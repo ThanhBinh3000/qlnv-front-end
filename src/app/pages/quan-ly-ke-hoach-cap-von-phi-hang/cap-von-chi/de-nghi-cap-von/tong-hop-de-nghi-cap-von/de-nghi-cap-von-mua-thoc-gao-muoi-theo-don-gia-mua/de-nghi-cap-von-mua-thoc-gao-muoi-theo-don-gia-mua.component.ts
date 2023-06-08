@@ -492,18 +492,18 @@ export class DeNghiCapVonMuaThocGaoMuoiTheoDonGiaMuaComponent implements OnInit 
 	getTotal() {
 		this.total = new ItemRequest();
 		this.baoCao.dnghiCapvonCtiets.forEach(item => {
-			// this.total.slKeHoach = sumNumber([this.total.slKeHoach, item.slKeHoach]);
+			this.total.slKeHoach = sumNumber([this.total.slKeHoach, item.slKeHoach]);
 			// this.total.donGia = sumNumber([this.total.donGia, item.donGia]);
 			this.total.gtTheoKeHoach = sumNumber([this.total.gtTheoKeHoach, item.gtTheoKeHoach]);
 			this.total.luyKeCapVon = sumNumber([this.total.luyKeCapVon, item.luyKeCapVon]);
 			this.total.luyKeCapUng = sumNumber([this.total.luyKeCapUng, item.luyKeCapUng]);
 			this.total.luyKeCong = sumNumber([this.total.luyKeCong, item.luyKeCong]);
-			this.total.vonDnghiCapLanNay = this.total.gtTheoKeHoach - this.total.luyKeCong;
+			this.total.vonDnghiCapLanNay = sumNumber([this.total.vonDnghiCapLanNay, item.vonDnghiCapLanNay]);
 			this.total.vonDuyetCapVon = sumNumber([this.total.vonDuyetCapVon, item.vonDuyetCapVon]);
 			this.total.vonDuyetCapUng = sumNumber([this.total.vonDuyetCapUng, item.vonDuyetCapUng]);
 			this.total.vonDuyetCong = sumNumber([this.total.vonDuyetCong, item.vonDuyetCong]);
 			this.total.soLkeSauKhiCapLanNay = sumNumber([this.total.soLkeSauKhiCapLanNay, item.soLkeSauKhiCapLanNay]);
-			this.total.soConDuocCap = this.total.gtTheoKeHoach - this.total.soLkeSauKhiCapLanNay;
+			this.total.soConDuocCap = sumNumber([this.total.soConDuocCap, item.soConDuocCap]);
 		})
 	}
 

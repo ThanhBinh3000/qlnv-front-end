@@ -77,6 +77,10 @@ export class BaoCao04anComponent implements OnInit {
     editMoneyUnit = false;
     isDataAvailable = false;
     editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
+    soLuongTheoQuyetDinh: ItemData;
+    soLuongThucHienNhap: ItemData;
+    soLuongThucHienNamTruoc: ItemData;
+    soLuongThucHienNamNay: ItemData;
 
     constructor(
         private spinner: NgxSpinnerService,
@@ -116,6 +120,14 @@ export class BaoCao04anComponent implements OnInit {
         await this.getDinhMuc();
         // }
 
+        if (this.data.isOffice && this.trangThaiPhuLuc == '3') {
+            this.soLuongTheoQuyetDinh = this.lstCtietBcao.find(e => e.maNdungChi == '0.1.1');
+            this.soLuongThucHienNhap = this.lstCtietBcao.find(e => e.maNdungChi == '0.1.2');
+            this.soLuongThucHienNamTruoc = this.lstCtietBcao.find(e => e.maNdungChi == '0.1.3');
+            this.soLuongThucHienNamNay = this.lstCtietBcao.find(e => e.maNdungChi == '0.1.4');
+            this.lstCtietBcao = []
+        }
+
         if (this.lstCtietBcao.length == 0) {
             if (this.luyKes.length > 0) {
                 this.luyKes.forEach(item => {
@@ -123,34 +135,89 @@ export class BaoCao04anComponent implements OnInit {
                     item.listCtiet.forEach(e => {
                         lstCtiet.push({
                             ...e,
-                            sl: (e.loaiMatHang == 1 || !this.data?.dotBcao) ? e.sl : 0,
+                            sl: (e.loaiMatHang == 1) ? e.sl : 0,
                         })
                     })
                     this.lstCtietBcao.push({
                         ...item,
                         listCtiet: lstCtiet,
-                        trongDotTcong: !this.data?.dotBcao ? item.trongDotTcong : 0,
+                        trongDotTcong: 0,
                         tenNdung: this.noiDungChis.find(e => e.ma == item.maNdungChi)?.giaTri,
                         id: uuid.v4() + 'FE',
                     })
                 })
             } else {
                 this.noiDungChis.forEach(item => {
+                    const lstCtiet: vatTu[] = [];
+                    if (this.soLuongTheoQuyetDinh || this.soLuongThucHienNhap || this.soLuongThucHienNamTruoc || this.soLuongThucHienNamNay) {
+                        this.soLuongTheoQuyetDinh.listCtiet.forEach(e => {
+                            lstCtiet.push({
+                                ...e,
+                                id: uuid.v4() + 'FE',
+                                sl: null,
+                            })
+                        })
+                    }
                     this.lstCtietBcao.push({
                         ...new ItemData(),
                         maNdungChi: item.ma,
                         tenNdung: item.giaTri,
                         stt: item.ma,
-                        listCtiet: [],
+                        listCtiet: lstCtiet,
                         id: uuid.v4() + "FE",
                     })
                 });
             }
-        } else {
-            this.lstCtietBcao.forEach(item => {
-                item.tenNdung = this.noiDungChis.find(e => e.ma == item.maNdungChi)?.giaTri;
-            })
+            if (this.soLuongTheoQuyetDinh || this.soLuongThucHienNhap || this.soLuongThucHienNamTruoc || this.soLuongThucHienNamNay) {
+                const index = this.lstCtietBcao.findIndex(e => e.maNdungChi == '0.1.1')
+                const index1 = this.lstCtietBcao.findIndex(e => e.maNdungChi == '0.1.2')
+                const index2 = this.lstCtietBcao.findIndex(e => e.maNdungChi == '0.1.3')
+                const index3 = this.lstCtietBcao.findIndex(e => e.maNdungChi == '0.1.4')
+                this.lstCtietBcao[index].trongDotTcong = this.soLuongTheoQuyetDinh.trongDotTcong;
+                this.lstCtietBcao[index].luyKeTcong = sumNumber([this.lstCtietBcao[index].luyKeTcong, this.soLuongTheoQuyetDinh.trongDotTcong]);
+                this.lstCtietBcao[index].listCtiet.forEach(item => {
+                    const sl = this.soLuongTheoQuyetDinh.listCtiet.find(e => e.maVtu == item.maVtu && e.loaiMatHang == 0)?.sl;
+                    if (item.loaiMatHang == 0) {
+                        item.sl = sl;
+                    } else {
+                        item.sl = sumNumber([item.sl, sl]);
+                    }
+                })
+                this.lstCtietBcao[index1].trongDotTcong = this.soLuongThucHienNhap.trongDotTcong;
+                this.lstCtietBcao[index1].luyKeTcong = sumNumber([this.lstCtietBcao[index1].luyKeTcong, this.soLuongThucHienNhap.trongDotTcong]);
+                this.lstCtietBcao[index1].listCtiet.forEach(item => {
+                    const sl = this.soLuongThucHienNhap.listCtiet.find(e => e.maVtu == item.maVtu && e.loaiMatHang == 0)?.sl;
+                    if (item.loaiMatHang == 0) {
+                        item.sl = sl;
+                    } else {
+                        item.sl = sumNumber([item.sl, sl]);
+                    }
+                })
+                this.lstCtietBcao[index2].trongDotTcong = this.soLuongThucHienNamTruoc.trongDotTcong;
+                this.lstCtietBcao[index2].luyKeTcong = sumNumber([this.lstCtietBcao[index2].luyKeTcong, this.soLuongThucHienNamTruoc.trongDotTcong]);
+                this.lstCtietBcao[index2].listCtiet.forEach(item => {
+                    const sl = this.soLuongThucHienNamTruoc.listCtiet.find(e => e.maVtu == item.maVtu && e.loaiMatHang == 0)?.sl;
+                    if (item.loaiMatHang == 0) {
+                        item.sl = sl;
+                    } else {
+                        item.sl = sumNumber([item.sl, sl]);
+                    }
+                })
+                this.lstCtietBcao[index3].trongDotTcong = this.soLuongThucHienNamNay.trongDotTcong;
+                this.lstCtietBcao[index3].luyKeTcong = sumNumber([this.lstCtietBcao[index3].luyKeTcong, this.soLuongThucHienNamNay.trongDotTcong]);
+                this.lstCtietBcao[index3].listCtiet.forEach(item => {
+                    const sl = this.soLuongThucHienNamNay.listCtiet.find(e => e.maVtu == item.maVtu && e.loaiMatHang == 0)?.sl;
+                    if (item.loaiMatHang == 0) {
+                        item.sl = sl;
+                    } else {
+                        item.sl = sumNumber([item.sl, sl]);
+                    }
+                })
+            }
         }
+        this.lstCtietBcao.forEach(item => {
+            item.tenNdung = this.noiDungChis.find(e => e.ma == item.maNdungChi)?.giaTri;
+        })
 
         this.lstCtietBcao.forEach(item => {
             item.listCtiet.sort((a, b) => parseInt(a.maVtu, 10) - parseInt(b.maVtu, 10));
@@ -520,11 +587,11 @@ export class BaoCao04anComponent implements OnInit {
     }
 
     getDmValue(cuc: number, vp: number) {
-        if (this.userService.isChiCuc()) {
-            return cuc;
-        }
         if (this.data.isOffice) {
             return vp;
+        }
+        if (this.userService.isChiCuc()) {
+            return cuc;
         }
         return sumNumber([cuc, vp]);
     }
@@ -803,6 +870,9 @@ export class BaoCao04anComponent implements OnInit {
         });
         modalTuChoi.afterClose.subscribe(async (res) => {
             if (res) {
+                if (this.listColTemp.findIndex(e => e.maVtu == res.ma) != -1) {
+                    return;
+                }
                 this.lstCtietBcao.forEach(data => {
                     const objTrongD = {
                         id: uuid.v4() + 'FE',
@@ -900,8 +970,8 @@ export class BaoCao04anComponent implements OnInit {
                     this.lstCtietBcao[ind1].trongDotTcong = this.lstCtietBcao[index].trongDotTcong;
                     this.lstCtietBcao[ind1].luyKeTcong = this.lstCtietBcao[index].luyKeTcong;
                     if (ind3 != -1) {
-                        this.lstCtietBcao[ind3].trongDotTcong = sumNumber([this.lstCtietBcao[ind1].trongDotTcong, ind2 == -1 ? 0 : this.lstCtietBcao[ind2].trongDotTcong]);
-                        this.lstCtietBcao[ind3].luyKeTcong = sumNumber([this.lstCtietBcao[ind1].luyKeTcong, ind2 == -1 ? 0 : this.lstCtietBcao[ind2].luyKeTcong]);
+                        this.lstCtietBcao[ind3].trongDotTcong = sumNumber([this.lstCtietBcao[ind1].trongDotTcong, ind2 == -1 ? 0 : -this.lstCtietBcao[ind2].trongDotTcong]);
+                        this.lstCtietBcao[ind3].luyKeTcong = sumNumber([this.lstCtietBcao[ind1].luyKeTcong, ind2 == -1 ? 0 : -this.lstCtietBcao[ind2].luyKeTcong]);
                     }
                     this.lstCtietBcao[ind1].listCtiet.forEach(item => {
                         item.sl = this.lstCtietBcao[index].listCtiet.find(e => e.loaiMatHang == item.loaiMatHang && e.maVtu == item.maVtu).sl;

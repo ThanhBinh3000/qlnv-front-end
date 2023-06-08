@@ -9,7 +9,7 @@ import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToa
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { BCVP, GDT, LTD, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { GDT, LTD, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import { DialogTaoMoiComponent } from '../dialog-tao-moi/dialog-tao-moi.component';
 
 @Component({
@@ -27,7 +27,7 @@ export class DanhSachBaoCaoComponent implements OnInit {
     maBaoCao: "",
     donViTao: "",
     trangThai: Utils.TT_BC_1,
-    loaiDuAn: null,
+    maLoaiDan: [3],
   };
 
   userInfo: any;
@@ -64,7 +64,6 @@ export class DanhSachBaoCaoComponent implements OnInit {
   };
   constructor(
     private spinner: NgxSpinnerService,
-    private lapThamDinhService: LapThamDinhService,
     private giaoDuToanChiService: GiaoDuToanChiService,
     private notification: NzNotificationService,
     private modal: NzModalService,
@@ -107,10 +106,10 @@ export class DanhSachBaoCaoComponent implements OnInit {
     let requestReport
     if (this.userInfo.CAP_DVI == "3") {
       requestReport = {
-        loaiTimKiem: "0",
+        loaiTimKiem: "3",
         maPhanGiao: "3",
         maLoai: "2",
-        loaiDuAn: this.searchFilter.loaiDuAn,
+        maLoaiDan: [3],
         maBcao: this.searchFilter.maBaoCao,
         donViTao: this.searchFilter.donViTao,
         namPa: this.searchFilter.nam,
@@ -126,10 +125,10 @@ export class DanhSachBaoCaoComponent implements OnInit {
 
     if (this.userInfo.CAP_DVI !== "3") {
       requestReport = {
-        loaiTimKiem: "0",
+        loaiTimKiem: "3",
         maPhanGiao: "3",
         maLoai: "2",
-        loaiDuAn: this.searchFilter.loaiDuAn,
+        maLoaiDan: [3],
         maBcao: this.searchFilter.maBaoCao,
         donViTao: this.searchFilter.donViTao,
         namPa: this.searchFilter.nam,
@@ -190,7 +189,8 @@ export class DanhSachBaoCaoComponent implements OnInit {
     this.searchFilter.denNgay = null
     this.searchFilter.maBaoCao = null
     this.searchFilter.trangThai = null
-    this.search();
+    this.searchFilter.maLoaiDan = [3],
+      this.search();
   }
 
   checkEditStatus(item: any) {
@@ -227,7 +227,7 @@ export class DanhSachBaoCaoComponent implements OnInit {
         const obj = {
           ...res,
           id: null,
-          tabSelected: 'baocao',
+          tabSelected: 'addBaoCao',
           isSynthetic: false,
         }
         this.dataChange.emit(obj);

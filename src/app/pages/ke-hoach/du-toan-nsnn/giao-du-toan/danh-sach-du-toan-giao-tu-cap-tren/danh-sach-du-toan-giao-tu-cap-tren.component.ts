@@ -42,6 +42,7 @@ export class DanhSachDuToanGiaoTuCapTrenComponent implements OnInit {
     loaiTimKiem: '1',
     maPhanGiao: '2',
     maLoai: '1',
+    maLoaiDan: [3],
     namGiao: null,
     ngayTaoTu: "",
     ngayTaoDen: "",
@@ -215,7 +216,7 @@ export class DanhSachDuToanGiaoTuCapTrenComponent implements OnInit {
     this.searchFilter.namGiao = null;
     this.searchFilter.ngayTaoTu = null;
     this.searchFilter.ngayTaoDen = null;
-    this.searchFilter.loaiDuAn = null;
+    this.searchFilter.maLoaiDan = [3];
     this.trangThai = null;
     this.searchFilter.maPa = null;
     this.onSubmit();

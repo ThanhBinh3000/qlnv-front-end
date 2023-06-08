@@ -201,7 +201,10 @@
                     <nz-form-label nzRequired [nzNoColon]="true">Lô kho(Nhập điều chuyển)
                     </nz-form-label>
                     <nz-form-control nz-col [nzErrorTip]="error">
-                      <input nz-input formControlName="tenLoKho" [readonly]="true" />
+                      <!-- <input nz-input formControlName="tenLoKho" [readonly]="true" /> -->
+                      <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogKhoNhap()">
+                        <input [readonly]="true" nz-input formControlName="tenLoKho" readonly="true" />
+                      </nz-input-group>
                     </nz-form-control>
                   </nz-form-item>
                 </div>
@@ -211,6 +214,7 @@
                     </nz-form-label>
                     <nz-form-control nz-col [nzErrorTip]="error">
                       <input nz-input formControlName="tenNganKho" [readonly]="true" />
+
                     </nz-form-control>
                   </nz-form-item>
                 </div>
@@ -220,6 +224,7 @@
                     </nz-form-label>
                     <nz-form-control nz-col [nzErrorTip]="error">
                       <input nz-input formControlName="tenNhaKho" [readonly]="true" />
+
                     </nz-form-control>
                   </nz-form-item>
                 </div>
@@ -270,7 +275,7 @@
                     </nz-form-label>
                     <nz-form-control nz-col [nzErrorTip]="error">
                       <span class="text-blue">{{formData.value.tichLuongKhaDung|number: '1.0-1':
-                        'vi_VN'}}</span>
+                        'vi_VN'}} {{formData.value.tenDonViTinh}}</span>
                     </nz-form-control>
                   </nz-form-item>
                 </div>
@@ -358,7 +363,8 @@
                     <nz-form-label nzRequired [nzNoColon]="true">Lô kho xuất ĐC
                     </nz-form-label>
                     <nz-form-control>
-                      <span class="text-blue">{{formData.value.tenLoKhoXuat}}</span>
+                      <span
+                        class="text-blue">{{formData.value.tenDiemKhoXuat}}-{{formData.value.tenNhaKhoXuat}}-{{formData.value.tenNganKhoXuat}}-{{formData.value.tenLoKhoXuat}}</span>
                     </nz-form-control>
                   </nz-form-item>
                 </div>
@@ -418,15 +424,15 @@
             </div>
           </div>
           <div class="btn-group">
-            <button type="button" class="btn btn-main ml-2" (click)="add()">
+            <button type="button" class="btn btn-main ml-2" (click)="addTH()">
               <i class="icon htvbdh_dau-cong"></i>
               <span>Thêm</span>
             </button>
           </div>
         </div>
         <nz-card class="mt-2px flex-card data-table card-border-content table-card">
-          <nz-table #dcnbBBNTBQDtlDtl class="nowrap mt-16 table-chi-tiet" nzBordered
-            [nzData]="formData.value.dcnbBBNTBQDtlList">
+
+          <nz-table #tblData [nzData]="dataTableView" class="nowrap mt-16 table-chi-tiet" nzBordered>
             <thead>
               <tr>
                 <th rowspan="2" style="width: 35px">STT</th>
@@ -447,7 +453,7 @@
               </tr>
             </thead>
             <tbody>
-              <ng-container *ngFor="let item of dcnbBBNTBQDtlDtl.data, let i = index;">
+              <ng-container *ngFor="let item of tblData.data, let i = index;">
                 <tr>
                   <td>{{i + 1}}</td>
                   <td>{{i + 1}}</td>
@@ -466,8 +472,6 @@
 
           </nz-table>
 
-
-
         </nz-card>
 
         <div nz-row [nzGutter]="24">
@@ -478,7 +482,7 @@
                 Tổng kinh phí thực tế đã thực hiện
               </nz-form-label>
               <nz-form-control>
-                <input nz-input formControlName="tongtien" [readonly]="true" />
+                <input nz-input formControlName="tongKinhPhiDaTh" [readonly]="true" />
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -489,7 +493,7 @@
                 Viết bằng chữ
               </nz-form-label>
               <nz-form-control>
-                <input nz-input formControlName="trichYeu" [readonly]="isView" />
+                <input nz-input formControlName="tongKinhPhiDaThBc" [readonly]="isView" />
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -505,15 +509,14 @@
               </div>
             </div>
             <div class="btn-group">
-              <button type="button" class="btn btn-main ml-2" (click)="add()">
+              <button type="button" class="btn btn-main ml-2" (click)="addPD()">
                 <i class="icon htvbdh_dau-cong"></i>
                 <span>Thêm</span>
               </button>
             </div>
           </div>
 
-          <nz-table #dcnbBBNTBQDtlDtl class="nowrap mt-16 table-chi-tiet" nzBordered
-            [nzData]="formData.value.dcnbBBNTBQDtlList">
+          <nz-table #tblData class="nowrap mt-16 table-chi-tiet" nzBordered [nzData]="dataTableView">
             <thead>
               <tr>
                 <th rowspan="2" style="width: 35px">STT</th>
@@ -534,21 +537,29 @@
               </tr>
             </thead>
             <tbody>
-              <ng-container *ngFor="let item of dcnbBBNTBQDtlDtl.data, let i = index;">
-                <tr>
-                  <td>{{i + 1}}</td>
-                  <td>{{i + 1}}</td>
-                  <td>{{i + 1}}</td>
-                  <td>{{i + 1}}</td>
-                  <td>{{i + 1}}</td>
-                  <td>{{i + 1}}</td>
-                  <td>{{i + 1}}</td>
-                  <td>{{i + 1}}</td>
-                  <td>{{i + 1}}</td>
-                  <td>{{i + 1}}</td>
-                  <td></td>
-                </tr>
-              </ng-container>
+              <tr nz-tbody-tr *ngFor="let item of tblData.data, let i = index;">
+                <td>{{i + 1}}</td>
+                <td>{{item.danhMuc}} {{item.nhomHang}}</td>
+                <td>{{item.tenMatHang}}</td>
+                <td>{{item.donViTinhMh}}</td>
+                <td>{{item.soLuongTrongNam|number:'1.0-1':'vi_VN'}}</td>
+                <td>{{item.donGia|number:'1.0-1':'vi_VN'}}</td>
+                <td>{{item.thanhTienTrongNam|number:'1.0-1':'vi_VN'}}</td>
+                <td>{{item.soLuongNamTruoc|number:'1.0-1':'vi_VN'}}</td>
+                <td>{{item.thanhTienNamTruoc|number:'1.0-1':'vi_VN'}}</td>
+                <td>{{(item.thanhTienTrongNam + item.thanhTienNamTruoc)|number:'1.0-1':'vi_VN'}}</td>
+                <td>
+                  <a (click)="them(item)">
+                    <i class="icon htvbdh_dau-cong"></i>
+                  </a>
+                  <a (click)="sua(item)">
+                    <i class="fa fa-pencil"></i>
+                  </a>
+                  <a (click)="xoa(item)">
+                    <i class="fa fa-trash-o do"></i>
+                  </a>
+                </td>
+              </tr>
             </tbody>
 
           </nz-table>

@@ -17,7 +17,7 @@
       </div>
       <div nz-col [nzSpan]="5">
         <nz-form-item [nzErrorTip]="error">
-          <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng hóa </nz-form-label>
+          <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng DTQG </nz-form-label>
           <nz-select formControlName="cloaiVthh" [nzDisabled]="isReadOnly" (ngModelChange)="onChangeCloaiVthh($event)">
             <nz-option *ngFor="let p of listChungLoai" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
           </nz-select>
@@ -42,8 +42,8 @@
       <div nz-col [nzSpan]="6">
         <nz-form-item [nzErrorTip]="error">
           <nz-form-label [nzNoColon]="true"> Đơn giá tạm tính</nz-form-label>
-          <nz-input-number formControlName="donGiaTamTinh" class="text-right" nz-input [nzSize]="'small'"
-            [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number>
+          <nz-input-number formControlName="donGiaTamTinh" class="text-right" nz-input [nzSize]="'small'" [nzStep]="0.1"
+            ></nz-input-number>
         </nz-form-item>
       </div>
       <div nz-col [nzSpan]="5">

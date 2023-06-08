@@ -1,16 +1,13 @@
 import { DatePipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
+import * as dayjs from 'dayjs';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
-import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
-import { UserService } from 'src/app/services/user.service';
-import { Utils } from 'src/app/Utility/utils';
-import * as uuid from "uuid";
-import * as dayjs from 'dayjs';
 import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-dialog-tong-hop',
@@ -74,30 +71,14 @@ export class DialogTongHopComponent implements OnInit {
       maPa: this.response.maPa,
       maDvi: this.obj.maDvi,
       namPa: this.response.namHienTai,
-      maLoaiDan: "3",
+      maLoaiDan: this.response.loai,
     }
     this.spinner.show();
-    await this.giaoDuToanChiService.tongHopGiaoDuToan(request).toPromise().then(
+    await this.giaoDuToanChiService.tongHopGiaoThucTe(request).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
-          console.log(data);
           this.response.lstCtietBcao = data.data.lstPa;
           this.response.lstDviTrucThuoc = data.data.lstGiaoDtoanDviTrucThuocs;
-          this.response.maPaCha = data.data.maPaCha;
-          this.response.lstCtietBcao.forEach(item => {
-            if (!item.id) {
-              item.id = uuid.v4() + 'FE';
-            }
-            item.lstCtietBcaos.forEach(itm => {
-              if (!itm.id) {
-                itm.id = uuid.v4() + 'FE';
-              }
-            });
-          })
-          // this.response.lstDviTrucThuoc.forEach(item => {
-          //   item.ngayDuyet = this.datePipe.transform(item.ngayDuyet, Utils.FORMAT_DATE_STR);
-          //   item.ngayPheDuyet = this.datePipe.transform(item.ngayPheDuyet, Utils.FORMAT_DATE_STR);
-          // })
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
@@ -125,8 +106,6 @@ export class DialogTongHopComponent implements OnInit {
     await this.giaoDuToanChiService.dsPaTongHop(requestReport).toPromise().then(res => {
       if (res.statusCode == 0) {
         this.lstPa = res.data;
-        // this.lstPa = this.lstPa.filter(item => item.listTtCtiet.every(e => e.trangThai == '1'));
-        console.log(res.data);
       } else {
         this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
       }
@@ -175,7 +154,6 @@ export class DialogTongHopComponent implements OnInit {
       return;
     }
 
-    const maPaCha = this.response.maPaCha
     let maBcao
     await this.giaoDuToanChiService.SinhMaBaoCao().toPromise().then(
       (res) => {
@@ -240,10 +218,6 @@ export class DialogTongHopComponent implements OnInit {
     if (this.response.loai == "2") {
       this._modalRef.close(request2);
     }
-
-    // console.log(this.response);
-
-    // this._modalRef.close(this.response);
   }
 
   handleCancel() {

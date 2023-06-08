@@ -70,6 +70,10 @@
             <app-add-bao-cao [data]="data" (dataChange)="changeTab($event)">
             </app-add-bao-cao>
         </ng-container>
+        <ng-container *ngIf="tabSelected == 'nextnextaddBaoCao'">
+            <app-add-bao-cao [data]="data" (dataChange)="changeTab($event)">
+            </app-add-bao-cao>
+        </ng-container>
         <ng-container *ngIf="tabSelected == 'danhSachBaoCao'">
             <app-danh-sach-bao-cao (dataChange)="changeTab($event)">
             </app-danh-sach-bao-cao>

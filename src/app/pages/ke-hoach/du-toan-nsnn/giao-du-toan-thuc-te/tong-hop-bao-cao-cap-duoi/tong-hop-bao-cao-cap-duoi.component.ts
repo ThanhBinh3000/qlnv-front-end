@@ -13,7 +13,7 @@ import { DataService } from 'src/app/services/data.service';
 import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { GDT, Utils } from 'src/app/Utility/utils';
+import { GDT, TRANG_THAI_KIEM_TRA_BAO_CAO, Utils } from 'src/app/Utility/utils';
 import { DialogTongHopComponent } from '../dialog-tong-hop/dialog-tong-hop.component';
 
 export const TRANG_THAI_TIM_KIEM_GIAO = [
@@ -53,10 +53,11 @@ export class TongHopBaoCaoCapDuoiComponent implements OnInit {
     loaiTimKiem: "1",
     maPhanGiao: '2',
     maLoai: '2',
+    maLoaiDan: [1, 2],
     namPa: null,
     ngayTaoTu: null,
     ngayTaoDen: null,
-    maBcao: "",
+    maPa: "",
     donViTao: "",
     // trangThai: "",
     paggingReq: {
@@ -68,7 +69,8 @@ export class TongHopBaoCaoCapDuoiComponent implements OnInit {
   };
 
   filterTable: any = {
-    maBcao: "",
+    maPaCha: "",
+    maPa: "",
     ngayTao: "",
     namPa: "",
     trangThai: "",
@@ -246,24 +248,23 @@ export class TongHopBaoCaoCapDuoiComponent implements OnInit {
     this.searchFilter.namPa = null
     this.searchFilter.ngayTaoTu = null
     this.searchFilter.ngayTaoDen = null
-    this.searchFilter.maBcao = null
+    this.searchFilter.maPa = null
+    this.searchFilter.maLoaiDan = [1, 2]
     this.trangThai = null;
     this.onSubmit();
   }
 
   xemChiTiet(id: string, maLoaiDan: string) {
-    console.log({ "id": id, "maLoaiDan": maLoaiDan });
-
     if (maLoaiDan == "1") {
       const obj = {
         id: id,
-        tabSelected: 'addBaoCao',
+        tabSelected: 'phuongAnGiaoDuToan',
       }
       this.dataChange.emit(obj);
     } else if (maLoaiDan == "2") {
       const obj = {
         id: id,
-        tabSelected: 'addBaoCao',
+        tabSelected: 'phuongAnGiaoDieuChinh',
       }
       this.dataChange.emit(obj);
     } else {
@@ -272,7 +273,8 @@ export class TongHopBaoCaoCapDuoiComponent implements OnInit {
   }
 
   getStatusName(trangThai: string) {
-    return this.trangThais.find(e => e.id == trangThai).tenDm;
+    const trangThais = TRANG_THAI_KIEM_TRA_BAO_CAO;
+    return trangThais.find(e => e.id == trangThai).ten;
   }
 
   getUnitName(maDvi: string) {
@@ -316,7 +318,6 @@ export class TongHopBaoCaoCapDuoiComponent implements OnInit {
     });
     modalTuChoi.afterClose.toPromise().then(async (res) => {
       if (res) {
-        console.log("res: ", res);
         const obj = {
           ...res,
           // id: null,

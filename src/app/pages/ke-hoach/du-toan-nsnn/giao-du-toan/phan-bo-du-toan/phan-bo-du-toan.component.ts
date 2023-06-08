@@ -8,7 +8,6 @@ import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
-import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { GDT, Utils } from 'src/app/Utility/utils';
 import { DialogThemThongTinQuyetToanComponent } from '../dialog-them-thong-tin-quyet-toan/dialog-them-thong-tin-quyet-toan.component';
@@ -41,18 +40,6 @@ export const TRANG_THAI_TIM_KIEM = [
     id: "7",
     tenDm: 'Gửi đơn vị cấp trên'
   },
-  // {
-  //   id: "8",
-  //   tenDm: 'Đơn vị cấp trên từ chối'
-  // },
-  // {
-  //   id: "9",
-  //   tenDm: 'Đơn vị cấp trên tiếp nhận'
-  // },
-  // {
-  //     id: "10",
-  //     tenDm: 'Lãnh đạo yêu cầu điều chỉnh'
-  // },
 ]
 @Component({
   selector: 'app-phan-bo-du-toan',
@@ -73,7 +60,7 @@ export class PhanBoDuToanComponent implements OnInit {
     loai: null,
     trangThais: [],
     maPa: "",
-    maLoaiDan: null,
+    maLoaiDan: [3],
     soQd: "",
     trangThaiGiaos: [],
     paggingReq: {
@@ -83,6 +70,7 @@ export class PhanBoDuToanComponent implements OnInit {
   };
 
   filterTable: any = {
+    maPaCha: "",
     maPa: "",
     ngayTao: "",
     namPa: "",
@@ -150,7 +138,6 @@ export class PhanBoDuToanComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private userService: UserService,
     private danhMuc: DanhMucHDVService,
-    private quanLyVonPhiService: QuanLyVonPhiService,
     private giaoDuToanChiService: GiaoDuToanChiService,
     private modal: NzModalService,
   ) { }
@@ -212,7 +199,7 @@ export class PhanBoDuToanComponent implements OnInit {
     this.searchFilter.maPa = null;
     this.trangThai = null;
     this.trangThaiGiao = null;
-    this.searchFilter.maLoaiDan = null;
+    this.searchFilter.maLoaiDan = [3];
     this.search();
   };
 
@@ -299,19 +286,14 @@ export class PhanBoDuToanComponent implements OnInit {
   };
 
   xemChiTiet(id: string, maLoaiDan: string) {
-    if (maLoaiDan == "1") {
+    if (maLoaiDan == "3") {
       const obj = {
         id: id,
         tabSelected: 'phuongAnGiaoDuToan',
       }
       this.dataChange.emit(obj);
-    } else if (maLoaiDan == "2") {
-      const obj = {
-        id: id,
-        tabSelected: 'phuongAnGiaoDieuChinh',
-      }
-      this.dataChange.emit(obj);
-    } else {
+    }
+    else {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
     }
   }
@@ -353,18 +335,10 @@ export class PhanBoDuToanComponent implements OnInit {
       },
     });
     modalTuChoi.afterClose.toPromise().then(async (res) => {
-      if (res && res?.loaiPa == "1") {
+      if (res) {
         let obj = {
           id: res.id,
           tabSelected: 'phuongAnGiaoDuToan',
-          isSynthetic: false,
-        }
-        this.dataChange.emit(obj);
-      }
-      if (res && res?.loaiPa == "2") {
-        let obj = {
-          id: res.id,
-          tabSelected: 'phuongAnGiaoDieuChinh',
           isSynthetic: false,
         }
         this.dataChange.emit(obj);
@@ -413,15 +387,6 @@ export class PhanBoDuToanComponent implements OnInit {
       this.dataTable = cloneDeep(this.dataTableAll);
     }
   };
-
-  // viewDetail(data: any) {
-  //   debugger
-  //   const obj = {
-  //     id: data.id,
-  //     tabSelected: 'quyetDinhBTC',
-  //   }
-  //   this.dataChange.emit(obj);
-  // };
 
   //doi so trang
   onPageIndexChange(page) {

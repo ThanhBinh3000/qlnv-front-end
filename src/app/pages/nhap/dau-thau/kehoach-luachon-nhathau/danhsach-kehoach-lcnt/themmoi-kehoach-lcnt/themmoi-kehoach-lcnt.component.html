@@ -125,7 +125,7 @@
         </div>
         <div nz-col [nzSpan]="4">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Số kế hoạch/ đề xuất </nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true"> Số công văn/ tờ trình </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
               <nz-input-group nzAddOnAfter="{{maTrinh}}">
                 <input nz-input formControlName="soDxuat"
@@ -186,7 +186,7 @@
         </div>
         <div nz-col [nzSpan]="6">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng hóa </nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng DTQG </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfterIcon="folder-open"
                 (click)="isView ? '' : (showFromTH ? '' : selectHangHoa())">
@@ -198,7 +198,7 @@
         <div nz-col [nzSpan]="6"
           *ngIf="(userService.isCuc() || userService.isTongCuc || showFromTH) && !this.loaiVthhInput.startsWith('02')">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng hóa </nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng DTQG </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfterIcon="folder-open"
                 (click)="isView ? '' : (showFromTH ? '' : selectHangHoa())">
@@ -209,7 +209,7 @@
         </div>
         <div nz-col [nzSpan]="6" *ngIf="!this.loaiVthhInput.startsWith('02')">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true" nzRequired> Tên hàng hóa </nz-form-label>
+            <nz-form-label [nzNoColon]="true" nzRequired> Tên hàng DTQG </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <input nz-input formControlName="moTaHangHoa" [readOnly]="isView" />
             </nz-form-control>
@@ -408,7 +408,7 @@
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfter="đ">
                 <nz-input-number
-                  [ngModel]="formData.value.tongMucDtDx  +(formData.value.tongMucDtDx * formData.value.gtriHdong / 100) +  +(formData.value.tongMucDtDx * formData.value.gtriDthau/ 100)  "
+                  [ngModel]="(formData.value.tongMucDtDx * formData.value.gtriHdong / 100) +(formData.value.tongMucDtDx * formData.value.gtriDthau/ 100)  "
                   [ngModelOptions]="{standalone: true}" nz-input [nzSize]="'small'" nzDisabled
                   [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
                 </nz-input-number>
@@ -441,18 +441,18 @@
         </div>
         <div nz-col [nzSpan]="6">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Tổng mức đầu tư theo đơn giá đã duyệt (đồng)
+            <nz-form-label nzRequired [nzNoColon]="true"> Tổng mức đầu tư theo đơn giá đã duyệt (tỷ đồng)
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <span class="blue-text">{{formData.value.tongMucDt | number : '1.0-1' : 'vi_VN'}}</span>
+              <span class="blue-text">{{formData.value.tongMucDt | number : '1.0-9999' : 'vi_VN'}}</span>
             </nz-form-control>
           </nz-form-item>
         </div>
         <div nz-col [nzSpan]="6">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Tổng mức đầu tư đề xuất (đồng) </nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true"> Tổng mức đầu tư đề xuất (tỷ đồng) </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <span class="blue-text">{{formData.value.tongMucDtDx | number : '1.0-1' : 'vi_VN'}}</span>
+              <span class="blue-text">{{formData.value.tongMucDtDx | number : '1.0-9999' : 'vi_VN'}}</span>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -473,7 +473,7 @@
       <div class="header-text">
         <div class="title-chi-tieu">
           <span></span>
-          <span>{{ (this.userService.isCuc() || showFromTH) ? 'Phụ lục đề xuất kế hoạch lựa chọn nhà thầu' : 'Địa điểm nhập hàng'}}</span>
+          <span>Phụ lục đề xuất kế hoạch lựa chọn nhà thầu</span>
         </div>
       </div>
       <div class="buttons" *ngIf="!isView">
@@ -597,13 +597,13 @@
         <tr>
           <th style="width: 2%;"></th>
           <th>Tên gói thầu</th>
-          <th>Chủng loại hàng hóa</th>
+          <th>Chủng loại hàng DTQG</th>
           <th>Cục DTNN KV</th>
           <th>Chi cục DTNN KV</th>
           <th>Điểm kho</th>
           <th>Chỉ tiêu kế hoạch được giao</th>
           <th>Số đã thực hiện</th>
-          <th>Số đề xuất (tấn)</th>
+          <th>Số đề xuất</th>
           <th>Đơn vị tính</th>
           <th>Đơn giá đề xuất có VAT (đ)</th>
           <th>Thành tiền tạm tính theo giá đề xuất (đ)</th>

@@ -5,7 +5,7 @@
 				Đơn vị:
 			</div>
 			<div nz-col [nzSpan]="2">
-				<ng-container *ngIf="!status || !editMoneyUnit; else editMoney">
+				<ng-container *ngIf="status || !editMoneyUnit; else editMoney">
 					<span (click)="editMoneyUnit=true">{{getMoneyUnit()}}</span>
 				</ng-container>
 				<ng-template #editMoney>
@@ -17,23 +17,20 @@
 				</ng-template>
 			</div>
 		</div>
-		<nz-table nzBordered class="table__body">
+		<nz-table nzBordered class="table__body" [nzScroll]="{x: scrollX}">
 			<thead>
 				<tr>
-					<th rowspan="4" class="text-center" nzWidth="100px">STT</th>
-					<th rowspan="4" nzWidth="300px">Chương trình/Đề tài/Dự án/Nhiệm vụ KH&CN <br> <em>(Nêu cụ thể tên
-							từng đề tài,
-							dự án khoa học thuộc các nhóm nhiệm vụ)</em></th>
-					<th rowspan="4" nzWidth="150px">Cơ quan chủ trì</th>
-					<th rowspan="4" nzWidth="150px">Thời gian thực hiện</th>
-					<th rowspan="4" nzWidth="150px">Quyết định phê duyệt của cấp có thẩm quyền <br> <em>(Nêu cụ thể số,
-							ngày,
-							tháng, năm và tên cơ quan ra quyết định)</em></th>
-					<!-- <th rowspan="4" nzWidth="150px">Nguồn kinh phí</th> -->
+					<th rowspan="4" nzWidth="50px" nzLeft>STT</th>
+					<th rowspan="4" nzWidth="300px" nzLeft>Chương trình/Đề tài/Dự án/Nhiệm vụ KH&CN <br> <em>(Nêu cụ thể
+							tên từng đề tài, dự án <br> khoa học thuộc các nhóm nhiệm vụ)</em></th>
+					<th rowspan="4">Cơ quan chủ trì</th>
+					<th rowspan="4">Thời gian thực hiện</th>
+					<th rowspan="4" style="width: 300px;">Quyết định phê duyệt của cấp có thẩm quyền <br> <em>(Nêu cụ
+							thể số, ngày, tháng, năm <br>và tên cơ quan ra quyết định)</em></th>
 					<th colspan="3" rowspan="2">Kinh phí được phê duyệt</th>
 					<th colspan="10">Kinh phí thực hiện</th>
-					<th rowspan="5" [hidden]="status"></th>
-					<th rowspan="5" [hidden]="status"></th>
+					<th rowspan="4" *ngIf="status" style="width: 60px;" nzRight></th>
+					<th rowspan="4" *ngIf="status" style="width: 50px;" nzRight></th>
 				</tr>
 				<tr>
 					<th colspan="4">Năm {{namBcao - 1}} (năm hiện hành)</th>
@@ -41,17 +38,17 @@
 					<th colspan="3">Dự toán bố trí năm {{namBcao}} (năm kế hoạch)</th>
 				</tr>
 				<tr>
-					<th nzWidth="100px" rowspan="2">Tổng số</th>
+					<th rowspan="2">Tổng số</th>
 					<th colspan="2">Trong đó</th>
-					<th nzWidth="100px" rowspan="2">Tổng số</th>
+					<th rowspan="2">Tổng số</th>
 					<th colspan="2">Kinh phí bố trí từ NSNN</th>
-					<th rowspan="2">Kinh phí thực hiện từ nguồn khác</th>
+					<th rowspan="2">Kinh phí thực hiện <br> từ nguồn khác</th>
 					<th rowspan="2">Tổng số</th>
 					<th rowspan="2">Nguồn NSNN</th>
 					<th rowspan="2">Nguồn khác</th>
 					<th rowspan="2">Tổng số</th>
 					<th rowspan="2">Nguồn NSNN</th>
-					<th rowspan="2">Ngồn khác</th>
+					<th rowspan="2">Nguồn khác</th>
 				</tr>
 				<tr>
 					<th>Nguồn NSNN</th>
@@ -60,33 +57,35 @@
 					<th>Ước thực hiện <br> đến hết năm {{namBcao - 1}} <br> (năm hiện hành)</th>
 				</tr>
 				<tr>
-					<th class="text-center">A</th>
-					<th class="text-center">B</th>
-					<th class="text-center">1</th>
-					<th class="text-center">2</th>
-					<th class="text-center">3</th>
-					<th class="text-center">4=5+6</th>
-					<th class="text-center">5</th>
-					<th class="text-center">6</th>
-					<th class="text-center">7=9+10</th>
-					<th class="text-center">8</th>
-					<th class="text-center">9</th>
-					<th class="text-center">10</th>
-					<th class="text-center">11=12+13</th>
-					<th class="text-center">12</th>
-					<th class="text-center">13</th>
-					<th class="text-center">14=15+16</th>
-					<th class="text-center">15</th>
-					<th class="text-center">16</th>
+					<th nzLeft>A</th>
+					<th nzLeft>B</th>
+					<th>1</th>
+					<th>2</th>
+					<th>3</th>
+					<th>4=5+6</th>
+					<th>5</th>
+					<th>6</th>
+					<th>7=9+10</th>
+					<th>8</th>
+					<th>9</th>
+					<th>10</th>
+					<th>11=12+13</th>
+					<th>12</th>
+					<th>13</th>
+					<th>14=15+16</th>
+					<th>15</th>
+					<th>16</th>
+					<th *ngIf="status" nzRight></th>
+					<th *ngIf="status" nzRight></th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr *ngFor="let data of lstCtietLapThamDinhs; let i = index">
 					<ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
-						<td class="text-center">
+						<td nzLeft>
 							{{getChiMuc(data.stt)}}
 						</td>
-						<td>
+						<td nzLeft>
 							{{data.tenDmuc}}
 						</td>
 						<td>{{data.coQuanCtri}}</td>
@@ -105,20 +104,20 @@
 						<td>{{displayValue(data.kphiThienDtoanTso)}}</td>
 						<td>{{displayValue(data.kphiThienDtoanNsnn)}}</td>
 						<td>{{displayValue(data.kphiThienDtoanNkhac)}}</td>
-						<td [hidden]="status">
+						<td *ngIf="status" nzRight>
 							<i *ngIf="checkEdit(data.stt)" class="fa fa-pencil" (click)="startEdit(data.id)"></i>
 						</td>
-						<td [hidden]="status">
+						<td *ngIf="status" nzRight>
 							<i *ngIf="checkAdd(data)" class="fa fa-plus" (click)="addLine(data.stt)"></i>
 							<i *ngIf="checkDelete(data.maDtaiDan)" class="fa fa-trash-o do"
 								(click)="deleteLine(data.stt)"></i>
 						</td>
 					</ng-container>
 					<ng-template #editTemplate>
-						<td class="text-center">
+						<td nzLeft>
 							{{getChiMuc(editCache[data.id].data.stt)}}
 						</td>
-						<td>
+						<td nzLeft>
 							<ng-container *ngIf="data.maDtaiDan; else editName">
 								{{editCache[data.id].data.tenDmuc}}
 							</ng-container>
@@ -191,14 +190,14 @@
 								[(ngModel)]="editCache[data.id].data.kphiThienDtoanNkhac"
 								(ngModelChange)="changeModel(data.id)" [options]="amount" />
 						</td>
-						<td>
+						<td nzRight>
 							<a (click)="saveEdit(data.id)" class="save">Lưu</a>
 							<a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
 								(nzOnConfirm)="cancelEdit(data.id)" class="save">
 								Hủy
 							</a>
 						</td>
-						<td>
+						<td nzRight>
 							<i *ngIf="checkAdd(data)" class="fa fa-plus" (click)="addLine(data.stt)"></i>
 							<i *ngIf="checkDelete(data.maDtaiDan)" class="fa fa-trash-o do"
 								(click)="deleteLine(data.stt)"></i>
@@ -206,8 +205,8 @@
 					</ng-template>
 				</tr>
 				<tr>
-					<td></td>
-					<td>Tổng cộng</td>
+					<td nzLeft></td>
+					<td nzLeft>Tổng cộng</td>
 					<td></td>
 					<td></td>
 					<td></td>
@@ -224,8 +223,8 @@
 					<td>{{displayValue(total.kphiThienDtoanTso)}}</td>
 					<td>{{displayValue(total.kphiThienDtoanNsnn)}}</td>
 					<td>{{displayValue(total.kphiThienDtoanNkhac)}}</td>
-					<td [hidden]="status"></td>
-					<td [hidden]="status"></td>
+					<td *ngIf="status" nzRight></td>
+					<td *ngIf="status" nzRight></td>
 				</tr>
 			</tbody>
 		</nz-table>
@@ -233,7 +232,7 @@
 	<div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
 		<div nz-col nzSpan="24">
 			<label class="search__label">Thuyết minh</label>
-			<textarea rows="2" nz-input [(ngModel)]="thuyetMinh" [disabled]="status"></textarea>
+			<textarea rows="2" nz-input [(ngModel)]="thuyetMinh" [disabled]="!status"></textarea>
 		</div>
 	</div>
 </div>

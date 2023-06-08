@@ -8,10 +8,7 @@
               <nz-form-label nzRequired [nzNoColon]="true">Danh mục
               </nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
-                <nz-select [nzDisabled]="false" formControlName="danhMuc" nzAllowClear
-                  (ngModelChange)="onChangeDanhMuc($event)">
-                  <nz-option *ngFor="let p of listDM" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
-                </nz-select>
+                <input nz-input formControlName="danhMuc" [readonly]="false" />
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -20,10 +17,7 @@
               <nz-form-label nzRequired [nzNoColon]="true">Nhóm hàng
               </nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
-                <nz-select [nzDisabled]="false" formControlName="nhomHang" nzAllowClear
-                  (ngModelChange)="onChangeNhomHang($event)">
-                  <nz-option *ngFor="let p of listMatHang" [nzValue]="p.maCcdc" [nzLabel]="p.tenCcdc"></nz-option>
-                </nz-select>
+                <input nz-input formControlName="nhomHang" [readonly]="false" />
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -32,17 +26,63 @@
               <nz-form-label nzRequired [nzNoColon]="true">Đơn vị tính
               </nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
-                <input nz-input formControlName="dvtNH" [readonly]="true" />
+                <input nz-input formControlName="donViTinh" [readonly]="false" />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+
+        <div nz-row [nzGutter]="24">
+          <div nz-col nzSpan="24">
+            <label class="mg-t-5" nz-checkbox formControlName="isMatHang">Có thông tin mặt
+              hàng</label>
+          </div>
+        </div>
+
+
+        <div nz-row [nzGutter]="24" *ngIf="!formData.value.isMatHang" class="mg-t-5">
+          <div nz-col nzSpan="8">
+            <nz-form-item>
+              <nz-form-label nzRequired [nzNoColon]="true">Số lượng
+              </nz-form-label>
+              <nz-form-control nz-col [nzErrorTip]="error">
+                <nz-input-number [nzDisabled]="false" formControlName="soLuongTrongNam" [nzMin]="0"
+                  [nzMax]="999999999999" [nzStep]="0.1" [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                  [nzParser]="globals.parser" (ngModelChange)="onChangeSLTrongNam($event)">
+                </nz-input-number>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="8">
+            <nz-form-item>
+              <nz-form-label nzRequired [nzNoColon]="true">Đơn giá
+              </nz-form-label>
+              <nz-form-control nz-col [nzErrorTip]="error">
+                <nz-input-number [nzDisabled]="false" formControlName="donGia" [nzMin]="0" [nzMax]="999999999999"
+                  [nzStep]="0.1" [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                  (ngModelChange)="onChangeDonGia($event)">
+                </nz-input-number>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="8">
+            <nz-form-item>
+              <nz-form-label nzRequired [nzNoColon]="true">Thành tiền
+              </nz-form-label>
+              <nz-form-control nz-col [nzErrorTip]="error">
+                <nz-input-number [nzDisabled]="true" formControlName="thanhTienTrongNam" [nzMin]="0"
+                  [nzMax]="999999999999" [nzStep]="0.1" [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                  [nzParser]="globals.parser">
+                </nz-input-number>
               </nz-form-control>
             </nz-form-item>
           </div>
         </div>
 
 
-
       </nz-card>
 
-      <div class="mt16 flex-card p-lr16">
+      <div class="mt16 flex-card p-lr16" *ngIf="formData.value.isMatHang">
         <div class="header header-green-background mg-t-16">
           <div class="header-text">
             <div class="title-chi-tieu">
@@ -53,14 +93,14 @@
         </div>
       </div>
 
-      <nz-card class="mg-t-16">
+      <nz-card class="mg-t-16" *ngIf="formData.value.isMatHang">
         <div nz-row [nzGutter]="24">
           <div nz-col nzSpan="10">
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true">Tên mặt hàng
               </nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
-                <nz-select [nzDisabled]="false" formControlName="tenMatHang" nzAllowClear
+                <nz-select [nzDisabled]="false" formControlName="matHang" nzAllowClear
                   (ngModelChange)="onChangeTenMH($event)">
                   <nz-option *ngFor="let p of listMatHang" [nzValue]="p.maCcdc" [nzLabel]="p.tenCcdc"></nz-option>
                 </nz-select>
@@ -72,7 +112,7 @@
               <nz-form-label nzRequired [nzNoColon]="true">Đơn vị tính
               </nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
-                <input nz-input formControlName="dvtTMH" [readonly]="true" />
+                <input nz-input formControlName="donViTinhMh" [readonly]="true" />
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -95,9 +135,9 @@
                   <nz-form-label nzRequired [nzNoColon]="true">Số lượng
                   </nz-form-label>
                   <nz-form-control nz-col [nzErrorTip]="error">
-                    <nz-input-number [nzDisabled]="false" formControlName="slTrongNam" [nzMin]="0"
+                    <nz-input-number [nzDisabled]="false" formControlName="soLuongTrongNam" [nzMin]="0"
                       [nzMax]="999999999999" [nzStep]="0.1" [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                      [nzParser]="globals.parser">
+                      [nzParser]="globals.parser" (ngModelChange)="onChangeSLTrongNam($event)">
                     </nz-input-number>
                   </nz-form-control>
                 </nz-form-item>
@@ -108,7 +148,8 @@
                   </nz-form-label>
                   <nz-form-control nz-col [nzErrorTip]="error">
                     <nz-input-number [nzDisabled]="false" formControlName="donGia" [nzMin]="0" [nzMax]="999999999999"
-                      [nzStep]="0.1" [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+                      [nzStep]="0.1" [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                      (ngModelChange)="onChangeDonGia($event)">
                     </nz-input-number>
                   </nz-form-control>
                 </nz-form-item>
@@ -118,7 +159,7 @@
                   <nz-form-label nzRequired [nzNoColon]="true">Thành tiền
                   </nz-form-label>
                   <nz-form-control nz-col [nzErrorTip]="error">
-                    <nz-input-number [nzDisabled]="false" formControlName="thanhTienTrongNam" [nzMin]="0"
+                    <nz-input-number [nzDisabled]="true" formControlName="thanhTienTrongNam" [nzMin]="0"
                       [nzMax]="999999999999" [nzStep]="0.1" [nzSize]="'small'" [nzFormatter]="globals.formatter"
                       [nzParser]="globals.parser">
                     </nz-input-number>
@@ -138,7 +179,7 @@
                   <nz-form-label nzRequired [nzNoColon]="true">Số lượng
                   </nz-form-label>
                   <nz-form-control nz-col [nzErrorTip]="error">
-                    <nz-input-number [nzDisabled]="false" formControlName="slNamTruoc" [nzMin]="0"
+                    <nz-input-number [nzDisabled]="false" formControlName="soLuongNamTruoc" [nzMin]="0"
                       [nzMax]="999999999999" [nzStep]="0.1" [nzSize]="'small'" [nzFormatter]="globals.formatter"
                       [nzParser]="globals.parser">
                     </nz-input-number>
@@ -152,7 +193,7 @@
                   <nz-form-control nz-col [nzErrorTip]="error">
                     <nz-input-number [nzDisabled]="false" formControlName="thanhTienNamTruoc" [nzMin]="0"
                       [nzMax]="999999999999" [nzStep]="0.1" [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                      [nzParser]="globals.parser">
+                      [nzParser]="globals.parser" (ngModelChange)="onChangeTTNamTruoc($event)">
                     </nz-input-number>
                   </nz-form-control>
                 </nz-form-item>

@@ -616,6 +616,7 @@ export class BaoCaoComponent implements OnInit {
                             const data = PHULUCLIST.find(e => e.maPhuLuc == item.maLoai);
                             this.baoCao.lstBcaos.push({
                                 ...item,
+                                id: uuid.v4() + "FE",
                                 maDviTien: '1',
                                 tieuDe: data.tieuDe,
                                 tenPhuLuc: data.tenPhuLuc,
@@ -731,53 +732,54 @@ export class BaoCaoComponent implements OnInit {
             }
             if (maPhuLuc == '1' && Utils.statusSave.includes(this.baoCao.trangThai)) {
                 //lay du lieu cua phu luc 3
-                const dataPL3 = {
-                    maNdung: '0.1.1.2',
-                    dtoanGiaoDtoan: 0,
-                    giaiNganThangBcaoDtoan: 0,
-                    luyKeGiaiNganDtoan: 0,
-                }
-                const dataTemp3 = this.baoCao.lstBcaos.find(e => e.maLoai == '3')?.lstCtietBcaos;
-                dataTemp3?.forEach(item => {
-                    const level = item.maDan.split('.').length - 2;
-                    if (level == 0) {
-                        dataPL3.dtoanGiaoDtoan = sumNumber([dataPL3.dtoanGiaoDtoan, item.khoachNamVonScl])
-                        dataPL3.giaiNganThangBcaoDtoan = sumNumber([dataPL3.giaiNganThangBcaoDtoan, item.giaiNganNsnnVonScl])
-                        dataPL3.luyKeGiaiNganDtoan = sumNumber([dataPL3.luyKeGiaiNganDtoan, item.luyKeGiaiNganDauNamNsnnVonScl])
+                const dataTemp3 = this.baoCao.lstBcaos.find(e => e.maLoai == '3');
+                if (dataTemp3 && dataTemp3?.trangThai != '3') {
+                    const dataPL3 = {
+                        maNdung: '0.1.1.2',
+                        dtoanGiaoDtoan: 0,
+                        giaiNganThangBcaoDtoan: 0,
+                        luyKeGiaiNganDtoan: 0,
                     }
-                })
-                if (dataTemp3) {
+                    dataTemp3?.lstCtietBcaos.forEach(item => {
+                        const level = item.maDan.split('.').length - 2;
+                        if (level == 0) {
+                            dataPL3.dtoanGiaoDtoan = sumNumber([dataPL3.dtoanGiaoDtoan, item.khoachNamVonScl])
+                            dataPL3.giaiNganThangBcaoDtoan = sumNumber([dataPL3.giaiNganThangBcaoDtoan, item.giaiNganNsnnVonScl])
+                            dataPL3.luyKeGiaiNganDtoan = sumNumber([dataPL3.luyKeGiaiNganDtoan, item.luyKeGiaiNganDauNamNsnnVonScl])
+                        }
+                    })
                     this.tabData.extraDataPL3 = dataPL3;
                 }
+
                 //lay du lieu cua phu luc 2
-                const dataPL2 = {
-                    maNdung: '0.1.1.1',
-                    dtoanGiaoDtoan: 0,
-                    dtoanGiaoNguonKhac: 0,
-                    dtoanGiaoNguonQuy: 0,
-                    giaiNganThangBcaoDtoan: 0,
-                    giaiNganThangBcaoNguonKhac: 0,
-                    giaiNganThangBcaoNguonQuy: 0,
-                    luyKeGiaiNganDtoan: 0,
-                    luyKeGiaiNganNguonKhac: 0,
-                    luyKeGiaiNganNguonQuy: 0,
-                }
-                const dataTemp2 = this.baoCao.lstBcaos.find(e => e.maLoai == '2')?.lstCtietBcaos;
-                dataTemp2?.forEach(item => {
-                    const level = item.maNdung.split('.').length - 2;
-                    if (level == 0) {
-                        dataPL2.dtoanGiaoDtoan = sumNumber([dataPL2.dtoanGiaoDtoan, item.dtoanSdungNamNguonNsnn])
-                        dataPL2.dtoanGiaoNguonKhac = sumNumber([dataPL2.dtoanGiaoNguonKhac, item.dtoanSdungNamNguonSn])
-                        dataPL2.dtoanGiaoNguonQuy = sumNumber([dataPL2.dtoanGiaoNguonQuy, item.dtoanSdungNamNguonQuy])
-                        dataPL2.giaiNganThangBcaoDtoan = sumNumber([dataPL2.giaiNganThangBcaoDtoan, item.giaiNganThangNguonNsnn])
-                        dataPL2.giaiNganThangBcaoNguonKhac = sumNumber([dataPL2.giaiNganThangBcaoNguonKhac, item.giaiNganThangNguonSn])
-                        dataPL2.giaiNganThangBcaoNguonQuy = sumNumber([dataPL2.giaiNganThangBcaoNguonQuy, item.giaiNganThangNguonQuy])
-                        dataPL2.luyKeGiaiNganDtoan = sumNumber([dataPL2.luyKeGiaiNganDtoan, item.luyKeGiaiNganNguonNsnn])
-                        dataPL2.luyKeGiaiNganNguonKhac = sumNumber([dataPL2.luyKeGiaiNganNguonKhac, item.luyKeGiaiNganNguonSn])
-                        dataPL2.luyKeGiaiNganNguonQuy = sumNumber([dataPL2.luyKeGiaiNganNguonQuy, item.luyKeGiaiNganNguonQuy])
+                const dataTemp2 = this.baoCao.lstBcaos.find(e => e.maLoai == '2');
+                if (dataTemp2 && dataTemp2?.trangThai != '3') {
+                    const dataPL2 = {
+                        maNdung: '0.1.1.1',
+                        dtoanGiaoDtoan: 0,
+                        dtoanGiaoNguonKhac: 0,
+                        dtoanGiaoNguonQuy: 0,
+                        giaiNganThangBcaoDtoan: 0,
+                        giaiNganThangBcaoNguonKhac: 0,
+                        giaiNganThangBcaoNguonQuy: 0,
+                        luyKeGiaiNganDtoan: 0,
+                        luyKeGiaiNganNguonKhac: 0,
+                        luyKeGiaiNganNguonQuy: 0,
                     }
-                })
-                if (dataTemp2) {
+                    dataTemp2?.lstCtietBcaos.forEach(item => {
+                        const level = item.maNdung.split('.').length - 2;
+                        if (level == 0) {
+                            dataPL2.dtoanGiaoDtoan = sumNumber([dataPL2.dtoanGiaoDtoan, item.dtoanSdungNamNguonNsnn])
+                            dataPL2.dtoanGiaoNguonKhac = sumNumber([dataPL2.dtoanGiaoNguonKhac, item.dtoanSdungNamNguonSn])
+                            dataPL2.dtoanGiaoNguonQuy = sumNumber([dataPL2.dtoanGiaoNguonQuy, item.dtoanSdungNamNguonQuy])
+                            dataPL2.giaiNganThangBcaoDtoan = sumNumber([dataPL2.giaiNganThangBcaoDtoan, item.giaiNganThangNguonNsnn])
+                            dataPL2.giaiNganThangBcaoNguonKhac = sumNumber([dataPL2.giaiNganThangBcaoNguonKhac, item.giaiNganThangNguonSn])
+                            dataPL2.giaiNganThangBcaoNguonQuy = sumNumber([dataPL2.giaiNganThangBcaoNguonQuy, item.giaiNganThangNguonQuy])
+                            dataPL2.luyKeGiaiNganDtoan = sumNumber([dataPL2.luyKeGiaiNganDtoan, item.luyKeGiaiNganNguonNsnn])
+                            dataPL2.luyKeGiaiNganNguonKhac = sumNumber([dataPL2.luyKeGiaiNganNguonKhac, item.luyKeGiaiNganNguonSn])
+                            dataPL2.luyKeGiaiNganNguonQuy = sumNumber([dataPL2.luyKeGiaiNganNguonQuy, item.luyKeGiaiNganNguonQuy])
+                        }
+                    })
                     this.tabData.extraDataPL2 = dataPL2;
                 }
             }
