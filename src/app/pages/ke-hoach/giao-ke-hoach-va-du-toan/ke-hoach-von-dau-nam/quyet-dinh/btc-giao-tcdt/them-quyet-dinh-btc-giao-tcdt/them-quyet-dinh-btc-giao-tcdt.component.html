@@ -109,23 +109,30 @@
 
     <nz-tab [nzTitle]="'Mua tăng'">
       <app-ke-hoach-mua-tang [dsHangHoa]="dsHangHoa" [isView]="isView" [(dataTable)]="muaTangList"
+                             [dataQdTtcpGiaoBn]="chiTang"
+                             [tabName]="'MT'"
                              [trangThai]="formData.value.trangThai">
       </app-ke-hoach-mua-tang>
     </nz-tab>
     <nz-tab [nzTitle]="'Xuất giảm không thu tiền'">
       <app-ke-hoach-mua-tang [dsHangHoa]="dsHangHoa" [isView]="isView" [(dataTable)]="xuatGiamList"
+                             [dataQdTtcpGiaoBn]="xuatGiam"
+                             [tabName]="'XG'"
                              [trangThai]="formData.value.trangThai">
       </app-ke-hoach-mua-tang>
     </nz-tab>
 
     <nz-tab [nzTitle]="'Xuất bán thu tiền'">
       <app-ke-hoach-mua-tang [dsHangHoa]="dsHangHoa" [isView]="isView" [(dataTable)]="xuatBanList"
+                             [dataQdTtcpGiaoBn]="xuatBan"
+                             [tabName]="'XB'"
                              [trangThai]="formData.value.trangThai">
       </app-ke-hoach-mua-tang>
     </nz-tab>
 
     <nz-tab [nzTitle]="'Xuất luân phiên đổi hàng'">
       <app-ke-hoach-mua-tang [dsHangHoa]="dsHangHoa" [isView]="isView" [(dataTable)]="luanPhienList"
+                             [tabName]="'LPDH'"
                              [trangThai]="formData.value.trangThai">
       </app-ke-hoach-mua-tang>
     </nz-tab>

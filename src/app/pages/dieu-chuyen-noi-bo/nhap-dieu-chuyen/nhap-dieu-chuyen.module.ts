@@ -22,7 +22,7 @@ import { KiemNghiemChatLuongComponent } from './tablevel3/phieu-kiem-nghiem-chat
 import { HoSoKyThuatComponent } from './tablevel3/ho-so-ky-thuat/ho-so-ky-thuat.component';
 import { PhieuNhapKhoComponent } from './tablevel3/phieu-nhap-kho/phieu-nhap-kho.component';
 import { BangKeCanHangComponent } from './tablevel3/bang-ke-can-hang/bang-ke-can-hang.component';
-import { BienBanNhapDayDuComponent } from './tablevel3/bien-ban-nhap-day-du/bien-ban-nhap-day-du.component';
+import { BienBanNhapDayDuComponent } from './tablevel3/bien-ban-nhap-day-du/bien-ban-nhap-day-du/bien-ban-nhap-day-du.component';
 import { BienBanGiaoNhanComponent } from './tablevel3/bien-ban-giao-nhan/bien-ban-giao-nhan.component';
 import { BangKeNhapVatTuComponent } from './tablevel3/bang-ke-nhap-vat-tu/bang-ke-nhap-vat-tu.component';
 import { KiemTraChatLuongComponent } from './tablevel3/phieu-kiem-tra-chat-luong/kiem-tra-chat-luong/kiem-tra-chat-luong.component';
@@ -32,8 +32,10 @@ import { ThongTinHangDtqgComponent } from './tablevel3/bien-ban-nghiem-thu-bao-q
 import { ThongTinKiemNghiemChatLuongComponent } from './tablevel3/phieu-kiem-nghiem-chat-luong/thong-tin-kiem-nghiem-chat-luong/thong-tin-kiem-nghiem-chat-luong.component';
 import { ThongTinKiemTraChatLuongComponent } from './tablevel3/phieu-kiem-tra-chat-luong/thong-tin-kiem-tra-chat-luong/thong-tin-kiem-tra-chat-luong.component';
 import { ThongTinBienBanLayMauBanGiaoMauComponent } from './tablevel3/bien-ban-lay-mau-ban-giao-mau/thong-tin-bien-ban-lay-mau-ban-giao-mau/thong-tin-bien-ban-lay-mau-ban-giao-mau.component';
-import { BienBanChuanBiKhoComponent } from './tablevel3/bien-ban-chuan-bi-kho/bien-ban-chuan-bi-kho.component';
+import { BienBanChuanBiKhoComponent } from './tablevel3/bien-ban-chuan-bi-kho/bien-ban-chuan-bi-kho/bien-ban-chuan-bi-kho.component';
 import { BienBanKetThucNhapKhoComponent } from './tablevel3/bien-ban-ket-thuc-nhap-kho/bien-ban-ket-thuc-nhap-kho.component';
+import { ThongTinBienBanChuanBiKhoComponent } from './tablevel3/bien-ban-chuan-bi-kho/thong-tin-bien-ban-chuan-bi-kho/thong-tin-bien-ban-chuan-bi-kho.component';
+import { ThongTinBienBanNhapDayDuComponent } from './tablevel3/bien-ban-nhap-day-du/thong-tin-bien-ban-nhap-day-du/thong-tin-bien-ban-nhap-day-du.component';
 
 
 
@@ -63,7 +65,9 @@ import { BienBanKetThucNhapKhoComponent } from './tablevel3/bien-ban-ket-thuc-nh
     ThongTinKiemTraChatLuongComponent,
     ThongTinBienBanLayMauBanGiaoMauComponent,
     BienBanChuanBiKhoComponent,
-    BienBanKetThucNhapKhoComponent
+    BienBanKetThucNhapKhoComponent,
+    ThongTinBienBanChuanBiKhoComponent,
+    ThongTinBienBanNhapDayDuComponent
   ],
   imports: [
     CommonModule,

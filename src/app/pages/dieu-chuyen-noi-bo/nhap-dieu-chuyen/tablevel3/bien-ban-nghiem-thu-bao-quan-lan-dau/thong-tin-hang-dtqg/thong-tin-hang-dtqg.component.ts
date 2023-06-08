@@ -24,6 +24,7 @@ export class ThongTinHangDtqgComponent extends Base2Component implements OnInit 
 
   listDM: any[] = [];
   listMatHang: any[] = [];
+  // isMatHang: boolean
 
   constructor(
     httpClient: HttpClient,
@@ -42,67 +43,27 @@ export class ThongTinHangDtqgComponent extends Base2Component implements OnInit 
     this.formData = this.fb.group({
       danhMuc: [],
       nhomHang: [],
-      dvtNH: [],
+      donViTinh: [],
+      isMatHang: [],
       tenMatHang: [],
-      dvtTMH: [],
+      matHang: [],
+      donViTinhMh: [],
       tongGiaTri: [],
-      slTrongNam: [],
+      soLuongTrongNam: [],
       donGia: [],
       thanhTienTrongNam: [],
-      slNamTruoc: [],
+      soLuongNamTruoc: [],
       thanhTienNamTruoc: [],
-
-      maDiemKho: [],
-      tenDiemKho: [],
-      maNhaKho: [],
-      tenNhaKho: [],
-      maNganKho: [],
-      tenNganKho: [],
-      maLoKho: [],
-      tenLoKho: [],
-      maThuKho: [],
-      thuKho: [],
-      loaiVthh: [],
-      tenLoaiVthh: [],
-      cloaiVthh: [],
-      tenCloaiVthh: [],
-      tonKho: [],
-      tenDonViTinh: [],
-      soLuongDc: [],
-      duToanKphi: [],
-      thoiGianDkDc: [],
-      maDiemKhoNhan: [],
-      tenDiemKhoNhan: [],
-      maNhaKhoNhan: [],
-      tenNhaKhoNhan: [],
-      maNganKhoNhan: [],
-      tenNganKhoNhan: [],
-      maLoKhoNhan: [],
-      tenLoKhoNhan: [],
-      maThuKhoNhan: [],
-      thuKhoNhan: [],
-      thayDoiThuKho: [],
-      slDcConLai: [],
-      tichLuongKd: [],
-      soLuongPhanBo: [],
     }
     );
   }
 
   ngOnInit(): void {
-    this.getNhomCCDC()
+    this.getDSMatHang()
   }
 
-  async getNhomCCDC() {
-    this.listDM = []
-    let res = await this.danhMucService.getNhomCCDC();
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.listDM = res.data
-    }
-  }
-
-  async onChangeDanhMuc(nhomCcdc) {
-    const body = { nhomCcdc }
+  async getDSMatHang() {
+    const body = {}
     this.listMatHang = []
     let res = await this.danhMucService.getDSMatHang(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -110,11 +71,20 @@ export class ThongTinHangDtqgComponent extends Base2Component implements OnInit 
     }
   }
 
-  async onChangeNhomHang(value) {
-    const nhomHang = this.listMatHang.find(item => item.maCcdc === value)
-    if (nhomHang) {
+  async onChangeSLTrongNam(value) {
+    if (this.formData.value.donGia && value) {
+      const thanhTienTrongNam = Number(value) * Number(this.formData.value.donGia)
       this.formData.patchValue({
-        dvtNH: nhomHang.donViTinh
+        thanhTienTrongNam
+      })
+    }
+  }
+
+  async onChangeDonGia(value) {
+    if (this.formData.value.soLuongTrongNam && value) {
+      const thanhTienTrongNam = Number(value) * Number(this.formData.value.soLuongTrongNam)
+      this.formData.patchValue({
+        thanhTienTrongNam
       })
     }
   }
@@ -123,10 +93,19 @@ export class ThongTinHangDtqgComponent extends Base2Component implements OnInit 
     const nhomHang = this.listMatHang.find(item => item.maCcdc === value)
     if (nhomHang) {
       this.formData.patchValue({
-        dvtTMH: nhomHang.donViTinh
+        donViTinhMh: nhomHang.donViTinh,
+        tenMatHang: nhomHang.tenCcdc
       })
     }
   }
+
+  async onChangeTTNamTruoc(thanhTienNamTruoc) {
+    const tongGiaTri = Number(thanhTienNamTruoc) + Number(this.formData.value.thanhTienTrongNam)
+    this.formData.patchValue({
+      tongGiaTri
+    })
+  }
+
 
   handleOk(item: any) {
     this._modalRef.close({

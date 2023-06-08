@@ -187,9 +187,9 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
         soLuongPhanBo: [0, [Validators.required]],
         tichLuongKd: [0, [Validators.required]],
         slDcConLai: [0, [Validators.required]],
-        thuKho: ['', [Validators.required]],
-        thuKhoNhan: ['', [Validators.required]],
-        thayDoiThuKho: [false, [Validators.required]]
+        thuKho: ['', []],
+        thuKhoNhan: ['', []],
+        thayDoiThuKho: [false, []]
       }
     );
     this.tableForm = this.fb.group({
