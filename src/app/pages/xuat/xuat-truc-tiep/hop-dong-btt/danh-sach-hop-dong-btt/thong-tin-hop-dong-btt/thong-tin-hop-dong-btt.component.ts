@@ -725,12 +725,9 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
         this.formData.controls["soHd"].setValidators([Validators.required]);
         this.formData.controls["tenHd"].setValidators([Validators.required]);
         this.formData.controls["ngayHluc"].setValidators([Validators.required]);
-        this.formData.controls["ghiChuNgayHluc"].setValidators([Validators.required]);
         this.formData.controls["loaiHdong"].setValidators([Validators.required]);
-        this.formData.controls["ghiChuLoaiHdong"].setValidators([Validators.required]);
         this.formData.controls["tgianThienHd"].setValidators([Validators.required]);
         this.formData.controls["thoiGianDuKien"].setValidators([Validators.required]);
-        this.formData.controls["ghiChuTgianGnhan"].setValidators([Validators.required]);
         this.formData.controls["noiDungHdong"].setValidators([Validators.required]);
         this.formData.controls["dkienHanTtoan"].setValidators([Validators.required]);
         this.formData.controls["maDvi"].setValidators([Validators.required]);
@@ -743,7 +740,6 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
         this.formData.controls["fax"].setValidators([Validators.required]);
         this.formData.controls["stk"].setValidators([Validators.required]);
         this.formData.controls["moTai"].setValidators([Validators.required]);
-        this.formData.controls["ttinGiayUyQuyen"].setValidators([Validators.required]);
         this.formData.controls["tenDviMua"].setValidators([Validators.required]);
         this.formData.controls["diaChiDviMua"].setValidators([Validators.required]);
         this.formData.controls["mstDviMua"].setValidators([Validators.required]);
@@ -766,12 +762,9 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
         this.formData.controls["soHd"].clearValidators();
         this.formData.controls["tenHd"].clearValidators();
         this.formData.controls["ngayHluc"].clearValidators();
-        this.formData.controls["ghiChuNgayHluc"].clearValidators();
         this.formData.controls["loaiHdong"].clearValidators();
-        this.formData.controls["ghiChuLoaiHdong"].clearValidators();
         this.formData.controls["tgianThienHd"].clearValidators();
         this.formData.controls["thoiGianDuKien"].clearValidators();
-        this.formData.controls["ghiChuTgianGnhan"].clearValidators();
         this.formData.controls["noiDungHdong"].clearValidators();
         this.formData.controls["dkienHanTtoan"].clearValidators();
         this.formData.controls["maDvi"].clearValidators();
@@ -784,7 +777,6 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
         this.formData.controls["fax"].clearValidators();
         this.formData.controls["stk"].clearValidators();
         this.formData.controls["moTai"].clearValidators();
-        this.formData.controls["ttinGiayUyQuyen"].clearValidators();
         this.formData.controls["tenDviMua"].clearValidators();
         this.formData.controls["diaChiDviMua"].clearValidators();
         this.formData.controls["mstDviMua"].clearValidators();
@@ -813,12 +805,9 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
         this.formData.controls["soHd"].setValidators([Validators.required]);
         this.formData.controls["tenHd"].setValidators([Validators.required]);
         this.formData.controls["ngayHluc"].setValidators([Validators.required]);
-        this.formData.controls["ghiChuNgayHluc"].setValidators([Validators.required]);
         this.formData.controls["loaiHdong"].setValidators([Validators.required]);
-        this.formData.controls["ghiChuLoaiHdong"].setValidators([Validators.required]);
         this.formData.controls["tgianThienHd"].setValidators([Validators.required]);
         this.formData.controls["thoiGianDuKien"].setValidators([Validators.required]);
-        this.formData.controls["ghiChuTgianGnhan"].setValidators([Validators.required]);
         this.formData.controls["noiDungHdong"].setValidators([Validators.required]);
         this.formData.controls["dkienHanTtoan"].setValidators([Validators.required]);
         this.formData.controls["maDvi"].setValidators([Validators.required]);
@@ -831,7 +820,6 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
         this.formData.controls["fax"].setValidators([Validators.required]);
         this.formData.controls["stk"].setValidators([Validators.required]);
         this.formData.controls["moTai"].setValidators([Validators.required]);
-        this.formData.controls["ttinGiayUyQuyen"].setValidators([Validators.required]);
         this.formData.controls["tenDviMua"].setValidators([Validators.required]);
         this.formData.controls["diaChiDviMua"].setValidators([Validators.required]);
         this.formData.controls["mstDviMua"].setValidators([Validators.required]);
@@ -856,12 +844,9 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
         this.formData.controls["soHd"].clearValidators();
         this.formData.controls["tenHd"].clearValidators();
         this.formData.controls["ngayHluc"].clearValidators();
-        this.formData.controls["ghiChuNgayHluc"].clearValidators();
         this.formData.controls["loaiHdong"].clearValidators();
-        this.formData.controls["ghiChuLoaiHdong"].clearValidators();
         this.formData.controls["tgianThienHd"].clearValidators();
         this.formData.controls["thoiGianDuKien"].clearValidators();
-        this.formData.controls["ghiChuTgianGnhan"].clearValidators();
         this.formData.controls["noiDungHdong"].clearValidators();
         this.formData.controls["dkienHanTtoan"].clearValidators();
         this.formData.controls["maDvi"].clearValidators();
@@ -874,7 +859,6 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
         this.formData.controls["fax"].clearValidators();
         this.formData.controls["stk"].clearValidators();
         this.formData.controls["moTai"].clearValidators();
-        this.formData.controls["ttinGiayUyQuyen"].clearValidators();
         this.formData.controls["tenDviMua"].clearValidators();
         this.formData.controls["diaChiDviMua"].clearValidators();
         this.formData.controls["mstDviMua"].clearValidators();
