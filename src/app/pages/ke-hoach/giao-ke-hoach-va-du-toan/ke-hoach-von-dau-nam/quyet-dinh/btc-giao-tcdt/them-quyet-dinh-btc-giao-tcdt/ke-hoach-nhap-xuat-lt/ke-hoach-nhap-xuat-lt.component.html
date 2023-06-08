@@ -21,8 +21,8 @@
       <td style="font-weight: 500;">Vốn chi mua lương thực</td>
       <td></td>
       <td style="font-weight: 500;">
-        {{ (keHoachNhapXuat?.soLuongMuaGaoLpdh + keHoachNhapXuat?.soLuongMuaGaoXcht) * 2 +
-      keHoachNhapXuat?.soLuongMuaThoc | number : '1.0-1' : 'vi_VN'}}
+<!--        {{ (keHoachNhapXuat?.soLuongMuaGaoLpdh + keHoachNhapXuat?.soLuongMuaGaoXcht) * 2 +-->
+<!--      keHoachNhapXuat?.soLuongMuaThoc | number : '1.0-1' : 'vi_VN'}}-->
       </td>
       <td></td>
       <td style="font-weight: 500;">{{ ((keHoachNhapXuat?.soLuongMuaThoc * keHoachNhapXuat.donGiaMuaThoc) +
@@ -59,9 +59,9 @@
                [(ngModel)]="keHoachNhapXuat.soLuongMuaGao"
                [options]="amount_no_decimal"/>
 
-        <span
-          *ngIf="keHoachNhapXuat.nhapCtMua"> {{ keHoachNhapXuat.soLuongMuaGaoLpdh + keHoachNhapXuat.soLuongMuaGaoXcht | number : '1.0-1' :
-          'vi_VN'}}</span>
+<!--        <span-->
+<!--          *ngIf="keHoachNhapXuat.nhapCtMua"> {{ keHoachNhapXuat.soLuongMuaGaoLpdh + keHoachNhapXuat.soLuongMuaGaoXcht | number : '1.0-1' :-->
+<!--          'vi_VN'}}</span>-->
       </td>
       <td>
         <input *ngIf="!keHoachNhapXuat.nhapCtMua" class="money-input" currencyMask [disabled]="!isView"
@@ -159,11 +159,11 @@
                [(ngModel)]="keHoachNhapXuat.soLuongBanThoc"
                [options]="amount"/>
 
-        <span *ngIf="keHoachNhapXuat.nhapCtBan">
-        {{ keHoachNhapXuat.soLuongBanThoc +
-        (keHoachNhapXuat.soLuongBanGao) * 2 | number : '1.0-1' :
-          'vi_VN' }}
-        </span>
+<!--        <span *ngIf="keHoachNhapXuat.nhapCtBan">-->
+<!--        {{ keHoachNhapXuat.soLuongBanThoc +-->
+<!--        (keHoachNhapXuat.soLuongBanGao) * 2 | number : '1.0-1' :-->
+<!--          'vi_VN' }}-->
+<!--        </span>-->
       </td>
       <td>
         <input *ngIf="!keHoachNhapXuat.nhapCtBan" class="money-input" currencyMask [disabled]="!isView"
