@@ -85,7 +85,7 @@ export class ThemSuaMuaTangComponent implements OnInit {
       tenCloaiVthh: [null],
       dviTinh: [null],
       soLuong: [null],
-      donGia: [null, Validators.required],
+      donGia: [null],
       tongTien: [null, Validators.required],
       soLuongDuToan: [null],
     });
