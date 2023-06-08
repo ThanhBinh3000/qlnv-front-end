@@ -32,16 +32,15 @@ import { MaTongHopQuyetDinhDieuChuyenService } from "src/app/services/dieu-chuye
 import { SoDeXuatQuyetDinhDieuChuyenService } from "src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/so-de-xuat-quyet-dinh-dieu-chinh.service";
 import { KeHoachDieuChuyenService } from "../../../../ke-hoach-dieu-chuyen/ke-hoach-dieu-chuyen.service";
 import * as uuid from "uuid";
-import { ThongTinHangDtqgComponent } from "../thong-tin-hang-dtqg/thong-tin-hang-dtqg.component";
 import { BienBanNghiemThuBaoQuanLanDauService } from "src/app/services/dieu-chuyen-noi-bo/nhap-dieu-chuyen/bien-ban-nghiem-thu-bao-quan-lan-dau.service";
-
+import { BienBanNhapDayKhoService } from "src/app/services/dieu-chuyen-noi-bo/nhap-dieu-chuyen/bien-ban-nhap-day-kho";
 
 @Component({
-  selector: 'app-thong-tin-bien-ban-nghiem-thu-bao-quan-lan-dau',
-  templateUrl: './thong-tin-bien-ban-nghiem-thu-bao-quan-lan-dau.component.html',
-  styleUrls: ['./thong-tin-bien-ban-nghiem-thu-bao-quan-lan-dau.component.scss']
+  selector: 'app-thong-tin-bien-ban-nhap-day-du',
+  templateUrl: './thong-tin-bien-ban-nhap-day-du.component.html',
+  styleUrls: ['./thong-tin-bien-ban-nhap-day-du.component.scss']
 })
-export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Component implements OnInit {
+export class ThongTinBienBanNhapDayDuComponent extends Base2Component implements OnInit {
 
   @Input() idInput: number;
   @Input() isView: boolean;
@@ -76,9 +75,9 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
     private cdr: ChangeDetectorRef,
     private danhMucService: DanhMucService,
     private quyetDinhDieuChuyenCucService: QuyetDinhDieuChuyenCucService,
-    private bbNghiemThuBaoQuanLanDauService: BienBanNghiemThuBaoQuanLanDauService,
+    private bienBanNhapDayKhoService: BienBanNhapDayKhoService,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, bbNghiemThuBaoQuanLanDauService);
+    super(httpClient, storageService, notification, spinner, modal, bienBanNhapDayKhoService);
     this.formData = this.fb.group({
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự thảo'],
@@ -219,61 +218,61 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
   }
 
   async add(row?: any) {
-    await this.spinner.show();
+    // await this.spinner.show();
 
-    await this.spinner.hide();
+    // await this.spinner.hide();
 
-    if (!row) this.typeAction = "ADD"
+    // if (!row) this.typeAction = "ADD"
 
-    const modalQD = this.modal.create({
-      nzTitle: 'THÔNG TIN HÀNG DTQG CẦN ĐIỀU CHUYỂN',
-      nzContent: ThongTinHangDtqgComponent,
-      nzMaskClosable: false,
-      nzClosable: false,
-      nzWidth: '1200px',
-      nzFooter: null,
-      nzComponentParams: {
-        // danhSachKeHoach: this.danhSachKeHoach,
-        // dsChiCuc: this.listChiCucNhan,
-        // data: row ? row : undefined,
-      },
-    });
-    modalQD.afterClose.subscribe(async (data) => {
-      if (data) {
-        console.log('add', data)
-        if (data.isMatHang) {
-          const parent = {
-            ...data,
-            idVirtual: uuidv4.v4(),
-            type: this.typeData
-          }
-          this.danhSach.push({
-            ...parent,
-            isParent: true
-          })
-          this.danhSach.push({
-            ...data,
-            idParent: parent.idVirtual,
-            idVirtual: uuidv4.v4(),
-            type: this.typeData
-          })
-        } else {
-          this.danhSach.push({
-            ...data,
-            idVirtual: uuidv4.v4(),
-            type: this.typeData
-          })
-        }
-        this.dataTableView = cloneDeep(this.danhSach)
+    // const modalQD = this.modal.create({
+    //   nzTitle: 'THÔNG TIN HÀNG DTQG CẦN ĐIỀU CHUYỂN',
+    //   nzContent: ThongTinHangDtqgComponent,
+    //   nzMaskClosable: false,
+    //   nzClosable: false,
+    //   nzWidth: '1200px',
+    //   nzFooter: null,
+    //   nzComponentParams: {
+    //     // danhSachKeHoach: this.danhSachKeHoach,
+    //     // dsChiCuc: this.listChiCucNhan,
+    //     // data: row ? row : undefined,
+    //   },
+    // });
+    // modalQD.afterClose.subscribe(async (data) => {
+    //   if (data) {
+    //     console.log('add', data)
+    //     if (data.isMatHang) {
+    //       const parent = {
+    //         ...data,
+    //         idVirtual: uuidv4.v4(),
+    //         type: this.typeData
+    //       }
+    //       this.danhSach.push({
+    //         ...parent,
+    //         isParent: true
+    //       })
+    //       this.danhSach.push({
+    //         ...data,
+    //         idParent: parent.idVirtual,
+    //         idVirtual: uuidv4.v4(),
+    //         type: this.typeData
+    //       })
+    //     } else {
+    //       this.danhSach.push({
+    //         ...data,
+    //         idVirtual: uuidv4.v4(),
+    //         type: this.typeData
+    //       })
+    //     }
+    //     this.dataTableView = cloneDeep(this.danhSach)
 
-        this.formData.patchValue({
-          dcnbBBNTBQDtlList: this.danhSach
-        })
+    //     this.formData.patchValue({
+    //       dcnbBBNTBQDtlList: this.danhSach
+    //     })
 
-        console.log('this.dataTableView', this.dataTableView)
+    //     console.log('this.dataTableView', this.dataTableView)
 
-      }
-    });
+    //   }
+    // });
   }
 
 
@@ -599,3 +598,4 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
   }
 
 }
+

@@ -462,11 +462,11 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
           this.formData.value.maThuKho === this.formData.value.maThuKhoNhan
         ) {
           this.formData.patchValue({
-            thayDoiThuKho: "Không"
+            thayDoiThuKho: false
           })
         } else {
           this.formData.patchValue({
-            thayDoiThuKho: "Có"
+            thayDoiThuKho: true
           })
         }
       }
