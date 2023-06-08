@@ -11,12 +11,8 @@ export class ThongTinDauThauSclComponent implements OnInit {
   selectedId: number = 0;
   isViewDetail: boolean;
   isDetail: boolean = false;
-  @Input("itemTtdt")
-  itemTtdt: any;
-  @Input()
-  itemDuAn: any;
-  @Input()
-  itemQdPdDaDtxd: any;
+  @Input("itemQdPdKhLcnt")
+  itemQdPdKhLcnt: any;
   STATUS  = STATUS;
   listTrangThai: any[] = [
     {ma: this.STATUS.DANG_CAP_NHAT, giaTri: 'Đang cập nhật'},
@@ -31,10 +27,9 @@ export class ThongTinDauThauSclComponent implements OnInit {
   }
 
   async ngOnInit() {
-    if (this.itemTtdt) {
-      this.selectedId = this.itemTtdt.id;
+    if (this.itemQdPdKhLcnt) {
+      this.selectedId = this.itemQdPdKhLcnt.id;
       this.isDetail = true;
-      this.isViewDetail = this.itemTtdt.trangThai == STATUS.DA_HOAN_THANH ? true : false;
     }
   }
 

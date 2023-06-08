@@ -233,6 +233,7 @@ export class TienDoSuaChuaThuongXuyenComponent extends Base2Component implements
       let body = {
         "soQdPdBcKtkt": this.itemQdPdKtkt.soQd,
         "idQdPdBcKtkt": this.itemQdPdKtkt.id,
+        "loai": "01",
         "paggingReq": {
           "limit": 10,
           "page": 0

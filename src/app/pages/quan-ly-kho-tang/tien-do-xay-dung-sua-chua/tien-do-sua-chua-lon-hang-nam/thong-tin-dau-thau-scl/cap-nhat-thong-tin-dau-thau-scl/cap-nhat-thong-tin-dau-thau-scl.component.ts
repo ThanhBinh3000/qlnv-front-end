@@ -11,6 +11,9 @@ import {
 } from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetKhlcnt.service";
 import {MESSAGE} from "../../../../../../constants/message";
 import {CurrencyMaskInputMode} from "ngx-currency";
+import {
+  QdPheDuyetKhlcntTdsclService
+} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/suachualon/qd-phe-duyet-khlcnt-tdscl.service";
 
 @Component({
   selector: 'app-cap-nhat-thong-tin-dau-thau-scl',
@@ -66,7 +69,7 @@ export class CapNhatThongTinDauThauSclComponent extends Base2Component implement
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private quyetdinhpheduyetKhlcntService: QuyetdinhpheduyetKhlcntService
+    private quyetdinhpheduyetKhlcntService: QdPheDuyetKhlcntTdsclService
   ) {
     super(httpClient, storageService, notification, spinner, modal, quyetdinhpheduyetKhlcntService)
     super.ngOnInit()
@@ -113,10 +116,7 @@ export class CapNhatThongTinDauThauSclComponent extends Base2Component implement
           const data = res.data;
           this.formData.patchValue({
             soQdPdKhlcnt: data.soQd,
-            soQdPdDaDtxd: this.itemQdPdDaDtxd.soQd,
-            soQdPdKhDtxd: this.itemDuAn.soQdPdKhNam,
             tenDuAn: data.tenDuAn,
-            chuDauTu: this.itemQdPdDaDtxd.chuDauTu,
             tongMucDt: data.tongTien,
             trangThaiDt: data.trangThaiDt,
             tenTrangThaiDt: data.tenTrangThaiDt,
@@ -125,8 +125,8 @@ export class CapNhatThongTinDauThauSclComponent extends Base2Component implement
             tongSoGcTb: data.soGoiThauTb ? data.soGoiThauTb : 0,
             ghiChu: data.ghiChu,
           })
-          this.listGoiThau = data.listKtTdxdQuyetDinhPdKhlcntCvKh ? data.listKtTdxdQuyetDinhPdKhlcntCvKh : [];
-          this.dataNhaThauNopHs = data.listKtTdxdQuyetDinhPdKhlcntDsnt ? data.listKtTdxdQuyetDinhPdKhlcntDsnt : [];
+          this.listGoiThau = data.listKtTdscQuyetDinhPdKhlcntCvKh ? data.listKtTdscQuyetDinhPdKhlcntCvKh : [];
+          this.dataNhaThauNopHs = data.listKtTdscQuyetDinhPdKhlcntDsnt ? data.listKtTdscQuyetDinhPdKhlcntDsnt : [];
           await this.showDetail(this.listGoiThau[0]);
         }
       } else {

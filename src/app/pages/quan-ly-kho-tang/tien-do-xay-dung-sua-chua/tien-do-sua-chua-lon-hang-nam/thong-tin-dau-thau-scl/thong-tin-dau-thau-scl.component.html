@@ -1,10 +1,4 @@
-<div class="luong-thuc__danh-sach" *ngIf="!isDetail; else templateThemmoi">
-</div>
-<ng-template #templateThemmoi>
-  <app-cap-nhat-thong-tin-dau-thau-scl [id]="selectedId" (showListEvent)="showList()"
+<app-cap-nhat-thong-tin-dau-thau-scl [id]="selectedId" (showListEvent)="showList()"
                                        [isViewDetail]="isViewDetail"
-                                       [itemDuAn]="itemDuAn"
-                                       [itemQdPdDaDtxd]="itemQdPdDaDtxd"
                                        [idInput]="selectedId">
   </app-cap-nhat-thong-tin-dau-thau-scl>
-</ng-template>
