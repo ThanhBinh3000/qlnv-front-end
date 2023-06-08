@@ -88,7 +88,7 @@ export class ThongTinQdPheDuyetBaoCaoKtktSctxComponent extends Base2Component im
       fileDinhKems: [null],
       child: [null],
       listKtTdscQuyetDinhPdBcKtktDtl: null,
-      loai : ['00']
+      loai : ['01']
     });
   }
 
@@ -120,7 +120,7 @@ export class ThongTinQdPheDuyetBaoCaoKtktSctxComponent extends Base2Component im
         namKh: this.itemDuAn.namKh,
         tenCongTrinh: this.itemDuAn.tenCongTrinh,
         idQdPdKhScl: this.itemDuAn.idQdTcdt,
-        soQdPdKhScl: this.itemDuAn.soQdPdTcdt,
+        soQdPdKhScl: this.itemDuAn.soQdScTx,
         loaiCongTrinh: this.itemDuAn.loaiCongTrinh,
         tenLoaiCongTrinh: this.itemDuAn.tenLoaiCongTrinh,
         loaiCapCt: this.itemDuAn.loaiCapCt,

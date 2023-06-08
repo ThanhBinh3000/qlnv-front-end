@@ -227,9 +227,9 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   }
 
   async findCanCuByYear(year: number, chiTieuKhNam?) {
-    this.formData.patchValue({
-      canCu: null,
-    });
+    // this.formData.patchValue({
+    //   canCu: null,
+    // });
     if (chiTieuKhNam) {
       if (chiTieuKhNam.capDvi == "2") {
         let res = await this.chiTieuKeHoachNamService.loadThongTinChiTieuKeHoachNam(chiTieuKhNam.qdGocId);
@@ -255,6 +255,18 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         } else {
           this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR)
         }
+      }else{
+        // let res = await this.chiTieuKeHoachNamService.canCuTongCuc(year);
+        // if (res.msg == MESSAGE.SUCCESS) {
+        //   let data = res.data
+        //   if (data) {
+        //     //Lấy data của TTCP giao cho BTC (TCDT)
+        //     this.dataQdTtcpGiaoBTC = data.listBoNganh ? res.data.listBoNganh.find(item => item.maBoNganh == '01') : null;
+        //     this.formData.patchValue({
+        //       canCu: data.soQd
+        //     })
+        //   }
+        // }
       }
     } else {
       if (this.userService.isCuc()) {

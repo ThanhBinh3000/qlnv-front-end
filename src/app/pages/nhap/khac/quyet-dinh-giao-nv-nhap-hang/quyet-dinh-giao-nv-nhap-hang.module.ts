@@ -4,12 +4,16 @@ import { QuyetDinhGiaoNvNhapHangComponent } from "./quyet-dinh-giao-nv-nhap-hang
 import { ComponentsModule } from "../../../../components/components.module";
 import { MainModule } from "../../../../layout/main/main.module";
 import { FormsModule } from "@angular/forms";
+import {
+  ThemmoiQdinhNhapXuatHangKhacComponent
+} from "./themmoi-qdinh-nhap-xuat-hang-khac/themmoi-qdinh-nhap-xuat-hang-khac.component";
 
 
 
 @NgModule({
   declarations: [
-    QuyetDinhGiaoNvNhapHangComponent
+    QuyetDinhGiaoNvNhapHangComponent,
+    ThemmoiQdinhNhapXuatHangKhacComponent
   ],
   imports: [
     CommonModule,
@@ -18,7 +22,8 @@ import { FormsModule } from "@angular/forms";
     FormsModule,
   ],
   exports: [
-    QuyetDinhGiaoNvNhapHangComponent
+    QuyetDinhGiaoNvNhapHangComponent,
+    ThemmoiQdinhNhapXuatHangKhacComponent
   ]
 })
 export class QuyetDinhGiaoNvNhapHangModule { }

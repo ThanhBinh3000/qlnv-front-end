@@ -6,7 +6,6 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
-import { ChaoGiaMuaLeUyQuyenService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/chao-gia-mua-le-uy-quyen.service';
 import { STATUS } from 'src/app/constants/status';
 import { QuyetDinhNvXuatBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/quyet-dinh-nv-xuat-btt/quyet-dinh-nv-xuat-btt.service';
 
@@ -80,7 +79,7 @@ export class DanhSachBanTrucTiepChiCucComponent extends Base2Component implement
     this.formData.patchValue({
       loaiVthh: this.loaiVthh,
       trangThai: STATUS.BAN_HANH,
-      phanLoai: 'QDDX'
+      phanLoai: '02'
     })
   }
 
