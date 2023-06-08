@@ -431,11 +431,11 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
               this.formData.value.maThuKho === this.formData.value.maThuKhoNhan
             ) {
               this.formData.patchValue({
-                thayDoiThuKho: "Không"
+                thayDoiThuKho: false
               })
             } else {
               this.formData.patchValue({
-                thayDoiThuKho: "Có"
+                thayDoiThuKho: true
               })
             }
           }
@@ -462,17 +462,24 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
           this.formData.value.maThuKho === this.formData.value.maThuKhoNhan
         ) {
           this.formData.patchValue({
-            thayDoiThuKho: "Không"
+            thayDoiThuKho: false
           })
         } else {
           this.formData.patchValue({
-            thayDoiThuKho: "Có"
+            thayDoiThuKho: true
           })
         }
       }
     }
 
 
+  }
+
+  onChangSLDC(value) {
+    this.formData.patchValue({
+      soLuongPhanBo: "",
+      slDcConLai: ""
+    })
   }
 
   onChangeSLNhapDc(value) {

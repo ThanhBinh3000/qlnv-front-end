@@ -133,7 +133,7 @@ export class BaoCao02Component implements OnInit {
         this.idBaoCao = this.data?.idBaoCao;
         this.trangThaiPhuLuc = this.data?.trangThai;
         //tinh toan theo don vi tien va dua vao bieu mau
-        if (!this.data?.dotBcao && this.trangThaiPhuLuc == '3') {
+        if (!this.data?.dotBcao && this.trangThaiPhuLuc == '3' && !this.data?.isSynthetic) {
             this.luyKes.forEach(item => {
                 const id = parseInt(item.header, 10) - 21;
                 this.lstCtietBcao[id].data.push({
@@ -373,7 +373,7 @@ export class BaoCao02Component implements OnInit {
         })
         const ind = this.lstCtietBcao[idAppendix].data.findIndex(e => e.maVtu == maVtu && e.maVtuCha == 0);
         this.lstCtietBcao[idAppendix].data[ind].thSoLuong = sl;
-        this.lstCtietBcao[idAppendix].data[ind].thGiaMuaTd = Math.round(divNumber(thanhTien, sl));
+        this.lstCtietBcao[idAppendix].data[ind].thGiaMuaTd = divNumber(thanhTien, sl);
         this.lstCtietBcao[idAppendix].data[ind].thTtien = thanhTien;
     }
 
@@ -388,7 +388,7 @@ export class BaoCao02Component implements OnInit {
         } else {
             let check = true;
             this.lstCtietBcao[idAppendix].data.forEach(item => {
-                if (item.maVtu == data.maVtu && item.maVtuCha != 0 && item.checked == false) {
+                if (item.maVtu == data.maVtu && item.maVtuCha != 0 && !item.checked) {
                     check = false;
                 }
             })

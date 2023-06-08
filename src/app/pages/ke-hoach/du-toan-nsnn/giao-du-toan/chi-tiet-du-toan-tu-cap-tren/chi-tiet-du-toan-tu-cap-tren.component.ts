@@ -1,7 +1,5 @@
-import { DatePipe, Location } from '@angular/common';
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
-import { ActivatedRoute, Router } from '@angular/router';
+import { DatePipe } from '@angular/common';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import * as fileSaver from 'file-saver';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
@@ -16,7 +14,7 @@ import { Globals } from 'src/app/shared/globals';
 import { displayNumber, exchangeMoney } from 'src/app/Utility/func';
 import { DON_VI_TIEN, GDT, LA_MA, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
-import { NOI_DUNG } from './chi-tiet-du-toan-tu-cap-tren.constant';
+import { NOI_DUNG } from '../tao-moi-quyet-dinh-btc/tao-moi-quyet-dinh-btc.constant';
 // import { GIAO_DU_TOAN, MAIN_ROUTE_DU_TOAN, MAIN_ROUTE_KE_HOACH } from '../../giao-du-toan-chi-nsnn.constant';
 // import { NOI_DUNG } from './nhan-du-toan-chi-NSNN-cho-cac-don-vi.constant';
 
@@ -89,6 +87,7 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
   fileDetail: NzUploadFile;
   // khac
   statusBtnNew: boolean;
+  statusBtnCreateReport = true;
   editMoneyUnit = false;
   isDataAvailable = false;
   isStatus: any;
@@ -99,12 +98,8 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
     private quanLyVonPhiService: QuanLyVonPhiService,
     private giaoDuToanChiService: GiaoDuToanChiService,
     private spinner: NgxSpinnerService,
-    private routerActive: ActivatedRoute,
     private datepipe: DatePipe,
-    private sanitizer: DomSanitizer,
-    private router: Router,
     private notification: NzNotificationService,
-    private location: Location,
     private danhMucService: DanhMucHDVService,
     private dataSource: DataService,
     public globals: Globals,
@@ -159,7 +154,6 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
       data => {
         if (data.statusCode == 0) {
           this.donVis = data.data;
-          // this.lstDvi = this.donVis.filter(e => e.parent?.maDvi === this.maDviTao);
         } else {
           this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }
@@ -226,8 +220,6 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
     await this.giaoDuToanChiService.QDGiaoChiTiet(this.id, "1").toPromise().then(
       async (data) => {
         if (data.statusCode == 0) {
-          console.log(data.data);
-
           this.lstCtietBcao = data.data.lstCtiets;
           this.sortByIndex();
           this.soQd = data.data.soQd;
@@ -245,6 +237,13 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
           if (data.data.trangThai == '1' || this.userInfo.CAP_DVI == '3') {
             this.statusBtnNew = true;
           }
+
+          if ((this.userInfo.DON_VI.tenVietTat.includes("CCDT") || this.userInfo.DON_VI.tenVietTat.includes("CNTT") || this.userInfo.DON_VI.tenVietTat.includes("_VP"))) {
+            this.statusBtnNew = true;
+            if (this.isStatus == "2") {
+              this.statusBtnCreateReport = false;
+            }
+          }
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
@@ -261,10 +260,6 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
       tabSelected: 'giaodutoan',
     }
     this.dataSource.changeData(obj);
-    // this.router.navigate([
-    //   MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN,
-    // ]);
-    // this.location.back()
   }
 
 
@@ -393,7 +388,7 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
     this.spinner.hide();
   }
 
-  async taoMoiPhuongAn(loaiPa) {
+  async taoMoiPhuongAn() {
     const listCtietDvi: any[] = [];
 
     let maPa
@@ -443,43 +438,16 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
       maPaCha: this.maPaCha,
       namPa: this.namDtoan,
       maPhanGiao: "2",
-      maLoaiDan: '1',
+      maLoaiDan: '3',
       trangThai: "1",
       thuyetMinh: "",
       idPaBTC: this.id,
       tabSelected: 'phuongAnGiaoDuToan',
     };
-
-    const request2 = {
-      id: null,
-      fileDinhKems: [],
-      listIdDeleteFiles: [],
-      lstCtiets: lstCtietBcaoTemp,
-      maDvi: this.maDviTao,
-      maDviTien: this.maDviTien,
-      maPa: maPa,
-      maPaCha: this.maPaCha,
-      namPa: this.namDtoan,
-      maPhanGiao: "2",
-      maLoaiDan: '2',
-      trangThai: "1",
-      thuyetMinh: "",
-      idPaBTC: this.id,
-      tabSelected: 'phuongAnGiaoDieuChinh',
-    };
-
-    if (loaiPa) {
-      if (loaiPa === 1) {
-        this.dataChange.emit(request1);
-      }
-
-      if (loaiPa === 2) {
-        this.dataChange.emit(request2);
-      }
-    }
+    this.dataChange.emit(request1);
   };
 
-  async taoMoiBaoCao(loaiPa) {
+  async taoMoiBaoCao() {
     const listCtietDvi: any[] = [];
     let maBcao
     await this.giaoDuToanChiService.SinhMaBaoCao().toPromise().then(
@@ -498,8 +466,6 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
     );
 
 
-    // this.lstDvi.forEach(item => {
-    // })
     listCtietDvi.push({
       id: uuid.v4() + 'FE',
       maDviNhan: this.userInfo.MA_DVI,
@@ -511,7 +477,7 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
     this.lstCtietBcao.forEach(item => {
       lstCtietBcaoTemp.push({
         ...item,
-        dtoanGiao: item.soTien,
+        dtoanGiao: 0,
         nguonNsnn: item.nguonNsnn,
         nguonKhac: item.nguonKhac,
         tongCong: item.soTien,
@@ -533,45 +499,14 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
       namPa: this.namDtoan,
       soQd: this.soQd,
       maPhanGiao: "2",
-      maLoaiDan: '1',
+      maLoaiDan: '3',
       trangThai: "1",
       thuyetMinh: "",
       idPaBTC: this.id,
       tabSelected: 'addBaoCao',
     };
-
-    const request2 = {
-      id: null,
-      fileDinhKems: [],
-      listIdDeleteFiles: [],
-      lstCtiets: lstCtietBcaoTemp,
-      lstCtiets1: lstCtietBcaoTemp,
-      maDvi: this.maDviTao,
-      maDviTien: this.maDviTien,
-      maBcao: maBcao,
-      maPa: this.maPa,
-      maPaCha: this.maPaCha,
-      namPa: this.namDtoan,
-      soQd: this.soQd,
-      maPhanGiao: "2",
-      maLoaiDan: '2',
-      trangThai: "1",
-      thuyetMinh: "",
-      idPaBTC: this.id,
-      tabSelected: 'addBaoCao',
-    };
-
-    if (loaiPa) {
-      if (loaiPa === 1) {
-        localStorage.setItem("idChiTiet", this.id);
-        this.dataChange.emit(request1);
-      }
-
-      if (loaiPa === 2) {
-        localStorage.setItem("idChiTiet", this.id);
-        this.dataChange.emit(request2);
-      }
-    }
+    localStorage.setItem("idChiTiet", this.id);
+    this.dataChange.emit(request1);
   };
 
 

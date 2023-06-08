@@ -385,19 +385,27 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
   }
 
   async getDataChiTieu() {
-    let res2 =
-      await this.chiTieuKeHoachNamCapTongCucService.loadThongTinChiTieuKeHoachCucNam(
-        +this.formData.value.namKh
-      );
+    let res2 = null;
+    res2 = await this.chiTieuKeHoachNamCapTongCucService.loadThongTinChiTieuKeHoachCucNam(
+      +this.formData.get('namKh').value,
+    );
     if (res2.msg == MESSAGE.SUCCESS) {
       this.dataChiTieu = res2.data;
-      if (this.dataChiTieu) {
-        this.formData.patchValue({
-          soQdCtieu: res2.data.soQuyetDinh,
-          idSoQdCtieu: res2.data.id
-        });
-      }
+      this.formData.patchValue({
+        soQdCtieu: res2.data.soQuyetDinh,
+        idSoQdCtieu: res2.data.id
+      });
+    } else {
+      this.dataChiTieu = null;
+      this.formData.patchValue({
+        soQdCtieu: null,
+        idSoQdCtieu: null
+      });
     }
+  }
+
+  onChangeNamKh() {
+    this.getDataChiTieu();
   }
 
   async guiDuyet() {

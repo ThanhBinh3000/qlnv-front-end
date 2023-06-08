@@ -13,7 +13,7 @@ import { DataService } from 'src/app/services/data.service';
 import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { GDT, Utils } from 'src/app/Utility/utils';
+import { GDT, TRANG_THAI_KIEM_TRA_BAO_CAO, Utils } from 'src/app/Utility/utils';
 import { DialogTongHopComponent } from '../dialog-tong-hop/dialog-tong-hop.component';
 
 export const TRANG_THAI_TIM_KIEM_GIAO = [
@@ -53,6 +53,7 @@ export class TongHopBaoCaoCapDuoiComponent implements OnInit {
     loaiTimKiem: "1",
     maPhanGiao: '3',
     maLoai: '2',
+    maLoaiDan: [3],
     namPa: null,
     ngayTaoTu: null,
     ngayTaoDen: null,
@@ -97,16 +98,13 @@ export class TongHopBaoCaoCapDuoiComponent implements OnInit {
   isDataAvailable = false;
   statusNewReport = true;
   constructor(
-    private quanLyVonPhiService: QuanLyVonPhiService,
     private giaoDuToanChiService: GiaoDuToanChiService,
     private danhMuc: DanhMucHDVService,
     private router: Router,
     private datePipe: DatePipe,
     private notification: NzNotificationService,
-    private fb: FormBuilder,
     private spinner: NgxSpinnerService,
     private userService: UserService,
-    private dataSource: DataService,
     private modal: NzModalService,
   ) {
   }
@@ -200,7 +198,6 @@ export class TongHopBaoCaoCapDuoiComponent implements OnInit {
     } else {
       searchFilterTemp.trangThais = [Utils.TT_BC_7, Utils.TT_BC_8, Utils.TT_BC_9, Utils.TT_BC_KT]
     }
-    // searchFilterTemp.trangThaiGiaos = ['0', '1', '2']
     await this.giaoDuToanChiService.timBaoCaoGiao(searchFilterTemp).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
@@ -248,19 +245,18 @@ export class TongHopBaoCaoCapDuoiComponent implements OnInit {
     this.searchFilter.ngayTaoDen = null
     this.searchFilter.maBcao = null
     this.trangThai = null;
+    this.searchFilter.maLoaiDan = [3];
     this.onSubmit();
   }
 
   xemChiTiet(id: string, maLoaiDan: string) {
-    console.log({ "id": id, "maLoaiDan": maLoaiDan });
-
-    if (maLoaiDan == "1") {
+    if (maLoaiDan == "3") {
       const obj = {
         id: id,
         tabSelected: 'addBaoCao',
       }
       this.dataChange.emit(obj);
-    } else if (maLoaiDan == "2") {
+    } else if (maLoaiDan == "3") {
       const obj = {
         id: id,
         tabSelected: 'addBaoCao',
@@ -272,7 +268,8 @@ export class TongHopBaoCaoCapDuoiComponent implements OnInit {
   }
 
   getStatusName(trangThai: string) {
-    return this.trangThais.find(e => e.id == trangThai).tenDm;
+    const trangThais = TRANG_THAI_KIEM_TRA_BAO_CAO;
+    return trangThais.find(e => e.id == trangThai).ten;
   }
 
   getUnitName(maDvi: string) {
@@ -316,10 +313,8 @@ export class TongHopBaoCaoCapDuoiComponent implements OnInit {
     });
     modalTuChoi.afterClose.toPromise().then(async (res) => {
       if (res) {
-        console.log("res: ", res);
         const obj = {
           ...res,
-          // id: null,
           tabSelected: 'addBaoCao',
           isSynthetic: true,
         }

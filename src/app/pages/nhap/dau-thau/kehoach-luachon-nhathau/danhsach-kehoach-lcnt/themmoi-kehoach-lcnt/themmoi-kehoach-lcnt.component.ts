@@ -143,7 +143,8 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       ldoTuchoi: [],
       trangThai: ['00'],
       tenTrangThai: ['Dự Thảo'],
-      diaDiemDuAn: ['']
+      diaDiemDuAn: [''],
+      yKien: ['']
     });
   }
 
@@ -159,7 +160,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
     }
     this.formData.get('loaiVthh').setValue(this.loaiVthhInput);
     if (this.loaiVthhInput.startsWith('02')){
-      this.formData.get('vat').setValue('10');
+      this.formData.get('vat').setValue('8');
     }
     this.loadDanhMucHang();
     if (this.idInput > 0) {
@@ -195,6 +196,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
     let resNx = await this.danhMucService.danhMucChungGetAll('LOAI_HINH_NHAP_XUAT');
     if (resNx.msg == MESSAGE.SUCCESS) {
       this.listLoaiHinhNx = resNx.data.filter(item => item.apDung == 'NHAP_DT');
+      this.formData.get('loaiHinhNx').setValue(this.listLoaiHinhNx[0].ma)
     }
     // kiểu nhập xuất
     this.listKieuNx = [];
@@ -425,7 +427,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       isReadOnly = true;
     }
     const modal = this.modal.create({
-      nzTitle: 'Địa điểm nhập hàng',
+      nzTitle: 'THÔNG TIN GÓI THẦU',
       nzContent: DialogThemMoiGoiThauComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -459,8 +461,8 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
         let tongMucDt: number = 0;
         let tongMucDtDx: number = 0;
         this.listOfData.forEach((item) => {
-          tongMucDt = tongMucDt + item.soLuong * item.donGiaVat;
-          tongMucDtDx = tongMucDtDx + item.soLuong * item.donGiaTamTinh;
+          tongMucDt = tongMucDt + (item.soLuong * item.donGiaVat /1000000000);
+          tongMucDtDx = tongMucDtDx + (item.soLuong * item.donGiaTamTinh /1000000000);
         });
         this.formData.patchValue({
           tongMucDt: tongMucDt,
@@ -529,8 +531,8 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       let tongMucDt: number = 0;
       let tongMucDtDx: number = 0;
       this.listOfData.forEach((item) => {
-        tongMucDt = tongMucDt + (item.soLuong * item.donGiaVat *1000);
-        tongMucDtDx = tongMucDtDx + (item.soLuong * item.donGiaTamTinh * 1000);
+        tongMucDt = tongMucDt + (item.soLuong * item.donGiaVat *1000/1000000000);
+        tongMucDtDx = tongMucDtDx + (item.soLuong * item.donGiaTamTinh * 1000/1000000000);
       });
       this.formData.patchValue({
         tongMucDt: tongMucDt,

@@ -27,14 +27,14 @@
         <label class="search__label">Mã PA</label>
         <input nz-input class="search__input" [(ngModel)]="searchFilter.maPa" />
       </div>
-      <div nz-col nzSpan="6">
+      <!-- <div nz-col nzSpan="6">
         <label class="search__label">Loại phương án</label>
         <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại dự án" [(ngModel)]="searchFilter.maLoaiDan"
           [class]="statusCreate || searchFilter.maLoaiDan ?'' : 'input-error-validate'">
           <nz-option *ngFor="let item of loaiDuAns" [nzValue]="item.id" [nzLabel]="item.tenDm">
           </nz-option>
         </nz-select>
-      </div>
+      </div> -->
       <div nz-col nzSpan="6">
         <label class="search__label">Trạng thái giao</label>
         <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái" [(ngModel)]="trangThaiGiao">
@@ -78,11 +78,12 @@
             <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"></label>
           </th>
           <th width="60px">STT</th>
+          <th width="150px">Mã phương án cấp trên</th>
           <th width="150px">Mã phương án</th>
           <!-- <th width="150px">Số QĐ</th> -->
           <th width="150px">Ngày tạo</th>
           <th width="150px">Năm phương án</th>
-          <th width="150px">Loại phương án</th>
+          <!-- <th width="150px">Loại phương án</th> -->
           <th width="150px">Trạng thái giao</th>
           <th width="150px" style="text-align: center">Trạng thái</th>
           <th width="150px">Hành động</th>
@@ -90,6 +91,15 @@
         <tr class="search-table">
           <th></th>
           <th></th>
+          <th>
+            <nz-input-group [nzSuffix]="suffixTemplateInfo">
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.maPaCha"
+                (input)="filterInTable('maPa',filterTable.maPa, false)" size="small" />
+            </nz-input-group>
+            <ng-template #suffixTemplateInfo>
+              <i nz-icon nzType="search"></i>
+            </ng-template>
+          </th>
           <th>
             <nz-input-group [nzSuffix]="suffixTemplateInfo">
               <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.maPa"
@@ -113,13 +123,13 @@
               <i nz-icon nzType="search"></i>
             </ng-template>
           </th>
-          <th>
+          <!-- <th>
             <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Tìm kiếm" [(ngModel)]="filterTable.maLoaiDan"
               (ngModelChange)="filterInTable('maLoaiDan',filterTable.maLoaiDan, false)">
               <nz-option *ngFor="let item of loaiDuAns" [nzValue]="item.id" [nzLabel]="item.tenDm">
               </nz-option>
             </nz-select>
-          </th>
+          </th> -->
           <th>
             <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Tìm kiếm" [(ngModel)]="filterTable.trangThaiGiao"
               (ngModelChange)="filterInTable('trangThaiGiao',filterTable.trangThaiGiao, false)">
@@ -147,6 +157,9 @@
             {{ (i + 1) + (pages.page - 1)*pages.size }}
           </td>
           <td>
+            {{ data.maPaCha}}
+          </td>
+          <td>
             {{ data.maPa}}
           </td>
           <td>
@@ -155,14 +168,14 @@
           <td>
             {{data.namPa}}
           </td>
-          <td>
+          <!-- <td>
             <ng-template [ngIf]="data.maLoaiDan == '1'">
               Giao dự toán
             </ng-template>
             <ng-template [ngIf]="data.maLoaiDan == '2'">
               Giao điều chỉnh dự toán
             </ng-template>
-          </td>
+          </td> -->
           <td>
             <ng-template [ngIf]="data.trangThaiGiao == '0'"><br>Chưa giao</ng-template>
             <ng-template [ngIf]="data.trangThaiGiao == '2'"><br>Đang giao</ng-template>

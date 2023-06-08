@@ -6,7 +6,6 @@ import { DialogDanhSachVatTuHangHoaComponent } from 'src/app/components/dialog/d
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
-import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
@@ -32,7 +31,7 @@ export class ItemData {
 @Component({
   selector: 'app-phu-luc-02',
   templateUrl: './phu-luc-02.component.html',
-  styleUrls: ['./phu-luc-02.component.scss']
+  styleUrls: ['../add-bao-cao.component.scss'],
 })
 
 export class PhuLuc02Component implements OnInit {
@@ -63,10 +62,11 @@ export class PhuLuc02Component implements OnInit {
   //nho dem
   editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
   userInfo: any;
+  BOX_NUMBER_WIDTH = 450;
+  scrollX: string;
   constructor(
     private _modalRef: NzModalRef,
     private spinner: NgxSpinnerService,
-    private lapThamDinhService: LapThamDinhService,
     private giaoDuToanService: GiaoDuToanChiService,
     private notification: NzNotificationService,
     private modal: NzModalService,
@@ -102,22 +102,29 @@ export class PhuLuc02Component implements OnInit {
     })
     await this.getDinhMuc();
     this.lstCtietBcao.forEach(item => {
+      const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.danhMuc && e.loaiBaoQuan == item.maDmuc);
       if (!item.tenDanhMuc) {
-        const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.danhMuc && e.loaiBaoQuan == item.maDmuc);
         item.tenDanhMuc = dinhMuc?.tenDinhMuc;
-        item.namDtDmuc = dinhMuc?.tongDmuc;
-        item.maDviTinh = dinhMuc?.donViTinh;
-        item.namDtTtien = mulNumber(item.namDtDmuc, item.namDtSluong);
       }
+      item.namDtDmuc = dinhMuc?.tongDmuc;
+      item.maDviTinh = dinhMuc?.donViTinh;
+      item.namDtTtien = mulNumber(item.namDtDmuc, item.namDtSluong);
     })
+    if (this.status) {
+      this.scrollX = (400 + this.BOX_NUMBER_WIDTH * 3).toString() + 'px';
+    } else {
+      this.scrollX = (350 + this.BOX_NUMBER_WIDTH * 3).toString() + 'px';
+    }
 
     this.sortByIndex();
     this.getTotal();
+    this.sum1();
     this.updateEditCache();
     this.getStatusButton();
 
     this.spinner.hide();
   }
+
 
   async getDinhMuc() {
     const request = {
@@ -475,10 +482,13 @@ export class PhuLuc02Component implements OnInit {
         maDmuc: data.maDmuc,
         tenDanhMuc: data.tenDanhMuc,
         level: data.level,
+        namDtSluong: data.namDtSluong,
+        maDviTinh: data.maDviTinh,
+        namDtDmuc: data.namDtDmuc,
       }
       this.lstCtietBcao.forEach(item => {
         if (this.getHead(item.stt) == stt) {
-          this.lstCtietBcao[index].namDtSluong = sumNumber([this.lstCtietBcao[index].namDtSluong, item.namDtSluong]);
+          // this.lstCtietBcao[index].namDtSluong = sumNumber([this.lstCtietBcao[index].namDtSluong, item.namDtSluong]);
           this.lstCtietBcao[index].namDtTtien = sumNumber([this.lstCtietBcao[index].namDtTtien, item.namDtTtien]);
 
         }
@@ -486,6 +496,37 @@ export class PhuLuc02Component implements OnInit {
       stt = this.getHead(stt);
     }
     this.getTotal();
+  }
+
+  sum1() {
+    this.lstCtietBcao.forEach(itm => {
+      let stt = this.getHead(itm.stt);
+      while (stt != '0') {
+        const index = this.lstCtietBcao.findIndex(e => e.stt == stt);
+        const data = this.lstCtietBcao[index];
+        this.lstCtietBcao[index] = {
+          ...new ItemData(),
+          id: data.id,
+          stt: data.stt,
+          danhMuc: data.danhMuc,
+          maDmuc: data.maDmuc,
+          tenDanhMuc: data.tenDanhMuc,
+          level: data.level,
+          namDtSluong: data.namDtSluong,
+          maDviTinh: data.maDviTinh,
+          namDtDmuc: data.namDtDmuc,
+        }
+        this.lstCtietBcao.forEach(item => {
+          if (this.getHead(item.stt) == stt) {
+            this.lstCtietBcao[index].namDtTtien = sumNumber([this.lstCtietBcao[index].namDtTtien, item.namDtTtien]);
+          }
+        })
+        stt = this.getHead(stt);
+      }
+      // this.getTotal();
+      this.getTotal();
+    })
+
   }
 
   getTotal() {

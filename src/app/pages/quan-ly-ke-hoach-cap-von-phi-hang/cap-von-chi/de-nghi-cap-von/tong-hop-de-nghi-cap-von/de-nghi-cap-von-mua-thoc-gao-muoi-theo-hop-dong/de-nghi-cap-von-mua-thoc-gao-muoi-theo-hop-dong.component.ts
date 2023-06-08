@@ -166,10 +166,11 @@ export class DeNghiCapVonMuaThocGaoMuoiTheoHopDongComponent implements OnInit {
 			await this.getDetailReport();
 		} else {
 			this.baoCao = this.data?.baoCao;
+			this.sum();
 		}
 		this.updateEditCache();
 		this.getStatusButton();
-		this.sum();
+		// this.sum();
 		this.getTotal();
 	}
 
@@ -474,7 +475,7 @@ export class DeNghiCapVonMuaThocGaoMuoiTheoHopDongComponent implements OnInit {
 		this.editCache[id].data.vonDnghiCapLanNay = sumNumber([this.editCache[id].data.gtHopDong, -this.editCache[id].data.tongVonVaDtDaCap]);
 		this.editCache[id].data.vonDuyetCong = sumNumber([this.editCache[id].data.vonDuyetCapUng, this.editCache[id].data.vonDuyetCapVon]);
 		this.editCache[id].data.tongCap = sumNumber([this.editCache[id].data.tongVonVaDtDaCap, this.editCache[id].data.vonDuyetCong]);
-		this.editCache[id].data.soConDuocCap = sumNumber([this.editCache[id].data.gtHopDong, -this.editCache[id].data.vonDuyetCong]);
+		this.editCache[id].data.soConDuocCap = sumNumber([this.editCache[id].data.gtHopDong, -this.editCache[id].data.tongCap]);
 	}
 
 	getTotal() {
@@ -484,58 +485,29 @@ export class DeNghiCapVonMuaThocGaoMuoiTheoHopDongComponent implements OnInit {
 			this.total.slHopDong = sumNumber([this.total.slHopDong, item.slHopDong]);
 			this.total.gtHopDong = sumNumber([this.total.gtHopDong, item.gtHopDong]);
 			this.total.duToanDaGiao = sumNumber([this.total.duToanDaGiao, item.duToanDaGiao]);
-			this.total.luyKeCong = sumNumber([this.total.luyKeCapUng, this.total.luyKeCapVon]);
 			this.total.luyKeCapUng = sumNumber([this.total.luyKeCapUng, item.luyKeCapUng]);
 			this.total.luyKeCapVon = sumNumber([this.total.luyKeCapVon, item.luyKeCapVon]);
+			this.total.luyKeCong = sumNumber([this.total.luyKeCong, item.luyKeCong]);
 			this.total.tongVonVaDtDaCap = sumNumber([this.total.duToanDaGiao, this.total.luyKeCong]);
 			this.total.vonDnghiCapLanNay = sumNumber([this.total.gtHopDong, -this.total.tongVonVaDtDaCap]);
 			this.total.vonDuyetCapUng = sumNumber([this.total.vonDuyetCapUng, item.vonDuyetCapUng]);
 			this.total.vonDuyetCapVon = sumNumber([this.total.vonDuyetCapVon, item.vonDuyetCapVon])
-			this.total.vonDuyetCong = sumNumber([this.total.vonDuyetCapUng, this.total.vonDuyetCapVon]);
-			this.total.tongCap = sumNumber([this.total.tongVonVaDtDaCap, this.total.vonDuyetCong]);
-			this.total.soConDuocCap = sumNumber([this.total.gtHopDong, -this.total.tongCap]);
+			this.total.vonDuyetCong = sumNumber([this.total.vonDuyetCong, item.vonDuyetCong]);
+			this.total.tongCap = sumNumber([this.total.tongCap, item.tongCap]);
+			this.total.soConDuocCap = sumNumber([this.total.soConDuocCap, item.soConDuocCap]);
 		})
 	}
 
 	sum() {
-		const index = this.baoCao.dnghiCapvonCtiets.findIndex(e => e)
 		this.baoCao.dnghiCapvonCtiets.forEach(item => {
-			this.baoCao.dnghiCapvonCtiets[index].vonDnghiCapLanNay = sumNumber([
-				this.baoCao.dnghiCapvonCtiets[index].gtHopDong,
-				-this.baoCao.dnghiCapvonCtiets[index].duToanDaGiao,
-				-this.baoCao.dnghiCapvonCtiets[index].luyKeCapUng,
-				-this.baoCao.dnghiCapvonCtiets[index].luyKeCapVon,
-			]);
-			this.baoCao.dnghiCapvonCtiets[index].luyKeCong = sumNumber([
-				this.baoCao.dnghiCapvonCtiets[index].luyKeCapVon,
-				this.baoCao.dnghiCapvonCtiets[index].luyKeCapUng
-			]);
-			this.baoCao.dnghiCapvonCtiets[index].tongVonVaDtDaCap = sumNumber([
-				this.baoCao.dnghiCapvonCtiets[index].duToanDaGiao,
-				this.baoCao.dnghiCapvonCtiets[index].luyKeCong
-			]);
-			this.baoCao.dnghiCapvonCtiets[index].vonDuyetCong = sumNumber([
-				this.baoCao.dnghiCapvonCtiets[index].vonDuyetCapVon,
-				this.baoCao.dnghiCapvonCtiets[index].vonDuyetCapUng
-			]);
-			this.baoCao.dnghiCapvonCtiets[index].tongCap = sumNumber([
-				this.baoCao.dnghiCapvonCtiets[index].tongVonVaDtDaCap,
-				this.baoCao.dnghiCapvonCtiets[index].vonDuyetCong
-			]);
-			this.baoCao.dnghiCapvonCtiets[index].soConDuocCap = sumNumber([
-				this.baoCao.dnghiCapvonCtiets[index].gtHopDong,
-				-this.baoCao.dnghiCapvonCtiets[index].tongCap
-			]);
+			if (item.isParent) {
+				item.tongVonVaDtDaCap = sumNumber([item.duToanDaGiao, item.luyKeCong]);
+				item.vonDnghiCapLanNay = sumNumber([item.gtHopDong, -item.tongVonVaDtDaCap]);
+				item.tongCap = sumNumber([item.tongVonVaDtDaCap, item.vonDuyetCong]);
+				item.soConDuocCap = sumNumber([item.gtHopDong, -item.tongCap]);
+			}
 		})
 	}
-
-	// getSum() {
-	//   this.sum = new ItemRequest()
-	//   this.baoCao.dnghiCapvonCtiets.forEach(item => {
-	//     this.sum.vonDnghiCapLanNay = sumNumber([this.sum.gtHopDong, -this.sum.duToanDaGiao, -this.sum.luyKeCapUng, -this.sum.luyKeCapVon])
-	//     console.log(item.vonDnghiCapLanNay)
-	//   })
-	// }
 
 	showDialogCopy() {
 		// const obj = {

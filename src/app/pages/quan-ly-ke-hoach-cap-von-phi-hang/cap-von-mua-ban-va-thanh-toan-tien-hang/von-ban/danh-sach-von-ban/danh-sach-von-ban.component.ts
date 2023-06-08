@@ -31,7 +31,7 @@ export class DanhSachVonBanComponent implements OnInit {
         maDvi: null,
         loaiDnghi: null,
         canCuVeGia: null,
-        namBcao: null,
+        namDnghi: null,
         ngayTaoDen: null,
         ngayTaoTu: null,
         paggingReq: {
@@ -175,7 +175,7 @@ export class DanhSachVonBanComponent implements OnInit {
         this.searchFilter.trangThai = null
         this.searchFilter.ngayTaoTu = null
         this.searchFilter.ngayTaoDen = null
-        this.searchFilter.namBcao = null
+        this.searchFilter.namDnghi = null
         this.searchFilter.loaiDnghi = null
         this.searchFilter.canCuVeGia = null
         this.search();

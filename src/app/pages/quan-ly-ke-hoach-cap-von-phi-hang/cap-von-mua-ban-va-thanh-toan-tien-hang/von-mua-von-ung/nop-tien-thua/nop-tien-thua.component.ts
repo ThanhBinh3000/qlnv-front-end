@@ -183,6 +183,9 @@ export class NopTienThuaComponent implements OnInit {
         this.baoCao.ttNhan.fileList = [];
         this.baoCao.ttGui.listIdDeleteFiles = [];
         this.baoCao.ttNhan.listIdDeleteFiles = [];
+        this.lstCtietBcaos.forEach(item => {
+            item.soConPhaiNop = sumNumber([item.tongVonDu, -item.soDaNopTcLuyKeLanNay, -item.soNopLanNay]);
+        })
         // this.updateSoDu();
         this.updateEditCache();
         this.getStatusButton();

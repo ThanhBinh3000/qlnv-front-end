@@ -29,6 +29,7 @@ export class ThemMoiBangKeCanHangBttComponent extends Base2Component implements 
   @Input() loaiVthh: string;
   @Input() isView: boolean;
   @Input() idQdGiaoNvXh: number;
+  @Input() isViewOnModal: boolean;
 
   @Output()
   showListEvent = new EventEmitter<any>();

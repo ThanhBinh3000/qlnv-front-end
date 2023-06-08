@@ -21,6 +21,7 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
   nam: any;
   keHoach: any = {
     id: null,
+    sapXep: null,
     maBoNganh: null,
     tenBoNganh: null,
     tongTien: null,
@@ -86,6 +87,7 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
       if (boNganh) {
         this.keHoach.tenBoNganh = boNganh.tenDvi;
         this.keHoach.maBoNganh = boNganh.maDvi;
+        this.keHoach.sapXep = boNganh.sapXep;
         this.keHoach.tongTien = 0;
       }
       //fix btc = tcdt
@@ -122,19 +124,21 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
       //fix theo giao dien moi
       this.dsBoNganh = res.data.filter(s => s.code != 'BTC');
     }
-
   }
 
   async loadDanhMucHang() {
-    await this.danhMucService.loadDanhMucHangHoa().subscribe((hangHoa) => {
-      if (hangHoa.msg == MESSAGE.SUCCESS) {
-        const dataVatTu = hangHoa.data.filter(item => (item.ma == "02" || item.ma == "04"));
-        dataVatTu.forEach(item => {
-          this.dsHangHoa = [...this.dsHangHoa, ...item.child]
-        })
-        // this.dsHangHoa = dataVatTu.child;
-      }
-    })
+    if (this.dataEdit) {
+      this.onChangeBoNganh(this.dataEdit.maBoNganh);
+    }
+    // await this.danhMucService.loadDanhMucHangHoa().subscribe((hangHoa) => {
+    //   if (hangHoa.msg == MESSAGE.SUCCESS) {
+    //     const dataVatTu = hangHoa.data.filter(item => (item.ma == "02" || item.ma == "04"));
+    //     dataVatTu.forEach(item => {
+    //       this.dsHangHoa = [...this.dsHangHoa, ...item.child]
+    //     })
+    //     // this.dsHangHoa = dataVatTu.child;
+    //   }
+    // })
   }
 
   luu() {

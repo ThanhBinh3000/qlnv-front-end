@@ -3,7 +3,7 @@
         <div *ngIf="userService.isCuc()" nz-col nzSpan="6">
             <label class="search__label">Căn cứ về giá</label>
             <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn căn cứ giá" [(ngModel)]="response.canCuVeGia"
-                [class]="response.canCuVeGia ?'' : 'input-error-validate'">
+                [class]="response.canCuVeGia ?'' : 'input-error-validate'" (ngModelChange)="changeLoaiDn()">
                 <nz-option *ngFor="let item of canCuGias" [nzValue]="item.id" [nzLabel]="item.tenDm">
                 </nz-option>
             </nz-select>

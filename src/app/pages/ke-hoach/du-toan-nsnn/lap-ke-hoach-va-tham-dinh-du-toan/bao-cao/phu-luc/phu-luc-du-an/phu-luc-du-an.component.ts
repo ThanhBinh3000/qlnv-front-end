@@ -5,11 +5,11 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.service';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
-import { displayNumber, exchangeMoney, sumNumber } from 'src/app/Utility/func';
-import { AMOUNT, DON_VI_TIEN, LA_MA } from "src/app/Utility/utils";
+import { displayNumber, exchangeMoney, getName, sumNumber } from 'src/app/Utility/func';
+import { AMOUNT, BOX_NUMBER_WIDTH, DON_VI_TIEN, LA_MA } from "src/app/Utility/utils";
 import * as uuid from "uuid";
-import { DANH_MUC } from './phu-luc-du-an.constant';
 
 export class ItemData {
     id: string;
@@ -63,7 +63,7 @@ export class PhuLucDuAnComponent implements OnInit {
     thuyetMinh: string;
     namBcao: number;
     //danh muc
-    duAns: any[] = DANH_MUC;
+    duAns: any[] = [];
     soLaMa: any[] = LA_MA;
     lstCtietBcao: ItemData[] = [];
     donViTiens: any[] = DON_VI_TIEN;
@@ -77,10 +77,13 @@ export class PhuLucDuAnComponent implements OnInit {
     //nho dem
     editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
     amount = AMOUNT;
+    scrollX: string;
+
     constructor(
         private _modalRef: NzModalRef,
         private spinner: NgxSpinnerService,
         private lapThamDinhService: LapThamDinhService,
+        private danhMucService: DanhMucDungChungService,
         private notification: NzNotificationService,
         private modal: NzModalService,
     ) {
@@ -98,9 +101,23 @@ export class PhuLucDuAnComponent implements OnInit {
         this.formDetail = this.dataInfo?.data;
         this.namBcao = this.dataInfo?.namBcao;
         this.thuyetMinh = this.formDetail?.thuyetMinh;
-        this.status = this.dataInfo?.status;
+        this.status = !this.dataInfo?.status;
         this.statusBtnFinish = this.dataInfo?.statusBtnFinish;
         this.statusPrint = this.dataInfo?.statusBtnPrint;
+        if (this.status) {
+            const category = await this.danhMucService.danhMucChungGetAll('LTD_PLDA');
+            if (category) {
+                category.data.forEach(item => {
+                    this.duAns.push({
+                        ...item,
+                        giaTri: getName(this.namBcao, item.giaTri),
+                    })
+                })
+            }
+            this.scrollX = (760 + BOX_NUMBER_WIDTH * 28).toString() + 'px';
+        } else {
+            this.scrollX = (650 + BOX_NUMBER_WIDTH * 28).toString() + 'px';
+        }
         this.formDetail?.lstCtietLapThamDinhs.forEach(item => {
             this.lstCtietBcao.push({
                 ...item,
@@ -117,9 +134,6 @@ export class PhuLucDuAnComponent implements OnInit {
                 })
             })
             this.setLevel();
-            this.lstCtietBcao.forEach(item => {
-                item.tenDanhMuc += this.getName(item.level, item.maDanhMucDa);
-            })
         } else if (!this.lstCtietBcao[0]?.stt) {
             this.lstCtietBcao.forEach(item => {
                 item.stt = item.maDanhMucDa;
@@ -132,30 +146,6 @@ export class PhuLucDuAnComponent implements OnInit {
         this.spinner.hide();
     }
 
-    getName(level: number, ma: string) {
-        const type = this.getTail(ma);
-        let str = '';
-        if (level == 1) {
-            switch (type) {
-                case 1:
-                    str = (this.namBcao - 1).toString();
-                    break;
-                case 2:
-                    str = this.namBcao.toString();
-                    break;
-                case 3:
-                    str = this.namBcao.toString();
-                    break;
-                case 4:
-                    str = (this.namBcao - 2).toString() + '-' + (this.namBcao + 2).toString();
-                    break;
-                default:
-                    break;
-            }
-        }
-        return str;
-    }
-
     getStatusButton() {
         if (this.dataInfo?.statusBtnOk && (this.formDetail.trangThai == "2" || this.formDetail.trangThai == "5")) {
             this.statusBtnOk = false;
@@ -165,7 +155,7 @@ export class PhuLucDuAnComponent implements OnInit {
     }
 
     // luu
-    async save(trangThai: string) {
+    async save(trangThai: string, lyDoTuChoi: string) {
         let checkSaveEdit;
         //check xem tat ca cac dong du lieu da luu chua?
         //chua luu thi bao loi, luu roi thi cho di
@@ -206,6 +196,10 @@ export class PhuLucDuAnComponent implements OnInit {
         const request = JSON.parse(JSON.stringify(this.formDetail));
         request.lstCtietLapThamDinhs = lstCtietBcaoTemp;
         request.trangThai = trangThai;
+
+        if (lyDoTuChoi) {
+            request.lyDoTuChoi = lyDoTuChoi;
+        }
 
         this.spinner.show();
         this.lapThamDinhService.updateLapThamDinh(request).toPromise().then(
@@ -273,7 +267,7 @@ export class PhuLucDuAnComponent implements OnInit {
         });
         modalTuChoi.afterClose.subscribe(async (text) => {
             if (text) {
-                this.onSubmit(mcn, text);
+                this.save(mcn, text);
             }
         });
     }
