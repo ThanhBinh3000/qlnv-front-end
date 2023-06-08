@@ -148,7 +148,7 @@
       <th nzWidth="250px">Chủng loại hàng hoá</th>
       <th nzWidth="120px">Đơn vị tính</th>
       <th nzWidth="120px">Kế hoạch năm <br/> {{namHienTai}}</th>
-      <th nzWidth="100px" class="text-center">Hành động</th>
+      <th nzWidth="100px" class="text-center" *ngIf="!isView">Hành động</th>
     </tr>
     </thead>
     <tbody>
@@ -211,6 +211,9 @@
           <td>{{data.dataChild[0].soLuong  | number : '1.0-1' : 'vi_VN'}}</td>
         </ng-container>
         <td class="font-weight-bold text-center" nzRight *ngIf="!isView">
+          <a *ngIf="data.isLeaf"  (click)="suaIem(data.dataChild[0],true)">
+            <i class="fa fa-pencil"></i>
+          </a>
           <a (click)="xoaItem(data,true)">
             <i class="fa fa-trash-o do"></i>
           </a>
@@ -224,7 +227,7 @@
           <td>{{item.dviTinh}}</td>
           <td>{{item.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
           <td class="text-center" nzRight *ngIf="!isView">
-            <a (click)="suaIem(item)">
+            <a (click)="suaIem(item,false)">
               <i class="fa fa-pencil"></i>
             </a>
             <a (click)="xoaItem(item,false)">

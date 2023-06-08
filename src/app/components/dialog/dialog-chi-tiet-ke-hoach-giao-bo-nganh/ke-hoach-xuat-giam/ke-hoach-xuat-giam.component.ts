@@ -6,7 +6,7 @@ import {NzNotificationService} from 'ng-zorro-antd/notification';
 import {MESSAGE} from 'src/app/constants/message';
 import {PAGE_SIZE_DEFAULT} from "../../../../constants/config";
 import {CurrencyMaskInputMode} from "ngx-currency";
-import {AMOUNT, AMOUNT_ONE_DECIMAL} from "../../../../Utility/utils";
+import {AMOUNT, AMOUNT_ONE_DECIMAL, AMOUNT_TWO_DECIMAL} from "../../../../Utility/utils";
 import {chain} from "lodash";
 import {v4 as uuidv4} from "uuid";
 import {
@@ -55,7 +55,7 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
   dataEdit: { [key: string]: { edit: boolean; data: ThongTinQuyetDinh } } = {};
   dsChungLoaiHangHoa = [];
   listTongGiaTriBnKhac: { [key: string]: { tongSo: any } } = {};
-  amount = AMOUNT_ONE_DECIMAL;
+  amount = AMOUNT_TWO_DECIMAL;
 
   constructor(
     private modal: NzModalService,
@@ -108,7 +108,6 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
     } else {
       this.dataTableView = [];
     }
-    console.log(this.dataTableView, 'this.dataTableViewthis.dataTableViewthis.dataTableView')
     this.expandAll();
   }
 
@@ -121,7 +120,6 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
   }
 
   xoaItem(item: any, isParent?) {
-    console.log(item, 'itemitemitem')
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -267,10 +265,14 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
     }
   }
 
-  suaIem(data: any) {
+  suaIem(data: any, isParent?) {
     this.onChangeLoaiVthh(data.loaiVthh);
-    let idx = this.dataTable.findIndex(item => (item.loaiVthh == data.loaiVthh && item.cloaiVthh == data.cloaiVthh));
-    console.log(idx, 'idxidxidxidxidx')
+    let idx = -1;
+    if (isParent) {
+      idx = this.dataTable.findIndex(item => (item.loaiVthh == data.loaiVthh));
+    } else {
+      idx = this.dataTable.findIndex(item => (item.loaiVthh == data.loaiVthh && item.cloaiVthh == data.cloaiVthh));
+    }
     if (idx >= 0) {
       const modalGT = this.modal.create({
         nzTitle: 'Sửa chi tiết ',
@@ -287,7 +289,7 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
       });
       modalGT.afterClose.subscribe((detail) => {
         if (detail) {
-          if ((detail.loaiVthh && !detail.cloaiVthh && this.dataTable.filter(item => item.loaiVthh == detail.loaiVthh).length > 0) || (detail.loaiVthh && detail.cloaiVthh && this.dataTable.filter(item => item.loaiVthh == detail.loaiVthh && item.cloaiVthh == detail.cloaiVthh).length > 0)) {
+          if ((detail.loaiVthh && !detail.cloaiVthh && this.dataTable.filter(item => item.loaiVthh == detail.loaiVthh).length > 0 && detail.loaiVthh != data.loaiVthh) || (detail.loaiVthh && detail.cloaiVthh && this.dataTable.filter(item => item.loaiVthh == detail.loaiVthh && item.cloaiVthh == detail.cloaiVthh).length > 0 && (detail.loaiVthh != data.loaiVthh || detail.cloaiVthh != data.cloaiVthh))) {
             this.notification.warning(MESSAGE.WARNING, "Hàng hóa đã được thêm, vui lòng chọn loại hàng hóa khác.")
             return;
           }
