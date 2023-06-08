@@ -75,9 +75,7 @@ export class CapNhatThongTinDauThauSclComponent extends Base2Component implement
     super.ngOnInit()
     this.formData = this.fb.group({
       soQdPdKhlcnt: [null],
-      soQdPdKhDtxd: [null],
-      soQdPdDaDtxd: [null],
-      tenDuAn: [null],
+      tenCongTrinh: [null],
       chuDauTu: [null],
       trangThaiDt: [null],
       tongMucDt: [],
@@ -116,8 +114,9 @@ export class CapNhatThongTinDauThauSclComponent extends Base2Component implement
           const data = res.data;
           this.formData.patchValue({
             soQdPdKhlcnt: data.soQd,
-            tenDuAn: data.tenDuAn,
+            tenCongTrinh: this.itemDuAn.tenCongTrinh,
             tongMucDt: data.tongTien,
+            chuDauTu: data.chuDauTu,
             trangThaiDt: data.trangThaiDt,
             tenTrangThaiDt: data.tenTrangThaiDt,
             tongSoGt: data.soGoiThau ? data.soGoiThau : 0,
@@ -186,7 +185,7 @@ export class CapNhatThongTinDauThauSclComponent extends Base2Component implement
     // await this.spinner.show()
     let body = {
       id: this.idInput,
-      listKtTdxdQuyetDinhPdKhlcntDsnt: this.dataNhaThauNopHs,
+      listKtTdscQuyetDinhPdKhlcntDsnt: this.dataNhaThauNopHs,
     }
     if (isHoanThanh) {
       let mesg = 'Hoàn thành'

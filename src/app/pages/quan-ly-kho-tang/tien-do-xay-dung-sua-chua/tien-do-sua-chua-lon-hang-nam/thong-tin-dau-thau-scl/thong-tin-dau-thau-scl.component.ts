@@ -11,8 +11,8 @@ export class ThongTinDauThauSclComponent implements OnInit {
   selectedId: number = 0;
   isViewDetail: boolean;
   isDetail: boolean = false;
-  @Input("itemQdPdKhLcnt")
-  itemQdPdKhLcnt: any;
+  @Input() itemQdPdKhLcnt: any;
+  @Input() itemDuAn: any;
   STATUS  = STATUS;
   listTrangThai: any[] = [
     {ma: this.STATUS.DANG_CAP_NHAT, giaTri: 'Đang cập nhật'},
