@@ -223,7 +223,7 @@
                                     <nz-form-label [nzNoColon]="true" class="label-color-kh"> Loại hình nhập xuất
                                     </nz-form-label>
                                     <nz-form-control>
-                                        <input nz-input formControlName="loaiHinhNhapXuat" [readOnly]="true" />
+                                        <input nz-input formControlName="tenLoaiHinhNhapXuat" [readOnly]="true" />
                                     </nz-form-control>
                                 </nz-form-item>
                             </div>
@@ -232,7 +232,7 @@
                                     <nz-form-label [nzNoColon]="true" class="label-color-kh">Kiểu nhập xuất
                                     </nz-form-label>
                                     <nz-form-control>
-                                        <input nz-input formControlName="kieuNhapXuat" [readOnly]="true" />
+                                        <input nz-input formControlName="tenKieuNhapXuat" [readOnly]="true" />
                                     </nz-form-control>
                                 </nz-form-item>
                             </div>
@@ -443,7 +443,7 @@
                                                         <td></td>
                                                         <td></td>
                                                         <td></td>
-                                                        <td class="bold">{{(c.tenLoKho? c.tenLoKho + "-": "") +
+                                                        <td class="bold">{{(c.tenLoKho? c.tenLoKho + " - ": "") +
                                                             (c.tenNganKho|| "")}}</td>
                                                         <td class="bold">{{c.tenLoaiVthh || ""}}</td>
                                                         <td class="bold">{{c.tenCloaiVthh || ""}}</td>
@@ -607,7 +607,7 @@
                                         <!-- <td><a nz-button nzType="link" (click)="openModalKeHoachDC(item.id)">{{
                                                 item.soDxuat }}</a></td> -->
                                         <!-- <td>{{ item.ngayGduyetTc|date:"dd/MM/yyyy" }}</td> -->
-                                        <td>{{ item.tongDuToanKinhPhi }}</td>
+                                        <td>{{ item.tongDuToanKinhPhi|number:'1.0-1':'vi_VN' }}</td>
                                         <!-- <td>{{item.trichYeu}}</td> -->
                                     </tr>
                                 </ng-container>
@@ -651,7 +651,7 @@
                                                 item.soDxuat }}</a></td>
                                         <td>{{ item.ngayDuyetLdcc|date:"dd/MM/yyyy" }}</td>
                                         <td colspan="6"></td>
-                                        <td class="text-right bold">{{item.duToanKphi}}</td>
+                                        <td class="text-right bold">{{item.duToanKphi|number:'1.0-1':'vi_VN'}}</td>
                                         <td colspan="2"></td>
                                         <ng-template #tdNormal>
                                             <td></td>
@@ -675,9 +675,9 @@
                                                 <td>{{bb.tenLoaiVthh}}</td>
                                                 <td>{{bb.tenCloaiVthh}}</td>
                                                 <td>{{bb.tenDonViTinh}}</td>
-                                                <td class="text-right">{{bb.tonKho}}</td>
-                                                <td class="text-right">{{bb.soLuongDc}}</td>
-                                                <td class="text-right">{{bb.duToanKphi}}</td>
+                                                <td class="text-right">{{bb.tonKho|number:'1.0-1':'vi_VN'}}</td>
+                                                <td class="text-right">{{bb.soLuongDc|number:'1.0-1':'vi_VN'}}</td>
+                                                <td class="text-right">{{bb.duToanKphi|number:'1.0-1':'vi_VN'}}</td>
                                                 <td>{{bb.thoiGianDkDc|date:"dd/MM/yyyy"}}</td>
                                                 <td>{{bb.tenChiCucNhan}}</td>
                                                 <td

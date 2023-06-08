@@ -32,9 +32,8 @@
             </nz-affix>
         </div>
     </div>
-    <nz-alert class="mb-2"
-        *ngIf="formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC"
-        nzShowIcon nzType="error" nzMessage="Lý do từ chối" nzDescription="{{formData.value.lyDoTuChoi}}">
+    <nz-alert class="mb-2" *ngIf="formData.value.trangThai == STATUS.TU_CHOI_BAN_HANH_QD" nzShowIcon nzType="error"
+        nzMessage="Lý do từ chối" nzDescription="{{formData.value.lyDoTuChoi}}">
     </nz-alert>
 </div>
 <ng-container *ngIf="!formData.value.trangThai">
@@ -121,7 +120,7 @@
         <nz-card class="flex-card pd-l-6 pd-r-6">
             <nz-collapse nzAccordion>
                 <nz-collapse-panel [nzHeader]="'THÔNG TIN CHUNG'" [nzActive]="true">
-                    <form nzLayout="vertical" nz-form [formGroup]="formData">
+                    <form nzLayout="vertical" nz-form [formGroup]="formData" class="form pd-l-r-10">
                         <!-- <ng-template #error let-control>
                             <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
                             </ng-container>
@@ -137,7 +136,7 @@
                             </div>
                         </div> -->
                         <!-- <div class="bg-trang"> -->
-                        <div nz-row nzSpan="24" [nzGutter]="24">
+                        <div nz-row nzSpan="24" [nzGutter]="24" class="table-out-tab">
                             <div nz-col nzSpan="4">
                                 <nz-form-item>
                                     <nz-form-label [nzNoColon]="true" class="label-color-kh">Mã tổng hợp
@@ -195,10 +194,28 @@
                                     </nz-form-control>
                                 </nz-form-item>
                             </div> -->
+                            <div nz-col nzSpan="4">
+                                <nz-form-item>
+                                    <nz-form-label [nzNoColon]="true" class="label-color-kh"> Loại hình nhập xuất
+                                    </nz-form-label>
+                                    <nz-form-control>
+                                        <input nz-input formControlName="tenLoaiHinhNhapXuat" [readOnly]="true" />
+                                    </nz-form-control>
+                                </nz-form-item>
+                            </div>
+                            <div nz-col nzSpan="4">
+                                <nz-form-item>
+                                    <nz-form-label [nzNoColon]="true" class="label-color-kh">Kiểu nhập xuất
+                                    </nz-form-label>
+                                    <nz-form-control>
+                                        <input nz-input formControlName="tenKieuNhapXuat" [readOnly]="true" />
+                                    </nz-form-control>
+                                </nz-form-item>
+                            </div>
                         </div>
                         <!-- </div> -->
                         <!-- <div class="bg-trang"> -->
-                        <div nz-row nzSpan="24" [nzGutter]="24">
+                        <div nz-row nzSpan="24" [nzGutter]="24" class="table-out-tab">
                             <div nz-col nzSpan="3">
                                 <nz-form-item>
                                     <nz-form-label [nzNoColon]="true" nzRequired class="label-color-kh"> Năm kế hoạch
@@ -338,7 +355,7 @@
                                                 (click)="openModalTHKeHoachDCCUC($event, item.thKhDcHdrId)">{{
                                                 item.soDxuat }}</a></td>
                                         <td>{{ item.ngayDuyetLdc }}</td>
-                                        <td>{{ item.tongDuToanKp }}</td>
+                                        <td>{{ item.tongDuToanKp|number:'1.0-1':'vi_VN' }}</td>
                                         <td>{{item.trichYeu}}</td>
                                     </tr>
                                 </ng-container>
@@ -616,7 +633,7 @@
                                                 (click)="openModalKeHoachDC($event, item.hdrId)">{{
                                                 item.soDxuat }}</a></td>
                                         <td colspan="6"></td>
-                                        <td class="text-right">{{item.duToanKphi}}</td>
+                                        <td class="text-right">{{item.duToanKphi|number:'1.0-1':'vi_VN'}}</td>
                                         <td colspan="3"></td>
                                         <ng-template #tdNormal>
                                             <td></td>
@@ -634,9 +651,9 @@
                                                 <td>{{bb.tenLoaiVthh}}</td>
                                                 <td>{{bb.tenCloaiVthh}}</td>
                                                 <td>{{bb.tenDonViTinh}}</td>
-                                                <td class="text-right">{{bb.tonKho}}</td>
-                                                <td class="text-right">{{bb.soLuongDc}}</td>
-                                                <td class="text-right">{{bb.duToanKphi}}</td>
+                                                <td class="text-right">{{bb.tonKho|number:'1.0-1':'vi_VN'}}</td>
+                                                <td class="text-right">{{bb.soLuongDc|number:'1.0-1':'vi_VN'}}</td>
+                                                <td class="text-right">{{bb.duToanKphi|number:'1.0-1':'vi_VN'}}</td>
                                                 <td>{{bb.thoiGianDkDc}}</td>
                                                 <td>{{bb.tenChiCucNhan}}</td>
                                             </tr>

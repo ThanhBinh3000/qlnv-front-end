@@ -103,7 +103,8 @@
                                     item.soQdinhDcc}}</a>
                             </td>
                             <td>{{item.nam}}</td>
-                            <td>{{item.ngayQd | date: 'dd/MM/YYYY'}}</td>
+                            <!-- <td>{{item.ngayQd | date: 'dd/MM/YYYY'}}</td> -->
+                            <td></td>
                             <td></td>
                             <td></td>
                             <td></td>
@@ -122,7 +123,7 @@
                                     <td></td>
                                     <td></td>
                                     <td></td>
-                                    <td></td>
+                                    <td>{{lv1.thoiGianDkDc | date: 'dd/MM/YYYY'}}</td>
                                     <td>{{lv1.tenDiemKho}}</td>
                                     <td></td>
                                     <td></td>
@@ -154,7 +155,7 @@
                                             <td class="text-left">
                                                 <a *ngIf="checkRoleAdd(lv2?.dcnbBienBanLayMauHdr?.trangThai)"
                                                     (click)="redirectToChiTiet(lv2, false, null ,item.qdinhDccId,  item.soQdinhDcc,
-                                                        lv2.maLoKho, lv2.tenLoKho, lv2.maNganKho, lv2.tenNganKho, lv2.maNhaKho, lv2.tenNhaKho, lv1.maDiemKho, lv1.tenDiemKho)">
+                                                        lv2.maLoKho, lv2.tenLoKho, lv2.maNganKho, lv2.tenNganKho, lv2.maNhaKho, lv2.tenNhaKho, lv1.maDiemKho, lv1.tenDiemKho, lv2.loaiVthh, lv2.tenLoaiVthh,  lv2.cloaiVthh, lv2.tenCloaiVthh)">
                                                     <i class="fa fa-plus"></i>
                                                 </a>
                                                 <a *ngIf="checkRoleView(lv2?.dcnbBienBanLayMauHdr?.trangThai)"

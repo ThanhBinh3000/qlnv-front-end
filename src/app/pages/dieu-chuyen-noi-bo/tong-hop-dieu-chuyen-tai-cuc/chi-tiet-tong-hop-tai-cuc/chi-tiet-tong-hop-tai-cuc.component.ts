@@ -101,6 +101,12 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
   };
   deXuatPheDuyet: { [key: string]: boolean } = {};
   dcnbKeHoachDcHdrId: number[] = [];
+  LOAI_HINH_NHAP_XUAT_CHI_CUC: { [key: string]: string } = {
+    loaiHinhNhapXuat: '90', tenLoaiHinhNhapXuat: "Xuất Điều chuyển nội bộ Chi cục", kieuNhapXuat: '04', tenKieuNhapXuat: "Xuất không thu tiền"
+  };
+  LOAI_HINH_NHAP_XUAT_CUC: { [key: string]: string } = {
+    loaiHinhNhapXuat: '94', tenLoaiHinhNhapXuat: "Xuất điều chuyển nội bộ Cục", kieuNhapXuat: '04', tenKieuNhapXuat: "Xuất không thu tiền"
+  }
   constructor(httpClient: HttpClient,
     storageService: StorageService,
     notification: NzNotificationService,
@@ -134,7 +140,11 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
 
         namKeHoach: [dayjs().get('year'), Validators.required],
         loaiDieuChuyen: ['CHI_CUC', Validators.required],
-        thoiGianTongHop: ['']
+        thoiGianTongHop: [''],
+        loaiHinhNhapXuat: [''],
+        tenLoaiHinhNhapXuat: [''],
+        kieuNhapXuat: [''],
+        tenKieuNhapXuat: ['']
       }
     );
     this.userInfo = this.userService.getUserLogin();
@@ -151,6 +161,11 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
         // await this.getDsChiCucBiTuChoi(this.formData.value.id);
         const data = await this.detail(this.formData.value.id);
         this.helperService.bidingDataInFormGroup(this.formData, data);
+        if (this.formData.value.loaiDieuChuyen === "CHI_CUC") {
+          this.formData.patchValue(this.LOAI_HINH_NHAP_XUAT_CHI_CUC)
+        } else if (this.formData.value.loaiDieuChuyen === "CUC") {
+          this.formData.patchValue(this.LOAI_HINH_NHAP_XUAT_CUC)
+        }
         this.formData.patchValue({
           soDeXuat: this.formData.value.soDeXuat ? this.formData.value.soDeXuat.split('/')[0] : null
         })
@@ -446,7 +461,12 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
       if (this.formData.valid) {
         this.isTongHop = true;
         const thoiGianTongHop = dayjs().format("YYYY-MM-DDTHH:mm:ss");
-        this.formData.patchValue({ thoiGianTongHop: thoiGianTongHop })
+        if (this.formData.value.loaiDieuChuyen === "CHI_CUC") {
+          this.formData.patchValue({ thoiGianTongHop, ...this.LOAI_HINH_NHAP_XUAT_CHI_CUC })
+        } else if (this.formData.value.loaiDieuChuyen === "CUC") {
+          this.formData.patchValue({ thoiGianTongHop, ...this.LOAI_HINH_NHAP_XUAT_CUC })
+
+        }
         // call api tổng hợp dữ liệu;
         const body = {
           namKeHoach: this.formData.value.namKeHoach,

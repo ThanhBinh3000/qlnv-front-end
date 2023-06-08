@@ -9,7 +9,7 @@ import { environment } from 'src/environments/environment';
 })
 export class PhieuKiemNghiemChatLuongDieuChuyenService extends BaseService {
     constructor(public httpClient: HttpClient) {
-        super(httpClient, 'dieu-chuyen-noi-bo/phieu-kiem-tra-chat-luong', '/qlnv-hang');
+        super(httpClient, 'dieu-chuyen-noi-bo/phieu-kiem-nghiem-chat-luong', '/qlnv-hang');
     }
     dsBBLMKiemNghiem(body): Promise<OldResponseData> {
         const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/bien-ban-lay-mau`;

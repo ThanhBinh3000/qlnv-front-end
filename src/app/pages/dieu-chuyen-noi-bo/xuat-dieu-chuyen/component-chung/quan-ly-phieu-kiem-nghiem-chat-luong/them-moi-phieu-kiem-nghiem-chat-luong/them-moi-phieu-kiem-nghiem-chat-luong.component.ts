@@ -400,8 +400,62 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
     if (res.msg == MESSAGE.SUCCESS) {
       this.listBienBanLayMau = Array.isArray(res.data) ? res.data : []
     }
+  };
+  async openDialogQuyetDinhDC() {
+    await this.loadBbLayMau();
+    const modalQD = this.modal.create({
+      nzTitle: 'Danh sách quyết định điều chuyển',
+      nzContent: DialogTableSelectionComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {
+        dataTable: this.listSoQuyetDinh,
+        dataHeader: ['Số quyết định', 'Ngày quyết định'],
+        dataColumn: ['soQdinh', 'ngayKyQdinh'],
+      },
+    });
+    modalQD.afterClose.subscribe(async (data) => {
+      this.bindingDataQd(data.id, false)
+    })
   }
+  async bindingDataQd(id, isChiTiet?) {
+    try {
+      await this.spinner.show();
+      let dataRes = await this.quyetDinhDieuChuyenCucService.getDetail(id)
+      const data = dataRes.data;
+      this.formData.patchValue({
+        soQdinhDcc: data.soQdinh,
+        qdinhDccId: data.id,
+        ngayQdDc: data.ngayKyQdinh,
+        // loaiVthh: data.loaiVthh,
+        // tenLoaiVthh: data.tenLoaiVthh,
 
+        maLoKho: '',
+        tenLoKho: '',
+        maNganKho: '',
+        tenNganKho: '',
+        maNhaKho: '',
+        tenNhaKho: '',
+        maDiemKho: '',
+        tenDiemKho: '',
+        loaiVthh: '',
+        tenLoaiVthh: '',
+        cloaiVthh: '',
+        tenCloaiVthh: ''
+      });
+      if (!isChiTiet) {
+        // const listBienBanLayMau=
+      }
+    } catch (error) {
+      console.log("error", error);
+
+    } finally {
+      await this.spinner.hide();
+
+    }
+  }
   async openDialogBbLayMau() {
     await this.loadBbLayMau();
     const modalQD = this.modal.create({

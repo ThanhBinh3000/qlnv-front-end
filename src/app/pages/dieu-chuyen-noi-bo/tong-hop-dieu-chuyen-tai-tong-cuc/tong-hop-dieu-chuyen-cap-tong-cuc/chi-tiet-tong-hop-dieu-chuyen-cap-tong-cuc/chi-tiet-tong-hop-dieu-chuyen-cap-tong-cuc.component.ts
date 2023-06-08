@@ -102,16 +102,23 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
   tongDuToanChiPhi: number;
 
   listTrangThai: any[] = [
-    { ma: this.STATUS.CHUA_TAO_QD, giaTri: 'Chưa tạo QĐ' },
-    { ma: this.STATUS.DA_DU_THAO_QD, giaTri: 'Đã dự thảo QĐ' },
-    { ma: this.STATUS.DA_BAN_HANH_QD, giaTri: 'Đã ban hành QĐ' }
+    { ma: STATUS.CHUA_TAO_QD, giaTri: 'Chưa tạo QĐ' },
+    { ma: STATUS.DA_DU_THAO_QD, giaTri: 'Đã dự thảo QĐ' },
+    { ma: STATUS.DA_BAN_HANH_QD, giaTri: 'Đã ban hành QĐ' },
+    { ma: STATUS.TU_CHOI_BAN_HANH_QD, giaTri: 'Từ chối ban hành QĐ' }
   ];
   LIST_TRANG_THAI: { [key: string]: string } = {
     '26': 'Chưa tạo QĐ',
     '27': 'Đã dự thảo QĐ',
     '28': 'Đã ban hành QĐ',
+    '78': 'Từ chối ban hành QĐ'
   }
-
+  LOAI_HINH_NHAP_XUAT_CHI_CUC: { [key: string]: string } = {
+    loaiHinhNhapXuat: '90', tenLoaiHinhNhapXuat: "Xuất Điều chuyển nội bộ Chi cục", kieuNhapXuat: '04', tenKieuNhapXuat: "Xuất không thu tiền"
+  };
+  LOAI_HINH_NHAP_XUAT_CUC: { [key: string]: string } = {
+    loaiHinhNhapXuat: '94', tenLoaiHinhNhapXuat: "Xuất điều chuyển nội bộ Cục", kieuNhapXuat: '04', tenKieuNhapXuat: "Xuất không thu tiền"
+  }
   constructor(httpClient: HttpClient,
     storageService: StorageService,
     notification: NzNotificationService,
@@ -137,6 +144,10 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
         maTongHop: [''],
         ngayTongHop: [dayjs().format('YYYY-MM-DD')],
         trichYeu: [''],
+        loaiHinhNhapXuat: [''],
+        tenLoaiHinhNhapXuat: [''],
+        kieuNhapXuat: [''],
+        tenKieuNhapXuat: [''],
         // ngayTrinhTc: ['']
       }
     );
@@ -152,7 +163,12 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
       if (this.formData.value.id) {
         const data = await this.detail(this.formData.value.id);
         this.formData.patchValue(data);
-        this.formData.patchValue({ maTongHop: data.id ? Number(data.id) : '' })
+        this.formData.patchValue({ maTongHop: data.id ? Number(data.id) : '' });
+        if (this.formData.value.loaiDieuChuyen === "CHI_CUC") {
+          this.formData.patchValue(this.LOAI_HINH_NHAP_XUAT_CHI_CUC)
+        } else if (this.formData.value.loaiDieuChuyen === "CUC") {
+          this.formData.patchValue(this.LOAI_HINH_NHAP_XUAT_CUC)
+        }
         this.convertTongHop(data, this.isAddNew)
       }
     } catch (e) {
@@ -293,7 +309,12 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
       if (this.formData.valid) {
         this.isTongHop = true;
         const thoiGianTongHop = dayjs().format("YYYY-MM-DDTHH:mm:ss");
-        this.formData.patchValue({ thoiGianTongHop: thoiGianTongHop })
+        this.formData.patchValue({ thoiGianTongHop: thoiGianTongHop });
+        if (this.formData.value.loaiDieuChuyen === "CHI_CUC") {
+          this.formData.patchValue(this.LOAI_HINH_NHAP_XUAT_CHI_CUC)
+        } else if (this.formData.value.loaiDieuChuyen === "CUC") {
+          this.formData.patchValue(this.LOAI_HINH_NHAP_XUAT_CUC)
+        }
         // call api tổng hợp dữ liệu;
         const body = {
           namKeHoach: this.formData.value.namKeHoach,
