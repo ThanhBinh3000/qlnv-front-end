@@ -56,7 +56,7 @@
         <div nz-col nzSpan="24" class="mt-2">
           <nz-form-item>
             <nz-form-control [nzErrorTip]="error">
-              <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh">Đơn giá (Triệu đồng)</nz-form-label>
+              <nz-form-label [nzNoColon]="true" class="label-color-kh">Đơn giá (Triệu đồng)</nz-form-label>
               <input class="money-input" currencyMask (ngModelChange)="calcularTongTienDuToan()"
                      formControlName="donGia" [options]="amount"/>
               <!--              <nz-input-number formControlName="donGia" (ngModelChange)="calcularTongTienDuToan(formItem.value)"-->
@@ -69,7 +69,7 @@
           <nz-form-item>
             <nz-form-control [nzErrorTip]="error">
               <nz-form-label nzNoColon="true">Dự toán (Triệu đồng)</nz-form-label>
-              <input class="money-input" currencyMask [readOnly]="true" formControlName="tongTien" [options]="amount"/>
+              <input class="money-input" currencyMask formControlName="tongTien" [options]="amount"/>
             </nz-form-control>
           </nz-form-item>
         </div>
