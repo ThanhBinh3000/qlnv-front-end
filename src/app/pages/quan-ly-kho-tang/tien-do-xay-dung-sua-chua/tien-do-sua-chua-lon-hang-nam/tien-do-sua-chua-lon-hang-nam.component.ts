@@ -192,9 +192,9 @@ export class TienDoSuaChuaLonHangNamComponent extends Base2Component implements 
         this.itemQdPdKtkt = res.data.content && res.data.content.length > 0 ? res.data.content[0] : null;
         // //Check tiếp quyết định phê duyệt bản vẽ
         // if (this.itemQdPdKtkt) {
-        //   // await this.loadItemQdPdTktcTdt(this.itemQdPdDaDtxd);
+          // await this.loadItemQdPdTktcTdt(this.itemQdPdDaDtxd);
           await this.loadItemQdPdKhLcnt(this.itemQdPdKtkt);
-        //   // await this.loadListItemQdPdKqLcnt(this.itemTtdt);
+          // await this.loadListItemQdPdKqLcnt(this.itemTtdt);
         //   // await this.loadItemHopDong();
         // } else {
         //   this.notification.warning(MESSAGE.WARNING, "Dự án chưa tạo quyết định phê duyệt dự án đầu tư xây dựng hoặc quyết định chưa ban hành.");
@@ -241,6 +241,7 @@ export class TienDoSuaChuaLonHangNamComponent extends Base2Component implements 
       let res = await this.quyetdinhpheduyetKhlcntService.search(body);
       if (res.msg == MESSAGE.SUCCESS) {
         this.itemQdPdKhLcnt = res.data.content && res.data.content.length > 0 ? res.data.content[0] : null;
+        this.itemTtdt = this.itemQdPdKhLcnt;
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
