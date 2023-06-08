@@ -4,27 +4,37 @@
             <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
                 <div nz-row [nzGutter]="[20]">
                     <div nz-col nzSpan="2">
-                        <label> Năm xuất </label>
+                        <label> Năm kế hoạch </label>
                         <nz-select formControlName="namKh">
                             <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                         </nz-select>
                     </div>
-                    <div nz-col nzSpan="4">
+                    <div nz-col nzSpan="3">
                         <label>Số QĐ giao NV xuất hàng</label>
-                        <input placeholder="Nhập nội dung" nz-input formControlName="soQd" />
+                        <input placeholder="Nhập số quyết định" nz-input formControlName="soQdNv" />
                     </div>
-                    <div nz-col nzSpan="4">
+                    <div nz-col nzSpan="3">
                         <label>Số bảng kê cân hàng</label>
-                        <input placeholder="Nhập nội dung" nz-input formControlName="trichYeu" />
+                        <input placeholder="Nhập số bảng kê" nz-input formControlName="soBangKe" />
                     </div>
                     <div nz-col nzSpan="4">
                         <label>Ngày xuất kho</label>
-                        <nz-range-picker formControlName="ngayLayMau" nzFormat="dd/MM/yyyy"></nz-range-picker>
+                        <div nz-row [nzGutter]="24">
+                            <div nz-col [nzSpan]="12" class="cus-start-date">
+                                <nz-date-picker [nzDisabledDate]="disabledNgayXuatKhoTu" nzFormat="dd/MM/yyyy"
+                                    formControlName="ngayXuatKhoTu" nzPlaceHolder="Ngày bắt đầu">
+                                </nz-date-picker>
+                            </div>
+                            <div nz-col [nzSpan]="12" class="cus-end-date">
+                                <nz-date-picker [nzDisabledDate]="disabledNgayXuatKhoDen" nzFormat="dd/MM/yyyy"
+                                    formControlName="ngayXuatKhoDen" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </form>
             <div class="cangiua group-button-search">
-                <button nz-button class="search__button--clear" (click)="clearForm()">
+                <button nz-button class="search__button--clear" (click)="clearFilter()">
                     <i class="icon  htvbdh_nhap-lai1"></i>
                     Xóa điều kiện
                 </button>
@@ -37,7 +47,8 @@
         <div class="group-button">
             <h3> DANH SÁCH BẢNG KÊ CÂN HÀNG </h3>
             <div class="buttons">
-                <button type="button" class="btn btn-sub" (click)="exportData()">
+                <button type="button" class="btn btn-sub"
+                    (click)="exportData('Danh-sach-bang-can-ke-hang-ban-truc-tiep.xlxs')">
                     <i class="icon htvbdh_chuyen-xu-ly"></i>
                     <span>Xuất file</span>
                 </button>

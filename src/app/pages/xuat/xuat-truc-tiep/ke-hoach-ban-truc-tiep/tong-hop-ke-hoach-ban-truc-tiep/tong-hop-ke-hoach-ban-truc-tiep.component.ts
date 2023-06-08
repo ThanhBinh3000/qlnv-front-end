@@ -51,12 +51,15 @@ export class TongHopKeHoachBanTrucTiepComponent extends Base2Component implement
   }
 
   filterTable: any = {
+    namKh: '',
     id: '',
     ngayTao: '',
     noiDungThop: '',
-    namKh: '',
     soQdPd: '',
+    loaiVthh: '',
     tenLoaiVthh: '',
+    cloaiVthh: '',
+    trangThai: '',
     tenTrangThai: '',
   }
 
