@@ -164,7 +164,12 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
   loadThongTinCuc(index) {
     this.ttCuc.maDvi = this.dataChiTieu.khVatTuNhap[index].maDvi;
     this.ttCuc.tenDvi = this.dataChiTieu.khVatTuNhap[index].tenDonVi;
-    this.ttCuc.soLuongTheoChiTieu = this.nvl(this.dataChiTieu.khVatTuNhap[index].soLuongNhap) + this.nvl(this.dataChiTieu.khVatTuNhap[index].soLuongChuyenSang);
+    if (this.dataChiTieu.khVatTuNhap[index].soLuongChuyenSang == null) {
+      this.ttCuc.soLuongTheoChiTieu = this.nvl(this.dataChiTieu.khVatTuNhap[index].soLuongNhap)
+    } else {
+      this.ttCuc.soLuongTheoChiTieu = this.nvl(this.dataChiTieu.khVatTuNhap[index].soLuongNhap) + this.nvl(parseFloat(this.dataChiTieu.khVatTuNhap[index].soLuongChuyenSang));
+    }
+
     this.listCuc.push(this.ttCuc);
     this.ttCuc = {
       maDvi: null,
