@@ -14,6 +14,7 @@ import { QuanLyHangTrongKhoService } from 'src/app/services/quanLyHangTrongKho.s
 import { DeXuatKhBanTrucTiepService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/de-xuat-kh-ban-truc-tiep.service';
 import { DanhSachMuaTrucTiep } from 'src/app/models/DeXuatKeHoachMuaTrucTiep';
 import { DanhSachMuaTrucTiepService } from 'src/app/services/danh-sach-mua-truc-tiep.service';
+import { cloneDeep } from 'lodash';
 
 
 @Component({
@@ -32,7 +33,7 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
   selectedChiCuc: boolean = false;
   isValid: boolean = false;
   userInfo: UserLogin;
-  listDiemKhoEdit: any[] = [];
+  thongTinMuaTrucTiepEdit: any[] = [];
   namKh: number;
   donGiaVat: number;
 
@@ -163,10 +164,7 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
         soLuongChiTieu: chiCuc?.soLuongNhap
       })
       this.listDiemKho = res.data.children.filter(item => item.type == 'MLK');
-
       this.thongTinMuaTrucTiep = new DanhSachMuaTrucTiep();
-      this.thongTinMuaTrucTiep.donGiaVat = this.donGiaVat;
-
     }
   }
 
@@ -188,22 +186,27 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
   }
 
   addDiemKho() {
-    this.listOfData = [...this.listOfData, this.thongTinMuaTrucTiep];
-    this.thongTinMuaTrucTiep = new DanhSachMuaTrucTiep();
-    this.thongTinMuaTrucTiep.donGiaVat = this.donGiaVat;
-    this.calcTongSLnhapTrucTiepDeXuat();
-    this.calcTongThanhTienTrucTiep();
-    this.calcTongThanhTienTheoDonGiaDd();
-    this.updateEditCache();
-    this.disableChiCuc();
-    this.checkDisabledSave();
+    if (this.validateSoLuong(true)) {
+      this.thongTinMuaTrucTiep.donGia = this.formData.get('donGia').value;
+      this.thongTinMuaTrucTiep.donGiaVat = this.formData.get('donGiaVat').value;
+      this.listOfData = [...this.listOfData, this.thongTinMuaTrucTiep];
+      this.thongTinMuaTrucTiep = new DanhSachMuaTrucTiep();
+      this.calcTongSLnhapTrucTiepDeXuat();
+      this.calcTongThanhTienTrucTiep();
+      this.calcTongThanhTienTheoDonGiaDd();
+      this.updateEditCache();
+      this.disableChiCuc();
+      this.checkDisabledSave();
+    }
   }
 
-
+  calTongThanhTien() {
+    this.calcTongThanhTienTrucTiep();
+    this.calcTongThanhTienTheoDonGiaDd();
+  }
 
   validateSoLuong(isAdd?) {
-    return true;
-    const soLuongConLai = this.formData.value.soLuongChiTieu - this.formData.value.soLuongKh
+    const soLuongConLai = this.formData.value.soLuongChiTieu - this.formData.value.soLuongKhDd
     let soLuong = 0
     if (isAdd) {
       soLuong += this.thongTinMuaTrucTiep.soLuong;
@@ -215,30 +218,44 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, "Số lượng đã vượt quá số lượng chỉ tiêu ")
       return false
     }
+    return true
+  }
+  validateSoLuongEdit(index) {
+    const soLuongConLai = this.formData.value.soLuongChiTieu - this.formData.value.soLuongKhDd
+    let soLuong = 0
+    this.listOfData.forEach(item => {
+      soLuong += item.soLuong
+    })
+    soLuong = soLuong - this.listOfData[index].soLuong + this.thongTinMuaTrucTiepEdit[index].soLuong
+    if (soLuong > soLuongConLai) {
+      this.notification.error(MESSAGE.ERROR, "Số lượng đã vượt quá số lượng chỉ tiêu ")
+      return false
+    }
+    return true;
   }
 
   clearDiemKho() {
-
+    this.thongTinMuaTrucTiep = new DanhSachMuaTrucTiep();
   }
 
   editCache: { [key: string]: { edit: boolean; data: any } } = {};
 
   startEdit(index: number): void {
-    this.listOfData[index].edit = true
-
+    this.thongTinMuaTrucTiepEdit[index] = cloneDeep(this.listOfData[index]);
+    this.listOfData[index].edit = true;
   }
 
   cancelEdit(index: number): void {
-    if (this.validateSoLuong()) {
-      this.listOfData[index].edit = false
-    }
+    this.listOfData[index].edit = false;
   }
 
   saveEdit(index: number): void {
-    if (this.validateSoLuong()) {
-      this.listOfData[index].edit = false
+    if (this.validateSoLuongEdit(index)) {
+      this.thongTinMuaTrucTiepEdit[index].donGia = this.formData.get('donGia').value;
+      this.thongTinMuaTrucTiepEdit[index].donGiaVat = this.formData.get('donGiaVat').value;
+      this.listOfData[index] = this.thongTinMuaTrucTiepEdit[index];
+      this.listOfData[index].edit = false;
     }
-
   }
 
   deleteRow(i: number): void {

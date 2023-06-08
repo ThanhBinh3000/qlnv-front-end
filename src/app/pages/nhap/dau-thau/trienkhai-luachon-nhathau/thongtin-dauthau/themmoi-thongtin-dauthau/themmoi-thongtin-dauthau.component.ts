@@ -347,7 +347,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
       })
     })
     this.listDataChiCuc = chain(this.listDataChiCuc).groupBy('idGoiThau').value()
-
+    let filteredChildren = null;
     this.listDataCuc.forEach(item => {
       if (this.listDataChiCuc[item.id] != undefined) {
         for (let i = 0; i < this.listDataChiCuc[item.id].length; i++) {
@@ -373,6 +373,11 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
       item.dataChild = item.dataChild.filter((value, index, self) => {
         return self.findIndex(v => v.id === value.id) === index;
       });
+      // item.dataChild.forEach(res =>{
+      //   filteredChildren = res.children.filter(child => child.tenDvi === item.tenDvi);
+      //   item.dataChild[res.index]
+      //   res.children = filteredChildren
+      // })
     });
     console.log(this.listDataDetail)
   }
@@ -745,7 +750,6 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
           arr.push(data)
         })
       }
-      debugger
       if (arr && arr.length > 0) {
         const sum = arr.reduce((prev, cur) => {
           if (cur['trangThai'] == 40 && column == 'chenhLech') {

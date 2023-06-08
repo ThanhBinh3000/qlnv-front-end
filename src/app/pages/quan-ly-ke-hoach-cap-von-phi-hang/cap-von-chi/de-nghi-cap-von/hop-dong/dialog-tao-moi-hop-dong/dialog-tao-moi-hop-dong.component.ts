@@ -23,7 +23,7 @@ export class DialogTaoMoiHopDongComponent implements OnInit {
     @Input() obj: any;
 
     userInfo: any;
-    response: BaoCao = new BaoCao();
+    response: BaoCao;
     lstHdongs: any[] = [];
     loaiDns: any[] = LOAI_DE_NGHI;
     canCuGias: any[] = CAN_CU_GIA;
@@ -39,6 +39,7 @@ export class DialogTaoMoiHopDongComponent implements OnInit {
     ) { }
 
     async ngOnInit() {
+        this.response = new BaoCao();
         this.userInfo = this.userService.getUserLogin();
         this.response.ngayTao = new Date();
         this.loadDsNam();
@@ -207,10 +208,11 @@ export class DialogTaoMoiHopDongComponent implements OnInit {
                                 id: uuid.v4() + 'FE',
                                 isParent: true,
                                 qdPheDuyetKqNhaThau: item.soQdPdKhlcnt,
+                                donGia: null,
                             })
                         } else {
                             if (this.response.dnghiCvHopDongCtiets[index].qdPheDuyetKqNhaThau.indexOf(item.soQdPdKhlcnt) == -1) {
-                                this.response.dnghiCvHopDongCtiets[index].qdPheDuyetKqNhaThau += ', ' + item.sosoQdPdKhlcnt;
+                                this.response.dnghiCvHopDongCtiets[index].qdPheDuyetKqNhaThau += ', ' + item.soQdPdKhlcnt;
                             }
                             this.response.dnghiCvHopDongCtiets[index].slHopDong = sumNumber([this.response.dnghiCvHopDongCtiets[index].slHopDong, temp.slHopDong]);
                             this.response.dnghiCvHopDongCtiets[index].slKeHoach = sumNumber([this.response.dnghiCvHopDongCtiets[index].slKeHoach, temp.slKeHoach]);

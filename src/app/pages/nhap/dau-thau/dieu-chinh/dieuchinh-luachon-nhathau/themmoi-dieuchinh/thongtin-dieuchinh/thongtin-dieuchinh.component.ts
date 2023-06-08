@@ -194,7 +194,7 @@ export class ThongtinDieuchinhComponent implements OnInit, OnChanges {
             tenPthucLcnt: res.data.tenPthucLcnt,
             tenLoaiHdong: res.data.tenLoaiHdong,
             tenDuAn: res.data.children[0].tenDuAn,
-            tchuanCluong: res.data.children[0].dxuatKhLcntHdr.tchuanCluong,
+            tchuanCluong: res.data.children[0].dxuatKhLcntHdr?.tchuanCluong,
           });
           console.log(this.formData.value)
         }
@@ -225,7 +225,7 @@ export class ThongtinDieuchinhComponent implements OnInit, OnChanges {
       item.children.forEach(i => {
         if(item.idDxDcHdr != undefined){
           i.children.forEach(h =>{
-            i.goiThau = h.goiThau
+            h.goiThau = i.goiThau
             listChild.push(h)
           })
         }else{

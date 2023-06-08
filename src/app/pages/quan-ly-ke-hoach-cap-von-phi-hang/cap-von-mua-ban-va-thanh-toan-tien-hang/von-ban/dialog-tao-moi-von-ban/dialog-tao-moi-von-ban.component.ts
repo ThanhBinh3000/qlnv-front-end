@@ -39,11 +39,20 @@ export class DialogTaoMoiVonBanComponent implements OnInit {
         if (!this.userService.isCuc()) {
             this.response.canCuVeGia = Utils.QD_DON_GIA;
         }
-        this.loaiDns = this.loaiDns.filter(e => e.id != Utils.MUA_VTU);
+        this.changeLoaiDn();
+        this.userInfo = this.userService.getUserLogin();
+    }
+
+    changeLoaiDn() {
+        this.loaiDns = LOAI_DE_NGHI.filter(e => e.id != Utils.MUA_VTU);
         if (this.userService.isChiCuc()) {
             this.loaiDns = this.loaiDns.filter(e => e.id == Utils.MUA_THOC);
         }
-        this.userInfo = this.userService.getUserLogin();
+        if (this.response.canCuVeGia == Utils.QD_DON_GIA) {
+            this.loaiDns = this.loaiDns.filter(e => e.id != Utils.MUA_GAO && e.id != Utils.MUA_MUOI);
+        } else {
+            this.loaiDns = this.loaiDns.filter(e => e.id != Utils.MUA_THOC);
+        }
     }
 
     //lay ra chi tiet cua de nghi
@@ -106,12 +115,12 @@ export class DialogTaoMoiVonBanComponent implements OnInit {
                     item.listLuyKe.push({
                         id: uuid.v4() + 'FE',
                         uyNhiemChiNgay: item.uyNhiemChiNgay,
-                        soNopLanNay: item.soNopLanNay,
+                        uyNhiemChiSoTien: item.uyNhiemChiSoTien,
                         dot: this.response.dot,
                     })
                     item.soDaNopTc = item.luyKeSauLanNopNay;
                     item.uyNhiemChiNgay = null;
-                    item.soNopLanNay = 0;
+                    item.uyNhiemChiSoTien = 0;
                 }
             })
             this.response.ttNhan.lstCtietBcaos.push({

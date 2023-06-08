@@ -40,7 +40,7 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
     soLuongMuaThoc: 0,
     donGiaMuaThoc: 0,
     soLuongMuaGaoLpdh: 0,
-    donGiaMuaGaoLqdh: 0,
+    donGiaMuaGaoLpdh: 0,
     soLuongMuaGaoXcht: 0,
     donGiaMuaGaoXcht: 0,
     soLuongBanThoc: 0,
@@ -51,6 +51,12 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
     donGiaGaoCtro: 0,
     tongTienVonNsnn: 0,
     tongTienVonTx: 0,
+    nhapCtMua: true,
+    nhapCtBan: true,
+    soLuongMuaGao: 0,
+    donGiaMuaGao: 0,
+    soLuongBan: 0,
+    donGiaBan: 0
   }
   dataQdTtcpGiaoBTC: any;
   taiLieuDinhKemList: any[] = [];
@@ -65,6 +71,7 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
   dataTable: any[] = [];
   dsHangHoa: any[] = [];
   iterableDiffer: any;
+  STATUS = STATUS;
 
   constructor(
     private readonly fb: FormBuilder,
@@ -85,7 +92,7 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
         ngayQd: [null, [Validators.required]],
         namQd: [dayjs().get('year'), [Validators.required]],
         trichYeu: [null],
-        trangThai: ['00'],
+        trangThai: [STATUS.DANG_NHAP_DU_LIEU],
         ghiChu: ['']
       }
     );

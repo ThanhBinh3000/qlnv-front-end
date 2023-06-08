@@ -186,7 +186,10 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
         tenLoKhoNhan: ['', [Validators.required]],
         soLuongPhanBo: [0, [Validators.required]],
         tichLuongKd: [0, [Validators.required]],
-        slDcConLai: [0, [Validators.required]]
+        slDcConLai: [0, [Validators.required]],
+        thuKho: ['', [Validators.required]],
+        thuKhoNhan: ['', [Validators.required]],
+        thayDoiThuKho: [false, [Validators.required]]
       }
     );
     this.tableForm = this.fb.group({
@@ -444,6 +447,7 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
     this.getDetailMlkByKey(tenNganKho.maDvi, tenNganKho.capDvi).then((res: OldResponseData) => {
       if (res.msg == MESSAGE.SUCCESS) {
         let coLoKho = !!res.data.object.coLoKho;
+        let thuKho = res.data.object.detailThuKho?.maThuKho;
         if (!coLoKho) {
           this.removeValidateFormChiTiet("maLoKho");
           this.removeValidateFormChiTiet("tenLoKho");
@@ -458,12 +462,14 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
           }
           this.getChiTietTonKho(body);
         }
-        this.listLoKhoBq = []
+        this.listLoKhoBq = [];
+
         this.formDataChiTiet.patchValue({
           coLoKho: coLoKho,
           maLoKho: "",
           tenLoKho: "",
-          tenNganKho: tenNganKho ? tenNganKho.tenDvi : ""
+          tenNganKho: tenNganKho ? tenNganKho.tenDvi : "",
+          thuKho: thuKho
         });
         this.getListLoKhoBq(value);
       } else {
@@ -1256,6 +1262,7 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
     this.getDetailMlkByKey(tenNganKhoNhan.maDvi, tenNganKhoNhan.capDvi).then((res: OldResponseData) => {
       if (res.msg == MESSAGE.SUCCESS) {
         let coLoKhoNhan = !!res.data.object.coLoKho;
+        let thuKhoNhan = res.data.object.detailThuKho?.maThuKho;
         if (!coLoKhoNhan) {
           this.removeValidateFormChiTiet("maLoKhoNhan");
           this.removeValidateFormChiTiet("tenLoKhoNhan");
@@ -1263,12 +1270,15 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
           this.addValidateFormChiTiet("maLoKhoNhan");
           this.addValidateFormChiTiet("tenLoKhoNhan");
         }
-        this.listLoKhoNhanBq = []
+        this.listLoKhoNhanBq = [];
+
         this.formDataChiTiet.patchValue({
           coLoKhoNhan: coLoKhoNhan,
           maLoKhoNhan: "",
           tenLoKhoNhan: "",
-          tenNganKhoNhan: tenNganKhoNhan ? tenNganKhoNhan.tenDvi : ""
+          tenNganKhoNhan: tenNganKhoNhan ? tenNganKhoNhan.tenDvi : "",
+          thuKhoNhan: thuKhoNhan,
+          thayDoiThuKho: (this.formDataChiTiet.value.thuKho !== thuKhoNhan)
         });
         this.getListLoKhoNhanBq(value);
       } else {

@@ -212,59 +212,99 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.newObjectMuoi();
     this.newObjectVatTu();
     this.loadDanhMucHang();
-    this.loadDsCanCu();
+    // this.loadDsCanCu();
     this.loadDonVi();
     if (this.id > 0) {
       this.loadThongTinChiTieuKeHoachNam(this.id);
     } else {
       this.formData.patchValue({
-        namKeHoach: dayjs().get('year')
+        namKeHoach: dayjs().get('year'),
       });
+      this.thongTinChiTieuKeHoachNam.capDvi = this.userInfo.CAP_DVI;
       this.findCanCuByYear(this.yearNow);
       this.loadQdTtcpGiaoBoNganh(this.yearNow);
     }
   }
 
-  async findCanCuByYear(year: number, id?) {
-    console.log('1111111111111111111111111111')
-    this.formData.patchValue({
-      canCu: null,
-    })
-    if (this.userService.isCuc()) {
-      let res = await this.chiTieuKeHoachNamService.canCuCuc(year);
-      if (res.msg == MESSAGE.SUCCESS) {
-        let data = res.data
-        if (data) {
-          this.dataQdTCDTGiaoCuc = {};
-          this.formData.patchValue({
-            canCu: data.soQuyetDinh,
-            chiTieuId: data.id
-          });
-          // Lấy kế hoạch tổng cục giao cho cục đang login
-          let dataLuongThuc = data.khLuongThuc.find(item => item.maDonVi == this.userInfo.MA_DVI);
-          if (dataLuongThuc) {
-            this.dataQdTCDTGiaoCuc = {
-              "ltThocMua": dataLuongThuc.ntnThoc,
-              "ltGaoMua": dataLuongThuc.ntnGao,
-              "ltThocXuat": dataLuongThuc.xtnTongThoc,
-              "ltGaoXuat": dataLuongThuc.xtnTongGao,
+  async findCanCuByYear(year: number, chiTieuKhNam?) {
+    // this.formData.patchValue({
+    //   canCu: null,
+    // });
+    if (chiTieuKhNam) {
+      if (chiTieuKhNam.capDvi == "2") {
+        let res = await this.chiTieuKeHoachNamService.loadThongTinChiTieuKeHoachNam(chiTieuKhNam.qdGocId);
+        if (res.msg == MESSAGE.SUCCESS) {
+          let data = res.data
+          if (data) {
+            this.dataQdTCDTGiaoCuc = {};
+            this.formData.patchValue({
+              canCu: data.soQuyetDinh,
+              chiTieuId: data.id
+            });
+            // Lấy kế hoạch tổng cục giao cho cục đang login
+            let dataLuongThuc = data.khLuongThuc.find(item => item.maDonVi == this.userInfo.MA_DVI);
+            if (dataLuongThuc) {
+              this.dataQdTCDTGiaoCuc = {
+                "ltThocMua": dataLuongThuc.ntnThoc,
+                "ltGaoMua": dataLuongThuc.ntnGao,
+                "ltThocXuat": dataLuongThuc.xtnTongThoc,
+                "ltGaoXuat": dataLuongThuc.xtnTongGao,
+              }
             }
           }
+        } else {
+          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR)
         }
-      } else {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR)
+      }else{
+        // let res = await this.chiTieuKeHoachNamService.canCuTongCuc(year);
+        // if (res.msg == MESSAGE.SUCCESS) {
+        //   let data = res.data
+        //   if (data) {
+        //     //Lấy data của TTCP giao cho BTC (TCDT)
+        //     this.dataQdTtcpGiaoBTC = data.listBoNganh ? res.data.listBoNganh.find(item => item.maBoNganh == '01') : null;
+        //     this.formData.patchValue({
+        //       canCu: data.soQd
+        //     })
+        //   }
+        // }
       }
-    }
-    if (this.userService.isTongCuc()) {
-      let res = await this.chiTieuKeHoachNamService.canCuTongCuc(year);
-      if (res.msg == MESSAGE.SUCCESS) {
-        let data = res.data
-        if (data) {
-          //Lấy data của TTCP giao cho BTC (TCDT)
-          this.dataQdTtcpGiaoBTC = data.listBoNganh ? res.data.listBoNganh.find(item => item.maBoNganh == '01') : null;
-          this.formData.patchValue({
-            canCu: data.soQd
-          })
+    } else {
+      if (this.userService.isCuc()) {
+        let res = await this.chiTieuKeHoachNamService.canCuCuc(year);
+        if (res.msg == MESSAGE.SUCCESS) {
+          let data = res.data
+          if (data) {
+            this.dataQdTCDTGiaoCuc = {};
+            this.formData.patchValue({
+              canCu: data.soQuyetDinh,
+              chiTieuId: data.id
+            });
+            // Lấy kế hoạch tổng cục giao cho cục đang login
+            let dataLuongThuc = data.khLuongThuc.find(item => item.maDonVi == this.userInfo.MA_DVI);
+            if (dataLuongThuc) {
+              this.dataQdTCDTGiaoCuc = {
+                "ltThocMua": dataLuongThuc.ntnThoc,
+                "ltGaoMua": dataLuongThuc.ntnGao,
+                "ltThocXuat": dataLuongThuc.xtnTongThoc,
+                "ltGaoXuat": dataLuongThuc.xtnTongGao,
+              }
+            }
+          }
+        } else {
+          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR)
+        }
+      }
+      if (this.userService.isTongCuc()) {
+        let res = await this.chiTieuKeHoachNamService.canCuTongCuc(year);
+        if (res.msg == MESSAGE.SUCCESS) {
+          let data = res.data
+          if (data) {
+            //Lấy data của TTCP giao cho BTC (TCDT)
+            this.dataQdTtcpGiaoBTC = data.listBoNganh ? res.data.listBoNganh.find(item => item.maBoNganh == '01') : null;
+            this.formData.patchValue({
+              canCu: data.soQd
+            })
+          }
         }
       }
     }
@@ -867,8 +907,10 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
             soQd: this.thongTinChiTieuKeHoachNam.soQuyetDinh ? this.thongTinChiTieuKeHoachNam.soQuyetDinh.split('/')[0] : null,
             ngayKy: this.thongTinChiTieuKeHoachNam.ngayKy,
             ngayHieuLuc: this.thongTinChiTieuKeHoachNam.ngayHieuLuc,
+            chiTieuId: this.thongTinChiTieuKeHoachNam.qdGocId
             // arrCanCu: JSON.parse(this.thongTinChiTieuKeHoachNam.canCu)
           })
+          this.findCanCuByYear(this.thongTinChiTieuKeHoachNam.namKeHoach, this.thongTinChiTieuKeHoachNam);
           this.loadData();
           this.formData.patchValue({
             soQD: this.formData.get('soQd').value?.split('/')[0],
@@ -1509,7 +1551,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.thongTinChiTieuKeHoachNam.chiTieuId = this.formData.get('chiTieuId').value;
     // this.thongTinChiTieuKeHoachNam.canCu = JSON.stringify(this.formData.get('arrCanCu').value);
     this.thongTinChiTieuKeHoachNam.canCu = this.formData.get('canCu').value;
-    this.thongTinChiTieuKeHoachNam.chiTieuId = this.formData.get('chiTieuId').value;
     this.thongTinChiTieuKeHoachNamInput = cloneDeep(
       this.thongTinChiTieuKeHoachNam,
     );
@@ -1715,34 +1756,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     if (!this.id) {
       this.findCanCuByYear(this.yearNow);
     }
-    // if (this.thongTinChiTieuKeHoachNam?.khLuongThuc.length > 0) {
-    //   console.log(this.thongTinChiTieuKeHoachNam?.khLuongThuc, 'ddddddd');
-    //   this.thongTinChiTieuKeHoachNam?.khLuongThuc.forEach((luongThuc) => {
-    //     luongThuc.tkdnGao[0].nam = this.yearNow - 1;
-    //     luongThuc.tkdnGao[1].nam = this.yearNow - 2;
-    //     luongThuc.tkdnGao[2].nam = this.yearNow - 3;
-    //     luongThuc.tkdnThoc[0].nam = this.yearNow - 1;
-    //     luongThuc.tkdnThoc[1].nam = this.yearNow - 2;
-    //     luongThuc.tkdnThoc[2].nam = this.yearNow - 3;
-    //     luongThuc.xtnGao[0].nam = this.yearNow - 1;
-    //     luongThuc.xtnGao[1].nam = this.yearNow - 2;
-    //     luongThuc.xtnGao[2].nam = this.yearNow - 3;
-    //     luongThuc.xtnThoc[0].nam = this.yearNow - 1;
-    //     luongThuc.xtnThoc[1].nam = this.yearNow - 2;
-    //     luongThuc.xtnThoc[2].nam = this.yearNow - 3;
-    //   });
-    // }
     this.loadQdTtcpGiaoBoNganh(this.yearNow);
-    // if (this.thongTinChiTieuKeHoachNam?.khMuoiDuTru.length > 0) {
-    //   this.thongTinChiTieuKeHoachNam?.khMuoiDuTru.forEach((muoi) => {
-    //     muoi.tkdnMuoi[0].nam = this.yearNow - 1;
-    //     muoi.tkdnMuoi[1].nam = this.yearNow - 2;
-    //     muoi.tkdnMuoi[2].nam = this.yearNow - 3;
-    //     muoi.xtnMuoi[0].nam = this.yearNow - 1;
-    //     muoi.xtnMuoi[1].nam = this.yearNow - 2;
-    //     muoi.xtnMuoi[2].nam = this.yearNow - 3;
-    //   });
-    // }
   }
 
   convertTrangThai(status: string) {
@@ -2058,11 +2072,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       // lấy chỉ tiêu ttcp giao bộ tài chính : maBoNganh = 01
       this.dataQdTtcpGiaoBTC = res.data.listBoNganh ? res.data.listBoNganh.find(item => item.maBoNganh == '01') : null;
-      // if (this.userService.isTongCuc() && !this.id) {
-      //   this.formData.patchValue({
-      //     canCu: res.data.soQd
-      //   })
-      // }
     }
   }
 

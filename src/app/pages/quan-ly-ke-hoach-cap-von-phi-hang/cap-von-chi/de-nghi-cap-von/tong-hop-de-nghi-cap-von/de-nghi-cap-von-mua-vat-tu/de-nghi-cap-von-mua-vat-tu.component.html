@@ -244,13 +244,8 @@
                                         {{ displayValue(editCache[data.id].data.soConDuocTt) }}
                                     </td>
                                     <td>
-                                        <ng-container *ngIf="baoCao.soLan != 1; else moi">
-                                            {{ displayValue(editCache[data.id].data.soDuyetTtLanNay) }}
-                                        </ng-container>
-                                        <ng-template #moi>
-                                            <input class="money-input" currencyMask [options]="amount"
-                                                [(ngModel)]="editCache[data.id].data.soDuyetTtLanNay" />
-                                        </ng-template>
+                                        <input class="money-input" currencyMask [options]="amount"
+                                            [(ngModel)]="editCache[data.id].data.soDuyetTtLanNay" />
                                     </td>
                                     <td>
                                         <input nz-input class="search__input"

@@ -173,7 +173,6 @@ export class ToanBoDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Comp
               }
             }
           ).value();
-        let rowItem = value.find(s => s.tenCuc === key);
         let idVirtual = uuidv4();
         this.expandSetString.add(idVirtual);
         return {
@@ -182,6 +181,7 @@ export class ToanBoDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Comp
           childData: rs
         };
       }).value();
+    console.log(this.dataTableView ,'this.dataTableView this.dataTableView ')
   }
 
   onExpandStringChange(id: string, checked: boolean) {

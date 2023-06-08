@@ -19,20 +19,20 @@
         </div>
         <div nz-col [nzSpan]="18"></div>
         <div nz-col class="gutter-row canphai phai" [nzSpan]="2" style="display:flex; justify-content: end;">
-          <button type="button" class="btn btn-main" (click)="deleteAllChecked()" [hidden]="status">
+          <button type="button" class="btn btn-main" (click)="deleteAllChecked()" *ngIf="!status">
             <i class="fa fa-trash-o"></i>
             <span>Xóa</span>
           </button>
-          <button type="button" class="btn btn-main" (click)="selectGoods()" [hidden]="status">
+          <button type="button" class="btn btn-main" (click)="selectGoods()" *ngIf="!status">
             <i class="icon htvbdh_dau-cong"></i>
             <span>Thêm</span>
           </button>
         </div>
       </div>
-      <nz-table nzBordered class="table__body">
+      <nz-table nzBordered class="table__body" [nzScroll]="{x: scrollX}">
         <thead>
           <tr>
-            <th rowspan="2" [hidden]="status" class="text-center">
+            <th rowspan="2" *ngIf="!status" class="text-center" nzWidth="50px">
               <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()" style="margin-right: 0;">
               </label>
             </th>
@@ -40,40 +40,40 @@
             <th rowspan="2" nzWidth="350px">Mặt hàng</th>
             <th rowspan="2">Đơn vị tính</th>
             <th colspan="3">Năm dự toán {{namBcao}}</th>
-            <th nzWidth="5%" rowspan="2" colspan="2" [hidden]="status "></th>
+            <th rowspan="2" colspan="2" *ngIf="!status "></th>
           </tr>
           <tr>
-            <th>Định mức</th>
             <th>Số lượng bảo quản</th>
+            <th>Định mức</th>
             <th>Thành tiền </th>
           </tr>
           <tr>
-            <th [hidden]="status"></th>
+            <th *ngIf="!status"></th>
             <th class="text-center">A</th>
             <th>B</th>
             <th>C</th>
             <th>1</th>
             <th>2</th>
             <th>3=1x2</th>
-            <th [hidden]="status"></th>
-            <th [hidden]="status "></th>
+            <th *ngIf="!status"></th>
+            <th *ngIf="!status "></th>
           </tr>
           <tr>
-            <th [hidden]="status"></th>
+            <th *ngIf="!status"></th>
             <th></th>
             <th>Tổng Cộng</th>
             <th></th>
             <th></th>
             <th></th>
             <th>{{displayValue(total.namDtTtien)}}</th>
-            <th [hidden]="status"></th>
-            <th [hidden]="status "></th>
+            <th *ngIf="!status"></th>
+            <th *ngIf="!status "></th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let data of lstCtietBcao; let i = index">
             <ng-container *ngIf="!editCache[data.id].edit; else editTemplate ">
-              <td [hidden]="status" class="text-center">
+              <td *ngIf="!status" class="text-center">
                 <label *ngIf="checkDelete(data.stt)" nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
                   (ngModelChange)="updateSingleChecked()"></label>
               </td>
@@ -84,18 +84,18 @@
                 {{data.tenDanhMuc}}
               </td>
               <td>{{data.maDviTinh}}</td>
-              <td>{{displayValue(data.namDtDmuc)}}</td>
               <td>{{displayValue(data.namDtSluong)}}</td>
+              <td>{{displayValue(data.namDtDmuc)}}</td>
               <td>{{displayValue(data.namDtTtien)}}</td>
-              <td [hidden]="status">
+              <td *ngIf="!status">
                 <i *ngIf="checkDelete(data.stt)" class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
               </td>
-              <td [hidden]="status ">
+              <td *ngIf="!status ">
                 <i *ngIf="checkEdit(data.stt)" class="fa fa-pencil" (click)="startEdit(data.id)"></i>
               </td>
             </ng-container>
             <ng-template #editTemplate>
-              <td [hidden]="status" class="text-center">
+              <td *ngIf="!status" class="text-center">
                 <label *ngIf="checkDelete(data.stt)" nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
                   (ngModelChange)="updateSingleChecked()"></label>
               </td>
@@ -109,16 +109,16 @@
                 {{editCache[data.id].data.maDviTinh}}
               </td>
               <td>
-                {{editCache[data.id].data.namDtDmuc}}
-              </td>
-              <td>
                 <fm-input-number nz-input class="search__input" [(ngModel)]="editCache[data.id].data.namDtSluong"
                   (ngModelChange)="changeModel(editCache[data.id].data.id)"></fm-input-number>
               </td>
               <td>
+                {{displayValue(editCache[data.id].data.namDtDmuc)}}
+              </td>
+              <td>
                 {{displayValue(editCache[data.id].data.namDtTtien)}}
               </td>
-              <td [hidden]="status">
+              <td *ngIf="!status">
                 <i *ngIf="checkDelete(data.stt)" class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
               </td>
               <td>
@@ -142,23 +142,23 @@
   <div class="modal-footer">
     <div class="nut">
       <div class="cantrai">
-        <button type="button" class="btn btn-main" [hidden]="!statusPrint" (click)="doPrint()">
+        <button type="button" class="btn btn-main" *ngIf="!!statusPrint" (click)="doPrint()">
           <i nz-icon nzType="printer" nzTheme="outline"></i>
           <span>In</span>
         </button>
-        <button type="button" class="btn btn-main" (click)="save('5', null)" [hidden]="statusBtnFinish">
+        <button type="button" class="btn btn-main" (click)="save('5', null)" *ngIf="!statusBtnFinish">
           <i nz-icon nzType="check" nzTheme="outline"></i>
           <span>Hoàn tất nhập liệu</span>
         </button>
-        <button type="button" class="btn btn-main" (click)="save('4', null)" [hidden]="statusBtnFinish">
+        <button type="button" class="btn btn-main" (click)="save('4', null)" *ngIf="!statusBtnFinish">
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
-        <button type="button" class="btn btn-main" (click)="save('1', null)" [hidden]="statusBtnOk">
+        <button type="button" class="btn btn-main" (click)="save('1', null)" *ngIf="!statusBtnOk">
           <i nz-icon nzType="check" nzTheme="outline"></i>
           <span>OK</span>
         </button>
-        <button type="button" class="btn btn-main" (click)="tuChoi('0')" [hidden]="statusBtnOk">
+        <button type="button" class="btn btn-main" (click)="tuChoi('0')" *ngIf="!statusBtnOk">
           <i nz-icon nzType="close" nzTheme="outline"></i>
           <span>Not OK</span>
         </button>

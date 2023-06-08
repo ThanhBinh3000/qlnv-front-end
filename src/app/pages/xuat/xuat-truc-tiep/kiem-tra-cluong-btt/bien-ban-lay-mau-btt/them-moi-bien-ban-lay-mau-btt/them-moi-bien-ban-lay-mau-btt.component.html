@@ -108,11 +108,23 @@
             <div nz-col [nzSpan]="4">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
-                  Số hợp đồng
                 </nz-form-label>
+                <nz-form-control>
+                  <nz-radio-group [(ngModel)]="radioValue" nzName="radiogroup" [ngModelOptions]="{standalone: true}"
+                    nzDisabled>
+                    <label nz-radio nzValue="01"> Chào giá </label>
+                    <label nz-radio nzValue="02"> Ủy quyền/Bán lẻ </label>
+                  </nz-radio-group>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="4">
+              <nz-form-item class="form-item">
+                <nz-form-label [nzNoColon]="true" nzRequired>
+                  Số hợp đồng</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-input-group>
-                    <input nz-input [readonly]="true" formControlName="soHd" />
+                  <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isDisabledQD() ? null :listHopDong()">
+                    <input [readonly]="true" nz-input formControlName="soHd" readonly />
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>

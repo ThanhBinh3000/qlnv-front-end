@@ -46,32 +46,6 @@ export class ItemData {
 }
 
 export class BaoCao {
-  // id: string;
-  // nam: number;
-  // lstBcaoDviTrucThuocs: any[];
-  // lstCtiets: ItemData[];
-  // lstFiles: any[];
-  // ngayTao: any;
-  // nguoiTao: string;
-  // maBcao: string;
-  // maDvi: string;
-  // maDviCha: string;
-  // trangThai: string;
-  // ngayTrinh: any;
-  // ngayDuyet: any;
-  // ngayPheDuyet: any;
-  // ngayTraKq: any;
-  // soQd: ItemCongVan;
-  // lyDoTuChoi: string;
-  // giaoSoTranChiId: string;
-  // thuyetMinh: string;
-  // fileDinhKems: any[];
-  // listIdDeleteFiles: string[];
-  // tongHopTuIds: any[];
-  // maGiao: string;
-  // maPaCha: string;
-  // maPa: string;
-
   id: string;
   maPa: string;
   maBcao: string; // Thêm trường maBcao	
@@ -266,8 +240,6 @@ export class AddBaoCaoComponent implements OnInit {
     if (this.baoCao.id) {
       await this.getDetailReport();
     } else {
-      console.log("this.data", this.data);
-
       this.baoCao.nam = this.data.namDtoan;
       this.baoCao.maPa = this.data?.maPa;
       this.baoCao.maPaCha = this.data?.maPaCha;
@@ -306,14 +278,6 @@ export class AddBaoCaoComponent implements OnInit {
         this.baoCao.lstFiles = [];
         this.baoCao.listIdFiles = [];
       }
-      // this.baoCao.trangThai = "1";
-      // this.baoCao.nguoiTao = this.userInfo?.sub;
-      // this.baoCao.ngayTao = this.datePipe.transform(new Date(), Utils.FORMAT_DATE_STR);
-      // this.baoCao.namPa = this.data?.namPa;
-      // this.baoCao.namDtoan = this.data?.namDtoan;
-      // this.baoCao.tongHopTuIds = [];
-      // this.baoCao.lstFiles = [];
-      // this.baoCao.listIdFiles = [];
       if (this.baoCao.lstGiaoDtoanTrucThuocs?.length == 0) {
         this.listAppendix.forEach(item => {
           if (item.id == "pl04") {
@@ -325,6 +289,7 @@ export class AddBaoCaoComponent implements OnInit {
               tenDm: item.tenDm + " năm " + this.baoCao.namPa,
               trangThai: '3',
               lstCtietBcaos: lstCtietsPhuLucPhanBo,
+              nguoiBcao: this.userInfo?.sub
             })
           } else {
             this.baoCao.lstCtiets.push({
@@ -335,6 +300,7 @@ export class AddBaoCaoComponent implements OnInit {
               tenDm: item.tenDm + " năm " + this.baoCao.namPa,
               trangThai: '3',
               lstCtietBcaos: [],
+              nguoiBcao: this.userInfo?.sub
             })
           }
         })
@@ -470,8 +436,6 @@ export class AddBaoCaoComponent implements OnInit {
       statusBtnPrint: this.printStatus,
       acceptStatus: this.acceptStatus,
       status: this.status || !(this.userInfo?.sub == formDetail.nguoiBcao),
-      // viewAppraisalValue: this.viewAppraisalValue,
-      // editAppraisalValue: this.acceptStatus,
       isSynthetic: isSynthetic
     };
 
@@ -505,85 +469,176 @@ export class AddBaoCaoComponent implements OnInit {
           let tongPl2 = 0
           let tongPl3 = 0
 
-          if (data1N?.trangThai != '3') {
-            const dataPL1N = this.baoCao.lstCtiets.find(e => e.maBieuMau == 'pl01N').lstCtietBcaos;
+          if (data1N && data1N?.trangThai != '3') {
+            const dataPL1N = this.baoCao.lstCtiets.find(e => e.maBieuMau == 'pl01N')?.lstCtietBcaos;
             let lstN = []
-            dataPL1N.forEach(i => {
+            dataPL1N?.forEach(i => {
               if (i.stt.length == 3) {
                 lstN.push(i)
               }
             })
             if (lstN.length > 0) {
-              lstN.forEach(i => {
-                tongPl1N += i.namDtTtien
+              lstN?.forEach(i => {
+                tongPl1N += i.namDtTtien ? i.namDtTtien : 0;
               })
             }
           }
-          if (data1X?.trangThai != '3') {
-            const dataPL1X = this.baoCao.lstCtiets.find(e => e.maBieuMau == 'pl01X').lstCtietBcaos;
+          if (data1X && data1X?.trangThai != '3') {
+            const dataPL1X = this.baoCao.lstCtiets.find(e => e.maBieuMau == 'pl01X')?.lstCtietBcaos;
             let lstX = []
-            dataPL1X.forEach(i => {
+            dataPL1X?.forEach(i => {
               if (i.stt.length == 3) {
                 lstX.push(i)
               }
             })
             if (lstX.length > 0) {
-              lstX.forEach(i => {
-                tongPl1X += i.namDtTtien
+              lstX?.forEach(i => {
+                tongPl1X += i.namDtTtien ? i.namDtTtien : 0;
               })
             }
           }
 
-          if (data2?.trangThai != '3') {
-            const dataPL2 = this.baoCao.lstCtiets.find(e => e.maBieuMau == 'pl02').lstCtietBcaos;
+          if (data2 && data2?.trangThai != '3') {
+            const dataPL2 = this.baoCao.lstCtiets.find(e => e.maBieuMau == 'pl02')?.lstCtietBcaos;
             let lstPl2 = []
-            dataPL2.forEach(i => {
+            dataPL2?.forEach(i => {
               if (i.stt.length == 3) {
                 lstPl2.push(i)
               }
             })
             if (lstPl2.length > 0) {
-              lstPl2.forEach(i => {
-                tongPl2 += i.namDtTtien
+              lstPl2?.forEach(i => {
+                tongPl2 += i.namDtTtien ? i.namDtTtien : 0;
               })
             }
           }
 
-          if (data3?.trangThai != '3') {
-            const dataPL3 = this.baoCao.lstCtiets.find(e => e.maBieuMau == 'pl03').lstCtietBcaos;
+          if (data3 && data3?.trangThai != '3') {
+            const dataPL3 = this.baoCao.lstCtiets.find(e => e.maBieuMau == 'pl03')?.lstCtietBcaos;
             let lstPl3 = []
-            dataPL3.forEach(i => {
+            dataPL3?.forEach(i => {
               if (i.stt.length == 3) {
                 lstPl3.push(i)
               }
             })
             if (lstPl3.length > 0) {
-              lstPl3.forEach(i => {
-                tongPl3 += i.namDtTcong
+              lstPl3?.forEach(i => {
+                tongPl3 += i.namDtTcong ? i.namDtTcong : 0
               })
             }
           }
+
           let soTranChi = tongPl1N + tongPl1X + tongPl3 + tongPl2
-          const lstCtietPlTong = this.baoCao.lstCtiets.find(item => item.maBieuMau == "pl04").lstCtietBcaos
-          let tongCong = lstCtietPlTong.find(itm => itm.stt == "0.1.2.3").tongCong
-          dataInfo.extraData.push({
-            dtoanGiao: tongCong,
-            id: uuid.v4() + "FE",
-            stt: "0.1.2.3",
-            loaiPa: null,
-            nguonKhac: null,
-            nguonNsnn: null,
-            panDtCtietId: null,
-            lstCtietDvis: [
-              {
-                id: uuid.v4() + "FE",
-                maDviNhan: this.userInfo.MA_DVI,
-                soTranChi: soTranChi
-              }
-            ],
-            maNdung: "0.1.2.3",
-            tongCong: soTranChi
-          })
+          const lstCtietPlTong = this.baoCao.lstCtiets.find(item => item.maBieuMau == "pl04")
+          let tongCong = lstCtietPlTong?.lstCtietBcaos.find(itm => itm.stt == "0.1.2.2")?.tongCong
+          let tongCong1N = lstCtietPlTong?.lstCtietBcaos.find(itm => itm.stt == "0.1.2.2.1")?.tongCong
+          let tongCong1X = lstCtietPlTong?.lstCtietBcaos.find(itm => itm.stt == "0.1.2.2.2")?.tongCong
+          let tongCong2 = lstCtietPlTong?.lstCtietBcaos.find(itm => itm.stt == "0.1.2.2.3")?.tongCong
+          let tongCong3 = lstCtietPlTong?.lstCtietBcaos.find(itm => itm.stt == "0.1.2.2.4")?.tongCong
+
+          if ((data1N || data1X || data2 || data3) && lstCtietPlTong?.trangThai != '3') {
+            dataInfo.extraData.push({
+              dtoanGiao: tongCong,
+              id: uuid.v4() + "FE",
+              stt: "0.1.2.2",
+              loaiPa: null,
+              nguonKhac: null,
+              nguonNsnn: null,
+              panDtCtietId: null,
+              lstCtietDvis: [
+                {
+                  id: uuid.v4() + "FE",
+                  maDviNhan: this.baoCao.maDvi,
+                  soTranChi: soTranChi
+                }
+              ],
+              maNdung: "0.1.2.2",
+              tongCong: soTranChi
+            })
+          }
+          if (data1N && data1N?.trangThai != '3') {
+            dataInfo.extraData.push({
+              dtoanGiao: tongCong1N,
+              id: uuid.v4() + "FE",
+              stt: "0.1.2.2.2",
+              loaiPa: null,
+              nguonKhac: null,
+              nguonNsnn: null,
+              panDtCtietId: null,
+              lstCtietDvis: [
+                {
+                  id: uuid.v4() + "FE",
+                  maDviNhan: this.baoCao.maDvi,
+                  soTranChi: tongPl1N
+                }
+              ],
+              maNdung: "0.1.2.2.2",
+              tongCong: tongPl1N
+            })
+          }
+
+          if (data1X && data1X?.trangThai != '3') {
+            dataInfo.extraData.push({
+              dtoanGiao: tongCong1X,
+              id: uuid.v4() + "FE",
+              stt: "0.1.2.2.3",
+              loaiPa: null,
+              nguonKhac: null,
+              nguonNsnn: null,
+              panDtCtietId: null,
+              lstCtietDvis: [
+                {
+                  id: uuid.v4() + "FE",
+                  maDviNhan: this.baoCao.maDvi,
+                  soTranChi: tongPl1X
+                }
+              ],
+              maNdung: "0.1.2.2.3",
+              tongCong: tongPl1X
+            })
+          }
+
+          if (data3 && data3?.trangThai != '3') {
+            dataInfo.extraData.push({
+              dtoanGiao: tongCong3,
+              id: uuid.v4() + "FE",
+              stt: "0.1.2.2.4",
+              loaiPa: null,
+              nguonKhac: null,
+              nguonNsnn: null,
+              panDtCtietId: null,
+              lstCtietDvis: [
+                {
+                  id: uuid.v4() + "FE",
+                  maDviNhan: this.baoCao.maDvi,
+                  soTranChi: tongPl3
+                }
+              ],
+              maNdung: "0.1.2.2.4",
+              tongCong: tongPl3
+            })
+          }
+
+          if (data2 && data2?.trangThai != '3') {
+            dataInfo.extraData.push({
+              dtoanGiao: tongCong2,
+              id: uuid.v4() + "FE",
+              stt: "0.1.2.2.1",
+              loaiPa: null,
+              nguonKhac: null,
+              nguonNsnn: null,
+              panDtCtietId: null,
+              lstCtietDvis: [
+                {
+                  id: uuid.v4() + "FE",
+                  maDviNhan: this.baoCao.maDvi,
+                  soTranChi: tongPl2
+                }
+              ],
+              maNdung: "0.1.2.2.1",
+              tongCong: tongPl2
+            })
+          }
         }
         break;
       default:
@@ -883,7 +938,7 @@ export class AddBaoCaoComponent implements OnInit {
   getStatusName(status: string) {
     const statusMoi = status == Utils.TT_BC_6 || status == Utils.TT_BC_7;
     const maDviCha = this.baoCao.maDvi.slice(0, (this.baoCao.maDvi.length - 2));
-    if (statusMoi && this.userInfo.MA_DVI == maDviCha) {
+    if (statusMoi && this.userInfo.MA_DVI == this.baoCao.maDviCha) {
       return 'Mới';
     } else {
       return this.trangThais.find(e => e.id == status)?.tenDm;
@@ -934,20 +989,9 @@ export class AddBaoCaoComponent implements OnInit {
 
 
   getStatusButton() {
-    console.log("this.userInfo", this.userInfo)
-    let isParent
-    if (this.userInfo.CAP_DVI == "1") {
-      this.childUnit.forEach(s => {
-        if (s.maDvi == this.baoCao.maDvi) {
-          isParent = true
-        }
-      })
-    } else if (this.userInfo.CAP_DVI == "2") {
-      const maDviCha = this.baoCao.maDvi.slice(0, (this.baoCao.maDvi.length - 2));
-      isParent = this.userInfo.MA_DVI == maDviCha;
-    }
     const isSynthetic = this.baoCao.lstGiaoDtoanTrucThuocs && this.baoCao.lstGiaoDtoanTrucThuocs.length != 0;
     const isChild = this.userInfo.MA_DVI == this.baoCao.maDvi;
+    const isParent = this.userInfo.MA_DVI == this.baoCao.maDviCha;
     //kiem tra quyen cua cac user
     const checkSave = isSynthetic ? this.userService.isAccessPermisson(GDT.EDIT_REPORT_TH) : this.userService.isAccessPermisson(GDT.EDIT_REPORT_TH);
     const checkSunmit = isSynthetic ? this.userService.isAccessPermisson(GDT.APPROVE_REPORT_TH) : this.userService.isAccessPermisson(GDT.APPROVE_REPORT_TH);
@@ -990,8 +1034,6 @@ export class AddBaoCaoComponent implements OnInit {
       data => {
         if (data.statusCode == 0) {
           this.childUnit = data.data;
-          console.log(this.childUnit);
-
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }

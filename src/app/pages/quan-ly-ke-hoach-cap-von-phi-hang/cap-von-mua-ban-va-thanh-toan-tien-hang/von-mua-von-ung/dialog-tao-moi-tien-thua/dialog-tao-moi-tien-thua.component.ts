@@ -41,7 +41,6 @@ export class DialogTaoMoiTienThuaComponent implements OnInit {
 
     //lay ra chi tiet cua de nghi
     async getDetail() {
-        this.spinner.show();
         await this.checkRequest();
 
         if (this.isRequestExist == 2) {
@@ -53,39 +52,8 @@ export class DialogTaoMoiTienThuaComponent implements OnInit {
             this.notification.warning(MESSAGE.WARNING, 'Chưa tồn tại bản ghi nộp tiền vốn thừa năm ' + this.response.namDnghi);
             // this.response.loaiDnghi = null;
             return;
-            this.response.ttGui = new sendInfo();
-            this.response.ttGui.lstCtietBcaos = [];
-            this.response.ttNhan = new receivedInfo();
-            this.response.ttNhan.lstCtietBcaos = [];
-            this.response.maDvi = this.userInfo?.MA_DVI;
-            this.response.ngayTao = new Date();
-            this.response.dot = 1;
-            this.response.ttGui.trangThai = Utils.TT_BC_1;
-            this.response.ttNhan.trangThai = Utils.TT_BC_1;
-            this.response.ttGui.lstFiles = [];
-            this.response.ttNhan.lstFiles = [];
-            this.response.ttGui.lstCtietBcaos.push({
-                ...new TienThua(),
-                id: uuid.v4() + 'FE',
-                maHang: Utils.MUA_THOC,
-                hangDtqg: 'Thóc',
-            })
-            if (!this.userService.isChiCuc) {
-                this.response.ttGui.lstCtietBcaos.push({
-                    ...new TienThua(),
-                    id: uuid.v4() + 'FE',
-                    maHang: Utils.MUA_GAO,
-                    hangDtqg: 'Gạo',
-                })
-                this.response.ttGui.lstCtietBcaos.push({
-                    ...new TienThua(),
-                    id: uuid.v4() + 'FE',
-                    maHang: Utils.MUA_MUOI,
-                    hangDtqg: 'Muối',
-                })
-            }
-            await this.getMaDnghi();
         } else {
+            this.spinner.show();
             //them lan moi cho de nghi
             await this.capVonMuaBanTtthService.ctietVonMuaBan(this.idRequest).toPromise().then(
                 async (data) => {
@@ -123,8 +91,8 @@ export class DialogTaoMoiTienThuaComponent implements OnInit {
             this.response.dot += 1;
             this.response.ttGui.trangThai = Utils.TT_BC_1;
             this.response.ttNhan.trangThai = Utils.TT_BC_1;
+            this.spinner.hide();
         }
-        this.spinner.hide();
     }
 
     async getMaDnghi() {
@@ -143,6 +111,7 @@ export class DialogTaoMoiTienThuaComponent implements OnInit {
     }
 
     async checkRequest() {
+        this.spinner.show();
         this.isRequestExist = 0;
         this.request.namDnghi = this.response.namDnghi;
         this.request.loaiDnghi = this.response.loaiDnghi;

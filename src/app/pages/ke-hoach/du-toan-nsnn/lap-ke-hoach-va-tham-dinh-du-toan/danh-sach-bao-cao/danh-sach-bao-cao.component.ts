@@ -190,6 +190,41 @@ export class DanhSachBaoCaoComponent implements OnInit {
                     tabSelected: 'baocao',
                     isSynthetic: false,
                 }
+
+                //check bao cao nam da ton tai hay chua
+                let checkExist = false;
+                let checkError = false;
+                const request = {
+                    loaiTimKiem: '0',
+                    maBcaos: [],
+                    maDvi: this.searchFilter.donViTao,
+                    namBcao: obj?.namHienTai,
+                    paggingReq: {
+                        limit: 10,
+                        page: 1,
+                    },
+                    trangThais: [],
+                }
+                await this.lapThamDinhService.timBaoCaoLapThamDinh(request).toPromise().then(res => {
+                    if (res.statusCode == 0) {
+                        if (res.data.content?.length > 0) {
+                            checkExist = true;
+                        }
+                    } else {
+                        checkError = true;
+                    }
+                }, err => {
+                    checkError = true;
+                })
+                if (checkExist) {
+                    this.notification.warning(MESSAGE.WARNING, "Báo cáo năm " + request.namBcao + " đã tồn tại!");
+                    return;
+                }
+                if (checkError) {
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+                    return;
+                }
+
                 this.dataChange.emit(obj);
             }
         });

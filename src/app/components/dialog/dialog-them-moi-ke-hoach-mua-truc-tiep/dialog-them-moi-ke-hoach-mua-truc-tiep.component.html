@@ -41,7 +41,7 @@
                     <nz-form-label nzRequired [nzNoColon]="true"> Đơn giá đề xuất (đ) </nz-form-label>
                     <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
                         <nz-input-number formControlName="donGia" [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
-                            [nzStep]="1" [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                            [nzStep]="1" [nzSize]="'small'" [nzFormatter]="globals.formatter" (input)="calTongThanhTien()"
                             [nzParser]="globals.parser">
                         </nz-input-number>
                     </nz-form-control>
@@ -130,9 +130,9 @@
                         [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
                     </nz-input-number>
                 </th>
-                <th>{{ thongTinMuaTrucTiep.donGia * thongTinMuaTrucTiep.soLuong * 1000 | number : '1.0-1' : 'vi_VN' }}
+                <th>{{ formData.value.donGia * thongTinMuaTrucTiep.soLuong * 1000 | number : '1.0-1' : 'vi_VN' }}
                 </th>
-                <th>{{ (thongTinMuaTrucTiep.soLuong * thongTinMuaTrucTiep.donGiaVat * 1000) | number
+                <th>{{ (thongTinMuaTrucTiep.soLuong * formData.value.donGiaVat * 1000) | number
                     : '1.0-1'
                     : 'vi_VN'}}</th>
                 <th class="text-center">
@@ -151,8 +151,8 @@
                     <td>{{ data.tenDiemKho }}</td>
                     <td>{{ data.diaDiemNhap }}</td>
                     <td>{{ data.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                    <td>{{ data.donGia * data.soLuong * 1000| number : '1.0-1' : 'vi_VN'}}</td>
-                    <td>{{ data.soLuong * data.donGiaVat * 1000 | number : '1.0-1' : 'vi_VN' }}</td>
+                    <td>{{ formData.value.donGia * data.soLuong * 1000| number : '1.0-1' : 'vi_VN'}}</td>
+                    <td>{{ data.soLuong * formData.value.donGiaVat * 1000 | number : '1.0-1' : 'vi_VN' }}</td>
                     <td class="text-center">
                         <a (click)="startEdit(i)">
                             <i class="fa fa-pencil"></i>
@@ -163,20 +163,16 @@
                     </td>
                 </ng-container>
                 <ng-template #editTemplate>
+                    <td>{{thongTinMuaTrucTiepEdit[i].tenDiemKho}}</td>
+                    <td>{{thongTinMuaTrucTiepEdit[i].diaDiemNhap}} </td>
                     <td>
-                        <nz-select [(ngModel)]="data.maDiemKho" (ngModelChange)="changeDiemKho()">
-                            <nz-option *ngFor="let p of listDiemKho" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
-                        </nz-select>
-                    </td>
-                    <td>{{data.diaDiemNhap}} </td>
-                    <td>
-                        <nz-input-number class="text-right" nz-input [(ngModel)]="data.soLuong" [nzMin]="1" [nzStep]="1"
+                        <nz-input-number class="text-right" nz-input [(ngModel)]="thongTinMuaTrucTiepEdit[i].soLuong" [nzMin]="1" [nzStep]="1"
                             [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
                         </nz-input-number>
                     </td>
-                    <td>{{ thongTinMuaTrucTiep.donGia * thongTinMuaTrucTiep.soLuong * 1000 | number : '1.0-1' : 'vi_VN'
+                    <td>{{ formData.value.donGia * thongTinMuaTrucTiepEdit[i].soLuong * 1000 | number : '1.0-1' : 'vi_VN'
                         }}</td>
-                    <td>{{ (thongTinMuaTrucTiep.soLuong * thongTinMuaTrucTiep.donGiaVat * 1000) | number
+                    <td>{{ (thongTinMuaTrucTiepEdit[i].soLuong * formData.value.donGiaVat * 1000) | number
                         : '1.0-1'
                         : 'vi_VN'}}</td>
 

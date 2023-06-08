@@ -125,7 +125,7 @@
                   <th nzWidth="40%">Tên phụ lục</th>
                   <th nzWidth="15%">Trạng thái</th>
                   <th nzWidth="15%">Giao cho</th>
-                  <th nzWidth="10%">Hành dộng</th>
+                  <th nzWidth="10%">Hành động</th>
                 </tr>
               </thead>
               <tbody>
@@ -158,6 +158,16 @@
                         </div>
                       </ng-template>
                     </td>
+                    <!-- <td>
+                      <ng-container *ngIf="baoCao.id">
+                        <a *ngIf="!status && (userInfo?.sub == data.nguoiBcao)">
+                          <i class="fa fa-pencil" (click)="viewAppendix(data)"></i>
+                        </a>
+                        <a *ngIf="(status || userInfo?.sub != data.nguoiBcao) && data.nguoiBcao">
+                          <i class="fa fa-eye" (click)="viewAppendix(data)"></i>
+                        </a>
+                      </ng-container>
+                    </td> -->
                     <td>
                       <ng-container *ngIf="baoCao.id">
                         <a *ngIf="!status && (userInfo?.sub == data.nguoiBcao)">
@@ -167,31 +177,21 @@
                           <i class="fa fa-eye" (click)="viewAppendix(data)"></i>
                         </a>
                       </ng-container>
-                    </td>
-                    <!-- <td>
-                      <ng-container>
-                        <a *ngIf="!status && (userInfo?.sub == data.nguoiBcao)">
-                          <i class="fa fa-pencil" (click)="viewAppendix(data)"></i>
-                        </a>
-                        <a *ngIf="(!status || userInfo?.sub != data.nguoiBcao) && data.nguoiBcao">
-                          <i class="fa fa-eye" (click)="viewAppendix(data)"></i>
-                        </a>
-                      </ng-container>
                       <a *ngIf="!status && (userInfo?.sub == baoCao.nguoiTao)">
                         <i class="fa fa-trash-o do" (click)="deleteAppendix(data.id)"></i>
                       </a>
-                    </td> -->
+                    </td>
                   </ng-container>
                 </tr>
               </tbody>
             </nz-table>
           </nz-tab>
           <ng-template #extraTemplate>
-            <!-- <button *ngIf="!status && userInfo?.sub == baoCao.nguoiTao" type="button" class="btn btn-main"
+            <button *ngIf="!status && userInfo?.sub == baoCao.nguoiTao" type="button" class="btn btn-main"
               (click)="addAppendix()">
               <i class="icon htvbdh_dau-cong"></i>
               <span>Thêm</span>
-            </button> -->
+            </button>
           </ng-template>
         </nz-tabset>
       </nz-table>

@@ -324,6 +324,7 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
     body.soQdDc = body.soQdDc + this.maQd;
     body.children = this.danhsachDx;
     body.id = this.id;
+    console.log(body)
     let data = await this.createUpdate(body);
     if (data) {
       if (isGuiDuyet) {

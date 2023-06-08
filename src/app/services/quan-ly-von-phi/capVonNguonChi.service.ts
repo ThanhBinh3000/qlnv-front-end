@@ -13,8 +13,9 @@ export class CapVonNguonChiService extends BaseService {
         super(httpClient, 'quanLyVonPhi', '');
     }
 
-    urlDefault = environment.SERVICE_API + '/qlnv-khoachphi';
     urlTest = 'http://localhost:9150';
+    urlDefault = environment.SERVICE_API + '/qlnv-khoachphi';
+
     //tao  ma de nghi
     maDeNghi(): Observable<any> {
         return this.httpClient.get(

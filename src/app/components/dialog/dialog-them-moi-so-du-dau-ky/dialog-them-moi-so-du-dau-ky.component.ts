@@ -67,7 +67,7 @@ export class DialogThemMoiSoDuDauKyComponent implements OnInit {
 
   async loadDsNam() {
       let thisYear = dayjs().get('year');
-      for (let i = -3; i < 23; i++) {
+      for (let i = -10; i < 10; i++) {
         this.dsNam.push((thisYear + i).toString());
       }
   }

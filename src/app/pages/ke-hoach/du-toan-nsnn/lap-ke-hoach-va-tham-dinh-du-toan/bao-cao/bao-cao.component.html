@@ -276,11 +276,7 @@
                                                 </nz-select>
                                             </ng-container>
                                             <ng-template #templateNguoiBcao>
-                                                <div *ngFor="let item of canBos">
-                                                    <div *ngIf="item.username == data.nguoiBcao">
-                                                        {{item.username}}
-                                                    </div>
-                                                </div>
+                                                {{data.nguoiBcao}}
                                             </ng-template>
                                         </td>
                                         <td>

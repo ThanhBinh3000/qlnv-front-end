@@ -51,6 +51,7 @@ export class BaoCaoTuDonViCapDuoiComponent implements OnInit {
     loaiTimKiem: "1",
     maPhanGiao: '3',
     maLoai: '2',
+    maLoaiDan: [3],
     namPa: null,
     ngayTaoTu: null,
     ngayTaoDen: null,
@@ -95,16 +96,13 @@ export class BaoCaoTuDonViCapDuoiComponent implements OnInit {
   isDataAvailable = false;
 
   constructor(
-    private quanLyVonPhiService: QuanLyVonPhiService,
     private giaoDuToanChiService: GiaoDuToanChiService,
     private danhMuc: DanhMucHDVService,
     private router: Router,
     private datePipe: DatePipe,
     private notification: NzNotificationService,
-    private fb: FormBuilder,
     private spinner: NgxSpinnerService,
     private userService: UserService,
-    private dataSource: DataService,
   ) {
   }
   ngOnInit() {
@@ -245,20 +243,19 @@ export class BaoCaoTuDonViCapDuoiComponent implements OnInit {
     this.searchFilter.ngayTaoTu = null
     this.searchFilter.ngayTaoDen = null
     this.searchFilter.maBcao = null
+    this.searchFilter.maLoaiDan = [3]
     this.trangThai = null;
     this.onSubmit();
   }
 
   xemChiTiet(id: string, maLoaiDan: string) {
-    console.log({ "id": id, "maLoaiDan": maLoaiDan });
-
-    if (maLoaiDan == "1") {
+    if (maLoaiDan == "3") {
       const obj = {
         id: id,
         tabSelected: 'addBaoCao',
       }
       this.dataChange.emit(obj);
-    } else if (maLoaiDan == "2") {
+    } else if (maLoaiDan == "3") {
       const obj = {
         id: id,
         tabSelected: 'addBaoCao',

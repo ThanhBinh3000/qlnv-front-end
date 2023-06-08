@@ -151,7 +151,7 @@ export class PhuLucIIIComponent implements OnInit {
         this.luyKeDetail = this.data?.luyKeDetail?.lstCtietBcaos;
         this.status = this.data?.status;
         this.statusEdit = this.status && this.maLoaiBcao != '527';
-        if (this.startEdit) {
+        if (this.statusEdit) {
             this.scrollX = (500 + 41 * BOX_NUMBER_WIDTH + 800).toString() + 'px';
         }
         this.statusBtnFinish = this.data?.statusBtnFinish;

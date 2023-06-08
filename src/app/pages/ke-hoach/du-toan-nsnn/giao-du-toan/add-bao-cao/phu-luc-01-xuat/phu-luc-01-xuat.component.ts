@@ -30,7 +30,7 @@ export class ItemData {
 @Component({
   selector: 'app-phu-luc-01-xuat',
   templateUrl: './phu-luc-01-xuat.component.html',
-  styleUrls: ['./phu-luc-01-xuat.component.scss']
+  styleUrls: ['../add-bao-cao.component.scss'],
 })
 export class PhuLuc01XuatComponent implements OnInit {
   @Input() dataInfo;
@@ -90,7 +90,6 @@ export class PhuLuc01XuatComponent implements OnInit {
     this.maDviTao = this.dataInfo?.maDvi;
     this.thuyetMinh = this.formDetail?.thuyetMinh;
     this.status = this.dataInfo?.status;
-    // this.status = false;
     this.namBaoCao = this.dataInfo?.namBcao;
     this.statusBtnFinish = this.dataInfo?.statusBtnFinish;
     this.statusPrint = this.dataInfo?.statusBtnPrint;
@@ -99,7 +98,6 @@ export class PhuLuc01XuatComponent implements OnInit {
         ...item,
       })
     })
-    // await this.getDinhMucPL2N();
     await this.getDinhMucPL2X();
 
     this.dsDinhMuc = this.dsDinhMucN.concat(this.dsDinhMucX);
@@ -113,7 +111,6 @@ export class PhuLuc01XuatComponent implements OnInit {
         item.namDtTtien = mulNumber(item.namDtDmuc, item.namDtSluong);
       } else {
         const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.danhMuc && e.loaiDinhMuc == item.maDmuc);
-        // item.tenDanhMuc = dinhMuc?.tenDinhMuc;
         item.namDtDmuc = dinhMuc?.tongDmuc;
         item.maDviTinh = dinhMuc?.donViTinh;
         item.namDtTtien = mulNumber(item.namDtDmuc, item.namDtSluong);
@@ -137,26 +134,6 @@ export class PhuLuc01XuatComponent implements OnInit {
 
     this.spinner.hide();
   }
-
-  // async getDinhMucPL2N() {
-  //   const request = {
-  //     loaiDinhMuc: '01',
-  //     maDvi: this.maDviTao,
-  //   }
-
-  //   await this.quanLyVonPhiService.getDinhMuc(request).toPromise().then(
-  //     res => {
-  //       if (res.statusCode == 0) {
-  //         this.dsDinhMucN = res.data;
-  //       } else {
-  //         this.notification.error(MESSAGE.ERROR, res?.msg);
-  //       }
-  //     },
-  //     err => {
-  //       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-  //     }
-  //   )
-  // };
 
   async getDinhMucPL2X() {
     const request = {
@@ -540,12 +517,10 @@ export class PhuLuc01XuatComponent implements OnInit {
         tenDanhMuc: data.tenDanhMuc,
         level: data.level,
         danhMuc: data.danhMuc,
-        // namDtSluong:data.namDtSluong,
-        // namDtTtien: data.namDtTtien,
-        // thienNamTruoc: data.thienNamTruoc,
-        // dtoanNamHtai: data.dtoanNamHtai,
-        // uocNamHtai: data.uocNamHtai,
-        // namDtDmuc: data.namDtDmuc,
+        maDmuc: data.maDmuc,
+        maDviTinh: data.maDviTinh,
+        namDtDmuc: data.namDtDmuc,
+        namDtSluong: data.namDtSluong,
       }
       this.lstCtietBcao.forEach(item => {
         if (this.getHead(item.stt) == stt) {
@@ -571,13 +546,10 @@ export class PhuLuc01XuatComponent implements OnInit {
           tenDanhMuc: data.tenDanhMuc,
           level: data.level,
           danhMuc: data.danhMuc,
-          // namDtSluong: data.namDtSluong,
-          // namDtTtien: data.namDtTtien,
-          // thienNamTruoc: data.thienNamTruoc,
-          // dtoanNamHtai: data.dtoanNamHtai,
-          // uocNamHtai: data.uocNamHtai,
-          // namDtDmuc: data.namDtDmuc,
-          // ttienTd: data.ttienTd,
+          maDmuc: data.maDmuc,
+          maDviTinh: data.maDviTinh,
+          namDtDmuc: data.namDtDmuc,
+          namDtSluong: data.namDtSluong,
         }
         this.lstCtietBcao.forEach(item => {
           if (this.getHead(item.stt) == stt) {

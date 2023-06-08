@@ -239,6 +239,7 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
       nzClosable: false,
       nzWidth: '1800px',
       nzFooter: null,
+      nzBodyStyle:{ 'overflow-y': 'auto' },
       nzComponentParams: {
         isModal: true,
         idDtl: this.idInput,

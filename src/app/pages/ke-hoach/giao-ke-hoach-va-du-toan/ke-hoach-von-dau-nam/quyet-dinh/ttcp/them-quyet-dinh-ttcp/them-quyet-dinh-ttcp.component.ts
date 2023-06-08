@@ -66,7 +66,7 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
       ngayQd: [null, [Validators.required]],
       namQd: [dayjs().get('year'), [Validators.required]],
       trichYeu: [null],
-      trangThai: ['00'],
+      trangThai: [STATUS.DANG_NHAP_DU_LIEU],
     });
   }
 
@@ -110,9 +110,17 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
         });
         this.dataTable = data.listBoNganh;
         if (data.listChiTangToanBoNganh.length > 0) {
+          this.dataTableAllBn.push({
+            "stt": 2,
+            "maCha": null,
+            "maBn": '01',
+            "tenBn": "Bộ Tài Chính",
+            "isSum": true,
+            "tongSo": 0
+          })
           for (let item of data.listChiTangToanBoNganh) {
             var obj = {
-              "stt": item.stt,
+              "stt": item.maBn == '01' ? 2 : item.stt,
               "maCha": item.maBn == '01' ? item.maBn : null,
               "maBn": item.maBn,
               "tenBn": item.tenBn,
@@ -121,14 +129,7 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
             };
             this.dataTableAllBn.push(obj);
           }
-          this.dataTableAllBn.unshift({
-            "stt": 1,
-            "maCha": null,
-            "maBn": null,
-            "tenBn": "Bộ Tài Chính",
-            "isSum": true,
-            "tongSo": 0
-          })
+          this.dataTableAllBn.sort((a, b) => (a.stt - b.stt));
           this.onInputNumberBNChange();
         }
         data.fileDinhkems.forEach(item => {
