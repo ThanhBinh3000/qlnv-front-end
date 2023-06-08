@@ -5,11 +5,11 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.service';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
 import { displayNumber, divNumber, exchangeMoney, getHead, sortByIndex, sumNumber } from 'src/app/Utility/func';
-import { AMOUNT, DON_VI_TIEN, LA_MA, MONEY_LIMIT, QUATITY } from "src/app/Utility/utils";
+import { AMOUNT, BOX_NUMBER_WIDTH, DON_VI_TIEN, LA_MA, MONEY_LIMIT, QUATITY } from "src/app/Utility/utils";
 import * as uuid from "uuid";
-import { DANH_MUC } from './bieu-mau-13.constant';
 
 export class ItemData {
     id!: string;
@@ -46,12 +46,13 @@ export class BieuMau13Component implements OnInit {
     namBcao: number;
     thuyetMinh: string;
     //danh muc
-    noiDungs: any[] = DANH_MUC;
+    noiDungs: any[] = [];
     soLaMa: any[] = LA_MA;
     lstCtietBcao: ItemData[] = [];
     donViTiens: any[] = DON_VI_TIEN;
     amount = AMOUNT;
     quatity = QUATITY;
+    scrollX: string;
     //trang thai cac nut
     status = false;
     statusBtnFinish: boolean;
@@ -65,6 +66,7 @@ export class BieuMau13Component implements OnInit {
     constructor(
         private _modalRef: NzModalRef,
         private spinner: NgxSpinnerService,
+        private danhMucService: DanhMucDungChungService,
         private lapThamDinhService: LapThamDinhService,
         private notification: NzNotificationService,
         private modal: NzModalService,
@@ -83,7 +85,16 @@ export class BieuMau13Component implements OnInit {
         this.formDetail = this.dataInfo?.data;
         this.namBcao = this.dataInfo?.namBcao;
         this.thuyetMinh = this.formDetail?.thuyetMinh;
-        this.status = this.dataInfo?.status;
+        this.status = !this.dataInfo?.status;
+        if (this.status) {
+            const category = await this.danhMucService.danhMucChungGetAll('LTD_TT69_BM13');
+            if (category) {
+                this.noiDungs = category.data;
+            }
+            this.scrollX = (410 + 180 + BOX_NUMBER_WIDTH * 11).toString() + 'px';
+        } else {
+            this.scrollX = (350 + 180 + BOX_NUMBER_WIDTH * 11).toString() + 'px';
+        }
         this.statusBtnFinish = this.dataInfo?.statusBtnFinish;
         this.statusPrint = this.dataInfo?.statusBtnPrint;
         this.formDetail?.lstCtietLapThamDinhs.forEach(item => {
@@ -122,6 +133,12 @@ export class BieuMau13Component implements OnInit {
                 this.sum(this.lstCtietBcao[index].stt);
             })
         }
+        if (this.formDetail.trangThai == '3') {
+            this.lstCtietBcao.forEach(item => {
+                item.clechTranChiVsNcauChiN = sumNumber([item.tranChiN, -item.ncauChiN])
+            })
+        }
+
         this.updateEditCache();
         this.getStatusButton();
         this.spinner.hide();

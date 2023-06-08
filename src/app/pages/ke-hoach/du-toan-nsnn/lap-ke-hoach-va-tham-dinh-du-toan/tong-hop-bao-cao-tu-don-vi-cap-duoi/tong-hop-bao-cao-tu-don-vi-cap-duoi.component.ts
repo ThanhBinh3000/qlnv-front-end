@@ -178,7 +178,6 @@ export class TongHopBaoCaoTuDonViCapDuoiComponent implements OnInit {
         });
         modalTuChoi.afterClose.toPromise().then(async (res) => {
             if (res) {
-                console.log(res)
                 if (res.loai == 1) {
                     const request = {
                         id: res.idSoTranChi,
@@ -232,6 +231,31 @@ export class TongHopBaoCaoTuDonViCapDuoiComponent implements OnInit {
                         },
                     );
                 } else {
+                    let check = false;
+                    const requestReport = {
+                        loaiTimKiem: "0",
+                        maBcaos: [],
+                        namBcao: res.namHienTai,
+                        maDvi: this.userInfo?.MA_DVI,
+                        paggingReq: {
+                            limit: 10,
+                            page: 1,
+                        },
+                        trangThais: [],
+                    };
+                    await this.lapThamDinhService.timBaoCaoLapThamDinh(requestReport).toPromise().then(
+                        (data) => {
+                            if (data.statusCode == 0) {
+                                if (data.data.content?.length > 0) {
+                                    check = true;
+                                }
+                            }
+                        }
+                    );
+                    if (check) {
+                        this.notification.warning(MESSAGE.WARNING, "Báo cáo năm " + requestReport.namBcao + " đã tồn tại!");
+                        return;
+                    }
                     const obj = {
                         ...res,
                         id: null,

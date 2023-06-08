@@ -51,6 +51,7 @@ export class BaoCaoTuDonViCapDuoiComponent implements OnInit {
     loaiTimKiem: "1",
     maPhanGiao: '2',
     maLoai: '2',
+    maLoaiDan: [1, 2],
     namPa: null,
     ngayTaoTu: null,
     ngayTaoDen: null,
@@ -62,7 +63,6 @@ export class BaoCaoTuDonViCapDuoiComponent implements OnInit {
       page: 1
     },
     trangThais: [],
-    // trangThaiGiaos: [],
   };
 
   filterTable: any = {
@@ -95,16 +95,13 @@ export class BaoCaoTuDonViCapDuoiComponent implements OnInit {
   isDataAvailable = false;
 
   constructor(
-    private quanLyVonPhiService: QuanLyVonPhiService,
     private giaoDuToanChiService: GiaoDuToanChiService,
     private danhMuc: DanhMucHDVService,
     private router: Router,
     private datePipe: DatePipe,
     private notification: NzNotificationService,
-    private fb: FormBuilder,
     private spinner: NgxSpinnerService,
     private userService: UserService,
-    private dataSource: DataService,
   ) {
   }
   ngOnInit() {
@@ -198,7 +195,6 @@ export class BaoCaoTuDonViCapDuoiComponent implements OnInit {
     } else {
       searchFilterTemp.trangThais = [Utils.TT_BC_7, Utils.TT_BC_8, Utils.TT_BC_9, Utils.TT_BC_KT]
     }
-    // searchFilterTemp.trangThaiGiaos = ['0', '1', '2']
     await this.giaoDuToanChiService.timBaoCaoGiao(searchFilterTemp).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
@@ -245,6 +241,7 @@ export class BaoCaoTuDonViCapDuoiComponent implements OnInit {
     this.searchFilter.ngayTaoTu = null
     this.searchFilter.ngayTaoDen = null
     this.searchFilter.maBcao = null
+    this.searchFilter.maLoaiDan = [1, 2]
     this.trangThai = null;
     this.onSubmit();
   }

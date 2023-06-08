@@ -10,6 +10,13 @@ export const TAB_LIST = [
         isSelected: false,
     },
     {
+        name: 'Dự toán giao từ đơn vị cấp trên',
+        code: 'dsGiaoTuCapTren',
+        status: true,
+        role: [GDT.NHAN_PA_PBDT],
+        isSelected: false,
+    },
+    {
         name: 'Phân bổ dự toán',
         code: 'dsphanBo',
         status: true,
@@ -19,13 +26,6 @@ export const TAB_LIST = [
             GDT.EDIT_REPORT_PA_PBDT,
             GDT.ADD_REPORT_CV_QD_GIAO_PA_PBDT,
         ],
-        isSelected: false,
-    },
-    {
-        name: 'Dự toán giao từ đơn vị cấp trên',
-        code: 'dsGiaoTuCapTren',
-        status: true,
-        role: [GDT.NHAN_PA_PBDT],
         isSelected: false,
     },
     {

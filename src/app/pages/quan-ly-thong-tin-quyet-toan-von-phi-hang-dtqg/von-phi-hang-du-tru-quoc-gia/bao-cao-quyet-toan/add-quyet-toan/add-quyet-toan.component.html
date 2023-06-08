@@ -76,7 +76,7 @@
                   <nz-upload [nzBeforeUpload]="beforeUploadCV" [hidden]="status">
                     <button nz-button>
                       <i nz-icon nzType="upload"></i>
-                      Select File
+                      Chọn tệp
                     </button>
                   </nz-upload>
                   <div class="tep__sqd" (click)="downloadFileCv()">
@@ -130,16 +130,16 @@
                 <th>A</th>
                 <th>B</th>
                 <th>C</th>
-                <th>D</th>
                 <th>1</th>
                 <th>2</th>
+                <th>3=1*2</th>
                 <th colspan="3" [hidden]="status"></th>
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="let data of lstCtietBcao; let i = index">
                 <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
-                  <td [nzIndentSize]="data.level * 8">
+                  <td>
                     {{getChiMuc(data.stt)}}
                   </td>
                   <td>
@@ -166,7 +166,7 @@
 
                 </ng-container>
                 <ng-template #editTemplate>
-                  <td [nzIndentSize]="data.level * 8">
+                  <td>
                     {{getChiMuc(editCache[data.id].data.stt)}}
                   </td>
                   <td>
@@ -207,7 +207,18 @@
               </tr>
               <tr>
                 <td></td>
-                <td>Tổng cộng lũy kế</td>
+                <td>Tổng cộng phát sinh trong kỳ</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>{{displayValue(total1.thanhTien)}}</td>
+                <td [hidden]="status"></td>
+                <td [hidden]="status"></td>
+                <td [hidden]="status"></td>
+              </tr>
+              <tr>
+                <td></td>
+                <td>Tổng cộng lũy kế từ đầu năm</td>
                 <td></td>
                 <td></td>
                 <td></td>

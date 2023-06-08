@@ -30,7 +30,7 @@ export class ItemData {
 @Component({
   selector: 'app-phu-luc-01-nhap',
   templateUrl: './phu-luc-01-nhap.component.html',
-  styleUrls: ['./phu-luc-01-nhap.component.scss']
+  styleUrls: ['../add-bao-cao.component.scss'],
 })
 export class PhuLuc01NhapComponent implements OnInit {
   @Input() dataInfo;
@@ -67,7 +67,6 @@ export class PhuLuc01NhapComponent implements OnInit {
   constructor(
     private _modalRef: NzModalRef,
     private spinner: NgxSpinnerService,
-    private lapThamDinhService: LapThamDinhService,
     private giaoDuToanChiService: GiaoDuToanChiService,
     private notification: NzNotificationService,
     private modal: NzModalService,
@@ -85,8 +84,6 @@ export class PhuLuc01NhapComponent implements OnInit {
 
 
   async initialization() {
-    console.log(this.dataInfo);
-
     this.spinner.show();
     this.formDetail = this.dataInfo?.data;
     this.maDviTao = this.dataInfo?.maDvi;
@@ -525,12 +522,10 @@ export class PhuLuc01NhapComponent implements OnInit {
         tenDanhMuc: data.tenDanhMuc,
         level: data.level,
         danhMuc: data.danhMuc,
-        // sluongNamDtoan:data.sluongNamDtoan,
-        // ttienNamDtoan: data.ttienNamDtoan,
-        // thienNamTruoc: data.thienNamTruoc,
-        // dtoanNamHtai: data.dtoanNamHtai,
-        // uocNamHtai: data.uocNamHtai,
-        // dmucNamDtoan: data.dmucNamDtoan,
+        maDmuc: data.maDmuc,
+        maDviTinh: data.maDviTinh,
+        namDtDmuc: data.namDtDmuc,
+        namDtSluong: data.namDtSluong,
       }
       this.lstCtietBcao.forEach(item => {
         if (this.getHead(item.stt) == stt) {
@@ -556,13 +551,10 @@ export class PhuLuc01NhapComponent implements OnInit {
           tenDanhMuc: data.tenDanhMuc,
           level: data.level,
           danhMuc: data.danhMuc,
-          // sluongNamDtoan: data.sluongNamDtoan,
-          // ttienNamDtoan: data.ttienNamDtoan,
-          // thienNamTruoc: data.thienNamTruoc,
-          // dtoanNamHtai: data.dtoanNamHtai,
-          // uocNamHtai: data.uocNamHtai,
-          // dmucNamDtoan: data.dmucNamDtoan,
-          // ttienTd: data.ttienTd,
+          namDtSluong: data.namDtSluong,
+          namDtDmuc: data.namDtDmuc,
+          maDmuc: data.maDmuc,
+          maDviTinh: data.maDviTinh,
         }
         this.lstCtietBcao.forEach(item => {
           if (this.getHead(item.stt) == stt) {

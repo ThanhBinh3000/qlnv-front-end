@@ -252,7 +252,7 @@ export class BaoCaoComponent implements OnInit {
             this.baoCao.ngayTao = this.datePipe.transform(new Date(), Utils.FORMAT_DATE_STR);
             this.baoCao.trangThai = "1";
             this.lstBieuMaus = this.baoCao.maLoaiBcao == BAO_CAO_DOT ? LISTBIEUMAUDOT : LISTBIEUMAUNAM;
-            if (this.data?.isSynthetic || this.isOffice) {
+            if (this.data?.isSynthetic || (this.isOffice)) {
                 await this.callSynthetic();
             } else {
                 this.lstBieuMaus.forEach(item => {
@@ -274,6 +274,9 @@ export class BaoCaoComponent implements OnInit {
                         denNgay: '',
                     });
                 })
+                if (this.isOffice) {
+                    this.baoCao.lstBcaos = this.baoCao.lstBcaos.filter(e => e.maLoai != '4' && e.maLoai != '5');
+                }
             }
         }
 
@@ -676,6 +679,7 @@ export class BaoCaoComponent implements OnInit {
         }
 
         this.baoCao?.lstBcaos?.forEach(item => {
+            item.id = uuid.v4() + "FE";
             item.maDviTien = '1';
             item.checked = false;
             item.trangThai = '3';
@@ -687,8 +691,8 @@ export class BaoCaoComponent implements OnInit {
             }
             if (item.maLoai == '4') {
                 item.lstCtietBcaos.forEach(e => {
-                    e.khGiaMuaTd = Math.round(divNumber(e.khTtien, e.khSoLuong));
-                    e.thGiaMuaTd = Math.round(divNumber(e.thTtien, e.thSoLuong));
+                    e.khGiaMuaTd = divNumber(e.khTtien, e.khSoLuong);
+                    e.thGiaMuaTd = divNumber(e.thTtien, e.thSoLuong);
                 })
             }
             if (item.maLoai == '5') {

@@ -42,7 +42,7 @@
                 <div class="header-text">
                     <div class="title-chi-tieu">
                         <span [ngClass]="statusClass()">{{getStatusName()}}</span>
-                        <span>Vốn bán nộp lên đơn vị cấp trên</span>
+                        <span>{{title}}</span>
                     </div>
                 </div>
             </div>
@@ -121,7 +121,8 @@
                             <th rowspan="2" *ngIf="baoCao.maLoai == 4" nzWidth="150px" nzLeft>Tên khách hàng </th>
                             <th rowspan="2" *ngIf="baoCao.maLoai == 4" nzWidth="200px" nzLeft>Quyết định phê duyệt
                                 <br /> kết quả nhà thầu / Hợp
-                                đồng</th>
+                                đồng
+                            </th>
                             <th rowspan="2" *ngIf="baoCao.maLoai == 1" nzWidth="350px" nzLeft>Đơn vị</th>
                             <th colspan="3">Số lượng</th>
                             <th rowspan="2">Đơn giá (đồng /kg)</th>

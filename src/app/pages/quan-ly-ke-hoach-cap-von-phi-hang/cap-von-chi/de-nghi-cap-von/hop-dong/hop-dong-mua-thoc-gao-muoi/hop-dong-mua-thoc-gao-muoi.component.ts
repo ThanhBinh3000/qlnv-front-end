@@ -12,7 +12,7 @@ import { CapVonNguonChiService } from 'src/app/services/quan-ly-von-phi/capVonNg
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { displayNumber } from 'src/app/Utility/func';
+import { displayNumber, sumNumber } from 'src/app/Utility/func';
 import { AMOUNT, CVNC, DON_VI_TIEN, LOAI_DE_NGHI, QUATITY, Utils } from 'src/app/Utility/utils';
 import { BaoCao, ItemContract, TRANG_THAI } from '../../de-nghi-cap-von.constant';
 
@@ -155,6 +155,7 @@ export class HopDongMuaThocGaoMuoiComponent implements OnInit {
             this.updateEditCache();
         }
         this.sortReport();
+        this.getTotal();
         this.getStatusButton();
     }
 
@@ -441,7 +442,19 @@ export class HopDongMuaThocGaoMuoiComponent implements OnInit {
         this.baoCao.dnghiCvHopDongCtiets = [];
         lstParent.forEach(item => {
             this.baoCao.dnghiCvHopDongCtiets.push(item);
-            this.baoCao.dnghiCvHopDongCtiets = this.baoCao.dnghiCvHopDongCtiets.concat(lstCtietBcao.find(e => e.maDvi == item.maDvi && !e.isParent));
+            this.baoCao.dnghiCvHopDongCtiets = this.baoCao.dnghiCvHopDongCtiets.concat(lstCtietBcao.filter(e => e.maDvi == item.maDvi && !e.isParent));
+        })
+    }
+
+    getTotal() {
+        this.total = new ItemContract();
+        this.baoCao.dnghiCvHopDongCtiets.forEach(item => {
+            if (item.isParent) {
+                this.total.slKeHoach = sumNumber([this.total.slKeHoach, item.slKeHoach]);
+                this.total.slHopDong = sumNumber([this.total.slHopDong, item.slHopDong]);
+                this.total.gtHopDong = sumNumber([this.total.gtHopDong, item.gtHopDong]);
+                this.total.daGiaoDuToan = sumNumber([this.total.daGiaoDuToan, item.daGiaoDuToan]);
+            }
         })
     }
 

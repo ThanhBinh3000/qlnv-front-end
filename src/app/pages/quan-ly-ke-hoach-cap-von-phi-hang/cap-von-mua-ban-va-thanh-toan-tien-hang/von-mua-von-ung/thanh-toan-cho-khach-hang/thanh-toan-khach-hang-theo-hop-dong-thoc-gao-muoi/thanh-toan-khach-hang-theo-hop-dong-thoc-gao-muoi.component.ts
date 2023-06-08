@@ -498,7 +498,7 @@ export class ThanhToanKhachHangTheoHopDongThocGaoMuoiComponent implements OnInit
 
     changeModel(id: string) {
         const index = this.lstCtietBcaos.findIndex(e => e.id == id);
-        this.editCache[id].data.giaTriHd = mulNumber(this.editCache[id].data.donGia, this.editCache[id].data.soLuongKeHoach)
+        this.editCache[id].data.giaTriHd = mulNumber(this.editCache[id].data.donGia, this.editCache[id].data.soLuongHopDong)
         this.editCache[id].data.uyNhiemChiTong = sumNumber([this.editCache[id].data.uyNhiemChiCapUng, this.editCache[id].data.uyNhiemChiCapVon]);
         this.editCache[id].data.luyKeCapUng = sumNumber([this.lstCtietBcaos[index].luyKeCapUng, this.editCache[id].data.uyNhiemChiCapUng, -this.lstCtietBcaos[index].uyNhiemChiCapUng]);
         this.editCache[id].data.luyKeCapVon = sumNumber([this.lstCtietBcaos[index].luyKeCapVon, this.editCache[id].data.uyNhiemChiCapVon, -this.lstCtietBcaos[index].uyNhiemChiCapVon]);
@@ -512,7 +512,7 @@ export class ThanhToanKhachHangTheoHopDongThocGaoMuoiComponent implements OnInit
         this.lstCtietBcaos = [];
         lstParent.forEach(item => {
             this.lstCtietBcaos.push(item);
-            this.lstCtietBcaos = this.lstCtietBcaos.concat(lstCtietBcao.find(e => e.tenKhachHang == item.tenKhachHang && !e.isParent));
+            this.lstCtietBcaos = this.lstCtietBcaos.concat(lstCtietBcao.filter(e => e.tenKhachHang == item.tenKhachHang && !e.isParent));
         })
     }
 

@@ -21,7 +21,7 @@ export class DialogTaoMoiDeNghiCapVonComponent implements OnInit {
 	@Input() obj: any;
 
 	userInfo: any;
-	response: BaoCao = new BaoCao();
+	response: BaoCao;
 	loaiDns: any[] = LOAI_DE_NGHI;
 	canCuGias: any[] = CAN_CU_GIA;
 	isRequestExist: number;
@@ -37,6 +37,7 @@ export class DialogTaoMoiDeNghiCapVonComponent implements OnInit {
 	) { }
 
 	async ngOnInit() {
+		this.response = new BaoCao();
 		this.userInfo = this.userService.getUserLogin();
 		if (this.userService.isChiCuc()) {
 			this.canCuGias = this.canCuGias.filter(e => e.id == Utils.QD_DON_GIA);
@@ -48,12 +49,18 @@ export class DialogTaoMoiDeNghiCapVonComponent implements OnInit {
 	}
 
 	changeDnghi() {
+		this.loaiDns = LOAI_DE_NGHI;
 		if (this.userService.isTongCuc()) {
 			if (this.response.canCuVeGia == Utils.QD_DON_GIA) {
 				this.loaiDns = LOAI_DE_NGHI.filter(e => e.id != Utils.MUA_VTU);
-			} else {
-				this.loaiDns = LOAI_DE_NGHI;
 			}
+		} else {
+			this.loaiDns = this.loaiDns.filter(e => e.id != Utils.MUA_VTU);
+		}
+		if (this.response.canCuVeGia == Utils.QD_DON_GIA) {
+			this.loaiDns = this.loaiDns.filter(e => e.id != Utils.MUA_GAO && e.id != Utils.MUA_MUOI);
+		} else {
+			this.loaiDns = this.loaiDns.filter(e => e.id != Utils.MUA_THOC);
 		}
 	}
 
@@ -107,6 +114,7 @@ export class DialogTaoMoiDeNghiCapVonComponent implements OnInit {
 			this.response.soLan = 1;
 			this.response.trangThai = Utils.TT_BC_1;
 			this.response.maDviTien = '1';
+			this.response.lstFiles = [];
 			//bao cao chua ton tai
 			if (this.response.canCuVeGia == Utils.HD_TRUNG_THAU) {
 				if (this.response.loaiDnghi == Utils.MUA_VTU) {
@@ -181,13 +189,21 @@ export class DialogTaoMoiDeNghiCapVonComponent implements OnInit {
 					item.luyKeCapUng = sumNumber([item.luyKeCapUng, item.vonDuyetCapUng]);
 					item.luyKeCapVon = sumNumber([item.luyKeCapVon, item.vonDuyetCapVon]);
 					item.soTtLuyKe = sumNumber([item.soTtLuyKe, item.uyNhchiNienSoTien]);
-					item.vonDuyetCong = 0;
-					item.vonDuyetCapUng = 0;
-					item.vonDuyetCapVon = 0;
+					item.vonDuyetCong = null;
+					item.vonDuyetCapUng = null;
+					item.vonDuyetCapVon = null;
 					item.uyNhchiNgay = null;
 					item.uyNhchiMaNguonNs = null;
 					item.uyNhchiNienDoNs = null;
-					item.uyNhchiNienSoTien = 0;
+					item.uyNhchiNienSoTien = null;
+					if (this.response.canCuVeGia == Utils.QD_DON_GIA) {
+						item.vonDnghiCapLanNay = sumNumber([item.gtTheoKeHoach, -item.luyKeCong]);
+					} else if (this.response.loaiDnghi != Utils.MUA_VTU) {
+						item.tongVonVaDtDaCap = sumNumber([item.duToanDaGiao, item.luyKeCong]);
+						item.vonDnghiCapLanNay = sumNumber([item.gtHopDong, -item.tongVonVaDtDaCap]);
+					} else {
+						item.soConDuocTt = sumNumber([item.gtriThucHien, -item.soTtLuyKe]);
+					}
 				}
 			})
 			if (this.response.loaiDnghi != Utils.MUA_VTU) {
@@ -261,7 +277,7 @@ export class DialogTaoMoiDeNghiCapVonComponent implements OnInit {
 							})
 						} else {
 							if (this.response.dnghiCapvonCtiets[index].qdPheDuyetKqNhaThau.indexOf(item.soQdPdKhlcnt) == -1) {
-								this.response.dnghiCapvonCtiets[index].qdPheDuyetKqNhaThau += ', ' + item.sosoQdPdKhlcnt;
+								this.response.dnghiCapvonCtiets[index].qdPheDuyetKqNhaThau += ', ' + item.soQdPdKhlcnt;
 							}
 							this.response.dnghiCapvonCtiets[index].slHopDong = sumNumber([this.response.dnghiCapvonCtiets[index].slHopDong, temp.slHopDong]);
 							this.response.dnghiCapvonCtiets[index].slKeHoach = sumNumber([this.response.dnghiCapvonCtiets[index].slKeHoach, temp.slKeHoach]);

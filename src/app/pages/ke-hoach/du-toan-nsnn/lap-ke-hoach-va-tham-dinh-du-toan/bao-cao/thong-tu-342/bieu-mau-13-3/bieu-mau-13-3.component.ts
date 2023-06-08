@@ -6,11 +6,11 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.service';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
 import { displayNumber, exchangeMoney, getHead, getTail, sortByIndex, sumNumber } from 'src/app/Utility/func';
-import { AMOUNT, DON_VI_TIEN, LA_MA, MONEY_LIMIT } from "src/app/Utility/utils";
+import { AMOUNT, BOX_NUMBER_WIDTH, DON_VI_TIEN, LA_MA, MONEY_LIMIT } from "src/app/Utility/utils";
 import * as uuid from "uuid";
-import { DANH_MUC } from './bieu-mau-13-3.constant';
 
 export class ItemData {
 	id: string;
@@ -52,7 +52,7 @@ export class BieuMau133Component implements OnInit {
 	namBcao: number;
 	namKeHoach: string;
 	//danh muc
-	duAns: any[] = DANH_MUC;
+	duAns: any[] = [];
 	soLaMa: any[] = LA_MA;
 	lstCtietLapThamDinhs: ItemData[] = [];
 	donViTiens: any[] = DON_VI_TIEN;
@@ -66,10 +66,12 @@ export class BieuMau133Component implements OnInit {
 	//nho dem
 	editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
 	amount = AMOUNT;
+	scrollX: string;
 	constructor(
 		private _modalRef: NzModalRef,
 		private spinner: NgxSpinnerService,
 		private lapThamDinhService: LapThamDinhService,
+		private danhMucService: DanhMucDungChungService,
 		private notification: NzNotificationService,
 		private modal: NzModalService,
 	) {
@@ -87,7 +89,16 @@ export class BieuMau133Component implements OnInit {
 		this.formDetail = this.dataInfo?.data;
 		this.namBcao = this.dataInfo?.namBcao;
 		this.thuyetMinh = this.formDetail?.thuyetMinh;
-		this.status = this.dataInfo?.status;
+		this.status = !this.dataInfo?.status;
+		if (this.status) {
+			const category = await this.danhMucService.danhMucChungGetAll('LTD_TT342_BM133');
+			if (category) {
+				this.duAns = category.data;
+			}
+			this.scrollX = (760 + BOX_NUMBER_WIDTH * 15).toString() + 'px';
+		} else {
+			this.scrollX = (650 + BOX_NUMBER_WIDTH * 15).toString() + 'px';
+		}
 		this.statusBtnFinish = this.dataInfo?.statusBtnFinish;
 		this.statusPrint = this.dataInfo?.statusBtnPrint;
 		this.formDetail?.lstCtietLapThamDinhs.forEach(item => {

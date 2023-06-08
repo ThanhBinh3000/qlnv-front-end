@@ -66,7 +66,7 @@
                     <th>Giá mua tối đa <br>Tổng cục QĐ</th>
                     <th>Thành tiền (Đã <br /> gồm thuế GTGT) </th>
                     <th>Số lượng</th>
-                    <th>Đơn giá mua thực tế</th>
+                    <th>Đơn giá mua <br> thực tế</th>
                     <th>Thành tiền (Đã <br /> gồm thuế GTGT)</th>
                 </tr>
                 <tr>
@@ -394,7 +394,7 @@
         <div nz-col nzSpan="24">
             <div nz-col nzSpan="24">
                 <label class="search__label">Thuyết minh</label>
-                <textarea rows="2" nz-input [(ngModel)]="thuyetMinh" [disabled]="status"></textarea>
+                <textarea rows="2" nz-input [(ngModel)]="thuyetMinh" [disabled]="!status"></textarea>
             </div>
         </div>
     </div>

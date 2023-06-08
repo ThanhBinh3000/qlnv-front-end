@@ -1,13 +1,10 @@
-import { DatePipe, Location } from '@angular/common';
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
-import { ActivatedRoute, Router } from '@angular/router';
+import { DatePipe } from '@angular/common';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import * as fileSaver from 'file-saver';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
-import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { DataService } from 'src/app/services/data.service';
 import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
@@ -16,9 +13,7 @@ import { Globals } from 'src/app/shared/globals';
 import { displayNumber, exchangeMoney } from 'src/app/Utility/func';
 import { DON_VI_TIEN, GDT, LA_MA, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
-import { NOI_DUNG } from './chi-tiet-du-toan-tu-cap-tren.constant';
-// import { GIAO_DU_TOAN, MAIN_ROUTE_DU_TOAN, MAIN_ROUTE_KE_HOACH } from '../../giao-du-toan-chi-nsnn.constant';
-// import { NOI_DUNG } from './nhan-du-toan-chi-NSNN-cho-cac-don-vi.constant';
+import { NOI_DUNG } from '../tao-moi-quyet-dinh-btc/tao-moi-quyet-dinh-btc.constant';
 
 export class ItemData {
   id!: any;
@@ -99,13 +94,8 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
     private quanLyVonPhiService: QuanLyVonPhiService,
     private giaoDuToanChiService: GiaoDuToanChiService,
     private spinner: NgxSpinnerService,
-    private routerActive: ActivatedRoute,
     private datepipe: DatePipe,
-    private sanitizer: DomSanitizer,
-    private router: Router,
     private notification: NzNotificationService,
-    private location: Location,
-    private danhMucService: DanhMucHDVService,
     private dataSource: DataService,
     public globals: Globals,
   ) { }
@@ -152,27 +142,36 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
     this.spinner.show();
     localStorage.setItem("preTab", "dsGiaoTuCapTren")
     this.id = this.data.id;
+    await this.userService.getUserLogin();
     this.userInfo = this.userService.getUserLogin();
     this.maDviTao = this.userInfo?.MA_DVI;
-    //lay danh sach danh muc
-    await this.danhMucService.dMDonVi().toPromise().then(
-      data => {
-        if (data.statusCode == 0) {
-          this.donVis = data.data;
-          // this.lstDvi = this.donVis.filter(e => e.parent?.maDvi === this.maDviTao);
-        } else {
-          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-        }
-      },
-      err => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      }
-    );
-
     if (this.id) {
       this.getDetailReport();
     }
+    await this.getChildUnit();
     this.sortByIndex()
+    this.spinner.hide();
+  };
+
+  async getChildUnit() {
+    this.spinner.show();
+    const request = {
+      maDviCha: this.maDviTao,
+      trangThai: '01',
+    }
+    await this.quanLyVonPhiService.dmDviCon(request).toPromise().then(
+      data => {
+        if (data.statusCode == 0) {
+          this.lstDvi = data.data;
+          this.lstDvi = this.lstDvi.filter(e => e.tenVietTat && (e.tenVietTat.includes("CDT") || e.tenVietTat.includes("CNTT") || e.tenVietTat.includes("_VP")))
+        } else {
+          this.notification.error(MESSAGE.ERROR, data?.msg);
+        }
+      },
+      (err) => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+      }
+    )
     this.spinner.hide();
   }
 
@@ -226,8 +225,6 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
     await this.giaoDuToanChiService.QDGiaoChiTiet(this.id, "1").toPromise().then(
       async (data) => {
         if (data.statusCode == 0) {
-          console.log(data.data);
-
           this.lstCtietBcao = data.data.lstCtiets;
           this.sortByIndex();
           this.soQd = data.data.soQd;
@@ -238,8 +235,6 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
           this.ngayNhap = this.datepipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR);
           this.maDviTao = data.data.maDviNhan;
           this.tenDvi = this.donVis.find(e => e.maDvi == this.maDviTao)?.tenDvi
-          this.lstDvi = this.donVis.filter(e => e?.maDviCha === this.maDviTao);
-          // this.isStatus = this.trangThais.find(e => e.id == data.data.trangThai)?.tenDm;
           this.isStatus = data.data.trangThai
           this.maDviTien = data.data.maDviTien
           if (data.data.trangThai == '1' || this.userInfo.CAP_DVI == '3') {
@@ -261,10 +256,6 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
       tabSelected: 'giaodutoan',
     }
     this.dataSource.changeData(obj);
-    // this.router.navigate([
-    //   MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN,
-    // ]);
-    // this.location.back()
   }
 
 
@@ -420,6 +411,14 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
       })
     })
 
+    if ((this.userInfo.DON_VI.tenVietTat.includes("CDT") || this.userInfo.DON_VI.tenVietTat.includes("CNTT") || this.userInfo.DON_VI.tenVietTat.includes("_VP")) && this.isStatus == "2") {
+      listCtietDvi.push({
+        id: uuid.v4() + 'FE',
+        maDviNhan: this.userInfo.MA_DVI,
+        soTranChi: 0,
+      })
+    }
+
     const lstCtietBcaoTemp: any[] = [];
     // gui du lieu trinh duyet len server
     this.lstCtietBcao.forEach(item => {
@@ -498,8 +497,7 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
     );
 
 
-    // this.lstDvi.forEach(item => {
-    // })
+
     listCtietDvi.push({
       id: uuid.v4() + 'FE',
       maDviNhan: this.userInfo.MA_DVI,
