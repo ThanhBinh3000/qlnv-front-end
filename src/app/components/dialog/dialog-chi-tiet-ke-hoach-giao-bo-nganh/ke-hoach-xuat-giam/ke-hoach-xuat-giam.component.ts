@@ -6,9 +6,13 @@ import {NzNotificationService} from 'ng-zorro-antd/notification';
 import {MESSAGE} from 'src/app/constants/message';
 import {PAGE_SIZE_DEFAULT} from "../../../../constants/config";
 import {CurrencyMaskInputMode} from "ngx-currency";
-import {AMOUNT, AMOUNT_ONE_DECIMAL} from "../../../../Utility/utils";
+import {AMOUNT, AMOUNT_ONE_DECIMAL, AMOUNT_TWO_DECIMAL} from "../../../../Utility/utils";
 import {chain} from "lodash";
 import {v4 as uuidv4} from "uuid";
+import {
+  ThemSuaMuaTangComponent
+} from "../../../../pages/ke-hoach/giao-ke-hoach-va-du-toan/ke-hoach-von-dau-nam/quyet-dinh/btc-giao-tcdt/them-quyet-dinh-btc-giao-tcdt/ke-hoach-mua-tang/them-sua-mua-tang/them-sua-mua-tang.component";
+import {DialogSuaXuatGiamComponent} from "../../dialog-sua-xuat-giam/dialog-sua-xuat-giam.component";
 
 @Component({
   selector: 'app-ke-hoach-xuat-giam',
@@ -51,7 +55,7 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
   dataEdit: { [key: string]: { edit: boolean; data: ThongTinQuyetDinh } } = {};
   dsChungLoaiHangHoa = [];
   listTongGiaTriBnKhac: { [key: string]: { tongSo: any } } = {};
-  amount = AMOUNT_ONE_DECIMAL;
+  amount = AMOUNT_TWO_DECIMAL;
 
   constructor(
     private modal: NzModalService,
@@ -62,7 +66,6 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.convertListData();
-    console.log(this.dataTable, 'dataTabledataTabledataTable')
     // this.updateEditCache()
     // this.emitDataTable();
     for (let item of this.dataToanBn) {
@@ -97,10 +100,13 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
     if (this.dataTable && this.dataTable.length > 0) {
       this.dataTableView = chain(this.dataTable).groupBy("tenVthh").map((value, key) => ({
           tenVthh: key,
+          isLeaf: (!value || (value.length == 1 && !value[0].cloaiVthh)) ? true : false,
           dataChild: value,
           idVirtual: uuidv4()
         })
       ).value();
+    } else {
+      this.dataTableView = [];
     }
     this.expandAll();
   }
@@ -113,7 +119,7 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
     }
   }
 
-  xoaItem(index: number) {
+  xoaItem(item: any, isParent?) {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -124,8 +130,19 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
       nzWidth: 400,
       nzOnOk: async () => {
         try {
-          this.dataTable.splice(index, 1);
-          // this.updateEditCache()
+          if (isParent) {
+            this.dataTable = this.dataTable.filter(it => (it.tenVthh != item.tenVthh));
+          } else {
+            let indexRm = this.dataTable.findIndex(it => (it.loaiVthh == item.loaiVthh && it.cloaiVthh == item.cloaiVthh));
+            if (indexRm >= 0 && this.dataTable.length == 1) {
+              this.dataTable = [];
+            }
+            if (indexRm >= 0 && this.dataTable.length > 1) {
+              this.dataTable.splice(indexRm, 1);
+            }
+          }
+          this.convertListData();
+          this.emitDataTable();
         } catch (e) {
           console.log('error', e);
         }
@@ -139,12 +156,11 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
         this.dataTable = [];
       }
       if ((this.rowItem.loaiVthh && !this.rowItem.cloaiVthh && this.dataTable.filter(item => item.loaiVthh == this.rowItem.loaiVthh).length > 0) || (this.rowItem.loaiVthh && this.rowItem.cloaiVthh && this.dataTable.filter(item => item.loaiVthh == this.rowItem.loaiVthh && item.cloaiVthh == this.rowItem.cloaiVthh).length > 0)) {
-        this.notification.error(MESSAGE.ERROR, "Hàng hóa đã được thêm, vui lòng chọn loại hàng hóa khác.")
+        this.notification.warning(MESSAGE.WARNING, "Hàng hóa đã được thêm, vui lòng chọn loại hàng hóa khác.")
         return;
       }
       this.dataTable = [...this.dataTable, this.rowItem]
       this.rowItem = new ThongTinQuyetDinh();
-      // this.updateEditCache()
       this.convertListData();
       this.emitDataTable()
     } else {
@@ -196,6 +212,7 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
+
   //
   // updateEditCache(): void {
   //   if (this.dataTable) {
@@ -245,6 +262,46 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
         this.rowItem.tenCloaiVthh = cloaiVthh.ten;
         this.rowItem.dviTinh = cloaiVthh.maDviTinh;
       }
+    }
+  }
+
+  suaIem(data: any, isParent?) {
+    this.onChangeLoaiVthh(data.loaiVthh);
+    let idx = -1;
+    if (isParent) {
+      idx = this.dataTable.findIndex(item => (item.loaiVthh == data.loaiVthh));
+    } else {
+      idx = this.dataTable.findIndex(item => (item.loaiVthh == data.loaiVthh && item.cloaiVthh == data.cloaiVthh));
+    }
+    if (idx >= 0) {
+      const modalGT = this.modal.create({
+        nzTitle: 'Sửa chi tiết ',
+        nzContent: DialogSuaXuatGiamComponent,
+        nzMaskClosable: false,
+        nzClosable: false,
+        nzWidth: '600px',
+        nzFooter: null,
+        nzComponentParams: {
+          itemInput: data,
+          dsHangHoa: this.dsHangHoa,
+          dsChungLoaiHangHoa: this.dsChungLoaiHangHoa
+        },
+      });
+      modalGT.afterClose.subscribe((detail) => {
+        if (detail) {
+          if ((detail.loaiVthh && !detail.cloaiVthh && this.dataTable.filter(item => item.loaiVthh == detail.loaiVthh).length > 0 && detail.loaiVthh != data.loaiVthh) || (detail.loaiVthh && detail.cloaiVthh && this.dataTable.filter(item => item.loaiVthh == detail.loaiVthh && item.cloaiVthh == detail.cloaiVthh).length > 0 && (detail.loaiVthh != data.loaiVthh || detail.cloaiVthh != data.cloaiVthh))) {
+            this.notification.warning(MESSAGE.WARNING, "Hàng hóa đã được thêm, vui lòng chọn loại hàng hóa khác.")
+            return;
+          }
+          Object.assign(this.dataTable[idx], detail);
+          this.convertListData();
+          this.emitDataTable();
+          this.expandAll();
+          this.dsChungLoaiHangHoa = [];
+        }
+      });
+    } else {
+      this.notification.warning(MESSAGE.WARNING, "Không tìm thấy bản ghi.");
     }
   }
 

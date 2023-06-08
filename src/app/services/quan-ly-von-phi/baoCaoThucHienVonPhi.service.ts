@@ -13,8 +13,8 @@ export class BaoCaoThucHienVonPhiService extends BaseService {
         super(httpClient, 'quanLyVonPhi', '');
     }
 
+    urlTest = 'http://localhost:9159';
     urlDefault = environment.SERVICE_API + '/qlnv-khoachphi';
-    urlTest = 'http://localhost:9170';
 
     //search list bao cao
     timBaoCao(request: any): Observable<any> {

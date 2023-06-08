@@ -148,7 +148,7 @@
       <th nzWidth="250px">Chủng loại hàng hoá</th>
       <th nzWidth="120px">Đơn vị tính</th>
       <th nzWidth="120px">Kế hoạch năm <br/> {{namHienTai}}</th>
-      <th nzWidth="100px" class="text-center">Hành động</th>
+      <th nzWidth="100px" class="text-center" *ngIf="!isView">Hành động</th>
     </tr>
     </thead>
     <tbody>
@@ -200,16 +200,26 @@
         <td>{{idx + 1}}</td>
         <td [nzExpand]="expandSet.has(data.idVirtual)"
             (nzExpandChange)="onExpandChange(data.idVirtual, $event)">{{data.tenVthh}}</td>
-        <td>{{data.tenCloaiVthh}}</td>
-        <td class="font-weight-bold">{{data.dviTinh}}</td>
-        <td class="font-weight-bold">{{data.soLuong  | number : '1.0-1' : 'vi_VN'}}</td>
+        <ng-container *ngIf="!data.isLeaf">
+          <td>{{data.tenCloaiVthh}}</td>
+          <td>{{data.dviTinh}}</td>
+          <td>{{data.soLuong  | number : '1.0-1' : 'vi_VN'}}</td>
+        </ng-container>
+        <ng-container *ngIf="data.isLeaf">
+          <td>{{data.dataChild[0].tenCloaiVthh}}</td>
+          <td>{{data.dataChild[0].dviTinh}}</td>
+          <td>{{data.dataChild[0].soLuong  | number : '1.0-1' : 'vi_VN'}}</td>
+        </ng-container>
         <td class="font-weight-bold text-center" nzRight *ngIf="!isView">
-<!--          <a>-->
-<!--            <i class="icon htvbdh_dau-cong"></i>-->
-<!--          </a>-->
+          <a *ngIf="data.isLeaf"  (click)="suaIem(data.dataChild[0],true)">
+            <i class="fa fa-pencil"></i>
+          </a>
+          <a (click)="xoaItem(data,true)">
+            <i class="fa fa-trash-o do"></i>
+          </a>
         </td>
       </tr>
-      <ng-container *ngIf="expandSet.has(data.idVirtual)">
+      <ng-container *ngIf="expandSet.has(data.idVirtual) &&  !data.isLeaf">
         <tr *ngFor="let item of data.dataChild, let y = index">
           <td></td>
           <td></td>
@@ -217,10 +227,10 @@
           <td>{{item.dviTinh}}</td>
           <td>{{item.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
           <td class="text-center" nzRight *ngIf="!isView">
-            <a>
+            <a (click)="suaIem(item,false)">
               <i class="fa fa-pencil"></i>
             </a>
-            <a>
+            <a (click)="xoaItem(item,false)">
               <i class="fa fa-trash-o do"></i>
             </a>
           </td>

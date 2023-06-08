@@ -14,13 +14,13 @@
             <i class="icon htvbdh_tcdt_pheduyet"></i>
             <span>Duyệt</span>
         </button>
-        <button *ngIf="formData.value.trangThaiTt == STATUS.DU_THAO || 
+        <button *ngIf="formData.value.trangThaiTt == STATUS.DU_THAO ||
             formData.value.trangThaiTt == STATUS.TU_CHOI_LDV " type="button" class="btn btn-sub xanh-nhat"
             (click)="save(true)">
             <i class="icon htvbdh_tcdt_guiduyet "></i>
             <span>Lưu và gửi duyệt</span>
         </button>
-        <button *ngIf="formData.value.trangThaiTt == STATUS.DU_THAO || 
+        <button *ngIf="formData.value.trangThaiTt == STATUS.DU_THAO ||
             formData.value.trangThaiTt == STATUS.TU_CHOI_LDV " type="button" class="btn btn-sub xanh" (click)="save()">
             <i class="icon htvbdh_luu"></i>
             <span>Lưu</span>
@@ -33,7 +33,7 @@
             <div class="header-text">
                 <div class="title-chi-tieu">
                     <span
-                        [ngClass]="formData.value.trangThaiTt == STATUS.DA_DUYET_LDV ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
+                        [ngClass]="formData.value.trangThaiTt == STATUS.DA_BAN_HANH_QD ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
                         {{ formData.value.tenTrangThaiTt }}
                     </span>
                     <span>TỜ TRÌNH HỒ SƠ PHƯƠNG ÁN GIÁ</span>

@@ -1,16 +1,13 @@
-import { DatePipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
+import * as dayjs from 'dayjs';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
-import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
-import { UserService } from 'src/app/services/user.service';
-import { Utils } from 'src/app/Utility/utils';
-import * as uuid from "uuid";
-import * as dayjs from 'dayjs';
 import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
+import { UserService } from 'src/app/services/user.service';
+import * as uuid from "uuid";
 
 @Component({
   selector: 'app-dialog-tong-hop',
@@ -28,7 +25,7 @@ export class DialogTongHopComponent implements OnInit {
     lstCtietBcao: [],
     lstDviTrucThuoc: [],
     maBcao: null,
-    loai: null,
+    loai: "3",
     maPa: null,
     maPaCha: null,
     idSoTranChi: null,
@@ -55,7 +52,6 @@ export class DialogTongHopComponent implements OnInit {
     private userService: UserService,
     private giaoDuToanChiService: GiaoDuToanChiService,
     private spinner: NgxSpinnerService,
-    private datePipe: DatePipe,
     private notification: NzNotificationService,
   ) { }
 
@@ -79,7 +75,6 @@ export class DialogTongHopComponent implements OnInit {
     await this.giaoDuToanChiService.tongHopGiaoDuToan(request).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
-          console.log(data);
           this.response.lstCtietBcao = data.data.lstPa;
           this.response.lstDviTrucThuoc = data.data.lstGiaoDtoanDviTrucThuocs;
           this.response.maPaCha = data.data.maPaCha;
@@ -93,10 +88,6 @@ export class DialogTongHopComponent implements OnInit {
               }
             });
           })
-          // this.response.lstDviTrucThuoc.forEach(item => {
-          //   item.ngayDuyet = this.datePipe.transform(item.ngayDuyet, Utils.FORMAT_DATE_STR);
-          //   item.ngayPheDuyet = this.datePipe.transform(item.ngayPheDuyet, Utils.FORMAT_DATE_STR);
-          // })
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
@@ -121,11 +112,30 @@ export class DialogTongHopComponent implements OnInit {
       maDvi: this.obj.maDvi,
       namPa: this.response.namHienTai
     };
+    this.lstPaLoai = []
     await this.giaoDuToanChiService.dsPaTongHop(requestReport).toPromise().then(res => {
       if (res.statusCode == 0) {
         this.lstPa = res.data;
         // this.lstPa = this.lstPa.filter(item => item.listTtCtiet.every(e => e.trangThai == '1'));
-        console.log(res.data);
+        let lstPaTemp = []
+        lstPaTemp = this.lstPa.filter(s => s.maLoaiDan == this.response.loai);
+        if (this.userInfo.CAP_DVI == "1") {
+          lstPaTemp.forEach(s => {
+            this.lstPaLoai.push(
+              {
+                maPa: s.maPaCha
+              }
+            )
+          })
+        } else {
+          lstPaTemp.forEach(s => {
+            this.lstPaLoai.push(
+              {
+                maPa: s.maPa
+              }
+            )
+          })
+        }
       } else {
         this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
       }
@@ -211,38 +221,7 @@ export class DialogTongHopComponent implements OnInit {
       idPaBTC: null,
       tabSelected: 'addBaoCao',
     };
-
-    const request2 = {
-      id: null,
-      fileDinhKems: [],
-      listIdDeleteFiles: [],
-      lstGiaoDtoanTrucThuocs: this.response.lstDviTrucThuoc,
-      lstCtiets: this.response.lstCtietBcao,
-      maDvi: this.response.maDvi,
-      maDviTien: "1",
-      maBcao: maBcao,
-      maPa: this.response.maPa,
-      maPaCha: this.response.maPaCha,
-      namPa: this.response.namHienTai,
-      // soQd: null,
-      maPhanGiao: "2",
-      maLoaiDan: '3',
-      trangThai: "1",
-      thuyetMinh: "",
-      idPaBTC: null,
-      tabSelected: 'addBaoCao',
-    };
-
-    if (this.response.loai == "1") {
-      this._modalRef.close(request1);
-    }
-    if (this.response.loai == "2") {
-      this._modalRef.close(request2);
-    }
-
-    // console.log(this.response);
-
-    // this._modalRef.close(this.response);
+    this._modalRef.close(request1);
   }
 
   handleCancel() {

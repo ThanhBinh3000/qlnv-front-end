@@ -20,13 +20,13 @@ export const PHU_LUC = [
 
     {
         id: 'pl03',
-        tenDm: 'Dự toán phí bảo quản hàng DTQG',
+        tenDm: 'Dự toán phí bảo quản hàng DTQG năm $n$',
         tenPl: 'Phụ lục 3',
         status: false,
     },
     {
         id: 'pl04',
-        tenDm: 'Dự toán chi ứng dụng CNTT',
+        tenDm: 'Dự toán chi ứng dụng CNTT năm $n$ giai đoạn $n$ - $n+2$',
         tenPl: 'Phụ lục 4',
         status: false,
     },
@@ -38,13 +38,13 @@ export const PHU_LUC = [
     },
     {
         id: 'pl06',
-        tenDm: 'Đề xuất nhu cầu trang bị tài sản là máy móc, thiết bị chuyên dùng phục vụ công tác nhập, xuất, bảo quản',
+        tenDm: 'Đề xuất nhu cầu trang bị tài sản là máy móc, thiết bị chuyên dùng phục vụ công tác nhập, xuất, bảo quản năm $n$ - $n+2$',
         tenPl: 'Phụ lục 6',
         status: false,
     },
     {
         id: 'plda',
-        tenDm: 'Phương án phân bổ kế hoạch vốn đầu tư công nguồn NSNN',
+        tenDm: 'Phương án phân bổ kế hoạch vốn đầu tư công nguồn NSNN năm $n$',
         tenPl: 'Phụ lục dự án',
         status: false,
     },

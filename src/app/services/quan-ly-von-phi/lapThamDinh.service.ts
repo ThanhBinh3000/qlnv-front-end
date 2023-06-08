@@ -13,8 +13,8 @@ export class LapThamDinhService extends BaseService {
         super(httpClient, 'quanLyVonPhi', '');
     }
 
+    urlTest = 'http://localhost:9159';
     urlDefault = environment.SERVICE_API + '/qlnv-khoachphi';
-    urlTest = 'http://localhost:9150';
 
     //search list bao cao
     timBaoCaoLapThamDinh(request: any): Observable<any> {
@@ -204,13 +204,8 @@ export class LapThamDinhService extends BaseService {
             request);
     }
 
-    getDsTle(request: any): Observable<any> {
+    getDsTle(nam: any): Observable<any> {
         return this.httpClient.get(
-            this.urlDefault + '/chung/tham-so-he-thong/' + request.nam);
-    }
-    getDsTle1(request: any): Observable<any> {
-        return this.httpClient.get(
-            'http://localhost:9159/chung/tham-so-he-thong/' + request.nam
-        );
+            this.urlDefault + '/chung/tham-so-he-thong/' + nam);
     }
 }

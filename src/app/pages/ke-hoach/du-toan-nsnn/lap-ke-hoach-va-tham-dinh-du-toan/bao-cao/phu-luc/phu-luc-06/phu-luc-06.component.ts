@@ -5,13 +5,11 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
-import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
+import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.service';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
-import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { displayNumber, exchangeMoney, mulNumber, sumNumber } from 'src/app/Utility/func';
-import { AMOUNT, DON_VI_TIEN, LA_MA, MONEY_LIMIT } from 'src/app/Utility/utils';
+import { AMOUNT, BOX_NUMBER_WIDTH, DON_VI_TIEN, LA_MA, MONEY_LIMIT } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
-import { DANH_MUC_TAI_SAN } from './phu-luc-6.constant';
 export class ItemData {
     id: any;
     stt: string;
@@ -47,7 +45,7 @@ export class PhuLuc06Component implements OnInit {
     total = new ItemData();
     //danh muc
     donViTiens: any[] = DON_VI_TIEN;
-    listVtu: any[] = DANH_MUC_TAI_SAN;
+    listVtu: any[] = [];
     dsDinhMuc: any[] = [];
     soLaMa: any[] = LA_MA;
     //cac nut
@@ -65,14 +63,15 @@ export class PhuLuc06Component implements OnInit {
     listIdDelete: string;
     editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
     amount = AMOUNT;
+    scrollX: string;
+
     constructor(
         private _modalRef: NzModalRef,
         private spinner: NgxSpinnerService,
         private lapThamDinhService: LapThamDinhService,
         private notification: NzNotificationService,
         private modal: NzModalService,
-        private danhMucService: DanhMucHDVService,
-        private quanLyVonPhiService: QuanLyVonPhiService,
+        private danhMucService: DanhMucDungChungService,
     ) {
     }
 
@@ -90,11 +89,26 @@ export class PhuLuc06Component implements OnInit {
         this.maDvi = this.dataInfo?.maDvi;
         this.namBcao = this.dataInfo?.namBcao;
         this.thuyetMinh = this.formDetail?.thuyetMinh;
-        this.status = this.dataInfo?.status;
+        this.status = !this.dataInfo?.status;
         this.statusBtnFinish = this.dataInfo?.statusBtnFinish;
         this.statusPrint = this.dataInfo?.statusBtnPrint;
         this.checkEditTD = this.dataInfo?.editAppraisalValue;
         this.checkViewTD = this.dataInfo?.viewAppraisalValue;
+        if (this.status) {
+            const category = await this.danhMucService.danhMucChungGetAll('LTD_PL6');
+            if (category) {
+                this.listVtu = category.data;
+            }
+            this.scrollX = (560 + BOX_NUMBER_WIDTH * 8).toString() + 'px';
+        } else {
+            if (this.checkEditTD) {
+                this.scrollX = (410 + BOX_NUMBER_WIDTH * 10).toString() + 'px';
+            } else if (this.checkViewTD) {
+                this.scrollX = (350 + BOX_NUMBER_WIDTH * 10).toString() + 'px';
+            } else {
+                this.scrollX = (350 + BOX_NUMBER_WIDTH * 8).toString() + 'px';
+            }
+        }
         this.formDetail?.lstCtietLapThamDinhs.forEach(item => {
             this.lstCtietBcao.push({
                 ...item,
@@ -290,7 +304,7 @@ export class PhuLuc06Component implements OnInit {
 
     selectTaisan(idTaiSan: any, idRow: any) {
         const taiSan = this.listVtu.find(ts => ts.ma === idTaiSan);
-        this.editCache[idRow].data.tenTaiSan = taiSan.ten;
+        this.editCache[idRow].data.tenTaiSan = taiSan.giaTri;
     }
 
     tinhTong() {

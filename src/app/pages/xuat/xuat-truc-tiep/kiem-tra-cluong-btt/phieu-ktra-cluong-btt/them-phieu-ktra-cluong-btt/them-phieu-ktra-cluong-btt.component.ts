@@ -256,6 +256,7 @@ export class ThemPhieuKtraCluongBttComponent extends Base2Component implements O
   async save(isGuiDuyet?: boolean) {
     let body = this.formData.value;
     body.children = this.dataTable;
+    body.fileDinhKems = this.fileDinhKem;
     let data = await this.createUpdate(body);
     if (data) {
       if (isGuiDuyet) {
@@ -304,21 +305,7 @@ export class ThemPhieuKtraCluongBttComponent extends Base2Component implements O
   async loadChitiet() {
     let data = await this.detail(this.id);
     this.dataTable = data.children
-  }
-
-  getNameFile(event?: any) {
-    // const element = event.currentTarget as HTMLInputElement;
-    // const fileList: FileList | null = element.files;
-    // if (fileList) {
-    //   this.nameFile = fileList[0].name;
-    // }
-    // this.formData.patchValue({
-    //   file: event.target.files[0] as File,
-    // });
-    // if (this.dataCanCuXacDinh) {
-    //   this.formTaiLieuClone.file = this.nameFile;
-    //   this.isSave = !isEqual(this.formTaiLieuClone, this.formTaiLieu);
-    // }
+    this.fileDinhKem = data.fileDinhKems;
   }
 
   cancelEdit(index: number): void {

@@ -127,8 +127,6 @@ export class DialogThemThongTinQuyetToanComponent implements OnInit {
       (data) => {
         if (data.statusCode == 0) {
           this.phuongAns = data.data;
-          console.log(this.phuongAns);
-
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }

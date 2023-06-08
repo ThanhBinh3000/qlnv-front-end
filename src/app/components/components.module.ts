@@ -183,6 +183,7 @@ import {MatToolbarModule} from "@angular/material/toolbar";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
 import {MatSelectModule} from "@angular/material/select";
+import { DialogSuaXuatGiamComponent } from './dialog/dialog-sua-xuat-giam/dialog-sua-xuat-giam.component';
 @NgModule({
   declarations: [
     //components
@@ -308,6 +309,7 @@ import {MatSelectModule} from "@angular/material/select";
     DialogKtGiaoKhoComponent,
     DialogQdPdKhlcntComponent,
     DialogQdPdKqlcntComponent,
+    DialogSuaXuatGiamComponent,
   ],
   imports: [
     CommonModule,

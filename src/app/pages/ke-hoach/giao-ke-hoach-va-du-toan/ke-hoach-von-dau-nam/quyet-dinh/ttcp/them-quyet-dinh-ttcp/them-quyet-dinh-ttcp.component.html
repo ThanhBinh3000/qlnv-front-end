@@ -10,7 +10,8 @@
       <i class="icon htvbdh_chuyenvanthu"></i>
       <span>Ban hành</span>
     </button>
-    <button *ngIf="formData.value.trangThai ==  STATUS.DANG_NHAP_DU_LIEU && !isView" type="button" class="btn btn-sub xanh"
+    <button *ngIf="formData.value.trangThai ==  STATUS.DANG_NHAP_DU_LIEU && !isView" type="button"
+            class="btn btn-sub xanh"
             (click)="save()">
       <i class="icon htvbdh_luu"></i>
       <span>Lưu</span>
@@ -24,7 +25,7 @@
         <div class="title-chi-tieu">
           <span
             [ngClass]="formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU ? 'du-thao-va-lanh-dao-duyet' : 'da-ban-hanh'">
-            {{ formData.value.trangThai ==  STATUS.DANG_NHAP_DU_LIEU ? 'Đang nhập dữ liệu' : 'Ban Hành' }}
+            {{ formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU ? 'Đang nhập dữ liệu' : 'Ban Hành' }}
           </span>
           <span>Quyết định thủ tướng chính phủ</span>
         </div>
@@ -131,7 +132,7 @@
             <td class="text-right bold" style="">{{totalBnKh | number : '1.0-1' : 'vi_VN'}}</td>
           </tr>
           <tr *ngFor="let data of dataTableAllBn; let idx = index">
-            <td class="text-center">{{ data.stt }}</td>
+            <td class="text-center">{{ !data.maCha ? data.stt : ''}}</td>
             <td *ngIf="data.maCha">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - {{ data.tenBn }}</td>
             <td *ngIf="!data.maCha"> {{ data.tenBn }}</td>
             <td *ngIf="!data.isSum" class="text-right">
@@ -149,8 +150,9 @@
   <nz-collapse>
     <nz-collapse-panel #collapseExpand [nzActive]="true" nzHeader="KẾ HOẠCH DTQG GIAO TỪNG BỘ/NGÀNH"
                        class="mg-t-10" [nzExtra]="extraTpl">
-      <ng-template #extraTpl >
-        <button type="button" *ngIf="formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU" class="btn btn-sub xanh" (click)="themKeHoach()">
+      <ng-template #extraTpl>
+        <button type="button" *ngIf="formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU" class="btn btn-sub xanh"
+                (click)="themKeHoach()">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
         </button>

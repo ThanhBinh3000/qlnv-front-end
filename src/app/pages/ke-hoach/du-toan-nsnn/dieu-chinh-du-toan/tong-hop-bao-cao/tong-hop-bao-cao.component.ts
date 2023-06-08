@@ -166,7 +166,7 @@ export class TongHopBaoCaoComponent implements OnInit {
       nzWidth: '900px',
       nzFooter: null,
       nzComponentParams: {
-        // tab: 'tonghop'
+        tab: 'tonghop'
       },
     });
     modalTuChoi.afterClose.toPromise().then(async (res) => {
@@ -174,7 +174,7 @@ export class TongHopBaoCaoComponent implements OnInit {
         const obj = {
           ...res,
           id: null,
-          tabSelected: 'baocao',
+          tabSelected: 'addbaocao',
           isSynthetic: true,
         }
         this.dataChange.emit(obj);
@@ -211,7 +211,7 @@ export class TongHopBaoCaoComponent implements OnInit {
   viewDetail(data: any) {
     const obj = {
       id: data.id,
-      tabSelected: 'baocao',
+      tabSelected: 'addbaocao',
     }
     this.dataChange.emit(obj);
   };
