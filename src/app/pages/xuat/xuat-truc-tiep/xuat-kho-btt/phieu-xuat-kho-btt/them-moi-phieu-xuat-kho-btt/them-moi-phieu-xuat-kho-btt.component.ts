@@ -195,17 +195,17 @@ export class ThemMoiPhieuXuatKhoBttComponent extends Base2Component implements O
           idQdNv: data.id,
           soQdNv: data.soQdNv,
           ngayQdNv: data.ngayTao,
-          idHd: data.idHd,
-          soHd: data.soHd,
-          ngayKyHd: data.ngayKyHd,
-          donViTinh: data.donViTinh,
+          // idHd: data.idHd,
+          // soHd: data.soHd,
+          // ngayKyHd: data.ngayKyHd,
+          // donViTinh: data.donViTinh,
         });
-        let dataHd = await this.hopDongBttService.getDetail(data.idHd)
-        if (dataHd.data) {
-          this.formData.patchValue({
-            donGia: dataHd.data.donGiaBanTrucTiep,
-          });
-        }
+        // let dataHd = await this.hopDongBttService.getDetail(data.idHd)
+        // if (dataHd.data) {
+        //   this.formData.patchValue({
+        //     donGia: dataHd.data.donGiaBanTrucTiep,
+        //   });
+        // }
         this.listPhieuXuatKho(data.soQdNv)
         let dataChiCuc = data.children.filter(item => item.maDvi == this.userInfo.MA_DVI);
         if (dataChiCuc && dataChiCuc.length > 0) {
@@ -309,6 +309,7 @@ export class ThemMoiPhieuXuatKhoBttComponent extends Base2Component implements O
             tenKtv: dataPhieuKn.tenKtv,
             soLuong: dataPhieuKn.soLuong,
           });
+          await this.loadChiTietHopDong(dataPhieuKn.idHd);
           let dataObj = {
             moTaHangHoa: this.loaiVthh.startsWith('02') ? (this.formData.value.tenCloaiVthh ? this.formData.value.tenCloaiVthh : this.formData.value.tenLoaiVthh) : (this.formData.value.moTaHangHoa ? this.formData.value.moTaHangHoa : this.formData.value.tenCloaiVthh),
             maSo: '',
@@ -320,6 +321,26 @@ export class ThemMoiPhieuXuatKhoBttComponent extends Base2Component implements O
           this.dataTable.push(dataObj)
         }
       }
+    }
+  }
+
+  async loadChiTietHopDong(idHd) {
+    if (idHd > 0) {
+      await this.spinner.show();
+      let dataHd = await this.hopDongBttService.getDetail(idHd)
+      if (dataHd.msg == MESSAGE.SUCCESS) {
+        const data = dataHd.data;
+        this.formData.patchValue({
+          idHd: data.id,
+          soHd: data.soHd,
+          ngayKyHd: data.ngayPduyet,
+          donViTinh: data.donViTinh,
+          donGia: data.donGiaBanTrucTiep
+        });
+      } else {
+        this.notification.error(MESSAGE.ERROR, dataHd.msg);
+      }
+      await this.spinner.hide();
     }
   }
 

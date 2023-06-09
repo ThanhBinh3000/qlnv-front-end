@@ -33,6 +33,9 @@ import {
 import {
   QdPheDuyetKhlcntTdsclService
 } from "../../../../services/qlnv-kho/tiendoxaydungsuachua/suachualon/qd-phe-duyet-khlcnt-tdscl.service";
+import {
+  QuyetdinhpheduyetKqLcntSclService
+} from "../../../../services/qlnv-kho/tiendoxaydungsuachua/suachualon/qdPdKqLcntScl.service";
 
 @Component({
   selector: 'app-tien-do-sua-chua-lon-hang-nam',
@@ -71,9 +74,8 @@ export class TienDoSuaChuaLonHangNamComponent extends Base2Component implements 
     private donViService: DonviService,
     private ktQdXdHangNamService: KtKhSuaChuaBtcService,
     private qdPheDuyetBaoCaoKtktService: QdPheDuyetBaoCaoKtktService,
-    private quyetdinhpheduyetTktcTdtService: QuyetdinhpheduyetTktcTdtService,
     private quyetdinhpheduyetKhlcntService: QdPheDuyetKhlcntTdsclService,
-    private quyetdinhpheduyetKqLcntService: QuyetdinhpheduyetKqLcntService,
+    private quyetdinhpheduyetKqLcntService: QuyetdinhpheduyetKqLcntSclService,
     private hopdongService: HopdongService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, ktQdXdHangNamService)
@@ -192,7 +194,6 @@ export class TienDoSuaChuaLonHangNamComponent extends Base2Component implements 
         this.itemQdPdKtkt = res.data.content && res.data.content.length > 0 ? res.data.content[0] : null;
         // //Check tiếp quyết định phê duyệt bản vẽ
         // if (this.itemQdPdKtkt) {
-          // await this.loadItemQdPdTktcTdt(this.itemQdPdDaDtxd);
           await this.loadItemQdPdKhLcnt(this.itemQdPdKtkt);
           await this.loadListItemQdPdKqLcnt(this.itemTtdt);
         //   // await this.loadItemHopDong();
@@ -206,24 +207,6 @@ export class TienDoSuaChuaLonHangNamComponent extends Base2Component implements 
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR + 11);
     } finally {
       this.spinner.hide();
-    }
-  }
-
-  async loadItemQdPdTktcTdt(itemQdPdTktcTdt) {
-    if (itemQdPdTktcTdt && itemQdPdTktcTdt.trangThai == STATUS.BAN_HANH) {
-      let body = {
-        "idQdPdDaDtxd": this.itemQdPdKtkt.id,
-        "paggingReq": {
-          "limit": 10,
-          "page": 0
-        }
-      }
-      let res = await this.quyetdinhpheduyetTktcTdtService.search(body);
-      if (res.msg == MESSAGE.SUCCESS) {
-        this.itemQdPdKtkt = res.data.content && res.data.content.length > 0 ? res.data.content[0] : null;
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
-      }
     }
   }
 
@@ -277,6 +260,7 @@ export class TienDoSuaChuaLonHangNamComponent extends Base2Component implements 
       let res = await this.quyetdinhpheduyetKqLcntService.search(body);
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data && res.data.content && res.data.content.length > 0) {
+          console.log(res.data,22222222222222)
           let totalSoGcTheoQdKqLcnt = res.data.content.reduce((accumulator, object) => {
             return accumulator + object.soGoiThau;
           }, 0);

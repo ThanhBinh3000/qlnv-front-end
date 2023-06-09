@@ -153,10 +153,10 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
     this.dataTable.forEach(item => {
       if (item && item.dataChild && item.dataChild.length > 0) {
         item.dataChild.forEach(child => {
-          tt += child.tongTien;
+          tt += child.tongTien ? child.tongTien : 0;
         })
       } else {
-        tt += item.tongTien;
+        tt += item.tongTien ? item.tongTien : 0;
       }
     });
     this.dataDuToanSumByDataTable = tt;

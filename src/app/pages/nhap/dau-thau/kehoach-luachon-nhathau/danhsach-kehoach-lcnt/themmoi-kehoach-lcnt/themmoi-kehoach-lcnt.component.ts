@@ -87,6 +87,8 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
   editBaoGiaCache: { [key: string]: { edit: boolean; data: any } } = {};
   editCoSoCache: { [key: string]: { edit: boolean; data: any } } = {};
   tongTienHopDong: any;
+  ykienThamGia: string;
+  ghiChu: string;
 
   constructor(
     httpClient: HttpClient,
@@ -144,7 +146,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       trangThai: ['00'],
       tenTrangThai: ['Dự Thảo'],
       diaDiemDuAn: [''],
-      yKien: ['']
+      ykienThamGia: ['']
     });
   }
 
@@ -249,6 +251,8 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
           if (res.msg == MESSAGE.SUCCESS) {
             const dataDetail = res.data;
             this.helperService.bidingDataInFormGroup(this.formData, dataDetail);
+            this.ykienThamGia = this.formData.get("ykienThamGia").value;
+            this.ghiChu = this.formData.get("ghiChu").value;
             this.formData.patchValue({
               soDxuat: dataDetail.soDxuat?.split('/')[0]
             })
@@ -611,6 +615,10 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
   }
 
   async luuVaGuiDuyet(isGuiDuyet) {
+    this.formData.patchValue({
+      ykienThamGia: this.ykienThamGia,
+      ghiChu: this.ghiChu,
+    })
     let pipe = new DatePipe('en-US');
     let body = this.formData.value;
     if (this.formData.get('soDxuat').value) {

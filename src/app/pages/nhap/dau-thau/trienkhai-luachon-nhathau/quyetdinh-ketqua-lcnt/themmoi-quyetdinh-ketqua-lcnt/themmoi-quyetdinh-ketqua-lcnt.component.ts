@@ -162,7 +162,6 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
     }
     console.log(this.danhSachFileCanCuPL)
     console.log(this.danhSachFileDinhKem)
-    debugger
     if (this.danhSachFileDinhKem.length > 0) {
       this.danhSachFileDinhKem.forEach(item => {
         item.fileType = FILETYPE.FILE_DINH_KEM
