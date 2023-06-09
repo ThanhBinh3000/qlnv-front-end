@@ -12,6 +12,12 @@ import {
   QuyetdinhpheduyetKqLcntService
 } from "../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetKqLcnt.service";
 import {MESSAGE} from "../../../../../constants/message";
+import {
+  QuyetdinhpheduyetKqLcntSclService
+} from "../../../../../services/qlnv-kho/tiendoxaydungsuachua/suachualon/qdPdKqLcntScl.service";
+import {
+  QdPheDuyetKhlcntTdsclService
+} from "../../../../../services/qlnv-kho/tiendoxaydungsuachua/suachualon/qd-phe-duyet-khlcnt-tdscl.service";
 
 @Component({
   selector: 'app-quyet-dinh-phe-duyet-kqlcnt-scl',
@@ -39,8 +45,8 @@ export class QuyetDinhPheDuyetKqlcntSclComponent extends Base2Component implemen
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    quyetdinhpheduyetKqLcntService: QuyetdinhpheduyetKqLcntService,
-    private quyetdinhpheduyetKhlcntService: QuyetdinhpheduyetKhlcntService,
+    quyetdinhpheduyetKqLcntService: QuyetdinhpheduyetKqLcntSclService,
+    private quyetdinhpheduyetKhlcntService: QdPheDuyetKhlcntTdsclService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, quyetdinhpheduyetKqLcntService)
     super.ngOnInit()
