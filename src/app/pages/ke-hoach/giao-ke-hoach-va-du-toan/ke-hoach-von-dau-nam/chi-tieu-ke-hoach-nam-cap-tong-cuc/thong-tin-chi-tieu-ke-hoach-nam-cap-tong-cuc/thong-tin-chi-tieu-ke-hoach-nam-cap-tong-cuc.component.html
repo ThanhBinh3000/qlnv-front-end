@@ -675,7 +675,7 @@
                 number: '1.0-3': 'vi_VN'}}
               </th>
               <th
-                class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.tkcnTongSoQuyThoc ? sumTotalKhDuTruLuongThuc.tkcnTongSoQuyThoc  : 0) |
+                class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.tkcnTongSoQuyThoc ? sumTotalKhDuTruLuongThuc.tkcnTongSoQuyThoc : 0) |
                 number: '1.0-3': 'vi_VN'}}
               </th>
               <th
@@ -683,7 +683,7 @@
                 number: '1.0-3': 'vi_VN'}}
               </th>
               <th
-                class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.tkcnTongGao ? sumTotalKhDuTruLuongThuc.tkcnTongGao  : 0)  |
+                class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.tkcnTongGao ? sumTotalKhDuTruLuongThuc.tkcnTongGao : 0)  |
                 number: '1.0-3': 'vi_VN'}}
               </th>
               <!-- <td class="background-last-row"></td> -->
@@ -823,7 +823,7 @@
                 </nz-form-control>
               </th>
               <th class="text-right">
-                {{keHoachMuoiCreate.tonKhoDauNam}}
+                {{keHoachMuoiCreate.tonKhoDauNam | number: '1.0-1': 'vi_VN'}}
               </th>
               <th class="text-right">
                 <nz-input-number type="text" nz-input name="goiThau" class="w-120" [nzMin]="0" [nzSize]="'small'"
@@ -837,7 +837,7 @@
                 </nz-input-number>
               </th>
               <th class="text-right">
-                {{(keHoachMuoiCreate.tonKhoDauNam ? keHoachMuoiCreate.tonKhoDauNam : 0) + (keHoachMuoiCreate.nhapTrongNam ? keHoachMuoiCreate.nhapTrongNam : 0) - (keHoachMuoiCreate.xuatTrongNamMuoi ? keHoachMuoiCreate.xuatTrongNamMuoi : 0)}}
+                {{(keHoachMuoiCreate.tonKhoDauNam ? keHoachMuoiCreate.tonKhoDauNam : 0) + (keHoachMuoiCreate.nhapTrongNam ? keHoachMuoiCreate.nhapTrongNam : 0) - (keHoachMuoiCreate.xuatTrongNamMuoi ? keHoachMuoiCreate.xuatTrongNamMuoi : 0) |number: '1.0-1': 'vi_VN'}}
               </th>
               <th *ngIf="!this.isViewDetail" class="text-center">
                 <a class="save" (click)="themMoiMuoiDuTru()" [ngClass]="{'isDisabled': (!isAddMuoi)}"
@@ -1078,7 +1078,7 @@
                         <td>{{r.tenVatTuCha}}</td>
                         <td>{{r.tenVatTu}}</td>
                         <td>{{r.donViTinh}}</td>
-                        <td>{{+r.soLuongChuyenSang + +r.soLuongNhap|number: '1.0-1': 'vi_VN'}}</td>
+                        <td>{{((r.soLuongChuyenSang ? r.soLuongChuyenSang: 0 ) + (r.soLuongNhap ? r.soLuongNhap : 0))|number: '1.0-1': 'vi_VN'}}</td>
                         <td>{{r.soLuongChuyenSang|number: '1.0-1': 'vi_VN'}}</td>
                         <td>{{r.soLuongNhap|number: '1.0-1': 'vi_VN'}}</td>
                         <td>
