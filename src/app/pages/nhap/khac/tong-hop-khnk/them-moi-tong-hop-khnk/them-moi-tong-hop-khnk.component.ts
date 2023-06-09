@@ -55,10 +55,10 @@ export class ThemMoiTongHopKhnkComponent extends Base2Component implements OnIni
     this.formData = this.fb.group({
       id: [],
       ngayTh: [dayjs().format("YYYY-MM-DD")],
-      trangThai: [STATUS.CHUA_TAO_QD],
-      tenTrangThai: ['Chưa Tạo QĐ'],
+      trangThai: [STATUS.DU_THAO],
+      tenTrangThai: ["Dự thảo"],
       maTh: [""],
-      noiDungTh: [""],
+      noiDungTh: [""]
     });
   }
 
@@ -68,6 +68,9 @@ export class ThemMoiTongHopKhnkComponent extends Base2Component implements OnIni
       await Promise.all([
         this.loadData()
       ]);
+      if (this.id > 0) {
+        await this.loadChiTiet();
+      }
       await this.spinner.hide();
     } catch (e) {
       console.log("error: ", e);
@@ -95,7 +98,7 @@ export class ThemMoiTongHopKhnkComponent extends Base2Component implements OnIni
   }
 
   async tongHopDeXuat() {
-    let body = this.formTraCuu.value
+    let body = this.formTraCuu.value;
     await this.tongHopDxKhNhapKhacService
       .dsDxDuocTaoQDinhPDuyet(body)
       .then(async (res) => {
@@ -103,8 +106,8 @@ export class ThemMoiTongHopKhnkComponent extends Base2Component implements OnIni
           let maTh = await this.userService.getId("HH_THOP_KHNK_SEQ");
           this.formData.patchValue({
             maTh: maTh,
-            ngayTh: dayjs().format("YYYY-MM-DD"),
-          })
+            ngayTh: dayjs().format("YYYY-MM-DD")
+          });
           this.dataTableDanhSachDX = res.data;
           this.isTongHop = true;
         } else {
@@ -112,7 +115,7 @@ export class ThemMoiTongHopKhnkComponent extends Base2Component implements OnIni
           this.isTongHop = false;
         }
         if (this.dataTableDanhSachDX.length > 0) {
-          this.showDetail(event, this.dataTableDanhSachDX[0].id)
+          this.showDetail(event, this.dataTableDanhSachDX[0].id);
         }
         await this.spinner.hide();
       })
@@ -126,8 +129,12 @@ export class ThemMoiTongHopKhnkComponent extends Base2Component implements OnIni
 
   async save(isGuiDuyet?) {
     let body = this.formData.value;
+    body.loaiVthh = this.formTraCuu.get("loaiVthh").value;
+    body.namKhoach = this.formTraCuu.get("namKhoach").value;
+    body.loaiHinhNx = this.formTraCuu.get("loaiHinhNx").value;
     body.fileDinhKems = this.fileDinhKems;
-    let data = await this.createUpdate(body, '');
+    body.details = this.dataTableDanhSachDX;
+    let data = await this.createUpdate(body, "");
     if (data) {
       this.id = data.id;
       await this.loadChiTiet();
@@ -143,15 +150,14 @@ export class ThemMoiTongHopKhnkComponent extends Base2Component implements OnIni
         const dataDetail = res.data;
         this.fileDinhKems = dataDetail.hdr.fileDinhKems;
         this.dataTableDanhSachDX = dataDetail.dtl;
-        this.helperService.bidingDataInFormGroup(this.formTraCuu, dataDetail.hdr)
+        this.helperService.bidingDataInFormGroup(this.formTraCuu, dataDetail.hdr);
         this.helperService.bidingDataInFormGroup(this.formData, dataDetail.hdr);
         this.isTongHop = true;
-      }
-      else {
+      } else {
         this.isTongHop = false;
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
-      this.showDetail(event, this.dataTableDanhSachDX[0].idDxHdr);
+      this.showDetail(event, this.dataTableDanhSachDX[0].id);
     }
   }
 

@@ -39,3 +39,7 @@ th.wrap-text {
 ::ng-deep .dialog-vat-tu .ant-modal-content .ant-modal-body {
   padding: 0px 20px 5px 20px;
 }
+
+::ng-deep .ant-modal-body .ant-row .ant-form-item-label.ant-col label, .ant-col-24.ant-form-item-label > label {
+  height: 40px !important;
+}

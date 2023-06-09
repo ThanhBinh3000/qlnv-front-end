@@ -72,6 +72,9 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
   dsHangHoa: any[] = [];
   iterableDiffer: any;
   STATUS = STATUS;
+  chiTang: number = 0;
+  xuatGiam: number = 0;
+  xuatBan: number = 0;
 
   constructor(
     private readonly fb: FormBuilder,
@@ -134,6 +137,10 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
       this.xuatGiamList = cloneDeep(this.dataQdTtcpGiaoBTC?.xuatGiamList ? this.dataQdTtcpGiaoBTC.xuatGiamList : []);
       this.xuatBanList = cloneDeep(this.dataQdTtcpGiaoBTC?.xuatBanList ? this.dataQdTtcpGiaoBTC.xuatBanList : []);
       this.luanPhienList = cloneDeep(this.dataQdTtcpGiaoBTC?.luanPhienList ? this.dataQdTtcpGiaoBTC.luanPhienList : []);
+      //Chi tăng,xuat giam, xuat ban vật tư ttcp giao bộ tài chính
+      this.chiTang = res.data.listChiTangToanBoNganh.find(item => item.maBn == '01' && item.tenBn == 'Vật tư, thiết bị').tongSo;
+      this.xuatBan = this.dataQdTtcpGiaoBTC.ttXuatBan;
+      this.xuatGiam = this.dataQdTtcpGiaoBTC.ttXuatGiam;
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }

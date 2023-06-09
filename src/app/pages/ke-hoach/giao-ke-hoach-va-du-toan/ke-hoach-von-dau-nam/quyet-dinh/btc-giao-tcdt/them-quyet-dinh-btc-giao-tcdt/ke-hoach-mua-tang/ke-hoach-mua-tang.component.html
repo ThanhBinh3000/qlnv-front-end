@@ -273,7 +273,31 @@
       </ng-container>
     </ng-container>
     </tbody>
-    <tfoot>
+    <tfoot *ngIf="dataTable && dataTable.length > 0 && tabName != 'LPDH'">
+    <tr class="text-blue">
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th class="text-right">Tổng dự toán</th>
+      <th></th>
+      <th></th>
+      <th class="text-left">{{dataDuToanSumByDataTable | number : '1.0-1' : 'vi_VN'}}</th>
+      <th></th>
+    </tr>
+    <tr class="text-blue">
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th class="text-right">Tổng TTCP giao</th>
+      <th></th>
+      <th></th>
+      <th>{{dataQdTtcpGiaoBn | number : '1.0-1' : 'vi_VN'}}</th>
+      <th></th>
+    </tr>
     </tfoot>
   </nz-table>
 

@@ -18,11 +18,11 @@ import { QuyetDinhDieuChuyenTCService } from 'src/app/services/dieu-chuyen-noi-b
 import { BienBanNghiemThuBaoQuanLanDauService } from 'src/app/services/dieu-chuyen-noi-bo/nhap-dieu-chuyen/bien-ban-nghiem-thu-bao-quan-lan-dau.service';
 
 @Component({
-  selector: 'app-bien-ban-nghiem-thu-bao-quan-lan-dau',
-  templateUrl: './bien-ban-nghiem-thu-bao-quan-lan-dau.component.html',
-  styleUrls: ['./bien-ban-nghiem-thu-bao-quan-lan-dau.component.scss']
+  selector: 'app-bien-ban-chuan-bi-kho',
+  templateUrl: './bien-ban-chuan-bi-kho.component.html',
+  styleUrls: ['./bien-ban-chuan-bi-kho.component.scss']
 })
-export class BienBanNghiemThuBaoQuanLanDauComponent extends Base2Component implements OnInit {
+export class BienBanChuanBiKhoComponent extends Base2Component implements OnInit {
 
   isVisibleChangeTab$ = new Subject();
   visibleTab: boolean = true;
