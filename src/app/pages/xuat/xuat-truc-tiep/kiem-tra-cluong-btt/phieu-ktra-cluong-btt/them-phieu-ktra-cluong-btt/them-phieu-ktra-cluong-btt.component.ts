@@ -59,6 +59,8 @@ export class ThemPhieuKtraCluongBttComponent extends Base2Component implements O
       soQdNv: ['', [Validators.required]],
       idQdNv: ['', [Validators.required]],
       ngayQd: [''],
+      soHd: [''],
+      idHd: [],
 
       soPhieu: ['', [Validators.required]],
 
@@ -175,6 +177,8 @@ export class ThemPhieuKtraCluongBttComponent extends Base2Component implements O
       this.formData.patchValue({
         idBienBan: data.id,
         soBienBan: data.soBienBan,
+        soHd: data.soHd,
+        idHd: data.idHd,
         soQdNv: data.soQdNv,
         idQdNv: data.idQdNv,
         ngayQd: data.ngayQd,
