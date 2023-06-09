@@ -13,6 +13,9 @@ import {AMOUNT_NO_DECIMAL} from "../../../../../../../Utility/utils";
 import dayjs from "dayjs";
 import {HopdongService} from "../../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/hopdong.service";
 import {KhoiLuongCongViec} from "../them-moi-hop-dong-scl/them-moi-hop-dong-scl.component";
+import {
+  HopdongTdscService
+} from "../../../../../../../services/qlnv-kho/tiendoxaydungsuachua/suachualon/hopdongTdsc.service";
 
 @Component({
   selector: 'app-phu-luc-hop-dong-scl',
@@ -43,7 +46,7 @@ export class PhuLucHopDongSclComponent extends Base2Component implements OnInit 
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private _modalRef: NzModalRef,
-    private hopdongService: HopdongService
+    private hopdongService: HopdongTdscService
   ) {
     super(httpClient, storageService, notification, spinner, modal, hopdongService)
     super.ngOnInit()
