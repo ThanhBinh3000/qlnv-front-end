@@ -440,11 +440,11 @@
                   <td class="text-right">0</td>
                   <td class="text-right">0</td>
                 </ng-container>
-                <td class="text-right">{{(data.tkcnTongSoQuyThoc / 1000) | number:
+                <td class="text-right">{{data.tkcnTongSoQuyThoc  | number:
                   '1.0-3': 'vi_VN'}}</td>
-                <td class="text-right">{{(data.tkcnTongThoc / 1000) | number: '1.0-3': 'vi_VN'}}
+                <td class="text-right">{{data.tkcnTongThoc  | number: '1.0-3': 'vi_VN'}}
                 </td>
-                <td class="text-right">{{(data.tkcnTongGao / 1000)| number: '1.0-3': 'vi_VN'}}
+                <td class="text-right">{{data.tkcnTongGao| number: '1.0-3': 'vi_VN'}}
                 </td>
                 <!-- <td>{{ convertTrangThai(tdongTinChiTieuKeHoachNam.trangThai) }}</td> -->
                 <td *ngIf="!this.isViewDetail" class="text-center" nzRight>
@@ -675,15 +675,15 @@
                 number: '1.0-3': 'vi_VN'}}
               </th>
               <th
-                class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.tkcnTongSoQuyThoc ? sumTotalKhDuTruLuongThuc.tkcnTongSoQuyThoc / 1000 : 0) |
+                class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.tkcnTongSoQuyThoc ? sumTotalKhDuTruLuongThuc.tkcnTongSoQuyThoc  : 0) |
                 number: '1.0-3': 'vi_VN'}}
               </th>
               <th
-                class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.tkcnTongThoc ? sumTotalKhDuTruLuongThuc.tkcnTongThoc / 1000 : 0) |
+                class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.tkcnTongThoc ? sumTotalKhDuTruLuongThuc.tkcnTongThoc : 0) |
                 number: '1.0-3': 'vi_VN'}}
               </th>
               <th
-                class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.tkcnTongGao ? sumTotalKhDuTruLuongThuc.tkcnTongGao / 1000 : 0)  |
+                class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.tkcnTongGao ? sumTotalKhDuTruLuongThuc.tkcnTongGao  : 0)  |
                 number: '1.0-3': 'vi_VN'}}
               </th>
               <!-- <td class="background-last-row"></td> -->
@@ -950,7 +950,7 @@
           <!--        nhapvattu-->
           <nz-tab nzTitle="Nhập">
             <nz-card class="mt-2px flex-card data-table card-border-content table-card">
-              <nz-table #phanBo class="mt-16 table-chi-tiet"  style="max-height: 700px; overflow: scroll;" nzBordered>
+              <nz-table #phanBo class="mt-16 table-chi-tiet" style="max-height: 700px; overflow: scroll;" nzBordered>
                 <thead>
                 <tr>
                   <th rowSpan="2">STT</th>
