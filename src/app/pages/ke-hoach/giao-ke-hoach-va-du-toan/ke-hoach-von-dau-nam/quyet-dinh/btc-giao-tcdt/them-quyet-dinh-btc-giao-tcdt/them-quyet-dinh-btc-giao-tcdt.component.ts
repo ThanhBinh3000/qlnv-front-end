@@ -314,9 +314,17 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
     return arr;
   }
 
-  receivedData(data, type) {
-    console.log(data, 'haha')
-    console.log(type, 'hihi')
+  receivedData(data: any, tab: string) {
+    this.keHoachNhapXuatLtComponent.emitData();
+    console.log(data,'datadatadatadata')
+    switch (tab) {
+      case 'KH_LT':
+        this.keHoachNhapXuat = data;
+        break;
+      case 'MT':
+        this.muaTangList = data;
+        break;
+    }
   }
 }
 

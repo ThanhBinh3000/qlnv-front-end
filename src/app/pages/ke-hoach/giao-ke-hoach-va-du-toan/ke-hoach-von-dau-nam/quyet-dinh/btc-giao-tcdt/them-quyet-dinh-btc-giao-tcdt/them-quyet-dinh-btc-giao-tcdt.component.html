@@ -146,13 +146,16 @@
       </div>
     </nz-tab>
     <nz-tab [nzTitle]="'Phân bổ, giao dự toán mua lương thực'">
-      <app-ke-hoach-nhap-xuat-lt #nhapXuatLt [isView]="isView" [(keHoachNhapXuat)]="keHoachNhapXuat">
+      <app-ke-hoach-nhap-xuat-lt #nhapXuatLt [isView]="isView"
+                                 (keHoachNhapXuatChange)="receivedData(keHoachNhapXuat,'KH_LT')"
+                                 [(keHoachNhapXuat)]="keHoachNhapXuat">
       </app-ke-hoach-nhap-xuat-lt>
     </nz-tab>
     <nz-tab [nzTitle]="'Mua tăng'">
       <app-ke-hoach-mua-tang [dsHangHoa]="dsHangHoa" [isView]="isView" [(dataTable)]="muaTangList"
                              [dataQdTtcpGiaoBn]="chiTang"
                              [tabName]="'MT'"
+                             (dataTableChange)="receivedData(muaTangList,'MT')"
                              [trangThai]="formData.value.trangThai">
       </app-ke-hoach-mua-tang>
     </nz-tab>

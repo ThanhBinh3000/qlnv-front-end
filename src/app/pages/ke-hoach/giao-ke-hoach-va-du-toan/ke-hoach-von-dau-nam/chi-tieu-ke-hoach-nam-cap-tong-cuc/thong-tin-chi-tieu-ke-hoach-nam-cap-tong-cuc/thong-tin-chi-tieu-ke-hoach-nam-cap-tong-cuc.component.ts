@@ -1813,8 +1813,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       +this.dsKeHoachLuongThucClone[i].ntnThoc -
       +this.dsKeHoachLuongThucClone[i].xtnTongThoc;
     return this.dsKeHoachLuongThucClone[i].tkcnTongThoc
-      ? Intl.NumberFormat('vi-VN', {minimumIntegerDigits: 3}).format(
-        (this.dsKeHoachLuongThucClone[i].tkcnTongThoc / 1000),
+      ? Intl.NumberFormat('vi-VN').format(
+        this.dsKeHoachLuongThucClone[i].tkcnTongThoc,
       )
       : '0';
   }
@@ -1826,8 +1826,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.dsKeHoachLuongThucClone[i].xtnTongGao;
 
     return this.dsKeHoachLuongThucClone[i].tkcnTongGao
-      ? Intl.NumberFormat('vi-VN', {minimumIntegerDigits: 3}).format(
-        (this.dsKeHoachLuongThucClone[i].tkcnTongGao / 1000),
+      ? Intl.NumberFormat('vi-VN').format(
+        this.dsKeHoachLuongThucClone[i].tkcnTongGao,
       )
       : '0';
   }
@@ -1837,7 +1837,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       +this.dsKeHoachLuongThucClone[i].xtnTongThoc +
       +this.dsKeHoachLuongThucClone[i].xtnTongGao * 2;
     return this.dsKeHoachLuongThucClone[i].xtnTongSoQuyThoc
-      ? Intl.NumberFormat('vi-VN', {minimumIntegerDigits: 3}).format(
+      ? Intl.NumberFormat('vi-VN').format(
         this.dsKeHoachLuongThucClone[i].xtnTongSoQuyThoc,
       )
       : '0';
@@ -1848,8 +1848,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.dsKeHoachLuongThucClone[i].tkcnTongThoc +
       this.dsKeHoachLuongThucClone[i].tkcnTongGao * 2;
     return this.dsKeHoachLuongThucClone[i].tkcnTongSoQuyThoc
-      ? Intl.NumberFormat('vi-VN', {minimumIntegerDigits: 3}).format(
-        (this.dsKeHoachLuongThucClone[i].tkcnTongSoQuyThoc / 1000),
+      ? Intl.NumberFormat('vi-VN').format(
+        this.dsKeHoachLuongThucClone[i].tkcnTongSoQuyThoc,
       )
       : '0';
   }
@@ -1859,7 +1859,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       +this.dsKeHoachLuongThucClone[i].ntnThoc +
       +this.dsKeHoachLuongThucClone[i].ntnGao * 2;
     return this.dsKeHoachLuongThucClone[i].ntnTongSoQuyThoc
-      ? Intl.NumberFormat('vi-VN', {minimumIntegerDigits: 3}).format(
+      ? Intl.NumberFormat('vi-VN').format(
         this.dsKeHoachLuongThucClone[i].ntnTongSoQuyThoc,
       )
       : '0';
