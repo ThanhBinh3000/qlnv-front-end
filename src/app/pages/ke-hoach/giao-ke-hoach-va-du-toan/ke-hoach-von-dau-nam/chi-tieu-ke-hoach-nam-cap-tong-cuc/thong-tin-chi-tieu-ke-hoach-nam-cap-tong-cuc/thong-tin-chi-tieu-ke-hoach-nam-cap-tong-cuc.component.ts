@@ -2157,24 +2157,24 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
 
   calculatortkcnTongThocCreate(): string {
     this.keHoachLuongThucCreate.tkcnTongThoc =
-      this.keHoachLuongThucCreate.tkdnTongThoc +
+      (this.keHoachLuongThucCreate.tkdnTongThoc / 1000) +
       +this.keHoachLuongThucCreate.ntnThoc -
       +this.keHoachLuongThucCreate.xtnTongThoc;
     return this.keHoachLuongThucCreate.tkcnTongThoc
-      ? Intl.NumberFormat('vi-VN', {minimumIntegerDigits: 3}).format(
-        (this.keHoachLuongThucCreate.tkcnTongThoc / 1000),
+      ? Intl.NumberFormat('vi-VN').format(
+        this.keHoachLuongThucCreate.tkcnTongThoc,
       )
       : '0';
   }
 
   calculatortkcnTongGaoCreate(): string {
     this.keHoachLuongThucCreate.tkcnTongGao =
-      this.keHoachLuongThucCreate.tkdnTongGao +
+      (this.keHoachLuongThucCreate.tkdnTongGao / 1000) +
       +this.keHoachLuongThucCreate.ntnGao -
       +this.keHoachLuongThucCreate.xtnTongGao;
     return this.keHoachLuongThucCreate.tkcnTongGao
-      ? Intl.NumberFormat('vi-VN', {minimumIntegerDigits: 3}).format(
-        (this.keHoachLuongThucCreate.tkcnTongGao / 1000),
+      ? Intl.NumberFormat('vi-VN').format(
+        this.keHoachLuongThucCreate.tkcnTongGao,
       )
       : '0';
   }
@@ -2184,8 +2184,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       +this.keHoachLuongThucCreate.tkcnTongThoc +
       +this.keHoachLuongThucCreate.tkcnTongGao * 2;
     return this.keHoachLuongThucCreate.tkcnTongSoQuyThoc
-      ? Intl.NumberFormat('vi-VN', {minimumIntegerDigits: 3}).format(
-        (this.keHoachLuongThucCreate.tkcnTongSoQuyThoc / 1000),
+      ? Intl.NumberFormat('vi-VN').format(
+        this.keHoachLuongThucCreate.tkcnTongSoQuyThoc ,
       )
       : '0';
   }
