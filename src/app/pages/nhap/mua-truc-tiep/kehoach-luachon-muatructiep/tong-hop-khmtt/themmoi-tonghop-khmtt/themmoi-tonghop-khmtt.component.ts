@@ -103,7 +103,6 @@ export class ThemmoiTonghopKhmttComponent extends Base2Component implements OnIn
   }
 
   async loadChiTiet() {
-    debugger
     if (this.id > 0) {
       const data = await this.detail(this.id);
       if (data) {
