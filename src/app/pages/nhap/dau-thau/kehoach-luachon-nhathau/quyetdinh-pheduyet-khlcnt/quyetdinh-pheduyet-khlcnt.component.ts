@@ -43,7 +43,7 @@ export class QuyetdinhPheduyetKhlcntComponent extends Base2Component implements 
   denNgayKy: Date | null = null;
 
   listTrangThai: any[] = [
-    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: this.STATUS.DANG_NHAP_DU_LIEU, giaTri: 'Đang nhập dữ liệu' },
     { ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành' }
   ];
   searchFilter = {

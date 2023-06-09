@@ -902,13 +902,13 @@
       <div nz-col [nzSpan]="24" *ngIf="loaiVthhInput.startsWith('02')">
         <nz-form-item>
           <nz-form-label [nzNoColon]="true"> Ý kiến tham gia của các Vụ </nz-form-label>
-          <textarea [readonly]="isView" rows="3" nz-input formControlName="yKien"></textarea>
+          <textarea [readonly]="isView" rows="3" nz-input [(ngModel)]="ykienThamGia"></textarea>
         </nz-form-item>
       </div>
       <div nz-col [nzSpan]="24" *ngIf="loaiVthhInput.startsWith('02')">
         <nz-form-item>
           <nz-form-label [nzNoColon]="true"> Ghi chú </nz-form-label>
-          <textarea [readonly]="isView" rows="3" nz-input formControlName="ghiChu"></textarea>
+          <textarea [readonly]="isView" rows="3" nz-input [(ngModel)]="ghiChu"></textarea>
         </nz-form-item>
       </div>
     </div>

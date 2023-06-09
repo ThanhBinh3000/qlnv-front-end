@@ -711,7 +711,6 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
 
   index = 0;
   async showDetail($event, index) {
-    debugger
     await this.spinner.show();
     if ($event.type == 'click') {
       this.selected = false
@@ -805,7 +804,6 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
   }
 
   deleteRow(data: any) {
-    debugger
     for (let index = 0; index < this.danhsachDx.length; index++) {
       for (let y = 0; y < this.danhsachDx[index].children.length; y++) {
         for (let k = 0; k < this.danhsachDx[index].children[y].children.length; k++) {

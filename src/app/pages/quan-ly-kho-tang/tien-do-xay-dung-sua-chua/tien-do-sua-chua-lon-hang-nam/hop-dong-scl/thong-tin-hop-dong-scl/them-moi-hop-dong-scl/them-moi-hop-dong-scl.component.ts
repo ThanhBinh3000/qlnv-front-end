@@ -26,6 +26,15 @@ import {NzCollapsePanelComponent} from "ng-zorro-antd/collapse";
 import {
   PhuLucHopDongComponent
 } from "../../../../tien-do-dau-tu-xay-dung/hop-dong/thong-tin-hop-dong/phu-luc-hop-dong/phu-luc-hop-dong.component";
+import {
+  HopdongTdscService
+} from "../../../../../../../services/qlnv-kho/tiendoxaydungsuachua/suachualon/hopdongTdsc.service";
+import {
+  QdPheDuyetKhlcntTdsclService
+} from "../../../../../../../services/qlnv-kho/tiendoxaydungsuachua/suachualon/qd-phe-duyet-khlcnt-tdscl.service";
+import {
+  QuyetdinhpheduyetKqLcntSclService
+} from "../../../../../../../services/qlnv-kho/tiendoxaydungsuachua/suachualon/qdPdKqLcntScl.service";
 
 @Component({
   selector: 'app-them-moi-hop-dong-scl',
@@ -84,9 +93,9 @@ export class ThemMoiHopDongSclComponent extends Base2Component implements OnInit
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private danhMucService: DanhMucService,
-    private quyetdinhpheduyetKhlcntService: QuyetdinhpheduyetKhlcntService,
-    private quyetdinhpheduyetKqLcntService: QuyetdinhpheduyetKqLcntService,
-    private hopdongService: HopdongService
+    private quyetdinhpheduyetKhlcntService: QdPheDuyetKhlcntTdsclService,
+    private quyetdinhpheduyetKqLcntService: QuyetdinhpheduyetKqLcntSclService,
+    private hopdongService: HopdongTdscService
   ) {
     super(httpClient, storageService, notification, spinner, modal, hopdongService)
     super.ngOnInit()

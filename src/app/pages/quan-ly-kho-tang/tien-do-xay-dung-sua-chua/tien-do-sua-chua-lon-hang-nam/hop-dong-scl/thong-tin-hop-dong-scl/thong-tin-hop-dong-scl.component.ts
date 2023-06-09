@@ -17,6 +17,15 @@ import {Validators} from "@angular/forms";
 import {MESSAGE} from "../../../../../../constants/message";
 import {CurrencyMaskInputMode} from "ngx-currency";
 import {STATUS} from "../../../../../../constants/status";
+import {
+  HopdongTdscService
+} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/suachualon/hopdongTdsc.service";
+import {
+  QuyetdinhpheduyetKqLcntSclService
+} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/suachualon/qdPdKqLcntScl.service";
+import {
+  QdPheDuyetKhlcntTdsclService
+} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/suachualon/qd-phe-duyet-khlcnt-tdscl.service";
 @Component({
   selector: 'app-thong-tin-hop-dong-scl',
   templateUrl: './thong-tin-hop-dong-scl.component.html',
@@ -58,9 +67,9 @@ export class ThongTinHopDongSclComponent extends Base2Component implements OnIni
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private danhMucService: DanhMucService,
-    private quyetdinhpheduyetKhlcntService: QuyetdinhpheduyetKhlcntService,
-    private quyetdinhpheduyetKqLcntService: QuyetdinhpheduyetKqLcntService,
-    private hopdongService: HopdongService
+    private quyetdinhpheduyetKhlcntService: QdPheDuyetKhlcntTdsclService,
+    private quyetdinhpheduyetKqLcntService: QuyetdinhpheduyetKqLcntSclService,
+    private hopdongService: HopdongTdscService
   ) {
     super(httpClient, storageService, notification, spinner, modal, hopdongService)
     this.formData = this.fb.group({

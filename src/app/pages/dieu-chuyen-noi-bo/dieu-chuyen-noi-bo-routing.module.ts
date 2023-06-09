@@ -6,6 +6,7 @@ import { TongHopDieuChuyenTaiCuc } from './tong-hop-dieu-chuyen-tai-cuc/tong-hop
 import {
   TongHopDieuChuyenTaiTongCuc
 } from './tong-hop-dieu-chuyen-tai-tong-cuc/tong-hop-dieu-chuyen-tai-tong-cuc.component';
+import { BaoCaoComponent } from './bao-cao/bao-cao.component';
 
 const routes: Routes = [
   {
@@ -49,6 +50,10 @@ const routes: Routes = [
           import(
             '../dieu-chuyen-noi-bo/nhap-dieu-chuyen/nhap-dieu-chuyen.module'
           ).then((m) => m.NhapDieuChuyenModule),
+      },
+      {
+        path: 'bao-cao',
+        component: BaoCaoComponent
       },
     ]
   }]
