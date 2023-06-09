@@ -3091,7 +3091,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
 
   themVatTu(type) {
     if (type == 'nhap') {
-      debugger;
       if (this.keHoachVatTuNhapCreate.tenDvi && this.keHoachVatTuNhapCreate.dsVatTu.length) {
         let dataExists = this.dataVatTuNhap.find(s => s.tenDvi == this.keHoachVatTuNhapCreate.tenDvi);
         let indexExists = this.dataVatTuNhap.findIndex(s => s.tenDvi == this.keHoachVatTuNhapCreate.tenDvi);
