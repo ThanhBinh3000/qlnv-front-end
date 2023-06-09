@@ -23,6 +23,7 @@ import { chain, cloneDeep } from 'lodash';
 import { QuyetDinhPdKhBanTrucTiepService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/quyet-dinh-pd-kh-ban-truc-tiep.service';
 import { Validators } from '@angular/forms';
 import { QuyetDinhNvXuatBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/quyet-dinh-nv-xuat-btt/quyet-dinh-nv-xuat-btt.service';
+import { DonviService } from 'src/app/services/donvi.service';
 
 @Component({
   selector: 'app-thong-tin-hop-dong-btt',
@@ -58,6 +59,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
   fileDinhKems: any[] = [];
   canCuPhapLy: any[] = [];
   listAllDviTsan: any[] = [];
+  listDiaDiemKho: any[] = [];
 
   constructor(
     httpClient: HttpClient,
@@ -70,6 +72,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
     private quyetDinhPdKhBanTrucTiepService: QuyetDinhPdKhBanTrucTiepService,
     private danhMucService: DanhMucService,
     private quyetDinhNvXuatBttService: QuyetDinhNvXuatBttService,
+    private donViService: DonviService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, hopDongBttService);
 
@@ -431,7 +434,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
     }
   }
 
-  calculatorTable() {
+  async calculatorTable() {
     let soLuongBanTrucTiep: number = 0
     let thanhTien: number = 0
     let tongSlBanttQdkhDakyHd: number = 0
@@ -459,9 +462,27 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
       tongSlBanttQdkhChuakyHd: this.formData.value.tongSlXuatBanQdKh - tongSlBanttQdkhDakyHd,
       donGiaBanTrucTiep: donGiaBanTrucTiep
     });
+    await this.loadDiemDiemKho();
   }
 
-
+  async loadDiemDiemKho() {
+    this.dataTable.forEach((item) => {
+      item.children.forEach(async (child) => {
+        let body = {
+          trangThai: "01",
+          maDviCha: item.maDvi
+        };
+        const res = await this.donViService.getAll(body)
+        const dataDk = res.data;
+        if (dataDk) {
+          this.listDiaDiemKho = dataDk.filter(item => item.maDvi == child.maDiemKho);
+          this.listDiaDiemKho.forEach(s => {
+            child.diaDiemKho = s.diaChi;
+          })
+        }
+      })
+    });
+  }
 
   async openDialogQdKhBtt() {
     this.spinner.show()
@@ -565,7 +586,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
     }
   }
 
-  calculatorTableChiCuc() {
+  async calculatorTableChiCuc() {
     let soLuongBanTrucTiep: number = 0;
     let donGiaBanTrucTiep: number = 0;
     let tongSlBanttQdkhDakyHd: number = 0;
@@ -583,6 +604,24 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
       tongSlBanttQdkhChuakyHd: this.formData.value.tongSlXuatBanQdKh - (soLuongBanTrucTiep + tongSlBanttQdkhDakyHd),
       thanhTien: soLuongBanTrucTiep * donGiaBanTrucTiep
     });
+    await this.loadDiemDiemKhoChiCuc();
+  }
+
+  async loadDiemDiemKhoChiCuc() {
+    this.dataTable.forEach(async (item) => {
+      let body = {
+        trangThai: "01",
+        maDviCha: this.userInfo.MA_DVI
+      }
+      const res1 = await this.donViService.getAll(body)
+      const dataDk = res1.data;
+      if (dataDk) {
+        this.listDiaDiemKho = dataDk.filter(s => s.maDvi == item.maDiemKho);
+        this.listDiaDiemKho.forEach(s => {
+          item.diaDiemKho = s.diaChi;
+        })
+      }
+    })
   }
 
   async loadDsHd(event) {
