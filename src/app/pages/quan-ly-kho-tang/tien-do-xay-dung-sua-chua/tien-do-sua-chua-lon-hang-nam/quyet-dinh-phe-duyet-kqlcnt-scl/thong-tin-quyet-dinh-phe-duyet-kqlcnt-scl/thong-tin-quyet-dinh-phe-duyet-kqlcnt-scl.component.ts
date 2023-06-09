@@ -17,6 +17,12 @@ import {
 } from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetKqLcnt.service";
 import {FILETYPE} from "../../../../../../constants/fileType";
 import {CurrencyMaskInputMode} from "ngx-currency";
+import {
+  QuyetdinhpheduyetKqLcntSclService
+} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/suachualon/qdPdKqLcntScl.service";
+import {
+  QdPheDuyetKhlcntTdsclService
+} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/suachualon/qd-phe-duyet-khlcnt-tdscl.service";
 
 @Component({
   selector: 'app-thong-tin-quyet-dinh-phe-duyet-kqlcnt-scl',
@@ -60,8 +66,8 @@ export class ThongTinQuyetDinhPheDuyetKqlcntSclComponent extends Base2Component 
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private danhMucService: DanhMucService,
-    private quyetdinhpheduyetKhlcntService: QuyetdinhpheduyetKhlcntService,
-    private quyetdinhpheduyetKqLcntService: QuyetdinhpheduyetKqLcntService
+    private quyetdinhpheduyetKhlcntService: QdPheDuyetKhlcntTdsclService,
+    private quyetdinhpheduyetKqLcntService: QuyetdinhpheduyetKqLcntSclService
   ) {
     super(httpClient, storageService, notification, spinner, modal, quyetdinhpheduyetKqLcntService)
     super.ngOnInit()
@@ -75,7 +81,7 @@ export class ThongTinQuyetDinhPheDuyetKqlcntSclComponent extends Base2Component 
       soQdPdKhlcnt: [null, Validators.required],
       idQdPdKhlcnt: [null, Validators.required],
       trichYeu: [null, Validators.required],
-      tenDuAn: [null],
+      tenCongTrinh: [null],
       chuDauTu: [null],
       diaChi: [null],
       ghiChu: [null],
@@ -84,7 +90,7 @@ export class ThongTinQuyetDinhPheDuyetKqlcntSclComponent extends Base2Component 
       tenTrangThai: ['Dự thảo'],
       fileDinhKems: [null],
       ccPhapLy: [],
-      listKtTdxdQuyetDinhPdKqlcntDsgt: [[]]
+      listKtTdscQuyetDinhPdKqlcntDsgt: [[]]
     });
   }
 
@@ -111,13 +117,13 @@ export class ThongTinQuyetDinhPheDuyetKqlcntSclComponent extends Base2Component 
         idQdPdKhlcnt: this.itemQdPdKhLcnt.id,
         soQdPdKhlcnt: this.itemQdPdKhLcnt.soQd,
         chuDauTu: this.itemQdPdKhLcnt.chuDauTu,
-        tenDuAn: this.itemQdPdKhLcnt.tenDuAn,
+        tenCongTrinh: this.itemQdPdKhLcnt.tenCongTrinh,
         idDuAn: this.itemQdPdKhLcnt.idDuAn,
         tongMucDt: this.itemQdPdKhLcnt.tongMucDt,
       });
       let res = await this.quyetdinhpheduyetKhlcntService.getDetail(this.itemQdPdKhLcnt.id);
       if (res.msg == MESSAGE.SUCCESS) {
-        this.listGoiThau = res.data.listKtTdxdQuyetDinhPdKhlcntCvKh.filter(item => !item.soQdPdKqlcnt && !item.idQdPdKqlcnt);
+        this.listGoiThau = res.data.listKtTdscQuyetDinhPdKhlcntCvKh.filter(item => !item.soQdPdKqlcnt && !item.idQdPdKqlcnt);
       }
     }
   }
@@ -140,7 +146,7 @@ export class ThongTinQuyetDinhPheDuyetKqlcntSclComponent extends Base2Component 
               this.listCcPhapLy.push(item)
             }
           })
-          this.listGoiThau = data.listKtTdxdQuyetDinhPdKqlcntDsgt;
+          this.listGoiThau = data.listKtTdscQuyetDinhPdKqlcntDsgt;
           this.listFile = data.fileDinhKems;
         }
       } else {
@@ -181,8 +187,8 @@ export class ThongTinQuyetDinhPheDuyetKqlcntSclComponent extends Base2Component 
     }
     this.formData.value.soQd = this.formData.value.soQd + this.maQd;
     if (this.listGoiThau && this.listGoiThau.length > 0) {
-      this.formData.value.listKtTdxdQuyetDinhPdKqlcntDsgt = this.listGoiThau;
-      this.formData.value.listKtTdxdQuyetDinhPdKqlcntDsgt.forEach(item => {
+      this.formData.value.listKtTdscQuyetDinhPdKqlcntDsgt = this.listGoiThau;
+      this.formData.value.listKtTdscQuyetDinhPdKqlcntDsgt.forEach(item => {
         item.idGoiThau = item.id;
         item.id = null
       })
