@@ -70,11 +70,11 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
   yearSelected: number;
   dataTable: any[] = [];
   dsHangHoa: any[] = [];
-  iterableDiffer: any;
   STATUS = STATUS;
   chiTang: number = 0;
   xuatGiam: number = 0;
   xuatBan: number = 0;
+
 
   constructor(
     private readonly fb: FormBuilder,
@@ -107,13 +107,13 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
       await Promise.all([
         this.userInfo = this.userService.getUserLogin(),
         this.loadDsNam(),
-        // this.maQd = '/' + this.userInfo.MA_QD,
         this.getDataDetail(this.idInput),
         this.loadDanhMucHang(),
       ])
     if (this.idInput == 0) {
       await this.loadQdTtcpGiaoBoNganh(dayjs().get('year'))
     }
+    console.log(this.keHoachNhapXuat, 'aaaaaaaaaaaaaaaaaa');
     await this.spinner.hide();
   }
 
@@ -159,7 +159,6 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
         trichYeu: data.trichYeu,
         ghiChu: data.ghiChu
       })
-      // this.taiLieuDinhKemList = data.fileDinhkems;
       data.fileDinhkems.forEach(item => {
         if (item.fileType == FILETYPE.FILE_DINH_KEM) {
           this.taiLieuDinhKemList.push(item)
@@ -191,40 +190,12 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
     }
   }
 
-  openFile(event) {
-    // if (!this.isView) {
-    //   let item = {
-    //     id: new Date().getTime(),
-    //     text: event.name,
-    //   };
-    //   if (!this.taiLieuDinhKemList.find((x) => x.text === item.text)) {
-    //     this.uploadFileService
-    //       .uploadFile(event.file, event.name)
-    //       .then((resUpload) => {
-    //         if (!this.deXuatDieuChinh.fileDinhKemReqs) {
-    //           this.deXuatDieuChinh.fileDinhKemReqs = [];
-    //         }
-    //         const fileDinhKem = new FileDinhKem();
-    //         fileDinhKem.fileName = resUpload.filename;
-    //         fileDinhKem.fileSize = resUpload.size;
-    //         fileDinhKem.fileUrl = resUpload.url;
-    //         fileDinhKem.idVirtual = item.id;
-    //         this.deXuatDieuChinh.fileDinhKemReqs.push(fileDinhKem);
-    //         this.taiLieuDinhKemList.push(item);
-    //       });
-    //   }
-    // }
-  }
-
   deleteTaiLieuDinhKemTag(data: any) {
     if (!this.isView) {
       this.taiLieuDinhKemList = this.taiLieuDinhKemList.filter(
         (x) => x.id !== data.id,
       );
     }
-  }
-
-  downloadFileKeHoach(event) {
   }
 
   quayLai() {
@@ -294,10 +265,6 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
       body.fileDinhKems = this.listFile;
     }
     body.soQd = body.soQd + this.maQd;
-    // body.muaTangList = this.muaTangList;
-    // body.xuatGiamList = this.xuatGiamList;
-    // body.xuatBanList = this.xuatBanList;
-    // body.luanPhienList = this.luanPhienList;
     body.muaTangList = this.conVertTreeToList(this.muaTangList);
     body.xuatGiamList = this.conVertTreeToList(this.xuatGiamList);
     body.xuatBanList = this.conVertTreeToList(this.xuatBanList);
@@ -333,7 +300,6 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
     this.spinner.hide();
   }
 
-
   conVertTreeToList(data) {
     let arr = [];
     data.forEach(item => {
@@ -348,13 +314,9 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
     return arr;
   }
 
-  exportData() {
-  }
-
-  xoaKeHoach() {
-  }
-
-  themKeHoach() {
+  receivedData(data, type) {
+    console.log(data, 'haha')
+    console.log(type, 'hihi')
   }
 }
 
