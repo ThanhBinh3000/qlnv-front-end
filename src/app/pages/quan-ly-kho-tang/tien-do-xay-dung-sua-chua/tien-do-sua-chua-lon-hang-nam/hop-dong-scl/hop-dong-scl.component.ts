@@ -4,12 +4,9 @@ import {StorageService} from "../../../../../services/storage.service";
 import {NzNotificationService} from "ng-zorro-antd/notification";
 import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
-import {
-  QuyetdinhpheduyetKhlcntService
-} from "../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetKhlcnt.service";
-import {HopdongService} from "../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/hopdong.service";
 import {STATUS} from "../../../../../constants/status";
 import {MESSAGE} from "../../../../../constants/message";
+import {HopdongTdscService} from "../../../../../services/qlnv-kho/tiendoxaydungsuachua/suachualon/hopdongTdsc.service";
 
 @Component({
   selector: 'app-hop-dong-scl',
@@ -35,8 +32,7 @@ export class HopDongSclComponent implements OnInit {
     private notification: NzNotificationService,
     private spinner: NgxSpinnerService,
     private modal: NzModalService,
-    private hopdongService: HopdongService,
-    private quyetdinhpheduyetKhlcntService: QuyetdinhpheduyetKhlcntService
+    private hopdongService: HopdongTdscService
   ) {
 
   }
@@ -50,11 +46,10 @@ export class HopDongSclComponent implements OnInit {
   }
 
   async loadItemHopDong() {
-    if (this.itemQdPdDaDtxd && this.itemQdPdKhLcnt && this.itemTtdt.trangThaiDt == STATUS.HOAN_THANH_CAP_NHAT) {
+    if (this.itemQdPdKhLcnt && this.itemTtdt.trangThaiDt == STATUS.HOAN_THANH_CAP_NHAT) {
       let body = {
         "namKh": this.itemTtdt.namKh,
         "idDuAn": this.itemTtdt.idDuAn,
-        "idQdPdDaDtxd": this.itemTtdt.idQdPdDaDtxd,
         "idQdPdKhLcnt": this.itemQdPdKhLcnt.id,
       }
       let res = await this.hopdongService.detailQdPdKhLcnt(body);
