@@ -155,7 +155,7 @@
                 Căn cứ pháp lý
               </nz-form-label>
               <div class="list-file">
-                <file-list [disabled]="isDisabled()" [data]="canCu"></file-list>
+                <file-list [isCanCuPL]="true" [isViewDetail]="isView"  [data]="canCu"></file-list>
               </div>
             </nz-form-item>
           </div>
@@ -165,7 +165,7 @@
                 File đính kèm QĐ đã ban hành
               </nz-form-label>
               <div class="list-file">
-                <file-list [disabled]="isDisabled()" [data]="fileDinhKem"></file-list>
+                <file-list [isViewDetail]="isView" [data]="fileDinhKem"></file-list>
               </div>
             </nz-form-item>
           </div>
