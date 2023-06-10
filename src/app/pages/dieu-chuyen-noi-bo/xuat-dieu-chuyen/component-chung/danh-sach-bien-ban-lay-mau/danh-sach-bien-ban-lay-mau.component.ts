@@ -142,38 +142,73 @@ export class DanhSachBienBanLayMau extends Base2Component implements OnInit {
     //     this.dataView = dataView;
     //     this.expandAll()
     // }
+    // buildTableView() {
+    //     let dataView = Array.isArray(this.dataTable) ? this.dataTable.map((data) => {
+    //         let arr = [];
+    //         Array.isArray(data.danhSachQuyetDinh) ? data.danhSachQuyetDinh.forEach(element => {
+    //             Array.isArray(element?.dcnbKeHoachDcHdr?.danhSachHangHoa) && element.dcnbKeHoachDcHdr.danhSachHangHoa.forEach(item => {
+    //                 arr.push(item)
+    //             });
+    //         }) : [];
+    //         const rs = chain(arr).groupBy("maDiemKho").map((v, k) => {
+    //             let rowLv2 = v.find(s => s.maDiemKho === k);
+    //             if (!rowLv2) {
+    //                 return;
+    //             }
+    //             return {
+    //                 ...rowLv2,
+    //                 idVirtual: uuidv4(),
+    //                 maDiemKho: k,
+    //                 childData: v
+    //             }
+    //         }).value()
+    //         return {
+    //             ...data,
+    //             soQdinhDcc: data.soQdinh,
+    //             qdinhDccId: data.id,
+    //             idVirtual: uuidv4(),
+    //             childData: rs
+    //         }
+    //     }) : [];
+    //     this.dataView = dataView;
+    //     this.expandAll()
+    // }
     buildTableView() {
-        let dataView = Array.isArray(this.dataTable) ? this.dataTable.map((data) => {
-            let arr = [];
-            Array.isArray(data.danhSachQuyetDinh) ? data.danhSachQuyetDinh.forEach(element => {
-                Array.isArray(element?.dcnbKeHoachDcHdr?.danhSachHangHoa) && element.dcnbKeHoachDcHdr.danhSachHangHoa.forEach(item => {
-                    arr.push(item)
-                });
-            }) : [];
-            const rs = chain(arr).groupBy("maDiemKho").map((v, k) => {
-                let rowLv2 = v.find(s => s.maDiemKho === k);
-                if (!rowLv2) {
-                    return;
-                }
-                return {
-                    ...rowLv2,
-                    idVirtual: uuidv4(),
-                    maDiemKho: k,
-                    childData: v
-                }
-            }).value()
-            return {
-                ...data,
-                soQdinhDcc: data.soQdinh,
-                qdinhDccId: data.id,
-                idVirtual: uuidv4(),
-                childData: rs
+        let removeDuplicateData = [];
+        this.dataTable.forEach((item, i) => {
+            const maLoNganKho = item.maLoNganKho ? item.maLoNganKho : (item.maloKho ? `${item.maloKho}${item.maNganKho}` : item.maNganKho);
+            const dataIndex = removeDuplicateData.findIndex(f => f.soQdinh == item.soQdinh && f.maLoNganKho == maLoNganKho);
+            if (dataIndex < 0) {
+                removeDuplicateData.push({ ...item, maLoNganKho })
             }
-        }) : [];
-        this.dataView = dataView;
+        })
+        let dataView = Array.isArray(removeDuplicateData) ?
+            chain(removeDuplicateData).groupBy("soQdinh").map((rs, i) => {
+                const dataSoQdinh = rs.find(f => f.soQdinh == i);
+                if (!dataSoQdinh) return;
+                const rsx = chain(rs).groupBy("maDiemKho").map((v, k) => {
+                    let rowLv2 = v.find(s => s.maDiemKho === k);
+                    if (!rowLv2) {
+                        return;
+                    }
+                    return {
+                        ...rowLv2,
+                        idVirtual: uuidv4(),
+                        maDiemKho: k,
+                        childData: v
+                    }
+                }).value()
+                return {
+                    ...dataSoQdinh,
+                    soQdinhDcc: dataSoQdinh.soQdinh,
+                    idVirtual: uuidv4(),
+                    childData: rsx
+                }
+            }).value() : [];
+        this.dataView = cloneDeep(dataView);
+        console.log("dataView", this.dataView)
         this.expandAll()
     }
-
     expandAll() {
         this.dataView.forEach(s => {
             this.expandSetString.add(s.idVirtual);

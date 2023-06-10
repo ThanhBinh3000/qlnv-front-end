@@ -98,11 +98,11 @@
                                 style="width: 35px">
                             </td>
                             <td>
-                                <a *ngIf="item.soQdinhDcc && item.id" nz-button nzType="link"
-                                    (click)="openModalQdDc(item.id)">{{
+                                <a *ngIf="item.soQdinhDcc && item.qdinhDccId" nz-button nzType="link"
+                                    (click)="openModalQdDc(item.qdinhDccId)">{{
                                     item.soQdinhDcc}}</a>
                             </td>
-                            <td>{{item.nam}}</td>
+                            <td>{{item.namKh}}</td>
                             <!-- <td>{{item.ngayQd | date: 'dd/MM/YYYY'}}</td> -->
                             <td></td>
                             <td></td>
@@ -123,7 +123,7 @@
                                     <td></td>
                                     <td></td>
                                     <td></td>
-                                    <td>{{lv1.thoiGianDkDc | date: 'dd/MM/YYYY'}}</td>
+                                    <td>{{lv1.thoiHanDieuChuyen | date: 'dd/MM/YYYY'}}</td>
                                     <td>{{lv1.tenDiemKho}}</td>
                                     <td></td>
                                     <td></td>
@@ -144,34 +144,34 @@
                                             <td></td>
                                             <td></td>
                                             <td></td>
-                                            <td>{{(lv2.tenLoKho? lv2.tenLoKho + " - ": "") + (lv2.tenNganKho|| "")}}
+                                            <td>{{(lv2.tenloKho? lv2.tenloKho + " - ": "") + (lv2.tenNganKho ||
+                                                "")}}
                                             </td>
-                                            <td>{{lv2.soBbLayMau}}</td>
-                                            <td>{{lv2.ngayLayMau | date: 'dd/MM/YYYY' }}</td>
-                                            <td>{{lv2.soBbTinhKho}}</td>
+                                            <td>{{lv2.soBBLayMau}}</td>
+                                            <td>{{lv2.ngaylayMau | date: 'dd/MM/YYYY' }}</td>
+                                            <td>{{lv2.soBBTinhKho}}</td>
                                             <td>{{lv2.ngayXuatDocKho}}</td>
-                                            <td>{{lv2.soBbHaoDoi}}</td>
+                                            <td>{{lv2.bbHaoDoi}}</td>
                                             <td>{{LIST_TRANG_THAI[lv2.trangThai]}}</td>
                                             <td class="text-left">
-                                                <a *ngIf="checkRoleAdd(lv2?.dcnbBienBanLayMauHdr?.trangThai)"
-                                                    (click)="redirectToChiTiet(lv2, false, null ,item.qdinhDccId,  item.soQdinhDcc,
-                                                        lv2.maLoKho, lv2.tenLoKho, lv2.maNganKho, lv2.tenNganKho, lv2.maNhaKho, lv2.tenNhaKho, lv1.maDiemKho, lv1.tenDiemKho, lv2.loaiVthh, lv2.tenLoaiVthh,  lv2.cloaiVthh, lv2.tenCloaiVthh)">
+                                                <a *ngIf="checkRoleAdd(lv2.trangThai)" (click)="redirectToChiTiet(lv2, false, null ,item.qdinhDccId,  item.soQdinhDcc,
+                                                        lv2.maLoKho, lv2.tenloKho, lv2.maNganKho, lv2.tenNganKho, lv2.maNhaKho, lv2.tenNhaKho, lv1.maDiemKho, lv1.tenDiemKho, lv2.maHangHoa, lv2.tenHangHoa,  lv2.maChLoaiHangHoa
+                                                        , lv2.tenChLoaiHangHoa)">
                                                     <i class="fa fa-plus"></i>
                                                 </a>
-                                                <a *ngIf="checkRoleView(lv2?.dcnbBienBanLayMauHdr?.trangThai)"
+                                                <a *ngIf="checkRoleView(lv2.trangThai)"
                                                     (click)="redirectToChiTiet(lv2, true, lv2.id)">
                                                     <i class="fa fa-eye"></i>
                                                 </a>
-                                                <a *ngIf="checkRoleEdit(lv2?.dcnbBienBanLayMauHdr?.trangThai)"
+                                                <a *ngIf="checkRoleEdit(lv2.trangThai)"
                                                     (click)="redirectToChiTiet(lv2, false, lv2.id)">
                                                     <i class="fa fa-pencil"></i>
                                                 </a>
-                                                <a *ngIf="checkRoleApprove(lv2?.dcnbBienBanLayMauHdr?.trangThai)"
+                                                <a *ngIf="checkRoleApprove(lv2.trangThai)"
                                                     (click)="redirectToChiTiet(lv2, false, lv2.id)">
                                                     <i class="icon htvbdh_tcdt_pheduyet"></i>
                                                 </a>
-                                                <a *ngIf="checkRoleDelete(lv2?.dcnbBienBanLayMauHdr?.trangThai)"
-                                                    (click)="xoaItem(lv2)">
+                                                <a *ngIf="checkRoleDelete(lv2.trangThai)" (click)="xoaItem(lv2)">
                                                     <i class="fa fa-trash-o do"></i>
                                                 </a>
                                             </td>
@@ -218,7 +218,7 @@
     ></app-thong-tin-quyet-dinh-dieu-chuyen>
 </ng-container> -->
     <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-        <app-thong-tin-quyet-dinh-dieu-chuyen-tc [idInput]="idQdDc"></app-thong-tin-quyet-dinh-dieu-chuyen-tc>
+        <app-thong-tin-quyet-dinh-dieu-chuyen-cuc [idInput]="idQdDc"></app-thong-tin-quyet-dinh-dieu-chuyen-cuc>
     </ng-container>
     <div *nzModalFooter>
         <button nz-button (click)="closeModalQdDc()" class="modal__button--cancel">
