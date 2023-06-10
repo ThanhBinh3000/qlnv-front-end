@@ -10,6 +10,7 @@ import { cloneDeep } from 'lodash';
 import { saveAs } from 'file-saver';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { MuaBuBoSungBtcService } from "../../../../../../services/mua-bu-bo-sung-btc.service";
+import {STATUS} from "../../../../../../constants/status";
 
 @Component({
   selector: 'app-btc-mua-bu',
@@ -52,6 +53,7 @@ export class BtcMuaBuComponent implements OnInit {
   dataTableAll: any[] = [];
   namDataSelect: number;
   listBoNganh: any[] = [];
+  STATUS = STATUS;
 
   constructor(
     private readonly fb: FormBuilder,
