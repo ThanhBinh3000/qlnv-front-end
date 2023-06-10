@@ -192,13 +192,13 @@
 </div>
 <div *ngIf="isDetail">
     <app-xuat-dcnb-them-moi-phieu-xuat-kho [idInput]="selectedId" (showListEvent)="showList()" [isView]="isView"
-        [typeVthh]="loaiVthh" [idQdDc]="idQdGiaoNvXh">
+        [typeVthh]="typeVthh[0]" [idQdDc]="idQdGiaoNvXh">
     </app-xuat-dcnb-them-moi-phieu-xuat-kho>
 </div>
 
 <nz-modal [nzWidth]="'90%'" [(nzVisible)]="isViewPhieu" (nzOnCancel)="closeModalPhieuXuatKho()">
     <ng-container *nzModalContent class="modal__content">
-        <app-them-moi-phieu-kiem-nghiem-chat-luong [idInput]="idPhieu" [typeVthh]="loaiVthh" [isViewOnModal]="true">
+        <app-them-moi-phieu-kiem-nghiem-chat-luong [idInput]="idPhieu" [typeVthh]="typeVthh" [isViewOnModal]="true">
         </app-them-moi-phieu-kiem-nghiem-chat-luong>
     </ng-container>
     <div *nzModalFooter>

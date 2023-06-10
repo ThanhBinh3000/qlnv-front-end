@@ -23,9 +23,8 @@
       <td style="font-weight: 500;">
       </td>
       <td></td>
-      <td style="font-weight: 500;">{{ ((keHoachNhapXuat?.soLuongMuaThoc * keHoachNhapXuat.donGiaMuaThoc) +
-        (keHoachNhapXuat?.soLuongMuaGaoLpdh * keHoachNhapXuat.donGiaMuaGaoLpdh) +
-        (keHoachNhapXuat?.soLuongMuaGaoXcht * keHoachNhapXuat.donGiaMuaGaoXcht)) / 1000 | number : '1.0-1' :
+      <td
+        style="font-weight: 500;">{{ (keHoachNhapXuat.nhapCtMua ? (keHoachNhapXuat.tienMuaThoc + keHoachNhapXuat.tienMuaGaoXcht + keHoachNhapXuat.tienMuaGaoLpdh) : (keHoachNhapXuat.tienMuaThoc + keHoachNhapXuat.tongTienMuaGao)) | number : '1.0-1' :
         'vi_VN'}}
       </td>
     </tr>
@@ -34,18 +33,23 @@
       <td></td>
       <td>
         <div>
-          <input class="money-input" currencyMask [disabled]="!isView" [(ngModel)]="keHoachNhapXuat.soLuongMuaThoc"
+          <input class="money-input" currencyMask [disabled]="!isView" (ngModelChange)="changeDataInput()"
+                 [(ngModel)]="keHoachNhapXuat.soLuongMuaThoc"
                  [options]="amount"/>
         </div>
       </td>
       <td>
         <div>
-          <input class="money-input" currencyMask [disabled]="!isView" [(ngModel)]="keHoachNhapXuat.donGiaMuaThoc"
+          <input class="money-input" currencyMask [disabled]="!isView" (ngModelChange)="changeDataInput()"
+                 [(ngModel)]="keHoachNhapXuat.donGiaMuaThoc"
                  [options]="amount_no_decimal"/>
         </div>
       </td>
-      <td>{{ (keHoachNhapXuat.soLuongMuaThoc * keHoachNhapXuat.donGiaMuaThoc) / 1000 | number : '0.0-1' :
-        'vi_VN'}}</td>
+      <td>
+        <input class="money-input" currencyMask [disabled]="!isView" [(ngModel)]="keHoachNhapXuat.tienMuaThoc"
+               [options]="amount_no_decimal"/>
+        <!--        {{ (keHoachNhapXuat.soLuongMuaThoc * keHoachNhapXuat.donGiaMuaThoc) / 1000 | number : '0.0-1' :-->
+        <!--        'vi_VN'}}</td>-->
     </tr>
     <tr>
 
@@ -63,12 +67,9 @@
                [options]="amount_no_decimal"/>
       </td>
       <td>
-        <span *ngIf="!keHoachNhapXuat.nhapCtMua">
-          {{
-          (keHoachNhapXuat.soLuongMuaGao * keHoachNhapXuat.donGiaMuaGao) / 1000 | number : '1.0-1' :
-            'vi_VN'
-          }}
-        </span>
+        <input *ngIf="!keHoachNhapXuat.nhapCtMua" class="money-input" currencyMask [disabled]="!isView"
+               [(ngModel)]="keHoachNhapXuat.tongTienMuaGao"
+               [options]="amount_no_decimal"/>
         <span
           *ngIf="keHoachNhapXuat.nhapCtMua">
         {{ ((keHoachNhapXuat.soLuongMuaGaoLpdh * keHoachNhapXuat.donGiaMuaGaoLpdh) +
@@ -95,10 +96,13 @@
         </div>
       </td>
       <td>
-        <span *ngIf="keHoachNhapXuat.nhapCtMua">
-        {{(keHoachNhapXuat.soLuongMuaGaoLpdh * keHoachNhapXuat.donGiaMuaGaoLpdh) / 1000 | number : '1.0-1'
-          :
-          'vi_VN' }}</span>
+        <input *ngIf="keHoachNhapXuat.nhapCtMua" class="money-input" currencyMask [disabled]="!isView"
+               [(ngModel)]="keHoachNhapXuat.tienMuaGaoLpdh"
+               [options]="amount"/>
+        <!--        <span *ngIf="keHoachNhapXuat.nhapCtMua">-->
+        <!--        {{(keHoachNhapXuat.soLuongMuaGaoLpdh * keHoachNhapXuat.donGiaMuaGaoLpdh) / 1000 | number : '1.0-1'-->
+        <!--          :-->
+        <!--          'vi_VN' }}</span>-->
       </td>
     </tr>
     <tr>
@@ -120,9 +124,12 @@
         </div>
       </td>
       <td>
-        <span *ngIf="keHoachNhapXuat.nhapCtMua">
-        {{ (keHoachNhapXuat.soLuongMuaGaoXcht * keHoachNhapXuat.donGiaMuaGaoXcht) / 1000 | number : '1.0-1' :
-          'vi_VN' }}</span>
+        <input *ngIf="keHoachNhapXuat.nhapCtMua" class="money-input" currencyMask [disabled]="!isView"
+               [(ngModel)]="keHoachNhapXuat.tienMuaGaoXcht"
+               [options]="amount"/>
+        <!--        <span *ngIf="keHoachNhapXuat.nhapCtMua">-->
+        <!--        {{ (keHoachNhapXuat.soLuongMuaGaoXcht * keHoachNhapXuat.donGiaMuaGaoXcht) / 1000 | number : '1.0-1' :-->
+        <!--          'vi_VN' }}</span>-->
       </td>
     </tr>
     <tr>
@@ -134,11 +141,15 @@
       <td>
 
       </td>
-      <td style="font-weight: 500;">{{ ((keHoachNhapXuat.soLuongBanThoc * keHoachNhapXuat.donGiaBanThoc)
-        + (keHoachNhapXuat.soLuongBanGao * keHoachNhapXuat.donGiaBanGao)
-        + (keHoachNhapXuat.soLuongGaoCtro * keHoachNhapXuat.donGiaGaoCtro)
-        + ((keHoachNhapXuat.tongTienVonNsnn)
-          + (keHoachNhapXuat.tongTienVonTx)) * 1000) / 1000 | number : '1.0-1' :'vi_VN' }}
+      <td style="font-weight: 500;">
+        {{(keHoachNhapXuat.nhapCtBan ? (keHoachNhapXuat.tienBanThoc + keHoachNhapXuat.tienBanGao + keHoachNhapXuat.tienGaoCtro + keHoachNhapXuat.tongTienVonNsnn + keHoachNhapXuat.tongTienVonTx) : (keHoachNhapXuat.tongTienBan + keHoachNhapXuat.tienGaoCtro + keHoachNhapXuat.tongTienVonNsnn + keHoachNhapXuat.tongTienVonTx)) | number : '1.0-1' :'vi_VN' }}
+
+
+        <!--        {{ ((keHoachNhapXuat.soLuongBanThoc * keHoachNhapXuat.donGiaBanThoc)-->
+        <!--        + (keHoachNhapXuat.soLuongBanGao * keHoachNhapXuat.donGiaBanGao)-->
+        <!--        + (keHoachNhapXuat.soLuongGaoCtro * keHoachNhapXuat.donGiaGaoCtro)-->
+        <!--        + ((keHoachNhapXuat.tongTienVonNsnn)-->
+        <!--          + (keHoachNhapXuat.tongTienVonTx)) * 1000) / 1000 | number : '1.0-1' :'vi_VN' }}-->
     </tr>
     <tr>
 
@@ -155,9 +166,12 @@
                [options]="amount"/>
       </td>
       <td>
-        {{ ((keHoachNhapXuat.soLuongBanThoc * keHoachNhapXuat.donGiaBanThoc) +
-        (keHoachNhapXuat.soLuongBanGao * keHoachNhapXuat.donGiaBanGao)) / 1000 | number : '1.0-1' :
-        'vi_VN' }}
+        <input *ngIf="!keHoachNhapXuat.nhapCtBan" class="money-input" currencyMask [disabled]="!isView"
+               [(ngModel)]="keHoachNhapXuat.tongTienBan"
+               [options]="amount"/>
+        <!--        {{ ((keHoachNhapXuat.soLuongBanThoc * keHoachNhapXuat.donGiaBanThoc) +-->
+        <!--        (keHoachNhapXuat.soLuongBanGao * keHoachNhapXuat.donGiaBanGao)) / 1000 | number : '1.0-1' :-->
+        <!--        'vi_VN' }}-->
       </td>
     </tr>
     <tr>
@@ -176,8 +190,11 @@
                [options]="amount_no_decimal"/>
       </td>
       <td>
-        {{ (keHoachNhapXuat.soLuongBanThoc * keHoachNhapXuat.donGiaBanThoc) / 1000 | number : '1.0-1' :
-        'vi_VN' }}
+        <input class="money-input" *ngIf="keHoachNhapXuat.nhapCtBan" currencyMask [disabled]="!isView"
+               [(ngModel)]="keHoachNhapXuat.tienBanThoc"
+               [options]="amount_no_decimal"/>
+        <!--        {{ (keHoachNhapXuat.soLuongBanThoc * keHoachNhapXuat.donGiaBanThoc) / 1000 | number : '1.0-1' :-->
+        <!--        'vi_VN' }}-->
       </td>
     </tr>
     <tr>
@@ -198,8 +215,11 @@
         </div>
       </td>
       <td>
-        {{ (keHoachNhapXuat.soLuongBanGao * keHoachNhapXuat.donGiaBanGao) / 1000 | number : '1.0-1' :
-        'vi_VN' }}
+        <input class="money-input" *ngIf="keHoachNhapXuat.nhapCtBan" currencyMask [disabled]="!isView"
+               [(ngModel)]="keHoachNhapXuat.tienBanGao"
+               [options]="amount_no_decimal"/>
+        <!--        {{ (keHoachNhapXuat.soLuongBanGao * keHoachNhapXuat.donGiaBanGao) / 1000 | number : '1.0-1' :-->
+        <!--        'vi_VN' }}-->
       </td>
     </tr>
     <tr>
@@ -218,8 +238,10 @@
         </div>
       </td>
       <td>
-        {{ (keHoachNhapXuat.soLuongGaoCtro * keHoachNhapXuat.donGiaGaoCtro) / 1000 | number : '1.0-1' :
-        'vi_VN' }}
+        <input class="money-input" [disabled]="!isView" currencyMask [(ngModel)]="keHoachNhapXuat.tienGaoCtro"
+               [options]="amount_no_decimal"/>
+        <!--        {{ (keHoachNhapXuat.soLuongGaoCtro * keHoachNhapXuat.donGiaGaoCtro) / 1000 | number : '1.0-1' :-->
+        <!--        'vi_VN' }}-->
       </td>
     </tr>
     <tr>
