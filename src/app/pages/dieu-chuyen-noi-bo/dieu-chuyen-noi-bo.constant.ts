@@ -59,4 +59,13 @@ export const ROUTE_LIST: Array<ChiTietMenu> = [
     hasTab: false,
     // accessPermisson: 'DCNB_KHDC'
   },
+  {
+    icon: 'htvbdh_tcdt_chitieukehoachnam',
+    title: 'Báo cáo kết quả điều chuyển',
+    url: `/bao-cao`,
+    dropdown: 'bao-cao',
+    idHover: 'bao-cao',
+    hasTab: false,
+    // accessPermisson: 'DCNB_KHDC'
+  },
 ];

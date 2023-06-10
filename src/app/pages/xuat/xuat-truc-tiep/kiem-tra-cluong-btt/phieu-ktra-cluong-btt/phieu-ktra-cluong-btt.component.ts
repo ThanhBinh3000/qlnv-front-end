@@ -43,6 +43,8 @@ export class PhieuKtraCluongBttComponent extends Base2Component implements OnIni
       trichYeu: null,
       ngayTao: null,
       maDvi: null,
+      trangThai: null,
+      maChiCuc: null
     })
 
     this.filterTable = {
@@ -80,11 +82,19 @@ export class PhieuKtraCluongBttComponent extends Base2Component implements OnIni
   }
 
   timKiem() {
-    this.formData.patchValue({
-      loaiVthh: this.loaiVthh,
-      maDvi: this.userService.isChiCuc() ? this.userInfo.MA_DVI : null,
-      trangThai: this.userService.isChiCuc() ? null : this.STATUS.DA_DUYET_LDCC
-    })
+    if (this.userService.isCuc()) {
+      this.formData.patchValue({
+        loaiVthh: this.loaiVthh,
+        maDvi: this.userInfo.MA_DVI,
+      })
+    } else {
+      this.formData.patchValue({
+        loaiVthh: this.loaiVthh,
+        maChiCuc: this.userInfo.MA_DVI,
+        trangThai: this.STATUS.DA_DUYET_LDC
+      })
+    }
+
   }
 
   clearFilter() {
@@ -171,4 +181,18 @@ export class PhieuKtraCluongBttComponent extends Base2Component implements OnIni
     this.idBienBan = null;
     this.isViewBienBan = false;
   }
+
+  disabledNgayKnghiemTu = (startValue: Date): boolean => {
+    if (!startValue || !this.formData.value.ngayKnghiemDen) {
+      return false;
+    }
+    return startValue.getTime() > this.formData.value.ngayKnghiemDen.getTime();
+  };
+
+  disabledNgayKnghiemDen = (endValue: Date): boolean => {
+    if (!endValue || !this.formData.value.ngayKnghiemTu) {
+      return false;
+    }
+    return endValue.getTime() <= this.formData.value.ngayKnghiemTu.getTime();
+  };
 }

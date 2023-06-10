@@ -49,22 +49,24 @@ export class QdGiaoNvXuatBttComponent extends Base2Component implements OnInit {
     super(httpClient, storageService, notification, spinner, modal, quyetDinhNvXuatBttService);
     this.formData = this.fb.group({
       namKh: null,
-      maDvi: null,
-      maChiCuc: null,
-      soQd: null,
+      soQdNv: null,
       loaiVthh: null,
       trichYeu: null,
+      maDvi: null,
+      maChiCuc: null,
       ngayTaoTu: null,
       ngayTaoDen: null,
       trangThai: null,
     })
 
     this.filterTable = {
-      nam: '',
-      soQd: '',
+      namKh: '',
+      soQdNv: '',
       ngayTao: '',
       soHd: '',
+      loaiVthh: '',
       tenLoaiVthh: '',
+      cloaiVthh: '',
       tenCloaiVthh: '',
       tgianGnhan: '',
       trichYeu: '',

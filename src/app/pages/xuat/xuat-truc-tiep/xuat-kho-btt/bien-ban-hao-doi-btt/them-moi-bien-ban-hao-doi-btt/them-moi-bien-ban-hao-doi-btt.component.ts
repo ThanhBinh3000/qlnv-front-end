@@ -14,7 +14,6 @@ import { StorageService } from 'src/app/services/storage.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { QuyetDinhNvXuatBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/quyet-dinh-nv-xuat-btt/quyet-dinh-nv-xuat-btt.service';
 import { BienBanTinhKhoBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/xuat-kho-btt/bien-ban-tinh-kho-btt.service';
-import { PhieuXuatKhoBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/xuat-kho-btt/phieu-xuat-kho-btt.service';
 import { BienBanHaoDoiBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/xuat-kho-btt/bien-ban-hao-doi-btt.service';
 
 @Component({
@@ -47,6 +46,7 @@ export class ThemMoiBienBanHaoDoiBttComponent extends Base2Component implements 
   listDiaDiemNhap: any[] = [];
 
   listBbTinhKho: any[] = [];
+  soQdNvXh: string;
 
   constructor(
     httpClient: HttpClient,
@@ -120,6 +120,9 @@ export class ThemMoiBienBanHaoDoiBttComponent extends Base2Component implements 
       } else {
         await this.initForm();
       }
+      await Promise.all([
+        this.loadSoBbTinhKho()
+      ])
       await this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -192,7 +195,7 @@ export class ThemMoiBienBanHaoDoiBttComponent extends Base2Component implements 
           soHd: data.soHd,
           ngayKyHd: data.ngayKyHd,
         });
-        this.loadSoBbTinhKho(data.soQdNv)
+        this.soQdNvXh = data.soQdNv
         let dataChiCuc = data.children.filter(item => item.maDvi == this.userInfo.MA_DVI);
         if (dataChiCuc) {
           dataChiCuc.forEach(e => {
@@ -207,13 +210,13 @@ export class ThemMoiBienBanHaoDoiBttComponent extends Base2Component implements 
     }
   }
 
-  async loadSoBbTinhKho(item) {
+  async loadSoBbTinhKho() {
     let body = {
       trangThai: STATUS.DA_DUYET_LDCC,
       loaiVthh: this.loaiVthh,
       maDviL: this.userInfo.MA_DVI,
       namKh: this.formData.value.namKh,
-      soQdNv: item
+      soQdNv: this.soQdNvXh
     }
     let res = await this.bienBanTinhKhoBttService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
