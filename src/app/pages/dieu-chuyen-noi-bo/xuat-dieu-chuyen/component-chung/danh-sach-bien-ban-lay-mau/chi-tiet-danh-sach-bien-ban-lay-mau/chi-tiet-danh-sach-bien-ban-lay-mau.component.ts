@@ -29,7 +29,7 @@ import { PassData } from '../danh-sach-bien-ban-lay-mau.component';
     styleUrls: ['./chi-tiet-danh-sach-bien-ban-lay-mau.component.scss']
 })
 export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnInit {
-    @Input() loaiVthh: string;
+    @Input() loaiVthh: string[];
     @Input() idInput: number;
     @Input() isView: boolean;
 
@@ -41,7 +41,6 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
     @Output()
     showListEvent = new EventEmitter<any>();
 
-    fileDinhKemNiemPhong: any[] = [];
     listChiCuc: any[] = [];
     listDiemKho: any[] = [];
     listSoQuyetDinh: any[] = [];
@@ -80,7 +79,7 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
 
         this.formData = this.fb.group(
             {
-                id: [0],
+                id: [],
                 nam: [dayjs().get("year")],
                 maDvi: [],
                 loaiBienBan: ['ALL'],
@@ -122,7 +121,7 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
                 nguoiLienQuan: [new Array()],
                 bienBanLayMauDinhKem: [new Array<FileDinhKem>()],
                 canCu: [new Array<FileDinhKem>()],
-                fileDinhKemNiemPhong: [new Array<FileDinhKem>()],
+                fileDinhKemChupMauNiemPhong: [new Array<FileDinhKem>()],
 
                 doiThuKho: [true],
                 checked: [true],
@@ -160,18 +159,22 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
                     if (res.msg == MESSAGE.SUCCESS) {
                         this.formData.patchValue(res.data);
                         const data = res.data;
-                        this.dcnbBienBanLayMauDtl = data.dcnbBienBanLayMauDtl,
+                        this.dcnbBienBanLayMauDtl = cloneDeep(data.dcnbBienBanLayMauDtl),
                             this.checked = data.ketQuaNiemPhong;
                         // this.daiDienChiCuc = data.nguoiLienQuan;
-                        this.bienBanLayMauDinhKem = data.bienBanLayMauDinhKem;
+                        this.bienBanLayMauDinhKem = cloneDeep(data.bienBanLayMauDinhKem);
                         this.canCu = data.canCu;
-
-                        this.formData.patchValue({ ...(data.dcnbBienBanLayMauDtl[0] ? data.dcnbBienBanLayMauDtl[0] : {}) })
-                        this.fileDinhKemChupMauNiemPhong = data.dcnbBienBanLayMauDtl[0]?.fileDinhKemChupMauNiemPhong;
-                        const daiDienChiCuc = data.dcnbBienBanLayMauDtl[0]?.daiDienChiCuc ? data.dcnbBienBanLayMauDtl[0]?.daiDienChiCuc : ''
-                        const daiDienCuc = data.dcnbBienBanLayMauDtl[0]?.daiDienCuc ? data.dcnbBienBanLayMauDtl[0]?.daiDienCuc : '';
-                        this.listDaiDienCuc = daiDienCuc?.split(',').map((f: string, i: number) => ({ daiDien: f, loaiDaiDien: 'CUC', id: i, isEdit: false }));
-                        this.listDaiDienChiCuc = daiDienChiCuc?.split(',').map((f: string, i: number) => ({ daiDien: f, loaiDaiDien: 'CHI_CUC', id: i, isEdit: false }));
+                        this.fileDinhKemChupMauNiemPhong = cloneDeep(data.fileDinhKemChupMauNiemPhong);
+                        const obj = Array.isArray(data.dcnbBienBanLayMauDtl) ? data.dcnbBienBanLayMauDtl.reduce((obj, cur) => {
+                            if (cur.loaiDaiDien == "00") {
+                                obj.listDaiDienCuc.push({ ...cur, daiDien: cur.tenDaiDien })
+                            } else if (cur.loaiDaiDien == "01") {
+                                obj.listDaiDienChiCuc.push({ ...cur, daiDien: cur.tenDaiDien })
+                            };
+                            return obj
+                        }, { listDaiDienCuc: [], listDaiDienChiCuc: [] }) : { listDaiDienCuc: [], listDaiDienChiCuc: [] };
+                        this.listDaiDienCuc = cloneDeep(obj.listDaiDienCuc);
+                        this.listDaiDienChiCuc = cloneDeep(obj.listDaiDienChiCuc);
                     }
                 })
                 .catch((e) => {
@@ -180,13 +183,14 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
                     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
                 });
         } else {
-            let id = await this.userService.getId('XH_CTVT_BB_LAY_MAU_HDR_SEQ')
+            let id = await this.userService.getId('DCNB_BIEN_BAN_LAY_MAU_HDR_SEQ')
             this.formData.patchValue({
                 maDvi: this.userInfo.MA_DVI,
                 tenDvi: this.userInfo.TEN_DVI,
                 maQhns: this.userInfo.DON_VI.maQhns,
                 ktvBaoQuan: this.userInfo.TEN_DAY_DU,
                 soBbLayMau: `${id}/${this.formData.get('nam').value}/${this.maBb}`,
+                id: id
 
             });
         }
@@ -200,13 +204,13 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
     async loadSoQuyetDinh() {
         let body = {
             trangThai: STATUS.BAN_HANH,
-            loaiVthh: ['0101', '0102'],
+            loaiVthh: this.loaiVthh,
             loaiDc: "DCNB",
             maDvi: this.userInfo.MA_DVI
             // listTrangThaiXh: [STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN],
         }
         try {
-            let res = await this.quyetDinhDieuChuyenCucService.getDsSoQuyetDinhDieuChuyenCuc(body);
+            let res = await this.quyetDinhDieuChuyenCucService.getDsSoQuyetDinhDieuChuyenChoChiCuc(body);
             if (res.msg == MESSAGE.SUCCESS) {
                 let data = res.data;
                 this.listSoQuyetDinh = Array.isArray(data) ? data.reduce((arr, cur) => {
@@ -354,18 +358,9 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
         // }
         body.bienBanLayMauDinhKem = this.bienBanLayMauDinhKem;
         body.canCu = this.canCu;
-        body.id = this.idInput;
-        // body.fileDinhKemNiemPhong = this.fileDinhKemChupMauNiemPhong;
-        body.dcnbBienBanLayMauDtl = [{
-            ...this.dcnbBienBanLayMauDtl[0] ? this.dcnbBienBanLayMauDtl[0] : {},
-            chiTieuKiemTra: this.formData.value.chiTieuKiemTra,
-            daNiemPhongMau: this.formData.value.daNiemPhongMau,
-            daiDienChiCuc: Array.isArray(this.listDaiDienChiCuc) ? this.listDaiDienChiCuc.map(f => f.daiDien).join(",") : '',
-            daiDienCuc: Array.isArray(this.listDaiDienCuc) ? this.listDaiDienCuc.map(f => f.daiDien).join(",") : '',
-            fileDinhKemChupMauNiemPhong: this.fileDinhKemChupMauNiemPhong,
-            phuongPhapLayMau: this.formData.value.phuongPhapLayMau,
-            slMauHangKiemTra: this.formData.value.slMauHangKiemTra
-        }];
+        // body.id = this.idInput;
+        body.fileDinhKemChupMauNiemPhong = this.fileDinhKemChupMauNiemPhong;
+        body.dcnbBienBanLayMauDtl = this.listDaiDienCuc.map(f => ({ ...f, loaiDaiDien: '00', tenDaiDien: f.daiDien })).concat(this.listDaiDienChiCuc.map(f => ({ ...f, loaiDaiDien: '01', tenDaiDien: f.daiDien })))
         let data = await this.createUpdate(body);
         if (data) {
             if (isGuiDuyet) {
@@ -375,6 +370,42 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
                 this.goBack()
             }
         }
+    }
+    async createUpdate(body, roles?: any) {
+        if (!this.checkPermission(roles)) {
+            return
+        }
+        await this.spinner.show();
+        try {
+            this.helperService.markFormGroupTouched(this.formData);
+            if (this.formData.invalid) {
+                return;
+            }
+            let res = null;
+            if (this.idInput && this.idInput > 0) {
+                res = await this.bienBanLayMauDieuChuyenService.update(body);
+            } else {
+                res = await this.bienBanLayMauDieuChuyenService.create(body);
+            }
+            if (res.msg == MESSAGE.SUCCESS) {
+                if (this.idInput && this.idInput > 0) {
+                    this.notification.success(MESSAGE.NOTIFICATION, MESSAGE.UPDATE_SUCCESS);
+                    return res.data;
+                } else {
+                    this.notification.success(MESSAGE.NOTIFICATION, MESSAGE.ADD_SUCCESS);
+                    return res.data;
+                }
+                this.formData.patchValue({ id: res.data.id });
+            } else {
+                this.notification.error(MESSAGE.ERROR, res.msg);
+                return null;
+            }
+        } catch (e) {
+            this.notification.error(MESSAGE.ERROR, e);
+        } finally {
+            await this.spinner.hide();
+        }
+
     }
 
     pheDuyet() {

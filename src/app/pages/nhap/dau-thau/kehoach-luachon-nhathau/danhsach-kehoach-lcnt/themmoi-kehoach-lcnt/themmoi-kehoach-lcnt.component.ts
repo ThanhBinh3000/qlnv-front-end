@@ -30,6 +30,7 @@ import { StorageService } from 'src/app/services/storage.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import {PREVIEW} from "../../../../../../constants/fileType";
 
 
 @Component({
@@ -87,6 +88,9 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
   editBaoGiaCache: { [key: string]: { edit: boolean; data: any } } = {};
   editCoSoCache: { [key: string]: { edit: boolean; data: any } } = {};
   tongTienHopDong: any;
+  showDlgPreview = false;
+  pdfBlob: any;
+  pdfSrc: any;
   ykienThamGia: string;
   ghiChu: string;
 
@@ -241,6 +245,22 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
         kieuNx: dataNx[0].ghiChu
       })
     }
+  }
+
+  async preview(){
+    await this.dauThauService.preview(this.formData.value).then(async s => {
+      console.log(s)
+      this.pdfSrc = PREVIEW.PATH_PDF + s.data;
+      this.showDlgPreview = true;
+    });
+  }
+
+  downloadPdf() {
+    saveAs(this.pdfSrc, "hai_test_thui_hihi.pdf");
+  }
+
+  closeDlg() {
+    this.showDlgPreview = false;
   }
 
   async getDetail(id?: number, soDx?: string) {

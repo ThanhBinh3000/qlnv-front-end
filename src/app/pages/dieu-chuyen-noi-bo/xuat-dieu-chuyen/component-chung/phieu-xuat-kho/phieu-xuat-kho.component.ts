@@ -9,13 +9,14 @@ import { MESSAGE } from 'src/app/constants/message';
 import { PhieuXuatKhoBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/xuat-kho-btt/phieu-xuat-kho-btt.service';
 import { v4 as uuidv4 } from 'uuid';
 import { chain, groupBy } from 'lodash';
+import { PhieuXuatKhoDieuChuyenService } from '../services/dcnb-xuat-kho.service';
 @Component({
   selector: 'app-xuat-dcnb-phieu-xuat-kho',
   templateUrl: './phieu-xuat-kho.component.html',
   styleUrls: ['./phieu-xuat-kho.component.scss']
 })
 export class PhieuXuatKhoDCNBComponent extends Base2Component implements OnInit {
-  @Input() loaiVthh: string;
+  @Input() typeVthh: string[];
 
   selectedId: number = 0;
   isView: boolean = false;
@@ -32,9 +33,10 @@ export class PhieuXuatKhoDCNBComponent extends Base2Component implements OnInit 
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private phieuXuatKhoBttService: PhieuXuatKhoBttService,
+    // private phieuXuatKhoBttService: PhieuXuatKhoBttService,
+    private phieuXuatKhoDieuChuyenService: PhieuXuatKhoDieuChuyenService
   ) {
-    super(httpClient, storageService, notification, spinner, modal, phieuXuatKhoBttService);
+    super(httpClient, storageService, notification, spinner, modal, phieuXuatKhoDieuChuyenService);
     this.formData = this.fb.group({
       namKh: null,
       soBienBan: null,
@@ -64,7 +66,7 @@ export class PhieuXuatKhoDCNBComponent extends Base2Component implements OnInit 
     await this.spinner.show();
     try {
       this.formData.patchValue({
-        loaiVthh: this.loaiVthh,
+        loaiVthh: this.typeVthh,
         maDvi: this.userService.isChiCuc() ? this.userInfo.MA_DVI : null
       })
       await this.search();
@@ -93,7 +95,7 @@ export class PhieuXuatKhoDCNBComponent extends Base2Component implements OnInit 
           let body = {
             id: item.id
           };
-          this.phieuXuatKhoBttService.delete(body).then(async () => {
+          this.phieuXuatKhoDieuChuyenService.delete(body).then(async () => {
             await this.search();
             this.spinner.hide();
           });

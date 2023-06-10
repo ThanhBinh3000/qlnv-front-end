@@ -1,5 +1,5 @@
 <div class="header-file">
-    <input type="text" nz-input placeholder="Tên đại diện" [(ngModel)]="itemRow.daiDien" />
+    <input type="text" nz-input placeholder="Tên đại diện" [(ngModel)]="itemRow.daiDien" [readOnly]="isView" />
     <div class="icon-plus" (click)="addDaiDien()" [hidden]="isView">
         <i class="icon htvbdh_dau-cong "></i>
     </div>
@@ -21,7 +21,7 @@
     </ng-container>
     <ng-template #editTemplate>
         <div class="content-data d-flex align-items-center">
-            <input type="text" nz-input placeholder="Tên đại diện" [(ngModel)]="item.daiDien" />
+            <input type="text" nz-input placeholder="Tên đại diện" [(ngModel)]="item.daiDien" [readOnly]="isView" />
         </div>
         <div class="icon-edit" (click)="saveEdit(i)" [hidden]="isView">
             <i class="fa fa-save"></i>
