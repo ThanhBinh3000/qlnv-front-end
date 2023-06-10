@@ -141,11 +141,15 @@
       <td>
 
       </td>
-      <td style="font-weight: 500;">{{ ((keHoachNhapXuat.soLuongBanThoc * keHoachNhapXuat.donGiaBanThoc)
-        + (keHoachNhapXuat.soLuongBanGao * keHoachNhapXuat.donGiaBanGao)
-        + (keHoachNhapXuat.soLuongGaoCtro * keHoachNhapXuat.donGiaGaoCtro)
-        + ((keHoachNhapXuat.tongTienVonNsnn)
-          + (keHoachNhapXuat.tongTienVonTx)) * 1000) / 1000 | number : '1.0-1' :'vi_VN' }}
+      <td style="font-weight: 500;">
+        {{(keHoachNhapXuat.nhapCtBan ? (keHoachNhapXuat.tienBanThoc + keHoachNhapXuat.tienBanGao + keHoachNhapXuat.tienGaoCtro + keHoachNhapXuat.tongTienVonNsnn + keHoachNhapXuat.tongTienVonTx) : (keHoachNhapXuat.tongTienBan + keHoachNhapXuat.tienGaoCtro + keHoachNhapXuat.tongTienVonNsnn + keHoachNhapXuat.tongTienVonTx)) | number : '1.0-1' :'vi_VN' }}
+
+
+        <!--        {{ ((keHoachNhapXuat.soLuongBanThoc * keHoachNhapXuat.donGiaBanThoc)-->
+        <!--        + (keHoachNhapXuat.soLuongBanGao * keHoachNhapXuat.donGiaBanGao)-->
+        <!--        + (keHoachNhapXuat.soLuongGaoCtro * keHoachNhapXuat.donGiaGaoCtro)-->
+        <!--        + ((keHoachNhapXuat.tongTienVonNsnn)-->
+        <!--          + (keHoachNhapXuat.tongTienVonTx)) * 1000) / 1000 | number : '1.0-1' :'vi_VN' }}-->
     </tr>
     <tr>
 
