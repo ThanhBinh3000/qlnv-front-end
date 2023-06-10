@@ -41,7 +41,6 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
     @Output()
     showListEvent = new EventEmitter<any>();
 
-    fileDinhKemNiemPhong: any[] = [];
     listChiCuc: any[] = [];
     listDiemKho: any[] = [];
     listSoQuyetDinh: any[] = [];
@@ -122,7 +121,7 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
                 nguoiLienQuan: [new Array()],
                 bienBanLayMauDinhKem: [new Array<FileDinhKem>()],
                 canCu: [new Array<FileDinhKem>()],
-                fileDinhKemNiemPhong: [new Array<FileDinhKem>()],
+                fileDinhKemChupMauNiemPhong: [new Array<FileDinhKem>()],
 
                 doiThuKho: [true],
                 checked: [true],
@@ -360,7 +359,7 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
         body.bienBanLayMauDinhKem = this.bienBanLayMauDinhKem;
         body.canCu = this.canCu;
         // body.id = this.idInput;
-        body.fileDinhKemNiemPhong = this.fileDinhKemChupMauNiemPhong;
+        body.fileDinhKemChupMauNiemPhong = this.fileDinhKemChupMauNiemPhong;
         body.dcnbBienBanLayMauDtl = this.listDaiDienCuc.map(f => ({ ...f, loaiDaiDien: '00', tenDaiDien: f.daiDien })).concat(this.listDaiDienChiCuc.map(f => ({ ...f, loaiDaiDien: '01', tenDaiDien: f.daiDien })))
         let data = await this.createUpdate(body);
         if (data) {
