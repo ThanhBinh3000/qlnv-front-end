@@ -45,6 +45,7 @@ export class ThemMoiTtcpComponent implements OnInit {
   userInfo: UserLogin;
   dataTable: any[] = [];
   listUbtvqh: any[] = [];
+  STATUS = STATUS;
 
   constructor(
     private readonly fb: FormBuilder,
@@ -65,7 +66,7 @@ export class ThemMoiTtcpComponent implements OnInit {
         soQdUbtvqh:  [, [Validators.required]],
         ngayQd: [null, [Validators.required]],
         trichYeu: [null],
-        trangThai: ['00'],
+        trangThai: [STATUS.DANG_NHAP_DU_LIEU],
         listBoNganh: []
       }
     );

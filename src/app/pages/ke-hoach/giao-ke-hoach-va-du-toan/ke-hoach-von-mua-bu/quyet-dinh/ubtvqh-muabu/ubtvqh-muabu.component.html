@@ -60,7 +60,7 @@
     </nz-card>
 
     <div class="group-button">
-      <h3>Danh sách nghị quyết của ủy ban thường vụ quốc hội</h3>
+      <h3>Danh sách nghị quyết của ủy ban thường vụ quốc hội 1</h3>
       <div class="buttons">
         <button *ngIf=" userService.isTongCuc() && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VMBBS_QD_UBTV_XOA')"
           type="button" class="btn btn-sub btn-xoa" (click)="xoa()">
@@ -168,11 +168,11 @@
                 (click)="viewDetail(data.id, true)">
                 <i class="fa fa-eye"></i>
               </a>
-              <a *ngIf="(data.trangThai == globals.prop.NHAP_DU_THAO && userService.isTongCuc()) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VMBBS_QD_UBTV_THEM')"
+              <a *ngIf="(data.trangThai == STATUS.DANG_NHAP_DU_LIEU && userService.isTongCuc()) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VMBBS_QD_UBTV_THEM')"
                 (click)="viewDetail(data.id, false)">
                 <i class="fa fa-pencil"></i>
               </a>
-              <a *ngIf="(data.trangThai == globals.prop.NHAP_DU_THAO && userService.isTongCuc()) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VMBBS_QD_UBTV_XOA')"
+              <a *ngIf="(data.trangThai == STATUS.DANG_NHAP_DU_LIEU && userService.isTongCuc()) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VMBBS_QD_UBTV_XOA')"
                 (click)="xoaItem(data)">
                 <i class="fa fa-trash-o do"></i>
               </a>
