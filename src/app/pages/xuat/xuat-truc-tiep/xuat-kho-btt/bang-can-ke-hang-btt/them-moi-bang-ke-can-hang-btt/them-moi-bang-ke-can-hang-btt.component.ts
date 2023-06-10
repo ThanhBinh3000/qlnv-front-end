@@ -181,9 +181,6 @@ export class ThemMoiBangKeCanHangBttComponent extends Base2Component implements 
           idQdNv: data.id,
           soQdNv: data.soQdNv,
           ngayQdNv: data.ngayTao,
-          idHd: data.idHd,
-          soHd: data.soHd,
-          ngayKyHd: data.ngayKyHd,
         });
         this.listBangCanke(data.soQdNv)
         let dataChiCuc = data.children.filter(item => item.maDvi == this.userInfo.MA_DVI);
@@ -306,6 +303,9 @@ export class ThemMoiBangKeCanHangBttComponent extends Base2Component implements 
             cloaiVthh: data.cloaiVthh,
             tenCloaiVthh: data.tenCloaiVthh,
             donViTinh: data.donViTinh,
+            idHd: data.idHd,
+            soHd: data.soHd,
+            ngayKyHd: data.ngayKyHd,
           });
         }
       }

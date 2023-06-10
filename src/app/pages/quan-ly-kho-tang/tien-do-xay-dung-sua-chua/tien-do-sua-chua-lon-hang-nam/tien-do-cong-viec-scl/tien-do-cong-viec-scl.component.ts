@@ -19,6 +19,10 @@ import {
 import {
   ThongTinTienDoCongViecSclComponent
 } from "./thong-tin-tien-do-cong-viec-scl/thong-tin-tien-do-cong-viec-scl.component";
+import {HopdongTdscService} from "../../../../../services/qlnv-kho/tiendoxaydungsuachua/suachualon/hopdongTdsc.service";
+import {
+  TienDoCongViecTdscService
+} from "../../../../../services/qlnv-kho/tiendoxaydungsuachua/suachualon/tien-do-cong-viec.service";
 
 @Component({
   selector: 'app-tien-do-cong-viec-scl',
@@ -50,8 +54,8 @@ export class TienDoCongViecSclComponent extends Base2Component implements OnInit
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private hopdongService: HopdongService,
-    private tienDoCongViecService: TienDoCongViecService,
+    private hopdongService: HopdongTdscService,
+    private tienDoCongViecService: TienDoCongViecTdscService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, tienDoCongViecService);
     super.ngOnInit();

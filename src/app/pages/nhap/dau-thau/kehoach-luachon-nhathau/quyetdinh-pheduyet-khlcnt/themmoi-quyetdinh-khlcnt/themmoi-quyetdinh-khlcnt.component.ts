@@ -140,9 +140,9 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       cloaiVthh: [''],
       tenCloaiVthh: [''],
       moTaHangHoa: [''],
-      trangThai: [STATUS.DU_THAO],
+      trangThai: [STATUS.DANG_NHAP_DU_LIEU],
       tchuanCluong: [''],
-      tenTrangThai: ['Dự thảo'],
+      tenTrangThai: ['Đang nhập dữ liệu'],
       ldoTuchoi: [''],
       phanLoai: ['', [Validators.required]],
       vat: ['5'],
@@ -153,7 +153,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       dienGiai: [''],
       tenDvi: [''],
       tgianThien: [''],
-      yKien: [''],
+      ykienThamGia: [''],
     })
   }
 
@@ -428,7 +428,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     let mesg = ''
     // Vật tư
     switch (this.formData.get('trangThai').value) {
-      case STATUS.DU_THAO: {
+      case STATUS.DANG_NHAP_DU_LIEU: {
         trangThai = STATUS.BAN_HANH;
         mesg = 'Văn bản sẵn sàng ban hành ?'
         break;
@@ -521,7 +521,6 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       } else {
         this.danhsachDx = data.children;
         this.danhsachDxCache = cloneDeep(this.danhsachDx);
-        console.log("1", this.danhsachDx)
         for (const item of this.danhsachDxCache) {
           await this.dauThauService.getDetail(item.idDxHdr).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
@@ -723,7 +722,9 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
           idThHdr: null,
           soTrHdr: dataRes.soDxuat,
           idTrHdr: dataRes.id,
-          tongMucDt: tongMucDt
+          tongMucDt: tongMucDt,
+          ghiChu: data.ghiChu,
+          ykienThamGia: data.ykienThamGia,
         })
         this.danhsachDxCache = cloneDeep(this.danhsachDx);
         this.dataInput = null;
@@ -827,7 +828,6 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
   }
 
   deleteRow(data: any) {
-    debugger
     for (let index = 0; index < this.danhsachDx.length; index++) {
       for (let y = 0; y < this.danhsachDx[index].children.length; y++) {
         for (let k = 0; k < this.danhsachDx[index].children[y].children.length; k++) {

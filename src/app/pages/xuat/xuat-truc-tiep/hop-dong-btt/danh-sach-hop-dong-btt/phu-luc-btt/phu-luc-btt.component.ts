@@ -122,7 +122,6 @@ export class PhuLucBttComponent extends Base2Component implements OnInit {
 
   async loadDsHopDong() {
     if (this.objHopDongHdr) {
-      console.log(this.objHopDongHdr, 999)
       this.formData.patchValue({
         idHd: this.objHopDongHdr.id ?? null,
         soHd: this.objHopDongHdr.soHd ?? null,
