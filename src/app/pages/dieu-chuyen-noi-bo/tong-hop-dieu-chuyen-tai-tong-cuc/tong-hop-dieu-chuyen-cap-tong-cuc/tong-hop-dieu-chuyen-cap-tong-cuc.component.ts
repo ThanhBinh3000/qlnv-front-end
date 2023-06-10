@@ -36,14 +36,16 @@ export class TongHopDieuChuyenCapTongCuc extends Base2Component implements OnIni
     // listHangHoaAll: any[] = [];
     // listChungLoaiHangHoa: any[] = [];
     listTrangThai: any[] = [
-        { ma: this.STATUS.CHUA_TAO_QD, giaTri: 'Chưa tạo QĐ' },
-        { ma: this.STATUS.DA_DU_THAO_QD, giaTri: 'Đã dự thảo QĐ' },
-        { ma: this.STATUS.DA_BAN_HANH_QD, giaTri: 'Đã ban hành QĐ' }
+        { ma: STATUS.CHUA_TAO_QD, giaTri: 'Chưa tạo QĐ' },
+        { ma: STATUS.DA_DU_THAO_QD, giaTri: 'Đã dự thảo QĐ' },
+        { ma: STATUS.DA_BAN_HANH_QD, giaTri: 'Đã ban hành QĐ' },
+        { ma: STATUS.TU_CHOI_BAN_HANH_QD, giaTri: 'Từ chối ban hành QĐ' }
     ];
     LIST_TRANG_THAI: { [key: string]: string } = {
         '26': 'Chưa tạo QĐ',
         '27': 'Đã dự thảo QĐ',
         '28': 'Đã ban hành QĐ',
+        '78': 'Từ chối ban hành QĐ'
     }
     listLoaiDieuChuyen: any[] = [
         { value: "CHI_CUC", giaTri: "Giữa 2 chi cục trong cùng 1 cục" },

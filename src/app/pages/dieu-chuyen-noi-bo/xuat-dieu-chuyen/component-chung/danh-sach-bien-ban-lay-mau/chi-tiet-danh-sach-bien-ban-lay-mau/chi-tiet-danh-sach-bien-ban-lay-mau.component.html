@@ -129,7 +129,7 @@
                                     <nz-input-group nzAddOnAfterIcon="folder-open"
                                         (click)="openDialogSoQd($event, isView)">
                                         <input nz-input formControlName="soQdinhDcc" class="dcnb xuat-dc-input"
-                                            [readonly]="true" />
+                                            [class.only-input]="!isView" [readonly]="true" />
                                     </nz-input-group>
                                 </nz-form-control>
                             </nz-form-item>
@@ -147,7 +147,7 @@
                             <nz-form-item>
                                 <nz-form-label [nzNoColon]="true" nzRequired> Đơn vị kiểm nghiệm</nz-form-label>
                                 <nz-form-control [nzErrorTip]="error">
-                                    <input nz-input formControlName="dviKiemNghiem" [disabled]="isView" />
+                                    <input nz-input formControlName="dviKiemNghiem" [readonly]="isView" />
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
@@ -155,7 +155,7 @@
                             <nz-form-item>
                                 <nz-form-label [nzNoColon]="true" nzRequired>Địa điểm lấy mẫu</nz-form-label>
                                 <nz-form-control [nzErrorTip]="error">
-                                    <input nz-input formControlName="diaDiemLayMau" [disabled]="isView" />
+                                    <input nz-input formControlName="diaDiemLayMau" [readonly]="isView" />
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
@@ -165,8 +165,8 @@
                                 <nz-form-control>
                                     <nz-input-group nzAddOnAfterIcon="folder-open"
                                         (click)="openDialogDdiemNhapHang($event, isView)">
-                                        <input nz-input class="dcnb xuat-dc-input" formControlName="tenLoKho"
-                                            [readonly]="true" />
+                                        <input nz-input class="dcnb xuat-dc-input" [class.only-input]="!isView"
+                                            formControlName="tenLoKho" [readonly]="true" />
                                     </nz-input-group>
                                 </nz-form-control>
                             </nz-form-item>
