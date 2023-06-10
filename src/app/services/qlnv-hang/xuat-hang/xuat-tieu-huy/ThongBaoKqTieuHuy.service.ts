@@ -9,6 +9,6 @@ export class ThongBaoKqTieuHuyService extends BaseService {
   GATEWAY = '/qlnv-hang';
 
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'xuat-hang/xuat-tieu-huy/bao-cao-ket-qua', '');
+    super(httpClient, 'xuat-hang/xuat-tieu-huy/thong-bao-ket-qua', '');
   }
 }

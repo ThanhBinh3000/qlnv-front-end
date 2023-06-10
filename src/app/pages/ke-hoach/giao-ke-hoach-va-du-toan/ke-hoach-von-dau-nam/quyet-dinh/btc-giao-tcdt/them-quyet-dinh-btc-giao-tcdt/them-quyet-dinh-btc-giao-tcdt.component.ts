@@ -56,7 +56,16 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
     soLuongMuaGao: 0,
     donGiaMuaGao: 0,
     soLuongBan: 0,
-    donGiaBan: 0
+    donGiaBan: 0,
+
+    tienMuaThoc: 0,
+    tongTienMuaGao: 0,
+    tienMuaGaoLpdh: 0,
+    tienMuaGaoXcht: 0,
+    tongTienBan: 0,
+    tienBanThoc: 0,
+    tienBanGao: 0,
+    tienGaoCtro: 0
   }
   dataQdTtcpGiaoBTC: any;
   taiLieuDinhKemList: any[] = [];
@@ -74,6 +83,9 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
   chiTang: number = 0;
   xuatGiam: number = 0;
   xuatBan: number = 0;
+  dtMuaLuongThuc: number = 0;
+  dtMuaVatTu: number = 0;
+  dtMuaMuoi: number = 0;
 
 
   constructor(
@@ -113,7 +125,7 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
     if (this.idInput == 0) {
       await this.loadQdTtcpGiaoBoNganh(dayjs().get('year'))
     }
-    console.log(this.keHoachNhapXuat, 'aaaaaaaaaaaaaaaaaa');
+    this.sumAllDataTable();
     await this.spinner.hide();
   }
 
@@ -314,17 +326,33 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
     return arr;
   }
 
-  receivedData(data: any, tab: string) {
-    this.keHoachNhapXuatLtComponent.emitData();
-    console.log(data,'datadatadatadata')
-    switch (tab) {
-      case 'KH_LT':
-        this.keHoachNhapXuat = data;
-        break;
-      case 'MT':
-        this.muaTangList = data;
-        break;
-    }
+  receivedData(data: any) {
+    this.muaTangList = data;
+    this.sumAllDataTable();
+  }
+
+  sumAllDataTable() {
+    let ttVatTu = 0;
+    let ttMuoi = 0;
+    this.muaTangList.forEach(item => {
+      if (item && item.dataChild && item.dataChild.length > 0) {
+        item.dataChild.forEach(child => {
+          if (!child.loaiVthh.startsWith('04')) {
+            ttVatTu += child.tongTien ? child.tongTien : 0;
+          } else {
+            ttMuoi += child.tongTien ? child.tongTien : 0;
+          }
+        })
+      } else {
+        if (!item.loaiVthh.startsWith('04')) {
+          ttVatTu += item.tongTien ? item.tongTien : 0;
+        } else {
+          ttMuoi += item.tongTien ? item.tongTien : 0;
+        }
+      }
+    });
+    this.dtMuaVatTu = ttVatTu;
+    this.dtMuaMuoi = ttMuoi;
   }
 }
 
