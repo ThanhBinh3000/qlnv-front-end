@@ -223,7 +223,7 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
           this.spinner.hide();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         });
-      this.formData.controls['idQdPd'].disable();
+      // this.formData.controls['idQdPd'].disable();
     } else {
       this.formData.patchValue({
         maDvi: this.userInfo.MA_DVI,
