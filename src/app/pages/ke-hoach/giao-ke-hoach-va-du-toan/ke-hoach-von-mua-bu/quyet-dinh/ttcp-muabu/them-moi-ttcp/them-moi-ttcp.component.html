@@ -5,12 +5,12 @@
       <span>Quay lại</span>
     </button>
     <button
-      *ngIf="(formData.value.trangThai == '00' && !isView && userService.isTongCuc()) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VMBBS_QD_BTC_BANHANH')"
+      *ngIf="(formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU && !isView && userService.isTongCuc()) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VMBBS_QD_BTC_BANHANH')"
       type="button" class="btn btn-sub" (click)="save(true)">
       <i class="icon htvbdh_chuyenvanthu"></i>
       <span>Ban hành</span>
     </button>
-    <button *ngIf="formData.value.trangThai == '00'  && !isView && userService.isTongCuc()" type="button"
+    <button *ngIf="formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU   && !isView && userService.isTongCuc()" type="button"
       class="btn btn-sub xanh" (click)="save()">
       <i class="icon htvbdh_luu"></i>
       <span>Lưu</span>
@@ -23,8 +23,8 @@
     <div class="header">
       <div class="header-text">
         <div class="title-chi-tieu">
-          <span [ngClass]="formData.value.trangThai == '00' ? 'du-thao-va-lanh-dao-duyet' : 'da-ban-hanh'">
-            {{ formData.value.trangThai == '00' ? 'Dự Thảo' : 'Ban Hành' }}
+          <span [ngClass]="formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU  ? 'du-thao-va-lanh-dao-duyet' : 'da-ban-hanh'">
+            {{ formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU  ? 'Đang nhập dữ liệu' : 'Ban Hành' }}
           </span>
           <span>QUYẾT ĐỊNH CỦA THỦ TƯỚNG CHÍNH PHỦ</span>
         </div>
@@ -140,10 +140,10 @@
             <a (click)="themKeHoach(data, idx,true)">
               <i class="fa fa-eye"></i>
             </a>
-            <a *ngIf="formData.value.trangThai == '00' && !isView" (click)="themKeHoach(data, idx,false)">
+            <a *ngIf="formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU  && !isView" (click)="themKeHoach(data, idx,false)">
               <i class="fa fa-pencil"></i>
             </a>
-            <a *ngIf="formData.value.trangThai == '00' && !isView" (click)="xoaItem(idx)">
+            <a *ngIf="formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU  && !isView" (click)="xoaItem(idx)">
               <i class="fa fa-trash-o do"></i>
             </a>
           </td>

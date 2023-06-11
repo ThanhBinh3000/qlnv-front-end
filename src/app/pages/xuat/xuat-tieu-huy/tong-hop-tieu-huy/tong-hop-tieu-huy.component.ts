@@ -51,9 +51,9 @@ export class TongHopTieuHuyComponent extends Base2Component implements OnInit {
               private danhMucService: DanhMucService,
               private tongHopTieuHuyService: TongHopTieuHuyService,
               private danhSachTieuHuyService: DanhSachTieuHuyService,
-              private xuatThanhLyComponent: XuatTieuHuyComponent) {
+              private xuatTieuHuyComponent: XuatTieuHuyComponent) {
     super(httpClient, storageService, notification, spinner, modal, tongHopTieuHuyService);
-    this.vldTrangThai = xuatThanhLyComponent;
+    this.vldTrangThai = xuatTieuHuyComponent;
     this.formData = this.fb.group({
       nam: [],
       maDanhSach: [],
