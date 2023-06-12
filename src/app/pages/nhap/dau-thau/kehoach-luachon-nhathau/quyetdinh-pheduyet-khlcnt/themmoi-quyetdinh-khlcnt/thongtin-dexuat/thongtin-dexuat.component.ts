@@ -16,6 +16,12 @@ import { NzModalService } from "ng-zorro-antd/modal";
 import dayjs from 'dayjs';
 import { QuyetDinhPheDuyetKeHoachLCNTService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/quyetDinhPheDuyetKeHoachLCNT.service';
 import { DatePipe } from '@angular/common';
+import {STATUS} from "../../../../../../../constants/status";
+import {
+  DialogThemMoiGoiThauComponent
+} from "../../../../../../../components/dialog/dialog-them-moi-goi-thau/dialog-them-moi-goi-thau.component";
+import {UserService} from "../../../../../../../services/user.service";
+import {NzNotificationService} from "ng-zorro-antd/notification";
 
 
 @Component({
@@ -57,12 +63,15 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
   tongSLuongNhap: any;
   sumDataSoLuong: any[] = [];
   sumThanhTienTamTinh: any[] = [];
+  dataChiTieu: any;
 
   constructor(
     private fb: FormBuilder,
     public globals: Globals,
     private danhMucService: DanhMucService,
     private dxKhLcntService: DanhSachDauThauService,
+    private userService: UserService,
+    private notification: NzNotificationService,
     private quyetDinhPheDuyetKeHoachLCNTService: QuyetDinhPheDuyetKeHoachLCNTService,
     private spinner: NgxSpinnerService,
     private helperService: HelperService,
@@ -106,6 +115,7 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
       tgianNhang: [null,],
       ghiChu: [null],
       ldoTuchoi: [],
+      trangThai: [],
     });
   }
 
@@ -153,7 +163,8 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
             tgianBdauTchuc: data.data.tgianBdauTchuc,
             gtriDthau: data.data.gtriDthau,
             tchuanCluong: data.data.children[0].dxuatKhLcntHdr.tchuanCluong,
-            tongMucDt: data.data.children[0].dxuatKhLcntHdr.tongMucDt
+            tongMucDt: data.data.children[0].dxuatKhLcntHdr.tongMucDt,
+            trangThai: data.data.trangThai
           });
         } else if (res != null && res.msg == MESSAGE.SUCCESS) {
           this.tgianBdauTchucChange = res.data.tgianBdauTchuc
@@ -171,7 +182,8 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
             tgianMthau: res.data.tgianMthau,
             tgianNhang: res.data.tgianNhang,
             tgianBdauTchuc: res.data.tgianBdauTchuc,
-            gtriDthau: res.data.gtriDthau
+            gtriDthau: res.data.gtriDthau,
+            trangThai: res.data.trangThai
           });
           console.log(this.formData.value)
         }
@@ -273,43 +285,43 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
     }
   }
 
-  themMoiGoiThau(data?: any, index?: number) {
-    const modalGT = this.modal.create({
-      nzTitle: 'Thêm địa điểm nhập kho',
-      nzContent: DialogThemMoiVatTuComponent,
-      nzMaskClosable: false,
-      nzClosable: false,
-      nzWidth: '1200px',
-      nzFooter: null,
-      nzComponentParams: {
-        dataEdit: data,
-        loaiVthh: this.formData.get('loaiVthh').value,
-      },
-    });
-    modalGT.afterClose.subscribe((res) => {
-      if (!res) {
-        return;
-      }
-      if (index >= 0) {
-        this.listOfData[index] = res.value;
-      } else {
-        this.listOfData = [...this.listOfData, res.value];
-      }
-      let tongMucDt: number = 0;
-      let soLuong: number = 0;
-      this.listOfData.forEach((item) => {
-        tongMucDt = tongMucDt + item.soLuong * item.donGia;
-        soLuong = soLuong + item.soLuong;
-      });
-      this.formData.patchValue({
-        tongMucDt: tongMucDt,
-        soLuong: soLuong
-      });
-      this.soLuongChange.emit(soLuong);
-      this.helperService.setIndexArray(this.listOfData);
-      this.convertListData();
-    });
-  };
+  // themMoiGoiThau(data?: any, index?: number) {
+  //   const modalGT = this.modal.create({
+  //     nzTitle: 'Thêm địa điểm nhập kho',
+  //     nzContent: DialogThemMoiVatTuComponent,
+  //     nzMaskClosable: false,
+  //     nzClosable: false,
+  //     nzWidth: '1200px',
+  //     nzFooter: null,
+  //     nzComponentParams: {
+  //       dataEdit: data,
+  //       loaiVthh: this.formData.get('loaiVthh').value,
+  //     },
+  //   });
+  //   modalGT.afterClose.subscribe((res) => {
+  //     if (!res) {
+  //       return;
+  //     }
+  //     if (index >= 0) {
+  //       this.listOfData[index] = res.value;
+  //     } else {
+  //       this.listOfData = [...this.listOfData, res.value];
+  //     }
+  //     let tongMucDt: number = 0;
+  //     let soLuong: number = 0;
+  //     this.listOfData.forEach((item) => {
+  //       tongMucDt = tongMucDt + item.soLuong * item.donGia;
+  //       soLuong = soLuong + item.soLuong;
+  //     });
+  //     this.formData.patchValue({
+  //       tongMucDt: tongMucDt,
+  //       soLuong: soLuong
+  //     });
+  //     this.soLuongChange.emit(soLuong);
+  //     this.helperService.setIndexArray(this.listOfData);
+  //     this.convertListData();
+  //   });
+  // };
 
   onInput(event: any) {
     var value: any;
@@ -402,6 +414,153 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
       })
       return sum * (100 + this.formData.get('gtriDthau').value) / 100;
     }
+  }
+  isDisbleForm(): boolean {
+    if (this.formData.value.trangThai == STATUS.DU_THAO || this.formData.value.trangThai == STATUS.TU_CHOI_TP || this.formData.value.trangThai == STATUS.TU_CHOI_LDC) {
+      return false
+    } else {
+      return true
+    }
+  }
+
+  themMoiGoiThau(data?: DanhSachGoiThau, index?: number) {
+    if (this.userService.isTongCuc()) {
+      this.themMoiTongCuc(data, index);
+    } else {
+      this.themMoiCuc();
+    }
+  }
+
+  themMoiTongCuc(data?: any, index?: number) {
+    if (this.formData.get('loaiVthh').value == null || this.formData.get('cloaiVthh').value == null) {
+      this.notification.error(MESSAGE.NOTIFICATION, "Vui lòng chọn loại hàng hóa");
+      return;
+    }
+    let listGoiThau = [];
+    this.listOfData.forEach(item => {
+      listGoiThau.push(item.goiThau)
+    })
+    let setListGoiThau = new Set(listGoiThau);
+    listGoiThau = [...setListGoiThau]
+    let isReadOnly = false;
+    if (data != null) {
+      isReadOnly = true;
+    }
+    const modal = this.modal.create({
+      nzTitle: 'THÔNG TIN GÓI THẦU',
+      nzContent: DialogThemMoiGoiThauComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '1500px',
+      nzFooter: null,
+      nzClassName: 'dialog-vat-tu',
+      nzComponentParams: {
+        trangThai: this.formData.get('trangThai').value,
+        data: data,
+        dataAll: this.listOfData,
+        listGoiThau: listGoiThau,
+        isReadOnly: isReadOnly,
+        dataChiTieu: this.dataChiTieu,
+        loaiVthh: this.formData.get('loaiVthh').value,
+        dviTinh: this.formData.get('loaiVthh').value.maDviTinh,
+        namKeHoach: this.formData.value.namKhoach,
+      },
+    });
+    modal.afterClose.subscribe((res) => {
+      if (res) {
+        let isUpdate = false;
+        for (let i = 0; index < this.listOfData.length; i++) {
+          if (this.listOfData[i].goiThau == res.goiThau) {
+            this.listOfData[i] = res;
+            isUpdate = true;
+          }
+        }
+        if (!isUpdate) {
+          this.listOfData.push(res);
+        }
+        let tongMucDt: number = 0;
+        let tongMucDtDx: number = 0;
+        this.listOfData.forEach((item) => {
+          tongMucDt = tongMucDt + (item.soLuong * item.donGiaVat /1000000000);
+          tongMucDtDx = tongMucDtDx + (item.soLuong * item.donGiaTamTinh /1000000000);
+        });
+        this.formData.patchValue({
+          tongMucDt: tongMucDt,
+          tongMucDtDx: tongMucDtDx,
+        });
+      }
+    });
+  }
+
+  themMoiCuc(goiThau?: string) {
+    if (!this.formData.get('loaiVthh').value) {
+      this.notification.error(MESSAGE.ERROR, 'Vui lòng chọn loại hàng hóa');
+      return;
+    }
+    let data = [];
+    let listGoiThau = [];
+    this.listOfData.forEach(item => {
+      listGoiThau.push(item.goiThau)
+      if (goiThau && goiThau != '' && item.goiThau == goiThau) {
+        data.push(item)
+      }
+    })
+    let setListGoiThau = new Set(listGoiThau);
+    listGoiThau = [...setListGoiThau]
+    let disabledGoiThau = false;
+    if (goiThau && goiThau != '') {
+      disabledGoiThau = true;
+    }
+    const modalGT = this.modal.create({
+      nzTitle: '',
+      nzContent: DialogThemMoiVatTuComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '1500px',
+      nzFooter: null,
+      nzClassName: 'dialog-luong-thuc',
+      nzComponentParams: {
+        disabledGoiThau: disabledGoiThau,
+        dataAll: this.listOfData,
+        listGoiThau: listGoiThau,
+        dataEdit: data,
+        dataChiTieu: this.dataChiTieu,
+        loaiVthh: this.formData.get('loaiVthh').value,
+        cloaiVthh: this.formData.get('cloaiVthh').value,
+        tenCloaiVthh: this.formData.get('tenCloaiVthh').value,
+        namKhoach: this.formData.get('namKhoach').value,
+        donGiaVat: this.formData.get('donGiaVat').value
+      },
+    });
+    modalGT.afterClose.subscribe((res) => {
+      if (!res) {
+        return;
+      }
+      let isReplace = false;
+      if (res.value.goiThau && res.value.goiThau != '') {
+        for (let i = 0; i < this.listOfData.length; i++) {
+          if (this.listOfData[i].goiThau == res.value.goiThau) {
+            this.listOfData.splice(i, 1, res.value)
+            isReplace = true;
+          }
+        }
+      }
+      if (isReplace == false) {
+        this.listOfData = [...this.listOfData, res.value]
+      }
+      let tongMucDt: number = 0;
+      let tongMucDtDx: number = 0;
+      this.listOfData.forEach((item) => {
+        tongMucDt = tongMucDt + (item.soLuong * item.donGiaVat *1000/1000000000);
+        tongMucDtDx = tongMucDtDx + (item.soLuong * item.donGiaTamTinh * 1000/1000000000);
+      });
+      this.formData.patchValue({
+        tongMucDt: tongMucDt,
+        tongMucDtDx: tongMucDtDx,
+      });
+      this.convertListDataLuongThuc();
+    });
+
   }
 
 
