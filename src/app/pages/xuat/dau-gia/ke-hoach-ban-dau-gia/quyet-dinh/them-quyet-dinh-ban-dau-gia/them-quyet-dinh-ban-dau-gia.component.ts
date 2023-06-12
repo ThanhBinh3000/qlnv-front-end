@@ -189,7 +189,7 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
         this.idInput = data.id;
         this.guiDuyet();
       } else {
-        // this.quayLai();
+        this.loadChiTiet(data.id)
       }
     }
     await this.spinner.hide();
