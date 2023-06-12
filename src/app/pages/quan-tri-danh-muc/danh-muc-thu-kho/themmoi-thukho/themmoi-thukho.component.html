@@ -24,20 +24,25 @@
                         </tr>
                         <ng-container *ngIf="nhaKho.expandSet">
                             <ng-container *ngFor="let nganKho of nhaKho.children , let i = index">
-                                <tr>
+                                <tr *ngIf="checkContainThuKho(nganKho)">
                                     <td class="pd-l-80" nzShowExpand="true" [nzExpand]="nganKho.expandSet"
                                         (nzExpandChange)="onExpandChange(nganKho, $event)">{{nganKho.tenDvi}}</td>
-                                    <td [nzDisabled]="nganKho.children.length > 0"
+                                    <td *ngIf="nganKho.children.length == 0,else templeTd"
                                         [nzChecked]="setOfCheckedId.has(nganKho.maDvi)"
                                         (nzCheckedChange)="onItemChecked(nganKho, $event)"></td>
+                                    <ng-template #templeTd>
+                                        <td></td>
+                                    </ng-template>
                                     <!-- Ngăn kho-->
                                 </tr>
                                 <ng-container *ngIf="nganKho.expandSet">
-                                    <tr *ngFor="let loKho of nganKho.children">
-                                        <td class="pd-l-120">{{loKho.tenDvi}}</td> <!-- Lô kho-->
-                                        <td [nzChecked]="setOfCheckedId.has(loKho.maDvi)"
-                                            (nzCheckedChange)="onItemChecked(loKho, $event)"></td>
-                                    </tr>
+                                    <ng-container *ngFor="let loKho of nganKho.children , let i = index">
+                                        <tr *ngIf='checkContainThuKho(loKho)'>
+                                            <td class="pd-l-120">{{loKho.tenDvi}}</td> <!-- Lô kho-->
+                                            <td [nzChecked]="setOfCheckedId.has(loKho.maDvi)"
+                                                (nzCheckedChange)="onItemChecked(loKho, $event)"></td>
+                                        </tr>
+                                    </ng-container>
                                 </ng-container>
                             </ng-container>
                         </ng-container>
