@@ -92,37 +92,6 @@ export class BienBanHaoDoiBttComponent extends Base2Component implements OnInit 
     }
   }
 
-  delete(item: any, roles?) {
-    if (!this.checkPermission(roles)) {
-      return
-    }
-    this.modal.confirm({
-      nzClosable: false,
-      nzTitle: 'Xác nhận',
-      nzContent: 'Bạn có chắc chắn muốn xóa?',
-      nzOkText: 'Đồng ý',
-      nzCancelText: 'Không',
-      nzOkDanger: true,
-      nzWidth: 310,
-      nzOnOk: () => {
-        this.spinner.show();
-        try {
-          let body = {
-            id: item.id
-          };
-          this.bienBanHaoDoiBttService.delete(body).then(async () => {
-            await this.search();
-            this.spinner.hide();
-          });
-        } catch (e) {
-          console.log('error: ', e);
-          this.spinner.hide();
-          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        }
-      },
-    });
-  }
-
   async search(roles?): Promise<void> {
     await this.spinner.show()
     await super.search(roles);
