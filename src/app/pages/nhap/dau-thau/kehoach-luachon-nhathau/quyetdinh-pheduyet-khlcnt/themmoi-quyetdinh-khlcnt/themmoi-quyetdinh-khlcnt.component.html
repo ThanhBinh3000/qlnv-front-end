@@ -59,7 +59,7 @@
             </nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
               <nz-select formControlName="namKhoach" nzAllowClear (nzOpenChange)="listDsTongHopToTrinh()"
-                [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== '' || isView">
+                [nzDisabled]="isView">
                 <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
               </nz-select>
             </nz-form-control>
