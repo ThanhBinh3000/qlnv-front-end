@@ -31,6 +31,7 @@ import { Base2Component } from 'src/app/components/base2/base2.component';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import {PREVIEW} from "../../../../../../constants/fileType";
+import {convertTienTobangChu} from "../../../../../../shared/commonFunction";
 
 
 @Component({
@@ -93,6 +94,12 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
   pdfSrc: any;
   ykienThamGia: string;
   ghiChu: string;
+  reportTemplate: any = {
+    typeFile: '',
+    fileName: 'test_preview.docx',
+    tenBaoCao: '',
+    trangThai: '',
+  };
 
   constructor(
     httpClient: HttpClient,
@@ -150,7 +157,8 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       trangThai: ['00'],
       tenTrangThai: ['Dự Thảo'],
       diaDiemDuAn: [''],
-      ykienThamGia: ['']
+      ykienThamGia: [''],
+      tongMucDtBangChu: ['']
     });
   }
 
@@ -248,7 +256,15 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
   }
 
   async preview(){
-    await this.dauThauService.preview(this.formData.value).then(async s => {
+    let pipe = new DatePipe('en-US');
+    let body = this.formData.value;
+    body.reportTemplateRequest = this.reportTemplate;
+    body.fileDinhKemReq = this.fileDinhKem;
+    body.tongMucDtBangChu = convertTienTobangChu(this.formData.get('tongMucDt').value)
+    body.tgianDthau = pipe.transform(body.tgianDthau, 'yyyy-MM-dd HH:mm')
+    body.tgianMthau = pipe.transform(body.tgianMthau, 'yyyy-MM-dd HH:mm')
+    console.log(body)
+    await this.dauThauService.preview(body).then(async s => {
       console.log(s)
       this.pdfSrc = PREVIEW.PATH_PDF + s.data;
       this.showDlgPreview = true;
@@ -256,7 +272,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
   }
 
   downloadPdf() {
-    saveAs(this.pdfSrc, "hai_test_thui_hihi.pdf");
+    saveAs(this.pdfSrc, "De-xuat-ke-hoach-lua-chon-nha-thau.pdf");
   }
 
   closeDlg() {
