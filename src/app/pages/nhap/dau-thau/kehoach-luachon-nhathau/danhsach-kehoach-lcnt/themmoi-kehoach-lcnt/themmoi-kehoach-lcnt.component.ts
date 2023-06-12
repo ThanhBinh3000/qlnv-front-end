@@ -30,6 +30,8 @@ import { StorageService } from 'src/app/services/storage.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import {PREVIEW} from "../../../../../../constants/fileType";
+import {convertTienTobangChu} from "../../../../../../shared/commonFunction";
 
 
 @Component({
@@ -87,8 +89,18 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
   editBaoGiaCache: { [key: string]: { edit: boolean; data: any } } = {};
   editCoSoCache: { [key: string]: { edit: boolean; data: any } } = {};
   tongTienHopDong: any;
+  showDlgPreview = false;
+  pdfBlob: any;
+  pdfSrc: any;
+  wordSrc: any;
   ykienThamGia: string;
   ghiChu: string;
+  reportTemplate: any = {
+    typeFile: '',
+    fileName: 'test_preview.docx',
+    tenBaoCao: '',
+    trangThai: '',
+  };
 
   constructor(
     httpClient: HttpClient,
@@ -146,7 +158,9 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       trangThai: ['00'],
       tenTrangThai: ['Dự Thảo'],
       diaDiemDuAn: [''],
-      ykienThamGia: ['']
+      ykienThamGia: [''],
+      tongMucDtBangChu: [''],
+      tongSlChiTieu: [''],
     });
   }
 
@@ -241,6 +255,35 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
         kieuNx: dataNx[0].ghiChu
       })
     }
+  }
+
+  async preview(){
+    let pipe = new DatePipe('en-US');
+    let body = this.formData.value;
+    body.reportTemplateRequest = this.reportTemplate;
+    body.fileDinhKemReq = this.fileDinhKem;
+    body.tongMucDtBangChu = convertTienTobangChu(this.formData.get('tongMucDt').value)
+    body.tgianDthau = pipe.transform(body.tgianDthau, 'yyyy-MM-dd HH:mm')
+    body.tgianMthau = pipe.transform(body.tgianMthau, 'yyyy-MM-dd HH:mm')
+    console.log(body)
+    await this.dauThauService.preview(body).then(async s => {
+      console.log(s)
+      this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
+      this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
+      this.showDlgPreview = true;
+    });
+  }
+
+  downloadPdf() {
+    saveAs(this.pdfSrc, "De-xuat-ke-hoach-lua-chon-nha-thau.pdf");
+  }
+
+  downloadWord() {
+    saveAs(this.wordSrc, "De-xuat-ke-hoach-lua-chon-nha-thau.docx");
+  }
+
+  closeDlg() {
+    this.showDlgPreview = false;
   }
 
   async getDetail(id?: number, soDx?: string) {
@@ -464,13 +507,16 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
         }
         let tongMucDt: number = 0;
         let tongMucDtDx: number = 0;
+        let tongSlChiTieu: number = 0;
         this.listOfData.forEach((item) => {
           tongMucDt = tongMucDt + (item.soLuong * item.donGiaVat /1000000000);
           tongMucDtDx = tongMucDtDx + (item.soLuong * item.donGiaTamTinh /1000000000);
+          tongSlChiTieu += item.soLuongTheoChiTieu
         });
         this.formData.patchValue({
-          tongMucDt: tongMucDt,
-          tongMucDtDx: tongMucDtDx,
+          tongMucDt: parseFloat(tongMucDt.toFixed(2)),
+          tongMucDtDx: parseFloat(tongMucDtDx.toFixed(2)),
+          tongSlChiTieu: tongSlChiTieu,
         });
       }
     });
@@ -534,13 +580,16 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       }
       let tongMucDt: number = 0;
       let tongMucDtDx: number = 0;
+      let tongSlChiTieu: number = 0;
       this.listOfData.forEach((item) => {
         tongMucDt = tongMucDt + (item.soLuong * item.donGiaVat *1000/1000000000);
         tongMucDtDx = tongMucDtDx + (item.soLuong * item.donGiaTamTinh * 1000/1000000000);
+        tongSlChiTieu += item.soLuongTheoChiTieu
       });
       this.formData.patchValue({
-        tongMucDt: tongMucDt,
-        tongMucDtDx: tongMucDtDx,
+        tongMucDt: parseFloat(tongMucDt.toFixed(2)),
+        tongMucDtDx: parseFloat(tongMucDtDx.toFixed(2)),
+        tongSlChiTieu: tongSlChiTieu,
       });
       this.convertListDataLuongThuc();
     });

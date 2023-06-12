@@ -59,7 +59,7 @@
             </nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
               <nz-select formControlName="namKhoach" nzAllowClear (nzOpenChange)="listDsTongHopToTrinh()"
-                [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== '' || isView">
+                [nzDisabled]="isView">
                 <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
               </nz-select>
             </nz-form-control>
@@ -72,7 +72,7 @@
               <nz-input-group nzAddOnAfter="/{{maQd}}">
                 <nz-input-number [ngClass]="'number-input'" formControlName="soQd" [nzMin]="1" [nzMax]="9999999"
                   [nzStep]="1" [nzSize]="'small'"
-                  [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== '' || isView">
+                  [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== '78' && formData.value.trangThai !== '' || isView">
                 </nz-input-number>
               </nz-input-group>
             </nz-form-control>
@@ -83,7 +83,7 @@
             <nz-form-label nzRequired [nzNoColon]="true"> Ngày ký quyết định </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-date-picker formControlName="ngayQd" nzFormat="dd/MM/yyyy"
-                [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== '' || isView">
+                [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== '78' && formData.value.trangThai !== '' || isView">
               </nz-date-picker>
             </nz-form-control>
           </nz-form-item>
@@ -93,14 +93,14 @@
             <nz-form-label nzRequired [nzNoColon]="true"> Ngày hiệu lực </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-date-picker formControlName="ngayHluc" nzFormat="dd/MM/yyyy"
-                [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== '' || isView">
+                [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== '78' && formData.value.trangThai !== '' || isView">
               </nz-date-picker>
             </nz-form-control>
           </nz-form-item>
         </div>
         <div nz-col [nzSpan]="8">
           <nz-radio-group
-            [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== '' || isView"
+            [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== '78' && formData.value.trangThai !== '' || isView"
             nzSize="small" class="rdo-input" formControlName="phanLoai">
             <nz-form-item *ngIf="loaiVthh != '02' && this.idInput == 0">
               <label nz-radio nzValue="TH">Chọn mã tổng hợp</label>
@@ -145,7 +145,7 @@
             </nz-form-label>
             <nz-form-control>
               <input nz-input formControlName="trichYeu"
-                [readonly]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== '' || isView" />
+                [readonly]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== '78' && formData.value.trangThai !== '' || isView" />
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -384,7 +384,7 @@
               <nz-form-control nz-col [nzSpan]="24">
                 <nz-input-number formControlName="tgianThien" nz-input [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
                   [nzStep]="1" [nzSize]="'small'"
-                  [nzDisabled]="(formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== '') || isView">
+                  [nzDisabled]="(formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== '78' && formData.value.trangThai !== '') || isView">
                 </nz-input-number>
               </nz-form-control>
             </nz-form-item>

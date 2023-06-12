@@ -41,10 +41,11 @@ export class ThemMoiTtcpComponent implements OnInit {
 
   taiLieuDinhKemList: any[] = [];
   dsNam: any[] = [];
-  maQd: string
+  // maQd: string
   userInfo: UserLogin;
   dataTable: any[] = [];
   listUbtvqh: any[] = [];
+  STATUS = STATUS;
 
   constructor(
     private readonly fb: FormBuilder,
@@ -65,7 +66,7 @@ export class ThemMoiTtcpComponent implements OnInit {
         soQdUbtvqh:  [, [Validators.required]],
         ngayQd: [null, [Validators.required]],
         trichYeu: [null],
-        trangThai: ['00'],
+        trangThai: [STATUS.DANG_NHAP_DU_LIEU],
         listBoNganh: []
       }
     );
@@ -76,7 +77,6 @@ export class ThemMoiTtcpComponent implements OnInit {
     await Promise.all([
       this.userInfo = this.userService.getUserLogin(),
       this.loadDsNam(),
-      this.maQd ="/VPCP-KTTH",
       this.getDataDetail(this.idInput),
     ])
     this.spinner.hide();
@@ -91,7 +91,7 @@ export class ThemMoiTtcpComponent implements OnInit {
         namQd: data.namQd,
         soQdUbtvqh: data.soQdUbtvqh,
         ngayQd: data.ngayQd,
-        soQd: data.soQd.split('/')[0],
+        soQd: data.soQd,
         trangThai: data.trangThai,
         trichYeu: data.trichYeu
       })
@@ -216,7 +216,7 @@ export class ThemMoiTtcpComponent implements OnInit {
       return;
     }
     let body = this.formData.value;
-    body.soQd = body.soQd + this.maQd;
+    body.soQd = body.soQd;
     body.listBoNganh = this.dataTable;
     body.fileDinhKems = this.taiLieuDinhKemList;
     let res

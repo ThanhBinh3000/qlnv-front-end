@@ -20,6 +20,9 @@ export class BangKeBanHangComponent extends Base2Component implements OnInit {
   loaiVthh: string;
   dataEdit: any;
 
+  idQdNv: number = 0;
+  isViewQdNv: boolean = false;
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -106,5 +109,15 @@ export class BangKeBanHangComponent extends Base2Component implements OnInit {
       }
     });
   };
+
+  openModalQdNv(id: number) {
+    this.idQdNv = id;
+    this.isViewQdNv = true;
+  }
+
+  closeModalQdNv() {
+    this.idQdNv = null;
+    this.isViewQdNv = false;
+  }
 
 }

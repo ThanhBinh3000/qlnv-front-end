@@ -11,6 +11,8 @@ import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { DonviService } from 'src/app/services/donvi.service';
 import { ThemmoiThukhoComponent } from './themmoi-thukho/themmoi-thukho.component';
+import { DanhMucThuKhoService } from 'src/app/services/danh-muc-thu-kho.service';
+import { DatePipe } from '@angular/common';
 
 
 @Component({
@@ -21,7 +23,7 @@ import { ThemmoiThukhoComponent } from './themmoi-thukho/themmoi-thukho.componen
 export class DanhMucThuKhoComponent extends Base2Component implements OnInit {
 
   listTrangThai = [{ "ma": "01", "giaTri": "Hoạt động" }, { "ma": "00", "giaTri": "Không hoạt động" }];
-
+  datePipe = new DatePipe('en-US');
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -29,7 +31,8 @@ export class DanhMucThuKhoComponent extends Base2Component implements OnInit {
     spinner: NgxSpinnerService,
     modal: NzModalService,
     userService: UserService,
-    private donviService: DonviService
+    private donviService: DonviService,
+    private danhMucThuKhoService: DanhMucThuKhoService
   ) {
     super(httpClient, storageService, notification, spinner, modal, userService);
     this.formData = this.fb.group({
@@ -63,27 +66,30 @@ export class DanhMucThuKhoComponent extends Base2Component implements OnInit {
   }
 
   getDetail(data) {
-    console.log("🚀 ~ data:", data)
-
-    const modalQD = this.modal.create({
-      nzTitle: 'Xem lịch sử giao kho',
-      nzContent: DialogTableSelectionComponent,
-      nzMaskClosable: false,
-      nzClosable: false,
-      nzWidth: '900px',
-      nzFooter: null,
-      nzComponentParams: {
-        // dataTable: this.listDanhSachQuyetDinh,
-        dataHeader: ['Từ ngày', 'Đến ngày', 'Quản lý kho'],
-        dataColumn: ['tuNgay', 'denNgay', 'quanLyKho'],
-        isView: true
-      },
+    this.danhMucThuKhoService.getDetail(data.id).then((res) => {
+      res.data?.forEach(i => {
+        i.tuNgayFormat = this.datePipe.transform(i.tuNgay, 'dd/MM/yyyy')
+        i.denNgayFormat = i.denNgay ? this.datePipe.transform(i.tuNgay, 'dd/MM/yyyy') : ''
+      });
+      const modalQD = this.modal.create({
+        nzTitle: 'Xem lịch sử giao kho',
+        nzContent: DialogTableSelectionComponent,
+        nzMaskClosable: false,
+        nzClosable: false,
+        nzWidth: '900px',
+        nzFooter: null,
+        nzComponentParams: {
+          dataTable: res.data,
+          dataHeader: ['Từ ngày', 'Đến ngày', 'Quản lý kho'],
+          dataColumn: ['tuNgayFormat', 'denNgayFormat', 'quanLyKho'],
+          isView: true
+        },
+      });
     });
   }
 
   edit(data) {
     this.spinner.show();
-    console.log(data);
     this.donviService.layTatCaDviDmKho({ 'maDvi': data.dvql, 'type': ['DV', 'MLK'] }).then((res) => {
       this.spinner.hide();
       const modalQD = this.modal.create({
@@ -94,11 +100,8 @@ export class DanhMucThuKhoComponent extends Base2Component implements OnInit {
         nzWidth: '900px',
         nzFooter: null,
         nzComponentParams: {
-          dataTree: res.data
-          // dataTable: this.listDanhSachQuyetDinh,
-          // dataHeader: ['Từ ngày', 'Đến ngày', 'Quản lý kho'],
-          // dataColumn: ['tuNgay', 'denNgay', 'quanLyKho'],
-          // isView: true
+          dataTree: res.data,
+          idThuKho: data.id
         },
       });
     });

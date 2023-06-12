@@ -168,26 +168,30 @@
                         <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
                         <td>{{ data.namKh }}</td>
                         <td>{{ data.soBangKe }}</td>
-                        <td class="text-blue">{{ data.soQd }}</td>
+                        <td>
+                            <a *ngIf="data.soQdNv && data.idQdNv" nz-button nzType="link"
+                                (click)="openModalQdNv(data.idQdNv)">{{
+                                data.soQdNv}}</a>
+                        </td>
                         <td>{{ data.tenNguoiMua}}</td>
                         <td>{{ data.diaChi }}</td>
                         <td>{{ data.cmt }}</td>
                         <td>{{ data.tenLoaiVthh }}</td>
                         <td>{{ data.tenCloaiVthh }}</td>
-                        <td>{{ data.soLuong}}</td>
-                        <td>{{ data.donGia }}</td>
-                        <td>{{ data.thanhTien}}
+                        <td>{{ data.soLuongBanLe | number :
+                            '1.0-1' :
+                            'vi_VN'}}</td>
+                        <td>{{ data.donGia | number :
+                            '1.0-1' :
+                            'vi_VN'}}</td>
+                        <td>{{ data.soLuongBanLe * data.donGia | number :
+                            '1.0-1' :
+                            'vi_VN'}}
                         <td class="text-left">
-                            <a *ngIf="userService.isAccessPermisson('NHDTQG_PTMTT_HDBKPM_LT_BKTML_XEM')"
-                                (click)="themMoiBangKeBanLe($event,data.id, i)">
+                            <a (click)="themMoiBangKeBanLe($event,data.id, i)">
                                 <i class="fa fa-eye"></i>
                             </a>
-                            <!-- <a *ngIf="(data.trangThai != STATUS.DA_DUYET_LDC && data.trangThai != STATUS.DA_DUYET_CBV )"
-                                (click)="goDetail(data.id,['XHDTQG_PTDG_KHBDG_VT_DEXUAT_THEM','XHDTQG_PTDG_KHBDG_LT_DEXUAT_THEM'])">
-                                <i class="fa fa-pencil"></i>
-                            </a> -->
-                            <a *ngIf="(data.trangThai == STATUS.DU_THAO ) && userService.isChiCuc()"
-                                (click)="delete(data,['XHDTQG_PTDG_KHBDG_VT_DEXUAT_XOA','XHDTQG_PTDG_KHBDG_LT_DEXUAT_XOA'])">
+                            <a (click)="delete(data)">
                                 <i class="fa fa-trash-o do"></i>
                             </a>
                         </td>
@@ -214,3 +218,15 @@
         </nz-card>
     </div>
 </div>
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdNv" (nzOnCancel)="closeModalQdNv()">
+    <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+        <!-- <app-them-moi-qd-giao-nv-xuat-btt [idInput]="idQdNv" [loaiVthh]="loaiVthh" [isViewOnModal]="true">
+        </app-them-moi-qd-giao-nv-xuat-btt> -->
+    </ng-container>
+    <div *nzModalFooter>
+        <button nz-button (click)="closeModalQdNv()" class="modal__button--cancel">
+            <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+            Đóng
+        </button>
+    </div>
+</nz-modal>

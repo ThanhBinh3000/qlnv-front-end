@@ -36,6 +36,7 @@ export class ThemMoiUbtvqhComponent implements OnInit {
   maQd: string
   userInfo: UserLogin;
   dataTable: any[] = [];
+  STATUS = STATUS;
 
   constructor(
     private readonly fb: FormBuilder,
@@ -54,7 +55,7 @@ export class ThemMoiUbtvqhComponent implements OnInit {
         ngayQd: [null, [Validators.required]],
         namQd: [dayjs().get('year'), [Validators.required]],
         trichYeu: [null],
-        trangThai: ['00'],
+        trangThai: [STATUS.DANG_NHAP_DU_LIEU],
         listBoNganh: []
       }
     );
