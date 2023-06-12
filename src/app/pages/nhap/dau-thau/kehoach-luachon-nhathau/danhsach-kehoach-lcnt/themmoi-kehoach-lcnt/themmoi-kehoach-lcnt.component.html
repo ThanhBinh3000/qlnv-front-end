@@ -413,7 +413,7 @@
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfter="đ">
                 <nz-input-number
-                  [ngModel]="(formData.value.tongMucDtDx * formData.value.gtriHdong / 100) +(formData.value.tongMucDtDx * formData.value.gtriDthau/ 100)  "
+                  [ngModel]="((formData.value.tongMucDtDx * formData.value.gtriHdong / 100) +(formData.value.tongMucDtDx * formData.value.gtriDthau/ 100)) * 1000000000  "
                   [ngModelOptions]="{standalone: true}" nz-input [nzSize]="'small'" nzDisabled
                   [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
                 </nz-input-number>

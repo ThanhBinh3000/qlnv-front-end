@@ -160,7 +160,8 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       tenTrangThai: ['Dự Thảo'],
       diaDiemDuAn: [''],
       ykienThamGia: [''],
-      tongMucDtBangChu: ['']
+      tongMucDtBangChu: [''],
+      tongSlChiTieu: [''],
     });
   }
 
@@ -507,13 +508,16 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
         }
         let tongMucDt: number = 0;
         let tongMucDtDx: number = 0;
+        let tongSlChiTieu: number = 0;
         this.listOfData.forEach((item) => {
           tongMucDt = tongMucDt + (item.soLuong * item.donGiaVat /1000000000);
           tongMucDtDx = tongMucDtDx + (item.soLuong * item.donGiaTamTinh /1000000000);
+          tongSlChiTieu += item.soLuongTheoChiTieu
         });
         this.formData.patchValue({
-          tongMucDt: tongMucDt,
-          tongMucDtDx: tongMucDtDx,
+          tongMucDt: parseFloat(tongMucDt.toFixed(2)),
+          tongMucDtDx: parseFloat(tongMucDtDx.toFixed(2)),
+          tongSlChiTieu: tongSlChiTieu,
         });
       }
     });
@@ -577,13 +581,16 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       }
       let tongMucDt: number = 0;
       let tongMucDtDx: number = 0;
+      let tongSlChiTieu: number = 0;
       this.listOfData.forEach((item) => {
         tongMucDt = tongMucDt + (item.soLuong * item.donGiaVat *1000/1000000000);
         tongMucDtDx = tongMucDtDx + (item.soLuong * item.donGiaTamTinh * 1000/1000000000);
+        tongSlChiTieu += item.soLuongTheoChiTieu
       });
       this.formData.patchValue({
-        tongMucDt: tongMucDt,
-        tongMucDtDx: tongMucDtDx,
+        tongMucDt: parseFloat(tongMucDt.toFixed(2)),
+        tongMucDtDx: parseFloat(tongMucDtDx.toFixed(2)),
+        tongSlChiTieu: tongSlChiTieu,
       });
       this.convertListDataLuongThuc();
     });
