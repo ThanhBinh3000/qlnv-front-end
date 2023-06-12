@@ -109,7 +109,7 @@
               <nz-form-item class="form-item">
                 <nz-form-label [nzNoColon]="true" nzRequired> Số phiếu kiểm nghiệm chất lượng</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <input [readonly]="true" nz-input formControlName="soPhieuKiemNghiemCl" readonly />
+                  <input [readonly]="true" nz-input formControlName="soPhieu" readonly />
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -126,7 +126,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Người kiểm nghiệm</nz-form-label>
                 <nz-form-control>
-                  <input nz-input formControlName="tenKyThuatVien" readonly />
+                  <input nz-input formControlName="nguoiKt" readonly />
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -154,7 +154,7 @@
                   Ngày hiệu lực của QĐ
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-date-picker nzFormat="dd/MM/YYYY" formControlName="ngayHieuLucQD" nzDisabled>
+                  <nz-date-picker nzFormat="dd/MM/YYYY" formControlName="ngayHieuLuc" nzDisabled>
                   </nz-date-picker>
                 </nz-form-control>
               </nz-form-item>
@@ -163,7 +163,7 @@
               <nz-form-item class="form-item">
                 <nz-form-label [nzNoColon]="true" nzRequired> Số BB lấy mẫu/bàn giao mẫu</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-input-group nzAddOnAfterIcon="folder-open">
+                  <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogBbLayMau()">
                     <input [readonly]="true" nz-input formControlName="soBbLayMau" readonly />
                   </nz-input-group>
                 </nz-form-control>
@@ -184,7 +184,7 @@
                   Ngày kiểm nghiệm mẫu
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-date-picker nzFormat="dd/MM/YYYY" formControlName="ngayKnghiem" nzDisabled>
+                  <nz-date-picker nzFormat="dd/MM/YYYY" formControlName="ngayKiem">
                   </nz-date-picker>
                 </nz-form-control>
               </nz-form-item>
@@ -258,7 +258,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Đơn vị tính</nz-form-label>
                 <nz-form-control>
-                  <input nz-input formControlName="donViTinh" readonly="true" />
+                  <input nz-input formControlName="tenDonViTinh" readonly="true" />
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -306,7 +306,7 @@
                 </nz-form-label>
                 <nz-form-item>
                   <div class="list-file" nz-col nzSpan="24">
-                    <file-list [data]="listFileDinhKem" [isViewDetail]="isView">
+                    <file-list [data]="bienBanLayMauDinhKem" [isViewDetail]="isView">
                     </file-list>
                   </div>
                 </nz-form-item>

@@ -80,6 +80,7 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
         this.formData = this.fb.group(
             {
                 id: [],
+                type: ['00'],
                 nam: [dayjs().get("year")],
                 maDvi: [],
                 loaiBienBan: ['ALL'],
@@ -108,7 +109,6 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
                 soBbHaoDoi: [],
                 soBbTinhKho: [],
                 ngayXuatDocKho: [],
-                type: [],
                 tenDvi: [''],
                 tenLoaiVthh: [''],
                 tenCloaiVthh: [''],

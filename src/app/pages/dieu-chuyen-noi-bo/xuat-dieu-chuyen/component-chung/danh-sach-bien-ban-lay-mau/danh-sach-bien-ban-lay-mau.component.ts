@@ -40,7 +40,7 @@ export class DanhSachBienBanLayMau extends Base2Component implements OnInit {
     expandSetString = new Set<string>();
     dataView: any[];
     isViewQdDc: boolean = false;
-    idQdDc: number;
+    qdinhDccId: number;
 
     page: number = 1;
     pageSize: number = PAGE_SIZE_DEFAULT;
@@ -65,6 +65,7 @@ export class DanhSachBienBanLayMau extends Base2Component implements OnInit {
         private cdr: ChangeDetectorRef,) {
         super(httpClient, storageService, notification, spinner, modal, bienBanLayMauDieuChuyenService);
         this.formData = this.fb.group({
+            type: ['00'],
             nam: [null],
             soBbLayMau: [null],
             soQdinhDcc: [null],
@@ -206,7 +207,6 @@ export class DanhSachBienBanLayMau extends Base2Component implements OnInit {
                 }
             }).value() : [];
         this.dataView = cloneDeep(dataView);
-        console.log("dataView", this.dataView)
         this.expandAll()
     }
     expandAll() {
@@ -302,7 +302,8 @@ export class DanhSachBienBanLayMau extends Base2Component implements OnInit {
                 this.spinner.show();
                 try {
                     let body = {
-                        id: item.id
+                        id: item.id,
+                        type: '00'
                     };
                     const res = await this.bienBanLayMauDieuChuyenService.delete(body);
                     if (res.msg == MESSAGE.SUCCESS) {
@@ -322,12 +323,12 @@ export class DanhSachBienBanLayMau extends Base2Component implements OnInit {
         this.isDetail = false;
         this.timKiem();
     }
-    openModalQdDc(idQdDc: number) {
-        this.idQdDc = idQdDc;
+    openModalQdDc(qdinhDccId: number) {
+        this.qdinhDccId = qdinhDccId;
         this.isViewQdDc = true
     }
     closeModalQdDc() {
-        this.idQdDc = null;
+        this.qdinhDccId = null;
         this.isViewQdDc = false;
     }
 }

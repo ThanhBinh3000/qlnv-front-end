@@ -214,11 +214,11 @@
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdDc" [nzBodyStyle]="{ 'overflow-y': 'auto' }"
     (nzOnCancel)="closeModalQdDc()">
     <!-- <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-  <app-thong-tin-quyet-dinh-dieu-chuyen [idInput]="idQdDc" [isViewOnModal]="true"
+  <app-thong-tin-quyet-dinh-dieu-chuyen [idInput]="qdinhDccId" [isViewOnModal]="true"
     ></app-thong-tin-quyet-dinh-dieu-chuyen>
 </ng-container> -->
     <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-        <app-thong-tin-quyet-dinh-dieu-chuyen-cuc [idInput]="idQdDc"></app-thong-tin-quyet-dinh-dieu-chuyen-cuc>
+        <app-thong-tin-quyet-dinh-dieu-chuyen-cuc [idInput]="qdinhDccId"></app-thong-tin-quyet-dinh-dieu-chuyen-cuc>
     </ng-container>
     <div *nzModalFooter>
         <button nz-button (click)="closeModalQdDc()" class="modal__button--cancel">
