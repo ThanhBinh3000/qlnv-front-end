@@ -5,4 +5,5 @@ export enum FILETYPE {
 
 export enum PREVIEW {
   PATH_PDF = 'data:application/pdf;base64,',
+  PATH_WORD = 'data:application/vnd.openxmlformats-officedocument.wordprocessingml.document;base64,',
 }

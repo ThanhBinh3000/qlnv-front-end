@@ -92,6 +92,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
   showDlgPreview = false;
   pdfBlob: any;
   pdfSrc: any;
+  wordSrc: any;
   ykienThamGia: string;
   ghiChu: string;
   reportTemplate: any = {
@@ -266,13 +267,18 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
     console.log(body)
     await this.dauThauService.preview(body).then(async s => {
       console.log(s)
-      this.pdfSrc = PREVIEW.PATH_PDF + s.data;
+      this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
+      this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
       this.showDlgPreview = true;
     });
   }
 
   downloadPdf() {
     saveAs(this.pdfSrc, "De-xuat-ke-hoach-lua-chon-nha-thau.pdf");
+  }
+
+  downloadWord() {
+    saveAs(this.wordSrc, "De-xuat-ke-hoach-lua-chon-nha-thau.docx");
   }
 
   closeDlg() {
