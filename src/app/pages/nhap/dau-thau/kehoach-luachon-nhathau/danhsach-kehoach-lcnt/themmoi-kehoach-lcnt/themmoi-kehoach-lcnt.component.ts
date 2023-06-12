@@ -92,6 +92,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
   showDlgPreview = false;
   pdfBlob: any;
   pdfSrc: any;
+  wordSrc: any;
   ykienThamGia: string;
   ghiChu: string;
   reportTemplate: any = {
@@ -158,7 +159,8 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       tenTrangThai: ['Dự Thảo'],
       diaDiemDuAn: [''],
       ykienThamGia: [''],
-      tongMucDtBangChu: ['']
+      tongMucDtBangChu: [''],
+      tongSlChiTieu: [''],
     });
   }
 
@@ -266,13 +268,18 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
     console.log(body)
     await this.dauThauService.preview(body).then(async s => {
       console.log(s)
-      this.pdfSrc = PREVIEW.PATH_PDF + s.data;
+      this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
+      this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
       this.showDlgPreview = true;
     });
   }
 
   downloadPdf() {
     saveAs(this.pdfSrc, "De-xuat-ke-hoach-lua-chon-nha-thau.pdf");
+  }
+
+  downloadWord() {
+    saveAs(this.wordSrc, "De-xuat-ke-hoach-lua-chon-nha-thau.docx");
   }
 
   closeDlg() {
@@ -500,13 +507,16 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
         }
         let tongMucDt: number = 0;
         let tongMucDtDx: number = 0;
+        let tongSlChiTieu: number = 0;
         this.listOfData.forEach((item) => {
           tongMucDt = tongMucDt + (item.soLuong * item.donGiaVat /1000000000);
           tongMucDtDx = tongMucDtDx + (item.soLuong * item.donGiaTamTinh /1000000000);
+          tongSlChiTieu += item.soLuongTheoChiTieu
         });
         this.formData.patchValue({
-          tongMucDt: tongMucDt,
-          tongMucDtDx: tongMucDtDx,
+          tongMucDt: parseFloat(tongMucDt.toFixed(2)),
+          tongMucDtDx: parseFloat(tongMucDtDx.toFixed(2)),
+          tongSlChiTieu: tongSlChiTieu,
         });
       }
     });
@@ -570,13 +580,16 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       }
       let tongMucDt: number = 0;
       let tongMucDtDx: number = 0;
+      let tongSlChiTieu: number = 0;
       this.listOfData.forEach((item) => {
         tongMucDt = tongMucDt + (item.soLuong * item.donGiaVat *1000/1000000000);
         tongMucDtDx = tongMucDtDx + (item.soLuong * item.donGiaTamTinh * 1000/1000000000);
+        tongSlChiTieu += item.soLuongTheoChiTieu
       });
       this.formData.patchValue({
-        tongMucDt: tongMucDt,
-        tongMucDtDx: tongMucDtDx,
+        tongMucDt: parseFloat(tongMucDt.toFixed(2)),
+        tongMucDtDx: parseFloat(tongMucDtDx.toFixed(2)),
+        tongSlChiTieu: tongSlChiTieu,
       });
       this.convertListDataLuongThuc();
     });

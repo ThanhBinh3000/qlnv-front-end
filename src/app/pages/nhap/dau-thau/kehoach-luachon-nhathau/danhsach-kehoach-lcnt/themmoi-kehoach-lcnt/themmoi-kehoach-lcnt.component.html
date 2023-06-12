@@ -413,7 +413,7 @@
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfter="đ">
                 <nz-input-number
-                  [ngModel]="(formData.value.tongMucDtDx * formData.value.gtriHdong / 100) +(formData.value.tongMucDtDx * formData.value.gtriDthau/ 100)  "
+                  [ngModel]="((formData.value.tongMucDtDx * formData.value.gtriHdong / 100) +(formData.value.tongMucDtDx * formData.value.gtriDthau/ 100)) * 1000000000  "
                   [ngModelOptions]="{standalone: true}" nz-input [nzSize]="'small'" nzDisabled
                   [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
                 </nz-input-number>
@@ -932,6 +932,11 @@
             class="modal__button--save">
       <i class="icon htvbdh_file-pdf"></i>
       Xuất .pdf
+    </button>
+    <button nz-button (click)="downloadWord()"
+            class="modal__button--save">
+      <i class="icon htvbdh_file-word"></i>
+      Xuất .docx
     </button>
     <button nz-button (click)="closeDlg()" class="modal__button--cancel">
       <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
