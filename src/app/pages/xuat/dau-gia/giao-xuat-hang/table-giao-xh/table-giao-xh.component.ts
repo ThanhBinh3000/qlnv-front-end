@@ -63,6 +63,7 @@ export class TableGiaoXh extends Base2Component implements OnInit {
       ngayTaoTu: null,
       ngayTaoDen: null,
       trangThai: null,
+      maChiCuc: null
     })
 
     this.filterTable = {
@@ -99,6 +100,7 @@ export class TableGiaoXh extends Base2Component implements OnInit {
       loaiVthh: this.loaiVthh,
       maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
       trangThai: this.userService.isChiCuc() ? STATUS.BAN_HANH : null,
+      maChiCuc: this.userService.isChiCuc() ? this.userInfo.MA_DVI : null,
     })
     if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
       this.loadDsVthh();
