@@ -149,7 +149,7 @@ export class ThemMoiHopDongSclComponent extends Base2Component implements OnInit
       idDuAn: [null],
       thanhTienBangChu: [],
       fileDinhKems: [null],
-      listKtTdxdHopDongKlcv: [[]]
+      listKtTdscHopDongKlcv: [[]]
     });
   }
 
@@ -178,8 +178,8 @@ export class ThemMoiHopDongSclComponent extends Base2Component implements OnInit
       if (rs.msg == MESSAGE.SUCCESS) {
         dataQdPdKqlcnt = rs.data;
       }
-      if (dataQdPdKqlcnt.listKtTdxdQuyetDinhPdKqlcntDsgt && dataQdPdKqlcnt.listKtTdxdQuyetDinhPdKqlcntDsgt.length) {
-        goiThau = dataQdPdKqlcnt.listKtTdxdQuyetDinhPdKqlcntDsgt.find(it => it.idGoiThau == this.itemGoiThau.id);
+      if (dataQdPdKqlcnt.listKtTdscQuyetDinhPdKqlcntDsgt && dataQdPdKqlcnt.listKtTdscQuyetDinhPdKqlcntDsgt.length) {
+        goiThau = dataQdPdKqlcnt.listKtTdscQuyetDinhPdKqlcntDsgt.find(it => it.idGoiThau == this.itemGoiThau.id);
       }
       this.formData.patchValue({
         namKeHoach : this.itemQdPdKhlcnt.namKeHoach,
@@ -194,11 +194,11 @@ export class ThemMoiHopDongSclComponent extends Base2Component implements OnInit
         ngayKyKqlcnt: dataQdPdKqlcnt ? dataQdPdKqlcnt.ngayKy : null,
         loaiHopDong: this.itemGoiThau.loaiHopDong,
         tenLoaiHopDong: this.itemGoiThau.tenLoaiHopDong,
-        cdtTen: this.itemGoiThau.ktTdxdQuyetDinhPdKqlcnt.chuDauTu,
-        cdtDiaChi: this.itemGoiThau.ktTdxdQuyetDinhPdKqlcnt.diaChi,
-        dvccTen: goiThau?.ktTdxdQuyetDinhPdKhlcntDsnt?.tenNhaThau,
-        dvccDiaChi: goiThau?.ktTdxdQuyetDinhPdKhlcntDsnt?.diaChi,
-        dvccMst: goiThau?.ktTdxdQuyetDinhPdKhlcntDsnt?.maSoThue,
+        cdtTen: this.itemGoiThau.ktTdscQuyetDinhPdKqlcnt.chuDauTu,
+        cdtDiaChi: this.itemGoiThau.ktTdscQuyetDinhPdKqlcnt.diaChi,
+        dvccTen: goiThau?.ktTdscQuyetDinhPdKhlcntDsnt?.tenNhaThau,
+        dvccDiaChi: goiThau?.ktTdscQuyetDinhPdKhlcntDsnt?.diaChi,
+        dvccMst: goiThau?.ktTdscQuyetDinhPdKhlcntDsnt?.maSoThue,
       });
     }
   }
@@ -240,7 +240,7 @@ export class ThemMoiHopDongSclComponent extends Base2Component implements OnInit
     }
     this.formData.value.soHd = this.formData.value.soHd + this.hauToSoHd;
     if (this.dataKlcv && this.dataKlcv.length > 0) {
-      this.formData.value.listKtTdxdHopDongKlcv = this.dataKlcv;
+      this.formData.value.listKtTdscHopDongKlcv = this.dataKlcv;
     } else {
       this.notification.success(MESSAGE.ERROR, "Danh sách khối lượng công việc không được để trống.");
       return;
@@ -351,12 +351,12 @@ export class ThemMoiHopDongSclComponent extends Base2Component implements OnInit
         //get danh sách gói thầu thành công (đã có đơn vị trúng thầu).
         let res = await this.quyetdinhpheduyetKqLcntService.getDetail(data.id);
         if (res.msg == MESSAGE.SUCCESS) {
-          this.listGoiThau = res.data.listKtTdxdQuyetDinhPdKqlcntDsgt.filter(item => item.trangThai == STATUS.THANH_CONG);
+          this.listGoiThau = res.data.listKtTdscQuyetDinhPdKqlcntDsgt.filter(item => item.trangThai == STATUS.THANH_CONG);
         }
         //Lấy danh sách nhà thầu tham gia đấu thầu cho qd pd khlcnt
         let resp = await this.quyetdinhpheduyetKhlcntService.getDetail(data.idQdPdKhlcnt);
         if (resp.msg == MESSAGE.SUCCESS) {
-          this.listNhaThau = resp.data.listKtTdxdQuyetDinhPdKhlcntDsnt ? resp.data.listKtTdxdQuyetDinhPdKhlcntDsnt.filter(item => item.trangThai == STATUS.TRUNG_THAU) : [];
+          this.listNhaThau = resp.data.listKtTdscQuyetDinhPdKhlcntDsnt ? resp.data.listKtTdscQuyetDinhPdKhlcntDsnt.filter(item => item.trangThai == STATUS.TRUNG_THAU) : [];
         }
       }
     })
@@ -398,7 +398,7 @@ export class ThemMoiHopDongSclComponent extends Base2Component implements OnInit
           })
           this.fileDinhKem = data.listFileDinhKems;
           this.listPhuLuc = data.listPhuLuc;
-          this.dataKlcv = data.listKtTdxdHopDongKlcv && data.listKtTdxdHopDongKlcv.length > 0 ? data.listKtTdxdHopDongKlcv : [];
+          this.dataKlcv = data.listKtTdscHopDongKlcv && data.listKtTdscHopDongKlcv.length > 0 ? data.listKtTdscHopDongKlcv : [];
           this.updateEditKLCongViecCache()
         }
       } else {
