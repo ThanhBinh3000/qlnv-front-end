@@ -405,7 +405,7 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
       });
     } else {
       this.formData.patchValue({
-        soQdCc: 189
+        soQdCc: null
       });
     }
   }

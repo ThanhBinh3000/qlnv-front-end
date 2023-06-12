@@ -274,7 +274,8 @@
                             <td></td>
                             <td></td>
                             <td>
-                                <a *ngIf="data.hopDong?.trangThai == STATUS.DU_THAO" (click)="redirectHopDong(true,data.hopDong.id)">
+                                <a *ngIf="data.hopDong?.trangThai == STATUS.DU_THAO ||
+                                    (data.hopDong?.trangThai == STATUS.DA_KY && formData.value.trangThaiHd != STATUS.DA_HOAN_THANH)" (click)="redirectHopDong(true,data.hopDong.id)">
                                     <i class="fa fa-pencil"></i>
                                 </a>
                                 <a *ngIf="data.hopDong?.trangThai == STATUS.DU_THAO"
