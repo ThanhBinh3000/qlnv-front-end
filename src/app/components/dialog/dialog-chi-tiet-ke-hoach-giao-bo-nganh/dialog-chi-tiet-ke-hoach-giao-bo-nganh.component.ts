@@ -129,16 +129,17 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
   async loadDanhMucHang() {
     if (this.dataEdit) {
       this.onChangeBoNganh(this.dataEdit.maBoNganh);
+    } else {
+      this.dsHangHoa = [];
+      await this.danhMucService.loadDanhMucHangHoa().subscribe((hangHoa) => {
+        if (hangHoa.msg == MESSAGE.SUCCESS) {
+          const dataVatTu = hangHoa.data.filter(item => (item.ma == "02" || item.ma == "04"));
+          dataVatTu.forEach(item => {
+            this.dsHangHoa = [...this.dsHangHoa, ...item.child]
+          })
+        }
+      })
     }
-    // await this.danhMucService.loadDanhMucHangHoa().subscribe((hangHoa) => {
-    //   if (hangHoa.msg == MESSAGE.SUCCESS) {
-    //     const dataVatTu = hangHoa.data.filter(item => (item.ma == "02" || item.ma == "04"));
-    //     dataVatTu.forEach(item => {
-    //       this.dsHangHoa = [...this.dsHangHoa, ...item.child]
-    //     })
-    //     // this.dsHangHoa = dataVatTu.child;
-    //   }
-    // })
   }
 
   luu() {
