@@ -6,14 +6,6 @@ import {NzNotificationService} from "ng-zorro-antd/notification";
 import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
 import {DanhMucService} from "../../../../../../services/danhmuc.service";
-import {
-  QuyetdinhpheduyetKhlcntService
-} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetKhlcnt.service";
-import {
-  QuyetdinhpheduyetKqLcntService
-} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetKqLcnt.service";
-import {HopdongService} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/hopdong.service";
-import {Validators} from "@angular/forms";
 import {MESSAGE} from "../../../../../../constants/message";
 import {CurrencyMaskInputMode} from "ngx-currency";
 import {STATUS} from "../../../../../../constants/status";
@@ -26,6 +18,7 @@ import {
 import {
   QdPheDuyetKhlcntTdsclService
 } from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/suachualon/qd-phe-duyet-khlcnt-tdscl.service";
+
 @Component({
   selector: 'app-thong-tin-hop-dong-scl',
   templateUrl: './thong-tin-hop-dong-scl.component.html',
@@ -85,6 +78,8 @@ export class ThongTinHopDongSclComponent extends Base2Component implements OnIni
       chuDauTu: [],
       diaChi: [],
       idDuAn: [],
+      tenNguonVon: [],
+      tenLoaiHopDong: [],
       soGoiThau: [0],
       soGoiThauTc: [0],
       soGoiThauTb: [0],
@@ -96,9 +91,9 @@ export class ThongTinHopDongSclComponent extends Base2Component implements OnIni
       trangThaiHd: [],
       tenTrangThaiHd: [],
       fileDinhKems: [null],
-      listKtTdxdQuyetDinhPdKhlcntCvDaTh: null,
-      listKtTdxdQuyetDinhPdKhlcntCvKad: null,
-      listKtTdxdQuyetDinhPdKhlcntCvKh: null
+      listKtTdscQuyetDinhPdKhlcntCvDaTh: null,
+      listKtTdscQuyetDinhPdKhlcntCvKad: null,
+      listKtTdscQuyetDinhPdKhlcntCvKh: null
     });
     super.ngOnInit()
   }
@@ -158,8 +153,8 @@ export class ThongTinHopDongSclComponent extends Base2Component implements OnIni
     try {
       if (this.itemQdPdKhLcnt && !isBackFromHd) {
         this.helperService.bidingDataInFormGroup(this.formData, this.itemQdPdKhLcnt);
-        this.listHopDong = this.itemQdPdKhLcnt.listKtTdxdQuyetDinhPdKhlcntCvKh;
-        console.log( this.itemQdPdKhLcnt,' this.itemQdPdKhLcnt this.itemQdPdKhLcnt this.itemQdPdKhLcnt this.itemQdPdKhLcnt');
+        this.listHopDong = this.itemQdPdKhLcnt.listKtTdscQuyetDinhPdKhlcntCvKh;
+        console.log(this.itemQdPdKhLcnt, ' this.itemQdPdKhLcnt this.itemQdPdKhLcnt this.itemQdPdKhLcnt this.itemQdPdKhLcnt');
         if (this.listHopDong && this.listHopDong.length > 0) {
           this.selectRow(this.listHopDong[0]);
         }
@@ -173,10 +168,9 @@ export class ThongTinHopDongSclComponent extends Base2Component implements OnIni
         }
         let res = await this.hopdongService.detailQdPdKhLcnt(body);
         if (res.msg == MESSAGE.SUCCESS) {
-          if (res.data) {
-            this.itemQdPdKhLcnt = res.data;
+          if (res.data) {(this.itemQdPdKhLcnt, 'this item')
             this.helperService.bidingDataInFormGroup(this.formData, this.itemQdPdKhLcnt);
-            this.listHopDong = this.itemQdPdKhLcnt.listKtTdxdQuyetDinhPdKhlcntCvKh;
+            this.listHopDong = this.itemQdPdKhLcnt.listKtTdscQuyetDinhPdKhlcntCvKh;
             if (this.listHopDong && this.listHopDong.length > 0) {
               this.selectRow(this.listHopDong[0]);
             }

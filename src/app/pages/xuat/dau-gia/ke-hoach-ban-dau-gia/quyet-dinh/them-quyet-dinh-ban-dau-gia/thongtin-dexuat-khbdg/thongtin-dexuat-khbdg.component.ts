@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { Globals } from "../../../../../../../shared/globals";
-import { MESSAGE } from "../../../../../../../constants/message";
 import { DanhMucService } from "../../../../../../../services/danhmuc.service";
 import { NgxSpinnerService } from 'ngx-spinner';
 import { HelperService } from 'src/app/services/helper.service';
@@ -54,7 +53,7 @@ export class ThongtinDexuatKhbdgComponent implements OnChanges {
       tgianGnhan: [null,],
       tgianGnhanGhiChu: [null,],
       pthucGnhan: [null,],
-      thongBaoKh: [null,],
+      thongBao: [null,],
       khoanTienDatTruoc: [null,],
       tongSoLuong: [null,],
       donViTinh: [null,],
@@ -118,22 +117,28 @@ export class ThongtinDexuatKhbdgComponent implements OnChanges {
   }
 
   calculatorTable() {
-    let tongSoLuong: number = 0;
+    let tongTienGiaKhoiDiemDx: Number = 0;
     let tongTienGiaKdTheoDgiaDd: number = 0;
-    let tongKhoanTienDtTheoDgiaDd: number = 0;
     this.dataTable.forEach((item) => {
+      item.soTienDtruocDxChiCuc = 0;
+      item.soTienDtruocDdChiCuc = 0;
       item.children.forEach((child) => {
-        item.soTienDtruocDx += child.soLuongDeXuat * child.donGiaDeXuat * this.formData.value.khoanTienDatTruoc / 100;
-        item.soTienDtruocDd += child.soLuongDeXuat * child.donGiaDuocDuyet * this.formData.value.khoanTienDatTruoc / 100;
-        tongSoLuong += child.soLuongDeXuat;
-        tongTienGiaKdTheoDgiaDd += child.soLuongDeXuat * child.donGiaDuocDuyet;
+        child.giaKhoiDiemDx = child.soLuongDeXuat * child.donGiaDeXuat;
+        child.giaKhoiDiemDd = child.soLuongDeXuat * child.donGiaDuocDuyet;
+        child.soTienDtruocDx = child.soLuongDeXuat * child.donGiaDeXuat * this.formData.value.khoanTienDatTruoc / 100;
+        child.soTienDtruocDd = child.soLuongDeXuat * child.donGiaDuocDuyet * this.formData.value.khoanTienDatTruoc / 100;
+        item.soTienDtruocDxChiCuc += child.soTienDtruocDx;
+        item.soTienDtruocDdChiCuc += child.soTienDtruocDd;
+        tongTienGiaKhoiDiemDx += child.giaKhoiDiemDx;
+        tongTienGiaKdTheoDgiaDd += child.giaKhoiDiemDd;
       })
-      tongKhoanTienDtTheoDgiaDd += item.soTienDtruocDd
     });
     this.formData.patchValue({
-      tongSoLuong: tongSoLuong,
+      tongSoLuong: this.dataTable.reduce((prev, cur) => prev + cur.soLuongChiCuc, 0),
+      tongTienGiaKhoiDiemDx: tongTienGiaKhoiDiemDx,
       tongTienGiaKdTheoDgiaDd: tongTienGiaKdTheoDgiaDd,
-      tongKhoanTienDtTheoDgiaDd: tongKhoanTienDtTheoDgiaDd,
+      tongKhoanTienDatTruocDx: this.dataTable.reduce((prev, cur) => prev + cur.soTienDtruocDxChiCuc, 0),
+      tongKhoanTienDtTheoDgiaDd: this.dataTable.reduce((prev, cur) => prev + cur.soTienDtruocDdChiCuc, 0),
     });
   }
 
