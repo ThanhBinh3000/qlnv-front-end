@@ -33,14 +33,14 @@
       <td></td>
       <td>
         <div>
-          <input class="money-input" currencyMask [disabled]="!isView" (ngModelChange)="changeDataInput()"
+          <input class="money-input" currencyMask [disabled]="!isView" (ngModelChange)="changeDataInput('row1')"
                  [(ngModel)]="keHoachNhapXuat.soLuongMuaThoc"
                  [options]="amount"/>
         </div>
       </td>
       <td>
         <div>
-          <input class="money-input" currencyMask [disabled]="!isView" (ngModelChange)="changeDataInput()"
+          <input class="money-input" currencyMask [disabled]="!isView" (ngModelChange)="changeDataInput('row1')"
                  [(ngModel)]="keHoachNhapXuat.donGiaMuaThoc"
                  [options]="amount_no_decimal"/>
         </div>
@@ -57,12 +57,14 @@
       <td class="text-center"><label nz-checkbox [(ngModel)]="keHoachNhapXuat.nhapCtMua"></label></td>
       <td>
 
-        <input *ngIf="!keHoachNhapXuat.nhapCtMua" class="money-input" currencyMask [disabled]="!isView"
+        <input *ngIf="!keHoachNhapXuat.nhapCtMua" (ngModelChange)="changeDataInput('row2')" class="money-input"
+               currencyMask [disabled]="!isView"
                [(ngModel)]="keHoachNhapXuat.soLuongMuaGao"
                [options]="amount_no_decimal"/>
       </td>
       <td>
-        <input *ngIf="!keHoachNhapXuat.nhapCtMua" class="money-input" currencyMask [disabled]="!isView"
+        <input *ngIf="!keHoachNhapXuat.nhapCtMua" (ngModelChange)="changeDataInput('row2')" class="money-input"
+               currencyMask [disabled]="!isView"
                [(ngModel)]="keHoachNhapXuat.donGiaMuaGao"
                [options]="amount_no_decimal"/>
       </td>
@@ -72,8 +74,7 @@
                [options]="amount_no_decimal"/>
         <span
           *ngIf="keHoachNhapXuat.nhapCtMua">
-        {{ ((keHoachNhapXuat.soLuongMuaGaoLpdh * keHoachNhapXuat.donGiaMuaGaoLpdh) +
-          (keHoachNhapXuat.soLuongMuaGaoXcht * keHoachNhapXuat.donGiaMuaGaoXcht)) / 1000 | number : '1.0-1' :
+        {{ (keHoachNhapXuat.tienMuaGaoLpdh + keHoachNhapXuat.tienMuaGaoXcht) | number : '1.0-1' :
           'vi_VN'}}
        </span>
       </td>
@@ -83,14 +84,16 @@
       <td></td>
       <td>
         <div>
-          <input *ngIf="keHoachNhapXuat.nhapCtMua" class="money-input" currencyMask [disabled]="!isView"
+          <input *ngIf="keHoachNhapXuat.nhapCtMua" class="money-input" (ngModelChange)="changeDataInput('row3')"
+                 currencyMask [disabled]="!isView"
                  [(ngModel)]="keHoachNhapXuat.soLuongMuaGaoLpdh"
                  [options]="amount"/>
         </div>
       </td>
       <td>
         <div>
-          <input *ngIf="keHoachNhapXuat.nhapCtMua" class="money-input" currencyMask [disabled]="!isView"
+          <input *ngIf="keHoachNhapXuat.nhapCtMua" class="money-input" (ngModelChange)="changeDataInput('row3')"
+                 currencyMask [disabled]="!isView"
                  [(ngModel)]="keHoachNhapXuat.donGiaMuaGaoLpdh"
                  [options]="amount_no_decimal"/>
         </div>
@@ -111,14 +114,16 @@
       <td></td>
       <td>
         <div>
-          <input *ngIf="keHoachNhapXuat.nhapCtMua" class="money-input" currencyMask [disabled]="!isView"
+          <input *ngIf="keHoachNhapXuat.nhapCtMua" class="money-input" (ngModelChange)="changeDataInput('row4')"
+                 currencyMask [disabled]="!isView"
                  [(ngModel)]="keHoachNhapXuat.soLuongMuaGaoXcht"
                  [options]="amount"/>
         </div>
       </td>
       <td>
         <div>
-          <input *ngIf="keHoachNhapXuat.nhapCtMua" class="money-input" currencyMask [disabled]="!isView"
+          <input *ngIf="keHoachNhapXuat.nhapCtMua" class="money-input" (ngModelChange)="changeDataInput('row4')"
+                 currencyMask [disabled]="!isView"
                  [(ngModel)]="keHoachNhapXuat.donGiaMuaGaoXcht"
                  [options]="amount_no_decimal"/>
         </div>
@@ -139,29 +144,23 @@
       <td>
       </td>
       <td>
-
       </td>
       <td style="font-weight: 500;">
         {{(keHoachNhapXuat.nhapCtBan ? (keHoachNhapXuat.tienBanThoc + keHoachNhapXuat.tienBanGao + keHoachNhapXuat.tienGaoCtro + keHoachNhapXuat.tongTienVonNsnn + keHoachNhapXuat.tongTienVonTx) : (keHoachNhapXuat.tongTienBan + keHoachNhapXuat.tienGaoCtro + keHoachNhapXuat.tongTienVonNsnn + keHoachNhapXuat.tongTienVonTx)) | number : '1.0-1' :'vi_VN' }}
-
-
-        <!--        {{ ((keHoachNhapXuat.soLuongBanThoc * keHoachNhapXuat.donGiaBanThoc)-->
-        <!--        + (keHoachNhapXuat.soLuongBanGao * keHoachNhapXuat.donGiaBanGao)-->
-        <!--        + (keHoachNhapXuat.soLuongGaoCtro * keHoachNhapXuat.donGiaGaoCtro)-->
-        <!--        + ((keHoachNhapXuat.tongTienVonNsnn)-->
-        <!--          + (keHoachNhapXuat.tongTienVonTx)) * 1000) / 1000 | number : '1.0-1' :'vi_VN' }}-->
     </tr>
     <tr>
 
       <td>&nbsp;&nbsp;&nbsp;2.1 Tiền thu được từ xuất bán</td>
       <td class="text-center"><label nz-checkbox [(ngModel)]="keHoachNhapXuat.nhapCtBan"></label></td>
       <td style="font-weight: 500;">
-        <input *ngIf="!keHoachNhapXuat.nhapCtBan" class="money-input" currencyMask [disabled]="!isView"
-               [(ngModel)]="keHoachNhapXuat.soLuongBanThoc"
+        <input *ngIf="!keHoachNhapXuat.nhapCtBan" class="money-input" (ngModelChange)="changeDataInput('row5')"
+               currencyMask [disabled]="!isView"
+               [(ngModel)]="keHoachNhapXuat.soLuongBan"
                [options]="amount"/>
       </td>
       <td>
-        <input *ngIf="!keHoachNhapXuat.nhapCtBan" class="money-input" currencyMask [disabled]="!isView"
+        <input *ngIf="!keHoachNhapXuat.nhapCtBan" class="money-input" (ngModelChange)="changeDataInput('row5')"
+               currencyMask [disabled]="!isView"
                [(ngModel)]="keHoachNhapXuat.donGiaBan"
                [options]="amount"/>
       </td>
@@ -180,12 +179,14 @@
       <td></td>
       <td>
 
-        <input class="money-input" *ngIf="keHoachNhapXuat.nhapCtBan" currencyMask [disabled]="!isView"
+        <input class="money-input" *ngIf="keHoachNhapXuat.nhapCtBan" (ngModelChange)="changeDataInput('row6')"
+               currencyMask [disabled]="!isView"
                [(ngModel)]="keHoachNhapXuat.soLuongBanThoc"
                [options]="amount"/>
       </td>
       <td>
-        <input class="money-input" *ngIf="keHoachNhapXuat.nhapCtBan" currencyMask [disabled]="!isView"
+        <input class="money-input" *ngIf="keHoachNhapXuat.nhapCtBan" (ngModelChange)="changeDataInput('row6')"
+               currencyMask [disabled]="!isView"
                [(ngModel)]="keHoachNhapXuat.donGiaBanThoc"
                [options]="amount_no_decimal"/>
       </td>
@@ -202,14 +203,16 @@
       <td></td>
       <td>
         <div>
-          <input class="money-input" *ngIf="keHoachNhapXuat.nhapCtBan" currencyMask [disabled]="!isView"
+          <input class="money-input" *ngIf="keHoachNhapXuat.nhapCtBan" (ngModelChange)="changeDataInput('row7')"
+                 currencyMask [disabled]="!isView"
                  [(ngModel)]="keHoachNhapXuat.soLuongBanGao"
                  [options]="amount"/>
         </div>
       </td>
       <td>
         <div>
-          <input class="money-input" *ngIf="keHoachNhapXuat.nhapCtBan" [disabled]="!isView" currencyMask
+          <input class="money-input" *ngIf="keHoachNhapXuat.nhapCtBan" (ngModelChange)="changeDataInput('row7')"
+                 [disabled]="!isView" currencyMask
                  [(ngModel)]="keHoachNhapXuat.donGiaBanGao"
                  [options]="amount_no_decimal"/>
         </div>
@@ -227,13 +230,15 @@
       <td></td>
       <td>
         <div>
-          <input class="money-input" [disabled]="!isView" currencyMask [(ngModel)]="keHoachNhapXuat.soLuongGaoCtro"
+          <input class="money-input" [disabled]="!isView" currencyMask (ngModelChange)="changeDataInput('row8')"
+                 [(ngModel)]="keHoachNhapXuat.soLuongGaoCtro"
                  [options]="amount"/>
         </div>
       </td>
       <td>
         <div>
-          <input class="money-input" [disabled]="!isView" currencyMask [(ngModel)]="keHoachNhapXuat.donGiaGaoCtro"
+          <input class="money-input" [disabled]="!isView" currencyMask (ngModelChange)="changeDataInput('row8')"
+                 [(ngModel)]="keHoachNhapXuat.donGiaGaoCtro"
                  [options]="amount_no_decimal"/>
         </div>
       </td>

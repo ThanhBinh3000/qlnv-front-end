@@ -280,9 +280,16 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
 
   themMoiBangPhanLoTaiSan($event, data?: DanhSachPhanLo, index?: number) {
     $event.stopPropagation();
-    if (!this.formData.get('loaiVthh').value || !this.formData.get('cloaiVthh').value) {
-      this.notification.error(MESSAGE.ERROR, 'Vui lòng chọn loại hàng hóa và chủng loại hàng hóa');
-      return;
+    if (this.loaiVthhInput.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
+      if (!this.formData.get('loaiVthh').value) {
+        this.notification.error(MESSAGE.ERROR, 'Vui lòng chọn loại hàng hóa');
+        return;
+      }
+    } else {
+      if (!this.formData.get('loaiVthh').value || !this.formData.get('cloaiVthh').value) {
+        this.notification.error(MESSAGE.ERROR, 'Vui lòng chọn loại hàng hóa và chủng loại hàng hóa');
+        return;
+      }
     }
     if (!this.formData.get('khoanTienDatTruoc').value) {
       this.notification.error(MESSAGE.ERROR, 'Vui lòng chọn khoản tiền đặt trước');
@@ -345,28 +352,28 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
   }
 
   calculatorTable() {
-    let tongSoLuong: number = 0;
-    let tongTienGiaKhoiDiemDx: number = 0;
+    let tongTienGiaKhoiDiemDx: Number = 0;
     let tongTienGiaKdTheoDgiaDd: number = 0;
-    let tongKhoanTienDatTruocDx: number = 0;
-    let tongKhoanTienDtTheoDgiaDd: number = 0;
     this.dataTable.forEach((item) => {
+      item.soTienDtruocDxChiCuc = 0;
+      item.soTienDtruocDdChiCuc = 0;
       item.children.forEach((child) => {
-        item.soTienDtruocDx += child.soLuongDeXuat * child.donGiaDeXuat * this.formData.value.khoanTienDatTruoc / 100;
-        item.soTienDtruocDd += child.soLuongDeXuat * child.donGiaDuocDuyet * this.formData.value.khoanTienDatTruoc / 100;
-        tongSoLuong += child.soLuongDeXuat;
-        tongTienGiaKhoiDiemDx += child.soLuongDeXuat * child.donGiaDeXuat;
-        tongTienGiaKdTheoDgiaDd += child.soLuongDeXuat * child.donGiaDuocDuyet;
+        child.giaKhoiDiemDx = child.soLuongDeXuat * child.donGiaDeXuat;
+        child.giaKhoiDiemDd = child.soLuongDeXuat * child.donGiaDuocDuyet;
+        child.soTienDtruocDx = child.soLuongDeXuat * child.donGiaDeXuat * this.formData.value.khoanTienDatTruoc / 100;
+        child.soTienDtruocDd = child.soLuongDeXuat * child.donGiaDuocDuyet * this.formData.value.khoanTienDatTruoc / 100;
+        item.soTienDtruocDxChiCuc += child.soTienDtruocDx;
+        item.soTienDtruocDdChiCuc += child.soTienDtruocDd;
+        tongTienGiaKhoiDiemDx += child.giaKhoiDiemDx;
+        tongTienGiaKdTheoDgiaDd += child.giaKhoiDiemDd;
       })
-      tongKhoanTienDatTruocDx += item.soTienDtruocDx
-      tongKhoanTienDtTheoDgiaDd += item.soTienDtruocDd
     });
     this.formData.patchValue({
-      tongSoLuong: tongSoLuong,
+      tongSoLuong: this.dataTable.reduce((prev, cur) => prev + cur.soLuongChiCuc, 0),
       tongTienGiaKhoiDiemDx: tongTienGiaKhoiDiemDx,
       tongTienGiaKdTheoDgiaDd: tongTienGiaKdTheoDgiaDd,
-      tongKhoanTienDatTruocDx: tongKhoanTienDatTruocDx,
-      tongKhoanTienDtTheoDgiaDd: tongKhoanTienDtTheoDgiaDd,
+      tongKhoanTienDatTruocDx: this.dataTable.reduce((prev, cur) => prev + cur.soTienDtruocDxChiCuc, 0),
+      tongKhoanTienDtTheoDgiaDd: this.dataTable.reduce((prev, cur) => prev + cur.soTienDtruocDdChiCuc, 0),
     });
   }
 
@@ -432,10 +439,6 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
         idSoQdCtieu: null
       });
     }
-  }
-
-  onChangeNamKh() {
-    this.getDataChiTieu();
   }
 
   quayLai() {
@@ -525,6 +528,12 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
       }
     };
     this.reject(this.idInput, trangThai);
+  }
+
+  async onChangeNamKh() {
+    if (this.idInput == null) {
+      await this.getDataChiTieu();
+    }
   }
 
   async ngOnChanges(changes: SimpleChanges) {
