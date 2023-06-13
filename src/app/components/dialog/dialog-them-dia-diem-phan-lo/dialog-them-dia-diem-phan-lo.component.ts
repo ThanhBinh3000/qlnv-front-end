@@ -139,7 +139,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
         });
       }
       if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
-        let data = this.dataChiTieu.khVatTuXuat.filter(item => item.maVatTuCha == this.loaiVthh);
+        let data = this.dataChiTieu.khVatTuXuat.filter(item => item.maVatTuCha == this.loaiVthh && item.maVatTu == this.cloaiVthh);
         data.forEach(item => {
           let body = {
             maDvi: item.maDvi,
@@ -199,7 +199,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
     }
   }
 
-  changeDiemKho(index?) {
+  async changeDiemKho(index?) {
     if (index >= 0) {
       let diemKho = this.listDiemKho.filter(item => item.maDvi == this.editCache[index].data.maDiemKho);
       if (diemKho.length > 0) {
@@ -211,7 +211,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
         const item = {
           'value': diemKho[0].children[i].maDvi,
           'text': diemKho[0].children[i].tenDvi,
-          listNganKhoEdit: diemKho[0].children[i],
+          listNhaKhoEdit: diemKho[0].children[i],
         };
         this.listNhaKho.push(item);
         this.editCache[index].data.maNhaKho = null;
@@ -237,7 +237,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
     this.thongtinPhanLo.maLoKho = null;
   }
 
-  changeNhaKho(index?) {
+  async changeNhaKho(index?) {
     if (index >= 0) {
       let nhakho = this.listNhaKho.filter(item => item.value == this.editCache[index].data.maNhaKho);
       if (nhakho.length > 0) {
@@ -245,11 +245,11 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
         this.editCache[index].data.maNhaKho = nhakho[0].value;
       }
       this.listNganKho = [];
-      for (let i = 0; i < nhakho[0].listNganKhoEdit?.children.length; i++) {
+      for (let i = 0; i < nhakho[0].listNhaKhoEdit?.children.length; i++) {
         const item = {
-          'value': nhakho[0].listNganKhoEdit.children[i].maDvi,
-          'text': nhakho[0].listNganKhoEdit.children[i].tenDvi,
-          listLoKhoEdit: nhakho[0].listNganKhoEdit.children[i],
+          'value': nhakho[0].listNhaKhoEdit.children[i].maDvi,
+          'text': nhakho[0].listNhaKhoEdit.children[i].tenDvi,
+          listNganKhoEdit: nhakho[0].listNhaKhoEdit.children[i],
         };
         this.listNganKho.push(item);
         this.editCache[index].data.maNganKho = null;
@@ -265,17 +265,17 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
     }
   }
 
-  changeNganKho(index?) {
+  async changeNganKho(index?) {
     if (index >= 0) {
       let nganKho = this.listNganKho.filter(item => item.value == this.editCache[index].data.maNganKho);
       if (nganKho.length > 0) {
         this.editCache[index].data.tenNganKho = nganKho[0].text;
         this.editCache[index].data.maNganKho = nganKho[0].value;
       }
-      for (let i = 0; i < nganKho[0].listLoKhoEdit?.children.length; i++) {
+      for (let i = 0; i < nganKho[0].listNganKhoEdit?.children.length; i++) {
         const item = {
-          'value': nganKho[0].listLoKhoEdit.children[i].maDvi,
-          'text': nganKho[0].listLoKhoEdit.children[i].tenDvi,
+          'value': nganKho[0].listNganKhoEdit.children[i].maDvi,
+          'text': nganKho[0].listNganKhoEdit.children[i].tenDvi,
         };
         this.listLoKho.push(item);
         if (this.listLoKho && this.listLoKho.length == 0) {
