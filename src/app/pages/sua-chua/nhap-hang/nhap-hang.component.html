@@ -1,0 +1,17 @@
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
+    <ul nz-menu nzMode="horizontal" id="mainTongCuc">
+        <li nz-menu-item nzSelected (click)="redirectUrl('/giao-nv-xh')">
+            Quyết định giao nhiệm vụ nhập hàng
+        </li>
+        <li nz-menu-item (click)="redirectUrl('/phieu-xuat-kho')">
+            Phiếu nhập kho
+        </li>
+        <li nz-menu-item (click)="redirectUrl('/bang-ke')">
+            Bảng kê nhập vật tư
+        </li>
+        <li nz-menu-item (click)="redirectUrl('/bb-kthuc-kho')">
+            Bảng bản giao nhận/kết thúc nhập kho
+        </li>
+    </ul>
+</nz-affix>
+<router-outlet></router-outlet>

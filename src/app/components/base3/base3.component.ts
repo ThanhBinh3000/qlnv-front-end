@@ -19,12 +19,13 @@ import { saveAs } from 'file-saver';
 import { DialogTuChoiComponent } from '../dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { UploadFileService } from 'src/app/services/uploaFile.service';
 import { endOfMonth } from 'date-fns';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
-  selector: 'app-base2',
-  templateUrl: './base2.component.html',
+  selector: 'app-base3',
+  templateUrl: './base3.component.html',
 })
-export class Base2Component implements OnInit {
+export class Base3Component implements OnInit {
 
   @Output()
   showListEvent = new EventEmitter<any>();
@@ -46,10 +47,12 @@ export class Base2Component implements OnInit {
   totalRecord: number = 0;
   allChecked = false;
   indeterminate = false;
+  defaultURL: string = '';
 
   @Input() isDetail: boolean = false;
   @Input() dataInit: any = {};
   idSelected: number = 0;
+  id: number;
 
   // Service
   modal: NzModalService
@@ -61,6 +64,8 @@ export class Base2Component implements OnInit {
   spinner: NgxSpinnerService
   notification: NzNotificationService
   uploadFileService: UploadFileService
+  route: ActivatedRoute
+  router: Router
   ranges = { 'Hôm nay': [new Date(), new Date()], 'Tháng hiện tại': [new Date(), endOfMonth(new Date())] };
 
   constructor(
@@ -69,6 +74,8 @@ export class Base2Component implements OnInit {
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
+    route: ActivatedRoute,
+    router: Router,
     private service: BaseService,
   ) {
     this.notification = notification
@@ -78,6 +85,8 @@ export class Base2Component implements OnInit {
     this.userService = new UserService(httpClient, storageService);
     this.userInfo = this.userService.getUserLogin();
     this.uploadFileService = new UploadFileService(httpClient);
+    this.route = route;
+    this.router = router;
     for (let i = -3; i < 23; i++) {
       this.listNam.push({
         value: dayjs().get('year') - i,
@@ -87,7 +96,6 @@ export class Base2Component implements OnInit {
   }
 
   ngOnInit(): void {
-
   }
 
   // SEARCH
@@ -623,6 +631,10 @@ export class Base2Component implements OnInit {
     return romanNumber;
   }
 
+  onExpandChangeItem(item: any, checked: boolean): void {
+    item.expandSet = checked
+  }
+
   disabledNgayTu = (startValue: Date): boolean => {
     if (startValue && this.formData.value.ngayTu) {
       return startValue.getTime() > this.formData.value.ngayTu.getTime();
@@ -636,4 +648,28 @@ export class Base2Component implements OnInit {
     }
     return endValue.getTime() <= this.formData.value.ngayDen.getTime();
   };
+
+  redirectCreate() {
+    this.router.navigate([this.defaultURL + '/them-moi']);
+  }
+
+  redirectUrl(url) {
+    this.router.navigate([url]);
+  }
+
+  redirectDetail(idDetail) {
+    this.router.navigate([this.defaultURL + '/chi-tiet', idDetail]);
+  }
+
+  redirectDefault() {
+    this.router.navigate([this.defaultURL]);
+  }
+
+  getId() {
+    let id = this.route.snapshot.paramMap.get('id');
+    if (id && +id > 0) {
+      this.id = +id
+    }
+  }
+
 }
