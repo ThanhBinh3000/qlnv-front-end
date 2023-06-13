@@ -259,6 +259,12 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
       this.spinner.hide();
       return;
     }
+    let checkKhNhaptXuat = this.validKeHoachNhapXuatLT(this.keHoachNhapXuat);
+    if (!checkKhNhaptXuat) {
+      this.notification.warning(MESSAGE.WARNING, "Vốn chi và vốn có của kế hoạch nhập xuất lương thực không bằng nhau.");
+      this.spinner.hide();
+      return;
+    }
     let body = this.formData.value;
     this.listFile = [];
     if (this.taiLieuDinhKemList.length > 0) {
@@ -310,6 +316,28 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
     this.spinner.hide();
+  }
+
+  validKeHoachNhapXuatLT(dataNhapXuatLt) {
+    let valid = true;
+    let vonChi = 0;
+    let vonCo = 0;
+    if (dataNhapXuatLt) {
+      if (dataNhapXuatLt.nhapCtMua) {
+        vonChi = dataNhapXuatLt.tienMuaThoc + dataNhapXuatLt.tienMuaGaoXcht + dataNhapXuatLt.tienMuaGaoLpdh;
+      } else {
+        vonChi = dataNhapXuatLt.tienMuaThoc + dataNhapXuatLt.tongTienMuaGao;
+      }
+      if (dataNhapXuatLt.nhapCtBan) {
+        vonCo = dataNhapXuatLt.tienBanThoc + dataNhapXuatLt.tienBanGao + dataNhapXuatLt.tienGaoCtro + dataNhapXuatLt.tongTienVonNsnn + dataNhapXuatLt.tongTienVonTx;
+      } else {
+        vonCo = dataNhapXuatLt.tongTienBan + dataNhapXuatLt.tienGaoCtro + dataNhapXuatLt.tongTienVonNsnn + dataNhapXuatLt.tongTienVonTx
+      }
+      if (vonChi != vonCo) {
+        valid = false;
+      }
+    }
+    return valid;
   }
 
   conVertTreeToList(data) {
