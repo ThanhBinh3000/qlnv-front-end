@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { NzModalRef } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { MESSAGE } from 'src/app/constants/message';
+import { DanhMucThuKhoService } from 'src/app/services/danh-muc-thu-kho.service';
+import { DonviService } from 'src/app/services/donvi.service';
 
 @Component({
   selector: 'app-themmoi-thukho',
@@ -9,17 +13,25 @@ import { NzModalRef } from 'ng-zorro-antd/modal';
 export class ThemmoiThukhoComponent implements OnInit {
 
   data: any;
+  idThuKho: number;
   dataTree: any[] = [];
 
   constructor(
     private _modalRef: NzModalRef,
-
+    private donViService: DonviService,
+    private danhMucThuKhoService: DanhMucThuKhoService,
+    private notification: NzNotificationService
   ) { }
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this.data = this.dataTree[0];
     this.dataTree = this.data.children;
-    console.log("🚀 ~ this.dataTree:", this.dataTree)
+    await this.danhMucThuKhoService.getDetail(this.idThuKho).then((res) => {
+      res.included?.forEach(element => {
+        this.setOfCheckedId.add(element)
+      });
+    })
+    console.log(this.setOfCheckedId);
   }
 
   onExpandChange(item: any, checked: boolean): void {
@@ -33,6 +45,18 @@ export class ThemmoiThukhoComponent implements OnInit {
 
   handleOk() {
     console.log(this.setOfCheckedId);
+    let body = {
+      idThuKho: this.idThuKho,
+      listMaDvi: Array.from(this.setOfCheckedId)
+    }
+    this.donViService.updateThuKho(body).then((res) => {
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS)
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+      console.log(res);
+    })
     this._modalRef.close();
   }
 
@@ -67,6 +91,14 @@ export class ThemmoiThukhoComponent implements OnInit {
         isAdd ? this.setOfCheckedId.add(data.maDvi) : this.setOfCheckedId.delete(data.maDvi);
     }
     console.log(this.setOfCheckedId);
+  }
+
+  checkContainThuKho(dataKho) {
+    if (dataKho.idThuKho == null || dataKho.idThuKho.length == 0 || dataKho.idThuKho == this.idThuKho) {
+      return true
+    } else {
+      return false;
+    }
   }
 
 }

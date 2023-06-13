@@ -143,7 +143,7 @@
                             <nz-form-item>
                                 <nz-form-label nzRequired [nzNoColon]="true"> Ngày lập kế hoạch </nz-form-label>
                                 <nz-form-control nz-col [nzErrorTip]="error">
-                                    <nz-date-picker formControlName="ngayTao"
+                                    <nz-date-picker formControlName="ngayTao" [nzDisabled]="isDisable()"
                                         nzFormat="dd/MM/yyyy">
                                     </nz-date-picker>
                                 </nz-form-control>
@@ -155,7 +155,7 @@
                                 <nz-form-label nzRequired [nzNoColon]="true"> Ngày duyệt kế hoạch </nz-form-label>
                                 <nz-form-control nz-col>
                                     <nz-input-group>
-                                        <nz-date-picker nzDisabled formControlName="ngayPduyet" nzFormat="dd/MM/yyyy">
+                                        <nz-date-picker formControlName="ngayPduyet" nzFormat="dd/MM/yyyy" [nzDisabled]="isDisable()">
                                         </nz-date-picker>
                                     </nz-input-group>
                                 </nz-form-control>

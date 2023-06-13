@@ -481,19 +481,10 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
 
 
   pheDuyet() {
-    let trangThai = '';
-    let msg = '';
-    switch (this.formData.get('trangThai').value) {
-      case STATUS.DU_THAO: {
-        trangThai = STATUS.BAN_HANH;
-        msg = 'Bạn có muốn hoàn thành cập nhật ?'
-        break;
-      }
-    }
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
-      nzContent: msg,
+      nzContent: 'Bạn có muốn hoàn thành cập nhật ?',
       nzOkText: 'Đồng ý',
       nzCancelText: 'Không',
       nzOkDanger: true,
