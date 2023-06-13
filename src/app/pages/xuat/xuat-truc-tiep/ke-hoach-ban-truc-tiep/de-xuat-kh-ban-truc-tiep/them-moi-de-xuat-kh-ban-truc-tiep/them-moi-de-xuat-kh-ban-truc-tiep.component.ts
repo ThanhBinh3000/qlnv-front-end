@@ -404,8 +404,10 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
     }
   }
 
-  onChangeNamKh() {
-    this.getDataChiTieu();
+  async onChangeNamKh() {
+    if (this.idInput == null) {
+      await this.getDataChiTieu();
+    }
   }
 
   async guiDuyet() {
