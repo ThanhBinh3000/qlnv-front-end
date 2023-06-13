@@ -558,45 +558,63 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
             })
           })
         }
+        let soPhieu =this.dsPhieuXuatKho.find(item => (item.maLoKho == data.maLoKho&&item.maNganKho == data.maNganKho));
+
+        this.formData.patchValue({
+          idPhieuXuatKho: soPhieu.id,
+          soPhieuXuatKho: soPhieu.soPhieuXuatKho,
+          ngayXuat: soPhieu.ngayXuatKho,
+          nlqHoTen: soPhieu.nguoiGiaoHang,
+          nlqCmnd: soPhieu.soCmt,
+          nlqDonVi: soPhieu.ctyNguoiGh,
+          nlqDiaChi: soPhieu.diaChi,
+          loaiVthh: soPhieu.loaiVthh,
+          cloaiVthh: soPhieu.cloaiVthh,
+          tenLoaiVthh: soPhieu.tenLoaiVthh,
+          tenCloaiVthh: soPhieu.tenCloaiVthh,
+          moTaHangHoa: soPhieu.moTaHangHoa,
+          donViTinh: soPhieu.donViTinh,
+          bangKeDtl: this.formData.value.bangKeDtl
+        });
       }
     });
   }
 
   async openDialogPhieuXuatKho() {
-    const modalQD = this.modal.create({
-      nzTitle: 'Danh sách phiếu kiểm nghiệm chất lượng',
-      nzContent: DialogTableSelectionComponent,
-      nzMaskClosable: false,
-      nzClosable: false,
-      nzWidth: '900px',
-      nzFooter: null,
-      nzComponentParams: {
-        dataTable: this.dsPhieuXuatKho,
-        dataHeader: ['Số phiếu xuất kho', 'Ngày xuất kho'],
-        dataColumn: ['soPhieuXuatKho', 'ngayXuatKho']
-      },
-    });
-    modalQD.afterClose.subscribe(async (data) => {
-      if (data) {
-        console.log(JSON.stringify(data))
-        this.formData.patchValue({
-          idPhieuXuatKho: data.id,
-          soPhieuXuatKho: data.soPhieuXuatKho,
-          ngayXuat: data.ngayXuatKho,
-          nlqHoTen: data.nguoiGiaoHang,
-          nlqCmnd: data.soCmt,
-          nlqDonVi: data.ctyNguoiGh,
-          nlqDiaChi: data.diaChi,
-          loaiVthh: data.loaiVthh,
-          cloaiVthh: data.cloaiVthh,
-          tenLoaiVthh: data.tenLoaiVthh,
-          tenCloaiVthh: data.tenCloaiVthh,
-          moTaHangHoa: data.moTaHangHoa,
-          donViTinh: data.donViTinh,
-          bangKeDtl: this.formData.value.bangKeDtl
-        });
-      }
-    });
+    // const modalQD = this.modal.create({
+    //   nzTitle: 'Danh sách phiếu kiểm nghiệm chất lượng',
+    //   nzContent: DialogTableSelectionComponent,
+    //   nzMaskClosable: false,
+    //   nzClosable: false,
+    //   nzWidth: '900px',
+    //   nzFooter: null,
+    //   nzComponentParams: {
+    //     dataTable: this.dsPhieuXuatKho,
+    //     dataHeader: ['Số phiếu xuất kho', 'Ngày xuất kho'],
+    //     dataColumn: ['soPhieuXuatKho', 'ngayXuatKho']
+    //   },
+    // });
+    // modalQD.afterClose.subscribe(async (data) => {
+    //   if (data) {
+    //     console.log(JSON.stringify(data))
+    //     this.formData.patchValue({
+    //       idPhieuXuatKho: data.id,
+    //       soPhieuXuatKho: data.soPhieuXuatKho,
+    //       ngayXuat: data.ngayXuatKho,
+    //       nlqHoTen: data.nguoiGiaoHang,
+    //       nlqCmnd: data.soCmt,
+    //       nlqDonVi: data.ctyNguoiGh,
+    //       nlqDiaChi: data.diaChi,
+    //       loaiVthh: data.loaiVthh,
+    //       cloaiVthh: data.cloaiVthh,
+    //       tenLoaiVthh: data.tenLoaiVthh,
+    //       tenCloaiVthh: data.tenCloaiVthh,
+    //       moTaHangHoa: data.moTaHangHoa,
+    //       donViTinh: data.donViTinh,
+    //       bangKeDtl: this.formData.value.bangKeDtl
+    //     });
+    //   }
+    // });
   }
 
   changeSoQd(event) {
@@ -648,6 +666,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
   async tinhTong() {
     let dtl = cloneDeep(this.formData.value.bangKeDtl);
     let tongTrongLuongCaBi = dtl.reduce((prev, cur) => prev + cur.trongLuongCaBi, 0);
+    this.tongSl = dtl.reduce((prev, cur) => prev + cur.soLuong, 0);
 
     this.formData.patchValue({
       tongTrongLuong: tongTrongLuongCaBi,
