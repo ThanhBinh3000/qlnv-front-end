@@ -28,7 +28,6 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
   @Input()
   dataTable = [];
   dataTableView = [];
-
   @Input()
   dataToanBn = [];
   @Input()
@@ -36,13 +35,10 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
   @Input() namHienTai: number;
   @Output()
   dataTableChange = new EventEmitter<any[]>();
-
   @Input()
   tongGtri: number;
-
   @Output()
   tongGtriChange = new EventEmitter<number>();
-
   @Input()
   isView: boolean = false;
   expandSet = new Set<number>();
@@ -69,10 +65,10 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
     // this.updateEditCache()
     // this.emitDataTable();
     for (let item of this.dataToanBn) {
-      if (item.maBn == '01' && !item.isSum && item.stt == 2) {
+      if (item.maBn == '01' && !item.isSum && item.tenBn.indexOf("Lương thực") != -1) {
         this.tongSoLT = item.tongSo;
       }
-      if (item.maBn == '01' && !item.isSum && item.stt == 3) {
+      if (item.maBn == '01' && !item.isSum && item.tenBn.indexOf("Vật tư") != -1) {
         this.tongSoVT = item.tongSo;
       }
       if (!item.isSum) {
@@ -206,24 +202,11 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
   async changePageSize(event) {
     try {
       this.pageSize = event;
-      // await this.search();
     } catch (e) {
       console.log('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
-
-  //
-  // updateEditCache(): void {
-  //   if (this.dataTable) {
-  //     this.dataTable.forEach((item, index) => {
-  //       this.dataEdit[index] = {
-  //         edit: false,
-  //         data: {...item},
-  //       }
-  //     });
-  //   }
-  // }
 
   onChangeLoaiVthh(event, typeData?: any) {
     if (typeData) {
