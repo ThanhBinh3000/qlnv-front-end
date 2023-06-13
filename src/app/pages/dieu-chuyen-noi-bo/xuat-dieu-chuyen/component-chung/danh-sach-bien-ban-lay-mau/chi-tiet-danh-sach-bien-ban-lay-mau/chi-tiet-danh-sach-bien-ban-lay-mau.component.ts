@@ -206,11 +206,11 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
             trangThai: STATUS.BAN_HANH,
             loaiVthh: this.loaiVthh,
             loaiDc: "DCNB",
-            maDvi: this.userInfo.MA_DVI
+            maDvi: this.userInfo.MA_DVI,
             // listTrangThaiXh: [STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN],
         }
         try {
-            let res = await this.quyetDinhDieuChuyenCucService.getDsSoQuyetDinhDieuChuyenChoChiCuc(body);
+            let res = await this.quyetDinhDieuChuyenCucService.getDsSoQuyetDinhDieuChuyenChiCuc(body);
             if (res.msg == MESSAGE.SUCCESS) {
                 let data = res.data;
                 this.listSoQuyetDinh = Array.isArray(data) ? data.reduce((arr, cur) => {

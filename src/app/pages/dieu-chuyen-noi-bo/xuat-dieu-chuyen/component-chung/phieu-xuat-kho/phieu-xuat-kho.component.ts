@@ -17,11 +17,11 @@ import { PhieuXuatKhoDieuChuyenService } from '../services/dcnb-xuat-kho.service
 })
 export class PhieuXuatKhoDCNBComponent extends Base2Component implements OnInit {
   @Input() typeVthh: string[];
-
+  @Input() loaiDc: string[]
   selectedId: number = 0;
   isView: boolean = false;
   isTatCa: boolean = false;
-  idQdGiaoNvXh: number = 0;
+  idQdinhDcc: number = 0;
   dataView: any = [];
   expandSetString = new Set<string>();
   idPhieu: number = 0;
@@ -38,12 +38,13 @@ export class PhieuXuatKhoDCNBComponent extends Base2Component implements OnInit 
   ) {
     super(httpClient, storageService, notification, spinner, modal, phieuXuatKhoDieuChuyenService);
     this.formData = this.fb.group({
-      namKh: null,
-      soBienBan: null,
-      soQd: null,
-      trichYeu: null,
-      ngayLayMau: null,
-      loaiVthh: null,
+      nam: [null],
+      soQdinhDcc: [''],
+      soPhieuXuatKho: [''],
+      tuNgay: [null],
+      denNgay: [null],
+      loaiVthh: [''],
+      loaiDc: ['']
     })
 
     this.filterTable = {
@@ -67,11 +68,11 @@ export class PhieuXuatKhoDCNBComponent extends Base2Component implements OnInit 
     try {
       this.formData.patchValue({
         loaiVthh: this.typeVthh,
-        maDvi: this.userService.isChiCuc() ? this.userInfo.MA_DVI : null
+        loaiDc: this.loaiDc,
+        // maDvi: this.userService.isChiCuc() ? this.userInfo.MA_DVI : null
       })
       await this.search();
     } catch (e) {
-      console.log('error: ', e)
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
@@ -166,12 +167,24 @@ export class PhieuXuatKhoDCNBComponent extends Base2Component implements OnInit 
       this.expandSetString.delete(id);
     }
   }
+  disabledTuNgay = (startValue: Date): boolean => {
+    if (startValue && this.formData.value.denNgay) {
+      return startValue.getTime() > this.formData.value.denNgay.getTime();
+    }
+    return false;
+  };
 
-  redirectToChiTiet(lv2: any, isView: boolean, idQdGiaoNvXh?: number) {
+  disabledDenNgay = (endValue: Date): boolean => {
+    if (!endValue || !this.formData.value.tuNgay) {
+      return false;
+    }
+    return endValue.getTime() <= this.formData.value.tuNgay.getTime();
+  };
+  redirectToChiTiet(lv2: any, isView: boolean, idQdinhDcc?: number) {
     this.selectedId = lv2.id;
     this.isDetail = true;
     this.isView = isView;
-    this.idQdGiaoNvXh = idQdGiaoNvXh;
+    this.idQdinhDcc = idQdinhDcc;
   }
 
 

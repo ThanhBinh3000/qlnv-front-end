@@ -118,7 +118,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
       maDvi: ['', [Validators.required]],
       maQhns: [''],
       tenNguoiKiemNghiem: [''],
-      tenTruongPhong: [''],
+      tpNguoiKt: [''],
 
       ketQuaDanhGia: [''],
       ketLuan: [''],
@@ -160,7 +160,6 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
       ngayGDuyet: [''],
       ngayKiem: [dayjs().format('YYYY-MM-DD')],
       ngayHieuLuc: [''],
-      ngayLapPhieu: [''],
       ngayLayMau: [''],
       ngayPDuyet: [''],
       ngayXuatDocKho: [''],
@@ -186,7 +185,6 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
       tenThuKho: [''],
       thayDoiThuKho: [null],
       thuKhoId: [null],
-      tpNguoiKt: [''],
       tpNguoiKtId: [null]
     });
   }
@@ -216,7 +214,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
     }
   }
   async initForm() {
-    let res = await this.userService.getId("PHIEU_KNGHIEM_CLUONG_SEQ");
+    let res = await this.userService.getId("DCNB_PHIEU_KN_CHLUONG_HDR_SEQ");
     if (this.passData.maHangHoa) {
       let dmTieuChuan = await this.danhMucTieuChuanService.getDetailByMaHh(this.passData.maChLoaiHangHoa);
       if (dmTieuChuan.data) {
@@ -233,7 +231,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
       tenDvi: this.userInfo.TEN_DVI,
       maQhns: this.userInfo.DON_VI.maQhns,
       nguoiKt: this.userInfo.TEN_DAY_DU,
-      tenTruongPhong: this.userInfo.MA_KTBQ,
+      tpNguoiKt: this.userInfo.MA_KTBQ,
       trangThai: STATUS.DU_THAO,
       tenTrangThai: this.LIST_TRANG_THAI[STATUS.DU_THAO],
       donViTinh: this.passData.donViTinh,
@@ -486,8 +484,8 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
       nzFooter: null,
       nzComponentParams: {
         dataTable: this.listSoQuyetDinh,
-        dataHeader: ['Số quyết định', 'Ngày quyết định'],
-        dataColumn: ['soQdinh', 'ngayKyQdinh'],
+        dataHeader: ['Số quyết định', 'Ngày hiệu lực'],
+        dataColumn: ['soQdinh', 'ngayPduyet'],
       },
     });
     modalQD.afterClose.subscribe(async (data) => {
@@ -502,7 +500,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
       this.formData.patchValue({
         soQdinhDc: data.soQdinh,
         qdDcId: data.id,
-        ngayHieuLuc: data.ngayKyQdinh,
+        ngayHieuLuc: data.ngayPduyet,
         // loaiVthh: data.loaiVthh,
         // tenLoaiVthh: data.tenLoaiVthh,
 
@@ -570,6 +568,9 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
         cloaiVthh: data.cloaiVthh,
         tenLoaiVthh: data.tenLoaiVthh,
         tenCloaiVthh: data.tenCloaiVthh,
+        tenThuKho: data.thuKho,
+        donViTinh: data.donViTinh,
+        tenDonViTinh: data.tenDonViTinh
         // moTaHangHoa: data.moTaHangHoa,
         // tenThuKho: data.bbNhapDayKho.tenNguoiTao
       })

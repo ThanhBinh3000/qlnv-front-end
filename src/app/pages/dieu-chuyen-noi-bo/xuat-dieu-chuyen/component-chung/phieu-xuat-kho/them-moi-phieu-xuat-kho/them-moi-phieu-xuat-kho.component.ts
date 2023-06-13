@@ -24,16 +24,15 @@ import { HopDongBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc
 })
 export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements OnInit {
   @Input() idInput: number;
-  @Input() typeVthh: string;
+  @Input() typeVthh?: string[] | string;
   @Input() isView: boolean;
-  @Input() idQdDc: number;
+  @Input() idQdinhDcc: number;
   @Input() isViewOnModal: boolean;
 
   @Output()
   showListEvent = new EventEmitter<any>();
-
+  loaiVthh?: string[] | string;
   id: number;
-  loaiVthh: string;
   listSoQuyetDinh: any[] = []
   listDiaDiemNhap: any[] = [];
 
@@ -118,13 +117,21 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự Thảo'],
       lyDoTuChoi: [],
+
+      ctyNguoiGh: [''],
+      diaChi: [''],
+      thoiGianGiaoNhan: [''],
+      loaiHinhNX: ["Nhập ĐC nội bộ Chi cục"],
+      kieuNX: ["Nhập không chi tiền"],
+      soBangKeCh: [''],
+      soLuongCanDc: ['']
     })
   }
 
   async ngOnInit() {
     try {
       this.id = this.idInput;
-      this.loaiVthh = this.typeVthh;
+      this.loaiVthh = this.typeVthh
       this.userInfo = this.userService.getUserLogin();
       if (this.id) {
         await this.loadChiTiet();
@@ -148,10 +155,12 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
       maQhns: this.userInfo.DON_VI.maQhns,
       trangThai: STATUS.DU_THAO,
       tenTrangThai: 'Dự thảo',
-      tenNguoiLapPhieu: this.userInfo.TEN_DAY_DU
+      tenNguoiLapPhieu: this.userInfo.TEN_DAY_DU,
+
+      soLuongCanDc: 1000
     });
-    if (this.idQdDc) {
-      await this.bindingDataQd(this.idQdDc);
+    if (this.idQdinhDcc) {
+      await this.bindingDataQd(this.idQdinhDcc);
     }
   }
 
@@ -319,7 +328,7 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
             soLuong: dataPhieuKn.soLuong,
           });
           let dataObj = {
-            moTaHangHoa: this.loaiVthh?.startsWith('02') ? (this.formData.value.tenCloaiVthh ? this.formData.value.tenCloaiVthh : this.formData.value.tenLoaiVthh) : (this.formData.value.moTaHangHoa ? this.formData.value.moTaHangHoa : this.formData.value.tenCloaiVthh),
+            // moTaHangHoa: this.loaiVthh?.startsWith('02') ? (this.formData.value.tenCloaiVthh ? this.formData.value.tenCloaiVthh : this.formData.value.tenLoaiVthh) : (this.formData.value.moTaHangHoa ? this.formData.value.moTaHangHoa : this.formData.value.tenCloaiVthh),
             maSo: '',
             donViTinh: this.formData.value.donViTinh,
             soLuongChungTu: 0,

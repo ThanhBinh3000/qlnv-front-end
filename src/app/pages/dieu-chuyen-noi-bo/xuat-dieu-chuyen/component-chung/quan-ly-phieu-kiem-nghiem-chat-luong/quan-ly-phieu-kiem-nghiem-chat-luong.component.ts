@@ -492,35 +492,35 @@ export class PhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base2Compon
     return false
   }
   checkRoleEdit(trangThai: string): boolean {
-    if (this.userService.isCuc() && (trangThai == this.STATUS.DU_THAO || trangThai == this.STATUS.TU_CHOI_LDCC)) {
+    if (this.userService.isCuc() && (trangThai == STATUS.DU_THAO || trangThai == STATUS.TU_CHOI_TP || trangThai == STATUS.TU_CHOI_LDC)) {
       return true
     }
     return false
   }
   checkRoleApprove(trangThai: string): boolean {
-    if (this.userService.isCuc() && trangThai == this.STATUS.CHO_DUYET_LDCC) {
+    if (this.userService.isCuc() && (trangThai == STATUS.CHO_DUYET_TP || trangThai == STATUS.CHO_DUYET_LDC)) {
       return true
     }
     return false
   }
   checkRoleDelete(trangThai: string): boolean {
-    if (this.userService.isCuc() && trangThai == this.STATUS.DU_THAO) {
+    if (this.userService.isCuc() && trangThai == STATUS.DU_THAO) {
       return true
     }
   }
 
   disabledTuNgay = (startValue: Date): boolean => {
-    if (startValue && this.formData.value.ngayKnghiemDen) {
-      return startValue.getTime() > this.formData.value.ngayKnghiemDen.getTime();
+    if (startValue && this.formData.value.denNgay) {
+      return startValue.getTime() > this.formData.value.denNgay.getTime();
     }
     return false;
   };
 
   disabledDenNgay = (endValue: Date): boolean => {
-    if (!endValue || !this.formData.value.ngayKnghiemTu) {
+    if (!endValue || !this.formData.value.tuNgay) {
       return false;
     }
-    return endValue.getTime() <= this.formData.value.ngayKnghiemTu.getTime();
+    return endValue.getTime() <= this.formData.value.tuNgay.getTime();
   };
   openModalQdDc(id: number) {
     this.qdinhDccId = id;
