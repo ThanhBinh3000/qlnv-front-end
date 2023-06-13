@@ -13,8 +13,4 @@ export class DeXuatPhuongAnCuuTroService extends BaseService {
   constructor(public httpClient: HttpClient) {
     super(httpClient, 'cuu-tro/de-xuat', '');
   }
-  getPhuongAnCuuTro(body) {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/dieu-chinh`;
-    return this._httpClient.post<OldResponseData>(url, body).toPromise();
-  }
 }
