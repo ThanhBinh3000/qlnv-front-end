@@ -78,14 +78,14 @@ export class KeHoachNhapXuatLtComponent implements OnInit, OnChanges {
       }
     }
     if (type && type == 'row6' && this.keHoachNhapXuat.soLuongBanThoc && this.keHoachNhapXuat.donGiaBanThoc) {
-      if (!this.keHoachNhapXuat.nhapCtBan) {
+      if (this.keHoachNhapXuat.nhapCtBan) {
         this.keHoachNhapXuat.tienBanThoc = (this.keHoachNhapXuat.soLuongBanThoc * this.keHoachNhapXuat.donGiaBanThoc) / 1000;
       } else {
         this.keHoachNhapXuat.tienBanThoc = 0;
       }
     }
     if (type && type == 'row7' && this.keHoachNhapXuat.soLuongBanGao && this.keHoachNhapXuat.donGiaBanGao) {
-      if (!this.keHoachNhapXuat.nhapCtBan) {
+      if (this.keHoachNhapXuat.nhapCtBan) {
         this.keHoachNhapXuat.tienBanGao = (this.keHoachNhapXuat.soLuongBanGao * this.keHoachNhapXuat.donGiaBanGao) / 1000;
       } else {
         this.keHoachNhapXuat.tienBanGao = 0;
