@@ -61,7 +61,7 @@ export class CommonInterceptor implements HttpInterceptor {
           if (err.status === STATUS_CODE.UNAUTHORIZED) {
             this.authService.logout();
           }
-          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          this.notification.warning(MESSAGE.ALERT, MESSAGE.UNAUTHORIZED_ERROR);
         },
       ),
     );
