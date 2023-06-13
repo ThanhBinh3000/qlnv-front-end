@@ -72,24 +72,12 @@ export class KiemNghiemChatLuongComponent extends Base2Component implements OnIn
     super(httpClient, storageService, notification, spinner, modal, phieuKiemNghiemChatLuongService);
     this.formData = this.fb.group({
       nam: null,
-      soQdinh: null,
-      ngayDuyetTc: null,
-      ngayHieuLuc: null,
-      loaiDc: null,
-      trichYeu: null,
+      soQdinhDcc: null,
+      soPhieu: null,
+      ngay: null,
+      soBbLayMau: null,
+      soBbXuatDocKho: null,
     })
-    this.filterTable = {
-      nam: '',
-      soQdinh: '',
-      ngayKyQdinh: '',
-      loaiDc: '',
-      trichYeu: '',
-      maDxuat: '',
-      maThop: '',
-      soQdinhXuatCuc: '',
-      soQdinhNhapCuc: '',
-      tenTrangThai: '',
-    };
   }
 
 
@@ -191,15 +179,10 @@ export class KiemNghiemChatLuongComponent extends Base2Component implements OnIn
   }
 
   async timKiem() {
-    if (this.formData.value.ngayDuyetTc) {
-      this.formData.value.ngayDuyetTcTu = dayjs(this.formData.value.ngayDuyetTc[0]).format('YYYY-MM-DD')
-      this.formData.value.ngayDuyetTcDen = dayjs(this.formData.value.ngayDuyetTc[1]).format('YYYY-MM-DD')
+    if (this.formData.value.ngay) {
+      this.formData.value.tuNgay = dayjs(this.formData.value.ngay[0]).format('YYYY-MM-DD')
+      this.formData.value.denNgay = dayjs(this.formData.value.ngay[1]).format('YYYY-MM-DD')
     }
-    if (this.formData.value.ngayHieuLuc) {
-      this.formData.value.ngayHieuLucTu = dayjs(this.formData.value.ngayHieuLuc[0]).format('YYYY-MM-DD')
-      this.formData.value.ngayHieuLucDen = dayjs(this.formData.value.ngayHieuLuc[1]).format('YYYY-MM-DD')
-    }
-    console.log('DSQuyetDinhDieuChuyenComponent/this.formData.value=>', this.formData.value)
     await this.search();
   }
 
@@ -209,13 +192,9 @@ export class KiemNghiemChatLuongComponent extends Base2Component implements OnIn
       try {
 
         let body = this.formData.value;
-        if (this.formData.value.ngayDuyetTc) {
-          body.ngayDuyetTcTu = body.ngayDuyetTc[0];
-          body.ngayDuyetTcDen = body.ngayDuyetTc[1];
-        }
-        if (this.formData.value.ngayHieuLuc) {
-          body.ngayHieuLucTu = body.ngayHieuLuc[0];
-          body.ngayHieuLucDen = body.ngayHieuLuc[1];
+        if (this.formData.value.ngay) {
+          body.tuNgay = body.ngay[0];
+          body.denNgay = body.ngay[1];
         }
         this.quyetDinhDieuChuyenTCService
           .export(body)

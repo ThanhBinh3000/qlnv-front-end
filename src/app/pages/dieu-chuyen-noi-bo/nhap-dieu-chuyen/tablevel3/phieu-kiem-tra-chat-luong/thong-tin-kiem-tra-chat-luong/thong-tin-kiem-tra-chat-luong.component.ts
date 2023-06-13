@@ -1,58 +1,22 @@
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
-import { FormGroup, Validators } from "@angular/forms";
-import { Base2Component } from "src/app/components/base2/base2.component";
 import { HttpClient } from "@angular/common/http";
-import { StorageService } from "src/app/services/storage.service";
+import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { Validators } from "@angular/forms";
+import * as dayjs from "dayjs";
+import { NzModalService } from "ng-zorro-antd/modal";
 import { NzNotificationService } from "ng-zorro-antd/notification";
 import { NgxSpinnerService } from "ngx-spinner";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { NzCardModule, NzCardComponent } from "ng-zorro-antd/card";
-import {
-  DeXuatPhuongAnCuuTroService
-} from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/DeXuatPhuongAnCuuTro.service";
-import * as dayjs from "dayjs";
-import { FileDinhKem } from "src/app/models/DeXuatKeHoachuaChonNhaThau";
-import { MESSAGE } from "src/app/constants/message";
-import { DanhMucService } from "src/app/services/danhmuc.service";
-import {
-  QuyetDinhPheDuyetPhuongAnCuuTroService
-} from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/QuyetDinhPheDuyetPhuongAnCuuTro.service";
-import { DonviService } from "src/app/services/donvi.service";
-import {
-  TongHopPhuongAnCuuTroService
-} from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/TongHopPhuongAnCuuTro.service";
+import { Base2Component } from "src/app/components/base2/base2.component";
 import {
   DialogTableSelectionComponent
 } from "src/app/components/dialog/dialog-table-selection/dialog-table-selection.component";
-import { v4 as uuidv4 } from 'uuid';
-import { chain, cloneDeep } from 'lodash';
+import { MESSAGE } from "src/app/constants/message";
 import { STATUS } from "src/app/constants/status";
-import { QuyetDinhDieuChuyenTCService } from "src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-tc.service";
-import { MaTongHopQuyetDinhDieuChuyenService } from "src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/ma-tong-hop-quyet-dinh-dieu-chinh.service";
-import { SoDeXuatQuyetDinhDieuChuyenService } from "src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/so-de-xuat-quyet-dinh-dieu-chinh.service";
-import { KeHoachDieuChuyenService } from "../../../../ke-hoach-dieu-chuyen/ke-hoach-dieu-chuyen.service";
-import * as uuid from "uuid";
-import { PhieuKiemTraChatLuongService } from "src/app/services/qlnv-hang/xuat-hang/xuat-cap/PhieuKiemTraChatLuong.service";
+import { DanhMucService } from "src/app/services/danhmuc.service";
 import { BienBanNghiemThuBaoQuanLanDauService } from "src/app/services/dieu-chuyen-noi-bo/nhap-dieu-chuyen/bien-ban-nghiem-thu-bao-quan-lan-dau.service";
 import { QuyetDinhDieuChuyenCucService } from "src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-c.service";
 import { DanhMucTieuChuanService } from "src/app/services/quantri-danhmuc/danhMucTieuChuan.service";
+import { StorageService } from "src/app/services/storage.service";
 
-export class QuyetDinhPdDtl {
-  idVirtual: number;
-  id: number;
-  idHdr: number;
-  idDx: number;
-  soDx: string;
-  maDviDx: string;
-  ngayPduyetDx: Date;
-  trichYeuDx: string;
-  tongSoLuongDx: number;
-  soLuongXuatCap: number;
-  thanhTienDx: number;
-  ngayKetThucDx: Date;
-  tenDviDx: string;
-  quyetDinhPdDx: Array<any> = [];
-}
 
 @Component({
   selector: 'app-thong-tin-kiem-tra-chat-luong',
@@ -543,8 +507,8 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
   async save(isGuiDuyet?) {
     await this.spinner.show();
     let body = this.formData.value;
-    body.fileDinhKemReq = this.phieuKTCLDinhKem;
-    body.fileDinhKemReq = this.bienBanLayMauDinhKem;
+    body.phieuKTCLDinhKem = this.phieuKTCLDinhKem;
+    body.bienBanLayMauDinhKem = this.bienBanLayMauDinhKem;
     body.dcnbPhieuKtChatLuongDtl = this.dataTableChiTieu;
     if (this.idInput) {
       body.id = this.idInput

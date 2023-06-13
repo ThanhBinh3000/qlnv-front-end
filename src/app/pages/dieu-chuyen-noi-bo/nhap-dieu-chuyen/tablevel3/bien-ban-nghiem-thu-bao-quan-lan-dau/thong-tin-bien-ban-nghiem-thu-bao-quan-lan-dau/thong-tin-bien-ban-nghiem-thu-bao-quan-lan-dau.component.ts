@@ -127,7 +127,7 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
       maDiemKhoXuat: [],
       tongKinhPhiDaTh: [],
       tongKinhPhiDaThBc: [],
-      dcnbBBNTBQDtlList: [new Array<any>(),],
+      dcnbBBNTBQDtl: [new Array<any>(),],
       nhanXet: [],
       type: ["01"],
     });
@@ -341,7 +341,7 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
         this.danhSach = this.danhSach.concat(this.dsHangTH)
         this.danhSach = this.danhSach.concat(this.dsHangPD)
         this.formData.patchValue({
-          dcnbBBNTBQDtlList: this.danhSach
+          dcnbBBNTBQDtl: this.danhSach
         })
 
 
