@@ -491,7 +491,8 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
       loaiVthh: this.loaiVthh,
       namKh: this.formData.value.namHd,
       maChiCuc: this.userInfo.MA_DVI,
-      trangThai: STATUS.BAN_HANH
+      trangThai: STATUS.BAN_HANH,
+      pthucBanTrucTiep: '02'
     };
     let res = await this.quyetDinhNvXuatBttService.search(body)
     if (res.data) {
