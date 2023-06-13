@@ -36,6 +36,7 @@ import {
 import {
   QuyetdinhpheduyetKqLcntSclService
 } from "../../../../services/qlnv-kho/tiendoxaydungsuachua/suachualon/qdPdKqLcntScl.service";
+import {HopdongTdscService} from "../../../../services/qlnv-kho/tiendoxaydungsuachua/suachualon/hopdongTdsc.service";
 
 @Component({
   selector: 'app-tien-do-sua-chua-lon-hang-nam',
@@ -76,7 +77,7 @@ export class TienDoSuaChuaLonHangNamComponent extends Base2Component implements 
     private qdPheDuyetBaoCaoKtktService: QdPheDuyetBaoCaoKtktService,
     private quyetdinhpheduyetKhlcntService: QdPheDuyetKhlcntTdsclService,
     private quyetdinhpheduyetKqLcntService: QuyetdinhpheduyetKqLcntSclService,
-    private hopdongService: HopdongService,
+    private hopdongService: HopdongTdscService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, ktQdXdHangNamService)
     super.ngOnInit();
@@ -193,18 +194,18 @@ export class TienDoSuaChuaLonHangNamComponent extends Base2Component implements 
       if (res.msg == MESSAGE.SUCCESS) {
         this.itemQdPdKtkt = res.data.content && res.data.content.length > 0 ? res.data.content[0] : null;
         // //Check tiếp quyết định phê duyệt bản vẽ
-        // if (this.itemQdPdKtkt) {
+        if (this.itemQdPdKtkt) {
           await this.loadItemQdPdKhLcnt(this.itemQdPdKtkt);
           await this.loadListItemQdPdKqLcnt(this.itemTtdt);
-        //   // await this.loadItemHopDong();
-        // } else {
-        //   this.notification.warning(MESSAGE.WARNING, "Dự án chưa tạo quyết định phê duyệt dự án đầu tư xây dựng hoặc quyết định chưa ban hành.");
-        // }
+          await this.loadItemHopDong();
+        } else {
+          this.notification.warning(MESSAGE.WARNING, "Dự án chưa tạo quyết định phê duyệt dự án đầu tư xây dựng hoặc quyết định chưa ban hành.");
+        }
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
     } catch (e) {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR + 11);
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     } finally {
       this.spinner.hide();
     }
@@ -260,7 +261,6 @@ export class TienDoSuaChuaLonHangNamComponent extends Base2Component implements 
       let res = await this.quyetdinhpheduyetKqLcntService.search(body);
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data && res.data.content && res.data.content.length > 0) {
-          console.log(res.data,22222222222222)
           let totalSoGcTheoQdKqLcnt = res.data.content.reduce((accumulator, object) => {
             return accumulator + object.soGoiThau;
           }, 0);

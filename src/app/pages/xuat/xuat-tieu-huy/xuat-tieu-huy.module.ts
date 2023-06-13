@@ -17,6 +17,8 @@ import {TongHopTieuHuyComponent} from "./tong-hop-tieu-huy/tong-hop-tieu-huy.com
 import {
   ChiTietTongHopTieuHuyComponent
 } from "./tong-hop-tieu-huy/chi-tiet-tong-hop-tieu-huy/chi-tiet-tong-hop-tieu-huy.component";
+import {HoSoTieuHuyComponent} from "./ho-so-tieu-huy/ho-so-tieu-huy.component";
+import {ChiTietHoSoTieuHuyComponent} from "./ho-so-tieu-huy/chi-tiet-ho-so-tieu-huy/chi-tiet-ho-so-tieu-huy.component";
 
 
 
@@ -25,6 +27,8 @@ import {
     DanhSachHangTieuHuyComponent,
     TongHopTieuHuyComponent,
     ChiTietTongHopTieuHuyComponent,
+    HoSoTieuHuyComponent,
+    ChiTietHoSoTieuHuyComponent,
     QuyetDinhTieuHuyComponent,
     ThemMoiQuyetDinhTieuHuyComponent,
     ThongBaoKetQuaComponent,
@@ -43,6 +47,8 @@ import {
     DanhSachHangTieuHuyComponent,
     TongHopTieuHuyComponent,
     ChiTietTongHopTieuHuyComponent,
+    HoSoTieuHuyComponent,
+    ChiTietHoSoTieuHuyComponent,
     QuyetDinhTieuHuyComponent,
     ThemMoiQuyetDinhTieuHuyComponent,
     ThongBaoKetQuaComponent,

@@ -21,7 +21,7 @@ export class HopDongSclComponent implements OnInit {
   STATUS = STATUS;
   @Input()
   itemQdPdKhLcnt: any;
-  @Input() itemQdPdDaDtxd: any;
+  @Input() itemQdPdKtkt: any;
   @Input()   itemDuAn: any;
   @Input()
   itemTtdt: any;
@@ -50,6 +50,7 @@ export class HopDongSclComponent implements OnInit {
       let body = {
         "namKh": this.itemTtdt.namKh,
         "idDuAn": this.itemTtdt.idDuAn,
+        "idQdPdKtkt": this.itemQdPdKtkt.id,
         "idQdPdKhLcnt": this.itemQdPdKhLcnt.id,
       }
       let res = await this.hopdongService.detailQdPdKhLcnt(body);
