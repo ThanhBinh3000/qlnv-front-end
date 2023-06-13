@@ -319,7 +319,7 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
             soLuong: dataPhieuKn.soLuong,
           });
           let dataObj = {
-            moTaHangHoa: this.loaiVthh.startsWith('02') ? (this.formData.value.tenCloaiVthh ? this.formData.value.tenCloaiVthh : this.formData.value.tenLoaiVthh) : (this.formData.value.moTaHangHoa ? this.formData.value.moTaHangHoa : this.formData.value.tenCloaiVthh),
+            moTaHangHoa: this.loaiVthh?.startsWith('02') ? (this.formData.value.tenCloaiVthh ? this.formData.value.tenCloaiVthh : this.formData.value.tenLoaiVthh) : (this.formData.value.moTaHangHoa ? this.formData.value.moTaHangHoa : this.formData.value.tenCloaiVthh),
             maSo: '',
             donViTinh: this.formData.value.donViTinh,
             soLuongChungTu: 0,

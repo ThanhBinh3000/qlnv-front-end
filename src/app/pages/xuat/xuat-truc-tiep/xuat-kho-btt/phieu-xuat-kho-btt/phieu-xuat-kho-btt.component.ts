@@ -37,74 +37,46 @@ export class PhieuXuatKhoBttComponent extends Base2Component implements OnInit {
     super(httpClient, storageService, notification, spinner, modal, phieuXuatKhoBttService);
     this.formData = this.fb.group({
       namKh: null,
-      soBienBan: null,
-      soQd: null,
-      trichYeu: null,
-      ngayLayMau: null,
+      soQdNv: null,
+      soPhieuXuat: null,
+      ngayXuatKhoTu: null,
+      ngayXuatKhoDen: null,
       loaiVthh: null,
       maDvi: null,
+      trangThai: null,
     })
 
     this.filterTable = {
-      soQd: '',
+      soQdNv: '',
       namKh: '',
-      ngayTao: '',
-      soHd: '',
-      tenLoaiVthh: '',
-      tenCloaiVthh: '',
-      tgianGnhan: '',
-      trichYeu: '',
-      bbTinhKho: '',
-      bbHaoDoi: '',
+      ngayQdNv: '',
+      maDiemKho: '',
+      tenDiemKho: '',
+      maNhaKho: '',
+      tenNhaKho: '',
+      maNganKho: '',
+      tenNganKho: '',
+      maLoKho: '',
+      tenLoKho: '',
+      ngayXuatKho: '',
+      soPhieuXuat: '',
+      soPhieu: '',
+      ngayKnghiem: '',
+      trangThai: '',
       tenTrangThai: '',
-      tenTrangThaiXh: '',
     };
   }
 
   async ngOnInit() {
     await this.spinner.show();
     try {
-      this.formData.patchValue({
-        loaiVthh: this.loaiVthh,
-        maDvi: this.userService.isChiCuc() ? this.userInfo.MA_DVI : null
-      })
+      this.timKiem();
       await this.search();
     } catch (e) {
       console.log('error: ', e)
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
-  }
-
-  delete(item: any, roles?) {
-    if (!this.checkPermission(roles)) {
-      return
-    }
-    this.modal.confirm({
-      nzClosable: false,
-      nzTitle: 'Xác nhận',
-      nzContent: 'Bạn có chắc chắn muốn xóa?',
-      nzOkText: 'Đồng ý',
-      nzCancelText: 'Không',
-      nzOkDanger: true,
-      nzWidth: 310,
-      nzOnOk: () => {
-        this.spinner.show();
-        try {
-          let body = {
-            id: item.id
-          };
-          this.phieuXuatKhoBttService.delete(body).then(async () => {
-            await this.search();
-            this.spinner.hide();
-          });
-        } catch (e) {
-          console.log('error: ', e);
-          this.spinner.hide();
-          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        }
-      },
-    });
   }
 
   async search(roles?): Promise<void> {
@@ -114,6 +86,19 @@ export class PhieuXuatKhoBttComponent extends Base2Component implements OnInit {
     await this.spinner.hide()
   }
 
+  timKiem() {
+    this.formData.patchValue({
+      loaiVthh: this.loaiVthh,
+      maDvi: this.userService.isChiCuc() ? this.userInfo.MA_DVI : null,
+      trangThai: this.userService.isChiCuc() ? null : this.STATUS.DA_DUYET_LDCC
+    })
+  }
+
+  clearFilter() {
+    this.formData.reset();
+    this.timKiem();
+    this.search();
+  }
 
   buildTableView() {
     let dataView = chain(this.dataTable)
@@ -179,7 +164,6 @@ export class PhieuXuatKhoBttComponent extends Base2Component implements OnInit {
     this.idQdGiaoNvXh = idQdGiaoNvXh;
   }
 
-
   openModalPhieuXuatKho(id: number) {
     this.idPhieu = id;
     this.isViewPhieu = true;
@@ -190,6 +174,19 @@ export class PhieuXuatKhoBttComponent extends Base2Component implements OnInit {
     this.isViewPhieu = false;
   }
 
+  disabledNgayXuatKhoTu = (startValue: Date): boolean => {
+    if (!startValue || !this.formData.value.ngayXuatKhoDen) {
+      return false;
+    }
+    return startValue.getTime() > this.formData.value.ngayXuatKhoDen.getTime();
+  };
+
+  disabledNgayXuatKhoDen = (endValue: Date): boolean => {
+    if (!endValue || !this.formData.value.ngayXuatKhoTu) {
+      return false;
+    }
+    return endValue.getTime() <= this.formData.value.ngayXuatKhoTu.getTime();
+  };
 
 }
 

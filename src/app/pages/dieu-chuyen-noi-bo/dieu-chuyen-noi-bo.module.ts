@@ -19,6 +19,8 @@ import { TongHopDieuChuyenCapTongCuc } from './tong-hop-dieu-chuyen-tai-tong-cuc
 import { ChiTietTongHopDieuChuyenCapTongCuc } from './tong-hop-dieu-chuyen-tai-tong-cuc/tong-hop-dieu-chuyen-cap-tong-cuc/chi-tiet-tong-hop-dieu-chuyen-cap-tong-cuc/chi-tiet-tong-hop-dieu-chuyen-cap-tong-cuc.component';
 import { DialogTuChoiTongHopDieuChuyenComponent } from './tong-hop-dieu-chuyen-tai-cuc/components/dialog-tu-choi/dialog-tu-choi.component';
 import { QuyetDinhDieuChuyenModule } from './quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen.module';
+import { BaoCaoComponent } from './bao-cao/bao-cao.component';
+import { ThemMoiBaoCaoComponent } from './bao-cao/them-moi-bao-cao/them-moi-bao-cao.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +32,9 @@ import { QuyetDinhDieuChuyenModule } from './quyet-dinh-dieu-chuyen/quyet-dinh-d
     TongHopDieuChuyenTaiTongCuc,
     TongHopDieuChuyenCapTongCuc,
     ChiTietTongHopDieuChuyenCapTongCuc,
-    DialogTuChoiTongHopDieuChuyenComponent
+    DialogTuChoiTongHopDieuChuyenComponent,
+    BaoCaoComponent,
+    ThemMoiBaoCaoComponent
   ],
   imports: [
     CommonModule,

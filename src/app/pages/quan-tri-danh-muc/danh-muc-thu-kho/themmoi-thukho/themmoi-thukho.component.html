@@ -1,0 +1,70 @@
+<div class="scroll-modal">
+    <nz-table [nzData]="dataTree" nzBordered [nzFrontPagination]="false" [nzShowPagination]="false">
+        <thead>
+            <tr>
+                <th>{{data.tenDvi}}</th>
+                <th nzWidth="35px">Chọn</th>
+            </tr>
+        </thead>
+        <tbody>
+            <ng-container *ngFor="let diemKho of dataTree , let i = index">
+                <tr>
+                    <td nzShowExpand="true" [nzExpand]="diemKho.expandSet"
+                        (nzExpandChange)="onExpandChange(diemKho, $event)" class="bold">{{ diemKho.tenDvi || "" }}</td>
+                    <td></td>
+                    <!--Điểm kho-->
+
+                </tr>
+                <ng-container *ngIf="diemKho.expandSet">
+                    <ng-container *ngFor="let nhaKho of diemKho.children , let i = index">
+                        <tr>
+                            <td class="pd-l-40" nzShowExpand="true" [nzExpand]="nhaKho.expandSet"
+                                (nzExpandChange)="onExpandChange(nhaKho, $event)">{{nhaKho.tenDvi}}</td><!-- Nhà kho-->
+                            <td></td>
+                        </tr>
+                        <ng-container *ngIf="nhaKho.expandSet">
+                            <ng-container *ngFor="let nganKho of nhaKho.children , let i = index">
+                                <tr *ngIf="checkContainThuKho(nganKho)">
+                                    <td class="pd-l-80" nzShowExpand="true" [nzExpand]="nganKho.expandSet"
+                                        (nzExpandChange)="onExpandChange(nganKho, $event)">{{nganKho.tenDvi}}</td>
+                                    <td *ngIf="nganKho.children.length == 0,else templeTd"
+                                        [nzChecked]="setOfCheckedId.has(nganKho.maDvi)"
+                                        (nzCheckedChange)="onItemChecked(nganKho, $event)"></td>
+                                    <ng-template #templeTd>
+                                        <td></td>
+                                    </ng-template>
+                                    <!-- Ngăn kho-->
+                                </tr>
+                                <ng-container *ngIf="nganKho.expandSet">
+                                    <ng-container *ngFor="let loKho of nganKho.children , let i = index">
+                                        <tr *ngIf='checkContainThuKho(loKho)'>
+                                            <td class="pd-l-120">{{loKho.tenDvi}}</td> <!-- Lô kho-->
+                                            <td [nzChecked]="setOfCheckedId.has(loKho.maDvi)"
+                                                (nzCheckedChange)="onItemChecked(loKho, $event)"></td>
+                                        </tr>
+                                    </ng-container>
+                                </ng-container>
+                            </ng-container>
+                        </ng-container>
+                    </ng-container>
+                </ng-container>
+            </ng-container>
+        </tbody>
+    </nz-table>
+</div>
+<div class="modal-footer">
+    <div class="nut">
+        <div class="cantrai">
+        </div>
+        <div class="canphai">
+            <button nz-button (click)="handleOk()" class="modal__button--save">
+                <i nz-icon nzType="save"></i>
+                Lưu
+            </button>
+            <button nz-button (click)="handleCancel()" class="modal__button--cancel">
+                <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+                Đóng
+            </button>
+        </div>
+    </div>
+</div>

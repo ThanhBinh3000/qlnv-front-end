@@ -244,7 +244,7 @@ export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements O
       // maDviChiCuc: this.userInfo.MA_DVI,
       loaiVthh: this.loaiVthh,
       trangThai: STATUS.HOAN_THANH_CAP_NHAT,
-      pthucBanTrucTiep: ['02'],
+      pthucBanTrucTiep: ['02', '03'],
       lastest: 1
     }
     ).then(res => {

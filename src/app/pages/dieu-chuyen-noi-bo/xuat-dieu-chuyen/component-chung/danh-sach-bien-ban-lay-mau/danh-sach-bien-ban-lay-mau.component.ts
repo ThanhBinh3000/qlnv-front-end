@@ -7,7 +7,7 @@ import { NzModalService } from "ng-zorro-antd/modal";
 import { StorageService } from 'src/app/services/storage.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import dayjs from 'dayjs';
-import { chain, cloneDeep } from 'lodash';
+import { chain, cloneDeep, groupBy } from 'lodash';
 import { v4 as uuidv4 } from 'uuid';
 import { MESSAGE } from 'src/app/constants/message';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
@@ -15,7 +15,7 @@ import { BienBanLayMauDieuChuyenService } from '../services/dcnb-bien-ban-lay-ma
 
 export interface PassData {
     idBbLayMau: number, qdinhDccId: number, soQdinhDcc: string, maLoKho: string, tenLoKho: string,
-    maNganKho: string, tenNganKho: string, maNhaKho: string, tenNhaKho: string, maDiemKho: string, tenDiemKho: string
+    maNganKho: string, tenNganKho: string, maNhaKho: string, tenNhaKho: string, maDiemKho: string, tenDiemKho: string, loaiVthh: string, tenLoaiVthh: string, cloaiVthh: string, tenCloaiVthh: string
 }
 @Component({
     selector: 'app-danh-sach-bien-ban-lay-mau',
@@ -48,7 +48,7 @@ export class DanhSachBienBanLayMau extends Base2Component implements OnInit {
     dataTable: any[];
     passData: PassData = {
         idBbLayMau: null, qdinhDccId: null, soQdinhDcc: '', maLoKho: '', tenLoKho: '',
-        maNganKho: '', tenNganKho: '', maNhaKho: '', tenNhaKho: '', maDiemKho: '', tenDiemKho: ''
+        maNganKho: '', tenNganKho: '', maNhaKho: '', tenNhaKho: '', maDiemKho: '', tenDiemKho: '', loaiVthh: '', tenLoaiVthh: '', cloaiVthh: '', tenCloaiVthh: ''
     }
     LIST_TRANG_THAI: { [key: string]: string } = {
         [STATUS.DU_THAO]: "Dự thảo",
@@ -73,7 +73,6 @@ export class DanhSachBienBanLayMau extends Base2Component implements OnInit {
             tuNgay: [null],
             denNgay: [null],
             trangThai: [STATUS.BAN_HANH],
-            maDvi: [this.userInfo.MA_DVI],
             loaiDc: [],
             loaiVthh: [],
         })
@@ -114,35 +113,102 @@ export class DanhSachBienBanLayMau extends Base2Component implements OnInit {
         this.isDetail = true;
         this.isAddNew = b;
     }
+    // buildTableView() {
+    //     let dataView = Array.isArray(this.dataTable) ?
+    //         this.dataTable.map((data) => {
+
+    //             let rs = Array.isArray(data.dcnbBienBanLayMauHdrList) ? chain(data.dcnbBienBanLayMauHdrList).groupBy("maDiemKho").map((v, k) => {
+    //                 let rowLv2 = v.find(s => s.maDiemKho === k);
+    //                 if (!rowLv2) {
+    //                     return;
+    //                 }
+    //                 return {
+    //                     ...rowLv2,
+    //                     idVirtual: uuidv4(),
+    //                     maDiemKho: k,
+    //                     childData: v
+    //                 }
+    //             }
+    //             ).value() : [];
+
+    //             return {
+    //                 ...data,
+    //                 soQdinhDcc: data.soQdinh,
+    //                 qdinhDccId: data.id,
+    //                 idVirtual: uuidv4(),
+    //                 childData: rs
+    //             };
+    //         }) : []
+    //     this.dataView = dataView;
+    //     this.expandAll()
+    // }
+    // buildTableView() {
+    //     let dataView = Array.isArray(this.dataTable) ? this.dataTable.map((data) => {
+    //         let arr = [];
+    //         Array.isArray(data.danhSachQuyetDinh) ? data.danhSachQuyetDinh.forEach(element => {
+    //             Array.isArray(element?.dcnbKeHoachDcHdr?.danhSachHangHoa) && element.dcnbKeHoachDcHdr.danhSachHangHoa.forEach(item => {
+    //                 arr.push(item)
+    //             });
+    //         }) : [];
+    //         const rs = chain(arr).groupBy("maDiemKho").map((v, k) => {
+    //             let rowLv2 = v.find(s => s.maDiemKho === k);
+    //             if (!rowLv2) {
+    //                 return;
+    //             }
+    //             return {
+    //                 ...rowLv2,
+    //                 idVirtual: uuidv4(),
+    //                 maDiemKho: k,
+    //                 childData: v
+    //             }
+    //         }).value()
+    //         return {
+    //             ...data,
+    //             soQdinhDcc: data.soQdinh,
+    //             qdinhDccId: data.id,
+    //             idVirtual: uuidv4(),
+    //             childData: rs
+    //         }
+    //     }) : [];
+    //     this.dataView = dataView;
+    //     this.expandAll()
+    // }
     buildTableView() {
-        let dataView = chain(this.dataTable).groupBy("soQdinhDcc").map((value, key) => {
-            let rs = chain(value).groupBy("maDiemKho").map((v, k) => {
-                let rowLv2 = v.find(s => s.maDiemKho === k);
-                if (!rowLv2) {
-                    return;
-                }
+        let removeDuplicateData = [];
+        this.dataTable.forEach((item, i) => {
+            const maLoNganKho = item.maLoNganKho ? item.maLoNganKho : (item.maloKho ? `${item.maloKho}${item.maNganKho}` : item.maNganKho);
+            const dataIndex = removeDuplicateData.findIndex(f => f.soQdinh == item.soQdinh && f.maLoNganKho == maLoNganKho);
+            if (dataIndex < 0) {
+                removeDuplicateData.push({ ...item, maLoNganKho })
+            }
+        })
+        let dataView = Array.isArray(removeDuplicateData) ?
+            chain(removeDuplicateData).groupBy("soQdinh").map((rs, i) => {
+                const dataSoQdinh = rs.find(f => f.soQdinh == i);
+                if (!dataSoQdinh) return;
+                const rsx = chain(rs).groupBy("maDiemKho").map((v, k) => {
+                    let rowLv2 = v.find(s => s.maDiemKho === k);
+                    if (!rowLv2) {
+                        return;
+                    }
+                    return {
+                        ...rowLv2,
+                        idVirtual: uuidv4(),
+                        maDiemKho: k,
+                        childData: v
+                    }
+                }).value()
                 return {
-                    ...rowLv2,
+                    ...dataSoQdinh,
+                    soQdinhDcc: dataSoQdinh.soQdinh,
                     idVirtual: uuidv4(),
-                    maDiemKho: k,
-                    childData: v
+                    childData: rsx
                 }
-            }
-            ).value();
-            let rowLv1 = value.find(s => s.soQdinhDcc === key);
-            if (!rowLv1) {
-                return;
-            }
-            return {
-                ...rowLv1,
-                idVirtual: uuidv4(),
-                childData: rs
-            };
-        }).value();
-        this.dataView = dataView;
+            }).value() : [];
+        this.dataView = cloneDeep(dataView);
+        console.log("dataView", this.dataView)
         this.expandAll()
     }
-
     expandAll() {
         this.dataView.forEach(s => {
             this.expandSetString.add(s.idVirtual);
@@ -160,13 +226,13 @@ export class DanhSachBienBanLayMau extends Base2Component implements OnInit {
 
     }
     redirectToChiTiet(data: any, isView: boolean, idBbLayMau?: number, qdinhDccId?: number, soQdinhDcc?: string, maLoKho?: string, tenLoKho?: string,
-        maNganKho?: string, tenNganKho?: string, maNhaKho?: string, tenNhaKho?: string, maDiemKho?: string, tenDiemKho?: string) {
+        maNganKho?: string, tenNganKho?: string, maNhaKho?: string, tenNhaKho?: string, maDiemKho?: string, tenDiemKho?: string, loaiVthh?: string, tenLoaiVthh?: string, cloaiVthh?: string, tenCloaiVthh?: string) {
         this.selectedId = idBbLayMau;
         this.isDetail = true;
         this.isView = isView;
         this.passData = {
             idBbLayMau, qdinhDccId, soQdinhDcc, maLoKho, tenLoKho,
-            maNganKho, tenNganKho, maNhaKho, tenNhaKho, maDiemKho, tenDiemKho
+            maNganKho, tenNganKho, maNhaKho, tenNhaKho, maDiemKho, tenDiemKho, loaiVthh, tenLoaiVthh, cloaiVthh, tenCloaiVthh
         }
     }
     disabledTuNgay = (startValue: Date): boolean => {
@@ -198,7 +264,7 @@ export class DanhSachBienBanLayMau extends Base2Component implements OnInit {
         return false
     }
     checkRoleView(trangThai: string): boolean {
-        if (!this.checkRoleAdd(trangThai) && !this.checkRoleEdit(trangThai)) {
+        if (trangThai && !this.checkRoleAdd(trangThai) && !this.checkRoleEdit(trangThai) && !this.checkRoleApprove(trangThai)) {
             return true
         }
         return false

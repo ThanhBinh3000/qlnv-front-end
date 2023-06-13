@@ -76,7 +76,7 @@
         <div nz-row [nzGutter]="24">
           <div nz-col nzSpan="2">
             <nz-form-item>
-              <nz-form-label nzRequired [nzNoColon]="true"> Năm kế hoạCch
+              <nz-form-label nzRequired [nzNoColon]="true"> Năm kế hoạch
               </nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
                 <nz-select formControlName="nam" nzAllowClear [nzDisabled]="isView">
@@ -156,7 +156,7 @@
                 Căn cứ pháp lý
               </nz-form-label>
               <div class="list-file">
-                <file-list [data]="formData.value.canCu" [isViewDetail]="isView"></file-list>
+                <file-list [isCanCuPL]="true" [data]="formData.value.canCu" [isViewDetail]="isView"></file-list>
               </div>
             </nz-form-item>
           </div>
@@ -362,7 +362,7 @@
                     <div nz-col nzSpan="24">
                       <nz-form-item>
                         <nz-form-label [nzNoColon]="true">
-                          SL xuất cứu trợ, viện trợ gạo được chuyển sang xuất cấp(thóc gia công)
+                          SL gạo cần xuất cấp gia công để cứu trợ, viện trợ
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
                              <span class="text-red">{{deXuatSelected.soLuongXuatCap | number : globals.numberFormat}}
@@ -373,7 +373,7 @@
                     <div nz-col nzSpan="12">
                       <nz-form-item>
                         <nz-form-label [nzNoColon]="true">
-                          Tổng SL gạo cần xuất cứu trợ, viện trợ theo PA được duyệt
+                          SL thóc cần xuất cấp gia công để cứu trợ, viện trợ
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
                              <span
@@ -385,7 +385,7 @@
                     <div nz-col nzSpan="12">
                       <nz-form-item>
                         <nz-form-label [nzNoColon]="true">
-                          SL gạo xuất được từ kho để cứu trợ, viện trợ
+                          Thành tiền
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
                             <span class="text-blue">{{formData.value.tongTienGiaDeXuat | number : globals.numberFormat}}

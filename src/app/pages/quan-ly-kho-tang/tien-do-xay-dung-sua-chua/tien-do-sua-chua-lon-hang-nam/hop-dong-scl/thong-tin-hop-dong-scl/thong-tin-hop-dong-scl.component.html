@@ -56,14 +56,18 @@
             </div>
             <div nz-col nzSpan="24">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true"> Chủ đầu tư</nz-form-label>
+                <nz-form-label [nzNoColon]="true">Loại hợp đồng</nz-form-label>
                 <nz-form-control>
-                  <input nz-input formControlName="chuDauTu" readonly/>
+                  <input nz-input formControlName="tenLoaiHopDong" readonly/>
                 </nz-form-control>
               </nz-form-item>
             </div>
             <div nz-col nzSpan="24">
               <nz-form-item>
+                <nz-form-label [nzNoColon]="true"> Chủ đầu tư</nz-form-label>
+                <nz-form-control>
+                  <input nz-input formControlName="chuDauTu" readonly/>
+                </nz-form-control>
               </nz-form-item>
             </div>
             <div nz-col nzSpan="24">
@@ -80,6 +84,16 @@
                 <nz-form-control>
                   <nz-input-group>
                     <input nz-input currencyMask [options]="AMOUNT" formControlName="tongTien" readonly/>
+                  </nz-input-group>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="24">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">Nguồn vốn</nz-form-label>
+                <nz-form-control>
+                  <nz-input-group>
+                    <input nz-input formControlName="tenNguonVon" readonly/>
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>

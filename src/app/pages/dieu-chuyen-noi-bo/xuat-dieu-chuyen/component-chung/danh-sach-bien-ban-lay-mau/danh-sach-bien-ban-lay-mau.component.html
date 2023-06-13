@@ -98,12 +98,13 @@
                                 style="width: 35px">
                             </td>
                             <td>
-                                <a *ngIf="item.soQdinhDcc && item.id" nz-button nzType="link"
-                                    (click)="openModalQdDc(item.id)">{{
+                                <a *ngIf="item.soQdinhDcc && item.qdinhDccId" nz-button nzType="link"
+                                    (click)="openModalQdDc(item.qdinhDccId)">{{
                                     item.soQdinhDcc}}</a>
                             </td>
-                            <td>{{item.nam}}</td>
-                            <td>{{item.ngayQd | date: 'dd/MM/YYYY'}}</td>
+                            <td>{{item.namKh}}</td>
+                            <!-- <td>{{item.ngayQd | date: 'dd/MM/YYYY'}}</td> -->
+                            <td></td>
                             <td></td>
                             <td></td>
                             <td></td>
@@ -122,7 +123,7 @@
                                     <td></td>
                                     <td></td>
                                     <td></td>
-                                    <td></td>
+                                    <td>{{lv1.thoiHanDieuChuyen | date: 'dd/MM/YYYY'}}</td>
                                     <td>{{lv1.tenDiemKho}}</td>
                                     <td></td>
                                     <td></td>
@@ -143,19 +144,19 @@
                                             <td></td>
                                             <td></td>
                                             <td></td>
-                                            <td>{{lv2.tenLoKho}},
-                                                {{lv2.tenNhaKho}}
+                                            <td>{{(lv2.tenloKho? lv2.tenloKho + " - ": "") + (lv2.tenNganKho ||
+                                                "")}}
                                             </td>
-                                            <td>{{lv2.soBbLayMau}}</td>
-                                            <td>{{lv2.ngayLayMau | date: 'dd/MM/YYYY' }}</td>
-                                            <td>{{lv2.soBbTinhKho}}</td>
+                                            <td>{{lv2.soBBLayMau}}</td>
+                                            <td>{{lv2.ngaylayMau | date: 'dd/MM/YYYY' }}</td>
+                                            <td>{{lv2.soBBTinhKho}}</td>
                                             <td>{{lv2.ngayXuatDocKho}}</td>
-                                            <td>{{lv2.soBbHaoDoi}}</td>
+                                            <td>{{lv2.bbHaoDoi}}</td>
                                             <td>{{LIST_TRANG_THAI[lv2.trangThai]}}</td>
                                             <td class="text-left">
-                                                <a *ngIf="checkRoleAdd(lv2.trangThai)"
-                                                    (click)="redirectToChiTiet(lv2, false, null ,item.qdinhDccId,  item.soQdinhDcc,
-                                                        lv2.maLoKho, lv2.tenLoKho, lv2.maNganKho, lv2.tenNganKho, lv2.maNhaKho, lv2.tenNhaKho, lv1.maDiemKho, lv1.tenDiemKho)">
+                                                <a *ngIf="checkRoleAdd(lv2.trangThai)" (click)="redirectToChiTiet(lv2, false, null ,item.qdinhDccId,  item.soQdinhDcc,
+                                                        lv2.maLoKho, lv2.tenloKho, lv2.maNganKho, lv2.tenNganKho, lv2.maNhaKho, lv2.tenNhaKho, lv1.maDiemKho, lv1.tenDiemKho, lv2.maHangHoa, lv2.tenHangHoa,  lv2.maChLoaiHangHoa
+                                                        , lv2.tenChLoaiHangHoa)">
                                                     <i class="fa fa-plus"></i>
                                                 </a>
                                                 <a *ngIf="checkRoleView(lv2.trangThai)"
@@ -166,10 +167,10 @@
                                                     (click)="redirectToChiTiet(lv2, false, lv2.id)">
                                                     <i class="fa fa-pencil"></i>
                                                 </a>
-                                                <!-- <a *ngIf="checkRoleDuyet(lv2.trangThai)"
-                                                        (click)="redirectToChiTiet(lv2, false, null)">
-                                                        <i class="icon htvbdh_tcdt_pheduyet"></i>
-                                                    </a> -->
+                                                <a *ngIf="checkRoleApprove(lv2.trangThai)"
+                                                    (click)="redirectToChiTiet(lv2, false, lv2.id)">
+                                                    <i class="icon htvbdh_tcdt_pheduyet"></i>
+                                                </a>
                                                 <a *ngIf="checkRoleDelete(lv2.trangThai)" (click)="xoaItem(lv2)">
                                                     <i class="fa fa-trash-o do"></i>
                                                 </a>
@@ -204,7 +205,7 @@
 </div>
 <ng-template #templateThemmoi>
     <app-chi-tiet-danh-sach-bien-ban-lay-mau [idInput]="selectedId" [isEdit]="isEdit" [isView]="isView"
-        [isAddNew]="isAddNew" [passData]="this.passData"
+        [isAddNew]="isAddNew" [passData]="this.passData" [loaiVthh]="typeVthh"
         (showListEvent)="showList()"></app-chi-tiet-danh-sach-bien-ban-lay-mau>
 </ng-template>
 
@@ -217,7 +218,7 @@
     ></app-thong-tin-quyet-dinh-dieu-chuyen>
 </ng-container> -->
     <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-        <app-thong-tin-quyet-dinh-dieu-chuyen-tc [idInput]="idQdDc"></app-thong-tin-quyet-dinh-dieu-chuyen-tc>
+        <app-thong-tin-quyet-dinh-dieu-chuyen-cuc [idInput]="idQdDc"></app-thong-tin-quyet-dinh-dieu-chuyen-cuc>
     </ng-container>
     <div *nzModalFooter>
         <button nz-button (click)="closeModalQdDc()" class="modal__button--cancel">

@@ -164,17 +164,17 @@
           <td>{{ data.trichYeu }}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td style="text-align: left; white-space: nowrap;">
-            <a *ngIf="(data.trangThai != '00') && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VMBBS_QD_TTCP_XEM')"
+            <a *ngIf="(data.trangThai != STATUS.DANG_NHAP_DU_LIEU) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VMBBS_QD_TTCP_XEM')"
                (click)="viewDetail(data.id, true)">
               <i class="fa fa-eye"></i>
             </a>
             <a
-              *ngIf="(data.trangThai == '00' && userService.isTongCuc()) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VMBBS_QD_TTCP_THEM')"
+              *ngIf="(data.trangThai == STATUS.DANG_NHAP_DU_LIEU && userService.isTongCuc()) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VMBBS_QD_TTCP_THEM')"
               (click)="viewDetail(data.id, false)">
               <i class="fa fa-pencil"></i>
             </a>
             <a
-              *ngIf="(data.trangThai == '00' && userService.isTongCuc()) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VMBBS_QD_TTCP_XOA')"
+              *ngIf="(data.trangThai == STATUS.DANG_NHAP_DU_LIEU && userService.isTongCuc()) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VMBBS_QD_TTCP_XOA')"
               (click)="xoaItem(data)">
               <i class="fa fa-trash-o do"></i>
             </a>

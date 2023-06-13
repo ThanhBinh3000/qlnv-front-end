@@ -42,6 +42,10 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
   dsHangHoa = [];
   @Input()
   isView: boolean = false;
+  @Input()
+  dataQdTtcpGiaoBn: number;
+  @Input()
+  tabName: string;
   rowItem: ThongTinQuyetDinh = new ThongTinQuyetDinh();
   dsChungLoaiHangHoa = [];
   dsChungLoaiHangHoaTable = [];
@@ -49,6 +53,7 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
   amount_no_decimal = AMOUNT_NO_DECIMAL;
   dataEdit: { [key: string]: { edit: boolean; data: ThongTinQuyetDinh } } = {};
   expandSet = new Set<number>();
+  dataDuToanSumByDataTable: number = 0;
 
   constructor(
     private modal: NzModalService,
@@ -115,8 +120,9 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
         item.donGia = item.dataChild[0].donGia ? item.dataChild[0].donGia : null;
         item.dataChild.shift();
       }
-    })
+    });
     this.expandAll();
+    this.sumAllDataTable();
   }
 
   sumSoLuong(data: any, row: string, type?: any) {
@@ -139,6 +145,21 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
       }
     }
     return sl;
+  }
+
+
+  sumAllDataTable() {
+    let tt = 0;
+    this.dataTable.forEach(item => {
+      if (item && item.dataChild && item.dataChild.length > 0) {
+        item.dataChild.forEach(child => {
+          tt += child.tongTien ? child.tongTien : 0;
+        })
+      } else {
+        tt += item.tongTien ? item.tongTien : 0;
+      }
+    });
+    this.dataDuToanSumByDataTable = tt;
   }
 
 
@@ -258,6 +279,7 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
         }
         this.emitDataTable();
         this.expandAll();
+        this.sumAllDataTable();
       }
     });
   }
@@ -278,6 +300,7 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
               this.dataTable[index].dataChild.splice(y, 1);
             }
           }
+          this.sumAllDataTable();
         } catch (e) {
           console.log("error", e);
         }
@@ -285,15 +308,15 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
     });
   }
 
-  calcTong() {
-    if (this.dataTable) {
-      const sum = this.dataTable.reduce((prev, cur) => {
-        prev += cur.tongTien;
-        return prev;
-      }, 0);
-      return sum;
-    }
-  }
+  // calcTong() {
+  //   if (this.dataTable) {
+  //     const sum = this.dataTable.reduce((prev, cur) => {
+  //       prev += cur.tongTien;
+  //       return prev;
+  //     }, 0);
+  //     return sum;
+  //   }
+  // }
 
   onChangeLoaiVthh(event, typeChange, index?) {
     if (typeChange === 'add') {

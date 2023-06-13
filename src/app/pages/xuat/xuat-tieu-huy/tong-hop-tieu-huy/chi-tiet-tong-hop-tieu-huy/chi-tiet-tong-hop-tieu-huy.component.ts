@@ -1,5 +1,4 @@
 import {ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, SimpleChanges} from '@angular/core';
-import {XuatThanhLyComponent} from "src/app/pages/xuat/xuat-thanh-ly/xuat-thanh-ly.component";
 import {HttpClient} from "@angular/common/http";
 import {StorageService} from "src/app/services/storage.service";
 import {NzNotificationService} from "ng-zorro-antd/notification";
@@ -12,11 +11,14 @@ import {Base2Component} from "src/app/components/base2/base2.component";
 import {CHUC_NANG} from 'src/app/constants/status';
 import {chain, cloneDeep, isEmpty} from "lodash";
 import {v4 as uuidv4} from "uuid";
-import {DanhSachThanhLyService} from "src/app/services/qlnv-hang/xuat-hang/xuat-thanh-ly/DanhSachThanhLy.service";
 import dayjs from "dayjs";
 import {NumberToRoman} from 'src/app/shared/commonFunction';
 import {Validators} from "@angular/forms";
 import {TongHopTieuHuyService} from "../../../../../services/qlnv-hang/xuat-hang/xuat-tieu-huy/TongHopTieuHuy.service";
+import {XuatTieuHuyComponent} from "../../xuat-tieu-huy.component";
+import {
+  DanhSachTieuHuyService
+} from "../../../../../services/qlnv-hang/xuat-hang/xuat-tieu-huy/DanhSachTieuHuy.service";
 
 @Component({
   selector: 'app-chi-tiet-tong-hop-tieu-huy',
@@ -43,7 +45,7 @@ export class ChiTietTongHopTieuHuyComponent extends Base2Component implements On
   expandSetString = new Set<string>();
   numberToRoman = NumberToRoman;
   maHauTo: any;
-  public vldTrangThai: XuatThanhLyComponent;
+  public vldTrangThai: XuatTieuHuyComponent;
 
   constructor(httpClient: HttpClient,
               storageService: StorageService,
@@ -53,11 +55,11 @@ export class ChiTietTongHopTieuHuyComponent extends Base2Component implements On
               private donviService: DonviService,
               private danhMucService: DanhMucService,
               private tongHopTieuHuyService: TongHopTieuHuyService,
-              private danhSachThanhLyService: DanhSachThanhLyService,
-              private xuatThanhLyComponent: XuatThanhLyComponent,
+              private danhSachTieuHuyService: DanhSachTieuHuyService,
+              private xuatTieuHuyComponent: XuatTieuHuyComponent,
               private cdr: ChangeDetectorRef) {
     super(httpClient, storageService, notification, spinner, modal, tongHopTieuHuyService);
-    this.vldTrangThai = xuatThanhLyComponent;
+    this.vldTrangThai = xuatTieuHuyComponent;
     this.formData = this.fb.group({
       id: [0],
       nam: [dayjs().get('year')],
@@ -226,7 +228,7 @@ export class ChiTietTongHopTieuHuyComponent extends Base2Component implements On
         this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đủ thông tin.');
         return;
       } else {
-        await this.danhSachThanhLyService.search({
+        await this.danhSachTieuHuyService.search({
           type: 'TH',
           ngayDeXuatTu: this.formData.value.thoiGianTlTu,
           ngayDeXuatDen: this.formData.value.thoiGianTlDen
@@ -314,7 +316,7 @@ export class ChiTietTongHopTieuHuyComponent extends Base2Component implements On
 
   }
 
-  chonNgayXuatThanhLy($event: any) {
+  chonNgayXuatTieuHuy($event: any) {
     if ($event) {
       this.formData.patchValue({
         thoiGianTlTu: dayjs($event[0]).format('YYYY-MM-DD'),

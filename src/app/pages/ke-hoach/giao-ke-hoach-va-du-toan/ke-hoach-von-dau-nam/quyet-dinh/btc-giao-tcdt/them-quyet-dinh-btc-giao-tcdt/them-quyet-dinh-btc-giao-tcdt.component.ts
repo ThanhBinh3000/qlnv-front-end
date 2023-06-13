@@ -56,7 +56,16 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
     soLuongMuaGao: 0,
     donGiaMuaGao: 0,
     soLuongBan: 0,
-    donGiaBan: 0
+    donGiaBan: 0,
+
+    tienMuaThoc: 0,
+    tongTienMuaGao: 0,
+    tienMuaGaoLpdh: 0,
+    tienMuaGaoXcht: 0,
+    tongTienBan: 0,
+    tienBanThoc: 0,
+    tienBanGao: 0,
+    tienGaoCtro: 0
   }
   dataQdTtcpGiaoBTC: any;
   taiLieuDinhKemList: any[] = [];
@@ -70,8 +79,14 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
   yearSelected: number;
   dataTable: any[] = [];
   dsHangHoa: any[] = [];
-  iterableDiffer: any;
   STATUS = STATUS;
+  chiTang: number = 0;
+  xuatGiam: number = 0;
+  xuatBan: number = 0;
+  dtMuaLuongThuc: number = 0;
+  dtMuaVatTu: number = 0;
+  dtMuaMuoi: number = 0;
+
 
   constructor(
     private readonly fb: FormBuilder,
@@ -104,13 +119,13 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
       await Promise.all([
         this.userInfo = this.userService.getUserLogin(),
         this.loadDsNam(),
-        // this.maQd = '/' + this.userInfo.MA_QD,
         this.getDataDetail(this.idInput),
         this.loadDanhMucHang(),
       ])
     if (this.idInput == 0) {
       await this.loadQdTtcpGiaoBoNganh(dayjs().get('year'))
     }
+    this.sumAllDataTable();
     await this.spinner.hide();
   }
 
@@ -134,6 +149,10 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
       this.xuatGiamList = cloneDeep(this.dataQdTtcpGiaoBTC?.xuatGiamList ? this.dataQdTtcpGiaoBTC.xuatGiamList : []);
       this.xuatBanList = cloneDeep(this.dataQdTtcpGiaoBTC?.xuatBanList ? this.dataQdTtcpGiaoBTC.xuatBanList : []);
       this.luanPhienList = cloneDeep(this.dataQdTtcpGiaoBTC?.luanPhienList ? this.dataQdTtcpGiaoBTC.luanPhienList : []);
+      //Chi tăng,xuat giam, xuat ban vật tư ttcp giao bộ tài chính
+      this.chiTang = res.data.listChiTangToanBoNganh.find(item => item.maBn == '01' && item.tenBn == 'Vật tư, thiết bị').tongSo;
+      this.xuatBan = this.dataQdTtcpGiaoBTC.ttXuatBan;
+      this.xuatGiam = this.dataQdTtcpGiaoBTC.ttXuatGiam;
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
@@ -152,7 +171,6 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
         trichYeu: data.trichYeu,
         ghiChu: data.ghiChu
       })
-      // this.taiLieuDinhKemList = data.fileDinhkems;
       data.fileDinhkems.forEach(item => {
         if (item.fileType == FILETYPE.FILE_DINH_KEM) {
           this.taiLieuDinhKemList.push(item)
@@ -184,40 +202,12 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
     }
   }
 
-  openFile(event) {
-    // if (!this.isView) {
-    //   let item = {
-    //     id: new Date().getTime(),
-    //     text: event.name,
-    //   };
-    //   if (!this.taiLieuDinhKemList.find((x) => x.text === item.text)) {
-    //     this.uploadFileService
-    //       .uploadFile(event.file, event.name)
-    //       .then((resUpload) => {
-    //         if (!this.deXuatDieuChinh.fileDinhKemReqs) {
-    //           this.deXuatDieuChinh.fileDinhKemReqs = [];
-    //         }
-    //         const fileDinhKem = new FileDinhKem();
-    //         fileDinhKem.fileName = resUpload.filename;
-    //         fileDinhKem.fileSize = resUpload.size;
-    //         fileDinhKem.fileUrl = resUpload.url;
-    //         fileDinhKem.idVirtual = item.id;
-    //         this.deXuatDieuChinh.fileDinhKemReqs.push(fileDinhKem);
-    //         this.taiLieuDinhKemList.push(item);
-    //       });
-    //   }
-    // }
-  }
-
   deleteTaiLieuDinhKemTag(data: any) {
     if (!this.isView) {
       this.taiLieuDinhKemList = this.taiLieuDinhKemList.filter(
         (x) => x.id !== data.id,
       );
     }
-  }
-
-  downloadFileKeHoach(event) {
   }
 
   quayLai() {
@@ -269,6 +259,12 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
       this.spinner.hide();
       return;
     }
+    let checkKhNhaptXuat = this.validKeHoachNhapXuatLT(this.keHoachNhapXuat);
+    if (!checkKhNhaptXuat) {
+      this.notification.warning(MESSAGE.WARNING, "Vốn chi và vốn có của kế hoạch nhập xuất lương thực không bằng nhau.");
+      this.spinner.hide();
+      return;
+    }
     let body = this.formData.value;
     this.listFile = [];
     if (this.taiLieuDinhKemList.length > 0) {
@@ -287,10 +283,6 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
       body.fileDinhKems = this.listFile;
     }
     body.soQd = body.soQd + this.maQd;
-    // body.muaTangList = this.muaTangList;
-    // body.xuatGiamList = this.xuatGiamList;
-    // body.xuatBanList = this.xuatBanList;
-    // body.luanPhienList = this.luanPhienList;
     body.muaTangList = this.conVertTreeToList(this.muaTangList);
     body.xuatGiamList = this.conVertTreeToList(this.xuatGiamList);
     body.xuatBanList = this.conVertTreeToList(this.xuatBanList);
@@ -326,6 +318,27 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
     this.spinner.hide();
   }
 
+  validKeHoachNhapXuatLT(dataNhapXuatLt) {
+    let valid = true;
+    let vonChi = 0;
+    let vonCo = 0;
+    if (dataNhapXuatLt) {
+      if (dataNhapXuatLt.nhapCtMua) {
+        vonChi = dataNhapXuatLt.tienMuaThoc + dataNhapXuatLt.tienMuaGaoXcht + dataNhapXuatLt.tienMuaGaoLpdh;
+      } else {
+        vonChi = dataNhapXuatLt.tienMuaThoc + dataNhapXuatLt.tongTienMuaGao;
+      }
+      if (dataNhapXuatLt.nhapCtBan) {
+        vonCo = dataNhapXuatLt.tienBanThoc + dataNhapXuatLt.tienBanGao + dataNhapXuatLt.tienGaoCtro + dataNhapXuatLt.tongTienVonNsnn + dataNhapXuatLt.tongTienVonTx;
+      } else {
+        vonCo = dataNhapXuatLt.tongTienBan + dataNhapXuatLt.tienGaoCtro + dataNhapXuatLt.tongTienVonNsnn + dataNhapXuatLt.tongTienVonTx
+      }
+      if (vonChi != vonCo) {
+        valid = false;
+      }
+    }
+    return valid;
+  }
 
   conVertTreeToList(data) {
     let arr = [];
@@ -341,13 +354,33 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
     return arr;
   }
 
-  exportData() {
+  receivedData(data: any) {
+    this.muaTangList = data;
+    this.sumAllDataTable();
   }
 
-  xoaKeHoach() {
-  }
-
-  themKeHoach() {
+  sumAllDataTable() {
+    let ttVatTu = 0;
+    let ttMuoi = 0;
+    this.muaTangList.forEach(item => {
+      if (item && item.dataChild && item.dataChild.length > 0) {
+        item.dataChild.forEach(child => {
+          if (!child.loaiVthh.startsWith('04')) {
+            ttVatTu += child.tongTien ? child.tongTien : 0;
+          } else {
+            ttMuoi += child.tongTien ? child.tongTien : 0;
+          }
+        })
+      } else {
+        if (!item.loaiVthh.startsWith('04')) {
+          ttVatTu += item.tongTien ? item.tongTien : 0;
+        } else {
+          ttMuoi += item.tongTien ? item.tongTien : 0;
+        }
+      }
+    });
+    this.dtMuaVatTu = ttVatTu;
+    this.dtMuaMuoi = ttMuoi;
   }
 }
 

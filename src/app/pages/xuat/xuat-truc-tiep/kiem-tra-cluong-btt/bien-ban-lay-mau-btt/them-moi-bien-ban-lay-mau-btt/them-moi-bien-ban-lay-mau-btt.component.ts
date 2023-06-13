@@ -63,6 +63,7 @@ export class ThemMoiBienBanLayMauBttComponent extends Base2Component implements 
       idQdNv: [''],
       soQdNv: ['', [Validators.required]],
       ngayQd: [''],
+      idHd: [''],
       soHd: [''],
       loaiBienBan: ['', [Validators.required]],
       ngayKyHd: [''],
@@ -150,28 +151,33 @@ export class ThemMoiBienBanLayMauBttComponent extends Base2Component implements 
       let res = await this.quyetDinhNvXuatBttService.getDetail(id);
       if (res.msg == MESSAGE.SUCCESS) {
         const data = res.data;
-        this.formData.patchValue({
-          soQdNv: data.soQdNv,
-          idQdNv: data.id,
-          ngayQd: data.ngayTao,
-          soHd: data.soHd,
-          ngayKyHd: data.ngayKyHd,
-          loaiVthh: data.loaiVthh,
-          cloaiVthh: data.cloaiVthh,
-          tenLoaiVthh: data.tenLoaiVthh,
-          tenCloaiVthh: data.tenCloaiVthh,
-          moTaHangHoa: data.moTaHangHoa
-        });
-        if (data.phanLoai) {
-          this.radioValue = data.phanLoai
-        }
-        this.soQdNvXh = data.soQdNv
+        this.radioValue = data.phanLoai
         this.listBienBanLayMau(data.soQdNv)
         if (data.phanLoai == '01') {
+          this.formData.patchValue({
+            soQdNv: data.soQdNv,
+            idQdNv: data.id,
+            ngayQd: data.ngayTao,
+            soHd: data.soHd,
+            idHd: data.idHd,
+            ngayKyHd: data.ngayKyHd,
+            loaiVthh: data.loaiVthh,
+            cloaiVthh: data.cloaiVthh,
+            tenLoaiVthh: data.tenLoaiVthh,
+            tenCloaiVthh: data.tenCloaiVthh,
+            moTaHangHoa: data.moTaHangHoa
+          });
           let dataChiCuc = data.children.filter(item => item.maDvi == this.userInfo.MA_DVI);
           if (dataChiCuc && dataChiCuc.length > 0) {
             this.listDiaDiemXh = dataChiCuc[0].children;
           }
+        } else {
+          this.soQdNvXh = data.soQdNv
+          this.formData.patchValue({
+            soQdNv: data.soQdNv,
+            idQdNv: data.id,
+            ngayQd: data.ngayTao,
+          });
         }
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -249,12 +255,12 @@ export class ThemMoiBienBanLayMauBttComponent extends Base2Component implements 
       let res = await this.hopDongBttService.getDetail(id);
       if (res.msg == MESSAGE.SUCCESS) {
         const data = res.data;
-        console.log(data.xhHopDongBttDviList, 999)
         this.formData.patchValue({
           soQdNv: data.soQdNv,
           idQdNv: data.idQdNv,
           ngayQd: data.ngayTao,
           soHd: data.soHd,
+          idHd: data.id,
           ngayKyHd: data.ngayPduyet,
           loaiVthh: data.loaiVthh,
           cloaiVthh: data.cloaiVthh,

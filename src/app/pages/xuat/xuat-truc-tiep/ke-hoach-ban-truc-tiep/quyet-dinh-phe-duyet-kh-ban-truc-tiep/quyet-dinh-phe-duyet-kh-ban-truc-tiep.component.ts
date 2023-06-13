@@ -40,11 +40,11 @@ export class QuyetDinhPheDuyetKhBanTrucTiepComponent extends Base2Component impl
       namKh: null,
       soQdPd: null,
       trichYeu: null,
-      loaiVthh: null,
       ngayKyQdTu: null,
       ngayKyQdDen: null,
       soTrHdr: null,
       trangThai: null,
+      loaiVthh: null,
       lastest: 0
     })
 
@@ -55,10 +55,13 @@ export class QuyetDinhPheDuyetKhBanTrucTiepComponent extends Base2Component impl
       trichYeu: '',
       soTrHdr: '',
       idThHdr: '',
+      loaiVthh: '',
       tenLoaiVthh: '',
+      cloaiVthh: '',
       tenCloaiVthh: '',
       slDviTsan: '',
       soHopDong: '',
+      trangThai: '',
       tenTrangThai: '',
     };
   }
