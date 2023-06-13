@@ -55,6 +55,9 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
   listHinhThucBaoQuan: any[] = [];
 
   dsKeHoach: any[] = []
+
+  listMatHang: any[] = []
+
   dsDiemKhoNhan: any[] = []
   dsNhaKhoNhan: any[] = []
   dsNganKhoNhan: any[] = []
@@ -124,6 +127,15 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
       tongKinhPhiDaThBc: [],
       dcnbBBNTBQDtlList: [new Array<any>(),],
       nhanXet: [],
+
+      noiDung: [],
+      dviTinh: [],
+      soLuongTrongNam: [],
+      donGiaTrongNam: [],
+      thanhTienTrongNam: [],
+      soLuongNamTruoc: [],
+      thanhTienNamTruoc: [],
+      tongGiaTri: [],
     }
     );
   }
@@ -140,10 +152,21 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
 
     })
 
+    this.getDSMatHang()
+
     if (this.idInput) {
       await this.loadChiTiet(this.idInput)
     }
 
+  }
+
+  async getDSMatHang() {
+    const body = {}
+    this.listMatHang = []
+    let res = await this.danhMucService.getDSMatHang(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listMatHang = res.data.content
+    }
   }
 
   async loadChiTiet(id: number) {
@@ -216,7 +239,32 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
     await this.add()
   }
 
-  async add(row?: any) {
+  async add() {
+    const row = {
+      noiDung: this.formData.value.noiDung,
+      dviTinh: this.formData.value.dviTinh,
+      soLuongTrongNam: this.formData.value.soLuongTrongNam,
+      donGiaTrongNam: this.formData.value.donGiaTrongNam,
+      thanhTienTrongNam: this.formData.value.thanhTienTrongNam,
+      soLuongNamTruoc: this.formData.value.soLuongNamTruoc,
+      thanhTienNamTruoc: this.formData.value.thanhTienNamTruoc,
+      tongGiaTri: this.formData.value.tongGiaTri,
+    }
+    this.danhSach.push(row)
+
+    this.formData.patchValue({
+      noiDung: "",
+      dviTinh: "",
+      soLuongTrongNam: "",
+      donGiaTrongNam: "",
+      thanhTienTrongNam: "",
+      soLuongNamTruoc: "",
+      thanhTienNamTruoc: "",
+      tongGiaTri: "",
+    })
+
+    this.dataTableView = cloneDeep(this.danhSach)
+    console.log('addadd', row, this.dataTableView)
     // await this.spinner.show();
 
     // await this.spinner.hide();

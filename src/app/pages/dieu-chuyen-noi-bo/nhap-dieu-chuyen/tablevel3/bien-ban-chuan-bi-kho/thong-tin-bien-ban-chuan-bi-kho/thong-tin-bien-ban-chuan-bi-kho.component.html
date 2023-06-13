@@ -365,12 +365,7 @@
               <span>Đơn vị chủ động thực hiện</span>
             </div>
           </div>
-          <div class="btn-group">
-            <button type="button" class="btn btn-main ml-2" (click)="addTH()">
-              <i class="icon htvbdh_dau-cong"></i>
-              <span>Thêm</span>
-            </button>
-          </div>
+
         </div>
         <nz-card class="mt-2px flex-card data-table card-border-content table-card">
 
@@ -395,32 +390,50 @@
               <tr>
                 <th></th>
                 <th>
-                  <nz-select [nzDisabled]="isView" formControlName="nam" nzAllowClear>
-                    <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+                  <nz-select [nzDisabled]="isView" formControlName="noiDung" nzAllowClear>
+                    <nz-option *ngFor="let p of listMatHang" [nzValue]="p.maCcdc" [nzLabel]="p.tenCcdc"></nz-option>
                   </nz-select>
                 </th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
+                <th>
+                  <input nz-input formControlName="dviTinh" [readonly]="true" />
+                </th>
+                <th>
+                  <input nz-input formControlName="soLuongTrongNam" />
+                </th>
+                <th>
+                  <input nz-input formControlName="donGiaTrongNam" />
+                </th>
+                <th>
+                  <input nz-input formControlName="thanhTienTrongNam" />
+                </th>
+                <th>
+                  <input nz-input formControlName="soLuongNamTruoc" />
+                </th>
+                <th>
+                  <input nz-input formControlName="thanhTienNamTruoc" />
+                </th>
+                <th>
+                  <input nz-input formControlName="tongGiaTri" />
+                </th>
+                <th>
+                  <a (click)="add()">
+                    <i class="icon htvbdh_dau-cong"></i>
+                  </a>
+                </th>
               </tr>
             </thead>
             <tbody>
               <ng-container *ngFor="let item of tblData.data, let i = index;">
                 <tr>
                   <td>{{i + 1}}</td>
-                  <td>{{i + 1}}</td>
-                  <td>{{i + 1}}</td>
-                  <td>{{i + 1}}</td>
-                  <td>{{i + 1}}</td>
-                  <td>{{i + 1}}</td>
-                  <td>{{i + 1}}</td>
-                  <td>{{i + 1}}</td>
-                  <td>{{i + 1}}</td>
+                  <td>{{item.noiDung}}</td>
+                  <td>{{item.dviTinh}}</td>
+                  <td>{{item.soLuongTrongNam}}</td>
+                  <td>{{item.donGiaTrongNam}}</td>
+                  <td>{{item.thanhTienTrongNam}}</td>
+                  <td>{{item.soLuongNamTruoc}}</td>
+                  <td>{{item.thanhTienNamTruoc}}</td>
+                  <td>{{item.tongGiaTri}}</td>
                   <td></td>
                 </tr>
               </ng-container>
@@ -464,12 +477,7 @@
                 <span>Định mức tổng cục phê duyệt trước khi thực hiện</span>
               </div>
             </div>
-            <div class="btn-group">
-              <button type="button" class="btn btn-main ml-2" (click)="addPD()">
-                <i class="icon htvbdh_dau-cong"></i>
-                <span>Thêm</span>
-              </button>
-            </div>
+
           </div>
 
           <nz-table #tblData class="nowrap mt-16 table-chi-tiet" nzBordered [nzData]="dataTableView">

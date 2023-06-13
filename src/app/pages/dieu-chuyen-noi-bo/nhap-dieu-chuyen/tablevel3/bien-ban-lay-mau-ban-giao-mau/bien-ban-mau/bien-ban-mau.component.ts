@@ -15,6 +15,7 @@ import { CHUC_NANG, STATUS } from 'src/app/constants/status';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { Subject } from 'rxjs';
 import { QuyetDinhDieuChuyenTCService } from 'src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-tc.service';
+import { BienBanLayMauService } from 'src/app/services/dieu-chuyen-noi-bo/nhap-dieu-chuyen/bien-ban-lay-mau';
 @Component({
   selector: 'app-bien-ban-mau',
   templateUrl: './bien-ban-mau.component.html',
@@ -66,8 +67,9 @@ export class BienBanMauComponent extends Base2Component implements OnInit {
     private donviService: DonviService,
     private danhMucService: DanhMucService,
     private quyetDinhDieuChuyenTCService: QuyetDinhDieuChuyenTCService,
+    private bbLayMauService: BienBanLayMauService,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, quyetDinhDieuChuyenTCService);
+    super(httpClient, storageService, notification, spinner, modal, bbLayMauService);
     this.formData = this.fb.group({
       nam: null,
       soQdinh: null,

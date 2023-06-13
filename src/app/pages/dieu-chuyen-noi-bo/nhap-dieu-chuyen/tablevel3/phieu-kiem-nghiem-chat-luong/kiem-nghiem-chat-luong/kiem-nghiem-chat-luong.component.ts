@@ -15,6 +15,7 @@ import { CHUC_NANG, STATUS } from 'src/app/constants/status';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { Subject } from 'rxjs';
 import { QuyetDinhDieuChuyenTCService } from 'src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-tc.service';
+import { PhieuKiemNghiemChatLuongService } from 'src/app/services/dieu-chuyen-noi-bo/nhap-dieu-chuyen/phieu-kiem-nghiem-chat-luong';
 @Component({
   selector: 'app-kiem-nghiem-chat-luong',
   templateUrl: './kiem-nghiem-chat-luong.component.html',
@@ -66,8 +67,9 @@ export class KiemNghiemChatLuongComponent extends Base2Component implements OnIn
     private donviService: DonviService,
     private danhMucService: DanhMucService,
     private quyetDinhDieuChuyenTCService: QuyetDinhDieuChuyenTCService,
+    private phieuKiemNghiemChatLuongService: PhieuKiemNghiemChatLuongService,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, quyetDinhDieuChuyenTCService);
+    super(httpClient, storageService, notification, spinner, modal, phieuKiemNghiemChatLuongService);
     this.formData = this.fb.group({
       nam: null,
       soQdinh: null,

@@ -16,6 +16,7 @@ import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { Subject } from 'rxjs';
 import { QuyetDinhDieuChuyenTCService } from 'src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-tc.service';
 import { BienBanNghiemThuBaoQuanLanDauService } from 'src/app/services/dieu-chuyen-noi-bo/nhap-dieu-chuyen/bien-ban-nghiem-thu-bao-quan-lan-dau.service';
+import { BienBanChuanBiKhoService } from 'src/app/services/dieu-chuyen-noi-bo/nhap-dieu-chuyen/bien-ban-chuan-bi-kho';
 
 @Component({
   selector: 'app-bien-ban-chuan-bi-kho',
@@ -65,9 +66,9 @@ export class BienBanChuanBiKhoComponent extends Base2Component implements OnInit
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private bbNghiemThuBaoQuanLanDauService: BienBanNghiemThuBaoQuanLanDauService,
+    private bbChuanBiKhoService: BienBanChuanBiKhoService,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, bbNghiemThuBaoQuanLanDauService);
+    super(httpClient, storageService, notification, spinner, modal, bbChuanBiKhoService);
     this.formData = this.fb.group({
       nam: null,
       soQdinh: null,
@@ -214,7 +215,7 @@ export class BienBanChuanBiKhoComponent extends Base2Component implements OnInit
           body.ngayHieuLucTu = body.ngayHieuLuc[0];
           body.ngayHieuLucDen = body.ngayHieuLuc[1];
         }
-        this.bbNghiemThuBaoQuanLanDauService
+        this.bbChuanBiKhoService
           .export(body)
           .subscribe((blob) =>
             saveAs(blob, 'bien-ban-nghiem-thu-bao-quan-lan-dau.xlsx'),
