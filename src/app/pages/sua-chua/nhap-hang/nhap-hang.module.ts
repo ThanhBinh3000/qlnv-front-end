@@ -8,6 +8,10 @@ import { PhieuNhapKhoComponent } from './phieu-nhap-kho/phieu-nhap-kho.component
 import { BangKeNhapComponent } from './bang-ke-nhap/bang-ke-nhap.component';
 import { BbKthucNhapComponent } from './bb-kthuc-nhap/bb-kthuc-nhap.component';
 import { ComponentsModule } from 'src/app/components/components.module';
+import { ThemMoiBknComponent } from './bang-ke-nhap/them-moi-bkn/them-moi-bkn.component';
+import { ThemMoiKthucComponent } from './bb-kthuc-nhap/them-moi-kthuc/them-moi-kthuc.component';
+import { ThemMoiPnkComponent } from './phieu-nhap-kho/them-moi-pnk/them-moi-pnk.component';
+import { ThemMoiQdnhComponent } from './quyet-dinh-nh/them-moi-qdnh/them-moi-qdnh.component';
 
 
 @NgModule({
@@ -16,7 +20,11 @@ import { ComponentsModule } from 'src/app/components/components.module';
     QuyetDinhNhComponent,
     PhieuNhapKhoComponent,
     BangKeNhapComponent,
-    BbKthucNhapComponent
+    BbKthucNhapComponent,
+    ThemMoiBknComponent,
+    ThemMoiKthucComponent,
+    ThemMoiPnkComponent,
+    ThemMoiQdnhComponent
   ],
   imports: [
     CommonModule,
