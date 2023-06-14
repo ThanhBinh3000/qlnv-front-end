@@ -28,37 +28,37 @@ export class BienBanChuanBiKhoComponent extends Base2Component implements OnInit
   isVisibleChangeTab$ = new Subject();
   visibleTab: boolean = true;
   tabSelected: number = 0;
-  @Input()
-  idTHop: number;
+  // @Input()
+  // idTHop: number;
 
-  @Input()
-  loaiVthh: string;
-  @Input()
-  loaiVthhCache: string;
+  // @Input()
+  // loaiVthh: string;
+  // @Input()
+  // loaiVthhCache: string;
 
-  CHUC_NANG = CHUC_NANG;
-  listLoaiDieuChuyen: any[] = [
-    { ma: "ALL", ten: "Tất cả" },
-    { ma: "CHI_CUC", ten: "Giữa 2 chi cục trong cùng 1 cục" },
-    { ma: "CUC", ten: "Giữa 2 cục DTNN KV" },
-  ];
-  listLoaiDCFilterTable: any[] = [
-    { ma: "CHI_CUC", ten: "Giữa 2 chi cục trong cùng 1 cục" },
-    { ma: "CUC", ten: "Giữa 2 cục DTNN KV" },
-  ];
+  // CHUC_NANG = CHUC_NANG;
+  // listLoaiDieuChuyen: any[] = [
+  //   { ma: "ALL", ten: "Tất cả" },
+  //   { ma: "CHI_CUC", ten: "Giữa 2 chi cục trong cùng 1 cục" },
+  //   { ma: "CUC", ten: "Giữa 2 cục DTNN KV" },
+  // ];
+  // listLoaiDCFilterTable: any[] = [
+  //   { ma: "CHI_CUC", ten: "Giữa 2 chi cục trong cùng 1 cục" },
+  //   { ma: "CUC", ten: "Giữa 2 cục DTNN KV" },
+  // ];
   dataTableView: any[] = [];
-  listLoaiHangHoa: any[] = [];
-  listHangHoaAll: any[] = [];
-  listChungLoaiHangHoa: any[] = [];
-  listTrangThai: any[] = [
-    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
-    { ma: this.STATUS.CHO_DUYET_TP, giaTri: 'Chờ duyệt - TP' },
-    { ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối - TP' },
-    { ma: this.STATUS.CHO_DUYET_LDC, giaTri: 'Chờ duyệt - LĐ Cục' },
-    { ma: this.STATUS.TU_CHOI_LDC, giaTri: 'Từ chối - LĐ Cục' },
-    { ma: this.STATUS.DA_DUYET_LDC, giaTri: 'Đã duyệt - LĐ Cục' },
-    { ma: this.STATUS.DA_TAO_CBV, giaTri: 'Đã tạo - CB Vụ' },
-  ];
+  // listLoaiHangHoa: any[] = [];
+  // listHangHoaAll: any[] = [];
+  // listChungLoaiHangHoa: any[] = [];
+  // listTrangThai: any[] = [
+  //   { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+  //   { ma: this.STATUS.CHO_DUYET_TP, giaTri: 'Chờ duyệt - TP' },
+  //   { ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối - TP' },
+  //   { ma: this.STATUS.CHO_DUYET_LDC, giaTri: 'Chờ duyệt - LĐ Cục' },
+  //   { ma: this.STATUS.TU_CHOI_LDC, giaTri: 'Từ chối - LĐ Cục' },
+  //   { ma: this.STATUS.DA_DUYET_LDC, giaTri: 'Đã duyệt - LĐ Cục' },
+  //   { ma: this.STATUS.DA_TAO_CBV, giaTri: 'Đã tạo - CB Vụ' },
+  // ];
 
   constructor(
     httpClient: HttpClient,
@@ -79,49 +79,49 @@ export class BienBanChuanBiKhoComponent extends Base2Component implements OnInit
   }
 
 
-  dsDonvi: any[] = [];
-  userInfo: UserLogin;
-  userdetail: any = {};
+  // dsDonvi: any[] = [];
+  // userInfo: UserLogin;
+  // userdetail: any = {};
   selectedId: number = 0;
-  isVatTu: boolean = false;
+  // isVatTu: boolean = false;
   isView = false;
 
-  disabledStartNgayLapKh = (startValue: Date): boolean => {
-    if (startValue && this.formData.value.ngayLapKhDen) {
-      return startValue.getTime() > this.formData.value.ngayLapKhDen.getTime();
-    } else {
-      return false;
-    }
-  };
+  // disabledStartNgayLapKh = (startValue: Date): boolean => {
+  //   if (startValue && this.formData.value.ngayLapKhDen) {
+  //     return startValue.getTime() > this.formData.value.ngayLapKhDen.getTime();
+  //   } else {
+  //     return false;
+  //   }
+  // };
 
-  disabledEndNgayLapKh = (endValue: Date): boolean => {
-    if (!endValue || !this.formData.value.ngayLapKhTu) {
-      return false;
-    }
-    return endValue.getTime() <= this.formData.value.ngayLapKhDen.getTime();
-  };
+  // disabledEndNgayLapKh = (endValue: Date): boolean => {
+  //   if (!endValue || !this.formData.value.ngayLapKhTu) {
+  //     return false;
+  //   }
+  //   return endValue.getTime() <= this.formData.value.ngayLapKhDen.getTime();
+  // };
 
-  disabledStartNgayDuyetLdc = (startValue: Date): boolean => {
-    if (startValue && this.formData.value.ngayDuyetLdcDen) {
-      return startValue.getTime() > this.formData.value.ngayDuyetLdcDen.getTime();
-    }
-    return false;
-  };
+  // disabledStartNgayDuyetLdc = (startValue: Date): boolean => {
+  //   if (startValue && this.formData.value.ngayDuyetLdcDen) {
+  //     return startValue.getTime() > this.formData.value.ngayDuyetLdcDen.getTime();
+  //   }
+  //   return false;
+  // };
 
-  disabledEndNgayDuyetLdc = (endValue: Date): boolean => {
-    if (!endValue || !this.formData.value.ngayDuyetLdcTu) {
-      return false;
-    }
-    return endValue.getTime() <= this.formData.value.ngayDuyetLdcDen.getTime();
-  };
+  // disabledEndNgayDuyetLdc = (endValue: Date): boolean => {
+  //   if (!endValue || !this.formData.value.ngayDuyetLdcTu) {
+  //     return false;
+  //   }
+  //   return endValue.getTime() <= this.formData.value.ngayDuyetLdcDen.getTime();
+  // };
 
   async ngOnInit() {
     this.isVisibleChangeTab$.subscribe((value: boolean) => {
       this.visibleTab = value;
     });
 
-    if (this.idTHop)
-      this.redirectDetail(0, false)
+    // if (this.idTHop)
+    //   this.redirectDetail(0, false)
 
     try {
       this.initData()
@@ -164,9 +164,9 @@ export class BienBanChuanBiKhoComponent extends Base2Component implements OnInit
   }
 
   async initData() {
-    this.userInfo = this.userService.getUserLogin();
-    this.userdetail.maDvi = this.userInfo.MA_DVI;
-    this.userdetail.tenDvi = this.userInfo.TEN_DVI;
+    // this.userInfo = this.userService.getUserLogin();
+    // this.userdetail.maDvi = this.userInfo.MA_DVI;
+    // this.userdetail.tenDvi = this.userInfo.TEN_DVI;
   }
 
   setExpand(parantExpand: boolean = false, children: any = []): void {

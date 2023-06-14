@@ -1,18 +1,19 @@
-import {Component, OnInit} from '@angular/core';
-import {Base2Component} from "../../../components/base2/base2.component";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalRef, NzModalService} from "ng-zorro-antd/modal";
-import {MmHienTrangMmService} from "../../../services/mm-hien-trang-mm.service";
-import {DanhMucService} from "../../../services/danhmuc.service";
-import {FileDinhKem} from "../../../models/FileDinhKem";
-import {HienTrangMayMoc} from "../../../constants/status";
-import {DonviService} from "../../../services/donvi.service";
-import {saveAs} from "file-saver";
-import {MESSAGE} from "../../../constants/message";
-import {DANH_MUC_LEVEL} from "../../../pages/luu-kho/luu-kho.constant";
+import { Component, OnInit } from '@angular/core';
+import { Base2Component } from "../../../components/base2/base2.component";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "../../../services/storage.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalRef, NzModalService } from "ng-zorro-antd/modal";
+import { MmHienTrangMmService } from "../../../services/mm-hien-trang-mm.service";
+import { DanhMucService } from "../../../services/danhmuc.service";
+import { FileDinhKem } from "../../../models/FileDinhKem";
+import { HienTrangMayMoc } from "../../../constants/status";
+import { DonviService } from "../../../services/donvi.service";
+import { saveAs } from "file-saver";
+import { MESSAGE } from "../../../constants/message";
+import { DANH_MUC_LEVEL } from "../../../pages/luu-kho/luu-kho.constant";
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-dialog-kt-giao-kho',
@@ -20,14 +21,10 @@ import {DANH_MUC_LEVEL} from "../../../pages/luu-kho/luu-kho.constant";
   styleUrls: ['./dialog-kt-giao-kho.component.scss']
 })
 export class DialogKtGiaoKhoComponent extends Base2Component implements OnInit {
-  isViewDetail: boolean;
-  dataDetail: any
-  dsNganKho : any[] = [];
-  dsNganLo : any[] = [];
-  rowItem: KtGiaoKho = new KtGiaoKho();
-  dataEdit: { [key: string]: { edit: boolean; data: KtGiaoKho } } = {};
-  statusMm = HienTrangMayMoc
-  listTinhTrang : any[] = ['Hoạt động','Đã thu hồi']
+
+  data: any;
+  dataTree: any[] = [];
+  dsUser: any[];
 
   constructor(
     private httpClient: HttpClient,
@@ -41,7 +38,6 @@ export class DialogKtGiaoKhoComponent extends Base2Component implements OnInit {
     private dviService: DonviService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, hienTrangSv);
-    super.ngOnInit()
     this.formData = this.fb.group({
       maDvi: [null],
       tenDvi: [null],
@@ -55,9 +51,9 @@ export class DialogKtGiaoKhoComponent extends Base2Component implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     try {
-      this.initForm();
-      // this.getDetail(this.dataDetail.id)
-      this.loadDsNganKho()
+      this.data = this.dataTree[0];
+      this.dataTree = this.data.children;
+      await this.loadUserThuKho()
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -66,180 +62,77 @@ export class DialogKtGiaoKhoComponent extends Base2Component implements OnInit {
     }
   }
 
-  downloadFile(item: FileDinhKem) {
-    if (item) {
-      this.uploadFileService.downloadFile(item.fileUrl).subscribe((blob) => {
-        saveAs(blob, item.fileName);
-      });
-    } else {
-      this.notification.error(MESSAGE.ERROR, 'Không tìm thấy file đính kèm');
-    }
-  }
-
-  async getDetail(id) {
-    this.spinner.show();
-    try {
-      let res = await this.hienTrangSv.getDetail(id);
-      if (res.msg == MESSAGE.SUCCESS) {
-        if (res.data) {
-          const data = res.data;
-          this.dataTable = data.listQlDinhMucPhiHienTrangMmtbDtl
-          this.updateEditCache()
-        }
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
-        this.spinner.hide();
+  async loadUserThuKho() {
+    let maDvi = this.data.maDvi;
+    let body = {
+      position: "CBTHUKHO",
+      maDvi: maDvi.substr(0, 8),
+      paggingReq: {
+        limit: this.globals.prop.MAX_INTERGER,
+        page: 0
       }
-    } catch (e) {
-      this.notification.error(MESSAGE.ERROR, e);
-      this.spinner.hide();
-    } finally {
-      this.spinner.hide();
     }
+    await this.userService.search(body).then((res) => {
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.dsUser = res.data?.content
+      }
+    })
   }
 
-  initForm() {
-    // this.formData.patchValue({
-    //   tenDvi: this.dataDetail.tenDvi,
-    //   tenCcdc: this.dataDetail.tenTaiSan,
-    //   donViTinh: this.dataDetail.donViTinh,
-    //   namKeHoach: this.dataDetail.namKeHoach
-    // })
-    // this.updateEditCache()
-  }
-
-  themMoiCtiet() {
-    let msgRequired = this.required(this.rowItem);
-    if (msgRequired) {
-      this.notification.error(MESSAGE.ERROR, msgRequired);
-      this.spinner.hide();
-      return;
-    }
-    if (!this.dataTable) {
-      this.dataTable = []
-    }
-    this.dataTable = [...this.dataTable, this.rowItem];
-    this.rowItem = new KtGiaoKho();
-    this.updateEditCache();
-  }
-
-
-
-  required(item: KtGiaoKho) {
-    let msgRequired = '';
-    if (!item.maNganKho || !item.maNganKho ) {
-      msgRequired = "Vui lòng nhập đủ dữ liệu!";
-    }
-    return msgRequired;
-  }
-
-  updateEditCache() {
-    if (this.dataTable) {
-      this.dataTable.forEach((item, index) => {
-        this.dataEdit[index] = {
-          edit: false,
-          data: {...item},
-        };
-      });
-    }
-  }
-
-  async loadDsNganKho() {
-    const body = {
-      maDviCha: this.userInfo.DON_VI.maDvi,
-      trangThai: '01',
-    };
-
-    const dsTong = await this.dviService.layDonViTheoCapDo(body);
-    this.dsNganKho = dsTong[DANH_MUC_LEVEL.NGAN_KHO];
-  }
-
-  refresh() {
-    this.rowItem = new KtGiaoKho();
-  }
-
-  editRow(stt: number) {
-    this.dataEdit[stt].edit = true;
-  }
-
-  cancelEdit(stt: number): void {
-    this.dataEdit[stt] = {
-      data: {...this.dataTable[stt]},
-      edit: false
-    };
-  }
-
-  async saveEdit(idx: number) {
-    let msgRequired = this.required(this.dataEdit[idx].data)
-    if (msgRequired) {
-      this.notification.error(MESSAGE.ERROR, msgRequired);
-      this.spinner.hide();
-      return;
-    }
-    this.dataEdit[idx].edit = false;
-    Object.assign(this.dataTable[idx], this.dataEdit[idx].data);
-    this.updateEditCache();
-  }
-
-  deleteItem(index: any) {
-    this.modal.confirm({
-      nzClosable: false,
-      nzTitle: 'Xác nhận',
-      nzContent: 'Bạn có chắc chắn muốn xóa?',
-      nzOkText: 'Đồng ý',
-      nzCancelText: 'Không',
-      nzOkDanger: true,
-      nzWidth: 400,
-      nzOnOk: async () => {
-        try {
-          this.dataTable.splice(index, 1);
-          this.updateEditCache();
-        } catch (e) {
-          console.log('error', e);
-        }
-      },
-    });
-  }
-
-  async handleOk(data : string) {
-    let body = this.dataDetail
-    if (!this.dataTable) {
-      this.notification.error(MESSAGE.ERROR,'Vui lòng nhập danh sách chi tiết!')
-      return;
-    }
-    body.listQlDinhMucHienTrangMmtbDtlReq = this.dataTable
-    let res = await this.createUpdate(body);
-    if (res) {
-      this._modalRef.close(data);
-    }
-  }
 
   onCancel() {
     this._modalRef.close();
   }
 
-  changNganKho(event: any) {
-    let nganLo = this.dsNganKho.filter(item => item.maDvi == event)
-    if(nganLo && nganLo.length >0) {
-      this.dsNganLo = nganLo[0].children
+  onExpandChange(item: any, checked: boolean): void {
+    item.expandSet = checked
+  }
+
+  handleCancel() {
+    this._modalRef.close();
+  }
+
+  handleOk() {
+    console.log(this.dataTree);
+    let body = {
+      saveFromMlk: true,
+      dsDonVi: this.dataTree
+    }
+    this.dviService.updateThuKho(body).then((res) => {
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS)
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+      console.log(res);
+    })
+    this._modalRef.close();
+  }
+
+  onChangeThuKho(item, $event) {
+    item.idThuKho = +$event;
+    if (item.capDvi == "6") {
+      item.children?.forEach((i) => {
+        i.idThuKho = +$event
+      });
+    }
+    if (item.capDvi == "7") {
+      let dataParent = null;
+      this.dataTree.forEach(nganKho => {
+        nganKho.children?.includes(item) ? dataParent = nganKho : '';
+      })
+
+      if (dataParent) {
+        // Check tất cả các con thuộc parent => Nếu có idThuKho con khác nhau thì set cha về null
+        const hasDifferentIdThuKho = dataParent.children.some((item, index, array) => {
+          return array.findIndex(obj => obj.idThuKho !== item.idThuKho) !== -1;
+        });
+        console.log(hasDifferentIdThuKho);
+        if (hasDifferentIdThuKho) {
+          dataParent.idThuKho = 0;
+        }
+      }
     }
   }
 
-  changeNganLo($event: any) {
-
-  }
-}
-
-export class KtGiaoKho {
-  id : number;
-  maNganLo : string;
-  tenNganLo :string;
-  maNganKho : string;
-  tenNganKho : string;
-  tenThuKho : string;
-  maThuKho : string;
-  giaoTuNgay : string;
-  giaoDenNgay : string;
-  ngayThuHoi : string;
-  tinhTrang : string
 }
