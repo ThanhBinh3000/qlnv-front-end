@@ -48,7 +48,7 @@
                             Năm kế hoạch
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
-                            <nz-select formControlName="namKh" nzDisabled>
+                            <nz-select formControlName="nam" nzDisabled>
                                 <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                             </nz-select>
                         </nz-form-control>
@@ -60,7 +60,7 @@
                             Đơn vị
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
-                            <input nz-input readonly formControlName="tenDvi" />
+                            <input nz-input readonly formControlName="tenMaDvi" />
                         </nz-form-control>
                     </nz-form-item>
                 </div>
@@ -78,7 +78,7 @@
                             Số phiếu xuất kho
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
-                            <nz-input-number formControlName="soPhieuXuat" nzDisabled [nzMin]="1"
+                            <nz-input-number formControlName="soPhieuXuatKho" nzDisabled [nzMin]="1"
                                 [nzMax]="globals.prop.MAX_INPUT" nzPlaceHolder="Nhập số biên bản" [nzStep]="1"
                                 [nzSize]="'small'">
                             </nz-input-number>
@@ -90,7 +90,7 @@
                         <nz-form-label [nzNoColon]="true">
                             Ngày tạo phiếu
                         </nz-form-label>
-                        <nz-date-picker nzFormat="dd/MM/YYYY" formControlName="ngayTao" nzDisabled>
+                        <nz-date-picker nzFormat="dd/MM/YYYY" formControlName="ngayTaoPhieu" nzDisabled>
                         </nz-date-picker>
                     </nz-form-item>
                 </div>
@@ -108,7 +108,7 @@
                         <nz-form-label nzRequired [nzNoColon]="true"> Nợ </nz-form-label>
                         <nz-form-control nz-col [nzErrorTip]="error">
                             <nz-input-group>
-                                <nz-input-number formControlName="no" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
+                                <nz-input-number formControlName="taiKhoanNo" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
                                     [nzSize]="'small'" [nzDisabled]="isDisabled()">
                                 </nz-input-number>
                             </nz-input-group>
@@ -120,7 +120,7 @@
                         <nz-form-label nzRequired [nzNoColon]="true"> Có </nz-form-label>
                         <nz-form-control nz-col [nzErrorTip]="error">
                             <nz-input-group>
-                                <nz-input-number formControlName="co" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
+                                <nz-input-number formControlName="taiKhoanCo" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
                                     [nzSize]="'small'" [nzDisabled]="isDisabled()">
                                 </nz-input-number>
                             </nz-input-group>
@@ -133,8 +133,8 @@
                             Số QĐ của Cục
                         </nz-form-label>
                         <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-                            <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogSoQdNvXh()">
-                                <input nz-input [readonly]="true" formControlName="soQdNv" />
+                            <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogSoQdDC()">
+                                <input nz-input [readonly]="true" formControlName="soQddc" />
                             </nz-input-group>
                         </nz-form-control>
                     </nz-form-item>
@@ -165,7 +165,7 @@
                         <nz-form-label [nzNoColon]="true">
                             Ngày ký QĐ điều chuyển
                         </nz-form-label>
-                        <nz-date-picker nzFormat="dd/MM/YYYY" formControlName="ngayKyHd" nzDisabled>
+                        <nz-date-picker nzFormat="dd/MM/YYYY" formControlName="ngayKyQddc" nzDisabled>
                         </nz-date-picker>
                     </nz-form-item>
                 </div>
@@ -216,7 +216,7 @@
                         </nz-form-label>
                         <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
                             <nz-input-group nzAddOnAfterIcon="folder-open">
-                                <input nz-input [readonly]="true" formControlName="soPhieu" />
+                                <input nz-input [readonly]="true" formControlName="soPhieuKtChatLuong" />
                             </nz-input-group>
                         </nz-form-control>
                     </nz-form-item>
@@ -249,7 +249,7 @@
                     <nz-form-item>
                         <nz-form-label [nzNoColon]="true"> Cán bộ lập phiếu </nz-form-label>
                         <nz-form-control>
-                            <input nz-input formControlName="tenNguoiLapPhieu" readonly />
+                            <input nz-input formControlName="canBoLapPhieu" readonly />
                         </nz-form-control>
                     </nz-form-item>
                 </div>
@@ -257,7 +257,7 @@
                     <nz-form-item>
                         <nz-form-label [nzNoColon]="true"> Lãnh đạo chi cục </nz-form-label>
                         <nz-form-control>
-                            <input nz-input formControlName="tenNguoiPduyet" readonly />
+                            <input nz-input formControlName="ldChiCuc" readonly />
                         </nz-form-control>
                     </nz-form-item>
                 </div>
@@ -265,7 +265,7 @@
                     <nz-form-item>
                         <nz-form-label [nzNoColon]="true"> KTV bảo quản </nz-form-label>
                         <nz-form-control>
-                            <input nz-input formControlName="tenKtv" readonly />
+                            <input nz-input formControlName="ktvBaoQuan" readonly />
                         </nz-form-control>
                     </nz-form-item>
                 </div>
@@ -281,7 +281,7 @@
                     <nz-form-item>
                         <nz-form-label nzRequired [nzNoColon]="true"> Họa và tên người giao </nz-form-label>
                         <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-                            <input placeholder="" nz-input formControlName="nguoiGiao" [readonly]="isDisabled()" />
+                            <input placeholder="" nz-input formControlName="nguoiGiaoHang" [readonly]="isDisabled()" />
                         </nz-form-control>
                     </nz-form-item>
                 </div>
@@ -289,7 +289,7 @@
                     <nz-form-item>
                         <nz-form-label nzRequired [nzNoColon]="true"> Số CMT/CCCD </nz-form-label>
                         <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-                            <input placeholder="" nz-input formControlName="cmtNguoiGiao" [readonly]="isDisabled()" />
+                            <input placeholder="" nz-input formControlName="soCmt" [readonly]="isDisabled()" />
                         </nz-form-control>
                     </nz-form-item>
                 </div>
@@ -328,7 +328,7 @@
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
-                                <input nz-input [readonly]="true" formControlName="soBangKe" />
+                                <input nz-input [readonly]="true" formControlName="loaiHinhNX" />
                             </nz-input-group>
                         </nz-form-control>
                     </nz-form-item>
@@ -340,7 +340,7 @@
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
-                                <input nz-input [readonly]="true" formControlName="soBangKe" />
+                                <input nz-input [readonly]="true" formControlName="kieuNX" />
                             </nz-input-group>
                         </nz-form-control>
                     </nz-form-item>

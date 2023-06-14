@@ -529,6 +529,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
     }
   }
   async openDialogBbLayMau() {
+    if (!this.formData.value.qdDcId) return;
     await this.loadBbLayMau();
     const modalQD = this.modal.create({
       nzTitle: 'Danh sách biên bản lấy mẫu',

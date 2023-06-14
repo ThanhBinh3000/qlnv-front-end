@@ -175,16 +175,16 @@ export class DanhSachBienBanLayMau extends Base2Component implements OnInit {
     //     this.expandAll()
     // }
     buildTableView() {
-        let removeDuplicateData = [];
-        this.dataTable.forEach((item, i) => {
-            const maLoNganKho = item.maLoNganKho ? item.maLoNganKho : (item.maloKho ? `${item.maloKho}${item.maNganKho}` : item.maNganKho);
-            const dataIndex = removeDuplicateData.findIndex(f => f.soQdinh == item.soQdinh && f.maLoNganKho == maLoNganKho);
-            if (dataIndex < 0) {
-                removeDuplicateData.push({ ...item, maLoNganKho })
-            }
-        })
-        let dataView = Array.isArray(removeDuplicateData) ?
-            chain(removeDuplicateData).groupBy("soQdinh").map((rs, i) => {
+        // let removeDuplicateData = [];
+        // this.dataTable.forEach((item, i) => {
+        //     const maLoNganKho = item.maLoNganKho ? item.maLoNganKho : (item.maloKho ? `${item.maloKho}${item.maNganKho}` : item.maNganKho);
+        //     const dataIndex = removeDuplicateData.findIndex(f => f.soQdinh == item.soQdinh && f.maLoNganKho == maLoNganKho);
+        //     if (dataIndex < 0) {
+        //         removeDuplicateData.push({ ...item, maLoNganKho })
+        //     }
+        // })
+        let dataView = Array.isArray(this.dataTable) ?
+            chain(this.dataTable).groupBy("soQdinh").map((rs, i) => {
                 const dataSoQdinh = rs.find(f => f.soQdinh == i);
                 if (!dataSoQdinh) return;
                 const rsx = chain(rs).groupBy("maDiemKho").map((v, k) => {

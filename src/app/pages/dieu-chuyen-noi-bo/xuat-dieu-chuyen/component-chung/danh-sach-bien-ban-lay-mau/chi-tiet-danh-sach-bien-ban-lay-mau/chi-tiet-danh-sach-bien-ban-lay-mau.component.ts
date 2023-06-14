@@ -134,6 +134,9 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
     }
 
     async ngOnInit() {
+        if (this.isViewOnModal) {
+            this.isView = true
+        }
         try {
             this.spinner.show();
             await Promise.all([
