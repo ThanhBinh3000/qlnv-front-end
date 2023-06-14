@@ -1,0 +1,168 @@
+<div class="bg-trang">
+    <div class="header header-green-background">
+        <div class="header-text">
+            <div class="title-chi-tieu">
+                <span
+                    [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDC || formData.value.trangThai == STATUS.DA_DUYET_LDV ? 'status-xanh' : 'status-do'">
+                    {{ formData.value.tenTrangThai }}
+                </span>
+                <span>Thông tin đề xuất kế hoạch lựa chọn nhà thầu</span>
+            </div>
+        </div>
+        <div class="btn-group">
+            <button type="button" class="btn btn-sub ml-2" (click)="redirectDefault()">
+                <i class="fa fa-arrow-left"></i>
+                <span>Quay lại</span>
+            </button>
+        </div>
+    </div>
+    <nz-alert class="mg-t-10"
+        *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDV "
+        nzShowIcon nzType="error" nzMessage="Lý do từ chối" nzDescription="{{formData.value.ldoTuchoi}}">
+    </nz-alert>
+
+    <nz-card class="mg-t-16 flex-card p-lr16">
+        <nz-collapse>
+            <nz-collapse-panel nzActive="true" nzHeader="THÔNG TIN CHUNG">
+                <form nzLayout="vertical" nz-form [formGroup]="formData">
+                    <div nz-row [nzGutter]="[24]">
+                        <div nz-col [nzSpan]="4">
+                            <nz-form-item>
+                                <nz-form-label nzRequired [nzNoColon]="true">Số tờ trình </nz-form-label>
+                                <nz-form-control [nzErrorTip]="error">
+                                    <nz-input-group nzAddOnAfter="/TTr-CDTVP">
+                                        <input nz-input formControlName="soToTrinh" />
+                                    </nz-input-group>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col [nzSpan]="3">
+                            <nz-form-item>
+                                <nz-form-label nzRequired [nzNoColon]="true">Ngày tạo HS sửa chữa</nz-form-label>
+                                <nz-form-control [nzErrorTip]="error">
+                                    <nz-date-picker formControlName="ngayTao" nzFormat="dd/MM/yyyy">
+                                    </nz-date-picker>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col [nzSpan]="4">
+                            <nz-form-item>
+                                <nz-form-label nzRequired [nzNoColon]="true">Mã danh sách sữa chữa</nz-form-label>
+                                <nz-form-control [nzErrorTip]="error">
+                                    <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogDanhSach()">
+                                        <input nz-input [readonly]="true" formControlName="soToTrinh" />
+                                    </nz-input-group>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col [nzSpan]="3">
+                            <nz-form-item>
+                                <nz-form-label nzRequired [nzNoColon]="true">Ngày duyệt LĐ Cục</nz-form-label>
+                                <nz-form-control [nzErrorTip]="error">
+                                    <nz-date-picker formControlName="ngayTao" nzFormat="dd/MM/yyyy">
+                                    </nz-date-picker>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col [nzSpan]="3">
+                            <nz-form-item>
+                                <nz-form-label nzRequired [nzNoColon]="true">Thời hạn xuất sửa chữa dự
+                                    kiến</nz-form-label>
+                                <nz-form-control [nzErrorTip]="error">
+                                    <nz-date-picker formControlName="ngayTao" nzFormat="dd/MM/yyyy">
+                                    </nz-date-picker>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col [nzSpan]="3">
+                            <nz-form-item>
+                                <nz-form-label nzRequired [nzNoColon]="true">Thời hạn nhập sửa chữa dự
+                                    kiến</nz-form-label>
+                                <nz-form-control [nzErrorTip]="error">
+                                    <nz-date-picker formControlName="ngayTao" nzFormat="dd/MM/yyyy">
+                                    </nz-date-picker>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col [nzSpan]="3">
+                            <nz-form-item>
+                                <nz-form-label nzRequired [nzNoColon]="true">Số quyết định sửa chữa</nz-form-label>
+                                <nz-form-control [nzErrorTip]="error">
+                                    <nz-input-group>
+                                        <input nz-input formControlName="soToTrinh" />
+                                    </nz-input-group>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col [nzSpan]="24">
+                            <nz-form-item>
+                                <nz-form-label nzRequired [nzNoColon]="true">Trích yếu </nz-form-label>
+                                <nz-form-control [nzErrorTip]="error">
+                                    <nz-input-group>
+                                        <input nz-input formControlName="trichYeu" />
+                                    </nz-input-group>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col [nzSpan]="24">
+                            <nz-form-item>
+                                <nz-form-label [nzNoColon]="true">Căn cứ pháp lý</nz-form-label>
+                                <nz-form-control>
+                                    <div class="list-file">
+                                        <file-list [data]="fileDinhKem"></file-list>
+                                    </div>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col [nzSpan]="24">
+                            <nz-form-item>
+                                <nz-form-label [nzNoColon]="true">Tài liệu đính kèm</nz-form-label>
+                                <nz-form-control>
+                                    <div class="list-file">
+                                        <file-list [data]="fileDinhKem"></file-list>
+                                    </div>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                    </div>
+                </form>
+            </nz-collapse-panel>
+        </nz-collapse>
+        <nz-collapse>
+            <nz-collapse-panel nzActive="true" nzHeader="Danh sách hàng DTQG đề nghị sửa chữa">
+                <nz-table class="pd-10" nzBordered [nzData]="dataTable" [nzFrontPagination]="false"
+                    [nzShowPagination]="false">
+                    <thead>
+                        <tr>
+                            <th [width]="30">STT</th>
+                            <th>Cục DTNN KV</th>
+                            <th>Địa chỉ</th>
+                            <th>Số kế hoạch/đề xuất</th>
+                            <th>Ngày ký</th>
+                            <th>Trích yếu</th>
+                            <th>Tên dự án</th>
+                            <th>Số Lượng</th>
+                            <th>Tổng tiền đã bao gồm thuế (đồng)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let data of dataTable ;let i = index">
+                            <td class="text-center">{{i + 1}} </td>
+                            <td>{{ data.tenDvi }}</td>
+                            <td>{{ data.diaChi }}</td>
+                            <td>{{ data.soDxuat }}</td>
+                            <td>{{ data.ngayPduyet | date: 'dd/MM/YYYY' }}</td>
+                            <td>{{ data.trichYeu }}</td>
+                            <td></td>
+                            <td>{{ data.tongSoLuong | number: '1.0-1' }}</td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </nz-table>
+            </nz-collapse-panel>
+        </nz-collapse>
+    </nz-card>
+</div>
+<ng-template #error let-control>
+    <app-template-error #error [control]="control"></app-template-error>
+</ng-template>

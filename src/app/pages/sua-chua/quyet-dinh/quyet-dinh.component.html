@@ -1,0 +1,166 @@
+<div class="bg-trang">
+    <nz-card class="mt16 flex-card p-lr16">
+        <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
+            <div nz-row [nzGutter]="20">
+                <div nz-col nzSpan="4">
+                    <nz-form-control>
+                        <nz-form-label>Số hồ sơ</nz-form-label>
+                        <nz-form-item>
+                            <input nz-input formControlName="maSc" />
+                        </nz-form-item>
+                    </nz-form-control>
+                </div>
+                <div nz-col nzSpan="4">
+                    <nz-form-control>
+                        <nz-form-label>Số QĐ sửa chữa</nz-form-label>
+                        <nz-form-item>
+                            <input nz-input formControlName="maSc" />
+                        </nz-form-item>
+                    </nz-form-control>
+                </div>
+                <div nz-col nzSpan="4">
+                    <nz-form-control>
+                        <nz-form-label>Số thông báo KQ trình hồ sơ</nz-form-label>
+                        <nz-form-item>
+                            <input nz-input formControlName="maSc" />
+                        </nz-form-item>
+                    </nz-form-control>
+                </div>
+                <div nz-col nzSpan="5">
+                    <nz-form-control>
+                        <nz-form-label>
+                            Trạng thái
+                        </nz-form-label>
+                        <nz-form-item>
+                            <nz-select formControlName="maCc" nzShowSearch nzAllowClear>
+                                <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+                            </nz-select>
+                        </nz-form-item>
+                    </nz-form-control>
+                </div>
+                <div nz-col nzSpan="6">
+                    <nz-form-control>
+                        <nz-form-label>Ngày tổng hợp</nz-form-label>
+                        <nz-form-item>
+                            <div nz-row>
+                                <div nz-col nzSpan="12" class="cus-start-date">
+                                    <nz-date-picker [nzDisabledDate]="disabledNgayTu" nzFormat="dd/MM/yyyy"
+                                        formControlName="ngayTu" nzPlaceHolder="Ngày bắt đầu">
+                                    </nz-date-picker>
+                                </div>
+                                <div nz-col nzSpan="12" class="cus-end-date">
+                                    <nz-date-picker [nzDisabledDate]="disabledNgayDen" nzFormat="dd/MM/yyyy"
+                                        formControlName="ngayDen" nzPlaceHolder="Ngày kết thúc">
+                                    </nz-date-picker>
+                                </div>
+                            </div>
+                        </nz-form-item>
+                    </nz-form-control>
+                </div>
+            </div>
+        </form>
+        <div nz-col class="cangiua group-button-search pt-16">
+            <div>
+                <button nz-button class="search__button--clear" (click)="clearForm()">
+                    <i class="icon  htvbdh_nhap-lai1"></i>
+                    Xóa điều kiện
+                </button>
+                <button nz-button class="search__button--search" (click)="search()">
+                    <i nz-icon nzType="search"></i>
+                    Tìm kiếm
+                </button>
+            </div>
+        </div>
+    </nz-card>
+    <div class="group-button">
+        <h3 class="text-uppercase">Tổng hợp danh sách hàng QTQG cần sữa chữa</h3>
+        <div class="buttons">
+            <!-- <ng-container>
+                <button type="button" class="btn btn-do" (click)="deleteSelect()">
+                    <i class="fa fa-trash-o do"></i>
+                    <span>Xóa</span>
+                </button>
+            </ng-container>
+
+            <button type="button" class="btn btn-sub" (click)="exportData()">
+                <i class="icon htvbdh_chuyen-xu-ly"></i>
+                <span>Xuất file</span>
+            </button> -->
+
+            <ng-container>
+                <button type="button" class="btn btn-main" (click)="redirectCreate()">
+                    <i class="icon htvbdh_dau-cong"></i>
+                    <span>Thêm</span>
+                </button>
+            </ng-container>
+        </div>
+    </div>
+    <nz-card class="mt-2px flex-card data-table card-border-content table-card">
+        <nz-table class="nowrap" [nzData]="dataTable" nzBordered [nzFrontPagination]="false" [nzShowPagination]="false">
+            <thead>
+                <tr>
+                    <th>aaaaa</th>
+                    <th nzWidth="35px">Chọn</th>
+                </tr>
+            </thead>
+            <tbody>
+                <ng-container *ngFor="let diemKho of dataTable , let i = index">
+                    <tr>
+                        <td nzShowExpand="true" [nzExpand]="diemKho.expandSet"
+                            (nzExpandChange)="onExpandChange(diemKho, $event)" class="bold">{{ diemKho.tenDvi ||
+                            "" }}</td>
+                        <td></td>
+                        <!--Điểm kho-->
+
+                    </tr>
+                    <ng-container *ngIf="diemKho.expandSet">
+                        <ng-container *ngFor="let nhaKho of diemKho.children , let i = index">
+                            <tr>
+                                <td class="pd-l-40" nzShowExpand="true" [nzExpand]="nhaKho.expandSet"
+                                    (nzExpandChange)="onExpandChange(nhaKho, $event)">{{nhaKho.tenDvi}}</td>
+                                <!-- Nhà kho-->
+                                <td></td>
+                            </tr>
+                            <ng-container *ngIf="nhaKho.expandSet">
+                                <ng-container *ngFor="let nganKho of nhaKho.children , let i = index">
+                                    <tr>
+                                        <td class="pd-l-80" nzShowExpand="true" [nzExpand]="nganKho.expandSet"
+                                            (nzExpandChange)="onExpandChange(nganKho, $event)">
+                                            {{nganKho.tenDvi}}</td>
+                                        <td></td>
+                                        <!-- Ngăn kho-->
+                                    </tr>
+                                    <ng-container *ngIf="nganKho.expandSet">
+                                        <ng-container *ngFor="let loKho of nganKho.children , let i = index">
+                                            <tr>
+                                                <td class="pd-l-120">{{loKho.tenDvi}}</td> <!-- Lô kho-->
+                                                <td></td>
+                                            </tr>
+                                        </ng-container>
+                                    </ng-container>
+                                </ng-container>
+                            </ng-container>
+                        </ng-container>
+                    </ng-container>
+                </ng-container>
+            </tbody>
+        </nz-table>
+        <div class="tab-content tab-menu" id="myTabContent">
+            <div class="tab-pane fade show active justify-content-between">
+                <div class="trai">
+                </div>
+                <div class="canphai">
+                    <!-- begin phân trang  -->
+                    <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord"
+                        nzShowSizeChanger [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate"
+                        (nzPageIndexChange)="changePageIndex($event)" (nzPageSizeChange)="changePageSize($event)">
+                        <ng-template #rangeTemplate let-range="range" let-total>
+                            {{ range[0] }}-{{ range[1] }} trên tổng số {{ total }} bản ghi
+                        </ng-template>
+                    </nz-pagination>
+                    <!-- end phân trang -->
+                </div>
+            </div>
+        </div>
+    </nz-card>
+</div>
