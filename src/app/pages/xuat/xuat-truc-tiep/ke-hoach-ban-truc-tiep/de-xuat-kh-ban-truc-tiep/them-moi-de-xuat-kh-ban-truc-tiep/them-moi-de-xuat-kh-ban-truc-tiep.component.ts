@@ -284,41 +284,41 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
         return;
       }
     }
-    if (this.validateGiaGiaToiDa()) {
-      const modalGT = this.modal.create({
-        nzTitle: 'THÊM ĐỊA ĐIỂM GIAO NHẬN HÀNG',
-        nzContent: DialogThemMoiXuatBanTrucTiepComponent,
-        nzMaskClosable: false,
-        nzClosable: false,
-        nzWidth: '2500px',
-        nzFooter: null,
-        nzComponentParams: {
-          dataEdit: data,
-          dataChiTieu: this.dataChiTieu,
-          loaiVthh: this.formData.get('loaiVthh').value,
-          cloaiVthh: this.formData.get('cloaiVthh').value,
-          tenCloaiVthh: this.formData.get('tenCloaiVthh').value,
-          namKh: this.formData.get('namKh').value,
-          donViTinh: this.formData.get('donViTinh').value,
-          donGiaDuocDuyet: this.donGiaDuocDuyet,
-          giaToiDa: this.giaToiDa,
-        },
-      });
-      modalGT.afterClose.subscribe((data) => {
-        if (!data) {
-          return;
+    // if (this.validateGiaGiaToiDa()) {
+    const modalGT = this.modal.create({
+      nzTitle: 'THÊM ĐỊA ĐIỂM GIAO NHẬN HÀNG',
+      nzContent: DialogThemMoiXuatBanTrucTiepComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '2500px',
+      nzFooter: null,
+      nzComponentParams: {
+        dataEdit: data,
+        dataChiTieu: this.dataChiTieu,
+        loaiVthh: this.formData.get('loaiVthh').value,
+        cloaiVthh: this.formData.get('cloaiVthh').value,
+        tenCloaiVthh: this.formData.get('tenCloaiVthh').value,
+        namKh: this.formData.get('namKh').value,
+        donViTinh: this.formData.get('donViTinh').value,
+        donGiaDuocDuyet: this.donGiaDuocDuyet,
+        giaToiDa: this.giaToiDa,
+      },
+    });
+    modalGT.afterClose.subscribe((data) => {
+      if (!data) {
+        return;
+      }
+      if (index >= 0) {
+        this.dataTable[index] = data;
+      } else {
+        if (!this.validateAddDiaDiem(data)) {
+          return
         }
-        if (index >= 0) {
-          this.dataTable[index] = data;
-        } else {
-          if (!this.validateAddDiaDiem(data)) {
-            return
-          }
-          this.dataTable.push(data);
-        }
-        this.calculatorTable();
-      });
-    }
+        this.dataTable.push(data);
+      }
+      this.calculatorTable();
+    });
+
   };
 
   validateGiaGiaToiDa() {
