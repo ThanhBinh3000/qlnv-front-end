@@ -195,6 +195,12 @@
       <span> Phụ lục đề xuất </span>
     </div>
   </div>
+  <div class="buttons" *ngIf="!isCache">
+    <button type="button" class="btn btn-main" (click)="themMoiGoiThau()">
+      <i class="icon htvbdh_dau-cong"></i>
+      <span>Thêm</span>
+    </button>
+  </div>
 </div>
 <nz-card class="mg-t-16 flex-card p-lr16 table-card">
   <nz-table [nzData]="listDataGroup" class="nowrap" nzBordered>
