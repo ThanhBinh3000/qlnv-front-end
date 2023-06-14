@@ -17,6 +17,8 @@ import { StorageService } from 'src/app/services/storage.service';
 })
 export class ThemMoiTtdComponent extends Base3Component implements OnInit {
 
+  fileCanCu: any[] = []
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,

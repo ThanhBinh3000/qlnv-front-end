@@ -28,7 +28,7 @@ export class QuyetDinhXhComponent extends Base3Component implements OnInit {
     private danhMucSv: DanhMucService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, route, router, hienTrangSv);
-    this.defaultURL = 'sua-chua/trinh-tham-dinh'
+    this.defaultURL = 'sua-chua/xuat-hang/giao-nv-xh'
     this.formData = this.fb.group({
       nam: null,
       maSc: null,
