@@ -261,7 +261,6 @@ export class TienDoSuaChuaLonHangNamComponent extends Base2Component implements 
       let res = await this.quyetdinhpheduyetKqLcntService.search(body);
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data && res.data.content && res.data.content.length > 0) {
-          console.log(res.data,22222222222222)
           let totalSoGcTheoQdKqLcnt = res.data.content.reduce((accumulator, object) => {
             return accumulator + object.soGoiThau;
           }, 0);

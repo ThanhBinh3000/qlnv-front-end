@@ -260,8 +260,8 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
       return;
     }
     let checkKhNhaptXuat = this.validKeHoachNhapXuatLT(this.keHoachNhapXuat);
-    if (!checkKhNhaptXuat) {
-      this.notification.warning(MESSAGE.WARNING, "Vốn chi và vốn có của kế hoạch nhập xuất lương thực không bằng nhau.");
+    if (!checkKhNhaptXuat && isGuiDuyet) {
+      this.notification.warning(MESSAGE.WARNING, "Vốn chi mua lương thực và Nguồn vốn có không bằng nhau.");
       this.spinner.hide();
       return;
     }

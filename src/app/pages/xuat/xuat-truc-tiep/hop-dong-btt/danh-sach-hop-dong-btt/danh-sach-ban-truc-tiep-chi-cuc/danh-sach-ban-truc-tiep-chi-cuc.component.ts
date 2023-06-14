@@ -36,7 +36,7 @@ export class DanhSachBanTrucTiepChiCucComponent extends Base2Component implement
       ngayPduyetDen: null,
       loaiVthh: null,
       trangThai: null,
-      phanLoai: null
+      pthucBanTrucTiep: null
     });
     this.filterTable = {
       namKh: '',
@@ -79,7 +79,7 @@ export class DanhSachBanTrucTiepChiCucComponent extends Base2Component implement
     this.formData.patchValue({
       loaiVthh: this.loaiVthh,
       trangThai: STATUS.BAN_HANH,
-      phanLoai: '02'
+      pthucBanTrucTiep: '02'
     })
   }
 

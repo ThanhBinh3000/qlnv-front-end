@@ -100,6 +100,8 @@ export class DialogChiTietKeHoachGiaoBoNganhUbtvqhMuaBuBoSungComponent implement
   async loadDanhMucHang() {
     if (this.dataEdit) {
       this.onChangeBoNganh(this.dataEdit.maBoNganh);
+    } else {
+      this.dsHangHoa = [];
     }
   }
 

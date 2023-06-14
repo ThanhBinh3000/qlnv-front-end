@@ -3,7 +3,6 @@ import {
   Input,
   OnInit,
 } from '@angular/core';
-import { Validators } from '@angular/forms';
 import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -15,6 +14,8 @@ import { BangKeBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-
 import { DialogTableSelectionComponent } from '../dialog-table-selection/dialog-table-selection.component';
 import { STATUS } from 'src/app/constants/status';
 import { QuyetDinhNvXuatBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/quyet-dinh-nv-xuat-btt/quyet-dinh-nv-xuat-btt.service';
+import { Validators } from '@angular/forms';
+import { MESSAGE } from 'src/app/constants/message';
 
 @Component({
   selector: 'app-dialog-them-moi-bang-ke-ban-le',
@@ -27,6 +28,9 @@ export class DialogThemMoiBangKeBanLeComponent extends Base2Component implements
   maTrinh: string = '';
   @Input()
   id: number;
+
+  loadBangKeBanLe: any[] = [];
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -40,28 +44,28 @@ export class DialogThemMoiBangKeBanLeComponent extends Base2Component implements
     super(httpClient, storageService, notification, spinner, modal, bangKeBttService);
     this.formData = this.fb.group(
       {
-        id: [],
+        id: [null],
         namKh: [dayjs().get('year')],
         soBangKe: [''],
-        maDvi: [''],
-        tenDvi: [''],
+        maDvi: ['', [Validators.required]],
+        tenDvi: ['', [Validators.required]],
         idQdNv: [],
-        soQdNv: [''],
+        soQdNv: ['', [Validators.required]],
         soLuongBanTrucTiep: [],
         soLuongConLai: [],
-        nguoiPhuTrach: [''],
-        diaChi: [''],
-        ngayBanHang: [''],
+        nguoiPhuTrach: ['', [Validators.required]],
+        diaChi: ['', [Validators.required]],
+        ngayBanHang: ['', [Validators.required]],
         loaiVthh: [''],
         tenLoaiVthh: [''],
         cloaiVthh: [''],
         tenCloaiVthh: [''],
-        soLuongBanLe: [],
+        soLuongBanLe: [, [Validators.required]],
         donGia: [],
         thanhTien: [],
-        tenNguoiMua: [''],
-        diaChiNguoiMua: [''],
-        cmt: [''],
+        tenNguoiMua: ['', [Validators.required]],
+        diaChiNguoiMua: ['', [Validators.required]],
+        cmt: ['', [Validators.required]],
         ghiChu: [''],
       });
   }
@@ -71,6 +75,7 @@ export class DialogThemMoiBangKeBanLeComponent extends Base2Component implements
       await this.loadChiTiet(this.idInput);
     } else {
       this.initForm();
+      await this.loadBangKeBanHang()
     }
   }
 
@@ -97,12 +102,23 @@ export class DialogThemMoiBangKeBanLeComponent extends Base2Component implements
       maChiCuc: this.userInfo.MA_DVI,
       loaiVthh: this.loaiVthh,
       trangThai: STATUS.BAN_HANH,
-      phanLoai: '02',
+      pthucBanTrucTiep: '03',
       namKh: this.formData.value.namKh
     };
     let res = await this.quyetDinhNvXuatBttService.search(body)
-    if (res.data) {
-      listNvXh = res.data?.content;
+    if (res.msg == MESSAGE.SUCCESS) {
+      const data = [
+        ...res.data.content.filter((item) => {
+          return !this.loadBangKeBanLe.some((child) => {
+            if (child.soQdNv != null && item.soQdNv != null) {
+              return item.soQdNv === child.soQdNv;
+            }
+          })
+        })
+      ]
+      listNvXh = data
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
     }
     this.spinner.hide();
     const modalQD = this.modal.create({
@@ -123,6 +139,18 @@ export class DialogThemMoiBangKeBanLeComponent extends Base2Component implements
         this.onChangeQdBanLe(data.id);
       }
     });
+  }
+
+  async loadBangKeBanHang() {
+    let body = {
+      maDvi: this.userInfo.MA_DVI,
+      namKh: this.formData.value.namKh,
+      loaiVthh: this.loaiVthh,
+    }
+    let res = await this.bangKeBttService.search(body);
+    if (res.data) {
+      this.loadBangKeBanLe = res.data.content;
+    }
   }
 
   async onChangeQdBanLe(id) {
@@ -163,11 +191,16 @@ export class DialogThemMoiBangKeBanLeComponent extends Base2Component implements
     }
   }
 
-  nzDisabled() {
-  }
-
   onCancel() {
     this._modalRef.destroy();
+  }
+
+  isDisable(): boolean {
+    if (this.idInput > 0) {
+      return true
+    } else {
+      return false;
+    }
   }
 
 }

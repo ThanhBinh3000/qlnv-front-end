@@ -9,14 +9,7 @@ import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
 import {DanhMucService} from "../../../../../../../services/danhmuc.service";
 import dayjs from 'dayjs';
-import {
-  QuyetdinhpheduyetKhlcntService
-} from "../../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetKhlcnt.service";
-import {
-  QuyetdinhpheduyetKqLcntService
-} from "../../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetKqLcnt.service";
 import {MESSAGE} from "../../../../../../../constants/message";
-import {HopdongService} from "../../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/hopdong.service";
 import {convertTienTobangChu} from "../../../../../../../shared/commonFunction";
 import {
   DialogQdPdKqlcntComponent
@@ -45,14 +38,10 @@ export class ThemMoiHopDongSclComponent extends Base2Component implements OnInit
   @ViewChild('collapseExpand', {static: false}) collapseExpand!: NzCollapsePanelComponent;
   formData: FormGroup;
   @Input('isViewDetail') isViewDetail: boolean;
-  @Output()
-  showListEvent = new EventEmitter<any>();
-  @Input()
-  idInput: number;
-  @Input()
-  flagThemMoi: string;
-  @Input()
-  itemGoiThau: any;
+  @Output() showListEvent = new EventEmitter<any>();
+  @Input() idInput: number;
+  @Input() flagThemMoi: string;
+  @Input() itemGoiThau: any;
   @Input() itemQdPdKhlcnt: any;
   @Input() itemDuAn: any;
   STATUS = STATUS;
@@ -187,8 +176,8 @@ export class ThemMoiHopDongSclComponent extends Base2Component implements OnInit
         soQdPdKhlcnt: this.itemQdPdKhlcnt.soQd,
         idQdPdKhlcnt: this.itemQdPdKhlcnt.id,
         idDuAn: this.itemQdPdKhlcnt.idDuAn,
-        tenCongTrinh: this.itemQdPdKhlcnt.tenDuAn,
-        soQdPdKqlcnt: this.itemGoiThau.soQdPdKqlcnt,
+        tenCongTrinh: this.itemQdPdKhlcnt.tenCongTrinh,
+        soQdPdKqlcnt: this.itemQdPdKhlcnt.soQdPdKqlcnt,
         idGoiThau: this.itemGoiThau.id,
         tenGoiThau: this.itemGoiThau.noiDung,
         ngayKyKqlcnt: dataQdPdKqlcnt ? dataQdPdKqlcnt.ngayKy : null,
@@ -287,7 +276,6 @@ export class ThemMoiHopDongSclComponent extends Base2Component implements OnInit
     } else {
       let res = await this.createUpdate(this.formData.value);
       if (res) {
-        console.log(res, 'day là sau khi save ko nè')
         this.emitDataHopDong(res);
       }
     }

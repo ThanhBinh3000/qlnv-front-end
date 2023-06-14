@@ -178,12 +178,13 @@ import { DialogKtGiaoKhoComponent } from './dialog/dialog-kt-giao-kho/dialog-kt-
 import {
   DialogQdPdKhlcntComponent
 } from "./dialog/ql-kho-tang/dialog-qd-pd-khlcnt/dialog-qd-pd-khlcnt.component";
-import {DialogQdPdKqlcntComponent} from "./dialog/ql-kho-tang/dialog-qd-pd-kqlcnt/dialog-qd-pd-kqlcnt.component";
-import {MatToolbarModule} from "@angular/material/toolbar";
-import {MatFormFieldModule} from "@angular/material/form-field";
-import {MatAutocompleteModule} from "@angular/material/autocomplete";
-import {MatSelectModule} from "@angular/material/select";
+import { DialogQdPdKqlcntComponent } from "./dialog/ql-kho-tang/dialog-qd-pd-kqlcnt/dialog-qd-pd-kqlcnt.component";
+import { MatToolbarModule } from "@angular/material/toolbar";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatAutocompleteModule } from "@angular/material/autocomplete";
+import { MatSelectModule } from "@angular/material/select";
 import { DialogSuaXuatGiamComponent } from './dialog/dialog-sua-xuat-giam/dialog-sua-xuat-giam.component';
+import { Base3Component } from './base3/base3.component';
 @NgModule({
   declarations: [
     //components
@@ -299,6 +300,7 @@ import { DialogSuaXuatGiamComponent } from './dialog/dialog-sua-xuat-giam/dialog
     DialogDanhSachVatTuHangHoaComponent,
     DialogChonDanhMucComponent,
     Base2Component,
+    Base3Component,
     DialogThemMoiBangKeThuMuaLeComponent,
     DialogQdXdTrungHanComponent,
     DialogDanhMucKhoComponent,
@@ -447,6 +449,7 @@ import { DialogSuaXuatGiamComponent } from './dialog/dialog-sua-xuat-giam/dialog
     DialogDanhSachVatTuHangHoaComponent,
     DialogChonDanhMucComponent,
     Base2Component,
+    Base3Component
   ],
   schemas: [NO_ERRORS_SCHEMA],
 })

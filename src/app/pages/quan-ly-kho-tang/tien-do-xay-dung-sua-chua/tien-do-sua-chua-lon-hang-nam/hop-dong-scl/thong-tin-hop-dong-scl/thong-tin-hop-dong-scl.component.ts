@@ -168,9 +168,7 @@ export class ThongTinHopDongSclComponent extends Base2Component implements OnIni
         }
         let res = await this.hopdongService.detailQdPdKhLcnt(body);
         if (res.msg == MESSAGE.SUCCESS) {
-          if (res.data) {
-            this.itemQdPdKhLcnt = res.data;
-            console.log(this.itemQdPdKhLcnt, 'this item')
+          if (res.data) {(this.itemQdPdKhLcnt, 'this item')
             this.helperService.bidingDataInFormGroup(this.formData, this.itemQdPdKhLcnt);
             this.listHopDong = this.itemQdPdKhLcnt.listKtTdscQuyetDinhPdKhlcntCvKh;
             if (this.listHopDong && this.listHopDong.length > 0) {

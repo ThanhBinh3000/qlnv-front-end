@@ -229,18 +229,18 @@
               <img *ngIf="itemTtdt && itemTtdt.trangThaiDt == STATUS.HOAN_THANH_CAP_NHAT" class="ml-1"
                    src="../../../../../assets/images/icon_tick_xanh.svg" width="14" height="14"/>
             </li>
-<!--            <li nz-menu-item-->
-<!--                [ngClass]="{'disabled-tab': !itemTtdt || itemTtdt.trangThaiDt != STATUS.HOAN_THANH_CAP_NHAT}"-->
-<!--                [nzSelected]="tabSelected == '04'" (click)="selectTab('04')"-->
-<!--                *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_QDPDKQLCNT')">-->
-<!--              Quyết định PD KQ lựa chọn nhà thầu-->
-<!--              <img-->
-<!--                *ngIf="!trangThaiQdPdKqLcnt"-->
-<!--                class="ml-1"-->
-<!--                src="../../../../../assets/images/icon_reject.svg" width="14" height="14"/>-->
-<!--              <img *ngIf="trangThaiQdPdKqLcnt" class="ml-1"-->
-<!--                   src="../../../../../assets/images/icon_tick_xanh.svg" width="14" height="14"/>-->
-<!--            </li>-->
+            <li nz-menu-item
+                [ngClass]="{'disabled-tab': !itemTtdt || itemTtdt.trangThaiDt != STATUS.HOAN_THANH_CAP_NHAT}"
+                [nzSelected]="tabSelected == '04'" (click)="selectTab('04')"
+                *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_QDPDKQLCNT')">
+              Quyết định PD KQ lựa chọn nhà thầu
+              <img
+                *ngIf="!trangThaiQdPdKqLcnt"
+                class="ml-1"
+                src="../../../../../assets/images/icon_reject.svg" width="14" height="14"/>
+              <img *ngIf="trangThaiQdPdKqLcnt" class="ml-1"
+                   src="../../../../../assets/images/icon_tick_xanh.svg" width="14" height="14"/>
+            </li>
 <!--            <li nz-menu-item-->
 <!--                [ngClass]="{'disabled-tab': !trangThaiQdPdKqLcnt}"-->
 <!--                [nzSelected]="tabSelected == '05'" (click)="selectTab('05')"-->
@@ -284,11 +284,10 @@
         <ng-container *ngIf="tabSelected == '03'">
           <app-thong-tin-dau-thau-sctx></app-thong-tin-dau-thau-sctx>
         </ng-container>
-<!--        <ng-container *ngIf="tabSelected == '04'">-->
-<!--          <app-quyet-dinh-phe-duyet-kqlcnt-scl [itemTtdt]="itemTtdt"-->
-<!--                                               [itemDuAn]="itemSelected">-->
-<!--          </app-quyet-dinh-phe-duyet-kqlcnt-scl>-->
-<!--        </ng-container>-->
+        <ng-container *ngIf="tabSelected == '04'">
+          <app-quyet-dinh-phe-duyet-kqlcnt-sctx [itemTtdt]="itemTtdt"
+                                                [itemDuAn]="itemSelected"></app-quyet-dinh-phe-duyet-kqlcnt-sctx>
+        </ng-container>
 <!--        <ng-container *ngIf="tabSelected == '05'">-->
 <!--          <app-hop-dong-scl [itemTtdt]="itemTtdt"-->
 <!--                            [itemQdPdKhLcnt]="itemQdPdKhLcnt">-->
