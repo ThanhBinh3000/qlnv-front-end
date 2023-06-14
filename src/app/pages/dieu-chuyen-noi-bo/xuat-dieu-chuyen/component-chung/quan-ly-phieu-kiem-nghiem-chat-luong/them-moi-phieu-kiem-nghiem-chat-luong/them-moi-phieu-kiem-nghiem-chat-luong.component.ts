@@ -121,10 +121,8 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
       tpNguoiKt: [''],
 
       ketQuaDanhGia: [''],
-      ketLuan: [''],
-
       ngayTao: [dayjs().format('YYYY-MM-DD')],
-      hthucBquan: [''],
+      hinhThucBq: [''],
 
       // donViTinh: [['']],
       // soPhieuKnChatLuong: [''], 
@@ -150,7 +148,6 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
       // thuKho: [''],
       donViTinh: [''],
       tenDonViTinh: [''],
-      hinhThucBq: [''],
       loaiVthh: [''],
       maDiemKho: [''],
       maLoKho: [''],
@@ -185,7 +182,9 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
       tenThuKho: [''],
       thayDoiThuKho: [null],
       thuKhoId: [null],
-      tpNguoiKtId: [null]
+      tpNguoiKtId: [null],
+
+      danhGiaCamQuan: ['']
     });
   }
 
@@ -313,7 +312,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
         return;
       }
       let body = this.formData.value;
-      body.dcnbPhieuKnChatLuongDtl = this.dataTableChiTieu;
+      body.dcnbPhieuKnChatLuongDtl = this.dataTableChiTieu.map(f => ({ ...f, id: f.hdrId ? f.id : undefined }));
       body.bienBanLayMauDinhKem = this.bienBanLayMauDinhKem;
       let res;
       if (this.idInput > 0) {

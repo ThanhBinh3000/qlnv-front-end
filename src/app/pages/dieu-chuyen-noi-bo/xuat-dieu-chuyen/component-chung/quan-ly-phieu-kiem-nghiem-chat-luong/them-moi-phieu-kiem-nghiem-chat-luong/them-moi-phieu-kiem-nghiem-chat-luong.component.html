@@ -266,7 +266,7 @@
                   Hình thức bảo quản
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-select formControlName="hthucBquan" [disabled]="isView">
+                  <nz-select formControlName="hinhThucBq" [disabled]="isView">
                     <nz-option *ngFor="let item of listHinhThucBaoQuan" [nzValue]="item.maHthuc"
                       [nzLabel]="item.tenHthuc">
                     </nz-option>
@@ -334,7 +334,7 @@
             <div nz-col nzSpan="24">
               <nz-form-item>
                 <textarea rows="3" nz-input placeholder="Nhập nội dung" [readonly]="isView"
-                  [ngClass]="isView ? 'disable' : ''" formControlName="ketQuaDanhGia"></textarea>
+                  [ngClass]="isView ? 'disable' : ''" formControlName="danhGiaCamQuan"></textarea>
               </nz-form-item>
             </div>
           </div>
@@ -418,7 +418,7 @@
             <div nz-col nzSpan="24">
               <nz-form-item>
                 <textarea rows="3" nz-input placeholder="Nhập nội dung" [readonly]="isView"
-                  [ngClass]="isView ? 'disable' : ''" formControlName="ketLuan"></textarea>
+                  [ngClass]="isView ? 'disable' : ''" formControlName="nhanXetKetLuan"></textarea>
               </nz-form-item>
             </div>
           </div>
