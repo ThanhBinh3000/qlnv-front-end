@@ -78,6 +78,7 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
       ngayLapPhieu: [dayjs().format('YYYY-MM-DD')],
       soQdinhDc: [],
       ngayQdinhDc: [],
+      qdDcId: [],
       ktvBaoQuan: [],
       thuTruong: [],
       tenLoKho: [],
@@ -359,6 +360,7 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
         this.formData.patchValue({
           soQdinhDc: data.soQdinh,
           ngayQdinhDc: data.ngayKyQdinh,
+          qdDcId: data.id,
           tenLoKho: "",
           maLoKho: "",
           tenNganKho: "",

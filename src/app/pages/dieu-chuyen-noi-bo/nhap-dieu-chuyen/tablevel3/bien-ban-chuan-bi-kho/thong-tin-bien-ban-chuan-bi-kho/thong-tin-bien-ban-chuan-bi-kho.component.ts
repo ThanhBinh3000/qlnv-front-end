@@ -13,6 +13,7 @@ import {
 import { MESSAGE } from "src/app/constants/message";
 import { STATUS } from "src/app/constants/status";
 import { DanhMucService } from "src/app/services/danhmuc.service";
+import { BienBanChuanBiKhoService } from "src/app/services/dieu-chuyen-noi-bo/nhap-dieu-chuyen/bien-ban-chuan-bi-kho";
 import { BienBanNghiemThuBaoQuanLanDauService } from "src/app/services/dieu-chuyen-noi-bo/nhap-dieu-chuyen/bien-ban-nghiem-thu-bao-quan-lan-dau.service";
 import { QuyetDinhDieuChuyenCucService } from "src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-c.service";
 import { StorageService } from "src/app/services/storage.service";
@@ -59,9 +60,9 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
     private cdr: ChangeDetectorRef,
     private danhMucService: DanhMucService,
     private quyetDinhDieuChuyenCucService: QuyetDinhDieuChuyenCucService,
-    private bbNghiemThuBaoQuanLanDauService: BienBanNghiemThuBaoQuanLanDauService,
+    private bienBanChuanBiKhoService: BienBanChuanBiKhoService,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, bbNghiemThuBaoQuanLanDauService);
+    super(httpClient, storageService, notification, spinner, modal, bienBanChuanBiKhoService);
     this.formData = this.fb.group({
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự thảo'],
