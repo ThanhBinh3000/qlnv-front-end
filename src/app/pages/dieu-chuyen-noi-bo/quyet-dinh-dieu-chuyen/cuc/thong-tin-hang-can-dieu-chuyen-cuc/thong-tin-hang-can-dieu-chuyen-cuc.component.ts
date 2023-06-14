@@ -322,8 +322,8 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
           const detailThuKho = detail.data.object.detailThuKho
           if (detailThuKho) {
             this.formData.patchValue({
-              maThuKho: detailThuKho.maThuKho,
-              thuKho: detailThuKho.hoTen
+              maThuKho: detailThuKho.id,
+              thuKho: detailThuKho.fullName
             })
           }
           if (coLoKho)
@@ -416,8 +416,8 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
           const detailThuKho = detail.data.object.detailThuKho
           if (detailThuKho) {
             this.formData.patchValue({
-              maThuKhoNhan: detailThuKho.maThuKho,
-              thuKhoNhan: detailThuKho.hoTen
+              maThuKhoNhan: detailThuKho.id,
+              thuKhoNhan: detailThuKho.fullName
             })
           }
           if (coLoKho) {

@@ -100,23 +100,20 @@
             </tr>
           </thead>
           <tbody>
-            <ng-container *ngFor="let item of basicTable.data , let i = index">
+            <ng-container *ngFor="let row1 of basicTable.data , let i = index">
               <tr>
                 <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
-                <td [nzExpand]="item.expand"
-                  (nzExpandChange)="item.expand=!item.expand; item.children=setExpand(item.expand, item.children)">
+                <td [nzExpand]="row1.expand"
+                  (nzExpandChange)="row1.expand=!row1.expand; row1.children=setExpand(row1.expand, row1.children)">
                 </td>
-                <td></td>
-                <td class="bold">{{ item.tenDvi || "" }}</td>
-                <td></td>
-                <td></td>
+                <td class="bold">{{ row1.soQdinh || "" }}</td>
+                <td class="bold">{{ row1.namKh || "" }}</td>
                 <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
-                <td class="text-right bold">{{item.duToanKphi|number: '1.0-1':
-                  'vi_VN'}}</td>
+                <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -125,19 +122,18 @@
                 <td></td>
                 <td></td>
               </tr>
-              <ng-container *ngIf="item.expand">
-                <ng-container *ngFor="let bb of item.children, let y = index">
+              <ng-container *ngIf="row1.expand">
+                <ng-container *ngFor="let row2 of row1.children, let y = index">
                   <tr>
                     <td></td>
                     <td></td>
-                    <td>
+                    <td></td>
+                    <td></td>
+                    <td class="bold">{{ row2.thoiHanDieuChuyen || ""}}</td>
+                    <td class="bold">{{ row2.tenloKhoXuat || ""}}{{ row2.tenNganKhoXuat || ""}}{{ row2.tenDiemKhoXuat ||
+                      ""}}
                     </td>
-                    <td></td>
-                    <td class="bold">{{ bb.tenDiemKho || ""}}</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td class="bold">{{ row2.tenTrangThai || ""}}</td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -149,25 +145,19 @@
                     <td></td>
                     <td></td>
                   </tr>
-                  <ng-container *ngIf="bb.expand">
-                    <ng-container *ngFor="let c of bb.children, let y = index">
+                  <ng-container>
+                    <ng-container *ngFor="let row3 of row2.children, let y = index">
                       <tr>
                         <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td class="bold">{{c.tenLoKho || ""}}</td>
-                        <td class="bold">{{c.tenLoaiVthh || ""}}</td>
-                        <td class="bold">{{c.tenCloaiVthh || ""}}</td>
-                        <td class="bold">{{c.tenDonViTinh || ""}}</td>
-                        <td class="text-right bold">{{c.tonKho|number: '1.0-1':
-                          'vi_VN'}}
-                        </td>
-                        <td class="text-right bold">{{c.soLuongDc|number: '1.0-1':
-                          'vi_VN'}}</td>
-                        <td class="text-right bold">{{c.duToanKphi|number: '1.0-1':
-                          'vi_VN'}}</td>
+                        <td></td>
+                        <td></td>
+                        <td class="bold">{{row3.tenDiemKhoNhan || ""}}</td>
+                        <td></td>
+                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -176,7 +166,7 @@
                         <td></td>
                         <td></td>
                       </tr>
-                      <ng-container *ngFor="let d of c.children, let y = index">
+                      <ng-container *ngFor="let row4 of row3.children, let y = index">
                         <tr>
                           <td></td>
                           <td></td>
@@ -186,21 +176,21 @@
                           <td></td>
                           <td></td>
                           <td></td>
+                          <td class="bold">{{row4.tenNganKhoNhan|| ""}}</td>
+                          <td class="bold">{{row4.tenLoKhoNhan|| ""}}</td>
                           <td></td>
                           <td></td>
                           <td></td>
                           <td></td>
-                          <td class="bold">{{d.thoiGianDkDc|date: "dd/MM/yyyy"}}</td>
-                          <td class="bold">{{d.tenChiCucNhan || ""}}</td>
                           <td></td>
                           <td></td>
-                          <td></td>
-                          <td></td>
-                          <td class="text-center">
-                            <label nz-checkbox [(ngModel)]="d.daXdinhDiemNhap" nzDisabled="true"></label>
+                          <td>
+                            <a>
+                              <i class="icon htvbdh_dau-cong"></i>
+                            </a>
                           </td>
                         </tr>
-                        <ng-container *ngFor="let e of d.children, let y = index">
+                        <ng-container *ngFor="let row5 of row4.children, let y = index">
                           <tr>
                             <td></td>
                             <td></td>
@@ -212,17 +202,27 @@
                             <td></td>
                             <td></td>
                             <td></td>
+                            <td>{{(row5.soLapBBKLot || "")}}</td>
+                            <td>{{(row5.ngayLapBBKLot || "")}}</td>
+                            <td>{{(row5.ngayKetThucNtKeLot || "")}}</td>
+                            <td>{{(row5.tongKinhPhiTT |number: '1.0-1':
+                              'vi_VN')}}</td>
+                            <td>{{(row5.tongKinhPhiPd |number: '1.0-1':
+                              'vi_VN')}}</td>
                             <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>{{(e.tenDiemKhoNhan || "")}}</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
+                            <td>
+                              <a *ngIf="row5.trangThai !== STATUS.DU_THAO" (click)="redirectDetail(row5.id, true)">
+                                <i class="fa fa-eye"></i>
+                              </a>
+                              <a *ngIf="row5.trangThai == STATUS.DU_THAO" (click)="redirectDetail(row5.id, false)">
+                                <i class="fa fa-pencil"></i>
+                              </a>
+                              <a *ngIf="row5.trangThai == STATUS.DU_THAO">
+                                <i class="fa fa-trash-o do"></i>
+                              </a>
+                            </td>
                           </tr>
-                          <ng-container *ngFor="let e of d.children, let y = index">
+                          <!-- <ng-container *ngFor="let e of d.children, let y = index">
                             <tr>
                               <td></td>
                               <td></td>
@@ -246,7 +246,7 @@
                                 {{c.soLuongPhanBo|number:'1.0-1':'vi_VN'}}</td>
                               <td></td>
                             </tr>
-                          </ng-container>
+                          </ng-container> -->
                         </ng-container>
                       </ng-container>
                     </ng-container>

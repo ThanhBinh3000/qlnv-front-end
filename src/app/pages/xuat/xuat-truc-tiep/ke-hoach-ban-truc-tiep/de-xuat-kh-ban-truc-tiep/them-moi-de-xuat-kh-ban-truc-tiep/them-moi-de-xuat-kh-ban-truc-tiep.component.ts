@@ -260,33 +260,31 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
           this.donGiaDuocDuyet = data.giaQd
         }
       }
-      let res2 = await this.dmTieuChuanService.getDetailByMaHh(
+      let resTC = await this.dmTieuChuanService.getDetailByMaHh(
         this.formData.value.cloaiVthh,
       );
-      if (res2.statusCode == API_STATUS_CODE.SUCCESS) {
+      if (resTC.statusCode == API_STATUS_CODE.SUCCESS) {
         this.formData.patchValue({
-          tchuanCluong: res2.data ? res2.data.tenQchuan : null,
+          tchuanCluong: resTC.data ? resTC.data.tenQchuan : null,
         });
       }
     }
   }
 
-  validateGiaGiaToiDa() {
-    if (this.giaToiDa == null) {
-      this.notification.error(MESSAGE.ERROR, 'Bạn cần lập và trình duyệt phương án giá mua tối đa, giá bán tối thiểu trước. Chỉ sau khi có giá bán tối thiểu bạn mới thêm được danh mục đơn vị tài sản BTT vì giá bán đề xuất ở đây nhập vào phải >= giá bán tối thiểu');
-      return false;
-    } else {
-      return true;
-    }
-  }
-
   themMoiBangPhanLoTaiSan($event, data?: DanhSachXuatBanTrucTiep, index?: number) {
-    if (this.validateGiaGiaToiDa()) {
-      $event.stopPropagation();
+    $event.stopPropagation();
+    if (this.loaiVthhInput.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
+      if (!this.formData.get('loaiVthh').value) {
+        this.notification.error(MESSAGE.ERROR, 'Vui lòng chọn loại hàng hóa');
+        return;
+      }
+    } else {
       if (!this.formData.get('loaiVthh').value || !this.formData.get('cloaiVthh').value) {
         this.notification.error(MESSAGE.ERROR, 'Vui lòng chọn loại hàng hóa và chủng loại hàng hóa');
         return;
       }
+    }
+    if (this.validateGiaGiaToiDa()) {
       const modalGT = this.modal.create({
         nzTitle: 'THÊM ĐỊA ĐIỂM GIAO NHẬN HÀNG',
         nzContent: DialogThemMoiXuatBanTrucTiepComponent,
@@ -322,6 +320,15 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
       });
     }
   };
+
+  validateGiaGiaToiDa() {
+    if (this.giaToiDa == null) {
+      this.notification.error(MESSAGE.ERROR, 'Bạn cần lập và trình duyệt phương án giá mua tối đa, giá bán tối thiểu trước. Chỉ sau khi có giá bán tối thiểu bạn mới thêm được danh mục đơn vị tài sản BTT vì giá bán đề xuất ở đây nhập vào phải >= giá bán tối thiểu');
+      return false;
+    } else {
+      return true;
+    }
+  }
 
   validateAddDiaDiem(dataAdd): boolean {
     let data = this.dataTable.filter(item => item.maDvi == dataAdd.maDvi);
@@ -379,7 +386,7 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
         this.idInput = res.id;
         this.guiDuyet();
       } else {
-        // this.goBack()
+        this.getDetail(res.id)
       }
     }
   }
@@ -402,10 +409,6 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
         idSoQdCtieu: null
       });
     }
-  }
-
-  onChangeNamKh() {
-    this.getDataChiTieu();
   }
 
   async guiDuyet() {
@@ -482,6 +485,16 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
       }
     }
     return true;
+  }
+
+  async onChangeNamKh() {
+    if (this.userService.isCuc()) {
+      await this.getDataChiTieu();
+    } else {
+      if (this.idInput == null) {
+        await this.getDataChiTieu();
+      }
+    }
   }
 
   async ngOnChanges(changes: SimpleChanges) {

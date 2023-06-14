@@ -10,12 +10,13 @@ import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { DonviService } from 'src/app/services/donvi.service';
-import { isEmpty } from 'lodash';
+import { chain, cloneDeep } from 'lodash';
 import { CHUC_NANG, STATUS } from 'src/app/constants/status';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { Subject } from 'rxjs';
 import { QuyetDinhDieuChuyenTCService } from 'src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-tc.service';
 import { BienBanNghiemThuBaoQuanLanDauService } from 'src/app/services/dieu-chuyen-noi-bo/nhap-dieu-chuyen/bien-ban-nghiem-thu-bao-quan-lan-dau.service';
+import * as uuidv4 from "uuid";
 
 @Component({
   selector: 'app-bien-ban-nghiem-thu-bao-quan-lan-dau',
@@ -197,7 +198,97 @@ export class BienBanNghiemThuBaoQuanLanDauComponent extends Base2Component imple
       this.formData.value.ngayHieuLucDen = dayjs(this.formData.value.ngayHieuLuc[1]).format('YYYY-MM-DD')
     }
     console.log('DSQuyetDinhDieuChuyenComponent/this.formData.value=>', this.formData.value)
-    await this.search();
+    let body = this.formData.value
+    body.paggingReq = {
+      limit: this.pageSize,
+      page: this.page - 1
+    }
+    let res = await this.bbNghiemThuBaoQuanLanDauService.search(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      let data = res.data.content
+        .map(element => {
+          return {
+            ...element,
+            maloNganKhoNhan: `${element.maloKhoNhan}${element.maNganKhoNhan}`
+          }
+        });
+      this.dataTableView = this.buildTableView(data)
+      console.log('data', data, res)
+      console.log('this.dataTableView', this.dataTableView)
+    }
+  }
+
+
+  buildTableView(data: any[] = []) {
+    let dataView = chain(data)
+      .groupBy("soQdinh")
+      ?.map((value1, key1) => {
+        let children1 = chain(value1)
+          .groupBy("maDiemKhoXuat")
+          ?.map((value2, key2) => {
+            let children2 = chain(value2)
+              .groupBy("maDiemKhoNhan")
+              ?.map((value3, key3) => {
+
+                const children3 = chain(value3).groupBy("maloNganKhoNhan")
+                  ?.map((m, im) => {
+
+                    const maChiCucNhan = m.find(f => f.maloNganKhoNhan == im);
+                    // const hasMaDiemKhoNhan = vs.some(f => f.maDiemKhoNhan);
+                    // if (!hasMaDiemKhoNhan) return {
+                    //   ...maChiCucNhan
+                    // }
+
+                    // const rssx = chain(m).groupBy("maDiemKhoNhan")?.map((n, inx) => {
+
+                    //   const maDiemKhoNhan = n.find(f => f.maDiemKhoNhan == inx);
+                    //   return {
+                    //     ...maDiemKhoNhan,
+                    //     children: n
+                    //   }
+                    // }).value()
+                    return {
+                      ...maChiCucNhan,
+                      children: m
+                    }
+                  }).value()
+
+                const row3 = value3.find(s => s?.maDiemKhoNhan == key3);
+                return {
+                  ...row3,
+                  idVirtual: row3 ? row3.idVirtual ? row3.idVirtual : uuidv4.v4() : uuidv4.v4(),
+                  children: children3,
+                }
+              }
+              ).value();
+
+            let row2 = value2?.find(s => s.maDiemKhoXuat == key2);
+
+            return {
+              ...row2,
+              idVirtual: row2 ? row2.idVirtual ? row2.idVirtual : uuidv4.v4() : uuidv4.v4(),
+              children: children2,
+            }
+          }
+          ).value();
+
+
+        let row1 = value1?.find(s => s.soQdinh === key1);
+        return {
+          ...row1,
+          idVirtual: row1 ? row1.idVirtual ? row1.idVirtual : uuidv4.v4() : uuidv4.v4(),
+          children: children1,
+          expand: true
+        };
+      }).value();
+
+    // if (data?.length !== 0) {
+    //   const tongDuToanChiPhi = data.reduce((prev, cur) => prev + cur.duToanKphi, 0);
+    //   this.formData.patchValue({
+    //     tongtien: tongDuToanChiPhi,
+    //   })
+    // };
+    return dataView
   }
 
   exportDataTC() {

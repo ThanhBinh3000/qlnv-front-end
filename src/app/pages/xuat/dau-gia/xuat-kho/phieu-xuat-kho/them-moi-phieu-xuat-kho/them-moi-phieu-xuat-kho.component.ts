@@ -283,17 +283,23 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
         this.listDiaDiemNhap = [...this.listDiaDiemNhap, e.children];
       });
       this.listDiaDiemNhap = this.listDiaDiemNhap.flat();
+      // if (this.listPhieuXk.length > 0) {
+      //   this.listDiaDiemNhap = this.listDiaDiemNhap.filter(item => {
+      //     return this.listPhieuXk.some(phieuXk => {
+      //       return (
+      //         item.maLoKho !== phieuXk.maLoKho ||
+      //         item.maNganKho !== phieuXk.maNganKho
+      //       );
+      //     });
+      //   });
+      // }
 
-      if (this.listPhieuXk.length > 0) {
-        this.listDiaDiemNhap = this.listDiaDiemNhap.filter(item => {
-          return this.listPhieuXk.some(phieuXk => {
-            return (
-              item.maLoKho !== phieuXk.maLoKho ||
-              item.maNganKho !== phieuXk.maNganKho
-            );
-          });
-        });
-      }
+      let set1 = new Set(this.listPhieuXk.map(item => JSON.stringify({ maLoKho: item.maLoKho, maNganKho: item.maNganKho })));
+      this.listDiaDiemNhap = this.listDiaDiemNhap.filter(item => {
+        const key = JSON.stringify({ maLoKho: item.maLoKho, maNganKho: item.maNganKho });
+        return !set1.has(key);
+      });
+
     }
     await this.spinner.hide();
   }
@@ -353,10 +359,8 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
       }
       let res = await this.xhPhieuKnghiemCluongService.search(body)
       const list = res.data.content;
-      console.log(list, "list")
       // this.listPhieuKtraCl = list.find(item => (item.maDiemKho == data.maDiemKho));
       let soPhieu = list.find(item => (item.maLoKho == data.maLoKho&&item.maNganKho == data.maNganKho));
-      console.log(soPhieu,'soPhieu')
       if(soPhieu){
         this.formData.patchValue({
           soPhieuKnCl: soPhieu.soPhieu,

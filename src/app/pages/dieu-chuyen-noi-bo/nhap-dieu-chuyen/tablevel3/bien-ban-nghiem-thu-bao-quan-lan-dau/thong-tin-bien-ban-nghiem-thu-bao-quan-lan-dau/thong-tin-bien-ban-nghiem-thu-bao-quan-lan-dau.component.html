@@ -28,27 +28,22 @@
         <span>Lưu</span>
       </button>
 
-      <button *ngIf="isView && formData.value.trangThai == STATUS.DU_THAO" type="button" class="btn btn-sub"
-        (click)="guiDuyet()">
+      <button *ngIf="isGuiDuyet()" type="button" class="btn btn-sub" (click)="guiDuyet()">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span>Gửi duyệt</span>
       </button>
 
-      <button
-        *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.TU_CHOI_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC || formData.value.trangThai == STATUS.TU_CHOI_LDTC"
-        type="button" class="btn btn-sub" (click)="tuChoi()">
+      <button *ngIf="isTuChoi()" type="button" class="btn btn-sub" (click)="tuChoi()">
         <i class="icon htvbdh_tcdt_tuchoi do"></i>
         <span>Từ chối</span>
       </button>
 
-      <button *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV" type="button" class="btn btn-sub"
-        (click)="pheDuyet()">
+      <button *ngIf="isPheDuyet()" type="button" class="btn btn-sub" (click)="pheDuyet()">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span>Duyệt</span>
       </button>
 
-      <button *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDTC" type="button" class="btn btn-info ml-2"
-        (click)="banHanh()">
+      <button *ngIf="isBanHanh()" type="button" class="btn btn-info ml-2" (click)="banHanh()">
         <i class="icon htvbdh_chuyenvanthu"></i>
         <span>Ban hành</span>
       </button>
@@ -432,7 +427,7 @@
         </div>
         <nz-card class="mt-2px flex-card data-table card-border-content table-card">
 
-          <nz-table #tblData [nzData]="dataTableView" class="nowrap mt-16 table-chi-tiet" nzBordered>
+          <nz-table #tblDatadsHangTH class="nowrap mt-16 table-chi-tiet" nzBordered [nzData]="dsHangTH">
             <thead>
               <tr>
                 <th rowspan="2" style="width: 35px">STT</th>
@@ -453,21 +448,29 @@
               </tr>
             </thead>
             <tbody>
-              <ng-container *ngFor="let item of tblData.data, let i = index;">
-                <tr>
-                  <td>{{i + 1}}</td>
-                  <td>{{i + 1}}</td>
-                  <td>{{i + 1}}</td>
-                  <td>{{i + 1}}</td>
-                  <td>{{i + 1}}</td>
-                  <td>{{i + 1}}</td>
-                  <td>{{i + 1}}</td>
-                  <td>{{i + 1}}</td>
-                  <td>{{i + 1}}</td>
-                  <td>{{i + 1}}</td>
-                  <td></td>
-                </tr>
-              </ng-container>
+              <tr nz-tbody-tr *ngFor="let item of tblDatadsHangTH.data, let i = index;">
+                <td>{{i + 1}}</td>
+                <td>{{item.danhMuc}} {{item.nhomHang}}</td>
+                <td>{{item.tenMatHang}}</td>
+                <td>{{item.isParent ? item.donViTinh : item.donViTinhMh}}</td>
+                <td>{{item.soLuongTrongNam|number:'1.0-1':'vi_VN'}}</td>
+                <td>{{item.donGia|number:'1.0-1':'vi_VN'}}</td>
+                <td>{{item.thanhTienTrongNam|number:'1.0-1':'vi_VN'}}</td>
+                <td>{{item.soLuongNamTruoc|number:'1.0-1':'vi_VN'}}</td>
+                <td>{{item.thanhTienNamTruoc|number:'1.0-1':'vi_VN'}}</td>
+                <td>{{(item.tongGiaTri)|number:'1.0-1':'vi_VN'}}</td>
+                <td>
+                  <a (click)="them(item)">
+                    <i class="icon htvbdh_dau-cong"></i>
+                  </a>
+                  <a (click)="sua(item)">
+                    <i class="fa fa-pencil"></i>
+                  </a>
+                  <a (click)="xoa(item)">
+                    <i class="fa fa-trash-o do"></i>
+                  </a>
+                </td>
+              </tr>
             </tbody>
 
           </nz-table>
@@ -482,7 +485,11 @@
                 Tổng kinh phí thực tế đã thực hiện
               </nz-form-label>
               <nz-form-control>
-                <input nz-input formControlName="tongKinhPhiDaTh" [readonly]="true" />
+                <!-- <input nz-input formControlName="tongKinhPhiDaTh" [readonly]="true" /> -->
+                <nz-input-number [nzDisabled]="true" formControlName="tongKinhPhiDaTh" [nzMin]="0"
+                  [nzMax]="999999999999" [nzStep]="0.1" [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                  [nzParser]="globals.parser">
+                </nz-input-number>
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -493,7 +500,7 @@
                 Viết bằng chữ
               </nz-form-label>
               <nz-form-control>
-                <input nz-input formControlName="tongKinhPhiDaThBc" [readonly]="isView" />
+                <input nz-input formControlName="tongKinhPhiDaThBc" [readonly]="true" />
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -516,7 +523,7 @@
             </div>
           </div>
 
-          <nz-table #tblData class="nowrap mt-16 table-chi-tiet" nzBordered [nzData]="dataTableView">
+          <nz-table #tblDatadsHangPD class="nowrap mt-16 table-chi-tiet" nzBordered [nzData]="dsHangPD">
             <thead>
               <tr>
                 <th rowspan="2" style="width: 35px">STT</th>
@@ -537,17 +544,17 @@
               </tr>
             </thead>
             <tbody>
-              <tr nz-tbody-tr *ngFor="let item of tblData.data, let i = index;">
+              <tr nz-tbody-tr *ngFor="let item of tblDatadsHangPD.data, let i = index;">
                 <td>{{i + 1}}</td>
                 <td>{{item.danhMuc}} {{item.nhomHang}}</td>
                 <td>{{item.tenMatHang}}</td>
-                <td>{{item.donViTinhMh}}</td>
+                <td>{{item.isParent ? item.donViTinh : item.donViTinhMh}}</td>
                 <td>{{item.soLuongTrongNam|number:'1.0-1':'vi_VN'}}</td>
                 <td>{{item.donGia|number:'1.0-1':'vi_VN'}}</td>
                 <td>{{item.thanhTienTrongNam|number:'1.0-1':'vi_VN'}}</td>
                 <td>{{item.soLuongNamTruoc|number:'1.0-1':'vi_VN'}}</td>
                 <td>{{item.thanhTienNamTruoc|number:'1.0-1':'vi_VN'}}</td>
-                <td>{{(item.thanhTienTrongNam + item.thanhTienNamTruoc)|number:'1.0-1':'vi_VN'}}</td>
+                <td>{{(item.tongGiaTri)|number:'1.0-1':'vi_VN'}}</td>
                 <td>
                   <a (click)="them(item)">
                     <i class="icon htvbdh_dau-cong"></i>

@@ -623,4 +623,17 @@ export class Base2Component implements OnInit {
     return romanNumber;
   }
 
+  disabledNgayTu = (startValue: Date): boolean => {
+    if (startValue && this.formData.value.ngayTu) {
+      return startValue.getTime() > this.formData.value.ngayTu.getTime();
+    }
+    return false;
+  };
+
+  disabledNgayDen = (endValue: Date): boolean => {
+    if (!endValue || !this.formData.value.ngayDen) {
+      return false;
+    }
+    return endValue.getTime() <= this.formData.value.ngayDen.getTime();
+  };
 }
