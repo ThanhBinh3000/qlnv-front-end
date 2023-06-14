@@ -38,12 +38,11 @@
       <nz-collapse-panel [nzHeader]="'THÔNG TIN CHUNG'" [nzActive]="true">
         <form nz-form nzLayout="vertical" [formGroup]="formData">
           <div nz-row [nzGutter]="[20]">
-            <div nz-col nzSpan="2">
+            <div nz-col [nzSpan]="2">
               <nz-form-item>
-                <nz-form-label nzRequired [nzNoColon]="true"> Năm kế hoạch
-                </nz-form-label>
-                <nz-form-control nz-col [nzErrorTip]="error">
-                  <nz-select formControlName="nam" nzAllowClear>
+                <nz-form-label [nzNoColon]="true">Năm kế hoạch</nz-form-label>
+                <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
+                  <nz-select formControlName="nam" [nzDisabled]="isDisabled()" (ngModelChange)="onChangeNamKh()">
                     <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                   </nz-select>
                 </nz-form-control>
@@ -147,7 +146,7 @@
                 <nz-form-label [nzNoColon]="true"> Năm kế hoạch
                 </nz-form-label>
                 <nz-form-control nz-col [nzErrorTip]="error">
-                  <nz-select formControlName="nam" nzAllowClear [nzDisabled]="true">
+                  <nz-select formControlName="namKh" nzAllowClear [nzDisabled]="true">
                     <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                   </nz-select>
                 </nz-form-control>

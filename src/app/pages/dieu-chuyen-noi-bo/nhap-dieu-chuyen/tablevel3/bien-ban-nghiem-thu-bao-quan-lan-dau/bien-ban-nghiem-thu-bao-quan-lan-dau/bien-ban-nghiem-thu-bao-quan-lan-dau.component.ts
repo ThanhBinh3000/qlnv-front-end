@@ -28,37 +28,6 @@ export class BienBanNghiemThuBaoQuanLanDauComponent extends Base2Component imple
   isVisibleChangeTab$ = new Subject();
   visibleTab: boolean = true;
   tabSelected: number = 0;
-  @Input()
-  idTHop: number;
-
-  @Input()
-  loaiVthh: string;
-  @Input()
-  loaiVthhCache: string;
-
-  CHUC_NANG = CHUC_NANG;
-  listLoaiDieuChuyen: any[] = [
-    { ma: "ALL", ten: "Tất cả" },
-    { ma: "CHI_CUC", ten: "Giữa 2 chi cục trong cùng 1 cục" },
-    { ma: "CUC", ten: "Giữa 2 cục DTNN KV" },
-  ];
-  listLoaiDCFilterTable: any[] = [
-    { ma: "CHI_CUC", ten: "Giữa 2 chi cục trong cùng 1 cục" },
-    { ma: "CUC", ten: "Giữa 2 cục DTNN KV" },
-  ];
-  dataTableView: any[] = [];
-  listLoaiHangHoa: any[] = [];
-  listHangHoaAll: any[] = [];
-  listChungLoaiHangHoa: any[] = [];
-  listTrangThai: any[] = [
-    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
-    { ma: this.STATUS.CHO_DUYET_TP, giaTri: 'Chờ duyệt - TP' },
-    { ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối - TP' },
-    { ma: this.STATUS.CHO_DUYET_LDC, giaTri: 'Chờ duyệt - LĐ Cục' },
-    { ma: this.STATUS.TU_CHOI_LDC, giaTri: 'Từ chối - LĐ Cục' },
-    { ma: this.STATUS.DA_DUYET_LDC, giaTri: 'Đã duyệt - LĐ Cục' },
-    { ma: this.STATUS.DA_TAO_CBV, giaTri: 'Đã tạo - CB Vụ' },
-  ];
 
   constructor(
     httpClient: HttpClient,
@@ -76,69 +45,22 @@ export class BienBanNghiemThuBaoQuanLanDauComponent extends Base2Component imple
       ngayLap: null,
       ngayKetThucNt: null,
     })
-    // this.filterTable = {
-    //   nam: '',
-    //   soQdinh: '',
-    //   ngayKyQdinh: '',
-    //   loaiDc: '',
-    //   trichYeu: '',
-    //   maDxuat: '',
-    //   maThop: '',
-    //   soQdinhXuatCuc: '',
-    //   soQdinhNhapCuc: '',
-    //   tenTrangThai: '',
-    // };
   }
 
-
-  dsDonvi: any[] = [];
-  userInfo: UserLogin;
-  userdetail: any = {};
+  dataTableView: any[] = [];
   selectedId: number = 0;
-  isVatTu: boolean = false;
+  data: any;
   isView = false;
-
-  disabledStartNgayLapKh = (startValue: Date): boolean => {
-    if (startValue && this.formData.value.ngayLapKhDen) {
-      return startValue.getTime() > this.formData.value.ngayLapKhDen.getTime();
-    } else {
-      return false;
-    }
-  };
-
-  disabledEndNgayLapKh = (endValue: Date): boolean => {
-    if (!endValue || !this.formData.value.ngayLapKhTu) {
-      return false;
-    }
-    return endValue.getTime() <= this.formData.value.ngayLapKhDen.getTime();
-  };
-
-  disabledStartNgayDuyetLdc = (startValue: Date): boolean => {
-    if (startValue && this.formData.value.ngayDuyetLdcDen) {
-      return startValue.getTime() > this.formData.value.ngayDuyetLdcDen.getTime();
-    }
-    return false;
-  };
-
-  disabledEndNgayDuyetLdc = (endValue: Date): boolean => {
-    if (!endValue || !this.formData.value.ngayDuyetLdcTu) {
-      return false;
-    }
-    return endValue.getTime() <= this.formData.value.ngayDuyetLdcDen.getTime();
-  };
 
   async ngOnInit() {
     this.isVisibleChangeTab$.subscribe((value: boolean) => {
       this.visibleTab = value;
     });
 
-    if (this.idTHop)
-      this.redirectDetail(0, false)
 
     try {
       this.initData()
       await this.timKiem();
-      // await this.loadDsVthh();
       await this.spinner.hide();
 
     } catch (e) {
@@ -176,9 +98,9 @@ export class BienBanNghiemThuBaoQuanLanDauComponent extends Base2Component imple
   }
 
   async initData() {
-    this.userInfo = this.userService.getUserLogin();
-    this.userdetail.maDvi = this.userInfo.MA_DVI;
-    this.userdetail.tenDvi = this.userInfo.TEN_DVI;
+    // this.userInfo = this.userService.getUserLogin();
+    // this.userdetail.maDvi = this.userInfo.MA_DVI;
+    // this.userdetail.tenDvi = this.userInfo.TEN_DVI;
   }
 
   setExpand(parantExpand: boolean = false, children: any = []): void {
@@ -189,15 +111,14 @@ export class BienBanNghiemThuBaoQuanLanDauComponent extends Base2Component imple
   }
 
   async timKiem() {
-    if (this.formData.value.ngayDuyetTc) {
-      this.formData.value.ngayDuyetTcTu = dayjs(this.formData.value.ngayDuyetTc[0]).format('YYYY-MM-DD')
-      this.formData.value.ngayDuyetTcDen = dayjs(this.formData.value.ngayDuyetTc[1]).format('YYYY-MM-DD')
-    }
-    if (this.formData.value.ngayHieuLuc) {
-      this.formData.value.ngayHieuLucTu = dayjs(this.formData.value.ngayHieuLuc[0]).format('YYYY-MM-DD')
-      this.formData.value.ngayHieuLucDen = dayjs(this.formData.value.ngayHieuLuc[1]).format('YYYY-MM-DD')
-    }
-    console.log('DSQuyetDinhDieuChuyenComponent/this.formData.value=>', this.formData.value)
+    // if (this.formData.value.ngayDuyetTc) {
+    //   this.formData.value.ngayDuyetTcTu = dayjs(this.formData.value.ngayDuyetTc[0]).format('YYYY-MM-DD')
+    //   this.formData.value.ngayDuyetTcDen = dayjs(this.formData.value.ngayDuyetTc[1]).format('YYYY-MM-DD')
+    // }
+    // if (this.formData.value.ngayHieuLuc) {
+    //   this.formData.value.ngayHieuLucTu = dayjs(this.formData.value.ngayHieuLuc[0]).format('YYYY-MM-DD')
+    //   this.formData.value.ngayHieuLucDen = dayjs(this.formData.value.ngayHieuLuc[1]).format('YYYY-MM-DD')
+    // }
     let body = this.formData.value
     body.paggingReq = {
       limit: this.pageSize,
@@ -209,6 +130,7 @@ export class BienBanNghiemThuBaoQuanLanDauComponent extends Base2Component imple
         .map(element => {
           return {
             ...element,
+            maKhoXuat: `${element.thoiHanDieuChuyen}${element.maloKhoXuat}${element.maNganKhoXuat}`,
             maloNganKhoNhan: `${element.maloKhoNhan}${element.maNganKhoNhan}`
           }
         });
@@ -224,7 +146,7 @@ export class BienBanNghiemThuBaoQuanLanDauComponent extends Base2Component imple
       .groupBy("soQdinh")
       ?.map((value1, key1) => {
         let children1 = chain(value1)
-          .groupBy("maDiemKhoXuat")
+          .groupBy("maKhoXuat")
           ?.map((value2, key2) => {
             let children2 = chain(value2)
               .groupBy("maDiemKhoNhan")
@@ -262,7 +184,7 @@ export class BienBanNghiemThuBaoQuanLanDauComponent extends Base2Component imple
               }
               ).value();
 
-            let row2 = value2?.find(s => s.maDiemKhoXuat == key2);
+            let row2 = value2?.find(s => s.maKhoXuat == key2);
 
             return {
               ...row2,
@@ -282,12 +204,6 @@ export class BienBanNghiemThuBaoQuanLanDauComponent extends Base2Component imple
         };
       }).value();
 
-    // if (data?.length !== 0) {
-    //   const tongDuToanChiPhi = data.reduce((prev, cur) => prev + cur.duToanKphi, 0);
-    //   this.formData.patchValue({
-    //     tongtien: tongDuToanChiPhi,
-    //   })
-    // };
     return dataView
   }
 
@@ -321,11 +237,44 @@ export class BienBanNghiemThuBaoQuanLanDauComponent extends Base2Component imple
     }
   }
 
+  add(data: any) {
+    this.data = data;
+    this.isDetail = true;
+    this.isView = false;
+  }
+
+  xoa(data: any) {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: () => {
+        this.spinner.show();
+        try {
+          let body = {
+            id: data.id
+          };
+          this.bbNghiemThuBaoQuanLanDauService.delete(body).then(async () => {
+            await this.timKiem();
+            this.spinner.hide();
+          });
+        } catch (e) {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      },
+    });
+  }
+
   redirectDetail(id, b: boolean) {
     this.selectedId = id;
     this.isDetail = true;
     this.isView = b;
-    // this.isViewDetail = isView ?? false;
   }
 
   quayLai() {

@@ -20,6 +20,7 @@ import { QuyetDinhPdKhBanTrucTiepService } from 'src/app/services/qlnv-hang/xuat
 import { DeXuatKhBanTrucTiepService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/de-xuat-kh-ban-truc-tiep.service';
 import { TongHopKhBanTrucTiepService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/tong-hop-kh-ban-truc-tiep.service';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
 @Component({
   selector: 'app-them-moi-qd-phe-duyet-kh-ban-truc-tiep',
   templateUrl: './them-moi-qd-phe-duyet-kh-ban-truc-tiep.component.html',
@@ -58,6 +59,7 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
     private quyetDinhPdKhBanTrucTiepService: QuyetDinhPdKhBanTrucTiepService,
     private deXuatKhBanTrucTiepService: DeXuatKhBanTrucTiepService,
     private tongHopKhBanTrucTiepService: TongHopKhBanTrucTiepService,
+    private chiTieuKeHoachNamCapTongCucService: ChiTieuKeHoachNamCapTongCucService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, quyetDinhPdKhBanTrucTiepService);
 
@@ -84,6 +86,7 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
       slDviTsan: [],
       loaiHinhNx: [''],
       kieuNx: [''],
+      nam: [''],
     })
   }
 
@@ -138,6 +141,12 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
     await this.spinner.hide();
   }
 
+  async onChangeNamKh() {
+    this.formData.patchValue({
+      nam: this.formData.value.namKh
+    })
+  }
+
   async loadDataComboBox() {
     // loại hình nhập xuất
     this.listLoaiHinhNx = [];
@@ -164,7 +173,7 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
         tenCloaiVthh: dataTongHop.tenCloaiVthh,
         loaiVthh: dataTongHop.loaiVthh,
         tenLoaiVthh: dataTongHop.tenLoaiVthh,
-        namKh: dataTongHop.namKh,
+        // namKh: dataTongHop.namKh,
         idThHdr: dataTongHop.id,
         phanLoai: 'TH',
       })
@@ -209,7 +218,8 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
     if (id) {
       let data = await this.detail(id);
       this.formData.patchValue({
-        soQdPd: data.soQdPd?.split('/')[0]
+        soQdPd: data.soQdPd?.split('/')[0],
+        nam: this.formData.value.namKh
       })
       this.danhsachDx = data.children;
       if (this.danhsachDx && this.danhsachDx.length > 0) {
@@ -281,17 +291,18 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
             slDviTsan: soLuongDviTsan,
             loaiHinhNx: data.loaiHinhNx,
             kieuNx: data.kieuNx,
+            nam: this.formData.value.namKh,
             idThHdr: event,
             idTrHdr: null,
             soTrHdr: null,
           })
+          this.getDataChiTieu();
           for (let item of data.children) {
             await this.deXuatKhBanTrucTiepService.getDetail(item.idDxHdr).then((res) => {
               if (res.msg == MESSAGE.SUCCESS) {
                 const dataRes = res.data;
                 this.formData.patchValue({
                   tchuanCluong: dataRes.tchuanCluong,
-                  soQdCc: dataRes.soQdCtieu,
                 })
                 dataRes.idDxHdr = dataRes.id;
                 this.danhsachDx.push(dataRes);
@@ -309,6 +320,22 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
       }
     }
     await this.spinner.hide()
+  }
+
+  async getDataChiTieu() {
+    let res2 = null;
+    res2 = await this.chiTieuKeHoachNamCapTongCucService.canCuCuc(
+      +this.formData.get('namKh').value,
+    );
+    if (res2.msg == MESSAGE.SUCCESS) {
+      this.formData.patchValue({
+        soQdCc: res2.data.soQuyetDinh,
+      });
+    } else {
+      this.formData.patchValue({
+        soQdCc: null
+      });
+    }
   }
 
   async openDialogTr() {
@@ -364,7 +391,6 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
         if (this.danhsachDx && this.danhsachDx.length > 0) {
           this.showFirstRow(event, this.danhsachDx[0]);
         }
-        let tongMucDt = 0
         this.formData.patchValue({
           cloaiVthh: data.cloaiVthh,
           tenCloaiVthh: data.tenCloaiVthh,
@@ -381,18 +407,18 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
           tgianGnhanGhiChu: data.tgianGnhanGhiChu,
           pthucGnhan: data.pthucGnhan,
           thongBaoKh: data.thongBaoKh,
-          soQdCc: data.soQdCtieu,
           tenDvi: data.tenDvi,
           diaChi: data.diaChi,
           maDvi: data.maDvi,
           loaiHinhNx: data.loaiHinhNx,
           kieuNx: data.kieuNx,
+          nam: this.formData.value.namKh,
           idThHdr: null,
           soTrHdr: dataRes.soDxuat,
           idTrHdr: dataRes.id,
           slDviTsan: dataRes.slDviTsan,
-          tongMucDt: tongMucDt
         })
+        this.getDataChiTieu();
         this.dataInput = null;
         this.dataInputCache = null;
       } else {

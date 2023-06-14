@@ -26,6 +26,7 @@ import { Tcdtnn } from "../../../models/Tcdtnn";
 import { DialogKtGiaoKhoComponent } from "../../../components/dialog/dialog-kt-giao-kho/dialog-kt-giao-kho.component";
 import { NzFormatEmitEvent, NzTreeService } from "ng-zorro-antd/tree";
 import { NzTreeBaseService, NzTreeNodeOptions } from "ng-zorro-antd/core/tree";
+import { ThemmoiThukhoComponent } from "../../quan-tri-danh-muc/danh-muc-thu-kho/themmoi-thukho/themmoi-thukho.component";
 
 
 @Component({
@@ -254,30 +255,30 @@ export class MangLuoiKhoComponent implements OnInit {
         let rs = chain(value)
           .groupBy("tenNhaKho")
           .map((v, k) => {
-              let rs1 = chain(v)
-                .groupBy("tenNganKho")
-                .map((v1, k1) => {
-                  let rs2 = chain(v1)
-                    .groupBy("tenNganLo")
-                    .map((v2, k2) => {
-                      return {
-                        idVirtual: uuid.v4(),
-                        tenDviCha: k2,
-                        childData: v2
-                      };
-                    }).value();
-                  return {
-                    idVirtual: uuid.v4(),
-                    tenDviCha: k1,
-                    childData: rs2
-                  };
-                }).value();
-              return {
-                idVirtual: uuid.v4(),
-                tenDviCha: k,
-                childData: rs1
-              };
-            }
+            let rs1 = chain(v)
+              .groupBy("tenNganKho")
+              .map((v1, k1) => {
+                let rs2 = chain(v1)
+                  .groupBy("tenNganLo")
+                  .map((v2, k2) => {
+                    return {
+                      idVirtual: uuid.v4(),
+                      tenDviCha: k2,
+                      childData: v2
+                    };
+                  }).value();
+                return {
+                  idVirtual: uuid.v4(),
+                  tenDviCha: k1,
+                  childData: rs2
+                };
+              }).value();
+            return {
+              idVirtual: uuid.v4(),
+              tenDviCha: k,
+              childData: rs1
+            };
+          }
           ).value();
         return {
           idVirtual: uuid.v4(),
@@ -749,7 +750,7 @@ export class MangLuoiKhoComponent implements OnInit {
 
   patchValueFormData(level) {
     switch (level) {
-      case "2" : {
+      case "2": {
         this.detailDonVi.patchValue({
           tenDtqgkv: this.nodeDetail.tenDvi,
           maDtqgkv: this.nodeDetail.maDvi,
@@ -758,7 +759,7 @@ export class MangLuoiKhoComponent implements OnInit {
         });
         break;
       }
-      case "3" : {
+      case "3": {
         this.detailDonVi.patchValue({
           tenTongKho: this.nodeDetail.tenDvi,
           maTongKho: this.nodeDetail.maDvi,
@@ -766,7 +767,7 @@ export class MangLuoiKhoComponent implements OnInit {
         });
         break;
       }
-      case "4" : {
+      case "4": {
         this.detailDonVi.patchValue({
           tenDiemkho: this.nodeDetail.tenDvi,
           maDiemkho: this.nodeDetail.maDvi,
@@ -774,7 +775,7 @@ export class MangLuoiKhoComponent implements OnInit {
         });
         break;
       }
-      case "5" : {
+      case "5": {
         this.detailDonVi.patchValue({
           tenNhakho: this.nodeDetail.tenDvi,
           maNhakho: this.nodeDetail.maDvi,
@@ -782,7 +783,7 @@ export class MangLuoiKhoComponent implements OnInit {
         });
         break;
       }
-      case "6" : {
+      case "6": {
         this.detailDonVi.patchValue({
           tenNgankho: this.nodeDetail.tenDvi,
           maNgankho: this.nodeDetail.maDvi,
@@ -790,7 +791,7 @@ export class MangLuoiKhoComponent implements OnInit {
         });
         break;
       }
-      case "7" : {
+      case "7": {
         this.detailDonVi.patchValue({
           tenNganlo: this.nodeDetail.tenDvi,
           maNganlo: this.nodeDetail.maDvi,
@@ -802,20 +803,38 @@ export class MangLuoiKhoComponent implements OnInit {
   }
 
   openDialogGiaoKho() {
-    const modalQD = this.modals.create({
-      nzTitle: "",
-      nzContent: DialogKtGiaoKhoComponent,
-      nzMaskClosable: false,
-      nzClosable: false,
-      nzWidth: "1500px",
-      nzFooter: null,
-      nzStyle: { top: "100px" },
-      nzComponentParams: {}
+    this.donviService.layTatCaDangTree({ 'maDviCha': this.detailDonVi.value.maNhakho }).then((res) => {
+      this.spinner.hide();
+      console.log(res);
+      const modalQD = this.modals.create({
+        nzTitle: 'Giao kho cho thủ kho',
+        nzContent: DialogKtGiaoKhoComponent,
+        nzMaskClosable: false,
+        nzClosable: true,
+        nzWidth: '900px',
+        nzFooter: null,
+        nzComponentParams: {
+          dataTree: res.data,
+        },
+      });
     });
-    modalQD.afterClose.subscribe((data) => {
-      if (data) {
-      }
-    });
+
+    // const modalQD = this.modals.create({
+    //   nzTitle: "",
+    //   nzContent: DialogKtGiaoKhoComponent,
+    //   nzMaskClosable: false,
+    //   nzClosable: false,
+    //   nzWidth: "1500px",
+    //   nzFooter: null,
+    //   nzStyle: { top: "100px" },
+    //   nzComponentParams: {
+    //     maNhaKho: this.detailDonVi.value.maNhakho
+    //   }
+    // });
+    // modalQD.afterClose.subscribe((data) => {
+    //   if (data) {
+    //   }
+    // });
   }
 
   async loadChildren(event: NzFormatEmitEvent) {
@@ -886,15 +905,15 @@ export class MangLuoiKhoComponent implements OnInit {
     }
   }
 
-  sumTableDanhSachHh(item) : number {
+  sumTableDanhSachHh(item): number {
     let result = 0;
     if (item && item.dataChild.length > 0) {
-        const sumChild = item.dataChild.reduce((prev, cur) => {
-          prev += cur.slHienThoi;
-          return prev;
-        }, 0);
-          result = sumChild
-      }
-    return  result;
+      const sumChild = item.dataChild.reduce((prev, cur) => {
+        prev += cur.slHienThoi;
+        return prev;
+      }, 0);
+      result = sumChild
+    }
+    return result;
   }
 }
