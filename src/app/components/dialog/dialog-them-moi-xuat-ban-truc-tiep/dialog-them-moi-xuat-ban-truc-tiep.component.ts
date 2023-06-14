@@ -367,7 +367,7 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
 
   validateSoLuong(isAdd?) {
     const soLuongConLai = this.formData.value.soLuongChiTieu - this.formData.value.soLuongKhDaDuyet
-    // const soLuong = this.thongTinXuatBanTrucTiep.tonKho
+    const tonKho = this.thongTinXuatBanTrucTiep.tonKho
     let soLuongDeXuat = 0
     let tongSoLuong = 0
     if (isAdd) {
@@ -377,15 +377,15 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
     this.listOfData.forEach(item => {
       tongSoLuong += item.soLuongDeXuat
     })
-    // if (soLuongDeXuat > soLuong) {
-    //   this.notification.error(MESSAGE.ERROR, " Số lượng đã vượt quá số lượng tồn kho. Xin vui lòng nhập lại ")
-    //   return false
-    // }
+    if (soLuongDeXuat > tonKho) {
+      this.notification.error(MESSAGE.ERROR, " Số lượng đề xuất đã vượt quá số lượng tồn kho. Xin vui lòng nhập lại ")
+      return false
+    }
     if (soLuongDeXuat > soLuongConLai) {
-      this.notification.error(MESSAGE.ERROR, " Số lượng đã vượt quá chỉ tiêu. Xin vui lòng nhập lại ")
+      this.notification.error(MESSAGE.ERROR, " Số lượng đề xuất đã vượt quá số lượng chỉ tiêu. Xin vui lòng nhập lại ")
       return false
     } else if (tongSoLuong > soLuongConLai) {
-      this.notification.error(MESSAGE.ERROR, " Tổng số lượng đã vượt quá chỉ tiêu. Xin vui lòng nhập lại ")
+      this.notification.error(MESSAGE.ERROR, " Tổng số lượng đề xuất đã vượt quá số lượng chỉ tiêu. Xin vui lòng nhập lại ")
       return false
     } else if (this.thongTinXuatBanTrucTiep.donGiaDeXuat < this.giaToiDa) {
       this.notification.error(MESSAGE.ERROR, "Đơn giá đề xuất phải lớn hơn hoặc bằng giá bán tối thiểu (" + this.giaToiDa + " đ)")

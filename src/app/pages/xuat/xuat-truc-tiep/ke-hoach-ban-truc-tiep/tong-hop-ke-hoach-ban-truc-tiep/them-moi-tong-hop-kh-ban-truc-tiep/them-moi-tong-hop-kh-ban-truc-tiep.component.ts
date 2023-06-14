@@ -189,7 +189,7 @@ export class ThemMoiTongHopKhBanTrucTiepComponent extends Base2Component impleme
 
   async save(isTaoQd?) {
     let body = this.formData.value;
-    let data = await this.createUpdate(body, 'XHDTQG_PTDG_KHBDG_TONGHOP_TONGHOP')
+    let data = await this.createUpdate(body, 'XHDTQG_PTTT_KHBTT_TONGHOP_TONGHOP')
     if (data) {
       if (isTaoQd) {
         this.taoQdinh();

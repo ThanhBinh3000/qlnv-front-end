@@ -188,7 +188,7 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
         this.idInput = data.id;
         this.guiDuyet();
       } else {
-        // this.goBack();
+        this.loadChiTiet(data.id)
       }
     }
     await this.spinner.hide();
@@ -228,7 +228,7 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
     await this.spinner.show();
     let bodyTh = {
       trangThai: STATUS.CHUA_TAO_QD,
-      namKh: this.formData.get('namKh').value,
+      namKh: this.formData.value.namKh,
       loaiVthh: this.loaiVthh,
       paggingReq: {
         limit: this.globals.prop.MAX_INTERGER,
@@ -320,7 +320,7 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
     let bodyToTrinh = {
       trangThai: STATUS.DA_DUYET_LDC,
       trangThaiTh: STATUS.CHUA_TONG_HOP,
-      namKh: this.formData.get('namKh').value,
+      namKh: this.formData.value.namKh,
       loaiVthh: this.loaiVthh,
       paggingReq: {
         limit: this.globals.prop.MAX_INTERGER,
