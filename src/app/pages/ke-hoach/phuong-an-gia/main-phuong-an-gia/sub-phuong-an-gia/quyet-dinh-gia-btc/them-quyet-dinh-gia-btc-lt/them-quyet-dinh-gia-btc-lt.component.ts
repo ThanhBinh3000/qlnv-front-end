@@ -188,7 +188,7 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
   async loadTiLeThue() {
     let res = await this.danhMucService.danhMucChungGetAll("THUE_VAT");
     if (res.msg == MESSAGE.SUCCESS) {
-      this.thueVat = res.data[0].giaTri;
+      this.thueVat = res.data && res.data.length > 0 ? res.data[0].giaTri : 5/100;
     } else {
       this.thueVat = 5 / 100;
     }

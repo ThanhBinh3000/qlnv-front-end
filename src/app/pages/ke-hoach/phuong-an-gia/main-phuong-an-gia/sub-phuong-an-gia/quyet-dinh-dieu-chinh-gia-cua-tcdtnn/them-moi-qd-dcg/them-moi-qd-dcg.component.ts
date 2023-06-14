@@ -463,7 +463,7 @@ export class ThemMoiQdDcgComponent implements OnInit {
     let res = await this.danhMucService.danhMucChungGetAll("THUE_VAT");
     if (res.msg == MESSAGE.SUCCESS) {
       if (this.loaiVthh == 'LT') {
-        this.thueVat = res.data && res.data.length > 0 ? res.data[0].giaTri : 10;
+        this.thueVat = res.data && res.data.length > 0 ? res.data[0].giaTri : 10/100;
       } else {
         this.thueVat = 10/100;
       }
