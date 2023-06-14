@@ -121,7 +121,10 @@
               <nz-form-label nzRequired [nzNoColon]="true">Tổng giá trị
               </nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
-                <input nz-input formControlName="tongGiaTri" [readonly]="true" />
+                <!-- <input nz-input formControlName="tongGiaTri" [readonly]="true" /> -->
+                <nz-input-number [nzDisabled]="true" formControlName="tongGiaTri" [nzMin]="0" [nzMax]="999999999999"
+                  [nzStep]="0.1" [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+                </nz-input-number>
               </nz-form-control>
             </nz-form-item>
           </div>

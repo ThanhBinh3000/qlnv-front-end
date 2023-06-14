@@ -12,27 +12,27 @@
             </div>
             <div nz-col nzSpan="3">
               <label class="search__label">Số QĐ giao nhiệm vụ NH</label>
-              <nz-select formControlName="nam">
+              <nz-select formControlName="soQdinhDcc">
                 <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
               </nz-select>
             </div>
             <div nz-col nzSpan="3">
               <label class="search__label">Số phiếu KTCL</label>
-              <input nz-input formControlName="trichYeu" />
+              <input nz-input formControlName="soPhieu" />
             </div>
 
             <div nz-col nzSpan="4">
               <label class="search__label">Ngày lập phiếu</label>
-              <nz-range-picker formControlName="ngayDuyetTc" nzFormat="dd/MM/yyyy"></nz-range-picker>
+              <nz-range-picker formControlName="tuNgay" nzFormat="dd/MM/yyyy"></nz-range-picker>
             </div>
             <div nz-col nzSpan="4">
               <label class="search__label">Ngày giám định</label>
-              <nz-range-picker formControlName="ngayHieuLuc" nzFormat="dd/MM/yyyy"></nz-range-picker>
+              <nz-range-picker formControlName="denNgay" nzFormat="dd/MM/yyyy"></nz-range-picker>
             </div>
 
             <div nz-col nzSpan="7">
               <label class="search__label">Kết quả đánh giá</label>
-              <input nz-input formControlName="trichYeu" />
+              <input nz-input formControlName="ketQua" />
             </div>
 
           </div>
