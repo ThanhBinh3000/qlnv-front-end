@@ -132,11 +132,20 @@ export class ThemMoiQdGiaTcdtnnComponent implements OnInit {
   }
 
   async loadTiLeThue() {
-    let res = await this.danhMucService.danhMucChungGetAll("THUE_VAT");
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.thueVat = res.data[0].giaTri;
-    } else {
-      this.thueVat = 10;
+    this.spinner.show();
+    try {
+      let res = await this.danhMucService.danhMucChungGetAll("THUE_VAT");
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.thueVat = res.data && res.data.length > 0 ? res.data[0].giaTri : 10;
+      } else {
+        this.thueVat = 10;
+      }
+      this.spinner.hide();
+    }
+    catch (e) {
+      console.log('error: ', e)
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
 
