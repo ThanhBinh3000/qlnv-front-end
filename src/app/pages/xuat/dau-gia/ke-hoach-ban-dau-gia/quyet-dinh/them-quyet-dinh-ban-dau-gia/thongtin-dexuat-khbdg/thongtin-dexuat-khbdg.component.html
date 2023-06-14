@@ -135,8 +135,7 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Thông báo bán đấu giá </nz-form-label>
             <nz-form-control nz-col>
-              <textarea rows="3" class="search__input" nz-input formControlName="thongBaoKh"
-                [readonly]="true"></textarea>
+              <textarea rows="3" class="search__input" nz-input formControlName="thongBao" [readonly]="true"></textarea>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -219,7 +218,7 @@
             <td></td>
             <td></td>
             <td></td>
-            <td style="color: black ;font-weight: bold;">{{item.soTienDtruocDd | number : '1.0-1' : 'vi_VN'}}</td>
+            <td style="color: black ;font-weight: bold;">{{item.soTienDtruocDdChiCuc | number : '1.0-1' : 'vi_VN'}}</td>
             <td *ngIf="!isView">
               <a (click)="themMoiBangPhanLoTaiSan(item,i)">
                 <i class="fa fa-pencil"></i>
@@ -237,11 +236,8 @@
               <td>{{children.soLuongDeXuat | number : '1.0-1' : 'vi_VN'}}</td>
               <td>{{children.donViTinh}}</td>
               <td>{{children.donGiaDuocDuyet | number : '1.0-1' : 'vi_VN' }}</td>
-              <td>{{children.donGiaDeXuat * children.soLuongDeXuat | number : '1.0-1' : 'vi_VN'}}</td>
-              <td>{{(children.soLuongDeXuat * children.donGiaDuocDuyet * formData.value.khoanTienDatTruoc / 100 ) |
-                number
-                :
-                '1.0-1' : 'vi_VN' }}</td>
+              <td>{{children.giaKhoiDiemDx | number : '1.0-1' : 'vi_VN'}}</td>
+              <td>{{children.soTienDtruocDd |number:'1.0-1' : 'vi_VN' }}</td>
               <td class="text-right" *ngIf="!isView">
               </td>
             </tr>

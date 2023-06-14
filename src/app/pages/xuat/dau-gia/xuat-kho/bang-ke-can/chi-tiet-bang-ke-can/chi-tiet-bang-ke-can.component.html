@@ -1,4 +1,4 @@
-<nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="btn-affix">
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="btn-affix" xmlns="http://www.w3.org/1999/html">
   <div class="btn-group">
     <button type="button" class="btn btn-sub" (click)="quayLai()">
       <i class="fa fa-arrow-left"></i>
@@ -340,6 +340,13 @@
           </ng-template>
         </tr>
         </tbody>
+        <tfoot>
+        <tr>
+          <td colspan="3">Tổng</td>
+          <td>{{formData.value.tongTrongLuong|number:'1.0-0'}}</td>
+          <td></td>
+        </tr>
+        </tfoot>
       </nz-table>
     </nz-card>
     <div nz-row [nzGutter]="24">

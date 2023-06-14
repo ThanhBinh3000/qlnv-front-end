@@ -51,7 +51,8 @@ export class ThongTinDauGiaComponent extends Base2Component implements OnInit {
       loaiVthh: null,
       ngayKyQd: null,
       soTrHdr: null,
-      lastest: 1
+      lastest: 1,
+      maDviCuc: this.userInfo.MA_DVI
     })
     this.filterTable = {
       namKh: '',
@@ -82,7 +83,8 @@ export class ThongTinDauGiaComponent extends Base2Component implements OnInit {
     let arr = [];
     try {
       this.formData.patchValue({
-        loaiVthh: this.loaiVthh
+        loaiVthh: this.loaiVthh,
+
       })
       await this.search();
       let dt = this.dataTable.flatMap(row => {

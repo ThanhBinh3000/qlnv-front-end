@@ -15,6 +15,7 @@ import { CHUC_NANG, STATUS } from 'src/app/constants/status';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { Subject } from 'rxjs';
 import { QuyetDinhDieuChuyenTCService } from 'src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-tc.service';
+import { HoSoKyThuatService } from 'src/app/services/dieu-chuyen-noi-bo/nhap-dieu-chuyen/ho-so-ky-thuat';
 
 @Component({
   selector: 'app-ho-so-ky-thuat',
@@ -67,8 +68,9 @@ export class HoSoKyThuatComponent extends Base2Component implements OnInit {
     private donviService: DonviService,
     private danhMucService: DanhMucService,
     private quyetDinhDieuChuyenTCService: QuyetDinhDieuChuyenTCService,
+    private hoSoKyThuatService: HoSoKyThuatService,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, quyetDinhDieuChuyenTCService);
+    super(httpClient, storageService, notification, spinner, modal, hoSoKyThuatService);
     this.formData = this.fb.group({
       nam: null,
       soQdinh: null,

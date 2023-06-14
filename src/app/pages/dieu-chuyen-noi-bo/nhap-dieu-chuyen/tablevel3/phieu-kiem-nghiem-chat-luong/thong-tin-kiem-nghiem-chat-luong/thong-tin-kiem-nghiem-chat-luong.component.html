@@ -5,7 +5,7 @@
         <span [ngClass]="'da-ban-hanh'">
           {{ formData.value.tenTrangThai }}
         </span>
-        <span> BIÊN BẢN NGHIỆM THU BẢO QUẢN LẦN ĐẦU</span>
+        <span>Phiếu kiểm nghiệm chất lượng hàng</span>
       </div>
     </div>
 
@@ -34,21 +34,17 @@
         <span>Gửi duyệt</span>
       </button>
 
-      <button
-        *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.TU_CHOI_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC || formData.value.trangThai == STATUS.TU_CHOI_LDTC"
-        type="button" class="btn btn-sub" (click)="tuChoi()">
+      <button *ngIf="isTuChoi()" type="button" class="btn btn-sub" (click)="tuChoi()">
         <i class="icon htvbdh_tcdt_tuchoi do"></i>
         <span>Từ chối</span>
       </button>
 
-      <button *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV" type="button" class="btn btn-sub"
-        (click)="pheDuyet()">
+      <button *ngIf="isPheDuyet()" type="button" class="btn btn-sub" (click)="pheDuyet()">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span>Duyệt</span>
       </button>
 
-      <button *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDTC" type="button" class="btn btn-info ml-2"
-        (click)="banHanh()">
+      <button *ngIf="isBanHanh()" type="button" class="btn btn-info ml-2" (click)="banHanh()">
         <i class="icon htvbdh_chuyenvanthu"></i>
         <span>Ban hành</span>
       </button>
@@ -82,11 +78,11 @@
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col [nzSpan]="3">
+          <div nz-col [nzSpan]="9">
             <nz-form-item>
-              <nz-form-label nzRequired [nzNoColon]="true"> Tên đơn vị</nz-form-label>
+              <nz-form-label nzRequired [nzNoColon]="true"> Đơn vị</nz-form-label>
               <nz-form-control>
-                <input nz-input formControlName="trichYeu" [readonly]="isView" />
+                <input nz-input formControlName="tenDvi" [readonly]="true" />
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -94,32 +90,23 @@
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true">Mã quan hệ ngân sách</nz-form-label>
               <nz-form-control>
-                <input nz-input formControlName="trichYeu" [readonly]="isView" />
+                <input nz-input formControlName="maQhns" [readonly]="true" />
               </nz-form-control>
             </nz-form-item>
           </div>
           <div nz-col [nzSpan]="3">
             <nz-form-item>
-              <nz-form-label nzRequired [nzNoColon]="true">Số biên bản</nz-form-label>
+              <nz-form-label nzRequired [nzNoColon]="true">Số phiếu KNCL</nz-form-label>
               <nz-form-control>
-                <input nz-input formControlName="trichYeu" [readonly]="isView" />
+                <input nz-input formControlName="soPhieu" [readonly]="true" />
               </nz-form-control>
             </nz-form-item>
           </div>
           <div nz-col [nzSpan]="3">
             <nz-form-item>
-              <nz-form-label [nzNoColon]="true"> Ngày lập biên bản</nz-form-label>
+              <nz-form-label [nzNoColon]="true"> Ngày lập phiếu</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <nz-date-picker [nzDisabled]="isView" formControlName="ngayKyQdinh" nzFormat="dd/MM/yyyy">
-                </nz-date-picker>
-              </nz-form-control>
-            </nz-form-item>
-          </div>
-          <div nz-col [nzSpan]="3">
-            <nz-form-item>
-              <nz-form-label [nzNoColon]="true">Ngày kết thúc NT kê lót, BQLĐ</nz-form-label>
-              <nz-form-control [nzErrorTip]="error">
-                <nz-date-picker [nzDisabled]="isView" formControlName="ngayPduyet" nzFormat="dd/MM/yyyy">
+                <nz-date-picker [nzDisabled]="isView" formControlName="ngayLapPhieu" nzFormat="dd/MM/yyyy">
                 </nz-date-picker>
               </nz-form-control>
             </nz-form-item>
@@ -130,426 +117,290 @@
               <nz-form-label [nzNoColon]="true">Số QĐ điều chuyển của cục</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogQD()">
-                  <input [readonly]="true" nz-input formControlName="idThop" readonly="true" />
+                  <input [readonly]="true" nz-input formControlName="soQdinhDc" readonly="true" />
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
           </div>
 
-          <div nz-col [nzSpan]="3">
-            <nz-form-item>
-              <nz-form-label [nzNoColon]="true">Ngày hiệu lực của QĐ</nz-form-label>
-              <nz-form-control [nzErrorTip]="error">
-                <nz-date-picker [nzDisabled]="isView" formControlName="ngayPduyet" nzFormat="dd/MM/yyyy">
-                </nz-date-picker>
-              </nz-form-control>
-            </nz-form-item>
-          </div>
-
-
-
-          <div nz-col [nzSpan]="6">
+          <div nz-col [nzSpan]="4">
             <nz-form-item>
               <nz-form-label [nzNoColon]="true">
-                KTV bảo quản
+                Người kiểm nghiệm
               </nz-form-label>
               <nz-form-control>
-                <input nz-input formControlName="tongtien" [readonly]="true" />
+                <input nz-input formControlName="nguoiKN" [readonly]="true" />
               </nz-form-control>
             </nz-form-item>
           </div>
 
-          <div nz-col [nzSpan]="3">
+          <div nz-col [nzSpan]="4">
+            <nz-form-item>
+              <nz-form-label [nzNoColon]="true">
+                Trưởng phòng KTBQ
+              </nz-form-label>
+              <nz-form-control>
+                <input nz-input formControlName="tpNguoiKt" [readonly]="true" />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <div nz-col nzSpan="4">
+            <nz-form-item>
+              <nz-form-label nzRequired [nzNoColon]="true">Lô kho(Nhập điều chuyển)
+              </nz-form-label>
+              <nz-form-control nz-col [nzErrorTip]="error">
+                <!-- <input nz-input formControlName="tenLoKho" [readonly]="true" /> -->
+                <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogKhoNhap()">
+                  <input [readonly]="true" nz-input formControlName="tenLoKho" readonly="true" />
+                </nz-input-group>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="4">
+            <nz-form-item>
+              <nz-form-label nzRequired [nzNoColon]="true">Ngăn kho
+              </nz-form-label>
+              <nz-form-control nz-col [nzErrorTip]="error">
+                <input nz-input formControlName="tenNganKho" [readonly]="true" />
+
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="4">
+            <nz-form-item>
+              <nz-form-label nzRequired [nzNoColon]="true">Nhà kho
+              </nz-form-label>
+              <nz-form-control nz-col [nzErrorTip]="error">
+                <input nz-input formControlName="tenNhaKho" [readonly]="true" />
+
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="4">
+            <nz-form-item>
+              <nz-form-label nzRequired [nzNoColon]="true">Điểm kho
+              </nz-form-label>
+              <nz-form-control nz-col [nzErrorTip]="error">
+                <input nz-input formControlName="tenDiemKho" [readonly]="true" />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <div nz-col [nzSpan]="4">
             <nz-form-item>
               <nz-form-label [nzNoColon]="true">
                 Thủ kho
               </nz-form-label>
               <nz-form-control>
-                <input nz-input formControlName="tongtien" [readonly]="true" />
+                <input nz-input formControlName="tenThuKho" [readonly]="true" />
               </nz-form-control>
             </nz-form-item>
           </div>
 
-          <div nz-col [nzSpan]="3">
+          <div nz-col [nzSpan]="4">
+            <nz-form-item>
+              <nz-form-label [nzNoColon]="true">Số BB lấy mẫu/bàn giao mẫu</nz-form-label>
+              <nz-form-control [nzErrorTip]="error">
+                <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogQD()">
+                  <input [readonly]="true" nz-input formControlName="soBbLayMau" readonly="true" />
+                </nz-input-group>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <div nz-col [nzSpan]="4">
+            <nz-form-item>
+              <nz-form-label [nzNoColon]="true">Ngày lấy mẫu</nz-form-label>
+              <nz-form-control [nzErrorTip]="error">
+                <nz-date-picker [nzDisabled]="true" formControlName="ngayLayMau" nzFormat="dd/MM/yyyy">
+                </nz-date-picker>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <div nz-col [nzSpan]="4">
+            <nz-form-item>
+              <nz-form-label [nzNoColon]="true">Ngày kiểm nghiệm mẫu</nz-form-label>
+              <nz-form-control [nzErrorTip]="error">
+                <nz-date-picker [nzDisabled]="isView" formControlName="ngayKiem" nzFormat="dd/MM/yyyy">
+                </nz-date-picker>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <div nz-col [nzSpan]="4">
+            <nz-form-item>
+              <nz-form-label [nzNoColon]="true">Số BB nhập đầy kho</nz-form-label>
+              <nz-form-control [nzErrorTip]="error">
+                <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogQD()">
+                  <input [readonly]="true" nz-input formControlName="soBbTinhKho" readonly="true" />
+                </nz-input-group>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <div nz-col nzSpan="4">
+            <nz-form-item>
+              <nz-form-label nzRequired [nzNoColon]="true">Số lượng hàng bảo quản
+              </nz-form-label>
+              <nz-form-control nz-col [nzErrorTip]="error">
+                <input nz-input formControlName="slHangBQ" [readonly]="true" />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <div nz-col [nzSpan]="4">
+            <nz-form-item>
+              <nz-form-label [nzNoColon]="true">Ngày tháng nhập đầy kho</nz-form-label>
+              <nz-form-control [nzErrorTip]="error">
+                <nz-date-picker [nzDisabled]="true" formControlName="ngayNhapDayKho" nzFormat="dd/MM/yyyy">
+                </nz-date-picker>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <div nz-col nzSpan="4">
+            <nz-form-item>
+              <nz-form-label nzRequired [nzNoColon]="true">Loại hàng hoá
+              </nz-form-label>
+              <nz-form-control nz-col [nzErrorTip]="error">
+                <input nz-input formControlName="loaiVthh" [readonly]="true" />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="4">
+            <nz-form-item>
+              <nz-form-label nzRequired [nzNoColon]="true">Chủng loại hàng hoá
+              </nz-form-label>
+              <nz-form-control nz-col [nzErrorTip]="error">
+                <input nz-input formControlName="tenCloaiVthh" [readonly]="true" />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <div nz-col nzSpan="4">
+            <nz-form-item>
+              <nz-form-label nzRequired [nzNoColon]="true">Đơn vị tính
+              </nz-form-label>
+              <nz-form-control nz-col [nzErrorTip]="error">
+                <input nz-input formControlName="tenDonViTinh" [readonly]="true" />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <div nz-col [nzSpan]="8">
             <nz-form-item>
               <nz-form-label [nzNoColon]="true">
-                Kế toán đơn vị
+                Hình thức bảo quản
               </nz-form-label>
               <nz-form-control>
-                <input nz-input formControlName="tongtien" [readonly]="true" />
+                <nz-checkbox-wrapper style="width: 100%;">
+                  <div nz-row>
+                    <div nz-col nzSpan="24"><label nz-checkbox [ngModel]="formData.value.hinhThucBq" nzValue="A">Lấy mẫu
+                        ngẫu nhiên</label></div>
+                    <div nz-col nzSpan="24"><label nz-checkbox [ngModel]="formData.value.hinhThucBq" nzValue="B">Lấy mẫu
+                        thủ công</label></div>
+                  </div>
+                </nz-checkbox-wrapper>
+
               </nz-form-control>
             </nz-form-item>
           </div>
-
-
-          <div nz-col [nzSpan]="3">
-            <nz-form-item>
-              <nz-form-label [nzNoColon]="true">
-                Thủ trưởng đơn vị
-              </nz-form-label>
-              <nz-form-control>
-                <input nz-input formControlName="trichYeu" [readonly]="isView" />
-              </nz-form-control>
-            </nz-form-item>
-          </div>
-
-          <div nz-col [nzSpan]="18">
-            <nz-card class="mg-t-16 flex-card p-lr16" nzTitle="Ngăn kho nhập hàng điều chuyển">
-              <div nz-row [nzGutter]="24">
-                <div nz-col nzSpan="6">
-                  <nz-form-item>
-                    <nz-form-label nzRequired [nzNoColon]="true">Lô kho(Nhập điều chuyển)
-                    </nz-form-label>
-                    <nz-form-control nz-col [nzErrorTip]="error">
-                      <nz-select [nzDisabled]="isView" formControlName="nam" nzAllowClear>
-                        <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
-                      </nz-select>
-                    </nz-form-control>
-                  </nz-form-item>
-                </div>
-                <div nz-col nzSpan="6">
-                  <nz-form-item>
-                    <nz-form-label nzRequired [nzNoColon]="true">Ngăn kho
-                    </nz-form-label>
-                    <nz-form-control nz-col [nzErrorTip]="error">
-                      <nz-select [nzDisabled]="isView" formControlName="nam" nzAllowClear>
-                        <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
-                      </nz-select>
-                    </nz-form-control>
-                  </nz-form-item>
-                </div>
-                <div nz-col nzSpan="6">
-                  <nz-form-item>
-                    <nz-form-label nzRequired [nzNoColon]="true">Nhà kho
-                    </nz-form-label>
-                    <nz-form-control nz-col [nzErrorTip]="error">
-                      <nz-select [nzDisabled]="isView" formControlName="nam" nzAllowClear>
-                        <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
-                      </nz-select>
-                    </nz-form-control>
-                  </nz-form-item>
-                </div>
-                <div nz-col nzSpan="6">
-                  <nz-form-item>
-                    <nz-form-label nzRequired [nzNoColon]="true">Điểm kho
-                    </nz-form-label>
-                    <nz-form-control nz-col [nzErrorTip]="error">
-                      <nz-select [nzDisabled]="isView" formControlName="nam" nzAllowClear>
-                        <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
-                      </nz-select>
-                    </nz-form-control>
-                  </nz-form-item>
-                </div>
-              </div>
-
-              <div nz-row [nzGutter]="24">
-                <div nz-col [nzSpan]="12">
-                  <nz-form-item>
-                    <nz-form-label nzRequired [nzNoColon]="true">Loại hình kho</nz-form-label>
-                    <nz-form-control>
-                      <input nz-input formControlName="trichYeu" [readonly]="isView" />
-                    </nz-form-control>
-                  </nz-form-item>
-                </div>
-                <div nz-col nzSpan="6">
-                  <nz-form-item>
-                    <nz-form-label nzRequired [nzNoColon]="true">Nhà kho
-                    </nz-form-label>
-                    <nz-form-control nz-col [nzErrorTip]="error">
-                      <nz-select [nzDisabled]="isView" formControlName="nam" nzAllowClear>
-                        <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
-                      </nz-select>
-                    </nz-form-control>
-                  </nz-form-item>
-                </div>
-                <div nz-col nzSpan="6">
-                  <nz-form-item>
-                    <nz-form-label nzRequired [nzNoColon]="true">Điểm kho
-                    </nz-form-label>
-                    <nz-form-control nz-col [nzErrorTip]="error">
-                      <nz-select [nzDisabled]="isView" formControlName="nam" nzAllowClear>
-                        <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
-                      </nz-select>
-                    </nz-form-control>
-                  </nz-form-item>
-                </div>
-              </div>
-
-              <div nz-row [nzGutter]="24">
-                <div nz-col nzSpan="6">
-                  <nz-form-item>
-                    <nz-form-label nzRequired [nzNoColon]="true">Tích lượng khả dụng
-                    </nz-form-label>
-                    <nz-form-control nz-col [nzErrorTip]="error">
-                      <span class="text-blue">Tự động hiển thị</span>
-                    </nz-form-control>
-                  </nz-form-item>
-                </div>
-                <div nz-col nzSpan="6">
-                  <nz-form-item>
-                    <nz-form-label nzRequired [nzNoColon]="true">DS phiếu nhập kho
-                    </nz-form-label>
-                    <nz-form-control nz-col [nzErrorTip]="error">
-                      <span class="text-blue">Tự động hiển thị</span>
-                    </nz-form-control>
-                  </nz-form-item>
-                </div>
-                <div nz-col nzSpan="6">
-                  <nz-form-item>
-                    <nz-form-label nzRequired [nzNoColon]="true">Thực nhập điều chuyển
-                    </nz-form-label>
-                    <nz-form-control>
-                      <span class="text-blue">Tự động hiển thị</span>
-                    </nz-form-control>
-                  </nz-form-item>
-                </div>
-                <div nz-col nzSpan="6">
-                  <nz-form-item>
-                    <nz-form-label nzRequired [nzNoColon]="true">Biên bản nhập đầy kho
-                    </nz-form-label>
-                    <nz-form-control>
-                      <span class="text-blue">Tự động hiển thị</span>
-                    </nz-form-control>
-                  </nz-form-item>
-                </div>
-              </div>
-
-              <div nz-row [nzGutter]="24">
-                <div nz-col nzSpan="6">
-                  <nz-form-item>
-                    <nz-form-label nzRequired [nzNoColon]="true">Hình thức kê lót/bảo quản
-                    </nz-form-label>
-                    <nz-form-control nz-col [nzErrorTip]="error">
-                      <nz-select [nzDisabled]="isView" formControlName="nam" nzAllowClear>
-                        <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
-                      </nz-select>
-                    </nz-form-control>
-                  </nz-form-item>
-                </div>
-                <div nz-col nzSpan="6">
-                  <nz-form-item>
-                    <nz-form-label nzRequired [nzNoColon]="true">Phương thức bảo quản
-                    </nz-form-label>
-                    <nz-form-control nz-col [nzErrorTip]="error">
-                      <nz-select [nzDisabled]="isView" formControlName="nam" nzAllowClear>
-                        <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
-                      </nz-select>
-                    </nz-form-control>
-                  </nz-form-item>
-                </div>
-                <div nz-col nzSpan="6">
-                  <nz-form-item>
-                    <nz-form-label nzRequired [nzNoColon]="true">Định mức được giao
-                    </nz-form-label>
-                    <nz-form-control>
-                      <input nz-input formControlName="tongtien" [readonly]="true" />
-                    </nz-form-control>
-                  </nz-form-item>
-                </div>
-                <div nz-col nzSpan="6">
-                  <nz-form-item>
-                    <nz-form-label nzRequired [nzNoColon]="true">Định mức thực tế thể hiện
-                    </nz-form-label>
-                    <nz-form-control>
-                      <input nz-input formControlName="tongtien" [readonly]="true" />
-                    </nz-form-control>
-                  </nz-form-item>
-                </div>
-              </div>
-            </nz-card>
-          </div>
-
-          <div nz-col [nzSpan]="6">
-            <nz-card class="mg-t-16 flex-card p-lr16" nzTitle="Ngăn kho xuất hàng điều chuyển">
-              <div nz-row [nzGutter]="24">
-                <div nz-col [nzSpan]="24">
-                  <nz-form-item>
-                    <nz-form-label nzRequired [nzNoColon]="true">Lô kho xuất ĐC
-                    </nz-form-label>
-                    <nz-form-control>
-                      <span class="text-blue">Tự động hiển thị</span>
-                    </nz-form-control>
-                  </nz-form-item>
-                </div>
-                <div nz-col [nzSpan]="24">
-                  <nz-form-item>
-                    <nz-form-label nzRequired [nzNoColon]="true">Số biên bản nghiệm thu bảo quản lần đầu(của lô kho xuất
-                      ĐC)
-                    </nz-form-label>
-                    <nz-form-control>
-                      <span class="text-blue">Tự động hiển thị</span>
-                    </nz-form-control>
-                  </nz-form-item>
-                </div>
-                <div nz-col [nzSpan]="24">
-                  <nz-form-item>
-                    <nz-form-label nzRequired [nzNoColon]="true">Tổng số kinh phí thực tế đã thực hiện
-                    </nz-form-label>
-                    <nz-form-control>
-                      <span class="text-blue">Tự động hiển thị</span>
-                    </nz-form-control>
-                  </nz-form-item>
-                </div>
-                <div nz-col [nzSpan]="24">
-                  <nz-form-item>
-                    <nz-form-label [nzNoColon]="true">
-                    </nz-form-label>
-                    <nz-form-control>
-                      <span class="text-blue"></span>
-                    </nz-form-control>
-                  </nz-form-item>
-                </div>
-              </div>
-            </nz-card>
-          </div>
-
 
 
           <div nz-col [nzSpan]="24">
             <nz-form-item>
               <nz-form-label [nzNoColon]="true">
-                File đính kèm biên bản đã ký
+                File đính kèm phiếu KNCL đã ký
               </nz-form-label>
               <div class="list-file">
-                <file-list [data]="quyetDinh" [disabled]="isView" [isViewDetail]="isView"></file-list>
+                <file-list [data]="phieuKNCLDinhKem" [disabled]="isView" [isViewDetail]="isView"></file-list>
               </div>
             </nz-form-item>
           </div>
+
+
         </div>
       </nz-card>
 
       <div class="mt16 flex-card p-lr16">
-        <div class="header header-green-background mg-t-16">
-          <div class="header-text">
-            <div class="title-chi-tieu">
-              <span></span>
-              <span>Đơn vị chủ động thực hiện</span>
-            </div>
-          </div>
 
+        <div nz-col [nzSpan]="24">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true">
+              Kết quả đánh giá cảm quan(Về màu sắc, mùi, vị, tạp chất, đánh bóng, sinh vật hại)
+            </nz-form-label>
+            <nz-form-control>
+              <textarea rows="3" nz-input placeholder="Nhập nội dung" [readonly]="isView"
+                formControlName="danhGiaCamQuan"></textarea>
+            </nz-form-control>
+          </nz-form-item>
         </div>
-        <nz-card class="mt-2px flex-card data-table card-border-content table-card">
-          <nz-table #quyetDinhPdDtl class="nowrap mt-16 table-chi-tiet" nzBordered
-            [nzData]="formData.value.quyetDinhPdDtl">
-            <thead>
-              <tr>
-                <th rowspan="2" style="width: 35px">STT</th>
-                <th rowspan="2">Danh mục/ nhóm hàng</th>
-                <th rowspan="2">Mặt hàng</th>
-                <th rowspan="2">ĐVT</th>
-                <th colspan="3">Kê lót / bảo quản trong năm</th>
-                <th colspan="2">Khối lượng đã quyết toán trước</th>
-                <th rowspan="2">Tổng giá trị</th>
-                <th rowspan="2">Hành động</th>
-              </tr>
-              <tr>
-                <th>Số lượng</th>
-                <th>Đơn giá</th>
-                <th>Thành tiền</th>
-                <th>Số lượng</th>
-                <th>Thành tiền</th>
-              </tr>
-            </thead>
-            <tbody>
-              <ng-container *ngFor="let item of quyetDinhPdDtl.data, let i = index;">
-                <tr>
-                  <td>{{i + 1}}</td>
-                  <td>{{i + 1}}</td>
-                  <td>{{i + 1}}</td>
-                  <td>{{i + 1}}</td>
-                  <td>{{i + 1}}</td>
-                  <td>{{i + 1}}</td>
-                  <td>{{i + 1}}</td>
-                  <td>{{i + 1}}</td>
-                  <td>{{i + 1}}</td>
-                  <td>{{i + 1}}</td>
-                  <td></td>
-                </tr>
-              </ng-container>
-            </tbody>
-
-          </nz-table>
 
 
-
-        </nz-card>
-
-        <div nz-row [nzGutter]="24">
-
-          <div nz-col [nzSpan]="6">
-            <nz-form-item>
-              <nz-form-label [nzNoColon]="true">
-                Tổng kinh phí thực tế đã thực hiện
-              </nz-form-label>
-              <nz-form-control>
-                <input nz-input formControlName="tongtien" [readonly]="true" />
-              </nz-form-control>
-            </nz-form-item>
-          </div>
-
-          <div nz-col [nzSpan]="18">
-            <nz-form-item>
-              <nz-form-label [nzNoColon]="true">
-                Viết bằng chữ
-              </nz-form-label>
-              <nz-form-control>
-                <input nz-input formControlName="trichYeu" [readonly]="isView" />
-              </nz-form-control>
-            </nz-form-item>
-          </div>
-
-        </div>
 
         <div nz-col [nzSpan]="24">
           <div class="header header-green-background mg-t-16">
             <div class="title-card">
               <div class="title-chi-tieu">
                 <span></span>
-                <span>Định mức tổng cục phê duyệt trước khi thực hiện</span>
+                <span>Kết quả phân tích chỉ tiêu chất lượng</span>
               </div>
             </div>
 
           </div>
 
-          <nz-table #quyetDinhPdDtl class="nowrap mt-16 table-chi-tiet" nzBordered
-            [nzData]="formData.value.quyetDinhPdDtl">
+          <nz-table class="pd-10" #basicTable class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false"
+            [nzData]="dataTableChiTieu">
             <thead>
               <tr>
-                <th rowspan="2" style="width: 35px">STT</th>
-                <th rowspan="2">Danh mục/ nhóm hàng</th>
-                <th rowspan="2">Mặt hàng</th>
-                <th rowspan="2">ĐVT</th>
-                <th colspan="3">Kê lót / bảo quản trong năm</th>
-                <th colspan="2">Khối lượng đã quyết toán trước</th>
-                <th rowspan="2">Tổng giá trị</th>
-                <th rowspan="2">Hành động</th>
-              </tr>
-              <tr>
-                <th>Số lượng</th>
-                <th>Đơn giá</th>
-                <th>Thành tiền</th>
-                <th>Số lượng</th>
-                <th>Thành tiền</th>
+                <th width="30px">STT</th>
+                <th>Chỉ tiêu chất lượng</th>
+                <th width="60px">Chỉ số chất lượng theo QCVN 14:2020/BTC</th>
+                <th width="400px">Kết quả phân tích</th>
+                <th>Phương pháp</th>
+                <th width="60px" *ngIf="!(isDisableField() || isView)">
+                  Hành động
+                </th>
               </tr>
             </thead>
             <tbody>
-              <ng-container *ngFor="let item of quyetDinhPdDtl.data, let i = index;">
-                <tr>
-                  <td>{{i + 1}}</td>
-                  <td>{{i + 1}}</td>
-                  <td>{{i + 1}}</td>
-                  <td>{{i + 1}}</td>
-                  <td>{{i + 1}}</td>
-                  <td>{{i + 1}}</td>
-                  <td>{{i + 1}}</td>
-                  <td>{{i + 1}}</td>
-                  <td>{{i + 1}}</td>
-                  <td>{{i + 1}}</td>
+              <tr *ngFor="let data of basicTable.data; let i = index">
+                <ng-container *ngIf="!data.edit; else editTemplate">
+                  <td class="text-center">{{i + 1}}</td>
+                  <td>{{data.tenTchuan}}</td>
+                  <td>{{data.chiSoNhap}}</td>
+                  <td>{{data.ketQuaKiemTra}}</td>
+                  <td>{{data.phuongPhap}}</td>
+                  <td *ngIf="!(isDisableField() || isView)">
+                    <a (click)="editRow(i)">
+                      <i class="fa fa-pencil"></i>
+                    </a>
+                    <a (click)="deleteRow(data)">
+                      <i class="fa fa-trash-o do"></i>
+                    </a>
+                  </td>
+                </ng-container>
+                <ng-template #editTemplate>
                   <td></td>
-                </tr>
-              </ng-container>
+                  <td>{{data.tenTchuan}}</td>
+                  <td>{{data.chiSoNhap}}</td>
+                  <td>
+                    <input type="text" nz-input class="w-400" [(ngModel)]="data.ketQuaKiemTra" />
+                  </td>
+                  <td>{{data.phuongPhap}}</td>
+                  <td>
+                    <a (click)="saveEdit(i)" class="save">
+                      <i class="fa fa-save"></i>
+                    </a>
+                    <a (click)="cancelEdit(i)">
+                      <i class="fa fa-times do"></i>
+                    </a>
+                  </td>
+                </ng-template>
+              </tr>
             </tbody>
-
           </nz-table>
 
           <div nz-row [nzGutter]="24">
@@ -561,7 +412,7 @@
                 </nz-form-label>
                 <nz-form-control>
                   <textarea rows="3" nz-input placeholder="Nhập nội dung" [readonly]="isView"
-                    formControlName="ketLuan"></textarea>
+                    formControlName="nhanXetKetLuan"></textarea>
                 </nz-form-control>
               </nz-form-item>
             </div>

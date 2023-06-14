@@ -36,6 +36,7 @@ import { BienBanChuanBiKhoComponent } from './tablevel3/bien-ban-chuan-bi-kho/bi
 import { BienBanKetThucNhapKhoComponent } from './tablevel3/bien-ban-ket-thuc-nhap-kho/bien-ban-ket-thuc-nhap-kho.component';
 import { ThongTinBienBanChuanBiKhoComponent } from './tablevel3/bien-ban-chuan-bi-kho/thong-tin-bien-ban-chuan-bi-kho/thong-tin-bien-ban-chuan-bi-kho.component';
 import { ThongTinBienBanNhapDayDuComponent } from './tablevel3/bien-ban-nhap-day-du/thong-tin-bien-ban-nhap-day-du/thong-tin-bien-ban-nhap-day-du.component';
+import { DauGiaModule } from "../../xuat/dau-gia/dau-gia.module";
 
 
 
@@ -78,6 +79,7 @@ import { ThongTinBienBanNhapDayDuComponent } from './tablevel3/bien-ban-nhap-day
     NzCardModule,
     MainModule,
     ComponentsModule,
+    DauGiaModule
   ]
 })
 export class NhapDieuChuyenModule { }

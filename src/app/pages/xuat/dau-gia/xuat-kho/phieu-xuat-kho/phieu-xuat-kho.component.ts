@@ -151,6 +151,7 @@ export class PhieuXuatKhoComponent extends Base2Component implements OnInit {
                 idVirtual: uuid.v4(),
                 tenDiemKho: k != "null" ? k : '',
                 tenLoKho: diaDiem ? diaDiem.tenLoKho : null,
+                tenNganKho: diaDiem ? diaDiem.tenNganKho : null,
                 childData: v
               }
             }

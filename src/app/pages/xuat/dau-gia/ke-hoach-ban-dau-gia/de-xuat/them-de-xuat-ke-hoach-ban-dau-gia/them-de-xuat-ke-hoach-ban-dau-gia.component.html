@@ -118,7 +118,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">Năm kế hoạch</nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-                  <nz-select formControlName="namKh" (ngModelChange)="onChangeNamKh()">
+                  <nz-select formControlName="namKh" (ngModelChange)="onChangeNamKh()" [nzDisabled]="isDisable()">
                     <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                   </nz-select>
                 </nz-form-control>
@@ -428,13 +428,9 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td style="color: black ;font-weight: bold;">{{item.soTienDtruocDx | number : '1.0-1'
-                  :
-                  'vi_VN'}}
+                <td style="color: black ;font-weight: bold;">{{item.soTienDtruocDxChiCuc | number : '1.0-1':'vi_VN'}}
                 </td>
-                <td style="color: black ;font-weight: bold;">{{item.soTienDtruocDd == 0 ? null : item.soTienDtruocDd |
-                  number : '1.0-1' :
-                  'vi_VN'}}
+                <td style="color: black ;font-weight: bold;">{{item.soTienDtruocDdChiCuc | number : '1.0-1' :'vi_VN'}}
                 </td>
                 <td *ngIf="!isDisable()">
                   <a (click)="themMoiBangPhanLoTaiSan($event,item,i)">
@@ -457,17 +453,11 @@
                   <td>{{children.soLuongDeXuat | number : '1.0-1' : 'vi_VN'}}</td>
                   <td>{{children.donViTinh}}</td>
                   <td>{{children.donGiaDeXuat | number : '1.0-1' : 'vi_VN' }}</td>
-                  <td>{{children.donGiaDeXuat * children.soLuongDeXuat | number : '1.0-1' : 'vi_VN'}}</td>
+                  <td>{{children.giaKhoiDiemDx | number : '1.0-1' : 'vi_VN'}}</td>
                   <td>{{children.donGiaDuocDuyet | number : '1.0-1' : 'vi_VN'}}</td>
-                  <td>{{children.donGiaDuocDuyet == null ? null : children.donGiaDuocDuyet * children.soLuongDeXuat |
-                    number : '1.0-1' : 'vi_VN'}}</td>
-                  <td>{{children.soLuongDeXuat * children.donGiaDeXuat * formData.value.khoanTienDatTruoc / 100 |
-                    number :
-                    '1.0-1' : 'vi_VN' }}</td>
-                  <td>{{children.donGiaDuocDuyet == null ? null : children.soLuongDeXuat * children.donGiaDuocDuyet *
-                    formData.value.khoanTienDatTruoc / 100 |
-                    number :
-                    '1.0-1' : 'vi_VN' }}</td>
+                  <td>{{children.giaKhoiDiemDd | number : '1.0-1' : 'vi_VN'}}</td>
+                  <td>{{children.soTienDtruocDx | number :'1.0-1' : 'vi_VN' }}</td>
+                  <td>{{children.soTienDtruocDd | number :'1.0-1' : 'vi_VN' }}</td>
                   <td class="text-right" *ngIf="!isDisable()">
                   </td>
                 </tr>

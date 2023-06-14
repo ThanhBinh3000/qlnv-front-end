@@ -15,6 +15,7 @@ import { CHUC_NANG, STATUS } from 'src/app/constants/status';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { Subject } from 'rxjs';
 import { QuyetDinhDieuChuyenTCService } from 'src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-tc.service';
+import { PhieuKiemTraChatLuongService } from 'src/app/services/dieu-chuyen-noi-bo/nhap-dieu-chuyen/phieu-kiem-tra-chat-luong';
 
 @Component({
   selector: 'app-kiem-tra-chat-luong',
@@ -67,28 +68,29 @@ export class KiemTraChatLuongComponent extends Base2Component implements OnInit 
     private donviService: DonviService,
     private danhMucService: DanhMucService,
     private quyetDinhDieuChuyenTCService: QuyetDinhDieuChuyenTCService,
+    private phieuKiemTraChatLuongService: PhieuKiemTraChatLuongService,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, quyetDinhDieuChuyenTCService);
+    super(httpClient, storageService, notification, spinner, modal, phieuKiemTraChatLuongService);
     this.formData = this.fb.group({
       nam: null,
-      soQdinh: null,
-      ngayDuyetTc: null,
-      ngayHieuLuc: null,
-      loaiDc: null,
-      trichYeu: null,
+      soQdinhDcc: null,
+      soPhieu: null,
+      tuNgay: null,
+      denNgay: null,
+      ketQua: null,
     })
-    this.filterTable = {
-      nam: '',
-      soQdinh: '',
-      ngayKyQdinh: '',
-      loaiDc: '',
-      trichYeu: '',
-      maDxuat: '',
-      maThop: '',
-      soQdinhXuatCuc: '',
-      soQdinhNhapCuc: '',
-      tenTrangThai: '',
-    };
+    // this.filterTable = {
+    //   nam: '',
+    //   soPhieu: '',
+    //   ngayKyQdinh: '',
+    //   loaiDc: '',
+    //   trichYeu: '',
+    //   maDxuat: '',
+    //   maThop: '',
+    //   soQdinhXuatCuc: '',
+    //   soQdinhNhapCuc: '',
+    //   tenTrangThai: '',
+    // };
   }
 
 

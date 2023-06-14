@@ -1,12 +1,12 @@
-import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {UserService} from "src/app/services/user.service";
-import {Subscription} from "rxjs";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "src/app/services/storage.service";
-import {Event, NavigationEnd, NavigationError, NavigationStart, Router} from "@angular/router";
-import {ROUTE_LIST} from './sua-chua.constant';
-import {STATUS} from "src/app/constants/status";
-import {cloneDeep} from 'lodash';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { UserService } from "src/app/services/user.service";
+import { Subscription } from "rxjs";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "src/app/services/storage.service";
+import { Event, NavigationEnd, NavigationError, NavigationStart, Router } from "@angular/router";
+import { ROUTE_LIST } from './sua-chua.constant';
+import { STATUS } from "src/app/constants/status";
+import { cloneDeep } from 'lodash';
 @Component({
   selector: 'app-sua-chua',
   templateUrl: './sua-chua.component.html',
