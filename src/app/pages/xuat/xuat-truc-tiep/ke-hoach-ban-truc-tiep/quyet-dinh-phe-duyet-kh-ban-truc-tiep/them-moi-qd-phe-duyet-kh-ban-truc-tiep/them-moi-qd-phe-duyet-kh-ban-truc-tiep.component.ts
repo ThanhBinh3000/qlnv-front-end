@@ -48,6 +48,7 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
   selected: boolean = false;
   listLoaiHinhNx: any[] = [];
   listKieuNx: any[] = [];
+  maDviCuc: string;
 
   constructor(
     httpClient: HttpClient,
@@ -221,7 +222,14 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
         soQdPd: data.soQdPd?.split('/')[0],
         nam: this.formData.value.namKh
       })
-      this.danhsachDx = data.children;
+      if (this.userService.isCuc()) {
+        this.maDviCuc = this.userInfo.MA_DVI
+      }
+      if (this.maDviCuc) {
+        this.danhsachDx = data.children.filter(s => s.maDvi == this.maDviCuc)
+      } else {
+        this.danhsachDx = data.children;
+      }
       if (this.danhsachDx && this.danhsachDx.length > 0) {
         this.showFirstRow(event, this.danhsachDx[0]);
       }
