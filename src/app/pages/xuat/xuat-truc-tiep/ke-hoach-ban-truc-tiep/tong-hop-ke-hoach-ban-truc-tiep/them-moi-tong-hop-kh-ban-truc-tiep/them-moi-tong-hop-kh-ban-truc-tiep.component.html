@@ -36,7 +36,7 @@
                             <nz-form-item>
                                 <nz-form-label [nzNoColon]="true">Năm kế hoạch</nz-form-label>
                                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-                                    <nz-select formControlName="namKh" [nzDisabled]="true">
+                                    <nz-select formControlName="namKh" [nzDisabled]="isDisable()">
                                         <nz-option *ngFor="let p of listNam" [nzValue]="p.value"
                                             [nzLabel]="p.text"></nz-option>
                                     </nz-select>
@@ -73,13 +73,14 @@
                                     <div nz-row [nzGutter]="24">
                                         <div nz-col nzSpan="12" class="cus-start-date">
                                             <nz-date-picker [nzDisabledDate]="disabledNgayDuyetTu" nzFormat="dd/MM/yyyy"
-                                                formControlName="ngayDuyetTu" nzPlaceHolder="Ngày bắt đầu">
+                                                formControlName="ngayDuyetTu" nzPlaceHolder="Ngày bắt đầu"
+                                                [nzDisabled]="isDisable()">
                                             </nz-date-picker>
                                         </div>
                                         <div nz-col nzSpan="12" class="cus-end-date">
                                             <nz-date-picker [nzDisabledDate]="disabledNgayDuyetDen"
                                                 nzFormat="dd/MM/yyyy" formControlName="ngayDuyetDen"
-                                                nzPlaceHolder="Ngày kết thúc">
+                                                nzPlaceHolder="Ngày kết thúc" [nzDisabled]="isDisable()">
                                             </nz-date-picker>
                                         </div>
                                     </div>
