@@ -444,6 +444,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
   quayLai() {
     this.showListEvent.emit();
   }
+
   async guiDuyet() {
     if (this.dataTable.length == 0) {
       this.notification.error(
@@ -484,6 +485,25 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
     }
   }
 
+  tuChoi() {
+    let trangThai = '';
+    switch (this.formData.get('trangThai').value) {
+      case STATUS.CHO_DUYET_TP: {
+        trangThai = STATUS.TU_CHOI_TP;
+        break;
+      }
+      case STATUS.CHO_DUYET_LDC: {
+        trangThai = STATUS.TU_CHOI_LDC;
+        break;
+      }
+      case STATUS.DA_DUYET_LDC: {
+        trangThai = STATUS.TU_CHOI_CBV;
+        break;
+      }
+    };
+    this.reject(this.idInput, trangThai);
+  }
+
   validatemaDviTsan(): boolean {
     if (this.dataTable && this.dataTable.length > 0) {
       let data = this.dataTable.flatMap(s => s.children)
@@ -511,28 +531,13 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
     return true;
   }
 
-  tuChoi() {
-    let trangThai = '';
-    switch (this.formData.get('trangThai').value) {
-      case STATUS.CHO_DUYET_TP: {
-        trangThai = STATUS.TU_CHOI_TP;
-        break;
-      }
-      case STATUS.CHO_DUYET_LDC: {
-        trangThai = STATUS.TU_CHOI_LDC;
-        break;
-      }
-      case STATUS.DA_DUYET_LDC: {
-        trangThai = STATUS.TU_CHOI_CBV;
-        break;
-      }
-    };
-    this.reject(this.idInput, trangThai);
-  }
-
   async onChangeNamKh() {
-    if (this.idInput == null) {
+    if (this.userService.isCuc()) {
       await this.getDataChiTieu();
+    } else {
+      if (this.idInput == null) {
+        await this.getDataChiTieu();
+      }
     }
   }
 
