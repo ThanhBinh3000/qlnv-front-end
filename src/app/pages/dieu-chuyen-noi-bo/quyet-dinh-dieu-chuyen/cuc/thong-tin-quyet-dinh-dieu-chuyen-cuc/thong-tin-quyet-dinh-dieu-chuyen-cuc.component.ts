@@ -922,14 +922,14 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
   }
 
   async save(isGuiDuyet?) {
+    if (!this.formData.value.soQdinh) return
     await this.spinner.show();
     let body = this.formData.value;
     body.canCu = this.canCu;
     body.quyetDinh = this.quyetDinh;
+    body.soQdinh = `${this.formData.value.soQdinh.toString().split("/")[0]}/${this.maQd}`
     if (this.idInput) {
       body.id = this.idInput
-    } else {
-      body.soQdinh = `${this.formData.value.soQdinh}/${this.maQd}`
     }
 
     let data = await this.createUpdate(body);
