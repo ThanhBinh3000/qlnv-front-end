@@ -133,16 +133,14 @@ export class ThemMoiQdDcgComponent implements OnInit {
 
   async ngOnInit() {
     this.namNay = dayjs().get('year');
-    await Promise.all([
       this.userInfo = this.userService.getUserLogin(),
       this.loadDsNam(),
       this.loadTiLeThue(),
       this.loadDsLoaiGia(),
       this.loadDsVthh(),
       this.loadDsToTrinh(),
-      this.getDataDetail(this.idInput),
+      this.getDataDetail(this.idInput)
       this.maQd = "/QĐ-TCDTNN"
-    ])
   }
 
   async loadDsVthh() {

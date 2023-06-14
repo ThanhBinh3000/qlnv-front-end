@@ -5,9 +5,6 @@ import {UploadFileService} from 'src/app/services/uploaFile.service';
 import {Globals} from 'src/app/shared/globals';
 import {saveAs} from 'file-saver';
 import {NzModalService} from "ng-zorro-antd/modal";
-import {
-  KhSuaChuaLonDtl
-} from "../../../../../../../quan-ly-kho-tang/ke-hoach/ke-hoach-sua-chua-hang-nam/de-xuat-kh-sc-lon/them-moi-sc-lon/dialog-dx-sc-lon/dialog-dx-sc-lon.component";
 import {MESSAGE} from "../../../../../../../../constants/message";
 import {NzNotificationService} from "ng-zorro-antd/notification";
 import {NgxSpinnerService} from "ngx-spinner";

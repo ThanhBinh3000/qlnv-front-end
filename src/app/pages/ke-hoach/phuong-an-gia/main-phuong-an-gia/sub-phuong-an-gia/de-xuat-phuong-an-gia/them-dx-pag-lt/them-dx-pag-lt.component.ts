@@ -68,6 +68,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
   dataTableKsGia: any[];
 
   dataTableKqGia: any[];
+  listVat: any[];
   dataTableTtThamKhao: any[];
   dviTinh: string;
   fileDkPhanTich: any[] = [];
@@ -105,7 +106,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
         moTa: [null],
         tchuanCluong: [''],
         giaDeNghi: [null, [Validators.required]],
-        vat: [5],
+        vat: [null],
         giaDeNghiVat: [null],
         soLuong: [],
         ghiChu: [],
@@ -123,11 +124,11 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
       }
     );
     this.formData.controls['giaDeNghi'].valueChanges.subscribe(value => {
-      const gtriHdSauVat = this.formData.controls.giaDeNghi.value + (this.formData.controls.giaDeNghi.value / 100 * this.formData.controls.vat.value);
+      const gtriHdSauVat = this.formData.controls.giaDeNghi.value + (this.formData.controls.giaDeNghi.value* this.formData.controls.vat.value);
       this.formData.controls['giaDeNghiVat'].setValue(gtriHdSauVat);
     });
     this.formData.controls['vat'].valueChanges.subscribe(value => {
-      const gtriHdSauVat = this.formData.controls.giaDeNghi.value + (this.formData.controls.giaDeNghi.value / 100 * this.formData.controls.vat.value);
+      const gtriHdSauVat = this.formData.controls.giaDeNghi.value + (this.formData.controls.giaDeNghi.value * this.formData.controls.vat.value);
       this.formData.controls['giaDeNghiVat'].setValue(gtriHdSauVat);
     })
     this.formData.controls['giaVonNk'].valueChanges.subscribe(value => {
@@ -153,41 +154,58 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
 
   async ngOnInit() {
     this.spinner.show();
-    await Promise.all([
-      this.isGiaMuaToiDa = this.type == TYPE_PAG.GIA_MUA_TOI_DA,
-      this.userInfo = this.userService.getUserLogin(),
-      this.maDx = '/' + this.userInfo.DON_VI.tenVietTat + '-KH&QLHDT',
-      this.loadDsNam(),
-      this.loadDsLoaiGia(),
-      this.loadDsPhuongAnGia(),
-      this.loadDsHangHoaPag(),
-      this.loadDsVthh(),
-      this.getDataDetail(this.idInput)
-    ])
+      this.isGiaMuaToiDa = this.type == TYPE_PAG.GIA_MUA_TOI_DA;
+      this.userInfo = this.userService.getUserLogin();
+      this.maDx = '/' + this.userInfo.DON_VI.tenVietTat + '-KH&QLHDT';
+      this.loadDsNam();
+      this.loadDsLoaiGia();
+      this.loadTiLeThue();
+      this.loadDsPhuongAnGia();
+      this.loadDsHangHoaPag();
+      this.loadDsVthh();
+      await this.getDataDetail(this.idInput)
     this.spinner.hide();
   }
 
-  async loadDsQdPduyetKhlcnt() {
-    if (this.type == 'GCT') {
-      let body = {
-        namKeHoach: this.formData.value.namKeHoach,
-        maDvi: this.userInfo.MA_DVI,
-        loaiVthh: this.formData.value.loaiVthh,
-        cloaiVthh: this.formData.value.cloaiVthh,
-        trangThai: STATUS.BAN_HANH
-      };
-      let res = await this.deXuatPAGService.loadQdGiaoKhLcnt(body);
+  async loadTiLeThue() {
+    this.spinner.show();
+    try {
+      let res = await this.danhMucService.danhMucChungGetAll("THUE_SUAT_VAT");
       if (res.msg == MESSAGE.SUCCESS) {
-        let arr = res.data;
-        if (arr) {
-          this.listQdCtKh = arr;
+        this.listVat = res.data;
+        if (this.listVat && this.listVat.length > 0) {
+          this.listVat.sort((a,b) => (a.giaTri - b.giaTri))
         }
-      } else {
-        this.notification.error(MESSAGE.ERROR, 'Không tìm thấy kế hoạch lựa chọn nhà thầu năm ' + dayjs().get('year'))
-        return;
       }
+      this.spinner.hide();
+    } catch (e) {
+      console.log('error: ', e)
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
+
+  // async loadDsQdPduyetKhlcnt() {
+  //   if (this.type == 'GCT') {
+  //     let body = {
+  //       namKeHoach: this.formData.value.namKeHoach,
+  //       maDvi: this.userInfo.MA_DVI,
+  //       loaiVthh: this.formData.value.loaiVthh,
+  //       cloaiVthh: this.formData.value.cloaiVthh,
+  //       trangThai: STATUS.BAN_HANH
+  //     };
+  //     let res = await this.deXuatPAGService.loadQdGiaoKhLcnt(body);
+  //     if (res.msg == MESSAGE.SUCCESS) {
+  //       let arr = res.data;
+  //       if (arr) {
+  //         this.listQdCtKh = arr;
+  //       }
+  //     } else {
+  //       this.notification.error(MESSAGE.ERROR, 'Không tìm thấy kế hoạch lựa chọn nhà thầu năm ' + dayjs().get('year'))
+  //       return;
+  //     }
+  //   }
+  // }
 
   async loadDsQdPduyetKhBdg() {
     if (this.type == 'GCT') {
@@ -228,7 +246,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
         moTa: data.moTa,
         tchuanCluong: data.tchuanCluong,
         giaDeNghi: data.giaDeNghi,
-        vat: data.vat,
+        vat: data.vat ? data.vat.toString() : '',
         giaDeNghiVat: data.giaDeNghiVat,
         soLuong: data.soLuong,
         ghiChu: data.ghiChu,
@@ -246,7 +264,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
         tenTrangThai: data.tenTrangThai,
         lyDoTuChoi: data.lyDoTuChoi
       })
-      await this.loadDsQdPduyetKhlcnt();
+      // await this.loadDsQdPduyetKhlcnt();
       await this.loadDsQdPduyetKhBdg();
       this.dataTableCanCuXdg = data.canCuPhapLy;
       this.dsDiaDiemDeHang = data.diaDiemDeHangs;
@@ -340,9 +358,9 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
       qdCtKhNam: null,
       tenCloaiVthh : list && list.length > 0 ? list[0].ten : ''
     })
-    if (this.formData.value.loaiGia == "LG03") {
-      await this.loadDsQdPduyetKhlcnt();
-    }
+    // if (this.formData.value.loaiGia == "LG03") {
+    //   await this.loadDsQdPduyetKhlcnt();
+    // }
     if (this.formData.value.loaiGia == "LG04") {
       await this.loadDsQdPduyetKhBdg();
     }
