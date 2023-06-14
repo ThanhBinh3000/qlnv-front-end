@@ -136,7 +136,7 @@ export class ThemMoiQdGiaTcdtnnComponent implements OnInit {
     try {
       let res = await this.danhMucService.danhMucChungGetAll("THUE_VAT");
       if (res.msg == MESSAGE.SUCCESS) {
-        this.thueVat = res.data[0] && res.data[0].giaTri ? res.data[0].giaTri : 10;
+        this.thueVat = res.data && res.data.length > 0 ? res.data[0].giaTri : 10;
       } else {
         this.thueVat = 10;
       }
