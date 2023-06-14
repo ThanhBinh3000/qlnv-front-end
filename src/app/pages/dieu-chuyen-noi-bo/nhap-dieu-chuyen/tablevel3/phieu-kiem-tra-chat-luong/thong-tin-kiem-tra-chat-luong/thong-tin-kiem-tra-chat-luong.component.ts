@@ -514,6 +514,13 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
     body.dcnbPhieuKtChatLuongDtl = this.dataTableChiTieu;
     if (this.idInput) {
       body.id = this.idInput
+    } else {
+      body.dcnbPhieuKtChatLuongDtl = this.dataTableChiTieu.map(item => {
+        return {
+          ...item,
+          id: undefined
+        }
+      });
     }
 
     let data = await this.createUpdate(body);
