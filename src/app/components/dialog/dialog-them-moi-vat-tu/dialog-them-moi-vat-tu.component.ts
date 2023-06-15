@@ -22,6 +22,7 @@ import { DanhMucService } from "../../../services/danhmuc.service";
   styleUrls: ['./dialog-them-moi-vat-tu.component.scss'],
 })
 export class DialogThemMoiVatTuComponent implements OnInit {
+  maDvi: any;
   formData: FormGroup;
   thongtinDauThau: DanhSachGoiThau
   loaiVthh: any;
@@ -88,7 +89,7 @@ export class DialogThemMoiVatTuComponent implements OnInit {
   async ngOnInit() {
     this.userInfo = await this.userService.getUserLogin();
     this.initForm();
-    this.getGiaToiDa();
+    await this.getGiaToiDa(this.maDvi);
   }
 
   save() {
@@ -170,8 +171,14 @@ export class DialogThemMoiVatTuComponent implements OnInit {
     }
   }
 
-  async getGiaToiDa() {
-    let res = await this.dxuatKhLcntService.getGiaBanToiDa(this.cloaiVthh, this.userInfo.MA_DVI, this.namKhoach);
+  async getGiaToiDa(maDvi?:any) {
+    let dvi;
+    if (maDvi != null) {
+      dvi = maDvi;
+    } else {
+      dvi = this.userInfo.MA_DVI
+    }
+    let res = await this.dxuatKhLcntService.getGiaBanToiDa(this.cloaiVthh, dvi, this.namKhoach);
     if (res.msg === MESSAGE.SUCCESS) {
       this.giaToiDa = res.data;
     }
