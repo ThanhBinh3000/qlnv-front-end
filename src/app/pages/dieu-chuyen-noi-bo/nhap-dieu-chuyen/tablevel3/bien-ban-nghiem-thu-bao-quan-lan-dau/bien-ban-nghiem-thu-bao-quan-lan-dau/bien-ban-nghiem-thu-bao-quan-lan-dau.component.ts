@@ -44,6 +44,8 @@ export class BienBanNghiemThuBaoQuanLanDauComponent extends Base2Component imple
       soBban: null,
       ngayLap: null,
       ngayKetThucNt: null,
+      type: ["01"],
+      loaiDc: ["DCNB"]
     })
   }
 

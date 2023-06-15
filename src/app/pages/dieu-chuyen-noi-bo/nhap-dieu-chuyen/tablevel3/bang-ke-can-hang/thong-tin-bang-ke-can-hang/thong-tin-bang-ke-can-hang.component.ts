@@ -110,6 +110,7 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
       dcnbBBNTBQDtl: [new Array<any>(),],
       nhanXet: [],
       type: ["01"],
+      loaiDc: ["DCNB"]
     });
   }
 

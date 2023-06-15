@@ -113,6 +113,7 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
       dcnbBBNTBQDtl: [new Array<any>(),],
       nhanXet: [],
       type: ["01"],
+      loaiDc: ["DCNB"]
     });
   }
 
