@@ -41,7 +41,7 @@ export class ThongTinDauGiaComponent extends Base2Component implements OnInit {
   ) {
     super(httpClient, storageService, notification, spinner, modal, quyetDinhPdKhBdgService);
     this.formData = this.fb.group({
-      namKh: dayjs().get('year'),
+      namKh: null,
       soDxuat: null,
       soQdPd: null,
       soQdPdKhBdg: null,
@@ -52,7 +52,7 @@ export class ThongTinDauGiaComponent extends Base2Component implements OnInit {
       ngayKyQd: null,
       soTrHdr: null,
       lastest: 1,
-      maDviCuc: this.userInfo.MA_DVI
+
     })
     this.filterTable = {
       namKh: '',
@@ -84,7 +84,7 @@ export class ThongTinDauGiaComponent extends Base2Component implements OnInit {
     try {
       this.formData.patchValue({
         loaiVthh: this.loaiVthh,
-
+        maDviCuc: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
       })
       await this.search();
       let dt = this.dataTable.flatMap(row => {
