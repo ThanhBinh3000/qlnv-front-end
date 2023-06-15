@@ -152,7 +152,7 @@
               </div>
               <div nz-col [nzSpan]="6">
                 <nz-form-item>
-                  <nz-form-label nzRequired [nzNoColon]="true"> Tiền mua hồ sơ(VNĐ/1 hồ sơ /1 đơn vị tài
+                  <nz-form-label nzRequired [nzNoColon]="true"> Tiền mua hồ sơ (VNĐ/1 hồ sơ /1 đơn vị tài
                     sản)
                   </nz-form-label>
                   <nz-form-control [nzErrorTip]="error">
@@ -246,7 +246,7 @@
               </div>
               <div nz-col [nzSpan]="12">
                 <nz-form-item>
-                  <nz-form-label [nzNoColon]="true"> Lưu ý về thời gian xem tài sản </nz-form-label>
+                  <nz-form-label [nzNoColon]="true"> Nộp tiền đặt trước </nz-form-label>
                   <nz-form-control [nzErrorTip]="error">
                     <nz-input-group>
                       <input nz-input formControlName="ghiChuTgianNopTien" [readonly]="isDisabled()" />
@@ -756,12 +756,14 @@
         Hủy bỏ
       </button>
       &nbsp;
-      <button nz-button (click)="confirmDone()" class="btn btn-sub xanh-nhat">
+      <button nz-button (click)="confirmDone()" class="btn btn-sub xanh-nhat"
+        *ngIf="this.formData.value.trangThai == STATUS.DU_THAO">
         <i nz-icon nzType="save"></i>
         Hoàn thành
       </button>
       &nbsp;
-      <button nz-button (click)="handleOk()" class="modal__button--save">
+      <button nz-button (click)="handleOk()" class="modal__button--save"
+        *ngIf="this.formData.value.trangThai == STATUS.DU_THAO">
         <i nz-icon nzType="save"></i>
         Lưu
       </button>

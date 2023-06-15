@@ -66,10 +66,9 @@
                   <nz-form-item>
                     <nz-form-label [nzNoColon]="true"> Tổng tiền giá khởi điểm </nz-form-label>
                     <nz-form-control>
-                      <nz-input-group>
-                        <input style="color: blue ;font-weight: bold;" nz-input formControlName="tongTienGiaKhoiDiem"
-                          readonly />
-                      </nz-input-group>
+                      <nz-input-number [nzSize]="'small'" formControlName="tongTienGiaKhoiDiem"
+                        [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nzDisabled>
+                      </nz-input-number>
                     </nz-form-control>
                   </nz-form-item>
                 </div>
@@ -77,10 +76,9 @@
                   <nz-form-item>
                     <nz-form-label [nzNoColon]="true"> Tổng khoản tiền đặt trước </nz-form-label>
                     <nz-form-control>
-                      <nz-input-group>
-                        <input style="color: blue ;font-weight: bold;" nz-input formControlName="tongTienDatTruoc"
-                          readonly />
-                      </nz-input-group>
+                      <nz-input-number [nzSize]="'small'" formControlName="tongTienDatTruoc"
+                        [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nzDisabled>
+                      </nz-input-number>
                     </nz-form-control>
                   </nz-form-item>
                 </div>
@@ -152,10 +150,9 @@
                     <nz-form-label [nzNoColon]="true"> Tổng khoản tiền đặt trước theo đơn giá được duyệt
                     </nz-form-label>
                     <nz-form-control>
-                      <nz-input-group>
-                        <input style="color: blue ;font-weight: bold;" nz-input formControlName="tongTienDatTruoc"
-                          readonly />
-                      </nz-input-group>
+                      <nz-input-number [nzSize]="'small'" formControlName="tongTienDatTruoc"
+                        [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nzDisabled>
+                      </nz-input-number>
                     </nz-form-control>
                   </nz-form-item>
                 </div>
@@ -185,8 +182,9 @@
                   <nz-form-item>
                     <nz-form-label [nzNoColon]="true"> Tổng số lượng xuất bán </nz-form-label>
                     <nz-form-control>
-                      <input style="color: blue ;font-weight: bold;" nz-input formControlName="tongSoLuong"
-                        readonly="true" />
+                      <nz-input-number [nzSize]="'small'" formControlName="tongSoLuong"
+                        [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nzDisabled>
+                      </nz-input-number>
                     </nz-form-control>
                   </nz-form-item>
                 </div>
@@ -269,6 +267,7 @@
               <th width="">Địa điểm tổ chức</th>
               <th width="">Kết quả đấu giá</th>
               <th width="">SL đơn vị TS</th>
+              <th width="">Trạng thái</th>
               <th width="">Hành động</th>
             </tr>
           </thead>
@@ -284,11 +283,15 @@
               <td>{{ data.diaDiemDauGia }}</td>
               <td>{{ data.ketQua == 1 ? 'Đấu giá thành công' : 'Đấu giá không thành' }}</td>
               <td>{{ data.ketQuaSl }}</td>
+              <td>{{ data.tenTrangThai}}</td>
               <td class="text-center">
+                <a *ngIf="data.trangThai == STATUS.DA_HOAN_THANH" (click)="themMoiPhienDauGia($event,data)">
+                  <i class="fa fa-eye"></i>
+                </a>
                 <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="themMoiPhienDauGia($event,data)">
                   <i class="fa fa-pencil"></i>
                 </a>
-                <a (click)="deleteThongTin(data)">
+                <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="deleteThongTin(data)">
                   <i class="fa fa-trash do"></i>
                 </a>
               </td>
