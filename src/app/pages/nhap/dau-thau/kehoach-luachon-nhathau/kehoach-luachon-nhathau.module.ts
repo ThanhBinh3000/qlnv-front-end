@@ -16,6 +16,7 @@ import { FormsModule } from "@angular/forms";
 import {
   KeHoachVonDauNamModule
 } from "../../../ke-hoach/giao-ke-hoach-va-du-toan/ke-hoach-von-dau-nam/ke-hoach-von-dau-nam.module";
+import { ThemmoiKehoachLcntVtComponent } from './danhsach-kehoach-lcnt/themmoi-kehoach-lcnt-vt/themmoi-kehoach-lcnt-vt.component';
 
 
 @NgModule({
@@ -29,6 +30,7 @@ import {
     ThemmoiTonghopKhlcntComponent,
     ThongtinDexuatComponent,
     MainKehoachLuachonNhathauComponent,
+    ThemmoiKehoachLcntVtComponent,
   ],
   imports: [
     CommonModule,
