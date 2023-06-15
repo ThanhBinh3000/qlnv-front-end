@@ -194,7 +194,7 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
         this.idInput;
         this.hoanThanhCapNhat();
       } else {
-        // this.goBack();
+        this.loadDetail(this.idInput);
       }
     }
     await this.spinner.hide();
@@ -205,15 +205,31 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
       if (this.listOfData.length == 0) {
         this.notification.error(
           MESSAGE.ERROR,
-          'Thông tin tổ chức cá nhân không dược để trống',
+          'Thông tin tổ chức cá nhân không dược để trống.',
         );
         return;
       }
+    }
+    let isBothFalse = true;
+    for (const obj of this.listOfData) {
+      if (obj.luaChon === true) {
+        isBothFalse = false;
+        break;
+      }
+    }
+    if (isBothFalse) {
+      this.notification.error(
+        MESSAGE.ERROR,
+        'Ở mỗi mã đơn vị tài sản bạn phải chọn ít nhất một tổ chức cá nhân chào giá.',
+      );
+      return false;
     }
     let trangThai = STATUS.HOAN_THANH_CAP_NHAT;
     let mesg = 'Văn bản sẵn sàng hoàn thành cập nhập ?'
     this.approve(this.idInput, trangThai, mesg);
   }
+
+
 
   addRow(): void {
     if (this.idDviDtl) {

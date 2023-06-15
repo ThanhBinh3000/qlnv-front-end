@@ -35,7 +35,7 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
   thongTinCuc: DanhSachGoiThau = new DanhSachGoiThau();
   thongTinChiCuc: any[] = [];
   thongTinDiemKho: any[] = [];
-
+  thongTinCucEdit: any[] = [];
   listChiCucMap = {};
   listDiemKhoMap = {};
 
@@ -43,7 +43,6 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
   listPhuongThucDauThau: any[] = [];
   listLoaiHopDong: any[] = [];
   listHinhThucDauThau: any[] = [];
-  donGiaVat: number = 0;
   giaToiDa: any;
   userInfo: UserLogin;
   namKeHoach: any;
@@ -86,9 +85,7 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
       dviTinh: [this.dviTinh],
       soLuong: [null],
       donGiaVat: [null],
-      donGiaTamTinh: [null],
       maDvi: ['']
-
     });
   }
 
@@ -124,10 +121,13 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
     }
     let pag = await this.quyetDinhGiaTCDTNNService.getPag(bodyPag)
     if (pag.msg == MESSAGE.SUCCESS) {
-      this.donGiaVat = pag.data.giaQdVat
+      this.formGoiThau.patchValue({
+        donGiaVat: pag.data.giaQdVat
+      })
     }
     this.formGoiThau.patchValue({
-      tenCloaiVthh: cloaiSelected[0].ten
+      tenCloaiVthh: cloaiSelected[0].ten,
+      soLuong: 0
     })
     this.listCuc = [];
     this.loadListDonVi();
@@ -198,12 +198,6 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
     this.listDiemKhoMap[$event] = chiCuc.children.filter(item => item.type != 'PB');
   }
 
-  validateRangPrice() {
-    let value = +this.formGoiThau.get('donGiaTamTinh').value
-    let priceMax = this.giaToiDa;
-    return value <= priceMax;
-  }
-
   async initForm(dataDetail) {
     if (dataDetail) {
       this.formGoiThau.patchValue({
@@ -211,10 +205,8 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
         cloaiVthh: dataDetail.cloaiVthh,
         diaDiemNhap: dataDetail.diaDiemNhap,
         donGia: dataDetail.donGia,
-        donGiaTamTinh: dataDetail.donGiaTamTinh,
         dviTinh: dataDetail.dviTinh,
         donGiaVat: dataDetail.donGiaVat,
-        soLuong: dataDetail.soLuong,
         tenDvi: dataDetail.tenDvi,
         maDvi: dataDetail.maDvi,
         thanhTien: dataDetail.thanhTien,
@@ -225,6 +217,9 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
       } else if (dataDetail.loaiVthh) {
         await this.onChangeCloaiVthh(dataDetail.loaiVthh)
       }
+      this.formGoiThau.patchValue({
+        soLuong: dataDetail.soLuong,
+      })
       if (this.trangThai != STATUS.DU_THAO) {
         this.formGoiThau.get('donGiaVat').setValue(dataDetail.donGiaVat)
       }
@@ -253,10 +248,6 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
     }
     if (this.giaToiDa == null) {
       this.notification.error(MESSAGE.ERROR, 'Bạn cần lập và trình duyệt phương án giá mua tối đa, giá bán tối thiểu trước. Chỉ sau khi có giá mua tối đa bạn mới thêm được địa điểm nhập kho vì giá mua đề xuất ở đây nhập vào phải <= giá mua tối đa.');
-      return;
-    }
-    if (!this.validateRangPrice()) {
-      this.notification.error(MESSAGE.ERROR, 'Giá tạm tính phải nhỏ hơn giá mua tối đa (' + this.giaToiDa + ')');
       return;
     }
     const body = this.formGoiThau.value;
@@ -429,22 +420,22 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
     this.thongTinDiemKho[y].soLuong = null;
   }
 
-  expandSet = new Set<number>();
-  onExpandChange(id: number, checked: boolean): void {
-    if (checked) {
-      this.expandSet.add(id);
-    } else {
-      this.expandSet.delete(id);
-    }
-  }
-  expandSet2 = new Set<number>();
-  onExpandChange2(id: number, checked: boolean): void {
-    if (checked) {
-      this.expandSet2.add(id);
-    } else {
-      this.expandSet2.delete(id);
-    }
-  }
+  // expandSet = new Set<number>();
+  // onExpandChange(id: number, checked: boolean): void {
+  //   if (checked) {
+  //     this.expandSet.add(id);
+  //   } else {
+  //     this.expandSet.delete(id);
+  //   }
+  // }
+  // expandSet2 = new Set<number>();
+  // onExpandChange2(id: number, checked: boolean): void {
+  //   if (checked) {
+  //     this.expandSet2.add(id);
+  //   } else {
+  //     this.expandSet2.delete(id);
+  //   }
+  // }
 
   async getGiaToiDa(ma: string) {
     let res = await this.dxuatKhLcntService.getGiaBanToiDa(ma, this.userInfo.MA_DVI, this.namKeHoach);
@@ -467,5 +458,17 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
       return 0;
     }
     return item;
+  }
+
+  editRowCuc(i: number) {
+    this.thongTinCucEdit[i] =  this.dataTable[i].soLuong
+    this.dataTable[i].edit = true;
+  }
+  saveEditCuc(i: number) {
+    this.dataTable[i].soLuong = this.thongTinCucEdit[i]
+    this.dataTable[i].edit = false;
+  }
+  cancelEditCuc(i: number) {
+    this.dataTable[i].edit = false;
   }
 }

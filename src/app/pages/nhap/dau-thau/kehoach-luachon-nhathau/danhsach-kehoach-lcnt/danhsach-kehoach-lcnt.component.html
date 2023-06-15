@@ -1,4 +1,4 @@
-<div *ngIf="!isDetail" class="luong-thuc__danh-sach">
+<div *ngIf="!isDetail && !isDetailVt" class="luong-thuc__danh-sach">
   <div class="bg-trang">
     <nz-card class="mt16 flex-card p-lr16">
       <div nz-row [nzGutter]="24">
@@ -314,6 +314,11 @@
   <app-themmoi-kehoach-lcnt [idInput]="selectedId" [loaiVthhInput]="loaiVthh" [isView]="isView"
     (showListEvent)="showList()">
   </app-themmoi-kehoach-lcnt>
+</div>
+<div class="chi-tiet" *ngIf="isDetailVt">
+  <app-themmoi-kehoach-lcnt-vt [idInput]="selectedId" [loaiVthhInput]="loaiVthh" [isView]="isView"
+                            (showListEvent)="showList()">
+  </app-themmoi-kehoach-lcnt-vt>
 </div>
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openQdPdKhlcnt"
   (nzOnCancel)="closeQdPdKhlcntModal()">

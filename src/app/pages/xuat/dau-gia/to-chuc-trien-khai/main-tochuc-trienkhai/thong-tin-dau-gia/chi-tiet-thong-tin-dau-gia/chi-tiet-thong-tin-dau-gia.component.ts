@@ -106,7 +106,7 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
                 tenDvi: dataDtl.tenDvi,
                 tgianDauGia: ['Từ' + ' ' + dayjs(dataDtl.tgianDkienTu).format('DD/MM/YYYY') + ' ' + 'Đến' + ' ' + dayjs(dataDtl.tgianDkienDen).format('DD/MM/YYYY')],
                 tgianTtoan: dataDtl.tgianTtoan,
-                pthucTtoan: dataDtl.pthucTtoan,
+                pthucTtoan: dataDtl.pthucTtoan == '1' ? 'Tiền mặt' : 'Chuyển khoản',
                 tgianGnhan: dataDtl.tgianGnhan,
                 pthucGnhan: dataDtl.pthucGnhan,
                 trangThai: dataDtl.trangThai,
@@ -239,7 +239,7 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
       nzClosable: false,
       nzWidth: '1800px',
       nzFooter: null,
-      nzBodyStyle:{ 'overflow-y': 'auto' },
+      nzBodyStyle: { 'overflow-y': 'auto' },
       nzComponentParams: {
         isModal: true,
         idDtl: this.idInput,

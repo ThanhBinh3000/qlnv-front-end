@@ -6,7 +6,7 @@
                     [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDC || formData.value.trangThai == STATUS.DA_DUYET_LDV ? 'status-xanh' : 'status-do'">
                     {{ formData.value.tenTrangThai }}
                 </span>
-                <span>Thông tin đề xuất kế hoạch lựa chọn nhà thầu</span>
+                <span>Thẩm định danh sách hàng dữ trữ quốc gia cần sửa chữa</span>
             </div>
         </div>
         <div class="btn-group">
@@ -40,7 +40,7 @@
                             <nz-form-item>
                                 <nz-form-label nzRequired [nzNoColon]="true">Ngày tạo HS sửa chữa</nz-form-label>
                                 <nz-form-control [nzErrorTip]="error">
-                                    <nz-date-picker formControlName="ngayTao" nzFormat="dd/MM/yyyy">
+                                    <nz-date-picker formControlName="ngayTaoHs" nzFormat="dd/MM/yyyy">
                                     </nz-date-picker>
                                 </nz-form-control>
                             </nz-form-item>
@@ -50,7 +50,7 @@
                                 <nz-form-label nzRequired [nzNoColon]="true">Mã danh sách sữa chữa</nz-form-label>
                                 <nz-form-control [nzErrorTip]="error">
                                     <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogDanhSach()">
-                                        <input nz-input [readonly]="true" formControlName="soToTrinh" />
+                                        <input nz-input [readonly]="true" formControlName="ngayTaoHs" />
                                     </nz-input-group>
                                 </nz-form-control>
                             </nz-form-item>
@@ -59,7 +59,7 @@
                             <nz-form-item>
                                 <nz-form-label nzRequired [nzNoColon]="true">Ngày duyệt LĐ Cục</nz-form-label>
                                 <nz-form-control [nzErrorTip]="error">
-                                    <nz-date-picker formControlName="ngayTao" nzFormat="dd/MM/yyyy">
+                                    <nz-date-picker formControlName="ngayTaoHs" nzFormat="dd/MM/yyyy">
                                     </nz-date-picker>
                                 </nz-form-control>
                             </nz-form-item>
@@ -69,7 +69,7 @@
                                 <nz-form-label nzRequired [nzNoColon]="true">Thời hạn xuất sửa chữa dự
                                     kiến</nz-form-label>
                                 <nz-form-control [nzErrorTip]="error">
-                                    <nz-date-picker formControlName="ngayTao" nzFormat="dd/MM/yyyy">
+                                    <nz-date-picker formControlName="ngayTaoHs" nzFormat="dd/MM/yyyy">
                                     </nz-date-picker>
                                 </nz-form-control>
                             </nz-form-item>
@@ -79,7 +79,7 @@
                                 <nz-form-label nzRequired [nzNoColon]="true">Thời hạn nhập sửa chữa dự
                                     kiến</nz-form-label>
                                 <nz-form-control [nzErrorTip]="error">
-                                    <nz-date-picker formControlName="ngayTao" nzFormat="dd/MM/yyyy">
+                                    <nz-date-picker formControlName="ngayTaoHs" nzFormat="dd/MM/yyyy">
                                     </nz-date-picker>
                                 </nz-form-control>
                             </nz-form-item>
@@ -109,7 +109,7 @@
                                 <nz-form-label [nzNoColon]="true">Căn cứ pháp lý</nz-form-label>
                                 <nz-form-control>
                                     <div class="list-file">
-                                        <file-list [data]="fileDinhKem"></file-list>
+                                        <file-list [data]="fileCanCu"></file-list>
                                     </div>
                                 </nz-form-control>
                             </nz-form-item>
