@@ -112,6 +112,7 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
       dcnbBBNTBQDtl: [new Array<any>(),],
       nhanXet: [],
       type: ["01"],
+      loaiDc: ["DCNB"]
     });
   }
 
@@ -211,6 +212,12 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
     await this.add()
   }
 
+  async updateTH(row) {
+    this.typeData = "TH"
+    this.typeAction = "UPDATE"
+    await this.add(row)
+  }
+
   async addPD() {
     this.typeData = "PD"
     await this.add()
@@ -231,9 +238,7 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
       nzWidth: '1200px',
       nzFooter: null,
       nzComponentParams: {
-        // danhSachKeHoach: this.danhSachKeHoach,
-        // dsChiCuc: this.listChiCucNhan,
-        // data: row ? row : undefined,
+        data: row,
       },
     });
     modalQD.afterClose.subscribe(async (data) => {
@@ -320,18 +325,21 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
           this.dsHangPD = cloneDeep(this.dsHangPD)
 
         }
-        this.danhSach = []
-        this.danhSach = this.danhSach.concat(this.dsHangTH)
-        this.danhSach = this.danhSach.concat(this.dsHangPD)
-        this.formData.patchValue({
-          dcnbBBNTBQDtl: this.danhSach
-        })
 
+        this.updateDataTable()
 
       }
     });
   }
 
+  updateDataTable() {
+    this.danhSach = []
+    this.danhSach = this.danhSach.concat(this.dsHangTH)
+    this.danhSach = this.danhSach.concat(this.dsHangPD)
+    this.formData.patchValue({
+      dcnbBBNTBQDtl: this.danhSach
+    })
+  }
 
 
   them(row) {
@@ -342,14 +350,41 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
 
   }
 
-  xoa(row) {
-    // if (row.isParent)
-    //   this.dsHangTH = this.dsHangTH.filter(item => item.idVirtual !== row.idVirtual || item.idParent !== row.idVirtual)
-    // else
-    //   this.dsHangTH = this.dsHangTH.filter(item => item.idVirtual !== row.idVirtual)
-    // this.formData.patchValue({
-    //   dcnbBBNTBQDtlList: this.dsHangTH
-    // })
+  xoa(row, type) {
+    if (type === "TH") {
+      this.dsHangTH = this.dsHangTH.filter(item => item.idVirtual !== row.idVirtual)
+
+      if (row.isParent)
+        this.dsHangTH = this.dsHangTH.filter(item => item.idParent !== row.idVirtual)
+
+      let tongKinhPhiDaTh = this.dsHangTH.reduce((prev, cur) => prev + cur.tongGiaTri, 0);
+      if (tongKinhPhiDaTh > 0) {
+        let tongKinhPhiDaThBc = this.convertTien(tongKinhPhiDaTh) + ' đồng'
+        this.formData.patchValue({
+          tongKinhPhiDaTh,
+          tongKinhPhiDaThBc
+        })
+      } else {
+        this.formData.patchValue({
+          tongKinhPhiDaTh: "",
+          tongKinhPhiDaThBc: ""
+        })
+      }
+
+      this.dsHangTH = cloneDeep(this.dsHangTH)
+      console.log('xoa', row, this.dsHangTH)
+    }
+    if (type === "PD") {
+      this.dsHangPD = this.dsHangPD.filter(item => item.idVirtual !== row.idVirtual)
+      if (row.isParent)
+        this.dsHangPD = this.dsHangPD.filter(item => item.idParent !== row.idVirtual)
+
+      this.dsHangPD = cloneDeep(this.dsHangPD)
+      console.log('xoa', row, this.dsHangPD)
+    }
+
+
+    this.updateDataTable()
   }
 
 
