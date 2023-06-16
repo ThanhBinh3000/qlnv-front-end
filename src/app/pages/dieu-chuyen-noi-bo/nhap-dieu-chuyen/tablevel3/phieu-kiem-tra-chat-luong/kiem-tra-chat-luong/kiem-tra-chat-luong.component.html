@@ -85,10 +85,11 @@
               <th rowspan="2" style="max-width: 90px; min-width: 90px;  white-space: break-spaces;" class="text-center">
                 Số BB NT kê lót,
                 BQLĐ</th>
-              <th rowspan="2">Ngày lập biên bản</th>
-              <th rowspan="2">Ngày kết thục NT kê lót, BQLĐ</th>
-              <th rowspan="2">Tổng kinh phí thực tế (đ)</th>
-              <th rowspan="2">Tổng kinh phí TC PD (đ)</th>
+              <th rowspan="2">Số phiếu KTCL</th>
+              <th rowspan="2">Ngày giám định</th>
+              <th rowspan="2">Kết quả đánh giá</th>
+              <th rowspan="2">Số phiếu nhập kho</th>
+              <th rowspan="2">Ngày nhập kho</th>
               <th rowspan="2">Trạng thái</th>
               <th rowspan="2">Hành động</th>
             </tr>
@@ -108,7 +109,8 @@
                   (nzExpandChange)="row1.expand=!row1.expand; row1.children=setExpand(row1.expand, row1.children)">
                 </td>
                 <td class="bold">{{ row1.soQdinh || "" }}</td>
-                <td class="bold">{{ row1.namKh || "" }}</td>
+                <td class="bold">{{ row1.nam || "" }}</td>
+                <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -130,12 +132,14 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td class="bold">{{ row2.thoiHanDieuChuyen || ""}}</td>
-                    <td class="bold">{{ row2.tenloKhoXuat || ""}} {{ row2.tenNganKhoXuat || ""}} {{ row2.tenDiemKhoXuat
+                    <td class="bold">{{ row2.thoiGianDieuChuyen || ""}}</td>
+                    <td class="bold">{{ row2.tenloKhoXuat || ""}} {{ row2.tenNganKhoXuat || ""}} {{ row2.tenNhaKhoXuat
+                      || ""}} {{ row2.tenDiemKhoXuat
                       ||
                       ""}}
                     </td>
                     <td class="bold">{{ row2.tenTrangThai || ""}}</td>
+                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -167,6 +171,7 @@
                         <td></td>
                         <td></td>
                         <td></td>
+                        <td></td>
                       </tr>
                       <ng-container *ngFor="let row4 of row3.children, let y = index">
                         <tr>
@@ -178,8 +183,13 @@
                           <td></td>
                           <td></td>
                           <td></td>
-                          <td class="bold">{{row4.tenNganKhoNhan|| ""}}</td>
-                          <td class="bold">{{row4.tenLoKhoNhan|| ""}}</td>
+                          <td class="bold">{{ row2.tenloKhoNhan || ""}} {{ row2.tenNganKhoNhan || ""}} {{
+                            row2.tenNhaKhoNhan || ""}} {{ row2.tenDiemKhoNhan
+                            ||
+                            ""}}
+                          </td>
+                          <td></td>
+                          <td>{{row2.soBBNtLd}}</td>
                           <td></td>
                           <td></td>
                           <td></td>
@@ -204,9 +214,10 @@
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td>{{(row5.soLapBBKLot || "")}}</td>
-                            <td>{{(row5.ngayLapBBKLot || "")}}</td>
-                            <td>{{(row5.ngayKetThucNtKeLot || "")}}</td>
+                            <td></td>
+                            <td>{{(row5.soPhieuKtChatLuong || "")}}</td>
+                            <td>{{(row5.ngayKiemNghiem || "")}}</td>
+                            <td>{{(row5.ketQuaDanhGia || "")}}</td>
                             <td>{{(row5.tongKinhPhiTT |number: '1.0-1':
                               'vi_VN')}}</td>
                             <td>{{(row5.tongKinhPhiPd |number: '1.0-1':
