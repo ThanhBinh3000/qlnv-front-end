@@ -575,44 +575,16 @@ export class ThemmoiKehoachLcntVtComponent extends Base2Component implements OnI
     });
     modalTuChoi.afterClose.subscribe(async (data) => {
       if (data) {
-        if (this.userService.isCuc()) {
+        this.formData.patchValue({
+          loaiVthh: data.ma,
+          tenLoaiVthh: data.ten
+        });
+        let res = await this.danhMucService.getDetail(
+          this.formData.get("loaiVthh").value
+        );
+        if (res.msg == MESSAGE.SUCCESS) {
           this.formData.patchValue({
-            cloaiVthh: data.ma,
-            tenCloaiVthh: data.ten,
-            loaiVthh: data.parent.ma,
-            tenLoaiVthh: data.parent.ten
-          });
-          let res = await this.dmTieuChuanService.getDetailByMaHh(
-            this.formData.get("cloaiVthh").value
-          );
-          let bodyPag = {
-            namKeHoach: this.formData.value.namKhoach,
-            loaiVthh: this.formData.value.loaiVthh,
-            cloaiVthh: this.formData.value.cloaiVthh,
-            trangThai: STATUS.BAN_HANH,
-            maDvi: this.formData.value.maDvi,
-            loaiGia: "LG03"
-          };
-          let pag = await this.quyetDinhGiaTCDTNNService.getPag(bodyPag);
-          if (pag.msg == MESSAGE.SUCCESS) {
-            const data = pag.data;
-            this.formData.patchValue({
-              donGiaVat: data.giaQdVat
-            });
-            // if (!data.giaQdVat) {
-            //   this.notification.error(MESSAGE.ERROR, "Chủng loại hàng hóa đang chưa có giá, xin vui lòng thêm phương án giá!")
-            // }
-          }
-          if (res.statusCode == API_STATUS_CODE.SUCCESS) {
-            this.formData.patchValue({
-              tchuanCluong: res.data ? res.data.tenQchuan : null
-            });
-          }
-        } else {
-          this.formData.patchValue({
-            cloaiVthh: data.ma,
-            loaiVthh: data.ma,
-            tenLoaiVthh: data.ten
+            tchuanCluong: res.data ? res.data.tieuChuanCl : null
           });
         }
       }
@@ -628,7 +600,7 @@ export class ThemmoiKehoachLcntVtComponent extends Base2Component implements OnI
   }
 
   themMoiGoiThau(data?: DanhSachGoiThau, index?: number) {
-    if (this.formData.get("loaiVthh").value == null || this.formData.get("cloaiVthh").value == null) {
+    if (this.formData.get("loaiVthh").value == null) {
       this.notification.error(MESSAGE.NOTIFICATION, "Vui lòng chọn loại hàng hóa");
       return;
     }

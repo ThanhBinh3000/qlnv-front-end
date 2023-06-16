@@ -125,6 +125,8 @@ export class ThongTinBienBanNhapDayDuComponent extends Base2Component implements
       tongKinhPhiDaThBc: [],
       dcnbBBNTBQDtlList: [new Array<any>(),],
       nhanXet: [],
+      type: ["01"],
+      loaiDc: ["DCNB"]
     }
     );
   }

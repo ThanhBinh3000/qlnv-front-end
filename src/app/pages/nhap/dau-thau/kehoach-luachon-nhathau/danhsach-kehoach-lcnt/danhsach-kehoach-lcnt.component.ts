@@ -276,15 +276,9 @@ export class DanhsachKehoachLcntComponent implements OnInit {
 
   detail(data?, isView?) {
     if (this.loaiVthh === "02") {
-      if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_VT_DEXUAT_THEM")) {
-        return;
-      }
       this.isDetailVt = true;
     }
     else {
-      if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_LT_DEXUAT_THEM")) {
-        return;
-      }
       this.isDetail = true;
     }
     this.selectedId = data.id;
