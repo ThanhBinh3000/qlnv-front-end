@@ -39,6 +39,7 @@ export class QuyetDinhDtl {
   ketQua: string;
   type: string;
 }
+
 @Component({
   selector: 'app-them-moi-quyet-dinh-thanh-ly',
   templateUrl: './them-moi-quyet-dinh-thanh-ly.component.html',
@@ -69,26 +70,20 @@ export class ThemMoiQuyetDinhThanhLyComponent extends Base2Component implements 
     private hoSoThanhLyService: HoSoThanhLyService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, quyetDinhThanhLyService);
-    for (let i = -3; i < 23; i++) {
-      this.listNam.push({
-        value: dayjs().get("year") - i,
-        text: dayjs().get("year") - i
-      });
-    }
     this.formData = this.fb.group({
       id: [],
       maDvi: [],
       nam: [dayjs().get("year")],
-      soQd:['', [Validators.required]],
-      ngayKy:['', [Validators.required]],
+      soQd: ['', [Validators.required]],
+      ngayKy: ['', [Validators.required]],
       idHoSo: [],
-      soHoSo :['', [Validators.required]],
+      soHoSo: ['', [Validators.required]],
       idKq: [],
       soKq: [],
       thoiGianTl: [],
       thoiGianTlTu: [],
       thoiGianTlDen: [],
-      trichYeu:['', [Validators.required]],
+      trichYeu: ['', [Validators.required]],
       trangThai: [STATUS.DU_THAO],
       tongSoLuongTl: [],
       tongSoLuongCon: [],
@@ -115,10 +110,10 @@ export class ThemMoiQuyetDinhThanhLyComponent extends Base2Component implements 
         this.loadDsHoSo(),
       ]);
       await this.loadChiTiet(this.idInput);
-      if (Object.keys(this.dataInit).length > 0) {
-        this.formData.patchValue({idHoSo: this.dataInit.id})
-        await this.changeHoSo(this.dataInit.id);
-      }
+      // if (Object.keys(this.dataInit).length > 0) {
+      //   this.formData.patchValue({idHoSo: this.dataInit.id})
+      //   await this.changeHoSo(this.dataInit.id);
+      // }
     } catch (e) {
       console.log("error: ", e);
       await this.spinner.hide();
@@ -133,26 +128,23 @@ export class ThemMoiQuyetDinhThanhLyComponent extends Base2Component implements 
       await this.quyetDinhThanhLyService.getDetail(idInput)
         .then((res) => {
           if (res.msg == MESSAGE.SUCCESS) {
-            this.formData.setValue({
+            this.formData.patchValue({
               ...res.data,
               soQd: res.data.soQd?.split('/')[0] ?? null,
               thoiGianTl: (res.data.thoiGianTlTu && res.data.thoiGianTlDen) ? [res.data.thoiGianTlTu, res.data.thoiGianTlDen] : null
 
             }, {emitEvent: false});
-
             this.formData.value.quyetDinhDtl.forEach(s => {
-              idVirtual: uuid.v4();
+              s.idVirtual = uuid.v4();
             });
-            this.changeHoSo(res.data.idHoSo);
+            this.buildTableView(this.formData.value.quyetDinhDtl);
           }
-          console.log(this.formData.value)
         })
         .catch((e) => {
           console.log("error: ", e);
           this.spinner.hide();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         });
-      this.formData.controls['idQd'].disable();
     } else {
       this.formData.patchValue({
         maDvi: this.userInfo.MA_DVI,
@@ -164,7 +156,7 @@ export class ThemMoiQuyetDinhThanhLyComponent extends Base2Component implements 
 
   async loadDsHoSo() {
     this.hoSoThanhLyService.search({
-      trangThai: STATUS.BAN_HANH,
+      trangThai: STATUS.DADUYET_BTC,
       paggingReq: {
         limit: this.globals.prop.MAX_INTERGER,
         page: this.page - 1,
@@ -184,9 +176,12 @@ export class ThemMoiQuyetDinhThanhLyComponent extends Base2Component implements 
 
   async save() {
     this.formData.disable({emitEvent: false});
+    if (this.formData.value.id == null) {
+      this.formData.value.quyetDinhDtl = this.formData.value.quyetDinhDtl.map(f => ({...f, id: null}))
+    }
     let body = {
       ...this.formData.value,
-      soQd: this.formData.value.soQd ? this.formData.value.soQd + this.maHauTo : this.maHauTo
+      soQd: this.formData.value.soQd ? this.formData.value.soQd + this.maHauTo : this.maHauTo,
     };
     if (this.formData.get('thoiGianTl').value) {
       body.thoiGianTlTu = dayjs(this.formData.get('thoiGianTl').value[0]).format('YYYY-MM-DD');
@@ -194,7 +189,12 @@ export class ThemMoiQuyetDinhThanhLyComponent extends Base2Component implements 
     }
     let rs = await this.createUpdate(body);
     this.formData.enable({emitEvent: false});
-    this.formData.patchValue({id: rs.id})
+    this.formData.patchValue({
+      id: rs.id,
+      quyetDinhDtl: rs.quyetDinhDtl
+    })
+    this.dataTable = cloneDeep(rs.quyetDinhDtl);
+    this.buildTableView(this.dataTable)
   }
 
   async saveAndSend(body: any, trangThai: string, msg: string, msgSuccess?: string) {
@@ -216,13 +216,20 @@ export class ThemMoiQuyetDinhThanhLyComponent extends Base2Component implements 
             if (res.data) {
               this.formData.patchValue({
                 soHoSo: res.data.soHoSo,
-                quyetDinhDtl: this.dataTable.length>0?this.dataTable:null,
-                tongSoLuongTl : this.dataTable.reduce((prev, cur) => prev + cur.slDaDuyet, 0),
-                tongSoLuongCon : this.dataTable.reduce((prev, cur) => prev + cur.slCon, 0),
-                tongThanhTien : this.dataTable.reduce((prev, cur) => prev + cur.thanhTien, 0),
+                quyetDinhDtl: res.data.hoSoDtl.filter(f => f.type === 'TD'),
+                tongSoLuongTl: res.data.hoSoDtl.reduce((prev, cur) => prev + cur.slDaDuyet, 0),
+                tongSoLuongCon: res.data.hoSoDtl.reduce((prev, cur) => prev + (cur.slDeXuat-cur.slDaDuyet), 0),
+                tongThanhTien: res.data.hoSoDtl.reduce((prev, cur) => prev + cur.thanhTien, 0),
               });
-              this.dataTable = cloneDeep(res.data.hoSoDtl);
-              this.buildTableView()
+              this.dataTable = cloneDeep(this.formData.value.quyetDinhDtl);
+              this.dataTable = this.dataTable.map((item) => {
+                return {
+                  ...item,
+                  ketQua: item.ketQuaDanhGia,
+                  slCon: item.slDeXuat - item.slDaDuyet
+                };
+              });
+              this.buildTableView(this.dataTable)
             }
           }
         })
@@ -250,24 +257,17 @@ export class ThemMoiQuyetDinhThanhLyComponent extends Base2Component implements 
   }
 
 
-  buildTableView() {
-    let data = cloneDeep(this.dataTable);
-    let dataView = chain(data)
+  buildTableView(data?: any) {
+    this.dataTable = chain(data)
       .groupBy("tenCuc")
       .map((value, key) => {
-        let rs = chain(value)
-        let rowItem = value.find(s => s.tenCuc === key);
         return {
           idVirtual: uuid.v4(),
           tenCuc: key,
           childData: value,
         };
       }).value();
-
-    this.dataTable = dataView;
-    console.log(this.dataTable)
     this.expandAll()
-
   }
 
   redirectDetail(id, b: boolean) {
