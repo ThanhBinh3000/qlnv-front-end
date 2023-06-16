@@ -118,7 +118,7 @@
             </nz-form-item>
           </div>
 
-          <div nz-col [nzSpan]="8">
+          <div nz-col [nzSpan]="24">
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true">
                 Nội dung báo cáo
@@ -185,7 +185,7 @@
             <td (nzExpandChange)="onExpandStringChange(item.idVirtual, $event)"
                 [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true" style="width: 35px"></td>
             <td>{{i + 1}}</td>
-            <td class="bold">{{ item.tenCuc }}</td>
+            <td class="bold">{{ item.tenChiCuc }}</td>
             <td></td>
             <td></td>
             <td></td>
@@ -217,15 +217,15 @@
                 <td>{{lv1.tenNhaKho}}</td>
                 <td>{{lv1.tenLoKho == null ? lv1.tenNganKho : lv1.tenLoKho}}</td>
                 <td>{{lv1.ngayNhapKho| date: 'dd/MM/YYYY'}}</td>
-                <td class="text-blue">{{lv1.slHienTai |number : '1.0-1' : 'vi_VN'}}</td>
-                <td class="text-blue">{{lv1.slDaDuyet |number : '1.0-1' : 'vi_VN'}}</td>
-                <td class="text-blue">{{lv1.slCon |number : '1.0-1' : 'vi_VN'}}</td>
-                <td class="text-blue">{{lv1.donViTinh}}</td>
-                <td class="text-blue">{{lv1.thanhTien |number : '1.0-1' : 'vi_VN'}}</td>
-                <td class="text-blue">{{lv1.lyDo}}</td>
-                <td class="text-blue">{{lv1.ketQua}}</td>
-                <td class="text-blue">{{lv1.ketQuaTl}}</td>
-                <td class="text-blue">{{lv1.tienThuDuoc |number : '1.0-1' : 'vi_VN'}}</td>
+                <td>{{lv1.slHienTai |number : '1.0-1' : 'vi_VN'}}</td>
+                <td>{{lv1.slDaDuyet |number : '1.0-1' : 'vi_VN'}}</td>
+                <td>{{lv1.slCon |number : '1.0-1' : 'vi_VN'}}</td>
+                <td>{{lv1.donViTinh}}</td>
+                <td>{{lv1.thanhTien |number : '1.0-1' : 'vi_VN'}}</td>
+                <td>{{lv1.lyDo}}</td>
+                <td>{{lv1.ketQua}}</td>
+                <td>{{lv1.ketQuaTl}}</td>
+                <td>{{lv1.tienThuDuoc |number : '1.0-1' : 'vi_VN'}}</td>
               </tr>
             </ng-container>
           </ng-container>
