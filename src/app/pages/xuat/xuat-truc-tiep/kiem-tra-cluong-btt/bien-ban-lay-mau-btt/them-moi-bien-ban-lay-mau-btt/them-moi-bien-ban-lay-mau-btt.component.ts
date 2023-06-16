@@ -175,15 +175,17 @@ export class ThemMoiBienBanLayMauBttComponent extends Base2Component implements 
               pthucBanTrucTiep: data.pthucBanTrucTiep,
             });
           } else {
-            this.soQdNvXh = data.soQdNv
-            this.formData.patchValue({
-              soQdNv: data.soQdNv,
-              idQdNv: data.id,
-              ngayQd: data.ngayTao,
-              moTaHangHoa: data.moTaHangHoa,
-              phanLoai: 'BL',
-              pthucBanTrucTiep: data.pthucBanTrucTiep,
-            });
+            if (data.pthucBanTrucTiep == '03') {
+              this.soQdNvXh = data.soQdNv
+              this.formData.patchValue({
+                soQdNv: data.soQdNv,
+                idQdNv: data.id,
+                ngayQd: data.ngayTao,
+                moTaHangHoa: data.moTaHangHoa,
+                phanLoai: 'BL',
+                pthucBanTrucTiep: data.pthucBanTrucTiep,
+              });
+            }
           }
           let dataChiCuc = data.children.filter(item => item.maDvi == this.userInfo.MA_DVI);
           if (dataChiCuc && dataChiCuc.length > 0) {
@@ -390,7 +392,6 @@ export class ThemMoiBienBanLayMauBttComponent extends Base2Component implements 
           tenNganKho: data.tenNganKho,
           maLoKho: data.maLoKho,
           tenLoKho: data.tenLoKho,
-          // soLuong: data.soLuong
         });
       }
     });
@@ -561,5 +562,4 @@ export class ThemMoiBienBanLayMauBttComponent extends Base2Component implements 
     this.canCuPhapLy = data.canCuPhapLy;
     this.fileNiemPhong = data.fileNiemPhong;
   }
-
 }
