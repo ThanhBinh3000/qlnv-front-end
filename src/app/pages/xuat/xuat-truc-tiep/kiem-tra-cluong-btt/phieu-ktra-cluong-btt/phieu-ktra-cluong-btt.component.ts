@@ -39,9 +39,11 @@ export class PhieuKtraCluongBttComponent extends Base2Component implements OnIni
       namKh: null,
       soQdNv: null,
       soPhieu: null,
+      ngayKnghiemTu: null,
+      ngayKnghiemDen: null,
+      soBienBan: null,
+      soBbXuatDoc: null,
       loaiVthh: null,
-      trichYeu: null,
-      ngayTao: null,
       maDvi: null,
       trangThai: null,
       maChiCuc: null

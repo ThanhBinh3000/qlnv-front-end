@@ -14,7 +14,6 @@ import { Base2Component } from 'src/app/components/base2/base2.component';
 import { DanhMucTieuChuanService } from 'src/app/services/quantri-danhmuc/danhMucTieuChuan.service';
 import { PhieuKtraCluongBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/ktra-cluong-btt/phieu-ktra-cluong-btt.service';
 import { BienBanLayMauBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/ktra-cluong-btt/bien-ban-lay-mau-btt.service';
-import { DonviService } from 'src/app/services/donvi.service';
 @Component({
   selector: 'app-them-phieu-ktra-cluong-btt',
   templateUrl: './them-phieu-ktra-cluong-btt.component.html',
@@ -40,45 +39,35 @@ export class ThemPhieuKtraCluongBttComponent extends Base2Component implements O
     private bienBanLayMauBttService: BienBanLayMauBttService,
     private danhMucService: DanhMucService,
     private danhMucTieuChuanService: DanhMucTieuChuanService,
-    private donViService: DonviService,
     private phieuKtraCluongBttService: PhieuKtraCluongBttService
   ) {
     super(httpClient, storageService, notification, spinner, modal, phieuKtraCluongBttService);
     this.formData = this.fb.group({
       id: [],
-      trangThai: [STATUS.DU_THAO],
-      tenTrangThai: ['Dự Thảo'],
-      ngayTao: [dayjs().format('YYYY-MM-DD')],
-      lyDoTuChoi: [''],
-      namKh: [dayjs().get('year'), [Validators.required]],
-      maDvi: ['', [Validators.required]],
-      tenDvi: ['', [Validators.required]],
+
+      namKh: [dayjs().get('year')],
+      maDvi: [''],
+      tenDvi: [''],
       maQhns: [''],
       idBienBan: [],
       soBienBan: ['', [Validators.required]],
-      soQdNv: ['', [Validators.required]],
-      idQdNv: ['', [Validators.required]],
+      soQdNv: [''],
+      idQdNv: [],
       ngayQd: [''],
       soHd: [''],
       idHd: [],
-
-      soPhieu: ['', [Validators.required]],
-
+      soPhieu: [''],
       idNgKnghiem: [''],
       tenNguoiKiemNghiem: [''],
-
       idTruongPhong: [''],
       tenTruongPhong: [''],
-
       idKtv: [''],
       tenKtv: [''],
-
       loaiVthh: [''],
       tenLoaiVthh: [''],
       cloaiVthh: [''],
       tenCloaiVthh: [''],
       moTaHangHoa: [''],
-
       idDdiemXh: [''],
       maDiemKho: ['', [Validators.required]],
       tenDiemKho: ['', [Validators.required]],
@@ -89,13 +78,15 @@ export class ThemPhieuKtraCluongBttComponent extends Base2Component implements O
       maLoKho: [''],
       tenLoKho: [''],
       soLuong: [],
-
-      hthucBquan: ['', [Validators.required]],
-      ngayLayMau: ['', [Validators.required]],
-      ngayKnghiem: ['', [Validators.required]],
-
+      hthucBquan: [''],
+      ngayLayMau: [''],
+      ngayKnghiem: [''],
       ketQua: [''],
       ketLuan: [''],
+      trangThai: [STATUS.DU_THAO],
+      tenTrangThai: ['Dự Thảo'],
+      ngayTao: [dayjs().format('YYYY-MM-DD')],
+      lyDoTuChoi: [''],
     })
   }
 
@@ -112,7 +103,7 @@ export class ThemPhieuKtraCluongBttComponent extends Base2Component implements O
 
   async openDialogBbLm() {
     let body = {
-      namKh: dayjs().get('year'),
+      namKh: this.formData.value.namKh,
       loaiVthh: this.loaiVthh,
       trangThai: this.STATUS.DA_DUYET_LDCC,
       // maDvi: this.userInfo.MA_DVI
@@ -136,16 +127,16 @@ export class ThemPhieuKtraCluongBttComponent extends Base2Component implements O
     }
 
     const modalQD = this.modal.create({
-      nzTitle: 'Danh sách biên bản lấy mẫu bán trực tiếp',
+      nzTitle: 'DANH SÁCH BIÊN BẢN LẤY MẪU BÁN TRỰC TIẾP',
       nzContent: DialogTableSelectionComponent,
       nzMaskClosable: false,
       nzClosable: false,
-      nzWidth: '900px',
+      nzWidth: '1000px',
       nzFooter: null,
       nzComponentParams: {
         dataTable: dataBbLM,
-        dataHeader: ['Số Biên bản', 'Loại hàng hóa', 'Chủng loại hàng hóa', 'Số lượng lấy mẫu'],
-        dataColumn: ['soBienBan', 'tenLoaiVthh', 'tenCloaiVthh', 'soLuongLayMau'],
+        dataHeader: ['Số Biên bản lấy mẫu/bàn giao mẫu', 'Ngày lấy mẫu', 'Loại hàng hóa', 'Chủng loại hàng hóa', 'Số lượng lấy mẫu'],
+        dataColumn: ['soBienBan', 'ngayLayMau', 'tenLoaiVthh', 'tenCloaiVthh', 'soLuongLayMau'],
       },
     })
     modalQD.afterClose.subscribe(async (dataChose) => {
@@ -222,6 +213,15 @@ export class ThemPhieuKtraCluongBttComponent extends Base2Component implements O
     }
   }
 
+  isDisabledQD() {
+    if (this.formData.value.id == null) {
+      return false
+    } else {
+      return true;
+    }
+  }
+
+
   async initForm() {
     let id = await this.userService.getId('XH_PHIEU_KTRA_CLUONG_BTT_SEQ')
     this.formData.patchValue({
@@ -257,7 +257,8 @@ export class ThemPhieuKtraCluongBttComponent extends Base2Component implements O
     ];
   }
 
-  async save(isGuiDuyet?: boolean) {
+  async save(isGuiDuyet?) {
+    this.setValidator(isGuiDuyet);
     let body = this.formData.value;
     body.children = this.dataTable;
     body.fileDinhKems = this.fileDinhKem;
@@ -267,7 +268,8 @@ export class ThemPhieuKtraCluongBttComponent extends Base2Component implements O
         this.id = data.id
         this.pheDuyet(true);
       } else {
-        this.goBack();
+        this.id = data.id
+        this.loadChitiet();
       }
     }
   }
@@ -342,6 +344,41 @@ export class ThemPhieuKtraCluongBttComponent extends Base2Component implements O
         }
       },
     });
+  }
+
+  setValidator(isGuiDuyet) {
+    if (isGuiDuyet) {
+      this.formData.controls["namKh"].setValidators([Validators.required]);
+      this.formData.controls["maDvi"].setValidators([Validators.required]);
+      this.formData.controls["tenDvi"].setValidators([Validators.required]);
+      this.formData.controls["maQhns"].setValidators([Validators.required]);
+      this.formData.controls["soQdNv"].setValidators([Validators.required]);
+      this.formData.controls["soPhieu"].setValidators([Validators.required]);
+      this.formData.controls["loaiVthh"].setValidators([Validators.required]);
+      this.formData.controls["tenLoaiVthh"].setValidators([Validators.required]);
+      this.formData.controls["cloaiVthh"].setValidators([Validators.required]);
+      this.formData.controls["tenCloaiVthh"].setValidators([Validators.required]);
+      this.formData.controls["hthucBquan"].setValidators([Validators.required]);
+      this.formData.controls["ngayLayMau"].setValidators([Validators.required]);
+      this.formData.controls["ngayKnghiem"].setValidators([Validators.required]);
+      this.formData.controls["ketQua"].setValidators([Validators.required]);
+    } else {
+      this.formData.controls["namKh"].clearValidators();
+      this.formData.controls["maDvi"].clearValidators();
+      this.formData.controls["tenDvi"].clearValidators();
+      this.formData.controls["maQhns"].clearValidators();
+      this.formData.controls["soQdNv"].clearValidators();
+      this.formData.controls["soPhieu"].clearValidators();
+      this.formData.controls["loaiVthh"].clearValidators();
+      this.formData.controls["tenLoaiVthh"].clearValidators();
+      this.formData.controls["cloaiVthh"].clearValidators();
+      this.formData.controls["tenCloaiVthh"].clearValidators();
+      this.formData.controls["hthucBquan"].clearValidators();
+      this.formData.controls["ngayLayMau"].clearValidators();
+      this.formData.controls["ngayKnghiem"].clearValidators();
+      this.formData.controls["ketQua"].clearValidators();
+
+    }
   }
 
 }
