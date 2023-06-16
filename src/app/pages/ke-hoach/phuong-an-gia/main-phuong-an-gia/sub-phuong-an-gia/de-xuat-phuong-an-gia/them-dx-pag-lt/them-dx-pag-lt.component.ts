@@ -27,6 +27,7 @@ import {
   DialogTableSelectionComponent
 } from "../../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
 import {DonviService} from "../../../../../../../services/donvi.service";
+import {AMOUNT} from "../../../../../../../Utility/utils";
 
 
 @Component({
@@ -37,13 +38,14 @@ import {DonviService} from "../../../../../../../services/donvi.service";
 export class ThemDeXuatPagLuongThucComponent implements OnInit {
   @Input('isView') isView: boolean;
   @Input() pagType: string;
-  @Input()
-  idInput: number;
+  @Input() idInput: number;
   @Output('onClose') onClose = new EventEmitter<any>();
-  @Input()
-  type: string;
-  rowItemTtc: ThongTinChungPag = new ThongTinChungPag();
+  @Input() type: string;
+  @Input()  dviTinh: string;
 
+  amount = AMOUNT;
+  rowItemTtc: ThongTinChungPag = new ThongTinChungPag();
+  dataEditTtc: { [key: string]: { edit: boolean; data: ThongTinChungPag } } = {};
   STATUS: any;
   isGiaMuaToiDa: boolean = false;
   isVat: boolean = false;
@@ -61,6 +63,8 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
   soDeXuat: string;
   dsLoaiGia: any[] = [];
   dsDiaDiemDeHang: any[] = [];
+  dataTableKqGia: any[];
+  dataTableTtThamKhao: any[];
   dsPhuongAnGia: any[] = [];
   dsLoaiDx: any[] = [];
   dsLoaiHangXdg: any[] = [];
@@ -74,14 +78,9 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
   dataEdit: { [key: string]: { edit: boolean; data: CanCuXacDinhPag } } = {};
 
   dataTableKsGia: any[];
-
-  dataTableKqGia: any[];
-  listVat: any[];
-  dataTableTtThamKhao: any[];
-  dviTinh: string;
   fileDkPhanTich: any[] = [];
   dsChiCuc: any[] = [];
-  dsDiemKho: any[] = [];
+  listVat: any[];
 
 
   constructor(
@@ -181,6 +180,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
       this.loadDsDxCanSua();
       this.loadDsChiCuc();
       await this.getDataDetail(this.idInput)
+    console.log(this.isGiaMuaToiDa,22222)
     this.spinner.hide();
   }
 
@@ -285,12 +285,14 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
       await this.loadDsQdPduyetKhBdg();
       this.dataTableCanCuXdg = data.canCuPhapLy;
       this.dsDiaDiemDeHang = data.diaDiemDeHangs;
+      this.pagTtChungs = data.pagTtChungs;
       this.dataTableKsGia = data.ketQuaKhaoSatGiaThiTruong;
       this.dataTableKqGia = data.ketQuaThamDinhGia;
       this.dataTableTtThamKhao = data.ketQuaKhaoSatTtThamKhao;
       this.fileDinhKem = data.fileDinhKems;
       this.fileDkPhanTich = data.filePhanTich;
-      this.updateEditCache()
+      this.updateEditCache('ttc');
+      this.updateEditCache('ppxdg');
     }
   }
 
@@ -540,6 +542,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
     body.canCuPhapLy = this.dataTableCanCuXdg;
     body.ketQuaKhaoSatGiaThiTruong = this.dataTableKsGia;
     body.ketQuaThamDinhGia = this.dataTableKqGia;
+    body.pagTtChungs = this.pagTtChungs;
     body.ketQuaKhaoSatTtThamKhao = this.dataTableTtThamKhao;
     body.diaDiemDeHangs = this.dsDiaDiemDeHang;
     body.fileDinhKemReqs = this.fileDinhKem;
@@ -718,28 +721,71 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
     })
   }
 
-  themDataTable() {
-    this.dataTableCanCuXdg = [...this.dataTableCanCuXdg, this.rowItemCcXdg];
-    this.rowItemCcXdg = new CanCuXacDinhPag();
-    this.updateEditCache();
+  required(page : string) : string {
+    let message ;
+    if(page == 'ttc') {
+      if (!this.rowItemTtc.maChiCuc || !this.rowItemTtc.donViTinh || !this.rowItemTtc.soLuong || !this.rowItemTtc.giaDn) {
+        message = 'Vui lòng nhập đủ thông tin'
+      }
+    } else if (page == 'ppxdg') {
+      if (!this.rowItemCcXdg.moTa || !this.rowItemCcXdg.fileDinhKem) {
+        message = 'Vui lòng nhập đủ thông tin'
+      }
+    }
+    return message;
   }
 
-  startEdit(index: number) {
-    this.dataEdit[index].edit = true;
+  themDataTable(page : string) {
+    if (page == 'ttc') {
+      this.rowItemTtc.donViTinh = this.dviTinh;
+    }
+    let msgRequired = this.required(page);
+    if (msgRequired) {
+      this.notification.error(MESSAGE.ERROR, msgRequired);
+      this.spinner.hide();
+      return;
+    }
+    if (page == 'ttc') {
+      this.pagTtChungs = [...this.pagTtChungs, this.rowItemTtc];
+      this.rowItemTtc = new ThongTinChungPag();
+      this.updateEditCache(page);
+    }
+    if (page == 'ppxdg') {
+      this.dataTableCanCuXdg = [...this.dataTableCanCuXdg, this.rowItemCcXdg];
+      this.rowItemCcXdg = new CanCuXacDinhPag();
+      this.updateEditCache(page);
+    }
   }
 
-  cancelEdit(index: number) {
-    this.dataEdit[index] = {
-      data: {...this.dataTableCanCuXdg[index]},
-      edit: false,
-    };
+  startEdit(index: number, page :string) {
+    if (page == 'ttc') {
+      this.dataEditTtc[index].edit = true;
+    }
+    if (page == 'ppxdg') {
+      this.dataEdit[index].edit = true;
+    }
   }
 
-  saveEdit(idx: number) {
+  cancelEdit(index: number, page : string) {
+    if (page == 'ttc') {
+      this.dataEditTtc[index] = {
+        data: {...this.pagTtChungs[index]},
+        edit: false,
+      };
+    }
+    if (page == 'ppxdg') {
+      this.dataEdit[index] = {
+        data: {...this.dataTableCanCuXdg[index]},
+        edit: false,
+      };
+    }
+  }
+
+  saveEdit(idx: number, page : string) {
 
   }
 
-  deleteItem(index: number) {
+  deleteItem(index: number, page  :string) {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -750,8 +796,14 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
       nzWidth: 400,
       nzOnOk: async () => {
         try {
-          this.dataTableCanCuXdg.splice(index, 1);
-          this.updateEditCache();
+          if (page == 'ppxdg') {
+            this.dataTableCanCuXdg.splice(index, 1);
+            this.updateEditCache(page);
+          }
+          if (page == 'ttc') {
+            this.pagTtChungs.splice(index, 1);
+            this.updateEditCache(page);
+          }
         } catch (e) {
           console.log('error', e);
         }
@@ -759,14 +811,26 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
     });
   }
 
-  updateEditCache(): void {
-    if (this.dataTableCanCuXdg) {
-      this.dataTableCanCuXdg.forEach((item, index) => {
-        this.dataEdit[index] = {
-          edit: false,
-          data: {...item},
-        };
-      });
+  updateEditCache(page  :string): void {
+    if(page == 'ttc') {
+      if (this.pagTtChungs) {
+        this.pagTtChungs.forEach((item, index) => {
+          this.dataEditTtc[index] = {
+            edit: false,
+            data: {...item},
+          };
+        });
+      }
+    }
+    if(page == 'ppxdg') {
+      if (this.dataTableCanCuXdg) {
+        this.dataTableCanCuXdg.forEach((item, index) => {
+          this.dataEdit[index] = {
+            edit: false,
+            data: {...item},
+          };
+        });
+      }
     }
   }
 
@@ -871,13 +935,14 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
      this.dataTableTtThamKhao = data.ketQuaKhaoSatTtThamKhao;
      this.fileDinhKem = data.fileDinhKems;
      this.fileDkPhanTich = data.filePhanTich;
-     this.updateEditCache()
+     this.updateEditCache('ttc');
+     this.updateEditCache('ppxdg');
   }
 
-  onChangeIsApDungTatCa(event) {
-    this.formData.patchValue({
-      apDungTatCa : event
-    })
+  onChangeIsApDungTatCa() {
+    this.pagTtChungs = [];
+    this.updateEditCache('ttc');
+    this.updateEditCache('ppxdg');
   }
 
   async loadDsChiCuc() {
@@ -889,16 +954,10 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
   }
 
   async changeChiCuc(event) {
-    const dsTong = await this.donViService.layTatCaDonViByLevel(4);
-    this.dsDiemKho = dsTong.data
-    this.dsDiemKho = this.dsDiemKho.filter(item => item.maDvi.startsWith(event))
-  }
-
-  onChangDiemKho(event) {
-    const diemKho = this.dsDiemKho.filter(item => item.maDvi == event);
-    if (diemKho) {
-        this.rowItemTtc.tenDiemKho = diemKho[0].tenDvi;
-      }
+    let list = this.dsChiCuc.filter(item => item.maDvi == event)
+    if(list && list.length > 0) {
+      this.rowItemTtc.tenChiCuc = list[0]?.tenDvi
+    }
   }
 }
 

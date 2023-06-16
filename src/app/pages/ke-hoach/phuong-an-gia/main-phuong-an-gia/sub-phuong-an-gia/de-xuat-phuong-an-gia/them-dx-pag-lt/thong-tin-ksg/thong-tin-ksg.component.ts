@@ -8,6 +8,9 @@ import {NzModalService} from "ng-zorro-antd/modal";
 import {MESSAGE} from "../../../../../../../../constants/message";
 import {NzNotificationService} from "ng-zorro-antd/notification";
 import {NgxSpinnerService} from "ngx-spinner";
+import {DonviService} from "../../../../../../../../services/donvi.service";
+import {UserLogin} from "../../../../../../../../models/userlogin";
+import {UserService} from "../../../../../../../../services/user.service";
 
 @Component({
   selector: 'app-thong-tin-ksg',
@@ -24,8 +27,7 @@ export class ThongTinKsgComponent implements OnInit, OnChanges {
   @Input()
   isTabNdKhac: boolean;
 
-  @Input()
-  dataTable : any[] = [];
+  @Input() dataTable : any[] = [];
 
   @Output()
   dataTableChange = new EventEmitter<any>();
@@ -42,11 +44,15 @@ export class ThongTinKsgComponent implements OnInit, OnChanges {
   @Input()
   dataCloaiVthh : any;
 
+  dsChiCuc : any[]=[]
+  userInfo  : UserLogin
   rowItem: ThongTinKhaoSatGia = new ThongTinKhaoSatGia();
-  dataEdit: { [key: string]: { edit: boolean; data: ThongTinKhaoSatGia } } = {};
+  dataEdit: { [key: string]: { edit: boolean; data: ThongTinKhaoSatGia }} = {};
   constructor(
     private uploadFileService: UploadFileService,
+    private userService: UserService,
     public globals: Globals,
+    public donViService: DonviService,
     public modal: NzModalService,
     public notification: NzNotificationService,
     public spinner: NgxSpinnerService,
@@ -54,8 +60,10 @@ export class ThongTinKsgComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-    this.emitDataTable()
-    this.updateEditCache()
+    this.userInfo = this.userService.getUserLogin();
+    this.emitDataTable();
+    this.updateEditCache();
+    this.loadDsChiCuc();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -172,7 +180,7 @@ export class ThongTinKsgComponent implements OnInit, OnChanges {
   }
 
   updateEditCache(): void {
-    if (this.dataTable) {
+    if (this.dataTable && this.dataTable.length > 0) {
       this.dataTable.forEach((item, index) => {
         this.dataEdit[index] = {
           edit: false,
@@ -195,5 +203,20 @@ export class ThongTinKsgComponent implements OnInit, OnChanges {
       data: { ...this.dataTable[stt] },
       edit: false
     };
+  }
+
+  async loadDsChiCuc() {
+    let res = await this.donViService.layTatCaDonViByLevel(3);
+    if (res && res.data) {
+      this.dsChiCuc = res.data
+      this.dsChiCuc = this.dsChiCuc.filter(item => item.type != "PB" && item.maDvi.startsWith(this.userInfo.MA_DVI))
+    }
+  }
+
+  async changeChiCuc(event) {
+    let list = this.dsChiCuc.filter(item => item.maDvi == event)
+    if(list && list.length > 0) {
+      this.rowItem.tenChiCuc = list[0]?.tenDvi
+    }
   }
 }

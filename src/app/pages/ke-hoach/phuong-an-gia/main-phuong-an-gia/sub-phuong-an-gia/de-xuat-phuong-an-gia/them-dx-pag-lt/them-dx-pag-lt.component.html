@@ -168,7 +168,7 @@
           <div nz-col nzSpan="4" class="mt-1">
             <nz-form-item>
               <label [nzDisabled]="isView" nz-checkbox formControlName="apDungTatCa"
-                     (ngModelChange)="onChangeIsApDungTatCa($event)" class="font-weight-bold">
+                     (ngModelChange)="onChangeIsApDungTatCa()" class="font-weight-bold">
                 Áp dụng cho tất cả các chi cục
               </label>
             </nz-form-item>
@@ -340,20 +340,17 @@
       <nz-table #editRowTable [nzData]="pagTtChungs" [nzFrontPagination]="false" [nzShowPagination]="false" *ngIf="formData.value.apDungTatCa == false">
         <thead>
         <tr>
-          <th class="text-center" style="width: 4%;">STT</th>
-          <th style="width: 20%;">Chi cục</th>
-          <th style="width: 20%;">Điểm kho</th>
-          <th style="width: 7%;">Số lượng (tấn)</th>
-          <th style="width: 7%;">Đơn vị tính</th>
-          <th style="width: 24%;">Đơn giá chưa VAT (đồng)</th>
-          <th style="width: 24%;"  *ngIf="formData.value.loaiGia == 'LG01' || formData.value.loaiGia == 'LG03'">Đơn giá có VAT (đồng)</th>
-          <th style="width: 10%;">Hành động</th>
+          <th class="text-center" nzWidth="45px">STT</th>
+          <th class="text-center" >Chi cục</th>
+          <th class="text-center" nzWidth="150px" >Số lượng (tấn)</th>
+          <th class="text-center" nzWidth="100px" >Đơn vị tính</th>
+          <th class="text-center" nzWidth="150px" >Đơn giá chưa VAT (đồng)</th>
+          <th class="text-center" nzWidth="150px"   *ngIf="formData.value.loaiGia == 'LG01' || formData.value.loaiGia == 'LG03'">Đơn giá có VAT (đồng)</th>
+          <th class="text-center" nzWidth="120px"  >Hành động</th>
         </tr>
-        </thead>
-        <tbody>
         <tr>
-          <td></td>
-          <td style="width: 9%;">
+          <th></th>
+          <th >
             <nz-input-group>
               <nz-select [(ngModel)]="rowItemTtc.maChiCuc" nzAllowClear (ngModelChange)="changeChiCuc($event)">
                 <nz-option nzValue="null" nzDisabled nzHide></nz-option>
@@ -361,65 +358,57 @@
                 </nz-option>
               </nz-select>
             </nz-input-group>
-          </td>
-
-          <td style="width: 9%;">
+          </th>
+          <th>
             <nz-input-group>
-              <nz-select [(ngModel)]="rowItemTtc.maDiemKho" nzAllowClear (ngModelChange)="onChangDiemKho($event)">
-                <nz-option nzValue="null" nzDisabled nzHide></nz-option>
-                <nz-option nzValue="{{item.maDvi}}" nzLabel="{{item.tenDvi}}" *ngFor="let item of dsDiemKho">
-                </nz-option>
-              </nz-select>
+              <input class="money-input" currencyMask [options]="amount"  name="soLuong" [(ngModel)]="rowItemTtc.soLuong" nz-input />
             </nz-input-group>
-          </td>
-          <td>
-            <nz-input-group>
-              <input type="text" name="soLuong" [(ngModel)]="rowItemTtc.soLuong" nz-input />
-            </nz-input-group>
-          </td>
-          <td>
+          </th>
+          <th>
             <nz-input-group>
               <input nz-input type="text" name="donViTinh" [(ngModel)]="dviTinh" readonly>
             </nz-input-group>
-          </td>
-          <td>
+          </th>
+          <th>
             <nz-input-group>
               <nz-input-number name="giaDn" [(ngModel)]="rowItemTtc.giaDn" [nzSize]="'small'" nz-input [nzMin]="0">
               </nz-input-number>
             </nz-input-group>
-          </td>
-          <td *ngIf="formData.value.loaiGia == 'LG01' || formData.value.loaiGia == 'LG03'">
+          </th>
+          <th *ngIf="formData.value.loaiGia == 'LG01' || formData.value.loaiGia == 'LG03'">
             <nz-input-group>
               <nz-input-number name="giaDnVat" [(ngModel)]="rowItemTtc.giaDnVat" [nzSize]="'small'" nz-input
                                [nzMin]="0">
               </nz-input-number>
             </nz-input-group>
-          </td>
-          <td style="text-align: center;">
-<!--            <a *ngIf="!isView">-->
-<!--              <i class="fa fa-plus" (click)="themDataTable('ttc')"></i>-->
-<!--            </a>-->
-<!--            <a>-->
-<!--              <i class="icon  htvbdh_nhap-lai1 "></i>-->
-<!--            </a>-->
-          </td>
+          </th>
+          <th style="text-align: center;">
+            <a *ngIf="!isView">
+              <i class="fa fa-plus" (click)="themDataTable('ttc')"></i>
+            </a>
+            <a>
+              <i class="icon  htvbdh_nhap-lai1 "></i>
+            </a>
+          </th>
         </tr>
+
+        </thead>
+        <tbody>
         <tr *ngFor="let data of pagTtChungs; let idx = index">
-          <ng-container *ngIf="!dataEdit[idx].edit; else editTemplate">
+          <ng-container *ngIf="!dataEditTtc[idx].edit; else editTemplate">
             <td>{{ idx + 1 }}</td>
             <td>{{ data.tenChiCuc }}</td>
-            <td>{{ data.tenDiemKho }}</td>
-            <td>{{ data.soLuong }}</td>
+            <td class="text-right">{{ data.soLuong | number : '1.0-1' : 'vi-VN'}}</td>
             <td>{{ data.donViTinh }}</td>
-            <td>{{ data.giaDn }}</td>
-            <td *ngIf="formData.value.loaiGia == 'LG01' || formData.value.loaiGia == 'LG03'" >{{ data.giaDnVat }}</td>
+            <td class="text-right">{{ data.giaDn | number : '1.0-1' : 'vi-VN' }}</td>
+            <td class="text-right" *ngIf="formData.value.loaiGia == 'LG01' || formData.value.loaiGia == 'LG03'" >{{ data.giaDnVat | number : '1.0-1' : 'vi-VN' }}</td>
             <td style="text-align: center;">
-<!--              <a *ngIf="!isView">-->
-<!--                <i class=" fa fa-pencil" (click)="startEdit(idx, 'ttc')"></i>-->
-<!--              </a>-->
-<!--              <a *ngIf="!isView" (click)="deleteItem(idx, 'ttc')">-->
-<!--                <i class="fa fa-trash-o do"></i>-->
-<!--              </a>-->
+              <a *ngIf="!isView">
+                <i class=" fa fa-pencil" (click)="startEdit(idx, 'ttc')"></i>
+              </a>
+              <a *ngIf="!isView" (click)="deleteItem(idx, 'ttc')">
+                <i class="fa fa-trash-o do"></i>
+              </a>
             </td>
           </ng-container>
           <ng-template #editTemplate>
@@ -506,7 +495,7 @@
             </th>
             <th class="text-left">
               <a *ngIf="!isView">
-                <i class="icon htvbdh_dau-cong" (click)="themDataTable()"></i>
+                <i class="icon htvbdh_dau-cong" (click)="themDataTable('ppxdg')"></i>
               </a>
               <a *ngIf="!isView">
                 <i class="icon  htvbdh_nhap-lai1 "></i>
@@ -524,10 +513,10 @@
                 <a  (click)="downloadFile(data.fileDinhKem)">
                   <i class="icon htvbdh_tcdt_import "></i>
                 </a>
-                <a *ngIf="!isView" (click)="startEdit(idx)">
+                <a *ngIf="!isView" (click)="startEdit(idx, 'ppxdg')">
                   <i class="fa fa-pencil"></i>
                 </a>
-                <a *ngIf="!isView" (click)="deleteItem(idx)">
+                <a *ngIf="!isView" (click)="deleteItem(idx, 'ppxdg')">
                   <i class="fa fa-trash-o do"></i>
                 </a>
               </td>
@@ -555,10 +544,10 @@
                 <a (click)="downloadFile(dataEdit[idx].data.fileDinhKem)">
                   <i class="icon htvbdh_tcdt_import "></i>
                 </a>
-                <a (click)="saveEdit(idx)" class="save">
+                <a (click)="saveEdit(idx, 'ppxdg')" class="save">
                   <i class="fa fa-save"></i>
                 </a>
-                <a (click)="cancelEdit(idx)">
+                <a (click)="cancelEdit(idx, 'ppxdg')">
                   <i class="fa fa-ban do"></i> </a>
               </td>
             </ng-template>
@@ -661,7 +650,7 @@
         <app-thong-tin-ksg [dataCloaiVthh]="formData.value" [isView]="isView" *ngIf="dataTableKsGia || !idInput" [vat]="formData.value.vat ? formData.value.vat  : 0 " [isTabNdKhac]="false"  [isTableKetQua]="false" [(dataTable)]="dataTableKqGia"
                            [isVat]="formData.value.loaiGia == 'LG01' || formData.value.loaiGia == 'LG03'"></app-thong-tin-ksg>
         <span class="sub-title mb-10">CÁC THÔNG TIN KHÁC</span>
-        <app-thong-tin-ksg  [isView]="isView" [isTableKetQua]="false" [(dataTable)]="dataTableTtThamKhao" [vat]="formData.value.vat ? formData.value.vat : 0 " [isTabNdKhac]="true"></app-thong-tin-ksg>
+        <app-thong-tin-ksg  [isView]="isView" [isTableKetQua]="false"  [vat]="formData.value.vat ? formData.value.vat : 0 " [isTabNdKhac]="true" [(dataTable)]="dataTableTtThamKhao"></app-thong-tin-ksg>
       </nz-card>
     </nz-tab>
 

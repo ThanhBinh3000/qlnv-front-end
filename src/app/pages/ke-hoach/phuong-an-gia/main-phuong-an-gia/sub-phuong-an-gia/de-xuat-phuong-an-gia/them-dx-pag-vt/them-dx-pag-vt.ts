@@ -555,11 +555,24 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     }
   }
 
-  cancelEdit(index: number) {
-    this.dataEdit[index] = {
-      data: {...this.pagPpXacDinhGias[index]},
-      edit: false,
-    };
+  cancelEdit(index: number, page : string) {
+    if (page == 'ttc') {
+      this.dataEdit[index] = {
+        data: {...this.pagTtChungs[index]},
+        edit: false,
+      };    }
+    if (page == 'ccXdg') {
+      this.dataEditCc[index] = {
+        data: {...this.dataTableCanCuXdg[index]},
+        edit: false,
+      };
+    }
+    if (page == 'ppxdg') {
+      this.dataEditPp[index] = {
+        data: {...this.pagPpXacDinhGias[index]},
+        edit: false,
+      };
+    }
   }
 
   async getDataChiTieu() {
