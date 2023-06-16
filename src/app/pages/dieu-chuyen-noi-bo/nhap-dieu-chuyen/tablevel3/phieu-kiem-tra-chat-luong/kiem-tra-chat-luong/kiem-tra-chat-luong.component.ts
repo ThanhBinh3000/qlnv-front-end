@@ -24,7 +24,7 @@ import * as uuidv4 from "uuid";
   styleUrls: ['./kiem-tra-chat-luong.component.scss']
 })
 export class KiemTraChatLuongComponent extends Base2Component implements OnInit {
-
+  @Input() loaiDc: string;
   isVisibleChangeTab$ = new Subject();
   visibleTab: boolean = true;
   tabSelected: number = 0;
@@ -85,7 +85,7 @@ export class KiemTraChatLuongComponent extends Base2Component implements OnInit 
   }
 
 
-  // dsDonvi: any[] = [];
+  data: any = [];
   // userInfo: UserLogin;
   // userdetail: any = {};
   dataTableView: any[] = [];
@@ -320,7 +320,7 @@ export class KiemTraChatLuongComponent extends Base2Component implements OnInit 
   }
 
   add(data: any) {
-    // this.data = data;
+    this.data = data;
     this.isDetail = true;
     this.isView = false;
   }
@@ -357,7 +357,6 @@ export class KiemTraChatLuongComponent extends Base2Component implements OnInit 
     this.selectedId = id;
     this.isDetail = true;
     this.isView = b;
-    // this.isViewDetail = isView ?? false;
   }
 
   quayLai() {

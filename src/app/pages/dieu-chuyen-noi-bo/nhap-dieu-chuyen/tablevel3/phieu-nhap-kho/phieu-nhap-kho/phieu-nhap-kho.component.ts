@@ -15,7 +15,7 @@ import { CHUC_NANG, STATUS } from 'src/app/constants/status';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { Subject } from 'rxjs';
 import { QuyetDinhDieuChuyenTCService } from 'src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-tc.service';
-import { PhieuNhapKhoService } from 'src/app/services/qlnv-hang/nhap-hang/mua-truc-tiep/nhapkho/PhieuNhapKho.service';
+import { PhieuNhapKhoService } from 'src/app/services/dieu-chuyen-noi-bo/nhap-dieu-chuyen/phieu-nhap-kho';
 
 @Component({
   selector: 'app-phieu-nhap-kho',
@@ -27,8 +27,7 @@ export class PhieuNhapKhoComponent extends Base2Component implements OnInit {
   isVisibleChangeTab$ = new Subject();
   visibleTab: boolean = true;
   tabSelected: number = 0;
-  @Input()
-  idTHop: number;
+  @Input() loaiDc: string;
 
   @Input()
   loaiVthh: string;
@@ -76,8 +75,9 @@ export class PhieuNhapKhoComponent extends Base2Component implements OnInit {
       soQdinh: null,
       ngayDuyetTc: null,
       ngayHieuLuc: null,
-      loaiDc: null,
       trichYeu: null,
+      type: ["01"],
+      loaiDc: ["DCNB"]
     })
     this.filterTable = {
       nam: '',
@@ -135,8 +135,8 @@ export class PhieuNhapKhoComponent extends Base2Component implements OnInit {
       this.visibleTab = value;
     });
 
-    if (this.idTHop)
-      this.redirectDetail(0, false)
+    // if (this.idTHop)
+    //   this.redirectDetail(0, false)
 
     try {
       this.initData()

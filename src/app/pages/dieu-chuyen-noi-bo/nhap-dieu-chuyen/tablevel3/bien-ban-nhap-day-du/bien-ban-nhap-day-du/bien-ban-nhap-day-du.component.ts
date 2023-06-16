@@ -27,8 +27,7 @@ export class BienBanNhapDayDuComponent extends Base2Component implements OnInit 
   isVisibleChangeTab$ = new Subject();
   visibleTab: boolean = true;
   tabSelected: number = 0;
-  @Input()
-  idTHop: number;
+  @Input() loaiDc: string;
 
   @Input()
   loaiVthh: string;
@@ -76,8 +75,9 @@ export class BienBanNhapDayDuComponent extends Base2Component implements OnInit 
       soQdinh: null,
       ngayDuyetTc: null,
       ngayHieuLuc: null,
-      loaiDc: null,
       trichYeu: null,
+      type: ["01"],
+      loaiDc: ["DCNB"]
     })
     this.filterTable = {
       nam: '',
@@ -135,8 +135,7 @@ export class BienBanNhapDayDuComponent extends Base2Component implements OnInit 
       this.visibleTab = value;
     });
 
-    if (this.idTHop)
-      this.redirectDetail(0, false)
+
 
     try {
       this.initData()

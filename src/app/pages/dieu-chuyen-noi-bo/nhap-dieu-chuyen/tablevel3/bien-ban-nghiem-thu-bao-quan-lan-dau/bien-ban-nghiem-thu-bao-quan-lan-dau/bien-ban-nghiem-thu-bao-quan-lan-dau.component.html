@@ -106,7 +106,7 @@
                 <td [nzExpand]="row1.expand"
                   (nzExpandChange)="row1.expand=!row1.expand; row1.children=setExpand(row1.expand, row1.children)">
                 </td>
-                <td class="bold" class="text-blue" (click)="redirectDetail(0,false)">{{ row1.soQdinh || "" }}</td>
+                <td class="bold text-blue" (click)="redirectDetail(0,false)">{{ row1.soQdinh || "" }}</td>
                 <td class="bold">{{ row1.namKh || "" }}</td>
                 <td></td>
                 <td></td>
@@ -210,7 +210,7 @@
                               'vi_VN')}}</td>
                             <td>{{(row5.tongKinhPhiPd |number: '1.0-1':
                               'vi_VN')}}</td>
-                            <td></td>
+                            <td>{{(row5.trangThai || "")}}</td>
                             <td>
                               <a *ngIf="row5.trangThai !== STATUS.DU_THAO" (click)="redirectDetail(row5.id, true)">
                                 <i class="fa fa-eye"></i>
@@ -242,8 +242,8 @@
   </div>
 
   <div class="chi-tiet" *ngIf="isDetail">
-    <app-thong-tin-bien-ban-nghiem-thu-bao-quan-lan-dau [isView]="isView" [idInput]="selectedId" [data]="data"
-      (showListEvent)="quayLai()"></app-thong-tin-bien-ban-nghiem-thu-bao-quan-lan-dau>
+    <app-thong-tin-bien-ban-nghiem-thu-bao-quan-lan-dau [loaiDc]="loaiDc" [isView]="isView" [idInput]="selectedId"
+      [data]="data" (showListEvent)="quayLai()"></app-thong-tin-bien-ban-nghiem-thu-bao-quan-lan-dau>
   </div>
 
 </div>

@@ -11,6 +11,7 @@ import {
 } from "src/app/components/dialog/dialog-table-selection/dialog-table-selection.component";
 import { MESSAGE } from "src/app/constants/message";
 import { STATUS } from "src/app/constants/status";
+import { DanhMucDungChungService } from "src/app/services/danh-muc-dung-chung.service";
 import { DanhMucService } from "src/app/services/danhmuc.service";
 import { BienBanNghiemThuBaoQuanLanDauService } from "src/app/services/dieu-chuyen-noi-bo/nhap-dieu-chuyen/bien-ban-nghiem-thu-bao-quan-lan-dau.service";
 import { PhieuKiemTraChatLuongService } from "src/app/services/dieu-chuyen-noi-bo/nhap-dieu-chuyen/phieu-kiem-tra-chat-luong";
@@ -25,9 +26,10 @@ import { StorageService } from "src/app/services/storage.service";
   styleUrls: ['./thong-tin-kiem-tra-chat-luong.component.scss']
 })
 export class ThongTinKiemTraChatLuongComponent extends Base2Component implements OnInit {
-
   @Input() idInput: number;
   @Input() isView: boolean;
+  @Input() data: any;
+  @Input() loaiDc: string;
   @Output()
   showListEvent = new EventEmitter<any>();
 
@@ -50,7 +52,7 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
   // dsHangPD: [];
   // typeData: string;
   // typeAction: string;
-
+  ppKtrCL: any[] = [];
   phieuKTCLDinhKem: any[] = [];
   bienBanLayMauDinhKem: any[] = [];
 
@@ -63,6 +65,7 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
     modal: NzModalService,
     private danhMucService: DanhMucService,
     private danhMucTieuChuanService: DanhMucTieuChuanService,
+    private dmService: DanhMucDungChungService,
     private quyetDinhDieuChuyenCucService: QuyetDinhDieuChuyenCucService,
     private phieuKiemTraChatLuongService: PhieuKiemTraChatLuongService,
   ) {
@@ -126,7 +129,7 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
       dcnbPhieuKtChatLuongDtl: [new Array<any>(),],
       nhanXetKetLuan: [],
       type: ["01"],
-      loaiDc: ["DCNB"]
+      loaiDc: []
     }
     );
   }
@@ -140,12 +143,54 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
       maQhns: this.userInfo.DON_VI.maQhns,
       ktvBaoQuan: this.userInfo.TEN_DAY_DU,
       soPhieu: `${id}/${this.formData.get('nam').value}/${this.maBb}`,
-
+      loaiDc: this.loaiDc
     })
 
     if (this.idInput) {
       await this.loadChiTiet(this.idInput)
     }
+    this.getPPKTCL()
+    // if (!!this.data) {
+    //   console.log('ngOnInit', this.data)
+    //   this.formData.patchValue({
+    //     soQdinhDc: this.data.soQdinh,
+    //     ngayQdinhDc: this.data.ngayHieuLuc,
+    //     qdDcId: this.data.qdinhDccId,
+    //     tenLoKho: this.data.tenloKhoNhan,
+    //     maLoKho: this.data.maloKhoNhan,
+    //     tenNganKho: this.data.tenNganKhoNhan,
+    //     maNganKho: this.data.maNganKhoNhan,
+    //     tenNhaKho: this.data.tenNhaKhoNhan,
+    //     maNhaKho: this.data.maNhaKhoNhan,
+    //     tenDiemKho: this.data.tenDiemKhoNhan,
+    //     maDiemKho: this.data.maDiemKhoNhan,
+    //     tenLoKhoXuat: this.data.tenloKhoXuat,
+    //     maLoKhoXuat: this.data.maloKhoXuat,
+    //     tenNganKhoXuat: this.data.tenNganKhoXuat,
+    //     maNganKhoXuat: this.data.maNganKhoXuat,
+    //     tenNhaKhoXuat: this.data.tenNhaKhoXuat,
+    //     maNhaKhoXuat: this.data.maNhaKhoXuat,
+    //     tenDiemKhoXuat: this.data.tenDiemKhoXuat,
+    //     maDiemKhoXuat: this.data.maDiemKhoXuat,
+    //     loaiVthh: this.data.loaiVthh,
+    //     tenLoaiVthh: this.data.tenLoaiVthh,
+    //     cloaiVthh: this.data.cloaiVthh,
+    //     tenCloaiVthh: this.data.tenCloaiVthh,
+    //     tichLuongKhaDung: this.data.tichLuongKd,
+    //     tenDonViTinh: this.data.tenDonViTinh,
+    //     // idKeHoachDtl: this.data.qdinhDccId
+    //   });
+    //   await this.loadChiTietQdinh(this.data.qdinhDccId);
+    //   // await this.loadDataBaoQuan(this.data.cloaiVthh || "010101")
+    //   let dmTieuChuan = await this.danhMucTieuChuanService.getDetailByMaHh(this.data.cloaiVthh);
+    //   if (dmTieuChuan.data) {
+    //     console.log('dmTieuChuan')
+    //     this.dataTableChiTieu = dmTieuChuan.data.children;
+    //     this.dataTableChiTieu.forEach(element => {
+    //       element.edit = false
+    //     });
+    //   }
+    // }
 
   }
 
@@ -166,6 +211,11 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
       });
     }
     await this.spinner.hide();
+  }
+
+  async getPPKTCL() {
+    let data = await this.dmService.danhMucChungGetAll("PP_KIEM_TRA_CL");
+    this.ppKtrCL = data.data;
   }
 
   // async loadDataBaoQuan(cloaiVthh) {
@@ -298,7 +348,7 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
     let body = {
       trangThai: STATUS.BAN_HANH,
       loaiVthh: ['0101', '0102'],
-      loaiDc: "DCNB",
+      loaiDc: this.loaiDc,
       maDvi: this.userInfo.MA_DVI
       // listTrangThaiXh: [STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN],
     }

@@ -22,6 +22,8 @@ export class ThongTinHangDtqgComponent extends Base2Component implements OnInit 
   formData: FormGroup
   fb: FormBuilder = new FormBuilder();
 
+  typeData: string
+  typeAction: string
   data: any
 
   listDM: any[] = [];
@@ -42,6 +44,7 @@ export class ThongTinHangDtqgComponent extends Base2Component implements OnInit 
   ) {
     super(httpClient, storageService, notification, spinner, modal, quanLyHangTrongKhoService);
     this.formData = this.fb.group({
+      id: [],
       danhMuc: [],
       nhomHang: [],
       donViTinh: [],
@@ -72,7 +75,9 @@ export class ThongTinHangDtqgComponent extends Base2Component implements OnInit 
     if (res.msg == MESSAGE.SUCCESS) {
       this.listMatHang = res.data.content
     }
-    this.formData.patchValue(this.data);
+    let data = this.data
+    data.isMatHang = (data.idParent && !data.isParent)
+    this.formData.patchValue(data);
   }
 
   async onChangeSLTrongNam(value) {

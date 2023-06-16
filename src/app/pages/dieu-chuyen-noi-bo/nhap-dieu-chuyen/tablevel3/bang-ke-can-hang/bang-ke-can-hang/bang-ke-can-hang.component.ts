@@ -15,7 +15,7 @@ import { CHUC_NANG, STATUS } from 'src/app/constants/status';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { Subject } from 'rxjs';
 import { QuyetDinhDieuChuyenTCService } from 'src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-tc.service';
-import { BangKeCanHangService } from 'src/app/services/qlnv-hang/nhap-hang/mua-truc-tiep/nhapkho/BangKeCanHang.service';
+import { BangKeCanHangService } from 'src/app/services/dieu-chuyen-noi-bo/nhap-dieu-chuyen/bang-ke-can-hang';
 
 @Component({
   selector: 'app-bang-ke-can-hang',
@@ -27,8 +27,7 @@ export class BangKeCanHangComponent extends Base2Component implements OnInit {
   isVisibleChangeTab$ = new Subject();
   visibleTab: boolean = true;
   tabSelected: number = 0;
-  @Input()
-  idTHop: number;
+  @Input() loaiDc: string;
 
   @Input()
   loaiVthh: string;
@@ -76,8 +75,9 @@ export class BangKeCanHangComponent extends Base2Component implements OnInit {
       soQdinh: null,
       ngayDuyetTc: null,
       ngayHieuLuc: null,
-      loaiDc: null,
       trichYeu: null,
+      type: ["01"],
+      loaiDc: ["DCNB"]
     })
     this.filterTable = {
       nam: '',
@@ -97,6 +97,7 @@ export class BangKeCanHangComponent extends Base2Component implements OnInit {
   dsDonvi: any[] = [];
   userInfo: UserLogin;
   userdetail: any = {};
+  data: any = {};
   selectedId: number = 0;
   isVatTu: boolean = false;
   isView = false;
@@ -134,9 +135,6 @@ export class BangKeCanHangComponent extends Base2Component implements OnInit {
     this.isVisibleChangeTab$.subscribe((value: boolean) => {
       this.visibleTab = value;
     });
-
-    if (this.idTHop)
-      this.redirectDetail(0, false)
 
     try {
       this.initData()
