@@ -174,7 +174,7 @@
               <td>{{ data.soQdDcBdg}}</td>
               <td>
                 <a *ngIf="data.soQdPdKqBdg && data.idQdPdKqBdg" nz-button nzType="link"
-                   (click)="openModalKqBdg(data.idQdPdKqBdg)">{{
+                  (click)="openModalKqBdg(data.idQdPdKqBdg)">{{
                   data.soQdPdKqBdg}}</a>
               </td>
               <td>
@@ -192,7 +192,11 @@
               <td>{{ data.tenTrangThai }}</td>
               <td>{{ data.ketQuaDauGia }}</td>
               <td class="text-left">
-                <a *ngIf="data.trangThai == STATUS.HOAN_THANH_CAP_NHAT " (click)="goDetail(data.id)">
+                <a *ngIf="data.trangThai == STATUS.HOAN_THANH_CAP_NHAT &&  userService.isCuc()"
+                  (click)="goDetail(data.id)">
+                  <i class="fa fa-eye"></i>
+                </a>
+                <a *ngIf="userService.isTongCuc()" (click)="goDetail(data.id)">
                   <i class="fa fa-eye"></i>
                 </a>
                 <a *ngIf="data.trangThai != STATUS.HOAN_THANH_CAP_NHAT &&  userService.isCuc()"

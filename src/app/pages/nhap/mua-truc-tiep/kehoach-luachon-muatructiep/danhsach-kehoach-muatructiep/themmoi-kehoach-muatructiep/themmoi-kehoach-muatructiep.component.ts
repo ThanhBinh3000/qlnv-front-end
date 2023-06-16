@@ -303,7 +303,7 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
     this.formData.patchValue({
       tongSoLuong: tongSoLuong,
       tongMucDt: tongMucDt,
-      tongTienGomThue: tongMucDt * (100 + this.formData.get('thueGtgt').value) / 100,
+      tongTienGomThue: tongMucDt,
     });
   }
 

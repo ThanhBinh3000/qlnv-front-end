@@ -127,6 +127,7 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
   async ngOnInit() {
     if (this.dataDetail) {
       this.getDetail(this.dataDetail.id)
+      this.formData.value.trangThai = this.dataDetail.trangThai
     } else {
       if (!this.isView) {
         this.spinner.show();
@@ -367,7 +368,7 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
         } catch (e) {
           console.log('error: ', e);
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        }finally {
+        } finally {
           this.spinner.hide();
         }
       },

@@ -33,8 +33,6 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
   @Input() idInput: number = 0;
   @Input() dataTongHop: any;
   @Input() isViewOnModal: boolean;
-  @Input() maDviCuc: string
-  @Input() dviCapCuc: any;
   @Output()
   showListEvent = new EventEmitter<any>();
 
@@ -50,6 +48,8 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
   selected: boolean = false;
   listLoaiHinhNx: any[] = [];
   listKieuNx: any[] = [];
+  maDviCuc: string;
+
 
   constructor(
     httpClient: HttpClient,
@@ -225,7 +225,10 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
         soQdPd: data.soQdPd?.split('/')[0],
         namKh: this.formData.value.nam
       })
-      if (this.maDviCuc && this.dviCapCuc == true) {
+      if (this.userService.isCuc()) {
+        this.maDviCuc = this.userInfo.MA_DVI
+      }
+      if (this.maDviCuc) {
         this.danhsachDx = data.children.filter(s => s.maDvi == this.maDviCuc)
       } else {
         this.danhsachDx = data.children;
