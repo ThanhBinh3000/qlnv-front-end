@@ -21,6 +21,7 @@ import { QuyetDinhNvXuatBttService } from 'src/app/services/qlnv-hang/xuat-hang/
 import { PhieuKtraCluongBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/ktra-cluong-btt/phieu-ktra-cluong-btt.service';
 import { HopDongBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/hop-dong-btt/hop-dong-btt.service';
 import { QuyetDinhDieuChuyenCucService } from 'src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-c.service';
+import { PassDataXK } from '../phieu-xuat-kho.component';
 @Component({
   selector: 'app-xuat-dcnb-them-moi-phieu-xuat-kho',
   templateUrl: './them-moi-phieu-xuat-kho.component.html',
@@ -28,9 +29,11 @@ import { QuyetDinhDieuChuyenCucService } from 'src/app/services/dieu-chuyen-noi-
 })
 export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements OnInit {
   @Input() idInput: number;
-  @Input() typeVthh?: string[] | string;
+  @Input() isVatTu: boolean;
+  @Input() loaiDc: string;
+  @Input() thayDoiThuKho: boolean;
   @Input() isView: boolean;
-  @Input() qddcId: number;
+  @Input() passData: PassDataXK;
   @Input() isViewOnModal: boolean;
 
   @Output()
@@ -191,7 +194,6 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
   async ngOnInit() {
     try {
       this.id = this.idInput;
-      this.loaiVthh = this.typeVthh
       this.userInfo = this.userService.getUserLogin();
       if (this.id) {
         await this.loadChiTiet();
@@ -207,6 +209,7 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
   }
 
   async initForm() {
+    console.log("passData", this.passData)
     let id = await this.userService.getId('XH_PHIEU_XKHO_BTT_SEQ')
     this.formData.patchValue({
       soPhieuXuatKho: `${id}/${this.formData.get('nam').value}/PNK-CCDTVP`,
@@ -216,9 +219,10 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
       trangThai: STATUS.DU_THAO,
       tenTrangThai: 'Dự thảo',
       canBoLapPhieu: this.userInfo.TEN_DAY_DU,
+      ...this.passData
     });
-    if (this.qddcId) {
-      await this.bindingDataQd(this.qddcId);
+    if (this.passData.qddcId) {
+      await this.bindingDataQd(this.passData.qddcId);
     }
   }
 
@@ -226,7 +230,9 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
     let dataQdDc = [];
     let body = {
       nam: dayjs().get('year'),
-      loaiVthh: this.loaiVthh,
+      isVatTu: this.isVatTu,
+      loaiDc: this.loaiDc,
+      thayDoiThuKho: this.thayDoiThuKho,
       trangThai: this.STATUS.BAN_HANH,
       maChiCuc: this.userInfo.MA_DVI
     }
@@ -314,7 +320,8 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
     await this.spinner.show();
     let body = {
       soQddc: even,
-      loaiVthh: this.loaiVthh,
+      isVatTu: this.isVatTu,
+      loaiDc: this.loaiDc,
       nam: this.formData.value.nam,
       maDvi: this.userInfo.MA_DVI,
     }

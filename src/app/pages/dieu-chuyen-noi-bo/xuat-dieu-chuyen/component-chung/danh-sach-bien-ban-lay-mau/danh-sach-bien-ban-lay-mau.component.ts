@@ -26,7 +26,8 @@ export class DanhSachBienBanLayMau extends Base2Component implements OnInit {
     @Input() title: string = "Danh sách biên bản lấy mẫu/bàn giao mẫu";
     @Input() fileNameExport: string = "file.xlsx";
     @Input() loaiDc: string;
-    @Input() typeVthh: string[];
+    @Input() isVatTu: boolean;
+    @Input() thayDoiThuKho: boolean;
     // @Output() checkPermissonDelete = new EventEmitter<boolean>();
     // @Output() checkPermissonExport = new EventEmitter<boolean>();
     // @Output() checkPermissonAdd = new EventEmitter<boolean>();
@@ -75,7 +76,7 @@ export class DanhSachBienBanLayMau extends Base2Component implements OnInit {
             denNgay: [null],
             trangThai: [STATUS.BAN_HANH],
             loaiDc: [],
-            loaiVthh: [],
+            isVatTu: [],
         })
         this.filterTable = {
             nam: '',
@@ -93,7 +94,7 @@ export class DanhSachBienBanLayMau extends Base2Component implements OnInit {
     }
 
     ngOnInit(): void {
-        this.formData.patchValue({ loaiDc: this.loaiDc, loaiVthh: this.typeVthh });
+        this.formData.patchValue({ loaiDc: this.loaiDc, isVatTu: this.isVatTu });
         this.timKiem()
     }
     async timKiem() {

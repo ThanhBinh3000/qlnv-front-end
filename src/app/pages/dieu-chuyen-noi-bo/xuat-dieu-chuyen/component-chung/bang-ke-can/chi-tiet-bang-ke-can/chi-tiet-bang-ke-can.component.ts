@@ -42,6 +42,8 @@ import { QuyetDinhGiaoNvCuuTroService } from 'src/app/services/qlnv-hang/xuat-ha
 })
 export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implements OnInit {
   @Input() typeVthh: string;
+  @Input() isVatTu: boolean;
+  @Input() loaiDc: string;
   @Input() idInput: number;
   @Input() isView: boolean;
   @Output()

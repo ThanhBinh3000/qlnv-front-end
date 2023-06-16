@@ -99,7 +99,7 @@
                         <nz-form-label [nzNoColon]="true">
                             Ngày xuất kho
                         </nz-form-label>
-                        <nz-date-picker nzFormat="dd/MM/YYYY" formControlName="ngayXuatKho" nzDisabled>
+                        <nz-date-picker nzFormat="dd/MM/YYYY" formControlName="ngayXuatKho" [nzDisabled]="isView">
                         </nz-date-picker>
                     </nz-form-item>
                 </div>
@@ -381,15 +381,14 @@
                         <th rowSpan="2" width="30px">STT (A)</th>
                         <th rowSpan="2">Tên, nhãn hiệu, quy cách phẩm chất hàng hóa (B)</th>
                         <th rowSpan="2">Mã số (C)</th>
-                        <th rowSpan="2">Đơn vị tính</th>
-                        <th colSpan="2">Số lượng</th>
-                        <th rowSpan="2">Đơn giá (3)</th>
-                        <th rowSpan="2">Thành tiền (4) = (2) x (3)</th>
+                        <th rowSpan="2">Đơn vị tính (D)</th>
+                        <th rowSpan="2">Số lượng ĐC thực tế (E)</th>
+                        <th colSpan="2">Kinh phí ĐC (F)</th>
                         <th rowSpan="2" *ngIf="!isDisabled()">Hành động</th>
                     </tr>
                     <tr>
-                        <th>Theo chứng từ (1)</th>
-                        <th>Thực nhập (2)</th>
+                        <th class="text-center">Dự toán kinh phí theo QĐ<br /> (Triệu đồng) (1)</th>
+                        <th>Kinh phí thực tế (2)</th>
                     </tr>
                     <tr>
                     </tr>

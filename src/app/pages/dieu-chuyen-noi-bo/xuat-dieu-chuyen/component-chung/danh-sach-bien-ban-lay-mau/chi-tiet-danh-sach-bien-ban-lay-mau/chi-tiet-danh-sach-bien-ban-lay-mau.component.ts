@@ -22,14 +22,19 @@ import { ChiTietList } from 'src/app/models/QdPheDuyetKHBanDauGia';
 import { QuyetDinhDieuChuyenCucService } from 'src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-c.service';
 import { cloneDeep } from 'lodash';
 import { PassData } from '../danh-sach-bien-ban-lay-mau.component';
-
+import { formatNumber } from '@angular/common';
+interface PhuongPhapLayMauDC extends PhuongPhapLayMau {
+  checked: true
+}
 @Component({
   selector: 'app-chi-tiet-danh-sach-bien-ban-lay-mau',
   templateUrl: './chi-tiet-danh-sach-bien-ban-lay-mau.component.html',
   styleUrls: ['./chi-tiet-danh-sach-bien-ban-lay-mau.component.scss']
 })
 export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnInit {
-  @Input() loaiVthh: string[];
+  @Input() isVatTu: boolean;
+  @Input() loaiDc: string;
+  @Input() thayDoiThuKho: boolean;
   @Input() idInput: number;
   @Input() isView: boolean;
 
@@ -45,7 +50,7 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
   listDiemKho: any[] = [];
   listSoQuyetDinh: any[] = [];
   listDiaDiemNhap: any[] = [];
-  phuongPhapLayMaus: Array<PhuongPhapLayMau>;
+  phuongPhapLayMaus: Array<PhuongPhapLayMauDC>;
   daiDienCuc: string;
   listDaiDienChiCuc: any[] = [];
   daiDienChiCuc: string;
@@ -125,27 +130,29 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
 
         doiThuKho: [true],
         checked: [true],
-        soBienBanBaoQuanLanDau: ['']
+        soBienBanBaoQuanLanDau: [''],
+        loaiDc: ['']
       }
     );
     this.maBb = 'BBLM-' + this.userInfo.DON_VI.tenVietTat;
 
     // this.setTitle();
   }
-
+  numberFomater = (value) => (value || value == "0") ? formatNumber(value, 'vi_VN', '1.0-1') : '';
   async ngOnInit() {
     if (this.isViewOnModal) {
       this.isView = true
     }
     try {
       this.spinner.show();
-      await Promise.all([
-        this.loadDetail(this.idInput),
-        this.loadPhuongPhapLayMau(),
-      ])
-      if (!this.idInput) {
-        this.formData.patchValue({ ...this.passData });
-      }
+      await this.loadDetail(this.idInput)
+      // await Promise.all([
+      //   this.loadDetail(this.idInput),
+      //   this.loadPhuongPhapLayMau(),
+      // ])
+      // if (!this.idInput) {
+      //   this.formData.patchValue({ ...this.passData });
+      // }
       this.spinner.hide();
     } catch (e) {
       this.notification.error(MESSAGE.ERROR, 'Có lỗi xảy ra.');
@@ -168,6 +175,7 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
             this.bienBanLayMauDinhKem = cloneDeep(data.bienBanLayMauDinhKem);
             this.canCu = data.canCu;
             this.fileDinhKemChupMauNiemPhong = cloneDeep(data.fileDinhKemChupMauNiemPhong);
+            this.phuongPhapLayMaus = Array.isArray(data?.pplayMau?.split(",")) ? data.pplayMau.split(",").map(f => ({ id: f.split("-")[0], giaTri: f.split("-")[1], checked: true })) : [];
             const obj = Array.isArray(data.dcnbBienBanLayMauDtl) ? data.dcnbBienBanLayMauDtl.reduce((obj, cur) => {
               if (cur.loaiDaiDien == "00") {
                 obj.listDaiDienCuc.push({ ...cur, daiDien: cur.tenDaiDien })
@@ -193,9 +201,13 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
         maQhns: this.userInfo.DON_VI.maQhns,
         ktvBaoQuan: this.userInfo.TEN_DAY_DU,
         soBbLayMau: `${id}/${this.formData.get('nam').value}/${this.maBb}`,
-        id: id
-
+        id: id,
+        loaiDc: this.loaiDc,
+        ...this.passData
       });
+      const chiTietHangHoa = await this.danhMucService.loadDanhMucHangChiTiet(this.passData.cloaiVthh);
+      this.phuongPhapLayMaus = Array.isArray(chiTietHangHoa?.data?.ppLayMau) ? chiTietHangHoa?.data?.ppLayMau.map(f => ({ ...f, checked: true })) : [];
+      this.formData.patchValue({ pplayMau: this.phuongPhapLayMaus.map(f => `${f.id}-${f.giaTri}`).join(",") });
     }
 
   }
@@ -207,8 +219,9 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
   async loadSoQuyetDinh() {
     let body = {
       trangThai: STATUS.BAN_HANH,
-      loaiVthh: this.loaiVthh,
-      loaiDc: "DCNB",
+      isVatTu: this.isVatTu,
+      loaiDc: this.loaiDc,
+      thayDoiThuKho: this.thayDoiThuKho,
       maDvi: this.userInfo.MA_DVI,
       // listTrangThaiXh: [STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN],
     }
@@ -346,6 +359,11 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
         tenCloaiVthh: data.tenCloaiVthh,
         cloaiVthh: data.cloaiVthh,
       })
+    }
+    if (data.cloaiVthh) {
+      const chiTietHangHoa = await this.danhMucService.loadDanhMucHangChiTiet(data.cloaiVthh);
+      this.phuongPhapLayMaus = Array.isArray(chiTietHangHoa?.data?.ppLayMau) ? chiTietHangHoa?.data?.ppLayMau.map(f => ({ ...f, checked: true })) : [];
+      this.formData.patchValue({ pplayMau: this.phuongPhapLayMaus.map(f => `${f.id}-${f.giaTri}`).join(",") });
     }
   }
 

@@ -5,7 +5,7 @@
                 <div nz-row [nzGutter]="[20]">
                     <div nz-col nzSpan="2">
                         <label> Năm xuất </label>
-                        <nz-select formControlName="nam">
+                        <nz-select formControlName="namKh">
                             <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                         </nz-select>
                     </div>
@@ -55,7 +55,7 @@
                     <span>Xuất file</span>
                 </button>
                 <button type="button" class="btn btn-main" *ngIf="userService.isChiCuc()"
-                    (click)="redirectToChiTiet(false, null, null)">
+                    (click)="redirectToChiTiet(false, null)">
                     <i class="icon htvbdh_dau-cong"></i>
                     <span>Thêm</span>
                 </button>
@@ -87,7 +87,7 @@
                             <td (nzExpandChange)="onExpandStringChange(item.idVirtual, $event)"
                                 [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true"
                                 style="width: 35px"></td>
-                            <td style="color: black ;font-weight: bold;">{{item.soQdNv}}</td>
+                            <td style="color: black ;font-weight: bold;">{{item.soQdinh}}</td>
                             <td style="color: black ;font-weight: bold;">{{item.namKh}}</td>
                             <td></td>
                             <td></td>
@@ -107,7 +107,8 @@
                                     <td></td>
                                     <td></td>
                                     <td></td>
-                                    <td style="color: black ;font-weight: bold;">{{item.ngayQdNv}}</td>
+                                    <td style="color: black ;font-weight: bold;">{{item.thoiHanDieuChuyen| date:
+                                        'dd/MM/YYYY'}}</td>
                                     <td style="color: black ;font-weight: bold;">{{lv1.tenDiemKho}}</td>
                                     <td></td>
                                     <td></td>
@@ -126,22 +127,31 @@
                                             <td></td>
                                             <td></td>
                                             <td></td>
-                                            <td>{{lv2.tenLoKho == null ? lv2.tenNganKho : lv2.tenLoKho }},
+                                            <!-- <td>{{lv2.tenLoKho == null ? lv2.tenNganKho : lv2.tenLoKho }},
                                                 {{lv2.tenNhaKho}}
+                                            </td> -->
+                                            <td>
+                                                {{(lv2.tenloKho? lv2.tenloKho + " - ": "") + (lv2.tenNganKho ||
+                                                "")}}
+
                                             </td>
-                                            <td></td>
-                                            <td></td>
+                                            <td>
+                                                <a *ngIf="lv2.soPhieuKiemNghiemCl && lv2.idPhieuKNCL" nz-button
+                                                    nzType="link" (click)="openModalPhieuKNCL(lv2.idPhieuKNCL)">{{
+                                                    lv2.soPhieuKiemNghiemCl}}</a>
+                                            </td>
+                                            <td>{{lv2.ngayKnghiem}}</td>
                                             <td></td>
                                             <td></td>
                                             <td></td>
                                             <td class="text-left">
-                                                <a (click)="redirectToChiTiet(false, null,item.idQdNv)"
+                                                <a (click)="redirectToChiTiet(lv2, null)"
                                                     *ngIf="userService.isChiCuc()">
                                                     <i class="fa fa-plus"></i>
                                                 </a>
                                             </td>
                                         </tr>
-                                        <ng-container>
+                                        <ng-container *ngIf="let lv3 of lv2.childData">
                                             <tr class="level-4">
                                                 <td></td>
                                                 <td></td>
@@ -150,22 +160,18 @@
                                                 <td></td>
                                                 <td></td>
                                                 <td></td>
-                                                <td style="color: black ;font-weight: bold;">{{lv2.soPhieuXuat}}</td>
+                                                <td></td>
+                                                <td></td>
+                                                <td style="color: black ;font-weight: bold;">{{lv2.soPhieuXuatKho}}</td>
                                                 <td>{{lv2.ngayXuatKho | date: 'dd/MM/YYYY' }}</td>
-                                                <td>
-                                                    <a *ngIf="lv2.soPhieu && lv2.idPhieu" nz-button nzType="link"
-                                                        (click)="openModalPhieuXuatKho(lv2.idPhieu)">{{
-                                                        lv2.soPhieu}}</a>
-                                                </td>
-                                                <td>{{lv2.ngayKnghiem}}</td>
                                                 <td>{{lv2.tenTrangThai}}</td>
                                                 <td class="text-left">
                                                     <a *ngIf="lv2.trangThai == STATUS.DA_DUYET_LDCC"
-                                                        (click)="redirectToChiTiet(lv2, false, null)">
+                                                        (click)="redirectToChiTiet(lv2, false)">
                                                         <i class="fa fa-eye"></i>
                                                     </a>
                                                     <a *ngIf="lv2.trangThai != STATUS.DA_DUYET_LDCC"
-                                                        (click)="redirectToChiTiet(lv2, false, null)">
+                                                        (click)="redirectToChiTiet(lv2, false)">
                                                         <i class="fa fa-pencil"></i>
                                                     </a>
                                                     <a *ngIf="lv2.trangThai == STATUS.DU_THAO" (click)="delete(lv2)">
@@ -204,13 +210,14 @@
 </div>
 <ng-template #templateThemmoi>
     <app-xuat-dcnb-them-moi-phieu-xuat-kho [idInput]="selectedId" (showListEvent)="showList()" [isView]="isView"
-        [typeVthh]="typeVthh" [qddcId]="idQdinhDcc">
+        [loaiDc]="loaiDc" [isVatTu]="isVatTu" [thayDoiThuKho]="thayDoiThuKho" [passData]="passData">
     </app-xuat-dcnb-them-moi-phieu-xuat-kho>
 </ng-template>
 
 <nz-modal [nzWidth]="'90%'" [(nzVisible)]="isViewPhieu" (nzOnCancel)="closeModalPhieuXuatKho()">
     <ng-container *nzModalContent class="modal__content">
-        <app-them-moi-phieu-kiem-nghiem-chat-luong [idInput]="idPhieu" [typeVthh]="typeVthh" [isViewOnModal]="true">
+        <app-them-moi-phieu-kiem-nghiem-chat-luong [idInput]="idPhieu" [isVatTu]="isVatTu" [loaiDc]="loaiDc"
+            [isViewOnModal]="true">
         </app-them-moi-phieu-kiem-nghiem-chat-luong>
     </ng-container>
     <div *nzModalFooter>
