@@ -17,6 +17,7 @@ import { Subject } from 'rxjs';
 import { QuyetDinhDieuChuyenTCService } from 'src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-tc.service';
 import { BienBanNghiemThuBaoQuanLanDauService } from 'src/app/services/dieu-chuyen-noi-bo/nhap-dieu-chuyen/bien-ban-nghiem-thu-bao-quan-lan-dau.service';
 import * as uuidv4 from "uuid";
+import { BienBanKetThucNhapKhoService } from 'src/app/services/dieu-chuyen-noi-bo/nhap-dieu-chuyen/bien-ban-ket-thuc-nhap-kho';
 
 @Component({
   selector: 'app-bien-ban-ket-thuc-nhap-kho',
@@ -24,7 +25,7 @@ import * as uuidv4 from "uuid";
   styleUrls: ['./bien-ban-ket-thuc-nhap-kho.component.scss']
 })
 export class BienBanKetThucNhapKhoComponent extends Base2Component implements OnInit {
-
+  @Input() loaiDc: string;
   isVisibleChangeTab$ = new Subject();
   visibleTab: boolean = true;
   tabSelected: number = 0;
@@ -35,15 +36,17 @@ export class BienBanKetThucNhapKhoComponent extends Base2Component implements On
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private bbNghiemThuBaoQuanLanDauService: BienBanNghiemThuBaoQuanLanDauService,
+    private bienBanKetThucNhapKhoService: BienBanKetThucNhapKhoService,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, bbNghiemThuBaoQuanLanDauService);
+    super(httpClient, storageService, notification, spinner, modal, bienBanKetThucNhapKhoService);
     this.formData = this.fb.group({
       nam: null,
       soQdinh: null,
       soBban: null,
       ngayLap: null,
       ngayKetThucNt: null,
+      type: ["01"],
+      loaiDc: ["DCNB"]
     })
   }
 
@@ -124,7 +127,7 @@ export class BienBanKetThucNhapKhoComponent extends Base2Component implements On
       limit: this.pageSize,
       page: this.page - 1
     }
-    let res = await this.bbNghiemThuBaoQuanLanDauService.search(body);
+    let res = await this.bienBanKetThucNhapKhoService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data.content
         .map(element => {
@@ -221,7 +224,7 @@ export class BienBanKetThucNhapKhoComponent extends Base2Component implements On
           body.ngayHieuLucTu = body.ngayHieuLuc[0];
           body.ngayHieuLucDen = body.ngayHieuLuc[1];
         }
-        this.bbNghiemThuBaoQuanLanDauService
+        this.bienBanKetThucNhapKhoService
           .export(body)
           .subscribe((blob) =>
             saveAs(blob, 'bien-ban-nghiem-thu-bao-quan-lan-dau.xlsx'),
@@ -258,7 +261,7 @@ export class BienBanKetThucNhapKhoComponent extends Base2Component implements On
           let body = {
             id: data.id
           };
-          this.bbNghiemThuBaoQuanLanDauService.delete(body).then(async () => {
+          this.bienBanKetThucNhapKhoService.delete(body).then(async () => {
             await this.timKiem();
             this.spinner.hide();
           });

@@ -10,12 +10,13 @@ import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { DonviService } from 'src/app/services/donvi.service';
-import { isEmpty } from 'lodash';
+import { chain, cloneDeep } from 'lodash';
 import { CHUC_NANG, STATUS } from 'src/app/constants/status';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { Subject } from 'rxjs';
 import { QuyetDinhDieuChuyenTCService } from 'src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-tc.service';
 import { BienBanLayMauService } from 'src/app/services/dieu-chuyen-noi-bo/nhap-dieu-chuyen/bien-ban-lay-mau';
+import * as uuidv4 from "uuid";
 @Component({
   selector: 'app-bien-ban-mau',
   templateUrl: './bien-ban-mau.component.html',
@@ -26,8 +27,7 @@ export class BienBanMauComponent extends Base2Component implements OnInit {
   isVisibleChangeTab$ = new Subject();
   visibleTab: boolean = true;
   tabSelected: number = 0;
-  @Input()
-  idTHop: number;
+  @Input() loaiDc: string;
 
   @Input()
   loaiVthh: string;
@@ -64,9 +64,6 @@ export class BienBanMauComponent extends Base2Component implements OnInit {
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private donviService: DonviService,
-    private danhMucService: DanhMucService,
-    private quyetDinhDieuChuyenTCService: QuyetDinhDieuChuyenTCService,
     private bbLayMauService: BienBanLayMauService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, bbLayMauService);
@@ -94,7 +91,7 @@ export class BienBanMauComponent extends Base2Component implements OnInit {
   }
 
 
-  dsDonvi: any[] = [];
+  data: any[] = [];
   userInfo: UserLogin;
   userdetail: any = {};
   selectedId: number = 0;
@@ -135,8 +132,7 @@ export class BienBanMauComponent extends Base2Component implements OnInit {
       this.visibleTab = value;
     });
 
-    if (this.idTHop)
-      this.redirectDetail(0, false)
+
 
     try {
       this.initData()
@@ -192,16 +188,66 @@ export class BienBanMauComponent extends Base2Component implements OnInit {
   }
 
   async timKiem() {
-    if (this.formData.value.ngayDuyetTc) {
-      this.formData.value.ngayDuyetTcTu = dayjs(this.formData.value.ngayDuyetTc[0]).format('YYYY-MM-DD')
-      this.formData.value.ngayDuyetTcDen = dayjs(this.formData.value.ngayDuyetTc[1]).format('YYYY-MM-DD')
+    // if (this.formData.value.ngayDuyetTc) {
+    //   this.formData.value.ngayDuyetTcTu = dayjs(this.formData.value.ngayDuyetTc[0]).format('YYYY-MM-DD')
+    //   this.formData.value.ngayDuyetTcDen = dayjs(this.formData.value.ngayDuyetTc[1]).format('YYYY-MM-DD')
+    // }
+    // if (this.formData.value.ngayHieuLuc) {
+    //   this.formData.value.ngayHieuLucTu = dayjs(this.formData.value.ngayHieuLuc[0]).format('YYYY-MM-DD')
+    //   this.formData.value.ngayHieuLucDen = dayjs(this.formData.value.ngayHieuLuc[1]).format('YYYY-MM-DD')
+    // }
+    // console.log('DSQuyetDinhDieuChuyenComponent/this.formData.value=>', this.formData.value)
+    // await this.search();
+    let body = this.formData.value
+    body.paggingReq = {
+      limit: this.pageSize,
+      page: this.page - 1
     }
-    if (this.formData.value.ngayHieuLuc) {
-      this.formData.value.ngayHieuLucTu = dayjs(this.formData.value.ngayHieuLuc[0]).format('YYYY-MM-DD')
-      this.formData.value.ngayHieuLucDen = dayjs(this.formData.value.ngayHieuLuc[1]).format('YYYY-MM-DD')
+    let res = await this.bbLayMauService.search(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      let data = res.data.content
+        .map(element => {
+          return {
+            ...element,
+            maKho: `${element.thoiHanDieuChuyen}${element.tenDiemKho}`,
+            maloNganKhoNhan: `${element.maloKhoNhan}${element.maNganKhoNhan}`
+          }
+        });
+      this.dataTableView = this.buildTableView(data)
+      console.log('data', data, res)
+      console.log('this.dataTableView', this.dataTableView)
     }
-    console.log('DSQuyetDinhDieuChuyenComponent/this.formData.value=>', this.formData.value)
-    await this.search();
+  }
+
+  buildTableView(data: any[] = []) {
+    let dataView = chain(data)
+      .groupBy("soQdinh")
+      ?.map((value1, key1) => {
+        let children1 = chain(value1)
+          .groupBy("maKho")
+          ?.map((value2, key2) => {
+
+            let row2 = value2?.find(s => s.maKho == key2);
+
+            return {
+              ...row2,
+              idVirtual: row2 ? row2.idVirtual ? row2.idVirtual : uuidv4.v4() : uuidv4.v4(),
+              children: value2,
+            }
+          }
+          ).value();
+
+
+        let row1 = value1?.find(s => s.soQdinh === key1);
+        return {
+          ...row1,
+          idVirtual: row1 ? row1.idVirtual ? row1.idVirtual : uuidv4.v4() : uuidv4.v4(),
+          children: children1,
+          expand: true
+        };
+      }).value();
+
+    return dataView
   }
 
   exportDataTC() {
@@ -218,7 +264,7 @@ export class BienBanMauComponent extends Base2Component implements OnInit {
           body.ngayHieuLucTu = body.ngayHieuLuc[0];
           body.ngayHieuLucDen = body.ngayHieuLuc[1];
         }
-        this.quyetDinhDieuChuyenTCService
+        this.bbLayMauService
           .export(body)
           .subscribe((blob) =>
             saveAs(blob, 'quyet-dinh-dieu-chuyen-tc.xlsx'),
@@ -232,6 +278,40 @@ export class BienBanMauComponent extends Base2Component implements OnInit {
     } else {
       this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
     }
+  }
+
+  add(data: any) {
+    this.data = data;
+    this.isDetail = true;
+    this.isView = false;
+  }
+
+  xoa(data: any) {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: () => {
+        this.spinner.show();
+        try {
+          let body = {
+            id: data.id
+          };
+          this.bbLayMauService.delete(body).then(async () => {
+            await this.timKiem();
+            this.spinner.hide();
+          });
+        } catch (e) {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      },
+    });
   }
 
   redirectDetail(id, b: boolean) {

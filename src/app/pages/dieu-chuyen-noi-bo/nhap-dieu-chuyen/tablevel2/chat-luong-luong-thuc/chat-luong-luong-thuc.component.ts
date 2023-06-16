@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -13,6 +13,8 @@ import { StorageService } from 'src/app/services/storage.service';
   styleUrls: ['./chat-luong-luong-thuc.component.scss']
 })
 export class ChatLuongLuongThucComponent extends Base2Component implements OnInit {
+
+  @Input() loaiDc: string;
 
   constructor(
     httpClient: HttpClient,
@@ -46,6 +48,7 @@ export class ChatLuongLuongThucComponent extends Base2Component implements OnIni
   tabSelected: number = 0;
 
   ngOnInit(): void {
+    console.log('ChatLuongLuongThucComponent', this.loaiDc)
   }
 
   selectTab(tab: number) {

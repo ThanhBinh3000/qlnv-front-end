@@ -24,6 +24,7 @@ import * as uuidv4 from "uuid";
   styleUrls: ['./bien-ban-nghiem-thu-bao-quan-lan-dau.component.scss']
 })
 export class BienBanNghiemThuBaoQuanLanDauComponent extends Base2Component implements OnInit {
+  @Input() loaiDc: string;
 
   isVisibleChangeTab$ = new Subject();
   visibleTab: boolean = true;

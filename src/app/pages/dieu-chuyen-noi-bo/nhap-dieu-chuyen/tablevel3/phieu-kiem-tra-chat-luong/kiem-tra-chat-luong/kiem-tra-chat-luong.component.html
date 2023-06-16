@@ -108,7 +108,7 @@
                 <td [nzExpand]="row1.expand"
                   (nzExpandChange)="row1.expand=!row1.expand; row1.children=setExpand(row1.expand, row1.children)">
                 </td>
-                <td class="bold">{{ row1.soQdinh || "" }}</td>
+                <td class="bold text-blue">{{ row1.soQdinh || "" }}</td>
                 <td class="bold">{{ row1.nam || "" }}</td>
                 <td></td>
                 <td></td>
@@ -183,13 +183,11 @@
                           <td></td>
                           <td></td>
                           <td></td>
-                          <td class="bold">{{ row2.tenloKhoNhan || ""}} {{ row2.tenNganKhoNhan || ""}} {{
-                            row2.tenNhaKhoNhan || ""}} {{ row2.tenDiemKhoNhan
-                            ||
-                            ""}}
+                          <td class="bold">{{ row4.tenloKhoNhan || ""}} {{ row4.tenNganKhoNhan || ""}} {{
+                            row4.tenNhaKhoNhan || ""}}
                           </td>
-                          <td></td>
-                          <td>{{row2.soBBNtLd}}</td>
+                          <td class="bold">{{ row4.tenTrangThai || ""}}</td>
+                          <td class="bold text-blue">{{row4.soBBNtLd}}</td>
                           <td></td>
                           <td></td>
                           <td></td>
@@ -218,11 +216,9 @@
                             <td>{{(row5.soPhieuKtChatLuong || "")}}</td>
                             <td>{{(row5.ngayKiemNghiem || "")}}</td>
                             <td>{{(row5.ketQuaDanhGia || "")}}</td>
-                            <td>{{(row5.tongKinhPhiTT |number: '1.0-1':
-                              'vi_VN')}}</td>
-                            <td>{{(row5.tongKinhPhiPd |number: '1.0-1':
-                              'vi_VN')}}</td>
-                            <td></td>
+                            <td>{{(row5.soPhieuNhapKho || "")}}</td>
+                            <td>{{(row5.ngayNhapKho || "")}}</td>
+                            <td>{{(row5.trangThai || "")}}</td>
                             <td>
                               <a *ngIf="row5.trangThai !== STATUS.DU_THAO" (click)="redirectDetail(row5.id, true)">
                                 <i class="fa fa-eye"></i>
@@ -254,7 +250,7 @@
   </div>
 
   <div class="chi-tiet" *ngIf="isDetail">
-    <app-thong-tin-kiem-tra-chat-luong [isView]="isView" [idInput]="selectedId"
+    <app-thong-tin-kiem-tra-chat-luong [loaiDc]="loaiDc" [isView]="isView" [idInput]="selectedId" [data]="data"
       (showListEvent)="quayLai()"></app-thong-tin-kiem-tra-chat-luong>
   </div>
 

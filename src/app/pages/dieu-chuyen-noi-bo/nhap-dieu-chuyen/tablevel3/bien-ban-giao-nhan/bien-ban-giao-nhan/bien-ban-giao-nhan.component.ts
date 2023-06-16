@@ -15,6 +15,7 @@ import { CHUC_NANG, STATUS } from 'src/app/constants/status';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { Subject } from 'rxjs';
 import { QuyetDinhDieuChuyenTCService } from 'src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-tc.service';
+import { BienBanGiaoNhanService } from 'src/app/services/dieu-chuyen-noi-bo/nhap-dieu-chuyen/bien-ban-giao-nhan';
 
 @Component({
   selector: 'app-bien-ban-giao-nhan',
@@ -26,8 +27,7 @@ export class BienBanGiaoNhanComponent extends Base2Component implements OnInit {
   isVisibleChangeTab$ = new Subject();
   visibleTab: boolean = true;
   tabSelected: number = 0;
-  @Input()
-  idTHop: number;
+  @Input() loaiDc: string;
 
   @Input()
   loaiVthh: string;
@@ -66,16 +66,17 @@ export class BienBanGiaoNhanComponent extends Base2Component implements OnInit {
     modal: NzModalService,
     private donviService: DonviService,
     private danhMucService: DanhMucService,
-    private quyetDinhDieuChuyenTCService: QuyetDinhDieuChuyenTCService,
+    private bienBanGiaoNhanService: BienBanGiaoNhanService,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, quyetDinhDieuChuyenTCService);
+    super(httpClient, storageService, notification, spinner, modal, bienBanGiaoNhanService);
     this.formData = this.fb.group({
       nam: null,
       soQdinh: null,
       ngayDuyetTc: null,
       ngayHieuLuc: null,
-      loaiDc: null,
       trichYeu: null,
+      type: ["01"],
+      loaiDc: ["DCNB"]
     })
     this.filterTable = {
       nam: '',
@@ -94,7 +95,7 @@ export class BienBanGiaoNhanComponent extends Base2Component implements OnInit {
 
   dsDonvi: any[] = [];
   userInfo: UserLogin;
-  userdetail: any = {};
+  data: any = {};
   selectedId: number = 0;
   isVatTu: boolean = false;
   isView = false;
@@ -133,8 +134,7 @@ export class BienBanGiaoNhanComponent extends Base2Component implements OnInit {
       this.visibleTab = value;
     });
 
-    if (this.idTHop)
-      this.redirectDetail(0, false)
+
 
     try {
       this.initData()
@@ -177,9 +177,9 @@ export class BienBanGiaoNhanComponent extends Base2Component implements OnInit {
   }
 
   async initData() {
-    this.userInfo = this.userService.getUserLogin();
-    this.userdetail.maDvi = this.userInfo.MA_DVI;
-    this.userdetail.tenDvi = this.userInfo.TEN_DVI;
+    // this.userInfo = this.userService.getUserLogin();
+    // this.userdetail.maDvi = this.userInfo.MA_DVI;
+    // this.userdetail.tenDvi = this.userInfo.TEN_DVI;
   }
 
   setExpand(parantExpand: boolean = false, children: any = []): void {
@@ -216,7 +216,7 @@ export class BienBanGiaoNhanComponent extends Base2Component implements OnInit {
           body.ngayHieuLucTu = body.ngayHieuLuc[0];
           body.ngayHieuLucDen = body.ngayHieuLuc[1];
         }
-        this.quyetDinhDieuChuyenTCService
+        this.bienBanGiaoNhanService
           .export(body)
           .subscribe((blob) =>
             saveAs(blob, 'quyet-dinh-dieu-chuyen-tc.xlsx'),
