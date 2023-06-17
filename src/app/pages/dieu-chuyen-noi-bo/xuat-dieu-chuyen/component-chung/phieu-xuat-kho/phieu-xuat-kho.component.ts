@@ -12,8 +12,8 @@ import { chain, groupBy } from 'lodash';
 import { PhieuXuatKhoDieuChuyenService } from '../services/dcnb-xuat-kho.service';
 
 export interface PassDataXK {
-  soQddc: string, qddcId: boolean, soPhieuKtChatLuong: string, phieuKtChatLuongHdrId: number, maDiemKho: string, maNganKho: string, maNhaKho: string, maLoKho: string
-  tenDiemKho: string, tenNganKho: string, tenNhaKho: string, tenLoKho: string
+  soQddc: string, qddcId: boolean, soPhieuKnChatLuong: string, phieuKnChatLuongHdrId: number, maDiemKho: string, maNganKho: string, maNhaKho: string, maLoKho: string
+  tenDiemKho: string, tenNganKho: string, tenNhaKho: string, tenLoKho: string, loaiVthh: string, cloaiVthh: string, tenLoaiVthh: string, tenCloaiVthh: string, soLuongCanDc: number
 }
 @Component({
   selector: 'app-xuat-dcnb-phieu-xuat-kho',
@@ -34,8 +34,14 @@ export class PhieuXuatKhoDCNBComponent extends Base2Component implements OnInit 
   isViewPhieu: boolean = false;
   idPhieuKNCL: number;
   isViewPhieuKNCL: boolean;
-  passData: PassDataXK
+  passData: PassDataXK;
 
+  LIST_TRANG_THAI: { [key: string]: string } = {
+    [this.STATUS.DU_THAO]: "Dự thảo",
+    [this.STATUS.CHO_DUYET_LDCC]: "Chờ duyệt LĐ Chi Cục",
+    [this.STATUS.TU_CHOI_LDCC]: "Từ chối LĐ Chi Cục",
+    [this.STATUS.DA_DUYET_LDCC]: "Đã duyệt LĐ Chi Cục"
+  }
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -142,7 +148,7 @@ export class PhieuXuatKhoDCNBComponent extends Base2Component implements OnInit 
               return {
                 ...rowLv3,
                 idVirtual: uuidv4(),
-                childData: x
+                childData: rowLv3.id ? x : []
               }
             }).value();
             return {
@@ -190,15 +196,16 @@ export class PhieuXuatKhoDCNBComponent extends Base2Component implements OnInit 
     }
     return endValue.getTime() <= this.formData.value.tuNgay.getTime();
   };
-  redirectToChiTiet(lv2: any, isView: boolean) {
-    this.selectedId = lv2.id;
+  redirectToChiTiet(lv2: any, isView: boolean, id) {
+    this.selectedId = id;
     this.isDetail = true;
     this.isView = isView;
     // this.idQdinhDcc = idQdinhDcc;
     console.log("lv2", lv2)
     this.passData = {
-      soQddc: lv2.soQdinh, qddcId: lv2.qdinhDccId, soPhieuKtChatLuong: lv2.soPhieuKiemNghiemCl, phieuKtChatLuongHdrId: lv2.idPhieuKiemNghiemCl, maDiemKho: lv2.maDiemKho,
-      maNhaKho: lv2.maNhaKho, maNganKho: lv2.maNganKho, maLoKho: lv2.maloKho, tenDiemKho: lv2.tenDiemKho, tenNhaKho: lv2.tenNhaKho, tenNganKho: lv2.tenNganKho, tenLoKho: lv2.tenloKho
+      soQddc: lv2.soQdinh, qddcId: lv2.qdinhDccId, soPhieuKnChatLuong: lv2.soPhieuKiemNghiemCl, phieuKnChatLuongHdrId: lv2.phieuKiemNghiemId, maDiemKho: lv2.maDiemKho,
+      maNhaKho: lv2.maNhaKho, maNganKho: lv2.maNganKho, maLoKho: lv2.maloKho, tenDiemKho: lv2.tenDiemKho, tenNhaKho: lv2.tenNhaKho, tenNganKho: lv2.tenNganKho, tenLoKho: lv2.tenloKho,
+      loaiVthh: lv2.maHangHoa, cloaiVthh: lv2.maChLoaiHangHoa, tenLoaiVthh: lv2.tenHangHoa, tenCloaiVthh: lv2.tenChLoaiHangHoa, soLuongCanDc: lv2.slDienChuyen
     }
   }
 

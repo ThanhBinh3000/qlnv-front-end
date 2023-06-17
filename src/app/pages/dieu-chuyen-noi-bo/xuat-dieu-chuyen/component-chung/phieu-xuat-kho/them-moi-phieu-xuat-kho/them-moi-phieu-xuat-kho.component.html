@@ -30,7 +30,7 @@
             <div class="title-chi-tieu">
                 <span
                     [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDCC ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
-                    {{ formData.value.tenTrangThai }}
+                    {{ LIST_TRANG_THAI[formData.value.trangThai] }}
                 </span>
                 <span> PHIẾU XUẤT KHO </span>
             </div>
@@ -212,11 +212,11 @@
                 <div nz-col nzSpan="4">
                     <nz-form-item>
                         <nz-form-label nzRequired [nzNoColon]="true">
-                            Số phiếu kiểm tra chất lượng
+                            Số phiếu kiểm nghiệm chất lượng
                         </nz-form-label>
                         <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
                             <nz-input-group nzAddOnAfterIcon="folder-open">
-                                <input nz-input [readonly]="true" formControlName="soPhieuKtChatLuong" />
+                                <input nz-input [readonly]="true" formControlName="soPhieuKnChatLuong" />
                             </nz-input-group>
                         </nz-form-control>
                     </nz-form-item>
@@ -396,27 +396,29 @@
                 <tbody>
                     <tr *ngFor="let item of dataTable; let i = index">
                         <td>{{i + 1}}</td>
-                        <td>{{item.moTaHangHoa == null ? item.tenCloaiVthh : item.moTaHangHoa}}</td>
+                        <td>{{item.tenCloaiVthh}}</td>
                         <td>
                             <input nz-input [(ngModel)]="item.maSo" />
                         </td>
                         <td>{{item.donViTinh}}</td>
                         <td>
                             <nz-input-number [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nz-input
-                                [nzSize]="'small'" [(ngModel)]="item.soLuongChungTu"></nz-input-number>
+                                [nzSize]="'small'" [(ngModel)]="item.slDcThucTe"></nz-input-number>
                         </td>
+                        <td>{{item.duToanKinhPhiDc| number : '1.0-1' : 'vi_VN'}}</td>
                         <td>
                             <!-- <nz-input-number [nzDisabled]="loaiVthh != '02'" [nzFormatter]="globals.formatter"
                                 [nzParser]="globals.parser" nz-input [nzSize]="'small'"
                                 [(ngModel)]="item.soLuongThucXuat"></nz-input-number> -->
                             <nz-input-number [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nz-input
-                                [nzSize]="'small'" [(ngModel)]="item.soLuongThucXuat"></nz-input-number>
+                                [nzSize]="'small'" [(ngModel)]="item.kinhPhiDcTt"></nz-input-number>
                         </td>
-                        <td>{{item.donGia | number : '1.0-1' : 'vi_VN'}}</td>
-                        <td>{{item.donGia * item.soLuongThucXuat | number : '1.0-1' : 'vi_VN' }}</td>
                         <td *ngIf="!isDisabled()">
-                            <a (click)="clearItemRow(i)">
-                                <i class="fa fa-refresh"></i>
+                            <a *ngIf="i==dataTable.length-1" (click)="addItemRow()">
+                                <i class="fa fa-plus"></i>
+                            </a>
+                            <a *ngIf="i!=dataTable.length-1" (click)="deleteItemRow(i)">
+                                <i class="fa fa-trash-o do"></i>
                             </a>
                         </td>
                     </tr>
@@ -428,11 +430,11 @@
                 <div nz-col nzSpan="24">
                     <nz-form-item>
                         <nz-form-label [nzNoColon]="true">
-                            Tổng số lượng (viết bằng chữ)
+                            Tổng số lượng xuất ĐC thực tế(viết bằng chữ)
                         </nz-form-label>
                         <nz-form-control nz-col [nzErrorTip]="error">
                             <input nz-input [ngModelOptions]="{standalone: true}"
-                                [ngModel]="dataTable.length > 0 ? convertTien(dataTable[0].soLuongThucXuat) : ''"
+                                [ngModel]="dataTable.length > 0 ? convertTien(tinhTongSoLuong(dataTable)) : ''"
                                 readonly />
                         </nz-form-control>
                     </nz-form-item>
@@ -440,11 +442,11 @@
                 <div nz-col nzSpan="24">
                     <nz-form-item>
                         <nz-form-label [nzNoColon]="true">
-                            Tổng số tiền (viết bằng chữ)
+                            Tổng số kinh phí điều chuyển thực tế(viết bằng chữ)
                         </nz-form-label>
                         <nz-form-control nz-col [nzErrorTip]="error">
                             <input nz-input [ngModelOptions]="{standalone: true}"
-                                [ngModel]="dataTable.length > 0 ? convertTien(dataTable[0].soLuongThucXuat * dataTable[0].donGia) : ''"
+                                [ngModel]="dataTable.length > 0 ? convertTien(tinhTongKinhPhi(dataTable)) : ''"
                                 readonly />
                         </nz-form-control>
                     </nz-form-item>
@@ -452,10 +454,10 @@
                 <div nz-col [nzSpan]="24">
                     <nz-form-item>
                         <nz-form-label [nzNoColon]="true">
-                            Chứng từ kèm theo
+                            File xuất kho đã ký
                         </nz-form-label>
                         <div class="list-file">
-                            <file-list [disabled]="isDisabled()" [data]="fileDinhKem"></file-list>
+                            <file-list [disabled]="isDisabled()" [data]="fileDinhKems"></file-list>
                         </div>
                     </nz-form-item>
                 </div>

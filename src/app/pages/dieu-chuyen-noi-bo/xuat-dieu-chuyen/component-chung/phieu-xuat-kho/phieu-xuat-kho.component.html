@@ -55,7 +55,7 @@
                     <span>Xuất file</span>
                 </button>
                 <button type="button" class="btn btn-main" *ngIf="userService.isChiCuc()"
-                    (click)="redirectToChiTiet(false, null)">
+                    (click)="redirectToChiTiet(false, null, null)">
                     <i class="icon htvbdh_dau-cong"></i>
                     <span>Thêm</span>
                 </button>
@@ -72,10 +72,10 @@
                         <th>Thời hạn điều chuyển</th>
                         <th>Điểm kho</th>
                         <th>Lô kho</th>
-                        <th>Số Phiếu xuất kho</th>
-                        <th>Ngày xuất kho</th>
                         <th>Số phiếu KNCL</th>
                         <th>Ngày giám định</th>
+                        <th>Số Phiếu xuất kho</th>
+                        <th>Ngày xuất kho</th>
                         <th>Trạng thái</th>
                         <th style="width: 10%">Hành động</th>
                     </tr>
@@ -136,50 +136,55 @@
 
                                             </td>
                                             <td>
-                                                <a *ngIf="lv2.soPhieuKiemNghiemCl && lv2.idPhieuKNCL" nz-button
-                                                    nzType="link" (click)="openModalPhieuKNCL(lv2.idPhieuKNCL)">{{
+                                                <a *ngIf="lv2.soPhieuKiemNghiemCl && lv2.phieuKiemNghiemId" nz-button
+                                                    nzType="link" (click)="openModalPhieuKNCL(lv2.phieuKiemNghiemId)">{{
                                                     lv2.soPhieuKiemNghiemCl}}</a>
                                             </td>
-                                            <td>{{lv2.ngayKnghiem}}</td>
+                                            <td>{{lv2.ngayGiamDinh}}</td>
                                             <td></td>
                                             <td></td>
                                             <td></td>
                                             <td class="text-left">
-                                                <a (click)="redirectToChiTiet(lv2, null)"
+                                                <a (click)="redirectToChiTiet(lv2, null, null)"
                                                     *ngIf="userService.isChiCuc()">
                                                     <i class="fa fa-plus"></i>
                                                 </a>
                                             </td>
                                         </tr>
-                                        <ng-container *ngIf="let lv3 of lv2.childData">
-                                            <tr class="level-4">
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td style="color: black ;font-weight: bold;">{{lv2.soPhieuXuatKho}}</td>
-                                                <td>{{lv2.ngayXuatKho | date: 'dd/MM/YYYY' }}</td>
-                                                <td>{{lv2.tenTrangThai}}</td>
-                                                <td class="text-left">
-                                                    <a *ngIf="lv2.trangThai == STATUS.DA_DUYET_LDCC"
-                                                        (click)="redirectToChiTiet(lv2, false)">
-                                                        <i class="fa fa-eye"></i>
-                                                    </a>
-                                                    <a *ngIf="lv2.trangThai != STATUS.DA_DUYET_LDCC"
-                                                        (click)="redirectToChiTiet(lv2, false)">
-                                                        <i class="fa fa-pencil"></i>
-                                                    </a>
-                                                    <a *ngIf="lv2.trangThai == STATUS.DU_THAO" (click)="delete(lv2)">
-                                                        <i class="fa fa-trash-o do"></i>
-                                                    </a>
+                                        <ng-container *ngIf="lv2.childData.length>0">
+                                            <ng-container *ngFor="let lv3 of lv2.childData">
 
-                                                </td>
-                                            </tr>
+                                                <tr class="level-4">
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td style="color: black ;font-weight: bold;">{{lv3.soPhieuXuatKho}}
+                                                    </td>
+                                                    <td>{{lv3.ngayXuatKho | date: 'dd/MM/YYYY' }}</td>
+                                                    <td>{{LIST_TRANG_THAI[lv3.trangThai]}}</td>
+                                                    <td class="text-left">
+                                                        <a *ngIf="lv3.trangThai == STATUS.DA_DUYET_LDCC"
+                                                            (click)="redirectToChiTiet(lv3, false, lv3.id)">
+                                                            <i class="fa fa-eye"></i>
+                                                        </a>
+                                                        <a *ngIf="lv3.trangThai != STATUS.DA_DUYET_LDCC"
+                                                            (click)="redirectToChiTiet(lv3, false, lv3.id)">
+                                                            <i class="fa fa-pencil"></i>
+                                                        </a>
+                                                        <a *ngIf="lv3.trangThai == STATUS.DU_THAO"
+                                                            (click)="delete(lv3)">
+                                                            <i class="fa fa-trash-o do"></i>
+                                                        </a>
+
+                                                    </td>
+                                                </tr>
+                                            </ng-container>
                                         </ng-container>
                                     </ng-container>
                                 </ng-container>
