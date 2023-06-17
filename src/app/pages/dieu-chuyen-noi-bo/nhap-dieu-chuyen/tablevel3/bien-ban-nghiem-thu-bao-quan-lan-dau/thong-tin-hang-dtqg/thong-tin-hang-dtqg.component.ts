@@ -22,9 +22,12 @@ export class ThongTinHangDtqgComponent extends Base2Component implements OnInit 
   formData: FormGroup
   fb: FormBuilder = new FormBuilder();
 
+  typeData: string
+  typeAction: string
+  data: any
+
   listDM: any[] = [];
   listMatHang: any[] = [];
-  // isMatHang: boolean
 
   constructor(
     httpClient: HttpClient,
@@ -41,6 +44,7 @@ export class ThongTinHangDtqgComponent extends Base2Component implements OnInit 
   ) {
     super(httpClient, storageService, notification, spinner, modal, quanLyHangTrongKhoService);
     this.formData = this.fb.group({
+      id: [],
       danhMuc: [],
       nhomHang: [],
       donViTinh: [],
@@ -60,6 +64,8 @@ export class ThongTinHangDtqgComponent extends Base2Component implements OnInit 
 
   ngOnInit(): void {
     this.getDSMatHang()
+    console.log('this.data', this.data)
+    // this.formData.patchValue(this.data)
   }
 
   async getDSMatHang() {
@@ -69,6 +75,9 @@ export class ThongTinHangDtqgComponent extends Base2Component implements OnInit 
     if (res.msg == MESSAGE.SUCCESS) {
       this.listMatHang = res.data.content
     }
+    let data = this.data
+    data.isMatHang = (data.idParent && !data.isParent)
+    this.formData.patchValue(data);
   }
 
   async onChangeSLTrongNam(value) {
@@ -108,10 +117,7 @@ export class ThongTinHangDtqgComponent extends Base2Component implements OnInit 
 
 
   handleOk(item: any) {
-    this._modalRef.close({
-      ...item,
-      // isUpdate: !!this.data
-    });
+    this._modalRef.close(item);
   }
 
   onCancel() {

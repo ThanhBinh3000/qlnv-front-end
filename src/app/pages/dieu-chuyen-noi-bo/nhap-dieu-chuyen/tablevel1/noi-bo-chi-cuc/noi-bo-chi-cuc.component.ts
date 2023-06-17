@@ -14,6 +14,8 @@ import { StorageService } from 'src/app/services/storage.service';
 })
 export class NoiBoChiCucComponent extends Base2Component implements OnInit {
 
+  loaiDc: string = "DCNB"
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -23,24 +25,7 @@ export class NoiBoChiCucComponent extends Base2Component implements OnInit {
     private quyetDinhDieuChuyenTCService: QuyetDinhDieuChuyenTCService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, quyetDinhDieuChuyenTCService);
-    this.formData = this.fb.group({
-      nam: null,
-      soQdinh: null,
-      ngayDuyetTc: null,
-      ngayHieuLuc: null,
-      loaiDc: null,
-      trichYeu: null,
-    })
-    this.filterTable = {
-      nam: '',
-      soQdinh: '',
-      ngayLapKh: '',
-      ngayDuyetTcTu: '',
-      loaiDc: '',
-      trichYeu: '',
-      tenDvi: '',
-      tenTrangThai: '',
-    };
+
   }
 
   tabSelected: number = 0;

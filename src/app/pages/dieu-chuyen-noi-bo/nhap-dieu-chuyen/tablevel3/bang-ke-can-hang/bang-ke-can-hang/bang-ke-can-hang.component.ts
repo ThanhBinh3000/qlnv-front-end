@@ -15,19 +15,19 @@ import { CHUC_NANG, STATUS } from 'src/app/constants/status';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { Subject } from 'rxjs';
 import { QuyetDinhDieuChuyenTCService } from 'src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-tc.service';
+import { BangKeCanHangService } from 'src/app/services/dieu-chuyen-noi-bo/nhap-dieu-chuyen/bang-ke-can-hang';
 
 @Component({
-  selector: 'app-bang-ke-nhap-vat-tu',
-  templateUrl: './bang-ke-nhap-vat-tu.component.html',
-  styleUrls: ['./bang-ke-nhap-vat-tu.component.scss']
+  selector: 'app-bang-ke-can-hang',
+  templateUrl: './bang-ke-can-hang.component.html',
+  styleUrls: ['./bang-ke-can-hang.component.scss']
 })
-export class BangKeNhapVatTuComponent extends Base2Component implements OnInit {
+export class BangKeCanHangComponent extends Base2Component implements OnInit {
 
   isVisibleChangeTab$ = new Subject();
   visibleTab: boolean = true;
   tabSelected: number = 0;
-  @Input()
-  idTHop: number;
+  @Input() loaiDc: string;
 
   @Input()
   loaiVthh: string;
@@ -67,15 +67,17 @@ export class BangKeNhapVatTuComponent extends Base2Component implements OnInit {
     private donviService: DonviService,
     private danhMucService: DanhMucService,
     private quyetDinhDieuChuyenTCService: QuyetDinhDieuChuyenTCService,
+    private bangKeCanHangService: BangKeCanHangService,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, quyetDinhDieuChuyenTCService);
+    super(httpClient, storageService, notification, spinner, modal, bangKeCanHangService);
     this.formData = this.fb.group({
       nam: null,
       soQdinh: null,
       ngayDuyetTc: null,
       ngayHieuLuc: null,
-      loaiDc: null,
       trichYeu: null,
+      type: ["01"],
+      loaiDc: ["DCNB"]
     })
     this.filterTable = {
       nam: '',
@@ -95,6 +97,7 @@ export class BangKeNhapVatTuComponent extends Base2Component implements OnInit {
   dsDonvi: any[] = [];
   userInfo: UserLogin;
   userdetail: any = {};
+  data: any = {};
   selectedId: number = 0;
   isVatTu: boolean = false;
   isView = false;
@@ -132,9 +135,6 @@ export class BangKeNhapVatTuComponent extends Base2Component implements OnInit {
     this.isVisibleChangeTab$.subscribe((value: boolean) => {
       this.visibleTab = value;
     });
-
-    if (this.idTHop)
-      this.redirectDetail(0, false)
 
     try {
       this.initData()

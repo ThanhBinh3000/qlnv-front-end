@@ -152,16 +152,16 @@
                                                 ||(!userService.isAccessPermisson('XHDTQG_PTTT_KTCL_LT_BBLM_DUYET_LDCCUC') && lv2.trangThai == STATUS.CHO_DUYET_LDCC)
                                                 ||(userService.isAccessPermisson('XHDTQG_PTTT_KTCL_LT_BBLM_DUYET_LDCCUC') && lv2.trangThai == STATUS.TU_CHOI_LDCC)
                                                 ||(userService.isAccessPermisson('XHDTQG_PTTT_KTCL_LT_BBLM_DUYET_LDCCUC') && lv2.trangThai == STATUS.DU_THAO)"
-                                                    (click)="redirectToChiTiet(lv2, true, null)">
+                                                    (click)="redirectToChiTiet(lv2,lv2.trangThai, null)">
                                                     <i class="fa fa-eye"></i>
                                                 </a>
                                                 <a *ngIf="(userService.isAccessPermisson('XHDTQG_PTTT_KTCL_LT_BBLM_THEM') && lv2.trangThai == STATUS.DU_THAO)
                                                 ||(userService.isAccessPermisson('XHDTQG_PTTT_KTCL_LT_BBLM_THEM') && lv2.trangThai == STATUS.TU_CHOI_LDCC)"
-                                                    (click)="redirectToChiTiet(lv2, false, null)">
+                                                    (click)="redirectToChiTiet(lv2,lv2.trangThai, null)">
                                                     <i class="fa fa-pencil"></i>
                                                 </a>
                                                 <a *ngIf="(userService.isAccessPermisson('XHDTQG_PTTT_KTCL_LT_BBLM_DUYET_LDCCUC') && lv2.trangThai == STATUS.CHO_DUYET_LDCC)"
-                                                    (click)="redirectToChiTiet(lv2, false, null)">
+                                                    (click)="redirectToChiTiet(lv2,lv2.trangThai, null)">
                                                     <i class="icon htvbdh_tcdt_pheduyet"></i>
                                                 </a>
                                                 <a *ngIf="(lv2.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('XHDTQG_PTTT_KTCL_LT_BBLM_XOA')) "
@@ -198,7 +198,7 @@
     </div>
 </div>
 <div *ngIf="isDetail">
-    <app-them-moi-bien-ban-lay-mau-btt [id]="selectedId" (showListEvent)="showList()" [isView]="isView"
+    <app-them-moi-bien-ban-lay-mau-btt [id]="selectedId" (showListEvent)="showList()" [trangThaiBb]="trangThaiBienBan"
         [loaiVthh]="loaiVthh" [idQdGiaoNvXh]="idQdGiaoNvXh">
     </app-them-moi-bien-ban-lay-mau-btt>
 </div>

@@ -106,7 +106,7 @@
                 <td [nzExpand]="row1.expand"
                   (nzExpandChange)="row1.expand=!row1.expand; row1.children=setExpand(row1.expand, row1.children)">
                 </td>
-                <td class="bold">{{ row1.soQdinh || "" }}</td>
+                <td class="bold text-blue" (click)="redirectDetail(0,false)">{{ row1.soQdinh || "" }}</td>
                 <td class="bold">{{ row1.namKh || "" }}</td>
                 <td></td>
                 <td></td>
@@ -130,7 +130,8 @@
                     <td></td>
                     <td></td>
                     <td class="bold">{{ row2.thoiHanDieuChuyen || ""}}</td>
-                    <td class="bold">{{ row2.tenloKhoXuat || ""}}{{ row2.tenNganKhoXuat || ""}}{{ row2.tenDiemKhoXuat ||
+                    <td class="bold">{{ row2.tenloKhoXuat || ""}} {{ row2.tenNganKhoXuat || ""}} {{ row2.tenDiemKhoXuat
+                      ||
                       ""}}
                     </td>
                     <td class="bold">{{ row2.tenTrangThai || ""}}</td>
@@ -185,13 +186,13 @@
                           <td></td>
                           <td></td>
                           <td>
-                            <a>
+                            <a (click)="add(row4)">
                               <i class="icon htvbdh_dau-cong"></i>
                             </a>
                           </td>
                         </tr>
                         <ng-container *ngFor="let row5 of row4.children, let y = index">
-                          <tr>
+                          <tr *ngIf="row5.id">
                             <td></td>
                             <td></td>
                             <td></td>
@@ -209,7 +210,7 @@
                               'vi_VN')}}</td>
                             <td>{{(row5.tongKinhPhiPd |number: '1.0-1':
                               'vi_VN')}}</td>
-                            <td></td>
+                            <td>{{(row5.trangThai || "")}}</td>
                             <td>
                               <a *ngIf="row5.trangThai !== STATUS.DU_THAO" (click)="redirectDetail(row5.id, true)">
                                 <i class="fa fa-eye"></i>
@@ -217,36 +218,12 @@
                               <a *ngIf="row5.trangThai == STATUS.DU_THAO" (click)="redirectDetail(row5.id, false)">
                                 <i class="fa fa-pencil"></i>
                               </a>
-                              <a *ngIf="row5.trangThai == STATUS.DU_THAO">
+                              <a *ngIf="row5.trangThai == STATUS.DU_THAO" (click)="xoa(row5)">
                                 <i class="fa fa-trash-o do"></i>
                               </a>
                             </td>
                           </tr>
-                          <!-- <ng-container *ngFor="let e of d.children, let y = index">
-                            <tr>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td>{{e.tenLoKhoNhan}}</td>
-                              <td class="text-right">
-                                {{c.tichLuongKd|number:'1.0-1':'vi_VN'}}</td>
-                              <td class="text-right">
-                                {{c.soLuongPhanBo|number:'1.0-1':'vi_VN'}}</td>
-                              <td></td>
-                            </tr>
-                          </ng-container> -->
+
                         </ng-container>
                       </ng-container>
                     </ng-container>
@@ -265,8 +242,8 @@
   </div>
 
   <div class="chi-tiet" *ngIf="isDetail">
-    <app-thong-tin-bien-ban-nghiem-thu-bao-quan-lan-dau [isView]="isView" [idInput]="selectedId"
-      (showListEvent)="quayLai()"></app-thong-tin-bien-ban-nghiem-thu-bao-quan-lan-dau>
+    <app-thong-tin-bien-ban-nghiem-thu-bao-quan-lan-dau [loaiDc]="loaiDc" [isView]="isView" [idInput]="selectedId"
+      [data]="data" (showListEvent)="quayLai()"></app-thong-tin-bien-ban-nghiem-thu-bao-quan-lan-dau>
   </div>
 
 </div>

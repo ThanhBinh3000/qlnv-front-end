@@ -137,7 +137,7 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
         });
       }
       if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
-        let data = this.dataChiTieu.khVatTuXuat.filter(item => item.maVatTuCha == this.loaiVthh);
+        let data = this.dataChiTieu.khVatTuXuat.filter(item => item.maVatTuCha == this.loaiVthh && item.maVatTu == this.cloaiVthh);
         data.forEach(item => {
           let body = {
             maDvi: item.maDvi,

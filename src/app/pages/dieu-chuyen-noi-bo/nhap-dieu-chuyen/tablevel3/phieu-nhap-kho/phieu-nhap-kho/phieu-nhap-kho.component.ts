@@ -15,20 +15,19 @@ import { CHUC_NANG, STATUS } from 'src/app/constants/status';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { Subject } from 'rxjs';
 import { QuyetDinhDieuChuyenTCService } from 'src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-tc.service';
-import { HoSoKyThuatService } from 'src/app/services/dieu-chuyen-noi-bo/nhap-dieu-chuyen/ho-so-ky-thuat';
+import { PhieuNhapKhoService } from 'src/app/services/dieu-chuyen-noi-bo/nhap-dieu-chuyen/phieu-nhap-kho';
 
 @Component({
-  selector: 'app-ho-so-ky-thuat',
-  templateUrl: './ho-so-ky-thuat.component.html',
-  styleUrls: ['./ho-so-ky-thuat.component.scss']
+  selector: 'app-phieu-nhap-kho',
+  templateUrl: './phieu-nhap-kho.component.html',
+  styleUrls: ['./phieu-nhap-kho.component.scss']
 })
-export class HoSoKyThuatComponent extends Base2Component implements OnInit {
+export class PhieuNhapKhoComponent extends Base2Component implements OnInit {
 
   isVisibleChangeTab$ = new Subject();
   visibleTab: boolean = true;
   tabSelected: number = 0;
-  @Input()
-  idTHop: number;
+  @Input() loaiDc: string;
 
   @Input()
   loaiVthh: string;
@@ -45,7 +44,7 @@ export class HoSoKyThuatComponent extends Base2Component implements OnInit {
     { ma: "CHI_CUC", ten: "Giữa 2 chi cục trong cùng 1 cục" },
     { ma: "CUC", ten: "Giữa 2 cục DTNN KV" },
   ];
-
+  dataTableView: any[] = [];
   listLoaiHangHoa: any[] = [];
   listHangHoaAll: any[] = [];
   listChungLoaiHangHoa: any[] = [];
@@ -68,16 +67,17 @@ export class HoSoKyThuatComponent extends Base2Component implements OnInit {
     private donviService: DonviService,
     private danhMucService: DanhMucService,
     private quyetDinhDieuChuyenTCService: QuyetDinhDieuChuyenTCService,
-    private hoSoKyThuatService: HoSoKyThuatService,
+    private phieuNhapKhoService: PhieuNhapKhoService,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, hoSoKyThuatService);
+    super(httpClient, storageService, notification, spinner, modal, phieuNhapKhoService);
     this.formData = this.fb.group({
       nam: null,
       soQdinh: null,
       ngayDuyetTc: null,
       ngayHieuLuc: null,
-      loaiDc: null,
       trichYeu: null,
+      type: ["01"],
+      loaiDc: ["DCNB"]
     })
     this.filterTable = {
       nam: '',
@@ -135,8 +135,8 @@ export class HoSoKyThuatComponent extends Base2Component implements OnInit {
       this.visibleTab = value;
     });
 
-    if (this.idTHop)
-      this.redirectDetail(0, false)
+    // if (this.idTHop)
+    //   this.redirectDetail(0, false)
 
     try {
       this.initData()
@@ -164,9 +164,12 @@ export class HoSoKyThuatComponent extends Base2Component implements OnInit {
   }
 
   isCuc() {
-    return this.userService.isCuc()
+    return false//this.userService.isCuc()
   }
 
+  // isChiCuc() {
+  //   return false//this.userService.isChiCuc()
+  // }
 
   selectTab(tab: number) {
     if (this.isDetail) {
@@ -181,28 +184,12 @@ export class HoSoKyThuatComponent extends Base2Component implements OnInit {
     this.userdetail.tenDvi = this.userInfo.TEN_DVI;
   }
 
-  // async loadDsVthh() {
-  //   let res = await this.danhMucService.getDanhMucHangDvqlAsyn({});
-  //   if (res.msg == MESSAGE.SUCCESS) {
-  //     this.listHangHoaAll = res.data;
-  //     this.listLoaiHangHoa = res.data?.filter((x) => (x.ma.length == 2 && !x.ma.match("^01.*")) || (x.ma.length == 4 && x.ma.match("^01.*")));
-  //   }
-  // }
-
-  // async changeHangHoa(event: any) {
-  //   if (event) {
-  //     this.formData.patchValue({ donViTinh: this.listHangHoaAll.find(s => s.ma == event)?.maDviTinh })
-
-  //     let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({ str: event });
-  //     if (res.msg == MESSAGE.SUCCESS) {
-  //       if (res.data) {
-  //         this.listChungLoaiHangHoa = res.data;
-  //       }
-  //     } else {
-  //       this.notification.error(MESSAGE.ERROR, res.msg);
-  //     }
-  //   }
-  // }
+  setExpand(parantExpand: boolean = false, children: any = []): void {
+    if (parantExpand) {
+      return children.map(f => ({ ...f, expand: false }))
+    }
+    return children
+  }
 
   async timKiem() {
     if (this.formData.value.ngayDuyetTc) {

@@ -10,12 +10,13 @@ import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { DonviService } from 'src/app/services/donvi.service';
-import { isEmpty } from 'lodash';
+import { chain, cloneDeep } from 'lodash';
 import { CHUC_NANG, STATUS } from 'src/app/constants/status';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { Subject } from 'rxjs';
 import { QuyetDinhDieuChuyenTCService } from 'src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-tc.service';
 import { PhieuKiemNghiemChatLuongService } from 'src/app/services/dieu-chuyen-noi-bo/nhap-dieu-chuyen/phieu-kiem-nghiem-chat-luong';
+import * as uuidv4 from "uuid";
 @Component({
   selector: 'app-kiem-nghiem-chat-luong',
   templateUrl: './kiem-nghiem-chat-luong.component.html',
@@ -26,37 +27,36 @@ export class KiemNghiemChatLuongComponent extends Base2Component implements OnIn
   isVisibleChangeTab$ = new Subject();
   visibleTab: boolean = true;
   tabSelected: number = 0;
-  @Input()
-  idTHop: number;
+  @Input() loaiDc: string;
 
-  @Input()
-  loaiVthh: string;
-  @Input()
-  loaiVthhCache: string;
+  // @Input()
+  // loaiVthh: string;
+  // @Input()
+  // loaiVthhCache: string;
 
-  CHUC_NANG = CHUC_NANG;
-  listLoaiDieuChuyen: any[] = [
-    { ma: "ALL", ten: "Tất cả" },
-    { ma: "CHI_CUC", ten: "Giữa 2 chi cục trong cùng 1 cục" },
-    { ma: "CUC", ten: "Giữa 2 cục DTNN KV" },
-  ];
-  listLoaiDCFilterTable: any[] = [
-    { ma: "CHI_CUC", ten: "Giữa 2 chi cục trong cùng 1 cục" },
-    { ma: "CUC", ten: "Giữa 2 cục DTNN KV" },
-  ];
+  // CHUC_NANG = CHUC_NANG;
+  // listLoaiDieuChuyen: any[] = [
+  //   { ma: "ALL", ten: "Tất cả" },
+  //   { ma: "CHI_CUC", ten: "Giữa 2 chi cục trong cùng 1 cục" },
+  //   { ma: "CUC", ten: "Giữa 2 cục DTNN KV" },
+  // ];
+  // listLoaiDCFilterTable: any[] = [
+  //   { ma: "CHI_CUC", ten: "Giữa 2 chi cục trong cùng 1 cục" },
+  //   { ma: "CUC", ten: "Giữa 2 cục DTNN KV" },
+  // ];
   dataTableView: any[] = [];
-  listLoaiHangHoa: any[] = [];
-  listHangHoaAll: any[] = [];
-  listChungLoaiHangHoa: any[] = [];
-  listTrangThai: any[] = [
-    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
-    { ma: this.STATUS.CHO_DUYET_TP, giaTri: 'Chờ duyệt - TP' },
-    { ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối - TP' },
-    { ma: this.STATUS.CHO_DUYET_LDC, giaTri: 'Chờ duyệt - LĐ Cục' },
-    { ma: this.STATUS.TU_CHOI_LDC, giaTri: 'Từ chối - LĐ Cục' },
-    { ma: this.STATUS.DA_DUYET_LDC, giaTri: 'Đã duyệt - LĐ Cục' },
-    { ma: this.STATUS.DA_TAO_CBV, giaTri: 'Đã tạo - CB Vụ' },
-  ];
+  // listLoaiHangHoa: any[] = [];
+  // listHangHoaAll: any[] = [];
+  // listChungLoaiHangHoa: any[] = [];
+  // listTrangThai: any[] = [
+  //   { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+  //   { ma: this.STATUS.CHO_DUYET_TP, giaTri: 'Chờ duyệt - TP' },
+  //   { ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối - TP' },
+  //   { ma: this.STATUS.CHO_DUYET_LDC, giaTri: 'Chờ duyệt - LĐ Cục' },
+  //   { ma: this.STATUS.TU_CHOI_LDC, giaTri: 'Từ chối - LĐ Cục' },
+  //   { ma: this.STATUS.DA_DUYET_LDC, giaTri: 'Đã duyệt - LĐ Cục' },
+  //   { ma: this.STATUS.DA_TAO_CBV, giaTri: 'Đã tạo - CB Vụ' },
+  // ];
 
   constructor(
     httpClient: HttpClient,
@@ -77,53 +77,28 @@ export class KiemNghiemChatLuongComponent extends Base2Component implements OnIn
       ngay: null,
       soBbLayMau: null,
       soBbXuatDocKho: null,
+      type: ["01"],
+      loaiDc: ["DCNB"]
     })
   }
 
 
-  dsDonvi: any[] = [];
+  data: any[] = [];
   userInfo: UserLogin;
   userdetail: any = {};
   selectedId: number = 0;
   isVatTu: boolean = false;
   isView = false;
 
-  disabledStartNgayLapKh = (startValue: Date): boolean => {
-    if (startValue && this.formData.value.ngayLapKhDen) {
-      return startValue.getTime() > this.formData.value.ngayLapKhDen.getTime();
-    } else {
-      return false;
-    }
-  };
 
-  disabledEndNgayLapKh = (endValue: Date): boolean => {
-    if (!endValue || !this.formData.value.ngayLapKhTu) {
-      return false;
-    }
-    return endValue.getTime() <= this.formData.value.ngayLapKhDen.getTime();
-  };
-
-  disabledStartNgayDuyetLdc = (startValue: Date): boolean => {
-    if (startValue && this.formData.value.ngayDuyetLdcDen) {
-      return startValue.getTime() > this.formData.value.ngayDuyetLdcDen.getTime();
-    }
-    return false;
-  };
-
-  disabledEndNgayDuyetLdc = (endValue: Date): boolean => {
-    if (!endValue || !this.formData.value.ngayDuyetLdcTu) {
-      return false;
-    }
-    return endValue.getTime() <= this.formData.value.ngayDuyetLdcDen.getTime();
-  };
 
   async ngOnInit() {
     this.isVisibleChangeTab$.subscribe((value: boolean) => {
       this.visibleTab = value;
     });
-
-    if (this.idTHop)
-      this.redirectDetail(0, false)
+    console.log('KiemNghiemChatLuongComponentloaiDc', this.loaiDc)
+    // if (this.idTHop)
+    //   this.redirectDetail(0, false)
 
     try {
       this.initData()
@@ -179,11 +154,61 @@ export class KiemNghiemChatLuongComponent extends Base2Component implements OnIn
   }
 
   async timKiem() {
-    if (this.formData.value.ngay) {
-      this.formData.value.tuNgay = dayjs(this.formData.value.ngay[0]).format('YYYY-MM-DD')
-      this.formData.value.denNgay = dayjs(this.formData.value.ngay[1]).format('YYYY-MM-DD')
+    // if (this.formData.value.ngay) {
+    //   this.formData.value.tuNgay = dayjs(this.formData.value.ngay[0]).format('YYYY-MM-DD')
+    //   this.formData.value.denNgay = dayjs(this.formData.value.ngay[1]).format('YYYY-MM-DD')
+    // }
+    // await this.search();
+    let body = this.formData.value
+    body.paggingReq = {
+      limit: this.pageSize,
+      page: this.page - 1
     }
-    await this.search();
+    let res = await this.phieuKiemNghiemChatLuongService.search(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      let data = res.data.content
+        .map(element => {
+          return {
+            ...element,
+            maKho: `${element.thoiHanDieuChuyen}${element.tenDiemKho}`,
+            maloNganKhoNhan: `${element.maloKhoNhan}${element.maNganKhoNhan}`
+          }
+        });
+      this.dataTableView = this.buildTableView(data)
+      console.log('data', data, res)
+      console.log('this.dataTableView', this.dataTableView)
+    }
+  }
+
+  buildTableView(data: any[] = []) {
+    let dataView = chain(data)
+      .groupBy("soQdinh")
+      ?.map((value1, key1) => {
+        let children1 = chain(value1)
+          .groupBy("maKho")
+          ?.map((value2, key2) => {
+
+            let row2 = value2?.find(s => s.maKho == key2);
+
+            return {
+              ...row2,
+              idVirtual: row2 ? row2.idVirtual ? row2.idVirtual : uuidv4.v4() : uuidv4.v4(),
+              children: value2,
+            }
+          }
+          ).value();
+
+
+        let row1 = value1?.find(s => s.soQdinh === key1);
+        return {
+          ...row1,
+          idVirtual: row1 ? row1.idVirtual ? row1.idVirtual : uuidv4.v4() : uuidv4.v4(),
+          children: children1,
+          expand: true
+        };
+      }).value();
+
+    return dataView
   }
 
   exportDataTC() {
@@ -210,6 +235,40 @@ export class KiemNghiemChatLuongComponent extends Base2Component implements OnIn
     } else {
       this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
     }
+  }
+
+  add(data: any) {
+    this.data = data;
+    this.isDetail = true;
+    this.isView = false;
+  }
+
+  xoa(data: any) {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: () => {
+        this.spinner.show();
+        try {
+          let body = {
+            id: data.id
+          };
+          this.phieuKiemNghiemChatLuongService.delete(body).then(async () => {
+            await this.timKiem();
+            this.spinner.hide();
+          });
+        } catch (e) {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      },
+    });
   }
 
   redirectDetail(id, b: boolean) {

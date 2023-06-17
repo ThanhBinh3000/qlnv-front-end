@@ -20,6 +20,7 @@ import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
 
 @Component({
   selector: 'app-them-quyet-dinh-ban-dau-gia',
@@ -32,8 +33,6 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
   @Input() idInput: number = 0;
   @Input() dataTongHop: any;
   @Input() isViewOnModal: boolean;
-  @Input() maDviCuc: string
-  @Input() dviCapCuc: any;
   @Output()
   showListEvent = new EventEmitter<any>();
 
@@ -49,6 +48,8 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
   selected: boolean = false;
   listLoaiHinhNx: any[] = [];
   listKieuNx: any[] = [];
+  maDviCuc: string;
+
 
   constructor(
     httpClient: HttpClient,
@@ -60,6 +61,7 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
     private quyetDinhPdKhBdgService: QuyetDinhPdKhBdgService,
     private deXuatKhBanDauGiaService: DeXuatKhBanDauGiaService,
     private tongHopDeXuatKeHoachBanDauGiaService: TongHopDeXuatKeHoachBanDauGiaService,
+    private chiTieuKeHoachNamCapTongCucService: ChiTieuKeHoachNamCapTongCucService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, quyetDinhPdKhBdgService);
     this.formData = this.fb.group({
@@ -85,6 +87,7 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
       slDviTsan: [],
       loaiHinhNx: [''],
       kieuNx: [''],
+      namKh: [],
     })
   }
 
@@ -139,6 +142,12 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
     await this.spinner.hide();
   }
 
+  async onChangeNamKh() {
+    this.formData.patchValue({
+      namKh: this.formData.value.nam
+    })
+  }
+
   async loadDataComboBox() {
     // loại hình nhập xuất
     this.listLoaiHinhNx = [];
@@ -165,7 +174,6 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
         tenCloaiVthh: dataTongHop.tenCloaiVthh,
         loaiVthh: dataTongHop.loaiVthh,
         tenLoaiVthh: dataTongHop.tenLoaiVthh,
-        nam: dataTongHop.namKh,
         idThHdr: dataTongHop.id == null ? dataTongHop.idTh : dataTongHop.id,
         phanLoai: 'TH',
       })
@@ -214,9 +222,13 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
     if (id) {
       let data = await this.detail(id);
       this.formData.patchValue({
-        soQdPd: data.soQdPd?.split('/')[0]
+        soQdPd: data.soQdPd?.split('/')[0],
+        namKh: this.formData.value.nam
       })
-      if (this.maDviCuc && this.dviCapCuc == true) {
+      if (this.userService.isCuc()) {
+        this.maDviCuc = this.userInfo.MA_DVI
+      }
+      if (this.maDviCuc) {
         this.danhsachDx = data.children.filter(s => s.maDvi == this.maDviCuc)
       } else {
         this.danhsachDx = data.children;
@@ -237,7 +249,7 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
     await this.spinner.show();
     let bodyTh = {
       trangThai: STATUS.CHUA_TAO_QD,
-      namKh: this.formData.get('nam').value,
+      namKh: this.formData.value.nam,
       loaiVthh: this.loaiVthh,
       paggingReq: {
         limit: this.globals.prop.MAX_INTERGER,
@@ -292,17 +304,18 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
             slDviTsan: soLuongDviTsan,
             loaiHinhNx: data.loaiHinhNx,
             kieuNx: data.kieuNx,
+            namKh: this.formData.value.nam,
             idThHdr: event,
             idTrHdr: null,
             soTrHdr: null,
           })
+          this.getDataChiTieu();
           for (let item of data.children) {
             await this.deXuatKhBanDauGiaService.getDetail(item.idDxHdr).then((res) => {
               if (res.msg == MESSAGE.SUCCESS) {
                 const dataRes = res.data;
                 this.formData.patchValue({
                   tchuanCluong: dataRes.tchuanCluong,
-                  soQdCc: dataRes.soQdCtieu,
                 })
                 dataRes.idDxHdr = dataRes.id;
                 this.danhsachDx.push(dataRes);
@@ -322,6 +335,22 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
     await this.spinner.hide()
   }
 
+  async getDataChiTieu() {
+    let res2 = null;
+    res2 = await this.chiTieuKeHoachNamCapTongCucService.canCuCuc(
+      +this.formData.get('nam').value,
+    );
+    if (res2.msg == MESSAGE.SUCCESS) {
+      this.formData.patchValue({
+        soQdCc: res2.data.soQuyetDinh,
+      });
+    } else {
+      this.formData.patchValue({
+        soQdCc: null
+      });
+    }
+  }
+
   async openDialogTr() {
     if (this.formData.get('phanLoai').value != 'TTr') {
       return
@@ -331,7 +360,7 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
     let bodyToTrinh = {
       trangThai: STATUS.DA_DUYET_CBV,
       trangThaiTh: STATUS.CHUA_TONG_HOP,
-      namKh: this.formData.get('nam').value,
+      namKh: this.formData.value.nam,
       loaiVthh: this.loaiVthh,
       paggingReq: {
         limit: this.globals.prop.MAX_INTERGER,
@@ -376,7 +405,6 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
         if (this.danhsachDx && this.danhsachDx.length > 0) {
           this.showFirstRow(event, this.danhsachDx[0]);
         }
-        let tongMucDt = 0
         this.formData.patchValue({
           cloaiVthh: data.cloaiVthh,
           tenCloaiVthh: data.tenCloaiVthh,
@@ -393,7 +421,6 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
           tgianGnhanGhiChu: data.tgianGnhanGhiChu,
           pthucGnhan: data.pthucGnhan,
           thongBaoKh: data.thongBaoKh,
-          soQdCc: data.soQdCtieu,
           trichYeu: dataRes.trichYeu,
           tenDvi: data.tenDvi,
           diaChi: data.diaChi,
@@ -401,11 +428,12 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
           maDvi: data.maDvi,
           loaiHinhNx: data.loaiHinhNx,
           kieuNx: data.kieuNx,
+          namKh: this.formData.value.nam,
           idThHdr: null,
           soTrHdr: dataRes.soDxuat,
           idTrHdr: dataRes.id,
-          tongMucDt: tongMucDt
         })
+        this.getDataChiTieu();
         this.dataInput = null;
         this.dataInputCache = null;
       } else {

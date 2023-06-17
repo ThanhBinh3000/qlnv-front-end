@@ -7,7 +7,7 @@ import { environment } from 'src/environments/environment';
 @Injectable({
   providedIn: 'root',
 })
-export class HoSoKyThuatService extends BaseService {
+export class BangKeCanHangService extends BaseService {
   constructor(public httpClient: HttpClient) {
     super(httpClient, 'dieu-chuyen-noi-bo/bang-ke-can-hang', '/qlnv-hang');
   }

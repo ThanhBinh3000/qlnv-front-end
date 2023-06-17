@@ -31,6 +31,7 @@ export class DanhsachKehoachLcntComponent implements OnInit {
   @Input()
   loaiVthh: string;
   isDetail: boolean = false;
+  isDetailVt: boolean = false;
   isView: boolean = false;
   listNam: any[] = [];
   yearNow: number = 0;
@@ -255,37 +256,34 @@ export class DanhsachKehoachLcntComponent implements OnInit {
       if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_VT_DEXUAT_THEM")) {
         return;
       }
+      this.isDetailVt = true;
     }
     else {
       if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_LT_DEXUAT_THEM")) {
         return;
       }
+      this.isDetail = true;
     }
-    this.isDetail = true;
     this.selectedId = null;
     this.isView = false;
   }
 
   showList() {
     this.isDetail = false;
+    this.isDetailVt = false;
     this.search()
   }
 
   detail(data?, isView?) {
-    this.selectedId = data.id;
-    this.isDetail = true;
-    if (isView != null) {
-      this.isView = isView;
-    }
     if (this.loaiVthh === "02") {
-      if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_VT_DEXUAT_THEM")) {
-        return;
-      }
+      this.isDetailVt = true;
     }
     else {
-      if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_VT_DEXUAT_THEM")) {
-        return;
-      }
+      this.isDetail = true;
+    }
+    this.selectedId = data.id;
+    if (isView != null) {
+      this.isView = isView;
     }
   }
 

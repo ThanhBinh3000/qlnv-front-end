@@ -19,6 +19,10 @@ import {
 } from "./tong-hop-tieu-huy/chi-tiet-tong-hop-tieu-huy/chi-tiet-tong-hop-tieu-huy.component";
 import {HoSoTieuHuyComponent} from "./ho-so-tieu-huy/ho-so-tieu-huy.component";
 import {ChiTietHoSoTieuHuyComponent} from "./ho-so-tieu-huy/chi-tiet-ho-so-tieu-huy/chi-tiet-ho-so-tieu-huy.component";
+import {BaoCaoKetQuaTieuHuyComponent} from "./bao-cao-ket-qua-tieu-huy/bao-cao-ket-qua-tieu-huy.component";
+import {
+  ThemMoiBaoCaoKetQuaTieuHuyComponent
+} from "./bao-cao-ket-qua-tieu-huy/them-moi-bao-ket-qua-tieu-huy/them-moi-bao-cao-ket-qua-tieu-huy.component";
 
 
 
@@ -32,7 +36,9 @@ import {ChiTietHoSoTieuHuyComponent} from "./ho-so-tieu-huy/chi-tiet-ho-so-tieu-
     QuyetDinhTieuHuyComponent,
     ThemMoiQuyetDinhTieuHuyComponent,
     ThongBaoKetQuaComponent,
-    ThemMoiThongBaoKetQuaComponent
+    ThemMoiThongBaoKetQuaComponent,
+    BaoCaoKetQuaTieuHuyComponent,
+    ThemMoiBaoCaoKetQuaTieuHuyComponent,
   ],
   imports: [
     CommonModule,
@@ -52,7 +58,9 @@ import {ChiTietHoSoTieuHuyComponent} from "./ho-so-tieu-huy/chi-tiet-ho-so-tieu-
     QuyetDinhTieuHuyComponent,
     ThemMoiQuyetDinhTieuHuyComponent,
     ThongBaoKetQuaComponent,
-    ThemMoiThongBaoKetQuaComponent
+    ThemMoiThongBaoKetQuaComponent,
+    BaoCaoKetQuaTieuHuyComponent,
+    ThemMoiBaoCaoKetQuaTieuHuyComponent,
   ],
   providers: [DatePipe]
 })

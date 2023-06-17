@@ -41,7 +41,7 @@ import { BienBanNhapDayKhoService } from "src/app/services/dieu-chuyen-noi-bo/nh
   styleUrls: ['./thong-tin-bien-ban-nhap-day-du.component.scss']
 })
 export class ThongTinBienBanNhapDayDuComponent extends Base2Component implements OnInit {
-
+  @Input() loaiDc: string;
   @Input() idInput: number;
   @Input() isView: boolean;
   @Output()
@@ -125,6 +125,8 @@ export class ThongTinBienBanNhapDayDuComponent extends Base2Component implements
       tongKinhPhiDaThBc: [],
       dcnbBBNTBQDtlList: [new Array<any>(),],
       nhanXet: [],
+      type: ["01"],
+      loaiDc: ["DCNB"]
     }
     );
   }

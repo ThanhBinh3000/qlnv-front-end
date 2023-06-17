@@ -128,8 +128,8 @@ export class ThongtinDexuatMuattComponent implements OnChanges {
       let soLuongChiCuc = 0;
       item.children.forEach(child => {
         soLuongChiCuc += child.soLuong;
-        tongSoLuong += child.soLuong / 1000;
-        tongMucDt += tongSoLuong * child.donGia * 1000
+        tongSoLuong += child.soLuong;
+        tongMucDt += child.soLuong * child.donGia * 1000
       })
       item.soLuong = soLuongChiCuc;
     });
