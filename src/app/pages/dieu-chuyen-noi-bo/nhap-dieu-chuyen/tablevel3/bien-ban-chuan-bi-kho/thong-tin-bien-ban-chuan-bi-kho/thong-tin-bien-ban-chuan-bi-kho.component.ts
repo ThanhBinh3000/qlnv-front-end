@@ -26,7 +26,7 @@ import { v4 as uuidv4 } from 'uuid';
   styleUrls: ['./thong-tin-bien-ban-chuan-bi-kho.component.scss']
 })
 export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implements OnInit {
-
+  @Input() loaiDc: string;
   @Input() idInput: number;
   @Input() isView: boolean;
   @Output()

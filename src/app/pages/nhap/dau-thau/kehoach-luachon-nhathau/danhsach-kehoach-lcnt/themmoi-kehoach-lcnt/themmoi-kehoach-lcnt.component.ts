@@ -98,9 +98,14 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
   ghiChu: string;
   reportTemplate: any = {
     typeFile: '',
-    fileName: 'test_preview.docx',
+    fileName: 'de-xuat-nhap-dau-thau-luong-thuc.docx',
     tenBaoCao: '',
     trangThai: '',
+  };
+
+  listDsGthau: any = {
+    tenDvi: '',
+    soLuong: ''
   };
 
   constructor(
@@ -262,6 +267,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
     let pipe = new DatePipe('en-US');
     let body = this.formData.value;
     body.reportTemplateRequest = this.reportTemplate;
+    body.listDsGthau = this.listDsGthau;
     body.fileDinhKemReq = this.fileDinhKem;
     body.tongMucDtBangChu = convertTienTobangChu(this.formData.get('tongMucDt').value)
     body.tgianDthau = pipe.transform(body.tgianDthau, 'yyyy-MM-dd HH:mm')
@@ -1364,7 +1370,9 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
         sluong = sluong + i.soLuong
       })
       item.soLuong = sluong;
+      this.listDsGthau = this.listDataGroup;
     })
+    console.log(this.listDsGthau)
   }
 
   expandSet = new Set<number>();

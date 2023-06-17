@@ -5,6 +5,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { StorageService } from 'src/app/services/storage.service';
 import { MESSAGE } from 'src/app/constants/message';
+import { STATUS } from 'src/app/constants/status';
 
 @Component({
   selector: 'app-them-dai-dien',
@@ -13,9 +14,10 @@ import { MESSAGE } from 'src/app/constants/message';
 })
 export class ThemDaiDienComponent implements OnInit {
   @Input() loaiDaiDien: string;
-  @Input() isView: boolean;
+  @Input() trangThaiBb: string;
   @Input() dataTable: any[] = [];
   @Output() dataTableChange = new EventEmitter<any[]>();
+  STATUS = STATUS;
   constructor(
     private httpClient: HttpClient,
     private storageService: StorageService,
@@ -102,32 +104,32 @@ export class ItemDaiDien {
 // itemRow: ItemDaiDien = new ItemDaiDien();
 //   itemRow2: ItemDaiDien = new ItemDaiDien();
 
-  // addDaiDien(data: any, type: string) {
-  //   if (this.validateDaiDienCuc()) {
-  //     data.loaiDaiDien = type;
-  //     let body = cloneDeep(data);
-  //     this.dataTable.push(body);
-  //     this.clearDiemKho(data);
-  //   }
-  // }
+// addDaiDien(data: any, type: string) {
+//   if (this.validateDaiDienCuc()) {
+//     data.loaiDaiDien = type;
+//     let body = cloneDeep(data);
+//     this.dataTable.push(body);
+//     this.clearDiemKho(data);
+//   }
+// }
 
-  // validateDaiDienCuc(): boolean {
-  //   if (this.itemRow.daiDien) {
-  //     if (this.itemRow.daiDien) {
-  //       return true
-  //     } else {
-  //       this.notification.error(MESSAGE.ERROR, "Đại diện Cục DTNN KV không được để trống")
-  //       return false;
-  //     }
-  //   } else {
-  //     if (this.itemRow2.daiDien) {
-  //       return true
-  //     } else {
-  //       this.notification.error(MESSAGE.ERROR, "Đại diện Chi Cục DTNN KV không được để trống")
-  //       return false;
-  //     }
-  //   }
-  // }
+// validateDaiDienCuc(): boolean {
+//   if (this.itemRow.daiDien) {
+//     if (this.itemRow.daiDien) {
+//       return true
+//     } else {
+//       this.notification.error(MESSAGE.ERROR, "Đại diện Cục DTNN KV không được để trống")
+//       return false;
+//     }
+//   } else {
+//     if (this.itemRow2.daiDien) {
+//       return true
+//     } else {
+//       this.notification.error(MESSAGE.ERROR, "Đại diện Chi Cục DTNN KV không được để trống")
+//       return false;
+//     }
+//   }
+// }
 
 
 

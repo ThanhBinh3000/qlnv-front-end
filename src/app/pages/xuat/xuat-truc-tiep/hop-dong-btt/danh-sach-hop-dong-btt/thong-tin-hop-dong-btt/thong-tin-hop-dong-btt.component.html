@@ -37,7 +37,7 @@
                                 <nz-form-item>
                                     <nz-form-label nzRequired [nzNoColon]="true"> Năm hợp đồng </nz-form-label>
                                     <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-                                        <nz-select formControlName="namHd" [nzDisabled]="true">
+                                        <nz-select formControlName="namHd" [nzDisabled]="isDisabled()">
                                             <nz-option *ngFor="let p of listNam" [nzValue]="p.value"
                                                 [nzLabel]="p.text"></nz-option>
                                         </nz-select>
@@ -738,7 +738,7 @@
                                 <nz-form-item>
                                     <nz-form-label nzRequired [nzNoColon]="true"> Năm hợp đồng </nz-form-label>
                                     <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-                                        <nz-select formControlName="namHd" [nzDisabled]="true">
+                                        <nz-select formControlName="namHd" [nzDisabled]="isDisabled()">
                                             <nz-option *ngFor="let p of listNam" [nzValue]="p.value"
                                                 [nzLabel]="p.text"></nz-option>
                                         </nz-select>

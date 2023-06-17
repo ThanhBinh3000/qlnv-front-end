@@ -19,11 +19,11 @@ export class BienBanLayMauBttComponent extends Base2Component implements OnInit 
   idQdNv: number = 0;
   isViewQdNv: boolean = false;
   selectedId: number = 0;
-  isView: boolean = false;
   idQdGiaoNvXh: number = 0;
   children: any = [];
   expandSetString = new Set<string>();
   dataView: any = [];
+  trangThaiBienBan: string;
 
   constructor(
     httpClient: HttpClient,
@@ -152,10 +152,10 @@ export class BienBanLayMauBttComponent extends Base2Component implements OnInit 
     }
   }
 
-  redirectToChiTiet(lv2: any, isView: boolean, idQdGiaoNvXh?: number) {
+  redirectToChiTiet(lv2: any, trangThaiBienBan: any, idQdGiaoNvXh?: number) {
     this.selectedId = lv2.id;
     this.isDetail = true;
-    this.isView = isView;
+    this.trangThaiBienBan = trangThaiBienBan;
     this.idQdGiaoNvXh = idQdGiaoNvXh;
   }
 

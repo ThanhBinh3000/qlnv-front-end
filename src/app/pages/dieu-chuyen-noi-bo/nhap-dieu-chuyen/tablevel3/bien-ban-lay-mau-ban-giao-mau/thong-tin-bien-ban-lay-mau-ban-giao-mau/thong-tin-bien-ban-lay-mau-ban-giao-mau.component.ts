@@ -23,7 +23,7 @@ import { StorageService } from "src/app/services/storage.service";
   styleUrls: ['./thong-tin-bien-ban-lay-mau-ban-giao-mau.component.scss']
 })
 export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component implements OnInit {
-
+  @Input() loaiDc: string;
   @Input() idInput: number;
   @Input() isView: boolean;
   @Output()
@@ -87,6 +87,7 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
       soLuongMau: [],
       dcnbBienBanLayMauDtl: [new Array<any>(),],
       type: ["01"],
+      loaiDc: ["DCNB"]
     });
   }
 
@@ -99,7 +100,8 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
       maQhns: this.userInfo.DON_VI.maQhns,
       ktvBaoQuan: this.userInfo.TEN_DAY_DU,
       soBbLayMau: `${id}/${this.formData.get('nam').value}/${this.maBb}`,
-      id: id
+      id: id,
+      loaiDc: this.loaiDc
     })
 
     if (this.idInput) {

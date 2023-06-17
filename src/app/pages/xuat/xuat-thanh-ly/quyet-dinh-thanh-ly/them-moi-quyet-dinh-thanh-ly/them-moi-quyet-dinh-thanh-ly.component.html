@@ -6,7 +6,7 @@
     </button>
     <button
       *ngIf="(formData.value.trangThai == STATUS.DU_THAO ||
-       formData.value.trangThai == STATUS.TU_CHOI_LDV)&& userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_QDXC_TAOQDXC')"
+       formData.value.trangThai == STATUS.TU_CHOI_LDV)&& userService.isAccessPermisson('XHDTQG_XTL_QDTL_THEM')"
       type="button" class="btn btn-sub"
       (click)="saveAndSend(formData.value, STATUS.CHO_DUYET_LDV, 'Bạn có muốn gửi duyệt ?')">
       <i class="icon htvbdh_tcdt_guiduyet"></i>
@@ -14,25 +14,25 @@
     </button>
 
     <button (click)="reject(idInput,STATUS.TU_CHOI_LDTC)"
-            *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_QDXC_DUYET_LDTC') && (formData.value.trangThai===STATUS.CHO_DUYET_LDTC)"
+            *ngIf="userService.isAccessPermisson('XHDTQG_XTL_QDTL_DUYETLDTC') && (formData.value.trangThai===STATUS.CHO_DUYET_LDTC)"
             class="btn btn-sub" type="button">
       <i class="icon htvbdh_tcdt_tuchoi do"></i>
       <span>Từ chối</span>
     </button>
     <button (click)="reject(idInput,STATUS.TU_CHOI_LDV)"
-            *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_QDXC_DUYET_LDVU') && (formData.value.trangThai===STATUS.CHO_DUYET_LDV)"
+            *ngIf="userService.isAccessPermisson('XHDTQG_XTL_QDTL_DUYETLDV') && (formData.value.trangThai===STATUS.CHO_DUYET_LDV)"
             class="btn btn-sub" type="button">
       <i class="icon htvbdh_tcdt_tuchoi do"></i>
       <span>Từ chối</span>
     </button>
     <button (click)="approve(idInput,STATUS.BAN_HANH,'Bạn có muốn duyệt quyết định này')"
-            *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_QDXC_DUYET_LDTC') && (formData.value.trangThai===STATUS.CHO_DUYET_LDTC)"
+            *ngIf="userService.isAccessPermisson('XHDTQG_XTL_QDTL_DUYETLDTC') && (formData.value.trangThai===STATUS.CHO_DUYET_LDTC)"
             class="btn btn-sub" type="button">
       <i class="icon htvbdh_tcdt_pheduyet"></i>
       <span>Duyệt</span>
     </button>
     <button (click)="approve(idInput,STATUS.CHO_DUYET_LDTC,'Bạn có muốn duyệt quyết định này')"
-            *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_QDXC_DUYET_LDVU') && (formData.value.trangThai===STATUS.CHO_DUYET_LDV)"
+            *ngIf="userService.isAccessPermisson('XHDTQG_XTL_QDTL_DUYETLDV') && (formData.value.trangThai===STATUS.CHO_DUYET_LDV)"
             class="btn btn-sub" type="button">
       <i class="icon htvbdh_tcdt_pheduyet"></i>
       <span>Duyệt</span>
@@ -97,7 +97,7 @@
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col [nzSpan]="3">
+          <div nz-col [nzSpan]="4">
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true"> Ngày ký</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
@@ -106,7 +106,7 @@
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div [nzSpan]="3" nz-col>
+          <div [nzSpan]="4" nz-col>
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true"> Số hồ sơ đề nghị thanh lý</nz-form-label>
               <nz-form-control [nzErrorTip]="error" nz-col nzSpan="24">
@@ -117,7 +117,7 @@
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div [nzSpan]="3" nz-col>
+          <div [nzSpan]="4" nz-col>
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true"> Thời gian thanh lý được phê duyệt</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
@@ -126,23 +126,14 @@
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col [nzSpan]="3">
-            <nz-form-item>
-              <nz-form-label [nzNoColon]="true">
-                Số thông báo KQ trình hồ sơ
-              </nz-form-label>
-              <nz-form-control>
-                <span>{{formData.value.soKq}}</span>
-              </nz-form-control>
-            </nz-form-item>
-          </div>
+
           <div nz-col [nzSpan]="24">
             <nz-form-item>
               <nz-form-label [nzNoColon]="true">
                 Căn cứ pháp lý
               </nz-form-label>
               <div class="list-file">
-                <file-list [data]="formData.value.canCu" [isViewDetail]="isView"></file-list>
+                <file-list [isCanCuPL]="true" [data]="formData.value.canCu" [isViewDetail]="isView"></file-list>
               </div>
             </nz-form-item>
           </div>
@@ -223,14 +214,14 @@
                 <td>{{lv1.tenDiemKho}}</td>
                 <td>{{lv1.tenLoKho == null ? lv1.tenNganKho : lv1.tenLoKho}}</td>
                 <td>{{lv1.ngayNhapKho| date: 'dd/MM/YYYY'}}</td>
-                <td class="text-blue">{{lv1.slHienTai |number : '1.0-1' : 'vi_VN'}}</td>
-                <td class="text-blue">{{lv1.slDaDuyet |number : '1.0-1' : 'vi_VN'}}</td>
-                <td class="text-blue">{{lv1.slCon |number : '1.0-1' : 'vi_VN'}}</td>
-                <td class="text-blue">{{lv1.donViTinh}}</td>
-                <td class="text-blue">{{lv1.donGia |number : '1.0-1' : 'vi_VN'}}</td>
-                <td class="text-blue">{{lv1.thanhTien |number : '1.0-1' : 'vi_VN'}}</td>
-                <td class="text-blue">{{lv1.lyDo}}</td>
-                <td class="text-blue">{{lv1.ketQua}}</td>
+                <td>{{lv1.slHienTai |number : '1.0-1' : 'vi_VN'}}</td>
+                <td>{{lv1.slDaDuyet |number : '1.0-1' : 'vi_VN'}}</td>
+                <td>{{lv1.slCon |number : '1.0-1' : 'vi_VN'}}</td>
+                <td>{{lv1.donViTinh}}</td>
+                <td>{{lv1.donGia |number : '1.0-1' : 'vi_VN'}}</td>
+                <td>{{lv1.thanhTien |number : '1.0-1' : 'vi_VN'}}</td>
+                <td>{{lv1.lyDo}}</td>
+                <td>{{lv1.ketQua}}</td>
               </tr>
             </ng-container>
           </ng-container>

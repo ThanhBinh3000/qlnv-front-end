@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import dayjs from 'dayjs';
 import { saveAs } from 'file-saver';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -8,6 +8,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { Subject } from 'rxjs';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { MESSAGE } from 'src/app/constants/message';
+import { HoSoKyThuatService } from 'src/app/services/dieu-chuyen-noi-bo/nhap-dieu-chuyen/ho-so-ky-thuat';
 import { QuyetDinhDieuChuyenCucService } from 'src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-c.service';
 import { StorageService } from 'src/app/services/storage.service';
 
@@ -29,7 +30,7 @@ export class HoSoKyThuatComponent extends Base2Component implements OnInit {
     { ma: "CHI_CUC", ten: "Giữa 2 chi cục trong cùng 1 cục" },
     { ma: "CUC", ten: "Giữa 2 cục DTNN KV" }
   ];
-
+  @Input() loaiDc: string;
 
   constructor(
     httpClient: HttpClient,
@@ -37,16 +38,17 @@ export class HoSoKyThuatComponent extends Base2Component implements OnInit {
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private quyetDinhDieuChuyenCucService: QuyetDinhDieuChuyenCucService,
+    private hoSoKyThuatService: HoSoKyThuatService,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, quyetDinhDieuChuyenCucService);
+    super(httpClient, storageService, notification, spinner, modal, hoSoKyThuatService);
     this.formData = this.fb.group({
       nam: null,
       soQdinh: null,
       ngayDuyetTc: null,
       ngayHieuLuc: null,
-      loaiDc: null,
       trichYeu: null,
+      type: ["01"],
+      loaiDc: ["DCNB"]
     })
     this.filterTable = {
       nam: '',
@@ -129,7 +131,7 @@ export class HoSoKyThuatComponent extends Base2Component implements OnInit {
           body.ngayHieuLucTu = body.ngayHieuLuc[0];
           body.ngayHieuLucDen = body.ngayHieuLuc[1];
         }
-        this.quyetDinhDieuChuyenCucService
+        this.hoSoKyThuatService
           .export(body)
           .subscribe((blob) =>
             saveAs(blob, 'quyet-dinh-dieu-chuyen-cuc.xlsx'),

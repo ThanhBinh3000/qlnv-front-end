@@ -26,7 +26,7 @@ import { v4 as uuidv4 } from 'uuid';
   styleUrls: ['./thong-tin-phieu-nhap-kho.component.scss']
 })
 export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnInit {
-
+  @Input() loaiDc: string;
   @Input() idInput: number;
   @Input() isView: boolean;
   @Input() data: any;
@@ -131,38 +131,38 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
       await this.loadChiTiet(this.idInput)
     }
 
-    if (this.data) {
-      this.formData.patchValue({
-        soQdDcCuc: this.data.soQdinh,
-        ngayQdDcCuc: this.data.thoiHanDieuChuyen,
-        qdDcCucId: this.data.qdinhDccId,
-        tenLoKho: this.data.tenloKhoNhan,
-        maLoKho: this.data.maloKhoNhan,
-        tenNganKho: this.data.tenNganKhoNhan,
-        maNganKho: this.data.maNganKhoNhan,
-        tenNhaKho: this.data.tenNhaKhoNhan,
-        maNhaKho: this.data.maNhaKhoNhan,
-        tenDiemKho: this.data.tenDiemKhoNhan,
-        maDiemKho: this.data.maDiemKhoNhan,
-        tenLoKhoXuat: this.data.tenloKhoXuat,
-        maLoKhoXuat: this.data.maloKhoXuat,
-        tenNganKhoXuat: this.data.tenNganKhoXuat,
-        maNganKhoXuat: this.data.maNganKhoXuat,
-        tenNhaKhoXuat: this.data.tenNhaKhoXuat,
-        maNhaKhoXuat: this.data.maNhaKhoXuat,
-        tenDiemKhoXuat: this.data.tenDiemKhoXuat,
-        maDiemKhoXuat: this.data.maDiemKhoXuat,
-        loaiVthh: this.data.loaiVthh,
-        tenLoaiVthh: this.data.tenLoaiVthh,
-        cloaiVthh: this.data.cloaiVthh,
-        tenCloaiVthh: this.data.tenCloaiVthh,
-        tichLuongKhaDung: this.data.tichLuongKd,
-        tenDonViTinh: this.data.tenDonViTinh,
-        idKeHoachDtl: this.data.qdinhDccId
-      });
-      await this.loadChiTietQdinh(this.data.qdinhDccId);
-      await this.loadDataBaoQuan(this.data.cloaiVthh || "010101")
-    }
+    // if (this.data) {
+    //   this.formData.patchValue({
+    //     soQdDcCuc: this.data.soQdinh,
+    //     ngayQdDcCuc: this.data.thoiHanDieuChuyen,
+    //     qdDcCucId: this.data.qdinhDccId,
+    //     tenLoKho: this.data.tenloKhoNhan,
+    //     maLoKho: this.data.maloKhoNhan,
+    //     tenNganKho: this.data.tenNganKhoNhan,
+    //     maNganKho: this.data.maNganKhoNhan,
+    //     tenNhaKho: this.data.tenNhaKhoNhan,
+    //     maNhaKho: this.data.maNhaKhoNhan,
+    //     tenDiemKho: this.data.tenDiemKhoNhan,
+    //     maDiemKho: this.data.maDiemKhoNhan,
+    //     tenLoKhoXuat: this.data.tenloKhoXuat,
+    //     maLoKhoXuat: this.data.maloKhoXuat,
+    //     tenNganKhoXuat: this.data.tenNganKhoXuat,
+    //     maNganKhoXuat: this.data.maNganKhoXuat,
+    //     tenNhaKhoXuat: this.data.tenNhaKhoXuat,
+    //     maNhaKhoXuat: this.data.maNhaKhoXuat,
+    //     tenDiemKhoXuat: this.data.tenDiemKhoXuat,
+    //     maDiemKhoXuat: this.data.maDiemKhoXuat,
+    //     loaiVthh: this.data.loaiVthh,
+    //     tenLoaiVthh: this.data.tenLoaiVthh,
+    //     cloaiVthh: this.data.cloaiVthh,
+    //     tenCloaiVthh: this.data.tenCloaiVthh,
+    //     tichLuongKhaDung: this.data.tichLuongKd,
+    //     tenDonViTinh: this.data.tenDonViTinh,
+    //     idKeHoachDtl: this.data.qdinhDccId
+    //   });
+    //   await this.loadChiTietQdinh(this.data.qdinhDccId);
+    //   await this.loadDataBaoQuan(this.data.cloaiVthh || "010101")
+    // }
 
   }
 
