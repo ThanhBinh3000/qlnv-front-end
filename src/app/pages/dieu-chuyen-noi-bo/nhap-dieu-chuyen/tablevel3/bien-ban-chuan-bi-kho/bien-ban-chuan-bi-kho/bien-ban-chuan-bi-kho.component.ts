@@ -28,8 +28,7 @@ export class BienBanChuanBiKhoComponent extends Base2Component implements OnInit
   isVisibleChangeTab$ = new Subject();
   visibleTab: boolean = true;
   tabSelected: number = 0;
-  // @Input()
-  // idTHop: number;
+  @Input() loaiDc: string;
 
   // @Input()
   // loaiVthh: string;
@@ -75,6 +74,8 @@ export class BienBanChuanBiKhoComponent extends Base2Component implements OnInit
       soBban: null,
       ngayLap: null,
       ngayKetThuc: null,
+      type: ["01"],
+      loaiDc: ["DCNB"]
     })
   }
 

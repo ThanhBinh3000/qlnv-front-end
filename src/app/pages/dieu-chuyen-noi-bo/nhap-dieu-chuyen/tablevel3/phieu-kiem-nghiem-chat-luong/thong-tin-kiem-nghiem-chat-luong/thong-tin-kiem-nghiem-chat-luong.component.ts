@@ -25,7 +25,7 @@ import { StorageService } from "src/app/services/storage.service";
   styleUrls: ['./thong-tin-kiem-nghiem-chat-luong.component.scss']
 })
 export class ThongTinKiemNghiemChatLuongComponent extends Base2Component implements OnInit {
-
+  @Input() loaiDc: string;
   @Input() idInput: number;
   @Input() isView: boolean;
   @Output()
@@ -95,7 +95,7 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
       dcnbPhieuKnChatLuongDtl: [new Array<any>(),],
       nhanXetKetLuan: [],
       type: ["01"],
-      loaiDc: ["DCNB"]
+      loaiDc: []
     }
     );
   }
@@ -109,7 +109,8 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
       maQhns: this.userInfo.DON_VI.maQhns,
       ktvBaoQuan: this.userInfo.TEN_DAY_DU,
       soPhieu: `${id}/${this.formData.get('nam').value}/${this.maBb}`,
-      id: id
+      id: id,
+      loaiDc: this.loaiDc
     })
     // this.dsBienBanLayMau()
     if (this.idInput) {

@@ -19,16 +19,16 @@
   <div class="contentBor chi-tieu__body giao-ke-hoach">
     <div class="contentDetail">
       <ng-container *ngIf="tabSelected == 0">
-        <app-chat-luong-luong-thuc *ngIf="tabSelected == 0"></app-chat-luong-luong-thuc>
+        <app-chat-luong-luong-thuc [loaiDc]="loaiDc" *ngIf="tabSelected == 0"></app-chat-luong-luong-thuc>
       </ng-container>
       <ng-container *ngIf="tabSelected == 1">
-        <app-chat-luong-vat-tu *ngIf="tabSelected == 1"></app-chat-luong-vat-tu>
+        <app-chat-luong-vat-tu [loaiDc]="loaiDc" *ngIf="tabSelected == 1"></app-chat-luong-vat-tu>
       </ng-container>
       <ng-container *ngIf="tabSelected == 2">
-        <app-nhap-kho-luong-thuc *ngIf="tabSelected == 2"></app-nhap-kho-luong-thuc>
+        <app-nhap-kho-luong-thuc [loaiDc]="loaiDc" *ngIf="tabSelected == 2"></app-nhap-kho-luong-thuc>
       </ng-container>
       <ng-container *ngIf="tabSelected == 3">
-        <app-nhap-kho-vat-tu *ngIf="tabSelected == 3"></app-nhap-kho-vat-tu>
+        <app-nhap-kho-vat-tu [loaiDc]="loaiDc" *ngIf="tabSelected == 3"></app-nhap-kho-vat-tu>
       </ng-container>
 
 

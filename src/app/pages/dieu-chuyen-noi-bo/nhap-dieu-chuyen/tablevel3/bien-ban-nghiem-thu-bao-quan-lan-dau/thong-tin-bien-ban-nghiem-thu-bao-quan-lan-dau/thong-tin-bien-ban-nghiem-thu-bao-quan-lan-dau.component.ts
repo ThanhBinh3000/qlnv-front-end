@@ -27,7 +27,7 @@ import { ThongTinHangDtqgComponent } from "../thong-tin-hang-dtqg/thong-tin-hang
   styleUrls: ['./thong-tin-bien-ban-nghiem-thu-bao-quan-lan-dau.component.scss']
 })
 export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Component implements OnInit {
-
+  @Input() loaiDc: string;
   @Input() idInput: number;
   @Input() isView: boolean;
   @Input() data: any;
@@ -125,7 +125,7 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
       maQhns: this.userInfo.DON_VI.maQhns,
       ktvBaoQuan: this.userInfo.TEN_DAY_DU,
       soBban: `${id}/${this.formData.get('nam').value}/${this.maBb}`,
-
+      loaiDc: this.loaiDc
     })
 
     if (this.idInput) {
@@ -135,7 +135,7 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
     if (this.data) {
       this.formData.patchValue({
         soQdDcCuc: this.data.soQdinh,
-        ngayQdDcCuc: this.data.thoiHanDieuChuyen,
+        ngayQdDcCuc: this.data.ngayHieuLuc,
         qdDcCucId: this.data.qdinhDccId,
         tenLoKho: this.data.tenloKhoNhan,
         maLoKho: this.data.maloKhoNhan,
@@ -207,9 +207,9 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
     }
   }
 
-  async addTH() {
+  async addTH(row?: any) {
     this.typeData = "TH"
-    await this.add()
+    await this.add(row)
   }
 
   async updateTH(row) {
@@ -218,9 +218,15 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
     await this.add(row)
   }
 
-  async addPD() {
+  async addPD(row?: any) {
     this.typeData = "PD"
-    await this.add()
+    await this.add(row)
+  }
+
+  async updatePD(row) {
+    this.typeData = "PD"
+    this.typeAction = "UPDATE"
+    await this.add(row)
   }
 
   async add(row?: any) {
@@ -239,97 +245,112 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
       nzFooter: null,
       nzComponentParams: {
         data: row,
+        typeData: this.typeData,
+        typeAction: this.typeAction
       },
     });
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
         if (this.typeData === "TH") {
-          if (data.isMatHang) {
-            const parent = {
-              ...data,
-              idVirtual: uuidv4.v4(),
-              type: this.typeData
-            }
-            this.dsHangTH.push({
-              danhMuc: parent.danhMuc,
-              nhomHang: parent.nhomHang,
-              donViTinh: parent.donViTinh,
-              tongGiaTri: parent.tongGiaTri,
-              idVirtual: parent.idVirtual,
-              isParent: true,
-              type: this.typeData
-            })
-            this.dsHangTH.push({
-              ...data,
-              danhMuc: "",
-              nhomHang: "",
-              donViTinh: "",
-              idParent: parent.idVirtual,
-              idVirtual: uuidv4.v4(),
-              type: this.typeData
-            })
-          } else {
-            this.dsHangTH.push({
-              ...data,
-              tongGiaTri: data.thanhTienTrongNam,
-              isParent: true,
-              idVirtual: uuidv4.v4(),
-              type: this.typeData
-            })
-          }
-
-          let tongKinhPhiDaTh = this.dsHangTH.reduce((prev, cur) => prev + cur.tongGiaTri, 0);
-          let tongKinhPhiDaThBc = this.convertTien(tongKinhPhiDaTh) + ' đồng'
-          this.formData.patchValue({
-            tongKinhPhiDaTh,
-            tongKinhPhiDaThBc
-          })
-
-          this.dsHangTH = cloneDeep(this.dsHangTH)
+          this.addDataTH(data)
         }
 
         if (this.typeData === "PD") {
-          if (data.isMatHang) {
-            const parent = {
-              ...data,
-              idVirtual: uuidv4.v4(),
-              type: this.typeData
-            }
-            this.dsHangPD.push({
-              danhMuc: parent.danhMuc,
-              nhomHang: parent.nhomHang,
-              donViTinh: parent.donViTinh,
-              tongGiaTri: parent.tongGiaTri,
-              idVirtual: parent.idVirtual,
-              isParent: true,
-              type: this.typeData
-            })
-            this.dsHangPD.push({
-              ...data,
-              danhMuc: "",
-              nhomHang: "",
-              donViTinh: "",
-              idParent: parent.idVirtual,
-              idVirtual: uuidv4.v4(),
-              type: this.typeData
-            })
-          } else {
-            this.dsHangPD.push({
-              ...data,
-              tongGiaTri: data.thanhTienTrongNam,
-              isParent: true,
-              idVirtual: uuidv4.v4(),
-              type: this.typeData
-            })
-          }
-          this.dsHangPD = cloneDeep(this.dsHangPD)
-
+          this.addDataPD(data)
         }
 
         this.updateDataTable()
 
       }
     });
+  }
+
+  addDataTH(data) {
+    if (data.isMatHang) {
+      const parent = {
+        ...data,
+        idVirtual: uuidv4.v4(),
+        type: this.typeData
+      }
+      this.dsHangTH.push({
+        danhMuc: parent.danhMuc,
+        nhomHang: parent.nhomHang,
+        donViTinh: parent.donViTinh,
+        tongGiaTri: parent.tongGiaTri,
+        idVirtual: parent.idVirtual,
+        idParent: parent.idVirtual,
+        isParent: true,
+        type: this.typeData
+      })
+      this.dsHangTH.push({
+        ...data,
+        danhMuc: "",
+        nhomHang: "",
+        donViTinh: "",
+        idParent: parent.idVirtual,
+        idVirtual: uuidv4.v4(),
+        type: this.typeData
+      })
+    } else {
+      const uuid = uuidv4.v4()
+      this.dsHangTH.push({
+        ...data,
+        tongGiaTri: data.thanhTienTrongNam,
+        isParent: true,
+        idVirtual: uuid,
+        idParent: uuid,
+        type: this.typeData
+      })
+    }
+
+    let tongKinhPhiDaTh = this.dsHangTH.reduce((prev, cur) => prev + cur.tongGiaTri, 0);
+    let tongKinhPhiDaThBc = this.convertTien(tongKinhPhiDaTh) + ' đồng'
+    this.formData.patchValue({
+      tongKinhPhiDaTh,
+      tongKinhPhiDaThBc
+    })
+
+    this.dsHangTH = cloneDeep(this.dsHangTH)
+  }
+
+  addDataPD(data) {
+    if (data.isMatHang) {
+      const parent = {
+        ...data,
+        idVirtual: uuidv4.v4(),
+        type: this.typeData
+      }
+      this.dsHangPD.push({
+        danhMuc: parent.danhMuc,
+        nhomHang: parent.nhomHang,
+        donViTinh: parent.donViTinh,
+        tongGiaTri: parent.tongGiaTri,
+        idVirtual: parent.idVirtual,
+        idParent: parent.idVirtual,
+        isParent: true,
+        type: this.typeData
+      })
+      this.dsHangPD.push({
+        ...data,
+        danhMuc: "",
+        nhomHang: "",
+        donViTinh: "",
+        idParent: parent.idVirtual,
+        idVirtual: uuidv4.v4(),
+        type: this.typeData
+      })
+    } else {
+      const uuid = uuidv4.v4()
+      this.dsHangPD.push({
+        ...data,
+        tongGiaTri: data.thanhTienTrongNam,
+        isParent: true,
+        idVirtual: uuid,
+        idParent: uuid,
+        type: this.typeData
+      })
+    }
+    this.dsHangPD = cloneDeep(this.dsHangPD)
   }
 
   updateDataTable() {
@@ -352,10 +373,14 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
 
   xoa(row, type) {
     if (type === "TH") {
-      this.dsHangTH = this.dsHangTH.filter(item => item.idVirtual !== row.idVirtual)
+      if (row.id)
+        this.dsHangTH = this.dsHangTH.filter(item => item.id !== row.id)
+      else
+        this.dsHangTH = this.dsHangTH.filter(item => item.idVirtual !== row.idVirtual)
+
 
       if (row.isParent)
-        this.dsHangTH = this.dsHangTH.filter(item => item.idParent !== row.idVirtual)
+        this.dsHangTH = this.dsHangTH.filter(item => item.idParent !== row.idParent)
 
       let tongKinhPhiDaTh = this.dsHangTH.reduce((prev, cur) => prev + cur.tongGiaTri, 0);
       if (tongKinhPhiDaTh > 0) {
@@ -372,15 +397,18 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
       }
 
       this.dsHangTH = cloneDeep(this.dsHangTH)
-      console.log('xoa', row, this.dsHangTH)
     }
     if (type === "PD") {
-      this.dsHangPD = this.dsHangPD.filter(item => item.idVirtual !== row.idVirtual)
+      if (row.id)
+        this.dsHangPD = this.dsHangPD.filter(item => item.id !== row.id)
+      else
+        this.dsHangPD = this.dsHangPD.filter(item => item.idVirtual !== row.idVirtual)
+
+
       if (row.isParent)
-        this.dsHangPD = this.dsHangPD.filter(item => item.idParent !== row.idVirtual)
+        this.dsHangPD = this.dsHangPD.filter(item => item.idParent !== row.idParent)
 
       this.dsHangPD = cloneDeep(this.dsHangPD)
-      console.log('xoa', row, this.dsHangPD)
     }
 
 
