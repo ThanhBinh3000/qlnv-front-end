@@ -80,6 +80,7 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
     this.formData = this.fb.group(
       {
         id: [],
+        type: ['00'],
         nam: [dayjs().get("year")],
         maDvi: [],
         loaiBienBan: ['ALL'],
@@ -108,7 +109,6 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
         soBbHaoDoi: [],
         soBbTinhKho: [],
         ngayXuatDocKho: [],
-        type: [],
         tenDvi: [''],
         tenLoaiVthh: [''],
         tenCloaiVthh: [''],
@@ -134,6 +134,9 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
   }
 
   async ngOnInit() {
+    if (this.isViewOnModal) {
+      this.isView = true
+    }
     try {
       this.spinner.show();
       await Promise.all([
@@ -206,7 +209,7 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
       trangThai: STATUS.BAN_HANH,
       loaiVthh: this.loaiVthh,
       loaiDc: "DCNB",
-      maDvi: this.userInfo.MA_DVI
+      maDvi: this.userInfo.MA_DVI,
       // listTrangThaiXh: [STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN],
     }
     try {
