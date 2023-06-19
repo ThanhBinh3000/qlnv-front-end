@@ -253,7 +253,8 @@
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewModalQdDc"
     [nzBodyStyle]="{ 'overflow-y': 'auto' }" (nzOnCancel)="closeModalQdDc()">
     <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-        <app-thong-tin-quyet-dinh-dieu-chuyen-tc [idInput]="idQdDcSelect"></app-thong-tin-quyet-dinh-dieu-chuyen-tc>
+        <app-thong-tin-quyet-dinh-dieu-chuyen-tc [idInput]="idQdDcSelect"
+            [isViewOnModal]="true"></app-thong-tin-quyet-dinh-dieu-chuyen-tc>
     </ng-container>
     <div *nzModalFooter>
         <button nz-button (click)="closeModalQdDc()" class="modal__button--cancel">
