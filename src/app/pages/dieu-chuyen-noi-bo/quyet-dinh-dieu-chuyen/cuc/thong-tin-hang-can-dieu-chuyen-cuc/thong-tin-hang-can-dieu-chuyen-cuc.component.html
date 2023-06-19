@@ -279,7 +279,7 @@
                 <nz-form-item>
                   <nz-form-control>
                     <nz-input-number formControlName="soLuongPhanBo" [nzMin]="1"
-                      [nzMax]="(formData.value.soLuongDc > formData.value.tichLuongKd ? formData.value.tichLuongKd : formData.value.soLuongDc) || 99"
+                      [nzMax]="(formData.value.soLuongDc > formData.value.tichLuongKd ? formData.value.tichLuongKd : formData.value.soLuongDc) || 0"
                       [nzStep]="1" [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
                       (ngModelChange)="onChangeSLNhapDc($event)">
                     </nz-input-number>

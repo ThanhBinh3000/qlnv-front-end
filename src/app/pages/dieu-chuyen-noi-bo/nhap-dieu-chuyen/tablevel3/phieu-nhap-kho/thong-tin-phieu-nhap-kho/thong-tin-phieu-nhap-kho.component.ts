@@ -34,6 +34,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
   showListEvent = new EventEmitter<any>();
 
   maBb: string;
+  chungTuDinhKem: any[] = [];
   fileDinhKemReq: any[] = [];
   listDanhSachQuyetDinh: any[] = [];
   listPhuongThucBaoQuan: any[] = [];
@@ -66,16 +67,13 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
       maDvi: [],
       tenDvi: [],
       maQhns: [],
-      soBban: [],
-      ngayLap: [dayjs().format('YYYY-MM-DD')],
-      ngayKetThucNt: [],
+      soPhieuNhapKho: [],
+      ngayNhapKho: [dayjs().format('YYYY-MM-DD')],
+      soNo: [],
+      soCo: [],
       soQdDcCuc: [],
       ngayQdDcCuc: [],
       qdDcCucId: [],
-      ktvBaoQuan: [],
-      thuKho: [],
-      keToan: [],
-      thuTruong: [],
       tenLoKho: [],
       maLoKho: [],
       tenNganKho: [],
@@ -84,46 +82,47 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
       maNhaKho: [],
       tenDiemKho: [],
       maDiemKho: [],
-      idKeHoachDtl: [],
-      loaiHinhKho: [],
+      soPhieuKtraCluong: [],
+      idPhieuKtraCluong: [],
       loaiVthh: [],
       tenLoaiVthh: [],
       cloaiVthh: [],
       tenCloaiVthh: [],
-      tichLuongKhaDung: [],
+      thuKho: [],
+      idThuKho: [],
+      lanhDao: [],
+      idLanhDao: [],
+      ktvBaoQuan: [],
+      keToanTruong: [],
+      hoVaTenNguoiGiao: [],
+      cmndNguoiGiao: [],
+      donViNguoiGiao: [],
+      diaChi: [],
+      tgianGiaoNhanHang: [],
+      loaiHinhNx: [],
+      kieuNx: [],
+      bbNghiemThuBqld: [],
+      soLuongQdDcCuc: [],
       tenDonViTinh: [],
-      dsPhieuNhapKho: [],
-      slThucNhapDc: [],
-      hinhThucBaoQuan: [],
-      phuongThucBaoQuan: [],
-      dinhMucDuocGiao: [],
-      dinhMucTT: [],
-      tenLoKhoXuat: [],
-      maLoKhoXuat: [],
-      tenNganKhoXuat: [],
-      maNganKhoXuat: [],
-      tenNhaKhoXuat: [],
-      maNhaKhoXuat: [],
-      tenDiemKhoXuat: [],
-      maDiemKhoXuat: [],
-      tongKinhPhiDaTh: [],
-      tongKinhPhiDaThBc: [],
-      dcnbBBNTBQDtl: [new Array<any>(),],
-      nhanXet: [],
+      soBangKeCanHang: [],
+      tongSLNhapTT: [],
+      tongKPDCTT: [],
+      children: [new Array<any>(),],
+      ghiChu: [],
       type: ["01"],
       loaiDc: ["DCNB"]
     });
   }
 
   async ngOnInit() {
-    this.maBb = 'BBNT-' + this.userInfo.DON_VI.tenVietTat;
-    let id = await this.userService.getId('DCNB_BB_NT_BQ_HDR_SEQ')
+    this.maBb = 'PNK-CCDTVP';
+    let id = await this.userService.getId('XH_PHIEU_XKHO_BTT_SEQ')
     this.formData.patchValue({
       maDvi: this.userInfo.MA_DVI,
       tenDvi: this.userInfo.TEN_DVI,
       maQhns: this.userInfo.DON_VI.maQhns,
       ktvBaoQuan: this.userInfo.TEN_DAY_DU,
-      soBban: `${id}/${this.formData.get('nam').value}/${this.maBb}`,
+      soPhieuNhapKho: `${id}/${this.formData.get('nam').value}/${this.maBb}`,
 
     })
 

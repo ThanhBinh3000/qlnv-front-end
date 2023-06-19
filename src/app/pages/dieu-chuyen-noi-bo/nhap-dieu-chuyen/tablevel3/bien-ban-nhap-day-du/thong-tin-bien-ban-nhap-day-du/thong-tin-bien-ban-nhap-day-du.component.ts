@@ -89,6 +89,7 @@ export class ThongTinBienBanNhapDayDuComponent extends Base2Component implements
       ngayKetThucNt: [],
       soQdDcCuc: [],
       ngayQdDcCuc: [],
+      qdDcCucId: [],
       ktvBaoQuan: [],
       thuKho: [],
       keToan: [],
@@ -147,6 +148,14 @@ export class ThongTinBienBanNhapDayDuComponent extends Base2Component implements
       await this.loadChiTiet(this.idInput)
     }
 
+  }
+
+  isCuc() {
+    return this.userService.isCuc()
+  }
+
+  isChiCuc() {
+    return this.userService.isChiCuc()
   }
 
   async loadChiTiet(id: number) {
@@ -307,7 +316,7 @@ export class ThongTinBienBanNhapDayDuComponent extends Base2Component implements
       maDvi: this.userInfo.MA_DVI
       // listTrangThaiXh: [STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN],
     }
-    let resSoDX = await this.quyetDinhDieuChuyenCucService.getDsSoQuyetDinhDieuChuyenCuc(body);
+    let resSoDX = this.isCuc() ? await this.quyetDinhDieuChuyenCucService.getDsSoQuyetDinhDieuChuyenCuc(body) : await this.quyetDinhDieuChuyenCucService.getDsSoQuyetDinhDieuChuyenChiCuc(body);
     if (resSoDX.msg == MESSAGE.SUCCESS) {
       this.listDanhSachQuyetDinh = resSoDX.data;
     }
@@ -331,6 +340,7 @@ export class ThongTinBienBanNhapDayDuComponent extends Base2Component implements
         this.formData.patchValue({
           soQdDcCuc: data.soQdinh,
           ngayQdDcCuc: data.ngayKyQdinh,
+          qdDcCucId: data.id,
           tenLoKho: "",
           maLoKho: "",
           tenNganKho: "",

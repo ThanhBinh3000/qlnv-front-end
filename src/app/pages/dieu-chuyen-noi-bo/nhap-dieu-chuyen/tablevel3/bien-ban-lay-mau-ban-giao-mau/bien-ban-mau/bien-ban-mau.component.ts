@@ -106,26 +106,26 @@ export class BienBanMauComponent extends Base2Component implements OnInit {
     }
   };
 
-  disabledEndNgayLapKh = (endValue: Date): boolean => {
-    if (!endValue || !this.formData.value.ngayLapKhTu) {
-      return false;
-    }
-    return endValue.getTime() <= this.formData.value.ngayLapKhDen.getTime();
-  };
+  // disabledEndNgayLapKh = (endValue: Date): boolean => {
+  //   if (!endValue || !this.formData.value.ngayLapKhTu) {
+  //     return false;
+  //   }
+  //   return endValue.getTime() <= this.formData.value.ngayLapKhDen.getTime();
+  // };
 
-  disabledStartNgayDuyetLdc = (startValue: Date): boolean => {
-    if (startValue && this.formData.value.ngayDuyetLdcDen) {
-      return startValue.getTime() > this.formData.value.ngayDuyetLdcDen.getTime();
-    }
-    return false;
-  };
+  // disabledStartNgayDuyetLdc = (startValue: Date): boolean => {
+  //   if (startValue && this.formData.value.ngayDuyetLdcDen) {
+  //     return startValue.getTime() > this.formData.value.ngayDuyetLdcDen.getTime();
+  //   }
+  //   return false;
+  // };
 
-  disabledEndNgayDuyetLdc = (endValue: Date): boolean => {
-    if (!endValue || !this.formData.value.ngayDuyetLdcTu) {
-      return false;
-    }
-    return endValue.getTime() <= this.formData.value.ngayDuyetLdcDen.getTime();
-  };
+  // disabledEndNgayDuyetLdc = (endValue: Date): boolean => {
+  //   if (!endValue || !this.formData.value.ngayDuyetLdcTu) {
+  //     return false;
+  //   }
+  //   return endValue.getTime() <= this.formData.value.ngayDuyetLdcDen.getTime();
+  // };
 
   async ngOnInit() {
     this.isVisibleChangeTab$.subscribe((value: boolean) => {
