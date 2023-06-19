@@ -180,7 +180,6 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
       this.loadDsDxCanSua();
       this.loadDsChiCuc();
       await this.getDataDetail(this.idInput)
-    console.log(this.isGiaMuaToiDa,22222)
     this.spinner.hide();
   }
 
@@ -254,6 +253,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
         id: data.id,
         namKeHoach: data.namKeHoach,
         soDeXuat: data.soDeXuat ? data.soDeXuat.split('/')[0] : '',
+        loaiDeXuat: data.loaiDeXuat,
         loaiVthh: data.loaiVthh,
         ngayKy: data.ngayKy,
         loaiGia: data.loaiGia,
@@ -279,6 +279,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
         soCanCu: data.soCanCu,
         qdCtKhNam: data.qdCtKhNam,
         tenTrangThai: data.tenTrangThai,
+        apDungTatCa: data.apDungTatCa,
         lyDoTuChoi: data.lyDoTuChoi
       })
       // await this.loadDsQdPduyetKhlcnt();
@@ -443,7 +444,6 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
   onChangeLoaiGia($event) {
     this.isVat = ($event == 'LG01' || $event == 'LG03');
     this.formData.patchValue({
-      qdCtKhNam: null,
       cloaiVthh : null
     })
   }
@@ -532,7 +532,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
         }
       }
     }*/
-
+    this.updatePagTtChungs();
     let body = this.formData.value;
     if (body.soDeXuat) {
       body.soDeXuat = body.soDeXuat + this.maDx;
@@ -542,7 +542,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
     body.canCuPhapLy = this.dataTableCanCuXdg;
     body.ketQuaKhaoSatGiaThiTruong = this.dataTableKsGia;
     body.ketQuaThamDinhGia = this.dataTableKqGia;
-    body.pagTtChungs = this.pagTtChungs;
+    body.pagTtChungs = body.apDungTatCa == true ? [] : this.pagTtChungs;
     body.ketQuaKhaoSatTtThamKhao = this.dataTableTtThamKhao;
     body.diaDiemDeHangs = this.dsDiaDiemDeHang;
     body.fileDinhKemReqs = this.fileDinhKem;
@@ -940,7 +940,6 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
   }
 
   onChangeIsApDungTatCa() {
-    this.pagTtChungs = [];
     this.updateEditCache('ttc');
     this.updateEditCache('ppxdg');
   }
@@ -957,6 +956,19 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
     let list = this.dsChiCuc.filter(item => item.maDvi == event)
     if(list && list.length > 0) {
       this.rowItemTtc.tenChiCuc = list[0]?.tenDvi
+    }
+  }
+
+  updatePagTtChungs() {
+    if (this.formData.value.apDungTatCa == true) {
+      this.pagTtChungs = [];
+    } else {
+      this.formData.patchValue({
+        giaDeNghi : null,
+        giaDeNghiVat : null,
+        soLuong : null,
+        diaDiemDeHang : null,
+      })
     }
   }
 }

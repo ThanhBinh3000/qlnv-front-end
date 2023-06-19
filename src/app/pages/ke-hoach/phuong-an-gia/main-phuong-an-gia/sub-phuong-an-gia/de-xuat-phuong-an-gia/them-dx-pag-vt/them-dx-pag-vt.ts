@@ -15,20 +15,15 @@ import {MESSAGE} from "../../../../../../../constants/message";
 import {DanhMucTieuChuanService} from "../../../../../../../services/quantri-danhmuc/danhMucTieuChuan.service";
 import {UploadFileService} from "../../../../../../../services/uploaFile.service";
 import {ChiTieuKeHoachNamCapTongCucService} from "../../../../../../../services/chiTieuKeHoachNamCapTongCuc.service";
-import {
-  QuyetDinhPheDuyetKeHoachLCNTService
-} from "../../../../../../../services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/quyetDinhPheDuyetKeHoachLCNT.service";
 import {saveAs} from 'file-saver';
 import {
   CanCuXacDinhPag,
   PhuongPhapXacDinhGia,
   ThongTinChungPag,
-  ThongTinKhaoSatGia
 } from "../../../../../../../models/DeXuatPhuongAnGia";
 import {FileDinhKem} from "../../../../../../../models/FileDinhKem";
 import {STATUS} from "../../../../../../../constants/status";
 import {DialogTuChoiComponent} from "../../../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
-import {ThongTinQuyetDinh} from "../../../../../../../models/DeXuatKeHoachuaChonNhaThau";
 import { uniqBy } from 'lodash';
 @Component({
   selector: 'app-them-moi-de-xuat-pag',
@@ -331,20 +326,6 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
       this.updateEditCache('ttc')
       this.updateEditCache('ccXdg')
       this.updateEditCache('ppxdg')
-      await this.loadTenCloaiVthh(data.loaiVthh, this.pagTtChungs)
-    }
-  }
-
-  async loadTenCloaiVthh(vthh, ttc) {
-    await this.loadDsQdPduyetKhlcnt();
-    await this.onChangeLoaiVthh(vthh)
-    if (ttc) {
-      ttc.forEach(item => {
-        let res = this.listCloaiVthh.find(cl => cl.ma == item.cloaiVthh)
-        if (res) {
-          item.tenCloaiVthh = res.ten
-        }
-      })
     }
   }
 
