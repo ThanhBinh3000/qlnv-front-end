@@ -284,9 +284,9 @@
                             <td class="text-center">{{(page-1)*pageSize+idx+1}}</td>
                             <td>{{ data.soDx }}</td>
                             <td>{{ data.tenDvi}}</td>
-                            <td>{{ data.soLuong }}</td>
-                            <td>{{ data.giaDn }}</td>
-                            <td>{{ data.giaDnVat }}</td>
+                            <td class="text-right">{{ data.soLuong | number : '1.0-1' : 'vi-VN' }}</td>
+                            <td class="text-right">{{ data.giaDn | number : '1.0-1' : 'vi-VN' }}</td>
+                            <td class="text-right">{{ data.giaDnVat | number : '1.0-1' : 'vi-VN' }}</td>
                         </tr>
                     </tbody>
                 </nz-table>
