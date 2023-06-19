@@ -201,7 +201,6 @@ export class PhieuXuatKhoDCNBComponent extends Base2Component implements OnInit 
     this.isDetail = true;
     this.isView = isView;
     // this.idQdinhDcc = idQdinhDcc;
-    console.log("lv2", lv2)
     this.passData = {
       soQddc: lv2.soQdinh, qddcId: lv2.qdinhDccId, soPhieuKnChatLuong: lv2.soPhieuKiemNghiemCl, phieuKnChatLuongHdrId: lv2.phieuKiemNghiemId, maDiemKho: lv2.maDiemKho,
       maNhaKho: lv2.maNhaKho, maNganKho: lv2.maNganKho, maLoKho: lv2.maloKho, tenDiemKho: lv2.tenDiemKho, tenNhaKho: lv2.tenNhaKho, tenNganKho: lv2.tenNganKho, tenLoKho: lv2.tenloKho,
@@ -209,7 +208,30 @@ export class PhieuXuatKhoDCNBComponent extends Base2Component implements OnInit 
     }
   }
 
-
+  checkRoleView(trangThai: string): boolean {
+    if (!this.checkRoleEdit(trangThai) && !this.checkRoleApprove(trangThai) && !this.checkRoleDelete(trangThai)) {
+      return true
+    }
+    return false
+  }
+  checkRoleEdit(trangThai: string): boolean {
+    if (this.userService.isChiCuc() && (trangThai == this.STATUS.DU_THAO || trangThai == this.STATUS.TU_CHOI_LDCC)) {
+      return true
+    }
+    return false
+  }
+  checkRoleApprove(trangThai: string): boolean {
+    if (this.userService.isChiCuc() && (trangThai == this.STATUS.CHO_DUYET_LDCC)) {
+      return true
+    }
+    return false
+  }
+  checkRoleDelete(trangThai: string): boolean {
+    if (this.userService.isChiCuc() && (trangThai == this.STATUS.DU_THAO)) {
+      return true
+    }
+    return false
+  }
   openModalPhieuXuatKho(id: number) {
     this.idPhieu = id;
     this.isViewPhieu = true;

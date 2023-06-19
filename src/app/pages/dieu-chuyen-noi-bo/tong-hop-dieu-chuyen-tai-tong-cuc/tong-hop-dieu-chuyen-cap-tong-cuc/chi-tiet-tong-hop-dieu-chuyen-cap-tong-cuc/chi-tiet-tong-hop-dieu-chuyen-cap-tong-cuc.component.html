@@ -16,11 +16,23 @@
                         <i class="fa fa-arrow-left"></i>
                         <span>Quay lại</span>
                     </button>
-                    <button type="button" class="btn btn-sub" (click)="taoQuyetDinh()"
-                        *ngIf="(isTongHop && !isViewDetail) && userService.isAccessPermisson('DCNB_QUYETDINHDC_SUA') && (formData.value.trangThai=='' || formData.value.trangThai == STATUS.CHUA_TAO_QD) && userService.isTongCuc()
+                    <button type="button" class="btn btn-sub" (click)="taoQuyetDinh(1)"
+                        *ngIf="isTongHop  && userService.isAccessPermisson('DCNB_QUYETDINHDC_SUA') && (formData.value.trangThai=='' || formData.value.trangThai == STATUS.CHUA_TAO_QD) && userService.isTongCuc()
                         && ((formData.value.loaiDieuChuyen=='CUC' && groupData2Cuc?.length>0)||(formData.value.loaiDieuChuyen=='CHI_CUC' && groupData2ChiCuc?.length>0))">
                         <i class="icon htvbdh_soanthao"></i>
                         <span>Tạo quyết định</span>
+                    </button>
+                    <button type="button" class="btn btn-sub" (click)="taoQuyetDinh(2)"
+                        *ngIf="isTongHop  && userService.isAccessPermisson('DCNB_QUYETDINHDC_SUA') && formData.value.trangThai== STATUS.DA_DU_THAO_QD && userService.isTongCuc()
+                        && ((formData.value.loaiDieuChuyen=='CUC' && groupData2Cuc?.length>0)||(formData.value.loaiDieuChuyen=='CHI_CUC' && groupData2ChiCuc?.length>0))">
+                        <i class="icon htvbdh_soanthao"></i>
+                        <span>Sửa quyết định</span>
+                    </button>
+                    <button type="button" class="btn btn-sub" (click)="taoQuyetDinh(3)"
+                        *ngIf="isTongHop  && userService.isAccessPermisson('DCNB_QUYETDINHDC_SUA') && formData.value.trangThai== STATUS.DA_BAN_HANH_QD && userService.isTongCuc()
+                        && ((formData.value.loaiDieuChuyen=='CUC' && groupData2Cuc?.length>0)||(formData.value.loaiDieuChuyen=='CHI_CUC' && groupData2ChiCuc?.length>0))">
+                        <i class="icon htvbdh_soanthao"></i>
+                        <span>Xem quyết định</span>
                     </button>
                     <button
                         *ngIf="isTongHop  && (formData.value.trangThai =='' || formData.value.trangThai == STATUS.CHUA_TAO_QD) && userService.isTongCuc() && userService.isAccessPermisson('DCNB_TONGHOPDC_SUA')"

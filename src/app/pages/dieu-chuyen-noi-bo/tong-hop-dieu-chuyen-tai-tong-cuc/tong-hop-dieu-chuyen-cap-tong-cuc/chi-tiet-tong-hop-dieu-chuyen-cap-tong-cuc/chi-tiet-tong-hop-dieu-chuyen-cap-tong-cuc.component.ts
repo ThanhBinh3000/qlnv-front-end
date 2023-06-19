@@ -46,7 +46,8 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
   @Input() isViewOnModal: boolean;
   @Input() isViewDetail: boolean;
   @Input() isEdit: boolean;
-  @Input() isAddNew: boolean
+  @Input() isAddNew: boolean;
+  @Input() qdDcId: number;
   @Output()
   showListEvent = new EventEmitter<any>();
 
@@ -232,16 +233,20 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
   quayLai() {
     this.showListEvent.emit();
   }
-  async taoQuyetDinh() {
+  async taoQuyetDinh(stt: number) {
     //save record-->redirect page tao quyet dinh
     try {
       // this.setValidator(true)
       this.formData.controls['trichYeu'].setValidators([Validators.required])
       this.helperService.markFormGroupTouched(this.formData);
       if (!this.formData.valid) return;
-      const res = await this.save();
-      if (res.msg == MESSAGE.SUCCESS) {
-        this.router.navigate(['dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen', { id: this.formData.value.id }]);
+      if (stt == 1) {
+        const res = await this.save();
+        if (res.msg == MESSAGE.SUCCESS) {
+          this.router.navigate(['dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen', { id: this.formData.value.id }]);
+        }
+      } else if (stt == 2 || stt == 3) {
+        this.router.navigate(['dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen', { qdDcId: this.qdDcId }]);
       }
     } catch (error) {
       console.log("error", error)

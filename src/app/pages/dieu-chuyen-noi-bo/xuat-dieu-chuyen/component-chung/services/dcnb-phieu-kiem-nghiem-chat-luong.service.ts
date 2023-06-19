@@ -15,4 +15,8 @@ export class PhieuKiemNghiemChatLuongDieuChuyenService extends BaseService {
         const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/bien-ban-lay-mau`;
         return this._httpClient.post<OldResponseData>(url, body).toPromise();
     }
+    dsPhieuKNChatLuong(body): Promise<OldResponseData> {
+        const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/danh-sach`;
+        return this._httpClient.post<OldResponseData>(url, body).toPromise();
+    }
 }

@@ -105,6 +105,8 @@ export class TongHopDieuChuyenCapTongCuc extends Base2Component implements OnIni
     selectedId: number = 0;
     isVatTu: boolean = false;
     isView = false;
+    selectQdDcId: number;
+
 
     async ngOnInit() {
         try {
@@ -150,10 +152,6 @@ export class TongHopDieuChuyenCapTongCuc extends Base2Component implements OnIni
         await this.search()
     }
     async timKiem() {
-        if (this.formData.value.ngayTongHop) {
-            this.formData.value.thTuNgay = dayjs(this.formData.value.ngayTongHop[0]).format('YYYY-MM-DD')
-            this.formData.value.thDenNgay = dayjs(this.formData.value.ngayTongHop[1]).format('YYYY-MM-DD')
-        }
         await this.search();
     }
 
@@ -189,9 +187,11 @@ export class TongHopDieuChuyenCapTongCuc extends Base2Component implements OnIni
             }
         }
     }
-    taoQuyetDinhDc(id: number) {
-        if (id) {
+    taoQuyetDinhDc(id: number, qdDcId: number) {
+        if (!qdDcId) {
             this.router.navigate(['dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen', { id }]);
+        } else {
+            this.router.navigate(['dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen', { qdDcId }]);
         }
     }
     checkRoleView(trangThai: string): boolean {
@@ -204,12 +204,13 @@ export class TongHopDieuChuyenCapTongCuc extends Base2Component implements OnIni
     checkRoleDelete(trangThai: string): boolean {
         return this.userService.isTongCuc() && trangThai == STATUS.CHUA_TAO_QD
     }
-    viewDetail(id: number, isViewDetail: boolean) {
+    viewDetail(id: number, isViewDetail: boolean, qdDcId: number) {
         this.selectedId = id;
         this.isDetail = true;
         this.isViewDetail = isViewDetail;
         this.isEdit = !isViewDetail;
         this.isAddNew = false;
+        this.selectQdDcId = qdDcId;
     };
     xoaItem(item: any) {
         this.delete(item)

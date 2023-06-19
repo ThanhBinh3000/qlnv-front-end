@@ -164,21 +164,25 @@
                                                     <td></td>
                                                     <td></td>
                                                     <td></td>
-                                                    <td style="color: black ;font-weight: bold;">{{lv3.soPhieuXuatKho}}
+                                                    <td style="color: black ;font-weight: bold;">
+                                                        {{lv3.id}}/PXK/DCNB
                                                     </td>
                                                     <td>{{lv3.ngayXuatKho | date: 'dd/MM/YYYY' }}</td>
                                                     <td>{{LIST_TRANG_THAI[lv3.trangThai]}}</td>
                                                     <td class="text-left">
-                                                        <a *ngIf="lv3.trangThai == STATUS.DA_DUYET_LDCC"
-                                                            (click)="redirectToChiTiet(lv3, false, lv3.id)">
+                                                        <a *ngIf="checkRoleView(lv3.trangThai)"
+                                                            (click)="redirectToChiTiet(lv3, true, lv3.id)">
                                                             <i class="fa fa-eye"></i>
                                                         </a>
-                                                        <a *ngIf="lv3.trangThai != STATUS.DA_DUYET_LDCC"
+                                                        <a *ngIf="checkRoleEdit(lv3.trangThai)"
                                                             (click)="redirectToChiTiet(lv3, false, lv3.id)">
                                                             <i class="fa fa-pencil"></i>
                                                         </a>
-                                                        <a *ngIf="lv3.trangThai == STATUS.DU_THAO"
-                                                            (click)="delete(lv3)">
+                                                        <a *ngIf="checkRoleApprove(lv3.trangThai)"
+                                                            (click)="redirectToChiTiet(lv2, false, lv3.id)">
+                                                            <i class="icon htvbdh_tcdt_pheduyet"></i>
+                                                        </a>
+                                                        <a *ngIf="checkRoleDelete(lv3.trangThai)" (click)="delete(lv3)">
                                                             <i class="fa fa-trash-o do"></i>
                                                         </a>
 

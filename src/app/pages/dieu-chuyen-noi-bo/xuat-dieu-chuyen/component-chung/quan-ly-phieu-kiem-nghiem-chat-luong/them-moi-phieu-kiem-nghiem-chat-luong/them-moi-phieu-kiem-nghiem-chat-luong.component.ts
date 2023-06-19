@@ -337,7 +337,6 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
       }
       if (res.msg == MESSAGE.SUCCESS) {
         if (isGuiDuyet) {
-          this.id = res.data.id;
           this.pheDuyet();
         } else {
           if (this.idInput) {
@@ -348,6 +347,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
             // this.back();
           }
         }
+        this.idInput = res.data.id;
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
@@ -393,7 +393,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
         this.spinner.show();
         try {
           let body = {
-            id: this.id,
+            id: this.formData.value.id,
             trangThai: trangThai
           };
           let res =
@@ -431,7 +431,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
         this.spinner.show();
         try {
           let body = {
-            id: this.id,
+            id: this.formData.value.id,
             lyDoTuChoi: text,
             trangThai: STATUS.TU_CHOI_LDCC,
           };
