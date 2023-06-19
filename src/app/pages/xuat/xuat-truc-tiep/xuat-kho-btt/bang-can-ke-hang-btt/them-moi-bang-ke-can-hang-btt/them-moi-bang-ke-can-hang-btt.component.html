@@ -4,21 +4,26 @@
             <i class="fa fa-arrow-left"></i>
             <span>Quay lại</span>
         </button>
-        <button class="btn btn-sub xanh-nhat" *ngIf="!isDisabled() &&  userService.isChiCuc()" (click)="save(true)">
-            <i class="icon htvbdh_tcdt_guiduyet"></i>
-            <span>Lưu và Gửi duyệt</span>
-        </button>
-        <button class="btn btn-do btn-sub do" (click)="pheDuyet(false)"
-            *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDCC) && userService.isChiCuc()">
+        <button
+            *ngIf=" userService.isAccessPermisson('XHDTQG_PTTT_XK_LT_BKCH_DUYET_LDCCUC') && formData.value.trangThai===STATUS.CHO_DUYET_LDCC"
+            type="button" class="btn btn-sub do" (click)="pheDuyet(false)">
             <i class="icon htvbdh_tcdt_tuchoi"></i>
             <span>Từ chối</span>
         </button>
-        <button class="btn btn-xanh btn-sub xanh-nhat" (click)="pheDuyet(true)"
-            *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDCC)  && userService.isChiCuc()">
+        <button
+            *ngIf="userService.isAccessPermisson('XHDTQG_PTTT_XK_LT_BKCH_DUYET_LDCCUC') && formData.value.trangThai===STATUS.CHO_DUYET_LDCC"
+            type="button" class="btn btn-sub xanh-nhat" (click)="pheDuyet(true)">
             <i class="icon htvbdh_tcdt_pheduyet"></i>
             <span>Duyệt</span>
         </button>
-        <button class="btn btn-sub xanh" *ngIf="!isDisabled() &&  userService.isChiCuc()" (click)="save()">
+        <button *ngIf="userService.isAccessPermisson('XHDTQG_PTTT_XK_LT_BKCH_THEM') && formData.value.trangThai===STATUS.DU_THAO
+            ||formData.value.trangThai===STATUS.TU_CHOI_LDCC" type="button" class="btn btn-sub xanh-nhat"
+            (click)="save(true)">
+            <i class="icon htvbdh_tcdt_guiduyet"></i>
+            <span>Lưu và gửi duyệt</span>
+        </button>
+        <button *ngIf=" userService.isAccessPermisson('XHDTQG_PTTT_XK_LT_BKCH_THEM') && formData.value.trangThai===STATUS.DU_THAO
+            ||formData.value.trangThai===STATUS.TU_CHOI_LDCC" type="button" class="btn btn-main" (click)="save()">
             <i class="icon htvbdh_tcdt_save"></i>
             <span>Lưu</span>
         </button>
@@ -315,7 +320,6 @@
                 </div>
             </div>
         </form>
-
         <nz-card class="mg-t-16 flex-card p-lr16 table-card">
             <nz-table nzBordered class="pd-10" [nzData]="dataTable" class="nowrap" [nzFrontPagination]="false"
                 [nzShowPagination]="false">
@@ -327,7 +331,6 @@
                         <th>Trọng lượng bao bì (2)</th>
                         <th width="60px" *ngIf="!isDisabled()">Hành động</th>
                     </tr>
-
                     <tr *ngIf="formData.value.trangThai != STATUS.DA_DUYET_LDCC">
                         <th class="text-center"> </th>
                         <th>

@@ -409,9 +409,9 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
         const detail = await this.mangLuoiKhoService.getDetailByMa(body);
         if (detail.statusCode == 0) {
           const coLoKho = detail.data.object.coLoKho
-          const tichLuongKdVt = detail.data.object.tichLuongKdVt
+          const tichLuongKd = (this.formData.value.cloaiVthh.startsWith("01") || this.formData.value.cloaiVthh.startsWith("04")) ? detail.data.object.tichLuongKdLt : detail.data.object.tichLuongKdVt
           this.formData.patchValue({
-            tichLuongKd: tichLuongKdVt
+            tichLuongKd
           })
           const detailThuKho = detail.data.object.detailThuKho
           if (detailThuKho) {

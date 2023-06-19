@@ -74,4 +74,9 @@ export abstract class BaseService {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/xoa/multi`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
+
+  preview(body) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/xem-truoc`;
+    return this._httpClient.post<OldResponseData>(url, body).toPromise();
+  }
 }

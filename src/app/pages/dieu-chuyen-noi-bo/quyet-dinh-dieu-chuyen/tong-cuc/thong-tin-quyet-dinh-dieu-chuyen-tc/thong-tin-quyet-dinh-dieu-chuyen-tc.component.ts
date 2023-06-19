@@ -96,7 +96,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự thảo'],
       quyetDinhPdDtl: [new Array<QuyetDinhPdDtl>(),],
-      // danhSachQuyetDinh: [new Array<any>(),],
+      danhSachQuyetDinh: [new Array<any>(),],
     }
     );
   }
@@ -151,23 +151,26 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
       let listDeXuat = []
       let listHangHoa = []
       this.dataTableView = []
-      data.danhSachQuyetDinh.map(async (item, i) => {
-        if (item.dcnbKeHoachDcHdr) {
-          listDeXuat.push(item.dcnbKeHoachDcHdr)
+      if (data.danhSachQuyetDinh.length > 0) {
+        data.danhSachQuyetDinh.map(async (item, i) => {
+          if (item.dcnbKeHoachDcHdr) {
+            listDeXuat.push(item.dcnbKeHoachDcHdr)
 
-        }
-      })
-
-      let dcnbKeHoachDcHdr = data.danhSachQuyetDinh[0].dcnbKeHoachDcHdr
-
-      dcnbKeHoachDcHdr.danhSachHangHoa.forEach(element => {
-        listHangHoa.push({
-          ...element,
-          maLoNganKho: element.maLoKho ? `${element.maLoKho}${element.maNganKho}` : element.maNganKho,
-          maDvi: dcnbKeHoachDcHdr.maDvi,
-          tenDvi: dcnbKeHoachDcHdr.tenDvi,
+          }
         })
-      });
+
+        let dcnbKeHoachDcHdr = data.danhSachQuyetDinh[0].dcnbKeHoachDcHdr
+
+        dcnbKeHoachDcHdr.danhSachHangHoa.forEach(element => {
+          listHangHoa.push({
+            ...element,
+            maLoNganKho: element.maLoKho ? `${element.maLoKho}${element.maNganKho}` : element.maNganKho,
+            maDvi: dcnbKeHoachDcHdr.maDvi,
+            tenDvi: dcnbKeHoachDcHdr.tenDvi,
+          })
+        });
+      }
+
 
       this.formData.patchValue({
         ...data,
@@ -277,6 +280,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
       const res = await this.maTongHopQuyetDinhDieuChuyenService.getDetail(event)
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data;
+        let listQD = []
         let listDeXuat = []
         let listHangHoa = []
 
@@ -297,6 +301,13 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
             if (item.thKeHoachDieuChuyenCucHdr.thKeHoachDieuChuyenNoiBoCucDtls.length > 0) {
               item.thKeHoachDieuChuyenCucHdr.thKeHoachDieuChuyenNoiBoCucDtls.map(itemKH => {
                 let dcnbKeHoachDcHdr = itemKH.dcnbKeHoachDcHdr
+
+                dcnbKeHoachDcHdr.forEach(element => {
+                  listQD.push({
+                    keHoachDcHdrId: element.id,
+                  })
+                });
+
                 dcnbKeHoachDcHdr.danhSachHangHoa.map(async itemHH => {
                   listHangHoa.push({
                     ...itemHH,
@@ -320,7 +331,9 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
             if (item.thKeHoachDieuChuyenCucKhacCucDtl.dcnbKeHoachDcHdr.length > 0) {
               item.thKeHoachDieuChuyenCucKhacCucDtl.dcnbKeHoachDcHdr.map(async (itemKH, i) => {
 
-
+                listQD.push({
+                  keHoachDcHdrId: itemKH.id,
+                })
                 itemKH.danhSachHangHoa.map(async itemHH => {
                   listHangHoa.push({
                     ...itemHH,
@@ -341,7 +354,8 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
 
         this.dataTableView = this.buildTableView(listHangHoa)
         this.formData.patchValue({
-          quyetDinhPdDtl: listDeXuat
+          quyetDinhPdDtl: listDeXuat,
+          danhSachQuyetDinh: listQD,
         });
 
 
@@ -435,13 +449,13 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
 
 
   async save(isGuiDuyet?) {
+    if (!this.formData.value.soQdinh) return
     await this.spinner.show();
     this.setValidator()
     let body = this.formData.value;
+    body.soQdinh = `${this.formData.value.soQdinh.toString().split("/")[0]}/${this.maQd}`
     if (this.idInput) {
       body.id = this.idInput
-    } else {
-      body.soQdinh = `${this.formData.value.soQdinh}/${this.maQd}`
     }
 
     body.canCu = this.canCu
@@ -664,7 +678,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
 
         this.formData.patchValue({
           quyetDinhPdDtl: listDeXuat,
-          // danhSachQuyetDinh: listQD,
+          danhSachQuyetDinh: listQD,
         });
 
       } else {

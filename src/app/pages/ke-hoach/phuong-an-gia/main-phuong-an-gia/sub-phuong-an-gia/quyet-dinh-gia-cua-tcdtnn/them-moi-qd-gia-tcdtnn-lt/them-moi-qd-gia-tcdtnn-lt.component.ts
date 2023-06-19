@@ -1,27 +1,27 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import dayjs from 'dayjs';
-import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from "@angular/forms";
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { MESSAGE } from 'src/app/constants/message';
-import { QuyetDinhGiaBtcThongTinGia } from 'src/app/models/QuyetDinhBtcThongTinGia';
-import { STATUS } from "src/app/constants/status";
-import { UserLogin } from 'src/app/models/userlogin';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { DanhMucTieuChuanService } from 'src/app/services/quantri-danhmuc/danhMucTieuChuan.service';
-import { HelperService } from 'src/app/services/helper.service';
-import { QuyetDinhGiaTCDTNNService } from 'src/app/services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service';
-import { UserService } from 'src/app/services/user.service';
-import { Globals } from 'src/app/shared/globals';
+import {AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators} from "@angular/forms";
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {MESSAGE} from 'src/app/constants/message';
+import {QuyetDinhGiaBtcThongTinGia} from 'src/app/models/QuyetDinhBtcThongTinGia';
+import {STATUS} from "src/app/constants/status";
+import {UserLogin} from 'src/app/models/userlogin';
+import {DanhMucService} from 'src/app/services/danhmuc.service';
+import {DanhMucTieuChuanService} from 'src/app/services/quantri-danhmuc/danhMucTieuChuan.service';
+import {HelperService} from 'src/app/services/helper.service';
+import {QuyetDinhGiaTCDTNNService} from 'src/app/services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service';
+import {UserService} from 'src/app/services/user.service';
+import {Globals} from 'src/app/shared/globals';
 import {
   DialogQuyetDinhGiaCuaTcdtnnComponent
 } from 'src/app/components/dialog/dialog-ke-hoach-phuong-an-gia/dialog-quyet-dinh-gia-cua-tcdtnn/dialog-quyet-dinh-gia-cua-tcdtnn.component';
 import {
   TongHopPhuongAnGiaService
 } from "../../../../../../../services/ke-hoach/phuong-an-gia/tong-hop-phuong-an-gia.service";
-import { DANH_MUC_LEVEL } from "../../../../../../luu-kho/luu-kho.constant";
-import { DonviService } from "../../../../../../../services/donvi.service";
+import {DANH_MUC_LEVEL} from "../../../../../../luu-kho/luu-kho.constant";
+import {DonviService} from "../../../../../../../services/donvi.service";
 
 @Component({
   selector: 'app-them-moi-qd-gia-tcdtnn-lt',
@@ -100,17 +100,15 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
 
   async ngOnInit() {
     this.spinner.show();
-    this.userInfo = this.userService.getUserLogin()
-    await this.loadDsDonVi()
-    await Promise.all([
-      this.loadDsNam(),
-      this.loadDsLoaiGia(),
-      this.loadDsVthh(),
-      this.loadToTrinhDeXuat(),
-      this.maQd = "/QĐ-TCDT",
-      this.getDataDetail(this.idInput),
-      this.loadTiLeThue()
-    ]);
+    this.userInfo = this.userService.getUserLogin();
+    this.loadDsDonVi();
+    this.loadDsNam();
+    this.loadDsLoaiGia();
+    this.loadDsVthh();
+    this.loadToTrinhDeXuat();
+    this.maQd = "/QĐ-TCDT"
+    this.getDataDetail(this.idInput)
+    this.loadTiLeThue();
     this.spinner.hide();
   }
 
@@ -139,8 +137,8 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
       if (this.arrThongTinGia) {
         this.arrThongTinGia.forEach(item => {
           let dataFind = this.dsDonVi.find(data => data.maDvi == item.maDvi)
-          if (dataFind ) {
-            item.tenDvi = dataFind.tenDvi ? dataFind.tenDvi  : ''
+          if (dataFind) {
+            item.tenDvi = dataFind.tenDvi ? dataFind.tenDvi : ''
           }
         })
       }
@@ -176,8 +174,7 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
         this.thueVat = 10;
       }
       this.spinner.hide();
-    }
-    catch (e) {
+    } catch (e) {
       console.log('error: ', e)
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -311,7 +308,7 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
       this.formData.controls["loaiVthh"].setValue(curToTrinh.loaiVthh);
 
       //chung loai hang hoa
-      let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({ "str": curToTrinh.loaiVthh });
+      let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({"str": curToTrinh.loaiVthh});
       this.dsCloaiVthh = [];
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
