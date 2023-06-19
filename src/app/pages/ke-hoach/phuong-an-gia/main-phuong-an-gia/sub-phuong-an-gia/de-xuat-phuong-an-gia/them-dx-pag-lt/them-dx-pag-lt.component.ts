@@ -621,6 +621,11 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
             }
             case STATUS.CHO_DUYET_LDC: {
               body.trangThai = STATUS.DA_DUYET_LDC;
+              break;
+            }
+            case STATUS.DA_DUYET_LDC: {
+              body.trangThai = STATUS.DA_DUYET_CBV;
+              break;
             }
           }
           let res = await this.deXuatPAGService.approve(body)
@@ -666,6 +671,10 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
             }
             case STATUS.CHO_DUYET_LDC: {
               body.trangThai = STATUS.TU_CHOI_LDC;
+              break;
+            }
+            case STATUS.DA_DUYET_LDC: {
+              body.trangThai = STATUS.TU_CHOI_CBV;
               break;
             }
           }

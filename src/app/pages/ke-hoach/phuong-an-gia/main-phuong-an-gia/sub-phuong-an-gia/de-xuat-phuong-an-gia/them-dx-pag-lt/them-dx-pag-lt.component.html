@@ -4,13 +4,15 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_TP ||
-            formData.value.trangThai == STATUS.CHO_DUYET_LDC" type="button" class="btn btn-sub do" (click)="tuChoi()">
+    <button  *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_TP && userService.isCuc()) ||
+            (formData.value.trangThai == STATUS.CHO_DUYET_LDC  && userService.isCuc()) || ( formData.value.trangThai == STATUS.DA_DUYET_LDC &&
+                 userService.isTongCuc())" type="button" class="btn btn-sub do" (click)="tuChoi()">
       <i class="icon htvbdh_tcdt_tuchoi do"></i>
       <span>Từ chối</span>
     </button>
-    <button *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_TP ||
-            formData.value.trangThai == STATUS.CHO_DUYET_LDC " type="button" class="btn btn-sub xanh-nhat"
+    <button *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_TP && userService.isCuc()) ||
+            (formData.value.trangThai == STATUS.CHO_DUYET_LDC  && userService.isCuc()) || ( formData.value.trangThai == STATUS.DA_DUYET_LDC &&
+                 userService.isTongCuc()) " type="button" class="btn btn-sub xanh-nhat"
             (click)="pheDuyet()">
       <i class="icon htvbdh_tcdt_pheduyet"></i>
       <span>Duyệt</span>
@@ -35,7 +37,7 @@
       <div class="header-text">
         <div class="title-chi-tieu">
                     <span
-                      [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDC ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
+                      [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDC || STATUS.DA_DUYET_CBV ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
                         {{ formData.value.tenTrangThai }}
                     </span>
           <span>ĐỀ XUẤT PHƯƠNG ÁN GIÁ</span>
