@@ -140,10 +140,6 @@
                                     <nz-date-picker formControlName="ngayTongHop" nzFormat="dd/MM/yyyy" [nzDisabled]="isView"
                                         id="ngay-qd" class="search__input">
                                     </nz-date-picker>
-                                    <ng-template #error let-control>
-                                        <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
-                                        </ng-container>
-                                    </ng-template>
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
@@ -155,10 +151,6 @@
                                     <nz-input-group>
                                         <input type="text" nz-input formControlName="noiDung" [readonly]="isView" />
                                     </nz-input-group>
-                                    <ng-template #error let-control>
-                                        <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
-                                        </ng-container>
-                                    </ng-template>
                                 </nz-form-control>
                             </nz-form-item>
                         </div>

@@ -38,10 +38,6 @@
                 <nz-option *ngFor="let p of dsNam" [nzValue]="p.value" [nzLabel]="p.text">
                 </nz-option>
               </nz-select>
-              <ng-template #error let-control>
-                <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
-                </ng-container>
-              </ng-template>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -55,10 +51,6 @@
                   [nzMax]="9999999" [nzStep]="1" [nzSize]="'small'">
                 </nz-input-number>
               </nz-input-group>
-              <ng-template #error let-control>
-                <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
-                </ng-container>
-              </ng-template>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -70,10 +62,6 @@
               <nz-date-picker formControlName="ngayKy" nzFormat="dd/MM/yyyy" id="ngay-ky" [nzDisabled]="noEdit"
                 class="search__input">
               </nz-date-picker>
-              <ng-template #error let-control>
-                <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
-                </ng-container>
-              </ng-template>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -85,10 +73,6 @@
               <nz-date-picker formControlName="ngayHieuLuc" nzFormat="dd/MM/yyyy" id="ngay-hieu-luc"
                 [nzDisabled]="noEdit" class="search__input">
               </nz-date-picker>
-              <ng-template #error let-control>
-                <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
-                </ng-container>
-              </ng-template>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -110,10 +94,6 @@
               <nz-select formControlName="loaiVthh" [nzDisabled]="true" nzAllowClear="true">
                 <nz-option *ngFor="let p of dsVthh" [nzValue]="p.ma" [nzLabel]="p.ten">
                 </nz-option>
-                <ng-template #error let-control>
-                  <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
-                  </ng-container>
-                </ng-template>
               </nz-select>
             </nz-form-control>
           </nz-form-item>
@@ -126,10 +106,6 @@
               <nz-select formControlName="loaiGia" [nzDisabled]="true" nzAllowClear="true">
                 <nz-option *ngFor="let p of dsLoaiGia" [nzValue]="p.ma" [nzLabel]="p.giaTri">
                 </nz-option>
-                <ng-template #error let-control>
-                  <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
-                  </ng-container>
-                </ng-template>
               </nz-select>
             </nz-form-control>
           </nz-form-item>
@@ -225,3 +201,8 @@
     </div>
   </form>
 </div>
+
+<ng-template #error let-control>
+  <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
+  </ng-container>
+</ng-template>
