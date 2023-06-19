@@ -296,6 +296,9 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
       tenTrangThaiTh: data.tenTrangThaiTh ? data.tenTrangThaiTh : 'Chưa tạo tờ trình',
     })
     this.dataTable = data.pagChiTiets;
+    if(this.dataTable && this.dataTable.length > 0) {
+      this.dataTable.sort((a,b) => a.giaDn- b.giaDn);
+    }
   }
 
   taoTtrinh() {

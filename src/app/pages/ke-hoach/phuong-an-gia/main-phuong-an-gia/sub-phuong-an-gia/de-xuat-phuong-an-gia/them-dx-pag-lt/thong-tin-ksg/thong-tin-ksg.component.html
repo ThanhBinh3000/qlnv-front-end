@@ -8,7 +8,7 @@
             <th *ngIf="!isTabNdKhac">Chủng loại hàng hóa, tiêu chuẩn chất lượng</th>
             <th *ngIf="!isTabNdKhac">Chi cục</th>
             <th>Đơn giá chưa VAT (đồng/kg)</th>
-            <th >Đơn giá có VAT (đồng/kg)</th>
+            <th *ngIf="isVat" >Đơn giá có VAT (đồng/kg)</th>
             <th *ngIf="isTabNdKhac" >Chỉ số CPI</th>
             <th *ngIf="isTableKetQua && !isTabNdKhac">Thời hạn báo giá</th>
             <th *ngIf="!isTableKetQua && !isTabNdKhac">Thời hạn thẩm định</th>
@@ -44,8 +44,8 @@
                     [nzParser]="globals.parser">
                 </nz-input-number>
             </th>
-            <th>
-                <nz-input-number  disabled [nzSize]="'small'" [(ngModel)]=" rowItem.donGia + rowItem.donGia * vat" [nzFormatter]="globals.formatter"
+            <th *ngIf="isVat"  >
+                <nz-input-number disabled [nzSize]="'small'" [(ngModel)]=" rowItem.donGia + rowItem.donGia * vat" [nzFormatter]="globals.formatter"
                     [nzParser]="globals.parser">
                 </nz-input-number>
             </th>
@@ -90,7 +90,7 @@
             <td *ngIf="!isTabNdKhac" >{{ data.cloaiVthh }}</td>
             <td *ngIf="!isTabNdKhac" >{{ data.tenChiCuc }}</td>
             <td>{{data.donGia | number : '1.0-1' : 'vi_VN' }}</td>
-            <td >{{data.donGiaVat | number : '1.0-1' : 'vi_VN' }}</td>
+            <td *ngIf="isVat" >{{data.donGiaVat | number : '1.0-1' : 'vi_VN' }}</td>
             <td *ngIf="!isTabNdKhac">{{data.thoiHanBaoGia }}</td>
             <td *ngIf="isTabNdKhac">{{data.chiSoCpi }}</td>
             <td>{{data.fileDinhKem?.fileName }}</td>
@@ -130,7 +130,7 @@
             </nz-input-number>
           </td>
           <td>
-            <nz-input-number disabled [nzSize]="'small'" [(ngModel)]="dataEdit[idx].data.donGia * vat + dataEdit[idx].data.donGia" [nzFormatter]="globals.formatter"
+            <nz-input-number *ngIf="isVat" disabled [nzSize]="'small'" [(ngModel)]="dataEdit[idx].data.donGia * vat + dataEdit[idx].data.donGia" [nzFormatter]="globals.formatter"
                              [nzParser]="globals.parser">
             </nz-input-number>
           </td>
