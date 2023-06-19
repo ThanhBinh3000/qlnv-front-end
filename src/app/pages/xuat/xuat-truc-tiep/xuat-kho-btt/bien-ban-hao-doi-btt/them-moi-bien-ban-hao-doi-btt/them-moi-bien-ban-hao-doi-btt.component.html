@@ -4,21 +4,33 @@
             <i class="fa fa-arrow-left"></i>
             <span>Quay lại</span>
         </button>
-        <button class="btn btn-sub xanh-nhat" *ngIf="!isDisabled() &&  userService.isChiCuc()" (click)="save(true)">
-            <i class="icon htvbdh_tcdt_guiduyet"></i>
-            <span>Lưu và Gửi duyệt</span>
-        </button>
-        <button class="btn btn-do btn-sub do" (click)="pheDuyet(false)"
-            *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDCC || formData.value.trangThai == STATUS.CHO_DUYET_KTVBQ ||formData.value.trangThai == STATUS.CHO_DUYET_KT) && userService.isChiCuc()">
+        <button
+            *ngIf="userService.isAccessPermisson('XHDTQG_PTTT_XK_LT_BBHD_DUYET_KTVBQ') && formData.value.trangThai===STATUS.CHO_DUYET_KTVBQ
+            ||userService.isAccessPermisson('XHDTQG_PTTT_XK_LT_BBHD_DUYET_KT') && formData.value.trangThai===STATUS.CHO_DUYET_KT
+            ||userService.isAccessPermisson('XHDTQG_PTTT_XK_LT_BBHD_DUYET_LDCCUC') && formData.value.trangThai===STATUS.CHO_DUYET_LDCC"
+            type="button" class="btn btn-sub do" (click)="pheDuyet(false)">
             <i class="icon htvbdh_tcdt_tuchoi"></i>
             <span>Từ chối</span>
         </button>
-        <button class="btn btn-xanh btn-sub xanh-nhat" (click)="pheDuyet(true)"
-            *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDCC || formData.value.trangThai == STATUS.CHO_DUYET_KTVBQ || formData.value.trangThai == STATUS.CHO_DUYET_KT)  && userService.isChiCuc()">
+        <button
+            *ngIf="userService.isAccessPermisson('XHDTQG_PTTT_XK_LT_BBHD_DUYET_KTVBQ') && formData.value.trangThai===STATUS.CHO_DUYET_KTVBQ
+            ||userService.isAccessPermisson('XHDTQG_PTTT_XK_LT_BBHD_DUYET_KT') && formData.value.trangThai===STATUS.CHO_DUYET_KT
+            ||userService.isAccessPermisson('XHDTQG_PTTT_XK_LT_BBHD_DUYET_LDCCUC') && formData.value.trangThai===STATUS.CHO_DUYET_LDCC"
+            type="button" class="btn btn-sub xanh-nhat" (click)="pheDuyet(true)">
             <i class="icon htvbdh_tcdt_pheduyet"></i>
             <span>Duyệt</span>
         </button>
-        <button class="btn btn-sub xanh" *ngIf="!isDisabled() &&  userService.isChiCuc()" (click)="save()">
+        <button
+            *ngIf="userService.isAccessPermisson('XHDTQG_PTTT_XK_LT_BBHD_THEM') && formData.value.trangThai===STATUS.DU_THAO
+            ||formData.value.trangThai===STATUS.TU_CHOI_KTVBQ || formData.value.trangThai ===STATUS.TU_CHOI_KT || formData.value.trangThai===STATUS.TU_CHOI_LDCC "
+            type="button" class="btn btn-sub xanh-nhat" (click)="save(true)">
+            <i class="icon htvbdh_tcdt_guiduyet"></i>
+            <span>Lưu và gửi duyệt</span>
+        </button>
+        <button
+            *ngIf=" userService.isAccessPermisson('XHDTQG_PTTT_XK_LT_BBHD_THEM') && formData.value.trangThai===STATUS.DU_THAO
+            ||formData.value.trangThai===STATUS.TU_CHOI_KTVBQ || formData.value.trangThai ===STATUS.TU_CHOI_KT || formData.value.trangThai===STATUS.TU_CHOI_LDCC "
+            type="button" class="btn btn-main" (click)="save()">
             <i class="icon htvbdh_tcdt_save"></i>
             <span>Lưu</span>
         </button>
@@ -546,7 +558,6 @@
 <ng-template #error let-control>
     <app-template-error #error [control]="control"></app-template-error>
 </ng-template>
-
 <nz-modal [nzWidth]="'90%'" [(nzVisible)]="isViewPhieu" (nzOnCancel)="closeModalPhieuKtCl()">
     <ng-container *nzModalContent class="modal__content">
         <app-them-phieu-ktra-cluong-btt [id]="idPhieu" [loaiVthh]="loaiVthh" [isViewOnModal]="true">
@@ -559,7 +570,6 @@
         </button>
     </div>
 </nz-modal>
-
 <nz-modal [nzWidth]="'90%'" [(nzVisible)]="isViewPhieuXuat" (nzOnCancel)="closeModalPhieuXuatKho()">
     <ng-container *nzModalContent class="modal__content">
         <app-them-moi-phieu-xuat-kho-btt [id]="idPhieuXuat" [loaiVthh]="loaiVthh" [isViewOnModal]="true">
@@ -572,7 +582,6 @@
         </button>
     </div>
 </nz-modal>
-
 <nz-modal [nzWidth]="'90%'" [(nzVisible)]="isViewBangKe" (nzOnCancel)="closeModalBangKe()">
     <ng-container *nzModalContent class="modal__content">
         <app-them-moi-bang-ke-can-hang-btt [id]="idBangKe" [loaiVthh]="loaiVthh" [isViewOnModal]="true">

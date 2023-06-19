@@ -75,18 +75,19 @@
         <div class="group-button">
             <h3> DANH SÁCH BIÊN BẢN TỊNH KHO </h3>
             <div class="buttons">
-                <button type="button" class="btn btn-sub" (click)="exportData()">
+                <button type="button" class="btn btn-sub"
+                    (click)="exportData('Danh-sach-bien-ban-tinh-kho-ban-truc-tiep.xlxs')"
+                    *ngIf="userService.isAccessPermisson('XHDTQG_PTTT_XK_LT_BBTK_EXP')">
                     <i class="icon htvbdh_chuyen-xu-ly"></i>
                     <span>Xuất file</span>
                 </button>
-                <button type="button" class="btn btn-main" *ngIf="userService.isChiCuc()"
-                    (click)="redirectToChiTiet(false, null, null)">
-                    <i class="icon htvbdh_dau-cong"></i>
+                <button type="button" class="btn btn-main" (click)="redirectToChiTiet(false, null, null)"
+                    *ngIf="userService.isAccessPermisson('XHDTQG_PTTT_XK_LT_BBTK_THEM') && userService.isChiCuc()">
+                    <i class="icon htvbdh_tcdt_tao-qd"></i>
                     <span>Thêm</span>
                 </button>
             </div>
         </div>
-
         <nz-card class="mt-2px flex-card data-table card-border-content table-card">
             <nz-table #basicTable class="nowrap table__container-tt" [nzData]="children" [nzFrontPagination]="false"
                 [nzShowPagination]="false" nzBordered>
@@ -110,7 +111,6 @@
                     </tr>
                 </thead>
                 <tbody>
-
                     <ng-container *ngFor="let item of basicTable.data, let i = index;">
                         <tr [ngClass]="{'bg-selected': item.selected}" class="level-1">
                             <td (nzExpandChange)="onExpandStringChange(item.idVirtual, $event)"
@@ -153,15 +153,34 @@
                                     <td></td>
                                     <td>{{lv1.tenTrangThai}}</td>
                                     <td class="text-left">
-                                        <a *ngIf="lv1.trangThai == STATUS.DA_DUYET_LDCC"
+                                        <a *ngIf=" (userService.isAccessPermisson('XHDTQG_PTTT_XK_LT_BBTK_XEM') && (lv1.trangThai == STATUS.DA_DUYET_LDCC))
+                                        ||(!userService.isAccessPermisson('XHDTQG_PTTT_XK_LT_BBTK_DUYET_KTVBQ') && lv1.trangThai == STATUS.CHO_DUYET_KTVBQ)
+                                        ||(userService.isAccessPermisson('XHDTQG_PTTT_XK_LT_BBTK_DUYET_KTVBQ') && lv1.trangThai == STATUS.TU_CHOI_KTVBQ)
+                                        ||(userService.isAccessPermisson('XHDTQG_PTTT_XK_LT_BBTK_DUYET_KTVBQ') && lv1.trangThai == STATUS.DU_THAO)
+                                        ||(!userService.isAccessPermisson('XHDTQG_PTTT_XK_LT_BBTK_DUYET_KT') && lv1.trangThai == STATUS.CHO_DUYET_KT)
+                                        ||(userService.isAccessPermisson('XHDTQG_PTTT_XK_LT_BBTK_DUYET_KT') && lv1.trangThai == STATUS.TU_CHOI_KT)
+                                        ||(userService.isAccessPermisson('XHDTQG_PTTT_XK_LT_BBTK_DUYET_KT') && lv1.trangThai == STATUS.DU_THAO)
+                                        ||(!userService.isAccessPermisson('XHDTQG_PTTT_XK_LT_BBTK_DUYET_LDCCUC') && lv1.trangThai == STATUS.CHO_DUYET_LDCC)
+                                        ||(userService.isAccessPermisson('XHDTQG_PTTT_XK_LT_BBTK_DUYET_LDCCUC') && lv1.trangThai == STATUS.TU_CHOI_LDCC)
+                                        ||(userService.isAccessPermisson('XHDTQG_PTTT_XK_LT_BBTK_DUYET_LDCCUC') && lv1.trangThai == STATUS.DU_THAO)"
                                             (click)="redirectToChiTiet(lv1, false, null)">
                                             <i class="fa fa-eye"></i>
                                         </a>
-                                        <a *ngIf="lv1.trangThai != STATUS.DA_DUYET_LDCC"
+                                        <a *ngIf="(userService.isAccessPermisson('XHDTQG_PTTT_XK_LT_BBTK_THEM') && lv1.trangThai == STATUS.DU_THAO)
+                                        ||(userService.isAccessPermisson('XHDTQG_PTTT_XK_LT_BBTK_THEM') && lv1.trangThai == STATUS.TU_CHOI_KTVBQ)
+                                        ||(userService.isAccessPermisson('XHDTQG_PTTT_XK_LT_BBTK_THEM') && lv1.trangThai == STATUS.TU_CHOI_KT)
+                                        ||(userService.isAccessPermisson('XHDTQG_PTTT_XK_LT_BBTK_THEM') && lv1.trangThai == STATUS.TU_CHOI_LDCC)"
                                             (click)="redirectToChiTiet(lv1, false, null)">
                                             <i class="fa fa-pencil"></i>
                                         </a>
-                                        <a *ngIf="lv1.trangThai == STATUS.DU_THAO" (click)="delete(lv1)">
+                                        <a *ngIf="(userService.isAccessPermisson('XHDTQG_PTTT_XK_LT_BBTK_DUYET_KTVBQ') && lv1.trangThai == STATUS.CHO_DUYET_KTVBQ)
+                                        ||(userService.isAccessPermisson('XHDTQG_PTTT_XK_LT_BBTK_DUYET_KT') && lv1.trangThai == STATUS.CHO_DUYET_KT)
+                                        ||(userService.isAccessPermisson('XHDTQG_PTTT_XK_LT_BBTK_DUYET_LDCCUC') && lv1.trangThai == STATUS.CHO_DUYET_LDCC)"
+                                            (click)="redirectToChiTiet(lv1, false, null)">
+                                            <i class="icon htvbdh_tcdt_pheduyet"></i>
+                                        </a>
+                                        <a *ngIf="(lv1.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('XHDTQG_PTTT_XK_LT_BBTK_XOA')) "
+                                            (click)="delete(lv1)">
                                             <i class="fa fa-trash-o do"></i>
                                         </a>
                                     </td>
@@ -231,7 +250,6 @@
         [loaiVthh]="loaiVthh" [idQdGiaoNvXh]="idQdGiaoNvXh">
     </app-them-moi-bien-ban-tinh-kho>
 </div>
-
 <nz-modal [nzWidth]="'90%'" [(nzVisible)]="isViewPhieuXuat" (nzOnCancel)="closeModalPhieuXuatKho()">
     <ng-container *nzModalContent class="modal__content">
         <app-them-moi-phieu-xuat-kho-btt [id]="idPhieuXuat" [loaiVthh]="loaiVthh" [isViewOnModal]="true">
@@ -244,7 +262,6 @@
         </button>
     </div>
 </nz-modal>
-
 <nz-modal [nzWidth]="'90%'" [(nzVisible)]="isViewBangKe" (nzOnCancel)="closeModalBangKe()">
     <ng-container *nzModalContent class="modal__content">
         <app-them-moi-bang-ke-can-hang-btt [id]="idBangKe" [loaiVthh]="loaiVthh" [isViewOnModal]="true">

@@ -276,8 +276,9 @@
               <nz-form-label nzRequired [nzNoColon]="true">Tích lượng khả dụng
               </nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
-                <span class="text-blue">{{formData.value.tichLuongKhaDung|number: '1.0-1':
-                  'vi_VN'}} {{formData.value.tenDonViTinh}}</span>
+                <!-- <span class="text-blue">{{formData.value.tichLuongKhaDung|number: '1.0-1':
+                  'vi_VN'}} {{formData.value.tenDonViTinh}}</span> -->
+                <input nz-input formControlName="tichLuongKhaDung" [readonly]="true" />
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -286,7 +287,7 @@
               <nz-form-label nzRequired [nzNoColon]="true">Số phiếu nhập kho
               </nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
-                <span class="text-blue">{{formData.value.dsPhieuNhapKho}}</span>
+                <input nz-input formControlName="dsPhieuNhapKho" [readonly]="true" />
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -296,7 +297,7 @@
               <nz-form-label nzRequired [nzNoColon]="true">Thực nhập điều chuyển
               </nz-form-label>
               <nz-form-control>
-                <span class="text-blue">Tự động hiển thị</span>
+                <input nz-input formControlName="dinhMucDuocGiao" [readonly]="true" />
               </nz-form-control>
             </nz-form-item>
           </div>
