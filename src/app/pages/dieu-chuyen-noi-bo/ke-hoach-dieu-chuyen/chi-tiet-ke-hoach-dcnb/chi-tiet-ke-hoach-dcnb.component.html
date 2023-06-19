@@ -381,7 +381,7 @@
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td>{{lv2.tenLoKho ? lv2.tenLoKho + "/": ""}}{{lv2.tenNganKho}}/{{lv2.tenNhaKho}}</td>
+                        <td>{{lv2.tenLoKho ? lv2.tenLoKho + "-": ""}}{{lv2.tenNganKho}}-{{lv2.tenNhaKho}}</td>
                         <td>{{lv2.tenLoaiVthh}}</td>
                         <td>{{lv2.tenCloaiVthh}}</td>
                         <td>{{lv2.tenDonViTinh}}</td>
@@ -460,7 +460,7 @@
                                 <td></td>
 <!--                                <td>{{lv4.tenNhaKhoNhan}}</td>-->
 <!--                                <td>{{lv4.tenNganKhoNhan}}</td>-->
-                                <td>{{lv4.tenLoKhoNhan ? lv4.tenLoKhoNhan + "/": ""}}{{lv4.tenNganKhoNhan}}/{{lv4.tenNhaKhoNhan}}</td>
+                                <td>{{lv4.tenLoKhoNhan ? lv4.tenLoKhoNhan + "-": ""}}{{lv4.tenNganKhoNhan}}-{{lv4.tenNhaKhoNhan}}</td>
                                 <td>{{lv4.tichLuongKd}}</td>
                                 <td>{{lv4.soLuongPhanBo}}</td>
                                 <td *ngIf="!isNhanDieuChuyen"></td>
@@ -883,7 +883,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true" nz-col [nzSpan]="8" class="dcnb-label">Tích lượng khả dụng
                 </nz-form-label>
-                <span>{{formDataChiTiet.value.tichLuongKd}}</span>
+                <span>{{formDataChiTiet.value.tichLuongKd}} (Tấn)</span>
               </nz-form-item>
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true" nz-col [nzSpan]="8" nzRequired class="dcnb-label">Sl nhập ĐC
