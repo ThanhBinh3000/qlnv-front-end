@@ -59,7 +59,7 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
     this.formData = this.fb.group({
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự thảo'],
-      loaiBienBan: ['ALL'],
+      loaiBb: ['ALL'],
       id: [],
       nam: [dayjs().get("year"), [Validators.required]],
       maDvi: [],
@@ -68,6 +68,7 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
       soBbLayMau: [],
       ngayLayMau: [dayjs().format('YYYY-MM-DD')],
       soQdinhDcc: [],
+      qDinhDccId: [],
       soBbNhapDayKho: [],
       ngayBbNhapDayKho: [],
       tenLoKho: [],
@@ -79,13 +80,17 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
       tenDiemKho: [],
       maDiemKho: [],
       loaiVthh: [],
+      tenLoaiVthh: [],
+      cloaiVthh: [],
       tenCloaiVthh: [],
       ktvBaoQuan: [],
       dviKiemNghiem: [],
       diaDiemLayMau: [],
       soBbNT: [],
       soLuongMau: [],
-      dcnbBienBanLayMauDtl: [new Array<any>(),],
+      pplayMau: [],
+      chiTieuKiemTra: [],
+      ketQuaNiemPhong: [],
       type: ["01"],
       loaiDc: ["DCNB"]
     });
@@ -202,8 +207,10 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
     });
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
+        console.log('openDialogQD', data)
         this.formData.patchValue({
           soQdinhDcc: data.soQdinh,
+          qDinhDccId: data.id,
           tenLoKho: "",
           maLoKho: "",
           tenNganKho: "",
