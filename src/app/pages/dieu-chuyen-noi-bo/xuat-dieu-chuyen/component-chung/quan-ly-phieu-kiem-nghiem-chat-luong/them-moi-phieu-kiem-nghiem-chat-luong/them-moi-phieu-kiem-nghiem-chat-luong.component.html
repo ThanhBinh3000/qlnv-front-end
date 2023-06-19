@@ -5,25 +5,25 @@
       <span>Quay lại</span>
     </button>
     <button class="btn btn-sub xanh-nhat" type="button"
-      *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC) "
+      *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC) && userService.isCuc() "
       (click)="save(true)">
       <i class="icon htvbdh_tcdt_guiduyet"></i>
       <span>Lưu và gửi duyệt</span>
     </button>
     <button type="button" class="btn btn-sub do"
-      *ngIf=" formData.value.trangThai == STATUS.CHO_DUYET_TP || formData.value.trangThai == STATUS.CHO_DUYET_LDC "
+      *ngIf=" formData.value.trangThai == STATUS.CHO_DUYET_TP || formData.value.trangThai == STATUS.CHO_DUYET_LDC && userService.isCuc()"
       (click)="tuChoi()">
       <i class="icon htvbdh_tcdt_tuchoi do"></i>
       <span>Từ chối</span>
     </button>
     <button class="btn btn-sub xanh-nhat"
-      *ngIf=" formData.value.trangThai == STATUS.CHO_DUYET_TP || formData.value.trangThai == STATUS.CHO_DUYET_LDC "
+      *ngIf=" formData.value.trangThai == STATUS.CHO_DUYET_TP || formData.value.trangThai == STATUS.CHO_DUYET_LDC && userService.isCuc()"
       (click)="pheDuyet()">
       <i class="icon htvbdh_tcdt_pheduyet "></i>
       <span>Duyệt</span>
     </button>
     <button class="btn btn-sub xanh"
-      *ngIf="( formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC ) "
+      *ngIf="( formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC ) && userService.isCuc()"
       (click)="save(false)">
       <i class="icon  htvbdh_tcdt_save"></i>
       <span>Lưu</span>
@@ -69,7 +69,7 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col nzSpan="6">
+            <div nz-col nzSpan="5">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
                   Đơn vị
@@ -109,11 +109,11 @@
               <nz-form-item class="form-item">
                 <nz-form-label [nzNoColon]="true" nzRequired> Số phiếu kiểm nghiệm chất lượng</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <input [readonly]="true" nz-input formControlName="soPhieuKiemNghiemCl" readonly />
+                  <input [readonly]="true" nz-input formControlName="soPhieu" readonly />
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col nzSpan="3">
+            <div nz-col [nzSpan]="4">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
                   Ngày lập phiếu
@@ -126,7 +126,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Người kiểm nghiệm</nz-form-label>
                 <nz-form-control>
-                  <input nz-input formControlName="tenKyThuatVien" readonly />
+                  <input nz-input formControlName="nguoiKt" readonly />
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -134,7 +134,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Trưởng phòng KTBQ</nz-form-label>
                 <nz-form-control>
-                  <input nz-input formControlName="tenTruongPhong" readonly />
+                  <input nz-input formControlName="tpNguoiKt" readonly />
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -154,7 +154,7 @@
                   Ngày hiệu lực của QĐ
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-date-picker nzFormat="dd/MM/YYYY" formControlName="ngayHieuLucQD" nzDisabled>
+                  <nz-date-picker nzFormat="dd/MM/YYYY" formControlName="ngayHieuLuc" nzDisabled>
                   </nz-date-picker>
                 </nz-form-control>
               </nz-form-item>
@@ -163,7 +163,7 @@
               <nz-form-item class="form-item">
                 <nz-form-label [nzNoColon]="true" nzRequired> Số BB lấy mẫu/bàn giao mẫu</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-input-group nzAddOnAfterIcon="folder-open">
+                  <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogBbLayMau()">
                     <input [readonly]="true" nz-input formControlName="soBbLayMau" readonly />
                   </nz-input-group>
                 </nz-form-control>
@@ -184,7 +184,7 @@
                   Ngày kiểm nghiệm mẫu
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-date-picker nzFormat="dd/MM/YYYY" formControlName="ngayKnghiem" nzDisabled>
+                  <nz-date-picker nzFormat="dd/MM/YYYY" formControlName="ngayKiem" [nzDisabled]="isView">
                   </nz-date-picker>
                 </nz-form-control>
               </nz-form-item>
@@ -193,9 +193,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true" nzRequired> Lô kho</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-input-group nzAddOnAfterIcon="folder-open">
-                    <input nz-input class="dcnb xuat-dc-input" formControlName="tenLoKho" [readonly]="true" />
-                  </nz-input-group>
+                  <input nz-input class="dcnb xuat-dc-input" formControlName="tenLoKho" [readonly]="true" />
                 </nz-form-control>
               </nz-form-item>
 
@@ -258,7 +256,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Đơn vị tính</nz-form-label>
                 <nz-form-control>
-                  <input nz-input formControlName="donViTinh" readonly="true" />
+                  <input nz-input formControlName="tenDonViTinh" readonly="true" />
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -306,7 +304,7 @@
                 </nz-form-label>
                 <nz-form-item>
                   <div class="list-file" nz-col nzSpan="24">
-                    <file-list [data]="listFileDinhKem" [isViewDetail]="isView">
+                    <file-list [data]="bienBanLayMauDinhKem" [isViewDetail]="isView">
                     </file-list>
                   </div>
                 </nz-form-item>

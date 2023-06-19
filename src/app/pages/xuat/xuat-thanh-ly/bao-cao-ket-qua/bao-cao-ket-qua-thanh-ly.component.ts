@@ -52,7 +52,7 @@ export class BaoCaoKetQuaThanhLyComponent extends Base2Component implements OnIn
     this.formData = this.fb.group({
       nam: [''],
       soQd: [''],
-      soHoSo: [''],
+      soBaoCao: [''],
       maDvi: [''],
       ngayKy: [''],
       ngayKyTu: [''],

@@ -5,15 +5,14 @@
       <span>Quay lại</span>
     </button>
     <button
-      *ngIf="(formData.value.trangThai == STATUS.DU_THAO ||
-       formData.value.trangThai == STATUS.TU_CHOI_LDV)&& userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_QDXC_TAOQDXC')"
+      *ngIf="formData.value.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('XHDTQG_XTL_TBKQ_THEM')"
       type="button" class="btn btn-sub"
       (click)="saveAndSend(formData.value, STATUS.DA_HOAN_THANH, 'Bạn có muốn hoàn thành thông báo ?')">
       <i class="icon htvbdh_checkfile2"></i>
       <span>Hoàn thành</span>
     </button>
     <button
-      *ngIf=" !isView && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV || formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_TP)"
+      *ngIf=" !isView && formData.value.trangThai == STATUS.DU_THAO "
       type="button" class="btn btn-main" (click)="save()">
       <i class="icon htvbdh_tcdt_save"></i>
       <span>Lưu</span>
@@ -64,7 +63,7 @@
           </div>
           <div nz-col [nzSpan]="3">
             <nz-form-item>
-              <nz-form-label nzRequired [nzNoColon]="true"> Ngày thông báo</nz-form-label>
+              <nz-form-label nzRequired [nzNoColon]="true"> Ngày thông báo </nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-date-picker formControlName="ngayThongBao" [nzFormat]="globals.dateFormat" [nzDisabled]="isView">
                 </nz-date-picker>
@@ -86,7 +85,7 @@
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true"> Ngày trình duyệt HS thanh lý</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <nz-date-picker formControlName="ngayThongBao" [nzFormat]="globals.dateFormat" [nzDisabled]="isView">
+                <nz-date-picker formControlName="ngayTrinhDuyet" [nzFormat]="globals.dateFormat" [nzDisabled]="isView">
                 </nz-date-picker>
               </nz-form-control>
             </nz-form-item>
@@ -95,7 +94,7 @@
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true"> Ngày thẩm định HS thanh lý</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <nz-date-picker formControlName="ngayThongBao" [nzFormat]="globals.dateFormat" [nzDisabled]="isView">
+                <nz-date-picker formControlName="ngayThamDinh" [nzFormat]="globals.dateFormat" [nzDisabled]="isView">
                 </nz-date-picker>
               </nz-form-control>
             </nz-form-item>
