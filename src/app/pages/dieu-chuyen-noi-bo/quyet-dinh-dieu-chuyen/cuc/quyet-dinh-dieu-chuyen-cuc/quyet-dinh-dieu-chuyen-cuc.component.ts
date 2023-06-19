@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import dayjs from 'dayjs';
 import { saveAs } from 'file-saver';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -17,6 +17,8 @@ import { StorageService } from 'src/app/services/storage.service';
   styleUrls: ['./quyet-dinh-dieu-chuyen-cuc.component.scss']
 })
 export class QuyetDinhDieuChuyenCucComponent extends Base2Component implements OnInit {
+  @Input() isViewOnModal: boolean;
+
   isVisibleChangeTab$ = new Subject();
   visibleTab: boolean = true;
   tabSelected: number = 0;
