@@ -1264,6 +1264,11 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
         let coLoKhoNhan = !!res.data.object.coLoKho;
         let thuKhoNhan = res.data.object.detailThuKho?.maThuKho;
         if (!coLoKhoNhan) {
+          if ((this.formDataChiTiet.value.cloaiVthh.startsWith("01") || this.formDataChiTiet.value.cloaiVthh.startsWith("04"))) {
+            this.formDataChiTiet.controls["tichLuongKd"].setValue(res.data.object.tichLuongKdLt);
+          } else {
+            this.formDataChiTiet.controls["tichLuongKd"].setValue(res.data.object.tichLuongKdVt);
+          }
           this.removeValidateFormChiTiet("maLoKhoNhan");
           this.removeValidateFormChiTiet("tenLoKhoNhan");
         } else {
@@ -1293,7 +1298,7 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
     if (value) {
       this.getDetailMlkByKey(value, tenLoKhoNhan.capDvi).then((res: OldResponseData) => {
         if (res.msg == MESSAGE.SUCCESS) {
-          if (!this.formDataChiTiet.value.cloaiVthh.startsWith("02")) {
+          if ((this.formDataChiTiet.value.cloaiVthh.startsWith("01") || this.formDataChiTiet.value.cloaiVthh.startsWith("04"))) {
             this.formDataChiTiet.controls["tichLuongKd"].setValue(res.data.object.tichLuongKdLt);
           } else {
             this.formDataChiTiet.controls["tichLuongKd"].setValue(res.data.object.tichLuongKdVt);
