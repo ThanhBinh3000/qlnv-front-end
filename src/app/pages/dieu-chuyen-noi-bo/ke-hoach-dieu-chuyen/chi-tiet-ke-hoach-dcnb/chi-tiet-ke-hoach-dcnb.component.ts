@@ -419,10 +419,19 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
       maNhaKho: "",
       tenNhaKho: "",
       maNganKho: "",
-      temNganKho: "",
+      tenNganKho: "",
       maLoKho: "",
       tenLoKho: "",
-      tenDiemKho: tenDiemKho ? tenDiemKho.tenDvi : ""
+      tenDiemKho: tenDiemKho ? tenDiemKho.tenDvi : "",
+      coLoKho: true,
+      thuKho: "",
+      loaiVthh: "",
+      tenLoaiVthh: "",
+      cloaiVthh: "",
+      tenCloaiVthh: "",
+      donViTinh: "",
+      tenDonViTinh: "",
+      tonKho: 0
     });
     this.getListNhaKhoBq(value)
   }
@@ -432,10 +441,19 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
     this.listLoKhoBq = []
     this.formDataChiTiet.patchValue({
       maNganKho: "",
-      temNganKho: "",
+      tenNganKho: "",
       maLoKho: "",
       tenLoKho: "",
-      tenNhaKho: tenNhaKho ? tenNhaKho.tenDvi : ""
+      tenNhaKho: tenNhaKho ? tenNhaKho.tenDvi : "",
+      coLoKho: true,
+      thuKho: "",
+      loaiVthh: "",
+      tenLoaiVthh: "",
+      cloaiVthh: "",
+      tenCloaiVthh: "",
+      donViTinh: "",
+      tenDonViTinh: "",
+      tonKho: 0
     });
     this.getListNganKhoBq(value);
   }
@@ -552,10 +570,19 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
       maNhaKho: "",
       tenNhaKho: "",
       maNganKho: "",
-      temNganKho: "",
+      tenNganKho: "",
       maLoKho: "",
       tenLoKho: "",
-      tenChiCucNhan: tenChiCucNhan ? tenChiCucNhan.tenDvi : ""
+      tenChiCucNhan: tenChiCucNhan ? tenChiCucNhan.tenDvi : "",
+      coLoKho: true,
+      thuKho: "",
+      loaiVthh: "",
+      tenLoaiVthh: "",
+      cloaiVthh: "",
+      tenCloaiVthh: "",
+      donViTinh: "",
+      tenDonViTinh: "",
+      tonKho: 0
     });
   }
 
@@ -1231,10 +1258,16 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
       maNhaKhoNhan: "",
       tenNhaKhoNhan: "",
       maNganKhoNhan: "",
-      temNganKhoNhan: "",
+      tenNganKhoNhan: "",
       maLoKhoNhan: "",
       tenLoKhoNhan: "",
-      tenDiemKhoNhan: tenDiemKhoNhan ? tenDiemKhoNhan.tenDvi : ""
+      tenDiemKhoNhan: tenDiemKhoNhan ? tenDiemKhoNhan.tenDvi : "",
+      coLoKhoNhan: true,
+      thuKhoNhan: "",
+      soLuongPhanBo: 0,
+      tichLuongKd: 0,
+      slDcConLai: 0,
+      thayDoiThuKho: false
     });
     this.getListNhaKhoNhanBq(value);
   }
@@ -1245,10 +1278,16 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
     this.listLoKhoNhanBq = []
     this.formDataChiTiet.patchValue({
       maNganKhoNhan: "",
-      temNganKhoNhan: "",
+      tenNganKhoNhan: "",
       maLoKhoNhan: "",
       tenLoKhoNhan: "",
-      tenNhaKhoNhan: tenNhaKhoNhan ? tenNhaKhoNhan.tenDvi : ""
+      tenNhaKhoNhan: tenNhaKhoNhan ? tenNhaKhoNhan.tenDvi : "",
+      coLoKhoNhan: true,
+      thuKhoNhan: "",
+      soLuongPhanBo: 0,
+      tichLuongKd: 0,
+      slDcConLai: 0,
+      thayDoiThuKho: false
     });
     this.getListNganKhoNhanBq(value);
   }
@@ -1279,8 +1318,6 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
 
         this.formDataChiTiet.patchValue({
           coLoKhoNhan: coLoKhoNhan,
-          maLoKhoNhan: "",
-          tenLoKhoNhan: "",
           tenNganKhoNhan: tenNganKhoNhan ? tenNganKhoNhan.tenDvi : "",
           thuKhoNhan: thuKhoNhan,
           thayDoiThuKho: (this.formDataChiTiet.value.thuKho !== thuKhoNhan)
@@ -1303,7 +1340,11 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
           } else {
             this.formDataChiTiet.controls["tichLuongKd"].setValue(res.data.object.tichLuongKdVt);
           }
-
+          let thuKhoNhan = res.data.object.detailThuKho?.maThuKho;
+          this.formDataChiTiet.patchValue({
+            thuKhoNhan: thuKhoNhan,
+            thayDoiThuKho: (this.formDataChiTiet.value.thuKho !== thuKhoNhan)
+          });
         } else {
           this.notification.error(MESSAGE.ERROR, res.error);
         }
