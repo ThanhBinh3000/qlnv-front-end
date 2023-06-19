@@ -26,6 +26,7 @@ import { QuyetDinhDieuChuyenTCService } from "src/app/services/dieu-chuyen-noi-b
 import { QuyetDinhDieuChuyenCucService } from "src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-c.service";
 import { AMOUNT_NO_DECIMAL } from "src/app/Utility/utils";
 import { ThongTinHangCanDieuChuyenChiCucComponent } from "../thong-tin-hang-can-dieu-chuyen-chi-cuc/thong-tin-hang-can-dieu-chuyen-chi-cuc.component";
+import { DialogTableSelectionComponent } from "src/app/components/dialog/dialog-table-selection/dialog-table-selection.component";
 
 export class QuyetDinhPdDtl {
   idVirtual: number;
@@ -50,7 +51,7 @@ export class QuyetDinhPdDtl {
   styleUrls: ['./thong-tin-quyet-dinh-dieu-chuyen-cuc.component.scss']
 })
 export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component implements OnInit {
-
+  @Input() isViewOnModal: boolean;
   @Input() idInput: number;
   @Input() isView: boolean;
   @Output()
@@ -114,14 +115,14 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
       tenLoaiDc: ['Trong nội bộ Chi cục'],
       nam: [dayjs().get("year"), [Validators.required]],
       soQdinh: [, [Validators.required]],
-      loaiQdinh: [],
+      loaiQdinh: [, [Validators.required]],
       tenLoaiQdinh: [],
-      ngayKyQdinh: [],
-      ngayPduyet: [],
+      ngayKyQdinh: [, [Validators.required]],
+      ngayPduyet: [, [Validators.required]],
       trichYeu: [],
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự thảo'],
-      canCuQdTc: [],
+      canCuQdTc: [, [Validators.required]],
       soCanCuQdTc: [],
       ngayTrinhDuyetTc: [],
       tongDuToanKp: [],
@@ -318,6 +319,42 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
     }
   }
 
+  async openDialogQD() {
+    await this.spinner.show();
+    // Get data tờ trình
+    // let body = {
+    //   trangThai: STATUS.BAN_HANH,
+    //   loaiVthh: ['0101', '0102'],
+    //   loaiDc: "DCNB",
+    //   maDvi: this.userInfo.MA_DVI
+    //   // listTrangThaiXh: [STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN],
+    // }
+    // let resSoDX = this.isCuc() ? await this.quyetDinhDieuChuyenCucService.getDsSoQuyetDinhDieuChuyenCuc(body) : await this.quyetDinhDieuChuyenCucService.getDsSoQuyetDinhDieuChuyenChiCuc(body);
+    // if (resSoDX.msg == MESSAGE.SUCCESS) {
+    //   this.listDanhSachQuyetDinh = resSoDX.data;
+    // }
+    await this.spinner.hide();
+
+    const modalQD = this.modal.create({
+      nzTitle: 'Danh sách quyết định',
+      nzContent: DialogTableSelectionComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {
+        dataTable: this.listQuyetDinh,
+        dataHeader: ['Số quyết định'],
+        dataColumn: ['soQdinh']
+      },
+    });
+    modalQD.afterClose.subscribe(async (data) => {
+      if (data) {
+        this.onChangeCanCuQdTc(data.id)
+      }
+    });
+  }
+
   async onChangeCanCuQdTc(value) {
     if (value) {
       const qdTC = this.listQuyetDinh.find(item => item.id == value)
@@ -325,6 +362,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
       if (qdTC) {
         this.formData.patchValue({
           soCanCuQdTc: qdTC.soQdinh,
+          canCuQdTc: qdTC.id,
           ngayTrinhDuyetTc: qdTC.ngayPduyet
         })
       }
@@ -921,8 +959,20 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
     return !this.isYCXDDiemNhap() && (!this.isView && this.formData.value.trangThai == STATUS.DU_THAO && this.isCuc()) || (this.isChiCuc() && this.formData.value.loaiQdinh == '01')
   }
 
+  setValidator() {
+    if (this.formData.value.loaiDc === "DCNB") {
+      this.formData.controls["loaiQdinh"].clearValidators();
+      this.formData.controls["canCuQdTc"].clearValidators();
+    }
+    if (this.formData.value.loaiDc === "CHI_CUC") {
+      this.formData.controls["loaiQdinh"].clearValidators();
+    }
+  }
+
   async save(isGuiDuyet?) {
-    if (!this.formData.value.soQdinh) return
+    this.setValidator()
+    this.helperService.markFormGroupTouched(this.formData);
+    if (!this.formData.valid) return
     await this.spinner.show();
     let body = this.formData.value;
     body.canCu = this.canCu;
@@ -945,7 +995,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
   }
 
   isYCXDDiemNhap() {
-    return this.formData.value.trangThai == STATUS.DU_THAO && this.formData.value.loaiQdinh == '01'
+    return this.formData.value.trangThai == STATUS.DU_THAO && this.formData.value.loaiQdinh == '00'
   }
 
   async ycXDDiemNhap() {
@@ -1011,7 +1061,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
 
   isPheDuyet() {
     if (this.isCuc()) {
-      return this.formData.value.trangThai == STATUS.CHO_DUYET_TP
+      return (this.formData.value.trangThai == STATUS.CHO_DUYET_TP || this.formData.value.trangThai == STATUS.CHO_DUYET_LDC)
     }
     if (this.isChiCuc()) {
       return this.formData.value.trangThai == STATUS.CHODUYET_TBP_TVQT || this.formData.value.trangThai == STATUS.CHO_DUYET_LDCC
