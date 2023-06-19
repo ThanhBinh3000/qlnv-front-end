@@ -246,7 +246,7 @@
               </div>
               <div nz-col [nzSpan]="12">
                 <nz-form-item>
-                  <nz-form-label [nzNoColon]="true"> Nộp tiền đặt trước </nz-form-label>
+                  <nz-form-label [nzNoColon]="true"> Lưu ý thời gian nộp tiền đặt trước </nz-form-label>
                   <nz-form-control [nzErrorTip]="error">
                     <nz-input-group>
                       <input nz-input formControlName="ghiChuTgianNopTien" [readonly]="isDisabled()" />
@@ -643,7 +643,7 @@
                             nhất (đ) </th>
                           <th nzWidth="120px" class="text-center wrap"> Thành tiền (đ)</th>
                           <th nzWidth="200px" class="text-center wrap"><span style='color: red;'>*</span> Tổ chức/cá
-                            nhân đấu giá </th>
+                            nhân trúng đấu giá </th>
                         </tr>
                       </thead>
                       <tbody>
@@ -696,7 +696,6 @@
                               </td>
                               <td>{{ children.soLuongDeXuat * children.donGiaTraGia | number : '1.0-1' :
                                 'vi_VN'}}</td>
-
                               <td>
                                 <nz-select [nzDisabled]="isDisabled() || formData.value.ketQua == 0"
                                   [(ngModel)]="children.toChucCaNhan" (ngModelChange)="changeNTG(i, y)">
@@ -767,7 +766,6 @@
         <i nz-icon nzType="save"></i>
         Lưu
       </button>
-
     </div>
   </div>
 </div>
