@@ -72,7 +72,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
   listDxCanSua: any[] = [];
   detailNhaphang: any;
   maDx: string;
-
+  typeConst = TYPE_PAG
   dataTableCanCuXdg: any[] = [];
   rowItemCcXdg: CanCuXacDinhPag = new CanCuXacDinhPag();
   dataEdit: { [key: string]: { edit: boolean; data: CanCuXacDinhPag } } = {};
