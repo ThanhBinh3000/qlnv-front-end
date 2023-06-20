@@ -66,7 +66,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
   dsLoaiHangXdg: any[] = [];
   STATUS: any;
   fileDinhKemList: any[] = [];
-
+  typeConst = TYPE_PAG;
   constructor(
     private readonly fb: FormBuilder,
     private readonly modal: NzModalService,

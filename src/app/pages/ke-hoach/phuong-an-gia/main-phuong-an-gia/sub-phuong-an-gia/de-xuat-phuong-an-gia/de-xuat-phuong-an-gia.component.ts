@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { LIST_VAT_TU_HANG_HOA, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import {LIST_VAT_TU_HANG_HOA, PAGE_SIZE_DEFAULT, TYPE_PAG} from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { DeXuatPAGService } from 'src/app/services/ke-hoach/phuong-an-gia/deXuatPAG.service';
 import { UserService } from 'src/app/services/user.service';
@@ -14,6 +14,7 @@ import {DanhMucService} from "../../../../../../services/danhmuc.service";
 import {Globals} from "../../../../../../shared/globals";
 import {UserLogin} from "../../../../../../models/userlogin";
 import {STATUS} from "../../../../../../constants/status";
+import {Router} from "@angular/router";
 @Component({
   selector: 'app-de-xuat-phuong-an-gia',
   templateUrl: './de-xuat-phuong-an-gia.component.html',
@@ -37,8 +38,9 @@ export class DeXuatPhuongAnGiaComponent implements OnInit {
   setOfCheckedId = new Set<number>();
   pageSize: number = PAGE_SIZE_DEFAULT;
   indeterminate = false;
-
+  typeConst = TYPE_PAG;
   userInfo: UserLogin
+  STATUS = STATUS
 
   last30Day = new Date(
     new Date().setTime(this.toDay.getTime() - 30 * 24 * 60 * 60 * 1000),
@@ -47,6 +49,7 @@ export class DeXuatPhuongAnGiaComponent implements OnInit {
   isViewDetail: boolean = false;
   idSelected: number = 0;
   constructor(private readonly fb: FormBuilder,
+    private router: Router,
     private deXuatPAGService: DeXuatPAGService,
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
@@ -88,6 +91,13 @@ export class DeXuatPhuongAnGiaComponent implements OnInit {
   };
 
   async ngOnInit() {
+    if (( this.type == this.typeConst.GIA_MUA_TOI_DA && this.pagType == 'LT' && !this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_MTDBTT_DEXUAT'))
+      || ( this.type == this.typeConst.GIA_CU_THE && this.pagType == 'LT' && !this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_GCT_DEXUAT'))
+      || ( this.type == this.typeConst.GIA_MUA_TOI_DA && this.pagType == 'VT' && !this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_VT_MTDBTT_DEXUAT'))
+      || ( this.type == this.typeConst.GIA_CU_THE && this.pagType == 'VT' && !this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_VT_GCT_DEXUAT'))
+    ) {
+      this.router.navigateByUrl('/error/401')
+    }
     this.userInfo = this.userService.getUserLogin();
     this.loadDsNam();
     this.search();
@@ -97,14 +107,6 @@ export class DeXuatPhuongAnGiaComponent implements OnInit {
     if (this.pagType == 'VT') {
       await this.loadDsVthh();
     }
-  }
-
-  checkRole(trangThai) {
-    let check = true;
-    if ((this.userService.isTongCuc() && trangThai == STATUS.DU_THAO || this.userService.isTongCuc() && trangThai == STATUS.TU_CHOI_LDC || this.userService.isTongCuc() && trangThai == STATUS.TU_CHOI_TP) && this.pagType == 'LT') {
-      check = false;
-    }
-    return check;
   }
   async loadDsVthh() {
     let body = {
