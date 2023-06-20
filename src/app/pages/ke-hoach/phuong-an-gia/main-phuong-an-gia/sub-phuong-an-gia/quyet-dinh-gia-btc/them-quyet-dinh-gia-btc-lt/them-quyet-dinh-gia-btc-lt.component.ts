@@ -31,8 +31,6 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
   @Input() idInput: number;
   @Output("onClose") onClose = new EventEmitter<any>();
   formData: FormGroup;
-
-  STATUS: any;
   dsVthh: any[] = [];
   dsCloaiVthh: any[] = [];
   dsTieuChuanCl: any[] = [];
@@ -58,6 +56,7 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
   thueVat: number;
   radioValue: string;
   fileDinhKem: any[] = [];
+  STATUS = STATUS;
 
   constructor(
     private readonly fb: FormBuilder,

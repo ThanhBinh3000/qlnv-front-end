@@ -4,12 +4,16 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button *ngIf="formData.value.trangThai == '00' && !isView" type="button" class="btn btn-sub" (click)="save(true)">
+    <button *ngIf="formData.value.trangThai == '00' && !isView && ((this.loaiVthh == 'LT' && this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_GCT_QDDCTC_BANHANH'))
+      || (this.loaiVthh == 'VT' && this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_VT_GCT_QDDCTC_BANHANH')))"
+            type="button" class="btn btn-sub" (click)="save(true)">
       <i class="icon htvbdh_chuyenvanthu"></i>
       <span>Ban hành</span>
     </button>
-    <button *ngIf="formData.value.trangThai == '00'  && !isView" type="button" class="btn btn-sub xanh"
-      (click)="save(false)">
+    <button *ngIf="formData.value.trangThai == '00'  && !isView && ((this.loaiVthh == 'LT' && this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_GCT_QDDCTC_THEM'))
+      || (this.loaiVthh == 'VT' && this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_VT_GCT_QDDCTC_THEM'))) "
+            type="button" class="btn btn-sub xanh"
+            (click)="save(false)">
       <i class="icon htvbdh_luu"></i>
       <span>Lưu</span>
     </button>
@@ -52,7 +56,7 @@
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfter="{{maQd}}">
                 <nz-input-number [nzDisabled]="isView" type="text" nz-input formControlName="soQd" [nzMin]="1"
-                  [nzMax]="9999999" [nzStep]="1" [nzSize]="'small'">
+                                 [nzMax]="9999999" [nzStep]="1" [nzSize]="'small'">
                 </nz-input-number>
               </nz-input-group>
               <ng-template #error let-control>
@@ -68,7 +72,7 @@
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfterIcon="folder-open" (click)="chonSoToTrinh('STT')">
-                <input nz-input formControlName="soToTrinhDx" [readonly]="true" />
+                <input nz-input formControlName="soToTrinhDx" [readonly]="true"/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -79,7 +83,7 @@
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfterIcon="folder-open" (click)="chonSoToTrinh('SQD')">
-                <input nz-input formControlName="soQdgTcdtnn" [readonly]="true" />
+                <input nz-input formControlName="soQdgTcdtnn" [readonly]="true"/>
               </nz-input-group>
               <ng-template #error let-control>
                 <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
@@ -140,7 +144,7 @@
             <nz-form-label [nzNoColon]="true">Loại hàng hóa
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <input nz-input formControlName="tenLoaiVthh" [readonly]="true" />
+              <input nz-input formControlName="tenLoaiVthh" [readonly]="true"/>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -149,7 +153,7 @@
             <nz-form-label [nzNoColon]="true">Chủng loại hàng hóa
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <input nz-input formControlName="tenCloaiVthh" [readonly]="true" />
+              <input nz-input formControlName="tenCloaiVthh" [readonly]="true"/>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -158,7 +162,7 @@
             <nz-form-label [nzNoColon]="true">Loại giá
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <input nz-input formControlName="tenLoaiGia" [readonly]="true" />
+              <input nz-input formControlName="tenLoaiGia" [readonly]="true"/>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -167,7 +171,7 @@
             <nz-form-label [nzNoColon]="true">Tiêu chuẩn chất lượng
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <input nz-input formControlName="tchuanCluong" [readonly]="true" />
+              <input nz-input formControlName="tchuanCluong" [readonly]="true"/>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -180,49 +184,49 @@
   <nz-card class="mt-2px flex-card data-table card-border-content table-card">
     <nz-table [nzData]="listThongTinGia" [nzFrontPagination]="false" [nzShowPagination]="false">
       <thead>
-        <tr>
-          <th class="text-center" style="width: 3%;">STT</th>
-          <th style="width: 15%;">Đơn vị</th>
-          <th style="width: 6%;">Số lượng</th>
-          <th style="width: 15%;">Giá tối đa/tối thiểu chưa VAT của BTC</th>
-          <th style="width: 15%;">Giá tối đa/tối thiểu gồm VAT của BTC</th>
-          <th style="width: 15%;">Đơn giá chưa VAT(đồng/kg)</th>
-          <th style="width: 15%;">Đơn giá gồm VAT(đồng/kg)</th>
-          <th style="width: 4%;" *ngIf="!isView">Hành động</th>
-        </tr>
+      <tr>
+        <th class="text-center" style="width: 3%;">STT</th>
+        <th style="width: 15%;">Đơn vị</th>
+        <th style="width: 6%;">Số lượng</th>
+        <th style="width: 15%;">Giá tối đa/tối thiểu chưa VAT của BTC</th>
+        <th style="width: 15%;">Giá tối đa/tối thiểu gồm VAT của BTC</th>
+        <th style="width: 15%;">Đơn giá chưa VAT(đồng/kg)</th>
+        <th style="width: 15%;">Đơn giá gồm VAT(đồng/kg)</th>
+        <th style="width: 4%;" *ngIf="!isView">Hành động</th>
+      </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let data of listThongTinGia; let idx = index">
-          <td class="text-center">{{ idx + 1 }}</td>
-          <td>{{ data.tenDvi }}</td>
-          <td>{{ data.soLuong }}</td>
-          <td>{{ data.giaDn }}</td>
-          <td>{{ data.giaDnVat }}</td>
-          <td>
-            <nz-input-group>
-              <nz-input-number nz-input [ngModelOptions]="{standalone: true}" [disabled]="isView"
-                [(ngModel)]="listThongTinGia[idx].giaQd" [nzMin]="0" [nzFormatter]="globals.formatter"
-                [nzParser]="globals.parser" (nzBlur)="calculateVAT(idx,0)">
-              </nz-input-number>
-            </nz-input-group>
-          </td>
-          <td>
-            <nz-input-group>
-              <nz-input-number nz-input [ngModelOptions]="{standalone: true}" [disabled]="isView"
-                [(ngModel)]="listThongTinGia[idx].giaQdVat" [nzMin]="0" [nzFormatter]="globals.formatter"
-                [nzParser]="globals.parser" (nzBlur)="calculateVAT(idx,1)">
-              </nz-input-number>
-            </nz-input-group>
-          </td>
-          <td *ngIf="!isView" style="text-align: left; white-space: nowrap;">
-            <!--  <a>
-              <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
-            </a>-->
-            <a>
-              <i class="fa fa-trash-o do" (click)="deleteItem(idx)"></i>
-            </a>
-          </td>
-        </tr>
+      <tr *ngFor="let data of listThongTinGia; let idx = index">
+        <td class="text-center">{{ idx + 1 }}</td>
+        <td>{{ data.tenDvi }}</td>
+        <td>{{ data.soLuong }}</td>
+        <td>{{ data.giaDn }}</td>
+        <td>{{ data.giaDnVat }}</td>
+        <td>
+          <nz-input-group>
+            <nz-input-number nz-input [ngModelOptions]="{standalone: true}" [disabled]="isView"
+                             [(ngModel)]="listThongTinGia[idx].giaQd" [nzMin]="0" [nzFormatter]="globals.formatter"
+                             [nzParser]="globals.parser" (nzBlur)="calculateVAT(idx,0)">
+            </nz-input-number>
+          </nz-input-group>
+        </td>
+        <td>
+          <nz-input-group>
+            <nz-input-number nz-input [ngModelOptions]="{standalone: true}" [disabled]="isView"
+                             [(ngModel)]="listThongTinGia[idx].giaQdVat" [nzMin]="0" [nzFormatter]="globals.formatter"
+                             [nzParser]="globals.parser" (nzBlur)="calculateVAT(idx,1)">
+            </nz-input-number>
+          </nz-input-group>
+        </td>
+        <td *ngIf="!isView" style="text-align: left; white-space: nowrap;">
+          <!--  <a>
+            <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
+          </a>-->
+          <a>
+            <i class="fa fa-trash-o do" (click)="deleteItem(idx)"></i>
+          </a>
+        </td>
+      </tr>
       </tbody>
     </nz-table>
   </nz-card>
@@ -264,7 +268,7 @@
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfter="{{maQd}}">
                 <nz-input-number [nzDisabled]="isView" type="text" nz-input formControlName="soQd" [nzMin]="1"
-                  [nzMax]="9999999" [nzStep]="1" [nzSize]="'small'">
+                                 [nzMax]="9999999" [nzStep]="1" [nzSize]="'small'">
                 </nz-input-number>
               </nz-input-group>
               <ng-template #error let-control>
@@ -311,7 +315,7 @@
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfterIcon="folder-open" (click)="chonSoToTrinh('SQD')">
-                <input nz-input formControlName="soQdgTcdtnn" [readonly]="true" />
+                <input nz-input formControlName="soQdgTcdtnn" [readonly]="true"/>
               </nz-input-group>
               <ng-template #error let-control>
                 <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
@@ -326,7 +330,7 @@
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
-                <input nz-input formControlName="soToTrinhDx" [readonly]="true" />
+                <input nz-input formControlName="soToTrinhDx" [readonly]="true"/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -393,50 +397,50 @@
   <nz-card class="mt-2px flex-card data-table card-border-content table-card">
     <nz-table [nzData]="listThongTinGia" [nzFrontPagination]="false" [nzShowPagination]="false">
       <thead>
-        <tr>
-          <th class="text-center" style="width: 3%;">STT</th>
-          <th style="width: 15%;">Chủng loại hàng hóa</th>
-          <th style="width: 15%;">Tiêu chuẩn chất lượng</th>
-          <th style="width: 6%;">Số lượng</th>
-          <th style="width: 6%;">Đơn vị</th>
-          <th style="width: 15%;">Đơn giá chưa VAT của BTC(đồng)</th>
-          <th style="width: 15%;">Đơn giá gồm VAT của BTC(đồng)</th>
-          <th style="width: 15%;">Đơn giá điều chỉnh chưa VAT(đồng)</th>
-          <th style="width: 15%;">Đơn giá điều chỉnh gồm VAT(đồng)</th>
-          <th style="width: 4%;" *ngIf="!isView">Hành động</th>
-        </tr>
+      <tr>
+        <th class="text-center" style="width: 3%;">STT</th>
+        <th style="width: 15%;">Chủng loại hàng hóa</th>
+        <th style="width: 15%;">Tiêu chuẩn chất lượng</th>
+        <th style="width: 6%;">Số lượng</th>
+        <th style="width: 6%;">Đơn vị</th>
+        <th style="width: 15%;">Đơn giá chưa VAT của BTC(đồng)</th>
+        <th style="width: 15%;">Đơn giá gồm VAT của BTC(đồng)</th>
+        <th style="width: 15%;">Đơn giá điều chỉnh chưa VAT(đồng)</th>
+        <th style="width: 15%;">Đơn giá điều chỉnh gồm VAT(đồng)</th>
+        <th style="width: 4%;" *ngIf="!isView">Hành động</th>
+      </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let data of listThongTinGia; let idx = index">
-          <td class="text-center">{{ idx + 1 }}</td>
-          <td>{{ data.cloaiVthh }}</td>
-          <td>{{ data.tieuChuanCl }}</td>
-          <td>{{ data.soLuong }}</td>
-          <td>{{ data.donViTinh }}</td>
-          <td>{{ data.giaDn }}</td>
-          <td>{{ data.giaDnVat }}</td>
-          <td>
-            <nz-input-group>
-              <nz-input-number nz-input [ngModelOptions]="{standalone: true}" [(ngModel)]="listThongTinGia[idx].giaQd"
-                [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                (nzBlur)="calculateVAT(idx,0)">
-              </nz-input-number>
-            </nz-input-group>
-          </td>
-          <td>
-            <nz-input-group>
-              <nz-input-number nz-input [ngModelOptions]="{standalone: true}"
-                [(ngModel)]="listThongTinGia[idx].giaQdVat" [nzMin]="0" [nzFormatter]="globals.formatter"
-                [nzParser]="globals.parser" (nzBlur)="calculateVAT(idx,1)">
-              </nz-input-number>
-            </nz-input-group>
-          </td>
-          <td *ngIf="!isView" style="text-align: left; white-space: nowrap;">
-            <a>
-              <i class="fa fa-trash-o do" (click)="deleteItem(idx)"></i>
-            </a>
-          </td>
-        </tr>
+      <tr *ngFor="let data of listThongTinGia; let idx = index">
+        <td class="text-center">{{ idx + 1 }}</td>
+        <td>{{ data.cloaiVthh }}</td>
+        <td>{{ data.tieuChuanCl }}</td>
+        <td>{{ data.soLuong }}</td>
+        <td>{{ data.donViTinh }}</td>
+        <td>{{ data.giaDn }}</td>
+        <td>{{ data.giaDnVat }}</td>
+        <td>
+          <nz-input-group>
+            <nz-input-number nz-input [ngModelOptions]="{standalone: true}" [(ngModel)]="listThongTinGia[idx].giaQd"
+                             [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                             (nzBlur)="calculateVAT(idx,0)">
+            </nz-input-number>
+          </nz-input-group>
+        </td>
+        <td>
+          <nz-input-group>
+            <nz-input-number nz-input [ngModelOptions]="{standalone: true}"
+                             [(ngModel)]="listThongTinGia[idx].giaQdVat" [nzMin]="0" [nzFormatter]="globals.formatter"
+                             [nzParser]="globals.parser" (nzBlur)="calculateVAT(idx,1)">
+            </nz-input-number>
+          </nz-input-group>
+        </td>
+        <td *ngIf="!isView" style="text-align: left; white-space: nowrap;">
+          <a>
+            <i class="fa fa-trash-o do" (click)="deleteItem(idx)"></i>
+          </a>
+        </td>
+      </tr>
       </tbody>
     </nz-table>
   </nz-card>

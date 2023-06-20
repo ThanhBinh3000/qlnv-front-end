@@ -28,6 +28,7 @@ export class PhieuXuatKhoDCNBComponent extends Base2Component implements OnInit 
   isView: boolean = false;
   isTatCa: boolean = false;
   idQdinhDcc: number = 0;
+  isViewQddc: boolean;
   dataView: any = [];
   expandSetString = new Set<string>();
   idPhieu: number = 0;
@@ -236,6 +237,10 @@ export class PhieuXuatKhoDCNBComponent extends Base2Component implements OnInit 
     this.idPhieu = id;
     this.isViewPhieu = true;
   }
+  openModalQddc(id: number) {
+    this.idQdinhDcc = id;
+    this.isViewQddc = true
+  }
   closeModalPhieuXuatKho() {
     this.idPhieu = null;
     this.isViewPhieu = false;
@@ -248,6 +253,9 @@ export class PhieuXuatKhoDCNBComponent extends Base2Component implements OnInit 
     this.idPhieuKNCL = null;
     this.isViewPhieuKNCL = false;
   }
-
+  closeModalQddc() {
+    this.idQdinhDcc = null;
+    this.isViewQddc = false;
+  }
 }
 

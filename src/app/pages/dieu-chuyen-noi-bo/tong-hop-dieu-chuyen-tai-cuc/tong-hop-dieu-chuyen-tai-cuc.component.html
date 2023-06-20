@@ -196,19 +196,17 @@
                         <td>{{ LIST_TRANG_THAI[data.trangThai]}}</td>
                         <td>
                             <a (click)="viewDetail(data.id, true)"
-                                *ngIf="viewOnly || (!viewOnly && userService.isAccessPermisson('DCNB_TONGHOPDC_XEM') && checkRoleView(data.trangThai))">
+                                *ngIf="(!viewOnly && checkRoleView(data.trangThai, data.loaiDieuChuyen) && userService.isAccessPermisson('DCNB_TONGHOPDC_XEM')) ||  (viewOnly && userService.isAccessPermisson('DCNB_TONGHOPDC_XEM') )">
                                 <i class="fa fa-eye"></i>
                             </a>
-                            <a *ngIf="!viewOnly && userService.isAccessPermisson('DCNB_TONGHOPDC_SUA') && checkRoleEdit(data.trangThai)"
+                            <a *ngIf="checkRoleEdit(data.trangThai, data.loaiDieuChuyen)"
                                 (click)="viewDetail(data.id, false)">
                                 <i class="fa fa-pencil"></i>
                             </a>
-                            <a
-                                *ngIf="!viewOnly && checkPermissonApprove(data.trangThai) && checkRoleApproveDc(data.trangThai)">
+                            <a *ngIf="checkRoleApproveDc(data.trangThai)">
                                 <i class="icon htvbdh_tcdt_pheduyet" (click)="viewDetail(data.id,false)"></i>
                             </a>
-                            <a *ngIf="!viewOnly && userService.isAccessPermisson('DCNB_TONGHOPDC_XOA') && checkRoleDelete(data.trangThai)"
-                                (click)="xoaItem(data)">
+                            <a *ngIf="checkRoleDelete(data.trangThai)" (click)="xoaItem(data)">
                                 <i class="fa fa-trash-o do"></i>
                             </a>
                         </td>

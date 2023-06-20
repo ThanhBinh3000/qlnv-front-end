@@ -50,6 +50,7 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
   listCucSelected: any[] = [];
   fileDinhKem: any[] = [];
   STATUS: any
+  typeConst = TYPE_PAG
   constructor(
     private readonly fb: FormBuilder,
     private readonly modal: NzModalService,

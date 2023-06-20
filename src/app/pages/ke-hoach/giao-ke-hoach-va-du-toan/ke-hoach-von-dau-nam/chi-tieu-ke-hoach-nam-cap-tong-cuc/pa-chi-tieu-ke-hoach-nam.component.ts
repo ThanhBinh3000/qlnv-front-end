@@ -17,9 +17,9 @@ import {Globals} from 'src/app/shared/globals';
 import {STATUS} from "../../../../../constants/status";
 
 @Component({
-  selector: 'app-chi-tieu-ke-hoach-nam-cap-tong-cuc',
-  templateUrl: './chi-tieu-ke-hoach-nam-cap-tong-cuc.component.html',
-  styleUrls: ['./chi-tieu-ke-hoach-nam-cap-tong-cuc.component.scss'],
+  selector: 'app-pa-chi-tieu-ke-hoach-nam',
+  templateUrl: './pa-chi-tieu-ke-hoach-nam.component.html',
+  styleUrls: ['./pa-chi-tieu-ke-hoach-nam.component.scss'],
 })
 export class ChiTieuKeHoachNamComponent implements OnInit {
   searchValue = '';

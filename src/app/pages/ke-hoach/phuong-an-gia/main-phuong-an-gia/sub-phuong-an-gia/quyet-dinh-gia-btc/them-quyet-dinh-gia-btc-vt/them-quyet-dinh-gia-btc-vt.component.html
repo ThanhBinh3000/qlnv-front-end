@@ -4,11 +4,17 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button type="button" class="btn btn-sub" (click)="save(true)">
+    <button type="button" class="btn btn-sub"
+            *ngIf="formData.value.trangThai == STATUS.DU_THAO &&
+     userService.isAccessPermisson('KHVDTNSNN_PAGIA_VT_MTDBTT_QD_BANHANH')"
+            (click)="save(true)">
       <i class="icon htvbdh_chuyenvanthu"></i>
       <span>Ban hành</span>
     </button>
-    <button *ngIf="formData.value.trangThai == '00'" type="button" class="btn btn-sub xanh" (click)="save(false)">
+    <button  type="button"
+             *ngIf="formData.value.trangThai == STATUS.DU_THAO &&
+     userService.isAccessPermisson('KHVDTNSNN_PAGIA_VT_MTDBTT_QD_THEM')"
+             class="btn btn-sub xanh" (click)="save(false)">
       <i class="icon htvbdh_luu"></i>
       <span>Lưu</span>
     </button>

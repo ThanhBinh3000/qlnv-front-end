@@ -90,7 +90,7 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
         maDvi: [],
         loaiBienBan: ['ALL'],
         maQhns: [],
-        qddccId: [, [Validators.required]],
+        qdccId: [, [Validators.required]],
         soQdinhDcc: [, [Validators.required]],
         ngayQdDc: [],
         ktvBaoQuan: [],
@@ -203,7 +203,8 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
         soBbLayMau: `${id}/${this.formData.get('nam').value}/${this.maBb}`,
         id: id,
         loaiDc: this.loaiDc,
-        ...this.passData
+        ...this.passData,
+        qdccId: this.passData.qddccId
       });
       if (this.passData.cloaiVthh) {
         const chiTietHangHoa = await this.danhMucService.loadDanhMucHangChiTiet(this.passData.cloaiVthh);
@@ -278,7 +279,7 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
       const data = dataRes.data;
       this.formData.patchValue({
         soQdinhDcc: data.soQdinh,
-        qddccId: data.id,
+        qdccId: data.id,
         ngayQdDc: data.ngayKyQdinh,
         // loaiVthh: data.loaiVthh,
         // tenLoaiVthh: data.tenLoaiVthh,

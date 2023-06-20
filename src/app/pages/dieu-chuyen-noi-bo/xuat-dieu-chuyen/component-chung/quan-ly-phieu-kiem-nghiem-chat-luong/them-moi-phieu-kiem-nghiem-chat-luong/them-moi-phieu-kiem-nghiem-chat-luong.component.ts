@@ -50,7 +50,11 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
   @Input() thayDoiThuKho: boolean;
   @Input() isView: boolean;
   @Input() isViewOnModal: boolean;
-  @Input() passData: PassDataPKNCL;
+  @Input() passData: PassDataPKNCL = {
+    soQdinhDcc: '', qdinhDccId: null, ngayQDHieuLuc: '', soBBLayMau: '', ngaylayMau: '', soPhieuKnChatLuong: '', phieuKnChatLuongId: null, bblayMauId: null,
+    donViTinh: '', maChLoaiHangHoa: '', maHangHoa: '', maDiemKho: '', maNhaKho: '', maNganKho: '', maloKho: '',
+    tenDiemKho: '', tenNhaKho: '', tenNganKho: '', tenloKho: '', tenHangHoa: '', tenChLoaiHangHoa: '', tenDonViTinh: '', thuKho: ''
+  };
   @Output()
   showListEvent = new EventEmitter<any>();
   userInfo: UserLogin;
@@ -131,30 +135,6 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
 
       ketQuaDanhGia: [''],
       ngayTao: [dayjs().format('YYYY-MM-DD')],
-      // hinhThucBq: [''],
-
-      // donViTinh: [['']],
-      // soPhieuKnChatLuong: [''], 
-      // phieuKnChatLuongId: [null], 
-      // soQdinhDcc: [''], 
-      // qdinhDccId: [null], 
-      // ngayQDHieuLuc: [''], 
-      // soBBLayMau: [''], 
-      // bblayMauId: [null], 
-      // ngaylayMau: [''], 
-      // tenloKho: [''], 
-      // maloKho: [''],
-      // tenNganKho: [''], 
-      // maNganKho: [''], 
-      // tenNhaKho: [''], 
-      // maNhaKho: [''], 
-      // tenDiemKho: [''], 
-      // maDiemKho: [''], 
-      // tenHangHoa: [''], 
-      // maHangHoa: [''], 
-      // tenChLoaiHangHoa: [''], 
-      // maChLoaiHangHoa: [''], 
-      // thuKho: [''],
       donViTinh: [''],
       tenDonViTinh: [''],
       loaiVthh: [''],
@@ -202,6 +182,9 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
     this.spinner.show();
     super.ngOnInit()
     try {
+      if (this.isViewOnModal) {
+        this.isView = this.isViewOnModal
+      }
       this.id = this.idInput;
       this.userInfo = this.userService.getUserLogin();
       // await Promise.all([
@@ -474,7 +457,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
     let body = {
       trangThai: STATUS.DA_DUYET_LDCC,
       loaiDc: this.loaiDc,
-      qdinhDccId: this.formData.value.qdDcId,
+      qdccId: this.formData.value.qdDcId,
       paggingReq: {
         "limit": this.globals.prop.MAX_INTERGER,
         "page": 0
