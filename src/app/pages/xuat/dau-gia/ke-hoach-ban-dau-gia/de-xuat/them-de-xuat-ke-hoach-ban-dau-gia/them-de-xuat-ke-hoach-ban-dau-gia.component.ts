@@ -23,6 +23,8 @@ import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { DatePipe } from '@angular/common';
+import {PREVIEW} from "../../../../../../constants/fileType";
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-them-de-xuat-ke-hoach-ban-dau-gia',
@@ -47,6 +49,10 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
   donGiaDuocDuyet: number = 0;
   maTrinh: string = '';
   giaToiDa: any;
+  showDlgPreview = false;
+  pdfBlob: any;
+  pdfSrc: any;
+  wordSrc: any;
 
   constructor(
     httpClient: HttpClient,
@@ -423,6 +429,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
           this.idInput = res.id;
           this.guiDuyet();
         } else {
+          this.idInput = res.id;
           this.getDetail(res.id)
         }
       }
@@ -625,5 +632,32 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
       this.formData.controls["pthucGnhan"].clearValidators();
       this.formData.controls["khoanTienDatTruoc"].clearValidators();
     }
+  }
+
+  async preview(id){
+    await this.deXuatKhBanDauGiaService.preview({
+      "tenBaoCao":"de-xuat-ke-hoach-ban-dau-gia",
+      "id":id
+    }).then(async res => {
+      if(res.data) {
+        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
+        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
+        this.showDlgPreview = true;
+      }else {
+        this.notification.error(MESSAGE.ERROR, "Lỗi trong quá trình tải file.");
+      }
+    });
+  }
+
+  downloadPdf() {
+    saveAs(this.pdfSrc, "De-xuat-ke-hoach-ban-dau-gia.pdf");
+  }
+
+  downloadWord() {
+    saveAs(this.wordSrc, "De-xuat-ke-hoach-ban-dau-gia.docx");
+  }
+
+  closeDlg() {
+    this.showDlgPreview = false;
   }
 }
