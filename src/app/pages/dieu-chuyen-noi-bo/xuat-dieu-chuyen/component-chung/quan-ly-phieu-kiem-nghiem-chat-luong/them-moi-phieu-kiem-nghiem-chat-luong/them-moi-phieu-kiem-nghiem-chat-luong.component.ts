@@ -457,7 +457,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
     let body = {
       trangThai: STATUS.DA_DUYET_LDCC,
       loaiDc: this.loaiDc,
-      qdinhDccId: this.formData.value.qdDcId,
+      qdccId: this.formData.value.qdDcId,
       paggingReq: {
         "limit": this.globals.prop.MAX_INTERGER,
         "page": 0

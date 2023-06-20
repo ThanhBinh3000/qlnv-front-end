@@ -417,7 +417,7 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
       } else {
         res = await this.tongHopDieuChuyenService.themTHCuc({ ...body, id: undefined });
         if (res.msg == MESSAGE.SUCCESS) {
-          if (!isGuiDuyet && isGuiYeuCau) {
+          if (!isGuiDuyet && !isGuiYeuCau) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
           }
           this.isAddNew = false;
@@ -759,5 +759,8 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
   };
   roleCheckXuatDuyet(id: number, trangThai: string) {
     return this.userService.isCuc() && ((this.userService.isAccessPermisson('DCNB_TONGHOPDC_DUYET_TP') && (trangThai == STATUS.CHO_DUYET_TP || trangThai == STATUS.TU_CHOI_LDC)) || (this.userService.isAccessPermisson('DCNB_TONGHOPDC_DUYET_LDCUC') && trangThai == STATUS.CHO_DUYET_LDC))
+  }
+  checkDisabledSoDxcv() {
+    return this.isViewDetail || (this.formData.value.loaiDieuChuyen == "CHI_CUC" && this.formData.value.trangThai == STATUS.DA_DUYET_LDC) || (this.formData.value.loaiDieuChuyen == "CUC" && this.formData.value.trangThai && this.formData.value.trangThai !== STATUS.DU_THAO)
   }
 }
