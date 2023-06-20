@@ -162,21 +162,6 @@ export class BaoCaoTuDonViCapDuoiComponent implements OnInit {
     this.spinner.hide();
   }
 
-
-  redirectThongTinTimKiem() {
-    this.router.navigate([
-      '/kehoach/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
-      0,
-    ]);
-  }
-
-  redirectSuaThongTinTimKiem(id) {
-    this.router.navigate([
-      '/kehoach/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
-      id,
-    ]);
-  }
-
   //search list bao cao theo tieu chi
   async onSubmit() {
     if (this.searchFilter.namPa || this.searchFilter.namPa === 0) {
