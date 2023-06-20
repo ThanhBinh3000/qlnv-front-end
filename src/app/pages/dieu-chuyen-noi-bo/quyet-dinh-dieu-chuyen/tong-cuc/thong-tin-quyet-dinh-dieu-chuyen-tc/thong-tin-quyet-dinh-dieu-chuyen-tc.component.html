@@ -2,7 +2,7 @@
   <div class="header header-green-background">
     <div class="header-text">
       <div class="title-chi-tieu">
-        <span [ngClass]="'da-ban-hanh'">
+        <span [ngClass]="formData.value.trangThai === STATUS.BAN_HANH ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
           {{ formData.value.tenTrangThai }}
         </span>
         <span> QUYẾT ĐỊNH PHÊ DUYỆT ĐIỀU CHUYỂN NỘI BỘ HÀNG DTQG CỦA TỔNG CỤC DTNN</span>
@@ -35,7 +35,7 @@
       </button>
 
       <button
-        *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.TU_CHOI_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC || formData.value.trangThai == STATUS.TU_CHOI_LDTC"
+        *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC"
         type="button" class="btn btn-sub" (click)="tuChoi()">
         <i class="icon htvbdh_tcdt_tuchoi do"></i>
         <span>Từ chối</span>
@@ -56,6 +56,11 @@
 
     </div>
   </div>
+
+  <nz-alert class="mg-t-16"
+    *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDV || formData.value.trangThai == STATUS.TU_CHOI_LDTC" nzShowIcon
+    nzType="error" nzMessage="Lý do từ chối" nzDescription="{{formData.value.lyDoTuChoi}}">
+  </nz-alert>
 
   <nz-collapse nzAccordion>
     <div class="mt16 flex-card p-lr16">
@@ -142,7 +147,7 @@
                 <label nz-radio nzValue="TTr">Chọn số đề xuất/ công văn</label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogTr()">
-                    <input [readonly]="true" nz-input formControlName="idDxuat" readonly="true" />
+                    <input [readonly]="true" nz-input formControlName="maDxuat" readonly="true" />
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>

@@ -15,7 +15,7 @@ import { CHUC_NANG, STATUS } from 'src/app/constants/status';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { Subject } from 'rxjs';
 import { QuyetDinhDieuChuyenTCService } from 'src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-tc.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 
 @Component({
   selector: 'app-quyet-dinh-dieu-chuyen',
@@ -48,12 +48,23 @@ export class QuyetDinhDieuChuyenComponent extends Base2Component implements OnIn
     { ma: this.STATUS.DA_TAO_CBV, giaTri: 'Đã tạo - CB Vụ' },
   ];
 
+  idTongHop: number
+  qdDcId: number
+  isViewOnModal: number
+  dsDonvi: any[] = [];
+  userInfo: UserLogin;
+  userdetail: any = {};
+  selectedId: number = 0;
+  isVatTu: boolean = false;
+  isView = false;
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
+    private router: Router,
     private donviService: DonviService,
     private routerActive: ActivatedRoute,
     private danhMucService: DanhMucService,
@@ -78,17 +89,14 @@ export class QuyetDinhDieuChuyenComponent extends Base2Component implements OnIn
       tenDvi: '',
       tenTrangThai: '',
     };
+    router.events.subscribe((val) => {
+      this.idTongHop = +this.routerActive.snapshot.paramMap.get('id');
+      this.qdDcId = +this.routerActive.snapshot.paramMap.get('qdDcId');
+      this.isViewOnModal = +this.routerActive.snapshot.paramMap.get('isViewOnModal');
+    });
   }
 
-  idTongHop: number
-  qdDcId: number
-  isViewOnModal: number
-  dsDonvi: any[] = [];
-  userInfo: UserLogin;
-  userdetail: any = {};
-  selectedId: number = 0;
-  isVatTu: boolean = false;
-  isView = false;
+
 
   disabledStartNgayLapKh = (startValue: Date): boolean => {
     if (startValue && this.formData.value.ngayLapKhDen) {
@@ -124,9 +132,9 @@ export class QuyetDinhDieuChuyenComponent extends Base2Component implements OnIn
       this.visibleTab = value;
     });
 
-    this.idTongHop = +this.routerActive.snapshot.paramMap.get('id');
-    this.qdDcId = +this.routerActive.snapshot.paramMap.get('qdDcId');
-    this.isViewOnModal = +this.routerActive.snapshot.paramMap.get('isViewOnModal');
+
+
+
 
     if (this.isChiCuc()) this.tabSelected = 1;
     if (this.tabSelected == 0) {
@@ -269,6 +277,7 @@ export class QuyetDinhDieuChuyenComponent extends Base2Component implements OnIn
   }
 
   quayLai() {
+    console.log('QuyetDinhDieuChuyenComponent', 'quayLai')
     this.showListEvent.emit();
     this.isDetail = false;
     this.isView = false;

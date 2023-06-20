@@ -122,12 +122,14 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
       trichYeu: [],
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự thảo'],
+      lyDoTuChoi: [],
       canCuQdTc: [, [Validators.required]],
       soCanCuQdTc: [],
       ngayTrinhDuyetTc: [],
       tongDuToanKp: [],
       loaiHinhNX: ["Nhập ĐC nội bộ Chi cục"],
       kieuNX: ["Nhập không chi tiền"],
+      quyetDinhPdDtl: [new Array<any>(),],
       danhSachQuyetDinh: [new Array<any>(),],
     }
     );
@@ -370,12 +372,13 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
       this.danhSachKeHoach = []
       this.danhSachQuyetDinh = []
       let dsHH = []
+      let dsDX = []
       const detail = await this.quyetDinhDieuChuyenTCService.getDetail(value)
 
       detail.data.danhSachQuyetDinh.map((qd) => {
         if (qd.dcnbKeHoachDcHdr) {
           const item = qd.dcnbKeHoachDcHdr
-
+          dsDX.push(item)
           this.danhSachQuyetDinh.push({
             danhSachKeHoach: item.danhSachHangHoa
           })
@@ -396,6 +399,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
 
       this.formData.patchValue({
         tongDuToanKp: tong,
+        quyetDinhPdDtl: dsDX,
         danhSachQuyetDinh: this.danhSachQuyetDinh
       })
 
@@ -956,7 +960,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
   }
 
   isLuuVaGD() {
-    return !this.isYCXDDiemNhap() && (!this.isView && this.formData.value.trangThai == STATUS.DU_THAO && this.isCuc()) || (this.isChiCuc() && this.formData.value.loaiQdinh == '01')
+    return !this.isYCXDDiemNhap() && (!this.isView && this.formData.value.trangThai == STATUS.DU_THAO && this.isCuc()) || (this.isChiCuc() && this.formData.value.loaiQdinh == '00' && this.formData.value.trangThai == STATUS.YC_CHICUC_PHANBO_DC)
   }
 
   setValidator() {
@@ -1031,7 +1035,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
 
   isTuChoi() {
     if (this.isCuc()) {
-      return this.formData.value.trangThai == STATUS.CHO_DUYET_TP || this.formData.value.trangThai == STATUS.TU_CHOI_TP || this.formData.value.trangThai == STATUS.CHO_DUYET_LDC || this.formData.value.trangThai == STATUS.TU_CHOI_LDC
+      return this.formData.value.trangThai == STATUS.CHO_DUYET_TP || this.formData.value.trangThai == STATUS.CHO_DUYET_LDC
     }
     return false
   }
