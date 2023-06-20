@@ -44,7 +44,7 @@ export class QuyetDinhPdDtl {
 export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component implements OnInit {
   @Input()
   idTHop: number;
-  @Input() isViewOnModal: boolean;
+  @Input() isViewOnModal: number;
   @Input() idInput: number;
   @Input() isView: boolean;
   @Output()

@@ -82,6 +82,7 @@ export class QuyetDinhDieuChuyenComponent extends Base2Component implements OnIn
 
   idTongHop: number
   qdDcId: number
+  isViewOnModal: number
   dsDonvi: any[] = [];
   userInfo: UserLogin;
   userdetail: any = {};
@@ -125,6 +126,7 @@ export class QuyetDinhDieuChuyenComponent extends Base2Component implements OnIn
 
     this.idTongHop = +this.routerActive.snapshot.paramMap.get('id');
     this.qdDcId = +this.routerActive.snapshot.paramMap.get('qdDcId');
+    this.isViewOnModal = +this.routerActive.snapshot.paramMap.get('isViewOnModal');
 
     if (this.isChiCuc()) this.tabSelected = 1;
     if (this.tabSelected == 0) {
