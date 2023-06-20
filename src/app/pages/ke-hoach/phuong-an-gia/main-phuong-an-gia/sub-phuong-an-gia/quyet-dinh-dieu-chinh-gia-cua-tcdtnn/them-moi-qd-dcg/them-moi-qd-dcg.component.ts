@@ -65,7 +65,7 @@ export class ThemMoiQdDcgComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private helperService: HelperService,
     private notification: NzNotificationService,
-    private userService: UserService,
+    public userService: UserService,
     private quyetDinhDieuChinhGiaTCDTNNService: QuyetDinhDieuChinhGiaTCDTNNService,
     private tongHopPhuongAnGiaService: TongHopPhuongAnGiaService
   ) {
