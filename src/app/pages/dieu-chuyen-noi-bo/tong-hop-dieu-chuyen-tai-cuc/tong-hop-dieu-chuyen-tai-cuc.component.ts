@@ -105,6 +105,7 @@ export class TongHopDieuChuyenTaiCuc extends Base2Component implements OnInit {
             namKeHoach: '',
             tenDvi: '',
             id: '',
+            soDeXuat: '',
             loaiDieuChuyen: '',
             ngayTongHop: '',
             thTuNgay: '',

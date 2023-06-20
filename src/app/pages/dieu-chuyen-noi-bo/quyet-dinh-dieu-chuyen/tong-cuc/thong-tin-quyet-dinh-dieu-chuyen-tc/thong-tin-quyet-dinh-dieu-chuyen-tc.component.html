@@ -9,7 +9,7 @@
       </div>
     </div>
 
-    <div class="btn-group">
+    <div *ngIf="!isViewOnModal" class="btn-group">
 
       <button type="button" class="btn btn-sub" (click)="quayLai()">
         <i class="fa fa-arrow-left"></i>
@@ -42,17 +42,17 @@
       </button>
 
       <button
-        *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV && userService.isAccessPermisson('DCNB_QUYETDINHDC_DUYET_LDTC')"
+        *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC) && userService.isAccessPermisson('DCNB_QUYETDINHDC_DUYET_LDTC')"
         type="button" class="btn btn-sub" (click)="pheDuyet()">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span>Duyệt</span>
       </button>
 
-      <button *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDTC" type="button" class="btn btn-info ml-2"
+      <!-- <button *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDTC" type="button" class="btn btn-info ml-2"
         (click)="banHanh()">
         <i class="icon htvbdh_chuyenvanthu"></i>
         <span>Ban hành</span>
-      </button>
+      </button> -->
 
     </div>
   </div>
@@ -111,7 +111,7 @@
           </div>
           <div nz-col [nzSpan]="3">
             <nz-form-item>
-              <nz-form-label [nzNoColon]="true"> Ngày ký quyết định</nz-form-label>
+              <nz-form-label nzRequired [nzNoColon]="true"> Ngày ký quyết định</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-date-picker [nzDisabled]="isView" formControlName="ngayKyQdinh" nzFormat="dd/MM/yyyy">
                 </nz-date-picker>
@@ -120,7 +120,7 @@
           </div>
           <div nz-col [nzSpan]="3">
             <nz-form-item>
-              <nz-form-label [nzNoColon]="true"> Ngày hiệu lực</nz-form-label>
+              <nz-form-label nzRequired [nzNoColon]="true"> Ngày hiệu lực</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-date-picker [nzDisabled]="isView" formControlName="ngayPduyet" nzFormat="dd/MM/yyyy">
                 </nz-date-picker>

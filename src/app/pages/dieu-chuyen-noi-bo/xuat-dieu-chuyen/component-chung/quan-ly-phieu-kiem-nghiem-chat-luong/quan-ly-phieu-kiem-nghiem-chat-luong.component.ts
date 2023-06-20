@@ -37,7 +37,8 @@ export interface PassDataPKNCL {
 })
 export class PhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base2Component implements OnInit {
   @Input() loaiDc: string;
-  @Input() typeVthh: string[];
+  @Input() isVatTu: boolean;
+  @Input() thayDoiThuKho: boolean;
   toDay = new Date();
   last30Day = new Date(
     new Date().setTime(this.toDay.getTime() - 30 * 24 * 60 * 60 * 1000),
@@ -109,7 +110,7 @@ export class PhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base2Compon
       nam: [null],
       maDvi: [null],
       loaiDc: [null],
-      loaiVthh: [null],
+      isVatTu: [false],
       soQdinh: [null],
       soPhieu: [null],
       tuNgay: [null],
@@ -142,7 +143,7 @@ export class PhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base2Compon
       // if (this.typeVthh == 'tat-ca') {
       //   this.isTatCa = true;
       // }
-      this.formData.patchValue({ loaiDc: this.loaiDc, loaiVthh: this.typeVthh, maDvi: this.userInfo.MA_DVI, trangThai: STATUS.BAN_HANH })
+      this.formData.patchValue({ loaiDc: this.loaiDc, isVatTu: this.isVatTu, maDvi: this.userInfo.MA_DVI, trangThai: STATUS.BAN_HANH })
       this.timKiem()
     } catch (e) {
       console.log('error: ', e);

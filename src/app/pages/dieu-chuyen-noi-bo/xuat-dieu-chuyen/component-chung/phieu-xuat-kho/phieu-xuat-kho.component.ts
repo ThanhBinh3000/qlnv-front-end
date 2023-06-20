@@ -10,14 +10,20 @@ import { PhieuXuatKhoBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban
 import { v4 as uuidv4 } from 'uuid';
 import { chain, groupBy } from 'lodash';
 import { PhieuXuatKhoDieuChuyenService } from '../services/dcnb-xuat-kho.service';
+
+export interface PassDataXK {
+  soQddc: string, qddcId: boolean, soPhieuKnChatLuong: string, phieuKnChatLuongHdrId: number, maDiemKho: string, maNganKho: string, maNhaKho: string, maLoKho: string
+  tenDiemKho: string, tenNganKho: string, tenNhaKho: string, tenLoKho: string, loaiVthh: string, cloaiVthh: string, tenLoaiVthh: string, tenCloaiVthh: string, soLuongCanDc: number
+}
 @Component({
   selector: 'app-xuat-dcnb-phieu-xuat-kho',
   templateUrl: './phieu-xuat-kho.component.html',
   styleUrls: ['./phieu-xuat-kho.component.scss']
 })
 export class PhieuXuatKhoDCNBComponent extends Base2Component implements OnInit {
-  @Input() typeVthh: string[];
-  @Input() loaiDc: string[]
+  @Input() isVatTu: boolean;
+  @Input() loaiDc: string;
+  @Input() thayDoiThuKho: boolean;
   selectedId: number = 0;
   isView: boolean = false;
   isTatCa: boolean = false;
@@ -26,7 +32,16 @@ export class PhieuXuatKhoDCNBComponent extends Base2Component implements OnInit 
   expandSetString = new Set<string>();
   idPhieu: number = 0;
   isViewPhieu: boolean = false;
+  idPhieuKNCL: number;
+  isViewPhieuKNCL: boolean;
+  passData: PassDataXK;
 
+  LIST_TRANG_THAI: { [key: string]: string } = {
+    [this.STATUS.DU_THAO]: "Dự thảo",
+    [this.STATUS.CHO_DUYET_LDCC]: "Chờ duyệt LĐ Chi Cục",
+    [this.STATUS.TU_CHOI_LDCC]: "Từ chối LĐ Chi Cục",
+    [this.STATUS.DA_DUYET_LDCC]: "Đã duyệt LĐ Chi Cục"
+  }
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -38,13 +53,14 @@ export class PhieuXuatKhoDCNBComponent extends Base2Component implements OnInit 
   ) {
     super(httpClient, storageService, notification, spinner, modal, phieuXuatKhoDieuChuyenService);
     this.formData = this.fb.group({
-      nam: [null],
+      namKh: [null],
       soQdinhDcc: [''],
       soPhieuXuatKho: [''],
       tuNgay: [null],
       denNgay: [null],
-      loaiVthh: [''],
-      loaiDc: ['']
+      isVatTu: [false],
+      loaiDc: [''],
+      thayDoiThuKho: ['']
     })
 
     this.filterTable = {
@@ -67,12 +83,14 @@ export class PhieuXuatKhoDCNBComponent extends Base2Component implements OnInit 
     await this.spinner.show();
     try {
       this.formData.patchValue({
-        loaiVthh: this.typeVthh,
+        isVatTu: this.isVatTu,
         loaiDc: this.loaiDc,
+        thayDoiThuKho: this.thayDoiThuKho
         // maDvi: this.userService.isChiCuc() ? this.userInfo.MA_DVI : null
       })
       await this.search();
     } catch (e) {
+      console.log('e', e)
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
@@ -119,18 +137,18 @@ export class PhieuXuatKhoDCNBComponent extends Base2Component implements OnInit 
 
   buildTableView() {
     let dataView = chain(this.dataTable)
-      .groupBy("soQdNv")
+      .groupBy("soQdinh")
       .map((value, key) => {
         let rs = chain(value)
           .groupBy("maDiemKho")
           .map((v, k) => {
             let rowLv2 = v.find(s => s.maDiemKho === k);
-            let rsx = chain(v).groupBy("maLoKho").map((x, ix) => {
-              const rowLv3 = x.find(f => f.maLoKho == ix);
+            let rsx = chain(v).groupBy("maloKho").map((x, ix) => {
+              const rowLv3 = x.find(f => f.maloKho == ix);
               return {
                 ...rowLv3,
                 idVirtual: uuidv4(),
-                childData: x
+                childData: rowLv3.id ? x : []
               }
             }).value();
             return {
@@ -140,17 +158,15 @@ export class PhieuXuatKhoDCNBComponent extends Base2Component implements OnInit 
             }
           }
           ).value();
-        let rowLv1 = value.find(s => s.soQdNv === key);
+        let rowLv1 = value.find(s => s.soQdinh === key);
         return {
+          ...rowLv1,
           idVirtual: uuidv4(),
-          soQdNv: key,
-          namKh: rowLv1.namKh,
-          ngayQdNv: rowLv1.ngayQdNv,
-          idQdNv: rowLv1.idQdNv,
           childData: rs
         };
       }).value();
-    this.dataView = dataView
+    this.dataView = dataView;
+    console.log("dataView", this.dataView)
     this.expandAll()
   }
 
@@ -180,24 +196,58 @@ export class PhieuXuatKhoDCNBComponent extends Base2Component implements OnInit 
     }
     return endValue.getTime() <= this.formData.value.tuNgay.getTime();
   };
-  redirectToChiTiet(lv2: any, isView: boolean, idQdinhDcc?: number) {
-    this.selectedId = lv2.id;
+  redirectToChiTiet(lv2: any, isView: boolean, id) {
+    this.selectedId = id;
     this.isDetail = true;
     this.isView = isView;
-    this.idQdinhDcc = idQdinhDcc;
+    // this.idQdinhDcc = idQdinhDcc;
+    this.passData = {
+      soQddc: lv2.soQdinh, qddcId: lv2.qdinhDccId, soPhieuKnChatLuong: lv2.soPhieuKiemNghiemCl, phieuKnChatLuongHdrId: lv2.phieuKiemNghiemId, maDiemKho: lv2.maDiemKho,
+      maNhaKho: lv2.maNhaKho, maNganKho: lv2.maNganKho, maLoKho: lv2.maloKho, tenDiemKho: lv2.tenDiemKho, tenNhaKho: lv2.tenNhaKho, tenNganKho: lv2.tenNganKho, tenLoKho: lv2.tenloKho,
+      loaiVthh: lv2.maHangHoa, cloaiVthh: lv2.maChLoaiHangHoa, tenLoaiVthh: lv2.tenHangHoa, tenCloaiVthh: lv2.tenChLoaiHangHoa, soLuongCanDc: lv2.slDienChuyen
+    }
   }
 
-
+  checkRoleView(trangThai: string): boolean {
+    if (!this.checkRoleEdit(trangThai) && !this.checkRoleApprove(trangThai) && !this.checkRoleDelete(trangThai)) {
+      return true
+    }
+    return false
+  }
+  checkRoleEdit(trangThai: string): boolean {
+    if (this.userService.isChiCuc() && (trangThai == this.STATUS.DU_THAO || trangThai == this.STATUS.TU_CHOI_LDCC)) {
+      return true
+    }
+    return false
+  }
+  checkRoleApprove(trangThai: string): boolean {
+    if (this.userService.isChiCuc() && (trangThai == this.STATUS.CHO_DUYET_LDCC)) {
+      return true
+    }
+    return false
+  }
+  checkRoleDelete(trangThai: string): boolean {
+    if (this.userService.isChiCuc() && (trangThai == this.STATUS.DU_THAO)) {
+      return true
+    }
+    return false
+  }
   openModalPhieuXuatKho(id: number) {
     this.idPhieu = id;
     this.isViewPhieu = true;
   }
-
   closeModalPhieuXuatKho() {
     this.idPhieu = null;
     this.isViewPhieu = false;
   }
-
+  openModalPhieuKNCL(id: number) {
+    this.idPhieuKNCL = id;
+    this.isViewPhieuKNCL = true
+  }
+  closeModalPhieuKNCL() {
+    this.idPhieuKNCL = null;
+    this.isViewPhieuKNCL = false;
+  }
 
 }
 
