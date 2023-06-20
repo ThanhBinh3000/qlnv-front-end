@@ -75,12 +75,6 @@ export class ChiTietHoSoTieuHuyComponent extends Base2Component implements OnIni
               private tongHopTieuHuyService: TongHopTieuHuyService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, hoSoTieuHuyService);
-    for (let i = -3; i < 23; i++) {
-      this.listNam.push({
-        value: dayjs().get("year") - i,
-        text: dayjs().get("year") - i
-      });
-    }
     this.maHauTo = '/HS-' + this.userInfo.DON_VI.tenVietTat;
     this.formData = this.fb.group({
       id: [],

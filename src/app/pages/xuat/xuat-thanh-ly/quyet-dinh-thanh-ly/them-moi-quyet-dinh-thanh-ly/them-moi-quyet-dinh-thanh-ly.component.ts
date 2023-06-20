@@ -54,7 +54,6 @@ export class ThemMoiQuyetDinhThanhLyComponent extends Base2Component implements 
   isVisible = false;
   maHauTo: any;
   listHoSo: any[] = [];
-  chiTiet: any = [];
 
 
   constructor(
@@ -176,9 +175,8 @@ export class ThemMoiQuyetDinhThanhLyComponent extends Base2Component implements 
 
   async save() {
     this.formData.disable({emitEvent: false});
-    if (this.formData.value.id == null) {
-      this.formData.value.quyetDinhDtl = this.formData.value.quyetDinhDtl.map(f => ({...f, id: null}))
-    }
+    let dt = this.dataTable.flatMap((item) => item.childData);
+    this.formData.patchValue({quyetDinhDtl: dt})
     let body = {
       ...this.formData.value,
       soQd: this.formData.value.soQd ? this.formData.value.soQd + this.maHauTo : this.maHauTo,
@@ -189,12 +187,9 @@ export class ThemMoiQuyetDinhThanhLyComponent extends Base2Component implements 
     }
     let rs = await this.createUpdate(body);
     this.formData.enable({emitEvent: false});
-    this.formData.patchValue({
-      id: rs.id,
-      quyetDinhDtl: rs.quyetDinhDtl
-    })
-    this.dataTable = cloneDeep(rs.quyetDinhDtl);
-    this.buildTableView(this.dataTable)
+    this.formData.patchValue({id: rs.id})
+    let ct = await this.quyetDinhThanhLyService.getDetail(rs.id);
+    this.buildTableView(ct.data.quyetDinhDtl)
   }
 
   async saveAndSend(body: any, trangThai: string, msg: string, msgSuccess?: string) {
@@ -206,30 +201,30 @@ export class ThemMoiQuyetDinhThanhLyComponent extends Base2Component implements 
     this.showListEvent.emit();
   }
 
-  changeHoSo(id) {
-    if (id) {
+  changeHoSo($event: any) {
+    if ($event) {
       try {
         this.spinner.show();
-        this.chiTiet = [];
-        this.hoSoThanhLyService.getDetail(id).then(res => {
+        this.hoSoThanhLyService.getDetail($event).then(res => {
           if (res.msg == MESSAGE.SUCCESS) {
             if (res.data) {
-              this.formData.patchValue({
-                soHoSo: res.data.soHoSo,
-                quyetDinhDtl: res.data.hoSoDtl.filter(f => f.type === 'TD'),
-                tongSoLuongTl: res.data.hoSoDtl.reduce((prev, cur) => prev + cur.slDaDuyet, 0),
-                tongSoLuongCon: res.data.hoSoDtl.reduce((prev, cur) => prev + (cur.slDeXuat-cur.slDaDuyet), 0),
-                tongThanhTien: res.data.hoSoDtl.reduce((prev, cur) => prev + cur.thanhTien, 0),
-              });
-              this.dataTable = cloneDeep(this.formData.value.quyetDinhDtl);
+              this.dataTable = cloneDeep(res.data.hoSoDtl.filter(f => f.type === 'TD'));
               this.dataTable = this.dataTable.map((item) => {
                 return {
                   ...item,
+                  id: null,
                   ketQua: item.ketQuaDanhGia,
                   slCon: item.slDeXuat - item.slDaDuyet
                 };
               });
-              this.buildTableView(this.dataTable)
+              this.formData.patchValue({
+                soHoSo: res.data.soHoSo,
+                quyetDinhDtl: this.dataTable,
+                tongSoLuongTl: res.data.hoSoDtl.reduce((prev, cur) => prev + cur.slDaDuyet, 0),
+                tongSoLuongCon: res.data.hoSoDtl.reduce((prev, cur) => prev + (cur.slDeXuat - cur.slDaDuyet), 0),
+                tongThanhTien: res.data.hoSoDtl.reduce((prev, cur) => prev + cur.thanhTien, 0),
+              });
+              this.buildTableView(this.formData.value.quyetDinhDtl)
             }
           }
         })
