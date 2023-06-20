@@ -208,7 +208,7 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnI
       namKh: this.formData.value.namHd,
       maDvi: this.userInfo.MA_DVI
     };
-
+  console.log(body)
     let res = await this.quyetDinhPheDuyetKetQuaChaoGiaMTTService.search(body)
     if (res.data) {
       listQdKq = res.data?.content;

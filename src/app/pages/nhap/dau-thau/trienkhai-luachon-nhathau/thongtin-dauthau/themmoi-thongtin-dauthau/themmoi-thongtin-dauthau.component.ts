@@ -517,7 +517,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
 
   async saveGoiThauPopup() {
     if (this.listNthauNopHs.length > 0) {
-      this.saveGoiThau();
+      await this.saveGoiThau();
     } else {
       const modalThongBao = this.modal.create({
         nzTitle: 'Thông báo',
@@ -586,13 +586,35 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
     this.itemRowUpdate.tenTrangThai = trangThai[0].text;
   }
 
-  addRow(): void {
+  async addRow() {
     if (this.validateItemSave(this.itemRow)) {
       this.listNthauNopHs = [
         ...this.listNthauNopHs,
         this.itemRow
       ];
+      await this.saveGt();
       this.clearItemRow();
+    }
+  }
+
+  async saveGt(){
+    if (this.listNthauNopHs.length > 0) {
+      await this.saveGoiThau();
+    } else {
+      const modalThongBao = this.modal.create({
+        nzTitle: 'Thông báo',
+        nzContent: DialogThongBaoThongTinDauThauComponent,
+        nzMaskClosable: false,
+        nzClosable: false,
+        nzWidth: '900px',
+        nzFooter: null,
+        nzComponentParams: {},
+      });
+      modalThongBao.afterClose.toPromise().then((data) => {
+        if (data) {
+          this.saveGoiThau();
+        }
+      });
     }
   }
 
@@ -627,10 +649,11 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
     this.listNthauNopHs[index].edit = false;
   }
 
-  saveEdit(dataUpdate, index: any): void {
+  async saveEdit(dataUpdate, index: any) {
     if (this.validateItemSave(this.itemRowUpdate, index)) {
       this.listNthauNopHs[index] = this.itemRowUpdate;
       this.listNthauNopHs[index].edit = false;
+      await this.saveGt();
     };
 
   }
