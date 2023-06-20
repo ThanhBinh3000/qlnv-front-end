@@ -583,7 +583,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
       idThop: undefined
     });
     await this.spinner.show();
-    // Get data tờ trình
+
     let bodyDx = {
       loaiDieuChuyen: this.formData.get('loaiDc').value,
       namKeHoach: this.formData.get('nam').value,
