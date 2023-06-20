@@ -52,7 +52,9 @@ export class HopdongPhulucHopdongComponent extends Base2Component implements OnI
   }
 
   async ngOnInit() {
+    this.loaiVthh = '0101'
     this.spinner.show();
+    console.log("ds hop dong", this.loaiVthh)
     try {
       this.formData.patchValue({
         loaiVthh: this.loaiVthh,
