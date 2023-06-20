@@ -1,15 +1,18 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.service';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
+import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { displayNumber, exchangeMoney, sumNumber } from 'src/app/Utility/func';
 import { AMOUNT, BOX_NUMBER_WIDTH, DON_VI_TIEN, LA_MA, MONEY_LIMIT } from "src/app/Utility/utils";
 import * as uuid from "uuid";
+import * as fileSaver from 'file-saver';
 
 export class ItemData {
     id: string;
@@ -32,6 +35,10 @@ export class ItemData {
     duToanNamTiepTheoN1ThDauTu: number;
     duToanNamTiepTheoN2CbDauTu: number;
     duToanNamTiepTheoN2ThDauTu: number;
+    chenhLechCbDautu: number;
+    chenhLechThDauTu: number;
+    ghiChu: string;
+    yKienCapTren: string;
     cacNamTiepTheo: number;
 }
 
@@ -68,11 +75,34 @@ export class PhuLuc04Component implements OnInit {
     editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
     amount = AMOUNT;
     scrollX: string;
+    fileList: NzUploadFile[] = [];
+    listFile: File[] = [];                      // list file chua ten va id de hien tai o input
+    lstFiles: any[] = [];
+    listIdDeleteFiles: string[] = [];
+
+    beforeUpload = (file: NzUploadFile): boolean => {
+        this.fileList = this.fileList.concat(file);
+        console.log(this.fileList);
+        return false;
+    };
+
+    // them file vao danh sach
+    handleUpload(): void {
+        console.log(this.fileList);
+
+        this.fileList.forEach((file: any) => {
+            const id = file?.lastModified.toString();
+            this.lstFiles.push({ id: id, fileName: file?.name });
+            this.listFile.push(file);
+        });
+        this.fileList = [];
+    };
 
     constructor(
         private _modalRef: NzModalRef,
         private spinner: NgxSpinnerService,
         private lapThamDinhService: LapThamDinhService,
+        private quanLyVonPhiService: QuanLyVonPhiService,
         private danhMucService: DanhMucDungChungService,
         private notification: NzNotificationService,
         private modal: NzModalService,
@@ -147,6 +177,28 @@ export class PhuLuc04Component implements OnInit {
         }
     }
 
+    //upload file
+    async uploadFile(file: File) {
+        // day file len server
+        const upfile: FormData = new FormData();
+        upfile.append('file', file);
+        upfile.append('folder', this.dataInfo.maDvi + '/' + this.dataInfo.maBcao);
+        const temp = await this.quanLyVonPhiService.uploadFile(upfile).toPromise().then(
+            (data) => {
+                const objfile = {
+                    fileName: data.filename,
+                    fileSize: data.size,
+                    fileUrl: data.url,
+                }
+                return objfile;
+            },
+            err => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            },
+        );
+        return temp;
+    }
+
     // luu
     async save(trangThai: string, lyDoTuChoi: string) {
         let checkSaveEdit;
@@ -196,6 +248,12 @@ export class PhuLuc04Component implements OnInit {
         }
 
         const request = JSON.parse(JSON.stringify(this.formDetail));
+        if (!request.fileDinhKems) {
+            request.fileDinhKems = [];
+        }
+        for (const iterator of this.listFile) {
+            request.fileDinhKems.push(await this.uploadFile(iterator));
+        }
         request.lstCtietLapThamDinhs = lstCtietBcaoTemp;
         request.trangThai = trangThai;
 
@@ -432,6 +490,9 @@ export class PhuLuc04Component implements OnInit {
             this.editCache[id].data.duToanNamTiepTheoN2ThDauTu,
             this.editCache[id].data.cacNamTiepTheo,
         ]);
+
+        this.editCache[id].data.chenhLechCbDautu = this.editCache[id].data.duToanKhNamNCbDauTuTd - this.editCache[id].data.duToanKhNamNCbDauTu
+        this.editCache[id].data.chenhLechThDauTu = this.editCache[id].data.duToanKhNamNThDauTuTd - this.editCache[id].data.duToanKhNamNThDauTu
     }
 
     sum(stt: string) {
@@ -464,6 +525,8 @@ export class PhuLuc04Component implements OnInit {
                     this.lstCtietBcao[index].duToanNamTiepTheoN1ThDauTu = sumNumber([this.lstCtietBcao[index].duToanNamTiepTheoN1ThDauTu, item.duToanNamTiepTheoN1ThDauTu]);
                     this.lstCtietBcao[index].duToanNamTiepTheoN2CbDauTu = sumNumber([this.lstCtietBcao[index].duToanNamTiepTheoN2CbDauTu, item.duToanNamTiepTheoN2CbDauTu]);
                     this.lstCtietBcao[index].duToanNamTiepTheoN2ThDauTu = sumNumber([this.lstCtietBcao[index].duToanNamTiepTheoN2ThDauTu, item.duToanNamTiepTheoN2ThDauTu]);
+                    this.lstCtietBcao[index].chenhLechCbDautu = sumNumber([this.lstCtietBcao[index].chenhLechCbDautu, item.chenhLechCbDautu]);
+                    this.lstCtietBcao[index].chenhLechThDauTu = sumNumber([this.lstCtietBcao[index].chenhLechThDauTu, item.chenhLechThDauTu]);
                     this.lstCtietBcao[index].cacNamTiepTheo = sumNumber([this.lstCtietBcao[index].cacNamTiepTheo, item.cacNamTiepTheo]);
                 }
             })
@@ -491,6 +554,8 @@ export class PhuLuc04Component implements OnInit {
                 this.total.duToanNamTiepTheoN1ThDauTu = sumNumber([this.total.duToanNamTiepTheoN1ThDauTu, item.duToanNamTiepTheoN1ThDauTu]);
                 this.total.duToanNamTiepTheoN2CbDauTu = sumNumber([this.total.duToanNamTiepTheoN2CbDauTu, item.duToanNamTiepTheoN2CbDauTu]);
                 this.total.duToanNamTiepTheoN2ThDauTu = sumNumber([this.total.duToanNamTiepTheoN2ThDauTu, item.duToanNamTiepTheoN2ThDauTu]);
+                this.total.chenhLechCbDautu = sumNumber([this.total.chenhLechCbDautu, item.chenhLechCbDautu]);
+                this.total.chenhLechThDauTu = sumNumber([this.total.chenhLechThDauTu, item.chenhLechThDauTu]);
                 this.total.cacNamTiepTheo = sumNumber([this.total.cacNamTiepTheo, item.cacNamTiepTheo]);
             }
         })
@@ -567,6 +632,34 @@ export class PhuLuc04Component implements OnInit {
     // dong dialog
     handleCancel() {
         this._modalRef.close();
-    }
+    };
+
+    deleteFile(id: string): void {
+        this.lstFiles = this.lstFiles.filter((a: any) => a.id !== id);
+        this.listFile = this.listFile.filter((a: any) => a?.lastModified.toString() !== id);
+        this.listIdDeleteFiles.push(id);
+    };
+
+    //download file về máy tính
+    async downloadFile(id: string) {
+        //let file!: File;
+        const file: File = this.listFile.find(element => element?.lastModified.toString() == id);
+        if (!file) {
+            const fileAttach = this.lstFiles.find(element => element?.id == id);
+            if (fileAttach) {
+                await this.quanLyVonPhiService.downloadFile(fileAttach.fileUrl).toPromise().then(
+                    (data) => {
+                        fileSaver.saveAs(data, fileAttach.fileName);
+                    },
+                    err => {
+                        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+                    },
+                );
+            }
+        } else {
+            const blob = new Blob([file], { type: "application/octet-stream" });
+            fileSaver.saveAs(blob, file.name);
+        }
+    };
 
 }

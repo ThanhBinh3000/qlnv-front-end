@@ -46,6 +46,7 @@ export class ItemData {
 	namKhDgopLuong: number;
 	namKhKhac: number;
 	checked: boolean;
+	ghiChu: string;
 }
 
 

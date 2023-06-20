@@ -29,6 +29,7 @@
 							thể số, ngày, tháng, năm <br>và tên cơ quan ra quyết định)</em></th>
 					<th colspan="3" rowspan="2">Kinh phí được phê duyệt</th>
 					<th colspan="10">Kinh phí thực hiện</th>
+					<th rowspan="4">Ghi chú</th>
 					<th rowspan="4" *ngIf="status" style="width: 60px;" nzRight></th>
 					<th rowspan="4" *ngIf="status" style="width: 50px;" nzRight></th>
 				</tr>
@@ -75,6 +76,7 @@
 					<th>14=15+16</th>
 					<th>15</th>
 					<th>16</th>
+					<th>17</th>
 					<th *ngIf="status" nzRight></th>
 					<th *ngIf="status" nzRight></th>
 				</tr>
@@ -104,6 +106,7 @@
 						<td>{{displayValue(data.kphiThienDtoanTso)}}</td>
 						<td>{{displayValue(data.kphiThienDtoanNsnn)}}</td>
 						<td>{{displayValue(data.kphiThienDtoanNkhac)}}</td>
+						<td>{{data.ghiChu}}</td>
 						<td *ngIf="status" nzRight>
 							<i *ngIf="checkEdit(data.stt)" class="fa fa-pencil" (click)="startEdit(data.id)"></i>
 						</td>
@@ -190,6 +193,9 @@
 								[(ngModel)]="editCache[data.id].data.kphiThienDtoanNkhac"
 								(ngModelChange)="changeModel(data.id)" [options]="amount" />
 						</td>
+						<td>
+							<input class="search-input" [(ngModel)]="editCache[data.id].data.ghiChu" />
+						</td>
 						<td nzRight>
 							<a (click)="saveEdit(data.id)" class="save">Lưu</a>
 							<a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
@@ -223,6 +229,7 @@
 					<td>{{displayValue(total.kphiThienDtoanTso)}}</td>
 					<td>{{displayValue(total.kphiThienDtoanNsnn)}}</td>
 					<td>{{displayValue(total.kphiThienDtoanNkhac)}}</td>
+					<td></td>
 					<td *ngIf="status" nzRight></td>
 					<td *ngIf="status" nzRight></td>
 				</tr>

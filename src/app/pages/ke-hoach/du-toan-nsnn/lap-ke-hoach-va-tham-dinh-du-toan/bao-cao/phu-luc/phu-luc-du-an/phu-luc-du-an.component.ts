@@ -1,20 +1,24 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.service';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
+import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { displayNumber, exchangeMoney, getName, sumNumber } from 'src/app/Utility/func';
 import { AMOUNT, BOX_NUMBER_WIDTH, DON_VI_TIEN, LA_MA } from "src/app/Utility/utils";
 import * as uuid from "uuid";
+import * as fileSaver from 'file-saver';
 
 export class ItemData {
     id: string;
     stt: string;
     maDanhMucDa: string;
+    maDuAn: string;
     tenDanhMuc: string;
     level: number;
     nhomDuAn: string;
@@ -78,6 +82,28 @@ export class PhuLucDuAnComponent implements OnInit {
     editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
     amount = AMOUNT;
     scrollX: string;
+    fileList: NzUploadFile[] = [];
+    listFile: File[] = [];                      // list file chua ten va id de hien tai o input
+    lstFiles: any[] = [];
+    listIdDeleteFiles: string[] = [];
+
+    beforeUpload = (file: NzUploadFile): boolean => {
+        this.fileList = this.fileList.concat(file);
+        console.log(this.fileList);
+        return false;
+    };
+
+    // them file vao danh sach
+    handleUpload(): void {
+        console.log(this.fileList);
+
+        this.fileList.forEach((file: any) => {
+            const id = file?.lastModified.toString();
+            this.lstFiles.push({ id: id, fileName: file?.name });
+            this.listFile.push(file);
+        });
+        this.fileList = [];
+    };
 
     constructor(
         private _modalRef: NzModalRef,
@@ -86,6 +112,7 @@ export class PhuLucDuAnComponent implements OnInit {
         private danhMucService: DanhMucDungChungService,
         private notification: NzNotificationService,
         private modal: NzModalService,
+        private quanLyVonPhiService: QuanLyVonPhiService,
     ) {
     }
 
@@ -154,6 +181,28 @@ export class PhuLucDuAnComponent implements OnInit {
         }
     }
 
+    //upload file
+    async uploadFile(file: File) {
+        // day file len server
+        const upfile: FormData = new FormData();
+        upfile.append('file', file);
+        upfile.append('folder', this.dataInfo.maDvi + '/' + this.dataInfo.maBcao);
+        const temp = await this.quanLyVonPhiService.uploadFile(upfile).toPromise().then(
+            (data) => {
+                const objfile = {
+                    fileName: data.filename,
+                    fileSize: data.size,
+                    fileUrl: data.url,
+                }
+                return objfile;
+            },
+            err => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            },
+        );
+        return temp;
+    }
+
     // luu
     async save(trangThai: string, lyDoTuChoi: string) {
         let checkSaveEdit;
@@ -194,6 +243,12 @@ export class PhuLucDuAnComponent implements OnInit {
         })
 
         const request = JSON.parse(JSON.stringify(this.formDetail));
+        if (!request.fileDinhKems) {
+            request.fileDinhKems = [];
+        }
+        for (const iterator of this.listFile) {
+            request.fileDinhKems.push(await this.uploadFile(iterator));
+        }
         request.lstCtietLapThamDinhs = lstCtietBcaoTemp;
         request.trangThai = trangThai;
 
@@ -569,5 +624,33 @@ export class PhuLucDuAnComponent implements OnInit {
     handleCancel() {
         this._modalRef.close();
     }
+
+    deleteFile(id: string): void {
+        this.lstFiles = this.lstFiles.filter((a: any) => a.id !== id);
+        this.listFile = this.listFile.filter((a: any) => a?.lastModified.toString() !== id);
+        this.listIdDeleteFiles.push(id);
+    };
+
+    //download file về máy tính
+    async downloadFile(id: string) {
+        //let file!: File;
+        const file: File = this.listFile.find(element => element?.lastModified.toString() == id);
+        if (!file) {
+            const fileAttach = this.lstFiles.find(element => element?.id == id);
+            if (fileAttach) {
+                await this.quanLyVonPhiService.downloadFile(fileAttach.fileUrl).toPromise().then(
+                    (data) => {
+                        fileSaver.saveAs(data, fileAttach.fileName);
+                    },
+                    err => {
+                        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+                    },
+                );
+            }
+        } else {
+            const blob = new Blob([file], { type: "application/octet-stream" });
+            fileSaver.saveAs(blob, file.name);
+        }
+    };
 
 }

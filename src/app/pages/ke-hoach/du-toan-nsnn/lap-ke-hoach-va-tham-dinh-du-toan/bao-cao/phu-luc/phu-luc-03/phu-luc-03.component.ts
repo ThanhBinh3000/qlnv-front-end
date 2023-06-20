@@ -13,6 +13,8 @@ import { UserService } from 'src/app/services/user.service';
 import { displayNumber, exchangeMoney, mulNumber, sumNumber } from 'src/app/Utility/func';
 import { AMOUNT, BOX_NUMBER_WIDTH, DON_VI_TIEN, LA_MA, MONEY_LIMIT } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
+import { NzUploadFile } from 'ng-zorro-antd/upload';
+import * as fileSaver from 'file-saver';
 
 export class ItemData {
 	id: any;
@@ -28,6 +30,8 @@ export class ItemData {
 	ttienNamDtoan: number;
 	sluongNamN1Td: number;
 	ttienNamN1Td: number;
+	chenhLech: number;
+	ghiChu: string;
 	stt: string;
 	level: any;
 	checked: boolean;
@@ -70,6 +74,28 @@ export class PhuLuc03Component implements OnInit {
 	userInfo: any;
 	amount = AMOUNT;
 	scrollX: string;
+	fileList: NzUploadFile[] = [];
+	listFile: File[] = [];                      // list file chua ten va id de hien tai o input
+	lstFiles: any[] = [];
+	listIdDeleteFiles: string[] = [];
+
+	beforeUpload = (file: NzUploadFile): boolean => {
+		this.fileList = this.fileList.concat(file);
+		console.log(this.fileList);
+		return false;
+	};
+
+	// them file vao danh sach
+	handleUpload(): void {
+		console.log(this.fileList);
+
+		this.fileList.forEach((file: any) => {
+			const id = file?.lastModified.toString();
+			this.lstFiles.push({ id: id, fileName: file?.name });
+			this.listFile.push(file);
+		});
+		this.fileList = [];
+	}
 
 	constructor(
 		private _modalRef: NzModalRef,
@@ -236,7 +262,30 @@ export class PhuLuc03Component implements OnInit {
 			xau = "-";
 		}
 		return xau;
+	};
+
+	//upload file
+	async uploadFile(file: File) {
+		// day file len server
+		const upfile: FormData = new FormData();
+		upfile.append('file', file);
+		upfile.append('folder', this.dataInfo.maDvi + '/' + this.dataInfo.maBcao);
+		const temp = await this.quanLyVonPhiService.uploadFile(upfile).toPromise().then(
+			(data) => {
+				const objfile = {
+					fileName: data.filename,
+					fileSize: data.size,
+					fileUrl: data.url,
+				}
+				return objfile;
+			},
+			err => {
+				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+			},
+		);
+		return temp;
 	}
+
 
 	// luu
 	async save(trangThai: string, lyDoTuChoi: string) {
@@ -285,6 +334,12 @@ export class PhuLuc03Component implements OnInit {
 		}
 
 		const request = JSON.parse(JSON.stringify(this.formDetail));
+		if (!request.fileDinhKems) {
+			request.fileDinhKems = [];
+		}
+		for (const iterator of this.listFile) {
+			request.fileDinhKems.push(await this.uploadFile(iterator));
+		}
 		request.lstCtietLapThamDinhs = lstCtietBcaoTemp;
 		request.trangThai = trangThai;
 
@@ -510,6 +565,7 @@ export class PhuLuc03Component implements OnInit {
 					this.lstCtietBcao[index].ttienNamDtoan = sumNumber([this.lstCtietBcao[index].ttienNamDtoan, item.ttienNamDtoan]);
 					this.lstCtietBcao[index].sluongNamN1Td = sumNumber([this.lstCtietBcao[index].sluongNamN1Td, item.sluongNamN1Td]);
 					this.lstCtietBcao[index].ttienNamN1Td = sumNumber([this.lstCtietBcao[index].ttienNamN1Td, item.ttienNamN1Td]);
+					this.lstCtietBcao[index].chenhLech = sumNumber([this.lstCtietBcao[index].chenhLech, item.chenhLech]);
 				}
 			})
 			stt = this.getHead(stt);
@@ -526,6 +582,7 @@ export class PhuLuc03Component implements OnInit {
 				this.total.uocThNamHtai = sumNumber([this.total.uocThNamHtai, item.uocThNamHtai]);
 				this.total.ttienNamDtoan = sumNumber([this.total.ttienNamDtoan, item.ttienNamDtoan]);
 				this.total.ttienNamN1Td = sumNumber([this.total.ttienNamN1Td, item.ttienNamN1Td]);
+				this.total.chenhLech = sumNumber([this.total.chenhLech, item.chenhLech]);
 			}
 		})
 	}
@@ -533,6 +590,7 @@ export class PhuLuc03Component implements OnInit {
 	changeModel(id: string): void {
 		this.editCache[id].data.ttienNamDtoan = mulNumber(this.editCache[id].data.dmucNamDtoan, this.editCache[id].data.sluongNamDtoan);
 		this.editCache[id].data.ttienNamN1Td = mulNumber(this.editCache[id].data.dmucNamDtoan, this.editCache[id].data.sluongNamN1Td);
+		this.editCache[id].data.chenhLech = this.editCache[id].data.ttienNamN1Td - this.editCache[id].data.ttienNamDtoan;
 
 	}
 
@@ -582,6 +640,34 @@ export class PhuLuc03Component implements OnInit {
 
 	handleCancel() {
 		this._modalRef.close();
-	}
+	};
+
+	deleteFile(id: string): void {
+		this.lstFiles = this.lstFiles.filter((a: any) => a.id !== id);
+		this.listFile = this.listFile.filter((a: any) => a?.lastModified.toString() !== id);
+		this.listIdDeleteFiles.push(id);
+	};
+
+	//download file về máy tính
+	async downloadFile(id: string) {
+		//let file!: File;
+		const file: File = this.listFile.find(element => element?.lastModified.toString() == id);
+		if (!file) {
+			const fileAttach = this.lstFiles.find(element => element?.id == id);
+			if (fileAttach) {
+				await this.quanLyVonPhiService.downloadFile(fileAttach.fileUrl).toPromise().then(
+					(data) => {
+						fileSaver.saveAs(data, fileAttach.fileName);
+					},
+					err => {
+						this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+					},
+				);
+			}
+		} else {
+			const blob = new Blob([file], { type: "application/octet-stream" });
+			fileSaver.saveAs(blob, file.name);
+		}
+	};
 
 }

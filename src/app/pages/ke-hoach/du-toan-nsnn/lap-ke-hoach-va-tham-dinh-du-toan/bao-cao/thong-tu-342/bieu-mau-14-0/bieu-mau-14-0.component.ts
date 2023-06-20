@@ -22,6 +22,8 @@ export class ItemData {
 	namUocThien: number;
 	namKh: number;
 	giaTriThamDinh: number;
+	chenhLech: number;
+	ghiChu: string;
 }
 @Component({
 	selector: 'app-bieu-mau-14-0',
@@ -380,7 +382,7 @@ export class BieuMau140Component implements OnInit {
 
 
 	changeModel(id: string): void {
-		// this.editCache[id].data.trungHanVonN2N2TongSo = sumNumber([this.editCache[id].data.trungHanVonN2N2ThuHoi, this.editCache[id].data.trungHanVonN2N2Cbi, this.editCache[id].data.trungHanVonN2N2Xdcb]);
+		this.editCache[id].data.chenhLech = this.editCache[id].data.giaTriThamDinh - this.editCache[id].data.namDtoan;
 		// this.editCache[id].data.trungHanVonN2N1TongSo = sumNumber([this.editCache[id].data.trungHanVonN2N1ThuHoi, this.editCache[id].data.trungHanVonN2N1Cbi, this.editCache[id].data.trungHanVonN2N1Xdcb]);
 		// this.editCache[id].data.khNstwTongSoNamN = sumNumber([this.editCache[id].data.khNstwThuHoiNamN, this.editCache[id].data.khNstwThanhToanNamN, this.editCache[id].data.khNstwChuanBiNamN]);
 	}

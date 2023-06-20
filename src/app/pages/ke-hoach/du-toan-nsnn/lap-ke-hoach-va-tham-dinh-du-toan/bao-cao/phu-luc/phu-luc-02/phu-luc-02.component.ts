@@ -1,6 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NzUploadFile } from 'ng-zorro-antd/upload';
+import * as fileSaver from 'file-saver';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogDanhSachVatTuHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-vat-tu-hang-hoa/dialog-danh-sach-vat-tu-hang-hoa.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
@@ -19,6 +21,8 @@ export class ItemData {
 	level: number;
 	// matHang: string;
 	// tenMatHang: string;
+	lstFiles: any[];
+	fileDinhKems: any[];
 	maDanhMuc: string;
 	tenDanhMuc: string;
 	dviTinh: string;
@@ -31,6 +35,11 @@ export class ItemData {
 	binhQuanNgoaiKho: number;
 	ttienNgoaiKho: number;
 	tongCong: number;
+	tdinhKhoSluong: number;
+	tdinhKhoTtien: number;
+	tdinhTcong: number;
+	chenhLech: number;
+	ghiChu: string;
 	checked: boolean;
 }
 
@@ -78,6 +87,29 @@ export class PhuLuc02Component implements OnInit {
 	isSynthetic: any;
 	amount = AMOUNT;
 	scrollX: string;
+	fileList: NzUploadFile[] = [];
+	listFile: File[] = [];                      // list file chua ten va id de hien tai o input
+	lstFiles: any[] = [];
+	listIdDeleteFiles: string[] = [];
+
+	beforeUpload = (file: NzUploadFile): boolean => {
+		this.fileList = this.fileList.concat(file);
+		console.log(this.fileList);
+		return false;
+	};
+
+	// them file vao danh sach
+	handleUpload(): void {
+		console.log(this.fileList);
+
+		this.fileList.forEach((file: any) => {
+			const id = file?.lastModified.toString();
+			this.lstFiles.push({ id: id, fileName: file?.name });
+			this.listFile.push(file);
+		});
+		this.fileList = [];
+	};
+
 
 	constructor(
 		private _modalRef: NzModalRef,
@@ -101,6 +133,7 @@ export class PhuLuc02Component implements OnInit {
 	async initialization() {
 		this.spinner.show();
 		this.formDetail = this.dataInfo?.data;
+		this.lstFiles = this.formDetail?.lstFiles;
 		this.namBcao = this.dataInfo?.namBcao;
 		this.maDviTao = this.dataInfo?.maDvi;
 		this.namTruoc = (Number(this.namBcao) - 1).toString();
@@ -210,6 +243,28 @@ export class PhuLuc02Component implements OnInit {
 		} else {
 			this.statusBtnOk = true;
 		}
+	};
+
+	//upload file
+	async uploadFile(file: File) {
+		// day file len server
+		const upfile: FormData = new FormData();
+		upfile.append('file', file);
+		upfile.append('folder', this.dataInfo.maDvi + '/' + this.dataInfo.maBcao);
+		const temp = await this.quanLyVonPhiService.uploadFile(upfile).toPromise().then(
+			(data) => {
+				const objfile = {
+					fileName: data.filename,
+					fileSize: data.size,
+					fileUrl: data.url,
+				}
+				return objfile;
+			},
+			err => {
+				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+			},
+		);
+		return temp;
 	}
 
 	// luu
@@ -248,6 +303,12 @@ export class PhuLuc02Component implements OnInit {
 		})
 
 		const request = JSON.parse(JSON.stringify(this.formDetail));
+		if (!request.fileDinhKems) {
+			request.fileDinhKems = [];
+		}
+		for (const iterator of this.listFile) {
+			request.fileDinhKems.push(await this.uploadFile(iterator));
+		}
 		request.lstCtietLapThamDinhs = lstCtietBcaoTemp;
 		if (lyDoTuChoi) {
 			request.lyDoTuChoi = lyDoTuChoi;
@@ -453,6 +514,9 @@ export class PhuLuc02Component implements OnInit {
 		this.editCache[id].data.ttienTaiKho = mulNumber(this.editCache[id].data.sluongTaiKho, this.editCache[id].data.dmucTaiKho);
 		this.editCache[id].data.ttienNgoaiKho = mulNumber(this.editCache[id].data.binhQuanNgoaiKho, this.editCache[id].data.sluongTaiKho);
 		this.editCache[id].data.tongCong = sumNumber([this.editCache[id].data.ttienNgoaiKho, this.editCache[id].data.ttienTaiKho]);
+		this.editCache[id].data.tdinhKhoTtien = mulNumber(this.editCache[id].data.tdinhKhoSluong, this.editCache[id].data.dmucTaiKho);
+		this.editCache[id].data.tongCong = sumNumber([this.editCache[id].data.tdinhKhoTtien, this.editCache[id].data.ttienNgoaiKho]);
+		this.editCache[id].data.chenhLech = this.editCache[id].data.tongCong - this.editCache[id].data.tongCong;
 	}
 
 	sum(stt: string) {
@@ -479,7 +543,10 @@ export class PhuLuc02Component implements OnInit {
 					this.lstCtietBcao[index].ttienNgoaiKho = sumNumber([this.lstCtietBcao[index].ttienNgoaiKho, item.ttienNgoaiKho])
 					// this.lstCtietBcao[index].binhQuanNgoaiKho = this.lstCtietBcao[index].ttienNgoaiKho / sumNumber([this.lstCtietBcao[index].sluongTaiKho, item.sluongTaiKho])
 					// this.lstCtietBcao[index].binhQuanNgoaiKho = sumNumber([this.lstCtietBcao[index].binhQuanNgoaiKho, item.binhQuanNgoaiKho])
-					this.lstCtietBcao[index].tongCong = this.lstCtietBcao[index].ttienNgoaiKho + this.lstCtietBcao[index].ttienTaiKho
+					this.lstCtietBcao[index].tongCong = this.lstCtietBcao[index].ttienNgoaiKho + this.lstCtietBcao[index].ttienTaiKho;
+					this.lstCtietBcao[index].tdinhKhoTtien = sumNumber([this.lstCtietBcao[index].tdinhKhoTtien, item.tdinhKhoTtien])
+					this.lstCtietBcao[index].tdinhTcong = sumNumber([this.lstCtietBcao[index].tdinhTcong, item.tdinhTcong]);
+					this.lstCtietBcao[index].chenhLech = sumNumber([this.lstCtietBcao[index].chenhLech, item.chenhLech]);
 				}
 			})
 			stt = this.getHead(stt);
@@ -503,16 +570,15 @@ export class PhuLuc02Component implements OnInit {
 				}
 				this.lstCtietBcao.forEach(item => {
 					if (this.getHead(item.stt) == stt) {
-						this.lstCtietBcao[index].thNamTruoc = sumNumber([this.lstCtietBcao[index].thNamTruoc, item.thNamTruoc])
-						this.lstCtietBcao[index].namDtoan = sumNumber([this.lstCtietBcao[index].namDtoan, item.namDtoan])
-						this.lstCtietBcao[index].namUocTh = sumNumber([this.lstCtietBcao[index].namUocTh, item.namUocTh])
-						// this.lstCtietBcao[index].sluongTaiKho = sumNumber([this.lstCtietBcao[index].sluongTaiKho, item.sluongTaiKho])
-						// this.lstCtietBcao[index].dmucTaiKho = sumNumber([this.lstCtietBcao[index].dmucTaiKho, item.dmucTaiKho])
-						this.lstCtietBcao[index].ttienTaiKho = sumNumber([this.lstCtietBcao[index].ttienTaiKho, item.ttienTaiKho])
+						this.lstCtietBcao[index].thNamTruoc = sumNumber([this.lstCtietBcao[index].thNamTruoc, item.thNamTruoc]);
+						this.lstCtietBcao[index].namDtoan = sumNumber([this.lstCtietBcao[index].namDtoan, item.namDtoan]);
+						this.lstCtietBcao[index].namUocTh = sumNumber([this.lstCtietBcao[index].namUocTh, item.namUocTh]);
+						this.lstCtietBcao[index].ttienTaiKho = sumNumber([this.lstCtietBcao[index].ttienTaiKho, item.ttienTaiKho]);
 						this.lstCtietBcao[index].ttienNgoaiKho = sumNumber([this.lstCtietBcao[index].ttienNgoaiKho, item.ttienNgoaiKho])
-						// this.lstCtietBcao[index].binhQuanNgoaiKho = sumNumber([this.lstCtietBcao[index].binhQuanNgoaiKho, item.binhQuanNgoaiKho])
-						// this.lstCtietBcao[index].binhQuanNgoaiKho = sumNumber([this.lstCtietBcao[index].binhQuanNgoaiKho, item.binhQuanNgoaiKho])
-						this.lstCtietBcao[index].tongCong = this.lstCtietBcao[index].ttienNgoaiKho + this.lstCtietBcao[index].ttienTaiKho
+						this.lstCtietBcao[index].tongCong = this.lstCtietBcao[index].ttienNgoaiKho + this.lstCtietBcao[index].ttienTaiKho;
+						this.lstCtietBcao[index].tdinhKhoTtien = sumNumber([this.lstCtietBcao[index].tdinhKhoTtien, item.tdinhKhoTtien]);
+						this.lstCtietBcao[index].tdinhTcong = sumNumber([this.lstCtietBcao[index].tdinhTcong, item.tdinhTcong]);
+						this.lstCtietBcao[index].chenhLech = sumNumber([this.lstCtietBcao[index].chenhLech, item.chenhLech]);
 					}
 				})
 				stt = this.getHead(stt);
@@ -536,7 +602,10 @@ export class PhuLuc02Component implements OnInit {
 				this.total.ttienNgoaiKho = sumNumber([this.total.ttienNgoaiKho, item.ttienNgoaiKho]);
 				this.total.tongCong = sumNumber([this.total.tongCong, item.tongCong]);
 				// this.total.binhQuanNgoaiKho = divNumber(this.total.ttienNgoaiKho, this.total.sluongTaiKho);
-				this.total.binhQuanNgoaiKho = sumNumber([this.total.binhQuanNgoaiKho, item.binhQuanNgoaiKho])
+				this.total.binhQuanNgoaiKho = sumNumber([this.total.binhQuanNgoaiKho, item.binhQuanNgoaiKho]);
+				this.total.tdinhKhoTtien = sumNumber([this.total.tdinhKhoTtien, item.tdinhKhoTtien]);
+				this.total.tdinhTcong = sumNumber([this.total.tdinhTcong, item.tdinhTcong]);
+				this.total.chenhLech = sumNumber([this.total.chenhLech, item.chenhLech]);
 			}
 		})
 	}
@@ -735,6 +804,34 @@ export class PhuLuc02Component implements OnInit {
 		this.lstCtietBcao.forEach(item => {
 			item.checked = this.allChecked;
 		})
+	};
+
+	deleteFile(id: string): void {
+		this.lstFiles = this.lstFiles.filter((a: any) => a.id !== id);
+		this.listFile = this.listFile.filter((a: any) => a?.lastModified.toString() !== id);
+		this.listIdDeleteFiles.push(id);
+	};
+
+	//download file về máy tính
+	async downloadFile(id: string) {
+		//let file!: File;
+		const file: File = this.listFile.find(element => element?.lastModified.toString() == id);
+		if (!file) {
+			const fileAttach = this.lstFiles.find(element => element?.id == id);
+			if (fileAttach) {
+				await this.quanLyVonPhiService.downloadFile(fileAttach.fileUrl).toPromise().then(
+					(data) => {
+						fileSaver.saveAs(data, fileAttach.fileName);
+					},
+					err => {
+						this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+					},
+				);
+			}
+		} else {
+			const blob = new Blob([file], { type: "application/octet-stream" });
+			fileSaver.saveAs(blob, file.name);
+		}
 	}
 }
 

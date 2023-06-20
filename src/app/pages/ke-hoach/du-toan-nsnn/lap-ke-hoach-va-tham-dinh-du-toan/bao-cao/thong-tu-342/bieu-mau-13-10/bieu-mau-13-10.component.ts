@@ -8,7 +8,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.service';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
-import { displayNumber, exchangeMoney, sumNumber } from 'src/app/Utility/func';
+import { displayNumber, exchangeMoney, mulNumber, sumNumber } from 'src/app/Utility/func';
 import { AMOUNT, BOX_NUMBER_WIDTH, DON_VI_TIEN, LA_MA } from "src/app/Utility/utils";
 import * as uuid from "uuid";
 
@@ -22,12 +22,22 @@ export class ItemData {
 	namSoDtuong: number;
 	namDtoanGiao: number;
 	namUocThien: number;
-	khSoDtuong: number;
-	khMucTcap: number;
-	khDtoanNam: number;
-	gtriTdinhSoDtuong: number;
-	gtriTdinhMucTcap: number;
-	gtriTdinhDtoanNam: number;
+	// khSoDtuong: number;
+	// khMucTcap: number;
+	// khDtoanNam: number;
+	// gtriTdinhSoDtuong: number;
+	// gtriTdinhMucTcap: number;
+	// gtriTdinhDtoanNam: number;
+	chenhLech: number;
+	ghiChu: string;
+
+
+	khDtoanNamSluong: number;
+	khDtoanNamDgia: number;
+	khDtoanNamTtien: number;
+	gtriTdinhSluong: number;
+	gtriTdinhDgia: number;
+	gtriTdinhTtien: number;
 }
 
 @Component({
@@ -211,9 +221,9 @@ export class BieuMau1310Component implements OnInit {
 
 		if (!this.viewAppraisalValue) {
 			lstCtietBcaoTemp?.forEach(item => {
-				item.gtriTdinhSoDtuong = item.khSoDtuong;
-				item.gtriTdinhMucTcap = item.khMucTcap;
-				item.gtriTdinhDtoanNam = item.khDtoanNam;
+				item.gtriTdinhSluong = item.khDtoanNamSluong;
+				item.gtriTdinhDgia = item.khDtoanNamDgia;
+				item.gtriTdinhTtien = item.khDtoanNamTtien;
 			})
 		}
 
@@ -436,11 +446,10 @@ export class BieuMau1310Component implements OnInit {
 
 
 	changeModel(id: string): void {
-		// this.editCache[id].data.ncauChiChiaRaDtuPtrien = sumNumber([this.editCache[id].data.ncauChiChiaRaChiCs1, this.editCache[id].data.ncauChiChiaRaChiMoi1]);
-		// this.editCache[id].data.ncauChiChiaRaChiTx = sumNumber([this.editCache[id].data.ncauChiChiaRaChiCs2, this.editCache[id].data.ncauChiChiaRaChiMoi2]);
-		// this.editCache[id].data.ncauChiTrongDoChiCs = sumNumber([this.editCache[id].data.ncauChiChiaRaChiCs1, this.editCache[id].data.ncauChiChiaRaChiCs2]);
-		// this.editCache[id].data.ncauChiTrongDoChiMoi = sumNumber([this.editCache[id].data.ncauChiChiaRaChiMoi1, this.editCache[id].data.ncauChiChiaRaChiMoi2]);
-		// this.editCache[id].data.ncauChiTongSo = sumNumber([this.editCache[id].data.ncauChiTrongDoChiCs, this.editCache[id].data.ncauChiTrongDoChiMoi]);
+		this.editCache[id].data.khDtoanNamTtien = mulNumber(this.editCache[id].data.khDtoanNamSluong, this.editCache[id].data.khDtoanNamDgia);
+		this.editCache[id].data.gtriTdinhTtien = mulNumber(this.editCache[id].data.gtriTdinhSluong, this.editCache[id].data.gtriTdinhTtien);
+		this.editCache[id].data.chenhLech = this.editCache[id].data.gtriTdinhTtien - this.editCache[id].data.khDtoanNamTtien;
+
 	}
 
 	sum(stt: string) {
@@ -462,12 +471,12 @@ export class BieuMau1310Component implements OnInit {
 					this.lstCtietBcao[index].namSoDtuong = sumNumber([this.lstCtietBcao[index].namSoDtuong, item.namSoDtuong])
 					this.lstCtietBcao[index].namDtoanGiao = sumNumber([this.lstCtietBcao[index].namDtoanGiao, item.namDtoanGiao])
 					this.lstCtietBcao[index].namUocThien = sumNumber([this.lstCtietBcao[index].namUocThien, item.namUocThien])
-					this.lstCtietBcao[index].khSoDtuong = sumNumber([this.lstCtietBcao[index].khSoDtuong, item.khSoDtuong])
-					this.lstCtietBcao[index].khMucTcap = sumNumber([this.lstCtietBcao[index].khMucTcap, item.khMucTcap])
-					this.lstCtietBcao[index].khDtoanNam = sumNumber([this.lstCtietBcao[index].khDtoanNam, item.khDtoanNam])
-					this.lstCtietBcao[index].gtriTdinhSoDtuong = sumNumber([this.lstCtietBcao[index].gtriTdinhSoDtuong, item.gtriTdinhSoDtuong])
-					this.lstCtietBcao[index].gtriTdinhMucTcap = sumNumber([this.lstCtietBcao[index].gtriTdinhMucTcap, item.gtriTdinhMucTcap])
-					this.lstCtietBcao[index].gtriTdinhDtoanNam = sumNumber([this.lstCtietBcao[index].gtriTdinhDtoanNam, item.gtriTdinhDtoanNam])
+					this.lstCtietBcao[index].khDtoanNamSluong = sumNumber([this.lstCtietBcao[index].khDtoanNamSluong, item.khDtoanNamSluong])
+					this.lstCtietBcao[index].khDtoanNamDgia = sumNumber([this.lstCtietBcao[index].khDtoanNamDgia, item.khDtoanNamDgia])
+					this.lstCtietBcao[index].khDtoanNamTtien = sumNumber([this.lstCtietBcao[index].khDtoanNamTtien, item.khDtoanNamTtien])
+					this.lstCtietBcao[index].gtriTdinhSluong = sumNumber([this.lstCtietBcao[index].gtriTdinhSluong, item.gtriTdinhSluong])
+					this.lstCtietBcao[index].gtriTdinhDgia = sumNumber([this.lstCtietBcao[index].gtriTdinhDgia, item.gtriTdinhDgia])
+					this.lstCtietBcao[index].gtriTdinhTtien = sumNumber([this.lstCtietBcao[index].gtriTdinhTtien, item.gtriTdinhTtien])
 				}
 			})
 			stt = this.getHead(stt);
@@ -483,12 +492,12 @@ export class BieuMau1310Component implements OnInit {
 				this.total.namSoDtuong = sumNumber([this.total.namSoDtuong, item.namSoDtuong]);
 				this.total.namDtoanGiao = sumNumber([this.total.namDtoanGiao, item.namDtoanGiao]);
 				this.total.namUocThien = sumNumber([this.total.namUocThien, item.namUocThien]);
-				this.total.khSoDtuong = sumNumber([this.total.khSoDtuong, item.khSoDtuong]);
-				this.total.khMucTcap = sumNumber([this.total.khMucTcap, item.khMucTcap]);
-				this.total.khDtoanNam = sumNumber([this.total.khDtoanNam, item.khDtoanNam]);
-				this.total.gtriTdinhSoDtuong = sumNumber([this.total.gtriTdinhSoDtuong, item.gtriTdinhSoDtuong]);
-				this.total.gtriTdinhMucTcap = sumNumber([this.total.gtriTdinhMucTcap, item.gtriTdinhMucTcap]);
-				this.total.gtriTdinhDtoanNam = sumNumber([this.total.gtriTdinhDtoanNam, item.gtriTdinhDtoanNam]);
+				this.total.khDtoanNamSluong = sumNumber([this.total.khDtoanNamSluong, item.khDtoanNamSluong]);
+				this.total.khDtoanNamDgia = sumNumber([this.total.khDtoanNamDgia, item.khDtoanNamDgia]);
+				this.total.khDtoanNamTtien = sumNumber([this.total.khDtoanNamTtien, item.khDtoanNamTtien]);
+				this.total.gtriTdinhSluong = sumNumber([this.total.gtriTdinhSluong, item.gtriTdinhSluong]);
+				this.total.gtriTdinhDgia = sumNumber([this.total.gtriTdinhDgia, item.gtriTdinhDgia]);
+				this.total.gtriTdinhTtien = sumNumber([this.total.gtriTdinhTtien, item.gtriTdinhTtien]);
 			}
 		})
 	}

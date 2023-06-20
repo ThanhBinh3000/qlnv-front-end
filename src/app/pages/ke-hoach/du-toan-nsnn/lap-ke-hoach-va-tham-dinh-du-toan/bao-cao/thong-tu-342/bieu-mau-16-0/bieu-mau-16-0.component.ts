@@ -32,6 +32,8 @@ export class ItemData {
 	tdinhTtien: number;
 	checked: boolean;
 	isDelete: false;
+	chenhLech: number;
+	ghiChu: string;
 }
 
 @Component({
@@ -227,6 +229,8 @@ export class BieuMau160Component implements OnInit {
 			tdinhTtien: 0,
 			checked: false,
 			isDelete: false,
+			chenhLech: 0,
+			ghiChu: ""
 		};
 
 		this.lstCtietBcao.splice(id, 0, item);
@@ -433,7 +437,7 @@ export class BieuMau160Component implements OnInit {
 	}
 
 	changeModel(id: string): void {
-
+		this.editCache[id].data.chenhLech = this.editCache[id].data.tdinhTtien - this.editCache[id].data.khTtien
 	}
 
 

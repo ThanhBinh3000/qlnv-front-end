@@ -22,6 +22,7 @@ export class ItemData {
 	namUocThien: number;
 	namKh: number;
 	giaTriThamDinh: number;
+	chenhLech: number;
 	ghiChu: string;
 }
 
@@ -193,6 +194,10 @@ export class BieuMau138Component implements OnInit {
 		} else {
 			this.statusBtnOk = true;
 		}
+	}
+
+	changeModel(id: string): void {
+		this.editCache[id].data.chenhLech = sumNumber([this.editCache[id].data.giaTriThamDinh, this.editCache[id].data.namKh]);
 	}
 
 	// luu

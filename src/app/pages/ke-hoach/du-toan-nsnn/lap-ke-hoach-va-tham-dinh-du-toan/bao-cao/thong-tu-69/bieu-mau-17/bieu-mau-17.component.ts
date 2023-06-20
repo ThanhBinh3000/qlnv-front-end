@@ -21,6 +21,7 @@ export class ItemData {
     ncauNamDtoanN: number;
     ncauNamN1: number;
     ncauNamN2: number;
+    ghiChu: string;
 }
 
 @Component({

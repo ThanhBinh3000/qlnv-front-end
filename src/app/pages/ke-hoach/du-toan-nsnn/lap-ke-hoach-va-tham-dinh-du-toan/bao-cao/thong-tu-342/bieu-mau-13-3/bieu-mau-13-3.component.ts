@@ -34,6 +34,7 @@ export class ItemData {
 	kphiThienDtoanTso: number;
 	kphiThienDtoanNsnn: number;
 	kphiThienDtoanNkhac: number;
+	ghiChu: string;
 }
 
 

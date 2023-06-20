@@ -28,6 +28,7 @@
                         <th rowspan="4" style="width: 200px;"> Hoạt động chủ yếu</th>
                         <th rowspan="4" style="width: 200px;">Nguồn kinh phí</th>
                         <th colspan="12">Nhu cầu chi</th>
+                        <th rowspan="4" style="width: 200px;">Ghi chú</th>
                         <th rowspan="4" style="width: 60px;" *ngIf="status" nzRight></th>
                     </tr>
                     <tr>
@@ -72,6 +73,7 @@
                         <th>16=17+18</th>
                         <th>17</th>
                         <th>18</th>
+                        <th>19</th>
                         <th *ngIf="status" nzRight></th>
                     </tr>
                 </thead>
@@ -100,6 +102,7 @@
                             <td>{{displayValue(data.ncauChiChiaRaChiDtqg)}}</td>
                             <td>{{displayValue(data.ncauChiChiaRaChiCs3)}}</td>
                             <td>{{displayValue(data.ncauChiChiaRaChiMoi3)}}</td>
+                            <td>{{data.ghiChu}}</td>
                             <td *ngIf="status" nzRight>
                                 <i *ngIf="checkEdit(data.stt)" class="fa fa-pencil" (click)="startEdit(data.id)"></i>
                             </td>
@@ -173,6 +176,9 @@
                                     [(ngModel)]="editCache[data.id].data.ncauChiChiaRaChiMoi3"
                                     (ngModelChange)="changeModel(data.id)" [options]="amount" />
                             </td>
+                            <td>
+                                <input class="search-input" [(ngModel)]="editCache[data.id].data.ghiChu" />
+                            </td>
                             <td nzRight>
                                 <a (click)="saveEdit(data.id)" class="save">Lưu</a>
                                 <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
@@ -201,6 +207,7 @@
                         <td>{{displayValue(total.ncauChiChiaRaChiDtqg)}}</td>
                         <td>{{displayValue(total.ncauChiChiaRaChiCs3)}}</td>
                         <td>{{displayValue(total.ncauChiChiaRaChiMoi3)}}</td>
+                        <td></td>
                         <td *ngIf="status" nzRight></td>
                     </tr>
                 </tbody>

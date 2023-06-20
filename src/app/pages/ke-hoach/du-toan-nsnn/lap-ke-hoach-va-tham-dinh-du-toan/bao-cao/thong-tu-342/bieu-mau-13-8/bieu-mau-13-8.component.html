@@ -27,6 +27,8 @@
 						<th colspan="2">Năm {{namBcao - 1}} (năm hiện hành)</th>
 						<th rowspan="2">Dự toán năm {{namBcao}}</th>
 						<th rowspan="2" *ngIf="viewAppraisalValue">Giá trị thẩm định</th>
+						<th rowspan="2" *ngIf="viewAppraisalValue">Chênh lệch giữa thẩm định của cấp trên à nhu cầu của
+							đơn vị cấp dưới</th>
 						<th rowspan="2" style="width: 250px;">Ghi chú</th>
 						<th rowspan="2" style="width: 60px;" *ngIf="status || viewAppraisalValue" nzRight></th>
 					</tr>
@@ -41,8 +43,9 @@
 						<th>2</th>
 						<th>3</th>
 						<th>4</th>
-						<th *ngIf="viewAppraisalValue">4A</th>
-						<th>5</th>
+						<th *ngIf="viewAppraisalValue">5</th>
+						<th *ngIf="viewAppraisalValue">6 = 5 -4</th>
+						<th>7</th>
 						<th *ngIf="status || viewAppraisalValue" nzRight></th>
 					</tr>
 				</thead>
@@ -60,6 +63,7 @@
 							<td>{{ displayValue(data.namUocThien) }}</td>
 							<td>{{ displayValue(data.namKh) }}</td>
 							<td *ngIf="viewAppraisalValue">{{ displayValue(data.giaTriThamDinh) }}</td>
+							<td *ngIf="viewAppraisalValue">{{ displayValue(data.chenhLech) }}</td>
 							<td>{{ data.ghiChu }}</td>
 							<td *ngIf="status || viewAppraisalValue" nzRight>
 								<i *ngIf="checkEdit(data.stt)" class="fa fa-pencil" (click)="startEdit(data.id)"></i>
@@ -80,11 +84,15 @@
 								<td>
 									<ng-container *ngIf="data.stt == '0.1.6'; else showAv1">
 										<input class="money-input" currencyMask
-											[(ngModel)]="editCache[data.id].data.giaTriThamDinh" [options]="amount" />
+											[(ngModel)]="editCache[data.id].data.giaTriThamDinh" [options]="amount"
+											(ngModelChange)="changeModel(data.id)" [options]="amount" />
 									</ng-container>
 									<ng-template #showAv1>
 										{{editCache[data.id].data.giaTriThamDinh}}
 									</ng-template>
+								</td>
+								<td>
+									{{displayValue(editCache[data.id].data.chenhLech)}}
 								</td>
 								<td>{{ data.ghiChu }}</td>
 							</ng-container>
@@ -113,6 +121,9 @@
 								<td *ngIf="viewAppraisalValue">
 									<input class="money-input" currencyMask
 										[(ngModel)]="editCache[data.id].data.giaTriThamDinh" [options]="amount" />
+								</td>
+								<td *ngIf="viewAppraisalValue">
+									{{displayValue(editCache[data.id].data.chenhLech)}}
 								</td>
 								<td>
 									<input nz-input class="search__input"

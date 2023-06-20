@@ -25,6 +25,7 @@
 					<th colspan="11">Dự toán năm {{namBaoCao}}</th>
 					<th colspan="13">Ước thực hiện năm {{namBaoCao}}</th>
 					<th colspan="11">Dự toán năm {{namKeHoach}}</th>
+					<th rowspan="4">Ghi chú</th>
 					<th rowspan="4" style="width: 50px;" *ngIf="status" nzRight></th>
 					<th rowspan="4" style="width: 60px;" *ngIf="status" nzRight></th>
 					<th rowspan="4" style="width: 50px;" *ngIf="status" nzRight></th>
@@ -123,6 +124,7 @@
 					<th>33</th>
 					<th>34</th>
 					<th>35</th>
+					<th></th>
 					<th *ngIf="status" nzRight></th>
 					<th *ngIf="status" nzRight></th>
 					<th *ngIf="status" nzRight></th>
@@ -165,6 +167,7 @@
 					<th>{{displayValue(total.namKhKphiSnDvu)}}</th>
 					<th>{{displayValue(total.namKhKphiPhiDlai)}}</th>
 					<th>{{displayValue(total.namKhKphiHphap)}}</th>
+					<th></th>
 					<th *ngIf="status" nzRight></th>
 					<th *ngIf="status" nzRight></th>
 					<th *ngIf="status" nzRight></th>
@@ -216,6 +219,7 @@
 						<td>{{displayValue(data.namKhKphiSnDvu)}}</td>
 						<td>{{displayValue(data.namKhKphiPhiDlai)}}</td>
 						<td>{{displayValue(data.namKhKphiHphap)}}</td>
+						<td>{{data.ghiChu}}</td>
 						<td *ngIf="status" nzRight>
 							<i *ngIf="checkDelete(data.stt)" class="fa fa-trash-o do"
 								(click)="deleteLine(data.stt)"></i>
@@ -396,6 +400,9 @@
 						<td>
 							<input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.namKhKphiHphap"
 								[options]="amount" />
+						</td>
+						<td>
+							<input class="search__input" [(ngModel)]="editCache[data.id].data.ghiChu" />
 						</td>
 						<td *ngIf="status" nzRight>
 							<i *ngIf="checkDelete(data.stt)" class="fa fa-trash-o do"

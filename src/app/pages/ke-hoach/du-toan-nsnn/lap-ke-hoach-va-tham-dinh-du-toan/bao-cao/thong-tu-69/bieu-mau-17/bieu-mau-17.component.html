@@ -27,6 +27,7 @@
 						<th>Nhu cầu dự toán năm {{namBcao}}</th>
 						<th>Nhu cầu năm {{namBcao + 1}}</th>
 						<th>Nhu cầu năm {{namBcao + 2}}</th>
+						<th>Ghi chú</th>
 						<th style="width: 60px;" *ngIf="status" nzRight></th>
 					</tr>
 					<tr>
@@ -36,6 +37,7 @@
 						<th>{{displayValue(total.ncauNamDtoanN)}}</th>
 						<th>{{displayValue(total.ncauNamN1)}}</th>
 						<th>{{displayValue(total.ncauNamN2)}}</th>
+						<th></th>
 						<th *ngIf="status" nzRight></th>
 					</tr>
 					<tr>
@@ -45,6 +47,7 @@
 						<th>{{displayValue(chiCoSo.ncauNamDtoanN)}}</th>
 						<th>{{displayValue(chiCoSo.ncauNamN1)}}</th>
 						<th>{{displayValue(chiCoSo.ncauNamN2)}}</th>
+						<th>{{chiCoSo.ghiChu}}</th>
 						<th *ngIf="status" nzRight></th>
 					</tr>
 					<tr>
@@ -54,6 +57,7 @@
 						<th>{{displayValue(chiMoi.ncauNamDtoanN)}}</th>
 						<th>{{displayValue(chiMoi.ncauNamN1)}}</th>
 						<th>{{displayValue(chiMoi.ncauNamN2)}}</th>
+						<th>{{chiMoi.ghiChu}}</th>
 						<th *ngIf="status" nzRight></th>
 					</tr>
 				</thead>
@@ -70,6 +74,7 @@
 							<td>{{displayValue(data.ncauNamDtoanN)}}</td>
 							<td>{{displayValue(data.ncauNamN1)}}</td>
 							<td>{{displayValue(data.ncauNamN2)}}</td>
+							<td>{{data.ghiChu}}</td>
 							<td *ngIf="status" nzRight>
 								<i *ngIf="checkEdit(data.stt)" class="fa fa-pencil" (click)="startEdit(data.id)"></i>
 							</td>
@@ -100,6 +105,9 @@
 								<input class="money-input" currencyMask [options]="amount"
 									[(ngModel)]="editCache[data.id].data.ncauNamN2"
 									[class]="(editCache[data.id].data.ncauNamN2 || editCache[data.id].data.ncauNamN2 ===0) ?'' : 'input-error-validate'" />
+							</td>
+							<td>
+								<input class="search-input" [(ngModel)]="editCache[data.id].data.ghiChu" />
 							</td>
 							<td nzRight>
 								<a (click)="saveEdit(data.id)" class="save">Lưu</a>
