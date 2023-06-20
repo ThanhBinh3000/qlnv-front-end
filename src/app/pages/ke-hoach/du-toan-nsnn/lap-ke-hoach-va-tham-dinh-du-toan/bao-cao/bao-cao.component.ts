@@ -67,6 +67,7 @@ export class ItemData {
 export class BaoCao {
     id: string;
     namBcao: number;
+    lan: number;
     lstBcaoDviTrucThuocs: any[];
     lstLapThamDinhs: ItemData[];
     lstFiles: any[];
@@ -254,6 +255,7 @@ export class BaoCaoComponent implements OnInit {
             }
         } else {
             this.baoCao.namBcao = this.data?.namHienTai;
+            this.baoCao.lan = this.data?.lan;
             this.baoCao.maDvi = this.data?.maDvi ? this.data?.maDvi : this.userInfo?.MA_DVI;
             this.baoCao.lstLapThamDinhs = this.data?.lstLapThamDinhs ? this.data?.lstLapThamDinhs : [];
             this.baoCao.lstBcaoDviTrucThuocs = this.data?.lstDviTrucThuoc ? this.data?.lstDviTrucThuoc : [];

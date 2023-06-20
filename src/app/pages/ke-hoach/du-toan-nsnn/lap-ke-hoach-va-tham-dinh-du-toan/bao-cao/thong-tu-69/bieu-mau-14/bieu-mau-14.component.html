@@ -26,6 +26,7 @@
                     <th>Nhu cầu năm dự toán {{namBcao}}</th>
                     <th>Nhu cầu năm {{namBcao + 1}}</th>
                     <th>Nhu cầu năm {{namBcao + 2}}</th>
+                    <th>Ghi chú</th>
                     <th style="width: 60px;" *ngIf="status" nzRight></th>
                 </tr>
             </thead>
@@ -42,6 +43,7 @@
                         <td>{{ displayValue(data.ncauNamDtoanN) }}</td>
                         <td>{{ displayValue(data.ncauNamN1) }}</td>
                         <td>{{ displayValue(data.ncauNamN2) }}</td>
+                        <td>{{ data.ghiChu}}</td>
                         <td *ngIf="status" nzRight>
                             <i *ngIf="checkEdit(data.stt)" class="fa fa-pencil" (click)="startEdit(data.id)"></i>
                         </td>
@@ -69,6 +71,9 @@
                             <input class="money-input" currencyMask [options]="amount"
                                 [(ngModel)]="editCache[data.id].data.ncauNamN2" />
                         </td>
+                        <td>
+                            <input class="search__input" [(ngModel)]="editCache[data.id].data.ghiChu" />
+                        </td>
                         <td nzRight>
                             <a (click)="saveEdit(data.id)" class="save">Lưu</a>
                             <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
@@ -85,6 +90,33 @@
         <div nz-col nzSpan="24">
             <label class="search__label">Thuyết minh</label>
             <textarea rows="2" nz-input [(ngModel)]="thuyetMinh" [disabled]="!status"></textarea>
+        </div>
+    </div>
+    <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+        <div nz-col class="gutter-row" [nzSpan]="12">
+            <nz-table nzBordered class="table__body">
+                <thead>
+                    <tr>
+                        <th nzWidth="7%">STT</th>
+                        <th>Tên file</th>
+                        <th nzWidth="10%"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let data of lstFiles; let i = index">
+                        <td>{{ i + 1 }} </td>
+                        <td>{{ data.fileName }}</td>
+                        <td>
+                            <a (click)="downloadFile(data.id)">
+                                <i class="fa fa-eye"></i>
+                            </a>
+                            <a (click)="deleteFile(data.id)">
+                                <i class="fa fa-trash-o do"></i>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </nz-table>
         </div>
     </div>
 </div>

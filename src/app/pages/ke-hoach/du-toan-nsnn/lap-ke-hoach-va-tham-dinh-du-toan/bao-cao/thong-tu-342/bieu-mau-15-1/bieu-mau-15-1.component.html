@@ -27,6 +27,7 @@
 						<th colspan="6">Dự toán năm {{namBaoCao -1}} (năm hiện hành)</th>
 						<th colspan="7">Ước thực hiện năm {{namBaoCao -1}} (năm hiện hành)</th>
 						<th colspan="6">Dự toán năm {{namBaoCao}} (năm kế hoạch)</th>
+						<th rowspan="3">Ghi chú</th>
 						<th rowspan="4" *ngIf="status" style="width: 60px;" nzRight></th>
 					</tr>
 					<tr>
@@ -96,6 +97,7 @@
 						<th>20</th>
 						<th>21</th>
 						<th>22</th>
+						<th></th>
 						<th></th>
 					</tr>
 				</thead>
@@ -185,6 +187,9 @@
 							</td>
 							<td>
 								{{displayValue(data.namKhKhac)}}
+							</td>
+							<td>
+								{{data.ghiChu}}
 							</td>
 							<td *ngIf="status" nzRight>
 								<i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
@@ -315,6 +320,9 @@
 								<input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.namKhKhac"
 									(ngModelChange)="changeModel(data.id)" [options]="amount" />
 							</td>
+							<td>
+								<input class="search__input" [(ngModel)]="editCache[data.id].data.ghiChu" />
+							</td>
 							<td nzRight>
 								<a (click)="saveEdit(data.id)" class="save">Lưu</a>
 								<a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
@@ -354,6 +362,7 @@
 						<td>{{displayValue(total.namKhPcapLuong)}}</td>
 						<td>{{displayValue(total.namKhDgopLuong)}}</td>
 						<td>{{displayValue(total.namKhKhac)}}</td>
+						<td></td>
 						<td *ngIf="status" nzRight></td>
 					</tr>
 				</tbody>

@@ -35,6 +35,7 @@
 					<th rowspan="2">Lũy kế vấp vốn đến {{namTruoc}}</th>
 					<th rowspan="2">Kế hoạnh vốn năm {{namBcao}}</th>
 					<th *ngIf="viewAppraisalValue" rowspan="2">Kế hoạnh vốn năm {{namBcao}} (Thẩm định)</th>
+					<th *ngIf="viewAppraisalValue" rowspan="2">Chênh lệch</th>
 					<th rowspan="2">Kế hoạch năm {{namDtoanOne}}</th>
 					<th rowspan="2">Kế hoạch năm {{namDtoanTwo}}</th>
 					<th rowspan="2" style="width: 250px;">Ghi chú</th>
@@ -91,6 +92,9 @@
 					<th *ngIf="viewAppraisalValue">
 						{{displayValue(total.keHoachVonTd)}}
 					</th>
+					<th *ngIf="viewAppraisalValue">
+						{{displayValue(total.chenhLech)}}
+					</th>
 					<!-- <th>{{displayValue(total.keHoachVonTd)}}</th> -->
 					<th>{{displayValue(total.keHoachNamDtN1)}}</th>
 					<th>{{displayValue(total.keHoachNamDtN2)}}</th>
@@ -124,6 +128,9 @@
 						<td *ngIf="viewAppraisalValue">
 							{{displayValue(data.keHoachVonTd)}}
 						</td>
+						<th *ngIf="viewAppraisalValue">
+							{{displayValue(data.chenhLech)}}
+						</th>
 						<!-- <td>{{displayValue(data.keHoachVonTd)}}</td> -->
 						<td>{{displayValue(data.keHoachNamDtN1)}}</td>
 						<td>{{displayValue(data.keHoachNamDtN2)}}</td>
@@ -162,6 +169,10 @@
 							<td>
 								<input class="money-input" currencyMask
 									[(ngModel)]="editCache[data.id].data.keHoachVonTd"
+									(ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
+							</td>
+							<td>
+								<input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.chenhLech"
 									(ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
 							</td>
 							<td>{{displayValue(data.keHoachNamDtN1)}}</td>
@@ -231,6 +242,10 @@
 								<input class="money-input" currencyMask
 									[(ngModel)]="editCache[data.id].data.keHoachVonTd" [options]="amount" />
 							</td>
+							<td *ngIf="viewAppraisalValue">
+								<input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.chenhLech"
+									[options]="amount" />
+							</td>
 							<td>
 								<input class="money-input" currencyMask
 									[(ngModel)]="editCache[data.id].data.keHoachNamDtN1" [options]="amount" />
@@ -264,6 +279,33 @@
 		<div nz-col nzSpan="24">
 			<label class="search__label">Thuyết minh</label>
 			<textarea rows="2" nz-input [(ngModel)]="thuyetMinh" [disabled]="!status"></textarea>
+		</div>
+	</div>
+	<div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+		<div nz-col class="gutter-row" [nzSpan]="12">
+			<nz-table nzBordered class="table__body">
+				<thead>
+					<tr>
+						<th nzWidth="7%">STT</th>
+						<th>Tên file</th>
+						<th nzWidth="10%"></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr *ngFor="let data of lstFiles; let i = index">
+						<td>{{ i + 1 }} </td>
+						<td>{{ data.fileName }}</td>
+						<td>
+							<a (click)="downloadFile(data.id)">
+								<i class="fa fa-eye"></i>
+							</a>
+							<a (click)="deleteFile(data.id)">
+								<i class="fa fa-trash-o do"></i>
+							</a>
+						</td>
+					</tr>
+				</tbody>
+			</nz-table>
 		</div>
 	</div>
 </div>

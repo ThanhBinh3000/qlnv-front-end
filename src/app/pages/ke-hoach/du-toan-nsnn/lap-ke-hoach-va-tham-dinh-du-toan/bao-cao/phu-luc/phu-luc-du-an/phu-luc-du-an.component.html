@@ -22,6 +22,7 @@
 				<tr>
 					<th rowspan="4" nzWidth="50px" nzLeft>STT</th>
 					<th rowspan="4" nzWidth="350px" nzLeft>Danh mục dự án</th>
+					<th rowspan="4">Mã dự án</th>
 					<th rowspan="4">Nhóm dự án</th>
 					<th rowspan="4">Địa điểm XD</th>
 					<th rowspan="4">Năng lực thiết kế</th>
@@ -78,6 +79,7 @@
 				<tr>
 					<th nzLeft>1</th>
 					<th nzLeft>2</th>
+					<th></th>
 					<th>3</th>
 					<th>4</th>
 					<th>5</th>
@@ -113,6 +115,7 @@
 				<tr>
 					<th nzLeft></th>
 					<th nzLeft>TỔNG SỐ</th>
+					<th></th>
 					<th></th>
 					<th></th>
 					<th></th>
@@ -155,6 +158,7 @@
 						<td nzLeft>
 							{{data.tenDanhMuc}}
 						</td>
+						<td>{{data.maDuAn}}</td>
 						<td>{{data.nhomDuAn}}</td>
 						<td>{{data.diaDiemXd}}</td>
 						<td>{{data.nangLucTke}}</td>
@@ -205,6 +209,9 @@
 								<input nz-input class="search__input"
 									[(ngModel)]="editCache[data.id].data.tenDanhMuc" />
 							</ng-template>
+						</td>
+						<td>
+							<input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.maDuAn" />
 						</td>
 						<td>
 							<input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.nhomDuAn" />
@@ -343,6 +350,33 @@
 		<div nz-col nzSpan="24">
 			<label class="search__label">Thuyết minh</label>
 			<textarea rows="2" nz-input [(ngModel)]="thuyetMinh" [disabled]="!status"></textarea>
+		</div>
+	</div>
+	<div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+		<div nz-col class="gutter-row" [nzSpan]="12">
+			<nz-table nzBordered class="table__body">
+				<thead>
+					<tr>
+						<th nzWidth="7%">STT</th>
+						<th>Tên file</th>
+						<th nzWidth="10%"></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr *ngFor="let data of lstFiles; let i = index">
+						<td>{{ i + 1 }} </td>
+						<td>{{ data.fileName }}</td>
+						<td>
+							<a (click)="downloadFile(data.id)">
+								<i class="fa fa-eye"></i>
+							</a>
+							<a (click)="deleteFile(data.id)">
+								<i class="fa fa-trash-o do"></i>
+							</a>
+						</td>
+					</tr>
+				</tbody>
+			</nz-table>
 		</div>
 	</div>
 </div>

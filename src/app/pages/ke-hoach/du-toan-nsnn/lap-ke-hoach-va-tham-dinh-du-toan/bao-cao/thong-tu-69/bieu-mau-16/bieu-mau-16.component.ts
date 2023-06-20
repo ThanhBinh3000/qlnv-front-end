@@ -27,6 +27,7 @@ export class ItemData {
     tranChiN2!: number;
     ncauChiN2!: number;
     clechTranChiVsNcauChiN2: number;
+    ghiChu: string;
 }
 
 

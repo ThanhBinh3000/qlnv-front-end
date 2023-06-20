@@ -53,6 +53,7 @@ export class ItemData {
 	namKhKphiHphap: number;
 	level: any;
 	checked: boolean;
+	ghiChu: string;
 }
 @Component({
 	selector: 'app-bieu-mau-15-2',

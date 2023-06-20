@@ -20,26 +20,33 @@
 		<nz-table nzBordered class="table__body" [nzScroll]="{x: scrollX}">
 			<thead>
 				<tr>
-					<th rowspan="2" class="text-center" nzWidth="50px" nzLeft>STT</th>
-					<th rowspan="2" nzWidth="400px" nzLeft>NỘI DUNG</th>
-					<th rowspan="2">Ước thực hiện <br> năm {{namBcao - 2 }} (năm trước)</th>
+					<th rowspan="3" class="text-center" nzWidth="50px" nzLeft>STT</th>
+					<th rowspan="3" nzWidth="400px" nzLeft>NỘI DUNG</th>
+					<th rowspan="3">Ước thực hiện <br> năm {{namBcao - 2 }} (năm trước)</th>
 					<th colspan="3">Năm {{namBcao - 1 }} (năm hiện hành)</th>
-					<th colspan="3">Kế hoạch năm {{namBcao}} (năm kế hoạch)</th>
+					<th colspan="5">Kế hoạch năm {{namBcao}} (năm kế hoạch)</th>
 					<th *ngIf="viewAppraisalValue" colspan="3">Giá trị thẩm định năm {{namBcao}} (năm kế hoạch)
 					</th>
-					<th rowspan="2" *ngIf=" status || editAppraisalValue" style="width: 60px;" nzRight></th>
-					<th rowspan="2" *ngIf="status" style="width: 50px;" nzRight></th>
+					<th rowspan="3">Chênh lệch giữa thẩm định của đơn vị cấp trên và nhu cầu của đơn vị cấp dưới</th>
+					<th rowspan="3">Ghi chú</th>
+					<th rowspan="3" *ngIf=" status || editAppraisalValue" style="width: 60px;" nzRight></th>
+					<th rowspan="3" *ngIf="status" style="width: 50px;" nzRight></th>
 				</tr>
 				<tr>
-					<th>Số đối tượng</th>
-					<th>Dự toán được giao</th>
-					<th>Ước thực hiện</th>
-					<th>Số đối tượng</th>
-					<th>Mức trợ cấp/ Mức chi</th>
-					<th>Dự toán năm {{namBcao}} <br> (năm kế hoạch)</th>
+					<th rowspan="2">Số đối tượng</th>
+					<th rowspan="2">Dự toán được giao</th>
+					<th rowspan="2">Ước thực hiện</th>
+					<th rowspan="2">Số đối tượng</th>
+					<th rowspan="2">Mức trợ cấp/ Mức chi</th>
+					<th colSpan="3">Dự toán năm {{namBcao}} <br> (năm kế hoạch)</th>
 					<th *ngIf="viewAppraisalValue">Số đối tượng</th>
-					<th *ngIf="viewAppraisalValue">Mức trợ cấp/ Mức chi</th>
-					<th *ngIf="viewAppraisalValue">Dự toán năm {{namBcao}} <br> (năm kế hoạch)</th>
+					<th *ngIf="viewAppraisalValue">Đơn giá</th>
+					<th *ngIf="viewAppraisalValue">Thành tiền</th>
+				</tr>
+				<tr>
+					<th>Số lượng</th>
+					<th>Đơn giá</th>
+					<th>Thành</th>
 				</tr>
 				<tr>
 					<th class="text-center" nzLeft>A</th>
@@ -51,9 +58,13 @@
 					<th>5</th>
 					<th>6</th>
 					<th>7</th>
-					<th *ngIf="viewAppraisalValue">5A</th>
-					<th *ngIf="viewAppraisalValue">6A</th>
-					<th *ngIf="viewAppraisalValue">7A</th>
+					<th>8</th>
+					<th>9 = 7 * 8</th>
+					<th *ngIf="viewAppraisalValue">10</th>
+					<th *ngIf="viewAppraisalValue">11</th>
+					<th *ngIf="viewAppraisalValue">12 = 10 * 11</th>
+					<th *ngIf="viewAppraisalValue">13 = 12 - 9</th>
+					<th></th>
 					<th *ngIf=" status || editAppraisalValue" nzRight></th>
 					<th *ngIf="status" nzRight></th>
 				</tr>
@@ -64,12 +75,17 @@
 					<th>{{displayValue(total.namSoDtuong)}}</th>
 					<th>{{displayValue(total.namDtoanGiao)}}</th>
 					<th>{{displayValue(total.namUocThien)}}</th>
-					<th>{{displayValue(total.khSoDtuong)}}</th>
-					<th>{{displayValue(total.khMucTcap)}}</th>
-					<th>{{displayValue(total.khDtoanNam)}}</th>
-					<th *ngIf="viewAppraisalValue">{{displayValue(total.gtriTdinhSoDtuong)}}</th>
-					<th *ngIf="viewAppraisalValue">{{displayValue(total.gtriTdinhMucTcap)}}</th>
-					<th *ngIf="viewAppraisalValue">{{displayValue(total.gtriTdinhDtoanNam)}}</th>
+					<th>{{displayValue(total.khDtoanNamSluong)}}</th>
+					<th>{{displayValue(total.khDtoanNamDgia)}}</th>
+					<th>{{displayValue(total.khDtoanNamTtien)}}</th>
+					<th>{{displayValue(total.khDtoanNamSluong)}}</th>
+					<th>{{displayValue(total.khDtoanNamDgia)}}</th>
+					<th>{{displayValue(total.khDtoanNamTtien)}}</th>
+					<th *ngIf="viewAppraisalValue">{{displayValue(total.gtriTdinhSluong)}}</th>
+					<th *ngIf="viewAppraisalValue">{{displayValue(total.gtriTdinhDgia)}}</th>
+					<th *ngIf="viewAppraisalValue">{{displayValue(total.gtriTdinhTtien)}}</th>
+					<th *ngIf="viewAppraisalValue">{{displayValue(total.chenhLech)}}</th>
+					<th></th>
 					<th *ngIf=" status || editAppraisalValue" nzRight></th>
 					<th *ngIf=" status" nzRight></th>
 				</tr>
@@ -87,17 +103,20 @@
 						<td>{{displayValue(data.namSoDtuong)}}</td>
 						<td>{{displayValue(data.namDtoanGiao)}}</td>
 						<td>{{displayValue(data.namUocThien)}}</td>
-						<td>{{displayValue(data.khSoDtuong)}}</td>
-						<td>{{displayValue(data.khMucTcap)}}</td>
-						<td>{{displayValue(data.khDtoanNam)}}</td>
+						<td>{{displayValue(data.khDtoanNamSluong)}}</td>
+						<td>{{displayValue(data.khDtoanNamDgia)}}</td>
+						<td>{{displayValue(data.khDtoanNamTtien)}}</td>
 						<td *ngIf="viewAppraisalValue">
-							{{displayValue(data.gtriTdinhSoDtuong)}}
+							{{displayValue(data.gtriTdinhSluong)}}
 						</td>
 						<td *ngIf="viewAppraisalValue">
-							{{displayValue(data.gtriTdinhMucTcap)}}
+							{{displayValue(data.gtriTdinhDgia)}}
 						</td>
 						<td *ngIf="viewAppraisalValue">
-							{{displayValue(data.gtriTdinhDtoanNam)}}
+							{{displayValue(data.gtriTdinhTtien)}}
+						</td>
+						<td *ngIf="viewAppraisalValue">
+							{{displayValue(data.chenhLech)}}
 						</td>
 						<td *ngIf=" status || editAppraisalValue" nzRight>
 							<i *ngIf="checkEdit(data.stt)" class="fa fa-pencil" (click)="startEdit(data.id)"></i>
@@ -125,23 +144,24 @@
 							<td>{{displayValue(data.namSoDtuong)}}</td>
 							<td>{{displayValue(data.namDtoanGiao)}}</td>
 							<td>{{displayValue(data.namUocThien)}}</td>
-							<td>{{displayValue(data.khSoDtuong)}}</td>
-							<td>{{displayValue(data.khMucTcap)}}</td>
-							<td>{{displayValue(data.khDtoanNam)}}</td>
+							<td>{{displayValue(data.khDtoanNamSluong)}}</td>
+							<td>{{displayValue(data.khDtoanNamDgia)}}</td>
+							<td>{{displayValue(data.khDtoanNamTtien)}}</td>
 							<td>
 								<input class="money-input" currencyMask
-									[(ngModel)]="editCache[data.id].data.gtriTdinhSoDtuong"
+									[(ngModel)]="editCache[data.id].data.gtriTdinhSluong"
 									(ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
 							</td>
 							<td>
 								<input class="money-input" currencyMask
-									[(ngModel)]="editCache[data.id].data.gtriTdinhMucTcap"
+									[(ngModel)]="editCache[data.id].data.gtriTdinhDgia"
 									(ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
 							</td>
 							<td>
-								<input class="money-input" currencyMask
-									[(ngModel)]="editCache[data.id].data.gtriTdinhDtoanNam"
-									(ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
+								{{displayValue(editCache[data.id].data.gtriTdinhTtien)}}
+							</td>
+							<td>
+								{{displayValue(editCache[data.id].data.chenhLech)}}
 							</td>
 						</ng-container>
 						<ng-template #editAppraisal>
@@ -162,33 +182,39 @@
 									[(ngModel)]="editCache[data.id].data.namUocThien" [options]="amount" />
 							</td>
 							<td>
-								<input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.khSoDtuong"
-									[options]="amount" />
+								<input class="money-input" currencyMask
+									[(ngModel)]="editCache[data.id].data.khDtoanNamSluong"
+									(ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
 							</td>
 							<td>
-								<input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.khMucTcap"
-									[options]="amount" />
+								<input class="money-input" currencyMask
+									[(ngModel)]="editCache[data.id].data.khDtoanNamDgia"
+									(ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
 							</td>
 							<td>
-								<input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.khDtoanNam"
-									[options]="amount" />
+								{{displayValue(editCache[data.id].data.khDtoanNamTtien)}}
 							</td>
 							<td *ngIf="viewAppraisalValue">
 								<input class="money-input" currencyMask
-									[(ngModel)]="editCache[data.id].data.gtriTdinhSoDtuong"
+									[(ngModel)]="editCache[data.id].data.gtriTdinhSluong"
 									(ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
 							</td>
 							<td *ngIf="viewAppraisalValue">
 								<input class="money-input" currencyMask
-									[(ngModel)]="editCache[data.id].data.gtriTdinhMucTcap"
+									[(ngModel)]="editCache[data.id].data.gtriTdinhDgia"
 									(ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
 							</td>
 							<td *ngIf="viewAppraisalValue">
-								<input class="money-input" currencyMask
-									[(ngModel)]="editCache[data.id].data.gtriTdinhDtoanNam"
-									(ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
+								{{displayValue(editCache[data.id].data.gtriTdinhTtien)}}
+							</td>
+							<td *ngIf="viewAppraisalValue">
+								{{displayValue(editCache[data.id].data.chenhLech)}}
+							</td>
+							<td>
+								<input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.ghiChu" />
 							</td>
 						</ng-template>
+
 						<td *ngIf=" status || editAppraisalValue" nzRight>
 							<a (click)="saveEdit(data.id)" class="save">Lưu</a>
 							<a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"

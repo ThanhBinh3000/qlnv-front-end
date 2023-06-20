@@ -21,6 +21,7 @@ export class DanhSachBaoCaoComponent implements OnInit {
 
     searchFilter = {
         nam: null,
+        lan: null,
         tuNgay: null,
         denNgay: null,
         maBaoCao: "",
@@ -199,6 +200,7 @@ export class DanhSachBaoCaoComponent implements OnInit {
                     maBcaos: [],
                     maDvi: this.searchFilter.donViTao,
                     namBcao: obj?.namHienTai,
+                    lan: obj?.lan,
                     paggingReq: {
                         limit: 10,
                         page: 1,

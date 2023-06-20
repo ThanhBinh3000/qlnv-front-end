@@ -23,6 +23,8 @@ export class ItemData {
     namUocThien: number;
     namKh: number;
     giaTriThamDinh: number;
+    chenhLech: number;
+    ghiChu: string;
 }
 @Component({
     selector: 'app-bieu-mau-13-1',
@@ -129,6 +131,9 @@ export class BieuMau131Component implements OnInit {
         } else {
             this.statusBtnOk = true;
         }
+    };
+    changeModel(id: string): void {
+        this.editCache[id].data.chenhLech = sumNumber([this.editCache[id].data.giaTriThamDinh, this.editCache[id].data.namUocThien]);
     }
 
     // luu

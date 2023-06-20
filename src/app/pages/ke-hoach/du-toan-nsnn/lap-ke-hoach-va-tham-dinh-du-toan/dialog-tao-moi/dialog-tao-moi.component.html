@@ -19,6 +19,17 @@
                 [class]="response.namHienTai && (response.namHienTai > 999 && response.namHienTai < 3000) ? '' : 'input-error-validate'">
             </nz-input-number> -->
         </div>
+        <div nz-col nzSpan="6" *ngIf="tab == 'danhsach' || (tab == 'tonghop' && response.loai == 2)">
+            <label class="search__label">Lần báo cáo</label>
+            <!-- <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn lần báo cáo" [(ngModel)]="response.lan"
+                [class]="response.lan ?'' : 'input-error-validate'">
+                <nz-option *ngFor="let item of lstLan" [nzValue]="item" [nzLabel]="item">
+                </nz-option>
+            </nz-select> -->
+            <nz-input-number nzSize="small" [(ngModel)]="response.lan"
+                [class]="response.lan && response.lan > 0 ? '' : 'input-error-validate'">
+            </nz-input-number>
+        </div>
         <div nz-col nzSpan="6" *ngIf="tab == 'tonghop' && response.loai == 1">
             <label class="search__label">Mã phương án</label>
             <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn mã phương án" [(ngModel)]="response.maPa"

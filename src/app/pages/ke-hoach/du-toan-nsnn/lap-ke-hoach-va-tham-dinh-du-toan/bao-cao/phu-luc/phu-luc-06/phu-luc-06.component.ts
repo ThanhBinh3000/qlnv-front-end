@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
@@ -10,23 +11,40 @@ import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh
 import { displayNumber, exchangeMoney, mulNumber, sumNumber } from 'src/app/Utility/func';
 import { AMOUNT, BOX_NUMBER_WIDTH, DON_VI_TIEN, LA_MA, MONEY_LIMIT } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
+import * as fileSaver from 'file-saver';
+import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
+
 export class ItemData {
     id: any;
     stt: string;
     tenTaiSan: string;
     maTaiSan: string;
-    dviTinh: any;
-    donGiaTdTheoQd: number;
-    ncauTbiNamNSluong: number;
-    ncauTbiNamNTtien: number;
-    ncauTbiNamNSluongTd: number;
-    ncauTbiNamNTtienTd: number;
-    ncauTbiNamN1Sluong: number;
-    ncauTbiNamN1Ttien: number;
-    ncauTbiNamN2Sluong: number;
-    ncauTbiNamN2Ttien: number;
+    // dviTinh: any;
+    // donGiaTdTheoQd: number;
+    // ncauTbiNamNSluong: number;
+    // ncauTbiNamNTtien: number;
+    // ncauTbiNamNSluongTd: number;
+    // ncauTbiNamNTtienTd: number;
+    // ncauTbiNamN1Sluong: number;
+    // ncauTbiNamN1Ttien: number;
+    // ncauTbiNamN2Sluong: number;
+    // ncauTbiNamN2Ttien: number;
     level: any;
     checked: boolean;
+
+    sluongTsanTdiemBcao: number;
+    sluongTsanDaNhan: number;
+    sluongTsanPduyet: number;
+    sluongTsanTcong: number;
+    tchuanDmucTda: number;
+    dtoanDnghiSluong: number;
+    dtoanDnghiMgia: number;
+    thanhTien: number;
+    tdinhSluong: number;
+    tdinhTtien: number;
+    chenhLech: number;
+    thuyetMinh: string;
+    yKien: string
 }
 @Component({
     selector: 'app-phu-luc-06',
@@ -64,7 +82,28 @@ export class PhuLuc06Component implements OnInit {
     editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
     amount = AMOUNT;
     scrollX: string;
+    fileList: NzUploadFile[] = [];
+    listFile: File[] = [];                      // list file chua ten va id de hien tai o input
+    lstFiles: any[] = [];
+    listIdDeleteFiles: string[] = [];
 
+    beforeUpload = (file: NzUploadFile): boolean => {
+        this.fileList = this.fileList.concat(file);
+        console.log(this.fileList);
+        return false;
+    };
+
+    // them file vao danh sach
+    handleUpload(): void {
+        console.log(this.fileList);
+
+        this.fileList.forEach((file: any) => {
+            const id = file?.lastModified.toString();
+            this.lstFiles.push({ id: id, fileName: file?.name });
+            this.listFile.push(file);
+        });
+        this.fileList = [];
+    };
     constructor(
         private _modalRef: NzModalRef,
         private spinner: NgxSpinnerService,
@@ -72,6 +111,7 @@ export class PhuLuc06Component implements OnInit {
         private notification: NzNotificationService,
         private modal: NzModalService,
         private danhMucService: DanhMucDungChungService,
+        private quanLyVonPhiService: QuanLyVonPhiService,
     ) {
     }
 
@@ -122,6 +162,28 @@ export class PhuLuc06Component implements OnInit {
         this.spinner.hide();
     }
 
+    //upload file
+    async uploadFile(file: File) {
+        // day file len server
+        const upfile: FormData = new FormData();
+        upfile.append('file', file);
+        upfile.append('folder', this.dataInfo.maDvi + '/' + this.dataInfo.maBcao);
+        const temp = await this.quanLyVonPhiService.uploadFile(upfile).toPromise().then(
+            (data) => {
+                const objfile = {
+                    fileName: data.filename,
+                    fileSize: data.size,
+                    fileUrl: data.url,
+                }
+                return objfile;
+            },
+            err => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            },
+        );
+        return temp;
+    }
+
     // luu
     async save(trangThai: string, lyDoTuChoi: string) {
         let checkSaveEdit;
@@ -140,7 +202,7 @@ export class PhuLuc06Component implements OnInit {
         const lstCtietBcaoTemp: ItemData[] = [];
         let checkMoneyRange = true;
         this.lstCtietBcao.forEach(item => {
-            if (item.ncauTbiNamNTtien > MONEY_LIMIT) {
+            if (item.sluongTsanTdiemBcao > MONEY_LIMIT) {
                 checkMoneyRange = false;
                 return;
             }
@@ -163,12 +225,18 @@ export class PhuLuc06Component implements OnInit {
 
         if (!this.checkViewTD) {
             lstCtietBcaoTemp.forEach(item => {
-                item.ncauTbiNamNSluongTd = item.ncauTbiNamNSluong;
-                item.ncauTbiNamNTtienTd = item.ncauTbiNamNTtien;
+                item.tdinhSluong = item.dtoanDnghiSluong;
+                item.tdinhTtien = item.thanhTien;
             })
         }
 
         const request = JSON.parse(JSON.stringify(this.formDetail));
+        if (!request.fileDinhKems) {
+            request.fileDinhKems = [];
+        }
+        for (const iterator of this.listFile) {
+            request.fileDinhKems.push(await this.uploadFile(iterator));
+        }
         request.lstCtietLapThamDinhs = lstCtietBcaoTemp;
         request.trangThai = trangThai;
 
@@ -310,23 +378,29 @@ export class PhuLuc06Component implements OnInit {
     tinhTong() {
         this.total = new ItemData();
         this.lstCtietBcao.forEach(item => {
-            this.total.donGiaTdTheoQd = sumNumber([this.total.donGiaTdTheoQd, item.donGiaTdTheoQd]);
-            this.total.ncauTbiNamNSluong = sumNumber([this.total.ncauTbiNamNSluong, item.ncauTbiNamNSluong]);
-            this.total.ncauTbiNamNTtien = sumNumber([this.total.ncauTbiNamNTtien, item.ncauTbiNamNTtien]);
-            this.total.ncauTbiNamNSluongTd = sumNumber([this.total.ncauTbiNamNSluongTd, item.ncauTbiNamNSluongTd]);
-            this.total.ncauTbiNamNTtienTd = sumNumber([this.total.ncauTbiNamNTtienTd, item.ncauTbiNamNTtienTd]);
-            this.total.ncauTbiNamN1Sluong = sumNumber([this.total.ncauTbiNamN1Sluong, item.ncauTbiNamN1Sluong]);
-            this.total.ncauTbiNamN1Ttien = sumNumber([this.total.ncauTbiNamN1Ttien, item.ncauTbiNamN1Ttien]);
-            this.total.ncauTbiNamN2Sluong = sumNumber([this.total.ncauTbiNamN2Sluong, item.ncauTbiNamN2Sluong]);
-            this.total.ncauTbiNamN2Ttien = sumNumber([this.total.ncauTbiNamN2Ttien, item.ncauTbiNamN2Ttien]);
+            // this.total.donGiaTdTheoQd = sumNumber([this.total.donGiaTdTheoQd, item.donGiaTdTheoQd]);
+            // this.total.ncauTbiNamNSluong = sumNumber([this.total.ncauTbiNamNSluong, item.ncauTbiNamNSluong]);
+            // this.total.ncauTbiNamNTtien = sumNumber([this.total.ncauTbiNamNTtien, item.ncauTbiNamNTtien]);
+            // this.total.ncauTbiNamNSluongTd = sumNumber([this.total.ncauTbiNamNSluongTd, item.ncauTbiNamNSluongTd]);
+            // this.total.ncauTbiNamNTtienTd = sumNumber([this.total.ncauTbiNamNTtienTd, item.ncauTbiNamNTtienTd]);
+            // this.total.ncauTbiNamN1Sluong = sumNumber([this.total.ncauTbiNamN1Sluong, item.ncauTbiNamN1Sluong]);
+            // this.total.ncauTbiNamN1Ttien = sumNumber([this.total.ncauTbiNamN1Ttien, item.ncauTbiNamN1Ttien]);
+            // this.total.ncauTbiNamN2Sluong = sumNumber([this.total.ncauTbiNamN2Sluong, item.ncauTbiNamN2Sluong]);
+            // this.total.ncauTbiNamN2Ttien = sumNumber([this.total.ncauTbiNamN2Ttien, item.ncauTbiNamN2Ttien]);
+
+            this.total.tchuanDmucTda = sumNumber([this.total.tchuanDmucTda, item.tchuanDmucTda]);
+            this.total.dtoanDnghiMgia = sumNumber([this.total.dtoanDnghiMgia, item.dtoanDnghiMgia]);
+            this.total.thanhTien = sumNumber([this.total.thanhTien, item.thanhTien]);
+            this.total.tdinhTtien = sumNumber([this.total.tdinhTtien, item.tdinhTtien]);
+            this.total.chenhLech = sumNumber([this.total.chenhLech, item.chenhLech]);
         })
     }
 
     changeModel(id: string): void {
-        this.editCache[id].data.ncauTbiNamNTtien = mulNumber(this.editCache[id].data.donGiaTdTheoQd, this.editCache[id].data.ncauTbiNamNSluong);
-        this.editCache[id].data.ncauTbiNamN1Ttien = mulNumber(this.editCache[id].data.donGiaTdTheoQd, this.editCache[id].data.ncauTbiNamN1Sluong);
-        this.editCache[id].data.ncauTbiNamN2Ttien = mulNumber(this.editCache[id].data.donGiaTdTheoQd, this.editCache[id].data.ncauTbiNamN2Sluong);
-        this.editCache[id].data.ncauTbiNamNTtienTd = mulNumber(this.editCache[id].data.donGiaTdTheoQd, this.editCache[id].data.ncauTbiNamNSluongTd);
+        this.editCache[id].data.sluongTsanTcong = sumNumber([this.editCache[id].data.sluongTsanTdiemBcao, this.editCache[id].data.sluongTsanDaNhan, this.editCache[id].data.sluongTsanPduyet]);
+        this.editCache[id].data.thanhTien = mulNumber(this.editCache[id].data.dtoanDnghiSluong, this.editCache[id].data.dtoanDnghiMgia);
+        this.editCache[id].data.tdinhTtien = mulNumber(this.editCache[id].data.tdinhSluong, this.editCache[id].data.dtoanDnghiMgia);
+        this.editCache[id].data.chenhLech = this.editCache[id].data.tdinhTtien - this.editCache[id].data.thanhTien;
     }
 
     //show popup tu choi
@@ -393,5 +467,33 @@ export class PhuLuc06Component implements OnInit {
 
     handleCancel() {
         this._modalRef.close();
-    }
+    };
+
+    deleteFile(id: string): void {
+        this.lstFiles = this.lstFiles.filter((a: any) => a.id !== id);
+        this.listFile = this.listFile.filter((a: any) => a?.lastModified.toString() !== id);
+        this.listIdDeleteFiles.push(id);
+    };
+
+    //download file về máy tính
+    async downloadFile(id: string) {
+        //let file!: File;
+        const file: File = this.listFile.find(element => element?.lastModified.toString() == id);
+        if (!file) {
+            const fileAttach = this.lstFiles.find(element => element?.id == id);
+            if (fileAttach) {
+                await this.quanLyVonPhiService.downloadFile(fileAttach.fileUrl).toPromise().then(
+                    (data) => {
+                        fileSaver.saveAs(data, fileAttach.fileName);
+                    },
+                    err => {
+                        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+                    },
+                );
+            }
+        } else {
+            const blob = new Blob([file], { type: "application/octet-stream" });
+            fileSaver.saveAs(blob, file.name);
+        }
+    };
 }

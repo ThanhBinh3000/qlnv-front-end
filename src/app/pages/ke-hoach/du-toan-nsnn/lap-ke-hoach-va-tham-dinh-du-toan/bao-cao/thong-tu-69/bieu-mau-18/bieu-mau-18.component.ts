@@ -33,6 +33,7 @@ export class ItemData {
 	ncauChiChiaRaChiDtqg: number;
 	ncauChiChiaRaChiCs3: number;
 	ncauChiChiaRaChiMoi3: number;
+	ghiChu: string;
 }
 
 

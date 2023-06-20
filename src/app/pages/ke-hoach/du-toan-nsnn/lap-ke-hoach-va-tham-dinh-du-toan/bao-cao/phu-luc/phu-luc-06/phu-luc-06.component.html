@@ -43,40 +43,46 @@
                         <th rowspan="2" nzWidth="300px" nzLeft>Tên tài sản (theo danh mục được phê duyệt <br />tại Quyết
                             định
                             số 149/QĐ-TCDT)</th>
-                        <th rowspan="2">Đơn vị tính</th>
-                        <th rowspan="2">Đơn giá tối đa theo <br /> QĐ 149/QĐ-TCDT</th>
-                        <th colspan="2">Nhu cầu trang bị trong năm {{namBcao}}</th>
+                        <th colSpan="4">Số lượng tài sản; MM, thiết bị hiện có</th>
+                        <th rowspan="2">Tiêu chuẩn định mức tối đa được trang bị</th>
+                        <th colspan="2">Dự toán đề nghị trang bị năm {{namBcao}} (năm kế hoạch)</th>
+                        <th rowspan="2">Thành tiền</th>
                         <th *ngIf="checkViewTD" colspan="2">Thẩm định</th>
-                        <th colspan="2">Nhu cầu trang bị trong năm {{namBcao+1}}</th>
-                        <th colspan="2">Nhu cầu trang bị trong năm {{namBcao+2}}</th>
+                        <th rowSpan="2">Chênh lệch giữa thẩm định của đơn vị cấp trên và nhu cầu đơn vị cấp dưới</th>
+                        <th rowSpan="2">Thuyết minh</th>
+                        <th *ngIf="checkViewTD" rowSpan="2">Ý kiến của đơn vị cấp trên</th>
                         <th rowspan="2" style="width: 50px;" *ngIf="status" nzRight></th>
                         <th rowspan="2" style="width: 60px;" *ngIf="status || checkEditTD" nzRight></th>
                         <th rowspan="2" style="width: 50px;" *ngIf="status" nzRight></th>
                     </tr>
                     <tr>
+                        <th>Đến thời điểm báo cáo (trên phần mềm)</th>
+                        <th>Đã nhận chưa có QĐ điều chuyển</th>
+                        <th>Được phê duyệt mua sắm năm {{namBcao - 1}}</th>
+                        <th>Tổng cộng</th>
                         <th>Số lượng</th>
-                        <th>Thành tiền</th>
+                        <th>Mức giá</th>
                         <th *ngIf="checkViewTD">Số lượng</th>
                         <th *ngIf="checkViewTD">Thành tiền</th>
-                        <th>Số lượng</th>
-                        <th>Thành tiền</th>
-                        <th>Số lượng</th>
-                        <th>Thành tiền</th>
                     </tr>
                     <tr>
                         <th *ngIf="status" nzLeft></th>
-                        <th nzLeft>1</th>
-                        <th nzLeft>2</th>
+                        <th nzLeft>A</th>
+                        <th nzLeft>B</th>
+                        <th>1</th>
+                        <th>2</th>
                         <th>3</th>
-                        <th>4</th>
+                        <th>3</th>
+                        <th>4 = 1 + 2 + 3</th>
                         <th>5</th>
-                        <th>(6=4*5)</th>
-                        <th *ngIf="checkViewTD">(5A)</th>
-                        <th *ngIf="checkViewTD">(6A=4*5A)</th>
+                        <th>6</th>
                         <th>7</th>
-                        <th>(8=4*7)</th>
-                        <th>9</th>
-                        <th>(10=4*9)</th>
+                        <th>8 = 6 * 7</th>
+                        <th *ngIf="checkViewTD">6A</th>
+                        <th *ngIf="checkViewTD">8A = 6A * 7</th>
+                        <th>9 = 8A - 8</th>
+                        <th>10</th>
+                        <th></th>
                         <th *ngIf="status" nzRight></th>
                         <th *ngIf="status || checkEditTD" nzRight></th>
                         <th *ngIf="status" nzRight></th>
@@ -85,16 +91,19 @@
                         <th *ngIf="status" nzLeft></th>
                         <th nzLeft></th>
                         <th nzLeft>Tổng Cộng</th>
+                        <th>{{displayValue(total.sluongTsanTdiemBcao)}}</th>
+                        <th>{{displayValue(total.sluongTsanDaNhan)}}</th>
+                        <th>{{displayValue(total.sluongTsanPduyet)}}</th>
+                        <th>{{displayValue(total.sluongTsanTcong)}}</th>
+                        <th>{{displayValue(total.tchuanDmucTda)}}</th>
+                        <th>{{displayValue(total.dtoanDnghiSluong)}}</th>
+                        <th>{{displayValue(total.dtoanDnghiMgia)}}</th>
+                        <th>{{displayValue(total.thanhTien)}}</th>
+                        <th *ngIf="checkViewTD">{{displayValue(total.tdinhSluong)}}</th>
+                        <th *ngIf="checkViewTD">{{displayValue(total.tdinhTtien)}}</th>
+                        <th *ngIf="checkViewTD">{{displayValue(total.chenhLech)}}</th>
                         <th></th>
-                        <th></th>
-                        <th></th>
-                        <th>{{displayValue(total.ncauTbiNamNTtien)}}</th>
                         <th *ngIf="checkViewTD"></th>
-                        <th *ngIf="checkViewTD">{{displayValue(total.ncauTbiNamNTtienTd)}}</th>
-                        <th></th>
-                        <th>{{displayValue(total.ncauTbiNamN1Ttien)}}</th>
-                        <th></th>
-                        <th>{{displayValue(total.ncauTbiNamN2Ttien)}}</th>
                         <th *ngIf="status" nzRight></th>
                         <th *ngIf="status || checkEditTD" nzRight></th>
                         <th *ngIf="status" nzRight></th>
@@ -113,18 +122,19 @@
                             <td nzLeft>
                                 {{data.tenTaiSan}}
                             </td>
-                            <td>
-                                {{data.dviTinh}}
-                            </td>
-                            <td>{{displayValue(data.donGiaTdTheoQd)}}</td>
-                            <td>{{displayValue(data.ncauTbiNamNSluong)}}</td>
-                            <td>{{displayValue(data.ncauTbiNamNTtien)}}</td>
-                            <td *ngIf="checkViewTD">{{displayValue(data.ncauTbiNamNSluongTd)}}</td>
-                            <td *ngIf="checkViewTD">{{displayValue(data.ncauTbiNamNTtienTd)}}</td>
-                            <td>{{displayValue(data.ncauTbiNamN1Sluong)}}</td>
-                            <td>{{displayValue(data.ncauTbiNamN1Ttien)}}</td>
-                            <td>{{displayValue(data.ncauTbiNamN2Sluong)}}</td>
-                            <td>{{displayValue(data.ncauTbiNamN2Ttien)}}</td>
+                            <td>{{displayValue(data.sluongTsanTdiemBcao)}}</td>
+                            <td>{{displayValue(data.sluongTsanDaNhan)}}</td>
+                            <td>{{displayValue(data.sluongTsanPduyet)}}</td>
+                            <td>{{displayValue(data.sluongTsanTcong)}}</td>
+                            <td>{{displayValue(data.tchuanDmucTda)}}</td>
+                            <td>{{displayValue(data.dtoanDnghiSluong)}}</td>
+                            <td>{{displayValue(data.dtoanDnghiMgia)}}</td>
+                            <td>{{displayValue(data.thanhTien)}}</td>
+                            <td *ngIf="checkViewTD">{{displayValue(data.tdinhSluong)}}</td>
+                            <td *ngIf="checkViewTD">{{displayValue(data.tdinhTtien)}}</td>
+                            <td *ngIf="checkViewTD">{{displayValue(data.chenhLech)}}</td>
+                            <td>{{data.thuyetMinh}}</td>
+                            <td *ngIf="checkViewTD">{{data.yKien}}</td>
                             <td *ngIf="status" nzRight>
                                 <i class="fa fa-trash-o do" (click)="deleteById(data.id)"></i>
                             </td>
@@ -147,22 +157,21 @@
                                 <td nzLeft>
                                     {{data.tenTaiSan}}
                                 </td>
-                                <td>
-                                    {{data.dviTinh}}
-                                </td>
-                                <td>{{displayValue(editCache[data.id].data.donGiaTdTheoQd)}}</td>
-                                <td>{{displayValue(editCache[data.id].data.ncauTbiNamNSluong)}}</td>
-                                <td>{{displayValue(editCache[data.id].data.ncauTbiNamNTtien)}}</td>
+                                <td>{{displayValue(editCache[data.id].data.sluongTsanTdiemBcao)}}</td>
+                                <td>{{displayValue(editCache[data.id].data.sluongTsanDaNhan)}}</td>
+                                <td>{{displayValue(editCache[data.id].data.sluongTsanPduyet)}}</td>
+                                <td>{{displayValue(editCache[data.id].data.sluongTsanTcong)}}</td>
+                                <td>{{displayValue(editCache[data.id].data.tchuanDmucTda)}}</td>
+                                <td>{{displayValue(editCache[data.id].data.dtoanDnghiSluong)}}</td>
+                                <td>{{displayValue(editCache[data.id].data.dtoanDnghiMgia)}}</td>
+                                <td>{{displayValue(editCache[data.id].data.thanhTien)}}</td>
                                 <td>
                                     <fm-input-number nz-input class="search__input"
-                                        [(ngModel)]="editCache[data.id].data.ncauTbiNamNSluongTd"
+                                        [(ngModel)]="editCache[data.id].data.tdinhSluong"
                                         (ngModelChange)="changeModel(editCache[data.id].data.id)"></fm-input-number>
                                 </td>
-                                <td>{{displayValue(editCache[data.id].data.ncauTbiNamNTtienTd)}}</td>
-                                <td>{{displayValue(editCache[data.id].data.ncauTbiNamN1Sluong)}}</td>
-                                <td>{{displayValue(editCache[data.id].data.ncauTbiNamN1Ttien)}}</td>
-                                <td>{{displayValue(editCache[data.id].data.ncauTbiNamN2Sluong)}}</td>
-                                <td>{{displayValue(editCache[data.id].data.ncauTbiNamN2Ttien)}}</td>
+                                <td>{{displayValue(editCache[data.id].data.tdinhTtien)}}</td>
+                                <td>{{displayValue(editCache[data.id].data.chenhLech)}}</td>
                             </ng-container>
                             <ng-template #editAppraisal>
                                 <td nzLeft>
@@ -176,47 +185,56 @@
                                     </nz-select>
                                 </td>
                                 <td>
-                                    <input nz-input class="search__input"
-                                        [(ngModel)]="editCache[data.id].data.dviTinh" />
+                                    <fm-input-number nz-input class="search__input"
+                                        [(ngModel)]="editCache[data.id].data.sluongTsanTdiemBcao"
+                                        (ngModelChange)="changeModel(editCache[data.id].data.id)"></fm-input-number>
+                                </td>
+                                <td>
+                                    <fm-input-number nz-input class="search__input"
+                                        [(ngModel)]="editCache[data.id].data.sluongTsanDaNhan"
+                                        (ngModelChange)="changeModel(editCache[data.id].data.id)"></fm-input-number>
+                                </td>
+                                <td>
+                                    <fm-input-number nz-input class="search__input"
+                                        [(ngModel)]="editCache[data.id].data.sluongTsanPduyet"
+                                        (ngModelChange)="changeModel(editCache[data.id].data.id)"></fm-input-number>
+                                </td>
+                                <td>
+                                    {{displayValue(editCache[data.id].data.sluongTsanTcong)}}
+                                </td>
+                                <td>
+                                    {{displayValue(editCache[data.id].data.tchuanDmucTda)}}
+                                </td>
+                                <td>
+                                    <fm-input-number nz-input class="search__input"
+                                        [(ngModel)]="editCache[data.id].data.dtoanDnghiSluong"
+                                        (ngModelChange)="changeModel(editCache[data.id].data.id)"></fm-input-number>
                                 </td>
                                 <td>
                                     <input class="money-input" currencyMask
-                                        [(ngModel)]="editCache[data.id].data.donGiaTdTheoQd"
+                                        [(ngModel)]="editCache[data.id].data.dtoanDnghiMgia"
                                         (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
                                 </td>
-                                <td>
-                                    <fm-input-number nz-input class="search__input"
-                                        [(ngModel)]="editCache[data.id].data.ncauTbiNamNSluong"
-                                        (ngModelChange)="changeModel(editCache[data.id].data.id)"></fm-input-number>
-                                </td>
-                                <td>
-                                    {{displayValue(editCache[data.id].data.ncauTbiNamNTtien)}}
-                                </td>
+                                <td>{{editCache[data.id].data.thanhTien}}</td>
                                 <td *ngIf="checkViewTD">
                                     <fm-input-number nz-input class="search__input"
-                                        [(ngModel)]="editCache[data.id].data.ncauTbiNamNSluongTd"
+                                        [(ngModel)]="editCache[data.id].data.tdinhSluong"
                                         (ngModelChange)="changeModel(editCache[data.id].data.id)"></fm-input-number>
                                 </td>
                                 <td *ngIf="checkViewTD">
-                                    {{displayValue(editCache[data.id].data.ncauTbiNamNTtienTd)}}
+                                    {{displayValue(editCache[data.id].data.tdinhTtien)}}
                                 </td>
-                                <td>
-                                    <fm-input-number nz-input class="search__input"
-                                        [(ngModel)]="editCache[data.id].data.ncauTbiNamN1Sluong"
-                                        (ngModelChange)="changeModel(editCache[data.id].data.id)"></fm-input-number>
-                                </td>
-                                <td>
-                                    {{displayValue(editCache[data.id].data.ncauTbiNamN1Ttien)}}
-                                </td>
-                                <td>
-                                    <fm-input-number nz-input class="search__input"
-                                        [(ngModel)]="editCache[data.id].data.ncauTbiNamN2Sluong"
-                                        (ngModelChange)="changeModel(editCache[data.id].data.id)"></fm-input-number>
-                                </td>
-                                <td>
-                                    {{displayValue(editCache[data.id].data.ncauTbiNamN2Ttien)}}
+                                <td *ngIf="checkViewTD">
+                                    {{displayValue(editCache[data.id].data.chenhLech)}}
                                 </td>
                             </ng-template>
+                            <td>
+                                <input nz-input class="search__input"
+                                    [(ngModel)]="editCache[data.id].data.thuyetMinh" />
+                            </td>
+                            <td>
+                                <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.yKien" />
+                            </td>
                             <td *ngIf="status" nzRight>
                                 <i class="fa fa-trash-o do" (click)="deleteById(data.id)"></i>
                             </td>
@@ -240,6 +258,33 @@
             <div nz-col nzSpan="24">
                 <label class="search__label">Thuyết minh</label>
                 <textarea rows="2" nz-input [(ngModel)]="thuyetMinh" [disabled]="!status"></textarea>
+            </div>
+        </div>
+        <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+            <div nz-col class="gutter-row" [nzSpan]="12">
+                <nz-table nzBordered class="table__body">
+                    <thead>
+                        <tr>
+                            <th nzWidth="7%">STT</th>
+                            <th>Tên file</th>
+                            <th nzWidth="10%"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let data of lstFiles; let i = index">
+                            <td>{{ i + 1 }} </td>
+                            <td>{{ data.fileName }}</td>
+                            <td>
+                                <a (click)="downloadFile(data.id)">
+                                    <i class="fa fa-eye"></i>
+                                </a>
+                                <a (click)="deleteFile(data.id)">
+                                    <i class="fa fa-trash-o do"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </nz-table>
             </div>
         </div>
     </div>

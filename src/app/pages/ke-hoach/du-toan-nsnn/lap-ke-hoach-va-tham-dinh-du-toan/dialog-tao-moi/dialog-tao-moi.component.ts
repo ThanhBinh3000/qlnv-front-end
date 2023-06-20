@@ -24,6 +24,7 @@ export class DialogTaoMoiComponent implements OnInit {
     response: any = {
         namHienTai: null,
         maDvi: null,
+        lan: null,
         lstLapThamDinhs: [],
         lstDviTrucThuoc: [],
         maBcao: null,
