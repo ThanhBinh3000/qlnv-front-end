@@ -59,6 +59,7 @@ export class BienBanHaoDoiBttComponent extends Base2Component implements OnInit 
       ngayQdNvDen: null,
       maChiCuc: null,
       loaiVthh: null,
+      maDvi: null,
     })
 
     this.filterTable = {
