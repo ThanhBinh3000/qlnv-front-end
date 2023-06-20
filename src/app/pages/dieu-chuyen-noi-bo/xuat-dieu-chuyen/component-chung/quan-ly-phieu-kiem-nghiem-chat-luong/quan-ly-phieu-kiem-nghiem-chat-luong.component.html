@@ -142,8 +142,8 @@
                       <td></td>
                       <td></td>
                       <td></td>
-                      <td>{{(lv2.tenloKho? lv2.tenloKho + " - ": "") + (lv2.tenNganKho ||
-                        "")}}
+                      <td>{{(lv2.tenloKho? lv2.tenloKho + " - ": "") + (lv2.tenNganKho ? lv2.tenNganKho + " - ": "") +
+                        (lv2.tenNhaKho? lv2.tenNhaKho: "")}}
                       </td>
                       <td>{{lv2.soPhieuKnChatLuong}}</td>
                       <td>{{lv2.ngayKiemNghiem | date: 'dd/MM/YYYY' }}</td>
@@ -217,7 +217,7 @@
   </ng-container> -->
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
     <app-thong-tin-quyet-dinh-dieu-chuyen-cuc [idInput]="qdinhDccId"
-      [isView]="true"></app-thong-tin-quyet-dinh-dieu-chuyen-cuc>
+      [isViewOnModal]="1"></app-thong-tin-quyet-dinh-dieu-chuyen-cuc>
   </ng-container>
   <div *nzModalFooter>
     <button nz-button (click)="closeModalQdDc()" class="modal__button--cancel">
