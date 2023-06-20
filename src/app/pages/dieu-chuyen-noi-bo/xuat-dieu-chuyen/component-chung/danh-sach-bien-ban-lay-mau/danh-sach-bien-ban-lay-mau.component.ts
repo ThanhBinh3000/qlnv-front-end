@@ -136,7 +136,7 @@ export class DanhSachBienBanLayMau extends Base2Component implements OnInit {
     //             return {
     //                 ...data,
     //                 soQdinhDcc: data.soQdinh,
-    //                 qddccId: data.id,
+    //                 qdccId: data.id,
     //                 idVirtual: uuidv4(),
     //                 childData: rs
     //             };
@@ -167,7 +167,7 @@ export class DanhSachBienBanLayMau extends Base2Component implements OnInit {
     //         return {
     //             ...data,
     //             soQdinhDcc: data.soQdinh,
-    //             qddccId: data.id,
+    //             qdccId: data.id,
     //             idVirtual: uuidv4(),
     //             childData: rs
     //         }
