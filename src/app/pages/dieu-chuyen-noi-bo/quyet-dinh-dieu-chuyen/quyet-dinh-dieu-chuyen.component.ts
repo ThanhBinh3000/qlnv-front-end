@@ -81,6 +81,7 @@ export class QuyetDinhDieuChuyenComponent extends Base2Component implements OnIn
   }
 
   idTongHop: number
+  qdDcId: number
   dsDonvi: any[] = [];
   userInfo: UserLogin;
   userdetail: any = {};
@@ -123,6 +124,7 @@ export class QuyetDinhDieuChuyenComponent extends Base2Component implements OnIn
     });
 
     this.idTongHop = +this.routerActive.snapshot.paramMap.get('id');
+    this.qdDcId = +this.routerActive.snapshot.paramMap.get('qdDcId');
 
     if (this.isChiCuc()) this.tabSelected = 1;
     if (this.tabSelected == 0) {
@@ -262,7 +264,6 @@ export class QuyetDinhDieuChuyenComponent extends Base2Component implements OnIn
     this.selectedId = id;
     this.isDetail = true;
     this.isView = b;
-    // this.isViewDetail = isView ?? false;
   }
 
   quayLai() {
