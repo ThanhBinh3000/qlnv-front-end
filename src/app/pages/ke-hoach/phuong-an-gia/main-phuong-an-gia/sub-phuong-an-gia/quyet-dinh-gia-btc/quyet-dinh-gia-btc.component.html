@@ -61,15 +61,23 @@
     <div class="group-button">
       <h3>Danh sách quyết định của BTC</h3>
       <div class="buttons">
-        <button type="button" class="btn btn-sub btn-xoa" (click)="deleteSelected()">
+        <button type="button" class="btn btn-sub btn-xoa" (click)="deleteSelected()"
+                *ngIf="(pagType == 'LT' && userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_MTDBTT_QD_XOA'))
+                 || (pagType == 'VT' && userService.isAccessPermisson('KHVDTNSNN_PAGIA_VT_MTDBTT_QD_XOA')) ">
           <i class="fa fa-trash-o do"></i>
           <span>Xóa</span>
         </button>
-        <button type="button" class="btn btn-sub" (click)="exportData()">
+        <button type="button" class="btn btn-sub"
+                *ngIf="(pagType == 'LT' && userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_MTDBTT_QD_EXP'))
+                 || (pagType == 'VT' && userService.isAccessPermisson('KHVDTNSNN_PAGIA_VT_MTDBTT_QD_EXP')) "
+                (click)="exportData()">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button type="button" class="btn btn-sub xanh" (click)="themMoi()">
+        <button type="button" class="btn btn-sub xanh"
+                *ngIf="(pagType == 'LT' && userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_MTDBTT_QD_THEM'))
+                 || (pagType == 'VT' && userService.isAccessPermisson('KHVDTNSNN_PAGIA_VT_MTDBTT_QD_THEM')) "
+                (click)="themMoi()">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
         </button>
@@ -161,13 +169,19 @@
             <td>{{ data.tenLoaiVthh }}</td>
             <td>{{ data.tenTrangThai }}</td>
             <td>
-              <a (click)="viewDetail(data.id, true,data.trangThai)" *ngIf="data.trangThai == globals.prop.NHAP_BAN_HANH">
+              <a (click)="viewDetail(data.id, true,data.trangThai)"
+                 *ngIf="((pagType == 'LT' && userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_MTDBTT_QD_XEM'))
+                 || (pagType == 'VT' && userService.isAccessPermisson('KHVDTNSNN_PAGIA_VT_MTDBTT_QD_XEM'))) && !(data.trangThai == STATUS.DU_THAO && (userInfo.MA_DVI == data.maDvi)) ">
                 <i class="fa fa-eye"></i>
               </a>
-              <a *ngIf="data.trangThai == '00'" (click)="viewDetail(data.id, false,data.trangThai)">
+              <a  (click)="viewDetail(data.id, false,data.trangThai)"
+                  *ngIf="data.trangThai == STATUS.DU_THAO && ((pagType == 'LT' && userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_MTDBTT_QD_THEM'))
+                 || (pagType == 'VT' && userService.isAccessPermisson('KHVDTNSNN_PAGIA_VT_MTDBTT_QD_THEM'))) ">
                 <i class="fa fa-pencil"></i>
               </a>
-              <a *ngIf="data.trangThai == '00'" (click)="deleteItem(data)">
+              <a *ngIf="data.trangThai == STATUS.DU_THAO  && ((pagType == 'LT' && userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_MTDBTT_QD_XOA'))
+                 || (pagType == 'VT' && userService.isAccessPermisson('KHVDTNSNN_PAGIA_VT_MTDBTT_QD_XOA'))) "
+                 (click)="deleteItem(data)">
                 <i class="fa fa-trash-o do"></i>
               </a>
             </td>
