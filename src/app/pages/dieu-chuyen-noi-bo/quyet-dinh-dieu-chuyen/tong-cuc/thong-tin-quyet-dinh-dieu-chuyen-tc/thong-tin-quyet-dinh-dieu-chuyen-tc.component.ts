@@ -44,7 +44,7 @@ export class QuyetDinhPdDtl {
 export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component implements OnInit {
   @Input()
   idTHop: number;
-  @Input() isViewOnModal: boolean;
+  @Input() isViewOnModal: number;
   @Input() idInput: number;
   @Input() isView: boolean;
   @Output()
@@ -695,7 +695,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
   }
 
   quayLai() {
-    if (this.idTHop) this.router.navigate(['dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen']);
+    if (this.idTHop || this.idInput) this.router.navigate(['dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen']);
     this.showListEvent.emit();
   }
 

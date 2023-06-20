@@ -24,7 +24,7 @@ export class QuyetDinhDieuChuyenTCComponent extends Base2Component implements On
   idTHop: number;
   @Input()
   qdDcId: number;
-  @Input() isViewOnModal: boolean;
+  @Input() isViewOnModal: number;
 
   selectedId: number = 0;
   isView = false;
