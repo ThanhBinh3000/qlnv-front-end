@@ -34,6 +34,9 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
   fileDinhKemMuaLe: any[] = [];
   @Output()
   dataTableChange = new EventEmitter<any>();
+  danhSachCtiet: any[] = [];
+  danhSachCtietDtl: any[] = [];
+  selected: boolean = false;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -68,6 +71,7 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
     );
   }
   rowItem: ChiTietThongTinChaoGia = new ChiTietThongTinChaoGia();
+  updateRowItem: ChiTietThongTinChaoGia = new ChiTietThongTinChaoGia();
   dataEdit: { [key: string]: { edit: boolean; data: ChiTietThongTinChaoGia } } = {};
 
   async ngOnInit() {
@@ -84,7 +88,6 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
       this.spinner.hide();
     }
     this.emitDataTable()
-    this.updateEditCache()
   }
 
   initForm() {
@@ -99,7 +102,7 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
       await this.quyetDinhPheDuyetKeHoachMTTService.getDetailDtlCuc(id)
         .then(async (res) => {
           const dataDtl = res.data;
-          this.dataTable = dataDtl.listChaoGia
+          this.danhSachCtiet = dataDtl.children
           this.formData.patchValue({
             idQdDtl: id,
             soQd: dataDtl.hhQdPheduyetKhMttHdr.soQd,
@@ -117,6 +120,7 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
           })
           this.fileDinhKemUyQuyen = dataDtl.fileDinhKemUyQuyen;
           this.fileDinhKemMuaLe = dataDtl.fileDinhKemMuaLe;
+          this.showDetail(event,this.danhSachCtiet[0]);
         })
         .catch((e) => {
           console.log('error: ', e);
@@ -124,6 +128,35 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         });
     }
+  }
+
+  calcTong() {
+    if (this.danhSachCtiet) {
+      const sum = this.danhSachCtiet.reduce((prev, cur) => {
+        prev += cur.soLuong;
+        return prev;
+      }, 0);
+      return sum;
+    }
+  }
+  idRowSelect: number;
+  async showDetail($event, data: any) {
+    await this.spinner.show();
+    if ($event.type == "click") {
+      this.selected = false;
+      $event.target.parentElement.parentElement.querySelector(".selectedRow")?.classList.remove("selectedRow");
+      $event.target.parentElement.classList.add("selectedRow");
+    } else {
+      this.selected = true;
+    }
+    this.idRowSelect = data.id;
+    this.dataTable = data.listChaoGia
+    this.updateEditCache()
+    await this.spinner.hide();
+  }
+
+  showDsChaoGia(id: any){
+
   }
 
   deleteTaiLieuDinhKemTag(data: any) {
@@ -187,7 +220,8 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
         return;
       }
       let body = this.formData.value;
-      body.children = this.dataTable;
+      body.children = this.danhSachCtietDtl;
+      body.danhSachCtiet = this.danhSachCtiet;
       body.pthucMuaTrucTiep = this.radioValue;
       body.fileDinhKemUyQuyen = this.fileDinhKemUyQuyen;
       body.fileDinhKemMuaLe = this.fileDinhKemMuaLe;
@@ -212,7 +246,15 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
     if (!this.dataTable) {
       this.dataTable = [];
     }
+    this.rowItem.idQdPdSldd = this.idRowSelect;
     this.dataTable = [...this.dataTable, this.rowItem];
+    this.danhSachCtiet.forEach((itemA) => {
+      const itemsB = this.dataTable.filter((item) => item.idQdPdSldd === itemA.id);
+      if (itemsB.length > 0) {
+        itemA.listChaoGia = [];
+        itemA.listChaoGia.push(...itemsB);
+      }
+    });
     this.rowItem = new ChiTietThongTinChaoGia();
     this.emitDataTable();
     this.updateEditCache()
@@ -256,6 +298,7 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
           edit: false,
           data: { ...item },
         };
+        // this.danhSachCtietDtl = [...this.danhSachCtietDtl, item];
       });
     }
   }
@@ -273,6 +316,13 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
 
   saveEdit(idx: number): void {
     Object.assign(this.dataTable[idx], this.dataEdit[idx].data);
+    this.danhSachCtiet.forEach((itemA) => {
+      const itemsB = this.dataTable.filter((item) => item.idQdPdSldd === itemA.id);
+      if (itemsB.length > 0) {
+        itemA.listChaoGia = [];
+        itemA.listChaoGia.push(...itemsB);
+      }
+    });
     this.dataEdit[idx].edit = false;
   }
 
@@ -322,13 +372,13 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
               this.rowItem.fileDinhKems.fileUrl = resUpload.url;
               this.rowItem.fileDinhKems.idVirtual = new Date().getTime();
             } else {
-              if (!type.fileDinhKem) {
-                type.fileDinhKem = new FileDinhKem();
-              }
-              type.fileDinhKem.fileName = resUpload.filename;
-              type.fileDinhKem.fileSize = resUpload.size;
-              type.fileDinhKem.fileUrl = resUpload.url;
-              type.fileDinhKem.idVirtual = new Date().getTime();
+              // if (!type.fileDinhKem) {
+              //   type.fileDinhKem = new FileDinhKem();
+              // }
+              type.fileDinhKems.fileName = resUpload.filename;
+              type.fileDinhKems.fileSize = resUpload.size;
+              type.fileDinhKems.fileUrl = resUpload.url;
+              type.fileDinhKems.idVirtual = new Date().getTime();
             }
 
           }

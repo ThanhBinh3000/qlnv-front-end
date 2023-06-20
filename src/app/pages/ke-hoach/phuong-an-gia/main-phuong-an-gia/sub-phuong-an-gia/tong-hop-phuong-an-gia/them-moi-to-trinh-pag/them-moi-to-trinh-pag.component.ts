@@ -13,6 +13,7 @@ import { HelperService } from 'src/app/services/helper.service';
 import { TongHopPhuongAnGiaService } from 'src/app/services/ke-hoach/phuong-an-gia/tong-hop-phuong-an-gia.service';
 import { ToTrinhPAGService } from 'src/app/services/ke-hoach/phuong-an-gia/toTrinhPAG.service';
 import { Globals } from 'src/app/shared/globals';
+import {UserService} from "../../../../../../../services/user.service";
 
 @Component({
   selector: 'app-them-moi-to-trinh-pag',
@@ -38,6 +39,7 @@ export class ThemMoiToTrinhPagComponent implements OnInit {
     private readonly fb: FormBuilder,
     private readonly modal: NzModalService,
     public globals: Globals,
+    public userService: UserService,
     private tongHopPhuongAnGiaService: TongHopPhuongAnGiaService,
     private toTrinhPAGService: ToTrinhPAGService,
     private danhMucService: DanhMucService,
