@@ -87,7 +87,11 @@
                             <td (nzExpandChange)="onExpandStringChange(item.idVirtual, $event)"
                                 [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true"
                                 style="width: 35px"></td>
-                            <td style="color: black ;font-weight: bold;">{{item.soQdinh}}</td>
+                            <td style="color: black ;font-weight: bold;">
+                                <a *ngIf="item.soQdinh && item.qdinhDccId" nz-button nzType="link"
+                                    (click)="openModalQddc(item.qdinhDccId)">{{
+                                    item.soQdinh}}</a>
+                            </td>
                             <td style="color: black ;font-weight: bold;">{{item.namKh}}</td>
                             <td></td>
                             <td></td>
@@ -131,8 +135,8 @@
                                                 {{lv2.tenNhaKho}}
                                             </td> -->
                                             <td>
-                                                {{(lv2.tenloKho? lv2.tenloKho + " - ": "") + (lv2.tenNganKho ||
-                                                "")}}
+                                                {{(lv2.tenloKho? lv2.tenloKho + " - ": "") + (lv2.tenNganKho?
+                                                lv2.tenNganKho + " - ": "") + (lv2.tenNhaKho? lv2.tenNhaKho: "")}}
 
                                             </td>
                                             <td>
@@ -223,14 +227,27 @@
     </app-xuat-dcnb-them-moi-phieu-xuat-kho>
 </ng-template>
 
-<nz-modal [nzWidth]="'90%'" [(nzVisible)]="isViewPhieu" (nzOnCancel)="closeModalPhieuXuatKho()">
+<nz-modal [nzWidth]="'90%'" [(nzVisible)]="isViewPhieuKNCL" (nzOnCancel)="closeModalPhieuKNCL()">
     <ng-container *nzModalContent class="modal__content">
-        <app-them-moi-phieu-kiem-nghiem-chat-luong [idInput]="idPhieu" [isVatTu]="isVatTu" [loaiDc]="loaiDc"
+        <app-them-moi-phieu-kiem-nghiem-chat-luong [idInput]="idPhieuKNCL" [isVatTu]="isVatTu" [loaiDc]="loaiDc"
             [isViewOnModal]="true">
         </app-them-moi-phieu-kiem-nghiem-chat-luong>
     </ng-container>
     <div *nzModalFooter>
-        <button nz-button (click)="closeModalPhieuXuatKho()" class="modal__button--cancel">
+        <button nz-button (click)="closeModalPhieuKNCL()" class="modal__button--cancel">
+            <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+            Đóng
+        </button>
+    </div>
+</nz-modal>
+
+<nz-modal [nzWidth]="'90%'" [(nzVisible)]="isViewQddc" (nzOnCancel)="closeModalQddc()">
+    <ng-container *nzModalContent class="modal__content">
+        <app-thong-tin-quyet-dinh-dieu-chuyen-cuc [idInput]="idQdinhDcc" [isView]="true"
+            [isViewOnModal]="1"></app-thong-tin-quyet-dinh-dieu-chuyen-cuc>
+    </ng-container>
+    <div *nzModalFooter>
+        <button nz-button (click)="closeModalQddc()" class="modal__button--cancel">
             <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
             Đóng
         </button>
