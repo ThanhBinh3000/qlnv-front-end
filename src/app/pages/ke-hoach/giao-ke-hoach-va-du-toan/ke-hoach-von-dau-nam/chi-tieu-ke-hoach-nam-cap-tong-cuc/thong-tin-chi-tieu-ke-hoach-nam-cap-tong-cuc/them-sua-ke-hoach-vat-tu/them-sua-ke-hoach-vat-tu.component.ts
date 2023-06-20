@@ -82,7 +82,6 @@ export class ThemSuaKeHoachVatTuComponent implements OnInit {
         donViId: this.donViId
       })
     }
-    console.log(this.formItem.value, 'this.formItemthis.formItemthis.formItem')
     if (this.actionType == 'them') {
       //remove những vật tư cha đã được thêm vào đơn vị (khi thêm nút gốc)
       if (this.isRoot) {
@@ -152,7 +151,6 @@ export class ThemSuaKeHoachVatTuComponent implements OnInit {
   }
 
   handleOk() {
-    console.log(this.itemInput, 'itemInputitemInputitemInput')
     if (this.tab == 'XUAT') {
       this.formItem.controls["namNhap"].setValidators([Validators.required]);
       this.formItem.controls["soLuongXuat"].setValidators([Validators.required]);
@@ -174,7 +172,6 @@ export class ThemSuaKeHoachVatTuComponent implements OnInit {
   async onChangeLoaiVthh(event, type?) {
     console.log(event, 'hahhaa');
     let vatTuCha = this.dataVatTuChaShow.find(item => item.maHang == event);
-    console.log(this.dataVatTuChaShow, 'this.dataVatTuChaShowthis.dataVatTuChaShow');
     this.dataVatTuConShow = [];
     if (vatTuCha) {
       let dsCloaiHangHoa = vatTuCha.child;
