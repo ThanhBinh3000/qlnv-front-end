@@ -180,9 +180,7 @@ export class ThemMoiBaoCaoKetQuaThanhLyComponent extends Base2Component implemen
     };
     let rs = await this.createUpdate(body)
     this.formData.enable({emitEvent: false});
-    this.formData.patchValue({
-      id: rs.id,
-    })
+    this.formData.patchValue({id: rs.id})
     let ct =  await this.baoCaoKqThanhLyService.getDetail(rs.id);
     this.buildTableView(ct.data.baoCaoKqDtl)
   }
@@ -209,7 +207,7 @@ export class ThemMoiBaoCaoKetQuaThanhLyComponent extends Base2Component implemen
                 this.dataTable.forEach(f=>f.id=null)
               }
               this.formData.patchValue({
-                soQD: res.data.soQd,
+                soQd: res.data.soQd,
                 baoCaoKqDtl:this.dataTable,
                 tongSoLuongTl: res.data.tongSoLuongTl,
                 tongSoLuongCon: res.data.tongSoLuongCon,

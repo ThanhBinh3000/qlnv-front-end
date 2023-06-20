@@ -18,6 +18,9 @@ import {
 import {
   BaoCaoKqTieuHuyService
 } from "../../../../../services/qlnv-hang/xuat-hang/xuat-tieu-huy/BaoCaoKqTieuHuy.service";
+import {
+  BaoCaoKqDtl
+} from "../../../xuat-thanh-ly/bao-cao-ket-qua/them-moi-bao-ket-qua-thanh-ly/them-moi-bao-cao-ket-qua-thanh-ly.component";
 
 export class QuyetDinhDtl {
   idVirtual: string;
@@ -68,37 +71,27 @@ export class ThemMoiBaoCaoKetQuaTieuHuyComponent extends Base2Component implemen
   ) {
     super(httpClient, storageService, notification, spinner, modal, baoCaoKqTieuHuyService);
     this.formData = this.fb.group({
-
       id: [],
       maDvi: [],
       nam: [dayjs().get("year"), [Validators.required]],
-      soQd: ['', [Validators.required]],
-      ngayKy: ['', [Validators.required]],
-      idQd: ['', [Validators.required]],
-      soHoSo: ['', [Validators.required]],
-      idKq: [],
-      soKq: [],
-      thoiGianTl: [],
-      thoiGianTlTu: [],
-      thoiGianTlDen: [],
-      trichYeu: [],
+      soBaoCao:  ['', [Validators.required]],
+      ngayBaoCao: [],
+      idQd: [],
+      soQd:  ['', [Validators.required]],
+      noiDung: ['', [Validators.required]],
       trangThai: [STATUS.DU_THAO],
       tongSoLuongTl: [],
       tongSoLuongCon: [],
       tongThanhTien: [],
-      lyDoTuChoi: [],
-      tenDvi: [],
-      tenTrangThai: ['Dự thảo'],
-      fileDinhKem: [new Array<FileDinhKem>()],
-      quyetDinhDtl: [new Array<QuyetDinhDtl>()],
-      ngayTao: [],
-      nguoiTaoId: [],
-      ngaySua: [],
-      nguoiSuaId: [],
       ngayPduyet: [],
       nguoiPduyetId: [],
       ngayGduyet: [],
       nguoiGduyetId: [],
+      lyDoTuChoi: [],
+      tenDvi: [],
+      tenTrangThai: ['Dự thảo'],
+      fileDinhKem: [new Array<FileDinhKem>()],
+      baoCaoKqDtl: [new Array<BaoCaoKqDtl>()],
     });
 
   }
@@ -111,10 +104,6 @@ export class ThemMoiBaoCaoKetQuaTieuHuyComponent extends Base2Component implemen
         this.loadDsSoQd(),
       ]);
       await this.loadChiTiet(this.idInput);
-      if (Object.keys(this.dataInit).length > 0) {
-        this.formData.patchValue({idQd: this.dataInit.id})
-        await this.changeSoQd(this.dataInit.id);
-      }
     } catch (e) {
       console.log("error: ", e);
       await this.spinner.hide();
@@ -129,16 +118,15 @@ export class ThemMoiBaoCaoKetQuaTieuHuyComponent extends Base2Component implemen
       await this.baoCaoKqTieuHuyService.getDetail(idInput)
         .then((res) => {
           if (res.msg == MESSAGE.SUCCESS) {
-            this.formData.setValue({
+            this.formData.patchValue({
               ...res.data,
               soBaoCao: res.data.soBaoCao?.split('/')[0] ?? null,
 
             }, {emitEvent: false});
-
-            this.formData.value.quyetDinhDtl.forEach(s => {
-              idVirtual: uuid.v4();
+            this.formData.value.baoCaoKqDtl.forEach(s => {
+              s.idVirtual = uuid.v4();
             });
-            this.changeSoQd(res.data.idQd);
+            this.buildTableView(this.formData.value.baoCaoKqDtl)
           }
           console.log(this.formData.value)
         })
@@ -180,6 +168,9 @@ export class ThemMoiBaoCaoKetQuaTieuHuyComponent extends Base2Component implemen
 
   async save() {
     this.formData.disable({emitEvent: false});
+    this.formData.disable({emitEvent: false});
+    let dt = this.dataTable.flatMap((item) => item.childData);
+    this.formData.patchValue({baoCaoKqDtl: dt})
     let body = {
       ...this.formData.value,
       soBaoCao: this.formData.value.soBaoCao ? this.formData.value.soBaoCao + this.maHauTo : this.maHauTo
@@ -187,6 +178,11 @@ export class ThemMoiBaoCaoKetQuaTieuHuyComponent extends Base2Component implemen
     let rs = await this.createUpdate(body);
     this.formData.enable({emitEvent: false});
     this.formData.patchValue({id: rs.id})
+    this.formData.patchValue({
+      id: rs.id,
+    })
+    let ct =  await this.baoCaoKqTieuHuyService.getDetail(rs.id);
+    this.buildTableView(ct.data.baoCaoKqDtl)
   }
 
   async saveAndSend(body: any, trangThai: string, msg: string, msgSuccess?: string) {
@@ -198,25 +194,26 @@ export class ThemMoiBaoCaoKetQuaTieuHuyComponent extends Base2Component implemen
     this.showListEvent.emit();
   }
 
-  changeSoQd(id) {
-    if (id) {
+  changeSoQd($event: any) {
+    if ($event) {
       try {
         this.spinner.show();
         this.chiTiet = [];
-        this.quyetDinhTieuHuyService.getDetail(id).then(res => {
+        this.quyetDinhTieuHuyService.getDetail($event).then(res => {
           if (res.msg == MESSAGE.SUCCESS) {
             if (res.data) {
               if (this.userInfo.CAP_DVI === "2") {
-                this.dataTable = cloneDeep(res.data.hoSoDtl);
+                this.dataTable = cloneDeep(res.data.quyetDinhDtl);
+                this.dataTable.forEach(f=>f.id=null)
               }
               this.formData.patchValue({
-                soHoSo: res.data.soHoSo,
-                quyetDinhDtl: this.dataTable.length>0?this.dataTable:null,
-                tongSoLuongTl : this.dataTable.reduce((prev, cur) => prev + cur.slDaDuyet, 0),
-                tongSoLuongCon : this.dataTable.reduce((prev, cur) => prev + cur.slCon, 0),
-                tongThanhTien : this.dataTable.reduce((prev, cur) => prev + cur.thanhTien, 0),
+                soQd: res.data.soQd,
+                baoCaoKqDtl:this.dataTable,
+                tongSoLuongTl: res.data.tongSoLuongTl,
+                tongSoLuongCon: res.data.tongSoLuongCon,
+                tongThanhTien: res.data.tongThanhTien,
               });
-              this.buildTableView()
+              this.buildTableView(this.formData.value.baoCaoKqDtl)
             }
           }
         })
@@ -244,24 +241,19 @@ export class ThemMoiBaoCaoKetQuaTieuHuyComponent extends Base2Component implemen
   }
 
 
-  buildTableView() {
-    let data = cloneDeep(this.formData.value.quyetDinhDtl);
-
+  buildTableView(data) {
     if (this.userService.isCuc()) {
-      data = data.filter(s => s.maChiCuc.substring(0, 6) === this.userInfo.MA_DVI);
+      data = data.filter(s => s.maDiaDiem.substring(0, 6) === this.userInfo.MA_DVI);
     }
-    let dataView = chain(data)
-      .groupBy("maChiCuc")
+    this.dataTable = chain(data)
+      .groupBy("tenChiCuc")
       .map((value, key) => {
-        let rs = chain(value)
         return {
           idVirtual: uuid.v4(),
-          maDvi: key,
-          childData: rs,
+          tenChiCuc: key,
+          childData: value,
         };
       }).value();
-
-    this.dataTable = dataView;
     this.expandAll()
 
   }
