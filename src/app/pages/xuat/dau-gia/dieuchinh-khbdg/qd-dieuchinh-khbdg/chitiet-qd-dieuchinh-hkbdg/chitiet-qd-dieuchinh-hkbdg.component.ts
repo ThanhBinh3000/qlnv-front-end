@@ -140,7 +140,8 @@ export class ChitietQdDieuchinhHkbdgComponent extends Base2Component implements 
     let dsQdPd = []
     await this.quyetDinhPdKhBdgService.search({
       trangThai: STATUS.BAN_HANH,
-      namKh: this.formData.value.nam,
+      nam: this.formData.value.nam,
+      loaiVthh: this.loaiVthh,
       lastest: 0,
       paggingReq: {
         limit: this.globals.prop.MAX_INTERGER,

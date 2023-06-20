@@ -280,7 +280,7 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
         };
         this.listLoKho.push(item);
         if (this.listLoKho && this.listLoKho.length == 0) {
-          this.tonKho(nganKho)
+          this.tonKho(nganKho, index)
         }
         this.editCache[index].data.maLoKho = null;
       };
@@ -303,7 +303,7 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
         this.editCache[index].data.tenLoKho = loKho[0].text;
         this.editCache[index].data.maLoKho = loKho[0].value
       }
-      this.tonKho(loKho)
+      this.tonKho(loKho, index)
     } else {
       let loKho = this.listLoKho.filter(item => item.maDvi == this.thongTinXuatBanTrucTiep.maLoKho)[0];
       this.tonKho(loKho)
@@ -311,7 +311,7 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
     }
   }
 
-  async tonKho(item) {
+  async tonKho(item, index?) {
     let body = {
       'maDvi': item.maDvi,
       'loaiVthh': this.formData.value.loaiVthh
@@ -321,9 +321,13 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
         let data = res.data;
         if (data.length > 0) {
           let val = data.reduce((prev, cur) => prev + cur.slHienThoi, 0);
-          this.thongTinXuatBanTrucTiep.tonKho = cloneDeep(val)
+          if (index >= 0) {
+            this.editCache[index].data.tonKho = cloneDeep(val)
+          } else {
+            this.thongTinXuatBanTrucTiep.tonKho = cloneDeep(val)
+          }
         } else {
-          this.thongTinXuatBanTrucTiep.tonKho = 0
+          this.thongTinXuatBanTrucTiep.tonKho = null
         }
       }
     });
@@ -370,18 +374,22 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
     const tonKho = this.thongTinXuatBanTrucTiep.tonKho
     let soLuongDeXuat = 0
     let tongSoLuong = 0
+    let maDviTsan: string;
     if (isAdd) {
       soLuongDeXuat += this.thongTinXuatBanTrucTiep.soLuongDeXuat;
       tongSoLuong += this.thongTinXuatBanTrucTiep.soLuongDeXuat;
     }
     this.listOfData.forEach(item => {
       tongSoLuong += item.soLuongDeXuat
+      maDviTsan = item.maDviTsan;
     })
-    if (soLuongDeXuat > tonKho) {
+    if (maDviTsan == this.thongTinXuatBanTrucTiep.maDviTsan) {
+      this.notification.error(MESSAGE.ERROR, "Mã đơn vị tài sản (" + this.thongTinXuatBanTrucTiep.maDviTsan + " ) đã bị trùng với mã đơn vị tài sản trước đó vui lòng nhập lại")
+      return false
+    } else if (soLuongDeXuat > tonKho) {
       this.notification.error(MESSAGE.ERROR, " Số lượng đề xuất đã vượt quá số lượng tồn kho. Xin vui lòng nhập lại ")
       return false
-    }
-    if (soLuongDeXuat > soLuongConLai) {
+    } else if (soLuongDeXuat > soLuongConLai) {
       this.notification.error(MESSAGE.ERROR, " Số lượng đề xuất đã vượt quá số lượng chỉ tiêu. Xin vui lòng nhập lại ")
       return false
     } else if (tongSoLuong > soLuongConLai) {
@@ -391,7 +399,7 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, "Đơn giá đề xuất phải lớn hơn hoặc bằng giá bán tối thiểu (" + this.giaToiDa + " đ)")
       return false
     } else {
-      return true
+      return true;
     }
   }
 

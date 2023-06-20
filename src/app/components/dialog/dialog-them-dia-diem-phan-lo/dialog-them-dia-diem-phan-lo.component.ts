@@ -279,7 +279,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
         };
         this.listLoKho.push(item);
         if (this.listLoKho && this.listLoKho.length == 0) {
-          this.tonKho(nganKho)
+          this.tonKho(nganKho, index)
         }
         this.editCache[index].data.maLoKho = null;
       };
@@ -302,7 +302,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
         this.editCache[index].data.tenLoKho = loKho[0].text;
         this.editCache[index].data.maLoKho = loKho[0].value
       }
-      this.tonKho(loKho)
+      this.tonKho(loKho, index)
     } else {
       let loKho = this.listLoKho.filter(item => item.maDvi == this.thongtinPhanLo.maLoKho)[0];
       this.tonKho(loKho)
@@ -310,7 +310,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
     }
   }
 
-  async tonKho(item) {
+  async tonKho(item, index?) {
     let body = {
       'maDvi': item.maDvi,
       'loaiVthh': this.formData.value.loaiVthh
@@ -320,7 +320,11 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
         let data = res.data;
         if (data.length > 0) {
           let val = data.reduce((prev, cur) => prev + cur.slHienThoi, 0);
-          this.thongtinPhanLo.tonKho = cloneDeep(val)
+          if (index >= 0) {
+            this.editCache[index].data.tonKho = cloneDeep(val)
+          } else {
+            this.thongtinPhanLo.tonKho = cloneDeep(val)
+          }
         } else {
           this.thongtinPhanLo.tonKho = null
         }
@@ -366,6 +370,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
 
   validateSoLuong(isAdd?) {
     const soLuongConLai = this.formData.value.slChiTieu - this.formData.value.slKeHoachDd
+    const tonKho = this.thongtinPhanLo.tonKho
     let soLuongDeXuat = 0
     let tongSoLuong = 0
     let maDviTsan: string;
@@ -379,6 +384,9 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
     })
     if (maDviTsan == this.thongtinPhanLo.maDviTsan) {
       this.notification.error(MESSAGE.ERROR, "Mã đơn vị tài sản (" + this.thongtinPhanLo.maDviTsan + " ) đã bị trùng với mã đơn vị tài sản trước đó vui lòng nhập lại")
+      return false
+    } else if (soLuongDeXuat > tonKho) {
+      this.notification.error(MESSAGE.ERROR, " Số lượng đề xuất đã vượt quá số lượng tồn kho. Xin vui lòng nhập lại ")
       return false
     } else if (soLuongDeXuat > soLuongConLai) {
       this.notification.error(MESSAGE.ERROR, " Số lượng đã vượt quá chỉ tiêu. Xin vui lòng nhập lại ")

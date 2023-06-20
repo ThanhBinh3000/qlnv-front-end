@@ -205,6 +205,14 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
   }
 
   selectHangHoa() {
+    this.dataTable = [];
+    this.formData.patchValue({
+      tongSoLuong: null,
+      tongTienGiaKhoiDiemDx: null,
+      tongTienGiaKdTheoDgiaDd: null,
+      tongKhoanTienDatTruocDx: null,
+      tongKhoanTienDtTheoDgiaDd: null,
+    });
     const modalTuChoi = this.modal.create({
       nzTitle: 'DANH SÁCH HÀNG HÓA',
       nzContent: DialogDanhSachHangHoaComponent,
