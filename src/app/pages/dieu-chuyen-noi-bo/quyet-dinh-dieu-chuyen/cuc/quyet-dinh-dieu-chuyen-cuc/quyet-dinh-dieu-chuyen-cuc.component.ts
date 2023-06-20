@@ -17,7 +17,7 @@ import { StorageService } from 'src/app/services/storage.service';
   styleUrls: ['./quyet-dinh-dieu-chuyen-cuc.component.scss']
 })
 export class QuyetDinhDieuChuyenCucComponent extends Base2Component implements OnInit {
-  @Input() isViewOnModal: boolean;
+  @Input() isViewOnModal: number;
 
   isVisibleChangeTab$ = new Subject();
   visibleTab: boolean = true;
