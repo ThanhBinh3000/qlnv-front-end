@@ -364,3 +364,7 @@ export function getName(n: number, name: string) {
     }
     return newName;
 }
+
+export function setTableWidth(leftWidth: number, col: number, colWidth: number, rightWidth: number): string {
+    return (leftWidth + col * colWidth + rightWidth).toString() + 'px';
+}

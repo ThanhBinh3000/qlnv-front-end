@@ -7,7 +7,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.service';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
-import { displayNumber, exchangeMoney, getHead, sortByIndex, sumNumber } from 'src/app/Utility/func';
+import { displayNumber, exchangeMoney, getHead, setTableWidth, sortByIndex, sumNumber } from 'src/app/Utility/func';
 import { AMOUNT, BOX_NUMBER_WIDTH, DON_VI_TIEN, LA_MA, MONEY_LIMIT, QUATITY } from "src/app/Utility/utils";
 import * as uuid from "uuid";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
@@ -121,9 +121,9 @@ export class BieuMau18Component implements OnInit {
 			if (category) {
 				this.linhVucChis = category.data;
 			}
-			this.scrollX = (1210 + BOX_NUMBER_WIDTH * 12).toString() + 'px';
+			this.scrollX = setTableWidth(1350, 12, BOX_NUMBER_WIDTH, 60);
 		} else {
-			this.scrollX = (1150 + BOX_NUMBER_WIDTH * 12).toString() + 'px';
+			this.scrollX = setTableWidth(1350, 12, BOX_NUMBER_WIDTH, 0);
 		}
 		this.statusBtnFinish = this.dataInfo?.statusBtnFinish;
 		this.statusPrint = this.dataInfo?.statusBtnPrint;
