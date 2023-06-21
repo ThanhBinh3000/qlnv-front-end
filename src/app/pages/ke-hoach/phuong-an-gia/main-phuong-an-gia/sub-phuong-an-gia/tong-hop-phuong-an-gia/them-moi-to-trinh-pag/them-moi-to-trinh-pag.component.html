@@ -4,24 +4,32 @@
             <i class="fa fa-arrow-left"></i>
             <span>Quay lại</span>
         </button>
-        <button *ngIf="formData.value.trangThaiTt == STATUS.CHO_DUYET_LDV" type="button" class="btn btn-sub do"
+        <button *ngIf="formData.value.trangThaiTt == STATUS.CHO_DUYET_LDV && (( this.type == this.TYPE_PAG.GIA_MUA_TOI_DA && !this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_MTDBTT_TONGHOP_DUYET_HSPAGIA'))
+      || ( this.type == this.TYPE_PAG.GIA_CU_THE  && !this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_GCT_TONGHOP_DUYET_HSPAGIA'))) "
+                type="button" class="btn btn-sub do"
             (click)="tuChoi()">
             <i class="icon htvbdh_tcdt_tuchoi do"></i>
             <span>Từ chối</span>
         </button>
-        <button *ngIf="formData.value.trangThaiTt == STATUS.CHO_DUYET_LDV " type="button" class="btn btn-sub xanh-nhat"
+        <button *ngIf="formData.value.trangThaiTt == STATUS.CHO_DUYET_LDV && (( this.type == this.TYPE_PAG.GIA_MUA_TOI_DA && !this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_MTDBTT_TONGHOP_DUYET_HSPAGIA'))
+      || ( this.type == this.TYPE_PAG.GIA_CU_THE  && !this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_GCT_TONGHOP_DUYET_HSPAGIA'))) "
+                type="button" class="btn btn-sub xanh-nhat"
             (click)="pheDuyet()">
             <i class="icon htvbdh_tcdt_pheduyet"></i>
             <span>Duyệt</span>
         </button>
-        <button *ngIf="formData.value.trangThaiTt == STATUS.DU_THAO ||
-            formData.value.trangThaiTt == STATUS.TU_CHOI_LDV " type="button" class="btn btn-sub xanh-nhat"
+        <button *ngIf="(formData.value.trangThaiTt == STATUS.DU_THAO ||formData.value.trangThaiTt == STATUS.TU_CHOI_LDV)
+         && (( this.type == this.TYPE_PAG.GIA_MUA_TOI_DA && !this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_MTDBTT_TONGHOP_TRINH_HSPAGIA'))
+      || ( this.type == this.TYPE_PAG.GIA_CU_THE  && !this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_GCT_TONGHOP_TRINH_HSPAGIA')))"
+                type="button" class="btn btn-sub xanh-nhat"
             (click)="save(true)">
             <i class="icon htvbdh_tcdt_guiduyet "></i>
             <span>Lưu và gửi duyệt</span>
         </button>
-        <button *ngIf="formData.value.trangThaiTt == STATUS.DU_THAO ||
-            formData.value.trangThaiTt == STATUS.TU_CHOI_LDV " type="button" class="btn btn-sub xanh" (click)="save()">
+        <button *ngIf="(formData.value.trangThaiTt == STATUS.DU_THAO || formData.value.trangThaiTt == STATUS.TU_CHOI_LDV)
+         && (( this.type == this.TYPE_PAG.GIA_MUA_TOI_DA && !this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_MTDBTT_TONGHOP_TRINH_HSPAGIA'))
+      || ( this.type == this.TYPE_PAG.GIA_CU_THE  && !this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_GCT_TONGHOP_TRINH_HSPAGIA')))"
+                type="button" class="btn btn-sub xanh" (click)="save()">
             <i class="icon htvbdh_luu"></i>
             <span>Lưu</span>
         </button>
@@ -55,10 +63,6 @@
                                     [nzMax]="9999999" [nzStep]="1" [nzSize]="'small'">
                                 </nz-input-number>
                             </nz-input-group>
-                            <ng-template #error let-control>
-                                <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
-                                </ng-container>
-                            </ng-template>
                         </nz-form-control>
                     </nz-form-item>
                 </div>
@@ -70,10 +74,6 @@
                             <nz-date-picker formControlName="ttNgayKy" nzFormat="dd/MM/yyyy" id="ngay-qd"
                                 class="search__input">
                             </nz-date-picker>
-                            <ng-template #error let-control>
-                                <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
-                                </ng-container>
-                            </ng-template>
                         </nz-form-control>
                     </nz-form-item>
                 </div>
@@ -130,10 +130,6 @@
                             <nz-select formControlName="loaiGia" nzDisabled>
                                 <nz-option *ngFor="let p of dsLoaiGia" [nzValue]="p.ma" [nzLabel]="p.giaTri">
                                 </nz-option>
-                                <ng-template #error let-control>
-                                    <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
-                                    </ng-container>
-                                </ng-template>
                             </nz-select>
                         </nz-form-control>
                     </nz-form-item>
@@ -328,3 +324,8 @@
         </div>
     </form>
 </div>
+
+<ng-template #error let-control>
+  <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
+  </ng-container>
+</ng-template>

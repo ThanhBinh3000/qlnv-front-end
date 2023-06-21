@@ -59,7 +59,7 @@ export class ThemMoiBaoCaoKetQuaThanhLyComponent extends Base2Component implemen
   maHauTo: any;
   listSoQd: any[] = [];
   chiTiet: any = [];
-
+  isFirstInit = true;
 
   constructor(
     httpClient: HttpClient,
@@ -78,12 +78,12 @@ export class ThemMoiBaoCaoKetQuaThanhLyComponent extends Base2Component implemen
       id: [],
       maDvi: [],
       nam: [dayjs().get("year"), [Validators.required]],
-      soBaoCao: [],
+      soBaoCao:  ['', [Validators.required]],
       ngayBaoCao: [],
       idQd: [],
-      soQd: [],
-      noiDung: [],
-      trangThai: [],
+      soQd:  ['', [Validators.required]],
+      noiDung: ['', [Validators.required]],
+      trangThai: [STATUS.DU_THAO],
       tongSoLuongTl: [],
       tongSoLuongCon: [],
       tongThanhTien: [],
@@ -93,7 +93,7 @@ export class ThemMoiBaoCaoKetQuaThanhLyComponent extends Base2Component implemen
       nguoiGduyetId: [],
       lyDoTuChoi: [],
       tenDvi: [],
-      tenTrangThai: [],
+      tenTrangThai: ['Dự thảo'],
       fileDinhKem: [new Array<FileDinhKem>()],
       baoCaoKqDtl: [new Array<BaoCaoKqDtl>()],
     });
@@ -108,16 +108,14 @@ export class ThemMoiBaoCaoKetQuaThanhLyComponent extends Base2Component implemen
         this.loadDsSoQd(),
       ]);
       await this.loadChiTiet(this.idInput);
-      if (Object.keys(this.dataInit).length > 0) {
-        this.formData.patchValue({idQd: this.dataInit.id})
-        await this.changeSoQd(this.dataInit.id);
-      }
     } catch (e) {
       console.log("error: ", e);
       await this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      this.isFirstInit = false;
+      await this.spinner.hide();
     }
-    await this.spinner.hide();
   }
 
 
@@ -133,25 +131,22 @@ export class ThemMoiBaoCaoKetQuaThanhLyComponent extends Base2Component implemen
             }, {emitEvent: false});
 
             this.formData.value.baoCaoKqDtl.forEach(s => {
-              idVirtual: uuid.v4();
+              s.idVirtual = uuid.v4();
             });
-            this.changeSoQd(res.data.idQd);
+            this.buildTableView(this.formData.value.baoCaoKqDtl)
           }
-          console.log(this.formData.value)
         })
         .catch((e) => {
           console.log("error: ", e);
           this.spinner.hide();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         });
-      this.formData.controls['idQd'].disable();
     } else {
       this.formData.patchValue({
         maDvi: this.userInfo.MA_DVI,
         tenDvi: this.userInfo.TEN_DVI,
       });
     }
-
   }
 
   async loadDsSoQd() {
@@ -177,13 +172,19 @@ export class ThemMoiBaoCaoKetQuaThanhLyComponent extends Base2Component implemen
 
   async save() {
     this.formData.disable({emitEvent: false});
+    let dt = this.dataTable.flatMap((item) => item.childData);
+    this.formData.patchValue({baoCaoKqDtl: dt})
     let body = {
       ...this.formData.value,
-      soBaoCao: this.formData.value.soBaoCao ? this.formData.value.soBaoCao + this.maHauTo : this.maHauTo
+      soBaoCao: this.formData.value.soBaoCao ? this.formData.value.soBaoCao + this.maHauTo : this.maHauTo,
     };
-    let rs = await this.createUpdate(body);
+    let rs = await this.createUpdate(body)
     this.formData.enable({emitEvent: false});
-    this.formData.patchValue({id: rs.id})
+    this.formData.patchValue({
+      id: rs.id,
+    })
+    let ct =  await this.baoCaoKqThanhLyService.getDetail(rs.id);
+    this.buildTableView(ct.data.baoCaoKqDtl)
   }
 
   async saveAndSend(body: any, trangThai: string, msg: string, msgSuccess?: string) {
@@ -195,26 +196,26 @@ export class ThemMoiBaoCaoKetQuaThanhLyComponent extends Base2Component implemen
     this.showListEvent.emit();
   }
 
-  changeSoQd(id) {
-    if (id) {
+  changeSoQd($event: any) {
+    if ($event && !this.isFirstInit) {
       try {
         this.spinner.show();
         this.chiTiet = [];
-        this.quyetDinhThanhLyService.getDetail(id).then(res => {
+        this.quyetDinhThanhLyService.getDetail($event).then(res => {
           if (res.msg == MESSAGE.SUCCESS) {
             if (res.data) {
               if (this.userInfo.CAP_DVI === "2") {
                 this.dataTable = cloneDeep(res.data.quyetDinhDtl);
+                this.dataTable.forEach(f=>f.id=null)
               }
-              console.log(res.data.quyetDinhDtl,"res.data.hoSoDtl")
               this.formData.patchValue({
                 soQD: res.data.soQd,
-                baoCaoKqDtl: res.data.quyetDinhDtl.length > 0 ? res.data.quyetDinhDtl : null,
+                baoCaoKqDtl:this.dataTable,
                 tongSoLuongTl: res.data.tongSoLuongTl,
                 tongSoLuongCon: res.data.tongSoLuongCon,
                 tongThanhTien: res.data.tongThanhTien,
               });
-              this.buildTableView()
+              this.buildTableView(this.formData.value.baoCaoKqDtl)
             }
           }
           0
@@ -243,13 +244,11 @@ export class ThemMoiBaoCaoKetQuaThanhLyComponent extends Base2Component implemen
   }
 
 
-  buildTableView() {
-    let data = cloneDeep(this.formData.value.baoCaoKqDtl);
-    console.log(data,1111)
+  buildTableView(data) {
     if (this.userService.isCuc()) {
       data = data.filter(s => s.maDiaDiem.substring(0, 6) === this.userInfo.MA_DVI);
     }
-    let dataView = chain(data)
+    this.dataTable = chain(data)
       .groupBy("tenChiCuc")
       .map((value, key) => {
         return {
@@ -258,9 +257,6 @@ export class ThemMoiBaoCaoKetQuaThanhLyComponent extends Base2Component implemen
           childData: value,
         };
       }).value();
-
-    this.dataTable = dataView;
-    console.log(this.dataTable,55)
     this.expandAll()
 
   }

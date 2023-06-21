@@ -9,7 +9,7 @@
       </div>
     </div>
 
-    <div class="btn-group">
+    <div *ngIf="!isViewOnModal" class="btn-group">
 
       <button type="button" class="btn btn-sub" (click)="quayLai()">
         <i class="fa fa-arrow-left"></i>
@@ -18,7 +18,7 @@
 
       <button *ngIf="isYCXDDiemNhap()" type="button" class="btn btn-sub xanh-nhat ml-2" (click)="ycXDDiemNhap()">
         <i class="icon htvbdh_tcdt_guiduyet"></i>
-        <span>Y/C xác định điểm nhập</span>
+        <span>Y/C Chi cục xác định điểm nhập ĐC</span>
       </button>
 
       <button *ngIf="isLuuVaGD()" type="button" class="btn btn-sub xanh-nhat ml-2" (click)="save(true)">
@@ -41,10 +41,10 @@
         <span>Duyệt</span>
       </button>
 
-      <button *ngIf="isBanHanh()" type="button" class="btn btn-info ml-2" (click)="banHanh()">
+      <!-- <button *ngIf="isBanHanh()" type="button" class="btn btn-info ml-2" (click)="banHanh()">
         <i class="icon htvbdh_chuyenvanthu"></i>
         <span>Ban hành</span>
-      </button>
+      </button> -->
 
     </div>
   </div>
@@ -214,7 +214,7 @@
             </nz-form-item>
           </div>
 
-          <div nz-col nzSpan="6">
+          <!-- <div nz-col nzSpan="6">
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true"> Căn cứ vào quyết định điều chuyển của Tổng cục
               </nz-form-label>
@@ -223,6 +223,18 @@
                   (ngModelChange)="onChangeCanCuQdTc($event)">
                   <nz-option *ngFor="let p of listQuyetDinh" [nzValue]="p.id" [nzLabel]="p.soQdinh"></nz-option>
                 </nz-select>
+              </nz-form-control>
+            </nz-form-item>[readonly]="isView || isChiCuc() || !formData.value.loaiQdinh"
+          </div> -->
+
+          <div nz-col [nzSpan]="5">
+            <nz-form-item>
+              <nz-form-label nzRequired [nzNoColon]="true">Căn cứ vào quyết định điều chuyển của Tổng
+                cục</nz-form-label>
+              <nz-form-control [nzErrorTip]="error">
+                <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogQD()">
+                  <input nz-input formControlName="canCuQdTc" [readonly]="true" />
+                </nz-input-group>
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -327,7 +339,7 @@
             </nz-form-item>
           </div>
 
-          <div nz-col nzSpan="5">
+          <!-- <div nz-col nzSpan="5">
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true"> Căn cứ vào quyết định điều chuyển của Tổng cục
               </nz-form-label>
@@ -336,6 +348,19 @@
                   nzAllowClear (ngModelChange)="onChangeCanCuQdTc($event)">
                   <nz-option *ngFor="let p of listQuyetDinh" [nzValue]="p.id" [nzLabel]="p.soQdinh"></nz-option>
                 </nz-select>
+              </nz-form-control>
+            </nz-form-item>[readonly]="isView || isChiCuc() || !formData.value.loaiQdinh"
+          </div> -->
+
+          <div nz-col [nzSpan]="5">
+            <nz-form-item>
+              <nz-form-label nzRequired [nzNoColon]="true">Căn cứ vào quyết định điều chuyển của Tổng
+                cục</nz-form-label>
+              <nz-form-control [nzErrorTip]="error">
+                <nz-input-group *ngIf="!!formData.value.loaiQdinh" nzAddOnAfterIcon="folder-open"
+                  (click)="openDialogQD()">
+                  <input nz-input formControlName="canCuQdTc" [readonly]="true" />
+                </nz-input-group>
               </nz-form-control>
             </nz-form-item>
           </div>

@@ -200,7 +200,7 @@
                                 data.soQddc }}</a></td>
                         <td>{{ LIST_TRANG_THAI[data.trangThai] }}</td>
                         <td>
-                            <a (click)="viewDetail(data.id, true)"
+                            <a (click)="viewDetail(data.id, true, data.qdDcId)"
                                 *ngIf="userService.isAccessPermisson('DCNB_TONGHOPDC_XEM')">
                                 <i class=" fa fa-eye"></i>
                             </a>
@@ -212,8 +212,8 @@
                                 (click)="taoQuyetDinhDc(data.id)">
                                 <i class="icon htvbdh_tcdt_tao-qd"></i>
                             </a> -->
-                            <a *ngIf="userService.isAccessPermisson('DCNB_QUYETDINHDC_SUA')"
-                                (click)="taoQuyetDinhDc(data.id)">
+                            <a *ngIf="userService.isAccessPermisson('DCNB_QUYETDINHDC_SUA') && userService.isTongCuc()"
+                                (click)="taoQuyetDinhDc(data.id, data.qdDcId)">
                                 <i class="icon htvbdh_tcdt_tao-qd"></i>
                             </a>
                             <a *ngIf="userService.isAccessPermisson('DCNB_TONGHOPDC_XOA') && checkRoleDelete(data.trangThai)"
@@ -246,14 +246,15 @@
 </div>
 <ng-template #templateThemmoi>
     <app-chi-tiet-tong-hop-dieu-chuyen-cap-tong-cuc [idInput]="selectedId" [isView]="isView" [isEdit]="isEdit"
-        [isViewDetail]="isViewDetail" [isAddNew]="isAddNew"
+        [isViewDetail]="isViewDetail" [isAddNew]="isAddNew" [qdDcId]="selectQdDcId"
         (showListEvent)="showList()"></app-chi-tiet-tong-hop-dieu-chuyen-cap-tong-cuc>
 </ng-template>
 
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewModalQdDc"
     [nzBodyStyle]="{ 'overflow-y': 'auto' }" (nzOnCancel)="closeModalQdDc()">
     <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-        <app-thong-tin-quyet-dinh-dieu-chuyen-tc [idInput]="idQdDcSelect"></app-thong-tin-quyet-dinh-dieu-chuyen-tc>
+        <app-thong-tin-quyet-dinh-dieu-chuyen-tc [idInput]="idQdDcSelect"
+            [isViewOnModal]="1"></app-thong-tin-quyet-dinh-dieu-chuyen-tc>
     </ng-container>
     <div *nzModalFooter>
         <button nz-button (click)="closeModalQdDc()" class="modal__button--cancel">

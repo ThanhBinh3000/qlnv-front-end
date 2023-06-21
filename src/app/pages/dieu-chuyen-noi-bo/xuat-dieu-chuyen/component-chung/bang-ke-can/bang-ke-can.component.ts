@@ -26,14 +26,14 @@ import { CHUC_NANG } from 'src/app/constants/status';
   styleUrls: ['./bang-ke-can.component.scss']
 })
 export class BangKeCanXuatDieuChuyenComponent extends Base2Component implements OnInit {
-  @Input() loaiVthh: string;
+  @Input() isVatTu: boolean;
+  @Input() loaiDc: string;
   // public vldTrangThai: XuatCuuTroVienTroComponent;
   public CHUC_NANG = CHUC_NANG;
   dsDonvi: any[] = [];
   userInfo: UserLogin;
   userdetail: any = {};
   selectedId: number = 0;
-  isVatTu: boolean = false;
   isView = false;
   expandSetString = new Set<string>();
   dataView: any = [];
@@ -58,7 +58,7 @@ export class BangKeCanXuatDieuChuyenComponent extends Base2Component implements 
       nam: [],
       soQdGiaoNvXh: [],
       soBangKe: [],
-      loaiVthh: [],
+      isVatTu: [],
       thoiGianGiaoNhan: [],
       thoiGianGiaoNhanTu: [],
       thoiGianGiaoNhanDen: [],
@@ -147,7 +147,8 @@ export class BangKeCanXuatDieuChuyenComponent extends Base2Component implements 
   async search(roles?): Promise<void> {
     await this.spinner.show()
     this.formData.patchValue({
-      loaiVthh: this.loaiVthh,
+      isVatTu: this.isVatTu,
+      loaiDc: this.loaiDc,
       type: "XUAT_CAP"
     });
     await super.search(roles);

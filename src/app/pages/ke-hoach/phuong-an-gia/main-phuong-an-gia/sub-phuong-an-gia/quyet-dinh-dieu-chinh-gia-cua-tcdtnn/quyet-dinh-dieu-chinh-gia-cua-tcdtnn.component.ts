@@ -11,6 +11,9 @@ import { UserService } from 'src/app/services/user.service';
 import {QuyetDinhDieuChinhGiaTCDTNNService} from "../../../../../../services/ke-hoach/phuong-an-gia/quyetDinhDieuChinhGiaTCDTNN.service";
 import { saveAs } from 'file-saver';
 import {Globals} from "../../../../../../shared/globals";
+import {Router} from "@angular/router";
+import {STATUS} from "../../../../../../constants/status";
+import {UserLogin} from "../../../../../../models/userlogin";
 
 @Component({
   selector: 'app-quyet-dinh-dieu-chinh-gia-cua-tcdtnn',
@@ -37,14 +40,16 @@ export class QuyetDinhDieuChinhGiaCuaTcdtnnComponent implements OnInit {
   setOfCheckedId = new Set<number>();
   pageSize: number = PAGE_SIZE_DEFAULT;
   indeterminate = false;
-
   isViewDetail: boolean;
   idSelected: number = 0;
+  STATUS = STATUS;
+  userInfo : UserLogin
   constructor(private readonly fb: FormBuilder,
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
     public userService: UserService,
     private modal: NzModalService,
+    private router: Router,
     private quyetDinhDieuChinhGiaTCDTNNService: QuyetDinhDieuChinhGiaTCDTNNService,
               public globals : Globals
   ) {
@@ -67,6 +72,11 @@ export class QuyetDinhDieuChinhGiaCuaTcdtnnComponent implements OnInit {
   };
 
   async ngOnInit() {
+    if ((this.pagType == 'LT' && !this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_GCT_QDDCTC'))
+      || (this.pagType == 'VT' && !this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_VT_GCT_QDDCTC'))) {
+      this.router.navigateByUrl('/error/401')
+    }
+    this.userInfo = this.userService.getUserLogin();
     this.loadDsNam();
     this.search();
 

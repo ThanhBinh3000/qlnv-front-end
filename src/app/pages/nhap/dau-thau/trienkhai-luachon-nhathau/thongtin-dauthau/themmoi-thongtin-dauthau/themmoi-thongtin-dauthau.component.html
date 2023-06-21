@@ -311,14 +311,14 @@
                     <span>Danh sách các gói thầu</span>
                 </div>
             </div>
-            <div class="buttons">
-                <button
-                    *ngIf="idGoiThau > 0 && !isShowFromKq && formData.value.trangThai != STATUS.HOAN_THANH_CAP_NHAT && !isView"
-                    class="btn btn-main btn-sm waves-effect waves-light" (click)="saveGoiThauPopup()">
-                    <i class="icon htvbdh_tcdt_save"></i>
-                    <span>Lưu</span>
-                </button>
-            </div>
+<!--            <div class="buttons">-->
+<!--                <button-->
+<!--                    *ngIf="idGoiThau > 0 && !isShowFromKq && formData.value.trangThai != STATUS.HOAN_THANH_CAP_NHAT && !isView"-->
+<!--                    class="btn btn-main btn-sm waves-effect waves-light" (click)="saveGoiThauPopup()">-->
+<!--                    <i class="icon htvbdh_tcdt_save"></i>-->
+<!--                    <span>Lưu</span>-->
+<!--                </button>-->
+<!--            </div>-->
         </div>
         <nz-card class="mg-t-16 flex-card p-lr16 table-card">
             <nz-table [nzData]="listDataDetail" class="nowrap" nzBordered

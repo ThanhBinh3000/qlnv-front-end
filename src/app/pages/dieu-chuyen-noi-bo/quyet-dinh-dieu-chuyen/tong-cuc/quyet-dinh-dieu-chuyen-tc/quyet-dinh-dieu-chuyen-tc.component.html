@@ -184,8 +184,8 @@
               <td>{{ data.trichYeu }}</td>
               <td>{{ data.maDxuat }}</td>
               <td>{{ data.maThop }}</td>
-              <td>{{ data.maThop }}</td>
-              <td>{{ data.maThop }}</td>
+              <td>{{ data.soQdinhXuatCuc }}</td>
+              <td>{{ data.soQdinhNhapCuc }}</td>
               <td>{{ data.tenTrangThai }}</td>
               <td class="text-center">
                 <a *ngIf="data.trangThai !== STATUS.DU_THAO && userService.isAccessPermisson('DCNB_QUYETDINHDC_XEM')"
@@ -230,6 +230,6 @@
 
   <div class="chi-tiet" *ngIf="isDetail">
     <app-thong-tin-quyet-dinh-dieu-chuyen-tc [isView]="isView" [idInput]="selectedId" [idTHop]="idTHop"
-      (showListEvent)="quayLai()"></app-thong-tin-quyet-dinh-dieu-chuyen-tc>
+      [isViewOnModal]="isViewOnModal" (showListEvent)="quayLai()"></app-thong-tin-quyet-dinh-dieu-chuyen-tc>
   </div>
 </div>

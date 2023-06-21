@@ -61,7 +61,7 @@
       </div>
     </nz-card>
     <div class="group-button">
-      <h3 class="text-uppercase">{{loaiVthh == '02' ? 'Bảng kê vật tư' : 'Danh sách bảng kê cân hàng'}}</h3>
+      <h3 class="text-uppercase">{{isVatTu ? 'Bảng kê vật tư' : 'Danh sách bảng kê cân hàng'}}</h3>
       <div class="buttons">
         <button type="button" class="btn btn-do" (click)="deleteMulti()"
           *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_XK_LT_BKCH_XOA')">
@@ -195,14 +195,14 @@
   </div>
 </div>
 <div class="chi-tiet" *ngIf="isDetail">
-  <app-xdcnb-chi-tiet-bang-ke-can [idInput]="selectedId" [typeVthh]="loaiVthh" [isView]="isView"
+  <app-xdcnb-chi-tiet-bang-ke-can [idInput]="selectedId" [isVatTu]="isVatTu" [loaiDc]="loaiDc" [isView]="isView"
     (showListEvent)="showList()">
   </app-xdcnb-chi-tiet-bang-ke-can>
 </div>
 
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openPhieuXk" (nzOnCancel)="closePhieuXkModal()">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-    <app-xuat-dcnb-them-moi-phieu-xuat-kho [idInput]="idPhieuXk" [typeVthh]="loaiVthh" [isView]="true">
+    <app-xuat-dcnb-them-moi-phieu-xuat-kho [idInput]="idPhieuXk" [isViewOnModal]="true">
     </app-xuat-dcnb-them-moi-phieu-xuat-kho>
   </ng-container>
   <div *nzModalFooter>

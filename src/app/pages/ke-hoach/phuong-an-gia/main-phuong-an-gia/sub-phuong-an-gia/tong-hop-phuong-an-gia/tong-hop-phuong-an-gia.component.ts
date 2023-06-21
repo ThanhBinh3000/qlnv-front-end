@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { LIST_VAT_TU_HANG_HOA, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import {LIST_VAT_TU_HANG_HOA, PAGE_SIZE_DEFAULT, TYPE_PAG} from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserService } from 'src/app/services/user.service';
 import { cloneDeep } from 'lodash';
@@ -12,6 +12,7 @@ import { saveAs } from 'file-saver';
 import { TongHopPhuongAnGiaService } from 'src/app/services/ke-hoach/phuong-an-gia/tong-hop-phuong-an-gia.service';
 import { STATUS } from 'src/app/constants/status';
 import {DanhMucService} from "../../../../../../services/danhmuc.service";
+import {Router} from "@angular/router";
 @Component({
   selector: 'app-tong-hop-phuong-an-gia',
   templateUrl: './tong-hop-phuong-an-gia.component.html',
@@ -46,12 +47,14 @@ export class TongHopPhuongAnGiaComponent implements OnInit {
 
   isViewDetail: boolean = false;
   idSelected: number = 0;
+  typeConst = TYPE_PAG
   constructor(private readonly fb: FormBuilder,
     private spinner: NgxSpinnerService,
     private danhMucService: DanhMucService,
     private notification: NzNotificationService,
     public userService: UserService,
     private modal: NzModalService,
+    private router: Router,
     private tongHopPhuongAnGiaService: TongHopPhuongAnGiaService,
   ) {
     this.formData = this.fb.group({
@@ -86,6 +89,11 @@ export class TongHopPhuongAnGiaComponent implements OnInit {
   };
 
   async ngOnInit() {
+    if (( this.type == this.typeConst.GIA_MUA_TOI_DA && !this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_MTDBTT_TONGHOP'))
+      || ( this.type == this.typeConst.GIA_CU_THE  && !this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_GCT_TONGHOP'))
+    ) {
+      this.router.navigateByUrl('/error/401')
+    }
     this.loadDsNam();
     this.loadDsVthh();
     this.search();

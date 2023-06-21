@@ -75,7 +75,7 @@
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true"> Số quyết định tiêu hủy</nz-form-label>
               <nz-form-control [nzErrorTip]="error" nz-col nzSpan="24">
-                <nz-select (ngModelChange)="changeHoSo($event)" [nzDisabled]="isView" formControlName="idQd"
+                <nz-select (ngModelChange)="changeSoQd($event)" [nzDisabled]="isView" formControlName="idQd"
                            nzAllowClear nzShowSearch>
                   <nz-option *ngFor="let p of listQd" [nzLabel]="p.soQd" [nzValue]="p.id"></nz-option>
                 </nz-select>
@@ -86,10 +86,7 @@
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true"> Số hồ sơ đề nghị tiêu hủy</nz-form-label>
               <nz-form-control [nzErrorTip]="error" nz-col nzSpan="24">
-                <nz-select (ngModelChange)="changeHoSo($event)" [nzDisabled]="isView" formControlName="idHoSo"
-                           nzAllowClear nzShowSearch>
-                  <nz-option *ngFor="let p of listHoSo" [nzLabel]="p.soHoSo" [nzValue]="p.id"></nz-option>
-                </nz-select>
+                <input nz-input formControlName="soHoSo" [readonly]="true" />
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -97,7 +94,7 @@
             <nz-form-item class="form-item">
               <nz-form-label [nzNoColon]="true"> Trích yếu </nz-form-label>
               <nz-form-control>
-                <input nz-input formControlName="trichYeu" readonly="isView" />
+                <input nz-input formControlName="trichYeu" [readonly]="isView"/>
               </nz-form-control>
             </nz-form-item>
           </div>

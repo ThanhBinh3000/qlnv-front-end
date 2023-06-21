@@ -14,7 +14,7 @@ import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { BienBanLayMauDieuChuyenService } from '../services/dcnb-bien-ban-lay-mau.service';
 
 export interface PassData {
-    idBbLayMau: number, qdinhDccId: number, soQdinhDcc: string, maLoKho: string, tenLoKho: string,
+    idBbLayMau: number, qddccId: number, soQdinhDcc: string, maLoKho: string, tenLoKho: string,
     maNganKho: string, tenNganKho: string, maNhaKho: string, tenNhaKho: string, maDiemKho: string, tenDiemKho: string, loaiVthh: string, tenLoaiVthh: string, cloaiVthh: string, tenCloaiVthh: string
 }
 @Component({
@@ -26,7 +26,8 @@ export class DanhSachBienBanLayMau extends Base2Component implements OnInit {
     @Input() title: string = "Danh sách biên bản lấy mẫu/bàn giao mẫu";
     @Input() fileNameExport: string = "file.xlsx";
     @Input() loaiDc: string;
-    @Input() typeVthh: string[];
+    @Input() isVatTu: boolean;
+    @Input() thayDoiThuKho: boolean;
     // @Output() checkPermissonDelete = new EventEmitter<boolean>();
     // @Output() checkPermissonExport = new EventEmitter<boolean>();
     // @Output() checkPermissonAdd = new EventEmitter<boolean>();
@@ -40,14 +41,14 @@ export class DanhSachBienBanLayMau extends Base2Component implements OnInit {
     expandSetString = new Set<string>();
     dataView: any[];
     isViewQdDc: boolean = false;
-    qdinhDccId: number;
+    qddccId: number;
 
     page: number = 1;
     pageSize: number = PAGE_SIZE_DEFAULT;
     totalRecord: number = 0;
     dataTable: any[];
     passData: PassData = {
-        idBbLayMau: null, qdinhDccId: null, soQdinhDcc: '', maLoKho: '', tenLoKho: '',
+        idBbLayMau: null, qddccId: null, soQdinhDcc: '', maLoKho: '', tenLoKho: '',
         maNganKho: '', tenNganKho: '', maNhaKho: '', tenNhaKho: '', maDiemKho: '', tenDiemKho: '', loaiVthh: '', tenLoaiVthh: '', cloaiVthh: '', tenCloaiVthh: ''
     }
     LIST_TRANG_THAI: { [key: string]: string } = {
@@ -75,7 +76,7 @@ export class DanhSachBienBanLayMau extends Base2Component implements OnInit {
             denNgay: [null],
             trangThai: [STATUS.BAN_HANH],
             loaiDc: [],
-            loaiVthh: [],
+            isVatTu: [],
         })
         this.filterTable = {
             nam: '',
@@ -93,7 +94,7 @@ export class DanhSachBienBanLayMau extends Base2Component implements OnInit {
     }
 
     ngOnInit(): void {
-        this.formData.patchValue({ loaiDc: this.loaiDc, loaiVthh: this.typeVthh });
+        this.formData.patchValue({ loaiDc: this.loaiDc, isVatTu: this.isVatTu });
         this.timKiem()
     }
     async timKiem() {
@@ -135,7 +136,7 @@ export class DanhSachBienBanLayMau extends Base2Component implements OnInit {
     //             return {
     //                 ...data,
     //                 soQdinhDcc: data.soQdinh,
-    //                 qdinhDccId: data.id,
+    //                 qdccId: data.id,
     //                 idVirtual: uuidv4(),
     //                 childData: rs
     //             };
@@ -166,7 +167,7 @@ export class DanhSachBienBanLayMau extends Base2Component implements OnInit {
     //         return {
     //             ...data,
     //             soQdinhDcc: data.soQdinh,
-    //             qdinhDccId: data.id,
+    //             qdccId: data.id,
     //             idVirtual: uuidv4(),
     //             childData: rs
     //         }
@@ -225,13 +226,13 @@ export class DanhSachBienBanLayMau extends Base2Component implements OnInit {
     viewDetail(id: number, isView: boolean) {
 
     }
-    redirectToChiTiet(data: any, isView: boolean, idBbLayMau?: number, qdinhDccId?: number, soQdinhDcc?: string, maLoKho?: string, tenLoKho?: string,
+    redirectToChiTiet(data: any, isView: boolean, idBbLayMau?: number, qddccId?: number, soQdinhDcc?: string, maLoKho?: string, tenLoKho?: string,
         maNganKho?: string, tenNganKho?: string, maNhaKho?: string, tenNhaKho?: string, maDiemKho?: string, tenDiemKho?: string, loaiVthh?: string, tenLoaiVthh?: string, cloaiVthh?: string, tenCloaiVthh?: string) {
         this.selectedId = idBbLayMau;
         this.isDetail = true;
         this.isView = isView;
         this.passData = {
-            idBbLayMau, qdinhDccId, soQdinhDcc, maLoKho, tenLoKho,
+            idBbLayMau, qddccId, soQdinhDcc, maLoKho, tenLoKho,
             maNganKho, tenNganKho, maNhaKho, tenNhaKho, maDiemKho, tenDiemKho, loaiVthh, tenLoaiVthh, cloaiVthh, tenCloaiVthh
         }
     }
@@ -323,12 +324,12 @@ export class DanhSachBienBanLayMau extends Base2Component implements OnInit {
         this.isDetail = false;
         this.timKiem();
     }
-    openModalQdDc(qdinhDccId: number) {
-        this.qdinhDccId = qdinhDccId;
+    openModalQdDc(qddccId: number) {
+        this.qddccId = qddccId;
         this.isViewQdDc = true
     }
     closeModalQdDc() {
-        this.qdinhDccId = null;
+        this.qddccId = null;
         this.isViewQdDc = false;
     }
 }

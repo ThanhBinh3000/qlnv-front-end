@@ -22,6 +22,9 @@ export class QuyetDinhDieuChuyenTCComponent extends Base2Component implements On
 
   @Input()
   idTHop: number;
+  @Input()
+  qdDcId: number;
+  @Input() isViewOnModal: number;
 
   selectedId: number = 0;
   isView = false;
@@ -75,6 +78,8 @@ export class QuyetDinhDieuChuyenTCComponent extends Base2Component implements On
 
     if (this.idTHop)
       this.redirectDetail(0, false)
+    if (this.qdDcId)
+      this.redirectDetail(this.qdDcId, true)
 
     try {
       this.initData()

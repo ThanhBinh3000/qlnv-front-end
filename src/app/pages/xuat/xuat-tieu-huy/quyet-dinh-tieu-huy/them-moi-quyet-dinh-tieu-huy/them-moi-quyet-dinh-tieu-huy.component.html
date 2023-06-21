@@ -339,8 +339,8 @@
             <td></td>
             <td></td>
             <td></td>
-            <td></td>
             <td>{{item.trangThai}}</td>
+            <td></td>
             <td></td>
           </tr>
           <ng-container *ngIf="expandSetString.has(item.idVirtual)">
@@ -387,7 +387,7 @@
                     <td>{{lv2.donViTinh}}</td>
                     <td>{{lv2.ngayDeXuat|date:globals.dateFormat}}</td>
                     <td>{{lv2.lyDo}}</td>
-                    <td>{{lv2.tgianDxTu|date:globals.dateFormat+'-'+lv2.tgianDxDen|date:globals.dateFormat}}</td>
+                    <td>{{lv2.tgianDxTu|date:globals.dateFormat+'-'}}{{lv2.tgianDxDen|date:globals.dateFormat}}</td>
                     <td></td>
                     <td>{{lv2.trangThaiTh}}</td>
                   </tr>

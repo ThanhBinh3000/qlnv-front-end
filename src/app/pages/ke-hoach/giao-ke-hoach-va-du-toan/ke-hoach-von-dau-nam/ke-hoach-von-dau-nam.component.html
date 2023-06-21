@@ -18,8 +18,11 @@
 <ng-container *ngIf="tabSelected == 'quyetdinh'">
   <app-quyet-dinh></app-quyet-dinh>
 </ng-container>
+<!--<ng-container *ngIf="tabSelected == 'chiteukehoach'">-->
+<!--  <app-pa-chi-tieu-ke-hoach-nam></app-pa-chi-tieu-ke-hoach-nam>-->
+<!--</ng-container>-->
 <ng-container *ngIf="tabSelected == 'chiteukehoach'">
-  <app-chi-tieu-ke-hoach-nam-cap-tong-cuc></app-chi-tieu-ke-hoach-nam-cap-tong-cuc>
+  <app-giao-chi-tieu-ke-hoach></app-giao-chi-tieu-ke-hoach>
 </ng-container>
 <ng-container *ngIf="tabSelected == 'dieuchinhchitieukh'">
   <app-dieu-chinh-ke-hoach></app-dieu-chinh-ke-hoach>
@@ -27,38 +30,3 @@
 <ng-container *ngIf="tabSelected == 'dutoannsnn'">
   <app-du-toan-nsnn></app-du-toan-nsnn>
 </ng-container>
-
-<!-- <nz-tabset nzType="card" class="mt-16 tab-level-1">
-  <nz-tab [nzTitle]="title_QD">
-    <ng-template #title_QD>
-      Quyết định
-    </ng-template>
-    <ng-template nz-tab>
-      <app-quyet-dinh></app-quyet-dinh>
-    </ng-template>
-  </nz-tab>
-  <nz-tab [nzTitle]="title_chi_tieu_kh">
-    <ng-template #title_chi_tieu_kh>
-      Chỉ tiêu kế hoạch
-    </ng-template>
-    <ng-template nz-tab>
-      <app-chi-tieu-ke-hoach-nam-cap-tong-cuc></app-chi-tieu-ke-hoach-nam-cap-tong-cuc>
-    </ng-template>
-  </nz-tab>
-  <nz-tab [nzTitle]="title_dc_chi_tieu_kh" class="vat-tu__container">
-    <ng-template #title_dc_chi_tieu_kh>
-      Điều chỉnh chỉ tiêu KH
-    </ng-template>
-    <ng-template nz-tab>
-      <app-dieu-chinh-ke-hoach></app-dieu-chinh-ke-hoach>
-    </ng-template>
-  </nz-tab>
-  <nz-tab [nzTitle]="title_du_toan_nsnn" class="vat-tu__container">
-    <ng-template #title_du_toan_nsnn>
-      Dự toán NSNN
-    </ng-template>
-    <ng-template nz-tab>
-      <app-du-toan-nsnn></app-du-toan-nsnn>
-    </ng-template>
-  </nz-tab>
-</nz-tabset> -->

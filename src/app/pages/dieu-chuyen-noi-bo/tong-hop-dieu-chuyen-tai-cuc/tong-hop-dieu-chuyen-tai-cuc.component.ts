@@ -37,13 +37,13 @@ export class TongHopDieuChuyenTaiCuc extends Base2Component implements OnInit {
     listHangHoaAll: any[] = [];
     listChungLoaiHangHoa: any[] = [];
     listTrangThai: any[] = [
-        { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
-        { ma: this.STATUS.CHO_DUYET_TP, giaTri: 'Chờ duyệt - TP' },
-        { ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối - TP' },
-        { ma: this.STATUS.CHO_DUYET_LDC, giaTri: 'Chờ duyệt - LĐ Cục' },
-        { ma: this.STATUS.TU_CHOI_LDC, giaTri: 'Từ chối - LĐ Cục' },
-        { ma: this.STATUS.DA_DUYET_LDC, giaTri: 'Đã duyệt - LĐ Cục' },
-        { ma: this.STATUS.YC_CHICUC_PHANBO_DC, giaTri: "Y/c chi cục xác định điểm nhập" }
+        { ma: STATUS.DU_THAO, giaTri: 'Dự thảo' },
+        { ma: STATUS.CHO_DUYET_TP, giaTri: 'Chờ duyệt - TP' },
+        { ma: STATUS.TU_CHOI_TP, giaTri: 'Từ chối - TP' },
+        { ma: STATUS.CHO_DUYET_LDC, giaTri: 'Chờ duyệt - LĐ Cục' },
+        { ma: STATUS.TU_CHOI_LDC, giaTri: 'Từ chối - LĐ Cục' },
+        { ma: STATUS.DA_DUYET_LDC, giaTri: 'Đã duyệt - LĐ Cục' },
+        { ma: STATUS.YC_CHICUC_PHANBO_DC, giaTri: "Y/c chi cục xác định điểm nhập" }
     ];
     listLoaiDieuChuyen: any[] = [
         // { value: "ALL", giaTri: "Tất cả" },
@@ -56,13 +56,13 @@ export class TongHopDieuChuyenTaiCuc extends Base2Component implements OnInit {
         "CUC": "Giữa 2 cục DTNN KV"
     }
     LIST_TRANG_THAI = {
-        "00": "Dự thảo",
-        "01": "Chờ duyệt - TP",
-        "02": "Từ chối -TP",
-        "03": "Chờ duyệt - LĐ Cục",
-        "04": "Từ chối - LĐ Cục",
-        "05": "Đã duyệt - LĐ Cục",
-        "59": "Y/c chi cục xác định điểm nhập"
+        [STATUS.DU_THAO]: "Dự thảo",
+        [STATUS.CHO_DUYET_TP]: "Chờ duyệt - TP",
+        [STATUS.TU_CHOI_TP]: "Từ chối -TP",
+        [STATUS.CHO_DUYET_LDC]: "Chờ duyệt - LĐ Cục",
+        [STATUS.TU_CHOI_LDC]: "Từ chối - LĐ Cục",
+        [STATUS.DA_DUYET_LDC]: "Đã duyệt - LĐ Cục",
+        [STATUS.YC_CHICUC_PHANBO_DC]: "Y/c chi cục xác định điểm nhập"
     }
     isViewDetail: boolean = false;
     isAddNew: boolean = false;
@@ -105,6 +105,7 @@ export class TongHopDieuChuyenTaiCuc extends Base2Component implements OnInit {
             namKeHoach: '',
             tenDvi: '',
             id: '',
+            soDeXuat: '',
             loaiDieuChuyen: '',
             ngayTongHop: '',
             thTuNgay: '',
@@ -204,20 +205,17 @@ export class TongHopDieuChuyenTaiCuc extends Base2Component implements OnInit {
         this.isViewDetail = false;
         await this.search();
     };
-    checkRoleView(trangThai: string) {
-        return !(this.checkRoleEdit(trangThai) || this.checkRoleApproveDc(trangThai) || this.checkRoleDelete(trangThai)) && this.userService.isCuc()
+    checkRoleView(trangThai: string, loaiDieuChuyen: string) {
+        return !(this.checkRoleEdit(trangThai, loaiDieuChuyen) || this.checkRoleApproveDc(trangThai) || this.checkRoleDelete(trangThai)) && this.userService.isCuc()
     }
-    checkRoleEdit(trangThai: string) {
-        return this.userService.isCuc() && (trangThai == STATUS.DU_THAO || trangThai == STATUS.YC_CHICUC_PHANBO_DC)
+    checkRoleEdit(trangThai: string, loaiDieuChuyen: string) {
+        return this.userService.isCuc() && !this.viewOnly && this.userService.isAccessPermisson('DCNB_TONGHOPDC_SUA') && (trangThai == STATUS.DU_THAO || trangThai == STATUS.YC_CHICUC_PHANBO_DC || ((trangThai == STATUS.TU_CHOI_TP || trangThai == STATUS.TU_CHOI_LDC) && loaiDieuChuyen == "CHI_CUC"))
     };
     checkRoleApproveDc(trangThai: string) {
-        return this.userService.isCuc() && (trangThai == STATUS.CHO_DUYET_TP || trangThai == STATUS.CHO_DUYET_LDC)
+        return this.userService.isCuc() && !this.viewOnly && ((trangThai == STATUS.CHO_DUYET_TP && this.userService.isAccessPermisson('DCNB_TONGHOPDC_DUYET_TP')) || (trangThai == STATUS.CHO_DUYET_LDC && this.userService.isAccessPermisson('DCNB_TONGHOPDC_DUYET_LDCUC')))
     };
     checkRoleDelete(trangThai: string) {
-        return (!trangThai || trangThai == STATUS.DU_THAO) && this.userService.isCuc()
-    }
-    checkPermissonApprove(trangThai: string) {
-        return this.userService.isCuc() && ((trangThai == STATUS.CHO_DUYET_TP && this.userService.isAccessPermisson('DCNB_TONGHOPDC_DUYET_TP')) || (trangThai == STATUS.CHO_DUYET_LDC && this.userService.isAccessPermisson('DCNB_TONGHOPDC_DUYET_LDCUC')))
+        return this.userService.isCuc() && !this.viewOnly && (!trangThai || trangThai == STATUS.DU_THAO) && this.userService.isAccessPermisson('DCNB_TONGHOPDC_XOA')
     }
     async search(roles?) {
         if (!this.checkPermission(roles)) {

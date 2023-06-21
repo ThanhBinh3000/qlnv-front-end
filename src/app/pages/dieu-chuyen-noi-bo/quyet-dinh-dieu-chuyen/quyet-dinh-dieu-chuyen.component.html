@@ -10,8 +10,10 @@
     </ul>
   </nz-affix>
 
-  <app-quyet-dinh-dieu-chuyen-tc *ngIf="tabSelected == 0" [idTHop]="idTongHop"></app-quyet-dinh-dieu-chuyen-tc>
-  <app-quyet-dinh-dieu-chuyen-cuc *ngIf="tabSelected == 1"></app-quyet-dinh-dieu-chuyen-cuc>
+  <app-quyet-dinh-dieu-chuyen-tc *ngIf="tabSelected == 0" [idTHop]="idTongHop" [qdDcId]="qdDcId"
+    [isViewOnModal]="isViewOnModal"></app-quyet-dinh-dieu-chuyen-tc>
+  <app-quyet-dinh-dieu-chuyen-cuc *ngIf="tabSelected == 1"
+    [isViewOnModal]="isViewOnModal"></app-quyet-dinh-dieu-chuyen-cuc>
 
 
 </div>

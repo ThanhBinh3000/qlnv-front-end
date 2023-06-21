@@ -12,6 +12,8 @@ import {saveAs} from "file-saver";
 import {QuyetDinhGiaCuaBtcService} from "src/app/services/ke-hoach/phuong-an-gia/quyetDinhGiaCuaBtc.service";
 import {STATUS} from "../../../../../../constants/status";
 import {Globals} from "../../../../../../shared/globals";
+import {Router} from "@angular/router";
+import {UserLogin} from "../../../../../../models/userlogin";
 
 @Component({
   selector: "app-quyet-dinh-gia-btc",
@@ -30,7 +32,7 @@ export class QuyetDinhGiaBtcComponent implements OnInit {
   allChecked = false;
   listVthh: any[] = [];
   dsNam: string[] = [];
-
+  userInfo : UserLogin
   dataTable: any[] = [];
   page: number = 1;
   dataTableAll: any[] = [];
@@ -38,7 +40,7 @@ export class QuyetDinhGiaBtcComponent implements OnInit {
   setOfCheckedId = new Set<number>();
   pageSize: number = PAGE_SIZE_DEFAULT;
   indeterminate = false;
-
+  STATUS = STATUS;
   last30Day = new Date(
     new Date().setTime(this.toDay.getTime() - 30 * 24 * 60 * 60 * 1000)
   );
@@ -51,6 +53,7 @@ export class QuyetDinhGiaBtcComponent implements OnInit {
               private notification: NzNotificationService,
               public userService: UserService,
               private modal: NzModalService,
+              private router: Router,
               private quyetDinhGiaCuaBtcService: QuyetDinhGiaCuaBtcService,
               public globals : Globals
   ) {
@@ -86,6 +89,11 @@ export class QuyetDinhGiaBtcComponent implements OnInit {
   };
 
   async ngOnInit() {
+    if ((this.pagType == 'LT' && !this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_MTDBTT_QD'))
+      || (this.pagType == 'VT' && !this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_VT_MTDBTT_QD'))) {
+      this.router.navigateByUrl('/error/401')
+    }
+    this.userInfo = this.userService.getUserLogin();
     this.loadDsNam();
     this.search();
     this.listVthh = LIST_VAT_TU_HANG_HOA;

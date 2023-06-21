@@ -1,6 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { Validators } from "@angular/forms";
+import { Router } from "@angular/router";
 import * as dayjs from "dayjs";
 import { chain } from 'lodash';
 import { NzModalService } from "ng-zorro-antd/modal";
@@ -43,6 +44,7 @@ export class QuyetDinhPdDtl {
 export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component implements OnInit {
   @Input()
   idTHop: number;
+  @Input() isViewOnModal: number;
   @Input() idInput: number;
   @Input() isView: boolean;
   @Output()
@@ -76,6 +78,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
+    private router: Router,
     private soDeXuatQuyetDinhDieuChuyenService: SoDeXuatQuyetDinhDieuChuyenService,
     private maTongHopQuyetDinhDieuChuyenService: MaTongHopQuyetDinhDieuChuyenService,
     private quyetDinhDieuChuyenTCService: QuyetDinhDieuChuyenTCService,
@@ -86,10 +89,12 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
       tenLoaiDc: ['Giữa 2 chi cục trong cùng 1 cục'],
       nam: [dayjs().get("year"), [Validators.required]],
       soQdinh: [, [Validators.required]],
-      ngayKyQdinh: [],
-      ngayPduyet: [],
+      ngayKyQdinh: [, [Validators.required]],
+      ngayPduyet: [, [Validators.required]],
       idThop: [, [Validators.required]],
+      maTongHop: [],
       idDxuat: [, [Validators.required]],
+      maDxuat: [],
       trichYeu: [],
       tongtien: [],
       type: ['TH', [Validators.required]],
@@ -449,9 +454,10 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
 
 
   async save(isGuiDuyet?) {
-    if (!this.formData.value.soQdinh) return
-    await this.spinner.show();
     this.setValidator()
+    this.helperService.markFormGroupTouched(this.formData);
+    if (!this.formData.valid) return
+    await this.spinner.show();
     let body = this.formData.value;
     body.soQdinh = `${this.formData.value.soQdinh.toString().split("/")[0]}/${this.maQd}`
     if (this.idInput) {
@@ -502,9 +508,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
     this.approve(this.idInput, trangThai, mesg);
   }
 
-  quayLai() {
-    this.showListEvent.emit();
-  }
+
 
 
 
@@ -562,6 +566,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
         await this.selectMaTongHop(data.id);
         this.formData.patchValue({
           idThop: data.id,
+          maTongHop: data.maTongHop,
           idDxuat: undefined
         });
       }
@@ -578,7 +583,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
       idThop: undefined
     });
     await this.spinner.show();
-    // Get data tờ trình
+
     let bodyDx = {
       loaiDieuChuyen: this.formData.get('loaiDc').value,
       namKeHoach: this.formData.get('nam').value,
@@ -611,6 +616,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
         this.setValidator()
         this.formData.patchValue({
           idDxuat: data.id,
+          maDxuat: data.maTongHop,
           idThop: undefined
         });
         this.dataTableView = []
@@ -688,6 +694,9 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
     await this.spinner.hide();
   }
 
-
+  quayLai() {
+    if (this.idTHop || this.idInput) this.router.navigate(['dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen']);
+    this.showListEvent.emit();
+  }
 
 }

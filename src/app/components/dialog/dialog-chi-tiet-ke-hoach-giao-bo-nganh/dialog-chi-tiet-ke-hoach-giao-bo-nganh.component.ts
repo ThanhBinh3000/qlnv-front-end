@@ -17,7 +17,6 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
   @ViewChild('keHoachLuongThuc') keHoachLuongThucComponent: KeHoachLuongThucComponent;
   isView: boolean = false;
   errorBn: boolean = false;
-  errorTt: boolean = false;
   nam: any;
   keHoach: any = {
     id: null,
