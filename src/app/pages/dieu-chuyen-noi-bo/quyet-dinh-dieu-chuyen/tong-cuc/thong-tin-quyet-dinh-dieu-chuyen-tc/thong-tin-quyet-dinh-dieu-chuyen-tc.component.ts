@@ -44,6 +44,8 @@ export class QuyetDinhPdDtl {
 export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component implements OnInit {
   @Input()
   idTHop: number;
+  @Input()
+  qdDcId: number;
   @Input() isViewOnModal: number;
   @Input() idInput: number;
   @Input() isView: boolean;
@@ -58,6 +60,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
   listDanhSachDeXuat: any[] = [];
   danhsachDx: any[] = [];
   dataTableView: any[] = []
+  dataDetail: any;
 
   selected: number = 0
 
@@ -92,14 +95,16 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
       ngayKyQdinh: [, [Validators.required]],
       ngayPduyet: [, [Validators.required]],
       idThop: [, [Validators.required]],
-      maTongHop: [],
+      maThop: [],
       idDxuat: [, [Validators.required]],
       maDxuat: [],
+      soDeXuat: [],
       trichYeu: [],
       tongtien: [],
       type: ['TH', [Validators.required]],
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự thảo'],
+      lyDoTuChoi: [],
       quyetDinhPdDtl: [new Array<QuyetDinhPdDtl>(),],
       danhSachQuyetDinh: [new Array<any>(),],
     }
@@ -153,6 +158,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
     await this.spinner.show()
     if (id) {
       let data = await this.detail(id);
+      this.dataDetail = data
       let listDeXuat = []
       let listHangHoa = []
       this.dataTableView = []
@@ -205,7 +211,6 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
     this.selected = index
     let listHangHoa = []
     this.dataTableView = []
-    console.log('selectRow', this.formData.value.quyetDinhPdDtl[index])
     let itemQd = this.formData.value.quyetDinhPdDtl[index]
     if (itemQd.danhSachHangHoa) {
       itemQd.danhSachHangHoa.forEach(element => {
@@ -297,6 +302,24 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
 
         data.thKeHoachDieuChuyenTongCucDtls.map(async item => {
           listDeXuat.push(item)
+          if (item.thKeHoachDieuChuyenCucHdr.thKeHoachDieuChuyenNoiBoCucDtls.length > 0) {
+            item.thKeHoachDieuChuyenCucHdr.thKeHoachDieuChuyenNoiBoCucDtls.map(itemKH => {
+              listQD.push({
+                keHoachDcHdrId: itemKH.id,
+              })
+            })
+
+          }
+          if (item.thKeHoachDieuChuyenCucKhacCucDtl) {
+            if (item.thKeHoachDieuChuyenCucKhacCucDtl.dcnbKeHoachDcHdr.length > 0) {
+              item.thKeHoachDieuChuyenCucKhacCucDtl.dcnbKeHoachDcHdr.map(async (itemKH, i) => {
+                listQD.push({
+                  keHoachDcHdrId: itemKH.id,
+                })
+              })
+            }
+
+          }
         })
         const item = data.thKeHoachDieuChuyenTongCucDtls[0]
         if (loaiDC === "CHI_CUC") {
@@ -306,21 +329,19 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
             if (item.thKeHoachDieuChuyenCucHdr.thKeHoachDieuChuyenNoiBoCucDtls.length > 0) {
               item.thKeHoachDieuChuyenCucHdr.thKeHoachDieuChuyenNoiBoCucDtls.map(itemKH => {
                 let dcnbKeHoachDcHdr = itemKH.dcnbKeHoachDcHdr
+                if (dcnbKeHoachDcHdr) {
 
-                dcnbKeHoachDcHdr.forEach(element => {
-                  listQD.push({
-                    keHoachDcHdrId: element.id,
+                  dcnbKeHoachDcHdr.danhSachHangHoa.map(async itemHH => {
+                    listHangHoa.push({
+                      ...itemHH,
+                      maLoNganKho: itemHH.maLoKho ? `${itemHH.maLoKho}${itemHH.maNganKho}` : itemHH.maNganKho,
+                      maDvi: dcnbKeHoachDcHdr.maDvi,
+                      tenDvi: dcnbKeHoachDcHdr.tenDvi,
+                    })
                   })
-                });
+                }
 
-                dcnbKeHoachDcHdr.danhSachHangHoa.map(async itemHH => {
-                  listHangHoa.push({
-                    ...itemHH,
-                    maLoNganKho: itemHH.maLoKho ? `${itemHH.maLoKho}${itemHH.maNganKho}` : itemHH.maNganKho,
-                    maDvi: dcnbKeHoachDcHdr.maDvi,
-                    tenDvi: dcnbKeHoachDcHdr.tenDvi,
-                  })
-                })
+
               })
 
             }
@@ -335,10 +356,6 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
 
             if (item.thKeHoachDieuChuyenCucKhacCucDtl.dcnbKeHoachDcHdr.length > 0) {
               item.thKeHoachDieuChuyenCucKhacCucDtl.dcnbKeHoachDcHdr.map(async (itemKH, i) => {
-
-                listQD.push({
-                  keHoachDcHdrId: itemKH.id,
-                })
                 itemKH.danhSachHangHoa.map(async itemHH => {
                   listHangHoa.push({
                     ...itemHH,
@@ -535,6 +552,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
     let bodyTh = {
       loaiDieuChuyen: this.formData.get('loaiDc').value,
       namKeHoach: this.formData.get('nam').value,
+      qdtcId: this.dataDetail?.idThop,
       paggingReq: {
         limit: this.globals.prop.MAX_INTERGER,
         page: 0
@@ -547,7 +565,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
     }
     await this.spinner.hide();
     const modalQD = this.modal.create({
-      nzTitle: 'Danh sách tổng hợp đề xuất kế hoạch bán đấu giá',
+      nzTitle: 'Danh sách tổng hợp kế hoạch điều chuyển',
       nzContent: DialogTableSelectionComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -566,7 +584,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
         await this.selectMaTongHop(data.id);
         this.formData.patchValue({
           idThop: data.id,
-          maTongHop: data.maTongHop,
+          maThop: data.maTongHop,
           idDxuat: undefined
         });
       }
@@ -587,6 +605,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
     let bodyDx = {
       loaiDieuChuyen: this.formData.get('loaiDc').value,
       namKeHoach: this.formData.get('nam').value,
+      qdtcId: this.dataDetail?.idDxuat,
       paggingReq: {
         limit: this.globals.prop.MAX_INTERGER,
         page: 0
@@ -599,7 +618,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
     await this.spinner.hide();
 
     const modalQD = this.modal.create({
-      nzTitle: 'Danh sách mã tổng hợp',
+      nzTitle: 'Danh sách số đề xuất/công văn',
       nzContent: DialogTableSelectionComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -616,7 +635,8 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
         this.setValidator()
         this.formData.patchValue({
           idDxuat: data.id,
-          maDxuat: data.maTongHop,
+          maDxuat: data.soDeXuat,
+          soDeXuat: data.soDeXuat,
           idThop: undefined
         });
         this.dataTableView = []
@@ -695,7 +715,8 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
   }
 
   quayLai() {
-    if (this.idTHop || this.idInput) this.router.navigate(['dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen']);
+    if (this.idTHop || this.qdDcId)
+      this.router.navigate(['dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen']);
     this.showListEvent.emit();
   }
 

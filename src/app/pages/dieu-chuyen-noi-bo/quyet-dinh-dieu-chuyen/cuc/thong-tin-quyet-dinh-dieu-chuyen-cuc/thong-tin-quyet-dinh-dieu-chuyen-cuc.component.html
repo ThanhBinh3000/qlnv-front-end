@@ -2,7 +2,7 @@
   <div class="header header-green-background">
     <div class="header-text">
       <div class="title-chi-tieu">
-        <span [ngClass]="'da-ban-hanh'">
+        <span [ngClass]="formData.value.trangThai === STATUS.BAN_HANH ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
           {{ formData.value.tenTrangThai }}
         </span>
         <span> QUYẾT ĐỊNH ĐIỀU CHUYỂN NỘI BỘ HÀNG DTQG CỦA CỤC DTNN KHU VỰC</span>
@@ -48,6 +48,12 @@
 
     </div>
   </div>
+
+  <nz-alert class="mg-t-16"
+    *ngIf="formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC" nzShowIcon
+    nzType="error" nzMessage="Lý do từ chối" nzDescription="{{formData.value.lyDoTuChoi}}">
+  </nz-alert>
+
   <!-- <nz-card class="mg-t-16 flex-card p-lr16"> -->
   <nz-collapse nzAccordion>
     <div class="mt16 flex-card p-lr16">
@@ -458,7 +464,32 @@
         </div>
       </div>
 
+      <nz-table *ngIf="formData.value.loaiDc === 'CUC'" #quyetDinhPdDtl class="nowrap mt-16 table-chi-tiet" nzBordered
+        [nzData]="formData.value.quyetDinhPdDtl">
+        <thead>
+          <tr>
+            <th style="width: 35px">STT</th>
+            <th>Cục DTNN KV xuất ĐC</th>
+            <th>Số đề xuất/ Công văn</th>
+            <th>Ngày trình duyệt Tổng cục</th>
+            <th>Tổng dự toán kinh phí(triệu đồng)</th>
+            <th>Trích yếu</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let item of quyetDinhPdDtl.data, let i = index;">
+            <tr>
+              <td>{{i + 1}}</td>
+              <td>{{item.tenDviCuc || item.tenCucDxuat || ""}}</td>
+              <td>{{item.soDxuat || ""}}</td>
+              <td>{{item.ngayGduyet || ""}}</td>
+              <td>{{item.tongDuToanKp|number: '1.0-1' || ""}}</td>
+              <td>{{item.trichYeu || ""}}</td>
+            </tr>
+          </ng-container>
+        </tbody>
 
+      </nz-table>
 
 
       <nz-table *ngIf="formData.value.loaiDc === 'DCNB'" #basicTable class="nowrap table-chi-tiet"
@@ -872,9 +903,9 @@
         </tbody>
       </nz-table>
 
-      <nz-table *ngIf="formData.value.loaiDc === 'CUC' && !(isChiCuc() && formData.value.loaiQdinh == '01')" #basicTable
-        class="nowrap table-chi-tiet" [nzData]="dataTableView" [nzFrontPagination]="false" [nzShowPagination]="false"
-        nzBordered>
+      <nz-table *ngIf="formData.value.loaiDc === 'CUC' && !(isChiCuc() && formData.value.loaiQdinh == '00')" #basicTable
+        class="mg-t-16 nowrap table-chi-tiet" [nzData]="dataTableView" [nzFrontPagination]="false"
+        [nzShowPagination]="false" nzBordered>
         <thead>
           <tr>
             <th rowspan="2" width="60px" class="text-center">STT</th>
@@ -1059,9 +1090,9 @@
         </tbody>
       </nz-table>
 
-      <nz-table *ngIf="formData.value.loaiDc === 'CUC' && isChiCuc() && formData.value.loaiQdinh == '01'" #basicTable
-        class="nowrap table-chi-tiet" [nzData]="dataTableView" [nzFrontPagination]="false" [nzShowPagination]="false"
-        nzBordered>
+      <nz-table *ngIf="formData.value.loaiDc === 'CUC' && isChiCuc() && formData.value.loaiQdinh == '00'" #basicTable
+        class="mg-t-16 nowrap table-chi-tiet" [nzData]="dataTableView" [nzFrontPagination]="false"
+        [nzShowPagination]="false" nzBordered>
         <thead>
           <tr>
             <th rowspan="2" width="60px" class="text-center">STT</th>
