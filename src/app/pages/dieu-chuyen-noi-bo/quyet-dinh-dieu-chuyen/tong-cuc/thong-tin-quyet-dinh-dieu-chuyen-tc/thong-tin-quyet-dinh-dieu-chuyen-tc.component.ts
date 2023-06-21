@@ -491,9 +491,10 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
       if (isGuiDuyet) {
         this.idInput = data.id;
         this.guiDuyet();
-      } else {
-        this.quayLai();
       }
+      //  else {
+      //   this.quayLai();
+      // }
     }
     await this.spinner.hide();
   }
@@ -516,15 +517,38 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
   }
 
   async pheDuyet() {
-    let trangThai = this.formData.value.trangThai == STATUS.CHO_DUYET_LDV ? STATUS.CHO_DUYET_LDTC : STATUS.BAN_HANH;
+    let trangThai = this.formData.value.trangThai == STATUS.CHO_DUYET_LDV ? STATUS.CHO_DUYET_LDTC : STATUS.DA_DUYET_LDTC;
     let mesg = 'Bạn muốn phê duyệt văn bản?'
     this.approve(this.idInput, trangThai, mesg);
   }
 
+  isBanHanh() {
+    return this.formData.value.trangThai == STATUS.DA_DUYET_LDTC
+  }
+
   async banHanh() {
-    let trangThai = STATUS.BAN_HANH;
-    let mesg = 'Bạn muốn ban hành văn bản?'
-    this.approve(this.idInput, trangThai, mesg);
+    this.setValidator()
+    this.helperService.markFormGroupTouched(this.formData);
+    if (!this.formData.valid) return
+    await this.spinner.show();
+    let body = this.formData.value;
+    body.soQdinh = `${this.formData.value.soQdinh.toString().split("/")[0]}/${this.maQd}`
+    if (this.idInput) {
+      body.id = this.idInput
+    }
+
+    body.canCu = this.canCu
+    body.quyetDinh = this.quyetDinh
+
+    let data = await this.createUpdate(body);
+    if (data) {
+      this.idInput = data.id;
+      await this.spinner.hide();
+      let trangThai = STATUS.BAN_HANH;
+      let mesg = 'Bạn muốn ban hành văn bản?'
+      this.approve(this.idInput, trangThai, mesg);
+    }
+
   }
 
 
