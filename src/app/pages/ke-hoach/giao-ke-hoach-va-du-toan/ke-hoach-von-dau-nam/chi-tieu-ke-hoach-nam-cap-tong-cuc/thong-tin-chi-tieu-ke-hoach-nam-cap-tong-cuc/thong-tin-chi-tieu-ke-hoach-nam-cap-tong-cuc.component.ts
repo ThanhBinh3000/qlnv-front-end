@@ -301,7 +301,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         }
       }
       if (this.userService.isTongCuc()) {
-        let res = await this.chiTieuKeHoachNamService.canCuTongCuc(year);
+        let res = await this.chiTieuKeHoachNamService.canCuBTCGiaoTCDT(year);
         if (res.msg == MESSAGE.SUCCESS) {
           let data = res.data
           if (data) {
