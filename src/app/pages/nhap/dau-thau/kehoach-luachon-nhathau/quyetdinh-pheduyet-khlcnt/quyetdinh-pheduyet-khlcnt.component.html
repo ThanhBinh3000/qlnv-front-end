@@ -1,4 +1,4 @@
-<div *ngIf="!isDetail">
+<div *ngIf="!isDetail && !isDetailVt">
   <div class="bg-trang">
     <nz-card class="mt16 flex-card p-lr16">
       <div nz-row [nzGutter]="[20]">
@@ -253,6 +253,11 @@
   <app-themmoi-quyetdinh-khlcnt [isView]="isView" [idInput]="selectedId" [loaiVthh]="loaiVthh"
     (showListEvent)="showList()">
   </app-themmoi-quyetdinh-khlcnt>
+</div>
+<div *ngIf="isDetailVt" class="chi-tiet">
+  <app-themmoi-quyetdinh-khlcnt-vt [isView]="isView" [idInput]="selectedId" [loaiVthh]="loaiVthh"
+                                (showListEvent)="showList()">
+  </app-themmoi-quyetdinh-khlcnt-vt>
 </div>
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openTHopKhlcnt"
   (nzOnCancel)="closeTHopKhlcntModal()">

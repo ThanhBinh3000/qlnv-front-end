@@ -27,7 +27,7 @@ import { ThongTinHangCanDieuChuyenChiCucComponent } from "./cuc/thong-tin-hang-c
     QuyetDinhDieuChuyenCucComponent,
     ThongTinQuyetDinhDieuChuyenCucComponent,
     ThongTinHangCanDieuChuyenCucComponent,
-    ThongTinHangCanDieuChuyenChiCucComponent
+    ThongTinHangCanDieuChuyenChiCucComponent,
   ],
   imports: [
     CommonModule,
@@ -46,7 +46,7 @@ import { ThongTinHangCanDieuChuyenChiCucComponent } from "./cuc/thong-tin-hang-c
     QuyetDinhDieuChuyenCucComponent,
     ThongTinQuyetDinhDieuChuyenCucComponent,
     ThongTinHangCanDieuChuyenCucComponent,
-    ThongTinHangCanDieuChuyenChiCucComponent
+    ThongTinHangCanDieuChuyenChiCucComponent,
   ]
 })
 export class QuyetDinhDieuChuyenModule {

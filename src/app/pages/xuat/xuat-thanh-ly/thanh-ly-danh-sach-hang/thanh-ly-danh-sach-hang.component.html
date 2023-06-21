@@ -172,7 +172,7 @@
                         <td>{{lv2.ngayDeXuat|date:globals.dateFormat}}</td>
                         <td>{{lv2.ngayTongHop|date:globals.dateFormat}}</td>
                         <td>{{lv2.tenTrangThai}}</td>
-                        <td>{{lv2.maTongHop}}</td>
+                        <td><a nz-button nzType="link" *ngIf="lv2.idTongHop" (click)="openTongHopModal(lv2.idTongHop)">{{lv2.maTongHop}}</a></td>
                         <td>{{lv2.lyDo}}</td>
                         <td class="text-left">
                           <!--<a *ngIf="data.trangThaiId !== STATUS.DU_THAO" (click)="detail(data, true)">
@@ -211,4 +211,17 @@
     </nz-card>
   </div>
 </div>
+<nz-modal [nzWidth]="'100%'" [nzBodyStyle]="{ 'overflow-y': 'auto' }"
+          nzMaskClosable="true" [(nzVisible)]="openTongHop" (nzOnCancel)="closeTongHopModal()">
+  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+    <app-chi-tiet-tong-hop-thanh-ly class="modal-content-detail" [idInput]="idTongHop"  [isView]="true">
+    </app-chi-tiet-tong-hop-thanh-ly>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button (click)="closeTongHopModal()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>
 

@@ -4,7 +4,7 @@ import {
   Input,
   OnInit,
   Output
-} from '@angular/core';
+} from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import * as dayjs from 'dayjs';
@@ -86,10 +86,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
   dataChiTieu: any;
   listNam: any[] = [];
   yearNow: number = 0;
-
   listOfData: any[] = [];
-
-
   STATUS = STATUS
   selected: boolean = false;
 
@@ -98,6 +95,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
   isTongHop: boolean
   isCheckCreate: boolean = true
   editCache: { [key: string]: { edit: boolean; data: any } } = {};
+  maDviSelected: any;
 
   constructor(
     private router: Router,
@@ -535,21 +533,12 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
   }
 
   async getDataChiTieu() {
-    let res2 = null;
-    if (this.loaiVthh.startsWith('02')) {
-      res2 = await this.chiTieuKeHoachNamCapTongCucService.loadThongTinChiTieuKeHoachVtNam(
-        +this.formData.get('namKhoach').value,
-      );
-    } else {
-      res2 = await this.chiTieuKeHoachNamCapTongCucService.loadThongTinChiTieuKeHoachCucNam(
-        +this.formData.get('namKhoach').value,
-      );
+    let body = {
+      namKeHoach: this.formData.get('namKhoach').value
     }
+    let res2 = await this.chiTieuKeHoachNamCapTongCucService.loadThongTinChiTieuKeHoachTongCucGiao(body);
     if (res2.msg == MESSAGE.SUCCESS) {
       this.dataChiTieu = res2.data;
-      // this.formData.patchValue({
-      //   soQd: this.dataChiTieu.soQuyetDinh
-      // });
     }
   }
 
@@ -729,6 +718,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
         this.danhsachDxCache = cloneDeep(this.danhsachDx);
         this.dataInput = null;
         this.dataInputCache = null;
+        this.showFirstRow(event, this.danhsachDx[0]);
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
@@ -743,6 +733,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       this.selected = false
       $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
       $event.target.parentElement.classList.add('selectedRow');
+      this.maDviSelected = this.danhsachDx[index].maDvi
       this.isTongHop = this.formData.value.phanLoai == 'TH';
       this.dataInput = this.danhsachDx[index];
       this.dataInputCache = this.danhsachDxCache[index];
@@ -754,6 +745,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       this.dataInput = this.danhsachDx[0];
       this.dataInputCache = this.danhsachDxCache[0];
       this.index = 0;
+      this.maDviSelected = this.danhsachDx[0].maDvi
       await this.spinner.hide();
     }
   }
@@ -766,9 +758,12 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     this.danhsachDx[this.index].tongTien = $event;
   }
 
+  setNewDanhsachDx($event) {
+
+  }
+
   setNewData($event) {
     let pipe = new DatePipe('en-US');
-    console.log($event)
     this.formData.get('tgianBdauTchuc').setValue($event.tgianBdauTchuc);
     this.formData.get('tgianMthau').setValue(pipe.transform($event.tgianMthau, 'yyyy-MM-dd HH:mm'));
     this.formData.get('tgianDthau').setValue(pipe.transform($event.tgianDthau, 'yyyy-MM-dd HH:mm'));

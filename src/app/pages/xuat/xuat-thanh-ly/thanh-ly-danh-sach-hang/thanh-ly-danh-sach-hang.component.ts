@@ -13,6 +13,7 @@ import {MESSAGE} from "src/app/constants/message";
 import {chain, isEmpty} from "lodash";
 import {DanhMucService} from "src/app/services/danhmuc.service";
 import {v4 as uuidv4} from "uuid";
+import {TongHopThanhLyService} from "../../../../services/qlnv-hang/xuat-hang/xuat-thanh-ly/TongHopThanhLy.service";
 
 @Component({
   selector: 'app-thanh-ly-danh-sach-hang',
@@ -37,6 +38,7 @@ export class ThanhLyDanhSachHangComponent extends Base2Component implements OnIn
               private donviService: DonviService,
               private danhMucService: DanhMucService,
               private danhSachThanhLyService: DanhSachThanhLyService,
+              private tongHopThanhLyService: TongHopThanhLyService,
               private xuatThanhLyComponent: XuatThanhLyComponent) {
     super(httpClient, storageService, notification, spinner, modal, danhSachThanhLyService);
     this.vldTrangThai = xuatThanhLyComponent;
@@ -75,6 +77,8 @@ export class ThanhLyDanhSachHangComponent extends Base2Component implements OnIn
     })
   }
 
+  idTongHop: number = 0;
+  openTongHop = false;
   async ngOnInit(): Promise<void> {
     try {
       await this.spinner.show();
@@ -203,5 +207,15 @@ export class ThanhLyDanhSachHangComponent extends Base2Component implements OnIn
     } else {
       this.expandSetString.delete(id);
     }
+  }
+
+  openTongHopModal(id: number) {
+    this.idTongHop = id;
+    this.openTongHop = true;
+  }
+
+  closeTongHopModal() {
+    this.idTongHop = null;
+    this.openTongHop = false;
   }
 }

@@ -163,7 +163,7 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
 
   loadThongTinCuc(index) {
     this.ttCuc.maDvi = this.dataChiTieu.khVatTuNhap[index].maDvi;
-    this.ttCuc.tenDvi = this.dataChiTieu.khVatTuNhap[index].tenDonVi;
+    this.ttCuc.tenDvi = this.dataChiTieu.khVatTuNhap[index].tenDvi;
     if (this.dataChiTieu.khVatTuNhap[index].soLuongChuyenSang == null) {
       this.ttCuc.soLuongTheoChiTieu = this.nvl(this.dataChiTieu.khVatTuNhap[index].soLuongNhap)
     } else {
@@ -224,15 +224,6 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
         this.formGoiThau.get('donGiaVat').setValue(dataDetail.donGiaVat)
       }
       this.dataTable = dataDetail.children;
-      for (let i = 0; i < dataDetail.children.length; i++) {
-        await this.onChangeCuc(dataDetail.children[i].maDvi);
-        this.thongTinChiCuc[dataDetail.children[i].maDvi] = new DanhSachGoiThau();
-        this.thongTinCuc = new DanhSachGoiThau();
-        for (let y = 0; y < dataDetail.children[i].children.length; y++) {
-          this.onChangeChiCuc(dataDetail.children[i].children[y].maDvi, dataDetail.children[i].maDvi)
-          this.thongTinDiemKho[dataDetail.children[i].children[y].maDvi] = new DanhSachGoiThau();
-        }
-      }
     }
   }
 
@@ -467,6 +458,13 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
   saveEditCuc(i: number) {
     this.dataTable[i].soLuong = this.thongTinCucEdit[i]
     this.dataTable[i].edit = false;
+    let soLuong: number = 0;
+    this.dataTable.forEach(item => {
+      soLuong = soLuong + item.soLuong
+    });
+    this.formGoiThau.patchValue({
+      soLuong: soLuong
+    });
   }
   cancelEditCuc(i: number) {
     this.dataTable[i].edit = false;

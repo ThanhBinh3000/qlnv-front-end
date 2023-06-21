@@ -17,6 +17,19 @@ import {
   KeHoachVonDauNamModule
 } from "../../../ke-hoach/giao-ke-hoach-va-du-toan/ke-hoach-von-dau-nam/ke-hoach-von-dau-nam.module";
 import { ThemmoiKehoachLcntVtComponent } from './danhsach-kehoach-lcnt/themmoi-kehoach-lcnt-vt/themmoi-kehoach-lcnt-vt.component';
+import { ThemmoiQuyetdinhKhlcntVtComponent } from './quyetdinh-pheduyet-khlcnt/themmoi-quyetdinh-khlcnt-vt/themmoi-quyetdinh-khlcnt-vt.component';
+import { ThongtinDexuatVtComponent } from './quyetdinh-pheduyet-khlcnt/themmoi-quyetdinh-khlcnt-vt/thongtin-dexuat-vt/thongtin-dexuat-vt.component';
+import { DieuchinhLuachonNhathauComponent } from "./dieuchinh-luachon-nhathau/dieuchinh-luachon-nhathau.component";
+import {
+  ThemMoiDieuChinhComponent
+} from "./dieuchinh-luachon-nhathau/themmoi-dieuchinh/themmoi-dieuchinh.component";
+import {
+  ThongtinDieuchinhComponent
+} from "./dieuchinh-luachon-nhathau/themmoi-dieuchinh/thongtin-dieuchinh/thongtin-dieuchinh.component";
+import { ThemmoiDieuchinhVtComponent } from './dieuchinh-luachon-nhathau/themmoi-dieuchinh-vt/themmoi-dieuchinh-vt.component';
+import {
+  ThongtinDieuchinhVtComponent
+} from "./dieuchinh-luachon-nhathau/themmoi-dieuchinh-vt/thongtin-dieuchinh-vt/thongtin-dieuchinh-vt.component";
 
 
 @NgModule({
@@ -31,6 +44,13 @@ import { ThemmoiKehoachLcntVtComponent } from './danhsach-kehoach-lcnt/themmoi-k
     ThongtinDexuatComponent,
     MainKehoachLuachonNhathauComponent,
     ThemmoiKehoachLcntVtComponent,
+    ThemmoiQuyetdinhKhlcntVtComponent,
+    ThongtinDexuatVtComponent,
+    DieuchinhLuachonNhathauComponent,
+    ThemMoiDieuChinhComponent,
+    ThongtinDieuchinhComponent,
+    ThongtinDieuchinhVtComponent,
+    ThemmoiDieuchinhVtComponent,
   ],
   imports: [
     CommonModule,
@@ -49,6 +69,7 @@ import { ThemmoiKehoachLcntVtComponent } from './danhsach-kehoach-lcnt/themmoi-k
     ThemmoiTonghopKhlcntComponent,
     ThongtinDexuatComponent,
     MainKehoachLuachonNhathauComponent,
+    DieuchinhLuachonNhathauComponent
   ]
 })
 export class KehoachLuachonNhathauModule { }

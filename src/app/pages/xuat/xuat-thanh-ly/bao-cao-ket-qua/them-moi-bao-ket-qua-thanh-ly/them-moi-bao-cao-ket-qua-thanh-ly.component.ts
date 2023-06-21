@@ -160,8 +160,10 @@ export class ThemMoiBaoCaoKetQuaThanhLyComponent extends Base2Component implemen
     }).then(res => {
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data;
-        if (data && data.content && data.content.length > 0) {
+        if (data && data.content && data.content.length > 0 && this.formData.value.idQd == null) {
           this.listSoQd = data.content.filter(item => item.soBaoCao == null);
+        } else {
+          this.listSoQd = data.content
         }
       } else {
         this.listSoQd = [];
@@ -180,9 +182,7 @@ export class ThemMoiBaoCaoKetQuaThanhLyComponent extends Base2Component implemen
     };
     let rs = await this.createUpdate(body)
     this.formData.enable({emitEvent: false});
-    this.formData.patchValue({
-      id: rs.id,
-    })
+    this.formData.patchValue({id: rs.id})
     let ct =  await this.baoCaoKqThanhLyService.getDetail(rs.id);
     this.buildTableView(ct.data.baoCaoKqDtl)
   }
@@ -209,7 +209,7 @@ export class ThemMoiBaoCaoKetQuaThanhLyComponent extends Base2Component implemen
                 this.dataTable.forEach(f=>f.id=null)
               }
               this.formData.patchValue({
-                soQD: res.data.soQd,
+                soQd: res.data.soQd,
                 baoCaoKqDtl:this.dataTable,
                 tongSoLuongTl: res.data.tongSoLuongTl,
                 tongSoLuongCon: res.data.tongSoLuongCon,

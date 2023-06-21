@@ -87,13 +87,11 @@ export class ThemMoiQdComponent implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     this.userInfo = this.userService.getUserLogin();
-    this.maQd = '/QĐ-BTC',
-      await Promise.all([
-        await this.loadListPa(),
-        await this.loadDsNam(),
-        await this.loadDsCuc(this.userInfo.MA_DVI),
-        await this.getDataDetail(this.idInput)
-      ])
+    this.maQd = '/QĐ-BTC';
+    this.loadListPa();
+    this.loadDsNam();
+    this.loadDsCuc(this.userInfo.MA_DVI);
+    this.getDataDetail(this.idInput);
     this.spinner.hide();
   }
 
@@ -315,7 +313,7 @@ export class ThemMoiQdComponent implements OnInit {
     }
   }
 
-  xoaItem(index: number) {
+  xoaItem(index: number, type : string) {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -326,9 +324,13 @@ export class ThemMoiQdComponent implements OnInit {
       nzWidth: 400,
       nzOnOk: async () => {
         try {
-          this.dataTable.splice(index, 1);
-          this.updateEditCache('TL')
-          this.updateEditCache('DTM')
+          if (type == 'TL') {
+            this.dataTableTL.splice(index, 1);
+            this.updateEditCache('TL')
+          } else {
+            this.dataTableDTM.splice(index, 1);
+            this.updateEditCache('DTM')
+          }
         } catch (e) {
           console.log('error', e);
         }
@@ -454,7 +456,7 @@ export class ThemMoiQdComponent implements OnInit {
         } else {
           this.rowItemTL.tenDiemKho = diemKho[0].tenDvi
           this.rowItemTL.diaDiem = diemKho[0].diaChi
-          this.rowItemTL.dienTich =res.dienTichDat ? res.dienTichDat : 0
+          this.rowItemTL.dienTich = res.dienTichDat ? res.dienTichDat : 0
         }
       }
     } else {
@@ -464,28 +466,28 @@ export class ThemMoiQdComponent implements OnInit {
   }
 
   async getDetailMlkByKey(maDvi, capDvi) {
-      let body = {
-        maDvi: maDvi,
-        capDvi: capDvi
-      }
-    let resp;
-      await this.mangLuoiKhoService.getDetailByMa(body).then((res: OldResponseData) => {
-        if (res.msg == MESSAGE.SUCCESS) {
-           resp = res.data.object;
-        }
-      })
-    return resp;
+    let body = {
+      maDvi: maDvi,
+      capDvi: capDvi
     }
+    let resp;
+    await this.mangLuoiKhoService.getDetailByMa(body).then((res: OldResponseData) => {
+      if (res.msg == MESSAGE.SUCCESS) {
+        resp = res.data.object;
+      }
+    })
+    return resp;
+  }
 
 
-  checkValidators(rowItem : QuyHoachKho) {
+  checkValidators(rowItem: QuyHoachKho) {
     let arr = [];
     let check = true;
     arr.push(
       rowItem.maCuc, rowItem.maChiCuc, rowItem.maDiemKho, rowItem.diaDiem, rowItem.dienTich, rowItem.tongTichLuong, rowItem.phuongAnQuyHoach, rowItem.ghiChu
     )
     if (arr && arr.length > 0) {
-      for (let  i = 0; i < arr.length; i++) {
+      for (let i = 0; i < arr.length; i++) {
         if (arr[i] == '' || arr[i] == null || arr[i] == undefined) {
           check = false;
           break;
@@ -495,7 +497,7 @@ export class ThemMoiQdComponent implements OnInit {
     return check;
   }
 
-  exportCt(type : string) {
+  exportCt(type: string) {
     this.spinner.show();
     try {
       if (this.dataTable && this.dataTable.length > 0) {

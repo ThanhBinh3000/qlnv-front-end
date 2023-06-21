@@ -235,3 +235,9 @@ export const DM_SC_TYPE = {
   SC_THUONG_XUYEN: '01',
   SC_LON: '00',
 };
+//Loại qd giao chỉ tiêu kế hoạch năm
+export const LOAI_QD_CTKH = {
+  QD: '00',
+  QD_DC: '01',
+  PA: '02'
+};
