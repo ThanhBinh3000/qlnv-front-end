@@ -51,7 +51,7 @@ export class QuyetDinhPdDtl {
   styleUrls: ['./thong-tin-quyet-dinh-dieu-chuyen-cuc.component.scss']
 })
 export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component implements OnInit {
-  @Input() isViewOnModal: number;
+  @Input() isViewOnModal: boolean;
   @Input() idInput: number;
   @Input() isView: boolean;
   @Output()
@@ -90,13 +90,11 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
       text: "Giữa 2 cục DTNN KV"
     }
   ];
-
+  selected: number = 0
   danhSachKeHoach: any[] = []
   typeKeHoach: string = "ADD"
   danhSachQuyetDinh: any[] = []
-  dataTableView: any[] = [
-    // { "maChiCucNhan": "01010202", "tenChiCucNhan": "Chi cục Dự trữ Nhà nước Phong Châu", "maDiemKho": "0101020201", "tenDiemKho": "Điểm kho Dục Mỹ", "maNhaKho": "010102020101", "tenNhaKho": "Nhà kho C1", "maNganKho": "01010202010101", "tenNganKho": "Ngăn kho C1/1", "maLoKho": "0101020201010111", "tenLoKho": "Lô kho test cũ", "thuKho": null, "loaiVthh": null, "cloaiVthh": null, "tonKho": null, "soLuongDc": "111", "duToanKphi": "00222", "thoiGianDkDc": "2023-05-15T04:48:26.266Z", "maDiemKhoNhan": "0101020201", "tenDiemKhoNhan": "Điểm kho Dục Mỹ", "maNhaKhoNhan": "010102020105", "tenNhaKhoNhan": "Nhà kho Q.a", "maNganKhoNhan": "01010202010501", "tenNganKhoNhan": "Ngăn kho test", "maLoKhoNhan": "0101020201050107", "tenLoKhoNhan": "lô kho 6", "thuKhoNhan": null, "thayDoiThuDo": null, "slDcConLai": null, "tichLuongKd": null, "slNhapDc": "333", "idVirtual": "7cc45619-d7a4-4d05-8c41-1510e80fa301", "children": [{ "maChiCucNhan": "01010202", "tenChiCucNhan": "Chi cục Dự trữ Nhà nước Phong Châu", "maDiemKho": "0101020201", "tenDiemKho": "Điểm kho Dục Mỹ", "maNhaKho": "010102020101", "tenNhaKho": "Nhà kho C1", "maNganKho": "01010202010101", "tenNganKho": "Ngăn kho C1/1", "maLoKho": "0101020201010111", "tenLoKho": "Lô kho test cũ", "thuKho": null, "loaiVthh": null, "cloaiVthh": null, "tonKho": null, "soLuongDc": "111", "duToanKphi": "0222", "thoiGianDkDc": "2023-05-15T04:48:26.266Z", "maDiemKhoNhan": "0101020201", "tenDiemKhoNhan": "Điểm kho Dục Mỹ", "maNhaKhoNhan": "010102020105", "tenNhaKhoNhan": "Nhà kho Q.a", "maNganKhoNhan": "01010202010501", "tenNganKhoNhan": "Ngăn kho test", "maLoKhoNhan": "0101020201050107", "tenLoKhoNhan": "lô kho 6", "thuKhoNhan": null, "thayDoiThuDo": null, "slDcConLai": null, "tichLuongKd": null, "slNhapDc": "333", "idVirtual": "561c3c8a-40eb-40d3-b474-2b4125f862f4", "children": [{ "maChiCucNhan": "01010202", "tenChiCucNhan": "Chi cục Dự trữ Nhà nước Phong Châu", "maDiemKho": "0101020201", "tenDiemKho": "Điểm kho Dục Mỹ", "maNhaKho": "010102020101", "tenNhaKho": "Nhà kho C1", "maNganKho": "01010202010101", "tenNganKho": "Ngăn kho C1/1", "maLoKho": "0101020201010111", "tenLoKho": "Lô kho test cũ", "thuKho": null, "loaiVthh": null, "cloaiVthh": null, "tonKho": null, "soLuongDc": "111", "duToanKphi": "0222", "thoiGianDkDc": "2023-05-15T04:48:26.266Z", "maDiemKhoNhan": "0101020201", "tenDiemKhoNhan": "Điểm kho Dục Mỹ", "maNhaKhoNhan": "010102020105", "tenNhaKhoNhan": "Nhà kho Q.a", "maNganKhoNhan": "01010202010501", "tenNganKhoNhan": "Ngăn kho test", "maLoKhoNhan": "0101020201050107", "tenLoKhoNhan": "lô kho 6", "thuKhoNhan": null, "thayDoiThuDo": null, "slDcConLai": null, "tichLuongKd": null, "slNhapDc": "333", "idVirtual": "a0ab431c-0b28-4db4-8ca9-e14f5d515e4b", "children": [{ "maChiCucNhan": "01010202", "tenChiCucNhan": "Chi cục Dự trữ Nhà nước Phong Châu", "maDiemKho": "0101020201", "tenDiemKho": "Điểm kho Dục Mỹ", "maNhaKho": "010102020101", "tenNhaKho": "Nhà kho C1", "maNganKho": "01010202010101", "tenNganKho": "Ngăn kho C1/1", "maLoKho": "0101020201010111", "tenLoKho": "Lô kho test cũ", "thuKho": null, "loaiVthh": null, "cloaiVthh": null, "tonKho": null, "soLuongDc": "111", "duToanKphi": "222", "thoiGianDkDc": "2023-05-15T04:48:26.266Z", "maDiemKhoNhan": "0101020201", "tenDiemKhoNhan": "Điểm kho Dục Mỹ", "maNhaKhoNhan": "010102020105", "tenNhaKhoNhan": "Nhà kho Q.a", "maNganKhoNhan": "01010202010501", "tenNganKhoNhan": "Ngăn kho test", "maLoKhoNhan": "0101020201050107", "tenLoKhoNhan": "lô kho 6", "thuKhoNhan": null, "thayDoiThuDo": null, "slDcConLai": null, "tichLuongKd": null, "slNhapDc": "333", "children": [{ "maChiCucNhan": "01010202", "tenChiCucNhan": "Chi cục Dự trữ Nhà nước Phong Châu", "maDiemKho": "0101020201", "tenDiemKho": "Điểm kho Dục Mỹ", "maNhaKho": "010102020101", "tenNhaKho": "Nhà kho C1", "maNganKho": "01010202010101", "tenNganKho": "Ngăn kho C1/1", "maLoKho": "0101020201010111", "tenLoKho": "Lô kho test cũ", "thuKho": null, "loaiVthh": null, "cloaiVthh": null, "tonKho": null, "soLuongDc": "111", "duToanKphi": "222", "thoiGianDkDc": "2023-05-15T04:48:26.266Z", "maDiemKhoNhan": "0101020201", "tenDiemKhoNhan": "Điểm kho Dục Mỹ", "maNhaKhoNhan": "010102020105", "tenNhaKhoNhan": "Nhà kho Q.a", "maNganKhoNhan": "01010202010501", "tenNganKhoNhan": "Ngăn kho test", "maLoKhoNhan": "0101020201050107", "tenLoKhoNhan": "lô kho 6", "thuKhoNhan": null, "thayDoiThuDo": null, "slDcConLai": null, "tichLuongKd": null, "slNhapDc": "333" }] }] }], "expand": true }], "expand": true }
-  ]
+  dataTableView: any[] = []
   AMOUNT = AMOUNT_NO_DECIMAL;
 
   constructor(
@@ -180,11 +178,24 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
         ...data,
         soQdinh: data.soQdinh.split('/')[0]
       });
+      this.canCu = data.canCu;
+      this.quyetDinh = data.quyetDinh;
 
-      data.danhSachQuyetDinh.map(async (item, i) => {
-        if (item.dcnbKeHoachDcHdr) {
-          let dcnbKeHoachDcHdr = item.dcnbKeHoachDcHdr
-
+      if (data.loaiDc !== "DCNB") this.loadDsQuyetDinh(data.loaiDc, data.loaiQdinh)
+      if (data.danhSachQuyetDinh.length == 0) return
+      let dsDX = []
+      if (data.loaiDc === "CUC") {
+        data.danhSachQuyetDinh.map(async (item, i) => {
+          if (item.dcnbKeHoachDcHdr) {
+            let dcnbKeHoachDcHdr = item.dcnbKeHoachDcHdr
+            dsDX.push(dcnbKeHoachDcHdr)
+          }
+        })
+        this.formData.patchValue({
+          quyetDinhPdDtl: dsDX,
+        })
+        let dcnbKeHoachDcHdr = data.danhSachQuyetDinh[0].dcnbKeHoachDcHdr
+        if (dcnbKeHoachDcHdr) {
           dcnbKeHoachDcHdr.danhSachHangHoa.forEach(element => {
             this.danhSachKeHoach.push({
               ...element,
@@ -194,12 +205,25 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
             })
           });
         }
-      })
 
-      this.canCu = data.canCu;
-      this.quyetDinh = data.quyetDinh;
+      } else {
+        data.danhSachQuyetDinh.map(async (item, i) => {
+          if (item.dcnbKeHoachDcHdr) {
+            let dcnbKeHoachDcHdr = item.dcnbKeHoachDcHdr
 
-      if (data.loaiDc !== "DCNB") this.loadDsQuyetDinh(data.loaiDc, data.loaiQdinh)
+            dcnbKeHoachDcHdr.danhSachHangHoa.forEach(element => {
+              this.danhSachKeHoach.push({
+                ...element,
+                maLoNganKho: element.maLoKho ? `${element.maLoKho}${element.maNganKho}` : element.maNganKho,
+                maDvi: dcnbKeHoachDcHdr.maDvi,
+                tenDvi: dcnbKeHoachDcHdr.tenDvi,
+              })
+            });
+          }
+        })
+      }
+
+
 
       if (data.loaiDc === "DCNB") {
         this.dataTableView = this.buildTableView(this.danhSachKeHoach, "maChiCucNhan")
@@ -209,6 +233,24 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
 
     }
     await this.spinner.hide();
+  }
+
+  selectRow(index) {
+    this.selected = index
+    this.dataTableView = []
+    let itemQd = this.formData.value.quyetDinhPdDtl[index]
+    this.danhSachKeHoach = []
+    itemQd.danhSachHangHoa.forEach(element => {
+      this.danhSachKeHoach.push({
+        ...element,
+        maLoNganKho: element.maLoKho ? `${element.maLoKho}${element.maNganKho}` : element.maNganKho,
+        maDvi: itemQd.maDvi,
+        tenDvi: itemQd.tenDvi,
+      })
+    });
+
+
+    this.dataTableView = this.buildTableView(this.danhSachKeHoach, "maDvi")
   }
 
   collapse(array: any[], data: any, $event: boolean): void {
@@ -374,7 +416,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
       let dsHH = []
       let dsDX = []
       const detail = await this.quyetDinhDieuChuyenTCService.getDetail(value)
-
+      if (detail.data.danhSachQuyetDinh.length == 0) return
       detail.data.danhSachQuyetDinh.map((qd) => {
         if (qd.dcnbKeHoachDcHdr) {
           const item = qd.dcnbKeHoachDcHdr
@@ -382,18 +424,33 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
           this.danhSachQuyetDinh.push({
             danhSachKeHoach: item.danhSachHangHoa
           })
-          item.danhSachHangHoa.map(itemHH => {
-            dsHH.push({
-              ...itemHH,
-              maLoNganKho: itemHH.maLoKho ? `${itemHH.maLoKho}${itemHH.maNganKho}` : itemHH.maNganKho,
-              maDvi: item.maDvi,
-              tenDvi: item.tenDvi
+          if (this.formData.value.loaiDc !== "CUC") {
+            item.danhSachHangHoa.map(itemHH => {
+              dsHH.push({
+                ...itemHH,
+                maLoNganKho: itemHH.maLoKho ? `${itemHH.maLoKho}${itemHH.maNganKho}` : itemHH.maNganKho,
+                maDvi: item.maDvi,
+                tenDvi: item.tenDvi
+              })
+              tong = tong + itemHH.duToanKphi
             })
-            tong = tong + itemHH.duToanKphi
-          })
+          }
         }
 
       })
+
+      if (this.formData.value.loaiDc === "CUC") {
+        const item = detail.data.danhSachQuyetDinh[0].dcnbKeHoachDcHdr
+        item.danhSachHangHoa.map(itemHH => {
+          dsHH.push({
+            ...itemHH,
+            maLoNganKho: itemHH.maLoKho ? `${itemHH.maLoKho}${itemHH.maNganKho}` : itemHH.maNganKho,
+            maDvi: item.maDvi,
+            tenDvi: item.tenDvi
+          })
+          tong = tong + itemHH.duToanKphi
+        })
+      }
 
       this.dataTableView = this.buildTableView(dsHH, "maDvi")
 
@@ -991,15 +1048,16 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
       if (isGuiDuyet) {
         this.idInput = data.id;
         this.guiDuyet();
-      } else {
-        this.quayLai();
       }
+      // else {
+      //   this.quayLai();
+      // }
     }
     await this.spinner.hide();
   }
 
   isYCXDDiemNhap() {
-    return this.formData.value.trangThai == STATUS.DU_THAO && this.formData.value.loaiQdinh == '00'
+    return this.formData.value.trangThai == STATUS.DU_THAO && this.formData.value.loaiQdinh == '00' && !this.isTongCuc()
   }
 
   async ycXDDiemNhap() {
