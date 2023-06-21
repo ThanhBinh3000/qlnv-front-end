@@ -1,4 +1,4 @@
-import { ResponseData } from './../interfaces/response';
+import { OldResponseData, ResponseData } from "./../interfaces/response";
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
@@ -24,6 +24,8 @@ export class ChiTieuKeHoachNamCapTongCucService extends BaseService {
       url_ += 'maDvi=' + encodeURIComponent('' + body.maDvi) + '&';
     if (body.capDvi)
       url_ += 'capDvi=' + encodeURIComponent('' + body.capDvi) + '&';
+    if (body.loaiQuyetDinh)
+      url_ += 'loaiQuyetDinh=' + encodeURIComponent('' + body.loaiQuyetDinh) + '&';
     if (body.ngayKyTuNgay)
       url_ +=
         'ngayKyTuNgay=' + encodeURIComponent('' + body.ngayKyTuNgay) + '&';
@@ -116,6 +118,16 @@ export class ChiTieuKeHoachNamCapTongCucService extends BaseService {
   loadThongTinChiTieuKeHoachCucNam(namKh: number): Promise<any> {
     const url_ = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/dxkh-lcnt/${namKh}`;
     return this.httpClient.get<any>(url_).toPromise();
+  }
+
+  loadThongTinChiTieuKeHoachTongCucGiao(body: any): Promise<any> {
+    const url_ = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/chi-tieu-cua-tong-cuc`;
+    return this.httpClient.post(url_, body).toPromise();
+  }
+
+  getCtieuKhoach(namKh) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/ct-kh-nam/khoi-luong-nhap-xuat/${namKh}`;
+    return this._httpClient.get<OldResponseData>(url).toPromise();
   }
 
   loadThongTinChiTieuKeHoachVtNam(namKh: number): Promise<any> {
