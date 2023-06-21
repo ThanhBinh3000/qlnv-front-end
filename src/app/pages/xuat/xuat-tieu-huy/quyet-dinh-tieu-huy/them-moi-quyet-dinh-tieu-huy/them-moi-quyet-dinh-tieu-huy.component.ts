@@ -179,8 +179,10 @@ export class ThemMoiQuyetDinhTieuHuyComponent extends Base2Component implements 
     }).then(res => {
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data;
-        if (data && data.content && data.content.length > 0) {
+        if (data && data.content && data.content.length > 0 && this.formData.value.idHoSo===null) {
           this.listHoSo = data.content.filter(item => item.soQd == null);
+        }else {
+          this.listHoSo = data.content;
         }
       } else {
         this.listHoSo = [];
@@ -191,7 +193,9 @@ export class ThemMoiQuyetDinhTieuHuyComponent extends Base2Component implements 
 
   async save() {
     this.formData.disable({emitEvent: false});
-    let dt = this.dataTable.flatMap((item) => item.childData);
+    let dt = this.flattenTree(this.dataTable);
+    console.log(this.dataTable,555)
+    console.log(dt,66)
     this.formData.patchValue({quyetDinhDtl: dt})
     let body = {
       ...this.formData.value,
@@ -217,6 +221,12 @@ export class ThemMoiQuyetDinhTieuHuyComponent extends Base2Component implements 
     this.showListEvent.emit();
   }
 
+  flattenTree(tree) {
+    return tree.flatMap((item) => {
+      return item.childData ? this.flattenTree(item.childData) : item;
+    });
+  }
+
   changeHoSo($event: any) {
     if ($event) {
       try {
@@ -236,7 +246,6 @@ export class ThemMoiQuyetDinhTieuHuyComponent extends Base2Component implements 
               });
               this.formData.patchValue({
                 soHoSo: res.data.soHoSo,
-                quyetDinhDtl: this.dataTable,
                 tongSoLuongTl: this.dataTable.reduce((prev, cur) => prev + cur.slDaDuyet, 0),
                 tongSoLuongCon: this.dataTable.reduce((prev, cur) => prev + cur.slCon, 0),
                 tongThanhTien: this.dataTable.reduce((prev, cur) => prev + cur.thanhTien, 0),

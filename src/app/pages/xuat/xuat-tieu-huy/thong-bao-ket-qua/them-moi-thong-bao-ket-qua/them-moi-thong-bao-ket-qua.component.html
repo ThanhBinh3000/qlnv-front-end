@@ -5,15 +5,14 @@
       <span>Quay lại</span>
     </button>
     <button
-      *ngIf="(formData.value.trangThai == STATUS.DU_THAO ||
-       formData.value.trangThai == STATUS.TU_CHOI_LDV)&& userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_QDXC_TAOQDXC')"
+      *ngIf="(formData.value.trangThai == STATUS.DU_THAO)&& userService.isAccessPermisson('XHDTQG_XTH_TBKQ_THEM')"
       type="button" class="btn btn-sub"
       (click)="saveAndSend(formData.value, STATUS.DA_HOAN_THANH, 'Bạn có muốn hoàn thành thông báo ?')">
       <i class="icon htvbdh_checkfile2"></i>
       <span>Hoàn thành</span>
     </button>
     <button
-      *ngIf=" !isView && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV || formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_TP)"
+      *ngIf=" !isView && (formData.value.trangThai == STATUS.DU_THAO)"
       type="button" class="btn btn-main" (click)="save()">
       <i class="icon htvbdh_tcdt_save"></i>
       <span>Lưu</span>
@@ -25,16 +24,16 @@
   <div class="header header-green-background">
     <div class="header-text">
       <div class="title-chi-tieu">
-        <span [ngClass]="formData.value.trangThai == STATUS.BAN_HANH ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
+        <span [ngClass]="formData.value.trangThai == STATUS.DA_HOAN_THANH ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
           {{ formData.value.tenTrangThai }}
         </span>
         <span> THÔNG BÁO KẾT QUẢ TRÌNH HỒ SƠ TIÊU HỦY HÀNG DTQG </span>
       </div>
     </div>
   </div>
-  <nz-alert *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDV " nzShowIcon nzType="error" nzMessage="Lý do từ chối"
-            nzDescription="{{formData.value.lyDoTuChoi}}">
-  </nz-alert>
+<!--  <nz-alert *ngIf="formData.value.trangThai == STATUS " nzShowIcon nzType="error" nzMessage="Lý do từ chối"-->
+<!--            nzDescription="{{formData.value.lyDoTuChoi}}">-->
+<!--  </nz-alert>-->
   <nz-card class="mg-t-16 flex-card p-lr16">
     <nz-collapse nzAccordion>
       <div class="mt16 flex-card p-lr16">
