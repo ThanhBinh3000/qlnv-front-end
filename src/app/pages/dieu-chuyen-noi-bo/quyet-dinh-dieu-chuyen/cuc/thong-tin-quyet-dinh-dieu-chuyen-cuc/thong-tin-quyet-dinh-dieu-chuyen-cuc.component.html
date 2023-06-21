@@ -1125,7 +1125,7 @@
                     Thời gian dự
                     kiến điều chuyển</th>
                   <th colspan="5" class="text-center">Chi cục nhận điều chuyển đến</th>
-                  <th rowspan="2">Hành động</th>
+                  <th rowspan="2" *ngIf="formData.value.trangThai == STATUS.YC_CHICUC_PHANBO_DC">Hành động</th>
                 </tr>
                 <tr>
                   <th>Chi cục</th>
@@ -1168,7 +1168,7 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td></td>
+                    <td *ngIf="formData.value.trangThai == STATUS.YC_CHICUC_PHANBO_DC"></td>
                   </tr>
                   <ng-container *ngIf="chicuc.expand">
                     <ng-container *ngFor="let diemkho of chicuc.children, let y = index">
@@ -1192,7 +1192,7 @@
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td></td>
+                        <td *ngIf="formData.value.trangThai == STATUS.YC_CHICUC_PHANBO_DC"></td>
                       </tr>
                       <ng-container *ngIf="diemkho.expand">
                         <ng-container *ngFor="let loNganKho of diemkho.children, let y = index">
@@ -1219,7 +1219,7 @@
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td></td>
+                            <td *ngIf="formData.value.trangThai == STATUS.YC_CHICUC_PHANBO_DC"></td>
                           </tr>
                           <ng-container *ngFor="let chiCucNhan of loNganKho.children, let y = index">
                             <tr>
@@ -1241,7 +1241,7 @@
                               <td></td>
                               <td></td>
                               <td></td>
-                              <td>
+                              <td *ngIf="formData.value.trangThai == STATUS.YC_CHICUC_PHANBO_DC">
                                 <a (click)="themDiemKhoNhan(chiCucNhan)">
                                   <i class="icon htvbdh_dau-cong"></i>
                                 </a>
@@ -1267,7 +1267,7 @@
                                 <td></td>
                                 <td></td>
                                 <td></td>
-                                <td>
+                                <td *ngIf="formData.value.trangThai == STATUS.YC_CHICUC_PHANBO_DC">
                                   <a (click)="themLoKhoNhan(diemKhoNhan)">
                                     <i class="icon htvbdh_dau-cong"></i>
                                   </a>
@@ -1298,7 +1298,7 @@
                                     {{f.tichLuongKd|number:'1.0-1':'vi_VN'}}</td>
                                   <td class="text-right">
                                     {{f.soLuongPhanBo|number:'1.0-1':'vi_VN'}}</td>
-                                  <td>
+                                  <td *ngIf="formData.value.trangThai == STATUS.YC_CHICUC_PHANBO_DC">
                                     <a (click)="suaLoKhoNhan(f)">
                                       <i class="fa fa-pencil"></i>
                                     </a>
