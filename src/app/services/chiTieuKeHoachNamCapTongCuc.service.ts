@@ -24,6 +24,8 @@ export class ChiTieuKeHoachNamCapTongCucService extends BaseService {
       url_ += 'maDvi=' + encodeURIComponent('' + body.maDvi) + '&';
     if (body.capDvi)
       url_ += 'capDvi=' + encodeURIComponent('' + body.capDvi) + '&';
+    if (body.loaiQuyetDinh)
+      url_ += 'loaiQuyetDinh=' + encodeURIComponent('' + body.loaiQuyetDinh) + '&';
     if (body.ngayKyTuNgay)
       url_ +=
         'ngayKyTuNgay=' + encodeURIComponent('' + body.ngayKyTuNgay) + '&';
