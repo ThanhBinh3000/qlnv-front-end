@@ -6,7 +6,7 @@ import {cloneDeep} from 'lodash';
 import {NzModalService} from 'ng-zorro-antd/modal';
 import {NzNotificationService} from 'ng-zorro-antd/notification';
 import {NgxSpinnerService} from 'ngx-spinner';
-import {LEVEL, PAGE_SIZE_DEFAULT} from 'src/app/constants/config';
+import {LEVEL, LOAI_QD_CTKH, PAGE_SIZE_DEFAULT} from 'src/app/constants/config';
 import {MESSAGE} from 'src/app/constants/message';
 import {UserLogin} from 'src/app/models/userlogin';
 import {ChiTieuKeHoachNamCapTongCucService} from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
@@ -34,7 +34,6 @@ export class PaGiaoChiTieuKeHoachComponent implements OnInit {
   optionsDonVi: any[] = [];
   options: any[] = [];
   inputDonVi: string = '';
-  indexTab: number = 0;
   errorMessage: string = '';
   startValue: Date | null = null;
   endValue: Date | null = null;
@@ -67,6 +66,8 @@ export class PaGiaoChiTieuKeHoachComponent implements OnInit {
     trichYeu: '',
     tenTrangThai: '',
   };
+  indexTab: number = this.userService.isTongCuc() ? 0 : 1;
+  LOAI_QD = LOAI_QD_CTKH;
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -91,7 +92,6 @@ export class PaGiaoChiTieuKeHoachComponent implements OnInit {
     } else if (this.userService.isCuc()) {
       this.lastBreadcrumb = LEVEL.CUC_SHOW;
     }
-
     this.spinner.show();
     try {
       let dayNow = dayjs().get('year');
@@ -176,6 +176,7 @@ export class PaGiaoChiTieuKeHoachComponent implements OnInit {
       tenDvi: tenDvi,
       pageNumber: this.page,
       pageSize: this.pageSize,
+      loaiQuyetDinh: this.LOAI_QD.PA,
       soQD: this.searchFilter.soQD,
       trichYeu: this.searchFilter.trichYeu,
       namKeHoach: this.searchFilter.namKeHoach,
