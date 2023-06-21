@@ -330,9 +330,21 @@
                   E-HSMT)
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-date-picker formControlName="tgianBdauTchuc" nzFormat="dd/MM/yyyy"
-                                  [nzDisabled]="(formData.value.trangThai != globals.prop.NHAP_DU_THAO && formData.value.trangThai != globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai != '') || isView">
-                  </nz-date-picker>
+                  <div nz-row [nzGutter]="24">
+                    <div nz-col nzSpan="12">
+                      <nz-select formControlName="quy" nzAllowClear (ngModelChange)="onChangeQuy()"
+                                 [nzDisabled]="(formData.value.trangThai != globals.prop.NHAP_DU_THAO && formData.value.trangThai != globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai != '') || isView">
+                        <nz-option *ngFor="let p of listQuy" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+                        </nz-option>
+                      </nz-select>
+                    </div>
+                    <div nz-col nzSpan="12">
+                      <nz-date-picker formControlName="tgianBdauTchuc" nzFormat="dd/MM/yyyy"
+                                      [nzDisabledDate]="disabledDate" nzAllowClear
+                                      [nzDisabled]="(formData.value.trangThai != globals.prop.NHAP_DU_THAO && formData.value.trangThai != globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai != '') || isView">
+                      </nz-date-picker>
+                    </div>
+                  </div>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -352,7 +364,7 @@
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true"> Thời gian thực hiện hợp đồng (ngày)</nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24">
-                  <nz-input-number formControlName="tgianThien" nz-input [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
+                  <nz-input-number formControlName="tgianThienHd" nz-input [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
                                    [nzStep]="1" [nzSize]="'small'"
                                    [nzDisabled]="(formData.value.trangThai != STATUS.DU_THAO && formData.value.trangThai != STATUS.CHO_DUYET_LDC && formData.value.trangThai != '') || isView">
                   </nz-input-number>
@@ -401,8 +413,8 @@
             <th class="text-center" nzWidth="180px"  nzLeft>Tên gói thầu</th>
             <th class="text-center" nzWidth="180px"  nzLeft>Chủng loại hàng DTQG</th>
             <th class="text-center" nzWidth="180px"  nzLeft>Cục DTNN KV</th>
-            <th class="text-center" nzWidth="180px"   nzLeft>Chi cục DTNN KV</th>
-            <th class="text-center" nzWidth="180px"   nzLeft>Điểm kho</th>
+<!--            <th class="text-center" nzWidth="180px"   nzLeft>Chi cục DTNN KV</th>-->
+<!--            <th class="text-center" nzWidth="180px"   nzLeft>Điểm kho</th>-->
             <th class="text-center" nzWidth="130px"  >Chỉ tiêu kế hoạch<br/>được giao</th>
             <th class="text-center" nzWidth="130px"  >Số đã thực hiện</th>
             <th class="text-center" nzWidth="100px"  >Số đề xuất</th>
@@ -419,8 +431,8 @@
               <td nzLeft class="multi-line">{{item.goiThau}}</td>
               <td nzLeft class="multi-line">{{item.tenCloaiVthh}}</td>
               <td nzLeft></td>
-              <td nzLeft></td>
-              <td nzLeft></td>
+<!--              <td nzLeft></td>-->
+<!--              <td nzLeft></td>-->
               <td></td>
               <td></td>
               <td class="text-right blue-text bold-700">{{item.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
@@ -444,8 +456,8 @@
                   <td nzLeft>
                   </td>
                   <td nzLeft class="multi-line">{{cuc.tenDvi}}</td>
-                  <td nzLeft></td>
-                  <td nzLeft></td>
+<!--                  <td nzLeft></td>-->
+<!--                  <td nzLeft></td>-->
                   <td class="text-right red-text">{{cuc.soLuongTheoChiTieu | number : '1.0-1' : 'vi_VN'}}</td>
                   <td class="text-right red-text">{{cuc.soLuongDaMua | number : '1.0-1' : 'vi_VN'}}</td>
                   <td class="text-right blue-text">{{cuc.soLuong | number : '1.0-1' : 'vi_VN'}}</td>

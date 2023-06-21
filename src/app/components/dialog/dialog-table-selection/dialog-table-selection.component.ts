@@ -21,7 +21,6 @@ export class DialogTableSelectionComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    console.log(this.dataTable);
   }
 
 

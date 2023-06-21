@@ -6,7 +6,7 @@ import {cloneDeep} from 'lodash';
 import {NzModalService} from 'ng-zorro-antd/modal';
 import {NzNotificationService} from 'ng-zorro-antd/notification';
 import {NgxSpinnerService} from 'ngx-spinner';
-import {LEVEL, PAGE_SIZE_DEFAULT} from 'src/app/constants/config';
+import {LEVEL, LOAI_QD_CTKH, PAGE_SIZE_DEFAULT} from 'src/app/constants/config';
 import {MESSAGE} from 'src/app/constants/message';
 import {UserLogin} from 'src/app/models/userlogin';
 import {ChiTieuKeHoachNamCapTongCucService} from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
@@ -17,11 +17,12 @@ import {Globals} from 'src/app/shared/globals';
 import {STATUS} from "../../../../../constants/status";
 
 @Component({
-  selector: 'app-chi-tieu-ke-hoach-nam-cap-tong-cuc',
-  templateUrl: './chi-tieu-ke-hoach-nam-cap-tong-cuc.component.html',
-  styleUrls: ['./chi-tieu-ke-hoach-nam-cap-tong-cuc.component.scss'],
+  selector: 'app-pa-giao-chi-tieu-ke-hoach',
+  templateUrl: './pa-giao-chi-tieu-ke-hoach.component.html',
+  styleUrls: ['./pa-giao-chi-tieu-ke-hoach.component.scss']
 })
-export class ChiTieuKeHoachNamComponent implements OnInit {
+export class PaGiaoChiTieuKeHoachComponent implements OnInit {
+
   searchValue = '';
   searchFilter = {
     soQD: '',
@@ -33,7 +34,6 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
   optionsDonVi: any[] = [];
   options: any[] = [];
   inputDonVi: string = '';
-  indexTab: number = 0;
   errorMessage: string = '';
   startValue: Date | null = null;
   endValue: Date | null = null;
@@ -66,6 +66,8 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
     trichYeu: '',
     tenTrangThai: '',
   };
+  indexTab: number = this.userService.isTongCuc() ? 0 : 1;
+  LOAI_QD = LOAI_QD_CTKH;
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -90,7 +92,6 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
     } else if (this.userService.isCuc()) {
       this.lastBreadcrumb = LEVEL.CUC_SHOW;
     }
-
     this.spinner.show();
     try {
       let dayNow = dayjs().get('year');
@@ -175,6 +176,7 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
       tenDvi: tenDvi,
       pageNumber: this.page,
       pageSize: this.pageSize,
+      loaiQuyetDinh: this.LOAI_QD.PA,
       soQD: this.searchFilter.soQD,
       trichYeu: this.searchFilter.trichYeu,
       namKeHoach: this.searchFilter.namKeHoach,
@@ -474,4 +476,5 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
       tenTrangThai: '',
     }
   }
+
 }

@@ -230,6 +230,7 @@
 
   <div class="chi-tiet" *ngIf="isDetail">
     <app-thong-tin-quyet-dinh-dieu-chuyen-tc [isView]="isView" [idInput]="selectedId" [idTHop]="idTHop"
-      [isViewOnModal]="isViewOnModal" (showListEvent)="quayLai()"></app-thong-tin-quyet-dinh-dieu-chuyen-tc>
+      [qdDcId]="qdDcId" [isViewOnModal]="isViewOnModal"
+      (showListEvent)="quayLai()"></app-thong-tin-quyet-dinh-dieu-chuyen-tc>
   </div>
 </div>

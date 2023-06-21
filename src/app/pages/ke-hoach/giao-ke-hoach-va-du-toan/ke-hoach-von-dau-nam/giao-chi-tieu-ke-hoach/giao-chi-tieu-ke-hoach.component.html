@@ -1,0 +1,18 @@
+<nz-affix [nzOffsetTop]="98" class="level2">
+  <ul nz-menu nzMode="horizontal">
+    <li nz-menu-item nzSelected
+        (click)="selectTab('PA')">
+      Phương án giao chỉ tiêu kế hoạch
+    </li>
+    <li nz-menu-item
+        (click)="selectTab('QD')">
+      QĐ giao chỉ tiêu kế hoạch
+    </li>
+  </ul>
+</nz-affix>
+<ng-container *ngIf="tabSelected == 'PA'">
+  <app-pa-giao-chi-tieu-ke-hoach></app-pa-giao-chi-tieu-ke-hoach>
+</ng-container>
+<ng-container *ngIf="tabSelected == 'QD'">
+  <app-qd-giao-chi-tieu-ke-hoach-nam></app-qd-giao-chi-tieu-ke-hoach-nam>
+</ng-container>

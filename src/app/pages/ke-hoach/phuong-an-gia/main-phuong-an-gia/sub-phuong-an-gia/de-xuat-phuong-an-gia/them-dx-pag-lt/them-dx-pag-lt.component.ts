@@ -880,13 +880,17 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.listDxCanSua = data.content;
+      if (this.listDxCanSua && this.listDxCanSua.length > 0) {
+        console.log(this.listDxCanSua,123)
+        this.listDxCanSua = this.listDxCanSua.filter(item => item.trangThai == STATUS.DA_DUYET_CBV);
+      }
     }
     this.spinner.hide();
   }
 
   openModalSoDx() {
     const modalQD = this.modal.create({
-      nzTitle: 'Danh sách số quyết định kế hoạch giao nhiệm vụ nhập hàng',
+      nzTitle: 'Danh sách điều chỉnh đề xuất Phương án giá',
       nzContent: DialogTableSelectionComponent,
       nzMaskClosable: false,
       nzClosable: false,
