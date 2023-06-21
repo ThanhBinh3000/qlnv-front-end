@@ -46,7 +46,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
   idTHop: number;
   @Input()
   qdDcId: number;
-  @Input() isViewOnModal: number;
+  @Input() isViewOnModal: boolean;
   @Input() idInput: number;
   @Input() isView: boolean;
   @Output()
@@ -109,6 +109,8 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
       danhSachQuyetDinh: [new Array<any>(),],
     }
     );
+
+    if (this.isViewOnModal) this.isView = true
   }
 
   async ngOnInit() {

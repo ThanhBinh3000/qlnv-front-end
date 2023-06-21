@@ -183,7 +183,7 @@
               <nz-form-label nzRequired [nzNoColon]="true"> Năm kế hoạch
               </nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
-                <nz-select [nzDisabled]="isView" formControlName="nam" nzAllowClear>
+                <nz-select [nzDisabled]="isView || isViewOnModal" formControlName="nam" nzAllowClear>
                   <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                 </nz-select>
               </nz-form-control>
@@ -194,8 +194,8 @@
               <nz-form-label nzRequired [nzNoColon]="true"> Số quyết định</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group nzAddOnAfter="/{{maQd}}">
-                  <nz-input-number [nzDisabled]="isView" formControlName="soQdinh" [nzMin]="1" [nzMax]="999999999999"
-                    [nzStep]="1" [nzSize]="'small'">
+                  <nz-input-number [nzDisabled]="isView || isViewOnModal" formControlName="soQdinh" [nzMin]="1"
+                    [nzMax]="999999999999" [nzStep]="1" [nzSize]="'small'">
                   </nz-input-number>
                 </nz-input-group>
               </nz-form-control>
@@ -205,7 +205,8 @@
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true"> Ngày ký quyết định</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <nz-date-picker [nzDisabled]="isView" formControlName="ngayKyQdinh" nzFormat="dd/MM/yyyy">
+                <nz-date-picker [nzDisabled]="isView || isViewOnModal" formControlName="ngayKyQdinh"
+                  nzFormat="dd/MM/yyyy">
                 </nz-date-picker>
               </nz-form-control>
             </nz-form-item>
@@ -214,24 +215,12 @@
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true"> Ngày hiệu lực</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <nz-date-picker [nzDisabled]="isView" formControlName="ngayPduyet" nzFormat="dd/MM/yyyy">
+                <nz-date-picker [nzDisabled]="isView || isViewOnModal" formControlName="ngayPduyet"
+                  nzFormat="dd/MM/yyyy">
                 </nz-date-picker>
               </nz-form-control>
             </nz-form-item>
           </div>
-
-          <!-- <div nz-col nzSpan="6">
-            <nz-form-item>
-              <nz-form-label nzRequired [nzNoColon]="true"> Căn cứ vào quyết định điều chuyển của Tổng cục
-              </nz-form-label>
-              <nz-form-control nz-col [nzErrorTip]="error">
-                <nz-select [nzDisabled]="isView" formControlName="canCuQdTc" nzAllowClear
-                  (ngModelChange)="onChangeCanCuQdTc($event)">
-                  <nz-option *ngFor="let p of listQuyetDinh" [nzValue]="p.id" [nzLabel]="p.soQdinh"></nz-option>
-                </nz-select>
-              </nz-form-control>
-            </nz-form-item>[readonly]="isView || isChiCuc() || !formData.value.loaiQdinh"
-          </div> -->
 
           <div nz-col [nzSpan]="5">
             <nz-form-item>
@@ -272,7 +261,7 @@
                 Trích yếu
               </nz-form-label>
               <nz-form-control>
-                <input nz-input formControlName="trichYeu" [readonly]="isView" />
+                <input nz-input formControlName="trichYeu" [readonly]="isView || isViewOnModal" />
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -423,7 +412,8 @@
                 Căn cứ pháp lý
               </nz-form-label>
               <div class="list-file">
-                <file-list [data]="canCu" [disabled]="isView" [isViewDetail]="isView || isChiCuc()"></file-list>
+                <file-list [data]="canCu" [disabled]="isView || isViewOnModal"
+                  [isViewDetail]="isView || isViewOnModal || isChiCuc()"></file-list>
               </div>
             </nz-form-item>
           </div>
@@ -434,7 +424,8 @@
                 File đính kèm QĐ phê duyệt KH điều chuyển nội bộ của Tổng cục đã ban hành
               </nz-form-label>
               <div class="list-file">
-                <file-list [data]="quyetDinh" [disabled]="isView" [isViewDetail]="isView || isChiCuc()"></file-list>
+                <file-list [data]="quyetDinh" [disabled]="isView || isViewOnModal"
+                  [isViewDetail]="isView || isViewOnModal || isChiCuc()"></file-list>
               </div>
             </nz-form-item>
           </div>

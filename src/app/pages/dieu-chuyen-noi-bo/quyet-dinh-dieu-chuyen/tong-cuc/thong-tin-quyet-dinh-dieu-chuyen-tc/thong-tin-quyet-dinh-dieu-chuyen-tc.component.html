@@ -81,7 +81,8 @@
               <nz-form-label nzRequired [nzNoColon]="true"> Loại điều chuyển
               </nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
-                <nz-radio-group formControlName="loaiDc" [nzDisabled]="isView" (ngModelChange)="onChangeLoaiDc($event)">
+                <nz-radio-group formControlName="loaiDc" [nzDisabled]="isView || isViewOnModal"
+                  (ngModelChange)="onChangeLoaiDc($event)">
                   <label nz-radio *ngFor="let p of listLoaiDC" [nzValue]="p.value">{{p.text}}</label>
                 </nz-radio-group>
               </nz-form-control>
@@ -96,7 +97,7 @@
               <nz-form-label nzRequired [nzNoColon]="true"> Năm kế hoạch
               </nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
-                <nz-select [nzDisabled]="isView" formControlName="nam" nzAllowClear>
+                <nz-select [nzDisabled]="isView || isViewOnModal" formControlName="nam" nzAllowClear>
                   <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                 </nz-select>
               </nz-form-control>
@@ -107,8 +108,8 @@
               <nz-form-label nzRequired [nzNoColon]="true"> Số quyết định</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group nzAddOnAfter="/{{maQd}}">
-                  <nz-input-number [nzDisabled]="isView" formControlName="soQdinh" [nzMin]="1" [nzMax]="999999999999"
-                    [nzStep]="1" [nzSize]="'small'">
+                  <nz-input-number [nzDisabled]="isView || isViewOnModal" formControlName="soQdinh" [nzMin]="1"
+                    [nzMax]="999999999999" [nzStep]="1" [nzSize]="'small'">
                   </nz-input-number>
                 </nz-input-group>
               </nz-form-control>
@@ -118,7 +119,8 @@
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true"> Ngày ký quyết định</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <nz-date-picker [nzDisabled]="isView" formControlName="ngayKyQdinh" nzFormat="dd/MM/yyyy">
+                <nz-date-picker [nzDisabled]="isView || isViewOnModal" formControlName="ngayKyQdinh"
+                  nzFormat="dd/MM/yyyy">
                 </nz-date-picker>
               </nz-form-control>
             </nz-form-item>
@@ -127,14 +129,16 @@
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true"> Ngày hiệu lực</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <nz-date-picker [nzDisabled]="isView" formControlName="ngayPduyet" nzFormat="dd/MM/yyyy">
+                <nz-date-picker [nzDisabled]="isView || isViewOnModal" formControlName="ngayPduyet"
+                  nzFormat="dd/MM/yyyy">
                 </nz-date-picker>
               </nz-form-control>
             </nz-form-item>
           </div>
 
           <div *ngIf="isTongCuc()" nz-col [nzSpan]="12">
-            <nz-radio-group [nzDisabled]="isView || !!idTHop" nzSize="small" class="rdo-input" formControlName="type">
+            <nz-radio-group [nzDisabled]="isView || isViewOnModal || !!idTHop" nzSize="small" class="rdo-input"
+              formControlName="type">
               <nz-form-item nz-col [nzSpan]="11">
                 <label nz-radio nzValue="TH">Chọn mã tổng hợp</label>
                 <nz-form-control [nzErrorTip]="error">
@@ -172,7 +176,7 @@
                 Trích yếu
               </nz-form-label>
               <nz-form-control>
-                <input nz-input formControlName="trichYeu" [readonly]="isView" />
+                <input nz-input formControlName="trichYeu" [readonly]="isView || isViewOnModal" />
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -183,7 +187,8 @@
                 Căn cứ pháp lý
               </nz-form-label>
               <div class="list-file">
-                <file-list [data]="canCu" [disabled]="isView" [isViewDetail]="isView"></file-list>
+                <file-list [data]="canCu" [disabled]="isView || isViewOnModal"
+                  [isViewDetail]="isView || isViewOnModal"></file-list>
               </div>
             </nz-form-item>
           </div>
@@ -194,7 +199,8 @@
                 File đính kèm QĐ phê duyệt KH điều chuyển nội bộ của Tổng cục đã ban hành
               </nz-form-label>
               <div class="list-file">
-                <file-list [data]="quyetDinh" [disabled]="isView" [isViewDetail]="isView"></file-list>
+                <file-list [data]="quyetDinh" [disabled]="isView || isViewOnModal"
+                  [isViewDetail]="isView || isViewOnModal"></file-list>
               </div>
             </nz-form-item>
           </div>
