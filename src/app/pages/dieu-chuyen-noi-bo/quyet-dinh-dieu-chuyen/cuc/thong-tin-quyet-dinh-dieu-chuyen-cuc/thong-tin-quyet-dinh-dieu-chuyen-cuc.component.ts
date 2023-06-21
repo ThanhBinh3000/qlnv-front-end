@@ -720,7 +720,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
 
   async addCC(row?: any) {
     await this.spinner.show();
-
+    console.log('addCC', row)
     await this.spinner.hide();
     const keHoachDcHdrId = row.hdrId
     const param = {
@@ -1045,13 +1045,14 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
 
     let data = await this.createUpdate(body);
     if (data) {
+      this.idInput = data.id;
       if (isGuiDuyet) {
-        this.idInput = data.id;
         this.guiDuyet();
       }
-      // else {
-      //   this.quayLai();
-      // }
+      else {
+        // this.quayLai();
+        await this.loadChiTiet(this.idInput)
+      }
     }
     await this.spinner.hide();
   }
@@ -1065,6 +1066,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
     let body = this.formData.value;
     body.canCu = this.canCu;
     body.quyetDinh = this.quyetDinh;
+    body.soQdinh = `${this.formData.value.soQdinh.toString().split("/")[0]}/${this.maQd}`
     if (this.idInput) body.id = this.idInput
 
     let data = await this.createUpdate(body);
