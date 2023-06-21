@@ -35,7 +35,6 @@ export class ThemMoiThongBaoKetQuaComponent extends Base2Component implements On
   maHauTo: any;
   listQd: any[] = [];
   listHoSo: any[] = [];
-  chiTiet: any = [];
 
 
   constructor(
@@ -66,12 +65,10 @@ export class ThemMoiThongBaoKetQuaComponent extends Base2Component implements On
       soHoSo:['', [Validators.required]],
       idHoSo:[],
       soQd:['', [Validators.required]],
-      ngayTrinhDuyet:['', [Validators.required]],
       ngayKy:['', [Validators.required]],
       trichYeu:['', [Validators.required]],
       lyDo:[],
-      trangThai:['', [Validators.required]],
-
+      trangThai:[STATUS.DU_THAO],
       ngayPduyet:[],
       nguoiPduyetId:[],
       ngayGduyet:[],
@@ -107,25 +104,17 @@ export class ThemMoiThongBaoKetQuaComponent extends Base2Component implements On
       await this.thongBaoKqTieuHuyService.getDetail(idInput)
         .then((res) => {
           if (res.msg == MESSAGE.SUCCESS) {
-            this.formData.setValue({
+            this.formData.patchValue({
               ...res.data,
-              soQd: res.data.soQd?.split('/')[0] ?? null,
-              thoiGianTl: (res.data.thoiGianTlTu && res.data.thoiGianTlDen) ? [res.data.thoiGianTlTu, res.data.thoiGianTlDen] : null
-
+              soThongBao: res.data.soThongBao?.split('/')[0] ?? null,
             }, {emitEvent: false});
-
-            this.formData.value.quyetDinhDtl.forEach(s => {
-              idVirtual: uuid.v4();
-            });
           }
-          console.log(this.formData.value)
         })
         .catch((e) => {
           console.log("error: ", e);
           this.spinner.hide();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         });
-      this.formData.controls['idQd'].disable();
     } else {
       this.formData.patchValue({
         maDvi: this.userInfo.MA_DVI,
@@ -154,25 +143,19 @@ export class ThemMoiThongBaoKetQuaComponent extends Base2Component implements On
     });
   }
 
-
-
   async save() {
     this.formData.disable({emitEvent: false});
     let body = {
       ...this.formData.value,
-      soQd: this.formData.value.soQd ? this.formData.value.soQd + this.maHauTo : this.maHauTo
+      soThongBao: this.formData.value.soThongBao ? this.formData.value.soThongBao + this.maHauTo : this.maHauTo
     };
-    if (this.formData.get('thoiGianTl').value) {
-      body.thoiGianTlTu = dayjs(this.formData.get('thoiGianTl').value[0]).format('YYYY-MM-DD');
-      body.thoiGianTlDen = dayjs(this.formData.get('thoiGianTl').value[1]).format('YYYY-MM-DD')
-    }
     let rs = await this.createUpdate(body);
     this.formData.enable({emitEvent: false});
     this.formData.patchValue({id: rs.id})
   }
 
   async saveAndSend(body: any, trangThai: string, msg: string, msgSuccess?: string) {
-    body = {...body, soQd: this.formData.value.soQd + this.maHauTo}
+    body = {...body, soThongBao: this.formData.value.soThongBao + this.maHauTo}
     await super.saveAndSend(body, trangThai, msg, msgSuccess);
   }
 
@@ -184,18 +167,19 @@ export class ThemMoiThongBaoKetQuaComponent extends Base2Component implements On
     if ($event) {
       try {
         this.spinner.show();
-        this.chiTiet = [];
         this.quyetDinhTieuHuyService.getDetail($event).then(res => {
           if (res.msg == MESSAGE.SUCCESS) {
             if (res.data) {
-              console.log( res.data,555)
               this.formData.patchValue({
                 soHoSo: res.data.soHoSo,
+                idHoSo: res.data.idHoSo,
+                soQd: res.data.soQd,
+
                });
             }
+            console.log(123)
           }
         })
-        console.log( this.formData.value,555)
       } catch (e) {
         console.log('error: ', e);
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
