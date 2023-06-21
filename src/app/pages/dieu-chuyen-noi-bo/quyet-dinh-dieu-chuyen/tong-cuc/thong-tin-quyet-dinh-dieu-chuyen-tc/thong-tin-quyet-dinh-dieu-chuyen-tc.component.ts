@@ -60,6 +60,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
   listDanhSachDeXuat: any[] = [];
   danhsachDx: any[] = [];
   dataTableView: any[] = []
+  dataDetail: any;
 
   selected: number = 0
 
@@ -157,6 +158,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
     await this.spinner.show()
     if (id) {
       let data = await this.detail(id);
+      this.dataDetail = data
       let listDeXuat = []
       let listHangHoa = []
       this.dataTableView = []
@@ -550,6 +552,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
     let bodyTh = {
       loaiDieuChuyen: this.formData.get('loaiDc').value,
       namKeHoach: this.formData.get('nam').value,
+      qdtcId: this.dataDetail?.idThop,
       paggingReq: {
         limit: this.globals.prop.MAX_INTERGER,
         page: 0
@@ -602,6 +605,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
     let bodyDx = {
       loaiDieuChuyen: this.formData.get('loaiDc').value,
       namKeHoach: this.formData.get('nam').value,
+      qdtcId: this.dataDetail?.idDxuat,
       paggingReq: {
         limit: this.globals.prop.MAX_INTERGER,
         page: 0
