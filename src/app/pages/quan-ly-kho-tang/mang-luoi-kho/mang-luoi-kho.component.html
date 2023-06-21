@@ -64,28 +64,47 @@
             <nz-collapse>
               <nz-collapse-panel nzActive="true"
                                  [nzHeader]="levelNode == 2 ? 'THÔNG TIN CỤC DTNN KV' : levelNode == 3 ? 'THÔNG TIN CHI CỤC DTNN' : levelNode == 4 ? 'THÔNG TIN ĐIỂM KHO' :  levelNode == 5 ? ' THÔNG TIN NHÀ KHO' : levelNode == 6 ? 'THÔNG TIN NGĂN KHO' : 'THÔNG TIN LÔ KHO'">
-                <div class="mg-t-10" nz *ngIf="levelNode > 3" nz-row [nzGutter]="24">
-                  <div nz-col nzSpan="12" class="text-left"
-                       *ngIf="!(this.levelNode == 7 || (this.levelNode == 6 && !detailDonVi.value.coLoKho))">
-                  </div>
-                  <div nz-col nzSpan="12" class="text-left"
-                       *ngIf="this.levelNode == 7 || (this.levelNode == 6 && !detailDonVi.value.coLoKho)">
-                    <label class="font-weight-bold">Loại hàng hóa</label>
-                    <label [(ngModel)]="loaiHangHoa.thoc" id="hhThoc"
-                           [nzDisabled]="!(detailDonVi.value.slTon == 0 && !isEditData)" class="font-weight-bold"
-                           style="margin-left: 20px" nz-checkbox>Thóc</label>
-                    <label [(ngModel)]="loaiHangHoa.gao" [nzDisabled]="!(detailDonVi.value.slTon == 0 && !isEditData)"
-                           class="font-weight-bold" nz-checkbox>Gạo</label>
-                    <label [(ngModel)]="loaiHangHoa.muoi" [nzDisabled]="!(detailDonVi.value.slTon == 0 && !isEditData)"
-                           class="font-weight-bold" nz-checkbox>Muối</label>
-                    <label [(ngModel)]="loaiHangHoa.vattu" [nzDisabled]="!(detailDonVi.value.slTon == 0 && !isEditData)"
-                           class="font-weight-bold" nz-checkbox>Vật tư</label>
-                  </div>
-                  <div class="text-right" nz-col nzSpan="12">
-
-                  </div>
-                </div>
                 <form nz-form [formGroup]="detailDonVi" [nzLayout]="'vertical'">
+                  <div class="mg-t-10" nz-row [nzGutter]="24" *ngIf="this.levelNode == 7 || (this.levelNode == 6 && !detailDonVi.value.coLoKho)">
+                    <div nz-col [nzSpan]="3">
+                      <nz-form-item>
+                        <nz-form-label>Ngăn/lô kho chứa: </nz-form-label>
+                      </nz-form-item>
+                    </div>
+                    <div nz-col [nzSpan]="3">
+                      <nz-form-item>
+                        <nz-select [(ngModel)]="loaiHangHoa.type" [ngModelOptions]="{standalone: true}">
+                          <nz-option nzValue="LT" nzLabel="Lương thực"></nz-option>
+                          <nz-option nzValue="VT" nzLabel="Vật tư"></nz-option>
+                        </nz-select>
+                      </nz-form-item>
+                    </div>
+                    <div nz-col [nzSpan]="6" *ngIf="loaiHangHoa.type == 'LT'">
+                      <label [ngModelOptions]="{standalone: true}"  [(ngModel)]="loaiHangHoa.thoc" class="font-weight-bold" nz-checkbox>Thóc</label>
+                      <label [ngModelOptions]="{standalone: true}"  [(ngModel)]="loaiHangHoa.gao"  class="font-weight-bold" nz-checkbox>Gạo</label>
+                      <label [ngModelOptions]="{standalone: true}"  [(ngModel)]="loaiHangHoa.muoi"  class="font-weight-bold" nz-checkbox>Muối</label>
+                    </div>
+                    <div nz-col [nzSpan]="2" *ngIf="loaiHangHoa.type == 'VT'">
+                      <nz-form-item>
+                        <nz-form-label nzRequired nzNoColon>Loại hàng hóa </nz-form-label>
+                      </nz-form-item>
+                    </div>
+                    <div nz-col [nzSpan]="4" *ngIf="loaiHangHoa.type == 'VT'">
+                      <nz-select [(ngModel)]="loaiHangHoa.loaiVthh"  [ngModelOptions]="{standalone: true}" (ngModelChange)="onChangeLoaiVthh($event)">
+                        <nz-option *ngFor="let p of listVthh" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
+                      </nz-select>
+                    </div>
+                    <div nz-col [nzSpan]="3" *ngIf="loaiHangHoa.type == 'VT'">
+                      <nz-form-item>
+                        <nz-form-label nzNoColon>Chủng loại hàng hóa</nz-form-label>
+                      </nz-form-item>
+                    </div>
+                    <div nz-col [nzSpan]="4" *ngIf="loaiHangHoa.type == 'VT'">
+                      <nz-select [(ngModel)]="loaiHangHoa.cloaiVthh" [ngModelOptions]="{standalone: true}">
+                        <nz-option *ngFor="let p of listCloaiVthh" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
+                      </nz-select>
+                    </div>
+                  </div>
                   <nz-card class="mt16 flex-card p-lr16" *ngIf="levelNode == 2">
                     <div nz-row [nzGutter]="24">
                       <div nz-col [nzSpan]="4">
