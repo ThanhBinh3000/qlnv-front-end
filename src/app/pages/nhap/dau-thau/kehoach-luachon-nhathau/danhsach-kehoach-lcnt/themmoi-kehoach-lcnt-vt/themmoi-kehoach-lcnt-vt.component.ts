@@ -53,6 +53,7 @@ export class ThemmoiKehoachLcntVtComponent extends Base2Component implements OnI
   listLoaiHopDong: any[] = [];
   listLoaiHinhNx: any[] = [];
   listKieuNx: any[] = [];
+  listQuy: any[] = [];
   dataChiTieu: any;
   listOfData: any[] = [];
   listDataGroup: any[] = [];
@@ -140,7 +141,8 @@ export class ThemmoiKehoachLcntVtComponent extends Base2Component implements OnI
       diaDiemDuAn: [""],
       ykienThamGia: [""],
       tongMucDtBangChu: [""],
-      tongSlChiTieu: [""]
+      tongSlChiTieu: [""],
+      quy: [""]
     });
   }
 
@@ -169,6 +171,7 @@ export class ThemmoiKehoachLcntVtComponent extends Base2Component implements OnI
       this.loadDataComboBox(),
       this.getDataChiTieu()
     ]);
+    this.initListQuy();
     await this.spinner.hide();
   }
 
@@ -284,6 +287,30 @@ export class ThemmoiKehoachLcntVtComponent extends Base2Component implements OnI
     }
   }
 
+  initListQuy() {
+    const currentYear = new Date().getFullYear();
+    const currentMonth = new Date().getMonth();
+    const quarters = [];
+
+    for (let quarter = 1; quarter <= 4; quarter++) {
+      if (this.formData.get('namKhoach').value < currentYear || (this.formData.get('namKhoach').value === currentYear && quarter <= Math.ceil((currentMonth + 1) / 3))) {
+        quarters.push(quarter);
+      }
+    }
+    this.listQuy = [];
+    for (const element of quarters) {
+      this.listQuy.push({ giaTri: "Quý " + element + "/" + this.formData.get("namKhoach").value, ma: element})
+    }
+  }
+  disabledDate = (current: Date): boolean => {
+    const startDate = new Date(this.formData.get("namKhoach").value, (this.formData.get("quy").value - 1) * 3, 1);
+    const endDate = new Date(this.formData.get("namKhoach").value, this.formData.get("quy").value * 3, 0);
+    return current < startDate || current > endDate;
+  };
+
+  onChangeQuy() {
+    this.formData.get("tgianBdauTchuc").setValue(null);
+  }
   async getDataChiTieu() {
     let res2 = await this.chiTieuKeHoachNamCapTongCucService.loadThongTinChiTieuKeHoachVtNam(
       +this.formData.get("namKhoach").value
@@ -483,6 +510,7 @@ export class ThemmoiKehoachLcntVtComponent extends Base2Component implements OnI
     this.formData.controls["tgianBdauTchuc"].setValidators([Validators.required]);
     this.formData.controls["loaiHdong"].setValidators([Validators.required]);
     this.formData.controls["tgianThien"].setValidators([Validators.required]);
+    this.formData.controls["quy"].setValidators([Validators.required]);
   }
   clearValidatorLuuDuThao() {
     Object.keys(this.formData.controls).forEach(key => {
@@ -555,6 +583,7 @@ export class ThemmoiKehoachLcntVtComponent extends Base2Component implements OnI
   //TODO: khi nào chạy thật thì đóng disable năm kế hoạch
   async onChangeNamKh() {
     await this.getDataChiTieu();
+    this.initListQuy();
   }
 
   selectHangHoa() {
@@ -637,7 +666,7 @@ export class ThemmoiKehoachLcntVtComponent extends Base2Component implements OnI
     modal.afterClose.subscribe((res) => {
       if (res) {
         let isUpdate = false;
-        for (let i = 0; index < this.listOfData.length; i++) {
+        for (let i = 0; i < this.listOfData.length; i++) {
           if (this.listOfData[i].goiThau == res.goiThau) {
             this.listOfData[i] = res;
             isUpdate = true;
