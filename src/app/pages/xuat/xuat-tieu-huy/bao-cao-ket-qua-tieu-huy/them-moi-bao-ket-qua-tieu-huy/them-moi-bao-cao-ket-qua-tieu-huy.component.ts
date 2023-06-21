@@ -43,6 +43,7 @@ export class QuyetDinhDtl {
   ketQua: string;
   type: string;
 }
+
 @Component({
   selector: 'app-them-moi-bao-cao-ket-qua-tieu-huy',
   templateUrl: './them-moi-bao-cao-ket-qua-tieu-huy.component.html',
@@ -74,10 +75,10 @@ export class ThemMoiBaoCaoKetQuaTieuHuyComponent extends Base2Component implemen
       id: [],
       maDvi: [],
       nam: [dayjs().get("year"), [Validators.required]],
-      soBaoCao:  ['', [Validators.required]],
+      soBaoCao: ['', [Validators.required]],
       ngayBaoCao: [],
       idQd: [],
-      soQd:  ['', [Validators.required]],
+      soQd: ['', [Validators.required]],
       noiDung: ['', [Validators.required]],
       trangThai: [STATUS.DU_THAO],
       tongSoLuongTl: [],
@@ -156,8 +157,10 @@ export class ThemMoiBaoCaoKetQuaTieuHuyComponent extends Base2Component implemen
     }).then(res => {
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data;
-        if (data && data.content && data.content.length > 0) {
+        if (data && data.content && data.content.length > 0 && this.formData.value.idQd == null) {
           this.listSoQd = data.content.filter(item => item.soBaoCao == null);
+        } else {
+          this.listSoQd = data.content
         }
       } else {
         this.listSoQd = [];
@@ -181,7 +184,7 @@ export class ThemMoiBaoCaoKetQuaTieuHuyComponent extends Base2Component implemen
     this.formData.patchValue({
       id: rs.id,
     })
-    let ct =  await this.baoCaoKqTieuHuyService.getDetail(rs.id);
+    let ct = await this.baoCaoKqTieuHuyService.getDetail(rs.id);
     this.buildTableView(ct.data.baoCaoKqDtl)
   }
 
@@ -204,11 +207,11 @@ export class ThemMoiBaoCaoKetQuaTieuHuyComponent extends Base2Component implemen
             if (res.data) {
               if (this.userInfo.CAP_DVI === "2") {
                 this.dataTable = cloneDeep(res.data.quyetDinhDtl);
-                this.dataTable.forEach(f=>f.id=null)
+                this.dataTable.forEach(f => f.id = null)
               }
               this.formData.patchValue({
                 soQd: res.data.soQd,
-                baoCaoKqDtl:this.dataTable,
+                baoCaoKqDtl: this.dataTable,
                 tongSoLuongTl: res.data.tongSoLuongTl,
                 tongSoLuongCon: res.data.tongSoLuongCon,
                 tongThanhTien: res.data.tongThanhTien,
