@@ -322,10 +322,12 @@ export class MangLuoiKhoComponent implements OnInit {
   }
 
   async getAllLoaiVthh() {
-    let res = await this.danhMucService.danhMucChungGetAll("LOAI_HHOA");
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.listVthh = res.data;
-    }
+      let res = await this.danhMucService.getAllVthhByCap("2");
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (res.data) {
+          this.listVthh = res.data
+        }
+      }
   }
 
   async onChangeLoaiVthh(event) {
@@ -378,6 +380,7 @@ export class MangLuoiKhoComponent implements OnInit {
           listHh.forEach(item => {
             if (item.length == 4) {
               this.loaiHangHoa.loaiVthh = item;
+              this.onChangeLoaiVthh(item);
             }
             if (item.length == 6) {
               this.loaiHangHoa.cloaiVthh = item;
@@ -419,6 +422,15 @@ export class MangLuoiKhoComponent implements OnInit {
   bindingDataDetail(dataNode) {
     if (this.levelNode != 1) {
       this.convertDataChild(dataNode);
+      this.loaiHangHoa = {
+        "type": "",
+        "loaiVthh": "",
+        "cloaiVthh": "",
+        "thoc": false,
+        "gao": false,
+        "muoi": false,
+        "vattu": false,
+      }
       if (dataNode.loaiHangHoa && dataNode.kieuHang) {
         let arr = dataNode.loaiHangHoa.split(",");
         this.updateCheckboxHh(arr && arr.length > 0 ? arr : [], dataNode.kieuHang);
@@ -607,6 +619,7 @@ export class MangLuoiKhoComponent implements OnInit {
           type: this.detailDonVi.value.type ? LOAI_DON_VI.PB : null
         };
         body.loaiHangHoa = this.setLoaiHangHoa();
+        body.kieuHang = this.loaiHangHoa.type;
         let dviReq = {
           "diaChi": this.detailDonVi.value.diaChi,
           "fax": this.nodeDetail.fax,
@@ -748,7 +761,8 @@ export class MangLuoiKhoComponent implements OnInit {
       nzStyle: {top: "50px"},
       nzComponentParams: {
         detail: this.detailDonVi.value,
-        levelNode: this.levelNode
+        levelNode: this.levelNode,
+        loaiHang : this.loaiHangHoa
       }
     });
     modalQD.afterClose.subscribe((data) => {
@@ -894,21 +908,27 @@ export class MangLuoiKhoComponent implements OnInit {
 
   setLoaiHangHoa(): string {
     let arr = [];
-    if (this.loaiHangHoa.gao) {
-      arr.push("0102");
+    if (this.loaiHangHoa.type == 'LT') {
+      if (this.loaiHangHoa.gao) {
+        arr.push("0102")
+      }
+      if (this.loaiHangHoa.thoc) {
+        arr.push("0101")
+      }
+      if (this.loaiHangHoa.muoi) {
+        arr.push("04")
+      }
+    } else {
+      if (this.loaiHangHoa.loaiVthh) {
+        arr.push(this.loaiHangHoa.loaiVthh)
+      }
+      if (this.loaiHangHoa.cloaiVthh) {
+        arr.push(this.loaiHangHoa.cloaiVthh)
+      }
     }
-    if (this.loaiHangHoa.thoc) {
-      arr.push("0101");
-    }
-    if (this.loaiHangHoa.vattu) {
-      arr.push("02");
-    }
-    if (this.loaiHangHoa.muoi) {
-      arr.push("04");
-    }
-    let string = "";
+    let string = ''
     if (arr && arr.length > 0) {
-      string = arr.toString();
+      string = arr.toString()
     }
     return string;
   }

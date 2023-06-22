@@ -273,17 +273,14 @@ export class ThemMoiKhoComponent implements OnInit {
   }
 
   async loadDsVthh() {
-    let body = {
-      "str": "02"
-    };
-    let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha(body);
-    this.dsLoaiHangHoa = [];
+    let res = await this.danhMucService.getAllVthhByCap("2");
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data) {
-        this.dsLoaiHangHoa = res.data;
+        this.dsLoaiHangHoa = res.data
+        if (this.dsLoaiHangHoa && this.dsLoaiHangHoa.length > 0) {
+          this.dsLoaiHangHoa = this.dsLoaiHangHoa.filter(item => item.ma.startsWith('02') || item.ma.startsWith('03') )
+        }
       }
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
 
