@@ -21,6 +21,8 @@ import { LapKeHoachVaThamDinhDuToanModule } from './lap-ke-hoach-va-tham-dinh-du
         GiaoDuToanModule,
         GiaoDuToanThucTeModule
     ],
-    providers: [DatePipe]
+    providers: [
+        DatePipe,
+    ]
 })
 export class DuToanNsnnModule { }
