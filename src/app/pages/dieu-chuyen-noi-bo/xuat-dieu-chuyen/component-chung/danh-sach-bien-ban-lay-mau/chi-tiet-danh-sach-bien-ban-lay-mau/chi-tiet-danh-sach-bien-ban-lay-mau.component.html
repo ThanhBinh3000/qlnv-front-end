@@ -186,8 +186,7 @@
                             <nz-form-item>
                                 <nz-form-label [nzNoColon]="true"> Ngăn kho</nz-form-label>
                                 <nz-form-control>
-                                    <nz-input-group nzAddOnAfterIcon="folder-open"
-                                        (click)="openDialogDdiemNhapHang($event, isView)">
+                                    <nz-input-group>
                                         <input nz-input class="dcnb xuat-dc-input" formControlName="tenNganKho"
                                             [readonly]="true" />
                                     </nz-input-group>
@@ -198,8 +197,7 @@
                             <nz-form-item>
                                 <nz-form-label [nzNoColon]="true"> Nhà kho</nz-form-label>
                                 <nz-form-control [nzErrorTip]="error">
-                                    <nz-input-group nzAddOnAfterIcon="folder-open"
-                                        (click)="openDialogDdiemNhapHang($event, isView)">
+                                    <nz-input-group>
                                         <input nz-input class="dcnb xuat-dc-input" formControlName="tenNhaKho"
                                             [readonly]="true" />
                                     </nz-input-group>
@@ -211,8 +209,7 @@
                             <nz-form-item>
                                 <nz-form-label [nzNoColon]="true" nzRequired> Điểm kho</nz-form-label>
                                 <nz-form-control [nzErrorTip]="error">
-                                    <nz-input-group nzAddOnAfterIcon="folder-open" class="dcnb xuat-kho-dc"
-                                        (click)="openDialogDdiemNhapHang($event, isView)">
+                                    <nz-input-group>
                                         <input nz-input class="dcnb xuat-dc-input" formControlName="tenDiemKho"
                                             [readonly]="true" />
                                     </nz-input-group>

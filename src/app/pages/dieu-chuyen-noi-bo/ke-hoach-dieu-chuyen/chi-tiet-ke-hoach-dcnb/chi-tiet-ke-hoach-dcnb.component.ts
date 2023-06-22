@@ -77,7 +77,7 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
   listNganKhoNhanBq: any[] = [];
   listLoKhoBq: any[] = [];
   listLoKhoNhanBq: any[] = [];
-  AMOUNT =  {
+  AMOUNT = {
     allowZero: true,
     allowNegative: false,
     precision: 2,
@@ -628,7 +628,7 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
     }
     if (!this.isNhanDieuChuyen) {
       this.disableValidateFormChiTietHangHoaNDC();
-    }else {
+    } else {
       if (!this.formDataChiTiet.value.coLoKho) {
         this.removeValidateFormChiTiet("maLoKho");
         this.removeValidateFormChiTiet("tenLoKho");
@@ -650,24 +650,48 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
       if (this.formData.value.danhSachHangHoa && this.formData.value.danhSachHangHoa.length > 0) {
         // check lô kho xuất
         if (!this.isNhanDieuChuyen) {
-          let maLoKho = this.formData.value.danhSachHangHoa.find(item => ((item.maLoKho == this.formDataChiTiet.value.maLoKho) && item.maChiCucNhan == this.formDataChiTiet.value.maChiCucNhan));
-          if (maLoKho && !this.isEditDetail) {
-            this.notification.error(MESSAGE.ERROR, "Vui lòng chọn lô kho khác!");
-            return;
+          if (this.formDataChiTiet.value.maLoKho) {
+            let maLoKho = this.formData.value.danhSachHangHoa.find(item => ((item.maLoKho == this.formDataChiTiet.value.maLoKho) && item.maChiCucNhan == this.formDataChiTiet.value.maChiCucNhan));
+            if (maLoKho && !this.isEditDetail) {
+              this.notification.error(MESSAGE.ERROR, "Vui lòng chọn lô kho khác!");
+              return;
+            } else {
+              this.formData.patchValue({
+                danhSachHangHoa: [...this.formData.value.danhSachHangHoa, this.formDataChiTiet.value]
+              })
+            }
           } else {
-            this.formData.patchValue({
-              danhSachHangHoa: [...this.formData.value.danhSachHangHoa, this.formDataChiTiet.value]
-            })
+            let maNganKho = this.formData.value.danhSachHangHoa.find(item => ((item.maNganKho == this.formDataChiTiet.value.maNganKho) && item.maChiCucNhan == this.formDataChiTiet.value.maChiCucNhan));
+            if (maNganKho && !this.isEditDetail) {
+              this.notification.error(MESSAGE.ERROR, "Vui lòng chọn ngăn kho khác!");
+              return;
+            } else {
+              this.formData.patchValue({
+                danhSachHangHoa: [...this.formData.value.danhSachHangHoa, this.formDataChiTiet.value]
+              })
+            }
           }
         } else {
-          let maLoKho = this.formData.value.danhSachHangHoa.find(item => ((item.maLoKhoNhan == this.formDataChiTiet.value.maLoKhoNhan) && item.maDiemKhoNhan == this.formDataChiTiet.value.maDiemKhoNhan));
-          if (maLoKho && !this.isEditDetail) {
-            this.notification.error(MESSAGE.ERROR, "Vui lòng chọn lô kho khác!");
-            return;
+          if (this.formDataChiTiet.value.maLoKhoNhan) {
+            let maLoKho = this.formData.value.danhSachHangHoa.find(item => ((item.maLoKhoNhan == this.formDataChiTiet.value.maLoKhoNhan) && item.maDiemKhoNhan == this.formDataChiTiet.value.maDiemKhoNhan));
+            if (maLoKho && !this.isEditDetail) {
+              this.notification.error(MESSAGE.ERROR, "Vui lòng chọn lô kho khác!");
+              return;
+            } else {
+              this.formData.patchValue({
+                danhSachHangHoa: [...this.formData.value.danhSachHangHoa, this.formDataChiTiet.value]
+              })
+            }
           } else {
-            this.formData.patchValue({
-              danhSachHangHoa: [...this.formData.value.danhSachHangHoa, this.formDataChiTiet.value]
-            })
+            let maNganKho = this.formData.value.danhSachHangHoa.find(item => ((item.maNganKhoNhan == this.formDataChiTiet.value.maNganKhoNhan) && item.maDiemKhoNhan == this.formDataChiTiet.value.maDiemKhoNhan));
+            if (maNganKho && !this.isEditDetail) {
+              this.notification.error(MESSAGE.ERROR, "Vui lòng chọn ngăn kho khác!");
+              return;
+            } else {
+              this.formData.patchValue({
+                danhSachHangHoa: [...this.formData.value.danhSachHangHoa, this.formDataChiTiet.value]
+              })
+            }
           }
         }
       } else {

@@ -273,17 +273,14 @@ export class ThemMoiKhoComponent implements OnInit {
   }
 
   async loadDsVthh() {
-    let body = {
-      "str": "02"
-    };
-    let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha(body);
-    this.dsLoaiHangHoa = [];
+    let res = await this.danhMucService.getAllVthhByCap("2");
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data) {
-        this.dsLoaiHangHoa = res.data;
+        this.dsLoaiHangHoa = res.data
+        if (this.dsLoaiHangHoa && this.dsLoaiHangHoa.length > 0) {
+          this.dsLoaiHangHoa = this.dsLoaiHangHoa.filter(item => item.ma.startsWith('02') || item.ma.startsWith('03') )
+        }
       }
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
 
@@ -344,6 +341,7 @@ export class ThemMoiKhoComponent implements OnInit {
       bodyDvi.diaChi = this.formKho.value.diaChi;
       let body = this.formKho.value;
       body.loaiHangHoa = this.setLoaiHangHoa();
+      body.kieuHang = this.loaiHangHoa.type;
       body.ngankhoId = this.idReq;
       body.maNganlo = this.formKho.value.maNganlo;
       body.fileDinhkems = this.listFileDinhKem;
@@ -387,6 +385,7 @@ export class ThemMoiKhoComponent implements OnInit {
       let body = this.formKho.value;
       body.dviReq = bodyDvi
       body.loaiHangHoa = this.setLoaiHangHoa();
+      body.kieuHang = this.loaiHangHoa.type;
       body.maNgankho = this.formKho.value.maNgankho;
       body.tichLuongKdLt = body.tichLuongTkLt;
       body.tichLuongKdVt = body.tichLuongTkVt;

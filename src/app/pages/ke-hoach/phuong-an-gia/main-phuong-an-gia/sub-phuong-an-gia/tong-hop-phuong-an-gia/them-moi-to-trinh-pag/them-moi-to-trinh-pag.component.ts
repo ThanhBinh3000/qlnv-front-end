@@ -27,7 +27,7 @@ export class ThemMoiToTrinhPagComponent implements OnInit {
   @Output('onClose') onClose = new EventEmitter<any>();
   @Input() type: string;
 
-  STATUS: any;
+  STATUS = STATUS;
   TYPE_PAG: any;
 
   formData: FormGroup;
@@ -76,7 +76,6 @@ export class ThemMoiToTrinhPagComponent implements OnInit {
         ghiChu: [],
 
       })
-    this.STATUS = STATUS
     this.TYPE_PAG = TYPE_PAG
   }
 
