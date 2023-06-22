@@ -9,7 +9,7 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DialogAddVatTuComponent } from 'src/app/pages/quan-ly-thong-tin-quyet-toan-von-phi-hang-dtqg/von-phi-hang-du-tru-quoc-gia/bao-cao-quyet-toan/dialog-add-vat-tu/dialog-add-vat-tu.component';
 import { DieuChinhService } from 'src/app/services/quan-ly-von-phi/dieuChinhDuToan.service';
 import { UserService } from 'src/app/services/user.service';
-import { addChild, displayNumber, exchangeMoney, getHead, sortByIndex, sumNumber } from 'src/app/Utility/func';
+import { addChild, displayNumber, exchangeMoney, getHead, mulNumber, sortByIndex, sumNumber } from 'src/app/Utility/func';
 import { AMOUNT, DON_VI_TIEN, LA_MA, MONEY_LIMIT } from 'src/app/Utility/utils';
 import * as uuid from "uuid";
 import { TEN_HANG } from './phu-luc-7.constant';
@@ -24,17 +24,23 @@ export class ItemData {
   khoachDpNhan: string;
   khoachQdGiaoNvu: string;
   khoachLuong: number;
+  dMucChiPhiTaiCuaKho: number;
+  binhQuanChiPhiNgoaiCuaKho: number;
   tdiemBcaoLuong: number;
-  tdiemBcaoDtoan: number;
+  tdiemBcaoChiPhiTaiCuaKho: number;
+  tdiemBcaoChiPhiNgoaiCuaKho: number;
+  tdiemBcaoChiPhiTongCong: number;
   tdiemBcaoCcu: string;
   dkienThienLuong: number;
-  dkienThienDtoan: number;
+  dkienThienChiPhiTaiCuaKho: number;
+  dkienThienChiPhiNgoaiCuaKho: number;
+  dkienThienChiPhiTongCong: number;
   ncauDtoan: number;
   dtoanLkeDaGiao: number;
   dtoanDnghiDchinh: number;
   dtoanVuTvqtDnghi: number;
+  kPhiThieuNamTruoc: number;
   ghiChu: string;
-  dtoanNamConThieu: number;
   checked: boolean;
 }
 
@@ -176,14 +182,21 @@ export class PhuLuc7Component implements OnInit {
     this.total = new ItemData();
     this.lstCtietBcao.forEach(item => {
       if (item.level == 0) {
-
-        this.total.tdiemBcaoDtoan = sumNumber([this.total.tdiemBcaoDtoan, item.tdiemBcaoDtoan]);
-        this.total.dkienThienDtoan = sumNumber([this.total.dkienThienDtoan, item.dkienThienDtoan]);
+        this.total.dMucChiPhiTaiCuaKho = sumNumber([this.total.dMucChiPhiTaiCuaKho, item.dMucChiPhiTaiCuaKho]);
+        this.total.binhQuanChiPhiNgoaiCuaKho = sumNumber([this.total.binhQuanChiPhiNgoaiCuaKho, item.binhQuanChiPhiNgoaiCuaKho]);
+        // this.total.tdiemBcaoLuong = sumNumber([this.total.tdiemBcaoLuong, item.tdiemBcaoLuong]);
+        this.total.tdiemBcaoChiPhiTaiCuaKho = sumNumber([this.total.tdiemBcaoChiPhiTaiCuaKho, item.tdiemBcaoChiPhiTaiCuaKho]);
+        this.total.tdiemBcaoChiPhiNgoaiCuaKho = sumNumber([this.total.tdiemBcaoChiPhiNgoaiCuaKho, item.tdiemBcaoChiPhiNgoaiCuaKho]);
+        this.total.tdiemBcaoChiPhiTongCong = sumNumber([this.total.tdiemBcaoChiPhiTongCong, item.tdiemBcaoChiPhiTongCong]);
+        // this.total.dkienThienLuong = sumNumber([this.total.dkienThienLuong, item.dkienThienLuong]);
+        this.total.dkienThienChiPhiTaiCuaKho = sumNumber([this.total.dkienThienChiPhiTaiCuaKho, item.dkienThienChiPhiTaiCuaKho]);
+        this.total.dkienThienChiPhiNgoaiCuaKho = sumNumber([this.total.dkienThienChiPhiNgoaiCuaKho, item.dkienThienChiPhiNgoaiCuaKho]);
+        this.total.dkienThienChiPhiTongCong = sumNumber([this.total.dkienThienChiPhiTongCong, item.dkienThienChiPhiTongCong]);
         this.total.ncauDtoan = sumNumber([this.total.ncauDtoan, item.ncauDtoan]);
         this.total.dtoanLkeDaGiao = sumNumber([this.total.dtoanLkeDaGiao, item.dtoanLkeDaGiao]);
         this.total.dtoanDnghiDchinh = sumNumber([this.total.dtoanDnghiDchinh, item.dtoanDnghiDchinh]);
         this.total.dtoanVuTvqtDnghi = sumNumber([this.total.dtoanVuTvqtDnghi, item.dtoanVuTvqtDnghi]);
-        this.total.dtoanNamConThieu = sumNumber([this.total.dtoanNamConThieu, item.dtoanNamConThieu]);
+        this.total.kPhiThieuNamTruoc = sumNumber([this.total.kPhiThieuNamTruoc, item.kPhiThieuNamTruoc]);
       }
     })
   };
@@ -364,13 +377,21 @@ export class PhuLuc7Component implements OnInit {
       }
       this.lstCtietBcao.forEach(item => {
         if (this.getHead(item.stt) == stt) {
-          this.lstCtietBcao[index].dkienThienDtoan = sumNumber([this.lstCtietBcao[index].dkienThienDtoan, item.dkienThienDtoan]);
-          this.lstCtietBcao[index].tdiemBcaoDtoan = sumNumber([this.lstCtietBcao[index].tdiemBcaoDtoan, item.tdiemBcaoDtoan]);
-          this.lstCtietBcao[index].dtoanLkeDaGiao = sumNumber([this.lstCtietBcao[index].dtoanLkeDaGiao, item.dtoanLkeDaGiao]);
-          this.lstCtietBcao[index].dtoanDnghiDchinh = sumNumber([this.lstCtietBcao[index].dtoanDnghiDchinh, item.dtoanDnghiDchinh]);
-          this.lstCtietBcao[index].dtoanNamConThieu = sumNumber([this.lstCtietBcao[index].dtoanNamConThieu, item.dtoanNamConThieu]);
-          this.lstCtietBcao[index].dtoanVuTvqtDnghi = sumNumber([this.lstCtietBcao[index].dtoanVuTvqtDnghi, item.dtoanVuTvqtDnghi]);
-          this.lstCtietBcao[index].ncauDtoan = sumNumber([this.lstCtietBcao[index].ncauDtoan, item.ncauDtoan]);
+          this.lstCtietBcao[index].dMucChiPhiTaiCuaKho = sumNumber([this.lstCtietBcao[index].dMucChiPhiTaiCuaKho, item.dMucChiPhiTaiCuaKho])
+          this.lstCtietBcao[index].binhQuanChiPhiNgoaiCuaKho = sumNumber([this.lstCtietBcao[index].binhQuanChiPhiNgoaiCuaKho, item.binhQuanChiPhiNgoaiCuaKho])
+          this.lstCtietBcao[index].tdiemBcaoLuong = sumNumber([this.lstCtietBcao[index].tdiemBcaoLuong, item.tdiemBcaoLuong])
+          this.lstCtietBcao[index].tdiemBcaoChiPhiTaiCuaKho = sumNumber([this.lstCtietBcao[index].tdiemBcaoChiPhiTaiCuaKho, item.tdiemBcaoChiPhiTaiCuaKho])
+          this.lstCtietBcao[index].tdiemBcaoChiPhiNgoaiCuaKho = sumNumber([this.lstCtietBcao[index].tdiemBcaoChiPhiNgoaiCuaKho, item.tdiemBcaoChiPhiNgoaiCuaKho])
+          this.lstCtietBcao[index].tdiemBcaoChiPhiTongCong = sumNumber([this.lstCtietBcao[index].tdiemBcaoChiPhiTongCong, item.tdiemBcaoChiPhiTongCong])
+          this.lstCtietBcao[index].dkienThienLuong = sumNumber([this.lstCtietBcao[index].dkienThienLuong, item.dkienThienLuong])
+          this.lstCtietBcao[index].dkienThienChiPhiTaiCuaKho = sumNumber([this.lstCtietBcao[index].dkienThienChiPhiTaiCuaKho, item.dkienThienChiPhiTaiCuaKho])
+          this.lstCtietBcao[index].dkienThienChiPhiNgoaiCuaKho = sumNumber([this.lstCtietBcao[index].dkienThienChiPhiNgoaiCuaKho, item.dkienThienChiPhiNgoaiCuaKho])
+          this.lstCtietBcao[index].dkienThienChiPhiTongCong = sumNumber([this.lstCtietBcao[index].dkienThienChiPhiTongCong, item.dkienThienChiPhiTongCong])
+          this.lstCtietBcao[index].ncauDtoan = sumNumber([this.lstCtietBcao[index].ncauDtoan, item.ncauDtoan])
+          this.lstCtietBcao[index].dtoanLkeDaGiao = sumNumber([this.lstCtietBcao[index].dtoanLkeDaGiao, item.dtoanLkeDaGiao])
+          this.lstCtietBcao[index].dtoanDnghiDchinh = sumNumber([this.lstCtietBcao[index].dtoanDnghiDchinh, item.dtoanDnghiDchinh])
+          this.lstCtietBcao[index].dtoanVuTvqtDnghi = sumNumber([this.lstCtietBcao[index].dtoanVuTvqtDnghi, item.dtoanVuTvqtDnghi])
+          this.lstCtietBcao[index].kPhiThieuNamTruoc = sumNumber([this.lstCtietBcao[index].kPhiThieuNamTruoc, item.kPhiThieuNamTruoc])
         }
       })
       stt = this.getHead(stt);
@@ -420,7 +441,14 @@ export class PhuLuc7Component implements OnInit {
   };
 
   changeModel(id: string): void {
-    this.editCache[id].data.ncauDtoan = this.editCache[id].data.tdiemBcaoDtoan + this.editCache[id].data.dkienThienDtoan;
+    // this.editCache[id].data.ncauDtoan = this.editCache[id].data.tdiemBcaoDtoan + this.editCache[id].data.dkienThienDtoan;
+    // this.editCache[id].data.dtoanDnghiDchinh = this.editCache[id].data.ncauDtoan - this.editCache[id].data.dtoanLkeDaGiao;
+    this.editCache[id].data.tdiemBcaoChiPhiTaiCuaKho = mulNumber(this.editCache[id].data.tdiemBcaoLuong, this.editCache[id].data.dMucChiPhiTaiCuaKho);
+    this.editCache[id].data.tdiemBcaoChiPhiTongCong = sumNumber([this.editCache[id].data.tdiemBcaoChiPhiTaiCuaKho, this.editCache[id].data.tdiemBcaoChiPhiNgoaiCuaKho]);
+    this.editCache[id].data.dkienThienChiPhiTaiCuaKho = mulNumber(this.editCache[id].data.dMucChiPhiTaiCuaKho, this.editCache[id].data.dkienThienLuong);
+    this.editCache[id].data.dkienThienChiPhiNgoaiCuaKho = mulNumber(this.editCache[id].data.binhQuanChiPhiNgoaiCuaKho, this.editCache[id].data.dkienThienLuong);
+    this.editCache[id].data.dkienThienChiPhiTongCong = sumNumber([this.editCache[id].data.dkienThienChiPhiTaiCuaKho, this.editCache[id].data.dkienThienChiPhiNgoaiCuaKho]);
+    this.editCache[id].data.ncauDtoan = sumNumber([this.editCache[id].data.tdiemBcaoChiPhiTongCong, this.editCache[id].data.dkienThienChiPhiTongCong]);
     this.editCache[id].data.dtoanDnghiDchinh = this.editCache[id].data.ncauDtoan - this.editCache[id].data.dtoanLkeDaGiao;
   };
 

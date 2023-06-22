@@ -348,7 +348,7 @@ export class PhuLuc2Component implements OnInit {
     if (this.editCache[id].data.dToanDnghiSl > (this.editCache[id].data.sluongTsTcDinhMuc - this.editCache[id].data.sluongTsCong)) {
       this.notification.warning(
         MESSAGE.WARNING,
-        "Dự toán số lượng đề nghị trang bị không được lớn hơn hiệu của tiêu chuẩn định mức tối đa được phê duyệt và tổng số lượng tài sản hiện có"
+        "Dự toán số lượng đề nghị trang bị không được lớn hơn hiệu của tiêu chuẩn định mức và tổng số lượng tài sản hiện có"
       ).onClose.subscribe(() => {
         this.statusCanhBao = false
       })
