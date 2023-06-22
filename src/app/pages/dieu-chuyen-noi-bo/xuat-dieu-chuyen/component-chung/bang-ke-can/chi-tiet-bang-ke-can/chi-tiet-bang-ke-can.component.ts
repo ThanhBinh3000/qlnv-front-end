@@ -179,11 +179,12 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
   async ngOnInit() {
     try {
       await this.spinner.show();
-      await Promise.all([
-        this.loadDsVthh(),
-        this.loadDsDonVi(),
-        // this.loadDSQdDc(),
-      ])
+      // await Promise.all([
+      //   this.loadDsVthh(),
+      //   this.loadDsDonVi(),
+      //   this.loadDSQdDc(),
+      // ])
+      this.loadDsVthh();
       await this.loadDetail(this.idInput)
     } catch (e) {
       this.notification.error(MESSAGE.ERROR, 'Có lỗi xảy ra.');
@@ -216,19 +217,19 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
     }
   }
 
-  async loadDsDonVi() {
-    let body = {
-      trangThai: "01",
-      maDviCha: this.userInfo.MA_DVI.substring(0, 4),
-      type: "DV"
-    };
-    let res = await this.donViService.getDonViTheoMaCha(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.dsDonVi = res.data;
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
-    }
-  }
+  // async loadDsDonVi() {
+  //   let body = {
+  //     trangThai: "01",
+  //     maDviCha: this.userInfo.MA_DVI.substring(0, 4),
+  //     type: "DV"
+  //   };
+  //   let res = await this.donViService.getDonViTheoMaCha(body);
+  //   if (res.msg == MESSAGE.SUCCESS) {
+  //     this.dsDonVi = res.data;
+  //   } else {
+  //     this.notification.error(MESSAGE.ERROR, res.msg);
+  //   }
+  // }
 
   async loadDSQdDc() {
     try {
@@ -316,21 +317,21 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
     item.selected = true;
   }
 
-  showModal(data?: any): void {
-    this.listNoiDung = [...new Set(this.formData.value.deXuatPhuongAn.map(s => s.noiDung))];
-    this.isVisible = true;
-    this.phuongAnRow.loaiVthh = this.formData.value.loaiVthh;
-    if (this.userService.isCuc()) {
-      this.phuongAnRow.maDviCuc = this.userInfo.MA_DVI;
-      this.changeCuc(this.phuongAnRow.maDviCuc);
-    }
-    /* if (data) {
-       this.phuongAnRow.maDviCuc = this.dsDonVi.find(s => s.tenDvi === data.tenCuc).maDvi;
-       this.changeCuc(this.phuongAnRow.maDviCuc);
-       this.phuongAnRow.noiDung = data.childData[0].noiDung;
-       this.phuongAnRow.soLuongXuatCuc = data.soLuongXuatCuc;
-     }*/
-  }
+  // showModal(data?: any): void {
+  //   this.listNoiDung = [...new Set(this.formData.value.deXuatPhuongAn.map(s => s.noiDung))];
+  //   this.isVisible = true;
+  //   this.phuongAnRow.loaiVthh = this.formData.value.loaiVthh;
+  //   if (this.userService.isCuc()) {
+  //     this.phuongAnRow.maDviCuc = this.userInfo.MA_DVI;
+  //     this.changeCuc(this.phuongAnRow.maDviCuc);
+  //   }
+  //   /* if (data) {
+  //      this.phuongAnRow.maDviCuc = this.dsDonVi.find(s => s.tenDvi === data.tenCuc).maDvi;
+  //      this.changeCuc(this.phuongAnRow.maDviCuc);
+  //      this.phuongAnRow.noiDung = data.childData[0].noiDung;
+  //      this.phuongAnRow.soLuongXuatCuc = data.soLuongXuatCuc;
+  //    }*/
+  // }
 
   async buildTableView() {
     let dataView = chain(this.formData.value.deXuatPhuongAn)
@@ -373,32 +374,32 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
     }
   }
 
-  async changeCuc(event: any) {
-    if (event) {
-      let existRow = this.formData.value.deXuatPhuongAn
-        .find(s => s.noiDung === this.phuongAnRow.noiDung && s.maDvi === this.phuongAnRow.maDvi);
-      if (existRow) {
-        this.phuongAnRow.soLuongXuatCuc = existRow.soLuongXuatCuc;
-      } else {
-        this.phuongAnRow.soLuongXuatCuc = 0
-      }
+  // async changeCuc(event: any) {
+  //   if (event) {
+  //     let existRow = this.formData.value.deXuatPhuongAn
+  //       .find(s => s.noiDung === this.phuongAnRow.noiDung && s.maDvi === this.phuongAnRow.maDvi);
+  //     if (existRow) {
+  //       this.phuongAnRow.soLuongXuatCuc = existRow.soLuongXuatCuc;
+  //     } else {
+  //       this.phuongAnRow.soLuongXuatCuc = 0
+  //     }
 
-      let data = this.dsDonVi.find(s => s.maDvi == event);
-      this.phuongAnRow.tenCuc = data.tenDvi;
-      let body = {
-        trangThai: "01",
-        maDviCha: event,
-        type: "DV"
-      };
-      let res = await this.donViService.getDonViTheoMaCha(body);
-      if (res.msg == MESSAGE.SUCCESS) {
-        this.listChiCuc = res.data;
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
-      }
-    }
+  //     let data = this.dsDonVi.find(s => s.maDvi == event);
+  //     this.phuongAnRow.tenCuc = data.tenDvi;
+  //     let body = {
+  //       trangThai: "01",
+  //       maDviCha: event,
+  //       type: "DV"
+  //     };
+  //     let res = await this.donViService.getDonViTheoMaCha(body);
+  //     if (res.msg == MESSAGE.SUCCESS) {
+  //       this.listChiCuc = res.data;
+  //     } else {
+  //       this.notification.error(MESSAGE.ERROR, res.msg);
+  //     }
+  //   }
 
-  }
+  // }
 
   async save() {
     this.formData.disable()
@@ -429,52 +430,52 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
     });
   }
 
-  async suaPhuongAn(data: any) {
-    let currentRow;
-    if (data.id) {
-      currentRow = this.formData.value.deXuatPhuongAn.find(s => s.id == data.id);
-    } else if (data.idVirtual) {
-      currentRow = this.formData.value.deXuatPhuongAn.find(s => s.idVirtual == data.idVirtual)
-    }
-    this.phuongAnRow = currentRow;
-    this.changeCuc(this.phuongAnRow.maDviCuc);
-    this.showModal();
-  }
+  // async suaPhuongAn(data: any) {
+  //   let currentRow;
+  //   if (data.id) {
+  //     currentRow = this.formData.value.deXuatPhuongAn.find(s => s.id == data.id);
+  //   } else if (data.idVirtual) {
+  //     currentRow = this.formData.value.deXuatPhuongAn.find(s => s.idVirtual == data.idVirtual)
+  //   }
+  //   this.phuongAnRow = currentRow;
+  //   this.changeCuc(this.phuongAnRow.maDviCuc);
+  //   this.showModal();
+  // }
 
-  async suaNoiDung(data: any) {
-    this.phuongAnRow.noiDung = data.noiDung;
-    this.phuongAnRow.noiDungEdit = data.noiDung;
-    this.showModalSuaNoiDung();
-  }
+  // async suaNoiDung(data: any) {
+  //   this.phuongAnRow.noiDung = data.noiDung;
+  //   this.phuongAnRow.noiDungEdit = data.noiDung;
+  //   this.showModalSuaNoiDung();
+  // }
 
-  showModalSuaNoiDung(): void {
-    this.isVisibleSuaNoiDung = true;
-  }
+  // showModalSuaNoiDung(): void {
+  //   this.isVisibleSuaNoiDung = true;
+  // }
 
-  handleOkSuaNoiDung(): void {
-    let currentNoiDung = this.formData.value.deXuatPhuongAn.filter(s => s.noiDung == this.phuongAnRow.noiDung);
-    currentNoiDung.forEach(s => {
-      s.noiDung = this.phuongAnRow.noiDungEdit;
-    });
-    this.buildTableView();
-    this.isVisibleSuaNoiDung = false;
+  // handleOkSuaNoiDung(): void {
+  //   let currentNoiDung = this.formData.value.deXuatPhuongAn.filter(s => s.noiDung == this.phuongAnRow.noiDung);
+  //   currentNoiDung.forEach(s => {
+  //     s.noiDung = this.phuongAnRow.noiDungEdit;
+  //   });
+  //   this.buildTableView();
+  //   this.isVisibleSuaNoiDung = false;
 
-    //clean
-    this.phuongAnRow = {}
-  }
+  //   //clean
+  //   this.phuongAnRow = {}
+  // }
 
-  handleCancelSuaNoiDung(): void {
-    this.isVisibleSuaNoiDung = false;
-    this.phuongAnRow = {}
-  }
+  // handleCancelSuaNoiDung(): void {
+  //   this.isVisibleSuaNoiDung = false;
+  //   this.phuongAnRow = {}
+  // }
 
-  async checkVld(inputName: string) {
-    if (this.errorInputComponent.find(s => s === inputName)) {
-      return 'error'
-    } else {
-      return '';
-    }
-  }
+  // async checkVld(inputName: string) {
+  //   if (this.errorInputComponent.find(s => s === inputName)) {
+  //     return 'error'
+  //   } else {
+  //     return '';
+  //   }
+  // }
 
   async addRow() {
     if (Object.keys(this.bangKeDtlCreate).length !== 0) {
