@@ -344,6 +344,7 @@ export class ThemMoiKhoComponent implements OnInit {
       bodyDvi.diaChi = this.formKho.value.diaChi;
       let body = this.formKho.value;
       body.loaiHangHoa = this.setLoaiHangHoa();
+      body.kieuHang = this.loaiHangHoa.type;
       body.ngankhoId = this.idReq;
       body.maNganlo = this.formKho.value.maNganlo;
       body.fileDinhkems = this.listFileDinhKem;
@@ -387,6 +388,7 @@ export class ThemMoiKhoComponent implements OnInit {
       let body = this.formKho.value;
       body.dviReq = bodyDvi
       body.loaiHangHoa = this.setLoaiHangHoa();
+      body.kieuHang = this.loaiHangHoa.type;
       body.maNgankho = this.formKho.value.maNgankho;
       body.tichLuongKdLt = body.tichLuongTkLt;
       body.tichLuongKdVt = body.tichLuongTkVt;
