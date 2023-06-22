@@ -337,7 +337,7 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
 
   async getDataChiTieu() {
     let res2 = null;
-    res2 = await this.chiTieuKeHoachNamCapTongCucService.canCuCuc(
+    res2 = await this.chiTieuKeHoachNamCapTongCucService.canCuCucQd(
       +this.formData.get('nam').value,
     );
     if (res2.msg == MESSAGE.SUCCESS) {
