@@ -250,212 +250,221 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     }
   }
 
-
   async findCanCuByYear(year: number, chiTieuKhNam?) {
-    console.log(chiTieuKhNam, 'chiTieuKhNamchiTieuKhNamchiTieuKhNam');
-    if (chiTieuKhNam) {
-      if (chiTieuKhNam.capDvi == "2") {
-        let res = await this.chiTieuKeHoachNamService.loadThongTinChiTieuKeHoachNam(chiTieuKhNam.qdGocId);
-        if (res.msg == MESSAGE.SUCCESS) {
-          let data = res.data
-          if (data) {
-            this.dataQdTCDTGiaoCuc = {};
-            this.formData.patchValue({
-              canCu: data.soQuyetDinh,
-              chiTieuId: data.id
-            });
-            // Lấy kế hoạch tổng cục giao cho cục đang login
-            let dataLuongThuc = data.khLuongThuc.find(item => item.maDonVi == this.userInfo.MA_DVI);
-            if (dataLuongThuc) {
-              this.dataQdTCDTGiaoCuc = {
-                "ltThocMua": dataLuongThuc.ntnThoc,
-                "ltGaoMua": dataLuongThuc.ntnGao,
-                "ltThocXuat": dataLuongThuc.xtnTongThoc,
-                "ltGaoXuat": dataLuongThuc.xtnTongGao,
-              }
-            }
-          }
-        } else {
-          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR)
-        }
-      } else {
-        this.dataQdTtcpOrBtc = {};
-        //Lấy ra số qd căn giao qd của BTC hoặc TTCP
-        if (chiTieuKhNam && chiTieuKhNam.loaiCanCu && chiTieuKhNam.loaiCanCu == 'TTCP') {
-          let res = await this.quyetDinhTtcpService.getDetail(chiTieuKhNam.idCanCu);
+    this.spinner.show();
+    try {
+      if (chiTieuKhNam) {
+        if (chiTieuKhNam.capDvi == "2") {
+          let res = await this.chiTieuKeHoachNamService.loadThongTinChiTieuKeHoachNam(chiTieuKhNam.qdGocId);
           if (res.msg == MESSAGE.SUCCESS) {
-            this.formData.patchValue({
-              soQdTtcpBtc: res.data.soQd
-            });
             let data = res.data
-            let dataTTCP = data.listBoNganh ? res.data.listBoNganh.find(item => item.maBoNganh == '01') : null;
-            //Lấy data của TTCP giao cho BTC (TCDT)
-            if (dataTTCP) {
-              this.dataQdTtcpOrBtc = {
-                "data": "TTCP",
-                "ltThocMua": dataTTCP.ltThocMua,
-                "ltGaoMua": dataTTCP.ltGaoMua,
-                "ltThocXuat": dataTTCP.ltThocXuat,
-                "ltGaoXuat": dataTTCP.ltGaoXuat,
-              }
-            }
-          }
-        }
-        if (chiTieuKhNam && chiTieuKhNam.loaiCanCu && chiTieuKhNam.loaiCanCu == 'BTC') {
-          let res = await this.quyetDinhBtcTcdtService.getDetail(chiTieuKhNam.idCanCu);
-          if (res.msg == MESSAGE.SUCCESS) {
-            let data = res.data;
-            this.formData.patchValue({
-              soQdTtcpBtc: res.data.soQd
-            });
-            this.dataQdTtcpOrBtc = {
-              "data": "BTC",
-              "ltThocMua": (data.keHoachNhapXuat && data.keHoachNhapXuat.soLuongMuaThoc) ? data.keHoachNhapXuat.soLuongMuaThoc : 0,
-              "ltGaoMua": (data.keHoachNhapXuat && data.keHoachNhapXuat.soLuongMuaGao) ? data.keHoachNhapXuat.soLuongMuaGao : 0,
-              "ltThocXuat": (data.keHoachNhapXuat && data.keHoachNhapXuat.soLuongBanThoc) ? data.keHoachNhapXuat.soLuongBanThoc : 0,
-              "ltGaoXuat": (data.keHoachNhapXuat && data.keHoachNhapXuat.soLuongBanGao) ? data.keHoachNhapXuat.soLuongBanGao : 0,
-            }
-          }
-        }
-      }
-    } else {
-      this.formData.patchValue({
-        canCu: null,
-        chiTieuId: null,
-        soQdTtcpBtc: null
-      });
-      if (this.userService.isCuc()) {
-        let res = await this.chiTieuKeHoachNamService.canCuCucQd(year);
-        if (res.msg == MESSAGE.SUCCESS) {
-          let data = res.data
-          if (data) {
-            this.dataQdTCDTGiaoCuc = {};
-            this.formData.patchValue({
-              canCu: data.soQuyetDinh,
-              chiTieuId: data.id
-            });
-            // Lấy kế hoạch tổng cục giao cho cục đang login
-            let dataLuongThuc = data.khLuongThuc.find(item => item.maDonVi == this.userInfo.MA_DVI);
-            if (dataLuongThuc) {
-              this.dataQdTCDTGiaoCuc = {
-                "ltThocMua": dataLuongThuc.ntnThoc,
-                "ltGaoMua": dataLuongThuc.ntnGao,
-                "ltThocXuat": dataLuongThuc.xtnTongThoc,
-                "ltGaoXuat": dataLuongThuc.xtnTongGao,
+            if (data) {
+              this.dataQdTCDTGiaoCuc = {};
+              this.formData.patchValue({
+                canCu: data.soQuyetDinh,
+                chiTieuId: data.id
+              });
+              // Lấy kế hoạch tổng cục giao cho cục đang login
+              let dataLuongThuc = data.khLuongThuc.find(item => item.maDonVi == this.userInfo.MA_DVI);
+              if (dataLuongThuc) {
+                this.dataQdTCDTGiaoCuc = {
+                  "ltThocMua": dataLuongThuc.ntnThoc,
+                  "ltGaoMua": dataLuongThuc.ntnGao,
+                  "ltThocXuat": dataLuongThuc.xtnTongThoc,
+                  "ltGaoXuat": dataLuongThuc.xtnTongGao,
+                }
               }
             }
           } else {
-            this.notification.warning(MESSAGE.WARNING, "Quyết định giao chỉ tiêu của tổng cục năm " + year + " chưa được tạo hoặc chưa ban hành,vui lòng kiểm tra lại.");
+            this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR)
           }
         } else {
-          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR)
+          this.dataQdTtcpOrBtc = {};
+          //Lấy ra số qd căn giao qd của BTC hoặc TTCP
+          if (chiTieuKhNam && chiTieuKhNam.loaiCanCu && chiTieuKhNam.loaiCanCu == 'TTCP') {
+            let res = await this.quyetDinhTtcpService.getDetail(chiTieuKhNam.idCanCu);
+            if (res.msg == MESSAGE.SUCCESS) {
+              this.formData.patchValue({
+                soQdTtcpBtc: res.data.soQd
+              });
+              let data = res.data
+              let dataTTCP = data.listBoNganh ? res.data.listBoNganh.find(item => item.maBoNganh == '01') : null;
+              //Lấy data của TTCP giao cho BTC (TCDT)
+              if (dataTTCP) {
+                this.dataQdTtcpOrBtc = {
+                  "data": "TTCP",
+                  "ltThocMua": dataTTCP.ltThocMua,
+                  "ltGaoMua": dataTTCP.ltGaoMua,
+                  "ltThocXuat": dataTTCP.ltThocXuat,
+                  "ltGaoXuat": dataTTCP.ltGaoXuat,
+                }
+              }
+            }
+          }
+          if (chiTieuKhNam && chiTieuKhNam.loaiCanCu && chiTieuKhNam.loaiCanCu == 'BTC') {
+            let res = await this.quyetDinhBtcTcdtService.getDetail(chiTieuKhNam.idCanCu);
+            if (res.msg == MESSAGE.SUCCESS) {
+              let data = res.data;
+              this.formData.patchValue({
+                soQdTtcpBtc: res.data.soQd
+              });
+              this.dataQdTtcpOrBtc = {
+                "data": "BTC",
+                "ltThocMua": (data.keHoachNhapXuat && data.keHoachNhapXuat.soLuongMuaThoc) ? data.keHoachNhapXuat.soLuongMuaThoc : 0,
+                "ltGaoMua": (data.keHoachNhapXuat && data.keHoachNhapXuat.soLuongMuaGao) ? data.keHoachNhapXuat.soLuongMuaGao : 0,
+                "ltThocXuat": (data.keHoachNhapXuat && data.keHoachNhapXuat.soLuongBanThoc) ? data.keHoachNhapXuat.soLuongBanThoc : 0,
+                "ltGaoXuat": (data.keHoachNhapXuat && data.keHoachNhapXuat.soLuongBanGao) ? data.keHoachNhapXuat.soLuongBanGao : 0,
+              }
+            }
+          }
         }
-      }
-      if (this.userService.isTongCuc()) {
-        this.dataQdTtcpOrBtc = {};
-        let res = await this.chiTieuKeHoachNamService.canCuCucPa(year);
-        if (res.msg == MESSAGE.SUCCESS) {
-          let data = res.data
-          if (data) {
-            //Load data của phương án giao chỉ tiêu cho QĐ giao chỉ tiêu
-            this.loadDataPhuongAn(data);
-            //Gán số công văn bản ghi phương án vào căn cứ, chiTieuId là id của bản ghi phương án.
-            this.formData.patchValue({
-              canCu: data.soQuyetDinh,
-              chiTieuId: data.id,
-              loaiCanCu: data.loaiCanCu,
-              soQdTtcpBtc: (data.loaiCanCu && data.loaiCanCu != 'OTHER') ? data.canCu : ''
-            });
-            if (data.loaiCanCu && data.loaiCanCu == 'TTCP' && data.idCanCu && data.canCu) {
-              let res = await this.quyetDinhTtcpService.getDetail(data.idCanCu);
-              if (res.msg == MESSAGE.SUCCESS) {
-                let data = res.data
-                if (data) {
-                  this.formData.patchValue({
-                    idCanCu: data.id
-                  });
-                  let dataTTCP = data.listBoNganh ? res.data.listBoNganh.find(item => item.maBoNganh == '01') : null;
-                  //Lấy data của TTCP giao cho BTC (TCDT)
-                  if (dataTTCP) {
-                    this.dataQdTtcpOrBtc = {
-                      "data": "TTCP",
-                      "ltThocMua": dataTTCP.ltThocMua,
-                      "ltGaoMua": dataTTCP.ltGaoMua,
-                      "ltThocXuat": dataTTCP.ltThocXuat,
-                      "ltGaoXuat": dataTTCP.ltGaoXuat,
+      } else {
+        this.formData.patchValue({
+          canCu: null,
+          chiTieuId: null,
+          soQdTtcpBtc: null
+        });
+        if (this.userService.isCuc()) {
+          let res = await this.chiTieuKeHoachNamService.canCuCucQd(year);
+          if (res.msg == MESSAGE.SUCCESS) {
+            let data = res.data
+            if (data) {
+              this.dataQdTCDTGiaoCuc = {};
+              this.formData.patchValue({
+                canCu: data.soQuyetDinh,
+                chiTieuId: data.id
+              });
+              // Lấy kế hoạch tổng cục giao cho cục đang login
+              let dataLuongThuc = data.khLuongThuc.find(item => item.maDonVi == this.userInfo.MA_DVI);
+              if (dataLuongThuc) {
+                this.dataQdTCDTGiaoCuc = {
+                  "ltThocMua": dataLuongThuc.ntnThoc,
+                  "ltGaoMua": dataLuongThuc.ntnGao,
+                  "ltThocXuat": dataLuongThuc.xtnTongThoc,
+                  "ltGaoXuat": dataLuongThuc.xtnTongGao,
+                }
+              }
+            } else {
+              this.notification.warning(MESSAGE.WARNING, "Quyết định giao chỉ tiêu của tổng cục năm " + year + " chưa được tạo hoặc chưa ban hành,vui lòng kiểm tra lại.");
+            }
+          } else {
+            this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR)
+          }
+        }
+        if (this.userService.isTongCuc()) {
+          this.dataQdTtcpOrBtc = {};
+          let res = await this.chiTieuKeHoachNamService.canCuCucPa(year);
+          if (res.msg == MESSAGE.SUCCESS) {
+            let data = res.data
+            if (data) {
+              //Load data của phương án giao chỉ tiêu cho QĐ giao chỉ tiêu
+              this.loadDataPhuongAn(data);
+              //Gán số công văn bản ghi phương án vào căn cứ, chiTieuId là id của bản ghi phương án.
+              this.formData.patchValue({
+                canCu: data.soQuyetDinh,
+                chiTieuId: data.id,
+                loaiCanCu: data.loaiCanCu,
+                soQdTtcpBtc: (data.loaiCanCu && data.loaiCanCu != 'OTHER') ? data.canCu : ''
+              });
+              if (data.loaiCanCu && data.loaiCanCu == 'TTCP' && data.idCanCu && data.canCu) {
+                let res = await this.quyetDinhTtcpService.getDetail(data.idCanCu);
+                if (res.msg == MESSAGE.SUCCESS) {
+                  let data = res.data
+                  if (data) {
+                    this.formData.patchValue({
+                      idCanCu: data.id
+                    });
+                    let dataTTCP = data.listBoNganh ? res.data.listBoNganh.find(item => item.maBoNganh == '01') : null;
+                    //Lấy data của TTCP giao cho BTC (TCDT)
+                    if (dataTTCP) {
+                      this.dataQdTtcpOrBtc = {
+                        "data": "TTCP",
+                        "ltThocMua": dataTTCP.ltThocMua,
+                        "ltGaoMua": dataTTCP.ltGaoMua,
+                        "ltThocXuat": dataTTCP.ltThocXuat,
+                        "ltGaoXuat": dataTTCP.ltGaoXuat,
+                      }
                     }
                   }
                 }
-              }
-            } else if (data.loaiCanCu && data.loaiCanCu == 'BTC' && data.idCanCu && data.canCu) {
-              let res = await this.quyetDinhBtcTcdtService.getDetail(data.idCanCu);
-              if (res.msg == MESSAGE.SUCCESS) {
-                let data = res.data
-                if (data) {
-                  this.formData.patchValue({
-                    idCanCu: data.id
-                  });
-                  this.dataQdTtcpOrBtc = {
-                    "data": "BTC",
-                    "ltThocMua": (data.keHoachNhapXuat && data.keHoachNhapXuat.soLuongMuaThoc) ? data.keHoachNhapXuat.soLuongMuaThoc : 0,
-                    "ltGaoMua": (data.keHoachNhapXuat && data.keHoachNhapXuat.soLuongMuaGao) ? data.keHoachNhapXuat.soLuongMuaGao : 0,
-                    "ltThocXuat": (data.keHoachNhapXuat && data.keHoachNhapXuat.soLuongBanThoc) ? data.keHoachNhapXuat.soLuongBanThoc : 0,
-                    "ltGaoXuat": (data.keHoachNhapXuat && data.keHoachNhapXuat.soLuongBanGao) ? data.keHoachNhapXuat.soLuongBanGao : 0,
+              } else if (data.loaiCanCu && data.loaiCanCu == 'BTC' && data.idCanCu && data.canCu) {
+                let res = await this.quyetDinhBtcTcdtService.getDetail(data.idCanCu);
+                if (res.msg == MESSAGE.SUCCESS) {
+                  let data = res.data
+                  if (data) {
+                    this.formData.patchValue({
+                      idCanCu: data.id
+                    });
+                    this.dataQdTtcpOrBtc = {
+                      "data": "BTC",
+                      "ltThocMua": (data.keHoachNhapXuat && data.keHoachNhapXuat.soLuongMuaThoc) ? data.keHoachNhapXuat.soLuongMuaThoc : 0,
+                      "ltGaoMua": (data.keHoachNhapXuat && data.keHoachNhapXuat.soLuongMuaGao) ? data.keHoachNhapXuat.soLuongMuaGao : 0,
+                      "ltThocXuat": (data.keHoachNhapXuat && data.keHoachNhapXuat.soLuongBanThoc) ? data.keHoachNhapXuat.soLuongBanThoc : 0,
+                      "ltGaoXuat": (data.keHoachNhapXuat && data.keHoachNhapXuat.soLuongBanGao) ? data.keHoachNhapXuat.soLuongBanGao : 0,
+                    }
+                  }
+                }
+              } else {
+                //Nếu Phương án được tạo khi chưa quyết định của TTCP hoặc BTC ban hành thì khi tạo QD giao chỉ tiêu, phải lấy lại 1 trong 2 số mà được TTCP giao hoặc BTC giao ( Ưu tiên QD BTC)
+                let res = await this.chiTieuKeHoachNamService.canCuBTCGiaoTCDT(year);
+                if (res.msg == MESSAGE.SUCCESS) {
+                  let data = res.data
+                  if (data) {
+                    this.formData.patchValue({
+                      soQdTtcpBtc: data.soQd,
+                      idCanCu: data.id,
+                      loaiCanCu: "TTCP",
+                    });
+                    //Lấy data của BTC giao cho TCDT
+                    this.dataQdTtcpOrBtc = {
+                      "data": "BTC",
+                      "ltThocMua": (data.keHoachNhapXuat && data.keHoachNhapXuat.soLuongMuaThoc) ? data.keHoachNhapXuat.soLuongMuaThoc : 0,
+                      "ltGaoMua": (data.keHoachNhapXuat && data.keHoachNhapXuat.soLuongMuaGao) ? data.keHoachNhapXuat.soLuongMuaGao : 0,
+                      "ltThocXuat": (data.keHoachNhapXuat && data.keHoachNhapXuat.soLuongBanThoc) ? data.keHoachNhapXuat.soLuongBanThoc : 0,
+                      "ltGaoXuat": (data.keHoachNhapXuat && data.keHoachNhapXuat.soLuongBanGao) ? data.keHoachNhapXuat.soLuongBanGao : 0,
+                    }
+                  } else {
+                    let res = await this.quyetDinhTtcpService.chiTietTheoNam(year);
+                    if (res.msg == MESSAGE.SUCCESS) {
+                      let data = res.data
+                      if (data) {
+                        //Lấy data của TTCP giao cho BTC (TCDT)
+                        let dataTTCP = data.listBoNganh ? res.data.listBoNganh.find(item => item.maBoNganh == '01') : null;
+                        if (dataTTCP) {
+                          this.dataQdTtcpOrBtc = {
+                            "data": "TTCP",
+                            "ltThocMua": dataTTCP.ltThocMua,
+                            "ltGaoMua": dataTTCP.ltGaoMua,
+                            "ltThocXuat": dataTTCP.ltThocXuat,
+                            "ltGaoXuat": dataTTCP.ltGaoXuat,
+                          }
+                        }
+                        this.formData.patchValue({
+                          soQdTtcpBtc: data.soQd,
+                          idCanCu: data.id,
+                          loaiCanCu: "BTC",
+                        });
+                      }
+                    }
                   }
                 }
               }
             } else {
-              //Nếu Phương án được tạo khi chưa quyết định của TTCP hoặc BTC ban hành thì khi tạo QD giao chỉ tiêu, phải lấy lại 1 trong 2 số mà được TTCP giao hoặc BTC giao ( Ưu tiên QD BTC)
-              let res = await this.chiTieuKeHoachNamService.canCuBTCGiaoTCDT(year);
-              if (res.msg == MESSAGE.SUCCESS) {
-                let data = res.data
-                if (data) {
-                  this.formData.patchValue({
-                    soQdTtcpBtc: data.soQd,
-                    idCanCu: data.id,
-                    loaiCanCu: "TTCP",
-                  });
-                  //Lấy data của BTC giao cho TCDT
-                  this.dataQdTtcpOrBtc = {
-                    "data": "BTC",
-                    "ltThocMua": (data.keHoachNhapXuat && data.keHoachNhapXuat.soLuongMuaThoc) ? data.keHoachNhapXuat.soLuongMuaThoc : 0,
-                    "ltGaoMua": (data.keHoachNhapXuat && data.keHoachNhapXuat.soLuongMuaGao) ? data.keHoachNhapXuat.soLuongMuaGao : 0,
-                    "ltThocXuat": (data.keHoachNhapXuat && data.keHoachNhapXuat.soLuongBanThoc) ? data.keHoachNhapXuat.soLuongBanThoc : 0,
-                    "ltGaoXuat": (data.keHoachNhapXuat && data.keHoachNhapXuat.soLuongBanGao) ? data.keHoachNhapXuat.soLuongBanGao : 0,
-                  }
-                } else {
-                  let res = await this.quyetDinhTtcpService.chiTietTheoNam(year);
-                  if (res.msg == MESSAGE.SUCCESS) {
-                    let data = res.data
-                    if (data) {
-                      //Lấy data của TTCP giao cho BTC (TCDT)
-                      let dataTTCP = data.listBoNganh ? res.data.listBoNganh.find(item => item.maBoNganh == '01') : null;
-                      if (dataTTCP) {
-                        this.dataQdTtcpOrBtc = {
-                          "data": "TTCP",
-                          "ltThocMua": dataTTCP.ltThocMua,
-                          "ltGaoMua": dataTTCP.ltGaoMua,
-                          "ltThocXuat": dataTTCP.ltThocXuat,
-                          "ltGaoXuat": dataTTCP.ltGaoXuat,
-                        }
-                      }
-                      this.formData.patchValue({
-                        soQdTtcpBtc: data.soQd,
-                        idCanCu: data.id,
-                        loaiCanCu: "BTC",
-                      });
-                    }
-                  }
-                }
-              }
+              this.notification.warning(MESSAGE.WARNING, "Phương án giao chỉ tiêu kế hoạch năm " + year + " chưa có hoặc chưa được duyệt,vui lòng kiểm tra lại.");
             }
           } else {
-            this.notification.warning(MESSAGE.WARNING, "Phương án giao chỉ tiêu kế hoạch năm " + year + " chưa có hoặc chưa được duyệt,vui lòng kiểm tra lại.");
+            this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR)
           }
-        } else {
-          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR)
         }
       }
+    } catch (e) {
+      console.error('error: ', e);
+      this.notification.error(
+        MESSAGE.ERROR,
+        e.error.errors[0].defaultMessage,
+      );
+    } finally {
+      this.spinner.hide();
     }
   }
 
