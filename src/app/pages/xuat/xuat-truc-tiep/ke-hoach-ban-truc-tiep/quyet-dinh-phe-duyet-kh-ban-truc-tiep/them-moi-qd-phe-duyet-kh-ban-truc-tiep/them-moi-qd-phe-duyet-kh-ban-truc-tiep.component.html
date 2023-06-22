@@ -117,7 +117,7 @@
                         </div>
                         <div nz-col [nzSpan]="24">
                             <nz-form-item>
-                                <nz-form-label [nzNoColon]="true">
+                                <nz-form-label nzRequired [nzNoColon]="true">
                                     File đính kèm QĐ đã ban hành
                                 </nz-form-label>
                                 <div class="list-file">
@@ -200,7 +200,7 @@
                         </div>
                         <div nz-col [nzSpan]="3">
                             <nz-form-item>
-                                <nz-form-label [nzNoColon]="true"> loại hình nhập xuất
+                                <nz-form-label [nzNoColon]="true"> Loại hình nhập xuất
                                 </nz-form-label>
                                 <nz-form-control [nzErrorTip]="error">
                                     <nz-select formControlName="loaiHinhNx" [nzDisabled]="true">

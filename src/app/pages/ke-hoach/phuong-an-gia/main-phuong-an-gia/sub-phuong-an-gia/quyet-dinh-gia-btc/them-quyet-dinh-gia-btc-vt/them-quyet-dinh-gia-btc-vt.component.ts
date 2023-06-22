@@ -33,7 +33,7 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
   @Output("onClose") onClose = new EventEmitter<any>();
   formData: FormGroup;
 
-  STATUS: any;
+  STATUS = STATUS;
   dsVthh: any[] = [];
   dsCloaiVthh: any[] = [];
   dsTieuChuanCl: any[] = [];

@@ -88,14 +88,14 @@ export class TongHopComponent extends Base2Component implements OnInit {
     this.dataTongHop = data;
   }
 
-  showTongHop() {
+  async showTongHop() {
     let elem = document.getElementById('mainTongCuc');
     let tabActive = elem.getElementsByClassName('ant-menu-item')[2];
     tabActive.classList.remove('ant-menu-item-selected')
     let setActive = elem.getElementsByClassName('ant-menu-item')[0];
     setActive.classList.add('ant-menu-item-selected');
     this.isQuyetDinh = false;
-    this.search;
+    await this.search();
   }
 
   timKiem() {
