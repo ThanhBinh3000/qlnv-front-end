@@ -135,7 +135,7 @@ export class ChiTieuKeHoachNamCapTongCucService extends BaseService {
     return this.httpClient.get<any>(url_).toPromise();
   }
 
-  canCuTongCuc(namKh: number): Promise<any> {
+  canCuBTCGiaoTCDT(namKh: number): Promise<any> {
     const url_ = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/qd-btc-giao-tcdt/${namKh}`;
     return this.httpClient.get<any>(url_).toPromise();
   }

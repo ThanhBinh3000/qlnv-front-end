@@ -49,7 +49,7 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
   isMain: boolean = true;
   listCucSelected: any[] = [];
   fileDinhKem: any[] = [];
-  STATUS: any
+  STATUS = STATUS
   typeConst = TYPE_PAG
   constructor(
     private readonly fb: FormBuilder,
@@ -99,7 +99,6 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
         ngayDx: [null, [Validators.required]],
       }
     );
-    this.STATUS = STATUS
   }
 
   async ngOnInit() {

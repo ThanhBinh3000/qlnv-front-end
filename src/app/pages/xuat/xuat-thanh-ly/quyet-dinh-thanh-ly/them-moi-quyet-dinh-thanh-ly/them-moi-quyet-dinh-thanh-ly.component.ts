@@ -163,8 +163,10 @@ export class ThemMoiQuyetDinhThanhLyComponent extends Base2Component implements 
     }).then(res => {
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data;
-        if (data && data.content && data.content.length > 0) {
+        if (data && data.content && data.content.length > 0 && this.formData.value.idHoSo == null) {
           this.listHoSo = data.content.filter(item => item.soQd == null);
+        } else {
+          this.listHoSo = data.content;
         }
       } else {
         this.listHoSo = [];

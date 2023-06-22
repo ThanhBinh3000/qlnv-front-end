@@ -357,22 +357,18 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
       })
       if (this.rowItem.soLuong > this.soLuongDeXuat) {
         this.notification.error(MESSAGE.ERROR, " Số lượng chào giá phải nhỏ hơn hoặc bằng số lượng bán trực tiếp đề xuất (" + this.soLuongDeXuat + "đ) vui lòng nhập lại")
-        this.rowItem.luaChon = false;
         return false;
       } else if (tongSoLuong > this.soLuongDeXuat) {
         this.notification.error(MESSAGE.ERROR, " Tổng số lượng đơn giá chào giá phải nhỏ hơn hoặc bằng đơn giá được duyệt bán trực tiếp (" + this.soLuongDeXuat + "đ) vui lòng nhập lại")
-        this.rowItem.luaChon = false;
         return false;
       } else if (this.rowItem.donGia < this.donGiaDuocDuyet) {
         this.notification.error(MESSAGE.ERROR, " Đơn giá chào giá phải lớn hơn hoặc bằng đơn giá được duyệt bán trực tiếp (" + this.donGiaDuocDuyet + "đ) vui lòng nhập lại")
-        this.rowItem.luaChon = false;
         return false;
       }
-      return true
+      return true;
     } else {
-      this.rowItem.luaChon = false;
       this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR);
-      return false
+      return false;
     }
   }
 

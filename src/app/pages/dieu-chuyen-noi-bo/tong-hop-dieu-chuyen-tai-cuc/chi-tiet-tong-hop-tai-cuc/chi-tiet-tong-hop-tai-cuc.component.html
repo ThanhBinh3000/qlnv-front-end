@@ -701,7 +701,8 @@
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewKeHoachDC"
     [nzBodyStyle]="{ 'overflow-y': 'auto' }" (nzOnCancel)="closeModalKeHoachDC()">
     <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-        <app-chi-tiet-ke-hoach-dcnb [idInput]="idKeHoachDC" [isViewOnModal]="true"></app-chi-tiet-ke-hoach-dcnb>
+        <app-chi-tiet-ke-hoach-dcnb [idInput]="idKeHoachDC" [isViewOnModal]="true"
+            [isView]="true"></app-chi-tiet-ke-hoach-dcnb>
     </ng-container>
     <div *nzModalFooter>
         <button nz-button (click)="closeModalKeHoachDC()" class="modal__button--cancel">

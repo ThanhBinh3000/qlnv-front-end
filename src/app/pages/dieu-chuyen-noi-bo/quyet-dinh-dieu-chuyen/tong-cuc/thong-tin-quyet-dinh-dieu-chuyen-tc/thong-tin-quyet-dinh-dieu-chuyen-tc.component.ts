@@ -488,13 +488,14 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
 
     let data = await this.createUpdate(body);
     if (data) {
+      this.idInput = data.id;
       if (isGuiDuyet) {
-        this.idInput = data.id;
         this.guiDuyet();
       }
-      //  else {
-      //   this.quayLai();
-      // }
+      else {
+        // this.quayLai();
+        await this.loadChiTiet(this.idInput)
+      }
     }
     await this.spinner.hide();
   }

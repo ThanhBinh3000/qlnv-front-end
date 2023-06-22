@@ -17,6 +17,7 @@ import { Subject } from 'rxjs';
 import { QuyetDinhDieuChuyenTCService } from 'src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-tc.service';
 import { BienBanNghiemThuBaoQuanLanDauService } from 'src/app/services/dieu-chuyen-noi-bo/nhap-dieu-chuyen/bien-ban-nghiem-thu-bao-quan-lan-dau.service';
 import * as uuidv4 from "uuid";
+import { ThongTinQuyetDinhDieuChuyenCucComponent } from 'src/app/pages/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/cuc/thong-tin-quyet-dinh-dieu-chuyen-cuc/thong-tin-quyet-dinh-dieu-chuyen-cuc.component';
 
 @Component({
   selector: 'app-bien-ban-nghiem-thu-bao-quan-lan-dau',
@@ -141,6 +142,23 @@ export class BienBanNghiemThuBaoQuanLanDauComponent extends Base2Component imple
       console.log('data', data, res)
       console.log('this.dataTableView', this.dataTableView)
     }
+  }
+
+  async openDialogQD(row) {
+    this.modal.create({
+      nzTitle: 'Thông tin quyết định điều chuyển',
+      nzContent: ThongTinQuyetDinhDieuChuyenCucComponent,
+      nzMaskClosable: false,
+      nzClosable: true,
+      nzBodyStyle: { overflowY: 'auto' },//maxHeight: 'calc(100vh - 200px)'
+      nzWidth: '90%',
+      nzFooter: null,
+      nzComponentParams: {
+        isViewOnModal: true,
+        isView: true,
+        idInput: row.qdinhDccId
+      },
+    });
   }
 
 

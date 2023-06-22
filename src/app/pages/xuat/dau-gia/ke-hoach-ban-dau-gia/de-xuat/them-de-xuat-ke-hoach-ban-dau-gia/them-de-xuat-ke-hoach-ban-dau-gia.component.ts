@@ -23,7 +23,7 @@ import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { DatePipe } from '@angular/common';
-import {PREVIEW} from "../../../../../../constants/fileType";
+import { PREVIEW } from "../../../../../../constants/fileType";
 import { saveAs } from 'file-saver';
 
 @Component({
@@ -456,10 +456,6 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
     }
   }
 
-  quayLai() {
-    this.showListEvent.emit();
-  }
-
   async guiDuyet() {
     if (this.dataTable.length == 0) {
       this.notification.error(
@@ -634,16 +630,16 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
     }
   }
 
-  async preview(id){
+  async preview(id) {
     await this.deXuatKhBanDauGiaService.preview({
-      "tenBaoCao":"de-xuat-ke-hoach-ban-dau-gia",
-      "id":id
+      "tenBaoCao": "de-xuat-ke-hoach-ban-dau-gia",
+      "id": id
     }).then(async res => {
-      if(res.data) {
+      if (res.data) {
         this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
         this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
         this.showDlgPreview = true;
-      }else {
+      } else {
         this.notification.error(MESSAGE.ERROR, "Lỗi trong quá trình tải file.");
       }
     });

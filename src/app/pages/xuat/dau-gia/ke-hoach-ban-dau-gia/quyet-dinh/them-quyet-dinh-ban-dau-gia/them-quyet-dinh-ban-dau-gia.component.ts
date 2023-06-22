@@ -207,10 +207,6 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
     this.reject(this.idInput, STATUS.TU_CHOI_LDV)
   }
 
-  quayLai() {
-    this.showListEvent.emit();
-  }
-
   async guiDuyet() {
     let trangThai = STATUS.BAN_HANH;
     let mesg = 'Văn bản sẵn sàng ban hành ?'

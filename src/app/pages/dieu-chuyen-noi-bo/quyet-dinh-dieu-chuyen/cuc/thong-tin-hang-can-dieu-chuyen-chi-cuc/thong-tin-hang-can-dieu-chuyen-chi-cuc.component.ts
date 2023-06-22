@@ -115,6 +115,7 @@ export class ThongTinHangCanDieuChuyenChiCucComponent extends Base2Component imp
     if (this.data.maNhaKho) await this.getListNganKho(this.data.maNhaKho)
     if (this.data.maNganKho) await this.getListLoKho(this.data.maNganKho)
 
+    if (this.data.maChiCucNhan) await this.getListDiemKhoNhan(this.data.maChiCucNhan)
     if (this.data.maDiemKhoNhan) await this.getListNhaKhoNhan(this.data.maDiemKhoNhan)
     if (this.data.maNhaKhoNhan) await this.getListNganKhoNhan(this.data.maNhaKhoNhan)
     if (this.data.maNganKhoNhan) await this.getListLoKhoNhan(this.data.maNganKhoNhan)
@@ -152,7 +153,39 @@ export class ThongTinHangCanDieuChuyenChiCucComponent extends Base2Component imp
                   ...this.dsDiemKho,
                   ...element.children.filter(item => item.type == 'MLK')
                 ]
-                this.dsDiemKhoNhan = this.dsDiemKho
+                // this.dsDiemKhoNhan = this.dsDiemKho
+              }
+            });
+          }
+        }
+
+      } catch (error) {
+        // this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      } finally {
+        // this.spinner.hide();
+      }
+    }
+  }
+
+  async getListDiemKhoNhan(maDvi) {
+    if (maDvi) {
+      try {
+        let body = {
+          maDviCha: maDvi,
+          trangThai: '01',
+        }
+        const res = await this.donViService.getTreeAll(body);
+        if (res.msg == MESSAGE.SUCCESS) {
+
+          if (res.data && res.data.length > 0) {
+            res.data.forEach(element => {
+              if (element && element.capDvi == '3' && element.children) {
+                this.dsDiemKhoNhan = [];
+                this.dsDiemKhoNhan = [
+                  ...this.dsDiemKhoNhan,
+                  ...element.children.filter(item => item.type == 'MLK')
+                ]
+                // this.dsDiemKhoNhan = this.dsDiemKho
               }
             });
           }
@@ -186,7 +219,7 @@ export class ThongTinHangCanDieuChuyenChiCucComponent extends Base2Component imp
 
   getListNhaKhoNhan(value) {
     if (value) {
-      const diemKhoNhan = this.dsDiemKho.find(f => f.maDvi === value)
+      const diemKhoNhan = this.dsDiemKhoNhan.find(f => f.maDvi === value)
       if (diemKhoNhan) {
 
         this.formData.patchValue({

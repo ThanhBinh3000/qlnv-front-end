@@ -6,7 +6,7 @@ import {cloneDeep} from 'lodash';
 import {NzModalService} from 'ng-zorro-antd/modal';
 import {NzNotificationService} from 'ng-zorro-antd/notification';
 import {NgxSpinnerService} from 'ngx-spinner';
-import {LEVEL, PAGE_SIZE_DEFAULT} from 'src/app/constants/config';
+import {LEVEL, LOAI_QD_CTKH, PAGE_SIZE_DEFAULT} from 'src/app/constants/config';
 import {MESSAGE} from 'src/app/constants/message';
 import {UserLogin} from 'src/app/models/userlogin';
 import {ChiTieuKeHoachNamCapTongCucService} from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
@@ -66,6 +66,7 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
     trichYeu: '',
     tenTrangThai: '',
   };
+  LOAI_QD = LOAI_QD_CTKH;
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -174,6 +175,7 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
       donViId: donviId ?? this.donViIdSearch,
       tenDvi: tenDvi,
       pageNumber: this.page,
+      loaiQuyetDinh: this.LOAI_QD.QD,
       pageSize: this.pageSize,
       soQD: this.searchFilter.soQD,
       trichYeu: this.searchFilter.trichYeu,
@@ -335,6 +337,7 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
           tenDvi: tenDvi,
           pageNumber: null,
           pageSize: null,
+          loai: this.LOAI_QD.PA,
           soQD: this.searchFilter.soQD,
           trichYeu: this.searchFilter.trichYeu,
           ngayKyTuNgay: this.startValue
