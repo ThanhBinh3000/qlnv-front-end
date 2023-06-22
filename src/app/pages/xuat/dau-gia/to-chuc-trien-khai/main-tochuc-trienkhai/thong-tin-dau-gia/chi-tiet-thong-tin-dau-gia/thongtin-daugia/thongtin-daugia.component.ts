@@ -249,6 +249,14 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
     return !this.isModal
   }
 
+  isDisable() {
+    if (this.formData.value.trangThai == STATUS.DU_THAO) {
+      return false
+    } else {
+      return true
+    }
+  }
+
   async handleOk(isHoanThanh?) {
     let body = this.formData.value;
     if (this.formData.value.ketQua == 1) {
@@ -286,9 +294,9 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
     });
     body.ketQuaSl = soLuongTrung + "/" + soLuongDviTsan;
     let data = await this.createUpdate(body);
-    // if (data) {
-    //   this.modal.closeAll();
-    // }
+    if (isHoanThanh) {
+      this.modal.closeAll();
+    }
   }
 
   addRow(item, name) {

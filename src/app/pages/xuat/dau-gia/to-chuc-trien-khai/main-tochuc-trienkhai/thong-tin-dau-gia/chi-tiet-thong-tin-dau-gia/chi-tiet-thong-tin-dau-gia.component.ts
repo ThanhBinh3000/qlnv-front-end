@@ -233,7 +233,7 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
         return;
       }
     } const modalQD = this.modal.create({
-      nzTitle: 'CẬP NHẬP THÔNG TIN ĐẤU GIÁ',
+      nzTitle: '',
       nzContent: ThongtinDaugiaComponent,
       nzMaskClosable: false,
       nzClosable: false,
