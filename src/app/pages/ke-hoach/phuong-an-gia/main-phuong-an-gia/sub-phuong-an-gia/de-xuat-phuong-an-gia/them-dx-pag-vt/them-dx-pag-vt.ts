@@ -64,7 +64,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
   listQdCtKh: any[] = [];
   dsPhuongAnGia: any[] = [];
   dsLoaiHangXdg: any[] = [];
-  STATUS: any;
+  STATUS = STATUS;
   fileDinhKemList: any[] = [];
   typeConst = TYPE_PAG;
   constructor(
@@ -103,7 +103,6 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
         vat: [null]
       }
     );
-    this.STATUS = STATUS
   }
 
   async loadDsPhuongAnGia() {
