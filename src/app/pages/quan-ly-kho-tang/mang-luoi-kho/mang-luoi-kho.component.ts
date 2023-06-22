@@ -376,14 +376,11 @@ export class MangLuoiKhoComponent implements OnInit {
       if (kieuHang == 'VT') {
         if (listHh && listHh.length > 0) {
           listHh.forEach(item => {
-            if (item == "0101") {
-              this.loaiHangHoa.thoc = true;
+            if (item.length == 4) {
+              this.loaiHangHoa.loaiVthh = item;
             }
-            if (item == "0102") {
-              this.loaiHangHoa.gao = true;
-            }
-            if (item == "04") {
-              this.loaiHangHoa.muoi = true;
+            if (item.length == 6) {
+              this.loaiHangHoa.cloaiVthh = item;
             }
           });
         }
