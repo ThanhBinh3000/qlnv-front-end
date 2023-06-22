@@ -357,8 +357,8 @@
                             <input nz-input [readonly]="true" formControlName="soLuongCanDc"
                                     class="text-blue border-none bg-transparent" />
                                     </nz-input-group> -->
-                            <span class="text-blue">{{formData.value.soLuongCanDc| number: '1.0-1': 'vi_VN'}}
-                                {{formData.value.donViTinh}}</span>
+                            <span class="text-blue">{{formData.value.soLuongCanDc| number: '1.0-1': 'vi_VN'}}</span>
+                            <span> ({{formData.value.donViTinh}})</span>
                         </nz-form-control>
                     </nz-form-item>
                 </div>
@@ -368,7 +368,8 @@
                             Dự toán kinh phí ĐC theo QĐ
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
-                            <span class="text-blue">{{formData.value.duToanKinhPhiDc| number: '1.0-1': 'vi_VN'}} (triệu
+                            <span class="text-blue">{{formData.value.duToanKinhPhiDc| number: '1.0-1':
+                                'vi_VN'}}</span><span> (triệu
                                 đồng)</span>
                         </nz-form-control>
                     </nz-form-item>
@@ -420,8 +421,7 @@
                                 [nzSize]="'small'" [(ngModel)]="item.slDcThucTe"></nz-input-number>
                         </td>
                         <td>
-                            <nz-input-number [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nz-input
-                                [nzSize]="'small'" [(ngModel)]="item.kinhPhiDcTt"></nz-input-number>
+                            <input class="money-input" currencyMask [options]="amount" [(ngModel)]="item.kinhPhiDcTt" />
                         </td>
                         <td *ngIf="!isDisabled()">
                             <a *ngIf="i==dataTable.length-1" (click)="addItemRow()">
@@ -456,7 +456,7 @@
                         </nz-form-label>
                         <nz-form-control nz-col [nzErrorTip]="error">
                             <input nz-input [ngModelOptions]="{standalone: true}"
-                                [ngModel]="dataTable.length > 0 ? convertTien(tinhTongKinhPhi(dataTable), 'triệu đồng') : ''"
+                                [ngModel]="dataTable.length > 0 ? convertTien(tinhTongKinhPhi(dataTable), 'VNĐ') : ''"
                                 readonly />
                         </nz-form-control>
                     </nz-form-item>

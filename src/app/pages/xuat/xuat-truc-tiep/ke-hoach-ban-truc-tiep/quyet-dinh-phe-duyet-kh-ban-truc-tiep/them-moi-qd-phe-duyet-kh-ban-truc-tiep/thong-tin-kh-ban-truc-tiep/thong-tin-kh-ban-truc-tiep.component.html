@@ -190,8 +190,8 @@
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td>
-                            <a *ngIf="!isView" (click)="themMoiBangPhanLoTaiSan(item,i)">
+                        <td *ngIf="!isView">
+                            <a (click)="themMoiBangPhanLoTaiSan(item,i)">
                                 <i class="fa fa-pencil"></i>
                             </a>
                         </td>

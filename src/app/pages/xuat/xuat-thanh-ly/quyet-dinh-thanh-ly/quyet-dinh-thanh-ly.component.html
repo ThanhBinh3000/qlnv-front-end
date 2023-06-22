@@ -72,17 +72,17 @@
                 [nzShowPagination]="false" nzBordered>
         <thead>
         <tr>
-          <th nzWidth="40px" >
+          <th nzWidth="10px">
             <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
                    [nzIndeterminate]="indeterminate"></label>
           </th>
-          <th class="text-center">STT</th>
-          <th class="text-center">Số quyết định</th>
-          <th class="text-center">Trích yếu</th>
-          <th class="text-center">Ngày ký</th>
-          <th class="text-center">Hồ sơ đề nghị thanh lý</th>
-          <th class="text-center">Trạng thái</th>
-          <th nzWidth="90px">Hành động</th>
+          <th class="text-center" nzWidth="10px">STT</th>
+          <th>Số quyết định</th>
+          <th>Trích yếu</th>
+          <th>Ngày ký</th>
+          <th>Hồ sơ đề nghị thanh lý</th>
+          <th>Trạng thái</th>
+          <th nzWidth="40px">Hành động</th>
         </tr>
         <tr class="search-table">
           <th></th>
@@ -127,7 +127,7 @@
         </thead>
         <tbody>
         <tr *ngFor="let data of basicTable.data; let i = index">
-          <td width="45px">
+          <td>
             <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
                    [nzDisabled]="data.trangThai != STATUS.DU_THAO"></label>
           </td>
@@ -135,7 +135,8 @@
           <td>{{ data.soQd }}</td>
           <td>{{ data.trichYeu }}</td>
           <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
-          <td><a nz-button nzType="link" *ngIf="data.soHoSo" (click)="openHoSoModal(data.idHoSo)">{{ data.soHoSo }}</a></td>
+          <td><a nz-button nzType="link" *ngIf="data.soHoSo" (click)="openHoSoModal(data.idHoSo)">{{ data.soHoSo }}</a>
+          </td>
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-left">
             <a (click)="redirectDetail(data.id, true)"

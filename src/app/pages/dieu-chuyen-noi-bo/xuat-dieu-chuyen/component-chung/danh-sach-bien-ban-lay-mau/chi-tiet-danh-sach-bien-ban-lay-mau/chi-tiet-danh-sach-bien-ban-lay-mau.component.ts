@@ -251,7 +251,7 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
     if (disabled || elm?.localName == "input") return;
     await this.loadSoQuyetDinh();
     const modalQD = this.modal.create({
-      nzTitle: 'Danh sách số quyết định xuất điều chuyển',
+      nzTitle: 'DANH SÁCH QUYẾT ĐỊNH XUẤT ĐIỀU CHUYỂN HÀNG HÓA',
       nzContent: DialogTableSelectionComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -261,12 +261,34 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
         dataTable: this.listSoQuyetDinh,
         // dataHeader: ['Số quyết định', 'Ngày quyết định', 'Loại hàng hóa'],
         // dataColumn: ['soQdinh', 'ngayKyQdinh', 'tenLoaiVthh'],
-        dataHeader: ['Số quyết định', 'Ngày quyết định'],
+        dataHeader: ['Số quyết định', 'Ngày ký quyết định'],
         dataColumn: ['soQdinh', 'ngayKyQdinh'],
       },
     })
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
+        this.formData.patchValue({
+          soQdinhDcc: '',
+          qdccId: '',
+          ngayQdDc: '',
+
+          maLoKho: '',
+          tenLoKho: '',
+          maNganKho: '',
+          tenNganKho: '',
+          maNhaKho: '',
+          tenNhaKho: '',
+          maDiemKho: '',
+          tenDiemKho: '',
+          loaiVthh: '',
+          tenLoaiVthh: '',
+          cloaiVthh: '',
+          tenCloaiVthh: '',
+
+          soLuongMau: '',
+          chiTieuKiemTra: '',
+        });
+        this.phuongPhapLayMaus = [];
         await this.bindingDataQd(data.id, true);
       }
     });
@@ -283,19 +305,6 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
         ngayQdDc: data.ngayKyQdinh,
         // loaiVthh: data.loaiVthh,
         // tenLoaiVthh: data.tenLoaiVthh,
-
-        maLoKho: '',
-        tenLoKho: '',
-        maNganKho: '',
-        tenNganKho: '',
-        maNhaKho: '',
-        tenNhaKho: '',
-        maDiemKho: '',
-        tenDiemKho: '',
-        loaiVthh: '',
-        tenLoaiVthh: '',
-        cloaiVthh: '',
-        tenCloaiVthh: ''
       });
       // let dataChiCuc = data.arrDataQuyetDinh.find(item =>
       //     item.maDviChiCuc == this.userInfo.MA_DVI
@@ -342,7 +351,27 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
       },
     });
     modalQD.afterClose.subscribe(async (data) => {
-      this.bindingDataDdNhap(data);
+      if (data) {
+        this.formData.patchValue({
+          maLoKho: '',
+          tenLoKho: '',
+          maNganKho: '',
+          tenNganKho: '',
+          maNhaKho: '',
+          tenNhaKho: '',
+          maDiemKho: '',
+          tenDiemKho: '',
+          loaiVthh: '',
+          tenLoaiVthh: '',
+          cloaiVthh: '',
+          tenCloaiVthh: '',
+
+          soLuongMau: '',
+          chiTieuKiemTra: '',
+        });
+        this.phuongPhapLayMaus = [];
+        this.bindingDataDdNhap(data);
+      }
     });
   }
 
@@ -390,8 +419,6 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
       this.idInput = data.id;
       if (isGuiDuyet) {
         this.pheDuyet();
-      } else {
-        this.goBack()
       }
     }
   }

@@ -29,7 +29,7 @@ export class TongHopPhuongAnGiaComponent implements OnInit {
   toDay = new Date();
   allChecked = false;
   listVthh: any[] = [];
-  STATUS: any;
+  STATUS = STATUS;
 
   dsNam: string[] = [];
 
@@ -63,7 +63,6 @@ export class TongHopPhuongAnGiaComponent implements OnInit {
       namKeHoach: [null],
       loaiVthh: [null],
     });
-    this.STATUS = STATUS
   }
   searchInTable = {
     namKeHoach: dayjs().get('year'),

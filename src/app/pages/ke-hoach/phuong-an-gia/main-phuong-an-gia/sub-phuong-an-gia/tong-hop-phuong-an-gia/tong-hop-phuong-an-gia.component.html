@@ -65,18 +65,18 @@
     <div class="group-button">
       <h3>Thông tin tổng hợp phương án giá</h3>
       <div class="buttons">
-        <button type="button" class="btn btn-sub btn-xoa" (click)="xoa()" *ngIf="(( this.type == this.typeConst.GIA_MUA_TOI_DA && !this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_MTDBTT_TONGHOP_XOA'))
-      || ( this.type == this.typeConst.GIA_CU_THE  && !this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_GCT_TONGHOP_XOA')))">
+        <button type="button" class="btn btn-sub btn-xoa" (click)="xoa()" *ngIf="(( this.type == this.typeConst.GIA_MUA_TOI_DA && this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_MTDBTT_TONGHOP_XOA'))
+      || ( this.type == this.typeConst.GIA_CU_THE  && this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_GCT_TONGHOP_XOA')))">
           <i class="fa fa-trash-o do"></i>
           <span>Xóa</span>
         </button>
-        <button type="button" class="btn btn-sub" (click)="exportData()" *ngIf="(( this.type == this.typeConst.GIA_MUA_TOI_DA && !this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_MTDBTT_TONGHOP_EXP'))
-      || ( this.type == this.typeConst.GIA_CU_THE  && !this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_GCT_TONGHOP_EXP')))">
+        <button type="button" class="btn btn-sub" (click)="exportData()" *ngIf="(( this.type == this.typeConst.GIA_MUA_TOI_DA && this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_MTDBTT_TONGHOP_EXP'))
+      || ( this.type == this.typeConst.GIA_CU_THE  && this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_GCT_TONGHOP_EXP')))">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button type="button" class="btn btn-main" (click)="themMoi()" *ngIf="(( this.type == this.typeConst.GIA_MUA_TOI_DA && !this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_MTDBTT_TONGHOP_TONGHOP'))
-      || ( this.type == this.typeConst.GIA_CU_THE  && !this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_GCT_TONGHOP_TONGHOP')))">
+        <button type="button" class="btn btn-main" (click)="themMoi()" *ngIf="(( this.type == this.typeConst.GIA_MUA_TOI_DA && this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_MTDBTT_TONGHOP_TONGHOP'))
+      || ( this.type == this.typeConst.GIA_CU_THE  && this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_GCT_TONGHOP_TONGHOP')))">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Tổng hợp</span>
         </button>

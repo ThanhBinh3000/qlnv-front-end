@@ -11,6 +11,7 @@ export class ThongTinChiTieuKeHoachNam {
   tenTrangThai: string;
   trangThai: string = '00';
   trichYeu: string;
+  loai:string;
   khLuongThuc: Array<KeHoachLuongThuc> = [];
   khMuoiDuTru: Array<KeHoachMuoi> = [];
   khVatTu: Array<KeHoachVatTu> = [];
@@ -18,7 +19,9 @@ export class ThongTinChiTieuKeHoachNam {
   khVatTuXuat: Array<any> = [];
   ghiChu: string;
   khMuoi: Array<KeHoachMuoi> = [];
+  loaiCanCu:string;
   canCu: string;
+  idCanCu: number;
   capDvi:string;
   fileDinhKemReqs: Array<FileDinhKem>;
   qdGocId: number;

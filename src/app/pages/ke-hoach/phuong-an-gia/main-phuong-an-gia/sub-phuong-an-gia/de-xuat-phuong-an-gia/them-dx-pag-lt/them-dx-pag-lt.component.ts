@@ -46,7 +46,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
   amount = AMOUNT;
   rowItemTtc: ThongTinChungPag = new ThongTinChungPag();
   dataEditTtc: { [key: string]: { edit: boolean; data: ThongTinChungPag } } = {};
-  STATUS: any;
+  STATUS = STATUS;
   isGiaMuaToiDa: boolean = false;
   isVat: boolean = false;
   fileDinhKem: any[] = [];
@@ -118,7 +118,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
         moTa: [null],
         apDungTatCa: [false,  [Validators.required]],
         tchuanCluong: [''],
-        giaDeNghi: [null, [Validators.required]],
+        giaDeNghi: [null],
         vat: [null],
         giaDeNghiVat: [null],
         soLuong: [],
@@ -162,7 +162,6 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
       const tongChiPhi = this.formData.controls.giaVonNk.value + this.formData.controls.chiPhiChung.value - this.formData.controls.chiPhiPbo.value
       this.formData.controls['tongChiPhi'].setValue(tongChiPhi);
     })
-    this.STATUS = STATUS
   }
 
   async ngOnInit() {
@@ -880,13 +879,17 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.listDxCanSua = data.content;
+      if (this.listDxCanSua && this.listDxCanSua.length > 0) {
+        console.log(this.listDxCanSua,123)
+        this.listDxCanSua = this.listDxCanSua.filter(item => item.trangThai == STATUS.DA_DUYET_CBV);
+      }
     }
     this.spinner.hide();
   }
 
   openModalSoDx() {
     const modalQD = this.modal.create({
-      nzTitle: 'Danh sách số quyết định kế hoạch giao nhiệm vụ nhập hàng',
+      nzTitle: 'Danh sách điều chỉnh đề xuất Phương án giá',
       nzContent: DialogTableSelectionComponent,
       nzMaskClosable: false,
       nzClosable: false,

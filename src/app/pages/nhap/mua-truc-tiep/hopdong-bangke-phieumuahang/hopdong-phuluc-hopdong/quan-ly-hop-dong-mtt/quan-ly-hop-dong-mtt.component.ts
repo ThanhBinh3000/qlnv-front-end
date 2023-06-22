@@ -28,7 +28,8 @@ export class QuanLyHopDongMttComponent extends Base2Component implements OnInit 
   idHopDong: number;
   isEditHopDong: boolean
   listNguonVon: any[] = [];
-
+  selected: boolean = false;
+  danhSachCtiet: any[] = [];
 
   constructor(
     httpClient: HttpClient,
@@ -85,6 +86,7 @@ export class QuanLyHopDongMttComponent extends Base2Component implements OnInit 
   async getDetail(id) {
     if (id) {
       let res = await this.quyetDinhPheDuyetKetQuaChaoGiaMTTService.getDetail(id);
+      console.log(res.data)
       if (res.msg == MESSAGE.SUCCESS) {
         const data = res.data;
         await this.quyetDinhPheDuyetKeHoachMTTService.getDetailDtlCuc(data.idPdKhDtl).then(dataTtin => {
@@ -102,7 +104,8 @@ export class QuanLyHopDongMttComponent extends Base2Component implements OnInit 
             tenTrangThaiHd: data.tenTrangThaiHd
 
           })
-          this.dataTable = data.hopDongMttHdrList;
+          this.danhSachCtiet = res.data.danhSachCtiet;
+          this.showDetail(event, this.danhSachCtiet[0])
         });
       }
     }
@@ -176,6 +179,30 @@ export class QuanLyHopDongMttComponent extends Base2Component implements OnInit 
       return
     }
     return result;
+  }
+
+  calcTong() {
+    if (this.danhSachCtiet) {
+      const sum = this.danhSachCtiet.reduce((prev, cur) => {
+        prev += cur.soLuong;
+        return prev;
+      }, 0);
+      return sum;
+    }
+  }
+  idRowSelect: number;
+  async showDetail($event, data: any) {
+    await this.spinner.show();
+    if ($event.type == "click") {
+      this.selected = false;
+      $event.target.parentElement.parentElement.querySelector(".selectedRow")?.classList.remove("selectedRow");
+      $event.target.parentElement.classList.add("selectedRow");
+    } else {
+      this.selected = true;
+    }
+    this.idRowSelect = data.id;
+    this.dataTable = data.listChaoGia.filter((item) => item.luaChon == true);
+    await this.spinner.hide();
   }
 
   async deleteHd(data) {

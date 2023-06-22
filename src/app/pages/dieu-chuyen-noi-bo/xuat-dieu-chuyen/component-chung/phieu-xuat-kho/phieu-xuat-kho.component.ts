@@ -167,7 +167,6 @@ export class PhieuXuatKhoDCNBComponent extends Base2Component implements OnInit 
         };
       }).value();
     this.dataView = dataView;
-    console.log("dataView", this.dataView)
     this.expandAll()
   }
 
