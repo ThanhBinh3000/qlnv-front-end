@@ -362,7 +362,7 @@
                                     <tr [ngClass]="{'bg-selected': item.selected}" class="tr-cursor"
                                         (click)="selectRow(item, isAddNew)">
                                         <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
-                                        <td>{{ item.tenDvi}}</td>
+                                        <td>{{ item.tenDvi || item.tenCucDxuat || ""}}</td>
                                         <td><a nz-button nzType="link"
                                                 (click)="openModalTHKeHoachDCCUC($event, item.thKhDcHdrId)">{{
                                                 item.soDxuat }}</a></td>

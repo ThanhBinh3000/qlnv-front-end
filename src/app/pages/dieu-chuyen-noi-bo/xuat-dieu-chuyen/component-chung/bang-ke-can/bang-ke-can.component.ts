@@ -18,7 +18,8 @@ import {
   BangKeCanCtvtService
 } from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/BangKeCanCtvt.service";
 // import { XuatCuuTroVienTroComponent } from 'src/app/pages/xuat/xuat-cuu-tro-vien-tro/xuat-cuu-tro-vien-tro.component';
-import { CHUC_NANG } from 'src/app/constants/status';
+import { CHUC_NANG, STATUS } from 'src/app/constants/status';
+import { BangKeCanHangDieuChuyenService } from '../services/dcnb-bang-ke-can-hang.service';
 
 @Component({
   selector: 'app-xuat-dcnb-bang-ke-can',
@@ -28,6 +29,7 @@ import { CHUC_NANG } from 'src/app/constants/status';
 export class BangKeCanXuatDieuChuyenComponent extends Base2Component implements OnInit {
   @Input() isVatTu: boolean;
   @Input() loaiDc: string;
+  @Input() thayDoiThuKho: boolean;
   // public vldTrangThai: XuatCuuTroVienTroComponent;
   public CHUC_NANG = CHUC_NANG;
   dsDonvi: any[] = [];
@@ -39,7 +41,12 @@ export class BangKeCanXuatDieuChuyenComponent extends Base2Component implements 
   dataView: any = [];
   idPhieuXk: number = 0;
   openPhieuXk = false;
-
+  LIST_TRANG_THAI = {
+    [this.STATUS.DU_THAO]: "Dự thảo",
+    [this.STATUS.CHO_DUYET_LDCC]: "Chờ duyệt LĐ Chi Cục",
+    [this.STATUS.TU_CHOI_LDCC]: "Từ chối LĐ Chi Cục",
+    [this.STATUS.DA_DUYET_LDCC]: "Đã duyệt LĐ Chi Cục"
+  }
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -48,10 +55,10 @@ export class BangKeCanXuatDieuChuyenComponent extends Base2Component implements 
     modal: NzModalService,
     private donviService: DonviService,
     private deXuatPhuongAnCuuTroService: DeXuatPhuongAnCuuTroService,
-    private bangKeCanCtvtService: BangKeCanCtvtService,
+    private bangKeCanHangDieuChuyenService: BangKeCanHangDieuChuyenService,
     // private xuatCuuTroVienTroComponent: XuatCuuTroVienTroComponent
   ) {
-    super(httpClient, storageService, notification, spinner, modal, bangKeCanCtvtService);
+    super(httpClient, storageService, notification, spinner, modal, bangKeCanHangDieuChuyenService);
     // this.vldTrangThai = xuatCuuTroVienTroComponent;
     this.formData = this.fb.group({
       id: [0],
@@ -59,13 +66,8 @@ export class BangKeCanXuatDieuChuyenComponent extends Base2Component implements 
       soQdGiaoNvXh: [],
       soBangKe: [],
       isVatTu: [],
-      thoiGianGiaoNhan: [],
-      thoiGianGiaoNhanTu: [],
-      thoiGianGiaoNhanDen: [],
-      ngayQdGiaoNvXh: [],
-      ngayXuat: [],
-      ngayXuatTu: [],
-      ngayXuatDen: [],
+      tuNgay: [],
+      denNgay: [],
       maDiemKho: [],
       maNhaKho: [],
       maNganKho: [],
@@ -75,37 +77,11 @@ export class BangKeCanXuatDieuChuyenComponent extends Base2Component implements 
       tenNganKho: [],
       tenLoKho: [],
       ngayKetThuc: [],
-      type: []
+      type: [],
+      loaiDc: []
     })
   }
 
-  disabledStartNgayQd = (startValue: Date): boolean => {
-    if (startValue && this.formData.value.thoiGianGiaoNhanDen) {
-      return startValue.getTime() >= this.formData.value.thoiGianGiaoNhanDen.getTime();
-    }
-    return false;
-  };
-
-  disabledEndNgayQd = (endValue: Date): boolean => {
-    if (!endValue || !this.formData.value.thoiGianGiaoNhanTu) {
-      return false;
-    }
-    return endValue.getTime() <= this.formData.value.thoiGianGiaoNhanTu.getTime();
-  };
-
-  disabledStartNgayXk = (startValue: Date): boolean => {
-    if (startValue && this.formData.value.ngayXuatDen) {
-      return startValue.getTime() >= this.formData.value.ngayXuatDen.getTime();
-    }
-    return false;
-  };
-
-  disabledEndNgayXk = (endValue: Date): boolean => {
-    if (!endValue || !this.formData.value.ngayXuatTu) {
-      return false;
-    }
-    return endValue.getTime() <= this.formData.value.ngayXuatTu.getTime();
-  };
 
   async ngOnInit() {
     try {
@@ -149,7 +125,8 @@ export class BangKeCanXuatDieuChuyenComponent extends Base2Component implements 
     this.formData.patchValue({
       isVatTu: this.isVatTu,
       loaiDc: this.loaiDc,
-      type: "XUAT_CAP"
+      type: "00",
+      thayDoiThuKho: this.thayDoiThuKho
     });
     await super.search(roles);
     this.buildTableView();
@@ -175,9 +152,46 @@ export class BangKeCanXuatDieuChuyenComponent extends Base2Component implements 
     }
   }
 
+  buildTableView() {
+    let dataView = chain(this.dataTable)
+      .groupBy("soQdinh")
+      .map((value, key) => {
+        let rs = chain(value)
+          .groupBy("maDiemKho")
+          .map((v, k) => {
+            let rowLv2 = v.find(s => s.maDiemKho === k);
+            let rsx = chain(v).groupBy("maLoKho").map((x, ix) => {
+              const rowLv3 = x.find(f => f.maLoKho == ix);
+              return {
+                ...rowLv3,
+                idVirtual: uuidv4(),
+                childData: rowLv3?.phieuXuatKhoId ? x : []
+              }
+            }).value();
+            return {
+              ...rowLv2,
+              idVirtual: uuidv4(),
+              childData: rsx
+            }
+          }
+          ).value();
+        let rowLv1 = value.find(s => s.soQdinh === key);
+        return {
+          ...rowLv1,
+          idVirtual: uuidv4(),
+          childData: rs
+        };
+      }).value();
+    this.dataView = dataView;
+    this.expandAll()
+  }
+
   expandAll() {
     this.dataView.forEach(s => {
       this.expandSetString.add(s.idVirtual);
+      Array.isArray(s.childData) && s.childData.forEach(element => {
+        this.expandSetString.add(element.idVirtual);
+      });
     })
   }
 
@@ -188,41 +202,6 @@ export class BangKeCanXuatDieuChuyenComponent extends Base2Component implements 
       this.expandSetString.delete(id);
     }
   }
-
-  buildTableView() {
-    console.log(JSON.stringify(this.dataTable), 'raw')
-    let dataView = chain(this.dataTable)
-      .groupBy("soQdGiaoNvXh")
-      .map((value, key) => {
-        let rs = chain(value)
-          .groupBy("maLoKho")
-          .map((v, k) => {
-            let rowLv2 = v.find(s => s.maLoKho === k);
-            return {
-              id: rowLv2 ? rowLv2.id : null,
-              idVirtual: uuidv4(),
-              maDiemKho: k != "null" ? k : '',
-              tenDiemKho: rowLv2 ? rowLv2.tenDiemKho : null,
-              tenNhaKho: rowLv2 ? rowLv2.tenNhaKho : null,
-              tenNganKho: rowLv2 ? rowLv2.tenNganKho : null,
-              tenLoKho: rowLv2 ? rowLv2.tenLoKho : null,
-              childData: v
-            }
-          }
-          ).value();
-        let rowLv1 = value.find(s => s.soQdGiaoNvXh === key);
-        return {
-          idVirtual: uuidv4(),
-          soQdGiaoNvXh: key != "null" ? key : '',
-          nam: rowLv1 ? rowLv1.nam : null,
-          thoiGianGiaoNhan: rowLv1 ? rowLv1.thoiGianGiaoNhan : null,
-          childData: rs
-        };
-      }).value();
-    this.dataView = dataView
-    this.expandAll()
-  }
-
   editRow(lv2: any, isView: boolean) {
     this.selectedId = lv2.id;
     this.isDetail = true;
@@ -250,16 +229,33 @@ export class BangKeCanXuatDieuChuyenComponent extends Base2Component implements 
     this.idPhieuXk = null;
     this.openPhieuXk = false;
   }
-  checkRoleView(): boolean {
-    return true
+  checkRoleAdd(trangThai: string): boolean {
+    return this.userService.isChiCuc() && !trangThai
   }
-  checkRoleEdit(): boolean {
-    return true
+  checkRoleView(trangThai: string): boolean {
+    return !this.checkRoleAdd(trangThai) && !this.checkRoleEdit(trangThai) && !this.checkRoleDuyet(trangThai) && !this.checkRoleDelete(trangThai)
   }
-  checkRoleDuyet(): boolean {
-    return true
+  checkRoleEdit(trangThai: string): boolean {
+    return this.userService.isChiCuc() && (trangThai == STATUS.DU_THAO || trangThai == STATUS.TU_CHOI_LDCC)
   }
-  checkRoleDelete(): boolean {
-    return true
+  checkRoleDuyet(trangThai: string): boolean {
+    return this.userService.isChiCuc() && trangThai == STATUS.CHO_DUYET_LDCC
   }
+  checkRoleDelete(trangThai: string): boolean {
+    return this.userService.isChiCuc() && trangThai == STATUS.DU_THAO
+  }
+
+  disabledTuNgay = (startValue: Date): boolean => {
+    if (startValue && this.formData.value.denNgay) {
+      return startValue.getTime() > this.formData.value.denNgay.getTime();
+    }
+    return false;
+  };
+
+  disabledDenNgay = (endValue: Date): boolean => {
+    if (!endValue || !this.formData.value.tuNgay) {
+      return false;
+    }
+    return endValue.getTime() <= this.formData.value.tuNgay.getTime();
+  };
 }

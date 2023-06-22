@@ -145,7 +145,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
       ngayDuyetTp: [''],
       ngayGDuyet: [''],
       ngayKiem: [dayjs().format('YYYY-MM-DD')],
-      ngayHieuLuc: [''],
+      ngayKyQdinh: [''],
       ngayLayMau: [''],
       ngayPDuyet: [''],
       ngayXuatDocKho: [''],
@@ -284,6 +284,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
         // this.bindingDataBbLayMau(data.soBbLayMau.split('/')[0], true);
         this.listHinhThucBaoQuan = Array.isArray(data?.hinhThucBq?.split(",")) ? data.hinhThucBq.split(",")?.map(f => ({ id: f.split("-")[0], giaTri: f.split("-")[1], checked: true })) : [];
         this.dataTableChiTieu = data.dcnbPhieuKnChatLuongDtl;
+        this.bienBanLayMauDinhKem = data.bienBanLayMauDinhKem;
       }
     }
   }
@@ -473,7 +474,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
     // await this.loadBbLayMau();
     // await this.loadSoQuyetDinh();
     const modalQD = this.modal.create({
-      nzTitle: 'Danh sách quyết định điều chuyển',
+      nzTitle: 'DANH SÁCH QUYẾT ĐỊNH XUẤT ĐIỀU CHUYỂN HÀNG HÓA',
       nzContent: DialogTableSelectionComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -481,13 +482,41 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
       nzFooter: null,
       nzComponentParams: {
         dataTable: this.listSoQuyetDinh,
-        dataHeader: ['Số quyết định', 'Ngày hiệu lực'],
-        dataColumn: ['soQdinh', 'ngayPduyet'],
+        dataHeader: ['Số quyết định', 'Ngày ký quyết định'],
+        dataColumn: ['soQdinh', 'ngayKyQdinh'],
       },
     });
     modalQD.afterClose.subscribe(async (data) => {
-      this.bindingDataQd(data.id, false)
-    })
+      if (data) {
+        this.formData.patchValue({
+          maLoKho: '',
+          tenLoKho: '',
+          maNganKho: '',
+          tenNganKho: '',
+          maNhaKho: '',
+          tenNhaKho: '',
+          maDiemKho: '',
+          tenDiemKho: '',
+          loaiVthh: '',
+          tenLoaiVthh: '',
+          cloaiVthh: '',
+          tenCloaiVthh: '',
+          tenThuKho: '',
+          donViTinh: '',
+          tenDonViTinh: '',
+
+          bbLayMauId: '',
+          soBbLayMau: '',
+          ngayLayMau: '',
+          danhGiaCamQuan: '',
+          nhanXetKetLuan: ''
+        })
+        this.listHinhThucBaoQuan = [];
+        this.bienBanLayMauDinhKem = [];
+        this.dataTableChiTieu = [];
+        this.bindingDataQd(data.id, false);
+      }
+    });
   }
   async bindingDataQd(id, isChiTiet?) {
     try {
@@ -497,26 +526,11 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
       this.formData.patchValue({
         soQdinhDc: data.soQdinh,
         qdDcId: data.id,
-        ngayHieuLuc: data.ngayPduyet,
+        ngayKyQdinh: data.ngayKyQdinh,
         // loaiVthh: data.loaiVthh,
         // tenLoaiVthh: data.tenLoaiVthh,
-
-        maLoKho: '',
-        tenLoKho: '',
-        maNganKho: '',
-        tenNganKho: '',
-        maNhaKho: '',
-        tenNhaKho: '',
-        maDiemKho: '',
-        tenDiemKho: '',
-        loaiVthh: '',
-        tenLoaiVthh: '',
-        cloaiVthh: '',
-        tenCloaiVthh: '',
-        tenThuKho: '',
-        tenDonViTinh: '',
       });
-      this.listHinhThucBaoQuan = [];
+
       if (!isChiTiet) {
         // const listBienBanLayMau=
       }
@@ -547,7 +561,35 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
       },
     });
     modalQD.afterClose.subscribe(async (data) => {
-      this.bindingDataBbLayMau(data.id, false);
+      if (data) {
+        this.formData.patchValue({
+          maLoKho: '',
+          tenLoKho: '',
+          maNganKho: '',
+          tenNganKho: '',
+          maNhaKho: '',
+          tenNhaKho: '',
+          maDiemKho: '',
+          tenDiemKho: '',
+          loaiVthh: '',
+          tenLoaiVthh: '',
+          cloaiVthh: '',
+          tenCloaiVthh: '',
+          tenThuKho: '',
+          donViTinh: '',
+          tenDonViTinh: '',
+
+          bbLayMauId: '',
+          soBbLayMau: '',
+          ngayLayMau: '',
+          danhGiaCamQuan: '',
+          nhanXetKetLuan: ''
+        });
+        this.listHinhThucBaoQuan = [];
+        this.bienBanLayMauDinhKem = [];
+        this.dataTableChiTieu = [];
+        this.bindingDataBbLayMau(data.id, false);
+      }
     });
   }
   async bindingDataBbLayMau(id, isChiTiet) {
@@ -572,7 +614,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
         tenCloaiVthh: data.tenCloaiVthh,
         tenThuKho: data.thuKho,
         donViTinh: data.donViTinh,
-        tenDonViTinh: data.tenDonViTinh
+        tenDonViTinh: data.tenDonViTinh,
         // moTaHangHoa: data.moTaHangHoa,
         // tenThuKho: data.bbNhapDayKho.tenNguoiTao
       })
