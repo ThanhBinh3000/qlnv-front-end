@@ -59,8 +59,6 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
         namKh: [dayjs().get('year'), [Validators.required]],
         ngayDuyetTu: [null],
         ngayDuyetDen: [null],
-        listTrangThai: [[STATUS.DA_DUYET_CBV]],
-        trangThaiTh: [STATUS.CHUA_TONG_HOP],
       }
     );
     this.formData = this.fb.group({
@@ -108,6 +106,7 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
           idTh: data.id
         })
         this.dataTable = data.children;
+        this.fileDinhKem = data.fileDinhKem;
         if (this.dataTable && this.dataTable.length > 0) {
           this.showFirstRow(event, this.dataTable[0].idDxHdr);
         }
@@ -189,6 +188,7 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
 
   async save(isTaoQd?) {
     let body = this.formData.value;
+    body.fileDinhKem = this.fileDinhKem;
     let data = await this.createUpdate(body, 'XHDTQG_PTDG_KHBDG_TONGHOP_TONGHOP')
     if (data) {
       if (isTaoQd) {
