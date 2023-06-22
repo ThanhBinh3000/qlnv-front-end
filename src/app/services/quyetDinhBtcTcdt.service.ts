@@ -15,4 +15,9 @@ export class QuyetDinhBtcTcdtService extends BaseService {
     super(httpClient, 'giao-chi-tieu-von-dau-nam/quyet-dinh/btc-tcdt', '/qlnv-khoach');
   }
 
+  chiTietTheoSoQd(soQd: any): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/giao-chi-tieu-von-dau-nam/quyet-dinh/btc-tcdt/chi-tiet-so-qd/${soQd}`;
+    return this.httpClient.get(url).toPromise();
+  }
+
 }

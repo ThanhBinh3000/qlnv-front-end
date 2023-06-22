@@ -53,7 +53,7 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
 
   formData: FormGroup;
   cacheData: any[] = [];
-  fileDinhKem: any[] = [];
+  canCu: any[] = [];
   userLogin: UserLogin;
   titleStatus: string = '';
   titleButtonDuyet: string = '';
@@ -163,8 +163,8 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
       // this.loadDsVthh()
       if (this.formData.value.id) {
         const data = await this.detail(this.formData.value.id);
-        this.formData.patchValue(data);
         this.formData.patchValue({ maTongHop: data.id ? Number(data.id) : '' });
+        this.canCu = data.canCu;
         if (this.formData.value.loaiDieuChuyen === "CHI_CUC") {
           this.formData.patchValue(this.LOAI_HINH_NHAP_XUAT_CHI_CUC)
         } else if (this.formData.value.loaiDieuChuyen === "CUC") {
@@ -267,6 +267,7 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
       // this.setValidator(false)
       await this.spinner.show();
       let body = { ...this.formData.value, ngayTongHop: dayjs(this.formData.value.ngayTongHop, 'DD/MM/YYYY').format("YYYY-MM-DD") };
+      body.canCu = this.canCu;
       let data;
       if (body.id) {
         data = await this.tongHopDieuChuyenCapTongCucService.capNhatTHTongCuc(body);
@@ -603,4 +604,13 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
   //         this.formData.controls["trichYeu"].clearValidators();
   //     }
   // }
+  disabledngayTH = (): boolean => {
+    return this.formData.value.trangThai === STATUS.DA_DU_THAO_QD || this.formData.value.trangThai === STATUS.DA_BAN_HANH_QD || this.formData.value.trangThai === STATUS.TU_CHOI_BAN_HANH_QD
+  }
+  disabledDateNgayTongHop = (value: Date): boolean => {
+    if (value && this.formData.value.thoiGianTongHop) {
+      return dayjs(value).endOf("days").isBefore(dayjs(this.formData.value.thoiGianTongHop, 'YYYY-MM-DDTHH:mm:ss'));
+    }
+    return false;
+  };
 }

@@ -36,7 +36,7 @@
           <i class="icon  htvbdh_nhap-lai1"></i>
           Xóa điều kiện
         </button>
-        <button nz-button class="search__button--search" (click)="search()">
+        <button nz-button class="search__button--search" (click)="timKiem()">
           <i nz-icon nzType="search"></i>
           Tìm kiếm
         </button>
@@ -179,6 +179,9 @@
               </a>
               <a (click)="goDetail(data.id,null,true)">
                 <i class="fa fa-eye"></i>
+              </a>
+              <a (click)="delete(data)">
+                <i class="fa fa-trash-o do"></i>
               </a>
             </td>
           </tr>
