@@ -64,17 +64,17 @@
         <nz-form-item>
           <nz-form-label nzRequired>Loại hàng hóa</nz-form-label>
           <nz-form-control>
-            <nz-select formControlName="loaiVthh" (ngModelChange)="onChangeLoaiVthh($event)">
-              <nz-option *ngFor="let item of listVthh" [nzLabel]="item.giaTri" [nzValue]="item.ma"></nz-option>
+            <nz-select formControlName="loaiVthh" (ngModelChange)="onChangeLoaiVthh($event)" [nzDisabled]="loaiHang.type == 'VT' && loaiHang.loaiVthh ">
+              <nz-option *ngFor="let item of listVthh" [nzLabel]="item.ten" [nzValue]="item.ma"></nz-option>
             </nz-select>
           </nz-form-control>
         </nz-form-item>
       </div>
       <div nz-col [nzSpan]="6">
         <nz-form-item>
-          <nz-form-label nzRequired>Chủng loại hàng hóa</nz-form-label>
+          <nz-form-label>Chủng loại hàng hóa</nz-form-label>
           <nz-form-control>
-            <nz-select formControlName="cloaiVthh" (ngModelChange)="onChangCloaiVthh($event)">
+            <nz-select formControlName="cloaiVthh" (ngModelChange)="onChangCloaiVthh($event)" [nzDisabled]="loaiHang.type == 'VT' && loaiHang.cloaiVthh ">
               <nz-option *ngFor="let item of listCloaiVthh" [nzLabel]="item.ten" [nzValue]="item.ma" ></nz-option>
             </nz-select>
           </nz-form-control>
