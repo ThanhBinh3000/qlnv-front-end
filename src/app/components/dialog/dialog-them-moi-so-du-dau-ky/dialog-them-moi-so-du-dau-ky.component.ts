@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {NzModalRef, NzModalService} from "ng-zorro-antd/modal";
 import {NzNotificationService} from "ng-zorro-antd/notification";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
@@ -19,6 +19,7 @@ import {TrangThaiHoatDong} from "../../../constants/status";
   styleUrls: ['./dialog-them-moi-so-du-dau-ky.component.scss']
 })
 export class DialogThemMoiSoDuDauKyComponent implements OnInit {
+  @Input() loaiHang: any
   m3: string = 'm3';
   formData: FormGroup;
   detail: any;
@@ -49,27 +50,25 @@ export class DialogThemMoiSoDuDauKyComponent implements OnInit {
       namNhap: ['', Validators.required],
       ngayNhapDay: [''],
       loaiVthh: ['', Validators.required],
-      cloaiVthh: ['', Validators.required],
+      cloaiVthh: [''],
       slTon: ['', Validators.required],
       dviTinh: [''],
       thanhTien: [0],
-      isKhoiTao : [false]
+      isKhoiTao: [false]
     })
   }
 
   async ngOnInit() {
-    await Promise.all([
-      this.getAllLoaiVthh(),
-      this.loadDsNam(),
-      this.getDetail()
-    ])
+    this.loadDsNam();
+    await this.getAllLoaiVthh();
+    await this.getDetail();
   }
 
   async loadDsNam() {
-      let thisYear = dayjs().get('year');
-      for (let i = -10; i < 10; i++) {
-        this.dsNam.push((thisYear + i).toString());
-      }
+    let thisYear = dayjs().get('year');
+    for (let i = -10; i < 10; i++) {
+      this.dsNam.push((thisYear + i).toString());
+    }
   }
 
   async getDetail() {
@@ -78,6 +77,25 @@ export class DialogThemMoiSoDuDauKyComponent implements OnInit {
         maDvi: this.levelNode == 6 ? this.detail.maNgankho : this.detail.maNganlo,
         tenDvi: this.levelNode == 6 ? this.detail.tenNgankho : this.detail.tenNganlo,
       })
+      if (this.detail.loaiHangHoa) {
+        let arr = this.detail.loaiHangHoa.split(",");
+        if (arr && arr.length > 0) {
+          if (this.loaiHang && this.loaiHang.type && this.loaiHang.type == 'LT') {
+            let arrResult = [];
+            arr.forEach(item => {
+              let arrMap = this.listVthh.filter(vthh => vthh.ma.startsWith(item));
+              arrResult = [...arrResult, arrMap].flat();
+            })
+            this.listVthh = arrResult;
+          }
+          if (this.loaiHang && this.loaiHang.type && this.loaiHang.type == 'VT') {
+            this.formData.patchValue({
+              loaiVthh : this.loaiHang.loaiVthh ?  this.loaiHang.loaiVthh : null,
+              cloaiVthh : this.loaiHang.cloaiVthh ?  this.loaiHang.cloaiVthh : null
+            })
+          }
+        }
+      }
     }
   }
 
@@ -87,14 +105,10 @@ export class DialogThemMoiSoDuDauKyComponent implements OnInit {
     if (this.formData.invalid) {
       return;
     }
-    if (!this.checkValidateLoaiVthh()) {
-      this.notification.error(MESSAGE.ERROR, 'Loại hàng hóa không hợp lệ!')
-      return;
-    }
     let body = this.detail
     body.tichLuongKdLt = (body.tichLuongTkLt - this.formData.value.tichLuongSdLt) >= 0 ? body.tichLuongTkLt - this.formData.value.tichLuongSdLt : 0
     body.tichLuongKdVt = (body.tichLuongKdVt - this.formData.value.tichLuongSdVt) >= 0 ? body.tichLuongKdVt - this.formData.value.tichLuongSdVt : 0
-    body.theTichKdLt = (body.theTichTkLt - this.formData.value.theTichSdLt) >=0 ? body.theTichKdLt - this.formData.value.theTichSdLt : 0
+    body.theTichKdLt = (body.theTichTkLt - this.formData.value.theTichSdLt) >= 0 ? body.theTichKdLt - this.formData.value.theTichSdLt : 0
     body.theTichKdVt = (body.theTichTkVt - this.formData.value.theTichSdVt) >= 0 ? body.theTichTkVt - this.formData.value.theTichSdVt : 0
     body.loaiVthh = this.formData.value.loaiVthh
     body.isKhoiTao = true;
@@ -123,9 +137,11 @@ export class DialogThemMoiSoDuDauKyComponent implements OnInit {
   }
 
   async getAllLoaiVthh() {
-    let res = await this.danhMucService.danhMucChungGetAll('LOAI_HHOA');
+    let res = await this.danhMucService.getAllVthhByCap("2");
     if (res.msg == MESSAGE.SUCCESS) {
-      this.listVthh = res.data;
+      if (res.data) {
+        this.listVthh = res.data
+      }
     }
   }
 
@@ -151,21 +167,5 @@ export class DialogThemMoiSoDuDauKyComponent implements OnInit {
         dviTinh: res.data ? res.data.maDviTinh : null
       })
     }
-  }
-
-  checkValidateLoaiVthh() : boolean {
-    let check = false;
-    if (this.detail.loaiHangHoa) {
-      let arr = this.detail.loaiHangHoa.split(",");
-      console.log(arr,2222)
-      if (arr && arr.length > 0) {
-        arr.forEach(item => {
-          if (this.formData.value.loaiVthh == item) {
-            check =true
-          }
-        })
-      }
-    }
-    return check;
   }
 }
