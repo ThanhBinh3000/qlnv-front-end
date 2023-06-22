@@ -1,4 +1,4 @@
-import {CurrencyMaskInputMode} from "ngx-currency";
+import { CurrencyMaskInputMode } from "ngx-currency";
 
 
 export class Utils {
@@ -589,6 +589,10 @@ export const TRANG_THAI_TIM_KIEM = [
   {
     id: "5",
     tenDm: 'Từ chối phê duyệt'
+  },
+  {
+    id: "6",
+    tenDm: 'Phê duyệt',
   },
   {
     id: "7",

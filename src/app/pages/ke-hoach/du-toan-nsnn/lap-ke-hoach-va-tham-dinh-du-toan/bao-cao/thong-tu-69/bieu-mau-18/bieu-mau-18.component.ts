@@ -13,6 +13,7 @@ import * as uuid from "uuid";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import * as fileSaver from 'file-saver';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
+import { BtnStatus, Form } from '../../bao-cao.class';
 
 export class ItemData {
 	id: string;
@@ -39,7 +40,6 @@ export class ItemData {
 	ghiChu: string;
 }
 
-
 @Component({
 	selector: 'app-bieu-mau-18',
 	templateUrl: './bieu-mau-18.component.html',
@@ -48,10 +48,9 @@ export class ItemData {
 export class BieuMau18Component implements OnInit {
 	@Input() dataInfo;
 	//thong tin chi tiet cua bieu mau
-	formDetail: any;
+	formDetail: Form = new Form();
 	total: ItemData = new ItemData();
 	maDviTien: string = '1';
-	thuyetMinh: string;
 	//danh muc
 	linhVucChis: any[] = [];
 	soLaMa: any[] = LA_MA;
@@ -61,10 +60,7 @@ export class BieuMau18Component implements OnInit {
 	quatity = QUATITY;
 	scrollX: string;
 	//trang thai cac nut
-	status = false;
-	statusBtnFinish: boolean;
-	statusBtnOk: boolean;
-	statusPrint: boolean;
+	status: BtnStatus = new BtnStatus();
 	editMoneyUnit = false;
 	isDataAvailable = false;
 	//nho dem
@@ -112,11 +108,9 @@ export class BieuMau18Component implements OnInit {
 
 	async initialization() {
 		this.spinner.show();
-
-		this.formDetail = this.dataInfo?.data;
-		this.thuyetMinh = this.formDetail?.thuyetMinh;
-		this.status = !this.dataInfo?.status;
-		if (this.status) {
+		Object.assign(this.formDetail, this.dataInfo.data);
+		Object.assign(this.status, this.dataInfo.status);
+		if (this.status.general) {
 			const category = await this.danhMucService.danhMucChungGetAll('LTD_TT69_BM18');
 			if (category) {
 				this.linhVucChis = category.data;
@@ -125,8 +119,6 @@ export class BieuMau18Component implements OnInit {
 		} else {
 			this.scrollX = setTableWidth(1350, 12, BOX_NUMBER_WIDTH, 0);
 		}
-		this.statusBtnFinish = this.dataInfo?.statusBtnFinish;
-		this.statusPrint = this.dataInfo?.statusBtnPrint;
 		this.formDetail?.lstCtietLapThamDinhs.forEach(item => {
 			this.lstCtietBcao.push({
 				...item,
@@ -156,11 +148,12 @@ export class BieuMau18Component implements OnInit {
 		this.spinner.hide();
 	}
 
+
 	getStatusButton() {
-		if (this.dataInfo?.statusBtnOk && (this.formDetail.trangThai == "2" || this.formDetail.trangThai == "5")) {
-			this.statusBtnOk = false;
+		if (this.status.ok && (this.formDetail.trangThai == "2" || this.formDetail.trangThai == "5")) {
+			this.status.ok = false;
 		} else {
-			this.statusBtnOk = true;
+			this.status.ok = true;
 		}
 	}
 

@@ -161,3 +161,13 @@
 .money-input:focus-visible {
     outline: none !important;
 }
+
+.custom-tab-container ::ng-deep .ant-tabs-tab {
+    border: none in !important;
+}
+
+.ant-tabs-content-holder {
+    border-left-color: white !important;
+    border-right-color: white !important;
+    border-bottom-color: white !important;
+}

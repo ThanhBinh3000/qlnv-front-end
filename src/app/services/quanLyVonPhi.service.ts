@@ -46,6 +46,30 @@ export class QuanLyVonPhiService extends BaseService {
     );
   }
 
+  async uploadFileDetail(file: File, path: string) {
+    const upfile: FormData = new FormData();
+    upfile.append('file', file);
+    upfile.append('folder', path);
+    const temp = await this.uploadFile(upfile).toPromise().then(
+      (data) => {
+        const objfile = {
+          fileName: data.filename,
+          fileSize: data.size,
+          fileUrl: data.url,
+        }
+        return objfile;
+      },
+      err => {
+        return {
+          fileName: 'error',
+          fileSize: null,
+          fileUrl: null,
+        }
+      }
+    );
+    return temp;
+  }
+
   //tao ma PA
   dsachHopDong(request: any): Observable<any> {
     return this.httpClient.post(

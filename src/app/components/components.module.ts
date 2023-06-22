@@ -5,7 +5,7 @@ import { DialogDieuChinhCopyComponent } from './dialog/dialog-dieu-chinh-copy/di
 import { DialogChonPhuLucDieuChinhComponent } from './dialog/dialog-quan-ly-dieu-chinh-du-toan-chi-nsnn/dialog-chon-phu-luc-dieu-chinh/dialog-chon-phu-luc-dieu-chinh.component';
 import { FileListComponent } from './file-list/file-list.component';
 import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxSpinnerModule } from 'ngx-spinner';
 
@@ -178,11 +178,11 @@ import { DialogKtGiaoKhoComponent } from './dialog/dialog-kt-giao-kho/dialog-kt-
 import {
   DialogQdPdKhlcntComponent
 } from "./dialog/ql-kho-tang/dialog-qd-pd-khlcnt/dialog-qd-pd-khlcnt.component";
-import {DialogQdPdKqlcntComponent} from "./dialog/ql-kho-tang/dialog-qd-pd-kqlcnt/dialog-qd-pd-kqlcnt.component";
-import {MatToolbarModule} from "@angular/material/toolbar";
-import {MatFormFieldModule} from "@angular/material/form-field";
-import {MatAutocompleteModule} from "@angular/material/autocomplete";
-import {MatSelectModule} from "@angular/material/select";
+import { DialogQdPdKqlcntComponent } from "./dialog/ql-kho-tang/dialog-qd-pd-kqlcnt/dialog-qd-pd-kqlcnt.component";
+import { MatToolbarModule } from "@angular/material/toolbar";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatAutocompleteModule } from "@angular/material/autocomplete";
+import { MatSelectModule } from "@angular/material/select";
 @NgModule({
   declarations: [
     //components
@@ -445,6 +445,9 @@ import {MatSelectModule} from "@angular/material/select";
     DialogDanhSachVatTuHangHoaComponent,
     DialogChonDanhMucComponent,
     Base2Component,
+  ],
+  providers: [
+    DatePipe,
   ],
   schemas: [NO_ERRORS_SCHEMA],
 })
