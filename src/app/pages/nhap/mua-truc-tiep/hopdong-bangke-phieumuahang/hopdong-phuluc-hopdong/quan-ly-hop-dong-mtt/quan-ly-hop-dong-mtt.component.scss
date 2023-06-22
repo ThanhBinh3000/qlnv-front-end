@@ -24,7 +24,13 @@
     border-right: solid 1px #e2e2e2;
 
 }
-
+.bg-selected td {
+  background-color: #ebedff;
+}
+.text-bold {
+  color: #444444;
+  font-weight: 700;
+}
 
 ::ng-deep {
     .bg-xam .ant-card-body {
