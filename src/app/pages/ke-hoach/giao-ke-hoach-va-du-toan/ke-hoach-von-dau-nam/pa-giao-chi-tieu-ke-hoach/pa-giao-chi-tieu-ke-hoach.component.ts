@@ -82,6 +82,7 @@ export class PaGiaoChiTieuKeHoachComponent implements OnInit {
   }
 
   async ngOnInit() {
+    this.selectTab(this.indexTab);
     await this.search();
     this.userInfo = this.userService.getUserLogin();
     if (this.userService.isTongCuc()) {

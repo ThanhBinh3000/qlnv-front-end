@@ -21,6 +21,7 @@ export class ThongTinChiTieuKeHoachNam {
   khMuoi: Array<KeHoachMuoi> = [];
   loaiCanCu:string;
   canCu: string;
+  idCanCu: number;
   capDvi:string;
   fileDinhKemReqs: Array<FileDinhKem>;
   qdGocId: number;

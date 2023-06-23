@@ -192,7 +192,6 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
       //   this.loadDanhMucPhuongThucBaoQuan(),
       //   this.loadTieuChuan(),
       // ]);
-      await this.loadSoQuyetDinh();
       if (this.idInput > 0) {
         await this.getDetail(this.idInput);
       } else {
@@ -258,7 +257,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
       isVatTu: this.isVatTu,
       loaiDc: this.loaiDc,
       thayDoiThuKho: this.thayDoiThuKho,
-      maDvi: this.userInfo.MA_DVI
+      maDvi: this.idInput > 0 ? this.formData.value.maDvi : this.userInfo.MA_DVI
       // listTrangThaiXh: [STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN],
     }
     let res = await this.quyetDinhDieuChuyenCucService.getDsSoQuyetDinhDieuChuyenCuc(body);
@@ -463,6 +462,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
         "limit": this.globals.prop.MAX_INTERGER,
         "page": 0
       },
+      maDvi: this.idInput > 0 ? this.formData.value.maDvi : this.userInfo.MA_DVI
       // loaiVthh: this.loaiVthh,
     }
     let res = await this.phieuKiemNghiemChatLuongDieuChuyenService.dsBBLMKiemNghiem(body);
@@ -472,7 +472,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
   };
   async openDialogQuyetDinhDC() {
     // await this.loadBbLayMau();
-    // await this.loadSoQuyetDinh();
+    await this.loadSoQuyetDinh();
     const modalQD = this.modal.create({
       nzTitle: 'DANH SÁCH QUYẾT ĐỊNH XUẤT ĐIỀU CHUYỂN HÀNG HÓA',
       nzContent: DialogTableSelectionComponent,

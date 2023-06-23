@@ -7,6 +7,7 @@ import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
 import { QuyetDinhPheDuyetKetQuaChaoGiaMTTService } from 'src/app/services/quyet-dinh-phe-duyet-ket-qua-chao-gia-mtt.service';
+import * as dayjs from "dayjs";
 
 
 @Component({
@@ -60,13 +61,21 @@ export class HopdongPhulucHopdongComponent extends Base2Component implements OnI
         loaiVthh: this.loaiVthh,
         maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
       })
-      await this.search();
+      await this.timKiem();
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e)
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
+  }
+
+  async timKiem() {
+    debugger
+    this.formData.patchValue({
+      trangThai: this.STATUS.BAN_HANH
+    });
+    await this.search();
   }
 
   goDetail(id: number, roles?: any, isQuanLy?: boolean) {

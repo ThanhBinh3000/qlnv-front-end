@@ -184,21 +184,22 @@
                             <div nz-col nzSpan="5">
                                 <nz-form-item>
                                     <!-- TODO:Chỉ mở ra cho test và phải đóng lại khi chạy thật -->
-                                    <nz-form-label [nzNoColon]="true" class="label-color-kh">Ngày tạo đề xuất (Ngày tổng
-                                        hợp)
+                                    <nz-form-label [nzNoColon]="true" class="label-color-kh">Ngày tổng
+                                        hợp
                                     </nz-form-label>
                                     <nz-form-control>
                                         <nz-date-picker class="search__input" formControlName="ngayTongHop"
-                                            [nzDisabled]="checkDisabledSoDxcv()" [nzFormat]="FORMAT_DATE_STR">
+                                            [nzDisabledDate]="disabledNgayTongHop" [nzDisabled]="checkDisabledSoDxcv()"
+                                            [nzFormat]="FORMAT_DATE_STR">
                                         </nz-date-picker>
                                     </nz-form-control>
                                 </nz-form-item>
                             </div>
                             <div nz-col nzSpan="8">
                                 <nz-form-item>
-                                    <nz-form-label [nzNoColon]="true" nzRequired class="label-color-kh">Trích yếu (Nội
+                                    <nz-form-label [nzNoColon]="true" nzRequired class="label-color-kh">Nội
                                         dung tổng
-                                        hợp)
+                                        hợp
                                     </nz-form-label>
                                     <nz-form-control nzErrorTip="Vui lòng nhập trích yếu">
                                         <textarea nz-input formControlName="trichYeu"
@@ -233,6 +234,19 @@
                                     <nz-form-control>
                                         <input nz-input formControlName="tenKieuNhapXuat" [readOnly]="true" />
                                     </nz-form-control>
+                                </nz-form-item>
+                            </div>
+                            <div nz-col nzSpan="24">
+                                <nz-form-item>
+                                    <nz-form-label [nzNoColon]="true" nzSpan="24">
+                                        File tài liệu đính kèm
+                                    </nz-form-label>
+                                </nz-form-item>
+                                <nz-form-item>
+                                    <div class="list-file" nz-col nzSpan="24">
+                                        <file-list [data]="canCu" [isViewDetail]="isViewDetail">
+                                        </file-list>
+                                    </div>
                                 </nz-form-item>
                             </div>
                         </div>
@@ -594,7 +608,7 @@
                                 <tr>
                                     <th style="width: 60px" class="text-center">STT</th>
                                     <th style="width: 20%">Cục DTNN KV nhận ĐC</th>
-                                    <!-- <th style="width: 10%">Số đề xuất/công văn</th> -->
+                                    <!-- <th style="width: 10%">Số công văn/tờ trình</th> -->
                                     <!-- <th style="width: 15%">Ngày trình duyệt tổng cục</th> -->
                                     <th>Tổng dự toán kinh phí (triệu đồng)</th>
                                     <!-- <th>Trích yếu</th> -->
@@ -630,7 +644,7 @@
                                 </tr>
                                 <tr>
                                     <th class="text-center">Chi cục/điểm kho</th>
-                                    <th class="text-center">Số đề xuất/công văn</th>
+                                    <th class="text-center">Số công văn/tờ trình</th>
                                     <th class="text-center max-w-90 min-w-90 break">Ngày trình duyệt Cục</th>
                                     <th class="text-center">Lô kho</th>
                                     <th class="text-center">Loại HH</th>
