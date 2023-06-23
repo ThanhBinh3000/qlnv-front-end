@@ -108,7 +108,13 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
   LOAI_HINH_NHAP_XUAT_CUC: { [key: string]: string } = {
     loaiHinhNhapXuat: '144', tenLoaiHinhNhapXuat: "Xuất điều chuyển nội bộ Cục", kieuNhapXuat: '04', tenKieuNhapXuat: "Xuất không thu tiền"
   };
-  loaiHinhNhapXuat: { [key: string]: any } = {};
+  TEN_KIEU_NHAP_XUAT: { [key: number]: any } = {
+    1: "Nhập mua",
+    2: "Nhập không chi tiền",
+    3: "Xuất bán",
+    4: "Xuất không thu tiền",
+    5: "Khác"
+  };
   constructor(httpClient: HttpClient,
     storageService: StorageService,
     notification: NzNotificationService,
@@ -206,7 +212,7 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
       const res = await this.danhMucDungChungService.search(params);
       if (res.msg === MESSAGE.SUCCESS) {
         const loaiHinhNhapXuat = res.data.content[0];
-        this.formData.patchValue({ loaiHinhNhapXuat: loaiHinhNhapXuat.ma, tenLoaiHinhNhapXuat: loaiHinhNhapXuat.giaTri, kieuNhapXuat: '04', tenKieuNhapXuat: loaiHinhNhapXuat.ghiChu })
+        this.formData.patchValue({ loaiHinhNhapXuat: loaiHinhNhapXuat.ma, tenLoaiHinhNhapXuat: loaiHinhNhapXuat.giaTri, kieuNhapXuat: loaiHinhNhapXuat.ghiChu, tenKieuNhapXuat: this.TEN_KIEU_NHAP_XUAT[Number(loaiHinhNhapXuat.ghiChu)] })
       } else {
         this.notification.error(MESSAGE.ERROR, "Có lỗi xảy ra.")
       }
