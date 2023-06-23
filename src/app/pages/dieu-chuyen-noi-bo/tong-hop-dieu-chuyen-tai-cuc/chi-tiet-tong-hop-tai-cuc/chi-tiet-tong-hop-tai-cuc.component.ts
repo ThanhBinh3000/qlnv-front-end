@@ -51,7 +51,7 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
 
   formData: FormGroup;
   cacheData: any[] = [];
-  fileDinhKem: any[] = [];
+  canCu: any[] = [];
   userLogin: UserLogin;
   titleStatus: string = '';
   titleButtonDuyet: string = '';
@@ -160,7 +160,6 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
       if (this.formData.value.id) {
         // await this.getDsChiCucBiTuChoi(this.formData.value.id);
         const data = await this.detail(this.formData.value.id);
-        this.helperService.bidingDataInFormGroup(this.formData, data);
         if (this.formData.value.loaiDieuChuyen === "CHI_CUC") {
           this.formData.patchValue(this.LOAI_HINH_NHAP_XUAT_CHI_CUC)
         } else if (this.formData.value.loaiDieuChuyen === "CUC") {
@@ -205,7 +204,7 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
         if (res.data) {
           const data = res.data;
           this.helperService.bidingDataInFormGroup(this.formData, data);
-          this.fileDinhKem = data.fileDinhKem
+          this.canCu = data.canCu
           return data;
         }
       } else {
@@ -402,6 +401,7 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
     try {
 
       let body = { ...this.formData.value, soDeXuat: this.formData.value.soDeXuat ? this.formData.value.soDeXuat + '/DCNB' : undefined };
+      body.canCu = this.canCu;
       let res;
       await this.spinner.show();
       this.setValidator(false)
@@ -763,4 +763,10 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
   checkDisabledSoDxcv() {
     return this.isViewDetail || (this.formData.value.loaiDieuChuyen == "CHI_CUC" && this.formData.value.trangThai == STATUS.DA_DUYET_LDC) || (this.formData.value.loaiDieuChuyen == "CUC" && this.formData.value.trangThai && this.formData.value.trangThai !== STATUS.DU_THAO)
   }
+  disabledNgayTongHop = (value: Date): boolean => {
+    if (value && this.formData.value.thoiGianTongHop) {
+      return dayjs(value).endOf("days").isBefore(dayjs(this.formData.value.thoiGianTongHop, 'YYYY-MM-DDTHH:mm:ss'));
+    }
+    return false;
+  };
 }

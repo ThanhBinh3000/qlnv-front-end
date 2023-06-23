@@ -628,11 +628,10 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
     }
     if (!this.isNhanDieuChuyen) {
       this.disableValidateFormChiTietHangHoaNDC();
-    } else {
-      if (!this.formDataChiTiet.value.coLoKho) {
-        this.removeValidateFormChiTiet("maLoKho");
-        this.removeValidateFormChiTiet("tenLoKho");
-      }
+    }
+    if (!this.formDataChiTiet.value.coLoKho) {
+      this.removeValidateFormChiTiet("maLoKho");
+      this.removeValidateFormChiTiet("tenLoKho");
     }
     this.helperService.markFormGroupTouched(this.formDataChiTiet);
     if (this.formDataChiTiet.invalid) {
@@ -650,56 +649,16 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
       if (this.formData.value.danhSachHangHoa && this.formData.value.danhSachHangHoa.length > 0) {
         // check lô kho xuất
         if (!this.isNhanDieuChuyen) {
-          if (this.formDataChiTiet.value.maLoKho) {
-            let maLoKho = this.formData.value.danhSachHangHoa.find(item => ((item.maLoKho == this.formDataChiTiet.value.maLoKho) && item.maChiCucNhan == this.formDataChiTiet.value.maChiCucNhan));
-            if (maLoKho && !this.isEditDetail) {
-              this.notification.error(MESSAGE.ERROR, "Vui lòng chọn lô kho khác!");
-              return;
-            } else {
-              this.formData.patchValue({
-                danhSachHangHoa: [...this.formData.value.danhSachHangHoa, this.formDataChiTiet.value]
-              })
-            }
-          } else {
-            let maNganKho = this.formData.value.danhSachHangHoa.find(item => ((item.maNganKho == this.formDataChiTiet.value.maNganKho) && item.maChiCucNhan == this.formDataChiTiet.value.maChiCucNhan));
-            if (maNganKho && !this.isEditDetail) {
-              this.notification.error(MESSAGE.ERROR, "Vui lòng chọn ngăn kho khác!");
-              return;
-            } else {
-              this.formData.patchValue({
-                danhSachHangHoa: [...this.formData.value.danhSachHangHoa, this.formDataChiTiet.value]
-              })
-            }
-          }
+          this.handleOkDieuChuyen();
         } else {
-          if (this.formDataChiTiet.value.maLoKhoNhan) {
-            let maLoKho = this.formData.value.danhSachHangHoa.find(item => ((item.maLoKhoNhan == this.formDataChiTiet.value.maLoKhoNhan) && item.maDiemKhoNhan == this.formDataChiTiet.value.maDiemKhoNhan));
-            if (maLoKho && !this.isEditDetail) {
-              this.notification.error(MESSAGE.ERROR, "Vui lòng chọn lô kho khác!");
-              return;
-            } else {
-              this.formData.patchValue({
-                danhSachHangHoa: [...this.formData.value.danhSachHangHoa, this.formDataChiTiet.value]
-              })
-            }
-          } else {
-            let maNganKho = this.formData.value.danhSachHangHoa.find(item => ((item.maNganKhoNhan == this.formDataChiTiet.value.maNganKhoNhan) && item.maDiemKhoNhan == this.formDataChiTiet.value.maDiemKhoNhan));
-            if (maNganKho && !this.isEditDetail) {
-              this.notification.error(MESSAGE.ERROR, "Vui lòng chọn ngăn kho khác!");
-              return;
-            } else {
-              this.formData.patchValue({
-                danhSachHangHoa: [...this.formData.value.danhSachHangHoa, this.formDataChiTiet.value]
-              })
-            }
-          }
+          this.handleOkNhanDieuChuyen();
         }
       } else {
         this.formData.patchValue({
           danhSachHangHoa: [this.formDataChiTiet.value]
         });
       }
-    } else {
+    } else { // lần đầu
       if (!this.isNhanDieuChuyen) {
         let maLoKho = this.formData.value.danhSachHangHoa.find(item => ((item.maLoKho == this.formDataChiTiet.value.maLoKho) && item.maChiCucNhan == this.formDataChiTiet.value.maChiCucNhan));
         if (maLoKho && !this.isEditDetail) {
@@ -732,7 +691,52 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
     this.errorInputComponent = [];
     this.listChiCuc = []
   }
-
+  handleOkDieuChuyen(){
+    if (this.formDataChiTiet.value.maLoKho) {
+      let maLoKho = this.formData.value.danhSachHangHoa.find(item => ((item.maLoKho == this.formDataChiTiet.value.maLoKho) && item.maChiCucNhan == this.formDataChiTiet.value.maChiCucNhan));
+      if (maLoKho && !this.isEditDetail) {
+        this.notification.error(MESSAGE.ERROR, "Vui lòng chọn lô kho khác!");
+        return;
+      } else {
+        this.formData.patchValue({
+          danhSachHangHoa: [...this.formData.value.danhSachHangHoa, this.formDataChiTiet.value]
+        })
+      }
+    } else {
+      let maNganKho = this.formData.value.danhSachHangHoa.find(item => ((item.maNganKho == this.formDataChiTiet.value.maNganKho) && item.maChiCucNhan == this.formDataChiTiet.value.maChiCucNhan));
+      if (maNganKho && !this.isEditDetail) {
+        this.notification.error(MESSAGE.ERROR, "Vui lòng chọn ngăn kho khác!");
+        return;
+      } else {
+        this.formData.patchValue({
+          danhSachHangHoa: [...this.formData.value.danhSachHangHoa, this.formDataChiTiet.value]
+        })
+      }
+    }
+  }
+  handleOkNhanDieuChuyen(){
+    if (this.formDataChiTiet.value.maLoKhoNhan) {
+      let maLoKho = this.formData.value.danhSachHangHoa.find(item => ((item.maLoKhoNhan == this.formDataChiTiet.value.maLoKhoNhan) && item.maDiemKhoNhan == this.formDataChiTiet.value.maDiemKhoNhan));
+      if (maLoKho && !this.isEditDetail) {
+        this.notification.error(MESSAGE.ERROR, "Vui lòng chọn lô kho khác!");
+        return;
+      } else {
+        this.formData.patchValue({
+          danhSachHangHoa: [...this.formData.value.danhSachHangHoa, this.formDataChiTiet.value]
+        })
+      }
+    } else {
+      let maNganKho = this.formData.value.danhSachHangHoa.find(item => ((item.maNganKhoNhan == this.formDataChiTiet.value.maNganKhoNhan) && item.maDiemKhoNhan == this.formDataChiTiet.value.maDiemKhoNhan));
+      if (maNganKho && !this.isEditDetail) {
+        this.notification.error(MESSAGE.ERROR, "Vui lòng chọn ngăn kho khác!");
+        return;
+      } else {
+        this.formData.patchValue({
+          danhSachHangHoa: [...this.formData.value.danhSachHangHoa, this.formDataChiTiet.value]
+        })
+      }
+    }
+  }
   handleCancel(): void {
     this.isVisible = false;
     this.isEditDetail = false;
@@ -751,49 +755,77 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
         let rs = chain(value)
           .groupBy("maDiemKho")
           .map((v, k) => {
-              let rss = chain(v)
-                .groupBy("maLoKho")
-                .map((vs, ks) => {
-                    let maLoKho = vs.find(s => (s.maLoKho == ks || "" + s.maLoKho == ks));
-                    let khoNhan = vs.filter(item => !(item.maDiemKhoNhan == undefined || item.maDiemKhoNhan == ""));
-                    let rsss = chain(khoNhan)
-                      .groupBy("maNhaKhoNhan")
-                      .map((vss, kss) => {
-                          let maNhaKhoNhan = vss.find(s => s.maNhaKhoNhan === kss);
-                          return {
-                            ...maNhaKhoNhan,
-                            idVirtual: maNhaKhoNhan ? maNhaKhoNhan.idVirtual ? maNhaKhoNhan.idVirtual : uuid.v4() : uuid.v4(),
-                            childData: vss
+            let rssLoKho = [];
+            let rss = chain(v)
+              .groupBy("maNganKho")
+              .map((vs, ks) => {
+                let rsss = chain(vs)
+                  .groupBy("maLoKho")
+                  .map((vss, ks) => {
+                      let maLoKho = vss.find(s => (s.maLoKho == ks || "" + s.maLoKho == ks));
+                      let khoNhan = vss.filter(item => !(item.maDiemKhoNhan == undefined || item.maDiemKhoNhan == ""));
+                      let rssss = chain(khoNhan)
+                        .groupBy("maNhaKhoNhan")
+                        .map((vsss, ksss) => {
+                            let maNhaKhoNhan = vsss.find(s => s.maNhaKhoNhan === ksss);
+                            return {
+                              ...maNhaKhoNhan,
+                              idVirtual: maNhaKhoNhan ? maNhaKhoNhan.idVirtual ? maNhaKhoNhan.idVirtual : uuid.v4() : uuid.v4(),
+                              childData: vss
+                            }
                           }
-                        }
-                      ).value();
-                    return {
-                      ...maLoKho,
-                      idVirtual: maLoKho ? maLoKho.idVirtual ? maLoKho.idVirtual : uuid.v4() : uuid.v4(),
-                      maDiemKhoNhan: "",
-                      tenDiemKhoNhan: "",
-                      maNhaKhoNhan: "",
-                      tenNhaKhoNhan: "",
-                      maNganKhoNhan: "",
-                      tenNganKhoNhan: "",
-                      coLoKhoNhan: true,
-                      maLoKhoNhan: "",
-                      tenLoKhoNhan: "",
-                      soLuongPhanBo: 0,
-                      tichLuongKd: 0,
-                      slDcConLai: 0,
-                      childData: rsss
+                        ).value();
+                      return {
+                        ...maLoKho,
+                        idVirtual: maLoKho ? maLoKho.idVirtual ? maLoKho.idVirtual : uuid.v4() : uuid.v4(),
+                        maDiemKhoNhan: "",
+                        tenDiemKhoNhan: "",
+                        maNhaKhoNhan: "",
+                        tenNhaKhoNhan: "",
+                        maNganKhoNhan: "",
+                        tenNganKhoNhan: "",
+                        coLoKhoNhan: true,
+                        maLoKhoNhan: "",
+                        tenLoKhoNhan: "",
+                        soLuongPhanBo: 0,
+                        tichLuongKd: 0,
+                        slDcConLai: 0,
+                        childData: rssss
+                      }
                     }
-                  }
-                ).value();
-              let duToanKphi = v.reduce((prev, cur) => prev + cur.duToanKphi, 0);
-              let rowDiemKho = v.find(s => s.maDiemKho === k);
+                  ).value();
+                  let duToanKphi = vs.reduce((prev, cur) => prev + cur.duToanKphi, 0);
+                  let rowNganKho = vs.find(s => s.maNganKho === ks);
 
+                  rssLoKho = (rowNganKho.coLoKho? [...rsss, ...rssLoKho] : [...rssLoKho]);
+                  return {
+                    ...rowNganKho,
+                    idVirtual: rowNganKho ? rowNganKho.idVirtual ? rowNganKho.idVirtual : uuid.v4() : uuid.v4(),
+                    maDiemKhoNhan: "",
+                    tenDiemKhoNhan: "",
+                    maNhaKhoNhan: "",
+                    tenNhaKhoNhan: "",
+                    maNganKhoNhan: "",
+                    tenNganKhoNhan: "",
+                    coLoKhoNhan: true,
+                    maLoKhoNhan: "",
+                    tenLoKhoNhan: "",
+                    soLuongPhanBo: 0,
+                    tichLuongKd: 0,
+                    slDcConLai: 0,
+                    duToanKphi: duToanKphi,
+                    // childData: rowNganKho.coLoKho? rsss : []
+                  }
+                }
+              ).value();
+
+            let duToanKphi = v.reduce((prev, cur) => prev + cur.duToanKphi, 0);
+            let rowDiemKho = v.find(s => s.maDiemKho === k);
               return {
                 ...rowDiemKho,
                 idVirtual: rowDiemKho ? rowDiemKho.idVirtual ? rowDiemKho.idVirtual : uuid.v4() : uuid.v4(),
                 duToanKphi: duToanKphi,
-                childData: rss
+                childData: [...rss.filter(item => !!!item.coLoKho),...rssLoKho]
               }
             }
           ).value();

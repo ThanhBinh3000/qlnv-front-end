@@ -419,8 +419,6 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
       this.idInput = data.id;
       if (isGuiDuyet) {
         this.pheDuyet();
-      } else {
-        this.goBack()
       }
     }
   }
