@@ -11,7 +11,7 @@ import { GeneralFunction } from 'src/app/Utility/func';
 import { Utils } from 'src/app/Utility/utils';
 import * as uuid from "uuid";
 import { Form, Report } from '../lap-ke-hoach-va-tham-dinh-du-toan.class';
-import { PHU_LUC } from '../lap-ke-hoach-va-tham-dinh-du-toan.constant';
+import { PHU_LUC } from '../bao-cao/bao-cao.constant';
 
 @Component({
     selector: 'dialog-tao-moi',
@@ -96,7 +96,6 @@ export class DialogTaoMoiComponent implements OnInit {
     }
 
     async initNewReport() {
-        debugger
         this.response.lan = 1;
         this.response.lstLapThamDinhs = [];
         this.response.lstBcaoDviTrucThuocs = [];

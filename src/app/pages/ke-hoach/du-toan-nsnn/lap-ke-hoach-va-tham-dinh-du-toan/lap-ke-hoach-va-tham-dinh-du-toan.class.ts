@@ -1,4 +1,5 @@
 export class Doc {
+    id: string;
     fileName: string;
     fileSize: number;
     fileUrl: number;
@@ -17,6 +18,9 @@ export class Form {
     lstCtietLapThamDinhs: any[];
     hsBhDuoi: number;
     hsBhTu: number;
+    lstFiles: Doc[];
+    fileDinhKems: any[];
+    listIdDeleteFiles: string[];
 }
 
 export class Report {
