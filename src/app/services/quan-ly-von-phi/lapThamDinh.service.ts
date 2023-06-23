@@ -14,7 +14,7 @@ export class LapThamDinhService extends BaseService {
     }
 
     urlTest = 'http://localhost:9159';
-    urlDefault = environment.SERVICE_API + '/qlnv-khoachphi';
+    urlDefault = environment.SERVICE_API + '/qlnv-khoachphi-dev';
 
     //search list bao cao
     timBaoCaoLapThamDinh(request: any): Observable<any> {
@@ -67,6 +67,12 @@ export class LapThamDinhService extends BaseService {
         return this.httpClient.put(
             this.urlDefault + '/lap-tham-dinh/cap-nhat',
             request,
+        );
+    }
+
+    ctietBieuMau(id: string): Observable<any> {
+        return this.httpClient.get(
+            this.urlDefault + '/lap-tham-dinh/chi-tiet/bieu-mau/' + id,
         );
     }
 
