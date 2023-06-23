@@ -136,7 +136,7 @@
               </nz-form-item>
             </div>
 
-            <div *ngIf="isTongCuc()" nz-col [nzSpan]="12">
+            <div nz-col [nzSpan]="12">
               <nz-radio-group [nzDisabled]="isView || isViewOnModal || !!idTHop" nzSize="small" class="rdo-input"
                 formControlName="type">
                 <nz-form-item nz-col [nzSpan]="11">
@@ -228,14 +228,6 @@
   </nz-collapse>
 
   <div class="mt16 flex-card p-lr16">
-    <!-- <div *ngIf="isTongCuc()" class="header header-green-background mg-t-16">
-      <div class="header-text">
-        <div class="title-chi-tieu">
-          <span></span>
-          <span>Thông tin điều chuyển nội bộ giữa 2 cục DTNN KV</span>
-        </div>
-      </div>formData.value.loaiDc ? "'Thông tin điều chuyển nội bộ giữa 2 cục DTNN KV'" : "'Thông tin điều chuyển nội bộ giữa 2 cục DTNN KV'"
-    </div> -->
     <nz-collapse nzAccordion>
       <nz-collapse-panel
         [nzHeader]="formData.value.loaiDc == 'CHI_CUC' ? 'THÔNG TIN ĐIỀU CHUYỂN NỘI BỘ GIỮA CÁC CHI CỤC DTNN TRONG CÙNG 1 CỤC DTNN KV' : 'THÔNG TIN ĐIỀU CHUYỂN NỘI BỘ GIỮA 2 CỤC DTNN KV'"
