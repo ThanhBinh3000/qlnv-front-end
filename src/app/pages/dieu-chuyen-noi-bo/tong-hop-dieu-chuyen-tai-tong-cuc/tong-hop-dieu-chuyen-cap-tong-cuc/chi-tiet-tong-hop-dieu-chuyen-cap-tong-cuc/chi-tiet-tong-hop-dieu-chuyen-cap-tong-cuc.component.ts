@@ -170,7 +170,7 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
       this.spinner.show();
       // this.loadDsVthh()
       if (this.idInput) {
-        const data = await this.detail(this.formData.value.id);
+        const data = await this.detail(this.idInput);
         this.formData.patchValue({ maTongHop: data.id ? Number(data.id) : '' });
         this.canCu = data.canCu;
         // if (this.formData.value.loaiDieuChuyen === "CHI_CUC") {
