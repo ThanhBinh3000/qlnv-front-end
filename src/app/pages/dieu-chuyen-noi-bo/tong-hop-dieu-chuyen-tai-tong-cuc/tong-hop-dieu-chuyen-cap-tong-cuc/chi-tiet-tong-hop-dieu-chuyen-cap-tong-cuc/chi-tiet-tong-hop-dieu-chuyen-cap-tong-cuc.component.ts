@@ -1,3 +1,4 @@
+import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.service';
 import { TongHopDieuChuyenCapTongCuc } from './../tong-hop-dieu-chuyen-cap-tong-cuc.component';
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormGroup, Validators } from "@angular/forms";
@@ -120,6 +121,13 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
   LOAI_HINH_NHAP_XUAT_CUC: { [key: string]: string } = {
     loaiHinhNhapXuat: '94', tenLoaiHinhNhapXuat: "Xuất điều chuyển nội bộ Cục", kieuNhapXuat: '04', tenKieuNhapXuat: "Xuất không thu tiền"
   }
+  TEN_KIEU_NHAP_XUAT: { [key: number]: any } = {
+    1: "Nhập mua",
+    2: "Nhập không chi tiền",
+    3: "Xuất bán",
+    4: "Xuất không thu tiền",
+    5: "Khác"
+  };
   constructor(httpClient: HttpClient,
     storageService: StorageService,
     notification: NzNotificationService,
@@ -130,6 +138,7 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
     private tongHopDieuChuyenService: TongHopDieuChuyenService,
     private tongHopDieuChuyenCapTongCucService: TongHopDieuChuyenCapTongCucService,
     private danhMucService: DanhMucService,
+    private danhMucDungChungService: DanhMucDungChungService,
     private cdr: ChangeDetectorRef,) {
     super(httpClient, storageService, notification, spinner, modal, tongHopDieuChuyenCapTongCucService);
     this.formData = this.fb.group(
@@ -157,20 +166,22 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
   }
 
   async ngOnInit() {
-    this.initData()
     try {
       this.spinner.show();
       // this.loadDsVthh()
-      if (this.formData.value.id) {
+      if (this.idInput) {
         const data = await this.detail(this.formData.value.id);
         this.formData.patchValue({ maTongHop: data.id ? Number(data.id) : '' });
         this.canCu = data.canCu;
-        if (this.formData.value.loaiDieuChuyen === "CHI_CUC") {
-          this.formData.patchValue(this.LOAI_HINH_NHAP_XUAT_CHI_CUC)
-        } else if (this.formData.value.loaiDieuChuyen === "CUC") {
-          this.formData.patchValue(this.LOAI_HINH_NHAP_XUAT_CUC)
-        }
+        // if (this.formData.value.loaiDieuChuyen === "CHI_CUC") {
+        //   this.formData.patchValue(this.LOAI_HINH_NHAP_XUAT_CHI_CUC)
+        // } else if (this.formData.value.loaiDieuChuyen === "CUC") {
+        //   this.formData.patchValue(this.LOAI_HINH_NHAP_XUAT_CUC)
+        // }
         this.convertTongHop(data, this.isAddNew)
+      } else {
+        this.initData()
+
       }
     } catch (e) {
       console.log("e", e)
@@ -183,7 +194,12 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
     }
   }
   async initData() {
-    this.formData.controls["id"].setValue(this.idInput)
+    // this.formData.controls["id"].setValue(this.idInput)
+    if (this.formData.value.loaiDieuChuyen === "CHI_CUC") {
+      this.getLoaiHinhNhapXuat({ loai: 'LOAI_HINH_NHAP_XUAT', ma: '94' });
+    } else if (this.formData.value.loaiDieuChuyen === "CUC") {
+      this.getLoaiHinhNhapXuat({ loai: 'LOAI_HINH_NHAP_XUAT', ma: '144' });
+    }
   };
   setExpand(parantExpand: boolean = false, children: any = []): void {
     if (parantExpand) {
@@ -210,6 +226,27 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
   handleChangeLoaiDC = (value) => {
     this.isTongHop = false;
     this.formData.patchValue({ thoiGianTongHop: '' });
+    if (this.isViewDetail) return;
+    if (this.formData.value.loaiDieuChuyen === "CHI_CUC") {
+      this.getLoaiHinhNhapXuat({ loai: 'LOAI_HINH_NHAP_XUAT', ma: '94' });
+    } else if (this.formData.value.loaiDieuChuyen === "CUC") {
+      this.getLoaiHinhNhapXuat({ loai: 'LOAI_HINH_NHAP_XUAT', ma: '144' });
+    }
+  }
+  async getLoaiHinhNhapXuat(params) {
+    try {
+      const res = await this.danhMucDungChungService.search(params);
+      if (res.msg === MESSAGE.SUCCESS) {
+        const loaiHinhNhapXuat = res.data.content[0];
+        this.formData.patchValue({ loaiHinhNhapXuat: loaiHinhNhapXuat.ma, tenLoaiHinhNhapXuat: loaiHinhNhapXuat.giaTri, kieuNhapXuat: loaiHinhNhapXuat.ghiChu, tenKieuNhapXuat: this.TEN_KIEU_NHAP_XUAT[Number(loaiHinhNhapXuat.ghiChu)] })
+      } else {
+        this.notification.error(MESSAGE.ERROR, "Có lỗi xảy ra.")
+      }
+
+    } catch (error) {
+      console.log("e", error);
+      this.notification.error(MESSAGE.ERROR, "Có lỗi xảy ra.")
+    }
   }
   // changeHangHoa = async (event) => {
   //     if (event) {

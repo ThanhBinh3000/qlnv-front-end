@@ -162,12 +162,12 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
       this.spinner.hide();
     }
   }
-  async loadDetail(idInput: number) {
-    if (idInput > 0) {
-      await this.bienBanLayMauDieuChuyenService.getDetail(idInput)
+  async loadDetail(id: number) {
+    if (id > 0) {
+      await this.bienBanLayMauDieuChuyenService.getDetail(id)
         .then((res) => {
           if (res.msg == MESSAGE.SUCCESS) {
-            this.formData.patchValue(res.data);
+            this.formData.patchValue({ ...res.data, soBbLayMau: res.data.soBbLayMau ? res.data.soBbLayMau : `${res.data.id}/${this.maBb}` });
             const data = res.data;
             this.dcnbBienBanLayMauDtl = cloneDeep(data.dcnbBienBanLayMauDtl),
               this.checked = data.ketQuaNiemPhong;
@@ -194,14 +194,11 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         });
     } else {
-      let id = await this.userService.getId('DCNB_BIEN_BAN_LAY_MAU_HDR_SEQ')
       this.formData.patchValue({
         maDvi: this.userInfo.MA_DVI,
         tenDvi: this.userInfo.TEN_DVI,
         maQhns: this.userInfo.DON_VI.maQhns,
         ktvBaoQuan: this.userInfo.TEN_DAY_DU,
-        soBbLayMau: `${id}/${this.formData.get('nam').value}/${this.maBb}`,
-        id: id,
         loaiDc: this.loaiDc,
         ...this.passData,
         qdccId: this.passData.qddccId
@@ -400,65 +397,18 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
   }
 
   async save(isGuiDuyet?) {
-    // this.setValidator(isGuiDuyet);
-    if (!isGuiDuyet) {
-      this.setValidator(false);
-      this.helperService.markFormGroupTouched(this.formData);
-    }
+    this.setValidator(isGuiDuyet);
     let body = this.formData.value;
-    // if (this.formData.value.soQdinhDcc) {
-    //     body.soQdinhDcc = this.formData.value.soQdinhDcc + "/" + this.maBb;
-    // }
     body.bienBanLayMauDinhKem = this.bienBanLayMauDinhKem;
     body.canCu = this.canCu;
-    // body.id = this.idInput;
     body.fileDinhKemChupMauNiemPhong = this.fileDinhKemChupMauNiemPhong;
     body.dcnbBienBanLayMauDtl = this.listDaiDienCuc.map(f => ({ ...f, loaiDaiDien: '00', tenDaiDien: f.daiDien })).concat(this.listDaiDienChiCuc.map(f => ({ ...f, loaiDaiDien: '01', tenDaiDien: f.daiDien })))
     let data = await this.createUpdate(body);
-    if (data) {
-      this.idInput = data.id;
-      if (isGuiDuyet) {
-        this.pheDuyet();
-      }
+    if (!data) return;
+    this.formData.patchValue({ id: data.id, trangThai: data.trangThai, soBbLayMau: data.soBbLayMau ? data.soBbLayMau : `${data.id}/${this.maBb}` })
+    if (isGuiDuyet) {
+      this.pheDuyet();
     }
-  }
-  async createUpdate(body, roles?: any) {
-    if (!this.checkPermission(roles)) {
-      return
-    }
-    await this.spinner.show();
-    try {
-      this.helperService.markFormGroupTouched(this.formData);
-      if (this.formData.invalid) {
-        return;
-      }
-      let res = null;
-      if (this.idInput && this.idInput > 0) {
-        res = await this.bienBanLayMauDieuChuyenService.update(body);
-      } else {
-        res = await this.bienBanLayMauDieuChuyenService.create(body);
-      }
-      if (res.msg == MESSAGE.SUCCESS) {
-        this.formData.patchValue({ id: res.data.id })
-        if (this.idInput && this.idInput > 0) {
-          this.notification.success(MESSAGE.NOTIFICATION, MESSAGE.UPDATE_SUCCESS);
-          this.idInput = res.data.id;
-          return res.data;
-        } else {
-          this.notification.success(MESSAGE.NOTIFICATION, MESSAGE.ADD_SUCCESS);
-          this.idInput = res.data.id;
-          return res.data;
-        }
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
-        return null;
-      }
-    } catch (e) {
-      this.notification.error(MESSAGE.ERROR, e);
-    } finally {
-      await this.spinner.hide();
-    }
-
   }
 
   pheDuyet() {
