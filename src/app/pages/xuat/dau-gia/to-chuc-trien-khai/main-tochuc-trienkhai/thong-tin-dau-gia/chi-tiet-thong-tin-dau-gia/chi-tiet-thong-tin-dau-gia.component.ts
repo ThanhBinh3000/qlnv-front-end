@@ -233,18 +233,19 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
         return;
       }
     } const modalQD = this.modal.create({
-      nzTitle: 'CẬP NHẬP THÔNG TIN ĐẤU GIÁ',
+      nzTitle: '',
       nzContent: ThongtinDaugiaComponent,
       nzMaskClosable: false,
       nzClosable: false,
-      nzWidth: '1800px',
+      nzWidth: '2000px',
       nzFooter: null,
       nzBodyStyle: { 'overflow-y': 'auto' },
       nzComponentParams: {
         isModal: true,
         idDtl: this.idInput,
         soQdPd: this.formData.value.soQdPd,
-        dataDetail: data
+        dataDetail: data,
+        soLanDauGia: this.dataTable.length
       },
     });
     modalQD.afterClose.subscribe((data) => {

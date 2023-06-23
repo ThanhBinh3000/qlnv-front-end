@@ -28,6 +28,7 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
   idDtl: number;
   soQdPd: string;
   dataDetail: any;
+  soLanDauGia: number;
 
   fileDinhKems: any[] = []
 
@@ -137,7 +138,8 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
           maThongBao: idThongBao + "/" + this.formData.value.nam + "/TB-ĐG",
           idQdPdDtl: this.idDtl,
           soQdPd: this.soQdPd,
-          soBienBan: idThongBao + "/" + this.formData.value.nam + "/BB-ĐG"
+          soBienBan: idThongBao + "/" + this.formData.value.nam + "/BB-ĐG",
+          lanDauGia: this.soLanDauGia + 1
         });
         this.spinner.hide();
       }
@@ -249,6 +251,14 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
     return !this.isModal
   }
 
+  isDisable() {
+    if (this.formData.value.trangThai == STATUS.DU_THAO) {
+      return false
+    } else {
+      return true
+    }
+  }
+
   async handleOk(isHoanThanh?) {
     let body = this.formData.value;
     if (this.formData.value.ketQua == 1) {
@@ -285,10 +295,14 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
       soLuongDviTsan += item.children.length;
     });
     body.ketQuaSl = soLuongTrung + "/" + soLuongDviTsan;
-    let data = await this.createUpdate(body);
-    // if (data) {
-    //   this.modal.closeAll();
-    // }
+    let res = await this.createUpdate(body);
+    if (res) {
+      if (isHoanThanh) {
+        this.modal.closeAll();
+      } else {
+        this.getDetail(res.id);
+      }
+    }
   }
 
   addRow(item, name) {

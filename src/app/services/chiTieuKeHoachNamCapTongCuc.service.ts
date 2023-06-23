@@ -140,8 +140,13 @@ export class ChiTieuKeHoachNamCapTongCucService extends BaseService {
     return this.httpClient.get<any>(url_).toPromise();
   }
 
-  canCuCuc(namKh: number): Promise<any> {
+  canCuCucQd(namKh: number): Promise<any> {
     const url_ = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/ct-kh-tc/${namKh}`;
+    return this.httpClient.get<any>(url_).toPromise();
+  }
+
+  canCuCucPa(namKh: number): Promise<any> {
+    const url_ = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/pa-ct-kh-tc/${namKh}`;
     return this.httpClient.get<any>(url_).toPromise();
   }
 

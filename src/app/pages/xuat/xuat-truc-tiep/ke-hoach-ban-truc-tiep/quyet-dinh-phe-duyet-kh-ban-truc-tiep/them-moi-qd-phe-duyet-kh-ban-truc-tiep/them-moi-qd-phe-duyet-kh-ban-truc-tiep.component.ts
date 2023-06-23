@@ -332,7 +332,7 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
 
   async getDataChiTieu() {
     let res2 = null;
-    res2 = await this.chiTieuKeHoachNamCapTongCucService.canCuCuc(
+    res2 = await this.chiTieuKeHoachNamCapTongCucService.canCuCucQd(
       +this.formData.get('namKh').value,
     );
     if (res2.msg == MESSAGE.SUCCESS) {
