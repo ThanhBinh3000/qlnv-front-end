@@ -76,20 +76,20 @@
                 [nzShowPagination]="false" nzBordered>
         <thead>
         <tr>
-          <th nzWidth="40px">
+          <th nzWidth="10px">
             <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
                    [nzIndeterminate]="indeterminate"></label>
           </th>
-          <th class="text-center">STT</th>
-          <th class="text-center">Số hồ sơ</th>
-          <th class="text-center">Tên hồ sơ</th>
-          <th class="text-center">Ngày duyệt LĐ Cục</th>
-          <th class="text-center">Ngày duyệt LĐ Vụ</th>
-          <th class="text-center">Ngày duyệt LĐ TC</th>
-          <th class="text-center">Số QĐ thanh lý</th>
-          <th class="text-center">Số TB KQ trình hồ sơ</th>
-          <th class="text-center">Trạng thái</th>
-          <th nzWidth="90px">Hành động</th>
+          <th class="text-center" nzWidth="10px">STT</th>
+          <th >Số hồ sơ</th>
+          <th >Tên hồ sơ</th>
+          <th >Ngày duyệt LĐ Cục</th>
+          <th >Ngày duyệt LĐ Vụ</th>
+          <th >Ngày duyệt LĐ TC</th>
+          <th >Số QĐ thanh lý</th>
+          <th >Số TB KQ trình hồ sơ</th>
+          <th >Trạng thái</th>
+          <th nzWidth="45px">Hành động</th>
         </tr>
         <!--<tr class="search-table">
           <th></th>
@@ -134,7 +134,7 @@
         </thead>
         <tbody>
         <tr *ngFor="let data of basicTable.data; let i = index">
-          <td width="45px">
+          <td>
             <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
                    [nzDisabled]="data.trangThai != STATUS.DU_THAO"></label>
           </td>
@@ -204,3 +204,29 @@
     </app-chi-tiet-ho-so-thanh-ly>
   </div>
 </ng-template>
+<nz-modal [nzWidth]="'100%'" [nzBodyStyle]="{ 'overflow-y': 'auto' }"
+          nzMaskClosable="true" [(nzVisible)]="openQd" (nzOnCancel)="closeQdModal()">
+  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+    <app-them-moi-quyet-dinh-thanh-ly class="modal-content-detail" [idInput]="idQd" [loaiVthh]="loaiVthh" [isView]="true">
+    </app-them-moi-quyet-dinh-thanh-ly>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button (click)="closeQdModal()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>
+<nz-modal [nzWidth]="'100%'" [nzBodyStyle]="{ 'overflow-y': 'auto' }"
+          nzMaskClosable="true" [(nzVisible)]="openTb" (nzOnCancel)="closeTbModal()">
+  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+    <app-them-moi-thong-bao-ket-qua class="modal-content-detail" [idInput]="idTb" [loaiVthh]="loaiVthh" [isView]="true">
+    </app-them-moi-thong-bao-ket-qua>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button (click)="closeTbModal()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>

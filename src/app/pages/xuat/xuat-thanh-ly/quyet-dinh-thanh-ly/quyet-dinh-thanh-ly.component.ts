@@ -128,8 +128,6 @@ export class QuyetDinhThanhLyComponent extends Base2Component implements OnInit 
     await this.spinner.hide();
   }
 
-
-
   openHoSoModal(id: any) {
     this.idHoSo = id;
     this.openHoSo = true;
