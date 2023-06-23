@@ -237,7 +237,7 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
     try {
       const res = await this.danhMucDungChungService.search(params);
       if (res.msg === MESSAGE.SUCCESS) {
-        const loaiHinhNhapXuat = res.data.content[0];
+        const loaiHinhNhapXuat = res.data.content[0] ? { ...res.data.content[0] } : {};
         this.formData.patchValue({ loaiHinhNhapXuat: loaiHinhNhapXuat.ma, tenLoaiHinhNhapXuat: loaiHinhNhapXuat.giaTri, kieuNhapXuat: loaiHinhNhapXuat.ghiChu, tenKieuNhapXuat: this.TEN_KIEU_NHAP_XUAT[Number(loaiHinhNhapXuat.ghiChu)] })
       } else {
         this.notification.error(MESSAGE.ERROR, "Có lỗi xảy ra.")
@@ -353,11 +353,11 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
         this.isTongHop = true;
         const thoiGianTongHop = dayjs().format("YYYY-MM-DDTHH:mm:ss");
         this.formData.patchValue({ thoiGianTongHop: thoiGianTongHop });
-        if (this.formData.value.loaiDieuChuyen === "CHI_CUC") {
-          this.formData.patchValue(this.LOAI_HINH_NHAP_XUAT_CHI_CUC)
-        } else if (this.formData.value.loaiDieuChuyen === "CUC") {
-          this.formData.patchValue(this.LOAI_HINH_NHAP_XUAT_CUC)
-        }
+        // if (this.formData.value.loaiDieuChuyen === "CHI_CUC") {
+        //   this.formData.patchValue(this.LOAI_HINH_NHAP_XUAT_CHI_CUC)
+        // } else if (this.formData.value.loaiDieuChuyen === "CUC") {
+        //   this.formData.patchValue(this.LOAI_HINH_NHAP_XUAT_CUC)
+        // }
         // call api tổng hợp dữ liệu;
         const body = {
           namKeHoach: this.formData.value.namKeHoach,

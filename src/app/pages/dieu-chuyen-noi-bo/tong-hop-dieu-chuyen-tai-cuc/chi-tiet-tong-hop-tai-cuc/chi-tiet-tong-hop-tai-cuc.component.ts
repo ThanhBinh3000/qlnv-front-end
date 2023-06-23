@@ -211,7 +211,7 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
     try {
       const res = await this.danhMucDungChungService.search(params);
       if (res.msg === MESSAGE.SUCCESS) {
-        const loaiHinhNhapXuat = res.data.content[0];
+        const loaiHinhNhapXuat = res.data.content[0] ? { ...res.data.content[0] } : {};
         this.formData.patchValue({ loaiHinhNhapXuat: loaiHinhNhapXuat.ma, tenLoaiHinhNhapXuat: loaiHinhNhapXuat.giaTri, kieuNhapXuat: loaiHinhNhapXuat.ghiChu, tenKieuNhapXuat: this.TEN_KIEU_NHAP_XUAT[Number(loaiHinhNhapXuat.ghiChu)] })
       } else {
         this.notification.error(MESSAGE.ERROR, "Có lỗi xảy ra.")
@@ -239,7 +239,6 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
     return result;
   }
   handleChangeLoaiDC = () => {
-    console.log("value")
     this.isTongHop = false;
     this.formData.patchValue({ thoiGianTongHop: '' });
     if (this.isViewDetail || this.formData.value.trangThai || this.idInput) return;
