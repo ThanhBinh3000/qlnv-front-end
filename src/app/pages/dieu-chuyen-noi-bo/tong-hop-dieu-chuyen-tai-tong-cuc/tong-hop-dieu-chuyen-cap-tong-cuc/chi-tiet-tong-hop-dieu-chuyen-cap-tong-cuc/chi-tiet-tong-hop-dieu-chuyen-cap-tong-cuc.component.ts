@@ -159,11 +159,10 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
   }
 
   async ngOnInit() {
-    this.initData()
     try {
       this.spinner.show();
       // this.loadDsVthh()
-      if (this.formData.value.id) {
+      if (this.idInput) {
         const data = await this.detail(this.formData.value.id);
         this.formData.patchValue({ maTongHop: data.id ? Number(data.id) : '' });
         this.canCu = data.canCu;
@@ -173,6 +172,9 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
         //   this.formData.patchValue(this.LOAI_HINH_NHAP_XUAT_CUC)
         // }
         this.convertTongHop(data, this.isAddNew)
+      } else {
+        this.initData()
+
       }
     } catch (e) {
       console.log("e", e)
@@ -185,7 +187,12 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
     }
   }
   async initData() {
-    this.formData.controls["id"].setValue(this.idInput)
+    // this.formData.controls["id"].setValue(this.idInput)
+    if (this.formData.value.loaiDieuChuyen === "CHI_CUC") {
+      this.getLoaiHinhNhapXuat({ loai: 'LOAI_HINH_NHAP_XUAT', ma: '94' });
+    } else if (this.formData.value.loaiDieuChuyen === "CUC") {
+      this.getLoaiHinhNhapXuat({ loai: 'LOAI_HINH_NHAP_XUAT', ma: '144' });
+    }
   };
   setExpand(parantExpand: boolean = false, children: any = []): void {
     if (parantExpand) {

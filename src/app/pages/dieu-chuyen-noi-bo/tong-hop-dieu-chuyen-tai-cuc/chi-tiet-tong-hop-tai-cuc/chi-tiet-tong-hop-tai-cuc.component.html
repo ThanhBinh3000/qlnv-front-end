@@ -88,7 +88,7 @@
                             <nz-form-label [nzNoColon]="true" nzRequired class="label-color-kh"> Năm kế hoạch
                             </nz-form-label>
                             <nz-form-control nzErrorTip="Vui lòng chọn năm kế hoạch">
-                                <nz-select formControlName="namKeHoach" (ngModelChange)="handleChangeLoaiDC(1)">
+                                <nz-select formControlName="namKeHoach" (ngModelChange)="handleChangeLoaiDC()">
                                     <nz-option *ngFor="let p of listNam" [nzValue]="p.value"
                                         [nzLabel]="p.text"></nz-option>
                                 </nz-select>
@@ -101,7 +101,7 @@
                             </nz-form-label>
                             <nz-form-control nzErrorTip="Vui lòng chọn loại điều chuyển">
                                 <nz-radio-group formControlName="loaiDieuChuyen" nzName="radiogroup" nzRequired
-                                    (valueChange)="handleChangeLoaiDC(2)">
+                                    (ngModelChange)="handleChangeLoaiDC()">
                                     <!-- <label nz-radio nzValue="ALL">Tất cả</label> -->
                                     <label nz-radio nzValue="CHI_CUC"> Giữa 2 chi cục trong cùng 1 cục </label>
                                     <label nz-radio nzValue="CUC"> Giữa 2 cục DTNN KV </label>
