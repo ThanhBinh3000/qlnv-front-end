@@ -27,6 +27,7 @@ import { QuyetDinhDieuChuyenCucService } from "src/app/services/dieu-chuyen-noi-
 import { AMOUNT_NO_DECIMAL } from "src/app/Utility/utils";
 import { ThongTinHangCanDieuChuyenChiCucComponent } from "../thong-tin-hang-can-dieu-chuyen-chi-cuc/thong-tin-hang-can-dieu-chuyen-chi-cuc.component";
 import { DialogTableSelectionComponent } from "src/app/components/dialog/dialog-table-selection/dialog-table-selection.component";
+import { DanhMucDungChungService } from "src/app/services/danh-muc-dung-chung.service";
 
 export class QuyetDinhPdDtl {
   idVirtual: number;
@@ -90,6 +91,30 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
       text: "Giữa 2 cục DTNN KV"
     }
   ];
+
+  kieuNhapXuat: any[] = [
+    {
+      value: "01",
+      text: "Nhập mua"
+    },
+    {
+      value: "02",
+      text: "Nhập không chi tiền"
+    },
+    {
+      value: "03",
+      text: "Xuất bán"
+    },
+    {
+      value: "04",
+      text: "Xuất không thu tiền"
+    },
+    {
+      value: "05",
+      text: "Khác"
+    }
+  ];
+
   selected: number = 0
   danhSachKeHoach: any[] = []
   typeKeHoach: string = "ADD"
@@ -103,6 +128,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
+    private dmService: DanhMucDungChungService,
     private donViService: DonviService,
     private quyetDinhDieuChuyenTCService: QuyetDinhDieuChuyenTCService,
     private quyetDinhDieuChuyenCucService: QuyetDinhDieuChuyenCucService,
@@ -125,8 +151,8 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
       soCanCuQdTc: [],
       ngayTrinhDuyetTc: [],
       tongDuToanKp: [],
-      loaiHinhNX: ["Nhập ĐC nội bộ Chi cục"],
-      kieuNX: ["Nhập không chi tiền"],
+      tenLoaiHinhNhapXuat: [],
+      tenKieuNhapXuat: [],
       quyetDinhPdDtl: [new Array<any>(),],
       danhSachQuyetDinh: [new Array<any>(),],
     }
@@ -137,7 +163,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
     await this.spinner.show();
 
     this.loadDsChiCuc()
-
+    this.getDataNX(this.formData.value.loaiDc)
     try {
       this.maQd = 'DCNB'//this.userInfo.MA_QD;
       if (this.idInput) {
@@ -232,6 +258,32 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
       }
 
     }
+    await this.spinner.hide();
+  }
+
+  async getDataNX(loaiDC) {
+    await this.spinner.show()
+    let ma = () => {
+      if (loaiDC == "CUC")
+        return '144'
+      if (loaiDC == "CHI_CUC")
+        return '94'
+      return '90';
+    }
+    const body = { loai: 'LOAI_HINH_NHAP_XUAT', ma: ma() }
+    let res = await this.dmService.search(body);
+    if (res.statusCode == 0) {
+      const data = res.data.content
+      if (data && data.length > 0) {
+        const content = data[0]
+        const knx = this.kieuNhapXuat.find(item => item.value === content.ghiChu)
+        this.formData.patchValue({
+          tenLoaiHinhNhapXuat: content.giaTri,
+          tenKieuNhapXuat: !!knx ? knx?.text : ''
+        });
+      }
+    }
+
     await this.spinner.hide();
   }
 
@@ -339,6 +391,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
       })
 
       if (loaiDC) {
+        this.getDataNX(loaiDC.value)
         this.formData.patchValue({
           tenLoaiDc: loaiDC.text,
         })
