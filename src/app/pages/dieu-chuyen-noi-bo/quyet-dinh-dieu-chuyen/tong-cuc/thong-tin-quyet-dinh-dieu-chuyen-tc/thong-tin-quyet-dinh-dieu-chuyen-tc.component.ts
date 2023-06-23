@@ -76,6 +76,29 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
     }
   ];
 
+  kieuNhapXuat: any[] = [
+    {
+      value: "01",
+      text: "Nhập mua"
+    },
+    {
+      value: "02",
+      text: "Nhập không chi tiền"
+    },
+    {
+      value: "03",
+      text: "Xuất bán"
+    },
+    {
+      value: "04",
+      text: "Xuất không thu tiền"
+    },
+    {
+      value: "05",
+      text: "Khác"
+    }
+  ];
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -167,9 +190,10 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
       const data = res.data.content
       if (data && data.length > 0) {
         const content = data[0]
+        const knx = this.kieuNhapXuat.find(item => item.value === content.ghiChu)
         this.formData.patchValue({
           tenLoaiHinhNhapXuat: content.giaTri,
-          tenKieuNhapXuat: content.ghiChu
+          tenKieuNhapXuat: !!knx ? knx?.text : ''
         });
       }
     }
