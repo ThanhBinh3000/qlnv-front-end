@@ -59,6 +59,24 @@ export const PHU_LUC = [
         tenPl: 'Phụ lục X',
         status: false,
     },
+    {
+        id: 'pl11',
+        tenDm: 'Chi đào tạo, bồi dưỡng cán bộ, công chức nhà nước',
+        tenPl: 'Phụ lục XI',
+        status: false,
+    },
+    {
+        id: 'pl12',
+        tenDm: 'Chi sự nghiệp khoa học công nghệ ',
+        tenPl: 'Phụ lục XII',
+        status: false,
+    },
+    {
+        id: 'pl13',
+        tenDm: 'Chi hoạt động bảo đảm xã hội',
+        tenPl: 'Phụ lục XIII',
+        status: false,
+    },
 ];
 
 export const PHU_LUC_TH = [
@@ -120,6 +138,24 @@ export const PHU_LUC_TH = [
         id: 'pl10',
         tenDm: 'Bảng tổng hợp tình hình thực hiện, điều chỉnh dự toán cải tạo sửa chữa lớn kho DTQG ',
         tenPl: 'Phụ lục X',
+        status: false,
+    },
+    {
+        id: 'pl11',
+        tenDm: 'Chi đào tạo, bồi dưỡng cán bộ, công chức nhà nước ',
+        tenPl: 'Phụ lục XI',
+        status: false,
+    },
+    {
+        id: 'pl12',
+        tenDm: 'Chi sự nghiệp khoa học công nghệ ',
+        tenPl: 'Phụ lục XII',
+        status: false,
+    },
+    {
+        id: 'pl13',
+        tenDm: 'Chi hoạt động bảo đảm xã hội',
+        tenPl: 'Phụ lục XIII',
         status: false,
     },
 ];

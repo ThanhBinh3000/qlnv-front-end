@@ -152,6 +152,9 @@
                                             </ng-template>
                                         </td>
                                         <td>
+                                            <a>
+                                                <i class="fa fa-pencil" (click)="viewAppendix(data)"></i>
+                                            </a>
                                             <ng-container *ngIf="baoCao.id">
                                                 <a *ngIf="!status && (userInfo?.sub == data.giaoCho)">
                                                     <i class="fa fa-pencil" (click)="viewAppendix(data)"></i>

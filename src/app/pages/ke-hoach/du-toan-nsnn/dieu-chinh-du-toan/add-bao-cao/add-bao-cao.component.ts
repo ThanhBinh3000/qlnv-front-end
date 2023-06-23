@@ -28,6 +28,9 @@ import { PhuLuc7Component } from './phu-luc-7/phu-luc-7.component';
 import { PhuLuc8Component } from './phu-luc-8/phu-luc-8.component';
 import { PhuLuc9Component } from './phu-luc-9/phu-luc-9.component';
 import { PhuLucTongHopComponent } from './phu-luc-tong-hop/phu-luc-tong-hop.component';
+import { PhuLuc11Component } from './phu-luc-11/phu-luc-11.component';
+import { PhuLuc12Component } from './phu-luc-12/phu-luc-12.component';
+import { PhuLuc13Component } from './phu-luc-13/phu-luc-13.component';
 
 export class ItemCongVan {
   fileName: string;
@@ -1048,6 +1051,15 @@ export class AddBaoCaoComponent implements OnInit {
         break;
       case 'pl10':
         nzContent = PhuLuc10Component;
+        break;
+      case 'pl11':
+        nzContent = PhuLuc11Component;
+        break;
+      case 'pl12':
+        nzContent = PhuLuc12Component;
+        break;
+      case 'pl13':
+        nzContent = PhuLuc13Component;
         break;
       case 'pl01TH':
         nzContent = PhuLucTongHopComponent;
