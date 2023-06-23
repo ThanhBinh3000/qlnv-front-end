@@ -1,7 +1,7 @@
 <ng-container *ngIf="isDataAvailable">
     <div class="modal__content">
         <nz-tabset>
-            <nz-tab nzTitle="Dữ liệu" class="custom-tab-container">
+            <nz-tab nzTitle="Dữ liệu">
                 <div id="tablePrint">
                     <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
                         <div nz-col [nzSpan]="2">
@@ -9,7 +9,7 @@
                         </div>
                         <div nz-col [nzSpan]="2">
                             <ng-container *ngIf="status.general || !editMoneyUnit; else editMoney">
-                                <span (click)="editMoneyUnit=true">{{getMoneyUnit()}}</span>
+                                <span (click)="editMoneyUnit=true">{{ genFunc.moneyUnitName(maDviTien) }}</span>
                             </ng-container>
                             <ng-template #editMoney>
                                 <nz-select nzShowSearch nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
@@ -84,28 +84,28 @@
                             <tr *ngFor="let data of lstCtietBcao; let i = index">
                                 <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
                                     <td nzLeft>
-                                        {{getChiMuc(data.stt)}}
+                                        {{ getChiMuc(data.stt) }}
                                     </td>
                                     <td nzLeft>
-                                        {{data.tenLvuc}}
+                                        {{ data.tenLvuc }}
                                     </td>
-                                    <td>{{data.mtieuNvu}}</td>
-                                    <td>{{data.csPhapLyThien}}</td>
-                                    <td>{{data.hdongChuYeu}}</td>
-                                    <td>{{data.nguonKphi}}</td>
-                                    <td>{{displayValue(data.ncauChiTongSo)}}</td>
-                                    <td>{{displayValue(data.ncauChiTrongDoChiCs)}}</td>
-                                    <td>{{displayValue(data.ncauChiTrongDoChiMoi)}}</td>
-                                    <td>{{displayValue(data.ncauChiChiaRaDtuPtrien)}}</td>
-                                    <td>{{displayValue(data.ncauChiChiaRaChiCs1)}}</td>
-                                    <td>{{displayValue(data.ncauChiChiaRaChiMoi1)}}</td>
-                                    <td>{{displayValue(data.ncauChiChiaRaChiTx)}}</td>
-                                    <td>{{displayValue(data.ncauChiChiaRaChiCs2)}}</td>
-                                    <td>{{displayValue(data.ncauChiChiaRaChiMoi2)}}</td>
-                                    <td>{{displayValue(data.ncauChiChiaRaChiDtqg)}}</td>
-                                    <td>{{displayValue(data.ncauChiChiaRaChiCs3)}}</td>
-                                    <td>{{displayValue(data.ncauChiChiaRaChiMoi3)}}</td>
-                                    <td>{{data.ghiChu}}</td>
+                                    <td>{{ data.mtieuNvu }}</td>
+                                    <td>{{ data.csPhapLyThien }}</td>
+                                    <td>{{ data.hdongChuYeu }}</td>
+                                    <td>{{ data.nguonKphi }}</td>
+                                    <td>{{ numFunc.valFmt(data.ncauChiTongSo, maDviTien) }}</td>
+                                    <td>{{ numFunc.valFmt(data.ncauChiTrongDoChiCs, maDviTien) }}</td>
+                                    <td>{{ numFunc.valFmt(data.ncauChiTrongDoChiMoi, maDviTien) }}</td>
+                                    <td>{{ numFunc.valFmt(data.ncauChiChiaRaDtuPtrien, maDviTien) }}</td>
+                                    <td>{{ numFunc.valFmt(data.ncauChiChiaRaChiCs1, maDviTien) }}</td>
+                                    <td>{{ numFunc.valFmt(data.ncauChiChiaRaChiMoi1, maDviTien) }}</td>
+                                    <td>{{ numFunc.valFmt(data.ncauChiChiaRaChiTx, maDviTien) }}</td>
+                                    <td>{{ numFunc.valFmt(data.ncauChiChiaRaChiCs2, maDviTien) }}</td>
+                                    <td>{{ numFunc.valFmt(data.ncauChiChiaRaChiMoi2, maDviTien) }}</td>
+                                    <td>{{ numFunc.valFmt(data.ncauChiChiaRaChiDtqg, maDviTien) }}</td>
+                                    <td>{{ numFunc.valFmt(data.ncauChiChiaRaChiCs3, maDviTien) }}</td>
+                                    <td>{{ numFunc.valFmt(data.ncauChiChiaRaChiMoi3, maDviTien) }}</td>
+                                    <td>{{ data.ghiChu }}</td>
                                     <td *ngIf="status.general" nzRight>
                                         <i *ngIf="checkEdit(data.stt)" class="fa fa-pencil"
                                             (click)="startEdit(data.id)"></i>
@@ -135,16 +135,16 @@
                                             [(ngModel)]="editCache[data.id].data.nguonKphi" />
                                     </td>
                                     <td>
-                                        {{displayValue(editCache[data.id].data.ncauChiTongSo)}}
+                                        {{ numFunc.valFmt(editCache[data.id].data.ncauChiTongSo, maDviTien) }}
                                     </td>
                                     <td>
-                                        {{displayValue(editCache[data.id].data.ncauChiTrongDoChiCs)}}
+                                        {{ numFunc.valFmt(editCache[data.id].data.ncauChiTrongDoChiCs, maDviTien) }}
                                     </td>
                                     <td>
-                                        {{displayValue(editCache[data.id].data.ncauChiTrongDoChiMoi)}}
+                                        {{ numFunc.valFmt(editCache[data.id].data.ncauChiTrongDoChiMoi, maDviTien) }}
                                     </td>
                                     <td>
-                                        {{displayValue(editCache[data.id].data.ncauChiChiaRaDtuPtrien)}}
+                                        {{ numFunc.valFmt(editCache[data.id].data.ncauChiChiaRaDtuPtrien, maDviTien) }}
                                     </td>
                                     <td>
                                         <input class="money-input" currencyMask
@@ -157,7 +157,7 @@
                                             (ngModelChange)="changeModel(data.id)" [options]="amount" />
                                     </td>
                                     <td>
-                                        {{displayValue(editCache[data.id].data.ncauChiChiaRaChiTx)}}
+                                        {{ numFunc.valFmt(editCache[data.id].data.ncauChiChiaRaChiTx, maDviTien) }}
                                     </td>
                                     <td>
                                         <input class="money-input" currencyMask
@@ -170,7 +170,7 @@
                                             (ngModelChange)="changeModel(data.id)" [options]="amount" />
                                     </td>
                                     <td>
-                                        {{displayValue(editCache[data.id].data.ncauChiChiaRaChiDtqg)}}
+                                        {{ numFunc.valFmt(editCache[data.id].data.ncauChiChiaRaChiDtqg, maDviTien) }}
                                     </td>
                                     <td>
                                         <input class="money-input" currencyMask
@@ -185,7 +185,7 @@
                                     <td>
                                         <input class="search-input" [(ngModel)]="editCache[data.id].data.ghiChu" />
                                     </td>
-                                    <td nzRight>
+                                    <td *ngIf="status.general" nzRight>
                                         <a (click)="saveEdit(data.id)" class="save">Lưu</a>
                                         <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
                                             (nzOnConfirm)="cancelEdit(data.id)" class="save">
@@ -201,18 +201,18 @@
                                 <td></td>
                                 <td></td>
                                 <td></td>
-                                <td>{{displayValue(total.ncauChiTongSo)}}</td>
-                                <td>{{displayValue(total.ncauChiTrongDoChiCs)}}</td>
-                                <td>{{displayValue(total.ncauChiTrongDoChiMoi)}}</td>
-                                <td>{{displayValue(total.ncauChiChiaRaDtuPtrien)}}</td>
-                                <td>{{displayValue(total.ncauChiChiaRaChiCs1)}}</td>
-                                <td>{{displayValue(total.ncauChiChiaRaChiMoi1)}}</td>
-                                <td>{{displayValue(total.ncauChiChiaRaChiTx)}}</td>
-                                <td>{{displayValue(total.ncauChiChiaRaChiCs2)}}</td>
-                                <td>{{displayValue(total.ncauChiChiaRaChiMoi2)}}</td>
-                                <td>{{displayValue(total.ncauChiChiaRaChiDtqg)}}</td>
-                                <td>{{displayValue(total.ncauChiChiaRaChiCs3)}}</td>
-                                <td>{{displayValue(total.ncauChiChiaRaChiMoi3)}}</td>
+                                <td>{{ numFunc.valFmt(total.ncauChiTongSo, maDviTien) }}</td>
+                                <td>{{ numFunc.valFmt(total.ncauChiTrongDoChiCs, maDviTien) }}</td>
+                                <td>{{ numFunc.valFmt(total.ncauChiTrongDoChiMoi, maDviTien) }}</td>
+                                <td>{{ numFunc.valFmt(total.ncauChiChiaRaDtuPtrien, maDviTien) }}</td>
+                                <td>{{ numFunc.valFmt(total.ncauChiChiaRaChiCs1, maDviTien) }}</td>
+                                <td>{{ numFunc.valFmt(total.ncauChiChiaRaChiMoi1, maDviTien) }}</td>
+                                <td>{{ numFunc.valFmt(total.ncauChiChiaRaChiTx, maDviTien) }}</td>
+                                <td>{{ numFunc.valFmt(total.ncauChiChiaRaChiCs2, maDviTien) }}</td>
+                                <td>{{ numFunc.valFmt(total.ncauChiChiaRaChiMoi2, maDviTien) }}</td>
+                                <td>{{ numFunc.valFmt(total.ncauChiChiaRaChiDtqg, maDviTien) }}</td>
+                                <td>{{ numFunc.valFmt(total.ncauChiChiaRaChiCs3, maDviTien) }}</td>
+                                <td>{{ numFunc.valFmt(total.ncauChiChiaRaChiMoi3, maDviTien) }}</td>
                                 <td></td>
                                 <td *ngIf="status.general" nzRight></td>
                             </tr>
@@ -221,22 +221,36 @@
                 </div>
             </nz-tab>
             <nz-tab nzTitle="Thuyết minh">
-                <textarea nz-input nzAutosize="{minRows: 4, maxRows: 16}" nzBorderless
-                    [(ngModel)]="formDetail.thuyetMinh" [disabled]="!status.general"></textarea>
+                <textarea nz-input nzAutosize="{minRows: 4, maxRows: 16}" [(ngModel)]="formDetail.thuyetMinh"
+                    [disabled]="!status.general"></textarea>
             </nz-tab>
             <nz-tab nzTitle="Tài liệu đính kèm">
                 <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
-                    <div nz-col class="gutter-row" [nzSpan]="12">
+                    <div nz-col class="gutter-row" [nzSpan]="3">
+                        <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" *ngIf="status.general">
+                            <button nz-button>
+                                <i nz-icon nzType="upload"></i>
+                                Chọn tài liệu đính kèm
+                            </button>
+                        </nz-upload>
+                        <button nz-button [nzType]="'primary'" (click)="handleUpload()"
+                            [disabled]="fileList.length === 0" *ngIf="status.general" style="margin-top: 16px">
+                            Thêm vào danh sách
+                        </button>
+                    </div>
+                </div>
+                <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+                    <div nz-col class="gutter-row" [nzSpan]="13">
                         <nz-table nzBordered class="table__body">
                             <thead>
                                 <tr>
                                     <th nzWidth="7%">STT</th>
                                     <th>Tên file</th>
-                                    <th nzWidth="10%"></th>
+                                    <th nzWidth="15%"></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let data of lstFiles; let i = index">
+                                <tr *ngFor="let data of formDetail.lstFiles; let i = index">
                                     <td>{{ i + 1 }} </td>
                                     <td>{{ data.fileName }}</td>
                                     <td>
@@ -258,31 +272,27 @@
     <div class="modal-footer">
         <div class="nut">
             <div class="cantrai">
-                <button type="button" class="btn btn-main" [hidden]="!status.print" (click)="doPrint()">
+                <button type="button" class="btn btn-main" *ngIf="status.print" (click)="genFunc.doPrint()">
                     <i nz-icon nzType="printer" nzTheme="outline"></i>
                     <span>In</span>
                 </button>
-                <button type="button" class="btn btn-main" (click)="save('5', null)" [hidden]="status.finish">
+                <button type="button" class="btn btn-sub" (click)="save('5', null)" *ngIf="status.finish">
                     <i nz-icon nzType="check" nzTheme="outline"></i>
                     <span>Hoàn tất nhập liệu</span>
                 </button>
-                <button type="button" class="btn btn-main" (click)="save('4', null)" [hidden]="status.finish">
+                <button type="button" class="btn btn-sub" (click)="save('4', null)" *ngIf="status.finish">
                     <i class="icon htvbdh_tcdt_save"></i>
                     <span>Lưu</span>
                 </button>
-                <button type="button" class="btn btn-main" (click)="save('1', null)" [hidden]="status.ok">
+                <button type="button" class="btn btn-sub" (click)="save('1', null)" *ngIf="status.ok">
                     <i nz-icon nzType="check" nzTheme="outline"></i>
-                    <span>OK</span>
-                </button>
-                <button type="button" class="btn btn-main" (click)="tuChoi('0')" [hidden]="status.ok">
-                    <i nz-icon nzType="close" nzTheme="outline"></i>
-                    <span>Not OK</span>
+                    <span>Chấp nhận</span>
                 </button>
             </div>
             <div class="canphai">
-                <button nz-button (click)="handleCancel()" class="modal__button--cancel">
-                    <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
-                    Đóng
+                <button type="button" class="btn btn-do" (click)="tuChoi('0')" *ngIf="status.ok">
+                    <i nz-icon nzType="close" nzTheme="outline"></i>
+                    <span>Không chấp nhận</span>
                 </button>
             </div>
         </div>
