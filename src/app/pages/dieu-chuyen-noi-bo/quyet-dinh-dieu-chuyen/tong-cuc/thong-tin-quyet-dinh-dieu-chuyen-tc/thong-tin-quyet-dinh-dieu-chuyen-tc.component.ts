@@ -76,6 +76,29 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
     }
   ];
 
+  kieuNhapXuat: any[] = [
+    {
+      value: "01",
+      text: "Nhập mua"
+    },
+    {
+      value: "02",
+      text: "Nhập không chi tiền"
+    },
+    {
+      value: "03",
+      text: "Xuất bán"
+    },
+    {
+      value: "04",
+      text: "Xuất không thu tiền"
+    },
+    {
+      value: "05",
+      text: "Khác"
+    }
+  ];
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -126,7 +149,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
         await this.loadChiTiet(this.idInput)
       } else {
         this.initForm();
-        this.getDataNX()
+        this.getDataNX(this.formData.value.loaiDc)
         if (this.idTHop) {
           this.formData.patchValue({
             idThop: this.idTHop
@@ -159,17 +182,18 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
     }
     return children
   }
-  async getDataNX() {
+  async getDataNX(loaiDC) {
     await this.spinner.show()
-    const body = { loai: 'LOAI_HINH_NHAP_XUAT', ma: '94' }
+    const body = { loai: 'LOAI_HINH_NHAP_XUAT', ma: loaiDC === 'CHI_CUC' ? '94' : '144' }
     let res = await this.dmService.search(body);
     if (res.statusCode == 0) {
       const data = res.data.content
       if (data && data.length > 0) {
         const content = data[0]
+        const knx = this.kieuNhapXuat.find(item => item.value === content.ghiChu)
         this.formData.patchValue({
           tenLoaiHinhNhapXuat: content.giaTri,
-          tenKieuNhapXuat: content.ghiChu
+          tenKieuNhapXuat: !!knx ? knx?.text : ''
         });
       }
     }
@@ -293,6 +317,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
       const loaiDC = this.listLoaiDC.find(item => item.value == value)
 
       if (loaiDC) {
+        this.getDataNX(loaiDC.value)
         this.formData.patchValue({
           tenLoaiDc: loaiDC.text,
         })
