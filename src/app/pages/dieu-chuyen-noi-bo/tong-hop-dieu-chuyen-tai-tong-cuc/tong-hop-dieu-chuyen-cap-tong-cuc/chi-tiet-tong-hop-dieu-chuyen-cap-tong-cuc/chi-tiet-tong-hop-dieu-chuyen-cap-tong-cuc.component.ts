@@ -1,3 +1,4 @@
+import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.service';
 import { TongHopDieuChuyenCapTongCuc } from './../tong-hop-dieu-chuyen-cap-tong-cuc.component';
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormGroup, Validators } from "@angular/forms";
@@ -130,6 +131,7 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
     private tongHopDieuChuyenService: TongHopDieuChuyenService,
     private tongHopDieuChuyenCapTongCucService: TongHopDieuChuyenCapTongCucService,
     private danhMucService: DanhMucService,
+    private danhMucDungChungService: DanhMucDungChungService,
     private cdr: ChangeDetectorRef,) {
     super(httpClient, storageService, notification, spinner, modal, tongHopDieuChuyenCapTongCucService);
     this.formData = this.fb.group(
@@ -165,11 +167,11 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
         const data = await this.detail(this.formData.value.id);
         this.formData.patchValue({ maTongHop: data.id ? Number(data.id) : '' });
         this.canCu = data.canCu;
-        if (this.formData.value.loaiDieuChuyen === "CHI_CUC") {
-          this.formData.patchValue(this.LOAI_HINH_NHAP_XUAT_CHI_CUC)
-        } else if (this.formData.value.loaiDieuChuyen === "CUC") {
-          this.formData.patchValue(this.LOAI_HINH_NHAP_XUAT_CUC)
-        }
+        // if (this.formData.value.loaiDieuChuyen === "CHI_CUC") {
+        //   this.formData.patchValue(this.LOAI_HINH_NHAP_XUAT_CHI_CUC)
+        // } else if (this.formData.value.loaiDieuChuyen === "CUC") {
+        //   this.formData.patchValue(this.LOAI_HINH_NHAP_XUAT_CUC)
+        // }
         this.convertTongHop(data, this.isAddNew)
       }
     } catch (e) {
@@ -210,6 +212,27 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
   handleChangeLoaiDC = (value) => {
     this.isTongHop = false;
     this.formData.patchValue({ thoiGianTongHop: '' });
+    if (this.isViewDetail) return;
+    if (this.formData.value.loaiDieuChuyen === "CHI_CUC") {
+      this.getLoaiHinhNhapXuat({ loai: 'LOAI_HINH_NHAP_XUAT', ma: '94' });
+    } else if (this.formData.value.loaiDieuChuyen === "CUC") {
+      this.getLoaiHinhNhapXuat({ loai: 'LOAI_HINH_NHAP_XUAT', ma: '144' });
+    }
+  }
+  async getLoaiHinhNhapXuat(params) {
+    try {
+      const res = await this.danhMucDungChungService.search(params);
+      if (res.msg === MESSAGE.SUCCESS) {
+        const loaiHinhNhapXuat = res.data.content[0];
+        this.formData.patchValue({ loaiHinhNhapXuat: loaiHinhNhapXuat.ma, tenLoaiHinhNhapXuat: loaiHinhNhapXuat.giaTri, kieuNhapXuat: '04', tenKieuNhapXuat: loaiHinhNhapXuat.ghiChu })
+      } else {
+        this.notification.error(MESSAGE.ERROR, "Có lỗi xảy ra.")
+      }
+
+    } catch (error) {
+      console.log("e", error);
+      this.notification.error(MESSAGE.ERROR, "Có lỗi xảy ra.")
+    }
   }
   // changeHangHoa = async (event) => {
   //     if (event) {

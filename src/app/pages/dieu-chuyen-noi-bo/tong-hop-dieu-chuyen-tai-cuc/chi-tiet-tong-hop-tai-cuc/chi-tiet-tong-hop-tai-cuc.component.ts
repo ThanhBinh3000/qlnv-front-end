@@ -1,3 +1,4 @@
+import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.service';
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormGroup, Validators } from "@angular/forms";
 import { UserLogin } from "../../../../models/userlogin";
@@ -102,17 +103,19 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
   deXuatPheDuyet: { [key: string]: boolean } = {};
   dcnbKeHoachDcHdrId: number[] = [];
   LOAI_HINH_NHAP_XUAT_CHI_CUC: { [key: string]: string } = {
-    loaiHinhNhapXuat: '90', tenLoaiHinhNhapXuat: "Xuất Điều chuyển nội bộ Chi cục", kieuNhapXuat: '04', tenKieuNhapXuat: "Xuất không thu tiền"
+    loaiHinhNhapXuat: '94', tenLoaiHinhNhapXuat: "Xuất Điều chuyển nội bộ Chi cục", kieuNhapXuat: '04', tenKieuNhapXuat: "Xuất không thu tiền"
   };
   LOAI_HINH_NHAP_XUAT_CUC: { [key: string]: string } = {
-    loaiHinhNhapXuat: '94', tenLoaiHinhNhapXuat: "Xuất điều chuyển nội bộ Cục", kieuNhapXuat: '04', tenKieuNhapXuat: "Xuất không thu tiền"
-  }
+    loaiHinhNhapXuat: '144', tenLoaiHinhNhapXuat: "Xuất điều chuyển nội bộ Cục", kieuNhapXuat: '04', tenKieuNhapXuat: "Xuất không thu tiền"
+  };
+  loaiHinhNhapXuat: { [key: string]: any } = {};
   constructor(httpClient: HttpClient,
     storageService: StorageService,
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private danhMucService: DanhMucService,
+    private danhMucDungChungService: DanhMucDungChungService,
     private deXuatKeHoachBanDauGiaService: DeXuatKeHoachBanDauGiaService,
     private donViService: DonviService,
     private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
@@ -160,11 +163,6 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
       if (this.formData.value.id) {
         // await this.getDsChiCucBiTuChoi(this.formData.value.id);
         const data = await this.detail(this.formData.value.id);
-        if (this.formData.value.loaiDieuChuyen === "CHI_CUC") {
-          this.formData.patchValue(this.LOAI_HINH_NHAP_XUAT_CHI_CUC)
-        } else if (this.formData.value.loaiDieuChuyen === "CUC") {
-          this.formData.patchValue(this.LOAI_HINH_NHAP_XUAT_CUC)
-        }
         this.formData.patchValue({
           soDeXuat: this.formData.value.soDeXuat ? this.formData.value.soDeXuat.split('/')[0] : null
         })
@@ -203,7 +201,8 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           const data = res.data;
-          this.helperService.bidingDataInFormGroup(this.formData, data);
+          // this.helperService.bidingDataInFormGroup(this.formData, data);
+          this.bidingDataInFormGroup(this.formData, data)
           this.canCu = data.canCu
           return data;
         }
@@ -219,6 +218,30 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
       this.spinner.hide();
     }
 
+  }
+  bidingDataInFormGroup(formGroup: FormGroup, dataBinding: any) {
+    if (dataBinding) {
+      for (const name in dataBinding) {
+        if (formGroup.controls.hasOwnProperty(name)) {
+          formGroup.get(name).setValue(dataBinding[name], { emitEvent: false });
+        }
+      }
+    }
+  }
+  async getLoaiHinhNhapXuat(params) {
+    try {
+      const res = await this.danhMucDungChungService.search(params);
+      if (res.msg === MESSAGE.SUCCESS) {
+        const loaiHinhNhapXuat = res.data.content[0];
+        this.formData.patchValue({ loaiHinhNhapXuat: loaiHinhNhapXuat.ma, tenLoaiHinhNhapXuat: loaiHinhNhapXuat.giaTri, kieuNhapXuat: '04', tenKieuNhapXuat: loaiHinhNhapXuat.ghiChu })
+      } else {
+        this.notification.error(MESSAGE.ERROR, "Có lỗi xảy ra.")
+      }
+
+    } catch (error) {
+      console.log("e", error);
+      this.notification.error(MESSAGE.ERROR, "Có lỗi xảy ra.")
+    }
   }
 
   setExpand(parantExpand: boolean = false, children: any = []): void {
@@ -236,9 +259,15 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
     });
     return result;
   }
-  handleChangeLoaiDC = () => {
+  handleChangeLoaiDC = (value: number) => {
     this.isTongHop = false;
-    this.formData.patchValue({ thoiGianTongHop: '' })
+    this.formData.patchValue({ thoiGianTongHop: '' });
+    if (this.isViewDetail || this.formData.value.trangThai || value !== 2) return;
+    if (this.formData.value.loaiDieuChuyen === "CHI_CUC") {
+      this.getLoaiHinhNhapXuat({ loai: 'LOAI_HINH_NHAP_XUAT', ma: '94' });
+    } else if (this.formData.value.loaiDieuChuyen === "CUC") {
+      this.getLoaiHinhNhapXuat({ loai: 'LOAI_HINH_NHAP_XUAT', ma: '144' });
+    }
   }
   yeuCauXacDinhDiemNhap = async ($event) => {
     $event.stopPropagation();
