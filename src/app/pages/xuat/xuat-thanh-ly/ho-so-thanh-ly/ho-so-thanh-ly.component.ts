@@ -40,10 +40,6 @@ export class HoSoThanhLyComponent extends Base2Component implements OnInit {
     {ma: this.STATUS.DANG_THUC_HIEN, giaTri: 'Đang thực hiện'},
     {ma: this.STATUS.DA_HOAN_THANH, giaTri: 'Đã hoàn thành'}
   ];
-  idQdPd: number = 0;
-  openQdPd = false;
-  id: number = 0;
-  openQdGnv = false;
   idQd: number = 0;
   openQd = false;
   idTb: number = 0;
@@ -138,16 +134,18 @@ export class HoSoThanhLyComponent extends Base2Component implements OnInit {
   }
 
   closeQdModal() {
-    this.idTb = null;
-    this.openTb = false;
+    this.idQd = null;
+    this.openQd = false;
   }
   openTbModal(id: any) {
-    this.idQd = id;
-    this.openQd = true;
+    this.idTb = id;
+    this.openTb = true;
   }
 
   closeTbModal() {
     this.idTb = null;
     this.openTb = false;
   }
+
+
 }
