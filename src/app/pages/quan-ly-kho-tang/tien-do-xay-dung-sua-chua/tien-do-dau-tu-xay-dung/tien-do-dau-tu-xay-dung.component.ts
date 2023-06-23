@@ -125,6 +125,10 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
 
   clearForm() {
     this.formData.reset();
+    this.formData.patchValue({
+      maDvi: this.userInfo.MA_DVI,
+      capDvi: this.userInfo.CAP_DVI
+    })
     this.filter();
   }
 
