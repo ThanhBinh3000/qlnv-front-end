@@ -5,22 +5,32 @@ import {
   OnInit,
   Output
 } from '@angular/core';
-import { Validators } from '@angular/forms';
+import {Validators} from '@angular/forms';
 import * as dayjs from 'dayjs';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
-import { MESSAGE } from 'src/app/constants/message';
-import { STATUS } from "../../../../../../constants/status";
-import { QuyetDinhPdKhBdgService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/quyetDinhPdKhBdg.service';
-import { TongHopDeXuatKeHoachBanDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/tongHopDeXuatKeHoachBanDauGia.service';
-import { DeXuatKhBanDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/deXuatKhBanDauGia.service';
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {
+  DialogTableSelectionComponent
+} from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
+import {MESSAGE} from 'src/app/constants/message';
+import {STATUS} from "../../../../../../constants/status";
+import {
+  QuyetDinhPdKhBdgService
+} from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/quyetDinhPdKhBdg.service';
+import {
+  TongHopDeXuatKeHoachBanDauGiaService
+} from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/tongHopDeXuatKeHoachBanDauGia.service';
+import {
+  DeXuatKhBanDauGiaService
+} from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/deXuatKhBanDauGia.service';
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from 'src/app/services/storage.service';
+import {DanhMucService} from 'src/app/services/danhmuc.service';
+import {ChiTieuKeHoachNamCapTongCucService} from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
+import {PREVIEW} from "src/app/constants/fileType";
+import {saveAs} from 'file-saver';
 
 @Component({
   selector: 'app-them-quyet-dinh-ban-dau-gia',
@@ -49,7 +59,11 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
   listLoaiHinhNx: any[] = [];
   listKieuNx: any[] = [];
   maDviCuc: string;
-
+  showDlgPreview = false;
+  pdfBlob: any;
+  pdfSrc: any;
+  wordSrc: any;
+  templateName = "quyet-dinh-ke-hoach-ban-dau-gia";
 
   constructor(
     httpClient: HttpClient,
@@ -320,7 +334,8 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
                 }
               }
             })
-          };
+          }
+          ;
           this.dataInput = null;
           this.dataInputCache = null;
         }
@@ -333,7 +348,7 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
 
   async getDataChiTieu() {
     let res2 = null;
-    res2 = await this.chiTieuKeHoachNamCapTongCucService.canCuCuc(
+    res2 = await this.chiTieuKeHoachNamCapTongCucService.canCuCucQd(
       +this.formData.get('nam').value,
     );
     if (res2.msg == MESSAGE.SUCCESS) {
@@ -440,6 +455,7 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
   }
 
   index = 0;
+
   async showDetail($event, index) {
     await this.spinner.show();
     if ($event.type == 'click') {
@@ -482,5 +498,32 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
     } else {
       return true;
     }
+  }
+
+  async preview(id) {
+    await this.quyetDinhPdKhBdgService.preview({
+      tenBaoCao: this.templateName,
+      id: id
+    }).then(async res => {
+      if (res.data) {
+        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
+        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
+        this.showDlgPreview = true;
+      } else {
+        this.notification.error(MESSAGE.ERROR, "Lỗi trong quá trình tải file.");
+      }
+    });
+  }
+
+  downloadPdf() {
+    saveAs(this.pdfSrc, this.templateName + ".pdf");
+  }
+
+  downloadWord() {
+    saveAs(this.wordSrc, this.templateName + ".docx");
+  }
+
+  closeDlg() {
+    this.showDlgPreview = false;
   }
 }

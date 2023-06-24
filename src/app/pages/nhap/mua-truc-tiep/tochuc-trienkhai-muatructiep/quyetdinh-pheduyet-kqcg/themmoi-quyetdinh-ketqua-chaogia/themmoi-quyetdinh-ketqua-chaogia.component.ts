@@ -26,7 +26,8 @@ export class ThemmoiQuyetdinhKetquaChaogiaComponent extends Base2Component imple
   @Input() idInput: number;
 
   maTrinh: String;
-
+  selected: boolean = false;
+  danhSachCtiet: any[] = [];
   showFromTT: boolean;
 
   constructor(
@@ -88,15 +89,19 @@ export class ThemmoiQuyetdinhKetquaChaogiaComponent extends Base2Component imple
   async getDetail(idInput) {
     if (idInput) {
       let res = await this.detail(idInput);
-      console.log(res, 999);
+      console.log("1", res);
 
       if (res) {
         this.formData.patchValue({
           soQdKq: res.soQdKq?.split('/')[0],
         })
         this.fileDinhKem = res.fileDinhKems;
-        this.dataTable = res.children;
-        await this.onChangeTtin(res.idPdKhDtl);
+        if(res.danhSachCtiet){
+          this.danhSachCtiet = res.danhSachCtiet;
+          this.showDetail(event, this.danhSachCtiet[0])
+        }else{
+          await this.onChangeTtin(res.idPdKhDtl);
+        }
       }
     }
   }
@@ -107,7 +112,8 @@ export class ThemmoiQuyetdinhKetquaChaogiaComponent extends Base2Component imple
       body.soQdKq = this.formData.get('soQdKq').value + this.maTrinh;
     }
     body.fileDinhKems = this.fileDinhKem;
-    // body.children = this.dataTable;
+    body.danhSachCtiet = this.danhSachCtiet;
+    console.log(body)
     let res = await this.createUpdate(body);
     if (res) {
       if (isGuiDuyet) {
@@ -187,6 +193,7 @@ export class ThemmoiQuyetdinhKetquaChaogiaComponent extends Base2Component imple
     let res = await this.chaogiaUyquyenMualeService.search(body);
     if (res.data) {
       listTb = res.data.content;
+      console.log(listTb)
     }
     const modalQD = this.modal.create({
       nzTitle: 'Danh sách thông tin chào giá',
@@ -225,7 +232,8 @@ export class ThemmoiQuyetdinhKetquaChaogiaComponent extends Base2Component imple
         idPdKhDtl: data.id,
         idPdKhHdr: data.hhQdPheduyetKhMttHdr.id
       })
-      this.dataTable = data.listChaoGia;
+      this.danhSachCtiet = data.children;
+      this.showDetail(event, this.danhSachCtiet[0])
       // if (this.dataTable) {
       //   this.dataTable.forEach((item) => {
       //     item.fileDinhKems.id = null;
@@ -234,6 +242,30 @@ export class ThemmoiQuyetdinhKetquaChaogiaComponent extends Base2Component imple
       //   })
       // }
     }
+  }
+
+  calcTong() {
+    if (this.danhSachCtiet) {
+      const sum = this.danhSachCtiet.reduce((prev, cur) => {
+        prev += cur.soLuong;
+        return prev;
+      }, 0);
+      return sum;
+    }
+  }
+  idRowSelect: number;
+  async showDetail($event, data: any) {
+    await this.spinner.show();
+    if ($event.type == "click") {
+      this.selected = false;
+      $event.target.parentElement.parentElement.querySelector(".selectedRow")?.classList.remove("selectedRow");
+      $event.target.parentElement.classList.add("selectedRow");
+    } else {
+      this.selected = true;
+    }
+    this.idRowSelect = data.id;
+    this.dataTable = data.listChaoGia
+    await this.spinner.hide();
   }
 
   dataEdit: { [key: string]: { edit: boolean; data: ChiTietThongTinBanTrucTiepChaoGia } } = {};

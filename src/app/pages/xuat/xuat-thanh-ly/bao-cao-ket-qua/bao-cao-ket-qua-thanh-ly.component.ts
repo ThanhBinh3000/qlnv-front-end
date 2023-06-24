@@ -34,8 +34,8 @@ export class BaoCaoKetQuaThanhLyComponent extends Base2Component implements OnIn
     {ma: this.STATUS.TU_CHOI_LDC, giaTri: 'Từ chối - LĐ TC'},
     {ma: this.STATUS.DA_DUYET_LDC, giaTri: 'Ban hành'},
   ];
-  idHoSo: number = 0;
-  openHoSo = false;
+  idQd: number = 0;
+  openQd = false;
 
   constructor(httpClient: HttpClient,
               storageService: StorageService,
@@ -129,13 +129,13 @@ export class BaoCaoKetQuaThanhLyComponent extends Base2Component implements OnIn
 
 
 
-  openHoSoModal(id: any) {
-    this.idHoSo = id;
-    this.openHoSo = true;
+  openQdModal(id: any) {
+    this.idQd = id;
+    this.openQd = true;
   }
 
-  closeHoSoModal() {
-    this.idHoSo = null;
-    this.openHoSo = false;
+  closeQdModal() {
+    this.idQd = null;
+    this.openQd = false;
   }
 }

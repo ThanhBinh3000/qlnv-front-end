@@ -13,6 +13,7 @@ import {
 } from "src/app/components/dialog/dialog-table-selection/dialog-table-selection.component";
 import { MESSAGE } from "src/app/constants/message";
 import { STATUS } from "src/app/constants/status";
+import { DanhMucDungChungService } from "src/app/services/danh-muc-dung-chung.service";
 import { MaTongHopQuyetDinhDieuChuyenService } from "src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/ma-tong-hop-quyet-dinh-dieu-chinh.service";
 import { QuyetDinhDieuChuyenTCService } from "src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-tc.service";
 import { SoDeXuatQuyetDinhDieuChuyenService } from "src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/so-de-xuat-quyet-dinh-dieu-chinh.service";
@@ -75,6 +76,29 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
     }
   ];
 
+  kieuNhapXuat: any[] = [
+    {
+      value: "01",
+      text: "Nhập mua"
+    },
+    {
+      value: "02",
+      text: "Nhập không chi tiền"
+    },
+    {
+      value: "03",
+      text: "Xuất bán"
+    },
+    {
+      value: "04",
+      text: "Xuất không thu tiền"
+    },
+    {
+      value: "05",
+      text: "Khác"
+    }
+  ];
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -82,6 +106,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private router: Router,
+    private dmService: DanhMucDungChungService,
     private soDeXuatQuyetDinhDieuChuyenService: SoDeXuatQuyetDinhDieuChuyenService,
     private maTongHopQuyetDinhDieuChuyenService: MaTongHopQuyetDinhDieuChuyenService,
     private quyetDinhDieuChuyenTCService: QuyetDinhDieuChuyenTCService,
@@ -105,6 +130,8 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự thảo'],
       lyDoTuChoi: [],
+      tenLoaiHinhNhapXuat: [],
+      tenKieuNhapXuat: [],
       quyetDinhPdDtl: [new Array<QuyetDinhPdDtl>(),],
       danhSachQuyetDinh: [new Array<any>(),],
     }
@@ -122,6 +149,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
         await this.loadChiTiet(this.idInput)
       } else {
         this.initForm();
+        this.getDataNX(this.formData.value.loaiDc)
         if (this.idTHop) {
           this.formData.patchValue({
             idThop: this.idTHop
@@ -154,7 +182,24 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
     }
     return children
   }
+  async getDataNX(loaiDC) {
+    await this.spinner.show()
+    const body = { loai: 'LOAI_HINH_NHAP_XUAT', ma: loaiDC === 'CHI_CUC' ? '94' : '144' }
+    let res = await this.dmService.search(body);
+    if (res.statusCode == 0) {
+      const data = res.data.content
+      if (data && data.length > 0) {
+        const content = data[0]
+        const knx = this.kieuNhapXuat.find(item => item.value === content.ghiChu)
+        this.formData.patchValue({
+          tenLoaiHinhNhapXuat: content.giaTri,
+          tenKieuNhapXuat: !!knx ? knx?.text : ''
+        });
+      }
+    }
 
+    await this.spinner.hide();
+  }
 
   async loadChiTiet(id: number) {
     await this.spinner.show()
@@ -272,13 +317,17 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
       const loaiDC = this.listLoaiDC.find(item => item.value == value)
 
       if (loaiDC) {
+        this.getDataNX(loaiDC.value)
         this.formData.patchValue({
           tenLoaiDc: loaiDC.text,
         })
       }
       this.formData.patchValue({
         idThop: this.idTHop || "",
-        idDxuat: "",
+        maThop: this.idTHop || "",
+        idDxuat: undefined,
+        maDxuat: undefined,
+        soDeXuat: undefined,
         quyetDinhPdDtl: []
       })
       this.dataTableView = []
@@ -572,9 +621,9 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
       return;
     }
     this.setValidator()
-    this.formData.patchValue({
-      idDxuat: undefined
-    });
+    // this.formData.patchValue({
+    //   idDxuat: undefined
+    // });
     await this.spinner.show();
     let bodyTh = {
       loaiDieuChuyen: this.formData.get('loaiDc').value,
@@ -612,7 +661,9 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
         this.formData.patchValue({
           idThop: data.id,
           maThop: data.maTongHop,
-          idDxuat: undefined
+          idDxuat: undefined,
+          maDxuat: undefined,
+          soDeXuat: undefined,
         });
       }
     });
@@ -624,9 +675,9 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
       return
     }
     this.setValidator()
-    this.formData.patchValue({
-      idThop: undefined
-    });
+    // this.formData.patchValue({
+    //   idThop: undefined
+    // });
     await this.spinner.show();
 
     let bodyDx = {
@@ -664,7 +715,8 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
           idDxuat: data.id,
           maDxuat: data.soDeXuat,
           soDeXuat: data.soDeXuat,
-          idThop: undefined
+          idThop: undefined,
+          maThop: undefined
         });
         this.dataTableView = []
         await this.onChangeIdTrHdr(data);

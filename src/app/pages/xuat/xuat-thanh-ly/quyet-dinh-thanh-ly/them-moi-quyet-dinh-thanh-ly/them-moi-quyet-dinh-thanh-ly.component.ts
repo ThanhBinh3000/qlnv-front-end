@@ -103,6 +103,7 @@ export class ThemMoiQuyetDinhThanhLyComponent extends Base2Component implements 
 
   async ngOnInit() {
     await this.spinner.show();
+    console.log(this.dataInit,555)
     try {
       this.maHauTo = '/' + this.userInfo.MA_QD;
       await Promise.all([

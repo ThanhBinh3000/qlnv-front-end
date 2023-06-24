@@ -160,7 +160,7 @@
                   Loại hình nhập xuất
                 </nz-form-label>
                 <nz-form-control>
-                  <input nz-input formControlName="loaiHinhNX" [readonly]="true" />
+                  <input nz-input formControlName="tenLoaiHinhNhapXuat" [readonly]="true" />
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -171,7 +171,7 @@
                   Kiểu nhập xuất
                 </nz-form-label>
                 <nz-form-control>
-                  <input nz-input formControlName="kieuNX" [readonly]="true" />
+                  <input nz-input formControlName="tenKieuNhapXuat" [readonly]="true" />
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -258,7 +258,7 @@
               </nz-form-item>
             </div>
 
-            <div nz-col [nzSpan]="18">
+            <div nz-col [nzSpan]="13">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
                   Trích yếu
@@ -269,13 +269,35 @@
               </nz-form-item>
             </div>
 
-            <div nz-col [nzSpan]="6">
+            <div nz-col [nzSpan]="4">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
                   Tổng dự toán kinh phí(triệu đồng)
                 </nz-form-label>
                 <nz-form-control>
                   <input nz-input currencyMask formControlName="tongDuToanKp" [options]="AMOUNT" [readonly]="true" />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <div nz-col [nzSpan]="3">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Loại hình nhập xuất
+                </nz-form-label>
+                <nz-form-control>
+                  <input nz-input formControlName="tenLoaiHinhNhapXuat" [readonly]="true" />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <div nz-col [nzSpan]="3">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Kiểu nhập xuất
+                </nz-form-label>
+                <nz-form-control>
+                  <input nz-input formControlName="tenKieuNhapXuat" [readonly]="true" />
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -386,7 +408,7 @@
               </nz-form-item>
             </div>
 
-            <div nz-col [nzSpan]="18">
+            <div nz-col [nzSpan]="14">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
                   Trích yếu
@@ -397,13 +419,35 @@
               </nz-form-item>
             </div>
 
-            <div nz-col [nzSpan]="6">
+            <div nz-col [nzSpan]="4">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
                   Tổng dự toán kinh phí(triệu đồng)
                 </nz-form-label>
                 <nz-form-control>
                   <input nz-input currencyMask formControlName="tongDuToanKp" [options]="AMOUNT" [readonly]="true" />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <div nz-col [nzSpan]="3">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Loại hình nhập xuất
+                </nz-form-label>
+                <nz-form-control>
+                  <input nz-input formControlName="tenLoaiHinhNhapXuat" [readonly]="true" />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <div nz-col [nzSpan]="3">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Kiểu nhập xuất
+                </nz-form-label>
+                <nz-form-control>
+                  <input nz-input formControlName="tenKieuNhapXuat" [readonly]="true" />
                 </nz-form-control>
               </nz-form-item>
             </div>

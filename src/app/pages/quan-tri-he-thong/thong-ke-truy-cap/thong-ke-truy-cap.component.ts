@@ -33,7 +33,10 @@ export class ThongKeTruyCapComponent extends Base2Component implements OnInit {
   listSystem: any[] = [{"code": "hang", "ten": "Quản lý hàng"}, {
     "code": "khoach",
     "ten": "Quản lý kế hoạch"
-  }, {"code": "kho", "ten": "Quản lý kho"}, {"code": "security", "ten": "Quản lý đăng nhập"}];
+  }, {"code": "kho", "ten": "Quản lý kho"}, {"code": "luukho", "ten": "Quản lý lưu kho"}, {
+    "code": "security",
+    "ten": "Quản lý đăng nhập"
+  }];
   pageSize: number = 100;
   @ViewChild("chart") chart: ChartComponent;
   chartOptions: Partial<ChartOptions>;
