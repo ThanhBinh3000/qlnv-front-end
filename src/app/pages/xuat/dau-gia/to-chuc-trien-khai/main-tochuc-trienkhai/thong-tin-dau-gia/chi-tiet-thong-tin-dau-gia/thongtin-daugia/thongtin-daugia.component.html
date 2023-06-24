@@ -730,12 +730,7 @@
                               <td> {{children.donViTinh}} </td>
                               <td> {{children.donGiaDuocDuyet | number : '1.0-1' : 'vi_VN' }} </td>
                               <td> {{children.donGiaDeXuat | number : '1.0-1' : 'vi_VN' }} </td>
-                              <td> {{(children.soLuongDeXuat * children.donGiaDuocDuyet *
-                                formData.value.khoanTienDatTruoc
-                                / 100 ) |
-                                number
-                                :
-                                '1.0-1' : 'vi_VN' }} </td>
+                              <td> {{children.soTienDatTruoc | number :'1.0-1' : 'vi_VN' }} </td>
                               <td>
                                 <nz-input-number
                                   [nzDisabled]="isDisabled() || isDisable() || formData.value.ketQua == 0"
