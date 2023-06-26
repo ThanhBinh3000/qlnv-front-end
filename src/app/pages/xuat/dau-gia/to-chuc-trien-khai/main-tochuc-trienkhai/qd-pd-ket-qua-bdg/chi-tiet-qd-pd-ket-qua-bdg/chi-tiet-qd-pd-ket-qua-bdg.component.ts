@@ -15,6 +15,8 @@ import { ThongTinDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-
 import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { QuyetDinhPdKhBdgService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/quyetDinhPdKhBdg.service';
+import { cloneDeep } from 'lodash';
+import { Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-chi-tiet-qd-pd-ket-qua-bdg',
@@ -49,10 +51,9 @@ export class ChiTietQdPdKetQuaBdgComponent extends Base2Component implements OnI
     this.formData = this.fb.group({
       id: [],
       nam: [dayjs().get('year')],
-      idPdKhDtl:[],
+      idPdKhDtl: [],
       idThongTin: [],
       maDvi: [''],
-      tenDvi: [''],
       soQdKq: [''],
       trichYeu: [''],
       ngayHluc: [''],
@@ -63,7 +64,7 @@ export class ChiTietQdPdKetQuaBdgComponent extends Base2Component implements OnI
       tenLoaiVthh: [''],
       cloaiVthh: [''],
       tenCloaiVthh: [''],
-      maThongBao: [''],
+      maThongBao: ['', [Validators.required]],
       soBienBan: [''],
       pthucGnhan: [''],
       tgianGnhan: [''],
@@ -126,15 +127,21 @@ export class ChiTietQdPdKetQuaBdgComponent extends Base2Component implements OnI
       this.fileDinhKems = res.fileDinhKems;
       this.fileDinhKem = res.fileDinhKem;
       await this.onChangeTtinDgia(res.maThongBao.split('/')[0]);
-      if(res.idPdKhDtl){
+      if (res.idPdKhDtl) {
         let resTb = await this.thongTinDauGiaService.getDetail(res.idThongTin)
         const dataTb = resTb.data
-        this.dataTable = dataTb.children
+        let toChuc = cloneDeep(dataTb.children);
+        toChuc.forEach(s => {
+          s.children = s.children.filter(f => f.toChucCaNhan);
+        });
+        this.dataTable = toChuc.filter(s => s.children.length != 0)
+        await this.calculatorTable();
       }
     }
   }
 
   async save(isGuiDuyet?: boolean) {
+    this.setValidator(isGuiDuyet);
     let body = this.formData.value;
     body.fileDinhKems = this.fileDinhKems;
     body.fileDinhKem = this.fileDinhKem;
@@ -145,7 +152,7 @@ export class ChiTietQdPdKetQuaBdgComponent extends Base2Component implements OnI
         this.idInput = res.id
         this.guiDuyet();
       } else {
-        // this.goBack();
+        this.getDetail(res.id)
       }
     }
   }
@@ -204,16 +211,20 @@ export class ChiTietQdPdKetQuaBdgComponent extends Base2Component implements OnI
     }
   }
 
+  isDisabledQD() {
+    if (this.formData.value.id == null) {
+      return false
+    } else {
+      return true;
+    }
+  }
+
   async openMaThongBao() {
     let body = {
-      "nam": this.formData.value.nam,
-      "loaiVthh": this.loaiVthh,
-      "maDvi": this.userInfo.MA_DVI,
-      "trangThai" : this.STATUS.DA_HOAN_THANH,
-      "paggingReq": {
-        limit: this.globals.prop.MAX_INTERGER,
-        page: 0,
-      }
+      nam: this.formData.value.nam,
+      loaiVthh: this.loaiVthh,
+      maDvi: this.userInfo.MA_DVI,
+      trangThai: this.STATUS.DA_HOAN_THANH,
     }
     await this.loadMaThongBao();
     let listTb = [];
@@ -276,10 +287,28 @@ export class ChiTietQdPdKetQuaBdgComponent extends Base2Component implements OnI
               tgianGnhan: dataQdKhDtl.tgianGnhan,
               tgianGnhanGhiChu: dataQdKhDtl.tgianGnhanGhiChu,
             })
-            this.dataTable = dataTb.children
+            let toChuc = cloneDeep(dataTb.children);
+            toChuc.forEach(s => {
+              s.children = s.children.filter(f => f.toChucCaNhan);
+            });
+            this.dataTable = toChuc.filter(s => s.children.length != 0)
+            await this.calculatorTable();
           }
         })
     }
+  }
+
+  async calculatorTable() {
+    this.dataTable.forEach((item) => {
+      item.children.forEach((child) => {
+        item.slBanDauGiaChiCuc = 0;
+        item.giaKhoiDiemChiCuc = 0;
+        item.soTienDatTruocCc = 0;
+        item.slBanDauGiaChiCuc += child.soLuongDeXuat;
+        item.giaKhoiDiemChiCuc += child.donGiaDeXuat;
+        item.soTienDatTruocCc += child.soTienDatTruoc
+      })
+    })
   }
 
   async loadMaThongBao() {
@@ -291,6 +320,40 @@ export class ChiTietQdPdKetQuaBdgComponent extends Base2Component implements OnI
     let res = await this.qdPdKetQuaBanDauGiaService.search(body)
     if (res.data) {
       this.loadMaThongBaoQd = res.data.content
+    }
+  }
+
+  setValidator(isGuiDuyet) {
+    if (isGuiDuyet) {
+      this.formData.controls["nam"].setValidators([Validators.required]);
+      this.formData.controls["soQdKq"].setValidators([Validators.required]);
+      this.formData.controls["trichYeu"].setValidators([Validators.required]);
+      this.formData.controls["ngayHluc"].setValidators([Validators.required]);
+      this.formData.controls["ngayKy"].setValidators([Validators.required]);
+      this.formData.controls["loaiHinhNx"].setValidators([Validators.required]);
+      this.formData.controls["kieuNx"].setValidators([Validators.required]);
+      this.formData.controls["soBienBan"].setValidators([Validators.required]);
+      this.formData.controls["loaiVthh"].setValidators([Validators.required]);
+      this.formData.controls["tenLoaiVthh"].setValidators([Validators.required]);
+      this.formData.controls["cloaiVthh"].setValidators([Validators.required]);
+      this.formData.controls["tenCloaiVthh"].setValidators([Validators.required]);
+      this.formData.controls["pthucGnhan"].setValidators([Validators.required]);
+      this.formData.controls["tgianGnhan"].setValidators([Validators.required]);
+    } else {
+      this.formData.controls["nam"].clearValidators();
+      this.formData.controls["soQdKq"].clearValidators();
+      this.formData.controls["trichYeu"].clearValidators();
+      this.formData.controls["ngayHluc"].clearValidators();
+      this.formData.controls["ngayKy"].clearValidators();
+      this.formData.controls["loaiHinhNx"].clearValidators();
+      this.formData.controls["kieuNx"].clearValidators();
+      this.formData.controls["soBienBan"].clearValidators();
+      this.formData.controls["loaiVthh"].clearValidators();
+      this.formData.controls["tenLoaiVthh"].clearValidators();
+      this.formData.controls["cloaiVthh"].clearValidators();
+      this.formData.controls["tenCloaiVthh"].clearValidators();
+      this.formData.controls["pthucGnhan"].clearValidators();
+      this.formData.controls["tgianGnhan"].clearValidators();
     }
   }
 
