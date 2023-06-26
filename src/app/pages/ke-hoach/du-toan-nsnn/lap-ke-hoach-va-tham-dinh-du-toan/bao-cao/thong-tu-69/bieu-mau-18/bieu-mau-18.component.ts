@@ -153,6 +153,7 @@ export class BieuMau18Component implements OnInit {
 				if (data.statusCode == 0) {
 					this.formDetail = data.data;
 					this.formDetail.maDviTien = '1';
+					this.lstCtietBcao = this.formDetail.lstCtietLapThamDinhs;
 					this.listFile = [];
 					this.getStatusButton();
 				} else {

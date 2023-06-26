@@ -600,6 +600,7 @@ export class BaoCaoComponent implements OnInit {
         const bieuMau = this.baoCao.lstLapThamDinhs.find(e => e.id == id);
         const dataInfo = {
             id: id,
+            maBieuMau: bieuMau.maBieuMau,
             extraData: null,
             maDvi: this.baoCao.maDvi,
             capDvi: this.userInfo.capDvi,
