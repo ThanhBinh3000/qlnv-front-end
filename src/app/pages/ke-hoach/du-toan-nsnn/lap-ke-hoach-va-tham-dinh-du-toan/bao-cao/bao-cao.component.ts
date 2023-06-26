@@ -180,7 +180,6 @@ export class BaoCaoComponent implements OnInit {
         //lay thong tin chung bao cao
         this.baoCao.id = this.data?.id;
         this.userInfo = this.userService.getUserLogin();
-        console.log(this.data)
 
         if (this.baoCao.id) {
             await this.getDetailReport();
@@ -254,7 +253,7 @@ export class BaoCaoComponent implements OnInit {
         this.status.print = Utils.statusPrint.includes(this.baoCao.trangThai) && checkPrint && isChild;
         this.status.ok = this.status.accept || this.status.approve || this.status.pass
         this.status.finish = this.status.general;
-        this.status.editAppval = this.status.approve;
+        this.status.editAppVal = this.status.approve;
     }
 
     back() {
@@ -603,6 +602,8 @@ export class BaoCaoComponent implements OnInit {
             id: id,
             extraData: null,
             maDvi: this.baoCao.maDvi,
+            capDvi: this.userInfo.capDvi,
+            tenDvi: this.userInfo.tenDvi,
             namBcao: this.baoCao.namBcao,
             path: this.path,
             status: new BtnStatus(),

@@ -53,6 +53,8 @@ export class BieuMau18Component implements OnInit {
 	linhVucChis: any[] = [];
 	lstCtietBcao: ItemData[] = [];
 	donViTiens: any[] = DON_VI_TIEN;
+	keys = ['ncauChiTongSo', 'ncauChiTrongDoChiCs', 'ncauChiTrongDoChiMoi', 'ncauChiChiaRaDtuPtrien', 'ncauChiChiaRaChiCs1', 'ncauChiChiaRaChiMoi1',
+		'ncauChiChiaRaChiTx', 'ncauChiChiaRaChiCs2', 'ncauChiChiaRaChiMoi2', 'ncauChiChiaRaChiCs3', 'ncauChiChiaRaChiMoi3', 'ncauChiChiaRaChiDtqg']
 	amount = AMOUNT;
 	scrollX: string;
 	//trang thai cac nut
@@ -96,9 +98,7 @@ export class BieuMau18Component implements OnInit {
 		public genFunc: GeneralFunction,
 		private fileFunc: FileFunction,
 		private tableFunc: TableFunction,
-	) {
-	}
-
+	) { }
 
 	async ngOnInit() {
 		this.initialization().then(() => {
@@ -319,18 +319,9 @@ export class BieuMau18Component implements OnInit {
 			}
 			this.lstCtietBcao.forEach(item => {
 				if (this.tableFunc.getHead(item.stt) == stt) {
-					this.lstCtietBcao[index].ncauChiTongSo = this.numFunc.sum([this.lstCtietBcao[index].ncauChiTongSo, item.ncauChiTongSo]);
-					this.lstCtietBcao[index].ncauChiTrongDoChiCs = this.numFunc.sum([this.lstCtietBcao[index].ncauChiTrongDoChiCs, item.ncauChiTrongDoChiCs]);
-					this.lstCtietBcao[index].ncauChiTrongDoChiMoi = this.numFunc.sum([this.lstCtietBcao[index].ncauChiTrongDoChiMoi, item.ncauChiTrongDoChiMoi]);
-					this.lstCtietBcao[index].ncauChiChiaRaDtuPtrien = this.numFunc.sum([this.lstCtietBcao[index].ncauChiChiaRaDtuPtrien, item.ncauChiChiaRaDtuPtrien]);
-					this.lstCtietBcao[index].ncauChiChiaRaChiCs1 = this.numFunc.sum([this.lstCtietBcao[index].ncauChiChiaRaChiCs1, item.ncauChiChiaRaChiCs1]);
-					this.lstCtietBcao[index].ncauChiChiaRaChiMoi1 = this.numFunc.sum([this.lstCtietBcao[index].ncauChiChiaRaChiMoi1, item.ncauChiChiaRaChiMoi1]);
-					this.lstCtietBcao[index].ncauChiChiaRaChiTx = this.numFunc.sum([this.lstCtietBcao[index].ncauChiChiaRaChiTx, item.ncauChiChiaRaChiTx]);
-					this.lstCtietBcao[index].ncauChiChiaRaChiCs2 = this.numFunc.sum([this.lstCtietBcao[index].ncauChiChiaRaChiCs2, item.ncauChiChiaRaChiCs2]);
-					this.lstCtietBcao[index].ncauChiChiaRaChiMoi2 = this.numFunc.sum([this.lstCtietBcao[index].ncauChiChiaRaChiMoi2, item.ncauChiChiaRaChiMoi2]);
-					this.lstCtietBcao[index].ncauChiChiaRaChiCs3 = this.numFunc.sum([this.lstCtietBcao[index].ncauChiChiaRaChiCs3, item.ncauChiChiaRaChiCs3]);
-					this.lstCtietBcao[index].ncauChiChiaRaChiMoi3 = this.numFunc.sum([this.lstCtietBcao[index].ncauChiChiaRaChiMoi3, item.ncauChiChiaRaChiMoi3]);
-					this.lstCtietBcao[index].ncauChiChiaRaChiDtqg = this.numFunc.sum([this.lstCtietBcao[index].ncauChiChiaRaChiDtqg, item.ncauChiChiaRaChiDtqg]);
+					this.keys.forEach(key => {
+						this.lstCtietBcao[index][key] = this.numFunc.sum([this.lstCtietBcao[index][key], item[key]]);
+					})
 				}
 			})
 			stt = this.tableFunc.getHead(stt);
@@ -342,18 +333,9 @@ export class BieuMau18Component implements OnInit {
 		this.total = new ItemData();
 		this.lstCtietBcao.forEach(item => {
 			if (item.level == 0) {
-				this.total.ncauChiTongSo = this.numFunc.sum([this.total.ncauChiTongSo, item.ncauChiTongSo]);
-				this.total.ncauChiTrongDoChiCs = this.numFunc.sum([this.total.ncauChiTrongDoChiCs, item.ncauChiTrongDoChiCs]);
-				this.total.ncauChiTrongDoChiMoi = this.numFunc.sum([this.total.ncauChiTrongDoChiMoi, item.ncauChiTrongDoChiMoi]);
-				this.total.ncauChiChiaRaDtuPtrien = this.numFunc.sum([this.total.ncauChiChiaRaDtuPtrien, item.ncauChiChiaRaDtuPtrien]);
-				this.total.ncauChiChiaRaChiCs1 = this.numFunc.sum([this.total.ncauChiChiaRaChiCs1, item.ncauChiChiaRaChiCs1]);
-				this.total.ncauChiChiaRaChiMoi1 = this.numFunc.sum([this.total.ncauChiChiaRaChiMoi1, item.ncauChiChiaRaChiMoi1]);
-				this.total.ncauChiChiaRaChiTx = this.numFunc.sum([this.total.ncauChiChiaRaChiTx, item.ncauChiChiaRaChiTx]);
-				this.total.ncauChiChiaRaChiCs2 = this.numFunc.sum([this.total.ncauChiChiaRaChiCs2, item.ncauChiChiaRaChiCs2]);
-				this.total.ncauChiChiaRaChiMoi2 = this.numFunc.sum([this.total.ncauChiChiaRaChiMoi2, item.ncauChiChiaRaChiMoi2]);
-				this.total.ncauChiChiaRaChiCs3 = this.numFunc.sum([this.total.ncauChiChiaRaChiCs3, item.ncauChiChiaRaChiCs3]);
-				this.total.ncauChiChiaRaChiMoi3 = this.numFunc.sum([this.total.ncauChiChiaRaChiMoi3, item.ncauChiChiaRaChiMoi3]);
-				this.total.ncauChiChiaRaChiDtqg = this.numFunc.sum([this.total.ncauChiChiaRaChiDtqg, item.ncauChiChiaRaChiDtqg]);
+				this.keys.forEach(key => {
+					this.total[key] = this.numFunc.sum([this.total[key], item[key]]);
+				})
 			}
 		})
 	}
