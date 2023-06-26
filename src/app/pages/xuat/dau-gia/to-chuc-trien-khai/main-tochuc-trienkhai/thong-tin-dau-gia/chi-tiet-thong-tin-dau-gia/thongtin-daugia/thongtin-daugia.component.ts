@@ -213,8 +213,8 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
     this.dataTable.forEach((item) => {
       item.children.forEach((child) => {
         item.soLuongChiCuc += child.soLuongDeXuat;
-        item.soTienDatTruocChiCuc += child.soLuongDeXuat * child.donGiaDuocDuyet *
-          this.formData.value.khoanTienDatTruoc / 100
+        item.soTienDatTruocChiCuc += child.soLuongDeXuat * child.donGiaDuocDuyet * this.formData.value.khoanTienDatTruoc / 100;
+        child.soTienDatTruoc = child.soLuongDeXuat * child.donGiaDuocDuyet * this.formData.value.khoanTienDatTruoc / 100;
       })
     })
   }

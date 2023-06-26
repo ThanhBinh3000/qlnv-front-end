@@ -62,7 +62,7 @@
   </nz-alert>
 
   <nz-collapse nzAccordion>
-    <nz-collapse-panel [nzHeader]="'Thông tin chung'" [nzActive]="true">
+    <nz-collapse-panel [nzHeader]="'THÔNG TIN CHUNG'" [nzActive]="true">
       <!-- <div class="mt16 flex-card p-lr16">
         <div class="header header-green-background mg-t-16">
           <div class="header-text">
@@ -136,7 +136,7 @@
               </nz-form-item>
             </div>
 
-            <div *ngIf="isTongCuc()" nz-col [nzSpan]="12">
+            <div nz-col [nzSpan]="12">
               <nz-radio-group [nzDisabled]="isView || isViewOnModal || !!idTHop" nzSize="small" class="rdo-input"
                 formControlName="type">
                 <nz-form-item nz-col [nzSpan]="11">
@@ -158,25 +158,38 @@
               </nz-radio-group>
             </div>
 
-            <div *ngIf="isCuc()" nz-col [nzSpan]="12">
-              <nz-form-item>
-                <nz-form-label [nzNoColon]="true">
-                  Tổng dự toán kinh phí(triệu đồng)
-                </nz-form-label>
-                <nz-form-control>
-                  <input nz-input formControlName="tongtien" [readonly]="true" />
-                </nz-form-control>
-              </nz-form-item>
-            </div>
 
 
-            <div nz-col [nzSpan]="24">
+
+            <div nz-col [nzSpan]="17">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
                   Trích yếu
                 </nz-form-label>
                 <nz-form-control>
                   <input nz-input formControlName="trichYeu" [readonly]="isView || isViewOnModal" />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <div nz-col [nzSpan]="3">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Loại hình nhập xuất
+                </nz-form-label>
+                <nz-form-control>
+                  <input nz-input formControlName="tenLoaiHinhNhapXuat" [readonly]="true" />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <div nz-col [nzSpan]="3">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Kiểu nhập xuất
+                </nz-form-label>
+                <nz-form-control>
+                  <input nz-input formControlName="tenKieuNhapXuat" [readonly]="true" />
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -215,24 +228,18 @@
   </nz-collapse>
 
   <div class="mt16 flex-card p-lr16">
-    <!-- <div *ngIf="isTongCuc()" class="header header-green-background mg-t-16">
-      <div class="header-text">
-        <div class="title-chi-tieu">
-          <span></span>
-          <span>Thông tin điều chuyển nội bộ giữa 2 cục DTNN KV</span>
-        </div>
-      </div>
-    </div> -->
     <nz-collapse nzAccordion>
-      <nz-collapse-panel [nzHeader]="'Thông tin điều chuyển nội bộ giữa 2 cục DTNN KV'" [nzActive]="true">
+      <nz-collapse-panel
+        [nzHeader]="formData.value.loaiDc == 'CHI_CUC' ? 'THÔNG TIN ĐIỀU CHUYỂN NỘI BỘ GIỮA CÁC CHI CỤC DTNN TRONG CÙNG 1 CỤC DTNN KV' : 'THÔNG TIN ĐIỀU CHUYỂN NỘI BỘ GIỮA 2 CỤC DTNN KV'"
+        [nzActive]="true">
         <nz-card class="mt-2px flex-card data-table card-border-content table-card">
           <nz-table #quyetDinhPdDtl class="nowrap mt-16 table-chi-tiet" nzBordered
             [nzData]="formData.value.quyetDinhPdDtl">
             <thead>
               <tr>
                 <th style="width: 35px">STT</th>
-                <th>Cục DTNN KV xuất ĐC</th>
-                <th>Cục DTNN KV nhận ĐC</th>
+                <th>{{formData.value.loaiDc == 'CUC' ? 'Cục DTNN KV xuất ĐC' : 'Cục DTNN KV'}}</th>
+                <th *ngIf="formData.value.loaiDc == 'CUC'">Cục DTNN KV nhận ĐC</th>
                 <th>Số đề xuất/ Công văn</th>
                 <th>Ngày trình duyệt Tổng cục</th>
                 <th>Tổng dự toán kinh phí(triệu đồng)</th>
@@ -244,9 +251,9 @@
                 <tr [ngClass]="{'bg-selected': selected === i}" (click)="selectRow(i)">
                   <td>{{i + 1}}</td>
                   <td>{{item.tenDviCuc || item.tenCucDxuat || ""}}</td>
-                  <td>{{item.tenCucNhan || ""}}</td>
+                  <td *ngIf="formData.value.loaiDc == 'CUC'">{{item.tenCucNhan || ""}}</td>
                   <td>{{item.soDxuat || ""}}</td>
-                  <td>{{item.ngayGduyet || ""}}</td>
+                  <td>{{item.ngayGduyet | date: 'dd/MM/YYYY'}}</td>
                   <td>{{item.tongDuToanKp|number: '1.0-1' || ""}}</td>
                   <td>{{item.trichYeu || ""}}</td>
                 </tr>

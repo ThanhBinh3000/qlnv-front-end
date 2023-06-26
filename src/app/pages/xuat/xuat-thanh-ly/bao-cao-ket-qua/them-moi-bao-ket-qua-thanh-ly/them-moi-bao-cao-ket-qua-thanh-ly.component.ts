@@ -182,9 +182,11 @@ export class ThemMoiBaoCaoKetQuaThanhLyComponent extends Base2Component implemen
     };
     let rs = await this.createUpdate(body)
     this.formData.enable({emitEvent: false});
-    this.formData.patchValue({id: rs.id})
-    let ct =  await this.baoCaoKqThanhLyService.getDetail(rs.id);
-    this.buildTableView(ct.data.baoCaoKqDtl)
+    if (rs){
+      this.formData.patchValue({id: rs.id})
+      let ct =  await this.baoCaoKqThanhLyService.getDetail(rs.id);
+      this.buildTableView(ct.data.baoCaoKqDtl)
+    }
   }
 
   async saveAndSend(body: any, trangThai: string, msg: string, msgSuccess?: string) {
@@ -210,12 +212,11 @@ export class ThemMoiBaoCaoKetQuaThanhLyComponent extends Base2Component implemen
               }
               this.formData.patchValue({
                 soQd: res.data.soQd,
-                baoCaoKqDtl:this.dataTable,
                 tongSoLuongTl: res.data.tongSoLuongTl,
                 tongSoLuongCon: res.data.tongSoLuongCon,
                 tongThanhTien: res.data.tongThanhTien,
               });
-              this.buildTableView(this.formData.value.baoCaoKqDtl)
+              this.buildTableView(this.dataTable)
             }
           }
           0

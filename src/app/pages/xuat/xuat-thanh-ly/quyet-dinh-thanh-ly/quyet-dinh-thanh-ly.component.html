@@ -135,7 +135,7 @@
           <td>{{ data.soQd }}</td>
           <td>{{ data.trichYeu }}</td>
           <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
-          <td><a nz-button nzType="link" *ngIf="data.soHoSo" (click)="openHoSoModal(data.idHoSo)">{{ data.soHoSo }}</a>
+          <td><a nz-button nzType="link" *ngIf="data.idHoSo" (click)="openHoSoModal(data.idHoSo)">{{ data.soHoSo }}</a>
           </td>
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-left">
@@ -196,18 +196,18 @@
   </div>
 </ng-template>
 
-<!--<nz-modal [nzWidth]="'100%'" [nzBodyStyle]="{ 'overflow-y': 'auto' }"-->
-<!--          nzMaskClosable="true" [(nzVisible)]="openQdPd" (nzOnCancel)="closeHoSoModal()">-->
-<!--  <ng-container *nzModalContent class="modal__content custom-scroll-modal">-->
-<!--    <app-thong-tin-quyet-dinh-phe-duyet-phuong-an class="modal-content-detail" [idSelected]="idQdPd" [loaiVthh]="loaiVthh" [isView]="true">-->
-<!--    </app-thong-tin-quyet-dinh-phe-duyet-phuong-an>-->
-<!--  </ng-container>-->
-<!--  <div *nzModalFooter>-->
-<!--    <button nz-button (click)="closeHoSoModal()" class="modal__button&#45;&#45;cancel">-->
-<!--      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>-->
-<!--      Đóng-->
-<!--    </button>-->
-<!--  </div>-->
-<!--</nz-modal>-->
+<nz-modal [nzWidth]="'100%'" [nzBodyStyle]="{ 'overflow-y': 'auto' }"
+          nzMaskClosable="true" [(nzVisible)]="openHoSo" (nzOnCancel)="closeHoSoModal()">
+  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+    <app-chi-tiet-ho-so-thanh-ly class="modal-content-detail" [idInput]="idHoSo" [loaiVthh]="loaiVthh" [isView]="true">
+    </app-chi-tiet-ho-so-thanh-ly>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button (click)="closeHoSoModal()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>
 
 
