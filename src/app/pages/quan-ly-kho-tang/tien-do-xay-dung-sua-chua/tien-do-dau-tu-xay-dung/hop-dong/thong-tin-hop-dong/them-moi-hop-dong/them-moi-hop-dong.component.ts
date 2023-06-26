@@ -161,6 +161,7 @@ export class ThemMoiHopDongComponent extends Base2Component implements OnInit {
 
   async bindingData() {
     if (this.itemGoiThau && this.itemQdPdKhlcnt) {
+      console.log(22222222)
       let rs = await this.quyetdinhpheduyetKqLcntService.getDetail(this.itemGoiThau.idQdPdKqlcnt);
       let dataQdPdKqlcnt;
       let goiThau;
@@ -170,8 +171,9 @@ export class ThemMoiHopDongComponent extends Base2Component implements OnInit {
       if (dataQdPdKqlcnt.listKtTdxdQuyetDinhPdKqlcntDsgt && dataQdPdKqlcnt.listKtTdxdQuyetDinhPdKqlcntDsgt.length) {
         goiThau = dataQdPdKqlcnt.listKtTdxdQuyetDinhPdKqlcntDsgt.find(it => it.idGoiThau == this.itemGoiThau.id);
       }
+      console.log(this.itemGoiThau, 'this.itemGoiThau this.itemGoiThau ')
       this.formData.patchValue({
-        namKeHoach : this.itemQdPdKhlcnt.namKeHoach,
+        namKeHoach: this.itemQdPdKhlcnt.namKeHoach,
         idQdPdKqlcnt: this.itemGoiThau.idQdPdKqlcnt,
         soQdPdKhlcnt: this.itemQdPdKhlcnt.soQd,
         idQdPdKhlcnt: this.itemQdPdKhlcnt.id,
