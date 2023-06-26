@@ -1,6 +1,6 @@
 <nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="btn-affix">
   <div class="btn-group">
-    <button type="button" class="btn btn-sub" (click)="quayLai()">
+    <button type="button" class="btn btn-sub" (click)="quayLai()" *ngIf="!isModal">
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
@@ -160,18 +160,18 @@
         <!--            </nz-form-control>-->
         <!--          </nz-form-item>-->
         <!--        </div>-->
-        <div nz-col [nzSpan]="5" *ngIf="type=='GCT'">
-          <nz-form-item class="form-item">
-            <nz-form-label [nzNoColon]="true" nzRequired class="label-color-kh"> Quyết định phê
-              duyệt kế hoạch mua/bán
-            </nz-form-label>
-            <nz-form-control [nzErrorTip]="error">
-              <nz-select [nzDisabled]="isView" formControlName="qdCtKhNam">
-                <nz-option *ngFor="let item of listQdCtKh" [nzLabel]="item.soQd" [nzValue]="item.soQd"></nz-option>
-              </nz-select>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
+<!--        <div nz-col [nzSpan]="5" *ngIf="type=='GCT'">-->
+<!--          <nz-form-item class="form-item">-->
+<!--            <nz-form-label [nzNoColon]="true" nzRequired class="label-color-kh"> Quyết định phê-->
+<!--              duyệt kế hoạch mua/bán-->
+<!--            </nz-form-label>-->
+<!--            <nz-form-control [nzErrorTip]="error">-->
+<!--              <nz-select [nzDisabled]="isView" formControlName="qdCtKhNam">-->
+<!--                <nz-option *ngFor="let item of listQdCtKh" [nzLabel]="item.soQd" [nzValue]="item.soQd"></nz-option>-->
+<!--              </nz-select>-->
+<!--            </nz-form-control>-->
+<!--          </nz-form-item>-->
+<!--        </div>-->
       </div>
     </form>
   </nz-card>
