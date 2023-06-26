@@ -70,10 +70,14 @@ export class ChiTietQdPdKetQuaBdgComponent extends Base2Component implements OnI
       tgianGnhan: [''],
       tgianGnhanGhiChu: [''],
       ghiChu: [''],
+      idQdPd: [],
       soQdPd: [''],
       hinhThucDauGia: [''],
       pthucDauGia: [''],
       soTbKhongThanh: [''],
+      tongSlXuat: [],
+      thanhTien: [],
+      tongDvts: [],
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự Thảo'],
       lyDoTuChoi: [''],
@@ -244,7 +248,7 @@ export class ChiTietQdPdKetQuaBdgComponent extends Base2Component implements OnI
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
     const modalQD = this.modal.create({
-      nzTitle: 'Danh sách thông báo bán đấu giá',
+      nzTitle: 'DANH SÁCH THÔNG BÁO BÁN ĐẤU GIÁ',
       nzContent: DialogTableSelectionComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -252,8 +256,8 @@ export class ChiTietQdPdKetQuaBdgComponent extends Base2Component implements OnI
       nzFooter: null,
       nzComponentParams: {
         dataTable: listTb.filter(s => s.ketQua == 1),
-        dataHeader: ['Số quyết định phê duyệt KH BDG', 'Mã thông báo', 'Số biên bản'],
-        dataColumn: ['soQdPd', 'maThongBao', 'soBienBan']
+        dataHeader: ['Mã thông báo', 'Số biên bản', 'Loại hàng háo', 'Chủng loại hàng hóa'],
+        dataColumn: ['maThongBao', 'soBienBan', 'tenLoaiVthh', 'tenCloaiVthh']
       },
     });
     modalQD.afterClose.subscribe(async (data) => {
@@ -274,6 +278,7 @@ export class ChiTietQdPdKetQuaBdgComponent extends Base2Component implements OnI
             this.formData.patchValue({
               idThongTin: dataTb.id,
               soQdPd: dataQdKhDtl.xhQdPdKhBdg.soQdPd,
+              idQdPd: dataQdKhDtl.xhQdPdKhBdg.id,
               idPdKhDtl: dataQdKhDtl.id,
               maThongBao: dataTb.maThongBao,
               soBienBan: dataTb.soBienBan,
@@ -286,6 +291,8 @@ export class ChiTietQdPdKetQuaBdgComponent extends Base2Component implements OnI
               pthucGnhan: dataQdKhDtl.pthucGnhan,
               tgianGnhan: dataQdKhDtl.tgianGnhan,
               tgianGnhanGhiChu: dataQdKhDtl.tgianGnhanGhiChu,
+              hinhThucDauGia: dataTb.hthucDgia,
+              pthucDauGia: dataTb.pthucDgia,
             })
             let toChuc = cloneDeep(dataTb.children);
             toChuc.forEach(s => {
@@ -299,6 +306,9 @@ export class ChiTietQdPdKetQuaBdgComponent extends Base2Component implements OnI
   }
 
   async calculatorTable() {
+    let tongSlXuat: number = 0;
+    let thanhTien: number = 0;
+    let tongDvts: number = 0;
     this.dataTable.forEach((item) => {
       item.children.forEach((child) => {
         item.slBanDauGiaChiCuc = 0;
@@ -307,8 +317,16 @@ export class ChiTietQdPdKetQuaBdgComponent extends Base2Component implements OnI
         item.slBanDauGiaChiCuc += child.soLuongDeXuat;
         item.giaKhoiDiemChiCuc += child.donGiaDeXuat;
         item.soTienDatTruocCc += child.soTienDatTruoc
+        tongDvts += item.children.length;
+        tongSlXuat += item.slBanDauGiaChiCuc
+        thanhTien += child.soLuongDeXuat * child.donGiaTraGia
       })
-    })
+    });
+    this.formData.patchValue({
+      tongSlXuat: tongSlXuat,
+      thanhTien: thanhTien,
+      tongDvts: tongDvts,
+    });
   }
 
   async loadMaThongBao() {

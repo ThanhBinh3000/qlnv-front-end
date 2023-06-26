@@ -24,6 +24,7 @@ import { STATUS } from 'src/app/constants/status';
 export class ThongtinDaugiaComponent extends Base2Component implements OnInit, OnChanges {
   @Input() data
   @Input() isView: boolean
+  @Input() idInput: number = 0;
   isModal = false;
   idDtl: number;
   soQdPd: string;
@@ -143,6 +144,9 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
         });
         this.spinner.hide();
       }
+    }
+    if (this.idInput > 0 && this.idInput) {
+      this.getDetail(this.idInput)
     }
     await Promise.all([
       this.loadDataComboBox(),
