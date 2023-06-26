@@ -200,12 +200,24 @@
           <td>{{ data.ngayPduyet | date: 'dd/MM/YYYY' }}</td>
           <td>{{ data.trichYeu }}</td>
           <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
-          <td>{{ data.soQdPd }}</td>
-          <td>{{ data.maThongBao }}</td>
-          <td>{{ data.hinhThucDauGia }}</td>
-          <td>{{ data.pthucDauGia }}</td>
+          <td>
+            <a *ngIf="data.soQdPd && data.idQdPd" nz-button nzType="link" (click)="openModalQdPd(data.idQdPd)">{{
+              data.soQdPd}}</a>
+          </td>
+          <td>
+            <a *ngIf="data.maThongBao && data.idThongTin" nz-button nzType="link"
+              (click)="openModalMaThongBao(data.idThongTin)">{{
+              data.maThongBao}}</a>
+          </td>
+
+          <td>{{ data.hinhThucDauGia == '01'? 'Đấu giá bằng bỏ phiếu trực tiếp tại cuộc đấu giá' : null }}</td>
+          <td>{{ data.pthucDauGia == '01' ? 'Phương thức trả giá lên, bán riêng từng đơn vị tài sản' : null }}</td>
           <td>{{ data.soTbKhongThanh }}</td>
-          <td>{{ data.soBienBan }}</td>
+          <td>
+            <a *ngIf="data.soBienBan && data.idThongTin" nz-button nzType="link"
+              (click)="openModalMaThongBao(data.idThongTin)">{{
+              data.soBienBan}}</a>
+          </td>
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-left">
             <a *ngIf="loaiVthh.startsWith('02') ?
@@ -279,3 +291,30 @@
   <app-chi-tiet-qd-pd-ket-qua-bdg [loaiVthh]="loaiVthh" [idInput]="idSelected" (showListEvent)="showList()">
   </app-chi-tiet-qd-pd-ket-qua-bdg>
 </div>
+
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdPd" (nzOnCancel)="closeModalQdPd()">
+  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+    <app-them-quyet-dinh-ban-dau-gia [idInput]="idQdPd" [loaiVthh]="loaiVthh" [isViewOnModal]="true">
+    </app-them-quyet-dinh-ban-dau-gia>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button (click)="closeModalQdPd()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>
+
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewThongTin"
+  (nzOnCancel)="closeModalMaThongBao()">
+  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+    <app-thongtin-daugia [idInput]="idThongTin">
+    </app-thongtin-daugia>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button (click)="closeModalMaThongBao()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>

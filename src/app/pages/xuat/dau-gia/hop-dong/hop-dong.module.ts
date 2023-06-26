@@ -8,6 +8,8 @@ import { ThongTinComponent } from './danh-sach-hop-dong/thong-tin/thong-tin.comp
 import { HopDongComponent } from './hop-dong.component';
 import { MainHopDongComponent } from './main-hop-dong/main-hop-dong.component';
 import { QuanlyHopdongComponent } from './danh-sach-hop-dong/quanly-hopdong/quanly-hopdong.component';
+import { KeHoachBanDauGiaModule } from '../ke-hoach-ban-dau-gia/ke-hoach-ban-dau-gia.module';
+import { ToChucTrienKhaiModule } from '../to-chuc-trien-khai/to-chuc-trien-khai.module';
 
 
 @NgModule({
@@ -23,6 +25,8 @@ import { QuanlyHopdongComponent } from './danh-sach-hop-dong/quanly-hopdong/quan
     CommonModule,
     ComponentsModule,
     DirectivesModule,
+    KeHoachBanDauGiaModule,
+    ToChucTrienKhaiModule
   ],
   exports: [
     HopDongComponent,

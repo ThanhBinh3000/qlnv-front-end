@@ -21,7 +21,8 @@ import { KeHoachBanDauGiaModule } from '../ke-hoach-ban-dau-gia/ke-hoach-ban-dau
     ThongtinDaugiaComponent
   ],
   exports: [
-    MainTochucTrienkhaiComponent
+    MainTochucTrienkhaiComponent,
+    ChiTietQdPdKetQuaBdgComponent
   ],
   imports: [
     CommonModule,
