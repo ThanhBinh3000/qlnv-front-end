@@ -1,7 +1,7 @@
 <nz-collapse nzAccordion class="pd-10">
   <nz-collapse-panel [nzHeader]="title" [nzActive]="true">
     <form nzLayout="vertical" nz-form [formGroup]="formData">
-      <div nz-row [nzGutter]="[24]">
+      <div nz-row [nzGutter]="[24]" style="min-height: 528px">
         <div nz-col [nzSpan]="24" *ngIf="isView">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Thời gian dự kiến tổ chức bán đấu giá </nz-form-label>
@@ -155,7 +155,8 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Tổng số lượng xuất bán đề xuất </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24">
-              <span style="color: blue" nzDisabled>{{formData.value.tongSoLuong |number: '1.0-1'}}
+              <span style="color: blue" nzDisabled>{{formData.value.tongSoLuong |number:'1.0-1' :
+                'vi_VN'}}
                 {{formData.value.donViTinh}}</span>
             </nz-form-control>
           </nz-form-item>
@@ -164,7 +165,8 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Tổng số lượng xuất bán </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24">
-              <span style="color: blue" nzDisabled>{{formData.value.tongSoLuong |number: '1.0-1'}}
+              <span style="color: blue" nzDisabled>{{formData.value.tongSoLuong |number:'1.0-1' :
+                'vi_VN'}}
                 {{formData.value.donViTinh}}</span>
             </nz-form-control>
           </nz-form-item>
@@ -173,7 +175,8 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Tổng tiền giá khởi điểm theo đơn giá được duyệt </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24">
-              <span style="color: blue" nzDisabled>{{formData.value.tongTienGiaKdTheoDgiaDd |number: '1.0-1'}}
+              <span style="color: blue" nzDisabled>{{formData.value.tongTienGiaKdTheoDgiaDd |number:'1.0-1' :
+                'vi_VN'}}
                 (vnd)</span>
             </nz-form-control>
           </nz-form-item>
@@ -182,7 +185,8 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Tổng khoản tiền đặt trước theo đơn giá được duyệt </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24">
-              <span style="color: blue" nzDisabled>{{formData.value.tongKhoanTienDtTheoDgiaDd |number: '1.0-1'}}
+              <span style="color: blue" nzDisabled>{{formData.value.tongKhoanTienDtTheoDgiaDd |number:'1.0-1' :
+                'vi_VN'}}
                 (vnd)</span>
             </nz-form-control>
           </nz-form-item>

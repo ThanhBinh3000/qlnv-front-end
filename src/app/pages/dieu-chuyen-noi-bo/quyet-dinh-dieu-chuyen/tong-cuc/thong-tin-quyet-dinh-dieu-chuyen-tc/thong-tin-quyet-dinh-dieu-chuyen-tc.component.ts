@@ -573,7 +573,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
   }
 
   isBanHanh() {
-    return this.formData.value.trangThai == STATUS.DA_DUYET_LDTC
+    return this.formData.value.trangThai == STATUS.DA_DUYET_LDTC && this.isTongCuc()
   }
 
   async banHanh() {
