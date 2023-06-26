@@ -33,6 +33,7 @@ import { uniqBy } from 'lodash';
 export class ThemMoiDeXuatPagComponent implements OnInit {
   @Input() loaiVthh: string;
   @Input('isView') isView: boolean;
+  @Input('isModal') isModal: boolean;
   @Input()
   idInput: number;
   @Input()
