@@ -499,24 +499,44 @@ export class PaGiaoChiTieuKeHoachComponent implements OnInit {
   }
 
   print() {
-    console.log(this.dataTable);
-
     let dataPrint = this.dataTable.map((item, index) => {
       return {
         ...item,
-        'Năm kế hoạch': item.namKeHoach,
-        'Ngày ký': item.ngayKy,
-        'Trích yếu': item.trichYeu,
-        'Trạng thái': item.trangThaiDuyet,
-        'STT': index + 1
+        'stt': index + 1
       };
     });
-
     printJS({
       printable: dataPrint,
-      gridHeaderStyle: 'color: red;  border: 2px solid #3971A5; width : 40px ',
+      gridHeaderStyle: 'color: red;  border: 2px solid #3971A5; ',
       gridStyle: 'border: 2px solid #3971A5;text-align:center;with:fit-content',
-      properties: ['STT', 'Năm kế hoạch', 'Ngày ký', 'Trích yếu', 'Trạng thái'],
+      properties: [
+        {
+          field: 'stt',
+          displayName: 'STT',
+          columnSize: '40px'
+        },
+        {
+          field: 'namKeHoach',
+          displayName: 'Năm kế hoạch',
+          columnSize: '100px'
+        }
+        ,
+        {
+          field: 'ngayKy',
+          displayName: 'Ngày ký',
+          columnSize: '100px'
+        },
+        {
+          field: 'trichYeu',
+          displayName: 'Trích yếu',
+          columnSize: 'calc(100% - calc( 40px + 100px + 100px + 100px)) px'
+        },
+        {
+          field: 'trangThaiDuyet',
+          displayName: 'Trạng thái',
+          columnSize: '100px'
+        }
+      ],
       type: 'json',
       header: 'Danh sách chỉ tiêu kế hoạch năm'
     })

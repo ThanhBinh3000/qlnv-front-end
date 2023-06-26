@@ -156,7 +156,7 @@ export class ThemSuaKeHoachVatTuComponent implements OnInit {
       this.formItem.controls["soLuongXuat"].setValidators([Validators.required]);
     }
     if (this.tab == 'NHAP') {
-      this.formItem.controls["soLuongNhap"].setValidators([Validators.required]);
+      // this.formItem.controls["soLuongNhap"].setValidators([Validators.required]);
     }
     this.helperService.markFormGroupTouched(this.formItem)
     if (this.formItem.invalid) {
