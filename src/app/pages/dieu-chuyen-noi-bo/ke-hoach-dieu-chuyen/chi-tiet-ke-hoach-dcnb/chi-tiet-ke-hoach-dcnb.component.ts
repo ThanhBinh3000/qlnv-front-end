@@ -189,6 +189,8 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
         slDcConLai: [0, [Validators.required]],
         thuKho: ['', []],
         thuKhoNhan: ['', []],
+        thuKhoId: [undefined, []],
+        thuKhoNhanId: [undefined, []],
         thayDoiThuKho: [false, []]
       }
     );
@@ -425,6 +427,7 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
       tenDiemKho: tenDiemKho ? tenDiemKho.tenDvi : "",
       coLoKho: true,
       thuKho: "",
+      thuKhoId: undefined,
       loaiVthh: "",
       tenLoaiVthh: "",
       cloaiVthh: "",
@@ -447,6 +450,7 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
       tenNhaKho: tenNhaKho ? tenNhaKho.tenDvi : "",
       coLoKho: true,
       thuKho: "",
+      thuKhoId: undefined,
       loaiVthh: "",
       tenLoaiVthh: "",
       cloaiVthh: "",
@@ -465,7 +469,8 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
     this.getDetailMlkByKey(tenNganKho.maDvi, tenNganKho.capDvi).then((res: OldResponseData) => {
       if (res.msg == MESSAGE.SUCCESS) {
         let coLoKho = !!res.data.object.coLoKho;
-        let thuKho = res.data.object.detailThuKho?.maThuKho;
+        let thuKho = res.data.object.detailThuKho?.fullName;
+        let thuKhoId = res.data.object.detailThuKho?.id;
         if (!coLoKho) {
           this.removeValidateFormChiTiet("maLoKho");
           this.removeValidateFormChiTiet("tenLoKho");
@@ -487,7 +492,8 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
           maLoKho: "",
           tenLoKho: "",
           tenNganKho: tenNganKho ? tenNganKho.tenDvi : "",
-          thuKho: thuKho
+          thuKho: thuKho,
+          thuKhoId: thuKhoId,
         });
         this.getListLoKhoBq(value);
       } else {
@@ -576,6 +582,7 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
       tenChiCucNhan: tenChiCucNhan ? tenChiCucNhan.tenDvi : "",
       coLoKho: true,
       thuKho: "",
+      thuKhoId: undefined,
       loaiVthh: "",
       tenLoaiVthh: "",
       cloaiVthh: "",
@@ -1320,6 +1327,7 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
       tenDiemKhoNhan: tenDiemKhoNhan ? tenDiemKhoNhan.tenDvi : "",
       coLoKhoNhan: true,
       thuKhoNhan: "",
+      thuKhoNhanId: undefined,
       soLuongPhanBo: 0,
       tichLuongKd: 0,
       slDcConLai: 0,
@@ -1340,6 +1348,7 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
       tenNhaKhoNhan: tenNhaKhoNhan ? tenNhaKhoNhan.tenDvi : "",
       coLoKhoNhan: true,
       thuKhoNhan: "",
+      thuKhoNhanId: undefined,
       soLuongPhanBo: 0,
       tichLuongKd: 0,
       slDcConLai: 0,
@@ -1357,7 +1366,8 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
     this.getDetailMlkByKey(tenNganKhoNhan.maDvi, tenNganKhoNhan.capDvi).then((res: OldResponseData) => {
       if (res.msg == MESSAGE.SUCCESS) {
         let coLoKhoNhan = !!res.data.object.coLoKho;
-        let thuKhoNhan = res.data.object.detailThuKho?.maThuKho;
+        let thuKhoNhan = res.data.object.detailThuKho?.fullName;
+        let thuKhoNhanId = res.data.object.detailThuKho?.id;
         if (!coLoKhoNhan) {
           if ((this.formDataChiTiet.value.cloaiVthh.startsWith("01") || this.formDataChiTiet.value.cloaiVthh.startsWith("04"))) {
             this.formDataChiTiet.controls["tichLuongKd"].setValue(res.data.object.tichLuongKdLt);
@@ -1376,6 +1386,7 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
           coLoKhoNhan: coLoKhoNhan,
           tenNganKhoNhan: tenNganKhoNhan ? tenNganKhoNhan.tenDvi : "",
           thuKhoNhan: thuKhoNhan,
+          thuKhoNhanId: thuKhoNhanId,
           thayDoiThuKho: (this.formDataChiTiet.value.thuKho !== thuKhoNhan)
         });
         this.getListLoKhoNhanBq(value);
@@ -1396,9 +1407,11 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
           } else {
             this.formDataChiTiet.controls["tichLuongKd"].setValue(res.data.object.tichLuongKdVt);
           }
-          let thuKhoNhan = res.data.object.detailThuKho?.maThuKho;
+          let thuKhoNhan = res.data.object.detailThuKho?.fullName;
+          let thuKhoNhanId = res.data.object.detailThuKho?.id;
           this.formDataChiTiet.patchValue({
             thuKhoNhan: thuKhoNhan,
+            thuKhoNhanId: thuKhoNhanId,
             thayDoiThuKho: (this.formDataChiTiet.value.thuKho !== thuKhoNhan)
           });
         } else {
