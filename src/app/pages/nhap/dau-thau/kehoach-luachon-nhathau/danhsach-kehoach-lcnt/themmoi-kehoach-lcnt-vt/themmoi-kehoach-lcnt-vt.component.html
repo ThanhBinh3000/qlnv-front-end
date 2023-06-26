@@ -380,7 +380,7 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="12">
+            <div nz-col [nzSpan]="6">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> % thuế VAT
                 </nz-form-label>
@@ -389,7 +389,25 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="12">
+            <div nz-col [nzSpan]="6">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true"> Số QĐ phê duyệt giá cụ thể
+                </nz-form-label>
+                <nz-form-control>
+                  <span class="blue-text">{{formData.value.soQdPdGia}}</span>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="6">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true"> Ngày ký QĐ phê duyệt giá cụ thể
+                </nz-form-label>
+                <nz-form-control>
+                  <span class="blue-text">{{formData.value.ngayKyQdPdGia}}</span>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="6">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Tổng giá trị các gói thầu
                 </nz-form-label>
@@ -413,8 +431,6 @@
             <th class="text-center" nzWidth="180px"  nzLeft>Tên gói thầu</th>
             <th class="text-center" nzWidth="180px"  nzLeft>Chủng loại hàng DTQG</th>
             <th class="text-center" nzWidth="180px"  nzLeft>Cục DTNN KV</th>
-<!--            <th class="text-center" nzWidth="180px"   nzLeft>Chi cục DTNN KV</th>-->
-<!--            <th class="text-center" nzWidth="180px"   nzLeft>Điểm kho</th>-->
             <th class="text-center" nzWidth="130px"  >Chỉ tiêu kế hoạch<br/>được giao</th>
             <th class="text-center" nzWidth="130px"  >Số đã thực hiện</th>
             <th class="text-center" nzWidth="100px"  >Số đề xuất</th>
@@ -431,8 +447,6 @@
               <td nzLeft class="multi-line">{{item.goiThau}}</td>
               <td nzLeft class="multi-line">{{item.tenCloaiVthh}}</td>
               <td nzLeft></td>
-<!--              <td nzLeft></td>-->
-<!--              <td nzLeft></td>-->
               <td></td>
               <td></td>
               <td class="text-right blue-text bold-700">{{item.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
@@ -440,7 +454,7 @@
               <td class="text-right">{{item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
               <td class="text-right bold-700">{{item.soLuong * item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
               <td *ngIf="!isView">
-                <a (click)="themMoiGoiThau(item,i)">
+                <a (click)="themMoiGoiThau($event,item,i)">
                   <i class="fa fa-pencil"></i>
                 </a>
                 <a (click)="deleteRow(i)">
@@ -453,11 +467,8 @@
                 <tr>
                   <td nzLeft></td>
                   <td nzLeft></td>
-                  <td nzLeft>
-                  </td>
+                  <td nzLeft></td>
                   <td nzLeft class="multi-line">{{cuc.tenDvi}}</td>
-<!--                  <td nzLeft></td>-->
-<!--                  <td nzLeft></td>-->
                   <td class="text-right red-text">{{cuc.soLuongTheoChiTieu | number : '1.0-1' : 'vi_VN'}}</td>
                   <td class="text-right red-text">{{cuc.soLuongDaMua | number : '1.0-1' : 'vi_VN'}}</td>
                   <td class="text-right blue-text">{{cuc.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
@@ -466,52 +477,11 @@
                   <td class="text-right">{{cuc.soLuong * item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
                   <td class="text-right" *ngIf="!isView"></td>
                 </tr>
-<!--                <ng-container *ngIf="expandSet2.has(y)">-->
-<!--                  <ng-container *ngFor="let chiCuc of cuc.children, let z = index">-->
-<!--                    <tr>-->
-<!--                      <td nzLeft></td>-->
-<!--                      <td nzLeft></td>-->
-<!--                      <td nzLeft></td>-->
-<!--                      <td nzLeft class="text-right" [nzExpand]="expandSet3.has(z)"-->
-<!--                          (nzExpandChange)="onExpandChange3(z, $event)">-->
-<!--                      </td>-->
-<!--                      <td nzLeft class="multi-line">{{chiCuc.tenDvi}}</td>-->
-<!--                      <td nzLeft></td>-->
-<!--                      <td></td>-->
-<!--                      <td></td>-->
-<!--                      <td class="text-right blue-text">{{chiCuc.soLuong | number : '1.0-1' : 'vi_VN'}}</td>-->
-<!--                      <td>{{item.dviTinh}}</td>-->
-<!--                      <td class="text-right">{{item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>-->
-<!--                      <td class="text-right">{{chiCuc.soLuong * item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>-->
-<!--                      <td class="text-right" *ngIf="!isView"></td>-->
-<!--                    </tr>-->
-<!--                    <ng-container *ngIf="expandSet3.has(z)">-->
-<!--                      <tr *ngFor="let diemKho of chiCuc.children">-->
-<!--                        <td nzLeft></td>-->
-<!--                        <td nzLeft></td>-->
-<!--                        <td nzLeft></td>-->
-<!--                        <td nzLeft></td>-->
-<!--                        <td nzLeft></td>-->
-<!--                        <td nzLeft class="multi-line">{{diemKho.tenDvi}}</td>-->
-<!--                        <td></td>-->
-<!--                        <td></td>-->
-<!--                        <td class="text-right blue-text">{{diemKho.soLuong | number : '1.0-1' : 'vi_VN'}}</td>-->
-<!--                        <td>{{item.dviTinh}}</td>-->
-<!--                        <td class="text-right">{{item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>-->
-<!--                        <td class="text-right">{{diemKho.soLuong * item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>-->
-<!--                        <td class="text-right" *ngIf="!isView">-->
-<!--                        </td>-->
-<!--                      </tr>-->
-<!--                    </ng-container>-->
-<!--                  </ng-container>-->
-<!--                </ng-container>-->
               </ng-container>
             </ng-container>
           </ng-container>
           </tbody>
           <tr *ngIf="listOfData.length > 0">
-            <td nzLeft></td>
-            <td nzLeft></td>
             <td nzLeft></td>
             <td nzLeft></td>
             <td nzLeft></td>
@@ -751,7 +721,7 @@
   </div>
 </nz-modal>
 <ng-template #themMoiGt>
-  <button type="button" class="btn btn-sub xanh" *ngIf="!isDisbleForm()" (click)="themMoiGoiThau()">
+  <button type="button" class="btn btn-sub xanh" *ngIf="!isDisbleForm()" (click)="themMoiGoiThau($event)">
     <i class="icon htvbdh_dau-cong"></i>
     <span>Thêm</span>
   </button>
