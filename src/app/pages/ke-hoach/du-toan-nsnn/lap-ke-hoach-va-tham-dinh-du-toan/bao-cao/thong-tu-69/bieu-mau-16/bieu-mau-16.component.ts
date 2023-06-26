@@ -50,6 +50,8 @@ export class BieuMau16Component implements OnInit {
     noiDungs: any[] = [];
     lstCtietBcao: ItemData[] = [];
     donViTiens: any[] = DON_VI_TIEN;
+    keys = ['thNamHienHanhN1', 'tranChiN', 'ncauChiN', 'clechTranChiVsNcauChiN', 'tranChiN1', 'ncauChiN1', 'clechTranChiVsNcauChiN1',
+        'tranChiN2', 'ncauChiN2', 'clechTranChiVsNcauChiN2']
     amount = AMOUNT;
     scrollX: string;
     //trang thai cac nut
@@ -328,16 +330,9 @@ export class BieuMau16Component implements OnInit {
         this.total = new ItemData();
         this.lstCtietBcao.forEach(item => {
             if (item.level == 0) {
-                this.total.thNamHienHanhN1 = this.numFunc.sum([this.total.thNamHienHanhN1, item.thNamHienHanhN1]);
-                this.total.tranChiN = this.numFunc.sum([this.total.tranChiN, item.tranChiN]);
-                this.total.ncauChiN = this.numFunc.sum([this.total.ncauChiN, item.ncauChiN]);
-                this.total.clechTranChiVsNcauChiN = this.numFunc.sum([this.total.clechTranChiVsNcauChiN, item.clechTranChiVsNcauChiN]);
-                this.total.tranChiN1 = this.numFunc.sum([this.total.tranChiN1, item.tranChiN1]);
-                this.total.ncauChiN1 = this.numFunc.sum([this.total.ncauChiN1, item.ncauChiN1]);
-                this.total.clechTranChiVsNcauChiN1 = this.numFunc.sum([this.total.clechTranChiVsNcauChiN1, item.clechTranChiVsNcauChiN1]);
-                this.total.tranChiN2 = this.numFunc.sum([this.total.tranChiN2, item.tranChiN2]);
-                this.total.ncauChiN2 = this.numFunc.sum([this.total.ncauChiN2, item.ncauChiN2]);
-                this.total.clechTranChiVsNcauChiN2 = this.numFunc.sum([this.total.clechTranChiVsNcauChiN2, item.clechTranChiVsNcauChiN2]);
+                this.keys.forEach(key => {
+                    this.total[key] = this.numFunc.sum([this.total[key], item[key]]);
+                })
             }
         })
         this.getInTotal();
@@ -349,28 +344,14 @@ export class BieuMau16Component implements OnInit {
         this.lstCtietBcao.forEach(item => {
             if (item.level == 1) {
                 if (this.tableFunc.getTail(item.stt) == 1) {
-                    this.chiCoSo.thNamHienHanhN1 = this.numFunc.sum([this.chiCoSo.thNamHienHanhN1, item.thNamHienHanhN1]);
-                    this.chiCoSo.tranChiN = this.numFunc.sum([this.chiCoSo.tranChiN, item.tranChiN]);
-                    this.chiCoSo.ncauChiN = this.numFunc.sum([this.chiCoSo.ncauChiN, item.ncauChiN]);
-                    this.chiCoSo.clechTranChiVsNcauChiN = this.numFunc.sum([this.chiCoSo.clechTranChiVsNcauChiN, item.clechTranChiVsNcauChiN]);
-                    this.chiCoSo.tranChiN1 = this.numFunc.sum([this.chiCoSo.tranChiN1, item.tranChiN1]);
-                    this.chiCoSo.ncauChiN1 = this.numFunc.sum([this.chiCoSo.ncauChiN1, item.ncauChiN1]);
-                    this.chiCoSo.clechTranChiVsNcauChiN1 = this.numFunc.sum([this.chiCoSo.clechTranChiVsNcauChiN1, item.clechTranChiVsNcauChiN1]);
-                    this.chiCoSo.tranChiN2 = this.numFunc.sum([this.chiCoSo.tranChiN2, item.tranChiN2]);
-                    this.chiCoSo.ncauChiN2 = this.numFunc.sum([this.chiCoSo.ncauChiN2, item.ncauChiN2]);
-                    this.chiCoSo.clechTranChiVsNcauChiN2 = this.numFunc.sum([this.chiCoSo.clechTranChiVsNcauChiN2, item.clechTranChiVsNcauChiN2]);
+                    this.keys.forEach(key => {
+                        this.chiCoSo[key] = this.numFunc.sum([this.chiCoSo[key], item[key]]);
+                    })
                 }
                 if (this.tableFunc.getTail(item.stt) == 2) {
-                    this.chiMoi.thNamHienHanhN1 = this.numFunc.sum([this.chiMoi.thNamHienHanhN1, item.thNamHienHanhN1]);
-                    this.chiMoi.tranChiN = this.numFunc.sum([this.chiMoi.tranChiN, item.tranChiN]);
-                    this.chiMoi.ncauChiN = this.numFunc.sum([this.chiMoi.ncauChiN, item.ncauChiN]);
-                    this.chiMoi.clechTranChiVsNcauChiN = this.numFunc.sum([this.chiMoi.clechTranChiVsNcauChiN, item.clechTranChiVsNcauChiN]);
-                    this.chiMoi.tranChiN1 = this.numFunc.sum([this.chiMoi.tranChiN1, item.tranChiN1]);
-                    this.chiMoi.ncauChiN1 = this.numFunc.sum([this.chiMoi.ncauChiN1, item.ncauChiN1]);
-                    this.chiMoi.clechTranChiVsNcauChiN1 = this.numFunc.sum([this.chiMoi.clechTranChiVsNcauChiN1, item.clechTranChiVsNcauChiN1]);
-                    this.chiMoi.tranChiN2 = this.numFunc.sum([this.chiMoi.tranChiN2, item.tranChiN2]);
-                    this.chiMoi.ncauChiN2 = this.numFunc.sum([this.chiMoi.ncauChiN2, item.ncauChiN2]);
-                    this.chiMoi.clechTranChiVsNcauChiN2 = this.numFunc.sum([this.chiMoi.clechTranChiVsNcauChiN2, item.clechTranChiVsNcauChiN2]);
+                    this.keys.forEach(key => {
+                        this.chiMoi[key] = this.numFunc.sum([this.chiMoi[key], item[key]]);
+                    })
                 }
             }
         })
