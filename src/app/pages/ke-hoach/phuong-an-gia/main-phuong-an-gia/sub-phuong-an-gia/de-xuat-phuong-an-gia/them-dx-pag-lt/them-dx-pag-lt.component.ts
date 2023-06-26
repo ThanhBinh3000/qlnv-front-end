@@ -37,6 +37,7 @@ import {AMOUNT} from "../../../../../../../Utility/utils";
 })
 export class ThemDeXuatPagLuongThucComponent implements OnInit {
   @Input('isView') isView: boolean;
+  @Input() isModal: boolean;
   @Input() pagType: string;
   @Input() idInput: number;
   @Output('onClose') onClose = new EventEmitter<any>();
@@ -252,6 +253,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
         id: data.id,
         namKeHoach: data.namKeHoach,
         soDeXuat: data.soDeXuat ? data.soDeXuat.split('/')[0] : '',
+        soDeXuatDc: data.soDeXuatDc,
         loaiDeXuat: data.loaiDeXuat,
         loaiVthh: data.loaiVthh,
         ngayKy: data.ngayKy,
@@ -880,7 +882,6 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
       let data = res.data;
       this.listDxCanSua = data.content;
       if (this.listDxCanSua && this.listDxCanSua.length > 0) {
-        console.log(this.listDxCanSua,123)
         this.listDxCanSua = this.listDxCanSua.filter(item => item.trangThai == STATUS.DA_DUYET_CBV);
       }
     }
@@ -888,24 +889,26 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
   }
 
   openModalSoDx() {
-    const modalQD = this.modal.create({
-      nzTitle: 'Danh sách điều chỉnh đề xuất Phương án giá',
-      nzContent: DialogTableSelectionComponent,
-      nzMaskClosable: false,
-      nzClosable: false,
-      nzWidth: '900px',
-      nzFooter: null,
-      nzComponentParams: {
-        dataTable: this.listDxCanSua,
-        dataHeader: ['Số công văn', 'Ngày ký', 'Loại hàng hoa'],
-        dataColumn: ['soDeXuat', 'ngayKy', 'tenLoaiVthh'],
-      },
-    })
-    modalQD.afterClose.subscribe(async (data) => {
-      if (data) {
-        await this.bindingDataQd(data.id);
-      }
-    });
+    if (!this.isView && !this.isModal) {
+      const modalQD = this.modal.create({
+        nzTitle: 'Danh sách điều chỉnh đề xuất Phương án giá',
+        nzContent: DialogTableSelectionComponent,
+        nzMaskClosable: false,
+        nzClosable: false,
+        nzWidth: '900px',
+        nzFooter: null,
+        nzComponentParams: {
+          dataTable: this.listDxCanSua,
+          dataHeader: ['Số công văn', 'Ngày ký', 'Loại hàng hoa'],
+          dataColumn: ['soDeXuat', 'ngayKy', 'tenLoaiVthh'],
+        },
+      })
+      modalQD.afterClose.subscribe(async (data) => {
+        if (data) {
+          await this.bindingDataQd(data.id);
+        }
+      });
+    }
   }
 
    async bindingDataQd(id) {

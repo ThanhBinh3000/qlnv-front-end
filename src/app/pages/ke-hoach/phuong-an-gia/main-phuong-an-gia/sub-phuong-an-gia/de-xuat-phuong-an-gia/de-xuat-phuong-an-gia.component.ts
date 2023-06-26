@@ -26,6 +26,7 @@ export class DeXuatPhuongAnGiaComponent implements OnInit {
   @Output()
   getCount = new EventEmitter<any>();
   isAddNew = false;
+  isViewModal : boolean = false;
   formData: FormGroup;
   toDay = new Date();
   allChecked = false;
@@ -41,7 +42,7 @@ export class DeXuatPhuongAnGiaComponent implements OnInit {
   typeConst = TYPE_PAG;
   userInfo: UserLogin
   STATUS = STATUS
-
+  listTrangThai: any[] = [];
   last30Day = new Date(
     new Date().setTime(this.toDay.getTime() - 30 * 24 * 60 * 60 * 1000),
   );
@@ -79,9 +80,10 @@ export class DeXuatPhuongAnGiaComponent implements OnInit {
   };
   filterTable: any = {
     soDeXuat: '',
+    soDeXuatDc: '',
+    tenLoaiDeXuat: '',
     ngayKy: '',
     trichYeu: '',
-    qdCtKhNam: '',
     soCanCu: '',
     namKeHoach: '',
     tenLoaiVthh: '',
@@ -99,6 +101,7 @@ export class DeXuatPhuongAnGiaComponent implements OnInit {
       this.router.navigateByUrl('/error/401')
     }
     this.userInfo = this.userService.getUserLogin();
+    this.loadListTrangThai();
     this.loadDsNam();
     this.search();
     if (this.pagType == 'LT') {
@@ -107,6 +110,28 @@ export class DeXuatPhuongAnGiaComponent implements OnInit {
     if (this.pagType == 'VT') {
       await this.loadDsVthh();
     }
+  }
+
+  loadListTrangThai() {
+    if (this.pagType == 'LT') {
+      this.listTrangThai = [
+        { ma: this.STATUS.DU_THAO, giaTri: "Dự thảo" },
+        { ma: this.STATUS.CHO_DUYET_TP, giaTri: "Chờ duyệt - TP" },
+        { ma: this.STATUS.TU_CHOI_TP, giaTri: "Từ chối - TP" },
+        { ma: this.STATUS.CHO_DUYET_LDC, giaTri: "Chờ duyệt - LĐC" },
+        { ma: this.STATUS.TU_CHOI_LDC, giaTri: "Từ chối - LĐC" },
+        { ma: this.STATUS.DA_DUYET_LDC, giaTri: "Đã duyệt - LĐC" },
+        { ma: this.STATUS.DA_DUYET_CBV, giaTri: "Đã duyệt - Cán bộ Vụ" },
+        { ma: this.STATUS.TU_CHOI_CBV, giaTri: "Từ chối - Cán bộ Vụ" }
+      ];
+    } else {
+      this.listTrangThai = [
+        { ma: this.STATUS.DU_THAO, giaTri: "Dự thảo" },
+        { ma: this.STATUS.CHO_DUYET_LDV, giaTri: "Đã duyệt - LĐ Vụ" },
+        {ma: this.STATUS.TU_CHOI_LDV, giaTri: "Từ chối - LĐ Vụ" },
+        { ma: this.STATUS.DA_DUYET_LDV, giaTri: "Đã duyệt - LĐ Vụ"}
+      ];
+  }
   }
   async loadDsVthh() {
     let body = {
@@ -351,28 +376,28 @@ export class DeXuatPhuongAnGiaComponent implements OnInit {
     });
   }
 
-  filterInTable(key: string, value: string, type?:string) {
+  filterInTable(key: string, value: string, type?: string) {
     if (value && value != '') {
       this.dataTable = [];
       let temp = [];
       if (this.dataTableAll && this.dataTableAll.length > 0) {
         this.dataTableAll.forEach((item) => {
-          if (['ngayKy','ngayLapKh','ngayDuyetLdcc', 'ngayGiaoNhan', 'ngayHieuLuc', 'ngayHetHieuLuc', 'ngayDeXuat', 'ngayTongHop', 'ngayTao', 'ngayQd', 'tgianNhang', 'tgianThien', 'ngayDx', 'ngayPduyet', 'ngayThop', 'thoiGianGiaoNhan', 'ngayKyQd', 'ngayNhanCgia', 'ngayKyDc', 'tgianGnhan', 'ngayDuyet'].includes(key)) {
+          if (['ngayKy', 'ngayLapKh', 'ngayDuyetLdcc', 'ngayGiaoNhan', 'ngayHieuLuc', 'ngayHetHieuLuc', 'ngayDeXuat', 'ngayTongHop', 'ngayTao', 'ngayQd', 'tgianNhang', 'tgianThien', 'ngayDx', 'ngayPduyet', 'ngayThop', 'thoiGianGiaoNhan', 'ngayKyQd', 'ngayNhanCgia', 'ngayKyDc', 'tgianGnhan', 'ngayDuyet', 'ngayNhapKho', 'ngayKyQdinh', 'ngayMkho'].includes(key)) {
             if (item[key] && dayjs(item[key]).format('DD/MM/YYYY').indexOf(value.toString()) != -1) {
               temp.push(item)
             }
           } else {
-            if(type){
-              if('eq' == type){
+            if (type) {
+              if ('eq' == type) {
                 if (item[key] && item[key].toString().toLowerCase() == value.toString().toLowerCase()) {
                   temp.push(item)
                 }
-              }else {
+              } else {
                 if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
                   temp.push(item)
                 }
               }
-            }else {
+            } else {
               if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
                 temp.push(item)
               }
@@ -431,6 +456,24 @@ export class DeXuatPhuongAnGiaComponent implements OnInit {
     }
   }
 
+  convertDateToString(event: any): string {
+    let result = '';
+    if (event) {
+      result = dayjs(event).format('DD/MM/YYYY').toString()
+    }
+    return result;
+  }
+
+
+  async openModalDxChinhSua(data : any) {
+        this.idSelected = data.id;
+        this.isViewModal = true;
+  }
+
+  closeDxPaModal() {
+    this.idSelected = null;
+    this.isViewModal = false;
+  }
 }
 
 
