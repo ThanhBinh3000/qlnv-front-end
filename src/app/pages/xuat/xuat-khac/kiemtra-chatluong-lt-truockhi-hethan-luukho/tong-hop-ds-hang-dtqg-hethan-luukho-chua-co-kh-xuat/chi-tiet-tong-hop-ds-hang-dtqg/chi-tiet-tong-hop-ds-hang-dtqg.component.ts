@@ -9,12 +9,6 @@ import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
 import {DonviService} from "../../../../../../services/donvi.service";
 import {DanhMucService} from "../../../../../../services/danhmuc.service";
-import {
-  TongHopThanhLyService
-} from "../../../../../../services/qlnv-hang/xuat-hang/xuat-thanh-ly/TongHopThanhLy.service";
-import {
-  DanhSachThanhLyService
-} from "../../../../../../services/qlnv-hang/xuat-hang/xuat-thanh-ly/DanhSachThanhLy.service";
 import dayjs from "dayjs";
 import {Validators} from "@angular/forms";
 import {MESSAGE} from "../../../../../../constants/message";
@@ -23,6 +17,12 @@ import {v4 as uuidv4} from "uuid";
 import {
   KiemtraChatluongLtTruockhiHethanLuukhoComponent
 } from "../../kiemtra-chatluong-lt-truockhi-hethan-luukho.component";
+import {
+  TongHopDanhSachHangDTQGService
+} from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/TongHopDanhSachHangDTQG.service";
+import {
+  DanhSachHangDTQGCon6ThangService
+} from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/DanhSachHangDTQGCon6Thang.service";
 @Component({
   selector: 'app-chi-tiet-tong-hop-ds-hang-dtqg',
   templateUrl: './chi-tiet-tong-hop-ds-hang-dtqg.component.html',
@@ -57,43 +57,35 @@ export class ChiTietTongHopDsHangDtqgComponent extends Base2Component implements
               modal: NzModalService,
               private donviService: DonviService,
               private danhMucService: DanhMucService,
-              private tongHopThanhLyService: TongHopThanhLyService,
-              private danhSachThanhLyService: DanhSachThanhLyService,
+              private tongHopDanhSachHangDTQGService: TongHopDanhSachHangDTQGService,
+              private danhSachHangDTQGCon6ThangService: DanhSachHangDTQGCon6ThangService,
               private kiemtraChatluongLtTruockhiHethanLuukhoComponent: KiemtraChatluongLtTruockhiHethanLuukhoComponent,
               private cdr: ChangeDetectorRef) {
-    super(httpClient, storageService, notification, spinner, modal, tongHopThanhLyService);
+    super(httpClient, storageService, notification, spinner, modal, tongHopDanhSachHangDTQGService);
     this.vldTrangThai = kiemtraChatluongLtTruockhiHethanLuukhoComponent;
     this.formData = this.fb.group({
-      id: [0],
-      nam: [dayjs().get('year')],
+      id:[0],
+      nam:[dayjs().get('year')],
       maDvi: [],
       maDanhSach: [],
       tenDanhSach: [, [Validators.required]],
-      thoiGianTl: [, [Validators.required]],
-      thoiGianTlTu: [, [Validators.required]],
-      thoiGianTlDen: [, [Validators.required]],
+      ngayDeXuatTu: [],
+      ngayDeXuatDen: [],
       trangThai: [],
-      idHoSo: [],
-      soHoSo: [],
-      idQdPd: [],
-      soQdPd: [],
-      ngayKyQd: [],
+      trangThaiKtCl: [],
       ngayGduyet: [],
       nguoiGduyetId: [],
       ngayPduyet: [],
       nguoiPduyetId: [],
-      ngayTao: [],
       lyDoTuChoi: [],
       tongSlHienTai: [],
-      tongSlDeXuat: [],
-      tongSlDaDuyet: [],
       tenTrangThai: [],
       tenDvi: [],
       tenCuc: [],
       tongHopDtl: [new Array()]
     })
     this.userInfo = this.userService.getUserLogin();
-    this.maHauTo = '/HTL-' + this.userInfo.DON_VI.tenVietTat;
+    this.maHauTo = 'DSKTCLLTTKHHLK-';
   }
 
   async ngOnInit(): Promise<void> {
@@ -116,7 +108,7 @@ export class ChiTietTongHopDsHangDtqgComponent extends Base2Component implements
 
   async loadDetail(idInput: any) {
     if (idInput > 0) {
-      await this.tongHopThanhLyService.getDetail(idInput)
+      await this.tongHopDanhSachHangDTQGService.getDetail(idInput)
         .then(async (res) => {
           if (res.msg == MESSAGE.SUCCESS) {
             // this.maHauTo = '/' + res.data.maDanhSach.split("/")[1];
@@ -139,14 +131,6 @@ export class ChiTietTongHopDsHangDtqgComponent extends Base2Component implements
   }
 
   async timKiem() {
-    /*    if (this.formData.value.ngayDx) {
-          this.formData.value.ngayDxTu = dayjs(this.formData.value.ngayDx[0]).format('YYYY-MM-DD')
-          this.formData.value.ngayDxDen = dayjs(this.formData.value.ngayDx[1]).format('YYYY-MM-DD')
-        }
-        if (this.formData.value.ngayKetThuc) {
-          this.formData.value.ngayKetThucTu = dayjs(this.formData.value.ngayKetThuc[0]).format('YYYY-MM-DD')
-          this.formData.value.ngayKetThucDen = dayjs(this.formData.value.ngayKetThuc[1]).format('YYYY-MM-DD')
-        }*/
     await this.search();
     this.dataTable.forEach(s => {
       s.idVirtual = uuidv4();
@@ -232,10 +216,8 @@ export class ChiTietTongHopDsHangDtqgComponent extends Base2Component implements
         this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đủ thông tin.');
         return;
       } else {
-        await this.danhSachThanhLyService.search({
+        await this.danhSachHangDTQGCon6ThangService.search({
           type: 'TH',
-          ngayDeXuatTu: this.formData.value.thoiGianTlTu,
-          ngayDeXuatDen: this.formData.value.thoiGianTlDen
         }).then(async res => {
           if (res.msg == MESSAGE.SUCCESS) {
             if (res.data.numberOfElements == 0) {
@@ -295,7 +277,7 @@ export class ChiTietTongHopDsHangDtqgComponent extends Base2Component implements
                   id: this.selectedItem.id,
                   trangThai: this.STATUS.DA_TONG_HOP,
                 }
-                let res = await this.tongHopThanhLyService.approve(body);
+                let res = await this.tongHopDanhSachHangDTQGService.approve(body);
                 if (res.msg == MESSAGE.SUCCESS) {
                   this.notification.success(MESSAGE.NOTIFICATION, 'Gửi duyệt tổng hợp thành công.');
                   this.step.emit({step: 1});
