@@ -37,7 +37,7 @@
           <span [ngClass]="formData.value.trangThai == STATUS.BAN_HANH?  'status-xanh' : 'status-do'">
             {{ formData.value.tenTrangThai }}
           </span>
-          <span class="title-form">Quy chuẩn kỹ thuật quốc gia</span>
+          <span class="title-form">{{userInfo.MA_DVI.startsWith("01") ? 'Quy chuẩn, tiêu chuẩn quốc gia đối với hàng DTQG tại TCDT' : 'Quy chuẩn, tiêu chuẩn quốc gia đối với hàng DTQG tại Bộ/Ngành' }}</span>
         </div>
       </div>
     </div>
