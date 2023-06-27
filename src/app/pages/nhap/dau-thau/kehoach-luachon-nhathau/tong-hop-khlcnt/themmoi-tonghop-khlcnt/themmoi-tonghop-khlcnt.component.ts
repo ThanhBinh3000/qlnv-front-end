@@ -45,6 +45,8 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
   selected: boolean = false;
   disableTh: boolean = false
   listFileDinhKem: any[] = [];
+  listLoaiHinhNx: any[] = [];
+  listKieuNx: any[] = [];
 
   constructor(
     httpClient: HttpClient,
@@ -63,10 +65,10 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
         cloaiVthh: [null, [Validators.required]],
         tenCloaiVthh: [null, [Validators.required]],
         namKhoach: [dayjs().get('year'), [Validators.required]],
-        hthucLcnt: ['', [Validators.required]],
-        pthucLcnt: ['', [Validators.required]],
-        loaiHdong: ['', [Validators.required]],
-        nguonVon: ['', [Validators.required]],
+        hthucLcnt: [''],
+        pthucLcnt: [''],
+        loaiHdong: [''],
+        nguonVon: [''],
       }
     );
     this.formData = this.fb.group({
@@ -86,6 +88,8 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
       tenCloaiVthh: [''],
       tchuanCluong: [''],
       soQdCc: [''],
+      kieuNx: [''],
+      loaiHinhNx: [''],
     })
 
   }
@@ -162,6 +166,19 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
     let resHd = await this.danhMucService.danhMucChungGetAll('LOAI_HDONG');
     if (resHd.msg == MESSAGE.SUCCESS) {
       this.listLoaiHopDong = resHd.data;
+    }
+    // loại hình nhập xuất
+    this.listLoaiHinhNx = [];
+    let resNx = await this.danhMucService.danhMucChungGetAll("LOAI_HINH_NHAP_XUAT");
+    if (resNx.msg == MESSAGE.SUCCESS) {
+      this.listLoaiHinhNx = resNx.data.filter(item => item.apDung == "NHAP_DT");
+      this.formData.get("loaiHinhNx").setValue(this.listLoaiHinhNx[0].ma);
+    }
+    // kiểu nhập xuất
+    this.listKieuNx = [];
+    let resKieuNx = await this.danhMucService.danhMucChungGetAll("KIEU_NHAP_XUAT");
+    if (resKieuNx.msg == MESSAGE.SUCCESS) {
+      this.listKieuNx = resKieuNx.data;
     }
   }
 

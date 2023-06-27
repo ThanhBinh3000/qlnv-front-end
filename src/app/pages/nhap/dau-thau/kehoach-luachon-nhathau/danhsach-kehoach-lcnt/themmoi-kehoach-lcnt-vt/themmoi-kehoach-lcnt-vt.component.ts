@@ -142,7 +142,8 @@ export class ThemmoiKehoachLcntVtComponent extends Base2Component implements OnI
       ykienThamGia: [""],
       tongMucDtBangChu: [""],
       tongSlChiTieu: [""],
-      quy: [""]
+      quy: [""],
+      tgianThienHd: [""]
     });
   }
 
@@ -489,6 +490,15 @@ export class ThemmoiKehoachLcntVtComponent extends Base2Component implements OnI
         );
         return;
       }
+      this.listOfData.forEach(item => {
+        if (item.donGiaVat == null ) {
+          this.notification.error(
+            MESSAGE.ERROR,
+            "Cần phải yêu cầu Vụ Kế hoạch phê duyệt giá cụ thể mua vật tư, thiết bị cho " + item.tenCloaiVthh + "!"
+          );
+          return;
+        }
+      })
       await this.luuVaGuiDuyet(isGuiDuyet);
     }
   }
@@ -628,7 +638,8 @@ export class ThemmoiKehoachLcntVtComponent extends Base2Component implements OnI
     }
   }
 
-  themMoiGoiThau(data?: DanhSachGoiThau, index?: number) {
+  themMoiGoiThau($event: any, data?: DanhSachGoiThau, index?: number) {
+    $event.stopPropagation();
     if (this.formData.get("loaiVthh").value == null) {
       this.notification.error(MESSAGE.NOTIFICATION, "Vui lòng chọn loại hàng hóa");
       return;

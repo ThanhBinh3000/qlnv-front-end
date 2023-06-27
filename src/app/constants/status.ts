@@ -78,7 +78,8 @@ export enum STATUS {
   GUI_DUYET = '76',
   DANG_DUYET_CB_VU = '77',
   DANG_NHAP_DU_LIEU = '78',
-  TU_CHOI_BAN_HANH_QD = '79'
+  TU_CHOI_BAN_HANH_QD = '79',
+  DA_LAP = '80'
 }
 
 export enum LoaiTaiLieu {

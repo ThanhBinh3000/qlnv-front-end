@@ -9,7 +9,7 @@
           </nz-select>
         </div>
         <div nz-col nzSpan="3">
-          <label class="search__label">Số kế hoạch/tờ trình</label>
+          <label class="search__label">Số công văn/tờ trình</label>
           <input class="search__input" placeholder="" nz-input [(ngModel)]="searchFilter.soDx" />
         </div>
         <div nz-col nzSpan="4">
@@ -100,8 +100,8 @@
                 [nzDisabled]="loaiVthh == '02' ? !userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_VT_DEXUAT_THEM') : !userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_LT_DEXUAT_THEM')"></label>
             </th>
             <th class="text-center" style="width: 2%;">STT</th>
-            <th class="text-center" style="width: 7%;">Số kế hoạch/tờ trình</th>
-            <th class="text-center" style="width: 7%;">Năm kế hoạch</th>
+            <th class="text-center" style="width: 7%;">Số công văn/tờ trình</th>
+            <th class="text-center" style="width: 7%;">Năm KH</th>
             <th class="text-center" style="width: 7%;">Ngày lập KH</th>
             <th class="text-center" style="width: 7%;">Ngày duyệt KH</th>
             <th class="text-center" style="width: 9%;">Số QĐ giao chỉ tiêu</th>
@@ -111,11 +111,10 @@
             <th class="text-center" style="width: 5%;">Tổng số gói thầu</th>
             <th class="text-center" style="width: 5%;">Số gói thầu đã trúng</th>
             <th class="text-center" style="width: 5%;">SL HĐ đã ký</th>
-            <th class="text-center" style="width: 5%;">Số QĐ duyệt KHLCNT</th>
+            <th class="text-center" style="width: 5%;">Số QĐ PD KHLCNT</th>
             <th *ngIf="loaiVthh != '02'" class="text-center" style="width: 7%;">Thời hạn nhập kho</th>
             <th *ngIf="loaiVthh == '02'" class="text-center" style="width: 7%;">Thời hạn thực hiện dự án</th>
-            <th class="text-center" style="width: 7%;">{{ userService.isTongCuc() ? 'Trạng thái đề xuất' : 'Trạng
-              thái'}} </th>
+            <th class="text-center" style="width: 7%;">{{ loaiVthh == '02' ? 'Trạng thái đề xuất' : 'Trạng thái'}} </th>
             <th *ngIf="userService.isTongCuc() && loaiVthh != '02'" class="text-center" style="width: 7%;">Mã tổng hợp
             </th>
             <th width="90px">Hành động</th>

@@ -242,7 +242,7 @@ export class ThemmoiQuyetdinhKhlcntVtComponent extends Base2Component implements
       await this.spinner.hide();
       return;
     }
-    if (isGuiDuyet && this.fileDinhKems && this.fileDinhKems.length > 0 ){
+    if (isGuiDuyet && this.fileDinhKems && this.fileDinhKems.length == 0 ){
       await this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, "File đính kèm quyết định đã ký và đóng dấu không được bỏ trống.");
       return;
