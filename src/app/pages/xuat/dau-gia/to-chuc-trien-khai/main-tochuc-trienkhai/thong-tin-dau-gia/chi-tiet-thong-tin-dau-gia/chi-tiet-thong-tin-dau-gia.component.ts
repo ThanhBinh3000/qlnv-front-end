@@ -114,6 +114,8 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
                 tenCloaiVthh: dataHdr.tenCloaiVthh,
                 tenLoaiVthh: dataHdr.tenLoaiVthh,
                 slDviTsan: dataDtl.slDviTsan,
+                soDviTsanThanhCong: dataDtl.soDviTsanThanhCong,
+                soDviTsanKhongThanh: dataDtl.soDviTsanKhongThanh,
                 loaiHinhNx: dataHdr.loaiHinhNx != null ? 'Xuất bán đấu giá' : null,
                 kieuNx: dataHdr.kieuNx != null ? 'Xuất bán' : null,
               })
