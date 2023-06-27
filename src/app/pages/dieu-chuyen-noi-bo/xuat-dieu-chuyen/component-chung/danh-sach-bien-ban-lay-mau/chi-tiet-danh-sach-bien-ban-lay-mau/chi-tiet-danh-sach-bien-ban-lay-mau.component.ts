@@ -23,6 +23,7 @@ import { QuyetDinhDieuChuyenCucService } from 'src/app/services/dieu-chuyen-noi-
 import { cloneDeep } from 'lodash';
 import { PassData } from '../danh-sach-bien-ban-lay-mau.component';
 import { formatNumber } from '@angular/common';
+import { KhCnQuyChuanKyThuat } from 'src/app/services/kh-cn-bao-quan/KhCnQuyChuanKyThuat';
 interface PhuongPhapLayMauDC extends PhuongPhapLayMau {
   checked: true
 }
@@ -69,6 +70,7 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
     [STATUS.TU_CHOI_LDCC]: "Từ chối LĐ Chi Cục",
     [STATUS.DA_DUYET_LDCC]: "Đã duyệt LĐ Chi Cục"
   }
+  chiTieuKiemTra: any[]
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -78,7 +80,8 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
     private danhMucService: DanhMucService,
     private quyetDinhDieuChuyenCucService: QuyetDinhDieuChuyenCucService,
     private bienBanLayMauBanGiaoMauService: BienBanLayMauBanGiaoMauService,
-    private bienBanLayMauDieuChuyenService: BienBanLayMauDieuChuyenService
+    private bienBanLayMauDieuChuyenService: BienBanLayMauDieuChuyenService,
+    private khCnQuyChuanKyThuat: KhCnQuyChuanKyThuat
   ) {
     super(httpClient, storageService, notification, spinner, modal, bienBanLayMauDieuChuyenService);
 
@@ -107,7 +110,6 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
         maLoKho: [],
         soLuongMau: [],
         pplayMau: [],
-        chiTieuKiemTra: [],
         ketQuaNiemPhong: [],
         trangThai: [STATUS.DU_THAO],
         lyDoTuChoi: [],
@@ -123,6 +125,7 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
         tenNhaKho: [],
         tenNganKho: [],
         tenLoKho: [],
+        tenNganLoKho: [],
         nguoiLienQuan: [new Array()],
         bienBanLayMauDinhKem: [new Array<FileDinhKem>()],
         canCu: [new Array<FileDinhKem>()],
@@ -131,7 +134,11 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
         doiThuKho: [true],
         checked: [true],
         soBienBanBaoQuanLanDau: [''],
-        loaiDc: ['']
+        loaiDc: [''],
+        thuKho: [null],
+        tenThuKho: [''],
+        donViTinh: '',
+        tenDonViTinh: ['']
       }
     );
     this.maBb = 'BBLM-' + this.userInfo.DON_VI.tenVietTat;
@@ -167,7 +174,7 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
       await this.bienBanLayMauDieuChuyenService.getDetail(id)
         .then((res) => {
           if (res.msg == MESSAGE.SUCCESS) {
-            this.formData.patchValue({ ...res.data, soBbLayMau: res.data.soBbLayMau ? res.data.soBbLayMau : `${res.data.id}/${this.maBb}` });
+            this.formData.patchValue({ ...res.data, soBbLayMau: res.data.soBbLayMau ? res.data.soBbLayMau : res.data.id ? `${res.data.id}/${res.data.nam}/${this.maBb}` : '', tenNganLoKho: res.data.tenLoKho ? `${res.data.tenLoKho} - ${res.data.tenNganKho}` : res.data.tenNganKho });
             const data = res.data;
             this.dcnbBienBanLayMauDtl = cloneDeep(data.dcnbBienBanLayMauDtl),
               this.checked = data.ketQuaNiemPhong;
@@ -176,6 +183,7 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
             this.canCu = data.canCu;
             this.fileDinhKemChupMauNiemPhong = cloneDeep(data.fileDinhKemChupMauNiemPhong);
             this.phuongPhapLayMaus = Array.isArray(data?.pplayMau?.split(",")) ? data.pplayMau.split(",").map(f => ({ id: f.split("-")[0], giaTri: f.split("-")[1], checked: true })) : [];
+            this.chiTieuKiemTra = Array.isArray(data?.chiTieuKiemTra?.split(",")) ? data.chiTieuKiemTra.split(",").map(f => ({ id: f.split("-")[0], giaTri: f.split("-")[1], checked: true })) : [];
             const obj = Array.isArray(data.dcnbBienBanLayMauDtl) ? data.dcnbBienBanLayMauDtl.reduce((obj, cur) => {
               if (cur.loaiDaiDien == "00") {
                 obj.listDaiDienCuc.push({ ...cur, daiDien: cur.tenDaiDien })
@@ -201,11 +209,15 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
         ktvBaoQuan: this.userInfo.TEN_DAY_DU,
         loaiDc: this.loaiDc,
         ...this.passData,
+        tenNganLoKho: this.passData.tenLoKho ? `${this.passData.tenLoKho} - ${this.passData.tenNganKho}` : this.passData.tenNganKho,
         qdccId: this.passData.qddccId
       });
       if (this.passData.cloaiVthh) {
-        const chiTietHangHoa = await this.danhMucService.loadDanhMucHangChiTiet(this.passData.cloaiVthh);
+        const [chiTietHangHoa, dataChiTieu] = await Promise.all([this.danhMucService.loadDanhMucHangChiTiet(this.passData.cloaiVthh), this.getTieuChiCanKiemTra(this.passData.loaiVthh)]);
         this.phuongPhapLayMaus = Array.isArray(chiTietHangHoa?.data?.ppLayMau) ? chiTietHangHoa?.data?.ppLayMau.map(f => ({ ...f, checked: true })) : [];
+        if (dataChiTieu?.msg === MESSAGE.SUCCESS) {
+          this.getChiTietTieuChiCanKiemTra(dataChiTieu.data?.content[0]?.id, this.passData.cloaiVthh)
+        }
         this.formData.patchValue({ pplayMau: this.phuongPhapLayMaus.map(f => `${f.id}-${f.giaTri}`).join(",") });
       }
     }
@@ -215,7 +227,6 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
   quayLai() {
     this.showListEvent.emit();
   }
-
   async loadSoQuyetDinh() {
     let body = {
       trangThai: STATUS.BAN_HANH,
@@ -268,7 +279,7 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
           soQdinhDcc: '',
           qdccId: '',
           ngayQdDc: '',
-
+          tenNganLoKho: '',
           maLoKho: '',
           tenLoKho: '',
           maNganKho: '',
@@ -281,11 +292,14 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
           tenLoaiVthh: '',
           cloaiVthh: '',
           tenCloaiVthh: '',
-
+          thuKho: null,
+          tenThuKho: '',
+          donViTinh: '',
+          tenDonViTinh: '',
           soLuongMau: '',
-          chiTieuKiemTra: '',
         });
-        this.phuongPhapLayMaus = [];
+        this.chiTieuKiemTra = [],
+          this.phuongPhapLayMaus = [];
         await this.bindingDataQd(data.id, true);
       }
     });
@@ -308,11 +322,11 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
       // );
       this.listDiaDiemNhap = [];
       let dataChiCuc = [];
-      if (Array.isArray(data?.danhSachQuyetDinh)) {
+      if (data.maDvi == this.userInfo.MA_DVI && Array.isArray(data?.danhSachQuyetDinh)) {
         data.danhSachQuyetDinh.forEach(element => {
           if (Array.isArray(element.danhSachKeHoach)) {
             element.danhSachKeHoach.forEach(item => {
-              if (item.maChiCucNhan == this.userInfo.MA_DVI && dataChiCuc.findIndex(f => f.maChiCucNhan == item.maChiCucNhan) < 0 && dataChiCuc.findIndex(f => f.maLoKho == item.maLoKho) < 0) {
+              if (dataChiCuc.findIndex(f => ((!f.maLoKho && !item.maLoKho && f.maNganKho == item.maNganKho) || (f.maLoKho && f.maLoKho == item.maLoKho))) < 0) {
                 dataChiCuc.push(item)
               }
             });
@@ -330,7 +344,34 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
 
     }
   }
-
+  async getTieuChiCanKiemTra(loaiVthh: string, cloaiVthh?: string) {
+    const body = {
+      loaiVthh, cloaiVthh, paggingReq: {
+        limit: this.globals.prop.MAX_INTERGER,
+        page: 0
+      }
+    }
+    const res = await this.khCnQuyChuanKyThuat.search(body);
+    console.log("ress", res)
+    return res;
+  };
+  async getChiTietTieuChiCanKiemTra(id: number, cloaiVthh: string) {
+    if (id) {
+      const res = await this.khCnQuyChuanKyThuat.getDetail(id);
+      if (res?.msg === MESSAGE.SUCCESS) {
+        if (res.data?.apDungCloaiVthh) {
+          this.chiTieuKiemTra = Array.isArray(res.data.tieuChuanKyThuat) ? res.data.tieuChuanKyThuat.map((f) => ({
+            id: f.id, giaTri: f.tenChiTieu + " " + f.mucYeuCauNhap, checked: true
+          })) : []
+        } else {
+          this.chiTieuKiemTra = Array.isArray(res.data.tieuChuanKyThuat) ? res.data.tieuChuanKyThuat.filter(f => f.cloaiVthh === cloaiVthh).map((f) => ({
+            id: f.id, giaTri: f.tenChiTieu + " " + f.mucYeuCauNhap, checked: true
+          })) : []
+        }
+      }
+      console.log("resââ", res)
+    }
+  }
   openDialogDdiemNhapHang(event: MouseEvent, disabled?: boolean) {
     const elm = event.target as HTMLInputElement;
     if (disabled || elm?.localName == "input") return;
@@ -350,6 +391,7 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
         this.formData.patchValue({
+          tenNganLoKho: '',
           maLoKho: '',
           tenLoKho: '',
           maNganKho: '',
@@ -362,11 +404,14 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
           tenLoaiVthh: '',
           cloaiVthh: '',
           tenCloaiVthh: '',
-
+          thuKho: null,
+          tenThuKho: '',
+          donViTinh: '',
+          tenDonViTinh: '',
           soLuongMau: '',
-          chiTieuKiemTra: '',
         });
-        this.phuongPhapLayMaus = [];
+        this.chiTieuKiemTra = [],
+          this.phuongPhapLayMaus = [];
         this.bindingDataDdNhap(data);
       }
     });
@@ -383,29 +428,38 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
         tenNganKho: data.tenNganKho,
         maLoKho: data.maLoKho,
         tenLoKho: data.tenLoKho,
+        tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho,
         tenLoaiVthh: data.tenLoaiVthh,
         loaiVthh: data.loaiVthh,
         tenCloaiVthh: data.tenCloaiVthh,
         cloaiVthh: data.cloaiVthh,
+        thuKho: data.thuKhoId,
+        tenThuKho: data.thuKho,
+        donViTinh: data.donViTinh,
+        tenDonViTinh: data.tenDonViTinh
       })
     }
     if (data.cloaiVthh) {
-      const chiTietHangHoa = await this.danhMucService.loadDanhMucHangChiTiet(data.cloaiVthh);
+      const [chiTietHangHoa, dataChiTieu] = await Promise.all([this.danhMucService.loadDanhMucHangChiTiet(data.cloaiVthh), this.getTieuChiCanKiemTra(data.loaiVthh)]);
       this.phuongPhapLayMaus = Array.isArray(chiTietHangHoa?.data?.ppLayMau) ? chiTietHangHoa?.data?.ppLayMau.map(f => ({ ...f, checked: true })) : [];
       this.formData.patchValue({ pplayMau: this.phuongPhapLayMaus.map(f => `${f.id}-${f.giaTri}`).join(",") });
+      if (dataChiTieu?.msg === MESSAGE.SUCCESS) {
+        this.getChiTietTieuChiCanKiemTra(dataChiTieu.data?.content[0]?.id, data.cloaiVthh)
+      }
     }
   }
 
   async save(isGuiDuyet?) {
-    this.setValidator(isGuiDuyet);
+    this.setValidator(isGuiDuyet)
     let body = this.formData.value;
     body.bienBanLayMauDinhKem = this.bienBanLayMauDinhKem;
     body.canCu = this.canCu;
     body.fileDinhKemChupMauNiemPhong = this.fileDinhKemChupMauNiemPhong;
+    body.chiTieuKiemTra = this.chiTieuKiemTra.map(f => `${f.id}-${f.giaTri}`);
     body.dcnbBienBanLayMauDtl = this.listDaiDienCuc.map(f => ({ ...f, loaiDaiDien: '00', tenDaiDien: f.daiDien })).concat(this.listDaiDienChiCuc.map(f => ({ ...f, loaiDaiDien: '01', tenDaiDien: f.daiDien })))
     let data = await this.createUpdate(body);
     if (!data) return;
-    this.formData.patchValue({ id: data.id, trangThai: data.trangThai, soBbLayMau: data.soBbLayMau ? data.soBbLayMau : `${data.id}/${this.maBb}` })
+    this.formData.patchValue({ id: data.id, trangThai: data.trangThai, soBbLayMau: data.soBbLayMau ? data.soBbLayMau : data.id ? `${data.id}/${data.nam}/${this.maBb}` : '' })
     if (isGuiDuyet) {
       this.pheDuyet();
     }
@@ -426,7 +480,7 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
         msg = MESSAGE.GUI_DUYET_CONFIRM;
         break;
       }
-    }
+    };
     this.approve(this.formData.value.id, trangThai, msg);
   }
 
@@ -460,30 +514,32 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
       this.notification.error(MESSAGE.ERROR, err.msg);
     })
   }
-  async saveAndSend(): Promise<void> {
-    this.setValidator(true);
-    this.helperService.markFormGroupTouched(this.formData);
-    if (this.formData.valid) {
-      this.save(true)
-    }
-  }
+  // async saveAndSend(): Promise<void> {
+  //   this.setValidator(true);
+  //   this.helperService.markFormGroupTouched(this.formData);
+  //   if (this.formData.valid) {
+  //     this.save(true)
+  //   }
+  // }
   setValidator(isGuiDuyet) {
     if (isGuiDuyet) {
       this.formData.controls['maDvi'].setValidators([Validators.required]);
-      this.formData.controls['soBbLayMau'].setValidators([Validators.required]);
+      // this.formData.controls['soBbLayMau'].setValidators([Validators.required]);
       this.formData.controls['dviKiemNghiem'].setValidators([Validators.required]);
       this.formData.controls['diaDiemLayMau'].setValidators([Validators.required]);
       this.formData.controls['soLuongMau'].setValidators([Validators.required]);
       this.formData.controls['pplayMau'].setValidators([Validators.required]);
-      this.formData.controls['chiTieuKiemTra'].setValidators([Validators.required]);
+      // this.formData.controls['chiTieuKiemTra'].setValidators([Validators.required]);
+      this.formData.controls['ngayLayMau'].setValidators([Validators.required]);
     } else {
       this.formData.controls['maDvi'].clearValidators();
-      this.formData.controls['soBbLayMau'].clearValidators();
+      // this.formData.controls['soBbLayMau'].clearValidators();
       this.formData.controls['dviKiemNghiem'].clearValidators();
       this.formData.controls['diaDiemLayMau'].clearValidators();
       this.formData.controls['soLuongMau'].clearValidators();
       this.formData.controls['pplayMau'].clearValidators();
-      this.formData.controls['chiTieuKiemTra'].clearValidators();
+      // this.formData.controls['chiTieuKiemTra'].clearValidators();
+      this.formData.controls['ngayLayMau'].clearValidators();
     }
   }
 

@@ -37,7 +37,7 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
   dsHangHoa: any[] = [];
   dsLoaiGia: any[] = [];
   dsToTrinhDeXuat: any[] = [];
-  arrThongTinGia: Array<QuyetDinhGiaBtcThongTinGia>;
+  arrThongTinGia: Array<QuyetDinhGiaBtcThongTinGia> = [];
 
   taiLieuDinhKemList: any[] = [];
   dsNam: any[] = [];

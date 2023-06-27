@@ -28,7 +28,7 @@ export class DieuchinhLuachonNhathauComponent extends Base2Component implements 
   tuNgayQd: Date | null = null;
   denNgayQd: Date | null = null;
   listTrangThai: any[] = [
-    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: this.STATUS.DA_LAP, giaTri: 'Đã lập' },
     { ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành' }
   ];
 

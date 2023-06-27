@@ -156,32 +156,16 @@ export class ToanBoDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Comp
 
   buildTableView() {
     this.dataTableView = chain(this.dataTable)
-      .groupBy("tenCuc")
+      .groupBy("tenChiCuc")
       .map((value, key) => {
-        let rs = chain(value)
-          .groupBy("tenChiCuc")
-          .map((v, k) => {
-              let rowItem = v.find(s => s.tenChiCuc === k);
-              let idVirtual = uuidv4();
-              this.expandSetString.add(idVirtual);
-              return {
-                idVirtual: idVirtual,
-                tenChiCuc: k,
-                maDiaDiem: rowItem.maDiaDiem,
-                tenCloaiVthh: rowItem.tenCloaiVthh,
-                childData: v
-              }
-            }
-          ).value();
         let idVirtual = uuidv4();
         this.expandSetString.add(idVirtual);
         return {
           idVirtual: idVirtual,
-          tenCuc: key,
-          childData: rs
+          tenChiCuc: key,
+          childData: value
         };
       }).value();
-    console.log(this.dataTableView ,'this.dataTableView this.dataTableView ')
   }
 
   onExpandStringChange(id: string, checked: boolean) {

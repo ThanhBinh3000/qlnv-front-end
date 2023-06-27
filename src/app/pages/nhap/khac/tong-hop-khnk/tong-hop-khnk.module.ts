@@ -23,6 +23,7 @@ import { KeHoachNhapKhacModule } from "../ke-hoach-nhap-khac/ke-hoach-nhap-khac.
   ],
   exports: [
     TongHopKhnkComponent,
+    ThemMoiTongHopKhnkComponent,
   ]
 })
 export class TongHopKhnkModule { }
