@@ -39,7 +39,7 @@
   <!--  step2-->
   <ng-container *ngIf="selectedItem">
     <div class="d-flex justify-content-center">
-      <h2>{{selectedItem.tenDanhSach + ' - ' + selectedItem.maDanhSach}}</h2>
+      <h4>{{selectedItem.tenDanhSach + ' - ' + selectedItem.maDanhSach}}</h4>
     </div>
     <div class="d-flex justify-content-center">
       <p>Thời gian tổng hợp: {{selectedItem.ngayTao|date:globals.dateFormat}}</p>
@@ -63,14 +63,9 @@
           <th>Ngăn/lô kho</th>
           <th>Ngày nhập kho</th>
           <th>SL tồn</th>
-          <th>SL cần thanh lý</th>
-          <th>SL cần thanh lý đã duyệt</th>
-          <th>SL còn lại cần thanh lý</th>
           <th>ĐVT</th>
-          <th>Ngày tổng hợp</th>
-          <th>Lý do cần thanh lý</th>
-          <th>Thời gian đề xuất thanh lý</th>
-          <th>Trạng thái thanh lý</th>
+          <th>Ngày đề xuất</th>
+          <th class="text-center">Trạng thái <br> kiểm tra chất lượng</th>
         </tr>
         </thead>
         <tbody>
@@ -79,11 +74,6 @@
           <tr>
             <td>{{numberToRoman(i + 1)}}</td>
             <td>{{item.tenChiCuc}}</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
             <td></td>
             <td></td>
             <td></td>
@@ -104,20 +94,14 @@
               <td>{{lv1.tenLoKho ? lv1.tenLoKho : lv1.tenNganKho}}</td>
               <td>{{lv1.ngayNhapKho|date:globals.dateFormat}}</td>
               <td>{{lv1.slHienTai|number:globals.numberFormat}}</td>
-              <td>{{lv1.slDeXuat|number:globals.numberFormat}}</td>
-              <td>{{lv1.slDaDuyet|number:globals.numberFormat}}</td>
-              <td>{{lv1.slDeXuat - lv1.slDaDuyet|number:globals.numberFormat}}</td>
               <td>{{lv1.donViTinh}}</td>
-              <td>{{lv1.ngayTongHop|date:globals.dateFormat}}</td>
-              <td>{{lv1.lyDo}}</td>
               <td>{{lv1.ngayDeXuat|date:globals.dateFormat}}</td>
-              <td>{{lv1.tenTrangThaiTl}}</td>
+              <td>{{lv1.tenTrangThaiKtCl}}</td>
             </tr>
           </ng-container>
         </ng-container>
         </tbody>
       </nz-table>
     </nz-card>
-
   </ng-container>
 </div>
