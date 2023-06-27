@@ -566,11 +566,11 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
 
             this.dsDiaDiem = [];
             let dataChiCuc = [];
-            if (Array.isArray(data?.danhSachQuyetDinh)) {
+            if (data.maDvi == this.userInfo.MA_DVI && Array.isArray(data?.danhSachQuyetDinh)) {
               data.danhSachQuyetDinh.forEach(element => {
                 if (Array.isArray(element.danhSachKeHoach)) {
                   element.danhSachKeHoach.forEach(item => {
-                    if (item.maChiCucNhan == this.userInfo.MA_DVI && dataChiCuc.findIndex(f => f.maChiCucNhan == item.maChiCucNhan) < 0 && dataChiCuc.findIndex(f => f.maLoKho == item.maLoKho) < 0) {
+                    if (dataChiCuc.findIndex(f => f.maChiCucNhan == item.maChiCucNhan) < 0 && dataChiCuc.findIndex(f => f.maLoKho == item.maLoKho) < 0) {
                       dataChiCuc.push(item)
                     }
                   });

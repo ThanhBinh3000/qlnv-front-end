@@ -41,8 +41,6 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
   listSoQuyetDinh: any[] = []
   listDiaDiemNhap: any[] = [];
 
-  listPhieuKNCl: any[] = [];
-
   taiLieuDinhKemList: any[] = [];
   dataTable: any[] = [];
   phieuXuatKho: any[] = [];
@@ -68,6 +66,7 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
     max: 1000000000000,
     inputMode: CurrencyMaskInputMode.NATURAL,
   }
+  maBb: string;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -104,8 +103,9 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
       tenNhaKho: ['', [Validators.required]],
       maNganKho: ['', [Validators.required]],
       tenNganKho: ['', [Validators.required]],
-      maLoKho: ['', [Validators.required]],
-      tenLoKho: ['', [Validators.required]],
+      tenNganLoKho: [''],
+      maLoKho: [''],
+      tenLoKho: [''],
 
       soPhieuKnChatLuong: ['', [Validators.required]],
       phieuKnChatLuongHdrId: ['', [Validators.required]],
@@ -146,13 +146,14 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
       lyDoTuChoi: [],
 
     });
+    this.maBb = 'BBLM-' + this.userInfo.DON_VI.tenVietTat;
   }
 
   async ngOnInit() {
     try {
       this.userInfo = this.userService.getUserLogin();
       if (this.idInput) {
-        await this.loadChiTiet();
+        await this.loadChiTiet(this.idInput);
       } else {
         await this.initForm();
       }
@@ -176,6 +177,7 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
       tenTrangThai: 'Dự thảo',
       canBoLapPhieu: this.userInfo.TEN_DAY_DU,
       ...this.passData,
+      tenNganLoKho: this.passData.tenLoKho ? `${this.passData.tenLoKho} - ${this.passData.tenNganKho}` : this.passData.tenNganKho,
     });
     if (this.passData.qddcId) {
       this.bindingDataQd(this.passData.qddcId, true);
@@ -218,7 +220,7 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
           qddcId: '',
           soQddc: '',
           ngayKyQddc: '',
-
+          tenNganLoKho: '',
           maLoKho: '',
           tenLoKho: '',
           maNganKho: '',
@@ -264,11 +266,11 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
           this.listDiaDiemNhap = [];
           let dataChiCuc = [];
 
-          if (Array.isArray(data?.danhSachQuyetDinh)) {
+          if (data.maDvi == this.userInfo.MA_DVI && Array.isArray(data?.danhSachQuyetDinh)) {
             data.danhSachQuyetDinh.forEach(element => {
               if (Array.isArray(element.danhSachKeHoach)) {
                 element.danhSachKeHoach.forEach(item => {
-                  if (item.maChiCucNhan == this.userInfo.MA_DVI && dataChiCuc.findIndex(f => f.maChiCucNhan == item.maChiCucNhan) < 0 && dataChiCuc.findIndex(f => f.maLoKho == item.maLoKho) < 0) {
+                  if (dataChiCuc.findIndex(f => ((!f.maLoKho && !item.maLoKho && f.maNganKho == item.maNganKho) || (f.maLoKho && f.maLoKho == item.maLoKho))) < 0) {
                     dataChiCuc.push(item)
                   }
                 });
@@ -364,6 +366,7 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
           tenNganKho: data.tenNganKho,
           maLoKho: data.maLoKho,
           tenLoKho: data.tenLoKho,
+          tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho,
           soLuongCanDc: data.soLuongDc,
           donViTinh: data.tenDonViTinh,
           loaiVthh: data.loaiVthh,
@@ -402,8 +405,7 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
     let res = await this.phieuKiemNghiemChatLuongDieuChuyenService.dsPhieuKNChatLuong(body)
     if (res.data) {
       const list = res.data;
-      this.listPhieuKNCl = list.filter(item => (item.maDiemKho == data.maDiemKho && item.maNhaKho == data.maNhaKho && item.maNganKho == data.maNganKho && item.maloKho == data.maLoKho));
-      const dataPhieu = this.listPhieuKNCl[0]
+      const dataPhieu = list.find(item => (item.maDiemKho == data.maDiemKho && item.maNhaKho == data.maNhaKho && item.maNganKho == data.maNganKho && ((!item.maloKho && !data.maLoKho) || (item.maloKho && item.maloKho == data.maLoKho))));
       if (dataPhieu) {
         let resDetail = await this.phieuKiemNghiemChatLuongDieuChuyenService.getDetail(dataPhieu.id);
         if (resDetail.data) {
@@ -452,41 +454,6 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
       return arr.findIndex(otherItem => otherItem.maSo === item.maSo) !== index;
     });
   }
-  async createUpdate(body, roles?: any) {
-    if (!this.checkPermission(roles)) {
-      return
-    }
-    await this.spinner.show();
-    try {
-      this.helperService.markFormGroupTouched(this.formData);
-      if (this.formData.invalid) {
-        return;
-      }
-      let res = null;
-      if (this.formData.value.id && this.formData.value.id > 0) {
-        res = await this.phieuXuatKhoDieuChuyenService.update(body);
-      } else {
-        res = await this.phieuXuatKhoDieuChuyenService.create(body);
-      }
-      if (res.msg == MESSAGE.SUCCESS) {
-        if (this.formData.value.id && this.formData.value.id > 0) {
-          this.notification.success(MESSAGE.NOTIFICATION, MESSAGE.UPDATE_SUCCESS);
-          return res.data;
-        } else {
-          this.notification.success(MESSAGE.NOTIFICATION, MESSAGE.ADD_SUCCESS);
-          return res.data;
-        }
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
-        return null;
-      }
-    } catch (e) {
-      this.notification.error(MESSAGE.ERROR, e);
-    } finally {
-      await this.spinner.hide();
-    }
-
-  }
   async save(isGuiDuyet?: boolean) {
     try {
       this.setValidate(isGuiDuyet)
@@ -505,8 +472,7 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
         body.thayDoiThuKho = this.thayDoiThuKho
       let data = await this.createUpdate(body);
       if (data) {
-        this.idInput = data.id;
-        this.formData.patchValue({ id: data.id, soPhieuXuatKho: this.genSoPhieuXuat(data.id), trangThai: data.trangThai });
+        this.formData.patchValue({ id: data.id, soPhieuXuatKho: data.soPhieuXuatKho ? data.soPhieuXuatKho : this.genSoPhieuXuat(data.id), trangThai: data.trangThai });
         if (isGuiDuyet) {
           this.pheDuyet(true);
         }
@@ -520,18 +486,16 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
     // this.logdataTable();
   }
 
-  async loadChiTiet() {
-    let data = await this.detail(this.idInput);
+  async loadChiTiet(id) {
+    let data = await this.detail(id);
     if (data) {
       this.fileDinhKems = data.fileDinhKems;
       this.dataTable = cloneDeep(data.dcnbPhieuXuatKhoDtl);
-      this.formData.patchValue({ soPhieuXuatKho: this.genSoPhieuXuat(data.id) })
+      this.formData.patchValue({ soPhieuXuatKho: this.genSoPhieuXuat(data.id), tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho })
     }
   }
-  genSoPhieuXuat(id) {
-    if (this.formData.get('id').value) {
-      return `${id}/PXK/DCNB`
-    } else return ""
+  genSoPhieuXuat(id: number) {
+    return `${id}/${this.formData.value.nam}/DCNB`
   }
 
   convertTien(tien: number, donVi: string): string {

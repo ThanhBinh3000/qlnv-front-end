@@ -24,11 +24,13 @@ import { BienBanLayMauBanGiaoMauComponent } from './kiemtra-chatluong-lt-truockh
 import { PhieuKiemNghiemChatLuongComponent } from './kiemtra-chatluong-lt-truockhi-hethan-luukho/phieu-kiem-nghiem-chat-luong/phieu-kiem-nghiem-chat-luong.component';
 import { BaoCaoKetQuaKiemDinhMauComponent } from './kiemtra-chatluong-lt-truockhi-hethan-luukho/bao-cao-ket-qua-kiem-dinh-mau/bao-cao-ket-qua-kiem-dinh-mau.component';
 import {ThanhLyDanhSachHangComponent} from "../xuat-thanh-ly/thanh-ly-danh-sach-hang/thanh-ly-danh-sach-hang.component";
+import { ChiTietTongHopDsHangDtqgComponent } from './kiemtra-chatluong-lt-truockhi-hethan-luukho/tong-hop-ds-hang-dtqg-hethan-luukho-chua-co-kh-xuat/chi-tiet-tong-hop-ds-hang-dtqg/chi-tiet-tong-hop-ds-hang-dtqg.component';
+import {KeHoachBanDauGiaModule} from "../dau-gia/ke-hoach-ban-dau-gia/ke-hoach-ban-dau-gia.module";
 
 
 
 @NgModule({
-  declarations: [XuatKhacComponent, KiemtraChatluongVtTbTrongThbhComponent, KiemtraChatluongVtTbTruockhiHethanLuukhoComponent, KiemtraChatluongLtTruockhiHethanLuukhoComponent, XuatHangDtqgThBkkComponent, XuatHangKhoiDanhMucComponent, ToanBoDsHangDtqgHethanLuukhoChuaCoKhXuatComponent, TongHopDsHangDtqgHethanLuukhoChuaCoKhXuatComponent, BienBanLayMauBanGiaoMauComponent, PhieuKiemNghiemChatLuongComponent, BaoCaoKetQuaKiemDinhMauComponent],
+  declarations: [XuatKhacComponent, KiemtraChatluongVtTbTrongThbhComponent, KiemtraChatluongVtTbTruockhiHethanLuukhoComponent, KiemtraChatluongLtTruockhiHethanLuukhoComponent, XuatHangDtqgThBkkComponent, XuatHangKhoiDanhMucComponent, ToanBoDsHangDtqgHethanLuukhoChuaCoKhXuatComponent, TongHopDsHangDtqgHethanLuukhoChuaCoKhXuatComponent, BienBanLayMauBanGiaoMauComponent, PhieuKiemNghiemChatLuongComponent, BaoCaoKetQuaKiemDinhMauComponent, ChiTietTongHopDsHangDtqgComponent],
   imports: [
     CommonModule,
     XuatKhacRoutingModule,
@@ -37,6 +39,7 @@ import {ThanhLyDanhSachHangComponent} from "../xuat-thanh-ly/thanh-ly-danh-sach-
     NzPipesModule,
     MainModule,
     ComponentsModule,
+    KeHoachBanDauGiaModule,
   ],
   exports: [
     KiemtraChatluongLtTruockhiHethanLuukhoComponent
