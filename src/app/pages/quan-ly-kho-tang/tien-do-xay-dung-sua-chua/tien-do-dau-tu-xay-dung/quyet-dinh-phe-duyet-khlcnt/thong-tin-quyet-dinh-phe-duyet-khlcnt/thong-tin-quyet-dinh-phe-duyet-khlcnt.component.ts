@@ -139,6 +139,7 @@ export class ThongTinQuyetDinhPheDuyetKhlcntComponent extends Base2Component imp
         idQdPdDaDtxd: this.itemQdPdTktcTdt.idQdPdDaDtxd,
         tenCongTrinh: this.itemQdPdTktcTdt.tenCongTrinh,
         tongMucDt: this.itemQdPdTktcTdt.giaTriDt,
+        chuDauTu: this.itemQdPdTktcTdt.chuDauTu,
         loaiCapCt: this.itemQdPdTktcTdt.loaiCapCt,
         khoi: this.itemDuAn.tenKhoi,
         diaDiem: this.itemQdPdTktcTdt.diaDiem,
@@ -266,9 +267,11 @@ export class ThongTinQuyetDinhPheDuyetKhlcntComponent extends Base2Component imp
       }
     }
   }
+
   emitDataKhLcnt(data) {
     this.dataItemKhLcnt.emit(data);
   }
+
   async detail(id) {
     this.spinner.show();
     try {
