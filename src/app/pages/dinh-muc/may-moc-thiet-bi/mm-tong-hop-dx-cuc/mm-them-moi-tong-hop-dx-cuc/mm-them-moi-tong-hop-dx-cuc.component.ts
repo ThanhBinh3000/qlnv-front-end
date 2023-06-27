@@ -270,12 +270,12 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
     let trangThai;
     switch (this.formData.value.trangThai) {
       case STATUS.DU_THAO :
-      case STATUS.TU_CHOI_LDV : {
-        trangThai = STATUS.CHO_DUYET_LDV;
+      case STATUS.TU_CHOI_LDTC : {
+        trangThai = STATUS.CHO_DUYET_LDTC;
         break;
       }
-      case STATUS.CHO_DUYET_LDV : {
-        trangThai = STATUS.DA_DUYET_LDV
+      case STATUS.CHO_DUYET_LDTC : {
+        trangThai = STATUS.DA_DUYET_LDTC
       }
     }
     await this.approve(this.id, trangThai, 'Bạn có chắc chắn muốn duyệt?')
