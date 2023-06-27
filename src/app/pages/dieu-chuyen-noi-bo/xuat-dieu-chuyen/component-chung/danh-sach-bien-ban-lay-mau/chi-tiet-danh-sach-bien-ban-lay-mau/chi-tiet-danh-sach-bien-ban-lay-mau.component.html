@@ -17,7 +17,7 @@
         </button>
         <button
             *ngIf="[STATUS.DU_THAO, STATUS.TU_CHOI_LDCC].includes(this.formData.value.trangThai) && userService.isChiCuc()"
-            type="button" class="btn btn-sub" (click)="saveAndSend()">
+            type="button" class="btn btn-sub" (click)="save(true)">
             <i class="icon htvbdh_tcdt_guiduyet"></i>
             <span>Lưu và gửi duyệt</span>
         </button>
@@ -164,12 +164,12 @@
                         </div>
                         <div nz-col [nzSpan]="5">
                             <nz-form-item>
-                                <nz-form-label [nzNoColon]="true"> Lô kho</nz-form-label>
+                                <nz-form-label [nzNoColon]="true" nzRequired> Lô kho/ Ngăn kho</nz-form-label>
                                 <nz-form-control>
                                     <nz-input-group nzAddOnAfterIcon="folder-open"
                                         (click)="openDialogDdiemNhapHang($event, isView)">
                                         <input nz-input class="dcnb xuat-dc-input" [class.only-input]="!isView"
-                                            formControlName="tenLoKho" [readonly]="true" />
+                                            formControlName="tenNganLoKho" [readonly]="true" />
                                     </nz-input-group>
                                 </nz-form-control>
                             </nz-form-item>
@@ -182,7 +182,7 @@
                                     kho</label>
                             </nz-form-item>
                         </div>
-                        <div nz-col [nzSpan]="5">
+                        <!-- <div nz-col [nzSpan]="5">
                             <nz-form-item>
                                 <nz-form-label [nzNoColon]="true"> Ngăn kho</nz-form-label>
                                 <nz-form-control>
@@ -192,12 +192,13 @@
                                     </nz-input-group>
                                 </nz-form-control>
                             </nz-form-item>
-                        </div>
+                        </div> -->
                         <div nz-col [nzSpan]="5">
                             <nz-form-item>
-                                <nz-form-label [nzNoColon]="true"> Nhà kho</nz-form-label>
+                                <nz-form-label [nzNoColon]="true" nzRequired> Nhà kho</nz-form-label>
                                 <nz-form-control [nzErrorTip]="error">
-                                    <nz-input-group>
+                                    <nz-input-group (click)="openDialogDdiemNhapHang($event, isView)"
+                                        nzAddOnAfterIcon="folder-open">
                                         <input nz-input class="dcnb xuat-dc-input" formControlName="tenNhaKho"
                                             [readonly]="true" />
                                     </nz-input-group>
@@ -209,7 +210,8 @@
                             <nz-form-item>
                                 <nz-form-label [nzNoColon]="true" nzRequired> Điểm kho</nz-form-label>
                                 <nz-form-control [nzErrorTip]="error">
-                                    <nz-input-group>
+                                    <nz-input-group (click)="openDialogDdiemNhapHang($event, isView)"
+                                        nzAddOnAfterIcon="folder-open">
                                         <input nz-input class="dcnb xuat-dc-input" formControlName="tenDiemKho"
                                             [readonly]="true" />
                                     </nz-input-group>
@@ -380,8 +382,20 @@
                                 <nz-form-label [nzNoColon]="true" nzRequired>
                                     Các chỉ tiêu cần kiểm tra
                                 </nz-form-label>
-                                <nz-form-control [nzErrorTip]="error">
-                                    <input nz-input formControlName="chiTieuKiemTra" [readonly]="isView" />
+                                <!-- <input nz-input formControlName="chiTieuKiemTra" [readonly]="isView" /> -->
+                                <nz-form-control [nzErrorTip]="error" class="d-flex direct-column">
+                                    <!-- <nz-select formControlName="pplayMau" [nzDisabled]="isView">
+                                            <nz-option *ngFor="let item of phuongPhapLayMaus" [nzValue]="item.ma"
+                                                [nzLabel]="item.giaTri">
+                                            </nz-option>
+                                        </nz-select> -->
+                                    <div class="label-wrapper">
+                                        <label [ngModelOptions]="{standalone: true}" [(ngModel)]="item.checked"
+                                            [nzDisabled]="true" nz-checkbox *ngFor="let item of chiTieuKiemTra"
+                                            class="text-bold">
+                                            {{item.giaTri}}
+                                        </label>
+                                    </div>
                                 </nz-form-control>
                             </nz-form-item>
                         </div>

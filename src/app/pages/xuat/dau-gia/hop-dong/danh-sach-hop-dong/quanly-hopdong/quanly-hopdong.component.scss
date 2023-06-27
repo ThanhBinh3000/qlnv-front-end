@@ -2,7 +2,7 @@
     .ant-form-item-label.ant-col {
         text-align: left;
         width: 50%;
-        height: 25px;
+        height: 30px;
     }
 
     .ant-picker,
@@ -26,24 +26,11 @@
 
 }
 
-
-::ng-deep {
-    .bg-xam .ant-card-body {
-        background: #f8f9fa;
-        //padding: 12px;
-        //margin: 12px;
-        //border-radius: 0px;
-        //border: solid 1px #f1f1f1;
-        //margin-right: 0px !important;
-        //margin-left: 0px !important;
-    }
+::ng-deep .ant-input-number-input {
+    color: #001CFF !important;
+    font-weight: bold;
 }
 
-.list-file {
-    .ant-input-affix-wrapper {
-        padding: 0px 11px !important;
-    }
-}
 
 .bg-selected td {
     background-color: #ebedff;

@@ -15,6 +15,9 @@ import {UserService} from 'src/app/services/user.service';
 import {convertTrangThai} from 'src/app/shared/commonFunction';
 import {Globals} from 'src/app/shared/globals';
 import {STATUS} from "../../../../../constants/status";
+import {DatePipe} from "@angular/common";
+import print from 'print-js';
+import printJS from "print-js";
 
 @Component({
   selector: 'app-pa-giao-chi-tieu-ke-hoach',
@@ -478,4 +481,64 @@ export class PaGiaoChiTieuKeHoachComponent implements OnInit {
     }
   }
 
+  async preview() {
+    // let pipe = new DatePipe('en-US');
+    // let body = this.formData.value;
+    // body.reportTemplateRequest = this.reportTemplate;
+    // body.listDsGthau = this.listDsGthau;
+    // body.fileDinhKemReq = this.fileDinhKem;
+    // body.tongMucDtBangChu = convertTienTobangChu(this.formData.get('tongMucDt').value)
+    // body.tgianDthau = pipe.transform(body.tgianDthau, 'yyyy-MM-dd HH:mm')
+    // body.tgianMthau = pipe.transform(body.tgianMthau, 'yyyy-MM-dd HH:mm')
+    // await this.dauThauService.preview(body).then(async s => {
+    //   console.log(s)
+    //   this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
+    //   this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
+    //   this.showDlgPreview = true;
+    // });
+  }
+
+  print() {
+    let dataPrint = this.dataTable.map((item, index) => {
+      return {
+        ...item,
+        'stt': index + 1
+      };
+    });
+    printJS({
+      printable: dataPrint,
+      gridHeaderStyle: 'color: red;  border: 2px solid #3971A5; ',
+      gridStyle: 'border: 2px solid #3971A5;text-align:center;with:fit-content',
+      properties: [
+        {
+          field: 'stt',
+          displayName: 'STT',
+          columnSize: '40px'
+        },
+        {
+          field: 'namKeHoach',
+          displayName: 'Năm kế hoạch',
+          columnSize: '100px'
+        }
+        ,
+        {
+          field: 'ngayKy',
+          displayName: 'Ngày ký',
+          columnSize: '100px'
+        },
+        {
+          field: 'trichYeu',
+          displayName: 'Trích yếu',
+          columnSize: 'calc(100% - calc( 40px + 100px + 100px + 100px)) px'
+        },
+        {
+          field: 'trangThaiDuyet',
+          displayName: 'Trạng thái',
+          columnSize: '100px'
+        }
+      ],
+      type: 'json',
+      header: 'Danh sách chỉ tiêu kế hoạch năm'
+    })
+  }
 }

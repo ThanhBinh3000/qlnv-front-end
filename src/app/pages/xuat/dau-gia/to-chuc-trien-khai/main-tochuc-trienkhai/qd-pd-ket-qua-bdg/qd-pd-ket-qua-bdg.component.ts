@@ -24,6 +24,10 @@ export class QdPdKetQuaBdgComponent extends Base2Component implements OnInit {
   typeLoaiVthh: any[] = [];
   listVthh: any[] = [];
   listCloaiVthh: any[] = [];
+  idQdPd: number = 0;
+  isViewQdPd: boolean = false;
+  idThongTin: number = 0;
+  isViewThongTin: boolean = false;
   listTrangThai: any[] = [
     { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
     { ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối - TP' },
@@ -135,5 +139,26 @@ export class QdPdKetQuaBdgComponent extends Base2Component implements OnInit {
     }
     return endValue.getTime() <= this.formData.value.ngayKyTu.getTime();
   };
+
+  openModalQdPd(id: number) {
+    this.idQdPd = id;
+    this.isViewQdPd = true;
+  }
+
+  closeModalQdPd() {
+    this.idQdPd = null;
+    this.isViewQdPd = false;
+  }
+
+  openModalMaThongBao(id: number) {
+    this.idThongTin = id;
+    this.isViewThongTin = true;
+  }
+
+  closeModalMaThongBao() {
+    this.idThongTin = null;
+    this.isViewThongTin = false;
+  }
+
 
 }
