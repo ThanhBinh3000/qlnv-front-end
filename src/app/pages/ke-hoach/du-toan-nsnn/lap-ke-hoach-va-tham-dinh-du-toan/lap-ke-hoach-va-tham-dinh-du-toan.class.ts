@@ -23,6 +23,15 @@ export class Form {
     listIdDeleteFiles: string[];
 }
 
+export class History {
+    id: string;
+    maBcao: string;
+    lan: number;
+    ngayTao: string;
+    nguoiTao: string;
+    trangThai: string;
+}
+
 export class Report {
     id: string;
     namBcao: number;
@@ -47,6 +56,7 @@ export class Report {
     fileDinhKems: any[];
     listIdDeleteFiles: string[];
     tongHopTuIds: any[];
+    lichSu: History[];
 }
 
 export class BtnStatus {

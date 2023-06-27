@@ -1,22 +1,19 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { FileFunction, GeneralFunction, NumberFunction, TableFunction } from 'src/app/Utility/func';
+import { AMOUNT, BOX_NUMBER_WIDTH, DON_VI_TIEN, MONEY_LIMIT, Utils } from 'src/app/Utility/utils';
 import { DialogDanhSachVatTuHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-vat-tu-hang-hoa/dialog-danh-sach-vat-tu-hang-hoa.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
-import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { AMOUNT, BOX_NUMBER_WIDTH, DON_VI_TIEN, LA_MA, MONEY_LIMIT, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
-import { NzUploadFile } from 'ng-zorro-antd/upload';
-import * as fileSaver from 'file-saver';
 import { BtnStatus, Doc, Form } from '../../../lap-ke-hoach-va-tham-dinh-du-toan.class';
-import { FileFunction, GeneralFunction, NumberFunction, TableFunction } from 'src/app/Utility/func';
-import { silentEvent } from 'ng-zorro-antd/core/util';
 
 export class ItemData {
 	id: any;
@@ -34,6 +31,7 @@ export class ItemData {
 	ttienNamN1Td: number;
 	chenhLech: number;
 	ghiChu: string;
+	ykienDviCtren: string;
 	stt: string;
 	level: any;
 	checked: boolean;
@@ -116,15 +114,15 @@ export class PhuLuc03Component implements OnInit {
 		Object.assign(this.status, this.dataInfo.status);
 		await this.getFormDetail();
 		this.namBcao = this.dataInfo.namBcao;
-		if (this.status) {
-			this.scrollX = this.genFunc.setTableWidth(400, 7, BOX_NUMBER_WIDTH, 160);
+		if (this.status.general) {
+			this.scrollX = this.genFunc.setTableWidth(400, 7, BOX_NUMBER_WIDTH, 310);
 		} else {
 			if (this.status.editAppVal) {
-				this.scrollX = this.genFunc.setTableWidth(400, 9, BOX_NUMBER_WIDTH, 60);
+				this.scrollX = this.genFunc.setTableWidth(350, 10, BOX_NUMBER_WIDTH, 460);
 			} else if (this.status.viewAppVal) {
-				this.scrollX = this.genFunc.setTableWidth(400, 9, BOX_NUMBER_WIDTH, 0);
+				this.scrollX = this.genFunc.setTableWidth(350, 10, BOX_NUMBER_WIDTH, 400);
 			} else {
-				this.scrollX = this.genFunc.setTableWidth(400, 7, BOX_NUMBER_WIDTH, 0);
+				this.scrollX = this.genFunc.setTableWidth(350, 7, BOX_NUMBER_WIDTH, 200);
 			}
 		}
 		await this.getDinhMuc();
@@ -471,8 +469,7 @@ export class PhuLuc03Component implements OnInit {
 	changeModel(id: string): void {
 		this.editCache[id].data.ttienNamDtoan = this.numFunc.mul(this.editCache[id].data.dmucNamDtoan, this.editCache[id].data.sluongNamDtoan);
 		this.editCache[id].data.ttienNamN1Td = this.numFunc.mul(this.editCache[id].data.dmucNamDtoan, this.editCache[id].data.sluongNamN1Td);
-		this.editCache[id].data.chenhLech = this.editCache[id].data.ttienNamN1Td - this.editCache[id].data.ttienNamDtoan;
-
+		this.editCache[id].data.chenhLech = this.numFunc.sum([this.editCache[id].data.ttienNamN1Td, -this.editCache[id].data.ttienNamDtoan]);
 	}
 
 	// gan editCache.data == lstCtietBcao

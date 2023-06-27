@@ -2,18 +2,17 @@ import { Component, Input, OnInit } from '@angular/core';
 import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
-import * as fileSaver from 'file-saver';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { FileFunction, GeneralFunction, NumberFunction, TableFunction } from 'src/app/Utility/func';
+import { AMOUNT, BOX_NUMBER_WIDTH, DON_VI_TIEN, MONEY_LIMIT, Utils } from 'src/app/Utility/utils';
 import { DialogDanhSachVatTuHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-vat-tu-hang-hoa/dialog-danh-sach-vat-tu-hang-hoa.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { AMOUNT, BOX_NUMBER_WIDTH, DON_VI_TIEN, LA_MA, MONEY_LIMIT, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import { BtnStatus, Doc, Form } from '../../../lap-ke-hoach-va-tham-dinh-du-toan.class';
-import { FileFunction, GeneralFunction, NumberFunction, TableFunction } from 'src/app/Utility/func';
 
 export class ItemData {
 	id: any;
@@ -30,7 +29,8 @@ export class ItemData {
 	sluongTd: number;
 	ttienTd: number;
 	chenhLech: number;
-	ghiChu: number;
+	ghiChu: string;
+	ykienDviCtren: string;
 	stt: string;
 	level: any;
 	checked: boolean;
@@ -53,12 +53,13 @@ export class PhuLuc01Component implements OnInit {
 	linhVucChis: any[] = [];
 	lstCtietBcao: ItemData[] = [];
 	donViTiens: any[] = DON_VI_TIEN;
-	keys = ['ttienNamDtoan', 'thienNamTruoc', 'dtoanNamHtai', 'uocNamHtai', 'sluongNamDtoan', 'sluongTd', 'ttienTd']
+	keys = ['ttienNamDtoan', 'thienNamTruoc', 'dtoanNamHtai', 'uocNamHtai', 'sluongNamDtoan', 'sluongTd', 'ttienTd', 'chenhLech']
 	listVattu: any[] = [];
 	lstVatTuFull = [];
 	dsDinhMuc: any[] = [];
 	amount = AMOUNT;
 	scrollX: string;
+	BOX_SIZE = 210;
 	//trang thai cac nut
 	status: BtnStatus = new BtnStatus();
 	editMoneyUnit = false;
@@ -120,14 +121,14 @@ export class PhuLuc01Component implements OnInit {
 			} else {
 				await this.getDinhMuc('02');
 			}
-			this.scrollX = this.genFunc.setTableWidth(350, 7, BOX_NUMBER_WIDTH, 160);
+			this.scrollX = this.genFunc.setTableWidth(400, 8, this.BOX_SIZE, 110);
 		} else {
 			if (this.status.editAppVal) {
-				this.scrollX = this.genFunc.setTableWidth(350, 9, BOX_NUMBER_WIDTH, 60);
+				this.scrollX = this.genFunc.setTableWidth(350, 12, this.BOX_SIZE, 60);
 			} else if (this.status.viewAppVal) {
-				this.scrollX = this.genFunc.setTableWidth(350, 9, BOX_NUMBER_WIDTH, 0);
+				this.scrollX = this.genFunc.setTableWidth(350, 12, this.BOX_SIZE, 0);
 			} else {
-				this.scrollX = this.genFunc.setTableWidth(350, 7, BOX_NUMBER_WIDTH, 0);
+				this.scrollX = this.genFunc.setTableWidth(350, 8, this.BOX_SIZE, 0);
 			}
 		}
 
@@ -161,6 +162,7 @@ export class PhuLuc01Component implements OnInit {
 				if (data.statusCode == 0) {
 					this.formDetail = data.data;
 					this.formDetail.maDviTien = '1';
+					this.lstCtietBcao = this.formDetail.lstCtietLapThamDinhs;
 					this.listFile = [];
 					this.getStatusButton();
 				} else {
@@ -484,7 +486,7 @@ export class PhuLuc01Component implements OnInit {
 	changeModel(id: string): void {
 		this.editCache[id].data.ttienNamDtoan = this.numFunc.mul(this.editCache[id].data.dmucNamDtoan, this.editCache[id].data.sluongNamDtoan);
 		this.editCache[id].data.ttienTd = this.numFunc.mul(this.editCache[id].data.dmucNamDtoan, this.editCache[id].data.sluongTd);
-
+		this.editCache[id].data.chenhLech = this.numFunc.sum([this.editCache[id].data.ttienTd, -this.editCache[id].data.ttienNamDtoan]);
 	}
 
 	// gan editCache.data == lstCtietBcao

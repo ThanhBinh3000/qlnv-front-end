@@ -8,7 +8,9 @@
                             <div> Đơn vị: </div>
                             <div style="margin-left: 10px;">
                                 <ng-container *ngIf="status.general || !editMoneyUnit; else editMoney">
-                                    <span (click)="editMoneyUnit=true">{{genFunc.moneyUnitName(maDviTien)}}</span>
+                                    <span (click)="editMoneyUnit=true">
+                                        {{ genFunc.moneyUnitName(maDviTien) }}
+                                    </span>
                                 </ng-container>
                                 <ng-template #editMoney>
                                     <nz-select nzShowSearch nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
@@ -37,67 +39,113 @@
                             <tr>
                                 <th rowspan="2" *ngIf="status.general" nzWidth="50px" class="text-center" nzLeft>
                                     <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
-                                        style="margin-right: 0;">
-                                    </label>
+                                        style="margin-right: 0;"> </label>
                                 </th>
-                                <th rowspan="2" nzWidth="50px" nzLeft>STT</th>
-                                <th rowspan="2" nzWidth="350px" nzLeft>Mặt hàng</th>
-                                <th rowspan="2">Đơn vị tính</th>
-                                <th rowspan="2">Thực hiện năm {{namBcao - 2}}</th>
-                                <th colspan="2">Năm {{namBcao -1 }}</th>
-                                <th colspan="3">Năm dự toán {{namBcao}}</th>
-                                <th *ngIf="status.viewAppVal " colspan="2">Thẩm Định</th>
-                                <th *ngIf="status.viewAppVal " rowSpan="3">Chênh lệch giữa <br /> thẩm định của <br />
-                                    đơn vị cấp trên
-                                    <br /> và nhu cầu
-                                    của <br /> đơn vị cấp dưới
+                                <th rowspan="2" nzWidth="50px" nzLeft>
+                                    STT
                                 </th>
-                                <th *ngIf="status.viewAppVal" rowSpan="3">Ghi chú</th>
+                                <th rowspan="2" nzWidth="300px" nzLeft>
+                                    Mặt hàng
+                                </th>
+                                <th rowspan="2">
+                                    Đơn vị tính
+                                </th>
+                                <th rowspan="2">
+                                    Thực hiện năm {{namBcao - 2}}
+                                </th>
+                                <th colspan="2">
+                                    Năm {{namBcao -1 }}
+                                </th>
+                                <th colspan="3">
+                                    Năm dự toán {{namBcao}}
+                                </th>
+                                <th *ngIf="status.viewAppVal" colspan="2">
+                                    Thẩm Định
+                                </th>
+                                <th *ngIf="status.viewAppVal" rowSpan="2">
+                                    Chênh lệch giữa <br /> thẩm định của DVCT <br /> và nhu cầu của DVCD
+                                </th>
+                                <th rowSpan="2" style="width: 200px;">
+                                    Ghi chú
+                                </th>
+                                <th *ngIf="status.viewAppVal" style="width: 200px;" rowspan="2">
+                                    Ý kiến của DVCT
+                                </th>
                                 <th style="width: 50px;" rowspan="2" *ngIf="status.general" nzRight></th>
                                 <th style="width: 60px;" rowspan="2" *ngIf="status.general || status.editAppVal"
                                     nzRight></th>
                             </tr>
                             <tr>
-                                <th>Dự toán</th>
-                                <th>Ước thực hiện</th>
-                                <th>Số lượng bảo quản</th>
-                                <th>Định mức</th>
-                                <th>Thành tiền </th>
-                                <th *ngIf="status.viewAppVal">Số lượng bảo quản <br> năm {{namBcao - 1}}</th>
-                                <th *ngIf="status.viewAppVal">Thành tiền </th>
+                                <th>
+                                    Dự toán
+                                </th>
+                                <th>
+                                    Ước thực hiện
+                                </th>
+                                <th>
+                                    Định mức
+                                </th>
+                                <th>
+                                    Số lượng bảo quản
+                                </th>
+                                <th>
+                                    Thành tiền
+                                </th>
+                                <th *ngIf="status.viewAppVal">
+                                    Số lượng bảo quản
+                                </th>
+                                <th *ngIf="status.viewAppVal">
+                                    Thành tiền
+                                </th>
                             </tr>
-                            <tr>
+                            <!-- <tr>
                                 <th *ngIf="status.general" nzLeft></th>
                                 <th nzLeft>A</th>
                                 <th nzLeft>B</th>
                                 <th>C</th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
                                 <th>1</th>
                                 <th>2</th>
-                                <th>3=1x2</th>
-                                <th *ngIf="status.viewAppVal">4</th>
-                                <th *ngIf="status.viewAppVal">5</th>
-                                <th *ngIf="status.viewAppVal">6 = 5- 3</th>
+                                <th>3</th>
+                                <th>4</th>
+                                <th>5</th>
+                                <th>6=4*5</th>
+                                <th *ngIf="status.viewAppVal">5A</th>
+                                <th *ngIf="status.viewAppVal">6A=4*5A</th>
                                 <th *ngIf="status.viewAppVal">7</th>
+                                <th>8</th>
+                                <th *ngIf="status.viewAppVal">9</th>
                                 <th *ngIf="status.general" nzRight></th>
                                 <th *ngIf="status.general || status.editAppVal" nzRight></th>
-                            </tr>
+                            </tr> -->
                             <tr>
                                 <th *ngIf="status.general" nzLeft></th>
                                 <th nzLeft></th>
-                                <th nzLeft>Tổng Cộng</th>
+                                <th nzLeft>
+                                    Tổng Cộng
+                                </th>
                                 <th></th>
-                                <th>{{numFunc.valFmt(total.thucHienNamTruoc, maDviTien)}}</th>
-                                <th>{{numFunc.valFmt(total.dtoanNamHtai, maDviTien)}}</th>
-                                <th>{{numFunc.valFmt(total.uocThNamHtai, maDviTien)}}</th>
+                                <th>
+                                    {{ numFunc.valFmt(total.thucHienNamTruoc, maDviTien) }}
+                                </th>
+                                <th>
+                                    {{ numFunc.valFmt(total.dtoanNamHtai, maDviTien) }}
+                                </th>
+                                <th>
+                                    {{ numFunc.valFmt(total.uocThNamHtai, maDviTien) }}
+                                </th>
                                 <th></th>
                                 <th></th>
-                                <th>{{numFunc.valFmt(total.ttienNamDtoan, maDviTien)}}</th>
+                                <th>
+                                    {{ numFunc.valFmt(total.ttienNamDtoan, maDviTien) }}
+                                </th>
                                 <th *ngIf="status.viewAppVal"></th>
-                                <th *ngIf="status.viewAppVal">{{numFunc.valFmt(total.ttienNamN1Td, maDviTien)}}</th>
-                                <th *ngIf="status.viewAppVal">{{numFunc.valFmt(total.chenhLech, maDviTien)}}</th>
+                                <th *ngIf="status.viewAppVal">
+                                    {{ numFunc.valFmt(total.ttienNamN1Td, maDviTien) }}
+                                </th>
+                                <th *ngIf="status.viewAppVal">
+                                    {{ numFunc.valFmt(total.chenhLech, maDviTien) }}
+                                </th>
+                                <th></th>
                                 <th *ngIf="status.viewAppVal"></th>
                                 <th *ngIf="status.general" nzRight></th>
                                 <th *ngIf="status.general || status.editAppVal" nzRight></th>
@@ -111,29 +159,46 @@
                                             [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"></label>
                                     </td>
                                     <td nzLeft>
-                                        {{getChiMuc(data.stt)}}
+                                        {{ getChiMuc(data.stt) }}
                                     </td>
                                     <td nzLeft>
-                                        {{data.tenMatHang}}
+                                        {{ data.tenMatHang }}
                                     </td>
-                                    <td>{{data.dvTinh}}</td>
-                                    <td>{{numFunc.valFmt(data.thucHienNamTruoc, maDviTien)}}</td>
-                                    <td>{{numFunc.valFmt(data.dtoanNamHtai, maDviTien)}}</td>
-                                    <td>{{numFunc.valFmt(data.uocThNamHtai, maDviTien)}}</td>
-                                    <td>{{numFunc.valFmt(data.sluongNamDtoan, maDviTien)}}</td>
-                                    <td>{{numFunc.valFmt(data.dmucNamDtoan, maDviTien)}}</td>
-                                    <td>{{numFunc.valFmt(data.ttienNamDtoan, maDviTien)}}</td>
-                                    <td *ngIf="status.viewAppVal">
-                                        {{numFunc.valFmt(data.sluongNamN1Td, maDviTien)}}
+                                    <td>
+                                        {{ data.dvTinh }}
+                                    </td>
+                                    <td>
+                                        {{ numFunc.valFmt(data.thucHienNamTruoc, maDviTien) }}
+                                    </td>
+                                    <td>
+                                        {{ numFunc.valFmt(data.dtoanNamHtai, maDviTien) }}
+                                    </td>
+                                    <td>
+                                        {{ numFunc.valFmt(data.uocThNamHtai, maDviTien) }}
+                                    </td>
+                                    <td>
+                                        {{ numFunc.valFmt(data.dmucNamDtoan, maDviTien) }}
+                                    </td>
+                                    <td>
+                                        {{ numFunc.numFmt(data.sluongNamDtoan) }}
+                                    </td>
+                                    <td>
+                                        {{ numFunc.valFmt(data.ttienNamDtoan, maDviTien) }}
                                     </td>
                                     <td *ngIf="status.viewAppVal">
-                                        {{numFunc.valFmt(data.ttienNamN1Td, maDviTien)}}
+                                        {{ numFunc.numFmt(data.sluongNamN1Td) }}
                                     </td>
                                     <td *ngIf="status.viewAppVal">
-                                        {{numFunc.valFmt(data.chenhLech, maDviTien)}}
+                                        {{ numFunc.valFmt(data.ttienNamN1Td, maDviTien) }}
                                     </td>
                                     <td *ngIf="status.viewAppVal">
-                                        {{data.ghiChu}}
+                                        {{ numFunc.valFmt(data.chenhLech, maDviTien) }}
+                                    </td>
+                                    <td>
+                                        {{ data.ghiChu }}
+                                    </td>
+                                    <td *ngIf="status.viewAppVal">
+                                        {{ data.ykienDviCtren }}
                                     </td>
                                     <td *ngIf="status.general" nzRight>
                                         <i *ngIf="checkDelete(data.stt)" class="fa fa-trash-o do"
@@ -150,76 +215,94 @@
                                             [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"></label>
                                     </td>
                                     <td nzLeft>
-                                        {{getChiMuc(editCache[data.id].data.stt)}}
+                                        {{ getChiMuc(editCache[data.id].data.stt) }}
                                     </td>
                                     <td nzLeft>
-                                        {{editCache[data.id].data.tenMatHang}}
+                                        {{ editCache[data.id].data.tenMatHang }}
                                     </td>
                                     <td>
-                                        {{editCache[data.id].data.dvTinh}}
+                                        {{ editCache[data.id].data.dvTinh }}
                                     </td>
-                                    <ng-container *ngIf="status.editAppVal else editAppraisal">
-                                        <td>{{numFunc.valFmt(editCache[data.id].data.thucHienNamTruoc, maDviTien)}}</td>
-                                        <td>{{numFunc.valFmt(editCache[data.id].data.dtoanNamHtai, maDviTien)}}</td>
-                                        <td>{{numFunc.valFmt(editCache[data.id].data.uocThNamHtai, maDviTien)}}</td>
-                                        <td>{{numFunc.valFmt(editCache[data.id].data.sluongNamDtoan, maDviTien)}}</td>
-                                        <td>{{numFunc.valFmt(editCache[data.id].data.dmucNamDtoan, maDviTien)}}</td>
-                                        <td>{{numFunc.valFmt(editCache[data.id].data.ttienNamDtoan, maDviTien)}}</td>
+                                    <ng-container *ngIf="!status.viewAppVal; else viewAppVal">
                                         <td>
-                                            <fm-input-number nz-input class="search__input"
-                                                [(ngModel)]="editCache[data.id].data.sluongNamN1Td"
-                                                (ngModelChange)="changeModel(editCache[data.id].data.id)"></fm-input-number>
-                                        </td>
-                                    </ng-container>
-                                    <ng-template #editAppraisal>
-                                        <td>
-                                            <input class="money-input" currencyMask
-                                                [(ngModel)]="editCache[data.id].data.thucHienNamTruoc"
-                                                [options]="amount" />
+                                            <input class="money-input" currencyMask [options]="amount"
+                                                [(ngModel)]="editCache[data.id].data.thucHienNamTruoc" />
                                         </td>
                                         <td>
-                                            <input class="money-input" currencyMask
-                                                [(ngModel)]="editCache[data.id].data.dtoanNamHtai" [options]="amount" />
+                                            <input class="money-input" currencyMask [options]="amount"
+                                                [(ngModel)]="editCache[data.id].data.dtoanNamHtai" />
                                         </td>
                                         <td>
-                                            <input class="money-input" currencyMask
-                                                [(ngModel)]="editCache[data.id].data.uocThNamHtai" [options]="amount" />
+                                            <input class="money-input" currencyMask [options]="amount"
+                                                [(ngModel)]="editCache[data.id].data.uocThNamHtai" />
                                         </td>
                                         <td>
-                                            <fm-input-number nz-input class="search__input"
+                                            {{ numFunc.valFmt(editCache[data.id].data.dmucNamDtoan, maDviTien) }}
+                                        </td>
+                                        <td>
+                                            <input class="money-input" currencyMask [options]="amount"
                                                 [(ngModel)]="editCache[data.id].data.sluongNamDtoan"
-                                                (ngModelChange)="changeModel(editCache[data.id].data.id)"></fm-input-number>
-                                        </td>
-                                        <td>
-                                            {{numFunc.valFmt(editCache[data.id].data.dmucNamDtoan, maDviTien)}}
+                                                (ngModelChange)="changeModel(data.id)" />
                                         </td>
                                         <td>
                                             {{numFunc.valFmt(editCache[data.id].data.ttienNamDtoan, maDviTien)}}
                                         </td>
-                                        <td *ngIf="status.viewAppVal">
-                                            {{numFunc.valFmt(editCache[data.id].data.sluongNamN1Td, maDviTien)}}
+                                        <td>
+                                            <input nz-input [(ngModel)]="editCache[data.id].data.ghiChu" />
                                         </td>
-                                        <td *ngIf="status.viewAppVal">
-                                            {{numFunc.valFmt(editCache[data.id].data.ttienNamN1Td, maDviTien)}}
+                                    </ng-container>
+                                    <ng-template #viewAppVal>
+                                        <td>
+                                            {{ numFunc.valFmt(editCache[data.id].data.thucHienNamTruoc, maDviTien) }}
                                         </td>
-                                        <td *ngIf="status.viewAppVal">
-                                            {{numFunc.valFmt(editCache[data.id].data.chenhLech, maDviTien)}}
+                                        <td>
+                                            {{ numFunc.valFmt(editCache[data.id].data.dtoanNamHtai, maDviTien) }}
+                                        </td>
+                                        <td>
+                                            {{ numFunc.valFmt(editCache[data.id].data.uocThNamHtai, maDviTien) }}
+                                        </td>
+                                        <td>
+                                            {{ numFunc.valFmt(editCache[data.id].data.dmucNamDtoan, maDviTien) }}
+                                        </td>
+                                        <td>
+                                            {{ numFunc.numFmt(editCache[data.id].data.sluongNamDtoan) }}
+                                        </td>
+                                        <td>
+                                            {{ numFunc.valFmt(editCache[data.id].data.ttienNamDtoan, maDviTien) }}
+                                        </td>
+                                        <td>
+                                            <input class="money-input" currencyMask [options]="amount"
+                                                [(ngModel)]="editCache[data.id].data.sluongNamN1Td"
+                                                (ngModelChange)="changeModel(data.id)" />
+                                        </td>
+                                        <td>
+                                            {{ numFunc.valFmt(editCache[data.id].data.ttienNamN1Td, maDviTien) }}
+                                        </td>
+                                        <td>
+                                            {{ numFunc.valFmt(editCache[data.id].data.chenhLech, maDviTien) }}
+                                        </td>
+                                        <td>
+                                            {{ editCache[data.id].data.ghiChu }}
+                                        </td>
+                                        <td>
+                                            <input nz-input [(ngModel)]="editCache[data.id].data.ykienDviCtren" />
                                         </td>
                                     </ng-template>
-                                    <input class="search__input" nz-input
-                                        [(ngModel)]="editCache[data.id].data.ghiChu" />
                                     <td *ngIf="status.general" nzRight>
                                         <i *ngIf="checkDelete(data.stt)" class="fa fa-trash-o do"
                                             (click)="deleteLine(data.id)"></i>
                                     </td>
                                     <td *ngIf="status.general || status.editAppVal" nzRight>
-                                        <a class="save" (click)="saveEdit(data.id)" style="margin-right:15px">Lưu</a>
+                                        <a class="save" (click)="saveEdit(data.id)" style="margin-right:15px">
+                                            Lưu
+                                        </a>
                                         <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
-                                            (nzOnConfirm)="cancelEdit(data.id)" class="save">Hủy</a>
+                                            (nzOnConfirm)="cancelEdit(data.id)" class="save">
+                                            Hủy
+                                        </a>
                                     </td>
                                 </ng-template>
                             </tr>
-
                         </tbody>
                     </nz-table>
                 </div>

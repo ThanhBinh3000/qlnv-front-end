@@ -48,6 +48,7 @@ export class ItemData {
     templateUrl: './phu-luc-04.component.html',
     styleUrls: ['../../bao-cao.component.scss']
 })
+
 export class PhuLuc04Component implements OnInit {
     @Input() dataInfo;
     //thong tin chi tiet cua bieu mau
@@ -124,14 +125,14 @@ export class PhuLuc04Component implements OnInit {
             if (category) {
                 this.duAns = category.data;
             }
-            this.scrollX = this.genFunc.setTableWidth(440, 12, BOX_NUMBER_WIDTH, 110);
+            this.scrollX = this.genFunc.setTableWidth(400, 12, BOX_NUMBER_WIDTH, 310);
         } else {
             if (this.status.editAppVal) {
-                this.scrollX = this.genFunc.setTableWidth(440, 16, BOX_NUMBER_WIDTH, 60);
+                this.scrollX = this.genFunc.setTableWidth(400, 18, BOX_NUMBER_WIDTH, 460);
             } else if (this.status.viewAppVal) {
-                this.scrollX = this.genFunc.setTableWidth(440, 16, BOX_NUMBER_WIDTH, 0);
+                this.scrollX = this.genFunc.setTableWidth(400, 18, BOX_NUMBER_WIDTH, 400);
             } else {
-                this.scrollX = this.genFunc.setTableWidth(440, 12, BOX_NUMBER_WIDTH, 0);
+                this.scrollX = this.genFunc.setTableWidth(400, 12, BOX_NUMBER_WIDTH, 0);
             }
         }
         if (this.lstCtietBcao.length == 0) {
@@ -351,8 +352,8 @@ export class PhuLuc04Component implements OnInit {
             this.editCache[id].data.cacNamTiepTheo,
         ]);
 
-        this.editCache[id].data.chenhLechCbDautu = this.editCache[id].data.duToanKhNamNCbDauTuTd - this.editCache[id].data.duToanKhNamNCbDauTu
-        this.editCache[id].data.chenhLechThDauTu = this.editCache[id].data.duToanKhNamNThDauTuTd - this.editCache[id].data.duToanKhNamNThDauTu
+        this.editCache[id].data.chenhLechCbDautu = this.numFunc.sum([this.editCache[id].data.duToanKhNamNCbDauTuTd, -this.editCache[id].data.duToanKhNamNCbDauTu]);
+        this.editCache[id].data.chenhLechThDauTu = this.numFunc.sum([this.editCache[id].data.duToanKhNamNThDauTuTd, -this.editCache[id].data.duToanKhNamNThDauTu]);
     }
 
     sum(stt: string) {

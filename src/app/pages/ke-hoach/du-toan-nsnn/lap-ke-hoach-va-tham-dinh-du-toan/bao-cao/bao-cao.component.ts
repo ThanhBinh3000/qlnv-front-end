@@ -4,6 +4,8 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { FileFunction, GeneralFunction, getName } from 'src/app/Utility/func';
+import { LTD, TRANG_THAI_PHU_LUC, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import { DialogChonThemBieuMauComponent } from 'src/app/components/dialog/dialog-chon-them-bieu-mau/dialog-chon-them-bieu-mau.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
@@ -12,8 +14,6 @@ import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { FileFunction, GeneralFunction, getName, sumNumber } from 'src/app/Utility/func';
-import { LTD, TRANG_THAI_PHU_LUC, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import { BtnStatus, Doc, Form, Report } from '../lap-ke-hoach-va-tham-dinh-du-toan.class';
 import { PHU_LUC } from './bao-cao.constant';
