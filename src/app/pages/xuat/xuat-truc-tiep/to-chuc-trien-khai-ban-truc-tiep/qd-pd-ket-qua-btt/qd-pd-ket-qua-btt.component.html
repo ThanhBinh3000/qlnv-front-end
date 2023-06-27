@@ -38,20 +38,23 @@
     <div class="group-button">
         <h3 class="text-uppercase"> DANH SÁCH QUYẾT ĐỊNH PHÊ DUYỆT KẾT QUẢ CHÀO GIÁ </h3>
         <div class="buttons">
-            <button *ngIf="userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_LT_QDKQCG_XOA')" type="button"
-                class="btn btn-do" (click)="deleteMulti()">
+            <button *ngIf="loaiVthh.startsWith('02') ? userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_VT_QDKQCG_XOA'):
+            userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_LT_QDKQCG_XOA')" type="button" class="btn btn-do"
+                (click)="deleteMulti()">
                 <i class="fa fa-trash-o do"></i>
                 <span>Xóa</span>
             </button>
-            <button *ngIf="userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_LT_QDKQCG_EXP')" type="button"
-                class="btn btn-sub" (click)="exportData('Danh-sach-quyet-dinh-phe-duyet-ket-qua-chao-gia.xlsx')">
+            <button *ngIf="loaiVthh.startsWith('02') ? userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_VT_QDKQCG_EXP'):
+            userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_LT_QDKQCG_EXP') " type="button" class="btn btn-sub"
+                (click)="exportData('Danh-sach-quyet-dinh-phe-duyet-ket-qua-chao-gia.xlsx')">
                 <i class="icon htvbdh_chuyen-xu-ly"></i>
                 <span>Xuất file</span>
             </button>
-            <button *ngIf="userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_LT_QDKQCG_THEM')" type="button"
-                class="btn btn-main" (click)="goDetail(null)">
+            <button *ngIf="loaiVthh.startsWith('02') ? userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_LT_QDKQCG_THEM'):
+            userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_VT_QDKQCG_THEM') " type="button" class="btn btn-main"
+                (click)="goDetail(null)">
                 <i class=" icon htvbdh_dau-cong"></i>
-                <span>tạo quyết định</span>
+                <span>Tạo quyết định</span>
             </button>
         </div>
     </div>
@@ -146,22 +149,33 @@
                     <td>{{ data.tenCloaiVthh }}</td>
                     <td>{{ data.tenTrangThai }}</td>
                     <td class="text-left">
-                        <a *ngIf="(userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_LT_QDKQCG_XEM') && (data.trangThai == STATUS.BAN_HANH))"
+                        <a *ngIf="loaiVthh.startsWith('02') ?
+                        (userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_VT_QDKQCG_XEM') && (data.trangThai == STATUS.BAN_HANH)):
+                        (userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_LT_QDKQCG_XEM') && (data.trangThai == STATUS.BAN_HANH))"
                             (click)=" goDetail(data.id)">
                             <i class="fa fa-eye"></i>
                         </a>
-                        <a *ngIf="(userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_LT_QDKQCG_THEM') && data.trangThai == STATUS.DU_THAO)
+                        <a *ngIf="loaiVthh.startsWith('02') ?
+                        (userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_VT_QDKQCG_THEM') && data.trangThai == STATUS.DU_THAO)
+                        ||(userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_VT_QDKQCG_THEM') && data.trangThai == STATUS.TU_CHOI_TP)
+                        ||(userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_VT_QDKQCG_THEM') && data.trangThai == STATUS.TU_CHOI_LDC):
+                        (userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_LT_QDKQCG_THEM') && data.trangThai == STATUS.DU_THAO)
                         ||(userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_LT_QDKQCG_THEM') && data.trangThai == STATUS.TU_CHOI_TP)
                         ||(userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_LT_QDKQCG_THEM') && data.trangThai == STATUS.TU_CHOI_LDC)"
                             (click)="goDetail(data.id)">
                             <i class="fa fa-pencil"></i>
                         </a>
-                        <a *ngIf="(userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_LT_QDKQCG_THEM') && data.trangThai == STATUS.CHO_DUYET_TP)
+                        <a *ngIf="loaiVthh.startsWith('02') ?
+                        (userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_VT_QDKQCG_THEM') && data.trangThai == STATUS.CHO_DUYET_TP)
+                        ||(userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_VT_QDKQCG_THEM') && data.trangThai == STATUS.CHO_DUYET_LDC):
+                        (userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_LT_QDKQCG_THEM') && data.trangThai == STATUS.CHO_DUYET_TP)
                         ||(userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_LT_QDKQCG_THEM') && data.trangThai == STATUS.CHO_DUYET_LDC)"
                             (click)="goDetail(data.id)">
                             <i class="icon htvbdh_tcdt_pheduyet"></i>
                         </a>
-                        <a *ngIf="(data.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_LT_QDKQCG_XOA')) "
+                        <a *ngIf="loaiVthh.startsWith('02') ?
+                        (data.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_VT_QDKQCG_XOA')):
+                        (data.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_LT_QDKQCG_XOA')) "
                             (click)="delete(data)">
                             <i class="fa fa-trash-o do"></i>
                         </a>

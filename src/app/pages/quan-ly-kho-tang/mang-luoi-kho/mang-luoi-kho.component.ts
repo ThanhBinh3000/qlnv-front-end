@@ -44,7 +44,7 @@ export class MangLuoiKhoComponent implements OnInit {
   };
 
   loaiHangHoa: any = {
-    "type": "LT",
+    "type": "",
     "loaiVthh": "",
     "cloaiVthh": "",
     "thoc": false,
@@ -732,6 +732,10 @@ export class MangLuoiKhoComponent implements OnInit {
   }
 
   themSoDuDauKy() {
+    if (!this.loaiHangHoa.type) {
+      this.notification.error(MESSAGE.ERROR, 'Vui lòng chọn loạn hàng có thể chứa');
+      return;
+    }
     let dviReq = {
       "diaChi": this.detailDonVi.value.diaChi,
       "fax": this.nodeDetail.fax,

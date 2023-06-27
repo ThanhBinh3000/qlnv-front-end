@@ -304,6 +304,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
     try {
 
       await this.spinner.show();
+      this.setValidator(isGuiDuyet);
       this.helperService.markFormGroupTouched(this.formData);
       if (this.formData.invalid) {
         return;
@@ -312,27 +313,9 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
       body.dcnbPhieuKnChatLuongDtl = this.dataTableChiTieu.map(f => ({ ...f, id: f.hdrId ? f.id : undefined }));
       body.bienBanLayMauDinhKem = this.bienBanLayMauDinhKem;
       body.hinhThucBq = this.listHinhThucBaoQuan.map(i => `${i.id}-${i.giaTri}`).join(",");
-      let res;
-      if (this.idInput > 0) {
-        res = await this.phieuKiemNghiemChatLuongDieuChuyenService.update(body);
-      } else {
-        res = await this.phieuKiemNghiemChatLuongDieuChuyenService.create(body);
-      }
-      if (res.msg == MESSAGE.SUCCESS) {
-        if (isGuiDuyet) {
-          this.pheDuyet();
-        } else {
-          if (this.idInput) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-            // this.back();
-          } else {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-            // this.back();
-          }
-        }
-        this.idInput = res.data.id;
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
+      let data = await this.createUpdate(body);
+      if (data.msg == MESSAGE.SUCCESS && isGuiDuyet) {
+        this.pheDuyet();
       }
     } catch (error) {
       console.log("error", error)
@@ -754,5 +737,8 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
 
   editRow(index: number) {
     this.dataTableChiTieu[index].edit = true;
+  }
+  setValidator(isGuiDuyet) {
+    return true
   }
 }

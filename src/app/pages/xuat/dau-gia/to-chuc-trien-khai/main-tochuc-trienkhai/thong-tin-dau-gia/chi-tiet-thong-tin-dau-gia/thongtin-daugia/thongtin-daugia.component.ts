@@ -24,6 +24,7 @@ import { STATUS } from 'src/app/constants/status';
 export class ThongtinDaugiaComponent extends Base2Component implements OnInit, OnChanges {
   @Input() data
   @Input() isView: boolean
+  @Input() idInput: number = 0;
   isModal = false;
   idDtl: number;
   soQdPd: string;
@@ -144,6 +145,9 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
         this.spinner.hide();
       }
     }
+    if (this.idInput > 0 && this.idInput) {
+      this.getDetail(this.idInput)
+    }
     await Promise.all([
       this.loadDataComboBox(),
     ]);
@@ -213,8 +217,8 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
     this.dataTable.forEach((item) => {
       item.children.forEach((child) => {
         item.soLuongChiCuc += child.soLuongDeXuat;
-        item.soTienDatTruocChiCuc += child.soLuongDeXuat * child.donGiaDuocDuyet *
-          this.formData.value.khoanTienDatTruoc / 100
+        item.soTienDatTruocChiCuc += child.soLuongDeXuat * child.donGiaDuocDuyet * this.formData.value.khoanTienDatTruoc / 100;
+        child.soTienDatTruoc = child.soLuongDeXuat * child.donGiaDuocDuyet * this.formData.value.khoanTienDatTruoc / 100;
       })
     })
   }
