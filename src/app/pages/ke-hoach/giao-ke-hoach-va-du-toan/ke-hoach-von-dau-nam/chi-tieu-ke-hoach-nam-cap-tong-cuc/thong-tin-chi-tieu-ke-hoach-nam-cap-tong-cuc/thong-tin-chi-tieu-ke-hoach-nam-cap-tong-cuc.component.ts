@@ -285,7 +285,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
             let res = await this.quyetDinhTtcpService.getDetail(chiTieuKhNam.idCanCu);
             if (res.msg == MESSAGE.SUCCESS) {
               this.formData.patchValue({
-                soQdTtcpBtc: res.data.soQd
+                soQdTtcpBtc: res.data.soQd,
+                idCanCu: chiTieuKhNam.idCanCu,
               });
               let data = res.data
               let dataTTCP = data.listBoNganh ? res.data.listBoNganh.find(item => item.maBoNganh == '01') : null;
@@ -306,7 +307,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
             if (res.msg == MESSAGE.SUCCESS) {
               let data = res.data;
               this.formData.patchValue({
-                soQdTtcpBtc: res.data.soQd
+                soQdTtcpBtc: res.data.soQd,
+                idCanCu: chiTieuKhNam.idCanCu,
               });
               this.dataQdTtcpOrBtc = {
                 "data": "BTC",
