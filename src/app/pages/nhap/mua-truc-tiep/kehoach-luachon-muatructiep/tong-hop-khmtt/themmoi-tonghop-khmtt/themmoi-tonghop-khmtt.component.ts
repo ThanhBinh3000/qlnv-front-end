@@ -44,7 +44,7 @@ export class ThemmoiTonghopKhmttComponent extends Base2Component implements OnIn
   listLoaiHopDong: any[] = [];
   isQuyetDinh: boolean = false;
   selected: boolean = false;
-
+  listFileDinhKem: any[] = [];
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -84,7 +84,6 @@ export class ThemmoiTonghopKhmttComponent extends Base2Component implements OnIn
   }
 
   async ngOnInit() {
-    console.log(this.isView)
     await this.spinner.show();
     try {
       await Promise.all([
@@ -112,7 +111,7 @@ export class ThemmoiTonghopKhmttComponent extends Base2Component implements OnIn
           idTh: data.id
         })
         this.dataTable = data.children;
-        console.log(this.dataTable)
+        this.listFileDinhKem = data.fileDinhKems;
         await this.showDetail(event, data.children[0].idDxHdr)
       }
       else {
@@ -157,6 +156,7 @@ export class ThemmoiTonghopKhmttComponent extends Base2Component implements OnIn
 
   async save() {
     let body = this.formData.value;
+    body.fileDinhKems = this.listFileDinhKem;
     let data = await this.createUpdate(body, 'NHDTQG_PTMTT_KHMTT_TONGHOP_TONGHOP')
     if (data) {
       this.quayLai();
