@@ -25,6 +25,7 @@ import { StorageService } from "src/app/services/storage.service";
   templateUrl: './thong-tin-kiem-tra-chat-luong.component.html',
   styleUrls: ['./thong-tin-kiem-tra-chat-luong.component.scss']
 })
+
 export class ThongTinKiemTraChatLuongComponent extends Base2Component implements OnInit {
   @Input() idInput: number;
   @Input() isView: boolean;
@@ -56,6 +57,10 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
   phieuKTCLDinhKem: any[] = [];
   bienBanLayMauDinhKem: any[] = [];
 
+  LIST_DANH_GIA: any[] = [
+    "Không đạt",
+    "Đạt"
+  ]
 
   constructor(
     httpClient: HttpClient,
@@ -145,52 +150,12 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
       soPhieu: `${id}/${this.formData.get('nam').value}/${this.maBb}`,
       loaiDc: this.loaiDc
     })
+    this.getPPKTCL()
 
     if (this.idInput) {
       await this.loadChiTiet(this.idInput)
     }
-    this.getPPKTCL()
-    // if (!!this.data) {
-    //   console.log('ngOnInit', this.data)
-    //   this.formData.patchValue({
-    //     soQdinhDc: this.data.soQdinh,
-    //     ngayQdinhDc: this.data.ngayHieuLuc,
-    //     qdDcId: this.data.qdinhDccId,
-    //     tenLoKho: this.data.tenloKhoNhan,
-    //     maLoKho: this.data.maloKhoNhan,
-    //     tenNganKho: this.data.tenNganKhoNhan,
-    //     maNganKho: this.data.maNganKhoNhan,
-    //     tenNhaKho: this.data.tenNhaKhoNhan,
-    //     maNhaKho: this.data.maNhaKhoNhan,
-    //     tenDiemKho: this.data.tenDiemKhoNhan,
-    //     maDiemKho: this.data.maDiemKhoNhan,
-    //     tenLoKhoXuat: this.data.tenloKhoXuat,
-    //     maLoKhoXuat: this.data.maloKhoXuat,
-    //     tenNganKhoXuat: this.data.tenNganKhoXuat,
-    //     maNganKhoXuat: this.data.maNganKhoXuat,
-    //     tenNhaKhoXuat: this.data.tenNhaKhoXuat,
-    //     maNhaKhoXuat: this.data.maNhaKhoXuat,
-    //     tenDiemKhoXuat: this.data.tenDiemKhoXuat,
-    //     maDiemKhoXuat: this.data.maDiemKhoXuat,
-    //     loaiVthh: this.data.loaiVthh,
-    //     tenLoaiVthh: this.data.tenLoaiVthh,
-    //     cloaiVthh: this.data.cloaiVthh,
-    //     tenCloaiVthh: this.data.tenCloaiVthh,
-    //     tichLuongKhaDung: this.data.tichLuongKd,
-    //     tenDonViTinh: this.data.tenDonViTinh,
-    //     // idKeHoachDtl: this.data.qdinhDccId
-    //   });
-    //   await this.loadChiTietQdinh(this.data.qdinhDccId);
-    //   // await this.loadDataBaoQuan(this.data.cloaiVthh || "010101")
-    //   let dmTieuChuan = await this.danhMucTieuChuanService.getDetailByMaHh(this.data.cloaiVthh);
-    //   if (dmTieuChuan.data) {
-    //     console.log('dmTieuChuan')
-    //     this.dataTableChiTieu = dmTieuChuan.data.children;
-    //     this.dataTableChiTieu.forEach(element => {
-    //       element.edit = false
-    //     });
-    //   }
-    // }
+
 
   }
 
@@ -206,9 +171,11 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
     await this.spinner.show()
     if (id) {
       let data = await this.detail(id);
-      this.formData.patchValue({
-        ...data
-      });
+      if (data) {
+        this.dataTableChiTieu = data.dcnbPhieuKtChatLuongDtl
+        this.formData.patchValue(data);
+      }
+
     }
     await this.spinner.hide();
   }
@@ -315,7 +282,7 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
   }
 
   deleteRow(data: any) {
-    // this.detail.ketQuaKiemTra = this.detail?.ketQuaKiemTra.filter(x => x.stt != data.stt);
+    this.dataTableChiTieu = this.dataTableChiTieu.filter(x => x.id != data.id);
     // this.sortTableId();
     // this.updateEditCache();
   }
@@ -453,10 +420,17 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
         // await this.loadDataBaoQuan(data.cloaiVthh)
         let dmTieuChuan = await this.danhMucTieuChuanService.getDetailByMaHh(data.cloaiVthh);
         if (dmTieuChuan.data) {
-          console.log('dmTieuChuan')
+          console.log('dmTieuChuan', dmTieuChuan)
           this.dataTableChiTieu = dmTieuChuan.data.children;
-          this.dataTableChiTieu.forEach(element => {
-            element.edit = false
+          this.dataTableChiTieu = this.dataTableChiTieu.map(element => {
+            return {
+              ...element,
+              edit: false,
+              chiSoCl: element.tenTchuan,
+              chiTieuCl: element.chiSoNhap,
+              ketQuaPt: element.ketQuaPt,
+              danhGia: element.danhGia
+            }
           });
         }
       }

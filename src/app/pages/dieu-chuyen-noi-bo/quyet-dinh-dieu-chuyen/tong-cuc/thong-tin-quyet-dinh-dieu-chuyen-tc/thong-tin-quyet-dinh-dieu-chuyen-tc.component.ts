@@ -218,7 +218,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
         })
 
         let dcnbKeHoachDcHdr = data.danhSachQuyetDinh[0].dcnbKeHoachDcHdr
-
+        if (!dcnbKeHoachDcHdr) return
         dcnbKeHoachDcHdr.danhSachHangHoa.forEach(element => {
           listHangHoa.push({
             ...element,
@@ -273,6 +273,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
       if (itemQd.thKeHoachDieuChuyenCucHdr.thKeHoachDieuChuyenNoiBoCucDtls.length > 0) {
         itemQd.thKeHoachDieuChuyenCucHdr.thKeHoachDieuChuyenNoiBoCucDtls.map(itemKH => {
           let dcnbKeHoachDcHdr = itemKH.dcnbKeHoachDcHdr
+          if (!dcnbKeHoachDcHdr) return
           dcnbKeHoachDcHdr.danhSachHangHoa.map(async itemHH => {
             listHangHoa.push({
               ...itemHH,
@@ -291,7 +292,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
       if (itemQd.thKeHoachDieuChuyenCucKhacCucDtl.dcnbKeHoachDcHdr.length > 0) {
         itemQd.thKeHoachDieuChuyenCucKhacCucDtl.dcnbKeHoachDcHdr.map(async (itemKH) => {
 
-
+          if (!itemKH.danhSachHangHoa) return
           itemKH.danhSachHangHoa.map(async itemHH => {
             listHangHoa.push({
               ...itemHH,
@@ -381,7 +382,6 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
               item.thKeHoachDieuChuyenCucHdr.thKeHoachDieuChuyenNoiBoCucDtls.map(itemKH => {
                 let dcnbKeHoachDcHdr = itemKH.dcnbKeHoachDcHdr
                 if (dcnbKeHoachDcHdr) {
-
                   dcnbKeHoachDcHdr.danhSachHangHoa.map(async itemHH => {
                     listHangHoa.push({
                       ...itemHH,
