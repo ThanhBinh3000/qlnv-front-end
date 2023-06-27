@@ -77,7 +77,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
   listDviThuHuong: any[] = [];
   rowItem: any = {};
   chiTietList: any[] = [];
-
+  STATUS = STATUS;
   constructor(
     private modal: NzModalService,
     private danhMucService: DanhMucService,
@@ -184,7 +184,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
   }
 
   isDisableField() {
-    if (this.khBanDauGia && (this.khBanDauGia.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_VU || this.khBanDauGia.trangThai == this.globals.prop.NHAP_DA_DUYET_LD_VU || this.khBanDauGia.trangThai == this.globals.prop.NHAP_DA_DUYET_LD_TONG_CUC)) {
+    if (this.khBanDauGia && (this.khBanDauGia.trangThai == STATUS.CHO_DUYET_LDV|| this.khBanDauGia.trangThai == STATUS.DA_DUYET_LDV || this.khBanDauGia.trangThai == STATUS.DA_DUYET_LDTC)) {
       return true;
     }
   }
@@ -325,7 +325,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
         try {
           let body = {
             id: this.idInput,
-            trangThai: this.globals.prop.NHAP_CHO_DUYET_LD_VU,
+            trangThai: STATUS.CHO_DUYET_LDV,
           };
           let res = await this.thongTriDuyetYCapVonService.updateStatus(body);
           await this.save(true);
@@ -349,9 +349,9 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
   }
 
   pheDuyet() {
-    let trangThai = this.globals.prop.NHAP_DA_DUYET_LD_VU;
-    if (this.khBanDauGia.trangThai == this.globals.prop.NHAP_DA_DUYET_LD_VU) {
-      trangThai = this.globals.prop.NHAP_DA_DUYET_LD_TONG_CUC;
+    let trangThai = STATUS.DA_DUYET_LDV;
+    if (this.khBanDauGia.trangThai == STATUS.DA_DUYET_LDV) {
+      trangThai = STATUS.DA_DUYET_LDTC;
     }
     this.modal.confirm({
       nzClosable: false,
