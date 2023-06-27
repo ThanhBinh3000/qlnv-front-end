@@ -208,7 +208,7 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
     let data = await this.createUpdate(this.formData.value)
     if (data) {
       if (isOther) {
-        this.approve(data.id, STATUS.CHO_DUYET_LDV, "Bạn có chắc chắn muốn gửi duyệt?");
+        this.approve(data.id, STATUS.CHO_DUYET_LDTC, "Bạn có chắc chắn muốn gửi duyệt?");
       } else {
         this.goBack()
       }
