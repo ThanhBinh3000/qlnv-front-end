@@ -5,14 +5,14 @@
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
-      <button *ngIf="isTongHop && !formData.value.id && (( this.type == this.typeConst.GIA_MUA_TOI_DA && !this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_MTDBTT_TONGHOP_TONGHOP'))
-      || ( this.type == this.typeConst.GIA_CU_THE  && !this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_GCT_TONGHOP_TONGHOP'))) "
+      <button *ngIf="isTongHop && !formData.value.id && (( this.type == this.typeConst.GIA_MUA_TOI_DA && this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_MTDBTT_TONGHOP_TONGHOP'))
+      || ( this.type == this.typeConst.GIA_CU_THE  && this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_GCT_TONGHOP_TONGHOP'))) "
               type="button" class="btn btn-main" (click)="save()">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
       </button>
-      <button *ngIf="isTongHop && formData.value.id > 0 &&  (( this.type == this.typeConst.GIA_MUA_TOI_DA && !this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_MTDBTT_TONGHOP_TRINH_HSPAGIA'))
-      || ( this.type == this.typeConst.GIA_CU_THE  && !this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_GCT_TONGHOP_TRINH_HSPAGIA')))  "
+      <button *ngIf="isTongHop && formData.value.id > 0 &&  (( this.type == this.typeConst.GIA_MUA_TOI_DA && this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_MTDBTT_TONGHOP_TRINH_HSPAGIA'))
+      || ( this.type == this.typeConst.GIA_CU_THE  && this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_GCT_TONGHOP_TRINH_HSPAGIA')))  "
               type="button" class="btn btn-sub xanh-nhat"
               (click)="taoTtrinh()">
         <i class="icon htvbdh_tcdt_tao-ttrinh"></i>
