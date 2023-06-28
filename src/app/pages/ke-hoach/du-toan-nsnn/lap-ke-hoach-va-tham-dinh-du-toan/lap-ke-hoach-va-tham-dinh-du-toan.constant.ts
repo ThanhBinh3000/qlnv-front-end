@@ -22,27 +22,27 @@ export const TAB_LIST = [
         role: [LTD.SYNTHETIC_REPORT],
         isSelected: false,
     },
-    {
-        name: 'Số kiểm tra trần chi từ BTC',
-        code: 'ds-skt-btc',
-        status: true,
-        role: [LTD.ADD_SKT_BTC, LTD.EDIT_SKT_BTC, LTD.DELETE_SKT_BTC],
-        isSelected: false,
-    },
-    {
-        name: 'Phương án giao số kiểm tra',
-        code: 'ds-pa',
-        status: true,
-        role: [LTD.VIEW_PA_GIAO_SKT],
-        isSelected: false,
-    },
-    {
-        name: 'Số kiểm tra chi từ đơn vị cấp trên',
-        code: 'ds-skt',
-        status: true,
-        role: [LTD.NHAN_SKT],
-        isSelected: false,
-    },
+    // {
+    //     name: 'Số kiểm tra trần chi từ BTC',
+    //     code: 'ds-skt-btc',
+    //     status: true,
+    //     role: [LTD.ADD_SKT_BTC, LTD.EDIT_SKT_BTC, LTD.DELETE_SKT_BTC],
+    //     isSelected: false,
+    // },
+    // {
+    //     name: 'Phương án giao số kiểm tra',
+    //     code: 'ds-pa',
+    //     status: true,
+    //     role: [LTD.VIEW_PA_GIAO_SKT],
+    //     isSelected: false,
+    // },
+    // {
+    //     name: 'Số kiểm tra chi từ đơn vị cấp trên',
+    //     code: 'ds-skt',
+    //     status: true,
+    //     role: [LTD.NHAN_SKT],
+    //     isSelected: false,
+    // },
 ]
 
 export const PHU_LUC = [
