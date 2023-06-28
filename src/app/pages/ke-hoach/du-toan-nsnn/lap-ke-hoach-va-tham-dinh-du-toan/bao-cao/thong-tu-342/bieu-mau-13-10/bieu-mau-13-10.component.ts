@@ -2,17 +2,17 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { FileFunction, GeneralFunction, NumberFunction, TableFunction } from 'src/app/Utility/func';
+import { AMOUNT, DON_VI_TIEN, Utils } from "src/app/Utility/utils";
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.service';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
-import { AMOUNT, BOX_NUMBER_WIDTH, DON_VI_TIEN, LA_MA, Utils } from "src/app/Utility/utils";
 import * as uuid from "uuid";
 import { BtnStatus, Doc, Form } from '../../../lap-ke-hoach-va-tham-dinh-du-toan.class';
-import { NzUploadFile } from 'ng-zorro-antd/upload';
-import { FileFunction, GeneralFunction, NumberFunction, TableFunction } from 'src/app/Utility/func';
 
 export class ItemData {
 	id: string;
@@ -24,6 +24,8 @@ export class ItemData {
 	namSoDtuong: number;
 	namDtoanGiao: number;
 	namUocThien: number;
+	khSoDtuong: number;
+	khMucTcap: number;
 	chenhLech: number;
 	ghiChu: string;
 
@@ -33,6 +35,7 @@ export class ItemData {
 	gtriTdinhSluong: number;
 	gtriTdinhDgia: number;
 	gtriTdinhTtien: number;
+	ykienDviCtren: string;
 }
 
 @Component({
@@ -95,8 +98,7 @@ export class BieuMau1310Component implements OnInit {
 		public genFunc: GeneralFunction,
 		private fileFunc: FileFunction,
 		private tableFunc: TableFunction,
-	) {
-	}
+	) { }
 
 	async ngOnInit() {
 		this.initialization().then(() => {
@@ -108,19 +110,20 @@ export class BieuMau1310Component implements OnInit {
 		this.spinner.show();
 		Object.assign(this.status, this.dataInfo.status);
 		await this.getFormDetail();
+		this.namBcao = this.dataInfo.namBcao;
 		if (this.status.general) {
 			const category = await this.danhMucService.danhMucChungGetAll('LTD_TT342_BM1310');
 			if (category) {
 				this.duAns = category.data;
 			}
-			this.scrollX = this.genFunc.setTableWidth(450, 7, BOX_NUMBER_WIDTH, 110);
+			this.scrollX = this.genFunc.tableWidth(350, 9, 1, 110);
 		} else {
 			if (this.status.editAppVal) {
-				this.scrollX = this.genFunc.setTableWidth(450, 10, BOX_NUMBER_WIDTH, 60);
+				this.scrollX = this.genFunc.tableWidth(350, 13, 2, 60);
 			} else if (this.status.viewAppVal) {
-				this.scrollX = this.genFunc.setTableWidth(450, 10, BOX_NUMBER_WIDTH, 0);
+				this.scrollX = this.genFunc.tableWidth(350, 13, 2, 0);
 			} else {
-				this.scrollX = this.genFunc.setTableWidth(450, 7, BOX_NUMBER_WIDTH, 0);
+				this.scrollX = this.genFunc.tableWidth(350, 9, 1, 0);
 			}
 		}
 		if (this.lstCtietBcao.length == 0) {

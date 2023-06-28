@@ -1,18 +1,18 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { FileFunction, GeneralFunction, NumberFunction } from 'src/app/Utility/func';
+import { AMOUNT, DON_VI_TIEN, LTD, MONEY_LIMIT, Utils } from "src/app/Utility/utils";
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
 import { UserService } from 'src/app/services/user.service';
-import { AMOUNT, BOX_NUMBER_WIDTH, DON_VI_TIEN, LA_MA, LTD, MONEY_LIMIT, Utils } from "src/app/Utility/utils";
 import * as uuid from "uuid";
 import { BtnStatus, Doc, Form } from '../../../lap-ke-hoach-va-tham-dinh-du-toan.class';
-import { NzUploadFile } from 'ng-zorro-antd/upload';
-import { FileFunction, GeneralFunction, NumberFunction, TableFunction } from 'src/app/Utility/func';
 // import { DANH_MUC } from './bieu-mau-18.constant';
 
 export class ItemData {
@@ -35,6 +35,7 @@ export class ItemData {
 	isDelete: false;
 	chenhLech: number;
 	ghiChu: string;
+	ykienDviCtren: string;
 }
 
 @Component({
@@ -99,7 +100,6 @@ export class BieuMau160Component implements OnInit {
 		public numFunc: NumberFunction,
 		public genFunc: GeneralFunction,
 		private fileFunc: FileFunction,
-		private tableFunc: TableFunction,
 	) { }
 
 	async ngOnInit() {
@@ -114,14 +114,14 @@ export class BieuMau160Component implements OnInit {
 		await this.getFormDetail();
 		this.namBcao = this.dataInfo.namBcao;
 		if (this.status) {
-			this.scrollX = this.genFunc.setTableWidth(550, 8, BOX_NUMBER_WIDTH, 200);
+			this.scrollX = this.genFunc.tableWidth(350, 9, 1, 160);
 		} else {
 			if (this.status.editAppVal) {
-				this.scrollX = this.genFunc.setTableWidth(550, 10, BOX_NUMBER_WIDTH, 60);
+				this.scrollX = this.genFunc.tableWidth(350, 12, 2, 60);
 			} else if (this.status.viewAppVal) {
-				this.scrollX = this.genFunc.setTableWidth(550, 10, BOX_NUMBER_WIDTH, 0);
+				this.scrollX = this.genFunc.tableWidth(350, 12, 1, 0);
 			} else {
-				this.scrollX = this.genFunc.setTableWidth(550, 8, BOX_NUMBER_WIDTH, 0);
+				this.scrollX = this.genFunc.tableWidth(350, 9, 1, 0);
 			}
 		}
 		await this.getListVtu()
@@ -396,7 +396,6 @@ export class BieuMau160Component implements OnInit {
 			this.total.uocThTtien = this.numFunc.sum([this.total.uocThTtien, item.uocThTtien])
 			this.total.namKhTtien = this.numFunc.sum([this.total.namKhTtien, item.namKhTtien])
 			this.total.tdinhTtien = this.numFunc.sum([this.total.tdinhTtien, item.tdinhTtien])
-
 		})
 	}
 

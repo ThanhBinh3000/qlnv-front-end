@@ -3,95 +3,192 @@
 		<nz-tabset>
 			<nz-tab nzTitle="Dữ liệu">
 				<div id="tablePrint">
-					<div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
-						<div nz-col [nzSpan]="2">
-							Đơn vị:
-						</div>
-						<div nz-col [nzSpan]="2">
-							<ng-container *ngIf="status.general || !editMoneyUnit; else editMoney">
-								<span (click)="editMoneyUnit=true">{{genFunc.moneyUnitName(maDviTien)}}</span>
-							</ng-container>
-							<ng-template #editMoney>
-								<nz-select nzShowSearch nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
-									(ngModelChange)="editMoneyUnit=false">
-									<nz-option *ngFor="let item of donViTiens" [nzValue]="item.id"
-										[nzLabel]="item.tenDm">
-									</nz-option>
-								</nz-select>
-							</ng-template>
+					<div class="nut" style="margin-top: 10px;">
+						<div class="cantrai">
+							<div> Đơn vị: </div>
+							<div style="margin-left: 10px;">
+								<ng-container *ngIf="status.general || !editMoneyUnit; else editMoney">
+									<span (click)="editMoneyUnit=true">
+										{{ genFunc.moneyUnitName(maDviTien) }}
+									</span>
+								</ng-container>
+								<ng-template #editMoney>
+									<nz-select nzShowSearch nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
+										(ngModelChange)="editMoneyUnit=false">
+										<nz-option *ngFor="let item of donViTiens" [nzValue]="item.id"
+											[nzLabel]="item.tenDm">
+										</nz-option>
+									</nz-select>
+								</ng-template>
+							</div>
 						</div>
 					</div>
 					<nz-table nzBordered class="table__body" [nzScroll]="{x: scrollX}">
 						<thead>
 							<tr>
-								<th rowspan="4" nzWidth="50px" nzLeft>STT</th>
-								<th rowspan="4" nzWidth="350px" nzLeft>Tên đơn vị</th>
-								<th colspan="11">Dự toán năm {{namBcao}}</th>
-								<th colspan="13">Ước thực hiện năm {{namBcao}}</th>
-								<th colspan="11">Dự toán năm {{namBcao + 1}}</th>
-								<th rowspan="4">Ghi chú</th>
+								<th rowspan="4" nzWidth="50px" nzLeft>
+									STT
+								</th>
+								<th rowspan="4" nzWidth="300px" nzLeft>
+									Tên đơn vị
+								</th>
+								<th colspan="11">
+									Dự toán năm {{namBcao}}
+								</th>
+								<th colspan="13">
+									Ước thực hiện năm {{namBcao}}
+								</th>
+								<th colspan="11">
+									Dự toán năm {{namBcao + 1}}
+								</th>
+								<th rowspan="4" class="text-col">
+									Ghi chú
+								</th>
 								<th rowspan="4" style="width: 50px;" *ngIf="status.general" nzRight></th>
 								<th rowspan="4" style="width: 60px;" *ngIf="status.general" nzRight></th>
 								<th rowspan="4" style="width: 50px;" *ngIf="status.general" nzRight></th>
 							</tr>
 							<tr>
-								<th rowspan="3">Tổng số người làm việc được cấp <br> có thẩm quyền giao (Người)</th>
-								<th rowspan="3">Tổng quỹ lương, phụ cấp và các <br> khoản đóng góp theo lương</th>
-								<th colspan="5">Trong đó</th>
-								<th colspan="4">Nguồn kinh phí bảo đảm</th>
-								<th rowspan="3">Tổng số người làm việc được cấp <br> có thẩm quyền giao (Người)</th>
-								<th rowspan="3">Tổng số người làm việc <br>được cấp có thẩm quyền giao <br> có
-									mặt tại thời điểm 31/12 (Người)</th>
-								<th rowspan="3">Trong đó: <br> Tổng số viên chức, <br> công chức (Người)</th>
-								<th rowspan="3">Tổng quỹ lương, phụ cấp và các <br> khoản đóng góp theo lương
-									theo số người<br> làm việc có mặt tại thời điểm 31/12</th>
-								<th colspan="5">Trong đó</th>
-								<th colspan="4">Nguồn kinh phí bảo đảm</th>
-								<th rowspan="3">Tổng số người làm việc được cấp <br> có thẩm quyền giao (Người)</th>
-								<th rowspan="3">Tổng quỹ lương, phụ cấp <br> và các khoản đóng góp theo lương</th>
-								<th colspan="5">Trong đó</th>
-								<th colspan="4">Nguồn kinh phí bảo đảm</th>
+								<th rowspan="3">
+									Tổng số người làm việc được cấp có thẩm quyền giao (Người)
+								</th>
+								<th rowspan="3">
+									Tổng quỹ lương, phụ cấp và các khoản đóng góp theo lương
+								</th>
+								<th colspan="5">
+									Trong đó
+								</th>
+								<th colspan="4">
+									Nguồn kinh phí bảo đảm
+								</th>
+								<th rowspan="3">
+									Tổng số người làm việc được cấp có thẩm quyền giao (Người)
+								</th>
+								<th rowspan="3">
+									Tổng số người làm việc được cấp có thẩm quyền giao có mặt tại thời điểm 31/12
+									(Người)
+								</th>
+								<th rowspan="3">
+									Trong đó: Tổng số viên chức, công chức (Người)
+								</th>
+								<th rowspan="3">
+									Tổng quỹ lương, phụ cấp và các khoản đóng góp theo lương theo số người làm việc có
+									mặt tại thời điểm 31/12
+								</th>
+								<th colspan="5">
+									Trong đó
+								</th>
+								<th colspan="4">
+									Nguồn kinh phí bảo đảm
+								</th>
+								<th rowspan="3">
+									Tổng số người làm việc được cấp có thẩm quyền giao (Người)
+								</th>
+								<th rowspan="3">
+									Tổng quỹ lương, phụ cấp và các khoản đóng góp theo lương
+								</th>
+								<th colspan="5">
+									Trong đó
+								</th>
+								<th colspan="4">
+									Nguồn kinh phí bảo đảm
+								</th>
 							</tr>
 							<tr>
-								<th colspan="4">Quỹ lương, phụ cấp và các khoản đóng góp theo lương của biên chế được
-									giao</th>
-								<th rowspan="2">Quỹ lương, phụ cấp và các khoản đóng <br> góp theo lương của hợp đồng
-									lao động</th>
-								<th rowspan="2">Nguồn NSNN</th>
-								<th rowspan="2">Nguồn thu sự nghiệp, dịch vụ</th>
-								<th rowspan="2">Nguồn phí được để lại</th>
-								<th rowspan="2">Nguồn thu hợp pháp khác</th>
-								<th colspan="4">Quỹ lương, phụ cấp và các khoản đóng góp theo lương của số biên chế thực
-									có mặt
-									thời điểm 31/12</th>
-								<th rowspan="2">Quỹ lương, phụ cấp và các khoản <br> đóng góp theo lương của hợp đồng
-									<br> lao động
-									có mặt tại thời điểm 31/12</th>
-								<th rowspan="2">Nguồn NSNN</th>
-								<th rowspan="2">Nguồn thu sự nghiệp, dịch vụ</th>
-								<th rowspan="2">Nguồn phí được để lại</th>
-								<th rowspan="2">Nguồn thu hợp pháp khác</th>
-								<th colspan="4">Quỹ lương, phụ cấp và các khoản đóng góp theo lương của biên chế</th>
-								<th rowspan="2">Quỹ lương, phụ cấp và các khoản đóng <br> góp theo lương của Hợp đồng
-									lao động</th>
-								<th rowspan="2">Nguồn NSNN</th>
-								<th rowspan="2">Nguồn thu sự nghiệp, dịch vụ</th>
-								<th rowspan="2">Nguồn phí được để lại</th>
-								<th rowspan="2">Nguồn thu hợp pháp khác</th>
+								<th colspan="4">
+									Quỹ lương, phụ cấp và các khoản đóng góp theo lương của biên chế được giao
+								</th>
+								<th rowspan="2">
+									Quỹ lương, phụ cấp và các khoản đóng góp theo lương của hợp đồng lao động
+								</th>
+								<th rowspan="2">
+									Nguồn NSNN
+								</th>
+								<th rowspan="2">
+									Nguồn thu sự nghiệp, dịch vụ
+								</th>
+								<th rowspan="2">
+									Nguồn phí được để lại
+								</th>
+								<th rowspan="2">
+									Nguồn thu hợp pháp khác
+								</th>
+								<th colspan="4">
+									Quỹ lương, phụ cấp và các khoản đóng góp theo lương của số biên chế thực có mặt thời
+									điểm 31/12
+								</th>
+								<th rowspan="2">
+									Quỹ lương, phụ cấp và các khoản đóng góp theo lương của hợp đồng lao động có mặt tại
+									thời điểm 31/12
+								</th>
+								<th rowspan="2">
+									Nguồn NSNN
+								</th>
+								<th rowspan="2">
+									Nguồn thu sự nghiệp, dịch vụ
+								</th>
+								<th rowspan="2">
+									Nguồn phí được để lại
+								</th>
+								<th rowspan="2">
+									Nguồn thu hợp pháp khác
+								</th>
+								<th colspan="4">
+									Quỹ lương, phụ cấp và các khoản đóng góp theo lương của biên chế
+								</th>
+								<th rowspan="2">
+									Quỹ lương, phụ cấp và các khoản đóng góp theo lương của Hợp đồng lao động
+								</th>
+								<th rowspan="2">
+									Nguồn NSNN
+								</th>
+								<th rowspan="2">
+									Nguồn thu sự nghiệp, dịch vụ
+								</th>
+								<th rowspan="2">
+									Nguồn phí được để lại
+								</th>
+								<th rowspan="2">
+									Nguồn thu hợp pháp khác
+								</th>
 							</tr>
 							<tr>
-								<th>Tổng số</th>
-								<th>Lương theo ngạch, bậc</th>
-								<th>Phụ cấp theo lương</th>
-								<th>Các khoản đóng góp theo lương</th>
-								<th>Tổng số</th>
-								<th>Lương theo ngạch, bậc</th>
-								<th>Phụ cấp theo lương</th>
-								<th>Các khoản đóng góp theo lương</th>
-								<th>Tổng số</th>
-								<th>Lương theo ngạch, bậc</th>
-								<th>Phụ cấp theo lương</th>
-								<th>Các khoản đóng góp theo lương</th>
+								<th>
+									Tổng số
+								</th>
+								<th>
+									Lương theo ngạch, bậc
+								</th>
+								<th>
+									Phụ cấp theo lương
+								</th>
+								<th>
+									Các khoản đóng góp theo lương
+								</th>
+								<th>
+									Tổng số
+								</th>
+								<th>
+									Lương theo ngạch, bậc
+								</th>
+								<th>
+									Phụ cấp theo lương
+								</th>
+								<th>
+									Các khoản đóng góp theo lương
+								</th>
+								<th>
+									Tổng số
+								</th>
+								<th>
+									Lương theo ngạch, bậc
+								</th>
+								<th>
+									Phụ cấp theo lương
+								</th>
+								<th>
+									Các khoản đóng góp theo lương
+								</th>
 							</tr>
 							<tr>
 								<th nzLeft>A</th>
