@@ -169,3 +169,12 @@
 :host ::ng-deep .ant-tabs-content-holder {
     border-color: white !important;
 }
+
+.ant-table-cell {
+    white-space: pre-line !important;
+    word-break: break-word !important;
+}
+
+.text-col {
+    width: 250px;
+}

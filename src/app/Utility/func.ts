@@ -3,7 +3,7 @@ import { NzNotificationService } from "ng-zorro-antd/notification";
 import * as uuid from "uuid";
 import { MESSAGE } from "../constants/message";
 import { QuanLyVonPhiService } from "../services/quanLyVonPhi.service";
-import { DON_VI_TIEN, LA_MA, Utils } from "./utils";
+import { DON_VI_TIEN, LA_MA, NUM_BOX_WIDTH, TEXT_BOX_WIDTH, Utils } from "./utils";
 import * as fileSaver from 'file-saver';
 import { DatePipe } from "@angular/common";
 
@@ -54,6 +54,10 @@ export class GeneralFunction {
 
     setTableWidth(leftWidth: number, col: number, colWidth: number, rightWidth: number): string {
         return (leftWidth + col * colWidth + rightWidth).toString() + 'px';
+    }
+
+    tableWidth(leftW: number, numCol: number, textCol: number, rightW: number): string {
+        return (leftW + numCol * NUM_BOX_WIDTH + textCol * TEXT_BOX_WIDTH + rightW).toString() + 'px';
     }
 
     fmtDate(date: any) {
