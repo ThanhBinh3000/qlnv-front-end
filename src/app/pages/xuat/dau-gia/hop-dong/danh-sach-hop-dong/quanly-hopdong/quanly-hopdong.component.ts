@@ -98,16 +98,16 @@ export class QuanlyHopdongComponent extends Base2Component implements OnInit {
             tongTien: data.thanhTien,
             loaiHinhNx: data.loaiHinhNx != null ? 'Xuất bán đấu giá' : null,
             kieuNx: data.kieuNx != null ? 'Xuất bán' : null,
+            soLuongDviTsanTrung: data.soDvtsDgTc,
+            soLuongDviTsanTruot: data.tongDvts - data.soDvtsDgTc,
           })
           this.listAllDviTsan = dataTtin.data.children;
           this.listAllDviTsan = this.listAllDviTsan.flatMap(item => item.children).filter((item) => {
             return item.toChucCaNhan !== null && item.soLanTraGia > 0
           }).map(item => item.maDviTsan);
-
           this.dataTable = data.listHopDong;
           this.listDviTsanDaKy = this.dataTable.filter(item => item.trangThai == STATUS.DA_KY);
           this.listDviTsanDaKy = this.listDviTsanDaKy.map(item => item.maDviTsan.split(",")).flat();
-
         });
       }
     }
@@ -201,8 +201,6 @@ export class QuanlyHopdongComponent extends Base2Component implements OnInit {
   }
 
   outputListAllDviTsan($event) {
-    console.log(123)
     this.listAllDviTsan = $event;
   }
-
 }
