@@ -69,7 +69,9 @@ export class ThongTinHangDtqgComponent extends Base2Component implements OnInit 
   }
 
   async getDSMatHang() {
-    const body = {}
+    const body = {
+      nhomCcdc: 1
+    }
     this.listMatHang = []
     let res = await this.danhMucService.getDSMatHang(body);
     if (res.msg == MESSAGE.SUCCESS) {

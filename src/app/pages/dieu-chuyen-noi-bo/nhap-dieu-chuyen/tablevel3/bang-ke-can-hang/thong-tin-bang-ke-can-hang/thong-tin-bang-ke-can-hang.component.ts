@@ -168,11 +168,7 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
     return this.userService.isChiCuc()
   }
 
-  convertTien(tien: number): string {
-    if (tien) {
-      return convertTienTobangChu(tien);
-    }
-  }
+
 
   async loadChiTiet(id: number) {
     await this.spinner.show()
@@ -329,6 +325,10 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
 
 
   them() {
+    if (!this.formData.value.maCan || !this.formData.value.soBaoBi || !this.formData.value.trongLuongCaBaoBi) {
+      this.notification.error(MESSAGE.ERROR, "Bạn chưa nhập đủ thông tin");
+      return
+    }
     this.dsHangTH.push({
       idVirtual: uuidv4.v4(),
       edit: false,
@@ -336,9 +336,19 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
       soBaoBi: this.formData.value.soBaoBi,
       trongLuongCaBaoBi: this.formData.value.trongLuongCaBaoBi,
     })
-    console.log('them', this.formData.value, this.dsHangTH)
     this.dsHangTH = cloneDeep(this.dsHangTH)
+    const tongTrongLuongCabaoBi = this.dsHangTH.reduce((previous, current) => previous + current.trongLuongCaBaoBi, 0);
+
+    if (this.formData.value.tongTrongLuongBaoBi) {
+      const tongTrongLuongTruBi = Number(tongTrongLuongCabaoBi) - Number(this.formData.value.tongTrongLuongBaoBi)
+      const tongTrongLuongTruBiText = this.convertTien(tongTrongLuongTruBi)
+      this.formData.patchValue({
+        tongTrongLuongTruBi,
+        tongTrongLuongTruBiText
+      })
+    }
     this.formData.patchValue({
+      tongTrongLuongCabaoBi,
       maCan: "",
       soBaoBi: "",
       trongLuongCaBaoBi: "",
@@ -363,7 +373,23 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
   }
 
 
+  onChangeTongTrongLuongBaoBi(tongTrongLuongBaoBi) {
+    if (this.formData.value.tongTrongLuongCabaoBi) {
+      const tongTrongLuongTruBi = Number(this.formData.value.tongTrongLuongCabaoBi) - Number(tongTrongLuongBaoBi)
+      const tongTrongLuongTruBiText = this.convertTien(tongTrongLuongTruBi)
+      this.formData.patchValue({
+        tongTrongLuongTruBi,
+        tongTrongLuongTruBiText
+      })
+    }
 
+  }
+
+  convertTien(tien: number): string {
+    if (tien) {
+      return convertTienTobangChu(tien);
+    }
+  }
 
   async openDialogQD() {
     await this.spinner.show();
