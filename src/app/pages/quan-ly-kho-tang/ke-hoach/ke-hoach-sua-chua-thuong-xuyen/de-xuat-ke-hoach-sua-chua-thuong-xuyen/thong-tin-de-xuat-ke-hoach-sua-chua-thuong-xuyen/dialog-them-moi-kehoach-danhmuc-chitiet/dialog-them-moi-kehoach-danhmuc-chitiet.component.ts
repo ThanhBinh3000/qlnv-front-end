@@ -185,7 +185,6 @@ export class DialogThemMoiKehoachDanhmucChitietComponent extends Base2Component 
         let result = this.listDmSuaChua.find(item => item.maCongTrinh == event)
         if (result) {
           this.formData.patchValue({
-            maDm: result.maCongTrinh,
             tenDm: result.tenCongTrinh,
             maChiCuc: result.maChiCuc,
             tenChiCuc: result.tenChiCuc,
