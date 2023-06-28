@@ -4,7 +4,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { FileFunction, GeneralFunction, NumberFunction, TableFunction } from 'src/app/Utility/func';
-import { AMOUNT, BOX_NUMBER_WIDTH, DON_VI_TIEN, MONEY_LIMIT, Utils } from "src/app/Utility/utils";
+import { AMOUNT, DON_VI_TIEN, MONEY_LIMIT, Utils } from "src/app/Utility/utils";
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
@@ -115,9 +115,9 @@ export class BieuMau18Component implements OnInit {
 			if (category) {
 				this.linhVucChis = category.data;
 			}
-			this.scrollX = this.genFunc.setTableWidth(1350, 12, BOX_NUMBER_WIDTH, 60);
+			this.scrollX = this.genFunc.tableWidth(350, 12, 5, 60);
 		} else {
-			this.scrollX = this.genFunc.setTableWidth(1350, 12, BOX_NUMBER_WIDTH, 0);
+			this.scrollX = this.genFunc.tableWidth(350, 12, 5, 0);
 		}
 		if (this.lstCtietBcao.length == 0) {
 			this.linhVucChis.forEach(e => {

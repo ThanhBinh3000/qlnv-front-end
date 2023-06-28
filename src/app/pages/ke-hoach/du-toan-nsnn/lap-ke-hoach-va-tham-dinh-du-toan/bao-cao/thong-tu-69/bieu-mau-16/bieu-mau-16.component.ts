@@ -4,7 +4,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { FileFunction, GeneralFunction, NumberFunction, TableFunction } from 'src/app/Utility/func';
-import { AMOUNT, BOX_NUMBER_WIDTH, DON_VI_TIEN, MONEY_LIMIT, Utils } from "src/app/Utility/utils";
+import { AMOUNT, DON_VI_TIEN, MONEY_LIMIT, Utils } from "src/app/Utility/utils";
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
@@ -114,9 +114,9 @@ export class BieuMau16Component implements OnInit {
             if (category) {
                 this.noiDungs = category.data;
             }
-            this.scrollX = this.genFunc.setTableWidth(350, 10, BOX_NUMBER_WIDTH, 60);
+            this.scrollX = this.genFunc.tableWidth(350, 10, 1, 60);
         } else {
-            this.scrollX = this.genFunc.setTableWidth(350, 10, BOX_NUMBER_WIDTH, 60);
+            this.scrollX = this.genFunc.tableWidth(350, 10, 1, 60);
         }
         this.formDetail?.lstCtietLapThamDinhs.forEach(item => {
             this.lstCtietBcao.push({
@@ -168,6 +168,7 @@ export class BieuMau16Component implements OnInit {
                 if (data.statusCode == 0) {
                     this.formDetail = data.data;
                     this.formDetail.maDviTien = '1';
+                    this.lstCtietBcao = this.formDetail.lstCtietLapThamDinhs;
                     this.listFile = [];
                     this.getStatusButton();
                 } else {

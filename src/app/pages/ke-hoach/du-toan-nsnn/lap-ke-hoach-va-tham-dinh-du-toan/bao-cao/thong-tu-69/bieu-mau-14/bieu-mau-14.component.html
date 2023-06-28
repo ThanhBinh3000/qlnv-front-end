@@ -2,33 +2,50 @@
     <nz-tabset>
         <nz-tab nzTitle="Dữ liệu">
             <div id="tablePrint">
-                <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
-                    <div nz-col [nzSpan]="2">
-                        Đơn vị:
-                    </div>
-                    <div nz-col [nzSpan]="2">
-                        <ng-container *ngIf="status || !editMoneyUnit; else editMoney">
-                            <span (click)="editMoneyUnit=true">{{genFunc.moneyUnitName(maDviTien)}}</span>
-                        </ng-container>
-                        <ng-template #editMoney>
-                            <nz-select nzShowSearch nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
-                                (ngModelChange)="editMoneyUnit=false">
-                                <nz-option *ngFor="let item of donViTiens" [nzValue]="item.id" [nzLabel]="item.tenDm">
-                                </nz-option>
-                            </nz-select>
-                        </ng-template>
+                <div class="nut" style="margin-top: 10px;">
+                    <div class="cantrai">
+                        <div> Đơn vị: </div>
+                        <div style="margin-left: 10px;">
+                            <ng-container *ngIf="status.general || !editMoneyUnit; else editMoney">
+                                <span (click)="editMoneyUnit=true">
+                                    {{ genFunc.moneyUnitName(maDviTien) }}
+                                </span>
+                            </ng-container>
+                            <ng-template #editMoney>
+                                <nz-select nzShowSearch nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
+                                    (ngModelChange)="editMoneyUnit=false">
+                                    <nz-option *ngFor="let item of donViTiens" [nzValue]="item.id"
+                                        [nzLabel]="item.tenDm">
+                                    </nz-option>
+                                </nz-select>
+                            </ng-template>
+                        </div>
                     </div>
                 </div>
                 <nz-table nzBordered class="table__body" [nzScroll]="{x: scrollX}">
                     <thead>
                         <tr>
-                            <th nzWidth="50px" nzLeft>STT</th>
-                            <th nzWidth="500px" nzLeft>Nội dung</th>
-                            <th>Thực hiên năm hiện hành {{namBcao -1}}</th>
-                            <th>Nhu cầu năm dự toán {{namBcao}}</th>
-                            <th>Nhu cầu năm {{namBcao + 1}}</th>
-                            <th>Nhu cầu năm {{namBcao + 2}}</th>
-                            <th>Ghi chú</th>
+                            <th nzWidth="50px" nzLeft>
+                                STT
+                            </th>
+                            <th nzWidth="500px" nzLeft>
+                                Nội dung
+                            </th>
+                            <th>
+                                Thực hiên năm hiện hành {{namBcao -1}}
+                            </th>
+                            <th>
+                                Nhu cầu năm dự toán {{namBcao}}
+                            </th>
+                            <th>
+                                Nhu cầu năm {{namBcao + 1}}
+                            </th>
+                            <th>
+                                Nhu cầu năm {{namBcao + 2}}
+                            </th>
+                            <th class="text-col">
+                                Ghi chú
+                            </th>
                             <th style="width: 60px;" *ngIf="status.general" nzRight></th>
                         </tr>
                     </thead>
@@ -36,16 +53,26 @@
                         <tr *ngFor="let data of lstCtietBcao; let i = index">
                             <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
                                 <td nzLeft>
-                                    {{getChiMuc(data.stt)}}
+                                    {{ getChiMuc(data.stt) }}
                                 </td>
                                 <td nzLeft>
-                                    {{data.tenNdung}}
+                                    {{ data.tenNdung }}
                                 </td>
-                                <td>{{ numFunc.valFmt(data.thNamHienHanhN1, maDviTien) }}</td>
-                                <td>{{ numFunc.valFmt(data.ncauNamDtoanN, maDviTien) }}</td>
-                                <td>{{ numFunc.valFmt(data.ncauNamN1, maDviTien) }}</td>
-                                <td>{{ numFunc.valFmt(data.ncauNamN2, maDviTien) }}</td>
-                                <td>{{ data.ghiChu}}</td>
+                                <td>
+                                    {{ numFunc.valFmt(data.thNamHienHanhN1, maDviTien) }}
+                                </td>
+                                <td>
+                                    {{ numFunc.valFmt(data.ncauNamDtoanN, maDviTien) }}
+                                </td>
+                                <td>
+                                    {{ numFunc.valFmt(data.ncauNamN1, maDviTien) }}
+                                </td>
+                                <td>
+                                    {{ numFunc.valFmt(data.ncauNamN2, maDviTien) }}
+                                </td>
+                                <td>
+                                    {{ data.ghiChu }}
+                                </td>
                                 <td *ngIf="status.general" nzRight>
                                     <i *ngIf="checkEdit(data.stt)" class="fa fa-pencil"
                                         (click)="startEdit(data.id)"></i>
@@ -53,10 +80,10 @@
                             </ng-container>
                             <ng-template #editTemplate>
                                 <td nzLeft>
-                                    {{getChiMuc(editCache[data.id].data.stt)}}
+                                    {{ getChiMuc(editCache[data.id].data.stt) }}
                                 </td>
                                 <td nzLeft>
-                                    {{editCache[data.id].data.tenNdung}}
+                                    {{ editCache[data.id].data.tenNdung }}
                                 </td>
                                 <td>
                                     <input class="money-input" currencyMask [options]="amount"
@@ -75,9 +102,9 @@
                                         [(ngModel)]="editCache[data.id].data.ncauNamN2" />
                                 </td>
                                 <td>
-                                    <input class="search__input" [(ngModel)]="editCache[data.id].data.ghiChu" />
+                                    <input nz-input [(ngModel)]="editCache[data.id].data.ghiChu" />
                                 </td>
-                                <td nzRight>
+                                <td *ngIf="status.general" nzRight>
                                     <a (click)="saveEdit(data.id)" class="save">Lưu</a>
                                     <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
                                         (nzOnConfirm)="cancelEdit(data.id)" class="save">
