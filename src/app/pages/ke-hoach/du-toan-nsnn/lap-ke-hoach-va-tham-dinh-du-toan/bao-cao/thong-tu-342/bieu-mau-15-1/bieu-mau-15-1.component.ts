@@ -1,19 +1,18 @@
-import { startWith } from 'rxjs/operators';
-import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { UserService } from './../../../../../../../services/user.service';
 import { Component, Input, OnInit } from '@angular/core';
 import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { FileFunction, GeneralFunction, NumberFunction, TableFunction } from 'src/app/Utility/func';
+import { AMOUNT, DON_VI_TIEN, Utils } from "src/app/Utility/utils";
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
-import { AMOUNT, DON_VI_TIEN, LA_MA, MONEY_LIMIT, Utils } from "src/app/Utility/utils";
+import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import * as uuid from "uuid";
 import { BtnStatus, Doc, Form } from '../../../lap-ke-hoach-va-tham-dinh-du-toan.class';
-import { NzUploadFile } from 'ng-zorro-antd/upload';
-import { FileFunction, GeneralFunction, NumberFunction, TableFunction } from 'src/app/Utility/func';
+import { UserService } from './../../../../../../../services/user.service';
 
 export class ItemData {
 	id: string;
@@ -78,7 +77,6 @@ export class BieuMau151Component implements OnInit {
 
 	amount = AMOUNT;
 	scrollX: string;
-	BOX_SIZE = 220;
 
 	fileList: NzUploadFile[] = [];
 	listFile: File[] = [];
@@ -129,9 +127,9 @@ export class BieuMau151Component implements OnInit {
 		await this.getFormDetail();
 		this.namBcao = this.dataInfo.namBcao;
 		if (this.status) {
-			this.scrollX = this.genFunc.setTableWidth(350, 26, this.BOX_SIZE, 60);
+			this.scrollX = this.genFunc.tableWidth(350, 26, 1, 60);
 		} else {
-			this.scrollX = this.genFunc.setTableWidth(350, 26, this.BOX_SIZE, 0);
+			this.scrollX = this.genFunc.tableWidth(350, 26, 1, 0);
 		}
 		const reqGetDonViCon = {
 			maDviCha: this.dataInfo.maDvi,
@@ -144,15 +142,6 @@ export class BieuMau151Component implements OnInit {
 				} else if (this.dataInfo.capDvi == "2") {
 					this.donVis = res.data.filter(e => e.tenVietTat && (e.tenVietTat?.startsWith('CCDT') || e.tenVietTat?.includes('_VP') || e.tenVietTat?.includes('CNTT')));
 				}
-				// else if (this.dataInfo.capDvi == "3") {
-				// 	if (this.lstCtietBcao.length == 0) {
-				// 		this.lstCtietBcao.push({
-				// 			... new ItemData(),
-				// 			maLvuc: this.maDviTao,
-				// 			tenDmuc: this.dataInfo?.tenDvi
-				// 		})
-				// 	}
-				// }
 			} else {
 				this.notification.error(MESSAGE.ERROR, res?.msg);
 			}
