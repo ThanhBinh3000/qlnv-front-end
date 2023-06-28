@@ -89,7 +89,7 @@
     </nz-card>
     <div class="group-button">
       <h3 class="text-uppercase">Danh sách phương án xuất cứu trợ, viện trợ</h3>
-      <span >
+      <span  style="margin-left: 50%">
       <a (click)="danhSach()" style="color: blue">
         Xem toàn bộ danh sách
       </a></span>
@@ -115,15 +115,10 @@
               <th>Ngăn/lô kho</th>
               <th>Ngày nhập kho</th>
               <th>SL tồn</th>
-              <th>SL cần thanh lý</th>
-              <th>SL cần thanh lý đã duyệt</th>
-              <th>SL còn lại cần thanh lý</th>
               <th>ĐVT</th>
-              <th>Ngày tổng hợp</th>
-              <th>Lý do cần thanh lý</th>
-              <th>Thời gian đề xuất thanh lý</th>
+              <th>Ngày đề xuất</th>
               <th>Trạng thái</th>
-              <th>Trạng thái thanh lý</th>
+              <th class="text-center">Trạng thái <br> kiểm tra chất lượng</th>
               <th>Hành động</th>
             </tr>
             </thead>
@@ -137,11 +132,6 @@
                 <td>{{item.nam}}</td>
                 <td>{{item.maDanhSach}}</td>
                 <td>{{item.tenCuc}}</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -181,11 +171,6 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
                   </tr>
                   <ng-container *ngIf="expandSetString.has(item.idVirtual) && expandSetString.has(lv1.idVirtual)">
                     <ng-container *ngFor="let lv2 of lv1.childData,let i2=index">
@@ -201,17 +186,10 @@
                         <td>{{lv2.tenLoKho ? lv2.tenLoKho : lv2.tenNganKho}}</td>
                         <td>{{lv2.ngayNhapKho|date:globals.dateFormat}}</td>
                         <td>{{lv2.slHienTai|number:globals.numberFormat}}</td>
-                        <td>{{lv2.slDeXuat|number:globals.numberFormat}}</td>
-                        <td>{{lv2.slDaDuyet|number:globals.numberFormat}}</td>
-                        <td>{{lv2.slDeXuat - lv2.slDaDuyet|number:globals.numberFormat}}</td>
                         <td>{{lv2.donViTinh}}</td>
-                        <td>{{lv2.ngayTongHop|date:globals.dateFormat}}</td>
-                        <td>{{lv2.lyDo}}</td>
                         <td>{{lv2.ngayDeXuat|date:globals.dateFormat}}</td>
                         <td></td>
-                        <td></td>
-                        <!--                        <td>{{lv2.tenTrangThai}}</td>-->
-                        <!--                        <td>{{lv2.tenTrangThaiTl}}</td>-->
+                        <td>{{lv2.tenTrangThaiKtCl|date:globals.dateFormat}}</td>
                         <td></td>
                       </tr>
                     </ng-container>
@@ -252,7 +230,7 @@
           [nzClosable]="false"
           [nzBodyStyle]="{ 'overflow-y': 'auto' }"
           nzMaskClosable="true"
-          nzTitle="TỔNG HỢP DANH SÁCH HÀNG CẦN THANH LÝ">
+          nzTitle="TỔNG HỢP DANH SÁCH HÀNG DTQG CÒN 6 THÁNG HẾT HẠN LƯU KHO NHƯNG CHƯA CÓ KẾ HOẠCH XUẤT">
   <ng-container *nzModalContent>
     <app-chi-tiet-tong-hop-ds-hang-dtqg [selectedItem]="selectedItem" (step)="changeStep($event)"
                                         [eventOk]="clickOk">

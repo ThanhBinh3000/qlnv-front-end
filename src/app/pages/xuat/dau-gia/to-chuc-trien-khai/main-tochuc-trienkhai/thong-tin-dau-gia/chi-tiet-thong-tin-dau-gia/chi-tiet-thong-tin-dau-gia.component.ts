@@ -114,6 +114,8 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
                 tenCloaiVthh: dataHdr.tenCloaiVthh,
                 tenLoaiVthh: dataHdr.tenLoaiVthh,
                 slDviTsan: dataDtl.slDviTsan,
+                soDviTsanThanhCong: dataDtl.soDviTsanThanhCong,
+                soDviTsanKhongThanh: dataDtl.soDviTsanKhongThanh,
                 loaiHinhNx: dataHdr.loaiHinhNx != null ? 'Xuất bán đấu giá' : null,
                 kieuNx: dataHdr.kieuNx != null ? 'Xuất bán' : null,
               })
@@ -225,13 +227,13 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
   themMoiPhienDauGia($event, data?: any) {
     $event.stopPropagation();
     if (!data) {
-      // let dataCheck = this.dataTable.filter(item => {
-      //   return item.trangThai == this.STATUS.DU_THAO
-      // })
-      // if (dataCheck.length > 0) {
-      //   this.notification.error(MESSAGE.ERROR, "Không thể thêm mới, vì đang có thông tin đấu giá chưa hoàn thành cập nhập, xin viu lòng hoàn thành cập nhập");
-      //   return;
-      // }
+      let dataCheck = this.dataTable.filter(item => {
+        return item.trangThai == this.STATUS.DU_THAO
+      })
+      if (dataCheck.length > 0) {
+        this.notification.error(MESSAGE.ERROR, "Không thể thêm mới, vì đang có thông tin đấu giá chưa hoàn thành cập nhập, xin viu lòng hoàn thành cập nhập");
+        return;
+      }
     } const modalQD = this.modal.create({
       nzTitle: '',
       nzContent: ThongtinDaugiaComponent,
