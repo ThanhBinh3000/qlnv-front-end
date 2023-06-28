@@ -238,7 +238,7 @@ export class QuyetDinhPdKhnkComponent extends Base2Component implements OnInit {
       soQd: this.searchFilter.soQd,
       tongTien: this.searchFilter.tongTien,
       soGthau: this.searchFilter.soGthau,
-      lastest: 0,
+      // lastest: 0,
       paggingReq: {
         limit: this.pageSize,
         page: this.page - 1,

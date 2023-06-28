@@ -39,8 +39,13 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
   listDanhSachBBLM: any[] = [];
 
   dsKeHoach: any[] = []
-
+  listHinhThucBaoQuan: any[] = []
   phieuKNCLDinhKem: any[] = [];
+
+  LIST_DANH_GIA: any[] = [
+    "Không đạt",
+    "Đạt"
+  ]
 
 
   constructor(
@@ -87,6 +92,8 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
       slHangBQ: [],
       ngayNhapDayKho: [],
       loaiVthh: [],
+      tenLoaiVthh: [],
+      cloaiVthh: [],
       tenCloaiVthh: [],
       tenDonViTinh: [],
       donViTinh: [],
@@ -112,7 +119,7 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
       id: id,
       loaiDc: this.loaiDc
     })
-    // this.dsBienBanLayMau()
+
     if (this.idInput) {
       await this.loadChiTiet(this.idInput)
     }
@@ -131,12 +138,34 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
     await this.spinner.show()
     if (id) {
       let data = await this.detail(id);
-      this.formData.patchValue({
-        ...data
-      });
+      if (data) {
+        this.dataTableChiTieu = data.dcnbPhieuKnChatLuongDtl
+        this.formData.patchValue(data);
+        await this.dsHinhThucBaoQuan(data.cloaiVthh)
+        if (data.hinhThucBq) {
+          const dshinhThucBq = data.hinhThucBq.split(",").map(f => ({ id: f.split("-")[0], giaTri: f.split("-")[1] }))
+          this.listHinhThucBaoQuan = this.listHinhThucBaoQuan.map(pp => {
+            return {
+              ...pp,
+              checked: !!dshinhThucBq.find(check => Number(check.id) == pp.id)
+            }
+          })
+
+        }
+      }
+
     }
     await this.spinner.hide();
   }
+
+  async dsHinhThucBaoQuan(maChLoaiHangHoa) {
+    let res = await this.danhMucService.loadDanhMucHangChiTiet(maChLoaiHangHoa)
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listHinhThucBaoQuan = res.data.hinhThucBq
+    }
+
+  }
+
 
   async dsBienBanLayMau() {
     let res = await this.phieuKiemNghiemChatLuongService.dsBienBanLayMau({});
@@ -315,6 +344,7 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
         });
         // this.listPhuongThucBaoQuan = []
         // this.listHinhThucBaoQuan = []
+
         await this.loadChiTietQdinh(data.id);
       }
     });
@@ -353,10 +383,9 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
       if (data) {
         this.formData.patchValue({
           soBbLayMau: data.soBbLayMau,
+          ngayLayMau: data.ngayLayMau
         });
-        // this.listPhuongThucBaoQuan = []
-        // this.listHinhThucBaoQuan = []
-        // await this.loadChiTietQdinh(data.id);
+        await this.dsHinhThucBaoQuan(data.cloaiVthh)
       }
     });
   }
@@ -398,7 +427,9 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
           maNhaKhoXuat: data.maNhaKho,
           tenDiemKhoXuat: data.tenDiemKho,
           maDiemKhoXuat: data.maDiemKho,
-          loaiVthh: data.tenLoaiVthh,
+          loaiVthh: data.loaiVthh,
+          tenLoaiVthh: data.tenLoaiVthh,
+          cloaiVthh: data.cloaiVthh,
           tenCloaiVthh: data.tenCloaiVthh,
           tichLuongKhaDung: data.tichLuongKd,
           tenDonViTinh: data.tenDonViTinh,
@@ -409,8 +440,15 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
         if (dmTieuChuan.data) {
           console.log('dmTieuChuan')
           this.dataTableChiTieu = dmTieuChuan.data.children;
-          this.dataTableChiTieu.forEach(element => {
-            element.edit = false
+          this.dataTableChiTieu = this.dataTableChiTieu.map(element => {
+            return {
+              ...element,
+              edit: false,
+              chiSoCl: element.tenTchuan,
+              chiTieuCl: element.chiSoNhap,
+              ketQuaPt: element.ketQuaPt,
+              danhGia: element.danhGia
+            }
           });
         }
       }
@@ -444,11 +482,12 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
     await this.spinner.show();
     let body = this.formData.value;
     body.phieuKNCLDinhKem = this.phieuKNCLDinhKem;
-    body.dcnbPhieuKtChatLuongDtl = this.dataTableChiTieu;
+    body.dcnbPhieuKnChatLuongDtl = this.dataTableChiTieu;
+    body.hinhThucBq = this.listHinhThucBaoQuan.filter(item => item.checked).map(i => `${i.id}-${i.giaTri}`).join(",");
     if (this.idInput) {
       body.id = this.idInput
     } else {
-      body.dcnbPhieuKtChatLuongDtl = this.dataTableChiTieu.map(item => {
+      body.dcnbPhieuKnChatLuongDtl = this.dataTableChiTieu.map(item => {
         return {
           ...item,
           id: undefined

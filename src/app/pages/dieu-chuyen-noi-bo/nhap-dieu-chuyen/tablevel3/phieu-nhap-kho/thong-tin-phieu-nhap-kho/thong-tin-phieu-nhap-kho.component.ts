@@ -14,6 +14,7 @@ import { MESSAGE } from "src/app/constants/message";
 import { STATUS } from "src/app/constants/status";
 import { DanhMucService } from "src/app/services/danhmuc.service";
 import { BienBanNghiemThuBaoQuanLanDauService } from "src/app/services/dieu-chuyen-noi-bo/nhap-dieu-chuyen/bien-ban-nghiem-thu-bao-quan-lan-dau.service";
+import { PhieuKiemTraChatLuongService } from "src/app/services/dieu-chuyen-noi-bo/nhap-dieu-chuyen/phieu-kiem-tra-chat-luong";
 import { PhieuNhapKhoService } from "src/app/services/dieu-chuyen-noi-bo/nhap-dieu-chuyen/phieu-nhap-kho";
 import { QuyetDinhDieuChuyenCucService } from "src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-c.service";
 import { StorageService } from "src/app/services/storage.service";
@@ -56,6 +57,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
     modal: NzModalService,
     private cdr: ChangeDetectorRef,
     private danhMucService: DanhMucService,
+    private phieuKiemTraChatLuongService: PhieuKiemTraChatLuongService,
     private quyetDinhDieuChuyenCucService: QuyetDinhDieuChuyenCucService,
     private phieuNhapKhoService: PhieuNhapKhoService,
   ) {
@@ -419,6 +421,72 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
     });
   }
 
+  async openDialogPKTCL() {
+    await this.spinner.show();
+    // Get data tờ trình
+    let body = {
+      // trangThai: STATUS.BAN_HANH,
+      // loaiVthh: ['0101', '0102'],
+      loaiDc: "DCNB",
+      // maDvi: this.userInfo.MA_DVI,
+      soQdinhDcc: this.formData.value.soQdDcCuc
+      // listTrangThaiXh: [STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN],
+    }
+    let resSoDX = await this.phieuKiemTraChatLuongService.getDanhSach(body)
+    if (resSoDX.msg == MESSAGE.SUCCESS) {
+      this.listDanhSachQuyetDinh = resSoDX.data;
+    }
+    await this.spinner.hide();
+
+    const modalQD = this.modal.create({
+      nzTitle: 'Danh sách quyết định',
+      nzContent: DialogTableSelectionComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {
+        dataTable: this.listDanhSachQuyetDinh,
+        dataHeader: ['Số quyết định'],
+        dataColumn: ['soQdinh']
+      },
+    });
+    modalQD.afterClose.subscribe(async (data) => {
+      if (data) {
+        this.formData.patchValue({
+          soQdDcCuc: data.soQdinh,
+          ngayQdDcCuc: data.ngayKyQdinh,
+          qdDcCucId: data.id,
+          tenLoKho: "",
+          maLoKho: "",
+          tenNganKho: "",
+          maNganKho: "",
+          tenNhaKho: "",
+          maNhaKho: "",
+          tenDiemKho: "",
+          maDiemKho: "",
+          tenLoKhoXuat: "",
+          maLoKhoXuat: "",
+          tenNganKhoXuat: "",
+          maNganKhoXuat: "",
+          tenNhaKhoXuat: "",
+          maNhaKhoXuat: "",
+          tenDiemKhoXuat: "",
+          maDiemKhoXuat: "",
+          loaiVthh: "",
+          tenLoaiVthh: "",
+          cloaiVthh: "",
+          tenCloaiVthh: "",
+          tichLuongKhaDung: "",
+          tenDonViTinh: "",
+        });
+        this.listPhuongThucBaoQuan = []
+        this.listHinhThucBaoQuan = []
+        await this.loadChiTietQdinh(data.id);
+      }
+    });
+  }
+
   async openDialogKhoNhap() {
     await this.spinner.show();
 
@@ -481,6 +549,31 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
       })
 
     }
+  }
+
+  isDisableField() {
+    // if (this.detail && (this.detail.trangThai == this.globals.prop.NHAP_CHO_DUYET_TP || this.detail.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC || this.detail.trangThai == this.globals.prop.NHAP_DA_DUYET_LD_CHI_CUC)) {
+    //   return true;
+    // }
+    return false;
+  }
+
+  cancelEdit(index: number): void {
+    // this.dataTableChiTieu[index].edit = false;
+  }
+
+  saveEdit(index: number): void {
+    // this.dataTableChiTieu[index].edit = false;
+  }
+
+  deleteRow(data: any) {
+    // this.dataTableChiTieu = this.dataTableChiTieu.filter(x => x.id != data.id);
+    // this.sortTableId();
+    // this.updateEditCache();
+  }
+
+  editRow(index: number) {
+    // this.dataTableChiTieu[index].edit = true;
   }
 
   setExpand(parantExpand: boolean = false, children: any = []): void {

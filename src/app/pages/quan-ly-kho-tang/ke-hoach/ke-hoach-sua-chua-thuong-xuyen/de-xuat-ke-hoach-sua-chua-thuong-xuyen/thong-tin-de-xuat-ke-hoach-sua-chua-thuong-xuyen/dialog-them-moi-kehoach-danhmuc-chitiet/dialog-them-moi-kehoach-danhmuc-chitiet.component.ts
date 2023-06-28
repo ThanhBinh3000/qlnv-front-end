@@ -76,11 +76,11 @@ export class DialogThemMoiKehoachDanhmucChitietComponent extends Base2Component 
       tenKhoi: [null, Validators.required],
       maDm: [null, Validators.required],
       tenDm: [null, Validators.required],
-      maChiCuc: [null, Validators.required],
-      tenChiCuc: [null, Validators.required],
-      maDiemKho: [null, Validators.required],
-      tenDiemKho: [null, Validators.required],
-      diaDiem: [null, Validators.required],
+      maChiCuc: [null],
+      tenChiCuc: [null],
+      maDiemKho: [null],
+      tenDiemKho: [null],
+      diaDiem: [null],
       ghiChu: [null],
       giaTriDn: [null],
       giaTriDuocDuyet: [null],
@@ -185,9 +185,8 @@ export class DialogThemMoiKehoachDanhmucChitietComponent extends Base2Component 
         let result = this.listDmSuaChua.find(item => item.maCongTrinh == event)
         if (result) {
           this.formData.patchValue({
-            maDm: result.maCongTrinh,
             tenDm: result.tenCongTrinh,
-            maCNhiCuc: result.maChiCuc,
+            maChiCuc: result.maChiCuc,
             tenChiCuc: result.tenChiCuc,
             maDiemKho: result.maDiemKho,
             tenDiemKho: result.tenDiemKho,

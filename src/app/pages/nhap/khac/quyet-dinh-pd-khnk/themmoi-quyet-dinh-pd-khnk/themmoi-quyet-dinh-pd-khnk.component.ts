@@ -124,7 +124,7 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
       ngayQd: ['',],
       ngayHluc: ['',],
       idThHdr: [''],
-      idTrHdr: [''],
+      idDx: [''],
       soDxuat: [''],
       trichYeu: [''],
       tgianDthau: [''],
@@ -159,12 +159,12 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
     }
     if (this.formData.get('phanLoai').value == 'TH') {
       this.formData.controls["idThHdr"].setValidators([Validators.required]);
-      this.formData.controls["idTrHdr"].clearValidators();
+      this.formData.controls["idDx"].clearValidators();
       this.formData.controls["soTrHdr"].clearValidators();
     }
     if (this.formData.get('phanLoai').value == 'TTr') {
       this.formData.controls["idThHdr"].clearValidators();
-      this.formData.controls["idTrHdr"].setValidators([Validators.required]);
+      this.formData.controls["idDx"].setValidators([Validators.required]);
       this.formData.controls["soTrHdr"].setValidators([Validators.required]);
     }
   }
@@ -319,19 +319,20 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
 
   async save(isGuiDuyet?) {
     await this.spinner.show();
-    if (!this.isDetailPermission()) {
-      return;
-    }
+    // if (!this.isDetailPermission()) {
+    //   return;
+    // }
     // this.setValidator(isGuiDuyet)
     this.helperService.markFormGroupTouched(this.formData);
-    if (this.formData.invalid) {
-      await this.spinner.hide();
-      return;
-    }
+    // if (this.formData.invalid) {
+    //   await this.spinner.hide();
+    //   return;
+    // }
     let body = this.formData.value;
     if (this.formData.value.soQd) {
       body.soQd = this.formData.value.soQd + "/" + this.maQd;
     }
+    body.lastest = 0;
     // body.ngayHluc = this.convertDateToString(body.ngayHluc)
     // body.ngayQd = this.convertDateToString(body.ngayQd)
     // this.danhsachDx.forEach(dtl =>{
@@ -615,7 +616,7 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
           nguonVon: data.nguonVon,
           soQdCc: data.soQdCc,
           idThHdr: event,
-          idTrHdr: null,
+          idDx: null,
           soTrHdr: null,
         })
         this.danhsachDx = data.hhDxKhLcntThopDtlList;

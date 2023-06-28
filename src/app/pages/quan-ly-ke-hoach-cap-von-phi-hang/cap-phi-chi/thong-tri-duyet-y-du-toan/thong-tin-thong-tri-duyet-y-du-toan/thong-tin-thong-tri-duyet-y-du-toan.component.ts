@@ -6,30 +6,37 @@ import {
   OnInit,
   Output
 } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import * as dayjs from 'dayjs';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { DialogQuyetDinhGiaoChiTieuComponent } from 'src/app/components/dialog/dialog-quyet-dinh-giao-chi-tieu/dialog-quyet-dinh-giao-chi-tieu.component';
-import { ChiTietDiaDiemNhapKho, DiaDiemNhapKho, DialogThemDiaDiemNhapKhoComponent } from 'src/app/components/dialog/dialog-them-dia-diem-nhap-kho/dialog-them-dia-diem-nhap-kho.component';
-import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
-import { MESSAGE } from 'src/app/constants/message';
-import { FileDinhKem } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {
+  DialogQuyetDinhGiaoChiTieuComponent
+} from 'src/app/components/dialog/dialog-quyet-dinh-giao-chi-tieu/dialog-quyet-dinh-giao-chi-tieu.component';
+import {
+  ChiTietDiaDiemNhapKho,
+  DiaDiemNhapKho,
+  DialogThemDiaDiemNhapKhoComponent
+} from 'src/app/components/dialog/dialog-them-dia-diem-nhap-kho/dialog-them-dia-diem-nhap-kho.component';
+import {DialogTuChoiComponent} from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
+import {MESSAGE} from 'src/app/constants/message';
+import {FileDinhKem} from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
 import {
   DiaDiemGiaoNhan, PhanLoTaiSan
 } from 'src/app/models/KeHoachBanDauGia';
-import { UserLogin } from 'src/app/models/userlogin';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { DonviService } from 'src/app/services/donvi.service';
-import { HelperService } from 'src/app/services/helper.service';
-import { DeNghiCapPhiBoNganhService } from 'src/app/services/ke-hoach/von-phi/deNghiCapPhiBoNganh.service';
-import { ThongTriDuyetYCapPhiService } from 'src/app/services/ke-hoach/von-phi/thongTriDuyetYCapPhi.service';
-import { TongHopDeNghiCapPhiService } from 'src/app/services/ke-hoach/von-phi/tongHopDeNghiCapPhi.service';
-import { UserService } from 'src/app/services/user.service';
-import { thongTinTrangThaiNhap } from 'src/app/shared/commonFunction';
-import { Globals } from 'src/app/shared/globals';
+import {UserLogin} from 'src/app/models/userlogin';
+import {DanhMucService} from 'src/app/services/danhmuc.service';
+import {DonviService} from 'src/app/services/donvi.service';
+import {HelperService} from 'src/app/services/helper.service';
+import {DeNghiCapPhiBoNganhService} from 'src/app/services/ke-hoach/von-phi/deNghiCapPhiBoNganh.service';
+import {ThongTriDuyetYCapPhiService} from 'src/app/services/ke-hoach/von-phi/thongTriDuyetYCapPhi.service';
+import {TongHopDeNghiCapPhiService} from 'src/app/services/ke-hoach/von-phi/tongHopDeNghiCapPhi.service';
+import {UserService} from 'src/app/services/user.service';
+import {thongTinTrangThaiNhap} from 'src/app/shared/commonFunction';
+import {Globals} from 'src/app/shared/globals';
 import VNnum2words from 'vn-num2words';
+import {STATUS} from "../../../../../constants/status";
 
 @Component({
   selector: 'app-thong-tin-thong-tri-duyet-y-du-toan',
@@ -74,6 +81,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
   listDviThuHuong: any[] = [];
   rowItem: any = {};
   chiTietList: any[] = [];
+  STATUS = STATUS;
 
   constructor(
     private modal: NzModalService,
@@ -89,7 +97,6 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
     private helperService: HelperService,
     private deNghiCapPhiBoNganhService: DeNghiCapPhiBoNganhService,
     private tongHopDeNghiCapPhiService: TongHopDeNghiCapPhiService,
-
   ) {
   }
 
@@ -229,7 +236,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
 
   isDisableField() {
     // console.log(this.formData)
-    if (this.khBanDauGia && (this.khBanDauGia.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_VU || this.khBanDauGia.trangThai == this.globals.prop.NHAP_DA_DUYET_LD_VU)) {
+    if (this.khBanDauGia && (this.khBanDauGia.trangThai == STATUS.CHO_DUYET_LDV || this.khBanDauGia.trangThai == STATUS.DA_DUYET_LDV || this.khBanDauGia.trangThai == STATUS.DA_DUYET_LDTC)) {
       return true;
     }
   }
@@ -245,6 +252,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
       this.listDeNghi = res.data.content;
     }
   }
+
   async getListTongHop() {
     this.listTongHop = [];
     let body = {
@@ -357,7 +365,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
         try {
           let body = {
             id: this.idInput,
-            trangThai: this.globals.prop.NHAP_CHO_DUYET_LD_VU,
+            trangThai: STATUS.CHO_DUYET_LDV,
           };
           let res = await this.thongTriDuyetYCapPhiService.updateStatus(body);
           await this.save(true);
@@ -381,7 +389,10 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
   }
 
   pheDuyet() {
-    let trangThai = this.globals.prop.NHAP_DA_DUYET_LD_VU;
+    let trangThai = STATUS.DA_DUYET_LDV;
+    if (this.khBanDauGia.trangThai == STATUS.DA_DUYET_LDV) {
+      trangThai = STATUS.DA_DUYET_LDTC;
+    }
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -497,6 +508,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
       this.chiTietList.splice(idx, 1);
     }
   }
+
   async changeMaTongHop() {
     let selected = this.formData.get('soDnCapPhi').value;
     this.dsBoNganh = [];
@@ -510,10 +522,10 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
         if (map.includes('BTC')) {
           map.push('Bộ Tài chính');
         }
-        console.log(this.dsBoNganhFix,'this.dsBoNganhFix');
+        console.log(this.dsBoNganhFix, 'this.dsBoNganhFix');
         this.dsBoNganh = this.dsBoNganhFix.filter(s => map.includes(s.code));
 
-        console.log(map,'map');
+        console.log(map, 'map');
       }
     }
   }

@@ -254,18 +254,18 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.spinner.show();
     try {
       if (chiTieuKhNam) {
-        if (chiTieuKhNam.capDvi == "2") {
-          let res = await this.chiTieuKeHoachNamService.loadThongTinChiTieuKeHoachNam(chiTieuKhNam.qdGocId);
+        if (chiTieuKhNam.capDvi == "2" && chiTieuKhNam.loaiCanCu == 'QD-TCDT') {
+          let res = await this.chiTieuKeHoachNamService.canCuCucQd(year);
           if (res.msg == MESSAGE.SUCCESS) {
-            let data = res.data
-            if (data) {
+            let dataQd = res.data
+            if (dataQd) {
               this.dataQdTCDTGiaoCuc = {};
               this.formData.patchValue({
-                canCu: data.soQuyetDinh,
-                chiTieuId: data.id
+                loaiCanCu: "QD-TCDT",
+                soQdTtcpBtc: dataQd.soQuyetDinh
               });
               // Lấy kế hoạch tổng cục giao cho cục đang login
-              let dataLuongThuc = data.khLuongThuc.find(item => item.maDonVi == this.userInfo.MA_DVI);
+              let dataLuongThuc = dataQd.khLuongThuc.find(item => item.maDonVi == chiTieuKhNam.maDvi);
               if (dataLuongThuc) {
                 this.dataQdTCDTGiaoCuc = {
                   "ltThocMua": dataLuongThuc.ntnThoc,
@@ -285,7 +285,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
             let res = await this.quyetDinhTtcpService.getDetail(chiTieuKhNam.idCanCu);
             if (res.msg == MESSAGE.SUCCESS) {
               this.formData.patchValue({
-                soQdTtcpBtc: res.data.soQd
+                soQdTtcpBtc: res.data.soQd,
+                idCanCu: chiTieuKhNam.idCanCu,
               });
               let data = res.data
               let dataTTCP = data.listBoNganh ? res.data.listBoNganh.find(item => item.maBoNganh == '01') : null;
@@ -306,7 +307,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
             if (res.msg == MESSAGE.SUCCESS) {
               let data = res.data;
               this.formData.patchValue({
-                soQdTtcpBtc: res.data.soQd
+                soQdTtcpBtc: res.data.soQd,
+                idCanCu: chiTieuKhNam.idCanCu,
               });
               this.dataQdTtcpOrBtc = {
                 "data": "BTC",
@@ -325,7 +327,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
           soQdTtcpBtc: null
         });
         if (this.userService.isCuc()) {
-          let res = await this.chiTieuKeHoachNamService.canCuCucQd(year);
+          let res = await this.chiTieuKeHoachNamService.canCuCucPa(year);
           if (res.msg == MESSAGE.SUCCESS) {
             let data = res.data
             if (data) {
@@ -334,18 +336,31 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
                 canCu: data.soQuyetDinh,
                 chiTieuId: data.id
               });
-              // Lấy kế hoạch tổng cục giao cho cục đang login
-              let dataLuongThuc = data.khLuongThuc.find(item => item.maDonVi == this.userInfo.MA_DVI);
-              if (dataLuongThuc) {
-                this.dataQdTCDTGiaoCuc = {
-                  "ltThocMua": dataLuongThuc.ntnThoc,
-                  "ltGaoMua": dataLuongThuc.ntnGao,
-                  "ltThocXuat": dataLuongThuc.xtnTongThoc,
-                  "ltGaoXuat": dataLuongThuc.xtnTongGao,
+              //load thông tin của phương án cục duyệt
+              this.loadDataPhuongAn(data);
+              //load căn cứ qd tổng cục giao cho cục để validate
+              let res1 = await this.chiTieuKeHoachNamService.canCuCucQd(year);
+              if (res1.msg == MESSAGE.SUCCESS) {
+                let dataQd = res1.data
+                // Lấy kế hoạch tổng cục giao cho cục đang login
+                let dataLuongThuc = dataQd.khLuongThuc.find(item => item.maDonVi == this.userInfo.MA_DVI);
+                if (dataLuongThuc) {
+                  this.dataQdTCDTGiaoCuc = {
+                    "ltThocMua": dataLuongThuc.ntnThoc,
+                    "ltGaoMua": dataLuongThuc.ntnGao,
+                    "ltThocXuat": dataLuongThuc.xtnTongThoc,
+                    "ltGaoXuat": dataLuongThuc.xtnTongGao,
+                  }
                 }
+                this.formData.patchValue({
+                  loaiCanCu: "QD-TCDT",
+                  soQdTtcpBtc: dataQd.soQuyetDinh
+                });
+              } else {
+                this.notification.warning(MESSAGE.WARNING, "Quyết định giao chỉ tiêu của tổng cục năm " + year + " chưa được tạo hoặc chưa được duyệt,vui lòng kiểm tra lại.");
               }
             } else {
-              this.notification.warning(MESSAGE.WARNING, "Quyết định giao chỉ tiêu của tổng cục năm " + year + " chưa được tạo hoặc chưa ban hành,vui lòng kiểm tra lại.");
+              this.notification.warning(MESSAGE.WARNING, "Phương án giao chỉ tiêu kế hoạch năm " + year + " chưa được tạo hoặc chưa được duyệt,vui lòng kiểm tra lại.");
             }
           } else {
             this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR)
@@ -413,7 +428,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
                     this.formData.patchValue({
                       soQdTtcpBtc: data.soQd,
                       idCanCu: data.id,
-                      loaiCanCu: "TTCP",
+                      loaiCanCu: "BTC",
                     });
                     //Lấy data của BTC giao cho TCDT
                     this.dataQdTtcpOrBtc = {
@@ -442,7 +457,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
                         this.formData.patchValue({
                           soQdTtcpBtc: data.soQd,
                           idCanCu: data.id,
-                          loaiCanCu: "BTC",
+                          loaiCanCu: "TTCP",
                         });
                       }
                     }
@@ -1019,7 +1034,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       .loadThongTinChiTieuKeHoachNam(id)
       .then((res) => {
         if (res.msg == MESSAGE.SUCCESS) {
-          console.log(res.data, 'res.datares.datares.datares.data')
           this.thongTinChiTieuKeHoachNam = res.data;
           this.thongTinChiTieuKeHoachNam.fileDinhKemReqs =
             res.data.fileDinhKems;
@@ -1863,94 +1877,48 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.thongTinChiTieuKeHoachNamInput.khMuoi = cloneDeep(
       this.thongTinChiTieuKeHoachNam.khMuoiDuTru,
     );
-    // this.thongTinChiTieuKeHoachNamInput.khMuoi.forEach((muoi) => {
-    //   // delete muoi.maDonVi;
-    //   delete muoi.tkdnTongSoMuoi;
-    //   delete muoi.tkdnMuoi;
-    //   delete muoi.tkcnTongSoMuoi;
-    //   // muoi.xuatTrongNam = cloneDeep(muoi.xtnMuoi);
-    //   delete muoi.xtnMuoi;
-    //   muoi.donViTinh = 'Kg';
-    //   // muoi.nhapTrongNam = cloneDeep(muoi.ntnTongSoMuoi);
-    //   delete muoi.ntnTongSoMuoi;
-    //   delete muoi.xtnTongSoMuoi;
-    //   delete muoi.sdcXtnMuoi;
-    //   delete muoi.tdcXtnMuoi;
-    //   delete muoi.xuatTrongNam;
-    //   delete muoi.id;
-    // });
     delete this.thongTinChiTieuKeHoachNamInput.khMuoiDuTru;
     //convert to flat object
     this.thongTinChiTieuKeHoachNamInput.khVatTuNhap = this.dataVatTuNhap;
     this.thongTinChiTieuKeHoachNamInput.khVatTuXuat = this.dataVatTuXuat;
-    // this.thongTinChiTieuKeHoachNamInput.khVatTuNhap = this.dataVatTuNhap.flatMap(s => s.dsVatTu.map(s1 => {
-    //   delete s.dsVatTu;
-    //   return Object.assign(s1, s)
-    // }));
-    // this.thongTinChiTieuKeHoachNamInput.khVatTuXuat = this.dataVatTuXuat.flatMap(s => s.dsVatTu.map(s1 => {
-    //   delete s.dsVatTu;
-    //   return Object.assign(s1, s)
-    // }));
-    // const khVatTu = this.thongTinChiTieuKeHoachNamInput.khVatTu;
-    // for (let i = 0; i < khVatTu.length; i++) {
-    //   for (let j = i + 1; j <= khVatTu.length - 1; j++) {
-    //     if (khVatTu[i].donViId === khVatTu[j].donViId) {
-    //       khVatTu[i].vatTuThietBi.push(khVatTu[j].vatTuThietBi[0]);
-    //       khVatTu.splice(j, 1);
-    //     }
-    //   }
-    // }
-    // this.thongTinChiTieuKeHoachNamInput.khVatTu = khVatTu;
-    // this.thongTinChiTieuKeHoachNamInput.khVatTu.forEach((vatTu) => {
-    //   delete vatTu.listDisplay;
-    //   vatTu.vatTuThietBi.forEach((thietbi, index) => {
-    //     delete thietbi.cacNamTruoc;
-    //     delete thietbi.tenVatTu;
-    //     delete thietbi.tenVatTuCha;
-    //     delete thietbi.tongCacNamTruoc;
-    //     delete thietbi.tongNhap;
-    //   });
-    // });
-    // console.log(this.thongTinChiTieuKeHoachNamInput,'this.thongTinChiTieuKeHoachNamInputthis.thongTinChiTieuKeHoachNamInput');
-    // return;
     if (this.thongTinChiTieuKeHoachNam.id > 0) {
       this.chiTieuKeHoachNamService
         .chinhSuaChiTieuKeHoach(this.thongTinChiTieuKeHoachNamInput)
         .then((res) => {
           if (res.msg == MESSAGE.SUCCESS) {
             if (isGuiDuyet) {
-              let trangThai;
-              if (this.userService.isTongCuc()) {
-                switch (this.thongTinChiTieuKeHoachNam.trangThai) {
-                  case STATUS.DU_THAO: {
-                    trangThai = STATUS.CHO_DUYET_LDV
-                    break;
-                  }
-                  case STATUS.TU_CHOI_LDV: {
-                    trangThai = STATUS.CHO_DUYET_LDV
-                    break;
-                  }
-                }
-              }
-              if (this.userService.isCuc()) {
-                switch (this.thongTinChiTieuKeHoachNam.trangThai) {
-                  case STATUS.DU_THAO: {
-                    trangThai = STATUS.CHO_DUYET_TP
-                    break;
-                  }
-                  case STATUS.TU_CHOI_TP: {
-                    trangThai = STATUS.CHO_DUYET_TP
-                    break;
-                  }
-                  case STATUS.TU_CHOI_LDC: {
-                    trangThai = STATUS.CHO_DUYET_TP
-                    break;
-                  }
-                }
-              }
+              // let trangThai = STATUS.BAN_HANH;
+              // if (this.userService.isTongCuc()) {
+              //   switch (this.thongTinChiTieuKeHoachNam.trangThai) {
+              //     case STATUS.DANG_NHAP_DU_LIEU: {
+              //       trangThai = STATUS.CHO_DUYET_LDV
+              //       break;
+              //     }
+              //     case STATUS.TU_CHOI_LDV: {
+              //       trangThai = STATUS.CHO_DUYET_LDV
+              //       break;
+              //     }
+              //   }
+              // }
+              // if (this.userService.isCuc()) {
+              //   switch (this.thongTinChiTieuKeHoachNam.trangThai) {
+              //     case STATUS.DU_THAO: {
+              //       trangThai = STATUS.CHO_DUYET_TP
+              //       break;
+              //     }
+              //     case STATUS.TU_CHOI_TP: {
+              //       trangThai = STATUS.CHO_DUYET_TP
+              //       break;
+              //     }
+              //     case STATUS.TU_CHOI_LDC: {
+              //       trangThai = STATUS.CHO_DUYET_TP
+              //       break;
+              //     }
+              //   }
+              // }
               let body = {
                 id: res.data.id,
-                trangThai: trangThai
+                trangThai: STATUS.BAN_HANH
               };
               this.chiTieuKeHoachNamService.updateStatus(body)
                 .then((resp) => {
@@ -2067,8 +2035,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   }
 
   convertTrangThai(status: string) {
-    if (status == this.globals.prop.DU_THAO) {
-      return 'Dự thảo';
+    if (status == STATUS.DANG_NHAP_DU_LIEU) {
+      return 'Đang nhập dữ liệu';
     } else if (status == this.globals.prop.LANH_DAO_DUYET) {
       return 'Chờ duyệt';
     } else if (status == this.globals.prop.BAN_HANH) {
@@ -3046,10 +3014,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
 
   thongTinTrangThai(trangThai: string): string {
     if (
-      trangThai === this.globals.prop.DU_THAO ||
-      trangThai === this.globals.prop.LANH_DAO_DUYET ||
-      trangThai === this.globals.prop.TU_CHOI ||
-      trangThai === this.globals.prop.DU_THAO_TRINH_DUYET
+      trangThai === STATUS.DANG_NHAP_DU_LIEU
     ) {
       return 'du-thao-va-lanh-dao-duyet';
     } else if (trangThai === this.globals.prop.BAN_HANH) {
@@ -3579,4 +3544,5 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     }
     return sl;
   }
+
 }

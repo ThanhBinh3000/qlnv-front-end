@@ -13,6 +13,7 @@ import { MESSAGE } from "../../../../constants/message";
 import {
   TongHopDxKhNhapKhacService
 } from "../../../../services/qlnv-hang/nhap-hang/nhap-khac/tongHopDxKhNhapKhac.service";
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: "app-tong-hop-khnk",
@@ -169,8 +170,77 @@ export class TongHopKhnkComponent implements OnInit {
     }
     this.spinner.hide();
   };
-  deleteSelect(){};
-  exportData(){};
+
+  deleteSelect(){
+    let dataDelete = [];
+    if (this.dataTable && this.dataTable.length > 0) {
+      this.dataTable.forEach((item) => {
+        if (item.checked) {
+          dataDelete.push(item.id);
+        }
+      });
+    }
+    if (dataDelete && dataDelete.length > 0) {
+      this.modal.confirm({
+        nzClosable: false,
+        nzTitle: 'Xác nhận',
+        nzContent: 'Bạn có chắc chắn muốn xóa các bản ghi đã chọn?',
+        nzOkText: 'Đồng ý',
+        nzCancelText: 'Không',
+        nzOkDanger: true,
+        nzWidth: 310,
+        nzOnOk: async () => {
+          this.spinner.show();
+          try {
+            let res = await this.tongHopDxKhNhapKhacService.deleteMuti({ idList: dataDelete });
+            if (res.msg == MESSAGE.SUCCESS) {
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+              await this.search();
+            } else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+            }
+            this.spinner.hide();
+          } catch (e) {
+            console.log('error: ', e);
+            this.spinner.hide();
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          }
+        },
+      });
+    }
+    else {
+      this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
+    }
+  };
+
+  exportData(){
+    if (this.totalRecord > 0) {
+      this.spinner.show();
+      try {
+        let body = {
+          tuNgayKy: this.tuNgayKy != null ? dayjs(this.tuNgayKy).format("YYYY-MM-DD") + " 00:00:00" : null,
+          denNgayKy: this.denNgayKy != null ? dayjs(this.denNgayKy).format("YYYY-MM-DD") + " 23:59:59" : null,
+          tuNgayTh: this.tuNgayTh != null ? dayjs(this.tuNgayTh).format("YYYY-MM-DD") + " 00:00:00" : null,
+          denNgayTh: this.denNgayTh != null ? dayjs(this.denNgayTh).format("YYYY-MM-DD") + " 23:59:59" : null,
+          namKhoach: this.searchFilter.namKhoach,
+          maTh: this.searchFilter.maTh,
+          trangThai: this.searchFilter.trangThai,
+        };
+        this.tongHopDxKhNhapKhacService
+          .export(body)
+          .subscribe((blob) =>
+            saveAs(blob, 'danh-sach-de-xuat-ke-hoach-lcnt.xlsx'),
+          );
+        this.spinner.hide();
+      } catch (e) {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
+    }
+  };
   tongHop() {
     this.isDetail = true;
     this.selectedId = null;

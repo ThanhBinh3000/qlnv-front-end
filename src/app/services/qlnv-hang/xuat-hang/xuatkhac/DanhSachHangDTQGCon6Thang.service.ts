@@ -9,6 +9,6 @@ export class DanhSachHangDTQGCon6ThangService extends BaseService {
   GATEWAY = '/qlnv-hang';
 
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'xuat-hang/xuat-khac/danh-sach', '');
+    super(httpClient, 'xuat-hang/xuat-khac/ktcl-lt-truoc-het-han/danh-sach', '');
   }
 }

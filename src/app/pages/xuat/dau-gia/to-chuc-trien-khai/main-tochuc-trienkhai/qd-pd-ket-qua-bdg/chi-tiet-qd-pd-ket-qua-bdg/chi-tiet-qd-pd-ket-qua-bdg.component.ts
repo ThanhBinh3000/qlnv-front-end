@@ -77,6 +77,7 @@ export class ChiTietQdPdKetQuaBdgComponent extends Base2Component implements OnI
       soTbKhongThanh: [''],
       tongSlXuat: [],
       thanhTien: [],
+      soDvtsDgTc: [],
       tongDvts: [],
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự Thảo'],
@@ -139,7 +140,7 @@ export class ChiTietQdPdKetQuaBdgComponent extends Base2Component implements OnI
           s.children = s.children.filter(f => f.toChucCaNhan);
         });
         this.dataTable = toChuc.filter(s => s.children.length != 0)
-        await this.calculatorTable();
+        this.calculatorTable(this.dataTable);
       }
     }
   }
@@ -275,6 +276,7 @@ export class ChiTietQdPdKetQuaBdgComponent extends Base2Component implements OnI
             const dataTb = resTb.data
             let resQdKhDtl = await this.quyetDinhPdKhBdgService.getDtlDetail(dataTb.idQdPdDtl);
             const dataQdKhDtl = resQdKhDtl.data;
+            console.log(dataQdKhDtl, 999)
             this.formData.patchValue({
               idThongTin: dataTb.id,
               soQdPd: dataQdKhDtl.xhQdPdKhBdg.soQdPd,
@@ -293,41 +295,44 @@ export class ChiTietQdPdKetQuaBdgComponent extends Base2Component implements OnI
               tgianGnhanGhiChu: dataQdKhDtl.tgianGnhanGhiChu,
               hinhThucDauGia: dataTb.hthucDgia,
               pthucDauGia: dataTb.pthucDgia,
+              tongDvts: dataQdKhDtl.slDviTsan,
             })
             let toChuc = cloneDeep(dataTb.children);
             toChuc.forEach(s => {
               s.children = s.children.filter(f => f.toChucCaNhan);
             });
             this.dataTable = toChuc.filter(s => s.children.length != 0)
-            await this.calculatorTable();
+            this.calculatorTable(this.dataTable);
           }
         })
     }
   }
 
-  async calculatorTable() {
+  calculatorTable(data) {
     let tongSlXuat: number = 0;
     let thanhTien: number = 0;
-    let tongDvts: number = 0;
-    this.dataTable.forEach((item) => {
+    let soDvtsDgTc: number = 0;
+    data.forEach((item) => {
+      item.slBanDauGiaChiCuc = 0;
+      item.giaKhoiDiemChiCuc = 0;
+      item.soTienDatTruocCc = 0;
       item.children.forEach((child) => {
-        item.slBanDauGiaChiCuc = 0;
-        item.giaKhoiDiemChiCuc = 0;
-        item.soTienDatTruocCc = 0;
         item.slBanDauGiaChiCuc += child.soLuongDeXuat;
         item.giaKhoiDiemChiCuc += child.donGiaDeXuat;
-        item.soTienDatTruocCc += child.soTienDatTruoc
-        tongDvts += item.children.length;
-        tongSlXuat += item.slBanDauGiaChiCuc
+        item.soTienDatTruocCc += child.soTienDatTruoc;
         thanhTien += child.soLuongDeXuat * child.donGiaTraGia
       })
-    });
+      soDvtsDgTc += item.children.length;
+      tongSlXuat += item.slBanDauGiaChiCuc;
+    })
     this.formData.patchValue({
       tongSlXuat: tongSlXuat,
       thanhTien: thanhTien,
-      tongDvts: tongDvts,
+      soDvtsDgTc: soDvtsDgTc,
     });
   }
+
+
 
   async loadMaThongBao() {
     let body = {

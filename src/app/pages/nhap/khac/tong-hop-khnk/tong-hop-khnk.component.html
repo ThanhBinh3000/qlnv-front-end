@@ -184,7 +184,7 @@
           <td>{{ data.maTh }}</td>
           <td>{{ data.ngayTh | date: 'dd/MM/YYYY' }}</td>
           <td>{{ data.soQd}}</td>
-          <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
+          <td>{{ data.ngayKyQd | date: 'dd/MM/YYYY' }}</td>
           <td>{{ data.tenLoaiVthh }}</td>
           <td>{{ data.tongSlNhap}}</td>
           <td>{{ data.dvt}}</td>
@@ -194,12 +194,6 @@
             <a
               (click)="detail(data, true)">
               <i class="fa fa-eye"></i>
-            </a>
-            <a (click)="detail(data, false)">
-              <i class="fa fa-pencil"></i>
-            </a>
-            <a (click)="detail(data, true)">
-              <i class="icon htvbdh_tcdt_pheduyet"></i>
             </a>
             <a (click)="xoaItem(data)">
               <i class="fa fa-trash-o do"></i>

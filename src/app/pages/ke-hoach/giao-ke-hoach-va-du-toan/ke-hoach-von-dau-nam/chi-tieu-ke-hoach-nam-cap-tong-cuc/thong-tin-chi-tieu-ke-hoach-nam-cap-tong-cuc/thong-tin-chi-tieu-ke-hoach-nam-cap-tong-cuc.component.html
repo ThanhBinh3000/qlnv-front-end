@@ -9,46 +9,46 @@
           <i class="fa fa-arrow-left"></i>
           <span>Quay lại</span>
         </button>
-        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="guiDuyet()"
-                *ngIf="(thongTinChiTieuKeHoachNam.trangThai == STATUS.DU_THAO || thongTinChiTieuKeHoachNam.trangThai ==  STATUS.TU_CHOI_TP || thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_LDC || thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_LDV) && !isViewDetail">
-          <i class="icon htvbdh_tcdt_guiduyet"></i>
-          <span>Lưu và gửi duyệt</span>
-        </button>
+        <!--        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="guiDuyet()"-->
+        <!--                *ngIf="(thongTinChiTieuKeHoachNam.trangThai == STATUS.DANG_NHAP_DU_LIEU || thongTinChiTieuKeHoachNam.trangThai ==  STATUS.TU_CHOI_TP || thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_LDC || thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_LDV) && !isViewDetail">-->
+        <!--          <i class="icon htvbdh_tcdt_guiduyet"></i>-->
+        <!--          <span>Lưu và gửi duyệt</span>-->
+        <!--        </button>-->
         <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="banHanh()"
-                *ngIf="thongTinChiTieuKeHoachNam.trangThai == STATUS.DA_DUYET_LDC ||thongTinChiTieuKeHoachNam.trangThai == STATUS.DA_DUYET_LDV  ">
+                *ngIf="thongTinChiTieuKeHoachNam.trangThai == STATUS.DANG_NHAP_DU_LIEU">
           <i class="icon htvbdh_chuyenvanthu"></i>
           <span>Ban hành</span>
         </button>
-        <button class="btn btn-outline-grey btn-sm waves-effect waves-light"
-                *ngIf="(thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_TP || thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_LDC) && ( userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_CUCGIAO_DUYET_TP')  || userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_CUCGIAO_DUYET_LDC'))"
-                (click)="pheDuyet()">
-          <i class="icon htvbdh_tcdt_pheduyet"></i>
-          <span>Duyệt</span>
-        </button>
+        <!--        <button class="btn btn-outline-grey btn-sm waves-effect waves-light"-->
+        <!--                *ngIf="(thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_TP || thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_LDC) && ( userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_CUCGIAO_DUYET_TP')  || userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_CUCGIAO_DUYET_LDC'))"-->
+        <!--                (click)="pheDuyet()">-->
+        <!--          <i class="icon htvbdh_tcdt_pheduyet"></i>-->
+        <!--          <span>Duyệt</span>-->
+        <!--        </button>-->
         <!--        <button class="btn btn-outline-grey btn-sm waves-effect waves-light"-->
         <!--                *ngIf="() && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_TCGIAO_DUYET_TP')"-->
         <!--                (click)="pheDuyet()">-->
         <!--          <i class="icon htvbdh_tcdt_pheduyet"></i>-->
         <!--          <span>Duyệt</span>-->
         <!--        </button>-->
-        <button class="btn btn-outline-grey btn-sm waves-effect waves-light"
-                *ngIf="(thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_LDV) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_TCGIAO_DUYET_LDVU')"
-                (click)="pheDuyet()">
-          <i class="icon htvbdh_tcdt_pheduyet"></i>
-          <span>Duyệt</span>
-        </button>
-        <a class="btn btn-outline-danger btn-sm waves-effect waves-light" (click)="tuChoi()"
-           *ngIf="(!userService.isTongCuc() &&  thongTinChiTieuKeHoachNam.trangThai ==  STATUS.CHO_DUYET_TP || thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_LDC) && (userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_CUCGIAO_DUYET_TP') || userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_CUCGIAO_DUYET_LDC'))">
-          <i class="icon htvbdh_tcdt_tuchoi"></i>
-          <span>Từ chối</span>
-        </a>
-        <a class="btn btn-outline-danger btn-sm waves-effect waves-light" (click)="tuChoi()"
-           *ngIf="(userService.isTongCuc() && thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_LDV ) && ( userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_TCGIAO_DUYET_LDVU') )">
-          <i class="icon htvbdh_tcdt_tuchoi"></i>
-          <span>Từ chối</span>
-        </a>
+        <!--        <button class="btn btn-outline-grey btn-sm waves-effect waves-light"-->
+        <!--                *ngIf="(thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_LDV) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_TCGIAO_DUYET_LDVU')"-->
+        <!--                (click)="pheDuyet()">-->
+        <!--          <i class="icon htvbdh_tcdt_pheduyet"></i>-->
+        <!--          <span>Duyệt</span>-->
+        <!--        </button>-->
+        <!--        <a class="btn btn-outline-danger btn-sm waves-effect waves-light" (click)="tuChoi()"-->
+        <!--           *ngIf="(!userService.isTongCuc() &&  thongTinChiTieuKeHoachNam.trangThai ==  STATUS.CHO_DUYET_TP || thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_LDC) && (userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_CUCGIAO_DUYET_TP') || userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_CUCGIAO_DUYET_LDC'))">-->
+        <!--          <i class="icon htvbdh_tcdt_tuchoi"></i>-->
+        <!--          <span>Từ chối</span>-->
+        <!--        </a>-->
+        <!--        <a class="btn btn-outline-danger btn-sm waves-effect waves-light" (click)="tuChoi()"-->
+        <!--           *ngIf="(userService.isTongCuc() && thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_LDV ) && ( userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_TCGIAO_DUYET_LDVU') )">-->
+        <!--          <i class="icon htvbdh_tcdt_tuchoi"></i>-->
+        <!--          <span>Từ chối</span>-->
+        <!--        </a>-->
         <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save(false)"
-                *ngIf="!this.isViewDetail && (thongTinChiTieuKeHoachNam.trangThai == STATUS.DU_THAO || thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_LDV || thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_LDC || thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_TP)">
+                *ngIf="!this.isViewDetail && thongTinChiTieuKeHoachNam.trangThai == STATUS.DANG_NHAP_DU_LIEU">
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
@@ -63,7 +63,7 @@
         <div class="title-chi-tieu">
           <span
             [ngClass]="thongTinChiTieuKeHoachNam.trangThai == STATUS.BAN_HANH ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'  ">
-            {{thongTinChiTieuKeHoachNam.trangThai == STATUS.DU_THAO ? 'Dự thảo' : thongTinChiTieuKeHoachNam.tenTrangThai }}
+            {{thongTinChiTieuKeHoachNam.trangThai == STATUS.DANG_NHAP_DU_LIEU ? 'Đang nhập dữ liệu' : thongTinChiTieuKeHoachNam.tenTrangThai }}
           </span>
           <span>Thông tin chỉ tiêu kế hoạch năm {{thongTinChiTieuKeHoachNam.capDvi == "1" ? 'Tổng cục' : 'Cục'}}
             giao</span>
@@ -134,7 +134,7 @@
         <div nz-col nzSpan="4">
           <nz-form-item>
             <nz-form-label nz-col nzRequired [nzNoColon]="true" class="text-left">
-              Số QĐ của TTCP/BTC
+              {{this.thongTinChiTieuKeHoachNam.capDvi == '1' ? 'Số QĐ của TTCP/BTC' : 'Số QĐ giao chỉ tiêu KH năm của TCDT' }}
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
@@ -632,8 +632,7 @@
                 number: '1.0-3': 'vi_VN'}}
               </th>
               <!-- <td class="background-last-row"></td> -->
-              <th class="background-last-row" *ngIf="thongTinChiTieuKeHoachNam.trangThai===globals.prop.DU_THAO || id===0 ||
-                thongTinChiTieuKeHoachNam.trangThai===globals.prop.TU_CHOI" nzRight></th>
+              <th class="background-last-row" *ngIf="thongTinChiTieuKeHoachNam.trangThai=== STATUS.DANG_NHAP_DU_LIEU || id===0" nzRight></th>
             </tr>
             <tr *ngIf="thongTinChiTieuKeHoachNam.capDvi == '1' && dataQdTtcpOrBtc && dataQdTtcpOrBtc.data">
               <th></th>

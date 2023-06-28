@@ -26,11 +26,12 @@ import { BaoCaoKetQuaKiemDinhMauComponent } from './kiemtra-chatluong-lt-truockh
 import {ThanhLyDanhSachHangComponent} from "../xuat-thanh-ly/thanh-ly-danh-sach-hang/thanh-ly-danh-sach-hang.component";
 import { ChiTietTongHopDsHangDtqgComponent } from './kiemtra-chatluong-lt-truockhi-hethan-luukho/tong-hop-ds-hang-dtqg-hethan-luukho-chua-co-kh-xuat/chi-tiet-tong-hop-ds-hang-dtqg/chi-tiet-tong-hop-ds-hang-dtqg.component';
 import {KeHoachBanDauGiaModule} from "../dau-gia/ke-hoach-ban-dau-gia/ke-hoach-ban-dau-gia.module";
-
+import { VtTbCoThoihanLuukhoLonHonMuoihaiThangComponent } from './kiemtra-chatluong-vt-tb-truockhi-hethan-luukho/vt-tb-co-thoihan-luukho-lon-hon-muoihai-thang/vt-tb-co-thoihan-luukho-lon-hon-muoihai-thang.component';
+import { VtTbCoThoihanLuukhoConSauThangComponent } from './kiemtra-chatluong-vt-tb-truockhi-hethan-luukho/vt-tb-co-thoihan-luukho-con-sau-thang/vt-tb-co-thoihan-luukho-con-sau-thang.component';
 
 
 @NgModule({
-  declarations: [XuatKhacComponent, KiemtraChatluongVtTbTrongThbhComponent, KiemtraChatluongVtTbTruockhiHethanLuukhoComponent, KiemtraChatluongLtTruockhiHethanLuukhoComponent, XuatHangDtqgThBkkComponent, XuatHangKhoiDanhMucComponent, ToanBoDsHangDtqgHethanLuukhoChuaCoKhXuatComponent, TongHopDsHangDtqgHethanLuukhoChuaCoKhXuatComponent, BienBanLayMauBanGiaoMauComponent, PhieuKiemNghiemChatLuongComponent, BaoCaoKetQuaKiemDinhMauComponent, ChiTietTongHopDsHangDtqgComponent],
+  declarations: [XuatKhacComponent, KiemtraChatluongVtTbTrongThbhComponent, KiemtraChatluongVtTbTruockhiHethanLuukhoComponent, KiemtraChatluongLtTruockhiHethanLuukhoComponent, XuatHangDtqgThBkkComponent, XuatHangKhoiDanhMucComponent, ToanBoDsHangDtqgHethanLuukhoChuaCoKhXuatComponent, TongHopDsHangDtqgHethanLuukhoChuaCoKhXuatComponent, BienBanLayMauBanGiaoMauComponent, PhieuKiemNghiemChatLuongComponent, BaoCaoKetQuaKiemDinhMauComponent, ChiTietTongHopDsHangDtqgComponent, VtTbCoThoihanLuukhoLonHonMuoihaiThangComponent, VtTbCoThoihanLuukhoConSauThangComponent],
   imports: [
     CommonModule,
     XuatKhacRoutingModule,

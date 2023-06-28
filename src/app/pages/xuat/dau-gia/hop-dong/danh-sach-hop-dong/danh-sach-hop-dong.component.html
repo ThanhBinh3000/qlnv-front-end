@@ -85,7 +85,6 @@
             <th width="175px">Loại hàng hóa</th>
             <th width="175px">Chủng loại hàng hóa</th>
             <th width="175px">ĐV thực hiện</th>
-            <th width="175px" class="wrap">TCCN thắng đấu giá</th>
             <th width="175px" class="wrap">Tổng SL xuất bán {{loaiVthh=='02' ? null: '(kg)'}}</th>
             <th width="90px">Thành tiền (đ)</th>
             <th width="90px">Trạng thái HĐ</th>
@@ -161,12 +160,6 @@
             </th>
             <th>
               <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenDviMua"
-                  (input)="filterInTable('tenDviMua',filterTable.tenDviMua)" size="small" />
-              </nz-input-group>
-            </th>
-            <th>
-              <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soLuong"
                   (input)="filterInTable('soLuong',filterTable.soLuong)" size="small" />
               </nz-input-group>
@@ -210,13 +203,12 @@
             </td>
 
             <td>{{ data.tongDvts }}</td>
-            <td></td>
+            <td>{{ data.soDvtsDgTc }}</td>
             <td></td>
             <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
             <td>{{ data.tenLoaiVthh }}</td>
             <td>{{ data.tenCloaiVthh }}</td>
             <td>{{ data.tenDvi }}</td>
-            <td></td>
             <td>{{ data.tongSlXuat| number : '1.0-1' : 'vi_VN' }}</td>
             <td>{{ data.thanhTien| number : '1.0-1' : 'vi_VN' }}</td>
             <td>{{ data.tenTrangThaiHd }}</td>

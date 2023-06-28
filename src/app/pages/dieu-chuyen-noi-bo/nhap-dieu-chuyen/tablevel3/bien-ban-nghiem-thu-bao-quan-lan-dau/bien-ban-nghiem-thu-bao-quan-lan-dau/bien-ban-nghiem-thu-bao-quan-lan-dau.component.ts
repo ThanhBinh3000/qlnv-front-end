@@ -151,7 +151,7 @@ export class BienBanNghiemThuBaoQuanLanDauComponent extends Base2Component imple
       nzMaskClosable: false,
       nzClosable: true,
       nzBodyStyle: { overflowY: 'auto' },//maxHeight: 'calc(100vh - 200px)'
-      nzWidth: '90%',
+      nzWidth: '95%',
       nzFooter: null,
       nzComponentParams: {
         isViewOnModal: true,

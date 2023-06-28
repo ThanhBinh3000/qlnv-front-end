@@ -1,1 +1,20 @@
-<p>kiemtra-chatluong-vt-tb-truockhi-hethan-luukho works!</p>
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="level1">
+  <ul nz-menu nzMode="horizontal">
+    <li nz-menu-item [nzSelected]="tabSelected==0" (click)="selectTab(0)">
+      Vật tư, thiết bị có thời hạn lưu khó lớn hơn 12 tháng
+    </li>
+    <li [nzSelected]="tabSelected==1" nz-menu-item (click)="selectTab(1)">
+      Vật tư, thiết bị có thời giạn lưu kho còn 6 tháng
+    </li>
+  </ul>
+</nz-affix>
+<div class="contentBor chi-tieu__body giao-ke-hoach">
+  <div class="contentDetail">
+    <ng-container *ngIf="tabSelected == 0">
+      <app-toan-bo-ds-hang-dtqg-hethan-luukho-chua-co-kh-xuat></app-toan-bo-ds-hang-dtqg-hethan-luukho-chua-co-kh-xuat>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 1">
+      <app-tong-hop-ds-hang-dtqg-hethan-luukho-chua-co-kh-xuat></app-tong-hop-ds-hang-dtqg-hethan-luukho-chua-co-kh-xuat>
+    </ng-container>
+  </div>
+</div>

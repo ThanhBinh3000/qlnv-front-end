@@ -194,15 +194,15 @@ export class ThemSuaKeHoachVatTuComponent implements OnInit {
         }
         this.dataVatTuConShow = uniqueList;
       }
-      if (type && type == 'them' && !this.isRoot && this.tab == 'XUAT' && this.itemInput.maVatTuCha) {
-        if (this.itemInput && this.itemInput.dataChild && this.itemInput.dataChild.length > 0) {
-          uniqueList = this.itemInput.dataChild.filter(item1 => !dsCloaiHangHoa.some(item2 => item1.maVatTu === item2.maHang));
-          uniqueList.push(...dsCloaiHangHoa.filter(item2 => !this.itemInput.dataChild.some(item1 => item1.maVatTu === item2.maHang)));
-        } else {
-          uniqueList = dsCloaiHangHoa;
-        }
-        this.dataVatTuConShow = uniqueList;
-      }
+      // if (type && type == 'them' && !this.isRoot && this.tab == 'XUAT' && this.itemInput.maVatTuCha) {
+      //   if (this.itemInput && this.itemInput.dataChild && this.itemInput.dataChild.length > 0) {
+      //     uniqueList = this.itemInput.dataChild.filter(item1 => !dsCloaiHangHoa.some(item2 => item1.maVatTu === item2.maHang));
+      //     uniqueList.push(...dsCloaiHangHoa.filter(item2 => !this.itemInput.dataChild.some(item1 => item1.maVatTu === item2.maHang)));
+      //   } else {
+      //     uniqueList = dsCloaiHangHoa;
+      //   }
+      //   this.dataVatTuConShow = uniqueList;
+      // }
     } else {
       this.formItem.patchValue({
         maVatTu: null,
