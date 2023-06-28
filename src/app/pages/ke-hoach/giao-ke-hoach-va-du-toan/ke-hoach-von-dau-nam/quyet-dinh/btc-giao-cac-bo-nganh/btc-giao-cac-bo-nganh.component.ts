@@ -12,6 +12,7 @@ import {saveAs} from 'file-saver';
 import {NzModalService} from 'ng-zorro-antd/modal';
 import {KeHoachMuaXuat} from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
 import {STATUS} from "../../../../../../constants/status";
+import printJS from "print-js";
 
 @Component({
   selector: 'app-btc-giao-cac-bo-nganh',
@@ -378,7 +379,52 @@ export class BtcGiaoCacBoNganhComponent implements OnInit {
       return sum;
     }
   }
-
+  print() {
+    let dataPrint = this.dataTable.map((item, index) => {
+      return {
+        ...item,
+        'stt': index + 1
+      };
+    });
+    printJS({
+      printable: dataPrint,
+      gridHeaderStyle: 'border: 2px solid #3971A5; ',
+      gridStyle: 'border: 2px solid #3971A5;text-align:center;with:fit-content',
+      properties: [
+        {
+          field: 'stt',
+          displayName: 'STT',
+          columnSize: '40px'
+        },
+        {
+          field: 'soQd',
+          displayName: 'Số quyết định',
+          columnSize: '100px'
+        },
+        {
+          field: 'ngayQd',
+          displayName: 'Ngày ký quyết định',
+          columnSize: '100px'
+        },
+        {
+          field: 'tenBoNganh',
+          displayName: 'Tên bộ ngành',
+          columnSize: '200px'
+        },
+        {
+          field: 'trichYeu',
+          displayName: 'Trích yếu',
+          columnSize: 'calc(100% - calc( 40px + 500px)) px'
+        }, {
+          field: 'tenTrangThai',
+          displayName: 'Trạng thái',
+          columnSize: '100px'
+        }
+      ],
+      type: 'json',
+      header: 'Danh sách quyết định của bộ tài chính giao các bộ ngành'
+    })
+  }
 
 }
 
