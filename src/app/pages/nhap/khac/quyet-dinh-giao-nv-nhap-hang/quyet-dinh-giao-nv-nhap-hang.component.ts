@@ -25,8 +25,6 @@ import {
 })
 export class QuyetDinhGiaoNvNhapHangComponent implements OnInit {
   @Input()
-  loaiVthh: string = "0101";
-  @Input()
   listVthh: any[] = [];
 
   userInfo: UserLogin;
@@ -85,9 +83,10 @@ export class QuyetDinhGiaoNvNhapHangComponent implements OnInit {
   indeterminate = false;
   isViewDetail: boolean;
   STATUS = STATUS;
-  dsCloaiVthh: any[] = [];
+  dsLoaiVthh: any[] = [];
   tuNgayQuyetDinh: Date | null = null;
   denNgayQuyetDinh: Date | null = null;
+  tabs: any[] = [];
   disabledStartDate = (startValue: Date): boolean => {
     if (!startValue || !this.denNgayQuyetDinh) {
       return false;
@@ -124,7 +123,7 @@ export class QuyetDinhGiaoNvNhapHangComponent implements OnInit {
           text: dayjs().get('year') + i,
         });
       }
-      await this.loadDsCloaiVthh(this.loaiVthh);
+      await this.loadDsVthh();
       await this.search();
       this.spinner.hide();
     } catch (e) {
@@ -134,13 +133,11 @@ export class QuyetDinhGiaoNvNhapHangComponent implements OnInit {
     }
   }
 
-  async loadDsCloaiVthh(ma: string) {
-    let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({ "str": ma });
-    this.dsCloaiVthh = [];
+  async loadDsVthh() {
+    let res = await this.danhMucService.getDanhMucHangDvqlAsyn({});
     if (res.msg == MESSAGE.SUCCESS) {
-      if (res.data) {
-        this.dsCloaiVthh = res.data;
-      }
+      this.dsLoaiVthh = res.data;
+      this.dsLoaiVthh = res.data?.filter((x) => x.ma.length == 4);
     }
   }
 
@@ -185,9 +182,8 @@ export class QuyetDinhGiaoNvNhapHangComponent implements OnInit {
     let body = {
       "tuNgayQd": this.tuNgayQuyetDinh != null ? dayjs(this.tuNgayQuyetDinh).format('YYYY-MM-DD') + " 00:00:00" : null,
       "denNgayQd": this.denNgayQuyetDinh != null ? dayjs(this.denNgayQuyetDinh).format('YYYY-MM-DD') + " 23:59:59" : null,
-      "loaiVthh": this.loaiVthh,
-      "cloaiVthh": this.searchFilter.cloaiVthh,
-      "namNhap": this.searchFilter.namNhap ? this.searchFilter.namNhap : null,
+      "loaiVthh": this.searchFilter.loaiVthh,
+      "nam": this.searchFilter.namNhap ? this.searchFilter.namNhap : null,
       "paggingReq": {
         "limit": this.pageSize,
         "page": this.page - 1
@@ -283,9 +279,8 @@ export class QuyetDinhGiaoNvNhapHangComponent implements OnInit {
         let body = {
           "tuNgayQd": this.tuNgayQuyetDinh != null ? dayjs(this.tuNgayQuyetDinh).format('YYYY-MM-DD') + " 00:00:00" : null,
           "denNgayQd": this.denNgayQuyetDinh != null ? dayjs(this.denNgayQuyetDinh).format('YYYY-MM-DD') + " 23:59:59" : null,
-          "loaiVthh": this.loaiVthh,
-          "cloaiVthh": this.searchFilter.cloaiVthh,
-          "namNhap": this.searchFilter.namNhap ? this.searchFilter.namNhap : null,
+          "loaiVthh": this.searchFilter.loaiVthh,
+          "nam": this.searchFilter.namNhap ? this.searchFilter.namNhap : null,
           "soQd": this.searchFilter.soQd ? this.searchFilter.soQd.trim() : null,
           "trichYeu": this.searchFilter.trichYeu ? this.searchFilter.trichYeu : null,
           "maDvi": this.userService.isCuc() ? this.userInfo.MA_DVI : null
@@ -349,7 +344,7 @@ export class QuyetDinhGiaoNvNhapHangComponent implements OnInit {
       let temp = [];
       if (this.dataTableAll && this.dataTableAll.length > 0) {
         this.dataTableAll.forEach((item) => {
-          if (['ngayQdinh', 'tgianNkho'].includes(key)) {
+          if (['ngayQd', 'tgianNkMnhat'].includes(key)) {
             if (item[key] && dayjs(item[key]).format('DD/MM/YYYY').indexOf(value.toString()) != -1) {
               temp.push(item)
             }
