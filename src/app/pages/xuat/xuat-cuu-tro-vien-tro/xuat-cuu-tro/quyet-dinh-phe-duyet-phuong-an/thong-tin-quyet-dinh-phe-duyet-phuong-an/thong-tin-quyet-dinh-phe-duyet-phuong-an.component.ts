@@ -126,6 +126,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
         idDx: [, [Validators.required]],
         soDx: [, [Validators.required]],
         ngayDx: [],
+        idXc: [],
         tongSoLuongDx: [],
         tongSoLuong: [],
         soLuongXuaCap: [],
