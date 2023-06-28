@@ -13,6 +13,7 @@ import {
   TongHopDxKhNhapKhacService
 } from "../../../../../services/qlnv-hang/nhap-hang/nhap-khac/tongHopDxKhNhapKhac.service";
 import { STATUS } from "../../../../../constants/status";
+import {DialogTuChoiComponent} from "../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
 
 @Component({
   selector: "app-them-moi-tong-hop-khnk",
@@ -20,7 +21,6 @@ import { STATUS } from "../../../../../constants/status";
   styleUrls: ["./them-moi-tong-hop-khnk.component.scss"]
 })
 export class ThemMoiTongHopKhnkComponent extends Base2Component implements OnInit {
-  @Input() loaiVthh: string;
   @Input() id: number;
   @Input() isViewOnModal: boolean;
   @Input() isView: boolean;
@@ -55,8 +55,8 @@ export class ThemMoiTongHopKhnkComponent extends Base2Component implements OnIni
     this.formData = this.fb.group({
       id: [],
       ngayTh: [dayjs().format("YYYY-MM-DD")],
-      trangThai: [STATUS.DU_THAO],
-      tenTrangThai: ["Dự thảo"],
+      trangThai: [STATUS.CHUA_TAO_QD],
+      tenTrangThai: ["Chưa tạo quyết định"],
       maTh: [""],
       noiDungTh: [""]
     });
@@ -138,7 +138,7 @@ export class ThemMoiTongHopKhnkComponent extends Base2Component implements OnIni
     if (data) {
       this.id = data.id;
       await this.loadChiTiet();
-      // this.isView = true
+      this.isView = true
       this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
     }
   }
@@ -164,6 +164,7 @@ export class ThemMoiTongHopKhnkComponent extends Base2Component implements OnIni
   clearFilter() {
 
   }
+
 
   idRowSelect: number;
 
