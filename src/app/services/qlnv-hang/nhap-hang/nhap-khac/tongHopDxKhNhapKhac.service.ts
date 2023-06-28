@@ -2,7 +2,11 @@ import { BaseService } from "../../../base.service";
 import { HttpClient } from "@angular/common/http";
 import { OldResponseData } from "../../../../interfaces/response";
 import { environment } from "../../../../../environments/environment";
+import { Injectable } from "@angular/core";
 
+@Injectable({
+  providedIn: 'root',
+})
 export class TongHopDxKhNhapKhacService extends BaseService {
   GATEWAY = '/qlnv-hang';
   CONTROLLER = 'nhap-khac/thop-kh-nk';
