@@ -584,11 +584,9 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
       this.formData.controls["loaiVthh"].setValidators([Validators.required]);
       this.formData.controls["ngayKy"].setValidators([Validators.required]);
       this.formData.controls["loaiGia"].setValidators([Validators.required]);
-      this.formData.controls["giaDeNghi"].setValidators([Validators.required]);
       this.formData.controls["maPphapXdg"].setValidators([Validators.required]);
     } else {
       this.formData.controls["ngayKy"].clearValidators();
-      this.formData.controls["giaDeNghi"].clearValidators();
       this.formData.controls["maPphapXdg"].clearValidators();
     }
   }

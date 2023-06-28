@@ -2438,10 +2438,10 @@ export class ThongTinPaGiaoChiTieuKeHoachComponent implements OnInit {
     if (level == 1) {
       if (data && data.dataChild && data.dataChild.length > 0) {
         data.dataChild.forEach(it => {
-          const sum = it.dataChild.reduce((prev, cur) => {
+          const sum = (it && it.dataChild && it.dataChild.length > 0) ? it.dataChild.reduce((prev, cur) => {
             prev += Number(cur[col]);
             return prev;
-          }, 0);
+          }, 0) : 0;
           sl += sum;
         })
       }
