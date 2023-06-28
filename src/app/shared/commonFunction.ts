@@ -33,6 +33,8 @@ export function convertTrangThai(status: string): string {
     return 'Đã Dự Thảo QĐ';
   } else if (status == '28') {
     return 'Đã Ban Hành QĐ';
+  } else if (status == '33') {
+    return 'Chưa cập nhật';
   }
 }
 

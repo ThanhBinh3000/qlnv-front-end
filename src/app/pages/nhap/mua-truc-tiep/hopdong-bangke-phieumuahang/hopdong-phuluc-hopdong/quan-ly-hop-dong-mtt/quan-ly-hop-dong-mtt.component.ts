@@ -29,6 +29,7 @@ export class QuanLyHopDongMttComponent extends Base2Component implements OnInit 
   isEditHopDong: boolean
   listNguonVon: any[] = [];
   selected: boolean = false;
+  selectedHd: boolean = false;
   danhSachCtiet: any[] = [];
 
   constructor(
@@ -202,6 +203,20 @@ export class QuanLyHopDongMttComponent extends Base2Component implements OnInit 
     }
     this.idRowSelect = data.id;
     this.dataTable = data.listChaoGia.filter((item) => item.luaChon == true);
+    this.showDetailHd($event, this.dataTable[0])
+    await this.spinner.hide();
+  }
+
+  async showDetailHd($event, data: any) {
+    await this.spinner.show();
+    if ($event.type == "click") {
+      this.selectedHd = false;
+      $event.target.parentElement.parentElement.querySelector(".selectedRow")?.classList.remove("selectedRow");
+      $event.target.parentElement.classList.add("selectedRow");
+    } else {
+      this.selectedHd = true;
+    }
+    this.idHopDong = data.id;
     await this.spinner.hide();
   }
 
