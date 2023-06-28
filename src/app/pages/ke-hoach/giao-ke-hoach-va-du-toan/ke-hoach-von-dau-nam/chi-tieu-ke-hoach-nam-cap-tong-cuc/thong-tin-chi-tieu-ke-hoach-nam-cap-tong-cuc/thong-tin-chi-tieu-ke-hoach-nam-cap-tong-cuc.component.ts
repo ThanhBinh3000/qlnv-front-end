@@ -254,18 +254,18 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.spinner.show();
     try {
       if (chiTieuKhNam) {
-        if (chiTieuKhNam.capDvi == "2") {
-          let res = await this.chiTieuKeHoachNamService.loadThongTinChiTieuKeHoachNam(chiTieuKhNam.qdGocId);
+        if (chiTieuKhNam.capDvi == "2" && chiTieuKhNam.loaiCanCu == 'QD-TCDT') {
+          let res = await this.chiTieuKeHoachNamService.canCuCucQd(year);
           if (res.msg == MESSAGE.SUCCESS) {
-            let data = res.data
-            if (data) {
+            let dataQd = res.data
+            if (dataQd) {
               this.dataQdTCDTGiaoCuc = {};
               this.formData.patchValue({
-                canCu: data.soQuyetDinh,
-                chiTieuId: data.id
+                loaiCanCu: "QD-TCDT",
+                soQdTtcpBtc: dataQd.soQuyetDinh
               });
               // Lấy kế hoạch tổng cục giao cho cục đang login
-              let dataLuongThuc = data.khLuongThuc.find(item => item.maDonVi == this.userInfo.MA_DVI);
+              let dataLuongThuc = dataQd.khLuongThuc.find(item => item.maDonVi == chiTieuKhNam.maDvi);
               if (dataLuongThuc) {
                 this.dataQdTCDTGiaoCuc = {
                   "ltThocMua": dataLuongThuc.ntnThoc,
@@ -352,7 +352,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
                     "ltGaoXuat": dataLuongThuc.xtnTongGao,
                   }
                 }
-                console.log(dataQd, 'dataQddataQddataQd')
                 this.formData.patchValue({
                   loaiCanCu: "QD-TCDT",
                   soQdTtcpBtc: dataQd.soQuyetDinh
