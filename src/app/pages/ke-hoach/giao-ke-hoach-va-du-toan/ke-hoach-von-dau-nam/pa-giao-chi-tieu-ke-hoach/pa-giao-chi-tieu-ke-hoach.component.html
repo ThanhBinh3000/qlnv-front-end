@@ -266,9 +266,9 @@
               <span>Xuất file</span>
             </button>
             <button
-              type="button" class="btn btn-sub do" (click)="print()">
-              <i class="icon htvbdh_tcdt_tuchoi"></i>
-              <span>In danh sách</span>
+              type="button" class="btn btn-sub" (click)="print()">
+              <i class="icon htvbdh_tcdt_print"></i>
+              <span>In</span>
             </button>
             <button
               *ngIf="(userService.isTongCuc && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_TCGIAO_THEM')) || (userService.isCuc() && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_CUCGIAO'))"
