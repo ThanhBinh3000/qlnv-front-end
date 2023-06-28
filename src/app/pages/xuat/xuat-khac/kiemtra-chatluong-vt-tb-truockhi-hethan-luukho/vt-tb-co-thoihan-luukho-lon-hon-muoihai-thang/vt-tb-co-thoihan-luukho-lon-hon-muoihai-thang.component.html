@@ -1,18 +1,18 @@
-<nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="level2">
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="level2-border">
   <ul nz-menu nzMode="horizontal">
-    <li nz-menu-item [nzSelected]="tabSelected==0" (click)="selectTab(0)">
+    <li nz-menu-item [nzSelected]="tabSelected==0" (click)="selectTab(0)" style="border-radius: 9999px">
       Toàn bộ danh sách VT, TB hết hạn lưu kho nhưng chưa có kế hoạch xuất
     </li>
     <li [nzSelected]="tabSelected==1" nz-menu-item (click)="selectTab(1)">
       Tổng hợp danh sách VT, TB hết hạn lưu kho nhưng chưa có kế hoạch xuất
     </li>
-    <li [nzSelected]="tabSelected==1" nz-menu-item (click)="selectTab(1)">
+    <li [nzSelected]="tabSelected==2" nz-menu-item (click)="selectTab(2)">
       Kế hoạch xuất hàng của cục
     </li>
-    <li [nzSelected]="tabSelected==1" nz-menu-item (click)="selectTab(1)">
+    <li [nzSelected]="tabSelected==3" nz-menu-item (click)="selectTab(3)">
       Tổng hợp kế hoạch xuất hàng
     </li>
-    <li [nzSelected]="tabSelected==1" nz-menu-item (click)="selectTab(1)">
+    <li [nzSelected]="tabSelected==4" nz-menu-item (click)="selectTab(4)">
       Kế hoạch xuất hàng của toàn Tổng cục
     </li>
   </ul>
