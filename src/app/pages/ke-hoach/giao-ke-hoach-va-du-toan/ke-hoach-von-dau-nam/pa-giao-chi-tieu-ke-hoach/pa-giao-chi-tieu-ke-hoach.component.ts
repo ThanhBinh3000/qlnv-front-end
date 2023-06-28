@@ -507,7 +507,7 @@ export class PaGiaoChiTieuKeHoachComponent implements OnInit {
     });
     printJS({
       printable: dataPrint,
-      gridHeaderStyle: 'color: red;  border: 2px solid #3971A5; ',
+      gridHeaderStyle: 'border: 2px solid #3971A5; ',
       gridStyle: 'border: 2px solid #3971A5;text-align:center;with:fit-content',
       properties: [
         {

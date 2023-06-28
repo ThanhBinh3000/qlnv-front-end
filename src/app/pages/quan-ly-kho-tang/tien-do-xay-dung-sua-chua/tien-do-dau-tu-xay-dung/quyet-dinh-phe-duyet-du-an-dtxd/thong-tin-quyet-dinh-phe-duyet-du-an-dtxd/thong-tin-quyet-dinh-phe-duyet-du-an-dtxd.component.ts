@@ -5,17 +5,10 @@ import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../../../services/storage.service";
 import {NzNotificationService} from "ng-zorro-antd/notification";
 import {NgxSpinnerService} from "ngx-spinner";
-import {chain} from 'lodash';
 import * as uuid from "uuid";
 import {NzModalService} from "ng-zorro-antd/modal";
-import {DxChiCucPvcService} from "../../../../../../services/dinh-muc-nhap-xuat-bao-quan/pvc/dx-chi-cuc-pvc.service";
-import {DanhMucCongCuDungCuService} from "../../../../../../services/danh-muc-cong-cu-dung-cu.service";
-import dayjs from "dayjs";
 import {MESSAGE} from "../../../../../../constants/message";
 import {STATUS} from "../../../../../../constants/status";
-import {
-  PvcDxChiCucCtiet
-} from "../../../../../dinh-muc/mang-pvc-cong-cu-dung-cu/de-xuat-nc-chi-cuc-pvc/them-moi-dx-chi-cuc-pvc/them-moi-dx-chi-cuc-pvc.component";
 import {
   QuyetdinhpheduyetduandtxdService
 } from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetduandtxd.service";
@@ -23,6 +16,7 @@ import {KtQdXdHangNamService} from "../../../../../../services/kt-qd-xd-hang-nam
 import {DonviService} from "../../../../../../services/donvi.service";
 import {AMOUNT_NO_DECIMAL} from "../../../../../../Utility/utils";
 import {FILETYPE} from "../../../../../../constants/fileType";
+import {TYPE_PAG} from "../../../../../../constants/config";
 
 @Component({
   selector: 'app-thong-tin-quyet-dinh-phe-duyet-du-an-dtxd',
@@ -214,9 +208,9 @@ export class ThongTinQuyetDinhPheDuyetDuAnDtxdComponent extends Base2Component i
           this.helperService.bidingDataInFormGroup(this.formData, data);
           this.formData.patchValue({
             soQd: data.soQd ? data.soQd.split('/')[0] : null,
-            khoi:this.itemDuAn.tenKhoi,
-            loaiDuAn:this.itemDuAn.loaiDuAn,
-            loaiCapCt:this.itemDuAn.loaiCapCt,
+            khoi: this.itemDuAn.tenKhoi,
+            loaiDuAn: this.itemDuAn.loaiDuAn,
+            loaiCapCt: this.itemDuAn.loaiCapCt,
             tgKhoiCong: this.itemDuAn.tgKhoiCong,
             tgHoanThanh: this.itemDuAn.tgHoanThanh,
           })
@@ -320,7 +314,13 @@ export class ThongTinQuyetDinhPheDuyetDuAnDtxdComponent extends Base2Component i
         },
       });
     } else {
-      await this.createUpdate(this.formData.value)
+      let res = await this.createUpdate(this.formData.value);
+      if (res) {
+        this.idInput = res.id;
+        this.formData.patchValue({
+          id : res.id
+        })
+      }
     }
   }
 
@@ -559,6 +559,37 @@ export class ThongTinQuyetDinhPheDuyetDuAnDtxdComponent extends Base2Component i
       this.tinhTongMucDauTu();
     }
     this.isVisiblePopTongMucDauTu = false;
+  }
+
+  protected readonly TYPE_PAG = TYPE_PAG;
+
+  xoa() {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa các bản ghi đã chọn?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: async () => {
+        this.spinner.show();
+        try {
+          let res = await this.quyetdinhpheduyetduandtxdService.delete({id: this.idInput});
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+            this.showListEvent.emit();
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+        } catch (e) {
+          console.log('error: ', e);
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        } finally {
+          this.spinner.hide();
+        }
+      },
+    });
   }
 }
 

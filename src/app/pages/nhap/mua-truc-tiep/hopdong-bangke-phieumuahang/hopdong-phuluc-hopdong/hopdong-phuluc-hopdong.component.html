@@ -174,14 +174,11 @@
             <td>{{ data.tenTrangThaiHd }}</td>
             <td>{{ data.tenTrangThaiNh }}</td>
             <td class="text-left">
-              <a (click)="goDetail(data.id,null,true)" *ngIf="data.trangThai=='00'">
+              <a (click)="goDetail(data.id,null,true)">
                 <i class="fa fa-pencil"></i>
               </a>
               <a (click)="goDetail(data.id,null,true)">
                 <i class="fa fa-eye"></i>
-              </a>
-              <a (click)="delete(data)">
-                <i class="fa fa-trash-o do"></i>
               </a>
             </td>
           </tr>
