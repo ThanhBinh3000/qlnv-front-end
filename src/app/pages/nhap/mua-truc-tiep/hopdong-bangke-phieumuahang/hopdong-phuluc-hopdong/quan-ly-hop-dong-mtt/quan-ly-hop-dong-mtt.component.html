@@ -284,6 +284,9 @@
             <thead>
             <tr>
               <th style="width: 2%;">STT</th>
+              <th>Số hợp đồng</th>
+              <th>Tên hợp đồng</th>
+              <th>Ngày ký hợp đồng</th>
               <th width="150px">Tên cá nhân/tổ chức</th>
               <th width="100px">MST</th>
               <th width="200px">Địa chỉ</th>
@@ -297,9 +300,12 @@
             </tr>
             </thead>
             <tbody>
-            <tr *ngFor="let data of dataTable , let i = index">
+            <tr *ngFor="let data of dataTable , let k = index" [ngClass]="{'bg-selected': k == 0 && this.selectedHd}" (click)="showDetailHd($event,data)">
               <ng-container>
-                <td class="text-center">{{i + 1}}</td>
+                <td class="text-center">{{k + 1}}</td>
+                <td>{{data.soHd}}</td>
+                <td>{{data.tenHd}}</td>
+                <td>{{data.ngayPduyet | date: 'dd/MM/YYYY' }}</td>
                 <td nzLeft>{{data.canhanTochuc}}</td>
                 <td nzLeft>{{data.mst}}</td>
                 <td nzLeft>{{data.diaChi}}</td>
@@ -310,9 +316,6 @@
                 <td nzLeft>{{data.soLuong * data.donGia | number : '1.0-1' : 'vi_VN' }}</td>
                 <td nzLeft class="text-blue">{{data.fileDinhKems?.fileName }}</td>
                 <td class="text-center">
-                  <a>
-                    <i class="fa fa-eye"></i>
-                  </a>
                   <a
                      (click)="redirectHopDong(true,data.id) ">
                     <i class="fa fa-pencil"></i>
@@ -327,10 +330,13 @@
             </tbody>
           </nz-table>
         </nz-card>
-
-        <app-themmoi-hopdong-phuluc [idKqMtt]="id" [loaiVthh]="loaiVthh" *ngIf="idHopDong" [id]="idHopDong"
-                                    [isQuanLy]="true">
-        </app-themmoi-hopdong-phuluc>
+        <div nz-col [nzSpan]="24">
+          <nz-card class="mg-t-10 flex-card p-lr16 ">
+            <app-themmoi-hopdong-phuluc [idKqMtt]="id" [loaiVthh]="loaiVthh" *ngIf="idHopDong" [id]="idHopDong"
+                                        [isQuanLy]="true">
+            </app-themmoi-hopdong-phuluc>
+          </nz-card>
+        </div>
       </nz-collapse>
 
 
