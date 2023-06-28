@@ -4,7 +4,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { FileFunction, GeneralFunction, NumberFunction, TableFunction } from 'src/app/Utility/func';
-import { AMOUNT, BOX_NUMBER_WIDTH, DON_VI_TIEN, MONEY_LIMIT, Utils } from 'src/app/Utility/utils';
+import { AMOUNT, DON_VI_TIEN, MONEY_LIMIT, Utils } from 'src/app/Utility/utils';
 import { DialogDanhSachVatTuHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-vat-tu-hang-hoa/dialog-danh-sach-vat-tu-hang-hoa.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
@@ -115,14 +115,14 @@ export class PhuLuc03Component implements OnInit {
 		await this.getFormDetail();
 		this.namBcao = this.dataInfo.namBcao;
 		if (this.status.general) {
-			this.scrollX = this.genFunc.setTableWidth(400, 7, BOX_NUMBER_WIDTH, 310);
+			this.scrollX = this.genFunc.tableWidth(350, 7, 1, 110);
 		} else {
 			if (this.status.editAppVal) {
-				this.scrollX = this.genFunc.setTableWidth(350, 10, BOX_NUMBER_WIDTH, 460);
+				this.scrollX = this.genFunc.tableWidth(350, 10, 2, 60);
 			} else if (this.status.viewAppVal) {
-				this.scrollX = this.genFunc.setTableWidth(350, 10, BOX_NUMBER_WIDTH, 400);
+				this.scrollX = this.genFunc.tableWidth(350, 10, 2, 0);
 			} else {
-				this.scrollX = this.genFunc.setTableWidth(350, 7, BOX_NUMBER_WIDTH, 200);
+				this.scrollX = this.genFunc.tableWidth(350, 7, 1, 0);
 			}
 		}
 		await this.getDinhMuc();

@@ -23,11 +23,6 @@
                             </div>
                         </div>
                         <div class="canphai">
-                            <button type="button" class="btn btn-do" (click)="deleteAllChecked()"
-                                *ngIf="status.general">
-                                <i class="fa fa-trash-o"></i>
-                                <span>Xóa</span>
-                            </button>
                             <button type="button" class="btn btn-sub" (click)="selectGoods()" *ngIf="status.general">
                                 <i class="icon htvbdh_dau-cong"></i>
                                 <span>Thêm</span>
@@ -37,10 +32,6 @@
                     <nz-table nzBordered class="table__body" [nzScroll]="{x: scrollX}">
                         <thead>
                             <tr>
-                                <th rowspan="2" *ngIf="status.general" nzWidth="50px" class="text-center" nzLeft>
-                                    <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
-                                        style="margin-right: 0;"> </label>
-                                </th>
                                 <th rowspan="2" nzWidth="50px" nzLeft>
                                     STT
                                 </th>
@@ -63,12 +54,12 @@
                                     Thẩm Định
                                 </th>
                                 <th *ngIf="status.viewAppVal" rowSpan="2">
-                                    Chênh lệch giữa <br /> thẩm định của DVCT <br /> và nhu cầu của DVCD
+                                    Chênh lệch giữa thẩm định của DVCT và nhu cầu của DVCD
                                 </th>
-                                <th rowSpan="2" style="width: 200px;">
+                                <th rowSpan="2" class="text-col">
                                     Ghi chú
                                 </th>
-                                <th *ngIf="status.viewAppVal" style="width: 200px;" rowspan="2">
+                                <th *ngIf="status.viewAppVal" class="text-col" rowspan="2">
                                     Ý kiến của DVCT
                                 </th>
                                 <th style="width: 50px;" rowspan="2" *ngIf="status.general" nzRight></th>
@@ -98,8 +89,7 @@
                                     Thành tiền
                                 </th>
                             </tr>
-                            <!-- <tr>
-                                <th *ngIf="status.general" nzLeft></th>
+                            <tr>
                                 <th nzLeft>A</th>
                                 <th nzLeft>B</th>
                                 <th>C</th>
@@ -116,9 +106,8 @@
                                 <th *ngIf="status.viewAppVal">9</th>
                                 <th *ngIf="status.general" nzRight></th>
                                 <th *ngIf="status.general || status.editAppVal" nzRight></th>
-                            </tr> -->
+                            </tr>
                             <tr>
-                                <th *ngIf="status.general" nzLeft></th>
                                 <th nzLeft></th>
                                 <th nzLeft>
                                     Tổng Cộng
@@ -154,10 +143,6 @@
                         <tbody>
                             <tr *ngFor="let data of lstCtietBcao; let i = index">
                                 <ng-container *ngIf="!editCache[data.id].edit; else editTemplate ">
-                                    <td *ngIf="status.general" class="text-center" nzLeft>
-                                        <label *ngIf="checkDelete(data.stt)" nz-checkbox [nzValue]="data.id"
-                                            [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"></label>
-                                    </td>
                                     <td nzLeft>
                                         {{ getChiMuc(data.stt) }}
                                     </td>
@@ -210,10 +195,6 @@
                                     </td>
                                 </ng-container>
                                 <ng-template #editTemplate>
-                                    <td *ngIf="status.general" class="text-center" nzLeft>
-                                        <label *ngIf="checkDelete(data.stt)" nz-checkbox [nzValue]="data.id"
-                                            [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"></label>
-                                    </td>
                                     <td nzLeft>
                                         {{ getChiMuc(editCache[data.id].data.stt) }}
                                     </td>

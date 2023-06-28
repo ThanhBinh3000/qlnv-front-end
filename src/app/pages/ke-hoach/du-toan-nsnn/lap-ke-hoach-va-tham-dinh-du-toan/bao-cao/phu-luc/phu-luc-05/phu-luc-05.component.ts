@@ -4,17 +4,15 @@ import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { FileFunction, GeneralFunction, NumberFunction, TableFunction } from 'src/app/Utility/func';
+import { AMOUNT, DON_VI_TIEN, MONEY_LIMIT, Utils } from "src/app/Utility/utils";
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.service';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
-import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { AMOUNT, DON_VI_TIEN, LA_MA, MONEY_LIMIT, Utils } from "src/app/Utility/utils";
 import * as uuid from "uuid";
-import * as fileSaver from 'file-saver';
 import { BtnStatus, Doc, Form } from '../../../lap-ke-hoach-va-tham-dinh-du-toan.class';
-import { FileFunction, GeneralFunction, NumberFunction, TableFunction } from 'src/app/Utility/func';
 
 export class ItemData {
 	id: string;
@@ -40,6 +38,7 @@ export class ItemData {
 	keHoachNamDtN1: number;
 	keHoachNamDtN2: number;
 	ghiChu: string;
+	ykienDviCtren: string;
 }
 
 @Component({
@@ -55,7 +54,6 @@ export class PhuLuc05Component implements OnInit {
 	total: ItemData = new ItemData();
 	maDviTien: string = '1';
 	namBcao: number;
-	BOX_SIZE = 200;
 	//danh muc
 	duAns: any[] = [];
 	lstCtietBcao: ItemData[] = [];
@@ -97,7 +95,6 @@ export class PhuLuc05Component implements OnInit {
 		private _modalRef: NzModalRef,
 		private spinner: NgxSpinnerService,
 		private lapThamDinhService: LapThamDinhService,
-		private quanLyVonPhiService: QuanLyVonPhiService,
 		private danhMucService: DanhMucDungChungService,
 		private notification: NzNotificationService,
 		private modal: NzModalService,
@@ -128,14 +125,14 @@ export class PhuLuc05Component implements OnInit {
 					})
 				})
 			}
-			this.scrollX = this.genFunc.setTableWidth(600, 15, this.BOX_SIZE, 110);
+			this.scrollX = this.genFunc.tableWidth(350, 7, 9, 110);
 		} else {
 			if (this.status.editAppVal) {
-				this.scrollX = this.genFunc.setTableWidth(600, 16, this.BOX_SIZE, 60);
+				this.scrollX = this.genFunc.tableWidth(350, 9, 10, 60);
 			} else if (this.status.viewAppVal) {
-				this.scrollX = this.genFunc.setTableWidth(600, 16, this.BOX_SIZE, 0);
+				this.scrollX = this.genFunc.tableWidth(350, 9, 10, 0);
 			} else {
-				this.scrollX = this.genFunc.setTableWidth(600, 15, this.BOX_SIZE, 0);
+				this.scrollX = this.genFunc.tableWidth(350, 7, 9, 0);
 			}
 		}
 		if (this.lstCtietBcao.length == 0) {
@@ -331,7 +328,7 @@ export class PhuLuc05Component implements OnInit {
 	}
 
 	changeModel(id: string): void {
-		this.editCache[id].data.chenhLech = this.editCache[id].data.keHoachVon - this.editCache[id].data.keHoachVonTd
+		this.editCache[id].data.chenhLech = this.numFunc.sum([-this.editCache[id].data.keHoachVon, this.editCache[id].data.keHoachVonTd]);
 	}
 
 	sum(stt: string) {

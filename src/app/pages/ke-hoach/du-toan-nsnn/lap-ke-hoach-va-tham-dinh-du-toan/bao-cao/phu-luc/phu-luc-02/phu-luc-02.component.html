@@ -54,12 +54,12 @@
 									Thẩm định
 								</th>
 								<th *ngIf="status.viewAppVal" rowSpan="3">
-									Chênh lệch giữa <br /> thẩm định của DVCT <br /> và nhu cầu của DVCD
+									Chênh lệch giữa thẩm định của DVCT và nhu cầu của DVCD
 								</th>
-								<th rowSpan="3" style="width: 200px;">
+								<th rowSpan="3" class="text-col">
 									Ghi chú
 								</th>
-								<th *ngIf="status.viewAppVal" style="width: 200px;">
+								<th *ngIf="status.viewAppVal" class="text-col">
 									Ý kiến của đơn vị cấp trên
 								</th>
 								<th rowspan="3" style="width: 60px;" *ngIf="status.general" nzRight></th>
@@ -112,7 +112,7 @@
 									Thành tiền
 								</th>
 							</tr>
-							<!-- <tr>
+							<tr>
 								<th nzLeft>A</th>
 								<th nzLeft>B</th>
 								<th>C</th>
@@ -129,10 +129,11 @@
 								<th *ngIf="status.viewAppVal">8 = 7 * 2</th>
 								<th *ngIf="status.viewAppVal">10 = 8 + 5</th>
 								<th *ngIf="status.viewAppVal">11 = 10 - 6 </th>
-								<th *ngIf="status.viewAppVal">12 </th>
+								<th>12</th>
+								<th *ngIf="status.viewAppVal"></th>
 								<th *ngIf="status.general" nzRight></th>
 								<th *ngIf="status.general || status.editAppVal" nzRight></th>
-							</tr> -->
+							</tr>
 							<tr>
 								<th nzLeft></th>
 								<th nzLeft>

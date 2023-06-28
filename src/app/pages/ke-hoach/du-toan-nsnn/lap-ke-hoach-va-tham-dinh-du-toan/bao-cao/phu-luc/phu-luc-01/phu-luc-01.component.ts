@@ -4,7 +4,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { FileFunction, GeneralFunction, NumberFunction, TableFunction } from 'src/app/Utility/func';
-import { AMOUNT, BOX_NUMBER_WIDTH, DON_VI_TIEN, MONEY_LIMIT, Utils } from 'src/app/Utility/utils';
+import { AMOUNT, DON_VI_TIEN, MONEY_LIMIT, Utils } from 'src/app/Utility/utils';
 import { DialogDanhSachVatTuHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-vat-tu-hang-hoa/dialog-danh-sach-vat-tu-hang-hoa.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
@@ -59,7 +59,6 @@ export class PhuLuc01Component implements OnInit {
 	dsDinhMuc: any[] = [];
 	amount = AMOUNT;
 	scrollX: string;
-	BOX_SIZE = 210;
 	//trang thai cac nut
 	status: BtnStatus = new BtnStatus();
 	editMoneyUnit = false;
@@ -121,14 +120,14 @@ export class PhuLuc01Component implements OnInit {
 			} else {
 				await this.getDinhMuc('02');
 			}
-			this.scrollX = this.genFunc.setTableWidth(400, 8, this.BOX_SIZE, 110);
+			this.scrollX = this.genFunc.tableWidth(350, 7, 1, 110);
 		} else {
 			if (this.status.editAppVal) {
-				this.scrollX = this.genFunc.setTableWidth(350, 12, this.BOX_SIZE, 60);
+				this.scrollX = this.genFunc.tableWidth(350, 10, 2, 60);
 			} else if (this.status.viewAppVal) {
-				this.scrollX = this.genFunc.setTableWidth(350, 12, this.BOX_SIZE, 0);
+				this.scrollX = this.genFunc.tableWidth(350, 10, 2, 0);
 			} else {
-				this.scrollX = this.genFunc.setTableWidth(350, 8, this.BOX_SIZE, 0);
+				this.scrollX = this.genFunc.tableWidth(350, 7, 1, 0);
 			}
 		}
 

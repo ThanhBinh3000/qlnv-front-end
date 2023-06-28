@@ -1,11 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
-import * as fileSaver from 'file-saver';
 import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { FileFunction, GeneralFunction, NumberFunction, TableFunction } from 'src/app/Utility/func';
-import { AMOUNT, BOX_NUMBER_WIDTH, DON_VI_TIEN, MONEY_LIMIT, Utils } from 'src/app/Utility/utils';
+import { AMOUNT, DON_VI_TIEN, MONEY_LIMIT, Utils } from 'src/app/Utility/utils';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
@@ -22,7 +21,6 @@ export class ItemData {
     maTaiSan: string;
     level: any;
     checked: boolean;
-
     sluongTsanTdiemBcao: number;
     sluongTsanDaNhan: number;
     sluongTsanPduyet: number;
@@ -35,7 +33,7 @@ export class ItemData {
     tdinhTtien: number;
     chenhLech: number;
     thuyetMinh: string;
-    yKien: string
+    ykienDviCtren: string
 }
 @Component({
     selector: 'app-phu-luc-06',
@@ -117,14 +115,14 @@ export class PhuLuc06Component implements OnInit {
             if (category) {
                 this.listVtu = category.data;
             }
-            this.scrollX = this.genFunc.setTableWidth(350, 8, BOX_NUMBER_WIDTH, 210);
+            this.scrollX = this.genFunc.tableWidth(350, 8, 1, 360);
         } else {
             if (this.status.editAppVal) {
-                this.scrollX = this.genFunc.setTableWidth(350, 10, BOX_NUMBER_WIDTH, 60);
+                this.scrollX = this.genFunc.setTableWidth(350, 11, 2, 60);
             } else if (this.status.viewAppVal) {
-                this.scrollX = this.genFunc.setTableWidth(350, 10, BOX_NUMBER_WIDTH, 0);
+                this.scrollX = this.genFunc.setTableWidth(350, 11, 2, 0);
             } else {
-                this.scrollX = this.genFunc.setTableWidth(350, 8, BOX_NUMBER_WIDTH, 0);
+                this.scrollX = this.genFunc.setTableWidth(350, 8, 1, 0);
             }
         }
 
@@ -333,7 +331,7 @@ export class PhuLuc06Component implements OnInit {
         this.editCache[id].data.sluongTsanTcong = this.numFunc.sum([this.editCache[id].data.sluongTsanTdiemBcao, this.editCache[id].data.sluongTsanDaNhan, this.editCache[id].data.sluongTsanPduyet]);
         this.editCache[id].data.thanhTien = this.numFunc.mul(this.editCache[id].data.dtoanDnghiSluong, this.editCache[id].data.dtoanDnghiMgia);
         this.editCache[id].data.tdinhTtien = this.numFunc.mul(this.editCache[id].data.tdinhSluong, this.editCache[id].data.dtoanDnghiMgia);
-        this.editCache[id].data.chenhLech = this.editCache[id].data.tdinhTtien - this.editCache[id].data.thanhTien;
+        this.editCache[id].data.chenhLech = this.numFunc.sum([this.editCache[id].data.tdinhTtien, -this.editCache[id].data.thanhTien]);
     }
 
     // gan editCache.data == lstCtietBcao

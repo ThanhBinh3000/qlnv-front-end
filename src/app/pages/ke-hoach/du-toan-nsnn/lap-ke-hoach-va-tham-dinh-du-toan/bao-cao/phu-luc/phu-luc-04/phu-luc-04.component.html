@@ -37,7 +37,7 @@
                                     Tổng mức dự toán
                                 </th>
                                 <th rowspan="2">
-                                    Dự toán đã được bố <br> trí đến hết năm {{namBcao - 2}}
+                                    Dự toán đã được bố trí đến hết năm {{namBcao - 2}}
                                 </th>
                                 <th colspan="2">
                                     Dự toán năm thực hiện {{namBcao -1 }}
@@ -49,7 +49,7 @@
                                     Thẩm định
                                 </th>
                                 <th colspan="2" *ngIf="status.viewAppVal">
-                                    Chênh lệch giữa thẩm định của <br> DVCT và nhu cầu của DVCD
+                                    Chênh lệch giữa thẩm định của DVCT và nhu cầu của DVCD
                                 </th>
                                 <th colspan="2">
                                     Dự toán năm tiếp theo {{namBcao + 1}}
@@ -60,10 +60,10 @@
                                 <th rowspan="2">
                                     Các năm tiếp theo
                                 </th>
-                                <th rowspan="2" style="width: 200px;">
+                                <th rowspan="2" class="text-col">
                                     Ghi chú
                                 </th>
-                                <th *ngIf="status.viewAppVal" rowspan="2" style="width: 200px;">
+                                <th *ngIf="status.viewAppVal" rowspan="2" class="text-col">
                                     Ý kiến của đơn vị cấp trên
                                 </th>
                                 <th rowspan="2" style="width: 60px;" *ngIf="status.general || status.editAppVal"
@@ -120,13 +120,13 @@
                                     TH đầu tư
                                 </th>
                             </tr>
-                            <!-- <tr>
+                            <tr>
                                 <th nzLeft>1</th>
                                 <th nzLeft>2</th>
                                 <th>3</th>
                                 <th *ngIf="status.viewAppVal">3A</th>
-                                <th>4= 5 + 6 + ... + 14</th>
-                                <th *ngIf="status.viewAppVal">4A= 5 + 6 + ... + 14</th>
+                                <th>4=5+6+8+9+...+14</th>
+                                <th *ngIf="status.viewAppVal">4A=5+6+8A+9A+...+14</th>
                                 <th>5</th>
                                 <th>6</th>
                                 <th>7</th>
@@ -134,17 +134,18 @@
                                 <th>9</th>
                                 <th *ngIf="status.viewAppVal">8A</th>
                                 <th *ngIf="status.viewAppVal">9A</th>
-                                <th *ngIf="status.viewAppVal">8B = 8A - 8</th>
-                                <th *ngIf="status.viewAppVal">9A = 9A - 9</th>
+                                <th *ngIf="status.viewAppVal">8B=8A-8</th>
+                                <th *ngIf="status.viewAppVal">9B=9A-9</th>
                                 <th>10</th>
                                 <th>11</th>
                                 <th>12</th>
                                 <th>13</th>
                                 <th>14</th>
                                 <th>15</th>
+                                <th *ngIf="status.viewAppVal">16</th>
                                 <th *ngIf="status.general || status.editAppVal" nzRight></th>
                                 <th *ngIf="status.general" nzRight></th>
-                            </tr> -->
+                            </tr>
                             <tr>
                                 <th nzLeft></th>
                                 <th nzLeft>

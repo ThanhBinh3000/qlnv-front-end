@@ -3,17 +3,16 @@ import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { FileFunction, GeneralFunction, NumberFunction, TableFunction } from 'src/app/Utility/func';
+import { AMOUNT, DON_VI_TIEN, MONEY_LIMIT, Utils } from "src/app/Utility/utils";
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.service';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { AMOUNT, BOX_NUMBER_WIDTH, DON_VI_TIEN, LA_MA, MONEY_LIMIT, Utils } from "src/app/Utility/utils";
 import * as uuid from "uuid";
-import * as fileSaver from 'file-saver';
 import { BtnStatus, Doc, Form } from '../../../lap-ke-hoach-va-tham-dinh-du-toan.class';
-import { FileFunction, GeneralFunction, NumberFunction, TableFunction } from 'src/app/Utility/func';
 
 export class ItemData {
     id: string;
@@ -125,14 +124,14 @@ export class PhuLuc04Component implements OnInit {
             if (category) {
                 this.duAns = category.data;
             }
-            this.scrollX = this.genFunc.setTableWidth(400, 12, BOX_NUMBER_WIDTH, 310);
+            this.scrollX = this.genFunc.tableWidth(350, 12, 1, 110);
         } else {
             if (this.status.editAppVal) {
-                this.scrollX = this.genFunc.setTableWidth(400, 18, BOX_NUMBER_WIDTH, 460);
+                this.scrollX = this.genFunc.tableWidth(350, 18, 2, 60);
             } else if (this.status.viewAppVal) {
-                this.scrollX = this.genFunc.setTableWidth(400, 18, BOX_NUMBER_WIDTH, 400);
+                this.scrollX = this.genFunc.tableWidth(350, 18, 2, 0);
             } else {
-                this.scrollX = this.genFunc.setTableWidth(400, 12, BOX_NUMBER_WIDTH, 0);
+                this.scrollX = this.genFunc.tableWidth(350, 12, 1, 0);
             }
         }
         if (this.lstCtietBcao.length == 0) {
