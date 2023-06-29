@@ -439,9 +439,13 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
   async guiDuyet() {
     let trangThai = ''
     let mesg = ''
-    // Vật tư
     switch (this.formData.get('trangThai').value) {
       case STATUS.DU_THAO: {
+        trangThai = STATUS.CHO_DUYET_LDV;
+        mesg = 'Văn bản sẵn sàng gửi duyệt ?'
+        break;
+      }
+      case STATUS.CHO_DUYET_LDV: {
         trangThai = STATUS.BAN_HANH;
         mesg = 'Văn bản sẵn sàng ban hành ?'
         break;
