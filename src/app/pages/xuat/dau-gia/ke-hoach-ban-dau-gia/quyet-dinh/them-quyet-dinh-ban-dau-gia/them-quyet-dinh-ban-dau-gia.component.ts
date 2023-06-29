@@ -94,8 +94,8 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
       tenCloaiVthh: [''],
       moTaHangHoa: [''],
       tchuanCluong: [''],
-      trangThai: [STATUS.DU_THAO],
-      tenTrangThai: ['Dự thảo'],
+      trangThai: [STATUS.DANG_NHAP_DU_LIEU],
+      tenTrangThai: ['Đang nhập dữ liệu'],
       phanLoai: ['TH', [Validators.required]],
       soQdCc: [''],
       slDviTsan: [],
@@ -485,7 +485,7 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
   }
 
   isDisabled() {
-    if (this.formData.value.trangThai == STATUS.DU_THAO) {
+    if (this.formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU) {
       return false;
     } else {
       return true;
