@@ -241,3 +241,9 @@ export const LOAI_QD_CTKH = {
   QD_DC: '01',
   PA: '02'
 };
+//Loại hàng hóa xuât khác
+export const LOAI_HH_XUAT_KHAC = {
+  LT_6_THANG: 'LT6',
+  VT_12_THANG: 'VT12',
+  VT_6_THANG: 'Vt6'
+};
