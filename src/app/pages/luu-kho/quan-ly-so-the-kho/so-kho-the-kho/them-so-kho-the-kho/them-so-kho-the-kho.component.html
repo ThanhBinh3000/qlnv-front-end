@@ -70,8 +70,8 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Điểm kho</nz-form-label>
             <nz-form-control>
-              <nz-select formControlName="maDiemKho">
-                <nz-option *ngFor="let item of listDiemKho" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
+              <nz-select formControlName="maDiemKho" (ngModelChange)="onChangeDiemKho($event)">
+                <nz-option *ngFor="let item of dsDiemKho" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
                 </nz-option>
               </nz-select>
             </nz-form-control>
@@ -81,8 +81,8 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Nhà kho</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-select formControlName="maNhaKho">
-                <nz-option *ngFor="let item of listDiemKho" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
+              <nz-select formControlName="maNhaKho" (ngModelChange)="onChangeNhaKho($event)">
+                <nz-option *ngFor="let item of dsNhaKho" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
                 </nz-option>
               </nz-select>
             </nz-form-control>
@@ -92,8 +92,8 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Ngăn kho</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-select formControlName="maNganKho">
-                <nz-option *ngFor="let item of listDiemKho" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
+              <nz-select formControlName="maNganKho" (ngModelChange)="onChangeNganKho($event)">
+                <nz-option *ngFor="let item of dsNganKho" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
                 </nz-option>
               </nz-select>
             </nz-form-control>
@@ -103,8 +103,8 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Lô kho</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-select formControlName="maLoKho">
-                <nz-option *ngFor="let item of listDiemKho" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
+              <nz-select formControlName="maLoKho" (ngModelChange)="onChangeLoKho($event)">
+                <nz-option *ngFor="let item of dsLoKho" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
                 </nz-option>
               </nz-select>
             </nz-form-control>
@@ -115,7 +115,7 @@
             <nz-form-label [nzNoColon]="true"> Loại hàng DTQG</nz-form-label>
             <nz-form-control>
               <nz-input-group>
-                <span class="text-blue">Thóc tẻ</span>
+                <span class="text-blue" formControlName="loaiVthh"></span>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -125,7 +125,7 @@
             <nz-form-label [nzNoColon]="true"> Chủng loại hàng</nz-form-label>
             <nz-form-control>
               <nz-input-group>
-                <span class="text-blue">Hạt rất dài</span>
+                <span class="text-blue" formControlName="cloaiVthh"></span>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -135,7 +135,7 @@
             <nz-form-label [nzNoColon]="true"> Đơn vị tính</nz-form-label>
             <nz-form-control>
               <nz-input-group>
-                <span class="text-blue">Kg</span>
+                <span class="text-blue"  formControlName="donViTinh"></span>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -249,7 +249,7 @@
             <nz-form-label nzRequired [nzNoColon]="true"> Điểm kho</nz-form-label>
             <nz-form-control>
               <nz-select formControlName="maDiemKho">
-                <nz-option *ngFor="let item of listDiemKho" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
+                <nz-option *ngFor="let item of dsDiemKho" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
                 </nz-option>
               </nz-select>
             </nz-form-control>
@@ -260,7 +260,7 @@
             <nz-form-label nzRequired [nzNoColon]="true"> Nhà kho</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-select formControlName="maNhaKho">
-                <nz-option *ngFor="let item of listDiemKho" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
+                <nz-option *ngFor="let item of dsNhaKho" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
                 </nz-option>
               </nz-select>
             </nz-form-control>
@@ -271,7 +271,7 @@
             <nz-form-label nzRequired [nzNoColon]="true"> Ngăn kho</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-select formControlName="maNganKho">
-                <nz-option *ngFor="let item of listDiemKho" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
+                <nz-option *ngFor="let item of dsNganKho" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
                 </nz-option>
               </nz-select>
             </nz-form-control>
@@ -282,7 +282,7 @@
             <nz-form-label nzRequired [nzNoColon]="true"> Lô kho</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-select formControlName="maLoKho">
-                <nz-option *ngFor="let item of listDiemKho" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
+                <nz-option *ngFor="let item of dsLoKho" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
                 </nz-option>
               </nz-select>
             </nz-form-control>
@@ -441,12 +441,14 @@
             <nz-form-control>
               <div nz-row>
                 <div nz-col nzSpan="11">
-                  <nz-date-picker nzPlaceHolder="Ngày tạo từ" formControlName="ngayTaoTu" nzFormat="dd/MM/yyyy" class="search__input"></nz-date-picker>
+                  <nz-date-picker nzPlaceHolder="Ngày tạo từ" formControlName="ngayTaoTu" nzFormat="dd/MM/yyyy"
+                                  class="search__input"></nz-date-picker>
                 </div>
                 <div nz-col nzSpan="1">
                 </div>
                 <div nz-col nzSpan="11">
-                  <nz-date-picker nzPlaceHolder="Ngày tạo đến" formControlName="ngayTaoDen" nzFormat="dd/MM/yyyy" class="search__input"></nz-date-picker>
+                  <nz-date-picker nzPlaceHolder="Ngày tạo đến" formControlName="ngayTaoDen" nzFormat="dd/MM/yyyy"
+                                  class="search__input"></nz-date-picker>
                 </div>
               </div>
             </nz-form-control>
@@ -472,12 +474,12 @@
         <span>Xóa</span>
       </button>
       <button type="button" class="btn btn-sub btn-xoa ml-2" (click)="tuChoi()"
-              *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_KT">
+              *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_KT || formData.value.trangThai == STATUS.CHO_DUYET_LDCC  ">
         <i class="icon htvbdh_tcdt_tuchoi"></i>
         <span>Từ chối</span>
       </button>
       <button type="button" class="btn btn-sub xanh-nhat ml-2" (click)="pheDuyet()"
-              *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_KT">
+              *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_KT || formData.value.trangThai == STATUS.CHO_DUYET_LDCC">
         <i class="icon htvbdh_dakyduyet"></i>
         <span>Duyệt</span>
       </button>
