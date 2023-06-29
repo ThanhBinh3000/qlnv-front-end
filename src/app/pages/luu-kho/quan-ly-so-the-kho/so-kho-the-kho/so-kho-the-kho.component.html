@@ -64,7 +64,7 @@
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button *ngIf="userService.isChiCuc()" type="button" class="btn btn-sub xanh">
+        <button type="button" class="btn btn-sub xanh" (click)="openModelCreate(null, false)">
           <i class="icon htvbdh_dau-cong xanh"></i>
           <span>Tạo sổ kho/thẻ kho</span>
         </button>
@@ -103,7 +103,38 @@
         </tr>
         </thead>
         <tbody>
-
+        <tr>
+          <td>1</td>
+          <td>1</td>
+          <td>1</td>
+          <td>1</td>
+          <td>1</td>
+          <td>1</td>
+          <td>1</td>
+          <td>1</td>
+          <td>1</td>
+          <td>1</td>
+          <td>1</td>
+          <td>1</td>
+          <td>1</td>
+          <td>1</td>
+          <td>1</td>
+          <td>1</td>
+          <td>11</td>
+          <td>1</td>
+          <td>1</td>
+          <td>
+            <a (click)="openModelCreate(1, true)" >
+              <i class="fa fa-eye"></i>
+            </a>
+            <a (click)="openModelCreate(1, false)" >
+              <i class="fa fa-pencil"></i>
+            </a>
+            <a >
+              <i class="fa fa-trash-o do"></i>
+            </a>
+          </td>
+        </tr>
         </tbody>
       </nz-table>
     </nz-card>

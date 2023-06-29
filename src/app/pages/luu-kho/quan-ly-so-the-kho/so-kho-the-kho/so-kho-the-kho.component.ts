@@ -1,16 +1,21 @@
-import { Component, EventEmitter, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { MESSAGE } from 'src/app/constants/message';
-import { QuanLySoKhoTheKhoService } from 'src/app/services/quan-ly-so-kho-the-kho.service';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
+import {Component, OnInit} from '@angular/core';
+import {FormGroup} from '@angular/forms';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {MESSAGE} from 'src/app/constants/message';
+import {QuanLySoKhoTheKhoService} from 'src/app/services/quan-ly-so-kho-the-kho.service';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {DanhMucService} from 'src/app/services/danhmuc.service';
 import {STATUS} from "../../../../constants/status";
 import {Base2Component} from "../../../../components/base2/base2.component";
 import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../services/storage.service";
 import {Router} from "@angular/router";
+import {
+  DialogQuyetDinhGiaoChiTieuComponent
+} from "../../../../components/dialog/dialog-quyet-dinh-giao-chi-tieu/dialog-quyet-dinh-giao-chi-tieu.component";
+import {ThemSoKhoTheKhoComponent} from "./them-so-kho-the-kho/them-so-kho-the-kho.component";
+
 @Component({
   selector: 'app-so-kho-the-kho',
   templateUrl: './so-kho-the-kho.component.html',
@@ -87,5 +92,26 @@ export class SoKhoTheKhoComponent extends Base2Component implements OnInit {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
     }
+  }
+
+  openModelCreate(id : number, isView : boolean) {
+    const modalCreate = this.modal.create({
+      nzTitle: !id && isView == false ? 'Tạo sổ kho/thẻ kho' : id > 0 && isView == true ? 'Thông tin sổ kho/thẻ kho' : 'Chỉnh sửa sổ kho/thẻ kho',
+      nzContent: ThemSoKhoTheKhoComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '1000px',
+      nzStyle: { top: '100px' },
+      nzFooter: null,
+      nzComponentParams: {
+        idInput : id,
+        isView : isView
+      },
+    });
+    modalCreate.afterClose.subscribe((data) => {
+      if (data) {
+
+      }
+    });
   }
 }
