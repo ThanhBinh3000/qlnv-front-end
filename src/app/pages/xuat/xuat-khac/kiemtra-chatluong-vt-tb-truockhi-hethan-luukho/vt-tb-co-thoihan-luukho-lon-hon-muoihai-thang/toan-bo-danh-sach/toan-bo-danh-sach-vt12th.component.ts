@@ -17,11 +17,11 @@ import {
 import {LOAI_HH_XUAT_KHAC} from "../../../../../../constants/config";
 
 @Component({
-  selector: 'app-toan-bo-danh-sach',
-  templateUrl: './toan-bo-danh-sach.component.html',
-  styleUrls: ['./toan-bo-danh-sach.component.scss']
+  selector: 'app-toan-bo-danh-sach-vt12th',
+  templateUrl: './toan-bo-danh-sach-vt12th.component.html',
+  styleUrls: ['./toan-bo-danh-sach-vt12th.component.scss']
 })
-export class ToanBoDanhSachComponent extends Base2Component implements OnInit {
+export class ToanBoDanhSachVt12ThComponent extends Base2Component implements OnInit {
   CHUC_NANG = CHUC_NANG;
   dsDonvi: any[] = [];
   dsLoaiVthh: any[] = [];
