@@ -19,10 +19,10 @@ import {
 } from "../../kiemtra-chatluong-lt-truockhi-hethan-luukho.component";
 import {
   TongHopDanhSachHangDTQGService
-} from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/TongHopDanhSachHangDTQG.service";
+} from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatlt/TongHopDanhSachHangDTQG.service";
 import {
   DanhSachHangDTQGCon6ThangService
-} from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/DanhSachHangDTQGCon6Thang.service";
+} from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatlt/DanhSachHangDTQGCon6Thang.service";
 @Component({
   selector: 'app-chi-tiet-tong-hop-ds-hang-dtqg',
   templateUrl: './chi-tiet-tong-hop-ds-hang-dtqg.component.html',

@@ -19,4 +19,9 @@ export class TongHopDxKhNhapKhacService extends BaseService {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/dx-chua-th`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
+
+  dsThDuocTaoQDinhPduyet(): Promise<OldResponseData> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/ds-th-chua-tao-qd`;
+    return this._httpClient.get<OldResponseData>(url).toPromise();
+  }
 }
