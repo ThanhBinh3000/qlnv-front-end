@@ -1,32 +1,32 @@
-import {Component, OnInit} from '@angular/core';
-import {Base2Component} from "../../../../../components/base2/base2.component";
+import { Component, OnInit } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../../services/storage.service";
+import {StorageService} from "../../../../../../services/storage.service";
 import {NzNotificationService} from "ng-zorro-antd/notification";
 import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
-import {DonviService} from "../../../../../services/donvi.service";
-import {DanhMucService} from "../../../../../services/danhmuc.service";
-import {chain, isEmpty} from "lodash";
-import {MESSAGE} from "../../../../../constants/message";
-import {CHUC_NANG} from "../../../../../constants/status";
+import {DonviService} from "../../../../../../services/donvi.service";
+import {DanhMucService} from "../../../../../../services/danhmuc.service";
 import {v4 as uuidv4} from "uuid";
+import {chain, isEmpty} from "lodash";
 import {
-  DanhSachHangDTQGCon6ThangService
-} from "../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatlt/DanhSachHangDTQGCon6Thang.service";
-
+  DanhSachVttbTruocHethanLuuKhoService
+} from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/DanhSachVttbTruocHethanLuuKho.service";
+import {LOAI_HH_XUAT_KHAC} from "../../../../../../constants/config";
+import {MESSAGE} from "../../../../../../constants/message";
+import {Base2Component} from "../../../../../../components/base2/base2.component";
+import {CHUC_NANG} from "../../../../../../constants/status";
 @Component({
-  selector: 'app-toan-bo-ds-hang-dtqg-hethan-luukho-chua-co-kh-xuat',
-  templateUrl: './toan-bo-ds-hang-dtqg-hethan-luukho-chua-co-kh-xuat.component.html',
-  styleUrls: ['./toan-bo-ds-hang-dtqg-hethan-luukho-chua-co-kh-xuat.component.scss']
+  selector: 'app-toan-bo-danh-sach-vt6th',
+  templateUrl: './toan-bo-danh-sach-vt6th.component.html',
+  styleUrls: ['./toan-bo-danh-sach-vt6th.component.scss']
 })
-export class ToanBoDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Component implements OnInit {
+export class ToanBoDanhSachVt6ThComponent extends Base2Component implements OnInit {
   CHUC_NANG = CHUC_NANG;
   dsDonvi: any[] = [];
   dsLoaiVthh: any[] = [];
   dsCloaiVthh: any[] = [];
   dataTableView: any = [];
-  tongHop=false;
+  tongHop = false;
   expandSetString = new Set<string>();
 
   constructor(httpClient: HttpClient,
@@ -36,8 +36,8 @@ export class ToanBoDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Comp
               modal: NzModalService,
               private donviService: DonviService,
               private danhMucService: DanhMucService,
-              private danhSachHangDTQGCon6ThangService: DanhSachHangDTQGCon6ThangService) {
-    super(httpClient, storageService, notification, spinner, modal, danhSachHangDTQGCon6ThangService);
+              private danhSachVttbTruocHethanLuuKhoService: DanhSachVttbTruocHethanLuuKhoService) {
+    super(httpClient, storageService, notification, spinner, modal, danhSachVttbTruocHethanLuuKhoService);
     this.formData = this.fb.group({
       id: [],
       maDvi: [],
@@ -47,10 +47,6 @@ export class ToanBoDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Comp
       loaiVthh: [],
       cloaiVthh: [],
       donViTinh: [],
-      slHienTai: [],
-      slDeXuat: [],
-      slDaDuyet: [],
-      thanhTien: [],
       ngayNhapKho: [],
       ngayDeXuat: [],
       ngayDeXuatTu: [],
@@ -60,7 +56,7 @@ export class ToanBoDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Comp
       ngayTongHopDen: [],
       lyDo: [],
       trangThai: [],
-      type: [],
+      type: [LOAI_HH_XUAT_KHAC.VT_6_THANG],
       tenLoaiVthh: [],
       tenCloaiVthh: [],
       tenTrangThai: [],
@@ -135,13 +131,18 @@ export class ToanBoDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Comp
   }
 
   async loadDsVthh() {
-    let res = await this.danhMucService.getDanhMucHangDvqlAsyn({});
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.dsLoaiVthh = res.data?.filter((x) => (x.ma.length == 2 && !x.ma.match("^01.*")) || (x.ma.length == 4 && x.ma.match("^01.*")));
-    }
+    this.danhMucService.getDanhMucHangDvql({
+      "dviQly": "0101"
+    }).subscribe((hangHoa) => {
+      if (hangHoa.msg == MESSAGE.SUCCESS) {
+        console.log(hangHoa.data, '22222222');
+        this.dsLoaiVthh = hangHoa.data?.filter((x) => ((x.ma.startsWith("02") || x.ma.startsWith("03")) && (x.cap == 1 || x.cap == 2)));
+      }
+    });
   }
 
   async changeHangHoa(event: any) {
+    this.dsCloaiVthh = [];
     this.formData.patchValue({cloaiVthh: null})
     if (event) {
       let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({str: event});
@@ -176,8 +177,9 @@ export class ToanBoDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Comp
       this.expandSetString.delete(id);
     }
   }
- openTongHop(){
-   this.tongHop= !this.tongHop;
- }
+
+  openTongHop() {
+    this.tongHop = !this.tongHop;
+  }
 
 }

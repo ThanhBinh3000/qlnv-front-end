@@ -285,10 +285,10 @@ export class QuanLyCanBoComponent implements OnInit {
       this.spinner.show();
       try {
         let body = this.formData.value;
-        this.dmDungCungService
+        this.qlNsdService
           .export(body)
           .subscribe((blob) =>
-            saveAs(blob, 'danh-sach-danh-muc-dung-chung.xlsx'),
+            saveAs(blob, 'danh-sach-can-bo.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {
