@@ -1,0 +1,35 @@
+.level2-border {
+  .ant-menu-horizontal {
+    line-height: 27px;
+    padding: 8px 12px 0px 12px;
+    border-bottom: none;
+    background: #F8F8F8;
+
+    &:not(.ant-menu-dark) {
+      & > .ant-menu-item {
+        font-size: 13px;
+        font-weight: 500;
+        height: 34px;
+        display: inline-flex;
+        align-items: center;
+        border-radius: 999px;
+      }
+
+      & > .ant-menu-item-selected,
+      & > .ant-menu-item:hover {
+        color: #353a64;
+        background: #ebedff;
+        border: 0.5px dotted;
+
+        &:after {
+          display: none;
+        }
+      }
+    }
+  }
+
+  .ant-affix .ant-menu-horizontal {
+    padding-top: 1px;
+    // border-bottom: 1px solid #f0f0f0;
+  }
+}

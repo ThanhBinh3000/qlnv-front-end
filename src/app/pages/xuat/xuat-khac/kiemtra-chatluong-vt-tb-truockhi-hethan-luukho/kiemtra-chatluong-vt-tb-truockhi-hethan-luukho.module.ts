@@ -12,6 +12,10 @@ import {
 import {
   VtTbCoThoihanLuukhoConSauThangComponent
 } from "./vt-tb-co-thoihan-luukho-con-sau-thang/vt-tb-co-thoihan-luukho-con-sau-thang.component";
+import {NzAffixModule} from "ng-zorro-antd/affix";
+import {NzMenuModule} from "ng-zorro-antd/menu";
+import {NzTransitionPatchModule} from "ng-zorro-antd/core/transition-patch/transition-patch.module";
+import {ComponentsModule} from "../../../../components/components.module";
 
 
 @NgModule({
@@ -19,7 +23,9 @@ import {
   imports: [
     CommonModule,
     VtTbCoThoihanLuukhoConSauThangModule,
-    VtTbCoThoihanLuukhoLonHonMuoihaiThangModule
+    VtTbCoThoihanLuukhoLonHonMuoihaiThangModule,
+    NzMenuModule,
+    ComponentsModule,
   ],
   exports: [
     VtTbCoThoihanLuukhoLonHonMuoihaiThangComponent, VtTbCoThoihanLuukhoConSauThangComponent

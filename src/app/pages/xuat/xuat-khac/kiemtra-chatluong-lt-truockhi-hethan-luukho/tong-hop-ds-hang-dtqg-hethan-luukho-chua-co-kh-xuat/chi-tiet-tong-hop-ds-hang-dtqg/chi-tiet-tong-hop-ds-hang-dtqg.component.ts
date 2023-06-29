@@ -19,10 +19,10 @@ import {
 } from "../../kiemtra-chatluong-lt-truockhi-hethan-luukho.component";
 import {
   TongHopDanhSachHangDTQGService
-} from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/TongHopDanhSachHangDTQG.service";
+} from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatlt/TongHopDanhSachHangDTQG.service";
 import {
   DanhSachHangDTQGCon6ThangService
-} from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/DanhSachHangDTQGCon6Thang.service";
+} from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatlt/DanhSachHangDTQGCon6Thang.service";
 @Component({
   selector: 'app-chi-tiet-tong-hop-ds-hang-dtqg',
   templateUrl: './chi-tiet-tong-hop-ds-hang-dtqg.component.html',
@@ -39,7 +39,9 @@ export class ChiTietTongHopDsHangDtqgComponent extends Base2Component implements
   isViewOnModal = new EventEmitter<any>();
   @Output()
   step = new EventEmitter<any>();
-
+  @Output()
+  changeShow=new EventEmitter<any>();
+  showDetail = false;
   isFirstInit = true;
   CHUC_NANG = CHUC_NANG;
   dsDonvi: any[] = [];
@@ -73,6 +75,7 @@ export class ChiTietTongHopDsHangDtqgComponent extends Base2Component implements
       ngayDeXuatDen: [],
       trangThai: [],
       trangThaiKtCl: [],
+      ngayTao:[],
       ngayGduyet: [],
       nguoiGduyetId: [],
       ngayPduyet: [],
@@ -96,6 +99,7 @@ export class ChiTietTongHopDsHangDtqgComponent extends Base2Component implements
            this.loadDsVthh()
          ]);*/
       // this.formData.patchValue(this.selectedItem)
+      console.log(this.showDetail,666)
       await this.loadDetail(this.idInput);
     } catch (e) {
       console.log('error: ', e)
@@ -297,18 +301,14 @@ export class ChiTietTongHopDsHangDtqgComponent extends Base2Component implements
       if (changes.eventCancel) {
         // this.quayLai();
         this.step.emit({step: 0});
+        this.changeShow.emit({showDetail: false, item: this.selectedItem})
       }
     }
 
   }
 
-  chonNgayXuatThanhLy($event: any) {
-    if ($event) {
-      this.formData.patchValue({
-        thoiGianTlTu: dayjs($event[0]).format('YYYY-MM-DD'),
-        thoiGianTlDen: dayjs($event[1]).format('YYYY-MM-DD')
-      })
-    }
-
+  onClickShowDetail() {
+    this.showDetail= !this.showDetail,
+    this.changeShow.emit({showDetail: this.showDetail, item: this.selectedItem})
   }
 }
