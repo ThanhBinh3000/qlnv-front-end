@@ -56,7 +56,7 @@ export class SoKhoTheKhoComponent extends Base2Component implements OnInit {
     this.spinner.show();
     try {
       this.loadDsHangHoa();
-      await this.search();
+      // await this.search();
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);

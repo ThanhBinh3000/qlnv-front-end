@@ -85,7 +85,7 @@ export class ThemSoKhoTheKhoComponent extends Base2Component implements OnInit {
 
   }
 
-  save(b: boolean) {
+  save(isGuiDuyet: boolean) {
 
   }
 
