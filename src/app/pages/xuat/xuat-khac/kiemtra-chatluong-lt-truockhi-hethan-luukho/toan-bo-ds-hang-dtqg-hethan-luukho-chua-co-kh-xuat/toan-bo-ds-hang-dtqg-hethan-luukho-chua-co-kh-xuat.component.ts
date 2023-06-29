@@ -13,7 +13,7 @@ import {CHUC_NANG} from "../../../../../constants/status";
 import {v4 as uuidv4} from "uuid";
 import {
   DanhSachHangDTQGCon6ThangService
-} from "../../../../../services/qlnv-hang/xuat-hang/xuatkhac/DanhSachHangDTQGCon6Thang.service";
+} from "../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatlt/DanhSachHangDTQGCon6Thang.service";
 
 @Component({
   selector: 'app-toan-bo-ds-hang-dtqg-hethan-luukho-chua-co-kh-xuat',
