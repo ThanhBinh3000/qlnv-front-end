@@ -26,6 +26,7 @@ export class ToanBoDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Comp
   dsLoaiVthh: any[] = [];
   dsCloaiVthh: any[] = [];
   dataTableView: any = [];
+  tongHop=false;
   expandSetString = new Set<string>();
 
   constructor(httpClient: HttpClient,
@@ -175,5 +176,8 @@ export class ToanBoDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Comp
       this.expandSetString.delete(id);
     }
   }
+ openTongHop(){
+   this.tongHop= !this.tongHop;
+ }
 
 }

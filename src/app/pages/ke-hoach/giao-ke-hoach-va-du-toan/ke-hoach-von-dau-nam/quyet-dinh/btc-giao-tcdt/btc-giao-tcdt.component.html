@@ -68,6 +68,11 @@
           <i class="fa fa-trash-o do"></i>
           <span>Xóa</span>
         </button>
+        <button
+          type="button" *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_QD_BTCTCDT_EXP')" class="btn btn-sub" (click)="print()">
+          <i class="icon htvbdh_tcdt_print"></i>
+          <span>In</span>
+        </button>
         <button *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_QD_BTCTCDT_EXP')" type="button"
                 class="btn btn-sub" (click)="exportData()">
           <i class="icon htvbdh_chuyen-xu-ly"></i>

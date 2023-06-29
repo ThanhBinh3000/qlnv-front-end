@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import {NgModule} from '@angular/core';
 import {CommonModule, DatePipe} from '@angular/common';
 import {XuatKhacComponent} from "./xuat-khac.component";
 import {
@@ -18,20 +18,32 @@ import {NzStatisticModule} from "ng-zorro-antd/statistic";
 import {NzPipesModule} from "ng-zorro-antd/pipes";
 import {MainModule} from "../../../layout/main/main.module";
 import {ComponentsModule} from "../../../components/components.module";
-import { ToanBoDsHangDtqgHethanLuukhoChuaCoKhXuatComponent } from './kiemtra-chatluong-lt-truockhi-hethan-luukho/toan-bo-ds-hang-dtqg-hethan-luukho-chua-co-kh-xuat/toan-bo-ds-hang-dtqg-hethan-luukho-chua-co-kh-xuat.component';
-import { TongHopDsHangDtqgHethanLuukhoChuaCoKhXuatComponent } from './kiemtra-chatluong-lt-truockhi-hethan-luukho/tong-hop-ds-hang-dtqg-hethan-luukho-chua-co-kh-xuat/tong-hop-ds-hang-dtqg-hethan-luukho-chua-co-kh-xuat.component';
-import { BienBanLayMauBanGiaoMauComponent } from './kiemtra-chatluong-lt-truockhi-hethan-luukho/bien-ban-lay-mau-ban-giao-mau/bien-ban-lay-mau-ban-giao-mau.component';
-import { PhieuKiemNghiemChatLuongComponent } from './kiemtra-chatluong-lt-truockhi-hethan-luukho/phieu-kiem-nghiem-chat-luong/phieu-kiem-nghiem-chat-luong.component';
-import { BaoCaoKetQuaKiemDinhMauComponent } from './kiemtra-chatluong-lt-truockhi-hethan-luukho/bao-cao-ket-qua-kiem-dinh-mau/bao-cao-ket-qua-kiem-dinh-mau.component';
-import {ThanhLyDanhSachHangComponent} from "../xuat-thanh-ly/thanh-ly-danh-sach-hang/thanh-ly-danh-sach-hang.component";
-import { ChiTietTongHopDsHangDtqgComponent } from './kiemtra-chatluong-lt-truockhi-hethan-luukho/tong-hop-ds-hang-dtqg-hethan-luukho-chua-co-kh-xuat/chi-tiet-tong-hop-ds-hang-dtqg/chi-tiet-tong-hop-ds-hang-dtqg.component';
+import {
+  ToanBoDsHangDtqgHethanLuukhoChuaCoKhXuatComponent
+} from './kiemtra-chatluong-lt-truockhi-hethan-luukho/toan-bo-ds-hang-dtqg-hethan-luukho-chua-co-kh-xuat/toan-bo-ds-hang-dtqg-hethan-luukho-chua-co-kh-xuat.component';
+import {
+  TongHopDsHangDtqgHethanLuukhoChuaCoKhXuatComponent
+} from './kiemtra-chatluong-lt-truockhi-hethan-luukho/tong-hop-ds-hang-dtqg-hethan-luukho-chua-co-kh-xuat/tong-hop-ds-hang-dtqg-hethan-luukho-chua-co-kh-xuat.component';
+import {
+  BienBanLayMauBanGiaoMauComponent
+} from './kiemtra-chatluong-lt-truockhi-hethan-luukho/bien-ban-lay-mau-ban-giao-mau/bien-ban-lay-mau-ban-giao-mau.component';
+import {
+  PhieuKiemNghiemChatLuongComponent
+} from './kiemtra-chatluong-lt-truockhi-hethan-luukho/phieu-kiem-nghiem-chat-luong/phieu-kiem-nghiem-chat-luong.component';
+import {
+  ChiTietTongHopDsHangDtqgComponent
+} from './kiemtra-chatluong-lt-truockhi-hethan-luukho/tong-hop-ds-hang-dtqg-hethan-luukho-chua-co-kh-xuat/chi-tiet-tong-hop-ds-hang-dtqg/chi-tiet-tong-hop-ds-hang-dtqg.component';
 import {KeHoachBanDauGiaModule} from "../dau-gia/ke-hoach-ban-dau-gia/ke-hoach-ban-dau-gia.module";
-import { VtTbCoThoihanLuukhoLonHonMuoihaiThangComponent } from './kiemtra-chatluong-vt-tb-truockhi-hethan-luukho/vt-tb-co-thoihan-luukho-lon-hon-muoihai-thang/vt-tb-co-thoihan-luukho-lon-hon-muoihai-thang.component';
-import { VtTbCoThoihanLuukhoConSauThangComponent } from './kiemtra-chatluong-vt-tb-truockhi-hethan-luukho/vt-tb-co-thoihan-luukho-con-sau-thang/vt-tb-co-thoihan-luukho-con-sau-thang.component';
+import {
+  KiemtraChatluongVtTbTruockhiHethanLuukhoModule
+} from "./kiemtra-chatluong-vt-tb-truockhi-hethan-luukho/kiemtra-chatluong-vt-tb-truockhi-hethan-luukho.module";
+import {
+  KiemtraChatluongLtTruockhiHethanLuukhoModule
+} from "./kiemtra-chatluong-lt-truockhi-hethan-luukho/kiemtra-chatluong-lt-truockhi-hethan-luukho.module";
 
 
 @NgModule({
-  declarations: [XuatKhacComponent, KiemtraChatluongVtTbTrongThbhComponent, KiemtraChatluongVtTbTruockhiHethanLuukhoComponent, KiemtraChatluongLtTruockhiHethanLuukhoComponent, XuatHangDtqgThBkkComponent, XuatHangKhoiDanhMucComponent, ToanBoDsHangDtqgHethanLuukhoChuaCoKhXuatComponent, TongHopDsHangDtqgHethanLuukhoChuaCoKhXuatComponent, BienBanLayMauBanGiaoMauComponent, PhieuKiemNghiemChatLuongComponent, BaoCaoKetQuaKiemDinhMauComponent, ChiTietTongHopDsHangDtqgComponent, VtTbCoThoihanLuukhoLonHonMuoihaiThangComponent, VtTbCoThoihanLuukhoConSauThangComponent],
+  declarations: [XuatKhacComponent, KiemtraChatluongVtTbTrongThbhComponent, KiemtraChatluongVtTbTruockhiHethanLuukhoComponent, XuatHangDtqgThBkkComponent, XuatHangKhoiDanhMucComponent],
   imports: [
     CommonModule,
     XuatKhacRoutingModule,
@@ -41,10 +53,11 @@ import { VtTbCoThoihanLuukhoConSauThangComponent } from './kiemtra-chatluong-vt-
     MainModule,
     ComponentsModule,
     KeHoachBanDauGiaModule,
+    KiemtraChatluongVtTbTruockhiHethanLuukhoModule,
+    KiemtraChatluongLtTruockhiHethanLuukhoModule
   ],
-  exports: [
-    KiemtraChatluongLtTruockhiHethanLuukhoComponent
-  ],
+  exports: [],
   providers: [DatePipe]
 })
-export class XuatKhacModule { }
+export class XuatKhacModule {
+}
