@@ -9,13 +9,11 @@ import {NzModalService} from "ng-zorro-antd/modal";
 import {
   QuyetdinhpheduyetduandtxdService
 } from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetduandtxd.service";
-import {KtQdXdHangNamService} from "../../../../../../services/kt-qd-xd-hang-nam.service";
 import {MESSAGE} from "../../../../../../constants/message";
 import {STATUS} from "../../../../../../constants/status";
 import {
   QuyetdinhpheduyetKhlcntService
 } from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetKhlcnt.service";
-import {KeHoachVonPhiBNCT} from "../../../../../../models/KeHoachVonPhiBNCT";
 import {DanhMucService} from "../../../../../../services/danhmuc.service";
 import {AMOUNT_NO_DECIMAL} from "../../../../../../Utility/utils";
 import {FILETYPE} from "../../../../../../constants/fileType";
@@ -139,6 +137,7 @@ export class ThongTinQuyetDinhPheDuyetKhlcntComponent extends Base2Component imp
         idQdPdDaDtxd: this.itemQdPdTktcTdt.idQdPdDaDtxd,
         tenCongTrinh: this.itemQdPdTktcTdt.tenCongTrinh,
         tongMucDt: this.itemQdPdTktcTdt.giaTriDt,
+        chuDauTu: this.itemQdPdTktcTdt.chuDauTu,
         loaiCapCt: this.itemQdPdTktcTdt.loaiCapCt,
         khoi: this.itemDuAn.tenKhoi,
         diaDiem: this.itemQdPdTktcTdt.diaDiem,
@@ -266,9 +265,11 @@ export class ThongTinQuyetDinhPheDuyetKhlcntComponent extends Base2Component imp
       }
     }
   }
+
   emitDataKhLcnt(data) {
     this.dataItemKhLcnt.emit(data);
   }
+
   async detail(id) {
     this.spinner.show();
     try {
@@ -624,6 +625,36 @@ export class ThongTinQuyetDinhPheDuyetKhlcntComponent extends Base2Component imp
       }
     }
   }
+
+  xoa() {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa các bản ghi đã chọn?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: async () => {
+        this.spinner.show();
+        try {
+          let res = await this.quyetdinhpheduyetKhlcntService.delete({id: this.idInput});
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+            this.showListEvent.emit();
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+        } catch (e) {
+          console.log('error: ', e);
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        } finally {
+          this.spinner.hide();
+        }
+      },
+    });
+  }
+
 }
 
 export class CongViec {

@@ -1,11 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {Base2Component} from "../../../../../components/base2/base2.component";
 import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../../services/storage.service";
 import {NzNotificationService} from "ng-zorro-antd/notification";
 import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
-import {TongHopThanhLyService} from "../../../../../services/qlnv-hang/xuat-hang/xuat-thanh-ly/TongHopThanhLy.service";
 import {FormGroup} from "@angular/forms";
 import {NumberToRoman} from "../../../../../shared/commonFunction";
 import {CHUC_NANG} from "../../../../../constants/status";
@@ -17,6 +16,9 @@ import {
 } from "../kiemtra-chatluong-lt-truockhi-hethan-luukho.component";
 import {chain, isEmpty} from "lodash";
 import {v4 as uuidv4} from "uuid";
+import {
+  TongHopDanhSachHangDTQGService
+} from "../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatlt/TongHopDanhSachHangDTQG.service";
 @Component({
   selector: 'app-tong-hop-ds-hang-dtqg-hethan-luukho-chua-co-kh-xuat',
   templateUrl: './tong-hop-ds-hang-dtqg-hethan-luukho-chua-co-kh-xuat.component.html',
@@ -40,7 +42,10 @@ export class TongHopDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Com
   selectedItem: any;
   modalWidth: any;
   step: any = 1;
-  isDanhSach: boolean = false;
+  DanhSach: boolean = false;
+  showDetail: boolean;
+  @Input()  openModal:boolean;
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -49,10 +54,10 @@ export class TongHopDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Com
     modal: NzModalService,
     private donviService: DonviService,
     private danhMucService: DanhMucService,
-    private tongHopThanhLyService: TongHopThanhLyService,
+    private tongHopDanhSachHangDTQGService: TongHopDanhSachHangDTQGService,
     private kiemtraChatluongLtTruockhiHethanLuukhoComponent:KiemtraChatluongLtTruockhiHethanLuukhoComponent
   ) {
-    super(httpClient, storageService, notification, spinner, modal,tongHopThanhLyService);
+    super(httpClient, storageService, notification, spinner, modal,tongHopDanhSachHangDTQGService);
     this.vldTrangThai = kiemtraChatluongLtTruockhiHethanLuukhoComponent;
     this.formData = this.fb.group({
       nam: [],
@@ -98,6 +103,9 @@ export class TongHopDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Com
         this.loadDsVthh()
       ]);
       await this.timKiem();
+      if (this.openModal){
+        await this.showModal(true);
+      }
     } catch (e) {
       console.log('error: ', e)
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -240,11 +248,12 @@ export class TongHopDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Com
     this.showModal(false);
   }
 
-  showModal(isVisibleModal: boolean, item?: any) {
+  showModal(isVisibleModal: boolean, item?: any, showDetail?: boolean) {
     this.isVisibleModal = isVisibleModal;
     this.selectedItem = item;
-    this.modalWidth = item ? '100vw' : '30vw';
+    this.modalWidth = showDetail? '80vw': (item? '40vw': '40vw');
     // this.step = item ? '1' : '2';
+    console.log(this.selectedItem,555)
   }
 
   async changeStep($event: any) {
@@ -256,7 +265,10 @@ export class TongHopDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Com
     }
     this.timKiem();
   }
-
+  async changeShowDetail($event:any){
+    console.log($event)
+    this.showModal(true, $event.item, $event.showDetail);
+  }
   async delete(item: any, roles?) {
     this.modal.confirm({
       nzClosable: false,
@@ -272,7 +284,7 @@ export class TongHopDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Com
           let body = {
             id: item.id
           };
-          this.tongHopThanhLyService.delete(body).then(async () => {
+          this.tongHopDanhSachHangDTQGService.delete(body).then(async () => {
             await this.timKiem();
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
           });
@@ -285,7 +297,7 @@ export class TongHopDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Com
     });
   }
   danhSach() {
-    this.isDanhSach = true;
+    this.DanhSach = true;
   }
 
 }

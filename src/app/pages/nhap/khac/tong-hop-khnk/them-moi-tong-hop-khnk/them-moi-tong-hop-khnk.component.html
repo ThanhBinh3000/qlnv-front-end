@@ -5,12 +5,7 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button
-            type="button" class="btn btn-sub xanh-nhat" (click)="save(true)">
-      <i class="icon htvbdh_tcdt_tao-qd"></i>
-      <span>Lưu và gửi duyệt</span>
-    </button>
-    <button
+    <button *ngIf="!isView"
             type="button" class="btn btn-main" (click)="save()">
       <i class="icon htvbdh_tcdt_save"></i>
       <span>Lưu</span>
@@ -22,7 +17,7 @@
     <div class="header-text">
       <div class="title-chi-tieu">
         <span
-          [ngClass]="formData.value.trangThai == STATUS.DA_BAN_HANH_QD ? 'status-xanh' : 'status-do'">
+          [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDV ? 'status-xanh' : 'status-do'">
           {{ formData.value.tenTrangThai }}
         </span>
         <span>Tổng hợp đề xuất kế hoạch nhập khác</span>
@@ -114,7 +109,7 @@
                 </nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
               <textarea formControlName="noiDungTh" nz-input [rows]="3"
-                        [readonly]="isView || formData.value.trangThai == '00'"></textarea>
+                        [readonly]="isView"></textarea>
                 </nz-form-control>
               </nz-form-item>
             </div>

@@ -113,6 +113,7 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
       thongBaoKhongThanh: [''],
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự Thảo'],
+      soDviTsan: [],
     })
   }
 
@@ -294,11 +295,26 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
     body.trangThai = isHoanThanh ? this.STATUS.DA_HOAN_THANH : this.STATUS.DU_THAO
     let soLuongDviTsan = 0
     let soLuongTrung = 0
+    let soLuongTruot = 0
     this.dataTable.forEach(item => {
-      soLuongTrung += item.children.filter(item => item.soLanTraGia > 0 && item.toChucCaNhan != null).length;
+      if (this.formData.value.ketQua == 1) {
+        soLuongTrung += item.children.filter(item => item.soLanTraGia > 0 && item.toChucCaNhan != null).length;
+      } else {
+        item.children.forEach(s => {
+          s.toChucCaNhan = null;
+          s.soLanTraGia = null;
+        })
+        soLuongTruot += item.children.filter(item => item.soLanTraGia == null && item.toChucCaNhan == null).length;
+      }
       soLuongDviTsan += item.children.length;
     });
-    body.ketQuaSl = soLuongTrung + "/" + soLuongDviTsan;
+    if (this.formData.value.ketQua == 1) {
+      body.ketQuaSl = soLuongTrung + "/" + soLuongDviTsan;
+      body.soDviTsan = soLuongTrung;
+    } else {
+      body.ketQuaSl = soLuongTruot + "/" + soLuongDviTsan;
+      body.soDviTsan = soLuongTruot;
+    }
     let res = await this.createUpdate(body);
     if (res) {
       if (isHoanThanh) {

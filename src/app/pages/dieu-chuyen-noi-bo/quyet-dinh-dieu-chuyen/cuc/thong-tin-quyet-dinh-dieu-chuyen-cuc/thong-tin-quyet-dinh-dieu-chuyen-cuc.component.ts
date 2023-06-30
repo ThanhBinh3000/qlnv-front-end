@@ -417,6 +417,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
   }
 
   async openDialogQD() {
+    if (this.isView) return
     await this.spinner.show();
     // Get data tờ trình
     // let body = {

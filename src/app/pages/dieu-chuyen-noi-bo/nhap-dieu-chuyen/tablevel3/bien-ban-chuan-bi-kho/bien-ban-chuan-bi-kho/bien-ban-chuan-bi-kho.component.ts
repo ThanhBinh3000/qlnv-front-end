@@ -10,13 +10,15 @@ import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { DonviService } from 'src/app/services/donvi.service';
-import { isEmpty } from 'lodash';
+import { chain } from 'lodash';
 import { CHUC_NANG, STATUS } from 'src/app/constants/status';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { Subject } from 'rxjs';
 import { QuyetDinhDieuChuyenTCService } from 'src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-tc.service';
 import { BienBanNghiemThuBaoQuanLanDauService } from 'src/app/services/dieu-chuyen-noi-bo/nhap-dieu-chuyen/bien-ban-nghiem-thu-bao-quan-lan-dau.service';
 import { BienBanChuanBiKhoService } from 'src/app/services/dieu-chuyen-noi-bo/nhap-dieu-chuyen/bien-ban-chuan-bi-kho';
+import { ThongTinQuyetDinhDieuChuyenCucComponent } from 'src/app/pages/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/cuc/thong-tin-quyet-dinh-dieu-chuyen-cuc/thong-tin-quyet-dinh-dieu-chuyen-cuc.component';
+import * as uuidv4 from "uuid";
 
 @Component({
   selector: 'app-bien-ban-chuan-bi-kho',
@@ -82,39 +84,12 @@ export class BienBanChuanBiKhoComponent extends Base2Component implements OnInit
 
   // dsDonvi: any[] = [];
   // userInfo: UserLogin;
-  // userdetail: any = {};
+  data: any = {};
   selectedId: number = 0;
   // isVatTu: boolean = false;
   isView = false;
 
-  // disabledStartNgayLapKh = (startValue: Date): boolean => {
-  //   if (startValue && this.formData.value.ngayLapKhDen) {
-  //     return startValue.getTime() > this.formData.value.ngayLapKhDen.getTime();
-  //   } else {
-  //     return false;
-  //   }
-  // };
 
-  // disabledEndNgayLapKh = (endValue: Date): boolean => {
-  //   if (!endValue || !this.formData.value.ngayLapKhTu) {
-  //     return false;
-  //   }
-  //   return endValue.getTime() <= this.formData.value.ngayLapKhDen.getTime();
-  // };
-
-  // disabledStartNgayDuyetLdc = (startValue: Date): boolean => {
-  //   if (startValue && this.formData.value.ngayDuyetLdcDen) {
-  //     return startValue.getTime() > this.formData.value.ngayDuyetLdcDen.getTime();
-  //   }
-  //   return false;
-  // };
-
-  // disabledEndNgayDuyetLdc = (endValue: Date): boolean => {
-  //   if (!endValue || !this.formData.value.ngayDuyetLdcTu) {
-  //     return false;
-  //   }
-  //   return endValue.getTime() <= this.formData.value.ngayDuyetLdcDen.getTime();
-  // };
 
   async ngOnInit() {
     this.isVisibleChangeTab$.subscribe((value: boolean) => {
@@ -157,6 +132,23 @@ export class BienBanChuanBiKhoComponent extends Base2Component implements OnInit
   //   return false//this.userService.isChiCuc()
   // }
 
+  async openDialogQD(row) {
+    this.modal.create({
+      nzTitle: 'Thông tin quyết định điều chuyển',
+      nzContent: ThongTinQuyetDinhDieuChuyenCucComponent,
+      nzMaskClosable: false,
+      nzClosable: true,
+      nzBodyStyle: { overflowY: 'auto' },//maxHeight: 'calc(100vh - 200px)'
+      nzWidth: '90%',
+      nzFooter: null,
+      nzComponentParams: {
+        isViewOnModal: true,
+        isView: true,
+        idInput: row.qddccId
+      },
+    });
+  }
+
   selectTab(tab: number) {
     if (this.isDetail) {
       this.quayLai()
@@ -186,7 +178,92 @@ export class BienBanChuanBiKhoComponent extends Base2Component implements OnInit
     //   this.formData.value.ngayHieuLucTu = dayjs(this.formData.value.ngayHieuLuc[0]).format('YYYY-MM-DD')
     //   this.formData.value.ngayHieuLucDen = dayjs(this.formData.value.ngayHieuLuc[1]).format('YYYY-MM-DD')
     // }
-    await this.search();
+    // console.log('DSQuyetDinhDieuChuyenComponent/this.formData.value=>', this.formData.value)
+    // await this.search();
+    let body = this.formData.value
+    body.paggingReq = {
+      limit: this.pageSize,
+      page: this.page - 1
+    }
+    let res = await this.bbChuanBiKhoService.search(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      let data = res.data.content
+        .map(element => {
+          return {
+            ...element,
+            maKho: `${element.thoiHanDieuChuyen}${element.tenDiemKho}`,
+            maloNganKhoNhan: `${element.maloKhoNhan}${element.maNganKhoNhan}`
+          }
+        });
+      this.dataTableView = this.buildTableView(data)
+      console.log('data', data, res)
+      console.log('this.dataTableView', this.dataTableView)
+    }
+  }
+
+  buildTableView(data: any[] = []) {
+    let dataView = chain(data)
+      .groupBy("soQdinh")
+      ?.map((value1, key1) => {
+        let children1 = chain(value1)
+          .groupBy("maKho")
+          ?.map((value2, key2) => {
+
+            let row2 = value2?.find(s => s.maKho == key2);
+
+            return {
+              ...row2,
+              idVirtual: row2 ? row2.idVirtual ? row2.idVirtual : uuidv4.v4() : uuidv4.v4(),
+              children: value2,
+            }
+          }
+          ).value();
+
+
+        let row1 = value1?.find(s => s.soQdinh === key1);
+        return {
+          ...row1,
+          idVirtual: row1 ? row1.idVirtual ? row1.idVirtual : uuidv4.v4() : uuidv4.v4(),
+          children: children1,
+          expand: true
+        };
+      }).value();
+
+    return dataView
+  }
+
+  add(data: any) {
+    this.data = data;
+    this.isDetail = true;
+    this.isView = false;
+  }
+
+  xoa(data: any) {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: () => {
+        this.spinner.show();
+        try {
+          let body = {
+            id: data.id
+          };
+          this.bbChuanBiKhoService.delete(body).then(async () => {
+            await this.timKiem();
+            this.spinner.hide();
+          });
+        } catch (e) {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      },
+    });
   }
 
   exportDataTC() {
