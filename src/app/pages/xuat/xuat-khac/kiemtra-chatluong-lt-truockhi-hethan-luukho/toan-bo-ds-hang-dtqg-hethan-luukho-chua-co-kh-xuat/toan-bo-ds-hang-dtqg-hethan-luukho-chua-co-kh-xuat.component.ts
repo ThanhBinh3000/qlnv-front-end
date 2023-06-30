@@ -13,7 +13,8 @@ import {CHUC_NANG} from "../../../../../constants/status";
 import {v4 as uuidv4} from "uuid";
 import {
   DanhSachHangDTQGCon6ThangService
-} from "../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatlt/DanhSachHangDTQGCon6Thang.service";
+} from "../../../../../services/qlnv-hang/xuat-hang/xuatkhac/DanhSachHangDTQGCon6Thang.service";
+import {LOAI_HH_XUAT_KHAC} from "../../../../../constants/config";
 
 @Component({
   selector: 'app-toan-bo-ds-hang-dtqg-hethan-luukho-chua-co-kh-xuat',
@@ -28,7 +29,7 @@ export class ToanBoDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Comp
   dataTableView: any = [];
   tongHop=false;
   expandSetString = new Set<string>();
-
+  loaiHhXuatKhac = LOAI_HH_XUAT_KHAC;
   constructor(httpClient: HttpClient,
               storageService: StorageService,
               notification: NzNotificationService,
@@ -60,7 +61,7 @@ export class ToanBoDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Comp
       ngayTongHopDen: [],
       lyDo: [],
       trangThai: [],
-      type: [],
+      loai: [],
       tenLoaiVthh: [],
       tenCloaiVthh: [],
       tenTrangThai: [],
@@ -119,6 +120,9 @@ export class ToanBoDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Comp
   };
 
   async timKiem() {
+    this.formData.patchValue({
+      loai: this.loaiHhXuatKhac.LT_6_THANG,
+    });
     await this.search();
     this.dataTable.forEach(s => {
       s.idVirtual = uuidv4();
@@ -137,7 +141,7 @@ export class ToanBoDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Comp
   async loadDsVthh() {
     let res = await this.danhMucService.getDanhMucHangDvqlAsyn({});
     if (res.msg == MESSAGE.SUCCESS) {
-      this.dsLoaiVthh = res.data?.filter((x) => (x.ma.length == 2 && !x.ma.match("^01.*")) || (x.ma.length == 4 && x.ma.match("^01.*")));
+      this.dsLoaiVthh = res.data?.filter((x) => (x.key.length == 4 && x.key.match("^01.*")));
     }
   }
 

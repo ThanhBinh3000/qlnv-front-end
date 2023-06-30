@@ -22,11 +22,21 @@ import {NzStatisticModule} from "ng-zorro-antd/statistic";
 import {NzPipesModule} from "ng-zorro-antd/pipes";
 import {MainModule} from "../../../../layout/main/main.module";
 import {ComponentsModule} from "../../../../components/components.module";
+import {CuuTroVienTroModule} from "../../xuat-cuu-tro-vien-tro/xuat-cuu-tro/cuu-tro-vien-tro.module";
+import {
+  ThemMoiBbLayMauBanGiaoMauComponent
+} from "./bien-ban-lay-mau-ban-giao-mau/them-moi-bb-lay-mau-ban-giao-mau/them-moi-bb-lay-mau-ban-giao-mau.component";
 
 
 @NgModule({
-  declarations: [KiemtraChatluongLtTruockhiHethanLuukhoComponent, BaoCaoKetQuaKiemDinhMauComponent, BienBanLayMauBanGiaoMauComponent, PhieuKiemNghiemChatLuongComponent,
-    TongHopDsHangDtqgHethanLuukhoChuaCoKhXuatComponent, ChiTietTongHopDsHangDtqgComponent,
+  declarations: [
+    KiemtraChatluongLtTruockhiHethanLuukhoComponent,
+    BaoCaoKetQuaKiemDinhMauComponent,
+    BienBanLayMauBanGiaoMauComponent,
+    ThemMoiBbLayMauBanGiaoMauComponent,
+    PhieuKiemNghiemChatLuongComponent,
+    TongHopDsHangDtqgHethanLuukhoChuaCoKhXuatComponent,
+    ChiTietTongHopDsHangDtqgComponent,
     ToanBoDsHangDtqgHethanLuukhoChuaCoKhXuatComponent],
   imports: [
     CommonModule,
@@ -35,11 +45,16 @@ import {ComponentsModule} from "../../../../components/components.module";
     NzPipesModule,
     MainModule,
     ComponentsModule,
+    CuuTroVienTroModule,
   ],
-  exports: [KiemtraChatluongLtTruockhiHethanLuukhoComponent,
-    BaoCaoKetQuaKiemDinhMauComponent, BienBanLayMauBanGiaoMauComponent, PhieuKiemNghiemChatLuongComponent,
-    TongHopDsHangDtqgHethanLuukhoChuaCoKhXuatComponent, ChiTietTongHopDsHangDtqgComponent
-    ,
+  exports: [
+    KiemtraChatluongLtTruockhiHethanLuukhoComponent,
+    BaoCaoKetQuaKiemDinhMauComponent,
+    BienBanLayMauBanGiaoMauComponent,
+    ThemMoiBbLayMauBanGiaoMauComponent,
+    PhieuKiemNghiemChatLuongComponent,
+    TongHopDsHangDtqgHethanLuukhoChuaCoKhXuatComponent,
+    ChiTietTongHopDsHangDtqgComponent,
     ToanBoDsHangDtqgHethanLuukhoChuaCoKhXuatComponent
   ],
   providers: [DatePipe]
