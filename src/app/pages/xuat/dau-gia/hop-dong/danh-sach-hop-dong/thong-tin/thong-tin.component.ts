@@ -236,7 +236,7 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     } else {
-      let data = await this.createUpdate(this.formData.value);
+      let data = await this.createUpdate(body);
       if (data) {
         await this.approve(data.id, status, message, null, sucessMessage);
       } else {
@@ -510,6 +510,7 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
       .map(async (value, key) => {
         let tenChiCuc = value.find(f => f.tenChiCuc === key);
         let tongSl = value.reduce((prev, cur) => prev + cur.soLuongDeXuat, 0);
+        let tongDg = value.reduce((prev, cur) => prev + cur.donGiaVat, 0);
         let thanhTien = value.reduce((prev, cur) => {
           const curThanhTien = cur.soLuongDeXuat * cur.donGiaVat;
           return prev + curThanhTien;
@@ -521,6 +522,7 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
           children: value,
           soLuong: tongSl,
           thanhTien: thanhTien,
+          donGiaVat: tongDg,
         };
       }).value();
     dataView = await Promise.all(dataView);
