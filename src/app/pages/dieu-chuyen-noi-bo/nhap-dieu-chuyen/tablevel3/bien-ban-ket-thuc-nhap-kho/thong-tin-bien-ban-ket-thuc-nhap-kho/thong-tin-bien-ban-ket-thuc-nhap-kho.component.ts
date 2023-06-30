@@ -198,9 +198,7 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
     if (this.allCheckedTT) {
       if (this.danhSach && this.danhSach.length > 0) {
         this.danhSach.forEach((item) => {
-          if (item.trangThai == this.STATUS.DU_THAO) {
-            item.checked = true;
-          }
+          item.checked = true;
         });
       }
     } else {
