@@ -140,14 +140,16 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
       }
       if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
         let data = this.dataChiTieu.khVatTuXuat.filter(item => item.maVatTuCha == this.loaiVthh && item.maVatTu == this.cloaiVthh);
-        data.forEach(item => {
+        let soLuongXuat : number = 0;
+        data.forEach((item) =>{
+          soLuongXuat += item.soLuongXuat
+        })
           let body = {
-            maDvi: item.maDvi,
-            tenDvi: item.tenDonVi,
-            soLuongXuat: item.soLuongNhap
+            maDvi: data[0].maDvi,
+            tenDvi: data[0].tenDvi,
+            soLuongXuat: soLuongXuat
           }
           this.listChiCuc.push(body);
-        })
       }
     } else {
       let body = {

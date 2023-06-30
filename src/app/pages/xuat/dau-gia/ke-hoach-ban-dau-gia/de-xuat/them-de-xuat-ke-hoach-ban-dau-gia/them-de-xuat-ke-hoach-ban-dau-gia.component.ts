@@ -366,7 +366,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
   }
 
   calculatorTable() {
-    let tongTienGiaKhoiDiemDx: Number = 0;
+    let tongTienGiaKhoiDiemDx: number = 0;
     let tongTienGiaKdTheoDgiaDd: number = 0;
     this.dataTable.forEach((item) => {
       item.soTienDtruocDxChiCuc = 0;
