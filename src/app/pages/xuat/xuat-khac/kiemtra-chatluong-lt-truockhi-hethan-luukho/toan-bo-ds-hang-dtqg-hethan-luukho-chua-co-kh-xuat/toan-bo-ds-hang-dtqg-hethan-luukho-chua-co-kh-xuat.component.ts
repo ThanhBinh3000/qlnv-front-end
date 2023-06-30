@@ -11,10 +11,10 @@ import {chain, isEmpty} from "lodash";
 import {MESSAGE} from "../../../../../constants/message";
 import {CHUC_NANG} from "../../../../../constants/status";
 import {v4 as uuidv4} from "uuid";
+import {LOAI_HH_XUAT_KHAC} from "../../../../../constants/config";
 import {
   DanhSachHangDTQGCon6ThangService
-} from "../../../../../services/qlnv-hang/xuat-hang/xuatkhac/DanhSachHangDTQGCon6Thang.service";
-import {LOAI_HH_XUAT_KHAC} from "../../../../../constants/config";
+} from "../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatlt/DanhSachHangDTQGCon6Thang.service";
 
 @Component({
   selector: 'app-toan-bo-ds-hang-dtqg-hethan-luukho-chua-co-kh-xuat',

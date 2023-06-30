@@ -17,9 +17,7 @@ import {v4 as uuidv4} from "uuid";
 import {
   KiemtraChatluongLtTruockhiHethanLuukhoComponent
 } from "../../kiemtra-chatluong-lt-truockhi-hethan-luukho.component";
-import {
-  TongHopDanhSachHangDTQGService
-} from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/TongHopDanhSachHangDTQG.service";
+import {LOAI_HH_XUAT_KHAC} from "../../../../../../constants/config";
 import {
   DanhSachHangDTQGCon6ThangService
 } from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatlt/DanhSachHangDTQGCon6Thang.service";
