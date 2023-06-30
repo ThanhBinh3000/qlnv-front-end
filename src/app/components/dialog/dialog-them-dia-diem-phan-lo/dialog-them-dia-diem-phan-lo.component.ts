@@ -167,6 +167,9 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
   }
 
   async changeChiCuc(event) {
+    this.formData.patchValue({
+      slChiTieu: null,
+    })
     let body = {
       year: this.namKh,
       loaiVthh: this.loaiVthh,

@@ -62,16 +62,16 @@
                     </nz-form-control>
                   </nz-form-item>
                 </div>
-                <div nz-col [nzSpan]="24">
-                  <nz-form-item>
-                    <nz-form-label [nzNoColon]="true"> Tổng tiền giá khởi điểm </nz-form-label>
-                    <nz-form-control>
-                      <nz-input-number [nzSize]="'small'" formControlName="tongTienGiaKhoiDiem"
-                        [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nzDisabled>
-                      </nz-input-number>
-                    </nz-form-control>
-                  </nz-form-item>
-                </div>
+<!--                <div nz-col [nzSpan]="24">-->
+<!--                  <nz-form-item>-->
+<!--                    <nz-form-label [nzNoColon]="true"> Tổng tiền giá khởi điểm </nz-form-label>-->
+<!--                    <nz-form-control>-->
+<!--                      <nz-input-number [nzSize]="'small'" formControlName="tongTienGiaKhoiDiem"-->
+<!--                        [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nzDisabled>-->
+<!--                      </nz-input-number>-->
+<!--                    </nz-form-control>-->
+<!--                  </nz-form-item>-->
+<!--                </div>-->
                 <div nz-col [nzSpan]="24">
                   <nz-form-item>
                     <nz-form-label [nzNoColon]="true"> Tổng khoản tiền đặt trước </nz-form-label>
@@ -107,7 +107,8 @@
                 </div>
                 <div nz-col [nzSpan]="24">
                   <nz-form-item>
-                    <nz-form-label [nzNoColon]="true"> Thời hạn thanh toán </nz-form-label>
+                    <nz-form-label [nzNoColon]="true"> Thời hạn thanh toán
+                    </nz-form-label>
                     <nz-form-control>
                       <nz-input-group>
                         <input nz-input formControlName="tgianTtoan" readonly />
@@ -156,19 +157,19 @@
                     </nz-form-control>
                   </nz-form-item>
                 </div>
+              </div>
+            </div>
+            <div nz-col [nzSpan]="8">
+              <div nz-row [nzGutter]="[24]" class="label-50 mg-t-10 ">
                 <div nz-col [nzSpan]="24">
                   <nz-form-item>
                     <nz-form-label [nzNoColon]="true"> Loại hàng hóa </nz-form-label>
                     <nz-form-control>
                       <input style="color: blue ;font-weight: bold;" nz-input formControlName="tenLoaiVthh"
-                        readonly="true" />
+                             readonly="true" />
                     </nz-form-control>
                   </nz-form-item>
                 </div>
-              </div>
-            </div>
-            <div nz-col [nzSpan]="8">
-              <div nz-row [nzGutter]="[24]" class="label-50 mg-t-10 ">
                 <div nz-col [nzSpan]="24">
                   <nz-form-item>
                     <nz-form-label [nzNoColon]="true"> Chủng loại hàng hóa</nz-form-label>
@@ -188,34 +189,34 @@
                     </nz-form-control>
                   </nz-form-item>
                 </div>
-                <div nz-col [nzSpan]="24">
-                  <nz-form-item>
-                    <nz-form-label [nzNoColon]="true"> Tổng số đơn vị tài sản đấu giá </nz-form-label>
-                    <nz-form-control>
-                      <input style="color: blue ;font-weight: bold;" nz-input formControlName="slDviTsan"
-                        readonly="true" />
-                    </nz-form-control>
-                  </nz-form-item>
-                </div>
-                <div nz-col [nzSpan]="24">
-                  <nz-form-item>
-                    <nz-form-label [nzNoColon]="true"> Số ĐV tài sản đấu giá thành thành
-                    </nz-form-label>
-                    <nz-form-control nz-col>
-                      <input nz-input formControlName="soDviTsanThanhCong" readonly />
-                    </nz-form-control>
-                  </nz-form-item>
-                </div>
-                <div nz-col [nzSpan]="24">
-                  <nz-form-item>
-                    <nz-form-label [nzNoColon]="true"> Số ĐV tài sản đấu giá không thành </nz-form-label>
-                    <nz-form-control>
-                      <nz-input-group>
-                        <input nz-input formControlName="soDviTsanKhongThanh" readonly />
-                      </nz-input-group>
-                    </nz-form-control>
-                  </nz-form-item>
-                </div>
+<!--                <div nz-col [nzSpan]="24">-->
+<!--                  <nz-form-item>-->
+<!--                    <nz-form-label [nzNoColon]="true"> Tổng số đơn vị tài sản đấu giá </nz-form-label>-->
+<!--                    <nz-form-control>-->
+<!--                      <input style="color: blue ;font-weight: bold;" nz-input formControlName="slDviTsan"-->
+<!--                        readonly="true" />-->
+<!--                    </nz-form-control>-->
+<!--                  </nz-form-item>-->
+<!--                </div>-->
+<!--                <div nz-col [nzSpan]="24">-->
+<!--                  <nz-form-item>-->
+<!--                    <nz-form-label [nzNoColon]="true"> Số ĐV tài sản đấu giá thành thành-->
+<!--                    </nz-form-label>-->
+<!--                    <nz-form-control nz-col>-->
+<!--                      <input nz-input formControlName="soDviTsanThanhCong" readonly />-->
+<!--                    </nz-form-control>-->
+<!--                  </nz-form-item>-->
+<!--                </div>-->
+<!--                <div nz-col [nzSpan]="24">-->
+<!--                  <nz-form-item>-->
+<!--                    <nz-form-label [nzNoColon]="true"> Số ĐV tài sản đấu giá không thành </nz-form-label>-->
+<!--                    <nz-form-control>-->
+<!--                      <nz-input-group>-->
+<!--                        <input nz-input formControlName="soDviTsanKhongThanh" readonly />-->
+<!--                      </nz-input-group>-->
+<!--                    </nz-form-control>-->
+<!--                  </nz-form-item>-->
+<!--                </div>-->
                 <div nz-col [nzSpan]="24">
                   <nz-form-item>
                     <nz-form-label [nzNoColon]="true"> Loại hình nhập xuất </nz-form-label>

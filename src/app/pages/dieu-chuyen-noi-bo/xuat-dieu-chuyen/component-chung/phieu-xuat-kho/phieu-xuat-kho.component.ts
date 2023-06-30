@@ -24,6 +24,7 @@ export class PhieuXuatKhoDCNBComponent extends Base2Component implements OnInit 
   @Input() isVatTu: boolean;
   @Input() loaiDc: string;
   @Input() thayDoiThuKho: boolean;
+  @Input() type: string;
   selectedId: number = 0;
   isView: boolean = false;
   isTatCa: boolean = false;
@@ -61,7 +62,9 @@ export class PhieuXuatKhoDCNBComponent extends Base2Component implements OnInit 
       denNgay: [null],
       isVatTu: [false],
       loaiDc: [''],
-      thayDoiThuKho: ['']
+      thayDoiThuKho: [''],
+      type: [''],
+      trangThai: ['']
     })
 
     this.filterTable = {
@@ -86,7 +89,8 @@ export class PhieuXuatKhoDCNBComponent extends Base2Component implements OnInit 
       this.formData.patchValue({
         isVatTu: this.isVatTu,
         loaiDc: this.loaiDc,
-        thayDoiThuKho: this.thayDoiThuKho
+        thayDoiThuKho: this.thayDoiThuKho,
+        type: this.type,
         // maDvi: this.userService.isChiCuc() ? this.userInfo.MA_DVI : null
       })
       await this.search();
@@ -137,15 +141,16 @@ export class PhieuXuatKhoDCNBComponent extends Base2Component implements OnInit 
 
 
   buildTableView() {
-    let dataView = chain(this.dataTable)
+    const newData = this.dataTable.map(f => ({ ...f, maNganLoKho: f.maLoKho ? `${f.maLoKho}${f.maNganKho}` : f.maNganKho }))
+    let dataView = chain(newData)
       .groupBy("soQdinh")
       .map((value, key) => {
         let rs = chain(value)
           .groupBy("maDiemKho")
           .map((v, k) => {
             let rowLv2 = v.find(s => s.maDiemKho === k);
-            let rsx = chain(v).groupBy("maloKho").map((x, ix) => {
-              const rowLv3 = x.find(f => f.maloKho == ix);
+            let rsx = chain(v).groupBy("maNganLoKho").map((x, ix) => {
+              const rowLv3 = x.find(f => f.maNganLoKho == ix);
               return {
                 ...rowLv3,
                 idVirtual: uuidv4(),

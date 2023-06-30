@@ -28,6 +28,7 @@ export class DanhSachBienBanLayMau extends Base2Component implements OnInit {
     @Input() loaiDc: string;
     @Input() isVatTu: boolean;
     @Input() thayDoiThuKho: boolean;
+    @Input() type: string;
     // @Output() checkPermissonDelete = new EventEmitter<boolean>();
     // @Output() checkPermissonExport = new EventEmitter<boolean>();
     // @Output() checkPermissonAdd = new EventEmitter<boolean>();
@@ -66,7 +67,6 @@ export class DanhSachBienBanLayMau extends Base2Component implements OnInit {
         private cdr: ChangeDetectorRef,) {
         super(httpClient, storageService, notification, spinner, modal, bienBanLayMauDieuChuyenService);
         this.formData = this.fb.group({
-            type: ['00'],
             nam: [null],
             soBbLayMau: [null],
             soQdinhDcc: [null],
@@ -76,7 +76,9 @@ export class DanhSachBienBanLayMau extends Base2Component implements OnInit {
             denNgay: [null],
             trangThai: [STATUS.BAN_HANH],
             loaiDc: [],
-            isVatTu: [],
+            isVatTu: [false],
+            thayDoiThuKho: [false],
+            type: []
         })
         this.filterTable = {
             nam: '',
@@ -94,7 +96,7 @@ export class DanhSachBienBanLayMau extends Base2Component implements OnInit {
     }
 
     ngOnInit(): void {
-        this.formData.patchValue({ loaiDc: this.loaiDc, isVatTu: this.isVatTu });
+        this.formData.patchValue({ loaiDc: this.loaiDc, isVatTu: this.isVatTu, thayDoiThuKho: this.thayDoiThuKho, type: this.type });
         this.timKiem()
     }
     async timKiem() {

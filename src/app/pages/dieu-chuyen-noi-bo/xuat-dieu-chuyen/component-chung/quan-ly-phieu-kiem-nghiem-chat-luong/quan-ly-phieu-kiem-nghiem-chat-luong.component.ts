@@ -39,6 +39,7 @@ export class PhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base2Compon
   @Input() loaiDc: string;
   @Input() isVatTu: boolean;
   @Input() thayDoiThuKho: boolean;
+  @Input() type: string;
   toDay = new Date();
   last30Day = new Date(
     new Date().setTime(this.toDay.getTime() - 30 * 24 * 60 * 60 * 1000),
@@ -106,7 +107,7 @@ export class PhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base2Compon
     super(httpClient, storageService, notification, spinner, modal, phieuKiemNghiemChatLuongDieuChuyenService);
     this.formData = this.fb.group({
       // namKeHoach: [dayjs().get("year")],
-      type: ['00'],
+      type: [null],
       nam: [null],
       maDvi: [null],
       loaiDc: [null],
@@ -143,7 +144,7 @@ export class PhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base2Compon
       // if (this.typeVthh == 'tat-ca') {
       //   this.isTatCa = true;
       // }
-      this.formData.patchValue({ loaiDc: this.loaiDc, isVatTu: this.isVatTu, maDvi: this.userInfo.MA_DVI, trangThai: STATUS.BAN_HANH })
+      this.formData.patchValue({ loaiDc: this.loaiDc, isVatTu: this.isVatTu, type: this.type, maDvi: this.userInfo.MA_DVI, trangThai: STATUS.BAN_HANH })
       this.timKiem()
     } catch (e) {
       console.log('error: ', e);

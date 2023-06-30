@@ -36,6 +36,7 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
   @Input() isVatTu: boolean;
   @Input() loaiDc: string;
   @Input() thayDoiThuKho: boolean;
+  @Input() type: string;
   @Input() idInput: number;
   @Input() isView: boolean;
 
@@ -88,7 +89,6 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
     this.formData = this.fb.group(
       {
         id: [],
-        type: ['00'],
         nam: [dayjs().get("year")],
         maDvi: [],
         loaiBienBan: ['ALL'],
@@ -134,7 +134,6 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
         doiThuKho: [true],
         checked: [true],
         soBienBanBaoQuanLanDau: [''],
-        loaiDc: [''],
         thuKho: [null],
         tenThuKho: [''],
         donViTinh: '',
@@ -207,7 +206,6 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
         tenDvi: this.userInfo.TEN_DVI,
         maQhns: this.userInfo.DON_VI.maQhns,
         ktvBaoQuan: this.userInfo.TEN_DAY_DU,
-        loaiDc: this.loaiDc,
         ...this.passData,
         tenNganLoKho: this.passData.tenLoKho ? `${this.passData.tenLoKho} - ${this.passData.tenNganKho}` : this.passData.tenNganKho,
         qdccId: this.passData.qddccId
@@ -326,7 +324,7 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
         data.danhSachQuyetDinh.forEach(element => {
           if (Array.isArray(element.danhSachKeHoach)) {
             element.danhSachKeHoach.forEach(item => {
-              if (dataChiCuc.findIndex(f => ((!f.maLoKho && !item.maLoKho && f.maNganKho == item.maNganKho) || (f.maLoKho && f.maLoKho == item.maLoKho))) < 0) {
+              if (dataChiCuc.findIndex(f => ((!f.maLoKho && !item.maLoKho && item.maNganKho && f.maNganKho == item.maNganKho) || (f.maLoKho && f.maLoKho == item.maLoKho))) < 0) {
                 dataChiCuc.push(item)
               }
             });
@@ -452,6 +450,10 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
   async save(isGuiDuyet?) {
     this.setValidator(isGuiDuyet)
     let body = this.formData.value;
+    body.loaiDc = this.loaiDc;
+    body.isVatTu = this.isVatTu;
+    body.thayDoiThuKho = this.thayDoiThuKho;
+    body.type = this.type;
     body.bienBanLayMauDinhKem = this.bienBanLayMauDinhKem;
     body.canCu = this.canCu;
     body.fileDinhKemChupMauNiemPhong = this.fileDinhKemChupMauNiemPhong;

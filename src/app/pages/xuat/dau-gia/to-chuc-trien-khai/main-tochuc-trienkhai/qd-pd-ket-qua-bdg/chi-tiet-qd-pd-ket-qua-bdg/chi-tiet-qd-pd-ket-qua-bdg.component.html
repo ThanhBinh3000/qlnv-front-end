@@ -33,14 +33,14 @@
       <i class="icon htvbdh_tcdt_guiduyet"></i>
       <span>Lưu và gửi duyệt</span>
     </button>
-    <button
-      *ngIf=" loaiVthh.startsWith('02') ? 
-      userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG_VT_QDKQDG_DUYET_LDC') && (formData.value.trangThai===STATUS.CHO_DUYET_LDC):
-      userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG_LT_QDKQDG_DUYET_LDC') && (formData.value.trangThai===STATUS.CHO_DUYET_LDC)"
-      type="button" class="btn btn-sub xanh-nhat" (click)="guiDuyet()">
-      <i class="icon htvbdh_chuyenvanthu"></i>
-      <span>Ban hành</span>
-    </button>
+<!--    <button-->
+<!--      *ngIf=" loaiVthh.startsWith('02') ? -->
+<!--      userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG_VT_QDKQDG_DUYET_LDC') && (formData.value.trangThai===STATUS.CHO_DUYET_LDC):-->
+<!--      userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG_LT_QDKQDG_DUYET_LDC') && (formData.value.trangThai===STATUS.CHO_DUYET_LDC)"-->
+<!--      type="button" class="btn btn-sub xanh-nhat" (click)="guiDuyet()">-->
+<!--      <i class="icon htvbdh_chuyenvanthu"></i>-->
+<!--      <span>Ban hành</span>-->
+<!--    </button>-->
     <button *ngIf=" loaiVthh.startsWith('02') ?
     userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG_VT_QDKQDG_THEM') && ((formData.value.trangThai===STATUS.DU_THAO)
     || (formData.value.trangThai===STATUS.TU_CHOI_TP) || (formData.value.trangThai===STATUS.TU_CHOI_LDC)) :

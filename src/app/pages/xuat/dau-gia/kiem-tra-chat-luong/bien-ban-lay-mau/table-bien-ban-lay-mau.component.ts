@@ -42,6 +42,7 @@ export class TableBienBanLayMauComponent extends Base2Component implements OnIni
       ngayLayMauDen: null,
       maDvi: null,
       loaiVthh: null,
+      maDviCuc: null,
     })
 
     this.filterTable = {
@@ -83,7 +84,8 @@ export class TableBienBanLayMauComponent extends Base2Component implements OnIni
     this.formData.patchValue({
       loaiVthh: this.loaiVthh,
       maDvi: this.userService.isChiCuc() ? this.userInfo.MA_DVI : null,
-      trangThai: this.userService.isChiCuc() ? null : this.STATUS.DA_DUYET_LDCC
+      trangThai: this.userService.isChiCuc() ? null : this.STATUS.DA_DUYET_LDCC,
+      maDviCuc : this.userService.isCuc() ? this.userInfo.MA_DVI : null,
     })
   }
 

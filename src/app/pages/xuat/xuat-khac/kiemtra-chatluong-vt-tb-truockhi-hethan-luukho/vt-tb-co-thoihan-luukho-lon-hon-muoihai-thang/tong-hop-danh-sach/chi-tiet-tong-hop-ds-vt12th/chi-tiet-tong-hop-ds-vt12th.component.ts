@@ -1,36 +1,45 @@
 import {ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, SimpleChanges} from '@angular/core';
-import {NumberToRoman} from "../../../../../../shared/commonFunction";
-import {Base2Component} from "../../../../../../components/base2/base2.component";
-import {CHUC_NANG} from "../../../../../../constants/status";
+import {NumberToRoman} from "../../../../../../../shared/commonFunction";
+import {
+  KiemtraChatluongLtTruockhiHethanLuukhoComponent
+} from "../../../../kiemtra-chatluong-lt-truockhi-hethan-luukho/kiemtra-chatluong-lt-truockhi-hethan-luukho.component";
 import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../../../services/storage.service";
+import {StorageService} from "../../../../../../../services/storage.service";
 import {NzNotificationService} from "ng-zorro-antd/notification";
 import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
-import {DonviService} from "../../../../../../services/donvi.service";
-import {DanhMucService} from "../../../../../../services/danhmuc.service";
-import dayjs from "dayjs";
-import {Validators} from "@angular/forms";
-import {MESSAGE} from "../../../../../../constants/message";
-import {chain, cloneDeep, isEmpty} from "lodash";
-import {v4 as uuidv4} from "uuid";
-import {
-  KiemtraChatluongLtTruockhiHethanLuukhoComponent
-} from "../../kiemtra-chatluong-lt-truockhi-hethan-luukho.component";
-import {LOAI_HH_XUAT_KHAC} from "../../../../../../constants/config";
-import {
-  DanhSachHangDTQGCon6ThangService
-} from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatlt/DanhSachHangDTQGCon6Thang.service";
+import {DonviService} from "../../../../../../../services/donvi.service";
+import {DanhMucService} from "../../../../../../../services/danhmuc.service";
 import {
   TongHopDanhSachHangDTQGService
-} from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatlt/TongHopDanhSachHangDTQG.service";
+} from "../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatlt/TongHopDanhSachHangDTQG.service";
+import {
+  DanhSachHangDTQGCon6ThangService
+} from "../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatlt/DanhSachHangDTQGCon6Thang.service";
+import dayjs from "dayjs";
+import {Validators} from "@angular/forms";
+import {chain, cloneDeep, isEmpty} from "lodash";
+import {v4 as uuidv4} from "uuid";
+import {MESSAGE} from "../../../../../../../constants/message";
+import {Base2Component} from "../../../../../../../components/base2/base2.component";
+import {CHUC_NANG} from "../../../../../../../constants/status";
+import {
+  VtTbCoThoihanLuukhoLonHonMuoihaiThangComponent
+} from "../../vt-tb-co-thoihan-luukho-lon-hon-muoihai-thang.component";
+import {
+  DanhSachVttbTruocHethanLuuKhoService
+} from "../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/DanhSachVttbTruocHethanLuuKho.service";
+import {
+  TongHopDanhSachVttbService
+} from "../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/TongHopDanhSachVttb.service";
+import {LOAI_HH_XUAT_KHAC} from "../../../../../../../constants/config";
 
 @Component({
-  selector: 'app-chi-tiet-tong-hop-ds-hang-dtqg',
-  templateUrl: './chi-tiet-tong-hop-ds-hang-dtqg.component.html',
-  styleUrls: ['./chi-tiet-tong-hop-ds-hang-dtqg.component.scss']
+  selector: 'app-chi-tiet-tong-hop-ds-vt12th',
+  templateUrl: './chi-tiet-tong-hop-ds-vt12th.component.html',
+  styleUrls: ['./chi-tiet-tong-hop-ds-vt12th.component.scss']
 })
-export class ChiTietTongHopDsHangDtqgComponent extends Base2Component implements OnInit {
+export class ChiTietTongHopDsVt12thComponent extends Base2Component implements OnInit {
   @Input() loaiVthhInput: string;
   @Input() idInput: number;
   @Input() selectedItem: any = {};
@@ -53,7 +62,7 @@ export class ChiTietTongHopDsHangDtqgComponent extends Base2Component implements
   expandSetString = new Set<string>();
   numberToRoman = NumberToRoman;
   maHauTo: any;
-  public vldTrangThai: KiemtraChatluongLtTruockhiHethanLuukhoComponent;
+  public vldTrangThai: VtTbCoThoihanLuukhoLonHonMuoihaiThangComponent;
 
   constructor(httpClient: HttpClient,
               storageService: StorageService,
@@ -62,14 +71,14 @@ export class ChiTietTongHopDsHangDtqgComponent extends Base2Component implements
               modal: NzModalService,
               private donviService: DonviService,
               private danhMucService: DanhMucService,
-              private tongHopDanhSachHangDTQGService: TongHopDanhSachHangDTQGService,
-              private danhSachHangDTQGCon6ThangService: DanhSachHangDTQGCon6ThangService,
-              private kiemtraChatluongLtTruockhiHethanLuukhoComponent: KiemtraChatluongLtTruockhiHethanLuukhoComponent,
+              private tongHopDanhSachVttbService: TongHopDanhSachVttbService,
+              private danhSachVttbTruocHethanLuuKhoService: DanhSachVttbTruocHethanLuuKhoService,
+              private vtTbCoThoihanLuukhoLonHonMuoihaiThangComponent: VtTbCoThoihanLuukhoLonHonMuoihaiThangComponent,
               private cdr: ChangeDetectorRef) {
-    super(httpClient, storageService, notification, spinner, modal, tongHopDanhSachHangDTQGService);
-    this.vldTrangThai = kiemtraChatluongLtTruockhiHethanLuukhoComponent;
+    super(httpClient, storageService, notification, spinner, modal, tongHopDanhSachVttbService);
+    this.vldTrangThai = vtTbCoThoihanLuukhoLonHonMuoihaiThangComponent;
     this.formData = this.fb.group({
-      id: [0],
+      id: [null],
       nam: [dayjs().get('year')],
       maDvi: [],
       maDanhSach: [],
@@ -88,21 +97,17 @@ export class ChiTietTongHopDsHangDtqgComponent extends Base2Component implements
       tenTrangThai: [],
       tenDvi: [],
       tenCuc: [],
+      capTh: [this.userInfo.CAP_DVI],
+      loai: [LOAI_HH_XUAT_KHAC.VT_12_THANG],
       tongHopDtl: [new Array()]
     })
     this.userInfo = this.userService.getUserLogin();
-    this.maHauTo = 'DSKTCLLTTKHHLK-';
+    this.maHauTo = 'DSLK12';
   }
 
   async ngOnInit(): Promise<void> {
     try {
       await this.spinner.show();
-      /*   await Promise.all([
-           this.loadDsDonVi(),
-           this.loadDsVthh()
-         ]);*/
-      // this.formData.patchValue(this.selectedItem)
-      console.log(this.showDetail, 666)
       await this.loadDetail(this.idInput);
     } catch (e) {
       console.log('error: ', e)
@@ -115,7 +120,7 @@ export class ChiTietTongHopDsHangDtqgComponent extends Base2Component implements
 
   async loadDetail(idInput: any) {
     if (idInput > 0) {
-      await this.tongHopDanhSachHangDTQGService.getDetail(idInput)
+      await this.tongHopDanhSachVttbService.getDetail(idInput)
         .then(async (res) => {
           if (res.msg == MESSAGE.SUCCESS) {
             // this.maHauTo = '/' + res.data.maDanhSach.split("/")[1];
@@ -223,12 +228,13 @@ export class ChiTietTongHopDsHangDtqgComponent extends Base2Component implements
         this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đủ thông tin.');
         return;
       } else {
-        await this.danhSachHangDTQGCon6ThangService.search({
+        await this.danhSachVttbTruocHethanLuuKhoService.search({
           type: 'TH',
+          loai:LOAI_HH_XUAT_KHAC.VT_12_THANG,
         }).then(async res => {
           if (res.msg == MESSAGE.SUCCESS) {
             if (res.data.numberOfElements == 0) {
-              this.notification.warning(MESSAGE.ALERT, 'Không tìm thấy hàng hóa cần thanh lý trong danh sách.');
+              this.notification.warning(MESSAGE.ALERT, 'Không tìm thấy vật tư thiết bị trong danh sách.');
             } else {
               res.data.content.forEach(s => {
                 s.idDsHdr = cloneDeep(s.id);
@@ -282,9 +288,9 @@ export class ChiTietTongHopDsHangDtqgComponent extends Base2Component implements
               try {
                 let body = {
                   id: this.selectedItem.id,
-                  trangThai: this.STATUS.DA_TONG_HOP,
+                  trangThai: this.STATUS.GUI_DUYET,
                 }
-                let res = await this.tongHopDanhSachHangDTQGService.approve(body);
+                let res = await this.tongHopDanhSachVttbService.approve(body);
                 if (res.msg == MESSAGE.SUCCESS) {
                   this.notification.success(MESSAGE.NOTIFICATION, 'Gửi duyệt tổng hợp thành công.');
                   this.step.emit({step: 1});

@@ -11,7 +11,7 @@
           </div>
           <div nz-col nzSpan="3">
             <label>Số QĐ giao nv xuất hàng</label>
-            <input placeholder="Nhập nội dung" nz-input formControlName="soQdGiaoNvXh" />
+            <input placeholder="Nhập nội dung" nz-input formControlName="soQdinhDcc" />
           </div>
           <div nz-col nzSpan="4">
             <label>Số bảng kê</label>
@@ -88,6 +88,7 @@
           <tr>
             <th style="width: 35px">STT</th>
             <th></th>
+            <th></th>
             <th>Số QĐ ĐC của Cục</th>
             <th>Năm KH</th>
             <th>Thời hạn điều chuyển</th>
@@ -106,6 +107,7 @@
               <td>{{i + 1}}</td>
               <td (nzExpandChange)="onExpandStringChange(item.idVirtual, $event)"
                 [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true" style="width: 35px"></td>
+              <td></td>
               <td class="bold">{{ item.soQdinh }}</td>
               <td class="bold">{{item.namKh}}</td>
               <td class="bold">{{item.thoiHanDieuChuyen | date: 'dd/MM/YYYY' }}</td>
@@ -126,6 +128,7 @@
                     [nzExpand]="expandSetString.has(lv1.idVirtual)" nzShowExpand="true" style="width: 35px"></td>
                   <td></td>
                   <td></td>
+                  <td></td>
                   <td class="bold">{{lv1.tenDiemKho}}</td>
                   <td></td>
                   <td></td>
@@ -144,16 +147,20 @@
                       <td></td>
                       <td></td>
                       <td></td>
+                      <td></td>
                       <td class="bold">{{ (lv2.tenLoKho ? lv1.tenLoKho + ' - ' : '') + (lv2.tenNganKho? lv2.tenNganKho +
                         " - " : "") + (lv2.tenNhaKho? lv2.tenNhaKho: "") }}</td>
                       <td></td>
                       <td></td>
                       <td></td>
                       <td></td>
-                      <td></td>
+                      <td><a (click)="redirectDetail(lv2, false, null)" *ngIf="checkRoleAdd(lv2.trangThai)">
+                          <i class="fa fa-plus"></i>
+                        </a></td>
                     </tr>
                     <ng-container *ngFor="let lv3 of lv2.childData,let i3=index">
                       <tr>
+                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -167,16 +174,16 @@
                         <td>{{lv3.ngayXuatKho | date: 'dd/MM/YYYY' }}</td>
                         <td>{{LIST_TRANG_THAI[lv3.trangThai]}}</td>
                         <td class="text-left">
-                          <a (click)="redirectDetail(lv3, true)" *ngIf="checkRoleAdd(lv3.trangThai)">
+                          <!-- <a (click)="redirectDetail(lv3, false, null)" *ngIf="checkRoleAdd(lv3.trangThai)">
                             <i class="fa fa-plus"></i>
-                          </a>
-                          <a (click)="redirectDetail(lv3.id, true)" *ngIf="checkRoleView(lv3.trangThai)">
+                          </a> -->
+                          <a (click)="redirectDetail(lv3, true, lv3.id)" *ngIf="checkRoleView(lv3.trangThai)">
                             <i class="fa fa-eye"></i>
                           </a>
-                          <a *ngIf="checkRoleEdit(lv3.trangThai)" (click)="redirectDetail(lv3.id, false)">
+                          <a *ngIf="checkRoleEdit(lv3.trangThai)" (click)="redirectDetail(lv3, false, lv3.id)">
                             <i class="fa fa-pencil"></i>
                           </a>
-                          <a *ngIf="checkRoleDuyet(lv3.trangThai)" (click)="redirectDetail(lv3.id, true)">
+                          <a *ngIf="checkRoleDuyet(lv3.trangThai)" (click)="redirectDetail(lv3, true, lv3.id)">
                             <i class="icon htvbdh_tcdt_pheduyet"></i>
                           </a>
                           <a *ngIf="checkRoleDelete(lv3.trangThai)" (click)="delete(lv3)">
@@ -214,7 +221,7 @@
 </div>
 <div class="chi-tiet" *ngIf="isDetail">
   <app-xdcnb-chi-tiet-bang-ke-can [idInput]="selectedId" [isVatTu]="isVatTu" [loaiDc]="loaiDc" [isView]="isView"
-    [thayDoiThuKho]="thayDoiThuKho" (showListEvent)="showList()">
+    [thayDoiThuKho]="thayDoiThuKho" [type]="type" [passData]="passData" (showListEvent)="showList()">
   </app-xdcnb-chi-tiet-bang-ke-can>
 </div>
 

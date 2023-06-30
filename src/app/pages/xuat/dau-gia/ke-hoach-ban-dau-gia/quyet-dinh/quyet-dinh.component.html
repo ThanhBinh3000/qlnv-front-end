@@ -201,11 +201,11 @@
                                 (click)="goDetail(data.id)">
                                 <i class="fa fa-eye"></i>
                             </a>
-                            <a *ngIf="userService.isTongCuc()&&(userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_QDLCNT_THEM') && (data.trangThai == STATUS.DU_THAO))"
+                            <a *ngIf="userService.isTongCuc()&&(userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_QDLCNT_THEM') && (data.trangThai == STATUS.DANG_NHAP_DU_LIEU))"
                                 (click)="goDetail(data.id)">
                                 <i class="fa fa-pencil"></i>
                             </a>
-                            <a *ngIf="userService.isTongCuc()&&(userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_QDLCNT_XOA') && (data.trangThai == STATUS.DU_THAO))"
+                            <a *ngIf="userService.isTongCuc()&&(userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_QDLCNT_XOA') && (data.trangThai == STATUS.DANG_NHAP_DU_LIEU))"
                                 (click)="delete(data)">
                                 <i class="fa fa-trash-o do"></i>
                             </a>

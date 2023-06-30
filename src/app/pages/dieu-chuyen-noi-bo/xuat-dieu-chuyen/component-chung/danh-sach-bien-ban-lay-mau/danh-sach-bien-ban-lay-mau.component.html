@@ -202,7 +202,8 @@
 <ng-template #templateThemmoi>
   <app-chi-tiet-danh-sach-bien-ban-lay-mau [idInput]="selectedId" [isEdit]="isEdit" [isView]="isView"
     [isAddNew]="isAddNew" [passData]="this.passData" [isVatTu]="isVatTu" [loaiDc]="loaiDc"
-    [thayDoiThuKho]="thayDoiThuKho" (showListEvent)="showList()"></app-chi-tiet-danh-sach-bien-ban-lay-mau>
+    [thayDoiThuKho]="thayDoiThuKho" [type]="type"
+    (showListEvent)="showList()"></app-chi-tiet-danh-sach-bien-ban-lay-mau>
 </ng-template>
 
 <!-- Modal view -->

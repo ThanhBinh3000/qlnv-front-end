@@ -20,16 +20,21 @@ import {
 // import { XuatCuuTroVienTroComponent } from 'src/app/pages/xuat/xuat-cuu-tro-vien-tro/xuat-cuu-tro-vien-tro.component';
 import { CHUC_NANG, STATUS } from 'src/app/constants/status';
 import { BangKeCanHangDieuChuyenService } from '../services/dcnb-bang-ke-can-hang.service';
-
+export interface PassDataXuatBangKeCanHang {
+  soQdinhDcc: string, qdinhDccId: number, ngayKyQdDcc: string, thoiHanDieuChuyen: string, maDiemKho: string, tenDiemKho: string, maNhaKho: string, tenNhaKho: string, maNganKho: string, tenNganKho: string,
+  maLoKho: string, tenLoKho: string, soPhieuXuatKho: string, phieuXuatKhoId: number, loaiVthh: string, tenLoaiVthh: string, cloaiVthh: string, tenCloaiVthh: string, diaDaDiemKho: string, tenNguoiGiaoHang: string, cccd: string,
+  donViNguoiGiaoHang: string, diaChiDonViNguoiGiaoHang: string, donViTinh: string, tenDonViTinh: string, thoiGianGiaoNhan: string
+}
 @Component({
   selector: 'app-xuat-dcnb-bang-ke-can',
   templateUrl: './bang-ke-can.component.html',
   styleUrls: ['./bang-ke-can.component.scss']
 })
 export class BangKeCanXuatDieuChuyenComponent extends Base2Component implements OnInit {
-  @Input() isVatTu: boolean;
   @Input() loaiDc: string;
+  @Input() isVatTu: boolean;
   @Input() thayDoiThuKho: boolean;
+  @Input() type: string;
   // public vldTrangThai: XuatCuuTroVienTroComponent;
   public CHUC_NANG = CHUC_NANG;
   dsDonvi: any[] = [];
@@ -47,6 +52,11 @@ export class BangKeCanXuatDieuChuyenComponent extends Base2Component implements 
     [this.STATUS.TU_CHOI_LDCC]: "Từ chối LĐ Chi Cục",
     [this.STATUS.DA_DUYET_LDCC]: "Đã duyệt LĐ Chi Cục"
   }
+  passData: PassDataXuatBangKeCanHang = {
+    soQdinhDcc: '', qdinhDccId: null, ngayKyQdDcc: '', thoiHanDieuChuyen: '', maDiemKho: '', tenDiemKho: '', maNhaKho: '', tenNhaKho: '', maNganKho: '', tenNganKho: '',
+    maLoKho: '', tenLoKho: '', soPhieuXuatKho: '', phieuXuatKhoId: null, loaiVthh: '', tenLoaiVthh: '', cloaiVthh: '', tenCloaiVthh: '', diaDaDiemKho: '', tenNguoiGiaoHang: '', cccd: '',
+    donViNguoiGiaoHang: '', diaChiDonViNguoiGiaoHang: '', donViTinh: '', tenDonViTinh: '', thoiGianGiaoNhan: ''
+  }
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -63,9 +73,8 @@ export class BangKeCanXuatDieuChuyenComponent extends Base2Component implements 
     this.formData = this.fb.group({
       id: [0],
       nam: [],
-      soQdGiaoNvXh: [],
+      soQdinhDcc: [],
       soBangKe: [],
-      isVatTu: [],
       tuNgay: [],
       denNgay: [],
       maDiemKho: [],
@@ -78,7 +87,9 @@ export class BangKeCanXuatDieuChuyenComponent extends Base2Component implements 
       tenLoKho: [],
       ngayKetThuc: [],
       type: [],
-      loaiDc: []
+      loaiDc: [],
+      isVatTu: [],
+      thayDoiThuKho: []
     })
   }
 
@@ -125,7 +136,7 @@ export class BangKeCanXuatDieuChuyenComponent extends Base2Component implements 
     this.formData.patchValue({
       isVatTu: this.isVatTu,
       loaiDc: this.loaiDc,
-      type: "00",
+      type: this.type,
       thayDoiThuKho: this.thayDoiThuKho
     });
     await super.search(roles);
@@ -153,15 +164,16 @@ export class BangKeCanXuatDieuChuyenComponent extends Base2Component implements 
   }
 
   buildTableView() {
-    let dataView = chain(this.dataTable)
+    const newData = this.dataTable.map(f => ({ ...f, maNganLoKho: f.maLoKho ? `${f.maLoKho}${f.maNganKho}` : f.maNganKho }))
+    let dataView = chain(newData)
       .groupBy("soQdinh")
       .map((value, key) => {
         let rs = chain(value)
           .groupBy("maDiemKho")
           .map((v, k) => {
             let rowLv2 = v.find(s => s.maDiemKho === k);
-            let rsx = chain(v).groupBy("maLoKho").map((x, ix) => {
-              const rowLv3 = x.find(f => f.maLoKho == ix);
+            let rsx = chain(v).groupBy("maNganLoKho").map((x, ix) => {
+              const rowLv3 = x.find(f => f.maNganLoKho == ix);
               return {
                 ...rowLv3,
                 idVirtual: uuidv4(),
@@ -212,11 +224,16 @@ export class BangKeCanXuatDieuChuyenComponent extends Base2Component implements 
     await this.delete(lv2);
   }
 
-  redirectDetail(id, b: boolean) {
+  redirectDetail(data, b: boolean, id) {
     this.selectedId = id;
     this.isDetail = true;
     this.isView = b;
     // this.isViewDetail = isView ?? false;
+    this.passData = {
+      soQdinhDcc: data.soQdinh, qdinhDccId: data.qdinhDcId, ngayKyQdDcc: '', thoiHanDieuChuyen: data.thoiHanDieuChuyen, maDiemKho: data.maDiemKho, tenDiemKho: data.tenDiemKho, maNhaKho: data.maNhaKho, tenNhaKho: data.tenNhaKho, maNganKho: data.maNganKho, tenNganKho: data.tenNganKho,
+      maLoKho: data.maLoKho, tenLoKho: data.tenLoKho, soPhieuXuatKho: data.soPhieuXuatKho, phieuXuatKhoId: data.phieuXuatKhoId, loaiVthh: data.maHangHoa, tenLoaiVthh: data.tenHangHoa, cloaiVthh: data.maChLoaiHangHoa, tenCloaiVthh: data.tenChLoaiHangHoa, diaDaDiemKho: '', tenNguoiGiaoHang: data.nguoiGiaoHang, cccd: data.soCmt,
+      donViNguoiGiaoHang: data.ctyNguoiGh, diaChiDonViNguoiGiaoHang: data.diaChi, donViTinh: data.donViTinh, tenDonViTinh: data.tenDonViTinh, thoiGianGiaoNhan: data.thoiGianGiaoNhan
+    }
   }
 
   openPhieuXkModal(id: number) {
@@ -230,10 +247,10 @@ export class BangKeCanXuatDieuChuyenComponent extends Base2Component implements 
     this.openPhieuXk = false;
   }
   checkRoleAdd(trangThai: string): boolean {
-    return this.userService.isChiCuc() && !trangThai
+    return this.userService.isChiCuc()
   }
   checkRoleView(trangThai: string): boolean {
-    return !this.checkRoleAdd(trangThai) && !this.checkRoleEdit(trangThai) && !this.checkRoleDuyet(trangThai) && !this.checkRoleDelete(trangThai)
+    return !this.checkRoleEdit(trangThai) && !this.checkRoleDuyet(trangThai) && !this.checkRoleDelete(trangThai)
   }
   checkRoleEdit(trangThai: string): boolean {
     return this.userService.isChiCuc() && (trangThai == STATUS.DU_THAO || trangThai == STATUS.TU_CHOI_LDCC)
