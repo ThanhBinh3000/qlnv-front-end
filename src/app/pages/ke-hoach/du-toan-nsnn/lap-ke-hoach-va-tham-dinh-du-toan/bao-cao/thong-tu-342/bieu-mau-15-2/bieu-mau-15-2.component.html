@@ -521,7 +521,7 @@
 											[(ngModel)]="editCache[data.id].data.namKhKphiHphap" [options]="amount" />
 									</td>
 									<td>
-										<input class="search__input" [(ngModel)]="editCache[data.id].data.ghiChu" />
+										<input nz-input [(ngModel)]="editCache[data.id].data.ghiChu" />
 									</td>
 									<td *ngIf="status.general" nzRight>
 										<i *ngIf="checkDelete(data.stt)" class="fa fa-trash-o do"

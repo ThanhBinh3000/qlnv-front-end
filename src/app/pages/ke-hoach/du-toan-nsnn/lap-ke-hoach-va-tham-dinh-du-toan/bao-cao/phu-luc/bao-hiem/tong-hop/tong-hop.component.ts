@@ -197,8 +197,8 @@ export class TongHopComponent implements OnInit {
             })
     }
 
-    getFormDetail() {
-        this.lapThamDinhService.ctietBieuMau(this.dataInfo.id).toPromise().then(
+    async getFormDetail() {
+        await this.lapThamDinhService.ctietBieuMau(this.dataInfo.id).toPromise().then(
             data => {
                 if (data.statusCode == 0) {
                     this.formDetail = data.data;
