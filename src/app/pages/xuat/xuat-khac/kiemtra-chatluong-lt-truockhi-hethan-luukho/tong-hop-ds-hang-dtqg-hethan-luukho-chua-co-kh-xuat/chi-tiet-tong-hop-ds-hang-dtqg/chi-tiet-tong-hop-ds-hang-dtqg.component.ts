@@ -21,6 +21,9 @@ import {LOAI_HH_XUAT_KHAC} from "../../../../../../constants/config";
 import {
   DanhSachHangDTQGCon6ThangService
 } from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatlt/DanhSachHangDTQGCon6Thang.service";
+import {
+  TongHopDanhSachHangDTQGService
+} from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatlt/TongHopDanhSachHangDTQG.service";
 
 @Component({
   selector: 'app-chi-tiet-tong-hop-ds-hang-dtqg',
