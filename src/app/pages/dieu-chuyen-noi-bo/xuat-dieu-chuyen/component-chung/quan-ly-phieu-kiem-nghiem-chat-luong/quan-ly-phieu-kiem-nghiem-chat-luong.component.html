@@ -204,7 +204,7 @@
 </div>
 <ng-template #templateThemmoi>
   <app-them-moi-phieu-kiem-nghiem-chat-luong [isVatTu]="isVatTu" [loaiDc]="loaiDc" [thayDoiThuKho]="thayDoiThuKho"
-    [idInput]="selectedId" [passData]="passData" [isView]="isView" (showListEvent)="showList()">
+    [type]="type" [idInput]="selectedId" [passData]="passData" [isView]="isView" (showListEvent)="showList()">
   </app-them-moi-phieu-kiem-nghiem-chat-luong>
 </ng-template>
 <!-- Modal view -->
@@ -230,8 +230,8 @@
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewBbLayMau"
   [nzBodyStyle]="{ 'overflow-y': 'auto' }" (nzOnCancel)="closeModalBbLayMau()">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-    <app-chi-tiet-danh-sach-bien-ban-lay-mau [idInput]="bblayMauId"
-      [isViewOnModal]="true"></app-chi-tiet-danh-sach-bien-ban-lay-mau>
+    <app-chi-tiet-danh-sach-bien-ban-lay-mau [idInput]="bblayMauId" [isVatTu]="isVatTu" [loaiDc]="loaiDc"
+      [thayDoiThuKho]="thayDoiThuKho" [type]="type" [isViewOnModal]="true"></app-chi-tiet-danh-sach-bien-ban-lay-mau>
   </ng-container>
   <div *nzModalFooter>
     <button nz-button (click)="closeModalBbLayMau()" class="modal__button--cancel">
@@ -254,3 +254,16 @@
     </button>
   </div>
 </nz-modal> -->
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewBbTinhKho"
+  [nzBodyStyle]="{ 'overflow-y': 'auto' }" (nzOnCancel)="closeModalBbTinhKho()">
+  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+    <app-xuat-dcnb-them-moi-bien-ban-tinh-kho [idInput]="idBbTinhKho" [isVatTu]="isVatTu" [loaiDc]="loaiDc"
+      [thayDoiThuKho]="thayDoiThuKho" [type]="type" [isViewOnModal]="true"></app-xuat-dcnb-them-moi-bien-ban-tinh-kho>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button (click)="closeModalBbTinhKho()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>

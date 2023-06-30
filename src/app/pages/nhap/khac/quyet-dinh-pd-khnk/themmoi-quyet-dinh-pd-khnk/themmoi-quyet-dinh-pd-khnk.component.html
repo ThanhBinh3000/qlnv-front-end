@@ -11,7 +11,7 @@
       <span>Lưu và gửi duyệt</span>
     </button>
     <button
-      *ngIf="(formData.value.trangThai == STATUS.DU_THAO) &&  userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_THEM') &&  userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_BANHANH') && !isView"
+      *ngIf="(formData.value.trangThai == STATUS.DA_DUYET_LDV) &&  userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_THEM') &&  userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_BANHANH') && !isView"
       type="button" class="btn btn-sub xanh-nhat" (click)="save(true)">
       <i class="icon htvbdh_chuyenvanthu"></i>
       <span>Ban hành</span>
@@ -22,10 +22,10 @@
       <span>Từ chối</span>
     </button>
     <button
-      *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.DA_DUYET_LDV) && userService.isTongCuc() && !isView"
+      *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.DU_THAO) && userService.isTongCuc() && !isView"
       type="button" class="btn btn-sub xanh-nhat" (click)="guiDuyet()">
       <i class="icon htvbdh_tcdt_pheduyet"></i>
-      <span> {{ formData.value.trangThai == STATUS.CHO_DUYET_LDV ? 'Duyệt' : 'Ban hành'}} </span>
+      <span> {{ formData.value.trangThai == STATUS.CHO_DUYET_LDV ? 'Duyệt' : 'Lưu và gửi duyệt'}} </span>
     </button>
     <button
       *ngIf="(this.isCheckCreate && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV ))  && isDetailPermission() && !isView"
