@@ -23,6 +23,7 @@ import {
 import {
   DanhSachHangDTQGCon6ThangService
 } from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatlt/DanhSachHangDTQGCon6Thang.service";
+
 @Component({
   selector: 'app-chi-tiet-tong-hop-ds-hang-dtqg',
   templateUrl: './chi-tiet-tong-hop-ds-hang-dtqg.component.html',
@@ -40,7 +41,7 @@ export class ChiTietTongHopDsHangDtqgComponent extends Base2Component implements
   @Output()
   step = new EventEmitter<any>();
   @Output()
-  changeShow=new EventEmitter<any>();
+  changeShow = new EventEmitter<any>();
   showDetail = false;
   isFirstInit = true;
   CHUC_NANG = CHUC_NANG;
@@ -52,6 +53,7 @@ export class ChiTietTongHopDsHangDtqgComponent extends Base2Component implements
   numberToRoman = NumberToRoman;
   maHauTo: any;
   public vldTrangThai: KiemtraChatluongLtTruockhiHethanLuukhoComponent;
+
   constructor(httpClient: HttpClient,
               storageService: StorageService,
               notification: NzNotificationService,
@@ -66,8 +68,8 @@ export class ChiTietTongHopDsHangDtqgComponent extends Base2Component implements
     super(httpClient, storageService, notification, spinner, modal, tongHopDanhSachHangDTQGService);
     this.vldTrangThai = kiemtraChatluongLtTruockhiHethanLuukhoComponent;
     this.formData = this.fb.group({
-      id:[0],
-      nam:[dayjs().get('year')],
+      id: [0],
+      nam: [dayjs().get('year')],
       maDvi: [],
       maDanhSach: [],
       tenDanhSach: [, [Validators.required]],
@@ -75,7 +77,7 @@ export class ChiTietTongHopDsHangDtqgComponent extends Base2Component implements
       ngayDeXuatDen: [],
       trangThai: [],
       trangThaiKtCl: [],
-      ngayTao:[],
+      ngayTao: [],
       ngayGduyet: [],
       nguoiGduyetId: [],
       ngayPduyet: [],
@@ -99,7 +101,7 @@ export class ChiTietTongHopDsHangDtqgComponent extends Base2Component implements
            this.loadDsVthh()
          ]);*/
       // this.formData.patchValue(this.selectedItem)
-      console.log(this.showDetail,666)
+      console.log(this.showDetail, 666)
       await this.loadDetail(this.idInput);
     } catch (e) {
       console.log('error: ', e)
@@ -117,7 +119,7 @@ export class ChiTietTongHopDsHangDtqgComponent extends Base2Component implements
           if (res.msg == MESSAGE.SUCCESS) {
             // this.maHauTo = '/' + res.data.maDanhSach.split("/")[1];
             // res.data.maDanhSach = res.data.maDanhSach.split("/")[0];
-            this.selectedItem=res.data;
+            this.selectedItem = res.data;
             this.formData.patchValue(res.data);
             this.formData.value.tongHopDtl.forEach(s => {
               s.idVirtual = uuidv4();
@@ -308,7 +310,7 @@ export class ChiTietTongHopDsHangDtqgComponent extends Base2Component implements
   }
 
   onClickShowDetail() {
-    this.showDetail= !this.showDetail,
-    this.changeShow.emit({showDetail: this.showDetail, item: this.selectedItem})
+    this.showDetail = !this.showDetail,
+      this.changeShow.emit({showDetail: this.showDetail, item: this.selectedItem})
   }
 }
