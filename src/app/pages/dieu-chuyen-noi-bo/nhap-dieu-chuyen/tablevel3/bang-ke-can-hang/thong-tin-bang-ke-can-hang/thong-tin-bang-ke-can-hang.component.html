@@ -38,10 +38,10 @@
         <span>Duyệt</span>
       </button>
 
-      <button *ngIf="isBanHanh()" type="button" class="btn btn-info ml-2" (click)="banHanh()">
+      <!-- <button *ngIf="isBanHanh()" type="button" class="btn btn-info ml-2" (click)="banHanh()">
         <i class="icon htvbdh_chuyenvanthu"></i>
         <span>Ban hành</span>
-      </button>
+      </button> -->
 
     </div>
   </div>
@@ -265,7 +265,7 @@
                 Thời gian giao,nhận hàng
               </nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <nz-date-picker [nzDisabled]="isView" formControlName="tgianGiaoNhanHang" nzFormat="dd/MM/yyyy">
+                <nz-date-picker [nzDisabled]="true" formControlName="tgianGiaoNhanHang" nzFormat="dd/MM/yyyy">
                 </nz-date-picker>
               </nz-form-control>
             </nz-form-item>
@@ -346,13 +346,19 @@
               </th>
               <th>
                 <form nz-form nzLayout="vertical" [formGroup]="formData">
-                  <input type="text" nz-input class="w-400" formControlName="soBaoBi" />
+                  <!-- <input type="text" nz-input class="w-400" formControlName="soBaoBi" /> -->
+                  <nz-input-number formControlName="soBaoBi" [nzMin]="1" [nzMax]="999999999999" [nzStep]="1"
+                    [nzSize]="'small'">
+                  </nz-input-number>
                 </form>
 
               </th>
               <th>
                 <form nz-form nzLayout="vertical" [formGroup]="formData">
-                  <input type="text" nz-input class="w-400" formControlName="trongLuongCaBaoBi" />
+                  <!-- <input type="text" nz-input class="w-400" formControlName="trongLuongCaBaoBi" /> -->
+                  <nz-input-number formControlName="trongLuongCaBaoBi" [nzMin]="1" [nzMax]="999999999999" [nzStep]="1"
+                    [nzSize]="'small'">
+                  </nz-input-number>
                 </form>
 
               </th>
@@ -417,9 +423,9 @@
               </nz-form-label>
               <nz-form-control>
                 <!-- <input nz-input formControlName="tongKinhPhiDaTh" [readonly]="true" /> -->
-                <nz-input-number [nzDisabled]="true" formControlName="tongTrongLuongBaoBi" [nzMin]="0"
+                <nz-input-number [nzDisabled]="isView" formControlName="tongTrongLuongBaoBi" [nzMin]="0"
                   [nzMax]="999999999999" [nzStep]="0.1" [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                  [nzParser]="globals.parser">
+                  [nzParser]="globals.parser" (ngModelChange)="onChangeTongTrongLuongBaoBi($event)">
                 </nz-input-number>
               </nz-form-control>
             </nz-form-item>
@@ -431,7 +437,11 @@
                 Tổng trọng lượng kể cả bao bì(kg)
               </nz-form-label>
               <nz-form-control>
-                <input nz-input formControlName="tongTrongLuongCabaoBi" [readonly]="true" />
+                <!-- <input nz-input formControlName="tongTrongLuongCabaoBi" [readonly]="true" /> -->
+                <nz-input-number [nzDisabled]="true" formControlName="tongTrongLuongCabaoBi" [nzMin]="0"
+                  [nzMax]="999999999999" [nzStep]="0.1" [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                  [nzParser]="globals.parser">
+                </nz-input-number>
               </nz-form-control>
             </nz-form-item>
           </div>

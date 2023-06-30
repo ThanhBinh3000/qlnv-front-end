@@ -168,20 +168,14 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
     return this.userService.isChiCuc()
   }
 
-  convertTien(tien: number): string {
-    if (tien) {
-      return convertTienTobangChu(tien);
-    }
-  }
+
 
   async loadChiTiet(id: number) {
     await this.spinner.show()
     if (id) {
       let data = await this.detail(id);
-      // await this.loadDataBaoQuan(data.cloaiVthh)
+      this.dsHangTH = data.dcnbBangKeCanHangDtl
       this.formData.patchValue(data);
-      // this.dsHangTH = data.dcnbBBNTBQDtl.filter(item => item.type === "TH")
-      // this.dsHangPD = data.dcnbBBNTBQDtl.filter(item => item.type === "PD")
       this.fileDinhKemReq = data.fileDinhKems
     }
     await this.spinner.hide();
@@ -329,6 +323,10 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
 
 
   them() {
+    if (!this.formData.value.maCan || !this.formData.value.soBaoBi || !this.formData.value.trongLuongCaBaoBi) {
+      this.notification.error(MESSAGE.ERROR, "Bạn chưa nhập đủ thông tin");
+      return
+    }
     this.dsHangTH.push({
       idVirtual: uuidv4.v4(),
       edit: false,
@@ -336,9 +334,19 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
       soBaoBi: this.formData.value.soBaoBi,
       trongLuongCaBaoBi: this.formData.value.trongLuongCaBaoBi,
     })
-    console.log('them', this.formData.value, this.dsHangTH)
     this.dsHangTH = cloneDeep(this.dsHangTH)
+    const tongTrongLuongCabaoBi = this.dsHangTH.reduce((previous, current) => previous + current.trongLuongCaBaoBi, 0);
+
+    if (this.formData.value.tongTrongLuongBaoBi) {
+      const tongTrongLuongTruBi = Number(tongTrongLuongCabaoBi) - Number(this.formData.value.tongTrongLuongBaoBi)
+      const tongTrongLuongTruBiText = this.convertTien(tongTrongLuongTruBi)
+      this.formData.patchValue({
+        tongTrongLuongTruBi,
+        tongTrongLuongTruBiText
+      })
+    }
     this.formData.patchValue({
+      tongTrongLuongCabaoBi,
       maCan: "",
       soBaoBi: "",
       trongLuongCaBaoBi: "",
@@ -363,7 +371,23 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
   }
 
 
+  onChangeTongTrongLuongBaoBi(tongTrongLuongBaoBi) {
+    if (this.formData.value.tongTrongLuongCabaoBi) {
+      const tongTrongLuongTruBi = Number(this.formData.value.tongTrongLuongCabaoBi) - Number(tongTrongLuongBaoBi)
+      const tongTrongLuongTruBiText = this.convertTien(tongTrongLuongTruBi)
+      this.formData.patchValue({
+        tongTrongLuongTruBi,
+        tongTrongLuongTruBiText
+      })
+    }
 
+  }
+
+  convertTien(tien: number): string {
+    if (tien) {
+      return convertTienTobangChu(tien);
+    }
+  }
 
   async openDialogQD() {
     await this.spinner.show();
@@ -535,7 +559,7 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
     //   this.approve(this.idInput, trangThai, mesg);
     // }
     // if (this.isChiCuc()) {
-    let trangThai = STATUS.CHO_DUYET_TK;
+    let trangThai = STATUS.CHO_DUYET_LDCC;
     let mesg = 'Bạn muốn gửi duyệt văn bản?'
     this.approve(this.idInput, trangThai, mesg);
     // }
@@ -569,27 +593,13 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
   }
 
   isPheDuyet() {
-    return this.formData.value.trangThai == STATUS.CHO_DUYET_TK || this.formData.value.trangThai == STATUS.CHO_DUYET_KT
+    return this.formData.value.trangThai == STATUS.CHO_DUYET_LDCC
   }
 
   async pheDuyet() {
-    // if (this.isCuc()) {
-    //   let trangThai = this.formData.value.trangThai == STATUS.CHO_DUYET_TP ? STATUS.CHO_DUYET_LDC : STATUS.BAN_HANH;
-    //   let mesg = 'Bạn muốn phê duyệt văn bản?'
-    //   this.approve(this.idInput, trangThai, mesg);
-    // }
-    // if (this.isChiCuc()) {
-    // let trangThai = this.formData.value.trangThai == STATUS.CHO_DUYET_TK ? STATUS.CHO_DUYET_KT : STATUS.CHO_DUYET_LDCC;
-    let trangThai = () => {
-      if (this.formData.value.trangThai == STATUS.CHO_DUYET_TK)
-        return STATUS.CHO_DUYET_KT
-      if (this.formData.value.trangThai == STATUS.CHO_DUYET_KT)
-        return STATUS.CHO_DUYET_LDCC
-      return STATUS.CHO_DUYET_KT;
-    };
+    let trangThai = STATUS.DA_DUYET_LDCC;
     let mesg = 'Bạn muốn phê duyệt văn bản?'
-    this.approve(this.idInput, trangThai(), mesg);
-    // }
+    this.approve(this.idInput, trangThai, mesg);
 
   }
 
