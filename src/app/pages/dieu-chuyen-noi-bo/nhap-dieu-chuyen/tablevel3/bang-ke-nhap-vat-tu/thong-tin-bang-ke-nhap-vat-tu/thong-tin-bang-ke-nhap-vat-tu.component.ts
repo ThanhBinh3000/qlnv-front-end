@@ -79,6 +79,7 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
       soHopDong: [],
       soPhieuNhapKho: [],
       phieuNhapKhoId: [],
+      ngayNhapKho: [],
       tenLoKho: [],
       maLoKho: [],
       tenNganKho: [],
@@ -555,6 +556,8 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
       if (data) {
         this.formData.patchValue({
           soPhieuNhapKho: data.soPhieuNhapKho,
+          phieuNhapKhoId: data.id,
+          ngayNhapKho: data.ngayNhapKho
         });
         await this.loadChiTietPNK(data.id);
       }
