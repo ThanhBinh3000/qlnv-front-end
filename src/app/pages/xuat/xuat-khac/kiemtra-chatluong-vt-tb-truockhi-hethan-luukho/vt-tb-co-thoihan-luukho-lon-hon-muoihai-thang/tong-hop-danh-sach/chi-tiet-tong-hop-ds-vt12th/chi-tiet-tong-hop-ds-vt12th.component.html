@@ -1,0 +1,134 @@
+<div class="bg-trang">
+  <!--  step 1-->
+  <ng-container *ngIf="!selectedItem">
+    <nz-card class="mt16 flex-card p-lr16">
+      <div>
+        <form nzLayout="vertical" nz-form [formGroup]="formData">
+          <ng-template #error let-control>
+            <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
+            </ng-container>
+          </ng-template>
+          <nz-form-item>
+            <nz-form-label>Mã danh sách</nz-form-label>
+            <nz-form-control>
+              <nz-input-group>
+                <nz-input-number [nzDisabled]="true" [nzMin]="1" [nzSize]="'small'"
+                                 [nzPlaceHolder]="'Tự động sinh'" [nzStep]="1" formControlName="maDanhSach">
+                </nz-input-number>
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label>Tên danh sách</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <input nz-input formControlName="tenDanhSach" [readonly]="isView">
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label>Thời gian tổng hợp</nz-form-label>
+            <nz-form-control>
+              <input nz-input formControlName="ngayTao" [readonly]="true">
+            </nz-form-control>
+          </nz-form-item>
+        </form>
+      </div>
+    </nz-card>
+
+  </ng-container>
+
+  <!--  step2-->
+  <ng-container *ngIf="selectedItem">
+    <ng-container *ngIf="!showDetail">
+      <div nz-row nzSpan="24" class="mg-t-16 flex-card p-lr16">
+        <div nz-col nzSpan="8"><b>Mã danh sách</b></div>
+        <div nz-col nzSpan="16"><span>{{selectedItem.maDanhSach}}</span></div>
+      </div>
+      <div nz-row nzSpan="24" class="mg-t-16 flex-card p-lr16">
+        <div nz-col nzSpan="8"><b>Tên danh sách</b></div>
+        <div nz-col nzSpan="16"><span>{{selectedItem.tenDanhSach}}</span></div>
+      </div>
+      <div nz-row nzSpan="24" class="mg-t-16 flex-card p-lr16">
+        <div nz-col nzSpan="8"><b>Thời gian tổng hợp</b></div>
+        <div nz-col nzSpan="16"><span>{{selectedItem.ngayTao|date:globals.dateFormat}}</span></div>
+      </div>
+      <div nz-row nzSpan="24" class="mg-t-16 flex-card p-lr16">
+        <div nz-col nzSpan="8"></div>
+        <div nz-col nzSpan="16"><span style="color: blue">
+          <a
+            (click)="onClickShowDetail()"><b>Xem toàn bộ danh sách hàng cần kiểm tra chất lượng {{selectedItem.maDanhSach}} </b></a></span>
+        </div>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="showDetail">
+      <div class="d-flex justify-content-center">
+        <h5>{{selectedItem.tenDanhSach + ' - ' + selectedItem.maDanhSach}}</h5>
+      </div>
+      <div class="d-flex justify-content-center">
+        <p>Thời gian tổng hợp: {{selectedItem.ngayTao|date:globals.dateFormat}}</p>
+      </div>
+      <div class="d-flex justify-content-center">
+        <div style="width: fit-content;border-style: none none dotted none">
+          <p style="font-size: 16px;margin: 0px">
+            <strong>{{selectedItem.tenCuc ? selectedItem.tenCuc : selectedItem.tenDvql}}</strong></p>
+        </div>
+      </div>
+
+      <nz-card class="mg-t-16">
+        <nz-table #tblData [nzData]="selectedItem.childData" class="nowrap table-chi-tiet" nzBordered>
+          <thead>
+          <tr>
+            <th>STT</th>
+            <th>Chi cục DTNN KV</th>
+            <th>Loại hàng hóa</th>
+            <th>Chủng loại</th>
+            <th>Điểm kho</th>
+            <th>Ngăn/lô kho</th>
+            <th>Ngày nhập kho</th>
+            <th>SL hết hạn (12 tháng) <br/> đề xuất xuất bán</th>
+            <th>SL tồn</th>
+            <th>ĐVT</th>
+            <th>Ngày đề xuất</th>
+            <th class="text-center">Trạng thái <br> kiểm tra chất lượng</th>
+          </tr>
+          </thead>
+          <tbody>
+
+          <ng-container *ngFor="let item of tblData.data, let i = index;">
+            <tr>
+              <td>{{numberToRoman(i + 1)}}</td>
+              <td>{{item.tenChiCuc}}</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <ng-container *ngFor="let lv1 of item.childData,let i1=index">
+              <tr>
+                <td style="text-align: right;">{{i1 + 1}}</td>
+                <td></td>
+                <td>{{lv1.tenLoaiVthh}}</td>
+                <td>{{lv1.tenCloaiVthh}}</td>
+                <td>{{lv1.tenDiemKho}}</td>
+                <td>{{lv1.tenLoKho ? lv1.tenLoKho : lv1.tenNganKho}}</td>
+                <td>{{lv1.ngayNhapKho|date:globals.dateFormat}}</td>
+                <td>{{lv1.slHetHan|number:globals.numberFormat}}</td>
+                <td>{{lv1.slTonKho|number:globals.numberFormat}}</td>
+                <td>{{lv1.donViTinh}}</td>
+                <td>{{lv1.ngayDeXuat|date:globals.dateFormat}}</td>
+                <td>{{lv1.tenTrangThaiKtCl}}</td>
+              </tr>
+            </ng-container>
+          </ng-container>
+          </tbody>
+        </nz-table>
+      </nz-card>
+    </ng-container>
+
+  </ng-container>
+</div>

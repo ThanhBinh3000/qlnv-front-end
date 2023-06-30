@@ -159,11 +159,6 @@ export class DanhMucService extends BaseService {
     return this.httpClient.get<any>(url).toPromise();
   }
 
-  getNhomCCDC(): Promise<any> {
-    const url = `${environment.SERVICE_API}/qlnv-category/dmuc-chung/danh-sach/NHOM_CCDC`
-    return this.httpClient.get<any>(url).toPromise();
-  }
-
   getDSMatHang(body: any): Promise<any> {
     const url = `${environment.SERVICE_API}/qlnv-category/dmuc-congcu/tra-cuu`
     return this.httpClient.post<any>(url, body).toPromise();

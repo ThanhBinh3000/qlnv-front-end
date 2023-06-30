@@ -57,7 +57,7 @@ export class ToanBoDanhSachVt12ThComponent extends Base2Component implements OnI
       ngayTongHopDen: [],
       lyDo: [],
       trangThai: [],
-      type: [LOAI_HH_XUAT_KHAC.VT_12_THANG],
+      loai: [LOAI_HH_XUAT_KHAC.VT_12_THANG],
       tenLoaiVthh: [],
       tenCloaiVthh: [],
       tenTrangThai: [],
@@ -136,7 +136,6 @@ export class ToanBoDanhSachVt12ThComponent extends Base2Component implements OnI
       "dviQly": "0101"
     }).subscribe((hangHoa) => {
       if (hangHoa.msg == MESSAGE.SUCCESS) {
-        console.log(hangHoa.data, '22222222');
         this.dsLoaiVthh = hangHoa.data?.filter((x) => ((x.ma.startsWith("02") || x.ma.startsWith("03")) && (x.cap == 1 || x.cap == 2)));
       }
     });

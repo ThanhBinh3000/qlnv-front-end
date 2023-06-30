@@ -191,8 +191,8 @@ export class BienBanChuanBiKhoComponent extends Base2Component implements OnInit
         .map(element => {
           return {
             ...element,
-            maKho: `${element.thoiHanDieuChuyen}${element.tenDiemKho}`,
-            maloNganKhoNhan: `${element.maloKhoNhan}${element.maNganKhoNhan}`
+            // maKho: `${element.thoiHanDieuChuyen}${element.tenDiemKho}`,
+            // maloNganKho: `${element.maloKho}${element.maNganKho}`
           }
         });
       this.dataTableView = this.buildTableView(data)
@@ -206,10 +206,10 @@ export class BienBanChuanBiKhoComponent extends Base2Component implements OnInit
       .groupBy("soQdinh")
       ?.map((value1, key1) => {
         let children1 = chain(value1)
-          .groupBy("maKho")
+          .groupBy("maDiemKho")
           ?.map((value2, key2) => {
 
-            let row2 = value2?.find(s => s.maKho == key2);
+            let row2 = value2?.find(s => s.maDiemKho == key2);
 
             return {
               ...row2,

@@ -11,4 +11,10 @@ export class BienBanKetThucNhapKhoService extends BaseService {
   constructor(public httpClient: HttpClient) {
     super(httpClient, 'dieu-chuyen-noi-bo/bien-ban-ket-thuc-nhap-kho-vt', '/qlnv-hang');
   }
+
+  getDanhSach(body): Promise<OldResponseData> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/danh-sach`;
+    return this._httpClient.post<OldResponseData>(url, body).toPromise();
+  }
+
 }

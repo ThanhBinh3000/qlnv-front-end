@@ -74,29 +74,21 @@
           [nzShowPagination]="false" nzBordered>
           <thead>
             <tr>
-              <th rowspan="2" width="60px" class="text-center">STT</th>
-              <th rowspan="2"></th>
-              <th rowspan="2">Số QĐ ĐC của Cục</th>
-              <th rowspan="2">Năm kế hoạch</th>
-              <th rowspan="2">Thời hạn ĐC</th>
-              <th colspan="2" class="text-center">Thông tin kho xuất</th>
-              <th colspan="3" class="text-center">Thông tin kho nhập</th>
-              <th rowspan="2" style="max-width: 90px; min-width: 90px;  white-space: break-spaces;" class="text-center">
-                Số BB NT kê lót,
-                BQLĐ</th>
-              <th rowspan="2">Ngày lập biên bản</th>
-              <th rowspan="2">Ngày kết thục NT kê lót, BQLĐ</th>
-              <th rowspan="2">Tổng kinh phí thực tế (đ)</th>
-              <th rowspan="2">Tổng kinh phí TC PD (đ)</th>
-              <th rowspan="2">Trạng thái</th>
-              <th rowspan="2">Hành động</th>
-            </tr>
-            <tr>
-              <th class="text-center">Lô kho</th>
-              <th class="text-center">Trạng thái xuất ĐC</th>
+              <th width="60px" class="text-center">STT</th>
+              <th></th>
+              <th class="text-center">Số QĐ giao nhiệm vụ</th>
+              <th class="text-center">Năm KH</th>
+              <th class="text-center">Thời hạn NH</th>
               <th class="text-center">Điểm kho</th>
               <th class="text-center">Lô kho</th>
-              <th class="text-center">Trạng thái nhập ĐC</th>
+              <th class="text-center">Số BB kết thúc NH </th>
+              <th class="text-center">Ngày kết thúc NK</th>
+              <th class="text-center">Số HSKT</th>
+              <th class="text-center">Số phiếu nhập kho</th>
+              <th class="text-center">Ngày nhập kho</th>
+              <th class="text-center">Số BB lấy mẫu/BG mẫu</th>
+              <th class="text-center">Trạng thái</th>
+              <th class="text-center">Hành động</th>
             </tr>
           </thead>
           <tbody>
@@ -108,9 +100,7 @@
                 </td>
                 <td class="bold">{{ row1.soQdinh || "" }}</td>
                 <td class="bold">{{ row1.namKh || "" }}</td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td class="bold">{{ row1.thoiHanDieuChuyen|date: "dd/MM/yyyy" }}</td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -129,22 +119,21 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td class="bold">{{ row2.thoiHanDieuChuyen || ""}}</td>
-                    <td class="bold">{{ row2.tenloKhoXuat || ""}} {{ row2.tenNganKhoXuat || ""}} {{ row2.tenDiemKhoXuat
-                      ||
-                      ""}}
+                    <td></td>
+                    <td class="bold">{{ row2.tenDiemKho || ""}}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                      <a (click)="add(row2)">
+                        <i class="icon htvbdh_dau-cong"></i>
+                      </a>
                     </td>
-                    <td class="bold">{{ row2.tenTrangThai || ""}}</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
                   </tr>
                   <ng-container>
                     <ng-container *ngFor="let row3 of row2.children, let y = index">
@@ -155,20 +144,29 @@
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td></td>
-                        <td class="bold">{{row3.tenDiemKhoNhan || ""}}</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td class="bold">{{ row3.tenloKho || ""}} {{ row3.tenNganKho || ""}} {{ row3.tenNhaKho||""}}
+                        </td>
+                        <td class="bold">{{row3.soBBKtNH || ""}}</td>
+                        <td>{{ row3.ngayKetThucNhapHang|date: "dd/MM/yyyy" }}</td>
                         <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td></td>
+                        <td class="bold">{{row3.tenTrangThai || ""}}</td>
+                        <td>
+                          <a *ngIf="row3.trangThai !== STATUS.DU_THAO" (click)="redirectDetail(row3.id, true)">
+                            <i class="fa fa-eye"></i>
+                          </a>
+                          <a *ngIf="row3.trangThai == STATUS.DU_THAO" (click)="redirectDetail(row3.id, false)">
+                            <i class="fa fa-pencil"></i>
+                          </a>
+                          <a *ngIf="row3.trangThai == STATUS.DU_THAO" (click)="xoa(row3)">
+                            <i class="fa fa-trash-o do"></i>
+                          </a>
+                        </td>
                       </tr>
                       <ng-container *ngFor="let row4 of row3.children, let y = index">
-                        <tr>
+                        <tr *ngIf="row4.soPhieuNhapKho">
                           <td></td>
                           <td></td>
                           <td></td>
@@ -177,54 +175,14 @@
                           <td></td>
                           <td></td>
                           <td></td>
-                          <td class="bold">{{row4.tenNganKhoNhan|| ""}}</td>
-                          <td class="bold">{{row4.tenLoKhoNhan|| ""}}</td>
                           <td></td>
                           <td></td>
+                          <td class="bold">{{row4.soPhieuNhapKho || ""}}</td>
+                          <td class="bold">{{row4.ngayNhapKho|date: "dd/MM/yyyy"}}</td>
+                          <td class="bold">{{row4.soBbLayMau || ""}}</td>
                           <td></td>
                           <td></td>
-                          <td></td>
-                          <td></td>
-                          <td>
-                            <a (click)="add(row4)">
-                              <i class="icon htvbdh_dau-cong"></i>
-                            </a>
-                          </td>
                         </tr>
-                        <ng-container *ngFor="let row5 of row4.children, let y = index">
-                          <tr *ngIf="row5.id">
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>{{(row5.soLapBBKLot || "")}}</td>
-                            <td>{{(row5.ngayLapBBKLot || "")}}</td>
-                            <td>{{(row5.ngayKetThucNtKeLot || "")}}</td>
-                            <td>{{(row5.tongKinhPhiTT |number: '1.0-1':
-                              'vi_VN')}}</td>
-                            <td>{{(row5.tongKinhPhiPd |number: '1.0-1':
-                              'vi_VN')}}</td>
-                            <td></td>
-                            <td>
-                              <a *ngIf="row5.trangThai !== STATUS.DU_THAO" (click)="redirectDetail(row5.id, true)">
-                                <i class="fa fa-eye"></i>
-                              </a>
-                              <a *ngIf="row5.trangThai == STATUS.DU_THAO" (click)="redirectDetail(row5.id, false)">
-                                <i class="fa fa-pencil"></i>
-                              </a>
-                              <a *ngIf="row5.trangThai == STATUS.DU_THAO" (click)="xoa(row5)">
-                                <i class="fa fa-trash-o do"></i>
-                              </a>
-                            </td>
-                          </tr>
-
-                        </ng-container>
                       </ng-container>
                     </ng-container>
                   </ng-container>
