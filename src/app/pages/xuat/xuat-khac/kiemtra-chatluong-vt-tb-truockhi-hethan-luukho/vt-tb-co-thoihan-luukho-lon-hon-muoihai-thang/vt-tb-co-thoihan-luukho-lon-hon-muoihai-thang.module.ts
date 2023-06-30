@@ -10,9 +10,7 @@ import {NzStatisticModule} from "ng-zorro-antd/statistic";
 import {NzPipesModule} from "ng-zorro-antd/pipes";
 import {MainModule} from "../../../../../layout/main/main.module";
 import {ComponentsModule} from "../../../../../components/components.module";
-
-
-
+import { ChiTietTongHopDsVt12thComponent } from './tong-hop-danh-sach/chi-tiet-tong-hop-ds-vt12th/chi-tiet-tong-hop-ds-vt12th.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +18,8 @@ import {ComponentsModule} from "../../../../../components/components.module";
     TongHopDanhSachVt12thComponent,
     KeHoachXuatHangCuaCucComponent,
     TongHopKeHoachXuatHangComponent,
-    KeHoachXuatHangCuaTongCucComponent
+    KeHoachXuatHangCuaTongCucComponent,
+    ChiTietTongHopDsVt12thComponent
   ],
   exports: [
     ToanBoDanhSachVt12ThComponent,

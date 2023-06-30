@@ -1,18 +1,18 @@
 <nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="level2-border">
   <ul nz-menu nzMode="horizontal">
-    <li nz-menu-item [nzSelected]="tabSelected==0" (click)="selectTab(0)" style="border-radius: 9999px">
+    <li nz-menu-item [nzSelected]="tabSelected==0" (click)="selectTab(0)" >
       Toàn bộ danh sách VT, TB hết hạn lưu kho nhưng chưa có kế hoạch xuất
     </li>
-    <li [nzSelected]="tabSelected==1" nz-menu-item (click)="selectTab(1)">
+    <li [nzSelected]="tabSelected==1" *ngIf="!userService.isChiCuc()" nz-menu-item (click)="selectTab(1)">
       Tổng hợp danh sách VT, TB hết hạn lưu kho nhưng chưa có kế hoạch xuất
     </li>
-    <li [nzSelected]="tabSelected==2" nz-menu-item (click)="selectTab(2)">
+    <li [nzSelected]="tabSelected==2" *ngIf="!userService.isChiCuc()" nz-menu-item (click)="selectTab(2)">
       Kế hoạch xuất hàng của cục
     </li>
-    <li [nzSelected]="tabSelected==3" nz-menu-item (click)="selectTab(3)">
+    <li [nzSelected]="tabSelected==3" nz-menu-item *ngIf="userService.isTongCuc()" (click)="selectTab(3)">
       Tổng hợp kế hoạch xuất hàng
     </li>
-    <li [nzSelected]="tabSelected==4" nz-menu-item (click)="selectTab(4)">
+    <li [nzSelected]="tabSelected==4" *ngIf="!userService.isChiCuc()" nz-menu-item (click)="selectTab(4)">
       Kế hoạch xuất hàng của toàn Tổng cục
     </li>
   </ul>
@@ -27,7 +27,7 @@
     </ng-container>
     <ng-container *ngIf="tabSelected == 2">
       <app-ke-hoach-xuat-hang-cua-cuc></app-ke-hoach-xuat-hang-cua-cuc>
-    </ng-container>`
+    </ng-container>
     <ng-container *ngIf="tabSelected == 3">
       <app-tong-hop-ke-hoach-xuat-hang></app-tong-hop-ke-hoach-xuat-hang>
     </ng-container>
