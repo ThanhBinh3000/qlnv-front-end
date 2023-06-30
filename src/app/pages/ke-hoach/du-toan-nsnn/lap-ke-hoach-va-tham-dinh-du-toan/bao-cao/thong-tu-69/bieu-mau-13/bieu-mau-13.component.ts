@@ -133,19 +133,6 @@ export class BieuMau13Component implements OnInit {
 
         this.lstCtietBcao = this.tableFunc.sortByIndex(this.lstCtietBcao);
 
-        // if (this.dataInfo?.extraData) {
-        //     const indDa = this.lstCtietBcao.findIndex(e => e.maNdung == '0.1.1.1');
-        //     this.lstCtietBcao[indDa].ncauChiN = this.dataInfo.extraData?.nhucauDan;
-        //     this.sum(this.lstCtietBcao[indDa].stt);
-        //     this.dataInfo.extraData?.lstBieuMau.forEach(item => {
-        //         const index = this.lstCtietBcao.findIndex(e => e.maNdung == item.maNdung);
-        //         this.lstCtietBcao[index].namHienHanhDtoan = item.namHienHanhDtoan;
-        //         this.lstCtietBcao[index].namHienHanhUocThien = item.namHienHanhUocThien;
-        //         this.lstCtietBcao[index].ncauChiN = item.ncauChiN;
-        //         this.lstCtietBcao[index].ssanhNcauNVoiN1 = this.numFunc.div(item.ncauChiN, item.namHienHanhUocThien);
-        //         this.sum(this.lstCtietBcao[index].stt);
-        //     })
-        // }
         if (this.formDetail.trangThai == '3') {
             this.lstCtietBcao.forEach(item => {
                 item.clechTranChiVsNcauChiN = this.numFunc.sum([item.tranChiN, -item.ncauChiN])

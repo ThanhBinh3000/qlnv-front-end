@@ -194,12 +194,12 @@ export class PhuLuc03Component implements OnInit {
 			})
 		})
 
-		// if (!this.status.viewAppVal) {
-		// 	lstCtietBcaoTemp?.forEach(item => {
-		// 		item.sluongNamN1Td = item.sluongNamDtoan;
-		// 		item.ttienNamN1Td = item.ttienNamDtoan;
-		// 	})
-		// }
+		if (this.status.general) {
+			lstCtietBcaoTemp?.forEach(item => {
+				item.sluongNamN1Td = item.sluongNamDtoan;
+				item.ttienNamN1Td = item.ttienNamDtoan;
+			})
+		}
 
 		const request = JSON.parse(JSON.stringify(this.formDetail));
 

@@ -6,6 +6,8 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { BAO_CAO_DOT, LBC_KET_QUA_THUC_HIEN_HANG_DTQG, Utils } from 'src/app/Utility/utils';
 import * as dayjs from 'dayjs';
 import { BaoCaoThucHienVonPhiService } from 'src/app/services/quan-ly-von-phi/baoCaoThucHienVonPhi.service';
+import { Report } from '../../bao-cao.class';
+import { BC_DOT, LBC_VON_PHI } from '../../bao-cao.constant';
 
 @Component({
     selector: 'dialog-tao-moi',
@@ -18,12 +20,13 @@ export class DialogTaoMoiComponent implements OnInit {
 
     nam: number;
     userInfo: any;
-    response: any = {
-        namBcao: null,
-        dotBcao: null,
-        maLoaiBcao: null,
-    };
-    baoCaos: any = LBC_KET_QUA_THUC_HIEN_HANG_DTQG;
+    response: Report = new Report();
+    // response: any = {
+    //     namBcao: null,
+    //     dotBcao: null,
+    //     maLoaiBcao: null,
+    // };
+    baoCaos: any = LBC_VON_PHI;
     lstNam: number[] = [];
 
     constructor(
@@ -34,9 +37,22 @@ export class DialogTaoMoiComponent implements OnInit {
 
     async ngOnInit() {
         const thisYear = dayjs().get('year');
-        for (let i = -10; i < 40; i++) {
+        for (let i = -5; i < 10; i++) {
             this.lstNam.push(thisYear + i);
         }
+    }
+
+    checkReport() {
+        if (!this.response.namBcao || !this.response.maLoaiBcao || (this.response.maLoaiBcao == BC_DOT && !this.response.dotBcao)) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+            return;
+        }
+    }
+
+    clearValue() {
+        this.response.namBcao = null;
+        this.response.maLoaiBcao = null;
+        this.response.dotBcao = null;
     }
 
     async handleOk() {
