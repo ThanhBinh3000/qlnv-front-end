@@ -23,6 +23,7 @@ import {
 import {
   DanhSachHangDTQGCon6ThangService
 } from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/DanhSachHangDTQGCon6Thang.service";
+import {LOAI_HH_XUAT_KHAC} from "../../../../../../constants/config";
 @Component({
   selector: 'app-chi-tiet-tong-hop-ds-hang-dtqg',
   templateUrl: './chi-tiet-tong-hop-ds-hang-dtqg.component.html',
@@ -52,6 +53,7 @@ export class ChiTietTongHopDsHangDtqgComponent extends Base2Component implements
   numberToRoman = NumberToRoman;
   maHauTo: any;
   public vldTrangThai: KiemtraChatluongLtTruockhiHethanLuukhoComponent;
+  loaiHhXuatKhac = LOAI_HH_XUAT_KHAC;
   constructor(httpClient: HttpClient,
               storageService: StorageService,
               notification: NzNotificationService,
@@ -221,9 +223,10 @@ export class ChiTietTongHopDsHangDtqgComponent extends Base2Component implements
         return;
       } else {
         await this.danhSachHangDTQGCon6ThangService.search({
-          type: 'TH',
+          loai: this.loaiHhXuatKhac.LT_6_THANG,
         }).then(async res => {
           if (res.msg == MESSAGE.SUCCESS) {
+            console.log(res.data,555)
             if (res.data.numberOfElements == 0) {
               this.notification.warning(MESSAGE.ALERT, 'Không tìm thấy hàng hóa cần thanh lý trong danh sách.');
             } else {
