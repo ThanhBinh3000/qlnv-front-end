@@ -400,7 +400,7 @@
 											(ngModelChange)="changeModel(data.id)" [options]="amount" />
 									</td>
 									<td>
-										<input class="search__input" [(ngModel)]="editCache[data.id].data.ghiChu" />
+										<input nz-input [(ngModel)]="editCache[data.id].data.ghiChu" />
 									</td>
 									<td nzRight>
 										<a (click)="saveEdit(data.id)" class="save">Lưu</a>

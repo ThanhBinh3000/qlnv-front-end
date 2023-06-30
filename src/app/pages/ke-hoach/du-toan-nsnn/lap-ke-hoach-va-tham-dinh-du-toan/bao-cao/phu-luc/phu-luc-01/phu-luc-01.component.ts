@@ -143,7 +143,9 @@ export class PhuLuc01Component implements OnInit {
 				item.ttienTd = this.numFunc.mul(item.dmucNamDtoan, item.sluongTd);
 			})
 		}
-		this.setIndex();
+		if (!this.lstCtietBcao[0]?.stt) {
+			this.setIndex();
+		}
 		this.lstCtietBcao = this.tableFunc.sortByIndex(this.lstCtietBcao);
 		this.tinhTong();
 		this.updateEditCache();
@@ -155,13 +157,13 @@ export class PhuLuc01Component implements OnInit {
 		this.status.ok = this.status.ok && (this.formDetail.trangThai == "2" || this.formDetail.trangThai == "5");
 	}
 
-	getFormDetail() {
-		this.lapThamDinhService.ctietBieuMau(this.dataInfo.id).toPromise().then(
+	async getFormDetail() {
+		await this.lapThamDinhService.ctietBieuMau(this.dataInfo.id).toPromise().then(
 			data => {
 				if (data.statusCode == 0) {
 					this.formDetail = data.data;
 					this.formDetail.maDviTien = '1';
-					this.lstCtietBcao = this.formDetail.lstCtietLapThamDinhs;
+					Object.assign(this.lstCtietBcao, this.formDetail.lstCtietLapThamDinhs);// this.lstCtietBcao = this.formDetail.lstCtietLapThamDinhs;
 					this.listFile = [];
 					this.getStatusButton();
 				} else {

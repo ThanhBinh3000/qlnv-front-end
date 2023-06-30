@@ -146,12 +146,13 @@ export class BieuMau131Component implements OnInit {
         this.editCache[id].data.chenhLech = this.numFunc.sum([this.editCache[id].data.giaTriThamDinh, this.editCache[id].data.namUocThien]);
     }
 
-    getFormDetail() {
-        this.lapThamDinhService.ctietBieuMau(this.dataInfo.id).toPromise().then(
+    async getFormDetail() {
+        await this.lapThamDinhService.ctietBieuMau(this.dataInfo.id).toPromise().then(
             data => {
                 if (data.statusCode == 0) {
                     this.formDetail = data.data;
                     this.formDetail.maDviTien = '1';
+                    this.lstCtietBcao = this.formDetail.lstCtietLapThamDinhs;
                     this.listFile = [];
                     this.getStatusButton();
                 } else {

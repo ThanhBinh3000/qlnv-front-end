@@ -662,11 +662,11 @@ export const TRANG_THAI_KIEM_TRA_BAO_CAO = [
 export const TRANG_THAI_PHU_LUC = [
   {
     id: 0,
-    ten: 'NOT OK'
+    ten: 'Không chấp nhận'
   },
   {
     id: 1,
-    ten: 'OK'
+    ten: 'Chấp nhận'
   },
   {
     id: 2,

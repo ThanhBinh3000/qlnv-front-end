@@ -60,6 +60,7 @@ export class Report {
 }
 
 export class BtnStatus {
+    new: boolean = true;                               // trang thai tao moi lich su
     general: boolean = true;                           //trang thai tong cua ban ghi dang xet
     save?: boolean = true;                             // trang thai cua nut luu
     submit?: boolean = true;                           // trang thai cua nut trinh duyet

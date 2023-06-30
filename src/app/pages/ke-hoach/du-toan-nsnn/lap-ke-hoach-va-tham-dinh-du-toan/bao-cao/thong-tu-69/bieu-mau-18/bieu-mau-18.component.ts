@@ -15,6 +15,7 @@ import { BtnStatus, Doc, Form } from '../../../lap-ke-hoach-va-tham-dinh-du-toan
 
 export class ItemData {
 	id: string;
+	khvonphiLapThamDinhCtietId: string;
 	stt: string;
 	maLvuc: string;
 	tenLvuc: string;
@@ -147,8 +148,8 @@ export class BieuMau18Component implements OnInit {
 		this.status.ok = this.status.ok && (this.formDetail.trangThai == "2" || this.formDetail.trangThai == "5");
 	}
 
-	getFormDetail() {
-		this.lapThamDinhService.ctietBieuMau(this.dataInfo.id).toPromise().then(
+	async getFormDetail() {
+		await this.lapThamDinhService.ctietBieuMau(this.dataInfo.id).toPromise().then(
 			data => {
 				if (data.statusCode == 0) {
 					this.formDetail = data.data;

@@ -285,7 +285,7 @@
                                             (click)="startEdit(data.id)"></i>
                                     </td>
                                     <td *ngIf="status.general" nzRight>
-                                        <i *ngIf="checkAdd(data)" class="fa fa-plus" (click)="addLine(data.stt)"></i>
+                                        <i *ngIf="checkAdd(data)" class="fa fa-plus" (click)="addLine(data.id)"></i>
                                         <i *ngIf="checkDelete(data.noiDung)" class="fa fa-trash-o do"
                                             (click)="deleteLine(data.id)"></i>
                                     </td>
@@ -361,7 +361,7 @@
                                                 (ngModelChange)="changeModel(data.id)" />
                                         </td>
                                         <td>
-                                            <input class="search__input" [(ngModel)]="editCache[data.id].data.ghiChu" />
+                                            <input nz-input [(ngModel)]="editCache[data.id].data.ghiChu" />
                                         </td>
                                     </ng-container>
                                     <ng-template #viewAppVal>
@@ -431,8 +431,7 @@
                                             {{ data.ghiChu }}
                                         </td>
                                         <td>
-                                            <input class="search__input"
-                                                [(ngModel)]="editCache[data.id].data.yKienCapTren" />
+                                            <input nz-input [(ngModel)]="editCache[data.id].data.yKienCapTren" />
                                         </td>
                                     </ng-template>
                                     <td *ngIf="status.general|| status.editAppVal" nzRight>
@@ -443,7 +442,7 @@
                                         </a>
                                     </td>
                                     <td *ngIf="status.general" nzRight>
-                                        <i *ngIf="checkAdd(data)" class="fa fa-plus" (click)="addLine(data.stt)"></i>
+                                        <i *ngIf="checkAdd(data)" class="fa fa-plus" (click)="addLine(data.id)"></i>
                                         <i *ngIf="checkDelete(data.noiDung)" class="fa fa-trash-o do"
                                             (click)="deleteLine(data.id)"></i>
                                     </td>
