@@ -21,7 +21,7 @@ export class QuyetDinhComponent extends Base2Component implements OnInit {
   idDxKh: number = 0;
   isViewDxKh: boolean = false;
   listTrangThai: any[] = [
-    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: this.STATUS.DANG_NHAP_DU_LIEU, giaTri: 'Đang nhập dữ liệu' },
     { ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành' },
   ];
 

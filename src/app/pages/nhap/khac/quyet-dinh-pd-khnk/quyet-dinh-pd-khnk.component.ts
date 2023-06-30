@@ -319,11 +319,11 @@ export class QuyetDinhPdKhnkComponent extends Base2Component implements OnInit {
           lastest: 0,
           maDvi: this.userService.isTongCuc() ? '' : this.userInfo.MA_DVI
         };
-        // this.quyetDinhPheDuyetKeHoachNhapKhacService
-          // .exportList(body)
-          // .subscribe((blob) =>
-          //   saveAs(blob, 'danh-sach-quyet-dinh-phe-duyet-ke-hoach-lua-chon-nha-thau.xlsx')
-          // );
+        this.quyetDinhPheDuyetKeHoachNhapKhacService
+          .export(body)
+          .subscribe((blob) =>
+            saveAs(blob, 'danh-sach-quyet-dinh-phe-duyet-ke-hoach-nhap-khac.xlsx')
+          );
         this.spinner.hide();
       } catch (e) {
         console.log('error: ', e);

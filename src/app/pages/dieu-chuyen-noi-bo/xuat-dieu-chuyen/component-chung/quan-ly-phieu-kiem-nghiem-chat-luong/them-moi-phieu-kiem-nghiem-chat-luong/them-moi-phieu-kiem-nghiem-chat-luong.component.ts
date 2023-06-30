@@ -48,6 +48,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
   @Input() isVatTu: boolean;
   @Input() loaiDc: string;
   @Input() thayDoiThuKho: boolean;
+  @Input() type: string;
   @Input() isView: boolean;
   @Input() isViewOnModal: boolean;
   @Input() passData: PassDataPKNCL = {
@@ -123,7 +124,6 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
     super(httpClient, storageService, notification, spinner, modal, phieuKiemNghiemChatLuongDieuChuyenService);
     this.formData = this.fb.group({
       id: [null],
-      type: ['00'],
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự Thảo'],
       lyDoTuChoi: [''],
@@ -260,7 +260,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
       maDvi: this.idInput > 0 ? this.formData.value.maDvi : this.userInfo.MA_DVI
       // listTrangThaiXh: [STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN],
     }
-    let res = await this.quyetDinhDieuChuyenCucService.getDsSoQuyetDinhDieuChuyenCuc(body);
+    let res = await this.quyetDinhDieuChuyenCucService.getDsSoQuyetDinhDieuChuyenChiCuc(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.listSoQuyetDinh = Array.isArray(data) ? data.reduce((arr, cur) => {
@@ -309,6 +309,10 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
       body.dcnbPhieuKnChatLuongDtl = this.dataTableChiTieu.map(f => ({ ...f, id: f.hdrId ? f.id : undefined }));
       body.bienBanLayMauDinhKem = this.bienBanLayMauDinhKem;
       body.hinhThucBq = this.listHinhThucBaoQuan.map(i => `${i.id}-${i.giaTri}`).join(",");
+      body.loaiDC = this.loaiDc;
+      body.isVatTu = this.isVatTu;
+      body.thayDoiThuKho = this.thayDoiThuKho;
+      body.type = this.type;
       let data = await this.createUpdate(body);
       if (!data) return;
       this.formData.patchValue({ id: data.id, trangThai: data.trangThai, soPhieu: data.soPhieu ? data.soPhieu : data.id ? `${data.id}/${data.nam}/${this.maBb}` : '' })

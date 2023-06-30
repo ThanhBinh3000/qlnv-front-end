@@ -18,7 +18,7 @@ import {chain, isEmpty} from "lodash";
 import {v4 as uuidv4} from "uuid";
 import {
   TongHopDanhSachHangDTQGService
-} from "../../../../../services/qlnv-hang/xuat-hang/xuatkhac/TongHopDanhSachHangDTQG.service";
+} from "../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatlt/TongHopDanhSachHangDTQG.service";
 @Component({
   selector: 'app-tong-hop-ds-hang-dtqg-hethan-luukho-chua-co-kh-xuat',
   templateUrl: './tong-hop-ds-hang-dtqg-hethan-luukho-chua-co-kh-xuat.component.html',
