@@ -183,7 +183,7 @@
                                                             <i class="fa fa-pencil"></i>
                                                         </a>
                                                         <a *ngIf="checkRoleApprove(lv3.trangThai)"
-                                                            (click)="redirectToChiTiet(lv2, false, lv3.id)">
+                                                            (click)="redirectToChiTiet(lv3, true, lv3.id)">
                                                             <i class="icon htvbdh_tcdt_pheduyet"></i>
                                                         </a>
                                                         <a *ngIf="checkRoleDelete(lv3.trangThai)" (click)="delete(lv3)">
@@ -223,7 +223,7 @@
 </div>
 <ng-template #templateThemmoi>
     <app-xuat-dcnb-them-moi-phieu-xuat-kho [idInput]="selectedId" (showListEvent)="showList()" [isView]="isView"
-        [loaiDc]="loaiDc" [isVatTu]="isVatTu" [thayDoiThuKho]="thayDoiThuKho" [passData]="passData">
+        [loaiDc]="loaiDc" [isVatTu]="isVatTu" [thayDoiThuKho]="thayDoiThuKho" [type]="type" [passData]="passData">
     </app-xuat-dcnb-them-moi-phieu-xuat-kho>
 </ng-template>
 
