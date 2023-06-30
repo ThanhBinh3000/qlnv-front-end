@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../../../services/storage.service";
 import {NzNotificationService} from "ng-zorro-antd/notification";
@@ -15,6 +15,7 @@ import {LOAI_HH_XUAT_KHAC} from "../../../../../../constants/config";
 import {MESSAGE} from "../../../../../../constants/message";
 import {Base2Component} from "../../../../../../components/base2/base2.component";
 import {CHUC_NANG} from "../../../../../../constants/status";
+
 @Component({
   selector: 'app-toan-bo-danh-sach-vt6th',
   templateUrl: './toan-bo-danh-sach-vt6th.component.html',
@@ -56,7 +57,7 @@ export class ToanBoDanhSachVt6ThComponent extends Base2Component implements OnIn
       ngayTongHopDen: [],
       lyDo: [],
       trangThai: [],
-      type: [LOAI_HH_XUAT_KHAC.VT_6_THANG],
+      loai: [LOAI_HH_XUAT_KHAC.VT_6_THANG],
       tenLoaiVthh: [],
       tenCloaiVthh: [],
       tenTrangThai: [],
