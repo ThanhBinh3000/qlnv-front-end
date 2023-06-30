@@ -12,10 +12,11 @@ import * as uuid from "uuid";
 import {v4 as uuidv4} from "uuid";
 import {CHUC_NANG} from 'src/app/constants/status';
 import {XuatKhacComponent} from "../../xuat-khac.component";
+
+import {LOAI_HH_XUAT_KHAC} from "../../../../../constants/config";
 import {
   TongHopDanhSachHangDTQGService
-} from "../../../../../services/qlnv-hang/xuat-hang/xuatkhac/TongHopDanhSachHangDTQG.service";
-import {LOAI_HH_XUAT_KHAC} from "../../../../../constants/config";
+} from "../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatlt/TongHopDanhSachHangDTQG.service";
 
 @Component({
   selector: 'app-xk-bien-ban-lay-mau-ban-giao-mau',
