@@ -3,65 +3,110 @@
 		<nz-tabset>
 			<nz-tab nzTitle="Dữ liệu">
 				<div id="tablePrint">
-					<div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
-						<div nz-col [nzSpan]="2">
-							Đơn vị:
-						</div>
-						<div nz-col [nzSpan]="2">
-							<ng-container *ngIf="status || !editMoneyUnit; else editMoney">
-								<span (click)="editMoneyUnit=true">{{genFunc.moneyUnitName(maDviTien)}}</span>
-							</ng-container>
-							<ng-template #editMoney>
-								<nz-select nzShowSearch nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
-									(ngModelChange)="editMoneyUnit=false">
-									<nz-option *ngFor="let item of donViTiens" [nzValue]="item.id"
-										[nzLabel]="item.tenDm">
-									</nz-option>
-								</nz-select>
-							</ng-template>
+					<div class="nut" style="margin-top: 10px;">
+						<div class="cantrai">
+							<div> Đơn vị: </div>
+							<div style="margin-left: 10px;">
+								<ng-container *ngIf="status || !editMoneyUnit; else editMoney">
+									<span (click)="editMoneyUnit=true">
+										{{ genFunc.moneyUnitName(maDviTien) }}
+									</span>
+								</ng-container>
+								<ng-template #editMoney>
+									<nz-select nzShowSearch nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
+										(ngModelChange)="editMoneyUnit=false">
+										<nz-option *ngFor="let item of donViTiens" [nzValue]="item.id"
+											[nzLabel]="item.tenDm">
+										</nz-option>
+									</nz-select>
+								</ng-template>
+							</div>
 						</div>
 					</div>
 					<nz-table nzBordered class="table__body" [nzScroll]="{x: scrollX}">
 						<thead>
 							<tr>
-								<th nzWidth="50px" nzLeft>STT</th>
-								<th nzWidth="400px" nzLeft>Lĩnh vực/Nội dung chi</th>
-								<th>Thực hiện năm hiện hành {{namBcao -1}}</th>
-								<th>Nhu cầu dự toán năm {{namBcao}}</th>
-								<th>Nhu cầu năm {{namBcao + 1}}</th>
-								<th>Nhu cầu năm {{namBcao + 2}}</th>
-								<th>Ghi chú</th>
-								<th style="width: 50px;" *ngIf="status.general" nzRight></th>
+								<th nzWidth="50px" nzLeft>
+									STT
+								</th>
+								<th nzWidth="350px" nzLeft>
+									Lĩnh vực/Nội dung chi
+								</th>
+								<th>
+									Thực hiện năm hiện hành {{namBcao -1}}
+								</th>
+								<th>
+									Nhu cầu dự toán năm {{namBcao}}
+								</th>
+								<th>
+									Nhu cầu năm {{namBcao + 1}}
+								</th>
+								<th>
+									Nhu cầu năm {{namBcao + 2}}
+								</th>
+								<th class="text-col">
+									Ghi chú
+								</th>
+								<th style="width: 60px;" *ngIf="status.general" nzRight></th>
 							</tr>
 							<tr>
 								<th nzLeft></th>
-								<th nzLeft>Tổng Nhu cầu chi thường xuyên</th>
-								<th>{{ numFunc.valFmt(total.thNamHienHanhN1, maDviTien) }}</th>
-								<th>{{ numFunc.valFmt(total.ncauNamDtoanN, maDviTien) }}</th>
-								<th>{{ numFunc.valFmt(total.ncauNamN1, maDviTien) }}</th>
-								<th>{{ numFunc.valFmt(total.ncauNamN2, maDviTien) }}</th>
+								<th nzLeft>
+									Tổng Nhu cầu chi thường xuyên
+								</th>
+								<th>
+									{{ numFunc.valFmt(total.thNamHienHanhN1, maDviTien) }}
+								</th>
+								<th>
+									{{ numFunc.valFmt(total.ncauNamDtoanN, maDviTien) }}
+								</th>
+								<th>
+									{{ numFunc.valFmt(total.ncauNamN1, maDviTien) }}
+								</th>
+								<th>
+									{{ numFunc.valFmt(total.ncauNamN2, maDviTien) }}
+								</th>
 								<th></th>
 								<th *ngIf="status.general" nzRight></th>
 							</tr>
 							<tr>
 								<th nzLeft></th>
-								<th nzLeft>Trong đó - Chi thường xuyên cơ sở</th>
-								<th>{{ numFunc.valFmt(chiCoSo.thNamHienHanhN1, maDviTien) }}</th>
-								<th>{{ numFunc.valFmt(chiCoSo.ncauNamDtoanN, maDviTien) }}</th>
-								<th>{{ numFunc.valFmt(chiCoSo.ncauNamN1, maDviTien) }}</th>
-								<th>{{ numFunc.valFmt(chiCoSo.ncauNamN2, maDviTien) }}</th>
-								<th>{{ chiCoSo.ghiChu }}</th>
+								<th nzLeft>
+									Trong đó - Chi thường xuyên cơ sở
+								</th>
+								<th>
+									{{ numFunc.valFmt(chiCoSo.thNamHienHanhN1, maDviTien) }}
+								</th>
+								<th>
+									{{ numFunc.valFmt(chiCoSo.ncauNamDtoanN, maDviTien) }}
+								</th>
+								<th>
+									{{ numFunc.valFmt(chiCoSo.ncauNamN1, maDviTien) }}
+								</th>
+								<th>
+									{{ numFunc.valFmt(chiCoSo.ncauNamN2, maDviTien) }}
+								</th>
+								<th></th>
 								<th *ngIf="status.general" nzRight></th>
 							</tr>
 							<tr>
 								<th nzLeft></th>
-								<th nzLeft>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; - Chi thường xuyên
-									mới</th>
-								<th>{{ numFunc.valFmt(chiMoi.thNamHienHanhN1, maDviTien) }}</th>
-								<th>{{ numFunc.valFmt(chiMoi.ncauNamDtoanN, maDviTien) }}</th>
-								<th>{{ numFunc.valFmt(chiMoi.ncauNamN1, maDviTien) }}</th>
-								<th>{{ numFunc.valFmt(chiMoi.ncauNamN2, maDviTien) }}</th>
-								<th>{{ chiMoi.ghiChu }}</th>
+								<th nzLeft>
+									&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; - Chi thường xuyên mới
+								</th>
+								<th>
+									{{ numFunc.valFmt(chiMoi.thNamHienHanhN1, maDviTien) }}
+								</th>
+								<th>
+									{{ numFunc.valFmt(chiMoi.ncauNamDtoanN, maDviTien) }}
+								</th>
+								<th>
+									{{ numFunc.valFmt(chiMoi.ncauNamN1, maDviTien) }}
+								</th>
+								<th>
+									{{ numFunc.valFmt(chiMoi.ncauNamN2, maDviTien) }}
+								</th>
+								<th></th>
 								<th *ngIf="status.general" nzRight></th>
 							</tr>
 						</thead>
@@ -74,11 +119,21 @@
 									<td nzLeft>
 										{{ data.tenLvucNdChi }}
 									</td>
-									<td>{{ numFunc.valFmt(data.thNamHienHanhN1, maDviTien) }}</td>
-									<td>{{ numFunc.valFmt(data.ncauNamDtoanN, maDviTien) }}</td>
-									<td>{{ numFunc.valFmt(data.ncauNamN1, maDviTien) }}</td>
-									<td>{{ numFunc.valFmt(data.ncauNamN2, maDviTien) }}</td>
-									<td>{{ data.ghiChu }}</td>
+									<td>
+										{{ numFunc.valFmt(data.thNamHienHanhN1, maDviTien) }}
+									</td>
+									<td>
+										{{ numFunc.valFmt(data.ncauNamDtoanN, maDviTien) }}
+									</td>
+									<td>
+										{{ numFunc.valFmt(data.ncauNamN1, maDviTien) }}
+									</td>
+									<td>
+										{{ numFunc.valFmt(data.ncauNamN2, maDviTien) }}
+									</td>
+									<td>
+										{{ data.ghiChu }}
+									</td>
 									<td *ngIf="status.general" nzRight>
 										<i *ngIf="checkEdit(data.stt)" class="fa fa-pencil"
 											(click)="startEdit(data.id)"></i>
@@ -112,7 +167,7 @@
 											[class]="(editCache[data.id].data.ncauNamN2 || editCache[data.id].data.ncauNamN2 ===0) ?'' : 'input-error-validate'" />
 									</td>
 									<td>
-										<input class="search-input" [(ngModel)]="editCache[data.id].data.ghiChu" />
+										<input nz-input [(ngModel)]="editCache[data.id].data.ghiChu" />
 									</td>
 									<td nzRight>
 										<a (click)="saveEdit(data.id)" class="save">Lưu</a>

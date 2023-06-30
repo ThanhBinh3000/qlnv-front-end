@@ -23,6 +23,15 @@ export class Form {
     listIdDeleteFiles: string[];
 }
 
+export class History {
+    id: string;
+    maBcao: string;
+    lan: number;
+    ngayTao: string;
+    nguoiTao: string;
+    trangThai: string;
+}
+
 export class Report {
     id: string;
     namBcao: number;
@@ -47,9 +56,11 @@ export class Report {
     fileDinhKems: any[];
     listIdDeleteFiles: string[];
     tongHopTuIds: any[];
+    lichSu: History[];
 }
 
 export class BtnStatus {
+    new: boolean = true;                               // trang thai tao moi lich su
     general: boolean = true;                           //trang thai tong cua ban ghi dang xet
     save?: boolean = true;                             // trang thai cua nut luu
     submit?: boolean = true;                           // trang thai cua nut trinh duyet
@@ -60,5 +71,5 @@ export class BtnStatus {
     ok?: boolean = true;                               // trang thai cua nut chap nhan bieu mau
     finish?: boolean = true;                           // trang thai cua nut hoan tat nhap lieu
     viewAppVal?: boolean = true;                       // quyen xem tham dinh
-    editAppval?: boolean = true;                       // quyen sua tham dinh
+    editAppVal?: boolean = true;                       // quyen sua tham dinh
 }

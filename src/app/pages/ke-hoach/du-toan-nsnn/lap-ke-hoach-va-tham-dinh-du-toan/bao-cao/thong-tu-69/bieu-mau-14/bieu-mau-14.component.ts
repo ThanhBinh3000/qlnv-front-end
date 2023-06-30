@@ -49,7 +49,6 @@ export class BieuMau14Component implements OnInit {
     status: BtnStatus = new BtnStatus();
     editMoneyUnit = false;
     isDataAvailable = false;
-    BOX_SIZE = 220;
     //nho dem
     editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
 
@@ -106,9 +105,9 @@ export class BieuMau14Component implements OnInit {
             if (category) {
                 this.noiDungs = category.data;
             }
-            this.scrollX = this.genFunc.setTableWidth(550, 4, this.BOX_SIZE, 60);
+            this.scrollX = this.genFunc.tableWidth(550, 4, 1, 60);
         } else {
-            this.scrollX = this.genFunc.setTableWidth(550, 4, this.BOX_SIZE, 0);
+            this.scrollX = this.genFunc.tableWidth(550, 4, 1, 0);
         }
         this.formDetail?.lstCtietLapThamDinhs.forEach(item => {
             this.lstCtietBcao.push({
@@ -142,12 +141,13 @@ export class BieuMau14Component implements OnInit {
         this.status.ok = this.status.ok && (this.formDetail.trangThai == "2" || this.formDetail.trangThai == "5");
     }
 
-    getFormDetail() {
-        this.lapThamDinhService.ctietBieuMau(this.dataInfo.id).toPromise().then(
+    async getFormDetail() {
+        await this.lapThamDinhService.ctietBieuMau(this.dataInfo.id).toPromise().then(
             data => {
                 if (data.statusCode == 0) {
                     this.formDetail = data.data;
                     this.formDetail.maDviTien = '1';
+                    this.lstCtietBcao = this.formDetail.lstCtietLapThamDinhs;
                     this.listFile = [];
                     this.getStatusButton();
                 } else {

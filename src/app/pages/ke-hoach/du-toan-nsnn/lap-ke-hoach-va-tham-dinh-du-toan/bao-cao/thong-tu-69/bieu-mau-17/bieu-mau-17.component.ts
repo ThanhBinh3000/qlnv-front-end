@@ -47,7 +47,6 @@ export class BieuMau17Component implements OnInit {
     donViTiens: any[] = DON_VI_TIEN;
     amount = AMOUNT;
     scrollX: string;
-    BOX_SIZE = 220;
     //trang thai cac nut
     status: BtnStatus = new BtnStatus();
     editMoneyUnit = false;
@@ -108,9 +107,9 @@ export class BieuMau17Component implements OnInit {
             if (category) {
                 this.linhVucs = category.data;
             }
-            this.scrollX = this.genFunc.setTableWidth(450, 4, this.BOX_SIZE, 60);
+            this.scrollX = this.genFunc.setTableWidth(400, 4, 1, 60);
         } else {
-            this.scrollX = this.genFunc.setTableWidth(450, 4, this.BOX_SIZE, 0);
+            this.scrollX = this.genFunc.setTableWidth(400, 4, 1, 0);
         }
         this.formDetail?.lstCtietLapThamDinhs.forEach(item => {
             this.lstCtietBcao.push({
@@ -150,12 +149,13 @@ export class BieuMau17Component implements OnInit {
         this.status.ok = this.status.ok && (this.formDetail.trangThai == "2" || this.formDetail.trangThai == "5");
     }
 
-    getFormDetail() {
-        this.lapThamDinhService.ctietBieuMau(this.dataInfo.id).toPromise().then(
+    async getFormDetail() {
+        await this.lapThamDinhService.ctietBieuMau(this.dataInfo.id).toPromise().then(
             data => {
                 if (data.statusCode == 0) {
                     this.formDetail = data.data;
                     this.formDetail.maDviTien = '1';
+                    this.lstCtietBcao = this.formDetail.lstCtietLapThamDinhs;
                     this.listFile = [];
                     this.getStatusButton();
                 } else {
