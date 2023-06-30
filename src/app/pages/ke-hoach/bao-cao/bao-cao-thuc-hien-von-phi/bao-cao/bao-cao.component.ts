@@ -16,64 +16,65 @@ import { BaoCaoThucHienVonPhiService } from 'src/app/services/quan-ly-von-phi/ba
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { divNumber, sumNumber } from 'src/app/Utility/func';
+import { FileFunction, GeneralFunction, divNumber, sumNumber } from 'src/app/Utility/func';
 import { BAO_CAO_DOT, BCVP, TRANG_THAI_PHU_LUC, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import { BAO_CAO_CHI_TIET_THUC_HIEN_PHI_NHAP_HANG_DTQG, BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_CUU_TRO_VIEN_TRO, BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_DTQG, KHAI_THAC_BAO_CAO_CHI_TIET_THUC_HIEN_PHI_BAO_QUAN_LAN_DAU_HANG_DTQG, LISTBIEUMAUDOT, LISTBIEUMAUNAM } from './bao-cao.constant';
+import { BtnStatus, Doc, Form, Report } from '../../bao-cao.class';
 
-export class ItemDanhSach {
-    id!: any;
-    maBcao!: string;
-    namBcao!: number;
-    dotBcao!: number;
-    thangBcao!: number;
-    trangThai!: string;
-    ngayTao!: string;
-    nguoiTao!: string;
-    maDviTien!: string;
-    maDvi: number;
-    congVan!: ItemCongVan;
-    ngayTrinh!: string;
-    ngayDuyet!: string;
-    ngayPheDuyet!: string;
-    ngayTraKq!: string;
-    // dung cho request
-    fileDinhKems!: any[];
-    listIdDeletes!: string;
-    listIdDeleteFiles = '';
-    maPhanBcao = "1";
+// export class ItemDanhSach {
+//     id!: any;
+//     maBcao!: string;
+//     namBcao!: number;
+//     dotBcao!: number;
+//     thangBcao!: number;
+//     trangThai!: string;
+//     ngayTao!: string;
+//     nguoiTao!: string;
+//     maDviTien!: string;
+//     maDvi: number;
+//     congVan!: ItemCongVan;
+//     ngayTrinh!: string;
+//     ngayDuyet!: string;
+//     ngayPheDuyet!: string;
+//     ngayTraKq!: string;
+//     // dung cho request
+//     fileDinhKems!: any[];
+//     listIdDeletes!: string;
+//     listIdDeleteFiles = '';
+//     maPhanBcao = "1";
 
-    maLoaiBcao!: string;
-    stt!: string;
-    checked!: boolean;
-    lstBcaos: ItemData[] = [];
-    lstFile: any[] = [];
-    lstBcaoDviTrucThuocs: any[] = [];
-    tongHopTuIds!: [];
-}
+//     maLoaiBcao!: string;
+//     stt!: string;
+//     checked!: boolean;
+//     lstBcaos: ItemData[] = [];
+//     lstFile: any[] = [];
+//     lstBcaoDviTrucThuocs: any[] = [];
+//     tongHopTuIds!: [];
+// }
 
-export class ItemCongVan {
-    fileName: string;
-    fileSize: number;
-    fileUrl: number;
-}
-export class ItemData {
-    id!: any;
-    maLoai!: string;
-    maDviTien!: any;
-    lstCtietBcaos!: any;
-    trangThai!: string;
-    checked!: boolean;
-    tieuDe!: string;
-    tenPhuLuc!: string;
-    thuyetMinh!: string;
-    lyDoTuChoi!: string;
-    lstIdDeletes!: [];
-    nguoiBcao!: string;
-    bcaoId!: string;
-    tuNgay: string;
-    denNgay: string;
-}
+// export class ItemCongVan {
+//     fileName: string;
+//     fileSize: number;
+//     fileUrl: number;
+// }
+// export class ItemData {
+//     id!: any;
+//     maLoai!: string;
+//     maDviTien!: any;
+//     lstCtietBcaos!: any;
+//     trangThai!: string;
+//     checked!: boolean;
+//     tieuDe!: string;
+//     tenPhuLuc!: string;
+//     thuyetMinh!: string;
+//     lyDoTuChoi!: string;
+//     lstIdDeletes!: [];
+//     nguoiBcao!: string;
+//     bcaoId!: string;
+//     tuNgay: string;
+//     denNgay: string;
+// }
 
 @Component({
     selector: 'app-bao-cao',
@@ -87,47 +88,59 @@ export class BaoCaoComponent implements OnInit {
     //thong tin dang nhap
     userInfo: any;
     //thong tin chung bao cao
-    baoCao: ItemDanhSach = new ItemDanhSach();
-    trangThaiPhuLuc: string;
+    baoCao: Report = new Report();
     //danh muc
-    listIdDelete: any = [];                     // list id delete
     nguoiBcaos: any[];
     donVis: any = [];                           // danh muc don vi
     childUnit: any = [];
-    lstFiles: any = [];                         // list File de day vao api
-    luyKes: ItemData[] = [];
-    luyKeDetail = [];
+    luyKes: Form[] = [];
     lstVatTus: any[] = [];
     lstBieuMaus: any[] = [];
     trangThais: any[] = TRANG_THAI_TIM_KIEM;
+    //file
+    listFile: File[] = [];                      // list file chua ten va id de hien tai o input
+    fileList: NzUploadFile[] = [];
+    fileDetail: NzUploadFile;
+    path: string;
     //trang thai cac nut
-    status = false;                             // trang thai an/ hien cua trang thai
-    saveStatus = true;                          // trang thai an/hien nut luu
-    submitStatus = true;                        // trang thai an/hien nut trinh duyet
-    passStatus = true;                          // trang thai an/hien nut truong bo phan
-    approveStatus = true;                       // trang thai an/hien nut lanh dao
-    acceptStatus = true;                        // trang thai nut don vi cap tren
-    copyStatus = true;                          // trang thai copy
-    printStatus = true;                         // trang thai print
-    okStatus = true;                            // trang thai ok/ not ok
-    exportStatus = true;                        // trang thai nut export
-    finishStatus = true;                        // trang thai hoan tat nhap lieu
+    status: BtnStatus = new BtnStatus();
     isDataAvailable = false;
     isOffice: boolean;
     //khac
     allChecked = false;                         // check all checkbox
     editCache: { [key: string]: { edit: boolean; data: any } } = {};     // phuc vu nut chinh
-    //file
-    listFile: File[] = [];
-    fileList: NzUploadFile[] = [];
-    fileDetail: NzUploadFile;
-    listIdFilesDelete: string[] = [];
     //phan tab
     tabSelected: string;
     tabs: any[] = [];
     selectedIndex = 1;
     //truyen du lieu sang tab con
     tabData: any;
+
+    // before uploaf file
+    beforeUpload = (file: NzUploadFile): boolean => {
+        this.fileList = this.fileList.concat(file);
+        return false;
+    };
+
+    // before uploaf file
+    beforeUploadCV = (file: NzUploadFile): boolean => {
+        this.fileDetail = file;
+        this.baoCao.congVan = {
+            ...new Doc(),
+            fileName: file.name,
+        };
+        return false;
+    };
+
+    // them file vao danh sach
+    handleUpload(): void {
+        this.fileList.forEach((file: any) => {
+            const id = file?.lastModified.toString();
+            this.baoCao.lstFile.push({ id: id, fileName: file?.name });
+            this.listFile.push(file);
+        });
+        this.fileList = [];
+    }
 
     constructor(
         private baoCaoThucHienVonPhiService: BaoCaoThucHienVonPhiService,
@@ -139,6 +152,8 @@ export class BaoCaoComponent implements OnInit {
         private notification: NzNotificationService,
         private modal: NzModalService,
         public globals: Globals,
+        public genFunc: GeneralFunction,
+        public fileFunc: FileFunction,
     ) { }
 
     async ngOnInit() {
@@ -257,21 +272,13 @@ export class BaoCaoComponent implements OnInit {
             } else {
                 this.lstBieuMaus.forEach(item => {
                     this.baoCao.lstBcaos.push({
+                        ... new Form(),
                         id: uuid.v4() + 'FE',
-                        checked: false,
                         tieuDe: item.tieuDe + (this.baoCao.maLoaiBcao == BAO_CAO_DOT ? this.baoCao.dotBcao : this.baoCao.namBcao),
                         maLoai: item.maPhuLuc,
                         tenPhuLuc: item.tenPhuLuc,
                         trangThai: '3',
                         lstCtietBcaos: [],
-                        maDviTien: '1',
-                        thuyetMinh: null,
-                        lyDoTuChoi: null,
-                        lstIdDeletes: [],
-                        nguoiBcao: null,
-                        bcaoId: this.baoCao.id,
-                        tuNgay: '',
-                        denNgay: '',
                     });
                 })
                 if (this.isOffice) {
@@ -364,38 +371,29 @@ export class BaoCaoComponent implements OnInit {
     //check role cho các nut trinh duyet
     getStatusButton() {
         const isSynthetic = this.baoCao.lstBcaoDviTrucThuocs.length != 0;
-        const checkChirld = this.baoCao.maDvi == this.userInfo?.MA_DVI;
-        const checkParent = this.childUnit.findIndex(e => e.maDvi == this.baoCao.maDvi) != -1;
+        const isChild = this.baoCao.maDvi == this.userInfo?.MA_DVI;
+        const isParent = this.childUnit.findIndex(e => e.maDvi == this.baoCao.maDvi) != -1;
         //kiem tra quyen cua cac user
         const checkSave = isSynthetic ? this.userService.isAccessPermisson(BCVP.EDIT_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(BCVP.EDIT_REPORT);
         const checkSunmit = isSynthetic ? this.userService.isAccessPermisson(BCVP.APPROVE_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(BCVP.APPROVE_REPORT);
         const checkPass = isSynthetic ? this.userService.isAccessPermisson(BCVP.DUYET_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(BCVP.DUYET_REPORT);
         const checkApprove = isSynthetic ? this.userService.isAccessPermisson(BCVP.PHE_DUYET_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(BCVP.PHE_DUYET_REPORT);
         const checkAccept = this.userService.isAccessPermisson(BCVP.TIEP_NHAN_REPORT);
-        const checkCopy = isSynthetic ? this.userService.isAccessPermisson(BCVP.COPY_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(BCVP.COPY_REPORT);
+        // const checkCopy = isSynthetic ? this.userService.isAccessPermisson(BCVP.COPY_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(BCVP.COPY_REPORT);
         const checkPrint = isSynthetic ? this.userService.isAccessPermisson(BCVP.PRINT_SYTHETIC_REPORT) : this.userService.isAccessPermisson(BCVP.PRINT_REPORT);
         const checkExport = this.userService.isAccessPermisson(BCVP.EXPORT_EXCEL_REPORT);
-        this.status = Utils.statusSave.includes(this.baoCao.trangThai) && checkSave;
 
-        this.saveStatus = Utils.statusSave.includes(this.baoCao.trangThai) && checkSave && checkChirld;
-        this.submitStatus = Utils.statusApprove.includes(this.baoCao.trangThai) && checkSunmit && checkChirld && !(!this.baoCao.id);
-        this.passStatus = Utils.statusDuyet.includes(this.baoCao.trangThai) && checkPass && checkChirld;
-        this.approveStatus = Utils.statusPheDuyet.includes(this.baoCao.trangThai) && checkApprove && checkChirld;
-        this.acceptStatus = Utils.statusTiepNhan.includes(this.baoCao.trangThai) && checkAccept && checkParent;
-        this.copyStatus = Utils.statusCopy.includes(this.baoCao.trangThai) && checkCopy && checkChirld && (this.data.preTab != 'khaithac');
-        this.printStatus = Utils.statusPrint.includes(this.baoCao.trangThai) && checkPrint && checkChirld;
-        this.exportStatus = !(Utils.statusExport.includes(this.baoCao.trangThai) && checkExport && checkChirld);
-
-        if (this.acceptStatus || this.approveStatus || this.passStatus) {
-            this.okStatus = true;
-        } else {
-            this.okStatus = false;
-        }
-        if (this.saveStatus) {
-            this.finishStatus = false;
-        } else {
-            this.finishStatus = true;
-        }
+        this.status.general = Utils.statusSave.includes(this.baoCao.trangThai) && checkSave;
+        this.status.new = ([Utils.TT_BC_3, Utils.TT_BC_5, Utils.TT_BC_8].includes(this.baoCao.trangThai)) && this.userService.isAccessPermisson(BCVP.ADD_REPORT) && isChild;
+        this.status.save = Utils.statusSave.includes(this.baoCao.trangThai) && checkSave && isChild;
+        this.status.submit = Utils.statusApprove.includes(this.baoCao.trangThai) && checkSunmit && isChild && !(!this.baoCao.id);
+        this.status.pass = Utils.statusDuyet.includes(this.baoCao.trangThai) && checkPass && isChild;
+        this.status.approve = Utils.statusPheDuyet.includes(this.baoCao.trangThai) && checkApprove && isChild;
+        this.status.accept = Utils.statusTiepNhan.includes(this.baoCao.trangThai) && checkAccept && isParent;
+        this.status.print = Utils.statusPrint.includes(this.baoCao.trangThai) && checkPrint && isChild;
+        this.status.export = Utils.statusExport.includes(this.baoCao.trangThai) && checkExport && isChild;
+        this.status.ok = this.status.accept || this.status.approve || this.status.pass
+        this.status.finish = this.status.general;
     }
 
     back() {
@@ -444,7 +442,6 @@ export class BaoCaoComponent implements OnInit {
                     }
                 })
 
-                this.lstFiles = data.data.lstFiles;
                 this.listFile = [];
                 await this.getDviCon();
                 //this.maDonViTao = data.data.maDvi;
@@ -590,7 +587,6 @@ export class BaoCaoComponent implements OnInit {
             })
 
             baoCaoTemp.fileDinhKems = listFile;
-            baoCaoTemp.listIdFiles = this.listIdFilesDelete;
             baoCaoTemp.trangThai = "1";
             //baoCaoTemp.maDvi = this.maDonViTao;
             baoCaoTemp.maPhanBcao = '1';
@@ -744,9 +740,7 @@ export class BaoCaoComponent implements OnInit {
                             maDviTien: '1',
                             thuyetMinh: null,
                             lyDoTuChoi: null,
-                            lstIdDeletes: [],
                             nguoiBcao: null,
-                            bcaoId: this.baoCao.id,
                             tuNgay: '',
                             denNgay: '',
                         });
@@ -793,9 +787,6 @@ export class BaoCaoComponent implements OnInit {
             this.tabData = {
                 ...item,
                 trangThaiBaoCao: this.baoCao.trangThai,
-                statusBtnOk: this.okStatus,
-                statusBtnFinish: this.finishStatus,
-                statusBtnExport: this.exportStatus,
                 status: this.status,
                 idBaoCao: this.baoCao.id,
                 luyKes: this.luyKes,
@@ -830,21 +821,11 @@ export class BaoCaoComponent implements OnInit {
         this.selectedIndex = 0;
     }
 
-    // them file vao danh sach
-    handleUpload(): void {
-        this.fileList.forEach((file: any) => {
-            const id = file?.lastModified.toString();
-            this.lstFiles.push({ id: id, fileName: file?.name });
-            this.listFile.push(file);
-        });
-        this.fileList = [];
-    }
-
     //download file về máy tính
     async downloadFile(id: string) {
         const file: File = this.listFile.find(element => element?.lastModified.toString() == id);
         if (!file) {
-            const fileAttach = this.lstFiles.find(element => element?.id == id);
+            const fileAttach = this.baoCao.lstFile.find(element => element?.id == id);
             if (fileAttach) {
                 await this.quanLyVonPhiService.downloadFile(fileAttach.fileUrl).toPromise().then(
                     (data) => {
@@ -903,27 +884,10 @@ export class BaoCaoComponent implements OnInit {
 
     // xoa file trong bang file
     deleteFile(id: string): void {
-        this.lstFiles = this.lstFiles.filter((a: any) => a.id !== id);
-        this.listFile = this.listFile.filter((a: any) => a?.lastModified.toString() !== id);
-        this.listIdFilesDelete.push(id);
+        // this.lstFiles = this.lstFiles.filter((a: any) => a.id !== id);
+        // this.listFile = this.listFile.filter((a: any) => a?.lastModified.toString() !== id);
+        // this.listIdFilesDelete.push(id);
     }
-
-    // before uploaf file
-    beforeUpload = (file: NzUploadFile): boolean => {
-        this.fileList = this.fileList.concat(file);
-        return false;
-    };
-
-    // before uploaf file
-    beforeUploadCV = (file: NzUploadFile): boolean => {
-        this.fileDetail = file;
-        this.baoCao.congVan = {
-            fileName: file.name,
-            fileSize: null,
-            fileUrl: null,
-        };
-        return false;
-    };
 
     viewDetail(id) {
         const obj = {

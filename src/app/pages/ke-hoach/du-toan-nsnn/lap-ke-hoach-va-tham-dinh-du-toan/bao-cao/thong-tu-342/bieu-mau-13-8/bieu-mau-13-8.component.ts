@@ -87,8 +87,7 @@ export class BieuMau138Component implements OnInit {
 		public genFunc: GeneralFunction,
 		private fileFunc: FileFunction,
 		private tableFunc: TableFunction,
-	) {
-	}
+	) { }
 
 	async ngOnInit() {
 		this.initialization().then(() => {
@@ -127,34 +126,6 @@ export class BieuMau138Component implements OnInit {
 					tenDmuc: e.giaTri,
 				})
 			})
-			// if (this.dataInfo?.extraData && this.dataInfo.extraData.length > 0) {
-			// 	this.lstCtietBcao = this.lstCtietBcao.filter(e => e.maNdung);
-			// 	this.dataInfo.extraData.forEach(item => {
-			// 		if (item.maNdung) {
-			// 			const index = this.lstCtietBcao.findIndex(e => e.maNdung == item.maNdung);
-			// 			this.lstCtietBcao[index].namKh = item.namKh;
-			// 			this.lstCtietBcao[index].giaTriThamDinh = item.giaTriThamDinh;
-			// 			if (item.namDtoan) {
-			// 				this.lstCtietBcao[index].namDtoan = item.namDtoan;
-			// 			}
-			// 			if (item.namUocThien) {
-			// 				this.lstCtietBcao[index].namUocThien = item.namUocThien;
-			// 			}
-			// 		} else {
-			// 			this.lstCtietBcao.push({
-			// 				...new ItemData(),
-			// 				id: uuid.v4(),
-			// 				stt: item.stt,
-			// 				tenDmuc: item.tenNdung,
-			// 				thienNtruoc: item.thienNtruoc,
-			// 				namDtoan: item.namDtoan,
-			// 				namUocThien: item.namUocThien,
-			// 				namKh: item.namKh,
-			// 				giaTriThamDinh: item.giaTriThamDinh,
-			// 			})
-			// 		}
-			// 		this.sum(item.stt);
-			// 	})
 		} else if (!this.lstCtietBcao[0]?.stt) {
 			this.lstCtietBcao.forEach(item => {
 				item.stt = item.maNdung;
@@ -165,34 +136,6 @@ export class BieuMau138Component implements OnInit {
 		this.getStatusButton();
 		this.spinner.hide();
 	}
-	// if (this.dataInfo?.extraData && this.dataInfo.extraData.length > 0) {
-	// 	this.lstCtietBcao = this.lstCtietBcao.filter(e => e.maNdung);
-	// 	this.dataInfo.extraData.forEach(item => {
-	// 		if (item.maNdung) {
-	// 			const index = this.lstCtietBcao.findIndex(e => e.maNdung == item.maNdung);
-	// 			this.lstCtietBcao[index].namKh = item.namKh;
-	// 			this.lstCtietBcao[index].giaTriThamDinh = item.giaTriThamDinh;
-	// 		} else {
-	// 			this.lstCtietBcao.push({
-	// 				...new ItemData(),
-	// 				id: uuid.v4(),
-	// 				stt: item.stt,
-	// 				tenDmuc: item.tenNdung,
-	// 				thienNtruoc: item.thienNtruoc,
-	// 				namDtoan: item.namDtoan,
-	// 				namUocThien: item.namUocThien,
-	// 				namKh: item.namKh,
-	// 				giaTriThamDinh: item.giaTriThamDinh,
-	// 			})
-	// 		}
-	// 		this.sum(item.stt);
-	// 	})
-	// }
-	// this.sortByIndex();
-	// this.updateEditCache();
-	// this.getStatusButton();
-	// this.spinner.hide();
-	// }
 
 	getStatusButton() {
 		this.status.ok = this.status.ok && (this.formDetail.trangThai == "2" || this.formDetail.trangThai == "5");
@@ -276,39 +219,6 @@ export class BieuMau138Component implements OnInit {
 				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
 			},
 		);
-		this.spinner.hide();
-	}
-
-	// chuc nang check role
-	async onSubmit(mcn: string, lyDoTuChoi: string) {
-		if (!this.formDetail?.id) {
-			this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING);
-			return;
-		}
-		const requestGroupButtons = {
-			id: this.formDetail.id,
-			trangThai: mcn,
-			lyDoTuChoi: lyDoTuChoi,
-		};
-		this.spinner.show();
-		await this.lapThamDinhService.approveCtietThamDinh(requestGroupButtons).toPromise().then(async (data) => {
-			if (data.statusCode == 0) {
-				this.formDetail.trangThai = mcn;
-				this.getStatusButton();
-				if (mcn == "0") {
-					this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
-				} else {
-					this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
-				}
-				this._modalRef.close({
-					formDetail: this.formDetail,
-				});
-			} else {
-				this.notification.error(MESSAGE.ERROR, data?.msg);
-			}
-		}, err => {
-			this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-		});
 		this.spinner.hide();
 	}
 
