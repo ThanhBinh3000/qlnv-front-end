@@ -188,11 +188,11 @@ export class BieuMau140Component implements OnInit {
 			})
 		})
 
-		// if (!this.status.viewAppVal) {
-		// 	lstCtietBcaoTemp?.forEach(item => {
-		// 		item.giaTriThamDinh = item.namKh;
-		// 	})
-		// }
+		if (this.status.general) {
+			lstCtietBcaoTemp?.forEach(item => {
+				item.giaTriThamDinh = item.namKh;
+			})
+		}
 
 		const request = JSON.parse(JSON.stringify(this.formDetail));
 
