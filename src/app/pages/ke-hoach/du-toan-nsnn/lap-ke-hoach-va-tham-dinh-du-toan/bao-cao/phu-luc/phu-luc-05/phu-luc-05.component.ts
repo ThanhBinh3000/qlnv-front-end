@@ -205,11 +205,11 @@ export class PhuLuc05Component implements OnInit {
 			})
 		})
 
-		// if (!this.status.viewAppVal) {
-		// 	lstCtietBcaoTemp?.forEach(item => {
-		// 		item.keHoachVonTd = item.keHoachVon;
-		// 	})
-		// }
+		if (this.status.general) {
+			lstCtietBcaoTemp?.forEach(item => {
+				item.keHoachVonTd = item.keHoachVon;
+			})
+		}
 
 		const request = JSON.parse(JSON.stringify(this.formDetail));
 

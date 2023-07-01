@@ -180,12 +180,12 @@ export class BieuMau160Component implements OnInit {
 			})
 		})
 
-		// if (!this.status.viewAppVal) {
-		// 	lstCtietBcaoTemp?.forEach(item => {
-		// 		item.tdinhSluong = item.namKhSluong;
-		// 		item.tdinhTtien = item.namKhTtien;
-		// 	})
-		// }
+		if (this.status.general) {
+			lstCtietBcaoTemp?.forEach(item => {
+				item.tdinhSluong = item.namKhSluong;
+				item.tdinhTtien = item.namKhTtien;
+			})
+		}
 
 		const request = JSON.parse(JSON.stringify(this.formDetail));
 
