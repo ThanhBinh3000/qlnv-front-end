@@ -84,7 +84,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
   listNoiDung = []
   listThanhTien: any;
   listSoLuong: any;
-  flagInit: Boolean = true;
+  flagInit: Boolean = false;
   listDiaDiemKho: any[] = [];
 
   constructor(
@@ -181,7 +181,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
     } catch (e) {
       this.notification.error(MESSAGE.ERROR, 'Có lỗi xảy ra.');
     } finally {
-      this.flagInit = false;
+      this.flagInit = true;
       this.spinner.hide();
     }
   }
@@ -245,7 +245,6 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
         .then((res) => {
           if (res.msg == MESSAGE.SUCCESS) {
             this.formData.patchValue(res.data);
-            this.formData.patchValue({soPhieuXuatKho: res.data.soPhieuXuatKho})
           }
         })
         .catch((e) => {
@@ -619,7 +618,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
   }
 
   changeSoQd(event) {
-    if (event && event !== this.formData.value.soQdGiaoNvXh) {
+    if (this.flagInit && event && event !== this.formData.value.soQdGiaoNvXh) {
       this.formData.patchValue({
         maDiemKho: null,
         tenDiemKho: null,
@@ -636,7 +635,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
   }
 
   changeDd(event) {
-    if (event && event !== this.formData.value.maDiemKho) {
+    if (this.flagInit && event && event !== this.formData.value.maDiemKho) {
       this.formData.patchValue({
         idPhieuXuatKho: null,
         soPhieuXuatKho: null,
@@ -656,7 +655,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
   }
 
   async changeNam() {
-    if (!this.flagInit) {
+    if (this.flagInit) {
       this.formData.patchValue({
         soBangKe: this.formData.value.soBangKe.replace(/\/\d+/, `/${this.formData.value.nam}`),
         bangKeDtl: this.formData.value.bangKeDtl
@@ -676,13 +675,15 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
   }
 
   async trongLuongTruBi() {
-    let data = cloneDeep(this.formData.value);
-    if (data.tongTrongLuongBaoBi) {
-      let tongTrongLuongHang = data.tongTrongLuong - data.tongTrongLuongBaoBi;
-      this.formData.patchValue({
-        tongTrongLuongHang: tongTrongLuongHang,
-        tongTrongLuongBaoBi: data.tongTrongLuongBaoBi,
-      });
+    if (this.flagInit) {
+      let data = cloneDeep(this.formData.value);
+      if (data.tongTrongLuongBaoBi) {
+        let tongTrongLuongHang = data.tongTrongLuong - data.tongTrongLuongBaoBi;
+        this.formData.patchValue({
+          tongTrongLuongHang: tongTrongLuongHang,
+          tongTrongLuongBaoBi: data.tongTrongLuongBaoBi,
+        });
+      }
     }
   }
 
