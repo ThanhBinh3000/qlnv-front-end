@@ -38,7 +38,7 @@ export const LISTBIEUMAUDOT = [
     {
         maPhuLuc: '9',
         tenPhuLuc: '05/BCPBQ',
-        tieuDe: 'Khai thác báo cáo chi tiết thực hiện phí bảo quản lần đầu hàng DTQG đợt ',
+        tieuDe: 'Báo cáo chi tiết thực hiện phí bảo quản lần đầu hàng DTQG đợt ',
         status: false,
         lstId: ['5-B'],
     },
@@ -84,7 +84,7 @@ export const LISTBIEUMAUNAM = [
     {
         maPhuLuc: '9',
         tenPhuLuc: '05/BCPBQ',
-        tieuDe: 'Khai thác báo cáo chi tiết thực hiện phí bảo quản lần đầu hàng DTQG năm ',
+        tieuDe: 'Báo cáo chi tiết thực hiện phí bảo quản lần đầu hàng DTQG năm ',
         status: false,
     },
 ]

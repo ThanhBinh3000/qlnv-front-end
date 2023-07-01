@@ -2,8 +2,8 @@
   "name": "qlnv",
   "version": "0.0.0",
   "scripts": {
-    "ng": "node --max_old_space_size=10000 ./node_modules/@angular/cli/bin/ng",
-    "start": "node --max_old_space_size=10000 ./node_modules/@angular/cli/bin/ng serve --host 192.168.1.111 --port 1801 --disable-host-check",
+    "ng": "node --max_old_space_size=8192 ./node_modules/@angular/cli/bin/ng",
+    "start": "node --max_old_space_size=8192 ./node_modules/@angular/cli/bin/ng serve",
     "build": "node --max_old_space_size=5048 ./node_modules/@angular/cli/bin/ng build --prod ",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"

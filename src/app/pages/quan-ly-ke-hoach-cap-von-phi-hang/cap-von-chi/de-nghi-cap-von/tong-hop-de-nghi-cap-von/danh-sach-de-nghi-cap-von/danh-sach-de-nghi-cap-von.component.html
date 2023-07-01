@@ -49,6 +49,10 @@
                 <nz-date-picker class="search__input" [(ngModel)]="searchFilter.ngayTaoDen" nzFormat="dd/MM/yyyy">
                 </nz-date-picker>
             </div>
+            <div nz-col nzSpan="3">
+                <label class="search__label">Lần</label>
+                <input class="search__input" nz-input [(ngModel)]="searchFilter.maDnghi" />
+            </div>
         </div>
         <div nz-col class="cangiua group-button-search">
             <div>
