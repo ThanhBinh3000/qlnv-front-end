@@ -12,6 +12,11 @@ import { DeNghiCapVonMuaThocGaoMuoiTheoDonGiaMuaComponent } from './tong-hop-de-
 import { DeNghiCapVonMuaThocGaoMuoiTheoHopDongComponent } from './tong-hop-de-nghi-cap-von/de-nghi-cap-von-mua-thoc-gao-muoi-theo-hop-dong/de-nghi-cap-von-mua-thoc-gao-muoi-theo-hop-dong.component';
 import { DeNghiCapVonMuaVatTuComponent } from './tong-hop-de-nghi-cap-von/de-nghi-cap-von-mua-vat-tu/de-nghi-cap-von-mua-vat-tu.component';
 import { DialogTaoMoiDeNghiCapVonComponent } from './tong-hop-de-nghi-cap-von/dialog-tao-moi-de-nghi-cap-von/dialog-tao-moi-de-nghi-cap-von.component';
+import { DanhSachCapVonComponent } from './tong-hop-de-nghi-cap-von/chi-cuc/danh-sach-cap-von/danh-sach-cap-von.component';
+import { CapVonComponent } from './tong-hop-de-nghi-cap-von/chi-cuc/cap-von/cap-von.component';
+import { DialogTaoMoiCapVonComponent } from './tong-hop-de-nghi-cap-von/chi-cuc/dialog-tao-moi-cap-von/dialog-tao-moi-cap-von.component';
+import { DanhSachTongHopTuDonViCapDuoiComponent } from './tong-hop-de-nghi-cap-von/danh-sach-tong-hop-tu-don-vi-cap-duoi/danh-sach-tong-hop-tu-don-vi-cap-duoi.component';
+import { DanhSachDeNghiTuDonViCapDuoiComponent } from './tong-hop-de-nghi-cap-von/danh-sach-de-nghi-tu-don-vi-cap-duoi/danh-sach-de-nghi-tu-don-vi-cap-duoi.component';
 
 @NgModule({
     imports: [
@@ -30,6 +35,11 @@ import { DialogTaoMoiDeNghiCapVonComponent } from './tong-hop-de-nghi-cap-von/di
         DialogTaoMoiHopDongComponent,
         DanhSachDeNghiCapVonComponent,
         DialogTaoMoiDeNghiCapVonComponent,
+        DanhSachCapVonComponent,
+        CapVonComponent,
+        DialogTaoMoiCapVonComponent,
+        DanhSachTongHopTuDonViCapDuoiComponent,
+        DanhSachDeNghiTuDonViCapDuoiComponent
     ],
     exports: [
         DeNghiCapVonComponent,
