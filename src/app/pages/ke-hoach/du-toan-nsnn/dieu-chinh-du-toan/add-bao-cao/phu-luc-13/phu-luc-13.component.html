@@ -36,25 +36,13 @@
               STT
             </th>
             <th nzLeft nzWidth="300px" rowSpan="2">
-              Nội dung đào tạo, bồi dưỡng
-            </th>
-            <th rowSpan="2">
-              Đối tượng
-            </th>
-            <th rowSpan="2">
-              Thời gian học
-            </th>
-            <th colSpan="3">
-              Số lượng
-            </th>
-            <th rowSpan="2">
-              Kinh phí hỗ trợ <br> (đồng/người)
-            </th>
-            <th rowSpan="2">
-              Tổng nhu cầu dự toán, kinh phí
+              Nội dung 
             </th>
             <th colSpan="3">
               Dự toán, kinh phí được sử dụng trong năm
+            </th>
+            <th rowSpan="2">
+              Tổng nhu cầu dự toán, kinh phí
             </th>
             <th rowSpan="2">
               Dự toán đề nghị điều chỉnh <br> (+ tăng )(- giảm)
@@ -62,14 +50,11 @@
             <th rowSpan="2" *ngIf="viewRecommendedValue">
               Dự toán Vụ TVQT đề nghị <br> (+ tăng) (- giảm)
             </th>
-            <th rowSpan="2" *ngIf="!status"></th>
-            <th rowSpan="2" *ngIf="!status "></th>
+            <!-- <th rowSpan="2" *ngIf="!status"></th>
+            <th rowSpan="2" *ngIf="!status "></th> -->
             <th rowSpan="2" *ngIf="!status || editRecommendedValue"></th>
           </tr>
           <tr>
-            <th>Trong nước</th>
-            <th>Ngoài nước</th>
-            <th>Tổng số</th>
             <th>Dự toán năm trước chuyển sang được <br> phép sử dụng cho năm nay</th>
             <th>Dự toán, kinh phí đã giao trong năm</th>
             <th>Tổng số</th>
@@ -77,20 +62,14 @@
           <tr>
             <th nzLeft>A</th>
             <th nzLeft>B</th>
-            <th>C</th>
-            <th>D</th>
             <th>1</th>
             <th>2</th>
             <th>3=1+2</th>
             <th>4</th>
-            <th>5=3x4</th>
-            <th>6</th>
-            <th>7</th>
-            <th>8=6+7</th>
-            <th>9=5-8</th>
-            <th *ngIf="viewRecommendedValue">10</th>
-            <th *ngIf="!status"></th>
-            <th *ngIf="!status "></th>
+            <th>5=4-3</th>
+            <th *ngIf="viewRecommendedValue">6</th>
+            <!-- <th *ngIf="!status"></th>
+            <th *ngIf="!status "></th> -->
             <th *ngIf="!status || editRecommendedValue"></th>
           </tr>
         </thead>
@@ -98,20 +77,14 @@
           <tr>
             <td nzLeft></td>
             <td nzLeft>Tổng cộng</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>{{displayValue(total.KinhPhiHoTro)}}</td>
-            <td>{{displayValue(total.TongNCDtoanKp)}}</td>
             <td>{{displayValue(total.dToanNamTruoc)}}</td>
             <td>{{displayValue(total.dToanDaGiao)}}</td>
             <td>{{displayValue(total.dToanTongSo)}}</td>
+            <td>{{displayValue(total.TongNCDtoanKp)}}</td>
             <td>{{displayValue(total.dtoanDnghiDchinh)}}</td>
             <td *ngIf="viewRecommendedValue">{{displayValue(total.dtoanVuTvqtDnghi)}}</td>
-            <td *ngIf="!status"></td>
-            <td *ngIf="!status"></td>
+            <!-- <td *ngIf="!status"></td>
+            <td *ngIf="!status"></td> -->
             <td *ngIf="!status || editRecommendedValue"></td>
           </tr>
           <tr>
@@ -121,16 +94,10 @@
             <td></td>
             <td></td>
             <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
             <td>{{displayValue(tongDieuChinhTang)}}</td>
             <td *ngIf="viewRecommendedValue">{{displayValue(dToanVuTang)}}</td>
-            <td *ngIf="!status"></td>
-            <td *ngIf="!status"></td>
+            <!-- <td *ngIf="!status"></td>
+            <td *ngIf="!status"></td> -->
             <td *ngIf="!status || editRecommendedValue"></td>
           </tr>
           <tr>
@@ -140,16 +107,10 @@
             <td></td>
             <td></td>
             <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
             <td>{{displayValue(tongDieuChinhGiam)}}</td>
             <td *ngIf="viewRecommendedValue">{{displayValue(dToanVuGiam)}}</td>
-            <td *ngIf="!status"></td>
-            <td *ngIf="!status"></td>
+            <!-- <td *ngIf="!status"></td>
+            <td *ngIf="!status"></td> -->
             <td *ngIf="!status || editRecommendedValue"></td>
           </tr>
           <tr *ngFor="let data of lstCtietBcao; let i = index">
@@ -160,27 +121,7 @@
               <td nzLeft>
                 {{data.tenNoiDung}}
               </td>
-              <td>
-                {{data.doiTuong}}
-              </td>
-              <td>
-                {{data.thoiGianHoc}}
-              </td>
-              <td>
-                {{displayValue(data.sLuongTrongNuoc)}}
-              </td>
-              <td>
-                {{displayValue(data.sLuongNgoaiNuoc)}}
-              </td>
-              <td>
-                {{displayValue(data.sLuongTongSo)}}
-              </td>
-              <td>
-                {{displayValue(data.KinhPhiHoTro)}}
-              </td>
-              <td>
-                {{displayValue(data.TongNCDtoanKp)}}
-              </td>
+              
               <td>
                 {{displayValue(data.dToanNamTruoc)}}
               </td>
@@ -191,17 +132,20 @@
                 {{displayValue(data.dToanTongSo)}}
               </td>
               <td>
+                {{displayValue(data.TongNCDtoanKp)}}
+              </td>
+              <td>
                 {{displayValue(data.dtoanDnghiDchinh)}}
               </td>
               <td *ngIf="viewRecommendedValue">
                 {{displayValue(data.dtoanVuTvqtDnghi)}}
               </td>
-              <td *ngIf="!status">
+              <!-- <td *ngIf="!status">
                 <i *ngIf="checkDelete(data.stt)" class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
               </td>
               <td *ngIf="!status">
                 <i *ngIf="checkAdd(data.stt)"  class="fa fa-plus" (click)="addLine(data)"></i>
-              </td>
+              </td> -->
               <td *ngIf="!status && !viewRecommendedValue">
                 <i *ngIf="checkEdit(data.stt)" class="fa fa-pencil" (click)="startEdit(data.id)"></i>
               </td>             
@@ -211,23 +155,13 @@
                 {{getIndex(editCache[data.id].data.stt)}}
               </td>
               <td nzLeft>
-                <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.tenNoiDung" />
-              </td>
-              <td>
-                <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.doiTuong" />
-              </td>
-              <td>
-                <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.thoiGianHoc" />
+                {{editCache[data.id].data.tenNoiDung}}
               </td>
               <ng-container *ngIf="editRecommendedValue else editAppraisal">
-                <td>{{displayValue(editCache[data.id].data.sLuongTrongNuoc)}}</td>
-                <td>{{displayValue(editCache[data.id].data.sLuongNgoaiNuoc)}}</td>
-                <td>{{displayValue(editCache[data.id].data.sLuongTongSo)}}</td>
-                <td>{{displayValue(editCache[data.id].data.KinhPhiHoTro)}}</td>
-                <td>{{displayValue(editCache[data.id].data.TongNCDtoanKp)}}</td>
                 <td>{{displayValue(editCache[data.id].data.dToanNamTruoc)}}</td>
                 <td>{{displayValue(editCache[data.id].data.dToanDaGiao)}}</td>
                 <td>{{displayValue(editCache[data.id].data.dToanTongSo)}}</td>
+                <td>{{displayValue(editCache[data.id].data.TongNCDtoanKp)}}</td>
                 <td>{{displayValue(editCache[data.id].data.dtoanDnghiDchinh)}}</td>
                 <td>
                   <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.dtoanVuTvqtDnghi"
@@ -236,42 +170,28 @@
               </ng-container>
               <ng-template #editAppraisal>
                 <td>
-                  <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.sLuongTrongNuoc"
-                    (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
-                </td>
-                <td>
-                  <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.sLuongNgoaiNuoc"
-                    (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
-                </td>
-                <td>
-                  {{displayValue(editCache[data.id].data.sLuongTongSo)}}
-                </td>
-                <td>
-                  <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.KinhPhiHoTro"
-                    (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
-                </td>
-                <td>
-                  {{displayValue(editCache[data.id].data.TongNCDtoanKp)}}
-                </td>
-                <td>
                   <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.dToanNamTruoc"
                     (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
                 </td>
                 <td>
                   <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.dToanDaGiao"
-                    (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
+                  (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
                 </td>
                 <td>
                   {{displayValue(editCache[data.id].data.dToanTongSo)}}
                 </td>
                 <td>
+                  <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.TongNCDtoanKp"
+                    (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
+                </td>
+                <td>
                   {{displayValue(editCache[data.id].data.dtoanDnghiDchinh)}}
                 </td>
               </ng-template>
-              <td *ngIf="!status">
+              <!-- <td *ngIf="!status">
                 <i *ngIf="checkDelete(data.stt)" class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
               </td>
-              <td *ngIf="!status"></td>
+              <td *ngIf="!status"></td> -->
               <td>
                 <a class="save" (click)="saveEdit(data.id)" style="margin-right:15px">Lưu</a>
                 <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
@@ -282,11 +202,9 @@
         </tbody>
       </nz-table>
     </div>
-    <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
-      <div nz-col nzSpan="24">
-        <label class="search__label">Thuyết minh</label>
-        <textarea rows="2" nz-input [(ngModel)]="thuyetMinh" [disabled]="status"></textarea>
-      </div>
+    <div nz-col nzSpan="24">
+      <label class="search__label">Thuyết minh</label>
+      <textarea rows="2" nz-input [(ngModel)]="thuyetMinh" [disabled]="status"></textarea>
     </div>
   </div>
 

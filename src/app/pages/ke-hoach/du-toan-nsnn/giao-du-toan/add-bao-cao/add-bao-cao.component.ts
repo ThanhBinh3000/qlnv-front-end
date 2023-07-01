@@ -280,7 +280,7 @@ export class AddBaoCaoComponent implements OnInit {
       }
       if (this.baoCao.lstGiaoDtoanTrucThuocs?.length == 0) {
         this.listAppendix.forEach(item => {
-          if (item.id == "pl04") {
+          if (item.id == "pl09") {
             this.baoCao.lstCtiets.push({
               ...new ItemData(),
               id: uuid.v4() + 'FE',
@@ -323,7 +323,7 @@ export class AddBaoCaoComponent implements OnInit {
           item.nguoiBcao = this.userInfo?.sub
           item.maBieuMau = pl.id
 
-          if (item.maBieuMau == "pl04") {
+          if (item.maBieuMau == "pl09") {
             item.lstCtietBcaos.forEach(s => {
               s.id = null
               s.lstCtietDvis.forEach(v => {
@@ -456,7 +456,7 @@ export class AddBaoCaoComponent implements OnInit {
       case 'pl03':
         nzContent = PhuLuc03Component;
         break;
-      case 'pl04':
+      case 'pl09':
         nzContent = PhuLucPhanBoComponent;
         if (isSynthetic == false) {
           dataInfo.extraData = [];
@@ -529,7 +529,7 @@ export class AddBaoCaoComponent implements OnInit {
           }
 
           let soTranChi = tongPl1N + tongPl1X + tongPl3 + tongPl2
-          const lstCtietPlTong = this.baoCao.lstCtiets.find(item => item.maBieuMau == "pl04")
+          const lstCtietPlTong = this.baoCao.lstCtiets.find(item => item.maBieuMau == "pl09")
           let tongCong = lstCtietPlTong?.lstCtietBcaos.find(itm => itm.stt == "0.1.2.2")?.tongCong
           let tongCong1N = lstCtietPlTong?.lstCtietBcaos.find(itm => itm.stt == "0.1.2.2.1")?.tongCong
           let tongCong1X = lstCtietPlTong?.lstCtietBcaos.find(itm => itm.stt == "0.1.2.2.2")?.tongCong

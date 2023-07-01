@@ -108,20 +108,31 @@ export const DANH_MUC_PL_TH = [
     },
 
     {
+        id: 10151,
+        ma: "0.2.2",
+        giaTri: "Kinh phí không thực hiện tự chủ"
+    },
+
+    {
         id: 1018,
         ma: "0.3",
         giaTri: "SỰ NGHIỆP GIÁO DỤC ĐÀO TẠO (Khoản 085)"
     },
 
     {
-        id: 1019,
+        id: 10181,
         ma: "0.3.1",
+        giaTri: "Kinh phí thực hiện tự chủ"
+    },
+    {
+        id: 1019,
+        ma: "0.3.2",
         giaTri: "Kinh phí không thực hiện tự chủ"
     },
 
     {
         id: 1020,
-        ma: "0.3.1.1",
+        ma: "0.3.2.1",
         giaTri: "Chi đào tạo, bồi dưỡng cán bộ, công chức nhà nước"
     },
 
@@ -132,8 +143,13 @@ export const DANH_MUC_PL_TH = [
     },
 
     {
-        id: 1022,
+        id: 10221,
         ma: "0.4.1",
+        giaTri: "Kinh phí không thực hiện tự chủ"
+    },
+    {
+        id: 1022,
+        ma: "0.4.2",
         giaTri: "Kinh phí không thực hiện tự chủ"
     },
 
@@ -144,8 +160,13 @@ export const DANH_MUC_PL_TH = [
     },
 
     {
-        id: 1024,
+        id: 10241,
         ma: "0.5.1",
+        giaTri: "Kinh phí thực hiện tự chủ"
+    },
+    {
+        id: 10242,
+        ma: "0.5.2",
         giaTri: "Kinh phí không thực hiện tự chủ"
     },
 ]

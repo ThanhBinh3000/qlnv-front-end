@@ -28,6 +28,9 @@ import { PhuLuc7Component } from './phu-luc-7/phu-luc-7.component';
 import { PhuLuc8Component } from './phu-luc-8/phu-luc-8.component';
 import { PhuLuc9Component } from './phu-luc-9/phu-luc-9.component';
 import { PhuLucTongHopComponent } from './phu-luc-tong-hop/phu-luc-tong-hop.component';
+import { PhuLuc11Component } from './phu-luc-11/phu-luc-11.component';
+import { PhuLuc12Component } from './phu-luc-12/phu-luc-12.component';
+import { PhuLuc13Component } from './phu-luc-13/phu-luc-13.component';
 
 export class ItemCongVan {
   fileName: string;
@@ -1018,6 +1021,99 @@ export class AddBaoCaoComponent implements OnInit {
             })
           }
 
+          const data11 = this.baoCao.lstDchinh.find(e => e.maLoai == 'pl11');
+          if (data11?.trangThai != '3') {
+            let dtoanKphiNamTruoc11 = 0;
+            let dtoanKphiNamNay11 = 0;
+            let tong11 = 0;
+            let tongDtoanTrongNam11 = 0;
+            let dtoanDnghiDchinh11 = 0;
+            let dtoanVuTvqtDnghi11 = 0;
+            data11?.lstCtietDchinh?.forEach(item => {
+              const level = item.stt.split('.').length - 2;
+              if (level == 0) {
+                dtoanKphiNamTruoc11 += item?.dToanNamTruoc
+                dtoanKphiNamNay11 += Number(item?.dToanDaGiao);
+                tong11 += Number(item?.dToanTongSo);
+                tongDtoanTrongNam11 += Number(item?.TongNCDtoanKp);
+                dtoanDnghiDchinh11 += Number(item?.dtoanDnghiDchinh ? item?.dtoanDnghiDchinh : 0);
+                dtoanVuTvqtDnghi11 += Number(item?.dtoanVuTvqtDnghi ? item?.dtoanVuTvqtDnghi : 0);
+              }
+              dataInfo.extraData.push({
+                stt: "0.3.2.1",
+                maNdung: '0.3.2.1',
+                dtoanKphiNamTruoc: dtoanKphiNamTruoc11,
+                dtoanKphiNamNay: dtoanKphiNamNay11,
+                tong: tong11,
+                tongDtoanTrongNam: tongDtoanTrongNam11,
+                dtoanDnghiDchinh: dtoanDnghiDchinh11,
+                dtoanVuTvqtDnghi: dtoanVuTvqtDnghi11,
+              })
+            })
+          }
+
+          const data12 = this.baoCao.lstDchinh.find(e => e.maLoai == 'pl12');
+          if (data12?.trangThai != '3') {
+            let dtoanKphiNamTruoc12 = 0;
+            let dtoanKphiNamNay12 = 0;
+            let tong12 = 0;
+            let tongDtoanTrongNam12 = 0;
+            let dtoanDnghiDchinh12 = 0;
+            let dtoanVuTvqtDnghi12 = 0;
+            data12?.lstCtietDchinh?.forEach(item => {
+              const level = item.stt.split('.').length - 2;
+              if (level == 0) {
+                dtoanKphiNamTruoc12 += item?.dToanNamTruoc
+                dtoanKphiNamNay12 += Number(item?.dToanDaGiao);
+                tong12 += Number(item?.dToanTongSo);
+                tongDtoanTrongNam12 += Number(item?.tongNcauDtoan);
+                dtoanDnghiDchinh12 += Number(item?.dtoanDnghiDchinh ? item?.dtoanDnghiDchinh : 0);
+                dtoanVuTvqtDnghi12 += Number(item?.dtoanVuTvqtDnghi ? item?.dtoanVuTvqtDnghi : 0);
+              }
+              dataInfo.extraData.push({
+                stt: "0.4.2",
+                maNdung: '0.4.2',
+                dtoanKphiNamTruoc: dtoanKphiNamTruoc12,
+                dtoanKphiNamNay: dtoanKphiNamNay12,
+                tong: tong12,
+                tongDtoanTrongNam: tongDtoanTrongNam12,
+                dtoanDnghiDchinh: dtoanDnghiDchinh12,
+                dtoanVuTvqtDnghi: dtoanVuTvqtDnghi12,
+              })
+            })
+          }
+
+          const data13 = this.baoCao.lstDchinh.find(e => e.maLoai == 'pl13');
+          if (data13?.trangThai != '3') {
+            let dtoanKphiNamTruoc13 = 0;
+            let dtoanKphiNamNay13 = 0;
+            let tong13 = 0;
+            let tongDtoanTrongNam13 = 0;
+            let dtoanDnghiDchinh13 = 0;
+            let dtoanVuTvqtDnghi13 = 0;
+            data13?.lstCtietDchinh?.forEach(item => {
+              const level = item.stt.split('.').length - 2;
+              if (level == 0) {
+                dtoanKphiNamTruoc13 += item?.dToanNamTruoc
+                dtoanKphiNamNay13 += Number(item?.dToanDaGiao);
+                tong13 += Number(item?.dToanTongSo);
+                tongDtoanTrongNam13 += Number(item?.TongNCDtoanKp);
+                dtoanDnghiDchinh13 += Number(item?.dtoanDnghiDchinh ? item?.dtoanDnghiDchinh : 0);
+                dtoanVuTvqtDnghi13 += Number(item?.dtoanVuTvqtDnghi ? item?.dtoanVuTvqtDnghi : 0);
+              }
+              dataInfo.extraData.push({
+                stt: "0.5.2",
+                maNdung: '0.5.2',
+                dtoanKphiNamTruoc: dtoanKphiNamTruoc13,
+                dtoanKphiNamNay: dtoanKphiNamNay13,
+                tong: tong13,
+                tongDtoanTrongNam: tongDtoanTrongNam13,
+                dtoanDnghiDchinh: dtoanDnghiDchinh13,
+                dtoanVuTvqtDnghi: dtoanVuTvqtDnghi13,
+              })
+            })
+          }
+
 
           // }
         }
@@ -1048,6 +1144,15 @@ export class AddBaoCaoComponent implements OnInit {
         break;
       case 'pl10':
         nzContent = PhuLuc10Component;
+        break;
+      case 'pl11':
+        nzContent = PhuLuc11Component;
+        break;
+      case 'pl12':
+        nzContent = PhuLuc12Component;
+        break;
+      case 'pl13':
+        nzContent = PhuLuc13Component;
         break;
       case 'pl01TH':
         nzContent = PhuLucTongHopComponent;

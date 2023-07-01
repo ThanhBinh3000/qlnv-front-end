@@ -7,7 +7,7 @@ import { AMOUNT, DON_VI_TIEN, LA_MA, MONEY_LIMIT } from 'src/app/Utility/utils';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
-import { DANH_MUC } from './phu-luc-11.constant';
+import { DANH_MUC } from './phu-luc-12.constant';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
@@ -15,21 +15,17 @@ import { DieuChinhService } from 'src/app/services/quan-ly-von-phi/dieuChinhDuTo
 
 export class ItemData {
   level: any;
-  // checked: boolean;
   id: string;
   stt: string;
   tenNoiDung: string;
   maNoiDung: string;
-  doiTuong: string;
-  thoiGianHoc: string;
-  sLuongTrongNuoc: number;
-  sLuongNgoaiNuoc: number;
-  sLuongTongSo: number;
-  KinhPhiHoTro: number;
-  TongNCDtoanKp: number;
+  coQuan: string;
+  thoiGian: string;
+  qDinhPheDuyet: number;
   dToanNamTruoc: number;
   dToanDaGiao: number;
   dToanTongSo: number;
+  tongNcauDtoan: number;
   dtoanDnghiDchinh: number;
   dtoanVuTvqtDnghi: number;
 }
@@ -47,11 +43,11 @@ export const AMOUNT1 = {
 }
 
 @Component({
-  selector: 'app-phu-luc-11',
-  templateUrl: './phu-luc-11.component.html',
+  selector: 'app-phu-luc-12',
+  templateUrl: './phu-luc-12.component.html',
   styleUrls: ['../add-bao-cao.component.scss'],
 })
-export class PhuLuc11Component implements OnInit {
+export class PhuLuc12Component implements OnInit {
   @Input() dataInfo;
   isDataAvailable = false;
   editMoneyUnit = false;
@@ -197,16 +193,30 @@ export class PhuLuc11Component implements OnInit {
     const n: number = chiSo.length - 1;
     let k: number = parseInt(chiSo[n], 10);
     if (n == 0) {
-      xau = chiSo[n];
+      // xau = String.fromCharCode(k + 64);
+      for (let i = 0; i < this.soLaMa.length; i++) {
+        while (k >= this.soLaMa[i].gTri) {
+          xau += this.soLaMa[i].kyTu;
+          k -= this.soLaMa[i].gTri;
+        }
+      }
     }
     if (n == 1) {
-      xau = "-";
-    }
-    if (n == 2) {
+      // for (let i = 0; i < this.soLaMa.length; i++) {
+      //   while (k >= this.soLaMa[i].gTri) {
+      //     xau += this.soLaMa[i].kyTu;
+      //     k -= this.soLaMa[i].gTri;
+      //   }
+      // }
       xau = chiSo[n];
     }
-    if (n == 3) {
+    if (n == 2) {
+      // xau = chiSo[n];
       xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
+    }
+    if (n == 3) {
+      // xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
+      xau = "-";
     }
     if (n == 4) {
       xau = String.fromCharCode(k + 96);
@@ -215,7 +225,7 @@ export class PhuLuc11Component implements OnInit {
       xau = "-";
     }
     return xau;
-  }
+  };
 
   getMoneyUnit() {
     return this.donViTiens.find(e => e.id == this.maDviTien)?.tenDm;
@@ -247,9 +257,14 @@ export class PhuLuc11Component implements OnInit {
     //tinh lai don vi tien va kiem tra gioi han cua chung
     const lstCtietBcaoTemp: ItemData[] = [];
     let checkMoneyRange = true;
+    let checkNullVal = true;
     this.lstCtietBcao.forEach(item => {
       if (item.dtoanDnghiDchinh > MONEY_LIMIT) {
         checkMoneyRange = false;
+        return;
+      }
+      if (item.tenNoiDung == "" || item.tenNoiDung == null) {
+        checkNullVal = false;
         return;
       }
       lstCtietBcaoTemp.push({
@@ -259,6 +274,10 @@ export class PhuLuc11Component implements OnInit {
 
     if (!checkMoneyRange) {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
+      return;
+    }
+    if (!checkNullVal) {
+      this.notification.warning(MESSAGE.WARNING, "Tên chương trình/ Đề tài/ Dự án/ Nhiệm vụ KH&CN không được để trống");
       return;
     }
 
@@ -339,8 +358,7 @@ export class PhuLuc11Component implements OnInit {
       }
       this.lstCtietBcao.forEach(item => {
         if (getHead(item.stt) == stt) {
-          this.lstCtietBcao[index].KinhPhiHoTro = Number(sumNumber([this.lstCtietBcao[index].KinhPhiHoTro, item.KinhPhiHoTro]))
-          this.lstCtietBcao[index].TongNCDtoanKp = Number(sumNumber([this.lstCtietBcao[index].TongNCDtoanKp, item.TongNCDtoanKp]))
+          this.lstCtietBcao[index].tongNcauDtoan = Number(sumNumber([this.lstCtietBcao[index].tongNcauDtoan, item.tongNcauDtoan]))
           this.lstCtietBcao[index].dToanNamTruoc = Number(sumNumber([this.lstCtietBcao[index].dToanNamTruoc, item.dToanNamTruoc]))
           this.lstCtietBcao[index].dToanDaGiao = Number(sumNumber([this.lstCtietBcao[index].dToanDaGiao, item.dToanDaGiao]))
           this.lstCtietBcao[index].dToanTongSo = Number(sumNumber([this.lstCtietBcao[index].dToanTongSo, item.dToanTongSo]))
@@ -373,7 +391,7 @@ export class PhuLuc11Component implements OnInit {
 
   checkDelete(stt: string) {
     const level = stt.split('.').length - 2;
-    if (level == 1) {
+    if (level == 3) {
       return true;
     }
     return false;
@@ -424,10 +442,8 @@ export class PhuLuc11Component implements OnInit {
   };
 
   changeModel(id: string): void {
-    this.editCache[id].data.sLuongTongSo = sumNumber([this.editCache[id].data.sLuongTrongNuoc, this.editCache[id].data.sLuongNgoaiNuoc]);
-    this.editCache[id].data.TongNCDtoanKp = mulNumber(this.editCache[id].data.sLuongTongSo, this.editCache[id].data.KinhPhiHoTro);
     this.editCache[id].data.dToanTongSo = sumNumber([this.editCache[id].data.dToanNamTruoc, this.editCache[id].data.dToanDaGiao]);
-    this.editCache[id].data.dtoanDnghiDchinh = this.editCache[id].data.TongNCDtoanKp - this.editCache[id].data.dToanTongSo;
+    this.editCache[id].data.dtoanDnghiDchinh = this.editCache[id].data.tongNcauDtoan - this.editCache[id].data.dToanTongSo;
   };
 
   getLowStatus(str: string) {
@@ -460,13 +476,9 @@ export class PhuLuc11Component implements OnInit {
       edit: false
     };
   };
-  checkAdd(stt: string) {
-
+  checkAdd(data: ItemData) {
     if (
-      stt == "0.1" ||
-      stt == "0.2" ||
-      stt == "0.3" ||
-      stt == "0.4"
+      data.level == 2
     ) {
       return true;
     }
@@ -477,11 +489,10 @@ export class PhuLuc11Component implements OnInit {
     this.total = new ItemData();
     this.lstCtietBcao.forEach(item => {
       if (item.level == 0) {
-        this.total.KinhPhiHoTro = sumNumber([this.total.KinhPhiHoTro, item.KinhPhiHoTro])
-        this.total.TongNCDtoanKp = sumNumber([this.total.TongNCDtoanKp, item.TongNCDtoanKp])
         this.total.dToanNamTruoc = sumNumber([this.total.dToanNamTruoc, item.dToanNamTruoc])
         this.total.dToanDaGiao = sumNumber([this.total.dToanDaGiao, item.dToanDaGiao])
         this.total.dToanTongSo = sumNumber([this.total.dToanTongSo, item.dToanTongSo])
+        this.total.tongNcauDtoan = sumNumber([this.total.tongNcauDtoan, item.tongNcauDtoan])
         this.total.dtoanDnghiDchinh = sumNumber([this.total.dtoanDnghiDchinh, item.dtoanDnghiDchinh])
         this.total.dtoanVuTvqtDnghi = sumNumber([this.total.dtoanVuTvqtDnghi, item.dtoanVuTvqtDnghi])
       }

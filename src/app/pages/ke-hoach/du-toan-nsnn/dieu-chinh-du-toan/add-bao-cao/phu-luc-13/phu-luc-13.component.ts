@@ -7,7 +7,7 @@ import { AMOUNT, DON_VI_TIEN, LA_MA, MONEY_LIMIT } from 'src/app/Utility/utils';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
-import { DANH_MUC } from './phu-luc-11.constant';
+import { DANH_MUC } from './phu-luc-13.constant';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
@@ -15,21 +15,14 @@ import { DieuChinhService } from 'src/app/services/quan-ly-von-phi/dieuChinhDuTo
 
 export class ItemData {
   level: any;
-  // checked: boolean;
   id: string;
   stt: string;
   tenNoiDung: string;
   maNoiDung: string;
-  doiTuong: string;
-  thoiGianHoc: string;
-  sLuongTrongNuoc: number;
-  sLuongNgoaiNuoc: number;
-  sLuongTongSo: number;
-  KinhPhiHoTro: number;
-  TongNCDtoanKp: number;
   dToanNamTruoc: number;
   dToanDaGiao: number;
   dToanTongSo: number;
+  TongNCDtoanKp: number;
   dtoanDnghiDchinh: number;
   dtoanVuTvqtDnghi: number;
 }
@@ -47,11 +40,11 @@ export const AMOUNT1 = {
 }
 
 @Component({
-  selector: 'app-phu-luc-11',
-  templateUrl: './phu-luc-11.component.html',
+  selector: 'app-phu-luc-13',
+  templateUrl: './phu-luc-13.component.html',
   styleUrls: ['../add-bao-cao.component.scss'],
 })
-export class PhuLuc11Component implements OnInit {
+export class PhuLuc13Component implements OnInit {
   @Input() dataInfo;
   isDataAvailable = false;
   editMoneyUnit = false;
@@ -339,7 +332,6 @@ export class PhuLuc11Component implements OnInit {
       }
       this.lstCtietBcao.forEach(item => {
         if (getHead(item.stt) == stt) {
-          this.lstCtietBcao[index].KinhPhiHoTro = Number(sumNumber([this.lstCtietBcao[index].KinhPhiHoTro, item.KinhPhiHoTro]))
           this.lstCtietBcao[index].TongNCDtoanKp = Number(sumNumber([this.lstCtietBcao[index].TongNCDtoanKp, item.TongNCDtoanKp]))
           this.lstCtietBcao[index].dToanNamTruoc = Number(sumNumber([this.lstCtietBcao[index].dToanNamTruoc, item.dToanNamTruoc]))
           this.lstCtietBcao[index].dToanDaGiao = Number(sumNumber([this.lstCtietBcao[index].dToanDaGiao, item.dToanDaGiao]))
@@ -424,8 +416,6 @@ export class PhuLuc11Component implements OnInit {
   };
 
   changeModel(id: string): void {
-    this.editCache[id].data.sLuongTongSo = sumNumber([this.editCache[id].data.sLuongTrongNuoc, this.editCache[id].data.sLuongNgoaiNuoc]);
-    this.editCache[id].data.TongNCDtoanKp = mulNumber(this.editCache[id].data.sLuongTongSo, this.editCache[id].data.KinhPhiHoTro);
     this.editCache[id].data.dToanTongSo = sumNumber([this.editCache[id].data.dToanNamTruoc, this.editCache[id].data.dToanDaGiao]);
     this.editCache[id].data.dtoanDnghiDchinh = this.editCache[id].data.TongNCDtoanKp - this.editCache[id].data.dToanTongSo;
   };
@@ -477,11 +467,10 @@ export class PhuLuc11Component implements OnInit {
     this.total = new ItemData();
     this.lstCtietBcao.forEach(item => {
       if (item.level == 0) {
-        this.total.KinhPhiHoTro = sumNumber([this.total.KinhPhiHoTro, item.KinhPhiHoTro])
-        this.total.TongNCDtoanKp = sumNumber([this.total.TongNCDtoanKp, item.TongNCDtoanKp])
         this.total.dToanNamTruoc = sumNumber([this.total.dToanNamTruoc, item.dToanNamTruoc])
         this.total.dToanDaGiao = sumNumber([this.total.dToanDaGiao, item.dToanDaGiao])
         this.total.dToanTongSo = sumNumber([this.total.dToanTongSo, item.dToanTongSo])
+        this.total.TongNCDtoanKp = sumNumber([this.total.TongNCDtoanKp, item.TongNCDtoanKp])
         this.total.dtoanDnghiDchinh = sumNumber([this.total.dtoanDnghiDchinh, item.dtoanDnghiDchinh])
         this.total.dtoanVuTvqtDnghi = sumNumber([this.total.dtoanVuTvqtDnghi, item.dtoanVuTvqtDnghi])
       }
