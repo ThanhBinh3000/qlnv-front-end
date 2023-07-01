@@ -59,9 +59,12 @@
             <th rowSpan="2">
               Dự toán đề nghị điều chỉnh <br> (+ tăng )(- giảm)
             </th>
-            <th rowSpan="2">
+            <th rowSpan="2" *ngIf="viewRecommendedValue">
               Dự toán Vụ TVQT đề nghị <br> (+ tăng) (- giảm)
             </th>
+            <th rowSpan="2" *ngIf="!status"></th>
+            <th rowSpan="2" *ngIf="!status "></th>
+            <th rowSpan="2" *ngIf="!status || editRecommendedValue"></th>
           </tr>
           <tr>
             <th>Trong nước</th>
@@ -85,7 +88,10 @@
             <th>7</th>
             <th>8=6+7</th>
             <th>9=5-8</th>
-            <th>10</th>
+            <th *ngIf="viewRecommendedValue">10</th>
+            <th *ngIf="!status"></th>
+            <th *ngIf="!status "></th>
+            <th *ngIf="!status || editRecommendedValue"></th>
           </tr>
         </thead>
         <tbody>
@@ -97,13 +103,16 @@
             <td></td>
             <td></td>
             <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td>{{displayValue(total.KinhPhiHoTro)}}</td>
+            <td>{{displayValue(total.TongNCDtoanKp)}}</td>
+            <td>{{displayValue(total.dToanNamTruoc)}}</td>
+            <td>{{displayValue(total.dToanDaGiao)}}</td>
+            <td>{{displayValue(total.dToanTongSo)}}</td>
+            <td>{{displayValue(total.dtoanDnghiDchinh)}}</td>
+            <td *ngIf="viewRecommendedValue">{{displayValue(total.dtoanVuTvqtDnghi)}}</td>
+            <td *ngIf="!status"></td>
+            <td *ngIf="!status"></td>
+            <td *ngIf="!status || editRecommendedValue"></td>
           </tr>
           <tr>
             <td nzLeft></td>
@@ -118,8 +127,11 @@
             <td></td>
             <td></td>
             <td></td>
-            <td></td>
-            <td></td>
+            <td>{{displayValue(tongDieuChinhTang)}}</td>
+            <td *ngIf="viewRecommendedValue">{{displayValue(dToanVuTang)}}</td>
+            <td *ngIf="!status"></td>
+            <td *ngIf="!status"></td>
+            <td *ngIf="!status || editRecommendedValue"></td>
           </tr>
           <tr>
             <td nzLeft></td>
@@ -134,15 +146,18 @@
             <td></td>
             <td></td>
             <td></td>
-            <td></td>
-            <td></td>
+            <td>{{displayValue(tongDieuChinhGiam)}}</td>
+            <td *ngIf="viewRecommendedValue">{{displayValue(dToanVuGiam)}}</td>
+            <td *ngIf="!status"></td>
+            <td *ngIf="!status"></td>
+            <td *ngIf="!status || editRecommendedValue"></td>
           </tr>
           <tr *ngFor="let data of lstCtietBcao; let i = index">
             <ng-container *ngIf="!editCache[data.id].edit; else editTemplate ">
-              <td class="text-center">
+              <td class="text-center" nzLeft>
                 {{getIndex(data.stt)}}
               </td>
-              <td>
+              <td nzLeft>
                 {{data.tenNoiDung}}
               </td>
               <td>
@@ -178,22 +193,31 @@
               <td>
                 {{displayValue(data.dtoanDnghiDchinh)}}
               </td>
-              <td>
+              <td *ngIf="viewRecommendedValue">
                 {{displayValue(data.dtoanVuTvqtDnghi)}}
               </td>
+              <td *ngIf="!status">
+                <i *ngIf="checkDelete(data.stt)" class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
+              </td>
+              <td *ngIf="!status">
+                <i *ngIf="checkAdd(data.stt)"  class="fa fa-plus" (click)="addLine(data)"></i>
+              </td>
+              <td *ngIf="!status && !viewRecommendedValue">
+                <i *ngIf="checkEdit(data.stt)" class="fa fa-pencil" (click)="startEdit(data.id)"></i>
+              </td>             
             </ng-container>
             <ng-template #editTemplate>
-              <td class="text-center">
+              <td class="text-center" nzLeft>
                 {{getIndex(editCache[data.id].data.stt)}}
               </td>
-              <td>
-                {{editCache[data.id].data.tenNoiDung}}
+              <td nzLeft>
+                <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.tenNoiDung" />
               </td>
               <td>
-                {{editCache[data.id].data.doiTuong}}
+                <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.doiTuong" />
               </td>
               <td>
-                {{editCache[data.id].data.thoiGianHoc}}
+                <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.thoiGianHoc" />
               </td>
               <ng-container *ngIf="editRecommendedValue else editAppraisal">
                 <td>{{displayValue(editCache[data.id].data.sLuongTrongNuoc)}}</td>
@@ -244,14 +268,26 @@
                   {{displayValue(editCache[data.id].data.dtoanDnghiDchinh)}}
                 </td>
               </ng-template>
-
+              <td *ngIf="!status">
+                <i *ngIf="checkDelete(data.stt)" class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
+              </td>
+              <td *ngIf="!status"></td>
+              <td>
+                <a class="save" (click)="saveEdit(data.id)" style="margin-right:15px">Lưu</a>
+                <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
+                  (nzOnConfirm)="cancelEdit(data.id)" class="save">Hủy</a>
+              </td>
             </ng-template>
           </tr>
         </tbody>
-
       </nz-table>
     </div>
-    <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px"></div>
+    <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+      <div nz-col nzSpan="24">
+        <label class="search__label">Thuyết minh</label>
+        <textarea rows="2" nz-input [(ngModel)]="thuyetMinh" [disabled]="status"></textarea>
+      </div>
+    </div>
   </div>
 
   <div class="modal-footer">
