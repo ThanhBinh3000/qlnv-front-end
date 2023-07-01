@@ -127,7 +127,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
         maKho: [''],
         idPhieuXuatKho: [''],
         soPhieuXuatKho: ['', Validators.required],
-        ngayXuat:  ['', Validators.required],
+        ngayXuat: ['', Validators.required],
         diaDiemKho: ['', Validators.required],
         loaiVthh: [''],
         cloaiVthh: [''],
@@ -139,7 +139,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
         nlqDiaChi: [''],
         thoiGianGiaoNhan: [''],
         tongTrongLuong: [''],
-        tongTrongLuongBaoBi:['', [Validators.required]],
+        tongTrongLuongBaoBi: ['', [Validators.required]],
         tongTrongLuongHang: [''],
         ngayGduyet: [''],
         nguoiGduyetId: [''],
@@ -245,6 +245,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
         .then((res) => {
           if (res.msg == MESSAGE.SUCCESS) {
             this.formData.patchValue(res.data);
+            this.formData.patchValue({soPhieuXuatKho: res.data.soPhieuXuatKho})
           }
         })
         .catch((e) => {
@@ -558,7 +559,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
             })
           })
         }
-        let soPhieu =this.dsPhieuXuatKho.find(item => (item.maLoKho == data.maLoKho&&item.maNganKho == data.maNganKho));
+        let soPhieu = this.dsPhieuXuatKho.find(item => (item.maLoKho == data.maLoKho && item.maNganKho == data.maNganKho));
 
         this.formData.patchValue({
           idPhieuXuatKho: soPhieu.id,
@@ -628,7 +629,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
         tenNganKho: null,
         maLoKho: null,
         tenLoKho: null,
-        maKho:null,
+        maKho: null,
         tenKho: null,
       });
     }
@@ -637,19 +638,19 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
   changeDd(event) {
     if (event && event !== this.formData.value.maDiemKho) {
       this.formData.patchValue({
-        idPhieuXuatKho:  null,
-        soPhieuXuatKho:  null,
-        ngayXuat:  null,
-        nlqHoTen:  null,
+        idPhieuXuatKho: null,
+        soPhieuXuatKho: null,
+        ngayXuat: null,
+        nlqHoTen: null,
         nlqCmnd: null,
-        nlqDonVi:  null,
+        nlqDonVi: null,
         nlqDiaChi: null,
-        loaiVthh:  null,
-        cloaiVthh:  null,
-        tenLoaiVthh:  null,
-        tenCloaiVthh:  null,
-        moTaHangHoa:  null,
-        donViTinh:  null,
+        loaiVthh: null,
+        cloaiVthh: null,
+        tenLoaiVthh: null,
+        tenCloaiVthh: null,
+        moTaHangHoa: null,
+        donViTinh: null,
       });
     }
   }
@@ -673,6 +674,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
       bangKeDtl: this.formData.value.bangKeDtl
     });
   }
+
   async trongLuongTruBi() {
     let data = cloneDeep(this.formData.value);
     if (data.tongTrongLuongBaoBi) {
