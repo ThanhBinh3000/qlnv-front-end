@@ -133,17 +133,6 @@ export class BieuMau140Component implements OnInit {
 			})
 		}
 
-		// if (this.dataInfo?.extraData && this.dataInfo?.extraData.length > 0) {
-		// 	this.dataInfo.extraData.forEach(item => {
-		// 		const index = this.lstCtietBcao.findIndex(e => e.maNdung == item.maNdung);
-		// 		this.lstCtietBcao[index].thienNtruoc = item.thienNtruoc;
-		// 		this.lstCtietBcao[index].namDtoan = item.namDtoan;
-		// 		this.lstCtietBcao[index].namUocThien = item.namUocThien;
-		// 		this.lstCtietBcao[index].namKh = item.namKh;
-		// 		this.lstCtietBcao[index].giaTriThamDinh = item.giaTriThamDinh;
-		// 		this.sum(this.lstCtietBcao[index].stt)
-		// 	})
-		// }
 		this.lstCtietBcao = this.tableFunc.sortByIndex(this.lstCtietBcao);
 		// this.getTotal();
 		this.updateEditCache();
@@ -199,11 +188,11 @@ export class BieuMau140Component implements OnInit {
 			})
 		})
 
-		// if (!this.status.viewAppVal) {
-		// 	lstCtietBcaoTemp?.forEach(item => {
-		// 		item.giaTriThamDinh = item.namKh;
-		// 	})
-		// }
+		if (this.status.general) {
+			lstCtietBcaoTemp?.forEach(item => {
+				item.giaTriThamDinh = item.namKh;
+			})
+		}
 
 		const request = JSON.parse(JSON.stringify(this.formDetail));
 

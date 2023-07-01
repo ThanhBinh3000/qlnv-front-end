@@ -244,6 +244,14 @@ export class PhuLuc02Component implements OnInit {
 			})
 		})
 
+		if (this.status.general) {
+			lstCtietBcaoTemp?.forEach(item => {
+				item.tdinhKhoSluong = item.sluongTaiKho;
+				item.tdinhKhoTtien = item.ttienTaiKho;
+				item.tdinhTcong = item.tongCong;
+			})
+		}
+
 		const request = JSON.parse(JSON.stringify(this.formDetail));
 
 		request.fileDinhKems = [];

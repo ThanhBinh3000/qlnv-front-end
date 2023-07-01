@@ -201,12 +201,12 @@ export class PhuLuc01Component implements OnInit {
 			})
 		})
 
-		// if (!this.status.viewAppVal) {
-		// 	lstCtietBcaoTemp?.forEach(item => {
-		// 		item.sluongTd = item.sluongNamDtoan;
-		// 		item.ttienTd = item.ttienNamDtoan;
-		// 	})
-		// }
+		if (this.status.general) {
+			lstCtietBcaoTemp?.forEach(item => {
+				item.sluongTd = item.sluongNamDtoan;
+				item.ttienTd = item.ttienNamDtoan;
+			})
+		}
 
 		const request = JSON.parse(JSON.stringify(this.formDetail));
 

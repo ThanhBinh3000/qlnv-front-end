@@ -133,12 +133,12 @@
 												[(ngModel)]="editCache[data.id].data.namUocThien" />
 										</td>
 										<td>
-											<ng-container *ngIf="data.stt == '0.1.6'; else showAv2">
+											<ng-container *ngIf="data.maNdung == '0.1.6'; else showAv2">
 												<input class="money-input" currencyMask [options]="amount"
 													[(ngModel)]="editCache[data.id].data.namKh" />
 											</ng-container>
 											<ng-template #showAv2>
-												{{editCache[data.id].data.namKh}}
+												{{ editCache[data.id].data.namKh }}
 											</ng-template>
 										</td>
 										<td>
@@ -159,13 +159,13 @@
 											{{ numFunc.valFmt(editCache[data.id].data.namKh, maDviTien) }}
 										</td>
 										<td>
-											<ng-container *ngIf="data.stt == '0.1.6'; else showAv1">
+											<ng-container *ngIf="data.maNdung == '0.1.6'; else showAv1">
 												<input class="money-input" currencyMask [options]="amount"
 													[(ngModel)]="editCache[data.id].data.giaTriThamDinh"
 													(ngModelChange)="changeModel(data.id)" />
 											</ng-container>
 											<ng-template #showAv1>
-												{{editCache[data.id].data.giaTriThamDinh}}
+												{{ editCache[data.id].data.giaTriThamDinh }}
 											</ng-template>
 										</td>
 										<td>

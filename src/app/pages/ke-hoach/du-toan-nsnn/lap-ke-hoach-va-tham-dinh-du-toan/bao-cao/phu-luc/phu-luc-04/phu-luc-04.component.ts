@@ -10,7 +10,6 @@ import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.service';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
-import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import * as uuid from "uuid";
 import { BtnStatus, Doc, Form } from '../../../lap-ke-hoach-va-tham-dinh-du-toan.class';
 
@@ -98,7 +97,6 @@ export class PhuLuc04Component implements OnInit {
         private _modalRef: NzModalRef,
         private spinner: NgxSpinnerService,
         private lapThamDinhService: LapThamDinhService,
-        private quanLyVonPhiService: QuanLyVonPhiService,
         private danhMucService: DanhMucDungChungService,
         private notification: NzNotificationService,
         private modal: NzModalService,
@@ -119,7 +117,7 @@ export class PhuLuc04Component implements OnInit {
         Object.assign(this.status, this.dataInfo.status);
         await this.getFormDetail();
         this.namBcao = this.dataInfo.namBcao;
-        if (this.status) {
+        if (this.status.general) {
             const category = await this.danhMucService.danhMucChungGetAll('LTD_PL4');
             if (category) {
                 this.duAns = category.data;
@@ -204,14 +202,14 @@ export class PhuLuc04Component implements OnInit {
             })
         })
 
-        // if (!this.status.viewAppVal) {
-        //     lstCtietBcaoTemp?.forEach(item => {
-        //         item.soLuongTd = item.soLuong;
-        //         item.tongMucDuToanTd = item.tongMucDuToan;
-        //         item.duToanKhNamNCbDauTuTd = item.duToanKhNamNCbDauTu;
-        //         item.duToanKhNamNThDauTuTd = item.duToanKhNamNThDauTu;
-        //     })
-        // }
+        if (!this.status.viewAppVal) {
+            lstCtietBcaoTemp?.forEach(item => {
+                item.soLuongTd = item.soLuong;
+                item.tongMucDuToanTd = item.tongMucDuToan;
+                item.duToanKhNamNCbDauTuTd = item.duToanKhNamNCbDauTu;
+                item.duToanKhNamNThDauTuTd = item.duToanKhNamNThDauTu;
+            })
+        }
 
         const request = JSON.parse(JSON.stringify(this.formDetail));
 

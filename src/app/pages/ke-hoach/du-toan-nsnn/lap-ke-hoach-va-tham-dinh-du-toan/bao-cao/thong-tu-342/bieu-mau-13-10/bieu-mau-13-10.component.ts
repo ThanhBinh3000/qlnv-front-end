@@ -5,7 +5,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { FileFunction, GeneralFunction, NumberFunction, TableFunction } from 'src/app/Utility/func';
-import { AMOUNT, DON_VI_TIEN, Utils } from "src/app/Utility/utils";
+import { AMOUNT, DON_VI_TIEN, MONEY_LIMIT, Utils } from "src/app/Utility/utils";
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
@@ -181,10 +181,10 @@ export class BieuMau1310Component implements OnInit {
 			return;
 		}
 
-		// if (this.lstCtietBcao.some(e => e.ncauChiTongSo > MONEY_LIMIT)) {
-		// 	this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
-		// 	return;
-		// }
+		if (this.lstCtietBcao.some(e => e.uocThien > MONEY_LIMIT || e.namUocThien > MONEY_LIMIT || e.khDtoanNamTtien > MONEY_LIMIT || e.gtriTdinhTtien > MONEY_LIMIT)) {
+			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
+			return;
+		}
 
 		if (this.listFile.some(file => file.size > Utils.FILE_SIZE)) {
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
@@ -199,13 +199,13 @@ export class BieuMau1310Component implements OnInit {
 			})
 		})
 
-		// if (!this.status.viewAppVal) {
-		// 	lstCtietBcaoTemp?.forEach(item => {
-		// 		item.gtriTdinhSluong = item.khDtoanNamSluong;
-		// 		item.gtriTdinhDgia = item.khDtoanNamDgia;
-		// 		item.gtriTdinhTtien = item.khDtoanNamTtien;
-		// 	})
-		// }
+		if (this.status.general) {
+			lstCtietBcaoTemp?.forEach(item => {
+				item.gtriTdinhSluong = item.khDtoanNamSluong;
+				item.gtriTdinhDgia = item.khDtoanNamDgia;
+				item.gtriTdinhTtien = item.khDtoanNamTtien;
+			})
+		}
 
 		const request = JSON.parse(JSON.stringify(this.formDetail));
 

@@ -255,7 +255,7 @@ export class BaoCaoComponent implements OnInit {
         this.status.print = Utils.statusPrint.includes(this.baoCao.trangThai) && checkPrint && isChild;
         this.status.ok = this.status.accept || this.status.approve || this.status.pass
         this.status.finish = this.status.general;
-        this.status.editAppVal = this.status.approve;
+        this.status.editAppVal = this.status.accept;
     }
 
     back() {

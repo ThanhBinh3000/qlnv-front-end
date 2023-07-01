@@ -13,7 +13,6 @@ import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh
 import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
 import { BtnStatus, Doc, Form } from '../../../lap-ke-hoach-va-tham-dinh-du-toan.class';
-// import { DANH_MUC } from './bieu-mau-18.constant';
 
 export class ItemData {
 	id: string;
@@ -143,6 +142,7 @@ export class BieuMau160Component implements OnInit {
 				if (data.statusCode == 0) {
 					this.formDetail = data.data;
 					this.formDetail.maDviTien = '1';
+					this.lstCtietBcao = this.formDetail.lstCtietLapThamDinhs;
 					this.listFile = [];
 					this.getStatusButton();
 				} else {
@@ -180,12 +180,12 @@ export class BieuMau160Component implements OnInit {
 			})
 		})
 
-		// if (!this.status.viewAppVal) {
-		// 	lstCtietBcaoTemp?.forEach(item => {
-		// 		item.tdinhSluong = item.namKhSluong;
-		// 		item.tdinhTtien = item.namKhTtien;
-		// 	})
-		// }
+		if (this.status.general) {
+			lstCtietBcaoTemp?.forEach(item => {
+				item.tdinhSluong = item.namKhSluong;
+				item.tdinhTtien = item.namKhTtien;
+			})
+		}
 
 		const request = JSON.parse(JSON.stringify(this.formDetail));
 

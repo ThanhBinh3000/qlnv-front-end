@@ -160,9 +160,6 @@ export class BieuMau152Component implements OnInit {
 					tenDmuc: e.giaTri,
 				})
 			})
-			// this.lstCtietBcao.forEach(item => {
-			// 	item.tenDmuc += this.getName(item.level, item.donVi);
-			// })
 		} else if (!this.lstCtietBcao[0]?.stt) {
 			this.lstCtietBcao.forEach(item => {
 				item.stt = item.donVi;
