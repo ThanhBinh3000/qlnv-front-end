@@ -166,8 +166,15 @@
     border: none in !important;
 }
 
-.ant-tabs-content-holder {
-    border-left-color: white !important;
-    border-right-color: white !important;
-    border-bottom-color: white !important;
+:host ::ng-deep .ant-tabs-content-holder {
+    border-color: white !important;
+}
+
+.ant-table-cell {
+    white-space: pre-line !important;
+    word-break: break-word !important;
+}
+
+.text-col {
+    width: 250px;
 }

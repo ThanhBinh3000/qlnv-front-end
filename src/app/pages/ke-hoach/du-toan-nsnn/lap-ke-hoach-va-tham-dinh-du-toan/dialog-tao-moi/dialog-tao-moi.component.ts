@@ -11,7 +11,7 @@ import { GeneralFunction } from 'src/app/Utility/func';
 import { Utils } from 'src/app/Utility/utils';
 import * as uuid from "uuid";
 import { Form, Report } from '../lap-ke-hoach-va-tham-dinh-du-toan.class';
-import { PHU_LUC } from '../lap-ke-hoach-va-tham-dinh-du-toan.constant';
+import { PHU_LUC } from '../bao-cao/bao-cao.constant';
 
 @Component({
     selector: 'dialog-tao-moi',
@@ -74,15 +74,16 @@ export class DialogTaoMoiComponent implements OnInit {
             data => {
                 if (data.statusCode == 0) {
                     if (data.data.content.length == 0) {
-                        this.initNewReport();
+                        this.initNewReport(1);
                     } else {
-                        let baoCao = data.data.content[0];
-                        if (baoCao.trangThai == Utils.TT_BC_3 || baoCao.trangThai == Utils.TT_BC_5 || baoCao.trangThai == Utils.TT_BC_8) {
-                            this.copyReport(baoCao)
-                        } else {
-                            this.notification.warning(MESSAGE.WARNING, "Trạng thái báo cáo năm " + this.response.namBcao + " không cho phép tạo mới!");
-                            this.response.namBcao = null;
-                        }
+                        let lstBcao = data.data.content;
+                        lstBcao.sort((a, b) => {
+                            if (a.lan > b.lan) {
+                                return 1;
+                            }
+                            return -1
+                        })
+                        this.initNewReport(lstBcao[0].lan + 1);
                     }
                 } else {
                     this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
@@ -95,9 +96,8 @@ export class DialogTaoMoiComponent implements OnInit {
         )
     }
 
-    async initNewReport() {
-        debugger
-        this.response.lan = 1;
+    async initNewReport(lan: number) {
+        this.response.lan = lan;
         this.response.lstLapThamDinhs = [];
         this.response.lstBcaoDviTrucThuocs = [];
         this.response.trangThai = Utils.TT_BC_1;
@@ -133,34 +133,33 @@ export class DialogTaoMoiComponent implements OnInit {
         } else {
             this.synthetic();
         }
-
     }
 
-    async copyReport(baoCao: Report) {
-        Object.assign(this.response, baoCao);
-        await this.lapThamDinhService.sinhMaBaoCao().toPromise().then(
-            (data) => {
-                if (data.statusCode == 0) {
-                    this.response.maBcao = data.data;
-                } else {
-                    this.notification.error(MESSAGE.ERROR, data?.msg);
-                    this.response.namBcao = null;
-                }
-            },
-            (err) => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-                this.response.namBcao = null;
-            }
-        );
-        this.response.id = null;
-        this.response.lan = baoCao.lan + 1;
-        this.response.lstLapThamDinhs.forEach(item => {
-            item.id = uuid.v4() + 'FE';
-            item.lstCtietLapThamDinhs.forEach(e => {
-                e.id = uuid.v4() + 'FE';
-            })
-        })
-    }
+    // async copyReport(baoCao: Report) {
+    //     Object.assign(this.response, baoCao);
+    //     await this.lapThamDinhService.sinhMaBaoCao().toPromise().then(
+    //         (data) => {
+    //             if (data.statusCode == 0) {
+    //                 this.response.maBcao = data.data;
+    //             } else {
+    //                 this.notification.error(MESSAGE.ERROR, data?.msg);
+    //                 this.response.namBcao = null;
+    //             }
+    //         },
+    //         (err) => {
+    //             this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+    //             this.response.namBcao = null;
+    //         }
+    //     );
+    //     this.response.id = null;
+    //     this.response.lan = baoCao.lan + 1;
+    //     this.response.lstLapThamDinhs.forEach(item => {
+    //         item.id = uuid.v4() + 'FE';
+    //         item.lstCtietLapThamDinhs.forEach(e => {
+    //             e.id = uuid.v4() + 'FE';
+    //         })
+    //     })
+    // }
 
     //tong hop theo nam bao cao
     async synthetic() {

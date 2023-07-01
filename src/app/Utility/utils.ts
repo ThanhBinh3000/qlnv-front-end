@@ -67,9 +67,9 @@ export class Utils {
 
   ////////// TRANG THAI BAO CAO DE THUC HIEN THAO TAC /////////////////////////////////
   //xoa
-  public static statusDelete = [Utils.TT_BC_1, Utils.TT_BC_3, Utils.TT_BC_5, Utils.TT_BC_8];
+  public static statusDelete = [Utils.TT_BC_1];
   //luu
-  public static statusSave = [Utils.TT_BC_1, Utils.TT_BC_3, Utils.TT_BC_5, Utils.TT_BC_8];
+  public static statusSave = [Utils.TT_BC_1];
   // trinh duyet
   public static statusApprove = [Utils.TT_BC_1];
   // duyet, tu choi
@@ -167,25 +167,25 @@ export const LTD = {
   VIEW_SYNTHETIC_REPORT: 'KHVDTNSNN_DTNSNN_LAPTD_XEM_BC_TONGHOP',					//xem bao cao tong hop
   PRINT_SYNTHETIC_REPORT: 'KHVDTNSNN_DTNSNN_LAPTD_IN_BC_TONGHOP',					//in bao cao tong hop
   EXPORT_SYNTHETIC_REPORT: 'KHVDTNSNN_DTNSNN_LAPTD_XUAT_BC_TONGHOP',				//xuat bao cao tong hop
-  ADD_SKT_BTC: 'KHVDTNSNN_DTNSNN_LAPTD_NHAP_SO_KIEMTRA_BTC',						//lap skt tran chi tu btc
-  EDIT_SKT_BTC: 'KHVDTNSNN_DTNSNN_LAPTD_SUA_SO_KIEMTRA_BTC',						//sua skt tran chi tu btc
-  DELETE_SKT_BTC: 'KHVDTNSNN_DTNSNN_LAPTD_XOA_SO_KIEMTRA_BTC',					//xoa skt tran chi tu btc
-  ADD_PA_GIAO_SKT: 'KHVDTNSNN_DTNSNN_LAPTD_LAP_PA_GIAO_SOKIEMTRA',				//lap pa giao skt tran chi cho cac don vi
-  EDIT_PA_GIAO_SKT: 'KHVDTNSNN_DTNSNN_LAPTD_SUA_PA_GIAO_SOKIEMTRA',				//sua phuong an
-  DELETE_PA_GIAO_SKT: 'KHVDTNSNN_DTNSNN_LAPTD_XOA_PA_GIAO_SOKIEMTRA',				//xoa phuong an
-  COPY_PA_GIAO_SKT: 'KHVDTNSNN_DTNSNN_LAPTD_COPY_PA_GIAO_SOKIEMTRA',				//copy phuong an
-  APPROVE_PA_GIAO_SKT: 'KHVDTNSNN_DTNSNN_LAPTD_LAP_PA_GIAO_SOKIEMTRA',			//trinh duyet phuong an
-  DUYET_PA_GIAO_SKT: 'KHVDTNSNN_DTNSNN_LAPTD_DUYET_TUCHOI_PA_GIAO_SKT',			//duyet phuong an
-  PHE_DUYET_PA_GIAO_SKT: 'KHVDTNSNN_DTNSNN_LAPTD_PHEDUYET_TUCHOI_PA_GIAO_SKT',	//phe duyet phuong an
-  VIEW_PA_GIAO_SKT: 'KHVDTNSNN_DTNSNN_LAPTD_XEM_PA_GIAO_SOKIEMTRA',				//xem phuong an
-  PRINT_PA_GIAO_SKT: 'KHVDTNSNN_DTNSNN_LAPTD_IN_PA_GIAO_SOKIEMTRA',				//in phuong an
-  EXPORT_PA_GIAO_SKT: 'KHVDTNSNN_DTNSNN_LAPTD_XUAT_PA_GIAO_SOKIEMTRA',			//xuat phuong an
-  ADD_QDCV_GIAO_SKT: 'KHVDTNSNN_DTNSNN_LAPTD_NHAP_CV_QD_GIAO_SOKIEMTRA',			//nhap so qdcv
-  EDIT_QDCV_GIAO_SKT: 'KHVDTNSNN_DTNSNN_LAPTD_SUA_CV_QD_GIAO_SOKIEMTRA',			//sua so qdcv
-  DELETE_QDCV_GIAO_SKT: 'KHVDTNSNN_DTNSNN_LAPTD_XOA_CV_QD_GIAO_SOKIEMTRA',		//xoa so qdcv
-  GIAO_SKT: 'KHVDTNSNN_DTNSNN_LAPTD_GIAO_SOKIEMTRA',								//giao skt tran chi
-  NHAN_SKT: 'KHVDTNSNN_DTNSNN_LAPTD_NHAN_SO_KIEMTRA',								//nhan skt tran chi
-  EDIT_REPORT_AFTER_RECEIVE_SKT: 'KHVDTNSNN_DTNSNN_LAPTD_SUA_BC_SAU_SOKIEMTRA',	//sua bao cao sau khi nhan skt ran chi
+  // ADD_SKT_BTC: 'KHVDTNSNN_DTNSNN_LAPTD_NHAP_SO_KIEMTRA_BTC',						//lap skt tran chi tu btc
+  // EDIT_SKT_BTC: 'KHVDTNSNN_DTNSNN_LAPTD_SUA_SO_KIEMTRA_BTC',						//sua skt tran chi tu btc
+  // DELETE_SKT_BTC: 'KHVDTNSNN_DTNSNN_LAPTD_XOA_SO_KIEMTRA_BTC',					//xoa skt tran chi tu btc
+  // ADD_PA_GIAO_SKT: 'KHVDTNSNN_DTNSNN_LAPTD_LAP_PA_GIAO_SOKIEMTRA',				//lap pa giao skt tran chi cho cac don vi
+  // EDIT_PA_GIAO_SKT: 'KHVDTNSNN_DTNSNN_LAPTD_SUA_PA_GIAO_SOKIEMTRA',				//sua phuong an
+  // DELETE_PA_GIAO_SKT: 'KHVDTNSNN_DTNSNN_LAPTD_XOA_PA_GIAO_SOKIEMTRA',				//xoa phuong an
+  // COPY_PA_GIAO_SKT: 'KHVDTNSNN_DTNSNN_LAPTD_COPY_PA_GIAO_SOKIEMTRA',				//copy phuong an
+  // APPROVE_PA_GIAO_SKT: 'KHVDTNSNN_DTNSNN_LAPTD_LAP_PA_GIAO_SOKIEMTRA',			//trinh duyet phuong an
+  // DUYET_PA_GIAO_SKT: 'KHVDTNSNN_DTNSNN_LAPTD_DUYET_TUCHOI_PA_GIAO_SKT',			//duyet phuong an
+  // PHE_DUYET_PA_GIAO_SKT: 'KHVDTNSNN_DTNSNN_LAPTD_PHEDUYET_TUCHOI_PA_GIAO_SKT',	//phe duyet phuong an
+  // VIEW_PA_GIAO_SKT: 'KHVDTNSNN_DTNSNN_LAPTD_XEM_PA_GIAO_SOKIEMTRA',				//xem phuong an
+  // PRINT_PA_GIAO_SKT: 'KHVDTNSNN_DTNSNN_LAPTD_IN_PA_GIAO_SOKIEMTRA',				//in phuong an
+  // EXPORT_PA_GIAO_SKT: 'KHVDTNSNN_DTNSNN_LAPTD_XUAT_PA_GIAO_SOKIEMTRA',			//xuat phuong an
+  // ADD_QDCV_GIAO_SKT: 'KHVDTNSNN_DTNSNN_LAPTD_NHAP_CV_QD_GIAO_SOKIEMTRA',			//nhap so qdcv
+  // EDIT_QDCV_GIAO_SKT: 'KHVDTNSNN_DTNSNN_LAPTD_SUA_CV_QD_GIAO_SOKIEMTRA',			//sua so qdcv
+  // DELETE_QDCV_GIAO_SKT: 'KHVDTNSNN_DTNSNN_LAPTD_XOA_CV_QD_GIAO_SOKIEMTRA',		//xoa so qdcv
+  // GIAO_SKT: 'KHVDTNSNN_DTNSNN_LAPTD_GIAO_SOKIEMTRA',								//giao skt tran chi
+  // NHAN_SKT: 'KHVDTNSNN_DTNSNN_LAPTD_NHAN_SO_KIEMTRA',								//nhan skt tran chi
+  // EDIT_REPORT_AFTER_RECEIVE_SKT: 'KHVDTNSNN_DTNSNN_LAPTD_SUA_BC_SAU_SOKIEMTRA',	//sua bao cao sau khi nhan skt ran chi
 };
 
 ///////////////////// GIAO DU TOAN /////////////////////////////////
@@ -538,6 +538,9 @@ export const AMOUNT_THREE_DECIMAL = {
 //kich co cua o nhap so lieu
 export const BOX_NUMBER_WIDTH = 150;
 
+export const NUM_BOX_WIDTH = 150;
+export const TEXT_BOX_WIDTH = 250;
+
 // loai bao cao quy trinh thuc hien du toan chi
 export const LBC_QUY_TRINH_THUC_HIEN_DU_TOAN_CHI = [
   {
@@ -659,11 +662,11 @@ export const TRANG_THAI_KIEM_TRA_BAO_CAO = [
 export const TRANG_THAI_PHU_LUC = [
   {
     id: 0,
-    ten: 'NOT OK'
+    ten: 'Không chấp nhận'
   },
   {
     id: 1,
-    ten: 'OK'
+    ten: 'Chấp nhận'
   },
   {
     id: 2,

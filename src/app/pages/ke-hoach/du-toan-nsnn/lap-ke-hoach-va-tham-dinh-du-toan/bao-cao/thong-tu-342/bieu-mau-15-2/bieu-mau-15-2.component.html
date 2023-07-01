@@ -1,467 +1,627 @@
-<div class="modal__content">
-	<div id="tablePrint">
-		<div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
-			<div nz-col [nzSpan]="2">
-				Đơn vị:
-			</div>
-			<div nz-col [nzSpan]="2">
-				<ng-container *ngIf="status || !editMoneyUnit; else editMoney">
-					<span (click)="editMoneyUnit=true">{{getMoneyUnit()}}</span>
-				</ng-container>
-				<ng-template #editMoney>
-					<nz-select nzShowSearch nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
-						(ngModelChange)="editMoneyUnit=false">
-						<nz-option *ngFor="let item of donViTiens" [nzValue]="item.id" [nzLabel]="item.tenDm">
-						</nz-option>
-					</nz-select>
-				</ng-template>
-			</div>
-		</div>
-		<nz-table nzBordered class="table__body" [nzScroll]="{x: scrollX}">
-			<thead>
-				<tr>
-					<th rowspan="4" class="text-center" nzWidth="50px" nzLeft>STT</th>
-					<th rowspan="4" nzWidth="350px" nzLeft>Tên đơn vị</th>
-					<th colspan="11">Dự toán năm {{namBaoCao}}</th>
-					<th colspan="13">Ước thực hiện năm {{namBaoCao}}</th>
-					<th colspan="11">Dự toán năm {{namKeHoach}}</th>
-					<th rowspan="4">Ghi chú</th>
-					<th rowspan="4" style="width: 50px;" *ngIf="status" nzRight></th>
-					<th rowspan="4" style="width: 60px;" *ngIf="status" nzRight></th>
-					<th rowspan="4" style="width: 50px;" *ngIf="status" nzRight></th>
-				</tr>
-				<tr>
-					<th rowspan="3">Tổng số người làm việc được cấp <br> có thẩm quyền giao (Người)</th>
-					<th rowspan="3">Tổng quỹ lương, phụ cấp và các <br> khoản đóng góp theo lương</th>
-					<th colspan="5">Trong đó</th>
-					<th colspan="4">Nguồn kinh phí bảo đảm</th>
-					<th rowspan="3">Tổng số người làm việc được cấp <br> có thẩm quyền giao (Người)</th>
-					<th rowspan="3">Tổng số người làm việc <br>được cấp có thẩm quyền giao <br> có
-						mặt tại thời điểm 31/12 (Người)</th>
-					<th rowspan="3">Trong đó: <br> Tổng số viên chức, <br> công chức (Người)</th>
-					<th rowspan="3">Tổng quỹ lương, phụ cấp và các <br> khoản đóng góp theo lương
-						theo số người<br> làm việc có mặt tại thời điểm 31/12</th>
-					<th colspan="5">Trong đó</th>
-					<th colspan="4">Nguồn kinh phí bảo đảm</th>
-					<th rowspan="3">Tổng số người làm việc được cấp <br> có thẩm quyền giao (Người)</th>
-					<th rowspan="3">Tổng quỹ lương, phụ cấp <br> và các khoản đóng góp theo lương</th>
-					<th colspan="5">Trong đó</th>
-					<th colspan="4">Nguồn kinh phí bảo đảm</th>
-					<!-- <th *ngIf="checkViewTD">Số lượng</th>
-                    <th *ngIf="checkViewTD">Thành tiền</th> -->
-				</tr>
-				<tr>
-					<th colspan="4">Quỹ lương, phụ cấp và các khoản đóng góp theo lương của biên chế được giao</th>
-					<th rowspan="2">Quỹ lương, phụ cấp và các khoản đóng <br> góp theo lương của hợp đồng lao động</th>
-					<th rowspan="2">Nguồn NSNN</th>
-					<th rowspan="2">Nguồn thu sự nghiệp, dịch vụ</th>
-					<th rowspan="2">Nguồn phí được để lại</th>
-					<th rowspan="2">Nguồn thu hợp pháp khác</th>
-					<th colspan="4">Quỹ lương, phụ cấp và các khoản đóng góp theo lương của số biên chế thực có mặt
-						thời điểm 31/12</th>
-					<th rowspan="2">Quỹ lương, phụ cấp và các khoản <br> đóng góp theo lương của hợp đồng <br> lao động
-						có mặt tại thời điểm 31/12</th>
-					<th rowspan="2">Nguồn NSNN</th>
-					<th rowspan="2">Nguồn thu sự nghiệp, dịch vụ</th>
-					<th rowspan="2">Nguồn phí được để lại</th>
-					<th rowspan="2">Nguồn thu hợp pháp khác</th>
-					<th colspan="4">Quỹ lương, phụ cấp và các khoản đóng góp theo lương của biên chế</th>
-					<th rowspan="2">Quỹ lương, phụ cấp và các khoản đóng <br> góp theo lương của Hợp đồng lao động</th>
-					<th rowspan="2">Nguồn NSNN</th>
-					<th rowspan="2">Nguồn thu sự nghiệp, dịch vụ</th>
-					<th rowspan="2">Nguồn phí được để lại</th>
-					<th rowspan="2">Nguồn thu hợp pháp khác</th>
-				</tr>
-				<tr>
-					<th>Tổng số</th>
-					<th>Lương theo ngạch, bậc</th>
-					<th>Phụ cấp theo lương</th>
-					<th>Các khoản đóng góp theo lương</th>
-					<th>Tổng số</th>
-					<th>Lương theo ngạch, bậc</th>
-					<th>Phụ cấp theo lương</th>
-					<th>Các khoản đóng góp theo lương</th>
-					<th>Tổng số</th>
-					<th>Lương theo ngạch, bậc</th>
-					<th>Phụ cấp theo lương</th>
-					<th>Các khoản đóng góp theo lương</th>
-				</tr>
-				<tr>
-					<th class="text-center" nzLeft>A</th>
-					<th nzLeft>B</th>
-					<th>1</th>
-					<th>2=3+7</th>
-					<th>3=4+5+6</th>
-					<th>4</th>
-					<th>5</th>
-					<th>6</th>
-					<th>7</th>
-					<th>8</th>
-					<th>9</th>
-					<th>10</th>
-					<th>11</th>
-					<th>12</th>
-					<th>13</th>
-					<th>14</th>
-					<th>15=16+20</th>
-					<th>16=17+18+19</th>
-					<th>17</th>
-					<th>18</th>
-					<th>19</th>
-					<th>20</th>
-					<th>21</th>
-					<th>22</th>
-					<th>23</th>
-					<th>24</th>
-					<th>25</th>
-					<th>26=27+31</th>
-					<th>27=28+29+30</th>
-					<th>28</th>
-					<th>29</th>
-					<th>30</th>
-					<th>31</th>
-					<th>32</th>
-					<th>33</th>
-					<th>34</th>
-					<th>35</th>
-					<th></th>
-					<th *ngIf="status" nzRight></th>
-					<th *ngIf="status" nzRight></th>
-					<th *ngIf="status" nzRight></th>
-				</tr>
-				<tr>
-					<th nzLeft></th>
-					<th nzLeft>Tổng Cộng</th>
-					<th>{{displayValue(total.dtTsoNguoiLv)}}</th>
-					<th>{{displayValue(total.dtTongQlPcap)}}</th>
-					<th>{{displayValue(total.dtQlPcapTso)}}</th>
-					<th>{{displayValue(total.dtQlPcapLuongBac)}}</th>
-					<th>{{displayValue(total.dtQlPcapPcapLuong)}}</th>
-					<th>{{displayValue(total.dtQlPcapDgopLuong)}}</th>
-					<th>{{displayValue(total.dtQlPcapHdLd)}}</th>
-					<th>{{displayValue(total.dtKphiNsnn)}}</th>
-					<th>{{displayValue(total.dtKphiSnDvu)}}</th>
-					<th>{{displayValue(total.dtKphiPhiDlai)}}</th>
-					<th>{{displayValue(total.dtKphiHphap)}}</th>
-					<th>{{displayValue(total.uocThTsoNguoiLv)}}</th>
-					<th>{{displayValue(total.uocThTsoBcTdiem)}}</th>
-					<th>{{displayValue(total.uocThTsoVcCc)}}</th>
-					<th>{{displayValue(total.uocThTongQlPcap)}}</th>
-					<th>{{displayValue(total.uocThQlPcapTso)}}</th>
-					<th>{{displayValue(total.uocThQlPcapLuongBac)}}</th>
-					<th>{{displayValue(total.uocThQlPcapPcapLuong)}}</th>
-					<th>{{displayValue(total.uocThQlPcapDgopLuong)}}</th>
-					<th>{{displayValue(total.uocThQlPcapHdLd)}}</th>
-					<th>{{displayValue(total.uocThKphiNsnn)}}</th>
-					<th>{{displayValue(total.uocThKphiSnDvu)}}</th>
-					<th>{{displayValue(total.uocThKphiPhiDlai)}}</th>
-					<th>{{displayValue(total.uocThKphiHphap)}}</th>
-					<th>{{displayValue(total.namKhTsoNguoiLv)}}</th>
-					<th>{{displayValue(total.namKhTongQlPcap)}}</th>
-					<th>{{displayValue(total.namKhQlPcapTso)}}</th>
-					<th>{{displayValue(total.namKhQlPcapLuongBac)}}</th>
-					<th>{{displayValue(total.namKhQlPcapPcapLuong)}}</th>
-					<th>{{displayValue(total.namKhQlPcapDgopLuong)}}</th>
-					<th>{{displayValue(total.namKhQlPcapHdLd)}}</th>
-					<th>{{displayValue(total.namKhKphiNsnn)}}</th>
-					<th>{{displayValue(total.namKhKphiSnDvu)}}</th>
-					<th>{{displayValue(total.namKhKphiPhiDlai)}}</th>
-					<th>{{displayValue(total.namKhKphiHphap)}}</th>
-					<th></th>
-					<th *ngIf="status" nzRight></th>
-					<th *ngIf="status" nzRight></th>
-					<th *ngIf="status" nzRight></th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr *ngFor="let data of lstCtietBcao; let i = index">
-					<ng-container *ngIf="!editCache[data.id].edit; else editTemplate ">
-						<td class="text-center" nzLeft>
-							{{getChiMuc(data.stt)}}
-						</td>
-						<td nzLeft>
-							{{data.tenDmuc}}
-						</td>
-						<td>
-							{{data.dtTsoNguoiLv}}
-						</td>
-						<td>{{displayValue(data.dtTongQlPcap)}}</td>
-						<td>{{displayValue(data.dtQlPcapTso)}}</td>
-						<td>{{displayValue(data.dtQlPcapLuongBac)}}</td>
-						<td>{{displayValue(data.dtQlPcapPcapLuong)}}</td>
-						<td>{{displayValue(data.dtQlPcapDgopLuong)}}</td>
-						<td>{{displayValue(data.dtQlPcapHdLd)}}</td>
-						<td>{{displayValue(data.dtKphiNsnn)}}</td>
-						<td>{{displayValue(data.dtKphiSnDvu)}}</td>
-						<td>{{displayValue(data.dtKphiPhiDlai)}}</td>
-						<td>{{displayValue(data.dtKphiHphap)}}</td>
-						<td>{{displayValue(data.uocThTsoNguoiLv)}}</td>
-						<td>{{displayValue(data.uocThTsoBcTdiem)}}</td>
-						<td>{{displayValue(data.uocThTsoVcCc)}}</td>
-						<td>{{displayValue(data.uocThTongQlPcap)}}</td>
-						<td>{{displayValue(data.uocThQlPcapTso)}}</td>
-						<td>{{displayValue(data.uocThQlPcapLuongBac)}}</td>
-						<td>{{displayValue(data.uocThQlPcapPcapLuong)}}</td>
-						<td>{{displayValue(data.uocThQlPcapDgopLuong)}}</td>
-						<td>{{displayValue(data.uocThQlPcapHdLd)}}</td>
-						<td>{{displayValue(data.uocThKphiNsnn)}}</td>
-						<td>{{displayValue(data.uocThKphiSnDvu)}}</td>
-						<td>{{displayValue(data.uocThKphiPhiDlai)}}</td>
-						<td>{{displayValue(data.uocThKphiHphap)}}</td>
-						<td>{{displayValue(data.namKhTsoNguoiLv)}}</td>
-						<td>{{displayValue(data.namKhTongQlPcap)}}</td>
-						<td>{{displayValue(data.namKhQlPcapTso)}}</td>
-						<td>{{displayValue(data.namKhQlPcapLuongBac)}}</td>
-						<td>{{displayValue(data.namKhQlPcapPcapLuong)}}</td>
-						<td>{{displayValue(data.namKhQlPcapDgopLuong)}}</td>
-						<td>{{displayValue(data.namKhQlPcapHdLd)}}</td>
-						<td>{{displayValue(data.namKhKphiNsnn)}}</td>
-						<td>{{displayValue(data.namKhKphiSnDvu)}}</td>
-						<td>{{displayValue(data.namKhKphiPhiDlai)}}</td>
-						<td>{{displayValue(data.namKhKphiHphap)}}</td>
-						<td>{{data.ghiChu}}</td>
-						<td *ngIf="status" nzRight>
-							<i *ngIf="checkDelete(data.stt)" class="fa fa-trash-o do"
-								(click)="deleteLine(data.stt)"></i>
-						</td>
-						<td *ngIf="status" nzRight>
-							<i *ngIf="checkEdit(data.stt)" class="fa fa-pencil" (click)="startEdit(data.id)"></i>
-						</td>
-						<td *ngIf="status" nzRight>
-							<i *ngIf="checkAdd(data)" class="fa fa-plus" (click)="addLine(data.stt)"></i>
-
-						</td>
-					</ng-container>
-					<ng-template #editTemplate>
-						<td class="text-center" nzLeft>
-							{{getChiMuc(editCache[data.id].data.stt)}}
-						</td>
-						<td nzLeft>
-							<ng-container *ngIf="data.donVi; else editName">
-								{{editCache[data.id].data.tenDmuc}}
-							</ng-container>
-							<ng-template #editName>
-								<input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.tenDmuc" />
-							</ng-template>
-						</td>
-						<td>
-							<input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.dtTsoNguoiLv"
-								[options]="amount" />
-						</td>
-						<td>
-							{{displayValue(editCache[data.id].data.dtTongQlPcap)}}
-						</td>
-						<td>
-							{{displayValue(editCache[data.id].data.dtQlPcapTso)}}
-						</td>
-						<td>
-							<input class="money-input" currencyMask
-								[(ngModel)]="editCache[data.id].data.dtQlPcapLuongBac"
-								(ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
-						</td>
-						<td>
-							<input class="money-input" currencyMask
-								[(ngModel)]="editCache[data.id].data.dtQlPcapPcapLuong"
-								(ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
-						</td>
-						<td>
-							<input class="money-input" currencyMask
-								[(ngModel)]="editCache[data.id].data.dtQlPcapDgopLuong"
-								(ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
-						</td>
-						<td>
-							<input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.dtQlPcapHdLd"
-								(ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
-						</td>
-						<td>
-							<input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.dtKphiNsnn"
-								[options]="amount" />
-
-						</td>
-						<td>
-							<input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.dtKphiSnDvu"
-								[options]="amount" />
-
-						</td>
-						<td>
-							<input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.dtKphiPhiDlai"
-								[options]="amount">
-
-						</td>
-						<td>
-							<input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.dtKphiHphap"
-								[options]="amount">
-
-						</td>
-						<td>
-							<input class="money-input" currencyMask
-								[(ngModel)]="editCache[data.id].data.uocThTsoNguoiLv" [options]="amount">
-
-						</td>
-						<td>
-							<input class="money-input" currencyMask
-								[(ngModel)]="editCache[data.id].data.uocThTsoBcTdiem" [options]="amount" />
-
-						</td>
-						<td>
-							<input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.uocThTsoVcCc"
-								[options]="amount" />
-
-						</td>
-						<td>
-							{{displayValue(editCache[data.id].data.uocThTongQlPcap)}}
-						</td>
-						<td>
-							{{displayValue(editCache[data.id].data.uocThQlPcapTso)}}
-						</td>
-						<td>
-							<input class="money-input" currencyMask
-								[(ngModel)]="editCache[data.id].data.uocThQlPcapLuongBac"
-								(ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
-						</td>
-						<td>
-							<input class="money-input" currencyMask
-								[(ngModel)]="editCache[data.id].data.uocThQlPcapPcapLuong"
-								(ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
-						</td>
-						<td>
-							<input class="money-input" currencyMask
-								[(ngModel)]="editCache[data.id].data.uocThQlPcapDgopLuong"
-								(ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
-						</td>
-						<td>
-							<input class="money-input" currencyMask
-								[(ngModel)]="editCache[data.id].data.uocThQlPcapHdLd"
-								(ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
-						</td>
-						<td>
-							<input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.uocThKphiNsnn"
-								[options]="amount" />
-
-						</td>
-						<td>
-							<input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.uocThKphiSnDvu"
-								[options]="amount" />
-
-						</td>
-						<td>
-							<input class="money-input" currencyMask
-								[(ngModel)]="editCache[data.id].data.uocThKphiPhiDlai" [options]="amount" />
-
-						</td>
-						<td>
-							<input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.uocThKphiHphap"
-								[options]="amount" />
-
-						</td>
-						<td>
-							<input class="money-input" currencyMask
-								[(ngModel)]="editCache[data.id].data.namKhTsoNguoiLv" [options]="amount" />
-
-						</td>
-						<td>
-							{{displayValue(editCache[data.id].data.namKhTongQlPcap)}}
-						</td>
-						<td>
-							{{displayValue(editCache[data.id].data.namKhQlPcapTso)}}
-						</td>
-						<td>
-							<input class="money-input" currencyMask
-								[(ngModel)]="editCache[data.id].data.namKhQlPcapLuongBac"
-								(ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
-						</td>
-						<td>
-							<input class="money-input" currencyMask
-								[(ngModel)]="editCache[data.id].data.namKhQlPcapPcapLuong"
-								(ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
-						</td>
-						<td>
-							<input class="money-input" currencyMask
-								[(ngModel)]="editCache[data.id].data.namKhQlPcapDgopLuong"
-								(ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
-						</td>
-						<td>
-							<input class="money-input" currencyMask
-								[(ngModel)]="editCache[data.id].data.namKhQlPcapHdLd"
-								(ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
-						</td>
-						<td>
-							<input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.namKhKphiNsnn"
-								[options]="amount" />
-						</td>
-						<td>
-							<input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.namKhKphiSnDvu"
-								[options]="amount" />
-						</td>
-						<td>
-							<input class="money-input" currencyMask
-								[(ngModel)]="editCache[data.id].data.namKhKphiPhiDlai" [options]="amount" />
-						</td>
-						<td>
-							<input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.namKhKphiHphap"
-								[options]="amount" />
-						</td>
-						<td>
-							<input class="search__input" [(ngModel)]="editCache[data.id].data.ghiChu" />
-						</td>
-						<td *ngIf="status" nzRight>
-							<i *ngIf="checkDelete(data.stt)" class="fa fa-trash-o do"
-								(click)="deleteLine(data.stt)"></i>
-						</td>
-						<td *ngIf="status" nzRight>
-							<div style="display: flex; justify-content: space-around; align-items: center;">
-								<a (click)="saveEdit(data.id)" class="save">Lưu</a>
-								<a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
-									(nzOnConfirm)="cancelEdit(data.id)" class="save">
-									Hủy
-								</a>
+<ng-container *ngIf="isDataAvailable">
+	<div class="modal__content">
+		<nz-tabset>
+			<nz-tab nzTitle="Dữ liệu">
+				<div id="tablePrint">
+					<div class="nut" style="margin-top: 10px;">
+						<div class="cantrai">
+							<div> Đơn vị: </div>
+							<div style="margin-left: 10px;">
+								<ng-container *ngIf="status.general || !editMoneyUnit; else editMoney">
+									<span (click)="editMoneyUnit=true">
+										{{ genFunc.moneyUnitName(maDviTien) }}
+									</span>
+								</ng-container>
+								<ng-template #editMoney>
+									<nz-select nzShowSearch nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
+										(ngModelChange)="editMoneyUnit=false">
+										<nz-option *ngFor="let item of donViTiens" [nzValue]="item.id"
+											[nzLabel]="item.tenDm">
+										</nz-option>
+									</nz-select>
+								</ng-template>
 							</div>
-						</td>
-						<td *ngIf="status" nzRight>
-							<i *ngIf="checkAdd(data)" class="fa fa-plus" (click)="addLine(data.stt)"></i>
-						</td>
-					</ng-template>
-				</tr>
+						</div>
+					</div>
+					<nz-table nzBordered class="table__body" [nzScroll]="{x: scrollX}">
+						<thead>
+							<tr>
+								<th rowspan="4" nzWidth="50px" nzLeft>
+									STT
+								</th>
+								<th rowspan="4" nzWidth="300px" nzLeft>
+									Tên đơn vị
+								</th>
+								<th colspan="11">
+									Dự toán năm {{namBcao}}
+								</th>
+								<th colspan="13">
+									Ước thực hiện năm {{namBcao}}
+								</th>
+								<th colspan="11">
+									Dự toán năm {{namBcao + 1}}
+								</th>
+								<th rowspan="4" class="text-col">
+									Ghi chú
+								</th>
+								<th rowspan="4" style="width: 50px;" *ngIf="status.general" nzRight></th>
+								<th rowspan="4" style="width: 60px;" *ngIf="status.general" nzRight></th>
+								<th rowspan="4" style="width: 50px;" *ngIf="status.general" nzRight></th>
+							</tr>
+							<tr>
+								<th rowspan="3">
+									Tổng số người làm việc được cấp có thẩm quyền giao (Người)
+								</th>
+								<th rowspan="3">
+									Tổng quỹ lương, phụ cấp và các khoản đóng góp theo lương
+								</th>
+								<th colspan="5">
+									Trong đó
+								</th>
+								<th colspan="4">
+									Nguồn kinh phí bảo đảm
+								</th>
+								<th rowspan="3">
+									Tổng số người làm việc được cấp có thẩm quyền giao (Người)
+								</th>
+								<th rowspan="3">
+									Tổng số người làm việc được cấp có thẩm quyền giao có mặt tại thời điểm 31/12
+									(Người)
+								</th>
+								<th rowspan="3">
+									Trong đó: Tổng số viên chức, công chức (Người)
+								</th>
+								<th rowspan="3">
+									Tổng quỹ lương, phụ cấp và các khoản đóng góp theo lương theo số người làm việc có
+									mặt tại thời điểm 31/12
+								</th>
+								<th colspan="5">
+									Trong đó
+								</th>
+								<th colspan="4">
+									Nguồn kinh phí bảo đảm
+								</th>
+								<th rowspan="3">
+									Tổng số người làm việc được cấp có thẩm quyền giao (Người)
+								</th>
+								<th rowspan="3">
+									Tổng quỹ lương, phụ cấp và các khoản đóng góp theo lương
+								</th>
+								<th colspan="5">
+									Trong đó
+								</th>
+								<th colspan="4">
+									Nguồn kinh phí bảo đảm
+								</th>
+							</tr>
+							<tr>
+								<th colspan="4">
+									Quỹ lương, phụ cấp và các khoản đóng góp theo lương của biên chế được giao
+								</th>
+								<th rowspan="2">
+									Quỹ lương, phụ cấp và các khoản đóng góp theo lương của hợp đồng lao động
+								</th>
+								<th rowspan="2">
+									Nguồn NSNN
+								</th>
+								<th rowspan="2">
+									Nguồn thu sự nghiệp, dịch vụ
+								</th>
+								<th rowspan="2">
+									Nguồn phí được để lại
+								</th>
+								<th rowspan="2">
+									Nguồn thu hợp pháp khác
+								</th>
+								<th colspan="4">
+									Quỹ lương, phụ cấp và các khoản đóng góp theo lương của số biên chế thực có mặt thời
+									điểm 31/12
+								</th>
+								<th rowspan="2">
+									Quỹ lương, phụ cấp và các khoản đóng góp theo lương của hợp đồng lao động có mặt tại
+									thời điểm 31/12
+								</th>
+								<th rowspan="2">
+									Nguồn NSNN
+								</th>
+								<th rowspan="2">
+									Nguồn thu sự nghiệp, dịch vụ
+								</th>
+								<th rowspan="2">
+									Nguồn phí được để lại
+								</th>
+								<th rowspan="2">
+									Nguồn thu hợp pháp khác
+								</th>
+								<th colspan="4">
+									Quỹ lương, phụ cấp và các khoản đóng góp theo lương của biên chế
+								</th>
+								<th rowspan="2">
+									Quỹ lương, phụ cấp và các khoản đóng góp theo lương của Hợp đồng lao động
+								</th>
+								<th rowspan="2">
+									Nguồn NSNN
+								</th>
+								<th rowspan="2">
+									Nguồn thu sự nghiệp, dịch vụ
+								</th>
+								<th rowspan="2">
+									Nguồn phí được để lại
+								</th>
+								<th rowspan="2">
+									Nguồn thu hợp pháp khác
+								</th>
+							</tr>
+							<tr>
+								<th>
+									Tổng số
+								</th>
+								<th>
+									Lương theo ngạch, bậc
+								</th>
+								<th>
+									Phụ cấp theo lương
+								</th>
+								<th>
+									Các khoản đóng góp theo lương
+								</th>
+								<th>
+									Tổng số
+								</th>
+								<th>
+									Lương theo ngạch, bậc
+								</th>
+								<th>
+									Phụ cấp theo lương
+								</th>
+								<th>
+									Các khoản đóng góp theo lương
+								</th>
+								<th>
+									Tổng số
+								</th>
+								<th>
+									Lương theo ngạch, bậc
+								</th>
+								<th>
+									Phụ cấp theo lương
+								</th>
+								<th>
+									Các khoản đóng góp theo lương
+								</th>
+							</tr>
+							<tr>
+								<th nzLeft>A</th>
+								<th nzLeft>B</th>
+								<th>1</th>
+								<th>2=3+7</th>
+								<th>3=4+5+6</th>
+								<th>4</th>
+								<th>5</th>
+								<th>6</th>
+								<th>7</th>
+								<th>8</th>
+								<th>9</th>
+								<th>10</th>
+								<th>11</th>
+								<th>12</th>
+								<th>13</th>
+								<th>14</th>
+								<th>15=16+20</th>
+								<th>16=17+18+19</th>
+								<th>17</th>
+								<th>18</th>
+								<th>19</th>
+								<th>20</th>
+								<th>21</th>
+								<th>22</th>
+								<th>23</th>
+								<th>24</th>
+								<th>25</th>
+								<th>26=27+31</th>
+								<th>27=28+29+30</th>
+								<th>28</th>
+								<th>29</th>
+								<th>30</th>
+								<th>31</th>
+								<th>32</th>
+								<th>33</th>
+								<th>34</th>
+								<th>35</th>
+								<th></th>
+								<th *ngIf="status.general" nzRight></th>
+								<th *ngIf="status.general" nzRight></th>
+								<th *ngIf="status.general" nzRight></th>
+							</tr>
+							<tr>
+								<th nzLeft></th>
+								<th nzLeft>Tổng Cộng</th>
+								<th>{{numFunc.numFmt(total.dtTsoNguoiLv)}}</th>
+								<th>{{numFunc.valFmt(total.dtTongQlPcap, maDviTien)}}</th>
+								<th>{{numFunc.valFmt(total.dtQlPcapTso, maDviTien)}}</th>
+								<th>{{numFunc.valFmt(total.dtQlPcapLuongBac, maDviTien)}}</th>
+								<th>{{numFunc.valFmt(total.dtQlPcapPcapLuong, maDviTien)}}</th>
+								<th>{{numFunc.valFmt(total.dtQlPcapDgopLuong, maDviTien)}}</th>
+								<th>{{numFunc.valFmt(total.dtQlPcapHdLd, maDviTien)}}</th>
+								<th>{{numFunc.valFmt(total.dtKphiNsnn, maDviTien)}}</th>
+								<th>{{numFunc.valFmt(total.dtKphiSnDvu, maDviTien)}}</th>
+								<th>{{numFunc.valFmt(total.dtKphiPhiDlai, maDviTien)}}</th>
+								<th>{{numFunc.valFmt(total.dtKphiHphap, maDviTien)}}</th>
+								<th>{{numFunc.numFmt(total.uocThTsoNguoiLv)}}</th>
+								<th>{{numFunc.numFmt(total.uocThTsoBcTdiem)}}</th>
+								<th>{{numFunc.numFmt(total.uocThTsoVcCc)}}</th>
+								<th>{{numFunc.valFmt(total.uocThTongQlPcap, maDviTien)}}</th>
+								<th>{{numFunc.valFmt(total.uocThQlPcapTso, maDviTien)}}</th>
+								<th>{{numFunc.valFmt(total.uocThQlPcapLuongBac, maDviTien)}}</th>
+								<th>{{numFunc.valFmt(total.uocThQlPcapPcapLuong, maDviTien)}}</th>
+								<th>{{numFunc.valFmt(total.uocThQlPcapDgopLuong, maDviTien)}}</th>
+								<th>{{numFunc.valFmt(total.uocThQlPcapHdLd, maDviTien)}}</th>
+								<th>{{numFunc.valFmt(total.uocThKphiNsnn, maDviTien)}}</th>
+								<th>{{numFunc.valFmt(total.uocThKphiSnDvu, maDviTien)}}</th>
+								<th>{{numFunc.valFmt(total.uocThKphiPhiDlai, maDviTien)}}</th>
+								<th>{{numFunc.valFmt(total.uocThKphiHphap, maDviTien)}}</th>
+								<th>{{numFunc.numFmt(total.namKhTsoNguoiLv)}}</th>
+								<th>{{numFunc.valFmt(total.namKhTongQlPcap, maDviTien)}}</th>
+								<th>{{numFunc.valFmt(total.namKhQlPcapTso, maDviTien)}}</th>
+								<th>{{numFunc.valFmt(total.namKhQlPcapLuongBac, maDviTien)}}</th>
+								<th>{{numFunc.valFmt(total.namKhQlPcapPcapLuong, maDviTien)}}</th>
+								<th>{{numFunc.valFmt(total.namKhQlPcapDgopLuong, maDviTien)}}</th>
+								<th>{{numFunc.valFmt(total.namKhQlPcapHdLd, maDviTien)}}</th>
+								<th>{{numFunc.valFmt(total.namKhKphiNsnn, maDviTien)}}</th>
+								<th>{{numFunc.valFmt(total.namKhKphiSnDvu, maDviTien)}}</th>
+								<th>{{numFunc.valFmt(total.namKhKphiPhiDlai, maDviTien)}}</th>
+								<th>{{numFunc.valFmt(total.namKhKphiHphap, maDviTien)}}</th>
+								<th></th>
+								<th *ngIf="status.general" nzRight></th>
+								<th *ngIf="status.general" nzRight></th>
+								<th *ngIf="status.general" nzRight></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr *ngFor="let data of lstCtietBcao; let i = index">
+								<ng-container *ngIf="!editCache[data.id].edit; else editTemplate ">
+									<td class="text-center" nzLeft>
+										{{getChiMuc(data.stt)}}
+									</td>
+									<td nzLeft>
+										{{data.tenDmuc}}
+									</td>
+									<td>
+										{{data.dtTsoNguoiLv}}
+									</td>
+									<td>{{numFunc.numFmt(data.dtTongQlPcap)}}</td>
+									<td>{{numFunc.valFmt(data.dtQlPcapTso, maDviTien)}}</td>
+									<td>{{numFunc.valFmt(data.dtQlPcapLuongBac, maDviTien)}}</td>
+									<td>{{numFunc.valFmt(data.dtQlPcapPcapLuong, maDviTien)}}</td>
+									<td>{{numFunc.valFmt(data.dtQlPcapDgopLuong, maDviTien)}}</td>
+									<td>{{numFunc.valFmt(data.dtQlPcapHdLd, maDviTien)}}</td>
+									<td>{{numFunc.valFmt(data.dtKphiNsnn, maDviTien)}}</td>
+									<td>{{numFunc.valFmt(data.dtKphiSnDvu, maDviTien)}}</td>
+									<td>{{numFunc.valFmt(data.dtKphiPhiDlai, maDviTien)}}</td>
+									<td>{{numFunc.valFmt(data.dtKphiHphap, maDviTien)}}</td>
+									<td>{{numFunc.numFmt(data.uocThTsoNguoiLv)}}</td>
+									<td>{{numFunc.numFmt(data.uocThTsoBcTdiem)}}</td>
+									<td>{{numFunc.numFmt(data.uocThTsoVcCc)}}</td>
+									<td>{{numFunc.valFmt(data.uocThTongQlPcap, maDviTien)}}</td>
+									<td>{{numFunc.valFmt(data.uocThQlPcapTso, maDviTien)}}</td>
+									<td>{{numFunc.valFmt(data.uocThQlPcapLuongBac, maDviTien)}}</td>
+									<td>{{numFunc.valFmt(data.uocThQlPcapPcapLuong, maDviTien)}}</td>
+									<td>{{numFunc.valFmt(data.uocThQlPcapDgopLuong, maDviTien)}}</td>
+									<td>{{numFunc.valFmt(data.uocThQlPcapHdLd, maDviTien)}}</td>
+									<td>{{numFunc.valFmt(data.uocThKphiNsnn, maDviTien)}}</td>
+									<td>{{numFunc.valFmt(data.uocThKphiSnDvu, maDviTien)}}</td>
+									<td>{{numFunc.valFmt(data.uocThKphiPhiDlai, maDviTien)}}</td>
+									<td>{{numFunc.valFmt(data.uocThKphiHphap, maDviTien)}}</td>
+									<td>{{numFunc.numFmt(data.namKhTsoNguoiLv)}}</td>
+									<td>{{numFunc.valFmt(data.namKhTongQlPcap, maDviTien)}}</td>
+									<td>{{numFunc.valFmt(data.namKhQlPcapTso, maDviTien)}}</td>
+									<td>{{numFunc.valFmt(data.namKhQlPcapLuongBac, maDviTien)}}</td>
+									<td>{{numFunc.valFmt(data.namKhQlPcapPcapLuong, maDviTien)}}</td>
+									<td>{{numFunc.valFmt(data.namKhQlPcapDgopLuong, maDviTien)}}</td>
+									<td>{{numFunc.valFmt(data.namKhQlPcapHdLd, maDviTien)}}</td>
+									<td>{{numFunc.valFmt(data.namKhKphiNsnn, maDviTien)}}</td>
+									<td>{{numFunc.valFmt(data.namKhKphiSnDvu, maDviTien)}}</td>
+									<td>{{numFunc.valFmt(data.namKhKphiPhiDlai, maDviTien)}}</td>
+									<td>{{numFunc.valFmt(data.namKhKphiHphap, maDviTien)}}</td>
+									<td>{{data.ghiChu}}</td>
+									<td *ngIf="status.general" nzRight>
+										<i *ngIf="checkDelete(data.stt)" class="fa fa-trash-o do"
+											(click)="deleteLine(data.id)"></i>
+									</td>
+									<td *ngIf="status.general" nzRight>
+										<i *ngIf="checkEdit(data.stt)" class="fa fa-pencil"
+											(click)="startEdit(data.id)"></i>
+									</td>
+									<td *ngIf="status.general" nzRight>
+										<i *ngIf="checkAdd(data)" class="fa fa-plus" (click)="addLine(data.id)"></i>
 
-			</tbody>
-		</nz-table>
+									</td>
+								</ng-container>
+								<ng-template #editTemplate>
+									<td class="text-center" nzLeft>
+										{{getChiMuc(editCache[data.id].data.stt)}}
+									</td>
+									<td nzLeft>
+										<ng-container *ngIf="data.donVi; else editName">
+											{{editCache[data.id].data.tenDmuc}}
+										</ng-container>
+										<ng-template #editName>
+											<input nz-input class="search__input"
+												[(ngModel)]="editCache[data.id].data.tenDmuc" />
+										</ng-template>
+									</td>
+									<td>
+										<input class="money-input" currencyMask
+											[(ngModel)]="editCache[data.id].data.dtTsoNguoiLv" [options]="amount" />
+									</td>
+									<td>
+										{{numFunc.valFmt(editCache[data.id].data.dtTongQlPcap, maDviTien)}}
+									</td>
+									<td>
+										{{numFunc.valFmt(editCache[data.id].data.dtQlPcapTso, maDviTien)}}
+									</td>
+									<td>
+										<input class="money-input" currencyMask
+											[(ngModel)]="editCache[data.id].data.dtQlPcapLuongBac"
+											(ngModelChange)="changeModel(editCache[data.id].data.id)"
+											[options]="amount" />
+									</td>
+									<td>
+										<input class="money-input" currencyMask
+											[(ngModel)]="editCache[data.id].data.dtQlPcapPcapLuong"
+											(ngModelChange)="changeModel(editCache[data.id].data.id)"
+											[options]="amount" />
+									</td>
+									<td>
+										<input class="money-input" currencyMask
+											[(ngModel)]="editCache[data.id].data.dtQlPcapDgopLuong"
+											(ngModelChange)="changeModel(editCache[data.id].data.id)"
+											[options]="amount" />
+									</td>
+									<td>
+										<input class="money-input" currencyMask
+											[(ngModel)]="editCache[data.id].data.dtQlPcapHdLd"
+											(ngModelChange)="changeModel(editCache[data.id].data.id)"
+											[options]="amount" />
+									</td>
+									<td>
+										<input class="money-input" currencyMask
+											[(ngModel)]="editCache[data.id].data.dtKphiNsnn" [options]="amount" />
+
+									</td>
+									<td>
+										<input class="money-input" currencyMask
+											[(ngModel)]="editCache[data.id].data.dtKphiSnDvu" [options]="amount" />
+
+									</td>
+									<td>
+										<input class="money-input" currencyMask
+											[(ngModel)]="editCache[data.id].data.dtKphiPhiDlai" [options]="amount">
+
+									</td>
+									<td>
+										<input class="money-input" currencyMask
+											[(ngModel)]="editCache[data.id].data.dtKphiHphap" [options]="amount">
+
+									</td>
+									<td>
+										<input class="money-input" currencyMask
+											[(ngModel)]="editCache[data.id].data.uocThTsoNguoiLv" [options]="amount">
+
+									</td>
+									<td>
+										<input class="money-input" currencyMask
+											[(ngModel)]="editCache[data.id].data.uocThTsoBcTdiem" [options]="amount" />
+
+									</td>
+									<td>
+										<input class="money-input" currencyMask
+											[(ngModel)]="editCache[data.id].data.uocThTsoVcCc" [options]="amount" />
+
+									</td>
+									<td>
+										{{numFunc.valFmt(editCache[data.id].data.uocThTongQlPcap, maDviTien)}}
+									</td>
+									<td>
+										{{numFunc.valFmt(editCache[data.id].data.uocThQlPcapTso, maDviTien)}}
+									</td>
+									<td>
+										<input class="money-input" currencyMask
+											[(ngModel)]="editCache[data.id].data.uocThQlPcapLuongBac"
+											(ngModelChange)="changeModel(editCache[data.id].data.id)"
+											[options]="amount" />
+									</td>
+									<td>
+										<input class="money-input" currencyMask
+											[(ngModel)]="editCache[data.id].data.uocThQlPcapPcapLuong"
+											(ngModelChange)="changeModel(editCache[data.id].data.id)"
+											[options]="amount" />
+									</td>
+									<td>
+										<input class="money-input" currencyMask
+											[(ngModel)]="editCache[data.id].data.uocThQlPcapDgopLuong"
+											(ngModelChange)="changeModel(editCache[data.id].data.id)"
+											[options]="amount" />
+									</td>
+									<td>
+										<input class="money-input" currencyMask
+											[(ngModel)]="editCache[data.id].data.uocThQlPcapHdLd"
+											(ngModelChange)="changeModel(editCache[data.id].data.id)"
+											[options]="amount" />
+									</td>
+									<td>
+										<input class="money-input" currencyMask
+											[(ngModel)]="editCache[data.id].data.uocThKphiNsnn" [options]="amount" />
+
+									</td>
+									<td>
+										<input class="money-input" currencyMask
+											[(ngModel)]="editCache[data.id].data.uocThKphiSnDvu" [options]="amount" />
+
+									</td>
+									<td>
+										<input class="money-input" currencyMask
+											[(ngModel)]="editCache[data.id].data.uocThKphiPhiDlai" [options]="amount" />
+
+									</td>
+									<td>
+										<input class="money-input" currencyMask
+											[(ngModel)]="editCache[data.id].data.uocThKphiHphap" [options]="amount" />
+
+									</td>
+									<td>
+										<input class="money-input" currencyMask
+											[(ngModel)]="editCache[data.id].data.namKhTsoNguoiLv" [options]="amount" />
+
+									</td>
+									<td>
+										{{numFunc.valFmt(editCache[data.id].data.namKhTongQlPcap, maDviTien)}}
+									</td>
+									<td>
+										{{numFunc.valFmt(editCache[data.id].data.namKhQlPcapTso, maDviTien)}}
+									</td>
+									<td>
+										<input class="money-input" currencyMask
+											[(ngModel)]="editCache[data.id].data.namKhQlPcapLuongBac"
+											(ngModelChange)="changeModel(editCache[data.id].data.id)"
+											[options]="amount" />
+									</td>
+									<td>
+										<input class="money-input" currencyMask
+											[(ngModel)]="editCache[data.id].data.namKhQlPcapPcapLuong"
+											(ngModelChange)="changeModel(editCache[data.id].data.id)"
+											[options]="amount" />
+									</td>
+									<td>
+										<input class="money-input" currencyMask
+											[(ngModel)]="editCache[data.id].data.namKhQlPcapDgopLuong"
+											(ngModelChange)="changeModel(editCache[data.id].data.id)"
+											[options]="amount" />
+									</td>
+									<td>
+										<input class="money-input" currencyMask
+											[(ngModel)]="editCache[data.id].data.namKhQlPcapHdLd"
+											(ngModelChange)="changeModel(editCache[data.id].data.id)"
+											[options]="amount" />
+									</td>
+									<td>
+										<input class="money-input" currencyMask
+											[(ngModel)]="editCache[data.id].data.namKhKphiNsnn" [options]="amount" />
+									</td>
+									<td>
+										<input class="money-input" currencyMask
+											[(ngModel)]="editCache[data.id].data.namKhKphiSnDvu" [options]="amount" />
+									</td>
+									<td>
+										<input class="money-input" currencyMask
+											[(ngModel)]="editCache[data.id].data.namKhKphiPhiDlai" [options]="amount" />
+									</td>
+									<td>
+										<input class="money-input" currencyMask
+											[(ngModel)]="editCache[data.id].data.namKhKphiHphap" [options]="amount" />
+									</td>
+									<td>
+										<input nz-input [(ngModel)]="editCache[data.id].data.ghiChu" />
+									</td>
+									<td *ngIf="status.general" nzRight>
+										<i *ngIf="checkDelete(data.stt)" class="fa fa-trash-o do"
+											(click)="deleteLine(data.id)"></i>
+									</td>
+
+									<td *ngIf="status.general" nzRight>
+										<div style="display: flex; justify-content: space-around; align-items: center;">
+											<a (click)="saveEdit(data.id)" class="save">Lưu</a>
+											<a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
+												(nzOnConfirm)="cancelEdit(data.id)" class="save">
+												Hủy
+											</a>
+										</div>
+									</td>
+									<td *ngIf="status.general" nzRight>
+										<i *ngIf="checkAdd(data)" class="fa fa-plus" (click)="addLine(data.id)"></i>
+									</td>
+								</ng-template>
+							</tr>
+
+						</tbody>
+					</nz-table>
+				</div>
+			</nz-tab>
+			<nz-tab nzTitle="Thuyết minh">
+				<textarea nz-input nzAutosize="{minRows: 4, maxRows: 16}" [(ngModel)]="formDetail.thuyetMinh"
+					[disabled]="!status.general"></textarea>
+			</nz-tab>
+			<nz-tab nzTitle="Tài liệu đính kèm">
+				<div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+					<div nz-col class="gutter-row" [nzSpan]="3">
+						<nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" *ngIf="status.general">
+							<button nz-button>
+								<i nz-icon nzType="upload"></i>
+								Chọn tài liệu đính kèm
+							</button>
+						</nz-upload>
+						<button nz-button [nzType]="'primary'" (click)="handleUpload()"
+							[disabled]="fileList.length === 0" *ngIf="status.general" style="margin-top: 16px">
+							Thêm vào danh sách
+						</button>
+					</div>
+				</div>
+				<div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+					<div nz-col class="gutter-row" [nzSpan]="13">
+						<nz-table nzBordered class="table__body">
+							<thead>
+								<tr>
+									<th nzWidth="7%">STT</th>
+									<th>Tên file</th>
+									<th nzWidth="15%"></th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr *ngFor="let data of formDetail.lstFiles; let i = index">
+									<td>{{ i + 1 }} </td>
+									<td>{{ data.fileName }}</td>
+									<td>
+										<a (click)="downloadFile(data.id)">
+											<i class="fa fa-eye"></i>
+										</a>
+										<a (click)="deleteFile(data.id)">
+											<i class="fa fa-trash-o do"></i>
+										</a>
+									</td>
+								</tr>
+							</tbody>
+						</nz-table>
+					</div>
+				</div>
+			</nz-tab>
+		</nz-tabset>
 	</div>
-	<div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
-		<div nz-col nzSpan="24">
-			<label class="search__label">Thuyết minh</label>
-			<textarea rows="2" nz-input [(ngModel)]="thuyetMinh" [disabled]="!status"></textarea>
+	<div class="modal-footer">
+		<div class="nut">
+			<div class="cantrai">
+				<button type="button" class="btn btn-main" *ngIf="status.print" (click)="genFunc.doPrint()">
+					<i nz-icon nzType="printer" nzTheme="outline"></i>
+					<span>In</span>
+				</button>
+				<button type="button" class="btn btn-sub" (click)="save('5', null)" *ngIf="status.finish">
+					<i nz-icon nzType="check" nzTheme="outline"></i>
+					<span>Hoàn tất nhập liệu</span>
+				</button>
+				<button type="button" class="btn btn-sub" (click)="save('4', null)" *ngIf="status.finish">
+					<i class="icon htvbdh_tcdt_save"></i>
+					<span>Lưu</span>
+				</button>
+				<button type="button" class="btn btn-sub" (click)="save('1', null)" *ngIf="status.ok">
+					<i nz-icon nzType="check" nzTheme="outline"></i>
+					<span>Chấp nhận</span>
+				</button>
+			</div>
+			<div class="canphai">
+				<button type="button" class="btn btn-do" (click)="tuChoi('0')" *ngIf="status.ok">
+					<i nz-icon nzType="close" nzTheme="outline"></i>
+					<span>Không chấp nhận</span>
+				</button>
+			</div>
 		</div>
 	</div>
-</div>
-<div class="modal-footer">
-	<div class="nut">
-		<div class="cantrai">
-			<button type="button" class="btn btn-main" [hidden]="!statusPrint" (click)="doPrint()">
-				<i nz-icon nzType="printer" nzTheme="outline"></i>
-				<span>In</span>
-			</button>
-			<button type="button" class="btn btn-main" (click)="save('5', null)" [hidden]="statusBtnFinish">
-				<i nz-icon nzType="check" nzTheme="outline"></i>
-				<span>Hoàn tất nhập liệu</span>
-			</button>
-			<button type="button" class="btn btn-main" (click)="save('4', null)" [hidden]="statusBtnFinish">
-				<i class="icon htvbdh_tcdt_save"></i>
-				<span>Lưu</span>
-			</button>
-			<button type="button" class="btn btn-main" (click)="save('1', null)" [hidden]="statusBtnOk">
-				<i nz-icon nzType="check" nzTheme="outline"></i>
-				<span>OK</span>
-			</button>
-			<button type="button" class="btn btn-main" (click)="tuChoi('0')" [hidden]="statusBtnOk">
-				<i nz-icon nzType="close" nzTheme="outline"></i>
-				<span>Not OK</span>
-			</button>
-		</div>
-		<div class="canphai">
-			<button nz-button (click)="handleCancel()" class="modal__button--cancel">
-				<i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
-				Đóng
-			</button>
-		</div>
-	</div>
-</div>
+</ng-container>

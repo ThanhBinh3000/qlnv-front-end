@@ -3,7 +3,7 @@ import { NzNotificationService } from "ng-zorro-antd/notification";
 import * as uuid from "uuid";
 import { MESSAGE } from "../constants/message";
 import { QuanLyVonPhiService } from "../services/quanLyVonPhi.service";
-import { Utils } from "./utils";
+import { DON_VI_TIEN, LA_MA, NUM_BOX_WIDTH, TEXT_BOX_WIDTH, Utils } from "./utils";
 import * as fileSaver from 'file-saver';
 import { DatePipe } from "@angular/common";
 
@@ -56,8 +56,45 @@ export class GeneralFunction {
         return (leftWidth + col * colWidth + rightWidth).toString() + 'px';
     }
 
+    tableWidth(leftW: number, numCol: number, textCol: number, rightW: number): string {
+        return (leftW + numCol * NUM_BOX_WIDTH + textCol * TEXT_BOX_WIDTH + rightW).toString() + 'px';
+    }
+
     fmtDate(date: any) {
         return this.datePipe.transform(date, Utils.FORMAT_DATE_STR);
+    }
+
+    moneyUnitName(moneyUnit: string) {
+        return DON_VI_TIEN.find(e => e.id == moneyUnit)?.tenDm;
+    }
+
+    laMa(k: number) {
+        let xau = "";
+        for (let i = 0; i < LA_MA.length; i++) {
+            while (k >= LA_MA[i].gTri) {
+                xau += LA_MA[i].kyTu;
+                k -= LA_MA[i].gTri;
+            }
+        }
+        return xau;
+    }
+
+    doPrint() {
+        const WindowPrt = window.open(
+            '',
+            '',
+            'left=0,top=0,width=900,height=900,toolbar=0,scrollbars=0,status=0',
+        );
+        let printContent = '';
+        printContent = printContent + '<div>';
+        printContent =
+            printContent + document.getElementById('tablePrint').innerHTML;
+        printContent = printContent + '</div>';
+        WindowPrt.document.write(printContent);
+        WindowPrt.document.close();
+        WindowPrt.focus();
+        WindowPrt.print();
+        WindowPrt.close();
     }
 }
 
@@ -122,7 +159,7 @@ export class NumberFunction {
     }
 
     //hien thi cac so theo dinh dang
-    NumFmt(num: number): string {
+    numFmt(num: number): string {
         let displayValue: string;
         if (Number.isNaN(num)) {
             return 'NaN';
@@ -172,7 +209,7 @@ export class NumberFunction {
         return displayValue;
     }
 
-    ValFmt(num: number, moneyUnit: string): string {
+    valFmt(num: number, moneyUnit: string): string {
         num = exchangeMoney(num, '1', moneyUnit);
         return displayNumber(num);
     }

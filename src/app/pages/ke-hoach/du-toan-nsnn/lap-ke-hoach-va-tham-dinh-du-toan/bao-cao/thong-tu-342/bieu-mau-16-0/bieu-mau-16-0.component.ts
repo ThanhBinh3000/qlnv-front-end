@@ -1,18 +1,18 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { FileFunction, GeneralFunction, NumberFunction } from 'src/app/Utility/func';
+import { AMOUNT, DON_VI_TIEN, LTD, MONEY_LIMIT, Utils } from "src/app/Utility/utils";
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
 import { UserService } from 'src/app/services/user.service';
-import { displayNumber, exchangeMoney, sumNumber } from 'src/app/Utility/func';
-import { AMOUNT, BOX_NUMBER_WIDTH, DON_VI_TIEN, LA_MA, LTD, MONEY_LIMIT, Utils } from "src/app/Utility/utils";
 import * as uuid from "uuid";
-// import { DANH_MUC } from './bieu-mau-18.constant';
+import { BtnStatus, Doc, Form } from '../../../lap-ke-hoach-va-tham-dinh-du-toan.class';
 
 export class ItemData {
 	id: string;
@@ -34,6 +34,7 @@ export class ItemData {
 	isDelete: false;
 	chenhLech: number;
 	ghiChu: string;
+	ykienDviCtren: string;
 }
 
 @Component({
@@ -44,36 +45,48 @@ export class ItemData {
 export class BieuMau160Component implements OnInit {
 	@Input() dataInfo;
 	//thong tin chi tiet cua bieu mau
-	formDetail: any;
+	formDetail: Form = new Form();
 	total: ItemData = new ItemData();
 	maDviTien: string = '1';
-	thuyetMinh: string;
+	namBcao: number;
 	//danh muc
 	linhVucChis: any[] = [];
-
 	listVatTu: any[] = [];
 	listVatTuFull: any[] = [];
-
-	soLaMa: any[] = LA_MA;
 	lstCtietBcao: ItemData[] = [];
 	donViTiens: any[] = DON_VI_TIEN;
 	//trang thai cac nut
-	status = false;
-	statusBtnFinish: boolean;
-	statusBtnOk: boolean;
-	statusPrint: boolean;
+	status: BtnStatus = new BtnStatus();
 	editMoneyUnit = false;
 	isDataAvailable = false;
 	//nho dem
 	editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
-	namHienHanh: number;
-	namKhoach: number;
 	allChecked = false;
-	listIdDelete = ""
-	editAppraisalValue: boolean;
-	viewAppraisalValue: boolean;
 	amount = AMOUNT;
 	scrollX: string;
+
+	fileList: NzUploadFile[] = [];
+	listFile: File[] = [];
+	listIdDeleteFiles: string[] = [];
+
+	beforeUpload = (file: NzUploadFile): boolean => {
+		this.fileList = this.fileList.concat(file);
+		return false;
+	};
+
+	// them file vao danh sach
+	handleUpload(): void {
+		this.fileList.forEach((file: any) => {
+			const id = file?.lastModified.toString();
+			this.formDetail.lstFiles.push({
+				... new Doc(),
+				id: id,
+				fileName: file?.name
+			});
+			this.listFile.push(file);
+		});
+		this.fileList = [];
+	};
 
 	constructor(
 		private _modalRef: NzModalRef,
@@ -83,9 +96,10 @@ export class BieuMau160Component implements OnInit {
 		private danhMucService: DanhMucHDVService,
 		private notification: NzNotificationService,
 		private modal: NzModalService,
-	) {
-	}
-
+		public numFunc: NumberFunction,
+		public genFunc: GeneralFunction,
+		private fileFunc: FileFunction,
+	) { }
 
 	async ngOnInit() {
 		this.initialization().then(() => {
@@ -95,31 +109,20 @@ export class BieuMau160Component implements OnInit {
 
 	async initialization() {
 		this.spinner.show();
-		this.formDetail = this.dataInfo?.data;
-		this.thuyetMinh = this.formDetail?.thuyetMinh;
-		this.status = !this.dataInfo?.status;
-		this.namHienHanh = Number(this.dataInfo?.namBcao) - 1;
-		this.namKhoach = this.dataInfo?.namBcao;
-		this.statusBtnFinish = this.dataInfo?.statusBtnFinish;
-		this.statusPrint = this.dataInfo?.statusBtnPrint;
-		this.editAppraisalValue = this.dataInfo?.editAppraisalValue;
-		this.viewAppraisalValue = this.dataInfo?.viewAppraisalValue;
+		Object.assign(this.status, this.dataInfo.status);
+		await this.getFormDetail();
+		this.namBcao = this.dataInfo.namBcao;
 		if (this.status) {
-			this.scrollX = (550 + 200 + BOX_NUMBER_WIDTH * 8).toString() + 'px';
+			this.scrollX = this.genFunc.tableWidth(350, 9, 1, 160);
 		} else {
-			if (this.editAppraisalValue) {
-				this.scrollX = (410 + 200 + BOX_NUMBER_WIDTH * 10).toString() + 'px';
-			} else if (this.viewAppraisalValue) {
-				this.scrollX = (350 + 200 + BOX_NUMBER_WIDTH * 10).toString() + 'px';
+			if (this.status.editAppVal) {
+				this.scrollX = this.genFunc.tableWidth(350, 12, 2, 60);
+			} else if (this.status.viewAppVal) {
+				this.scrollX = this.genFunc.tableWidth(350, 12, 1, 0);
 			} else {
-				this.scrollX = (350 + 200 + BOX_NUMBER_WIDTH * 8).toString() + 'px';
+				this.scrollX = this.genFunc.tableWidth(350, 9, 1, 0);
 			}
 		}
-		this.formDetail?.lstCtietLapThamDinhs.forEach(item => {
-			this.lstCtietBcao.push({
-				...item,
-			})
-		})
 		await this.getListVtu()
 		await this.addListVatTu()
 
@@ -127,6 +130,111 @@ export class BieuMau160Component implements OnInit {
 		this.updateEditCache();
 		this.getStatusButton();
 		this.spinner.hide();
+	}
+
+	getStatusButton() {
+		this.status.ok = this.status.ok && (this.formDetail.trangThai == "2" || this.formDetail.trangThai == "5");
+	}
+
+	async getFormDetail() {
+		await this.lapThamDinhService.ctietBieuMau(this.dataInfo.id).toPromise().then(
+			data => {
+				if (data.statusCode == 0) {
+					this.formDetail = data.data;
+					this.formDetail.maDviTien = '1';
+					this.lstCtietBcao = this.formDetail.lstCtietLapThamDinhs;
+					this.listFile = [];
+					this.getStatusButton();
+				} else {
+					this.notification.error(MESSAGE.ERROR, data?.msg);
+				}
+			},
+			err => {
+				this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+			}
+		)
+	}
+
+	// luu
+	async save(trangThai: string, lyDoTuChoi: string) {
+		if (this.lstCtietBcao.some(e => this.editCache[e.id].edit)) {
+			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+			return;
+		}
+
+		if (this.lstCtietBcao.some(e => e.khTtien > MONEY_LIMIT || e.namKhTtien > MONEY_LIMIT || e.tdinhTtien > MONEY_LIMIT || e.uocThTtien > MONEY_LIMIT)) {
+			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
+			return;
+		}
+
+		if (this.listFile.some(file => file.size > Utils.FILE_SIZE)) {
+			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
+			return;
+		}
+
+		const lstCtietBcaoTemp: ItemData[] = [];
+		this.lstCtietBcao.forEach(item => {
+			lstCtietBcaoTemp.push({
+				...item,
+				id: item.id?.length == 38 ? null : item.id,
+			})
+		})
+
+		// if (!this.status.viewAppVal) {
+		// 	lstCtietBcaoTemp?.forEach(item => {
+		// 		item.tdinhSluong = item.namKhSluong;
+		// 		item.tdinhTtien = item.namKhTtien;
+		// 	})
+		// }
+
+		const request = JSON.parse(JSON.stringify(this.formDetail));
+
+		request.fileDinhKems = [];
+		for (let iterator of this.listFile) {
+			request.fileDinhKems.push(await this.fileFunc.uploadFile(iterator, this.dataInfo.path));
+		}
+
+		request.lstCtietLapThamDinhs = lstCtietBcaoTemp;
+		request.trangThai = trangThai;
+
+		if (lyDoTuChoi) {
+			request.lyDoTuChoi = lyDoTuChoi;
+		}
+
+		this.spinner.show();
+		this.lapThamDinhService.updateLapThamDinh(request).toPromise().then(
+			async data => {
+				if (data.statusCode == 0) {
+					this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+					this._modalRef.close({
+						trangThai: data.data.trangThai,
+					});
+				} else {
+					this.notification.error(MESSAGE.ERROR, data?.msg);
+				}
+			},
+			err => {
+				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+			},
+		);
+		this.spinner.hide();
+	}
+
+	tuChoi(mcn: string) {
+		const modalTuChoi = this.modal.create({
+			nzTitle: 'Từ chối',
+			nzContent: DialogTuChoiComponent,
+			nzMaskClosable: false,
+			nzClosable: false,
+			nzWidth: '900px',
+			nzFooter: null,
+			nzComponentParams: {},
+		});
+		modalTuChoi.afterClose.subscribe(async (text) => {
+			if (text) {
+				this.save(mcn, text);
+			}
+		});
 	}
 
 	async getListVtu() {
@@ -199,9 +307,6 @@ export class BieuMau160Component implements OnInit {
 
 	deleteById(id: any): void {
 		this.lstCtietBcao = this.lstCtietBcao.filter(item => item.id != id)
-		if (typeof id == "number") {
-			this.listIdDelete += id + ","
-		}
 	}
 
 	checkDeleteStatus(item: any) {
@@ -212,25 +317,8 @@ export class BieuMau160Component implements OnInit {
 
 	addLine(id: any) {
 		const item: ItemData = {
+			... new ItemData(),
 			id: uuid.v4(),
-			stt: '',
-			matHang: "",
-			tenDmuc: "",
-			maDviTinh: "",
-			khSluong: 0,
-			khTtien: 0,
-			uocThSluong: 0,
-			uocThTtien: 0,
-			tonKho: 0,
-			tongMucDtru: 0,
-			namKhSluong: 0,
-			namKhTtien: 0,
-			tdinhSluong: 0,
-			tdinhTtien: 0,
-			checked: false,
-			isDelete: false,
-			chenhLech: 0,
-			ghiChu: ""
 		};
 
 		this.lstCtietBcao.splice(id, 0, item);
@@ -257,145 +345,6 @@ export class BieuMau160Component implements OnInit {
 	deleteAllChecked() {
 		this.lstCtietBcao = this.lstCtietBcao.filter(e => !e.checked);
 		this.allChecked = false;
-	}
-
-
-	getStatusButton() {
-		if (this.dataInfo?.statusBtnOk && (this.formDetail.trangThai == "2" || this.formDetail.trangThai == "5")) {
-			this.statusBtnOk = false;
-		} else {
-			this.statusBtnOk = true;
-		}
-	}
-
-	// luu
-	async save(trangThai: string, lyDoTuChoi: string) {
-		let checkSaveEdit;
-		//check xem tat ca cac dong du lieu da luu chua?
-		//chua luu thi bao loi, luu roi thi cho di
-		this.lstCtietBcao.forEach(element => {
-			if (this.editCache[element.id].edit === true) {
-				checkSaveEdit = false
-			}
-		});
-		if (checkSaveEdit == false) {
-			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
-			return;
-		}
-		//tinh lai don vi tien va kiem tra gioi han cua chung
-		const lstCtietBcaoTemp: ItemData[] = [];
-		let checkMoneyRange = true;
-		this.lstCtietBcao.forEach(item => {
-			if (
-				item.khTtien > MONEY_LIMIT ||
-				item.namKhTtien > MONEY_LIMIT ||
-				item.tdinhTtien > MONEY_LIMIT ||
-				item.uocThTtien > MONEY_LIMIT
-			) {
-				checkMoneyRange = false;
-				return;
-			}
-			lstCtietBcaoTemp.push({
-				...item,
-			})
-		})
-
-		if (!checkMoneyRange) {
-			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
-			return;
-		}
-
-		// replace nhung ban ghi dc them moi id thanh null
-		lstCtietBcaoTemp.forEach(item => {
-			if (item.id?.length == 38) {
-				item.id = null;
-			}
-		})
-
-		if (!this.viewAppraisalValue) {
-			lstCtietBcaoTemp?.forEach(item => {
-				item.tdinhSluong = item.namKhSluong;
-				item.tdinhTtien = item.namKhTtien;
-			})
-		}
-
-		const request = JSON.parse(JSON.stringify(this.formDetail));
-		request.lstCtietLapThamDinhs = lstCtietBcaoTemp;
-		request.trangThai = trangThai;
-
-		if (lyDoTuChoi) {
-			request.lyDoTuChoi = lyDoTuChoi;
-		}
-
-		this.spinner.show();
-		this.lapThamDinhService.updateLapThamDinh(request).toPromise().then(
-			async data => {
-				if (data.statusCode == 0) {
-					this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-					this.formDetail = data.data;
-					this._modalRef.close({
-						formDetail: this.formDetail,
-					});
-				} else {
-					this.notification.error(MESSAGE.ERROR, data?.msg);
-				}
-			},
-			err => {
-				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-			},
-		);
-		this.spinner.hide();
-	}
-
-	// chuc nang check role
-	// async onSubmit(mcn: string, lyDoTuChoi: string) {
-	//   if (!this.formDetail?.id) {
-	//     this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING);
-	//     return;
-	//   }
-	//   const requestGroupButtons = {
-	//     id: this.formDetail.id,
-	//     trangThai: mcn,
-	//     lyDoTuChoi: lyDoTuChoi,
-	//   };
-	//   this.spinner.show();
-	//   await this.lapThamDinhService.approveCtietThamDinh(requestGroupButtons).toPromise().then(async (data) => {
-	//     if (data.statusCode == 0) {
-	//       this.formDetail.trangThai = mcn;
-	//       this.getStatusButton();
-	//       if (mcn == "0") {
-	//         this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
-	//       } else {
-	//         this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
-	//       }
-	//       this._modalRef.close({
-	//         formDetail: this.formDetail,
-	//       });
-	//     } else {
-	//       this.notification.error(MESSAGE.ERROR, data?.msg);
-	//     }
-	//   }, err => {
-	//     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-	//   });
-	//   this.spinner.hide();
-	// }
-
-	//show popup tu choi
-	tuChoi(mcn: string) {
-		const modalTuChoi = this.modal.create({
-			nzTitle: 'Từ chối',
-			nzContent: DialogTuChoiComponent,
-			nzMaskClosable: false,
-			nzClosable: false,
-			nzWidth: '900px',
-			nzFooter: null,
-			nzComponentParams: {},
-		});
-		modalTuChoi.afterClose.subscribe(async (text) => {
-			if (text) {
-				this.save(mcn, text);
-			}
-		});
 	}
 
 	// gan editCache.data == lstCtietBcao
@@ -440,16 +389,13 @@ export class BieuMau160Component implements OnInit {
 		this.editCache[id].data.chenhLech = this.editCache[id].data.tdinhTtien - this.editCache[id].data.khTtien
 	}
 
-
-
 	getTotal() {
 		this.total = new ItemData();
 		this.lstCtietBcao.forEach(item => {
-			this.total.khTtien = sumNumber([this.total.khTtien, item.khTtien])
-			this.total.uocThTtien = sumNumber([this.total.uocThTtien, item.uocThTtien])
-			this.total.namKhTtien = sumNumber([this.total.namKhTtien, item.namKhTtien])
-			this.total.tdinhTtien = sumNumber([this.total.tdinhTtien, item.tdinhTtien])
-
+			this.total.khTtien = this.numFunc.sum([this.total.khTtien, item.khTtien])
+			this.total.uocThTtien = this.numFunc.sum([this.total.uocThTtien, item.uocThTtien])
+			this.total.namKhTtien = this.numFunc.sum([this.total.namKhTtien, item.namKhTtien])
+			this.total.tdinhTtien = this.numFunc.sum([this.total.tdinhTtien, item.tdinhTtien])
 		})
 	}
 
@@ -458,40 +404,17 @@ export class BieuMau160Component implements OnInit {
 		return lstTemp.every(e => !e.stt.startsWith(stt));
 	}
 
-	doPrint() {
-		const WindowPrt = window.open(
-			'',
-			'',
-			'left=0,top=0,width=900,height=900,toolbar=0,scrollbars=0,status=0',
-		);
-		let printContent = '';
-		printContent = printContent + '<div>';
-		printContent =
-			printContent + document.getElementById('tablePrint').innerHTML;
-		printContent = printContent + '</div>';
-		WindowPrt.document.write(printContent);
-		WindowPrt.document.close();
-		WindowPrt.focus();
-		WindowPrt.print();
-		WindowPrt.close();
+	// xoa file trong bang file
+	deleteFile(id: string): void {
+		this.formDetail.lstFiles = this.formDetail.lstFiles.filter((a: any) => a.id !== id);
+		this.listFile = this.listFile.filter((a: any) => a?.lastModified.toString() !== id);
+		this.formDetail.listIdDeleteFiles.push(id);
 	}
 
-	displayValue(num: number): string {
-		num = exchangeMoney(num, '1', this.maDviTien);
-		return displayNumber(num);
+	async downloadFile(id: string) {
+		let file: any = this.listFile.find(element => element?.lastModified.toString() == id);
+		let doc: any = this.formDetail.lstFiles.find(element => element?.id == id);
+		await this.fileFunc.downloadFile(file, doc);
 	}
-
-	displayNumber(num: number): string {
-		return displayNumber(num);
-	}
-
-	getMoneyUnit() {
-		return this.donViTiens.find(e => e.id == this.maDviTien)?.tenDm;
-	}
-
-	handleCancel() {
-		this._modalRef.close();
-	}
-
 }
 
