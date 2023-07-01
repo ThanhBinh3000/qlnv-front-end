@@ -12,9 +12,11 @@ import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.se
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
 import * as uuid from 'uuid';
 import { BtnStatus, Doc, Form } from '../../../lap-ke-hoach-va-tham-dinh-du-toan.class';
+import * as XLSX from 'xlsx';
 
 export class ItemData {
 	id: any;
+	khvonphiLapThamDinhCtietId: string;
 	stt: string;
 	donVi: string;
 	tenDmuc: string;
@@ -448,5 +450,78 @@ export class BieuMau152Component implements OnInit {
 		let file: any = this.listFile.find(element => element?.lastModified.toString() == id);
 		let doc: any = this.formDetail.lstFiles.find(element => element?.id == id);
 		await this.fileFunc.downloadFile(file, doc);
+	}
+
+	exportToExcel() {
+		const header = [
+			{ t: 0, b: 3, l: 0, r: 37, val: null },
+			{ t: 0, b: 3, l: 0, r: 0, val: 'STT' },
+			{ t: 0, b: 3, l: 1, r: 1, val: 'Tên đơn vị' },
+			{ t: 0, b: 0, l: 2, r: 12, val: 'Dự toán năm ' + (this.namBcao - 1).toString() },
+			{ t: 1, b: 3, l: 2, r: 2, val: 'Tổng số người làm việc được cấp có thẩm quyền giao (Người)' },
+			{ t: 1, b: 3, l: 3, r: 3, val: 'Tổng quỹ lương, phụ cấp và các khoản đóng góp theo lương' },
+			{ t: 1, b: 1, l: 4, r: 8, val: 'Trong đó' },
+			{ t: 2, b: 2, l: 4, r: 7, val: 'Quỹ lương, phụ cấp và các khoản đóng góp theo lương của biên chế được giao' },
+			{ t: 3, b: 3, l: 4, r: 4, val: 'Tổng số' },
+			{ t: 3, b: 3, l: 5, r: 5, val: 'Lương theo ngạch, bậc' },
+			{ t: 3, b: 3, l: 6, r: 6, val: 'Phụ cấp theo lương' },
+			{ t: 3, b: 3, l: 7, r: 7, val: 'Các khoản đóng góp theo lương' },
+			{ t: 2, b: 3, l: 8, r: 8, val: 'Quỹ lương, phụ cấp và các khoản đóng góp theo lương của hợp đồng lao động' },
+			{ t: 1, b: 1, l: 9, r: 12, val: 'Nguồn kinh phí bảo đảm' },
+			{ t: 2, b: 3, l: 9, r: 9, val: 'Nguồn NSNN' },
+			{ t: 2, b: 3, l: 10, r: 10, val: 'Nguồn thu sự nghiệp, dịch vụ' },
+			{ t: 2, b: 3, l: 11, r: 11, val: 'Nguồn phí được để lại' },
+			{ t: 2, b: 3, l: 12, r: 12, val: 'Nguồn thu hợp pháp khác' },
+			{ t: 0, b: 0, l: 13, r: 25, val: 'Ước thực hiện ' + (this.namBcao - 1).toString() },
+			{ t: 1, b: 3, l: 13, r: 13, val: 'Tổng số người làm việc được cấp có thẩm quyền giao (Người)' },
+			{ t: 1, b: 3, l: 14, r: 14, val: 'Tổng số người làm việc được cấp có thẩm quyền giao có mặt tại thời điểm 31/12 (Người)' },
+			{ t: 1, b: 3, l: 15, r: 15, val: 'Trong đó: Tổng số viên chức, công chức (Người)' },
+			{ t: 1, b: 3, l: 16, r: 16, val: 'Tổng quỹ lương, phụ cấp và các khoản đóng góp theo lương theo số người làm việc có mặt tại thời điểm 31/12' },
+			{ t: 1, b: 1, l: 17, r: 21, val: 'Trong đó' },
+			{ t: 2, b: 2, l: 17, r: 20, val: 'Quỹ lương, phụ cấp và các khoản đóng góp theo lương của số biên chế thực có mặt thời điểm 31/12' },
+			{ t: 3, b: 3, l: 17, r: 17, val: 'Tổng số' },
+			{ t: 3, b: 3, l: 18, r: 18, val: 'Lương theo ngạch, bậc' },
+			{ t: 3, b: 3, l: 19, r: 19, val: 'Phụ cấp theo lương' },
+			{ t: 3, b: 3, l: 20, r: 20, val: 'Các khoản đóng góp theo lương' },
+			{ t: 2, b: 3, l: 21, r: 21, val: 'Quỹ lương, phụ cấp và các khoản đóng góp theo lương của hợp đồng lao động có mặt tại thời điểm 31/12' },
+			{ t: 1, b: 1, l: 22, r: 25, val: 'Nguồn kinh phí bảo đảm' },
+			{ t: 2, b: 3, l: 22, r: 22, val: 'Nguồn NSNN' },
+			{ t: 2, b: 3, l: 23, r: 23, val: 'Nguồn thu sự nghiệp, dịch vụ' },
+			{ t: 2, b: 3, l: 24, r: 24, val: 'Nguồn phí được để lại' },
+			{ t: 2, b: 3, l: 25, r: 25, val: 'Nguồn thu hợp pháp khác' },
+			{ t: 0, b: 0, l: 26, r: 36, val: 'Dự toán năm ' + (this.namBcao).toString() },
+			{ t: 1, b: 3, l: 26, r: 26, val: 'Tổng số người làm việc được cấp có thẩm quyền giao (Người)' },
+			{ t: 1, b: 3, l: 27, r: 27, val: 'Tổng quỹ lương, phụ cấp và các khoản đóng góp theo lương' },
+			{ t: 1, b: 1, l: 28, r: 32, val: 'Trong đó' },
+			{ t: 2, b: 2, l: 28, r: 31, val: 'Quỹ lương, phụ cấp và các khoản đóng góp theo lương của biên chế' },
+			{ t: 3, b: 3, l: 28, r: 28, val: 'Tổng số' },
+			{ t: 3, b: 3, l: 29, r: 29, val: 'Lương theo ngạch, bậc' },
+			{ t: 3, b: 3, l: 30, r: 30, val: 'Phụ cấp theo lương' },
+			{ t: 3, b: 3, l: 31, r: 31, val: 'Các khoản đóng góp theo lương' },
+			{ t: 2, b: 3, l: 32, r: 32, val: 'Quỹ lương, phụ cấp và các khoản đóng góp theo lương của hợp đồng lao động' },
+			{ t: 1, b: 1, l: 33, r: 36, val: 'Nguồn kinh phí bảo đảm' },
+			{ t: 2, b: 3, l: 33, r: 33, val: 'Nguồn NSNN' },
+			{ t: 2, b: 3, l: 34, r: 34, val: 'Nguồn thu sự nghiệp, dịch vụ' },
+			{ t: 2, b: 3, l: 35, r: 35, val: 'Nguồn phí được để lại' },
+			{ t: 2, b: 3, l: 36, r: 36, val: 'Nguồn thu hợp pháp khác' },
+			{ t: 0, b: 3, l: 37, r: 37, val: 'Ghi chú' },
+		]
+		const filterData = this.lstCtietBcao.map(item => {
+			const { id, donVi, khvonphiLapThamDinhCtietId, level, checked, ...rest } = item;
+			return rest;
+		})
+		filterData.forEach(item => {
+			const level = item.stt.split('.').length - 2;
+			item.stt = this.getChiMuc(item.stt);
+			for (let i = 0; i < level; i++) {
+				item.stt = '   ' + item.stt;
+			}
+		})
+
+		const workbook = XLSX.utils.book_new();
+		const worksheet = this.genFunc.initExcel(header);
+		XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: this.genFunc.coo(header[0].l, header[0].b + 1) })
+		XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
+		XLSX.writeFile(workbook, 'TT342_15.2.xlsx');
 	}
 }

@@ -13,9 +13,11 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import * as uuid from "uuid";
 import { BtnStatus, Doc, Form } from '../../../lap-ke-hoach-va-tham-dinh-du-toan.class';
 import { UserService } from './../../../../../../../services/user.service';
+import * as XLSX from 'xlsx'
 
 export class ItemData {
 	id: string;
+	khvonphiLapThamDinhCtietId: string;
 	stt: string;
 	maLvuc: string;
 	tenDmuc: string;
@@ -273,26 +275,6 @@ export class BieuMau151Component implements OnInit {
 		});
 	}
 
-	// chuyển đổi stt đang được mã hóa thành dạng I, II, a, b, c, ...
-	getChiMuc(str: string): string {
-		str = str.substring(str.indexOf('.') + 1, str.length);
-		const chiSo: string[] = str.split('.');
-		const n: number = chiSo.length - 1;
-		let k: number = parseInt(chiSo[n], 10);
-		switch (n) {
-			case 0:
-				return this.genFunc.laMa(k);
-			case 1:
-				return chiSo[n];
-			case 2:
-				return chiSo[n - 1].toString() + "." + chiSo[n].toString();
-			case 3:
-				return String.fromCharCode(k + 96);
-			case 4:
-				return "-"
-		}
-	}
-
 	// gan editCache.data == lstCtietBcao
 	updateEditCache(): void {
 		this.lstCtietBcao.forEach(item => {
@@ -448,4 +430,61 @@ export class BieuMau151Component implements OnInit {
 		await this.fileFunc.downloadFile(file, doc);
 	}
 
+	exportToExcel() {
+		const header = [
+			{ t: 0, b: 2, l: 0, r: 28, val: null },
+			{ t: 0, b: 2, l: 0, r: 0, val: 'STT' },
+			{ t: 0, b: 2, l: 1, r: 1, val: 'Lĩnh vực/Tên đơn vị' },
+			{ t: 0, b: 0, l: 2, r: 8, val: 'Thực hiện năm ' + (this.namBcao - 2).toString() },
+			{ t: 1, b: 2, l: 2, r: 2, val: 'Tổng số biên chế được cấp có thẩm quyền giao (Người)' },
+			{ t: 1, b: 2, l: 3, r: 3, val: 'Tống số biên chế có mặt thời điểm 31/12 (Người)' },
+			{ t: 1, b: 2, l: 4, r: 4, val: 'Quỹ lương, phụ cấp và các khoản đóng góp theo lương theo biên chế có mặt 31/12' },
+			{ t: 1, b: 1, l: 5, r: 8, val: 'Trong đó' },
+			{ t: 2, b: 2, l: 5, r: 5, val: 'Lương theo ngạch, bậc' },
+			{ t: 2, b: 2, l: 6, r: 6, val: 'Phụ cấp theo lương' },
+			{ t: 2, b: 2, l: 7, r: 7, val: 'Các khoản đóng góp theo lương' },
+			{ t: 2, b: 2, l: 8, r: 8, val: 'Khác' },
+			{ t: 0, b: 0, l: 9, r: 14, val: 'Dự toán năm ' + (this.namBcao - 1).toString() },
+			{ t: 1, b: 2, l: 9, r: 9, val: 'Tổng số biên chế được cấp có thẩm quyền giao (Người)' },
+			{ t: 1, b: 2, l: 10, r: 10, val: 'Quỹ lương, phụ cấp và các khoản đóng góp theo lương (Người)' },
+			{ t: 1, b: 1, l: 11, r: 14, val: 'Trong đó' },
+			{ t: 2, b: 2, l: 11, r: 11, val: 'Lương theo ngạch, bậc' },
+			{ t: 2, b: 2, l: 12, r: 12, val: 'Phụ cấp theo lương' },
+			{ t: 2, b: 2, l: 13, r: 13, val: 'Các khoản đóng góp theo lương' },
+			{ t: 2, b: 2, l: 14, r: 14, val: 'Khác' },
+			{ t: 0, b: 0, l: 15, r: 21, val: 'Ước thực hiện năm ' + (this.namBcao - 1).toString() },
+			{ t: 1, b: 2, l: 15, r: 15, val: 'Tổng số biên chế được cấp có thẩm quyền giao (Người)' },
+			{ t: 1, b: 2, l: 16, r: 16, val: 'Tống số biên chế có mặt thời điểm 31/12 (Người)' },
+			{ t: 1, b: 2, l: 17, r: 17, val: 'Quỹ lương, phụ cấp và các khoản đóng góp theo lương theo biên chế có mặt 31/12' },
+			{ t: 1, b: 1, l: 18, r: 21, val: 'Trong đó' },
+			{ t: 2, b: 2, l: 18, r: 18, val: 'Lương theo ngạch, bậc' },
+			{ t: 2, b: 2, l: 19, r: 19, val: 'Phụ cấp theo lương' },
+			{ t: 2, b: 2, l: 20, r: 20, val: 'Các khoản đóng góp theo lương' },
+			{ t: 2, b: 2, l: 21, r: 21, val: 'Khác' },
+			{ t: 0, b: 0, l: 22, r: 27, val: 'Dự toán năm ' + this.namBcao.toString() },
+			{ t: 1, b: 2, l: 22, r: 22, val: 'Tổng số biên chế được cấp có thẩm quyền giao (Người)' },
+			{ t: 1, b: 2, l: 23, r: 23, val: 'Quỹ lương, phụ cấp và các khoản đóng góp theo lương (Người)' },
+			{ t: 1, b: 1, l: 24, r: 27, val: 'Trong đó' },
+			{ t: 2, b: 2, l: 24, r: 24, val: 'Lương theo ngạch, bậc' },
+			{ t: 2, b: 2, l: 25, r: 25, val: 'Phụ cấp theo lương' },
+			{ t: 2, b: 2, l: 26, r: 26, val: 'Các khoản đóng góp theo lương' },
+			{ t: 2, b: 2, l: 27, r: 27, val: 'Khác' },
+			{ t: 0, b: 2, l: 28, r: 28, val: 'Ghi chú' },
+		]
+		const filterData = this.lstCtietBcao.map(item => {
+			const { id, maLvuc, khvonphiLapThamDinhCtietId, checked, ...rest } = item;
+			return rest;
+		})
+		let ind = 1;
+		filterData.forEach(item => {
+			item.stt = ind.toString();
+			ind += 1;
+		})
+
+		const workbook = XLSX.utils.book_new();
+		const worksheet = this.genFunc.initExcel(header);
+		XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: this.genFunc.coo(header[0].l, header[0].b + 1) })
+		XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
+		XLSX.writeFile(workbook, 'TT342_15.1.xlsx');
+	}
 }

@@ -9,7 +9,7 @@
                             <div style="margin-left: 10px;">
                                 <ng-container *ngIf="status.general || !editMoneyUnit; else editMoney">
                                     <span (click)="editMoneyUnit=true">
-                                        {{ genFunc.moneyUnitName(maDviTien) }}
+                                        {{ gen.moneyUnitName(maDviTien) }}
                                     </span>
                                 </ng-container>
                                 <ng-template #editMoney>
@@ -354,7 +354,7 @@
     <div class="modal-footer">
         <div class="nut">
             <div class="cantrai">
-                <button type="button" class="btn btn-main" *ngIf="status.print" (click)="genFunc.doPrint()">
+                <button type="button" class="btn btn-main" *ngIf="status.print" (click)="gen.doPrint()">
                     <i nz-icon nzType="printer" nzTheme="outline"></i>
                     <span>In</span>
                 </button>
@@ -372,6 +372,10 @@
                 </button>
             </div>
             <div class="canphai">
+                <button type="button" class="btn btn-do" (click)="exportToExcel()">
+                    <i nz-icon nzType="close" nzTheme="outline"></i>
+                    <span>Export</span>
+                </button>
                 <button type="button" class="btn btn-do" (click)="tuChoi('0')" *ngIf="status.ok">
                     <i nz-icon nzType="close" nzTheme="outline"></i>
                     <span>Không chấp nhận</span>
