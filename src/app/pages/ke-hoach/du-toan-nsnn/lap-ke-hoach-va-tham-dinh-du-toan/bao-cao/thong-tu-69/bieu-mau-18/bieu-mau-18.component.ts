@@ -12,6 +12,7 @@ import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.se
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
 import * as uuid from "uuid";
 import { BtnStatus, Doc, Form } from '../../../lap-ke-hoach-va-tham-dinh-du-toan.class';
+import * as XLSX from 'xlsx'
 
 export class ItemData {
 	id: string;
@@ -96,7 +97,7 @@ export class BieuMau18Component implements OnInit {
 		private notification: NzNotificationService,
 		private modal: NzModalService,
 		public numFunc: NumberFunction,
-		public genFunc: GeneralFunction,
+		public gen: GeneralFunction,
 		private fileFunc: FileFunction,
 		private tableFunc: TableFunction,
 	) { }
@@ -116,9 +117,9 @@ export class BieuMau18Component implements OnInit {
 			if (category) {
 				this.linhVucChis = category.data;
 			}
-			this.scrollX = this.genFunc.tableWidth(350, 12, 5, 60);
+			this.scrollX = this.gen.tableWidth(350, 12, 5, 60);
 		} else {
-			this.scrollX = this.genFunc.tableWidth(350, 12, 5, 0);
+			this.scrollX = this.gen.tableWidth(350, 12, 5, 0);
 		}
 		if (this.lstCtietBcao.length == 0) {
 			this.linhVucChis.forEach(e => {
@@ -251,7 +252,7 @@ export class BieuMau18Component implements OnInit {
 		let k: number = parseInt(chiSo[n], 10);
 		switch (n) {
 			case 0:
-				return this.genFunc.laMa(k);
+				return this.gen.laMa(k);
 			case 1:
 				return chiSo[n];
 			case 2:
@@ -358,6 +359,54 @@ export class BieuMau18Component implements OnInit {
 		let file: any = this.listFile.find(element => element?.lastModified.toString() == id);
 		let doc: any = this.formDetail.lstFiles.find(element => element?.id == id);
 		await this.fileFunc.downloadFile(file, doc);
+	}
+
+	exportToExcel() {
+		const header = [
+			{ t: 0, b: 3, l: 0, r: 18, val: null },
+			{ t: 0, b: 3, l: 0, r: 0, val: 'STT' },
+			{ t: 0, b: 3, l: 1, r: 1, val: 'Lĩnh vực chi' },
+			{ t: 0, b: 3, l: 2, r: 2, val: 'Mục tiêu, nhiệm vụ' },
+			{ t: 0, b: 3, l: 3, r: 3, val: 'Cơ sở pháp lý/ thực tiễn' },
+			{ t: 0, b: 3, l: 4, r: 4, val: 'Hoạt động chủ yếu' },
+			{ t: 0, b: 3, l: 5, r: 5, val: 'Nguồn kinh phí' },
+			{ t: 0, b: 0, l: 6, r: 17, val: 'Nhu cầu chi' },
+			{ t: 1, b: 3, l: 6, r: 6, val: 'Tổng số' },
+			{ t: 1, b: 1, l: 7, r: 8, val: 'Trong đó' },
+			{ t: 2, b: 3, l: 7, r: 7, val: 'Chi cơ sở' },
+			{ t: 2, b: 3, l: 8, r: 8, val: 'Chi mới' },
+			{ t: 1, b: 1, l: 9, r: 17, val: 'Chia ra' },
+			{ t: 2, b: 3, l: 9, r: 9, val: 'Đầu tư phát triển' },
+			{ t: 2, b: 2, l: 10, r: 11, val: 'Trong đó' },
+			{ t: 3, b: 3, l: 10, r: 10, val: 'Chi cơ sở' },
+			{ t: 3, b: 3, l: 11, r: 11, val: 'Chi mới' },
+			{ t: 2, b: 3, l: 12, r: 12, val: 'Chi thường xuyên' },
+			{ t: 2, b: 2, l: 13, r: 14, val: 'Trong đó' },
+			{ t: 3, b: 3, l: 13, r: 13, val: 'Chi cơ sở' },
+			{ t: 3, b: 3, l: 14, r: 14, val: 'Chi mới' },
+			{ t: 2, b: 3, l: 15, r: 15, val: 'Chi DTQG' },
+			{ t: 2, b: 2, l: 16, r: 17, val: 'Trong đó' },
+			{ t: 3, b: 3, l: 16, r: 16, val: 'Chi cơ sở' },
+			{ t: 3, b: 3, l: 17, r: 17, val: 'Chi mới' },
+			{ t: 0, b: 3, l: 18, r: 18, val: 'Ghi chú' },
+		]
+		const filterData = this.lstCtietBcao.map(item => {
+			const { id, maLvuc, khvonphiLapThamDinhCtietId, level, ...rest } = item;
+			return rest;
+		})
+		filterData.forEach(item => {
+			const level = item.stt.split('.').length - 2;
+			item.stt = this.getChiMuc(item.stt);
+			for (let i = 0; i < level; i++) {
+				item.stt = '   ' + item.stt;
+			}
+		})
+
+		const workbook = XLSX.utils.book_new();
+		const worksheet = this.gen.initExcel(header);
+		XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: this.gen.coo(header[0].l, header[0].b + 1) })
+		XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
+		XLSX.writeFile(workbook, 'TT69_BM18.xlsx');
 	}
 
 }

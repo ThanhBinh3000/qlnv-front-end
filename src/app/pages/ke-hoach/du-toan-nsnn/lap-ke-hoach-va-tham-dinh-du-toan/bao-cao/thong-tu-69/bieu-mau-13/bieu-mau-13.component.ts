@@ -12,9 +12,11 @@ import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.se
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
 import * as uuid from "uuid";
 import { BtnStatus, Doc, Form } from '../../../lap-ke-hoach-va-tham-dinh-du-toan.class';
+import * as XLSX from 'xlsx'
 
 export class ItemData {
     id!: string;
+    khvonphiLapThamDinhCtietId: string;
     stt!: string;
     level: number;
     maNdung!: string;
@@ -359,5 +361,47 @@ export class BieuMau13Component implements OnInit {
         let file: any = this.listFile.find(element => element?.lastModified.toString() == id);
         let doc: any = this.formDetail.lstFiles.find(element => element?.id == id);
         await this.fileFunc.downloadFile(file, doc);
+    }
+
+    exportToExcel() {
+        const header = [
+            { t: 0, b: 1, l: 0, r: 14, val: null },
+            { t: 0, b: 1, l: 0, r: 0, val: 'STT' },
+            { t: 0, b: 1, l: 1, r: 1, val: 'Nội dung' },
+            { t: 0, b: 0, l: 2, r: 3, val: 'Năm hiện hành ' + (this.namBcao - 1).toString() },
+            { t: 1, b: 1, l: 2, r: 2, val: 'Dự toán' },
+            { t: 1, b: 1, l: 3, r: 3, val: 'Ước thực hiện' },
+            { t: 0, b: 0, l: 4, r: 6, val: 'Dự kiến năm dự toán ' + this.namBcao.toString() },
+            { t: 1, b: 1, l: 4, r: 4, val: 'Trần chi được thông báo' },
+            { t: 1, b: 1, l: 5, r: 5, val: 'Nhu cầu chi của đơn vị' },
+            { t: 1, b: 1, l: 6, r: 6, val: 'Chênh lệch trần chi - nhu cầu' },
+            { t: 0, b: 1, l: 7, r: 7, val: 'So sánh nhu cầu năm ' + this.namBcao.toString() + ' với TH năm ' + (this.namBcao - 1).toString() },
+            { t: 0, b: 0, l: 8, r: 10, val: 'Dự kiến năm ' + (this.namBcao + 1).toString() },
+            { t: 1, b: 1, l: 8, r: 8, val: 'Trần chi được thông báo' },
+            { t: 1, b: 1, l: 9, r: 9, val: 'Nhu cầu chi của đơn vị' },
+            { t: 1, b: 1, l: 10, r: 10, val: 'Chênh lệch trần chi - nhu cầu' },
+            { t: 0, b: 0, l: 11, r: 13, val: 'Dự kiến năm ' + (this.namBcao + 2).toString() },
+            { t: 1, b: 1, l: 11, r: 11, val: 'Trần chi được thông báo' },
+            { t: 1, b: 1, l: 12, r: 12, val: 'Nhu cầu chi của đơn vị' },
+            { t: 1, b: 1, l: 13, r: 13, val: 'Chênh lệch trần chi - nhu cầu' },
+            { t: 0, b: 1, l: 14, r: 14, val: 'Ghi chú' },
+        ]
+        const filterData = this.lstCtietBcao.map(item => {
+            const { id, maNdung, khvonphiLapThamDinhCtietId, level, ...rest } = item;
+            return rest;
+        })
+        filterData.forEach(item => {
+            const level = item.stt.split('.').length - 2;
+            item.stt = this.getChiMuc(item.stt);
+            for (let i = 0; i < level; i++) {
+                item.stt = '   ' + item.stt;
+            }
+        })
+
+        const workbook = XLSX.utils.book_new();
+        const worksheet = this.genFunc.initExcel(header);
+        XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: this.genFunc.coo(header[0].l, header[0].b + 1) })
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
+        XLSX.writeFile(workbook, 'TT69_BM13.xlsx');
     }
 }

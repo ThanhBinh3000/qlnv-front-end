@@ -424,6 +424,10 @@
 				</button>
 			</div>
 			<div class="canphai">
+				<button type="button" class="btn btn-do" (click)="exportToExcel()">
+					<i nz-icon nzType="close" nzTheme="outline"></i>
+					<span>Export</span>
+				</button>
 				<button type="button" class="btn btn-do" (click)="tuChoi('0')" *ngIf="status.ok">
 					<i nz-icon nzType="close" nzTheme="outline"></i>
 					<span>Không chấp nhận</span>

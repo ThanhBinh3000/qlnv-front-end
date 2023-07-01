@@ -13,10 +13,12 @@ import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.se
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
 import * as uuid from "uuid";
 import { BtnStatus, Doc, Form } from '../../../lap-ke-hoach-va-tham-dinh-du-toan.class';
+import * as XLSX from 'xlsx'
 
 export class ItemData {
 	id: string;
 	stt: string;
+	khvonphiLapThamDinhCtietId: string;
 	level: number;
 	maDtaiDan: string;
 	tenDmuc: string;
@@ -393,6 +395,55 @@ export class BieuMau133Component implements OnInit {
 		let file: any = this.listFile.find(element => element?.lastModified.toString() == id);
 		let doc: any = this.formDetail.lstFiles.find(element => element?.id == id);
 		await this.fileFunc.downloadFile(file, doc);
+	}
+
+	exportToExcel() {
+		const header = [
+			{ t: 0, b: 3, l: 0, r: 18, val: null },
+			{ t: 0, b: 3, l: 0, r: 0, val: 'STT' },
+			{ t: 0, b: 3, l: 1, r: 1, val: 'Chương trình/Đề tài/Dự án/Nhiệm vụ/ KH&CN' },
+			{ t: 0, b: 3, l: 2, r: 2, val: 'Cơ quan chủ trì' },
+			{ t: 0, b: 3, l: 3, r: 3, val: 'Thời gian thực hiện' },
+			{ t: 0, b: 3, l: 4, r: 4, val: 'Quyết định phê duyệt của cấp có thẩm quyền' },
+			{ t: 0, b: 1, l: 5, r: 7, val: 'Kinh phí được phê duyệt' },
+			{ t: 2, b: 3, l: 5, r: 5, val: 'Tổng số' },
+			{ t: 2, b: 2, l: 6, r: 7, val: 'Trong đó' },
+			{ t: 3, b: 3, l: 6, r: 6, val: 'Nguồn NSNN' },
+			{ t: 3, b: 3, l: 7, r: 7, val: 'Nguồn khác' },
+			{ t: 0, b: 0, l: 8, r: 17, val: 'Kinh phí thực hiện' },
+			{ t: 1, b: 1, l: 8, r: 11, val: 'Năm ' + (this.namBcao - 1).toString() },
+			{ t: 2, b: 3, l: 8, r: 8, val: 'Tổng số' },
+			{ t: 2, b: 2, l: 9, r: 10, val: 'Kinh phí bố trí từ NSNN' },
+			{ t: 3, b: 3, l: 9, r: 9, val: 'Dự toán' },
+			{ t: 3, b: 3, l: 10, r: 10, val: 'Ước thực hiện đến hết năm ' + (this.namBcao - 1).toString() },
+			{ t: 2, b: 3, l: 11, r: 11, val: 'Kinh phí thực hiện từ nguồn khác' },
+			{ t: 1, b: 1, l: 12, r: 14, val: 'Lũy kế số kinh phí bố trí đến hết năm ' + (this.namBcao - 1).toString() },
+			{ t: 2, b: 3, l: 12, r: 12, val: 'Tổng số' },
+			{ t: 2, b: 3, l: 13, r: 13, val: 'Nguồn NSNN' },
+			{ t: 2, b: 3, l: 14, r: 14, val: 'Nguồn khác' },
+			{ t: 1, b: 1, l: 15, r: 17, val: 'Dự toán bố trí năm ' + this.namBcao.toString() },
+			{ t: 2, b: 3, l: 15, r: 15, val: 'Tổng số' },
+			{ t: 2, b: 3, l: 16, r: 16, val: 'Nguồn NSNN' },
+			{ t: 2, b: 3, l: 17, r: 17, val: 'Nguồn khác' },
+			{ t: 0, b: 3, l: 18, r: 18, val: 'Ghi chú' },
+		]
+		const filterData = this.lstCtietBcao.map(item => {
+			const { id, maDtaiDan, khvonphiLapThamDinhCtietId, level, ...rest } = item;
+			return rest;
+		})
+		filterData.forEach(item => {
+			const level = item.stt.split('.').length - 2;
+			item.stt = this.getChiMuc(item.stt);
+			for (let i = 0; i < level; i++) {
+				item.stt = '   ' + item.stt;
+			}
+		})
+
+		const workbook = XLSX.utils.book_new();
+		const worksheet = this.genFunc.initExcel(header);
+		XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: this.genFunc.coo(header[0].l, header[0].b + 1) })
+		XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
+		XLSX.writeFile(workbook, 'TT342_13.3.xlsx');
 	}
 }
 
