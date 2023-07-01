@@ -189,6 +189,12 @@ export class BieuMau138Component implements OnInit {
 			})
 		})
 
+		if (this.status.general) {
+			lstCtietBcaoTemp.forEach(item => {
+				item.giaTriThamDinh = item.namDtoan;
+			})
+		}
+
 		const request = JSON.parse(JSON.stringify(this.formDetail));
 
 		request.fileDinhKems = [];

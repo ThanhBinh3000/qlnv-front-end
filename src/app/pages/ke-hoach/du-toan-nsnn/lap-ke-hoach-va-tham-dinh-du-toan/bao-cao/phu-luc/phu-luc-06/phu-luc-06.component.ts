@@ -180,7 +180,7 @@ export class PhuLuc06Component implements OnInit {
             })
         })
 
-        if (!this.status.viewAppVal) {
+        if (this.status.general) {
             lstCtietBcaoTemp.forEach(item => {
                 item.tdinhSluong = item.dtoanDnghiSluong;
                 item.tdinhTtien = item.thanhTien;
