@@ -54,6 +54,8 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
   openPhieuXk = false;
   idBangKe: number = 0;
   openBangKe = false;
+  flagInit: Boolean = false;
+
 
   constructor(
     httpClient: HttpClient,
@@ -138,6 +140,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
       await this.spinner.hide();
     } finally {
       await this.spinner.hide();
+      this.flagInit = true;
     }
   }
 
@@ -226,6 +229,8 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
       soHdong: data.soHd,
       idHdong: data.idHd,
       ngayKyHd: data.ngayKyHd,
+      loaiVthh: data.loaiVthh,
+      cloaiVthh: data.cloaiVthh,
 
     });
     let dataChiCuc = data.children.filter(item => item.maDvi == this.userInfo.MA_DVI);
@@ -297,7 +302,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
 
 
   changeSoQd(event) {
-    if (event && event !== this.formData.value.soQdGiaoNvXh) {
+    if (this.flagInit && event && event !== this.formData.value.soQdGiaoNvXh) {
       this.formData.patchValue({
         maDiemKho: null,
         tenDiemKho: null,
@@ -319,7 +324,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
   }
 
   changeDd(event) {
-    if (event && event !== this.formData.value.maDiemKho) {
+    if (this.flagInit && event && event !== this.formData.value.maDiemKho) {
       this.dataTable.forEach(s => {
           s.slXuat = null;
           s.soBkCanHang = null;
@@ -425,17 +430,19 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
   }
 
   slChenhLech() {
-    if (this.formData.value.slThucTeCon > 0 && this.formData.value.slConLai > 0) {
-      if (this.formData.value.slThucTeCon - this.formData.value.slConLai > 0) {
-        this.formData.patchValue({
-          slThua: Math.abs(this.formData.value.slThucTeCon - this.formData.value.slConLai),
-          slThieu: null
-        })
-      } else {
-        this.formData.patchValue({
-          slThieu: Math.abs(this.formData.value.slThucTeCon - this.formData.value.slConLai),
-          slThua: null
-        })
+    if (this.flagInit) {
+      if (this.formData.value.slThucTeCon > 0 && this.formData.value.slConLai > 0) {
+        if (this.formData.value.slThucTeCon - this.formData.value.slConLai > 0) {
+          this.formData.patchValue({
+            slThua: Math.abs(this.formData.value.slThucTeCon - this.formData.value.slConLai),
+            slThieu: null
+          })
+        } else {
+          this.formData.patchValue({
+            slThieu: Math.abs(this.formData.value.slThucTeCon - this.formData.value.slConLai),
+            slThua: null
+          })
+        }
       }
     }
   }
