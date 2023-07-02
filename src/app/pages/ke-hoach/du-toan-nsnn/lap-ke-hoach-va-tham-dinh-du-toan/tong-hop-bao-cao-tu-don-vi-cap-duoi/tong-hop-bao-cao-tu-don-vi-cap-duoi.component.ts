@@ -211,25 +211,25 @@ export class TongHopBaoCaoTuDonViCapDuoiComponent implements OnInit {
                         this.notification.warning(MESSAGE.WARNING, "Trạng thái bản ghi không được phép sửa");
                         return;
                     }
-                    this.lapThamDinhService.suaBcao(request).toPromise().then(
-                        async (data) => {
-                            if (data.statusCode == 0) {
-                                this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-                                const obj = {
-                                    ...res,
-                                    id: data.data.id,
-                                    tabSelected: 'baocao',
-                                    isSynthetic: true,
-                                }
-                                this.dataChange.emit(obj);
-                            } else {
-                                this.notification.error(MESSAGE.ERROR, data?.msg);
-                            }
-                        },
-                        (err) => {
-                            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-                        },
-                    );
+                    // this.lapThamDinhService.suaBcao(request).toPromise().then(
+                    //     async (data) => {
+                    //         if (data.statusCode == 0) {
+                    //             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+                    //             const obj = {
+                    //                 ...res,
+                    //                 id: data.data.id,
+                    //                 tabSelected: 'baocao',
+                    //                 isSynthetic: true,
+                    //             }
+                    //             this.dataChange.emit(obj);
+                    //         } else {
+                    //             this.notification.error(MESSAGE.ERROR, data?.msg);
+                    //         }
+                    //     },
+                    //     (err) => {
+                    //         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+                    //     },
+                    // );
                 } else {
                     let check = false;
                     const requestReport = {

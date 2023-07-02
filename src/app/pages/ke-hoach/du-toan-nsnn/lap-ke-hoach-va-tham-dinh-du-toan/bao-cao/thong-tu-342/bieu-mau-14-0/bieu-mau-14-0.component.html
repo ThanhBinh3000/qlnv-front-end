@@ -253,10 +253,14 @@
 	<div class="modal-footer">
 		<div class="nut">
 			<div class="cantrai">
-				<button type="button" class="btn btn-main" *ngIf="status.print" (click)="genFunc.doPrint()">
+				<button type="button" class="btn btn-main" *ngIf="status.export" (click)="exportToExcel()">
+					<span nz-icon nzType="export" nzTheme="outline" style="margin-right: 5px;"></span>
+					<span>Xuất</span>
+				</button>
+				<!-- <button type="button" class="btn btn-main" *ngIf="status.print" (click)="genFunc.doPrint()">
 					<i nz-icon nzType="printer" nzTheme="outline"></i>
 					<span>In</span>
-				</button>
+				</button> -->
 				<button type="button" class="btn btn-sub" (click)="save('5', null)" *ngIf="status.finish">
 					<i nz-icon nzType="check" nzTheme="outline"></i>
 					<span>Hoàn tất nhập liệu</span>
@@ -271,10 +275,6 @@
 				</button>
 			</div>
 			<div class="canphai">
-				<button type="button" class="btn btn-do" (click)="exportToExcel()">
-					<i nz-icon nzType="close" nzTheme="outline"></i>
-					<span>Export</span>
-				</button>
 				<button type="button" class="btn btn-do" (click)="tuChoi('0')" *ngIf="status.ok">
 					<i nz-icon nzType="close" nzTheme="outline"></i>
 					<span>Không chấp nhận</span>
