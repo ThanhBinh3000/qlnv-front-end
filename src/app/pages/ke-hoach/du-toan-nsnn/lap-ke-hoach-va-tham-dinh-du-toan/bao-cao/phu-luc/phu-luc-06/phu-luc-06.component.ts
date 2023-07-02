@@ -13,9 +13,11 @@ import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import * as uuid from 'uuid';
 import { BtnStatus, Doc, Form } from '../../../lap-ke-hoach-va-tham-dinh-du-toan.class';
+import * as XLSX from 'xlsx'
 
 export class ItemData {
     id: any;
+    khvonphiLapThamDinhCtietId: string;
     stt: string;
     tenTaiSan: string;
     maTaiSan: string;
@@ -356,4 +358,44 @@ export class PhuLuc06Component implements OnInit {
         let doc: any = this.formDetail.lstFiles.find(element => element?.id == id);
         await this.fileFunc.downloadFile(file, doc);
     }
+
+    exportToExcel() {
+        const header = [
+            { t: 0, b: 1, l: 0, r: 14, val: null },
+            { t: 0, b: 1, l: 0, r: 0, val: 'STT' },
+            { t: 0, b: 1, l: 1, r: 1, val: 'Tên tài sản (theo danh mục được phê duyệt tại Quyết định số 149/QĐ-TCDT)' },
+            { t: 0, b: 0, l: 2, r: 5, val: 'Số lượng tài sản; MM, thiết bị hiện có' },
+            { t: 1, b: 1, l: 2, r: 2, val: 'Đến thời điểm báo cáo (trên phần mềm QLTS) ' },
+            { t: 1, b: 1, l: 3, r: 3, val: 'Đã nhận chưa có QĐ điều chuyển' },
+            { t: 1, b: 1, l: 4, r: 4, val: 'Được phê duyệt mua sắm năm ' + (this.namBcao - 1).toString() },
+            { t: 1, b: 1, l: 5, r: 5, val: 'Tổng cộng' },
+            { t: 0, b: 1, l: 6, r: 6, val: 'Tiêu chuẩn định mức tối đa được trang bị' },
+            { t: 0, b: 0, l: 7, r: 8, val: 'Dự toán đề nghị trang bị năm ' + this.namBcao.toString() },
+            { t: 1, b: 1, l: 7, r: 7, val: 'Số lượng' },
+            { t: 1, b: 1, l: 8, r: 8, val: 'Mức giá' },
+            { t: 0, b: 1, l: 9, r: 9, val: 'Thành tiền' },
+            { t: 0, b: 0, l: 10, r: 11, val: 'Thẩm định' },
+            { t: 1, b: 1, l: 10, r: 10, val: 'Số lượng' },
+            { t: 1, b: 1, l: 11, r: 11, val: 'Thành tiền' },
+            { t: 0, b: 1, l: 12, r: 12, val: 'Chênh lệch giữa thẩm định của DVCT và nhu cầu của DVCD' },
+            { t: 0, b: 1, l: 13, r: 13, val: 'Thuyết minh' },
+            { t: 0, b: 1, l: 14, r: 14, val: 'Ý kiến của đơn vị cấp trên' },
+        ]
+        const filterData = this.lstCtietBcao.map(item => {
+            const { id, maTaiSan, khvonphiLapThamDinhCtietId, level, ...rest } = item;
+            return rest;
+        })
+        let ind = 1;
+        filterData.forEach(item => {
+            item.stt = ind.toString();
+            ind += 1;
+        })
+
+        const workbook = XLSX.utils.book_new();
+        const worksheet = this.genFunc.initExcel(header);
+        XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: this.genFunc.coo(header[0].l, header[0].b + 1) })
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
+        XLSX.writeFile(workbook, 'Phu_luc_VI.xlsx');
+    }
+
 }
