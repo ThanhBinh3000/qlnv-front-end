@@ -12,9 +12,11 @@ import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.se
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
 import * as uuid from "uuid";
 import { BtnStatus, Doc, Form } from '../../../lap-ke-hoach-va-tham-dinh-du-toan.class';
+import * as XLSX from 'xlsx'
 
 export class ItemData {
     id: string;
+    khvonphiLapThamDinhCtietId: string;
     stt: string;
     maDanhMucDa: string;
     maDuAn: string;
@@ -280,7 +282,7 @@ export class PhuLucDuAnComponent implements OnInit {
             case 4:
                 return '-';
             default:
-                return null;
+                return '';
         }
     }
 
@@ -408,5 +410,75 @@ export class PhuLucDuAnComponent implements OnInit {
         let file: any = this.listFile.find(element => element?.lastModified.toString() == id);
         let doc: any = this.formDetail.lstFiles.find(element => element?.id == id);
         await this.fileFunc.downloadFile(file, doc);
+    }
+
+    exportToExcel() {
+        const header = [
+            { t: 0, b: 4, l: 0, r: 31, val: null },
+            { t: 0, b: 4, l: 0, r: 0, val: 'STT' },
+            { t: 0, b: 4, l: 1, r: 1, val: 'Danh mục dự án' },
+            { t: 0, b: 4, l: 2, r: 2, val: 'Mã dự án' },
+            { t: 0, b: 4, l: 3, r: 3, val: 'Nhóm dự án' },
+            { t: 0, b: 4, l: 4, r: 4, val: 'Địa điểm XD' },
+            { t: 0, b: 4, l: 5, r: 5, val: 'Năng lực thiết kế' },
+            { t: 0, b: 4, l: 6, r: 6, val: 'Thời gian KC-HT' },
+            { t: 0, b: 0, l: 7, r: 9, val: 'Quyết định đầu tư' },
+            { t: 1, b: 4, l: 7, r: 7, val: 'Số quyết định ngày, tháng, năm ban hành' },
+            { t: 1, b: 1, l: 8, r: 9, val: 'TMĐT' },
+            { t: 2, b: 4, l: 8, r: 8, val: 'Tổng số (tất cả các nguồn vốn)' },
+            { t: 2, b: 4, l: 9, r: 9, val: 'Trong đó: NSTW' },
+            { t: 0, b: 0, l: 10, r: 15, val: 'Năm ' + (this.namBcao - 1).toString() },
+            { t: 1, b: 1, l: 10, r: 11, val: 'Kế hoạch' },
+            { t: 2, b: 4, l: 10, r: 10, val: 'Tổng số (tất cả các nguồn vốn)' },
+            { t: 2, b: 4, l: 11, r: 11, val: 'Trong đó: NSTW' },
+            { t: 1, b: 1, l: 12, r: 13, val: 'Ước giải ngân từ 1/1 đến 30/9' },
+            { t: 2, b: 4, l: 12, r: 12, val: 'Tổng số (tất cả các nguồn vốn)' },
+            { t: 2, b: 4, l: 13, r: 13, val: 'Trong đó: NSTW' },
+            { t: 1, b: 1, l: 14, r: 15, val: 'Ước giải ngân từ 1/1 đến 31/12' },
+            { t: 2, b: 4, l: 14, r: 14, val: 'Tổng số (tất cả các nguồn vốn)' },
+            { t: 2, b: 4, l: 15, r: 15, val: 'Trong đó: NSTW' },
+            { t: 0, b: 1, l: 16, r: 17, val: 'Đã bố trí đến hết KH năm ' + (this.namBcao - 1).toString() },
+            { t: 2, b: 4, l: 16, r: 16, val: 'Tổng số (tất cả các nguồn vốn)' },
+            { t: 2, b: 4, l: 17, r: 17, val: 'Trong đó: NSTW' },
+            { t: 0, b: 1, l: 18, r: 25, val: 'KH đầu tư trung hạn vốn NSTW giai đoạn ' + (this.namBcao - 2).toString() + ' - ' + (this.namBcao + 2).toString() },
+            { t: 2, b: 2, l: 18, r: 21, val: 'Giai đoạn ' + (this.namBcao - 2).toString() + ' - ' + (this.namBcao + 2).toString() },
+            { t: 3, b: 4, l: 18, r: 18, val: 'Tổng số' },
+            { t: 3, b: 3, l: 19, r: 21, val: 'Trong đó' },
+            { t: 4, b: 4, l: 19, r: 19, val: 'Thu hồi các khoản vốn ứng trước' },
+            { t: 4, b: 4, l: 20, r: 20, val: 'Thanh toán nợ XDCB' },
+            { t: 4, b: 4, l: 21, r: 21, val: 'Chuẩn bị đầu tư' },
+            { t: 2, b: 2, l: 22, r: 25, val: 'Trong đó: đã giao kế hoạch các năm ' + (this.namBcao - 2).toString() + ', ' + (this.namBcao - 1).toString() },
+            { t: 3, b: 4, l: 22, r: 22, val: 'Tổng số' },
+            { t: 3, b: 3, l: 23, r: 25, val: 'Trong đó' },
+            { t: 4, b: 4, l: 23, r: 23, val: 'Thu hồi các khoản vốn ứng trước' },
+            { t: 4, b: 4, l: 24, r: 24, val: 'Thanh toán nợ XDCB' },
+            { t: 4, b: 4, l: 25, r: 25, val: 'Chuẩn bị đầu tư' },
+            { t: 0, b: 1, l: 26, r: 30, val: 'Nhu cầu kế hoạch năm kế hoạch ' + this.namBcao.toString() },
+            { t: 2, b: 4, l: 26, r: 26, val: 'Tổng số (tất cả các nguồn vốn)' },
+            { t: 2, b: 2, l: 27, r: 30, val: 'Trong đó: NSTW' },
+            { t: 3, b: 4, l: 27, r: 27, val: 'Tổng số' },
+            { t: 3, b: 3, l: 28, r: 30, val: 'Trong đó' },
+            { t: 4, b: 4, l: 28, r: 28, val: 'Thu hồi các khoản vốn ứng trước' },
+            { t: 4, b: 4, l: 29, r: 29, val: 'Thanh toán nợ XDCB' },
+            { t: 4, b: 4, l: 30, r: 30, val: 'Chuẩn bị đầu tư' },
+            { t: 0, b: 4, l: 31, r: 31, val: 'Ghi chú' },
+        ]
+        const filterData = this.lstCtietBcao.map(item => {
+            const { id, maDanhMucDa, khvonphiLapThamDinhCtietId, level, ...rest } = item;
+            return rest;
+        })
+        filterData.forEach(item => {
+            const level = item.stt.split('.').length - 2;
+            item.stt = this.getChiMuc(item.stt);
+            for (let i = 0; i < level; i++) {
+                item.stt = '   ' + item.stt;
+            }
+        })
+
+        const workbook = XLSX.utils.book_new();
+        const worksheet = this.genFunc.initExcel(header);
+        XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: this.genFunc.coo(header[0].l, header[0].b + 1) })
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
+        XLSX.writeFile(workbook, 'Phu_luc_DA.xlsx');
     }
 }

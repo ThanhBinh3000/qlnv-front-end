@@ -12,6 +12,7 @@ import * as uuid from "uuid";
 import { BtnStatus, Doc, Form } from '../../../../lap-ke-hoach-va-tham-dinh-du-toan.class';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { FileFunction, GeneralFunction, NumberFunction, TableFunction } from 'src/app/Utility/func';
+import * as XLSX from 'xlsx';
 
 export class UnitItem {
     id: string;
@@ -399,5 +400,80 @@ export class TongHopComponent implements OnInit {
         let file: any = this.listFile.find(element => element?.lastModified.toString() == id);
         let doc: any = this.formDetail.lstFiles.find(element => element?.id == id);
         await this.fileFunc.downloadFile(file, doc);
+    }
+
+    exportToExcel() {
+        const header = [
+            { t: 0, b: 3 + this.lstCtietBcao.length, l: 0, r: 12 + 10 * this.childUnit.length, val: null },
+            { t: 1, b: 3, l: 0, r: 0, val: 'STT' },
+            { t: 1, b: 3, l: 1, r: 1, val: 'Danh mục hàng DTQG tham gia bảo hiểm' },
+            { t: 1, b: 3, l: 2, r: 2, val: 'Đơn vị tính' },
+            { t: 1, b: 1, l: 3, r: 5, val: 'Tổng số lượng hàng trong kho của các đơn vị cấp dưới' },
+            { t: 2, b: 3, l: 3, r: 3, val: 'Kho từ 5000m3 trở lên' },
+            { t: 2, b: 3, l: 4, r: 4, val: 'Kho dưới 5000m3' },
+            { t: 2, b: 3, l: 5, r: 5, val: 'Tổng SL' },
+            { t: 1, b: 1, l: 6, r: 12, val: 'Tổng giá trị hàng trong kho của các đơn vị cấp dưới' },
+            { t: 2, b: 2, l: 6, r: 8, val: 'Kho từ 5000 m3 trở lên' },
+            { t: 3, b: 3, l: 6, r: 6, val: 'Giá trị' },
+            { t: 3, b: 3, l: 7, r: 7, val: 'Tỷ lệ bảo hiểm' },
+            { t: 3, b: 3, l: 8, r: 8, val: 'Giá trị bảo hiểm' },
+            { t: 2, b: 2, l: 9, r: 11, val: 'Kho dưới 5000 m3' },
+            { t: 3, b: 3, l: 9, r: 9, val: 'Giá trị' },
+            { t: 3, b: 3, l: 10, r: 10, val: 'Tỷ lệ bảo hiểm' },
+            { t: 3, b: 3, l: 11, r: 11, val: 'Giá trị bảo hiểm' },
+            { t: 2, b: 3, l: 12, r: 12, val: 'Tổng GT' },
+        ]
+        this.childUnit.forEach((item, index) => {
+            const left = 12 + index * 10;
+            header.push({ t: 0, b: 0, l: left + 1, r: left + 10, val: item.tenDvi })
+            header.push({ t: 1, b: 1, l: left + 1, r: left + 3, val: 'Tổng số lượng hàng trong kho của các đơn vị cấp dưới' })
+            header.push({ t: 2, b: 3, l: left + 1, r: left + 1, val: 'Kho từ 5000m3 trở lên' })
+            header.push({ t: 2, b: 3, l: left + 2, r: left + 2, val: 'Kho dưới 5000m3' })
+            header.push({ t: 2, b: 3, l: left + 3, r: left + 3, val: 'Tổng SL' })
+            header.push({ t: 1, b: 1, l: left + 4, r: left + 10, val: 'Tổng giá trị hàng trong kho của các đơn vị cấp dưới' })
+            header.push({ t: 2, b: 2, l: left + 4, r: left + 6, val: 'Kho từ 5000 m3 trở lên' })
+            header.push({ t: 3, b: 3, l: left + 4, r: left + 4, val: 'Giá trị' })
+            header.push({ t: 3, b: 3, l: left + 5, r: left + 5, val: 'Tỷ lệ bảo hiểm' })
+            header.push({ t: 3, b: 3, l: left + 6, r: left + 6, val: 'Giá trị bảo hiểm' })
+            header.push({ t: 2, b: 2, l: left + 7, r: left + 9, val: 'Kho dưới 5000 m3' })
+            header.push({ t: 3, b: 3, l: left + 7, r: left + 7, val: 'Giá trị' })
+            header.push({ t: 3, b: 3, l: left + 8, r: left + 8, val: 'Tỷ lệ bảo hiểm' })
+            header.push({ t: 3, b: 3, l: left + 9, r: left + 9, val: 'Giá trị bảo hiểm' })
+            header.push({ t: 2, b: 3, l: left + 10, r: left + 10, val: 'Tổng GT' })
+        })
+        const headerBot = 3;
+        this.lstCtietBcao.forEach((item, index) => {
+            const row = headerBot + index + 1;
+            header.push({ t: row, b: row, l: 0, r: 0, val: this.getChiMuc(item.stt) })
+            header.push({ t: row, b: row, l: 1, r: 1, val: item.tenDanhMuc })
+            header.push({ t: row, b: row, l: 2, r: 2, val: item.dviTinh })
+            header.push({ t: row, b: row, l: 3, r: 3, val: item.slTren?.toString() })
+            header.push({ t: row, b: row, l: 4, r: 4, val: item.slDuoi?.toString() })
+            header.push({ t: row, b: row, l: 5, r: 5, val: item.slTong?.toString() })
+            header.push({ t: row, b: row, l: 6, r: 6, val: item.gtTrenGt?.toString() })
+            header.push({ t: row, b: row, l: 7, r: 7, val: item.gtTrenTyLeBh?.toString() })
+            header.push({ t: row, b: row, l: 8, r: 8, val: item.gtTrenGtBh?.toString() })
+            header.push({ t: row, b: row, l: 9, r: 9, val: item.gtDuoiGt?.toString() })
+            header.push({ t: row, b: row, l: 10, r: 10, val: item.gtDuoiTyLeBh?.toString() })
+            header.push({ t: row, b: row, l: 11, r: 11, val: item.gtDuoiGtBh?.toString() })
+            header.push({ t: row, b: row, l: 12, r: 12, val: item.tong?.toString() })
+            item.lstDviCapDuoi.forEach((e, ind) => {
+                const col = 12 + ind * 10;
+                header.push({ t: row, b: row, l: col + 1, r: col + 1, val: e.slTren?.toString() })
+                header.push({ t: row, b: row, l: col + 2, r: col + 2, val: e.slDuoi?.toString() })
+                header.push({ t: row, b: row, l: col + 3, r: col + 3, val: e.slTong?.toString() })
+                header.push({ t: row, b: row, l: col + 4, r: col + 4, val: e.gtTrenGt?.toString() })
+                header.push({ t: row, b: row, l: col + 5, r: col + 5, val: e.gtTrenTyLeBh?.toString() })
+                header.push({ t: row, b: row, l: col + 6, r: col + 6, val: e.gtTrenGtBh?.toString() })
+                header.push({ t: row, b: row, l: col + 7, r: col + 7, val: e.gtDuoiGt?.toString() })
+                header.push({ t: row, b: row, l: col + 8, r: col + 8, val: e.gtDuoiTyLeBh?.toString() })
+                header.push({ t: row, b: row, l: col + 9, r: col + 9, val: e.gtDuoiGtBh?.toString() })
+                header.push({ t: row, b: row, l: col + 10, r: col + 10, val: e.tong?.toString() })
+            })
+        })
+        const workbook = XLSX.utils.book_new();
+        const worksheet = this.genFunc.initExcel(header);
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
+        XLSX.writeFile(workbook, 'bao_hiem_tong_hop.xlsx');
     }
 }

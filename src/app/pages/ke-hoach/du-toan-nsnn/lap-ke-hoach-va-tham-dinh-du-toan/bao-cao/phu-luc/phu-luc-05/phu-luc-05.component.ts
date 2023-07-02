@@ -13,9 +13,11 @@ import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.se
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
 import * as uuid from "uuid";
 import { BtnStatus, Doc, Form } from '../../../lap-ke-hoach-va-tham-dinh-du-toan.class';
+import * as XLSX from 'xlsx'
 
 export class ItemData {
 	id: string;
+	khvonphiLapThamDinhCtietId: string;
 	stt: string;
 	level: number;
 	maCongTrinh: string;
@@ -278,7 +280,7 @@ export class PhuLuc05Component implements OnInit {
 			case 3:
 				return chiSo[n];
 			default:
-				return null;
+				return '';
 
 		}
 	}
@@ -404,6 +406,52 @@ export class PhuLuc05Component implements OnInit {
 		let file: any = this.listFile.find(element => element?.lastModified.toString() == id);
 		let doc: any = this.formDetail.lstFiles.find(element => element?.id == id);
 		await this.fileFunc.downloadFile(file, doc);
+	}
+
+	exportToExcel() {
+		const header = [
+			{ t: 0, b: 1, l: 0, r: 20, val: null },
+			{ t: 0, b: 1, l: 0, r: 0, val: 'STT' },
+			{ t: 0, b: 1, l: 1, r: 1, val: 'Tên công trình' },
+			{ t: 0, b: 1, l: 2, r: 2, val: 'Đơn vị cấp dưới' },
+			{ t: 0, b: 1, l: 3, r: 3, val: 'Địa điểm xây dựng' },
+			{ t: 0, b: 1, l: 4, r: 4, val: 'Lý do sửa chữa' },
+			{ t: 0, b: 1, l: 5, r: 5, val: 'Mục tiêu sửa chữa' },
+			{ t: 0, b: 1, l: 6, r: 6, val: 'Khối lượng sửa chữa' },
+			{ t: 0, b: 1, l: 7, r: 7, val: 'Thời gian thực hiện' },
+			{ t: 0, b: 1, l: 8, r: 8, val: 'Giá trị công trình (=Tổng mức đầu tư TMDT)' },
+			{ t: 0, b: 0, l: 9, r: 10, val: 'Quyết định phê duyệt Báo cáo Kinh tế kỹ thuật hoặc Khái toán Tổng mức đầu tư' },
+			{ t: 1, b: 1, l: 9, r: 9, val: 'Số ngày, tháng, năm ban hành' },
+			{ t: 1, b: 1, l: 10, r: 10, val: 'Giá trị dự toán hoặc khái toán Tổng mức đầu tư' },
+			{ t: 0, b: 0, l: 11, r: 12, val: 'Quyết định phê duyệt quyết toán công trình hoàn thành' },
+			{ t: 1, b: 1, l: 11, r: 11, val: 'Số ngày, tháng, năm ban hành' },
+			{ t: 1, b: 1, l: 12, r: 12, val: 'Giá trị quyết toán' },
+			{ t: 0, b: 1, l: 13, r: 13, val: 'Lũy kế cấp vốn đến ' + (this.namBcao - 1).toString() },
+			{ t: 0, b: 1, l: 14, r: 14, val: 'Kế hoạch vốn năm ' + this.namBcao.toString() },
+			{ t: 0, b: 1, l: 15, r: 15, val: 'Thẩm định' },
+			{ t: 0, b: 1, l: 16, r: 16, val: 'Chênh lệch giữa thẩm định của DVCT và nhu cầu của DVCD' },
+			{ t: 0, b: 1, l: 17, r: 17, val: 'Kế hoạch năm ' + (this.namBcao + 1).toString() },
+			{ t: 0, b: 1, l: 18, r: 18, val: 'Kế hoạch năm ' + (this.namBcao + 2).toString() },
+			{ t: 0, b: 1, l: 19, r: 19, val: 'Ghi chú' },
+			{ t: 0, b: 1, l: 20, r: 20, val: 'Ý kiến của DVCT' },
+		]
+		const filterData = this.lstCtietBcao.map(item => {
+			const { id, maCongTrinh, khvonphiLapThamDinhCtietId, level, ...rest } = item;
+			return rest;
+		})
+		filterData.forEach(item => {
+			const level = item.stt.split('.').length - 2;
+			item.stt = this.getChiMuc(item.stt);
+			for (let i = 0; i < level; i++) {
+				item.stt = '   ' + item.stt;
+			}
+		})
+
+		const workbook = XLSX.utils.book_new();
+		const worksheet = this.genFunc.initExcel(header);
+		XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: this.genFunc.coo(header[0].l, header[0].b + 1) })
+		XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
+		XLSX.writeFile(workbook, 'Phu_luc_V.xlsx');
 	}
 }
 
