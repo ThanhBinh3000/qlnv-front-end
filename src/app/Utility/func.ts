@@ -17,7 +17,7 @@ export class GeneralFunction {
         private datePipe: DatePipe,
     ) { }
     statusClass(status) {
-        if (Utils.statusSave.includes(status)) {
+        if ([Utils.TT_BC_1, Utils.TT_BC_3, Utils.TT_BC_5, Utils.TT_BC_8].includes(status)) {
             return 'du-thao-va-lanh-dao-duyet';
         } else {
             return 'da-ban-hanh';

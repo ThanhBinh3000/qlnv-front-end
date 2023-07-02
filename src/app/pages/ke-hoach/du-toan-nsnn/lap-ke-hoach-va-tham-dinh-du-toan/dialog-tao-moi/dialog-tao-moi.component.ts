@@ -78,7 +78,7 @@ export class DialogTaoMoiComponent implements OnInit {
                     } else {
                         let lstBcao = data.data.content;
                         lstBcao.sort((a, b) => {
-                            if (a.lan > b.lan) {
+                            if (a.lan < b.lan) {
                                 return 1;
                             }
                             return -1

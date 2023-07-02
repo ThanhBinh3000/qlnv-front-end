@@ -70,6 +70,7 @@ export class BtnStatus {
     print?: boolean = true;                            // trang thai cua nut in
     ok?: boolean = true;                               // trang thai cua nut chap nhan bieu mau
     finish?: boolean = true;                           // trang thai cua nut hoan tat nhap lieu
+    export: boolean = true;
     viewAppVal?: boolean = true;                       // quyen xem tham dinh
     editAppVal?: boolean = true;                       // quyen sua tham dinh
 }

@@ -85,7 +85,7 @@ export class Utils {
   //ok, not ok
   public static statusOK = [Utils.TT_BC_2, Utils.TT_BC_4, Utils.TT_BC_6, Utils.TT_BC_7];
   //export
-  public static statusExport = [Utils.TT_BC_6, Utils.TT_BC_7, Utils.TT_BC_9];
+  public static statusExport = [Utils.TT_BC_9];
   public static statusAppraisal = [Utils.TT_BC_6, Utils.TT_BC_7, Utils.TT_BC_8, Utils.TT_BC_9];
 
   // lay ten trang thai theo ma trang thai

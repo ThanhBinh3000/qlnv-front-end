@@ -243,6 +243,7 @@ export class BaoCaoComponent implements OnInit {
         const checkApprove = isSynthetic ? this.userService.isAccessPermisson(LTD.PHE_DUYET_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(LTD.PHE_DUYET_REPORT);
         const checkAccept = this.userService.isAccessPermisson(LTD.TIEP_NHAN_REPORT);
         const checkPrint = isSynthetic ? this.userService.isAccessPermisson(LTD.PRINT_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(LTD.PRINT_REPORT);
+        const checkExport = isSynthetic ? this.userService.isAccessPermisson(LTD.EXPORT_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(LTD.EXPORT_REPORT)
 
         this.status.general = Utils.statusSave.includes(this.baoCao.trangThai) && checkSave;
         this.status.new = ([Utils.TT_BC_3, Utils.TT_BC_5, Utils.TT_BC_8].includes(this.baoCao.trangThai)) && this.userService.isAccessPermisson(LTD.ADD_REPORT) && isChild;
@@ -253,6 +254,7 @@ export class BaoCaoComponent implements OnInit {
         this.status.approve = Utils.statusPheDuyet.includes(this.baoCao.trangThai) && checkApprove && isChild;
         this.status.accept = Utils.statusTiepNhan.includes(this.baoCao.trangThai) && checkAccept && isParent;
         this.status.print = Utils.statusPrint.includes(this.baoCao.trangThai) && checkPrint && isChild;
+        this.status.export = Utils.statusExport.includes(this.baoCao.trangThai) && checkExport && isChild;
         this.status.ok = this.status.accept || this.status.approve || this.status.pass
         this.status.finish = this.status.general;
         this.status.editAppVal = this.status.accept;
@@ -1114,6 +1116,10 @@ export class BaoCaoComponent implements OnInit {
                         const appendix = this.listAppendix.find(e => e.id == item.maBieuMau);
                         item.tenPl = appendix.tenPl;
                         item.tenDm = getName(this.baoCao.namBcao, appendix.tenDm);
+                        item.id = uuid.v4() + 'FE';
+                        item.lstCtietLapThamDinhs?.forEach(e => {
+                            e.id = null;
+                        })
                     })
                     this.notification.success(MESSAGE.SUCCESS, 'Khôi phục thành công.');
                 } else {
@@ -1132,12 +1138,12 @@ export class BaoCaoComponent implements OnInit {
             ...this.baoCao,
             tongHopTuIds
         }));
-        this.baoCao.lstBcaoDviTrucThuocs.forEach(item => {
+        this.baoCao.lstBcaoDviTrucThuocs?.forEach(item => {
             baoCaoTemp.tongHopTuIds.push(item.id);
         })
 
         baoCaoTemp.fileDinhKems = [];
-        baoCaoTemp.lstFiles.forEach(item => {
+        baoCaoTemp.lstFiles?.forEach(item => {
             baoCaoTemp.fileDinhKems.push({
                 fileName: item.fileName,
                 fileSize: item.fileSize,
@@ -1148,10 +1154,10 @@ export class BaoCaoComponent implements OnInit {
         baoCaoTemp.congVan.id = null;
 
         // replace nhung ban ghi dc them moi id thanh null
-        baoCaoTemp.lstLapThamDinhs.forEach(item => {
+        baoCaoTemp.lstLapThamDinhs?.forEach(item => {
             item.id = null;
             item.fileDinhKems = [];
-            item.lstFiles.forEach(e => {
+            item.lstFiles?.forEach(e => {
                 e.fileDinhKems.push({
                     fileName: e.fileName,
                     fileSize: e.fileSize,
@@ -1159,8 +1165,9 @@ export class BaoCaoComponent implements OnInit {
                 })
             })
             item.lstFiles = [];
-            item.lstCtietLapThamDinhs.forEach(e => {
+            item.lstCtietLapThamDinhs?.forEach(e => {
                 e.id = null;
+                e.trangThai = '3';
             })
         })
 
