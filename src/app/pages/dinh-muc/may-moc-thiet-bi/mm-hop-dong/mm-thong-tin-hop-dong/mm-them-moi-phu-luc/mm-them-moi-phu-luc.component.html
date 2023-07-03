@@ -205,10 +205,10 @@
                 <td>{{lv2.soLuongHoanThanh}}</td>
                 <td class="text-center"  *ngIf="itemRowEdit != ((i + 1) + '.' + (i1 + 1) + '.' + (i2 + 1))">
                   <a (click)="editRow( i, i1, i2, lv2.soLuong )">
-                    <i class="fa fa-pencil"></i>
+                    <i class="fa fa-pencil" title="Sửa"></i>
                   </a>
                   <a (click)="deleteItem(lv2)">
-                    <i class="fa fa-trash-o do"></i>
+                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                   </a>
                 </td>
                 <td class="text-center"  *ngIf="itemRowEdit == ((i + 1) + '.' + (i1 + 1) + '.' + (i2 + 1))">

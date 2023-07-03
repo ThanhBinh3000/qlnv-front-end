@@ -200,10 +200,10 @@
                             <i class="icon htvbdh_tcdt_import"></i>
                         </a>
                         <a>
-                            <i class="fa fa-pencil"></i>
+                            <i class="fa fa-pencil" title="Sửa"></i>
                         </a>
                         <a>
-                            <i class="fa fa-trash-o do"></i>
+                            <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                         </a>
                     </td>
                 </tr>
@@ -238,11 +238,11 @@
                     <td class="text-left">
                         <a *ngIf="formData.value.id > 0 && item.id && item.trangThai == STATUS.DA_KY "
                             (click)="redirectToBienBan(false,item)">
-                            <i class="fa fa-eye"></i>
+                            <i class="fa fa-eye" title="Xem chi tiết"></i>
                         </a>
                         <a *ngIf="formData.value.id > 0 && item.trangThai != STATUS.DA_KY"
                             (click)="redirectToBienBan(false,item)">
-                            <i class="fa fa-pencil"></i>
+                            <i class="fa fa-pencil" title="Sửa"></i>
                         </a>
                         <a *ngIf="formData.value.id > 0 && item.id && item.trangThai == STATUS.DU_THAO "
                             (click)="redirectToBienBan(false,item)">

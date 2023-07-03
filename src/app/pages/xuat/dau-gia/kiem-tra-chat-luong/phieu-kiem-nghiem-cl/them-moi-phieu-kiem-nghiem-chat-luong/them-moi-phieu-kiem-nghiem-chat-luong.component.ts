@@ -25,6 +25,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
   @Input() id: number;
   @Input() loaiVthh: string;
   @Input() isView: boolean;
+  @Input() isViewOnModal: boolean;
 
   listDiaDiemXh: any[] = [];
   listHinhThucBaoQuan: any[] = [];

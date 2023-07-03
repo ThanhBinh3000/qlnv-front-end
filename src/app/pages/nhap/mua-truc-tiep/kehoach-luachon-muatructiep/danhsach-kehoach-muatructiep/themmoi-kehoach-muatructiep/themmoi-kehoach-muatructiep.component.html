@@ -354,10 +354,10 @@
                                         <i class="icon htvbdh_tcdt_import"></i>
                                     </a>
                                     <a *ngIf="!isDisable()" (click)="editRowCoSo(data.id)">
-                                        <i class="fa fa-pencil"></i>
+                                        <i class="fa fa-pencil" title="Sửa"></i>
                                     </a>
                                     <a *ngIf="!isDisable()" (click)="deleteRowCoSo(data)">
-                                        <i class="fa fa-trash-o do"></i>
+                                        <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                                     </a>
                                 </td>
                             </ng-container>
@@ -480,10 +480,10 @@
                                     <td>{{children.soLuong * children.donGiaVat * 1000 | number : '1.0-1' : 'vi_VN'}}</td>
                                     <td>
                                         <a *ngIf="!isDisable()" (click)="themMoiBangPhanLoTaiSan($event,item,i)">
-                                            <i class="fa fa-pencil"></i>
+                                            <i class="fa fa-pencil" title="Sửa"></i>
                                         </a>
                                         <a *ngIf="!isDisable()" (click)="deleteRow(i)">
-                                            <i class="fa fa-trash-o do"></i>
+                                            <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                                         </a>
                                     </td>
                                 </tr>

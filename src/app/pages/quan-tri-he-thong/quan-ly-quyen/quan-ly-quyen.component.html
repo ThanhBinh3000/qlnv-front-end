@@ -5,7 +5,7 @@
         <h3>Quản lý nhóm quyền</h3>
         <div class="buttons">
           <button type="button" class="btn btn-do">
-            <i class="fa fa-trash-o do"></i>
+            <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             <span>Xóa</span>
           </button>
           <button type="button" class="btn btn-sub">
@@ -65,13 +65,13 @@
               <td>{{data.ghiChu}}</td>
               <td>
                 <a (click)="themNhomQuyen(data)">
-                  <i class="fa fa-eye"></i>
+                  <i class="fa fa-eye" title="Xem chi tiết"></i>
                 </a>
                 <a (click)="themNhomQuyen(data)">
-                  <i class="fa fa-pencil"></i>
+                  <i class="fa fa-pencil" title="Sửa"></i>
                 </a>
                 <a (click)="xoaNhomQuyen(data)">
-                  <i class="fa fa-trash-o do"></i>
+                  <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                 </a>
               </td>
             </tr>

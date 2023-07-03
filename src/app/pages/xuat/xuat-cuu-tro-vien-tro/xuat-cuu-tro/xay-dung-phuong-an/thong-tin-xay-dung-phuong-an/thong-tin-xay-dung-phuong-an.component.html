@@ -302,10 +302,10 @@
                {{item.soLuong ?? 0|number: '1.0-1'}}</td>
              <td [ngClass]="(idDxuatDtlSelect==item.idVirtual)?'bg-selected':''">
                <a (click)="editThongTin(i)" *ngIf="!isView">
-                 <i class="fa fa-pencil"></i>
+                 <i class="fa fa-pencil" title="Sửa"></i>
                </a>
                <a (click)="deleteThongTin(i)" *ngIf="!isView">
-                 <i class="fa fa-trash-o do"></i>
+                 <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                </a>
              </td>
            </ng-container>

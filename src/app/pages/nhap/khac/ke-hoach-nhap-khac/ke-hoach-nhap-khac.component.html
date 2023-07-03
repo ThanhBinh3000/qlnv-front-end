@@ -76,7 +76,7 @@
         <ng-container
           *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_VT_DEXUAT_XOA') || userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_LT_DEXUAT_XOA')">
           <button type="button" class="btn btn-do" (click)="deleteSelect()">
-            <i class="fa fa-trash-o do"></i>
+            <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             <span>Xóa</span>
           </button>
         </ng-container>
@@ -221,16 +221,16 @@
           <td class="text-left">
             <a
               (click)="detail(data, true)">
-              <i class="fa fa-eye"></i>
+              <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
             <a (click)="detail(data, false)">
-              <i class="fa fa-pencil"></i>
+              <i class="fa fa-pencil" title="Sửa"></i>
             </a>
             <a (click)="detail(data, true)">
               <i class="icon htvbdh_tcdt_pheduyet"></i>
             </a>
             <a (click)="xoaItem(data)">
-              <i class="fa fa-trash-o do"></i>
+              <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>
         </tr>

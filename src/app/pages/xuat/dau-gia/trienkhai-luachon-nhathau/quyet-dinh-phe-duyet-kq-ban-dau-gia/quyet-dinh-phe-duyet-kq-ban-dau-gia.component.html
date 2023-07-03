@@ -174,15 +174,15 @@
                     <td>{{data.tenTrangThai}}</td>
                     <td nzRight>
                       <a (click)="redirectToChiTiet(data.id, true)">
-                        <i class="fa fa-eye"></i>
+                        <i class="fa fa-eye" title="Xem chi tiết"></i>
                       </a>
                       <a (click)="redirectToChiTiet(data.id)"
                         *ngIf="userService.isCuc() && (data.trangThai == globals.prop.NHAP_TU_CHOI_TP || data.trangThai == globals.prop.NHAP_DU_THAO|| data.trangThai == globals.prop.NHAP_TU_CHOI_LD_CUC)">
-                        <i class="fa fa-pencil"></i>
+                        <i class="fa fa-pencil" title="Sửa"></i>
                       </a>
                       <a (click)="xoaItem(data.id)"
                         *ngIf="userService.isCuc() && data.trangThai && data.trangThai == globals.prop.NHAP_DU_THAO">
-                        <i class="fa fa-trash-o do"></i>
+                        <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                       </a>
                     </td>
                   </tr>
@@ -209,7 +209,7 @@
           </nz-tabset>
           <ng-template #extraTemplate>
             <button type="button" class="btn btn-do" (click)="deleteSelect()" *ngIf="userService.isCuc()">
-              <i class="fa fa-trash-o do"></i>
+              <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
               <span>Xóa</span>
             </button>
             <button type="button" class="btn btn-sub" (click)="export()">

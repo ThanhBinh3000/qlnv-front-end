@@ -210,7 +210,7 @@
                                     <td>{{getStatusName(data.trangThai)}}</td>
                                     <td>
                                         <a (click)="viewDetail(data.id)">
-                                            <i class="fa fa-eye"></i>
+                                            <i class="fa fa-eye" title="Xem chi tiết"></i>
                                         </a>
                                     </td>
                                 </tr>
@@ -248,10 +248,10 @@
                                             <td>{{ data.fileName }}</td>
                                             <td>
                                                 <a (click)="downloadFile(data.id)">
-                                                    <i class="fa fa-eye"></i>
+                                                    <i class="fa fa-eye" title="Xem chi tiết"></i>
                                                 </a>
                                                 <a *ngIf="!status" (click)="deleteFile(data.id)">
-                                                    <i class="fa fa-trash-o do"></i>
+                                                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                                                 </a>
                                             </td>
                                         </tr>

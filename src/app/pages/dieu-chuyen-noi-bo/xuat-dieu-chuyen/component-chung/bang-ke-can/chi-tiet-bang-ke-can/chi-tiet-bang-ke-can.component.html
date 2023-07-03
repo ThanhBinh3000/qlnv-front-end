@@ -128,7 +128,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="5">
+        <!-- <div nz-col [nzSpan]="5">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Lô kho</nz-form-label>
             <nz-form-control nz-col>
@@ -147,8 +147,18 @@
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
+        </div> -->
+        <div nz-col [nzSpan]="6">
+          <nz-form-item>
+            <nz-form-label nzRequired [nzNoColon]="true"> Điểm kho</nz-form-label>
+            <nz-form-control nz-col>
+              <nz-input-group>
+                <input [readonly]="true" nz-input formControlName="tenDiemKho" readonly />
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="5">
+        <div nz-col [nzSpan]="7">
           <nz-form-item class="form-item">
             <nz-form-label [nzNoColon]="true"> Nhà kho</nz-form-label>
             <nz-form-control nz-col>
@@ -158,12 +168,12 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="5">
+        <div nz-col [nzSpan]="7">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Điểm kho</nz-form-label>
+            <nz-form-label [nzNoColon]="true">Ngăn/ Lô kho</nz-form-label>
             <nz-form-control nz-col>
               <nz-input-group>
-                <input [readonly]="true" nz-input formControlName="tenDiemKho" readonly />
+                <input [readonly]="true" nz-input formControlName="tenNganLoKho" readonly />
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -243,7 +253,7 @@
         <div nz-col [nzSpan]="4">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Đơn vị tính</nz-form-label>
-            <input nz-input formControlName="donViTinh" readonly />
+            <input nz-input formControlName="tenDonViTinh" readonly />
           </nz-form-item>
         </div>
       </div>
@@ -296,11 +306,11 @@
               <td>{{item.trongLuongCaBaoBi|number: '1.0-1' : 'vi_VN'}}</td>
               <td>
                 <a (click)="editRow(i)" *ngIf="!isView">
-                  <i class="fa fa-pencil"></i>
+                  <i class="fa fa-pencil" title="Sửa"></i>
                 </a>
                 <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn xóa ?" (nzOnConfirm)="deleteRow(i)"
                   *ngIf="!isView">
-                  <i class="fa fa-trash-o do"></i>
+                  <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                 </a>
               </td>
             </ng-container>
@@ -415,11 +425,11 @@
               <td>{{item.soLuong|number: '1.0-1' : 'vi_VN'}}</td>
               <td>
                 <a (click)="editRow(i)" *ngIf="!isView">
-                  <i class="fa fa-pencil"></i>
+                  <i class="fa fa-pencil" title="Sửa"></i>
                 </a>
                 <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn xóa ?" (nzOnConfirm)="deleteRow(i)"
                   *ngIf="!isView">
-                  <i class="fa fa-trash-o do"></i>
+                  <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                 </a>
               </td>
             </ng-container>

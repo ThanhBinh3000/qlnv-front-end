@@ -11,6 +11,7 @@ import {NzPipesModule} from "ng-zorro-antd/pipes";
 import {MainModule} from "../../../../../layout/main/main.module";
 import {ComponentsModule} from "../../../../../components/components.module";
 import { ChiTietTongHopDsVt12thComponent } from './tong-hop-danh-sach/chi-tiet-tong-hop-ds-vt12th/chi-tiet-tong-hop-ds-vt12th.component';
+import { ThongTinKeHoachXuatHangCuaCucComponent } from './ke-hoach-xuat-hang-cua-cuc/thong-tin-ke-hoach-xuat-hang-cua-cuc/thong-tin-ke-hoach-xuat-hang-cua-cuc.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { ChiTietTongHopDsVt12thComponent } from './tong-hop-danh-sach/chi-tiet-t
     KeHoachXuatHangCuaCucComponent,
     TongHopKeHoachXuatHangComponent,
     KeHoachXuatHangCuaTongCucComponent,
-    ChiTietTongHopDsVt12thComponent
+    ChiTietTongHopDsVt12thComponent,
+    ThongTinKeHoachXuatHangCuaCucComponent
   ],
   exports: [
     ToanBoDanhSachVt12ThComponent,

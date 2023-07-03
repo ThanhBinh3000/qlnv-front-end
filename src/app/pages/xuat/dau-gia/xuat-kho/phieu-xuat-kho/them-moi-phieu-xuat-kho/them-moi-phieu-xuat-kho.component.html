@@ -37,7 +37,7 @@
                 <span [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDCC ? 'status-xanh' : 'status-do'">
                     {{ formData.value.tenTrangThai }}
                 </span>
-        <span>Phiếu xuất kho</span>
+        <span> PHIẾU XUẤT KHO  </span>
       </div>
     </div>
   </div>
@@ -49,20 +49,17 @@
   <nz-card class="mg-t-16 flex-card p-lr16">
     <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
       <div nz-row [nzGutter]="[18, 6]">
-        <div nz-col nzSpan="2">
+        <div nz-col [nzSpan]="2">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true">
-              Năm kế hoạch
-            </nz-form-label>
-            <nz-form-control nz-col>
-              <nz-select formControlName="nam" [nzDisabled]="true">
-                <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text">
-                </nz-option>
+            <nz-form-label [nzNoColon]="true">Năm kế hoạch</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-select formControlName="nam" [nzDisabled]="isDisabled()">
+                <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
               </nz-select>
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="3">
+        <div nz-col nzSpan="5">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">
               Đơn vị
@@ -74,7 +71,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="3">
+        <div nz-col nzSpan="5">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">
               Mã QHNS (mã quan hệ ngân sách)
@@ -86,7 +83,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="4">
+        <div nz-col nzSpan="6">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">
               Số phiếu xuất kho
@@ -98,7 +95,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="2">
+        <div nz-col nzSpan="3">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">
               Ngày tạo phiếu
@@ -111,7 +108,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="2">
+        <div nz-col nzSpan="3">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">
               Ngày xuất kho
@@ -155,7 +152,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="2">
+        <div nz-col nzSpan="4">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true">
               Số hợp đồng
@@ -167,7 +164,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="2">
+        <div nz-col nzSpan="4">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true">
               Ngày ký hợp đồng
@@ -379,10 +376,12 @@
         </div>
         <div nz-col [nzSpan]="6">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> Loại hình nhập xuất</nz-form-label>
-            <nz-form-control>
+            <nz-form-label [nzNoColon]="true"> loại hình nhập xuất
+            </nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
               <nz-select formControlName="loaiHinhNx" [nzDisabled]="true">
-                <nz-option *ngFor="let p of listLoaiHinhNx" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+                <nz-option *ngFor="let p of listLoaiHinhNx" [nzValue]="p.ma"
+                           [nzLabel]="p.giaTri">
                 </nz-option>
               </nz-select>
             </nz-form-control>
@@ -390,8 +389,9 @@
         </div>
         <div nz-col [nzSpan]="6">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> Kiểu nhập xuất</nz-form-label>
-            <nz-form-control>
+            <nz-form-label [nzNoColon]="true"> Kiểu nhập xuất
+            </nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
               <nz-select formControlName="kieuNhapXuat" [nzDisabled]="true">
                 <nz-option *ngFor="let p of listKieuNx" [nzValue]="p.ma" [nzLabel]="p.giaTri">
                 </nz-option>

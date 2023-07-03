@@ -7,7 +7,7 @@
       GIỮA 2 CHI CỤC TRONG CÙNG MỘT CỤC
     </li>
     <li nz-menu-item (click)="selectTab(2)">
-      GIỮA 2 CUC DTNN KV
+      GIỮA 2 CỤC DTNN KV
     </li>
   </ul>
 </nz-affix>
@@ -17,9 +17,11 @@
       <app-dcnb-xuat-noi-bo-chi-cuc></app-dcnb-xuat-noi-bo-chi-cuc>
     </ng-container>
     <ng-container *ngIf="tabSelected == 1">
+      <app-ghcc-thay-doi-thu-kho></app-ghcc-thay-doi-thu-kho>
       <!--      <app-xuat-cap></app-xuat-cap>-->
     </ng-container>
     <ng-container *ngIf="tabSelected == 2">
+      <app-dcnb-ghc-thay-doi-thu-kho></app-dcnb-ghc-thay-doi-thu-kho>
       <!--      <app-xuat-cap></app-xuat-cap>-->
     </ng-container>
   </div>

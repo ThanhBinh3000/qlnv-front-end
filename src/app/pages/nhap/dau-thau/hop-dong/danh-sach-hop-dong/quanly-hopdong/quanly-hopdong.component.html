@@ -276,11 +276,11 @@
                             <td>
                                 <a *ngIf="data.hopDong?.trangThai == STATUS.DU_THAO ||
                                     (data.hopDong?.trangThai == STATUS.DA_KY && formData.value.trangThaiHd != STATUS.DA_HOAN_THANH)" (click)="redirectHopDong(true,data.hopDong.id)">
-                                    <i class="fa fa-pencil"></i>
+                                    <i class="fa fa-pencil" title="Sửa"></i>
                                 </a>
                                 <a *ngIf="data.hopDong?.trangThai == STATUS.DU_THAO"
                                     (click)="deleteHopDong(data.hopDong.id)">
-                                    <i class="fa fa-trash-o do"></i>
+                                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                                 </a>
                             </td>
                         </tr>

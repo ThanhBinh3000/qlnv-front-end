@@ -47,7 +47,7 @@
       <div class="buttons">
         <button type="button" class="btn btn-do" (click)="deleteSelect()"
                 *ngIf="userService.isTongCuc() && userService.isAccessPermisson('VONPHIHANG_VONCHIDTQG_TONGHOP_XOA')">
-          <i class="fa fa-trash-o do"></i>
+          <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
           <span>Xóa</span>
         </button>
         <button type="button" class="btn btn-sub"
@@ -148,17 +148,17 @@
           <td class="text-left">
             <a (click)="detail(data, true)"
                *ngIf="!((data.trangThai == globals.prop.NHAP_DU_THAO || data.trangThai==globals.prop.NHAP_TU_CHOI_TP || data.trangThai == globals.prop.NHAP_TU_CHOI_LD_CUC || data.trangThai==globals.prop.NHAP_TU_CHOI_LD_VU) && userInfo.MA_DVI == data.maDvi)">
-              <i class="fa fa-eye"></i>
+              <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
             <a
               *ngIf="(data.trangThai== STATUS.DU_THAO || data.trangThai== STATUS.TU_CHOI_TP || data.trangThai== STATUS.TU_CHOI_LDC || data.trangThai==globals.prop.NHAP_TU_CHOI_LD_VU ) && userService.isTongCuc() && userService.isAccessPermisson('VONPHIHANG_VONCHIDTQG_TONGHOP_THEM')"
               (click)="detail(data, false)">
-              <i class="fa fa-pencil"></i>
+              <i class="fa fa-pencil" title="Sửa"></i>
             </a>
             <a
               *ngIf="data.trangThai== STATUS.DU_THAO && userService.isTongCuc() && userService.isAccessPermisson('VONPHIHANG_VONCHIDTQG_TONGHOP_XOA')"
               (click)="xoaItem(data)">
-              <i class="fa fa-trash-o do"></i>
+              <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>
         </tr>

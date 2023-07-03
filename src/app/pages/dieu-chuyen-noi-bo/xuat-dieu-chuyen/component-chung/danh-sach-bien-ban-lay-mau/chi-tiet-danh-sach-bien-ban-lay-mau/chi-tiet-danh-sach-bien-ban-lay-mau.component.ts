@@ -137,7 +137,8 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
         thuKho: [null],
         tenThuKho: [''],
         donViTinh: '',
-        tenDonViTinh: ['']
+        tenDonViTinh: [''],
+        ghiChu: ['']
       }
     );
     this.maBb = 'BBLM-' + this.userInfo.DON_VI.tenVietTat;

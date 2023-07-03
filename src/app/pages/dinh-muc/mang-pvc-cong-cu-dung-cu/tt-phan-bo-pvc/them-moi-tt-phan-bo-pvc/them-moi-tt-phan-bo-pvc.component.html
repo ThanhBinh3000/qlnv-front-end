@@ -143,10 +143,10 @@
           <td>{{item.ghiChu}}</td>
           <td class="text-center" *ngIf="!isView">
             <a (click)="openModalCt(item, 'sua', y, dataTable[idx])">
-              <i class="fa fa-pencil"></i>
+              <i class="fa fa-pencil" title="Sửa"></i>
             </a>
             <a (click)="deleteItem(idx, y)">
-              <i class="fa fa-trash-o do"></i>
+              <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>
         </tr>

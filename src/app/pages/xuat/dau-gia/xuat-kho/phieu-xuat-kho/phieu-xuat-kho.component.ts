@@ -56,7 +56,6 @@ export class PhieuXuatKhoComponent extends Base2Component implements OnInit {
       nam: '',
       ngayQdGiaoNvXh: '',
       tenDiemKho: '',
-      tenLoKho: '',
       soPhieuXuatKho: '',
       ngayXuatKho: '',
       soPhieuKnCl: '',
@@ -73,9 +72,10 @@ export class PhieuXuatKhoComponent extends Base2Component implements OnInit {
   isView = false;
   children: any = [];
   expandSetString = new Set<string>();
+  idQdNv: number =0;
 
-  idPhieuKnCl: number = 0;
-  openPhieuKnCl = false;
+  idPhieu: number = 0;
+  isViewPhieu: boolean = false;
   disabledStartNgayXk = (startValue: Date): boolean => {
     if (startValue && this.formData.value.ngayXuatKhoDen) {
       return startValue.getTime() >= this.formData.value.ngayXuatKhoDen.getTime();
@@ -116,7 +116,6 @@ export class PhieuXuatKhoComponent extends Base2Component implements OnInit {
     this.userdetail.tenDvi = this.userInfo.TEN_DVI;
   }
 
-
   isOwner(maDvi: any) {
     return this.userInfo.MA_PHONG_BAN == maDvi;
   }
@@ -139,19 +138,15 @@ export class PhieuXuatKhoComponent extends Base2Component implements OnInit {
   }
 
   buildTableView() {
-    let dataView = chain(this.dataTable)
-      .groupBy("soQdGiaoNvXh")
-      .map((value, key) => {
+    let dataView = chain(this.dataTable).groupBy("soQdGiaoNvXh").map((value, key) => {
         let quyetDinh = value.find(f => f.soQdGiaoNvXh === key)
-        let rs = chain(value)
-          .groupBy("tenDiemKho")
-          .map((v, k) => {
-              let diaDiem = v.find(s => s.tenDiemKho === k)
+        let rs = chain(value).groupBy("maDiemKho").map((v, k) => {
+          let diaDiem = v.find(s => s.maDiemKho === k)
               return {
                 idVirtual: uuid.v4(),
-                tenDiemKho: k != "null" ? k : '',
-                tenLoKho: diaDiem ? diaDiem.tenLoKho : null,
-                tenNganKho: diaDiem ? diaDiem.tenNganKho : null,
+                maDiemKho: k != "null" ? k : '',
+                tenDiemKho: diaDiem ? diaDiem.tenDiemKho : null,
+                idQdGiaoNvXh: diaDiem ? diaDiem.idQdGiaoNvXh : null,
                 childData: v
               }
             }
@@ -185,23 +180,21 @@ export class PhieuXuatKhoComponent extends Base2Component implements OnInit {
     }
   }
 
-
-  redirectDetail(id, b: boolean) {
+  redirectDetail(id, b: boolean, idQdNv? : number) {
     this.selectedId = id;
     this.isDetail = true;
     this.isView = b;
-    // this.isViewDetail = isView ?? false;
+    this.idQdNv = idQdNv
   }
 
   openPhieuKnClModal(id: number) {
-    console.log(id, 'id');
-    this.idPhieuKnCl = id;
-    this.openPhieuKnCl = true;
+    this.idPhieu = id;
+    this.isViewPhieu = true;
   }
 
   closePhieuKnClModal() {
-    this.idPhieuKnCl = null;
-    this.openPhieuKnCl = false;
+    this.idPhieu = null;
+    this.isViewPhieu = false;
   }
 
 

@@ -560,10 +560,10 @@
                 <td>{{LIST_DANH_GIA[data.danhGia]}}</td>
                 <td *ngIf="!(isDisableField() || isView)">
                   <a (click)="editRow(i)">
-                    <i class="fa fa-pencil"></i>
+                    <i class="fa fa-pencil" title="Sửa"></i>
                   </a>
                   <a (click)="deleteRow(data)">
-                    <i class="fa fa-trash-o do"></i>
+                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                   </a>
                 </td>
               </ng-container>
