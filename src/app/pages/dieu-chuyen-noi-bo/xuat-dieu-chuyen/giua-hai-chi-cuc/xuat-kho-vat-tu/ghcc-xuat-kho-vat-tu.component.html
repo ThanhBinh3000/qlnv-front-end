@@ -1,4 +1,4 @@
-<nz-affix [nzOffsetTop]="141" class="level1">
+<nz-affix [nzOffsetTop]="112" class="level1">
   <ul nz-menu nzMode="horizontal">
     <li nz-menu-item [nzSelected]="tabSelected==0" (click)="selectTab(0)">
       Phiếu xuất kho
@@ -17,7 +17,7 @@
       <app-ghcc-xkvt-phieu-xuat-kho></app-ghcc-xkvt-phieu-xuat-kho>
     </ng-container>
     <ng-container *ngIf="tabSelected == 1">
-      <app-ghcc-xkvt-bang-ke-nhap-vat-tu></app-ghcc-xkvt-bang-ke-nhap-vat-tu>
+      <app-ghcc-xkvt-bang-ke-xuat-vat-tu></app-ghcc-xkvt-bang-ke-xuat-vat-tu>
     </ng-container>
     <ng-container *ngIf="tabSelected == 2">
       <app-ghcc-xkvt-bien-ban-tinh-kho-vat-tu></app-ghcc-xkvt-bien-ban-tinh-kho-vat-tu>
