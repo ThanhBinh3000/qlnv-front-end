@@ -155,7 +155,7 @@
                         nzShowSizeChanger [nzPageSize]="pages.size" [nzShowTotal]="rangeTemplate"
                         (nzPageIndexChange)="onPageIndexChange($event)" (nzPageSizeChange)="onPageSizeChange($event)">
                         <ng-template #rangeTemplate let-range="range" let-total>
-                            {{ range[0] }}-{{ range[1] }} of {{totalElements}} items
+                            {{ range[0] }}-{{ range[1] }} trong {{totalElements}} bản ghi
                         </ng-template>
                     </nz-pagination>
                 </div>

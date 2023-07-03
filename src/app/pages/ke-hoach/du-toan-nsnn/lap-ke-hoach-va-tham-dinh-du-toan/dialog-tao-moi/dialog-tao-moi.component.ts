@@ -119,47 +119,53 @@ export class DialogTaoMoiComponent implements OnInit {
             }
         );
         if (this.tab == 'danhsach') {
-            this.listAppendix.forEach(item => {
-                this.response.lstLapThamDinhs.push({
-                    ...new Form(),
-                    id: uuid.v4() + 'FE',
-                    maBieuMau: item.id,
-                    tenPl: item.tenPl,
-                    tenDm: item.tenDm,
-                    trangThai: '3',
-                    lstCtietLapThamDinhs: [],
+            if (this.userInfo.DON_VI.tenVietTat.indexOf('_VP') != -1) {
+                const request = {
+                    lan: lan,
+                    maDvi: this.userInfo.MA_DVI,
+                    namHienTai: this.response.namBcao,
+                }
+                await this.lapThamDinhService.soLuongVp(request).toPromise().then(
+                    (data) => {
+                        if (data.statusCode == 0) {
+                            this.response.lstLapThamDinhs = data.data.lstLapThamDinhs;
+                            this.response.lstLapThamDinhs.forEach(item => {
+                                if (!item.id) {
+                                    item.id = uuid.v4() + 'FE';
+                                }
+                                item.maDviTien = '1';
+                                item.trangThai = '3';
+                                const pl = this.listAppendix.find(e => e.id == item.maBieuMau);
+                                item.tenPl = pl.tenPl;
+                                item.tenDm = pl.tenDm;
+                            })
+                        } else {
+                            this.notification.error(MESSAGE.ERROR, data?.msg);
+                            this.response.namBcao = null;
+                        }
+                    },
+                    (err) => {
+                        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+                        this.response.namBcao = null;
+                    }
+                );
+            } else {
+                this.listAppendix.forEach(item => {
+                    this.response.lstLapThamDinhs.push({
+                        ...new Form(),
+                        id: uuid.v4() + 'FE',
+                        maBieuMau: item.id,
+                        tenPl: item.tenPl,
+                        tenDm: item.tenDm,
+                        trangThai: '3',
+                        lstCtietLapThamDinhs: [],
+                    })
                 })
-            })
+            }
         } else {
             this.synthetic();
         }
     }
-
-    // async copyReport(baoCao: Report) {
-    //     Object.assign(this.response, baoCao);
-    //     await this.lapThamDinhService.sinhMaBaoCao().toPromise().then(
-    //         (data) => {
-    //             if (data.statusCode == 0) {
-    //                 this.response.maBcao = data.data;
-    //             } else {
-    //                 this.notification.error(MESSAGE.ERROR, data?.msg);
-    //                 this.response.namBcao = null;
-    //             }
-    //         },
-    //         (err) => {
-    //             this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-    //             this.response.namBcao = null;
-    //         }
-    //     );
-    //     this.response.id = null;
-    //     this.response.lan = baoCao.lan + 1;
-    //     this.response.lstLapThamDinhs.forEach(item => {
-    //         item.id = uuid.v4() + 'FE';
-    //         item.lstCtietLapThamDinhs.forEach(e => {
-    //             e.id = uuid.v4() + 'FE';
-    //         })
-    //     })
-    // }
 
     //tong hop theo nam bao cao
     async synthetic() {

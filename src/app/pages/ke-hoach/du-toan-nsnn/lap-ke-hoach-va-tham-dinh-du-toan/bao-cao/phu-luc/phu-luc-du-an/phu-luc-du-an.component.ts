@@ -16,7 +16,6 @@ import * as XLSX from 'xlsx'
 
 export class ItemData {
     id: string;
-    khvonphiLapThamDinhCtietId: string;
     stt: string;
     maDanhMucDa: string;
     maDuAn: string;
@@ -463,9 +462,16 @@ export class PhuLucDuAnComponent implements OnInit {
             { t: 4, b: 4, l: 30, r: 30, val: 'Chuẩn bị đầu tư' },
             { t: 0, b: 4, l: 31, r: 31, val: 'Ghi chú' },
         ]
+        const fieldOrder = ['stt', 'tenDanhMuc', 'maDuAn', 'nhomDuAn', 'diaDiemXd', 'nangLucTke', 'thoiGianKcHt', 'soQd', 'tmdtTongSo', 'tmdtNstw', 'keHoachTongSo', 'keHoachNstw',
+            'uocGiaiNganDauNamTong', 'uocGiaiNganDauNamNstw', 'uocGiaiNganCaNamTong', 'uocGiaiNganCaNamNstw', 'daBoTriVonTongSo', 'daBoTriVonNstw', 'trungHanVonN2N2TongSo',
+            'trungHanVonN2N2ThuHoi', 'trungHanVonN2N2Xdcb', 'trungHanVonN2N2Cbi', 'trungHanVonN2N1TongSo', 'trungHanVonN2N1ThuHoi', 'trungHanVonN2N1Xdcb', 'trungHanVonN2N1Cbi',
+            'khTongSoNamN', 'khNstwTongSoNamN', 'khNstwThuHoiNamN', 'khNstwThanhToanNamN', 'khNstwChuanBiNamN', 'ghiChu']
         const filterData = this.lstCtietBcao.map(item => {
-            const { id, maDanhMucDa, khvonphiLapThamDinhCtietId, level, ...rest } = item;
-            return rest;
+            const row: any = {};
+            fieldOrder.forEach(field => {
+                row[field] = item[field]
+            })
+            return row;
         })
         filterData.forEach(item => {
             const level = item.stt.split('.').length - 2;
@@ -479,6 +485,6 @@ export class PhuLucDuAnComponent implements OnInit {
         const worksheet = this.genFunc.initExcel(header);
         XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: this.genFunc.coo(header[0].l, header[0].b + 1) })
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
-        XLSX.writeFile(workbook, 'Phu_luc_DA.xlsx');
+        XLSX.writeFile(workbook, this.dataInfo.maBcao + '_Phu_luc_DA.xlsx');
     }
 }

@@ -162,7 +162,7 @@ export class DanhSachBaoCaoComponent implements OnInit {
 
     checkDeleteStatus(item: any) {
         const isSynthetic = item.tongHopTu != "[]";
-        return Utils.statusDelete.includes(item.trangThai) &&
+        return Utils.statusSave.includes(item.trangThai) &&
             (isSynthetic ? this.userService.isAccessPermisson(LTD.DELETE_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(LTD.DELETE_REPORT));
     }
 

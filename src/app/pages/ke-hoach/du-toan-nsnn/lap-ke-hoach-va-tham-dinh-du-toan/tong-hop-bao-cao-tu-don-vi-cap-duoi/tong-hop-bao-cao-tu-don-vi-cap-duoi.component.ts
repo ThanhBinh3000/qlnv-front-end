@@ -178,92 +178,12 @@ export class TongHopBaoCaoTuDonViCapDuoiComponent implements OnInit {
         });
         modalTuChoi.afterClose.toPromise().then(async (res) => {
             if (res) {
-                if (res.loai == 1) {
-                    const request = {
-                        id: res.idSoTranChi,
-                        maBcao: res.maBcao,
-                    }
-                    let check = false;
-                    const trangThais = [Utils.TT_BC_1, Utils.TT_BC_3, Utils.TT_BC_5, Utils.TT_BC_8, Utils.TT_BC_9];
-                    if (this.userInfo?.CAP_DVI == Utils.TONG_CUC) {
-                        trangThais.push(Utils.TT_BC_7);
-                    }
-                    const requestReport = {
-                        loaiTimKiem: "0",
-                        maBcaos: !res.maBcao ? [] : [res.maBcao],
-                        maDvi: this.userInfo?.MA_DVI,
-                        paggingReq: {
-                            limit: 10,
-                            page: 1,
-                        },
-                        trangThais: trangThais,
-                    };
-                    await this.lapThamDinhService.timBaoCaoLapThamDinh(requestReport).toPromise().then(
-                        (data) => {
-                            if (data.statusCode == 0) {
-                                if (data.data.content?.length > 0) {
-                                    check = true;
-                                }
-                            }
-                        }
-                    );
-                    if (!check) {
-                        this.notification.warning(MESSAGE.WARNING, "Trạng thái bản ghi không được phép sửa");
-                        return;
-                    }
-                    // this.lapThamDinhService.suaBcao(request).toPromise().then(
-                    //     async (data) => {
-                    //         if (data.statusCode == 0) {
-                    //             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-                    //             const obj = {
-                    //                 ...res,
-                    //                 id: data.data.id,
-                    //                 tabSelected: 'baocao',
-                    //                 isSynthetic: true,
-                    //             }
-                    //             this.dataChange.emit(obj);
-                    //         } else {
-                    //             this.notification.error(MESSAGE.ERROR, data?.msg);
-                    //         }
-                    //     },
-                    //     (err) => {
-                    //         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-                    //     },
-                    // );
-                } else {
-                    let check = false;
-                    const requestReport = {
-                        loaiTimKiem: "0",
-                        maBcaos: [],
-                        namBcao: res.namHienTai,
-                        maDvi: this.userInfo?.MA_DVI,
-                        paggingReq: {
-                            limit: 10,
-                            page: 1,
-                        },
-                        trangThais: [],
-                    };
-                    await this.lapThamDinhService.timBaoCaoLapThamDinh(requestReport).toPromise().then(
-                        (data) => {
-                            if (data.statusCode == 0) {
-                                if (data.data.content?.length > 0) {
-                                    check = true;
-                                }
-                            }
-                        }
-                    );
-                    if (check) {
-                        this.notification.warning(MESSAGE.WARNING, "Báo cáo năm " + requestReport.namBcao + " đã tồn tại!");
-                        return;
-                    }
-                    const obj = {
-                        ...res,
-                        id: null,
-                        tabSelected: 'baocao',
-                        isSynthetic: true,
-                    }
-                    this.dataChange.emit(obj);
+                const obj = {
+                    baoCao: res,
+                    tabSelected: 'baocao',
+                    isSynthetic: true,
                 }
+                this.dataChange.emit(obj);
             }
         });
     }

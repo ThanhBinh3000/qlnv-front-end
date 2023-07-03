@@ -17,7 +17,6 @@ import * as XLSX from 'xlsx'
 
 export class ItemData {
 	id: string;
-	khvonphiLapThamDinhCtietId: string;
 	stt: string;
 	maLvuc: string;
 	tenDmuc: string;
@@ -471,9 +470,15 @@ export class BieuMau151Component implements OnInit {
 			{ t: 2, b: 2, l: 27, r: 27, val: 'Khác' },
 			{ t: 0, b: 2, l: 28, r: 28, val: 'Ghi chú' },
 		]
+		const fieldOrder = ['stt', 'tenDmuc', 'thienTsoBcTqGiao', 'thienTsoBcTdiem', 'thienQlPcap', 'thienLuongBac', 'thienPcapLuong', 'thienDgopLuong', 'thienKhac', 'dtoanTsoBcheTqGiao',
+			'dtoanQluongPcap', 'dtoanLuongBac', 'dtoanPcapLuong', 'dtoanDgopLuong', 'dtoanKhac', 'uocThTsoBcTqGiao', 'uocThTsoBcTdiem', 'uocThQlPcap', 'uocThLuongBac', 'uocThPCapLuong',
+			'uocThDgopLuong', 'uocThKhac', 'namKhTsoBcTqGiao', 'namKhQlPcap', 'namKhLuongBac', 'namKhPcapLuong', 'namKhDgopLuong', 'namKhKhac', 'ghiChu']
 		const filterData = this.lstCtietBcao.map(item => {
-			const { id, maLvuc, khvonphiLapThamDinhCtietId, checked, ...rest } = item;
-			return rest;
+			const row: any = {};
+			fieldOrder.forEach(field => {
+				row[field] = item[field]
+			})
+			return row;
 		})
 		let ind = 1;
 		filterData.forEach(item => {
@@ -485,6 +490,6 @@ export class BieuMau151Component implements OnInit {
 		const worksheet = this.genFunc.initExcel(header);
 		XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: this.genFunc.coo(header[0].l, header[0].b + 1) })
 		XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
-		XLSX.writeFile(workbook, 'TT342_15.1.xlsx');
+		XLSX.writeFile(workbook, this.dataInfo.maBcao + '_TT342_15.1.xlsx');
 	}
 }

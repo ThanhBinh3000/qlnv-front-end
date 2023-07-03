@@ -16,7 +16,6 @@ import * as XLSX from 'xlsx';
 
 export class ItemData {
 	id: any;
-	khvonphiLapThamDinhCtietId: string;
 	stt: string;
 	donVi: string;
 	tenDmuc: string;
@@ -506,9 +505,17 @@ export class BieuMau152Component implements OnInit {
 			{ t: 2, b: 3, l: 36, r: 36, val: 'Nguồn thu hợp pháp khác' },
 			{ t: 0, b: 3, l: 37, r: 37, val: 'Ghi chú' },
 		]
+		const fieldOrder = ['stt', 'tenDmuc', 'dtTsoNguoiLv', 'dtTongQlPcap', 'dtQlPcapTso', 'dtQlPcapLuongBac', 'dtQlPcapPcapLuong', 'dtQlPcapDgopLuong', 'dtQlPcapHdLd', 'dtKphiNsnn',
+			'dtKphiSnDvu', 'dtKphiPhiDlai', 'dtKphiHphap', 'uocThTsoNguoiLv', 'uocThTsoBcTdiem', 'uocThTsoVcCc', 'uocThTongQlPcap', 'uocThQlPcapTso', 'uocThQlPcapLuongBac', 'uocThQlPcapPcapLuong',
+			'uocThQlPcapDgopLuong', 'uocThQlPcapHdLd', 'uocThKphiNsnn', 'uocThKphiSnDvu', 'uocThKphiPhiDlai', 'uocThKphiHphap', 'namKhTsoNguoiLv', 'namKhTongQlPcap', 'namKhQlPcapTso',
+			'namKhQlPcapLuongBac', 'namKhQlPcapPcapLuong', 'namKhQlPcapDgopLuong', 'namKhQlPcapHdLd', 'namKhKphiNsnn', 'namKhKphiSnDvu', 'namKhKphiPhiDlai', 'namKhKphiHphap', 'ghiChu']
+
 		const filterData = this.lstCtietBcao.map(item => {
-			const { id, donVi, khvonphiLapThamDinhCtietId, level, checked, ...rest } = item;
-			return rest;
+			const row: any = {};
+			fieldOrder.forEach(field => {
+				row[field] = item[field]
+			})
+			return row;
 		})
 		filterData.forEach(item => {
 			const level = item.stt.split('.').length - 2;
@@ -522,6 +529,6 @@ export class BieuMau152Component implements OnInit {
 		const worksheet = this.genFunc.initExcel(header);
 		XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: this.genFunc.coo(header[0].l, header[0].b + 1) })
 		XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
-		XLSX.writeFile(workbook, 'TT342_15.2.xlsx');
+		XLSX.writeFile(workbook, this.dataInfo.namBcao + '_TT342_15.2.xlsx');
 	}
 }

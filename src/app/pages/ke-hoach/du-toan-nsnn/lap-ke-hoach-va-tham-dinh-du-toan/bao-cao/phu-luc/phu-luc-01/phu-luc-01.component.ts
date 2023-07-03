@@ -17,7 +17,6 @@ import * as XLSX from 'xlsx'
 
 export class ItemData {
 	id: any;
-	khvonphiLapThamDinhCtietId: string;
 	stt: string;
 	danhMuc: string;
 	maDmuc: string;
@@ -536,9 +535,15 @@ export class PhuLuc01Component implements OnInit {
 			{ t: 0, b: 1, l: 12, r: 12, val: 'Ghi chú' },
 			{ t: 0, b: 1, l: 13, r: 13, val: 'Ý kiến của đơn vị cấp trên' },
 		]
+		const fieldOrder = ['stt', 'tenDanhMuc', 'dviTinh', 'thienNamTruoc', 'dtoanNamHtai', 'uocNamHtai', 'sluongNamDtoan',
+			'sluongNamDtoan', 'dmucNamDtoan', 'ttienNamDtoan', 'sluongTd', 'ttienTd', 'chenhLech', 'ghiChu', 'ykienDviCtren']
+
 		const filterData = this.lstCtietBcao.map(item => {
-			const { id, maDmuc, danhMuc, khvonphiLapThamDinhCtietId, level, checked, ...rest } = item;
-			return rest;
+			const row: any = {};
+			fieldOrder.forEach(field => {
+				row[field] = item[field]
+			})
+			return row;
 		})
 		filterData.forEach(item => {
 			const level = item.stt.split('.').length - 2;
@@ -552,6 +557,12 @@ export class PhuLuc01Component implements OnInit {
 		const worksheet = this.genFunc.initExcel(header);
 		XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: this.genFunc.coo(header[0].l, header[0].b + 1) })
 		XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
-		XLSX.writeFile(workbook, 'Phu_luc_I.xlsx');
+		let excelName = this.dataInfo.maBcao;
+		if (this.dataInfo.maBieuMau == "pl01N") {
+			excelName = excelName + '_Phu_luc_I_nhap.xlsx'
+		} else {
+			excelName = excelName + '_Phu_luc_I_xuat.xlsx'
+		}
+		XLSX.writeFile(workbook, excelName);
 	}
 }
