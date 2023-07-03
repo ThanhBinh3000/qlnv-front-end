@@ -1,6 +1,6 @@
 <nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="level2-border">
   <ul nz-menu nzMode="horizontal">
-    <li nz-menu-item [nzSelected]="tabSelected==0" (click)="selectTab(0)" >
+    <li nz-menu-item [nzSelected]="tabSelected==0" (click)="selectTab(0)">
       Toàn bộ danh sách VT, TB hết hạn lưu kho nhưng chưa có kế hoạch xuất
     </li>
     <li [nzSelected]="tabSelected==1" *ngIf="!userService.isChiCuc()" nz-menu-item (click)="selectTab(1)">
@@ -20,10 +20,10 @@
 <div class="contentBor chi-tieu__body giao-ke-hoach">
   <div class="contentDetail">
     <ng-container *ngIf="tabSelected == 0">
-      <app-toan-bo-danh-sach-vt12th></app-toan-bo-danh-sach-vt12th>
+      <app-toan-bo-danh-sach-vt12th (tabFocus)="receivedTab($event)"></app-toan-bo-danh-sach-vt12th>
     </ng-container>
     <ng-container *ngIf="tabSelected == 1">
-      <app-tong-hop-danh-sach-vt12th></app-tong-hop-danh-sach-vt12th>
+      <app-tong-hop-danh-sach-vt12th (tabFocus)="receivedTab($event)"></app-tong-hop-danh-sach-vt12th>
     </ng-container>
     <ng-container *ngIf="tabSelected == 2">
       <app-ke-hoach-xuat-hang-cua-cuc></app-ke-hoach-xuat-hang-cua-cuc>
