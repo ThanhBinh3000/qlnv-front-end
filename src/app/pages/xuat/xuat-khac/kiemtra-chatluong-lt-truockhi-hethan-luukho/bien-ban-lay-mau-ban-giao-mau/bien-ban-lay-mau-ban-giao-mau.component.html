@@ -128,7 +128,7 @@
                 <td>{{lv1.tenLoKho}}</td>
                 <td>{{lv1.tenTrangThai}}</td>
                 <td class="text-left">
-                  <a (click)="redirectDetail(item, false)">
+                  <a (click)="redirectDetail(lv1, false)">
                     <i class="fa fa-eye"></i>
                   </a>
                   <a *ngIf="(vldTrangThai.checkStatusPermission(lv1,CHUC_NANG.SUA)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_BBLMBGM_THEM'))"
