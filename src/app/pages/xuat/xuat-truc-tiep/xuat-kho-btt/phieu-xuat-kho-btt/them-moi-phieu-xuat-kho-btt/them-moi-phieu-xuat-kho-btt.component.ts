@@ -26,7 +26,6 @@ import { BangKeBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-
 export class ThemMoiPhieuXuatKhoBttComponent extends Base2Component implements OnInit {
   @Input() id: number;
   @Input() loaiVthh: string;
-  @Input() isView: boolean;
   @Input() idQdGiaoNvXh: number;
   @Input() isViewOnModal: boolean;
 
@@ -108,8 +107,8 @@ export class ThemMoiPhieuXuatKhoBttComponent extends Base2Component implements O
       soLuong: [''],
       ghiChu: [''],
       soBangKe: [''],
-      trangThai: [STATUS.DU_THAO],
-      tenTrangThai: ['Dự Thảo'],
+      trangThai: [''],
+      tenTrangThai: [''],
       lyDoTuChoi: [],
       phanLoai: ['HĐ'],
       ngayTaoBangKe: [''],
