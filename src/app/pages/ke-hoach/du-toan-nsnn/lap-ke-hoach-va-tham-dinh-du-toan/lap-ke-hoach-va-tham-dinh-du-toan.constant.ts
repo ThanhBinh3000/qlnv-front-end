@@ -22,6 +22,13 @@ export const TAB_LIST = [
         role: [LTD.SYNTHETIC_REPORT],
         isSelected: false,
     },
+    {
+        name: 'Hệ số bảo hiểm',
+        code: 'ds-heso',
+        status: true,
+        role: [LTD.VIEW_COEFFCIENT_INSURANCE],
+        isSelected: false,
+    },
     // {
     //     name: 'Số kiểm tra trần chi từ BTC',
     //     code: 'ds-skt-btc',

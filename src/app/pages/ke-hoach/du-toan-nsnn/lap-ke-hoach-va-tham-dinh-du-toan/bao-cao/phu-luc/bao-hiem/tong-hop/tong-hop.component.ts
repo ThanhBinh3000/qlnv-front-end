@@ -1,18 +1,18 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { FileFunction, GeneralFunction, NumberFunction, TableFunction } from 'src/app/Utility/func';
+import { AMOUNT, DON_VI_TIEN, MONEY_LIMIT } from "src/app/Utility/utils";
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.service';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
-import { AMOUNT, DON_VI_TIEN, LA_MA, MONEY_LIMIT, QUATITY } from "src/app/Utility/utils";
 import * as uuid from "uuid";
-import { BtnStatus, Doc, Form } from '../../../../lap-ke-hoach-va-tham-dinh-du-toan.class';
-import { NzUploadFile } from 'ng-zorro-antd/upload';
-import { FileFunction, GeneralFunction, NumberFunction, TableFunction } from 'src/app/Utility/func';
 import * as XLSX from 'xlsx';
+import { BtnStatus, Doc, Form } from '../../../../lap-ke-hoach-va-tham-dinh-du-toan.class';
 
 export class UnitItem {
     id: string;
@@ -68,6 +68,7 @@ export class TongHopComponent implements OnInit {
     lstTyLe: any[] = [];
     lstCtietBcao: ItemData[] = [];
     donViTiens: any[] = DON_VI_TIEN;
+    khoiTich: number;
     amount = AMOUNT;
     scrollX: string;
     BOX_SIZE = 180;
@@ -124,12 +125,12 @@ export class TongHopComponent implements OnInit {
         this.spinner.show();
         Object.assign(this.status, this.dataInfo.status);
         await this.getFormDetail();
+        await this.getKhoiTich();
         if (this.lstCtietBcao.length == 0) {
             const category = await this.danhMucService.danhMucChungGetAll('LTD_BH');
             if (category) {
                 this.danhMucs = category.data;
             }
-            await this.getTle();
             this.danhMucs.forEach(e => {
                 const tyLe = this.lstTyLe?.find(tl => e.ma == tl.maDmuc);
                 this.lstCtietBcao.push({
@@ -162,19 +163,6 @@ export class TongHopComponent implements OnInit {
         this.lstCtietBcao = this.tableFunc.sortByIndex(this.lstCtietBcao);
         this.sortUnit();
 
-        // //lay du lieu tu cac bieu mau khac
-        // if (this.dataInfo?.extraData) {
-        //     this.dataInfo.extraData.forEach(item => {
-        //         const index = this.lstCtietBcao.findIndex(e => e.danhMuc == item.danhMuc);
-        //         if (index != -1) {
-        //             this.lstCtietBcao[index].slTren = item.slTren;
-        //             this.lstCtietBcao[index].slDuoi = item.slDuoi;
-        //             this.lstCtietBcao[index].gtTrenGt = item.gtTrenGt;
-        //             this.lstCtietBcao[index].gtDuoiGt = item.gtDuoiGt;
-        //             this.sum(this.lstCtietBcao[index].stt);
-        //         }
-        //     })
-        // }
 
         this.changeModel();
         this.getTotal();
@@ -186,16 +174,19 @@ export class TongHopComponent implements OnInit {
         this.status.ok = this.status.ok && (this.formDetail.trangThai == "2" || this.formDetail.trangThai == "5");
     }
 
-    async getTle() {
-        await this.lapThamDinhService.getDsTle(this.dataInfo?.namBcao).toPromise().then(
-            res => {
-                if (res.statusCode == 0) {
-                    this.lstTyLe = res.data?.lstCtiets;
+    async getKhoiTich() {
+        await this.lapThamDinhService.tyLeBaoHiem(this.dataInfo.namBcao).toPromise().then(
+            data => {
+                if (data.statusCode == 0) {
+                    this.khoiTich = data.data.khoiTich;
+                } else {
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
                 }
             },
             (err) => {
                 this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-            })
+            }
+        )
     }
 
     async getFormDetail() {
@@ -413,11 +404,11 @@ export class TongHopComponent implements OnInit {
             { t: 2, b: 3, l: 4, r: 4, val: 'Kho dưới 5000m3' },
             { t: 2, b: 3, l: 5, r: 5, val: 'Tổng SL' },
             { t: 1, b: 1, l: 6, r: 12, val: 'Tổng giá trị hàng trong kho của các đơn vị cấp dưới' },
-            { t: 2, b: 2, l: 6, r: 8, val: 'Kho từ 5000 m3 trở lên' },
+            { t: 2, b: 2, l: 6, r: 8, val: 'Kho từ ' + this.khoiTich.toString() + ' m3 trở lên' },
             { t: 3, b: 3, l: 6, r: 6, val: 'Giá trị' },
             { t: 3, b: 3, l: 7, r: 7, val: 'Tỷ lệ bảo hiểm' },
             { t: 3, b: 3, l: 8, r: 8, val: 'Giá trị bảo hiểm' },
-            { t: 2, b: 2, l: 9, r: 11, val: 'Kho dưới 5000 m3' },
+            { t: 2, b: 2, l: 9, r: 11, val: 'Kho dưới ' + this.khoiTich.toString() + ' m3' },
             { t: 3, b: 3, l: 9, r: 9, val: 'Giá trị' },
             { t: 3, b: 3, l: 10, r: 10, val: 'Tỷ lệ bảo hiểm' },
             { t: 3, b: 3, l: 11, r: 11, val: 'Giá trị bảo hiểm' },
@@ -431,11 +422,11 @@ export class TongHopComponent implements OnInit {
             header.push({ t: 2, b: 3, l: left + 2, r: left + 2, val: 'Kho dưới 5000m3' })
             header.push({ t: 2, b: 3, l: left + 3, r: left + 3, val: 'Tổng SL' })
             header.push({ t: 1, b: 1, l: left + 4, r: left + 10, val: 'Tổng giá trị hàng trong kho của các đơn vị cấp dưới' })
-            header.push({ t: 2, b: 2, l: left + 4, r: left + 6, val: 'Kho từ 5000 m3 trở lên' })
+            header.push({ t: 2, b: 2, l: left + 4, r: left + 6, val: 'Kho từ ' + this.khoiTich.toString() + ' m3 trở lên' })
             header.push({ t: 3, b: 3, l: left + 4, r: left + 4, val: 'Giá trị' })
             header.push({ t: 3, b: 3, l: left + 5, r: left + 5, val: 'Tỷ lệ bảo hiểm' })
             header.push({ t: 3, b: 3, l: left + 6, r: left + 6, val: 'Giá trị bảo hiểm' })
-            header.push({ t: 2, b: 2, l: left + 7, r: left + 9, val: 'Kho dưới 5000 m3' })
+            header.push({ t: 2, b: 2, l: left + 7, r: left + 9, val: 'Kho dưới ' + this.khoiTich.toString() + ' m3' })
             header.push({ t: 3, b: 3, l: left + 7, r: left + 7, val: 'Giá trị' })
             header.push({ t: 3, b: 3, l: left + 8, r: left + 8, val: 'Tỷ lệ bảo hiểm' })
             header.push({ t: 3, b: 3, l: left + 9, r: left + 9, val: 'Giá trị bảo hiểm' })

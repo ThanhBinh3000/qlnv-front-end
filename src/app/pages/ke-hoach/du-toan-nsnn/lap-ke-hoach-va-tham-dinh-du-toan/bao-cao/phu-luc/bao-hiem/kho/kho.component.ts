@@ -60,6 +60,7 @@ export class KhoComponent implements OnInit {
     donVi: any;
     amount = AMOUNT;
     scrollX: string;
+    khoiTich: number;
     //trang thai cac nut
     status: BtnStatus = new BtnStatus();
     editMoneyUnit = false;
@@ -113,6 +114,7 @@ export class KhoComponent implements OnInit {
         this.spinner.show();
         Object.assign(this.status, this.dataInfo.status);
         await this.getFormDetail();
+        await this.getKhoiTich();
         if (this.status.general) {
             if (!this.dataInfo?.isSynthetic) {
                 await this.getDmKho();
@@ -156,6 +158,21 @@ export class KhoComponent implements OnInit {
 
     getStatusButton() {
         this.status.ok = this.status.ok && (this.formDetail.trangThai == "2" || this.formDetail.trangThai == "5");
+    }
+
+    async getKhoiTich() {
+        await this.lapThamDinhService.tyLeBaoHiem(this.dataInfo.namBcao).toPromise().then(
+            data => {
+                if (data.statusCode == 0) {
+                    this.khoiTich = data.data.khoiTich;
+                } else {
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            }
+        )
     }
 
     async getDmKho() {
@@ -308,7 +325,7 @@ export class KhoComponent implements OnInit {
 
     // luu thay doi
     saveEdit(id: string): void {
-        if (this.editCache[id].data.khoiTichTren && this.editCache[id].data.khoiTichTren < 5000) {
+        if (this.editCache[id].data.khoiTichTren && this.editCache[id].data.khoiTichTren < this.khoiTich) {
             this.notification.warning(MESSAGE.WARNING, "Giá trị của khối kho từ 5000m3 trở lên không phù hợp!");
             return;
         }
@@ -331,8 +348,8 @@ export class KhoComponent implements OnInit {
             this.editCache[id].data.slTren = 1;
             this.editCache[id].data.slDuoi = null;
         } else if (this.editCache[id].data.khoiTichDuoi) {
-            if (this.editCache[id].data.khoiTichDuoi >= 5000) {
-                this.editCache[id].data.khoiTichDuoi = 4999;
+            if (this.editCache[id].data.khoiTichDuoi >= this.khoiTich) {
+                this.editCache[id].data.khoiTichDuoi = this.khoiTich - 1;
             }
             this.editCache[id].data.slTren = null;
             this.editCache[id].data.slDuoi = 1;
@@ -471,18 +488,18 @@ export class KhoComponent implements OnInit {
             { t: 0, b: 2, l: 2, r: 2, val: 'Tên địa điểm, địa chỉ' },
             { t: 0, b: 2, l: 3, r: 3, val: 'Tên nhà kho' },
             { t: 0, b: 0, l: 4, r: 5, val: 'Khối tích kho (m3)' },
-            { t: 1, b: 2, l: 4, r: 4, val: 'Từ 5000 m3 trở lên' },
-            { t: 1, b: 2, l: 5, r: 5, val: 'Dưới 5000 m3' },
+            { t: 1, b: 2, l: 4, r: 4, val: 'Từ ' + this.khoiTich.toString() + ' m3 trở lên' },
+            { t: 1, b: 2, l: 5, r: 5, val: 'Dưới ' + this.khoiTich.toString() + ' m3' },
             { t: 0, b: 0, l: 6, r: 8, val: 'Số lượng nhà kho' },
-            { t: 1, b: 2, l: 6, r: 6, val: 'Từ 5000 m3 trở lên' },
-            { t: 1, b: 2, l: 7, r: 7, val: 'Dưới 5000 m3' },
+            { t: 1, b: 2, l: 6, r: 6, val: 'Từ ' + this.khoiTich.toString() + ' m3 trở lên' },
+            { t: 1, b: 2, l: 7, r: 7, val: 'Dưới ' + this.khoiTich.toString() + ' m3' },
             { t: 1, b: 2, l: 8, r: 8, val: 'Tổng' },
             { t: 0, b: 0, l: 9, r: 15, val: 'Giá trị kho (VNĐ)' },
-            { t: 1, b: 1, l: 9, r: 11, val: 'Từ 5000 m3' },
+            { t: 1, b: 1, l: 9, r: 11, val: 'Từ ' + this.khoiTich.toString() + ' m3' },
             { t: 2, b: 2, l: 9, r: 9, val: 'Kho lấy theo giá trị còn lại' },
             { t: 2, b: 2, l: 10, r: 10, val: 'Kho hết khấu hao' },
             { t: 2, b: 2, l: 11, r: 11, val: 'Tổng giá trị kho từ 5000m3' },
-            { t: 1, b: 1, l: 12, r: 14, val: 'Dưới 5000 m3' },
+            { t: 1, b: 1, l: 12, r: 14, val: 'Dưới ' + this.khoiTich.toString() + ' m3' },
             { t: 2, b: 2, l: 12, r: 12, val: 'Kho lấy theo giá trị còn lại' },
             { t: 2, b: 2, l: 13, r: 13, val: 'Kho hết khấu hao' },
             { t: 2, b: 2, l: 14, r: 14, val: 'Tổng giá trị kho dưới 5000m3' },

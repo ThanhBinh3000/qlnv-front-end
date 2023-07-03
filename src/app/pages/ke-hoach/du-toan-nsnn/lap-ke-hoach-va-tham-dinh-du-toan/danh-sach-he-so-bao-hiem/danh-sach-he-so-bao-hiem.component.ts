@@ -1,31 +1,28 @@
 
-import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { GeneralFunction } from 'src/app/Utility/func';
+import { LTD, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import { MESSAGE } from 'src/app/constants/message';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { BCVP, LTD, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
-import { DialogTaoMoiComponent } from '../dialog-tao-moi/dialog-tao-moi.component';
+import { DialogTaoMoiTyLeBaoHiemComponent } from '../dialog-tao-moi-ty-le-bao-hiem/dialog-tao-moi-ty-le-bao-hiem.component';
 
 @Component({
-    selector: 'app-danh-sach-bao-cao',
-    templateUrl: './danh-sach-bao-cao.component.html',
+    selector: 'app-danh-sach-he-so-bao-hiem',
+    templateUrl: './danh-sach-he-so-bao-hiem.component.html',
 })
-export class DanhSachBaoCaoComponent implements OnInit {
+export class DanhSachHeSoBaoHiemComponent implements OnInit {
     @Output() dataChange = new EventEmitter();
 
     searchFilter = {
         nam: null,
-        lan: null,
         tuNgay: null,
         denNgay: null,
-        maBaoCao: "",
-        donViTao: "",
         trangThai: Utils.TT_BC_1,
     };
 
@@ -45,20 +42,13 @@ export class DanhSachBaoCaoComponent implements OnInit {
     statusDelete = true;
     allChecked = false;
 
-    filterTable: any = {
-        soQd: '',
-        ngayKy: '',
-        namKeHoach: '',
-        trichYeu: '',
-        tenTrangThai: '',
-    };
     constructor(
         private spinner: NgxSpinnerService,
         private lapThamDinhService: LapThamDinhService,
         private notification: NzNotificationService,
         private modal: NzModalService,
         public userService: UserService,
-        private datePipe: DatePipe,
+        public gen: GeneralFunction,
         public globals: Globals,
     ) { }
 
@@ -70,14 +60,13 @@ export class DanhSachBaoCaoComponent implements OnInit {
         const newDate = new Date();
         newDate.setMonth(newDate.getMonth() - 1);
         this.searchFilter.tuNgay = newDate;
-        this.searchFilter.donViTao = this.userInfo?.MA_DVI;
         //check quyen va cac nut chuc nang
-        this.statusNewReport = this.userService.isAccessPermisson(LTD.ADD_REPORT);
-        this.statusDelete = this.userService.isAccessPermisson(LTD.DELETE_REPORT) || this.userService.isAccessPermisson(LTD.DELETE_SYNTHETIC_REPORT);
-        if (this.userService.isAccessPermisson(LTD.DUYET_REPORT) || this.userService.isAccessPermisson(LTD.DUYET_SYNTHETIC_REPORT)) {
+        this.statusNewReport = this.userService.isAccessPermisson(LTD.ADD_COEFFCIENT_INSURANCE);
+        this.statusDelete = this.userService.isAccessPermisson(LTD.DELETE_COEFFCIENT_INSURANCE);
+        if (this.userService.isAccessPermisson(LTD.DUYET_COEFFCIENT_INSURANCE)) {
             this.searchFilter.trangThai = Utils.TT_BC_2;
         } else {
-            if (this.userService.isAccessPermisson(LTD.PHE_DUYET_REPORT) || this.userService.isAccessPermisson(LTD.PHE_DUYET_SYNTHETIC_REPORT)) {
+            if (this.userService.isAccessPermisson(LTD.PHE_DUYET_COEFFCIENT_INSURANCE)) {
                 this.searchFilter.trangThai = Utils.TT_BC_4;
             }
         }
@@ -92,29 +81,21 @@ export class DanhSachBaoCaoComponent implements OnInit {
             trangThais = [this.searchFilter.trangThai];
         }
         const requestReport = {
-            loaiTimKiem: "0",
-            maBcaos: !this.searchFilter.maBaoCao ? [] : [this.searchFilter.maBaoCao],
-            maDvi: this.searchFilter.donViTao,
             namBcao: this.searchFilter.nam,
-            ngayTaoDen: this.datePipe.transform(this.searchFilter.denNgay, Utils.FORMAT_DATE_STR),
-            ngayTaoTu: this.datePipe.transform(this.searchFilter.tuNgay, Utils.FORMAT_DATE_STR),
+            ngayTaoDen: this.gen.fmtDate(this.searchFilter.denNgay),
+            ngayTaoTu: this.gen.fmtDate(this.searchFilter.tuNgay),
             paggingReq: {
                 limit: this.pages.size,
                 page: this.pages.page,
             },
             trangThais: trangThais,
         };
-        await this.lapThamDinhService.timBaoCaoLapThamDinh(requestReport).toPromise().then(res => {
+        await this.lapThamDinhService.danhSachHeSoBh(requestReport).toPromise().then(res => {
             if (res.statusCode == 0) {
                 this.dataTable = [];
                 res.data.content.forEach(item => {
                     this.dataTable.push({
                         ...item,
-                        ngayDuyet: this.datePipe.transform(item.ngayDuyet, Utils.FORMAT_DATE_STR),
-                        ngayTao: this.datePipe.transform(item.ngayTao, Utils.FORMAT_DATE_STR),
-                        ngayTrinh: this.datePipe.transform(item.ngayTrinh, Utils.FORMAT_DATE_STR),
-                        ngayPheDuyet: this.datePipe.transform(item.ngayPheDuyet, Utils.FORMAT_DATE_STR),
-                        ngayTraKq: this.datePipe.transform(item.ngayTraKq, Utils.FORMAT_DATE_STR),
                         isEdit: this.checkEditStatus(item),
                         isDelete: this.checkDeleteStatus(item),
                         checked: false,
@@ -149,21 +130,18 @@ export class DanhSachBaoCaoComponent implements OnInit {
         this.searchFilter.nam = null
         this.searchFilter.tuNgay = null
         this.searchFilter.denNgay = null
-        this.searchFilter.maBaoCao = null
         this.searchFilter.trangThai = null
         this.search();
     }
 
     checkEditStatus(item: any) {
-        const isSynthetic = item.tongHopTu != "[]";
-        return Utils.statusSave.includes(item.trangThai) &&
-            (isSynthetic ? this.userService.isAccessPermisson(LTD.EDIT_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(LTD.EDIT_REPORT));
+        return [Utils.TT_BC_1, Utils.TT_BC_3, Utils.TT_BC_5].includes(item.trangThai) &&
+            this.userService.isAccessPermisson(LTD.EDIT_COEFFCIENT_INSURANCE);
     }
 
     checkDeleteStatus(item: any) {
-        const isSynthetic = item.tongHopTu != "[]";
-        return Utils.statusSave.includes(item.trangThai) &&
-            (isSynthetic ? this.userService.isAccessPermisson(LTD.DELETE_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(LTD.DELETE_REPORT));
+        return [Utils.TT_BC_1, Utils.TT_BC_3, Utils.TT_BC_5].includes(item.trangThai) &&
+            this.userService.isAccessPermisson(LTD.DELETE_COEFFCIENT_INSURANCE);
     }
 
     getStatusName(trangThai: string) {
@@ -173,22 +151,20 @@ export class DanhSachBaoCaoComponent implements OnInit {
     //them moi bao cao
     addNewReport() {
         const modalTuChoi = this.modal.create({
-            nzTitle: 'Thông tin tạo mới báo cáo',
-            nzContent: DialogTaoMoiComponent,
+            nzTitle: 'Thông tin tạo mới tỷ lệ bảo hiểm',
+            nzContent: DialogTaoMoiTyLeBaoHiemComponent,
             nzMaskClosable: false,
             nzClosable: false,
             nzWidth: '900px',
             nzFooter: null,
             nzComponentParams: {
-                tab: 'danhsach'
             },
         });
         modalTuChoi.afterClose.toPromise().then(async (res) => {
             if (res) {
                 const obj = {
                     baoCao: res,
-                    tabSelected: 'baocao',
-                    isSynthetic: false,
+                    tabSelected: 'heso',
                 }
                 this.dataChange.emit(obj);
             }
@@ -199,7 +175,7 @@ export class DanhSachBaoCaoComponent implements OnInit {
     viewDetail(data: any) {
         const obj = {
             id: data.id,
-            tabSelected: 'baocao',
+            tabSelected: 'heso',
         }
         this.dataChange.emit(obj);
     }
@@ -247,7 +223,7 @@ export class DanhSachBaoCaoComponent implements OnInit {
                         })
                     }
                 }
-                this.lapThamDinhService.xoaBaoCaoLapThamDinh(request).toPromise().then(
+                this.lapThamDinhService.xoaBh(request).toPromise().then(
                     data => {
                         if (data.statusCode == 0) {
                             this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
@@ -264,26 +240,5 @@ export class DanhSachBaoCaoComponent implements OnInit {
                 this.spinner.hide();
             },
         });
-    }
-
-    // Tìm kiếm trong bảng
-    filterInTable(key: string, value: string, isDate: boolean) {
-        if (value && value != '') {
-            this.dataTable = [];
-            let temp = [];
-            if (this.dataTableAll && this.dataTableAll.length > 0) {
-                if (isDate) {
-                    value = this.datePipe.transform(value, Utils.FORMAT_DATE_STR);
-                }
-                this.dataTableAll.forEach((item) => {
-                    if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
-                        temp.push(item)
-                    }
-                });
-            }
-            this.dataTable = [...this.dataTable, ...temp];
-        } else {
-            this.dataTable = cloneDeep(this.dataTableAll);
-        }
     }
 }

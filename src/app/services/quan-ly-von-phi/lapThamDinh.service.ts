@@ -92,90 +92,6 @@ export class LapThamDinhService extends BaseService {
         );
     }
 
-    // //tim kiem so giao tran chi
-    // timKiemPhuongAn(request: any): Observable<any> {
-    //     return this.httpClient.post(
-    //         this.urlDefault + '/pa-giao-so/danh-sach'
-    //         , request)
-    // }
-
-    // //xoa phuong an
-    // xoaPhuongAn(request: any): Observable<any> {
-    //     return this.httpClient.post(
-    //         this.urlDefault + '/pa-giao-so/xoa',
-    //         request
-    //     );
-    // }
-
-    // //tao ma PA
-    // maPhuongAn(): Observable<any> {
-    //     return this.httpClient.get(
-    //         this.urlDefault + '/pa-giao-so/sinh-ma-pa'
-    //     );
-    // }
-
-    // //danh sach bao cao tong hop nen bao cao to
-    // danhSachBaoCaoTongHop(maBcao: string): Observable<any> {
-    //     return this.httpClient.get(
-    //         this.urlDefault + '/giao-so/danh-sach/' + maBcao
-    //     )
-    // }
-
-    // //chi tiet ma phuong an
-    // ctietPhuongAn(id: any): Observable<any> {
-    //     return this.httpClient.get(
-    //         this.urlDefault + '/pa-giao-so/chi-tiet/' + id
-    //     );
-    // }
-
-    // trinhDuyetPhuongAn(request: any): Observable<any> {
-    //     return this.httpClient.put(
-    //         this.urlDefault + '/pa-giao-so/trang-thai',
-    //         request);
-    // }
-
-    // //them moi phuong an
-    // themMoiPhuongAn(request: any): Observable<any> {
-    //     return this.httpClient.post(
-    //         this.urlDefault + '/pa-giao-so/them-moi',
-    //         request);
-    // }
-
-    // //nhap so QD-CV
-    // themMoiQdCv(request: any): Observable<any> {
-    //     return this.httpClient.put(
-    //         this.urlDefault + '/pa-giao-so/nhap-qd-cv'
-    //         , request);
-    // }
-
-    // //cap nhat phuong an
-    // capnhatPhuongAn(requestUpdate: any): Observable<any> {
-    //     return this.httpClient.put(
-    //         this.urlDefault + '/pa-giao-so/cap-nhat'
-    //         , requestUpdate);
-    // }
-
-    // //giao so tran chi
-    // giaoSoTranChi(request: any): Observable<any> {
-    //     return this.httpClient.post(
-    //         this.urlDefault + '/giao-so/giao-so-dvi-cap-duoi'
-    //         , request);
-    // }
-
-    // //tim kiem so giao kiem tra tran chi
-    // timKiemSoKiemTraTranChi(request: any): Observable<any> {
-    //     return this.httpClient.post(
-    //         this.urlDefault + '/giao-so/dsach-giao-so'
-    //         , request)
-    // }
-
-    // //xem chi tiet so giao tran chi
-    // ctietGiaoSoTranChi(id: any): Observable<any> {
-    //     return this.httpClient.get(
-    //         this.urlDefault + '/giao-so/chi-tiet/' + id
-    //     );
-    // }
-
     //tong hop
     tongHop(request: any): Observable<any> {
         return this.httpClient.post(
@@ -184,34 +100,58 @@ export class LapThamDinhService extends BaseService {
         );
     }
 
-    // //tao ma giao
-    // maGiao(): Observable<any> {
-    //     return this.httpClient.get(
-    //         this.urlDefault + '/giao-so/sinh-ma-giao-so'
-    //     );
-    // }
+    //tong hop
+    soLuongVp(request: any): Observable<any> {
+        return this.httpClient.post(
+            this.urlDefault + '/lap-tham-dinh/get-so-luong',
+            request,
+        );
+    }
 
-    // timKiemMaPaDuyet(): Observable<any> {
-    //     return this.httpClient.get(
-    //         this.urlDefault + '/pa-giao-so/danh-sach/pa-lanh-dao-duyet'
-    //     );
-    // }
+    themMoiTyLeBh(request: any): Observable<any> {
+        return this.httpClient.post(
+            this.urlDefault + '/he-so-bao-hiem/them-moi',
+            request,
+        );
+    }
 
-    // //sua bao cao theo so giao tran chi
-    // suaBcao(request: any): Observable<any> {
-    //     return this.httpClient.put(
-    //         this.urlDefault + '/giao-so/cap-nhat/bao-cao',
-    //         request);
-    // }
+    capNhatTyLeBh(request: any): Observable<any> {
+        return this.httpClient.put(
+            this.urlDefault + '/he-so-bao-hiem/cap-nhat',
+            request,
+        );
+    }
 
-    // tongHopPa(request: any): Observable<any> {
-    //     return this.httpClient.post(
-    //         this.urlDefault + '/lap-tham-dinh/tong-hop-theo-ma-pa',
-    //         request);
-    // }
-
-    getDsTle(nam: any): Observable<any> {
+    chiTietTyLeBh(id: string): Observable<any> {
         return this.httpClient.get(
-            this.urlDefault + '/chung/tham-so-he-thong/' + nam);
+            this.urlDefault + '/he-so-bao-hiem/chi-tiet/' + id,
+        );
+    }
+
+    trangThaiTyLeBh(request: any): Observable<any> {
+        return this.httpClient.post(
+            this.urlDefault + '/he-so-bao-hiem/trang-thai',
+            request,
+        );
+    }
+
+    tyLeBaoHiem(nam: number): Observable<any> {
+        return this.httpClient.get(
+            this.urlDefault + '/he-so-bao-hiem/' + nam.toString(),
+        );
+    }
+
+    danhSachHeSoBh(request: any): Observable<any> {
+        return this.httpClient.post(
+            this.urlDefault + '/he-so-bao-hiem/danh-sach',
+            request,
+        );
+    }
+
+    xoaBh(request: any): Observable<any> {
+        return this.httpClient.post(
+            this.urlDefault + '/he-so-bao-hiem/xoa',
+            request
+        );
     }
 }
