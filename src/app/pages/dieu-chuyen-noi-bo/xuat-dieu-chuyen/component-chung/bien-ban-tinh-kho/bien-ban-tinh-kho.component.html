@@ -190,16 +190,16 @@
                                                     <i class="fa fa-plus"></i>
                                                 </a>
                                                 <a *ngIf="checkRoleView(lv2)" (click)="redirectDetail(lv2.id, true)">
-                                                    <i class="fa fa-eye"></i>
+                                                    <i class="fa fa-eye" title="Xem chi tiết"></i>
                                                 </a>
                                                 <a *ngIf="checkRoleEdit(lv2)" (click)="redirectDetail(lv2.id, false)">
-                                                    <i class="fa fa-pencil"></i>
+                                                    <i class="fa fa-pencil" title="Sửa"></i>
                                                 </a>
                                                 <a *ngIf="checkRoleApprove(lv2)" (click)="redirectDetail(lv2.id, true)">
                                                     <i class="icon htvbdh_tcdt_pheduyet"></i>
                                                 </a>
                                                 <a *ngIf="checkRoleDetele(lv2)" (click)="delete(lv2)">
-                                                    <i class="fa fa-trash-o do"></i>
+                                                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                                                 </a>
                                             </td>
                                         </tr>

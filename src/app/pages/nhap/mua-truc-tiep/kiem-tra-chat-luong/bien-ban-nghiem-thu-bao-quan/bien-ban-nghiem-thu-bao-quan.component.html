@@ -103,15 +103,15 @@
                                     <td>
                                         <a *ngIf="bbNghiemThuBq.trangThai == STATUS.DA_DUYET_LDCC && userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBNTBQLD_XEM')"
                                             (click)="redirectToChiTiet(false, bbNghiemThuBq.id)">
-                                            <i class="fa fa-eye"></i>
+                                            <i class="fa fa-eye" title="Xem chi tiết"></i>
                                         </a>
                                         <a *ngIf="bbNghiemThuBq.trangThai != STATUS.DA_DUYET_LDCC && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_THEM')"
                                             (click)="redirectToChiTiet(false, bbNghiemThuBq.id)">
-                                            <i class="fa fa-pencil"></i>
+                                            <i class="fa fa-pencil" title="Sửa"></i>
                                         </a>
                                         <a *ngIf="bbNghiemThuBq.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBNTBQLD_XOA')"
                                             (click)="xoaItem(bbNghiemThuBq)">
-                                            <i class="fa fa-trash-o do"></i>
+                                            <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                                         </a>
                                     </td>
                                 </tr>

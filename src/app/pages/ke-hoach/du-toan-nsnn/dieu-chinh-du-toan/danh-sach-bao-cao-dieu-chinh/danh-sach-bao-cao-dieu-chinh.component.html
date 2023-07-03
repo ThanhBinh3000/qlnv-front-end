@@ -52,7 +52,7 @@
     <h3 class="text-uppercase">DANH SÁCH BÁO CÁO ĐIỀU CHỈNH</h3>
     <div class="buttons">
       <button *ngIf="statusDelete" type="button" class="btn btn-do" (click)="deleteReport('')">
-        <i class="fa fa-trash-o do"></i>
+        <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
         <span>Xóa</span>
       </button>
       <button *ngIf="statusNewReport" type="button" class="btn btn-main" (click)="addNewReport()">
@@ -191,14 +191,14 @@
           <td class="text-left">
             <a (click)="viewDetail(data)">
               <ng-container *ngIf="data.isEdit; else view">
-                <i class="fa fa-pencil"></i>
+                <i class="fa fa-pencil" title="Sửa"></i>
               </ng-container>
               <ng-template #view>
-                <i class="fa fa-eye"></i>
+                <i class="fa fa-eye" title="Xem chi tiết"></i>
               </ng-template>
             </a>
             <a *ngIf="data.isDelete" (click)="deleteReport(data.id)">
-              <i class="fa fa-trash-o do"></i>
+              <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>
         </tr>

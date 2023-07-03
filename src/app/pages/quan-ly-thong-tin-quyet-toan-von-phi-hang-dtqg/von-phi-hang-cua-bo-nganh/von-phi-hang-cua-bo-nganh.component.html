@@ -49,7 +49,7 @@
     <h3 class="text-uppercase">Danh sách vốn, phí hàng của Bộ/Ngành</h3>
     <div class="buttons">
       <button type="button" class="btn btn-sub btn-xoa" (click)="xoa()">
-        <i class="fa fa-trash-o do"></i>
+        <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
         <span>Xóa</span>
       </button>
       <button type="button" (click)="exportData()" class="btn btn-sub">
@@ -131,13 +131,13 @@
         <td></td>
         <td class="text-center">
           <a *ngIf="data.trangThai !== STATUS.DU_THAO" (click)="viewDetail(data.id, true)">
-            <i class="fa fa-eye"></i>
+            <i class="fa fa-eye" title="Xem chi tiết"></i>
           </a>
           <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="viewDetail(data.id, false)">
-            <i class="fa fa-pencil"></i>
+            <i class="fa fa-pencil" title="Sửa"></i>
           </a>
           <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="xoaItem(data)">
-            <i class="fa fa-trash-o do"></i>
+            <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
           </a>
         </td>
       </tr>

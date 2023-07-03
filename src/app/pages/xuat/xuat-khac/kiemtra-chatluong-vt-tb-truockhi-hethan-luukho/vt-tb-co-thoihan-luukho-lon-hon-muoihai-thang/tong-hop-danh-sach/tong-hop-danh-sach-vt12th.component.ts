@@ -1,4 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+
 import {Base2Component} from "../../../../../../components/base2/base2.component";
 import {FormGroup} from "@angular/forms";
 import {NumberToRoman} from "../../../../../../shared/commonFunction";
@@ -40,10 +41,10 @@ export class TongHopDanhSachVt12thComponent extends Base2Component implements On
   numberToRoman = NumberToRoman;
   selectedItem: any;
   modalWidth: any;
+  @Input() openModal: boolean;
   step: any = 1;
   DanhSach: boolean = false;
   showDetail: boolean;
-  @Input() openModal: boolean;
   @Output() tabFocus = new EventEmitter<number>();
 
   constructor(
@@ -104,6 +105,7 @@ export class TongHopDanhSachVt12thComponent extends Base2Component implements On
         this.loadDsDonVi(),
         this.loadDsVthh()
       ]);
+      console.log(this.openModal)
       await this.timKiem();
       if (this.openModal) {
         await this.showModal(true);

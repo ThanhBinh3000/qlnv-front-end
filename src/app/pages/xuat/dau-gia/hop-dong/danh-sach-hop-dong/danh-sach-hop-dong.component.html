@@ -215,11 +215,11 @@
             <td class="text-left">
               <a (click)="goDetail(data.id,null,true)"
                 *ngIf="data.trangThaiHd!=STATUS.DA_HOAN_THANH && userService.isCuc()">
-                <i class="fa fa-pencil"></i>
+                <i class="fa fa-pencil" title="Sửa"></i>
               </a>
               <a (click)="goDetail(data.id,null,true)"
                 *ngIf="data.trangThaiHd==STATUS.DA_HOAN_THANH ||userService.isTongCuc()">
-                <i class="fa fa-eye"></i>
+                <i class="fa fa-eye" title="Xem chi tiết"></i>
               </a>
             </td>
           </tr>

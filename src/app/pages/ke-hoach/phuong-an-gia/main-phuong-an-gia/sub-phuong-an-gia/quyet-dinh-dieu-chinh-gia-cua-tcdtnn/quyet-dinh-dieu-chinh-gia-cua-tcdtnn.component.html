@@ -65,7 +65,7 @@
         <button *ngIf="userService.isTongCuc() && ((this.pagType == 'LT' && this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_GCT_QDDCTC_XOA'))
       || (this.pagType == 'VT' && this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_VT_GCT_QDDCTC_XOA')))"
                 type="button" class="btn btn-sub btn-xoa" (click)="xoa()">
-          <i class="fa fa-trash-o do"></i>
+          <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
           <span>Xóa</span>
         </button>
         <button type="button" class="btn btn-sub" (click)="exportData()"
@@ -190,17 +190,17 @@
           <td>
             <a (click)="viewDetail(data.id, true)" *ngIf="((this.pagType == 'LT' && this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_GCT_QDDCTC_XEM'))
       || (this.pagType == 'VT' && this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_VT_GCT_QDDCTC_XEM'))) && !(data.trangThai == STATUS.DU_THAO && data.maDvi == userInfo.MA_DVI)">
-              <i class="fa fa-eye"></i>
+              <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
             <a *ngIf="data.trangThai == STATUS.DU_THAO && ((this.pagType == 'LT' && this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_GCT_QDDCTC_THEM'))
       || (this.pagType == 'VT' && this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_VT_GCT_QDDCTC_THEM')))"
                (click)="viewDetail(data.id, false)">
-              <i class="fa fa-pencil"></i>
+              <i class="fa fa-pencil" title="Sửa"></i>
             </a>
             <a *ngIf="data.trangThai == STATUS.DU_THAO && ((this.pagType == 'LT' && this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_GCT_QDDCTC_XOA'))
       || (this.pagType == 'VT' && this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_VT_GCT_QDDCTC_XOA')))"
                (click)="xoaItem(data)">
-              <i class="fa fa-trash-o do"></i>
+              <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>
         </tr>

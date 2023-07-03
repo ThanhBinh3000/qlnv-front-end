@@ -258,10 +258,10 @@
                                         '1.0-1' }}</td>
                                     <td *ngIf="!(isDisableField() || isView)">
                                         <a (click)="editRow(data, 'ct1s')">
-                                            <i class="fa fa-pencil"></i>
+                                            <i class="fa fa-pencil" title="Sửa"></i>
                                         </a>
                                         <a (click)="deleteRow(data, 'ct1s')">
-                                            <i class="fa fa-trash-o do"></i>
+                                            <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                                         </a>
                                     </td>
                                 </ng-container>
@@ -396,10 +396,10 @@
                                     <td>{{data.yeuCauCapThem | number: '1.0-1'}}</td>
                                     <td>
                                         <a (click)="editRow(data, 'ct2s')" [class.disabled]="rowEdit.isView">
-                                            <i class="fa fa-pencil"></i>
+                                            <i class="fa fa-pencil" title="Sửa"></i>
                                         </a>
                                         <a (click)="deleteRow(data, 'ct2s')" [class.disabled]="rowEdit.isView">
-                                            <i class="fa fa-trash-o do"></i>
+                                            <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                                         </a>
                                     </td>
                                 </ng-container>

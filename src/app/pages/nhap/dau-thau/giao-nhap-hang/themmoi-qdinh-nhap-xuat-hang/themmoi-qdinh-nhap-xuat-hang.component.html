@@ -12,13 +12,13 @@
         <span>Lưu và gửi duyệt</span>
       </button>
       <button type="button" class="btn btn-sub do"
-        *ngIf="((formData.value.trangThai == STATUS.CHO_DUYET_TP && userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_DUYET_TP')) 
+        *ngIf="((formData.value.trangThai == STATUS.CHO_DUYET_TP && userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_DUYET_TP'))
         || (formData.value.trangThai == STATUS.CHO_DUYET_LDC && userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_DUYET_LDCUC'))) " (click)="tuChoi()">
         <i class="icon htvbdh_tcdt_tuchoi"></i>
         <span>Từ chối</span>
       </button>
       <button type="button" class="btn btn-sub xanh-nhat"
-        *ngIf="((formData.value.trangThai == STATUS.CHO_DUYET_TP && userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_DUYET_TP')) 
+        *ngIf="((formData.value.trangThai == STATUS.CHO_DUYET_TP && userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_DUYET_TP'))
       || (formData.value.trangThai == STATUS.CHO_DUYET_LDC && userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_DUYET_LDCUC'))) " (click)="save(true)">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span>Duyệt</span>
@@ -346,7 +346,7 @@
               <td *ngIf="userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_PHANBO')"
                 style="text-align: center;">
                 <a>
-                  <i class="fa fa-pencil"></i>
+                  <i class="fa fa-pencil" title="Sửa"></i>
                 </a>
                 <a>
                   <i (click)="xoaDiaDiemNhap(i,y)" class="fa fa-trash-o do"></i>

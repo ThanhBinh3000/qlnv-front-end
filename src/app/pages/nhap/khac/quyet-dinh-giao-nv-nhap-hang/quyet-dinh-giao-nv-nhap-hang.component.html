@@ -54,7 +54,7 @@
       <div class="buttons">
         <button type="button" class="btn btn-do" (click)="deleteSelect()" *ngIf="userService.isCuc()
         && userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_XOA')">
-          <i class="fa fa-trash-o do"></i>
+          <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
           <span>Xóa</span>
         </button>
         <button *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_EXP')" type="button" class="btn btn-sub"
@@ -211,7 +211,7 @@
             </a>
             <a (click)="xoaItem(data)" *ngIf="userService.isCuc() && data.trangThai == STATUS.DU_THAO
               && userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_XOA')">
-              <i class="fa fa-trash-o do"></i>
+              <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>
         </tr>

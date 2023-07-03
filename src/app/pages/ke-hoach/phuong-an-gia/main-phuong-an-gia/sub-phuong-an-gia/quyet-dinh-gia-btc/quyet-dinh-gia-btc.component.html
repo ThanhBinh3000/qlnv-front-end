@@ -64,7 +64,7 @@
         <button type="button" class="btn btn-sub btn-xoa" (click)="deleteSelected()"
                 *ngIf="(pagType == 'LT' && userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_MTDBTT_QD_XOA'))
                  || (pagType == 'VT' && userService.isAccessPermisson('KHVDTNSNN_PAGIA_VT_MTDBTT_QD_XOA')) ">
-          <i class="fa fa-trash-o do"></i>
+          <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
           <span>Xóa</span>
         </button>
         <button type="button" class="btn btn-sub"
@@ -172,17 +172,17 @@
               <a (click)="viewDetail(data.id, true,data.trangThai)"
                  *ngIf="((pagType == 'LT' && userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_MTDBTT_QD_XEM'))
                  || (pagType == 'VT' && userService.isAccessPermisson('KHVDTNSNN_PAGIA_VT_MTDBTT_QD_XEM'))) && !(data.trangThai == STATUS.DU_THAO && (userInfo.MA_DVI == data.maDvi)) ">
-                <i class="fa fa-eye"></i>
+                <i class="fa fa-eye" title="Xem chi tiết"></i>
               </a>
               <a  (click)="viewDetail(data.id, false,data.trangThai)"
                   *ngIf="data.trangThai == STATUS.DU_THAO && ((pagType == 'LT' && userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_MTDBTT_QD_THEM'))
                  || (pagType == 'VT' && userService.isAccessPermisson('KHVDTNSNN_PAGIA_VT_MTDBTT_QD_THEM'))) ">
-                <i class="fa fa-pencil"></i>
+                <i class="fa fa-pencil" title="Sửa"></i>
               </a>
               <a *ngIf="data.trangThai == STATUS.DU_THAO  && ((pagType == 'LT' && userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_MTDBTT_QD_XOA'))
                  || (pagType == 'VT' && userService.isAccessPermisson('KHVDTNSNN_PAGIA_VT_MTDBTT_QD_XOA'))) "
                  (click)="deleteItem(data)">
-                <i class="fa fa-trash-o do"></i>
+                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
               </a>
             </td>
           </tr>

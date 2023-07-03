@@ -613,7 +613,7 @@
                         <i class="icon htvbdh_dau-cong"></i>
                       </a>
                       <a (click)="xoaChiCuc(chiCuc)">
-                        <i class="fa fa-trash-o do"></i>
+                        <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                       </a>
                     </td>
                   </tr>
@@ -644,7 +644,7 @@
                             <i class="icon htvbdh_dau-cong"></i>
                           </a>
                           <a (click)="xoaDiemKho(diemKho)">
-                            <i class="fa fa-trash-o do"></i>
+                            <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                           </a>
                         </td>
                       </tr>
@@ -678,7 +678,7 @@
                                 <i class="icon htvbdh_dau-cong"></i>
                               </a>
                               <a (click)="xoaLoKho(loNganKho)">
-                                <i class="fa fa-trash-o do"></i>
+                                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                               </a>
                             </td>
                           </tr>
@@ -707,7 +707,7 @@
                                   <i class="icon htvbdh_dau-cong"></i>
                                 </a>
                                 <a (click)="xoaDiemKhoNhan(diemKhoNhan)">
-                                  <i class="fa fa-trash-o do"></i>
+                                  <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                                 </a>
                               </td>
                             </tr>
@@ -735,10 +735,10 @@
                                   {{loNganKhoNhan.soLuongPhanBo|number:'1.0-1':'vi_VN'}}</td>
                                 <td *ngIf="!isView">
                                   <a (click)="suaLoKhoNhan(loNganKhoNhan)">
-                                    <i class="fa fa-pencil"></i>
+                                    <i class="fa fa-pencil" title="Sửa"></i>
                                   </a>
                                   <a (click)="xoaLoKhoNhan(loNganKhoNhan)">
-                                    <i class="fa fa-trash-o do"></i>
+                                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                                   </a>
                               </tr>
 
@@ -1316,7 +1316,7 @@
                                     <i class="icon htvbdh_dau-cong"></i>
                                   </a>
                                   <a (click)="xoaDiemKhoNhan(diemKhoNhan)">
-                                    <i class="fa fa-trash-o do"></i>
+                                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                                   </a>
                                 </td>
                               </tr>
@@ -1344,10 +1344,10 @@
                                     {{f.soLuongPhanBo|number:'1.0-1':'vi_VN'}}</td>
                                   <td *ngIf="formData.value.trangThai == STATUS.YC_CHICUC_PHANBO_DC">
                                     <a (click)="suaLoKhoNhan(f)">
-                                      <i class="fa fa-pencil"></i>
+                                      <i class="fa fa-pencil" title="Sửa"></i>
                                     </a>
                                     <a (click)="xoaLoKhoNhan(f)">
-                                      <i class="fa fa-trash-o do"></i>
+                                      <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                                     </a>
                                   </td>
                                 </tr>

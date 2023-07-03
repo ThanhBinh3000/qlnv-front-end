@@ -215,10 +215,10 @@
               <td>{{item.chuThich}}</td>
               <td>
                 <a *ngIf="!isDisableField() && !isView" (click)="showEditItem(idx, 'show')">
-                  <i class="fa fa-pencil"></i>
+                  <i class="fa fa-pencil" title="Sửa"></i>
                 </a>
                 <a *ngIf="!isDisableField() && !isView" (click)="xoaItem(idx)">
-                  <i class="fa fa-trash-o do"></i>
+                  <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                 </a>
               </td>
             </ng-container>

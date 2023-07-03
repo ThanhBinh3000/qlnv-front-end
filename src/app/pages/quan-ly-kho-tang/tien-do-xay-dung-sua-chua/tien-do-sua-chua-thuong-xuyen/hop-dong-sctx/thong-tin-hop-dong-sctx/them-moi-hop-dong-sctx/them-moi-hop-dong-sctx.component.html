@@ -12,7 +12,7 @@
     <div class="btn-group">
       <button *ngIf="idInput && formData.value.trangThai == STATUS.DU_THAO " type="button" (click)="delete(formData.value)"
               class="btn btn-sub btn-xoa">
-        <i class="fa fa-trash-o do"></i>
+        <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
         <span>Xóa {{idInput}}</span>
       </button>
       <button class="btn btn-sub xanh-nhat ml-2" (click)="save(true)"
@@ -488,10 +488,10 @@
               <td>{{data.ghiChu}}</td>
               <td class="text-center" *ngIf="!isViewDetail">
                 <a  (click)="editDataKlCongViec(i)">
-                  <i class="fa fa-pencil"></i>
+                  <i class="fa fa-pencil" title="Sửa"></i>
                 </a>
                 <a (click)="deleteKlCongViec(i)">
-                  <i class="fa fa-trash-o do"></i>
+                  <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                 </a>
               </td>
             </ng-container>
@@ -573,13 +573,13 @@
             <td>{{data.tenTrangThai }}</td>
             <td class="text-center" *ngIf="isViewDetail">
               <a (click)="openModalPhuLuc(true, data.id)" *ngIf="data.trangThai == STATUS.DA_KY">
-                <i class="fa fa-eye"></i>
+                <i class="fa fa-eye" title="Xem chi tiết"></i>
               </a>
               <a (click)="openModalPhuLuc(false, data.id)" *ngIf="data.trangThai == STATUS.DU_THAO">
-                <i class="fa fa-pencil"></i>
+                <i class="fa fa-pencil" title="Sửa"></i>
               </a>
               <a (click)="deleteDetail(data) " *ngIf="data.trangThai == STATUS.DU_THAO">
-                <i class="fa fa-trash-o do"></i>
+                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
               </a>
             </td>
           </tr>

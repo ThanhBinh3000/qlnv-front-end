@@ -65,7 +65,7 @@
             <div class="buttons">
                 <button type="button" class="btn btn-do" (click)="deleteMulti()"
                     *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_XK_LT_BKCH_XOA')">
-                    <i class="fa fa-trash-o do"></i>
+                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                     <span>Xóa</span>
                 </button>
                 <button type="button" class="btn btn-sub" (click)="exportData()"
@@ -184,18 +184,18 @@
                             </a> -->
                                                     <a (click)="redirectDetail(lv3, true, lv3.id)"
                                                         *ngIf="checkRoleView(lv3.trangThai)">
-                                                        <i class="fa fa-eye"></i>
+                                                        <i class="fa fa-eye" title="Xem chi tiết"></i>
                                                     </a>
                                                     <a *ngIf="checkRoleEdit(lv3.trangThai)"
                                                         (click)="redirectDetail(lv3, false, lv3.id)">
-                                                        <i class="fa fa-pencil"></i>
+                                                        <i class="fa fa-pencil" title="Sửa"></i>
                                                     </a>
                                                     <a *ngIf="checkRoleDuyet(lv3.trangThai)"
                                                         (click)="redirectDetail(lv3, true, lv3.id)">
                                                         <i class="icon htvbdh_tcdt_pheduyet"></i>
                                                     </a>
                                                     <a *ngIf="checkRoleDelete(lv3.trangThai)" (click)="delete(lv3)">
-                                                        <i class="fa fa-trash-o do"></i>
+                                                        <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                                                     </a>
                                                 </td>
                                             </tr>

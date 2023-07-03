@@ -39,7 +39,7 @@
       <h3 class="text-uppercase">Danh sách biên bản giao nhận</h3>
       <div class="buttons">
         <button type="button" *ngIf="(userService.isChiCuc()) && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_BBGN_XOA')" class="btn btn-do ml-2" (click)="deleteMulti()">
-          <i class="fa fa-trash-o do"></i>
+          <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
           <span>Xóa</span>
         </button>
         <button type="button" class="btn btn-sub ml-2" (click)="exportData()" *ngIf="userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_BBGN_EXP')">
@@ -146,14 +146,14 @@
           <td>{{ data.tenTrangThai }}</td>
           <td>
             <a (click)="redirectToChiTiet(data.id, true)" *ngIf="((data.trangThai == STATUS.DA_KY || !userService.isChiCuc()) && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_BBGN_XEM'))">
-              <i class="fa fa-eye"></i>
+              <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
             <a *ngIf="((data.trangThai == STATUS.DU_THAO && userService.isChiCuc()) && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_BBGN_SUA'))"
                (click)="redirectToChiTiet(data.id, false)">
-              <i class="fa fa-pencil"></i>
+              <i class="fa fa-pencil" title="Sửa"></i>
             </a>
             <a *ngIf="((data.trangThai == STATUS.DU_THAO && userService.isChiCuc()) && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_BBGN_XOA'))" (click)="delete(data)">
-              <i class="fa fa-trash-o do"></i>
+              <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>
         </tr>
