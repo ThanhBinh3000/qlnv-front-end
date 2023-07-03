@@ -39,7 +39,7 @@
             <button
               [disabled]="(dataTable && dataTable.length > 0 && levelNode < 6) || (levelNode == 6 && detailDonVi.value.coLoKho == true && dataTable && dataTable.length > 0) || (levelNode == 6 && detailDonVi.value.coLoKho == false && detailDonVi.value.slTon != 0) || (levelNode == 7 && detailDonVi.value.slTon != 0)"
               nz-button class="btn btn-sub do ml-2" (click)="delete()">
-              <i class="fa fa-trash-o do"></i>
+              <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
               Xóa
             </button>
             <button nz-button class="btn btn-sub xanh-nhat ml-2" (click)="themSoDuDauKy()"

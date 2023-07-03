@@ -151,10 +151,10 @@
                 <td></td>
                 <td class="text-left">
                   <a (click)="showModal(true, item)">
-                    <i class="fa fa-eye"></i>
+                    <i class="fa fa-eye" title="Xem chi tiết"></i>
                   </a>
                   <a *ngIf="item.trangThai==STATUS.DU_THAO" (click)="delete(item)">
-                    <i class="fa fa-trash-o do"></i>
+                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                   </a>
                 </td>
               </tr>

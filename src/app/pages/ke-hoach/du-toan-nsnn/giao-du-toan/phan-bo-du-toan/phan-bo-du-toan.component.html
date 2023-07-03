@@ -59,7 +59,7 @@
     <h3 class="text-uppercase">DANH SÁCH PHÂN BỔ DỰ TOÁN</h3>
     <div class="buttons">
       <button *ngIf="statusDelete" type="button" class="btn btn-do" (click)="deleteReport('')">
-        <i class="fa fa-trash-o do"></i>
+        <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
         <span>Xóa</span>
       </button>
       <button *ngIf="statusNewReport" type="button" class="btn btn-main" (click)="addNewReport()">
@@ -187,10 +187,10 @@
           </td>
           <td class="text-left">
             <a (click)="xemChiTiet(data.id, data.maLoaiDan)">
-              <i class="fa fa-eye"></i>
+              <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
             <a *ngIf="data.isDelete" (click)="deleteReport(data.id)">
-              <i class="fa fa-trash-o do"></i>
+              <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>
         </tr>

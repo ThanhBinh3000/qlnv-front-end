@@ -53,7 +53,7 @@
       <h3>DANH SÁCH SỔ NHẬT TRÌNH BẢO QUẢN</h3>
       <div class="buttons">
         <button type="button" class="btn btn-sub btn-xoa" (click)="xoa()" *ngIf="userService.isChiCuc()">
-          <i class="fa fa-trash-o do"></i>
+          <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
           <span>Xóa</span>
         </button>
         <button type="button" class="btn btn-sub" (click)="exportData()">
@@ -173,10 +173,10 @@
               <i class=" icon htvbdh_eye"></i>
             </a>
             <a (click)="viewDetail(data.id, false)" *ngIf="(data.trangThai == STATUS.TU_CHOI_LDCC || data.trangThai == STATUS.DU_THAO) && userService.isChiCuc() ">
-              <i class="fa fa-pencil"></i>
+              <i class="fa fa-pencil" title="Sửa"></i>
             </a>
             <a (click)="xoaItem(data.id)" *ngIf="(data.trangThai == STATUS.DU_THAO) && userService.isChiCuc()">
-              <i class="fa fa-trash-o do"></i>
+              <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>
         </tr>

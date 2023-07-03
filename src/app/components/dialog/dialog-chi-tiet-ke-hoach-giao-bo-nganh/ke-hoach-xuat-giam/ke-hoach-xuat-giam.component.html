@@ -91,7 +91,7 @@
   <!--            <i class=" fa fa-pencil"></i>-->
   <!--          </a>-->
   <!--          <a *ngIf="!isView" (click)="xoaItem(idx)">-->
-  <!--            <i class="fa fa-trash-o do"></i>-->
+  <!--            <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>-->
   <!--          </a>-->
   <!--        </td>-->
   <!--      </ng-container>-->
@@ -212,10 +212,10 @@
         </ng-container>
         <td class="font-weight-bold text-center" nzRight *ngIf="!isView">
           <a *ngIf="data.isLeaf"  (click)="suaIem(data.dataChild[0],true)">
-            <i class="fa fa-pencil"></i>
+            <i class="fa fa-pencil" title="Sửa"></i>
           </a>
           <a (click)="xoaItem(data,true)">
-            <i class="fa fa-trash-o do"></i>
+            <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
           </a>
         </td>
       </tr>
@@ -228,10 +228,10 @@
           <td>{{item.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
           <td class="text-center" nzRight *ngIf="!isView">
             <a (click)="suaIem(item,false)">
-              <i class="fa fa-pencil"></i>
+              <i class="fa fa-pencil" title="Sửa"></i>
             </a>
             <a (click)="xoaItem(item,false)">
-              <i class="fa fa-trash-o do"></i>
+              <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>
         </tr>

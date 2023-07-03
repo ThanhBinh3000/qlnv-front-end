@@ -164,7 +164,7 @@
                     <td>{{ data.statusConvert }}</td>
                     <td class="text-left">
                       <a (click)="redirectToChiTiet(data.idGt)">
-                        <i class="fa fa-eye"></i>
+                        <i class="fa fa-eye" title="Xem chi tiết"></i>
                       </a>
                       <a *ngIf="data.trangThai == globals.prop.NHAP_DU_THAO || data.trangThai == globals.prop.NHAP_CHO_DUYET_TP"
                         (click)="redirectToChiTiet(data.idGt)">

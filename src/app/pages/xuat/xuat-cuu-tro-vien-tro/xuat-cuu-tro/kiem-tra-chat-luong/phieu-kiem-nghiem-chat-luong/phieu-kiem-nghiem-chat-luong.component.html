@@ -263,12 +263,12 @@
                 !(vldTrangThai.checkStatusPermission(lv1,CHUC_NANG.DUYET_TP)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_PKNCL_DUYET_TP'))&&
                 !(vldTrangThai.checkStatusPermission(lv1,CHUC_NANG.DUYET_LDC)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_PKNCL_DUYET_LDCUC')) &&
                 userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_PKNCL_XEM')">
-                    <i class="fa fa-eye"></i>
+                    <i class="fa fa-eye" title="Xem chi tiết"></i>
                   </a>
                   <a
                     *ngIf="(vldTrangThai.checkStatusPermission(lv1,CHUC_NANG.SUA)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_PKNCL_THEM'))"
                     (click)="redirectDetail(lv1.id, false)">
-                    <i class="fa fa-pencil"></i>
+                    <i class="fa fa-pencil" title="Sửa"></i>
                   </a>
                   <a *ngIf="(vldTrangThai.checkStatusPermission(lv1,CHUC_NANG.DUYET_TP)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_PKNCL_DUYET_TP'))||
                       (vldTrangThai.checkStatusPermission(lv1,CHUC_NANG.DUYET_LDC)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_PKNCL_DUYET_LDCUC'))"
@@ -278,7 +278,7 @@
                   <a
                     *ngIf="vldTrangThai.checkStatusPermission(lv1,CHUC_NANG.XOA) && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_PKNCL_XOA')"
                     (click)="delete(lv1)">
-                    <i class="fa fa-trash-o do"></i>
+                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                   </a>
                 </td>
               </tr>

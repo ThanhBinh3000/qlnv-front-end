@@ -55,7 +55,7 @@
         <div class="buttons">
           <button type="button" class="btn btn-do" (click)="deleteSelect()"
                   *ngIf="(userService.isCuc()) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_DEXUAT_XOA')">
-            <i class="fa fa-trash-o do"></i>
+            <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             <span>Xóa</span>
           </button>
           <button *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_DEXUAT_EXP')" type="button"
@@ -174,17 +174,17 @@
               <a
                 *ngIf="(data.trangThai == STATUS.DA_DUYET_LDC  || data.trangThai == STATUS.CHO_DUYET_LDC  || data.trangThai == STATUS.CHO_DUYET_TP || data.trangThai == STATUS.TU_CHOI_LDC || data.trangThai == STATUS.TU_CHOI_TP) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_DEXUAT_XEM')"
                 (click)="redirectToChiTiet(true, data.id)">
-                <i class="icon htvbdh_eye"></i>
+                <i class="icon htvbdh_eye" title="Xem chi tiết"></i>
               </a>
               <a *ngIf="(userService.isCuc() && (data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_TP || data.trangThai == STATUS.TU_CHOI_LDC))
                 && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_DEXUAT_THEM')"
                  (click)="redirectToChiTiet(false, data.id)">
-                <i class="fa fa-pencil"></i>
+                <i class="fa fa-pencil" title="Sửa"></i>
               </a>
               <a
                 *ngIf="(data.trangThai == globals.prop.DU_THAO && userService.isCuc()) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_DEXUAT_XOA')"
                 (click)="xoaItem(data)">
-                <i class="fa fa-trash-o do"></i>
+                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
               </a>
               <!--              <a *ngIf="data.trangThai == globals.prop.LANH_DAO_DUYET" (click)="redirectToDieuChinh(false, data.id)">-->
               <!--                <i class="icon htvbdh_tcdt_tao-qd"></i>-->
@@ -210,7 +210,7 @@
         </div>
         <!-- <div class="action-giao-chi-tieu">
           <button type="button" class="btn btn-do" (click)="deleteSelect()" *ngIf="userService.isCuc()">
-            <i class="fa fa-trash-o do"></i>
+            <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             <span>Xóa</span>
           </button>
           <button type="button" class="btn btn-sub" (click)="exportData()">

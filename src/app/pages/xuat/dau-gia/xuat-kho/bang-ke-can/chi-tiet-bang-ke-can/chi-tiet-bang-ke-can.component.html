@@ -308,11 +308,11 @@
             <td>{{item.trongLuongCaBi|number: '1.0-1' : 'vi_VN'}}</td>
             <td>
               <a (click)="editRow(i)" *ngIf="!isView">
-                <i class="fa fa-pencil"></i>
+                <i class="fa fa-pencil" title="Sửa"></i>
               </a>
               <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn xóa ?" (nzOnConfirm)="deleteRow(i)"
                  *ngIf="!isView">
-                <i class="fa fa-trash-o do"></i>
+                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
               </a>
             </td>
           </ng-container>
@@ -434,11 +434,11 @@
             <td>{{item.soLuong|number: '1.0-1' : 'vi_VN'}}</td>
             <td>
               <a (click)="editRow(i)" *ngIf="!isView">
-                <i class="fa fa-pencil"></i>
+                <i class="fa fa-pencil" title="Sửa"></i>
               </a>
               <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn xóa ?" (nzOnConfirm)="deleteRow(i)"
                  *ngIf="!isView">
-                <i class="fa fa-trash-o do"></i>
+                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
               </a>
             </td>
           </ng-container>

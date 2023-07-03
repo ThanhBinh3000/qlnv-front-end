@@ -312,10 +312,10 @@
               <td
                 *ngIf="formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV">
                 <a [ngClass]="{'disabled': isView}" (click)="editItem(idx)">
-                  <i class="fa fa-pencil"></i>
+                  <i class="fa fa-pencil" title="Sửa"></i>
                 </a>
                 <a [ngClass]="{'disabled': isView}" (click)="xoaItem(idx)">
-                  <i class="fa fa-trash-o do"></i>
+                  <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                 </a>
               </td>
             </ng-container>

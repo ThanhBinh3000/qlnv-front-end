@@ -263,7 +263,7 @@
               <i class="icon htvbdh_dau-cong"></i>
             </a>
             <a (click)="deleteItemCha(idx)">
-              <i class="fa fa-trash-o do"></i>
+              <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>
         </tr>
@@ -284,10 +284,10 @@
             <td nzRight class="text-right">{{ item.vonDauTu | number : '1.0-1' : 'vi_VN' }}</td>
             <td class="text-center" nzRight *ngIf="formData.value.trangThai != STATUS.DA_DUYET_CBV && formData.value.trangThai != STATUS.DA_DUYET_LDC" >
               <a (click)="themMoiItem(item, 'sua', y, dataTable[idx])">
-                <i class="fa fa-pencil"></i>
+                <i class="fa fa-pencil" title="Sửa"></i>
               </a>
               <a (click)="deleteItem(idx, y)">
-                <i class="fa fa-trash-o do"></i>
+                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
               </a>
             </td>
           </tr>

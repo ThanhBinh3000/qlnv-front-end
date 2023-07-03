@@ -114,14 +114,14 @@
                     <td>
                       <a *ngIf="dataPhieu.trangThai == STATUS.DA_DUYET_LDCC "
                         (click)="redirectToChiTiet(true, dataPhieu.id)">
-                        <i class="fa fa-eye"></i>
+                        <i class="fa fa-eye" title="Xem chi tiết"></i>
                       </a>
                       <a *ngIf="dataPhieu.trangThai != STATUS.DA_DUYET_LDCC "
                         (click)="redirectToChiTiet(false, dataPhieu.id)">
-                        <i class="fa fa-pencil"></i>
+                        <i class="fa fa-pencil" title="Sửa"></i>
                       </a>
                       <a *ngIf="dataPhieu.trangThai == STATUS.DU_THAO">
-                        <i class="fa fa-trash-o do"></i>
+                        <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                       </a>
                     </td>
                   </tr>

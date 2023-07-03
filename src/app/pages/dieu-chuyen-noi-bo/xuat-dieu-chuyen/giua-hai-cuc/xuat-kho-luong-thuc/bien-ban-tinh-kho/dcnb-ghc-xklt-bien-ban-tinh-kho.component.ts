@@ -7,11 +7,11 @@ import { Base2Component } from "../../../../../../components/base2/base2.compone
 import { StorageService } from "../../../../../../services/storage.service";
 
 @Component({
-  selector: 'app-ghcc-xkvt-bang-ke-nhap-vat-tu',
-  templateUrl: './ghcc-xkvt-bang-ke-nhap-vat-tu.component.html',
-  styleUrls: ['./ghcc-xkvt-bang-ke-nhap-vat-tu.component.scss']
+  selector: 'app-dcnb-ghc-xklt-bien-ban-tinh-kho',
+  templateUrl: './dcnb-ghc-xklt-bien-ban-tinh-kho.component.html',
+  styleUrls: ['./dcnb-ghc-xklt-bien-ban-tinh-kho.component.scss']
 })
-export class GhccXkvtBangKeNhapVatTuComponent extends Base2Component implements OnInit {
+export class DCNBGHCXkltBienBanTinhKhoComponent extends Base2Component implements OnInit {
   tabSelected: number = 0;
 
   selectTab(tab: number) {

@@ -663,13 +663,13 @@
               <td>{{data.tenTrangThai}}</td>
               <td>
                 <a (click)="redirectPhuLuc(true, data.id)" *ngIf="data.trangThai!=globals.prop.DU_THAO">
-                  <i class="fa fa-eye"></i>
+                  <i class="fa fa-eye" title="Xem chi tiết"></i>
                 </a>
                 <a (click)="redirectPhuLuc(false, data.id)" *ngIf="data.trangThai==globals.prop.DU_THAO && !isView">
-                  <i class="fa fa-pencil"></i>
+                  <i class="fa fa-pencil" title="Sửa"></i>
                 </a>
                 <a (click)="xoaPhuLuc(data.id)" *ngIf="data.trangThai==globals.prop.DU_THAO && !isView">
-                  <i class="fa fa-trash-o do"></i>
+                  <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                 </a>
               </td>
             </tr>

@@ -356,7 +356,7 @@
             <!--                  <i class="icon htvbdh_dau-cong"></i>-->
             <!--                </a>-->
             <!--                <a (click)="clearKHLT()" class="ml-3" [ngClass]="{'isDisabled': !isAddLuongThuc}">-->
-            <!--                  <i class="fa fa-trash-o do"></i>-->
+            <!--                  <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>-->
             <!--                </a>-->
             <!--              </th>-->
             <!--            </tr>-->
@@ -425,10 +425,10 @@
                 </td>
                 <td *ngIf="!this.isViewDetail" class="text-center" nzRight>
                   <a (click)="startEdit(i)">
-                    <i class="fa fa-pencil"></i>
+                    <i class="fa fa-pencil" title="Sửa"></i>
                   </a>
                   <a (click)="deleteKeHoachLuongThuc(data.stt)" class="ml-3">
-                    <i class="fa fa-trash-o do"></i>
+                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                   </a>
                 </td>
                 <td *ngIf="data.stt == null" class="background-last-row"></td>
@@ -737,10 +737,10 @@
                   class="text-right">{{(dataMuoi.tonKhoDauNam + dataMuoi.nhapTrongNam - dataMuoi.xuatTrongNamMuoi) | number: '1.0-1': 'vi_VN'}}</td>
                 <td *ngIf="!this.isViewDetail" class="text-center" nzRight>
                   <a (click)="startEditMuoi(i)">
-                    <i class="fa fa-pencil"></i>
+                    <i class="fa fa-pencil" title="Sửa"></i>
                   </a>
                   <a (click)="deleteKeHoachMuoi(dataMuoi.stt)">
-                    <i class="fa fa-trash-o do"></i>
+                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                   </a>
                 </td>
               </ng-container>
@@ -884,10 +884,10 @@
                           </a>
                           <a *ngIf="item && (!item.dataChild || item.dataChild.length == 0)"
                              (click)="themSuaVatTu(item,'sua','NHAP',true,idx,data.donViId)">
-                            <i class="fa fa-pencil"></i>
+                            <i class="fa fa-pencil" title="Sửa"></i>
                           </a>
                           <a (click)="xoaKeHoachVatTu(item,true)">
-                            <i class="fa fa-trash-o do"></i>
+                            <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                           </a>
                         </td>
                       </tr>
@@ -907,10 +907,10 @@
                             <td>{{itemLoaiHang.soLuongNhap |number: '1.0-1': 'vi_VN'}}</td>
                             <td class="text-left" nzRight>
                               <a (click)="themSuaVatTu(itemLoaiHang,'sua','NHAP',false,idx,data.donViId)">
-                                <i class="fa fa-pencil"></i>
+                                <i class="fa fa-pencil" title="Sửa"></i>
                               </a>
                               <a (click)="xoaKeHoachVatTu(itemLoaiHang,false)">
-                                <i class="fa fa-trash-o do"></i>
+                                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                               </a>
                             </td>
                           </tr>
@@ -986,10 +986,10 @@
                           </a>
                           <a *ngIf="item && (!item.dataChild || item.dataChild.length == 0)"
                              (click)="themSuaVatTu(item,'sua','XUAT',false,idx,data.donViId)">
-                            <i class="fa fa-pencil"></i>
+                            <i class="fa fa-pencil" title="Sửa"></i>
                           </a>
                           <a (click)="xoaKeHoachVatTuXuat(item,1)">
-                            <i class="fa fa-trash-o do"></i>
+                            <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                           </a>
                         </td>
                       </tr>
@@ -1019,7 +1019,7 @@
                                 <i class="icon htvbdh_dau-cong"></i>
                               </a>
                               <a (click)="xoaKeHoachVatTuXuat(itemLoaiHang,2)">
-                                <i class="fa fa-trash-o do"></i>
+                                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                               </a>
                             </td>
                           </tr>
@@ -1037,10 +1037,10 @@
                                 <td class="text-right">{{itemDetail.soLuongXuat |number: '1.0-1': 'vi_VN'}}</td>
                                 <td>
                                   <a (click)="themSuaVatTu(itemDetail,'sua','XUAT',false,idx)">
-                                    <i class="fa fa-pencil"></i>
+                                    <i class="fa fa-pencil" title="Sửa"></i>
                                   </a>
                                   <a (click)="xoaKeHoachVatTuXuat(itemDetail,3)">
-                                    <i class="fa fa-trash-o do"></i>
+                                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                                   </a>
                                 </td>
                               </tr>

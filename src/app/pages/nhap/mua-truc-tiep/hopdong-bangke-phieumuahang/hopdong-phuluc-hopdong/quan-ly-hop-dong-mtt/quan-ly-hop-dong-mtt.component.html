@@ -201,15 +201,15 @@
 <!--                            <td>{{data.tenTrangThaiXh}}</td>-->
 <!--                            <td>-->
 <!--                                <a *ngIf="data.trangThai == STATUS.DA_KY" (click)="getDetailHopDong($event,data.id)">-->
-<!--                                    <i class="fa fa-eye"></i>-->
+<!--                                    <i class="fa fa-eye" title="Xem chi tiết"></i>-->
 <!--                                </a>-->
 <!--                                <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isCuc()"-->
 <!--                                    (click)="redirectHopDong(true,data.id) ">-->
-<!--                                    <i class="fa fa-pencil"></i>-->
+<!--                                    <i class="fa fa-pencil" title="Sửa"></i>-->
 <!--                                </a>-->
 <!--                                <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isCuc()"-->
 <!--                                    (click)="deleteHd(data)">-->
-<!--                                    <i class="fa fa-trash-o do"></i>-->
+<!--                                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>-->
 <!--                                </a>-->
 <!--                            </td>-->
 <!--                        </tr>-->
@@ -318,11 +318,11 @@
                 <td class="text-center">
                   <a
                      (click)="redirectHopDong(true,data.id) ">
-                    <i class="fa fa-pencil"></i>
+                    <i class="fa fa-pencil" title="Sửa"></i>
                   </a>
                   <a
                      (click)="deleteHd(data)">
-                    <i class="fa fa-trash-o do"></i>
+                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                   </a>
                 </td>
               </ng-container>

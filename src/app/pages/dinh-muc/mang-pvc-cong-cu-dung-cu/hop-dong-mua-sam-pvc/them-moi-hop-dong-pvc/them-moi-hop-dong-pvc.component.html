@@ -184,10 +184,10 @@
             <td>{{data.soLuong * data.donGia    | number: '1.0-1' }}</td>
             <td class="text-center" *ngIf="!isView">
               <a (click)="editRow(idx)">
-                <i class="fa fa-pencil"></i>
+                <i class="fa fa-pencil" title="Sửa"></i>
               </a>
               <a (click)="deleteItem(idx)">
-                <i class="fa fa-trash-o do"></i>
+                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
               </a>
           </ng-container>
           <ng-template #editTemplate>
@@ -485,13 +485,13 @@
           <td>{{data.tenTrangThai }}</td>
           <td class="text-center">
             <a (click)="redirectToPhuLuc(true, data.id)" *ngIf="data.trangThai == STATUS.DA_KY">
-              <i class="fa fa-eye"></i>
+              <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
             <a (click)="redirectToPhuLuc(false, data.id)" *ngIf="data.trangThai == STATUS.DU_THAO">
-              <i class="fa fa-pencil"></i>
+              <i class="fa fa-pencil" title="Sửa"></i>
             </a>
             <a (click)="deleteDetail(data) " *ngIf="data.trangThai == STATUS.DU_THAO">
-              <i class="fa fa-trash-o do"></i>
+              <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>
         </tr>

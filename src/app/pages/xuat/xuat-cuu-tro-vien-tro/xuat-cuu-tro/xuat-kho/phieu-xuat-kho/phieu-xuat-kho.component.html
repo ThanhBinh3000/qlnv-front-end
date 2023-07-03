@@ -222,12 +222,12 @@
                       !(vldTrangThai.checkStatusPermission(lv2,CHUC_NANG.SUA)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_PXK_THEM'))&&
                       !(vldTrangThai.checkStatusPermission(lv2,CHUC_NANG.DUYET_LDCC)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_PXK_DUYET'))&&
                       userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_PXK_XEM')">
-                        <i class="fa fa-eye"></i>
+                        <i class="fa fa-eye" title="Xem chi tiết"></i>
                       </a>
                       <a
                         *ngIf="(vldTrangThai.checkStatusPermission(lv2,CHUC_NANG.SUA)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_PXK_THEM'))"
                         (click)="redirectDetail(lv2.id, false)">
-                        <i class="fa fa-pencil"></i>
+                        <i class="fa fa-pencil" title="Sửa"></i>
                       </a>
                       <a
                         *ngIf="(vldTrangThai.checkStatusPermission(lv2,CHUC_NANG.DUYET_LDCC)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_PXK_DUYET'))"
@@ -237,7 +237,7 @@
                       <a
                         *ngIf="vldTrangThai.checkStatusPermission(lv2,CHUC_NANG.XOA) && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_BBTK_XOA')"
                         (click)="delete(lv2)">
-                        <i class="fa fa-trash-o do"></i>
+                        <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                       </a>
                     </td>
                   </tr>

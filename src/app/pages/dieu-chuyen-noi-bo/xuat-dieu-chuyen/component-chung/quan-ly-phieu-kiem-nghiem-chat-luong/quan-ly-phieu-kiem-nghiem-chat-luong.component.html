@@ -162,16 +162,16 @@
                           <i class="fa fa-plus"></i>
                         </a>
                         <a *ngIf="checkRoleView(lv2.trangThai)" (click)="redirectToChiTiet(lv2, true, null)">
-                          <i class="fa fa-eye"></i>
+                          <i class="fa fa-eye" title="Xem chi tiết"></i>
                         </a>
                         <a *ngIf="checkRoleEdit(lv2.trangThai)" (click)="redirectToChiTiet(lv2, false, null)">
-                          <i class="fa fa-pencil"></i>
+                          <i class="fa fa-pencil" title="Sửa"></i>
                         </a>
                         <a *ngIf="checkRoleApprove(lv2.trangThai)" (click)="redirectToChiTiet(lv2, false, null)">
                           <i class="icon htvbdh_tcdt_pheduyet"></i>
                         </a>
                         <a *ngIf="checkRoleDelete(lv2.trangThai)" (click)="xoaItem(lv2)">
-                          <i class="fa fa-trash-o do"></i>
+                          <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                         </a>
                       </td>
                     </tr>

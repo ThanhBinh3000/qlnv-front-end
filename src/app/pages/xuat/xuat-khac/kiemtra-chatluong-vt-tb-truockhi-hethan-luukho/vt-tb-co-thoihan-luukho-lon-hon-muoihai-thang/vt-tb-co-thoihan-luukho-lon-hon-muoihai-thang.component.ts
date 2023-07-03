@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Subject} from "rxjs";
 import {UserService} from "../../../../../services/user.service";
 import {Globals} from "../../../../../shared/globals";
@@ -32,4 +32,9 @@ export class VtTbCoThoihanLuukhoLonHonMuoihaiThangComponent implements OnInit {
     this.tabSelected = tab;
   }
 
+  receivedTab(tab) {
+    if (tab >= 0) {
+      this.tabSelected = tab;
+    }
+  }
 }

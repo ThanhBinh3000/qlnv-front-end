@@ -254,7 +254,7 @@
                   <i class=" fa fa-pencil" (click)="startEdit(idx, 'ttc')"></i>
                 </a>
                 <a *ngIf="!isView" (click)="deleteItem(idx, 'ttc')">
-                  <i class="fa fa-trash-o do"></i>
+                  <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                 </a>
               </td>
             </ng-container>
@@ -484,7 +484,7 @@
                   <i *ngIf="!isView" class="fa fa-plus" (click)="themDataTable('ppxdg')"></i>
                 </a>
                 <a *ngIf="(formData.value.trangThai == '00' || formData.value.trangThai == '03') && (!isView)">
-                  <i class="fa fa-trash-o do"></i>
+                  <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                 </a>
               </td>
             </tr>

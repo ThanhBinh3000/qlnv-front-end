@@ -20,9 +20,6 @@ import {
   NbccKtdtkXuatKhoVatTuComponent
 } from "./noi-bo-chi-cuc/khong-thay-doi-thu-kho/xuat-kho-vat-tu/nbcc-ktdtk-xuat-kho-vat-tu.component";
 import {
-  NbccTdtkXkltBangKeNhapVatTuComponent
-} from "./noi-bo-chi-cuc/thay-doi-thu-kho/xuat-kho-luong-thuc/bang-ke-nhap-vat-tu/nbcc-tdtk-xklt-bang-ke-nhap-vat-tu.component";
-import {
   NbccTdtkXkltBienBanTinhKhoComponent
 } from "./noi-bo-chi-cuc/thay-doi-thu-kho/xuat-kho-luong-thuc/bien-ban-tinh-kho/nbcc-tdtk-xklt-bien-ban-tinh-kho.component";
 import {
@@ -89,8 +86,26 @@ import { GhccXkltBienBanTinhKhoComponent } from './giua-hai-chi-cuc/xuat-kho-luo
 import { GhccXkltBienBanHaoDoiComponent } from './giua-hai-chi-cuc/xuat-kho-luong-thuc/bien-ban-hao-doi/ghcc-xklt-bien-ban-hao-doi.component';
 import { GhccXuatKhoVatTuComponent } from './giua-hai-chi-cuc/xuat-kho-vat-tu/ghcc-xuat-kho-vat-tu.component';
 import { GhccXkvtPhieuXuatKhoComponent } from './giua-hai-chi-cuc/xuat-kho-vat-tu/phieu-xuat-kho/ghcc-xkvt-phieu-xuat-kho.component';
-import { GhccXkvtBangKeNhapVatTuComponent } from './giua-hai-chi-cuc/xuat-kho-vat-tu/bang-ke-nhap-vat-tu/ghcc-xkvt-bang-ke-nhap-vat-tu.component';
+import { GhccXkvtBangKeXuatVatTuComponent } from './giua-hai-chi-cuc/xuat-kho-vat-tu/bang-ke-xuat-vat-tu/ghcc-xkvt-bang-ke-xuat-vat-tu.component';
 import { GhccXkvtBienBanTinhKhoComponent } from './giua-hai-chi-cuc/xuat-kho-vat-tu/bien-ban-tinh-kho/ghcc-xkvt-bien-ban-tinh-kho.component';
+import { NbccTdtkXkltBangKeXuatVatTuComponent } from './noi-bo-chi-cuc/thay-doi-thu-kho/xuat-kho-luong-thuc/bang-ke-xuat-vat-tu/nbcc-tdtk-xklt-bang-ke-xuat-vat-tu.component';
+import { DCNBGiuaHaiCucComponent } from './giua-hai-cuc/dcnb-giua-hai-cuc.component';
+import { DCNBGHCKiemTraChatLuongLuongThucComponent } from './giua-hai-cuc/kiem-tra-chat-luong-luong-thuc/dcnb-ghc-kiem-tra-chat-luong-luong-thuc.component';
+import { DCNBGHCKtclltBienBanLayMauBanGiaoComponent } from './giua-hai-cuc/kiem-tra-chat-luong-luong-thuc/bien-ban-lay-mau-ban-giao/dcnb-ghc-ktcllt-bien-ban-lay-mau-ban-giao.component';
+import { DCNBGHCKtclltPhieuKiemNghiemChatLuongComponent } from './giua-hai-cuc/kiem-tra-chat-luong-luong-thuc/phieu-kiem-nghiem-chat-luong/dcnb-ghc-ktcllt-phieu-kiem-nghiem-chat-luong.component';
+import { DCNBGHCKiemTraChatLuongVatTuComponent } from './giua-hai-cuc/kiem-tra-chat-luong-vat-tu/dcnb-ghc-kiem-tra-chat-luong-vat-tu.component';
+import { DCNBGHCKtclvtBienBanLayMauBanGiaoComponent } from './giua-hai-cuc/kiem-tra-chat-luong-vat-tu/bien-ban-lay-mau-ban-giao/dcnb-ghc-ktclvt-bien-ban-lay-mau-ban-giao.component';
+import { DCNBGHCKtclvtPhieuKiemNghiemChatLuongComponent } from './giua-hai-cuc/kiem-tra-chat-luong-vat-tu/phieu-kiem-nghiem-chat-luong/dcnb-ghc-ktclvt-phieu-kiem-nghiem-chat-luong.component';
+import { DCNBGHCXuatKhoLuongThucComponent } from './giua-hai-cuc/xuat-kho-luong-thuc/dcnb-ghc-xuat-kho-luong-thuc.component';
+import { DCNBGHCXkltPhieuXuatKhoComponent } from './giua-hai-cuc/xuat-kho-luong-thuc/phieu-xuat-kho/dcnb-ghc-xklt-phieu-xuat-kho.component';
+import { DCNBGHCXkltBangKeCanHangComponent } from './giua-hai-cuc/xuat-kho-luong-thuc/bang-ke-can-hang/dcnb-ghc-xklt-bang-ke-can-hang.component';
+import { DCNBGHCXkltBienBanTinhKhoComponent } from './giua-hai-cuc/xuat-kho-luong-thuc/bien-ban-tinh-kho/dcnb-ghc-xklt-bien-ban-tinh-kho.component';
+import { DCNBGHCXkltBienBanHaoDoiComponent } from './giua-hai-cuc/xuat-kho-luong-thuc/bien-ban-hao-doi/dcnb-ghc-xklt-bien-ban-hao-doi.component';
+import { DCNBGHCXuatKhoVatTuComponent } from './giua-hai-cuc/xuat-kho-vat-tu/dcnb-ghc-xuat-kho-vat-tu.component';
+import { DCNBGHCXkvtPhieuXuatKhoComponent } from './giua-hai-cuc/xuat-kho-vat-tu/phieu-xuat-kho/dcnb-ghc-xkvt-phieu-xuat-kho.component';
+import { DCNBGHCXkvtBangKeXuatVatTuComponent } from './giua-hai-cuc/xuat-kho-vat-tu/bang-ke-xuat-vat-tu/dcnb-ghc-xkvt-bang-ke-xuat-vat-tu.component';
+import { DCNBGHCXkvtBienBanTinhKhoComponent } from './giua-hai-cuc/xuat-kho-vat-tu/bien-ban-tinh-kho/dcnb-ghc-xkvt-bien-ban-tinh-kho.component';
+import { DCNBGHCKtclvtHoSoKyThuatComponent } from './giua-hai-cuc/kiem-tra-chat-luong-vat-tu/ho-so-ky-thuat/dcnb-ghc-ktclvt-ho-so-ky-thuat.component';
 
 @NgModule({
   declarations: [
@@ -102,7 +117,7 @@ import { GhccXkvtBienBanTinhKhoComponent } from './giua-hai-chi-cuc/xuat-kho-vat
     DcnbNbccTdtkXuatKhoVatTuComponent,
     NbccKtdtkXuatKhoLuongThucComponent,
     NbccKtdtkXuatKhoVatTuComponent,
-    NbccTdtkXkltBangKeNhapVatTuComponent,
+    NbccTdtkXkltBangKeXuatVatTuComponent,
     NbccTdtkXkltBienBanTinhKhoComponent,
     NbccTdtkXkltPhieuXuatKhoComponent,
     DcnbNbccTdtkXkvtPhieuXuatKhoComponent,
@@ -138,8 +153,30 @@ import { GhccXkvtBienBanTinhKhoComponent } from './giua-hai-chi-cuc/xuat-kho-vat
     //Giua 2 chi cuc =>Xuat kho vat tu
     GhccXuatKhoVatTuComponent,
     GhccXkvtPhieuXuatKhoComponent,
-    GhccXkvtBangKeNhapVatTuComponent,
+    GhccXkvtBangKeXuatVatTuComponent,
     GhccXkvtBienBanTinhKhoComponent,
+    //Giua 2cuc 
+    DCNBGiuaHaiCucComponent,
+    //Giua 2 cuc => Kiem tra chat luong luong thuc
+    DCNBGHCKiemTraChatLuongLuongThucComponent,
+    DCNBGHCKtclltBienBanLayMauBanGiaoComponent,
+    DCNBGHCKtclltPhieuKiemNghiemChatLuongComponent,
+    //Giua 2 cuc =>Kiem tra luong thuc vat tu
+    DCNBGHCKiemTraChatLuongVatTuComponent,
+    DCNBGHCKtclvtBienBanLayMauBanGiaoComponent,
+    DCNBGHCKtclvtPhieuKiemNghiemChatLuongComponent,
+    DCNBGHCKtclvtHoSoKyThuatComponent,
+    //Giua 2 cuc =>Xuat kho vat tu
+    DCNBGHCXuatKhoLuongThucComponent,
+    DCNBGHCXkltPhieuXuatKhoComponent,
+    DCNBGHCXkltBangKeCanHangComponent,
+    DCNBGHCXkltBienBanTinhKhoComponent,
+    DCNBGHCXkltBienBanHaoDoiComponent,
+    //Giua 2 cuc =>Xuat kho vat tu
+    DCNBGHCXuatKhoVatTuComponent,
+    DCNBGHCXkvtPhieuXuatKhoComponent,
+    DCNBGHCXkvtBangKeXuatVatTuComponent,
+    DCNBGHCXkvtBienBanTinhKhoComponent,
 
     DanhSachBienBanLayMau,
     ChiTietDanhSachBienBanLayMau,
