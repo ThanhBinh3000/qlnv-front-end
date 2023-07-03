@@ -199,7 +199,7 @@ export class MmThemMoiDmTrangBiComponent extends Base2Component implements OnIni
       msgRequired = "Loại tài sản không được để trống";
     } else if (!item.slVpCucKv) {
       msgRequired = "Số lượng tối đa VP Cục DTNN KV không được để trống";
-    } else if (!item.slChiCuc || !item.klChiCuc || !item.loaiHinh) {
+    } else if (!item.slChiCuc || !item.klChiCuc) {
       msgRequired = "Số lượng tối đa Chi cục DTNN không được để trống";
     } else if (!item.donGiaTd) {
       msgRequired = "Đơn giá tối đa không được để trống";
