@@ -89,8 +89,6 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
         maNhaKho: [],
         maNganKho: [],
         maLoKho: [],
-        loaiVthh: [],
-        cloaiVthh: [],
         moTaHangHoa: [],
         ngayBatDauXuat: [],
         ngayKetThucXuat: [],
@@ -112,6 +110,8 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
         lyDoTuChoi: [],
         diaChiDvi: [],
         tenDvi: [],
+        loaiVthh: [''],
+        cloaiVthh: [''],
         tenCloaiVthh: [],
         tenLoaiVthh: [],
         tenTrangThai: ['Dự Thảo'],
@@ -222,6 +222,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
     await this.spinner.show();
     let dataRes = await this.quyetDinhGiaoNvXuatHangService.getDetail(id)
     const data = dataRes.data;
+    console.log(data.loaiVthh, 999)
     this.formData.patchValue({
       soQdGiaoNvXh: data.soQd,
       idQdGiaoNvXh: data.id,
@@ -231,7 +232,6 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
       ngayKyHd: data.ngayKyHd,
       loaiVthh: data.loaiVthh,
       cloaiVthh: data.cloaiVthh,
-
     });
     let dataChiCuc = data.children.filter(item => item.maDvi == this.userInfo.MA_DVI);
     if (dataChiCuc) {
@@ -265,6 +265,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
 
   async bindingDataDdNhap(data) {
     if (data) {
+      console.log(data,888)
       this.formData.patchValue({
         maDiemKho: data.maDiemKho,
         tenDiemKho: data.tenDiemKho,
@@ -275,11 +276,11 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
         maLoKho: data.maLoKho,
         tenLoKho: data.tenLoKho,
         soPhieuKnCl: data.soPhieu,
-        loaiVthh: data.loaiVthh,
-        cloaiVthh: data.cloaiVthh,
-        tenLoaiVthh: data.tenLoaiVthh,
-        tenCloaiVthh: data.tenCloaiVthh,
-        moTaHangHoa: data.moTaHangHoa,
+        // loaiVthh: data.loaiVthh,
+        // cloaiVthh: data.cloaiVthh,
+        // tenLoaiVthh: data.tenLoaiVthh,
+        // tenCloaiVthh: data.tenCloaiVthh,
+        // moTaHangHoa: data.moTaHangHoa,
       })
       let body = {
         trangThai: STATUS.DA_DUYET_LDCC,
