@@ -1,4 +1,4 @@
-<nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="level2">
+<nz-affix [nzOffsetTop]="141" class="level1">
   <ul nz-menu nzMode="horizontal">
     <li nz-menu-item [nzSelected]="tabSelected==0" (click)="selectTab(0)">
       Phiếu xuất kho
@@ -14,10 +14,16 @@
 <div class="contentBor chi-tieu__body giao-ke-hoach">
   <div class="contentDetail">
     <ng-container *ngIf="tabSelected == 0">
+      <app-xuat-dcnb-phieu-xuat-kho loaiDc="DCNB" [isVatTu]="true" [thayDoiThuKho]="false"
+        type="00"></app-xuat-dcnb-phieu-xuat-kho>
     </ng-container>
     <ng-container *ngIf="tabSelected == 1">
+      <app-xuat-dcnb-bang-ke-xuat-vat-tu loaiDc="DCNB" [isVatTu]="true" [thayDoiThuKho]="false"
+        type="00"></app-xuat-dcnb-bang-ke-xuat-vat-tu>
     </ng-container>
     <ng-container *ngIf="tabSelected == 2">
+      <app-xuat-dcnb-bien-ban-tinh-kho loaiDc="DCNB" [isVatTu]="true" [thayDoiThuKho]="false"
+        type="00"></app-xuat-dcnb-bien-ban-tinh-kho>
     </ng-container>
   </div>
 </div>

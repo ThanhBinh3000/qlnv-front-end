@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Base2Component} from "../../../../../../components/base2/base2.component";
 import {FormGroup} from "@angular/forms";
 import {NumberToRoman} from "../../../../../../shared/commonFunction";
@@ -44,6 +44,7 @@ export class TongHopDanhSachVt12thComponent extends Base2Component implements On
   DanhSach: boolean = false;
   showDetail: boolean;
   @Input() openModal: boolean;
+  @Output() tabFocus = new EventEmitter<number>();
 
   constructor(
     httpClient: HttpClient,
@@ -98,6 +99,7 @@ export class TongHopDanhSachVt12thComponent extends Base2Component implements On
   async ngOnInit(): Promise<void> {
     try {
       await this.spinner.show();
+      this.emitTab(1);
       await Promise.all([
         this.loadDsDonVi(),
         this.loadDsVthh()
@@ -253,6 +255,7 @@ export class TongHopDanhSachVt12thComponent extends Base2Component implements On
     this.isVisibleModal = isVisibleModal;
     this.selectedItem = item;
     this.modalWidth = showDetail ? '80vw' : (item ? '40vw' : '40vw');
+    this.emitTab(1);
   }
 
   async changeStep($event: any) {
@@ -296,8 +299,13 @@ export class TongHopDanhSachVt12thComponent extends Base2Component implements On
     });
   }
 
+  emitTab(tab) {
+    this.tabFocus.emit(tab);
+  }
+
   danhSach() {
     this.DanhSach = true;
+    this.emitTab(0)
   }
 
 }
