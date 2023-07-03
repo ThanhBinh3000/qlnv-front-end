@@ -3,7 +3,7 @@
     <nz-card class="mt16 flex-card p-lr16">
       <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
         <div nz-row [nzGutter]="20">
-          <div nz-col nzSpan="5">
+          <div nz-col nzSpan="4">
             <nz-form-item class="form-item">
               <nz-form-label>Năm kế hoạch</nz-form-label>
               <nz-select formControlName="namKeHoach" nzAllowClear>
@@ -11,9 +11,9 @@
               </nz-select>
             </nz-form-item>
           </div>
-          <div nz-col nzSpan="5">
+          <div nz-col nzSpan="4">
             <nz-form-item class="form-item">
-              <nz-form-label>Chủng loại hàng hóa</nz-form-label>
+              <nz-form-label>Số kế hoạch/tờ trình</nz-form-label>
               <input class="search__input" nz-input formControlName="soToTrinh"/>
             </nz-form-item>
           </div>
@@ -74,25 +74,21 @@
       </div>
     </nz-card>
     <div class="group-button">
-      <h3 class="text-uppercase">Danh sách kế hoạch xuất hàng VT, TB có thời hạn lưu kho lớn hơn 12 tháng của cục DTNN KV </h3>
+      <h3 class="text-uppercase">Danh sách kế hoạch xuất hàng VT, TB có thời hạn lưu kho lớn hơn 12 tháng của cục DTNN
+        KV </h3>
       <div class="buttons">
-        <button *ngIf="userService.isTongCuc() && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_QD_TTCP_XOA')"
-                type="button" class="btn btn-sub btn-xoa" >
+        <button
+                type="button" class="btn btn-sub btn-xoa">
           <i class="fa fa-trash-o do"></i>
           <span>Xóa</span>
         </button>
-        <button
-          type="button" *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_QD_TTCP_EXP')" class="btn btn-sub" >
-          <i class="icon htvbdh_tcdt_print"></i>
-          <span>In</span>
-        </button>
-        <button *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_QD_TTCP_EXP')" type="button"
+        <button type="button"
                 class="btn btn-sub" (click)="exportData()">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button *ngIf="userService.isTongCuc() && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_QD_TTCP_THEM')"
-                type="button" class="btn btn-sub xanh"  >
+        <button
+                type="button" class="btn btn-sub xanh">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
         </button>
@@ -115,7 +111,7 @@
           <th class="text-left">Trích yếu</th>
           <th class="text-left">Ngày duyệt KH</th>
           <th class="text-left">Trích yếu</th>
-          <th class="text-left">Chủng loại hàng hóa</th>
+<!--          <th class="text-left">Chủng loại hàng hóa</th>-->
           <th class="text-left">Số ĐV tài sản</th>
           <th class="text-left">Trạng thái</th>
           <th class="text-left">Hành động</th>
@@ -158,37 +154,37 @@
           <th></th>
           <th></th>
           <th></th>
-          <th></th>
+<!--          <th></th>-->
         </tr>
-<!--        <tr *ngFor="let data of rowSelectionTable.data; let idx = index" (click)="getDetailRow(data.id)">-->
-<!--          <td [ngClass]="(rowSelected==data.id)?'bg-selected':''" width="45px">-->
-<!--            <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"-->
-<!--                   [nzDisabled]="data.trangThai != STATUS.DANG_NHAP_DU_LIEU"></label>-->
-<!--          </td>-->
-<!--          <td [ngClass]="(rowSelected==data.id)?'bg-selected':''" class="text-center">{{(page - 1) * pageSize + idx +-->
-<!--          1}}</td>-->
-<!--          <td [ngClass]="(rowSelected==data.id)?'bg-selected':''"> {{ data.soQd }} </td>-->
-<!--          <td [ngClass]="(rowSelected==data.id)?'bg-selected':''">{{ data.namQd }}</td>-->
-<!--          <td [ngClass]="(rowSelected==data.id)?'bg-selected':''">{{ data.ngayQd | date: 'dd/MM/YYYY' }}</td>-->
-<!--          <td [ngClass]="(rowSelected==data.id)?'bg-selected':''">{{ data.trichYeu }}</td>-->
-<!--          <td [ngClass]="(rowSelected==data.id)?'bg-selected':''">{{ data.tenTrangThai }}</td>-->
-<!--          <td [ngClass]="(rowSelected==data.id)?'bg-selected':''" style="text-align: left; white-space: nowrap;">-->
-<!--            <a (click)="viewDetail(data.id, true)"-->
-<!--               *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_QD_TTCP_XEM')">-->
-<!--              <i class="fa fa-eye"></i>-->
-<!--            </a>-->
-<!--            <a-->
-<!--              *ngIf="(data.trangThai == STATUS.DANG_NHAP_DU_LIEU && userService.isTongCuc()) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_QD_TTCP_THEM')"-->
-<!--              (click)="viewDetail(data.id, false)">-->
-<!--              <i class="fa fa-pencil"></i>-->
-<!--            </a>-->
-<!--            <a-->
-<!--              *ngIf="(data.trangThai == STATUS.DANG_NHAP_DU_LIEU && userService.isTongCuc()) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_QD_TTCP_XOA')"-->
-<!--              (click)="xoaItem(data)">-->
-<!--              <i class="fa fa-trash-o do"></i>-->
-<!--            </a>-->
-<!--          </td>-->
-<!--        </tr>-->
+        <!--        <tr *ngFor="let data of rowSelectionTable.data; let idx = index" (click)="getDetailRow(data.id)">-->
+        <!--          <td [ngClass]="(rowSelected==data.id)?'bg-selected':''" width="45px">-->
+        <!--            <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"-->
+        <!--                   [nzDisabled]="data.trangThai != STATUS.DANG_NHAP_DU_LIEU"></label>-->
+        <!--          </td>-->
+        <!--          <td [ngClass]="(rowSelected==data.id)?'bg-selected':''" class="text-center">{{(page - 1) * pageSize + idx +-->
+        <!--          1}}</td>-->
+        <!--          <td [ngClass]="(rowSelected==data.id)?'bg-selected':''"> {{ data.soQd }} </td>-->
+        <!--          <td [ngClass]="(rowSelected==data.id)?'bg-selected':''">{{ data.namQd }}</td>-->
+        <!--          <td [ngClass]="(rowSelected==data.id)?'bg-selected':''">{{ data.ngayQd | date: 'dd/MM/YYYY' }}</td>-->
+        <!--          <td [ngClass]="(rowSelected==data.id)?'bg-selected':''">{{ data.trichYeu }}</td>-->
+        <!--          <td [ngClass]="(rowSelected==data.id)?'bg-selected':''">{{ data.tenTrangThai }}</td>-->
+        <!--          <td [ngClass]="(rowSelected==data.id)?'bg-selected':''" style="text-align: left; white-space: nowrap;">-->
+        <!--            <a (click)="viewDetail(data.id, true)"-->
+        <!--               *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_QD_TTCP_XEM')">-->
+        <!--              <i class="fa fa-eye"></i>-->
+        <!--            </a>-->
+        <!--            <a-->
+        <!--              *ngIf="(data.trangThai == STATUS.DANG_NHAP_DU_LIEU && userService.isTongCuc()) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_QD_TTCP_THEM')"-->
+        <!--              (click)="viewDetail(data.id, false)">-->
+        <!--              <i class="fa fa-pencil"></i>-->
+        <!--            </a>-->
+        <!--            <a-->
+        <!--              *ngIf="(data.trangThai == STATUS.DANG_NHAP_DU_LIEU && userService.isTongCuc()) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_QD_TTCP_XOA')"-->
+        <!--              (click)="xoaItem(data)">-->
+        <!--              <i class="fa fa-trash-o do"></i>-->
+        <!--            </a>-->
+        <!--          </td>-->
+        <!--        </tr>-->
         </tbody>
       </nz-table>
       <div class="tab-content tab-menu" id="myTabContent">
