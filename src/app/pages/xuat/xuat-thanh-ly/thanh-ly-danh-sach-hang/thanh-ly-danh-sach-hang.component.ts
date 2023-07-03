@@ -150,6 +150,11 @@ export class ThanhLyDanhSachHangComponent extends Base2Component implements OnIn
     }
   }
 
+  clearFilter() {
+    this.formData.reset();
+    this.timKiem();
+  }
+
   async loadDsVthh() {
     let res = await this.danhMucService.getDanhMucHangDvqlAsyn({});
     if (res.msg == MESSAGE.SUCCESS) {
