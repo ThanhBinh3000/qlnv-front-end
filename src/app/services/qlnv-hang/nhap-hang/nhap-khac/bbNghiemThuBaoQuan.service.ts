@@ -16,7 +16,7 @@ export class BbNghiemThuBaoQuanService extends BaseService {
   }
 
   getDataKho(maDvi): Promise<OldResponseData> {
-    const url = `${environment.SERVICE_API_LOCAL}${this.GATEWAY}/${this.table}/chi-tiet/data-kho/${maDvi}`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/chi-tiet/data-kho/${maDvi}`;
     return this._httpClient.get<OldResponseData>(url).toPromise();
   }
 }
