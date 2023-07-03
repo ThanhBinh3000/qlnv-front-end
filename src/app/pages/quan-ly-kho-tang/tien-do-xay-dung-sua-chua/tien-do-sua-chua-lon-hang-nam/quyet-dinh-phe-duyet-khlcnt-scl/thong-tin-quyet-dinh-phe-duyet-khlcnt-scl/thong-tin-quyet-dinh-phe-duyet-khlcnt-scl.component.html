@@ -273,10 +273,10 @@
               <td>{{data.vanBanPd }}</td>
               <td class="text-center">
                 <a *ngIf="!isViewDetail" (click)="editDataCongViecDaTh(i)">
-                  <i class="fa fa-pencil"></i>
+                  <i class="fa fa-pencil" title="Sửa"></i>
                 </a>
                 <a *ngIf="!isViewDetail" (click)="deleteCongViecDaTh(i)">
-                  <i class="fa fa-trash-o do"></i>
+                  <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                 </a>
               </td>
             </ng-container>
@@ -367,10 +367,10 @@
               <td class="text-right">{{data.giaTri  | number}}</td>
               <td class="text-center">
                 <a *ngIf="!isViewDetail" (click)="editDataCongViecKad(i)">
-                  <i class="fa fa-pencil"></i>
+                  <i class="fa fa-pencil" title="Sửa"></i>
                 </a>
                 <a *ngIf="!isViewDetail" (click)="deleteCongViecKad(i)">
-                  <i class="fa fa-trash-o do"></i>
+                  <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                 </a>
               </td>
             </ng-container>
@@ -519,10 +519,10 @@
               <td>{{data.thoiGianThHd}}</td>
               <td class="text-center">
                 <a *ngIf="!isViewDetail" (click)="editDataCongViecKh(i)">
-                  <i class="fa fa-pencil"></i>
+                  <i class="fa fa-pencil" title="Sửa"></i>
                 </a>
                 <a *ngIf="!isViewDetail" (click)="deleteCongViecKh(i)">
-                  <i class="fa fa-trash-o do"></i>
+                  <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                 </a>
               </td>
             </ng-container>

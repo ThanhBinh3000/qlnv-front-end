@@ -217,10 +217,10 @@
             <td>{{item.ycCapThem |number : '1.0-1' : 'vi_VN'}}</td>
             <td class="text-center" *ngIf="!isView">
               <a (click)="showEditItem(idx, 'show')">
-                <i class="fa fa-pencil"></i>
+                <i class="fa fa-pencil" title="Sửa"></i>
               </a>
               <a (click)="xoaItem(idx)">
-                <i class="fa fa-trash-o do"></i>
+                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
               </a>
             </td>
           </ng-container>

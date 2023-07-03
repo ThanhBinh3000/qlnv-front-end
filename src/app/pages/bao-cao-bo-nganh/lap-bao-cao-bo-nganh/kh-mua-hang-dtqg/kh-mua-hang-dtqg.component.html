@@ -105,15 +105,15 @@
           <td>{{ data.tenTrangThai }}</td>
           <td>
             <a (click)="redirectDetail(true, data)" *ngIf="data.trangThai != STATUS.DU_THAO">
-              <i class="fa fa-eye"></i>
+              <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
             <a *ngIf="data.trangThai == STATUS.DU_THAO"
                (click)="redirectDetail(false, data)">
-              <i class="fa fa-pencil"></i>
+              <i class="fa fa-pencil" title="Sửa"></i>
             </a>
             <a *ngIf="data.trangThai == STATUS.DU_THAO"
                (click)="delete(data)">
-              <i class="fa fa-trash-o do"></i>
+              <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
             <a *ngIf="data.trangThai == STATUS.BAN_HANH" (click)="download(data.id, 'pdf')">
               <i class="icon htvbdh_file-pdf"></i>

@@ -32,7 +32,7 @@
       <h3>Danh sách định mức trang bị</h3>
       <div class="buttons">
         <button type="button" class="btn btn-do" (click)="deleteSelect()">
-          <i class="fa fa-trash-o do"></i>
+          <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
           <span>Xóa</span>
         </button>
         <button type="button" class="btn btn-sub" (click)="export()">
@@ -100,7 +100,7 @@
                 <i class="fa fa-plus"></i>
               </a>
               <a (click)="clearItemRow()">
-                <i class="fa fa-trash-o do"></i>
+                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
               </a>
             </td>
           </tr>
@@ -121,10 +121,10 @@
               <td>{{ data.tenTrangThai }}</td>
               <td>
                 <a (click)="editRow(data.stt)">
-                  <i class="fa fa-pencil"></i>
+                  <i class="fa fa-pencil" title="Sửa"></i>
                 </a>
                 <a (click)="deleteRow(data)">
-                  <i class="fa fa-trash-o do"></i>
+                  <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                 </a>
               </td>
             </ng-container>

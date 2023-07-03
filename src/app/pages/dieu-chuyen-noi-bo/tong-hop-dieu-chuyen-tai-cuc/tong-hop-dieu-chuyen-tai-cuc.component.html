@@ -66,11 +66,11 @@
             <div class="buttons">
                 <button type="button" class="btn btn-do" (click)="deleteSelect()"
                     *ngIf="!viewOnly && userService.isAccessPermisson('DCNB_TONGHOPDC_XOA') && userService.isCuc()">
-                    <i class="fa fa-trash-o do"></i>
+                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                     <span>Xóa</span>
                 </button>
                 <!-- <button type="button" class="btn btn-do" (click)="deleteMulti()" *ngIf="!viewOnly">
-                    <i class="fa fa-trash-o do"></i>
+                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                     <span>Xóa</span>
                 </button> -->
                 <button type="button" class="btn btn-sub"
@@ -197,17 +197,17 @@
                         <td>
                             <a (click)="viewDetail(data.id, true)"
                                 *ngIf="(!viewOnly && checkRoleView(data.trangThai, data.loaiDieuChuyen) && userService.isAccessPermisson('DCNB_TONGHOPDC_XEM')) ||  (viewOnly && userService.isAccessPermisson('DCNB_TONGHOPDC_XEM') )">
-                                <i class="fa fa-eye"></i>
+                                <i class="fa fa-eye" title="Xem chi tiết"></i>
                             </a>
                             <a *ngIf="checkRoleEdit(data.trangThai, data.loaiDieuChuyen)"
                                 (click)="viewDetail(data.id, false)">
-                                <i class="fa fa-pencil"></i>
+                                <i class="fa fa-pencil" title="Sửa"></i>
                             </a>
                             <a *ngIf="checkRoleApproveDc(data.trangThai)">
                                 <i class="icon htvbdh_tcdt_pheduyet" (click)="viewDetail(data.id,false)"></i>
                             </a>
                             <a *ngIf="checkRoleDelete(data.trangThai)" (click)="xoaItem(data)">
-                                <i class="fa fa-trash-o do"></i>
+                                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                             </a>
                         </td>
                     </tr>

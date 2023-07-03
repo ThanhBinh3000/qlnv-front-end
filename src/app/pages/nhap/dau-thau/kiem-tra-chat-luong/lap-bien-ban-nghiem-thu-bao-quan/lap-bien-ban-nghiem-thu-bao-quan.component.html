@@ -69,7 +69,7 @@
             <div class="buttons">
                 <button type="button" class="btn btn-do" (click)="deleteSelect()"
                     *ngIf="userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_BBNTBQLD_XOA')">
-                    <i class="fa fa-trash-o do"></i>
+                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                     <span>Xóa</span>
                 </button>
                 <button *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_BBNTBQLD_EXP')" type="button"
@@ -130,11 +130,11 @@
                                 </a>
                                 <a *ngIf="item.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_BBNTBQLD_THEM')"
                                     (click)="redirectToChiTiet(false, item.id)">
-                                    <i class="fa fa-pencil"></i>
+                                    <i class="fa fa-pencil" title="Sửa"></i>
                                 </a>
                                 <a *ngIf="item.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_BBNTBQLD_XOA')"
                                     (click)="xoaItem(item)">
-                                    <i class="fa fa-trash-o do"></i>
+                                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                                 </a>
                             </td>
                         </tr>
@@ -172,15 +172,15 @@
                                         <td nzRight>
                                             <a *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_BBNTBQLD_XEM')"
                                                 (click)="redirectToChiTiet(true, dataBb.id)">
-                                                <i class="fa fa-eye"></i>
+                                                <i class="fa fa-eye" title="Xem chi tiết"></i>
                                             </a>
                                             <a *ngIf="(dataBb.trangThai == STATUS.DU_THAO || dataBb.trangThai == STATUS.TU_CHOI_KTVBQ) && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_BBNTBQLD_THEM')"
                                                 (click)="redirectToChiTiet(false, dataBb.id)">
-                                                <i class="fa fa-pencil"></i>
+                                                <i class="fa fa-pencil" title="Sửa"></i>
                                             </a>
                                             <a *ngIf="dataBb.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_BBNTBQLD_XOA')"
                                                 (click)="xoaItem(dataBb)">
-                                                <i class="fa fa-trash-o do"></i>
+                                                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                                             </a>
                                         </td>
                                     </tr>

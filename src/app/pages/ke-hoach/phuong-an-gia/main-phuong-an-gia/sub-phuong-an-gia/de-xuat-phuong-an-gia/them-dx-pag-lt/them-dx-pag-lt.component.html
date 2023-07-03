@@ -431,7 +431,7 @@
                 <i class=" fa fa-pencil" (click)="startEdit(idx, 'ttc')"></i>
               </a>
               <a *ngIf="!isView" (click)="deleteItem(idx, 'ttc')">
-                <i class="fa fa-trash-o do"></i>
+                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
               </a>
             </td>
           </ng-container>
@@ -538,10 +538,10 @@
                   <i class="icon htvbdh_tcdt_import "></i>
                 </a>
                 <a *ngIf="!isView" (click)="startEdit(idx, 'ppxdg')">
-                  <i class="fa fa-pencil"></i>
+                  <i class="fa fa-pencil" title="Sửa"></i>
                 </a>
                 <a *ngIf="!isView" (click)="deleteItem(idx, 'ppxdg')">
-                  <i class="fa fa-trash-o do"></i>
+                  <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                 </a>
               </td>
             </ng-container>

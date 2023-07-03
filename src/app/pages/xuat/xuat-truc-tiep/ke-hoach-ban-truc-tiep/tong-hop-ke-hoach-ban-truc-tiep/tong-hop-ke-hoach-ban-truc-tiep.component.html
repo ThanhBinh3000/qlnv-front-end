@@ -51,7 +51,7 @@
             <div class="buttons">
                 <button type="button" class="btn btn-do" (click)="deleteMulti()"
                     *ngIf="userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_TONGHOP_XOA')">
-                    <i class="fa fa-trash-o do"></i>
+                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                     <span>Xóa</span>
                 </button>
                 <button type="button" class="btn btn-sub"
@@ -162,7 +162,7 @@
                         <td class="text-left">
                             <a (click)="goDetail(data.id,'XHDTQG_PTDG_KHBDG_TONGHOP_XEM')"
                                 *ngIf="(data.trangThai == STATUS.CHUA_TAO_QD || data.trangThai == STATUS.DA_DU_THAO_QD || data.trangThai == STATUS.DA_BAN_HANH_QD )">
-                                <i class="fa fa-eye"></i>
+                                <i class="fa fa-eye" title="Xem chi tiết"></i>
                             </a>
                             <a *ngIf="(data.trangThai == STATUS.CHUA_TAO_QD || data.trangThai == STATUS.DA_DU_THAO_QD || data.trangThai == STATUS.DA_BAN_HANH_QD)"
                                 (click)="taoQdinh(data.id)">
@@ -170,7 +170,7 @@
                             </a>
                             <a *ngIf="(data.trangThai == STATUS.CHUA_TAO_QD || data.trangThai == STATUS.DA_DU_THAO_QD)"
                                 (click)="delete(data,'XHDTQG_PTDG_KHBDG_TONGHOP_XOA')">
-                                <i class="fa fa-trash-o do"></i>
+                                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                             </a>
                         </td>
                     </tr>

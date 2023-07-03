@@ -140,7 +140,7 @@
           <td>{{ dataChiCuc.soLuong * formData.value.donGiaVat * 1000 | number : '1.0-1' : 'vi_VN' }}</td>
           <td *ngIf="!isReadOnly" class="text-left" [nzRight]="true">
             <a (click)="deleteRow(i,-1,-1)">
-              <i class="fa fa-trash-o do"></i>
+              <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>
         </tr>
@@ -185,7 +185,7 @@
             <td>{{ itemChild.soLuong * formData.value.donGiaVat * 1000 | number : '1.0-1' : 'vi_VN' }}</td>
             <td [nzRight]="true">
               <a (click)="deleteRow(i,y)">
-                <i class="fa fa-trash-o do"></i>
+                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
               </a>
             </td>
           </tr>

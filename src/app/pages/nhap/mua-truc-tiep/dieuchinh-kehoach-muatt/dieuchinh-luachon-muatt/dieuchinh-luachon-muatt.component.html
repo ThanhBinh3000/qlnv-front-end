@@ -40,7 +40,7 @@
             <div class="buttons">
                 <button *ngIf="userService.isTongCuc() && userService.isAccessPermisson('NHDTQG_PTMTT_DCKHMTT_XOA')"
                     type="button" class="btn btn-sub btn-xoa" (click)="xoa()">
-                    <i class="fa fa-trash-o do"></i>
+                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                     <span>Xóa</span>
                 </button>
                 <button *ngIf="userService.isAccessPermisson('NHDTQG_PTMTT_DCKHMTT_EXP')" type="button"
@@ -153,17 +153,17 @@
                         <td class="text-left">
                             <a (click)="redirectToChiTiet(true,data.id)"
                                 *ngIf="data.trangThai != '00' && userService.isAccessPermisson('NHDTQG_PTMTT_DCKHMTT_XEM')">
-                                <i class="fa fa-eye"></i>
+                                <i class="fa fa-eye" title="Xem chi tiết"></i>
                             </a>
                             <a *ngIf="(data.trangThai == globals.prop.NHAP_DU_THAO || data.trangThai == globals.prop.NHAP_TU_CHOI_LDC)
                              && userService.isTongCuc()
                              && userService.isAccessPermisson('NHDTQG_PTMTT_DCKHMTT_XEM')"
                                 (click)="redirectToChiTiet(false,data.id)">
-                                <i class="fa fa-pencil"></i>
+                                <i class="fa fa-pencil" title="Sửa"></i>
                             </a>
                             <a *ngIf="data.trangThai == globals.prop.NHAP_DU_THAO && userService.isTongCuc()
                              && userService.isAccessPermisson('NHDTQG_PTMTT_DCKHMTT_XOA')" (click)="xoaItem(data)">
-                                <i class="fa fa-trash-o do"></i>
+                                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                             </a>
                         </td>
                     </tr>

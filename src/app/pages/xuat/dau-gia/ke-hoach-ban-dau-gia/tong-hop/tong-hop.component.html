@@ -57,7 +57,7 @@
             <div class="buttons">
                 <button *ngIf="userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_TONGHOP_XOA')" type="button"
                     class="btn btn-do" (click)="deleteMulti()">
-                    <i class="fa fa-trash-o do"></i>
+                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                     <span>Xóa</span>
                 </button>
                 <button *ngIf="userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_TONGHOP_EXP')" type="button"
@@ -167,14 +167,14 @@
                         <td class="text-left">
                             <a (click)="goDetail(data.id)"
                                 *ngIf="userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_TONGHOP_XEM')">
-                                <i class="fa fa-eye"></i>
+                                <i class="fa fa-eye" title="Xem chi tiết"></i>
                             </a>
                             <a (click)="taoQdinh(data)">
                                 <i class="icon htvbdh_tcdt_tao-qd"></i>
                             </a>
                             <a *ngIf="(data.trangThai == STATUS.CHUA_TAO_QD && userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_TONGHOP_XOA'))"
                                 (click)="delete(data,'XHDTQG_PTDG_KHBDG_TONGHOP_XOA')">
-                                <i class="fa fa-trash-o do"></i>
+                                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                             </a>
                         </td>
                     </tr>

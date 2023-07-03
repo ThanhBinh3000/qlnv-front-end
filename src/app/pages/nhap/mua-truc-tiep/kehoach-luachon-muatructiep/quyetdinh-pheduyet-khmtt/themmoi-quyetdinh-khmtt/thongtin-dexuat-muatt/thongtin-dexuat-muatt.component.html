@@ -185,7 +185,7 @@
                         <td class="text-blue">{{item.soLuong * item.donGia * 1000 | number : '1.0-1' : 'vi_VN'}}</td>
                         <td>
                             <a *ngIf="!isView" (click)="themMoiBangPhanLoTaiSan(item,i)">
-                                <i class="fa fa-pencil"></i>
+                                <i class="fa fa-pencil" title="Sửa"></i>
                             </a>
                         </td>
                     </tr>

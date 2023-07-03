@@ -107,15 +107,15 @@
                                     <td class="text-left">
                                         <a (click)="goDetail(bb.id)"
                                             *ngIf="(bb.trangThai == STATUS.DA_DUYET_LDC || bb.trangThai == STATUS.DA_DUYET_CBV ) && userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBLMBGM_XEM')">
-                                            <i class="fa fa-eye"></i>
+                                            <i class="fa fa-eye" title="Xem chi tiết"></i>
                                         </a>
                                         <a *ngIf="(bb.trangThai != STATUS.DA_DUYET_LDC && bb.trangThai != STATUS.DA_DUYET_CBV ) && userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBLMBGM_THEM')"
                                             (click)="goDetail(bb.id) ">
-                                            <i class="fa fa-pencil"></i>
+                                            <i class="fa fa-pencil" title="Sửa"></i>
                                         </a>
                                         <a *ngIf="(bb.trangThai == STATUS.DU_THAO ) && userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBLMBGM_XOA')"
                                             (click)="xoaItem(bb)">
-                                            <i class="fa fa-trash-o do"></i>
+                                            <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                                         </a>
                                     </td>
                                 </tr>

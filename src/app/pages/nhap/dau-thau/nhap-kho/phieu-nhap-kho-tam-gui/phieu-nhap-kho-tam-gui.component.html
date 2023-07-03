@@ -34,7 +34,7 @@
       <div class="buttons">
         <button type="button" class="btn btn-do" (click)="deleteSelect()"
           *ngIf="userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_PNK_XOA')">
-          <i class="fa fa-trash-o do"></i>
+          <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
           <span>Xóa</span>
         </button>
         <button *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_PNK_EXP')" type="button" class="btn btn-sub"
@@ -109,11 +109,11 @@
                   <a *ngIf="(dataDdiem.phieuNhapKhoTamGui && dataDdiem.phieuNhapKhoTamGui.trangThai != STATUS.DA_HOAN_THANH ) && userService.isChiCuc()
                   && userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_PNK_THEM')"
                     (click)="redirectToChiTiet(false, dataDdiem.phieuNhapKhoTamGui?.id)">
-                    <i class="fa fa-pencil"></i>
+                    <i class="fa fa-pencil" title="Sửa"></i>
                   </a>
                   <a *ngIf="dataDdiem.phieuNhapKhoTamGui?.trangThai == STATUS.DU_THAO && userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_PNK_XOA')"
                     (click)="xoaItem(dataDdiem.phieuNhapKhoTamGui)">
-                    <i class="fa fa-trash-o do"></i>
+                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                   </a>
                 </td>
               </tr>

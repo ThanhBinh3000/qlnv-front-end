@@ -93,7 +93,7 @@
   <!--            <i class=" fa fa-pencil"></i>-->
   <!--          </a>-->
   <!--          <a (click)="xoaItem(idx)" *ngIf="isView">-->
-  <!--            <i class="fa fa-trash-o do"></i>-->
+  <!--            <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>-->
   <!--          </a>-->
   <!--        </td>-->
   <!--      </ng-container>-->
@@ -236,7 +236,7 @@
         </ng-container>
         <td class="font-weight-bold text-left" nzRight *ngIf="isView">
           <a *ngIf="!data.dataChild || data.dataChild.length == 0" (click)="themMoiMuaTang(data, 'sua', idx)">
-            <i class="fa fa-pencil"></i>
+            <i class="fa fa-pencil" title="Sửa"></i>
           </a>
           <a>
             <i class="icon htvbdh_dau-cong" *ngIf="data.loaiVthh != '0401'  && !data.cloaiVthh"
@@ -263,10 +263,10 @@
           </td>
           <td class="text-left" nzRight *ngIf="isView">
             <a (click)="themMoiMuaTang(item, 'sua', y, dataTable[idx])">
-              <i class="fa fa-pencil"></i>
+              <i class="fa fa-pencil" title="Sửa"></i>
             </a>
             <a (click)="deleteItem(idx, y)" *ngIf="data.dataChild.length >= 1">
-              <i class="fa fa-trash-o do"></i>
+              <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>
         </tr>

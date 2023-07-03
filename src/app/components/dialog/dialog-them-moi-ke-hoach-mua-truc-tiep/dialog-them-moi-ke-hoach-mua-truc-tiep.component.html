@@ -155,10 +155,10 @@
                     <td>{{ data.soLuong * formData.value.donGiaVat * 1000 | number : '1.0-1' : 'vi_VN' }}</td>
                     <td class="text-center">
                         <a (click)="startEdit(i)">
-                            <i class="fa fa-pencil"></i>
+                            <i class="fa fa-pencil" title="Sửa"></i>
                         </a>
                         <a (click)="deleteRow(i)">
-                            <i class="fa fa-trash-o do"></i>
+                            <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                         </a>
                     </td>
                 </ng-container>

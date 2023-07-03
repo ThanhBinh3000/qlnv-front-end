@@ -431,10 +431,10 @@
               <td class="text-right">{{data.tongGtri ?? 0 | number: '1.0-1'}}</td>
               <td *ngIf="!isView">
                 <a (click)="startEdit(i)">
-                  <i class="fa fa-pencil"></i>
+                  <i class="fa fa-pencil" title="Sửa"></i>
                 </a>
                 <a (click)="deleteRow(i)">
-                  <i class="fa fa-trash-o do"></i>
+                  <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                 </a>
               </td>
             </ng-container>
@@ -618,10 +618,10 @@
               <td class="text-right">{{data.tongGtri ?? 0 | number: '1.0-1'}}</td>
               <td *ngIf="!isView">
                 <a (click)="startEdit(i)">
-                  <i class="fa fa-pencil"></i>
+                  <i class="fa fa-pencil" title="Sửa"></i>
                 </a>
                 <a (click)="deleteRow(i, 'PDT')">
-                  <i class="fa fa-trash-o do"></i>
+                  <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                 </a>
               </td>
             </ng-container>
