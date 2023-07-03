@@ -11,8 +11,8 @@ import { MESSAGE } from 'src/app/constants/message';
 import { chain, groupBy, cloneDeep } from 'lodash';
 import { v4 as uuidv4 } from 'uuid';
 import { PhieuXuatKhoService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuXuatKho.service';
-import { BienBanTinhKhoService } from './../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/xuat-kho/BienBanTinhKho.service';
 import { BienBanTinhKhoDieuChuyenService } from '../services/dcnb-bien-ban-tinh-kho.service';
+import { LIST_TRANG_THAI_BBTK } from './them-moi-bien-ban-tinh-kho/them-moi-bien-ban-tinh-kho.component';
 
 export interface PassDataBienBanTinhKho {
   soQdinhDcc: string, qdinhDccId: number, tenDiemKho: string, tenNhaKho: string, tenNganKho: string, tenLoKho: string,
@@ -33,6 +33,7 @@ export class BienBanTinhKhoDieuChuyenComponent extends Base2Component implements
     soQdinhDcc: '', qdinhDccId: null, tenDiemKho: '', tenNhaKho: '', tenNganKho: '', tenLoKho: '', maDiemKho: '',
     maNhaKho: '', maNganKho: '', maLoKho: ''
   }
+  LIST_TRANG_THAI = LIST_TRANG_THAI_BBTK;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -54,6 +55,7 @@ export class BienBanTinhKhoDieuChuyenComponent extends Base2Component implements
       loaiDc: [''],
       isVatTu: [false],
       thayDoiThuKho: [false],
+      type: ['']
     })
     this.filterTable = {
       soQdinhDcc: '',
@@ -103,7 +105,7 @@ export class BienBanTinhKhoDieuChuyenComponent extends Base2Component implements
     this.userInfo = this.userService.getUserLogin();
     this.userdetail.maDvi = this.userInfo.MA_DVI;
     this.userdetail.tenDvi = this.userInfo.TEN_DVI;
-    this.formData.patchValue({ loaiDc: this.loaiDc, isVatTu: this.isVatTu, thayDoiThuKho: this.thayDoiThuKho })
+    this.formData.patchValue({ loaiDc: this.loaiDc, isVatTu: this.isVatTu, thayDoiThuKho: this.thayDoiThuKho, type: this.type })
   }
 
 
@@ -203,10 +205,11 @@ export class BienBanTinhKhoDieuChuyenComponent extends Base2Component implements
     return !data.trangThai && this.userService.isChiCuc()
   }
   checkRoleEdit(data: any): boolean {
-    return (data.trangThai == this.STATUS.DU_THAO || data.trangThai == this.STATUS.TU_CHOI_LDCC) && this.userService.isChiCuc();
+    return (data.trangThai == this.STATUS.DU_THAO || data.trangThai === this.STATUS.TU_CHOI_KTVBQ || data.trangThai === this.STATUS.TU_CHOI_KT || data.trangThai == this.STATUS.TU_CHOI_LDCC) && this.userService.isChiCuc();
   }
   checkRoleApprove(data: any): boolean {
-    return data.trangThai == this.STATUS.CHO_DUYET_LDC && this.userService.isChiCuc();
+    //trangThai1 && Quyen1, trangThai2 && Quyen 2
+    return data.trangThai === this.STATUS.CHO_DUYET_KTVBQ || data.trangThai === this.STATUS.CHO_DUYET_KT || data.trangThai == this.STATUS.CHO_DUYET_LDCC && this.userService.isChiCuc();
   }
   checkRoleDetele(data: any): boolean {
     return data.trangThai == this.STATUS.DU_THAO && this.userService.isChiCuc()

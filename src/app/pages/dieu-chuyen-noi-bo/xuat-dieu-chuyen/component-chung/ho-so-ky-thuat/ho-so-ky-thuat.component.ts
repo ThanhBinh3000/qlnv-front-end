@@ -19,6 +19,10 @@ import { DonviService } from 'src/app/services/donvi.service';
 })
 export class HoSoKyThuatXuatDieuChuyenComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
+  @Input() loaiDc: string;
+  @Input() isVatTu: boolean;
+  @Input() thayDoiThuKho: boolean;
+  @Input() type: string
   isDetail: boolean = false;
   selectedId: number = 0;
   isViewDetail: boolean;

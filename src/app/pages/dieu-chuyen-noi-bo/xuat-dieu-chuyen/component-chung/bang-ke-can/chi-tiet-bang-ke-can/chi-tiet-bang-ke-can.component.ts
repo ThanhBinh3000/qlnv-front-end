@@ -144,6 +144,7 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
         loaiVthh: [''],
         cloaiVthh: [''],
         donViTinh: [''],
+        tenDonViTinh: [''],
         moTaHangHoa: [''],
         tenNguoiGiaoHang: [''],
         cccd: [''],
@@ -160,7 +161,6 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
         nguoiPduyetId: [''],
         lyDoTuChoi: [''],
         trangThai: ['00'],
-        type: ['00'],
         tenDvi: [''],
         diaChiDvi: [''],
         tenLoaiVthh: [''],
@@ -171,6 +171,7 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
         tenNhaKho: ['', [Validators.required]],
         tenNganKho: ['', [Validators.required]],
         tenLoKho: [''],
+        tenNganLoKho: [''],
         nguoiPduyet: [''],
         nguoiGduyet: [''],
         thuKhoId: [''],
@@ -204,24 +205,24 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
 
   async loadDsLoaiHinhNhapXuat() {
     let res = await this.danhMucService.danhMucChungGetAll("LOAI_HINH_NHAP_XUAT");
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.listLoaiHinhNhapXuat = res.data.filter(item => item.phanLoai == 'XUAT_CAP');
+    if (res.msg === MESSAGE.SUCCESS) {
+      this.listLoaiHinhNhapXuat = res.data.filter(item => item.phanLoai === 'XUAT_CAP');
     }
   }
 
   async loadDsKieuNhapXuat() {
     let res = await this.danhMucService.danhMucChungGetAll("KIEU_NHAP_XUAT");
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.listKieuNhapXuat = res.data.filter(item => item.apDung == 'XUAT_CAP');
+    if (res.msg === MESSAGE.SUCCESS) {
+      this.listKieuNhapXuat = res.data.filter(item => item.apDung === 'XUAT_CAP');
 
     }
   }
 
   async loadDsVthh() {
     let res = await this.danhMucService.getDanhMucHangDvqlAsyn({});
-    if (res.msg == MESSAGE.SUCCESS) {
+    if (res.msg === MESSAGE.SUCCESS) {
       this.listHangHoaAll = res.data;
-      this.listLoaiHangHoa = res.data?.filter((x) => x.ma.length == 4);
+      this.listLoaiHangHoa = res.data?.filter((x) => x.ma.length === 4);
     }
   }
 
@@ -232,7 +233,7 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
   //     type: "DV"
   //   };
   //   let res = await this.donViService.getDonViTheoMaCha(body);
-  //   if (res.msg == MESSAGE.SUCCESS) {
+  //   if (res.msg === MESSAGE.SUCCESS) {
   //     this.dsDonVi = res.data;
   //   } else {
   //     this.notification.error(MESSAGE.ERROR, res.msg);
@@ -249,7 +250,7 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
         thayDoiThuKho: this.thayDoiThuKho,
       }
       let res = await this.quyetDinhDieuChuyenCucService.getDsSoQuyetDinhDieuChuyenChiCuc(body);
-      if (res.msg == MESSAGE.SUCCESS) {
+      if (res.msg === MESSAGE.SUCCESS) {
         this.dsQuyetDinhDC = res.data;
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -267,8 +268,8 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
     if (idInput > 0) {
       await this.bangKeCanHangDieuChuyenService.getDetail(idInput)
         .then((res) => {
-          if (res.msg == MESSAGE.SUCCESS) {
-            this.formData.patchValue({ ...res.data, soBangKe: res.data.soBangKe ? res.data.soBangKe : this.genSoBangKe(res.data.id) });
+          if (res.msg === MESSAGE.SUCCESS) {
+            this.formData.patchValue({ ...res.data, soBangKe: res.data.soBangKe ? res.data.soBangKe : this.genSoBangKe(res.data.id), tenNganLoKho: res.data.tenLoKho ? `${res.data.tenLoKho} - ${res.data.tenNganKho}` : res.data.tenNganKho });
           }
         })
         .catch((e) => {
@@ -284,10 +285,12 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
         maQhns: this.userInfo.DON_VI.maQhns,
         thuKhoId: null,
         tenThuKho: this.userInfo.TEN_DAY_DU,
-        ...this.passData
+        ...this.passData,
+        tenNganLoKho: this.passData.tenLoKho ? `${this.passData.tenLoKho} - ${this.passData.tenNganKho}` : this.passData.tenNganKho
       });
+      this.chiTietDiemKho(this.passData.maDiemKho);
       await this.loadDsPhieuXuatKho(this.passData.qdinhDccId);
-      this.dsPhieuXuatKho = this.dsPhieuXuatKho.filter(f => ((f.maloKho && f.maloKho == this.passData.maDiemKho) || (f.maloKho && f.maNganKho && f.maNganKho == this.passData.maNganKho)));
+      this.dsPhieuXuatKho = this.dsPhieuXuatKho.filter(f => ((f.maloKho && f.maloKho === this.passData.maDiemKho) || (f.maloKho && f.maNganKho && f.maNganKho === this.passData.maNganKho)));
     }
   }
   genSoBangKe(id: number) {
@@ -317,7 +320,7 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
 
   async selectHangHoa(event: any) {
     let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({ str: event });
-    if (res.msg == MESSAGE.SUCCESS) {
+    if (res.msg === MESSAGE.SUCCESS) {
       if (res.data) {
         this.listChungLoaiHangHoa = res.data;
       }
@@ -420,13 +423,17 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
 
       this.formData.disable()
       let body = this.formData.value;
+      body.loaiDc = this.loaiDc;
+      body.isVatTu = this.isVatTu;
+      body.thayDoiThuKho = this.thayDoiThuKho;
+      body.type = this.type;
       let res;
       if (body.id && body.id > 0) {
         res = await this.bangKeCanHangDieuChuyenService.update(body);
       } else {
         res = await this.bangKeCanHangDieuChuyenService.create(body);
       }
-      if (res.msg == MESSAGE.SUCCESS) {
+      if (res.msg === MESSAGE.SUCCESS) {
         if (this.formData.get('id').value) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
         } else {
@@ -575,7 +582,8 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
             cloaiVthh: '',
             tenCloaiVthh: '',
             tenNguoiGiaoHang: '',
-
+            donViTinh: '',
+            tenDonViTinh: '',
             soPhieuXuatKho: '',
             phieuXuatKhoId: '',
             cccd: '',
@@ -613,7 +621,7 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
 
       }
       let dataRes = await this.phieuXuatKhoDieuChuyenService.search(body);
-      if (dataRes.msg == MESSAGE.SUCCESS) {
+      if (dataRes.msg === MESSAGE.SUCCESS) {
         this.dsPhieuXuatKho = [];
         if (Array.isArray(dataRes.data?.content)) {
           this.dsPhieuXuatKho = dataRes.data?.content.filter(f => f.id);
@@ -673,15 +681,21 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
         maNhaKho: dataRes.data.maNhaKho,
         tenNhaKho: dataRes.data.tenNhaKho,
         maDiemKho: dataRes.data.maDiemKho,
-        tenDiemKho: dataRes.data.tenDiemKho
+        tenDiemKho: dataRes.data.tenDiemKho,
+        tenNganLoKho: dataRes.data.tenLoKho ? `${dataRes.data.tenLoKho} - ${dataRes.data.tenNganKho}` : dataRes.data.tenNganKho
       });
       this.chiTietDiemKho(dataRes.data.maDiemKho);
     }
   }
   async chiTietDiemKho(maDiemKho: string) {
+    if (!maDiemKho) {
+      this.formData.patchValue({
+        diaDaDiemKho: ''
+      })
+    }
     const res = await this.donViService.layDonViCon();
     if (res.msg === MESSAGE.SUCCESS) {
-      const dataDiemKho = res.data.find(f => f.maDvi == maDiemKho);
+      const dataDiemKho = res.data.find(f => f.maDvi === maDiemKho);
       if (dataDiemKho) {
         this.formData.patchValue({
           diaDaDiemKho: dataDiemKho.diaChi
