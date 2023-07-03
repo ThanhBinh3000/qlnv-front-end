@@ -76,7 +76,7 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
       ktvBaoQuan: [],
       thuKho: [],
       keToan: [],
-      thuTruong: [],
+      ldChiCuc: [],
       tenLoKho: [],
       maLoKho: [],
       tenNganKho: [],
@@ -539,6 +539,9 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
 
       const data = res.data
       this.dsKeHoach = []
+      this.formData.patchValue({
+        ngayQdDcCuc: data.ngayKyQdinh
+      })
       if (data.danhSachQuyetDinh.length == 0) return
       data.danhSachQuyetDinh.map(qdinh => {
         this.dsKeHoach = this.dsKeHoach.concat(qdinh.danhSachKeHoach)

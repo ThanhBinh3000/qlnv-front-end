@@ -35,8 +35,7 @@
         <span>Từ chối</span>
       </button>
 
-      <button *ngIf="isPheDuyet() && userService.isAccessPermisson('DCNB_QUYETDINHDC_DUYET_LDVU')" type="button"
-        class="btn btn-sub" (click)="pheDuyet()">
+      <button *ngIf="isPheDuyet()" type="button" class="btn btn-sub" (click)="pheDuyet()">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span>Duyệt</span>
       </button>
@@ -66,7 +65,7 @@
         </div>
       </div>
     </div> -->
-    <nz-collapse-panel [nzHeader]="'Thông tin chung'" [nzActive]="true">
+    <nz-collapse-panel [nzHeader]="'THÔNG TIN CHUNG'" [nzActive]="true">
       <form nz-form nzLayout="vertical" [formGroup]="formData">
         <nz-card class="mg-t-16 flex-card p-lr16">
           <div nz-row [nzGutter]="24">
@@ -231,7 +230,7 @@
                   cục</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogQD()">
-                    <input nz-input formControlName="canCuQdTc" [readonly]="true" />
+                    <input nz-input formControlName="soCanCuQdTc" [readonly]="true" />
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
@@ -240,10 +239,10 @@
             <div nz-col [nzSpan]="3">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
-                  Số đề xuất/công văn
+                  Số công văn/tờ trình của cục
                 </nz-form-label>
                 <nz-form-control>
-                  <input nz-input formControlName="soCanCuQdTc" [readonly]="true" />
+                  <input nz-input formControlName="maDxuat" [readonly]="true" />
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -517,8 +516,7 @@
         <!-- <nz-collapse-panel #collapseExpand [nzActive]="true" nzHeader="KẾ HOẠCH DTQG GIAO TỪNG BỘ/NGÀNH"
                        class="mg-t-10" [nzExtra]="extraTpl">
                       </nz-collapse-panel> -->
-        <nz-collapse-panel [nzHeader]="'QUYẾT ĐỊNH ĐIỀU CHUYỂN NỘI BỘ HÀNG DTQG TRONG CÙNG 1 CHI CỤC DTNN'"
-          [nzActive]="true" [nzExtra]="extraTpl">
+        <nz-collapse-panel [nzHeader]="getTitle()" [nzActive]="true" [nzExtra]="extraTpl">
           <ng-template #extraTpl>
             <button *ngIf="!isView && formData.value.loaiDc === 'DCNB'" type="button" class="btn btn-sub xanh"
               (click)="add()">
@@ -533,9 +531,10 @@
                 <tr>
                   <th style="width: 35px">STT</th>
                   <th>Cục DTNN KV xuất ĐC</th>
+                  <th>Cục DTNN KV nhận ĐC</th>
                   <th>Số đề xuất/ Công văn</th>
                   <th>Ngày trình duyệt Tổng cục</th>
-                  <th>Tổng dự toán kinh phí(triệu đồng)</th>
+                  <th>Tổng dự toán kinh phí (triệu đồng)</th>
                   <th>Trích yếu</th>
                 </tr>
               </thead>
@@ -544,6 +543,7 @@
                   <tr [ngClass]="{'bg-selected': selected === i}" (click)="selectRow(i)">
                     <td>{{i + 1}}</td>
                     <td>{{item.tenDviCuc || item.tenCucDxuat || ""}}</td>
+                    <td>{{item.tenCucNhan || ""}}</td>
                     <td>{{item.soDxuat || ""}}</td>
                     <td>{{item.ngayGduyet || ""}}</td>
                     <td>{{item.tongDuToanKp|number: '1.0-1' || ""}}</td>
@@ -571,17 +571,17 @@
                   <th>Điểm kho</th>
                   <th>Lô kho</th>
                   <th class="text-center">Loại HH</th>
-                  <th class="text-center">Chủng loại hàng hóa</th>
+                  <th class="text-center">Chủng loại hàng</th>
                   <th class="text-center">ĐVT</th>
                   <th class="text-center">Tồn kho</th>
-                  <th class="text-center">Sl điều chuyển</th>
+                  <th class="text-center">SL điều chuyển</th>
                   <th class="text-center break min-w-120 max-w-120">Dự toán kinh phí (triệu đồng)</th>
                   <th class="text-center">Thời gian dự kiến điều chuyển</th>
                   <th class="text-center">Điểm kho</th>
                   <th class="text-center">Lô kho</th>
                   <th>Thay đổi thủ kho</th>
                   <th class="text-center">Tích lượng khả dụng</th>
-                  <th class="text-center">Sl nhập ĐC</th>
+                  <th class="text-center">SL nhập ĐC</th>
                 </tr>
               </thead>
               <tbody>
@@ -774,16 +774,16 @@
                   <th>Điểm kho</th>
                   <th>Lô kho</th>
                   <th class="text-center">Loại HH</th>
-                  <th class="text-center">Chủng loại hàng hóa</th>
+                  <th class="text-center">Chủng loại hàng</th>
                   <th class="text-center">ĐVT</th>
                   <th class="text-center">Tồn kho</th>
-                  <th class="text-center">Sl điều chuyển</th>
+                  <th class="text-center">SL điều chuyển</th>
                   <th class="text-center break min-w-120 max-w-120">Dự toán kinh phí (triệu đồng)</th>
                   <th>Chi cục</th>
                   <th class="text-center">Điểm kho</th>
                   <th class="text-center">Lô kho</th>
                   <th class="text-center">Tích lượng khả dụng</th>
-                  <th class="text-center">Sl nhập ĐC</th>
+                  <th class="text-center">SL nhập ĐC</th>
                 </tr>
               </thead>
               <tbody>
@@ -975,7 +975,7 @@
                   <th rowspan="2" width="60px" class="text-center">STT</th>
                   <th rowspan="2"></th>
                   <th rowspan="2"></th>
-                  <th colspan="9" class="text-center">Chi cục đề xuất điều chuyển</th>
+                  <th colspan="10" class="text-center">Chi cục đề xuất điều chuyển</th>
                   <th rowspan="2" style="max-width: 90px; min-width: 90px;  white-space: break-spaces;"
                     class="text-center">
                     Thời gian dự
@@ -984,19 +984,20 @@
                 </tr>
                 <tr>
                   <th>Chi cục</th>
+                  <th>Số công văn/tờ trình</th>
                   <th>Điểm kho</th>
                   <th>Lô kho</th>
                   <th class="text-center">Loại HH</th>
-                  <th class="text-center">Chủng loại hàng hóa</th>
+                  <th class="text-center">Chủng loại hàng</th>
                   <th class="text-center">ĐVT</th>
                   <th class="text-center">Tồn kho</th>
-                  <th class="text-center">Sl điều chuyển</th>
+                  <th class="text-center">SL điều chuyển</th>
                   <th class="text-center break min-w-120 max-w-120">Dự toán kinh phí (triệu đồng)</th>
                   <th>Chi cục</th>
                   <th class="text-center">Điểm kho</th>
                   <th class="text-center">Lô kho</th>
                   <th class="text-center">Tích lượng khả dụng</th>
-                  <th class="text-center">Sl nhập ĐC</th>
+                  <th class="text-center">SL nhập ĐC</th>
 
                 </tr>
               </thead>
@@ -1009,7 +1010,7 @@
                     </td>
                     <td></td>
                     <td class="bold">{{ item.tenDvi || "" }}</td>
-                    <td></td>
+                    <td class="bold text-blue">{{ item.soDxuat || "" }}</td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -1033,6 +1034,7 @@
                         <td [nzExpand]="bb.expand" (nzExpandChange)="bb.expand=!bb.expand">
                         </td>
                         <td></td>
+                        <td></td>
                         <td class="bold">{{ bb.tenDiemKho || ""}}</td>
                         <td></td>
                         <td></td>
@@ -1051,6 +1053,7 @@
                       <ng-container *ngIf="bb.expand">
                         <ng-container *ngFor="let c of bb.children, let y = index">
                           <tr>
+                            <td></td>
                             <td></td>
                             <td></td>
                             <td></td>
@@ -1089,6 +1092,7 @@
                               <td></td>
                               <td></td>
                               <td></td>
+                              <td></td>
                               <td class="bold">{{d.tenChiCucNhan || ""}}</td>
                               <td></td>
                               <td></td>
@@ -1113,6 +1117,7 @@
                                 <td></td>
                                 <td></td>
                                 <td></td>
+                                <td></td>
                                 <td>{{(diemKhoNhan.tenDiemKhoNhan || "")}}</td>
                                 <td></td>
                                 <td></td>
@@ -1121,6 +1126,7 @@
                               </tr>
                               <ng-container *ngFor="let f of diemKhoNhan.children, let y = index">
                                 <tr>
+                                  <td></td>
                                   <td></td>
                                   <td></td>
                                   <td></td>
@@ -1176,7 +1182,7 @@
                   <th>Điểm kho</th>
                   <th class="text-center">Lô kho</th>
                   <th class="text-center">Loại HH</th>
-                  <th class="text-center">Chủng loại hàng hóa</th>
+                  <th class="text-center">Chủng loại hàng</th>
                   <th class="text-center">ĐVT</th>
                   <th class="text-center">Tồn kho</th>
                   <th class="text-center">Sl điều chuyển</th>

@@ -14,10 +14,10 @@ import { chain, cloneDeep } from 'lodash';
 import { CHUC_NANG, STATUS } from 'src/app/constants/status';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { Subject } from 'rxjs';
-import { QuyetDinhDieuChuyenTCService } from 'src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-tc.service';
 import { PhieuKiemTraChatLuongService } from 'src/app/services/dieu-chuyen-noi-bo/nhap-dieu-chuyen/phieu-kiem-tra-chat-luong';
 import * as uuidv4 from "uuid";
 import { ThongTinQuyetDinhDieuChuyenCucComponent } from 'src/app/pages/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/cuc/thong-tin-quyet-dinh-dieu-chuyen-cuc/thong-tin-quyet-dinh-dieu-chuyen-cuc.component';
+import { QuyetDinhDieuChuyenCucService } from 'src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-c.service';
 
 @Component({
   selector: 'app-kiem-tra-chat-luong',
@@ -29,37 +29,6 @@ export class KiemTraChatLuongComponent extends Base2Component implements OnInit 
   isVisibleChangeTab$ = new Subject();
   visibleTab: boolean = true;
   tabSelected: number = 0;
-  // @Input()
-  // idTHop: number;
-
-  // @Input()
-  // loaiVthh: string;
-  // @Input()
-  // loaiVthhCache: string;
-
-  // CHUC_NANG = CHUC_NANG;
-  // listLoaiDieuChuyen: any[] = [
-  //   { ma: "ALL", ten: "Tất cả" },
-  //   { ma: "CHI_CUC", ten: "Giữa 2 chi cục trong cùng 1 cục" },
-  //   { ma: "CUC", ten: "Giữa 2 cục DTNN KV" },
-  // ];
-  // listLoaiDCFilterTable: any[] = [
-  //   { ma: "CHI_CUC", ten: "Giữa 2 chi cục trong cùng 1 cục" },
-  //   { ma: "CUC", ten: "Giữa 2 cục DTNN KV" },
-  // ];
-  // dataTableView: any[] = [];
-  // listLoaiHangHoa: any[] = [];
-  // listHangHoaAll: any[] = [];
-  // listChungLoaiHangHoa: any[] = [];
-  // listTrangThai: any[] = [
-  //   { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
-  //   { ma: this.STATUS.CHO_DUYET_TP, giaTri: 'Chờ duyệt - TP' },
-  //   { ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối - TP' },
-  //   { ma: this.STATUS.CHO_DUYET_LDC, giaTri: 'Chờ duyệt - LĐ Cục' },
-  //   { ma: this.STATUS.TU_CHOI_LDC, giaTri: 'Từ chối - LĐ Cục' },
-  //   { ma: this.STATUS.DA_DUYET_LDC, giaTri: 'Đã duyệt - LĐ Cục' },
-  //   { ma: this.STATUS.DA_TAO_CBV, giaTri: 'Đã tạo - CB Vụ' },
-  // ];
 
   constructor(
     httpClient: HttpClient,
@@ -69,7 +38,7 @@ export class KiemTraChatLuongComponent extends Base2Component implements OnInit 
     modal: NzModalService,
     private donviService: DonviService,
     private danhMucService: DanhMucService,
-    private quyetDinhDieuChuyenTCService: QuyetDinhDieuChuyenTCService,
+    private quyetDinhDieuChuyenCucService: QuyetDinhDieuChuyenCucService,
     private phieuKiemTraChatLuongService: PhieuKiemTraChatLuongService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, phieuKiemTraChatLuongService);
@@ -86,42 +55,11 @@ export class KiemTraChatLuongComponent extends Base2Component implements OnInit 
   }
 
 
-  data: any = [];
-  // userInfo: UserLogin;
-  // userdetail: any = {};
+  data: any;
+  dsQuyetDinh: any[] = [];
   dataTableView: any[] = [];
   selectedId: number = 0;
-  // isVatTu: boolean = false;
   isView = false;
-
-  // disabledStartNgayLapKh = (startValue: Date): boolean => {
-  //   if (startValue && this.formData.value.ngayLapKhDen) {
-  //     return startValue.getTime() > this.formData.value.ngayLapKhDen.getTime();
-  //   } else {
-  //     return false;
-  //   }
-  // };
-
-  // disabledEndNgayLapKh = (endValue: Date): boolean => {
-  //   if (!endValue || !this.formData.value.ngayLapKhTu) {
-  //     return false;
-  //   }
-  //   return endValue.getTime() <= this.formData.value.ngayLapKhDen.getTime();
-  // };
-
-  // disabledStartNgayDuyetLdc = (startValue: Date): boolean => {
-  //   if (startValue && this.formData.value.ngayDuyetLdcDen) {
-  //     return startValue.getTime() > this.formData.value.ngayDuyetLdcDen.getTime();
-  //   }
-  //   return false;
-  // };
-
-  // disabledEndNgayDuyetLdc = (endValue: Date): boolean => {
-  //   if (!endValue || !this.formData.value.ngayDuyetLdcTu) {
-  //     return false;
-  //   }
-  //   return endValue.getTime() <= this.formData.value.ngayDuyetLdcDen.getTime();
-  // };
 
   async ngOnInit() {
     this.isVisibleChangeTab$.subscribe((value: boolean) => {
@@ -133,7 +71,6 @@ export class KiemTraChatLuongComponent extends Base2Component implements OnInit 
     try {
       this.initData()
       await this.timKiem();
-      // await this.loadDsVthh();
       await this.spinner.hide();
 
     } catch (e) {
@@ -156,12 +93,8 @@ export class KiemTraChatLuongComponent extends Base2Component implements OnInit 
   }
 
   isCuc() {
-    return false//this.userService.isCuc()
+    return this.userService.isCuc()
   }
-
-  // isChiCuc() {
-  //   return false//this.userService.isChiCuc()
-  // }
 
   selectTab(tab: number) {
     if (this.isDetail) {
@@ -171,9 +104,23 @@ export class KiemTraChatLuongComponent extends Base2Component implements OnInit 
   }
 
   async initData() {
-    // this.userInfo = this.userService.getUserLogin();
-    // this.userdetail.maDvi = this.userInfo.MA_DVI;
-    // this.userdetail.tenDvi = this.userInfo.TEN_DVI;
+    this.formData.patchValue({
+      loaiDc: this.loaiDc
+    })
+    this.getDSQD()
+  }
+
+  async getDSQD() {
+    let body = {
+      trangThai: STATUS.BAN_HANH,
+      // loaiVthh: ['0101', '0102'],
+      loaiDc: this.loaiDc,
+      maDvi: this.userInfo.MA_DVI
+    }
+    let resSoDX = this.isCuc() ? await this.quyetDinhDieuChuyenCucService.getDsSoQuyetDinhDieuChuyenCuc(body) : await this.quyetDinhDieuChuyenCucService.getDsSoQuyetDinhDieuChuyenChiCuc(body);
+    if (resSoDX.msg == MESSAGE.SUCCESS) {
+      this.dsQuyetDinh = resSoDX.data;
+    }
   }
 
   setExpand(parantExpand: boolean = false, children: any = []): void {
@@ -184,15 +131,6 @@ export class KiemTraChatLuongComponent extends Base2Component implements OnInit 
   }
 
   async timKiem() {
-    // if (this.formData.value.ngayDuyetTc) {
-    //   this.formData.value.ngayDuyetTcTu = dayjs(this.formData.value.ngayDuyetTc[0]).format('YYYY-MM-DD')
-    //   this.formData.value.ngayDuyetTcDen = dayjs(this.formData.value.ngayDuyetTc[1]).format('YYYY-MM-DD')
-    // }
-    // if (this.formData.value.ngayHieuLuc) {
-    //   this.formData.value.ngayHieuLucTu = dayjs(this.formData.value.ngayHieuLuc[0]).format('YYYY-MM-DD')
-    //   this.formData.value.ngayHieuLucDen = dayjs(this.formData.value.ngayHieuLuc[1]).format('YYYY-MM-DD')
-    // }
-    // console.log('DSQuyetDinhDieuChuyenComponent/this.formData.value=>', this.formData.value)
     await this.spinner.show();
     try {
       let body = this.formData.value
@@ -321,10 +259,10 @@ export class KiemTraChatLuongComponent extends Base2Component implements OnInit 
           body.ngayHieuLucTu = body.ngayHieuLuc[0];
           body.ngayHieuLucDen = body.ngayHieuLuc[1];
         }
-        this.quyetDinhDieuChuyenTCService
+        this.phieuKiemTraChatLuongService
           .export(body)
           .subscribe((blob) =>
-            saveAs(blob, 'quyet-dinh-dieu-chuyen-tc.xlsx'),
+            saveAs(blob, 'phieu-kiem-tra-chat-luong.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {

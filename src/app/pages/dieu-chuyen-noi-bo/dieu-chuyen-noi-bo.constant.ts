@@ -33,7 +33,7 @@ export const ROUTE_LIST: Array<ChiTietMenu> = [
   },
   {
     icon: 'htvbdh_tcdt_chitieukehoachnam',
-    title: 'Quyết định điều chuyển',
+    title: 'Quyết định điều chuyển/xuất nhập hàng',
     url: `/quyet-dinh-dieu-chuyen`,
     dropdown: 'quyet-dinh-dieu-chuyen',
     idHover: 'quyet-dinh-dieu-chuyen',
