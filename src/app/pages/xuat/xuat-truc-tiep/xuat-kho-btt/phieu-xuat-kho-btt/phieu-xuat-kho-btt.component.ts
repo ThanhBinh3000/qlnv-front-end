@@ -7,7 +7,7 @@ import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
 import { MESSAGE } from 'src/app/constants/message';
 import { PhieuXuatKhoBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/xuat-kho-btt/phieu-xuat-kho-btt.service';
-import { v4 as uuidv4 } from 'uuid';
+import * as uuid from "uuid";
 import { chain } from 'lodash';
 @Component({
   selector: 'app-phieu-xuat-kho-btt',
@@ -18,11 +18,10 @@ export class PhieuXuatKhoBttComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
 
   selectedId: number = 0;
-  isView: boolean = false;
-  isTatCa: boolean = false;
   idQdGiaoNvXh: number = 0;
-  dataView: any = [];
   expandSetString = new Set<string>();
+  children: any = [];
+
   idPhieu: number = 0;
   isViewPhieu: boolean = false;
 
@@ -70,7 +69,6 @@ export class PhieuXuatKhoBttComponent extends Base2Component implements OnInit {
   async ngOnInit() {
     await this.spinner.show();
     try {
-      this.timKiem();
       await this.search();
     } catch (e) {
       console.log('error: ', e)
@@ -80,71 +78,51 @@ export class PhieuXuatKhoBttComponent extends Base2Component implements OnInit {
   }
 
   async search(roles?): Promise<void> {
-    await this.spinner.show()
-    await super.search(roles);
-    this.buildTableView();
-    await this.spinner.hide()
-  }
-
-  timKiem() {
     this.formData.patchValue({
       loaiVthh: this.loaiVthh,
       maDvi: this.userService.isChiCuc() ? this.userInfo.MA_DVI : null,
       trangThai: this.userService.isChiCuc() ? null : this.STATUS.DA_DUYET_LDCC
     })
+    await super.search(roles);
+    this.buildTableView();
   }
 
   clearFilter() {
     this.formData.reset();
-    this.timKiem();
     this.search();
   }
 
   buildTableView() {
-    let dataView = chain(this.dataTable)
-      .groupBy("soQdNv")
-      .map((value, key) => {
-        let rs = chain(value)
-          .groupBy("maDiemKho")
-          .map((v, k) => {
-            let rowLv2 = v.find(s => s.maDiemKho === k);
-            return {
-              id: rowLv2.id,
-              maDiemKho: k,
-              idVirtual: uuidv4(),
-              maLoKho: rowLv2.maLoKho,
-              tenDiemKho: rowLv2.tenDiemKho,
-              maNhaKho: rowLv2.maNhaKho,
-              tenNhaKho: rowLv2.tenNhaKho,
-              maNganKho: rowLv2.maNganKho,
-              tenNganKho: rowLv2.tenNganKho,
-              tenLoKho: rowLv2.tenLoKho,
-              soPhieuXuat: rowLv2.soPhieuXuat,
-              ngayXuatKho: rowLv2.ngayXuatKho,
-              soPhieu: rowLv2.soPhieu,
-              ngayKnghiem: rowLv2.ngayKnghiem,
-              trangThai: rowLv2.trangThai,
-              tenTrangThai: rowLv2.tenTrangThai,
-              childData: v
-            }
+    let dataView = chain(this.dataTable).groupBy("soQdNv").map((value, key) => {
+      let quyetDinh = value.find(f => f.soQdNv === key)
+      let rs = chain(value).groupBy("maDiemKho").map((v, k) => {
+          let diaDiem = v.find(s => s.maDiemKho === k)
+          return {
+            idVirtual: uuid.v4(),
+            maDiemKho: k != "null" ? k : '',
+            tenDiemKho: diaDiem ? diaDiem.tenDiemKho : null,
+            idQdNv:diaDiem ? diaDiem.idQdNv : null,
+            childData: v
           }
-          ).value();
-        let rowLv1 = value.find(s => s.soQdNv === key);
-        return {
-          idVirtual: uuidv4(),
-          soQdNv: key,
-          namKh: rowLv1.namKh,
-          ngayQdNv: rowLv1.ngayQdNv,
-          idQdNv: rowLv1.idQdNv,
-          childData: rs
-        };
-      }).value();
-    this.dataView = dataView
+        }
+      ).value();
+      let namKh = quyetDinh ? quyetDinh.namKh : null;
+      let ngayQdNv = quyetDinh ? quyetDinh.soQdNv : null;
+      return {
+        idVirtual: uuid.v4(),
+        soQdNv: key != "null" ? key : '',
+        namKh: namKh,
+        ngayQdNv: ngayQdNv,
+        childData: rs
+      };
+    }).value();
+    this.children = dataView
+    console.log(this.children, "this.children ");
     this.expandAll()
   }
 
   expandAll() {
-    this.dataView.forEach(s => {
+    this.children.forEach(s => {
       this.expandSetString.add(s.idVirtual);
     })
   }
@@ -157,10 +135,9 @@ export class PhieuXuatKhoBttComponent extends Base2Component implements OnInit {
     }
   }
 
-  redirectToChiTiet(lv2: any, isView: boolean, idQdGiaoNvXh?: number) {
-    this.selectedId = lv2.id;
+  redirectToChiTiet(lv2: any, idQdGiaoNvXh?: number) {
+    this.selectedId = lv2 ? lv2.id : null;
     this.isDetail = true;
-    this.isView = isView;
     this.idQdGiaoNvXh = idQdGiaoNvXh;
   }
 
