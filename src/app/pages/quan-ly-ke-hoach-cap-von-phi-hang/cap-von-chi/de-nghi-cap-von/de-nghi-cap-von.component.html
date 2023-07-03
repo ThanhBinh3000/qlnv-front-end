@@ -40,5 +40,21 @@
             <app-de-nghi-cap-von-mua-vat-tu [data]=data (dataChange)="changeTab($event)">
             </app-de-nghi-cap-von-mua-vat-tu>
         </ng-container>
+        <ng-container *ngIf="tabSelected == 'ds-capvon'">
+            <app-danh-sach-cap-von (dataChange)="changeTab($event)">
+            </app-danh-sach-cap-von>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 'dn-capvon'">
+            <app-cap-von [data]=data (dataChange)="changeTab($event)">
+            </app-cap-von>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 'ds-tonghop-denghi-donvi-capduoi'">
+            <app-danh-sach-tong-hop-tu-don-vi-cap-duoi [data]=data (dataChange)="changeTab($event)">
+            </app-danh-sach-tong-hop-tu-don-vi-cap-duoi>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 'ds-denghi-donvi-capduoi'">
+            <app-danh-sach-de-nghi-tu-don-vi-cap-duoi [data]=data (dataChange)="changeTab($event)">
+            </app-danh-sach-de-nghi-tu-don-vi-cap-duoi>
+        </ng-container>
     </div>
 </div>

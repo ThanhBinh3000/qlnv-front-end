@@ -1,19 +1,19 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { FileFunction, GeneralFunction, NumberFunction, TableFunction } from 'src/app/Utility/func';
+import { AMOUNT, BOX_NUMBER_WIDTH, DON_VI_TIEN, MONEY_LIMIT, Utils } from "src/app/Utility/utils";
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.service';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { AMOUNT, BOX_NUMBER_WIDTH, DON_VI_TIEN, LA_MA, MONEY_LIMIT, QUATITY, Utils } from "src/app/Utility/utils";
 import * as uuid from "uuid";
 import { BtnStatus, Doc, Form } from '../../../../lap-ke-hoach-va-tham-dinh-du-toan.class';
-import { NzUploadFile } from 'ng-zorro-antd/upload';
-import { FileFunction, GeneralFunction, NumberFunction, TableFunction } from 'src/app/Utility/func';
-
+import * as XLSX from 'xlsx';
 export class ItemData {
     id: string;
     stt: string;
@@ -147,7 +147,7 @@ export class HangComponent implements OnInit {
                 }
             })
         }
-
+        console.log(this.lstCtietBcao)
         this.getTotal();
         this.updateEditCache();
         this.getStatusButton();
@@ -479,5 +479,41 @@ export class HangComponent implements OnInit {
         let file: any = this.listFile.find(element => element?.lastModified.toString() == id);
         let doc: any = this.formDetail.lstFiles.find(element => element?.id == id);
         await this.fileFunc.downloadFile(file, doc);
+    }
+
+    exportToExcel() {
+        const header = [
+            { t: 0, b: 0 + this.lstCtietBcao.length, l: 0, r: 7, val: null },
+            { t: 0, b: 0, l: 0, r: 0, val: 'STT' },
+            { t: 0, b: 0, l: 1, r: 1, val: 'Tên cục DTNNKV, chi cục DTNN' },
+            { t: 0, b: 0, l: 2, r: 2, val: 'Tên địa điểm, địa chỉ' },
+            { t: 0, b: 0, l: 3, r: 3, val: 'Tên nhà kho' },
+            { t: 0, b: 0, l: 4, r: 4, val: 'Khối tích (m3)' },
+            { t: 0, b: 0, l: 5, r: 5, val: 'Tên hàng DTQG' },
+            { t: 0, b: 0, l: 6, r: 6, val: 'Số lượng' },
+            { t: 0, b: 0, l: 7, r: 7, val: 'Giá trị' },
+        ]
+        const headerBot = 0;
+        const ori = header[0];
+        this.lstCtietBcao.forEach((item, index) => {
+            if (item.unitSpan) {
+                header.push({ t: headerBot + index + 1, b: headerBot + item.unitSpan, l: 0, r: 0, val: this.getIndex(item.stt) })
+                header.push({ t: headerBot + index + 1, b: headerBot + item.unitSpan, l: 1, r: 1, val: item.tenDvi })
+            }
+            if (item.locationSpan) {
+                header.push({ t: headerBot + index + 1, b: headerBot + item.locationSpan, l: 2, r: 2, val: item.tenDiaChiKho })
+            }
+            if (item.storehouseSpan) {
+                header.push({ t: headerBot + index + 1, b: headerBot + item.storehouseSpan, l: 3, r: 3, val: item.tenNhaKho })
+            }
+            header.push({ t: headerBot + index + 1, b: headerBot + index + 1, l: 4, r: 4, val: item.khoiTich?.toString() })
+            header.push({ t: headerBot + index + 1, b: headerBot + index + 1, l: 5, r: 5, val: item.tenHang })
+            header.push({ t: headerBot + index + 1, b: headerBot + index + 1, l: 6, r: 6, val: item.soLuong?.toString() })
+            header.push({ t: headerBot + index + 1, b: headerBot + index + 1, l: 7, r: 7, val: item.giaTri?.toString() })
+        })
+        const workbook = XLSX.utils.book_new();
+        const worksheet = this.genFunc.initExcel(header);
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
+        XLSX.writeFile(workbook, 'bao_hiem_hang.xlsx');
     }
 }

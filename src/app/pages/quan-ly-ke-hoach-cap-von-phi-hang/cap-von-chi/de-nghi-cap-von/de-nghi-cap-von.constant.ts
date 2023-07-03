@@ -9,8 +9,29 @@ export const TAB_LIST = [
         isSelected: false,
     },
     {
+        name: 'Cấp vốn',
+        code: 'ds-capvon',
+        status: true,
+        role: [],
+        isSelected: false,
+    },
+    {
         name: 'Đề nghị cấp vốn',
         code: 'ds-denghi',
+        status: true,
+        role: [],
+        isSelected: false,
+    },
+    {
+        name: 'Đề nghị của đơn vị cấp dưới',
+        code: 'ds-denghi-donvi-capduoi',
+        status: true,
+        role: [],
+        isSelected: false,
+    },
+    {
+        name: 'Tổng hợp đề nghị từ đơn vị cấp dưới',
+        code: 'ds-tonghop-denghi-donvi-capduoi',
         status: true,
         role: [],
         isSelected: false,
@@ -82,6 +103,7 @@ export class BaoCao {
     thuyetMinh: string;
     fileDinhKems: any[];
     listIdDeleteFiles: string[];
+    maLoai: string;
 }
 
 export class ItemContract {
@@ -140,6 +162,11 @@ export class ItemRequest {
     soConDuocCap: number;
     ghiChu: string;
     dnghiCapvonLuyKes: Times[];
+    luyKeTongCapUng: number;
+    luyKeTongCapVon: number;
+    luyKeTongCong: number;
+    soLan: number;
+    tongTien: number;
 }
 
 export class Times {

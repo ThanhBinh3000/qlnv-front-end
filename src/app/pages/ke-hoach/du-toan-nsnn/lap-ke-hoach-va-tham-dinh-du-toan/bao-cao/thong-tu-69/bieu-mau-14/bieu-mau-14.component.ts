@@ -12,9 +12,11 @@ import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.se
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
 import * as uuid from "uuid";
 import { BtnStatus, Doc, Form } from '../../../lap-ke-hoach-va-tham-dinh-du-toan.class';
+import * as XLSX from 'xlsx'
 
 export class ItemData {
     id: string;
+    khvonphiLapThamDinhCtietId: string;
     stt!: string;
     level: number;
     maNdung: string;
@@ -109,11 +111,6 @@ export class BieuMau14Component implements OnInit {
         } else {
             this.scrollX = this.genFunc.tableWidth(550, 4, 1, 0);
         }
-        this.formDetail?.lstCtietLapThamDinhs.forEach(item => {
-            this.lstCtietBcao.push({
-                ...item,
-            })
-        })
         if (this.lstCtietBcao.length == 0) {
             this.noiDungs.forEach(e => {
                 this.lstCtietBcao.push({
@@ -342,5 +339,35 @@ export class BieuMau14Component implements OnInit {
         let file: any = this.listFile.find(element => element?.lastModified.toString() == id);
         let doc: any = this.formDetail.lstFiles.find(element => element?.id == id);
         await this.fileFunc.downloadFile(file, doc);
+    }
+
+    exportToExcel() {
+        const header = [
+            { t: 0, b: 0, l: 0, r: 6, val: null },
+            { t: 0, b: 0, l: 0, r: 0, val: 'STT' },
+            { t: 0, b: 0, l: 1, r: 1, val: 'Nội dung' },
+            { t: 0, b: 0, l: 2, r: 2, val: 'Thực hiện năm hiện hành ' + (this.namBcao - 1).toString() },
+            { t: 0, b: 0, l: 3, r: 3, val: 'Nhu cầu dự toán năm ' + this.namBcao.toString() },
+            { t: 0, b: 0, l: 4, r: 4, val: 'Nhu cầu năm ' + (this.namBcao + 1).toString() },
+            { t: 0, b: 0, l: 5, r: 5, val: 'Nhu cầu năm ' + (this.namBcao + 2).toString() },
+            { t: 0, b: 0, l: 6, r: 6, val: 'Ghi chú' },
+        ]
+        const filterData = this.lstCtietBcao.map(item => {
+            const { id, maNdung, khvonphiLapThamDinhCtietId, level, ...rest } = item;
+            return rest;
+        })
+        filterData.forEach(item => {
+            const level = item.stt.split('.').length - 2;
+            item.stt = this.getChiMuc(item.stt);
+            for (let i = 0; i < level; i++) {
+                item.stt = '   ' + item.stt;
+            }
+        })
+
+        const workbook = XLSX.utils.book_new();
+        const worksheet = this.genFunc.initExcel(header);
+        XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: this.genFunc.coo(header[0].l, header[0].b + 1) })
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
+        XLSX.writeFile(workbook, 'TT69_BM14.xlsx');
     }
 }

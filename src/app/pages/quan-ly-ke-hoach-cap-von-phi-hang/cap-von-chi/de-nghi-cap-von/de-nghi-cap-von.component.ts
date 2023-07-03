@@ -20,22 +20,10 @@ export class DeNghiCapVonComponent implements OnInit {
     ) { }
 
     async ngOnInit() {
-        // this.tabList.forEach(item => {
-        //     let check = false;
-        //     item.role.forEach(e => {
-        //         if (this.userService.isAccessPermisson(e)) {
-        //             check = true;
-        //         }
-        //     })
-        //     item.status = check;
-        //     item.isSelected = false;
-        //     if (!this.tabSelected && item.status) {
-        //         this.tabSelected = item.code;
-        //         item.isSelected = true;
-        //     }
-        // })
         if (this.userService.isChiCuc()) {
-            this.tabList = this.tabList.filter(e => e.code != 'ds-hopdong');
+            this.tabList = this.tabList.filter(e => e.code != 'ds-hopdong' && e.code != 'ds-denghi-donvi-capduoi' && e.code != 'ds-tonghop-denghi-donvi-capduoi');
+        } else if (this.userService.isTongCuc()) {
+            this.tabList = this.tabList.filter(e => e.code == 'ds-capvon')
         } else {
             this.tabList[1].isSelected = false;
         }

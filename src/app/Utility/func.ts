@@ -6,6 +6,7 @@ import { QuanLyVonPhiService } from "../services/quanLyVonPhi.service";
 import { DON_VI_TIEN, LA_MA, NUM_BOX_WIDTH, TEXT_BOX_WIDTH, Utils } from "./utils";
 import * as fileSaver from 'file-saver';
 import { DatePipe } from "@angular/common";
+import * as XLSX from 'xlsx'
 
 @Injectable({
     providedIn: 'root',
@@ -16,7 +17,7 @@ export class GeneralFunction {
         private datePipe: DatePipe,
     ) { }
     statusClass(status) {
-        if (Utils.statusSave.includes(status)) {
+        if ([Utils.TT_BC_1, Utils.TT_BC_3, Utils.TT_BC_5, Utils.TT_BC_8].includes(status)) {
             return 'du-thao-va-lanh-dao-duyet';
         } else {
             return 'da-ban-hanh';
@@ -77,6 +78,40 @@ export class GeneralFunction {
             }
         }
         return xau;
+    }
+
+    coo(c: number, r: number) {
+        const thuong = Math.floor(c / 26);
+        const du = c % 26;
+        if (thuong > 0) {
+            return String.fromCharCode(thuong + 96).toUpperCase() + String.fromCharCode(du + 97).toUpperCase() + (r + 1).toString();
+        }
+        return String.fromCharCode(du + 97).toUpperCase() + (r + 1).toString();
+    }
+
+    header(r: number, c: number) {
+        const data = [];
+        const subData = [];
+        for (let i = 0; i <= c; i++) {
+            subData.push('');
+        }
+        for (let i = 0; i <= r; i++) {
+            data.push(subData);
+        }
+        return data;
+    }
+
+    initExcel(data: any[]) {
+        const ori = data[0];
+        data = data.filter(item => item.val !== null);
+        const mergeCells = [];
+        const worksheet = XLSX.utils.aoa_to_sheet(this.header(ori.b, ori.r));
+        data.forEach(item => {
+            worksheet[this.coo(ori.l + item.l, ori.t + item.t)].v = item.val;
+            mergeCells.push({ s: { r: ori.t + item.t, c: ori.l + item.l }, e: { r: ori.t + item.b, c: ori.l + item.r } })
+        })
+        worksheet['!merges'] = mergeCells;
+        return worksheet;
     }
 
     doPrint() {

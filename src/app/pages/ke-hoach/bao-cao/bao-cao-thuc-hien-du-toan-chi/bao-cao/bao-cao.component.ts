@@ -208,6 +208,8 @@ export class BaoCaoComponent implements OnInit {
         this.userInfo = this.userService.getUserLogin();
         if (this.userInfo?.DON_VI?.tenVietTat == 'CCNTT') {
             this.lstPhuLuc = this.lstPhuLuc.filter(e => e.maPhuLuc != '3');
+        } else if (this.userService.isChiCuc()) {
+            this.lstPhuLuc = this.lstPhuLuc.filter(e => e.maPhuLuc == '1')
         } else {
             if (!this.userService.isTongCuc()) {
                 this.lstPhuLuc = this.lstPhuLuc.filter(e => e.maPhuLuc != '2');
