@@ -78,7 +78,7 @@ export class ThBcSoLuongClMayMocThietBiChuyenDungComponent extends Base2Componen
   }
 
   downloadPdf() {
-    saveAs(this.pdfBlob, "bc_kh_tang_hang_du_tru_quoc_gia.pdf");
+    saveAs(this.pdfBlob, "th_bc_sl_chat_luong_may_moc_tb_chuyen_dung.pdf");
   }
 
   async downloadExcel() {
@@ -97,7 +97,7 @@ export class ThBcSoLuongClMayMocThietBiChuyenDungComponent extends Base2Componen
       await this.bcCLuongHangDTQGService.baoCaoSLuongCLuongMmTbcd(body).then(async s => {
         this.excelBlob = s;
         this.excelSrc = await new Response(s).arrayBuffer();
-        saveAs(this.excelBlob, "th_bc_sl_cl_may_moc_thiet_bi_chuyen_dung.xlsx");
+        saveAs(this.excelBlob, "th_bc_sl_chat_luong_may_moc_tb_chuyen_dung.xlsx");
       });
       this.showDlgPreview = true;
     } catch (e) {
