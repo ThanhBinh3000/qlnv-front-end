@@ -4,6 +4,11 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
+    <button *ngIf="!formData.value.idXc" type="button"
+            class="btn btn-sub xanh-nhat" >
+      <i class="icon htvbdh_tcdt_tao-qd"></i>
+      <span>Tạo QĐ xuất cấp</span>
+    </button>
     <button
       *ngIf="(formData.value.trangThai == STATUS.DU_THAO) && userService.isTongCuc() && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDPDPA_BANHANH')"
       type="button" class="btn btn-sub xanh-nhat" (click)="saveAndSend(STATUS.BAN_HANH,'Bạn có muốn ban hành ?','Bạn đã ban hành thành công!')">

@@ -9,6 +9,7 @@ import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
 import {BbNghiemThuBaoQuanService} from "../../../../../services/qlnv-hang/nhap-hang/nhap-khac/bbNghiemThuBaoQuan.service";
 import { STATUS } from 'src/app/constants/status';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-bien-ban-nghiem-thu-bao-quan',
@@ -125,7 +126,33 @@ export class BienBanNghiemThuBaoQuanComponent extends Base2Component implements 
   }
 
   export() {
-
+    if (this.totalRecord > 0) {
+      this.spinner.show();
+      try {
+        let body = {
+          loaiVthh: this.typeVthh,
+          soQd: this.searchFilter.soQd,
+          namKhoach: this.searchFilter.namKhoach,
+          soBbNtBq: this.searchFilter.soBb,
+          tuNgayLP: this.tuNgayLP != null ? dayjs(this.tuNgayLP).format('YYYY-MM-DD') + " 00:00:00" : null,
+          denNgayLP: this.denNgayLP != null ? dayjs(this.denNgayLP).format('YYYY-MM-DD') + " 24:59:59" : null,
+          tuNgayKT: this.tuNgayKT != null ? dayjs(this.tuNgayKT).format('YYYY-MM-DD') + " 00:00:00" : null,
+          denNgayKT: this.denNgayKT != null ? dayjs(this.denNgayKT).format('YYYY-MM-DD') + " 24:59:59" : null,
+        };
+        this.bbNghiemThuBaoQuanService
+          .export(body)
+          .subscribe((blob) =>
+            saveAs(blob, 'Ds_bb_ntbq_lan_dau.xlsx'),
+          );
+        this.spinner.hide();
+      } catch (e) {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
+    }
   }
 
   redirectToChiTiet(isView: boolean, id: number, idQdGiaoNvNh?: number) {
@@ -166,5 +193,10 @@ export class BienBanNghiemThuBaoQuanComponent extends Base2Component implements 
         }
       },
     });
+  }
+
+  showList() {
+    this.isDetail = false;
+    this.timKiem();
   }
 }

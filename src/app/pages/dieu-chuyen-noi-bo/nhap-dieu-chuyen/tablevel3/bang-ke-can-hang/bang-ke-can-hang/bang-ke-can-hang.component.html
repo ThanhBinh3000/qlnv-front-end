@@ -135,7 +135,11 @@
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td></td>
+                        <td>
+                          <a (click)="add(row3)">
+                            <i class="icon htvbdh_dau-cong"></i>
+                          </a>
+                        </td>
                       </tr>
                       <ng-container *ngFor="let row4 of row3.children, let y = index">
                         <tr>
@@ -150,7 +154,17 @@
                           <td class="bold">{{row4.soPhieuNhapKho || ""}}</td>
                           <td class="bold">{{row4.ngayNhapKho || ""}}</td>
                           <td class="bold">{{row4.tenTrangThai || ""}}</td>
-                          <td></td>
+                          <td>
+                            <a *ngIf="row4.trangThai !== STATUS.DU_THAO" (click)="redirectDetail(row4.id, true)">
+                              <i class="fa fa-eye"></i>
+                            </a>
+                            <a *ngIf="row4.trangThai == STATUS.DU_THAO" (click)="redirectDetail(row4.id, false)">
+                              <i class="fa fa-pencil"></i>
+                            </a>
+                            <a *ngIf="row4.trangThai == STATUS.DU_THAO" (click)="xoa(row4)">
+                              <i class="fa fa-trash-o do"></i>
+                            </a>
+                          </td>
                         </tr>
                       </ng-container>
                     </ng-container>

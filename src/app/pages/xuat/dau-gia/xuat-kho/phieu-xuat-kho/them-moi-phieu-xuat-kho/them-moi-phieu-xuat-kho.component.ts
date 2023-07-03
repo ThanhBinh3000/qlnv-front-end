@@ -49,6 +49,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
   listFileDinhKem: any = [];
   listLoaiHinhNx: any = [];
   listKieuNx: any = [];
+  flagInit: Boolean = false;
 
   constructor(
     httpClient: HttpClient,
@@ -143,6 +144,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
       this.spinner.hide();
     } finally {
       this.spinner.hide();
+      this.flagInit = true;
     }
   }
 
@@ -153,6 +155,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
         .then((res) => {
           if (res.msg == MESSAGE.SUCCESS) {
             this.formData.patchValue(res.data);
+
             const data = res.data;
             this.fileDinhKems = data.fileDinhKems;
           }
@@ -220,7 +223,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
   };
 
   changeSoQd(event) {
-    if (event && event !== this.formData.value.soQdGiaoNvXh) {
+    if (this.flagInit && event && event !== this.formData.value.soQdGiaoNvXh) {
       this.formData.patchValue({
         maDiemKho: null,
         tenDiemKho: null,
@@ -244,7 +247,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
   }
 
   changeDd(event) {
-    if (event && event !== this.formData.value.maDiemKho) {
+    if (this.flagInit && event && event !== this.formData.value.maDiemKho) {
       this.formData.patchValue({
         soPhieuKnCl: null,
         ktvBaoQuan: null,
