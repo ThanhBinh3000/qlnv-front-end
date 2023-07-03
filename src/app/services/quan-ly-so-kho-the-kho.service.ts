@@ -13,52 +13,8 @@ export class QuanLySoKhoTheKhoService extends BaseService {
     super(httpClient, 'so-kho-the-kho', '');
   }
 
-  pheDuyet(body: any): Promise<any> {
-    let url = `${environment.SERVICE_API}${this.GATEWAY}/so-kho-the-kho/phe-duyet`
-    return this.httpClient.put<any>(url, body).toPromise();
-  }
-
-  them(body: any): Promise<any> {
-    let url = `${environment.SERVICE_API}${this.GATEWAY}/so-kho-the-kho/them-moi`
+  loadDsNhapXuat(body: any): Promise<any> {
+    let url = `${environment.SERVICE_API}/qlnv-hang/lich-su-nhap-xuat/ds-nhap-xuat-the-kho`
     return this.httpClient.post<any>(url, body).toPromise();
-  }
-
-  sua(body: any): Promise<any> {
-    let url = `${environment.SERVICE_API}${this.GATEWAY}/so-kho-the-kho/cap-nhat`
-    return this.httpClient.post<any>(url, body).toPromise();
-  }
-
-  timKiem(body: any): Promise<any> {
-    let url = `${environment.SERVICE_API}${this.GATEWAY}/so-kho-the-kho/tra-cuu`
-    return this.httpClient.post<any>(url, body).toPromise();
-  }
-  chiTiet(id: number): Promise<any> {
-    let url = `${environment.SERVICE_API}${this.GATEWAY}/so-kho-the-kho/chi-tiet/${id}`
-    return this.httpClient.get<any>(url).toPromise()
-  }
-  deleteData(id: any): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/so-kho-the-kho/xoa/${id}`;
-    return this.httpClient.delete(url).toPromise();
-  }
-  deleteMultiple(body: any): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/so-kho-the-kho/delete/multiple`;
-    return this.httpClient.post(url, body).toPromise();
-  }
-
-  exportCT(body: any): Observable<Blob> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/so-kho-the-kho/export/listct`;
-    return this.httpClient.post(url, body, { responseType: 'blob' });
-  }
-  exportList(body: any): Observable<Blob> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/so-kho-the-kho/export/list`;
-    return this.httpClient.post(url, body, { responseType: 'blob' });
-  }
-  updateStatus(body: any): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/so-kho-the-kho/phe-duyet`
-    return this.httpClient.put(url, body).toPromise();
-  }
-  editData(body: any): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/so-kho-the-kho`
-    return this.httpClient.put(url, body).toPromise();
   }
 }

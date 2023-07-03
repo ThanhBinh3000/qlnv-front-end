@@ -4,7 +4,7 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button *ngIf="userService.isAccessPermisson('KHCNBQ_CTNCKHCNBQ_DUYET') && !isView" class="btn btn-main"
+    <button *ngIf="(userService.isAccessPermisson('KHCNBQ_CTNCKHCNBQ_THEM') || userService.isAccessPermisson('KHCNBQ_CTNCKHCNBQ_THEM')) && !isView" class="btn btn-main"
       (click)="save(true)">
       <i class="icon  htvbdh_tcdt_save"></i>
       <span>Lưu</span>
@@ -32,7 +32,7 @@
       </div>
     </div>
     <form nzLayout="vertical" nz-form [formGroup]="formData">
-      <div nz-row [nzGutter]="[24]">
+      <div nz-row [nzGutter]="24">
         <div nz-col nzSpan="3">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true">
