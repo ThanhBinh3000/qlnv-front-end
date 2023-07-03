@@ -108,8 +108,50 @@ export class LapThamDinhService extends BaseService {
         );
     }
 
-    getDsTle(nam: any): Observable<any> {
+    themMoiTyLeBh(request: any): Observable<any> {
+        return this.httpClient.post(
+            this.urlDefault + '/he-so-bao-hiem/them-moi',
+            request,
+        );
+    }
+
+    capNhatTyLeBh(request: any): Observable<any> {
+        return this.httpClient.put(
+            this.urlDefault + '/he-so-bao-hiem/cap-nhat',
+            request,
+        );
+    }
+
+    chiTietTyLeBh(id: string): Observable<any> {
         return this.httpClient.get(
-            this.urlDefault + '/chung/tham-so-he-thong/' + nam);
+            this.urlDefault + '/he-so-bao-hiem/chi-tiet/' + id,
+        );
+    }
+
+    trangThaiTyLeBh(request: any): Observable<any> {
+        return this.httpClient.post(
+            this.urlDefault + '/he-so-bao-hiem/trang-thai',
+            request,
+        );
+    }
+
+    tyLeBaoHiem(nam: number): Observable<any> {
+        return this.httpClient.get(
+            this.urlDefault + '/he-so-bao-hiem/' + nam.toString(),
+        );
+    }
+
+    danhSachHeSoBh(request: any): Observable<any> {
+        return this.httpClient.post(
+            this.urlDefault + '/he-so-bao-hiem/danh-sach',
+            request,
+        );
+    }
+
+    xoaBh(request: any): Observable<any> {
+        return this.httpClient.post(
+            this.urlDefault + '/he-so-bao-hiem/xoa',
+            request
+        );
     }
 }

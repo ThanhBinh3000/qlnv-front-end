@@ -9,15 +9,21 @@ import { DanhSachBaoCaoComponent } from './danh-sach-bao-cao/danh-sach-bao-cao.c
 import { DialogTaoMoiComponent } from './dialog-tao-moi/dialog-tao-moi.component';
 import { LapKeHoachVaThamDinhDuToanComponent } from './lap-ke-hoach-va-tham-dinh-du-toan.component';
 import { TongHopBaoCaoTuDonViCapDuoiComponent } from './tong-hop-bao-cao-tu-don-vi-cap-duoi/tong-hop-bao-cao-tu-don-vi-cap-duoi.component';
+import { DanhSachHeSoBaoHiemComponent } from './danh-sach-he-so-bao-hiem/danh-sach-he-so-bao-hiem.component';
+import { HeSoBaoHiemComponent } from './he-so-bao-hiem/he-so-bao-hiem.component';
+import { DialogTaoMoiTyLeBaoHiemComponent } from './dialog-tao-moi-ty-le-bao-hiem/dialog-tao-moi-ty-le-bao-hiem.component';
 
 @NgModule({
     declarations: [
         LapKeHoachVaThamDinhDuToanComponent,
         DanhSachBaoCaoComponent,
+        DanhSachHeSoBaoHiemComponent,
         DanhSachBaoCaoTuDonViCapDuoiComponent,
         TongHopBaoCaoTuDonViCapDuoiComponent,
         DialogTaoMoiComponent,
+        DialogTaoMoiTyLeBaoHiemComponent,
         DialogThemKhoanMucComponent,
+        HeSoBaoHiemComponent,
     ],
     imports: [
         CommonModule,

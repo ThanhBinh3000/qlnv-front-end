@@ -74,3 +74,32 @@ export class BtnStatus {
     viewAppVal?: boolean = true;                       // quyen xem tham dinh
     editAppVal?: boolean = true;                       // quyen sua tham dinh
 }
+
+export class CoeffIns {
+    id: string;
+    stt: string;
+    maDmuc: string;
+    tenDmuc: string;
+    maDviTinh: string;
+    tyLeKhoDuoi: number;
+    tyLeKhoTren: number;
+    ghiChu: string;
+}
+
+export class Insurance {
+    id: string;
+    maBaoHiem: string;
+    nam: number;
+    khoiTich: number;
+    maDvi: string;
+    trangThai: string;
+    nguoiTao: string;
+    ngayTao: string;
+    ngayTrinh: string;
+    ngayDuyet: string;
+    ngayPheDuyet: string;
+    lstFiles: any[];
+    fileDinhKems: Doc[];
+    listIdDeleteFiles: string[];
+    lstCtiets: CoeffIns[];
+}
