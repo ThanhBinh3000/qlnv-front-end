@@ -22,6 +22,11 @@ import { PHU_LUC } from './add-bao-cao.constant';
 import * as uuid from 'uuid';
 import { DatePipe } from '@angular/common';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+import { PhuLucSuaChuaComponent } from './phu-luc-sua-chua/phu-luc-sua-chua.component';
+import { PhuLucTaiSanComponent } from './phu-luc-tai-san/phu-luc-tai-san.component';
+import { PhuLucQuyLuongComponent } from './phu-luc-quy-luong/phu-luc-quy-luong.component';
+import { PhuLucDaoTaoComponent } from './phu-luc-dao-tao/phu-luc-dao-tao.component';
+import { PhuLucKhoaHocCongNgheComponent } from './phu-luc-khoa-hoc-cong-nghe/phu-luc-khoa-hoc-cong-nghe.component';
 
 
 export class ItemCongVan {
@@ -455,6 +460,21 @@ export class AddBaoCaoComponent implements OnInit {
         break;
       case 'pl03':
         nzContent = PhuLuc03Component;
+        break;
+      case 'pl04':
+        nzContent = PhuLucSuaChuaComponent;
+        break;
+      case 'pl05':
+        nzContent = PhuLucTaiSanComponent;
+        break;
+      case 'pl06':
+        nzContent = PhuLucQuyLuongComponent;
+        break;
+      case 'pl07':
+        nzContent = PhuLucDaoTaoComponent;
+        break;
+      case 'pl08':
+        nzContent = PhuLucKhoaHocCongNgheComponent;
         break;
       case 'pl09':
         nzContent = PhuLucPhanBoComponent;
