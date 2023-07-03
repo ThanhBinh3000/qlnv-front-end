@@ -1,4 +1,4 @@
-<nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="level1">
+<nz-affix [nzOffsetTop]="112" class="level1">
   <ul nz-menu nzMode="horizontal">
     <li nz-menu-item [nzSelected]="tabSelected==0" (click)="selectTab(0)">
       Biên bản lấy mẫu/bàn giao mẫu
@@ -7,17 +7,20 @@
       Phiếu kiểm nghiệm chất lượng
     </li>
     <li [nzSelected]="tabSelected==2" nz-menu-item (click)="selectTab(2)">
-     Hồ sơ kỹ thuật
+      Hồ sơ kỹ thuật
     </li>
   </ul>
 </nz-affix>
 <div class="contentBor chi-tieu__body giao-ke-hoach">
   <div class="contentDetail">
     <ng-container *ngIf="tabSelected == 0">
+      <app-ghcc-ktclvt-bien-ban-lay-mau-ban-giao></app-ghcc-ktclvt-bien-ban-lay-mau-ban-giao>
     </ng-container>
     <ng-container *ngIf="tabSelected == 1">
+      <app-ghcc-ktclvt-ho-so-ky-thuat></app-ghcc-ktclvt-ho-so-ky-thuat>
     </ng-container>
     <ng-container *ngIf="tabSelected == 2">
+      <app-ghcc-ktclvt-phieu-kiem-nghiem-chat-luong-tu></app-ghcc-ktclvt-phieu-kiem-nghiem-chat-luong-tu>
     </ng-container>
   </div>
 </div>

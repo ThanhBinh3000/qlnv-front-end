@@ -275,8 +275,6 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
         maLoKho: data.maLoKho,
         tenLoKho: data.tenLoKho,
         soPhieuKnCl: data.soPhieu,
-        loaiVthh: data.loaiVthh,
-        cloaiVthh: data.cloaiVthh,
         tenLoaiVthh: data.tenLoaiVthh,
         tenCloaiVthh: data.tenCloaiVthh,
         moTaHangHoa: data.moTaHangHoa,

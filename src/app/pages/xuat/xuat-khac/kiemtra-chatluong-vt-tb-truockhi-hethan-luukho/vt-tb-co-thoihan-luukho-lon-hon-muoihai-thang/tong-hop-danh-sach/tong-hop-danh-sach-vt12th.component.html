@@ -21,7 +21,7 @@
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col nzSpan="6">
+          <div nz-col nzSpan="6" *ngIf="userService.isTongCuc()">
             <nz-form-item>
               <nz-form-label>Cục DTNN KV</nz-form-label>
               <nz-form-control>
@@ -75,7 +75,7 @@
       </div>
     </nz-card>
     <div class="group-button">
-      <h3 class="text-uppercase">Danh sách hàng DTQG (Lương thực) còn 6 tháng hết hạn lưu kho nhưng chưa có kế hoạch
+      <h3 class="text-uppercase">Danh sách vật tư, thiết bị có thời hạn lưu kho lớn hơn 12 tháng nhưng chưa có kế hoạch
         xuất</h3>
       <div>
         <a (click)="danhSach()" style="color: blue">
@@ -83,7 +83,7 @@
         </a>
         <button type="button" class="btn btn-main" (click)="showModal(true)">
           <i class="icon htvbdh_tcdt_tao-qd"></i>
-          <span>Tổng hợp DS kiểm tra chất lượng LT trước khi hết hạn lưu kho</span>
+          <span>Tổng hợp DS VT, TB có thời hạn lưu kho lớn hơn 12 tháng</span>
         </button>
       </div>
 
@@ -108,7 +108,6 @@
               <th>ĐVT</th>
               <th>Ngày đề xuất</th>
               <th>Trạng thái</th>
-              <th class="text-center">Trạng thái <br> kiểm tra chất lượng</th>
               <th>Hành động</th>
             </tr>
             </thead>
@@ -132,7 +131,6 @@
                 <td></td>
                 <td></td>
                 <td>{{item.tenTrangThai}}</td>
-                <td></td>
                 <td class="text-left">
                   <a (click)="showModal(true, item)">
                     <i class="fa fa-eye"></i>
@@ -149,7 +147,6 @@
                     <td></td>
                     <td></td>
                     <td>{{lv1.tenChiCuc}}</td>
-                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -179,7 +176,6 @@
                         <td>{{lv2.donViTinh}}</td>
                         <td>{{lv2.ngayDeXuat|date:globals.dateFormat}}</td>
                         <td></td>
-                        <td>{{lv2.tenTrangThaiKtCl|date:globals.dateFormat}}</td>
                         <td></td>
                       </tr>
                     </ng-container>

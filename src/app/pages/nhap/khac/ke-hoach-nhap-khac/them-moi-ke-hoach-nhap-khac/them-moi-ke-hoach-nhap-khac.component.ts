@@ -1,22 +1,22 @@
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
-import { Base2Component } from "../../../../../components/base2/base2.component";
-import { HttpClient } from "@angular/common/http";
-import { StorageService } from "../../../../../services/storage.service";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { DxKhNhapKhacService } from "../../../../../services/qlnv-hang/nhap-hang/nhap-khac/dxKhNhapKhac.service";
-import { MESSAGE } from "../../../../../constants/message";
-import { DanhMucService } from "../../../../../services/danhmuc.service";
-import { Validators } from "@angular/forms";
+import {Component, EventEmitter, Input, OnInit, Output, SimpleChanges} from "@angular/core";
+import {Base2Component} from "../../../../../components/base2/base2.component";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../../services/storage.service";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {DxKhNhapKhacService} from "../../../../../services/qlnv-hang/nhap-hang/nhap-khac/dxKhNhapKhac.service";
+import {MESSAGE} from "../../../../../constants/message";
+import {DanhMucService} from "../../../../../services/danhmuc.service";
+import {Validators} from "@angular/forms";
 import * as dayjs from "dayjs";
-import { DonviService } from "../../../../../services/donvi.service";
-import { DANH_MUC_LEVEL } from "../../../../luu-kho/luu-kho.constant";
-import { OldResponseData } from "../../../../../interfaces/response";
-import { MangLuoiKhoService } from "../../../../../services/qlnv-kho/mangLuoiKho.service";
-import { chain, cloneDeep } from "lodash";
-import { STATUS } from "../../../../../constants/status";
-import { DialogTuChoiComponent } from "../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
+import {DonviService} from "../../../../../services/donvi.service";
+import {DANH_MUC_LEVEL} from "../../../../luu-kho/luu-kho.constant";
+import {OldResponseData} from "../../../../../interfaces/response";
+import {MangLuoiKhoService} from "../../../../../services/qlnv-kho/mangLuoiKho.service";
+import {chain, cloneDeep} from "lodash";
+import {STATUS} from "../../../../../constants/status";
+import {DialogTuChoiComponent} from "../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
 
 @Component({
   selector: "app-them-moi-ke-hoach-nhap-khac",
@@ -82,25 +82,31 @@ export class ThemMoiKeHoachNhapKhacComponent extends Base2Component implements O
   }
 
   async ngOnInit() {
-    await this.spinner.show();
-    try {
       this.userInfo = this.userService.getUserLogin();
       this.maTrinh = "/" + this.userInfo.MA_TR;
       await Promise.all([
         this.loadData(),
-        this.loadDsDonVi()
       ]);
-      if (this.idInput > 0) {
-        await this.getDetail(this.idInput);
-      } else {
-        await this.initForm();
+  }
+
+  async ngOnChanges(changes: SimpleChanges) {
+    await this.spinner.show();
+    if (changes) {
+      try {
+        await Promise.all([
+          this.loadDsDonVi()
+        ]);
+        if (this.idInput > 0) {
+          await this.getDetail(this.idInput);
+        } else {
+          await this.initForm();
+        }
+      } catch (e) {
+        console.log("error: ", e);
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
-      await this.spinner.hide();
-    } catch (e) {
-      console.log("error: ", e);
-      await this.spinner.hide();
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
+    await this.spinner.hide();
   }
 
   async getDetail(id: number) {
@@ -266,15 +272,16 @@ export class ThemMoiKeHoachNhapKhacComponent extends Base2Component implements O
     this.formData.controls["loaiVthh"].clearValidators();
     this.formData.controls["ngayDxuat"].clearValidators();
   }
+
   setValidator() {
-    this.formData.controls["maDviDxuat"] .setValidators([Validators.required]);
-    this.formData.controls["loaiHinhNx"] .setValidators([Validators.required]);
-    this.formData.controls["kieuNx"] .setValidators([Validators.required]);
-    this.formData.controls["namKhoach"] .setValidators([Validators.required]);
-    this.formData.controls["soDxuat"] .setValidators([Validators.required]);
-    this.formData.controls["trichYeu"] .setValidators([Validators.required]);
-    this.formData.controls["loaiVthh"] .setValidators([Validators.required]);
-    this.formData.controls["ngayDxuat"] .setValidators([Validators.required]);
+    this.formData.controls["maDviDxuat"].setValidators([Validators.required]);
+    this.formData.controls["loaiHinhNx"].setValidators([Validators.required]);
+    this.formData.controls["kieuNx"].setValidators([Validators.required]);
+    this.formData.controls["namKhoach"].setValidators([Validators.required]);
+    this.formData.controls["soDxuat"].setValidators([Validators.required]);
+    this.formData.controls["trichYeu"].setValidators([Validators.required]);
+    this.formData.controls["loaiVthh"].setValidators([Validators.required]);
+    this.formData.controls["ngayDxuat"].setValidators([Validators.required]);
   }
 
   tuChoi() {
@@ -386,16 +393,16 @@ export class ThemMoiKeHoachNhapKhacComponent extends Base2Component implements O
 
   deleteRow(ma: string, data: any) {
     if (ma == 'cuc' && data.maCuc) {
-      this.listOfData = this.listOfData.filter(i=> i.maCuc != data.maCuc)
+      this.listOfData = this.listOfData.filter(i => i.maCuc != data.maCuc)
     }
     if (ma == 'chiCuc' && data.maChiCuc) {
-      this.listOfData = this.listOfData.filter(i=> i.maChiCuc != data.maChiCuc)
+      this.listOfData = this.listOfData.filter(i => i.maChiCuc != data.maChiCuc)
     }
     if (ma == 'diemKho' && data.maDiemKho) {
-      this.listOfData = this.listOfData.filter(i=> i.maDiemKho != data.maDiemKho)
+      this.listOfData = this.listOfData.filter(i => i.maDiemKho != data.maDiemKho)
     }
     if (ma == 'nhaKho' && data.maNhaKho) {
-      this.listOfData = this.listOfData.filter(i=> i.maNhaKho != data.maNhaKho)
+      this.listOfData = this.listOfData.filter(i => i.maNhaKho != data.maNhaKho)
     }
     this.convertListData();
   }
@@ -457,12 +464,13 @@ export class ThemMoiKeHoachNhapKhacComponent extends Base2Component implements O
     if (this.listLoKho.length > 0) {
       this.listLoKho = this.listLoKho.filter(i => i.type != "PB");
     }
-    if(this.rowThemMoi.maLoKho){
+    if (this.rowThemMoi.maLoKho) {
       await this.loadThongTinNganLoKho(this.rowThemMoi.maLoKho, DANH_MUC_LEVEL.LO_KHO);
     } else {
       await this.loadThongTinNganLoKho(this.rowThemMoi.maNganKho, DANH_MUC_LEVEL.NGAN_KHO);
     }
   }
+
   changeCuc(event) {
     if (event) {
       this.rowThemMoi.maChiCuc = null;
@@ -654,7 +662,7 @@ export class ThemMoiKeHoachNhapKhacComponent extends Base2Component implements O
     this.rowThemMoi.tonKho = null;
   }
 
-  tinhTongSlVaThanhTien (){
+  tinhTongSlVaThanhTien() {
     let tongSl = 0;
     let tongThanhTien = 0;
     this.listOfData.forEach(i => {

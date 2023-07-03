@@ -4,7 +4,8 @@
       <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
         <div nz-row [nzGutter]="20">
           <div nz-col nzSpan="6">
-            <label>Đơn vị đề xuất</label>
+            <label *ngIf="userService.isTongCuc()"> Cục DTNN KV </label>
+            <label *ngIf="!userService.isTongCuc()"> Chi cục DTNN KV </label>
             <nz-select formControlName="maDvi" nzShowSearch nzAllowClear>
               <nz-option *ngFor="let p of dsDonvi" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi"></nz-option>
             </nz-select>
@@ -37,7 +38,7 @@
             </div>
           </div>
           <div nz-col nzSpan="4">
-            <label>Ngày tổng hợp (chốt danh sách)</label>
+            <label>Ngày tổng hợp (chốt DS)</label>
             <div nz-row>
               <div nz-col nzSpan="12" class="cus-start-date">
                 <nz-date-picker [nzDisabledDate]="disabledNgayTongHopTu" nzFormat="dd/MM/yyyy"
@@ -57,7 +58,7 @@
       </form>
       <div nz-col class="cangiua group-button-search pt-16">
         <div>
-          <button nz-button class="search__button--clear" (click)="clearForm()">
+          <button nz-button class="search__button--clear" (click)="clearFilter()">
             <i class="icon  htvbdh_nhap-lai1"></i>
             Xóa điều kiện
           </button>
@@ -69,9 +70,12 @@
       </div>
     </nz-card>
     <div class="group-button">
-      <h3 class="text-uppercase">Danh sách phương án xuất cứu trợ, viện trợ</h3>
+      <h3 class="text-uppercase">DANH SÁCH HÀNG DTQG CẦN THANH LÝ</h3>
+      <button type="button" class="btn btn-main" (click)="showModal(true)">
+        <i class="icon htvbdh_tcdt_tao-qd"></i>
+        <span>Tổng hợp DS hàng cần thanh lý</span>
+      </button>
     </div>
-
     <nz-card class="mt-2px flex-card data-table card-border-content table-card">
       <ng-container>
         <div class="mt-16">

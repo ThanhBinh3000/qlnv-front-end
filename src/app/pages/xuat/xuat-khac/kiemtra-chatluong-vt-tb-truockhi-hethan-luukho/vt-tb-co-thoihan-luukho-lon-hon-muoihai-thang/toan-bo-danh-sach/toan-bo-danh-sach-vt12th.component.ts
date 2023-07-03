@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {Base2Component} from "../../../../../../components/base2/base2.component";
 import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../../../services/storage.service";
@@ -29,6 +29,7 @@ export class ToanBoDanhSachVt12ThComponent extends Base2Component implements OnI
   dataTableView: any = [];
   tongHop = false;
   expandSetString = new Set<string>();
+  @Output() tabFocus = new EventEmitter<object>();
 
   constructor(httpClient: HttpClient,
               storageService: StorageService,
@@ -178,8 +179,14 @@ export class ToanBoDanhSachVt12ThComponent extends Base2Component implements OnI
     }
   }
 
+  emitTab(tab) {
+    this.tabFocus.emit(tab);
+  }
+
+
   openTongHop() {
     this.tongHop = !this.tongHop;
+    this.emitTab(1);
   }
 
 

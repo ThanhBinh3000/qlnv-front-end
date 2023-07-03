@@ -74,7 +74,7 @@ export class DanhSachBienBanLayMau extends Base2Component implements OnInit {
             ngayLayMau: [null],
             tuNgay: [null],
             denNgay: [null],
-            trangThai: [STATUS.BAN_HANH],
+            // trangThai: [STATUS.BAN_HANH],
             loaiDc: [],
             isVatTu: [false],
             thayDoiThuKho: [false],
