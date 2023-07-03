@@ -108,7 +108,6 @@
               <th>ĐVT</th>
               <th>Ngày đề xuất</th>
               <th>Trạng thái</th>
-              <th class="text-center">Trạng thái <br> kiểm tra chất lượng</th>
               <th>Hành động</th>
             </tr>
             </thead>
@@ -132,7 +131,6 @@
                 <td></td>
                 <td></td>
                 <td>{{item.tenTrangThai}}</td>
-                <td></td>
                 <td class="text-left">
                   <a (click)="showModal(true, item)">
                     <i class="fa fa-eye"></i>
@@ -149,7 +147,6 @@
                     <td></td>
                     <td></td>
                     <td>{{lv1.tenChiCuc}}</td>
-                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -179,7 +176,6 @@
                         <td>{{lv2.donViTinh}}</td>
                         <td>{{lv2.ngayDeXuat|date:globals.dateFormat}}</td>
                         <td></td>
-                        <td>{{lv2.tenTrangThaiKtCl|date:globals.dateFormat}}</td>
                         <td></td>
                       </tr>
                     </ng-container>

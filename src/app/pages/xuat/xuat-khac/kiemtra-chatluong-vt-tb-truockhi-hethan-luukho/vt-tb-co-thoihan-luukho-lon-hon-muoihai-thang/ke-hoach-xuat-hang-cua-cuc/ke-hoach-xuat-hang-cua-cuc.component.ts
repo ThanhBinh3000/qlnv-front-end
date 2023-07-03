@@ -13,6 +13,10 @@ import {
 } from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/DanhSachVttbTruocHethanLuuKho.service";
 import {LOAI_HH_XUAT_KHAC, PAGE_SIZE_DEFAULT} from "../../../../../../constants/config";
 import {CHUC_NANG, STATUS} from "../../../../../../constants/status";
+import {
+  KeHoachXuatHangService
+} from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/KeHoachXuatHang.service";
+import {MESSAGE} from "../../../../../../constants/message";
 
 @Component({
   selector: 'app-ke-hoach-xuat-hang-cua-cuc',
@@ -27,6 +31,7 @@ export class KeHoachXuatHangCuaCucComponent extends Base2Component implements On
   dataTableView: any = [];
   tongHop = false;
   expandSetString = new Set<string>();
+
   constructor(httpClient: HttpClient,
               storageService: StorageService,
               notification: NzNotificationService,
@@ -34,8 +39,8 @@ export class KeHoachXuatHangCuaCucComponent extends Base2Component implements On
               modal: NzModalService,
               private donviService: DonviService,
               private danhMucService: DanhMucService,
-              private danhSachVttbTruocHethanLuuKhoService: DanhSachVttbTruocHethanLuuKhoService) {
-    super(httpClient, storageService, notification, spinner, modal, danhSachVttbTruocHethanLuuKhoService);
+              private keHoachXuatHangService: KeHoachXuatHangService) {
+    super(httpClient, storageService, notification, spinner, modal, keHoachXuatHangService);
     this.formData = this.fb.group({
       namKeHoach: [],
       soToTrinh: [],
@@ -49,7 +54,17 @@ export class KeHoachXuatHangCuaCucComponent extends Base2Component implements On
     })
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
+    try {
+      await this.spinner.show();
+      await Promise.all([]);
+      await this.timKiem();
+    } catch (e) {
+      console.log('error: ', e)
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      await this.spinner.hide();
+    }
   }
 
   disabledNgayLapKhTu = (startValue: Date): boolean => {
@@ -68,17 +83,17 @@ export class KeHoachXuatHangCuaCucComponent extends Base2Component implements On
   };
 
   disabledNgayDuyetKhTu = (startValue: Date): boolean => {
-    if (startValue && this.formData.value.ngayTongHopDen) {
-      return startValue.getTime() > this.formData.value.ngayTongHopDen.getTime();
+    if (startValue && this.formData.value.ngayDuyetKeHoachDen) {
+      return startValue.getTime() > this.formData.value.ngayDuyetKeHoachDen.getTime();
     }
     return false;
   };
 
   disabledNgayDuyetKhDen = (endValue: Date): boolean => {
-    if (!endValue || !this.formData.value.ngayTongHopTu) {
+    if (!endValue || !this.formData.value.ngayDuyetKeHoachTu) {
       return false;
     }
-    return endValue.getTime() <= this.formData.value.ngayTongHopTu.getTime();
+    return endValue.getTime() <= this.formData.value.ngayDuyetKeHoachTu.getTime();
   };
 
   async timKiem() {
