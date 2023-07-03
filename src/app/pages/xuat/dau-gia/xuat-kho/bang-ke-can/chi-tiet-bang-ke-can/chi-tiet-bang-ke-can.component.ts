@@ -84,7 +84,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
   listNoiDung = []
   listThanhTien: any;
   listSoLuong: any;
-  flagInit: Boolean = true;
+  flagInit: Boolean = false;
   listDiaDiemKho: any[] = [];
 
   constructor(
@@ -127,7 +127,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
         maKho: [''],
         idPhieuXuatKho: [''],
         soPhieuXuatKho: ['', Validators.required],
-        ngayXuat:  ['', Validators.required],
+        ngayXuat: ['', Validators.required],
         diaDiemKho: ['', Validators.required],
         loaiVthh: [''],
         cloaiVthh: [''],
@@ -139,7 +139,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
         nlqDiaChi: [''],
         thoiGianGiaoNhan: [''],
         tongTrongLuong: [''],
-        tongTrongLuongBaoBi:['', [Validators.required]],
+        tongTrongLuongBaoBi: ['', [Validators.required]],
         tongTrongLuongHang: [''],
         ngayGduyet: [''],
         nguoiGduyetId: [''],
@@ -181,7 +181,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
     } catch (e) {
       this.notification.error(MESSAGE.ERROR, 'Có lỗi xảy ra.');
     } finally {
-      this.flagInit = false;
+      this.flagInit = true;
       this.spinner.hide();
     }
   }
@@ -558,7 +558,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
             })
           })
         }
-        let soPhieu =this.dsPhieuXuatKho.find(item => (item.maLoKho == data.maLoKho&&item.maNganKho == data.maNganKho));
+        let soPhieu = this.dsPhieuXuatKho.find(item => (item.maLoKho == data.maLoKho && item.maNganKho == data.maNganKho));
 
         this.formData.patchValue({
           idPhieuXuatKho: soPhieu.id,
@@ -618,7 +618,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
   }
 
   changeSoQd(event) {
-    if (event && event !== this.formData.value.soQdGiaoNvXh) {
+    if (this.flagInit && event && event !== this.formData.value.soQdGiaoNvXh) {
       this.formData.patchValue({
         maDiemKho: null,
         tenDiemKho: null,
@@ -628,34 +628,34 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
         tenNganKho: null,
         maLoKho: null,
         tenLoKho: null,
-        maKho:null,
+        maKho: null,
         tenKho: null,
       });
     }
   }
 
   changeDd(event) {
-    if (event && event !== this.formData.value.maDiemKho) {
+    if (this.flagInit && event && event !== this.formData.value.maDiemKho) {
       this.formData.patchValue({
-        idPhieuXuatKho:  null,
-        soPhieuXuatKho:  null,
-        ngayXuat:  null,
-        nlqHoTen:  null,
+        idPhieuXuatKho: null,
+        soPhieuXuatKho: null,
+        ngayXuat: null,
+        nlqHoTen: null,
         nlqCmnd: null,
-        nlqDonVi:  null,
+        nlqDonVi: null,
         nlqDiaChi: null,
-        loaiVthh:  null,
-        cloaiVthh:  null,
-        tenLoaiVthh:  null,
-        tenCloaiVthh:  null,
-        moTaHangHoa:  null,
-        donViTinh:  null,
+        loaiVthh: null,
+        cloaiVthh: null,
+        tenLoaiVthh: null,
+        tenCloaiVthh: null,
+        moTaHangHoa: null,
+        donViTinh: null,
       });
     }
   }
 
   async changeNam() {
-    if (!this.flagInit) {
+    if (this.flagInit) {
       this.formData.patchValue({
         soBangKe: this.formData.value.soBangKe.replace(/\/\d+/, `/${this.formData.value.nam}`),
         bangKeDtl: this.formData.value.bangKeDtl
@@ -673,14 +673,17 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
       bangKeDtl: this.formData.value.bangKeDtl
     });
   }
+
   async trongLuongTruBi() {
-    let data = cloneDeep(this.formData.value);
-    if (data.tongTrongLuongBaoBi) {
-      let tongTrongLuongHang = data.tongTrongLuong - data.tongTrongLuongBaoBi;
-      this.formData.patchValue({
-        tongTrongLuongHang: tongTrongLuongHang,
-        tongTrongLuongBaoBi: data.tongTrongLuongBaoBi,
-      });
+    if (this.flagInit) {
+      let data = cloneDeep(this.formData.value);
+      if (data.tongTrongLuongBaoBi) {
+        let tongTrongLuongHang = data.tongTrongLuong - data.tongTrongLuongBaoBi;
+        this.formData.patchValue({
+          tongTrongLuongHang: tongTrongLuongHang,
+          tongTrongLuongBaoBi: data.tongTrongLuongBaoBi,
+        });
+      }
     }
   }
 

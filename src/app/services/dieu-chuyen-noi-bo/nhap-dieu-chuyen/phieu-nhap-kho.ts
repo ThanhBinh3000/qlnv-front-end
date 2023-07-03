@@ -11,4 +11,15 @@ export class PhieuNhapKhoService extends BaseService {
   constructor(public httpClient: HttpClient) {
     super(httpClient, 'dieu-chuyen-noi-bo/phieu-nhap-kho', '/qlnv-hang');
   }
+
+  getDanhSach(body): Promise<OldResponseData> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/danh-sach`;
+    return this._httpClient.post<OldResponseData>(url, body).toPromise();
+  }
+
+  getDanhSachTT(body): Promise<OldResponseData> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/danh-sach-thong-tin-chung`;
+    return this._httpClient.post<OldResponseData>(url, body).toPromise();
+  }
+
 }

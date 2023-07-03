@@ -133,8 +133,7 @@ export class BienBanKetThucNhapKhoComponent extends Base2Component implements On
         .map(element => {
           return {
             ...element,
-            maKhoXuat: `${element.thoiHanDieuChuyen}${element.maloKhoXuat}${element.maNganKhoXuat}`,
-            maloNganKhoNhan: `${element.maloKhoNhan}${element.maNganKhoNhan}`
+            maloNganKho: `${element.maloKho}${element.maNganKho}${element.soBBKtNH}`
           }
         });
       this.dataTableView = this.buildTableView(data)
@@ -149,45 +148,45 @@ export class BienBanKetThucNhapKhoComponent extends Base2Component implements On
       .groupBy("soQdinh")
       ?.map((value1, key1) => {
         let children1 = chain(value1)
-          .groupBy("maKhoXuat")
+          .groupBy("maDiemKho")
           ?.map((value2, key2) => {
             let children2 = chain(value2)
-              .groupBy("maDiemKhoNhan")
+              .groupBy("maloNganKho")
               ?.map((value3, key3) => {
 
-                const children3 = chain(value3).groupBy("maloNganKhoNhan")
-                  ?.map((m, im) => {
+                // const children3 = chain(value3).groupBy("maloNganKhoNhan")
+                //   ?.map((m, im) => {
 
-                    const maChiCucNhan = m.find(f => f.maloNganKhoNhan == im);
-                    // const hasMaDiemKhoNhan = vs.some(f => f.maDiemKhoNhan);
-                    // if (!hasMaDiemKhoNhan) return {
-                    //   ...maChiCucNhan
-                    // }
+                //     const maChiCucNhan = m.find(f => f.maloNganKhoNhan == im);
+                //     // const hasMaDiemKhoNhan = vs.some(f => f.maDiemKhoNhan);
+                //     // if (!hasMaDiemKhoNhan) return {
+                //     //   ...maChiCucNhan
+                //     // }
 
-                    // const rssx = chain(m).groupBy("maDiemKhoNhan")?.map((n, inx) => {
+                //     // const rssx = chain(m).groupBy("maDiemKhoNhan")?.map((n, inx) => {
 
-                    //   const maDiemKhoNhan = n.find(f => f.maDiemKhoNhan == inx);
-                    //   return {
-                    //     ...maDiemKhoNhan,
-                    //     children: n
-                    //   }
-                    // }).value()
-                    return {
-                      ...maChiCucNhan,
-                      children: m
-                    }
-                  }).value()
+                //     //   const maDiemKhoNhan = n.find(f => f.maDiemKhoNhan == inx);
+                //     //   return {
+                //     //     ...maDiemKhoNhan,
+                //     //     children: n
+                //     //   }
+                //     // }).value()
+                //     return {
+                //       ...maChiCucNhan,
+                //       children: m
+                //     }
+                //   }).value()
 
-                const row3 = value3.find(s => s?.maDiemKhoNhan == key3);
+                const row3 = value3.find(s => s?.maloNganKho == key3);
                 return {
                   ...row3,
                   idVirtual: row3 ? row3.idVirtual ? row3.idVirtual : uuidv4.v4() : uuidv4.v4(),
-                  children: children3,
+                  children: value3,
                 }
               }
               ).value();
 
-            let row2 = value2?.find(s => s.maKhoXuat == key2);
+            let row2 = value2?.find(s => s.maDiemKho == key2);
 
             return {
               ...row2,
@@ -227,7 +226,7 @@ export class BienBanKetThucNhapKhoComponent extends Base2Component implements On
         this.bienBanKetThucNhapKhoService
           .export(body)
           .subscribe((blob) =>
-            saveAs(blob, 'bien-ban-nghiem-thu-bao-quan-lan-dau.xlsx'),
+            saveAs(blob, 'bien-ban-ket-thuc-nhap-kho.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {

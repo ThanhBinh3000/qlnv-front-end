@@ -9,10 +9,10 @@ import {BaseService} from "../../../base.service";
 })
 export class BbNghiemThuBaoQuanService extends BaseService {
   GATEWAY = '/qlnv-hang';
-  CONTROLLER = 'nhap-khac/thop-kh-nk';
+  CONTROLLER = 'nhap-khac/bb-nt';
 
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'nhap-khac/thop-kh-nk', '/qlnv-hang');
+    super(httpClient, 'nhap-khac/bb-nt', '/qlnv-hang');
   }
 
   getDataKho(maDvi): Promise<OldResponseData> {

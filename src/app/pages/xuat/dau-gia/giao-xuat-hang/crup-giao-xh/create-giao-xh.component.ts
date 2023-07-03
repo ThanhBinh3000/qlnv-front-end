@@ -157,7 +157,7 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
               this.formData.patchValue({
                 soHd: data.soHd,
                 idHd: data.id,
-                ngayKyHd: data.ngayHluc,
+                ngayKyHd: data.ngayPduyet,
                 maDviTsan: data.maDviTsan,
                 loaiVthh: data.loaiVthh,
                 tenLoaiVthh: data.tenLoaiVthh,
@@ -166,7 +166,7 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
                 moTaHangHoa: data.moTaHangHoa,
                 soLuong: data.soLuong,
                 donViTinh: data.donViTinh,
-                tgianGnhan: data.ngayPduyet,
+                tgianGnhan: data.ngayHluc,
                 trichYeu: data.trichYeu,
                 tenTtcn: data.tenNguoiDdienNhaThau,
               })
@@ -202,7 +202,6 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
   async loadDataComboBox(data) {
     this.listLoaiHinhNx = [];
     let resNx = await this.danhMucService.danhMucChungGetAll('LOAI_HINH_NHAP_XUAT');
-    console.log(resNx, 999)
     if (resNx.msg == MESSAGE.SUCCESS) {
       this.listLoaiHinhNx = resNx.data.filter(item => item.ma == data.loaiHinhNx);
     }
