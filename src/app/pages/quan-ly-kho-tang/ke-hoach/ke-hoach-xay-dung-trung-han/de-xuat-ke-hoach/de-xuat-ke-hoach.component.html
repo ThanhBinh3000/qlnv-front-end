@@ -70,7 +70,7 @@
       <h3> DANH SÁCH ĐỀ XUẤT KẾ HOẠCH ĐẦU TƯ XÂY DỰNG TRUNG HẠN (5 NĂM)</h3>
       <div class="buttons">
         <button *ngIf="userService.isCuc() && userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDTRUNGHAN_DX_XOA')" (click)="deleteMulti()" type="button" class="btn btn-sub btn-xoa">
-          <i class="fa fa-trash-o do"></i>
+          <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
           <span>Xóa</span>
         </button>
         <button type="button" class="btn btn-sub" (click)="exportData()" *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDTRUNGHAN_DX_EXP')">
@@ -180,15 +180,15 @@
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-left">
             <a (click)="redirectToChiTiet(data.id,true)" *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDTRUNGHAN_DX_XEM')">
-              <i class="fa fa-eye"></i>
+              <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
             <a
               *ngIf="(userService.isCuc() && (data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_CBV || data.trangThai == STATUS.TU_CHOI_TP || data.trangThai == STATUS.TU_CHOI_LDC )) && userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDTRUNGHAN_DX_THEM')"
               (click)="redirectToChiTiet(data.id,false)">
-              <i class="fa fa-pencil"></i>
+              <i class="fa fa-pencil" title="Sửa"></i>
             </a>
             <a *ngIf="userService.isCuc() && data.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDTRUNGHAN_DX_XOA') " (click)="xoaItem(data)">
-              <i class="fa fa-trash-o do"></i>
+              <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>
         </tr>

@@ -53,7 +53,7 @@
       <div class="buttons">
         <button type="button" class="btn btn-do" (click)="deleteSelect()"
                 *ngIf="userService.isTongCuc() && userService.isAccessPermisson('VONPHIHANG_PHICHINGVU_DEXUAT_XOA')">
-          <i class="fa fa-trash-o do"></i>
+          <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
           <span>Xóa</span>
         </button>
         <button type="button" class="btn btn-sub" (click)="exportData()"
@@ -163,15 +163,15 @@
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-left">
             <a *ngIf=" data.trangThaiId != globals.prop.NHAP_DU_THAO" (click)="viewDetail(data, true)">
-              <i class="fa fa-eye"></i>
+              <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
             <a *ngIf="(data.trangThaiId==globals.prop.NHAP_DU_THAO) && userService.isTongCuc()"
                (click)="viewDetail(data, false)">
-              <i class="fa fa-pencil"></i>
+              <i class="fa fa-pencil" title="Sửa"></i>
             </a>
             <a *ngIf="data.trangThaiId==globals.prop.NHAP_DU_THAO && userService.isTongCuc()"
                (click)="xoaItem(data)">
-              <i class="fa fa-trash-o do"></i>
+              <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>
         </tr>

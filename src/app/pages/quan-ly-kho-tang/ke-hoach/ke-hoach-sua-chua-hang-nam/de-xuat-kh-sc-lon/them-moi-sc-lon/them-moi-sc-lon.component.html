@@ -215,7 +215,7 @@
                   <i class="icon htvbdh_dau-cong"></i>
                 </a>
                 <a (click)="deleteItemCha(idx, tableDuoi)">
-                  <i class="fa fa-trash-o do"></i>
+                  <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                 </a>
               </td>
             </tr>
@@ -238,10 +238,10 @@
                 <td>{{ item.ghiChu }}</td>
                 <td class="text-center" nzRight *ngIf="!isViewDetail">
                   <a (click)="themMoiItem(item,'duoi', 'sua', y, tableDuoi[idx])">
-                    <i class="fa fa-pencil"></i>
+                    <i class="fa fa-pencil" title="Sửa"></i>
                   </a>
                   <a (click)="deleteItem(y, data.dataChild)">
-                    <i class="fa fa-trash-o do"></i>
+                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                   </a>
                 </td>
               </tr>
@@ -357,7 +357,7 @@
                     <i class="icon htvbdh_dau-cong"></i>
                   </a>
                   <a (click)="deleteItemCha(idx, tableTren)">
-                    <i class="fa fa-trash-o do"></i>
+                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                   </a>
                 </td>
               </tr>
@@ -380,10 +380,10 @@
                   <td>{{ item.ghiChu }}</td>
                   <td class="text-center" nzRight *ngIf="!isViewDetail">
                     <a (click)="themMoiItem(item,'tren', 'sua', y, tableTren[idx])">
-                      <i class="fa fa-pencil"></i>
+                      <i class="fa fa-pencil" title="Sửa"></i>
                     </a>
                     <a (click)="deleteItem(y, data.dataChild)">
-                      <i class="fa fa-trash-o do"></i>
+                      <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                     </a>
                   </td>
                 </tr>

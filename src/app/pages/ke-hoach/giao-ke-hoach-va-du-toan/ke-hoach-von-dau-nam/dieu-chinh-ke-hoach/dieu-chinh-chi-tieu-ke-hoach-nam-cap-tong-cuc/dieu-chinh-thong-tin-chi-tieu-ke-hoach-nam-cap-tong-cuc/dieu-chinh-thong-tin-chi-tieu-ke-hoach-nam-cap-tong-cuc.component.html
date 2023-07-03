@@ -400,7 +400,7 @@
                     <i class="icon htvbdh_dau-cong"></i>
                   </a>
                   <a (click)="loadDefaultLuongThucNew()" [ngClass]="{'isDisabled': !isAddLuongThuc}">
-                    <i class="fa fa-trash-o do"></i>
+                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                   </a>
                 </td>
               </tr>
@@ -464,10 +464,10 @@
                     *ngIf="(dieuChinhThongTinChiTieuKHNam.trangThai=== STATUS.DU_THAO || id===0 || dieuChinhThongTinChiTieuKHNam.trangThai===STATUS.TU_CHOI_TP || dieuChinhThongTinChiTieuKHNam.trangThai===STATUS.TU_CHOI_LDV ||dieuChinhThongTinChiTieuKHNam.trangThai===STATUS.TU_CHOI_LDC) && !isView"
                     nzRight>
                     <a (click)="editRowLuongThuc(data.donViId)">
-                      <i class="fa fa-pencil"></i>
+                      <i class="fa fa-pencil" title="Sửa"></i>
                     </a>
                     <a (click)="deleteRowLuongThuc(data)">
-                      <i class="fa fa-trash-o do"></i>
+                      <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                     </a>
                   </td>
                 </ng-container>
@@ -751,7 +751,7 @@
                     <i class="icon htvbdh_dau-cong"></i>
                   </a>
                   <a (click)="loadDefaultMuoiNew()" [ngClass]="{'isDisabled': !isAddMuoi}">
-                    <i class="fa fa-trash-o do"></i>
+                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                   </a>
                 </td>
               </tr>
@@ -770,10 +770,10 @@
                     *ngIf="(dieuChinhThongTinChiTieuKHNam.trangThai=== STATUS.DU_THAO || id===0 || dieuChinhThongTinChiTieuKHNam.trangThai===STATUS.TU_CHOI_TP || dieuChinhThongTinChiTieuKHNam.trangThai===STATUS.TU_CHOI_LDV ||dieuChinhThongTinChiTieuKHNam.trangThai===STATUS.TU_CHOI_LDC) && !isView"
                     class="text-center" nzRight>
                     <a (click)="editRowMuoi(dataMuoi.donViId)">
-                      <i class="fa fa-pencil"></i>
+                      <i class="fa fa-pencil" title="Sửa"></i>
                     </a>
                     <a (click)="deleteRowMuoi(dataMuoi)">
-                      <i class="fa fa-trash-o do"></i>
+                      <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                     </a>
                   </td>
                 </ng-container>
@@ -992,10 +992,10 @@
                             <td
                               *ngIf="(dieuChinhThongTinChiTieuKHNam.trangThai=== STATUS.DU_THAO || id===0 || dieuChinhThongTinChiTieuKHNam.trangThai===STATUS.TU_CHOI_TP || dieuChinhThongTinChiTieuKHNam.trangThai===STATUS.TU_CHOI_LDV ||dieuChinhThongTinChiTieuKHNam.trangThai===STATUS.TU_CHOI_LDC) && !isView">
                               <a (click)="suaVatTu(i,i1,'nhap')">
-                                <i class="fa fa-pencil"></i>
+                                <i class="fa fa-pencil" title="Sửa"></i>
                               </a>
                               <a (click)="xoaVatTu(i,i1,'nhap')">
-                                <i class="fa fa-trash-o do"></i>
+                                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                               </a>
                             </td>
                           </ng-container>
@@ -1187,11 +1187,11 @@
                           <i class="fa fa-plus"></i>
                         </a>
                         <!--<a (click)="suaPhuongAn(i)" *ngIf="!isView">
-                          <i class="fa fa-pencil"></i>
+                          <i class="fa fa-pencil" title="Sửa"></i>
                         </a>
                         &lt;!&ndash;              <a (click)="deletePhanLo(item.idVirtual)">&ndash;&gt;
                         <a (click)="xoaPhuongAn(i)" *ngIf="!isView">
-                          <i class="fa fa-trash-o do"></i>
+                          <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                         </a>-->
                       </td>
                     </tr>
@@ -1221,10 +1221,10 @@
                             <td
                               *ngIf="(dieuChinhThongTinChiTieuKHNam.trangThai=== STATUS.DU_THAO || id===0 || dieuChinhThongTinChiTieuKHNam.trangThai===STATUS.TU_CHOI_TP || dieuChinhThongTinChiTieuKHNam.trangThai===STATUS.TU_CHOI_LDV ||dieuChinhThongTinChiTieuKHNam.trangThai===STATUS.TU_CHOI_LDC) && !isView">
                               <a (click)="suaVatTu(i,i1,'xuat')">
-                                <i class="fa fa-pencil"></i>
+                                <i class="fa fa-pencil" title="Sửa"></i>
                               </a>
                               <a (click)="xoaVatTu(i,i1,'xuat')">
-                                <i class="fa fa-trash-o do"></i>
+                                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                               </a>
                             </td>
                           </ng-container>

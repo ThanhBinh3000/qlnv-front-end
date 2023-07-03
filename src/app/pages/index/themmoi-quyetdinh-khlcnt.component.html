@@ -482,10 +482,10 @@
               <td>{{ data.tongTien | number: '1.0-1' }}</td>
               <td class="text-center">
                 <a (click)="openDialogDeXuat(i)">
-                  <i class="fa fa-pencil"></i>
+                  <i class="fa fa-pencil" title="Sửa"></i>
                 </a>
                 <a (click)="deleteItem(i)">
-                  <i class="fa fa-trash-o do"></i>
+                  <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                 </a>
               </td>
             </tr>
@@ -525,10 +525,10 @@
               <td>{{ data.diaDiemNhap }}</td>
               <td class="text-center">
                 <a (click)="openDialogGoiThau(data,i)">
-                  <i class="fa fa-pencil"></i>
+                  <i class="fa fa-pencil" title="Sửa"></i>
                 </a>
                 <a (click)="deleteItem(i)">
-                  <i class="fa fa-trash-o do"></i>
+                  <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                 </a>
               </td>
             </tr>
@@ -539,7 +539,7 @@
     <ng-template #tableCard1>
       <div *ngIf="isVatTu">
         <button type="button" class="btn btn-do" (click)="deleteSelect()">
-          <i class="fa fa-trash-o do"></i>
+          <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
           <span>Xóa</span>
         </button>
         <button type="button" class="btn btn-sub">

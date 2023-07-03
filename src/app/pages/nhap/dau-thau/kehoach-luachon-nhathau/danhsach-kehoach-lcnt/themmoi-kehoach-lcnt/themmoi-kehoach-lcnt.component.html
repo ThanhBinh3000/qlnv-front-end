@@ -541,10 +541,10 @@
               <td></td>
               <td class="text-right" *ngIf="userService.isCuc() && !isView">
                 <a *ngIf="!isDisbleForm()" (click)="themMoiCuc(dtGoiThau.goiThau)">
-                  <i class="fa fa-pencil"></i>
+                  <i class="fa fa-pencil" title="Sửa"></i>
                 </a>
                 <a *ngIf="!isDisbleForm()" (click)="deleteRowLt(dtGoiThau.idx, dtGoiThau.goiThau)">
-                  <i class="fa fa-trash-o do"></i>
+                  <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                 </a>
               </td>
             </tr>
@@ -565,10 +565,10 @@
                 <td class="text-right">{{diemKho.soLuong * dtGoiThau.donGiaTamTinh *1000 * formData.value.gtriDthau / 100 | number: '1.0-1' : 'vi_VN'}}</td>
                 <td class="text-right" *ngIf="userService.isCuc() && !isView">
                   <a *ngIf="!isDisbleForm()" (click)="themMoiCuc(dtGoiThau.goiThau)">
-                    <i class="fa fa-pencil"></i>
+                    <i class="fa fa-pencil" title="Sửa"></i>
                   </a>
                   <a *ngIf="!isDisbleForm()" (click)="deleteRowLt(dtGoiThau.idx, dtGoiThau.goiThau, z)">
-                    <i class="fa fa-trash-o do"></i>
+                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                   </a>
                 </td>
               </tr>
@@ -637,10 +637,10 @@
             <td></td>
             <td *ngIf="!isView">
               <a (click)="themMoiGoiThau(item,i)">
-                <i class="fa fa-pencil"></i>
+                <i class="fa fa-pencil" title="Sửa"></i>
               </a>
               <a (click)="deleteRow(i)">
-                <i class="fa fa-trash-o do"></i>
+                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
               </a>
             </td>
           </tr>
@@ -786,11 +786,11 @@
               </a>
               <a *ngIf="(formData.value.trangThai == globals.prop.NHAP_DU_THAO || formData.value.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CUC || formData.value.trangThai == '') && !isView"
                 (click)="editRowBaoGia(data.id)">
-                <i class="fa fa-pencil"></i>
+                <i class="fa fa-pencil" title="Sửa"></i>
               </a>
               <a *ngIf="(formData.value.trangThai == globals.prop.NHAP_DU_THAO || formData.value.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CUC || formData.value.trangThai == '') && !isView"
                 (click)="deleteRowBaoGia(data)">
-                <i class="fa fa-trash-o do"></i>
+                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
               </a>
             </td>
           </ng-container>
@@ -870,11 +870,11 @@
               </a>
               <a *ngIf="(formData.value.trangThai == globals.prop.NHAP_DU_THAO || formData.value.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CUC || formData.value.trangThai == '') && !isView"
                 (click)="editRowCoSo(data.id)">
-                <i class="fa fa-pencil"></i>
+                <i class="fa fa-pencil" title="Sửa"></i>
               </a>
               <a *ngIf="(formData.value.trangThai == globals.prop.NHAP_DU_THAO || formData.value.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CUC || formData.value.trangThai == '') && !isView"
                 (click)="deleteRowCoSo(data)">
-                <i class="fa fa-trash-o do"></i>
+                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
               </a>
             </td>
           </ng-container>

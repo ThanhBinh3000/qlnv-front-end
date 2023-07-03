@@ -157,10 +157,10 @@
               <i class=" icon htvbdh_eye"></i>
             </a>
             <a *ngIf="(data.trangThai == STATUS.DU_THAO && userService.isTongCuc()) && userService.isAccessPermisson('QLĐMNXBQ_ĐMTBMTBCD_SUA')" (click)="redirectToChiTiet(data.id)">
-              <i class="fa fa-pencil"></i>
+              <i class="fa fa-pencil" title="Sửa"></i>
             </a>
             <a *ngIf="(data.trangThai == STATUS.DU_THAO && userService.isTongCuc()) && userService.isAccessPermisson('QLĐMNXBQ_ĐMTBMTBCD_XOA')" (click)="delete(data)">
-              <i class="fa fa-trash-o do"></i>
+              <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>
         </tr>

@@ -147,10 +147,10 @@
                 <td>{{ data.chucVu}}</td>
                 <td class="text-center" *ngIf="!isView">
                   <a (click)="editRowBgBn(idx, 'benNhan')">
-                    <i class="fa fa-pencil"></i>
+                    <i class="fa fa-pencil" title="Sửa"></i>
                   </a>
                   <a (click)="deleteItemBgBn(idx, 'benNhan')">
-                    <i class="fa fa-trash-o do"></i>
+                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                   </a>
                 </td>
               </ng-container>
@@ -202,10 +202,10 @@
                 <td>{{ data.chucVu}}</td>
                 <td class="text-center" *ngIf="!isView">
                   <a (click)="editRowBgBn(idx, 'benGiao')">
-                    <i class="fa fa-pencil"></i>
+                    <i class="fa fa-pencil" title="Sửa"></i>
                   </a>
                   <a (click)="deleteItemBgBn(idx, 'benGiao')">
-                    <i class="fa fa-trash-o do"></i>
+                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                   </a>
                 </td>
               </ng-container>
@@ -284,10 +284,10 @@
               <td>{{ data.donGia *  data.soLuong   | number: '1.0-1'  }}</td>
               <td class="text-center" *ngIf="!isView">
                 <a (click)="editRow(idx)">
-                  <i class="fa fa-pencil"></i>
+                  <i class="fa fa-pencil" title="Sửa"></i>
                 </a>
                 <a (click)="deleteItem(idx)">
-                  <i class="fa fa-trash-o do"></i>
+                  <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                 </a>
               </td>
             </ng-container>

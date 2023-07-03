@@ -88,7 +88,7 @@
                 || ( type == typeConst.GIA_CU_THE && pagType == 'VT'  && userService.isAccessPermisson('KHVDTNSNN_PAGIA_VT_GCT_DEXUAT_XOA'))
                 )"
                 (click)="xoa()">
-          <i class="fa fa-trash-o do"></i>
+          <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
           <span>Xóa</span>
         </button>
         <button type="button" class="btn btn-sub" (click)="exportData()" *ngIf="( type == typeConst.GIA_MUA_TOI_DA && pagType == 'LT'  && (userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_MTDBTT_DEXUAT_EXP'))
@@ -228,21 +228,21 @@
                 || ( type == typeConst.GIA_MUA_TOI_DA && pagType == 'VT'  && userService.isAccessPermisson('KHVDTNSNN_PAGIA_VT_MTDBTT_DEXUAT_XEM'))
                 || ( type == typeConst.GIA_CU_THE && pagType == 'VT'  && userService.isAccessPermisson('KHVDTNSNN_PAGIA_VT_GCT_DEXUAT_XEM'))) &&
                  !((data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_TP || data.trangThai == STATUS.TU_CHOI_LDC || data.trangThai == STATUS.TU_CHOI_LDV || data.trangThai == STATUS.TU_CHOI_CBV) && data.maDvi == userInfo.MA_DVI  ) ">
-              <i class="fa fa-eye"></i>
+              <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
             <a (click)="viewDetail(data.id, false)" *ngIf="( type == typeConst.GIA_MUA_TOI_DA && pagType == 'LT'  && (userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_MTDBTT_DEXUAT_THEM') && (data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_TP || data.trangThai == STATUS.TU_CHOI_LDC || data.trangThai == STATUS.TU_CHOI_CBV ))
                 || ( type == typeConst.GIA_CU_THE && pagType == 'LT'  && userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_GCT_DEXUAT_THEM') && (data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_TP || data.trangThai == STATUS.TU_CHOI_LDC || data.trangThai == STATUS.TU_CHOI_CBV ))
                 || ( type == typeConst.GIA_MUA_TOI_DA && pagType == 'VT'  && userService.isAccessPermisson('KHVDTNSNN_PAGIA_VT_MTDBTT_DEXUAT_THEM') && (data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_LDV))
                 || ( type == typeConst.GIA_CU_THE && pagType == 'VT'  && userService.isAccessPermisson('KHVDTNSNN_PAGIA_VT_GCT_DEXUAT_THEM') && (data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_LDV))
                 )">
-              <i class="fa fa-pencil"></i>
+              <i class="fa fa-pencil" title="Sửa"></i>
             </a>
             <a *ngIf="(data.trangThai == STATUS.DU_THAO) && ( type == typeConst.GIA_MUA_TOI_DA && pagType == 'LT'  && (userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_MTDBTT_DEXUAT_XOA'))
                 || ( type == typeConst.GIA_CU_THE && pagType == 'LT'  && userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_GCT_DEXUAT_XOA'))
                 || ( type == typeConst.GIA_MUA_TOI_DA && pagType == 'VT'  && userService.isAccessPermisson('KHVDTNSNN_PAGIA_VT_MTDBTT_DEXUAT_XOA'))
                 || ( type == typeConst.GIA_CU_THE && pagType == 'VT'  && userService.isAccessPermisson('KHVDTNSNN_PAGIA_VT_GCT_DEXUAT_XOA'))
                 )" (click)="xoaItem(data)">
-              <i class="fa fa-trash-o do"></i>
+              <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>
         </tr>

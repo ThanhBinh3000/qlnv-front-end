@@ -202,10 +202,10 @@
             <td class="text-left">
               <a *ngIf="data.trangThai == STATUS.HOAN_THANH_CAP_NHAT &&  userService.isCuc()"
                 (click)="goDetail(data.id)">
-                <i class="fa fa-eye"></i>
+                <i class="fa fa-eye" title="Xem chi tiết"></i>
               </a>
               <a *ngIf="userService.isTongCuc()" (click)="goDetail(data.id)">
-                <i class="fa fa-eye"></i>
+                <i class="fa fa-eye" title="Xem chi tiết"></i>
               </a>
               <a *ngIf="data.trangThai != STATUS.HOAN_THANH_CAP_NHAT &&  userService.isCuc()"
                 (click)="goDetail(data.id)">

@@ -55,7 +55,7 @@
       <h3>Danh sách hàng hỏng, giảm chất lượng do nguyên nhân bất khả kháng</h3>
       <div class="buttons">
         <button type="button" class="btn btn-sub btn-xoa" (click)="xoa()" *ngIf="userService.isChiCuc()">
-          <i class="fa fa-trash-o do"></i>
+          <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
           <span>Xóa</span>
         </button>
         <button type="button" class="btn btn-sub" (click)="exportData()">
@@ -138,10 +138,10 @@
               <i class=" icon htvbdh_eye"></i>
             </a>
             <a (click)="viewDetail(data.id, false)" *ngIf="globals.prop.NHAP_CHUA_TONG_HOP">
-              <i class="fa fa-pencil"></i>
+              <i class="fa fa-pencil" title="Sửa"></i>
             </a>
             <a (click)="xoaItem(data.id)"  *ngIf="globals.prop.NHAP_CHUA_TONG_HOP" >
-              <i class="fa fa-trash-o do"></i>
+              <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>
         </tr>

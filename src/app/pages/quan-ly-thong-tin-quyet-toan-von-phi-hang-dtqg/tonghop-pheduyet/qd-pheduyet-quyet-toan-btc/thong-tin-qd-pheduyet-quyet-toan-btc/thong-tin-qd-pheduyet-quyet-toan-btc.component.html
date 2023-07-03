@@ -268,10 +268,10 @@
             <td class="text-right">{{data.soTuNamSau | number}}</td>
             <td class="text-center">
               <a *ngIf="trangThaiEditDetail && !isView" (click)="editQtNsChiTw(i)">
-                <i class="fa fa-pencil"></i>
+                <i class="fa fa-pencil" title="Sửa"></i>
               </a>
               <!--                          <a *ngIf="!isView" (click)="deleteQtNsChiTw(i)">-->
-              <!--                            <i class="fa fa-trash-o do"></i>-->
+              <!--                            <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>-->
               <!--                          </a>-->
             </td>
           </ng-container>
@@ -568,10 +568,10 @@
             <td class="text-right">{{data.soTuNamSau | number}}</td>
             <td class="text-center" *ngIf="trangThaiEditDetail && !isView">
               <a (click)="editQtNsKpChiNvDtqg(i)">
-                <i class="fa fa-pencil"></i>
+                <i class="fa fa-pencil" title="Sửa"></i>
               </a>
               <!--                          <a *ngIf="!isView" (click)="deleteQtNsKpChiNvDtqg(i)">-->
-              <!--                            <i class="fa fa-trash-o do"></i>-->
+              <!--                            <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>-->
               <!--                          </a>-->
             </td>
           </ng-container>

@@ -338,10 +338,10 @@
                                         <td>{{ data.fileName }}</td>
                                         <td>
                                             <a (click)="downloadFileGui(data.id)">
-                                                <i class="fa fa-eye"></i>
+                                                <i class="fa fa-eye" title="Xem chi tiết"></i>
                                             </a>
                                             <a *ngIf="statusGui" (click)="deleteFileGui(data.id)">
-                                                <i class="fa fa-trash-o do"></i>
+                                                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                                             </a>
                                         </td>
                                     </tr>
@@ -420,10 +420,10 @@
                                         <td>{{ data.fileName }}</td>
                                         <td>
                                             <a (click)="downloadFileNhan(data.id)">
-                                                <i class="fa fa-eye"></i>
+                                                <i class="fa fa-eye" title="Xem chi tiết"></i>
                                             </a>
                                             <a *ngIf="statusNhan" (click)="deleteFileNhan(data.id)">
-                                                <i class="fa fa-trash-o do"></i>
+                                                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                                             </a>
                                         </td>
                                     </tr>
