@@ -54,6 +54,7 @@ export class ThanhLyDanhSachHangComponent extends Base2Component implements OnIn
       slHienTai: [],
       slDeXuat: [],
       slDaDuyet: [],
+      slConlai:[],
       thanhTien: [],
       ngayNhapKho: [],
       ngayDeXuat: [],
@@ -67,6 +68,7 @@ export class ThanhLyDanhSachHangComponent extends Base2Component implements OnIn
       type: [],
       tenLoaiVthh: [],
       tenCloaiVthh: [],
+      moTaHangHoa:[],
       tenTrangThai: [],
       tenCuc: [],
       tenChiCuc: [],
@@ -148,6 +150,11 @@ export class ThanhLyDanhSachHangComponent extends Base2Component implements OnIn
     }
   }
 
+  clearFilter() {
+    this.formData.reset();
+    this.timKiem();
+  }
+
   async loadDsVthh() {
     let res = await this.danhMucService.getDanhMucHangDvqlAsyn({});
     if (res.msg == MESSAGE.SUCCESS) {
@@ -218,4 +225,25 @@ export class ThanhLyDanhSachHangComponent extends Base2Component implements OnIn
     this.idTongHop = null;
     this.openTongHop = false;
   }
+
+  handleCancel() {
+    this.showModal(false);
+  }
+
+  modalWidth: any;
+  isVisibleModal = false;
+  async showModal(isVisibleModal: boolean, item?: any) {
+    this.isVisibleModal = isVisibleModal;
+    this.modalWidth = '50vw';
+    if(item.id){
+      this.spinner.show()
+      let data = await this.detail(item.id);
+      this.formData.patchValue({
+        slConlai:data.slDeXuat - data.slConlai,
+        tenTrangThai: data.tenTrangThai
+      });
+    }
+    this.spinner.hide()
+  }
+
 }

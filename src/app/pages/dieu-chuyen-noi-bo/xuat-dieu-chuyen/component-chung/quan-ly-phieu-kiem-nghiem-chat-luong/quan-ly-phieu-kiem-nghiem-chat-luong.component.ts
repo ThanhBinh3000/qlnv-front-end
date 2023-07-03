@@ -112,6 +112,7 @@ export class PhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base2Compon
       maDvi: [null],
       loaiDc: [null],
       isVatTu: [false],
+      thayDoiThuKho: [false],
       soQdinh: [null],
       soPhieu: [null],
       tuNgay: [null],
@@ -144,7 +145,7 @@ export class PhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base2Compon
       // if (this.typeVthh == 'tat-ca') {
       //   this.isTatCa = true;
       // }
-      this.formData.patchValue({ loaiDc: this.loaiDc, isVatTu: this.isVatTu, type: this.type, maDvi: this.userInfo.MA_DVI, trangThai: STATUS.BAN_HANH })
+      this.formData.patchValue({ loaiDc: this.loaiDc, isVatTu: this.isVatTu, thayDoiThuKho: this.thayDoiThuKho, type: this.type, maDvi: this.userInfo.MA_DVI, trangThai: STATUS.BAN_HANH })
       this.timKiem()
     } catch (e) {
       console.log('error: ', e);

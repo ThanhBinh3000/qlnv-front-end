@@ -23,6 +23,16 @@ import { QuyetDinhDieuChuyenCucService } from 'src/app/services/dieu-chuyen-noi-
 import { PhieuXuatKhoDieuChuyenService } from '../../services/dcnb-xuat-kho.service';
 import { PassDataBienBanTinhKho } from '../bien-ban-tinh-kho.component';
 
+export const LIST_TRANG_THAI_BBTK = {
+  [STATUS.DU_THAO]: "Dự thảo",
+  [STATUS.CHO_DUYET_KTVBQ]: "Chờ duyệt - kỹ thuật viên bảo quản",
+  [STATUS.TU_CHOI_KTVBQ]: "Từ chối kỹ - thuật viên bảo quản",
+  [STATUS.CHO_DUYET_KT]: "Chờ duyệt - kế toán",
+  [STATUS.TU_CHOI_KT]: "Từ chối - kế toán",
+  [STATUS.CHO_DUYET_LDCC]: "Chờ duyệt - lãnh đạo chi cục",
+  [STATUS.TU_CHOI_LDCC]: "Từ chối - lãnh đạo chi cục",
+  [STATUS.DA_DUYET_LDCC]: "Đã duyệt - lãnh đạo chi cục"
+}
 @Component({
   selector: 'app-xuat-dcnb-them-moi-bien-ban-tinh-kho',
   templateUrl: './them-moi-bien-ban-tinh-kho.component.html',
@@ -41,13 +51,9 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
   showListEvent = new EventEmitter<any>();
   listSoQuyetDinh: any[] = []
   listDiaDiemNhap: any[] = [];
-  listPhieuXuatKho: any[] = [];
-  fileDinhKems: any[] = [];
   listDiemKho: any[] = [];
   maBb: string;
   checked: boolean = false;
-  listFileDinhKem: any = [];
-  tongSlXuat: number;
   //View modal ifor
   isViewModalPhieuKNCL: boolean;
   idPhieuKNCL: number;
@@ -55,6 +61,9 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
   idPhieuXuatKho: number;
   isViewModalBKCH: boolean;
   idBKCH: number;
+  fileBbTinhKhoDaKy: FileDinhKem[] = [];
+
+  LIST_TRANG_THAI = LIST_TRANG_THAI_BBTK;
 
   constructor(
     httpClient: HttpClient,
@@ -74,15 +83,15 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
         id: [],
         nam: [dayjs().get("year")],
         maDvi: [],
-        maQhNs: [],
+        maQhns: [],
         soBbTinhKho: [],
         ngayTaoBb: [],
         qdinhDccId: [],
         soQdinhDcc: ['', [Validators.required]],
-        ngayKyQdDcc: [],
+        ngayKyQdDcc: [''],
         maDiemKho: ['', [Validators.required]],
-        maNhaKho: [],
-        maNganKho: [],
+        maNhaKho: ['', [Validators.required]],
+        maNganKho: ['', [Validators.required]],
         maLoKho: [],
         loaiVthh: [],
         cloaiVthh: [],
@@ -97,13 +106,16 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
         chenhLechSlConLai: [],
         slThua: [],
         slThieu: [],
-        nguyenNhan: ['', [Validators.required]],
-        kienNghi: ['', [Validators.required]],
-        ghiChu: ['', [Validators.required]],
+        nguyenNhan: [''],
+        kienNghi: [''],
+        ghiChu: [''],
         thuKho: [],
         ktvBaoQuan: [],
+        ktvBaoQuanId: [],
         keToan: [],
-        ldChiCuc: [],
+        keToanId: [],
+        lanhDaoChiCuc: [],
+        lanhDaoChiCucId: [],
         trangThai: [STATUS.DU_THAO],
         lyDoTuChoi: [],
         diaChiDvi: [],
@@ -115,8 +127,8 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
         tenDiemKho: [],
         tenLoKho: [],
         tenNganKho: [],
-        listPhieuXuatKho: [new Array()],
-        fileDinhKems: [new Array<FileDinhKem>()],
+        tenNganLoKho: [],
+        dcnbBienBanTinhKhoDtl: [new Array()]
       }
     );
     this.maBb = '-BBTK';
@@ -142,12 +154,11 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
     if (idInput > 0) {
       await this.bienBanTinhKhoDieuChuyenService.getDetail(idInput)
         .then((res) => {
-          if (res.msg == MESSAGE.SUCCESS) {
+          if (res.msg === MESSAGE.SUCCESS) {
             this.formData.patchValue(res.data);
             this.formData.patchValue({ soBbTinhKho: res.data.soBbTinhKho ? res.data.soBbTinhKho : this.genSoBienBanTinhKho(res.data.id) });
             const data = res.data;
-            this.fileDinhKems = data.fileDinhKems;
-            this.dataTable = data.listPhieuXuatKho;
+            this.fileBbTinhKhoDaKy = data.fileBbTinhKhoDaKy;
           }
         })
         .catch((e) => {
@@ -159,17 +170,18 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
       this.formData.patchValue({
         maDvi: this.userInfo.MA_DVI,
         tenDvi: this.userInfo.TEN_DVI,
-        maQhNs: this.userInfo.DON_VI.maQhns,
+        maQhns: this.userInfo.DON_VI.maQhns,
         // soBbTinhKho: `${id}/${this.formData.get('nam').value}/${this.maBb}`,
         ngayTaoBb: dayjs().format('YYYY-MM-DD'),
         ngayKetThucXuat: dayjs().format('YYYY-MM-DD'),
         thuKho: this.userInfo.TEN_DAY_DU,
-        ...this.passData
+        ...this.passData,
+        tenNganLoKho: this.passData.tenLoKho ? `${this.passData.tenLoKho} - ${this.passData.tenNganKho}` : this.passData.tenNganKho
       });
       if (this.passData.qdinhDccId) {
         await this.bindingDataQd(this.passData.qdinhDccId, true);
-        console.log("listDiDiam", this.listDiaDiemNhap)
-        // this.bindingDataDdNhap(this.passData)
+        const dataDiaDiemNhap = this.listDiaDiemNhap.find(f => ((f.maLoKho && f.maLoKho === this.passData.maLoKho) || (!f.maLoKho && !this.passData.maLoKho && f.maNganKho && f.maNganKho === this.passData.maNganKho)))
+        this.bindingDataDdNhap(dataDiaDiemNhap)
       }
     }
 
@@ -191,7 +203,7 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
         trangThai: STATUS.BAN_HANH,
       }
       let res = await this.quyetDinhDieuChuyenCucService.getDsSoQuyetDinhDieuChuyenChiCuc(body);
-      if (res.msg == MESSAGE.SUCCESS) {
+      if (res.msg === MESSAGE.SUCCESS) {
         this.listSoQuyetDinh = res.data;
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -204,7 +216,6 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
       this.spinner.hide();
     }
   }
-
   async openDialogSoQd() {
     await this.loadSoQuyetDinh();
     const modalQD = this.modal.create({
@@ -222,6 +233,7 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
     })
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
+        this.resetData();
         await this.bindingDataQd(data.id, true);
       }
     });
@@ -241,7 +253,7 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
         // ngayKyHd: data.ngayKyHd,
 
       });
-      if (dataRes.msg == MESSAGE.SUCCESS) {
+      if (dataRes.msg === MESSAGE.SUCCESS) {
         const data = dataRes.data;
         this.formData.patchValue({
           qddcId: data.id,
@@ -251,11 +263,11 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
         this.listDiaDiemNhap = [];
         let dataChiCuc = [];
 
-        if (data.maDvi == this.userInfo.MA_DVI && Array.isArray(data?.danhSachQuyetDinh)) {
+        if (data.maDvi === this.userInfo.MA_DVI && Array.isArray(data?.danhSachQuyetDinh)) {
           data.danhSachQuyetDinh.forEach(element => {
             if (Array.isArray(element.danhSachKeHoach)) {
               element.danhSachKeHoach.forEach(item => {
-                if (dataChiCuc.findIndex(f => ((!f.maLoKho && !item.maLoKho && item.maNganKho && f.maNganKho == item.maNganKho) || (f.maLoKho && f.maLoKho == item.maLoKho))) < 0) {
+                if (dataChiCuc.findIndex(f => ((!f.maLoKho && !item.maLoKho && item.maNganKho && f.maNganKho === item.maNganKho) || (f.maLoKho && f.maLoKho === item.maLoKho))) < 0) {
                   dataChiCuc.push(item)
                 }
               });
@@ -289,13 +301,15 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
       },
     });
     modalQD.afterClose.subscribe(async (data) => {
-      this.bindingDataDdNhap(data);
+      if (data) {
+        this.resetData();
+        this.bindingDataDdNhap(data);
+      }
     });
   }
 
   async bindingDataDdNhap(data) {
     if (data) {
-      console.log(data, 123321);
       this.formData.patchValue({
         maDiemKho: data.maDiemKho,
         tenDiemKho: data.tenDiemKho,
@@ -305,6 +319,7 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
         tenNganKho: data.tenNganKho,
         maLoKho: data.maLoKho,
         tenLoKho: data.tenLoKho,
+        tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho,
 
         loaiVthh: data.loaiVthh,
         cloaiVthh: data.cloaiVthh,
@@ -323,74 +338,101 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
         thayDoiThuKho: this.thayDoiThuKho,
         type: this.type,
         trangThai: STATUS.DA_DUYET_LDCC,
+        qdinhDccId: this.formData.value.qdinhDccId,
+        maLoKho: this.formData.value.maLoKho,
+        maNganKho: this.formData.value.maNganKho
       }
       let res = await this.phieuXuatKhoDieuChuyenService.getThongTinChungPhieuXuatKho(body)
       const list = res.data;
-      this.dataTable = [];
-      this.listPhieuXuatKho = list.filter(item => ((this.formData.value.maLoKho && this.formData.value.maLoKho == item.maloKho) ||
-        (!this.formData.value.maLoKho && this.formData.value.maNganKho && this.formData.value.maNganKho == item.maNganKho)));
-      this.dataTable = this.listPhieuXuatKho.map(f => ({
-        bangKeCanHangHdrId: f.bkcanHangId,
+      // this.listPhieuXuatKho = list.filter(item => ((this.formData.value.maLoKho && this.formData.value.maLoKho === item.maloKho) ||
+      //   (!this.formData.value.maLoKho && this.formData.value.maNganKho && this.formData.value.maNganKho === item.maNganKho)));
+      const dataTable = Array.isArray(list) ? list.map(f => ({
+        bangKeCanHangHdrId: f.bangKeCanHangId,
         hdrId: null,
         id: null,
         ngayXuatKho: f.ngayXuatKho,
-        phieuKtChatLuongHdrId: f.phieuKiemNghiemId,
+        phieuKtChatLuongHdrId: f.phieuKiemNghiemClId,
         phieuXuatKhoHdrId: f.id,
         soPhieuKtChatLuong: f.soPhieuKiemNghiemCl,
         soPhieuXuatKho: f.soPhieuXuatKho,
-        soBangKeCanHang: f.soBKCanHang,
+        soBangKeCanHang: f.soBangKeCanHang,
         soLuongXuat: f.soLuong
-      }));
-      this.tongSlXuat = this.dataTable.reduce((sum, cur) => sum += cur.soLuongXuat, 0)
+      })) : [];
+      const tongSlXuat = dataTable.reduce((sum, cur) => sum += cur.soLuongXuat, 0);
+      this.formData.patchValue({ tongSlXuatTheoTt: tongSlXuat, dcnbBienBanTinhKhoDtl: dataTable })
 
-      console.log("dataTable", this.dataTable)
-      if (this.dataTable && this.dataTable.length > 0) {
-        // const lastItem = this.dataTable[this.dataTable.length - 1];
-        const maxDate = new Date(Math.min.apply(null, this.dataTable.map(function (e) {
+      if (this.formData.value.dcnbBienBanTinhKhoDtl && this.formData.value.dcnbBienBanTinhKhoDtl.length > 0) {
+        const maxDate = new Date(Math.min.apply(null, this.formData.value.dcnbBienBanTinhKhoDtl.map(function (e) {
           return new Date(e.ngayXuatKho);
         })));
         const minDateString = maxDate.toISOString().slice(0, 10);
         this.formData.patchValue({
           ngayBatDauXuat: minDateString
-          // ngayBatDauXuat: lastItem.ngayXuatKho,
-          // soPhieuKnCl: lastItem.soPhieu,
         })
       }
     }
+  }
+  resetData() {
+    this.formData.patchValue({
+      maDiemKho: '',
+      tenDiemKho: '',
+      maNhaKho: '',
+      tenNhaKho: '',
+      maNganKho: '',
+      tenNganKho: '',
+      maLoKho: '',
+      tenLoKho: '',
+      tenNganLoKho: '',
+
+      loaiVthh: '',
+      cloaiVthh: '',
+      tenLoaiVthh: '',
+      tenCloaiVthh: '',
+      moTaHangHoa: '',
+
+      tongSlXuatTheoQd: 0,
+      tonKhoBanDau: 0,
+      slConLaiTheoSs: 0,
+      tongSlXuatTheoTt: 0,
+      dcnbBienBanTinhKhoDtl: [],
+      ngayBatDauXuat: ''
+
+    })
   }
   makePositive(num: number) {
     return Math.abs(num)
   }
   slChenhLech() {
-    if (this.formData.value.slThucTeCon > 0 && this.formData.value.slConLai > 0) {
-      // if (this.formData.value.slThucTeCon - this.formData.value.slConLai > 0) {
-      //   this.formData.patchValue({
-      //     slThua: Math.abs(this.formData.value.slThucTeCon - this.formData.value.slConLai),
-      //     slThieu: null
-      //   })
-      // } else {
-      //   this.formData.patchValue({
-      //     slThieu: Math.abs(this.formData.value.slThucTeCon - this.formData.value.slConLai),
-      //     slThua: null
-      //   })
-      // }
-      this.formData.patchValue({
-        chenhLechSlConLai: this.formData.value.slConLaiTheoSs - this.formData.value.slConLaiTheoTt
-      })
-    }
+    // if (this.formData.value.slThucTeCon > 0 && this.formData.value.slConLai > 0) {
+    //   if (this.formData.value.slThucTeCon - this.formData.value.slConLai > 0) {
+    //     this.formData.patchValue({
+    //       slThua: Math.abs(this.formData.value.slThucTeCon - this.formData.value.slConLai),
+    //       slThieu: null
+    //     })
+    //   } else {
+    //     this.formData.patchValue({
+    //       slThieu: Math.abs(this.formData.value.slThucTeCon - this.formData.value.slConLai),
+    //       slThua: null
+    //     })
+    //   }
+    // }
+    this.formData.patchValue({
+      chenhLechSlConLai: this.formData.value.slConLaiTheoSs - this.formData.value.slConLaiTheoTt
+    })
   }
 
   async save(isGuiDuyet?) {
     let body = this.formData.value;
-    body.fileDinhKems = this.fileDinhKems;
-    body.listPhieuXuatKho = this.dataTable;
+    body.fileBbTinhKhoDaKy = this.fileBbTinhKhoDaKy;
+    body.loaiDc = this.loaiDc;
+    body.isVatTu = this.isVatTu;
+    body.thayDoiThuKho = this.thayDoiThuKho;
+    body.type = this.type;
     let data = await this.createUpdate(body);
     if (data) {
-      this.formData.patchValue({ soBbTinhKho: data.soBbTinhKho ? data.soBbTinhKho : this.genSoBienBanTinhKho(data.id) })
+      this.formData.patchValue({ id: data.id, trangThai: data.trangThai, soBbTinhKho: data.soBbTinhKho ? data.soBbTinhKho : this.genSoBienBanTinhKho(data.id) })
       if (isGuiDuyet) {
         this.pheDuyet();
-      } else {
-        this.goBack()
       }
     }
   }
@@ -447,7 +489,7 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
 
   isDisabled() {
     let trangThai = this.formData.value.trangThai;
-    if (trangThai == STATUS.CHO_DUYET_LDCC || trangThai == STATUS.CHO_DUYET_KT || trangThai == STATUS.CHO_DUYET_KTVBQ) {
+    if (trangThai === STATUS.CHO_DUYET_LDCC || trangThai === STATUS.CHO_DUYET_KT || trangThai === STATUS.CHO_DUYET_KTVBQ) {
       return true
     }
     return false;

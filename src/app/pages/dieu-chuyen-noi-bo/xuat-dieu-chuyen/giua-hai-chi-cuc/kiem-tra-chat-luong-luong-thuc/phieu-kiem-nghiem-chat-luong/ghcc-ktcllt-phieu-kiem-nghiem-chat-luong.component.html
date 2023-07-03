@@ -1,4 +1,4 @@
-<nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="level1">
+<!-- <nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="level1">
   <ul nz-menu nzMode="horizontal">
     <li nz-menu-item [nzSelected]="tabSelected==0" (click)="selectTab(0)">
       Phiếu xuất kho
@@ -25,4 +25,6 @@
     <ng-container *ngIf="tabSelected == 3">
     </ng-container>
   </div>
-</div>
+</div> -->
+<app-quan-ly-phieu-kiem-nghiem-chat-luong loaiDc="CHI_CUC" [isVatTu]="false" [thayDoiThuKho]="true"
+  type="00"></app-quan-ly-phieu-kiem-nghiem-chat-luong>

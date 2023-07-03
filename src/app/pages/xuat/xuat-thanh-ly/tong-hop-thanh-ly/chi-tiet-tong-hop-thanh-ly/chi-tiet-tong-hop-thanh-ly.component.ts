@@ -78,7 +78,7 @@ export class ChiTietTongHopThanhLyComponent extends Base2Component implements On
       nguoiGduyetId: [],
       ngayPduyet: [],
       nguoiPduyetId: [],
-      ngayTao: [],
+      ngayTao:[dayjs().format('YYYY-MM-DD HH:mm:ss')],
       lyDoTuChoi: [],
       tongSlHienTai: [],
       tongSlDeXuat: [],
@@ -200,8 +200,6 @@ export class ChiTietTongHopThanhLyComponent extends Base2Component implements On
           }
         }
       ).value();
-    console.log(data, 'raw');
-    console.log(this.selectedItem, 'view');
   }
 
   onExpandStringChange(id: string, checked: boolean) {

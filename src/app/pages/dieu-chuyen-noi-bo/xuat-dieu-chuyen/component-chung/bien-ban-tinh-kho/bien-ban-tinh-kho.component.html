@@ -3,22 +3,54 @@
         <nz-card class="mt16 flex-card p-lr16">
             <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
                 <div nz-row [nzGutter]="[20]">
-                    <div nz-col nzSpan="4">
+                    <div nz-col nzSpan="2">
                         <label>Năm kế hoạch</label>
                         <nz-select formControlName="nam">
                             <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                         </nz-select>
                     </div>
-                    <div nz-col nzSpan="4">
+                    <div nz-col nzSpan="5">
                         <label>Số QĐ ĐC của Cục</label>
                         <input placeholder="" nz-input formControlName="soQdinhDcc" />
                     </div>
-                    <div nz-col nzSpan="4">
+                    <div nz-col nzSpan="5">
                         <label>Số BB tịnh kho </label>
                         <input placeholder="" nz-input formControlName="soBbTinhKho" />
                     </div>
                     <div nz-col nzSpan="4">
-                        <label>Ngày</label>
+                        <label>Ngày bắt đầu xuất</label>
+                        <div nz-row>
+                            <div nz-col nzSpan="12" class="cus-start-date">
+                                <nz-date-picker [nzDisabledDate]="disabledTuNgay" nzFormat="dd/MM/yyyy"
+                                    formControlName="tuNgay" nzPlaceHolder="Ngày bắt đầu">
+                                </nz-date-picker>
+                            </div>
+                            <div nz-col nzSpan="12" class="cus-end-date">
+                                <nz-date-picker [nzDisabledDate]="disabledDenNgay" nzFormat="dd/MM/yyyy"
+                                    formControlName="denNgay" nzPlaceHolder="Ngày kết thúc">
+                                </nz-date-picker>
+                            </div>
+                        </div>
+                        <!-- <nz-range-picker formControlName="ngayLayMau" nzFormat="dd/MM/yyyy"></nz-range-picker> -->
+                    </div>
+                    <div nz-col nzSpan="4">
+                        <label>Ngày kết thúc xuất</label>
+                        <div nz-row>
+                            <div nz-col nzSpan="12" class="cus-start-date">
+                                <nz-date-picker [nzDisabledDate]="disabledTuNgay" nzFormat="dd/MM/yyyy"
+                                    formControlName="tuNgay" nzPlaceHolder="Ngày bắt đầu">
+                                </nz-date-picker>
+                            </div>
+                            <div nz-col nzSpan="12" class="cus-end-date">
+                                <nz-date-picker [nzDisabledDate]="disabledDenNgay" nzFormat="dd/MM/yyyy"
+                                    formControlName="denNgay" nzPlaceHolder="Ngày kết thúc">
+                                </nz-date-picker>
+                            </div>
+                        </div>
+                        <!-- <nz-range-picker formControlName="ngayLayMau" nzFormat="dd/MM/yyyy"></nz-range-picker> -->
+                    </div>
+                    <div nz-col nzSpan="4">
+                        <label>Thời hạn điều chuyển</label>
                         <div nz-row>
                             <div nz-col nzSpan="12" class="cus-start-date">
                                 <nz-date-picker [nzDisabledDate]="disabledTuNgay" nzFormat="dd/MM/yyyy"
@@ -143,7 +175,6 @@
                                             <td></td>
                                             <td></td>
                                             <td></td>
-                                            <td></td>
                                             <td>{{(lv2.tenLoKho? lv2.tenLoKho + " - ": "") + (lv2.tenNganKho?
                                                 lv2.tenNganKho + " - ": "") + (lv2.tenNhaKho ? lv2.tenNhaKho: "")}}</td>
                                             <td>{{lv2.soBbTinhKho}}</td>
@@ -152,6 +183,7 @@
                                             <td></td>
                                             <td></td>
                                             <td></td>
+                                            <td>{{LIST_TRANG_THAI[lv2.trangThai]}}</td>
                                             <td class="text-left">
                                                 <a (click)="redirectDetail(lv2.id, false, lv2)"
                                                     *ngIf="checkRoleAdd(lv2)">
