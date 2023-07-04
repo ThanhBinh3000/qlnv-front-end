@@ -50,12 +50,17 @@ export class BienBanTinhKhoDieuChuyenComponent extends Base2Component implements
       nam: [''],
       soQdinhDcc: [''],
       soBbTinhKho: [''],
-      tuNgay: [''],
-      denNgay: [''],
       loaiDc: [''],
       isVatTu: [false],
       thayDoiThuKho: [false],
-      type: ['']
+      type: [''],
+
+      tuNgayBdXuat: [''],
+      tuNgayKtXuat: [''],
+      tuNgayXhXuat: [''],
+      denNgayBdXuat: [''],
+      denNgayKtXuat: [''],
+      denNgayXhXuat: [''],
     })
     this.filterTable = {
       soQdinhDcc: '',
@@ -177,18 +182,46 @@ export class BienBanTinhKhoDieuChuyenComponent extends Base2Component implements
     })
   }
 
-  disabledTuNgay = (startValue: Date): boolean => {
-    if (startValue && this.formData.value.denNgay) {
-      return startValue.getTime() > this.formData.value.denNgay.getTime();
+  disabledTuNgayBdXuat = (startValue: Date): boolean => {
+    if (startValue && this.formData.value.denNgayBdXuat) {
+      return startValue.getTime() > this.formData.value.denNgayBdXuat.getTime();
     }
     return false;
   };
 
-  disabledDenNgay = (endValue: Date): boolean => {
-    if (!endValue || !this.formData.value.tuNgay) {
+  disabledDenNgayBdXuat = (endValue: Date): boolean => {
+    if (!endValue || !this.formData.value.tuNgayBdXuat) {
       return false;
     }
-    return endValue.getTime() <= this.formData.value.tuNgay.getTime();
+    return endValue.getTime() <= this.formData.value.tuNgayBdXuat.getTime();
+  };
+
+  disabledTuNgayKtXuat = (startValue: Date): boolean => {
+    if (startValue && this.formData.value.denNgayKtXuat) {
+      return startValue.getTime() > this.formData.value.denNgayKtXuat.getTime();
+    }
+    return false;
+  };
+
+  disabledDenNgayKtXuat = (endValue: Date): boolean => {
+    if (!endValue || !this.formData.value.tuNgayKtXuat) {
+      return false;
+    }
+    return endValue.getTime() <= this.formData.value.tuNgayKtXuat.getTime();
+  };
+
+  disabledTuNgayXhXuat = (startValue: Date): boolean => {
+    if (startValue && this.formData.value.denNgayXhXuat) {
+      return startValue.getTime() > this.formData.value.denNgayXhXuat.getTime();
+    }
+    return false;
+  };
+
+  disabledDenNgayXhXuat = (endValue: Date): boolean => {
+    if (!endValue || !this.formData.value.tuNgayXhXuat) {
+      return false;
+    }
+    return endValue.getTime() <= this.formData.value.tuNgayXhXuat.getTime();
   };
 
   onExpandStringChange(id: string, checked: boolean): void {
