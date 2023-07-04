@@ -556,6 +556,7 @@ export class DanhMucDinhMucPhiComponent implements OnInit {
     this.spinner.show();
     try {
       this.page = event;
+      this.search();
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -569,6 +570,7 @@ export class DanhMucDinhMucPhiComponent implements OnInit {
     try {
       this.pageSize = event;
       this.spinner.hide();
+      this.search();
     } catch (e) {
       console.log('error: ', e);
       this.spinner.hide();

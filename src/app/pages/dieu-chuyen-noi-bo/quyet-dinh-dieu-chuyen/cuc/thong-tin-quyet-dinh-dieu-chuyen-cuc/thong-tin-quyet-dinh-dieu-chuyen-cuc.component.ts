@@ -148,7 +148,8 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
       tenTrangThai: ['Dự thảo'],
       lyDoTuChoi: [],
       soCanCuQdTc: [, [Validators.required]],
-      maDxuat: [],
+      canCuQdTc: [],
+      soDxuat: [],
       ngayTrinhDuyetTc: [],
       tongDuToanKp: [],
       tenLoaiHinhNhapXuat: [],
@@ -357,7 +358,8 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
   async loadDsQuyetDinh(loaiDc, loaiQdinh?) {
     let body = {
       loaiDc,
-      loaiQdinh
+      loaiQdinh,
+      qDinhCucId: this.idInput
     };
     let res = await this.quyetDinhDieuChuyenTCService.dsQuyetDinh(body);
 
@@ -395,6 +397,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
       this.formData.patchValue({
         canCuQdTc: "",
         soCanCuQdTc: "",
+        soDxuat: "",
         ngayTrinhDuyetTc: "",
         tongDuToanKp: "",
       })
@@ -469,7 +472,8 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
       if (qdTC) {
         this.formData.patchValue({
           soCanCuQdTc: qdTC.soQdinh,
-          maDxuat: qdTC.maDxuat,
+          canCuQdTc: qdTC.id,
+          soDxuat: qdTC.maDxuat,
           ngayTrinhDuyetTc: qdTC.ngayPduyet
         })
       }
@@ -1088,7 +1092,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
   setValidator() {
     if (this.formData.value.loaiDc === "DCNB") {
       this.formData.controls["loaiQdinh"].clearValidators();
-      this.formData.controls["canCuQdTc"].clearValidators();
+      this.formData.controls["soCanCuQdTc"].clearValidators();
     }
     if (this.formData.value.loaiDc === "CHI_CUC") {
       this.formData.controls["loaiQdinh"].clearValidators();

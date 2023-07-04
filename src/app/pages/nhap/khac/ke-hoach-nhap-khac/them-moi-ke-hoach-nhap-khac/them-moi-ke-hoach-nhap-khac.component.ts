@@ -432,19 +432,43 @@ export class ThemMoiKeHoachNhapKhacComponent extends Base2Component implements O
   }
 
   calcTongSlTonKho() {
-    return 0;
+    if (this.listOfData) {
+      let sum = 0
+      this.listOfData.forEach(item => {
+        sum += item.slTonKho;
+      })
+      return sum;
+    }
   }
 
   calcTongSlHaoDoi() {
-    return 0;
+    if (this.listOfData) {
+      let sum = 0
+      this.listOfData.forEach(item => {
+        sum += item.slHaoDoiDinhMuc;
+      })
+      return sum;
+    }
   }
 
   calcTongSlDoiThua() {
-    return 0;
+    if (this.listOfData) {
+      let sum = 0
+      this.listOfData.forEach(item => {
+        sum += item.slDoiThua;
+      })
+      return sum;
+    }
   }
 
   calcTongThanhTien() {
-    return 0;
+    if (this.listOfData) {
+      let sum = 0
+      this.listOfData.forEach(item => {
+        sum += item.slDoiThua * item.donGia;
+      })
+      return sum;
+    }
   }
 
   async loadListDviThemMoi() {
@@ -650,6 +674,33 @@ export class ThemMoiKeHoachNhapKhacComponent extends Base2Component implements O
           });
         });
       });
+    } else {
+      this.listDataGroup = chain(this.listOfData).groupBy("maChiCuc").map((value, key) => (
+        {
+          tenChiCuc: this.listDonVi[DANH_MUC_LEVEL.CHI_CUC].find(i => i.maDvi == key)?.tenDvi,
+          maChiCuc: key,
+          children: value
+        }))
+        .value();
+      this.listDataGroup.forEach(chiCuc => {
+        chiCuc.children = chain(chiCuc.children).groupBy("maDiemKho").map((value, key) => (
+          {
+            tenDiemKho: this.listDonVi[DANH_MUC_LEVEL.DIEM_KHO].find(i => i.maDvi == key)?.tenDvi,
+            maDiemKho: key,
+            children: value
+          }))
+          .value();
+        chiCuc.children.forEach(diemKho => {
+          diemKho.children.forEach(nganLo => {
+            if (nganLo.maLoKho != null) {
+              nganLo.tenNganLoKho = this.listDonVi[DANH_MUC_LEVEL.LO_KHO].find(i => i.maDvi == nganLo.maLoKho).tenDvi + " - "
+                + this.listDonVi[DANH_MUC_LEVEL.NGAN_KHO].find(i => i.maDvi == nganLo.maNganKho).tenDvi;
+            } else {
+              nganLo.tenNganLoKho = this.listDonVi[DANH_MUC_LEVEL.NGAN_KHO].find(i => i.maDvi == nganLo.maNganKho).tenDvi;
+            }
+          });
+        });
+      })
     }
   }
 
