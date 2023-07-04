@@ -248,7 +248,6 @@ export class QuyetDinhPdKhnkComponent extends Base2Component implements OnInit {
     let res = await this.quyetDinhPheDuyetKeHoachNhapKhacService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
-      console.log(data)
       this.dataTable = data.content;
       if (data && data.content && data.content.length > 0) {
         this.dataTable = data.content;
@@ -384,7 +383,6 @@ export class QuyetDinhPdKhnkComponent extends Base2Component implements OnInit {
     if (value instanceof Date) {
       value = dayjs(value).format('YYYY-MM-DD');
     }
-    console.log(key, value);
 
     if (value && value != '') {
       this.dataTable = this.dataTableAll.filter((item) =>

@@ -127,16 +127,16 @@
               </th>
               <th>
                 <nz-input-group>
-                  <nz-select nzAllowClear [(ngModel)]="filterTable.loaiDc"
-                    (ngModelChange)="filterInTable('loaiDc',filterTable.loaiDc)">
-                    <nz-option *ngFor="let p of listLoaiDieuChuyen" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
+                  <nz-select nzAllowClear [(ngModel)]="filterTable.tenLoaiDc"
+                    (ngModelChange)="filterInTable('tenLoaiDc',filterTable.tenLoaiDc)">
+                    <nz-option *ngFor="let p of listLoaiDieuChuyen" [nzValue]="p.ten" [nzLabel]="p.ten"></nz-option>
                   </nz-select>
                 </nz-input-group>
               </th>
               <th>
                 <nz-input-group>
-                  <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.loaiQdinh"
-                    (input)="filterInTable('loaiQdinh',filterTable.loaiQdinh)" size="small" />
+                  <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenLoaiQdinh"
+                    (input)="filterInTable('tenLoaiQdinh',filterTable.tenLoaiQdinh)" size="small" />
                 </nz-input-group>
               </th>
               <th>

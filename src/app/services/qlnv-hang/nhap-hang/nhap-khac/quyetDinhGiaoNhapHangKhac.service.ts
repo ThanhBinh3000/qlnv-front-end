@@ -19,8 +19,13 @@ export class QuyetDinhGiaoNhapHangKhacService extends BaseService {
     return this.httpClient.post<any>(url, body).toPromise();
   }
 
-  exportBbNtBq(body: any): Observable<Blob> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/ket-xuat/bbntbq`;
+  dsQdNvuDuocLapBb(body: any): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/ds-qd-nvu-duoc-lap-bb`;
+    return this.httpClient.post<any>(url, body).toPromise();
+  }
+
+  exportBbLm(body: any): Observable<Blob> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/ket-xuat/bblm`;
     return this.httpClient.post(url, body, { responseType: 'blob' });
   }
 

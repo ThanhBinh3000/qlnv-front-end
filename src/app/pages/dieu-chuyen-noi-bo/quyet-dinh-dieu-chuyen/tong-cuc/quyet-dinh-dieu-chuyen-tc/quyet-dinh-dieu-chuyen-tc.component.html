@@ -125,9 +125,9 @@
               </th>
               <th>
                 <nz-input-group>
-                  <nz-select nzAllowClear [(ngModel)]="filterTable.loaiDc"
-                    (ngModelChange)="filterInTable('loaiDc',filterTable.loaiDc)">
-                    <nz-option *ngFor="let p of listLoaiDCFilterTable" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
+                  <nz-select nzAllowClear [(ngModel)]="filterTable.tenLoaiDc"
+                    (ngModelChange)="filterInTable('tenLoaiDc',filterTable.tenLoaiDc)">
+                    <nz-option *ngFor="let p of listLoaiDCFilterTable" [nzValue]="p.ten" [nzLabel]="p.ten"></nz-option>
                   </nz-select>
                 </nz-input-group>
               </th>

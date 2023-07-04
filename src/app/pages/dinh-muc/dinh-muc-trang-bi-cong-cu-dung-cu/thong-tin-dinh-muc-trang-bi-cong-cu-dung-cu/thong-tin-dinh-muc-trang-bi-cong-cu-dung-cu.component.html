@@ -98,14 +98,14 @@
   <div class="group-button">
     <h3 class="text-uppercase">Danh sách định mức trang bị công cụ, dụng cụ</h3>
     <div class="buttons">
-      <button type="button" class="btn btn-main"  *ngIf="!isViewDetail" (click)="themMoi()">
+      <button type="button" class="btn btn-main" *ngIf="!isViewDetail" (click)="themMoi()">
         <i class="icon htvbdh_tcdt_tao-qd"></i>
         <span>Thêm</span>
       </button>
     </div>
   </div>
   <nz-card class="mt-2px flex-card data-table card-border-content table-card">
-    <nz-table #basicTable class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false"
+    <nz-table #basicTable [nzFrontPagination]="false" [nzShowPagination]="false"
               [nzData]="dataTableDetail"
               nzBordered>
       <thead>
@@ -131,7 +131,7 @@
         <td>{{data.apDungTai ? data.apDungTaiStr : 'Tất cả'}}</td>
         <td>{{data.dmVpCuc}}</td>
         <td>{{data.dmVpChiCuc | number}}</td>
-        <td>bbbb</td>
+        <td>{{data.ccRaDm == 'DK' ? data.dmTheoDiemKho + '/điểm kho bảo quản lương thực' : data.dmTrangBi + '/' + data.khoiLuong + ' tấn lương thực bảo quản theo kế hoạch năm'}}</td>
         <td>{{data.donViTinh}}</td>
         <td>{{data.ycKyThuat}}</td>
         <td class="text-center">
