@@ -1092,7 +1092,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
   setValidator() {
     if (this.formData.value.loaiDc === "DCNB") {
       this.formData.controls["loaiQdinh"].clearValidators();
-      this.formData.controls["canCuQdTc"].clearValidators();
+      this.formData.controls["soCanCuQdTc"].clearValidators();
     }
     if (this.formData.value.loaiDc === "CHI_CUC") {
       this.formData.controls["loaiQdinh"].clearValidators();
