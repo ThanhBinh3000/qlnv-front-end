@@ -200,8 +200,6 @@ export class ChiTietTongHopDsVt12thComponent extends Base2Component implements O
           }
         }
       ).value();
-    console.log(data, 'raw');
-    console.log(this.selectedItem, 'view');
   }
 
   onExpandStringChange(id: string, checked: boolean) {
