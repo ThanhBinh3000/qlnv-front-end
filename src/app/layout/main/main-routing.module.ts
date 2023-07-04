@@ -1,11 +1,11 @@
-import {NgModule} from '@angular/core';
-import {RouterModule, Routes} from '@angular/router';
-import {MAIN_ROUTES} from './main-routing.constant';
-import {MainComponent} from './main.component';
-import {ErrorComponent} from './error/error.component';
-import {NotAuthenComponent} from './error/not-authen/not-authen.component';
-import {AuthGuard} from 'src/app/guard/auth.guard';
-import {NotFoundComponent} from './error/not-found/not-found.component';
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { MAIN_ROUTES } from './main-routing.constant';
+import { MainComponent } from './main.component';
+import { ErrorComponent } from './error/error.component';
+import { NotAuthenComponent } from './error/not-authen/not-authen.component';
+import { AuthGuard } from 'src/app/guard/auth.guard';
+import { NotFoundComponent } from './error/not-found/not-found.component';
 
 const routes: Routes = [
   {
@@ -141,7 +141,7 @@ const routes: Routes = [
       }
     ]
   },
-  {path: '**', redirectTo: '/error/404'},
+  { path: '**', redirectTo: '/error/404' },
 ];
 
 @NgModule({

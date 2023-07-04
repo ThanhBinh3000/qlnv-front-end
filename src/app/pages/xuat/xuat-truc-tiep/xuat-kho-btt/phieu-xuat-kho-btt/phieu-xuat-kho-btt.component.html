@@ -53,16 +53,17 @@
                     <i class="icon htvbdh_chuyen-xu-ly"></i>
                     <span>Xuất file</span>
                 </button>
-                <button type="button" class="btn btn-main" (click)="redirectToChiTiet(false, null, null)"
+                <button type="button" class="btn btn-main" (click)="redirectToChiTiet(null,  null)"
                     *ngIf="userService.isAccessPermisson('XHDTQG_PTTT_XK_LT_PXK_THEM') && userService.isChiCuc()">
                     <i class="icon htvbdh_tcdt_tao-qd"></i>
                     <span>Thêm</span>
                 </button>
             </div>
         </div>
-        <nz-card class="mt-2px flex-card data-table card-border-content table-card">
-            <nz-table #tblData [nzData]="dataView" class="nowrap table-chi-tiet" nzBordered>
-                <thead>
+      <nz-card class="mt-2px flex-card data-table card-border-content table-card">
+        <nz-table #basicTable class="nowrap table__container-tt" [nzData]="children" [nzFrontPagination]="false"
+                  [nzShowPagination]="false" nzBordered>
+          <thead>
                     <tr>
                         <th style="width: 35px">STT</th>
                         <th></th>
@@ -80,15 +81,15 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <ng-container *ngFor="let item of tblData.data, let i = index;">
-                        <tr [ngClass]="{'bg-selected': item.selected}" class="level-1">
+                <ng-container *ngFor="let item of basicTable.data, let i = index;">
+                  <tr  class="level-1">
                             <td>{{i + 1}}</td>
                             <td (nzExpandChange)="onExpandStringChange(item.idVirtual, $event)"
                                 [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true"
                                 style="width: 35px"></td>
-                            <td style="color: black ;font-weight: bold;">{{item.soQdNv}}</td>
-                            <td style="color: black ;font-weight: bold;">{{item.namKh}}</td>
-                            <td style="color: black ;font-weight: bold;">{{item.ngayQdNv}}</td>
+                            <td  class="bold">{{item.soQdNv}}</td>
+                            <td  class="bold">{{item.namKh}}</td>
+                            <td  class="bold">{{item.ngayQdNv}}</td>
                             <td></td>
                             <td></td>
                             <td></td>
@@ -107,7 +108,7 @@
                                     <td></td>
                                     <td></td>
                                     <td></td>
-                                    <td style="color: black ;font-weight: bold;">{{lv1.tenDiemKho}}</td>
+                                    <td class="bold">{{lv1.tenDiemKho}}</td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
@@ -115,7 +116,7 @@
                                     <td></td>
                                     <td></td>
                                     <td class="text-left">
-                                        <a (click)="redirectToChiTiet(false, null,item.idQdNv)"
+                                        <a (click)="redirectToChiTiet(false, item.idQdNv)"
                                             *ngIf="userService.isChiCuc()">
                                             <i class="fa fa-plus"></i>
                                         </a>
@@ -133,7 +134,7 @@
                                             <td>{{lv2.tenLoKho == null ? lv2.tenNganKho : lv2.tenLoKho }},
                                                 {{lv2.tenNhaKho}}
                                             </td>
-                                            <td style="color: black ;font-weight: bold;">{{lv2.soPhieuXuat}}</td>
+                                            <td class="bold">{{lv2.soPhieuXuat}}</td>
                                             <td>{{lv2.ngayXuatKho | date: 'dd/MM/YYYY' }}</td>
                                             <td>
                                                 <a *ngIf="lv2.soPhieu && lv2.idPhieu" nz-button nzType="link"
@@ -147,21 +148,21 @@
                                                 ||(!userService.isAccessPermisson('XHDTQG_PTTT_XK_LT_PXK_DUYET') && lv2.trangThai == STATUS.CHO_DUYET_LDCC)
                                                 ||(userService.isAccessPermisson('XHDTQG_PTTT_XK_LT_PXK_DUYET') && lv2.trangThai == STATUS.TU_CHOI_LDCC)
                                                 ||(userService.isAccessPermisson('XHDTQG_PTTT_XK_LT_PXK_DUYET') && lv2.trangThai == STATUS.DU_THAO)"
-                                                    (click)="redirectToChiTiet(lv2, false, null)">
-                                                    <i class="fa fa-eye"></i>
+                                                   (click)="redirectToChiTiet(lv2,  null)">
+                                                    <i class="fa fa-eye" title="Xem chi tiết"></i>
                                                 </a>
                                                 <a *ngIf="(userService.isAccessPermisson('XHDTQG_PTTT_XK_LT_PXK_THEM') && lv2.trangThai == STATUS.DU_THAO)
                                                 ||(userService.isAccessPermisson('XHDTQG_PTTT_XK_LT_PXK_THEM') && lv2.trangThai == STATUS.TU_CHOI_LDCC)"
-                                                    (click)="redirectToChiTiet(lv2, false, null)">
-                                                    <i class="fa fa-pencil"></i>
+                                                   (click)="redirectToChiTiet(lv2,  null)">
+                                                    <i class="fa fa-pencil" title="Sửa"></i>
                                                 </a>
                                                 <a *ngIf="(userService.isAccessPermisson('XHDTQG_PTTT_XK_LT_PXK_DUYET') && lv2.trangThai == STATUS.CHO_DUYET_LDCC)"
-                                                    (click)="redirectToChiTiet(lv2, false, null)">
+                                                   (click)="redirectToChiTiet(lv2,  null)">
                                                     <i class="icon htvbdh_tcdt_pheduyet"></i>
                                                 </a>
                                                 <a *ngIf="(lv2.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('XHDTQG_PTTT_XK_LT_PXK_XOA')) "
                                                     (click)="delete(lv2)">
-                                                    <i class="fa fa-trash-o do"></i>
+                                                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                                                 </a>
                                             </td>
                                         </tr>
@@ -193,7 +194,7 @@
     </div>
 </div>
 <div *ngIf="isDetail">
-    <app-them-moi-phieu-xuat-kho-btt [id]="selectedId" (showListEvent)="showList()" [isView]="isView"
+    <app-them-moi-phieu-xuat-kho-btt [id]="selectedId" (showListEvent)="showList()"
         [loaiVthh]="loaiVthh" [idQdGiaoNvXh]="idQdGiaoNvXh">
     </app-them-moi-phieu-xuat-kho-btt>
 </div>

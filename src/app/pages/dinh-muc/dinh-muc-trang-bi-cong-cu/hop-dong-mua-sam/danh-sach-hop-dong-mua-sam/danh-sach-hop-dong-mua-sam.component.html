@@ -31,7 +31,7 @@
       <h3>Danh sách hợp đồng mua</h3>
       <div class="buttons">
         <button type="button" class="btn btn-do" (click)="deleteSelect()">
-          <i class="fa fa-trash-o do"></i>
+          <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
           <span>Xóa</span>
         </button>
         <button type="button" class="btn btn-sub" (click)="exportData()">
@@ -151,13 +151,13 @@
             <td>{{ data.trangThai }}</td>
             <td class="text-left">
               <a (click)="redirectToChiTiet(false, data.id)" *ngIf="data.trangThai==globals.prop.NHAP_DU_THAO">
-                <i class="fa fa-pencil"></i>
+                <i class="fa fa-pencil" title="Sửa"></i>
               </a>
               <a (click)="redirectToChiTiet(true, data.id)">
-                <i class="fa fa-eye"></i>
+                <i class="fa fa-eye" title="Xem chi tiết"></i>
               </a>
               <a (click)="xoaItem(data)" *ngIf="data.trangThai==globals.prop.NHAP_DU_THAO">
-                <i class="fa fa-trash-o do"></i>
+                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
               </a>
             </td>
           </tr>

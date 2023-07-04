@@ -133,10 +133,10 @@
                 <td>{{ data.trangThai }}</td>
                 <td class="text-center">
                   <a (click)="redirectChiTiet(data.id)">
-                    <i class="fa fa-pencil"></i>
+                    <i class="fa fa-pencil" title="Sửa"></i>
                   </a>
                   <a *ngIf="data.trangThai == '00'" (click)="xoaItem(data)">
-                    <i class="fa fa-trash-o do"></i>
+                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                   </a>
                 </td>
               </tr>

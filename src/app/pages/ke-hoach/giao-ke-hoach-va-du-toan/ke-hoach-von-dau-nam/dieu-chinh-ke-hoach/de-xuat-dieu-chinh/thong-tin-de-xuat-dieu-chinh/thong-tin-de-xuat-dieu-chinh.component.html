@@ -248,7 +248,7 @@
             <!--                  <i class="icon htvbdh_dau-cong"></i>-->
             <!--                </a>-->
             <!--                <a (click)="clearDataLT()">-->
-            <!--                  <i class="fa fa-trash-o do"></i>-->
+            <!--                  <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>-->
             <!--                </a>-->
             <!--              </td>-->
             <!--            </tr>-->
@@ -270,10 +270,10 @@
                 <td *ngIf="!isView"
                     class="text-center">
                   <a (click)="editRowLT(data.chiTieu)">
-                    <i class="fa fa-pencil"></i>
+                    <i class="fa fa-pencil" title="Sửa"></i>
                   </a>
                   <!--                  <a (click)="deleteRowLT(data)">-->
-                  <!--                    <i class="fa fa-trash-o do"></i>-->
+                  <!--                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>-->
                   <!--                  </a>-->
                 </td>
               </ng-container>
@@ -399,7 +399,7 @@
         <!--                    <i class="icon htvbdh_dau-cong"></i>-->
         <!--                  </a>-->
         <!--                  <a (click)="clearDataLT()">-->
-        <!--                    <i class="fa fa-trash-o do"></i>-->
+        <!--                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>-->
         <!--                  </a>-->
         <!--                </td>-->
         <!--              </tr>-->
@@ -425,10 +425,10 @@
         <!--                  <td *ngIf="(deXuatDieuChinh.trangThai == '00' || id == 0) && !userService.isTongCuc() && !isView"-->
         <!--                    nzRight>-->
         <!--                    <a (click)="editRowLT(data.chiTieu)">-->
-        <!--                      <i class="fa fa-pencil"></i>-->
+        <!--                      <i class="fa fa-pencil" title="Sửa"></i>-->
         <!--                    </a>-->
         <!--                    <a (click)="deleteRowLT(data)">-->
-        <!--                      <i class="fa fa-trash-o do"></i>-->
+        <!--                      <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>-->
         <!--                    </a>-->
         <!--                  </td>-->
         <!--                </ng-container>-->
@@ -531,7 +531,7 @@
             <!--                  <i class="icon htvbdh_dau-cong"></i>-->
             <!--                </a>-->
             <!--                <a (click)="clearDataMuoi()">-->
-            <!--                  <i class="fa fa-trash-o do"></i>-->
+            <!--                  <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>-->
             <!--                </a>-->
             <!--              </td>-->
             <!--            </tr>-->
@@ -547,10 +547,10 @@
                 <td *ngIf=" !isView"
                     class="text-center">
                   <a (click)="editRowMuoi(data.chiTieu)">
-                    <i class="fa fa-pencil"></i>
+                    <i class="fa fa-pencil" title="Sửa"></i>
                   </a>
                   <!--                  <a (click)="deleteRowMuoi(data)">-->
-                  <!--                    <i class="fa fa-trash-o do"></i>-->
+                  <!--                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>-->
                   <!--                  </a>-->
                 </td>
               </ng-container>
@@ -648,7 +648,7 @@
         <!--                  <i class="icon htvbdh_dau-cong"></i>-->
         <!--                </a>-->
         <!--                <a (click)="clearDataMuoi()">-->
-        <!--                  <i class="fa fa-trash-o do"></i>-->
+        <!--                  <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>-->
         <!--                </a>-->
         <!--              </td>-->
         <!--            </tr>-->
@@ -668,10 +668,10 @@
         <!--                <td *ngIf="(deXuatDieuChinh.trangThai == '00' || id == 0) && !userService.isTongCuc() && !isView"-->
         <!--                    nzRight>-->
         <!--                  <a (click)="editRowMuoi(data.chiTieu)">-->
-        <!--                    <i class="fa fa-pencil"></i>-->
+        <!--                    <i class="fa fa-pencil" title="Sửa"></i>-->
         <!--                  </a>-->
         <!--                  <a (click)="deleteRowMuoi(data)">-->
-        <!--                    <i class="fa fa-trash-o do"></i>-->
+        <!--                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>-->
         <!--                  </a>-->
         <!--                </td>-->
         <!--              </ng-container>-->
@@ -802,7 +802,7 @@
                 <!--                      <i class="icon htvbdh_dau-cong"></i>-->
                 <!--                    </a>-->
                 <!--                    <a (click)="clearDataVatTu('01')">-->
-                <!--                      <i class="fa fa-trash-o do"></i>-->
+                <!--                      <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>-->
                 <!--                    </a>-->
                 <!--                  </td>-->
                 <!--                </tr>-->
@@ -822,10 +822,10 @@
                     <td *ngIf="!isView" class="text-center"
                     >
                       <a (click)="editRowVatTu(data.maVatTuCha, data.maVatTu,data.chiTieu)">
-                        <i class="fa fa-pencil"></i>
+                        <i class="fa fa-pencil" title="Sửa"></i>
                       </a>
                       <!--                      <a (click)="deleteRowVatTu(data)">-->
-                      <!--                        <i class="fa fa-trash-o do"></i>-->
+                      <!--                        <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>-->
                       <!--                      </a>-->
                     </td>
                   </ng-container>
@@ -957,7 +957,7 @@
                       <i class="icon htvbdh_dau-cong"></i>
                     </a>
                     <a (click)="clearDataVatTu('00')">
-                      <i class="fa fa-trash-o do"></i>
+                      <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                     </a>
                   </td>
                 </tr>
@@ -977,10 +977,10 @@
                     <td *ngIf="!isView"
                         nzRight>
                       <a (click)="editRowVatTu(data.maVatTuCha, data.maVatTu,data.chiTieu)">
-                        <i class="fa fa-pencil"></i>
+                        <i class="fa fa-pencil" title="Sửa"></i>
                       </a>
                       <a (click)="deleteRowVatTu(data)">
-                        <i class="fa fa-trash-o do"></i>
+                        <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                       </a>
                     </td>
                   </ng-container>
@@ -1122,7 +1122,7 @@
         <!--                  <i class="icon htvbdh_dau-cong"></i>-->
         <!--                </a>-->
         <!--                <a (click)="clearDataVatTu()">-->
-        <!--                  <i class="fa fa-trash-o do"></i>-->
+        <!--                  <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>-->
         <!--                </a>-->
         <!--              </td>-->
         <!--            </tr>-->
@@ -1149,10 +1149,10 @@
         <!--                <td *ngIf="(deXuatDieuChinh.trangThai == '00' || id == 0) && !userService.isTongCuc() && !isView"-->
         <!--                    nzRight>-->
         <!--                  <a (click)="editRowVatTu(data.maVatTuCha, data.maVatTu)">-->
-        <!--                    <i class="fa fa-pencil"></i>-->
+        <!--                    <i class="fa fa-pencil" title="Sửa"></i>-->
         <!--                  </a>-->
         <!--                  <a (click)="deleteRowVatTu(data)">-->
-        <!--                    <i class="fa fa-trash-o do"></i>-->
+        <!--                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>-->
         <!--                  </a>-->
         <!--                </td>-->
         <!--              </ng-container>-->

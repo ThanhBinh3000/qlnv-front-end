@@ -308,10 +308,10 @@
           <td *ngIf="capDvi == 2">{{data.tcTongCucDieuHanhKv | number}}</td>
           <td *ngIf="!isViewDetail">
             <a (click)="editRow(idx)">
-              <i class="fa fa-pencil"></i>
+              <i class="fa fa-pencil" title="Sửa"></i>
             </a>
             <a (click)="deleteItem(idx)">
-              <i class="fa fa-trash-o do"></i>
+              <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>
         </ng-container>

@@ -53,7 +53,7 @@
             <div class="buttons">
                 <button type="button" class="btn btn-do" (click)="deleteMulti()"
                     *ngIf="userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_QDLCNT_XOA')">
-                    <i class="fa fa-trash-o do"></i>
+                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                     <span>Xóa</span>
                 </button>
                 <button type="button" class="btn btn-sub"
@@ -199,15 +199,15 @@
                             <a *ngIf="(!userService.isTongCuc() && userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_QDLCNT_XEM'))
                             || (userService.isTongCuc() && userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_QDLCNT_XEM') && (data.trangThai == STATUS.BAN_HANH))"
                                 (click)="goDetail(data.id)">
-                                <i class="fa fa-eye"></i>
+                                <i class="fa fa-eye" title="Xem chi tiết"></i>
                             </a>
                             <a *ngIf="userService.isTongCuc()&&(userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_QDLCNT_THEM') && (data.trangThai == STATUS.DANG_NHAP_DU_LIEU))"
                                 (click)="goDetail(data.id)">
-                                <i class="fa fa-pencil"></i>
+                                <i class="fa fa-pencil" title="Sửa"></i>
                             </a>
                             <a *ngIf="userService.isTongCuc()&&(userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_QDLCNT_XOA') && (data.trangThai == STATUS.DANG_NHAP_DU_LIEU))"
                                 (click)="delete(data)">
-                                <i class="fa fa-trash-o do"></i>
+                                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                             </a>
                         </td>
                     </tr>

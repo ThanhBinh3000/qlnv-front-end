@@ -147,8 +147,9 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự thảo'],
       lyDoTuChoi: [],
-      canCuQdTc: [, [Validators.required]],
-      soCanCuQdTc: [],
+      soCanCuQdTc: [, [Validators.required]],
+      canCuQdTc: [],
+      soDxuat: [],
       ngayTrinhDuyetTc: [],
       tongDuToanKp: [],
       tenLoaiHinhNhapXuat: [],
@@ -193,6 +194,15 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
 
   isChiCuc() {
     return this.userService.isChiCuc()
+  }
+
+  getTitle() {
+    if (this.formData.value.loaiDc === "DCNB")
+      return "QUYẾT ĐỊNH ĐIỀU CHUYỂN NỘI BỘ HÀNG TRONG CÙNG 1 CHI CỤC DTNN"
+    if (this.formData.value.loaiDc === "CHI_CUC")
+      return "QUYẾT ĐỊNH ĐIỀU CHUYỂN NỘI BỘ GIỮA CÁC CHI CỤC DTNN TRONG CÙNG 1 CỤC DTNN KV"
+    if (this.formData.value.loaiDc === "CUC")
+      return "QUYẾT ĐỊNH ĐIỀU CHUYỂN NỘI BỘ GIỮA 2 CỤC DTNN KV"
   }
 
   async loadChiTiet(id: number) {
@@ -348,7 +358,8 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
   async loadDsQuyetDinh(loaiDc, loaiQdinh?) {
     let body = {
       loaiDc,
-      loaiQdinh
+      loaiQdinh,
+      qDinhCucId: this.idInput
     };
     let res = await this.quyetDinhDieuChuyenTCService.dsQuyetDinh(body);
 
@@ -386,8 +397,9 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
       this.formData.patchValue({
         canCuQdTc: "",
         soCanCuQdTc: "",
+        soDxuat: "",
         ngayTrinhDuyetTc: "",
-        tongDuToanKp: ""
+        tongDuToanKp: "",
       })
 
       if (loaiDC) {
@@ -406,7 +418,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
   async onChangeLoaiQdinh(value) {
     if (value) {
       const loaiQD = this.listLoaiQD.find(item => item.value == value)
-      this.loadDsQuyetDinh(this.formData.value.loaiDC, value)
+      this.loadDsQuyetDinh(this.formData.value.loaiDc, value)
       if (loaiQD) {
         this.formData.patchValue({
           tenLoaiQdinh: loaiQD.text,
@@ -461,6 +473,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
         this.formData.patchValue({
           soCanCuQdTc: qdTC.soQdinh,
           canCuQdTc: qdTC.id,
+          soDxuat: qdTC.maDxuat,
           ngayTrinhDuyetTc: qdTC.ngayPduyet
         })
       }
@@ -484,7 +497,8 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
                 ...itemHH,
                 maLoNganKho: itemHH.maLoKho ? `${itemHH.maLoKho}${itemHH.maNganKho}` : itemHH.maNganKho,
                 maDvi: item.maDvi,
-                tenDvi: item.tenDvi
+                tenDvi: item.tenDvi,
+                soDxuat: item.soDxuat
               })
               tong = tong + itemHH.duToanKphi
             })
@@ -500,7 +514,8 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
             ...itemHH,
             maLoNganKho: itemHH.maLoKho ? `${itemHH.maLoKho}${itemHH.maNganKho}` : itemHH.maNganKho,
             maDvi: item.maDvi,
-            tenDvi: item.tenDvi
+            tenDvi: item.tenDvi,
+            soDxuat: item.soDxuat
           })
           tong = tong + itemHH.duToanKphi
         })
@@ -1077,7 +1092,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
   setValidator() {
     if (this.formData.value.loaiDc === "DCNB") {
       this.formData.controls["loaiQdinh"].clearValidators();
-      this.formData.controls["canCuQdTc"].clearValidators();
+      this.formData.controls["soCanCuQdTc"].clearValidators();
     }
     if (this.formData.value.loaiDc === "CHI_CUC") {
       this.formData.controls["loaiQdinh"].clearValidators();
@@ -1179,7 +1194,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
 
   isPheDuyet() {
     if (this.isCuc()) {
-      return (this.formData.value.trangThai == STATUS.CHO_DUYET_TP || this.formData.value.trangThai == STATUS.CHO_DUYET_LDC)
+      return (this.formData.value.trangThai == STATUS.CHO_DUYET_TP || this.formData.value.trangThai == STATUS.CHO_DUYET_LDC) //&& userService.isAccessPermisson('DCNB_QUYETDINHDC_DUYET_LDVU')
     }
     if (this.isChiCuc()) {
       return this.formData.value.trangThai == STATUS.CHODUYET_TBP_TVQT || this.formData.value.trangThai == STATUS.CHO_DUYET_LDCC

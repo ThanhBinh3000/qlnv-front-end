@@ -165,8 +165,6 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
     );
     this.userInfo = this.userService.getUserLogin();
     this.maDeXuat = '/' + this.userInfo.MA_TCKT;
-
-    // this.setTitle();
   }
 
   async ngOnInit() {
@@ -183,21 +181,6 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
     } finally {
       this.flagInit = true;
       this.spinner.hide();
-    }
-  }
-
-  async loadDsLoaiHinhNhapXuat() {
-    let res = await this.danhMucService.danhMucChungGetAll("LOAI_HINH_NHAP_XUAT");
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.listLoaiHinhNhapXuat = res.data.filter(item => item.phanLoai == 'VIEN_TRO_CUU_TRO');
-    }
-  }
-
-  async loadDsKieuNhapXuat() {
-    let res = await this.danhMucService.danhMucChungGetAll("KIEU_NHAP_XUAT");
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.listKieuNhapXuat = res.data.filter(item => item.apDung == 'XUAT_CTVT');
-      ;
     }
   }
 

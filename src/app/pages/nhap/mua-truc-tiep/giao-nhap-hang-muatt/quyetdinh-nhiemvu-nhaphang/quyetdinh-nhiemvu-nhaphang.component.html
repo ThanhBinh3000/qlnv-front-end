@@ -58,7 +58,7 @@
             <h3> DANH SÁCH QUYẾT ĐỊNH GIAO NHIỆM VỤ NHẬP HÀNG </h3>
             <div class="buttons">
                 <button type="button" class="btn btn-do" (click)="deleteSelect()" *ngIf="userService.isCuc()">
-                    <i class="fa fa-trash-o do"></i>
+                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                     <span>Xóa</span>
                 </button>
                 <button type="button" class="btn btn-sub" (click)="export()">
@@ -179,10 +179,10 @@
                             </a>
                             <a (click)="redirectToThongTin(data.id, false)"
                                 *ngIf="userService.isCuc() && ( data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_TP || data.trangThai == STATUS.TU_CHOI_LDC ) ">
-                                <i class="fa fa-pencil"></i>
+                                <i class="fa fa-pencil" title="Sửa"></i>
                             </a>
                             <a (click)="xoaItem(data)" *ngIf="userService.isCuc() && data.trangThai == STATUS.DU_THAO">
-                                <i class="fa fa-trash-o do"></i>
+                                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                             </a>
                         </td>
                     </tr>

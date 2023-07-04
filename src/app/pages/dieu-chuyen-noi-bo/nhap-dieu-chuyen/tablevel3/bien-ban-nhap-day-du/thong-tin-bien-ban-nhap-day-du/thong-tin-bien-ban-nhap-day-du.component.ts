@@ -142,7 +142,7 @@ export class ThongTinBienBanNhapDayDuComponent extends Base2Component implements
 
   async ngOnInit() {
     this.maBb = 'BBNDK-' + this.userInfo.DON_VI.tenVietTat;
-    let id = await this.userService.getId('DCNB_BB_NT_BQ_HDR_SEQ')
+    let id = await this.userService.getId('DCNB_BB_NDK_BQ_HDR_SEQ')
     this.formData.patchValue({
       maDvi: this.userInfo.MA_DVI,
       tenDvi: this.userInfo.TEN_DVI,

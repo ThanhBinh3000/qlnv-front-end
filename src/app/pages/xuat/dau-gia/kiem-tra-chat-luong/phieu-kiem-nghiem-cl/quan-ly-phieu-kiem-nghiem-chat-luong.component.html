@@ -171,13 +171,13 @@
                         ||(userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_KNCL_DUYET_LDCUC') && lv2.trangThai == STATUS.TU_CHOI_TP)
                         ||(userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_KNCL_DUYET_LDCUC') && lv2.trangThai == STATUS.TU_CHOI_LDC)"
                           (click)="goDetail(lv2.id)">
-                          <i class="fa fa-eye"></i>
+                          <i class="fa fa-eye" title="Xem chi tiết"></i>
                         </a>
                         <a *ngIf="(userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_KNCL_THEM') && lv2.trangThai == STATUS.DU_THAO)
                         ||(userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_KNCL_THEM') && lv2.trangThai == STATUS.TU_CHOI_TP)
                         ||(userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_KNCL_THEM') && lv2.trangThai == STATUS.TU_CHOI_LDC)"
                           (click)="goDetail(lv2.id)">
-                          <i class="fa fa-pencil"></i>
+                          <i class="fa fa-pencil" title="Sửa"></i>
                         </a>
                         <a *ngIf="(userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_KNCL_DUYET_TP') && lv2.trangThai == STATUS.CHO_DUYET_TP)
                         ||(userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_KNCL_DUYET_LDCUC') && lv2.trangThai == STATUS.CHO_DUYET_LDC)"
@@ -185,7 +185,7 @@
                           <i class="icon htvbdh_tcdt_pheduyet"></i>
                         </a>
                         <a  *ngIf="lv2.trangThai == STATUS.DU_THAO" (click)="delete(lv2)">
-                          <i class="fa fa-trash-o do"></i>
+                          <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                         </a>
                       </td>
                     </tr>

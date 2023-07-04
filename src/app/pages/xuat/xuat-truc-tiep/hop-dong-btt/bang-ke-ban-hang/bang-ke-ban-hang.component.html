@@ -56,7 +56,7 @@
                 <button type="button" class="btn btn-do"
                     (click)="deleteMulti(['XHDTQG_PTDG_KHBDG_VT_DEXUAT_XOA','XHDTQG_PTDG_KHBDG_LT_DEXUAT_XOA'])"
                     *ngIf="userService.isChiCuc()">
-                    <i class="fa fa-trash-o do"></i>
+                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                     <span>Xóa</span>
                 </button>
                 <button type="button" class="btn btn-sub" (click)="exportData('Danh-sach-bang-ke-ban-le.xlsx')">
@@ -203,10 +203,10 @@
                             'vi_VN'}}
                         <td class="text-left">
                             <a (click)="themMoiBangKeBanLe($event,data.id, i)">
-                                <i class="fa fa-eye"></i>
+                                <i class="fa fa-eye" title="Xem chi tiết"></i>
                             </a>
                             <a (click)="delete(data)">
-                                <i class="fa fa-trash-o do"></i>
+                                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                             </a>
                         </td>
                     </tr>

@@ -233,7 +233,7 @@
             <td class="text-left">
               <!--              <a *ngIf="loaiVthh.startsWith('02') ? ( (data.trangThaiDt == STATUS.HOAN_THANH_CAP_NHAT || data.trangThaiDt == STATUS.CHUA_CAP_NHAT || data.trangThaiDt == STATUS.DANG_CAP_NHAT) && userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_LT_TTDT_XEM')) : ( data.trangThai == STATUS.HOAN_THANH_CAP_NHAT || data.trangThai == STATUS.CHUA_CAP_NHAT || data.trangThai == STATUS.DANG_CAP_NHAT ) && userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_LT_TTDT_XEM')"-->
               <!--                (click)="redirectToChiTiet(data)">-->
-              <!--                <i class="fa fa-eye"></i>-->
+              <!--                <i class="fa fa-eye" title="Xem chi tiết"></i>-->
               <!--              </a>-->
               <!--              <a *ngIf="loaiVthh.startsWith('02') ? ( (data.trangThaiDt == STATUS.CHUA_CAP_NHAT || data.trangThaiDt == STATUS.DANG_CAP_NHAT) && userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_LT_TTDT_THEM')) : ( data.trangThai == STATUS.CHUA_CAP_NHAT || data.trangThai == STATUS.DANG_CAP_NHAT) && userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_LT_TTDT_THEM')"-->
               <!--                (click)="redirectToChiTiet(data)">-->
@@ -241,7 +241,7 @@
               <!--              </a>-->
               <a *ngIf="loaiVthh.startsWith('02') ? data.trangThaiDt == STATUS.HOAN_THANH_CAP_NHAT && userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_LT_TTDT_XEM') ? true : (data.trangThaiDt != STATUS.HOAN_THANH_CAP_NHAT && userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_LT_TTDT_XEM') && !userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_LT_TTDT_SUA') ? true : false) : data.trangThai == STATUS.HOAN_THANH_CAP_NHAT && userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_LT_TTDT_XEM') ? true : (data.trangThai != STATUS.HOAN_THANH_CAP_NHAT && userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_LT_TTDT_XEM') && !userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_LT_TTDT_SUA') ? true : false)"
                 (click)="redirectToChiTiet(data, 'NHDTQG_PTDT_TCKHLCNT_LT_TTDT_XEM')">
-                <i class="fa fa-eye"></i>
+                <i class="fa fa-eye" title="Xem chi tiết"></i>
               </a>
               <a *ngIf="loaiVthh.startsWith('02') ? (data.trangThaiDt == STATUS.CHUA_CAP_NHAT || data.trangThaiDt == STATUS.DANG_CAP_NHAT) && userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_VT_TTDT_SUA') : ( (data.trangThai == STATUS.CHUA_CAP_NHAT || data.trangThai == STATUS.DANG_CAP_NHAT) && userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_LT_TTDT_SUA'))"
                  (click)="redirectToChiTiet(data, !loaiVthh.startsWith('02') ? 'NHDTQG_PTDT_TCKHLCNT_LT_TTDT_SUA' : 'NHDTQG_PTDT_TCKHLCNT_VT_TTDT_SUA')">

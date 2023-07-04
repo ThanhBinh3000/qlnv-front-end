@@ -108,6 +108,7 @@
               <th>Ngày tổng hợp (chốt DS)</th>
               <th>Trạng thái</th>
               <th>Mã danh sách</th>
+              <th>Hành động</th>
             </tr>
             </thead>
             <tbody>
@@ -117,6 +118,7 @@
                     [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true" style="width: 35px">
                   {{item.tenChiCuc}}
                 </td>
+                <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -146,6 +148,11 @@
                     <td>{{lv1.ngayTongHop|date:globals.dateFormat}}</td>
                     <td>{{lv1.tenTrangThai}}</td>
                     <td>{{lv1.maTongHop}}</td>
+                    <td><a *ngIf="lv1.id" nzType="link"
+                           (click)="openDsModal(lv1.id)">
+                      <i class="fa fa-eye"></i>
+                    </a>
+                    </td>
                   </tr>
                 </ng-container>
               </ng-container>
@@ -176,8 +183,21 @@
     </nz-card>
   </div>
 </div>
+
+<nz-modal class="scroll-nz-modal" [nzWidth]="'50%'" [(nzVisible)]="openDs" (nzOnCancel)="closeDsModal()">
+  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+    <app-xk-thong-tin-danh-sach-hdtqg-het-han [idInput]="idDs" [isView]="true">
+    </app-xk-thong-tin-danh-sach-hdtqg-het-han>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button (click)="closeDsModal()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>
 <div>
-  <app-tong-hop-ds-hang-dtqg-hethan-luukho-chua-co-kh-xuat *ngIf="tongHop"  [openModal]="true">
+  <app-tong-hop-ds-hang-dtqg-hethan-luukho-chua-co-kh-xuat *ngIf="tongHop" [openModal]="true">
   </app-tong-hop-ds-hang-dtqg-hethan-luukho-chua-co-kh-xuat>
 </div>
 

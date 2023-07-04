@@ -32,7 +32,7 @@
       <h3>Danh sách biên bản chuẩn bị kho</h3>
       <div class="buttons">
         <button type="button" class="btn btn-do" (click)="deleteSelect()" *ngIf="userService.isChiCuc()">
-          <i class="fa fa-trash-o do"></i>
+          <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
           <span>Xóa</span>
         </button>
         <button type="button" class="btn btn-sub" (click)="export()">
@@ -99,13 +99,13 @@
                 <td>{{bbCbKho.tenTrangThai}}</td>
                 <td>
                   <a *ngIf="bbCbKho.trangThai == STATUS.DA_DUYET_LDCC" (click)="redirectToChiTiet(false, bbCbKho.id)">
-                    <i class="fa fa-eye"></i>
+                    <i class="fa fa-eye" title="Xem chi tiết"></i>
                   </a>
                   <a *ngIf="bbCbKho.trangThai != STATUS.DA_DUYET_LDCC" (click)="redirectToChiTiet(false, bbCbKho.id)">
-                    <i class="fa fa-pencil"></i>
+                    <i class="fa fa-pencil" title="Sửa"></i>
                   </a>
                   <a *ngIf="bbCbKho.trangThai == STATUS.DU_THAO" (click)="xoaItem(bbCbKho)">
-                    <i class="fa fa-trash-o do"></i>
+                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                   </a>
                 </td>
               </tr>

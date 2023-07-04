@@ -58,7 +58,7 @@
             <h3>Danh sách hàng thuộc diện thanh lý</h3>
             <div class="buttons">
                 <button *ngIf="isShowUpdate" type="button" class="btn btn-sub btn-xoa" (click)="xoa()">
-                    <i class="fa fa-trash-o do"></i>
+                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                     <span>Xóa</span>
                 </button>
                 <button type="button" class="btn btn-sub" (click)="exportData()">
@@ -135,13 +135,13 @@
                         <td>{{ data.tenTrangThaiCuc }}</td>
                         <td style="text-align: left; white-space: nowrap;">
                             <a (click)="viewDetail(data.id, true)" *ngIf="data.trangThaiChiCuc == STATUS.CHO_DUYET_KTVBQ || data.trangThaiChiCuc == STATUS.CHO_DUYET_KT || data.trangThaiChiCuc == STATUS.DA_DUYET_LDCC || data.trangThaiChiCuc == STATUS.CHO_DUYET_LDCC " >
-                                <i class="fa fa-eye"></i>
+                                <i class="fa fa-eye" title="Xem chi tiết"></i>
                             </a>
                             <a *ngIf="userService.isChiCuc() && (data.trangThaiChiCuc == STATUS.DU_THAO || data.trangThaiChiCuc == STATUS.TU_CHOI_KTVBQ || data.trangThaiChiCuc == STATUS.TU_CHOI_LDCC || data.trangThaiChiCuc == STATUS.TU_CHOI_KT)" (click)="viewDetail(data.id, false)">
-                                <i class="fa fa-pencil"></i>
+                                <i class="fa fa-pencil" title="Sửa"></i>
                             </a>
                             <a *ngIf="userService.isChiCuc() && data.trangThaiChiCuc == STATUS.DU_THAO" (click)="xoaItem(data.id)">
-                                <i class="fa fa-trash-o do"></i>
+                                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                             </a>
                         </td>
                     </tr>

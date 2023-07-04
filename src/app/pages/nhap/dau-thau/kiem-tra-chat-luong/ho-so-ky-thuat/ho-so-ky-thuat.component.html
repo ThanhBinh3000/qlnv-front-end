@@ -48,7 +48,7 @@
       <div class="buttons">
         <button type="button" class="btn btn-do" (click)="deleteSelect()"
           *ngIf="userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_VT_HSKT_XOA')">
-          <i class="fa fa-trash-o do"></i>
+          <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
           <span>Xóa</span>
         </button>
         <button *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KTCL_VT_HSKT_EXP')" type="button" class="btn btn-sub"
@@ -166,16 +166,16 @@
             <td>
               <a *ngIf="data.trangThai == STATUS.DA_DUYET_LDC && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_VT_HSKT_XEM')"
                 (click)="redirectToChiTiet(true, data.id)">
-                <i class="fa fa-eye"></i>
+                <i class="fa fa-eye" title="Xem chi tiết"></i>
               </a>
               <a *ngIf="(data.trangThai != STATUS.DA_DUYET_LDC ) && userService.isCuc()
               && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_VT_HSKT_THEM')"
                 (click)="redirectToChiTiet(false, data.id)">
-                <i class="fa fa-pencil"></i>
+                <i class="fa fa-pencil" title="Sửa"></i>
               </a>
               <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isCuc() && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_VT_HSKT_XOA')"
                 (click)="xoaItem(data)">
-                <i class="fa fa-trash-o do"></i>
+                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
               </a>
             </td>
           </tr>

@@ -75,7 +75,7 @@
       <h3 class="text-uppercase">DANH SÁCH KẾ HOẠCH ĐIỀU CHUYỂN NỘI BỘ HÀNG DTQG</h3>
       <div class="buttons">
         <button type="button" class="btn btn-do"  *ngIf="userService.isChiCuc() && userService.isAccessPermisson('DCNB_KHDC_XOA')" (click)="deleteMulti()">
-          <i class="fa fa-trash-o do"></i>
+          <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
           <span>Xóa</span>
         </button>
         <button type="button" class="btn btn-sub" *ngIf="userService.isAccessPermisson('DCNB_KHDC_EXP')" (click)="exportData('ke-hoach-dieu-chuyen-noi-bo.xlsx')">

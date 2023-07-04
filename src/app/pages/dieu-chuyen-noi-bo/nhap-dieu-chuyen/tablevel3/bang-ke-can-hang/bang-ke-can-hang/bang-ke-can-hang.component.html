@@ -48,7 +48,7 @@
         <div class="buttons">
           <button type="button" class="btn btn-do" (click)="deleteMulti()"
             *ngIf="userService.isAccessPermisson('DCNB_QUYETDINHDC_XOA') && isTongCuc()">
-            <i class="fa fa-trash-o do"></i>
+            <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             <span>Xóa</span>
           </button>
           <button type="button" class="btn btn-sub" (click)="exportDataTC()">
@@ -89,7 +89,7 @@
                 <td [nzExpand]="row1.expand"
                   (nzExpandChange)="row1.expand=!row1.expand; row1.children=setExpand(row1.expand, row1.children)">
                 </td>
-                <td class="bold">{{ row1.soQdinh || "" }}</td>
+                <td class="bold text-blue" (click)="openDialogQD(row1)">{{ row1.soQdinh || "" }}</td>
                 <td class="bold">{{ row1.nam || "" }}</td>
                 <td class="bold">{{row1.thoiHanDieuChuyen|date: "dd/MM/yyyy"}}</td>
                 <td></td>
@@ -156,13 +156,13 @@
                           <td class="bold">{{row4.tenTrangThai || ""}}</td>
                           <td>
                             <a *ngIf="row4.trangThai !== STATUS.DU_THAO" (click)="redirectDetail(row4.id, true)">
-                              <i class="fa fa-eye"></i>
+                              <i class="fa fa-eye" title="Xem chi tiết"></i>
                             </a>
                             <a *ngIf="row4.trangThai == STATUS.DU_THAO" (click)="redirectDetail(row4.id, false)">
-                              <i class="fa fa-pencil"></i>
+                              <i class="fa fa-pencil" title="Sửa"></i>
                             </a>
                             <a *ngIf="row4.trangThai == STATUS.DU_THAO" (click)="xoa(row4)">
-                              <i class="fa fa-trash-o do"></i>
+                              <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                             </a>
                           </td>
                         </tr>

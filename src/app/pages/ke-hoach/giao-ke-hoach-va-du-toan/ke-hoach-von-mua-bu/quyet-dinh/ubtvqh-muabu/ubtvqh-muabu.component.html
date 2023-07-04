@@ -64,7 +64,7 @@
       <div class="buttons">
         <button *ngIf=" userService.isTongCuc() && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VMBBS_QD_UBTV_XOA')"
           type="button" class="btn btn-sub btn-xoa" (click)="xoa()">
-          <i class="fa fa-trash-o do"></i>
+          <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
           <span>Xóa</span>
         </button>
         <button *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VMBBS_QD_UBTV_EXP')" type="button"
@@ -166,15 +166,15 @@
             <td style="text-align: left; white-space: nowrap;">
               <a *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VMBBS_QD_UBTV_XEM')"
                 (click)="viewDetail(data.id, true)">
-                <i class="fa fa-eye"></i>
+                <i class="fa fa-eye" title="Xem chi tiết"></i>
               </a>
               <a *ngIf="(data.trangThai == STATUS.DANG_NHAP_DU_LIEU && userService.isTongCuc()) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VMBBS_QD_UBTV_THEM')"
                 (click)="viewDetail(data.id, false)">
-                <i class="fa fa-pencil"></i>
+                <i class="fa fa-pencil" title="Sửa"></i>
               </a>
               <a *ngIf="(data.trangThai == STATUS.DANG_NHAP_DU_LIEU && userService.isTongCuc()) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VMBBS_QD_UBTV_XOA')"
                 (click)="xoaItem(data)">
-                <i class="fa fa-trash-o do"></i>
+                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
               </a>
             </td>
           </tr>

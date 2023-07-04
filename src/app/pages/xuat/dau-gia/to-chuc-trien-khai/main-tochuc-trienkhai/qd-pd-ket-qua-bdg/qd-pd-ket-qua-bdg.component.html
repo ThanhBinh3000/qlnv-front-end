@@ -62,7 +62,7 @@
       <button *ngIf="loaiVthh.startsWith('02') ? userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG_VT_QDKQDG_XOA'):
          userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG_LT_QDKQDG_XOA')" type="button" class="btn btn-do"
         (click)="deleteMulti()">
-        <i class="fa fa-trash-o do"></i>
+        <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
         <span>Xóa</span>
       </button>
       <button *ngIf="loaiVthh.startsWith('02') ? userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG_VT_QDKQDG_EXP'):
@@ -240,7 +240,7 @@
             ||(userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG_LT_QDKQDG_DUYET_LDC') && data.trangThai == STATUS.TU_CHOI_TP)
             ||(userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG_LT_QDKQDG_DUYET_LDC') && data.trangThai == STATUS.TU_CHOI_LDC)"
               (click)=" goDetail(data.id)">
-              <i class="fa fa-eye"></i>
+              <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
             <a *ngIf="loaiVthh.startsWith('02') ?
             (userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG_VT_QDKQDG_THEM') && data.trangThai == STATUS.DU_THAO)
@@ -250,7 +250,7 @@
             ||(userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG_LT_QDKQDG_THEM') && data.trangThai == STATUS.TU_CHOI_TP)
             ||(userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG_LT_QDKQDG_THEM') && data.trangThai == STATUS.TU_CHOI_LDC)"
               (click)="goDetail(data.id)">
-              <i class="fa fa-pencil"></i>
+              <i class="fa fa-pencil" title="Sửa"></i>
             </a>
             <a *ngIf="loaiVthh.startsWith('02') ?
             (userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG_VT_QDKQDG_DUYET_TP') && data.trangThai == STATUS.CHO_DUYET_TP)
@@ -264,7 +264,7 @@
             (data.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG_VT_QDKQDG_XOA')):
             (data.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG_LT_QDKQDG_XOA')) "
               (click)="delete(data)">
-              <i class="fa fa-trash-o do"></i>
+              <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>
         </tr>

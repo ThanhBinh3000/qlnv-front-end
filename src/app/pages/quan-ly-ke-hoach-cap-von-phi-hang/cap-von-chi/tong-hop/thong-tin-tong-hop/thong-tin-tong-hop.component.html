@@ -179,7 +179,7 @@
           <td>{{ data.ycCapThem | number : '1.0-1' : 'vi_VN' }}</td>
           <td class="text-left">
             <a *ngIf="!data.isSum" (click)="goToDetail(data, true)">
-              <i class="fa fa-eye"></i>
+              <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
           </td>
         </tr>
@@ -249,7 +249,7 @@
             <!--                    <i class="fa fa-plus"></i>-->
             <!--                  </a>-->
             <!--                  <a (click)="clearItemRow()">-->
-            <!--                    <i class="fa fa-trash-o do"></i>-->
+            <!--                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>-->
             <!--                  </a>-->
             <!--                </td>-->
             <!--              </tr>-->
@@ -266,10 +266,10 @@
                 <td>{{data.tcCapThem | number : '1.0-1' : 'vi_VN'}}</td>
                 <td >
                   <a (click)="editRow(data.stt)" *ngIf="!data.isSum  &&  !(isDisableField() || isView)">
-                    <i class="fa fa-pencil"></i>
+                    <i class="fa fa-pencil" title="Sửa"></i>
                   </a>
                   <!--                    <a (click)="deleteRow(data)">-->
-                  <!--                      <i class="fa fa-trash-o do"></i>-->
+                  <!--                      <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>-->
                   <!--                    </a>-->
                 </td>
               </ng-container>

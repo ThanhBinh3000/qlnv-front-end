@@ -64,7 +64,7 @@
       <h3> DANH SÁCH TỔNG HỢP KẾ HOẠCH MUA TRỰC TIẾP </h3>
       <div class="buttons">
         <button type="button" class="btn btn-do" (click)="deleteMulti(['NHDTQG_PTMTT_KHMTT_TONGHOP_XOA'])">
-          <i class="fa fa-trash-o do"></i>
+          <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
           <span>Xóa</span>
         </button>
         <button type="button" class="btn btn-sub"
@@ -166,7 +166,7 @@
             <td class="text-left">
               <a (click)="goDetail(data.id, 'NHDTQG_PTMTT_KHMTT_TONGHOP_XEM')"
                 *ngIf=" (data.trangThai == STATUS.CHUA_TAO_QD ||data.trangThai==STATUS.DA_BAN_HANH_QD || data.trangThai == STATUS.DA_DU_THAO_QD ) && userService.isAccessPermisson('NHDTQG_PTMTT_KHMTT_TONGHOP_XEM')">
-                <i class="fa fa-eye"></i>
+                <i class="fa fa-eye" title="Xem chi tiết"></i>
               </a>
               <a *ngIf=" ( data.trangThai == STATUS.CHUA_TAO_QD || data.trangThai == STATUS.DA_DU_THAO_QD || data.trangThai==STATUS.DA_BAN_HANH_QD ) && userService.isAccessPermisson('NHDTQG_PTMTT_KHMTT_TONGHOP_TONGHOP')"
                 (click)="taoQdinh(data)">
@@ -174,7 +174,7 @@
               </a>
               <a *ngIf="( data.trangThai== STATUS.CHUA_TAO_QD || data.trangThai == STATUS.DA_DU_THAO_QD ) && (userService.isAccessPermisson('NHDTQG_PTMTT_KHMTT_TONGHOP_XOA'))"
                 (click)="delete(data)">
-                <i class="fa fa-trash-o do"></i>
+                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
               </a>
             </td>
           </tr>

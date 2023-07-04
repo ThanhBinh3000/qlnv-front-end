@@ -259,10 +259,10 @@
                             <td class="text-center" nzRight
                                 *ngIf="!isViewDetail && formData.value.trangThai == STATUS.DU_THAO">
                               <a (click)="themMoiItem(children, 'sua', y,  item.dataChild)">
-                                <i class="fa fa-pencil"></i>
+                                <i class="fa fa-pencil" title="Sửa"></i>
                               </a>
                               <a (click)="deleteRow(children)">
-                                <i class="fa fa-trash-o do"></i>
+                                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                               </a>
                             </td>
                           </tr>
