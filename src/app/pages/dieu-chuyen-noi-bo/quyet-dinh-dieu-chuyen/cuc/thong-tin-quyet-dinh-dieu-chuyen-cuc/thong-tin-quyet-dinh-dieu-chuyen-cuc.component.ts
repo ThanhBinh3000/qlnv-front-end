@@ -357,7 +357,8 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
   async loadDsQuyetDinh(loaiDc, loaiQdinh?) {
     let body = {
       loaiDc,
-      loaiQdinh
+      loaiQdinh,
+      qDinhCucId: this.idInput
     };
     let res = await this.quyetDinhDieuChuyenTCService.dsQuyetDinh(body);
 

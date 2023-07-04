@@ -513,9 +513,6 @@
       </div> -->
 
       <nz-collapse nzAccordion>
-        <!-- <nz-collapse-panel #collapseExpand [nzActive]="true" nzHeader="KẾ HOẠCH DTQG GIAO TỪNG BỘ/NGÀNH"
-                       class="mg-t-10" [nzExtra]="extraTpl">
-                      </nz-collapse-panel> -->
         <nz-collapse-panel [nzHeader]="getTitle()" [nzActive]="true" [nzExtra]="extraTpl">
           <ng-template #extraTpl>
             <button *ngIf="!isView && formData.value.loaiDc === 'DCNB'" type="button" class="btn btn-sub xanh"
