@@ -9,7 +9,7 @@ export const ROUTE_LIST: Array<ChiTietMenu> = [
     idHover: 'danh-sach',
     caps: [1],
     hasTab: false,
-    // accessPermisson: 'DCNB_KHDC'
+    accessPermisson: 'SCHDTQG_DSCSC'
   },
   {
     icon: 'htvbdh_tcdt_chitieukehoachnam',
@@ -19,7 +19,7 @@ export const ROUTE_LIST: Array<ChiTietMenu> = [
     idHover: 'tong-hop',
     hasTab: false,
     caps: [1],
-    accessPermisson: 'DCNB_TONGHOPDC'
+    accessPermisson: 'SCHDTQG_THDSCSC'
   },
   {
     icon: 'htvbdh_tcdt_chitieukehoachnam',
@@ -29,7 +29,7 @@ export const ROUTE_LIST: Array<ChiTietMenu> = [
     idHover: 'trinh-tham-dinh',
     hasTab: false,
     caps: [1],
-    accessPermisson: 'DCNB_TONGHOPDC'
+    accessPermisson: 'SCHDTQG_HSSC'
   },
   {
     icon: 'htvbdh_tcdt_chitieukehoachnam',
@@ -38,7 +38,7 @@ export const ROUTE_LIST: Array<ChiTietMenu> = [
     dropdown: 'quyet-dinh',
     idHover: 'quyet-dinh',
     hasTab: false,
-    accessPermisson: 'DCNB_QUYETDINHDC'
+    accessPermisson: 'SCHDTQG_QDSC'
   },
   {
     icon: 'htvbdh_tcdt_chitieukehoachnam',
@@ -48,7 +48,7 @@ export const ROUTE_LIST: Array<ChiTietMenu> = [
     idHover: 'xuat-hang',
     hasTab: false,
     caps: [1, 2, 3],
-    accessPermisson: 'DCNB_KHDC'
+    accessPermisson: 'SCHDTQG_XH'
   },
   {
     icon: 'htvbdh_tcdt_chitieukehoachnam',
@@ -57,7 +57,7 @@ export const ROUTE_LIST: Array<ChiTietMenu> = [
     dropdown: 'kiem-tra-cl',
     idHover: 'kiem-tra-cl',
     hasTab: false,
-    // accessPermisson: 'DCNB_KHDC'
+    accessPermisson: 'SCHDTQG_KTCL'
   },
   {
     icon: 'htvbdh_tcdt_chitieukehoachnam',
@@ -66,7 +66,7 @@ export const ROUTE_LIST: Array<ChiTietMenu> = [
     dropdown: 'nhap-hang',
     idHover: 'nhap-hang',
     hasTab: false,
-    // accessPermisson: 'DCNB_KHDC'
+    accessPermisson: 'SCHDTQG_NH'
   },
   {
     icon: 'htvbdh_tcdt_chitieukehoachnam',

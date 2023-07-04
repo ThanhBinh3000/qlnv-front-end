@@ -41,6 +41,7 @@ export class Base3Component implements OnInit {
   // Form search and dataTable
   formData: FormGroup
   dataTable: any[] = [];
+  dataTableView : any[] = [];
   dataTableAll: any[] = [];
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
@@ -169,35 +170,8 @@ export class Base3Component implements OnInit {
     await this.search();
   }
 
-  expandSet = new Set<number>();
-
-  onExpandChange(id: number, checked: boolean): void {
-    if (checked) {
-      this.expandSet.add(id);
-    } else {
-      this.expandSet.delete(id);
-    }
-  }
-
-  expandSet2 = new Set<number>();
-
-  onExpandChange2(id: number, checked: boolean): void {
-    if (checked) {
-      this.expandSet2.add(id);
-    } else {
-      this.expandSet2.delete(id);
-    }
-  }
-
-
-  expandSet3 = new Set<number>();
-
-  onExpandChange3(id: number, checked: boolean): void {
-    if (checked) {
-      this.expandSet3.add(id);
-    } else {
-      this.expandSet3.delete(id);
-    }
+  onExpandChange(item: any, checked: boolean): void {
+    item.expandSet = checked
   }
 
   filterInTable(key: string, value: string, type?: string) {
@@ -289,6 +263,7 @@ export class Base3Component implements OnInit {
           this.service.delete(body).then(async () => {
             await this.search();
             this.spinner.hide();
+            this.notification.success(MESSAGE.SUCCESS,MESSAGE.DELETE_SUCCESS);
           });
         } catch (e) {
           console.log('error: ', e);
@@ -375,6 +350,8 @@ export class Base3Component implements OnInit {
     try {
       this.helperService.markFormGroupTouched(this.formData);
       if (this.formData.invalid) {
+        this.notification.info(MESSAGE.NOTIFICATION, MESSAGE.FORM_REQUIRED_ERROR);
+        this.spinner.hide();
         return;
       }
       let res = null;
@@ -671,5 +648,7 @@ export class Base3Component implements OnInit {
       this.id = +id
     }
   }
+
+
 
 }
