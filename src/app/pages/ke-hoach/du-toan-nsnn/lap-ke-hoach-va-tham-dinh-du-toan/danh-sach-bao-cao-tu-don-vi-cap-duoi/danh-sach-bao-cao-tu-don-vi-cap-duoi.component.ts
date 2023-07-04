@@ -1,12 +1,10 @@
 
-import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import * as fileSaver from 'file-saver';
 import { cloneDeep } from 'lodash';
-import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { TRANG_THAI_GUI_DVCT, Utils } from 'src/app/Utility/utils';
+import { Status, Utils } from 'src/app/Utility/utils';
 import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
@@ -21,6 +19,8 @@ import { Globals } from 'src/app/shared/globals';
 })
 export class DanhSachBaoCaoTuDonViCapDuoiComponent implements OnInit {
     @Output() dataChange = new EventEmitter();
+    Status = Status;
+    Utils = Utils;
 
     searchFilter = {
         loaiTimKiem: '1',
@@ -33,7 +33,6 @@ export class DanhSachBaoCaoTuDonViCapDuoiComponent implements OnInit {
     };
 
     userInfo: any;
-    trangThais: any = TRANG_THAI_GUI_DVCT;
     donVis: any[] = [];
     dataTable: any[] = [];
     dataTableAll: any[] = [];
@@ -46,22 +45,13 @@ export class DanhSachBaoCaoTuDonViCapDuoiComponent implements OnInit {
     totalPages = 0;
     allChecked = false;
 
-    filterTable: any = {
-        soQd: '',
-        ngayKy: '',
-        namKeHoach: '',
-        trichYeu: '',
-        tenTrangThai: '',
-    };
     constructor(
         private spinner: NgxSpinnerService,
         private lapThamDinhService: LapThamDinhService,
         private notification: NzNotificationService,
         private quanLyVonPhiService: QuanLyVonPhiService,
-        private modal: NzModalService,
         private danhMuc: DanhMucHDVService,
         public userService: UserService,
-        private datePipe: DatePipe,
         public globals: Globals,
     ) { }
 
@@ -97,15 +87,15 @@ export class DanhSachBaoCaoTuDonViCapDuoiComponent implements OnInit {
         if (this.searchFilter.trangThai) {
             trangThais = [this.searchFilter.trangThai];
         } else {
-            trangThais = [Utils.TT_BC_7, Utils.TT_BC_8, Utils.TT_BC_9]
+            trangThais = [Status.TT_07, Status.TT_08, Status.TT_09];
         }
         const requestReport = {
             loaiTimKiem: this.searchFilter.loaiTimKiem,
             maBcaos: !this.searchFilter.maBaoCao ? [] : [this.searchFilter.maBaoCao],
             maDvi: this.searchFilter.donViTao,
             namBcao: this.searchFilter.nam,
-            ngayTaoDen: this.datePipe.transform(this.searchFilter.denNgay, Utils.FORMAT_DATE_STR),
-            ngayTaoTu: this.datePipe.transform(this.searchFilter.tuNgay, Utils.FORMAT_DATE_STR),
+            ngayTaoDen: Utils.fmtDate(this.searchFilter.denNgay),
+            ngayTaoTu: Utils.fmtDate(this.searchFilter.tuNgay),
             paggingReq: {
                 limit: this.pages.size,
                 page: this.pages.page,
@@ -119,9 +109,6 @@ export class DanhSachBaoCaoTuDonViCapDuoiComponent implements OnInit {
                     this.dataTable.push({
                         ...item,
                         congVan: JSON.parse(item.congVan),
-                        ngayTao: this.datePipe.transform(item.ngayTao, Utils.FORMAT_DATE_STR),
-                        ngayPheDuyet: this.datePipe.transform(item.ngayPheDuyet, Utils.FORMAT_DATE_STR),
-                        ngayTraKq: this.datePipe.transform(item.ngayTraKq, Utils.FORMAT_DATE_STR),
                     })
                 })
                 this.dataTableAll = cloneDeep(this.dataTable);
@@ -163,10 +150,6 @@ export class DanhSachBaoCaoTuDonViCapDuoiComponent implements OnInit {
         return this.donVis.find(e => e.maDvi == maDvi)?.tenDvi;
     }
 
-    getStatusName(trangThai: string) {
-        return this.trangThais.find(e => e.id == trangThai)?.ten;
-    }
-
     //them moi bao cao
     addNewReport() {
 
@@ -191,26 +174,5 @@ export class DanhSachBaoCaoTuDonViCapDuoiComponent implements OnInit {
                 this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
             },
         );
-    }
-
-    // Tìm kiếm trong bảng
-    filterInTable(key: string, value: string, isDate: boolean) {
-        if (value && value != '') {
-            this.dataTable = [];
-            let temp = [];
-            if (this.dataTableAll && this.dataTableAll.length > 0) {
-                if (isDate) {
-                    value = this.datePipe.transform(value, Utils.FORMAT_DATE_STR);
-                }
-                this.dataTableAll.forEach((item) => {
-                    if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
-                        temp.push(item)
-                    }
-                });
-            }
-            this.dataTable = [...this.dataTable, ...temp];
-        } else {
-            this.dataTable = cloneDeep(this.dataTableAll);
-        }
     }
 }

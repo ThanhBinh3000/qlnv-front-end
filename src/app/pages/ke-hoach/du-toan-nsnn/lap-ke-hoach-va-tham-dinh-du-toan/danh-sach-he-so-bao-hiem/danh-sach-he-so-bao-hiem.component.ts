@@ -4,8 +4,7 @@ import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { GeneralFunction } from 'src/app/Utility/func';
-import { LTD, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { Roles, Status, Utils } from 'src/app/Utility/utils';
 import { MESSAGE } from 'src/app/constants/message';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
 import { UserService } from 'src/app/services/user.service';
@@ -18,16 +17,17 @@ import { DialogTaoMoiTyLeBaoHiemComponent } from '../dialog-tao-moi-ty-le-bao-hi
 })
 export class DanhSachHeSoBaoHiemComponent implements OnInit {
     @Output() dataChange = new EventEmitter();
+    Status = Status;
+    Utils = Utils;
 
     searchFilter = {
         nam: null,
         tuNgay: null,
         denNgay: null,
-        trangThai: Utils.TT_BC_1,
+        trangThai: Status.TT_01,
     };
 
     userInfo: any;
-    trangThais: any = TRANG_THAI_TIM_KIEM;
     dataTable: any[] = [];
     dataTableAll: any[] = [];
 
@@ -48,7 +48,6 @@ export class DanhSachHeSoBaoHiemComponent implements OnInit {
         private notification: NzNotificationService,
         private modal: NzModalService,
         public userService: UserService,
-        public gen: GeneralFunction,
         public globals: Globals,
     ) { }
 
@@ -61,12 +60,12 @@ export class DanhSachHeSoBaoHiemComponent implements OnInit {
         newDate.setMonth(newDate.getMonth() - 1);
         this.searchFilter.tuNgay = newDate;
         //check quyen va cac nut chuc nang
-        this.statusNewReport = this.userService.isAccessPermisson(LTD.ADD_COEFFCIENT_INSURANCE);
-        this.statusDelete = this.userService.isAccessPermisson(LTD.DELETE_COEFFCIENT_INSURANCE);
-        if (this.userService.isAccessPermisson(LTD.DUYET_COEFFCIENT_INSURANCE)) {
+        this.statusNewReport = this.userService.isAccessPermisson(Roles.LTD.ADD_COEFFCIENT_INSURANCE);
+        this.statusDelete = this.userService.isAccessPermisson(Roles.LTD.DELETE_COEFFCIENT_INSURANCE);
+        if (this.userService.isAccessPermisson(Roles.LTD.DUYET_COEFFCIENT_INSURANCE)) {
             this.searchFilter.trangThai = Utils.TT_BC_2;
         } else {
-            if (this.userService.isAccessPermisson(LTD.PHE_DUYET_COEFFCIENT_INSURANCE)) {
+            if (this.userService.isAccessPermisson(Roles.LTD.PHE_DUYET_COEFFCIENT_INSURANCE)) {
                 this.searchFilter.trangThai = Utils.TT_BC_4;
             }
         }
@@ -82,8 +81,8 @@ export class DanhSachHeSoBaoHiemComponent implements OnInit {
         }
         const requestReport = {
             namBcao: this.searchFilter.nam,
-            ngayTaoDen: this.gen.fmtDate(this.searchFilter.denNgay),
-            ngayTaoTu: this.gen.fmtDate(this.searchFilter.tuNgay),
+            ngayTaoDen: Utils.fmtDate(this.searchFilter.denNgay),
+            ngayTaoTu: Utils.fmtDate(this.searchFilter.tuNgay),
             paggingReq: {
                 limit: this.pages.size,
                 page: this.pages.page,
@@ -135,17 +134,13 @@ export class DanhSachHeSoBaoHiemComponent implements OnInit {
     }
 
     checkEditStatus(item: any) {
-        return [Utils.TT_BC_1, Utils.TT_BC_3, Utils.TT_BC_5].includes(item.trangThai) &&
-            this.userService.isAccessPermisson(LTD.EDIT_COEFFCIENT_INSURANCE);
+        return Status.check('saveWOHist', item.trangThai) &&
+            this.userService.isAccessPermisson(Roles.LTD.EDIT_COEFFCIENT_INSURANCE);
     }
 
     checkDeleteStatus(item: any) {
-        return [Utils.TT_BC_1, Utils.TT_BC_3, Utils.TT_BC_5].includes(item.trangThai) &&
-            this.userService.isAccessPermisson(LTD.DELETE_COEFFCIENT_INSURANCE);
-    }
-
-    getStatusName(trangThai: string) {
-        return this.trangThais.find(e => e.id == trangThai)?.tenDm;
+        return Status.check('saveWOHist', item.trangThai) &&
+            this.userService.isAccessPermisson(Roles.LTD.DELETE_COEFFCIENT_INSURANCE);
     }
 
     //them moi bao cao

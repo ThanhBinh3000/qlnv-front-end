@@ -4,7 +4,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { FileManip, LTD, Status, Utils } from 'src/app/Utility/utils';
+import { FileManip, Roles, Status, Utils } from 'src/app/Utility/utils';
 import { DialogChonThemBieuMauComponent } from 'src/app/components/dialog/dialog-chon-them-bieu-mau/dialog-chon-them-bieu-mau.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
@@ -236,16 +236,16 @@ export class BaoCaoComponent implements OnInit {
         this.isChild = this.userInfo.MA_DVI == this.baoCao.maDvi;
         this.isParent = this.userInfo.MA_DVI == this.baoCao.maDviCha;
         //kiem tra quyen cua cac user
-        const checkSave = isSynthetic ? this.userService.isAccessPermisson(LTD.EDIT_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(LTD.EDIT_REPORT);
-        const checkSunmit = isSynthetic ? this.userService.isAccessPermisson(LTD.APPROVE_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(LTD.APPROVE_REPORT);
-        const checkPass = isSynthetic ? this.userService.isAccessPermisson(LTD.DUYET_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(LTD.DUYET_REPORT);
-        const checkApprove = isSynthetic ? this.userService.isAccessPermisson(LTD.PHE_DUYET_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(LTD.PHE_DUYET_REPORT);
-        const checkAccept = this.userService.isAccessPermisson(LTD.TIEP_NHAN_REPORT);
-        const checkPrint = isSynthetic ? this.userService.isAccessPermisson(LTD.PRINT_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(LTD.PRINT_REPORT);
-        const checkExport = isSynthetic ? this.userService.isAccessPermisson(LTD.EXPORT_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(LTD.EXPORT_REPORT)
+        const checkSave = isSynthetic ? this.userService.isAccessPermisson(Roles.LTD.EDIT_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(Roles.LTD.EDIT_REPORT);
+        const checkSunmit = isSynthetic ? this.userService.isAccessPermisson(Roles.LTD.APPROVE_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(Roles.LTD.APPROVE_REPORT);
+        const checkPass = isSynthetic ? this.userService.isAccessPermisson(Roles.LTD.DUYET_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(Roles.LTD.DUYET_REPORT);
+        const checkApprove = isSynthetic ? this.userService.isAccessPermisson(Roles.LTD.PHE_DUYET_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(Roles.LTD.PHE_DUYET_REPORT);
+        const checkAccept = this.userService.isAccessPermisson(Roles.LTD.TIEP_NHAN_REPORT);
+        const checkPrint = isSynthetic ? this.userService.isAccessPermisson(Roles.LTD.PRINT_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(Roles.LTD.PRINT_REPORT);
+        const checkExport = isSynthetic ? this.userService.isAccessPermisson(Roles.LTD.EXPORT_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(Roles.LTD.EXPORT_REPORT)
 
         this.status.general = Status.check('saveWHist', this.baoCao.trangThai) && checkSave;
-        this.status.new = Status.check('reject', this.baoCao.trangThai) && this.userService.isAccessPermisson(LTD.ADD_REPORT) && this.isChild;
+        this.status.new = Status.check('reject', this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.LTD.ADD_REPORT) && this.isChild;
         this.status.viewAppVal = Status.check('appraisal', this.baoCao.trangThai);
         this.status.save = Status.check('saveWHist', this.baoCao.trangThai) && checkSave && this.isChild;
         this.status.submit = Status.check('submit', this.baoCao.trangThai) && checkSunmit && this.isChild && !(!this.baoCao.id);
@@ -703,19 +703,16 @@ export class BaoCaoComponent implements OnInit {
     }
 
     async restoreReport(id: string) {
-        await this.lapThamDinhService.bCLapThamDinhDuToanChiTiet(id).toPromise().then(
+        await this.lapThamDinhService.restoreReport(this.baoCao.id, id).toPromise().then(
             (data) => {
                 if (data.statusCode == 0) {
-                    Object.assign(this.baoCao.lstLapThamDinhs, data.data.lstLapThamDinhs);
+                    Object.assign(this.baoCao, data.data);
                     this.baoCao.lstLapThamDinhs.forEach(item => {
                         const appendix = this.listAppendix.find(e => e.id == item.maBieuMau);
                         item.tenPl = appendix.tenPl;
                         item.tenDm = Utils.getName(this.baoCao.namBcao, appendix.tenDm);
-                        item.id = uuid.v4() + 'FE';
-                        item.lstCtietLapThamDinhs?.forEach(e => {
-                            e.id = null;
-                        })
                     })
+                    this.getStatusButton();
                     this.notification.success(MESSAGE.SUCCESS, 'Khôi phục thành công.');
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -727,65 +724,25 @@ export class BaoCaoComponent implements OnInit {
         );
     }
 
-    newReport() {
-        const tongHopTuIds = []
-        const baoCaoTemp = JSON.parse(JSON.stringify({
-            ...this.baoCao,
-            tongHopTuIds
-        }));
-        this.baoCao.lstBcaoDviTrucThuocs?.forEach(item => {
-            baoCaoTemp.tongHopTuIds.push(item.id);
-        })
-
-        baoCaoTemp.fileDinhKems = [];
-        baoCaoTemp.lstFiles?.forEach(item => {
-            baoCaoTemp.fileDinhKems.push({
-                fileName: item.fileName,
-                fileSize: item.fileSize,
-                fileUrl: item.fileUrl,
-            })
-        })
-        baoCaoTemp.lstFiles = [];
-        baoCaoTemp.congVan.id = null;
-
-        // replace nhung ban ghi dc them moi id thanh null
-        baoCaoTemp.lstLapThamDinhs?.forEach(item => {
-            item.id = null;
-            item.fileDinhKems = [];
-            item.lstFiles?.forEach(e => {
-                e.fileDinhKems.push({
-                    fileName: e.fileName,
-                    fileSize: e.fileSize,
-                    fileUrl: e.fileUrl,
-                })
-            })
-            item.lstFiles = [];
-            item.lstCtietLapThamDinhs?.forEach(e => {
-                e.id = null;
-                e.trangThai = '3';
-            })
-        })
-
-        baoCaoTemp.id = null;
-        this.lapThamDinhService.trinhDuyetService(baoCaoTemp).toPromise().then(
-            async data => {
+    async newReport() {
+        await this.lapThamDinhService.addHistory(this.baoCao.id).toPromise().then(
+            (data) => {
                 if (data.statusCode == 0) {
-                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-                    this.baoCao.id = data.data.id;
-                    this.getDetailReport();
-                    const dataTemp = {
-                        id: data.data.id,
-                        tabSelected: this.data.tabSelected,
-                        preTab: this.data.preTab,
-                    }
-                    this.data = dataTemp;
+                    Object.assign(this.baoCao, data.data);
+                    this.baoCao.lstLapThamDinhs.forEach(item => {
+                        const appendix = this.listAppendix.find(e => e.id == item.maBieuMau);
+                        item.tenPl = appendix.tenPl;
+                        item.tenDm = Utils.getName(this.baoCao.namBcao, appendix.tenDm);
+                    })
+                    this.getStatusButton();
+                    this.notification.success(MESSAGE.SUCCESS, 'Tạo mới thành công.');
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
                 }
             },
-            err => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+            }
         );
     }
 }

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import * as dayjs from 'dayjs';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { Utils } from 'src/app/Utility/utils';
+import { Status } from 'src/app/Utility/utils';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.service';
@@ -80,7 +80,7 @@ export class DialogTaoMoiTyLeBaoHiemComponent implements OnInit {
     }
 
     async initNewReport() {
-        this.response.trangThai = Utils.TT_BC_1;
+        this.response.trangThai = Status.TT_01;
         this.response.nguoiTao = this.userInfo?.sub;
         this.response.ngayTao = new Date().toString();
         this.response.lstFiles = [];

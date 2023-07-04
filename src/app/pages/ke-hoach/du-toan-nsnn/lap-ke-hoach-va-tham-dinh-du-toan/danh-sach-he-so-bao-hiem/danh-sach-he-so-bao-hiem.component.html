@@ -21,7 +21,7 @@
                 <label class="search__label">Trạng thái</label>
                 <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái"
                     [(ngModel)]="searchFilter.trangThai">
-                    <nz-option *ngFor="let item of trangThais" [nzValue]="item.id" [nzLabel]="item.tenDm">
+                    <nz-option *ngFor="let item of Status.TRANG_THAI_DVCD" [nzValue]="item.id" [nzLabel]="item.tenDm">
                     </nz-option>
                 </nz-select>
             </div>
@@ -81,20 +81,20 @@
                         {{ data.nam }}
                     </td>
                     <td>
-                        {{ gen.fmtDate(data.ngayTao) }}
+                        {{ Utils.fmtDate(data.ngayTao) }}
                     </td>
                     <td>
-                        {{ gen.fmtDate(data.ngayTrinh) }}
+                        {{ Utils.fmtDate(data.ngayTrinh) }}
                     </td>
                     <td>
-                        {{ gen.fmtDate(data.ngayDuyet) }}
+                        {{ Utils.fmtDate(data.ngayDuyet) }}
                     </td>
                     <td>
-                        {{ gen.fmtDate(data.ngayPheDuyet) }}
+                        {{ Utils.fmtDate(data.ngayPheDuyet) }}
                     </td>
                     <td>
-                        {{getStatusName(data.trangThai)}}
-                        <ng-container *ngIf="data.trangThai =='3' || data.trangThai == '5' || data.trangThai == '8'">
+                        {{ Status.reportStatusName(data.trangThai)}}
+                        <ng-container *ngIf="Status.check('reject', data.trangThai)">
                             <br />
                             Lý do: {{data.lyDoTuChoi}}
                         </ng-container>

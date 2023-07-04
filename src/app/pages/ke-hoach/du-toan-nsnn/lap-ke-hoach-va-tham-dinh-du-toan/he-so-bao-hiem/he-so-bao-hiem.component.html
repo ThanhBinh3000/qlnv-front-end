@@ -37,8 +37,8 @@
             <div class="header mg-t-16">
                 <div class="header-text">
                     <div class="title-chi-tieu">
-                        <span [ngClass]="genFunc.statusClass(baoCao.trangThai)">
-                            {{ getStatusName() }}
+                        <span [ngClass]="Status.statusClass(baoCao.trangThai)">
+                            {{ Status.reportStatusName(baoCao.trangThai) }}
                         </span>
                         <span>Thiết lập hệ số bảo hiểm</span>
                     </div>
@@ -61,11 +61,11 @@
                         <tr>
                             <td>{{ baoCao.maBaoHiem }}</td>
                             <td>{{ baoCao.nam }}</td>
-                            <td>{{ genFunc.fmtDate(baoCao.ngayTao) }}</td>
+                            <td>{{ Utils.fmtDate(baoCao.ngayTao) }}</td>
                             <td>{{ baoCao.nguoiTao }}</td>
-                            <td>{{ genFunc.fmtDate(baoCao.ngayTrinh) }}</td>
-                            <td>{{ genFunc.fmtDate(baoCao.ngayDuyet) }}</td>
-                            <td>{{ genFunc.fmtDate(baoCao.ngayPheDuyet) }}</td>
+                            <td>{{ Utils.fmtDate(baoCao.ngayTrinh) }}</td>
+                            <td>{{ Utils.fmtDate(baoCao.ngayDuyet) }}</td>
+                            <td>{{ Utils.fmtDate(baoCao.ngayPheDuyet) }}</td>
                         </tr>
                     </tbody>
                 </nz-table>
@@ -79,7 +79,7 @@
                         <div class="search__body" nz-row [nzGutter]="[18, 12]">
                             <div nz-col nzSpan="6">
                                 <label class="search__label">Khối tích</label>
-                                <input class="money-input" currencyMask [options]="amount" [(ngModel)]="khoiTich" />
+                                <input class="money-input" currencyMask [options]="Op.amount" [(ngModel)]="khoiTich" />
                             </div>
                             <button type="button" class="btn btn-main" (click)="updateKhoiTich()"
                                 style="margin-top: 24px;">
@@ -116,10 +116,10 @@
                                             {{ data.maDviTinh }}
                                         </td>
                                         <td>
-                                            {{ numFunc.valFmt(data.tyLeKhoDuoi, maDviTien) }}
+                                            {{ Op.fmtVal(data.tyLeKhoDuoi, maDviTien) }}
                                         </td>
                                         <td>
-                                            {{ numFunc.valFmt(data.tyLeKhoTren, maDviTien) }}
+                                            {{ Op.fmtVal(data.tyLeKhoTren, maDviTien) }}
                                         </td>
                                         <td>
                                             {{ data.ghiChu }}
@@ -140,11 +140,11 @@
                                             {{ data.maDviTinh }}
                                         </td>
                                         <td>
-                                            <input class="money-input" currencyMask [options]="amount"
+                                            <input class="money-input" currencyMask [options]="Op.amount"
                                                 [(ngModel)]="editCache[data.id].data.tyLeKhoDuoi" />
                                         </td>
                                         <td>
-                                            <input class="money-input" currencyMask [options]="amount"
+                                            <input class="money-input" currencyMask [options]="Op.amount"
                                                 [(ngModel)]="editCache[data.id].data.tyLeKhoTren" />
                                         </td>
                                         <td>

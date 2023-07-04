@@ -1,16 +1,15 @@
 
-import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { Roles, Status, Utils } from 'src/app/Utility/utils';
 import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { LTD, Utils } from 'src/app/Utility/utils';
 import { DialogTaoMoiComponent } from '../dialog-tao-moi/dialog-tao-moi.component';
 
 @Component({
@@ -19,26 +18,14 @@ import { DialogTaoMoiComponent } from '../dialog-tao-moi/dialog-tao-moi.componen
 })
 export class TongHopBaoCaoTuDonViCapDuoiComponent implements OnInit {
     @Output() dataChange = new EventEmitter();
+    Status = Status;
+    Utils = Utils;
 
     namHienTai: number;
-    trangThai: string = Utils.TT_BC_9;
+    trangThai: string = Status.TT_09;
     maDviTao: string;
 
     userInfo: any;
-    trangThais: any[] = [
-        {
-            id: '9',
-            ten: 'Tiếp nhận'
-        },
-        {
-            id: '7',
-            ten: 'Mới'
-        },
-        {
-            id: '-1',
-            ten: 'Chưa gửi đơn vị cấp trên'
-        },
-    ];
     donVis: any[] = [];
     dataTable: any[] = [];
     dataTableAll: any[] = [];
@@ -51,13 +38,6 @@ export class TongHopBaoCaoTuDonViCapDuoiComponent implements OnInit {
     totalElements = 0;
     totalPages = 0;
 
-    filterTable: any = {
-        soQd: '',
-        ngayKy: '',
-        namKeHoach: '',
-        trichYeu: '',
-        tenTrangThai: '',
-    };
     constructor(
         private spinner: NgxSpinnerService,
         private lapThamDinhService: LapThamDinhService,
@@ -65,7 +45,6 @@ export class TongHopBaoCaoTuDonViCapDuoiComponent implements OnInit {
         private modal: NzModalService,
         private danhMuc: DanhMucHDVService,
         public userService: UserService,
-        private datePipe: DatePipe,
         public globals: Globals,
     ) { }
 
@@ -74,7 +53,7 @@ export class TongHopBaoCaoTuDonViCapDuoiComponent implements OnInit {
         this.spinner.show();
         //khoi tao gia tri mac dinh
         this.maDviTao = this.userInfo?.MA_DVI;
-        this.statusNewReport = this.userService.isAccessPermisson(LTD.SYNTHETIC_REPORT);
+        this.statusNewReport = this.userService.isAccessPermisson(Roles.LTD.SYNTHETIC_REPORT);
         //lay danh sach ca don vi truc thuoc
         await this.danhMuc.dMDviCon().toPromise().then(
             data => {
@@ -99,7 +78,7 @@ export class TongHopBaoCaoTuDonViCapDuoiComponent implements OnInit {
         if (this.trangThai) {
             trangThais = [this.trangThai];
         } else[
-            trangThais = [Utils.TT_BC_9, Utils.TT_BC_7]
+            trangThais = [Status.TT_09, Status.TT_07]
         ]
         const requestReport = {
             loaiTimKiem: "1",
@@ -120,8 +99,6 @@ export class TongHopBaoCaoTuDonViCapDuoiComponent implements OnInit {
                 res.data.content.forEach(item => {
                     this.dataTable.push({
                         ...item,
-                        ngayPheDuyet: this.datePipe.transform(item.ngayPheDuyet, Utils.FORMAT_DATE_STR),
-                        ngayTraKq: this.datePipe.transform(item.ngayTraKq, Utils.FORMAT_DATE_STR),
                     })
                 })
                 this.dataTableAll = cloneDeep(this.dataTable);
@@ -159,10 +136,6 @@ export class TongHopBaoCaoTuDonViCapDuoiComponent implements OnInit {
         return this.donVis.find(e => e.maDvi == maDvi)?.tenDvi;
     }
 
-    getStatusName(trangThai: string) {
-        return this.trangThais.find(e => e.id == trangThai)?.ten;
-    }
-
     //them moi bao cao
     addNewReport() {
         const modalTuChoi = this.modal.create({
@@ -197,24 +170,4 @@ export class TongHopBaoCaoTuDonViCapDuoiComponent implements OnInit {
         this.dataChange.emit(obj);
     }
 
-    // Tìm kiếm trong bảng
-    filterInTable(key: string, value: string, isDate: boolean) {
-        if (value && value != '') {
-            this.dataTable = [];
-            let temp = [];
-            if (this.dataTableAll && this.dataTableAll.length > 0) {
-                if (isDate) {
-                    value = this.datePipe.transform(value, Utils.FORMAT_DATE_STR);
-                }
-                this.dataTableAll.forEach((item) => {
-                    if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
-                        temp.push(item)
-                    }
-                });
-            }
-            this.dataTable = [...this.dataTable, ...temp];
-        } else {
-            this.dataTable = cloneDeep(this.dataTableAll);
-        }
-    }
 }
