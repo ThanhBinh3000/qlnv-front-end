@@ -154,7 +154,7 @@
           <td class="text-left">{{ data.tenTrangThai }}</td>
           <td >
             <a *ngIf="((data.trangThai != STATUS.DU_THAO && userService.isTongCuc()) || userService.isCuc()) && userService.isAccessPermisson('QLĐMNXBQ_ĐMTBMTBCD_XEM')" (click)="redirectToChiTiet(data.id, true)">
-              <i class=" icon htvbdh_eye"></i>
+              <i class="icon htvbdh_eye" title="Xem chi tiết"></i>
             </a>
             <a *ngIf="(data.trangThai == STATUS.DU_THAO && userService.isTongCuc()) && userService.isAccessPermisson('QLĐMNXBQ_ĐMTBMTBCD_SUA')" (click)="redirectToChiTiet(data.id)">
               <i class="fa fa-pencil" title="Sửa"></i>

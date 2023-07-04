@@ -19,6 +19,7 @@ import {v4 as uuidv4} from "uuid";
 import {
   TongHopDanhSachHangDTQGService
 } from "../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatlt/TongHopDanhSachHangDTQG.service";
+import {LOAI_HH_XUAT_KHAC} from "../../../../../constants/config";
 @Component({
   selector: 'app-tong-hop-ds-hang-dtqg-hethan-luukho-chua-co-kh-xuat',
   templateUrl: './tong-hop-ds-hang-dtqg-hethan-luukho-chua-co-kh-xuat.component.html',
@@ -45,7 +46,7 @@ export class TongHopDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Com
   DanhSach: boolean = false;
   showDetail: boolean;
   @Input()  openModal:boolean;
-
+  loaiHhXuatKhac = LOAI_HH_XUAT_KHAC;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -67,6 +68,7 @@ export class TongHopDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Com
       ngayTao: [],
       ngayTaoTu: [],
       ngayTaoDen: [],
+      loai: [],
     })
     this.formDataDetail = this.fb.group({
       id: [],
@@ -136,14 +138,9 @@ export class TongHopDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Com
   }
 
   async timKiem() {
-    /*    if (this.formData.value.ngayDx) {
-          this.formData.value.ngayDxTu = dayjs(this.formData.value.ngayDx[0]).format('YYYY-MM-DD')
-          this.formData.value.ngayDxDen = dayjs(this.formData.value.ngayDx[1]).format('YYYY-MM-DD')
-        }
-        if (this.formData.value.ngayKetThuc) {
-          this.formData.value.ngayKetThucTu = dayjs(this.formData.value.ngayKetThuc[0]).format('YYYY-MM-DD')
-          this.formData.value.ngayKetThucDen = dayjs(this.formData.value.ngayKetThuc[1]).format('YYYY-MM-DD')
-        }*/
+    this.formData.patchValue({
+      loai: this.loaiHhXuatKhac.LT_6_THANG,
+    });
     await this.search();
 
     this.flatDataTable = this.dataTable.flatMap(s => {
