@@ -19,9 +19,4 @@ export class QuyetDinhPheDuyetKeHoachNhapKhacService extends BaseService {
     return this.httpClient.post<any>(url, body).toPromise();
   }
 
-  exportBbNtBq(body: any): Observable<Blob> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/ket-xuat/bbntbq`;
-    return this.httpClient.post(url, body, { responseType: 'blob' });
-  }
-
 }
