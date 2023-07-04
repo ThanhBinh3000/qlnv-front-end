@@ -127,7 +127,7 @@ export class ThemMoiTongHopKhnkComponent extends Base2Component implements OnIni
       });
   }
 
-  async save(isGuiDuyet?) {
+  async save() {
     let body = this.formData.value;
     body.loaiVthh = this.formTraCuu.get("loaiVthh").value;
     body.namKhoach = this.formTraCuu.get("namKhoach").value;

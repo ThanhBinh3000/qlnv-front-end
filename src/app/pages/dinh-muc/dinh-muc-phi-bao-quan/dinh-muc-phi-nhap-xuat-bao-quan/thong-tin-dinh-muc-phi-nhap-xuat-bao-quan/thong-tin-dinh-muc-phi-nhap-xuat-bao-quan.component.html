@@ -163,7 +163,7 @@
         <th>
           <nz-select
             nzMode="multiple"
-            style="width:200px"
+            style="width:180px"
             nzPlaceHolder="Chọn đơn vị áp dụng"
             nzAllowClear
             [(ngModel)]=rowItem.apDungTai>
@@ -292,9 +292,8 @@
           <td>{{data.tenDinhMuc}}</td>
           <td>{{data.apDungTai ? data.apDungTaiStr : 'Tất cả '}}</td>
           <td>{{data.donViTinh}}</td>
-          <td>{{data.tongDinhMucTc}}</td>
+<!--          <td>{{data.tongDinhMucTc}}</td>-->
           <td>{{data.nvChuyenMonTc + data.ttCaNhanTc + data.tcDieuHanhTc + data.nvChuyenMonKv + data.ttCaNhanKv + data.tcDieuHanhKv | number}}</td>
-          <td>2222</td>
           <td>{{data.nvChuyenMonTc + data.ttCaNhanTc + data.tcDieuHanhTc | number}}</td>
           <td>{{data.nvChuyenMonTc + data.ttCaNhanTc | number }}</td>
           <td>{{data.nvChuyenMonTc | number}}</td>

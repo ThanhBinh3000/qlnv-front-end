@@ -145,14 +145,12 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
     let res = null;
     if (changes) {
       if (this.dataInput) {
-        debugger
         this.formData.patchValue({
           tenLoaiHinhNx: this.dataInput.tenLoaiHinhNx,
           tongSlNhap: this.dataInput.tongSlNhap,
           tongThanhTien: this.dataInput.tongThanhTien
         })
         this.listOfData = this.dataInput.details;
-        console.log("hihi ", this.dataInput)
         // this.convertListData();
         await this.loadDsDonVi();
         await this.loadData();
@@ -248,7 +246,6 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
           });
         });
       });
-      console.log(this.listDataGroup)
     }
     // this.sumThanhTien()
   }
@@ -288,7 +285,6 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
     if (data) {
       this.rowThemMoi = cloneDeep(data);
       this.rowThemMoi.tenCloaiVthh = data.tenCloaiVthh
-      console.log(this.rowThemMoi)
       this.isEditRowThemMoi = true;
       if (this.userService.isTongCuc()) {
         this.listChiCuc = this.listCuc.find(item => item.maDvi == this.rowThemMoi.maCuc).children;
@@ -503,7 +499,6 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
   async ngOnInit() {
     await this.spinner.show()
     this.isTongCuc = this.userService.isTongCuc();
-    console.log(this.isTongCuc)
     await this.loadDataComboBox();
     await this.spinner.hide()
   }

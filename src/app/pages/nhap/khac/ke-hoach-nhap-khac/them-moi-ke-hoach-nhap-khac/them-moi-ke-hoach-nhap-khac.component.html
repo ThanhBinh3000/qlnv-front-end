@@ -66,7 +66,7 @@
       <div nz-row [nzGutter]="16">
         <div nz-col [nzSpan]="3">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true">Năm kế hoạch</nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true">Năm kế hoạch</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
               <nz-select formControlName="namKhoach">
                 <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>

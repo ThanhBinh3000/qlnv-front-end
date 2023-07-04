@@ -19,4 +19,9 @@ export class BbNghiemThuBaoQuanService extends BaseService {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/chi-tiet/data-kho/${maDvi}`;
     return this._httpClient.get<OldResponseData>(url).toPromise();
   }
+
+  timKiemBbtheoMaNganLo(body): Promise<OldResponseData> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/tim-kiem-bbntbqld`;
+    return this._httpClient.post<OldResponseData>(url, body).toPromise();
+  }
 }
