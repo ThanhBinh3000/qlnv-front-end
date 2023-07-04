@@ -167,7 +167,7 @@
                         <a *ngIf="checkRoleEdit(lv2.trangThai)" (click)="redirectToChiTiet(lv2, false, null)">
                           <i class="fa fa-pencil" title="Sửa"></i>
                         </a>
-                        <a *ngIf="checkRoleApprove(lv2.trangThai)" (click)="redirectToChiTiet(lv2, false, null)">
+                        <a *ngIf="checkRoleApprove(lv2.trangThai)" (click)="redirectToChiTiet(lv2, true, null)">
                           <i class="icon htvbdh_tcdt_pheduyet"></i>
                         </a>
                         <a *ngIf="checkRoleDelete(lv2.trangThai)" (click)="xoaItem(lv2)">

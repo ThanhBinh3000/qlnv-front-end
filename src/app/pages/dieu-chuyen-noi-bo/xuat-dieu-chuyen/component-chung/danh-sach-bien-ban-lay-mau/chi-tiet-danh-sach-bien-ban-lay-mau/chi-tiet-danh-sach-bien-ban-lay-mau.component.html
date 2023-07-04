@@ -424,9 +424,9 @@
                         </div>
                         <div nz-col [nzSpan]="24">
                             <nz-form-item>
-                                <nz-form-label nzRequired [nzNoColon]="true"> Ghi chú
+                                <nz-form-label [nzNoColon]="true"> Ghi chú
                                 </nz-form-label>
-                                <nz-form-control nz-col>
+                                <nz-form-control nz-col [nzErrorTip]="error">
                                     <textarea [readonly]="isView" nz-input [rows]="3"
                                         formControlName="ghiChu"></textarea>
                                 </nz-form-control>
