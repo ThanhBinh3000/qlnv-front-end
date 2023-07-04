@@ -148,7 +148,8 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
       tenTrangThai: ['Dự thảo'],
       lyDoTuChoi: [],
       soCanCuQdTc: [, [Validators.required]],
-      maDxuat: [],
+      canCuQdTc: [],
+      soDxuat: [],
       ngayTrinhDuyetTc: [],
       tongDuToanKp: [],
       tenLoaiHinhNhapXuat: [],
@@ -396,6 +397,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
       this.formData.patchValue({
         canCuQdTc: "",
         soCanCuQdTc: "",
+        soDxuat: "",
         ngayTrinhDuyetTc: "",
         tongDuToanKp: "",
       })
@@ -470,7 +472,8 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
       if (qdTC) {
         this.formData.patchValue({
           soCanCuQdTc: qdTC.soQdinh,
-          maDxuat: qdTC.maDxuat,
+          canCuQdTc: qdTC.id,
+          soDxuat: qdTC.maDxuat,
           ngayTrinhDuyetTc: qdTC.ngayPduyet
         })
       }
