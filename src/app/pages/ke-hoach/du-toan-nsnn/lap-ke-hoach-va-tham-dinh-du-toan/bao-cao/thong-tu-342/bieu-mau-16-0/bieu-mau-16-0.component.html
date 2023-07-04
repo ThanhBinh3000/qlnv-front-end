@@ -9,13 +9,13 @@
 							<div style="padding-left: 10px;">
 								<ng-container *ngIf="status.general || !editMoneyUnit; else editMoney">
 									<span (click)="editMoneyUnit=true">
-										{{ genFunc.moneyUnitName(maDviTien) }}
+										{{ Utils.moneyUnitName(maDviTien) }}
 									</span>
 								</ng-container>
 								<ng-template #editMoney>
 									<nz-select nzShowSearch nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
 										(ngModelChange)="editMoneyUnit=false">
-										<nz-option *ngFor="let item of donViTiens" [nzValue]="item.id"
+										<nz-option *ngFor="let item of Utils.DVI_TIEN" [nzValue]="item.id"
 											[nzLabel]="item.tenDm">
 										</nz-option>
 									</nz-select>
@@ -130,37 +130,37 @@
 								</td>
 								<td></td>
 								<td>
-									{{ numFunc.numFmt(total.khSluong) }}
+									{{ Op.fmtNum(total.khSluong) }}
 								</td>
 								<td>
-									{{ numFunc.valFmt(total.khTtien, maDviTien) }}
+									{{ Op.fmtVal(total.khTtien, maDviTien) }}
 								</td>
 								<td>
-									{{ numFunc.numFmt(total.uocThSluong) }}
+									{{ Op.fmtNum(total.uocThSluong) }}
 								</td>
 								<td>
-									{{ numFunc.valFmt(total.uocThTtien, maDviTien) }}
+									{{ Op.fmtVal(total.uocThTtien, maDviTien) }}
 								</td>
 								<td>
-									{{ numFunc.numFmt(total.tonKho) }}
+									{{ Op.fmtNum(total.tonKho) }}
 								</td>
 								<td>
-									{{ numFunc.numFmt(total.tongMucDtru) }}
+									{{ Op.fmtNum(total.tongMucDtru) }}
 								</td>
 								<td>
-									{{ numFunc.numFmt(total.namKhSluong) }}
+									{{ Op.fmtNum(total.namKhSluong) }}
 								</td>
 								<td>
-									{{ numFunc.valFmt(total.namKhTtien, maDviTien) }}
+									{{ Op.fmtVal(total.namKhTtien, maDviTien) }}
 								</td>
 								<td *ngIf="status.viewAppVal">
-									{{ numFunc.numFmt(total.tdinhSluong) }}
+									{{ Op.fmtNum(total.tdinhSluong) }}
 								</td>
 								<td *ngIf="status.viewAppVal">
-									{{ numFunc.valFmt(total.tdinhTtien, maDviTien) }}
+									{{ Op.fmtVal(total.tdinhTtien, maDviTien) }}
 								</td>
 								<td *ngIf="status.viewAppVal">
-									{{ numFunc.valFmt(total.chenhLech, maDviTien) }}
+									{{ Op.fmtVal(total.chenhLech, maDviTien) }}
 								</td>
 								<td></td>
 								<td *ngIf="status.viewAppVal"></td>
@@ -184,37 +184,37 @@
 										{{ data.maDviTinh }}
 									</td>
 									<td>
-										{{ numFunc.numFmt(data.khSluong) }}
+										{{ Op.fmtNum(data.khSluong) }}
 									</td>
 									<td>
-										{{ numFunc.valFmt(data.khTtien, maDviTien) }}
+										{{ Op.fmtVal(data.khTtien, maDviTien) }}
 									</td>
 									<td>
-										{{ numFunc.numFmt(data.uocThSluong) }}
+										{{ Op.fmtNum(data.uocThSluong) }}
 									</td>
 									<td>
-										{{ numFunc.valFmt(data.uocThTtien, maDviTien) }}
+										{{ Op.fmtVal(data.uocThTtien, maDviTien) }}
 									</td>
 									<td>
-										{{ numFunc.numFmt(data.tonKho) }}
+										{{ Op.fmtNum(data.tonKho) }}
 									</td>
 									<td>
-										{{ numFunc.numFmt(data.tongMucDtru) }}
+										{{ Op.fmtNum(data.tongMucDtru) }}
 									</td>
 									<td>
-										{{ numFunc.numFmt(data.namKhSluong) }}
+										{{ Op.fmtNum(data.namKhSluong) }}
 									</td>
 									<td>
-										{{ numFunc.valFmt(data.namKhTtien, maDviTien) }}
+										{{ Op.fmtVal(data.namKhTtien, maDviTien) }}
 									</td>
 									<td *ngIf="status.viewAppVal">
-										{{ numFunc.numFmt(data.tdinhSluong) }}
+										{{ Op.fmtNum(data.tdinhSluong) }}
 									</td>
 									<td *ngIf="status.viewAppVal">
-										{{ numFunc.valFmt(data.tdinhTtien, maDviTien) }}
+										{{ Op.fmtVal(data.tdinhTtien, maDviTien) }}
 									</td>
 									<td *ngIf="status.viewAppVal">
-										{{ numFunc.valFmt(data.chenhLech, maDviTien) }}
+										{{ Op.fmtVal(data.chenhLech, maDviTien) }}
 									</td>
 									<td>
 										{{ data.ghiChu }}
@@ -250,41 +250,41 @@
 											{{editCache[data.id].data.maDviTinh}}
 										</td>
 										<td>
-											<input class="money-input" currencyMask [options]="amount"
+											<input class="money-input" currencyMask [options]="Op.amount"
 												[(ngModel)]="editCache[data.id].data.khSluong"
 												(ngModelChange)="changeModel(data.id)" />
 										</td>
 										<td>
-											<input class="money-input" currencyMask [options]="amount"
+											<input class="money-input" currencyMask [options]="Op.amount"
 												[(ngModel)]="editCache[data.id].data.khTtien"
 												(ngModelChange)="changeModel(data.id)" />
 										</td>
 										<td>
-											<input class="money-input" currencyMask [options]="amount"
+											<input class="money-input" currencyMask [options]="Op.amount"
 												[(ngModel)]="editCache[data.id].data.uocThSluong"
 												(ngModelChange)="changeModel(data.id)" />
 										</td>
 										<td>
-											<input class="money-input" currencyMask [options]="amount"
+											<input class="money-input" currencyMask [options]="Op.amount"
 												[(ngModel)]="editCache[data.id].data.uocThTtien"
 												(ngModelChange)="changeModel(data.id)" />
 										</td>
 										<td>
-											<input class="money-input" currencyMask [options]="amount"
+											<input class="money-input" currencyMask [options]="Op.amount"
 												[(ngModel)]="editCache[data.id].data.tonKho" />
 										</td>
 										<td>
-											<input class="money-input" currencyMask [options]="amount"
+											<input class="money-input" currencyMask [options]="Op.amount"
 												[(ngModel)]="editCache[data.id].data.tongMucDtru" />
 										</td>
 
 										<td>
-											<input class="money-input" currencyMask [options]="amount"
+											<input class="money-input" currencyMask [options]="Op.amount"
 												[(ngModel)]="editCache[data.id].data.namKhSluong"
 												(ngModelChange)="changeModel(data.id)" />
 										</td>
 										<td>
-											<input class="money-input" currencyMask [options]="amount"
+											<input class="money-input" currencyMask [options]="Op.amount"
 												[(ngModel)]="editCache[data.id].data.namKhTtien"
 												(ngModelChange)="changeModel(data.id)" />
 										</td>
@@ -304,41 +304,41 @@
 											{{ data.maDviTinh }}
 										</td>
 										<td>
-											{{ numFunc.numFmt(data.khSluong) }}
+											{{ Op.fmtNum(data.khSluong) }}
 										</td>
 										<td>
-											{{ numFunc.valFmt(data.khTtien, maDviTien) }}
+											{{ Op.fmtVal(data.khTtien, maDviTien) }}
 										</td>
 										<td>
-											{{ numFunc.numFmt(data.uocThSluong) }}
+											{{ Op.fmtNum(data.uocThSluong) }}
 										</td>
 										<td>
-											{{ numFunc.valFmt(data.uocThTtien, maDviTien) }}
+											{{ Op.fmtVal(data.uocThTtien, maDviTien) }}
 										</td>
 										<td>
-											{{ numFunc.numFmt(data.tonKho) }}
+											{{ Op.fmtNum(data.tonKho) }}
 										</td>
 										<td>
-											{{ numFunc.numFmt(data.tongMucDtru) }}
+											{{ Op.fmtNum(data.tongMucDtru) }}
 										</td>
 										<td>
-											{{ numFunc.numFmt(data.namKhSluong) }}
+											{{ Op.fmtNum(data.namKhSluong) }}
 										</td>
 										<td>
-											{{ numFunc.valFmt(data.namKhTtien, maDviTien) }}
+											{{ Op.fmtVal(data.namKhTtien, maDviTien) }}
 										</td>
 										<td>
-											<input class="money-input" currencyMask [options]="amount"
+											<input class="money-input" currencyMask [options]="Op.amount"
 												[(ngModel)]="editCache[data.id].data.tdinhSluong"
 												(ngModelChange)="changeModel(data.id)" />
 										</td>
 										<td>
-											<input class="money-input" currencyMask [options]="amount"
+											<input class="money-input" currencyMask [options]="Op.amount"
 												[(ngModel)]="editCache[data.id].data.tdinhTtien"
 												(ngModelChange)="changeModel(data.id)" />
 										</td>
 										<td>
-											{{ numFunc.valFmt(editCache[data.id].data.chenhLech, maDviTien) }}
+											{{ Op.fmtVal(editCache[data.id].data.chenhLech, maDviTien) }}
 										</td>
 										<td>
 											{{ editCache[data.id].data.ghiChu }}

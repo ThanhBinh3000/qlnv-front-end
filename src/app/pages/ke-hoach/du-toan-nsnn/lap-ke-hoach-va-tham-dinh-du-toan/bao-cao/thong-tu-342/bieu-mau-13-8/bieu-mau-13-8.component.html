@@ -9,13 +9,13 @@
 							<div style="margin-left: 10px;">
 								<ng-container *ngIf="status || !editMoneyUnit; else editMoney">
 									<span (click)="editMoneyUnit=true">
-										{{ genFunc.moneyUnitName(maDviTien) }}
+										{{ Utils.moneyUnitName(maDviTien) }}
 									</span>
 								</ng-container>
 								<ng-template #editMoney>
 									<nz-select nzShowSearch nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
 										(ngModelChange)="editMoneyUnit=false">
-										<nz-option *ngFor="let item of donViTiens" [nzValue]="item.id"
+										<nz-option *ngFor="let item of Utils.DVI_TIEN" [nzValue]="item.id"
 											[nzLabel]="item.tenDm">
 										</nz-option>
 									</nz-select>
@@ -84,22 +84,22 @@
 										{{ data.tenDmuc }}
 									</td>
 									<td>
-										{{ numFunc.valFmt(data.thienNtruoc, maDviTien) }}
+										{{ Op.fmtVal(data.thienNtruoc, maDviTien) }}
 									</td>
 									<td>
-										{{ numFunc.valFmt(data.namDtoan, maDviTien) }}
+										{{ Op.fmtVal(data.namDtoan, maDviTien) }}
 									</td>
 									<td>
-										{{ numFunc.valFmt(data.namUocThien, maDviTien) }}
+										{{ Op.fmtVal(data.namUocThien, maDviTien) }}
 									</td>
 									<td>
-										{{ numFunc.valFmt(data.namKh, maDviTien) }}
+										{{ Op.fmtVal(data.namKh, maDviTien) }}
 									</td>
 									<td *ngIf="status.viewAppVal">
-										{{ numFunc.valFmt(data.giaTriThamDinh, maDviTien) }}
+										{{ Op.fmtVal(data.giaTriThamDinh, maDviTien) }}
 									</td>
 									<td *ngIf="status.viewAppVal">
-										{{ numFunc.valFmt(data.chenhLech, maDviTien) }}
+										{{ Op.fmtVal(data.chenhLech, maDviTien) }}
 									</td>
 									<td>
 										{{ data.ghiChu }}
@@ -121,20 +121,20 @@
 									</td>
 									<ng-container *ngIf="!status.viewAppVal; else viewAppVal">
 										<td>
-											<input class="money-input" currencyMask [options]="amount"
+											<input class="money-input" currencyMask [options]="Op.amount"
 												[(ngModel)]="editCache[data.id].data.thienNtruoc" />
 										</td>
 										<td>
-											<input class="money-input" currencyMask [options]="amount"
+											<input class="money-input" currencyMask [options]="Op.amount"
 												[(ngModel)]="editCache[data.id].data.namDtoan" />
 										</td>
 										<td>
-											<input class="money-input" currencyMask [options]="amount"
+											<input class="money-input" currencyMask [options]="Op.amount"
 												[(ngModel)]="editCache[data.id].data.namUocThien" />
 										</td>
 										<td>
 											<ng-container *ngIf="data.maNdung == '0.1.6'; else showAv2">
-												<input class="money-input" currencyMask [options]="amount"
+												<input class="money-input" currencyMask [options]="Op.amount"
 													[(ngModel)]="editCache[data.id].data.namKh" />
 											</ng-container>
 											<ng-template #showAv2>
@@ -147,20 +147,20 @@
 									</ng-container>
 									<ng-template #viewAppVal>
 										<td>
-											{{ numFunc.valFmt(editCache[data.id].data.thienNtruoc, maDviTien) }}
+											{{ Op.fmtVal(editCache[data.id].data.thienNtruoc, maDviTien) }}
 										</td>
 										<td>
-											{{ numFunc.valFmt(editCache[data.id].data.namDtoan, maDviTien) }}
+											{{ Op.fmtVal(editCache[data.id].data.namDtoan, maDviTien) }}
 										</td>
 										<td>
-											{{ numFunc.valFmt(editCache[data.id].data.namUocThien, maDviTien) }}
+											{{ Op.fmtVal(editCache[data.id].data.namUocThien, maDviTien) }}
 										</td>
 										<td>
-											{{ numFunc.valFmt(editCache[data.id].data.namKh, maDviTien) }}
+											{{ Op.fmtVal(editCache[data.id].data.namKh, maDviTien) }}
 										</td>
 										<td>
 											<ng-container *ngIf="data.maNdung == '0.1.6'; else showAv1">
-												<input class="money-input" currencyMask [options]="amount"
+												<input class="money-input" currencyMask [options]="Op.amount"
 													[(ngModel)]="editCache[data.id].data.giaTriThamDinh"
 													(ngModelChange)="changeModel(data.id)" />
 											</ng-container>

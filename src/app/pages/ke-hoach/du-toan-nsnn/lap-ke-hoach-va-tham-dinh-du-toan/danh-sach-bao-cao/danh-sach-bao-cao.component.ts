@@ -5,11 +5,11 @@ import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { LTD, Status, Utils } from 'src/app/Utility/utils';
 import { MESSAGE } from 'src/app/constants/message';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { BCVP, LTD, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import { DialogTaoMoiComponent } from '../dialog-tao-moi/dialog-tao-moi.component';
 
 @Component({
@@ -30,7 +30,7 @@ export class DanhSachBaoCaoComponent implements OnInit {
     };
 
     userInfo: any;
-    trangThais: any = TRANG_THAI_TIM_KIEM;
+    trangThais: any = Status.TRANG_THAI_FULL;
     dataTable: any[] = [];
     dataTableAll: any[] = [];
 
@@ -45,13 +45,6 @@ export class DanhSachBaoCaoComponent implements OnInit {
     statusDelete = true;
     allChecked = false;
 
-    filterTable: any = {
-        soQd: '',
-        ngayKy: '',
-        namKeHoach: '',
-        trichYeu: '',
-        tenTrangThai: '',
-    };
     constructor(
         private spinner: NgxSpinnerService,
         private lapThamDinhService: LapThamDinhService,

@@ -4,8 +4,7 @@ import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { FileFunction, GeneralFunction, NumberFunction, TableFunction } from 'src/app/Utility/func';
-import { AMOUNT, DON_VI_TIEN, MONEY_LIMIT, Utils } from "src/app/Utility/utils";
+import { FileManip, Operator, Status, Table, Utils } from "src/app/Utility/utils";
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
@@ -50,6 +49,8 @@ export class ItemData {
 
 export class PhuLuc05Component implements OnInit {
 	@Input() dataInfo;
+	Op = Operator;
+	Utils = Utils;
 	//thong tin chi tiet cua bieu mau
 	formDetail: Form = new Form();
 	total: ItemData = new ItemData();
@@ -58,9 +59,7 @@ export class PhuLuc05Component implements OnInit {
 	//danh muc
 	duAns: any[] = [];
 	lstCtietBcao: ItemData[] = [];
-	donViTiens: any[] = DON_VI_TIEN;
 	keys = ['giaTriCongTrinh', 'qdPdBcaoGtriDtoanKtoanTmdt', 'qdPdQtoanGtriQtoan', 'luyKeVapVon', 'keHoachVon', 'keHoachVonTd', 'keHoachNamDtN1', 'keHoachNamDtN2']
-	amount = AMOUNT;
 	scrollX: string;
 	//trang thai cac nut
 	status: BtnStatus = new BtnStatus();
@@ -99,10 +98,7 @@ export class PhuLuc05Component implements OnInit {
 		private danhMucService: DanhMucDungChungService,
 		private notification: NzNotificationService,
 		private modal: NzModalService,
-		public numFunc: NumberFunction,
-		public genFunc: GeneralFunction,
-		private fileFunc: FileFunction,
-		private tableFunc: TableFunction,
+		private fileManip: FileManip,
 	) { }
 
 	async ngOnInit() {
@@ -122,18 +118,18 @@ export class PhuLuc05Component implements OnInit {
 				category.data.forEach(item => {
 					this.duAns.push({
 						...item,
-						giaTri: this.genFunc.getName(this.namBcao, item.giaTri),
+						giaTri: Utils.getName(this.namBcao, item.giaTri),
 					})
 				})
 			}
-			this.scrollX = this.genFunc.tableWidth(350, 7, 9, 110);
+			this.scrollX = Table.tableWidth(350, 7, 9, 110);
 		} else {
 			if (this.status.editAppVal) {
-				this.scrollX = this.genFunc.tableWidth(350, 9, 10, 60);
+				this.scrollX = Table.tableWidth(350, 9, 10, 60);
 			} else if (this.status.viewAppVal) {
-				this.scrollX = this.genFunc.tableWidth(350, 9, 10, 0);
+				this.scrollX = Table.tableWidth(350, 9, 10, 0);
 			} else {
-				this.scrollX = this.genFunc.tableWidth(350, 7, 9, 0);
+				this.scrollX = Table.tableWidth(350, 7, 9, 0);
 			}
 		}
 		if (this.lstCtietBcao.length == 0) {
@@ -151,7 +147,7 @@ export class PhuLuc05Component implements OnInit {
 				item.stt = item.maCongTrinh;
 			})
 		}
-		this.lstCtietBcao = this.tableFunc.sortByIndex(this.lstCtietBcao);
+		this.lstCtietBcao = Table.sortByIndex(this.lstCtietBcao);
 		this.getTotal();
 		this.updateEditCache();
 		this.getStatusButton();
@@ -159,7 +155,7 @@ export class PhuLuc05Component implements OnInit {
 	}
 
 	getStatusButton() {
-		this.status.ok = this.status.ok && (this.formDetail.trangThai == "2" || this.formDetail.trangThai == "5");
+		this.status.ok = this.status.ok && (this.formDetail.trangThai == Status.NOT_RATE || this.formDetail.trangThai == Status.COMPLETE);
 	}
 
 	async getFormDetail() {
@@ -188,7 +184,7 @@ export class PhuLuc05Component implements OnInit {
 			return;
 		}
 
-		if (this.lstCtietBcao.some(e => e.keHoachVonTd > MONEY_LIMIT)) {
+		if (this.lstCtietBcao.some(e => e.keHoachVonTd > Utils.MONEY_LIMIT)) {
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
 			return;
 		}
@@ -216,7 +212,7 @@ export class PhuLuc05Component implements OnInit {
 
 		request.fileDinhKems = [];
 		for (let iterator of this.listFile) {
-			request.fileDinhKems.push(await this.fileFunc.uploadFile(iterator, this.dataInfo.path));
+			request.fileDinhKems.push(await this.fileManip.uploadFile(iterator, this.dataInfo.path));
 		}
 
 		request.lstCtietLapThamDinhs = lstCtietBcaoTemp;
@@ -275,7 +271,7 @@ export class PhuLuc05Component implements OnInit {
 			case 1:
 				return String.fromCharCode(parseInt(chiSo[n - 1], 10) + 64) + chiSo[n];
 			case 2:
-				return this.genFunc.laMa(k);
+				return Utils.laMa(k);
 			case 3:
 				return chiSo[n];
 			default:
@@ -324,16 +320,16 @@ export class PhuLuc05Component implements OnInit {
 	}
 
 	addLine(id: string) {
-		this.lstCtietBcao = this.tableFunc.addChild(id, new ItemData(), this.lstCtietBcao);
+		this.lstCtietBcao = Table.addChild(id, new ItemData(), this.lstCtietBcao);
 		this.updateEditCache();
 	}
 
 	changeModel(id: string): void {
-		this.editCache[id].data.chenhLech = this.numFunc.sum([-this.editCache[id].data.keHoachVon, this.editCache[id].data.keHoachVonTd]);
+		this.editCache[id].data.chenhLech = Operator.sum([-this.editCache[id].data.keHoachVon, this.editCache[id].data.keHoachVonTd]);
 	}
 
 	sum(stt: string) {
-		stt = this.tableFunc.getHead(stt);
+		stt = Table.preIndex(stt);
 		while (stt != '0') {
 			const index = this.lstCtietBcao.findIndex(e => e.stt == stt);
 			const data = this.lstCtietBcao[index];
@@ -346,13 +342,13 @@ export class PhuLuc05Component implements OnInit {
 				level: data.level,
 			}
 			this.lstCtietBcao.forEach(item => {
-				if (this.tableFunc.getHead(item.stt) == stt) {
+				if (Table.preIndex(item.stt) == stt) {
 					this.keys.forEach(key => {
-						this.lstCtietBcao[index][key] = this.numFunc.sum([this.lstCtietBcao[index][key], item[key]]);
+						this.lstCtietBcao[index][key] = Operator.sum([this.lstCtietBcao[index][key], item[key]]);
 					})
 				}
 			})
-			stt = this.tableFunc.getHead(stt);
+			stt = Table.preIndex(stt);
 		}
 		this.getTotal();
 	}
@@ -362,7 +358,7 @@ export class PhuLuc05Component implements OnInit {
 		this.lstCtietBcao.forEach(item => {
 			if (item.level == 0) {
 				this.keys.forEach(key => {
-					this.total[key] = this.numFunc.sum([this.total[key], item[key]]);
+					this.total[key] = Operator.sum([this.total[key], item[key]]);
 				})
 			}
 		})
@@ -389,7 +385,7 @@ export class PhuLuc05Component implements OnInit {
 	//xóa dòng
 	deleteLine(id: string) {
 		const stt = this.lstCtietBcao.find(e => e.id === id)?.stt;
-		this.lstCtietBcao = this.tableFunc.deleteRow(id, this.lstCtietBcao);
+		this.lstCtietBcao = Table.deleteRow(id, this.lstCtietBcao);
 		this.sum(stt);
 		this.updateEditCache();
 	}
@@ -404,7 +400,7 @@ export class PhuLuc05Component implements OnInit {
 	async downloadFile(id: string) {
 		let file: any = this.listFile.find(element => element?.lastModified.toString() == id);
 		let doc: any = this.formDetail.lstFiles.find(element => element?.id == id);
-		await this.fileFunc.downloadFile(file, doc);
+		await this.fileManip.downloadFile(file, doc);
 	}
 
 	exportToExcel() {
@@ -454,8 +450,8 @@ export class PhuLuc05Component implements OnInit {
 		})
 
 		const workbook = XLSX.utils.book_new();
-		const worksheet = this.genFunc.initExcel(header);
-		XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: this.genFunc.coo(header[0].l, header[0].b + 1) })
+		const worksheet = Table.initExcel(header);
+		XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
 		XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
 		XLSX.writeFile(workbook, this.dataInfo.maBcao + '_Phu_luc_V.xlsx');
 	}

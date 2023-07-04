@@ -8,12 +8,12 @@
                             <div> Đơn vị: </div>
                             <div style="margin-left: 10px;">
                                 <ng-container *ngIf="status.general || !editMoneyUnit; else editMoney">
-                                    <span (click)="editMoneyUnit=true">{{genFunc.moneyUnitName(maDviTien)}}</span>
+                                    <span (click)="editMoneyUnit=true">{{Utils.moneyUnitName(maDviTien)}}</span>
                                 </ng-container>
                                 <ng-template #editMoney>
                                     <nz-select nzShowSearch nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
                                         (ngModelChange)="editMoneyUnit=false">
-                                        <nz-option *ngFor="let item of donViTiens" [nzValue]="item.id"
+                                        <nz-option *ngFor="let item of Utils.DVI_TIEN" [nzValue]="item.id"
                                             [nzLabel]="item.tenDm">
                                         </nz-option>
                                     </nz-select>
@@ -106,24 +106,24 @@
                                 <th></th>
                                 <th></th>
                                 <th></th>
-                                <th>{{numFunc.valFmt(total.gtTrenGt, maDviTien)}}</th>
+                                <th>{{Op.fmtVal(total.gtTrenGt, maDviTien)}}</th>
                                 <th></th>
-                                <th>{{numFunc.valFmt(total.gtTrenGtBh, maDviTien)}}</th>
-                                <th>{{numFunc.valFmt(total.gtDuoiGt, maDviTien)}}</th>
+                                <th>{{Op.fmtVal(total.gtTrenGtBh, maDviTien)}}</th>
+                                <th>{{Op.fmtVal(total.gtDuoiGt, maDviTien)}}</th>
                                 <th></th>
-                                <th>{{numFunc.valFmt(total.gtDuoiGtBh, maDviTien)}}</th>
-                                <th>{{numFunc.valFmt(total.tong, maDviTien)}}</th>
+                                <th>{{Op.fmtVal(total.gtDuoiGtBh, maDviTien)}}</th>
+                                <th>{{Op.fmtVal(total.tong, maDviTien)}}</th>
                                 <ng-container *ngFor="let item of total.lstDviCapDuoi">
                                     <th></th>
                                     <th></th>
                                     <th></th>
-                                    <th>{{numFunc.valFmt(item.gtTrenGt, maDviTien)}}</th>
+                                    <th>{{Op.fmtVal(item.gtTrenGt, maDviTien)}}</th>
                                     <th></th>
-                                    <th>{{numFunc.valFmt(item.gtTrenGtBh, maDviTien)}}</th>
-                                    <th>{{numFunc.valFmt(item.gtDuoiGt, maDviTien)}}</th>
+                                    <th>{{Op.fmtVal(item.gtTrenGtBh, maDviTien)}}</th>
+                                    <th>{{Op.fmtVal(item.gtDuoiGt, maDviTien)}}</th>
                                     <th></th>
-                                    <th>{{numFunc.valFmt(item.gtDuoiGtBh, maDviTien)}}</th>
-                                    <th>{{numFunc.valFmt(item.tong, maDviTien)}}</th>
+                                    <th>{{Op.fmtVal(item.gtDuoiGtBh, maDviTien)}}</th>
+                                    <th>{{Op.fmtVal(item.tong, maDviTien)}}</th>
                                 </ng-container>
                             </tr>
                         </thead>
@@ -139,65 +139,65 @@
                                     {{data.dviTinh}}
                                 </td>
                                 <td>
-                                    {{numFunc.numFmt(data.slTren)}}
+                                    {{Op.fmtNum(data.slTren)}}
                                 </td>
                                 <td>
-                                    {{numFunc.numFmt(data.slDuoi)}}
+                                    {{Op.fmtNum(data.slDuoi)}}
                                 </td>
                                 <td>
-                                    {{numFunc.numFmt(data.slTong)}}
+                                    {{Op.fmtNum(data.slTong)}}
                                 </td>
                                 <td>
-                                    {{numFunc.valFmt(data.gtTrenGt, maDviTien)}}
+                                    {{Op.fmtVal(data.gtTrenGt, maDviTien)}}
                                 </td>
                                 <td>
-                                    {{numFunc.numFmt(data.gtTrenTyLeBh)}}
+                                    {{Op.fmtNum(data.gtTrenTyLeBh)}}
                                 </td>
                                 <td>
-                                    {{numFunc.valFmt(data.gtTrenGtBh, maDviTien)}}
+                                    {{Op.fmtVal(data.gtTrenGtBh, maDviTien)}}
                                 </td>
                                 <td>
-                                    {{numFunc.valFmt(data.gtDuoiGt, maDviTien)}}
+                                    {{Op.fmtVal(data.gtDuoiGt, maDviTien)}}
                                 </td>
                                 <td>
-                                    {{numFunc.numFmt(data.gtDuoiTyLeBh)}}
+                                    {{Op.fmtNum(data.gtDuoiTyLeBh)}}
                                 </td>
                                 <td>
-                                    {{numFunc.valFmt(data.gtDuoiGtBh, maDviTien)}}
+                                    {{Op.fmtVal(data.gtDuoiGtBh, maDviTien)}}
                                 </td>
                                 <td>
-                                    {{numFunc.valFmt(data.tong, maDviTien)}}
+                                    {{Op.fmtVal(data.tong, maDviTien)}}
                                 </td>
                                 <ng-container *ngFor="let item of data.lstDviCapDuoi">
                                     <td>
-                                        {{numFunc.numFmt(item.slTren)}}
+                                        {{Op.fmtNum(item.slTren)}}
                                     </td>
                                     <td>
-                                        {{numFunc.numFmt(item.slDuoi)}}
+                                        {{Op.fmtNum(item.slDuoi)}}
                                     </td>
                                     <td>
-                                        {{numFunc.numFmt(item.slTong)}}
+                                        {{Op.fmtNum(item.slTong)}}
                                     </td>
                                     <td>
-                                        {{numFunc.valFmt(item.gtTrenGt, maDviTien)}}
+                                        {{Op.fmtVal(item.gtTrenGt, maDviTien)}}
                                     </td>
                                     <td>
-                                        {{numFunc.numFmt(item.gtTrenTyLeBh)}}
+                                        {{Op.fmtNum(item.gtTrenTyLeBh)}}
                                     </td>
                                     <td>
-                                        {{numFunc.valFmt(item.gtTrenGtBh, maDviTien)}}
+                                        {{Op.fmtVal(item.gtTrenGtBh, maDviTien)}}
                                     </td>
                                     <td>
-                                        {{numFunc.valFmt(item.gtDuoiGt, maDviTien)}}
+                                        {{Op.fmtVal(item.gtDuoiGt, maDviTien)}}
                                     </td>
                                     <td>
-                                        {{numFunc.numFmt(item.gtDuoiTyLeBh)}}
+                                        {{Op.fmtNum(item.gtDuoiTyLeBh)}}
                                     </td>
                                     <td>
-                                        {{numFunc.valFmt(item.gtDuoiGtBh, maDviTien)}}
+                                        {{Op.fmtVal(item.gtDuoiGtBh, maDviTien)}}
                                     </td>
                                     <td>
-                                        {{numFunc.valFmt(item.tong, maDviTien)}}
+                                        {{Op.fmtVal(item.tong, maDviTien)}}
                                     </td>
                                 </ng-container>
                             </tr>

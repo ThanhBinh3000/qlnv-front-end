@@ -9,13 +9,13 @@
 							<div style="margin-left: 10px;">
 								<ng-container *ngIf="status || !editMoneyUnit; else editMoney">
 									<span (click)="editMoneyUnit=true">
-										{{ genFunc.moneyUnitName(maDviTien) }}
+										{{ Utils.moneyUnitName(maDviTien) }}
 									</span>
 								</ng-container>
 								<ng-template #editMoney>
 									<nz-select nzShowSearch nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
 										(ngModelChange)="editMoneyUnit=false">
-										<nz-option *ngFor="let item of donViTiens" [nzValue]="item.id"
+										<nz-option *ngFor="let item of Utils.DVI_TIEN" [nzValue]="item.id"
 											[nzLabel]="item.tenDm">
 										</nz-option>
 									</nz-select>
@@ -55,16 +55,16 @@
 									Tổng Nhu cầu chi thường xuyên
 								</th>
 								<th>
-									{{ numFunc.valFmt(total.thNamHienHanhN1, maDviTien) }}
+									{{ Op.fmtVal(total.thNamHienHanhN1, maDviTien) }}
 								</th>
 								<th>
-									{{ numFunc.valFmt(total.ncauNamDtoanN, maDviTien) }}
+									{{ Op.fmtVal(total.ncauNamDtoanN, maDviTien) }}
 								</th>
 								<th>
-									{{ numFunc.valFmt(total.ncauNamN1, maDviTien) }}
+									{{ Op.fmtVal(total.ncauNamN1, maDviTien) }}
 								</th>
 								<th>
-									{{ numFunc.valFmt(total.ncauNamN2, maDviTien) }}
+									{{ Op.fmtVal(total.ncauNamN2, maDviTien) }}
 								</th>
 								<th></th>
 								<th *ngIf="status.general" nzRight></th>
@@ -75,16 +75,16 @@
 									Trong đó - Chi thường xuyên cơ sở
 								</th>
 								<th>
-									{{ numFunc.valFmt(chiCoSo.thNamHienHanhN1, maDviTien) }}
+									{{ Op.fmtVal(chiCoSo.thNamHienHanhN1, maDviTien) }}
 								</th>
 								<th>
-									{{ numFunc.valFmt(chiCoSo.ncauNamDtoanN, maDviTien) }}
+									{{ Op.fmtVal(chiCoSo.ncauNamDtoanN, maDviTien) }}
 								</th>
 								<th>
-									{{ numFunc.valFmt(chiCoSo.ncauNamN1, maDviTien) }}
+									{{ Op.fmtVal(chiCoSo.ncauNamN1, maDviTien) }}
 								</th>
 								<th>
-									{{ numFunc.valFmt(chiCoSo.ncauNamN2, maDviTien) }}
+									{{ Op.fmtVal(chiCoSo.ncauNamN2, maDviTien) }}
 								</th>
 								<th></th>
 								<th *ngIf="status.general" nzRight></th>
@@ -95,16 +95,16 @@
 									&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; - Chi thường xuyên mới
 								</th>
 								<th>
-									{{ numFunc.valFmt(chiMoi.thNamHienHanhN1, maDviTien) }}
+									{{ Op.fmtVal(chiMoi.thNamHienHanhN1, maDviTien) }}
 								</th>
 								<th>
-									{{ numFunc.valFmt(chiMoi.ncauNamDtoanN, maDviTien) }}
+									{{ Op.fmtVal(chiMoi.ncauNamDtoanN, maDviTien) }}
 								</th>
 								<th>
-									{{ numFunc.valFmt(chiMoi.ncauNamN1, maDviTien) }}
+									{{ Op.fmtVal(chiMoi.ncauNamN1, maDviTien) }}
 								</th>
 								<th>
-									{{ numFunc.valFmt(chiMoi.ncauNamN2, maDviTien) }}
+									{{ Op.fmtVal(chiMoi.ncauNamN2, maDviTien) }}
 								</th>
 								<th></th>
 								<th *ngIf="status.general" nzRight></th>
@@ -120,16 +120,16 @@
 										{{ data.tenLvucNdChi }}
 									</td>
 									<td>
-										{{ numFunc.valFmt(data.thNamHienHanhN1, maDviTien) }}
+										{{ Op.fmtVal(data.thNamHienHanhN1, maDviTien) }}
 									</td>
 									<td>
-										{{ numFunc.valFmt(data.ncauNamDtoanN, maDviTien) }}
+										{{ Op.fmtVal(data.ncauNamDtoanN, maDviTien) }}
 									</td>
 									<td>
-										{{ numFunc.valFmt(data.ncauNamN1, maDviTien) }}
+										{{ Op.fmtVal(data.ncauNamN1, maDviTien) }}
 									</td>
 									<td>
-										{{ numFunc.valFmt(data.ncauNamN2, maDviTien) }}
+										{{ Op.fmtVal(data.ncauNamN2, maDviTien) }}
 									</td>
 									<td>
 										{{ data.ghiChu }}
@@ -147,22 +147,22 @@
 										{{ editCache[data.id].data.tenLvucNdChi }}
 									</td>
 									<td>
-										<input class="money-input" currencyMask [options]="amount"
+										<input class="money-input" currencyMask [options]="Op.amount"
 											[(ngModel)]="editCache[data.id].data.thNamHienHanhN1"
 											[class]="(editCache[data.id].data.thNamHienHanhN1 || editCache[data.id].data.thNamHienHanhN1 ===0) ?'' : 'input-error-validate'" />
 									</td>
 									<td>
-										<input class="money-input" currencyMask [options]="amount"
+										<input class="money-input" currencyMask [options]="Op.amount"
 											[(ngModel)]="editCache[data.id].data.ncauNamDtoanN"
 											[class]="(editCache[data.id].data.ncauNamDtoanN || editCache[data.id].data.ncauNamDtoanN ===0) ?'' : 'input-error-validate'" />
 									</td>
 									<td>
-										<input class="money-input" currencyMask [options]="amount"
+										<input class="money-input" currencyMask [options]="Op.amount"
 											[(ngModel)]="editCache[data.id].data.ncauNamN1"
 											[class]="(editCache[data.id].data.ncauNamN1 || editCache[data.id].data.ncauNamN1 ===0) ?'' : 'input-error-validate'" />
 									</td>
 									<td>
-										<input class="money-input" currencyMask [options]="amount"
+										<input class="money-input" currencyMask [options]="Op.amount"
 											[(ngModel)]="editCache[data.id].data.ncauNamN2"
 											[class]="(editCache[data.id].data.ncauNamN2 || editCache[data.id].data.ncauNamN2 ===0) ?'' : 'input-error-validate'" />
 									</td>

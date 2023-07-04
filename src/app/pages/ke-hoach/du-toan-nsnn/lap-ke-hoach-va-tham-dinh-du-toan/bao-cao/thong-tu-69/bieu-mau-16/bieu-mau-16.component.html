@@ -9,13 +9,13 @@
 							<div style="margin-left: 10px;">
 								<ng-container *ngIf="status || !editMoneyUnit; else editMoney">
 									<span (click)="editMoneyUnit=true">
-										{{ genFunc.moneyUnitName(maDviTien) }}
+										{{ Utils.moneyUnitName(maDviTien) }}
 									</span>
 								</ng-container>
 								<ng-template #editMoney>
 									<nz-select nzShowSearch nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
 										(ngModelChange)="editMoneyUnit=false">
-										<nz-option *ngFor="let item of donViTiens" [nzValue]="item.id"
+										<nz-option *ngFor="let item of Utils.DVI_TIEN" [nzValue]="item.id"
 											[nzLabel]="item.tenDm">
 										</nz-option>
 									</nz-select>
@@ -100,34 +100,34 @@
 									TỔNG NHU CẦU
 								</th>
 								<th>
-									{{ numFunc.valFmt(total.thNamHienHanhN1, maDviTien) }}
+									{{ Op.fmtVal(total.thNamHienHanhN1, maDviTien) }}
 								</th>
 								<th>
-									{{ numFunc.valFmt(total.tranChiN, maDviTien) }}
+									{{ Op.fmtVal(total.tranChiN, maDviTien) }}
 								</th>
 								<th>
-									{{ numFunc.valFmt(total.ncauChiN, maDviTien) }}
+									{{ Op.fmtVal(total.ncauChiN, maDviTien) }}
 								</th>
 								<th>
-									{{ numFunc.valFmt(total.clechTranChiVsNcauChiN, maDviTien) }}
+									{{ Op.fmtVal(total.clechTranChiVsNcauChiN, maDviTien) }}
 								</th>
 								<th>
-									{{ numFunc.valFmt(total.tranChiN1, maDviTien) }}
+									{{ Op.fmtVal(total.tranChiN1, maDviTien) }}
 								</th>
 								<th>
-									{{ numFunc.valFmt(total.ncauChiN1, maDviTien) }}
+									{{ Op.fmtVal(total.ncauChiN1, maDviTien) }}
 								</th>
 								<th>
-									{{ numFunc.valFmt(total.clechTranChiVsNcauChiN1, maDviTien) }}
+									{{ Op.fmtVal(total.clechTranChiVsNcauChiN1, maDviTien) }}
 								</th>
 								<th>
-									{{ numFunc.valFmt(total.tranChiN2, maDviTien) }}
+									{{ Op.fmtVal(total.tranChiN2, maDviTien) }}
 								</th>
 								<th>
-									{{ numFunc.valFmt(total.ncauChiN2, maDviTien) }}
+									{{ Op.fmtVal(total.ncauChiN2, maDviTien) }}
 								</th>
 								<th>
-									{{ numFunc.valFmt(total.clechTranChiVsNcauChiN2, maDviTien) }}
+									{{ Op.fmtVal(total.clechTranChiVsNcauChiN2, maDviTien) }}
 								</th>
 								<th></th>
 								<th *ngIf="status.general" nzRight></th>
@@ -138,34 +138,34 @@
 									Trong đó - Chi thường xuyên cơ sở
 								</th>
 								<th>
-									{{ numFunc.valFmt(chiCoSo.thNamHienHanhN1, maDviTien) }}
+									{{ Op.fmtVal(chiCoSo.thNamHienHanhN1, maDviTien) }}
 								</th>
 								<th>
-									{{ numFunc.valFmt(chiCoSo.tranChiN, maDviTien) }}
+									{{ Op.fmtVal(chiCoSo.tranChiN, maDviTien) }}
 								</th>
 								<th>
-									{{ numFunc.valFmt(chiCoSo.ncauChiN, maDviTien) }}
+									{{ Op.fmtVal(chiCoSo.ncauChiN, maDviTien) }}
 								</th>
 								<th>
-									{{ numFunc.valFmt(chiCoSo.clechTranChiVsNcauChiN, maDviTien) }}
+									{{ Op.fmtVal(chiCoSo.clechTranChiVsNcauChiN, maDviTien) }}
 								</th>
 								<th>
-									{{ numFunc.valFmt(chiCoSo.tranChiN1, maDviTien) }}
+									{{ Op.fmtVal(chiCoSo.tranChiN1, maDviTien) }}
 								</th>
 								<th>
-									{{ numFunc.valFmt(chiCoSo.ncauChiN1, maDviTien) }}
+									{{ Op.fmtVal(chiCoSo.ncauChiN1, maDviTien) }}
 								</th>
 								<th>
-									{{ numFunc.valFmt(chiCoSo.clechTranChiVsNcauChiN1, maDviTien) }}
+									{{ Op.fmtVal(chiCoSo.clechTranChiVsNcauChiN1, maDviTien) }}
 								</th>
 								<th>
-									{{ numFunc.valFmt(chiCoSo.tranChiN2, maDviTien) }}
+									{{ Op.fmtVal(chiCoSo.tranChiN2, maDviTien) }}
 								</th>
 								<th>
-									{{ numFunc.valFmt(chiCoSo.ncauChiN2, maDviTien) }}
+									{{ Op.fmtVal(chiCoSo.ncauChiN2, maDviTien) }}
 								</th>
 								<th>
-									{{ numFunc.valFmt(chiCoSo.clechTranChiVsNcauChiN2, maDviTien) }}
+									{{ Op.fmtVal(chiCoSo.clechTranChiVsNcauChiN2, maDviTien) }}
 								</th>
 								<th></th>
 								<th *ngIf="status.general" nzRight></th>
@@ -176,34 +176,34 @@
 									&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; - Chi thường xuyên mới
 								</th>
 								<th>
-									{{ numFunc.valFmt(chiMoi.thNamHienHanhN1, maDviTien) }}
+									{{ Op.fmtVal(chiMoi.thNamHienHanhN1, maDviTien) }}
 								</th>
 								<th>
-									{{ numFunc.valFmt(chiMoi.tranChiN, maDviTien) }}
+									{{ Op.fmtVal(chiMoi.tranChiN, maDviTien) }}
 								</th>
 								<th>
-									{{ numFunc.valFmt(chiMoi.ncauChiN, maDviTien) }}
+									{{ Op.fmtVal(chiMoi.ncauChiN, maDviTien) }}
 								</th>
 								<th>
-									{{ numFunc.valFmt(chiMoi.clechTranChiVsNcauChiN, maDviTien) }}
+									{{ Op.fmtVal(chiMoi.clechTranChiVsNcauChiN, maDviTien) }}
 								</th>
 								<th>
-									{{ numFunc.valFmt(chiMoi.tranChiN1, maDviTien) }}
+									{{ Op.fmtVal(chiMoi.tranChiN1, maDviTien) }}
 								</th>
 								<th>
-									{{ numFunc.valFmt(chiMoi.ncauChiN1, maDviTien) }}
+									{{ Op.fmtVal(chiMoi.ncauChiN1, maDviTien) }}
 								</th>
 								<th>
-									{{ numFunc.valFmt(chiMoi.clechTranChiVsNcauChiN1, maDviTien) }}
+									{{ Op.fmtVal(chiMoi.clechTranChiVsNcauChiN1, maDviTien) }}
 								</th>
 								<th>
-									{{ numFunc.valFmt(chiMoi.tranChiN2, maDviTien) }}
+									{{ Op.fmtVal(chiMoi.tranChiN2, maDviTien) }}
 								</th>
 								<th>
-									{{ numFunc.valFmt(chiMoi.ncauChiN2, maDviTien) }}
+									{{ Op.fmtVal(chiMoi.ncauChiN2, maDviTien) }}
 								</th>
 								<th>
-									{{ numFunc.valFmt(chiMoi.clechTranChiVsNcauChiN2, maDviTien) }}
+									{{ Op.fmtVal(chiMoi.clechTranChiVsNcauChiN2, maDviTien) }}
 								</th>
 								<th> </th>
 								<th *ngIf="status.general" nzRight></th>
@@ -219,34 +219,34 @@
 										{{ data.tenNdung }}
 									</td>
 									<td>
-										{{ numFunc.valFmt(data.thNamHienHanhN1, maDviTien) }}
+										{{ Op.fmtVal(data.thNamHienHanhN1, maDviTien) }}
 									</td>
 									<td>
-										{{ numFunc.valFmt(data.tranChiN, maDviTien) }}
+										{{ Op.fmtVal(data.tranChiN, maDviTien) }}
 									</td>
 									<td>
-										{{ numFunc.valFmt(data.ncauChiN, maDviTien) }}
+										{{ Op.fmtVal(data.ncauChiN, maDviTien) }}
 									</td>
 									<td>
-										{{ numFunc.valFmt(data.clechTranChiVsNcauChiN, maDviTien) }}
+										{{ Op.fmtVal(data.clechTranChiVsNcauChiN, maDviTien) }}
 									</td>
 									<td>
-										{{ numFunc.valFmt(data.tranChiN1, maDviTien) }}
+										{{ Op.fmtVal(data.tranChiN1, maDviTien) }}
 									</td>
 									<td>
-										{{ numFunc.valFmt(data.ncauChiN1, maDviTien) }}
+										{{ Op.fmtVal(data.ncauChiN1, maDviTien) }}
 									</td>
 									<td>
-										{{ numFunc.valFmt(data.clechTranChiVsNcauChiN1, maDviTien) }}
+										{{ Op.fmtVal(data.clechTranChiVsNcauChiN1, maDviTien) }}
 									</td>
 									<td>
-										{{ numFunc.valFmt(data.tranChiN2, maDviTien) }}
+										{{ Op.fmtVal(data.tranChiN2, maDviTien) }}
 									</td>
 									<td>
-										{{ numFunc.valFmt(data.ncauChiN2, maDviTien) }}
+										{{ Op.fmtVal(data.ncauChiN2, maDviTien) }}
 									</td>
 									<td>
-										{{ numFunc.valFmt(data.clechTranChiVsNcauChiN2, maDviTien) }}
+										{{ Op.fmtVal(data.clechTranChiVsNcauChiN2, maDviTien) }}
 									</td>
 									<td>
 										{{ data.ghiChu }}
@@ -264,47 +264,47 @@
 										{{ editCache[data.id].data.tenNdung }}
 									</td>
 									<td>
-										<input class="money-input" currencyMask [options]="amount"
+										<input class="money-input" currencyMask [options]="Op.amount"
 											[(ngModel)]="editCache[data.id].data.thNamHienHanhN1" />
 									</td>
 									<td>
-										<input class="money-input" currencyMask [options]="amount"
+										<input class="money-input" currencyMask [options]="Op.amount"
 											[(ngModel)]="editCache[data.id].data.tranChiN"
 											(ngModelChange)="changeModel(data.id)" />
 									</td>
 									<td>
-										<input class="money-input" currencyMask [options]="amount"
+										<input class="money-input" currencyMask [options]="Op.amount"
 											[(ngModel)]="editCache[data.id].data.ncauChiN"
 											(ngModelChange)="changeModel(data.id)" />
 									</td>
 									<td>
-										{{ numFunc.valFmt(editCache[data.id].data.clechTranChiVsNcauChiN, maDviTien) }}
+										{{ Op.fmtVal(editCache[data.id].data.clechTranChiVsNcauChiN, maDviTien) }}
 									</td>
 									<td>
-										<input class="money-input" currencyMask [options]="amount"
+										<input class="money-input" currencyMask [options]="Op.amount"
 											[(ngModel)]="editCache[data.id].data.tranChiN1"
 											(ngModelChange)="changeModel(data.id)" />
 									</td>
 									<td>
-										<input class="money-input" currencyMask [options]="amount"
+										<input class="money-input" currencyMask [options]="Op.amount"
 											[(ngModel)]="editCache[data.id].data.ncauChiN1"
 											(ngModelChange)="changeModel(data.id)" />
 									</td>
 									<td>
-										{{ numFunc.valFmt(editCache[data.id].data.clechTranChiVsNcauChiN1, maDviTien) }}
+										{{ Op.fmtVal(editCache[data.id].data.clechTranChiVsNcauChiN1, maDviTien) }}
 									</td>
 									<td>
-										<input class="money-input" currencyMask [options]="amount"
+										<input class="money-input" currencyMask [options]="Op.amount"
 											[(ngModel)]="editCache[data.id].data.tranChiN2"
 											(ngModelChange)="changeModel(data.id)" />
 									</td>
 									<td>
-										<input class="money-input" currencyMask [options]="amount"
+										<input class="money-input" currencyMask [options]="Op.amount"
 											[(ngModel)]="editCache[data.id].data.ncauChiN2"
 											(ngModelChange)="changeModel(data.id)" />
 									</td>
 									<td>
-										{{ numFunc.valFmt(editCache[data.id].data.clechTranChiVsNcauChiN2, maDviTien) }}
+										{{ Op.fmtVal(editCache[data.id].data.clechTranChiVsNcauChiN2, maDviTien) }}
 									</td>
 									<td>
 										<input nz-input [(ngModel)]="editCache[data.id].data.ghiChu" />
