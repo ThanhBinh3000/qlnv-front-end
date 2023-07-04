@@ -7,12 +7,7 @@ import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
 import {DonviService} from "../../../../../../services/donvi.service";
 import {DanhMucService} from "../../../../../../services/danhmuc.service";
-import {v4 as uuidv4} from "uuid";
-import {
-  DanhSachVttbTruocHethanLuuKhoService
-} from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/DanhSachVttbTruocHethanLuuKho.service";
-import {LOAI_HH_XUAT_KHAC, PAGE_SIZE_DEFAULT} from "../../../../../../constants/config";
-import {CHUC_NANG, STATUS} from "../../../../../../constants/status";
+import {STATUS} from "../../../../../../constants/status";
 import {
   KeHoachXuatHangService
 } from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/KeHoachXuatHang.service";
@@ -25,12 +20,9 @@ import {MESSAGE} from "../../../../../../constants/message";
 })
 export class KeHoachXuatHangCuaCucComponent extends Base2Component implements OnInit {
   STATUS = STATUS;
-  dsDonvi: any[] = [];
-  dsLoaiVthh: any[] = [];
-  dsCloaiVthh: any[] = [];
-  dataTableView: any = [];
-  tongHop = false;
-  expandSetString = new Set<string>();
+  isDetail: boolean = false;
+  selectedId: number;
+  isView: boolean = false;
 
   constructor(httpClient: HttpClient,
               storageService: StorageService,
@@ -98,5 +90,16 @@ export class KeHoachXuatHangCuaCucComponent extends Base2Component implements On
 
   async timKiem() {
     await this.search();
+  }
+
+  themMoi() {
+    this.isDetail = true;
+    this.selectedId = null;
+    this.isView = false;
+  };
+
+  async showList() {
+    await this.search();
+    this.isDetail = false;
   }
 }
