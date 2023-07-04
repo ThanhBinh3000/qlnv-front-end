@@ -8,6 +8,7 @@ import { Base3Component } from 'src/app/components/base3/base3.component';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { MmHienTrangMmService } from 'src/app/services/mm-hien-trang-mm.service';
 import { StorageService } from 'src/app/services/storage.service';
+import {TrinhThamDinhScService} from "../../../services/sua-chua/trinhThamDinhSc.service";
 
 @Component({
   selector: 'app-trinh-tham-dinh',
@@ -24,10 +25,11 @@ export class TrinhThamDinhComponent extends Base3Component implements OnInit {
     modal: NzModalService,
     route: ActivatedRoute,
     router: Router,
-    private hienTrangSv: MmHienTrangMmService,
+    private trinhThamDinhScService: TrinhThamDinhScService,
+
     private danhMucSv: DanhMucService,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, route, router, hienTrangSv);
+    super(httpClient, storageService, notification, spinner, modal, route, router, trinhThamDinhScService);
     this.defaultURL = 'sua-chua/trinh-tham-dinh'
     this.formData = this.fb.group({
       nam: null,
@@ -39,5 +41,6 @@ export class TrinhThamDinhComponent extends Base3Component implements OnInit {
   }
 
   ngOnInit(): void {
+    this.search();
   }
 }

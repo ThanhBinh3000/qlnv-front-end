@@ -4,14 +4,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { Base2Component } from 'src/app/components/base2/base2.component';
 import { Base3Component } from 'src/app/components/base3/base3.component';
-import { MmHienTrangMmService } from 'src/app/services/mm-hien-trang-mm.service';
 import { StorageService } from 'src/app/services/storage.service';
 import { TongHopScService } from 'src/app/services/sua-chua/tongHopSc.service';
 import { ThemmoiThComponent } from './themmoi-th/themmoi-th.component';
 import {MESSAGE} from "../../../constants/message";
 import { cloneDeep, chain } from 'lodash';
+import {ChitietThComponent} from "./chitiet-th/chitiet-th.component";
 
 @Component({
   selector: 'app-tong-hop',
@@ -41,13 +40,17 @@ export class TongHopComponent extends Base3Component implements OnInit {
   }
 
   async ngOnInit(){
-    await this.search();
+    await this.spinner.show();
+    await Promise.all([
+       this.search(),
+    ])
     this.buildTableView()
+    await this.spinner.hide();
+
   }
 
-  buildTableView() {
-    console.log(this.dataTable)
-    this.dataTable.forEach( item => {
+  async buildTableView() {
+    await this.dataTable.forEach( item => {
       item.expandSet = true;
       item.groupChiCuc = chain(item.children).groupBy('scDanhSachHdr.tenChiCuc').map((value, key) => ({
           tenDonVi: key,
@@ -55,6 +58,7 @@ export class TongHopComponent extends Base3Component implements OnInit {
         })
       ).value()
     })
+    console.log(this.dataTable)
   }
 
   openDialogDs() {
@@ -67,11 +71,33 @@ export class TongHopComponent extends Base3Component implements OnInit {
         nzWidth: '900px',
         nzFooter: null,
         nzComponentParams: {
-
         },
       });
     } else {
       this.notification.error(MESSAGE.ERROR, MESSAGE.ACCESS_DENIED);
+    }
+  }
+
+  showDetail(idTh){
+    if(idTh){
+      const modalGT = this.modal.create({
+        nzTitle: 'Tổng hợp danh sách cần sửa chữa',
+        nzContent: ChitietThComponent,
+        nzMaskClosable: false,
+        nzClosable: false,
+        nzWidth: '900px',
+        nzFooter: null,
+        nzComponentParams: {
+          id : idTh
+        },
+      });
+      modalGT.afterClose.subscribe((data) => {
+        if (data) {
+          this.ngOnInit()
+        }
+      });
+    }else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
     }
   }
 

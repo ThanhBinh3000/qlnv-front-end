@@ -433,7 +433,7 @@ export class Base3Component implements OnInit {
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.NOTIFICATION, msgSuccess ? msgSuccess : MESSAGE.UPDATE_SUCCESS);
             this.spinner.hide();
-            this.goBack();
+            this.redirectDefault();
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
             this.spinner.hide();

@@ -23,6 +23,7 @@ import { ThemMoiKtraclComponent } from './kiem-tra-cl/them-moi-ktracl/them-moi-k
 import { ThemMoiBcComponent } from './bao-cao/them-moi-bc/them-moi-bc.component';
 import { XuatHangModule } from './xuat-hang/xuat-hang.module';
 import { ThemmoiThComponent } from './tong-hop/themmoi-th/themmoi-th.component';
+import { ChitietThComponent } from './tong-hop/chitiet-th/chitiet-th.component';
 
 
 @NgModule({
@@ -40,6 +41,7 @@ import { ThemmoiThComponent } from './tong-hop/themmoi-th/themmoi-th.component';
     ThemMoiKtraclComponent,
     ThemMoiBcComponent,
     ThemmoiThComponent,
+    ChitietThComponent,
   ],
   imports: [
     CommonModule,

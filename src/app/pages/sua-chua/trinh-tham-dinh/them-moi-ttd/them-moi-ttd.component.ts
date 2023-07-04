@@ -9,6 +9,14 @@ import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { MmHienTrangMmService } from 'src/app/services/mm-hien-trang-mm.service';
 import { StorageService } from 'src/app/services/storage.service';
+import {TongHopScService} from "../../../../services/sua-chua/tongHopSc.service";
+import {MESSAGE} from "../../../../constants/message";
+import { cloneDeep, chain } from 'lodash';
+import * as moment from 'moment';
+import {Validators} from "@angular/forms";
+import dayjs from "dayjs";
+import {TrinhThamDinhScService} from "../../../../services/sua-chua/trinhThamDinhSc.service";
+import {STATUS} from "../../../../constants/status";
 
 @Component({
   selector: 'app-them-moi-ttd',
@@ -16,9 +24,7 @@ import { StorageService } from 'src/app/services/storage.service';
   styleUrls: ['./them-moi-ttd.component.scss']
 })
 export class ThemMoiTtdComponent extends Base3Component implements OnInit {
-
   fileCanCu: any[] = []
-
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -27,49 +33,119 @@ export class ThemMoiTtdComponent extends Base3Component implements OnInit {
     modal: NzModalService,
     route: ActivatedRoute,
     router: Router,
-    private hienTrangSv: MmHienTrangMmService,
-    private danhMucSv: DanhMucService,
+    private trinhThamDinhScService: TrinhThamDinhScService,
+    private tongHopScService: TongHopScService,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, route, router, hienTrangSv);
+    super(httpClient, storageService, notification, spinner, modal, route, router, trinhThamDinhScService);
     this.defaultURL = 'sua-chua/trinh-tham-dinh'
     this.getId();
     this.formData = this.fb.group({
-      trangThai: '00',
-      tenTrangThai: 'Dự thảo',
-      soToTrinh: '',
-      ngayTaoHs: '',
-      ngayDuyetLdc: '',
-      thoiHanXuat: '',
-      thoiHanNhap: '',
-      soQdSc: '',
-      trichYeu: '',
-
+      trangThai: ['00'],
+      tenTrangThai: ['Dự thảo'],
+      soTtr: [null, [Validators.required]],
+      ngayTao : [dayjs().format("YYYY-MM-DD"), [Validators.required]],
+      maThHdr: [null, [Validators.required]],
+      idThHdr: [null, [Validators.required]],
+      ngayDuyetLdc: [null],
+      thoiHanXuat: [null, [Validators.required]],
+      thoiHanNhap: [null, [Validators.required]],
+      soQdSc: [null],
+      trichYeu: [null, [Validators.required]],
+      lyDoTuChoi : [null],
     })
   }
 
-  ngOnInit(): void {
-    console.log(this.route);
+  async ngOnInit() {
+    await Promise.all([
+      this.getId(),
+      this.initForm()
+    ])
+  }
+
+  initForm(){
+    if(this.id){
+      this.detail(this.id).then((res)=>{
+        if(res){
+          console.log(res)
+          this.formData.patchValue(res);
+        }
+      })
+    }
+  }
+
+  save(isGuiDuyet?){
+    this.spinner.show();
+    let body = this.formData.value;
+    body.fileDinhKemReq = this.fileDinhKem;
+    body.fileCanCuReq = this.fileCanCu;
+    let children = []
+    this.dataTable.forEach( item => {
+        item.children.forEach( data => {
+          children.push(data.scDanhSachHdr);
+        })
+    })
+    body.children = children;
+    if(this.formData.value.soTtr){
+      body.soTtr = this.formData.value.soTtr + '/TTr-CDTVP'
+    }
+    this.createUpdate(body).then((res)=>{
+      if(res){
+        if(isGuiDuyet){
+          this.approve(res.data.id,STATUS.CHO_DUYET_TP,MESSAGE.GUI_DUYET_CONFIRM);
+        }else{
+          this.redirectDefault();
+        }
+      }
+    })
   }
 
   openDialogDanhSach() {
-    const modalQD = this.modal.create({
-      nzTitle: 'Danh sách sửa chữa',
-      nzContent: DialogTableSelectionComponent,
-      nzMaskClosable: false,
-      nzClosable: false,
-      nzWidth: '900px',
-      nzFooter: null,
-      nzComponentParams: {
-        // dataTable: this.listDanhSachTongHop,
-        dataHeader: ['Mã sửa chữa', 'Tên'],
-        dataColumn: ['id', 'noiDungThop']
-      },
-    });
-    modalQD.afterClose.subscribe(async (data) => {
-      // if (data) {
-      //   await this.selectMaTongHop(data.id);
-      // }
-    });
+    this.spinner.show();
+    this.tongHopScService.getDanhSachTrinhThamDinh({}).then((res)=>{
+      this.spinner.hide();
+      if(res.data){
+          res.data?.forEach(item => {
+            item.thoiGianThFr = moment(item.thoiGianTh).format('dd/MM/yyyy HH:mm:ss');
+            item.thoiHanNhapFr = moment(item.thoiHanNhap).format('dd/MM/yyyy');;
+            item.thoiHanXuatFr = moment(item.thoiHanXuat).format('dd/MM/yyyy');
+          })
+          const modalQD = this.modal.create({
+            nzTitle: 'Danh sách sửa chữa',
+            nzContent: DialogTableSelectionComponent,
+            nzMaskClosable: false,
+            nzClosable: false,
+            nzWidth: '900px',
+            nzFooter: null,
+            nzComponentParams: {
+              dataTable: res.data,
+              dataHeader: ['Mã danh sách', 'Tên danh sách','Thời gian tổng hợp','Thời hạn xuất','Thời hạn nhập'],
+              dataColumn: ['maDanhSach', 'tenDanhSach','thoiGianThFr','thoiHanXuatFr','thoiHanNhapFr']
+            },
+          });
+          modalQD.afterClose.subscribe(async (data) => {
+            if (data) {
+              this.spinner.show();
+              this.tongHopScService.getDetail(data.id).then((res)=>{
+                this.spinner.hide();
+                if(res.data){
+                  const dataTh = res.data
+                  this.formData.patchValue({
+                    maThHdr : dataTh.maDanhSach,
+                    idThHdr : dataTh.id,
+                    thoiHanNhap : data.thoiHanNhap,
+                    thoiHanXuat : data.thoiHanXuat
+                  })
+                  this.dataTable = chain(dataTh.children).groupBy('scDanhSachHdr.tenChiCuc').map((value, key) => ({
+                      tenDonVi: key,
+                      children: value,
+                    })
+                  ).value()
+                }
+              })
+            }
+          });
+        }
+    })
   }
 
 }
