@@ -3,8 +3,7 @@ import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { FileFunction, GeneralFunction, NumberFunction, TableFunction } from 'src/app/Utility/func';
-import { AMOUNT, BOX_NUMBER_WIDTH, DON_VI_TIEN, MONEY_LIMIT, Utils } from "src/app/Utility/utils";
+import { FileManip, Operator, Status, Table, Utils } from "src/app/Utility/utils";
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
@@ -48,6 +47,8 @@ export class ItemData {
 
 export class KhoComponent implements OnInit {
     @Input() dataInfo;
+    Op = Operator;
+    Utils = Utils;
     //thong tin chi tiet cua bieu mau
     formDetail: Form = new Form();
     total: ItemData = new ItemData();
@@ -55,10 +56,8 @@ export class KhoComponent implements OnInit {
     //danh muc
     linhVucChis: any[] = [];
     lstCtietBcao: ItemData[] = [];
-    donViTiens: any[] = DON_VI_TIEN;
     keys = ['slTren', 'slDuoi', 'slTong', 'gtTrenGtConLai', 'gtTrenHetKhauHao', 'gtTrenTong', 'gtDuoiGtConLai', 'gtDuoiHetKhauHao', 'gtDuoiTong', 'tong']
     donVi: any;
-    amount = AMOUNT;
     scrollX: string;
     khoiTich: number;
     //trang thai cac nut
@@ -98,10 +97,7 @@ export class KhoComponent implements OnInit {
         private quanLyVonPhiService: QuanLyVonPhiService,
         private notification: NzNotificationService,
         private modal: NzModalService,
-        public numFunc: NumberFunction,
-        public genFunc: GeneralFunction,
-        private fileFunc: FileFunction,
-        private tableFunc: TableFunction,
+        private fileManip: FileManip,
     ) { }
 
     async ngOnInit() {
@@ -119,9 +115,9 @@ export class KhoComponent implements OnInit {
             if (!this.dataInfo?.isSynthetic) {
                 await this.getDmKho();
             }
-            this.scrollX = this.genFunc.setTableWidth(560, 12, BOX_NUMBER_WIDTH, 60);
+            this.scrollX = Table.tableWidth(500, 12, 0, 60);
         } else {
-            this.scrollX = this.genFunc.setTableWidth(560, 12, BOX_NUMBER_WIDTH, 0);
+            this.scrollX = Table.tableWidth(500, 12, 0, 0);
         }
         if (this.lstCtietBcao.length == 0) {
             this.donVi?.children.forEach(diaDiem => {
@@ -142,7 +138,7 @@ export class KhoComponent implements OnInit {
         }
 
         this.sortReport();
-        if (this.formDetail.trangThai == '3') {
+        if (this.formDetail.trangThai == Status.NEW) {
             this.lstCtietBcao.forEach(item => {
                 if (item.level == 0) {
                     this.sum(item.stt + '.1');
@@ -157,7 +153,7 @@ export class KhoComponent implements OnInit {
     }
 
     getStatusButton() {
-        this.status.ok = this.status.ok && (this.formDetail.trangThai == "2" || this.formDetail.trangThai == "5");
+        this.status.ok = this.status.ok && (this.formDetail.trangThai == Status.NOT_RATE || this.formDetail.trangThai == Status.COMPLETE);
     }
 
     async getKhoiTich() {
@@ -195,7 +191,7 @@ export class KhoComponent implements OnInit {
         const lst = stt.split('.');
         switch (lst?.length) {
             case 2:
-                return this.genFunc.laMa(parseInt(lst[1], 10));
+                return Utils.laMa(parseInt(lst[1], 10));
             case 3:
                 return lst[2];
             default:
@@ -229,7 +225,7 @@ export class KhoComponent implements OnInit {
             return;
         }
 
-        if (this.lstCtietBcao.some(e => e.tong > MONEY_LIMIT)) {
+        if (this.lstCtietBcao.some(e => e.tong > Utils.MONEY_LIMIT)) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
             return;
         }
@@ -251,7 +247,7 @@ export class KhoComponent implements OnInit {
 
         request.fileDinhKems = [];
         for (let iterator of this.listFile) {
-            request.fileDinhKems.push(await this.fileFunc.uploadFile(iterator, this.dataInfo.path));
+            request.fileDinhKems.push(await this.fileManip.uploadFile(iterator, this.dataInfo.path));
         }
 
         request.lstCtietLapThamDinhs = lstCtietBcaoTemp;
@@ -337,10 +333,10 @@ export class KhoComponent implements OnInit {
     }
 
     changeModel(id: string): void {
-        this.editCache[id].data.slTong = this.numFunc.sum([this.editCache[id].data.slTren, this.editCache[id].data.slDuoi]);
-        this.editCache[id].data.gtTrenTong = this.numFunc.sum([this.editCache[id].data.gtTrenGtConLai, this.editCache[id].data.gtTrenHetKhauHao]);
-        this.editCache[id].data.gtDuoiTong = this.numFunc.sum([this.editCache[id].data.gtDuoiGtConLai, this.editCache[id].data.gtDuoiHetKhauHao]);
-        this.editCache[id].data.tong = this.numFunc.sum([this.editCache[id].data.gtTrenTong, this.editCache[id].data.gtDuoiTong]);
+        this.editCache[id].data.slTong = Operator.sum([this.editCache[id].data.slTren, this.editCache[id].data.slDuoi]);
+        this.editCache[id].data.gtTrenTong = Operator.sum([this.editCache[id].data.gtTrenGtConLai, this.editCache[id].data.gtTrenHetKhauHao]);
+        this.editCache[id].data.gtDuoiTong = Operator.sum([this.editCache[id].data.gtDuoiGtConLai, this.editCache[id].data.gtDuoiHetKhauHao]);
+        this.editCache[id].data.tong = Operator.sum([this.editCache[id].data.gtTrenTong, this.editCache[id].data.gtDuoiTong]);
     }
 
     countWarehouse(id: string) {
@@ -360,7 +356,7 @@ export class KhoComponent implements OnInit {
     }
 
     sum(stt: string) {
-        stt = this.tableFunc.getHead(stt);
+        stt = Table.preIndex(stt);
         while (stt != '0') {
             const index = this.lstCtietBcao.findIndex(e => e.stt == stt);
             const data = this.lstCtietBcao[index];
@@ -381,13 +377,13 @@ export class KhoComponent implements OnInit {
                 khoiTichTren: data.khoiTichTren,
             }
             this.lstCtietBcao.forEach(item => {
-                if (this.tableFunc.getHead(item.stt) == stt) {
+                if (Table.preIndex(item.stt) == stt) {
                     this.keys.forEach(key => {
-                        this.lstCtietBcao[index][key] = this.numFunc.sum([this.lstCtietBcao[index][key], item[key]]);
+                        this.lstCtietBcao[index][key] = Operator.sum([this.lstCtietBcao[index][key], item[key]]);
                     })
                 }
             })
-            stt = this.tableFunc.getHead(stt);
+            stt = Table.preIndex(stt);
         }
         this.getTotal();
     }
@@ -397,7 +393,7 @@ export class KhoComponent implements OnInit {
         this.lstCtietBcao.forEach(item => {
             if (item.level == 0) {
                 this.keys.forEach(key => {
-                    this.total[key] = this.numFunc.sum([this.total[key], item[key]]);
+                    this.total[key] = Operator.sum([this.total[key], item[key]]);
                 })
             }
         })
@@ -430,10 +426,10 @@ export class KhoComponent implements OnInit {
                 return -1;
             }
             //ban ghi co stt nho hon dat len truoc
-            if (this.tableFunc.getTail(a.stt) > this.tableFunc.getTail(b.stt)) {
+            if (Table.subIndex(a.stt) > Table.subIndex(b.stt)) {
                 return 1;
             }
-            if (this.tableFunc.getTail(a.stt) < this.tableFunc.getTail(b.stt)) {
+            if (Table.subIndex(a.stt) < Table.subIndex(b.stt)) {
                 return -1;
             }
             //ban ghi co ma dia chi nho hon dat len truoc
@@ -477,7 +473,7 @@ export class KhoComponent implements OnInit {
     async downloadFile(id: string) {
         let file: any = this.listFile.find(element => element?.lastModified.toString() == id);
         let doc: any = this.formDetail.lstFiles.find(element => element?.id == id);
-        await this.fileFunc.downloadFile(file, doc);
+        await this.fileManip.downloadFile(file, doc);
     }
 
     exportToExcel() {
@@ -529,7 +525,7 @@ export class KhoComponent implements OnInit {
             header.push({ t: headerBot + index + 1, b: headerBot + index + 1, l: 15, r: 15, val: item.tong?.toString() })
         })
         const workbook = XLSX.utils.book_new();
-        const worksheet = this.genFunc.initExcel(header);
+        const worksheet = Table.initExcel(header);
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
         XLSX.writeFile(workbook, 'bao_hiem_kho.xlsx');
     }

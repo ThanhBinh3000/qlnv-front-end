@@ -3,8 +3,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { FileFunction, GeneralFunction, NumberFunction, TableFunction } from 'src/app/Utility/func';
-import { AMOUNT, LTD, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { FileManip, Roles, Operator, Status, Table, Utils } from 'src/app/Utility/utils';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
@@ -22,6 +21,9 @@ import { BtnStatus, CoeffIns, Insurance } from '../lap-ke-hoach-va-tham-dinh-du-
 export class HeSoBaoHiemComponent implements OnInit {
     @Input() data;
     @Output() dataChange = new EventEmitter();
+    Op = Operator;
+    Utils = Utils;
+    Status = Status;
     //thong tin dang nhap
     userInfo: any;
     //thong tin chung bao cao
@@ -30,9 +32,6 @@ export class HeSoBaoHiemComponent implements OnInit {
     khoiTich: number;
     maDviTien = '1';
     scrollX: string;
-    //danh muc
-    trangThais: any[] = TRANG_THAI_TIM_KIEM;
-    amount = AMOUNT;
     //trang thai cac nut
     status: BtnStatus = new BtnStatus();
     isDataAvailable = false;
@@ -63,10 +62,7 @@ export class HeSoBaoHiemComponent implements OnInit {
         private notification: NzNotificationService,
         private modal: NzModalService,
         public globals: Globals,
-        public genFunc: GeneralFunction,
-        public fileFunc: FileFunction,
-        public numFunc: NumberFunction,
-        private tableFunc: TableFunction,
+        public fileManip: FileManip,
     ) { }
 
     async ngOnInit() {
@@ -132,7 +128,7 @@ export class HeSoBaoHiemComponent implements OnInit {
         } else {
             this.baoCao = this.data?.baoCao;
         }
-        this.baoCao.lstCtiets = this.tableFunc.sortByIndex(this.baoCao.lstCtiets);
+        this.baoCao.lstCtiets = Table.sortByIndex(this.baoCao.lstCtiets);
         this.updateEditCache();
         this.getStatusButton();
     }
@@ -141,25 +137,21 @@ export class HeSoBaoHiemComponent implements OnInit {
     getStatusButton() {
         const isChild = this.userInfo.MA_DVI == this.baoCao.maDvi;
         //kiem tra quyen cua cac user
-        const checkSave = this.userService.isAccessPermisson(LTD.EDIT_COEFFCIENT_INSURANCE);
-        const checkSunmit = this.userService.isAccessPermisson(LTD.APPROVE_COEFFCIENT_INSURANCE);
-        const checkPass = this.userService.isAccessPermisson(LTD.DUYET_COEFFCIENT_INSURANCE);
-        const checkApprove = this.userService.isAccessPermisson(LTD.PHE_DUYET_COEFFCIENT_INSURANCE);
+        const checkSave = this.userService.isAccessPermisson(Roles.LTD.EDIT_COEFFCIENT_INSURANCE);
+        const checkSunmit = this.userService.isAccessPermisson(Roles.LTD.APPROVE_COEFFCIENT_INSURANCE);
+        const checkPass = this.userService.isAccessPermisson(Roles.LTD.DUYET_COEFFCIENT_INSURANCE);
+        const checkApprove = this.userService.isAccessPermisson(Roles.LTD.PHE_DUYET_COEFFCIENT_INSURANCE);
 
-        this.status.general = Utils.statusSave.includes(this.baoCao.trangThai) && checkSave;
-        this.status.save = Utils.statusSave.includes(this.baoCao.trangThai) && checkSave && isChild;
-        this.status.submit = Utils.statusApprove.includes(this.baoCao.trangThai) && checkSunmit && isChild && !(!this.baoCao.id);
-        this.status.pass = Utils.statusDuyet.includes(this.baoCao.trangThai) && checkPass && isChild;
-        this.status.approve = Utils.statusPheDuyet.includes(this.baoCao.trangThai) && checkApprove && isChild;
+        this.status.general = Status.check('saveWOHist', this.baoCao.trangThai) && checkSave;
+        this.status.save = Status.check('saveWOHist', this.baoCao.trangThai) && checkSave && isChild;
+        this.status.submit = Status.check('submit', this.baoCao.trangThai) && checkSunmit && isChild && !(!this.baoCao.id);
+        this.status.pass = Status.check('pass', this.baoCao.trangThai) && checkPass && isChild;
+        this.status.approve = Status.check('approve', this.baoCao.trangThai) && checkApprove && isChild;
         if (this.status.general) {
-            this.scrollX = this.genFunc.tableWidth(400, 3, 1, 60);
+            this.scrollX = Table.tableWidth(400, 3, 1, 60);
         } else {
-            this.scrollX = this.genFunc.tableWidth(400, 3, 1, 0);
+            this.scrollX = Table.tableWidth(400, 3, 1, 0);
         }
-    }
-
-    getStatusName() {
-        return this.trangThais.find(e => e.id == this.baoCao.trangThai)?.tenDm;
     }
 
     back() {
@@ -197,7 +189,7 @@ export class HeSoBaoHiemComponent implements OnInit {
             nzOkDanger: true,
             nzWidth: 500,
             nzOnOk: () => {
-                this.onSubmit(Utils.TT_BC_2, '')
+                this.onSubmit(Status.TT_02, '')
             },
         });
     }
@@ -213,7 +205,7 @@ export class HeSoBaoHiemComponent implements OnInit {
             if (data.statusCode == 0) {
                 this.baoCao.trangThai = mcn;
                 this.getStatusButton();
-                if (mcn == Utils.TT_BC_5 || mcn == Utils.TT_BC_3) {
+                if (Status.check('reject', mcn)) {
                     this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
                 } else {
                     this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
@@ -259,7 +251,7 @@ export class HeSoBaoHiemComponent implements OnInit {
 
         baoCaoTemp.fileDinhKems = [];
         for (const iterator of this.listFile) {
-            baoCaoTemp.fileDinhKems.push(await this.fileFunc.uploadFile(iterator, this.baoCao.maDvi + '/' + this.baoCao.maBaoHiem));
+            baoCaoTemp.fileDinhKems.push(await this.fileManip.uploadFile(iterator, this.baoCao.maDvi + '/' + this.baoCao.maBaoHiem));
         }
 
         // replace nhung ban ghi dc them moi id thanh null
@@ -319,11 +311,11 @@ export class HeSoBaoHiemComponent implements OnInit {
         let k: number = parseInt(chiSo[n], 10);
         switch (n) {
             case 0:
-                return this.genFunc.laMa(k);
+                return Utils.laMa(k);
             case 1:
                 return chiSo[n];
             case 2:
-                if (this.baoCao.lstCtiets.findIndex(e => this.tableFunc.getHead(e.maDmuc) == stt) == -1) {
+                if (this.baoCao.lstCtiets.findIndex(e => Table.preIndex(e.maDmuc) == stt) == -1) {
                     return null;
                 }
                 return chiSo[n - 1].toString() + "." + chiSo[n].toString();
@@ -373,6 +365,6 @@ export class HeSoBaoHiemComponent implements OnInit {
     async downloadFile(id: string) {
         let file: any = this.listFile.find(element => element?.lastModified.toString() == id);
         let doc: any = this.baoCao.lstFiles.find(element => element?.id == id);
-        await this.fileFunc.downloadFile(file, doc);
+        await this.fileManip.downloadFile(file, doc);
     }
 }

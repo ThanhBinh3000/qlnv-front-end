@@ -3,15 +3,14 @@ import * as dayjs from 'dayjs';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { Status, Utils } from 'src/app/Utility/utils';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
 import { UserService } from 'src/app/services/user.service';
-import { GeneralFunction } from 'src/app/Utility/func';
-import { Utils } from 'src/app/Utility/utils';
 import * as uuid from "uuid";
-import { Form, Report } from '../lap-ke-hoach-va-tham-dinh-du-toan.class';
 import { PHU_LUC } from '../bao-cao/bao-cao.constant';
+import { Form, Report } from '../lap-ke-hoach-va-tham-dinh-du-toan.class';
 
 @Component({
     selector: 'dialog-tao-moi',
@@ -32,7 +31,6 @@ export class DialogTaoMoiComponent implements OnInit {
         private userService: UserService,
         private lapThamDinhService: LapThamDinhService,
         private spinner: NgxSpinnerService,
-        private genFunc: GeneralFunction,
         private notification: NzNotificationService,
     ) { }
 
@@ -52,7 +50,7 @@ export class DialogTaoMoiComponent implements OnInit {
             return;
         }
         this.listAppendix.forEach(e => {
-            e.tenDm = this.genFunc.getName(this.response.namBcao, e.tenDm);
+            e.tenDm = Utils.getName(this.response.namBcao, e.tenDm);
         })
         this.response = {
             ...new Report(),
@@ -100,7 +98,7 @@ export class DialogTaoMoiComponent implements OnInit {
         this.response.lan = lan;
         this.response.lstLapThamDinhs = [];
         this.response.lstBcaoDviTrucThuocs = [];
-        this.response.trangThai = Utils.TT_BC_1;
+        this.response.trangThai = Status.TT_01;
         this.response.nguoiTao = this.userInfo?.sub;
         this.response.ngayTao = new Date();
         this.response.lstFiles = [];
@@ -181,7 +179,7 @@ export class DialogTaoMoiComponent implements OnInit {
                         }
                         item.nguoiBcao = this.userInfo?.sub;
                         item.maDviTien = '1';
-                        item.trangThai = '3';
+                        item.trangThai = Status.NEW;
                         const pl = this.listAppendix.find(e => e.id == item.maBieuMau);
                         item.tenPl = pl.tenPl;
                         item.tenDm = pl.tenDm;

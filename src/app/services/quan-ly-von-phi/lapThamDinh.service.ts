@@ -154,4 +154,16 @@ export class LapThamDinhService extends BaseService {
             request
         );
     }
+
+    addHistory(id: string): Observable<any> {
+        return this.httpClient.get(
+            this.urlDefault + '/lap-tham-dinh/sao-chep/' + id,
+        );
+    }
+
+    restoreReport(cId: string, rId: string): Observable<any> {
+        return this.httpClient.get(
+            this.urlDefault + '/lap-tham-dinh/phu-hoi/currentId=' + cId + '/recoverId=' + rId,
+        );
+    }
 }

@@ -3,8 +3,7 @@ import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { FileFunction, GeneralFunction, NumberFunction, TableFunction } from 'src/app/Utility/func';
-import { AMOUNT, DON_VI_TIEN, MONEY_LIMIT, Utils } from 'src/app/Utility/utils';
+import { FileManip, Operator, Status, Table, Utils } from 'src/app/Utility/utils';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
@@ -44,6 +43,8 @@ export class ItemData {
 
 export class PhuLuc06Component implements OnInit {
     @Input() dataInfo;
+    Op = Operator;
+    Utils = Utils;
     //thong tin chi tiet cua bieu mau
     formDetail: Form = new Form();
     total: ItemData = new ItemData();
@@ -52,8 +53,6 @@ export class PhuLuc06Component implements OnInit {
     //danh muc
     listVtu: any[] = [];
     lstCtietBcao: ItemData[] = [];
-    donViTiens: any[] = DON_VI_TIEN;
-    amount = AMOUNT;
     scrollX: string;
     //trang thai cac nut
     status: BtnStatus = new BtnStatus();
@@ -93,11 +92,7 @@ export class PhuLuc06Component implements OnInit {
         private notification: NzNotificationService,
         private modal: NzModalService,
         private danhMucService: DanhMucDungChungService,
-        private quanLyVonPhiService: QuanLyVonPhiService,
-        public numFunc: NumberFunction,
-        public genFunc: GeneralFunction,
-        private fileFunc: FileFunction,
-        private tableFunc: TableFunction,
+        private fileManip: FileManip,
     ) { }
 
     async ngOnInit() {
@@ -116,14 +111,14 @@ export class PhuLuc06Component implements OnInit {
             if (category) {
                 this.listVtu = category.data;
             }
-            this.scrollX = this.genFunc.tableWidth(350, 8, 1, 360);
+            this.scrollX = Table.tableWidth(350, 8, 1, 360);
         } else {
             if (this.status.editAppVal) {
-                this.scrollX = this.genFunc.setTableWidth(350, 11, 2, 60);
+                this.scrollX = Table.tableWidth(350, 11, 2, 60);
             } else if (this.status.viewAppVal) {
-                this.scrollX = this.genFunc.setTableWidth(350, 11, 2, 0);
+                this.scrollX = Table.tableWidth(350, 11, 2, 0);
             } else {
-                this.scrollX = this.genFunc.setTableWidth(350, 8, 1, 0);
+                this.scrollX = Table.tableWidth(350, 8, 1, 0);
             }
         }
 
@@ -134,7 +129,7 @@ export class PhuLuc06Component implements OnInit {
     }
 
     getStatusButton() {
-        this.status.ok = this.status.ok && (this.formDetail.trangThai == "2" || this.formDetail.trangThai == "5");
+        this.status.ok = this.status.ok && (this.formDetail.trangThai == Status.NOT_RATE || this.formDetail.trangThai == Status.COMPLETE);
     }
 
     async getFormDetail() {
@@ -163,7 +158,7 @@ export class PhuLuc06Component implements OnInit {
             return;
         }
 
-        if (this.lstCtietBcao.some(e => e.sluongTsanTdiemBcao > MONEY_LIMIT)) {
+        if (this.lstCtietBcao.some(e => e.sluongTsanTdiemBcao > Utils.MONEY_LIMIT)) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
             return;
         }
@@ -192,7 +187,7 @@ export class PhuLuc06Component implements OnInit {
 
         request.fileDinhKems = [];
         for (let iterator of this.listFile) {
-            request.fileDinhKems.push(await this.fileFunc.uploadFile(iterator, this.dataInfo.path));
+            request.fileDinhKems.push(await this.fileManip.uploadFile(iterator, this.dataInfo.path));
         }
 
         request.lstCtietLapThamDinhs = lstCtietBcaoTemp;
@@ -320,19 +315,19 @@ export class PhuLuc06Component implements OnInit {
     tinhTong() {
         this.total = new ItemData();
         this.lstCtietBcao.forEach(item => {
-            this.total.tchuanDmucTda = this.numFunc.sum([this.total.tchuanDmucTda, item.tchuanDmucTda]);
-            this.total.dtoanDnghiMgia = this.numFunc.sum([this.total.dtoanDnghiMgia, item.dtoanDnghiMgia]);
-            this.total.thanhTien = this.numFunc.sum([this.total.thanhTien, item.thanhTien]);
-            this.total.tdinhTtien = this.numFunc.sum([this.total.tdinhTtien, item.tdinhTtien]);
-            this.total.chenhLech = this.numFunc.sum([this.total.chenhLech, item.chenhLech]);
+            this.total.tchuanDmucTda = Operator.sum([this.total.tchuanDmucTda, item.tchuanDmucTda]);
+            this.total.dtoanDnghiMgia = Operator.sum([this.total.dtoanDnghiMgia, item.dtoanDnghiMgia]);
+            this.total.thanhTien = Operator.sum([this.total.thanhTien, item.thanhTien]);
+            this.total.tdinhTtien = Operator.sum([this.total.tdinhTtien, item.tdinhTtien]);
+            this.total.chenhLech = Operator.sum([this.total.chenhLech, item.chenhLech]);
         })
     }
 
     changeModel(id: string): void {
-        this.editCache[id].data.sluongTsanTcong = this.numFunc.sum([this.editCache[id].data.sluongTsanTdiemBcao, this.editCache[id].data.sluongTsanDaNhan, this.editCache[id].data.sluongTsanPduyet]);
-        this.editCache[id].data.thanhTien = this.numFunc.mul(this.editCache[id].data.dtoanDnghiSluong, this.editCache[id].data.dtoanDnghiMgia);
-        this.editCache[id].data.tdinhTtien = this.numFunc.mul(this.editCache[id].data.tdinhSluong, this.editCache[id].data.dtoanDnghiMgia);
-        this.editCache[id].data.chenhLech = this.numFunc.sum([this.editCache[id].data.tdinhTtien, -this.editCache[id].data.thanhTien]);
+        this.editCache[id].data.sluongTsanTcong = Operator.sum([this.editCache[id].data.sluongTsanTdiemBcao, this.editCache[id].data.sluongTsanDaNhan, this.editCache[id].data.sluongTsanPduyet]);
+        this.editCache[id].data.thanhTien = Operator.mul(this.editCache[id].data.dtoanDnghiSluong, this.editCache[id].data.dtoanDnghiMgia);
+        this.editCache[id].data.tdinhTtien = Operator.mul(this.editCache[id].data.tdinhSluong, this.editCache[id].data.dtoanDnghiMgia);
+        this.editCache[id].data.chenhLech = Operator.sum([this.editCache[id].data.tdinhTtien, -this.editCache[id].data.thanhTien]);
     }
 
     // gan editCache.data == lstCtietBcao
@@ -355,7 +350,7 @@ export class PhuLuc06Component implements OnInit {
     async downloadFile(id: string) {
         let file: any = this.listFile.find(element => element?.lastModified.toString() == id);
         let doc: any = this.formDetail.lstFiles.find(element => element?.id == id);
-        await this.fileFunc.downloadFile(file, doc);
+        await this.fileManip.downloadFile(file, doc);
     }
 
     exportToExcel() {
@@ -396,8 +391,8 @@ export class PhuLuc06Component implements OnInit {
         })
 
         const workbook = XLSX.utils.book_new();
-        const worksheet = this.genFunc.initExcel(header);
-        XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: this.genFunc.coo(header[0].l, header[0].b + 1) })
+        const worksheet = Table.initExcel(header);
+        XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
         XLSX.writeFile(workbook, this.dataInfo.maBcao + '_Phu_luc_VI.xlsx');
     }

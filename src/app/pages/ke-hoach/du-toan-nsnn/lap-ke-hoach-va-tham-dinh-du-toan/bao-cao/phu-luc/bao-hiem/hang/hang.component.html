@@ -8,12 +8,12 @@
                             <div> Đơn vị: </div>
                             <div style="margin-left: 10px;">
                                 <ng-container *ngIf="status.general || !editMoneyUnit; else editMoney">
-                                    <span (click)="editMoneyUnit=true">{{genFunc.moneyUnitName(maDviTien)}}</span>
+                                    <span (click)="editMoneyUnit=true">{{Utils.moneyUnitName(maDviTien)}}</span>
                                 </ng-container>
                                 <ng-template #editMoney>
                                     <nz-select nzShowSearch nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
                                         (ngModelChange)="editMoneyUnit=false">
-                                        <nz-option *ngFor="let item of donViTiens" [nzValue]="item.id"
+                                        <nz-option *ngFor="let item of Utils.DVI_TIEN" [nzValue]="item.id"
                                             [nzLabel]="item.tenDm">
                                         </nz-option>
                                     </nz-select>
@@ -57,7 +57,7 @@
                                 <th></th>
                                 <th></th>
                                 <th></th>
-                                <th>{{numFunc.numFmt(total.giaTri)}}</th>
+                                <th>{{Op.fmtNum(total.giaTri)}}</th>
                                 <th *ngIf="status.general" nzRight></th>
                                 <th *ngIf="status.general" nzRight></th>
                                 <th *ngIf="status.general" nzRight></th>
@@ -79,16 +79,16 @@
                                         {{data.tenNhaKho}}
                                     </td>
                                     <td [attr.rowspan]="data.storehouseSpan" [hidden]="!data.storehouseSpan">
-                                        {{numFunc.numFmt(data.khoiTich)}}
+                                        {{Op.fmtNum(data.khoiTich)}}
                                     </td>
                                     <td>
                                         {{data.tenHang}}
                                     </td>
                                     <td>
-                                        {{numFunc.numFmt(data.soLuong)}}
+                                        {{Op.fmtNum(data.soLuong)}}
                                     </td>
                                     <td>
-                                        {{numFunc.valFmt(data.giaTri, maDviTien)}}
+                                        {{Op.fmtVal(data.giaTri, maDviTien)}}
                                     </td>
                                     <td *ngIf="status.general" nzRight>
                                         <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
@@ -115,7 +115,7 @@
                                         {{editCache[data.id].data.tenNhaKho}}
                                     </td>
                                     <td [attr.rowspan]="data.storehouseSpan" [hidden]="!data.storehouseSpan">
-                                        <input class="money-input" currencyMask [options]="amount"
+                                        <input class="money-input" currencyMask [options]="Op.amount"
                                             [(ngModel)]="editCache[data.id].data.khoiTich" />
                                     </td>
                                     <td>
@@ -129,11 +129,11 @@
                                         </nz-select>
                                     </td>
                                     <td>
-                                        <input class="money-input" currencyMask [options]="amount"
+                                        <input class="money-input" currencyMask [options]="Op.amount"
                                             [(ngModel)]="editCache[data.id].data.soLuong" />
                                     </td>
                                     <td>
-                                        <input class="money-input" currencyMask [options]="amount"
+                                        <input class="money-input" currencyMask [options]="Op.amount"
                                             [(ngModel)]="editCache[data.id].data.giaTri" />
                                     </td>
                                     <td nzRight>

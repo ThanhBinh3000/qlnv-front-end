@@ -3,8 +3,7 @@ import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { FileFunction, GeneralFunction, NumberFunction, TableFunction } from 'src/app/Utility/func';
-import { AMOUNT, DON_VI_TIEN, MONEY_LIMIT, Utils } from "src/app/Utility/utils";
+import { FileManip, Operator, Status, Table, Utils } from "src/app/Utility/utils";
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
@@ -42,6 +41,8 @@ export class ItemData {
 })
 export class BieuMau13Component implements OnInit {
     @Input() dataInfo;
+    Op = Operator;
+    Utils = Utils;
     //thong tin chi tiet cua bieu mau
     formDetail: Form = new Form();
     total: ItemData = new ItemData();
@@ -50,8 +51,6 @@ export class BieuMau13Component implements OnInit {
     //danh muc
     noiDungs: any[] = [];
     lstCtietBcao: ItemData[] = [];
-    donViTiens: any[] = DON_VI_TIEN;
-    amount = AMOUNT;
     scrollX: string;
     //trang thai cac nut
     status: BtnStatus = new BtnStatus();
@@ -90,10 +89,7 @@ export class BieuMau13Component implements OnInit {
         private lapThamDinhService: LapThamDinhService,
         private notification: NzNotificationService,
         private modal: NzModalService,
-        public numFunc: NumberFunction,
-        public genFunc: GeneralFunction,
-        private fileFunc: FileFunction,
-        private tableFunc: TableFunction,
+        private fileManip: FileManip,
     ) { }
 
     async ngOnInit() {
@@ -112,9 +108,9 @@ export class BieuMau13Component implements OnInit {
             if (category) {
                 this.noiDungs = category.data;
             }
-            this.scrollX = this.genFunc.tableWidth(350, 12, 1, 60);
+            this.scrollX = Table.tableWidth(350, 12, 1, 60);
         } else {
-            this.scrollX = this.genFunc.tableWidth(350, 12, 1, 0);
+            this.scrollX = Table.tableWidth(350, 12, 1, 0);
         }
         if (this.lstCtietBcao.length == 0) {
             this.noiDungs.forEach(e => {
@@ -128,15 +124,15 @@ export class BieuMau13Component implements OnInit {
             })
         } else {
             this.lstCtietBcao.forEach(item => {
-                item.ssanhNcauNVoiN1 = this.numFunc.div(item.ncauChiN, item.namHienHanhUocThien);
+                item.ssanhNcauNVoiN1 = Operator.div(item.ncauChiN, item.namHienHanhUocThien);
             })
         }
 
-        this.lstCtietBcao = this.tableFunc.sortByIndex(this.lstCtietBcao);
+        this.lstCtietBcao = Table.sortByIndex(this.lstCtietBcao);
 
         if (this.formDetail.trangThai == '3') {
             this.lstCtietBcao.forEach(item => {
-                item.clechTranChiVsNcauChiN = this.numFunc.sum([item.tranChiN, -item.ncauChiN])
+                item.clechTranChiVsNcauChiN = Operator.sum([item.tranChiN, -item.ncauChiN])
             })
         }
 
@@ -146,7 +142,7 @@ export class BieuMau13Component implements OnInit {
     }
 
     getStatusButton() {
-        this.status.ok = this.status.ok && (this.formDetail.trangThai == "2" || this.formDetail.trangThai == "5");
+        this.status.ok = this.status.ok && (this.formDetail.trangThai == Status.NOT_RATE || this.formDetail.trangThai == Status.COMPLETE);
     }
 
     async getFormDetail() {
@@ -175,10 +171,10 @@ export class BieuMau13Component implements OnInit {
             return;
         }
 
-        if (this.lstCtietBcao.some(e => e.namHienHanhDtoan > MONEY_LIMIT || e.namHienHanhUocThien > MONEY_LIMIT ||
-            e.tranChiN > MONEY_LIMIT || e.ncauChiN > MONEY_LIMIT || e.clechTranChiVsNcauChiN > MONEY_LIMIT ||
-            e.tranChiN1 > MONEY_LIMIT || e.ncauChiN1 > MONEY_LIMIT || e.clechTranChiVsNcauChiN1 > MONEY_LIMIT ||
-            e.tranChiN2 > MONEY_LIMIT || e.ncauChiN2 > MONEY_LIMIT || e.clechTranChiVsNcauChiN2 > MONEY_LIMIT)) {
+        if (this.lstCtietBcao.some(e => e.namHienHanhDtoan > Utils.MONEY_LIMIT || e.namHienHanhUocThien > Utils.MONEY_LIMIT ||
+            e.tranChiN > Utils.MONEY_LIMIT || e.ncauChiN > Utils.MONEY_LIMIT || e.clechTranChiVsNcauChiN > Utils.MONEY_LIMIT ||
+            e.tranChiN1 > Utils.MONEY_LIMIT || e.ncauChiN1 > Utils.MONEY_LIMIT || e.clechTranChiVsNcauChiN1 > Utils.MONEY_LIMIT ||
+            e.tranChiN2 > Utils.MONEY_LIMIT || e.ncauChiN2 > Utils.MONEY_LIMIT || e.clechTranChiVsNcauChiN2 > Utils.MONEY_LIMIT)) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
             return;
         }
@@ -200,7 +196,7 @@ export class BieuMau13Component implements OnInit {
 
         request.fileDinhKems = [];
         for (let iterator of this.listFile) {
-            request.fileDinhKems.push(await this.fileFunc.uploadFile(iterator, this.dataInfo.path));
+            request.fileDinhKems.push(await this.fileManip.uploadFile(iterator, this.dataInfo.path));
         }
 
         request.lstCtietLapThamDinhs = lstCtietBcaoTemp;
@@ -257,7 +253,7 @@ export class BieuMau13Component implements OnInit {
             case 0:
                 return String.fromCharCode(k + 64);
             case 1:
-                return this.genFunc.laMa(k);
+                return Utils.laMa(k);
             case 2:
                 return chiSo[n];
         }
@@ -305,14 +301,14 @@ export class BieuMau13Component implements OnInit {
     }
 
     changeModel(id: string): void {
-        this.editCache[id].data.clechTranChiVsNcauChiN = this.numFunc.sum([this.editCache[id].data.tranChiN, -this.editCache[id].data.ncauChiN]);
-        this.editCache[id].data.ssanhNcauNVoiN1 = this.numFunc.div(this.editCache[id].data.ncauChiN, this.editCache[id].data.namHienHanhUocThien);
-        this.editCache[id].data.clechTranChiVsNcauChiN1 = this.numFunc.sum([this.editCache[id].data.tranChiN1, -this.editCache[id].data.ncauChiN1]);
-        this.editCache[id].data.clechTranChiVsNcauChiN2 = this.numFunc.sum([this.editCache[id].data.tranChiN2, -this.editCache[id].data.ncauChiN2]);
+        this.editCache[id].data.clechTranChiVsNcauChiN = Operator.sum([this.editCache[id].data.tranChiN, -this.editCache[id].data.ncauChiN]);
+        this.editCache[id].data.ssanhNcauNVoiN1 = Operator.div(this.editCache[id].data.ncauChiN, this.editCache[id].data.namHienHanhUocThien);
+        this.editCache[id].data.clechTranChiVsNcauChiN1 = Operator.sum([this.editCache[id].data.tranChiN1, -this.editCache[id].data.ncauChiN1]);
+        this.editCache[id].data.clechTranChiVsNcauChiN2 = Operator.sum([this.editCache[id].data.tranChiN2, -this.editCache[id].data.ncauChiN2]);
     }
 
     sum(stt: string) {
-        stt = this.tableFunc.getHead(stt);
+        stt = Table.preIndex(stt);
         while (stt != '0') {
             const index = this.lstCtietBcao.findIndex(e => e.stt == stt);
             const data = this.lstCtietBcao[index];
@@ -325,22 +321,22 @@ export class BieuMau13Component implements OnInit {
                 level: data.level,
             }
             this.lstCtietBcao.forEach(item => {
-                if (this.tableFunc.getHead(item.stt) == stt) {
-                    this.lstCtietBcao[index].namHienHanhDtoan = this.numFunc.sum([this.lstCtietBcao[index].namHienHanhDtoan, item.namHienHanhDtoan]);
-                    this.lstCtietBcao[index].namHienHanhUocThien = this.numFunc.sum([this.lstCtietBcao[index].namHienHanhUocThien, item.namHienHanhUocThien]);
-                    this.lstCtietBcao[index].tranChiN = this.numFunc.sum([this.lstCtietBcao[index].tranChiN, item.tranChiN]);
-                    this.lstCtietBcao[index].ncauChiN = this.numFunc.sum([this.lstCtietBcao[index].ncauChiN, item.ncauChiN]);
-                    this.lstCtietBcao[index].clechTranChiVsNcauChiN = this.numFunc.sum([this.lstCtietBcao[index].clechTranChiVsNcauChiN, item.clechTranChiVsNcauChiN]);
-                    this.lstCtietBcao[index].tranChiN1 = this.numFunc.sum([this.lstCtietBcao[index].tranChiN1, item.tranChiN1]);
-                    this.lstCtietBcao[index].ncauChiN1 = this.numFunc.sum([this.lstCtietBcao[index].ncauChiN1, item.ncauChiN1]);
-                    this.lstCtietBcao[index].clechTranChiVsNcauChiN1 = this.numFunc.sum([this.lstCtietBcao[index].clechTranChiVsNcauChiN1, item.clechTranChiVsNcauChiN1]);
-                    this.lstCtietBcao[index].tranChiN2 = this.numFunc.sum([this.lstCtietBcao[index].tranChiN2, item.tranChiN2]);
-                    this.lstCtietBcao[index].ncauChiN2 = this.numFunc.sum([this.lstCtietBcao[index].ncauChiN2, item.ncauChiN2]);
-                    this.lstCtietBcao[index].clechTranChiVsNcauChiN2 = this.numFunc.sum([this.lstCtietBcao[index].clechTranChiVsNcauChiN2, item.clechTranChiVsNcauChiN2]);
+                if (Table.preIndex(item.stt) == stt) {
+                    this.lstCtietBcao[index].namHienHanhDtoan = Operator.sum([this.lstCtietBcao[index].namHienHanhDtoan, item.namHienHanhDtoan]);
+                    this.lstCtietBcao[index].namHienHanhUocThien = Operator.sum([this.lstCtietBcao[index].namHienHanhUocThien, item.namHienHanhUocThien]);
+                    this.lstCtietBcao[index].tranChiN = Operator.sum([this.lstCtietBcao[index].tranChiN, item.tranChiN]);
+                    this.lstCtietBcao[index].ncauChiN = Operator.sum([this.lstCtietBcao[index].ncauChiN, item.ncauChiN]);
+                    this.lstCtietBcao[index].clechTranChiVsNcauChiN = Operator.sum([this.lstCtietBcao[index].clechTranChiVsNcauChiN, item.clechTranChiVsNcauChiN]);
+                    this.lstCtietBcao[index].tranChiN1 = Operator.sum([this.lstCtietBcao[index].tranChiN1, item.tranChiN1]);
+                    this.lstCtietBcao[index].ncauChiN1 = Operator.sum([this.lstCtietBcao[index].ncauChiN1, item.ncauChiN1]);
+                    this.lstCtietBcao[index].clechTranChiVsNcauChiN1 = Operator.sum([this.lstCtietBcao[index].clechTranChiVsNcauChiN1, item.clechTranChiVsNcauChiN1]);
+                    this.lstCtietBcao[index].tranChiN2 = Operator.sum([this.lstCtietBcao[index].tranChiN2, item.tranChiN2]);
+                    this.lstCtietBcao[index].ncauChiN2 = Operator.sum([this.lstCtietBcao[index].ncauChiN2, item.ncauChiN2]);
+                    this.lstCtietBcao[index].clechTranChiVsNcauChiN2 = Operator.sum([this.lstCtietBcao[index].clechTranChiVsNcauChiN2, item.clechTranChiVsNcauChiN2]);
                 }
             })
-            this.lstCtietBcao[index].ssanhNcauNVoiN1 = this.numFunc.div(this.lstCtietBcao[index].ncauChiN, this.lstCtietBcao[index].namHienHanhUocThien);
-            stt = this.tableFunc.getHead(stt);
+            this.lstCtietBcao[index].ssanhNcauNVoiN1 = Operator.div(this.lstCtietBcao[index].ncauChiN, this.lstCtietBcao[index].namHienHanhUocThien);
+            stt = Table.preIndex(stt);
         }
     }
 
@@ -359,7 +355,7 @@ export class BieuMau13Component implements OnInit {
     async downloadFile(id: string) {
         let file: any = this.listFile.find(element => element?.lastModified.toString() == id);
         let doc: any = this.formDetail.lstFiles.find(element => element?.id == id);
-        await this.fileFunc.downloadFile(file, doc);
+        await this.fileManip.downloadFile(file, doc);
     }
 
     exportToExcel() {
@@ -403,8 +399,8 @@ export class BieuMau13Component implements OnInit {
         })
 
         const workbook = XLSX.utils.book_new();
-        const worksheet = this.genFunc.initExcel(header);
-        XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: this.genFunc.coo(header[0].l, header[0].b + 1) })
+        const worksheet = Table.initExcel(header);
+        XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
         XLSX.writeFile(workbook, this.dataInfo.maBcao + '_TT69_13.xlsx');
     }
