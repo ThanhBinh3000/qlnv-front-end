@@ -25,6 +25,7 @@ import {
 import {LOAI_HH_XUAT_KHAC} from "../../../../../../../constants/config";
 import {Validators} from "@angular/forms";
 import {FILETYPE} from "../../../../../../../constants/fileType";
+import {DialogTuChoiComponent} from "../../../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
 
 @Component({
   selector: 'app-thong-tin-ke-hoach-xuat-hang-cua-cuc',
@@ -79,6 +80,7 @@ export class ThongTinKeHoachXuatHangCuaCucComponent extends Base2Component imple
       thoiGianDuKienXuatDen: [],
       moTa: [],
       idTongHopDs: [],
+      lyDoTuChoi: [],
       maTongHopDs: [null, [Validators.required]],
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự thảo'],
@@ -96,7 +98,7 @@ export class ThongTinKeHoachXuatHangCuaCucComponent extends Base2Component imple
         this.loadDanhSachTongHop(),
       ]);
       if (this.idInput) {
-        this.detail(this.idInput)
+        this.getDetail(this.idInput)
       } else {
         this.bindingData();
       }
@@ -106,6 +108,41 @@ export class ThongTinKeHoachXuatHangCuaCucComponent extends Base2Component imple
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
+  }
+
+  async getDetail(id: number) {
+    await this.keHoachXuatHangService
+      .getDetail(id)
+      .then((res) => {
+        if (res.msg == MESSAGE.SUCCESS) {
+          const dataDetail = res.data;
+          this.helperService.bidingDataInFormGroup(this.formData, dataDetail);
+          if (dataDetail) {
+            let thoiGianDuKienXuat = [dataDetail.thoiGianDuKienXuatTu, dataDetail.thoiGianDuKienXuatDen];
+            this.formData.patchValue({
+              soToTrinh: dataDetail.soToTrinh?.split('/')[0],
+              thoiGianDuKienXuatHang: thoiGianDuKienXuat
+            })
+            this.listFile = dataDetail.fileDinhKems;
+            if (dataDetail.fileDinhKems && dataDetail.fileDinhKems.length > 0) {
+              dataDetail.fileDinhKems.forEach(item => {
+                if (item.fileType == FILETYPE.FILE_DINH_KEM) {
+                  this.listFileDinhKem.push(item)
+                } else if (item.fileType == FILETYPE.CAN_CU_PHAP_LY) {
+                  this.listCcPhapLy.push(item)
+                }
+              })
+            }
+            this.dataTh = cloneDeep(dataDetail.xhXkKhXuatHangDtl);
+            this.buildTableView(this.dataTh);
+          }
+        }
+      })
+      .catch((e) => {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      });
   }
 
   async bindingData() {
@@ -221,57 +258,129 @@ export class ThongTinKeHoachXuatHangCuaCucComponent extends Base2Component imple
       this.formData.value.fileDinhKems = this.listFile;
     }
     this.formData.value.soToTrinh = this.formData.value.soToTrinh + this.maTT;
+    if (this.formData.get("thoiGianDuKienXuatHang").value) {
+      this.formData.value.thoiGianDuKienXuatTu = this.formData.get("thoiGianDuKienXuatHang").value[0];
+      this.formData.value.thoiGianDuKienXuatDen = this.formData.get("thoiGianDuKienXuatHang").value[1];
+    }
     this.formData.value.xhXkKhXuatHangDtl = this.dataTh;
-    if (isGuiDuyet) {
-      this.modal.confirm({
-        nzClosable: false,
-        nzTitle: 'Xác nhận',
-        nzContent: "Ban hành quyết định",
-        nzOkText: 'Đồng ý',
-        nzCancelText: 'Không',
-        nzOkDanger: true,
-        nzWidth: 350,
-        nzOnOk: async () => {
-          this.spinner.show();
-          try {
-            let res = await this.createUpdate(this.formData.value);
-            if (res) {
-              let body = {
-                id: res.id,
-                trangThai: STATUS.BAN_HANH,
-              }
-              let res1 = await this.keHoachXuatHangService.approve(body);
-              if (res1.msg == MESSAGE.SUCCESS) {
-                this.notification.success(MESSAGE.NOTIFICATION, "Ban hành quyết định thành công");
-                this.formData.patchValue({
-                  trangThai: STATUS.BAN_HANH,
-                  tenTrangThai: "Ban hành",
-                })
-                this.isViewDetail = true;
-                this.spinner.hide();
-              } else {
-                this.notification.error(MESSAGE.ERROR, res1.msg);
-                this.spinner.hide();
-              }
-            }
-          } catch (e) {
-            console.log('error: ', e);
-            this.spinner.hide();
-            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-          } finally {
-            this.spinner.hide();
-          }
-        },
-      });
-    } else {
-      let res = await this.createUpdate(this.formData.value);
-      if (res) {
-        this.idInput = res.id;
-        this.formData.patchValue({
-          id : res.id
-        })
+    this.formData.value.xhXkKhXuatHangDtl.forEach(item => {
+      delete item.id;
+    });
+    let data = await this.createUpdate(this.formData.value);
+    if (data) {
+      if (!this.idInput) {
+        this.idInput = data.id;
+        this.formData.patchValue({id: data.id, trangThai: data.trangThai});
       }
+      if (isGuiDuyet) {
+        this.pheDuyet(this.formData.get("id").value)
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, "Có lỗi xảy ra.");
     }
   }
 
+
+  pheDuyet(id?) {
+    let trangThai = ''
+    let mess = ''
+    switch (this.formData.get('trangThai').value) {
+      case STATUS.DU_THAO:
+      case STATUS.TU_CHOI_TP: {
+        trangThai = STATUS.CHO_DUYET_TP;
+        mess = 'Bạn có muối gửi duyệt?'
+        break;
+      }
+      case STATUS.CHO_DUYET_TP: {
+        trangThai = STATUS.CHO_DUYET_LDC;
+        mess = 'Bạn có chắc chắn muốn phê duyệt ?'
+        break;
+      }
+      case STATUS.CHO_DUYET_LDC: {
+        trangThai = STATUS.DA_DUYET_LDC;
+        mess = 'Bạn có chắc chắn muốn phê duyệt ?'
+        break;
+      }
+    }
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: mess,
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 500,
+      nzOnOk: async () => {
+        this.spinner.show();
+        try {
+          let body = {
+            id: id ? id : this.idInput,
+            trangThai: trangThai,
+          };
+          let res =
+            await this.keHoachXuatHangService.approve(
+              body,
+            );
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+            this.goBack()
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+          this.spinner.hide();
+        } catch (e) {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      },
+    });
+  }
+
+
+  tuChoi() {
+    const modalTuChoi = this.modal.create({
+      nzTitle: 'Từ chối',
+      nzContent: DialogTuChoiComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {},
+    });
+    modalTuChoi.afterClose.subscribe(async (text) => {
+      if (text) {
+        this.spinner.show();
+        try {
+          let trangThai;
+          switch (this.formData.get('trangThai').value) {
+            case STATUS.CHO_DUYET_TP: {
+              trangThai = STATUS.TU_CHOI_TP
+              break;
+            }
+            case STATUS.CHO_DUYET_LDC: {
+              trangThai = STATUS.TU_CHOI_LDC
+              break;
+            }
+          }
+          let body = {
+            id: this.idInput,
+            lyDoTuChoi: text,
+            trangThai: trangThai,
+          };
+          const res = await this.keHoachXuatHangService.approve(body);
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.TU_CHOI_SUCCESS);
+            this.goBack();
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+          this.spinner.hide();
+        } catch (e) {
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      }
+    });
+  }
 }
