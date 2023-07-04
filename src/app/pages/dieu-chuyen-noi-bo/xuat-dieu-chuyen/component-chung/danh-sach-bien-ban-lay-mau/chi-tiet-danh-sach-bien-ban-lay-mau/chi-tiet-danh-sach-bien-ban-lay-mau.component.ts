@@ -458,7 +458,7 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
     body.bienBanLayMauDinhKem = this.bienBanLayMauDinhKem;
     body.canCu = this.canCu;
     body.fileDinhKemChupMauNiemPhong = this.fileDinhKemChupMauNiemPhong;
-    body.chiTieuKiemTra = this.chiTieuKiemTra.map(f => `${f.id}-${f.giaTri}`);
+    body.chiTieuKiemTra = this.chiTieuKiemTra.map(f => `${f.id}-${f.giaTri}`)?.join(",");
     body.dcnbBienBanLayMauDtl = this.listDaiDienCuc.map(f => ({ ...f, loaiDaiDien: '00', tenDaiDien: f.daiDien })).concat(this.listDaiDienChiCuc.map(f => ({ ...f, loaiDaiDien: '01', tenDaiDien: f.daiDien })))
     let data = await this.createUpdate(body);
     if (!data) return;
