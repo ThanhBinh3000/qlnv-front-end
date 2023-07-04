@@ -9,7 +9,7 @@
       </li>
       <ng-container *ngFor="let route of routes">
         <li class="nav-item"
-            *ngIf="userService.haveAnyCap(route.caps) && ((route && route.accessPermisson) ? userService.isAccessPermisson(route.accessPermisson) : true)">
+            *ngIf="userService.isAccessPermisson(route.accessPermisson)">
           <span class="nav-link" [ngClass]="
                 route.url && routerUrl.indexOf(route.url) != -1 ? 'active' : ''" nz-popover title
                 nzPopoverPlacement="leftBottom" [nzPopoverOverlayClassName]="'dau-thau-tab'"
