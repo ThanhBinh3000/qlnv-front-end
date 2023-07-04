@@ -307,7 +307,7 @@
             </ng-container>
           </ng-container>
           <ng-template #templateCuc>
-            <ng-container *ngFor="let item of listOfData , let i = index">
+            <ng-container *ngFor="let item of listDataGroup , let i = index">
               <tr>
                 <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
                 <td>{{item.tenChiCuc}}</td>
@@ -325,10 +325,10 @@
                   </a>
                 </td>
               </tr>
-              <ng-container *ngIf="expandSet2.has(i)">
+              <ng-container *ngIf="expandSet.has(i)">
                 <ng-container *ngFor="let diemKho of item.children, let y = index">
                   <tr>
-                    <td class="text-right" [nzExpand]="expandSet3.has(y)" (nzExpandChange)="onExpandChange3(y, $event)"></td>
+                    <td class="text-right" [nzExpand]="expandSet2.has(y)" (nzExpandChange)="onExpandChange2(y, $event)"></td>
                     <td></td>
                     <td>{{diemKho.tenDiemKho}}</td>
                     <td></td>
@@ -344,10 +344,9 @@
                       </a>
                     </td>
                   </tr>
-                  <ng-container *ngIf="expandSet3.has(y)">
+                  <ng-container *ngIf="expandSet2.has(y)">
                     <ng-container *ngFor="let nganLo of diemKho.children, let z = index">
                       <tr>
-                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -375,7 +374,7 @@
           </ng-template>
           </tbody>
           <tr *ngIf="listOfData.length > 0">
-            <td></td>
+            <td *ngIf="userService.isTongCuc()"></td>
             <td colspan="5" class="first-last-row-table background-last-row text-right text-blue">Tổng</td>
             <td
               class="background-last-row text-right blue-text">{{ calcTongSlTonKho() | number : '1.0-1' : 'vi_VN' }}</td>
