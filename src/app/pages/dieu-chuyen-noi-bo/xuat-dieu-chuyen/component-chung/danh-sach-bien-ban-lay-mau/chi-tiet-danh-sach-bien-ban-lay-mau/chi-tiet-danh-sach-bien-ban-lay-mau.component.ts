@@ -98,7 +98,7 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
         ngayQdDc: [],
         ktvBaoQuan: [],
         soBbLayMau: [],
-        ngayLayMau: [,],
+        ngayLayMau: [dayjs().format('YYYY-MM-DD')],
         dviKiemNghiem: [],
         diaDiemLayMau: [],
         loaiVthh: [, [Validators.required]],
@@ -182,8 +182,8 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
             this.bienBanLayMauDinhKem = cloneDeep(data.bienBanLayMauDinhKem);
             this.canCu = data.canCu;
             this.fileDinhKemChupMauNiemPhong = cloneDeep(data.fileDinhKemChupMauNiemPhong);
-            this.phuongPhapLayMaus = Array.isArray(data?.pplayMau?.split(",")) ? data.pplayMau.split(",").map(f => ({ id: f.split("-")[0], giaTri: f.split("-")[1], checked: true })) : [];
-            this.chiTieuKiemTra = Array.isArray(data?.chiTieuKiemTra?.split(",")) ? data.chiTieuKiemTra.split(",").map(f => ({ id: f.split("-")[0], giaTri: f.split("-")[1], checked: true })) : [];
+            this.phuongPhapLayMaus = Array.isArray(data?.pplayMau?.split("-*")) ? data.pplayMau.split("-*").map(f => ({ id: f.split("-")[0], giaTri: f.split("-")[1], checked: true })) : [];
+            this.chiTieuKiemTra = Array.isArray(data?.chiTieuKiemTra?.split("-*")) ? data.chiTieuKiemTra.split("-*").map(f => ({ id: f.split("-")[0], giaTri: f.split("-")[1], checked: true })) : [];
             const obj = Array.isArray(data.dcnbBienBanLayMauDtl) ? data.dcnbBienBanLayMauDtl.reduce((obj, cur) => {
               if (cur.loaiDaiDien == "00") {
                 obj.listDaiDienCuc.push({ ...cur, daiDien: cur.tenDaiDien })
@@ -217,7 +217,7 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
         if (dataChiTieu?.msg === MESSAGE.SUCCESS) {
           this.getChiTietTieuChiCanKiemTra(dataChiTieu.data?.content[0]?.id, this.passData.cloaiVthh)
         }
-        this.formData.patchValue({ pplayMau: this.phuongPhapLayMaus.map(f => `${f.id}-${f.giaTri}`).join(",") });
+        this.formData.patchValue({ pplayMau: this.phuongPhapLayMaus.map(f => `${f.id}-${f.giaTri}`).join("-*") });
       }
     }
 
@@ -368,7 +368,6 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
           })) : []
         }
       }
-      console.log("resââ", res)
     }
   }
   openDialogDdiemNhapHang(event: MouseEvent, disabled?: boolean) {
@@ -441,7 +440,7 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
     if (data.cloaiVthh) {
       const [chiTietHangHoa, dataChiTieu] = await Promise.all([this.danhMucService.loadDanhMucHangChiTiet(data.cloaiVthh), this.getTieuChiCanKiemTra(data.loaiVthh)]);
       this.phuongPhapLayMaus = Array.isArray(chiTietHangHoa?.data?.ppLayMau) ? chiTietHangHoa?.data?.ppLayMau.map(f => ({ ...f, checked: true })) : [];
-      this.formData.patchValue({ pplayMau: this.phuongPhapLayMaus.map(f => `${f.id}-${f.giaTri}`).join(",") });
+      this.formData.patchValue({ pplayMau: this.phuongPhapLayMaus.map(f => `${f.id}-${f.giaTri}`).join("-*") });
       if (dataChiTieu?.msg === MESSAGE.SUCCESS) {
         this.getChiTietTieuChiCanKiemTra(dataChiTieu.data?.content[0]?.id, data.cloaiVthh)
       }
@@ -458,7 +457,7 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
     body.bienBanLayMauDinhKem = this.bienBanLayMauDinhKem;
     body.canCu = this.canCu;
     body.fileDinhKemChupMauNiemPhong = this.fileDinhKemChupMauNiemPhong;
-    body.chiTieuKiemTra = this.chiTieuKiemTra.map(f => `${f.id}-${f.giaTri}`)?.join(",");
+    body.chiTieuKiemTra = this.chiTieuKiemTra.map(f => `${f.id}-${f.giaTri}`)?.join("-*");
     body.dcnbBienBanLayMauDtl = this.listDaiDienCuc.map(f => ({ ...f, loaiDaiDien: '00', tenDaiDien: f.daiDien })).concat(this.listDaiDienChiCuc.map(f => ({ ...f, loaiDaiDien: '01', tenDaiDien: f.daiDien })))
     let data = await this.createUpdate(body);
     if (!data) return;
