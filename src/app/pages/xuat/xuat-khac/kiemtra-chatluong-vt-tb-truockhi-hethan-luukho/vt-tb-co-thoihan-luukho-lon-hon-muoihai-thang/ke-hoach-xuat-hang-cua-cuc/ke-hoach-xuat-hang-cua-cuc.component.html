@@ -87,7 +87,7 @@
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button *ngIf="userService.isCuc()" (click)="themMoi()"
+        <button *ngIf="userService.isCuc()" (click)="themMoi(null,false)"
                 type="button" class="btn btn-sub xanh">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
@@ -95,7 +95,7 @@
       </div>
     </div>
     <nz-card class="mt-2px flex-card data-table card-border-content table-card">
-      <nz-table #rowSelectionTable class="nowrap" nzBordered [nzData]="dataTable" [nzFrontPagination]="false"
+      <nz-table #rowSelectionTable nzBordered [nzData]="dataTable" [nzFrontPagination]="false"
                 [nzShowPagination]="false">
         <tbody>
         <tr class="header-row">
@@ -109,12 +109,9 @@
           <th class="text-left">Ngày lập KH</th>
           <th class="text-left">Ngày duyệt KH</th>
           <th class="text-left">Trích yếu</th>
-          <th class="text-left">Ngày duyệt KH</th>
-          <th class="text-left">Trích yếu</th>
-          <!--          <th class="text-left">Chủng loại hàng hóa</th>-->
           <th class="text-left">Số ĐV tài sản</th>
           <th class="text-left">Trạng thái</th>
-          <th class="text-left">Hành động</th>
+          <th class="text-center" width="120px">Hành động</th>
         </tr>
         <!--        <tr class="header-row search">-->
         <!--          <th></th>-->
@@ -159,34 +156,27 @@
         <tr *ngFor="let data of rowSelectionTable.data; let idx = index">
           <td>
             <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
-                   [nzDisabled]="data.trangThai != STATUS.DANG_NHAP_DU_LIEU"></label>
+                   [nzDisabled]="data.trangThai != STATUS.DU_THAO"></label>
           </td>
           <td>{{(page - 1) * pageSize + idx +
           1}}</td>
-          <td> {{ data.soQd }} </td>
-          <td>{{ data.namQd }}</td>
-          <td>{{ data.ngayQd | date: 'dd/MM/YYYY' }}</td>
+          <td> {{ data.namKeHoach }} </td>
+          <td>{{ data.soToTrinh }}</td>
+          <td>{{ data.ngayKeHoach | date: 'dd/MM/YYYY' }}</td>
+          <td>{{ data.ngayDuyetKeHoach | date: 'dd/MM/YYYY' }}</td>
           <td>{{ data.trichYeu }}</td>
+          <td>{{ data.soDviTaiSan }}</td>
           <td>{{ data.tenTrangThai }}</td>
-          <td>{{ data.tenTrangThai }}</td>
-          <td>{{ data.tenTrangThai }}</td>
-          <td>{{ data.tenTrangThai }}</td>
-          <td>{{ data.tenTrangThai }}</td>
-          <td>
-            <!--            <a (click)="viewDetail(data.id, true)"-->
-            <!--               *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_QD_TTCP_XEM')">-->
-            <!--              <i class="fa fa-eye" title="Xem chi tiết"></i>-->
-            <!--            </a>-->
-            <!--            <a-->
-            <!--              *ngIf="(data.trangThai == STATUS.DANG_NHAP_DU_LIEU && userService.isTongCuc()) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_QD_TTCP_THEM')"-->
-            <!--              (click)="viewDetail(data.id, false)">-->
-            <!--              <i class="fa fa-pencil" title="Sửa"></i>-->
-            <!--            </a>-->
-            <!--            <a-->
-            <!--              *ngIf="(data.trangThai == STATUS.DANG_NHAP_DU_LIEU && userService.isTongCuc()) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_QD_TTCP_XOA')"-->
-            <!--              (click)="xoaItem(data)">-->
-            <!--              <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>-->
-            <!--            </a>-->
+          <td class="text-left">
+            <a (click)="themMoi(data.id, true)">
+              <i class="fa fa-eye" title="Xem chi tiết"></i>
+            </a>
+            <a *ngIf="data.trangThai==STATUS.DU_THAO" (click)="themMoi(data.id, false)">
+              <i class="fa fa-pencil" title="Sửa"></i>
+            </a>
+            <a *ngIf="data.trangThai==STATUS.DU_THAO" (click)="delete(data)">
+              <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+            </a>
           </td>
         </tr>
         </tbody>
@@ -194,7 +184,6 @@
       <div class="tab-content tab-menu" id="myTabContent">
         <div class="tab-pane fade show active justify-content-between">
           <div class="trai">
-
           </div>
           <div class="canphai">
             <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger
@@ -212,6 +201,6 @@
   </div>
 </div>
 <div class="chi-tiet" *ngIf="isDetail">
-  <app-thong-tin-ke-hoach-xuat-hang-cua-cuc [isViewDetail]="isView" (showListEvent)="showList()" [idInput]="idSelected">
+  <app-thong-tin-ke-hoach-xuat-hang-cua-cuc [isViewDetail]="isView" (showListEvent)="showList()" [idInput]="selectedId">
   </app-thong-tin-ke-hoach-xuat-hang-cua-cuc>
 </div>

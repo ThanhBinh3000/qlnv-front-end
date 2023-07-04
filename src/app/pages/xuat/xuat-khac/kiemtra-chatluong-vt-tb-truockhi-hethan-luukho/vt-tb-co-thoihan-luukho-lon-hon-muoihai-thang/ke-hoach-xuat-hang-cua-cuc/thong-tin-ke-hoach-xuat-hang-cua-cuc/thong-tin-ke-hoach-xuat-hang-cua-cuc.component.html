@@ -15,8 +15,24 @@
           <i class="fa fa-arrow-left"></i>
           <span>Quay lại</span>
         </button>
-        <button (click)="save()"
-                *ngIf="(formData.value.trangThai == STATUS.DU_THAO)  "
+        <button type="button" (click)="save(true)" class="btn btn-sm ml-2"
+                *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC )">
+          <i class="icon htvbdh_tcdt_guiduyet"></i>
+          <span>Lưu và gửi duyệt</span>
+        </button>
+        <a class="btn btn-outline-danger btn-sm waves-effect waves-light ml-2" (click)="tuChoi()"
+           *ngIf="(formData.value.trangThai  == STATUS.CHO_DUYET_TP || formData.value.trangThai  == STATUS.CHO_DUYET_LDC)">
+          <i class="icon htvbdh_tcdt_tuchoi"></i>
+          <span>Từ chối</span>
+        </a>
+        <a class="btn btn-outline-success btn-sm waves-effect waves-light ml-2"
+           *ngIf="(formData.value.trangThai  == STATUS.CHO_DUYET_TP || formData.value.trangThai  == STATUS.CHO_DUYET_LDC)"
+           (click)="pheDuyet()">
+          <i class="icon htvbdh_tcdt_pheduyet"></i>
+          <span>Duyệt</span>
+        </a>
+        <button (click)="save(false)"
+                *ngIf="(formData.value.trangThai == STATUS.DU_THAO && !isViewDetail)  "
                 class="btn btn-main btn-sm waves-effect waves-light ml-2">
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
@@ -24,7 +40,8 @@
       </div>
     </div>
   </nz-affix>
-  <nz-alert *ngIf="formData.value.trangThai == STATUS.TUCHOI_CB_CUC " nzShowIcon nzType="error"
+  <nz-alert *ngIf="formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC "
+            nzShowIcon nzType="error"
             nzMessage="Lý do từ chối"
             nzDescription="{{formData.value.lyDoTuChoi}}">
   </nz-alert>
@@ -167,7 +184,8 @@
                 <nz-form-control [nzErrorTip]="error">
                   <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Thời gian dự kiến xuất hàng
                   </nz-form-label>
-                  <nz-range-picker formControlName="thoiGianDuKienXuatHang" nzFormat="dd/MM/yyyy"></nz-range-picker>
+                  <nz-range-picker [nzDisabled]="isViewDetail" formControlName="thoiGianDuKienXuatHang"
+                                   nzFormat="dd/MM/yyyy"></nz-range-picker>
                 </nz-form-control>
               </nz-form-item>
               <nz-form-item>
@@ -175,7 +193,8 @@
                   <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Chọn bản tổng hợp
                   </nz-form-label>
                   <nz-form-control [nzErrorTip]="error">
-                    <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogDsTongHop()">
+                    <nz-input-group nzAddOnAfterIcon="folder-open"
+                                    (click)="!isViewDetail  ? openDialogDsTongHop():  'javascript:;'">
                       <input class="search__input" [readonly]="true" nz-input formControlName="maTongHopDs"
                              readonly/>
                     </nz-input-group>

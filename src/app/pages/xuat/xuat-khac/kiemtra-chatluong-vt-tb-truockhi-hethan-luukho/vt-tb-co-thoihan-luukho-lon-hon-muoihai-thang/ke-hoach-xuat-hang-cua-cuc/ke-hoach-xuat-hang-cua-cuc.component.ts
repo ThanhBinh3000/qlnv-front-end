@@ -92,10 +92,11 @@ export class KeHoachXuatHangCuaCucComponent extends Base2Component implements On
     await this.search();
   }
 
-  themMoi() {
+  themMoi(id, isView) {
+    console.log(id, 'idid')
     this.isDetail = true;
-    this.selectedId = null;
-    this.isView = false;
+    this.selectedId = id;
+    this.isView = isView;
   };
 
   async showList() {
