@@ -282,7 +282,7 @@ export class LapBienBanNghiemThuBaoQuanComponent extends Base2Component implemen
     });
     modalQD.afterClose.subscribe(async (data) => {
       await this.bindingDataDdNhap(data);
-      await this.loadDataComboBox();
+      // await this.loadDataComboBox();
     });
   }
 
