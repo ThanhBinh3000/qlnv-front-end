@@ -1,21 +1,18 @@
-<ng-container class="luong-thuc__danh-sach" *ngIf="!isDetail">
+<ng-container *ngIf="!isDetail">
   <div class="bg-trang">
     <nz-card class="mt16 flex-card p-lr16">
       <div class="search__body" nz-row [nzGutter]="20">
-        <div nz-col nzSpan="6">
-          <label>Số biên bản lấy mẫu/bàn giao mẫu</label>
-          <input nz-input [(ngModel)]="searchFilter.soBienBan" />
+        <div nz-col nzSpan="4">
+          <label class="search__label">Số QĐ</label>
+          <input class="search__input" placeholder="Nhập số quyết định" nz-input
+            [(ngModel)]="this.searchFilter.soQdNhap" />
         </div>
-        <div nz-col nzSpan="6">
-          <label>Số QĐ giao nhiệm vụ nhập hàng</label>
-          <input nz-input [(ngModel)]="searchFilter.soQuyetDinhNhap" />
+        <div nz-col nzSpan="4">
+          <label class="search__label">Số phiếu</label>
+          <input class="search__input" placeholder="Nhập số phiếu" nz-input [(ngModel)]="this.searchFilter.soPhieu" />
         </div>
-<!--        <div nz-col nzSpan="6">-->
-<!--          <label>Đơn vị kiểm nghiệm</label>-->
-<!--          <input nz-input [(ngModel)]="searchFilter.soBienBan" />-->
-<!--        </div>-->
         <div nz-col nzSpan="5">
-          <label>Ngày lấy mẫu</label>
+          <label class="search__label">Ngày lấy mẫu</label>
           <div nz-row [nzGutter]="24">
             <div nz-col nzSpan="12" class="cus-start-date">
               <nz-date-picker [nzDisabledDate]="disabledTuNgayLm" nzFormat="dd/MM/yyyy" [(ngModel)]="tuNgayLm"
@@ -27,6 +24,15 @@
                               [ngModelOptions]="{standalone: true}" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
             </div>
           </div>
+        </div>
+        <div nz-col nzSpan="4">
+          <label class="search__label">Số hợp đồng</label>
+          <input class="search__input" placeholder="Nhập số hợp đồng" nz-input [(ngModel)]="searchFilter.soHopDong" />
+        </div>
+        <div nz-col nzSpan="4">
+          <label class="search__label">Số biên bản lấy mẫu</label>
+          <input class="search__input" placeholder="Nhập số biên bản lấy mẫu" nz-input
+            [(ngModel)]="searchFilter.soBbBanGiao" />
         </div>
       </div>
       <div class="cangiua group-button-search">
@@ -41,22 +47,22 @@
       </div>
     </nz-card>
 
+
     <div class="group-button">
-      <h3>Danh sách biên bản lấy mẫu</h3>
+      <h3>Danh sách lập và ký phiếu kiểm nghiệm chất lượng</h3>
       <div class="buttons">
-        <button type="button" class="btn btn-do" (click)="deleteSelect()"
-          *ngIf="userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_BBLMBGM_XOA')">
-          <i class="fa fa-trash-o do"></i>
+        <button type="button" class="btn btn-do"
+          (click)="deleteSelect()">
+          <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
           <span>Xóa</span>
         </button>
-        <button *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_BBLMBGM_EXP')" type="button"
-          class="btn btn-sub" (click)="export()">
+        <button
+          type="button" class="btn btn-sub" (click)="export()">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button type="button" class="btn btn-main"
-          *ngIf="userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_BBLMBGM_THEM')"
-          (click)="redirectToChiTiet(false, 0)">
+        <button type="button" class="btn btn-main" (click)="redirectToChiTiet(false, 0)"
+          *ngIf="userService.isCuc()">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
         </button>
@@ -74,13 +80,13 @@
             <th>Năm kế hoạch</th>
             <th>Thời hạn NH trước ngày</th>
             <th>Điểm kho</th>
-<!--            <th>Nhà kho </th>-->
-<!--            <th>Ngăn kho </th>-->
             <th>Lô kho </th>
+            <th>Số phiếu KNCL</th>
+            <th>Ngày kiểm nghiệm</th>
             <th>Số BB LM/BGM</th>
             <th>Ngày lấy mẫu</th>
-            <th>{{ loaiVthh == '02' ? 'Số BB gửi hàng' : 'Số BB nhập đầy kho' }} </th>
-            <th>{{ loaiVthh == '02' ? 'Ngày gửi hàng' : 'Ngày nhập đầy kho' }} </th>
+            <th>Số BB nhập đầy kho </th>
+            <th>Ngày nhập đầy kho </th>
             <th>Trạng thái</th>
             <th>Hành động</th>
           </tr>
@@ -93,9 +99,9 @@
               <td class="link bold">{{ item.soQd }}</td>
               <td class="bold">{{ item.nam }}</td>
               <td class="bold">{{ item.tgianNkMnhat }}</td>
-              <td colspan="7"></td>
+              <td colspan="9"></td>
               <td>
-                <a (click)="redirectToChiTiet(false, 0,item.id)">
+                <a (click)="redirectToChiTiet(false, 0,item)">
                   <i class="fa fa-plus"></i>
                 </a>
               </td>
@@ -114,6 +120,8 @@
                   <td></td>
                   <td></td>
                   <td></td>
+                  <td></td>
+                  <td></td>
                 </tr>
                 <ng-container *ngFor="let lk of bb.children, let k = index">
                   <tr>
@@ -122,23 +130,22 @@
                     <td colspan="3"></td>
                     <td></td>
                     <td>{{lk.tenNganLoKho}}</td>
+                    <td class="bold">{{lk.pknghiemClHang?.soPhieuKiemNghiemCl}}</td>
+                    <td>{{lk.pknghiemClHang?.ngayKnghiem | date: 'dd/MM/YYYY' }}</td>
                     <td class="bold">{{lk.bbLayMau?.soBienBan}}</td>
                     <td>{{lk.bbLayMau?.ngayLayMau | date: 'dd/MM/YYYY'}}</td>
-                    <td>{{lk.bbLayMau?.soBbNhapDayKho}}</td>
-                    <td>{{lk.bbLayMau?.ngayNhapDayKho}}</td>
-                    <td>{{lk.bbLayMau?.tenTrangThai}}</td>
+                    <td>{{lk.soBbNhapDayKho}}</td>
+                    <td>{{lk.ngayNhapDayKho | date: 'dd/MM/YYYY' }}</td>
+                    <td>{{lk.pknghiemClHang?.tenTrangThai}}</td>
                     <td>
-                      <a *ngIf="lk.bbLayMau && lk.bbLayMau?.trangThai == STATUS.DA_DUYET_LDCC"
-                         (click)="redirectToChiTiet(false, lk.bbLayMau?.id)">
-                        <i class="fa fa-eye"></i>
+                      <a *ngIf="lk.pknghiemClHang?.trangThai == STATUS.DA_DUYET_LDCC" (click)="redirectToChiTiet(false, lk.pknghiemClHang?.id)">
+                        <i class="fa fa-eye" title="Xem chi tiết"></i>
                       </a>
-                      <a *ngIf="lk.bbLayMau && bb.bbLayMau?.trangThai != STATUS.DA_DUYET_LDCC"
-                         (click)="redirectToChiTiet(false, lk.bbLayMau?.id)">
-                        <i class="fa fa-pencil"></i>
+                      <a *ngIf="lk.pknghiemClHang?.trangThai != STATUS.DA_DUYET_LDCC" (click)="redirectToChiTiet(false, lk.pknghiemClHang?.id)">
+                        <i class="fa fa-pencil" title="Sửa"></i>
                       </a>
-                      <a *ngIf="lk.bbLayMau && lk.bbLayMau?.trangThai == STATUS.DU_THAO"
-                         (click)="xoaItem(lk.bbLayMau)">
-                        <i class="fa fa-trash-o do"></i>
+                      <a *ngIf="lk.pknghiemClHang?.trangThai == STATUS.DU_THAO" (click)="xoaItem(lk.pknghiemClHang)">
+                        <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                       </a>
                     </td>
                   </tr>
@@ -167,8 +174,8 @@
     </nz-card>
   </div>
 </ng-container>
-<ng-container *ngIf="isDetail">
-  <them-moi-bien-ban-lay-mau [id]="selectedId" [idQdGvuNh]="idQdGvuNh" (showListEvent)="showList()" [isView]="isView" [loaiVthh]="loaiVthh"
-    [isTatCa]="isTatCa">
-  </them-moi-bien-ban-lay-mau>
+<ng-container class="chi-tiet" *ngIf="isDetail">
+  <app-them-moi-phieu-kiem-nghiem-chat-luong [qdGvuNh]="qdGvuNh" [typeVthh]="typeVthh" [id]="selectedId" [isView]="isView"
+    (showListEvent)="showList()">
+  </app-them-moi-phieu-kiem-nghiem-chat-luong>
 </ng-container>
