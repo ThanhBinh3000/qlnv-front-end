@@ -11,6 +11,7 @@ import dayjs from "dayjs";
 import {STATUS} from "../../../../../constants/status";
 import {DanhMucCongCuDungCuService} from "../../../../../services/danh-muc-cong-cu-dung-cu.service";
 import {DxChiCucPvcService} from "../../../../../services/dinh-muc-nhap-xuat-bao-quan/pvc/dx-chi-cuc-pvc.service";
+import {AMOUNT, AMOUNT_ONE_DECIMAL, AMOUNT_TWO_DECIMAL} from "../../../../../Utility/utils";
 
 @Component({
   selector: 'app-them-moi-dx-chi-cuc-pvc',
@@ -24,7 +25,8 @@ export class ThemMoiDxChiCucPvcComponent extends Base2Component implements OnIni
   dataEdit: { [key: string]: { edit: boolean; data: PvcDxChiCucCtiet } } = {};
   listCcdc: any[] = [];
   listCtieuKh: any[] = []
-  maQd  :string
+  maQd: string
+  amount = AMOUNT_ONE_DECIMAL;
 
   constructor(
     httpClient: HttpClient,
@@ -251,10 +253,10 @@ export class ThemMoiDxChiCucPvcComponent extends Base2Component implements OnIni
     this.formData.value.listQlDinhMucPvcDxCcdcDtl = this.dataTable;
     this.formData.value.maDvi = this.userInfo.MA_DVI;
     this.formData.value.capDvi = this.userInfo.CAP_DVI;
-    this.formData.value.soCv =this.formData.value.soCv + this.maQd;
+    this.formData.value.soCv = this.formData.value.soCv + this.maQd;
     let res = await this.createUpdate(this.formData.value)
     if (res) {
-        this.goBack()
+      this.goBack()
     }
   }
 
@@ -267,7 +269,7 @@ export class ThemMoiDxChiCucPvcComponent extends Base2Component implements OnIni
           const data = res.data;
           this.helperService.bidingDataInFormGroup(this.formData, data);
           this.formData.patchValue({
-            soCv : this.formData.value.soCv  ? this.formData.value.soCv.split('/')[0] : null
+            soCv: this.formData.value.soCv ? this.formData.value.soCv.split('/')[0] : null
           })
           this.fileDinhKem = data.listFileDinhKems;
           this.dataTable = data.listQlDinhMucPvcDxCcdcDtl;
@@ -303,6 +305,8 @@ export class ThemMoiDxChiCucPvcComponent extends Base2Component implements OnIni
   changeSoQdGiaoCt(event) {
 
   }
+
+  protected readonly AMOUNT = AMOUNT;
 }
 
 export class PvcDxChiCucCtiet {
