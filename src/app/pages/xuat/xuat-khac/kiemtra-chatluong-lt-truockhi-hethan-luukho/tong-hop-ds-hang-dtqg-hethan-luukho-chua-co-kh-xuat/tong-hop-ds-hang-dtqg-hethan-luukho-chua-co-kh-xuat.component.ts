@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Base2Component} from "../../../../../components/base2/base2.component";
 import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../../services/storage.service";
@@ -47,6 +47,7 @@ export class TongHopDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Com
   showDetail: boolean;
   @Input()  openModal:boolean;
   loaiHhXuatKhac = LOAI_HH_XUAT_KHAC;
+  @Output() tabFocus = new EventEmitter<number>();
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -293,8 +294,12 @@ export class TongHopDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Com
       },
     });
   }
+  emitTab(tab) {
+    this.tabFocus.emit(tab);
+  }
   danhSach() {
     this.DanhSach = true;
+    this.emitTab(0)
   }
 
 }
