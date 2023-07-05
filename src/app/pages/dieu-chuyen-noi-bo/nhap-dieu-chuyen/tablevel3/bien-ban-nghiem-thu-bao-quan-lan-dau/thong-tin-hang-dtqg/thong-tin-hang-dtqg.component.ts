@@ -64,8 +64,6 @@ export class ThongTinHangDtqgComponent extends Base2Component implements OnInit 
 
   ngOnInit(): void {
     this.getDSMatHang()
-    console.log('this.data', this.data)
-    // this.formData.patchValue(this.data)
   }
 
   async getDSMatHang() {
@@ -77,6 +75,7 @@ export class ThongTinHangDtqgComponent extends Base2Component implements OnInit 
     if (res.msg == MESSAGE.SUCCESS) {
       this.listMatHang = res.data.content
     }
+    if (!this.data) return
     let data = this.data
     data.isMatHang = (data.idParent && !data.isParent)
     this.formData.patchValue(data);
