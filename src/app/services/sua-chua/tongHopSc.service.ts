@@ -15,7 +15,7 @@ export class TongHopScService extends BaseService {
   }
 
   getDanhSachTrinhThamDinh(body): Promise<OldResponseData> {
-    const url = `${environment.SERVICE_API_LOCAL}/${this.table}/ds-trinh-tham-dinh`;
+    const url = `${environment.SERVICE_API}/${this.table}/ds-trinh-tham-dinh`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
 
