@@ -221,7 +221,7 @@ export class PhuLucTaiSanComponent implements OnInit {
 			request.fileDinhKems.push(await this.fileFunc.uploadFile(iterator, this.dataInfo.path));
 		}
 
-		request.lstCtietLapThamDinhs = lstCtietBcaoTemp;
+		request.lstCtietBcaos = lstCtietBcaoTemp;
 		request.trangThai = trangThai;
 
 		if (lyDoTuChoi) {
