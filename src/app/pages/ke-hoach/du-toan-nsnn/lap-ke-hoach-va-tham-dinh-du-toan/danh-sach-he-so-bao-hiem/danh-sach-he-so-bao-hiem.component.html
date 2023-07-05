@@ -2,7 +2,7 @@
     <nz-card class="mt16 flex-card p-lr16">
         <div class="search__body" nz-row [nzGutter]="[18, 12]">
             <div nz-col nzSpan="3">
-                <label class="search__label">Năm báo cáo</label>
+                <label class="search__label">Năm</label>
                 <nz-input-number [nzSize]="'small'"
                     [class]="(searchFilter.nam >= 1000 &&  searchFilter.nam <= 2999) || !searchFilter.nam && this.searchFilter.nam !== 0 ?'' : 'input-error-validate'"
                     [(ngModel)]="searchFilter.nam"></nz-input-number>
@@ -18,22 +18,10 @@
                 </nz-date-picker>
             </div>
             <div nz-col nzSpan="3">
-                <label class="search__label">Mã báo cáo</label>
-                <input class="search__input" nz-input [(ngModel)]="searchFilter.maBaoCao" />
-            </div>
-            <div nz-col nzSpan="3">
                 <label class="search__label">Trạng thái</label>
                 <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái"
                     [(ngModel)]="searchFilter.trangThai">
-                    <nz-option *ngFor="let item of Status.TRANG_THAI_DVCT" [nzValue]="item.id" [nzLabel]="item.tenDm">
-                    </nz-option>
-                </nz-select>
-            </div>
-            <div nz-col nzSpan="6">
-                <label class="search__label">Đơn vị tạo</label>
-                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị tạo"
-                    [(ngModel)]="searchFilter.donViTao">
-                    <nz-option *ngFor="let item of donVis" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
+                    <nz-option *ngFor="let item of Status.TRANG_THAI_DVCD" [nzValue]="item.id" [nzLabel]="item.tenDm">
                     </nz-option>
                 </nz-select>
             </div>
@@ -50,63 +38,78 @@
         </div>
     </nz-card>
     <div class="group-button">
-        <h3 class="text-uppercase">DANH SÁCH DỰ TOÁN NGÂN SÁCH HẰNG NĂM VÀ KHTC 03 NĂM</h3>
+        <h3 class="text-uppercase">THIẾT LẬP HỆ SÓ BẢO HIỂM HÀNG NĂM</h3>
+        <div class="buttons">
+            <button *ngIf="statusDelete" type="button" class="btn btn-do" (click)="deleteReport('')">
+                <i class="fa fa-trash-o do"></i>
+                <span>Xóa</span>
+            </button>
+            <button *ngIf="statusNewReport" type="button" class="btn btn-main" (click)="addNewReport()">
+                <i class="icon htvbdh_tcdt_tao-qd"></i>
+                <span>Thêm</span>
+            </button>
+        </div>
     </div>
     <nz-card class="mt-2px flex-card data-table card-border-content table-card">
         <nz-table #basicTable class="nowrap table__container-tt" [nzData]="dataTable" [nzFrontPagination]="false"
             [nzShowPagination]="false" nzBordered>
             <thead>
                 <tr>
+                    <th width="45px">
+                        <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"></label>
+                    </th>
                     <th width="60px" class="text-center">STT</th>
-                    <th>Đơn vị lập</th>
-                    <th>Mã báo cáo</th>
-                    <th>Năm báo cáo</th>
+                    <th>Năm</th>
                     <th>Ngày tạo</th>
-                    <th nzWidth="20%">Công văn</th>
-                    <th>Ngày trình duyệt <br /> (Ngày đơn vị dưới gửi báo cáo)</th>
-                    <th>Ngày duyệt <br />(Ngày cấp trên đánh giá báo cáo)</th>
-                    <th class="text-center">Trạng thái</th>
+                    <th>Ngày trình duyệt</th>
+                    <th>Ngày TBP duyệt</th>
+                    <th>Ngày lãnh đạo duyệt</th>
+                    <th>Trạng thái</th>
                     <th width="90px">Hành động</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let data of basicTable.data; let i = index">
+                    <td width="45px">
+                        <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
+                            [nzDisabled]="!data.isDelete"></label>
+                    </td>
                     <td class="text-center">
                         {{ (i + 1) + (pages.page - 1)*pages.size }}
                     </td>
                     <td>
-                        {{ getUnitName(data.maDvi) }}
-                    </td>
-                    <td>
-                        {{ data.maBcao }}
-                    </td>
-                    <td>
-                        {{ data.namBcao }}
+                        {{ data.nam }}
                     </td>
                     <td>
                         {{ Utils.fmtDate(data.ngayTao) }}
                     </td>
                     <td>
-                        <div class="tep" (click)="downloadFileCv(data?.congVan?.fileUrl, data?.congVan?.fileName)">
-                            <span>{{data?.congVan?.fileName}}</span>
-                        </div>
+                        {{ Utils.fmtDate(data.ngayTrinh) }}
+                    </td>
+                    <td>
+                        {{ Utils.fmtDate(data.ngayDuyet) }}
                     </td>
                     <td>
                         {{ Utils.fmtDate(data.ngayPheDuyet) }}
                     </td>
                     <td>
-                        {{ Utils.fmtDate(data.ngayTraKq) }}
-                    </td>
-                    <td>
-                        {{Status.reportStatusName(data.trangThai, true)}}
-                        <ng-container *ngIf="data.trangThai == Status.TT_08">
+                        {{ Status.reportStatusName(data.trangThai)}}
+                        <ng-container *ngIf="Status.check('reject', data.trangThai)">
                             <br />
                             Lý do: {{data.lyDoTuChoi}}
                         </ng-container>
                     </td>
                     <td class="text-left">
                         <a (click)="viewDetail(data)">
-                            <i class="fa fa-eye"></i>
+                            <ng-container *ngIf="data.isEdit; else view">
+                                <i class="fa fa-pencil"></i>
+                            </ng-container>
+                            <ng-template #view>
+                                <i class="fa fa-eye"></i>
+                            </ng-template>
+                        </a>
+                        <a *ngIf="data.isDelete" (click)="deleteReport(data.id)">
+                            <i class="fa fa-trash-o do"></i>
                         </a>
                     </td>
                 </tr>

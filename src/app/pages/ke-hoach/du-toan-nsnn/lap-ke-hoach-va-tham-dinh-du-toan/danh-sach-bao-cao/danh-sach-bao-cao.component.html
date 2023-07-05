@@ -31,7 +31,7 @@
                 <label class="search__label">Trạng thái</label>
                 <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái"
                     [(ngModel)]="searchFilter.trangThai">
-                    <nz-option *ngFor="let item of trangThais" [nzValue]="item.id" [nzLabel]="item.tenDm">
+                    <nz-option *ngFor="let item of Status.TRANG_THAI_FULL" [nzValue]="item.id" [nzLabel]="item.tenDm">
                     </nz-option>
                 </nz-select>
             </div>
@@ -154,7 +154,7 @@
                         {{ data.maBcao }}
                     </td>
                     <td>
-                        {{ data.ngayTao }}
+                        {{ Utils.fmtDate(data.ngayTao) }}
                     </td>
                     <td>
                         {{ data.namBcao }}
@@ -163,19 +163,19 @@
                         {{ data.lan }}
                     </td>
                     <td>
-                        {{ data.ngayTrinh }}
+                        {{ Utils.fmtDate(data.ngayTrinh) }}
                     </td>
                     <td>
-                        {{ data.ngayDuyet }}
+                        {{ Utils.fmtDate(data.ngayDuyet) }}
                     </td>
                     <td>
-                        {{ data.ngayPheDuyet }}
+                        {{ Utils.fmtDate(data.ngayPheDuyet) }}
                     </td>
                     <td>
-                        {{ data.ngayTraKq }}
+                        {{ Utils.fmtDate(data.ngayTraKq) }}
                     </td>
                     <td>
-                        {{getStatusName(data.trangThai)}}
+                        {{Status.reportStatusName(data.trangThai)}}
                         <ng-container *ngIf="data.trangThai =='3' || data.trangThai == '5' || data.trangThai == '8'">
                             <br />
                             Lý do: {{data.lyDoTuChoi}}

@@ -8,12 +8,12 @@
 							<div> Đơn vị: </div>
 							<div style="margin-left: 10px;">
 								<ng-container *ngIf="status.general || !editMoneyUnit; else editMoney">
-									<span (click)="editMoneyUnit=true">{{genFunc.moneyUnitName(maDviTien)}}</span>
+									<span (click)="editMoneyUnit=true">{{Utils.moneyUnitName(maDviTien)}}</span>
 								</ng-container>
 								<ng-template #editMoney>
 									<nz-select nzShowSearch nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
 										(ngModelChange)="editMoneyUnit=false">
-										<nz-option *ngFor="let item of donViTiens" [nzValue]="item.id"
+										<nz-option *ngFor="let item of Utils.DVI_TIEN" [nzValue]="item.id"
 											[nzLabel]="item.tenDm">
 										</nz-option>
 									</nz-select>
@@ -126,29 +126,29 @@
 								<th></th>
 								<th></th>
 								<th></th>
-								<th>{{numFunc.valFmt(total.tmdtTongSo, maDviTien)}}</th>
-								<th>{{numFunc.valFmt(total.tmdtNstw, maDviTien)}}</th>
-								<th>{{numFunc.valFmt(total.keHoachTongSo, maDviTien)}}</th>
-								<th>{{numFunc.valFmt(total.keHoachNstw, maDviTien)}}</th>
-								<th>{{numFunc.valFmt(total.uocGiaiNganDauNamTong, maDviTien)}}</th>
-								<th>{{numFunc.valFmt(total.uocGiaiNganDauNamNstw, maDviTien)}}</th>
-								<th>{{numFunc.valFmt(total.uocGiaiNganCaNamTong, maDviTien)}}</th>
-								<th>{{numFunc.valFmt(total.uocGiaiNganCaNamNstw, maDviTien)}}</th>
-								<th>{{numFunc.valFmt(total.daBoTriVonTongSo, maDviTien)}}</th>
-								<th>{{numFunc.valFmt(total.daBoTriVonNstw, maDviTien)}}</th>
-								<th>{{numFunc.valFmt(total.trungHanVonN2N2TongSo, maDviTien)}}</th>
-								<th>{{numFunc.valFmt(total.trungHanVonN2N2ThuHoi, maDviTien)}}</th>
-								<th>{{numFunc.valFmt(total.trungHanVonN2N2Xdcb, maDviTien)}}</th>
-								<th>{{numFunc.valFmt(total.trungHanVonN2N2Cbi, maDviTien)}}</th>
-								<th>{{numFunc.valFmt(total.trungHanVonN2N1TongSo, maDviTien)}}</th>
-								<th>{{numFunc.valFmt(total.trungHanVonN2N1ThuHoi, maDviTien)}}</th>
-								<th>{{numFunc.valFmt(total.trungHanVonN2N1Xdcb, maDviTien)}}</th>
-								<th>{{numFunc.valFmt(total.trungHanVonN2N1Cbi, maDviTien)}}</th>
-								<th>{{numFunc.valFmt(total.khTongSoNamN, maDviTien)}}</th>
-								<th>{{numFunc.valFmt(total.khNstwTongSoNamN, maDviTien)}}</th>
-								<th>{{numFunc.valFmt(total.khNstwThuHoiNamN, maDviTien)}}</th>
-								<th>{{numFunc.valFmt(total.khNstwThanhToanNamN, maDviTien)}}</th>
-								<th>{{numFunc.valFmt(total.khNstwChuanBiNamN, maDviTien)}}</th>
+								<th>{{Op.fmtVal(total.tmdtTongSo, maDviTien)}}</th>
+								<th>{{Op.fmtVal(total.tmdtNstw, maDviTien)}}</th>
+								<th>{{Op.fmtVal(total.keHoachTongSo, maDviTien)}}</th>
+								<th>{{Op.fmtVal(total.keHoachNstw, maDviTien)}}</th>
+								<th>{{Op.fmtVal(total.uocGiaiNganDauNamTong, maDviTien)}}</th>
+								<th>{{Op.fmtVal(total.uocGiaiNganDauNamNstw, maDviTien)}}</th>
+								<th>{{Op.fmtVal(total.uocGiaiNganCaNamTong, maDviTien)}}</th>
+								<th>{{Op.fmtVal(total.uocGiaiNganCaNamNstw, maDviTien)}}</th>
+								<th>{{Op.fmtVal(total.daBoTriVonTongSo, maDviTien)}}</th>
+								<th>{{Op.fmtVal(total.daBoTriVonNstw, maDviTien)}}</th>
+								<th>{{Op.fmtVal(total.trungHanVonN2N2TongSo, maDviTien)}}</th>
+								<th>{{Op.fmtVal(total.trungHanVonN2N2ThuHoi, maDviTien)}}</th>
+								<th>{{Op.fmtVal(total.trungHanVonN2N2Xdcb, maDviTien)}}</th>
+								<th>{{Op.fmtVal(total.trungHanVonN2N2Cbi, maDviTien)}}</th>
+								<th>{{Op.fmtVal(total.trungHanVonN2N1TongSo, maDviTien)}}</th>
+								<th>{{Op.fmtVal(total.trungHanVonN2N1ThuHoi, maDviTien)}}</th>
+								<th>{{Op.fmtVal(total.trungHanVonN2N1Xdcb, maDviTien)}}</th>
+								<th>{{Op.fmtVal(total.trungHanVonN2N1Cbi, maDviTien)}}</th>
+								<th>{{Op.fmtVal(total.khTongSoNamN, maDviTien)}}</th>
+								<th>{{Op.fmtVal(total.khNstwTongSoNamN, maDviTien)}}</th>
+								<th>{{Op.fmtVal(total.khNstwThuHoiNamN, maDviTien)}}</th>
+								<th>{{Op.fmtVal(total.khNstwThanhToanNamN, maDviTien)}}</th>
+								<th>{{Op.fmtVal(total.khNstwChuanBiNamN, maDviTien)}}</th>
 								<th></th>
 								<th *ngIf="status.general" nzRight></th>
 								<th *ngIf="status.general" nzRight></th>
@@ -169,29 +169,29 @@
 									<td>{{data.nangLucTke}}</td>
 									<td>{{data.thoiGianKcHt}}</td>
 									<td>{{data.soQd}}</td>
-									<td>{{numFunc.valFmt(data.tmdtTongSo, maDviTien)}}</td>
-									<td>{{numFunc.valFmt(data.tmdtNstw, maDviTien)}}</td>
-									<td>{{numFunc.valFmt(data.keHoachTongSo, maDviTien)}}</td>
-									<td>{{numFunc.valFmt(data.keHoachNstw, maDviTien)}}</td>
-									<td>{{numFunc.valFmt(data.uocGiaiNganDauNamTong, maDviTien)}}</td>
-									<td>{{numFunc.valFmt(data.uocGiaiNganDauNamNstw, maDviTien)}}</td>
-									<td>{{numFunc.valFmt(data.uocGiaiNganCaNamTong, maDviTien)}}</td>
-									<td>{{numFunc.valFmt(data.uocGiaiNganCaNamNstw, maDviTien)}}</td>
-									<td>{{numFunc.valFmt(data.daBoTriVonTongSo, maDviTien)}}</td>
-									<td>{{numFunc.valFmt(data.daBoTriVonNstw, maDviTien)}}</td>
-									<td>{{numFunc.valFmt(data.trungHanVonN2N2TongSo, maDviTien)}}</td>
-									<td>{{numFunc.valFmt(data.trungHanVonN2N2ThuHoi, maDviTien)}}</td>
-									<td>{{numFunc.valFmt(data.trungHanVonN2N2Xdcb, maDviTien)}}</td>
-									<td>{{numFunc.valFmt(data.trungHanVonN2N2Cbi, maDviTien)}}</td>
-									<td>{{numFunc.valFmt(data.trungHanVonN2N1TongSo, maDviTien)}}</td>
-									<td>{{numFunc.valFmt(data.trungHanVonN2N1ThuHoi, maDviTien)}}</td>
-									<td>{{numFunc.valFmt(data.trungHanVonN2N1Xdcb, maDviTien)}}</td>
-									<td>{{numFunc.valFmt(data.trungHanVonN2N1Cbi, maDviTien)}}</td>
-									<td>{{numFunc.valFmt(data.khTongSoNamN, maDviTien)}}</td>
-									<td>{{numFunc.valFmt(data.khNstwTongSoNamN, maDviTien)}}</td>
-									<td>{{numFunc.valFmt(data.khNstwThuHoiNamN, maDviTien)}}</td>
-									<td>{{numFunc.valFmt(data.khNstwThanhToanNamN, maDviTien)}}</td>
-									<td>{{numFunc.valFmt(data.khNstwChuanBiNamN, maDviTien)}}</td>
+									<td>{{Op.fmtVal(data.tmdtTongSo, maDviTien)}}</td>
+									<td>{{Op.fmtVal(data.tmdtNstw, maDviTien)}}</td>
+									<td>{{Op.fmtVal(data.keHoachTongSo, maDviTien)}}</td>
+									<td>{{Op.fmtVal(data.keHoachNstw, maDviTien)}}</td>
+									<td>{{Op.fmtVal(data.uocGiaiNganDauNamTong, maDviTien)}}</td>
+									<td>{{Op.fmtVal(data.uocGiaiNganDauNamNstw, maDviTien)}}</td>
+									<td>{{Op.fmtVal(data.uocGiaiNganCaNamTong, maDviTien)}}</td>
+									<td>{{Op.fmtVal(data.uocGiaiNganCaNamNstw, maDviTien)}}</td>
+									<td>{{Op.fmtVal(data.daBoTriVonTongSo, maDviTien)}}</td>
+									<td>{{Op.fmtVal(data.daBoTriVonNstw, maDviTien)}}</td>
+									<td>{{Op.fmtVal(data.trungHanVonN2N2TongSo, maDviTien)}}</td>
+									<td>{{Op.fmtVal(data.trungHanVonN2N2ThuHoi, maDviTien)}}</td>
+									<td>{{Op.fmtVal(data.trungHanVonN2N2Xdcb, maDviTien)}}</td>
+									<td>{{Op.fmtVal(data.trungHanVonN2N2Cbi, maDviTien)}}</td>
+									<td>{{Op.fmtVal(data.trungHanVonN2N1TongSo, maDviTien)}}</td>
+									<td>{{Op.fmtVal(data.trungHanVonN2N1ThuHoi, maDviTien)}}</td>
+									<td>{{Op.fmtVal(data.trungHanVonN2N1Xdcb, maDviTien)}}</td>
+									<td>{{Op.fmtVal(data.trungHanVonN2N1Cbi, maDviTien)}}</td>
+									<td>{{Op.fmtVal(data.khTongSoNamN, maDviTien)}}</td>
+									<td>{{Op.fmtVal(data.khNstwTongSoNamN, maDviTien)}}</td>
+									<td>{{Op.fmtVal(data.khNstwThuHoiNamN, maDviTien)}}</td>
+									<td>{{Op.fmtVal(data.khNstwThanhToanNamN, maDviTien)}}</td>
+									<td>{{Op.fmtVal(data.khNstwChuanBiNamN, maDviTien)}}</td>
 									<td>{{data.ghiChu}}</td>
 									<td *ngIf="status.general" nzRight>
 										<i *ngIf="checkEdit(data.stt)" class="fa fa-pencil"
@@ -242,105 +242,107 @@
 									</td>
 									<td>
 										<input class="money-input" currencyMask
-											[(ngModel)]="editCache[data.id].data.tmdtTongSo" [options]="amount" />
+											[(ngModel)]="editCache[data.id].data.tmdtTongSo" [options]="Op.amount" />
 									</td>
 									<td>
 										<input class="money-input" currencyMask
-											[(ngModel)]="editCache[data.id].data.tmdtNstw" [options]="amount" />
+											[(ngModel)]="editCache[data.id].data.tmdtNstw" [options]="Op.amount" />
 									</td>
 									<td>
 										<input class="money-input" currencyMask
-											[(ngModel)]="editCache[data.id].data.keHoachTongSo" [options]="amount" />
+											[(ngModel)]="editCache[data.id].data.keHoachTongSo" [options]="Op.amount" />
 									</td>
 									<td>
 										<input class="money-input" currencyMask
-											[(ngModel)]="editCache[data.id].data.keHoachNstw" [options]="amount" />
+											[(ngModel)]="editCache[data.id].data.keHoachNstw" [options]="Op.amount" />
 									</td>
 									<td>
 										<input class="money-input" currencyMask
 											[(ngModel)]="editCache[data.id].data.uocGiaiNganDauNamTong"
-											[options]="amount" />
+											[options]="Op.amount" />
 									</td>
 									<td>
 										<input class="money-input" currencyMask
 											[(ngModel)]="editCache[data.id].data.uocGiaiNganDauNamNstw"
-											[options]="amount" />
+											[options]="Op.amount" />
 									</td>
 									<td>
 										<input class="money-input" currencyMask
 											[(ngModel)]="editCache[data.id].data.uocGiaiNganCaNamTong"
-											[options]="amount" />
+											[options]="Op.amount" />
 									</td>
 									<td>
 										<input class="money-input" currencyMask
 											[(ngModel)]="editCache[data.id].data.uocGiaiNganCaNamNstw"
-											[options]="amount" />
+											[options]="Op.amount" />
 									</td>
 									<td>
 										<input class="money-input" currencyMask
-											[(ngModel)]="editCache[data.id].data.daBoTriVonTongSo" [options]="amount" />
+											[(ngModel)]="editCache[data.id].data.daBoTriVonTongSo"
+											[options]="Op.amount" />
 									</td>
 									<td>
 										<input class="money-input" currencyMask
-											[(ngModel)]="editCache[data.id].data.daBoTriVonNstw" [options]="amount" />
+											[(ngModel)]="editCache[data.id].data.daBoTriVonNstw"
+											[options]="Op.amount" />
 									</td>
 									<td>
-										{{numFunc.valFmt(editCache[data.id].data.trungHanVonN2N2TongSo, maDviTien)}}
+										{{Op.fmtVal(editCache[data.id].data.trungHanVonN2N2TongSo, maDviTien)}}
 									</td>
 									<td>
 										<input class="money-input" currencyMask
 											[(ngModel)]="editCache[data.id].data.trungHanVonN2N2ThuHoi"
-											(ngModelChange)="changeModel(data.id)" [options]="amount" />
+											(ngModelChange)="changeModel(data.id)" [options]="Op.amount" />
 									</td>
 									<td>
 										<input class="money-input" currencyMask
 											[(ngModel)]="editCache[data.id].data.trungHanVonN2N2Xdcb"
-											(ngModelChange)="changeModel(data.id)" [options]="amount" />
+											(ngModelChange)="changeModel(data.id)" [options]="Op.amount" />
 									</td>
 									<td>
 										<input class="money-input" currencyMask
 											[(ngModel)]="editCache[data.id].data.trungHanVonN2N2Cbi"
-											(ngModelChange)="changeModel(data.id)" [options]="amount" />
+											(ngModelChange)="changeModel(data.id)" [options]="Op.amount" />
 									</td>
 									<td>
-										{{numFunc.valFmt(editCache[data.id].data.trungHanVonN2N1TongSo, maDviTien)}}
+										{{Op.fmtVal(editCache[data.id].data.trungHanVonN2N1TongSo, maDviTien)}}
 									</td>
 									<td>
 										<input class="money-input" currencyMask
 											[(ngModel)]="editCache[data.id].data.trungHanVonN2N1ThuHoi"
-											(ngModelChange)="changeModel(data.id)" [options]="amount" />
+											(ngModelChange)="changeModel(data.id)" [options]="Op.amount" />
 									</td>
 									<td>
 										<input class="money-input" currencyMask
 											[(ngModel)]="editCache[data.id].data.trungHanVonN2N1Xdcb"
-											(ngModelChange)="changeModel(data.id)" [options]="amount" />
+											(ngModelChange)="changeModel(data.id)" [options]="Op.amount" />
 									</td>
 									<td>
 										<input class="money-input" currencyMask
 											[(ngModel)]="editCache[data.id].data.trungHanVonN2N1Cbi"
-											(ngModelChange)="changeModel(data.id)" [options]="amount" />
+											(ngModelChange)="changeModel(data.id)" [options]="Op.amount" />
 									</td>
 									<td>
 										<input class="money-input" currencyMask
-											[(ngModel)]="editCache[data.id].data.khTongSoNamN" [options]="amount" />
+											[(ngModel)]="editCache[data.id].data.khTongSoNamN" [options]="Op.amount" />
 									</td>
 									<td>
-										{{numFunc.valFmt(editCache[data.id].data.khNstwTongSoNamN, maDviTien)}}
+										{{Op.fmtVal(editCache[data.id].data.khNstwTongSoNamN, maDviTien)}}
 									</td>
 									<td>
 										<input class="money-input" currencyMask
 											[(ngModel)]="editCache[data.id].data.khNstwThuHoiNamN"
-											(ngModelChange)="changeModel(data.id)" [options]="amount" />
+											(ngModelChange)="changeModel(data.id)" [options]="Op.amount" />
 									</td>
 									<td>
 										<input class="money-input" currencyMask
 											[(ngModel)]="editCache[data.id].data.khNstwThanhToanNamN"
-											(ngModelChange)="changeModel(data.id)" [options]="amount" />
+											(ngModelChange)="changeModel(data.id)" [options]="Op.amount" />
 									</td>
 									<td>
 										<input class="money-input" currencyMask
 											[(ngModel)]="editCache[data.id].data.khNstwChuanBiNamN"
-											(ngModelChange)="changeModel(data.id)" [options]="amount" />
+											(ngModelChange)="changeModel(data.id)" [options]="Op.amount" />
 									</td>
 									<td>
 										<input nz-input class="search__input"

@@ -3,15 +3,14 @@ import * as dayjs from 'dayjs';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { Status, Utils } from 'src/app/Utility/utils';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
 import { UserService } from 'src/app/services/user.service';
-import { GeneralFunction } from 'src/app/Utility/func';
-import { Utils } from 'src/app/Utility/utils';
 import * as uuid from "uuid";
-import { Form, Report } from '../lap-ke-hoach-va-tham-dinh-du-toan.class';
 import { PHU_LUC } from '../bao-cao/bao-cao.constant';
+import { Form, Report } from '../lap-ke-hoach-va-tham-dinh-du-toan.class';
 
 @Component({
     selector: 'dialog-tao-moi',
@@ -32,7 +31,6 @@ export class DialogTaoMoiComponent implements OnInit {
         private userService: UserService,
         private lapThamDinhService: LapThamDinhService,
         private spinner: NgxSpinnerService,
-        private genFunc: GeneralFunction,
         private notification: NzNotificationService,
     ) { }
 
@@ -52,7 +50,7 @@ export class DialogTaoMoiComponent implements OnInit {
             return;
         }
         this.listAppendix.forEach(e => {
-            e.tenDm = this.genFunc.getName(this.response.namBcao, e.tenDm);
+            e.tenDm = Utils.getName(this.response.namBcao, e.tenDm);
         })
         this.response = {
             ...new Report(),
@@ -100,7 +98,7 @@ export class DialogTaoMoiComponent implements OnInit {
         this.response.lan = lan;
         this.response.lstLapThamDinhs = [];
         this.response.lstBcaoDviTrucThuocs = [];
-        this.response.trangThai = Utils.TT_BC_1;
+        this.response.trangThai = Status.TT_01;
         this.response.nguoiTao = this.userInfo?.sub;
         this.response.ngayTao = new Date();
         this.response.lstFiles = [];
@@ -119,47 +117,53 @@ export class DialogTaoMoiComponent implements OnInit {
             }
         );
         if (this.tab == 'danhsach') {
-            this.listAppendix.forEach(item => {
-                this.response.lstLapThamDinhs.push({
-                    ...new Form(),
-                    id: uuid.v4() + 'FE',
-                    maBieuMau: item.id,
-                    tenPl: item.tenPl,
-                    tenDm: item.tenDm,
-                    trangThai: '3',
-                    lstCtietLapThamDinhs: [],
+            if (this.userInfo.DON_VI.tenVietTat.indexOf('_VP') != -1) {
+                const request = {
+                    lan: lan,
+                    maDvi: this.userInfo.MA_DVI,
+                    namHienTai: this.response.namBcao,
+                }
+                await this.lapThamDinhService.soLuongVp(request).toPromise().then(
+                    (data) => {
+                        if (data.statusCode == 0) {
+                            this.response.lstLapThamDinhs = data.data.lstLapThamDinhs;
+                            this.response.lstLapThamDinhs.forEach(item => {
+                                if (!item.id) {
+                                    item.id = uuid.v4() + 'FE';
+                                }
+                                item.maDviTien = '1';
+                                item.trangThai = '3';
+                                const pl = this.listAppendix.find(e => e.id == item.maBieuMau);
+                                item.tenPl = pl.tenPl;
+                                item.tenDm = pl.tenDm;
+                            })
+                        } else {
+                            this.notification.error(MESSAGE.ERROR, data?.msg);
+                            this.response.namBcao = null;
+                        }
+                    },
+                    (err) => {
+                        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+                        this.response.namBcao = null;
+                    }
+                );
+            } else {
+                this.listAppendix.forEach(item => {
+                    this.response.lstLapThamDinhs.push({
+                        ...new Form(),
+                        id: uuid.v4() + 'FE',
+                        maBieuMau: item.id,
+                        tenPl: item.tenPl,
+                        tenDm: item.tenDm,
+                        trangThai: '3',
+                        lstCtietLapThamDinhs: [],
+                    })
                 })
-            })
+            }
         } else {
             this.synthetic();
         }
     }
-
-    // async copyReport(baoCao: Report) {
-    //     Object.assign(this.response, baoCao);
-    //     await this.lapThamDinhService.sinhMaBaoCao().toPromise().then(
-    //         (data) => {
-    //             if (data.statusCode == 0) {
-    //                 this.response.maBcao = data.data;
-    //             } else {
-    //                 this.notification.error(MESSAGE.ERROR, data?.msg);
-    //                 this.response.namBcao = null;
-    //             }
-    //         },
-    //         (err) => {
-    //             this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-    //             this.response.namBcao = null;
-    //         }
-    //     );
-    //     this.response.id = null;
-    //     this.response.lan = baoCao.lan + 1;
-    //     this.response.lstLapThamDinhs.forEach(item => {
-    //         item.id = uuid.v4() + 'FE';
-    //         item.lstCtietLapThamDinhs.forEach(e => {
-    //             e.id = uuid.v4() + 'FE';
-    //         })
-    //     })
-    // }
 
     //tong hop theo nam bao cao
     async synthetic() {
@@ -175,7 +179,7 @@ export class DialogTaoMoiComponent implements OnInit {
                         }
                         item.nguoiBcao = this.userInfo?.sub;
                         item.maDviTien = '1';
-                        item.trangThai = '3';
+                        item.trangThai = Status.NEW;
                         const pl = this.listAppendix.find(e => e.id == item.maBieuMau);
                         item.tenPl = pl.tenPl;
                         item.tenDm = pl.tenDm;

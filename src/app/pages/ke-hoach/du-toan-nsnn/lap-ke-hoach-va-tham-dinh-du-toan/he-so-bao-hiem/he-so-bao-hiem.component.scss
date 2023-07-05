@@ -1,0 +1,180 @@
+.text-green {
+    color: #8BC34C;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 140%;
+}
+
+.table-icon {
+    border: solid 1px #e4e4e4;
+    width: 24px;
+    height: 24px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #fefefe !important;
+    margin: 0 2px;
+}
+
+.tep__sqd {
+    cursor: pointer;
+    // position: absolute;
+    top: 4px;
+    height: 15px;
+    left: 695px;
+    color: #2196f3;
+
+    span {
+        margin-left: 5px;
+    }
+}
+
+.table__body {
+    margin: 12px 0px 0px 0px !important;
+    overflow: scroll !important;
+}
+
+::ng-deep {
+    .chi-tieu__body {
+        .flex-card.ant-card {
+            border: 1px solid #ececec !important;
+            background: transparent;
+            box-shadow: unset;
+            margin-bottom: 0px !important;
+            margin-top: 11px !important;
+            border-radius: 6px;
+        }
+
+        .table__body {
+            margin: 12px 0px 0px 0px !important;
+            overflow: scroll !important;
+        }
+
+        .tab__container {
+            margin-top: 12px;
+        }
+
+        .ghi-chu {
+            .ant-form-item-no-colon {
+                margin-bottom: 0px !important;
+            }
+
+            ul {
+                padding-left: 25px !important;
+            }
+
+            .ghi-chu__item {
+                font-style: italic;
+                font-weight: normal;
+                font-size: 12px;
+                line-height: 200%;
+            }
+        }
+
+        tr.table__header-vat-tu.ant-table-row>td {
+            background: #f1f1f1;
+        }
+
+        .tab__container {
+            position: relative;
+        }
+
+        .action {
+            position: absolute;
+            right: 25px;
+            top: 0;
+        }
+    }
+
+    .star {
+        color: #ff4d4f;
+    }
+
+    .input-so-qd {
+        width: calc(100% - 70px);
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+
+    .code-so-qd {
+        width: 70px;
+        background: #f8f9fa;
+        border: 1px solid #c4c9cc;
+        border-left: none;
+        font-size: 12px;
+        height: 24px;
+        float: right;
+        line-height: 24px;
+        text-align: center;
+        border-top-right-radius: 3px;
+        border-bottom-right-radius: 3px;
+    }
+
+    .tep {
+        cursor: pointer;
+        position: absolute;
+        top: 4px;
+        height: 15px;
+        left: 695px;
+        color: #2196f3;
+
+        span {
+            margin-left: 5px;
+        }
+    }
+
+    .tep__sqd {
+        cursor: pointer;
+        // position: absolute;
+        top: 4px;
+        height: 15px;
+        left: 695px;
+        color: #2196f3;
+
+        span {
+            margin-left: 5px;
+        }
+    }
+}
+
+.save {
+    margin-right: 8px;
+}
+
+.contentTemplate_chonpa {
+    display: flex;
+    flex-direction: column;
+}
+
+.ant-input-number {
+    min-width: 100px !important;
+}
+
+.money-input {
+    border: 1px solid #bbb8b8;
+    height: inherit;
+    width: 100%;
+}
+
+.money-input:focus-visible {
+    outline: none !important;
+}
+
+.custom-tab-container ::ng-deep .ant-tabs-tab {
+    border: none in !important;
+}
+
+:host ::ng-deep .ant-tabs-content-holder {
+    border-color: white !important;
+}
+
+.ant-table-cell {
+    white-space: pre-line !important;
+    word-break: break-word !important;
+}
+
+.text-col {
+    width: 250px;
+}

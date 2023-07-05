@@ -3,8 +3,7 @@ import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { FileFunction, GeneralFunction, NumberFunction, TableFunction } from 'src/app/Utility/func';
-import { AMOUNT, DON_VI_TIEN, Utils } from "src/app/Utility/utils";
+import { FileManip, Operator, Status, Table, Utils } from "src/app/Utility/utils";
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
@@ -17,7 +16,6 @@ import * as XLSX from 'xlsx'
 
 export class ItemData {
 	id: string;
-	khvonphiLapThamDinhCtietId: string;
 	stt: string;
 	maLvuc: string;
 	tenDmuc: string;
@@ -59,6 +57,8 @@ export class ItemData {
 
 export class BieuMau151Component implements OnInit {
 	@Input() dataInfo;
+	Op = Operator;
+	Utils = Utils;
 	//thong tin chi tiet cua bieu mau
 	formDetail: Form = new Form();
 	total: ItemData = new ItemData();
@@ -68,7 +68,6 @@ export class BieuMau151Component implements OnInit {
 	donVis: any[] = [];
 	linhVucChis: any[] = [];
 	lstCtietBcao: ItemData[] = [];
-	donViTiens: any[] = DON_VI_TIEN;
 	//trang thai cac nut
 	status: BtnStatus = new BtnStatus();
 	editMoneyUnit = false;
@@ -76,8 +75,6 @@ export class BieuMau151Component implements OnInit {
 	//nho dem
 	editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
 	allChecked = false;
-
-	amount = AMOUNT;
 	scrollX: string;
 
 	fileList: NzUploadFile[] = [];
@@ -109,12 +106,8 @@ export class BieuMau151Component implements OnInit {
 		private lapThamDinhService: LapThamDinhService,
 		private notification: NzNotificationService,
 		private modal: NzModalService,
-		private userService: UserService,
 		private quanLyVonPhiService: QuanLyVonPhiService,
-		public numFunc: NumberFunction,
-		public genFunc: GeneralFunction,
-		private fileFunc: FileFunction,
-		private tableFunc: TableFunction,
+		private fileManip: FileManip,
 	) { }
 
 	async ngOnInit() {
@@ -129,9 +122,9 @@ export class BieuMau151Component implements OnInit {
 		await this.getFormDetail();
 		this.namBcao = this.dataInfo.namBcao;
 		if (this.status) {
-			this.scrollX = this.genFunc.tableWidth(350, 26, 1, 60);
+			this.scrollX = Table.tableWidth(350, 26, 1, 60);
 		} else {
-			this.scrollX = this.genFunc.tableWidth(350, 26, 1, 0);
+			this.scrollX = Table.tableWidth(350, 26, 1, 0);
 		}
 		const reqGetDonViCon = {
 			maDviCha: this.dataInfo.maDvi,
@@ -177,7 +170,7 @@ export class BieuMau151Component implements OnInit {
 	}
 
 	getStatusButton() {
-		this.status.ok = this.status.ok && (this.formDetail.trangThai == "2" || this.formDetail.trangThai == "5");
+		this.status.ok = this.status.ok && (this.formDetail.trangThai == Status.NOT_RATE || this.formDetail.trangThai == Status.COMPLETE);
 	}
 
 	async getFormDetail() {
@@ -228,7 +221,7 @@ export class BieuMau151Component implements OnInit {
 
 		request.fileDinhKems = [];
 		for (let iterator of this.listFile) {
-			request.fileDinhKems.push(await this.fileFunc.uploadFile(iterator, this.dataInfo.path));
+			request.fileDinhKems.push(await this.fileManip.uploadFile(iterator, this.dataInfo.path));
 		}
 
 		request.lstCtietLapThamDinhs = lstCtietBcaoTemp;
@@ -311,50 +304,42 @@ export class BieuMau151Component implements OnInit {
 	}
 
 	changeModel(id: string): void {
-		this.editCache[id].data.thienQlPcap = this.numFunc.sum([this.editCache[id].data.thienLuongBac, this.editCache[id].data.thienPcapLuong, this.editCache[id].data.thienDgopLuong, this.editCache[id].data.thienKhac]);
-		this.editCache[id].data.dtoanQluongPcap = this.numFunc.sum([this.editCache[id].data.dtoanLuongBac, this.editCache[id].data.dtoanPcapLuong, this.editCache[id].data.dtoanDgopLuong, this.editCache[id].data.dtoanKhac]);
-		this.editCache[id].data.uocThQlPcap = this.numFunc.sum([this.editCache[id].data.uocThLuongBac, this.editCache[id].data.uocThPCapLuong, this.editCache[id].data.uocThDgopLuong, this.editCache[id].data.uocThKhac]);
-		this.editCache[id].data.namKhQlPcap = this.numFunc.sum([this.editCache[id].data.namKhLuongBac, this.editCache[id].data.namKhPcapLuong, this.editCache[id].data.namKhDgopLuong, this.editCache[id].data.namKhKhac]);
-		// this.editCache[id].data.ncauChiTongSo = this.numFunc.sum([this.editCache[id].data.ncauChiTrongDoChiCs, this.editCache[id].data.ncauChiTrongDoChiMoi]);
-	}
-
-	getLowStatus(str: string) {
-		const index: number = this.lstCtietBcao.findIndex(e => this.tableFunc.getHead(e.stt) == str);
-		if (index == -1) {
-			return false;
-		}
-		return true;
+		this.editCache[id].data.thienQlPcap = Operator.sum([this.editCache[id].data.thienLuongBac, this.editCache[id].data.thienPcapLuong, this.editCache[id].data.thienDgopLuong, this.editCache[id].data.thienKhac]);
+		this.editCache[id].data.dtoanQluongPcap = Operator.sum([this.editCache[id].data.dtoanLuongBac, this.editCache[id].data.dtoanPcapLuong, this.editCache[id].data.dtoanDgopLuong, this.editCache[id].data.dtoanKhac]);
+		this.editCache[id].data.uocThQlPcap = Operator.sum([this.editCache[id].data.uocThLuongBac, this.editCache[id].data.uocThPCapLuong, this.editCache[id].data.uocThDgopLuong, this.editCache[id].data.uocThKhac]);
+		this.editCache[id].data.namKhQlPcap = Operator.sum([this.editCache[id].data.namKhLuongBac, this.editCache[id].data.namKhPcapLuong, this.editCache[id].data.namKhDgopLuong, this.editCache[id].data.namKhKhac]);
+		// this.editCache[id].data.ncauChiTongSo = Operator.sum([this.editCache[id].data.ncauChiTrongDoChiCs, this.editCache[id].data.ncauChiTrongDoChiMoi]);
 	}
 
 	getTotal() {
 		this.total = new ItemData();
 		this.lstCtietBcao.forEach(item => {
-			this.total.thienTsoBcTdiem = this.numFunc.sum([this.total.thienTsoBcTdiem, item.thienTsoBcTdiem]);
-			this.total.thienTsoBcTqGiao = this.numFunc.sum([this.total.thienTsoBcTqGiao, item.thienTsoBcTqGiao]);
-			this.total.thienQlPcap = this.numFunc.sum([this.total.thienQlPcap, item.thienQlPcap]);
-			this.total.thienLuongBac = this.numFunc.sum([this.total.thienLuongBac, item.thienLuongBac]);
-			this.total.thienPcapLuong = this.numFunc.sum([this.total.thienPcapLuong, item.thienPcapLuong]);
-			this.total.thienDgopLuong = this.numFunc.sum([this.total.thienDgopLuong, item.thienDgopLuong]);
-			this.total.thienKhac = this.numFunc.sum([this.total.thienKhac, item.thienKhac]);
-			this.total.dtoanTsoBcheTqGiao = this.numFunc.sum([this.total.dtoanTsoBcheTqGiao, item.dtoanTsoBcheTqGiao]);
-			this.total.dtoanQluongPcap = this.numFunc.sum([this.total.dtoanQluongPcap, item.dtoanQluongPcap]);
-			this.total.dtoanLuongBac = this.numFunc.sum([this.total.dtoanLuongBac, item.dtoanLuongBac]);
-			this.total.dtoanPcapLuong = this.numFunc.sum([this.total.dtoanPcapLuong, item.dtoanPcapLuong]);
-			this.total.dtoanDgopLuong = this.numFunc.sum([this.total.dtoanDgopLuong, item.dtoanDgopLuong]);
-			this.total.dtoanKhac = this.numFunc.sum([this.total.dtoanKhac, item.dtoanKhac]);
-			this.total.uocThTsoBcTqGiao = this.numFunc.sum([this.total.uocThTsoBcTqGiao, item.uocThTsoBcTqGiao]);
-			this.total.uocThTsoBcTdiem = this.numFunc.sum([this.total.uocThTsoBcTdiem, item.uocThTsoBcTdiem]);
-			this.total.uocThQlPcap = this.numFunc.sum([this.total.uocThQlPcap, item.uocThQlPcap]);
-			this.total.uocThLuongBac = this.numFunc.sum([this.total.uocThLuongBac, item.uocThLuongBac]);
-			this.total.uocThPCapLuong = this.numFunc.sum([this.total.uocThPCapLuong, item.uocThPCapLuong]);
-			this.total.uocThDgopLuong = this.numFunc.sum([this.total.uocThDgopLuong, item.uocThDgopLuong]);
-			this.total.uocThKhac = this.numFunc.sum([this.total.uocThKhac, item.uocThKhac]);
-			this.total.namKhTsoBcTqGiao = this.numFunc.sum([this.total.namKhTsoBcTqGiao, item.namKhTsoBcTqGiao]);
-			this.total.namKhQlPcap = this.numFunc.sum([this.total.namKhQlPcap, item.namKhQlPcap]);
-			this.total.namKhLuongBac = this.numFunc.sum([this.total.namKhLuongBac, item.namKhLuongBac]);
-			this.total.namKhPcapLuong = this.numFunc.sum([this.total.namKhPcapLuong, item.namKhPcapLuong]);
-			this.total.namKhDgopLuong = this.numFunc.sum([this.total.namKhDgopLuong, item.namKhDgopLuong]);
-			this.total.namKhKhac = this.numFunc.sum([this.total.namKhKhac, item.namKhKhac]);
+			this.total.thienTsoBcTdiem = Operator.sum([this.total.thienTsoBcTdiem, item.thienTsoBcTdiem]);
+			this.total.thienTsoBcTqGiao = Operator.sum([this.total.thienTsoBcTqGiao, item.thienTsoBcTqGiao]);
+			this.total.thienQlPcap = Operator.sum([this.total.thienQlPcap, item.thienQlPcap]);
+			this.total.thienLuongBac = Operator.sum([this.total.thienLuongBac, item.thienLuongBac]);
+			this.total.thienPcapLuong = Operator.sum([this.total.thienPcapLuong, item.thienPcapLuong]);
+			this.total.thienDgopLuong = Operator.sum([this.total.thienDgopLuong, item.thienDgopLuong]);
+			this.total.thienKhac = Operator.sum([this.total.thienKhac, item.thienKhac]);
+			this.total.dtoanTsoBcheTqGiao = Operator.sum([this.total.dtoanTsoBcheTqGiao, item.dtoanTsoBcheTqGiao]);
+			this.total.dtoanQluongPcap = Operator.sum([this.total.dtoanQluongPcap, item.dtoanQluongPcap]);
+			this.total.dtoanLuongBac = Operator.sum([this.total.dtoanLuongBac, item.dtoanLuongBac]);
+			this.total.dtoanPcapLuong = Operator.sum([this.total.dtoanPcapLuong, item.dtoanPcapLuong]);
+			this.total.dtoanDgopLuong = Operator.sum([this.total.dtoanDgopLuong, item.dtoanDgopLuong]);
+			this.total.dtoanKhac = Operator.sum([this.total.dtoanKhac, item.dtoanKhac]);
+			this.total.uocThTsoBcTqGiao = Operator.sum([this.total.uocThTsoBcTqGiao, item.uocThTsoBcTqGiao]);
+			this.total.uocThTsoBcTdiem = Operator.sum([this.total.uocThTsoBcTdiem, item.uocThTsoBcTdiem]);
+			this.total.uocThQlPcap = Operator.sum([this.total.uocThQlPcap, item.uocThQlPcap]);
+			this.total.uocThLuongBac = Operator.sum([this.total.uocThLuongBac, item.uocThLuongBac]);
+			this.total.uocThPCapLuong = Operator.sum([this.total.uocThPCapLuong, item.uocThPCapLuong]);
+			this.total.uocThDgopLuong = Operator.sum([this.total.uocThDgopLuong, item.uocThDgopLuong]);
+			this.total.uocThKhac = Operator.sum([this.total.uocThKhac, item.uocThKhac]);
+			this.total.namKhTsoBcTqGiao = Operator.sum([this.total.namKhTsoBcTqGiao, item.namKhTsoBcTqGiao]);
+			this.total.namKhQlPcap = Operator.sum([this.total.namKhQlPcap, item.namKhQlPcap]);
+			this.total.namKhLuongBac = Operator.sum([this.total.namKhLuongBac, item.namKhLuongBac]);
+			this.total.namKhPcapLuong = Operator.sum([this.total.namKhPcapLuong, item.namKhPcapLuong]);
+			this.total.namKhDgopLuong = Operator.sum([this.total.namKhDgopLuong, item.namKhDgopLuong]);
+			this.total.namKhKhac = Operator.sum([this.total.namKhKhac, item.namKhKhac]);
 			// }
 		})
 	}
@@ -427,7 +412,7 @@ export class BieuMau151Component implements OnInit {
 	async downloadFile(id: string) {
 		let file: any = this.listFile.find(element => element?.lastModified.toString() == id);
 		let doc: any = this.formDetail.lstFiles.find(element => element?.id == id);
-		await this.fileFunc.downloadFile(file, doc);
+		await this.fileManip.downloadFile(file, doc);
 	}
 
 	exportToExcel() {
@@ -471,9 +456,15 @@ export class BieuMau151Component implements OnInit {
 			{ t: 2, b: 2, l: 27, r: 27, val: 'Khác' },
 			{ t: 0, b: 2, l: 28, r: 28, val: 'Ghi chú' },
 		]
+		const fieldOrder = ['stt', 'tenDmuc', 'thienTsoBcTqGiao', 'thienTsoBcTdiem', 'thienQlPcap', 'thienLuongBac', 'thienPcapLuong', 'thienDgopLuong', 'thienKhac', 'dtoanTsoBcheTqGiao',
+			'dtoanQluongPcap', 'dtoanLuongBac', 'dtoanPcapLuong', 'dtoanDgopLuong', 'dtoanKhac', 'uocThTsoBcTqGiao', 'uocThTsoBcTdiem', 'uocThQlPcap', 'uocThLuongBac', 'uocThPCapLuong',
+			'uocThDgopLuong', 'uocThKhac', 'namKhTsoBcTqGiao', 'namKhQlPcap', 'namKhLuongBac', 'namKhPcapLuong', 'namKhDgopLuong', 'namKhKhac', 'ghiChu']
 		const filterData = this.lstCtietBcao.map(item => {
-			const { id, maLvuc, khvonphiLapThamDinhCtietId, checked, ...rest } = item;
-			return rest;
+			const row: any = {};
+			fieldOrder.forEach(field => {
+				row[field] = item[field]
+			})
+			return row;
 		})
 		let ind = 1;
 		filterData.forEach(item => {
@@ -482,9 +473,9 @@ export class BieuMau151Component implements OnInit {
 		})
 
 		const workbook = XLSX.utils.book_new();
-		const worksheet = this.genFunc.initExcel(header);
-		XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: this.genFunc.coo(header[0].l, header[0].b + 1) })
+		const worksheet = Table.initExcel(header);
+		XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
 		XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
-		XLSX.writeFile(workbook, 'TT342_15.1.xlsx');
+		XLSX.writeFile(workbook, this.dataInfo.maBcao + '_TT342_15.1.xlsx');
 	}
 }

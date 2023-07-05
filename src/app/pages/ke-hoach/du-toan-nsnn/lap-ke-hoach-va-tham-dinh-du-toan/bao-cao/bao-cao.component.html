@@ -49,8 +49,8 @@
             <div class="header mg-t-16">
                 <div class="header-text">
                     <div class="title-chi-tieu">
-                        <span [ngClass]="genFunc.statusClass(baoCao.trangThai)">
-                            {{ getStatusName(baoCao.trangThai) }}
+                        <span [ngClass]="Status.statusClass(baoCao.trangThai)">
+                            {{ Status.reportStatusName(baoCao.trangThai, isParent) }}
                         </span>
                         <span>Báo cáo dự toán ngân sách nhà nước hàng năm và KHTC 03 năm</span>
                     </div>
@@ -77,7 +77,7 @@
                             <td>{{ baoCao.maBcao }}</td>
                             <td>{{ baoCao.namBcao }}</td>
                             <td>{{ baoCao.lan }}</td>
-                            <td>{{ genFunc.fmtDate(baoCao.ngayTao) }}</td>
+                            <td>{{ Utils.fmtDate(baoCao.ngayTao) }}</td>
                             <td>{{ baoCao.nguoiTao }}</td>
                             <td>
                                 <nz-upload *ngIf="status.general" [nzBeforeUpload]="beforeUploadCV">
@@ -90,10 +90,10 @@
                                     <span>{{baoCao.congVan?.fileName}}</span>
                                 </div>
                             </td>
-                            <td>{{ genFunc.fmtDate(baoCao.ngayTrinh) }}</td>
-                            <td>{{ genFunc.fmtDate(baoCao.ngayDuyet) }}</td>
-                            <td>{{ genFunc.fmtDate(baoCao.ngayPheDuyet) }}</td>
-                            <td>{{ genFunc.fmtDate(baoCao.ngayTraKq) }}</td>
+                            <td>{{ Utils.fmtDate(baoCao.ngayTrinh) }}</td>
+                            <td>{{ Utils.fmtDate(baoCao.ngayDuyet) }}</td>
+                            <td>{{ Utils.fmtDate(baoCao.ngayPheDuyet) }}</td>
+                            <td>{{ Utils.fmtDate(baoCao.ngayTraKq) }}</td>
                         </tr>
                     </tbody>
                 </nz-table>
@@ -123,7 +123,7 @@
                                         <td>{{data.tenPl}}</td>
                                         <td>{{data.tenDm}}</td>
                                         <td>
-                                            {{getStatusAppendixName(data.trangThai)}}
+                                            {{Status.appendixStatusName(data.trangThai)}}
                                             <ng-container *ngIf="data.trangThai == '0'">
                                                 <br>
                                                 Lý do: {{data.lyDoTuChoi}}
@@ -182,7 +182,7 @@
                                         <td>{{data.tenPl}}</td>
                                         <td>{{data.tenDm}}</td>
                                         <td>
-                                            {{getStatusAppendixName(data.trangThai)}}
+                                            {{Status.appendixStatusName(data.trangThai)}}
                                             <ng-container *ngIf="data.trangThai == '0'">
                                                 <br>
                                                 Lý do: {{data.lyDoTuChoi}}
@@ -241,7 +241,7 @@
                                         <td>{{data.tenPl}}</td>
                                         <td>{{data.tenDm}}</td>
                                         <td>
-                                            {{getStatusAppendixName(data.trangThai)}}
+                                            {{Status.appendixStatusName(data.trangThai)}}
                                             <ng-container *ngIf="data.trangThai == '0'">
                                                 <br>
                                                 Lý do: {{data.lyDoTuChoi}}
@@ -311,9 +311,9 @@
                                 <nz-table nzBordered class="table__body">
                                     <thead>
                                         <tr>
-                                            <th nzWidth="7%">STT</th>
+                                            <th nzWidth="15%">STT</th>
                                             <th>Tên file</th>
-                                            <th nzWidth="10%"></th>
+                                            <th nzWidth="15%"></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -351,9 +351,9 @@
                                     <tr *ngFor="let data of baoCao.lichSu">
                                         <td>{{ data.maBcao }} </td>
                                         <td>{{ data.lan }}</td>
-                                        <td>{{ genFunc.fmtDate(data.ngayTao) }}</td>
+                                        <td>{{ Utils.fmtDate(data.ngayTao) }}</td>
                                         <td>{{ data.nguoiTao }}</td>
-                                        <td>{{ getStatusName(data.trangThai) }}</td>
+                                        <td>{{ Status.reportStatusName(data.trangThai) }}</td>
                                         <td *ngIf="status.general">
                                             <a click="restoreReport(data.id)">Khôi phục</a>
                                         </td>
@@ -388,9 +388,9 @@
                                         {{ data.maBcao }}
                                     </td>
                                     <td>{{ data.namBcao }}</td>
-                                    <td>{{ genFunc.fmtDate(data.ngayDuyet) }}</td>
-                                    <td>{{ genFunc.fmtDate(data.ngayPheDuyet) }}</td>
-                                    <td>{{ getStatusName(data.trangThai) }}</td>
+                                    <td>{{ Utils.fmtDate(data.ngayDuyet) }}</td>
+                                    <td>{{ Utils.fmtDate(data.ngayPheDuyet) }}</td>
+                                    <td>{{ Status.reportStatusName(data.trangThai) }}</td>
                                     <td>
                                         <a (click)="viewDetail(data.id)">
                                             <i class="fa fa-eye"></i>

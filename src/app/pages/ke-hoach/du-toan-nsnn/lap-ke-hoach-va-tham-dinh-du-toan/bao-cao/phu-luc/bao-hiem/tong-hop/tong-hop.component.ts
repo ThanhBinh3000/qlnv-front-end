@@ -1,18 +1,17 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { FileManip, Operator, Status, Table, Utils } from "src/app/Utility/utils";
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.service';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
-import { AMOUNT, DON_VI_TIEN, LA_MA, MONEY_LIMIT, QUATITY } from "src/app/Utility/utils";
 import * as uuid from "uuid";
-import { BtnStatus, Doc, Form } from '../../../../lap-ke-hoach-va-tham-dinh-du-toan.class';
-import { NzUploadFile } from 'ng-zorro-antd/upload';
-import { FileFunction, GeneralFunction, NumberFunction, TableFunction } from 'src/app/Utility/func';
 import * as XLSX from 'xlsx';
+import { BtnStatus, Doc, Form } from '../../../../lap-ke-hoach-va-tham-dinh-du-toan.class';
 
 export class UnitItem {
     id: string;
@@ -58,6 +57,8 @@ export class ItemData {
 })
 export class TongHopComponent implements OnInit {
     @Input() dataInfo;
+    Op = Operator;
+    Utils = Utils;
     //thong tin chi tiet cua bieu mau
     formDetail: Form = new Form();
     total: ItemData = new ItemData();
@@ -67,10 +68,8 @@ export class TongHopComponent implements OnInit {
     childUnit: any[] = [];
     lstTyLe: any[] = [];
     lstCtietBcao: ItemData[] = [];
-    donViTiens: any[] = DON_VI_TIEN;
-    amount = AMOUNT;
+    khoiTich: number;
     scrollX: string;
-    BOX_SIZE = 180;
     //trang thai cac nut
     status: BtnStatus = new BtnStatus();
     editMoneyUnit = false;
@@ -108,10 +107,7 @@ export class TongHopComponent implements OnInit {
         private lapThamDinhService: LapThamDinhService,
         private notification: NzNotificationService,
         private modal: NzModalService,
-        public numFunc: NumberFunction,
-        public genFunc: GeneralFunction,
-        private fileFunc: FileFunction,
-        private tableFunc: TableFunction,
+        private fileManip: FileManip,
     ) { }
 
     async ngOnInit() {
@@ -124,12 +120,12 @@ export class TongHopComponent implements OnInit {
         this.spinner.show();
         Object.assign(this.status, this.dataInfo.status);
         await this.getFormDetail();
+        await this.getKhoiTich();
         if (this.lstCtietBcao.length == 0) {
             const category = await this.danhMucService.danhMucChungGetAll('LTD_BH');
             if (category) {
                 this.danhMucs = category.data;
             }
-            await this.getTle();
             this.danhMucs.forEach(e => {
                 const tyLe = this.lstTyLe?.find(tl => e.ma == tl.maDmuc);
                 this.lstCtietBcao.push({
@@ -157,24 +153,11 @@ export class TongHopComponent implements OnInit {
             })
         })
 
-        this.scrollX = this.genFunc.setTableWidth(450, 11 + 10 * this.childUnit.length, this.BOX_SIZE, 0);
+        this.scrollX = Table.tableWidth(450, 11 + 10 * this.childUnit.length, 0, 0);
         //sap xep lai du lieu
-        this.lstCtietBcao = this.tableFunc.sortByIndex(this.lstCtietBcao);
+        this.lstCtietBcao = Table.sortByIndex(this.lstCtietBcao);
         this.sortUnit();
 
-        // //lay du lieu tu cac bieu mau khac
-        // if (this.dataInfo?.extraData) {
-        //     this.dataInfo.extraData.forEach(item => {
-        //         const index = this.lstCtietBcao.findIndex(e => e.danhMuc == item.danhMuc);
-        //         if (index != -1) {
-        //             this.lstCtietBcao[index].slTren = item.slTren;
-        //             this.lstCtietBcao[index].slDuoi = item.slDuoi;
-        //             this.lstCtietBcao[index].gtTrenGt = item.gtTrenGt;
-        //             this.lstCtietBcao[index].gtDuoiGt = item.gtDuoiGt;
-        //             this.sum(this.lstCtietBcao[index].stt);
-        //         }
-        //     })
-        // }
 
         this.changeModel();
         this.getTotal();
@@ -183,19 +166,22 @@ export class TongHopComponent implements OnInit {
     }
 
     getStatusButton() {
-        this.status.ok = this.status.ok && (this.formDetail.trangThai == "2" || this.formDetail.trangThai == "5");
+        this.status.ok = this.status.ok && (this.formDetail.trangThai == Status.NOT_RATE || this.formDetail.trangThai == Status.COMPLETE);
     }
 
-    async getTle() {
-        await this.lapThamDinhService.getDsTle(this.dataInfo?.namBcao).toPromise().then(
-            res => {
-                if (res.statusCode == 0) {
-                    this.lstTyLe = res.data?.lstCtiets;
+    async getKhoiTich() {
+        await this.lapThamDinhService.tyLeBaoHiem(this.dataInfo.namBcao).toPromise().then(
+            data => {
+                if (data.statusCode == 0) {
+                    this.khoiTich = data.data.khoiTich;
+                } else {
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
                 }
             },
             (err) => {
                 this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-            })
+            }
+        )
     }
 
     async getFormDetail() {
@@ -219,7 +205,7 @@ export class TongHopComponent implements OnInit {
 
     // luu
     async save(trangThai: string, lyDoTuChoi: string) {
-        if (this.lstCtietBcao.some(e => e.tong > MONEY_LIMIT)) {
+        if (this.lstCtietBcao.some(e => e.tong > Utils.MONEY_LIMIT)) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
             return;
         }
@@ -293,11 +279,11 @@ export class TongHopComponent implements OnInit {
         let k: number = parseInt(chiSo[n], 10);
         switch (n) {
             case 0:
-                return this.genFunc.laMa(k);
+                return Utils.laMa(k);
             case 1:
                 return chiSo[n];
             case 2:
-                if (this.lstCtietBcao.findIndex(e => this.tableFunc.getHead(e.danhMuc) == stt) == -1) {
+                if (this.lstCtietBcao.findIndex(e => Table.preIndex(e.danhMuc) == stt) == -1) {
                     return null;
                 }
                 return chiSo[n - 1].toString() + "." + chiSo[n].toString();
@@ -323,10 +309,10 @@ export class TongHopComponent implements OnInit {
 
     changeModel(): void {
         this.lstCtietBcao.forEach(item => {
-            item.slTong = this.numFunc.sum([item.slTren, item.slDuoi]);
-            item.gtTrenGtBh = this.numFunc.div(this.numFunc.mul(item.gtTrenGt, item.gtTrenTyLeBh), 100);
-            item.gtDuoiGtBh = this.numFunc.div(this.numFunc.mul(item.gtDuoiGt, item.gtDuoiTyLeBh), 100);
-            item.tong = this.numFunc.sum([item.gtTrenGtBh, item.gtDuoiGtBh]);
+            item.slTong = Operator.sum([item.slTren, item.slDuoi]);
+            item.gtTrenGtBh = Operator.div(Operator.mul(item.gtTrenGt, item.gtTrenTyLeBh), 100);
+            item.gtDuoiGtBh = Operator.div(Operator.mul(item.gtDuoiGt, item.gtDuoiTyLeBh), 100);
+            item.tong = Operator.sum([item.gtTrenGtBh, item.gtDuoiGtBh]);
         })
         this.sum('0.2.1.1');
         this.sum('0.2.2.1.1');
@@ -335,7 +321,7 @@ export class TongHopComponent implements OnInit {
     }
 
     sum(stt: string) {
-        stt = this.tableFunc.getHead(stt);
+        stt = Table.preIndex(stt);
         while (stt != '0') {
             const index = this.lstCtietBcao.findIndex(e => e.stt == stt);
             const data = this.lstCtietBcao[index];
@@ -349,15 +335,15 @@ export class TongHopComponent implements OnInit {
                 lstDviCapDuoi: data.lstDviCapDuoi,
             }
             this.lstCtietBcao.forEach(item => {
-                if (this.tableFunc.getHead(item.stt) == stt) {
-                    this.lstCtietBcao[index].gtTrenGt = this.numFunc.sum([this.lstCtietBcao[index].gtTrenGt, item.gtTrenGt]);
-                    this.lstCtietBcao[index].gtTrenGtBh = this.numFunc.sum([this.lstCtietBcao[index].gtTrenGtBh, item.gtTrenGtBh]);
-                    this.lstCtietBcao[index].gtDuoiGt = this.numFunc.sum([this.lstCtietBcao[index].gtDuoiGt, item.gtDuoiGt]);
-                    this.lstCtietBcao[index].gtDuoiGtBh = this.numFunc.sum([this.lstCtietBcao[index].gtDuoiGtBh, item.gtDuoiGtBh]);
-                    this.lstCtietBcao[index].tong = this.numFunc.sum([this.lstCtietBcao[index].tong, item.tong]);
+                if (Table.preIndex(item.stt) == stt) {
+                    this.lstCtietBcao[index].gtTrenGt = Operator.sum([this.lstCtietBcao[index].gtTrenGt, item.gtTrenGt]);
+                    this.lstCtietBcao[index].gtTrenGtBh = Operator.sum([this.lstCtietBcao[index].gtTrenGtBh, item.gtTrenGtBh]);
+                    this.lstCtietBcao[index].gtDuoiGt = Operator.sum([this.lstCtietBcao[index].gtDuoiGt, item.gtDuoiGt]);
+                    this.lstCtietBcao[index].gtDuoiGtBh = Operator.sum([this.lstCtietBcao[index].gtDuoiGtBh, item.gtDuoiGtBh]);
+                    this.lstCtietBcao[index].tong = Operator.sum([this.lstCtietBcao[index].tong, item.tong]);
                 }
             })
-            stt = this.tableFunc.getHead(stt);
+            stt = Table.preIndex(stt);
         }
     }
 
@@ -373,17 +359,17 @@ export class TongHopComponent implements OnInit {
         })
         this.lstCtietBcao.forEach(item => {
             if (item.stt.split('.')?.length == 2) {
-                this.total.gtTrenGt = this.numFunc.sum([this.total.gtTrenGt, item.gtTrenGt]);
-                this.total.gtTrenGtBh = this.numFunc.sum([this.total.gtTrenGtBh, item.gtTrenGtBh]);
-                this.total.gtDuoiGt = this.numFunc.sum([this.total.gtDuoiGt, item.gtDuoiGt]);
-                this.total.gtDuoiGtBh = this.numFunc.sum([this.total.gtDuoiGtBh, item.gtDuoiGtBh]);
-                this.total.tong = this.numFunc.sum([this.total.tong, item.tong]);
+                this.total.gtTrenGt = Operator.sum([this.total.gtTrenGt, item.gtTrenGt]);
+                this.total.gtTrenGtBh = Operator.sum([this.total.gtTrenGtBh, item.gtTrenGtBh]);
+                this.total.gtDuoiGt = Operator.sum([this.total.gtDuoiGt, item.gtDuoiGt]);
+                this.total.gtDuoiGtBh = Operator.sum([this.total.gtDuoiGtBh, item.gtDuoiGtBh]);
+                this.total.tong = Operator.sum([this.total.tong, item.tong]);
                 for (let i = 0; i < item.lstDviCapDuoi?.length; i++) {
-                    this.total.lstDviCapDuoi[i].gtTrenGt = this.numFunc.sum([this.total.lstDviCapDuoi[i].gtTrenGt, item.lstDviCapDuoi[i].gtTrenGt]);
-                    this.total.lstDviCapDuoi[i].gtTrenGtBh = this.numFunc.sum([this.total.lstDviCapDuoi[i].gtTrenGtBh, item.lstDviCapDuoi[i].gtTrenGtBh]);
-                    this.total.lstDviCapDuoi[i].gtDuoiGt = this.numFunc.sum([this.total.lstDviCapDuoi[i].gtDuoiGt, item.lstDviCapDuoi[i].gtDuoiGt]);
-                    this.total.lstDviCapDuoi[i].gtDuoiGtBh = this.numFunc.sum([this.total.lstDviCapDuoi[i].gtDuoiGtBh, item.lstDviCapDuoi[i].gtDuoiGtBh]);
-                    this.total.lstDviCapDuoi[i].tong = this.numFunc.sum([this.total.lstDviCapDuoi[i].tong, item.lstDviCapDuoi[i].tong]);
+                    this.total.lstDviCapDuoi[i].gtTrenGt = Operator.sum([this.total.lstDviCapDuoi[i].gtTrenGt, item.lstDviCapDuoi[i].gtTrenGt]);
+                    this.total.lstDviCapDuoi[i].gtTrenGtBh = Operator.sum([this.total.lstDviCapDuoi[i].gtTrenGtBh, item.lstDviCapDuoi[i].gtTrenGtBh]);
+                    this.total.lstDviCapDuoi[i].gtDuoiGt = Operator.sum([this.total.lstDviCapDuoi[i].gtDuoiGt, item.lstDviCapDuoi[i].gtDuoiGt]);
+                    this.total.lstDviCapDuoi[i].gtDuoiGtBh = Operator.sum([this.total.lstDviCapDuoi[i].gtDuoiGtBh, item.lstDviCapDuoi[i].gtDuoiGtBh]);
+                    this.total.lstDviCapDuoi[i].tong = Operator.sum([this.total.lstDviCapDuoi[i].tong, item.lstDviCapDuoi[i].tong]);
                 }
             }
         })
@@ -399,7 +385,7 @@ export class TongHopComponent implements OnInit {
     async downloadFile(id: string) {
         let file: any = this.listFile.find(element => element?.lastModified.toString() == id);
         let doc: any = this.formDetail.lstFiles.find(element => element?.id == id);
-        await this.fileFunc.downloadFile(file, doc);
+        await this.fileManip.downloadFile(file, doc);
     }
 
     exportToExcel() {
@@ -413,11 +399,11 @@ export class TongHopComponent implements OnInit {
             { t: 2, b: 3, l: 4, r: 4, val: 'Kho dưới 5000m3' },
             { t: 2, b: 3, l: 5, r: 5, val: 'Tổng SL' },
             { t: 1, b: 1, l: 6, r: 12, val: 'Tổng giá trị hàng trong kho của các đơn vị cấp dưới' },
-            { t: 2, b: 2, l: 6, r: 8, val: 'Kho từ 5000 m3 trở lên' },
+            { t: 2, b: 2, l: 6, r: 8, val: 'Kho từ ' + this.khoiTich.toString() + ' m3 trở lên' },
             { t: 3, b: 3, l: 6, r: 6, val: 'Giá trị' },
             { t: 3, b: 3, l: 7, r: 7, val: 'Tỷ lệ bảo hiểm' },
             { t: 3, b: 3, l: 8, r: 8, val: 'Giá trị bảo hiểm' },
-            { t: 2, b: 2, l: 9, r: 11, val: 'Kho dưới 5000 m3' },
+            { t: 2, b: 2, l: 9, r: 11, val: 'Kho dưới ' + this.khoiTich.toString() + ' m3' },
             { t: 3, b: 3, l: 9, r: 9, val: 'Giá trị' },
             { t: 3, b: 3, l: 10, r: 10, val: 'Tỷ lệ bảo hiểm' },
             { t: 3, b: 3, l: 11, r: 11, val: 'Giá trị bảo hiểm' },
@@ -431,11 +417,11 @@ export class TongHopComponent implements OnInit {
             header.push({ t: 2, b: 3, l: left + 2, r: left + 2, val: 'Kho dưới 5000m3' })
             header.push({ t: 2, b: 3, l: left + 3, r: left + 3, val: 'Tổng SL' })
             header.push({ t: 1, b: 1, l: left + 4, r: left + 10, val: 'Tổng giá trị hàng trong kho của các đơn vị cấp dưới' })
-            header.push({ t: 2, b: 2, l: left + 4, r: left + 6, val: 'Kho từ 5000 m3 trở lên' })
+            header.push({ t: 2, b: 2, l: left + 4, r: left + 6, val: 'Kho từ ' + this.khoiTich.toString() + ' m3 trở lên' })
             header.push({ t: 3, b: 3, l: left + 4, r: left + 4, val: 'Giá trị' })
             header.push({ t: 3, b: 3, l: left + 5, r: left + 5, val: 'Tỷ lệ bảo hiểm' })
             header.push({ t: 3, b: 3, l: left + 6, r: left + 6, val: 'Giá trị bảo hiểm' })
-            header.push({ t: 2, b: 2, l: left + 7, r: left + 9, val: 'Kho dưới 5000 m3' })
+            header.push({ t: 2, b: 2, l: left + 7, r: left + 9, val: 'Kho dưới ' + this.khoiTich.toString() + ' m3' })
             header.push({ t: 3, b: 3, l: left + 7, r: left + 7, val: 'Giá trị' })
             header.push({ t: 3, b: 3, l: left + 8, r: left + 8, val: 'Tỷ lệ bảo hiểm' })
             header.push({ t: 3, b: 3, l: left + 9, r: left + 9, val: 'Giá trị bảo hiểm' })
@@ -472,7 +458,7 @@ export class TongHopComponent implements OnInit {
             })
         })
         const workbook = XLSX.utils.book_new();
-        const worksheet = this.genFunc.initExcel(header);
+        const worksheet = Table.initExcel(header);
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
         XLSX.writeFile(workbook, 'bao_hiem_tong_hop.xlsx');
     }

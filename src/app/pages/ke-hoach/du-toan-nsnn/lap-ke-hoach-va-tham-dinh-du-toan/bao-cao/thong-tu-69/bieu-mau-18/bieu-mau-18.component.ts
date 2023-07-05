@@ -3,20 +3,18 @@ import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { FileFunction, GeneralFunction, NumberFunction, TableFunction } from 'src/app/Utility/func';
-import { AMOUNT, DON_VI_TIEN, MONEY_LIMIT, Utils } from "src/app/Utility/utils";
+import { FileManip, Operator, Status, Table, Utils } from "src/app/Utility/utils";
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.service';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
 import * as uuid from "uuid";
+import * as XLSX from 'xlsx';
 import { BtnStatus, Doc, Form } from '../../../lap-ke-hoach-va-tham-dinh-du-toan.class';
-import * as XLSX from 'xlsx'
 
 export class ItemData {
 	id: string;
-	khvonphiLapThamDinhCtietId: string;
 	stt: string;
 	maLvuc: string;
 	tenLvuc: string;
@@ -47,6 +45,8 @@ export class ItemData {
 })
 export class BieuMau18Component implements OnInit {
 	@Input() dataInfo;
+	Op = Operator;
+	Utils = Utils;
 	//thong tin chi tiet cua bieu mau
 	formDetail: Form = new Form();
 	total: ItemData = new ItemData();
@@ -54,10 +54,8 @@ export class BieuMau18Component implements OnInit {
 	//danh muc
 	linhVucChis: any[] = [];
 	lstCtietBcao: ItemData[] = [];
-	donViTiens: any[] = DON_VI_TIEN;
 	keys = ['ncauChiTongSo', 'ncauChiTrongDoChiCs', 'ncauChiTrongDoChiMoi', 'ncauChiChiaRaDtuPtrien', 'ncauChiChiaRaChiCs1', 'ncauChiChiaRaChiMoi1',
 		'ncauChiChiaRaChiTx', 'ncauChiChiaRaChiCs2', 'ncauChiChiaRaChiMoi2', 'ncauChiChiaRaChiCs3', 'ncauChiChiaRaChiMoi3', 'ncauChiChiaRaChiDtqg']
-	amount = AMOUNT;
 	scrollX: string;
 	//trang thai cac nut
 	status: BtnStatus = new BtnStatus();
@@ -96,10 +94,7 @@ export class BieuMau18Component implements OnInit {
 		private lapThamDinhService: LapThamDinhService,
 		private notification: NzNotificationService,
 		private modal: NzModalService,
-		public numFunc: NumberFunction,
-		public gen: GeneralFunction,
-		private fileFunc: FileFunction,
-		private tableFunc: TableFunction,
+		private fileManip: FileManip,
 	) { }
 
 	async ngOnInit() {
@@ -117,9 +112,9 @@ export class BieuMau18Component implements OnInit {
 			if (category) {
 				this.linhVucChis = category.data;
 			}
-			this.scrollX = this.gen.tableWidth(350, 12, 5, 60);
+			this.scrollX = Table.tableWidth(350, 12, 5, 60);
 		} else {
-			this.scrollX = this.gen.tableWidth(350, 12, 5, 0);
+			this.scrollX = Table.tableWidth(350, 12, 5, 0);
 		}
 		if (this.lstCtietBcao.length == 0) {
 			this.linhVucChis.forEach(e => {
@@ -137,7 +132,7 @@ export class BieuMau18Component implements OnInit {
 			})
 		}
 
-		this.lstCtietBcao = this.tableFunc.sortByIndex(this.lstCtietBcao);
+		this.lstCtietBcao = Table.sortByIndex(this.lstCtietBcao);
 
 		this.getTotal();
 		this.updateEditCache();
@@ -146,7 +141,7 @@ export class BieuMau18Component implements OnInit {
 	}
 
 	getStatusButton() {
-		this.status.ok = this.status.ok && (this.formDetail.trangThai == "2" || this.formDetail.trangThai == "5");
+		this.status.ok = this.status.ok && (this.formDetail.trangThai == Status.NOT_RATE || this.formDetail.trangThai == Status.COMPLETE);
 	}
 
 	async getFormDetail() {
@@ -175,7 +170,7 @@ export class BieuMau18Component implements OnInit {
 			return;
 		}
 
-		if (this.lstCtietBcao.some(e => e.ncauChiTongSo > MONEY_LIMIT)) {
+		if (this.lstCtietBcao.some(e => e.ncauChiTongSo > Utils.MONEY_LIMIT)) {
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
 			return;
 		}
@@ -197,7 +192,7 @@ export class BieuMau18Component implements OnInit {
 
 		request.fileDinhKems = [];
 		for (let iterator of this.listFile) {
-			request.fileDinhKems.push(await this.fileFunc.uploadFile(iterator, this.dataInfo.path));
+			request.fileDinhKems.push(await this.fileManip.uploadFile(iterator, this.dataInfo.path));
 		}
 
 		request.lstCtietLapThamDinhs = lstCtietBcaoTemp;
@@ -252,7 +247,7 @@ export class BieuMau18Component implements OnInit {
 		let k: number = parseInt(chiSo[n], 10);
 		switch (n) {
 			case 0:
-				return this.gen.laMa(k);
+				return Utils.laMa(k);
 			case 1:
 				return chiSo[n];
 			case 2:
@@ -299,16 +294,16 @@ export class BieuMau18Component implements OnInit {
 	}
 
 	changeModel(id: string): void {
-		this.editCache[id].data.ncauChiChiaRaDtuPtrien = this.numFunc.sum([this.editCache[id].data.ncauChiChiaRaChiCs1, this.editCache[id].data.ncauChiChiaRaChiMoi1]);
-		this.editCache[id].data.ncauChiChiaRaChiTx = this.numFunc.sum([this.editCache[id].data.ncauChiChiaRaChiCs2, this.editCache[id].data.ncauChiChiaRaChiMoi2]);
-		this.editCache[id].data.ncauChiTrongDoChiCs = this.numFunc.sum([this.editCache[id].data.ncauChiChiaRaChiCs1, this.editCache[id].data.ncauChiChiaRaChiCs2]);
-		this.editCache[id].data.ncauChiTrongDoChiMoi = this.numFunc.sum([this.editCache[id].data.ncauChiChiaRaChiMoi1, this.editCache[id].data.ncauChiChiaRaChiMoi2]);
-		this.editCache[id].data.ncauChiChiaRaChiDtqg = this.numFunc.sum([this.editCache[id].data.ncauChiChiaRaChiCs3, this.editCache[id].data.ncauChiChiaRaChiMoi3]);
-		this.editCache[id].data.ncauChiTongSo = this.numFunc.sum([this.editCache[id].data.ncauChiTrongDoChiCs, this.editCache[id].data.ncauChiTrongDoChiMoi]);
+		this.editCache[id].data.ncauChiChiaRaDtuPtrien = Operator.sum([this.editCache[id].data.ncauChiChiaRaChiCs1, this.editCache[id].data.ncauChiChiaRaChiMoi1]);
+		this.editCache[id].data.ncauChiChiaRaChiTx = Operator.sum([this.editCache[id].data.ncauChiChiaRaChiCs2, this.editCache[id].data.ncauChiChiaRaChiMoi2]);
+		this.editCache[id].data.ncauChiTrongDoChiCs = Operator.sum([this.editCache[id].data.ncauChiChiaRaChiCs1, this.editCache[id].data.ncauChiChiaRaChiCs2]);
+		this.editCache[id].data.ncauChiTrongDoChiMoi = Operator.sum([this.editCache[id].data.ncauChiChiaRaChiMoi1, this.editCache[id].data.ncauChiChiaRaChiMoi2]);
+		this.editCache[id].data.ncauChiChiaRaChiDtqg = Operator.sum([this.editCache[id].data.ncauChiChiaRaChiCs3, this.editCache[id].data.ncauChiChiaRaChiMoi3]);
+		this.editCache[id].data.ncauChiTongSo = Operator.sum([this.editCache[id].data.ncauChiTrongDoChiCs, this.editCache[id].data.ncauChiTrongDoChiMoi]);
 	}
 
 	sum(stt: string) {
-		stt = this.tableFunc.getHead(stt);
+		stt = Table.preIndex(stt);
 		while (stt != '0') {
 			const index = this.lstCtietBcao.findIndex(e => e.stt == stt);
 			const data = this.lstCtietBcao[index];
@@ -321,13 +316,13 @@ export class BieuMau18Component implements OnInit {
 				level: data.level,
 			}
 			this.lstCtietBcao.forEach(item => {
-				if (this.tableFunc.getHead(item.stt) == stt) {
+				if (Table.preIndex(item.stt) == stt) {
 					this.keys.forEach(key => {
-						this.lstCtietBcao[index][key] = this.numFunc.sum([this.lstCtietBcao[index][key], item[key]]);
+						this.lstCtietBcao[index][key] = Operator.sum([this.lstCtietBcao[index][key], item[key]]);
 					})
 				}
 			})
-			stt = this.tableFunc.getHead(stt);
+			stt = Table.preIndex(stt);
 		}
 		this.getTotal();
 	}
@@ -337,7 +332,7 @@ export class BieuMau18Component implements OnInit {
 		this.lstCtietBcao.forEach(item => {
 			if (item.level == 0) {
 				this.keys.forEach(key => {
-					this.total[key] = this.numFunc.sum([this.total[key], item[key]]);
+					this.total[key] = Operator.sum([this.total[key], item[key]]);
 				})
 			}
 		})
@@ -358,7 +353,7 @@ export class BieuMau18Component implements OnInit {
 	async downloadFile(id: string) {
 		let file: any = this.listFile.find(element => element?.lastModified.toString() == id);
 		let doc: any = this.formDetail.lstFiles.find(element => element?.id == id);
-		await this.fileFunc.downloadFile(file, doc);
+		await this.fileManip.downloadFile(file, doc);
 	}
 
 	exportToExcel() {
@@ -390,9 +385,14 @@ export class BieuMau18Component implements OnInit {
 			{ t: 3, b: 3, l: 17, r: 17, val: 'Chi mới' },
 			{ t: 0, b: 3, l: 18, r: 18, val: 'Ghi chú' },
 		]
+		const fieldOrder = ['stt', 'tenLvuc', 'mtieuNvu', 'csPhapLyThien', 'hdongChuYeu', 'nguonKphi', 'ncauChiTongSo', 'ncauChiTrongDoChiCs', 'ncauChiTrongDoChiMoi', 'ncauChiChiaRaDtuPtrien',
+			'ncauChiChiaRaChiCs1', 'ncauChiChiaRaChiMoi1', 'ncauChiChiaRaChiTx', 'ncauChiChiaRaChiCs2', 'ncauChiChiaRaChiMoi2', 'ncauChiChiaRaChiDtqg', 'ncauChiChiaRaChiCs3', 'ncauChiChiaRaChiMoi3', 'ghiChu']
 		const filterData = this.lstCtietBcao.map(item => {
-			const { id, maLvuc, khvonphiLapThamDinhCtietId, level, ...rest } = item;
-			return rest;
+			const row: any = {};
+			fieldOrder.forEach(field => {
+				row[field] = item[field]
+			})
+			return row;
 		})
 		filterData.forEach(item => {
 			const level = item.stt.split('.').length - 2;
@@ -403,10 +403,10 @@ export class BieuMau18Component implements OnInit {
 		})
 
 		const workbook = XLSX.utils.book_new();
-		const worksheet = this.gen.initExcel(header);
-		XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: this.gen.coo(header[0].l, header[0].b + 1) })
+		const worksheet = Table.initExcel(header);
+		XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
 		XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
-		XLSX.writeFile(workbook, 'TT69_BM18.xlsx');
+		XLSX.writeFile(workbook, this.dataInfo.maBcao + '_TT69_18.xlsx');
 	}
 
 }
