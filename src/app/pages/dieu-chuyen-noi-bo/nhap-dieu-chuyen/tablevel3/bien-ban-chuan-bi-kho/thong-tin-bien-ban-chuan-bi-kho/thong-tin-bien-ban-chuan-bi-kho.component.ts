@@ -318,8 +318,7 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
         thanhTienNamTruoc: this.formData.value.thanhTienNamTruoc,
         tongGiaTri: this.tongGiaTri,
       })
-    // const tongKinhPhiDaTh = this.dsHangPD.reduce((previous, current) => previous + current.tongGiaTri, 0);
-    // const tongKinhPhiDaThBc = this.convertTien(tongKinhPhiDaTh)
+
     this.dsHangPD = cloneDeep(this.dsHangPD)
     this.formData.patchValue({
       noiDung: "",
@@ -327,8 +326,6 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
       donGiaTrongNam: "",
       soLuongNamTruoc: "",
       thanhTienNamTruoc: "",
-      // tongKinhPhiDaTh,
-      // tongKinhPhiDaThBc
     })
     this.dviTinh = ""
     this.thanhTienTrongNam = null
@@ -336,117 +333,7 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
   }
 
   async add(row?: any) {
-    // await this.spinner.show();
 
-    // await this.spinner.hide();
-
-    // if (!row) this.typeAction = "ADD"
-
-    // const modalQD = this.modal.create({
-    //   nzTitle: 'THÔNG TIN HÀNG DTQG CẦN ĐIỀU CHUYỂN',
-    //   nzContent: ThongTinHangDtqgComponent,
-    //   nzMaskClosable: false,
-    //   nzClosable: false,
-    //   nzWidth: '1200px',
-    //   nzFooter: null,
-    //   nzComponentParams: {
-    //     // danhSachKeHoach: this.danhSachKeHoach,
-    //     // dsChiCuc: this.listChiCucNhan,
-    //     // data: row ? row : undefined,
-    //   },
-    // });
-    // modalQD.afterClose.subscribe(async (data) => {
-    //   if (data) {
-    //     if (this.typeData === "TH") {
-    //       if (data.isMatHang) {
-    //         const parent = {
-    //           ...data,
-    //           idVirtual: uuidv4.v4(),
-    //           type: this.typeData
-    //         }
-    //         this.dsHangTH.push({
-    //           danhMuc: parent.danhMuc,
-    //           nhomHang: parent.nhomHang,
-    //           donViTinh: parent.donViTinh,
-    //           tongGiaTri: parent.tongGiaTri,
-    //           idVirtual: parent.idVirtual,
-    //           isParent: true
-    //         })
-    //         this.dsHangTH.push({
-    //           ...data,
-    //           danhMuc: "",
-    //           nhomHang: "",
-    //           donViTinh: "",
-    //           idParent: parent.idVirtual,
-    //           idVirtual: uuidv4.v4(),
-    //           type: this.typeData
-    //         })
-    //       } else {
-    //         this.dsHangTH.push({
-    //           ...data,
-    //           tongGiaTri: data.thanhTienTrongNam,
-    //           isParent: true,
-    //           idVirtual: uuidv4.v4(),
-    //           type: this.typeData
-    //         })
-    //       }
-
-    //       let tongKinhPhiDaTh = this.dsHangTH.reduce((prev, cur) => prev + cur.tongGiaTri, 0);
-    //       let tongKinhPhiDaThBc = this.convertTien(tongKinhPhiDaTh) + ' đồng'
-    //       this.formData.patchValue({
-    //         tongKinhPhiDaTh,
-    //         tongKinhPhiDaThBc
-    //       })
-
-    //       this.dsHangTH = cloneDeep(this.dsHangTH)
-    //     }
-
-    //     if (this.typeData === "PD") {
-    //       if (data.isMatHang) {
-    //         const parent = {
-    //           ...data,
-    //           idVirtual: uuidv4.v4(),
-    //           type: this.typeData
-    //         }
-    //         this.dsHangPD.push({
-    //           danhMuc: parent.danhMuc,
-    //           nhomHang: parent.nhomHang,
-    //           donViTinh: parent.donViTinh,
-    //           tongGiaTri: parent.tongGiaTri,
-    //           idVirtual: parent.idVirtual,
-    //           isParent: true
-    //         })
-    //         this.dsHangPD.push({
-    //           ...data,
-    //           danhMuc: "",
-    //           nhomHang: "",
-    //           donViTinh: "",
-    //           idParent: parent.idVirtual,
-    //           idVirtual: uuidv4.v4(),
-    //           type: this.typeData
-    //         })
-    //       } else {
-    //         this.dsHangPD.push({
-    //           ...data,
-    //           tongGiaTri: data.thanhTienTrongNam,
-    //           isParent: true,
-    //           idVirtual: uuidv4.v4(),
-    //           type: this.typeData
-    //         })
-    //       }
-    //       this.dsHangPD = cloneDeep(this.dsHangPD)
-
-    //     }
-    //     this.danhSach = []
-    //     this.danhSach = this.danhSach.concat(this.dsHangTH)
-    //     this.danhSach = this.danhSach.concat(this.dsHangPD)
-    //     this.formData.patchValue({
-    //       dcnbBBNTBQDtl: this.danhSach
-    //     })
-
-
-    //   }
-    // });
   }
 
 
@@ -602,37 +489,6 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
     }
   }
 
-  // onChangeDiemKhoNhan(maDiemKhoNhan) {
-  //   this.dsNhaKhoNhan = this.dsKeHoach.filter(kh => kh.maDiemKhoNhan === maDiemKhoNhan)
-  // }
-
-  // onChangeNhaKhoNhan(maNhaKhoNhan) {
-  //   this.dsNganKhoNhan = this.dsKeHoach.filter(kh => kh.maNhaKhoNhan === maNhaKhoNhan)
-  // }
-
-  // onChangeNganKhoNhan(maNganKhoNhan) {
-  //   this.dsLoKhoNhan = this.dsKeHoach.filter(kh => kh.maNganKhoNhan === maNganKhoNhan)
-  // }
-
-  // onChangeLoKhoNhan(maLoKhoNhan) {
-  //   const loKhoNhan = this.dsKeHoach.find(kh => kh.maLoKhoNhan === maLoKhoNhan)
-  //   if (!loKhoNhan) return
-  //   this.formData.patchValue({
-  //     tenLoKhoXuat: loKhoNhan.tenLoKho,
-  //     maLoKhoXuat: loKhoNhan.maLoKho,
-  //     tenNganKhoXuat: loKhoNhan.tenNganKho,
-  //     maNganKhoXuat: loKhoNhan.maNganKho,
-  //     tenNhaKhoXuat: loKhoNhan.tenNhaKho,
-  //     maNhaKhoXuat: loKhoNhan.maNhaKho,
-  //     tenDiemKhoXuat: loKhoNhan.tenDiemKho,
-  //     maDiemKhoXuat: loKhoNhan.maDiemKho,
-  //     loaiVthh: loKhoNhan.tenLoaiVthh,
-  //     tenCloaiVthh: loKhoNhan.tenCloaiVthh,
-  //     tichLuongKhaDung: loKhoNhan.tichLuongKd,
-  //     tenDonViTinh: loKhoNhan.tenDonViTinh,
-  //   });
-  // }
-
   setExpand(parantExpand: boolean = false, children: any = []): void {
     if (parantExpand) {
       return children.map(f => ({ ...f, expand: false }))
@@ -658,9 +514,10 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
       if (isGuiDuyet) {
         this.idInput = data.id;
         this.guiDuyet();
-      } else {
-        this.quayLai();
       }
+      // else {
+      //   this.quayLai();
+      // }
     }
     await this.spinner.hide();
   }
@@ -672,16 +529,9 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
   }
 
   async guiDuyet() {
-    // if (this.isCuc()) {
-    //   let trangThai = STATUS.CHO_DUYET_TP;
-    //   let mesg = 'Bạn muốn gửi duyệt văn bản?'
-    //   this.approve(this.idInput, trangThai, mesg);
-    // }
-    // if (this.isChiCuc()) {
     let trangThai = STATUS.CHO_DUYET_TK;
     let mesg = 'Bạn muốn gửi duyệt văn bản?'
     this.approve(this.idInput, trangThai, mesg);
-    // }
   }
 
   isTuChoi() {
@@ -689,26 +539,13 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
   }
 
   async tuChoi() {
-    // if (this.isCuc()) {
-    //   let trangThai = () => {
-    //     if (this.formData.value.trangThai == STATUS.CHO_DUYET_TP)
-    //       return STATUS.TU_CHOI_TP
-    //     if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDC)
-    //       return STATUS.TU_CHOI_LDC
-    //     return STATUS.CHO_DUYET_TP;
-    //   };
-    //   this.reject(this.idInput, trangThai());
-    // }
-    // if (this.isChiCuc()) {
-    //   let trangThai = () => {
-    //     if (this.formData.value.trangThai == STATUS.CHODUYET_TBP_TVQT)
-    //       return STATUS.TUCHOI_TBP_TVQT
-    //     if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDCC)
-    //       return STATUS.TU_CHOI_LDCC
-    //     return STATUS.CHODUYET_TBP_TVQT;
-    //   };
-    //   this.reject(this.idInput, trangThai());
-    // }
+    let trangThai = () => {
+      if (this.formData.value.trangThai == STATUS.CHO_DUYET_TK)
+        return STATUS.TU_CHOI_TK
+      if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDCC)
+        return STATUS.TU_CHOI_LDCC
+    };
+    this.reject(this.idInput, trangThai());
   }
 
   isPheDuyet() {
