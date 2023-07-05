@@ -203,7 +203,7 @@
               <nz-form-label nzRequired [nzNoColon]="true">Loại hàng hoá
               </nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
-                <input nz-input formControlName="loaiVthh" [readonly]="true" />
+                <input nz-input formControlName="tenLoaiVthh" [readonly]="true" />
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -367,13 +367,6 @@
                   Phương pháp lấy mẫu(Theo QC kỹ thuật QG)
                 </nz-form-label>
                 <nz-form-control>
-                  <!-- <nz-checkbox-wrapper style="width: 100%;" (nzOnChange)="checkedChange()">
-                    <div nz-row>
-                      <div nz-col nzSpan="24"><label nz-checkbox nzValue="A" [ngModel]="checked">Lấy mẫu ngẫu
-                          nhiên</label></div>
-                      <div nz-col nzSpan="24"><label nz-checkbox nzValue="B">Lấy mẫu thủ công</label></div>
-                    </div>
-                  </nz-checkbox-wrapper> -->
                   <div class="label-wrapper">
                     <label *ngFor="let item of phuongPhapLayMaus" [ngModelOptions]="{standalone: true}"
                       [(ngModel)]="item.checked" [nzDisabled]="isView" nz-checkbox class="text-bold">
@@ -391,25 +384,28 @@
                   Các chỉ tiêu chất lượng cần kiểm tra
                 </nz-form-label>
                 <nz-form-control>
-                  <input nz-input formControlName="chiTieuKiemTra" [readonly]="isView" />
-                  <!-- <nz-checkbox-wrapper style="width: 100%;" (nzOnChange)="checkedChange()">
-                    <div nz-row>
-                      <div nz-col nzSpan="24"><label nz-checkbox nzValue="A" [ngModel]="true">Hạt
-                          nguyên(%) >=
-                          45</label></div>
-                      <div nz-col nzSpan="24"><label nz-checkbox nzValue="B">Tấm(%) <= 20</label>
-                      </div>
-                      <div nz-col nzSpan="24"><label nz-checkbox nzValue="C">Hạt
-                          vàng(%) <= 0.5</label>
-                      </div>
-                      <div nz-col nzSpan="24"><label nz-checkbox nzValue="D">Hạt hư hỏng(%) <= 2.0</label>
-                      </div>
-                    </div>
-                  </nz-checkbox-wrapper> -->
+                  <div class="label-wrapper">
+                    <label *ngFor="let item of chiTieuChatLuongs" [ngModelOptions]="{standalone: true}"
+                      [(ngModel)]="item.checked" [nzDisabled]="isView" nz-checkbox class="text-bold">
+                      {{item.giaTri}}
+                    </label>
+                  </div>
 
                 </nz-form-control>
               </nz-form-item>
             </div>
+
+            <!-- <div nz-col [nzSpan]="8">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Các chỉ tiêu chất lượng cần kiểm tra
+                </nz-form-label>
+                <nz-form-control>
+                  <input nz-input formControlName="chiTieuKiemTra" [readonly]="isView" />
+
+                </nz-form-control>
+              </nz-form-item>
+            </div> -->
 
 
           </div>
