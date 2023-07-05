@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {Base2Component} from "../../../../../components/base2/base2.component";
 import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../../services/storage.service";
@@ -35,6 +35,7 @@ export class ToanBoDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Comp
   modalWidth: any;
   idDs: number = 0;
   openDs = false;
+  @Output() tabFocus = new EventEmitter<object>();
   constructor(httpClient: HttpClient,
               storageService: StorageService,
               notification: NzNotificationService,
@@ -63,6 +64,7 @@ export class ToanBoDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Comp
       ngayTongHop: [],
       ngayTongHopTu: [],
       ngayTongHopDen: [],
+      tgianLuuKho:[],
       lyDo: [],
       trangThai: [],
       loai: [],
@@ -185,8 +187,13 @@ export class ToanBoDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Comp
       this.expandSetString.delete(id);
     }
   }
- openTongHop(){
+  emitTab(tab) {
+    this.tabFocus.emit(tab);
+  }
+
+  openTongHop(){
    this.tongHop= !this.tongHop;
+   this.emitTab(1);
  }
   openDsModal(id: number) {
     this.idDs = id;

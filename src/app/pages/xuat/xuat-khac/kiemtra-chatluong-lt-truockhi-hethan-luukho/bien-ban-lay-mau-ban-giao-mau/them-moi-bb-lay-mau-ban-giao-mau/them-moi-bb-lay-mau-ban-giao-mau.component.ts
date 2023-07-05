@@ -4,7 +4,6 @@ import { StorageService } from 'src/app/services/storage.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { BienBanLayMauBanGiaoMauService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/BienBanLayMauBanGiaoMau.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import dayjs from 'dayjs';
 import { FileDinhKem } from 'src/app/models/FileDinhKem';
@@ -17,6 +16,10 @@ import { Validators } from '@angular/forms';
 import {
   TongHopDanhSachHangDTQGService
 } from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatlt/TongHopDanhSachHangDTQG.service";
+import {LOAI_HH_XUAT_KHAC} from "../../../../../../constants/config";
+import {
+  BienBanLayMauLuongThucHangDTQG
+} from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatlt/BienBanLayMauLuongThucHangDTQG.service";
 
 @Component({
   selector: 'app-xk-them-moi-bb-lay-mau-ban-giao-mau',
@@ -36,7 +39,7 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
   fileDinhKemNiemPhong: any[] = [];
   listChiCuc: any[] = [];
   listDiemKho: any[] = [];
-  listSoQuyetDinh: any[] = [];
+  listDsTongHop: any[] = [];
   listDiaDiemNhap: any[] = [];
   phuongPhapLayMaus: Array<PhuongPhapLayMau>;
   listDaiDienCuc: any[] = [];
@@ -48,6 +51,7 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
   listFileDinhKem: any = [];
   fileNiemPhong: any = [];
   bienBan: any[] = [];
+  loaiHhXuatKhac = LOAI_HH_XUAT_KHAC;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -56,9 +60,9 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
     modal: NzModalService,
     private danhMucService: DanhMucService,
     private tongHopDanhSachHangDTQGService: TongHopDanhSachHangDTQGService,
-    private bienBanLayMauBanGiaoMauService: BienBanLayMauBanGiaoMauService
+    private bienBanLayMauLuongThucHangDTQG: BienBanLayMauLuongThucHangDTQG
   ) {
-    super(httpClient, storageService, notification, spinner, modal, bienBanLayMauBanGiaoMauService);
+    super(httpClient, storageService, notification, spinner, modal, bienBanLayMauLuongThucHangDTQG);
 
     this.formData = this.fb.group(
       {
@@ -117,7 +121,7 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
     try {
       this.spinner.show();
       await Promise.all([
-        // this.loadSoQuyetDinh(),
+        this.loadSoQuyetDinh(),
         // this.loadSoBbLayMau(),
         this.loadPhuongPhapLayMau(),
       ])
@@ -137,7 +141,7 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
 
   async loadDetail(idInput: number) {
     if (idInput > 0) {
-      await this.bienBanLayMauBanGiaoMauService.getDetail(idInput)
+      await this.bienBanLayMauLuongThucHangDTQG.getDetail(idInput)
         .then((res) => {
           if (res.msg == MESSAGE.SUCCESS) {
             this.formData.patchValue(res.data);
@@ -157,7 +161,7 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         });
     } else {
-      let id = await this.userService.getId('XH_CTVT_BB_LAY_MAU_HDR_SEQ')
+      let id = await this.userService.getId('XH_XK_LT_BB_LAY_MAU_HDR_SEQ')
       this.formData.patchValue({
         maDvi: this.userInfo.MA_DVI,
         tenDvi: this.userInfo.TEN_DVI,
@@ -166,6 +170,7 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
         soBienBan: `${id}/${this.formData.get('nam').value}/${this.maBb}`,
         loaiVthh: this.loaiVthh
       });
+      this.radioValue= 'ALL'
     }
 
   }
@@ -196,34 +201,33 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
     this.showListEvent.emit();
   }
 
-  // async loadSoQuyetDinh() {
-  //   let body = {
-  //     trangThai: STATUS.BAN_HANH,
-  //     loaiVthh: this.loaiVthh,
-  //     listTrangThaiXh: [STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN],
-  //   }
-  //   let res = await this.tongHopDanhSachHangDTQGService.search(body);
-  //   if (res.msg == MESSAGE.SUCCESS) {
-  //     let data = res.data;
-  //     this.listSoQuyetDinh = data.content;
-  //     console.log(this.listSoQuyetDinh,"this.listSoQuyetDinh")
-  //   } else {
-  //     this.notification.error(MESSAGE.ERROR, res.msg);
-  //   }
-  // }
+  async loadSoQuyetDinh() {
+    let body = {
+      trangThai: STATUS.GUI_DUYET,
+      loai: this.loaiHhXuatKhac.LT_6_THANG,
+    }
+    let res = await this.tongHopDanhSachHangDTQGService.search(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      let data = res.data;
+      this.listDsTongHop = data.content;
+      console.log(this.listDsTongHop,"this.listDsTongHop")
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
 
   async openDialogSoQd() {
     const modalQD = this.modal.create({
-      nzTitle: 'Danh sách số quyết định kế hoạch giao nhiệm vụ xuất hàng',
+      nzTitle: 'Danh sách tổng hợp hàng DTQG còn 6 tháng hết hạn lưu kho ',
       nzContent: DialogTableSelectionComponent,
       nzMaskClosable: false,
       nzClosable: false,
       nzWidth: '900px',
       nzFooter: null,
       nzComponentParams: {
-        dataTable: this.listSoQuyetDinh,
-        dataHeader: ['Số quyết định', 'Ngày quyết định', 'Loại hàng hóa'],
-        dataColumn: ['soQd', 'ngayKy', 'tenLoaiVthh'],
+        dataTable: this.listDsTongHop,
+        dataHeader: ['Mã danh sách', 'Tên danh sách', 'Ngày tạo'],
+        dataColumn: ['maDanhSach', 'tenDanhSach', 'ngayTao'],
       },
     })
     modalQD.afterClose.subscribe(async (data) => {
@@ -238,44 +242,39 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
     let dataRes = await this.tongHopDanhSachHangDTQGService.getDetail(id)
     const data = dataRes.data;
     this.formData.patchValue({
-      soQdGiaoNvXh: data.soQd,
-      idQdGiaoNvXh: data.id,
-      ngayQdGiaoNvXh: data.ngayKy,
-      loaiVthh: data.loaiVthh,
-      tenLoaiVthh: data.tenLoaiVthh,
+      idTongHop:data.id,
+      tenDanhSach:data.tenDanhSach,
+      maDanhSach:data.maDanhSach,
+
 
     });
-    let dataChiCuc = data.noiDungCuuTro.find(item =>
-      item.maDviChiCuc == this.userInfo.MA_DVI
-    );
-    if (dataChiCuc) {
-      this.listDiaDiemNhap = [...this.listDiaDiemNhap, dataChiCuc];
+    if (data.tongHopDtl) {
+      this.listDiaDiemNhap = data.tongHopDtl;
     }
-    await this.listBienBan(data.soQd)
+    await this.listBienBan(data.maDanhSach)
     await this.spinner.hide();
   }
 
-  async listBienBan(item) {
-    await this.spinner.show();
-    let body = {
-      soQdGiaoNvXh: item,
-    }
-    let res = await this.bienBanLayMauBanGiaoMauService.search(body)
-    const data = res.data;
-    this.bienBan = data.content;
-    const listDd = [
-      ...this.listDiaDiemNhap.filter((e) => {
-        return !this.bienBan.some((bb) => {
-          if (bb.maLoKho.length > 0 && e.maLoKho.length > 0) {
-            return e.maLoKho === bb.maLoKho;
-          } else {
-            return e.maNganKho === bb.maNganKho;
-          }
-        });
-      }),
-    ];
-    this.listDiaDiemNhap = listDd;
-    console.log(this.listDiaDiemNhap,"this.listDiaDiemNhap")
+  async listBienBan(maDanhSach) {
+    // await this.spinner.show();
+    // let body = {
+    //   maDanhSach: maDanhSach,
+    // }
+    // let res = await this.bienBanLayMauLuongThucHangDTQG.search(body)
+    // this.bienBan = res.data.content;
+    // let listDd = [
+    //   ...this.listDiaDiemNhap.filter((e) => {
+    //     return !this.bienBan.some((bb) => {
+    //       if (bb.maLoKho.length > 0 && e.maLoKho.length > 0) {
+    //         return e.maLoKho === bb.maLoKho;
+    //       } else {
+    //         return e.maNganKho === bb.maNganKho;
+    //       }
+    //     });
+    //   }),
+    // ];
+    // this.listDiaDiemNhap = listDd;
+    // console.log(this.listDiaDiemNhap,"this.listDiaDiemNhap")
   }
 
   openDialogDdiemNhapHang() {
@@ -300,14 +299,13 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
   async bindingDataDdNhap(data) {
     if (data) {
       this.formData.patchValue({
-        maDiemKho: data.maDiemKho,
+        maDiaDiem: data.maDiaDiem,
         tenDiemKho: data.tenDiemKho,
-        maNhaKho: data.maNhaKho,
         tenNhaKho: data.tenNhaKho,
-        maNganKho: data.maNganKho,
         tenNganKho: data.tenNganKho,
-        maLoKho: data.maLoKho,
         tenLoKho: data.tenLoKho,
+        loaiVthh: data.loaiVthh,
+        tenLoaiVthh: data.tenLoaiVthh,
         cloaiVthh: data.cloaiVthh,
         tenCloaiVthh: data.tenCloaiVthh,
       })
