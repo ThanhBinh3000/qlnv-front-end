@@ -37,6 +37,7 @@ export class KeHoachXuatHangCuaCucComponent extends Base2Component implements On
       namKeHoach: [],
       soToTrinh: [],
       trichYeu: [],
+      loai: [LOAI.KE_HOACH],
       ngayKeHoach: [],
       ngayKeHoachTu: [],
       ngayKeHoachDen: [],
@@ -93,7 +94,6 @@ export class KeHoachXuatHangCuaCucComponent extends Base2Component implements On
   }
 
   themMoi(id, isView) {
-    console.log(id, 'idid')
     this.isDetail = true;
     this.selectedId = id;
     this.isView = isView;
@@ -104,3 +104,10 @@ export class KeHoachXuatHangCuaCucComponent extends Base2Component implements On
     this.isDetail = false;
   }
 }
+
+
+export enum LOAI {
+  KE_HOACH = "00",
+  TONG_HOP = "01",
+}
+
