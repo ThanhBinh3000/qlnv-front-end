@@ -136,10 +136,17 @@ export class ThemMoiKeHoachNhapKhacComponent extends Base2Component implements O
   }
 
   async initForm() {
-    this.formData.patchValue({
-      tenDvi: this.userInfo.TEN_DVI,
-      maDviDxuat: this.userInfo.MA_DVI
-    });
+    if (this.userService.isTongCuc()) {
+      this.formData.patchValue({
+        tenDvi: this.userInfo.TEN_PHONG_BAN,
+        maDviDxuat: this.userInfo.MA_PHONG_BAN
+      });
+    } else {
+      this.formData.patchValue({
+        tenDvi: this.userInfo.TEN_DVI,
+        maDviDxuat: this.userInfo.MA_DVI
+      });
+    }
   }
 
   async loadData() {
@@ -371,6 +378,42 @@ export class ThemMoiKeHoachNhapKhacComponent extends Base2Component implements O
               break;
             }
           }
+          let res = await this.dxKhNhapKhacService.approve(body);
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(
+              MESSAGE.SUCCESS,
+              MESSAGE.DUYET_SUCCESS,
+            );
+            this.quayLai();
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+          await this.spinner.hide();
+        } catch (e) {
+          console.log('error: ', e);
+          await this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      },
+    });
+  }
+
+  async hoanThanh() {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn hoàn thành bản dự thảo?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 350,
+      nzOnOk: async () => {
+        await this.spinner.show();
+        try {
+          let body = {
+            id: this.idInput,
+            trangThai: STATUS.DA_TAO_CBV,
+          };
           let res = await this.dxKhNhapKhacService.approve(body);
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(
