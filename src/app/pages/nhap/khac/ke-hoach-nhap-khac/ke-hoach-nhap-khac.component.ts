@@ -122,11 +122,6 @@ export class KeHoachNhapKhacComponent implements OnInit {
         });
       }
       this.userInfo = this.userService.getUserLogin();
-      if (this.userService.isCuc()) {
-        this.searchFilter.maDviDxuat = this.userInfo.MA_DVI;
-      } else {
-        this.searchFilter.maDviDxuat = this.userInfo.MA_PHONG_BAN;
-      }
       await Promise.all([
         this.loadDanhSachCuc(),
         this.search(),
@@ -146,6 +141,8 @@ export class KeHoachNhapKhacComponent implements OnInit {
     const dsTong = await this.dviService.layDonViTheoCapDo(body);
     this.danhSachCuc = dsTong[DANH_MUC_LEVEL.CUC];
     this.danhSachCuc = this.danhSachCuc.filter(item => item.type != "PB");
+    let vuQlh = dsTong[DANH_MUC_LEVEL.CUC].filter(item => item.maDvi == "010124" );
+    this.danhSachCuc = [...this.danhSachCuc, vuQlh[0]]
   }
   clearFilter() {
     this.searchFilter.namKhoach = null;
