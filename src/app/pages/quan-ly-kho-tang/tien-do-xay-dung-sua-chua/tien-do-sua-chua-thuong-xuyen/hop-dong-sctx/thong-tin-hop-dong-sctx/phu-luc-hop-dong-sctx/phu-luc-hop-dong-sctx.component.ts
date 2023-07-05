@@ -55,6 +55,7 @@ export class PhuLucHopDongSctxComponent extends Base2Component implements OnInit
       capDvi: [null],
       namKeHoach: [null],
       soHd: [null],
+      loaiSuaChua: [null],
       soHdHdr: [null],
       tenHd: [null],
       ngayHieuLucHdr: [null],

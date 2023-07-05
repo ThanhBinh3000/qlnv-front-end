@@ -117,7 +117,7 @@
         <th colspan="5" width="680px">Mức chi giao văn phòng {{capDvi == 1 ? 'Tổng cục' : 'cục'}}</th>
         <th colspan="5"
             width="680px">{{capDvi == 1 ? 'Mức chi giao cục DTNN KV' : 'Mức chi giao Chi cục DTNN trực thuộc'}}</th>
-        <th rowspan="3" width="200px" *ngIf="capDvi == 2">TỔng cục điều hành <br/> (Nghiệp vụ chuyên môn)</th>
+        <th rowspan="3" width="200px" *ngIf="capDvi == 2">Tổng cục điều hành <br/> (Nghiệp vụ chuyên môn)</th>
         <th rowspan="3" width="100px" *ngIf="!isViewDetail">Hành động</th>
       </tr>
       <tr>
@@ -292,8 +292,9 @@
           <td>{{data.tenDinhMuc}}</td>
           <td>{{data.apDungTai ? data.apDungTaiStr : 'Tất cả '}}</td>
           <td>{{data.donViTinh}}</td>
-<!--          <td>{{data.tongDinhMucTc}}</td>-->
+          <td *ngIf="capDvi == 2">{{data.tongDinhMucTc}}</td>
           <td>{{data.nvChuyenMonTc + data.ttCaNhanTc + data.tcDieuHanhTc + data.nvChuyenMonKv + data.ttCaNhanKv + data.tcDieuHanhKv | number}}</td>
+          <td *ngIf="capDvi == 2">{{data.nvChuyenMonTc + data.ttCaNhanTc  + data.nvChuyenMonKv + data.ttCaNhanKv}}</td>
           <td>{{data.nvChuyenMonTc + data.ttCaNhanTc + data.tcDieuHanhTc | number}}</td>
           <td>{{data.nvChuyenMonTc + data.ttCaNhanTc | number }}</td>
           <td>{{data.nvChuyenMonTc | number}}</td>
@@ -318,31 +319,12 @@
           <td></td>
           <td>
             {{dataEdit[idx].data.maDinhMuc}}
-            <!--            <nz-select [(ngModel)]="dataEdit[idx].data.maDinhMuc"-->
-            <!--                       nzAllowClear="true">-->
-            <!--              <nz-option *ngFor="let p of listDmDinhMuc" [nzValue]="p.ma" [nzLabel]="p.ma">-->
-            <!--              </nz-option>-->
-            <!--            </nz-select>-->
           </td>
           <td>
             {{dataEdit[idx].data.tenDinhMuc}}
-            <!--            <nz-select [(ngModel)]="dataEdit[idx].data.tenDinhMuc" [nzDisabled]="true"-->
-            <!--                       nzAllowClear="true">-->
-            <!--              <nz-option *ngFor="let p of listDmDinhMuc" [nzValue]="p.ten" [nzLabel]="p.ten">-->
-            <!--              </nz-option>-->
-            <!--            </nz-select>-->
           </td>
           <td>
             {{dataEdit[idx].data.apDungTai ? dataEdit[idx].data.apDungTai : 'Tất cả '}}
-            <!--            <nz-select [(ngModel)]="dataEdit[idx].data.apDungTai" [nzDisabled]="isViewDetail"-->
-            <!--                       nzAllowClear="true">-->
-            <!--              <nz-option *ngFor="let p of listLoaiDinhMuc" [nzValue]="p.ma" [nzLabel]="p.ten">-->
-            <!--              </nz-option>-->
-            <!--              <ng-template #error let-control>-->
-            <!--                <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}-->
-            <!--                </ng-container>-->
-            <!--              </ng-template>-->
-            <!--            </nz-select>-->
           </td>
           <td>
             <input type="text" [disabled]="true" [(ngModel)]="dataEdit[idx].data.donViTinh" nz-input/>

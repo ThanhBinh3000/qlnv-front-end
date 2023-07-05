@@ -79,6 +79,7 @@ export class ThongTinKeHoachXuatHangCuaCucComponent extends Base2Component imple
       thoiGianDuKienXuatTu: [],
       thoiGianDuKienXuatDen: [],
       moTa: [],
+      capDvi: [this.userInfo.CAP_DVI],
       idTongHopDs: [],
       lyDoTuChoi: [],
       maTongHopDs: [null, [Validators.required]],

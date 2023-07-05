@@ -20,10 +20,10 @@
 <div class="contentBor chi-tieu__body giao-ke-hoach">
   <div class="contentDetail">
     <ng-container *ngIf="tabSelected == 0">
-      <app-toan-bo-ds-hang-dtqg-hethan-luukho-chua-co-kh-xuat></app-toan-bo-ds-hang-dtqg-hethan-luukho-chua-co-kh-xuat>
+      <app-toan-bo-ds-hang-dtqg-hethan-luukho-chua-co-kh-xuat (tabFocus)="receivedTab($event)" ></app-toan-bo-ds-hang-dtqg-hethan-luukho-chua-co-kh-xuat>
     </ng-container>
     <ng-container *ngIf="tabSelected == 1">
-      <app-tong-hop-ds-hang-dtqg-hethan-luukho-chua-co-kh-xuat></app-tong-hop-ds-hang-dtqg-hethan-luukho-chua-co-kh-xuat>
+      <app-tong-hop-ds-hang-dtqg-hethan-luukho-chua-co-kh-xuat (tabFocus)="receivedTab($event)" ></app-tong-hop-ds-hang-dtqg-hethan-luukho-chua-co-kh-xuat>
     </ng-container>
     <ng-container *ngIf="tabSelected == 2">
       <app-xk-bien-ban-lay-mau-ban-giao-mau></app-xk-bien-ban-lay-mau-ban-giao-mau>

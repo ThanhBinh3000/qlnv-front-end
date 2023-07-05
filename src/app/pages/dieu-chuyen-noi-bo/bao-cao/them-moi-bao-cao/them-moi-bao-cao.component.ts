@@ -1,4 +1,6 @@
+import { chain, cloneDeep } from 'lodash';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Validators } from '@angular/forms';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -10,7 +12,7 @@ import { STATUS } from 'src/app/constants/status';
 import { MESSAGE } from 'src/app/constants/message';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import dayjs from 'dayjs';
-import { Validators } from '@angular/forms';
+import { v4 as uuidv4 } from 'uuid';
 @Component({
   selector: 'app-them-moi-bao-cao',
   templateUrl: './them-moi-bao-cao.component.html',
@@ -22,6 +24,8 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
   @Input() isViewOnModal: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
+  expandSetString = new Set<string>();
+  dataView: any[] = [];
   TRANG_THAI: { [key: string]: string } = {
     [STATUS.DU_THAO]: "Dự thảo",
     [STATUS.CHO_DUYET_TP]: "Chờ duyệt - TP",
@@ -56,12 +60,62 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
   }
 
   ngOnInit(): void {
+    try {
+      this.spinner.show();
+      this.loadDetail(this.idInput)
+    } catch (error) {
+      console.log('e', error)
+    }
+    finally {
+      this.spinner.hide()
+    }
+  }
+  async loadDetail(id: number): Promise<void> {
+    if (id) {
+      const res = await this.bangCaoDieuChuyenService.getDetail(id);
+      if (res.msg === MESSAGE.SUCCESS) {
+        this.formData.patchValue({ ...res.data });
+        this.dataTable = res.data.dataTable
+      }
+      else {
+        this.formData.patchValue({
+          maDvi: this.userInfo.MA_DVI,
+          tenDvi: this.userInfo.TEN_DVI
+        })
+      }
+    }
   }
   openModalQDCuc() {
 
   }
   openModalQDTongCuc() {
 
+  }
+  expandAll() {
+    this.dataView.forEach(s => {
+      this.expandSetString.add(s.idVirtual);
+    })
+  }
+
+  onExpandStringChange(id: string, checked: boolean): void {
+    if (checked) {
+      this.expandSetString.add(id);
+    } else {
+      this.expandSetString.delete(id);
+    }
+  }
+  buildTableView() {
+    let dataView = Array.isArray(this.dataTable) ?
+      chain(this.dataTable).groupBy("soQdinh").map((rs, i) => {
+        const dataSoQdinh = rs.find(f => f.soQdinh == i);
+        return {
+          ...dataSoQdinh,
+          idVirtual: uuidv4(),
+          childData: dataSoQdinh ? rs : []
+        }
+      }).value() : [];
+    this.dataView = cloneDeep(dataView);
+    this.expandAll()
   }
   async save(isGuiDuyet: boolean): Promise<void> {
     try {

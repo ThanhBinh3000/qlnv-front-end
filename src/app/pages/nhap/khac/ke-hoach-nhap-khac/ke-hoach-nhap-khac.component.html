@@ -23,7 +23,7 @@
           <label class="search__label">Trạng thái</label>
           <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái"
                      [(ngModel)]="searchFilter.trangThai">
-            <nz-option *ngFor="let item of listTrangThai" [nzValue]="item.id" [nzLabel]="item.tenDm">
+            <nz-option *ngFor="let item of listTrangThai" [nzValue]="item.ma" [nzLabel]="item.giaTri">
             </nz-option>
           </nz-select>
         </div>
@@ -156,13 +156,13 @@
           </th>
           <th>
             <nz-input-group>
-              <input type="number" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenLoaiVthh"
+              <input nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenLoaiVthh"
                      (input)="filterInTable('tenLoaiVthh',filterTable.tenLoaiVthh)" size="small" />
             </nz-input-group>
           </th>
           <th>
             <nz-input-group>
-              <input type="number" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tongSlNhap"
+              <input nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tongSlNhap"
                      (input)="filterInTable('tongSlNhap',filterTable.tongSlNhap)" size="small" />
             </nz-input-group>
           </th>

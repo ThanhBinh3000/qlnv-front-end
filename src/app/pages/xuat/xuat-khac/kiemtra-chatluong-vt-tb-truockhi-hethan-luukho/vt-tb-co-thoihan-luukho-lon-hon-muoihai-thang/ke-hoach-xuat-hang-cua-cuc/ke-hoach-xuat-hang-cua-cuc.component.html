@@ -113,46 +113,53 @@
           <th class="text-left">Trạng thái</th>
           <th class="text-center" width="120px">Hành động</th>
         </tr>
-        <!--        <tr class="header-row search">-->
-        <!--          <th></th>-->
-        <!--          <th></th>-->
-        <!--          <th>-->
-        <!--            <nz-input-group>-->
-        <!--              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQd"-->
-        <!--                     (input)="filterInTable('soQd',filterTable.soQd)" size="small"/>-->
-        <!--            </nz-input-group>-->
-        <!--          </th>-->
-        <!--          <th>-->
-        <!--            <nz-input-group>-->
-        <!--              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.namQd"-->
-        <!--                     (input)="filterInTable('namQd',filterTable.namQd)" size="small"/>-->
-        <!--            </nz-input-group>-->
-        <!--          </th>-->
-        <!--          <th>-->
-        <!--            <nz-input-group>-->
-        <!--              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayQd"-->
-        <!--                     (input)="filterInTable('ngayQd',filterTable.ngayQd)" size="small"/>-->
-        <!--            </nz-input-group>-->
-        <!--          </th>-->
-        <!--          <th>-->
-        <!--            <nz-input-group>-->
-        <!--              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trichYeu"-->
-        <!--                     (input)="filterInTable('trichYeu',filterTable.trichYeu)" size="small"/>-->
-        <!--            </nz-input-group>-->
-        <!--          </th>-->
-        <!--          <th>-->
-        <!--            <nz-input-group>-->
-        <!--              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenTrangThai"-->
-        <!--                     (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" size="small"/>-->
-        <!--            </nz-input-group>-->
-        <!--          </th>-->
-        <!--          <th></th>-->
-        <!--          <th></th>-->
-        <!--          <th></th>-->
-        <!--          <th></th>-->
-        <!--          <th></th>-->
-        <!--&lt;!&ndash;          <th></th>&ndash;&gt;-->
-        <!--        </tr>-->
+        <tr class="header-row search">
+          <th></th>
+          <th></th>
+          <th>
+            <nz-input-group>
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQd"
+                     (input)="filterInTable('namKeHoach',filterTable.namKeHoach)" size="small"/>
+            </nz-input-group>
+          </th>
+          <th>
+            <nz-input-group>
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soToTrinh"
+                     (input)="filterInTable('soToTrinh',filterTable.soToTrinh)" size="small"/>
+            </nz-input-group>
+          </th>
+          <th>
+            <nz-input-group>
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayKeHoach"
+                     (input)="filterInTable('ngayKeHoach',filterTable.ngayKeHoach)" size="small"/>
+            </nz-input-group>
+          </th>
+          <th>
+            <nz-input-group>
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayDuyetKeHoach"
+                     (input)="filterInTable('ngayDuyetKeHoach',filterTable.ngayDuyetKeHoach)" size="small"/>
+            </nz-input-group>
+          </th>
+          <th>
+            <nz-input-group>
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trichYeu"
+                     (input)="filterInTable('trichYeu',filterTable.trichYeu)" size="small"/>
+            </nz-input-group>
+          </th>
+          <th>
+            <nz-input-group>
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soDviTaiSan"
+                     (input)="filterInTable('soDviTaiSan',filterTable.soDviTaiSan)" size="small"/>
+            </nz-input-group>
+          </th>
+          <th>
+            <nz-input-group>
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenTrangThai"
+                     (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" size="small"/>
+            </nz-input-group>
+          </th>
+          <th></th>
+        </tr>
         <tr *ngFor="let data of rowSelectionTable.data; let idx = index">
           <td>
             <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"

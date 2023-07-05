@@ -53,6 +53,7 @@ export class ThongTinDanhSachHdtqgHetHan extends Base2Component implements OnIni
         slTonKho:[],
         ngayNhapKho:[],
         ngayDeXuat:[],
+        tgianLuuKho:[],
         ngayTongHop:[],
         lyDo:[],
         trangThai:[],

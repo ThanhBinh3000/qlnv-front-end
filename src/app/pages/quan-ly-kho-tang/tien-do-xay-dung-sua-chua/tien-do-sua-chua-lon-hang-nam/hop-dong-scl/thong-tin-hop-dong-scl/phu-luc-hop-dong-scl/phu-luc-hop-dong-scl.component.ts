@@ -66,6 +66,7 @@ export class PhuLucHopDongSclComponent extends Base2Component implements OnInit 
       thoiGianThHdHdr: [null],
       ghiChu: [null],
       listKtTdxdHopDongKlcv: [],
+      loaiSuaChua : [null],
       trangThai: ['00'],
       tenTrangThai: ['Dự thảo'],
       fileDinhKems: [null],
