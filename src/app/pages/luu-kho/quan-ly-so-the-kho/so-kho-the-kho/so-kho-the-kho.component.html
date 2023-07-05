@@ -2,59 +2,61 @@
   <div class="bg-trang">
     <nz-card class="mt16 flex-card p-lr16">
       <form [nzLayout]="'vertical'" [formGroup]="formData" nz-form>
-      <div nz-row [nzGutter]="24">
-        <div nz-col nzSpan="2">
-          <nz-form-label>Năm</nz-form-label>
-          <nz-select formControlName="nam">
-            <nz-option *ngFor="let p of listNam" [nzValue]="p" [nzLabel]="p"></nz-option>
-          </nz-select>
-        </div>
-        <div nz-col nzSpan="3">
-          <nz-form-label class="search__label">Mã đơn vị</nz-form-label>
-          <input type="text" nz-input formControlName="maDvi" />
-        </div>
-        <div nz-col nzSpan="6">
-          <nz-form-label class="search__label">Tên đơn vị</nz-form-label>
-          <input type="text" nz-input formControlName="tenDvi" />
-        </div>
-        <div nz-col nzSpan="4">
-          <nz-form-label nzFor="loai-hang-hoa">Loại hàng hoá</nz-form-label>
-          <nz-select nzShowSearch formControlName="loaiHang" (ngModelChange)="onChangeLoaiVthh($event)">
-            <nz-option *ngFor="let item of listLoaiHangHoa" nzValue="{{item.ma}}" nzLabel="{{item.ten}}">
-            </nz-option>
-          </nz-select>
-        </div>
-        <div nz-col nzSpan="4">
-          <nz-form-label nzFor="chung-loai-hang-hoa">Chủng loại hàng hoá</nz-form-label>
-          <nz-select nzShowSearch formControlName="maChungLoaiHang">
-            <nz-option *ngFor="let item of listChungLoaiHangHoa" nzValue="{{item.ma}}" nzLabel="{{item.ten}}">
-            </nz-option>
-          </nz-select>
-        </div>
-        <div nz-col nzSpan="5">
-          <nz-form-label nzFor="chung-loai-hang-hoa">Ngày tạo</nz-form-label>
-          <div nz-row>
-            <div nz-col nzSpan="11">
-              <nz-date-picker nzPlaceHolder="Ngày tạo từ" formControlName="ngayTaoTu" nzFormat="dd/MM/yyyy" class="search__input"></nz-date-picker>
-            </div>
-            <div nz-col nzSpan="1">
-            </div>
-            <div nz-col nzSpan="11">
-              <nz-date-picker nzPlaceHolder="Ngày tạo đến" formControlName="ngayTaoDen" nzFormat="dd/MM/yyyy" class="search__input"></nz-date-picker>
+        <div nz-row [nzGutter]="24">
+          <div nz-col nzSpan="2">
+            <nz-form-label>Năm</nz-form-label>
+            <nz-select formControlName="nam">
+              <nz-option *ngFor="let p of listNam" [nzValue]="p" [nzLabel]="p"></nz-option>
+            </nz-select>
+          </div>
+          <div nz-col nzSpan="3">
+            <nz-form-label class="search__label">Mã đơn vị</nz-form-label>
+            <input type="text" nz-input formControlName="maDvi"/>
+          </div>
+          <div nz-col nzSpan="6">
+            <nz-form-label class="search__label">Tên đơn vị</nz-form-label>
+            <input type="text" nz-input formControlName="tenDvi"/>
+          </div>
+          <div nz-col nzSpan="4">
+            <nz-form-label nzFor="loai-hang-hoa">Loại hàng hoá</nz-form-label>
+            <nz-select nzShowSearch formControlName="loaiHang" (ngModelChange)="onChangeLoaiVthh($event)">
+              <nz-option *ngFor="let item of listLoaiHangHoa" nzValue="{{item.ma}}" nzLabel="{{item.ten}}">
+              </nz-option>
+            </nz-select>
+          </div>
+          <div nz-col nzSpan="4">
+            <nz-form-label nzFor="chung-loai-hang-hoa">Chủng loại hàng hoá</nz-form-label>
+            <nz-select nzShowSearch formControlName="maChungLoaiHang">
+              <nz-option *ngFor="let item of listChungLoaiHangHoa" nzValue="{{item.ma}}" nzLabel="{{item.ten}}">
+              </nz-option>
+            </nz-select>
+          </div>
+          <div nz-col nzSpan="5">
+            <nz-form-label nzFor="chung-loai-hang-hoa">Ngày tạo</nz-form-label>
+            <div nz-row>
+              <div nz-col nzSpan="11">
+                <nz-date-picker nzPlaceHolder="Ngày tạo từ" formControlName="ngayTaoTu" nzFormat="dd/MM/yyyy"
+                                class="search__input"></nz-date-picker>
+              </div>
+              <div nz-col nzSpan="1">
+              </div>
+              <div nz-col nzSpan="11">
+                <nz-date-picker nzPlaceHolder="Ngày tạo đến" formControlName="ngayTaoDen" nzFormat="dd/MM/yyyy"
+                                class="search__input"></nz-date-picker>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="cangiua group-button-search">
-        <button nz-button class="search__button--clear" (click)="clearForm()">
-          <i class="icon htvbdh_nhap-lai1"></i>
-          Xóa điều kiện
-        </button>
-        <button nz-button class="search__button--search" (click)="search()">
-          <i nz-icon nzType="search"></i>
-          Tìm kiếm
-        </button>
-      </div>
+        <div class="cangiua group-button-search">
+          <button nz-button class="search__button--clear" (click)="clearForm()">
+            <i class="icon htvbdh_nhap-lai1"></i>
+            Xóa điều kiện
+          </button>
+          <button nz-button class="search__button--search" (click)="search()">
+            <i nz-icon nzType="search"></i>
+            Tìm kiếm
+          </button>
+        </div>
       </form>
     </nz-card>
     <div class="group-button">
@@ -77,22 +79,22 @@
         <thead>
         <tr>
           <th nzWidth="45px" rowSpan="2" class="text-center">STT</th>
-          <th nzWidth="" rowSpan="2" class="text-center" >Điểm kho</th>
-          <th nzWidth="" rowSpan="2" class="text-center" >Nhà kho</th>
-          <th nzWidth="" rowSpan="2" class="text-center" >Lô kho</th>
-          <th nzWidth="" rowSpan="2" class="text-center" >Năm nhập</th>
-          <th nzWidth="" rowSpan="2" class="text-center" >Số sổ kho</th>
-          <th nzWidth="" rowSpan="2" class="text-center" >Thẻ kho</th>
-          <th nzWidth="" rowSpan="2" class="text-center" >Thời gian tạo</th>
-          <th nzWidth="" rowSpan="2" class="text-center" >Thời gian đóng</th>
-          <th nzWidth="" rowSpan="2" class="text-center" >Loại hàng DTQG</th>
-          <th nzWidth="" rowSpan="2" class="text-center" >Chủng loại</th>
-          <th nzWidth="" rowSpan="2" class="text-center" >Phiếu nhập/xuất</th>
-          <th nzWidth="" rowSpan="2" class="text-center" >Ngày nhập/xuất</th>
-          <th nzWidth="" colSpan="2" class="text-center" >Chứng từ</th>
-          <th nzWidth="" colSpan="2" class="text-center" >Số lượng</th>
-          <th nzWidth="" rowSpan="2" class="text-center" >ĐVT</th>
-          <th nzWidth="" rowSpan="2" class="text-center" >Trạng thái</th>
+          <th nzWidth="" rowSpan="2" class="text-center">Điểm kho</th>
+          <th nzWidth="" rowSpan="2" class="text-center">Nhà kho</th>
+          <th nzWidth="" rowSpan="2" class="text-center">Lô kho</th>
+          <th nzWidth="" rowSpan="2" class="text-center">Năm nhập</th>
+          <th nzWidth="" rowSpan="2" class="text-center">Số sổ kho</th>
+          <th nzWidth="" rowSpan="2" class="text-center">Thẻ kho</th>
+          <th nzWidth="" rowSpan="2" class="text-center">Thời gian tạo</th>
+          <th nzWidth="" rowSpan="2" class="text-center">Thời gian đóng</th>
+          <th nzWidth="" rowSpan="2" class="text-center">Loại hàng DTQG</th>
+          <th nzWidth="" rowSpan="2" class="text-center">Chủng loại</th>
+          <th nzWidth="" rowSpan="2" class="text-center">Phiếu nhập/xuất</th>
+          <th nzWidth="" rowSpan="2" class="text-center">Ngày nhập/xuất</th>
+          <th nzWidth="" colSpan="2" class="text-center">Chứng từ</th>
+          <th nzWidth="" colSpan="2" class="text-center">Số lượng</th>
+          <th nzWidth="" rowSpan="2" class="text-center">ĐVT</th>
+          <th nzWidth="" rowSpan="2" class="text-center">Trạng thái</th>
           <th nzWidth="90px" rowSpan="2" class="text-center" nzRight>Hành động</th>
         </tr>
         <tr>
@@ -101,6 +103,45 @@
           <th class="text-center">Nhập</th>
           <th class="text-center">Xuất</th>
         </tr>
+        <ng-container *ngFor="let item of dataTable , let i = index">
+          <tr class="level-1">
+            <td>{{i + 1}}</td>
+            <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <ng-container *ngIf="expandSet.has(i)">
+            <ng-container *ngFor="let dataDdiem of item.children, let y = index">
+              <tr class="level-2">
+                <td></td>
+                <td></td>
+                <td [nzExpand]="expandSet2.has(y)" (nzExpandChange)="onExpandChange2(y, $event)"></td>
+              </tr>
+              <ng-container *ngIf="expandSet.has(i)">
+                <ng-container *ngFor="let dataDdiem of item.children, let y = index">
+                  <tr class="level-3">
+                    <td></td>
+                  </tr>
+                  <ng-container *ngIf="expandSet.has(i)">
+                    <ng-container *ngFor="let dataDdiem of item.children, let y = index">
+                      <tr class="level-3">
+                        <td></td>
+                      </tr>
+                    </ng-container>
+                  </ng-container>
+                </ng-container>
+              </ng-container>
+            </ng-container>
+          </ng-container>
+        </ng-container>
         </thead>
         <tbody>
         </tbody>

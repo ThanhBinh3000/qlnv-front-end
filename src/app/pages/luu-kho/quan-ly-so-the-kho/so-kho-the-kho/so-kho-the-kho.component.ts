@@ -14,6 +14,7 @@ import {Router} from "@angular/router";
 import {ThemSoKhoTheKhoComponent} from "./them-so-kho-the-kho/them-so-kho-the-kho.component";
 import {chain, cloneDeep} from "lodash";
 import {DANH_MUC_LEVEL} from "../../luu-kho.constant";
+import {PAGE_SIZE_DEFAULT} from "../../../../constants/config";
 
 @Component({
   selector: 'app-so-kho-the-kho',
@@ -127,7 +128,7 @@ export class SoKhoTheKhoComponent extends Base2Component implements OnInit {
         let data = res.data;
         this.dataTable = data;
         this.buildDataToTree();
-        console.log(this.dataTable,222)
+        console.log(this.dataTable,333)
       } else {
         this.dataTable = [];
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -147,27 +148,26 @@ export class SoKhoTheKhoComponent extends Base2Component implements OnInit {
       }))
       .value();
     this.dataTable.forEach(diemKho => {
-      diemKho.children = chain(diemKho.children).groupBy("tenNhaKho").map((value, key) => (
+      let nhaKho = chain(diemKho.children).groupBy("tenNhaKho").map((value, key) => (
         {
           tenNhaKho: key,
           children: value
         }))
         .value();
-      diemKho.children.forEach(nhaKho => {
-        if (nhaKho.children && nhaKho.children.length > 0) {
-          let nganKho1 = nhaKho.children.forEach(item => item.maLoKho != null)
-          let nganKho2 = nhaKho.children.forEach(item => item.maLoKho == null)
-          if (nganKho1 && nganKho1.length > 0) {
-            nganKho1 = chain(nganKho1).groupBy("tenNganKho").map((value, key) => (
+      if (nhaKho.children && nhaKho.children.length > 0) {
+        let listNgan1 = nhaKho.children.filter(item => item.maLoKho)
+        let listNgan2 = nhaKho.children.filter(item => !item.maLoKho)
+        if (listNgan1 && listNgan1.length > 0) {
+          listNgan1 = chain(diemKho.children).groupBy("tenNganKho").map((value, key) => (
             {
-              tenNganKho: key,
+              tenNhaKho: key,
               children: value
             }))
             .value();
-          }
-          nhaKho.children = [...nganKho1 && nganKho1.length > 0 ? nganKho1 : [], nganKho2 && nganKho2.length > 0 ? nganKho2 : []].flat();
         }
-      });
+        nhaKho.children = [...listNgan1, listNgan2].flat();
+        diemKho.children = nhaKho;
+      }
     })
   }
 
@@ -176,4 +176,5 @@ export class SoKhoTheKhoComponent extends Base2Component implements OnInit {
     await this.searchPage();
   }
 
+  protected readonly PAGE_SIZE_DEFAULT = PAGE_SIZE_DEFAULT;
 }
