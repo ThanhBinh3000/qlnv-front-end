@@ -105,6 +105,7 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
         tenNhaKho: [],
         tenNganKho: [],
         tenLoKho: [],
+        nguoiPduyet: [],
         bbLayMauDtl: [new Array()],
         fileDinhKems: [new Array<FileDinhKem>()],
         canCu: [new Array<FileDinhKem>()],
@@ -122,13 +123,12 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
       this.spinner.show();
       await Promise.all([
         this.loadSoQuyetDinh(),
-        // this.loadSoBbLayMau(),
         this.loadPhuongPhapLayMau(),
       ])
       await this.loadDetail(this.idInput)
-      if(this.itemInput){
-        await  this.bindingDataDs(this.itemInput);
-      }
+      // if(this.itemInput){
+      //   await  this.bindingDataDs(this.itemInput);
+      // }
       await this.spinner.hide();
     } catch (e) {
       this.notification.error(MESSAGE.ERROR, 'Có lỗi xảy ra.');
@@ -175,27 +175,27 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
 
   }
 
-   async bindingDataDs(item){
-     console.log(item,"uietem")
-     let dataRes = await this.tongHopDanhSachHangDTQGService.getDetail(item.idHdr)
-     const data = dataRes.data;
-    this.formData.patchValue({
-        idTongHop:data.id,
-        tenDanhSach:data.tenDanhSach,
-        maDanhSach:data.maDanhSach,
-        maDiaDiem:item.maDiaDiem,
-        loaiVthh:item.loaiVthh,
-        cloaiVthh:item.cloaiVthh,
-        tenLoaiVthh:item.tenLoaiVthh,
-        tenCloaiVthh:item.tenCloaiVthh,
-        tenChiCuc:item.tenChiCuc,
-        tenDiemKho:item.tenDiemKho,
-        tenNhaKho:item.tenNhaKho,
-        tenNganKho:item.tenNganKho,
-        tenLoKho:item.tenLoKho,
-    }
-    )
-   }
+   // async bindingDataDs(item){
+   //   console.log(item,"uietem")
+   //   let dataRes = await this.tongHopDanhSachHangDTQGService.getDetail(item.idHdr)
+   //   const data = dataRes.data;
+   //  this.formData.patchValue({
+   //      idTongHop:data.id,
+   //      tenDanhSach:data.tenDanhSach,
+   //      maDanhSach:data.maDanhSach,
+   //      maDiaDiem:item.maDiaDiem,
+   //      loaiVthh:item.loaiVthh,
+   //      cloaiVthh:item.cloaiVthh,
+   //      tenLoaiVthh:item.tenLoaiVthh,
+   //      tenCloaiVthh:item.tenCloaiVthh,
+   //      tenChiCuc:item.tenChiCuc,
+   //      tenDiemKho:item.tenDiemKho,
+   //      tenNhaKho:item.tenNhaKho,
+   //      tenNganKho:item.tenNganKho,
+   //      tenLoKho:item.tenLoKho,
+   //  }
+   //  )
+   // }
 
   quayLai() {
     this.showListEvent.emit();
@@ -210,7 +210,6 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.listDsTongHop = data.content;
-      console.log(this.listDsTongHop,"this.listDsTongHop")
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
@@ -256,25 +255,23 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
   }
 
   async listBienBan(maDanhSach) {
-    // await this.spinner.show();
-    // let body = {
-    //   maDanhSach: maDanhSach,
-    // }
-    // let res = await this.bienBanLayMauLuongThucHangDTQG.search(body)
-    // this.bienBan = res.data.content;
-    // let listDd = [
-    //   ...this.listDiaDiemNhap.filter((e) => {
-    //     return !this.bienBan.some((bb) => {
-    //       if (bb.maLoKho.length > 0 && e.maLoKho.length > 0) {
-    //         return e.maLoKho === bb.maLoKho;
-    //       } else {
-    //         return e.maNganKho === bb.maNganKho;
-    //       }
-    //     });
-    //   }),
-    // ];
-    // this.listDiaDiemNhap = listDd;
-    // console.log(this.listDiaDiemNhap,"this.listDiaDiemNhap")
+    await this.spinner.show();
+    let body = {
+      maDanhSach: maDanhSach,
+    }
+    let res = await this.bienBanLayMauLuongThucHangDTQG.search(body)
+    this.bienBan = res.data.content;
+    let listDd = [
+      ...this.listDiaDiemNhap.filter((e) => {
+        return !this.bienBan.some((bb) => {
+          if (bb.maDiaDiem.length > 0 && e.maDiaDiem.length > 0) {
+            return e.maDiaDiem === bb.maDiaDiem;
+          }
+        });
+      }),
+    ];
+    this.listDiaDiemNhap = listDd;
+    console.log(this.listDiaDiemNhap,"this.listDiaDiemNhap")
   }
 
   openDialogDdiemNhapHang() {
