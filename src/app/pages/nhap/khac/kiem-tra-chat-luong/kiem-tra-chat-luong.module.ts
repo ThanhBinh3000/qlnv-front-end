@@ -15,6 +15,12 @@ import {
 import {
   ThanhphanLaymauComponent
 } from "./quan-ly-bien-ban-lay-mau/them-moi-bien-ban-lay-mau/thanhphan-laymau/thanhphan-laymau.component";
+import {
+  QuanLyPhieuKiemNghiemChatLuongComponent
+} from "./quan-ly-phieu-kiem-nghiem-chat-luong/quan-ly-phieu-kiem-nghiem-chat-luong.component";
+import {
+  ThemMoiPhieuKiemNghiemChatLuongComponent
+} from "./quan-ly-phieu-kiem-nghiem-chat-luong/them-moi-phieu-kiem-nghiem-chat-luong/them-moi-phieu-kiem-nghiem-chat-luong.component";
 import { PhieuKtraCluongComponent } from './phieu-ktra-cluong/phieu-ktra-cluong.component';
 import { LapPhieuKtraCluongComponent } from './phieu-ktra-cluong/lap-phieu-ktra-cluong/lap-phieu-ktra-cluong.component';
 
@@ -28,10 +34,11 @@ import { LapPhieuKtraCluongComponent } from './phieu-ktra-cluong/lap-phieu-ktra-
     LapBienBanNghiemThuBaoQuanComponent,
     PhieuKtraCluongComponent,
     LapPhieuKtraCluongComponent,
-    LapBienBanNghiemThuBaoQuanComponent,
     QuanLyBienBanLayMauComponent,
     ThemMoiBienBanLayMauKhoComponent,
-    ThanhphanLaymauComponent
+    ThanhphanLaymauComponent,
+    QuanLyPhieuKiemNghiemChatLuongComponent,
+    ThemMoiPhieuKiemNghiemChatLuongComponent
   ],
     imports: [
         CommonModule,
