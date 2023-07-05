@@ -106,5 +106,10 @@ export class KiemtraChatluongLtTruockhiHethanLuukhoComponent implements OnInit {
     this.dataInit = {};
     this.isDetail = false;
   }
+  receivedTab(tab) {
+    if (tab >= 0) {
+      this.tabSelected = tab;
+    }
+  }
 
 }

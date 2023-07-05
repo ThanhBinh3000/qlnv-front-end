@@ -167,8 +167,8 @@
           <td>{{data.tenTaiSan}}</td>
           <td>{{data.donViTinh}}</td>
           <td>{{data.slVpCucKv}} </td>
-          <td>{{data.slChiCuc}} / {{data.klChiCuc}} tấn lương
-            thực  {{data.tenLoaiHinh ? '( ' + data.tenLoaiHinh + ')' : ''}}</td>
+          <td>{{data.slChiCuc}}
+             {{data.klChiCuc ? data.klChiCuc + ' / tấn lương thực' : ''}}  {{data.tenLoaiHinh ? '( ' + data.tenLoaiHinh + ')' : ''}}</td>
           <td>{{data.donGiaTd}}</td>
           <td>{{data.ghiChu}}</td>
           <td class="text-center" *ngIf="!isViewDetail">

@@ -282,7 +282,7 @@ export class ChiTietTongHopDsHangDtqgComponent extends Base2Component implements
               try {
                 let body = {
                   id: this.selectedItem.id,
-                  trangThai: this.STATUS.DA_TONG_HOP,
+                  trangThai: this.STATUS.GUI_DUYET,
                 }
                 let res = await this.tongHopDanhSachHangDTQGService.approve(body);
                 if (res.msg == MESSAGE.SUCCESS) {
