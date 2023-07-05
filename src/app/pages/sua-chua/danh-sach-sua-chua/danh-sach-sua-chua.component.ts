@@ -27,7 +27,6 @@ export class DanhSachSuaChuaComponent extends Base3Component implements OnInit {
   dsDonvi: any[] = [];
   dsLoaiVthh: any[] = [];
   dsCloaiVthh: any[] = [];
-  dataTableView: any = [];
   expandSetString = new Set<string>();
 
   public vldTrangThai: SuaChuaComponent;

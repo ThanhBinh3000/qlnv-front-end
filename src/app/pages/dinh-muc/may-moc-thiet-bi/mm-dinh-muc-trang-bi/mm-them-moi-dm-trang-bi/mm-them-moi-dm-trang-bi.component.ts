@@ -127,7 +127,7 @@ export class MmThemMoiDmTrangBiComponent extends Base2Component implements OnIni
       arrLoaiHinh.forEach((item) => {
         switch (item) {
           case '00' : {
-            if (arrLoaiHinh.indexOf(item) == arrLoaiHinh.length - 1 ) {
+            if (arrLoaiHinh.indexOf(item) == arrLoaiHinh.length - 1) {
               str = str + 'Nhập'
             } else {
               str = str + 'Nhập' + ', '
@@ -197,10 +197,10 @@ export class MmThemMoiDmTrangBiComponent extends Base2Component implements OnIni
     //validator
     if (!item.maTaiSan) {
       msgRequired = "Loại tài sản không được để trống";
-    } else if (!item.slVpCucKv) {
-      msgRequired = "Số lượng tối đa VP Cục DTNN KV không được để trống";
-    } else if (!item.slChiCuc || !item.klChiCuc) {
-      msgRequired = "Số lượng tối đa Chi cục DTNN không được để trống";
+      // } else if (!item.slVpCucKv) {
+      //   msgRequired = "Số lượng tối đa VP Cục DTNN KV không được để trống";
+      // } else if (!item.slChiCuc || !item.klChiCuc) {
+      //   msgRequired = "Số lượng tối đa Chi cục DTNN không được để trống";
     } else if (!item.donGiaTd) {
       msgRequired = "Đơn giá tối đa không được để trống";
     }

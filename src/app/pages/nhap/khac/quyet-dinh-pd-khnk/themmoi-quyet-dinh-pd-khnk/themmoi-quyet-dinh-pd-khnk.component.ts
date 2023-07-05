@@ -211,7 +211,6 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
   }
 
   async ngOnInit() {
-    console.log(this.isView)
     await this.spinner.show();
     try {
       this.userInfo = this.userService.getUserLogin();
@@ -314,7 +313,6 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
       },
     }
     let resTh = await this.tongHopDxKhNhapKhacService.dsThDuocTaoQDinhPduyet();
-    console.log(resTh)
     if (resTh.msg == MESSAGE.SUCCESS) {
       this.listDanhSachTongHop = resTh.data;
     }
@@ -344,7 +342,6 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
     //     item.soDxuat = dtl.soDxuat
     //   })
     // })
-    console.log(this.danhsachDx)
     body.details = this.danhsachDx;
     if (this.listFileDinhKem.length > 0) {
       this.listFileDinhKem.forEach(item => {
@@ -520,7 +517,6 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
       let res = await this.quyetDinhPheDuyetKeHoachNhapKhacService.getDetail(id);
       this.listDanhSachTongHop = [];
       const data = res.data;
-      console.log("data:    ", data)
       if (data.fileDinhKems.length > 0) {
         data.fileDinhKems.forEach(item => {
           if (item.fileType == FILETYPE.FILE_DINH_KEM) {
@@ -539,7 +535,6 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
         this.danhsachDxCache = cloneDeep(this.danhsachDx);
         for (const item of this.danhsachDxCache) {
           await this.dxKhNhapKhacService.getDetail(item.idDx).then((res) => {
-            console.log(res)
             if (res.msg == MESSAGE.SUCCESS) {
               item.details = res.data.dtl;
             }
@@ -550,14 +545,12 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
         this.danhsachDxCache = cloneDeep(this.danhsachDx);
         this.danhsachDxCache.forEach(item => {
           this.dxKhNhapKhacService.getDetail(item.id).then((res) => {
-            console.log(res)
             if (res.msg == MESSAGE.SUCCESS) {
               item.details = res.data.dtl;
             }
           })
         })
       }
-      console.log("11", this.danhsachDx)
       await this.showFirstRow(event, this.danhsachDx[0]);
     }
   }
@@ -619,7 +612,6 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
   async selectMaTongHop(event) {
     await this.spinner.show()
     if (event) {
-      console.log(event)
       const data = event;
       this.formData.patchValue({
         loaiVthh: data.dxHdr[0].loaiVthh,
@@ -649,7 +641,6 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
     await this.spinner.show();
 
     let res = await this.dxKhNhapKhacService.dsDxDuocTaoQDinhPDuyet();
-    console.log(res)
     if (res.msg == MESSAGE.SUCCESS) {
       this.dsDxTaoQd = res.data;
     }
@@ -687,7 +678,6 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
           dataRes.details = data.dtl
         };
         this.danhsachDx.push(dataRes);
-        console.log(this.danhsachDx)
         this.formData.patchValue({
           cloaiVthh: data.hdr.cloaiVthh,
           tenCloaiVthh: data.hdr.tenCloaiVthh,
@@ -725,8 +715,6 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
       this.isTongHop = this.formData.value.phanLoai == 'TH';
       this.dataInput = this.danhsachDx[index];
       this.dataInputCache = this.danhsachDxCache[index];
-      console.log(this.dataInput)
-      console.log(this.dataInputCache)
       this.index = index;
       await this.spinner.hide();
     } else {
@@ -734,8 +722,6 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
       this.isTongHop = this.formData.value.phanLoai == 'TH';
       this.dataInput = this.danhsachDx[0];
       this.dataInputCache = this.danhsachDxCache[0];
-      console.log(this.dataInput)
-      console.log(this.dataInputCache)
       this.index = 0;
       await this.spinner.hide();
     }
@@ -751,7 +737,6 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
 
   setNewDate($event) {
     let pipe = new DatePipe('en-US');
-    console.log($event)
     this.formData.get('tgianBdauTchuc').setValue($event.tgianBdauTchuc);
     this.formData.get('tgianMthau').setValue(pipe.transform($event.tgianMthau, 'yyyy-MM-dd HH:mm'));
     this.formData.get('tgianDthau').setValue(pipe.transform($event.tgianDthau, 'yyyy-MM-dd HH:mm'));

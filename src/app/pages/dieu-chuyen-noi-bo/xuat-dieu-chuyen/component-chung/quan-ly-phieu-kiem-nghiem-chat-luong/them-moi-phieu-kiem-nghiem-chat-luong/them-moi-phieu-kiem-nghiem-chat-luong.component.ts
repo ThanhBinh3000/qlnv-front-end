@@ -281,7 +281,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
         const data = res.data;
         this.helperService.bidingDataInFormGroup(this.formData, { ...data, soPhieu: data.soPhieu ? data.soPhieu : data.id ? `${data.id}/${data.nam}/${this.maBb}` : "", tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho });
         // this.bindingDataBbLayMau(data.soBbLayMau.split('/')[0], true);
-        this.listHinhThucBaoQuan = Array.isArray(data?.hinhThucBq?.split(",")) ? data.hinhThucBq.split(",")?.map(f => ({ id: f.split("-")[0], giaTri: f.split("-")[1], checked: true })) : [];
+        this.listHinhThucBaoQuan = Array.isArray(data?.hinhThucBq?.split("-*")) ? data.hinhThucBq.split("-*")?.map(f => ({ id: f.split("-")[0], giaTri: f.split("-")[1], checked: true })) : [];
         this.dataTableChiTieu = data.dcnbPhieuKnChatLuongDtl;
         this.bienBanLayMauDinhKem = data.bienBanLayMauDinhKem;
       }
@@ -308,7 +308,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
       let body = this.formData.value;
       body.dcnbPhieuKnChatLuongDtl = this.dataTableChiTieu.map(f => ({ ...f, id: f.hdrId ? f.id : undefined }));
       body.bienBanLayMauDinhKem = this.bienBanLayMauDinhKem;
-      body.hinhThucBq = this.listHinhThucBaoQuan.map(i => `${i.id}-${i.giaTri}`).join(",");
+      body.hinhThucBq = this.listHinhThucBaoQuan.map(i => `${i.id}-${i.giaTri}`).join("-*");
       body.loaiDC = this.loaiDc;
       body.isVatTu = this.isVatTu;
       body.thayDoiThuKho = this.thayDoiThuKho;
