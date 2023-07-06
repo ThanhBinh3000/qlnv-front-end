@@ -524,30 +524,12 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
   }
 
   isTuChoi() {
-    return this.formData.value.trangThai == STATUS.CHO_DUYET_TP || this.formData.value.trangThai == STATUS.TU_CHOI_TP || this.formData.value.trangThai == STATUS.CHO_DUYET_LDC || this.formData.value.trangThai == STATUS.TU_CHOI_LDC
+    return this.formData.value.trangThai == STATUS.CHO_DUYET_LDCC
   }
 
   async tuChoi() {
-    // if (this.isCuc()) {
-    //   let trangThai = () => {
-    //     if (this.formData.value.trangThai == STATUS.CHO_DUYET_TP)
-    //       return STATUS.TU_CHOI_TP
-    //     if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDC)
-    //       return STATUS.TU_CHOI_LDC
-    //     return STATUS.CHO_DUYET_TP;
-    //   };
-    //   this.reject(this.idInput, trangThai());
-    // }
-    // if (this.isChiCuc()) {
-    //   let trangThai = () => {
-    //     if (this.formData.value.trangThai == STATUS.CHODUYET_TBP_TVQT)
-    //       return STATUS.TUCHOI_TBP_TVQT
-    //     if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDCC)
-    //       return STATUS.TU_CHOI_LDCC
-    //     return STATUS.CHODUYET_TBP_TVQT;
-    //   };
-    //   this.reject(this.idInput, trangThai());
-    // }
+    let trangThai = STATUS.TU_CHOI_LDCC
+    this.reject(this.idInput, trangThai);
   }
 
   isPheDuyet() {

@@ -13,6 +13,7 @@ import dayjs from "dayjs";
 import {STATUS} from "../../../../../constants/status";
 import {DxChiCucPvcService} from "../../../../../services/dinh-muc-nhap-xuat-bao-quan/pvc/dx-chi-cuc-pvc.service";
 import {PvcDxChiCucCtiet} from "../../de-xuat-nc-chi-cuc-pvc/them-moi-dx-chi-cuc-pvc/them-moi-dx-chi-cuc-pvc.component";
+import {AMOUNT_ONE_DECIMAL} from "../../../../../Utility/utils";
 
 @Component({
   selector: 'app-them-moi-tong-hop-dx-cuc-pvc',
@@ -28,7 +29,7 @@ export class ThemMoiTongHopDxCucPvcComponent extends Base2Component implements O
   dataEdit: { [key: string]: { edit: boolean; data: PvcDxChiCucCtiet } } = {};
   formDataTongHop: FormGroup
   expandSet = new Set<number>();
-
+  amount = AMOUNT_ONE_DECIMAL;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -50,6 +51,7 @@ export class ThemMoiTongHopDxCucPvcComponent extends Base2Component implements O
       fileDinhKems: [null],
       ghiChu: [null],
       lyDoTuChoi: [null],
+      soQdGiaoCtieu:[null],
       listQlDinhMucPvcDxCcdcDtl: [null],
     });
     this.formDataTongHop = this.fb.group({
@@ -320,4 +322,6 @@ export class ThemMoiTongHopDxCucPvcComponent extends Base2Component implements O
       this.expandSet.delete(id);
     }
   }
+
+  protected readonly AMOUNT_ONE_DECIMAL = AMOUNT_ONE_DECIMAL;
 }

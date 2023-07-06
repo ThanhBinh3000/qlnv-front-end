@@ -1,0 +1,197 @@
+<div *ngIf="userService.isAccessPermisson('DCNB_QUYETDINHDC')">
+  <div *ngIf="isShowDS() && !isDetail" class="luong-thuc__danh-sach">
+    <div class="bg-trang">
+      <nz-card class="mt16 flex-card p-lr16">
+        <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
+          <div nz-row [nzGutter]="20">
+            <div nz-col nzSpan="3">
+              <label class="search__label"> Năm kế hoạch </label>
+              <nz-select formControlName="nam">
+                <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+              </nz-select>
+            </div>
+            <div nz-col nzSpan="3">
+              <label class="search__label">Số QĐ ĐC của cục</label>
+              <nz-input-group nzAddOnAfter="/DCNB">
+                <nz-input-number class="search__input" formControlName="soQdinh" [nzMin]="1" [nzMax]="9" [nzStep]="1"
+                  [nzSize]="'small'" [nzDisabled]="isView">
+                </nz-input-number>
+              </nz-input-group>
+            </div>
+            <div nz-col nzSpan="3">
+              <label class="search__label">Số phiếu nhập kho</label>
+              <input nz-input formControlName="trichYeu" />
+            </div>
+
+            <div nz-col nzSpan="4">
+              <label class="search__label">Ngày nhập kho</label>
+              <nz-range-picker formControlName="ngayDuyetTc" nzFormat="dd/MM/yyyy"></nz-range-picker>
+            </div>
+
+
+
+          </div>
+        </form>
+        <div nz-col class="cangiua group-button-search">
+          <div>
+            <button nz-button class="search__button--clear" (click)="clearForm()">
+              <i class="icon  htvbdh_nhap-lai1"></i>
+              Xóa điều kiện
+            </button>
+            <button nz-button class="search__button--search" (click)="timKiem()">
+              <i nz-icon nzType="search"></i>
+              Tìm kiếm
+            </button>
+          </div>
+        </div>
+      </nz-card>
+      <div class="group-button">
+        <h3 class="text-uppercase">Danh sách biên bản nghiệm thu bảo quản lần đầu nhập hàng dự trữ quốc gia</h3>
+        <div class="buttons">
+          <button type="button" class="btn btn-do" (click)="deleteMulti()"
+            *ngIf="userService.isAccessPermisson('DCNB_QUYETDINHDC_XOA') && isTongCuc()">
+            <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+            <span>Xóa</span>
+          </button>
+          <button type="button" class="btn btn-sub" (click)="exportDataTC()">
+            <i class="icon htvbdh_chuyen-xu-ly"></i>
+            <span>Xuất file</span>
+          </button>
+          <button type="button" class="btn btn-main ml-2" (click)="redirectDetail(0,false)">
+            <i class="icon htvbdh_dau-cong"></i>
+            <span>Thêm</span>
+          </button>
+        </div>
+      </div>
+
+
+      <nz-card class="mt-2px flex-card data-table card-border-content table-card">
+        <nz-table #basicTable class="nowrap table-chi-tiet" [nzData]="dataTableView" [nzFrontPagination]="false"
+          [nzShowPagination]="false" nzBordered>
+          <thead>
+            <tr>
+              <th width="60px" class="text-center">STT</th>
+              <th></th>
+              <th class="text-center">Số QĐ giao nhiệm vụ</th>
+              <th class="text-center">Năm KH</th>
+              <th class="text-center">Thời hạn NH</th>
+              <th class="text-center">Điểm kho</th>
+              <th class="text-center">Lô kho</th>
+              <!-- <th class="text-center">BB NTBQLĐ</th> -->
+              <th class="text-center">Số phiếu nhập kho</th>
+              <th class="text-center">Ngày nhập kho</th>
+              <th class="text-center">Số phiếu KTCL</th>
+              <!-- <th class="text-center">Ngày giám định</th> -->
+              <th class="text-center">Trạng thái</th>
+              <th class="text-center">Hành động</th>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngFor="let row1 of basicTable.data , let i = index">
+              <tr>
+                <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
+                <td [nzExpand]="row1.expand"
+                  (nzExpandChange)="row1.expand=!row1.expand; row1.children=setExpand(row1.expand, row1.children)">
+                </td>
+                <td class="bold text-blue" (click)="openDialogQD(row1)">{{ row1.soQdinh || "" }}</td>
+                <td class="bold">{{ row1.namKh || "" }}</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <!-- <td></td>
+                <td></td> -->
+              </tr>
+              <ng-container *ngIf="row1.expand">
+                <ng-container *ngFor="let row2 of row1.children, let y = index">
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td>
+                    </td>
+                    <td></td>
+                    <td class="bold">{{row2.thoiHanDieuChuyen|date: "dd/MM/yyyy"}}</td>
+                    <td class="bold">{{ row2.tenDiemKho || ""}}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <!-- <td></td>
+                    <td></td> -->
+                  </tr>
+                  <ng-container>
+                    <ng-container *ngFor="let row3 of row2.children, let y = index">
+                      <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class="bold">{{ row3.tenloKho || ""}} {{ row3.tenNganKho || ""}} {{ row3.tenNhaKho||""}}
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>
+                          <a (click)="add(row3)">
+                            <i class="icon htvbdh_dau-cong"></i>
+                          </a>
+                        </td>
+                      </tr>
+                      <ng-container *ngFor="let row4 of row3.children, let y = index">
+                        <tr *ngIf="row4.soPhieuNhapKho">
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td class="bold">{{row4.soPhieuNhapKho || ""}}</td>
+                          <!-- <td></td>
+                          <td></td> -->
+                          <td class="bold">{{row4.ngayNhapKho|date: "dd/MM/yyyy"}}</td>
+                          <td class="bold">{{row4.soPhieuKiemTraCl || ""}}</td>
+                          <td class="bold">{{row4.tenTrangThai || ""}}</td>
+                          <td>
+                            <a *ngIf="row4.trangThai !== STATUS.DU_THAO" (click)="redirectDetail(row4.id, true)">
+                              <i class="fa fa-eye" title="Xem chi tiết"></i>
+                            </a>
+                            <a *ngIf="row4.trangThai == STATUS.DU_THAO" (click)="redirectDetail(row4.id, false)">
+                              <i class="fa fa-pencil" title="Sửa"></i>
+                            </a>
+                            <a *ngIf="row4.trangThai == STATUS.DU_THAO" (click)="xoa(row4)">
+                              <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+                            </a>
+                          </td>
+                        </tr>
+                      </ng-container>
+                    </ng-container>
+                  </ng-container>
+                </ng-container>
+              </ng-container>
+            </ng-container>
+          </tbody>
+        </nz-table>
+
+
+      </nz-card>
+
+
+    </div>
+  </div>
+
+  <div class="chi-tiet" *ngIf="isDetail">
+    <app-thong-tin-phieu-nhap-kho [isView]="isView" [idInput]="selectedId"
+      (showListEvent)="quayLai()"></app-thong-tin-phieu-nhap-kho>
+  </div>
+
+</div>
