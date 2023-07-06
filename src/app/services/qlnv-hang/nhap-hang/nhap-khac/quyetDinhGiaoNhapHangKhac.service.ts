@@ -29,4 +29,9 @@ export class QuyetDinhGiaoNhapHangKhacService extends BaseService {
     return this.httpClient.post(url, body, { responseType: 'blob' });
   }
 
+  exportPkncl(body: any): Observable<Blob> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/ket-xuat/pkncl`;
+    return this.httpClient.post(url, body, { responseType: 'blob' });
+  }
+
 }
