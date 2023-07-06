@@ -240,6 +240,7 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnI
         .then(async (resKq) => {
           const dataKq = resKq.data;
           let resTtin = await this.quyetDinhPheDuyetKeHoachMTTService.getDetailDtlCuc(dataKq.idPdKhDtl);
+          console.log(resTtin)
           if (resKq.data) {
             const dataThongTin = resTtin.data;
             this.dataTable = dataThongTin.children;
@@ -258,10 +259,12 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnI
               dviTinh: "kg",
               tongSoLuongQdKh: dataThongTin.tongSoLuong * 1000
             });
-            dataThongTin.listChaoGia.forEach((item) => {
-              if (item.luaChon == true) {
-                this.listDviLquan.push(item)
-              }
+            dataThongTin.children.forEach((item) => {
+              item.listChaoGia.forEach(res =>{
+                if (res.luaChon == true) {
+                  this.listDviLquan.push(res)
+                }
+              })
             })
           }
         })
