@@ -5,7 +5,6 @@ import { StorageService } from 'src/app/services/storage.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import dayjs from 'dayjs';
 import { UserLogin } from 'src/app/models/userlogin';
 import { MESSAGE } from 'src/app/constants/message';
 import { chain } from 'lodash';
@@ -90,24 +89,15 @@ export class PhieuXuatKhoComponent extends Base2Component implements OnInit {
     return endValue.getTime() <= this.formData.value.ngayXuatKhoTu.getTime();
   };
 
-  ngOnInit(): void {
+  async ngOnInit() {
     try {
-      this.initData()
-      this.timKiem();
-    }
-    catch (e) {
+      this.initData();
+      await this.search();
+    } catch (e) {
       console.log('error: ', e)
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
-  }
-
-  async search(roles?): Promise<void> {
-    this.formData.patchValue({
-      loaiVthh: this.loaiVthh,
-    });
-    await super.search(roles);
-    this.buildTableView();
   }
 
   async initData() {
@@ -123,18 +113,15 @@ export class PhieuXuatKhoComponent extends Base2Component implements OnInit {
   isBelong(maDvi: any) {
     return this.userInfo.MA_DVI == maDvi;
   }
-  async timKiem() {
-    await this.spinner.show();
-    try {
-      if (this.formData.value.ngayXuatKho) {
-        this.formData.value.ngayXuatKhoTu = dayjs(this.formData.value.ngayXuatKho[0]).format('YYYY-MM-DD')
-        this.formData.value.ngayXuatKhoDen = dayjs(this.formData.value.ngayXuatKho[1]).format('YYYY-MM-DD')
-      }
-      await this.search();
-    } catch (e) {
-      console.log(e)
-    }
-    await this.spinner.hide();
+
+  async search(roles?): Promise<void> {
+    await this.spinner.show()
+    this.formData.patchValue({
+      loaiVthh: this.loaiVthh,
+    });
+    await super.search(roles);
+    this.buildTableView();
+    await this.spinner.hide()
   }
 
   buildTableView() {
@@ -144,27 +131,24 @@ export class PhieuXuatKhoComponent extends Base2Component implements OnInit {
           let diaDiem = v.find(s => s.maDiemKho === k)
               return {
                 idVirtual: uuid.v4(),
-                maDiemKho: k != "null" ? k : '',
+                maDiemKho: k != null ? k : '',
                 tenDiemKho: diaDiem ? diaDiem.tenDiemKho : null,
                 idQdGiaoNvXh: diaDiem ? diaDiem.idQdGiaoNvXh : null,
                 childData: v
               }
-            }
-          ).value();
+            }).value();
         let nam = quyetDinh ? quyetDinh.nam : null;
         let ngayQdGiaoNvXh = quyetDinh ? quyetDinh.ngayQdGiaoNvXh : null;
         return {
           idVirtual: uuid.v4(),
-          soQdGiaoNvXh: key != "null" ? key : '',
+          soQdGiaoNvXh: key != null ? key : '',
           nam: nam,
           ngayQdGiaoNvXh: ngayQdGiaoNvXh,
           childData: rs
         };
       }).value();
     this.children = dataView
-    console.log(this.children, "this.children ");
     this.expandAll()
-
   }
   expandAll() {
     this.children.forEach(s => {
@@ -196,7 +180,5 @@ export class PhieuXuatKhoComponent extends Base2Component implements OnInit {
     this.idPhieu = null;
     this.isViewPhieu = false;
   }
-
-
 }
 

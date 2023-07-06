@@ -55,12 +55,10 @@
         <form nzLayout="vertical" nz-form [formGroup]="formData">
           <div nz-row [nzGutter]="[24]">
             <div nz-col nzSpan="2">
-              <nz-form-item class="form-item">
-                <nz-form-label [nzNoColon]="true">
-                  Năm kế hoạch
-                </nz-form-label>
-                <nz-form-control [nzErrorTip]="error">
-                  <nz-select formControlName="nam" nzDisabled>
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">Năm kế hoạch</nz-form-label>
+                <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
+                  <nz-select formControlName="nam" [nzDisabled]="isDisabled()">
                     <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                   </nz-select>
                 </nz-form-control>
