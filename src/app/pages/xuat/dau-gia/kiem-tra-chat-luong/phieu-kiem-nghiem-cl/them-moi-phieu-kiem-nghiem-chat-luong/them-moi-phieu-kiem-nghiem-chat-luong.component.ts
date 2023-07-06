@@ -60,7 +60,6 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
       ngayQdGiaoNvXh: [''],
       idQdGiaoNvXh: [],
       soPhieu: [''],
-      idDdiemXh: [],
       maDiemKho: [''],
       tenDiemKho: [''],
       maNhaKho: [''],
@@ -192,46 +191,56 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
     })
     modalQD.afterClose.subscribe(async (dataChose) => {
       if (dataChose) {
-        await this.bindingDataQd(dataChose.id);
+        await this.loadDataDtailBienBanLayMau(dataChose.id);
       }
     });
     await this.spinner.hide();
   }
 
-  async bindingDataQd(id) {
+  async loadDataDtailBienBanLayMau(id) {
     await this.spinner.show();
-    let res = await this.bienBanLayMauXhService.getDetail(id);
-    if (res.data) {
-      const data = res.data;
-      this.formData.patchValue({
-        idBbLayMau: data.id,
-        soBbLayMau: data.soBienBan,
-        idQdGiaoNvXh: data.idQd,
-        soQdGiaoNvXh: data.soQd,
-        ngayQdGiaoNvXh: data.ngayQd,
-        maDiemKho: data.maDiemKho,
-        tenDiemKho: data.tenDiemKho,
-        maNhaKho: data.maNhaKho,
-        tenNhaKho: data.tenNhaKho,
-        maNganKho: data.maNganKho,
-        tenNganKho: data.tenNganKho,
-        maLoKho: data.maLoKho,
-        tenLoKho: data.tenLoKho,
-        loaiVthh: data.loaiVthh,
-        tenLoaiVthh: data.tenLoaiVthh,
-        cloaiVthh: data.cloaiVthh,
-        tenCloaiVthh: data.tenCloaiVthh,
-        moTaHangHoa: data.moTaHangHoa,
-        ngayLayMau: data.ngayLayMau
-      });
-      let dmTieuChuan = await this.danhMucTieuChuanService.getDetailByMaHh(data.cloaiVthh);
-      if (dmTieuChuan.data) {
-        this.dataTable = dmTieuChuan.data.children;
-        this.dataTable.forEach(element => {
-          element.edit = false
+    if(id){
+      await this.bienBanLayMauXhService.getDetail(id)
+        .then(async (res) => {
+          if (res.msg == MESSAGE.SUCCESS) {
+            const data = res.data
+            this.formData.patchValue({
+              idBbLayMau: data.id,
+              soBbLayMau: data.soBienBan,
+              idQdGiaoNvXh: data.idQd,
+              soQdGiaoNvXh: data.soQd,
+              ngayQdGiaoNvXh: data.ngayQd,
+              maDiemKho: data.maDiemKho,
+              tenDiemKho: data.tenDiemKho,
+              maNhaKho: data.maNhaKho,
+              tenNhaKho: data.tenNhaKho,
+              maNganKho: data.maNganKho,
+              tenNganKho: data.tenNganKho,
+              maLoKho: data.maLoKho,
+              tenLoKho: data.tenLoKho,
+              loaiVthh: data.loaiVthh,
+              tenLoaiVthh: data.tenLoaiVthh,
+              cloaiVthh: data.cloaiVthh,
+              tenCloaiVthh: data.tenCloaiVthh,
+              moTaHangHoa: data.moTaHangHoa,
+              ngayLayMau: data.ngayLayMau,
+              idThuKho: data.idKtv,
+              tenThuKho: data.tenKtv
+            });
+            let dmTieuChuan = await this.danhMucTieuChuanService.getDetailByMaHh(data.cloaiVthh);
+            if (dmTieuChuan.data) {
+              this.dataTable = dmTieuChuan.data.children;
+              this.dataTable.forEach(element => {
+                element.edit = false
+              });
+            }
+          }
+        }).catch((e) => {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         });
-      }
-    };
+    }
     await this.spinner.hide();
   }
 

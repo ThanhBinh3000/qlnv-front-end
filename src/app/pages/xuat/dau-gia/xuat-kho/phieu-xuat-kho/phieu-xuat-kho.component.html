@@ -196,11 +196,11 @@
   <app-bdg-them-moi-phieu-xuat-kho [idInput]="selectedId" [isView]="isView" (showListEvent)="showList()"
                                    [loaiVthh]="loaiVthh" [idQdNv] ="idQdNv">
   </app-bdg-them-moi-phieu-xuat-kho>
-</div>
-    <nz-modal [nzWidth]="'90%'" [(nzVisible)]="isViewPhieu" (nzOnCancel)="closePhieuKnClModal()">
-      <ng-container *nzModalContent class="modal__content">
-        <app-bdg-them-moi-phieu-kiem-nghiem-chat-luong [id]="idPhieu" [loaiVthh]="loaiVthh" [isViewOnModal]="true">
-        </app-bdg-them-moi-phieu-kiem-nghiem-chat-luong>
+<!-- xem -->
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewPhieu" (nzOnCancel)="closePhieuKnClModal()">
+  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+    <app-bdg-them-moi-phieu-kiem-nghiem-chat-luong [id]="idPhieu" [loaiVthh]="loaiVthh" [isViewOnModal]="true">
+    </app-bdg-them-moi-phieu-kiem-nghiem-chat-luong>
   </ng-container>
   <div *nzModalFooter>
     <button nz-button (click)="closePhieuKnClModal()" class="modal__button--cancel">

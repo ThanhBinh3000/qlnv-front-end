@@ -78,7 +78,6 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
       cloaiVthh: [''],
       tenCloaiVthh: [''],
       moTaHangHoa: [''],
-      idDdiemXh: [''],
       maDiemKho: ['', [Validators.required]],
       tenDiemKho: ['', [Validators.required]],
       maNhaKho: ['', [Validators.required]],
@@ -211,7 +210,6 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
   changeSoQd(event) {
     if (this.flagInit && event && event !== this.formData.value.soQd) {
       this.formData.patchValue({
-        idDdiemXh: null,
         maDiemKho: null,
         tenDiemKho: null,
         maNhaKho: null,
@@ -310,7 +308,6 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
         this.formData.patchValue({
-          idDdiemXh: data.id,
           maDiemKho: data.maDiemKho,
           tenDiemKho: data.tenDiemKho,
           maNhaKho: data.maNhaKho,
