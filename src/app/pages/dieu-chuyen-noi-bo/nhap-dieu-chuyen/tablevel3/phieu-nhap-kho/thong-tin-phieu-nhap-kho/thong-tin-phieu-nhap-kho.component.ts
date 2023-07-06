@@ -122,7 +122,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
 
   async ngOnInit() {
     this.maBb = 'PNK-CCDTVP';
-    let id = await this.userService.getId('XH_PHIEU_NKHO_BTT_SEQ')
+    let id = await this.userService.getId('DCNB_BB_NT_BQ_HDR_SEQ')
     this.formData.patchValue({
       maDvi: this.userInfo.MA_DVI,
       tenDvi: this.userInfo.TEN_DVI,
