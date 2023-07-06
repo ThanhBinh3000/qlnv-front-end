@@ -1,4 +1,4 @@
-<div class="header-file">
+<div class="header-file" [hidden]="isView">
     <input type="text" nz-input placeholder="Tên đại diện" [(ngModel)]="itemRow.daiDien" />
     <div class="icon-plus" (click)="addDaiDien()" [hidden]="isView">
         <i class="icon htvbdh_dau-cong "></i>
