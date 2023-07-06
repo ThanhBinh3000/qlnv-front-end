@@ -14,7 +14,7 @@ export class LapThamDinhService extends BaseService {
     }
 
     urlTest = 'http://localhost:9159';
-    urlDefault = environment.SERVICE_API + '/qlnv-khoachphi-dev';
+    urlDefault = environment.SERVICE_API + '/qlnv-khoachphi';
 
     //search list bao cao
     timBaoCaoLapThamDinh(request: any): Observable<any> {
@@ -129,7 +129,7 @@ export class LapThamDinhService extends BaseService {
     }
 
     trangThaiTyLeBh(request: any): Observable<any> {
-        return this.httpClient.post(
+        return this.httpClient.put(
             this.urlDefault + '/he-so-bao-hiem/trang-thai',
             request,
         );
@@ -163,7 +163,7 @@ export class LapThamDinhService extends BaseService {
 
     restoreReport(cId: string, rId: string): Observable<any> {
         return this.httpClient.get(
-            this.urlDefault + '/lap-tham-dinh/phu-hoi/currentId=' + cId + '/recoverId=' + rId,
+            this.urlDefault + '/lap-tham-dinh/phuc-hoi/currentId=' + cId + '/recoverId=' + rId,
         );
     }
 }

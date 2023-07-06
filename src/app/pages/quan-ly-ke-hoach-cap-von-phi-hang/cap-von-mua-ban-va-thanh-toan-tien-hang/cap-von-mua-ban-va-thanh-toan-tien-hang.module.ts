@@ -4,7 +4,6 @@ import { ComponentsModule } from 'src/app/components/components.module';
 import { DirectivesModule } from 'src/app/directives/directives.module';
 import { CapVonMuaBanVaThanhToanTienHangRoutingModule } from './cap-von-mua-ban-va-thanh-toan-tien-hang-routing.module';
 import { CapVonMuaBanVaThanhToanTienHangComponent } from './cap-von-mua-ban-va-thanh-toan-tien-hang.component';
-import { VonBanModule } from './von-ban/von-ban.module';
 import { VonMuaVonUngModule } from './von-mua-von-ung/von-mua-von-ung.module';
 @NgModule({
     declarations: [
@@ -15,7 +14,7 @@ import { VonMuaVonUngModule } from './von-mua-von-ung/von-mua-von-ung.module';
         CapVonMuaBanVaThanhToanTienHangRoutingModule,
         ComponentsModule,
         DirectivesModule,
-        VonBanModule,
+        // VonBanModule,
         VonMuaVonUngModule,
     ],
 })

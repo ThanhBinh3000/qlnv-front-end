@@ -496,7 +496,7 @@ export class BaoCaoComponent implements OnInit {
         const obj = {
             id: id,
             preData: this.data,
-            tabSelected: 'next' + this.data?.tabSelected,
+            tabSelected: 'next-' + this.data?.tabSelected,
         }
         this.dataChange.emit(obj);
     }

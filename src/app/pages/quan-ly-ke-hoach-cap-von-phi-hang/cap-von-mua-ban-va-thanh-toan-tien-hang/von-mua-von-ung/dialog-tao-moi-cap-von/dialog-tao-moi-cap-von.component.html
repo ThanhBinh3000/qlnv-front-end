@@ -2,15 +2,17 @@
     <div class="search__body" nz-row [nzGutter]="[18, 12]">
         <div nz-col nzSpan="6">
             <label class="search__label">Năm</label>
-            <nz-input-number nzSize="small" [(ngModel)]="response.namDnghi"
-                [class]="response.namDnghi && (response.namDnghi > 999 && response.namDnghi < 3000) ? '' : 'input-error-validate'">
-            </nz-input-number>
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn năm" [(ngModel)]="response.namDnghi"
+                [class]="response.namDnghi ?'' : 'input-error-validate'">
+                <nz-option *ngFor="let item of lstNam" [nzValue]="item" [nzLabel]="item">
+                </nz-option>
+            </nz-select>
         </div>
 
         <div nz-col nzSpan="6">
             <label class="search__label">Loại đề nghị</label>
-            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại đề nghị" [(ngModel)]="response.loaiDnghi"
-                [class]="response.loaiDnghi ?'' : 'input-error-validate'" (ngModelChange)="getDetail()">
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại đề nghị" [(ngModel)]="response.loaiDeNghi"
+                [class]="response.loaiDeNghi ?'' : 'input-error-validate'" (ngModelChange)="checkReport()">
                 <nz-option *ngFor="let item of loaiDns" [nzValue]="item.id" [nzLabel]="item.tenDm">
                 </nz-option>
             </nz-select>

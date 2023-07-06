@@ -145,6 +145,7 @@ export class BieuMau138Component implements OnInit {
 					this.formDetail = data.data;
 					this.formDetail.maDviTien = '1';
 					this.lstCtietBcao = this.formDetail.lstCtietLapThamDinhs;
+					this.formDetail.listIdDeleteFiles = [];
 					this.listFile = [];
 					this.getStatusButton();
 				} else {

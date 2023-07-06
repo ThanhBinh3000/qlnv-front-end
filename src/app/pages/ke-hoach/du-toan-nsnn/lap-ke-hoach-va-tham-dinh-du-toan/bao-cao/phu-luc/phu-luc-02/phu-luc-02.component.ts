@@ -205,6 +205,7 @@ export class PhuLuc02Component implements OnInit {
 					this.formDetail.maDviTien = '1';
 					this.lstCtietBcao = this.formDetail.lstCtietLapThamDinhs;
 					this.listFile = [];
+					this.formDetail.listIdDeleteFiles = [];
 					this.getStatusButton();
 				} else {
 					this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -365,7 +366,7 @@ export class PhuLuc02Component implements OnInit {
 		this.editCache[id].data.ttienNgoaiKho = Operator.mul(this.editCache[id].data.binhQuanNgoaiKho, this.editCache[id].data.sluongTaiKho);
 		this.editCache[id].data.tongCong = Operator.sum([this.editCache[id].data.ttienNgoaiKho, this.editCache[id].data.ttienTaiKho]);
 		this.editCache[id].data.tdinhKhoTtien = Operator.mul(this.editCache[id].data.tdinhKhoSluong, this.editCache[id].data.dmucTaiKho);
-		this.editCache[id].data.tongCong = Operator.sum([this.editCache[id].data.tdinhKhoTtien, this.editCache[id].data.ttienNgoaiKho]);
+		this.editCache[id].data.tdinhTcong = Operator.sum([this.editCache[id].data.tdinhKhoTtien, this.editCache[id].data.ttienNgoaiKho]);
 		this.editCache[id].data.chenhLech = Operator.sum([this.editCache[id].data.tdinhTcong, -this.editCache[id].data.tongCong]);
 	}
 

@@ -349,13 +349,15 @@
                                 </thead>
                                 <tbody>
                                     <tr *ngFor="let data of baoCao.lichSu">
-                                        <td>{{ data.maBcao }} </td>
+                                        <td>
+                                            <a class="save" (click)="viewDetail(data.id)">{{ data.maBcao }}</a>
+                                        </td>
                                         <td>{{ data.lan }}</td>
                                         <td>{{ Utils.fmtDate(data.ngayTao) }}</td>
                                         <td>{{ data.nguoiTao }}</td>
                                         <td>{{ Status.reportStatusName(data.trangThai) }}</td>
                                         <td *ngIf="status.general">
-                                            <a click="restoreReport(data.id)">Khôi phục</a>
+                                            <a class="save" (click)="restoreReport(data.id)">Khôi phục</a>
                                         </td>
                                     </tr>
                                 </tbody>
