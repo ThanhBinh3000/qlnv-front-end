@@ -1,7 +1,7 @@
 <div>
   <div>
     <form nz-form nzLayout="vertical" [formGroup]="formData">
-      <nz-card class="pd-t-16">
+      <nz-card class="pd-t-16" *ngIf="!(typeAction === 'UPDATE' && !data.isParent)">
         <div nz-row [nzGutter]="24">
           <div nz-col nzSpan="12">
             <nz-form-item>
@@ -41,8 +41,8 @@
         </div>
 
 
-        <div nz-row [nzGutter]="24" *ngIf="!formData.value.isMatHang" class="mg-t-5">
-          <div nz-col nzSpan="8">
+        <div nz-row [nzGutter]="24" *ngIf="!formData.value.isMatHang " class="mg-t-5">
+          <div nz-col nzSpan="8" *ngIf="!(typeAction === 'UPDATE' && formData.value.soLuongTrongNam)">
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true">Số lượng
               </nz-form-label>
@@ -54,7 +54,7 @@
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col nzSpan="8">
+          <div nz-col nzSpan="8" *ngIf="!(typeAction === 'UPDATE' && formData.value.donGia)">
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true">Đơn giá
               </nz-form-label>
@@ -66,7 +66,7 @@
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col nzSpan="8">
+          <div nz-col nzSpan="8" *ngIf="!(typeAction === 'UPDATE' && formData.value.thanhTienTrongNam)">
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true">Thành tiền
               </nz-form-label>

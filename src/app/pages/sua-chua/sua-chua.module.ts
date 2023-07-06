@@ -22,6 +22,8 @@ import { ThemMoiQdComponent } from './quyet-dinh/them-moi-qd/them-moi-qd.compone
 import { ThemMoiKtraclComponent } from './kiem-tra-cl/them-moi-ktracl/them-moi-ktracl.component';
 import { ThemMoiBcComponent } from './bao-cao/them-moi-bc/them-moi-bc.component';
 import { XuatHangModule } from './xuat-hang/xuat-hang.module';
+import { ThemmoiThComponent } from './tong-hop/themmoi-th/themmoi-th.component';
+import { ChitietThComponent } from './tong-hop/chitiet-th/chitiet-th.component';
 
 
 @NgModule({
@@ -38,6 +40,8 @@ import { XuatHangModule } from './xuat-hang/xuat-hang.module';
     ThemMoiQdComponent,
     ThemMoiKtraclComponent,
     ThemMoiBcComponent,
+    ThemmoiThComponent,
+    ChitietThComponent,
   ],
   imports: [
     CommonModule,

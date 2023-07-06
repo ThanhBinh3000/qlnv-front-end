@@ -19,6 +19,7 @@ import { StorageService } from "src/app/services/storage.service";
 import { convertTienTobangChu } from "src/app/shared/commonFunction";
 import { v4 as uuidv4 } from 'uuid';
 import { ThongTinHangDtqgComponent } from "../thong-tin-hang-dtqg/thong-tin-hang-dtqg.component";
+import { BbNghiemThuBaoQuanService } from "src/app/services/qlnv-hang/nhap-hang/nhap-khac/bbNghiemThuBaoQuan.service";
 
 
 @Component({
@@ -57,26 +58,27 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
     private cdr: ChangeDetectorRef,
     private danhMucService: DanhMucService,
     private quyetDinhDieuChuyenCucService: QuyetDinhDieuChuyenCucService,
+    private bbNghiemThuBaoQuanService: BbNghiemThuBaoQuanService,
     private bbNghiemThuBaoQuanLanDauService: BienBanNghiemThuBaoQuanLanDauService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, bbNghiemThuBaoQuanLanDauService);
     this.formData = this.fb.group({
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự thảo'],
-      nam: [dayjs().get("year"), [Validators.required]],
+      nam: [dayjs().get("year")],
       maDvi: [],
       tenDvi: [],
       maQhns: [],
       soBban: [],
-      ngayLap: [dayjs().format('YYYY-MM-DD')],
+      ngayLap: [dayjs().format('YYYY-MM-DD'), [Validators.required]],
       ngayKetThucNt: [],
-      soQdDcCuc: [],
+      soQdDcCuc: [, [Validators.required]],
       ngayQdDcCuc: [],
       qdDcCucId: [],
       ktvBaoQuan: [],
       thuKho: [],
       keToan: [],
-      thuTruong: [],
+      ldChiCuc: [],
       tenLoKho: [],
       maLoKho: [],
       tenNganKho: [],
@@ -163,6 +165,7 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
       });
       await this.loadChiTietQdinh(this.data.qdinhDccId);
       await this.loadDataBaoQuan(this.data.cloaiVthh || "010101")
+      await this.getDataKho(this.data.maLoKhoNhan || this.data.maNganKhoNhan)
     }
 
   }
@@ -209,6 +212,7 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
 
   async addTH(row?: any) {
     this.typeData = "TH"
+    this.typeAction = "ADD"
     await this.add(row)
   }
 
@@ -220,6 +224,7 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
 
   async addPD(row?: any) {
     this.typeData = "PD"
+    this.typeAction = "ADD"
     await this.add(row)
   }
 
@@ -252,11 +257,23 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
         if (this.typeData === "TH") {
-          this.addDataTH(data)
+          if (this.typeAction === "ADD")
+            this.addDataTH(data)
+          else
+            this.updateDataTH({
+              ...row,
+              ...data
+            })
         }
 
         if (this.typeData === "PD") {
-          this.addDataPD(data)
+          if (this.typeAction === "ADD")
+            this.addDataPD(data)
+          else
+            this.updateDataPD({
+              ...row,
+              ...data
+            })
         }
 
         this.updateDataTable()
@@ -313,6 +330,20 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
     this.dsHangTH = cloneDeep(this.dsHangTH)
   }
 
+  updateDataTH(data) {
+    const index = this.dsHangTH.findIndex(item => data.id ? item.id == data.id : item.idVirtual === data.idVirtual)
+    this.dsHangTH[index] = data
+    let tongKinhPhiDaTh = this.dsHangTH.reduce((prev, cur) => prev + cur.tongGiaTri, 0);
+    let tongKinhPhiDaThBc = this.convertTien(tongKinhPhiDaTh) + ' đồng'
+    this.formData.patchValue({
+      tongKinhPhiDaTh,
+      tongKinhPhiDaThBc
+    })
+
+    this.dsHangTH = cloneDeep(this.dsHangTH)
+
+  }
+
   addDataPD(data) {
     if (data.isMatHang) {
       const parent = {
@@ -353,6 +384,12 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
     this.dsHangPD = cloneDeep(this.dsHangPD)
   }
 
+  updateDataPD(data) {
+    const index = this.dsHangPD.findIndex(item => data.id ? item.id == data.id : item.idVirtual === data.idVirtual)
+    this.dsHangPD[index] = data
+    this.dsHangPD = cloneDeep(this.dsHangPD)
+  }
+
   updateDataTable() {
     this.danhSach = []
     this.danhSach = this.danhSach.concat(this.dsHangTH)
@@ -360,15 +397,6 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
     this.formData.patchValue({
       dcnbBBNTBQDtl: this.danhSach
     })
-  }
-
-
-  them(row) {
-
-  }
-
-  sua(row) {
-
   }
 
   xoa(row, type) {
@@ -529,8 +557,19 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
           idKeHoachDtl: data.id
         });
         await this.loadDataBaoQuan(data.cloaiVthh)
+        await this.getDataKho(data.maLoKhoNhan || data.maNganKhoNhan)
       }
     });
+  }
+
+  async getDataKho(maDvi: any) {
+    if (maDvi) {
+      let res = await this.bbNghiemThuBaoQuanService.getDataKho(maDvi);
+      this.formData.patchValue({
+        // tichLuong: (res.data.tichLuongTkLt - res.data.tichLuongKdLt) > 0 ? res.data.tichLuongTkLt - res.data.tichLuongKdLt : 0,
+        loaiHinhKho: res.data.lhKho
+      });
+    }
   }
 
   async loadChiTietQdinh(id: number) {
@@ -539,6 +578,9 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
 
       const data = res.data
       this.dsKeHoach = []
+      this.formData.patchValue({
+        ngayQdDcCuc: data.ngayKyQdinh
+      })
       if (data.danhSachQuyetDinh.length == 0) return
       data.danhSachQuyetDinh.map(qdinh => {
         this.dsKeHoach = this.dsKeHoach.concat(qdinh.danhSachKeHoach)
@@ -554,26 +596,38 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
     return children
   }
 
+  setValidator() {
+    if (this.formData.get('type').value == 'TH') {
+      this.formData.controls["idThop"].setValidators([Validators.required]);
+      this.formData.controls["idDxuat"].clearValidators();
+    }
+    if (this.formData.get('type').value == 'TTr') {
+      this.formData.controls["idThop"].clearValidators();
+      this.formData.controls["idDxuat"].setValidators([Validators.required]);
+    }
+  }
 
   async save(isGuiDuyet?) {
+    // this.setValidator()
+    this.helperService.markFormGroupTouched(this.formData);
+    if (!this.formData.valid) return
     await this.spinner.show();
     let body = this.formData.value;
     body.fileDinhKemReq = this.fileDinhKemReq;
 
     if (this.idInput) {
       body.id = this.idInput
-    } else {
-      // body.soQdinh = `${this.formData.value.soQdinh}/${this.maQd}`
     }
 
     let data = await this.createUpdate(body);
     if (data) {
+      this.idInput = data.id;
       if (isGuiDuyet) {
-        this.idInput = data.id;
         this.guiDuyet();
-      } else {
-        this.quayLai();
       }
+      // else {
+      //   this.quayLai();
+      // }
     }
     await this.spinner.hide();
   }
@@ -585,16 +639,9 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
   }
 
   async guiDuyet() {
-    // if (this.isCuc()) {
-    //   let trangThai = STATUS.CHO_DUYET_TP;
-    //   let mesg = 'Bạn muốn gửi duyệt văn bản?'
-    //   this.approve(this.idInput, trangThai, mesg);
-    // }
-    // if (this.isChiCuc()) {
     let trangThai = STATUS.CHO_DUYET_TK;
     let mesg = 'Bạn muốn gửi duyệt văn bản?'
     this.approve(this.idInput, trangThai, mesg);
-    // }
   }
 
   isTuChoi() {
@@ -602,26 +649,15 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
   }
 
   async tuChoi() {
-    // if (this.isCuc()) {
-    //   let trangThai = () => {
-    //     if (this.formData.value.trangThai == STATUS.CHO_DUYET_TP)
-    //       return STATUS.TU_CHOI_TP
-    //     if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDC)
-    //       return STATUS.TU_CHOI_LDC
-    //     return STATUS.CHO_DUYET_TP;
-    //   };
-    //   this.reject(this.idInput, trangThai());
-    // }
-    // if (this.isChiCuc()) {
-    //   let trangThai = () => {
-    //     if (this.formData.value.trangThai == STATUS.CHODUYET_TBP_TVQT)
-    //       return STATUS.TUCHOI_TBP_TVQT
-    //     if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDCC)
-    //       return STATUS.TU_CHOI_LDCC
-    //     return STATUS.CHODUYET_TBP_TVQT;
-    //   };
-    //   this.reject(this.idInput, trangThai());
-    // }
+    let trangThai = () => {
+      if (this.formData.value.trangThai == STATUS.CHO_DUYET_TK)
+        return STATUS.TU_CHOI_TK
+      if (this.formData.value.trangThai == STATUS.CHO_DUYET_KT)
+        return STATUS.TU_CHOI_KT
+      if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDCC)
+        return STATUS.TU_CHOI_LDCC
+    };
+    this.reject(this.idInput, trangThai());
   }
 
   isPheDuyet() {
@@ -629,13 +665,6 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
   }
 
   async pheDuyet() {
-    // if (this.isCuc()) {
-    //   let trangThai = this.formData.value.trangThai == STATUS.CHO_DUYET_TP ? STATUS.CHO_DUYET_LDC : STATUS.BAN_HANH;
-    //   let mesg = 'Bạn muốn phê duyệt văn bản?'
-    //   this.approve(this.idInput, trangThai, mesg);
-    // }
-    // if (this.isChiCuc()) {
-    // let trangThai = this.formData.value.trangThai == STATUS.CHO_DUYET_TK ? STATUS.CHO_DUYET_KT : STATUS.CHO_DUYET_LDCC;
     let trangThai = () => {
       if (this.formData.value.trangThai == STATUS.CHO_DUYET_TK)
         return STATUS.CHO_DUYET_KT
@@ -645,7 +674,6 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
     };
     let mesg = 'Bạn muốn phê duyệt văn bản?'
     this.approve(this.idInput, trangThai(), mesg);
-    // }
 
   }
 

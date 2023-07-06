@@ -136,10 +136,17 @@ export class ThemMoiKeHoachNhapKhacComponent extends Base2Component implements O
   }
 
   async initForm() {
-    this.formData.patchValue({
-      tenDvi: this.userInfo.TEN_DVI,
-      maDviDxuat: this.userInfo.MA_DVI
-    });
+    if (this.userService.isTongCuc()) {
+      this.formData.patchValue({
+        tenDvi: this.userInfo.TEN_PHONG_BAN,
+        maDviDxuat: this.userInfo.MA_PHONG_BAN
+      });
+    } else {
+      this.formData.patchValue({
+        tenDvi: this.userInfo.TEN_DVI,
+        maDviDxuat: this.userInfo.MA_DVI
+      });
+    }
   }
 
   async loadData() {
@@ -391,6 +398,42 @@ export class ThemMoiKeHoachNhapKhacComponent extends Base2Component implements O
     });
   }
 
+  async hoanThanh() {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn hoàn thành bản dự thảo?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 350,
+      nzOnOk: async () => {
+        await this.spinner.show();
+        try {
+          let body = {
+            id: this.idInput,
+            trangThai: STATUS.DA_TAO_CBV,
+          };
+          let res = await this.dxKhNhapKhacService.approve(body);
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(
+              MESSAGE.SUCCESS,
+              MESSAGE.DUYET_SUCCESS,
+            );
+            this.quayLai();
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+          await this.spinner.hide();
+        } catch (e) {
+          console.log('error: ', e);
+          await this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      },
+    });
+  }
+
   deleteRow(ma: string, data: any) {
     if (ma == 'cuc' && data.maCuc) {
       this.listOfData = this.listOfData.filter(i => i.maCuc != data.maCuc)
@@ -432,19 +475,43 @@ export class ThemMoiKeHoachNhapKhacComponent extends Base2Component implements O
   }
 
   calcTongSlTonKho() {
-    return 0;
+    if (this.listOfData) {
+      let sum = 0
+      this.listOfData.forEach(item => {
+        sum += item.slTonKho;
+      })
+      return sum;
+    }
   }
 
   calcTongSlHaoDoi() {
-    return 0;
+    if (this.listOfData) {
+      let sum = 0
+      this.listOfData.forEach(item => {
+        sum += item.slHaoDoiDinhMuc;
+      })
+      return sum;
+    }
   }
 
   calcTongSlDoiThua() {
-    return 0;
+    if (this.listOfData) {
+      let sum = 0
+      this.listOfData.forEach(item => {
+        sum += item.slDoiThua;
+      })
+      return sum;
+    }
   }
 
   calcTongThanhTien() {
-    return 0;
+    if (this.listOfData) {
+      let sum = 0
+      this.listOfData.forEach(item => {
+        sum += item.slDoiThua * item.donGia;
+      })
+      return sum;
+    }
   }
 
   async loadListDviThemMoi() {
@@ -650,6 +717,33 @@ export class ThemMoiKeHoachNhapKhacComponent extends Base2Component implements O
           });
         });
       });
+    } else {
+      this.listDataGroup = chain(this.listOfData).groupBy("maChiCuc").map((value, key) => (
+        {
+          tenChiCuc: this.listDonVi[DANH_MUC_LEVEL.CHI_CUC].find(i => i.maDvi == key)?.tenDvi,
+          maChiCuc: key,
+          children: value
+        }))
+        .value();
+      this.listDataGroup.forEach(chiCuc => {
+        chiCuc.children = chain(chiCuc.children).groupBy("maDiemKho").map((value, key) => (
+          {
+            tenDiemKho: this.listDonVi[DANH_MUC_LEVEL.DIEM_KHO].find(i => i.maDvi == key)?.tenDvi,
+            maDiemKho: key,
+            children: value
+          }))
+          .value();
+        chiCuc.children.forEach(diemKho => {
+          diemKho.children.forEach(nganLo => {
+            if (nganLo.maLoKho != null) {
+              nganLo.tenNganLoKho = this.listDonVi[DANH_MUC_LEVEL.LO_KHO].find(i => i.maDvi == nganLo.maLoKho).tenDvi + " - "
+                + this.listDonVi[DANH_MUC_LEVEL.NGAN_KHO].find(i => i.maDvi == nganLo.maNganKho).tenDvi;
+            } else {
+              nganLo.tenNganLoKho = this.listDonVi[DANH_MUC_LEVEL.NGAN_KHO].find(i => i.maDvi == nganLo.maNganKho).tenDvi;
+            }
+          });
+        });
+      })
     }
   }
 

@@ -108,7 +108,7 @@
   </nz-card>
 
   <nz-collapse>
-    <nz-collapse-panel [nzActive]="true" nzHeader="KẾ HOẠCH NSNN CHI TĂNG DTQG TOÀN BỘ/NGÀNH"
+    <nz-collapse-panel [nzActive]="true" nzHeader="KẾ HOẠCH NSNN CHI DTQG TẤT CẢ BỘ/NGÀNH"
                        class="mg-t-10">
       <nz-card class="mt-2px flex-card data-table card-border-content table-card">
         <div>
@@ -121,7 +121,7 @@
           <thead>
           <tr>
             <th class="text-center" style="width: 5%;">STT</th>
-            <th class="text-center" style="width: 75%;">Bộ</th>
+            <th class="text-center" style="width: 75%;">Bộ/Ngành</th>
             <th class="text-center" style="width: 15%;">Kế hoạch năm {{formData.value.namQd}}</th>
           </tr>
           </thead>
@@ -148,7 +148,7 @@
     </nz-collapse-panel>
   </nz-collapse>
   <nz-collapse>
-    <nz-collapse-panel #collapseExpand [nzActive]="true" nzHeader="KẾ HOẠCH DTQG GIAO TỪNG BỘ/NGÀNH"
+    <nz-collapse-panel #collapseExpand [nzActive]="true" nzHeader="CHI TIẾT KẾ HOẠCH DTQG GIAO TỪNG BỘ/NGÀNH"
                        class="mg-t-10" [nzExtra]="extraTpl">
       <ng-template #extraTpl>
         <button type="button" *ngIf="formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU" class="btn btn-sub xanh"

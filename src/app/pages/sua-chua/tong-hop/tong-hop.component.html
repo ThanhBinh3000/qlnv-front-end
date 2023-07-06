@@ -68,52 +68,128 @@
     </nz-card>
     <div class="group-button">
         <h3 class="text-uppercase">Tổng hợp danh sách hàng QTQG cần sữa chữa</h3>
+        <div class="buttons">
+            <a (click)="redirectUrl('/sua-chua/danh-sach')" class="link">Xem toàn bộ danh sách</a>
+            <button type="button" class="btn btn-main" (click)="openDialogDs()" *ngIf="userService.isCuc()">
+                <i class="icon htvbdh_dau-cong"></i>
+                <span>Tổng hợp DS hàng cần sửa chữa</span>
+            </button>
+        </div>
     </div>
     <nz-card class="mt-2px flex-card data-table card-border-content table-card">
         <nz-table class="nowrap" [nzData]="dataTable" nzBordered [nzFrontPagination]="false" [nzShowPagination]="false">
             <thead>
                 <tr>
-                    <th>aaaaa</th>
-                    <th nzWidth="35px">Chọn</th>
+                    <th></th>
+                    <th>STT</th>
+                    <th>Năm KH</th>
+                    <th>Mã danh sách cần SC</th>
+                    <th>Chi cục DTNN</th>
+                    <th>Loại hàng</th>
+                    <th>Chủng loại</th>
+                    <th>Điểm kho</th>
+                    <th>Nhà/Ngăn/Lô kho</th>
+                    <th>Ngày nhập kho</th>
+                    <th>SL tồn</th>
+                    <th>SL hỏng cần</th>
+                    <th>SL SC đã duyệt</th>
+                    <th>SL còn lại cần SC</th>
+                    <th>ĐVT</th>
+                    <th>Ngày đề xuất</th>
+                    <th>Lý do cần SC</th>
+                    <th>Thời hạn xuất SC dự kiến</th>
+                    <th>Thời hạn nhập SC dự kiến</th>
+                    <th>Trạng thái</th>
+                    <th>Trạng thái SC</th>
+                    <th nzWidth="35px">Hành động</th>
                 </tr>
             </thead>
             <tbody>
-                <ng-container *ngFor="let diemKho of dataTable , let i = index">
+                <ng-container *ngFor="let item of dataTable , let i = index">
                     <tr>
-                        <td nzShowExpand="true" [nzExpand]="diemKho.expandSet"
-                            (nzExpandChange)="onExpandChange(diemKho, $event)" class="bold">{{ diemKho.tenDvi ||
-                            "" }}</td>
-                        <td></td>
-                        <!--Điểm kho-->
-
+                      <td nzShowExpand="true" [nzExpand]="item.expandSet"
+                          (nzExpandChange)="onExpandChange(item, $event)"></td>
+                      <td>{{(page-1)*pageSize+i+1}}</td>
+                      <td>{{item.nam}}</td>
+                      <td>{{item.maDanhSach}}</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td>{{item.thoiHanXuat | date : 'dd/MM/yyyy'}}</td>
+                      <td>{{item.thoiHanNhap | date : 'dd/MM/yyyy'}}</td>
+                      <td>{{item.tenTrangThai}}</td>
+                      <td></td>
+                      <td>
+                        <a (click)="showDetail(item.id)">
+                          <span class="icon htvbdh_eye"></span>
+                        </a>
+                        <a *ngIf="item.trangThai == STATUS.DU_THAO" (click)="delete(item)" >
+                          <i class="fa fa-trash-o do"></i>
+                        </a>
+                      </td>
                     </tr>
-                    <ng-container *ngIf="diemKho.expandSet">
-                        <ng-container *ngFor="let nhaKho of diemKho.children , let i = index">
+                    <ng-container *ngIf="item.expandSet">
+                        <ng-container *ngFor="let chiCuc of item.groupChiCuc , let i = index">
                             <tr>
-                                <td class="pd-l-40" nzShowExpand="true" [nzExpand]="nhaKho.expandSet"
-                                    (nzExpandChange)="onExpandChange(nhaKho, $event)">{{nhaKho.tenDvi}}</td>
-                                <!-- Nhà kho-->
-                                <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td >{{chiCuc.tenDonVi}}</td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
                             </tr>
-                            <ng-container *ngIf="nhaKho.expandSet">
-                                <ng-container *ngFor="let nganKho of nhaKho.children , let i = index">
-                                    <tr>
-                                        <td class="pd-l-80" nzShowExpand="true" [nzExpand]="nganKho.expandSet"
-                                            (nzExpandChange)="onExpandChange(nganKho, $event)">
-                                            {{nganKho.tenDvi}}</td>
-                                        <td></td>
-                                        <!-- Ngăn kho-->
-                                    </tr>
-                                    <ng-container *ngIf="nganKho.expandSet">
-                                        <ng-container *ngFor="let loKho of nganKho.children , let i = index">
-                                            <tr>
-                                                <td class="pd-l-120">{{loKho.tenDvi}}</td> <!-- Lô kho-->
-                                                <td></td>
-                                            </tr>
-                                        </ng-container>
-                                    </ng-container>
-                                </ng-container>
-                            </ng-container>
+                              <ng-container *ngFor="let data of chiCuc.children , let i = index">
+                                  <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>{{data.scDanhSachHdr.tenLoaiVthh}}</td>
+                                    <td>{{data.scDanhSachHdr.tenCloaiVthh}}</td>
+                                    <td>{{data.scDanhSachHdr.tenDiemKho}}</td>
+                                    <td>{{data.scDanhSachHdr.tenNhaKho}}/{{data.scDanhSachHdr.tenNganKho}}/{{data.scDanhSachHdr.tenLoKho}}</td>
+                                    <td>{{data.scDanhSachHdr.ngayNhapKho | date : 'dd/MM/yyyy'}}</td>
+                                    <td>{{data.scDanhSachHdr.slDaDuyet }}</td>
+                                    <td>{{data.scDanhSachHdr.slDaDuyet }}</td>
+                                    <td>{{data.scDanhSachHdr.slDaDuyet }}</td>
+                                    <td>{{data.scDanhSachHdr.slDaDuyet }}</td>
+                                    <td>{{data.scDanhSachHdr.donViTinh }}</td>
+                                    <td>{{data.scDanhSachHdr.ngayDeXuat | date : 'dd/MM/yyyy'}}</td>
+                                    <td>{{data.scDanhSachHdr.lyDo}}</td>
+                                    <td>{{item.thoiHanXuat | date : 'dd/MM/yyyy'}}</td>
+                                    <td>{{item.thoiHanNhap | date : 'dd/MM/yyyy'}}</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                  </tr>
+                              </ng-container>
                         </ng-container>
                     </ng-container>
                 </ng-container>

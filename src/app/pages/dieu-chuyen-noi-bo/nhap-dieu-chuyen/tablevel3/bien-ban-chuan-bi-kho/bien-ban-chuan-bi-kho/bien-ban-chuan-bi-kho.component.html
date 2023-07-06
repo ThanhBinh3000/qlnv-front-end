@@ -98,7 +98,7 @@
                 <td [nzExpand]="row1.expand"
                   (nzExpandChange)="row1.expand=!row1.expand; row1.children=setExpand(row1.expand, row1.children)">
                 </td>
-                <td class="bold">{{ row1.soQdinh || "" }}</td>
+                <td class="bold text-blue" (click)="openDialogQD(row1)">{{ row1.soQdinh || "" }}</td>
                 <td class="bold">{{ row1.namKh || "" }}</td>
                 <td></td>
                 <td></td>

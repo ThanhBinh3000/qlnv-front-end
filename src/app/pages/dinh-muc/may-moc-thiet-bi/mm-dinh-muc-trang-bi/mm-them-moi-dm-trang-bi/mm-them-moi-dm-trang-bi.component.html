@@ -109,8 +109,8 @@
         <th rowspan="2" nzWidth="150px" *ngIf="!isViewDetail">Hành động</th>
       </tr>
       <tr>
-        <th class="text-center" >VP Cục DTNN KV</th>
-        <th class="text-center"  >Chi cục DTNN</th>
+        <th class="text-center">VP Cục DTNN KV</th>
+        <th class="text-center">Chi cục DTNN</th>
       </tr>
       <tr *ngIf="!isViewDetail">
         <th></th>
@@ -129,12 +129,15 @@
         </th>
         <th>
           <div class="chi-cuc-sl">
-            <nz-input-number [nzSize]="'small'" [(ngModel)]="rowItem.slChiCuc" [nzMin]="0" class="w-50"></nz-input-number>
+            <nz-input-number [nzSize]="'small'" [(ngModel)]="rowItem.slChiCuc" [nzMin]="0"
+                             class="w-50"></nz-input-number>
             &nbsp;
             &nbsp; <span>/</span>
-            &nbsp; <nz-input-number [nzSize]="'small'" [(ngModel)]="rowItem.klChiCuc" [nzMin]="0" class="w-50"></nz-input-number>
+            &nbsp;
+            <nz-input-number [nzSize]="'small'" [(ngModel)]="rowItem.klChiCuc" [nzMin]="0"
+                             class="w-50"></nz-input-number>
             &nbsp; <span>tấn lương thực</span> &nbsp;
-            <nz-select nzPlaceHolder="Nhập loại hình"  nzMode="tags" class="w-300"  [(ngModel)]="rowItem.loaiHinh"  >
+            <nz-select nzPlaceHolder="Nhập loại hình" nzMode="tags" class="w-300" [(ngModel)]="rowItem.loaiHinh">
               <nz-option nzValue="00" nzLabel="Nhập"></nz-option>
               <nz-option nzValue="01" nzLabel="Xuất"></nz-option>
               <nz-option nzValue="02" nzLabel="Bảo quản"></nz-option>
@@ -145,7 +148,7 @@
           <nz-input-number [nzSize]="'small'" [nzMin]="0" [(ngModel)]="rowItem.donGiaTd"></nz-input-number>
         </th>
         <th>
-          <input type="text"  [(ngModel)]="rowItem.ghiChu" nz-input/>
+          <input type="text" [(ngModel)]="rowItem.ghiChu" nz-input/>
         </th>
         <th class="text-center" *ngIf="!isViewDetail">
           <a (click)="addDetailDinhMuc()">
@@ -164,7 +167,8 @@
           <td>{{data.tenTaiSan}}</td>
           <td>{{data.donViTinh}}</td>
           <td>{{data.slVpCucKv}} </td>
-          <td>{{data.slChiCuc}} / {{data.klChiCuc}} tấn lương thực ({{data.tenLoaiHinh}})</td>
+          <td>{{data.slChiCuc}}
+             {{data.klChiCuc ? data.klChiCuc + ' / tấn lương thực' : ''}}  {{data.tenLoaiHinh ? '( ' + data.tenLoaiHinh + ')' : ''}}</td>
           <td>{{data.donGiaTd}}</td>
           <td>{{data.ghiChu}}</td>
           <td class="text-center" *ngIf="!isViewDetail">
@@ -179,7 +183,8 @@
         <ng-template #editTemplate>
           <td></td>
           <td>
-            <nz-select [(ngModel)]="dataEdit[idx].data.maTaiSan" [nzDisabled]="isViewDetail" (ngModelChange)="changeDm($event , dataEdit[idx].data)"
+            <nz-select [(ngModel)]="dataEdit[idx].data.maTaiSan" [nzDisabled]="isViewDetail"
+                       (ngModelChange)="changeDm($event , dataEdit[idx].data)"
                        nzAllowClear="true">
               <nz-option *ngFor="let p of listDmTaiSan" [nzValue]="p.maTaiSan" [nzLabel]="p.tenTaiSan">
               </nz-option>
@@ -189,16 +194,20 @@
             <input type="text" [disabled]="true" [(ngModel)]="dataEdit[idx].data.donViTinh" nz-input/>
           </td>
           <td>
-            <nz-input-number [nzSize]="'small'" [nzMin]="0" [(ngModel)]="dataEdit[idx].data.slVpCucKv"></nz-input-number>
+            <nz-input-number [nzSize]="'small'" [nzMin]="0"
+                             [(ngModel)]="dataEdit[idx].data.slVpCucKv"></nz-input-number>
           </td>
           <td>
             <div class="chi-cuc-sl">
-              <nz-input-number [nzSize]="'small'" [(ngModel)]="dataEdit[idx].data.slChiCuc" [nzMin]="0" class="w-50"></nz-input-number>
+              <nz-input-number [nzSize]="'small'" [(ngModel)]="dataEdit[idx].data.slChiCuc" [nzMin]="0"
+                               class="w-50"></nz-input-number>
               &nbsp;
               &nbsp; <span>/</span>
-              &nbsp; <nz-input-number [nzSize]="'small'" [(ngModel)]="dataEdit[idx].data.klChiCuc" [nzMin]="0" class="w-50"></nz-input-number>
-              &nbsp; <span>tấn lương tdực</span> &nbsp;
-              <nz-select  nzMode="tags" class="w-300"  [(ngModel)]="dataEdit[idx].data.loaiHinh" >
+              &nbsp;
+              <nz-input-number [nzSize]="'small'" [(ngModel)]="dataEdit[idx].data.klChiCuc" [nzMin]="0"
+                               class="w-50"></nz-input-number>
+              &nbsp; <span>tấn lương thực</span> &nbsp;
+              <nz-select nzMode="tags" class="w-300" [(ngModel)]="dataEdit[idx].data.loaiHinh">
                 <nz-option nzValue="00" nzLabel="Nhập"></nz-option>
                 <nz-option nzValue="01" nzLabel="Xuất"></nz-option>
                 <nz-option nzValue="02" nzLabel="Bảo quản"></nz-option>
@@ -209,7 +218,7 @@
             <nz-input-number [nzSize]="'small'" [nzMin]="0" [(ngModel)]="dataEdit[idx].data.donGiaTd"></nz-input-number>
           </td>
           <td>
-            <input type="text"  [(ngModel)]="dataEdit[idx].data.ghiChu" nz-input/>
+            <input type="text" [(ngModel)]="dataEdit[idx].data.ghiChu" nz-input/>
           </td>
           <td class="text-center" *ngIf="!isViewDetail">
             <a class="save" (click)="saveDinhMuc(idx)">

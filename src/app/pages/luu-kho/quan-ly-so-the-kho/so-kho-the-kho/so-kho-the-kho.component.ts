@@ -12,6 +12,9 @@ import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../services/storage.service";
 import {Router} from "@angular/router";
 import {ThemSoKhoTheKhoComponent} from "./them-so-kho-the-kho/them-so-kho-the-kho.component";
+import {chain, cloneDeep} from "lodash";
+import {DANH_MUC_LEVEL} from "../../luu-kho.constant";
+import {PAGE_SIZE_DEFAULT} from "../../../../constants/config";
 
 @Component({
   selector: 'app-so-kho-the-kho',
@@ -46,14 +49,16 @@ export class SoKhoTheKhoComponent extends Base2Component implements OnInit {
       maChungLoaiHang: [null],
       ngayTaoTu: [null],
       ngayTaoDen: [null],
+      idThuKho: [null]
     })
     this.filterTable = {};
   }
+
   async ngOnInit() {
     this.spinner.show();
     try {
+      this.searchPage();
       this.loadDsHangHoa();
-      // await this.search();
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -74,7 +79,7 @@ export class SoKhoTheKhoComponent extends Base2Component implements OnInit {
   async onChangeLoaiVthh(event) {
     if (event) {
       this.formData.patchValue({
-        tenHH : null
+        tenHH: null
       })
       let body = {
         "str": event
@@ -91,18 +96,18 @@ export class SoKhoTheKhoComponent extends Base2Component implements OnInit {
     }
   }
 
-  openModelCreate(id : number, isView : boolean) {
+  openModelCreate(id: number, isView: boolean) {
     const modalCreate = this.modal.create({
       nzTitle: !id && isView == false ? 'Tạo sổ kho/thẻ kho' : id > 0 && isView == true ? 'Thông tin sổ kho/thẻ kho' : 'Chỉnh sửa sổ kho/thẻ kho',
       nzContent: ThemSoKhoTheKhoComponent,
       nzMaskClosable: false,
       nzClosable: false,
       nzWidth: '1000px',
-      nzStyle: { top: '100px' },
+      nzStyle: {top: '100px'},
       nzFooter: null,
       nzComponentParams: {
-        idInput : id,
-        isView : isView
+        idInput: id,
+        isView: isView
       },
     });
     modalCreate.afterClose.subscribe((data) => {
@@ -111,4 +116,65 @@ export class SoKhoTheKhoComponent extends Base2Component implements OnInit {
       }
     });
   }
+
+  async searchPage() {
+    await this.spinner.show();
+    try {
+      let body = this.formData.value
+      body.idThuKho = this.userInfo.POSITION == 'CBTHUKHO' ? this.userInfo.ID : null;
+      body.maDvi = this.userInfo.POSITION == 'CBTHUKHO' ? null : this.userInfo.MA_DVI;
+      let res = await this.quanLySoKhoTheKhoService.search(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        let data = res.data;
+        this.dataTable = data;
+        this.buildDataToTree();
+        console.log(this.dataTable,333)
+      } else {
+        this.dataTable = [];
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+    } catch (e) {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      await this.spinner.hide();
+    }
+  }
+
+  buildDataToTree() {
+    this.dataTable = chain(this.dataTable).groupBy("tenDiemKho").map((value, key) => (
+      {
+        tenDiemKho: key,
+        children: value
+      }))
+      .value();
+    this.dataTable.forEach(diemKho => {
+      let nhaKho = chain(diemKho.children).groupBy("tenNhaKho").map((value, key) => (
+        {
+          tenNhaKho: key,
+          children: value
+        }))
+        .value();
+      if (nhaKho.children && nhaKho.children.length > 0) {
+        let listNgan1 = nhaKho.children.filter(item => item.maLoKho)
+        let listNgan2 = nhaKho.children.filter(item => !item.maLoKho)
+        if (listNgan1 && listNgan1.length > 0) {
+          listNgan1 = chain(diemKho.children).groupBy("tenNganKho").map((value, key) => (
+            {
+              tenNhaKho: key,
+              children: value
+            }))
+            .value();
+        }
+        nhaKho.children = [...listNgan1, listNgan2].flat();
+        diemKho.children = nhaKho;
+      }
+    })
+  }
+
+  async clearForm() {
+    this.formData.reset();
+    await this.searchPage();
+  }
+
+  protected readonly PAGE_SIZE_DEFAULT = PAGE_SIZE_DEFAULT;
 }

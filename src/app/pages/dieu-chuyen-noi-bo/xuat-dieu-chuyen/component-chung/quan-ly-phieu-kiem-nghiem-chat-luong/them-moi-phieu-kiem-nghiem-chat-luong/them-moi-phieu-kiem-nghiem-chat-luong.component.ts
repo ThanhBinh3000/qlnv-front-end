@@ -54,7 +54,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
   @Input() passData: PassDataPKNCL = {
     soQdinhDcc: '', qdinhDccId: null, ngayQDHieuLuc: '', soBBLayMau: '', ngaylayMau: '', soPhieuKnChatLuong: '', phieuKnChatLuongId: null, bblayMauId: null,
     donViTinh: '', maChLoaiHangHoa: '', maHangHoa: '', maDiemKho: '', maNhaKho: '', maNganKho: '', maloKho: '',
-    tenDiemKho: '', tenNhaKho: '', tenNganKho: '', tenloKho: '', tenHangHoa: '', tenChLoaiHangHoa: '', tenDonViTinh: '', thuKho: null, tenThuKho: ''
+    tenDiemKho: '', tenNhaKho: '', tenNganKho: '', tenloKho: '', tenHangHoa: '', tenChLoaiHangHoa: '', tenDonViTinh: '', thuKhoId: null, tenThuKho: ''
   };
   @Output()
   showListEvent = new EventEmitter<any>();
@@ -212,7 +212,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
       // let dmTieuChuan = await this.danhMucTieuChuanService.getDetailByMaHh(this.passData.maChLoaiHangHoa);
       let [dmTieuChuan, chiTietHangHoa] = await Promise.all([this.danhMucTieuChuanService.getDetailByMaHh(this.passData.maChLoaiHangHoa), this.danhMucService.loadDanhMucHangChiTiet(this.passData.maChLoaiHangHoa)])
       if (dmTieuChuan.data) {
-        this.dataTableChiTieu = Array.isArray(dmTieuChuan.data.children) ? dmTieuChuan.data.children.map(element => ({ edit: false, chiSoCl: element.chiSoNhap, chiTieuCl: element.tenTchuan, danhGia: element.danhGia, hdrId: element.hdrId, id: element.id, ketQuaPt: element.ketQuaPt, phuongPhap: element.camQuan })) : [];
+        this.dataTableChiTieu = Array.isArray(dmTieuChuan.data.children) ? dmTieuChuan.data.children.map(element => ({ edit: false, chiSoCl: element.chiSoNhap, chiTieuCl: element.tenTchuan, danhGia: element.danhGia, hdrId: element.hdrId, id: element.id, ketQuaPt: element.ketQuaPt, phuongPhap: element.phuongPhap })) : [];
       }
       if (chiTietHangHoa.data) {
         this.listHinhThucBaoQuan = Array.isArray(chiTietHangHoa.data.hinhThucBq) ? chiTietHangHoa.data.hinhThucBq.map(f => ({ ...f, checked: true })) : [];
@@ -245,7 +245,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
       tenNganKho: this.passData.tenNganKho,
       tenNhaKho: this.passData.tenNhaKho,
       tenNganLoKho: this.passData.tenloKho ? `${this.passData.tenloKho} - ${this.passData.tenNganKho}` : this.passData.tenNganKho,
-      thuKhoId: this.passData.thuKho,
+      thuKhoId: this.passData.thuKhoId,
       tenThuKho: this.passData.tenThuKho,
       thayDoiThuKho: this.thayDoiThuKho,
       loaiDc: this.loaiDc,
@@ -281,7 +281,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
         const data = res.data;
         this.helperService.bidingDataInFormGroup(this.formData, { ...data, soPhieu: data.soPhieu ? data.soPhieu : data.id ? `${data.id}/${data.nam}/${this.maBb}` : "", tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho });
         // this.bindingDataBbLayMau(data.soBbLayMau.split('/')[0], true);
-        this.listHinhThucBaoQuan = Array.isArray(data?.hinhThucBq?.split(",")) ? data.hinhThucBq.split(",")?.map(f => ({ id: f.split("-")[0], giaTri: f.split("-")[1], checked: true })) : [];
+        this.listHinhThucBaoQuan = Array.isArray(data?.hinhThucBq?.split("-*")) ? data.hinhThucBq.split("-*")?.map(f => ({ id: f.split("-")[0], giaTri: f.split("-")[1], checked: true })) : [];
         this.dataTableChiTieu = data.dcnbPhieuKnChatLuongDtl;
         this.bienBanLayMauDinhKem = data.bienBanLayMauDinhKem;
       }
@@ -308,7 +308,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
       let body = this.formData.value;
       body.dcnbPhieuKnChatLuongDtl = this.dataTableChiTieu.map(f => ({ ...f, id: f.hdrId ? f.id : undefined }));
       body.bienBanLayMauDinhKem = this.bienBanLayMauDinhKem;
-      body.hinhThucBq = this.listHinhThucBaoQuan.map(i => `${i.id}-${i.giaTri}`).join(",");
+      body.hinhThucBq = this.listHinhThucBaoQuan.map(i => `${i.id}-${i.giaTri}`).join("-*");
       body.loaiDC = this.loaiDc;
       body.isVatTu = this.isVatTu;
       body.thayDoiThuKho = this.thayDoiThuKho;
@@ -385,6 +385,17 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
   }
 
   tuChoi() {
+    let trangThai = '';
+    switch (this.formData.get('trangThai').value) {
+      case STATUS.CHO_DUYET_TP: {
+        trangThai = STATUS.TU_CHOI_TP;
+        break;
+      }
+      case STATUS.CHO_DUYET_LDC: {
+        trangThai = STATUS.TU_CHOI_LDC;
+        break;
+      }
+    }
     const modalTuChoi = this.modal.create({
       nzTitle: 'Từ chối',
       nzContent: DialogTuChoiComponent,
@@ -401,7 +412,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
           let body = {
             id: this.formData.value.id,
             lyDoTuChoi: text,
-            trangThai: STATUS.TU_CHOI_LDCC,
+            trangThai: trangThai,
           };
           let res =
             await this.phieuKiemNghiemChatLuongDieuChuyenService.approve(

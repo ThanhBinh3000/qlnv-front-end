@@ -11,4 +11,5 @@ export class BienBanNghiemThuBaoQuanLanDauService extends BaseService {
   constructor(public httpClient: HttpClient) {
     super(httpClient, 'dieu-chuyen-noi-bo/bb-nghiem-thu-bao-quan-lan-dau', '/qlnv-hang');
   }
+
 }

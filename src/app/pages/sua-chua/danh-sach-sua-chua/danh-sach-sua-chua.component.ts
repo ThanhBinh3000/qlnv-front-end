@@ -1,45 +1,48 @@
-import {Component, OnInit} from '@angular/core';
-import {XuatThanhLyComponent} from "src/app/pages/xuat/xuat-thanh-ly/xuat-thanh-ly.component";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "src/app/services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {DonviService} from "src/app/services/donvi.service";
-import {DanhMucService} from "src/app/services/danhmuc.service";
-import {MESSAGE} from "src/app/constants/message";
-import {CHUC_NANG} from 'src/app/constants/status';
-import {v4 as uuidv4} from "uuid";
-import {Base2Component} from "src/app/components/base2/base2.component";
-import {DanhSachSuaChuaService} from "src/app/services/qlnv-hang/xuat-hang/sua-chua-hang/DanhSachSuaChua.service";
-import {chain, isEmpty} from "lodash";
-import {SuaChuaComponent} from "src/app/pages/sua-chua/sua-chua.component";
+import { Component, OnInit } from '@angular/core';
+import { XuatThanhLyComponent } from "src/app/pages/xuat/xuat-thanh-ly/xuat-thanh-ly.component";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "src/app/services/storage.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { DonviService } from "src/app/services/donvi.service";
+import { DanhMucService } from "src/app/services/danhmuc.service";
+import { MESSAGE } from "src/app/constants/message";
+import { CHUC_NANG } from 'src/app/constants/status';
+import { v4 as uuidv4 } from "uuid";
+import { Base2Component } from "src/app/components/base2/base2.component";
+import { DanhSachSuaChuaService } from "src/app/services/qlnv-hang/xuat-hang/sua-chua-hang/DanhSachSuaChua.service";
+import { chain, isEmpty } from "lodash";
+import { SuaChuaComponent } from "src/app/pages/sua-chua/sua-chua.component";
+import { Base3Component } from 'src/app/components/base3/base3.component';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-danh-sach-sua-chua',
   templateUrl: './danh-sach-sua-chua.component.html',
   styleUrls: ['./danh-sach-sua-chua.component.scss']
 })
-export class DanhSachSuaChuaComponent extends Base2Component implements OnInit {
+export class DanhSachSuaChuaComponent extends Base3Component implements OnInit {
   CHUC_NANG = CHUC_NANG;
   dsDonvi: any[] = [];
   dsLoaiVthh: any[] = [];
   dsCloaiVthh: any[] = [];
-  dataTableView: any = [];
   expandSetString = new Set<string>();
 
   public vldTrangThai: SuaChuaComponent;
 
   constructor(httpClient: HttpClient,
-              storageService: StorageService,
-              notification: NzNotificationService,
-              spinner: NgxSpinnerService,
-              modal: NzModalService,
-              private donviService: DonviService,
-              private danhMucService: DanhMucService,
-              private danhSachSuaChuaService: DanhSachSuaChuaService,
-              private suaChuaComponent: SuaChuaComponent) {
-    super(httpClient, storageService, notification, spinner, modal, danhSachSuaChuaService);
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
+    route: ActivatedRoute,
+    router: Router,
+    private donviService: DonviService,
+    private danhMucService: DanhMucService,
+    private danhSachSuaChuaService: DanhSachSuaChuaService,
+    private suaChuaComponent: SuaChuaComponent) {
+    super(httpClient, storageService, notification, spinner, modal, route, router, danhSachSuaChuaService);
     this.vldTrangThai = suaChuaComponent;
     this.formData = this.fb.group({
       id: [],
@@ -153,9 +156,9 @@ export class DanhSachSuaChuaComponent extends Base2Component implements OnInit {
   }
 
   async changeHangHoa(event: any) {
-    this.formData.patchValue({cloaiVthh: null})
+    this.formData.patchValue({ cloaiVthh: null })
     if (event) {
-      let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({str: event});
+      let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({ str: event });
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           this.dsCloaiVthh = res.data;
@@ -173,17 +176,17 @@ export class DanhSachSuaChuaComponent extends Base2Component implements OnInit {
         let rs = chain(value)
           .groupBy("tenChiCuc")
           .map((v, k) => {
-              let rowItem = v.find(s => s.tenChiCuc === k);
-              let idVirtual = uuidv4();
-              this.expandSetString.add(idVirtual);
-              return {
-                idVirtual: idVirtual,
-                tenChiCuc: k,
-                maDiaDiem: rowItem.maDiaDiem,
-                tenCloaiVthh: rowItem.tenCloaiVthh,
-                childData: v
-              }
+            let rowItem = v.find(s => s.tenChiCuc === k);
+            let idVirtual = uuidv4();
+            this.expandSetString.add(idVirtual);
+            return {
+              idVirtual: idVirtual,
+              tenChiCuc: k,
+              maDiaDiem: rowItem.maDiaDiem,
+              tenCloaiVthh: rowItem.tenCloaiVthh,
+              childData: v
             }
+          }
           ).value();
         let rowItem = value.find(s => s.tenCuc === key);
         let idVirtual = uuidv4();

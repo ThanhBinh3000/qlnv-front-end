@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {Base2Component} from "../../../../../components/base2/base2.component";
 import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../../services/storage.service";
@@ -30,6 +30,12 @@ export class ToanBoDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Comp
   tongHop=false;
   expandSetString = new Set<string>();
   loaiHhXuatKhac = LOAI_HH_XUAT_KHAC;
+  isVisibleModal = false;
+  selectedItem: any;
+  modalWidth: any;
+  idDs: number = 0;
+  openDs = false;
+  @Output() tabFocus = new EventEmitter<object>();
   constructor(httpClient: HttpClient,
               storageService: StorageService,
               notification: NzNotificationService,
@@ -47,11 +53,10 @@ export class ToanBoDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Comp
       maDiaDiem: [],
       loaiVthh: [],
       cloaiVthh: [],
+      moTaHangHoa: [],
       donViTinh: [],
-      slHienTai: [],
-      slDeXuat: [],
-      slDaDuyet: [],
-      thanhTien: [],
+      slTonKho: [],
+      slHetHan: [],
       ngayNhapKho: [],
       ngayDeXuat: [],
       ngayDeXuatTu: [],
@@ -59,6 +64,7 @@ export class ToanBoDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Comp
       ngayTongHop: [],
       ngayTongHopTu: [],
       ngayTongHopDen: [],
+      tgianLuuKho:[],
       lyDo: [],
       trangThai: [],
       loai: [],
@@ -171,6 +177,7 @@ export class ToanBoDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Comp
           childData: value
         };
       }).value();
+    console.log(this.dataTableView,777)
   }
 
   onExpandStringChange(id: string, checked: boolean) {
@@ -180,8 +187,22 @@ export class ToanBoDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Comp
       this.expandSetString.delete(id);
     }
   }
- openTongHop(){
+  emitTab(tab) {
+    this.tabFocus.emit(tab);
+  }
+
+  openTongHop(){
    this.tongHop= !this.tongHop;
+   this.emitTab(1);
  }
+  openDsModal(id: number) {
+    this.idDs = id;
+    this.openDs= true;
+  }
+
+  closeDsModal() {
+    this.idDs = null;
+    this.openDs = false;
+  }
 
 }

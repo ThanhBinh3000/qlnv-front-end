@@ -747,6 +747,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
               element.danhSachHangHoa.map(async itemHH => {
                 listHangHoa.push({
                   ...itemHH,
+                  maLoNganKho: itemHH.maLoKho ? `${itemHH.maLoKho}${itemHH.maNganKho}` : itemHH.maNganKho,
                   maDvi: element.maDvi,
                   tenDvi: element.tenDvi,
                 })
@@ -768,6 +769,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
             dcnbKeHoachDcHdr.danhSachHangHoa.map(async itemHH => {
               listHangHoa.push({
                 ...itemHH,
+                maLoNganKho: itemHH.maLoKho ? `${itemHH.maLoKho}${itemHH.maNganKho}` : itemHH.maNganKho,
                 maDvi: dcnbKeHoachDcHdr.maDvi,
                 tenDvi: dcnbKeHoachDcHdr.tenDvi,
               })

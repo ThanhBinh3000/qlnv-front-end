@@ -26,6 +26,12 @@ import {CuuTroVienTroModule} from "../../xuat-cuu-tro-vien-tro/xuat-cuu-tro/cuu-
 import {
   ThemMoiBbLayMauBanGiaoMauComponent
 } from "./bien-ban-lay-mau-ban-giao-mau/them-moi-bb-lay-mau-ban-giao-mau/them-moi-bb-lay-mau-ban-giao-mau.component";
+import {
+  ThongTinDanhSachHdtqgHetHan
+} from "./toan-bo-ds-hang-dtqg-hethan-luukho-chua-co-kh-xuat/thong-tin-danh-sach-hdtqg-het-han/thong-tin-danh-sach-hdtqg-het-han";
+import {
+  ThanhPhanThamGiaComponent
+} from "./bien-ban-lay-mau-ban-giao-mau/them-moi-bb-lay-mau-ban-giao-mau/thanh-phan-tham-gia/thanh-phan-tham-gia.component";
 
 
 @NgModule({
@@ -34,10 +40,13 @@ import {
     BaoCaoKetQuaKiemDinhMauComponent,
     BienBanLayMauBanGiaoMauComponent,
     ThemMoiBbLayMauBanGiaoMauComponent,
+    ThanhPhanThamGiaComponent,
     PhieuKiemNghiemChatLuongComponent,
     TongHopDsHangDtqgHethanLuukhoChuaCoKhXuatComponent,
     ChiTietTongHopDsHangDtqgComponent,
-    ToanBoDsHangDtqgHethanLuukhoChuaCoKhXuatComponent],
+    ToanBoDsHangDtqgHethanLuukhoChuaCoKhXuatComponent,
+    ThongTinDanhSachHdtqgHetHan
+  ],
   imports: [
     CommonModule,
     DirectivesModule,
@@ -52,10 +61,12 @@ import {
     BaoCaoKetQuaKiemDinhMauComponent,
     BienBanLayMauBanGiaoMauComponent,
     ThemMoiBbLayMauBanGiaoMauComponent,
+    ThanhPhanThamGiaComponent,
     PhieuKiemNghiemChatLuongComponent,
     TongHopDsHangDtqgHethanLuukhoChuaCoKhXuatComponent,
     ChiTietTongHopDsHangDtqgComponent,
-    ToanBoDsHangDtqgHethanLuukhoChuaCoKhXuatComponent
+    ToanBoDsHangDtqgHethanLuukhoChuaCoKhXuatComponent,
+    ThongTinDanhSachHdtqgHetHan
   ],
   providers: [DatePipe]
 })

@@ -3,7 +3,7 @@ import {NzModalService} from "ng-zorro-antd/modal";
 import { cloneDeep } from 'lodash';
 
 @Component({
-  selector: 'app-thanh-phan-tham-gia',
+  selector: 'app-xk-thanh-phan-tham-gia',
   templateUrl: './thanh-phan-tham-gia.component.html',
   styleUrls: ['./thanh-phan-tham-gia.component.scss']
 })
