@@ -175,6 +175,20 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
         tenDonViTinh: this.data.tenDonViTinh,
       });
       await this.loadChiTietQdinh(this.data.qdinhDccId);
+      let dmTieuChuan = await this.danhMucTieuChuanService.getDetailByMaHh(this.data.cloaiVthh);
+      if (dmTieuChuan.data) {
+        this.dataTableChiTieu = dmTieuChuan.data.children;
+        this.dataTableChiTieu = this.dataTableChiTieu.map(element => {
+          return {
+            ...element,
+            edit: false,
+            chiSoCl: element.tenTchuan,
+            chiTieuCl: element.chiSoNhap,
+            ketQuaPt: element.ketQuaPt,
+            danhGia: element.danhGia
+          }
+        });
+      }
       await this.getDataKho(this.data.maLoKhoNhan || this.data.maNganKhoNhan)
     }
 
@@ -229,8 +243,6 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
 
   deleteRow(data: any) {
     this.dataTableChiTieu = this.dataTableChiTieu.filter(x => x.id != data.id);
-    // this.sortTableId();
-    // this.updateEditCache();
   }
 
   editRow(index: number) {
@@ -257,13 +269,11 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
 
   async openDialogQD() {
     await this.spinner.show();
-    // Get data tờ trình
     let body = {
       trangThai: STATUS.BAN_HANH,
       loaiVthh: ['0101', '0102'],
       loaiDc: this.loaiDc,
       maDvi: this.userInfo.MA_DVI
-      // listTrangThaiXh: [STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN],
     }
     let resSoDX = this.isCuc() ? await this.quyetDinhDieuChuyenCucService.getDsSoQuyetDinhDieuChuyenCuc(body) : await this.quyetDinhDieuChuyenCucService.getDsSoQuyetDinhDieuChuyenChiCuc(body);
     if (resSoDX.msg == MESSAGE.SUCCESS) {

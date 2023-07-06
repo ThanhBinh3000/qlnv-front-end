@@ -24,6 +24,7 @@ export class ThongTinHangDtqgComponent extends Base2Component implements OnInit 
 
   typeData: string
   typeAction: string
+  isChildren: boolean
   data: any
 
   listDM: any[] = [];
@@ -84,8 +85,10 @@ export class ThongTinHangDtqgComponent extends Base2Component implements OnInit 
   async onChangeSLTrongNam(value) {
     if (this.formData.value.donGia && value) {
       const thanhTienTrongNam = Number(value) * Number(this.formData.value.donGia)
+      const tongGiaTri = Number(this.formData.value.thanhTienNamTruoc) + Number(thanhTienTrongNam)
       this.formData.patchValue({
-        thanhTienTrongNam
+        thanhTienTrongNam,
+        tongGiaTri
       })
     }
   }
@@ -93,8 +96,10 @@ export class ThongTinHangDtqgComponent extends Base2Component implements OnInit 
   async onChangeDonGia(value) {
     if (this.formData.value.soLuongTrongNam && value) {
       const thanhTienTrongNam = Number(value) * Number(this.formData.value.soLuongTrongNam)
+      const tongGiaTri = Number(this.formData.value.thanhTienNamTruoc) + Number(thanhTienTrongNam)
       this.formData.patchValue({
-        thanhTienTrongNam
+        thanhTienTrongNam,
+        tongGiaTri
       })
     }
   }
@@ -118,7 +123,7 @@ export class ThongTinHangDtqgComponent extends Base2Component implements OnInit 
 
 
   handleOk(item: any) {
-    this._modalRef.close(item);
+    this._modalRef.close({ ...item, isChildren: this.isChildren });
   }
 
   onCancel() {
