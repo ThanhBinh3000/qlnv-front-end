@@ -32,6 +32,9 @@ import {
 import {
   ThanhPhanThamGiaComponent
 } from "./bien-ban-lay-mau-ban-giao-mau/them-moi-bb-lay-mau-ban-giao-mau/thanh-phan-tham-gia/thanh-phan-tham-gia.component";
+import {
+  ThemMoiPhieuKiemNghiemChatLuongComponent
+} from "./phieu-kiem-nghiem-chat-luong/them-moi-phieu-kiem-nghiem-chat-luong/them-moi-phieu-kiem-nghiem-chat-luong.component";
 
 
 @NgModule({
@@ -42,6 +45,7 @@ import {
     ThemMoiBbLayMauBanGiaoMauComponent,
     ThanhPhanThamGiaComponent,
     PhieuKiemNghiemChatLuongComponent,
+    ThemMoiPhieuKiemNghiemChatLuongComponent,
     TongHopDsHangDtqgHethanLuukhoChuaCoKhXuatComponent,
     ChiTietTongHopDsHangDtqgComponent,
     ToanBoDsHangDtqgHethanLuukhoChuaCoKhXuatComponent,
@@ -63,6 +67,7 @@ import {
     ThemMoiBbLayMauBanGiaoMauComponent,
     ThanhPhanThamGiaComponent,
     PhieuKiemNghiemChatLuongComponent,
+    ThemMoiPhieuKiemNghiemChatLuongComponent,
     TongHopDsHangDtqgHethanLuukhoChuaCoKhXuatComponent,
     ChiTietTongHopDsHangDtqgComponent,
     ToanBoDsHangDtqgHethanLuukhoChuaCoKhXuatComponent,
