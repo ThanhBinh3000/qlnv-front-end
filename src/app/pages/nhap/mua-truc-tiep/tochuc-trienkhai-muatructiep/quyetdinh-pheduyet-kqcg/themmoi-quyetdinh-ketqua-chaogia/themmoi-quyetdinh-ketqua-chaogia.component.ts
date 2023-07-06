@@ -66,6 +66,7 @@ export class ThemmoiQuyetdinhKetquaChaogiaComponent extends Base2Component imple
       tenTrangThai: ['Dự thảo'],
       lyDoTuChoi: [null],
       fileName: [],
+      pthucMuaTrucTiep: ['']
     });
   }
 
@@ -183,6 +184,7 @@ export class ThemmoiQuyetdinhKetquaChaogiaComponent extends Base2Component imple
       namKh: this.formData.value.namKh,
       loaiVthh: this.loaiVthh,
       trangThai: STATUS.HOAN_THANH_CAP_NHAT,
+      pthucMuaTrucTiep: '01',
       maDvi: this.userInfo.MA_DVI,
       paggingReq: {
         limit: this.globals.prop.MAX_INTERGER,
