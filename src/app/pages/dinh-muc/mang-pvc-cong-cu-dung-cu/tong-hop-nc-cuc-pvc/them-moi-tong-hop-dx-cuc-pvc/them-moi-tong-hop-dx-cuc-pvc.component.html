@@ -188,19 +188,28 @@
           <td class="text-right">{{item.slTieuChuan | number: '1.0-1' }}</td>
           <td class="text-right">{{item.nhuCauTb | number: '1.0-1' }}</td>
           <td>
-            <nz-input-number [(ngModel)]="item.slTieuChuanTc" [nzSize]="'small'" [nzDisabled]="isView"
-                             [nzFormatter]="globals.formatter" [nzMin]="0"
-                             [nzParser]="globals.parser"></nz-input-number>
+            <input class="money-input" currencyMask [options]="amount" [min]="0"
+                   [(ngModel)]="item.slTieuChuanTc"
+            />
+<!--            <nz-input-number [(ngModel)]="item.slTieuChuanTc" [nzSize]="'small'" [nzDisabled]="isView"-->
+<!--                             [nzFormatter]="globals.formatter" [nzMin]="0"-->
+<!--                             [nzParser]="globals.parser"></nz-input-number>-->
           </td>
           <td>
-            <nz-input-number [(ngModel)]="item.soLuong" [nzSize]="'small'" [nzDisabled]="isView"
-                             [nzFormatter]="globals.formatter" [nzMin]="0"
-                             [nzParser]="globals.parser"></nz-input-number>
+            <input class="money-input" currencyMask [options]="amount" [min]="0"
+                   [(ngModel)]="item.soLuong"
+            />
+<!--            <nz-input-number [(ngModel)]="item.soLuong" [nzSize]="'small'" [nzDisabled]="isView"-->
+<!--                             [nzFormatter]="globals.formatter" [nzMin]="0"-->
+<!--                             [nzParser]="globals.parser"></nz-input-number>-->
           </td>
           <td>
-            <nz-input-number [(ngModel)]="item.donGia" [nzSize]="'small'" [nzDisabled]="isView"
-                             [nzFormatter]="globals.formatter" [nzMin]="0"
-                             [nzParser]="globals.parser"></nz-input-number>
+            <input class="money-input" currencyMask [options]="amount" [min]="0"
+                   [(ngModel)]="item.donGia"
+            />
+<!--            <nz-input-number [(ngModel)]="item.donGia" [nzSize]="'small'" [nzDisabled]="isView"-->
+<!--                             [nzFormatter]="globals.formatter" [nzMin]="0"-->
+<!--                             [nzParser]="globals.parser"></nz-input-number>-->
           </td>
           <td class="text-right">{{item.donGia * item.soLuong | number: '1.0-1' }}</td>
           <td><input type="text" nz-input [(ngModel)]="item.ghiChu"></td>

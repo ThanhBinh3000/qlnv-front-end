@@ -60,7 +60,6 @@ export class ThongTinTongHopKeHoachXuatHangComponent extends Base2Component impl
   rowItem: KeHoachXayDungTrungHan = new KeHoachXayDungTrungHan();
   dataEdit: { [key: string]: { edit: boolean; data: KeHoachXayDungTrungHan } } = {};
   isTongHop: boolean = false;
-  listNam: any[] = [];
   listCcPhapLy: any[] = [];
   listFileDinhKem: any[] = [];
   listLoaiDuAn: any[] = [];
@@ -108,46 +107,54 @@ export class ThongTinTongHopKeHoachXuatHangComponent extends Base2Component impl
   }
 
   async tongHop() {
-    this.spinner.show();
-    this.formData.patchValue({
-      thoiGianTh: new Date()
-    });
-    let body = {
-      "namKeHoach": this.formData.value.namKh,
-      "loai": "00",
-      "capDvi": 2,
-    };
-    let res = await this.keHoachXuatHangService.searchTh(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.listDx = [];
-      this.dataTableDx = [];
-      this.dataTableDxAll = [];
-      this.dataTable = [];
-      this.dataTableReq = [];
-      let listDataKh = res.data;
-      if (listDataKh && listDataKh.length > 0) {
-        this.isTongHop = true;
-        this.listDx = listDataKh;
-        // this.listDx.forEach(item => {
-        //   if (item.listKtKhDxkhScThuongXuyenDtl && item.listKtKhDxkhScThuongXuyenDtl.length > 0) {
-        //     item.listKtKhDxkhScThuongXuyenDtl.forEach(itChild => {
-        //       itChild.id = null;
-        //       itChild.idHdrDx = item.id;
-        //       this.dataTableDxAll.push(itChild);
-        //       this.dataTableReq.push(itChild);
-        //     })
-        //   }
-        // })
+    try {
+      this.spinner.show();
+      this.formData.patchValue({
+        thoiGianTh: new Date()
+      });
+      let body = {
+        "namKeHoach": this.formData.value.namKh,
+        "loai": "00",
+        "trangThai": STATUS.DA_DUYET_LDC,
+        "capDvi": 2,
+      };
+      let res = await this.keHoachXuatHangService.searchTh(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.listDx = [];
+        this.dataTableDx = [];
+        this.dataTableDxAll = [];
+        this.dataTable = [];
+        this.dataTableReq = [];
+        let listDataKh = res.data;
+        if (listDataKh && listDataKh.length > 0) {
+          this.isTongHop = true;
+          this.listDx = listDataKh;
+          // this.listDx.forEach(item => {
+          //   if (item.listKtKhDxkhScThuongXuyenDtl && item.listKtKhDxkhScThuongXuyenDtl.length > 0) {
+          //     item.listKtKhDxkhScThuongXuyenDtl.forEach(itChild => {
+          //       itChild.id = null;
+          //       itChild.idHdrDx = item.id;
+          //       this.dataTableDxAll.push(itChild);
+          //       this.dataTableReq.push(itChild);
+          //     })
+          //   }
+          // })
+        } else {
+          this.notification.error(MESSAGE.ERROR, "Không tìm thấy dữ liệu kế hoạch xuất hàng của Cục");
+          this.isTongHop = false;
+          this.spinner.hide();
+          return;
+        }
       } else {
-        this.notification.error(MESSAGE.ERROR, "Không tìm thấy dữ liệu kế hoạch xuất hàng của Cục");
-        this.isTongHop = false;
+        this.notification.error(MESSAGE.ERROR, res.msg);
         this.spinner.hide();
-        return;
       }
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
       this.spinner.hide();
+    } catch (e) {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      await this.spinner.hide();
     }
-    this.spinner.hide();
   }
+
 }
