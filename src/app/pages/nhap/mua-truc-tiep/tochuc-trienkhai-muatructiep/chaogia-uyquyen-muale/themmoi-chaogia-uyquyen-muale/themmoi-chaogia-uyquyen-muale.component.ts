@@ -29,7 +29,7 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
   @Output()
   showListEvent = new EventEmitter<any>();
   dataDetail: any[] = [];
-  radioValue: string = 'Chào giá';
+  radioValue: string = '01';
   fileDinhKemUyQuyen: any[] = [];
   fileDinhKemMuaLe: any[] = [];
   @Output()
@@ -102,6 +102,7 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
       await this.quyetDinhPheDuyetKeHoachMTTService.getDetailDtlCuc(id)
         .then(async (res) => {
           const dataDtl = res.data;
+          console.log(dataDtl)
           this.danhSachCtiet = dataDtl.children
           this.formData.patchValue({
             idQdDtl: id,
@@ -118,6 +119,7 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
             ngayMua: dataDtl.ngayMua,
             ghiChuChaoGia: dataDtl.ghiChuChaoGia
           })
+          this.radioValue = dataDtl.pthucMuaTrucTiep
           this.fileDinhKemUyQuyen = dataDtl.fileDinhKemUyQuyen;
           this.fileDinhKemMuaLe = dataDtl.fileDinhKemMuaLe;
           this.showDetail(event,this.danhSachCtiet[0]);
