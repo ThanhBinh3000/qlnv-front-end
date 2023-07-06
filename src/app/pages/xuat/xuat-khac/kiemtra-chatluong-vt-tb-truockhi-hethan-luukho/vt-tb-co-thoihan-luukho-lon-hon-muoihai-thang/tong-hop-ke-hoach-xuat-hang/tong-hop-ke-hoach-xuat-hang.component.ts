@@ -12,6 +12,9 @@ import {
 } from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/KeHoachXuatHang.service";
 import {STATUS} from "../../../../../../constants/status";
 import {MESSAGE} from "../../../../../../constants/message";
+import {
+  TongHopKeHoachXuatHangService
+} from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/TongHopKeHoachXuatHang.service";
 
 @Component({
   selector: 'app-tong-hop-ke-hoach-xuat-hang',
@@ -30,8 +33,8 @@ export class TongHopKeHoachXuatHangComponent extends Base2Component implements O
               modal: NzModalService,
               private donviService: DonviService,
               private danhMucService: DanhMucService,
-              private keHoachXuatHangService: KeHoachXuatHangService) {
-    super(httpClient, storageService, notification, spinner, modal, keHoachXuatHangService);
+              private tongHopKeHoachXuatHangService: TongHopKeHoachXuatHangService) {
+    super(httpClient, storageService, notification, spinner, modal, tongHopKeHoachXuatHangService);
     this.formData = this.fb.group({
       namKeHoach: [],
       loai: [LOAI.TONG_HOP],
