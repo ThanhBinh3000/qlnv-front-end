@@ -81,7 +81,7 @@
           <th nzWidth="45px" rowSpan="2" class="text-center">STT</th>
           <th nzWidth="" rowSpan="2" class="text-center">Điểm kho</th>
           <th nzWidth="" rowSpan="2" class="text-center">Nhà kho</th>
-          <th nzWidth="" rowSpan="2" class="text-center">Lô kho</th>
+          <th nzWidth="" rowSpan="2" class="text-center">Ngăn/lô kho</th>
           <th nzWidth="" rowSpan="2" class="text-center">Năm nhập</th>
           <th nzWidth="" rowSpan="2" class="text-center">Số sổ kho</th>
           <th nzWidth="" rowSpan="2" class="text-center">Thẻ kho</th>
@@ -95,7 +95,7 @@
           <th nzWidth="" colSpan="2" class="text-center">Số lượng</th>
           <th nzWidth="" rowSpan="2" class="text-center">ĐVT</th>
           <th nzWidth="" rowSpan="2" class="text-center">Trạng thái</th>
-          <th nzWidth="90px" rowSpan="2" class="text-center bg-parent2"  nzRight>Hành động</th>
+          <th nzWidth="90px" rowSpan="2" class="text-center" nzRight>Hành động</th>
         </tr>
         <tr>
           <th class="text-center">Nhập</th>
@@ -103,6 +103,8 @@
           <th class="text-center">Nhập</th>
           <th class="text-center">Xuất</th>
         </tr>
+        </thead>
+        <tbody>
         <ng-container *ngFor="let diemKho of dataTable , let i = index">
           <tr>
             <td>{{i + 1}}</td>
@@ -125,7 +127,7 @@
             <td class="bg-parent2 font-weight-bold"></td>
             <td class="bg-parent2 font-weight-bold"></td>
             <td class="bg-parent2 font-weight-bold"></td>
-            <td></td>
+            <td class="bg-parent2 font-weight-bold" nzRight></td>
           </tr>
           <ng-container *ngIf="expandSet.has(diemKho.idVirtual)">
             <ng-container *ngFor="let nhaKho of diemKho.children, let y = index">
@@ -158,7 +160,7 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td class="bg-parent2 font-weight-bold" [nzExpand]="expandSet.has(diemKho.idVirtual)"
+                    <td class="bg-parent2 font-weight-bold" [nzExpand]="expandSet.has(nhaKho.idVirtual)"
                         (nzExpandChange)="onExpandChange(nganKho.idVirtual, $event)">{{nganKho.tenNganLo ? nganKho.tenNganLo + ' - ' + nganKho.tenNganKho : nganKho.tenNganKho}}</td>
                     <td class="bg-parent2 font-weight-bold"></td>
                     <td class="bg-parent2 font-weight-bold"></td>
@@ -311,8 +313,6 @@
             </ng-container>
           </ng-container>
         </ng-container>
-        </thead>
-        <tbody>
         </tbody>
       </nz-table>
     </nz-card>
