@@ -11,15 +11,15 @@
           </div>
           <div nz-col nzSpan="4">
             <label>Số biên bản lấy mẫu/bàn giao mẫu</label>
-            <input placeholder="" nz-input formControlName="soBienBan" />
+            <input placeholder="" nz-input formControlName="soBienBan"/>
           </div>
           <div nz-col nzSpan="4">
             <label>Mã danh sách hàng sắp hết hạn lưu kho</label>
-            <input placeholder="" nz-input formControlName="maDanhSach" />
+            <input placeholder="" nz-input formControlName="maDanhSach"/>
           </div>
           <div nz-col nzSpan="4">
             <label>Đơn vị kiểm nghiệm</label>
-            <input placeholder="" nz-input formControlName="dviKiemNghiem" />
+            <input placeholder="" nz-input formControlName="dviKiemNghiem"/>
           </div>
           <div nz-col nzSpan="4">
             <label>Ngày lấy mẫu</label>
@@ -132,20 +132,22 @@
                 <td>{{lv1.tgianLuuKho}}</td>
                 <td class="bold">{{lv1.soBienBan}}</td>
                 <td>{{lv1.ngayLayMau}}</td>
-                <td>{{lv1.tenTrangThai}}</td>
+                <td>{{lv1.tenTrangThaiBienBan}}</td>
                 <td class="text-left">
-                  <a (click)="redirectDetail(item, false)">
+                  <a *ngIf="lv1.trangThaiBienBan== STATUS.DA_DUYET_LDCC"
+                     (click)="redirectDetail(lv1.idBienBan, false)">
                     <i class="fa fa-eye" title="Xem chi tiết"></i>
                   </a>
-                  <a *ngIf="(vldTrangThai.checkStatusPermission(lv1,CHUC_NANG.SUA)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_BBLMBGM_THEM'))"
-                     (click)="redirectDetail(lv1.id, false)">
+                  <a *ngIf="lv1.trangThaiBienBan== STATUS.DU_THAO
+                            || lv1.trangThaiBienBan== STATUS.TU_CHOI_LDCC"
+                     (click)="redirectDetail(lv1.idBienBan, false)">
                     <i class="fa fa-pencil" title="Sửa"></i>
                   </a>
-                  <a *ngIf="(vldTrangThai.checkStatusPermission(lv1,CHUC_NANG.DUYET_LDCC)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_BBLMBGM_DUYET_LDCCUC'))"
-                     (click)="redirectDetail(lv1.id, true)">
+                  <a *ngIf="lv1.trangThaiBienBan== STATUS.CHO_DUYET_LDCC"
+                     (click)="redirectDetail(lv1.idBienBan, true)">
                     <i class="icon htvbdh_tcdt_pheduyet"></i>
                   </a>
-                  <a *ngIf="vldTrangThai.checkStatusPermission(lv1,CHUC_NANG.XOA) && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_BBLMBGM_XOA')"
+                  <a *ngIf="lv1.trangThaiBienBan== STATUS.DU_THAO"
                      (click)="delete(lv1)">
                     <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                   </a>
@@ -177,8 +179,8 @@
   </div>
 </div>
 <div class="chi-tiet" *ngIf="isDetail">
-  <app-xk-them-moi-bb-lay-mau-ban-giao-mau [itemInput]="item" [idInput]="selectedId" [loaiVthh]="loaiVthh" [isView]="isView"
-                                        (showListEvent)="showList()">
+  <app-xk-them-moi-bb-lay-mau-ban-giao-mau [idInput]="selectedId" [loaiVthh]="loaiVthh" [isView]="isView"
+                                           (showListEvent)="showList()">
   </app-xk-them-moi-bb-lay-mau-ban-giao-mau>
 </div>
 <!--<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openQdGnv" (nzOnCancel)="closeQdGnvModal()">-->
