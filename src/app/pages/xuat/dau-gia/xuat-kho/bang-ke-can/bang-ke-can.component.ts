@@ -9,17 +9,13 @@ import {DonviService} from "src/app/services/donvi.service";
 import {
   DeXuatPhuongAnCuuTroService
 } from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/DeXuatPhuongAnCuuTro.service";
-import dayjs from "dayjs";
 import {UserLogin} from "src/app/models/userlogin";
 import {MESSAGE} from "src/app/constants/message";
-import {chain, isEmpty} from 'lodash';
-import {v4 as uuidv4} from 'uuid';
-import {
-  BangKeCanCtvtService
-} from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/BangKeCanCtvt.service";
+import {chain} from 'lodash';
 import {BangKeCanService} from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/xuat-kho/BangKeCan.service';
 import {DauGiaComponent} from "../../dau-gia.component";
 import {CHUC_NANG} from "../../../../../constants/status";
+import * as uuid from "uuid";
 
 @Component({
   selector: 'app-bdg-bang-ke-can',
@@ -30,16 +26,15 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
   public vldTrangThai: DauGiaComponent;
   public CHUC_NANG = CHUC_NANG;
-  dsDonvi: any[] = [];
   userInfo: UserLogin;
   userdetail: any = {};
   selectedId: number = 0;
-  isVatTu: boolean = false;
   isView = false;
   expandSetString = new Set<string>();
-  dataView: any = [];
+  children: any = [];
   idPhieuXk: number = 0;
   openPhieuXk = false;
+  idQdNv: number =0;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -91,10 +86,11 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
 
   async ngOnInit() {
     try {
-      this.initData()
-      await this.timKiem();
+      this.initData();
+      await this.search();
     } catch (e) {
       console.log('error: ', e)
+      this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
@@ -103,19 +99,6 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
     this.userInfo = this.userService.getUserLogin();
     this.userdetail.maDvi = this.userInfo.MA_DVI;
     this.userdetail.tenDvi = this.userInfo.TEN_DVI;
-    await this.loadDsTong();
-  }
-
-  async loadDsTong() {
-    /*const body = {
-      maDviCha: this.userdetail.maDvi,
-      trangThai: '01',
-    };*/
-    const dsTong = await this.donviService.layDonViCon();
-    if (!isEmpty(dsTong)) {
-      this.dsDonvi = dsTong.data;
-    }
-
   }
 
   isOwner(maDvi: any) {
@@ -136,27 +119,35 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
     await this.spinner.hide()
   }
 
-  async timKiem() {
-    await this.spinner.show();
-    try {
-      if (this.formData.value.ngayDx) {
-        this.formData.value.ngayDxTu = dayjs(this.formData.value.ngayDx[0]).format('YYYY-MM-DD')
-        this.formData.value.ngayDxDen = dayjs(this.formData.value.ngayDx[1]).format('YYYY-MM-DD')
+  buildTableView() {
+    let dataView = chain(this.dataTable).groupBy("soQdGiaoNvXh").map((value, key) => {
+      let quyetDinh = value.find(f => f.soQdGiaoNvXh === key)
+      let rs = chain(value).groupBy("maDiemKho").map((v, k) => {
+        let diaDiem = v.find(s => s.maDiemKho === k)
+        return {
+          idVirtual: uuid.v4(),
+          maDiemKho: k != null ? k : '',
+          tenDiemKho: diaDiem ? diaDiem.tenDiemKho : null,
+          idQdGiaoNvXh: diaDiem ? diaDiem.idQdGiaoNvXh : null,
+          childData: v
+        }
+      }).value();
+      let nam = quyetDinh? quyetDinh.nam : null;
+      let ngayQdGiaoNvXh = quyetDinh ? quyetDinh.ngayQdGiaoNvXh : null;
+      return{
+        idVirtual: uuid.v4(),
+        soQdGiaoNvXh: key != null ? key : '',
+        nam: nam,
+        ngayQdGiaoNvXh: ngayQdGiaoNvXh,
+        childData: rs
       }
-      if (this.formData.value.ngayKetThuc) {
-        this.formData.value.ngayKetThucTu = dayjs(this.formData.value.ngayKetThuc[0]).format('YYYY-MM-DD')
-        this.formData.value.ngayKetThucDen = dayjs(this.formData.value.ngayKetThuc[1]).format('YYYY-MM-DD')
-      }
-      await this.search();
-    } catch (e) {
-      console.log(e)
-    } finally {
-      await this.spinner.hide();
-    }
+    }).value();
+    this.children = dataView
+    this.expandAll()
   }
 
   expandAll() {
-    this.dataView.forEach(s => {
+    this.children.forEach(s => {
       this.expandSetString.add(s.idVirtual);
     })
   }
@@ -169,57 +160,13 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
     }
   }
 
-  buildTableView() {
-    console.log(JSON.stringify(this.dataTable), 'raw')
-    let dataView = chain(this.dataTable)
-      .groupBy("soQdGiaoNvXh")
-      .map((value, key) => {
-        let rs = chain(value)
-          .groupBy("maDiemKho")
-          .map((v, k) => {
-              let rowLv2 = v.find(s => s.maDiemKho === k);
-              return {
-                id: rowLv2 ? rowLv2.id : null,
-                idVirtual: uuidv4(),
-                maDiemKho: k != "null" ? k : '',
-                tenDiemKho: rowLv2 ? rowLv2.tenDiemKho : null,
-                tenNhaKho: rowLv2 ? rowLv2.tenNhaKho : null,
-                tenNganKho: rowLv2 ? rowLv2.tenNganKho : null,
-                tenLoKho: rowLv2 ? rowLv2.tenLoKho : null,
-                childData: v
-              }
-            }
-          ).value();
-        let rowLv1 = value.find(s => s.soQdGiaoNvXh === key);
-        return {
-          idVirtual: uuidv4(),
-          soQdGiaoNvXh: key != "null" ? key : '',
-          nam: rowLv1 ? rowLv1.nam : null,
-          thoiGianGiaoNhan: rowLv1 ? rowLv1.thoiGianGiaoNhan : null,
-          childData: rs
-        };
-      }).value();
-    this.dataView = dataView
-    console.log(dataView,"data")
-    this.expandAll()
-  }
-
-  editRow(lv2: any, isView: boolean) {
-    this.selectedId = lv2.id;
-    this.isDetail = true;
-    this.isView = isView;
-  }
-
-  redirectDetail(id, b: boolean) {
+  redirectDetail(id, b: boolean, idQdNv? : number) {
     this.selectedId = id;
     this.isDetail = true;
     this.isView = b;
-    // this.isViewDetail = isView ?? false;
+    this.idQdNv = idQdNv
   }
 
-  async deleteRow(lv2: any) {
-    await this.delete(lv2);
-  }
   openPhieuXkModal(id: number) {
     console.log(id, 'id');
     this.idPhieuXk = id;
