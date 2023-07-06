@@ -7,16 +7,15 @@ import {NgxSpinnerService} from 'ngx-spinner';
 import {NzModalService} from 'ng-zorro-antd/modal';
 import {UserLogin} from 'src/app/models/userlogin';
 import {MESSAGE} from 'src/app/constants/message';
-import {cloneDeep} from 'lodash';
 import {v4 as uuidv4} from "uuid";
-import {CHUC_NANG, STATUS} from 'src/app/constants/status';
+import {CHUC_NANG} from 'src/app/constants/status';
 
 import {LOAI_HH_XUAT_KHAC} from "../../../../../constants/config";
 import {
   TongHopDanhSachHangDTQGService
 } from "../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatlt/TongHopDanhSachHangDTQG.service";
 import {
-  BienBanLayMauLuongThucHangDTQG
+  BienBanLayMauLuongThucHangDTQGService
 } from "../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatlt/BienBanLayMauLuongThucHangDTQG.service";
 
 @Component({
@@ -32,6 +31,7 @@ export class BienBanLayMauBanGiaoMauComponent extends Base2Component implements 
   loaiVthhCache: string;
   CHUC_NANG = CHUC_NANG;
   loaiHhXuatKhac = LOAI_HH_XUAT_KHAC;
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -39,7 +39,7 @@ export class BienBanLayMauBanGiaoMauComponent extends Base2Component implements 
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private tongHopDanhSachHangDTQGService: TongHopDanhSachHangDTQGService,
-    private bienBanLayMauLuongThucHangDTQG: BienBanLayMauLuongThucHangDTQG
+    private bienBanLayMauLuongThucHangDTQGService: BienBanLayMauLuongThucHangDTQGService
   ) {
     super(httpClient, storageService, notification, spinner, modal, tongHopDanhSachHangDTQGService);
     this.formData = this.fb.group({
@@ -82,11 +82,10 @@ export class BienBanLayMauBanGiaoMauComponent extends Base2Component implements 
 
   ngOnInit(): void {
     try {
-      console.log(this.userService.getUserLogin().MA_PHONG_BAN,8888)
+      console.log(this.userService.getUserLogin().MA_PHONG_BAN, 8888)
       this.initData()
       this.timKiem();
-    }
-    catch (e) {
+    } catch (e) {
       console.log('error: ', e)
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -106,6 +105,7 @@ export class BienBanLayMauBanGiaoMauComponent extends Base2Component implements 
     }
     return endValue.getTime() <= this.formData.value.ngayLayMauDen.getTime();
   };
+
   async initData() {
     this.userInfo = this.userService.getUserLogin();
     this.userdetail.maDvi = this.userInfo.MA_DVI;
@@ -130,7 +130,7 @@ export class BienBanLayMauBanGiaoMauComponent extends Base2Component implements 
       s.idVirtual = uuidv4();
       this.expandSetString.add(s.idVirtual);
     });
-    console.log(this.dataTable,"789")
+    console.log(this.dataTable, "789")
     this.buildTableView();
   }
 
@@ -205,7 +205,7 @@ export class BienBanLayMauBanGiaoMauComponent extends Base2Component implements 
           let body = {
             id: item.idBienBan
           };
-          this.bienBanLayMauLuongThucHangDTQG.delete(body).then(async () => {
+          this.bienBanLayMauLuongThucHangDTQGService.delete(body).then(async () => {
             await this.search();
             this.spinner.hide();
           });
