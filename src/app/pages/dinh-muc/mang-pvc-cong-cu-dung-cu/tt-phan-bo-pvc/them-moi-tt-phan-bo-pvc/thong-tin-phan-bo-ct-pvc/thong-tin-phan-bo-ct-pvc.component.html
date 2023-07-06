@@ -66,9 +66,7 @@
           <nz-form-label nzRequired nzNoColon="true">Số lượng phân bổ</nz-form-label>
           <nz-form-control >
             <nz-input-group>
-              <nz-input-number  type="text" nz-input [nzSize]="'small'" [(ngModel)]="item.soLuong" [nzMin]="0"
-                                [nzMax]="globals.prop.MAX_INPUT" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
-              </nz-input-number>
+              <input nz-input [(ngModel)]="item.soLuong" class="money-input" currencyMask [options]="amount">
             </nz-input-group>
           </nz-form-control>
         </nz-form-item>
