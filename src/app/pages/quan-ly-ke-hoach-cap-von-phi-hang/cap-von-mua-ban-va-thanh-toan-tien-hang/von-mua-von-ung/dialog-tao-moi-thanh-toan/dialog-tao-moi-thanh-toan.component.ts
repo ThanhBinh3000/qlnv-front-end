@@ -2,14 +2,14 @@ import { Component, Input, OnInit } from '@angular/core';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { divNumber, mulNumber, sumNumber } from 'src/app/Utility/func';
+import { Utils } from 'src/app/Utility/utils';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { CapVonMuaBanTtthService } from 'src/app/services/quan-ly-von-phi/capVonMuaBanTtth.service';
 import { UserService } from 'src/app/services/user.service';
-import { divNumber, mulNumber, sumNumber } from 'src/app/Utility/func';
-import { CAN_CU_GIA, LOAI_DE_NGHI, Utils } from 'src/app/Utility/utils';
 import * as uuid from "uuid";
-import { receivedInfo, Report, sendInfo, ThanhToan } from '../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
+import { Const, Report, ThanhToan } from '../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
 
 @Component({
     selector: 'dialog-tao-moi-thanh-toan',
@@ -22,10 +22,9 @@ export class DialogTaoMoiThanhToanComponent implements OnInit {
 
     userInfo: any;
     response: Report = new Report();
-    loaiDns: any[] = LOAI_DE_NGHI;
-    canCuGias: any[] = CAN_CU_GIA;
-    isRequestExist!: number;
-    idRequest: string;
+    loaiDns: any[] = [];
+    canCuGias: any[] = [];
+    lstNam: number[] = [];
 
     constructor(
         private _modalRef: NzModalRef,
@@ -36,29 +35,19 @@ export class DialogTaoMoiThanhToanComponent implements OnInit {
     ) { }
 
     async ngOnInit() {
-        if (this.userService.isTongCuc()) {
-            this.response.canCuVeGia = Utils.HD_TRUNG_THAU;
-            this.loaiDns = this.loaiDns.filter(e => e.id == Utils.MUA_VTU);
-        } else {
-            this.loaiDns = this.loaiDns.filter(e => e.id != Utils.MUA_VTU);
-            if (this.userService.isChiCuc()) {
-                this.loaiDns = this.loaiDns.filter(e => e.id == Utils.MUA_THOC);
-            }
-        }
         if (this.userService.isChiCuc()) {
-            this.response.canCuVeGia = Utils.QD_DON_GIA;
+            this.canCuGias = Const.CAN_CU_GIA.filter(e => e.id == Const.DON_GIA);
+            this.loaiDns = Const.LOAI_DE_NGHI.filter(e => e.id == Const.THOC);
+        } else {
+            this.canCuGias = Const.CAN_CU_GIA.filter(e => e.id == Const.HOP_DONG);
+            if (this.userService.isTongCuc()) {
+                this.loaiDns = Const.LOAI_DE_NGHI;
+            } else {
+                this.loaiDns = Const.LOAI_DE_NGHI.filter(e => e.id != Const.VTU);
+            }
         }
         this.response.maLoai = this.request.maLoai;
         this.userInfo = this.userService.getUserLogin();
-    }
-
-    changeDnghi() {
-        this.loaiDns = LOAI_DE_NGHI.filter(e => e.id != Utils.MUA_VTU);
-        if (this.response.canCuVeGia == Utils.QD_DON_GIA) {
-            this.loaiDns = this.loaiDns.filter(e => e.id != Utils.MUA_GAO && e.id != Utils.MUA_MUOI);
-        } else {
-            this.loaiDns = this.loaiDns.filter(e => e.id != Utils.MUA_THOC);
-        }
     }
 
     //lay ra chi tiet cua de nghi
@@ -262,6 +251,12 @@ export class DialogTaoMoiThanhToanComponent implements OnInit {
             }
         );
         this.spinner.hide();
+    }
+
+    clear() {
+        this.response.namDnghi = null;
+        this.response.loaiDeNghi = null;
+        this.response.canCuVeGia = null;
     }
 
     handleOk() {

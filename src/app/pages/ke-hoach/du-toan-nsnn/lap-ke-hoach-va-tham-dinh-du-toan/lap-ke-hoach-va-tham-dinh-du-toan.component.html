@@ -27,11 +27,15 @@
             <app-bao-cao [data]="data" (dataChange)="changeTab($event)">
             </app-bao-cao>
         </ng-container>
-        <ng-container *ngIf="tabSelected == 'nextbaocao'">
+        <ng-container *ngIf="tabSelected == 'next-baocao'">
             <app-bao-cao [data]="data" (dataChange)="changeTab($event)">
             </app-bao-cao>
         </ng-container>
-        <ng-container *ngIf="tabSelected == 'nextnextbaocao'">
+        <ng-container *ngIf="tabSelected == 'next-next-baocao'">
+            <app-bao-cao [data]="data" (dataChange)="changeTab($event)">
+            </app-bao-cao>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 'next-next-next-baocao'">
             <app-bao-cao [data]="data" (dataChange)="changeTab($event)">
             </app-bao-cao>
         </ng-container>

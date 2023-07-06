@@ -75,7 +75,7 @@ export class DanhSachHeSoBaoHiemComponent implements OnInit {
 
     async search() {
         this.spinner.show();
-        let trangThais = [];
+        let trangThais = [Status.TT_01, Status.TT_02, Status.TT_03, Status.TT_04, Status.TT_05, Status.TT_07];
         if (this.searchFilter.trangThai) {
             trangThais = [this.searchFilter.trangThai];
         }
@@ -129,7 +129,7 @@ export class DanhSachHeSoBaoHiemComponent implements OnInit {
         this.searchFilter.nam = null
         this.searchFilter.tuNgay = null
         this.searchFilter.denNgay = null
-        this.searchFilter.trangThai = null
+        this.searchFilter.trangThai = null;
         this.search();
     }
 
