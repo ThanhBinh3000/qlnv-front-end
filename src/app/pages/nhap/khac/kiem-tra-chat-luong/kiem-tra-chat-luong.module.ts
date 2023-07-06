@@ -43,6 +43,9 @@ import { LapBienBanChuanBiKhoComponent } from './bien-ban-chuan-bi-kho/lap-bien-
     LapBienBanChuanBiKhoComponent,
     ThanhphanLaymauComponent,
     QuanLyPhieuKiemNghiemChatLuongComponent,
+    ThemMoiPhieuKiemNghiemChatLuongComponent,
+    ThanhphanLaymauComponent,
+    QuanLyPhieuKiemNghiemChatLuongComponent,
     ThemMoiPhieuKiemNghiemChatLuongComponent
   ],
     imports: [
