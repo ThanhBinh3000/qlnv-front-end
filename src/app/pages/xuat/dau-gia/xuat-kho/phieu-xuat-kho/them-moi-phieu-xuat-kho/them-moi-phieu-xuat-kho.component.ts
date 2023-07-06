@@ -92,8 +92,9 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
         cloaiVthh: [],
         moTaHangHoa: [],
         canBoLapPhieu: [],
-        ldChiCuc: [],
-        ktvBaoQuan: [],
+        tenNguoiPduyet: [],
+        idKtv:[],
+        tenKtv: [],
         keToanTruong: [],
         nguoiGiaoHang: [],
         soCmt: [],
@@ -106,12 +107,10 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
         theoChungTu: [],
         thucXuat: [],
         donGia: [],
-        thanhTien: [],
         ghiChu: [],
         trangThai: [''],
         tenDvi: [],
         lyDoTuChoi: [],
-        type: [],
         tenTrangThai: [''],
         diaChiDvi: [],
         tenLoaiVthh: [],
@@ -146,6 +145,21 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
     } finally {
       this.spinner.hide();
       this.flagInit = true;
+    }
+  }
+
+  async loadDataComboBox() {
+    // loại hình nhập xuất
+    this.listLoaiHinhNx = [];
+    let resNx = await this.danhMucService.danhMucChungGetAll('LOAI_HINH_NHAP_XUAT');
+    if (resNx.msg == MESSAGE.SUCCESS) {
+      this.listLoaiHinhNx = resNx.data.filter(item => item.apDung == 'XUAT_DG');
+    }
+    // kiểu nhập xuất
+    this.listKieuNx = [];
+    let resKieuNx = await this.danhMucService.danhMucChungGetAll('KIEU_NHAP_XUAT');
+    if (resKieuNx.msg == MESSAGE.SUCCESS) {
+      this.listKieuNx = resKieuNx.data
     }
   }
 
@@ -225,7 +239,8 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
         tenLoKho: null,
         donGia: null,
         soPhieuKnCl: null,
-        ktvBaoQuan: null,
+        idKtv: null,
+        tenKtv: null,
         ngayKn: null,
         loaiVthh: null,
         cloaiVthh: null,
@@ -240,7 +255,8 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
     if (this.flagInit && event && event !== this.formData.value.maDiemKho) {
       this.formData.patchValue({
         soPhieuKnCl: null,
-        ktvBaoQuan: null,
+        idKtv: null,
+        tenKtv: null,
         ngayKn: null,
         loaiVthh: null,
         cloaiVthh: null,
@@ -310,7 +326,9 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
     let res = await this.phieuXuatKhoService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
-      this.listPhieuXk = data.content;
+      if(data && data.content && data.content.length >0) {
+        this.listPhieuXk = data.content;
+      }
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
@@ -369,11 +387,11 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
             .then((dataDtail) => {
               if (dataDtail.msg == MESSAGE.SUCCESS) {
                 const dataPhieuKn = dataDtail.data
-                console.log(dataPhieuKn, 999)
                 this.formData.patchValue({
                   idPhieuKnCl: dataPhieuKn.id,
                   soPhieuKnCl: dataPhieuKn.soPhieu,
-                  ktvBaoQuan: dataPhieuKn.nguoiKn,
+                  idKtv: dataPhieuKn.idThuKho,
+                  tenKtv: dataPhieuKn.tenThuKho,
                   ngayKn: dataPhieuKn.ngayTao,
                   loaiVthh: dataPhieuKn.loaiVthh,
                   cloaiVthh: dataPhieuKn.cloaiVthh,
@@ -462,20 +480,5 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
 
   convertTien(tien: number): string {
     return convertTienTobangChu(tien);
-  }
-
-  async loadDataComboBox() {
-    // loại hình nhập xuất
-    this.listLoaiHinhNx = [];
-    let resNx = await this.danhMucService.danhMucChungGetAll('LOAI_HINH_NHAP_XUAT');
-    if (resNx.msg == MESSAGE.SUCCESS) {
-      this.listLoaiHinhNx = resNx.data.filter(item => item.apDung == 'XUAT_DG');
-    }
-    // kiểu nhập xuất
-    this.listKieuNx = [];
-    let resKieuNx = await this.danhMucService.danhMucChungGetAll('KIEU_NHAP_XUAT');
-    if (resKieuNx.msg == MESSAGE.SUCCESS) {
-      this.listKieuNx = resKieuNx.data
-    }
   }
 }
