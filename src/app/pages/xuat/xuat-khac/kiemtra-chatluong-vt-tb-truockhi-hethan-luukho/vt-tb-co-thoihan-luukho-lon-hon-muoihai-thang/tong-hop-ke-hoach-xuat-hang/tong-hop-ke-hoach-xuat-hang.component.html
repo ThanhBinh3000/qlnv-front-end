@@ -46,7 +46,8 @@
       </div>
     </nz-card>
     <div class="group-button">
-      <h3 class="text-uppercase">Thông tin tổng hợp kế hoạch xuất vật tư, thiết bị có thời hạn lưu kho lớn hơn 12 tháng</h3>
+      <h3 class="text-uppercase">Danh sách tổng hợp kế hoạch xuất vật tư, thiết bị có thời hạn lưu kho lớn hơn 12
+        tháng</h3>
       <div class="buttons">
         <button
           type="button" class="btn btn-sub btn-xoa">
@@ -125,19 +126,19 @@
           </td>
           <td>{{(page - 1) * pageSize + idx +
           1}}</td>
-          <td> {{ data.maTongHop }} </td>
+          <td> {{ data.id }} </td>
           <td>{{ data.thoiGianTh | date: 'dd/MM/YYYY' }}</td>
-          <td>{{ data.noiDung }}</td>
+          <td>{{ data.noiDungTh }}</td>
           <td>{{ data.namKeHoach }}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-left">
-            <a >
+            <a (click)="redirectToChiTiet(data.id,true)">
               <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
-            <a *ngIf="data.trangThai==STATUS.DU_THAO"  >
+            <a (click)="redirectToChiTiet(data.id,false)" *ngIf="data.trangThai==STATUS.CHUATAO_KH">
               <i class="fa fa-pencil" title="Sửa"></i>
             </a>
-            <a *ngIf="data.trangThai==STATUS.DU_THAO" (click)="delete(data)">
+            <a *ngIf="data.trangThai==STATUS.CHUATAO_KH" (click)="delete(data)">
               <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>
@@ -164,6 +165,7 @@
   </div>
 </div>
 <div class="chi-tiet" *ngIf="isDetail">
-  <app-thong-tin-tong-hop-ke-hoach-xuat-hang [isViewDetail]="isView" (showListEvent)="showList()" [idInput]="selectedId">
+  <app-thong-tin-tong-hop-ke-hoach-xuat-hang [isViewDetail]="isView"  (showListEvent)="showList()"
+                                             [idInput]="selectedId">
   </app-thong-tin-tong-hop-ke-hoach-xuat-hang>
 </div>
