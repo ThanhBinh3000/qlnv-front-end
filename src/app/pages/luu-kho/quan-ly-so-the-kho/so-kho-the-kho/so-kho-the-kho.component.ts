@@ -59,6 +59,7 @@ export class SoKhoTheKhoComponent extends Base2Component implements OnInit {
     try {
       await this.searchPage();
       this.loadDsHangHoa();
+      console.log(this.dataTable, 333333)
       await this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -128,7 +129,6 @@ export class SoKhoTheKhoComponent extends Base2Component implements OnInit {
         let data = res.data;
         this.dataTable = data;
         this.buildDataToTree();
-        console.log(this.dataTable,222)
       } else {
         this.dataTable = [];
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -148,31 +148,35 @@ export class SoKhoTheKhoComponent extends Base2Component implements OnInit {
           let rs = chain(value)
             .groupBy("tenNhaKho")
             .map((v, k) => {
+              if (v && v.length > 0) {
+                v.idVirtual = uuidv4();
+                v.forEach(nganlo => {
+                  nganlo.idVirtual = uuidv4();
+                  console.log(nganlo.children, 'nganlo')
+                  if (nganlo.children && nganlo.children.length > 0) {
+                    nganlo.children.forEach(nam => {
+                      nam.idVirtual = uuidv4();
+                      console.log(nam.children, 'nam')
+                      if (nam.children && nam.children.length > 0) {
+                        nam.children.forEach(soKho => {
+                          soKho.idVirtual = uuidv4();
+                          console.log(soKho.children, 'soKho')
+                          if (soKho.children && soKho.children.length > 0) {
+                            soKho.theKhoList.forEach(theKho => {
+                              theKho.idVirtual = uuidv4();
+                            })
+                          }
+                        })
+                      }
+                    })
+                  }
+                })
+              }
                 return {
                   idVirtual: uuidv4(),
                   tenNhaKho: k,
                   children: v
                 };
-                if (v && v.length > 0) {
-                  v.forEach(nganLo => {
-                    nganLo.idVirtual = uuidv4();
-                    if (nganLo && nganLo.length > 0) {
-                      nganLo.forEach(nam => {
-                        nam.idVirtual = uuidv4();
-                        if (nam && nam.length > 0) {
-                          nganLo.forEach(soKho => {
-                            soKho.idVirtual = uuidv4();
-                            if (soKho && soKho.length > 0) {
-                              nganLo.forEach(theKho => {
-                                theKho.idVirtual = uuidv4();
-                              })
-                            }
-                          })
-                        }
-                      })
-                    }
-                  })
-                }
               }
             ).value();
           return {
@@ -228,7 +232,7 @@ export class SoKhoTheKhoComponent extends Base2Component implements OnInit {
     await this.searchPage();
   }
 
-  async selectRow(item: any, table : any[]) {
+  async selectRow(item: any, table: any[]) {
     if (table.length > 0) {
       table.forEach(i => i.selected = false);
       item.selected = true;
