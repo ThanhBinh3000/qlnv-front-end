@@ -112,6 +112,8 @@ export class ThemmoiQuyetdinhKetquaChaogiaComponent extends Base2Component imple
     if (this.formData.get('soQdKq').value) {
       body.soQdKq = this.formData.get('soQdKq').value + this.maTrinh;
     }
+    body.ngayHluc = body.ngayHluc != null ? dayjs(body.ngayHluc).format('YYYY-MM-DD') : null;
+    body.ngayKy = body.ngayKy != null ? dayjs(body.ngayKy).format('YYYY-MM-DD') : null;
     body.fileDinhKems = this.fileDinhKem;
     body.danhSachCtiet = this.danhSachCtiet;
     console.log(body)

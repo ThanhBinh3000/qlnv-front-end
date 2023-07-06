@@ -119,7 +119,7 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
             ngayMua: dataDtl.ngayMua,
             ghiChuChaoGia: dataDtl.ghiChuChaoGia
           })
-          this.radioValue = dataDtl.pthucMuaTrucTiep
+          this.radioValue = dataDtl.pthucMuaTrucTiep ? dataDtl.pthucMuaTrucTiep : '01'
           this.fileDinhKemUyQuyen = dataDtl.fileDinhKemUyQuyen;
           this.fileDinhKemMuaLe = dataDtl.fileDinhKemMuaLe;
           this.showDetail(event,this.danhSachCtiet[0]);
