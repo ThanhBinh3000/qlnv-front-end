@@ -103,6 +103,22 @@
           <th class="text-center">Nhập</th>
           <th class="text-center">Xuất</th>
         </tr>
+        <ng-container *ngFor="let item of dataTable , let i = index">
+          <tr class="level-2">
+            <td>{{i + 1}}</td>
+            <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </ng-container>
         </thead>
         <tbody>
         <ng-container *ngFor="let diemKho of dataTable , let i = index">
