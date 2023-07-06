@@ -62,7 +62,7 @@ export class ThemMoiQdMuaSamPvcComponent extends Base2Component implements OnIni
     this.spinner.show();
     try {
       this.maQd = '/QĐ-TCDT'
-      await this.loadDsDxCc();
+      await this.loadDsTongHop();
       await this.loadDxCuc();
       if (this.id > 0) {
         await this.detail(this.id);
@@ -76,7 +76,7 @@ export class ThemMoiQdMuaSamPvcComponent extends Base2Component implements OnIni
   }
 
 
-  async loadDsDxCc() {
+  async loadDsTongHop() {
     this.spinner.show();
     try {
       let body = {
@@ -92,7 +92,7 @@ export class ThemMoiQdMuaSamPvcComponent extends Base2Component implements OnIni
         this.listTongHop = data.content;
         if (this.listTongHop) {
           this.listTongHop =  this.listTongHop.filter(
-            (item) => (item.trangThai == this.STATUS.DA_DUYET_LDV && item.qdMuaSamBhId == null )
+            (item) => (item.trangThai == this.STATUS.DA_DUYET_LDTC && item.qdMuaSamBhId == null )
           )
         }
       } else {
@@ -114,7 +114,7 @@ export class ThemMoiQdMuaSamPvcComponent extends Base2Component implements OnIni
       let body = {
         "capDvi": "2",
         "paggingReq": {
-          "limit": 10,
+          "limit": 99,
           "page": 0
         }
       }

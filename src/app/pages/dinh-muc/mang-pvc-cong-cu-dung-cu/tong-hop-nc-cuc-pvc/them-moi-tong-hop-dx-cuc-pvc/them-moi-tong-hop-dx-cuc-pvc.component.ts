@@ -224,16 +224,21 @@ export class ThemMoiTongHopDxCucPvcComponent extends Base2Component implements O
   async pheDuyet() {
     let trangThai;
     switch (this.formData.value.trangThai) {
-      case STATUS.DU_THAO :
-      case STATUS.TU_CHOI_LDTC : {
-        trangThai = STATUS.CHO_DUYET_LDTC;
-        break;
-      }
       case STATUS.CHO_DUYET_LDTC : {
         trangThai = STATUS.DA_DUYET_LDTC
       }
     }
     await this.approve(this.id, trangThai, 'Bạn có chắc chắn muốn duyệt?')
+  }
+
+  async tuChoi() {
+    let trangThai;
+    switch (this.formData.value.trangThai) {
+      case STATUS.CHO_DUYET_LDTC : {
+        trangThai = STATUS.TU_CHOI_LDTC
+      }
+    }
+    await this.reject(this.id, trangThai, 'Bạn có chắc chắn muốn từ chối?')
   }
 
   convertListData() {

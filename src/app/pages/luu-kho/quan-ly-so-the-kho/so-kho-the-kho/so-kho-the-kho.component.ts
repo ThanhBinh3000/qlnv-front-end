@@ -13,7 +13,7 @@ import {StorageService} from "../../../../services/storage.service";
 import {Router} from "@angular/router";
 import {ThemSoKhoTheKhoComponent} from "./them-so-kho-the-kho/them-so-kho-the-kho.component";
 import {chain, cloneDeep} from "lodash";
-import {DANH_MUC_LEVEL} from "../../luu-kho.constant";
+import {v4 as uuidv4} from 'uuid';
 import {PAGE_SIZE_DEFAULT} from "../../../../constants/config";
 
 @Component({
@@ -55,14 +55,14 @@ export class SoKhoTheKhoComponent extends Base2Component implements OnInit {
   }
 
   async ngOnInit() {
-    this.spinner.show();
+    await this.spinner.show();
     try {
-      this.searchPage();
+      await this.searchPage();
       this.loadDsHangHoa();
-      this.spinner.hide();
+      await this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
-      this.spinner.hide();
+      await this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
@@ -118,7 +118,7 @@ export class SoKhoTheKhoComponent extends Base2Component implements OnInit {
   }
 
   async searchPage() {
-    await this.spinner.show();
+    this.spinner.show();
     try {
       let body = this.formData.value
       body.idThuKho = this.userInfo.POSITION == 'CBTHUKHO' ? this.userInfo.ID : null;
@@ -128,7 +128,7 @@ export class SoKhoTheKhoComponent extends Base2Component implements OnInit {
         let data = res.data;
         this.dataTable = data;
         this.buildDataToTree();
-        console.log(this.dataTable,333)
+        console.log(this.dataTable,222)
       } else {
         this.dataTable = [];
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -136,44 +136,103 @@ export class SoKhoTheKhoComponent extends Base2Component implements OnInit {
     } catch (e) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     } finally {
-      await this.spinner.hide();
+      this.spinner.hide();
     }
   }
 
   buildDataToTree() {
-    this.dataTable = chain(this.dataTable).groupBy("tenDiemKho").map((value, key) => (
-      {
-        tenDiemKho: key,
-        children: value
-      }))
-      .value();
-    this.dataTable.forEach(diemKho => {
-      let nhaKho = chain(diemKho.children).groupBy("tenNhaKho").map((value, key) => (
-        {
-          tenNhaKho: key,
-          children: value
-        }))
-        .value();
-      if (nhaKho.children && nhaKho.children.length > 0) {
-        let listNgan1 = nhaKho.children.filter(item => item.maLoKho)
-        let listNgan2 = nhaKho.children.filter(item => !item.maLoKho)
-        if (listNgan1 && listNgan1.length > 0) {
-          listNgan1 = chain(diemKho.children).groupBy("tenNganKho").map((value, key) => (
-            {
-              tenNhaKho: key,
-              children: value
-            }))
-            .value();
+    try {
+      this.dataTable = chain(this.dataTable)
+        .groupBy("tenDiemKho")
+        .map((value, key) => {
+          let rs = chain(value)
+            .groupBy("tenNhaKho")
+            .map((v, k) => {
+                return {
+                  idVirtual: uuidv4(),
+                  tenNhaKho: k,
+                  children: v
+                };
+                if (v && v.length > 0) {
+                  v.forEach(nganLo => {
+                    nganLo.idVirtual = uuidv4();
+                    if (nganLo && nganLo.length > 0) {
+                      nganLo.forEach(nam => {
+                        nam.idVirtual = uuidv4();
+                        if (nam && nam.length > 0) {
+                          nganLo.forEach(soKho => {
+                            soKho.idVirtual = uuidv4();
+                            if (soKho && soKho.length > 0) {
+                              nganLo.forEach(theKho => {
+                                theKho.idVirtual = uuidv4();
+                              })
+                            }
+                          })
+                        }
+                      })
+                    }
+                  })
+                }
+              }
+            ).value();
+          return {
+            idVirtual: uuidv4(),
+            tenDiemKho: key,
+            children: rs
+          };
+        }).value();
+      this.expandAll();
+      this.spinner.hide();
+    } catch (e) {
+      console.log('error: ', e);
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  expandAll() {
+    if (this.dataTable && this.dataTable.length > 0) {
+      this.dataTable.forEach(diemKho => {
+        this.expandSet.add(diemKho.idVirtual);
+        if (diemKho.children && diemKho.children.length > 0) {
+          diemKho.children.forEach(nhaKho => {
+            this.expandSet.add(nhaKho.idVirtual);
+            if (nhaKho.children && nhaKho.children.length > 0) {
+              nhaKho.children.forEach(nganLo => {
+                this.expandSet.add(nganLo.idVirtual);
+                if (nganLo.children && nganLo.children.length > 0) {
+                  nganLo.children.forEach(nam => {
+                    this.expandSet.add(nam.idVirtual);
+                    if (nam.children && nam.children.length > 0) {
+                      nam.children.forEach(soKho => {
+                        this.expandSet.add(soKho.idVirtual);
+                        if (soKho.theKhoList && soKho.theKhoList.length > 0) {
+                          soKho.theKhoList.forEach(theKho => {
+                            this.expandSet.add(theKho.idVirtual);
+                          })
+                        }
+                      })
+                    }
+                  })
+                }
+              })
+            }
+          })
         }
-        nhaKho.children = [...listNgan1, listNgan2].flat();
-        diemKho.children = nhaKho;
-      }
-    })
+      });
+    }
   }
 
   async clearForm() {
     this.formData.reset();
     await this.searchPage();
+  }
+
+  async selectRow(item: any, table : any[]) {
+    if (table.length > 0) {
+      table.forEach(i => i.selected = false);
+      item.selected = true;
+    }
   }
 
   protected readonly PAGE_SIZE_DEFAULT = PAGE_SIZE_DEFAULT;
