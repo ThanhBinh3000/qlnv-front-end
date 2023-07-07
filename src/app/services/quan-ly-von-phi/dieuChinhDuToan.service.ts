@@ -179,5 +179,23 @@ export class DieuChinhService extends BaseService {
             // 'http://192.168.1.105:8094/dieu-chinh-du-toan-chi/get-data',
             request
         );
-    }
+    };
+
+    restoreReport(cId: string, rId: string): Observable<any> {
+        return this.httpClient.get(
+            this.urlDefault + '/dieu-chinh-du-toan-chi/phuc-hoi/currentId=' + cId + '/recoverId=' + rId,
+        );
+    };
+
+    addHistory(id: string): Observable<any> {
+        return this.httpClient.get(
+            this.urlDefault + '/dieu-chinh-du-toan-chi/sao-chep/' + id,
+        );
+    };
+
+    ctietBieuMau(id: string): Observable<any> {
+        return this.httpClient.get(
+            this.urlDefault + '/dieu-chinh-du-toan-chi/chi-tiet/bieu-mau/' + id,
+        );
+    };
 }

@@ -1,31 +1,31 @@
 <div class="modal__content">
-  <div class="search__body" nz-row [nzGutter]="[18, 12]">
-    <div nz-col nzSpan="6">
-      <label class="search__label">Năm quyết toán</label>
-      <input class="search__input" nz-input [(ngModel)]="response.namQtoan"
-        [class]="response.namQtoan && (response.namQtoan > 999 && response.namQtoan < 3000) ? '' : 'input-error-validate'" />
+    <div class="search__body" nz-row [nzGutter]="[18, 12]">
+        <div nz-col nzSpan="6">
+            <label class="search__label">Năm quyết toán</label>
+            <input class="search__input" nz-input [(ngModel)]="response.namQtoan"
+                [class]="response.namQtoan && (response.namQtoan > 999 && response.namQtoan < 3000) ? '' : 'input-error-validate'" />
+        </div>
+        <div nz-col nzSpan="6">
+            <label class="search__label">Báo cáo tháng</label>
+            <nz-input-number nzSize="small" [(ngModel)]="response.thangBcao" [nzMin]="1" [nzMax]="12"
+                [class]="response.thangBcao? '' : 'input-error-validate'">
+            </nz-input-number>
+        </div>
     </div>
-    <div nz-col nzSpan="6">
-      <label class="search__label">Báo cáo tháng</label>
-      <nz-input-number nzSize="small" [(ngModel)]="response.thangBcao" [nzMin]="1" [nzMax]="12"
-        [class]="response.thangBcao? '' : 'input-error-validate'">
-      </nz-input-number>
-    </div>
-  </div>
 </div>
 <div class="modal-footer">
-  <div class="nut">
-    <div class="cantrai">
+    <div class="nut">
+        <div class="cantrai">
+        </div>
+        <div class="canphai">
+            <button nz-button (click)="handleOk()" class="modal__button--save">
+                <i class="icon htvbdh_tcdt_save"></i>
+                Tạo mới
+            </button>
+            <button nz-button (click)="handleCancel()" class="modal__button--cancel">
+                <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+                Đóng
+            </button>
+        </div>
     </div>
-    <div class="canphai">
-      <button nz-button (click)="handleOk()" class="modal__button--save">
-        <i class="icon htvbdh_tcdt_save"></i>
-        Tạo mới
-      </button>
-      <button nz-button (click)="handleCancel()" class="modal__button--cancel">
-        <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
-        Đóng
-      </button>
-    </div>
-  </div>
 </div>

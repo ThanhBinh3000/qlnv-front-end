@@ -1,160 +1,162 @@
 <div class="main-content bg-trang">
-  <nz-card class="mt16 flex-card p-lr16">
-    <div class="widget-body">
-      <nz-descriptions [nzColumn]="{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }" [nzColon]="false">
+    <nz-card class="mt16 flex-card p-lr16">
+        <div class="widget-body">
+            <nz-descriptions [nzColumn]="{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }" [nzColon]="false">
 
-        <nz-descriptions-item nzTitle="Năm báo cáo" [nzSpan]="1">
-          <nz-input-number class="input__search" nzSize="small"
-            [class]="((!namHienTai && namHienTai !== 0) || (namHienTai < 3000 && namHienTai > 999)) ?'' : 'input-error-validate' "
-            [(ngModel)]="namHienTai"></nz-input-number>
-        </nz-descriptions-item>
+                <nz-descriptions-item nzTitle="Năm báo cáo" [nzSpan]="1">
+                    <nz-input-number class="input__search" nzSize="small"
+                        [class]="((!namHienTai && namHienTai !== 0) || (namHienTai < 3000 && namHienTai > 999)) ?'' : 'input-error-validate' "
+                        [(ngModel)]="namHienTai"></nz-input-number>
+                </nz-descriptions-item>
 
-        <nz-descriptions-item nzTitle="Đơn vị tạo" [nzSpan]="1">
-          <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị tạo" [(ngModel)]="maDviTao">
-            <nz-option *ngFor="let item of donVis" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi"></nz-option>
-          </nz-select>
-        </nz-descriptions-item>
+                <nz-descriptions-item nzTitle="Đơn vị tạo" [nzSpan]="1">
+                    <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị tạo" [(ngModel)]="maDviTao">
+                        <nz-option *ngFor="let item of donVis" [nzValue]="item.maDvi"
+                            [nzLabel]="item.tenDvi"></nz-option>
+                    </nz-select>
+                </nz-descriptions-item>
 
-        <nz-descriptions-item nzTitle="Trạng thái" [nzSpan]="1">
-          <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái" [(ngModel)]="trangThai">
-            <nz-option *ngFor="let item of trangThais" [nzValue]="item.id" [nzLabel]="item.ten">
-            </nz-option>
-          </nz-select>
-        </nz-descriptions-item>
+                <nz-descriptions-item nzTitle="Trạng thái" [nzSpan]="1">
+                    <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái" [(ngModel)]="trangThai">
+                        <nz-option *ngFor="let item of trangThais" [nzValue]="item.id" [nzLabel]="item.ten">
+                        </nz-option>
+                    </nz-select>
+                </nz-descriptions-item>
 
-      </nz-descriptions>
-    </div>
-    <div class="cangiua group-button-search">
-      <button nz-button class="search__button--clear" (click)="clearFilter()">
-        <i class="icon  htvbdh_nhap-lai1"></i>
-        Xóa điều kiện
-      </button>
-      <button nz-button class="search__button--search" (click)="search()">
-        <i nz-icon nzType="search"></i>
-        Tìm kiếm
-      </button>
-    </div>
-  </nz-card>
-  <div class="group-button">
-    <h3 class="text-uppercase"> DANH SÁCH BÁO CÁO KHTC NS 3 NĂM VÀ DỰ TOÁN NGÂN SÁCH HÀNG NĂM </h3>
-    <div class="buttons">
-      <button *ngIf="statusNewReport" type="button" class="btn btn-main" (click)="addNewReport()">
-        <i class="icon htvbdh_tcdt_tao-qd"></i>
-        <span>Tổng hợp</span>
-      </button>
-    </div>
-  </div>
-
-  <nz-card class="mt-2px flex-card data-table card-border-content table-card">
-    <nz-table #basicTable class="nowrap table__container-tt" [nzData]="dataTable" [nzFrontPagination]="false"
-      [nzShowPagination]="false" nzBordered>
-      <thead>
-        <tr>
-          <th width="60px" class="text-center">STT</th>
-          <th>Đơn vị lập</th>
-          <th>Mã báo cáo</th>
-          <th>Năm báo cáo</th>
-          <th>Ngày trình duyệt (Ngày đơn vị cấp dưới gửi báo cáo)</th>
-          <th>Ngày duyệt (Ngày cấp trên duyệt báo cáo)</th>
-          <th class="text-center">Trạng thái</th>
-          <th width="90px">Hành động</th>
-        </tr>
-        <tr class="search-table">
-          <th></th>
-          <th>
-            <nz-input-group [nzSuffix]="suffixTemplateInfo">
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenDvi"
-                (input)="filterInTable('tenDvi',filterTable.tenDvi, false)" size="small" />
-            </nz-input-group>
-            <ng-template #suffixTemplateInfo>
-              <i nz-icon nzType="search"></i>
-            </ng-template>
-          </th>
-          <th>
-            <nz-input-group [nzSuffix]="suffixTemplateInfo">
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.maBcao"
-                (input)="filterInTable('maBcao',filterTable.maBcao, false)" size="small" />
-            </nz-input-group>
-            <ng-template #suffixTemplateInfo>
-              <i nz-icon nzType="search"></i>
-            </ng-template>
-          </th>
-
-          <th>
-            <nz-input-group [nzSuffix]="suffixTemplateInfo">
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.namHienHanh"
-                (input)="filterInTable('namHienHanh',filterTable.namHienHanh, false)" size="small" />
-            </nz-input-group>
-            <ng-template #suffixTemplateInfo>
-              <i nz-icon nzType="search"></i>
-            </ng-template>
-          </th>
-          <th>
-            <nz-date-picker nzFormat="dd/MM/yyyy" [(ngModel)]="filterTable.ngayPheDuyet"
-              (ngModelChange)="filterInTable('ngayPheDuyet',filterTable.ngayPheDuyet, true)">
-            </nz-date-picker>
-          </th>
-          <th>
-            <nz-date-picker nzFormat="dd/MM/yyyy" [(ngModel)]="filterTable.ngayTraKq"
-              (ngModelChange)="filterInTable('ngayTraKq',filterTable.ngayTraKq, true)">
-            </nz-date-picker>
-          </th>
-          <th>
-            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Tìm kiếm" [(ngModel)]="filterTable.trangThai"
-              (ngModelChange)="filterInTable('trangThai',filterTable.trangThai, false)">
-              <nz-option *ngFor="let item of trangThais" [nzValue]="item.id" [nzLabel]="item.tenDm">
-              </nz-option>
-            </nz-select>
-          </th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let data of basicTable.data; let i = index">
-          <td class="text-center">
-            {{ (i + 1) + (pages.page - 1)*pages.size }}
-          </td>
-          <td>
-            {{ data.tenDvi }}
-          </td>
-          <td>
-            {{ data.maBcao }}
-          </td>
-          <td>
-            {{ data.namBcao }}
-          </td>
-          <td>
-            {{ data.ngayPheDuyet }}
-          </td>
-          <td>
-            {{ data.ngayTraKq }}
-          </td>
-          <td>
-            {{getStatusName(data.trangThai)}}
-          </td>
-          <td class="text-left">
-            <a (click)="viewDetail(data)">
-              <i class="fa fa-eye"></i>
-            </a>
-          </td>
-        </tr>
-      </tbody>
-    </nz-table>
-    <div class="tab-content tab-menu" id="myTabContent">
-      <div class="tab-pane fade show active justify-content-between">
-        <div class="trai">
+            </nz-descriptions>
         </div>
-        <div class="canphai">
-          <nz-pagination class="pagination-card" [nzPageIndex]="pages.page" [nzTotal]="totalElements" nzShowSizeChanger
-            [nzPageSize]="pages.size" [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="onPageIndexChange($event)"
-            (nzPageSizeChange)="onPageSizeChange($event)">
-            <ng-template #rangeTemplate let-range="range" let-total>
-              {{ range[0] }}-{{ range[1] }} of {{totalElements}} items
-            </ng-template>
-          </nz-pagination>
+        <div class="cangiua group-button-search">
+            <button nz-button class="search__button--clear" (click)="clearFilter()">
+                <i class="icon  htvbdh_nhap-lai1"></i>
+                Xóa điều kiện
+            </button>
+            <button nz-button class="search__button--search" (click)="search()">
+                <i nz-icon nzType="search"></i>
+                Tìm kiếm
+            </button>
         </div>
-      </div>
+    </nz-card>
+    <div class="group-button">
+        <h3 class="text-uppercase"> DANH SÁCH BÁO CÁO KHTC NS 3 NĂM VÀ DỰ TOÁN NGÂN SÁCH HÀNG NĂM </h3>
+        <div class="buttons">
+            <button *ngIf="statusNewReport" type="button" class="btn btn-main" (click)="addNewReport()">
+                <i class="icon htvbdh_tcdt_tao-qd"></i>
+                <span>Tổng hợp</span>
+            </button>
+        </div>
     </div>
-  </nz-card>
+
+    <nz-card class="mt-2px flex-card data-table card-border-content table-card">
+        <nz-table #basicTable class="nowrap table__container-tt" [nzData]="dataTable" [nzFrontPagination]="false"
+            [nzShowPagination]="false" nzBordered>
+            <thead>
+                <tr>
+                    <th width="60px" class="text-center">STT</th>
+                    <th>Đơn vị lập</th>
+                    <th>Mã báo cáo</th>
+                    <th>Năm báo cáo</th>
+                    <th>Ngày trình duyệt (Ngày đơn vị cấp dưới gửi báo cáo)</th>
+                    <th>Ngày duyệt (Ngày cấp trên duyệt báo cáo)</th>
+                    <th class="text-center">Trạng thái</th>
+                    <th width="90px">Hành động</th>
+                </tr>
+                <tr class="search-table">
+                    <th></th>
+                    <th>
+                        <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                            <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenDvi"
+                                (input)="filterInTable('tenDvi',filterTable.tenDvi, false)" size="small" />
+                        </nz-input-group>
+                        <ng-template #suffixTemplateInfo>
+                            <i nz-icon nzType="search"></i>
+                        </ng-template>
+                    </th>
+                    <th>
+                        <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                            <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.maBcao"
+                                (input)="filterInTable('maBcao',filterTable.maBcao, false)" size="small" />
+                        </nz-input-group>
+                        <ng-template #suffixTemplateInfo>
+                            <i nz-icon nzType="search"></i>
+                        </ng-template>
+                    </th>
+
+                    <th>
+                        <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                            <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.namHienHanh"
+                                (input)="filterInTable('namHienHanh',filterTable.namHienHanh, false)" size="small" />
+                        </nz-input-group>
+                        <ng-template #suffixTemplateInfo>
+                            <i nz-icon nzType="search"></i>
+                        </ng-template>
+                    </th>
+                    <th>
+                        <nz-date-picker nzFormat="dd/MM/yyyy" [(ngModel)]="filterTable.ngayPheDuyet"
+                            (ngModelChange)="filterInTable('ngayPheDuyet',filterTable.ngayPheDuyet, true)">
+                        </nz-date-picker>
+                    </th>
+                    <th>
+                        <nz-date-picker nzFormat="dd/MM/yyyy" [(ngModel)]="filterTable.ngayTraKq"
+                            (ngModelChange)="filterInTable('ngayTraKq',filterTable.ngayTraKq, true)">
+                        </nz-date-picker>
+                    </th>
+                    <th>
+                        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Tìm kiếm"
+                            [(ngModel)]="filterTable.trangThai"
+                            (ngModelChange)="filterInTable('trangThai',filterTable.trangThai, false)">
+                            <nz-option *ngFor="let item of trangThais" [nzValue]="item.id" [nzLabel]="item.tenDm">
+                            </nz-option>
+                        </nz-select>
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let data of basicTable.data; let i = index">
+                    <td class="text-center">
+                        {{ (i + 1) + (pages.page - 1)*pages.size }}
+                    </td>
+                    <td>
+                        {{ data.tenDvi }}
+                    </td>
+                    <td>
+                        {{ data.maBcao }}
+                    </td>
+                    <td>
+                        {{ data.namBcao }}
+                    </td>
+                    <td>
+                        {{ data.ngayPheDuyet }}
+                    </td>
+                    <td>
+                        {{ data.ngayTraKq }}
+                    </td>
+                    <td>
+                        {{getStatusName(data.trangThai)}}
+                    </td>
+                    <td class="text-left">
+                        <a (click)="viewDetail(data)">
+                            <i class="fa fa-eye"></i>
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </nz-table>
+        <div class="tab-content tab-menu" id="myTabContent">
+            <div class="tab-pane fade show active justify-content-between">
+                <div class="trai">
+                </div>
+                <div class="canphai">
+                    <nz-pagination class="pagination-card" [nzPageIndex]="pages.page" [nzTotal]="totalElements"
+                        nzShowSizeChanger [nzPageSize]="pages.size" [nzShowTotal]="rangeTemplate"
+                        (nzPageIndexChange)="onPageIndexChange($event)" (nzPageSizeChange)="onPageSizeChange($event)">
+                        <ng-template #rangeTemplate let-range="range" let-total>
+                            {{ range[0] }}-{{ range[1] }} of {{totalElements}} items
+                        </ng-template>
+                    </nz-pagination>
+                </div>
+            </div>
+        </div>
+    </nz-card>
 
 </div>
