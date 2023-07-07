@@ -18,21 +18,18 @@ export class ItemData {
   id: string;
   qlnvKhvonphiDchinhCtietId: string;
   stt: string;
-
   noiDung: string;
+  maNoiDung: string;
   dlieuPlucTuongUng: string;
   dtoanKphiNamTruoc: number;
   dtoanKphiNamNay: number;
   tong: number;
-  // dtoanDaThien: number;
-  // dtoanUocThien: number;
   tongDtoanTrongNam: number;
   dtoanDnghiDchinh: number;
   dtoanVuTvqtDnghi: number;
   tongDchinhTang: number;
   tongDchinhGiam: number;
   tongDchinhTaiDvi: number;
-  maNoiDung: string;
 }
 
 export const AMOUNT1 = {

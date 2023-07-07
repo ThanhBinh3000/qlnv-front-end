@@ -8,33 +8,11 @@ import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.service';
 import { DieuChinhService } from 'src/app/services/quan-ly-von-phi/dieuChinhDuToan.service';
-import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { displayNumber, exchangeMoney, mulNumber, sumNumber } from 'src/app/Utility/func';
 import { AMOUNT, DON_VI_TIEN, MONEY_LIMIT } from 'src/app/Utility/utils';
 import * as uuid from "uuid";
 
-// export class ItemData {
-//   id: string;
-//   qlnvKhvonphiDchinhCtietId: string;
-//   stt: string;
-//   tenTaiSan: string;
-//   dvTinh: string;
-//   sluongDuocGiao: number;
-//   sluongThien: number;
-//   sluongUocTh: number;
-//   tongCongTh: number;
-//   dgiaTh: number;
-//   thanhTienTh: number;
-//   dtoanSuDung: number;
-//   dtoanDaGiao: number;
-//   tongCongDtoan: number;
-//   dieuChinhDtoan: number;
-//   vuTvqtDnghiDtoan: number;
-//   kphiConThieu: number;
-//   maTaiSan: string;
-//   checked: boolean;
-// }
 
 export class ItemData {
   id: string;
@@ -112,7 +90,6 @@ export class PhuLuc2Component implements OnInit {
     private dieuChinhDuToanService: DieuChinhService,
     private notification: NzNotificationService,
     private modal: NzModalService,
-    private quanLyVonPhiService: QuanLyVonPhiService,
     public userService: UserService,
     private danhMucService: DanhMucDungChungService,
   ) { }
@@ -406,19 +383,9 @@ export class PhuLuc2Component implements OnInit {
   };
 
   changeModel(id: string): void {
-    // this.editCache[id].data.tongNcauDtoanN = this.editCache[id].data.tdiemBcaoDtoan + this.editCache[id].data.dkienThienDtoan + this.editCache[id].data.dtoanThieuNtruoc;
-    // // this.editCache[id].data.dtoanDchinh = Number((this.editCache[id].data.ncauChiN1 / this.editCache[id].data.uocThienN).toFixed(3));
-    // this.editCache[id].data.tongCongTh = this.editCache[id].data.sluongThien + this.editCache[id].data.sluongUocTh;
-    // this.editCache[id].data.thanhTienTh = this.editCache[id].data.tongCongTh * this.editCache[id].data.dgiaTh;
-    // this.editCache[id].data.tongCongDtoan = this.editCache[id].data.dtoanSuDung + this.editCache[id].data.dtoanDaGiao;
-    // this.editCache[id].data.dieuChinhDtoan = this.editCache[id].data.thanhTienTh - this.editCache[id].data.tongCongDtoan;
-
     this.editCache[id].data.sluongTsCong = sumNumber([this.editCache[id].data.sluongTsDenTd, this.editCache[id].data.sluongTsDaNhan, this.editCache[id].data.sluongTsDaPd]);
-
     this.editCache[id].data.dToanDnghiThanhTien = mulNumber(this.editCache[id].data.dToanDnghiSl, this.editCache[id].data.dToanDnghiMucGia);
-
     this.editCache[id].data.dToanKpCong = sumNumber([this.editCache[id].data.dToanKpNamTruoc, this.editCache[id].data.dToanKpDaGiao]);
-
     this.editCache[id].data.dToanDieuChinh = this.editCache[id].data.dToanDnghiThanhTien - this.editCache[id].data.dToanKpCong;
 
   };

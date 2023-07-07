@@ -484,10 +484,20 @@ export class AddBaoCaoComponent implements OnInit {
           const data1X = this.baoCao.lstCtiets.find(e => e.maBieuMau == 'pl01X');
           const data2 = this.baoCao.lstCtiets.find(e => e.maBieuMau == 'pl02');
           const data3 = this.baoCao.lstCtiets.find(e => e.maBieuMau == 'pl03');
+          const data4 = this.baoCao.lstCtiets.find(e => e.maBieuMau == 'pl04');
+          const data5 = this.baoCao.lstCtiets.find(e => e.maBieuMau == 'pl05');
+          const data6 = this.baoCao.lstCtiets.find(e => e.maBieuMau == 'pl06');
+          const data7 = this.baoCao.lstCtiets.find(e => e.maBieuMau == 'pl07');
+          const data8 = this.baoCao.lstCtiets.find(e => e.maBieuMau == 'pl08');
           let tongPl1N = 0
           let tongPl1X = 0
           let tongPl2 = 0
           let tongPl3 = 0
+          let tongPl4 = 0
+          let tongPl5 = 0
+          let tongPl6 = 0
+          let tongPl7 = 0
+          let tongPl8 = 0
 
           if (data1N && data1N?.trangThai != '3') {
             const dataPL1N = this.baoCao.lstCtiets.find(e => e.maBieuMau == 'pl01N')?.lstCtietBcaos;
@@ -548,15 +558,105 @@ export class AddBaoCaoComponent implements OnInit {
             }
           }
 
-          let soTranChi = tongPl1N + tongPl1X + tongPl3 + tongPl2
+          if (data4 && data4?.trangThai != '3') {
+            const dataPL4 = this.baoCao.lstCtiets.find(e => e.maBieuMau == 'pl04')?.lstCtietBcaos;
+            let lstPl4 = []
+            dataPL4?.forEach(i => {
+              if (i.stt.length == 3) {
+                lstPl4.push(i)
+              }
+            })
+            if (lstPl4.length > 0) {
+              lstPl4?.forEach(i => {
+                tongPl4 += i.dToanNam ? i.dToanNam : 0
+              })
+            }
+          }
+
+          if (data5 && data5?.trangThai != '3') {
+            const dataPL5 = this.baoCao.lstCtiets.find(e => e.maBieuMau == 'pl05')?.lstCtietBcaos;
+            let lstPl5 = []
+            dataPL5?.forEach(i => {
+              if (i.stt.length == 3) {
+                lstPl5.push(i)
+              }
+            })
+            if (lstPl5.length > 0) {
+              lstPl5?.forEach(i => {
+                tongPl5 += i.ttien ? i.ttien : 0
+              })
+            }
+          }
+
+          if (data6 && data6?.trangThai != '3') {
+            const dataPL6 = this.baoCao.lstCtiets.find(e => e.maBieuMau == 'pl06')?.lstCtietBcaos;
+            let lstPl6 = []
+            dataPL6?.forEach(i => {
+              if (i.stt.length == 3) {
+                lstPl6.push(i)
+              }
+            })
+            if (lstPl6.length > 0) {
+              lstPl6?.forEach(i => {
+                tongPl6 += i.ttien ? i.ttien : 0
+              })
+            }
+          }
+
+          if (data7 && data7?.trangThai != '3') {
+            const dataPL7 = this.baoCao.lstCtiets.find(e => e.maBieuMau == 'pl07')?.lstCtietBcaos;
+            let lstPl7 = []
+            dataPL7?.forEach(i => {
+              if (i.stt.length == 3) {
+                lstPl7.push(i)
+              }
+            })
+            if (lstPl7.length > 0) {
+              lstPl7?.forEach(i => {
+                tongPl7 += i.TongNCDtoanKp ? i.TongNCDtoanKp : 0
+              })
+            }
+          }
+
+          if (data8 && data8?.trangThai != '3') {
+            const dataPL8 = this.baoCao.lstCtiets.find(e => e.maBieuMau == 'pl08')?.lstCtietBcaos;
+            let lstPl8 = []
+            dataPL8?.forEach(i => {
+              if (i.stt.length == 3) {
+                lstPl8.push(i)
+              }
+            })
+            if (lstPl8.length > 0) {
+              lstPl8?.forEach(i => {
+                tongPl8 += i.tongNcauDtoan ? i.tongNcauDtoan : 0
+              })
+            }
+          }
+
+          let soTranChi = tongPl1N + tongPl1X + tongPl3 + tongPl2 + tongPl4
           const lstCtietPlTong = this.baoCao.lstCtiets.find(item => item.maBieuMau == "pl09")
           let tongCong = lstCtietPlTong?.lstCtietBcaos.find(itm => itm.stt == "0.1.2.2")?.tongCong
           let tongCong1N = lstCtietPlTong?.lstCtietBcaos.find(itm => itm.stt == "0.1.2.2.1")?.tongCong
           let tongCong1X = lstCtietPlTong?.lstCtietBcaos.find(itm => itm.stt == "0.1.2.2.2")?.tongCong
           let tongCong2 = lstCtietPlTong?.lstCtietBcaos.find(itm => itm.stt == "0.1.2.2.3")?.tongCong
           let tongCong3 = lstCtietPlTong?.lstCtietBcaos.find(itm => itm.stt == "0.1.2.2.4")?.tongCong
+          let tongCong4 = lstCtietPlTong?.lstCtietBcaos.find(itm => itm.stt == "0.1.2.1")?.tongCong
+          let tongCong5 = lstCtietPlTong?.lstCtietBcaos.find(itm => itm.stt == "0.1.2.4.1")?.tongCong
+          let tongCong6 = lstCtietPlTong?.lstCtietBcaos.find(itm => itm.stt == "0.2.1.1")?.tongCong
+          let tongCong7 = lstCtietPlTong?.lstCtietBcaos.find(itm => itm.stt == "0.3.1")?.tongCong
+          let tongCong8 = lstCtietPlTong?.lstCtietBcaos.find(itm => itm.stt == "0.1.2.4.1")?.tongCong
 
-          if ((data1N || data1X || data2 || data3) && lstCtietPlTong?.trangThai != '3') {
+          if (
+            (
+              data1N ||
+              data1X ||
+              data2 ||
+              data3 ||
+              data4
+            )
+            &&
+            lstCtietPlTong?.trangThai != '3'
+          ) {
             dataInfo.extraData.push({
               dtoanGiao: tongCong,
               id: uuid.v4() + "FE",
@@ -657,6 +757,107 @@ export class AddBaoCaoComponent implements OnInit {
               ],
               maNdung: "0.1.2.2.1",
               tongCong: tongPl2
+            })
+          }
+
+          if (data4 && data4?.trangThai != '3') {
+            dataInfo.extraData.push({
+              dtoanGiao: tongCong4,
+              id: uuid.v4() + "FE",
+              stt: "0.1.2.1",
+              loaiPa: null,
+              nguonKhac: null,
+              nguonNsnn: null,
+              panDtCtietId: null,
+              lstCtietDvis: [
+                {
+                  id: uuid.v4() + "FE",
+                  maDviNhan: this.baoCao.maDvi,
+                  soTranChi: tongPl4
+                }
+              ],
+              maNdung: "0.1.2.1",
+              tongCong: tongPl4
+            })
+          }
+          if (data5 && data5?.trangThai != '3') {
+            dataInfo.extraData.push({
+              dtoanGiao: tongCong5,
+              id: uuid.v4() + "FE",
+              stt: "0.1.2.4.1",
+              loaiPa: null,
+              nguonKhac: null,
+              nguonNsnn: null,
+              panDtCtietId: null,
+              lstCtietDvis: [
+                {
+                  id: uuid.v4() + "FE",
+                  maDviNhan: this.baoCao.maDvi,
+                  soTranChi: tongPl5
+                }
+              ],
+              maNdung: "0.1.2.4.1",
+              tongCong: tongPl5
+            })
+          }
+          if (data6 && data6?.trangThai != '3') {
+            dataInfo.extraData.push({
+              dtoanGiao: tongCong6,
+              id: uuid.v4() + "FE",
+              stt: "0.2.1.1",
+              loaiPa: null,
+              nguonKhac: null,
+              nguonNsnn: null,
+              panDtCtietId: null,
+              lstCtietDvis: [
+                {
+                  id: uuid.v4() + "FE",
+                  maDviNhan: this.baoCao.maDvi,
+                  soTranChi: tongPl6
+                }
+              ],
+              maNdung: "0.2.1.1",
+              tongCong: tongPl6
+            })
+          }
+          if (data7 && data7?.trangThai != '3') {
+            dataInfo.extraData.push({
+              dtoanGiao: tongCong7,
+              id: uuid.v4() + "FE",
+              stt: "0.3.1",
+              loaiPa: null,
+              nguonKhac: null,
+              nguonNsnn: null,
+              panDtCtietId: null,
+              lstCtietDvis: [
+                {
+                  id: uuid.v4() + "FE",
+                  maDviNhan: this.baoCao.maDvi,
+                  soTranChi: tongPl7
+                }
+              ],
+              maNdung: "0.3.1",
+              tongCong: tongPl7
+            })
+          }
+          if (data8 && data8?.trangThai != '3') {
+            dataInfo.extraData.push({
+              dtoanGiao: tongCong8,
+              id: uuid.v4() + "FE",
+              stt: "0.3.1",
+              loaiPa: null,
+              nguonKhac: null,
+              nguonNsnn: null,
+              panDtCtietId: null,
+              lstCtietDvis: [
+                {
+                  id: uuid.v4() + "FE",
+                  maDviNhan: this.baoCao.maDvi,
+                  soTranChi: tongPl8
+                }
+              ],
+              maNdung: "0.3.1",
+              tongCong: tongPl8
             })
           }
         }

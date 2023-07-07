@@ -170,8 +170,6 @@ export class PhuLuc11Component implements OnInit {
 
     this.updateEditCache();
     this.getStatusButton();
-    console.log(this.lstCtietBcao);
-
     this.spinner.hide();
   };
 
@@ -231,7 +229,6 @@ export class PhuLuc11Component implements OnInit {
   };
 
   async save(trangThai: string, lyDoTuChoi: string) {
-    console.log(this.lstCtietBcao);
     let checkSaveEdit;
     //check xem tat ca cac dong du lieu da luu chua?
     //chua luu thi bao loi, luu roi thi cho di
