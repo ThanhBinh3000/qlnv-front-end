@@ -108,8 +108,12 @@ export class DanhSachBienBanLayMau extends Base2Component implements OnInit {
             console.log("error", error)
         }
     }
-    clearFilter() {
+    resetForm() {
         this.formData.reset();
+        this.formData.patchValue({ loaiDc: this.loaiDc, isVatTu: this.isVatTu, thayDoiThuKho: this.thayDoiThuKho, type: this.type })
+    }
+    clearFilter() {
+        this.resetForm();
         this.timKiem();
     }
     redirectDetail(id: number, b: boolean) {
