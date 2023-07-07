@@ -100,9 +100,12 @@ export class HoSoKyThuatXuatDieuChuyenComponent extends Base2Component implement
     }
     this.search()
   }
-
-  clearForm() {
+  resetForm() {
     this.formData.reset();
+    this.formData.patchValue({ loaiDc: this.loaiDc, isVatTu: this.isVatTu, thayDoiThuKho: this.thayDoiThuKho, type: this.type })
+  }
+  clearForm() {
+    this.resetForm();
     this.timKiem()
   }
   async getListDiemKho(maDvi) {
