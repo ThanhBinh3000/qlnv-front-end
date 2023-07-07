@@ -29,10 +29,10 @@
       <app-ke-hoach-xuat-hang-cua-cuc></app-ke-hoach-xuat-hang-cua-cuc>
     </ng-container>
     <ng-container *ngIf="tabSelected == 3">
-      <app-tong-hop-ke-hoach-xuat-hang></app-tong-hop-ke-hoach-xuat-hang>
+      <app-tong-hop-ke-hoach-xuat-hang (tabFocus)="receivedTab($event)"></app-tong-hop-ke-hoach-xuat-hang>
     </ng-container>
     <ng-container *ngIf="tabSelected == 4">
-      <app-ke-hoach-xuat-hang-cua-tong-cuc></app-ke-hoach-xuat-hang-cua-tong-cuc>
+      <app-ke-hoach-xuat-hang-cua-tong-cuc (tabFocus)="receivedTab($event)"></app-ke-hoach-xuat-hang-cua-tong-cuc>
     </ng-container>
   </div>
 </div>

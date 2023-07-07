@@ -33,7 +33,6 @@ import {DialogTuChoiComponent} from "../../../../../../../components/dialog/dial
   styleUrls: ['./thong-tin-ke-hoach-xuat-hang-cua-cuc.component.scss']
 })
 export class ThongTinKeHoachXuatHangCuaCucComponent extends Base2Component implements OnInit {
-
   @Input('isViewDetail') isViewDetail: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
@@ -79,6 +78,7 @@ export class ThongTinKeHoachXuatHangCuaCucComponent extends Base2Component imple
       thoiGianDuKienXuatTu: [],
       thoiGianDuKienXuatDen: [],
       moTa: [],
+      loai : ["00"],
       capDvi: [this.userInfo.CAP_DVI],
       idTongHopDs: [],
       lyDoTuChoi: [],

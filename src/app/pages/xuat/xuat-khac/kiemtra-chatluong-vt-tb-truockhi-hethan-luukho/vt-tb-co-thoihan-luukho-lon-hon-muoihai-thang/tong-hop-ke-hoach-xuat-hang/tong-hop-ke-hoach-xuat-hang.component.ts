@@ -1,7 +1,8 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {Base2Component} from "../../../../../../components/base2/base2.component";
 import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../../../services/storage.service";
+import {chain, cloneDeep, isEmpty} from "lodash";
 import {NzNotificationService} from "ng-zorro-antd/notification";
 import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
@@ -15,6 +16,7 @@ import {MESSAGE} from "../../../../../../constants/message";
 import {
   TongHopKeHoachXuatHangService
 } from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/TongHopKeHoachXuatHang.service";
+import {DataService} from "../../../../../../services/data.service";
 
 @Component({
   selector: 'app-tong-hop-ke-hoach-xuat-hang',
@@ -26,18 +28,24 @@ export class TongHopKeHoachXuatHangComponent extends Base2Component implements O
   isDetail: boolean = false;
   selectedId: number;
   isView: boolean = false;
+  TONG_HOP: string = "01";
+  isTaoQdTongCuc: boolean = false;
+  dataTongHop: any = {};
+  @Output() tabFocus = new EventEmitter<object>();
+
   constructor(httpClient: HttpClient,
               storageService: StorageService,
               notification: NzNotificationService,
               spinner: NgxSpinnerService,
               modal: NzModalService,
+              private dataService: DataService,
               private donviService: DonviService,
               private danhMucService: DanhMucService,
               private tongHopKeHoachXuatHangService: TongHopKeHoachXuatHangService) {
     super(httpClient, storageService, notification, spinner, modal, tongHopKeHoachXuatHangService);
     this.formData = this.fb.group({
       namKeHoach: [],
-      loai: [LOAI.TONG_HOP],
+      loai: [this.TONG_HOP],
       thoiGianThTu: [],
       thoiGianThDen: [],
     })
@@ -79,9 +87,19 @@ export class TongHopKeHoachXuatHangComponent extends Base2Component implements O
     this.isDetail = true;
     this.isView = isView ?? false;
   }
-}
 
-export enum LOAI {
-  KE_HOACH = "00",
-  TONG_HOP = "01",
+  emitTab(tab) {
+    this.tabFocus.emit(tab);
+  }
+
+  taoKeHoachXuatHangTongCuc(data) {
+    this.isTaoQdTongCuc = true;
+    const dataSend = {
+      tab: 4,
+      dataTongHop: data,
+      isTaoQdTongCuc: true
+    }
+    this.dataService.changeData(dataSend);
+    this.emitTab(4);
+  }
 }
