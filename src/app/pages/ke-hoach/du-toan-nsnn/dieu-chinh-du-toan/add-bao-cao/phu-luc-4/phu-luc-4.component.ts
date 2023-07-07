@@ -9,11 +9,9 @@ import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.service';
 import { DieuChinhService } from 'src/app/services/quan-ly-von-phi/dieuChinhDuToan.service';
-import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { addChild, addHead, addParent, deleteRow, displayNumber, exchangeMoney, getHead, getName, sortByIndex, sortWithoutIndex, sumNumber } from 'src/app/Utility/func';
 import { AMOUNT, DON_VI_TIEN, LA_MA, MONEY_LIMIT } from 'src/app/Utility/utils';
-import * as uuid from "uuid";
 export class ItemData {
   level: any;
   checked: boolean;
@@ -354,14 +352,7 @@ export class PhuLuc4Component implements OnInit {
         stt: data.stt,
         noiDung: data.noiDung,
         level: data.level,
-        // ttienTd: data.ttienTd,
         maNoiDung: data.maNoiDung,
-        // sluongNamDtoan:data.sluongNamDtoan,
-        // ttienNamDtoan: data.ttienNamDtoan,
-        // thienNamTruoc: data.thienNamTruoc,
-        // dtoanNamHtai: data.dtoanNamHtai,
-        // uocNamHtai: data.uocNamHtai,
-        // dmucNamDtoan: data.dmucNamDtoan,
       }
       this.lstCtietBcao.forEach(item => {
         if (this.getHead(item.stt) == stt) {
@@ -376,7 +367,6 @@ export class PhuLuc4Component implements OnInit {
       })
       stt = this.getHead(stt);
     }
-    // this.getTotal();
     this.tinhTong();
   };
 
@@ -414,8 +404,6 @@ export class PhuLuc4Component implements OnInit {
   };
 
   changeModel(id: string): void {
-    // this.editCache[id].data.tongNcauDtoanN = this.editCache[id].data.tdiemBcaoDtoan + this.editCache[id].data.dkienThienDtoan + this.editCache[id].data.dtoanThieuNtruoc;
-    // // this.editCache[id].data.dtoanDchinh = Number((this.editCache[id].data.ncauChiN1 / this.editCache[id].data.uocThienN).toFixed(3));
     this.editCache[id].data.khoachSauDchinh = sumNumber([this.editCache[id].data.keHoachVon, this.editCache[id].data.dtoanDchinhDnghi]);
     this.editCache[id].data.dtoanDchinhDnghiLanNay = Number(this.editCache[id].data.khoachSauDchinh) - Number(this.editCache[id].data.dtoanDaGiaoLke);
   };

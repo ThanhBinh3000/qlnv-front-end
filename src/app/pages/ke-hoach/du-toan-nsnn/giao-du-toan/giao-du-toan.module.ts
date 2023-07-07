@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { AppComponent } from 'src/app/app.component';
 import { ComponentsModule } from 'src/app/components/components.module';
 import { DirectivesModule } from 'src/app/directives/directives.module';
 import { AddBaoCaoModule } from './add-bao-cao/add-bao-cao.module';
@@ -11,6 +12,7 @@ import { DialogTaoMoiComponent } from './dialog-tao-moi/dialog-tao-moi.component
 import { DialogThemKhoanMucComponent } from './dialog-them-khoan-muc/dialog-them-khoan-muc.component';
 import { DialogThemThongTinQuyetToanComponent } from './dialog-them-thong-tin-quyet-toan/dialog-them-thong-tin-quyet-toan.component';
 import { DialogTongHopComponent } from './dialog-tong-hop/dialog-tong-hop.component';
+import { DialogSelectTaiSanComponent } from './dialogSelectTaiSan/dialogSelectTaiSan.component';
 import { GiaoDuToanComponent } from './giao-du-toan.component';
 import { PhanBoDuToanComponent } from './phan-bo-du-toan/phan-bo-du-toan.component';
 import { QuyetDinhBoTaiChinhComponent } from './quyet-dinh-bo-tai-chinh/quyet-dinh-bo-tai-chinh.component';
@@ -18,8 +20,6 @@ import { TaoMoiGiaoDieuChinhDuToanComponent } from './tao-moi-giao-dieu-chinh-du
 import { TaoMoiGiaoDuToanComponent } from './tao-moi-giao-du-toan/tao-moi-giao-du-toan.component';
 import { TaoMoiQuyetDinhBtcComponent } from './tao-moi-quyet-dinh-btc/tao-moi-quyet-dinh-btc.component';
 import { TongHopBaoCaoCapDuoiComponent } from './tong-hop-bao-cao-cap-duoi/tong-hop-bao-cao-cap-duoi.component';
-import { DialogSelectTaiSanComponent } from './dialogSelectTaiSan/dialogSelectTaiSan.component';
-import { AppComponent } from 'src/app/app.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +37,8 @@ import { AppComponent } from 'src/app/app.component';
     DialogTongHopComponent,
     DanhSachBaoCaoComponent,
     DialogThemKhoanMucComponent,
-    DialogSelectTaiSanComponent
+    DialogSelectTaiSanComponent,
+
   ],
   imports: [
     CommonModule,

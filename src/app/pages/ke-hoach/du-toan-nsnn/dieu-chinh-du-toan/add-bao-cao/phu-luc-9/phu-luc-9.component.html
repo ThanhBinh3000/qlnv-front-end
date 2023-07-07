@@ -49,9 +49,6 @@
             <th rowSpan="4">Các khoản lương <br> khác <br> theo chế độ</th>
             <th colSpan="4">Bao gồm</th>
             <th colSpan="3">Dự toán, kinh phí <br> được sử dụng trong năm</th>
-            <!-- <th rowSpan="4">Dự toán đã thực hiện đến thời điểm báo cáo</th>
-            <th rowSpan="4">Dự toán ước thực hiện đến cuối năm</th> -->
-            <!-- <th rowSpan="4">Tổng nhu cầu dự toán trong năm</th> -->
             <th rowSpan="4">Dự toán điều <br> chỉnh <br> (+ tăng) (- giảm)</th>
             <th rowSpan="4" *ngIf="viewRecommendedValue">Dự toán Vụ TVQT <br> đề nghị <br> (+ tăng) (- giảm)</th>
             <th rowSpan="4" *ngIf="!status || editRecommendedValue"></th>
@@ -65,7 +62,7 @@
             <th rowSpan="3">Các khoản <br> đóng góp theo <br> lương của <br> biên chế thực tế</th>
             <th rowSpan="3">Lương CBCC <br> chưa tuyển dụng</th>
             <th rowSpan="3">Lương điều <br> hòa chung</th>
-            <th rowSpan="3">Dự toán năm <br> trước chuyển sang <br> được phép <br> sử dụng</th>
+            <th rowSpan="3">Các khoản lương <br> khác theo chế độ</th>
             <th rowSpan="3">Dự toán, kinh phí <br> đã giao <br> trong năm</th>
             <th rowSpan="3">Cộng</th>
           </tr>
@@ -599,11 +596,11 @@
         </button>
         <button type="button" class="btn btn-main" (click)="save('1', null)" [hidden]="statusBtnOk">
           <i nz-icon nzType="check" nzTheme="outline"></i>
-          <span>OK</span>
+          <span>Chấp nhận</span>
         </button>
-        <button type="button" class="btn btn-main" (click)="tuChoi('0')" [hidden]="statusBtnOk">
+        <button type="button" class="btn btn-do" (click)="tuChoi('0')" [hidden]="statusBtnOk">
           <i nz-icon nzType="close" nzTheme="outline"></i>
-          <span>Not OK</span>
+          <span>Không chấp nhận</span>
         </button>
       </div>
       <div class="canphai">

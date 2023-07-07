@@ -131,7 +131,6 @@ export class PhuLuc5Component implements OnInit {
       })
     })
     await this.getDinhMucPL2N();
-    // await this.getDinhMucPL2X();
 
     this.dsDinhMuc = this.dsDinhMucN
     if (this.dataInfo?.isSynthetic && this.formDetail.trangThai == "3") {
@@ -579,7 +578,6 @@ export class PhuLuc5Component implements OnInit {
         stt: data.stt,
         noiDung: data.noiDung,
         level: data.level,
-        // ttienTd: data.ttienTd,
         maNoiDung: data.maNoiDung,
         dviTinh: data.dviTinh,
         sluongDuocGiao: data.sluongDuocGiao,
@@ -587,11 +585,6 @@ export class PhuLuc5Component implements OnInit {
         soluongUocThien: data.soluongUocThien,
         tongCong: data.tongCong,
         dinhMuc: data.dinhMuc,
-        // thanhTien: data.thanhTien,
-        // dtoanDaGiaoLke: data.dtoanDaGiaoLke,
-        // dtoanDchinh: data.dtoanDchinh,
-        // dtoanVuTvqtDnghi: data.dtoanVuTvqtDnghi,
-        // kphiThieu: data.kphiThieu,
         maDmuc: data.maDmuc,
       }
       this.lstCtietBcao.forEach(item => {
