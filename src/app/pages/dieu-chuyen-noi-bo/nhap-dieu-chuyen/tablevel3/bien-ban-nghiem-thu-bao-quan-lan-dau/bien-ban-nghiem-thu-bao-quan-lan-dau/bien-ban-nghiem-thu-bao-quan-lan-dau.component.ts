@@ -136,8 +136,8 @@ export class BienBanNghiemThuBaoQuanLanDauComponent extends Base2Component imple
         .map(element => {
           return {
             ...element,
-            maKhoXuat: `${element.thoiHanDieuChuyen}${element.maloKhoXuat}${element.maNganKhoXuat}`,
-            maloNganKhoNhan: `${element.maloKhoNhan}${element.maNganKhoNhan}`
+            maKhoXuat: `${element.thoiHanDieuChuyen}${element.maLoKhoXuat}${element.maNganKhoXuat}`,
+            maloNganKhoNhan: `${element.maLoKhoNhan}${element.maNganKhoNhan}`
           }
         });
       this.dataTableView = this.buildTableView(data)
