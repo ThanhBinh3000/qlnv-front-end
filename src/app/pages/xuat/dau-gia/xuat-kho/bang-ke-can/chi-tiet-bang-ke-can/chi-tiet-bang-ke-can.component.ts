@@ -373,7 +373,6 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
     }
   }
 
-
   changeDd(event) {
     if (this.flagInit && event && event !== this.formData.value.maDiemKho) {
       this.formData.patchValue({
@@ -414,8 +413,6 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
       }
     }
   }
-
-
 
   pheDuyet(isPheDuyet) {
     let trangThai = ''

@@ -85,133 +85,27 @@
         <tr>
           <th></th>
           <th class="text-center">STT</th>
-          <th>Số QĐ giao nhiệm vụ XH</th>
+          <th>Số QĐ giao NV XH</th>
           <th>Năm KH</th>
           <th>Thời hạn XH trước ngày</th>
           <th>Số BB tịnh kho</th>
           <th>Ngày bắt đầu xuất</th>
           <th>Ngày kết thúc xuất</th>
           <th>Số phiếu XK</th>
-          <th>Ngày xuất kho</th>
           <th>Số bảng kê</th>
+          <th>Ngày xuất kho</th>
           <th>Điểm Kho</th>
           <th>Lô kho</th>
           <th>Trạng thái</th>
           <th>Hành động</th>
         </tr>
-        <!-- <tr class="search-table">
-             <th></th>
-             <th></th>
-             <th>
-                 <nz-input-group>
-                     <input type="text" nz-input placeholder="Tìm kiếm"
-                         [(ngModel)]="filterTable.soQdGiaoNvXh"
-                         (input)="filterInTable('soQdGiaoNvXh',filterTable.soQdGiaoNvXh)" size="small" />
-                 </nz-input-group>
-             </th>
-             <th>
-                 <nz-input-group>
-                     <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.nam"
-                         (input)="filterInTable('nam',filterTable.nam)" size="small" />
-                 </nz-input-group>
-
-             </th>
-             <th>
-                 <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                     <input type="text" nz-input placeholder="Tìm kiếm"
-                         [(ngModel)]="filterTable.ngayQdGiaoNvXh"
-                         (input)="filterInTable('ngayQdGiaoNvXh',filterTable.ngayQdGiaoNvXh)" size="small" />
-                 </nz-input-group>
-                 <ng-template #suffixTemplateInfo>
-                     <i nz-icon nzType="calendar"></i>
-                 </ng-template>
-             </th>
-             <th>
-                 <nz-input-group>
-                     <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soBbTinhKho"
-                         (input)="filterInTable('soBbTinhKho',filterTable.soBbTinhKho)" size="small" />
-                 </nz-input-group>
-             </th>
-             <th>
-                 <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                     <input type="text" nz-input placeholder="Tìm kiếm"
-                         [(ngModel)]="filterTable.ngayBatDauXuatTu"
-                         (input)="filterInTable('ngayBatDauXuatTu',filterTable.ngayBatDauXuatTu)"
-                         size="small" />
-                 </nz-input-group>
-                 <ng-template #suffixTemplateInfo>
-                     <i nz-icon nzType="calendar"></i>
-                 </ng-template>
-             </th>
-             <th>
-                 <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                     <input type="text" nz-input placeholder="Tìm kiếm"
-                         [(ngModel)]="filterTable.ngayKetThucXuat"
-                         (input)="filterInTable('ngayKetThucXuat',filterTable.ngayKetThucXuat)"
-                         size="small" />
-                 </nz-input-group>
-                 <ng-template #suffixTemplateInfo>
-                     <i nz-icon nzType="calendar"></i>
-                 </ng-template>
-             </th>
-             <th>
-                 <nz-input-group>
-                     <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenDiemKho"
-                         (input)="filterInTable('tenDiemKho',filterTable.tenDiemKho)" size="small" />
-                 </nz-input-group>
-
-             </th>
-             <th>
-                 <nz-input-group>
-                     <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenLoKho"
-                         (input)="filterInTable('tenLoKho',filterTable.tenLoKho)" size="small" />
-                 </nz-input-group>
-
-             </th>
-
-             <th>
-                 <nz-input-group>
-                     <input type="text" nz-input placeholder="Tìm kiếm"
-                         [(ngModel)]="filterTable.soPhieuXuatKho"
-                         (input)="filterInTable('soPhieuXuatKho',filterTable.soPhieuXuatKho)" size="small" />
-                 </nz-input-group>
-
-             </th>
-             <th>
-                 <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                     <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayXuatKho"
-                         (input)="filterInTable('ngayXuatKho',filterTable.ngayXuatKho)" size="small" />
-                 </nz-input-group>
-                 <ng-template #suffixTemplateInfo>
-                     <i nz-icon nzType="calendar"></i>
-                 </ng-template>
-             </th>
-             <th>
-                 <nz-input-group>
-                     <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soBkCanHang"
-                         (input)="filterInTable('soBkCanHang',filterTable.soBkCanHang)" size="small" />
-                 </nz-input-group>
-
-             </th>
-             <th>
-                 <nz-input-group>
-                     <input type="text" nz-input placeholder="Tìm kiếm"
-                         [(ngModel)]="filterTable.tenTrangThai"
-                         (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" size="small" />
-                 </nz-input-group>
-
-             </th>
-             <th></th>
-         </tr>-->
         </thead>
         <tbody>
-
         <ng-container *ngFor="let item of basicTable.data, let i = index;">
-          <tr>
-            <td (nzExpandChange)="onExpandStringChange(item.idVirtual, $event)"
-                [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true"
-                style="width: 35px"></td>
+          <tr class="level-1">
             <td class="bold">{{i + 1}}</td>
+            <td (nzExpandChange)="onExpandStringChange(item.idVirtual, $event)"
+                [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true" style="width: 35px"></td>
             <td class="bold">{{ item.soQdGiaoNvXh }}</td>
             <td class="bold">{{ item.nam }}</td>
             <td class="bold">{{ item.ngayQdGiaoNvXh | date: 'dd/MM/YYYY' }}</td>
@@ -228,7 +122,7 @@
           </tr>
           <ng-container *ngIf="expandSetString.has(item.idVirtual)">
             <ng-container *ngFor="let lv1 of item.childData,let i1=index">
-              <tr>
+              <tr class="level-2">
                 <td></td>
                 <td></td>
                 <td></td>
@@ -270,7 +164,7 @@
               <ng-container *ngIf="expandSetString.has(item.idVirtual)">
                 <ng-container *ngFor="let lv3 of lv1.childData,let i2=index">
                   <ng-container *ngIf="lv3.listPhieuXuatKho && lv3.listPhieuXuatKho.length > 0">
-                    <tr *ngFor="let lv2 of lv3.listPhieuXuatKho,let i2=index">
+                    <tr *ngFor="let lv2 of lv3.listPhieuXuatKho,let i2=index" class="level-3">
                       <td></td>
                       <td></td>
                       <td></td>
@@ -279,13 +173,19 @@
                       <td></td>
                       <td></td>
                       <td></td>
-                      <td><a *ngIf="lv2.soPhieuXuatKho" nz-button nzType="link"
-                             (click)="openPhieuXkModal(lv2.idPhieuXuatKho)">{{lv2.soPhieuXuatKho}}</a></td>
-                      <td>{{lv2.ngayXuatKho}}</td>
-                      <td><a *ngIf="lv2.soPhieuXuatKho" nz-button nzType="link"
-                             (click)="openBangKeModal(lv2.idBkCanHang)">{{lv2.soBkCanHang}}</a></td>
+                      <td>
+                        <a *ngIf="lv2.soPhieuXuatKho && lv2.idPhieuXuatKho" nz-button nzType="link"
+                           (click)="openPhieuXkModal(lv2.idPhieuXuatKho)">{{
+                          lv2.soPhieuXuatKho}}</a>
+                      </td>
+                      <td>
+                        <a *ngIf="lv2.soBkCanHang && lv2.idBkCanHang" nz-button nzType="link"
+                           (click)="openBangKeModal(lv2.idBkCanHang)">{{
+                          lv2.soBkCanHang}}</a>
+                      </td>
+                      <td>{{lv2.ngayXuatKho | date: 'dd/MM/YYYY' }}</td>
                       <td>{{lv3.tenDiemKho}}</td>
-                      <td>{{ (lv3.tenLoKho ? lv3.tenLoKho + '-' : '') + lv3.tenNganKho }}</td>
+                      <td>{{ (lv3.tenLoKho ? lv3.tenLoKho + ' - ' : '') + lv3.tenNganKho }}</td>
                       <td></td>
                       <td class="text-left">
                       </td>
@@ -324,6 +224,7 @@
                                       (showListEvent)="showList()">
   </app-bdg-them-moi-bien-ban-tinh-kho>
 </div>
+<!-- xem -->
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openPhieuXk" (nzOnCancel)="closePhieuXkModal()">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
     <app-bdg-them-moi-phieu-xuat-kho [idInput]="idPhieuXk" [loaiVthh]="loaiVthh" [isView]="true">
