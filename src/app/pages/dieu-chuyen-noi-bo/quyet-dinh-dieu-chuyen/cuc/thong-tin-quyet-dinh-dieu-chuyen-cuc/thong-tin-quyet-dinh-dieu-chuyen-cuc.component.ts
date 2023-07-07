@@ -1032,17 +1032,36 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
 
     this.dataTableView = this.buildTableView(this.danhSachKeHoach, "maDvi")
 
-    console.log('xoaDiemKhoNhanCC', row, dsDelete, this.dataTableView)
+
 
     if (this.idInput) {
       const qDinh = this.formData.value.danhSachQuyetDinh.find(item => item.keHoachDcHdrId === row.hdrId)
-      const dsKH = qDinh.danhSachKeHoach.filter(item => item.maDiemKhoNhan !== row.maDiemKhoNhan)
+      const keHoach = qDinh.danhSachKeHoach.find(item => item.maDiemKhoNhan === row.maDiemKhoNhan)
+      let dsKH = qDinh.danhSachKeHoach.filter(item => item.maDiemKhoNhan !== row.maDiemKhoNhan)
+      dsKH.push({
+        ...keHoach,
+        tenDiemKhoNhan: "",
+        maDiemKhoNhan: "",
+        tenNhaKhoNhan: "",
+        maNhaKhoNhan: "",
+        tenNganKhoNhan: "",
+        maNganKhoNhan: "",
+        tenLoKhoNhan: "",
+        maLoKhoNhan: "",
+        tichLuongKd: "",
+        soLuongPhanBo: "",
+      })
       qDinh.danhSachKeHoach = dsKH
+
       const dsQuyetDinh = this.formData.value.danhSachQuyetDinh.filter(item => item.keHoachDcHdrId !== row.hdrId)
       dsQuyetDinh.push(qDinh)
       this.formData.patchValue({
         danhSachQuyetDinh: dsQuyetDinh
       })
+
+      console.log('xoaDiemKhoNhanCCqDinh', qDinh)
+      console.log('xoaDiemKhoNhanCCkeHoach', keHoach)
+      console.log('xoaDiemKhoNhanCC', dsQuyetDinh)
     }
   }
 
@@ -1173,13 +1192,27 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
 
     if (this.idInput) {
       const qDinh = this.formData.value.danhSachQuyetDinh.find(item => item.keHoachDcHdrId === row.hdrId)
-      const dsKH = row.maLoKhoNhan ? qDinh.danhSachKeHoach.filter(item => item.maLoKhoNhan !== row.maLoKhoNhan) : qDinh.danhSachKeHoach.filter(item => item.maNganKhoNhan !== row.maNganKhoNhan)
+      const keHoach = row.maLoKhoNhan ? qDinh.danhSachKeHoach.find(item => item.maLoKhoNhan === row.maLoKhoNhan) : qDinh.danhSachKeHoach.filter(item => item.maNganKhoNhan === row.maNganKhoNhan)
+      let dsKH = row.maLoKhoNhan ? qDinh.danhSachKeHoach.filter(item => item.maLoKhoNhan !== row.maLoKhoNhan) : qDinh.danhSachKeHoach.filter(item => item.maNganKhoNhan !== row.maNganKhoNhan)
+      dsKH.push({
+        ...keHoach,
+        tenNhaKhoNhan: "",
+        maNhaKhoNhan: "",
+        tenNganKhoNhan: "",
+        maNganKhoNhan: "",
+        tenLoKhoNhan: "",
+        maLoKhoNhan: "",
+        tichLuongKd: "",
+        soLuongPhanBo: "",
+      })
       qDinh.danhSachKeHoach = dsKH
       const dsQuyetDinh = this.formData.value.danhSachQuyetDinh.filter(item => item.keHoachDcHdrId !== row.hdrId)
       dsQuyetDinh.push(qDinh)
       this.formData.patchValue({
         danhSachQuyetDinh: dsQuyetDinh
       })
+
+      console.log('xoaLoKhoNhanCC', dsQuyetDinh)
     }
 
 
@@ -1219,7 +1252,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
     if (this.idInput) {
       body.id = this.idInput
     }
-
+    console.log('save', body)
     let data = await this.createUpdate(body);
     if (data) {
       this.idInput = data.id;

@@ -192,7 +192,7 @@ export class BienBanChuanBiKhoComponent extends Base2Component implements OnInit
           return {
             ...element,
             // maKho: `${element.thoiHanDieuChuyen}${element.tenDiemKho}`,
-            // maloNganKho: `${element.maloKho}${element.maNganKho}`
+            // maloNganKho: `${element.maLoKho}${element.maNganKho}`
           }
         });
       this.dataTableView = this.buildTableView(data)
