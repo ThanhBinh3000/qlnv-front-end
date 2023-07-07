@@ -103,22 +103,6 @@
           <th class="text-center">Nhập</th>
           <th class="text-center">Xuất</th>
         </tr>
-        <ng-container *ngFor="let item of dataTable , let i = index">
-          <tr class="level-2">
-            <td>{{i + 1}}</td>
-            <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-        </ng-container>
         </thead>
         <tbody>
         <ng-container *ngFor="let diemKho of dataTable , let i = index">
@@ -233,9 +217,9 @@
                             <td></td>
                             <td class="bg-parent2 font-weight-bold" [nzExpand]="expandSet.has(nam.idVirtual)"
                                 (nzExpandChange)="onExpandChange(soKho.idVirtual, $event)">{{soKho.ten}}</td>
-                            <td class="bg-parent2 font-weight-bold"></td>
-                            <td class="bg-parent2 font-weight-bold"></td>
-                            <td class="bg-parent2 font-weight-bold"></td>
+                            <td class="bg-parent2 font-weight-bold">555</td>
+                            <td class="bg-parent2 font-weight-bold">55</td>
+                            <td class="bg-parent2 font-weight-bold">555</td>
                             <td class="bg-parent2 font-weight-bold"></td>
                             <td class="bg-parent2 font-weight-bold"></td>
                             <td class="bg-parent2 font-weight-bold"></td>
@@ -266,9 +250,9 @@
                                 <td></td>
                                 <td class="bg-parent2 font-weight-bold" [nzExpand]="expandSet.has(soKho.idVirtual)"
                                     (nzExpandChange)="onExpandChange(theKho.idVirtual, $event)">{{theKho.ten}}</td>
-                                <td class="bg-parent2 font-weight-bold"></td>
-                                <td class="bg-parent2 font-weight-bold"></td>
-                                <td class="bg-parent2 font-weight-bold"></td>
+                                <td class="bg-parent2 font-weight-bold">444</td>
+                                <td class="bg-parent2 font-weight-bold">444</td>
+                                <td class="bg-parent2 font-weight-bold">444</td>
                                 <td class="bg-parent2 font-weight-bold"></td>
                                 <td class="bg-parent2 font-weight-bold"></td>
                                 <td class="bg-parent2 font-weight-bold"></td>
@@ -287,7 +271,7 @@
                               </tr>
                               <ng-container *ngIf="expandSet.has(theKho.idVirtual)">
                                 <ng-container *ngFor="let phieuNhapXuat of theKho.ctList, let y = index">
-                                  <tr [ngClass]="{'bg-selected': phieuNhapXuat.selected}" (click)="selectRow($event,theKho.ctList)">
+                                  <tr [ngClass]="{'bg-selected': phieuNhapXuat.selected}" (click)="selectRow(phieuNhapXuat,theKho.ctList)">
                                     <td></td>
                                     <td></td>
                                     <td></td>
@@ -295,9 +279,9 @@
                                     <td></td>
                                     <td></td>
                                     <td class="bg-parent2 font-weight-bold" >{{phieuNhapXuat.id}}</td>
-                                    <td class="bg-parent2 font-weight-bold"></td>
-                                    <td class="bg-parent2 font-weight-bold"></td>
-                                    <td class="bg-parent2 font-weight-bold"></td>
+                                    <td class="bg-parent2 font-weight-bold">123</td>
+                                    <td class="bg-parent2 font-weight-bold">123</td>
+                                    <td class="bg-parent2 font-weight-bold">123</td>
                                     <td class="bg-parent2 font-weight-bold"></td>
                                     <td class="bg-parent2 font-weight-bold"></td>
                                     <td class="bg-parent2 font-weight-bold"></td>

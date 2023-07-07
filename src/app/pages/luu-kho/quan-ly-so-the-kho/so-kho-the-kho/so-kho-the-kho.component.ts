@@ -152,16 +152,13 @@ export class SoKhoTheKhoComponent extends Base2Component implements OnInit {
                 v.idVirtual = uuidv4();
                 v.forEach(nganlo => {
                   nganlo.idVirtual = uuidv4();
-                  console.log(nganlo.children, 'nganlo')
                   if (nganlo.children && nganlo.children.length > 0) {
                     nganlo.children.forEach(nam => {
                       nam.idVirtual = uuidv4();
-                      console.log(nam.children, 'nam')
                       if (nam.children && nam.children.length > 0) {
                         nam.children.forEach(soKho => {
                           soKho.idVirtual = uuidv4();
-                          console.log(soKho.children, 'soKho')
-                          if (soKho.children && soKho.children.length > 0) {
+                          if (soKho.theKhoList && soKho.theKhoList.length > 0) {
                             soKho.theKhoList.forEach(theKho => {
                               theKho.idVirtual = uuidv4();
                             })
