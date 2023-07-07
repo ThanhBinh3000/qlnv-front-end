@@ -10,6 +10,7 @@ import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { DialogTaoMoiTyLeBaoHiemComponent } from '../dialog-tao-moi-ty-le-bao-hiem/dialog-tao-moi-ty-le-bao-hiem.component';
+import { Ltd } from '../lap-ke-hoach-va-tham-dinh-du-toan.constant';
 
 @Component({
     selector: 'app-danh-sach-he-so-bao-hiem',
@@ -60,12 +61,12 @@ export class DanhSachHeSoBaoHiemComponent implements OnInit {
         newDate.setMonth(newDate.getMonth() - 1);
         this.searchFilter.tuNgay = newDate;
         //check quyen va cac nut chuc nang
-        this.statusNewReport = this.userService.isAccessPermisson(Roles.LTD.ADD_COEFFCIENT_INSURANCE);
-        this.statusDelete = this.userService.isAccessPermisson(Roles.LTD.DELETE_COEFFCIENT_INSURANCE);
-        if (this.userService.isAccessPermisson(Roles.LTD.DUYET_COEFFCIENT_INSURANCE)) {
+        this.statusNewReport = this.userService.isAccessPermisson(Roles.LTD.ADD_COEF_INS);
+        this.statusDelete = this.userService.isAccessPermisson(Roles.LTD.DEL_COEF_INS);
+        if (this.userService.isAccessPermisson(Roles.LTD.PASS_COEF_INS)) {
             this.searchFilter.trangThai = Utils.TT_BC_2;
         } else {
-            if (this.userService.isAccessPermisson(Roles.LTD.PHE_DUYET_COEFFCIENT_INSURANCE)) {
+            if (this.userService.isAccessPermisson(Roles.LTD.APPROVE_COEF_INS)) {
                 this.searchFilter.trangThai = Utils.TT_BC_4;
             }
         }
@@ -135,12 +136,12 @@ export class DanhSachHeSoBaoHiemComponent implements OnInit {
 
     checkEditStatus(item: any) {
         return Status.check('saveWOHist', item.trangThai) &&
-            this.userService.isAccessPermisson(Roles.LTD.EDIT_COEFFCIENT_INSURANCE);
+            this.userService.isAccessPermisson(Roles.LTD.EDIT_COEF_INS);
     }
 
     checkDeleteStatus(item: any) {
         return Status.check('saveWOHist', item.trangThai) &&
-            this.userService.isAccessPermisson(Roles.LTD.DELETE_COEFFCIENT_INSURANCE);
+            this.userService.isAccessPermisson(Roles.LTD.DEL_COEF_INS);
     }
 
     //them moi bao cao
@@ -159,7 +160,7 @@ export class DanhSachHeSoBaoHiemComponent implements OnInit {
             if (res) {
                 const obj = {
                     baoCao: res,
-                    tabSelected: 'heso',
+                    tabSelected: Ltd.HE_SO_BAO_HIEM,
                 }
                 this.dataChange.emit(obj);
             }
@@ -170,7 +171,7 @@ export class DanhSachHeSoBaoHiemComponent implements OnInit {
     viewDetail(data: any) {
         const obj = {
             id: data.id,
-            tabSelected: 'heso',
+            tabSelected: Ltd.HE_SO_BAO_HIEM,
         }
         this.dataChange.emit(obj);
     }

@@ -5,12 +5,13 @@ import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { Status, Utils } from 'src/app/Utility/utils';
 import { MESSAGE } from 'src/app/constants/message';
-import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { BaoCaoThucHienDuToanChiService } from 'src/app/services/quan-ly-von-phi/baoCaoThucHienDuToanChi.service';
+import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { LBC_QUY_TRINH_THUC_HIEN_DU_TOAN_CHI, TRANG_THAI_GUI_DVCT, Utils } from 'src/app/Utility/utils';
+import { Dtc } from '../bao-cao-thuc-hien-du-toan-chi.constant';
 import { DialogTaoMoiComponent } from '../dialog-tao-moi/dialog-tao-moi.component';
 
 @Component({
@@ -20,11 +21,13 @@ import { DialogTaoMoiComponent } from '../dialog-tao-moi/dialog-tao-moi.componen
 })
 export class TongHopBaoCaoComponent implements OnInit {
     @Output() dataChange = new EventEmitter();
-
+    Status = Status;
+    Utils = Utils;
+    Dtc = Dtc;
     searchFilter = {
         ngayTaoTu: '',
         ngayTaoDen: '',
-        trangThais: ['9'],
+        trangThais: [Status.TT_09],
         maBcao: '',
         maLoaiBcao: '',
         namBcao: null,
@@ -41,9 +44,7 @@ export class TongHopBaoCaoComponent implements OnInit {
     };
 
     userInfo: any;
-    trangThais: any = TRANG_THAI_GUI_DVCT;
     trangThai!: string;
-    baoCaos: any = LBC_QUY_TRINH_THUC_HIEN_DU_TOAN_CHI;
     totalElements = 0;
     totalPages = 0;
     statusNewReport = true;
@@ -51,18 +52,11 @@ export class TongHopBaoCaoComponent implements OnInit {
     dataTableAll: any[] = [];
     donVis: any[] = [];
 
-    filterTable: any = {
-        soQd: '',
-        ngayKy: '',
-        namKeHoach: '',
-        trichYeu: '',
-        tenTrangThai: '',
-    };
     constructor(
         private spinner: NgxSpinnerService,
         private baoCaoThucHienDuToanChiService: BaoCaoThucHienDuToanChiService,
         private notification: NzNotificationService,
-        private danhMuc: DanhMucHDVService,
+        private quanLyVonPhiService: QuanLyVonPhiService,
         private modal: NzModalService,
         public userService: UserService,
         private datePipe: DatePipe,
@@ -76,9 +70,13 @@ export class TongHopBaoCaoComponent implements OnInit {
         const date = new Date();
         this.searchFilter.namBcao = date.getFullYear();
         this.searchFilter.thangBcao = date.getMonth();
-        this.searchFilter.maLoaiBcao = '526';
+        this.searchFilter.maLoaiBcao = Dtc.BC_DINH_KY;
         //lay danh sach danh muc
-        this.danhMuc.dMDviCon().toPromise().then(
+        const request = {
+            maDviCha: this.userInfo.maDvi,
+            trangThai: '01',
+        }
+        await this.quanLyVonPhiService.dmDviCon(request).toPromise().then(
             data => {
                 if (data.statusCode == 0) {
                     this.donVis = data.data;
@@ -102,11 +100,6 @@ export class TongHopBaoCaoComponent implements OnInit {
                 res.data.content.forEach(e => {
                     this.dataTable.push({
                         ...e,
-                        ngayPheDuyet: this.datePipe.transform(e.ngayPheDuyet, Utils.FORMAT_DATE_STR),
-                        ngayDuyet: this.datePipe.transform(e.ngayDuyet, Utils.FORMAT_DATE_STR),
-                        ngayTrinh: this.datePipe.transform(e.ngayTrinh, Utils.FORMAT_DATE_STR),
-                        ngayTraKq: this.datePipe.transform(e.ngayTraKq, Utils.FORMAT_DATE_STR),
-                        ngayTao: this.datePipe.transform(e.ngayTao, Utils.FORMAT_DATE_STR),
                     })
                 })
                 this.dataTableAll = cloneDeep(this.dataTable);
@@ -141,10 +134,6 @@ export class TongHopBaoCaoComponent implements OnInit {
         this.search();
     }
 
-    getStatusName(trangThai: string) {
-        return this.trangThais.find(e => e.id == trangThai)?.ten;
-    }
-
     // lay ten don vi tao
     getUnitName(dvitao: any) {
         return this.donVis.find(item => item.maDvi == dvitao)?.tenDvi;
@@ -167,7 +156,7 @@ export class TongHopBaoCaoComponent implements OnInit {
                 const obj = {
                     ...res,
                     id: null,
-                    tabSelected: 'baocao',
+                    tabSelected: Dtc.BAO_CAO_01,
                     isSynthetic: true,
                 }
                 this.dataChange.emit(obj);
@@ -179,29 +168,8 @@ export class TongHopBaoCaoComponent implements OnInit {
     viewDetail(data: any) {
         const obj = {
             id: data.id,
-            tabSelected: 'baocao',
+            tabSelected: Dtc.BAO_CAO_01,
         }
         this.dataChange.emit(obj);
-    }
-
-    // Tìm kiếm trong bảng
-    filterInTable(key: string, value: string, isDate: boolean) {
-        if (value && value != '') {
-            this.dataTable = [];
-            let temp = [];
-            if (this.dataTableAll && this.dataTableAll.length > 0) {
-                if (isDate) {
-                    value = this.datePipe.transform(value, Utils.FORMAT_DATE_STR);
-                }
-                this.dataTableAll.forEach((item) => {
-                    if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
-                        temp.push(item)
-                    }
-                });
-            }
-            this.dataTable = [...this.dataTable, ...temp];
-        } else {
-            this.dataTable = cloneDeep(this.dataTableAll);
-        }
     }
 }

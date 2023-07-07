@@ -9,8 +9,7 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
 import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
-import { PHU_LUC } from '../bao-cao/bao-cao.constant';
-import { Form, Report } from '../lap-ke-hoach-va-tham-dinh-du-toan.class';
+import { Form, Ltd, Report } from '../lap-ke-hoach-va-tham-dinh-du-toan.constant';
 
 @Component({
     selector: 'dialog-tao-moi',
@@ -23,7 +22,7 @@ export class DialogTaoMoiComponent implements OnInit {
 
     userInfo: any;
     response: Report = new Report();
-    listAppendix: any[] = PHU_LUC;
+    listAppendix: any[] = Ltd.PHU_LUC;
     lstNam: number[] = [];
 
     constructor(
@@ -116,7 +115,7 @@ export class DialogTaoMoiComponent implements OnInit {
                 this.response.namBcao = null;
             }
         );
-        if (this.tab == 'danhsach') {
+        if (this.tab == Ltd.DANH_SACH_BAO_CAO) {
             if (this.userInfo.DON_VI.tenVietTat.indexOf('_VP') != -1) {
                 const request = {
                     lan: lan,

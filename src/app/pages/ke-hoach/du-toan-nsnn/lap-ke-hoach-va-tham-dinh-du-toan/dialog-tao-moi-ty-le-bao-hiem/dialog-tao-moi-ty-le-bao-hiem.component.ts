@@ -9,7 +9,7 @@ import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.se
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
 import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
-import { CoeffIns, Insurance } from '../lap-ke-hoach-va-tham-dinh-du-toan.class';
+import { CoeffIns, Insurance } from '../lap-ke-hoach-va-tham-dinh-du-toan.constant';
 
 @Component({
     selector: 'dialog-tao-moi-ty-le-bao-hiem',

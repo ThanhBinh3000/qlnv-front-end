@@ -11,7 +11,7 @@ import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.se
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
 import * as uuid from "uuid";
 import * as XLSX from 'xlsx';
-import { BtnStatus, Doc, Form } from '../../../lap-ke-hoach-va-tham-dinh-du-toan.class';
+import { BtnStatus, Doc, Form } from '../../../lap-ke-hoach-va-tham-dinh-du-toan.constant';
 
 export class ItemData {
 	id: string;
@@ -45,7 +45,7 @@ export class ItemData {
 })
 export class BieuMau18Component implements OnInit {
 	@Input() dataInfo;
-	Op = Operator;
+	Op = new Operator('1');
 	Utils = Utils;
 	//thong tin chi tiet cua bieu mau
 	formDetail: Form = new Form();
