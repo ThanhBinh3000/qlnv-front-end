@@ -128,6 +128,14 @@ export class BienBanHaoDoiDieuChuyenComponent extends Base2Component implements 
   isBelong(maDvi: any) {
     return this.userInfo.MA_DVI == maDvi;
   }
+  resetForm() {
+    this.formData.reset();
+    this.formData.patchValue({ loaiDc: this.loaiDc, isVatTu: this.isVatTu, thayDoiThuKho: this.thayDoiThuKho, type: this.type })
+  }
+  clearForm(): void {
+    this.resetForm();
+    this.timKiem();
+  }
   async timKiem() {
     await this.spinner.show();
     try {

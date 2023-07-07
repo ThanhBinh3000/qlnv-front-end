@@ -139,7 +139,14 @@ export class PhieuXuatKhoDCNBComponent extends Base2Component implements OnInit 
     await this.spinner.hide()
   }
 
-
+  resetForm() {
+    this.formData.reset();
+    this.formData.patchValue({ loaiDc: this.loaiDc, isVatTu: this.isVatTu, thayDoiThuKho: this.thayDoiThuKho, type: this.type })
+  }
+  clearFilter() {
+    this.resetForm();
+    this.search();
+  }
   buildTableView() {
     const newData = this.dataTable.map(f => ({ ...f, maNganLoKho: f.maLoKho ? `${f.maLoKho}${f.maNganKho}` : f.maNganKho }))
     let dataView = chain(newData)
@@ -208,7 +215,7 @@ export class PhieuXuatKhoDCNBComponent extends Base2Component implements OnInit 
     // this.idQdinhDcc = idQdinhDcc;
     this.passData = {
       soQddc: lv2.soQdinh, qddcId: lv2.qdinhDccId, soPhieuKnChatLuong: lv2.soPhieuKiemNghiemCl, phieuKnChatLuongHdrId: lv2.phieuKiemNghiemId, maDiemKho: lv2.maDiemKho,
-      maNhaKho: lv2.maNhaKho, maNganKho: lv2.maNganKho, maLoKho: lv2.maloKho, tenDiemKho: lv2.tenDiemKho, tenNhaKho: lv2.tenNhaKho, tenNganKho: lv2.tenNganKho, tenLoKho: lv2.tenloKho,
+      maNhaKho: lv2.maNhaKho, maNganKho: lv2.maNganKho, maLoKho: lv2.maLoKho, tenDiemKho: lv2.tenDiemKho, tenNhaKho: lv2.tenNhaKho, tenNganKho: lv2.tenNganKho, tenLoKho: lv2.tenLoKho,
       loaiVthh: lv2.maHangHoa, cloaiVthh: lv2.maChLoaiHangHoa, tenLoaiVthh: lv2.tenHangHoa, tenCloaiVthh: lv2.tenChLoaiHangHoa, soLuongCanDc: lv2.slDienChuyen
     }
   }
