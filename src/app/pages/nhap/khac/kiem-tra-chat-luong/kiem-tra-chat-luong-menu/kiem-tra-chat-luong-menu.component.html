@@ -29,3 +29,9 @@
 <ng-container *ngIf="tabSelected == 2">
   <quan-ly-bien-ban-lay-mau [loaiVthh]="typeVthh"></quan-ly-bien-ban-lay-mau>
 </ng-container>
+<ng-container *ngIf="tabSelected == 3">
+  <app-quan-ly-phieu-kiem-nghiem-chat-luong [typeVthh]="typeVthh"></app-quan-ly-phieu-kiem-nghiem-chat-luong>
+</ng-container>
+<ng-container *ngIf="tabSelected == 4">
+  <app-bien-ban-chuan-bi-kho [typeVthh]="typeVthh"></app-bien-ban-chuan-bi-kho>
+</ng-container>

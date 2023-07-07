@@ -60,7 +60,9 @@ export class BienBanNghiemThuBaoQuanLanDauComponent extends Base2Component imple
     this.isVisibleChangeTab$.subscribe((value: boolean) => {
       this.visibleTab = value;
     });
-
+    this.formData.patchValue({
+      loaiDc: this.loaiDc
+    })
 
     try {
       this.initData()
@@ -87,7 +89,7 @@ export class BienBanNghiemThuBaoQuanLanDauComponent extends Base2Component imple
   }
 
   isCuc() {
-    return false//this.userService.isCuc()
+    return this.userService.isCuc()
   }
 
   // isChiCuc() {
@@ -177,19 +179,6 @@ export class BienBanNghiemThuBaoQuanLanDauComponent extends Base2Component imple
                   ?.map((m, im) => {
 
                     const maChiCucNhan = m.find(f => f.maloNganKhoNhan == im);
-                    // const hasMaDiemKhoNhan = vs.some(f => f.maDiemKhoNhan);
-                    // if (!hasMaDiemKhoNhan) return {
-                    //   ...maChiCucNhan
-                    // }
-
-                    // const rssx = chain(m).groupBy("maDiemKhoNhan")?.map((n, inx) => {
-
-                    //   const maDiemKhoNhan = n.find(f => f.maDiemKhoNhan == inx);
-                    //   return {
-                    //     ...maDiemKhoNhan,
-                    //     children: n
-                    //   }
-                    // }).value()
                     return {
                       ...maChiCucNhan,
                       children: m
@@ -245,7 +234,7 @@ export class BienBanNghiemThuBaoQuanLanDauComponent extends Base2Component imple
         this.bbNghiemThuBaoQuanLanDauService
           .export(body)
           .subscribe((blob) =>
-            saveAs(blob, 'bien-ban-nghiem-thu-bao-quan-lan-dau.xlsx'),
+            saveAs(blob, 'dcnb-bien-ban-nghiem-thu-bao-quan-lan-dau.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {

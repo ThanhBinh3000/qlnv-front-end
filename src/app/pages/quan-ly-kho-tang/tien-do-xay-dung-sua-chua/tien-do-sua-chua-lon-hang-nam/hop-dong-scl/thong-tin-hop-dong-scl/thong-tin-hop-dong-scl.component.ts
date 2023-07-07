@@ -91,6 +91,7 @@ export class ThongTinHopDongSclComponent extends Base2Component implements OnIni
       trangThaiHd: [],
       tenTrangThaiHd: [],
       fileDinhKems: [null],
+      loaiSuaChua : [null],
       listKtTdscQuyetDinhPdKhlcntCvDaTh: null,
       listKtTdscQuyetDinhPdKhlcntCvKad: null,
       listKtTdscQuyetDinhPdKhlcntCvKh: null

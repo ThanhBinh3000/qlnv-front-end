@@ -31,6 +31,12 @@
         <span>Lưu và gửi duyệt</span>
       </button>
       <button
+        *ngIf="formData.value.trangThai == STATUS.DU_THAO"
+        type="button" class="btn btn-sub xanh-nhat" (click)="hoanThanh()">
+        <i class="icon htvbdh_tcdt_tuchoi"></i>
+        <span>Hoàn thành</span>
+      </button>
+      <button
         *ngIf="formData.value.trangThai == STATUS.DU_THAO
         || formData.value.trangThai == STATUS.TU_CHOI_TP
         || formData.value.trangThai == STATUS.TU_CHOI_LDC

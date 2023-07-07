@@ -96,7 +96,7 @@
                     <th>SL còn lại cần SC</th>
                     <th>ĐVT</th>
                     <th>Ngày đề xuất</th>
-                    <th>Lú do cần SC</th>
+                    <th>Lý do cần SC</th>
                     <th>Thời hạn xuất SC dự kiến</th>
                     <th>Thời hạn nhập SC dự kiến</th>
                     <th>Trạng thái</th>
@@ -130,10 +130,10 @@
                       <td>{{item.tenTrangThai}}</td>
                       <td></td>
                       <td>
-                        <a (click)="goDetail(item.id)">
+                        <a (click)="showDetail(item.id)">
                           <span class="icon htvbdh_eye"></span>
                         </a>
-                        <a (click)="delete(item)" >
+                        <a *ngIf="item.trangThai == STATUS.DU_THAO" (click)="delete(item)" >
                           <i class="fa fa-trash-o do"></i>
                         </a>
                       </td>
@@ -180,7 +180,7 @@
                                     <td>{{data.scDanhSachHdr.slDaDuyet }}</td>
                                     <td>{{data.scDanhSachHdr.slDaDuyet }}</td>
                                     <td>{{data.scDanhSachHdr.slDaDuyet }}</td>
-                                    <td>{{data.scDanhSachHdr.slDaDuyet }}</td>
+                                    <td>{{data.scDanhSachHdr.donViTinh }}</td>
                                     <td>{{data.scDanhSachHdr.ngayDeXuat | date : 'dd/MM/yyyy'}}</td>
                                     <td>{{data.scDanhSachHdr.lyDo}}</td>
                                     <td>{{item.thoiHanXuat | date : 'dd/MM/yyyy'}}</td>

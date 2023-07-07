@@ -109,6 +109,7 @@ export class ThemMoiHopDongSclComponent extends Base2Component implements OnInit
       thoiGianThHd: [null, Validators.required],
       thoiGianBh: [],
       loai: ['00'],
+      loaiSuaChua : [null],
       ghiChu: [null, Validators.required],
       trangThai: ['00'],
       tenTrangThai: ['Dự thảo'],

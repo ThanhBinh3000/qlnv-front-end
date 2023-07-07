@@ -6,6 +6,7 @@ import { FormsModule } from "@angular/forms";
 import { TongHopKhnkComponent } from "./tong-hop-khnk.component";
 import { ThemMoiTongHopKhnkComponent } from './them-moi-tong-hop-khnk/them-moi-tong-hop-khnk.component';
 import { KeHoachNhapKhacModule } from "../ke-hoach-nhap-khac/ke-hoach-nhap-khac.module";
+import {QuyetDinhPdKhnkModule} from "../quyet-dinh-pd-khnk/quyet-dinh-pd-khnk.module";
 
 
 
@@ -19,7 +20,8 @@ import { KeHoachNhapKhacModule } from "../ke-hoach-nhap-khac/ke-hoach-nhap-khac.
     ComponentsModule,
     MainModule,
     FormsModule,
-    KeHoachNhapKhacModule
+    KeHoachNhapKhacModule,
+    QuyetDinhPdKhnkModule
   ],
   exports: [
     TongHopKhnkComponent,

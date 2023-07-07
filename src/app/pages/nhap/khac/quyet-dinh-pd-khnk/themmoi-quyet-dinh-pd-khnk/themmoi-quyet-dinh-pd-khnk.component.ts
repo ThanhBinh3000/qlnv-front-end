@@ -49,6 +49,7 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
 
   @Input() loaiVthh: string
   @Input() idInput: number = 0;
+  @Input() idTh: number = 0;
   @Input() dataTongHop: any;
   @Input() isViewOnModal: boolean;
   @Output()
@@ -292,7 +293,7 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
         phanLoai: 'TH',
       })
       await this.listDsTongHopToTrinh();
-      await this.selectMaTongHop(dataTongHop.id);
+      await this.selectMaTongHop(dataTongHop);
     }
   }
 
@@ -619,7 +620,7 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
         tenLoaiHinhNx: data.dxHdr[0].tenLoaiHinhNx,
         loaiHinhNx: data.dxHdr[0].loaiHinhNx,
         tenKieuNx: data.dxHdr[0].tenKieuNx,
-        kieuNx: data.dxHdr.kieuNx,
+        kieuNx: data.dxHdr[0].kieuNx,
         idTh: data.id,
         idDx: null,
         soTrHdr: null,

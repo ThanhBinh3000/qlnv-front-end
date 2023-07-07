@@ -7,16 +7,16 @@ import {NgxSpinnerService} from 'ngx-spinner';
 import {NzModalService} from 'ng-zorro-antd/modal';
 import {UserLogin} from 'src/app/models/userlogin';
 import {MESSAGE} from 'src/app/constants/message';
-import {chain} from 'lodash';
-import * as uuid from "uuid";
 import {v4 as uuidv4} from "uuid";
 import {CHUC_NANG} from 'src/app/constants/status';
-import {XuatKhacComponent} from "../../xuat-khac.component";
 
 import {LOAI_HH_XUAT_KHAC} from "../../../../../constants/config";
 import {
   TongHopDanhSachHangDTQGService
 } from "../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatlt/TongHopDanhSachHangDTQG.service";
+import {
+  BienBanLayMauLuongThucHangDTQGService
+} from "../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatlt/BienBanLayMauLuongThucHangDTQG.service";
 
 @Component({
   selector: 'app-xk-bien-ban-lay-mau-ban-giao-mau',
@@ -29,9 +29,9 @@ export class BienBanLayMauBanGiaoMauComponent extends Base2Component implements 
   loaiVthh: string;
   @Input()
   loaiVthhCache: string;
-  public vldTrangThai: XuatKhacComponent;
   CHUC_NANG = CHUC_NANG;
   loaiHhXuatKhac = LOAI_HH_XUAT_KHAC;
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -39,10 +39,9 @@ export class BienBanLayMauBanGiaoMauComponent extends Base2Component implements 
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private tongHopDanhSachHangDTQGService: TongHopDanhSachHangDTQGService,
-    private xuatKhacComponent: XuatKhacComponent
+    private bienBanLayMauLuongThucHangDTQGService: BienBanLayMauLuongThucHangDTQGService
   ) {
     super(httpClient, storageService, notification, spinner, modal, tongHopDanhSachHangDTQGService);
-    this.vldTrangThai = this.xuatKhacComponent;
     this.formData = this.fb.group({
       nam: null,
       soBienBan: null,
@@ -83,10 +82,10 @@ export class BienBanLayMauBanGiaoMauComponent extends Base2Component implements 
 
   ngOnInit(): void {
     try {
+      console.log(this.userService.getUserLogin().MA_PHONG_BAN, 8888)
       this.initData()
       this.timKiem();
-    }
-    catch (e) {
+    } catch (e) {
       console.log('error: ', e)
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -106,6 +105,7 @@ export class BienBanLayMauBanGiaoMauComponent extends Base2Component implements 
     }
     return endValue.getTime() <= this.formData.value.ngayLayMauDen.getTime();
   };
+
   async initData() {
     this.userInfo = this.userService.getUserLogin();
     this.userdetail.maDvi = this.userInfo.MA_DVI;
@@ -130,7 +130,7 @@ export class BienBanLayMauBanGiaoMauComponent extends Base2Component implements 
       s.idVirtual = uuidv4();
       this.expandSetString.add(s.idVirtual);
     });
-    console.log(this.dataTable,"789")
+    console.log(this.dataTable, "789")
     this.buildTableView();
   }
 
@@ -170,8 +170,8 @@ export class BienBanLayMauBanGiaoMauComponent extends Base2Component implements 
   }
 
 
-  redirectDetail(item, b: boolean) {
-    this.item = item;
+  redirectDetail(id, b: boolean) {
+    this.selectedId = id;
     this.isDetail = true;
     this.isView = b;
     // this.isViewDetail = isView ?? false;
@@ -185,6 +185,37 @@ export class BienBanLayMauBanGiaoMauComponent extends Base2Component implements 
   closeQdGnvModal() {
     this.idQdGnv = null;
     this.openQdGnv = false;
+  }
+
+  delete(item: any, roles?) {
+    if (!this.checkPermission(roles)) {
+      return
+    }
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: () => {
+        this.spinner.show();
+        try {
+          let body = {
+            id: item.idBienBan
+          };
+          this.bienBanLayMauLuongThucHangDTQGService.delete(body).then(async () => {
+            await this.search();
+            this.spinner.hide();
+          });
+        } catch (e) {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      },
+    });
   }
 
 }

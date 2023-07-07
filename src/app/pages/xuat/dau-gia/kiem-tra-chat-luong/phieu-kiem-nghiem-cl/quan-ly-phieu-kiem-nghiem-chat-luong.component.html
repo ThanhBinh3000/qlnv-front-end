@@ -42,7 +42,7 @@
         </div>
       </form>
       <div class="cangiua group-button-search">
-        <button nz-button class="search__button--clear" (click)="clearFilter()">
+        <button nz-button class="search__button--clear" (click)="clearForm()">
           <i class="icon  htvbdh_nhap-lai1"></i>
           Xóa điều kiện
         </button>
@@ -69,7 +69,8 @@
       </div>
     </div>
     <nz-card class="mt-2px flex-card data-table card-border-content table-card">
-      <nz-table #tblData [nzData]="dataView" class="nowrap table-chi-tiet" nzBordered>
+      <nz-table #basicTable class="nowrap table__container-tt" [nzData]="children" [nzFrontPagination]="false"
+                [nzShowPagination]="false" nzBordered>
         <thead>
           <tr>
             <th style="width: 35px">STT</th>
@@ -90,8 +91,8 @@
           </tr>
         </thead>
         <tbody>
-          <ng-container *ngFor="let item of tblData.data, let i = index;">
-            <tr [ngClass]="{'bg-selected': item.selected}" class="level-1">
+        <ng-container *ngFor="let item of basicTable.data, let i = index;">
+          <tr class="level-1">
               <td>{{i + 1}}</td>
               <td (nzExpandChange)="onExpandStringChange(item.idVirtual, $event)"
                 [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true" style="width: 35px"></td>
@@ -100,8 +101,8 @@
                   (click)="openModalQdNv(item.idQdGiaoNvXh)">{{
                   item.soQdGiaoNvXh}}</a>
               </td>
-              <td>{{item.nam}}</td>
-              <td>{{item.ngayQdGiaoNvXh | date: 'dd/MM/YYYY'}}</td>
+              <td class="bold">{{item.nam}}</td>
+              <td class="bold">{{item.ngayQdGiaoNvXh | date: 'dd/MM/YYYY'}}</td>
               <td></td>
               <td></td>
               <td></td>
@@ -113,15 +114,15 @@
               <td></td>
               <td class="text-left"></td>
             </tr>
-            <ng-container *ngIf="expandSetString.has(item.idVirtual)">
-              <ng-container *ngFor="let lv1 of item.childData,let i1=index">
+          <ng-container *ngIf="expandSetString.has(item.idVirtual)">
+            <ng-container *ngFor="let lv1 of item.childData,let i1=index">
                 <tr class="level-2">
                   <td></td>
                   <td></td>
                   <td></td>
                   <td></td>
                   <td></td>
-                  <td>{{lv1.tenDiemKho}}</td>
+                  <td class="bold">{{lv1.tenDiemKho}}</td>
                   <td></td>
                   <td></td>
                   <td></td>
@@ -131,13 +132,10 @@
                   <td></td>
                   <td></td>
                   <td class="text-left">
-                    <a>
-                      <i class="fa fa-plus"></i>
-                    </a>
                   </td>
                 </tr>
-                <ng-container *ngIf="expandSetString.has(item.idVirtual)">
-                  <ng-container *ngFor="let lv2 of lv1.childData,let i2=index">
+              <ng-container *ngIf="expandSetString.has(item.idVirtual)">
+                <ng-container *ngFor="let lv2 of lv1.childData,let i2=index">
                     <tr class="level-3">
                       <td></td>
                       <td></td>
@@ -145,10 +143,8 @@
                       <td></td>
                       <td></td>
                       <td></td>
-                      <td>{{lv2.tenLoKho == null ? lv2.tenNganKho : lv2.tenLoKho }},
-                        {{lv2.tenNhaKho}}
-                      </td>
-                      <td>{{lv2.soPhieu}}</td>
+                      <td>{{ (lv2.tenLoKho ? lv2.tenLoKho + ' - ' : '') + lv2.tenNganKho }}</td>
+                      <td class="bold">{{lv2.soPhieu}}</td>
                       <td>{{lv2.ngayKnghiem | date: 'dd/MM/YYYY' }}</td>
                       <td>
                         <a *ngIf="lv2.soBbLayMau && lv2.idBbLayMau" nz-button nzType="link"

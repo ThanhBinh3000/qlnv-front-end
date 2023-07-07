@@ -4,13 +4,6 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button class="btn btn-sub xanh-nhat" type="button"
-            *ngIf=" this.userService.isChiCuc() && !isDisabled() && formData.value.trangThai != STATUS.DA_DUYET_LDCC  "
-            (click)="saveAndSend(formData.value,STATUS.CHO_DUYET_LDCC,'Bạn có muốn lưu và gửi duyệt ?','Bạn đã lưu và gửi duyệt thành công!')">
-      <i class="icon htvbdh_tcdt_guiduyet"></i>
-      <span>Lưu và gửi duyệt</span>
-
-    </button>
     <button type="button" class="btn btn-sub do" *ngIf="  this.userService.isChiCuc() && isDisabled()
      && userService.isAccessPermisson('XHDTQG_PTDG_XK_LT_PXK_DUYET')"
             (click)="tuChoi()">
@@ -21,6 +14,12 @@
         && userService.isAccessPermisson('XHDTQG_PTDG_XK_LT_PXK_DUYET')" (click)="pheDuyet()">
       <i class="icon htvbdh_tcdt_pheduyet "></i>
       <span>Duyệt</span>
+    </button>
+    <button class="btn btn-sub xanh-nhat" type="button"
+            *ngIf=" this.userService.isChiCuc() && !isDisabled() && formData.value.trangThai != STATUS.DA_DUYET_LDCC  "
+            (click)="saveAndSend(formData.value,STATUS.CHO_DUYET_LDCC,'Bạn có muốn lưu và gửi duyệt ?','Bạn đã lưu và gửi duyệt thành công!')">
+      <i class="icon htvbdh_tcdt_guiduyet"></i>
+      <span>Lưu và gửi duyệt</span>
     </button>
     <button class="btn btn-sub xanh"
             *ngIf=" this.userService.isChiCuc() && !isDisabled() && formData.value.trangThai != STATUS.DA_DUYET_LDCC "
@@ -285,7 +284,7 @@
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
-                <input nz-input formControlName="ldChiCuc" readonly/>
+                <input nz-input formControlName="tenNguoiPduyet" readonly/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -297,7 +296,7 @@
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
-                <input nz-input formControlName="ktvBaoQuan" readonly/>
+                <input nz-input formControlName="tenKtv" readonly/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>

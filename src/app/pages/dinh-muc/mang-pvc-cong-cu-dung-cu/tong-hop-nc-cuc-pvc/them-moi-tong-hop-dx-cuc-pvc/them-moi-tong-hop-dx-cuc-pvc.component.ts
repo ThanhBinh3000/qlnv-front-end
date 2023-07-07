@@ -13,6 +13,7 @@ import dayjs from "dayjs";
 import {STATUS} from "../../../../../constants/status";
 import {DxChiCucPvcService} from "../../../../../services/dinh-muc-nhap-xuat-bao-quan/pvc/dx-chi-cuc-pvc.service";
 import {PvcDxChiCucCtiet} from "../../de-xuat-nc-chi-cuc-pvc/them-moi-dx-chi-cuc-pvc/them-moi-dx-chi-cuc-pvc.component";
+import {AMOUNT_ONE_DECIMAL} from "../../../../../Utility/utils";
 
 @Component({
   selector: 'app-them-moi-tong-hop-dx-cuc-pvc',
@@ -28,7 +29,7 @@ export class ThemMoiTongHopDxCucPvcComponent extends Base2Component implements O
   dataEdit: { [key: string]: { edit: boolean; data: PvcDxChiCucCtiet } } = {};
   formDataTongHop: FormGroup
   expandSet = new Set<number>();
-
+  amount = AMOUNT_ONE_DECIMAL;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -50,6 +51,7 @@ export class ThemMoiTongHopDxCucPvcComponent extends Base2Component implements O
       fileDinhKems: [null],
       ghiChu: [null],
       lyDoTuChoi: [null],
+      soQdGiaoCtieu:[null],
       listQlDinhMucPvcDxCcdcDtl: [null],
     });
     this.formDataTongHop = this.fb.group({
@@ -224,16 +226,21 @@ export class ThemMoiTongHopDxCucPvcComponent extends Base2Component implements O
   async pheDuyet() {
     let trangThai;
     switch (this.formData.value.trangThai) {
-      case STATUS.DU_THAO :
-      case STATUS.TU_CHOI_LDTC : {
-        trangThai = STATUS.CHO_DUYET_LDTC;
-        break;
-      }
       case STATUS.CHO_DUYET_LDTC : {
         trangThai = STATUS.DA_DUYET_LDTC
       }
     }
     await this.approve(this.id, trangThai, 'Bạn có chắc chắn muốn duyệt?')
+  }
+
+  async tuChoi() {
+    let trangThai;
+    switch (this.formData.value.trangThai) {
+      case STATUS.CHO_DUYET_LDTC : {
+        trangThai = STATUS.TU_CHOI_LDTC
+      }
+    }
+    await this.reject(this.id, trangThai, 'Bạn có chắc chắn muốn từ chối?')
   }
 
   convertListData() {
@@ -315,4 +322,6 @@ export class ThemMoiTongHopDxCucPvcComponent extends Base2Component implements O
       this.expandSet.delete(id);
     }
   }
+
+  protected readonly AMOUNT_ONE_DECIMAL = AMOUNT_ONE_DECIMAL;
 }

@@ -118,6 +118,7 @@ export class ThemMoiHopDongSctxComponent extends  Base2Component implements OnIn
       cdtChucVu: [null],
       cdtSdt: [null],
       cdtStk: [null],
+      loaiSuaChua: [null],
       cdtFax: [null],
       cdtMoTai: [null],
       cdtGiayUq: [null],

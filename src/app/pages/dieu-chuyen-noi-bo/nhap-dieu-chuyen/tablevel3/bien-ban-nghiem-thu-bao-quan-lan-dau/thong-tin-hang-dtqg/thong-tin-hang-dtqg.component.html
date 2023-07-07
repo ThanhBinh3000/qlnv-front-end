@@ -1,7 +1,7 @@
 <div>
   <div>
     <form nz-form nzLayout="vertical" [formGroup]="formData">
-      <nz-card class="pd-t-16">
+      <nz-card class="pd-t-16" *ngIf="!isChildren && !(typeAction === 'UPDATE' && !data.isParent)">
         <div nz-row [nzGutter]="24">
           <div nz-col nzSpan="12">
             <nz-form-item>
@@ -32,7 +32,7 @@
           </div>
         </div>
 
-        <div nz-row [nzGutter]="24">
+        <div nz-row [nzGutter]="24" *ngIf="!isChildren">
           <div nz-col nzSpan="24">
             <label class="mg-t-5" [nzDisabled]="typeAction === 'UPDATE'" nz-checkbox formControlName="isMatHang">Có
               thông tin mặt
@@ -41,8 +41,9 @@
         </div>
 
 
-        <div nz-row [nzGutter]="24" *ngIf="!formData.value.isMatHang" class="mg-t-5">
-          <div nz-col nzSpan="8">
+        <div nz-row [nzGutter]="24" *ngIf="!isChildren && !formData.value.isMatHang " class="mg-t-5">
+          <div nz-col nzSpan="8"
+            *ngIf="typeAction === 'ADD' || (typeAction === 'UPDATE' && formData.value.soLuongTrongNam)">
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true">Số lượng
               </nz-form-label>
@@ -54,7 +55,7 @@
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col nzSpan="8">
+          <div nz-col nzSpan="8" *ngIf="typeAction === 'ADD' || (typeAction === 'UPDATE' && formData.value.donGia)">
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true">Đơn giá
               </nz-form-label>
@@ -66,7 +67,8 @@
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col nzSpan="8">
+          <div nz-col nzSpan="8"
+            *ngIf="typeAction === 'ADD' || (typeAction === 'UPDATE' && formData.value.thanhTienTrongNam)">
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true">Thành tiền
               </nz-form-label>
@@ -83,7 +85,7 @@
 
       </nz-card>
 
-      <div class="mt16 flex-card p-lr16" *ngIf="formData.value.isMatHang">
+      <div class="mt16 flex-card p-lr16" *ngIf="isChildren || formData.value.isMatHang">
         <div class="header header-green-background mg-t-16">
           <div class="header-text">
             <div class="title-chi-tieu">
@@ -94,7 +96,7 @@
         </div>
       </div>
 
-      <nz-card class="mg-t-16" *ngIf="formData.value.isMatHang">
+      <nz-card class="mg-t-16" *ngIf="isChildren || formData.value.isMatHang">
         <div nz-row [nzGutter]="24">
           <div nz-col nzSpan="10">
             <nz-form-item>

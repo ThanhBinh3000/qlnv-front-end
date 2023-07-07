@@ -74,12 +74,12 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
       loaiHinhNx: [''],
       kieuNx: [''],
       diaChi: [],
-      namKh: [dayjs().get('year'),],
+      namKh: [],
       soDxuat: [''],
       trichYeu: [''],
       idSoQdCtieu: [],
       soQdCtieu: [''],
-      ngayTao: [dayjs().format('YYYY-MM-DD')],
+      ngayTao: [''],
       ngayPduyet: [''],
       loaiVthh: ['', [Validators.required]],
       tenLoaiVthh: ['', [Validators.required]],
@@ -104,8 +104,8 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
       tongKhoanTienDatTruocDx: [],
       tongKhoanTienDtTheoDgiaDd: [],
       ghiChu: [''],
-      trangThai: [STATUS.DU_THAO],
-      tenTrangThai: ['Dự Thảo'],
+      trangThai: [''],
+      tenTrangThai: [''],
       lyDoTuChoi: [''],
       tongDonGiaDx: [],
       donViTinh: [''],
@@ -113,18 +113,24 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
   }
 
   async ngOnInit() {
-    this.spinner.show();
-    this.maTrinh = '/' + this.userInfo.MA_TR;
-    if (this.idInput > 0) {
-      // await this.getDetail(this.idInput);
-    } else {
-      this.initForm();
+    try {
+      await this.spinner.show();
+      this.maTrinh = '/' + this.userInfo.MA_TR;
+      if (this.idInput > 0) {
+        // await this.getDetail(this.idInput);
+      } else {
+        this.initForm();
+      }
+      await Promise.all([
+        this.loadDataComboBox(),
+        this.getDataChiTieu()
+      ]);
+    }catch (e) {
+      this.notification.error(MESSAGE.ERROR, 'Có lỗi xảy ra.');
+      await this.spinner.hide();
+    } finally {
+      await this.spinner.hide();
     }
-    await Promise.all([
-      this.loadDataComboBox(),
-      this.getDataChiTieu()
-    ]);
-    await this.spinner.hide();
   }
 
   async loadDataComboBox() {
@@ -183,12 +189,20 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
         tenDvi: this.userInfo.TEN_DVI,
         maDvi: this.userInfo.MA_DVI,
         diaChi: this.userInfo.DON_VI.diaChi,
+        namKh: dayjs().get('year'),
+        ngayTao: dayjs().format('YYYY-MM-DD'),
+        trangThai: STATUS.DU_THAO,
+        tenTrangThai: 'Dự Thảo',
       })
     } else {
       this.formData.patchValue({
         tenDvi: this.userInfo.TEN_DVI,
         maDvi: this.userInfo.MA_DVI,
         diaChi: this.userInfo.DON_VI.diaChi,
+        namKh: dayjs().get('year'),
+        ngayTao: dayjs().format('YYYY-MM-DD'),
+        trangThai: STATUS.DU_THAO,
+        tenTrangThai: 'Dự Thảo',
         loaiVthh: this.loaiVthhInput,
       })
       this.loadDanhMucHang()

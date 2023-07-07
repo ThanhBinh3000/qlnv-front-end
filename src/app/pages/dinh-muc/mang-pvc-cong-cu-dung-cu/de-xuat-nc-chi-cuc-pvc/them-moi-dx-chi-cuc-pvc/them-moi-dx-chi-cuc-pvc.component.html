@@ -73,7 +73,8 @@
               </nz-form-label>
               <nz-select nzAllowClear (ngModelChange)="changeSoQdGiaoCt($event)" formControlName="soQdGiaoCt"
                          [nzDisabled]="isView">
-                <nz-option *ngFor="let p of listCtieuKh" [nzValue]="p.soQuyetDinh" [nzLabel]="p.soQuyetDinh"></nz-option>
+                <nz-option *ngFor="let p of listCtieuKh" [nzValue]="p.soQuyetDinh"
+                           [nzLabel]="p.soQuyetDinh"></nz-option>
               </nz-select>
             </nz-form-control>
           </nz-form-item>
@@ -153,14 +154,20 @@
                          [nzParser]="globals.parser"></nz-input-number>
       </th>
       <th>
-        <nz-input-number [(ngModel)]="rowItem.slTieuChuan" [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                          [nzMin]="0"
-                         [nzParser]="globals.parser"></nz-input-number>
+        <input class="money-input" currencyMask [options]="amount" [min]="0"
+               [(ngModel)]="rowItem.slTieuChuan"
+        />
+        <!--        <nz-input-number [(ngModel)]="rowItem.slTieuChuan" [nzSize]="'small'" [nzFormatter]="globals.formatter"-->
+        <!--                          [nzMin]="0"-->
+        <!--                         [nzParser]="globals.parser"></nz-input-number>-->
       </th>
       <th>
-        <nz-input-number [(ngModel)]="rowItem.nhuCauTb" [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                         [nzMin]="0"
-                         [nzParser]="globals.parser"></nz-input-number>
+        <input class="money-input" currencyMask [options]="amount" [min]="0"
+               [(ngModel)]="rowItem.nhuCauTb"
+        />
+        <!--        <nz-input-number [(ngModel)]="rowItem.nhuCauTb" [nzSize]="'small'" [nzFormatter]="globals.formatter"-->
+        <!--                         [nzMin]="0"-->
+        <!--                         [nzParser]="globals.parser"></nz-input-number>-->
       </th>
       <th>
         <input type="text" [(ngModel)]="rowItem.ghiChu" nz-input/>
@@ -182,11 +189,11 @@
         <td>{{data.tenCcdc}}</td>
         <td>{{data.moTaCcdc}}</td>
         <td>{{data.donViTinh}}</td>
-        <td class="text-right">{{data.slHienCo | number: '1.0-1' }}</td>
-        <td class="text-right">{{data.slNhapThem | number: '1.0-1' }}</td>
-        <td class="text-right">{{data.slHienCo + data.slNhapThem | number: '1.0-1' }}</td>
-        <td class="text-right">{{data.slTieuChuan | number: '1.0-1' }}</td>
-        <td class="text-right">{{data.nhuCauTb | number: '1.0-1' }}</td>
+        <td class="text-right">{{data.slHienCo | number : '1.0-1' : 'vi_VN' }}</td>
+        <td class="text-right">{{data.slNhapThem | number : '1.0-1' : 'vi_VN' }}</td>
+        <td class="text-right">{{data.slHienCo + data.slNhapThem |number : '1.0-1' : 'vi_VN' }}</td>
+        <td class="text-right">{{data.slTieuChuan |number : '1.0-1' : 'vi_VN' }}</td>
+        <td class="text-right">{{data.nhuCauTb | number : '1.0-1' : 'vi_VN'}}</td>
         <td>{{data.ghiChu}}</td>
         <td class="text-center" *ngIf="!isView">
           <a (click)="editRow(idx)">
@@ -228,14 +235,20 @@
                            [nzParser]="globals.parser"></nz-input-number>
         </th>
         <th>
-          <nz-input-number [(ngModel)]="dataEdit[idx].data.slTieuChuan" [nzSize]="'small'"
-                           [nzFormatter]="globals.formatter" nzDisabled [nzMin]="0"
-                           [nzParser]="globals.parser"></nz-input-number>
-        </th>
+          <input class="money-input" currencyMask [options]="amount" [min]="0"
+                 [(ngModel)]="dataEdit[idx].data.slTieuChuan"
+          />
+          <!--          <nz-input-number [(ngModel)]="dataEdit[idx].data.slTieuChuan" [nzSize]="'small'"-->
+          <!--                           [nzFormatter]="globals.formatter" nzDisabled [nzMin]="0"-->
+          <!--                           [nzParser]="globals.parser"></nz-input-number>-->
+          <!--        </th>-->
         <th>
-          <nz-input-number [(ngModel)]="dataEdit[idx].data.nhuCauTb" [nzSize]="'small'"
-                           [nzFormatter]="globals.formatter" nzDisabled [nzMin]="0"
-                           [nzParser]="globals.parser"></nz-input-number>
+          <input class="money-input" currencyMask [options]="amount" [min]="0"
+                 [(ngModel)]="dataEdit[idx].data.nhuCauTb"
+          />
+          <!--          <nz-input-number [(ngModel)]="dataEdit[idx].data.nhuCauTb" [nzSize]="'small'"-->
+          <!--                           [nzFormatter]="globals.formatter" nzDisabled [nzMin]="0"-->
+          <!--                           [nzParser]="globals.parser"></nz-input-number>-->
         </th>
         <th>
           <input type="text" [(ngModel)]="dataEdit[idx].data.ghiChu" nz-input/>

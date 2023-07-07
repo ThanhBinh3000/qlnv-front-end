@@ -90,6 +90,7 @@ export class ThongTinHopDongSctxComponent extends Base2Component implements OnIn
       tongTien: [0],
       trangThaiHd: [],
       tenTrangThaiHd: [],
+      loaiSuaChua: [null],
       fileDinhKems: [null],
       listKtTdscQuyetDinhPdKhlcntCvDaTh: null,
       listKtTdscQuyetDinhPdKhlcntCvKad: null,
