@@ -11,7 +11,7 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import * as uuid from 'uuid';
-import { BtnStatus, Doc, Form } from '../../../lap-ke-hoach-va-tham-dinh-du-toan/lap-ke-hoach-va-tham-dinh-du-toan.class';
+// import { BtnStatus, Doc, Form } from '../../../lap-ke-hoach-va-tham-dinh-du-toan/lap-ke-hoach-va-tham-dinh-du-toan.class';
 import { DialogSelectTaiSanComponent } from '../../dialogSelectTaiSan/dialogSelectTaiSan.component'
 
 export class ItemData {
@@ -42,7 +42,8 @@ export class ItemData {
 export class PhuLucTaiSanComponent implements OnInit {
 	@Input() dataInfo;
 	//thong tin chi tiet cua bieu mau
-	formDetail: Form = new Form();
+	// formDetail: Form = new Form();
+	formDetail: any;
 	total: ItemData = new ItemData();
 	maDviTien: string = '1';
 	namBcao: number;
@@ -66,7 +67,8 @@ export class PhuLucTaiSanComponent implements OnInit {
 	amount = AMOUNT;
 	scrollX: string;
 	//trang thai cac nut
-	status: BtnStatus = new BtnStatus();
+	// status: BtnStatus = new BtnStatus();
+	status:any ;
 	editMoneyUnit = false;
 	isDataAvailable = false;
 	allChecked = false;
@@ -87,7 +89,7 @@ export class PhuLucTaiSanComponent implements OnInit {
 		this.fileList.forEach((file: any) => {
 			const id = file?.lastModified.toString();
 			this.formDetail.lstFiles.push({
-				... new Doc(),
+				// ... new Doc(),
 				id: id,
 				fileName: file?.name
 			});
