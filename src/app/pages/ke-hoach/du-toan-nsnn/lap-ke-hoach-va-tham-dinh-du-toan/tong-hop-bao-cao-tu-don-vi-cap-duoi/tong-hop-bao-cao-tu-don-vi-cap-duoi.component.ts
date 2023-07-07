@@ -11,6 +11,7 @@ import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { DialogTaoMoiComponent } from '../dialog-tao-moi/dialog-tao-moi.component';
+import { Ltd } from '../lap-ke-hoach-va-tham-dinh-du-toan.constant';
 
 @Component({
     selector: 'app-tong-hop-bao-cao-tu-don-vi-cap-duoi',
@@ -146,14 +147,14 @@ export class TongHopBaoCaoTuDonViCapDuoiComponent implements OnInit {
             nzWidth: '900px',
             nzFooter: null,
             nzComponentParams: {
-                tab: 'tonghop'
+                tab: Ltd.DANH_SACH_TONG_HOP,
             },
         });
         modalTuChoi.afterClose.toPromise().then(async (res) => {
             if (res) {
                 const obj = {
                     baoCao: res,
-                    tabSelected: 'baocao',
+                    tabSelected: Ltd.BAO_CAO_01,
                     isSynthetic: true,
                 }
                 this.dataChange.emit(obj);

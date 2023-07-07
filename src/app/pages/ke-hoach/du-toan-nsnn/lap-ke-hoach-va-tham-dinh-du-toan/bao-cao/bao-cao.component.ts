@@ -14,7 +14,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import * as uuid from 'uuid';
-import { BtnStatus, Doc, Form, Report } from '../lap-ke-hoach-va-tham-dinh-du-toan.class';
+import { BtnStatus, Doc, Form, Report } from '../lap-ke-hoach-va-tham-dinh-du-toan.constant';
 import { PHU_LUC } from './bao-cao.constant';
 import { HangComponent } from './phu-luc/bao-hiem/hang/hang.component';
 import { KhoComponent } from './phu-luc/bao-hiem/kho/kho.component';
@@ -39,6 +39,7 @@ import { BieuMau14Component } from './thong-tu-69/bieu-mau-14/bieu-mau-14.compon
 import { BieuMau16Component } from './thong-tu-69/bieu-mau-16/bieu-mau-16.component';
 import { BieuMau17Component } from './thong-tu-69/bieu-mau-17/bieu-mau-17.component';
 import { BieuMau18Component } from './thong-tu-69/bieu-mau-18/bieu-mau-18.component';
+import { Ltd } from '../lap-ke-hoach-va-tham-dinh-du-toan.constant';
 
 @Component({
     selector: 'app-bao-cao',
@@ -270,16 +271,6 @@ export class BaoCaoComponent implements OnInit {
         }
     }
 
-    // lay ten trang thai ban ghi
-    // getStatusName(status: string) {
-    //     const statusMoi = status == Utils.TT_BC_6 || status == Utils.TT_BC_7;
-    //     if (statusMoi && this.userInfo.MA_DVI == this.baoCao.maDviCha) {
-    //         return 'Mới';
-    //     } else {
-    //         return this.trangThais.find(e => e.id == status)?.tenDm;
-    //     }
-    // }
-
     // xoa file trong bang file
     deleteFile(id: string): void {
         this.baoCao.lstFiles = this.baoCao.lstFiles.filter((a: any) => a.id !== id);
@@ -307,9 +298,7 @@ export class BaoCaoComponent implements OnInit {
                 if (data.statusCode == 0) {
                     this.baoCao = data.data;
                     this.baoCao.lstLapThamDinhs.forEach(item => {
-                        const appendix = this.listAppendix.find(e => e.id == item.maBieuMau);
-                        item.tenPl = appendix.tenPl;
-                        item.tenDm = Utils.getName(this.baoCao.namBcao, appendix.tenDm);
+                        [item.tenPl, item.tenDm] = Ltd.appendixName(item.maBieuMau, this.baoCao.namBcao);
                     })
                     this.listFile = [];
                     this.getStatusButton();
@@ -333,34 +322,28 @@ export class BaoCaoComponent implements OnInit {
             nzOkDanger: true,
             nzWidth: 500,
             nzOnOk: () => {
-                this.onSubmit(Utils.TT_BC_2, '')
+                this.onSubmit(Status.TT_02, '')
             },
         });
     }
 
     // chuc nang check role
     async onSubmit(mcn: string, lyDoTuChoi: string) {
-        if (mcn == Utils.TT_BC_2) {
+        if (mcn == Status.TT_02) {
             if (!this.baoCao.congVan) {
                 this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
                 return;
             }
-            if (!this.baoCao.lstLapThamDinhs.every(e => e.trangThai == '5')) {
+            if (!this.baoCao.lstLapThamDinhs.every(e => e.trangThai == Status.COMPLETE)) {
                 this.notification.warning(MESSAGE.ERROR, MESSAGE.FINISH_FORM);
                 return;
             }
         } else {
-            let check = true;
-            if (mcn == Utils.TT_BC_4 || mcn == Utils.TT_BC_7 || mcn == Utils.TT_BC_9) {
-                this.baoCao.lstLapThamDinhs.forEach(item => {
-                    if (item.trangThai == '2') {
-                        check = false;
-                    }
-                })
-            }
-            if (!check) {
-                this.notification.warning(MESSAGE.ERROR, MESSAGE.RATE_FORM);
-                return;
+            if (mcn == Status.TT_04 || mcn == Status.TT_07 || mcn == Status.TT_09) {
+                if (this.baoCao.lstLapThamDinhs.some(e => e.trangThai == Status.NOT_RATE)) {
+                    this.notification.warning(MESSAGE.ERROR, MESSAGE.RATE_FORM);
+                    return;
+                }
             }
         }
         const requestGroupButtons = {
@@ -372,7 +355,7 @@ export class BaoCaoComponent implements OnInit {
             if (data.statusCode == 0) {
                 this.baoCao.trangThai = mcn;
                 this.getStatusButton();
-                if (mcn == Utils.TT_BC_8 || mcn == Utils.TT_BC_5 || mcn == Utils.TT_BC_3) {
+                if (Status.check('reject', mcn)) {
                     this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
                 } else {
                     this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
@@ -496,7 +479,7 @@ export class BaoCaoComponent implements OnInit {
         const obj = {
             id: id,
             preData: this.data,
-            tabSelected: 'next-' + this.data?.tabSelected,
+            tabSelected: this.data.tabSelected == Ltd.BAO_CAO_01 ? Ltd.BAO_CAO_02 : Ltd.BAO_CAO_01,
         }
         this.dataChange.emit(obj);
     }
@@ -708,9 +691,7 @@ export class BaoCaoComponent implements OnInit {
                 if (data.statusCode == 0) {
                     Object.assign(this.baoCao, data.data);
                     this.baoCao.lstLapThamDinhs.forEach(item => {
-                        const appendix = this.listAppendix.find(e => e.id == item.maBieuMau);
-                        item.tenPl = appendix.tenPl;
-                        item.tenDm = Utils.getName(this.baoCao.namBcao, appendix.tenDm);
+                        [item.tenPl, item.tenDm] = Ltd.appendixName(item.maBieuMau, this.baoCao.namBcao);
                     })
                     this.getStatusButton();
                     this.notification.success(MESSAGE.SUCCESS, 'Khôi phục thành công.');
@@ -730,9 +711,7 @@ export class BaoCaoComponent implements OnInit {
                 if (data.statusCode == 0) {
                     Object.assign(this.baoCao, data.data);
                     this.baoCao.lstLapThamDinhs.forEach(item => {
-                        const appendix = this.listAppendix.find(e => e.id == item.maBieuMau);
-                        item.tenPl = appendix.tenPl;
-                        item.tenDm = Utils.getName(this.baoCao.namBcao, appendix.tenDm);
+                        [item.tenPl, item.tenDm] = Ltd.appendixName(item.maBieuMau, this.baoCao.namBcao);
                     })
                     this.getStatusButton();
                     this.notification.success(MESSAGE.SUCCESS, 'Tạo mới thành công.');

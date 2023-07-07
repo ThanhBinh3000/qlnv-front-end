@@ -10,6 +10,7 @@ import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { DialogTaoMoiTyLeBaoHiemComponent } from '../dialog-tao-moi-ty-le-bao-hiem/dialog-tao-moi-ty-le-bao-hiem.component';
+import { Ltd } from '../lap-ke-hoach-va-tham-dinh-du-toan.constant';
 
 @Component({
     selector: 'app-danh-sach-he-so-bao-hiem',
@@ -159,7 +160,7 @@ export class DanhSachHeSoBaoHiemComponent implements OnInit {
             if (res) {
                 const obj = {
                     baoCao: res,
-                    tabSelected: 'heso',
+                    tabSelected: Ltd.HE_SO_BAO_HIEM,
                 }
                 this.dataChange.emit(obj);
             }
@@ -170,7 +171,7 @@ export class DanhSachHeSoBaoHiemComponent implements OnInit {
     viewDetail(data: any) {
         const obj = {
             id: data.id,
-            tabSelected: 'heso',
+            tabSelected: Ltd.HE_SO_BAO_HIEM,
         }
         this.dataChange.emit(obj);
     }

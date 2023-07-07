@@ -11,6 +11,7 @@ import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
+import { Ltd } from '../lap-ke-hoach-va-tham-dinh-du-toan.constant';
 
 @Component({
     selector: 'app-danh-sach-bao-cao-tu-don-vi-cap-duoi',
@@ -159,7 +160,7 @@ export class DanhSachBaoCaoTuDonViCapDuoiComponent implements OnInit {
     viewDetail(data: any) {
         const obj = {
             id: data.id,
-            tabSelected: 'baocao',
+            tabSelected: Ltd.BAO_CAO_01,
         }
         this.dataChange.emit(obj);
     }
