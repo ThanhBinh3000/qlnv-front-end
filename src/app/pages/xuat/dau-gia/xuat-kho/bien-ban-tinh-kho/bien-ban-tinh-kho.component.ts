@@ -166,19 +166,16 @@ export class BienBanTinhKhoComponent extends Base2Component implements OnInit {
   }
 
   buildTableView() {
-    console.log(this.dataTable, " key ? key : null,")
-    let dataView = chain(this.dataTable)
-      .groupBy("soQdGiaoNvXh")
-      .map((value, key) => {
-        let quyetDinh = value.find(f => f.soQdGiaoNvXh === key)
-        let rs = chain(value)
-          .groupBy("soBbTinhKho")
-          .map((v, k) => {
+    let dataView = chain(this.dataTable).groupBy("soQdGiaoNvXh").map((value, key) => {
+      let quyetDinh = value.find(f => f.soQdGiaoNvXh === key)
+        let rs = chain(value).groupBy("soBbTinhKho").map((v, k) => {
               let soBb = v.find(s => s.soBbTinhKho === k)
               return {
                 idVirtual: uuid.v4(),
                 soBbTinhKho: k != "null" ? k : '',
+                maDiemKho: soBb ? soBb.maDiemKho : null,
                 tenDiemKho: soBb ? soBb.tenDiemKho : null,
+                maLoKho: soBb ? soBb.maLoKho : null,
                 tenLoKho: soBb ? soBb.tenLoKho : null,
                 ngayBatDauXuat: soBb ? soBb.ngayBatDauXuat : null,
                 ngayKetThucXuat: soBb ? soBb.ngayKetThucXuat : null,
