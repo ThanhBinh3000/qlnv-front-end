@@ -144,8 +144,8 @@ export class KiemTraChatLuongComponent extends Base2Component implements OnInit 
         this.dataTable = data.content.map(element => {
           return {
             ...element,
-            maKhoXuat: `${element.thoiHanDieuChuyen}${element.maloKhoXuat}${element.maNganKhoXuat}`,
-            maloNganKhoNhan: `${element.maloKhoNhan}${element.maNganKhoNhan}`
+            maKhoXuat: `${element.thoiHanDieuChuyen}${element.maLoKhoXuat}${element.maNganKhoXuat}`,
+            maloNganKhoNhan: `${element.maLoKhoNhan}${element.maNganKhoNhan}`
           }
         });
         this.dataTableView = this.buildTableView(this.dataTable)

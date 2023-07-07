@@ -92,7 +92,7 @@
               <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
               <td class="link bold">{{ item.soQd }}</td>
               <td class="bold">{{ item.nam }}</td>
-              <td class="bold">{{ item.tgianNkho }}</td>
+              <td class="bold">{{ item.tgianNkMnhat }}</td>
               <td colspan="7"></td>
               <td>
                 <a (click)="redirectToChiTiet(false, 0,item.id)">
@@ -115,7 +115,7 @@
                   <td></td>
                   <td></td>
                 </tr>
-                <ng-container *ngFor="let lk of bb.children, let y = index">
+                <ng-container *ngFor="let lk of bb.children, let k = index">
                   <tr>
                     <td></td>
                     <td></td>

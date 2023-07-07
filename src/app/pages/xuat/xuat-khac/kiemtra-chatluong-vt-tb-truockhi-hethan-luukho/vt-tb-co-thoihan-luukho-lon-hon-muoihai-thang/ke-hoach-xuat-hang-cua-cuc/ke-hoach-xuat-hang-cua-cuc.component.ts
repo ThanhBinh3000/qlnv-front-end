@@ -23,6 +23,8 @@ export class KeHoachXuatHangCuaCucComponent extends Base2Component implements On
   isDetail: boolean = false;
   selectedId: number;
   isView: boolean = false;
+  KE_HOACH: string = "00";
+
 
   constructor(httpClient: HttpClient,
               storageService: StorageService,
@@ -37,7 +39,8 @@ export class KeHoachXuatHangCuaCucComponent extends Base2Component implements On
       namKeHoach: [],
       soToTrinh: [],
       trichYeu: [],
-      loai: [LOAI.KE_HOACH],
+      capDvi: [2],
+      loai: [this.KE_HOACH],
       ngayKeHoach: [],
       ngayKeHoachTu: [],
       ngayKeHoachDen: [],
@@ -103,11 +106,5 @@ export class KeHoachXuatHangCuaCucComponent extends Base2Component implements On
     await this.search();
     this.isDetail = false;
   }
-}
-
-
-export enum LOAI {
-  KE_HOACH = "00",
-  TONG_HOP = "01",
 }
 

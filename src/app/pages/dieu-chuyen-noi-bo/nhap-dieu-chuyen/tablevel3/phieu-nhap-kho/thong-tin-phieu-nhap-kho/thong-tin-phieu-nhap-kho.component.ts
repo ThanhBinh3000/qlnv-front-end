@@ -122,7 +122,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
 
   async ngOnInit() {
     this.maBb = 'PNK-CCDTVP';
-    let id = await this.userService.getId('XH_PHIEU_NKHO_BTT_SEQ')
+    let id = await this.userService.getId('DCNB_BB_NT_BQ_HDR_SEQ')
     this.formData.patchValue({
       maDvi: this.userInfo.MA_DVI,
       tenDvi: this.userInfo.TEN_DVI,
@@ -141,16 +141,16 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
     //     soQdDcCuc: this.data.soQdinh,
     //     ngayQdDcCuc: this.data.thoiHanDieuChuyen,
     //     qdDcCucId: this.data.qdinhDccId,
-    //     tenLoKho: this.data.tenloKhoNhan,
-    //     maLoKho: this.data.maloKhoNhan,
+    //     tenLoKho: this.data.tenLoKhoNhan,
+    //     maLoKho: this.data.maLoKhoNhan,
     //     tenNganKho: this.data.tenNganKhoNhan,
     //     maNganKho: this.data.maNganKhoNhan,
     //     tenNhaKho: this.data.tenNhaKhoNhan,
     //     maNhaKho: this.data.maNhaKhoNhan,
     //     tenDiemKho: this.data.tenDiemKhoNhan,
     //     maDiemKho: this.data.maDiemKhoNhan,
-    //     tenLoKhoXuat: this.data.tenloKhoXuat,
-    //     maLoKhoXuat: this.data.maloKhoXuat,
+    //     tenLoKhoXuat: this.data.tenLoKhoXuat,
+    //     maLoKhoXuat: this.data.maLoKhoXuat,
     //     tenNganKhoXuat: this.data.tenNganKhoXuat,
     //     maNganKhoXuat: this.data.maNganKhoXuat,
     //     tenNhaKhoXuat: this.data.tenNhaKhoXuat,

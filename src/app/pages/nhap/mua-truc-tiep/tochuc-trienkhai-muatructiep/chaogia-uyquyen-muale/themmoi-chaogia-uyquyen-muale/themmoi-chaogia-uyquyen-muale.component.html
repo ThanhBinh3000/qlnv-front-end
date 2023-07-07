@@ -5,7 +5,7 @@
             <span>Quay lại</span>
         </button>
         <button
-            *ngIf="this.userService.isCuc() && formData.value.trangThai == STATUS.HOAN_THANH_CAP_NHAT ||  formData.value.trangThai == STATUS.DANG_CAP_NHAT"
+            *ngIf="radioValue == '01' && (this.userService.isCuc() && formData.value.trangThai == STATUS.DANG_CAP_NHAT)"
             type="button" class="btn btn-sub xanh-nhat" (click)="hoanThanhCapNhat()">
             <i class="icon htvbdh_tcdt_guiduyet"></i>
             <span>Hoàn thành cập nhập</span>
@@ -41,9 +41,9 @@
                                 <nz-form-control>
                                     <nz-radio-group [(ngModel)]="radioValue" nzName="radiogroup"
                                         [ngModelOptions]="{standalone: true}">
-                                        <label nz-radio nzValue="Chào giá"> Chào giá </label>
-                                        <label nz-radio nzValue="Ủy quyền"> Ủy quyền </label>
-                                        <label nz-radio nzValue="Mua lẻ"> Bán lẻ </label>
+                                        <label nz-radio nzValue="01"> Chào giá </label>
+                                        <label nz-radio nzValue="02"> Ủy quyền </label>
+                                        <label nz-radio nzValue="03"> Mua lẻ </label>
                                     </nz-radio-group>
                                 </nz-form-control>
                             </nz-form-item>
@@ -67,7 +67,7 @@
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
-                        <div nz-col [nzSpan]="17" *ngIf=" radioValue == 'Chào giá'">
+                        <div nz-col [nzSpan]="17" *ngIf=" radioValue == '01'">
                             <nz-form-item>
                                 <nz-form-label nzRequired [nzNoColon]="true"> Địa điểm chào giá </nz-form-label>
                                 <nz-form-control nz-col [nzSpan]="24">
@@ -127,7 +127,7 @@
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
-                        <div nz-col [nzSpan]="24" *ngIf=" radioValue == 'Ủy quyền'">
+                        <div nz-col [nzSpan]="24" *ngIf=" radioValue == '02'">
                             <nz-form-item nz-col class="form-item">
                                 <nz-form-label [nzNoColon]="true" class="label-color-kh">File đính kèm QĐ ủy quyền (nếu
                                     có)
@@ -137,7 +137,7 @@
                                 </div>
                             </nz-form-item>
                         </div>
-                        <div nz-col [nzSpan]="24" *ngIf=" radioValue == 'Mua lẻ'">
+                        <div nz-col [nzSpan]="24" *ngIf=" radioValue == '03'">
                             <nz-form-item nz-col class="form-item">
                                 <nz-form-label [nzNoColon]="true" class="label-color-kh"> File đính kèm QĐ giao chi cục
                                     mua lẻ
@@ -163,7 +163,7 @@
             </nz-collapse-panel>
         </nz-collapse>
 
-      <nz-collapse *ngIf=" radioValue == 'Chào giá'">
+      <nz-collapse *ngIf=" radioValue == '01'">
         <nz-collapse-panel nzActive="true" nzHeader="Chi tiết thông tin chào giá">
         <nz-table #tableData [nzData]="danhSachCtiet" class="nowrap" nzBordered>
           <thead>
@@ -205,7 +205,7 @@
       </nz-collapse>
 
         <!-- Thông tin các lần thực hiện đấu giá -->
-        <nz-collapse *ngIf=" radioValue == 'Chào giá'">
+        <nz-collapse *ngIf=" radioValue == '01'">
             <nz-collapse-panel nzActive="true" nzHeader="Danh sách các bảng chào giá">
                 <nz-table nzBordered [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false"
                     class="nowrap pd-10">

@@ -412,7 +412,7 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
     let res = await this.phieuKiemNghiemChatLuongDieuChuyenService.dsPhieuKNChatLuong(body)
     if (res.data) {
       const list = res.data;
-      const dataPhieu = list.find(item => (item.maDiemKho == data.maDiemKho && item.maNhaKho == data.maNhaKho && item.maNganKho == data.maNganKho && ((!item.maloKho && !data.maLoKho) || (item.maloKho && item.maloKho == data.maLoKho))));
+      const dataPhieu = list.find(item => (item.maDiemKho == data.maDiemKho && item.maNhaKho == data.maNhaKho && item.maNganKho == data.maNganKho && ((!item.maLoKho && !data.maLoKho) || (item.maLoKho && item.maLoKho == data.maLoKho))));
       if (dataPhieu) {
         let resDetail = await this.phieuKiemNghiemChatLuongDieuChuyenService.getDetail(dataPhieu.id);
         if (resDetail.data) {

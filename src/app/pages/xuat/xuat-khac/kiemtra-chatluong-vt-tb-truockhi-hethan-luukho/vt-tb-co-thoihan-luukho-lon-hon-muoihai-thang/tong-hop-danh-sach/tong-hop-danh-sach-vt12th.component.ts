@@ -105,7 +105,6 @@ export class TongHopDanhSachVt12thComponent extends Base2Component implements On
         this.loadDsDonVi(),
         this.loadDsVthh()
       ]);
-      console.log(this.openModal)
       await this.timKiem();
       if (this.openModal) {
         await this.showModal(true);

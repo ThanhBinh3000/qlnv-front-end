@@ -53,8 +53,8 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
   @Input() isViewOnModal: boolean;
   @Input() passData: PassDataPKNCL = {
     soQdinhDcc: '', qdinhDccId: null, ngayQDHieuLuc: '', soBBLayMau: '', ngaylayMau: '', soPhieuKnChatLuong: '', phieuKnChatLuongId: null, bblayMauId: null,
-    donViTinh: '', maChLoaiHangHoa: '', maHangHoa: '', maDiemKho: '', maNhaKho: '', maNganKho: '', maloKho: '',
-    tenDiemKho: '', tenNhaKho: '', tenNganKho: '', tenloKho: '', tenHangHoa: '', tenChLoaiHangHoa: '', tenDonViTinh: '', thuKhoId: null, tenThuKho: ''
+    donViTinh: '', maChLoaiHangHoa: '', maHangHoa: '', maDiemKho: '', maNhaKho: '', maNganKho: '', maLoKho: '',
+    tenDiemKho: '', tenNhaKho: '', tenNganKho: '', tenLoKho: '', tenHangHoa: '', tenChLoaiHangHoa: '', tenDonViTinh: '', thuKhoId: null, tenThuKho: ''
   };
   @Output()
   showListEvent = new EventEmitter<any>();
@@ -230,7 +230,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
       loaiVthh: this.passData.maHangHoa,
       cloaiVthh: this.passData.maChLoaiHangHoa,
       maDiemKho: this.passData.maDiemKho,
-      maLoKho: this.passData.maloKho,
+      maLoKho: this.passData.maLoKho,
       maNganKho: this.passData.maNganKho,
       maNhaKho: this.passData.maNhaKho,
       ngayLayMau: this.passData.ngaylayMau,
@@ -240,11 +240,11 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
       soQdinhDc: this.passData.soQdinhDcc,
       tenCloaiVthh: this.passData.tenChLoaiHangHoa,
       tenDiemKho: this.passData.tenDiemKho,
-      tenLoKho: this.passData.tenloKho,
+      tenLoKho: this.passData.tenLoKho,
       tenLoaiVthh: this.passData.tenHangHoa,
       tenNganKho: this.passData.tenNganKho,
       tenNhaKho: this.passData.tenNhaKho,
-      tenNganLoKho: this.passData.tenloKho ? `${this.passData.tenloKho} - ${this.passData.tenNganKho}` : this.passData.tenNganKho,
+      tenNganLoKho: this.passData.tenLoKho ? `${this.passData.tenLoKho} - ${this.passData.tenNganKho}` : this.passData.tenNganKho,
       thuKhoId: this.passData.thuKhoId,
       tenThuKho: this.passData.tenThuKho,
       thayDoiThuKho: this.thayDoiThuKho,
