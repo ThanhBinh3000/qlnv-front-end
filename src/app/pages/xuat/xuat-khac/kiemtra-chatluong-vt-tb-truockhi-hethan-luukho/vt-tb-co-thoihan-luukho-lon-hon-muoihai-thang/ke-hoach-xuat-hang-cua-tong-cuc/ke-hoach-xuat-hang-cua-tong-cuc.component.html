@@ -203,10 +203,14 @@
           <td>{{ data.soDviTaiSan }}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-left">
-            <a (click)="themMoi(data.id, true)">
+            <a
+              *ngIf="data.trangThai !== STATUS.DU_THAO && data.trangThai !==STATUS.TUCHOI_BTC &&  data.trangThai!==STATUS.TU_CHOI_LDV && data.trangThai!==STATUS.TU_CHOI_LDTC"
+              (click)="themMoi(data.id, true)">
               <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
-            <a *ngIf="data.trangThai==STATUS.DU_THAO" (click)="themMoi(data.id, false)">
+            <a
+              *ngIf="data.trangThai==STATUS.DU_THAO || data.trangThai==STATUS.TUCHOI_BTC || data.trangThai==STATUS.TU_CHOI_LDV || data.trangThai==STATUS.TU_CHOI_LDTC"
+              (click)="themMoi(data.id, false)">
               <i class="fa fa-pencil" title="Sửa"></i>
             </a>
             <a *ngIf="data.trangThai==STATUS.DU_THAO" (click)="delete(data)">
