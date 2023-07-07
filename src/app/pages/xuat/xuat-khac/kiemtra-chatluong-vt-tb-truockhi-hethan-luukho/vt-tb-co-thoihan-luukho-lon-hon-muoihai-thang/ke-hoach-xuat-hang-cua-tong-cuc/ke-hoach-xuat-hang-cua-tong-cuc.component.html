@@ -93,7 +93,8 @@
       </div>
     </nz-card>
     <div class="group-button">
-      <h3 class="text-uppercase">Danh sách kế hoạch xuất hàng VT, TB có thời hạn lưu kho lớn hơn 12 tháng của toàn tổng cục DTNN
+      <h3 class="text-uppercase">Danh sách kế hoạch xuất hàng VT, TB có thời hạn lưu kho lớn hơn 12 tháng của toàn tổng
+        cục DTNN
       </h3>
       <div class="buttons">
         <button
@@ -234,7 +235,8 @@
     </nz-card>
   </div>
 </div>
-<!--<div class="chi-tiet" *ngIf="isDetail">-->
-<!--  <app-thong-tin-ke-hoach-xuat-hang-cua-cuc [isViewDetail]="isView" (showListEvent)="showList()" [idInput]="selectedId">-->
-<!--  </app-thong-tin-ke-hoach-xuat-hang-cua-cuc>-->
-<!--</div>-->
+<div class="chi-tiet" *ngIf="isDetail">
+  <app-thong-tin-ke-hoach-xuat-hang-cua-tong-cuc [isViewDetail]="isView" (showListEvent)="showList()"
+                                                 [idInput]="selectedId" [dataTongHop]="dataTongHop">
+  </app-thong-tin-ke-hoach-xuat-hang-cua-tong-cuc>
+</div>
