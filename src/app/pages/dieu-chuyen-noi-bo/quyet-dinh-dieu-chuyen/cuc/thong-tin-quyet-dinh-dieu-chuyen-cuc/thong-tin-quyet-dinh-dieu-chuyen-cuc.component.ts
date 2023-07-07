@@ -561,10 +561,10 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
                 }).value() : chain(vs).groupBy("maChiCucNhan")?.map((m, im) => {
 
                   const maChiCucNhan = m.find(f => f.maChiCucNhan == im);
-                  const hasMaDiemKhoNhan = m.some(f => f.maDiemKhoNhan);
-                  if (!hasMaDiemKhoNhan) return {
-                    ...maChiCucNhan
-                  }
+                  // const hasMaDiemKhoNhan = m.some(f => f.maDiemKhoNhan);
+                  // if (!hasMaDiemKhoNhan) return {
+                  //   ...maChiCucNhan
+                  // }
 
                   const rssx = chain(m).groupBy("maDiemKhoNhan")?.map((n, inx) => {
 
@@ -995,6 +995,57 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
     }
   }
 
+  xoaDiemKhoNhanCC(row) {
+    const dsDelete = this.danhSachKeHoach.filter(kh =>
+    (kh.maChiCucNhan === row.maChiCucNhan &&
+      kh.maDiemKho === row.maDiemKho &&
+      kh.maNhaKho === row.maNhaKho &&
+      kh.maNganKho === row.maNganKho &&
+      (row.maLoKho ? kh.maLoKho === row.maLoKho : true) &&
+      kh.maDiemKhoNhan === row.maDiemKhoNhan)
+    )
+
+    this.danhSachKeHoach = this.danhSachKeHoach.filter(kh =>
+      !(kh.maChiCucNhan === row.maChiCucNhan &&
+        kh.maDiemKho === row.maDiemKho &&
+        kh.maNhaKho === row.maNhaKho &&
+        kh.maNganKho === row.maNganKho &&
+        (row.maLoKho ? kh.maLoKho === row.maLoKho : true) &&
+        kh.maDiemKhoNhan === row.maDiemKhoNhan)
+    )
+
+    if (dsDelete.length == 1) {
+      this.danhSachKeHoach.push({
+        ...row,
+        tenDiemKhoNhan: "",
+        maDiemKhoNhan: "",
+        tenNhaKhoNhan: "",
+        maNhaKhoNhan: "",
+        tenNganKhoNhan: "",
+        maNganKhoNhan: "",
+        tenLoKhoNhan: "",
+        maLoKhoNhan: "",
+        tichLuongKd: "",
+        soLuongPhanBo: "",
+      })
+    }
+
+    this.dataTableView = this.buildTableView(this.danhSachKeHoach, "maDvi")
+
+    console.log('xoaDiemKhoNhanCC', row, dsDelete, this.dataTableView)
+
+    if (this.idInput) {
+      const qDinh = this.formData.value.danhSachQuyetDinh.find(item => item.keHoachDcHdrId === row.hdrId)
+      const dsKH = qDinh.danhSachKeHoach.filter(item => item.maDiemKhoNhan !== row.maDiemKhoNhan)
+      qDinh.danhSachKeHoach = dsKH
+      const dsQuyetDinh = this.formData.value.danhSachQuyetDinh.filter(item => item.keHoachDcHdrId !== row.hdrId)
+      dsQuyetDinh.push(qDinh)
+      this.formData.patchValue({
+        danhSachQuyetDinh: dsQuyetDinh
+      })
+    }
+  }
+
   suaDiemKhoNhan(row) {
     this.typeKeHoach = "DIEM_KHO_NHAN"
     const data = {
@@ -1062,6 +1113,63 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
       this.dataTableView = this.buildTableView(this.danhSachKeHoach, "maChiCucNhan")
     if (this.isChiCuc())
       this.dataTableView = this.buildTableView(this.danhSachKeHoach, "maDvi")
+
+    if (this.idInput) {
+      const qDinh = this.formData.value.danhSachQuyetDinh.find(item => item.keHoachDcHdrId === row.hdrId)
+      const dsKH = row.maLoKhoNhan ? qDinh.danhSachKeHoach.filter(item => item.maLoKhoNhan !== row.maLoKhoNhan) : qDinh.danhSachKeHoach.filter(item => item.maNganKhoNhan !== row.maNganKhoNhan)
+      qDinh.danhSachKeHoach = dsKH
+      const dsQuyetDinh = this.formData.value.danhSachQuyetDinh.filter(item => item.keHoachDcHdrId !== row.hdrId)
+      dsQuyetDinh.push(qDinh)
+      this.formData.patchValue({
+        danhSachQuyetDinh: dsQuyetDinh
+      })
+    }
+
+
+  }
+
+  xoaLoKhoNhanCC(row) {
+    const dsDelete = this.danhSachKeHoach.filter(kh =>
+    (kh.maChiCucNhan === row.maChiCucNhan &&
+      kh.maDiemKho === row.maDiemKho &&
+      kh.maNhaKho === row.maNhaKho &&
+      kh.maNganKho === row.maNganKho &&
+      (row.maLoKho ? kh.maLoKho === row.maLoKho : true) &&
+      kh.maDiemKhoNhan === row.maDiemKhoNhan &&
+      kh.maNhaKhoNhan === row.maNhaKhoNhan &&
+      kh.maNganKhoNhan === row.maNganKhoNhan &&
+      (row.maLoKhoNhan ? kh.maLoKhoNhan === row.maLoKhoNhan : true))
+    )
+
+    this.danhSachKeHoach = this.danhSachKeHoach.filter(kh =>
+      !(kh.maChiCucNhan === row.maChiCucNhan &&
+        kh.maDiemKho === row.maDiemKho &&
+        kh.maNhaKho === row.maNhaKho &&
+        kh.maNganKho === row.maNganKho &&
+        (row.maLoKho ? kh.maLoKho === row.maLoKho : true) &&
+        kh.maDiemKhoNhan === row.maDiemKhoNhan &&
+        kh.maNhaKhoNhan === row.maNhaKhoNhan &&
+        kh.maNganKhoNhan === row.maNganKhoNhan &&
+        (row.maLoKhoNhan ? kh.maLoKhoNhan === row.maLoKhoNhan : true))
+    )
+
+
+
+    if (dsDelete.length == 1) {
+      this.danhSachKeHoach.push({
+        ...row,
+        tenNhaKhoNhan: "",
+        maNhaKhoNhan: "",
+        tenNganKhoNhan: "",
+        maNganKhoNhan: "",
+        tenLoKhoNhan: "",
+        maLoKhoNhan: "",
+        tichLuongKd: "",
+        soLuongPhanBo: "",
+      })
+    }
+
+    this.dataTableView = this.buildTableView(this.danhSachKeHoach, "maDvi")
 
     if (this.idInput) {
       const qDinh = this.formData.value.danhSachQuyetDinh.find(item => item.keHoachDcHdrId === row.hdrId)
