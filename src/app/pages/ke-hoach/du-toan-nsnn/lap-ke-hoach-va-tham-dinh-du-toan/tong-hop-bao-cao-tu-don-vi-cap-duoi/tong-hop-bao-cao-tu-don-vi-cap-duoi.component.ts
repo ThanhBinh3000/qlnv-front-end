@@ -6,8 +6,8 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Roles, Status, Utils } from 'src/app/Utility/utils';
 import { MESSAGE } from 'src/app/constants/message';
-import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
+import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { DialogTaoMoiComponent } from '../dialog-tao-moi/dialog-tao-moi.component';
@@ -42,9 +42,9 @@ export class TongHopBaoCaoTuDonViCapDuoiComponent implements OnInit {
     constructor(
         private spinner: NgxSpinnerService,
         private lapThamDinhService: LapThamDinhService,
+        private quanLyVonPhiService: QuanLyVonPhiService,
         private notification: NzNotificationService,
         private modal: NzModalService,
-        private danhMuc: DanhMucHDVService,
         public userService: UserService,
         public globals: Globals,
     ) { }
@@ -54,9 +54,13 @@ export class TongHopBaoCaoTuDonViCapDuoiComponent implements OnInit {
         this.spinner.show();
         //khoi tao gia tri mac dinh
         this.maDviTao = this.userInfo?.MA_DVI;
-        this.statusNewReport = this.userService.isAccessPermisson(Roles.LTD.SYNTHETIC_REPORT);
+        this.statusNewReport = this.userService.isAccessPermisson(Roles.LTD.SYNTH_REPORT);
         //lay danh sach ca don vi truc thuoc
-        await this.danhMuc.dMDviCon().toPromise().then(
+        const request = {
+            maDviCha: this.userInfo.maDvi,
+            trangThai: '01',
+        }
+        await this.quanLyVonPhiService.dmDviCon(request).toPromise().then(
             data => {
                 if (data.statusCode == 0) {
                     this.donVis = data.data;

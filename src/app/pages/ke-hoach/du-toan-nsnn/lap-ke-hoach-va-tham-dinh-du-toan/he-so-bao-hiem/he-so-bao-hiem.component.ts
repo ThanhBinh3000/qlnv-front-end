@@ -137,10 +137,10 @@ export class HeSoBaoHiemComponent implements OnInit {
     getStatusButton() {
         const isChild = this.userInfo.MA_DVI == this.baoCao.maDvi;
         //kiem tra quyen cua cac user
-        const checkSave = this.userService.isAccessPermisson(Roles.LTD.EDIT_COEFFCIENT_INSURANCE);
-        const checkSunmit = this.userService.isAccessPermisson(Roles.LTD.APPROVE_COEFFCIENT_INSURANCE);
-        const checkPass = this.userService.isAccessPermisson(Roles.LTD.DUYET_COEFFCIENT_INSURANCE);
-        const checkApprove = this.userService.isAccessPermisson(Roles.LTD.PHE_DUYET_COEFFCIENT_INSURANCE);
+        const checkSave = this.userService.isAccessPermisson(Roles.LTD.EDIT_COEF_INS);
+        const checkSunmit = this.userService.isAccessPermisson(Roles.LTD.SUBMIT_COEF_INS);
+        const checkPass = this.userService.isAccessPermisson(Roles.LTD.PASS_COEF_INS);
+        const checkApprove = this.userService.isAccessPermisson(Roles.LTD.APPROVE_COEF_INS);
 
         this.status.general = Status.check('saveWOHist', this.baoCao.trangThai) && checkSave;
         this.status.save = Status.check('saveWOHist', this.baoCao.trangThai) && checkSave && isChild;

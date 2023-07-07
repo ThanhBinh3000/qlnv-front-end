@@ -14,8 +14,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import * as uuid from 'uuid';
-import { BtnStatus, Doc, Form, Report } from '../lap-ke-hoach-va-tham-dinh-du-toan.constant';
-import { PHU_LUC } from './bao-cao.constant';
+import { BtnStatus, Doc, Form, Ltd, Report } from '../lap-ke-hoach-va-tham-dinh-du-toan.constant';
 import { HangComponent } from './phu-luc/bao-hiem/hang/hang.component';
 import { KhoComponent } from './phu-luc/bao-hiem/kho/kho.component';
 import { TongHopComponent } from './phu-luc/bao-hiem/tong-hop/tong-hop.component';
@@ -39,7 +38,6 @@ import { BieuMau14Component } from './thong-tu-69/bieu-mau-14/bieu-mau-14.compon
 import { BieuMau16Component } from './thong-tu-69/bieu-mau-16/bieu-mau-16.component';
 import { BieuMau17Component } from './thong-tu-69/bieu-mau-17/bieu-mau-17.component';
 import { BieuMau18Component } from './thong-tu-69/bieu-mau-18/bieu-mau-18.component';
-import { Ltd } from '../lap-ke-hoach-va-tham-dinh-du-toan.constant';
 
 @Component({
     selector: 'app-bao-cao',
@@ -57,8 +55,7 @@ export class BaoCaoComponent implements OnInit {
     //thong tin chung bao cao
     baoCao: Report = new Report();
     //danh muc
-    listAppendix: any[] = PHU_LUC;
-    tabs: any[] = [];
+    listAppendix: any[] = Ltd.PHU_LUC;
     canBos: any[];
     //file
     listFile: File[] = [];                      // list file chua ten va id de hien tai o input
@@ -71,10 +68,7 @@ export class BaoCaoComponent implements OnInit {
     isChild: boolean;
     isParent: boolean;
     //phan tab
-    tabSelected: string;
     selectedIndex = 0;
-    //truyen du lieu sang tab con
-    tabData: any;
     // before uploaf file
     beforeUpload = (file: NzUploadFile): boolean => {
         this.fileList = this.fileList.concat(file);
@@ -173,7 +167,6 @@ export class BaoCaoComponent implements OnInit {
             default:
                 break;
         }
-        this.tabs = [];
         this.spinner.hide();
     }
 
@@ -187,8 +180,8 @@ export class BaoCaoComponent implements OnInit {
         } else {
             this.baoCao = this.data.baoCao;
         }
-
-        if (Utils.statusSave.includes(this.baoCao.trangThai)) {
+        this.getStatusButton();
+        if (this.status.general) {
             await this.getListUser();
             this.listAppendix.forEach(e => {
                 e.tenDm = Utils.getName(this.baoCao.namBcao, e.tenDm);
@@ -237,13 +230,13 @@ export class BaoCaoComponent implements OnInit {
         this.isChild = this.userInfo.MA_DVI == this.baoCao.maDvi;
         this.isParent = this.userInfo.MA_DVI == this.baoCao.maDviCha;
         //kiem tra quyen cua cac user
-        const checkSave = isSynthetic ? this.userService.isAccessPermisson(Roles.LTD.EDIT_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(Roles.LTD.EDIT_REPORT);
-        const checkSunmit = isSynthetic ? this.userService.isAccessPermisson(Roles.LTD.APPROVE_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(Roles.LTD.APPROVE_REPORT);
-        const checkPass = isSynthetic ? this.userService.isAccessPermisson(Roles.LTD.DUYET_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(Roles.LTD.DUYET_REPORT);
-        const checkApprove = isSynthetic ? this.userService.isAccessPermisson(Roles.LTD.PHE_DUYET_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(Roles.LTD.PHE_DUYET_REPORT);
-        const checkAccept = this.userService.isAccessPermisson(Roles.LTD.TIEP_NHAN_REPORT);
-        const checkPrint = isSynthetic ? this.userService.isAccessPermisson(Roles.LTD.PRINT_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(Roles.LTD.PRINT_REPORT);
-        const checkExport = isSynthetic ? this.userService.isAccessPermisson(Roles.LTD.EXPORT_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(Roles.LTD.EXPORT_REPORT)
+        const checkSave = isSynthetic ? this.userService.isAccessPermisson(Roles.LTD.EDIT_SYNTH_REPORT) : this.userService.isAccessPermisson(Roles.LTD.EDIT_REPORT);
+        const checkSunmit = isSynthetic ? this.userService.isAccessPermisson(Roles.LTD.SUBMIT_SYNTH_REPORT) : this.userService.isAccessPermisson(Roles.LTD.SUBMIT_REPORT);
+        const checkPass = isSynthetic ? this.userService.isAccessPermisson(Roles.LTD.PASS_SYNTH_REPORT) : this.userService.isAccessPermisson(Roles.LTD.PASS_REPORT);
+        const checkApprove = isSynthetic ? this.userService.isAccessPermisson(Roles.LTD.APPROVE_SYNTH_REPORT) : this.userService.isAccessPermisson(Roles.LTD.APPROVE_REPORT);
+        const checkAccept = this.userService.isAccessPermisson(Roles.LTD.ACCEPT_REPORT);
+        const checkPrint = isSynthetic ? this.userService.isAccessPermisson(Roles.LTD.PRINT_SYNTH_REPORT) : this.userService.isAccessPermisson(Roles.LTD.PRINT_REPORT);
+        const checkExport = isSynthetic ? this.userService.isAccessPermisson(Roles.LTD.EXPORT_SYNTH_REPORT) : this.userService.isAccessPermisson(Roles.LTD.EXPORT_REPORT)
 
         this.status.general = Status.check('saveWHist', this.baoCao.trangThai) && checkSave;
         this.status.new = Status.check('reject', this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.LTD.ADD_REPORT) && this.isChild;
@@ -360,7 +353,6 @@ export class BaoCaoComponent implements OnInit {
                 } else {
                     this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
                 }
-                this.tabs = [];
             } else {
                 this.notification.error(MESSAGE.ERROR, data?.msg);
             }

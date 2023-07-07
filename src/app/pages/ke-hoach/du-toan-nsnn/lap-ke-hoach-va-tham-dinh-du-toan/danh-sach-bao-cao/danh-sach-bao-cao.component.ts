@@ -67,11 +67,11 @@ export class DanhSachBaoCaoComponent implements OnInit {
         this.searchFilter.donViTao = this.userInfo?.MA_DVI;
         //check quyen va cac nut chuc nang
         this.statusNewReport = this.userService.isAccessPermisson(Roles.LTD.ADD_REPORT);
-        this.statusDelete = this.userService.isAccessPermisson(Roles.LTD.DELETE_REPORT) || this.userService.isAccessPermisson(Roles.LTD.DELETE_SYNTHETIC_REPORT);
-        if (this.userService.isAccessPermisson(Roles.LTD.DUYET_REPORT) || this.userService.isAccessPermisson(Roles.LTD.DUYET_SYNTHETIC_REPORT)) {
+        this.statusDelete = this.userService.isAccessPermisson(Roles.LTD.DEL_REPORT) || this.userService.isAccessPermisson(Roles.LTD.DEL_SYNTH_REPORT);
+        if (this.userService.isAccessPermisson(Roles.LTD.PASS_REPORT) || this.userService.isAccessPermisson(Roles.LTD.PASS_SYNTH_REPORT)) {
             this.searchFilter.trangThai = Status.TT_02;
         } else {
-            if (this.userService.isAccessPermisson(Roles.LTD.PHE_DUYET_REPORT) || this.userService.isAccessPermisson(Roles.LTD.PHE_DUYET_SYNTHETIC_REPORT)) {
+            if (this.userService.isAccessPermisson(Roles.LTD.APPROVE_REPORT) || this.userService.isAccessPermisson(Roles.LTD.APPROVE_SYNTH_REPORT)) {
                 this.searchFilter.trangThai = Status.TT_04;
             }
         }
@@ -146,13 +146,13 @@ export class DanhSachBaoCaoComponent implements OnInit {
     checkEditStatus(item: any) {
         const isSynthetic = item.tongHopTu != "[]";
         return Status.check('saveWHist', item.trangThai) &&
-            (isSynthetic ? this.userService.isAccessPermisson(Roles.LTD.EDIT_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(Roles.LTD.EDIT_REPORT));
+            (isSynthetic ? this.userService.isAccessPermisson(Roles.LTD.EDIT_SYNTH_REPORT) : this.userService.isAccessPermisson(Roles.LTD.EDIT_REPORT));
     }
 
     checkDeleteStatus(item: any) {
         const isSynthetic = item.tongHopTu != "[]";
         return Status.check('saveWHist', item.trangThai) &&
-            (isSynthetic ? this.userService.isAccessPermisson(Roles.LTD.DELETE_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(Roles.LTD.DELETE_REPORT));
+            (isSynthetic ? this.userService.isAccessPermisson(Roles.LTD.DEL_SYNTH_REPORT) : this.userService.isAccessPermisson(Roles.LTD.DEL_REPORT));
     }
 
     // getStatusName(trangThai: string) {

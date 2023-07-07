@@ -61,12 +61,12 @@ export class DanhSachHeSoBaoHiemComponent implements OnInit {
         newDate.setMonth(newDate.getMonth() - 1);
         this.searchFilter.tuNgay = newDate;
         //check quyen va cac nut chuc nang
-        this.statusNewReport = this.userService.isAccessPermisson(Roles.LTD.ADD_COEFFCIENT_INSURANCE);
-        this.statusDelete = this.userService.isAccessPermisson(Roles.LTD.DELETE_COEFFCIENT_INSURANCE);
-        if (this.userService.isAccessPermisson(Roles.LTD.DUYET_COEFFCIENT_INSURANCE)) {
+        this.statusNewReport = this.userService.isAccessPermisson(Roles.LTD.ADD_COEF_INS);
+        this.statusDelete = this.userService.isAccessPermisson(Roles.LTD.DEL_COEF_INS);
+        if (this.userService.isAccessPermisson(Roles.LTD.PASS_COEF_INS)) {
             this.searchFilter.trangThai = Utils.TT_BC_2;
         } else {
-            if (this.userService.isAccessPermisson(Roles.LTD.PHE_DUYET_COEFFCIENT_INSURANCE)) {
+            if (this.userService.isAccessPermisson(Roles.LTD.APPROVE_COEF_INS)) {
                 this.searchFilter.trangThai = Utils.TT_BC_4;
             }
         }
@@ -136,12 +136,12 @@ export class DanhSachHeSoBaoHiemComponent implements OnInit {
 
     checkEditStatus(item: any) {
         return Status.check('saveWOHist', item.trangThai) &&
-            this.userService.isAccessPermisson(Roles.LTD.EDIT_COEFFCIENT_INSURANCE);
+            this.userService.isAccessPermisson(Roles.LTD.EDIT_COEF_INS);
     }
 
     checkDeleteStatus(item: any) {
         return Status.check('saveWOHist', item.trangThai) &&
-            this.userService.isAccessPermisson(Roles.LTD.DELETE_COEFFCIENT_INSURANCE);
+            this.userService.isAccessPermisson(Roles.LTD.DEL_COEF_INS);
     }
 
     //them moi bao cao

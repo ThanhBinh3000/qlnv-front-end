@@ -14,7 +14,7 @@
                                 </ng-container>
                                 <ng-template #editMoney>
                                     <nz-select nzShowSearch nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
-                                        (ngModelChange)="editMoneyUnit=false">
+                                        (ngModelChange)="editMoneyUnit=false; Op.setMoneyUnit(maDviTien)">
                                         <nz-option *ngFor="let item of Utils.DVI_TIEN" [nzValue]="item.id"
                                             [nzLabel]="item.tenDm">
                                         </nz-option>
@@ -154,40 +154,40 @@
                                         {{ data.nguonKphi }}
                                     </td>
                                     <td>
-                                        {{ Op.fmtVal(data.ncauChiTongSo, maDviTien) }}
+                                        {{ Op.fmtVal(data.ncauChiTongSo) }}
                                     </td>
                                     <td>
-                                        {{ Op.fmtVal(data.ncauChiTrongDoChiCs, maDviTien) }}
+                                        {{ Op.fmtVal(data.ncauChiTrongDoChiCs) }}
                                     </td>
                                     <td>
-                                        {{ Op.fmtVal(data.ncauChiTrongDoChiMoi, maDviTien) }}
+                                        {{ Op.fmtVal(data.ncauChiTrongDoChiMoi) }}
                                     </td>
                                     <td>
-                                        {{ Op.fmtVal(data.ncauChiChiaRaDtuPtrien, maDviTien) }}
+                                        {{ Op.fmtVal(data.ncauChiChiaRaDtuPtrien) }}
                                     </td>
                                     <td>
-                                        {{ Op.fmtVal(data.ncauChiChiaRaChiCs1, maDviTien) }}
+                                        {{ Op.fmtVal(data.ncauChiChiaRaChiCs1) }}
                                     </td>
                                     <td>
-                                        {{ Op.fmtVal(data.ncauChiChiaRaChiMoi1, maDviTien) }}
+                                        {{ Op.fmtVal(data.ncauChiChiaRaChiMoi1) }}
                                     </td>
                                     <td>
-                                        {{ Op.fmtVal(data.ncauChiChiaRaChiTx, maDviTien) }}
+                                        {{ Op.fmtVal(data.ncauChiChiaRaChiTx) }}
                                     </td>
                                     <td>
-                                        {{ Op.fmtVal(data.ncauChiChiaRaChiCs2, maDviTien) }}
+                                        {{ Op.fmtVal(data.ncauChiChiaRaChiCs2) }}
                                     </td>
                                     <td>
-                                        {{ Op.fmtVal(data.ncauChiChiaRaChiMoi2, maDviTien) }}
+                                        {{ Op.fmtVal(data.ncauChiChiaRaChiMoi2) }}
                                     </td>
                                     <td>
-                                        {{ Op.fmtVal(data.ncauChiChiaRaChiDtqg, maDviTien) }}
+                                        {{ Op.fmtVal(data.ncauChiChiaRaChiDtqg) }}
                                     </td>
                                     <td>
-                                        {{ Op.fmtVal(data.ncauChiChiaRaChiCs3, maDviTien) }}
+                                        {{ Op.fmtVal(data.ncauChiChiaRaChiCs3) }}
                                     </td>
                                     <td>
-                                        {{ Op.fmtVal(data.ncauChiChiaRaChiMoi3, maDviTien) }}
+                                        {{ Op.fmtVal(data.ncauChiChiaRaChiMoi3) }}
                                     </td>
                                     <td>
                                         {{ data.ghiChu }}
@@ -217,16 +217,16 @@
                                         <input nz-input [(ngModel)]="editCache[data.id].data.nguonKphi" />
                                     </td>
                                     <td>
-                                        {{ Op.fmtVal(editCache[data.id].data.ncauChiTongSo, maDviTien) }}
+                                        {{ Op.fmtVal(editCache[data.id].data.ncauChiTongSo) }}
                                     </td>
                                     <td>
-                                        {{ Op.fmtVal(editCache[data.id].data.ncauChiTrongDoChiCs, maDviTien) }}
+                                        {{ Op.fmtVal(editCache[data.id].data.ncauChiTrongDoChiCs) }}
                                     </td>
                                     <td>
-                                        {{ Op.fmtVal(editCache[data.id].data.ncauChiTrongDoChiMoi, maDviTien) }}
+                                        {{ Op.fmtVal(editCache[data.id].data.ncauChiTrongDoChiMoi) }}
                                     </td>
                                     <td>
-                                        {{ Op.fmtVal(editCache[data.id].data.ncauChiChiaRaDtuPtrien, maDviTien) }}
+                                        {{ Op.fmtVal(editCache[data.id].data.ncauChiChiaRaDtuPtrien) }}
                                     </td>
                                     <td>
                                         <input class="money-input" currencyMask [options]="Op.amount"
@@ -239,7 +239,7 @@
                                             (ngModelChange)="changeModel(data.id)" />
                                     </td>
                                     <td>
-                                        {{ Op.fmtVal(editCache[data.id].data.ncauChiChiaRaChiTx, maDviTien) }}
+                                        {{ Op.fmtVal(editCache[data.id].data.ncauChiChiaRaChiTx) }}
                                     </td>
                                     <td>
                                         <input class="money-input" currencyMask [options]="Op.amount"
@@ -252,7 +252,7 @@
                                             (ngModelChange)="changeModel(data.id)" />
                                     </td>
                                     <td>
-                                        {{ Op.fmtVal(editCache[data.id].data.ncauChiChiaRaChiDtqg, maDviTien) }}
+                                        {{ Op.fmtVal(editCache[data.id].data.ncauChiChiaRaChiDtqg) }}
                                     </td>
                                     <td>
                                         <input class="money-input" currencyMask [options]="Op.amount"
@@ -283,18 +283,18 @@
                                 <td></td>
                                 <td></td>
                                 <td></td>
-                                <td>{{ Op.fmtVal(total.ncauChiTongSo, maDviTien) }}</td>
-                                <td>{{ Op.fmtVal(total.ncauChiTrongDoChiCs, maDviTien) }}</td>
-                                <td>{{ Op.fmtVal(total.ncauChiTrongDoChiMoi, maDviTien) }}</td>
-                                <td>{{ Op.fmtVal(total.ncauChiChiaRaDtuPtrien, maDviTien) }}</td>
-                                <td>{{ Op.fmtVal(total.ncauChiChiaRaChiCs1, maDviTien) }}</td>
-                                <td>{{ Op.fmtVal(total.ncauChiChiaRaChiMoi1, maDviTien) }}</td>
-                                <td>{{ Op.fmtVal(total.ncauChiChiaRaChiTx, maDviTien) }}</td>
-                                <td>{{ Op.fmtVal(total.ncauChiChiaRaChiCs2, maDviTien) }}</td>
-                                <td>{{ Op.fmtVal(total.ncauChiChiaRaChiMoi2, maDviTien) }}</td>
-                                <td>{{ Op.fmtVal(total.ncauChiChiaRaChiDtqg, maDviTien) }}</td>
-                                <td>{{ Op.fmtVal(total.ncauChiChiaRaChiCs3, maDviTien) }}</td>
-                                <td>{{ Op.fmtVal(total.ncauChiChiaRaChiMoi3, maDviTien) }}</td>
+                                <td>{{ Op.fmtVal(total.ncauChiTongSo) }}</td>
+                                <td>{{ Op.fmtVal(total.ncauChiTrongDoChiCs) }}</td>
+                                <td>{{ Op.fmtVal(total.ncauChiTrongDoChiMoi) }}</td>
+                                <td>{{ Op.fmtVal(total.ncauChiChiaRaDtuPtrien) }}</td>
+                                <td>{{ Op.fmtVal(total.ncauChiChiaRaChiCs1) }}</td>
+                                <td>{{ Op.fmtVal(total.ncauChiChiaRaChiMoi1) }}</td>
+                                <td>{{ Op.fmtVal(total.ncauChiChiaRaChiTx) }}</td>
+                                <td>{{ Op.fmtVal(total.ncauChiChiaRaChiCs2) }}</td>
+                                <td>{{ Op.fmtVal(total.ncauChiChiaRaChiMoi2) }}</td>
+                                <td>{{ Op.fmtVal(total.ncauChiChiaRaChiDtqg) }}</td>
+                                <td>{{ Op.fmtVal(total.ncauChiChiaRaChiCs3) }}</td>
+                                <td>{{ Op.fmtVal(total.ncauChiChiaRaChiMoi3) }}</td>
                                 <td></td>
                                 <td *ngIf="status.general" nzRight></td>
                             </tr>
@@ -309,7 +309,8 @@
             <nz-tab nzTitle="Tài liệu đính kèm">
                 <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
                     <div nz-col class="gutter-row" [nzSpan]="3">
-                        <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" *ngIf="status.general">
+                        <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" [nzMultiple]="true"
+                            *ngIf="status.general">
                             <button nz-button>
                                 <i nz-icon nzType="upload"></i>
                                 Chọn tài liệu đính kèm
