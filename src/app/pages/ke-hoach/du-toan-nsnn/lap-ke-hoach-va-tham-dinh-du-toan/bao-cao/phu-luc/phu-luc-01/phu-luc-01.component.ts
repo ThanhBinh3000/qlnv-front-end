@@ -161,6 +161,7 @@ export class PhuLuc01Component implements OnInit {
 					this.formDetail = data.data;
 					this.formDetail.maDviTien = '1';
 					Object.assign(this.lstCtietBcao, this.formDetail.lstCtietLapThamDinhs);// this.lstCtietBcao = this.formDetail.lstCtietLapThamDinhs;
+					this.formDetail.listIdDeleteFiles = [];
 					this.listFile = [];
 					this.getStatusButton();
 				} else {

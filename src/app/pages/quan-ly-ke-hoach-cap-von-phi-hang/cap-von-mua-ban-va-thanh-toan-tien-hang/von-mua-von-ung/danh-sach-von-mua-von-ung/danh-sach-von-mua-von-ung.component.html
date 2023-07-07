@@ -14,7 +14,7 @@
             <div nz-col nzSpan="3">
                 <label class="search__label">Loại</label>
                 <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại" [(ngModel)]="searchFilter.loaiDnghi">
-                    <nz-option *ngFor="let item of loaiDns" [nzValue]="item.id" [nzLabel]="item.tenDm">
+                    <nz-option *ngFor="let item of Const.LOAI_DE_NGHI" [nzValue]="item.id" [nzLabel]="item.tenDm">
                     </nz-option>
                 </nz-select>
             </div>
@@ -22,7 +22,7 @@
                 <label class="search__label">Căn cứ về giá</label>
                 <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn căn cứ giá"
                     [(ngModel)]="searchFilter.canCuVeGia">
-                    <nz-option *ngFor="let item of canCuGias" [nzValue]="item.id" [nzLabel]="item.tenDm">
+                    <nz-option *ngFor="let item of Const.CAN_CU_GIA" [nzValue]="item.id" [nzLabel]="item.tenDm">
                     </nz-option>
                 </nz-select>
             </div>
@@ -104,11 +104,7 @@
                         {{ (i + 1) + (searchFilter.paggingReq.page - 1)*searchFilter.paggingReq.limit }}
                     </td>
                     <td *ngIf="searchFilter.loaiTimKiem == '1'">
-                        <div *ngFor="let e of donVis">
-                            <div *ngIf="e.maDvi == data.maDvi">
-                                {{e.tenDvi}}
-                            </div>
-                        </div>
+                        {{ data.tenDvi }}
                     </td>
                     <td>
                         {{ data.maCapUng}}
@@ -117,39 +113,31 @@
                         {{ data.namDnghi }}
                     </td>
                     <td>
-                        <div *ngFor="let e of loaiDns">
-                            <div *ngIf="e.id == data.loaiDnghi">
-                                {{e.tenDm}}
-                            </div>
-                        </div>
-                    </td>
-                    <td *ngIf="searchFilter.maLoai == 5">
-                        <div *ngFor="let e of canCuGias">
-                            <div *ngIf="e.id == data.canCuVeGia">
-                                {{e.tenDm}}
-                            </div>
-                        </div>
+                        {{ Const.suggestionName(data.loaiDnghi)}}
                     </td>
                     <td>
-                        {{ getDate(data.ngayTao) }}
+                        {{ Const.priceBasisName(data.canCuVeGia) }}
                     </td>
                     <td>
-                        {{ getDate(data.ngayTrinh) }}
+                        {{ Utils.fmtDate(data.ngayTao) }}
                     </td>
                     <td>
-                        {{ getDate(data.ngayDuyet) }}
+                        {{ Utils.fmtDate(data.ngayTrinh) }}
                     </td>
                     <td>
-                        {{ getDate(data.ngayPheDuyet) }}
+                        {{ Utils.fmtDate(data.ngayDuyet) }}
                     </td>
                     <td>
-                        {{getStatusName(data.trangThai)}}
-                        <ng-container *ngIf="data.trangThai == '3' || data.trangThai == '5'">
+                        {{ Utils.fmtDate(data.ngayPheDuyet) }}
+                    </td>
+                    <td>
+                        {{Status.reportStatusName(data.trangThai, isParent)}}
+                        <ng-container *ngIf="Status.check('reject', data.trangThai)">
                             <br>Lý do: {{data.lyDoTuChoi}}
                         </ng-container>
                     </td>
                     <td class="text-left">
-                        <a (click)="viewDetail(data)">
+                        <!-- <a (click)="viewDetail(data)">
                             <ng-container *ngIf="data.isEdit; else view">
                                 <i class="fa fa-pencil"></i>
                             </ng-container>
@@ -159,7 +147,7 @@
                         </a>
                         <a *ngIf="data.isDelete" (click)="deleteReport(data.id)">
                             <i class="fa fa-trash-o do"></i>
-                        </a>
+                        </a> -->
                     </td>
                 </tr>
             </tbody>
@@ -174,7 +162,7 @@
                         [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="onPageIndexChange($event)"
                         (nzPageSizeChange)="onPageSizeChange($event)">
                         <ng-template #rangeTemplate let-range="range" let-total>
-                            {{ range[0] }}-{{ range[1] }} of {{totalElements}} items
+                            {{ range[0] }}-{{ range[1] }} trong {{totalElements}} bản ghi
                         </ng-template>
                     </nz-pagination>
                 </div>

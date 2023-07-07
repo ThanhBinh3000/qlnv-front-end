@@ -163,6 +163,9 @@ export class DialogTaoMoiComponent implements OnInit {
         } else {
             this.synthetic();
         }
+        this.response.lstLapThamDinhs.forEach(item => {
+            item.nguoiBcao = this.userInfo?.sub;
+        })
     }
 
     //tong hop theo nam bao cao
@@ -177,7 +180,6 @@ export class DialogTaoMoiComponent implements OnInit {
                         if (!item.id) {
                             item.id = uuid.v4() + 'FE';
                         }
-                        item.nguoiBcao = this.userInfo?.sub;
                         item.maDviTien = '1';
                         item.trangThai = Status.NEW;
                         const pl = this.listAppendix.find(e => e.id == item.maBieuMau);

@@ -139,6 +139,7 @@ export class PhuLuc06Component implements OnInit {
                     this.formDetail = data.data;
                     this.formDetail.maDviTien = '1';
                     this.lstCtietBcao = this.formDetail.lstCtietLapThamDinhs;
+                    this.formDetail.listIdDeleteFiles = [];
                     this.listFile = [];
                     this.getStatusButton();
                 } else {
@@ -325,6 +326,9 @@ export class PhuLuc06Component implements OnInit {
 
     changeModel(id: string): void {
         this.editCache[id].data.sluongTsanTcong = Operator.sum([this.editCache[id].data.sluongTsanTdiemBcao, this.editCache[id].data.sluongTsanDaNhan, this.editCache[id].data.sluongTsanPduyet]);
+        if (this.editCache[id].data.dtoanDnghiSluong > Operator.sum([this.editCache[id].data.tchuanDmucTda, -this.editCache[id].data.sluongTsanTcong])) {
+            this.editCache[id].data.dtoanDnghiSluong = Operator.sum([this.editCache[id].data.tchuanDmucTda, -this.editCache[id].data.sluongTsanTcong]);
+        }
         this.editCache[id].data.thanhTien = Operator.mul(this.editCache[id].data.dtoanDnghiSluong, this.editCache[id].data.dtoanDnghiMgia);
         this.editCache[id].data.tdinhTtien = Operator.mul(this.editCache[id].data.tdinhSluong, this.editCache[id].data.dtoanDnghiMgia);
         this.editCache[id].data.chenhLech = Operator.sum([this.editCache[id].data.tdinhTtien, -this.editCache[id].data.thanhTien]);
