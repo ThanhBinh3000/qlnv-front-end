@@ -293,7 +293,7 @@
                     <nz-tab [nzTitle]="'Danh sách văn bản đính kèm'">
                         <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
                             <div nz-col class="gutter-row" [nzSpan]="3">
-                                <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload"
+                                <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" [nzMultiple]="true"
                                     *ngIf="status.general">
                                     <button nz-button>
                                         <i nz-icon nzType="upload"></i>

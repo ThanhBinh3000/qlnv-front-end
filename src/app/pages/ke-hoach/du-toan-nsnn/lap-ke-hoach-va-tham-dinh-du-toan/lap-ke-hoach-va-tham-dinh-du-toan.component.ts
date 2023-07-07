@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { NgxSpinnerService } from 'ngx-spinner';
 import { UserService } from 'src/app/services/user.service';
-import { TAB_LIST } from './lap-ke-hoach-va-tham-dinh-du-toan.constant';
+import { Ltd } from './lap-ke-hoach-va-tham-dinh-du-toan.constant';
 
 @Component({
     selector: 'app-lap-ke-hoach-va-tham-dinh-du-toan',
@@ -9,13 +8,12 @@ import { TAB_LIST } from './lap-ke-hoach-va-tham-dinh-du-toan.constant';
     styleUrls: ['./lap-ke-hoach-va-tham-dinh-du-toan.component.scss']
 })
 export class LapKeHoachVaThamDinhDuToanComponent implements OnInit {
-
+    Ltd = Ltd;
     tabSelected!: string;
     data: any;
-    tabList: any[] = TAB_LIST;
+    tabList: any[] = Ltd.TAB_LIST;
 
     constructor(
-        private spinner: NgxSpinnerService,
         public userService: UserService,
     ) { }
 

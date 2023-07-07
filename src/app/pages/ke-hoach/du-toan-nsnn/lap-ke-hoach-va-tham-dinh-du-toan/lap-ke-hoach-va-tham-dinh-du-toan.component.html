@@ -11,39 +11,31 @@
 <div class="contentBor chi-tieu__body giao-ke-hoach">
     <div class="contentDetail">
         <!-- bao cao -->
-        <ng-container *ngIf="tabSelected == 'danhsach'">
+        <ng-container *ngIf="tabSelected == Ltd.DANH_SACH_BAO_CAO">
             <app-danh-sach-bao-cao (dataChange)="changeTab($event)">
             </app-danh-sach-bao-cao>
         </ng-container>
-        <ng-container *ngIf="tabSelected == 'capduoi'">
+        <ng-container *ngIf="tabSelected == Ltd.DANH_SACH_BAO_CAO_DVCD">
             <app-danh-sach-bao-cao-tu-don-vi-cap-duoi (dataChange)="changeTab($event)">
             </app-danh-sach-bao-cao-tu-don-vi-cap-duoi>
         </ng-container>
-        <ng-container *ngIf="tabSelected == 'tonghop'">
+        <ng-container *ngIf="tabSelected == Ltd.DANH_SACH_TONG_HOP">
             <app-tong-hop-bao-cao-tu-don-vi-cap-duoi (dataChange)="changeTab($event)">
             </app-tong-hop-bao-cao-tu-don-vi-cap-duoi>
         </ng-container>
-        <ng-container *ngIf="tabSelected == 'baocao'">
+        <ng-container *ngIf="tabSelected == Ltd.BAO_CAO_01">
             <app-bao-cao [data]="data" (dataChange)="changeTab($event)">
             </app-bao-cao>
         </ng-container>
-        <ng-container *ngIf="tabSelected == 'next-baocao'">
+        <ng-container *ngIf="tabSelected == Ltd.BAO_CAO_02">
             <app-bao-cao [data]="data" (dataChange)="changeTab($event)">
             </app-bao-cao>
         </ng-container>
-        <ng-container *ngIf="tabSelected == 'next-next-baocao'">
-            <app-bao-cao [data]="data" (dataChange)="changeTab($event)">
-            </app-bao-cao>
-        </ng-container>
-        <ng-container *ngIf="tabSelected == 'next-next-next-baocao'">
-            <app-bao-cao [data]="data" (dataChange)="changeTab($event)">
-            </app-bao-cao>
-        </ng-container>
-        <ng-container *ngIf="tabSelected == 'ds-heso'">
+        <ng-container *ngIf="tabSelected == Ltd.DANH_SACH_BAO_HIEM">
             <app-danh-sach-he-so-bao-hiem (dataChange)="changeTab($event)">
             </app-danh-sach-he-so-bao-hiem>
         </ng-container>
-        <ng-container *ngIf="tabSelected == 'heso'">
+        <ng-container *ngIf="tabSelected == Ltd.HE_SO_BAO_HIEM">
             <app-he-so-bao-hiem [data]="data" (dataChange)="changeTab($event)">
             </app-he-so-bao-hiem>
         </ng-container>

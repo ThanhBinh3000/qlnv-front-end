@@ -7,7 +7,6 @@ import { BaoCaoModule } from './bao-cao/bao-cao.module';
 import { DanhSachBaoCaoThucHienDuToanChiComponent } from './danh-sach-bao-cao-thuc-hien-du-toan-chi/danh-sach-bao-cao-thuc-hien-du-toan-chi.component';
 import { DanhSachBaoCaoTuDonViCapDuoiComponent } from './danh-sach-bao-cao-tu-don-vi-cap-duoi/danh-sach-bao-cao-tu-don-vi-cap-duoi.component';
 import { DialogTaoMoiComponent } from './dialog-tao-moi/dialog-tao-moi.component';
-import { KiemTraBaoCaoCacDonViCapDuoiComponent } from './kiem-tra-bao-cao-cac-don-vi-cap-duoi/kiem-tra-bao-cao-cac-don-vi-cap-duoi.component';
 import { TongHopBaoCaoComponent } from './tong-hop-bao-cao/tong-hop-bao-cao.component';
 
 @NgModule({
@@ -15,7 +14,7 @@ import { TongHopBaoCaoComponent } from './tong-hop-bao-cao/tong-hop-bao-cao.comp
         BaoCaoThucHienDuToanChiComponent,
         DanhSachBaoCaoThucHienDuToanChiComponent,
         DanhSachBaoCaoTuDonViCapDuoiComponent,
-        KiemTraBaoCaoCacDonViCapDuoiComponent,
+        // KiemTraBaoCaoCacDonViCapDuoiComponent,
         TongHopBaoCaoComponent,
         DialogTaoMoiComponent,
     ],
@@ -29,7 +28,7 @@ import { TongHopBaoCaoComponent } from './tong-hop-bao-cao/tong-hop-bao-cao.comp
         BaoCaoThucHienDuToanChiComponent,
         DanhSachBaoCaoThucHienDuToanChiComponent,
         DanhSachBaoCaoTuDonViCapDuoiComponent,
-        KiemTraBaoCaoCacDonViCapDuoiComponent,
+        // KiemTraBaoCaoCacDonViCapDuoiComponent,
         TongHopBaoCaoComponent,
         DialogTaoMoiComponent,
     ]
