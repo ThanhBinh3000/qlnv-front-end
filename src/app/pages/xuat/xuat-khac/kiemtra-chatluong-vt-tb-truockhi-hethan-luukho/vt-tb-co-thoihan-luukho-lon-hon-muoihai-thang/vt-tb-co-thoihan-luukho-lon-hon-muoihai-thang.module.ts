@@ -13,6 +13,7 @@ import {ComponentsModule} from "../../../../../components/components.module";
 import { ChiTietTongHopDsVt12thComponent } from './tong-hop-danh-sach/chi-tiet-tong-hop-ds-vt12th/chi-tiet-tong-hop-ds-vt12th.component';
 import { ThongTinKeHoachXuatHangCuaCucComponent } from './ke-hoach-xuat-hang-cua-cuc/thong-tin-ke-hoach-xuat-hang-cua-cuc/thong-tin-ke-hoach-xuat-hang-cua-cuc.component';
 import { ThongTinTongHopKeHoachXuatHangComponent } from './tong-hop-ke-hoach-xuat-hang/thong-tin-tong-hop-ke-hoach-xuat-hang/thong-tin-tong-hop-ke-hoach-xuat-hang.component';
+import { ThongTinKeHoachXuatHangCuaTongCucComponent } from './ke-hoach-xuat-hang-cua-tong-cuc/thong-tin-ke-hoach-xuat-hang-cua-tong-cuc/thong-tin-ke-hoach-xuat-hang-cua-tong-cuc.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { ThongTinTongHopKeHoachXuatHangComponent } from './tong-hop-ke-hoach-xua
     KeHoachXuatHangCuaTongCucComponent,
     ChiTietTongHopDsVt12thComponent,
     ThongTinKeHoachXuatHangCuaCucComponent,
-    ThongTinTongHopKeHoachXuatHangComponent
+    ThongTinTongHopKeHoachXuatHangComponent,
+    ThongTinKeHoachXuatHangCuaTongCucComponent
   ],
   exports: [
     ToanBoDanhSachVt12ThComponent,

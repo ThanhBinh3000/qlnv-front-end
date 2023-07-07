@@ -36,9 +36,11 @@
             <div nz-row [nzGutter]="[16,12]">
               <div nz-col [nzSpan]="2">
                 <nz-form-item>
-                  <nz-form-label [nzNoColon]="true"> Năm hợp đồng</nz-form-label>
-                  <nz-form-control>
-                    <input nz-input formControlName="nam" readonly/>
+                  <nz-form-label [nzNoColon]="true">Năm hợp đồng</nz-form-label>
+                  <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
+                    <nz-select formControlName="nam" [nzDisabled]="isView">
+                      <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+                    </nz-select>
                   </nz-form-control>
                 </nz-form-item>
               </div>

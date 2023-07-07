@@ -26,6 +26,7 @@ export class ThemMoiTongHopKhnkComponent extends Base2Component implements OnIni
   @Input() isView: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
+  isQuyetDinh: boolean = false;
   formTraCuu: FormGroup;
   listLoaiVthh: any[] = [];
   listLoaiHinhNx: any[] = [];
@@ -58,7 +59,8 @@ export class ThemMoiTongHopKhnkComponent extends Base2Component implements OnIni
       trangThai: [STATUS.CHUA_TAO_QD],
       tenTrangThai: ["Chưa tạo quyết định"],
       maTh: [""],
-      noiDungTh: [""]
+      noiDungTh: [""],
+      dxHdr: []
     });
   }
 
@@ -152,6 +154,7 @@ export class ThemMoiTongHopKhnkComponent extends Base2Component implements OnIni
         this.dataTableDanhSachDX = dataDetail.dtl;
         this.helperService.bidingDataInFormGroup(this.formTraCuu, dataDetail.hdr);
         this.helperService.bidingDataInFormGroup(this.formData, dataDetail.hdr);
+        this.formData.get('dxHdr').setValue(dataDetail.dtl);
         this.isTongHop = true;
       } else {
         this.isTongHop = false;
@@ -179,5 +182,12 @@ export class ThemMoiTongHopKhnkComponent extends Base2Component implements OnIni
     }
     this.idRowSelect = id;
     await this.spinner.hide();
+  }
+
+  taoQdinh() {
+    this.isQuyetDinh = true;
+  }
+  showTongHop() {
+    this.isQuyetDinh = false;
   }
 }

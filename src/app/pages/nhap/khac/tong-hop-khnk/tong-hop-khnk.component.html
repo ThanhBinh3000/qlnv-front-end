@@ -1,4 +1,4 @@
-<div *ngIf="!isDetail" class="luong-thuc__danh-sach">
+<div *ngIf="!isDetail && !isQuyetDinh" class="luong-thuc__danh-sach">
   <div class="bg-trang">
     <nz-card class="mt16 flex-card p-lr16">
       <div nz-row [nzGutter]="24">
@@ -195,6 +195,9 @@
               (click)="detail(data, true)">
               <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
+            <a (click)="taoQdinh(data)">
+              <i class="icon htvbdh_tcdt_tao-qd"></i>
+            </a>
             <a (click)="xoaItem(data)">
               <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
@@ -227,4 +230,8 @@
   <app-them-moi-tong-hop-khnk [isView]="isView" [id]="selectedId"
                                    (showListEvent)="showList()">
   </app-them-moi-tong-hop-khnk>
+</div>
+<div class="chi-tiet" *ngIf="isQuyetDinh">
+  <app-themmoi-quyet-dinh-pd-khnk [dataTongHop]="dataTongHop" (showListEvent)="showList()">
+  </app-themmoi-quyet-dinh-pd-khnk>
 </div>

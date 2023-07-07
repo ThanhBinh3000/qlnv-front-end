@@ -11,7 +11,7 @@
       </div>
     </div>
     <div class="btn-group">
-      <button type="button" class="btn btn-sub ml-2" (click)="goBack()">
+      <button type="button" class="btn btn-sub ml-2" (click)="saveAndSend(formData, STATUS.CHO_DUYET_LDTC, 'Bạn có chắc chắn muốn gửi duyệt?')">
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
@@ -21,13 +21,13 @@
         <span>Lưu và gửi duyệt</span>
       </button>
       <button type="button" class="btn btn-sub btn-xoa  ml-2"
-              *ngIf=" (formData.value.trangThai == STATUS.CHO_DUYET_LDV && userService.isTongCuc()) && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_THDEXUATCUC_DUYET')"
-              (click)="reject(id, STATUS.TU_CHOI_CBV)">
+              *ngIf=" ((formData.value.trangThai == STATUS.CHO_DUYET_LDTC) && userService.isTongCuc()) && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_THDEXUATCUC_DUYET')"
+              (click)="tuChoi()">
         <i class="icon htvbdh_tcdt_tuchoi"></i>
         <span>Từ chối</span>
       </button>
       <button type="button" class="btn btn-sub xanh-nhat  ml-2"
-              *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDV && userService.isTongCuc()) && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_THDEXUATCUC_DUYET')"
+              *ngIf="((formData.value.trangThai == STATUS.CHO_DUYET_LDTC) && userService.isTongCuc()) && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_THDEXUATCUC_DUYET')"
               (click)="pheDuyet()">
         <i class="icon htvbdh_dakyduyet"></i>
         <span>Duyệt</span>
@@ -188,19 +188,28 @@
           <td class="text-right">{{item.slTieuChuan | number: '1.0-1' }}</td>
           <td class="text-right">{{item.nhuCauTb | number: '1.0-1' }}</td>
           <td>
-            <nz-input-number [(ngModel)]="item.slTieuChuanTc" [nzSize]="'small'" [nzDisabled]="isView"
-                             [nzFormatter]="globals.formatter" [nzMin]="0"
-                             [nzParser]="globals.parser"></nz-input-number>
+            <input class="money-input" currencyMask [options]="amount" [min]="0"
+                   [(ngModel)]="item.slTieuChuanTc"
+            />
+<!--            <nz-input-number [(ngModel)]="item.slTieuChuanTc" [nzSize]="'small'" [nzDisabled]="isView"-->
+<!--                             [nzFormatter]="globals.formatter" [nzMin]="0"-->
+<!--                             [nzParser]="globals.parser"></nz-input-number>-->
           </td>
           <td>
-            <nz-input-number [(ngModel)]="item.soLuong" [nzSize]="'small'" [nzDisabled]="isView"
-                             [nzFormatter]="globals.formatter" [nzMin]="0"
-                             [nzParser]="globals.parser"></nz-input-number>
+            <input class="money-input" currencyMask [options]="amount" [min]="0"
+                   [(ngModel)]="item.soLuong"
+            />
+<!--            <nz-input-number [(ngModel)]="item.soLuong" [nzSize]="'small'" [nzDisabled]="isView"-->
+<!--                             [nzFormatter]="globals.formatter" [nzMin]="0"-->
+<!--                             [nzParser]="globals.parser"></nz-input-number>-->
           </td>
           <td>
-            <nz-input-number [(ngModel)]="item.donGia" [nzSize]="'small'" [nzDisabled]="isView"
-                             [nzFormatter]="globals.formatter" [nzMin]="0"
-                             [nzParser]="globals.parser"></nz-input-number>
+            <input class="money-input" currencyMask [options]="amount" [min]="0"
+                   [(ngModel)]="item.donGia"
+            />
+<!--            <nz-input-number [(ngModel)]="item.donGia" [nzSize]="'small'" [nzDisabled]="isView"-->
+<!--                             [nzFormatter]="globals.formatter" [nzMin]="0"-->
+<!--                             [nzParser]="globals.parser"></nz-input-number>-->
           </td>
           <td class="text-right">{{item.donGia * item.soLuong | number: '1.0-1' }}</td>
           <td><input type="text" nz-input [(ngModel)]="item.ghiChu"></td>

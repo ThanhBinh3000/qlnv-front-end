@@ -10,13 +10,13 @@
       <span>Lưu và gửi duyệt</span>
     </button>
     <button
-      *ngIf="this.userService.isChiCuc() && isDisabled() && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_BBLMBGM_DUYET_LDCCUC')"
+      *ngIf="this.userService.isChiCuc() && isDisabled()"
       type="button" class="btn btn-sub do" (click)="tuChoi()">
       <i class="icon htvbdh_tcdt_tuchoi do"></i>
       <span>Từ chối</span>
     </button>
     <button
-      *ngIf="this.userService.isChiCuc() && isDisabled() && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_BBLMBGM_DUYET_LDCCUC')"
+      *ngIf="this.userService.isChiCuc() && isDisabled() "
       class="btn btn-sub xanh-nhat" (click)="pheDuyet()">
       <i class="icon htvbdh_tcdt_pheduyet"></i>
       <span>Duyệt</span>
@@ -104,7 +104,7 @@
                 <nz-form-label [nzNoColon]="true" nzRequired> Mã DSLT <= 6 tháng hết hạn lưu kho
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogSoQd()">
+                  <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogMaDs()">
                     <input nz-input formControlName="maDanhSach" [readonly]="isView"/>
                   </nz-input-group>
                 </nz-form-control>
@@ -270,8 +270,8 @@
           Đại diện Cục Dự Trữ nhà nước
         </nz-form-label>
       </nz-form-item>
-      <app-thanh-phan-tham-gia [loaiDaiDien]="'CUC'" [(dataTable)]="listDaiDienCuc" [isView]="isView">
-      </app-thanh-phan-tham-gia>
+      <app-xk-thanh-phan-tham-gia [loaiDaiDien]="'CUC'" [(dataTable)]="listDaiDienCuc" [isView]="isView">
+      </app-xk-thanh-phan-tham-gia>
     </div>
     <div nz-col nzSpan="12">
       <nz-form-item>
@@ -279,8 +279,8 @@
           Đại diện Chi Cục Dự Trữ nhà nước
         </nz-form-label>
       </nz-form-item>
-      <app-thanh-phan-tham-gia [loaiDaiDien]="'CHI_CUC'" [(dataTable)]="listDaiDienChiCuc" [isView]="isView">
-      </app-thanh-phan-tham-gia>
+      <app-xk-thanh-phan-tham-gia [loaiDaiDien]="'CHI_CUC'" [(dataTable)]="listDaiDienChiCuc" [isView]="isView">
+      </app-xk-thanh-phan-tham-gia>
     </div>
   </div>
   <div class="mg-t-16 header header-green-background">

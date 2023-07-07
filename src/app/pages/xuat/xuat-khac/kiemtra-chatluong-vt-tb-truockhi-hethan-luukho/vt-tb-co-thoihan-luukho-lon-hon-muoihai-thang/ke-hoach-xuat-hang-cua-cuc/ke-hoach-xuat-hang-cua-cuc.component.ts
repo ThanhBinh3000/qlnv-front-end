@@ -37,6 +37,7 @@ export class KeHoachXuatHangCuaCucComponent extends Base2Component implements On
       namKeHoach: [],
       soToTrinh: [],
       trichYeu: [],
+      capDvi: [2],
       loai: [LOAI.KE_HOACH],
       ngayKeHoach: [],
       ngayKeHoachTu: [],

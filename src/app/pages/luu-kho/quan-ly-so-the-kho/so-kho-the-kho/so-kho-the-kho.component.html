@@ -1,6 +1,6 @@
-<ng-container>
+<div class="luong-thuc__danh-sach">
   <div class="bg-trang">
-    <nz-card class="mt16 flex-card p-lr16">
+    <nz-card class="flex-card p-lr16">
       <form [nzLayout]="'vertical'" [formGroup]="formData" nz-form>
         <div nz-row [nzGutter]="24">
           <div nz-col nzSpan="2">
@@ -72,16 +72,16 @@
         </button>
       </div>
     </div>
-    <nz-card class="mt-2px flex-card data-table card-border-content table-card">
-      <nz-table #basicTable nzBordered [nzFrontPagination]="false" [nzShowPagination]="false"
-                [nzScroll]="dataTable && dataTable.length ? { x: '2500px' } : null"
-                [nzData]="dataTable">
+    <nz-card class="flex-card p-lr16">
+      <nz-table nzBordered class="pd-10"
+                [nzFrontPagination]="false" [nzShowPagination]="false"
+                [nzScroll]="{x: '2500px'}">
         <thead>
         <tr>
           <th nzWidth="45px" rowSpan="2" class="text-center">STT</th>
           <th nzWidth="" rowSpan="2" class="text-center">Điểm kho</th>
           <th nzWidth="" rowSpan="2" class="text-center">Nhà kho</th>
-          <th nzWidth="" rowSpan="2" class="text-center">Lô kho</th>
+          <th nzWidth="" rowSpan="2" class="text-center">Ngăn/lô kho</th>
           <th nzWidth="" rowSpan="2" class="text-center">Năm nhập</th>
           <th nzWidth="" rowSpan="2" class="text-center">Số sổ kho</th>
           <th nzWidth="" rowSpan="2" class="text-center">Thẻ kho</th>
@@ -104,7 +104,7 @@
           <th class="text-center">Xuất</th>
         </tr>
         <ng-container *ngFor="let item of dataTable , let i = index">
-          <tr class="level-1">
+          <tr class="level-2">
             <td>{{i + 1}}</td>
             <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
             <td></td>
@@ -118,34 +118,219 @@
             <td></td>
             <td></td>
           </tr>
-          <ng-container *ngIf="expandSet.has(i)">
-            <ng-container *ngFor="let dataDdiem of item.children, let y = index">
-              <tr class="level-2">
+        </ng-container>
+        </thead>
+        <tbody>
+        <ng-container *ngFor="let diemKho of dataTable , let i = index">
+          <tr>
+            <td>{{i + 1}}</td>
+            <td class="bg-parent2 font-weight-bold" [nzExpand]="expandSet.has(diemKho.idVirtual)"
+                (nzExpandChange)="onExpandChange(diemKho.idVirtual, $event)">{{diemKho.tenDiemKho}}</td>
+            <td class="bg-parent2 font-weight-bold"></td>
+            <td class="bg-parent2 font-weight-bold"></td>
+            <td class="bg-parent2 font-weight-bold"></td>
+            <td class="bg-parent2 font-weight-bold"></td>
+            <td class="bg-parent2 font-weight-bold"></td>
+            <td class="bg-parent2 font-weight-bold"></td>
+            <td class="bg-parent2 font-weight-bold"></td>
+            <td class="bg-parent2 font-weight-bold"></td>
+            <td class="bg-parent2 font-weight-bold"></td>
+            <td class="bg-parent2 font-weight-bold"></td>
+            <td class="bg-parent2 font-weight-bold"></td>
+            <td class="bg-parent2 font-weight-bold"></td>
+            <td class="bg-parent2 font-weight-bold"></td>
+            <td class="bg-parent2 font-weight-bold"></td>
+            <td class="bg-parent2 font-weight-bold"></td>
+            <td class="bg-parent2 font-weight-bold"></td>
+            <td class="bg-parent2 font-weight-bold"></td>
+            <td class="bg-parent2 font-weight-bold" nzRight></td>
+          </tr>
+          <ng-container *ngIf="expandSet.has(diemKho.idVirtual)">
+            <ng-container *ngFor="let nhaKho of diemKho.children, let y = index">
+              <tr>
                 <td></td>
                 <td></td>
-                <td [nzExpand]="expandSet2.has(y)" (nzExpandChange)="onExpandChange2(y, $event)"></td>
+                <td class="bg-parent2 font-weight-bold" [nzExpand]="expandSet.has(diemKho.idVirtual)"
+                    (nzExpandChange)="onExpandChange(nhaKho.idVirtual, $event)">{{nhaKho.tenNhaKho}}</td>
+                <td class="bg-parent2 font-weight-bold"></td>
+                <td class="bg-parent2 font-weight-bold"></td>
+                <td class="bg-parent2 font-weight-bold"></td>
+                <td class="bg-parent2 font-weight-bold"></td>
+                <td class="bg-parent2 font-weight-bold"></td>
+                <td class="bg-parent2 font-weight-bold"></td>
+                <td class="bg-parent2 font-weight-bold"></td>
+                <td class="bg-parent2 font-weight-bold"></td>
+                <td class="bg-parent2 font-weight-bold"></td>
+                <td class="bg-parent2 font-weight-bold"></td>
+                <td class="bg-parent2 font-weight-bold"></td>
+                <td class="bg-parent2 font-weight-bold"></td>
+                <td class="bg-parent2 font-weight-bold"></td>
+                <td class="bg-parent2 font-weight-bold"></td>
+                <td class="bg-parent2 font-weight-bold"></td>
+                <td class="bg-parent2 font-weight-bold"></td>
+                <td nzRight class="bg-parent2 font-weight-bold" ></td>
               </tr>
-              <ng-container *ngIf="expandSet.has(i)">
-                <ng-container *ngFor="let dataDdiem of item.children, let y = index">
-                  <tr class="level-3">
+              <ng-container *ngIf="expandSet.has(nhaKho.idVirtual)">
+                <ng-container *ngFor="let nganKho of nhaKho.children, let y = index">
+                  <tr>
                     <td></td>
+                    <td></td>
+                    <td></td>
+                    <td class="bg-parent2 font-weight-bold" [nzExpand]="expandSet.has(nhaKho.idVirtual)"
+                        (nzExpandChange)="onExpandChange(nganKho.idVirtual, $event)">{{nganKho.tenNganLo ? nganKho.tenNganLo + ' - ' + nganKho.tenNganKho : nganKho.tenNganKho}}</td>
+                    <td class="bg-parent2 font-weight-bold"></td>
+                    <td class="bg-parent2 font-weight-bold"></td>
+                    <td class="bg-parent2 font-weight-bold"></td>
+                    <td class="bg-parent2 font-weight-bold"></td>
+                    <td class="bg-parent2 font-weight-bold"></td>
+                    <td class="bg-parent2 font-weight-bold"></td>
+                    <td class="bg-parent2 font-weight-bold"></td>
+                    <td class="bg-parent2 font-weight-bold"></td>
+                    <td class="bg-parent2 font-weight-bold"></td>
+                    <td class="bg-parent2 font-weight-bold"></td>
+                    <td class="bg-parent2 font-weight-bold"></td>
+                    <td class="bg-parent2 font-weight-bold"></td>
+                    <td class="bg-parent2 font-weight-bold"></td>
+                    <td class="bg-parent2 font-weight-bold"></td>
+                    <td class="bg-parent2 font-weight-bold"></td>
+                    <td nzRight class="bg-parent2 font-weight-bold">
+                      <a >
+                        <i class="fa fa-plus"></i>
+                      </a>
+                    </td>
                   </tr>
-                  <ng-container *ngIf="expandSet.has(i)">
-                    <ng-container *ngFor="let dataDdiem of item.children, let y = index">
-                      <tr class="level-3">
+                  <ng-container *ngIf="expandSet.has(nganKho.idVirtual)">
+                    <ng-container *ngFor="let nam of nganKho.children, let y = index">
+                      <tr>
                         <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class="bg-parent2 font-weight-bold" [nzExpand]="expandSet.has(nganKho.idVirtual)"
+                            (nzExpandChange)="onExpandChange(nam.idVirtual, $event)">{{nam.nam}}</td>
+                        <td class="bg-parent2 font-weight-bold"></td>
+                        <td class="bg-parent2 font-weight-bold"></td>
+                        <td class="bg-parent2 font-weight-bold"></td>
+                        <td class="bg-parent2 font-weight-bold"></td>
+                        <td class="bg-parent2 font-weight-bold"></td>
+                        <td class="bg-parent2 font-weight-bold"></td>
+                        <td class="bg-parent2 font-weight-bold"></td>
+                        <td class="bg-parent2 font-weight-bold"></td>
+                        <td class="bg-parent2 font-weight-bold"></td>
+                        <td class="bg-parent2 font-weight-bold"></td>
+                        <td class="bg-parent2 font-weight-bold"></td>
+                        <td class="bg-parent2 font-weight-bold"></td>
+                        <td class="bg-parent2 font-weight-bold"></td>
+                        <td class="bg-parent2 font-weight-bold"></td>
+                        <td nzRight class="bg-parent2 font-weight-bold"></td>
                       </tr>
+                      <ng-container *ngIf="expandSet.has(nam.idVirtual)">
+                        <ng-container *ngFor="let soKho of nam.children, let y = index">
+                          <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td class="bg-parent2 font-weight-bold" [nzExpand]="expandSet.has(nam.idVirtual)"
+                                (nzExpandChange)="onExpandChange(soKho.idVirtual, $event)">{{soKho.ten}}</td>
+                            <td class="bg-parent2 font-weight-bold"></td>
+                            <td class="bg-parent2 font-weight-bold"></td>
+                            <td class="bg-parent2 font-weight-bold"></td>
+                            <td class="bg-parent2 font-weight-bold"></td>
+                            <td class="bg-parent2 font-weight-bold"></td>
+                            <td class="bg-parent2 font-weight-bold"></td>
+                            <td class="bg-parent2 font-weight-bold"></td>
+                            <td class="bg-parent2 font-weight-bold"></td>
+                            <td class="bg-parent2 font-weight-bold"></td>
+                            <td class="bg-parent2 font-weight-bold"></td>
+                            <td class="bg-parent2 font-weight-bold"></td>
+                            <td class="bg-parent2 font-weight-bold"></td>
+                            <td class="bg-parent2 font-weight-bold"></td>
+                            <td class="bg-parent2 font-weight-bold"></td>
+                            <td class="bg-parent2 font-weight-bold" nzRight>
+                              <a >
+                                <i class="fa fa-eye"></i>
+                              </a>
+                              <a >
+                                <i class="fa fa-plus"></i>
+                              </a>
+                            </td>
+                          </tr>
+                          <ng-container *ngIf="expandSet.has(soKho.idVirtual)">
+                            <ng-container *ngFor="let theKho of soKho.theKhoList, let y = index">
+                              <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td class="bg-parent2 font-weight-bold" [nzExpand]="expandSet.has(soKho.idVirtual)"
+                                    (nzExpandChange)="onExpandChange(theKho.idVirtual, $event)">{{theKho.ten}}</td>
+                                <td class="bg-parent2 font-weight-bold"></td>
+                                <td class="bg-parent2 font-weight-bold"></td>
+                                <td class="bg-parent2 font-weight-bold"></td>
+                                <td class="bg-parent2 font-weight-bold"></td>
+                                <td class="bg-parent2 font-weight-bold"></td>
+                                <td class="bg-parent2 font-weight-bold"></td>
+                                <td class="bg-parent2 font-weight-bold"></td>
+                                <td class="bg-parent2 font-weight-bold"></td>
+                                <td class="bg-parent2 font-weight-bold"></td>
+                                <td class="bg-parent2 font-weight-bold"></td>
+                                <td class="bg-parent2 font-weight-bold"></td>
+                                <td class="bg-parent2 font-weight-bold"></td>
+                                <td class="bg-parent2 font-weight-bold"></td>
+                                <td class="bg-parent2 font-weight-bold" nzRight>
+                                  <a >
+                                    <i class="fa fa-eye"></i>
+                                  </a>
+                                </td>
+                              </tr>
+                              <ng-container *ngIf="expandSet.has(theKho.idVirtual)">
+                                <ng-container *ngFor="let phieuNhapXuat of theKho.ctList, let y = index">
+                                  <tr [ngClass]="{'bg-selected': phieuNhapXuat.selected}" (click)="selectRow($event,theKho.ctList)">
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td class="bg-parent2 font-weight-bold" >{{phieuNhapXuat.id}}</td>
+                                    <td class="bg-parent2 font-weight-bold"></td>
+                                    <td class="bg-parent2 font-weight-bold"></td>
+                                    <td class="bg-parent2 font-weight-bold"></td>
+                                    <td class="bg-parent2 font-weight-bold"></td>
+                                    <td class="bg-parent2 font-weight-bold"></td>
+                                    <td class="bg-parent2 font-weight-bold"></td>
+                                    <td class="bg-parent2 font-weight-bold"></td>
+                                    <td class="bg-parent2 font-weight-bold"></td>
+                                    <td class="bg-parent2 font-weight-bold"></td>
+                                    <td class="bg-parent2 font-weight-bold"></td>
+                                    <td class="bg-parent2 font-weight-bold"></td>
+                                    <td class="bg-parent2 font-weight-bold"></td>
+                                    <td class="bg-parent2 font-weight-bold" nzRight>
+                                      <a >
+                                        <i class="fa fa-eye"></i>
+                                      </a>
+                                    </td>
+                                  </tr>
+                                </ng-container>
+                              </ng-container>
+                            </ng-container>
+
+                          </ng-container>
+                        </ng-container>
+
+                      </ng-container>
                     </ng-container>
+
                   </ng-container>
                 </ng-container>
               </ng-container>
             </ng-container>
           </ng-container>
         </ng-container>
-        </thead>
-        <tbody>
         </tbody>
       </nz-table>
     </nz-card>
   </div>
-</ng-container>
+</div>

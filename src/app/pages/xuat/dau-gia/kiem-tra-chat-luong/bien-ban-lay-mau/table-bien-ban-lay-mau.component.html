@@ -32,7 +32,7 @@
         </div>
       </form>
       <div class="cangiua group-button-search">
-        <button nz-button class="search__button--clear" (click)="clearFilter()">
+        <button nz-button class="search__button--clear" (click)="clearForm()">
           <i class="icon  htvbdh_nhap-lai1"></i>
           Xóa điều kiện
         </button>
@@ -46,13 +46,14 @@
     <div class="group-button">
       <h3>DANH SÁCH BIÊN BẢN LẤY MẪU/BÀN GIAO MẪU</h3>
       <div class="buttons">
-        <button *ngIf="userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_BBLM_EXP')" type="button" class="btn btn-sub"
+        <button *ngIf="loaiVthh.startsWith('02') ? userService.isAccessPermisson('XHDTQG_PTDG_KTCL_VT_BBBGM_EXP'):
+         userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_BBLM_EXP') " type="button" class="btn btn-sub"
           (click)="exportData('Danh-sach-bien-ban-lay-mau-ban-giao-mau.xlsx')">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button *ngIf="userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_BBLM_THEM')" type="button"
-          class="btn btn-main" (click)="redirectToChiTiet(false, null, null)">
+        <button *ngIf="loaiVthh.startsWith('02') ? userService.isAccessPermisson('XHDTQG_PTDG_KTCL_VT_BBBGM_THEM'):
+         userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_BBLM_THEM') " type="button" class="btn btn-main" (click)="redirectToChiTiet(false, null, null)">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
         </button>
@@ -60,7 +61,8 @@
       </div>
     </div>
     <nz-card class="mt-2px flex-card data-table card-border-content table-card">
-      <nz-table #tblData [nzData]="dataView" class="nowrap table-chi-tiet" nzBordered>
+      <nz-table #basicTable class="nowrap table__container-tt" [nzData]="children" [nzFrontPagination]="false"
+                [nzShowPagination]="false" nzBordered>
         <thead>
           <tr>
             <th style="width: 35px">STT</th>
@@ -80,8 +82,8 @@
           </tr>
         </thead>
         <tbody>
-          <ng-container *ngFor="let item of tblData.data, let i = index;">
-            <tr [ngClass]="{'bg-selected': item.selected}" class="level-1">
+        <ng-container *ngFor="let item of basicTable.data, let i = index;">
+          <tr class="level-1">
               <td>{{i + 1}}</td>
               <td (nzExpandChange)="onExpandStringChange(item.idVirtual, $event)"
                 [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true" style="width: 35px"></td>
@@ -89,8 +91,8 @@
                 <a *ngIf="item.soQd && item.idQd" nz-button nzType="link" (click)="openModalQdNv(item.idQd)">{{
                   item.soQd}}</a>
               </td>
-              <td>{{item.nam}}</td>
-              <td>{{item.ngayQd | date: 'dd/MM/YYYY'}}</td>
+              <td class="bold">{{item.nam}}</td>
+              <td class="bold">{{item.ngayQd | date: 'dd/MM/YYYY'}}</td>
               <td></td>
               <td></td>
               <td></td>
@@ -102,15 +104,15 @@
               <td class="text-left">
               </td>
             </tr>
-            <ng-container *ngIf="expandSetString.has(item.idVirtual)">
-              <ng-container *ngFor="let lv1 of item.childData,let i1=index">
+          <ng-container *ngIf="expandSetString.has(item.idVirtual)">
+            <ng-container *ngFor="let lv1 of item.childData,let i1=index">
                 <tr class="level-2">
                   <td></td>
                   <td></td>
                   <td></td>
                   <td></td>
                   <td></td>
-                  <td>{{lv1.tenDiemKho}}</td>
+                  <td class="bold">{{lv1.tenDiemKho}}</td>
                   <td></td>
                   <td></td>
                   <td></td>
@@ -125,8 +127,8 @@
                   </td>
 
                 </tr>
-                <ng-container *ngIf="expandSetString.has(item.idVirtual)">
-                  <ng-container *ngFor="let lv2 of lv1.childData,let i2=index">
+              <ng-container *ngIf="expandSetString.has(item.idVirtual)">
+                <ng-container *ngFor="let lv2 of lv1.childData,let i2=index">
                     <tr class="level-3">
                       <td></td>
                       <td></td>
@@ -134,10 +136,8 @@
                       <td></td>
                       <td></td>
                       <td></td>
-                      <td>{{lv2.tenLoKho == null ? lv2.tenNganKho : lv2.tenLoKho }},
-                        {{lv2.tenNhaKho}}
-                      </td>
-                      <td>{{lv2.soBienBan}}</td>
+                      <td>{{ (lv2.tenLoKho ? lv2.tenLoKho + ' - ' : '') + lv2.tenNganKho }}</td>
+                      <td class="bold">{{lv2.soBienBan}}</td>
                       <td>{{lv2.ngayLayMau | date: 'dd/MM/YYYY' }}</td>
                       <td>{{lv2.soBbTinhKho}}</td>
                       <td>{{lv2.ngayXuatDocKho}}</td>

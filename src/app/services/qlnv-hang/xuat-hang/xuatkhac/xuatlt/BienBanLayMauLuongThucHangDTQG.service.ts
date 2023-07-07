@@ -5,7 +5,7 @@ import {BaseService} from "../../../../base.service";
 @Injectable({
   providedIn: 'root'
 })
-export class BienBanLayMauLuongThucHangDTQG extends BaseService {
+export class BienBanLayMauLuongThucHangDTQGService extends BaseService {
   GATEWAY = '/qlnv-hang';
 
   constructor(public httpClient: HttpClient) {
