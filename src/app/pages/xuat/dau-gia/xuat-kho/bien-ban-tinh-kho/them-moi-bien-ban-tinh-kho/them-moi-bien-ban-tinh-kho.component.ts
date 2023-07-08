@@ -38,6 +38,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
   @Input() idInput: number;
   @Input() isView: boolean;
   @Input() isViewOnModal: boolean;
+  @Input() idQdNv: number;
   @Output()
   showListEvent = new EventEmitter<any>();
   listSoQuyetDinh: any[] = []
@@ -151,6 +152,9 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
       trangThai: STATUS.DU_THAO,
       tenTrangThai: 'Dự Thảo',
     });
+    if(this.idQdNv){
+      this.bindingDataQd(this.idQdNv)
+    }
   }
 
   async loadDetail(idInput: number) {
