@@ -73,7 +73,7 @@
         <div class="mt-16 flex-card p-lr16">
             <nz-card class="mt-2px flex-card data-table card-border-content table-card">
                 <nz-tabset class="tab__container">
-                    <nz-tab *ngIf="status.general" [nzTitle]="'Thiết lập khối tích'">
+                    <!-- <nz-tab *ngIf="status.general" [nzTitle]="'Thiết lập khối tích'">
                         <div class="search__body" nz-row [nzGutter]="[18, 12]">
                             <div nz-col nzSpan="6">
                                 <label class="search__label">Khối tích</label>
@@ -84,8 +84,23 @@
                                 <span>Cập nhật khối tích</span>
                             </button>
                         </div>
-                    </nz-tab>
+                    </nz-tab> -->
                     <nz-tab [nzTitle]="'Thiết lập hệ số bảo hiểm'">
+                        <div class="nut" style="margin-top: 10px;" *ngIf="status.general">
+                            <div class="cantrai">
+                                <div class="search__body" nz-row [nzGutter]="[18, 12]">
+                                    <div nz-col nzSpan="12">
+                                        <input class="money-input" placeholder="Thiết lập khối tích" currencyMask
+                                            [options]="Op.amount" [(ngModel)]="khoiTich" />
+                                    </div>
+                                    <div nz-col nzSpan="12">
+                                        <button type="button" class="btn btn-main" (click)="updateKhoiTich()">
+                                            <span>Cập nhật khối tích</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <nz-table nzBordered class="table__body" [nzScroll]="{x: scrollX}">
                             <thead>
                                 <tr>
@@ -114,10 +129,10 @@
                                             {{ data.maDviTinh }}
                                         </td>
                                         <td>
-                                            {{ Op.fmtVal(data.tyLeKhoDuoi, maDviTien) }}
+                                            {{ Op.fmtVal(data.tyLeKhoDuoi) }}
                                         </td>
                                         <td>
-                                            {{ Op.fmtVal(data.tyLeKhoTren, maDviTien) }}
+                                            {{ Op.fmtVal(data.tyLeKhoTren) }}
                                         </td>
                                         <td>
                                             {{ data.ghiChu }}

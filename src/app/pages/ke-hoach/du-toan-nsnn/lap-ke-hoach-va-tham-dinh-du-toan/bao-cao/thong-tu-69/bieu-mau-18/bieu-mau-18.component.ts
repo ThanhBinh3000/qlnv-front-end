@@ -12,6 +12,7 @@ import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh
 import * as uuid from "uuid";
 import * as XLSX from 'xlsx';
 import { BtnStatus, Doc, Form } from '../../../lap-ke-hoach-va-tham-dinh-du-toan.constant';
+import { DecimalPipe } from '@angular/common';
 
 export class ItemData {
 	id: string;
@@ -87,6 +88,8 @@ export class BieuMau18Component implements OnInit {
 		this.fileList = [];
 	};
 
+	num: number = 1973843523.23;
+
 	constructor(
 		private _modalRef: NzModalRef,
 		private spinner: NgxSpinnerService,
@@ -95,6 +98,7 @@ export class BieuMau18Component implements OnInit {
 		private notification: NzNotificationService,
 		private modal: NzModalService,
 		private fileManip: FileManip,
+		private decimalPipe: DecimalPipe,
 	) { }
 
 	async ngOnInit() {
@@ -105,6 +109,7 @@ export class BieuMau18Component implements OnInit {
 
 	async initialization() {
 		this.spinner.show();
+		console.log(this.decimalPipe.transform(this.num, '1.0-4').replace('.', ';').replace(/,/g, '.').replace(';', ','))
 		Object.assign(this.status, this.dataInfo.status);
 		await this.getFormDetail();
 		if (this.status.general) {

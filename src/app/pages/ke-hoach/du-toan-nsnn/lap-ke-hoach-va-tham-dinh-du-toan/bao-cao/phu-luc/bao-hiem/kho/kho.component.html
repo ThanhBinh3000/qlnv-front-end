@@ -12,7 +12,7 @@
                                 </ng-container>
                                 <ng-template #editMoney>
                                     <nz-select nzShowSearch nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
-                                        (ngModelChange)="editMoneyUnit=false">
+                                        (ngModelChange)="editMoneyUnit=false; Op.setMoneyUnit(maDviTien)">
                                         <nz-option *ngFor="let item of Utils.DVI_TIEN" [nzValue]="item.id"
                                             [nzLabel]="item.tenDm">
                                         </nz-option>
@@ -80,13 +80,13 @@
                                 <th>{{Op.fmtNum(total.slTren)}}</th>
                                 <th>{{Op.fmtNum(total.slDuoi)}}</th>
                                 <th>{{Op.fmtNum(total.slTong)}}</th>
-                                <th>{{Op.fmtVal(total.gtTrenGtConLai, maDviTien)}}</th>
-                                <th>{{Op.fmtVal(total.gtTrenHetKhauHao, maDviTien)}}</th>
-                                <th>{{Op.fmtVal(total.gtTrenTong, maDviTien)}}</th>
-                                <th>{{Op.fmtVal(total.gtDuoiGtConLai, maDviTien)}}</th>
-                                <th>{{Op.fmtVal(total.gtDuoiHetKhauHao, maDviTien)}}</th>
-                                <th>{{Op.fmtVal(total.gtDuoiTong, maDviTien)}}</th>
-                                <th>{{Op.fmtVal(total.tong, maDviTien)}}</th>
+                                <th>{{Op.fmtVal(total.gtTrenGtConLai)}}</th>
+                                <th>{{Op.fmtVal(total.gtTrenHetKhauHao)}}</th>
+                                <th>{{Op.fmtVal(total.gtTrenTong)}}</th>
+                                <th>{{Op.fmtVal(total.gtDuoiGtConLai)}}</th>
+                                <th>{{Op.fmtVal(total.gtDuoiHetKhauHao)}}</th>
+                                <th>{{Op.fmtVal(total.gtDuoiTong)}}</th>
+                                <th>{{Op.fmtVal(total.tong)}}</th>
                                 <th *ngIf="status.general" nzRight></th>
                             </tr>
                         </thead>
@@ -121,25 +121,25 @@
                                         {{Op.fmtNum(data.slTong)}}
                                     </td>
                                     <td>
-                                        {{Op.fmtVal(data.gtTrenGtConLai, maDviTien)}}
+                                        {{Op.fmtVal(data.gtTrenGtConLai)}}
                                     </td>
                                     <td>
-                                        {{Op.fmtVal(data.gtTrenHetKhauHao, maDviTien)}}
+                                        {{Op.fmtVal(data.gtTrenHetKhauHao)}}
                                     </td>
                                     <td>
-                                        {{Op.fmtVal(data.gtTrenTong, maDviTien)}}
+                                        {{Op.fmtVal(data.gtTrenTong)}}
                                     </td>
                                     <td>
-                                        {{Op.fmtVal(data.gtDuoiGtConLai, maDviTien)}}
+                                        {{Op.fmtVal(data.gtDuoiGtConLai)}}
                                     </td>
                                     <td>
-                                        {{Op.fmtVal(data.gtDuoiHetKhauHao, maDviTien)}}
+                                        {{Op.fmtVal(data.gtDuoiHetKhauHao)}}
                                     </td>
                                     <td>
-                                        {{Op.fmtVal(data.gtDuoiTong, maDviTien)}}
+                                        {{Op.fmtVal(data.gtDuoiTong)}}
                                     </td>
                                     <td>
-                                        {{Op.fmtVal(data.tong, maDviTien)}}
+                                        {{Op.fmtVal(data.tong)}}
                                     </td>
                                     <td *ngIf="status.general" nzRight>
                                         <i *ngIf="checkEdit(data.stt)" class="fa fa-pencil"
@@ -202,7 +202,7 @@
                                             (ngModelChange)="changeModel(data.id)" />
                                     </td>
                                     <td>
-                                        {{Op.fmtVal(editCache[data.id].data.gtTrenTong, maDviTien)}}
+                                        {{Op.fmtVal(editCache[data.id].data.gtTrenTong)}}
                                     </td>
                                     <td>
                                         <input class="money-input" currencyMask [options]="Op.amount"
@@ -215,10 +215,10 @@
                                             (ngModelChange)="changeModel(data.id)" />
                                     </td>
                                     <td>
-                                        {{Op.fmtVal(editCache[data.id].data.gtDuoiTong, maDviTien)}}
+                                        {{Op.fmtVal(editCache[data.id].data.gtDuoiTong)}}
                                     </td>
                                     <td>
-                                        {{Op.fmtVal(editCache[data.id].data.tong, maDviTien)}}
+                                        {{Op.fmtVal(editCache[data.id].data.tong)}}
                                     </td>
                                     <td nzRight>
                                         <a (click)="saveEdit(data.id)" class="save">Lưu</a>

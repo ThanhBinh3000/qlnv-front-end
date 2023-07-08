@@ -1,4 +1,4 @@
-import { DatePipe } from '@angular/common';
+import { ComponentType } from '@angular/cdk/portal';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -16,7 +16,6 @@ import { Globals } from 'src/app/shared/globals';
 import * as uuid from 'uuid';
 import { BtnStatus, Doc, Dtc, Form, Report } from '../bao-cao-thuc-hien-du-toan-chi.constant';
 import { PHULUCLIST } from './bao-cao.constant';
-import { ComponentType } from '@angular/cdk/portal';
 import { PhuLucIComponent } from './phu-luc-1/phu-luc-1.component';
 import { PhuLucIIComponent } from './phu-luc-2/phu-luc-2.component';
 import { PhuLucIIIComponent } from './phu-luc-3/phu-luc-3.component';
@@ -84,7 +83,6 @@ export class BaoCaoComponent implements OnInit {
         private baoCaoThucHienDuToanChiService: BaoCaoThucHienDuToanChiService,
         private quanLyVonPhiService: QuanLyVonPhiService,
         private spinner: NgxSpinnerService,
-        private datePipe: DatePipe,
         private userService: UserService,
         private notification: NzNotificationService,
         private modal: NzModalService,
@@ -618,6 +616,7 @@ export class BaoCaoComponent implements OnInit {
             namBcao: this.baoCao.namBcao,
             path: this.path,
             status: new BtnStatus(),
+            luyKes: this.luyKes.find(e => e.maLoai == id),
         }
         Object.assign(dataInfo.status, this.status);
         dataInfo.status.save = dataInfo.status.save && (this.userInfo?.sub == bieuMau.nguoiBcao);

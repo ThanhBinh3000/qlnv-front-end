@@ -21,7 +21,7 @@ import { BtnStatus, CoeffIns, Insurance } from '../lap-ke-hoach-va-tham-dinh-du-
 export class HeSoBaoHiemComponent implements OnInit {
     @Input() data;
     @Output() dataChange = new EventEmitter();
-    Op = Operator;
+    Op = new Operator('1');
     Utils = Utils;
     Status = Status;
     //thong tin dang nhap
@@ -94,22 +94,22 @@ export class HeSoBaoHiemComponent implements OnInit {
                 })
                 break;
             case 'nonpass':
-                await this.tuChoi('3').then(() => {
+                await this.tuChoi(Status.TT_03).then(() => {
                     this.isDataAvailable = true;
                 })
                 break;
             case 'pass':
-                await this.onSubmit('4', null).then(() => {
+                await this.onSubmit(Status.TT_04, null).then(() => {
                     this.isDataAvailable = true;
                 })
                 break;
             case 'nonapprove':
-                await this.tuChoi('5').then(() => {
+                await this.tuChoi(Status.TT_05).then(() => {
                     this.isDataAvailable = true;
                 })
                 break;
             case 'approve':
-                await this.onSubmit('7', null).then(() => {
+                await this.onSubmit(Status.TT_07, null).then(() => {
                     this.isDataAvailable = true;
                 })
                 break;
