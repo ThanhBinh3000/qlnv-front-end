@@ -7,6 +7,6 @@ import { BaseService } from 'src/app/services/base.service';
 })
 export class BangCaoDieuChuyenService extends BaseService {
     constructor(public httpClient: HttpClient) {
-        super(httpClient, 'dieu-chuyen-noi-bo/bao-cao', '/qlnv-hang');
+        super(httpClient, 'dieu-chuyen-noi-bo/bao-cao-ket-qua', '/qlnv-hang');
     }
 }
