@@ -177,7 +177,6 @@ export class ToanBoDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Comp
           childData: value
         };
       }).value();
-    console.log(this.dataTableView,777)
   }
 
   onExpandStringChange(id: string, checked: boolean) {

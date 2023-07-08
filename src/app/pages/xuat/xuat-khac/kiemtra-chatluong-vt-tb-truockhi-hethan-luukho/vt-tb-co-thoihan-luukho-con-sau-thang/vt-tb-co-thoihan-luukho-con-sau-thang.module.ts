@@ -11,6 +11,11 @@ import {NzStatisticModule} from "ng-zorro-antd/statistic";
 import {NzPipesModule} from "ng-zorro-antd/pipes";
 import {MainModule} from "../../../../../layout/main/main.module";
 import {ComponentsModule} from "../../../../../components/components.module";
+import { TongHopDanhSachVt6thComponent } from './tong-hop-danh-sach-vt6th/tong-hop-danh-sach-vt6th.component';
+import { ChiTietTongHopDanhSachVt6thComponent } from './tong-hop-danh-sach-vt6th/chi-tiet-tong-hop-danh-sach-vt6th/chi-tiet-tong-hop-danh-sach-vt6th.component';
+import {
+    VtTbCoThoihanLuukhoLonHonMuoihaiThangModule
+} from "../vt-tb-co-thoihan-luukho-lon-hon-muoihai-thang/vt-tb-co-thoihan-luukho-lon-hon-muoihai-thang.module";
 
 
 
@@ -21,18 +26,22 @@ import {ComponentsModule} from "../../../../../components/components.module";
     QuyetDinhXuatGiamVatTuComponent,
     KiemTraChatLuongComponent,
     XuatKhoComponent,
-    NhapKhoComponent
+    NhapKhoComponent,
+    TongHopDanhSachVt6thComponent,
+    ChiTietTongHopDanhSachVt6thComponent
   ],
-  exports: [
-    ToanBoDanhSachVt6ThComponent
-  ],
-  imports: [
-    CommonModule,
-    DirectivesModule,
-    NzStatisticModule,
-    NzPipesModule,
-    MainModule,
-    ComponentsModule,
-  ]
+    exports: [
+        ToanBoDanhSachVt6ThComponent,
+        TongHopDanhSachVt6thComponent
+    ],
+    imports: [
+        CommonModule,
+        DirectivesModule,
+        NzStatisticModule,
+        NzPipesModule,
+        MainModule,
+        ComponentsModule,
+        VtTbCoThoihanLuukhoLonHonMuoihaiThangModule,
+    ]
 })
 export class VtTbCoThoihanLuukhoConSauThangModule { }
