@@ -211,7 +211,7 @@ export class BangKeNhapVatTuComponent extends Base2Component implements OnInit {
           return {
             ...element,
             // diemKho: `${element.thoiHanDieuChuyen}${element.maDiemKho}`,
-            maloNganKho: `${element.maloKho}${element.maNganKho}`
+            maloNganKho: `${element.maLoKho}${element.maNganKho}`
           }
         });
       this.dataTableView = this.buildTableView(data)

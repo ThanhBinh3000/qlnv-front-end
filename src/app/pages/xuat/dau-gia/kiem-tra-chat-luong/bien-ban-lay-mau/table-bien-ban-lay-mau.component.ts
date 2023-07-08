@@ -23,6 +23,8 @@ export class TableBienBanLayMauComponent extends Base2Component implements OnIni
   expandSetString = new Set<string>();
   idQdNv: number = 0;
   isViewQdNv: boolean = false;
+  idBbTinhKho : number = 0;
+  isViewBbTinhKho: boolean = false;
 
   constructor(
     httpClient: HttpClient,
@@ -156,5 +158,15 @@ export class TableBienBanLayMauComponent extends Base2Component implements OnIni
   closeModalQdNv() {
     this.idQdNv = null;
     this.isViewQdNv = false;
+  }
+
+  openModalBbTinhKho(id: number) {
+    this.idBbTinhKho = id;
+    this.isViewBbTinhKho = true;
+  }
+
+  closeModalBbTinhKho() {
+    this.idBbTinhKho = null;
+    this.isViewBbTinhKho = false;
   }
 }

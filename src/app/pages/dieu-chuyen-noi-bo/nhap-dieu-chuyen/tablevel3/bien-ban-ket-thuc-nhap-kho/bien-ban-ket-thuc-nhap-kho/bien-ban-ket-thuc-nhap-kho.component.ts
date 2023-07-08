@@ -134,7 +134,7 @@ export class BienBanKetThucNhapKhoComponent extends Base2Component implements On
         .map(element => {
           return {
             ...element,
-            maloNganKho: `${element.maloKho}${element.maNganKho}${element.soBBKtNH}`
+            maloNganKho: `${element.maLoKho}${element.maNganKho}${element.soBBKtNH}`
           }
         });
       this.dataTableView = this.buildTableView(data)

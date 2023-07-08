@@ -380,7 +380,7 @@
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group *ngIf="!!formData.value.loaiQdinh" nzAddOnAfterIcon="folder-open"
                     (click)="openDialogQD()">
-                    <input nz-input formControlName="canCuQdTc" [readonly]="true" />
+                    <input nz-input formControlName="soCanCuQdTc" [readonly]="true" />
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
@@ -389,10 +389,10 @@
             <div nz-col [nzSpan]="3">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
-                  Số QĐ Tổng cục
+                  Số công văn/tờ trình của cục
                 </nz-form-label>
                 <nz-form-control>
-                  <input nz-input formControlName="soCanCuQdTc" [readonly]="true" />
+                  <input nz-input formControlName="soDxuat" [readonly]="true" />
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -1295,7 +1295,7 @@
                               </td>
                             </tr>
                             <ng-container *ngFor="let diemKhoNhan of chiCucNhan.children, let y = index">
-                              <tr>
+                              <tr *ngIf="diemKhoNhan.tenDiemKhoNhan">
                                 <td></td>
                                 <td></td>
                                 <td></td>
@@ -1316,15 +1316,15 @@
                                 <td></td>
                                 <td *ngIf="formData.value.trangThai == STATUS.YC_CHICUC_PHANBO_DC">
                                   <a (click)="themLoKhoNhan(diemKhoNhan)">
-                                    <i class="icon htvbdh_dau-cong"></i>
+                                    <i class="icon htvbdh_dau-cong" title="Thêm"></i>
                                   </a>
-                                  <a (click)="xoaDiemKhoNhan(diemKhoNhan)">
-                                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+                                  <a (click)="xoaDiemKhoNhanCC(diemKhoNhan)">
+                                    <i class="fa fa-trash-o do" title="Xóa"></i>
                                   </a>
                                 </td>
                               </tr>
                               <ng-container *ngFor="let f of diemKhoNhan.children, let y = index">
-                                <tr>
+                                <tr *ngIf="f.tenNganKhoNhan">
                                   <td></td>
                                   <td></td>
                                   <td></td>
@@ -1340,7 +1340,7 @@
                                   <td></td>
                                   <td></td>
                                   <td></td>
-                                  <td>{{f.tenLoKhoNhan}} {{f.tenNganKhoNhan}}</td>
+                                  <td>{{f.tenLoKhoNhan}} {{f.tenNganKhoNhan}} {{f.tenNhaKhoNhan}}</td>
                                   <td class="text-right">
                                     {{f.tichLuongKd|number:'1.0-1':'vi_VN'}}</td>
                                   <td class="text-right">
@@ -1349,8 +1349,8 @@
                                     <a (click)="suaLoKhoNhan(f)">
                                       <i class="fa fa-pencil" title="Sửa"></i>
                                     </a>
-                                    <a (click)="xoaLoKhoNhan(f)">
-                                      <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+                                    <a (click)="xoaLoKhoNhanCC(f)">
+                                      <i class="fa fa-trash-o do" title="Xóa"></i>
                                     </a>
                                   </td>
                                 </tr>

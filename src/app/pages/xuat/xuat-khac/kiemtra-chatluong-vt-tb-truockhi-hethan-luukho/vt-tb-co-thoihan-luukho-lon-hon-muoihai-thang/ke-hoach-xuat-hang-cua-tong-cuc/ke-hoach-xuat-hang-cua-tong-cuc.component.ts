@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {Base2Component} from "../../../../../../components/base2/base2.component";
 import {STATUS} from "../../../../../../constants/status";
 import {HttpClient} from "@angular/common/http";
@@ -10,6 +10,8 @@ import {DonviService} from "../../../../../../services/donvi.service";
 import {DanhMucService} from "../../../../../../services/danhmuc.service";
 import {KeHoachXuatHangService} from 'src/app/services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/KeHoachXuatHang.service';
 import {MESSAGE} from "../../../../../../constants/message";
+import {DataService} from "../../../../../../services/data.service";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-ke-hoach-xuat-hang-cua-tong-cuc',
@@ -18,16 +20,21 @@ import {MESSAGE} from "../../../../../../constants/message";
 })
 export class KeHoachXuatHangCuaTongCucComponent extends Base2Component implements OnInit {
 
-  STATUS = STATUS;
+  dataTongHop: any;
   isDetail: boolean = false;
   selectedId: number;
   isView: boolean = false;
+  KE_HOACH: string = "00";
+  STATUS = STATUS;
+  private dataSubscription: Subscription;
+  @Output() tabFocus = new EventEmitter<number>();
 
   constructor(httpClient: HttpClient,
               storageService: StorageService,
               notification: NzNotificationService,
               spinner: NgxSpinnerService,
               modal: NzModalService,
+              private dataService: DataService,
               private donviService: DonviService,
               private danhMucService: DanhMucService,
               private keHoachXuatHangService: KeHoachXuatHangService) {
@@ -37,20 +44,34 @@ export class KeHoachXuatHangCuaTongCucComponent extends Base2Component implement
       soToTrinh: [],
       trichYeu: [],
       capDvi: [1],
-      loai: [LOAI.KE_HOACH],
+      loai: [this.KE_HOACH],
       ngayKeHoach: [],
       ngayKeHoachTu: [],
       ngayKeHoachDen: [],
       ngayDuyetKeHoach: [],
       ngayDuyetKeHoachTu: [],
       ngayDuyetKeHoachDen: [],
+      ngayDuyetKeHoachBtcTu: [],
+      ngayDuyetKeHoachBtcDen: [],
     })
+
+  }
+
+  removeData() {
+    this.dataService.removeData();
   }
 
   async ngOnInit(): Promise<void> {
     try {
+      this.emitTab(4)
       await this.spinner.show();
-      await Promise.all([]);
+      await this.dataService.currentData.subscribe(data => {
+        if (data && data.dataTongHop) {
+          this.dataTongHop = data.dataTongHop;
+          this.isDetail = true;
+        }
+      });
+      await this.removeData();
       await this.timKiem();
     } catch (e) {
       console.log('error: ', e)
@@ -103,9 +124,8 @@ export class KeHoachXuatHangCuaTongCucComponent extends Base2Component implement
     await this.search();
     this.isDetail = false;
   }
-}
 
-export enum LOAI {
-  KE_HOACH = "00",
-  TONG_HOP = "01",
+  emitTab(tab) {
+    this.tabFocus.emit(tab);
+  }
 }

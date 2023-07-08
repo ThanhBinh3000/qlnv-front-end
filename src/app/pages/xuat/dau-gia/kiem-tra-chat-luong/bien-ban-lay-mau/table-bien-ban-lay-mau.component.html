@@ -139,7 +139,10 @@
                       <td>{{ (lv2.tenLoKho ? lv2.tenLoKho + ' - ' : '') + lv2.tenNganKho }}</td>
                       <td class="bold">{{lv2.soBienBan}}</td>
                       <td>{{lv2.ngayLayMau | date: 'dd/MM/YYYY' }}</td>
-                      <td>{{lv2.soBbTinhKho}}</td>
+                      <td>
+                        <a *ngIf="lv2.soBbTinhKho && lv2.idBbTinhKho" nz-button nzType="link" (click)="openModalBbTinhKho(lv2.idBbTinhKho)">{{
+                          lv2.soBbTinhKho}}</a>
+                      </td>
                       <td>{{lv2.ngayXuatDocKho}}</td>
                       <td>{{lv2.soBbHaoDoi}}</td>
                       <td>{{lv2.tenTrangThai}}</td>
@@ -206,6 +209,18 @@
   </ng-container>
   <div *nzModalFooter>
     <button nz-button (click)="closeModalQdNv()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewBbTinhKho" (nzOnCancel)="closeModalBbTinhKho()">
+  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+    <app-bdg-them-moi-bien-ban-tinh-kho [idInput]="idBbTinhKho" [loaiVthh]="loaiVthh" [isViewOnModal]="true">
+    </app-bdg-them-moi-bien-ban-tinh-kho>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button (click)="closeModalBbTinhKho()" class="modal__button--cancel">
       <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
       Đóng
     </button>

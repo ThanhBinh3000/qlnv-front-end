@@ -213,7 +213,7 @@ export class BienBanGiaoNhanComponent extends Base2Component implements OnInit {
       //   return {
       //     ...element,
       //     maKho: `${element.thoiHanDieuChuyen}${element.maDiemKho}`,
-      //     maloNganKhoNhan: `${element.maloKhoNhan}${element.maNganKhoNhan}`
+      //     maloNganKhoNhan: `${element.maLoKhoNhan}${element.maNganKhoNhan}`
       //   }
       // });
       this.dataTableView = this.buildTableView(data)
