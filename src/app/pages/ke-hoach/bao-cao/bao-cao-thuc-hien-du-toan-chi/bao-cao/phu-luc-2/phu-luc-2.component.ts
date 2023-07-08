@@ -1,17 +1,18 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { NzModalService } from 'ng-zorro-antd/modal';
+import { Component, Input, OnInit } from '@angular/core';
+import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { FileManip, Operator, Status, Table, Utils } from "src/app/Utility/utils";
 import { DialogChonDanhMucComponent } from 'src/app/components/dialog/dialog-chon-danh-muc/dialog-chon-danh-muc.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.service';
 import { BaoCaoThucHienDuToanChiService } from 'src/app/services/quan-ly-von-phi/baoCaoThucHienDuToanChi.service';
-import { addChild, addHead, addParent, deleteRow, displayNumber, exchangeMoney, getHead, getName, percent, sortByIndex, sortWithoutIndex, sumNumber } from 'src/app/Utility/func';
-import { AMOUNT, BOX_NUMBER_WIDTH, DON_VI_TIEN, LA_MA, MONEY_LIMIT, QUATITY } from "src/app/Utility/utils";
 import * as uuid from "uuid";
-
+import { BtnStatus, Doc, Dtc, Form } from '../../bao-cao-thuc-hien-du-toan-chi.constant';
+import * as XLSX from 'xlsx';
 
 export class ItemData {
     id: string;
@@ -48,47 +49,61 @@ export class ItemData {
     styleUrls: ['../bao-cao.component.scss']
 })
 export class PhuLucIIComponent implements OnInit {
-    @Input() data;
-    @Output() dataChange = new EventEmitter();
+    @Input() dataInfo;
+    Op = new Operator('1');
+    Utils = Utils;
+    Dtc = Dtc;
+    //thong tin
+    formDetail: Form = new Form();
+    total: ItemData = new ItemData();
+    maDviTien: string = '1';
+    scrollX: string;
+    namBcao: number;
     //danh muc
     noiDungs: any[] = [];
     lstCtietBcao: ItemData[] = [];
-    donViTiens: any[] = DON_VI_TIEN;
-    soLaMa: any[] = LA_MA;
-    luyKeDetail: any[] = [];
-
-    //thong tin chung
-    idBcao: string;
-    id: string;
-    namBcao: number;
-    maPhuLuc: string;
-    thuyetMinh: string;
-    maDviTien: string;
-    listIdDelete = "";
-    trangThaiPhuLuc = '1';
-    initItem: ItemData = new ItemData();
-    total: ItemData = new ItemData();
-    scrollX = (350 + 20 * BOX_NUMBER_WIDTH + 200).toString() + 'px';
-    amount = AMOUNT;
-    quatity = QUATITY;
-    //trang thai cac nut
-    status = false;
-    statusBtnFinish: boolean;
-    statusBtnOk: boolean;
+    luyKes: any[] = [];
+    keys = ['dtoanSdungNamTcong', 'dtoanSdungNamNguonNsnn', 'dtoanSdungNamNguonSn', 'dtoanSdungNamNguonQuy', 'giaiNganThangTcong', 'giaiNganThangNguonNsnn', 'giaiNganThangNguonSn',
+        'giaiNganThangNguonQuy', 'luyKeGiaiNganTcong', 'luyKeGiaiNganNguonNsnn', 'luyKeGiaiNganNguonSn', 'luyKeGiaiNganNguonQuy']
+    //trang thai
+    status: BtnStatus = new BtnStatus();
     editMoneyUnit = false;
     isDataAvailable = false;
-
     allChecked = false;
     editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
 
+    fileList: NzUploadFile[] = [];
+    listFile: File[] = [];
+    listIdDeleteFiles: string[] = [];
+
+    beforeUpload = (file: NzUploadFile): boolean => {
+        this.fileList = this.fileList.concat(file);
+        return false;
+    };
+
+    // them file vao danh sach
+    handleUpload(): void {
+        this.fileList.forEach((file: any) => {
+            const id = file?.lastModified.toString();
+            this.formDetail.lstFiles.push({
+                ... new Doc(),
+                id: id,
+                fileName: file?.name
+            });
+            this.listFile.push(file);
+        });
+        this.fileList = [];
+    };
+
     constructor(
+        private _modalRef: NzModalRef,
         private spinner: NgxSpinnerService,
         private danhMucService: DanhMucDungChungService,
         private baoCaoThucHienDuToanChiService: BaoCaoThucHienDuToanChiService,
         private notification: NzNotificationService,
         private modal: NzModalService,
-    ) {
-    }
+        private fileManip: FileManip,
+    ) { }
 
     ngOnInit() {
         this.initialization().then(() => {
@@ -98,74 +113,64 @@ export class PhuLucIIComponent implements OnInit {
 
     async initialization() {
         this.spinner.show();
-
-        this.id = this.data?.id;
-        this.idBcao = this.data.idBcao;
-        this.maPhuLuc = this.data?.maPhuLuc;
-        this.maDviTien = this.data?.maDviTien ? this.data?.maDviTien : '1';
-        this.thuyetMinh = this.data?.thuyetMinh;
-        this.trangThaiPhuLuc = this.data?.trangThai;
-        this.namBcao = this.data?.namBcao;
-        this.luyKeDetail = this.data?.luyKeDetail?.lstCtietBcaos;
-        this.status = this.data?.status;
-        if (this.status) {
-            this.scrollX = (350 + 20 * BOX_NUMBER_WIDTH).toString() + 'px';
-        }
-        this.statusBtnFinish = this.data?.statusBtnFinish;
-        //lay danh muc va ten danh muc
-        const category = await this.danhMucService.danhMucChungGetAll('BC_DTC_PL2');
-        if (category) {
-            category.data.forEach(
-                item => {
-                    this.noiDungs.push({
+        Object.assign(this.status, this.dataInfo.status);
+        this.namBcao = this.dataInfo.namBcao;
+        this.luyKes = this.dataInfo.luyKes?.lstCtietBcaos;
+        if (this.status.save) {
+            const category = await this.danhMucService.danhMucChungGetAll('BC_DTC_PL2');
+            if (category) {
+                category.data.forEach(
+                    item => {
+                        this.noiDungs.push({
+                            ...item,
+                            level: item.ma?.split('.').length - 2,
+                            giaTri: Utils.getName(this.namBcao, item.giaTri),
+                        })
+                    }
+                )
+            }
+            if (this.lstCtietBcao.length == 0) {
+                this.luyKes.forEach(item => {
+                    this.lstCtietBcao.push({
                         ...item,
-                        level: item.ma?.split('.').length - 2,
-                        giaTri: getName(this.namBcao, item.giaTri),
+                        luyKeGiaiNganTcongTle: Operator.percent(item.luyKeGiaiNganTcong, item.dtoanSdungNamTcong),
+                        luyKeGiaiNganNguonNsnnTle: Operator.percent(item.luyKeGiaiNganNguonNsnn, item.dtoanSdungNamNguonNsnn),
+                        luyKeGiaiNganNguonSnTle: Operator.percent(item.luyKeGiaiNganNguonSn, item.dtoanSdungNamNguonSn),
+                        luyKeGiaiNganNguonQuyTle: Operator.percent(item.luyKeGiaiNganNguonQuy, item.dtoanSdungNamNguonQuy),
+                        checked: false,
+                        id: uuid.v4() + 'FE',
                     })
-                }
-            )
+                })
+            }
+            this.scrollX = Table.tableWidth(350, 20, 0, 200);
+        } else {
+            this.scrollX = Table.tableWidth(350, 20, 0, 0);
         }
         //them cac ban ghi va tinh toan lai ty le cho chung
-        this.data?.lstCtietBcaos.forEach(item => {
-            this.lstCtietBcao.push({
-                ...item,
-                giaiNganThangTcongTle: percent(item.giaiNganThangTcong, item.dtoanSdungNamTcong),
-                giaiNganThangNguonNsnnTle: percent(item.giaiNganThangNguonNsnn, item.dtoanSdungNamNguonNsnn),
-                giaiNganThangNguonSnTle: percent(item.giaiNganThangNguonSn, item.dtoanSdungNamNguonSn),
-                giaiNganThangNguonQuyTle: percent(item.giaiNganThangNguonQuy, item.dtoanSdungNamNguonQuy),
-                luyKeGiaiNganTcongTle: percent(item.luyKeGiaiNganTcong, item.dtoanSdungNamTcong),
-                luyKeGiaiNganNguonNsnnTle: percent(item.luyKeGiaiNganNguonNsnn, item.dtoanSdungNamNguonNsnn),
-                luyKeGiaiNganNguonSnTle: percent(item.luyKeGiaiNganNguonSn, item.dtoanSdungNamNguonSn),
-                luyKeGiaiNganNguonQuyTle: percent(item.luyKeGiaiNganNguonQuy, item.dtoanSdungNamNguonQuy),
-                checked: false,
-            })
-        })
+        // this.data?.lstCtietBcaos.forEach(item => {
+        //     this.lstCtietBcao.push({
+        //         ...item,
+        //         giaiNganThangTcongTle: Operator.percent(item.giaiNganThangTcong, item.dtoanSdungNamTcong),
+        //         giaiNganThangNguonNsnnTle: Operator.percent(item.giaiNganThangNguonNsnn, item.dtoanSdungNamNguonNsnn),
+        //         giaiNganThangNguonSnTle: Operator.percent(item.giaiNganThangNguonSn, item.dtoanSdungNamNguonSn),
+        //         giaiNganThangNguonQuyTle: Operator.percent(item.giaiNganThangNguonQuy, item.dtoanSdungNamNguonQuy),
+        //         luyKeGiaiNganTcongTle: Operator.percent(item.luyKeGiaiNganTcong, item.dtoanSdungNamTcong),
+        //         luyKeGiaiNganNguonNsnnTle: Operator.percent(item.luyKeGiaiNganNguonNsnn, item.dtoanSdungNamNguonNsnn),
+        //         luyKeGiaiNganNguonSnTle: Operator.percent(item.luyKeGiaiNganNguonSn, item.dtoanSdungNamNguonSn),
+        //         luyKeGiaiNganNguonQuyTle: Operator.percent(item.luyKeGiaiNganNguonQuy, item.dtoanSdungNamNguonQuy),
+        //         checked: false,
+        //     })
+        // })
 
-        if (this.lstCtietBcao.length == 0) {
-            this.luyKeDetail.forEach(item => {
-                this.lstCtietBcao.push({
-                    ...item,
-                    luyKeGiaiNganTcongTle: percent(item.luyKeGiaiNganTcong, item.dtoanSdungNamTcong),
-                    luyKeGiaiNganNguonNsnnTle: percent(item.luyKeGiaiNganNguonNsnn, item.dtoanSdungNamNguonNsnn),
-                    luyKeGiaiNganNguonSnTle: percent(item.luyKeGiaiNganNguonSn, item.dtoanSdungNamNguonSn),
-                    luyKeGiaiNganNguonQuyTle: percent(item.luyKeGiaiNganNguonQuy, item.dtoanSdungNamNguonQuy),
-                    checked: false,
-                    id: uuid.v4() + 'FE',
-                })
-            })
-        }
+
 
         if (this.lstCtietBcao.length > 0) {
             if (!this.lstCtietBcao[0].stt) {
-                this.lstCtietBcao = sortWithoutIndex(this.lstCtietBcao, 'maNdung');
+                this.lstCtietBcao = Table.sortWithoutIndex(this.lstCtietBcao, 'maNdung');
             } else {
-                this.lstCtietBcao = sortByIndex(this.lstCtietBcao);
+                this.lstCtietBcao = Table.sortByIndex(this.lstCtietBcao);
             }
         }
-
-        this.lstCtietBcao.forEach(item => {
-            item.tenNdung = this.noiDungs.find(e => e.ma == item.maNdung)?.giaTri;
-        })
         this.getTotal();
         this.updateEditCache();
         this.getStatusButton();
@@ -173,69 +178,49 @@ export class PhuLucIIComponent implements OnInit {
     }
 
     getStatusButton() {
-        if (this.data?.statusBtnOk && (this.trangThaiPhuLuc == "2" || this.trangThaiPhuLuc == "5")) {
-            this.statusBtnOk = false;
-        } else {
-            this.statusBtnOk = true;
-        }
+        this.status.ok = this.status.ok && (this.formDetail.trangThai == Status.NOT_RATE || this.formDetail.trangThai == Status.COMPLETE);
     }
 
     // luu
     async save(trangThai: string) {
-        let checkSaveEdit;
-        //check xem tat ca cac dong du lieu da luu chua?
-        this.lstCtietBcao.forEach(element => {
-            if (this.editCache[element.id].edit === true) {
-                checkSaveEdit = false
-            }
-        });
-        if (checkSaveEdit == false) {
+        if (this.lstCtietBcao.some(e => this.editCache[e.id].edit)) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
             return;
         }
-        //tinh lai don vi tien va kiem tra gioi han cua chung
-        const lstCtietBcaoTemp: ItemData[] = [];
-        let checkMoneyRange = true;
-        this.lstCtietBcao.forEach(item => {
-            if (item.dtoanSdungNamTcong > MONEY_LIMIT || item.giaiNganThangTcong > MONEY_LIMIT || item.luyKeGiaiNganTcong > MONEY_LIMIT) {
-                checkMoneyRange = false;
-                return;
-            }
-            lstCtietBcaoTemp.push({
-                ...item,
-            })
-        })
 
-        if (!checkMoneyRange == true) {
+        if (this.lstCtietBcao.some(e => e.dtoanSdungNamTcong > Utils.MONEY_LIMIT || e.giaiNganThangTcong > Utils.MONEY_LIMIT || e.luyKeGiaiNganTcong > Utils.MONEY_LIMIT)) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
             return;
         }
-        // replace nhung ban ghi dc them moi id thanh null
-        lstCtietBcaoTemp.forEach(item => {
-            if (item.id?.length == 38) {
-                item.id = null;
-            }
+
+        if (this.listFile.some(file => file.size > Utils.FILE_SIZE)) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
+            return;
+        }
+
+        const lstCtietBcaoTemp: ItemData[] = [];
+        this.lstCtietBcao.forEach(item => {
+            lstCtietBcaoTemp.push({
+                ...item,
+                id: item.id?.length == 38 ? null : item.id,
+            })
         })
-        const request = {
-            id: this.id,
-            lstCtietBcaos: lstCtietBcaoTemp,
-            maLoai: this.maPhuLuc,
-            maDviTien: this.maDviTien,
-            nguoiBcao: this.data?.nguoiBcao,
-            lyDoTuChoi: this.data?.lyDoTuChoi,
-            thuyetMinh: this.thuyetMinh,
-            trangThai: trangThai,
-        };
+
+        const request = JSON.parse(JSON.stringify(this.formDetail));
+        request.fileDinhKems = [];
+        for (let iterator of this.listFile) {
+            request.fileDinhKems.push(await this.fileManip.uploadFile(iterator, this.dataInfo.path));
+        }
+        request.lstCtietLapThamDinhs = lstCtietBcaoTemp;
+        request.trangThai = trangThai;
         this.spinner.show();
         this.baoCaoThucHienDuToanChiService.baoCaoCapNhatChiTiet(request).toPromise().then(
             async data => {
                 if (data.statusCode == 0) {
                     this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-                    const obj = {
-                        trangThai: '-1',
-                        data: data.data,
-                    };
-                    this.dataChange.emit(obj);
+                    this._modalRef.close({
+                        trangThai: data.data.trangThai,
+                    });
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
                 }
@@ -250,37 +235,29 @@ export class PhuLucIIComponent implements OnInit {
 
     // chuc nang check role
     async onSubmit(mcn: string, lyDoTuChoi: string) {
-        if (this.id) {
-            const requestGroupButtons = {
-                id: this.id,
-                trangThai: mcn,
-                lyDoTuChoi: lyDoTuChoi,
-            };
-            this.spinner.show();
-            await this.baoCaoThucHienDuToanChiService.approveBieuMau(requestGroupButtons).toPromise().then(async (data) => {
-                if (data.statusCode == 0) {
-                    this.trangThaiPhuLuc = mcn;
-                    this.getStatusButton();
-                    const obj = {
-                        trangThai: mcn,
-                        lyDoTuChoi: lyDoTuChoi,
-                    }
-                    this.dataChange.emit(obj);
-                    if (mcn == '0') {
-                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
-                    } else {
-                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
-                    }
+        const requestGroupButtons = {
+            id: this.formDetail.id,
+            trangThai: mcn,
+            lyDoTuChoi: lyDoTuChoi,
+        };
+        this.spinner.show();
+        await this.baoCaoThucHienDuToanChiService.approveBieuMau(requestGroupButtons).toPromise().then(async (data) => {
+            if (data.statusCode == 0) {
+                if (mcn == Status.NOT_OK) {
+                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
                 } else {
-                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
                 }
-            }, err => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-            });
-            this.spinner.hide();
-        } else {
-            this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING)
-        }
+                this._modalRef.close({
+                    trangThai: mcn,
+                });
+            } else {
+                this.notification.error(MESSAGE.ERROR, data?.msg);
+            }
+        }, err => {
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        });
+        this.spinner.hide();
     }
 
     //show popup tu choi
@@ -304,40 +281,31 @@ export class PhuLucIIComponent implements OnInit {
     // chuyển đổi stt đang được mã hóa thành dạng I, II, a, b, c, ...
     getIndex(str: string): string {
         str = str.substring(str.indexOf('.') + 1, str.length);
-        let xau = "";
         const chiSo: string[] = str.split('.');
         const n: number = chiSo.length - 1;
         let k: number = parseInt(chiSo[n], 10);
-        if (n == 0) {
-            xau = String.fromCharCode(k + 64);
+        switch (n) {
+            case 0:
+                return String.fromCharCode(k + 64);
+            case 1:
+                return Utils.laMa(k);
+            case 2:
+                return chiSo[n];
+            case 3:
+                return chiSo[n - 1].toString() + "." + chiSo[n].toString();
+            case 4:
+                return String.fromCharCode(k + 96);
+            case 5:
+                return "-";
+            default:
+                return '';
         }
-        if (n == 1) {
-            for (let i = 0; i < this.soLaMa.length; i++) {
-                while (k >= this.soLaMa[i].gTri) {
-                    xau += this.soLaMa[i].kyTu;
-                    k -= this.soLaMa[i].gTri;
-                }
-            }
-        }
-        if (n == 2) {
-            xau = chiSo[n];
-        }
-        if (n == 3) {
-            xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
-        }
-        if (n == 4) {
-            xau = String.fromCharCode(k + 96);
-        }
-        if (n == 5) {
-            xau = "-";
-        }
-        return xau;
     }
 
 
     //thêm ngang cấp
     addSame(id: string, initItem: ItemData) {
-        this.lstCtietBcao = addParent(id, initItem, this.lstCtietBcao);
+        this.lstCtietBcao = Table.addParent(id, initItem, this.lstCtietBcao);
     }
 
     // gan editCache.data == lstCtietBcao
@@ -351,12 +319,12 @@ export class PhuLucIIComponent implements OnInit {
     }
     //thêm cấp thấp hơn
     addLow(id: string, initItem: ItemData) {
-        this.lstCtietBcao = addChild(id, initItem, this.lstCtietBcao);
+        this.lstCtietBcao = Table.addChild(id, initItem, this.lstCtietBcao);
     }
     //xóa dòng
     deleteLine(id: string) {
         const stt = this.lstCtietBcao.find(e => e.id === id)?.stt;
-        this.lstCtietBcao = deleteRow(id, this.lstCtietBcao);
+        this.lstCtietBcao = Table.deleteRow(id, this.lstCtietBcao);
         this.sum(stt);
         this.updateEditCache();
     }
@@ -403,14 +371,14 @@ export class PhuLucIIComponent implements OnInit {
             }
         })
         //thay đổi các phần tử cha cho phù hợp với tháy đổi của phần tử con
-        let index: number = this.lstCtietBcao.findIndex(e => e.stt == getHead(data.stt));
+        let index: number = this.lstCtietBcao.findIndex(e => e.stt == Table.preIndex(data.stt));
         if (index == -1) {
             this.allChecked = this.checkAllChild('0');
         } else {
             let nho: boolean = this.lstCtietBcao[index].checked;
             while (nho != this.checkAllChild(this.lstCtietBcao[index].stt)) {
                 this.lstCtietBcao[index].checked = !nho;
-                index = this.lstCtietBcao.findIndex(e => e.stt == getHead(this.lstCtietBcao[index].stt));
+                index = this.lstCtietBcao.findIndex(e => e.stt == Table.preIndex(this.lstCtietBcao[index].stt));
                 if (index == -1) {
                     this.allChecked = this.checkAllChild('0');
                     break;
@@ -423,7 +391,7 @@ export class PhuLucIIComponent implements OnInit {
     checkAllChild(str: string): boolean {
         let nho = true;
         this.lstCtietBcao.forEach(item => {
-            if ((getHead(item.stt) == str) && (!item.checked)) {
+            if ((Table.preIndex(item.stt) == str) && (!item.checked)) {
                 nho = item.checked;
             }
         })
@@ -474,13 +442,13 @@ export class PhuLucIIComponent implements OnInit {
                 const index: number = this.lstCtietBcao.findIndex(e => e.maNdung == res.ma);
                 if (index == -1) {
                     const data: ItemData = {
-                        ...this.initItem,
+                        ... new ItemData(),
                         maNdung: res.ma,
                         level: this.noiDungs.find(e => e.ma == res.ma)?.level,
                         tenNdung: this.noiDungs.find(e => e.ma == res.ma)?.giaTri,
                     };
                     if (this.lstCtietBcao.length == 0) {
-                        this.lstCtietBcao = addHead(data, this.lstCtietBcao);
+                        this.lstCtietBcao = Table.addHead(data, this.lstCtietBcao);
                     } else {
                         this.addSame(id, data);
                     }
@@ -489,7 +457,7 @@ export class PhuLucIIComponent implements OnInit {
                 res.lstDanhMuc.forEach(item => {
                     if (this.lstCtietBcao.findIndex(e => e.maNdung == item.ma) == -1) {
                         const data: ItemData = {
-                            ...this.initItem,
+                            ... new ItemData(),
                             maNdung: item.ma,
                             level: item.level,
                             tenNdung: item.giaTri,
@@ -504,53 +472,36 @@ export class PhuLucIIComponent implements OnInit {
     }
 
     getLowStatus(str: string) {
-        return this.lstCtietBcao.findIndex(e => getHead(e.stt) == str) != -1;
+        return this.lstCtietBcao.findIndex(e => Table.preIndex(e.stt) == str) != -1;
     }
 
     getDeleteStatus(data: ItemData) {
-        return this.luyKeDetail.findIndex(e => e.maNdung == data.maNdung) != -1;
+        return this.luyKes.findIndex(e => e.maNdung == data.maNdung) != -1;
     }
 
     sum(stt: string) {
-        stt = getHead(stt);
+        stt = Table.preIndex(stt);
         while (stt != '0') {
             const index = this.lstCtietBcao.findIndex(e => e.stt == stt);
-            const data = this.lstCtietBcao[index];
-            this.lstCtietBcao[index] = {
-                ...this.initItem,
-                id: data.id,
-                stt: data.stt,
-                checked: data.checked,
-                level: data.level,
-                maNdung: data.maNdung,
-                tenNdung: data.tenNdung,
-            }
-            this.lstCtietBcao.forEach(item => {
-                if (getHead(item.stt) == stt) {
-                    this.lstCtietBcao[index].dtoanSdungNamTcong = sumNumber([this.lstCtietBcao[index].dtoanSdungNamTcong, item.dtoanSdungNamTcong]);
-                    this.lstCtietBcao[index].dtoanSdungNamNguonNsnn = sumNumber([this.lstCtietBcao[index].dtoanSdungNamNguonNsnn, item.dtoanSdungNamNguonNsnn]);
-                    this.lstCtietBcao[index].dtoanSdungNamNguonSn = sumNumber([this.lstCtietBcao[index].dtoanSdungNamNguonSn, item.dtoanSdungNamNguonSn]);
-                    this.lstCtietBcao[index].dtoanSdungNamNguonQuy = sumNumber([this.lstCtietBcao[index].dtoanSdungNamNguonQuy, item.dtoanSdungNamNguonQuy]);
-                    this.lstCtietBcao[index].giaiNganThangTcong = sumNumber([this.lstCtietBcao[index].giaiNganThangTcong, item.giaiNganThangTcong]);
-                    this.lstCtietBcao[index].giaiNganThangNguonNsnn = sumNumber([this.lstCtietBcao[index].giaiNganThangNguonNsnn, item.giaiNganThangNguonNsnn]);
-                    this.lstCtietBcao[index].giaiNganThangNguonSn = sumNumber([this.lstCtietBcao[index].giaiNganThangNguonSn, item.giaiNganThangNguonSn]);
-                    this.lstCtietBcao[index].giaiNganThangNguonQuy = sumNumber([this.lstCtietBcao[index].giaiNganThangNguonQuy, item.giaiNganThangNguonQuy]);
-                    this.lstCtietBcao[index].luyKeGiaiNganTcong = sumNumber([this.lstCtietBcao[index].luyKeGiaiNganTcong, item.luyKeGiaiNganTcong]);
-                    this.lstCtietBcao[index].luyKeGiaiNganNguonNsnn = sumNumber([this.lstCtietBcao[index].luyKeGiaiNganNguonNsnn, item.luyKeGiaiNganNguonNsnn]);
-                    this.lstCtietBcao[index].luyKeGiaiNganNguonSn = sumNumber([this.lstCtietBcao[index].luyKeGiaiNganNguonSn, item.luyKeGiaiNganNguonSn]);
-                    this.lstCtietBcao[index].luyKeGiaiNganNguonQuy = sumNumber([this.lstCtietBcao[index].luyKeGiaiNganNguonQuy, item.luyKeGiaiNganNguonQuy]);
-                    // chua co tinh ty le
-                }
-                this.lstCtietBcao[index].giaiNganThangTcongTle = percent(this.lstCtietBcao[index].giaiNganThangTcong, this.lstCtietBcao[index].dtoanSdungNamTcong);
-                this.lstCtietBcao[index].giaiNganThangNguonNsnnTle = percent(this.lstCtietBcao[index].giaiNganThangNguonNsnn, this.lstCtietBcao[index].dtoanSdungNamNguonNsnn);
-                this.lstCtietBcao[index].giaiNganThangNguonSnTle = percent(this.lstCtietBcao[index].giaiNganThangNguonSn, this.lstCtietBcao[index].dtoanSdungNamNguonSn);
-                this.lstCtietBcao[index].giaiNganThangNguonQuyTle = percent(this.lstCtietBcao[index].giaiNganThangNguonQuy, this.lstCtietBcao[index].dtoanSdungNamNguonQuy);
-                this.lstCtietBcao[index].luyKeGiaiNganTcongTle = percent(this.lstCtietBcao[index].luyKeGiaiNganTcong, this.lstCtietBcao[index].dtoanSdungNamTcong);
-                this.lstCtietBcao[index].luyKeGiaiNganNguonNsnnTle = percent(this.lstCtietBcao[index].luyKeGiaiNganNguonNsnn, this.lstCtietBcao[index].dtoanSdungNamNguonNsnn);
-                this.lstCtietBcao[index].luyKeGiaiNganNguonSnTle = percent(this.lstCtietBcao[index].luyKeGiaiNganNguonSn, this.lstCtietBcao[index].dtoanSdungNamNguonSn);
-                this.lstCtietBcao[index].luyKeGiaiNganNguonQuyTle = percent(this.lstCtietBcao[index].luyKeGiaiNganNguonQuy, this.lstCtietBcao[index].dtoanSdungNamNguonQuy);
+            this.keys.forEach(key => {
+                this.lstCtietBcao[index][key] = null;
             })
-            stt = getHead(stt);
+            this.lstCtietBcao.forEach(item => {
+                if (Table.preIndex(item.stt) == stt) {
+                    this.keys.forEach(key => {
+                        this.lstCtietBcao[index][key] = Operator.sum([this.lstCtietBcao[index][key], item[key]]);
+                    })
+                }
+            })
+            this.lstCtietBcao[index].giaiNganThangTcongTle = Operator.percent(this.lstCtietBcao[index].giaiNganThangTcong, this.lstCtietBcao[index].dtoanSdungNamTcong);
+            this.lstCtietBcao[index].giaiNganThangNguonNsnnTle = Operator.percent(this.lstCtietBcao[index].giaiNganThangNguonNsnn, this.lstCtietBcao[index].dtoanSdungNamNguonNsnn);
+            this.lstCtietBcao[index].giaiNganThangNguonSnTle = Operator.percent(this.lstCtietBcao[index].giaiNganThangNguonSn, this.lstCtietBcao[index].dtoanSdungNamNguonSn);
+            this.lstCtietBcao[index].giaiNganThangNguonQuyTle = Operator.percent(this.lstCtietBcao[index].giaiNganThangNguonQuy, this.lstCtietBcao[index].dtoanSdungNamNguonQuy);
+            this.lstCtietBcao[index].luyKeGiaiNganTcongTle = Operator.percent(this.lstCtietBcao[index].luyKeGiaiNganTcong, this.lstCtietBcao[index].dtoanSdungNamTcong);
+            this.lstCtietBcao[index].luyKeGiaiNganNguonNsnnTle = Operator.percent(this.lstCtietBcao[index].luyKeGiaiNganNguonNsnn, this.lstCtietBcao[index].dtoanSdungNamNguonNsnn);
+            this.lstCtietBcao[index].luyKeGiaiNganNguonSnTle = Operator.percent(this.lstCtietBcao[index].luyKeGiaiNganNguonSn, this.lstCtietBcao[index].dtoanSdungNamNguonSn);
+            this.lstCtietBcao[index].luyKeGiaiNganNguonQuyTle = Operator.percent(this.lstCtietBcao[index].luyKeGiaiNganNguonQuy, this.lstCtietBcao[index].dtoanSdungNamNguonQuy);
+            stt = Table.preIndex(stt);
         }
         this.getTotal();
     }
@@ -559,60 +510,118 @@ export class PhuLucIIComponent implements OnInit {
         this.total = new ItemData();
         this.lstCtietBcao.forEach(item => {
             if (item.level == 0) {
-                this.total.dtoanSdungNamTcong = sumNumber([this.total.dtoanSdungNamTcong, item.dtoanSdungNamTcong]);
-                this.total.dtoanSdungNamNguonNsnn = sumNumber([this.total.dtoanSdungNamNguonNsnn, item.dtoanSdungNamNguonNsnn]);
-                this.total.dtoanSdungNamNguonSn = sumNumber([this.total.dtoanSdungNamNguonSn, item.dtoanSdungNamNguonSn]);
-                this.total.dtoanSdungNamNguonQuy = sumNumber([this.total.dtoanSdungNamNguonQuy, item.dtoanSdungNamNguonQuy]);
-                this.total.giaiNganThangTcong = sumNumber([this.total.giaiNganThangTcong, item.giaiNganThangTcong]);
-                this.total.giaiNganThangNguonNsnn = sumNumber([this.total.giaiNganThangNguonNsnn, item.giaiNganThangNguonNsnn]);
-                this.total.giaiNganThangNguonSn = sumNumber([this.total.giaiNganThangNguonSn, item.giaiNganThangNguonSn]);
-                this.total.giaiNganThangNguonQuy = sumNumber([this.total.giaiNganThangNguonQuy, item.giaiNganThangNguonQuy]);
-                this.total.luyKeGiaiNganTcong = sumNumber([this.total.luyKeGiaiNganTcong, item.luyKeGiaiNganTcong]);
-                this.total.luyKeGiaiNganNguonNsnn = sumNumber([this.total.luyKeGiaiNganNguonNsnn, item.luyKeGiaiNganNguonNsnn]);
-                this.total.luyKeGiaiNganNguonSn = sumNumber([this.total.luyKeGiaiNganNguonSn, item.luyKeGiaiNganNguonSn]);
-                this.total.luyKeGiaiNganNguonQuy = sumNumber([this.total.luyKeGiaiNganNguonQuy, item.luyKeGiaiNganNguonQuy]);
+                this.keys.forEach(key => {
+                    this.total[key] = Operator.sum([this.total[key], item[key]]);
+                })
             }
         })
-        this.total.giaiNganThangTcongTle = percent(this.total.giaiNganThangTcong, this.total.dtoanSdungNamTcong);
-        this.total.giaiNganThangNguonNsnnTle = percent(this.total.giaiNganThangNguonNsnn, this.total.dtoanSdungNamNguonNsnn);
-        this.total.giaiNganThangNguonSnTle = percent(this.total.giaiNganThangNguonSn, this.total.dtoanSdungNamNguonSn);
-        this.total.giaiNganThangNguonQuyTle = percent(this.total.giaiNganThangNguonQuy, this.total.dtoanSdungNamNguonQuy);
-        this.total.luyKeGiaiNganTcongTle = percent(this.total.luyKeGiaiNganTcong, this.total.dtoanSdungNamTcong);
-        this.total.luyKeGiaiNganNguonNsnnTle = percent(this.total.luyKeGiaiNganNguonNsnn, this.total.dtoanSdungNamNguonNsnn);
-        this.total.luyKeGiaiNganNguonSnTle = percent(this.total.luyKeGiaiNganNguonSn, this.total.dtoanSdungNamNguonSn);
-        this.total.luyKeGiaiNganNguonQuyTle = percent(this.total.luyKeGiaiNganNguonQuy, this.total.dtoanSdungNamNguonQuy);
+        this.total.giaiNganThangTcongTle = Operator.percent(this.total.giaiNganThangTcong, this.total.dtoanSdungNamTcong);
+        this.total.giaiNganThangNguonNsnnTle = Operator.percent(this.total.giaiNganThangNguonNsnn, this.total.dtoanSdungNamNguonNsnn);
+        this.total.giaiNganThangNguonSnTle = Operator.percent(this.total.giaiNganThangNguonSn, this.total.dtoanSdungNamNguonSn);
+        this.total.giaiNganThangNguonQuyTle = Operator.percent(this.total.giaiNganThangNguonQuy, this.total.dtoanSdungNamNguonQuy);
+        this.total.luyKeGiaiNganTcongTle = Operator.percent(this.total.luyKeGiaiNganTcong, this.total.dtoanSdungNamTcong);
+        this.total.luyKeGiaiNganNguonNsnnTle = Operator.percent(this.total.luyKeGiaiNganNguonNsnn, this.total.dtoanSdungNamNguonNsnn);
+        this.total.luyKeGiaiNganNguonSnTle = Operator.percent(this.total.luyKeGiaiNganNguonSn, this.total.dtoanSdungNamNguonSn);
+        this.total.luyKeGiaiNganNguonQuyTle = Operator.percent(this.total.luyKeGiaiNganNguonQuy, this.total.dtoanSdungNamNguonQuy);
     }
 
 
     changeModel(id: string) {
         const data = this.lstCtietBcao.find(e => e.id === id);
-        this.editCache[id].data.dtoanSdungNamTcong = sumNumber([this.editCache[id].data.dtoanSdungNamNguonNsnn, this.editCache[id].data.dtoanSdungNamNguonSn, this.editCache[id].data.dtoanSdungNamNguonQuy]);
-        this.editCache[id].data.giaiNganThangTcong = sumNumber([this.editCache[id].data.giaiNganThangNguonNsnn, this.editCache[id].data.giaiNganThangNguonSn, this.editCache[id].data.giaiNganThangNguonQuy]);
-        this.editCache[id].data.luyKeGiaiNganTcong = sumNumber([this.editCache[id].data.luyKeGiaiNganNguonNsnn, this.editCache[id].data.luyKeGiaiNganNguonSn, this.editCache[id].data.luyKeGiaiNganNguonQuy]);
+        this.editCache[id].data.dtoanSdungNamTcong = Operator.sum([this.editCache[id].data.dtoanSdungNamNguonNsnn, this.editCache[id].data.dtoanSdungNamNguonSn, this.editCache[id].data.dtoanSdungNamNguonQuy]);
+        this.editCache[id].data.giaiNganThangTcong = Operator.sum([this.editCache[id].data.giaiNganThangNguonNsnn, this.editCache[id].data.giaiNganThangNguonSn, this.editCache[id].data.giaiNganThangNguonQuy]);
+        this.editCache[id].data.luyKeGiaiNganTcong = Operator.sum([this.editCache[id].data.luyKeGiaiNganNguonNsnn, this.editCache[id].data.luyKeGiaiNganNguonSn, this.editCache[id].data.luyKeGiaiNganNguonQuy]);
 
         // cong luy ke
-        this.editCache[id].data.luyKeGiaiNganTcong = sumNumber([data.luyKeGiaiNganTcong, this.editCache[id].data.giaiNganThangTcong, -data.giaiNganThangTcong]);
-        this.editCache[id].data.luyKeGiaiNganNguonNsnn = sumNumber([data.luyKeGiaiNganNguonNsnn, this.editCache[id].data.giaiNganThangNguonNsnn, -data.giaiNganThangNguonNsnn]);
-        this.editCache[id].data.luyKeGiaiNganNguonSn = sumNumber([data.luyKeGiaiNganNguonSn, this.editCache[id].data.giaiNganThangNguonSn, -data.giaiNganThangNguonSn]);
-        this.editCache[id].data.luyKeGiaiNganNguonQuy = sumNumber([data.luyKeGiaiNganNguonQuy, this.editCache[id].data.giaiNganThangNguonQuy, -data.giaiNganThangNguonQuy]);
+        this.editCache[id].data.luyKeGiaiNganTcong = Operator.sum([data.luyKeGiaiNganTcong, this.editCache[id].data.giaiNganThangTcong, -data.giaiNganThangTcong]);
+        this.editCache[id].data.luyKeGiaiNganNguonNsnn = Operator.sum([data.luyKeGiaiNganNguonNsnn, this.editCache[id].data.giaiNganThangNguonNsnn, -data.giaiNganThangNguonNsnn]);
+        this.editCache[id].data.luyKeGiaiNganNguonSn = Operator.sum([data.luyKeGiaiNganNguonSn, this.editCache[id].data.giaiNganThangNguonSn, -data.giaiNganThangNguonSn]);
+        this.editCache[id].data.luyKeGiaiNganNguonQuy = Operator.sum([data.luyKeGiaiNganNguonQuy, this.editCache[id].data.giaiNganThangNguonQuy, -data.giaiNganThangNguonQuy]);
         //tinh ty le
-        this.editCache[data.id].data.giaiNganThangTcongTle = percent(this.editCache[data.id].data.giaiNganThangTcong, this.editCache[data.id].data.dtoanSdungNamTcong);
-        this.editCache[data.id].data.giaiNganThangNguonNsnnTle = percent(this.editCache[data.id].data.giaiNganThangNguonNsnn, this.editCache[data.id].data.dtoanSdungNamNguonNsnn);
-        this.editCache[data.id].data.giaiNganThangNguonSnTle = percent(this.editCache[data.id].data.giaiNganThangNguonSn, this.editCache[data.id].data.dtoanSdungNamNguonSn);
-        this.editCache[data.id].data.giaiNganThangNguonQuyTle = percent(this.editCache[data.id].data.giaiNganThangNguonQuy, this.editCache[data.id].data.dtoanSdungNamNguonQuy);
-        this.editCache[data.id].data.luyKeGiaiNganTcongTle = percent(this.editCache[data.id].data.luyKeGiaiNganTcong, this.editCache[data.id].data.dtoanSdungNamTcong);
-        this.editCache[data.id].data.luyKeGiaiNganNguonNsnnTle = percent(this.editCache[data.id].data.luyKeGiaiNganNguonNsnn, this.editCache[data.id].data.dtoanSdungNamNguonNsnn);
-        this.editCache[data.id].data.luyKeGiaiNganNguonSnTle = percent(this.editCache[data.id].data.luyKeGiaiNganNguonSn, this.editCache[data.id].data.dtoanSdungNamNguonSn);
-        this.editCache[data.id].data.luyKeGiaiNganNguonQuyTle = percent(this.editCache[data.id].data.luyKeGiaiNganNguonQuy, this.editCache[data.id].data.dtoanSdungNamNguonQuy);
+        this.editCache[data.id].data.giaiNganThangTcongTle = Operator.percent(this.editCache[data.id].data.giaiNganThangTcong, this.editCache[data.id].data.dtoanSdungNamTcong);
+        this.editCache[data.id].data.giaiNganThangNguonNsnnTle = Operator.percent(this.editCache[data.id].data.giaiNganThangNguonNsnn, this.editCache[data.id].data.dtoanSdungNamNguonNsnn);
+        this.editCache[data.id].data.giaiNganThangNguonSnTle = Operator.percent(this.editCache[data.id].data.giaiNganThangNguonSn, this.editCache[data.id].data.dtoanSdungNamNguonSn);
+        this.editCache[data.id].data.giaiNganThangNguonQuyTle = Operator.percent(this.editCache[data.id].data.giaiNganThangNguonQuy, this.editCache[data.id].data.dtoanSdungNamNguonQuy);
+        this.editCache[data.id].data.luyKeGiaiNganTcongTle = Operator.percent(this.editCache[data.id].data.luyKeGiaiNganTcong, this.editCache[data.id].data.dtoanSdungNamTcong);
+        this.editCache[data.id].data.luyKeGiaiNganNguonNsnnTle = Operator.percent(this.editCache[data.id].data.luyKeGiaiNganNguonNsnn, this.editCache[data.id].data.dtoanSdungNamNguonNsnn);
+        this.editCache[data.id].data.luyKeGiaiNganNguonSnTle = Operator.percent(this.editCache[data.id].data.luyKeGiaiNganNguonSn, this.editCache[data.id].data.dtoanSdungNamNguonSn);
+        this.editCache[data.id].data.luyKeGiaiNganNguonQuyTle = Operator.percent(this.editCache[data.id].data.luyKeGiaiNganNguonQuy, this.editCache[data.id].data.dtoanSdungNamNguonQuy);
     }
 
-    displayValue(num: number): string {
-        num = exchangeMoney(num, '1', this.maDviTien);
-        return displayNumber(num);
+    deleteFile(id: string): void {
+        this.formDetail.lstFiles = this.formDetail.lstFiles.filter((a: any) => a.id !== id);
+        this.listFile = this.listFile.filter((a: any) => a?.lastModified.toString() !== id);
+        this.formDetail.listIdDeleteFiles.push(id);
     }
 
-    getMoneyUnit() {
-        return this.donViTiens.find(e => e.id == this.maDviTien)?.tenDm;
+    async downloadFile(id: string) {
+        let file: any = this.listFile.find(element => element?.lastModified.toString() == id);
+        let doc: any = this.formDetail.lstFiles.find(element => element?.id == id);
+        await this.fileManip.downloadFile(file, doc);
     }
 
+    exportToExcel() {
+        const header = [
+            { t: 0, b: 3, l: 0, r: 21, val: null },
+            { t: 0, b: 3, l: 0, r: 0, val: 'STT' },
+            { t: 0, b: 3, l: 1, r: 1, val: 'Danh mục nội dung' },
+            { t: 0, b: 0, l: 2, r: 5, val: 'Dự toán được sử dụng trong năm' },
+            { t: 1, b: 3, l: 2, r: 2, val: 'Tổng cộng' },
+            { t: 1, b: 1, l: 3, r: 5, val: 'Trong đó' },
+            { t: 2, b: 3, l: 3, r: 3, val: 'Nguồn NSNN' },
+            { t: 2, b: 3, l: 4, r: 4, val: 'Nguồn thu SN' },
+            { t: 2, b: 3, l: 5, r: 5, val: 'Nguồn quỹ' },
+            { t: 0, b: 0, l: 6, r: 13, val: 'Giải ngân tháng báo cáo' },
+            { t: 1, b: 2, l: 6, r: 7, val: 'Tổng cộng' },
+            { t: 3, b: 3, l: 6, r: 6, val: 'Số tiền' },
+            { t: 3, b: 3, l: 7, r: 7, val: 'Tỷ lệ (%)' },
+            { t: 1, b: 1, l: 8, r: 13, val: 'Trong đó' },
+            { t: 2, b: 2, l: 8, r: 9, val: 'Nguồn NSNN' },
+            { t: 3, b: 3, l: 8, r: 8, val: 'Số tiền' },
+            { t: 3, b: 3, l: 9, r: 9, val: 'Tỷ lệ (%)' },
+            { t: 2, b: 2, l: 10, r: 11, val: 'Nguồn thu SN' },
+            { t: 3, b: 3, l: 10, r: 10, val: 'Số tiền' },
+            { t: 3, b: 3, l: 11, r: 11, val: 'Tỷ lệ (%)' },
+            { t: 2, b: 2, l: 12, r: 13, val: 'Nguồn quỹ' },
+            { t: 3, b: 3, l: 12, r: 12, val: 'Số tiền' },
+            { t: 3, b: 3, l: 13, r: 13, val: 'Tỷ lệ (%)' },
+            { t: 0, b: 0, l: 14, r: 21, val: 'Lũy kế giải ngân từ đầu năm đến tháng báo cáo đối với báo cáo tháng (đến hết thời gian chỉnh lý quyết toán ngân sách - ngày 31/1 năm sau đối với báo cáo năm)' },
+            { t: 1, b: 2, l: 14, r: 15, val: 'Tổng cộng' },
+            { t: 3, b: 3, l: 14, r: 14, val: 'Số tiền' },
+            { t: 3, b: 3, l: 15, r: 15, val: 'Tỷ lệ (%)' },
+            { t: 1, b: 1, l: 16, r: 21, val: 'Trong đó' },
+            { t: 2, b: 2, l: 16, r: 17, val: 'Nguồn NSNN' },
+            { t: 3, b: 3, l: 16, r: 16, val: 'Số tiền' },
+            { t: 3, b: 3, l: 17, r: 17, val: 'Tỷ lệ (%)' },
+            { t: 2, b: 2, l: 18, r: 19, val: 'Nguồn thu SN' },
+            { t: 3, b: 3, l: 18, r: 18, val: 'Số tiền' },
+            { t: 3, b: 3, l: 19, r: 19, val: 'Tỷ lệ (%)' },
+            { t: 2, b: 2, l: 20, r: 21, val: 'Nguồn quỹ' },
+            { t: 3, b: 3, l: 20, r: 20, val: 'Số tiền' },
+            { t: 3, b: 3, l: 21, r: 21, val: 'Tỷ lệ (%)' },
+        ]
+        const fieldOrder = ['stt', 'tenNdung', 'dtoanSdungNamTcong', 'dtoanSdungNamNguonNsnn', 'dtoanSdungNamNguonSn', 'dtoanSdungNamNguonQuy', 'giaiNganThangTcong', 'giaiNganThangTcongTle', 'giaiNganThangNguonNsnn',
+            'giaiNganThangNguonNsnnTle', 'giaiNganThangNguonSn', 'giaiNganThangNguonSnTle', 'giaiNganThangNguonQuy', 'giaiNganThangNguonQuyTle', 'luyKeGiaiNganTcong', 'luyKeGiaiNganTcongTle', 'luyKeGiaiNganNguonNsnn',
+            'luyKeGiaiNganNguonNsnnTle', 'luyKeGiaiNganNguonSn', 'luyKeGiaiNganNguonSnTle', 'luyKeGiaiNganNguonQuy', 'luyKeGiaiNganNguonQuyTle'];
+        const filterData = this.lstCtietBcao.map(item => {
+            const row: any = {};
+            fieldOrder.forEach(field => {
+                row[field] = item[field]
+            })
+            return row;
+        })
+        filterData.forEach(item => {
+            const level = item.stt.split('.').length - 2;
+            item.stt = this.getIndex(item.stt);
+            for (let i = 0; i < level; i++) {
+                item.stt = '   ' + item.stt;
+            }
+        })
+
+        const workbook = XLSX.utils.book_new();
+        const worksheet = Table.initExcel(header);
+        XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
+        XLSX.writeFile(workbook, this.dataInfo.maBcao + '_Phu_Luc_II.xlsx');
+    }
 }

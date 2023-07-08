@@ -14,7 +14,7 @@
 								</ng-container>
 								<ng-template #editMoney>
 									<nz-select nzShowSearch nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
-										(ngModelChange)="editMoneyUnit=false">
+										(ngModelChange)="editMoneyUnit=false; Op.setMoneyUnit(maDviTien)">
 										<nz-option *ngFor="let item of Utils.DVI_TIEN" [nzValue]="item.id"
 											[nzLabel]="item.tenDm">
 										</nz-option>
@@ -237,40 +237,40 @@
 								<th nzLeft></th>
 								<th nzLeft>Tổng Cộng</th>
 								<th>{{Op.fmtNum(total.dtTsoNguoiLv)}}</th>
-								<th>{{Op.fmtVal(total.dtTongQlPcap, maDviTien)}}</th>
-								<th>{{Op.fmtVal(total.dtQlPcapTso, maDviTien)}}</th>
-								<th>{{Op.fmtVal(total.dtQlPcapLuongBac, maDviTien)}}</th>
-								<th>{{Op.fmtVal(total.dtQlPcapPcapLuong, maDviTien)}}</th>
-								<th>{{Op.fmtVal(total.dtQlPcapDgopLuong, maDviTien)}}</th>
-								<th>{{Op.fmtVal(total.dtQlPcapHdLd, maDviTien)}}</th>
-								<th>{{Op.fmtVal(total.dtKphiNsnn, maDviTien)}}</th>
-								<th>{{Op.fmtVal(total.dtKphiSnDvu, maDviTien)}}</th>
-								<th>{{Op.fmtVal(total.dtKphiPhiDlai, maDviTien)}}</th>
-								<th>{{Op.fmtVal(total.dtKphiHphap, maDviTien)}}</th>
+								<th>{{Op.fmtVal(total.dtTongQlPcap)}}</th>
+								<th>{{Op.fmtVal(total.dtQlPcapTso)}}</th>
+								<th>{{Op.fmtVal(total.dtQlPcapLuongBac)}}</th>
+								<th>{{Op.fmtVal(total.dtQlPcapPcapLuong)}}</th>
+								<th>{{Op.fmtVal(total.dtQlPcapDgopLuong)}}</th>
+								<th>{{Op.fmtVal(total.dtQlPcapHdLd)}}</th>
+								<th>{{Op.fmtVal(total.dtKphiNsnn)}}</th>
+								<th>{{Op.fmtVal(total.dtKphiSnDvu)}}</th>
+								<th>{{Op.fmtVal(total.dtKphiPhiDlai)}}</th>
+								<th>{{Op.fmtVal(total.dtKphiHphap)}}</th>
 								<th>{{Op.fmtNum(total.uocThTsoNguoiLv)}}</th>
 								<th>{{Op.fmtNum(total.uocThTsoBcTdiem)}}</th>
 								<th>{{Op.fmtNum(total.uocThTsoVcCc)}}</th>
-								<th>{{Op.fmtVal(total.uocThTongQlPcap, maDviTien)}}</th>
-								<th>{{Op.fmtVal(total.uocThQlPcapTso, maDviTien)}}</th>
-								<th>{{Op.fmtVal(total.uocThQlPcapLuongBac, maDviTien)}}</th>
-								<th>{{Op.fmtVal(total.uocThQlPcapPcapLuong, maDviTien)}}</th>
-								<th>{{Op.fmtVal(total.uocThQlPcapDgopLuong, maDviTien)}}</th>
-								<th>{{Op.fmtVal(total.uocThQlPcapHdLd, maDviTien)}}</th>
-								<th>{{Op.fmtVal(total.uocThKphiNsnn, maDviTien)}}</th>
-								<th>{{Op.fmtVal(total.uocThKphiSnDvu, maDviTien)}}</th>
-								<th>{{Op.fmtVal(total.uocThKphiPhiDlai, maDviTien)}}</th>
-								<th>{{Op.fmtVal(total.uocThKphiHphap, maDviTien)}}</th>
+								<th>{{Op.fmtVal(total.uocThTongQlPcap)}}</th>
+								<th>{{Op.fmtVal(total.uocThQlPcapTso)}}</th>
+								<th>{{Op.fmtVal(total.uocThQlPcapLuongBac)}}</th>
+								<th>{{Op.fmtVal(total.uocThQlPcapPcapLuong)}}</th>
+								<th>{{Op.fmtVal(total.uocThQlPcapDgopLuong)}}</th>
+								<th>{{Op.fmtVal(total.uocThQlPcapHdLd)}}</th>
+								<th>{{Op.fmtVal(total.uocThKphiNsnn)}}</th>
+								<th>{{Op.fmtVal(total.uocThKphiSnDvu)}}</th>
+								<th>{{Op.fmtVal(total.uocThKphiPhiDlai)}}</th>
+								<th>{{Op.fmtVal(total.uocThKphiHphap)}}</th>
 								<th>{{Op.fmtNum(total.namKhTsoNguoiLv)}}</th>
-								<th>{{Op.fmtVal(total.namKhTongQlPcap, maDviTien)}}</th>
-								<th>{{Op.fmtVal(total.namKhQlPcapTso, maDviTien)}}</th>
-								<th>{{Op.fmtVal(total.namKhQlPcapLuongBac, maDviTien)}}</th>
-								<th>{{Op.fmtVal(total.namKhQlPcapPcapLuong, maDviTien)}}</th>
-								<th>{{Op.fmtVal(total.namKhQlPcapDgopLuong, maDviTien)}}</th>
-								<th>{{Op.fmtVal(total.namKhQlPcapHdLd, maDviTien)}}</th>
-								<th>{{Op.fmtVal(total.namKhKphiNsnn, maDviTien)}}</th>
-								<th>{{Op.fmtVal(total.namKhKphiSnDvu, maDviTien)}}</th>
-								<th>{{Op.fmtVal(total.namKhKphiPhiDlai, maDviTien)}}</th>
-								<th>{{Op.fmtVal(total.namKhKphiHphap, maDviTien)}}</th>
+								<th>{{Op.fmtVal(total.namKhTongQlPcap)}}</th>
+								<th>{{Op.fmtVal(total.namKhQlPcapTso)}}</th>
+								<th>{{Op.fmtVal(total.namKhQlPcapLuongBac)}}</th>
+								<th>{{Op.fmtVal(total.namKhQlPcapPcapLuong)}}</th>
+								<th>{{Op.fmtVal(total.namKhQlPcapDgopLuong)}}</th>
+								<th>{{Op.fmtVal(total.namKhQlPcapHdLd)}}</th>
+								<th>{{Op.fmtVal(total.namKhKphiNsnn)}}</th>
+								<th>{{Op.fmtVal(total.namKhKphiSnDvu)}}</th>
+								<th>{{Op.fmtVal(total.namKhKphiPhiDlai)}}</th>
+								<th>{{Op.fmtVal(total.namKhKphiHphap)}}</th>
 								<th></th>
 								<th *ngIf="status.general" nzRight></th>
 								<th *ngIf="status.general" nzRight></th>
@@ -290,39 +290,39 @@
 										{{data.dtTsoNguoiLv}}
 									</td>
 									<td>{{Op.fmtNum(data.dtTongQlPcap)}}</td>
-									<td>{{Op.fmtVal(data.dtQlPcapTso, maDviTien)}}</td>
-									<td>{{Op.fmtVal(data.dtQlPcapLuongBac, maDviTien)}}</td>
-									<td>{{Op.fmtVal(data.dtQlPcapPcapLuong, maDviTien)}}</td>
-									<td>{{Op.fmtVal(data.dtQlPcapDgopLuong, maDviTien)}}</td>
-									<td>{{Op.fmtVal(data.dtQlPcapHdLd, maDviTien)}}</td>
-									<td>{{Op.fmtVal(data.dtKphiNsnn, maDviTien)}}</td>
-									<td>{{Op.fmtVal(data.dtKphiSnDvu, maDviTien)}}</td>
-									<td>{{Op.fmtVal(data.dtKphiPhiDlai, maDviTien)}}</td>
-									<td>{{Op.fmtVal(data.dtKphiHphap, maDviTien)}}</td>
+									<td>{{Op.fmtVal(data.dtQlPcapTso)}}</td>
+									<td>{{Op.fmtVal(data.dtQlPcapLuongBac)}}</td>
+									<td>{{Op.fmtVal(data.dtQlPcapPcapLuong)}}</td>
+									<td>{{Op.fmtVal(data.dtQlPcapDgopLuong)}}</td>
+									<td>{{Op.fmtVal(data.dtQlPcapHdLd)}}</td>
+									<td>{{Op.fmtVal(data.dtKphiNsnn)}}</td>
+									<td>{{Op.fmtVal(data.dtKphiSnDvu)}}</td>
+									<td>{{Op.fmtVal(data.dtKphiPhiDlai)}}</td>
+									<td>{{Op.fmtVal(data.dtKphiHphap)}}</td>
 									<td>{{Op.fmtNum(data.uocThTsoNguoiLv)}}</td>
 									<td>{{Op.fmtNum(data.uocThTsoBcTdiem)}}</td>
 									<td>{{Op.fmtNum(data.uocThTsoVcCc)}}</td>
-									<td>{{Op.fmtVal(data.uocThTongQlPcap, maDviTien)}}</td>
-									<td>{{Op.fmtVal(data.uocThQlPcapTso, maDviTien)}}</td>
-									<td>{{Op.fmtVal(data.uocThQlPcapLuongBac, maDviTien)}}</td>
-									<td>{{Op.fmtVal(data.uocThQlPcapPcapLuong, maDviTien)}}</td>
-									<td>{{Op.fmtVal(data.uocThQlPcapDgopLuong, maDviTien)}}</td>
-									<td>{{Op.fmtVal(data.uocThQlPcapHdLd, maDviTien)}}</td>
-									<td>{{Op.fmtVal(data.uocThKphiNsnn, maDviTien)}}</td>
-									<td>{{Op.fmtVal(data.uocThKphiSnDvu, maDviTien)}}</td>
-									<td>{{Op.fmtVal(data.uocThKphiPhiDlai, maDviTien)}}</td>
-									<td>{{Op.fmtVal(data.uocThKphiHphap, maDviTien)}}</td>
+									<td>{{Op.fmtVal(data.uocThTongQlPcap)}}</td>
+									<td>{{Op.fmtVal(data.uocThQlPcapTso)}}</td>
+									<td>{{Op.fmtVal(data.uocThQlPcapLuongBac)}}</td>
+									<td>{{Op.fmtVal(data.uocThQlPcapPcapLuong)}}</td>
+									<td>{{Op.fmtVal(data.uocThQlPcapDgopLuong)}}</td>
+									<td>{{Op.fmtVal(data.uocThQlPcapHdLd)}}</td>
+									<td>{{Op.fmtVal(data.uocThKphiNsnn)}}</td>
+									<td>{{Op.fmtVal(data.uocThKphiSnDvu)}}</td>
+									<td>{{Op.fmtVal(data.uocThKphiPhiDlai)}}</td>
+									<td>{{Op.fmtVal(data.uocThKphiHphap)}}</td>
 									<td>{{Op.fmtNum(data.namKhTsoNguoiLv)}}</td>
-									<td>{{Op.fmtVal(data.namKhTongQlPcap, maDviTien)}}</td>
-									<td>{{Op.fmtVal(data.namKhQlPcapTso, maDviTien)}}</td>
-									<td>{{Op.fmtVal(data.namKhQlPcapLuongBac, maDviTien)}}</td>
-									<td>{{Op.fmtVal(data.namKhQlPcapPcapLuong, maDviTien)}}</td>
-									<td>{{Op.fmtVal(data.namKhQlPcapDgopLuong, maDviTien)}}</td>
-									<td>{{Op.fmtVal(data.namKhQlPcapHdLd, maDviTien)}}</td>
-									<td>{{Op.fmtVal(data.namKhKphiNsnn, maDviTien)}}</td>
-									<td>{{Op.fmtVal(data.namKhKphiSnDvu, maDviTien)}}</td>
-									<td>{{Op.fmtVal(data.namKhKphiPhiDlai, maDviTien)}}</td>
-									<td>{{Op.fmtVal(data.namKhKphiHphap, maDviTien)}}</td>
+									<td>{{Op.fmtVal(data.namKhTongQlPcap)}}</td>
+									<td>{{Op.fmtVal(data.namKhQlPcapTso)}}</td>
+									<td>{{Op.fmtVal(data.namKhQlPcapLuongBac)}}</td>
+									<td>{{Op.fmtVal(data.namKhQlPcapPcapLuong)}}</td>
+									<td>{{Op.fmtVal(data.namKhQlPcapDgopLuong)}}</td>
+									<td>{{Op.fmtVal(data.namKhQlPcapHdLd)}}</td>
+									<td>{{Op.fmtVal(data.namKhKphiNsnn)}}</td>
+									<td>{{Op.fmtVal(data.namKhKphiSnDvu)}}</td>
+									<td>{{Op.fmtVal(data.namKhKphiPhiDlai)}}</td>
+									<td>{{Op.fmtVal(data.namKhKphiHphap)}}</td>
 									<td>{{data.ghiChu}}</td>
 									<td *ngIf="status.general" nzRight>
 										<i *ngIf="checkDelete(data.stt)" class="fa fa-trash-o do"
@@ -355,10 +355,10 @@
 											[(ngModel)]="editCache[data.id].data.dtTsoNguoiLv" [options]="Op.amount" />
 									</td>
 									<td>
-										{{Op.fmtVal(editCache[data.id].data.dtTongQlPcap, maDviTien)}}
+										{{Op.fmtVal(editCache[data.id].data.dtTongQlPcap)}}
 									</td>
 									<td>
-										{{Op.fmtVal(editCache[data.id].data.dtQlPcapTso, maDviTien)}}
+										{{Op.fmtVal(editCache[data.id].data.dtQlPcapTso)}}
 									</td>
 									<td>
 										<input class="money-input" currencyMask
@@ -421,10 +421,10 @@
 
 									</td>
 									<td>
-										{{Op.fmtVal(editCache[data.id].data.uocThTongQlPcap, maDviTien)}}
+										{{Op.fmtVal(editCache[data.id].data.uocThTongQlPcap)}}
 									</td>
 									<td>
-										{{Op.fmtVal(editCache[data.id].data.uocThQlPcapTso, maDviTien)}}
+										{{Op.fmtVal(editCache[data.id].data.uocThQlPcapTso)}}
 									</td>
 									<td>
 										<input class="money-input" currencyMask
@@ -480,10 +480,10 @@
 
 									</td>
 									<td>
-										{{Op.fmtVal(editCache[data.id].data.namKhTongQlPcap, maDviTien)}}
+										{{Op.fmtVal(editCache[data.id].data.namKhTongQlPcap)}}
 									</td>
 									<td>
-										{{Op.fmtVal(editCache[data.id].data.namKhQlPcapTso, maDviTien)}}
+										{{Op.fmtVal(editCache[data.id].data.namKhQlPcapTso)}}
 									</td>
 									<td>
 										<input class="money-input" currencyMask

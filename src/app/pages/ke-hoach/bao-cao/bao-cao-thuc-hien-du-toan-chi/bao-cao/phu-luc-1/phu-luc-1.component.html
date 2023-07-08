@@ -22,6 +22,17 @@
                                 </ng-template>
                             </div>
                         </div>
+                        <div class="canphai">
+                            <button *ngIf="status.save" type="button" class="btn btn-do" (click)="deleteAllChecked()">
+                                <i class="fa fa-trash-o"></i>
+                                <span>Xóa</span>
+                            </button>
+                            <button *ngIf="status.save && lstCtietBcao.length == 0" type="button" class="btn btn-sub"
+                                (click)="addLine(null)">
+                                <i class="icon htvbdh_dau-cong"></i>
+                                <span>Thêm</span>
+                            </button>
+                        </div>
                     </div>
                     <nz-table nzBordered class="table__body" [nzScroll]="{ x: scrollX}">
                         <thead>
@@ -565,10 +576,10 @@
     <div class="modal-footer">
         <div class="nut">
             <div class="cantrai">
-                <!-- <button type="button" class="btn btn-main" *ngIf="status.export" (click)="exportToExcel()">
+                <button type="button" class="btn btn-main" (click)="exportToExcel()">
                     <span nz-icon nzType="export" nzTheme="outline" style="margin-right: 5px;"></span>
                     <span>Xuất</span>
-                </button> -->
+                </button>
                 <!-- <button type="button" class="btn btn-main" *ngIf="status.print" (click)="gen.doPrint()">
                     <i nz-icon nzType="printer" nzTheme="outline"></i>
                     <span>In</span>

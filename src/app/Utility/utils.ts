@@ -3,7 +3,7 @@ import { NzNotificationService } from "ng-zorro-antd/notification";
 import { CurrencyMaskInputMode } from "ngx-currency";
 import { MESSAGE } from "../constants/message";
 import { QuanLyVonPhiService } from "../services/quanLyVonPhi.service";
-import { DatePipe } from '@angular/common';
+import { DatePipe, DecimalPipe } from '@angular/common';
 import * as uuid from "uuid";
 import { Injectable } from '@angular/core';
 import * as XLSX from 'xlsx'
@@ -432,6 +432,7 @@ export class Operator {
 	maDviTien: string;
 	precision: number;
 	amount: any;
+
 	constructor(maDviTien: string, precision: number = 4) {
 		this.maDviTien = maDviTien;
 		this.precision = precision;

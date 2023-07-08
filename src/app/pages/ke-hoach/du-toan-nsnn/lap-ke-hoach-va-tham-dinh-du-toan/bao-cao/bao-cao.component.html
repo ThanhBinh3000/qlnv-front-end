@@ -83,7 +83,7 @@
                                 <nz-upload *ngIf="status.general" [nzBeforeUpload]="beforeUploadCV">
                                     <button nz-button>
                                         <i nz-icon nzType="upload"></i>
-                                        Select File
+                                        Chọn
                                     </button>
                                 </nz-upload>
                                 <div class="tep__sqd" (click)="downloadFile(null)">
@@ -335,16 +335,20 @@
                         </div>
                     </nz-tab>
                     <nz-tab *ngIf="baoCao.lichSu && baoCao.lichSu.length > 0" [nzTitle]="'Lịch sử'">
-                        <div nz-col class="gutter-row" [nzSpan]="12">
+                        <div nz-col class="gutter-row" [nzSpan]="24">
                             <nz-table nzBordered class="table__body">
                                 <thead>
                                     <tr>
                                         <th>Mã báo cáo</th>
                                         <th>Lần</th>
                                         <th>Ngày tạo</th>
-                                        <th>Người tạo</th>
+                                        <th>Ngày trình duyệt</th>
+                                        <th>Ngày duyệt</th>
+                                        <th>Ngày phê duyệt</th>
+                                        <th>Ngày cấp trên trả kết quả</th>
                                         <th>Trạng thái</th>
-                                        <th *ngIf="status.general"></th>
+                                        <th>Lý do từ chối</th>
+                                        <th *ngIf="status.general">Hành động</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -354,8 +358,12 @@
                                         </td>
                                         <td>{{ data.lan }}</td>
                                         <td>{{ Utils.fmtDate(data.ngayTao) }}</td>
-                                        <td>{{ data.nguoiTao }}</td>
+                                        <td>{{ Utils.fmtDate(data.ngayTrinh) }}</td>
+                                        <td>{{ Utils.fmtDate(data.ngayDuyet) }}</td>
+                                        <td>{{ Utils.fmtDate(data.ngayPheDuyet) }}</td>
+                                        <td>{{ Utils.fmtDate(data.ngayTraKq) }}</td>
                                         <td>{{ Status.reportStatusName(data.trangThai) }}</td>
+                                        <td>{{ data.lyDoTuChoi }}</td>
                                         <td *ngIf="status.general">
                                             <a class="save" (click)="restoreReport(data.id)">Khôi phục</a>
                                         </td>

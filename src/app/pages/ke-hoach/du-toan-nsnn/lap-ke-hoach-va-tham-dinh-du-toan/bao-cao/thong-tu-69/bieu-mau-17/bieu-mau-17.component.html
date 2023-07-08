@@ -14,7 +14,7 @@
 								</ng-container>
 								<ng-template #editMoney>
 									<nz-select nzShowSearch nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
-										(ngModelChange)="editMoneyUnit=false">
+										(ngModelChange)="editMoneyUnit=false; Op.setMoneyUnit(maDviTien)">
 										<nz-option *ngFor="let item of Utils.DVI_TIEN" [nzValue]="item.id"
 											[nzLabel]="item.tenDm">
 										</nz-option>
@@ -55,16 +55,16 @@
 									Tổng Nhu cầu chi thường xuyên
 								</th>
 								<th>
-									{{ Op.fmtVal(total.thNamHienHanhN1, maDviTien) }}
+									{{ Op.fmtVal(total.thNamHienHanhN1) }}
 								</th>
 								<th>
-									{{ Op.fmtVal(total.ncauNamDtoanN, maDviTien) }}
+									{{ Op.fmtVal(total.ncauNamDtoanN) }}
 								</th>
 								<th>
-									{{ Op.fmtVal(total.ncauNamN1, maDviTien) }}
+									{{ Op.fmtVal(total.ncauNamN1) }}
 								</th>
 								<th>
-									{{ Op.fmtVal(total.ncauNamN2, maDviTien) }}
+									{{ Op.fmtVal(total.ncauNamN2) }}
 								</th>
 								<th></th>
 								<th *ngIf="status.general" nzRight></th>
@@ -75,16 +75,16 @@
 									Trong đó - Chi thường xuyên cơ sở
 								</th>
 								<th>
-									{{ Op.fmtVal(chiCoSo.thNamHienHanhN1, maDviTien) }}
+									{{ Op.fmtVal(chiCoSo.thNamHienHanhN1) }}
 								</th>
 								<th>
-									{{ Op.fmtVal(chiCoSo.ncauNamDtoanN, maDviTien) }}
+									{{ Op.fmtVal(chiCoSo.ncauNamDtoanN) }}
 								</th>
 								<th>
-									{{ Op.fmtVal(chiCoSo.ncauNamN1, maDviTien) }}
+									{{ Op.fmtVal(chiCoSo.ncauNamN1) }}
 								</th>
 								<th>
-									{{ Op.fmtVal(chiCoSo.ncauNamN2, maDviTien) }}
+									{{ Op.fmtVal(chiCoSo.ncauNamN2) }}
 								</th>
 								<th></th>
 								<th *ngIf="status.general" nzRight></th>
@@ -95,16 +95,16 @@
 									&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; - Chi thường xuyên mới
 								</th>
 								<th>
-									{{ Op.fmtVal(chiMoi.thNamHienHanhN1, maDviTien) }}
+									{{ Op.fmtVal(chiMoi.thNamHienHanhN1) }}
 								</th>
 								<th>
-									{{ Op.fmtVal(chiMoi.ncauNamDtoanN, maDviTien) }}
+									{{ Op.fmtVal(chiMoi.ncauNamDtoanN) }}
 								</th>
 								<th>
-									{{ Op.fmtVal(chiMoi.ncauNamN1, maDviTien) }}
+									{{ Op.fmtVal(chiMoi.ncauNamN1) }}
 								</th>
 								<th>
-									{{ Op.fmtVal(chiMoi.ncauNamN2, maDviTien) }}
+									{{ Op.fmtVal(chiMoi.ncauNamN2) }}
 								</th>
 								<th></th>
 								<th *ngIf="status.general" nzRight></th>
@@ -120,16 +120,16 @@
 										{{ data.tenLvucNdChi }}
 									</td>
 									<td>
-										{{ Op.fmtVal(data.thNamHienHanhN1, maDviTien) }}
+										{{ Op.fmtVal(data.thNamHienHanhN1) }}
 									</td>
 									<td>
-										{{ Op.fmtVal(data.ncauNamDtoanN, maDviTien) }}
+										{{ Op.fmtVal(data.ncauNamDtoanN) }}
 									</td>
 									<td>
-										{{ Op.fmtVal(data.ncauNamN1, maDviTien) }}
+										{{ Op.fmtVal(data.ncauNamN1) }}
 									</td>
 									<td>
-										{{ Op.fmtVal(data.ncauNamN2, maDviTien) }}
+										{{ Op.fmtVal(data.ncauNamN2) }}
 									</td>
 									<td>
 										{{ data.ghiChu }}

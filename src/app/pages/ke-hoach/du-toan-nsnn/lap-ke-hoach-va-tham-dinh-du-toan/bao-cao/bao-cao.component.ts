@@ -135,32 +135,32 @@ export class BaoCaoComponent implements OnInit {
                 })
                 break;
             case 'nonpass':
-                await this.tuChoi('3').then(() => {
+                await this.tuChoi(Status.TT_03).then(() => {
                     this.isDataAvailable = true;
                 })
                 break;
             case 'pass':
-                await this.onSubmit('4', null).then(() => {
+                await this.onSubmit(Status.TT_04, null).then(() => {
                     this.isDataAvailable = true;
                 })
                 break;
             case 'nonapprove':
-                await this.tuChoi('5').then(() => {
+                await this.tuChoi(Status.TT_05).then(() => {
                     this.isDataAvailable = true;
                 })
                 break;
             case 'approve':
-                await this.onSubmit('7', null).then(() => {
+                await this.onSubmit(Status.TT_07, null).then(() => {
                     this.isDataAvailable = true;
                 })
                 break;
             case 'nonaccept':
-                await this.tuChoi('8').then(() => {
+                await this.tuChoi(Status.TT_08).then(() => {
                     this.isDataAvailable = true;
                 })
                 break;
             case 'accept':
-                await this.onSubmit('9', null).then(() => {
+                await this.onSubmit(Status.TT_09, null).then(() => {
                     this.isDataAvailable = true;
                 })
                 break;
@@ -239,7 +239,7 @@ export class BaoCaoComponent implements OnInit {
         const checkExport = isSynthetic ? this.userService.isAccessPermisson(Roles.LTD.EXPORT_SYNTH_REPORT) : this.userService.isAccessPermisson(Roles.LTD.EXPORT_REPORT)
 
         this.status.general = Status.check('saveWHist', this.baoCao.trangThai) && checkSave;
-        this.status.new = Status.check('reject', this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.LTD.ADD_REPORT) && this.isChild;
+        this.status.new = Status.check('reject', this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.LTD.ADD_REPORT) && this.isChild && this.data.preTab == Ltd.DANH_SACH_BAO_CAO;
         this.status.viewAppVal = Status.check('appraisal', this.baoCao.trangThai);
         this.status.save = Status.check('saveWHist', this.baoCao.trangThai) && checkSave && this.isChild;
         this.status.submit = Status.check('submit', this.baoCao.trangThai) && checkSunmit && this.isChild && !(!this.baoCao.id);

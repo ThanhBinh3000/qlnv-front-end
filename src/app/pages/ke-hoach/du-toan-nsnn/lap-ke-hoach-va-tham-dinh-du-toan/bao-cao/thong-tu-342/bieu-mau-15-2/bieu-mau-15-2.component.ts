@@ -66,7 +66,7 @@ export class ItemData {
 
 export class BieuMau152Component implements OnInit {
 	@Input() dataInfo;
-	Op = Operator;
+	Op = new Operator('1');
 	Utils = Utils;
 	//thong tin chi tiet cua bieu mau
 	formDetail: Form = new Form();

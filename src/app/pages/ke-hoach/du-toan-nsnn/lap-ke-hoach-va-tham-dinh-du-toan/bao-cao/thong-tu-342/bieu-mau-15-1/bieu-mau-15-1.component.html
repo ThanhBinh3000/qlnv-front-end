@@ -14,7 +14,7 @@
 								</ng-container>
 								<ng-template #editMoney>
 									<nz-select nzShowSearch nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
-										(ngModelChange)="editMoneyUnit=false">
+										(ngModelChange)="editMoneyUnit=false; Op.setMoneyUnit(maDviTien)">
 										<nz-option *ngFor="let item of Utils.DVI_TIEN" [nzValue]="item.id"
 											[nzLabel]="item.tenDm">
 										</nz-option>
@@ -186,82 +186,82 @@
 										{{data.tenDmuc}}
 									</td>
 									<td>
-										{{Op.fmtVal(data.thienTsoBcTqGiao, maDviTien)}}
+										{{Op.fmtVal(data.thienTsoBcTqGiao)}}
 									</td>
 									<td>
-										{{Op.fmtVal(data.thienTsoBcTdiem, maDviTien)}}
+										{{Op.fmtVal(data.thienTsoBcTdiem)}}
 									</td>
 									<td>
-										{{Op.fmtVal(data.thienQlPcap, maDviTien)}}
+										{{Op.fmtVal(data.thienQlPcap)}}
 									</td>
 									<td>
-										{{Op.fmtVal(data.thienLuongBac, maDviTien)}}
+										{{Op.fmtVal(data.thienLuongBac)}}
 									</td>
 									<td>
-										{{Op.fmtVal(data.thienPcapLuong, maDviTien)}}
+										{{Op.fmtVal(data.thienPcapLuong)}}
 									</td>
 									<td>
-										{{Op.fmtVal(data.thienDgopLuong, maDviTien)}}
+										{{Op.fmtVal(data.thienDgopLuong)}}
 									</td>
 									<td>
-										{{Op.fmtVal(data.thienKhac, maDviTien)}}
+										{{Op.fmtVal(data.thienKhac)}}
 									</td>
 									<td>
-										{{Op.fmtVal(data.dtoanTsoBcheTqGiao, maDviTien)}}
+										{{Op.fmtVal(data.dtoanTsoBcheTqGiao)}}
 									</td>
 									<td>
-										{{Op.fmtVal(data.dtoanQluongPcap, maDviTien)}}
+										{{Op.fmtVal(data.dtoanQluongPcap)}}
 									</td>
 									<td>
-										{{Op.fmtVal(data.dtoanLuongBac, maDviTien)}}
+										{{Op.fmtVal(data.dtoanLuongBac)}}
 									</td>
 									<td>
-										{{Op.fmtVal(data.dtoanPcapLuong, maDviTien)}}
+										{{Op.fmtVal(data.dtoanPcapLuong)}}
 									</td>
 									<td>
-										{{Op.fmtVal(data.dtoanDgopLuong, maDviTien)}}
+										{{Op.fmtVal(data.dtoanDgopLuong)}}
 									</td>
 									<td>
-										{{Op.fmtVal(data.dtoanKhac, maDviTien)}}
+										{{Op.fmtVal(data.dtoanKhac)}}
 									</td>
 									<td>
-										{{Op.fmtVal(data.uocThTsoBcTqGiao, maDviTien)}}
+										{{Op.fmtVal(data.uocThTsoBcTqGiao)}}
 									</td>
 									<td>
-										{{Op.fmtVal(data.uocThTsoBcTdiem, maDviTien)}}
+										{{Op.fmtVal(data.uocThTsoBcTdiem)}}
 									</td>
 									<td>
-										{{Op.fmtVal(data.uocThQlPcap, maDviTien)}}
+										{{Op.fmtVal(data.uocThQlPcap)}}
 									</td>
 									<td>
-										{{Op.fmtVal(data.uocThLuongBac, maDviTien)}}
+										{{Op.fmtVal(data.uocThLuongBac)}}
 									</td>
 									<td>
-										{{Op.fmtVal(data.uocThPCapLuong, maDviTien)}}
+										{{Op.fmtVal(data.uocThPCapLuong)}}
 									</td>
 									<td>
-										{{Op.fmtVal(data.uocThDgopLuong, maDviTien)}}
+										{{Op.fmtVal(data.uocThDgopLuong)}}
 									</td>
 									<td>
-										{{Op.fmtVal(data.uocThKhac, maDviTien)}}
+										{{Op.fmtVal(data.uocThKhac)}}
 									</td>
 									<td>
-										{{Op.fmtVal(data.namKhTsoBcTqGiao, maDviTien)}}
+										{{Op.fmtVal(data.namKhTsoBcTqGiao)}}
 									</td>
 									<td>
-										{{Op.fmtVal(data.namKhQlPcap, maDviTien)}}
+										{{Op.fmtVal(data.namKhQlPcap)}}
 									</td>
 									<td>
-										{{Op.fmtVal(data.namKhLuongBac, maDviTien)}}
+										{{Op.fmtVal(data.namKhLuongBac)}}
 									</td>
 									<td>
-										{{Op.fmtVal(data.namKhPcapLuong, maDviTien)}}
+										{{Op.fmtVal(data.namKhPcapLuong)}}
 									</td>
 									<td>
-										{{Op.fmtVal(data.namKhDgopLuong, maDviTien)}}
+										{{Op.fmtVal(data.namKhDgopLuong)}}
 									</td>
 									<td>
-										{{Op.fmtVal(data.namKhKhac, maDviTien)}}
+										{{Op.fmtVal(data.namKhKhac)}}
 									</td>
 									<td>
 										{{data.ghiChu}}
@@ -288,7 +288,7 @@
 											(ngModelChange)="changeModel(data.id)" [options]="Op.amount" />
 									</td>
 									<td>
-										{{Op.fmtVal(editCache[data.id].data.thienQlPcap, maDviTien)}}
+										{{Op.fmtVal(editCache[data.id].data.thienQlPcap)}}
 									</td>
 									<td>
 										<input class="money-input" currencyMask
@@ -316,7 +316,7 @@
 											(ngModelChange)="changeModel(data.id)" [options]="Op.amount" />
 									</td>
 									<td>
-										{{Op.fmtVal(editCache[data.id].data.dtoanQluongPcap, maDviTien)}}
+										{{Op.fmtVal(editCache[data.id].data.dtoanQluongPcap)}}
 									</td>
 									<td>
 										<input class="money-input" currencyMask
@@ -349,7 +349,7 @@
 											(ngModelChange)="changeModel(data.id)" [options]="Op.amount" />
 									</td>
 									<td>
-										{{Op.fmtVal(editCache[data.id].data.uocThQlPcap, maDviTien)}}
+										{{Op.fmtVal(editCache[data.id].data.uocThQlPcap)}}
 									</td>
 									<td>
 										<input class="money-input" currencyMask
@@ -377,7 +377,7 @@
 											(ngModelChange)="changeModel(data.id)" [options]="Op.amount" />
 									</td>
 									<td>
-										{{Op.fmtVal(editCache[data.id].data.namKhQlPcap, maDviTien)}}
+										{{Op.fmtVal(editCache[data.id].data.namKhQlPcap)}}
 									</td>
 									<td>
 										<input class="money-input" currencyMask
@@ -414,32 +414,32 @@
 							<tr>
 								<td nzLeft></td>
 								<td nzLeft>Tổng Số</td>
-								<td>{{Op.fmtVal(total.thienTsoBcTqGiao, maDviTien)}}</td>
-								<td>{{Op.fmtVal(total.thienTsoBcTdiem, maDviTien)}}</td>
-								<td>{{Op.fmtVal(total.thienQlPcap, maDviTien)}}</td>
-								<td>{{Op.fmtVal(total.thienLuongBac, maDviTien)}}</td>
-								<td>{{Op.fmtVal(total.thienPcapLuong, maDviTien)}}</td>
-								<td>{{Op.fmtVal(total.thienDgopLuong, maDviTien)}}</td>
-								<td>{{Op.fmtVal(total.thienKhac, maDviTien)}}</td>
-								<td>{{Op.fmtVal(total.dtoanTsoBcheTqGiao, maDviTien)}}</td>
-								<td>{{Op.fmtVal(total.dtoanQluongPcap, maDviTien)}}</td>
-								<td>{{Op.fmtVal(total.dtoanLuongBac, maDviTien)}}</td>
-								<td>{{Op.fmtVal(total.dtoanPcapLuong, maDviTien)}}</td>
-								<td>{{Op.fmtVal(total.dtoanDgopLuong, maDviTien)}}</td>
-								<td>{{Op.fmtVal(total.dtoanKhac, maDviTien)}}</td>
-								<td>{{Op.fmtVal(total.uocThTsoBcTqGiao, maDviTien)}}</td>
-								<td>{{Op.fmtVal(total.uocThTsoBcTdiem, maDviTien)}}</td>
-								<td>{{Op.fmtVal(total.uocThQlPcap, maDviTien)}}</td>
-								<td>{{Op.fmtVal(total.uocThLuongBac, maDviTien)}}</td>
-								<td>{{Op.fmtVal(total.uocThPCapLuong, maDviTien)}}</td>
-								<td>{{Op.fmtVal(total.uocThDgopLuong, maDviTien)}}</td>
-								<td>{{Op.fmtVal(total.uocThKhac, maDviTien)}}</td>
-								<td>{{Op.fmtVal(total.namKhTsoBcTqGiao, maDviTien)}}</td>
-								<td>{{Op.fmtVal(total.namKhQlPcap, maDviTien)}}</td>
-								<td>{{Op.fmtVal(total.namKhLuongBac, maDviTien)}}</td>
-								<td>{{Op.fmtVal(total.namKhPcapLuong, maDviTien)}}</td>
-								<td>{{Op.fmtVal(total.namKhDgopLuong, maDviTien)}}</td>
-								<td>{{Op.fmtVal(total.namKhKhac, maDviTien)}}</td>
+								<td>{{Op.fmtVal(total.thienTsoBcTqGiao)}}</td>
+								<td>{{Op.fmtVal(total.thienTsoBcTdiem)}}</td>
+								<td>{{Op.fmtVal(total.thienQlPcap)}}</td>
+								<td>{{Op.fmtVal(total.thienLuongBac)}}</td>
+								<td>{{Op.fmtVal(total.thienPcapLuong)}}</td>
+								<td>{{Op.fmtVal(total.thienDgopLuong)}}</td>
+								<td>{{Op.fmtVal(total.thienKhac)}}</td>
+								<td>{{Op.fmtVal(total.dtoanTsoBcheTqGiao)}}</td>
+								<td>{{Op.fmtVal(total.dtoanQluongPcap)}}</td>
+								<td>{{Op.fmtVal(total.dtoanLuongBac)}}</td>
+								<td>{{Op.fmtVal(total.dtoanPcapLuong)}}</td>
+								<td>{{Op.fmtVal(total.dtoanDgopLuong)}}</td>
+								<td>{{Op.fmtVal(total.dtoanKhac)}}</td>
+								<td>{{Op.fmtVal(total.uocThTsoBcTqGiao)}}</td>
+								<td>{{Op.fmtVal(total.uocThTsoBcTdiem)}}</td>
+								<td>{{Op.fmtVal(total.uocThQlPcap)}}</td>
+								<td>{{Op.fmtVal(total.uocThLuongBac)}}</td>
+								<td>{{Op.fmtVal(total.uocThPCapLuong)}}</td>
+								<td>{{Op.fmtVal(total.uocThDgopLuong)}}</td>
+								<td>{{Op.fmtVal(total.uocThKhac)}}</td>
+								<td>{{Op.fmtVal(total.namKhTsoBcTqGiao)}}</td>
+								<td>{{Op.fmtVal(total.namKhQlPcap)}}</td>
+								<td>{{Op.fmtVal(total.namKhLuongBac)}}</td>
+								<td>{{Op.fmtVal(total.namKhPcapLuong)}}</td>
+								<td>{{Op.fmtVal(total.namKhDgopLuong)}}</td>
+								<td>{{Op.fmtVal(total.namKhKhac)}}</td>
 								<td></td>
 								<td *ngIf="status.general" nzRight></td>
 							</tr>

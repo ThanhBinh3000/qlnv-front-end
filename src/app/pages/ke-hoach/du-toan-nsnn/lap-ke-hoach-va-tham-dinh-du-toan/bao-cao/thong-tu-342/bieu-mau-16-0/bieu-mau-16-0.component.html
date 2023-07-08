@@ -14,7 +14,7 @@
 								</ng-container>
 								<ng-template #editMoney>
 									<nz-select nzShowSearch nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
-										(ngModelChange)="editMoneyUnit=false">
+										(ngModelChange)="editMoneyUnit=false; Op.setMoneyUnit(maDviTien)">
 										<nz-option *ngFor="let item of Utils.DVI_TIEN" [nzValue]="item.id"
 											[nzLabel]="item.tenDm">
 										</nz-option>
@@ -133,13 +133,13 @@
 									{{ Op.fmtNum(total.khSluong) }}
 								</td>
 								<td>
-									{{ Op.fmtVal(total.khTtien, maDviTien) }}
+									{{ Op.fmtVal(total.khTtien) }}
 								</td>
 								<td>
 									{{ Op.fmtNum(total.uocThSluong) }}
 								</td>
 								<td>
-									{{ Op.fmtVal(total.uocThTtien, maDviTien) }}
+									{{ Op.fmtVal(total.uocThTtien) }}
 								</td>
 								<td>
 									{{ Op.fmtNum(total.tonKho) }}
@@ -151,16 +151,16 @@
 									{{ Op.fmtNum(total.namKhSluong) }}
 								</td>
 								<td>
-									{{ Op.fmtVal(total.namKhTtien, maDviTien) }}
+									{{ Op.fmtVal(total.namKhTtien) }}
 								</td>
 								<td *ngIf="status.viewAppVal">
 									{{ Op.fmtNum(total.tdinhSluong) }}
 								</td>
 								<td *ngIf="status.viewAppVal">
-									{{ Op.fmtVal(total.tdinhTtien, maDviTien) }}
+									{{ Op.fmtVal(total.tdinhTtien) }}
 								</td>
 								<td *ngIf="status.viewAppVal">
-									{{ Op.fmtVal(total.chenhLech, maDviTien) }}
+									{{ Op.fmtVal(total.chenhLech) }}
 								</td>
 								<td></td>
 								<td *ngIf="status.viewAppVal"></td>
@@ -187,13 +187,13 @@
 										{{ Op.fmtNum(data.khSluong) }}
 									</td>
 									<td>
-										{{ Op.fmtVal(data.khTtien, maDviTien) }}
+										{{ Op.fmtVal(data.khTtien) }}
 									</td>
 									<td>
 										{{ Op.fmtNum(data.uocThSluong) }}
 									</td>
 									<td>
-										{{ Op.fmtVal(data.uocThTtien, maDviTien) }}
+										{{ Op.fmtVal(data.uocThTtien) }}
 									</td>
 									<td>
 										{{ Op.fmtNum(data.tonKho) }}
@@ -205,16 +205,16 @@
 										{{ Op.fmtNum(data.namKhSluong) }}
 									</td>
 									<td>
-										{{ Op.fmtVal(data.namKhTtien, maDviTien) }}
+										{{ Op.fmtVal(data.namKhTtien) }}
 									</td>
 									<td *ngIf="status.viewAppVal">
 										{{ Op.fmtNum(data.tdinhSluong) }}
 									</td>
 									<td *ngIf="status.viewAppVal">
-										{{ Op.fmtVal(data.tdinhTtien, maDviTien) }}
+										{{ Op.fmtVal(data.tdinhTtien) }}
 									</td>
 									<td *ngIf="status.viewAppVal">
-										{{ Op.fmtVal(data.chenhLech, maDviTien) }}
+										{{ Op.fmtVal(data.chenhLech) }}
 									</td>
 									<td>
 										{{ data.ghiChu }}
@@ -307,13 +307,13 @@
 											{{ Op.fmtNum(data.khSluong) }}
 										</td>
 										<td>
-											{{ Op.fmtVal(data.khTtien, maDviTien) }}
+											{{ Op.fmtVal(data.khTtien) }}
 										</td>
 										<td>
 											{{ Op.fmtNum(data.uocThSluong) }}
 										</td>
 										<td>
-											{{ Op.fmtVal(data.uocThTtien, maDviTien) }}
+											{{ Op.fmtVal(data.uocThTtien) }}
 										</td>
 										<td>
 											{{ Op.fmtNum(data.tonKho) }}
@@ -325,7 +325,7 @@
 											{{ Op.fmtNum(data.namKhSluong) }}
 										</td>
 										<td>
-											{{ Op.fmtVal(data.namKhTtien, maDviTien) }}
+											{{ Op.fmtVal(data.namKhTtien) }}
 										</td>
 										<td>
 											<input class="money-input" currencyMask [options]="Op.amount"
@@ -338,7 +338,7 @@
 												(ngModelChange)="changeModel(data.id)" />
 										</td>
 										<td>
-											{{ Op.fmtVal(editCache[data.id].data.chenhLech, maDviTien) }}
+											{{ Op.fmtVal(editCache[data.id].data.chenhLech) }}
 										</td>
 										<td>
 											{{ editCache[data.id].data.ghiChu }}

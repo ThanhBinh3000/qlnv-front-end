@@ -7,23 +7,22 @@
                 <nz-option *ngFor="let item of lstNam" [nzValue]="item" [nzLabel]="item">
                 </nz-option>
             </nz-select>
-            <!-- <nz-input-number nzSize="small" [(ngModel)]="response.namBcao"
-                [class]="response.namBcao && (response.namBcao > 999 && response.namBcao < 3000) ? '' : 'input-error-validate'">
-            </nz-input-number> -->
         </div>
         <div nz-col nzSpan="6">
             <label class="search__label">Loại báo cáo</label>
             <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại báo cáo" [(ngModel)]="response.maLoaiBcao"
                 [class]="response.maLoaiBcao ?'' : 'input-error-validate'" (ngModelChange)="changeModel()">
-                <nz-option *ngFor="let item of baoCaos" [nzValue]="item.id" [nzLabel]="item.tenDm">
+                <nz-option *ngFor="let item of Dtc.LOAI_BAO_CAO" [nzValue]="item.id" [nzLabel]="item.tenDm">
                 </nz-option>
             </nz-select>
         </div>
-        <div nz-col nzSpan="6" *ngIf="response.maLoaiBcao && response.maLoaiBcao != '527'">
+        <div nz-col nzSpan="6" *ngIf="response.maLoaiBcao && response.maLoaiBcao == Dtc.BC_DINH_KY">
             <label class="search__label">Tháng báo cáo</label>
-            <nz-input-number nzSize="small" [(ngModel)]="response.thangBcao" [nzMin]="1" [nzMax]="12"
-                [class]="response.thangBcao? '' : 'input-error-validate'" [nzDisabled]="isDisable">
-            </nz-input-number>
+            <nz-select nzShowSearch nzPlaceHolder="Chọn năm báo cáo" [(ngModel)]="response.thangBcao"
+                [class]="response.thangBcao ?'' : 'input-error-validate'">
+                <nz-option *ngFor="let item of lstThang" [nzValue]="item" [nzLabel]="item">
+                </nz-option>
+            </nz-select>
         </div>
     </div>
 </div>
