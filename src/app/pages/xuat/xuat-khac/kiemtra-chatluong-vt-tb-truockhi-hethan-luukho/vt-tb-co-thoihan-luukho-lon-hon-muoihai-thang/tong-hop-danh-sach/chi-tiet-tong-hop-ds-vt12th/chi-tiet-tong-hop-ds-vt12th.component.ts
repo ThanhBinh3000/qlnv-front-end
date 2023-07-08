@@ -1,8 +1,5 @@
 import {ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, SimpleChanges} from '@angular/core';
 import {NumberToRoman} from "../../../../../../../shared/commonFunction";
-import {
-  KiemtraChatluongLtTruockhiHethanLuukhoComponent
-} from "../../../../kiemtra-chatluong-lt-truockhi-hethan-luukho/kiemtra-chatluong-lt-truockhi-hethan-luukho.component";
 import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../../../../services/storage.service";
 import {NzNotificationService} from "ng-zorro-antd/notification";
@@ -10,12 +7,6 @@ import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
 import {DonviService} from "../../../../../../../services/donvi.service";
 import {DanhMucService} from "../../../../../../../services/danhmuc.service";
-import {
-  TongHopDanhSachHangDTQGService
-} from "../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatlt/TongHopDanhSachHangDTQG.service";
-import {
-  DanhSachHangDTQGCon6ThangService
-} from "../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatlt/DanhSachHangDTQGCon6Thang.service";
 import dayjs from "dayjs";
 import {Validators} from "@angular/forms";
 import {chain, cloneDeep, isEmpty} from "lodash";

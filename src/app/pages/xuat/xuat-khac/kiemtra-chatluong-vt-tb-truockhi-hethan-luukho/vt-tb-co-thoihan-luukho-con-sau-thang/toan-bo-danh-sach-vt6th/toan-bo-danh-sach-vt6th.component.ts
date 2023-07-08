@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../../../services/storage.service";
 import {NzNotificationService} from "ng-zorro-antd/notification";
@@ -29,6 +29,7 @@ export class ToanBoDanhSachVt6ThComponent extends Base2Component implements OnIn
   dataTableView: any = [];
   tongHop = false;
   expandSetString = new Set<string>();
+  @Output() tabFocus = new EventEmitter<object>();
 
   constructor(httpClient: HttpClient,
               storageService: StorageService,
@@ -136,7 +137,6 @@ export class ToanBoDanhSachVt6ThComponent extends Base2Component implements OnIn
       "dviQly": "0101"
     }).subscribe((hangHoa) => {
       if (hangHoa.msg == MESSAGE.SUCCESS) {
-        console.log(hangHoa.data, '22222222');
         this.dsLoaiVthh = hangHoa.data?.filter((x) => ((x.ma.startsWith("02") || x.ma.startsWith("03")) && (x.cap == 1 || x.cap == 2)));
       }
     });
@@ -179,8 +179,13 @@ export class ToanBoDanhSachVt6ThComponent extends Base2Component implements OnIn
     }
   }
 
+  emitTab(tab) {
+    this.tabFocus.emit(tab);
+  }
+
   openTongHop() {
     this.tongHop = !this.tongHop;
+    this.emitTab(1);
   }
 
 }

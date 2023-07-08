@@ -20,19 +20,19 @@
 <div class="contentBor chi-tieu__body giao-ke-hoach">
   <div class="contentDetail">
     <ng-container *ngIf="tabSelected == 0">
-      <app-toan-bo-danh-sach-vt6th></app-toan-bo-danh-sach-vt6th>
+      <app-toan-bo-danh-sach-vt6th (tabFocus)="receivedTab($event)"></app-toan-bo-danh-sach-vt6th>
     </ng-container>
-<!--    <ng-container *ngIf="tabSelected == 1">-->
-<!--      <app-tong-hop-danh-sach></app-tong-hop-danh-sach>-->
-<!--    </ng-container>-->
-<!--    <ng-container *ngIf="tabSelected == 2">-->
-<!--      <app-ke-hoach-xuat-hang-cua-cuc></app-ke-hoach-xuat-hang-cua-cuc>-->
-<!--    </ng-container>-->
-<!--    <ng-container *ngIf="tabSelected == 3">-->
-<!--      <app-tong-hop-ke-hoach-xuat-hang></app-tong-hop-ke-hoach-xuat-hang>-->
-<!--    </ng-container>-->
-<!--    <ng-container *ngIf="tabSelected == 4">-->
-<!--      <app-ke-hoach-xuat-hang-cua-tong-cuc></app-ke-hoach-xuat-hang-cua-tong-cuc>-->
-<!--    </ng-container>-->
+    <ng-container *ngIf="tabSelected == 1">
+      <app-tong-hop-danh-sach-vt6th (tabFocus)="receivedTab($event)"></app-tong-hop-danh-sach-vt6th>
+    </ng-container>
+    <!--    <ng-container *ngIf="tabSelected == 2">-->
+    <!--      <app-ke-hoach-xuat-hang-cua-cuc></app-ke-hoach-xuat-hang-cua-cuc>-->
+    <!--    </ng-container>-->
+    <!--    <ng-container *ngIf="tabSelected == 3">-->
+    <!--      <app-tong-hop-ke-hoach-xuat-hang></app-tong-hop-ke-hoach-xuat-hang>-->
+    <!--    </ng-container>-->
+    <!--    <ng-container *ngIf="tabSelected == 4">-->
+    <!--      <app-ke-hoach-xuat-hang-cua-tong-cuc></app-ke-hoach-xuat-hang-cua-tong-cuc>-->
+    <!--    </ng-container>-->
   </div>
 </div>
