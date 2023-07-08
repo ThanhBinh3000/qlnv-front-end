@@ -161,7 +161,6 @@ export class ThemMoiHopDongComponent extends Base2Component implements OnInit {
 
   async bindingData() {
     if (this.itemGoiThau && this.itemQdPdKhlcnt) {
-      console.log(22222222)
       let rs = await this.quyetdinhpheduyetKqLcntService.getDetail(this.itemGoiThau.idQdPdKqlcnt);
       let dataQdPdKqlcnt;
       let goiThau;
