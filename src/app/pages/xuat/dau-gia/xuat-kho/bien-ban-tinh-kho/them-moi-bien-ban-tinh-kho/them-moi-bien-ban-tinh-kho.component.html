@@ -151,16 +151,17 @@
                     </nz-form-item>
                 </div>
                 <div nz-col nzSpan="3">
-                    <nz-form-item>
-                        <nz-form-label [nzNoColon]="true">
-                            Ngày ký hợp đồng
-                        </nz-form-label>
-                        <nz-form-control [nzErrorTip]="error">
-                            <nz-input-group>
-                                <input nz-input formControlName="ngayKyHd" readonly />
-                            </nz-input-group>
-                        </nz-form-control>
-                    </nz-form-item>
+                  <nz-form-item>
+                    <nz-form-label [nzNoColon]="true">
+                      Ngày ký hợp đồng
+                    </nz-form-label>
+                    <nz-form-control [nzErrorTip]="error">
+                      <nz-input-group>
+                        <nz-date-picker nzDisabled nzFormat="dd/MM/yyyy" formControlName="ngayKyHd">
+                        </nz-date-picker>
+                      </nz-input-group>
+                    </nz-form-control>
+                  </nz-form-item>
                 </div>
                 <div nz-col [nzSpan]="5">
                     <nz-form-item>

@@ -28,6 +28,7 @@ export class BienBanTinhKhoComponent extends Base2Component implements OnInit {
   loaiVthhCache: string;
   public vldTrangThai: DauGiaComponent;
   public CHUC_NANG = CHUC_NANG;
+  idQdNv: number =0;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -189,11 +190,13 @@ export class BienBanTinhKhoComponent extends Base2Component implements OnInit {
           ).value();
         let nam = quyetDinh ? quyetDinh.nam : null;
         let ngayQdGiaoNvXh = quyetDinh ? quyetDinh.ngayQdGiaoNvXh : null;
+        let idQdGiaoNvXh = quyetDinh ? quyetDinh.idQdGiaoNvXh : null;
         return {
           idVirtual: uuid.v4(),
           soQdGiaoNvXh: key != "null" ? key : '',
           nam: nam,
           ngayQdGiaoNvXh: ngayQdGiaoNvXh,
+          idQdGiaoNvXh : idQdGiaoNvXh,
           childData: rs
         };
       }).value();
@@ -217,11 +220,11 @@ export class BienBanTinhKhoComponent extends Base2Component implements OnInit {
   }
 
 
-  redirectDetail(id, b: boolean) {
+  redirectDetail(id, b: boolean, idQdNv? : number) {
     this.selectedId = id;
     this.isDetail = true;
     this.isView = b;
-    // this.isViewDetail = isView ?? false;
+    this.idQdNv = idQdNv
   }
 
   openPhieuXkModal(id: number) {
