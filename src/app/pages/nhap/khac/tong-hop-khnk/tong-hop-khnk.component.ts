@@ -231,7 +231,7 @@ export class TongHopKhnkComponent implements OnInit {
         this.tongHopDxKhNhapKhacService
           .export(body)
           .subscribe((blob) =>
-            saveAs(blob, 'danh-sach-de-xuat-ke-hoach-lcnt.xlsx'),
+            saveAs(blob, 'danh-sach-tong-hop-de-xuat-khnk.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {
