@@ -245,5 +245,5 @@ export const LOAI_QD_CTKH = {
 export const LOAI_HH_XUAT_KHAC = {
   LT_6_THANG: 'LT6',
   VT_12_THANG: 'VT12',
-  VT_6_THANG: 'Vt6'
+  VT_6_THANG: 'VT6'
 };

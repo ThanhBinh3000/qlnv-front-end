@@ -226,7 +226,6 @@ export class DialogThemMoiBangKeThuMuaLeComponent extends Base2Component impleme
     await this.spinner.show();
     let dataRes = await this.quyetDinhGiaoNvNhapHangService.getDetail(id)
     const data = dataRes.data;
-    console.log(data, 777);
     this.formData.patchValue({
       soQdGiaoNvNh: data.soQd,
       idQdGiaoNvNh: data.id,
