@@ -154,7 +154,7 @@ export class PhuLucIComponent implements OnInit {
                 )
             }
             if (this.lstCtietBcao.length == 0) {
-                this.luyKes.forEach(item => {
+                this.luyKes?.forEach(item => {
                     this.lstCtietBcao.push({
                         ...item,
                         luyKeGiaiNganTcongTle: Operator.percent(item.luyKeGiaiNganTcong, item.kphiSdungTcong),
@@ -522,7 +522,7 @@ export class PhuLucIComponent implements OnInit {
     }
 
     getDeleteStatus(data: ItemData) {
-        return this.luyKes.findIndex(e => e.maNdung == data.maNdung) != -1;
+        return this.luyKes?.findIndex(e => e.maNdung == data.maNdung) != -1;
     }
 
     sum(stt: string) {

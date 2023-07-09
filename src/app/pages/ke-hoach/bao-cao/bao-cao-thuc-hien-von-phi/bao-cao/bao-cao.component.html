@@ -9,19 +9,19 @@
                 <i class="icon htvbdh_tcdt_save"></i>
                 <span>Lưu</span>
             </button>
+            <!-- <button *ngIf="status.new" type="button" class="btn btn-sub" (click)="newReport()">
+                <i class="icon htvbdh_tcdt_tao-qd"></i>
+                <span>Tạo mới</span>
+            </button> -->
             <button *ngIf="status.submit" type="button" class="btn btn-sub" (click)="action('submit')">
                 <i class="icon htvbdh_tcdt_guiduyet"></i>
                 <span>Trình duyệt</span>
-            </button>
-            <button *ngIf="status.pass" type="button" class="btn btn-sub" (click)="action('nonpass')">
-                <i class="icon htvbdh_tcdt_tuchoi"></i>
-                <span>Từ chối</span>
             </button>
             <button *ngIf="status.pass" type="button" class="btn btn-sub" (click)="action('pass')">
                 <i class="icon htvbdh_tcdt_pheduyet"></i>
                 <span>Duyệt</span>
             </button>
-            <button *ngIf="status.approve" type="button" class="btn btn-sub" (click)="action('nonapprove')">
+            <button *ngIf="status.pass" type="button" class="btn btn-do" (click)="action('nonpass')">
                 <i class="icon htvbdh_tcdt_tuchoi"></i>
                 <span>Từ chối</span>
             </button>
@@ -29,13 +29,17 @@
                 <i class="icon htvbdh_tcdt_pheduyet"></i>
                 <span>Phê duyệt</span>
             </button>
-            <button *ngIf="status.accept" type="button" class="btn btn-sub" (click)="action('nonaccept')">
+            <button *ngIf="status.approve" type="button" class="btn btn-do" (click)="action('nonapprove')">
                 <i class="icon htvbdh_tcdt_tuchoi"></i>
                 <span>Từ chối</span>
             </button>
             <button *ngIf="status.accept" type="button" class="btn btn-sub" (click)="action('accept')">
                 <i class="icon htvbdh_tcdt_pheduyet"></i>
                 <span>Tiếp nhận</span>
+            </button>
+            <button *ngIf="status.accept" type="button" class="btn btn-do" (click)="action('nonaccept')">
+                <i class="icon htvbdh_tcdt_tuchoi"></i>
+                <span>Từ chối</span>
             </button>
         </div>
     </nz-affix>
@@ -45,8 +49,10 @@
             <div class="header mg-t-16">
                 <div class="header-text">
                     <div class="title-chi-tieu">
-                        <span [ngClass]="statusClass()">{{getStatusName(baoCao.trangThai)}}</span>
-                        <span>Báo cáo kết quả thực hiện vốn phí hàng DTQG</span>
+                        <span [ngClass]="Status.statusClass(baoCao.trangThai)">
+                            {{ Status.reportStatusName(baoCao.trangThai, isParent) }}
+                        </span>
+                        <span>Báo cáo thực hiện dự toán chi ngân sách nhà nước</span>
                     </div>
                 </div>
             </div>
@@ -56,42 +62,43 @@
                         <tr>
                             <th>Mã báo cáo</th>
                             <th>Báo cáo năm</th>
-                            <th>Báo cáo đợt</th>
+                            <th>Báo cáo tháng</th>
+                            <th>Loại báo cáo</th>
                             <th>Người tạo</th>
                             <th>Ngày lập</th>
-                            <th>Biểu mẫu 01/BCNXBQ</th>
+                            <th>Công văn</th>
                             <th>Ngày trình duyệt</th>
-                            <th>Ngày duyệt<br>(Ngày trưởng bộ phận kế toán duyệt)</th>
-                            <th>Ngày phê duyệt<br>(Lãnh đạo đơn vị cấp dưới phê duyệt)</th>
+                            <th>Ngày duyệt</th>
+                            <th>Ngày phê duyệt</th>
                             <th>Ngày đơn vị cấp trên trả kết quả</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td>{{baoCao?.maBcao}}</td>
-                            <td>{{baoCao?.namBcao}}</td>
-                            <td>{{baoCao?.dotBcao}}</td>
-                            <td>{{baoCao?.nguoiTao}}</td>
-                            <td>{{baoCao?.ngayTao}}</td>
+                            <td>{{ baoCao.maBcao }}</td>
+                            <td>{{ baoCao.namBcao }}</td>
+                            <td>{{ baoCao.thangBcao }}</td>
                             <td>
-                                <ng-container *ngIf="status">
-                                    <nz-upload [nzBeforeUpload]="beforeUploadCV" *ngIf="status">
-                                        <button nz-button>
-                                            <i nz-icon nzType="upload"></i>
-                                            Select File
-                                        </button>
-                                    </nz-upload>
-                                    <br />
-                                </ng-container>
-                                <div class="tep__sqd" (click)="downloadFileCv()">
-                                    <span>{{baoCao?.congVan?.fileName}}</span>
+                                {{ Vp.reportTypeName(baoCao.maLoaiBcao) }}
+                            </td>
+                            <td>{{ baoCao.nguoiTao }}</td>
+                            <td>{{ Utils.fmtDate(baoCao.ngayTao) }}</td>
+                            <td>
+                                <nz-upload *ngIf="status.save" [nzBeforeUpload]="beforeUploadCV">
+                                    <button nz-button>
+                                        <i nz-icon nzType="upload"></i>
+                                        Select File
+                                    </button>
+                                </nz-upload>
+                                <div class="tep__sqd" (click)="downloadFile(null)">
+                                    <span>{{baoCao.congVan?.fileName}}</span>
                                 </div>
 
                             </td>
-                            <td>{{baoCao?.ngayTrinh}}</td>
-                            <td>{{baoCao?.ngayDuyet}}</td>
-                            <td>{{baoCao?.ngayPheDuyet}}</td>
-                            <td>{{baoCao?.ngayTraKq}}</td>
+                            <td>{{ Utils.fmtDate(baoCao.ngayTrinh) }}</td>
+                            <td>{{ Utils.fmtDate(baoCao.ngayDuyet) }}</td>
+                            <td>{{ Utils.fmtDate(baoCao.ngayPheDuyet) }}</td>
+                            <td>{{ Utils.fmtDate(baoCao.ngayTraKq) }}</td>
                         </tr>
                     </tbody>
                 </nz-table>
@@ -100,148 +107,85 @@
 
         <div class="mt-16 flex-card p-lr16">
             <nz-card class="mt-2px flex-card data-table card-border-content table-card">
-                <nz-tabset class="tab__container" [(nzSelectedIndex)]="selectedIndex" nzType="editable-card"
-                    (nzClose)="closeTab($event)" nzHideAdd>
+                <nz-tabset class="tab__container" [nzTabBarExtraContent]="extraTemplate">
                     <nz-tab [nzTitle]="'DANH SÁCH PHỤ LỤC'">
-                        <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }"
-                            style="margin-top: 10px; margin-bottom: 10px;">
-                            <div nz-col class="gutter-row canphai phai" [nzSpan]="24"
-                                style="display:flex; justify-content: end;">
-                                <button type="button" class="btn btn-main" (click)="addPhuLuc()"
-                                    [hidden]="!status || userInfo?.sub != baoCao?.nguoiTao">
-                                    <i class="icon htvbdh_dau-cong"></i>
-                                    <span>Thêm</span>
-                                </button>
-                                <button type="button" class="btn btn-sub" (click)="deletePhuLucList()"
-                                    [hidden]="!status || userInfo?.sub != baoCao?.nguoiTao">
-                                    <i class="icon htvbdh_tcdt_delete"></i>
-                                    <span>Xóa</span>
-                                </button>
-                            </div>
-                        </div>
                         <nz-table nzBordered class="table__body">
                             <thead>
                                 <tr>
-                                    <th>STT</th>
-                                    <th>Biểu số</th>
-                                    <th>Tiêu đề</th>
-                                    <th>Trạng thái</th>
-                                    <th>Giao cho</th>
-                                    <th>Hành động</th>
-                                    <th class="th" *ngIf="status">
-                                        <label [hidden]="userInfo?.sub != baoCao?.nguoiTao" nz-checkbox
-                                            [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()">
-                                        </label>
-                                    </th>
+                                    <th nzWidth="5%">STT</th>
+                                    <th nzWidth="15%">Phụ lục</th>
+                                    <th nzWidth="40%">Tiêu đề</th>
+                                    <th nzWidth="15%">Trạng thái</th>
+                                    <th nzWidth="15%">Giao cho</th>
+                                    <th nzWidth="10%">Hành động</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let item of baoCao?.lstBcaos; let i = index">
-                                    <td>{{ i + 1 }}</td>
-                                    <td>{{item.tenPhuLuc}}</td>
-                                    <td>{{item.tieuDe}}</td>
-                                    <td>{{getStatusAppendixName(item.trangThai)}}
-                                        <ng-template [ngIf]="item.trangThai == '0'"><br>Lý do: {{item.lyDoTuChoi}}
-                                        </ng-template>
+                                <tr *ngFor="let data of baoCao.lstBcaos; let i = index">
+                                    <td>{{ (i + 1) }}</td>
+                                    <td>{{ data.tenPhuLuc }}</td>
+                                    <td>{{ data.tieuDe }}</td>
+                                    <td>
+                                        {{Status.appendixStatusName(data.trangThai)}}
+                                        <ng-container *ngIf="data.trangThai == Status.NOT_OK">
+                                            <br>
+                                            Lý do: {{data.lyDoTuChoi}}
+                                        </ng-container>
                                     </td>
                                     <td>
                                         <ng-container
-                                            *ngIf="userInfo?.sub == baoCao?.nguoiTao && status && item?.id?.length == 38;else templateNguoiBcao ">
-                                            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn người thực hiện"
-                                                [(ngModel)]="item.nguoiBcao"
-                                                [class]="item.nguoiBcao ?'' : 'input-error-validate' ">
+                                            *ngIf="userInfo?.sub == baoCao.nguoiTao && status.save && data?.id?.length==38 ;else templateNguoiBcao ">
+                                            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn cán bộ thực hiện"
+                                                [(ngModel)]="data.nguoiBcao"
+                                                [class]="data.nguoiBcao ?'' : 'input-error-validate'">
                                                 <nz-option *ngFor="let item of nguoiBcaos" [nzValue]="item.username"
                                                     [nzLabel]="item.username">
                                                 </nz-option>
                                             </nz-select>
                                         </ng-container>
                                         <ng-template #templateNguoiBcao>
-                                            {{item.nguoiBcao}}
+                                            {{data.nguoiBcao}}
                                         </ng-template>
                                     </td>
                                     <td>
-                                        <a *ngIf="status && userInfo?.sub == item.nguoiBcao && baoCao.id"
-                                            (click)="newTab(item.maLoai)">
-                                            <i class="fa fa-pencil"></i>
+                                        <ng-container *ngIf="baoCao.id">
+                                            <a *ngIf="status.save && (userInfo?.sub == data.nguoiBcao)">
+                                                <i class="fa fa-pencil" (click)="viewAppendix(data.id)"></i>
+                                            </a>
+                                            <a
+                                                *ngIf="(!status.save || userInfo?.sub != data.nguoiBcao) && data.nguoiBcao">
+                                                <i class="fa fa-eye" (click)="viewAppendix(data.id)"></i>
+                                            </a>
+                                        </ng-container>
+                                        <a *ngIf="status.save && (userInfo?.sub == baoCao.nguoiTao)">
+                                            <i class="fa fa-trash-o do" (click)="deleteAppendix(data.id)"></i>
                                         </a>
-                                        <a *ngIf="!status" (click)="newTab(item.maLoai)">
-                                            <i class="fa fa-eye"></i>
-                                        </a>
-                                    </td>
-                                    <td *ngIf="status">
-                                        <label [hidden]="userInfo?.sub != baoCao?.nguoiTao" nz-checkbox
-                                            [nzValue]="item.id" [(ngModel)]="item.checked"
-                                            (ngModelChange)="updateSingleChecked()"></label>
                                     </td>
                                 </tr>
                             </tbody>
                         </nz-table>
-                        <ng-container *ngIf="baoCao.lstBcaoDviTrucThuocs.length != 0">
-                            <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
-                                <div nz-col class="gutter-row" [nzSpan]="12">
-                                    Danh sách báo cáo từ các đơn vị trực thuộc
-                                    <br />
-                                </div>
-                            </div>
-                            <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
-                                <div nz-col class="gutter-row" [nzSpan]="24">
-                                    <nz-table #basicTable class="nowrap">
-                                        <thead>
-                                            <tr>
-                                                <th>STT</th>
-                                                <th>Đơn vị lập</th>
-                                                <th>Mã báo cáo</th>
-                                                <th>Báo cáo năm</th>
-                                                <th>Báo cáo đợt</th>
-                                                <th>Người tạo</th>
-                                                <th>
-                                                    Ngày trình duyệt<br>
-                                                    (Ngày đơn vị cấp dưới gửi báo cáo)
-                                                </th>
-                                                <th>
-                                                    Ngày duyệt<br>
-                                                    (Ngày cục khu vực kiểm tra đánh giá báo cáo)
-                                                </th>
-                                                <th>
-                                                    Trạng thái<br>
-                                                    (Cục khu vực đánh giá)
-                                                </th>
-                                                <th>
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr *ngFor="let item of baoCao?.lstBcaoDviTrucThuocs; let i = index">
-                                                <td>{{ i + 1 }}</td>
-                                                <td>{{getUnitName(item.maDvi)}}</td>
-                                                <td>{{item.maBcao}}</td>
-                                                <td>{{item.namBcao}}</td>
-                                                <td>{{item.dotBcao}}</td>
-                                                <td>{{item.nguoiTao}}</td>
-                                                <td>{{item.ngayTrinh}}</td>
-                                                <td>{{item.ngayDuyet}}</td>
-                                                <td>{{getStatusName(item.trangThai)}}</td>
-                                                <td>
-                                                    <a (click)="viewDetail(item.id)">
-                                                        <i class="fa fa-eye"></i>
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </nz-table>
-                                </div>
-                            </div>
-                        </ng-container>
+                    </nz-tab>
+                    <ng-template #extraTemplate>
+                        <button *ngIf="status.save && userInfo?.sub == baoCao.nguoiTao" type="button"
+                            class="btn btn-main" (click)="addAppendix()">
+                            <i class="icon htvbdh_dau-cong"></i>
+                            <span>Thêm</span>
+                        </button>
+                    </ng-template>
+                </nz-tabset>
+                <nz-tabset class="tab__container">
+                    <nz-tab [nzTitle]="'Danh sách văn bản đính kèm'">
                         <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
                             <div nz-col class="gutter-row" [nzSpan]="3">
-                                <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" *ngIf="status">
+                                <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" [nzMultiple]="true"
+                                    *ngIf="status.general">
                                     <button nz-button>
                                         <i nz-icon nzType="upload"></i>
-                                        Select File
+                                        Chọn tài liệu đính kèm
                                     </button>
                                 </nz-upload>
                                 <button nz-button [nzType]="'primary'" (click)="handleUpload()"
-                                    [disabled]="fileList.length === 0" *ngIf="status" style="margin-top: 16px">
+                                    [disabled]="fileList.length === 0" *ngIf="status.general" style="margin-top: 16px">
                                     Thêm vào danh sách
                                 </button>
                             </div>
@@ -251,20 +195,20 @@
                                 <nz-table nzBordered class="table__body">
                                     <thead>
                                         <tr>
-                                            <th nzWidth="7%">STT</th>
+                                            <th nzWidth="15%">STT</th>
                                             <th>Tên file</th>
-                                            <th nzWidth="10%"></th>
+                                            <th nzWidth="15%"></th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr *ngFor="let data of baoCao.lstFile; let i = index">
+                                        <tr *ngFor="let data of baoCao.lstFiles; let i = index">
                                             <td>{{ i + 1 }} </td>
                                             <td>{{ data.fileName }}</td>
                                             <td>
                                                 <a (click)="downloadFile(data.id)">
                                                     <i class="fa fa-eye"></i>
                                                 </a>
-                                                <a *ngIf="status" (click)="deleteFile(data.id)">
+                                                <a *ngIf="status.general" (click)="deleteFile(data.id)">
                                                     <i class="fa fa-trash-o do"></i>
                                                 </a>
                                             </td>
@@ -274,31 +218,73 @@
                             </div>
                         </div>
                     </nz-tab>
-                    <nz-tab *ngFor="let tab of tabs" nzClosable [nzTitle]="tab?.tieuDe">
-                        <ng-container *ngIf="tab.maLoai == '4'">
-                            <app-bao-cao-02 [data]="tabData" (dataChange)="getNewData($event)">
-                            </app-bao-cao-02>
-                        </ng-container>
-                        <ng-container *ngIf="tab.maLoai == '5'">
-                            <app-bao-cao-03 [data]="tabData" (dataChange)="getNewData($event)">
-                            </app-bao-cao-03>
-                        </ng-container>
-                        <ng-container *ngIf="tab.maLoai == '7'">
-                            <app-bao-cao-04an [data]="tabData" (dataChange)="getNewData($event)">
-                            </app-bao-cao-04an>
-                        </ng-container>
-                        <ng-container *ngIf="tab.maLoai == '6'">
-                            <app-bao-cao-04ax [data]="tabData" (dataChange)="getNewData($event)">
-                            </app-bao-cao-04ax>
-                        </ng-container>
-                        <ng-container *ngIf="tab.maLoai == '8'">
-                            <app-bao-cao-04b [data]="tabData" (dataChange)="getNewData($event)">
-                            </app-bao-cao-04b>
-                        </ng-container>
-                        <ng-container *ngIf="tab.maLoai == '9'">
-                            <app-bao-cao-05 [data]="tabData" (dataChange)="getNewData($event)">
-                            </app-bao-cao-05>
-                        </ng-container>
+                    <!-- <nz-tab *ngIf="baoCao.lichSu && baoCao.lichSu.length > 0" [nzTitle]="'Lịch sử'">
+                        <div nz-col class="gutter-row" [nzSpan]="12">
+                            <nz-table nzBordered class="table__body">
+                                <thead>
+                                    <tr>
+                                        <th>Mã báo cáo</th>
+                                        <th>Lần</th>
+                                        <th>Ngày tạo</th>
+                                        <th>Người tạo</th>
+                                        <th>Trạng thái</th>
+                                        <th *ngIf="status.general"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let data of baoCao.lichSu">
+                                        <td>
+                                            <a class="save" (click)="viewDetail(data.id)">{{ data.maBcao }}</a>
+                                        </td>
+                                        <td>{{ data.lan }}</td>
+                                        <td>{{ Utils.fmtDate(data.ngayTao) }}</td>
+                                        <td>{{ data.nguoiTao }}</td>
+                                        <td>{{ Status.reportStatusName(data.trangThai) }}</td>
+                                        <td *ngIf="status.general">
+                                            <a class="save" (click)="restoreReport(data.id)">Khôi phục</a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </nz-table>
+                        </div>
+                    </nz-tab> -->
+                    <nz-tab *ngIf="baoCao.lstBcaoDviTrucThuocs && baoCao.lstBcaoDviTrucThuocs.length > 0"
+                        [nzTitle]="'Danh sách báo cáo từ các đơn vị trực thuộc'">
+                        <nz-table #basicTable class="nowrap">
+                            <thead>
+                                <tr>
+                                    <th nzWidth="5%">STT</th>
+                                    <th nzWidth="30%">Đơn vị lập</th>
+                                    <th nzWidth="12%">Mã báo cáo</th>
+                                    <th nzWidth="12%">Năm báo cáo</th>
+                                    <th nzWidth="12%">Ngày trình duyệt <br /> (Ngày đơn vị cấp dưới
+                                        gửi báo cáo)</th>
+                                    <th nzWidth="12%">Ngày duyệt <br />(Ngày đơn vị cấp trên duyệt báo
+                                        cáo)
+                                    </th>
+                                    <th nzWidth="12%">Trạng thái</th>
+                                    <th nzWidth="5%"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let data of baoCao.lstBcaoDviTrucThuocs; let i = index">
+                                    <td>{{i+1}}</td>
+                                    <td></td>
+                                    <td>
+                                        {{ data.maBcao }}
+                                    </td>
+                                    <td>{{ data.namBcao }}</td>
+                                    <td>{{ Utils.fmtDate(data.ngayDuyet) }}</td>
+                                    <td>{{ Utils.fmtDate(data.ngayPheDuyet) }}</td>
+                                    <td>{{ Status.reportStatusName(data.trangThai) }}</td>
+                                    <td>
+                                        <a (click)="viewDetail(data.id)">
+                                            <i class="fa fa-eye"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </nz-table>
                     </nz-tab>
                 </nz-tabset>
             </nz-card>

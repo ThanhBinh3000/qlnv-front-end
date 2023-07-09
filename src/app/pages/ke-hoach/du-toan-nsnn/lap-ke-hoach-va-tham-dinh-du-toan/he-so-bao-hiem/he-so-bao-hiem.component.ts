@@ -347,7 +347,9 @@ export class HeSoBaoHiemComponent implements OnInit {
     }
 
     updateKhoiTich() {
-        this.baoCao.khoiTich = this.khoiTich;
+        if (this.khoiTich) {
+            this.baoCao.khoiTich = this.khoiTich;
+        }
     }
 
     isEdit(id: string) {

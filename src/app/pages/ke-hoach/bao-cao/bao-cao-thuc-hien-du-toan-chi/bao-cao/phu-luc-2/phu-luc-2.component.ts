@@ -130,7 +130,7 @@ export class PhuLucIIComponent implements OnInit {
                 )
             }
             if (this.lstCtietBcao.length == 0) {
-                this.luyKes.forEach(item => {
+                this.luyKes?.forEach(item => {
                     this.lstCtietBcao.push({
                         ...item,
                         luyKeGiaiNganTcongTle: Operator.percent(item.luyKeGiaiNganTcong, item.dtoanSdungNamTcong),
