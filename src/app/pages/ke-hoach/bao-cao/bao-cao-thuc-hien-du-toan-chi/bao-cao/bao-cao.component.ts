@@ -5,7 +5,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { FileManip, Roles, Status, Utils } from 'src/app/Utility/utils';
-import { DialogLuaChonThemPhuLucComponent } from 'src/app/components/dialog/dialog-lua-chon-them-phu-luc/dialog-lua-chon-them-phu-luc.component';
+import { DialogChonThemBieuMauComponent } from 'src/app/components/dialog/dialog-chon-them-bieu-mau/dialog-chon-them-bieu-mau.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
@@ -15,7 +15,6 @@ import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import * as uuid from 'uuid';
 import { BtnStatus, Doc, Dtc, Form, Report } from '../bao-cao-thuc-hien-du-toan-chi.constant';
-import { PHULUCLIST } from './bao-cao.constant';
 import { PhuLucIComponent } from './phu-luc-1/phu-luc-1.component';
 import { PhuLucIIComponent } from './phu-luc-2/phu-luc-2.component';
 import { PhuLucIIIComponent } from './phu-luc-3/phu-luc-3.component';
@@ -37,7 +36,7 @@ export class BaoCaoComponent implements OnInit {
     //thong tin chung bao cao
     baoCao: Report = new Report();
     //danh muc
-    lstPhuLuc: any = PHULUCLIST;
+    lstPhuLuc: any = Dtc.PHU_LUC;
     nguoiBcaos: any[];
     luyKes: Form[] = [];
     //trang thai cac nut
@@ -45,7 +44,6 @@ export class BaoCaoComponent implements OnInit {
     isDataAvailable = false;
     isChild: boolean;
     isParent: boolean;
-    isOffice: boolean;
     //khac
     editCache: { [key: string]: { edit: boolean; data: any } } = {};     // phuc vu nut chinh
     //file
@@ -159,20 +157,20 @@ export class BaoCaoComponent implements OnInit {
         this.baoCao.id = this.data?.id;
         this.userInfo = this.userService.getUserLogin();
         if (this.userInfo?.DON_VI?.tenVietTat == 'CCNTT') {
-            this.lstPhuLuc = this.lstPhuLuc.filter(e => e.maPhuLuc != Dtc.PHU_LUC_III);
+            this.lstPhuLuc = this.lstPhuLuc.filter(e => e.id != Dtc.PHU_LUC_III);
         } else if (this.userService.isChiCuc()) {
-            this.lstPhuLuc = this.lstPhuLuc.filter(e => e.maPhuLuc == Dtc.PHU_LUC_I)
+            this.lstPhuLuc = this.lstPhuLuc.filter(e => e.id == Dtc.PHU_LUC_I)
         } else {
             if (!this.userService.isTongCuc()) {
-                this.lstPhuLuc = this.lstPhuLuc.filter(e => e.maPhuLuc != Dtc.PHU_LUC_II);
+                this.lstPhuLuc = this.lstPhuLuc.filter(e => e.id != Dtc.PHU_LUC_II);
             }
         }
 
-        this.getListUser();
         if (this.baoCao.id) {
             await this.getDetailReport();
         } else {
             this.baoCao = this.data.baoCao;
+            this.baoCao.lstBcaos = this.baoCao.lstBcaos.filter(item => this.lstPhuLuc.findIndex(e => e.id == item.maLoai) != -1);
             // this.baoCao.maDvi = this.userInfo?.MA_DVI;
             // await this.getDviCon();
             // this.baoCaoThucHienDuToanChiService.taoMaBaoCao().toPromise().then(
@@ -490,6 +488,7 @@ export class BaoCaoComponent implements OnInit {
                             preTab: this.data.preTab,
                         }
                         this.data = dataTemp;
+                        this.getStatusButton();
                     } else {
                         this.notification.error(MESSAGE.ERROR, data?.msg);
                     }
@@ -568,16 +567,16 @@ export class BaoCaoComponent implements OnInit {
     // them phu luc
     addAppendix() {
         this.lstPhuLuc.forEach(item => item.status = false);
-        const danhSach = this.lstPhuLuc.filter(item => this.baoCao?.lstBcaos?.findIndex(data => data.maLoai == item.maPhuLuc) == -1);
+        const danhSach = this.lstPhuLuc.filter(item => this.baoCao?.lstBcaos?.findIndex(data => data.maLoai == item.id) == -1);
         const modalIn = this.modal.create({
             nzTitle: 'Danh sách phụ lục',
-            nzContent: DialogLuaChonThemPhuLucComponent,
+            nzContent: DialogChonThemBieuMauComponent,
             nzMaskClosable: false,
             nzClosable: false,
             nzWidth: '600px',
             nzFooter: null,
             nzComponentParams: {
-                danhSachPhuLuc: danhSach
+                danhSachBieuMau: danhSach
             },
         });
         modalIn.afterClose.toPromise().then((res) => {
@@ -588,13 +587,13 @@ export class BaoCaoComponent implements OnInit {
                             ... new Form(),
                             id: uuid.v4() + 'FE',
                             checked: false,
-                            tieuDe: item.tieuDe,
-                            maLoai: item.maPhuLuc,
-                            tenPhuLuc: item.tenPhuLuc,
+                            tieuDe: item.tenDm,
+                            maLoai: item.id,
+                            tenPhuLuc: item.tenPl,
                             trangThai: Status.NEW,
                             lstCtietBcaos: [],
                             maDviTien: '1',
-                            nguoiBcao: null,
+                            nguoiBcao: this.userInfo?.sub,
                         });
                     }
                 })
@@ -616,7 +615,7 @@ export class BaoCaoComponent implements OnInit {
             namBcao: this.baoCao.namBcao,
             path: this.path,
             status: new BtnStatus(),
-            luyKes: this.luyKes.find(e => e.maLoai == id),
+            luyKes: this.luyKes.find(e => e.maLoai == bieuMau.maLoai),
         }
         Object.assign(dataInfo.status, this.status);
         dataInfo.status.save = dataInfo.status.save && (this.userInfo?.sub == bieuMau.nguoiBcao);
@@ -641,7 +640,7 @@ export class BaoCaoComponent implements OnInit {
             nzContent: nzContent,
             nzBodyStyle: { overflowY: 'auto', maxHeight: 'calc(100vh - 200px)' },
             nzMaskClosable: false,
-            nzWidth: '90%',
+            nzWidth: '95%',
             nzFooter: null,
             nzComponentParams: {
                 dataInfo: dataInfo

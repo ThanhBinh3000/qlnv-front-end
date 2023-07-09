@@ -127,58 +127,59 @@
                                 <th>Số tiền</th>
                                 <th>Tỷ lệ(%)</th>
                             </tr>
+                            <tr>
+                                <th nzLeft>A</th>
+                                <th nzLeft>B</th>
+                                <th>1=2+...+6</th>
+                                <th>2=8+14</th>
+                                <th>3=9+15</th>
+                                <th>4=10+16</th>
+                                <th>5=11+17</th>
+                                <th>6=12+18</th>
+                                <th>7=8+...+12</th>
+                                <th>8</th>
+                                <th>9</th>
+                                <th>10</th>
+                                <th>11</th>
+                                <th>12</th>
+                                <th>13=14+...+18</th>
+                                <th>14</th>
+                                <th>15</th>
+                                <th>16</th>
+                                <th>17</th>
+                                <th>18</th>
+                                <th>19=21+23+...+29</th>
+                                <th>20 =19/1</th>
+                                <th>21</th>
+                                <th>22=21/2</th>
+                                <th>23</th>
+                                <th>24=23/3</th>
+                                <th>25</th>
+                                <th>26=25/4</th>
+                                <th>27</th>
+                                <th>28=27/5</th>
+                                <th>29</th>
+                                <th>30=29/6</th>
+                                <th>31=33+35+...+41</th>
+                                <th>32=31/1</th>
+                                <th>33</th>
+                                <th>34=33/2</th>
+                                <th>35</th>
+                                <th>36=35/3</th>
+                                <th>37</th>
+                                <th>38=37/4</th>
+                                <th>39</th>
+                                <th>40=39/5</th>
+                                <th>41</th>
+                                <th>42=41/6 </th>
+                                <th *ngIf="status.save" nzRight></th>
+                                <th *ngIf="status.save" nzRight></th>
+                                <th *ngIf="status.save" nzRight></th>
+                                <th *ngIf="status.save" nzRight></th>
+                            </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td nzLeft>A</td>
-                                <td nzLeft>B</td>
-                                <td>1=2+...+6</td>
-                                <td>2=8+14</td>
-                                <td>3=9+15</td>
-                                <td>4=10+16</td>
-                                <td>5=11+17</td>
-                                <td>6=12+18</td>
-                                <td>7=8+...+12</td>
-                                <td>8</td>
-                                <td>9</td>
-                                <td>10</td>
-                                <td>11</td>
-                                <td>12</td>
-                                <td>13=14+...+18</td>
-                                <td>14</td>
-                                <td>15</td>
-                                <td>16</td>
-                                <td>17</td>
-                                <td>18</td>
-                                <td>19=21+23+...+29</td>
-                                <td>20 =19/1</td>
-                                <td>21</td>
-                                <td>22=21/2</td>
-                                <td>23</td>
-                                <td>24=23/3</td>
-                                <td>25</td>
-                                <td>26=25/4</td>
-                                <td>27</td>
-                                <td>28=27/5</td>
-                                <td>29</td>
-                                <td>30=29/6</td>
-                                <td>31=33+35+...+41</td>
-                                <td>32=31/1</td>
-                                <td>33</td>
-                                <td>34=33/2</td>
-                                <td>35</td>
-                                <td>36=35/3</td>
-                                <td>37</td>
-                                <td>38=37/4</td>
-                                <td>39</td>
-                                <td>40=39/5</td>
-                                <td>41</td>
-                                <td>42=41/6 </td>
-                                <td *ngIf="status.save" nzRight></td>
-                                <td *ngIf="status.save" nzRight></td>
-                                <td *ngIf="status.save" nzRight></td>
-                                <td *ngIf="status.save" nzRight></td>
-                            </tr>
+
                             <tr>
                                 <td nzLeft></td>
                                 <td nzLeft>TỔNG SỐ</td>
@@ -279,7 +280,6 @@
                                     <td> {{ Op.fmtVal(data.luyKeGiaiNganNsttTle) }} </td>
                                     <td> {{ Op.fmtVal(data.luyKeGiaiNganCk) }} </td>
                                     <td> {{ Op.fmtVal(data.luyKeGiaiNganCkTle) }} </td>
-
                                     <td *ngIf="status.save" nzRight>
                                         <ng-container *ngIf="!getDeleteStatus(data)">
                                             <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>

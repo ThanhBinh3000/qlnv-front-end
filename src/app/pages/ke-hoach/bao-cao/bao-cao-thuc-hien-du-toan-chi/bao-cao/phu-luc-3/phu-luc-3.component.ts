@@ -159,7 +159,7 @@ export class PhuLucIIIComponent implements OnInit {
             }
             if (this.lstCtietBcao.length == 0) {
                 this.luyKes.forEach(item => {
-                    this.lstCtietBcao.push({
+                    this.lstCtietBcao?.push({
                         ...item,
                         luyKeGiaiNganDauNamTsoTle: Operator.percent(item.luyKeGiaiNganDauNamTso, item.khoachNamVonTso),
                         luyKeGiaiNganDauNamNsnnTle: Operator.percent(item.luyKeGiaiNganDauNamNsnn, item.khoachNamVonNsnn),
