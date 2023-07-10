@@ -12,7 +12,7 @@
                                 </ng-container>
                                 <ng-template #editMoney>
                                     <nz-select nzShowSearch nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
-                                        (ngModelChange)="editMoneyUnit=false">
+                                        (ngModelChange)="editMoneyUnit=false; Op.setMoneyUnit(maDviTien)">
                                         <nz-option *ngFor="let item of Utils.DVI_TIEN" [nzValue]="item.id"
                                             [nzLabel]="item.tenDm">
                                         </nz-option>
@@ -88,7 +88,7 @@
                                         {{Op.fmtNum(data.soLuong)}}
                                     </td>
                                     <td>
-                                        {{Op.fmtVal(data.giaTri, maDviTien)}}
+                                        {{Op.fmtVal(data.giaTri)}}
                                     </td>
                                     <td *ngIf="status.general" nzRight>
                                         <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>

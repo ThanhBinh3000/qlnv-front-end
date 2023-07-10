@@ -7,7 +7,7 @@
                         <div> Đơn vị: </div>
                         <div style="margin-left: 10px;">
                             <ng-container *ngIf="status.general || !editMoneyUnit; else editMoney">
-                                <span (click)="editMoneyUnit=true">
+                                <span (click)="editMoneyUnit=true; Op.setMoneyUnit(maDviTien)">
                                     {{ Utils.moneyUnitName(maDviTien) }}
                                 </span>
                             </ng-container>
@@ -59,16 +59,16 @@
                                     {{ data.tenNdung }}
                                 </td>
                                 <td>
-                                    {{ Op.fmtVal(data.thNamHienHanhN1, maDviTien) }}
+                                    {{ Op.fmtVal(data.thNamHienHanhN1) }}
                                 </td>
                                 <td>
-                                    {{ Op.fmtVal(data.ncauNamDtoanN, maDviTien) }}
+                                    {{ Op.fmtVal(data.ncauNamDtoanN) }}
                                 </td>
                                 <td>
-                                    {{ Op.fmtVal(data.ncauNamN1, maDviTien) }}
+                                    {{ Op.fmtVal(data.ncauNamN1) }}
                                 </td>
                                 <td>
-                                    {{ Op.fmtVal(data.ncauNamN2, maDviTien) }}
+                                    {{ Op.fmtVal(data.ncauNamN2) }}
                                 </td>
                                 <td>
                                     {{ data.ghiChu }}

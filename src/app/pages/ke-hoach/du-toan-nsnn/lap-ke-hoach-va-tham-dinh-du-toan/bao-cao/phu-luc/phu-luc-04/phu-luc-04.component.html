@@ -12,7 +12,7 @@
                                 </ng-container>
                                 <ng-template #editMoney>
                                     <nz-select nzShowSearch nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
-                                        (ngModelChange)="editMoneyUnit=false">
+                                        (ngModelChange)="editMoneyUnit=false; Op.setMoneyUnit(maDviTien)">
                                         <nz-option *ngFor="let item of Utils.DVI_TIEN" [nzValue]="item.id"
                                             [nzLabel]="item.tenDm">
                                         </nz-option>
@@ -158,52 +158,52 @@
                                     {{ Op.fmtNum(total.soLuongTd) }}
                                 </th>
                                 <th>
-                                    {{ Op.fmtVal(total.tongMucDuToan, maDviTien) }}
+                                    {{ Op.fmtVal(total.tongMucDuToan) }}
                                 </th>
                                 <th *ngIf="status.viewAppVal">
-                                    {{ Op.fmtVal(total.tongMucDuToanTd, maDviTien) }}
+                                    {{ Op.fmtVal(total.tongMucDuToanTd) }}
                                 </th>
                                 <th>
-                                    {{ Op.fmtVal(total.duToanDaBoTriNamN2, maDviTien) }}
+                                    {{ Op.fmtVal(total.duToanDaBoTriNamN2) }}
                                 </th>
                                 <th>
-                                    {{ Op.fmtVal(total.duToanNamN1Dmdt, maDviTien) }}
+                                    {{ Op.fmtVal(total.duToanNamN1Dmdt) }}
                                 </th>
                                 <th>
-                                    {{ Op.fmtVal(total.duToanNamN1UocTh, maDviTien) }}
+                                    {{ Op.fmtVal(total.duToanNamN1UocTh) }}
                                 </th>
                                 <th>
-                                    {{ Op.fmtVal(total.duToanKhNamNCbDauTu, maDviTien) }}
+                                    {{ Op.fmtVal(total.duToanKhNamNCbDauTu) }}
                                 </th>
                                 <th>
-                                    {{ Op.fmtVal(total.duToanKhNamNThDauTu, maDviTien) }}
+                                    {{ Op.fmtVal(total.duToanKhNamNThDauTu) }}
                                 </th>
                                 <th *ngIf="status.viewAppVal">
-                                    {{ Op.fmtVal(total.duToanKhNamNCbDauTuTd, maDviTien) }}
+                                    {{ Op.fmtVal(total.duToanKhNamNCbDauTuTd) }}
                                 </th>
                                 <th *ngIf="status.viewAppVal">
-                                    {{ Op.fmtVal(total.duToanKhNamNThDauTuTd, maDviTien) }}
+                                    {{ Op.fmtVal(total.duToanKhNamNThDauTuTd) }}
                                 </th>
                                 <th *ngIf="status.viewAppVal">
-                                    {{ Op.fmtVal(total.chenhLechCbDautu, maDviTien) }}
+                                    {{ Op.fmtVal(total.chenhLechCbDautu) }}
                                 </th>
                                 <th *ngIf="status.viewAppVal">
-                                    {{ Op.fmtVal(total.chenhLechThDauTu, maDviTien) }}
+                                    {{ Op.fmtVal(total.chenhLechThDauTu) }}
                                 </th>
                                 <th>
-                                    {{ Op.fmtVal(total.duToanNamTiepTheoN1CbDauTu, maDviTien) }}
+                                    {{ Op.fmtVal(total.duToanNamTiepTheoN1CbDauTu) }}
                                 </th>
                                 <th>
-                                    {{ Op.fmtVal(total.duToanNamTiepTheoN1ThDauTu, maDviTien) }}
+                                    {{ Op.fmtVal(total.duToanNamTiepTheoN1ThDauTu) }}
                                 </th>
                                 <th>
-                                    {{ Op.fmtVal(total.duToanNamTiepTheoN2CbDauTu, maDviTien) }}
+                                    {{ Op.fmtVal(total.duToanNamTiepTheoN2CbDauTu) }}
                                 </th>
                                 <th>
-                                    {{ Op.fmtVal(total.duToanNamTiepTheoN2ThDauTu, maDviTien) }}
+                                    {{ Op.fmtVal(total.duToanNamTiepTheoN2ThDauTu) }}
                                 </th>
                                 <th>
-                                    {{ Op.fmtVal(total.cacNamTiepTheo, maDviTien) }}
+                                    {{ Op.fmtVal(total.cacNamTiepTheo) }}
                                 </th>
                                 <th></th>
                                 <th *ngIf="status.viewAppVal"></th>
@@ -227,52 +227,52 @@
                                         {{ Op.fmtNum(data.soLuongTd) }}
                                     </td>
                                     <td>
-                                        {{ Op.fmtVal(data.tongMucDuToan, maDviTien) }}
+                                        {{ Op.fmtVal(data.tongMucDuToan) }}
                                     </td>
                                     <td *ngIf="status.viewAppVal">
-                                        {{ Op.fmtVal(data.tongMucDuToanTd, maDviTien) }}
+                                        {{ Op.fmtVal(data.tongMucDuToanTd) }}
                                     </td>
                                     <td>
-                                        {{ Op.fmtVal(data.duToanDaBoTriNamN2, maDviTien) }}
+                                        {{ Op.fmtVal(data.duToanDaBoTriNamN2) }}
                                     </td>
                                     <td>
-                                        {{ Op.fmtVal(data.duToanNamN1Dmdt, maDviTien) }}
+                                        {{ Op.fmtVal(data.duToanNamN1Dmdt) }}
                                     </td>
                                     <td>
-                                        {{ Op.fmtVal(data.duToanNamN1UocTh, maDviTien) }}
+                                        {{ Op.fmtVal(data.duToanNamN1UocTh) }}
                                     </td>
                                     <td>
-                                        {{ Op.fmtVal(data.duToanKhNamNCbDauTu, maDviTien) }}
+                                        {{ Op.fmtVal(data.duToanKhNamNCbDauTu) }}
                                     </td>
                                     <td>
-                                        {{ Op.fmtVal(data.duToanKhNamNThDauTu, maDviTien) }}
+                                        {{ Op.fmtVal(data.duToanKhNamNThDauTu) }}
                                     </td>
                                     <td *ngIf="status.viewAppVal">
-                                        {{ Op.fmtVal(data.duToanKhNamNCbDauTuTd, maDviTien) }}
+                                        {{ Op.fmtVal(data.duToanKhNamNCbDauTuTd) }}
                                     </td>
                                     <td *ngIf="status.viewAppVal">
-                                        {{ Op.fmtVal(data.duToanKhNamNThDauTuTd, maDviTien) }}
+                                        {{ Op.fmtVal(data.duToanKhNamNThDauTuTd) }}
                                     </td>
                                     <td *ngIf="status.viewAppVal">
-                                        {{ Op.fmtVal(data.chenhLechCbDautu, maDviTien) }}
+                                        {{ Op.fmtVal(data.chenhLechCbDautu) }}
                                     </td>
                                     <td *ngIf="status.viewAppVal">
-                                        {{ Op.fmtVal(data.chenhLechThDauTu, maDviTien) }}
+                                        {{ Op.fmtVal(data.chenhLechThDauTu) }}
                                     </td>
                                     <td>
-                                        {{ Op.fmtVal(data.duToanNamTiepTheoN1CbDauTu, maDviTien) }}
+                                        {{ Op.fmtVal(data.duToanNamTiepTheoN1CbDauTu) }}
                                     </td>
                                     <td>
-                                        {{ Op.fmtVal(data.duToanNamTiepTheoN1ThDauTu, maDviTien) }}
+                                        {{ Op.fmtVal(data.duToanNamTiepTheoN1ThDauTu) }}
                                     </td>
                                     <td>
-                                        {{ Op.fmtVal(data.duToanNamTiepTheoN2CbDauTu, maDviTien) }}
+                                        {{ Op.fmtVal(data.duToanNamTiepTheoN2CbDauTu) }}
                                     </td>
                                     <td>
-                                        {{ Op.fmtVal(data.duToanNamTiepTheoN2ThDauTu, maDviTien) }}
+                                        {{ Op.fmtVal(data.duToanNamTiepTheoN2ThDauTu) }}
                                     </td>
                                     <td>
-                                        {{ Op.fmtVal(data.cacNamTiepTheo, maDviTien) }}
+                                        {{ Op.fmtVal(data.cacNamTiepTheo) }}
                                     </td>
                                     <td>
                                         {{ data.ghiChu }}
@@ -308,7 +308,7 @@
                                                 [(ngModel)]="editCache[data.id].data.soLuong" />
                                         </td>
                                         <td>
-                                            {{ Op.fmtVal(editCache[data.id].data.tongMucDuToan, maDviTien) }}
+                                            {{ Op.fmtVal(editCache[data.id].data.tongMucDuToan) }}
                                         </td>
                                         <td>
                                             <input class="money-input" currencyMask [options]="Op.amount"
@@ -376,25 +376,25 @@
                                                 [(ngModel)]="editCache[data.id].data.soLuongTd" />
                                         </td>
                                         <td>
-                                            {{ Op.fmtVal(data.tongMucDuToan, maDviTien) }}
+                                            {{ Op.fmtVal(data.tongMucDuToan) }}
                                         </td>
                                         <td>
-                                            {{ Op.fmtVal(editCache[data.id].data.tongMucDuToanTd, maDviTien) }}
+                                            {{ Op.fmtVal(editCache[data.id].data.tongMucDuToanTd) }}
                                         </td>
                                         <td>
-                                            {{ Op.fmtVal(data.duToanDaBoTriNamN2, maDviTien) }}
+                                            {{ Op.fmtVal(data.duToanDaBoTriNamN2) }}
                                         </td>
                                         <td>
-                                            {{ Op.fmtVal(data.duToanNamN1Dmdt, maDviTien) }}
+                                            {{ Op.fmtVal(data.duToanNamN1Dmdt) }}
                                         </td>
                                         <td>
-                                            {{ Op.fmtVal(data.duToanNamN1UocTh, maDviTien) }}
+                                            {{ Op.fmtVal(data.duToanNamN1UocTh) }}
                                         </td>
                                         <td>
-                                            {{ Op.fmtVal(data.duToanKhNamNCbDauTu, maDviTien) }}
+                                            {{ Op.fmtVal(data.duToanKhNamNCbDauTu) }}
                                         </td>
                                         <td>
-                                            {{ Op.fmtVal(data.duToanKhNamNThDauTu, maDviTien) }}
+                                            {{ Op.fmtVal(data.duToanKhNamNThDauTu) }}
                                         </td>
                                         <td>
                                             <input class="money-input" currencyMask [options]="Op.amount"
@@ -407,25 +407,25 @@
                                                 (ngModelChange)="changeModel(data.id)" />
                                         </td>
                                         <td>
-                                            {{ Op.fmtVal(data.chenhLechCbDautu, maDviTien) }}
+                                            {{ Op.fmtVal(data.chenhLechCbDautu) }}
                                         </td>
                                         <td>
-                                            {{ Op.fmtVal(data.chenhLechThDauTu, maDviTien) }}
+                                            {{ Op.fmtVal(data.chenhLechThDauTu) }}
                                         </td>
                                         <td>
-                                            {{ Op.fmtVal(data.duToanNamTiepTheoN1CbDauTu, maDviTien) }}
+                                            {{ Op.fmtVal(data.duToanNamTiepTheoN1CbDauTu) }}
                                         </td>
                                         <td>
-                                            {{ Op.fmtVal(data.duToanNamTiepTheoN1ThDauTu, maDviTien) }}
+                                            {{ Op.fmtVal(data.duToanNamTiepTheoN1ThDauTu) }}
                                         </td>
                                         <td>
-                                            {{ Op.fmtVal(data.duToanNamTiepTheoN2CbDauTu, maDviTien) }}
+                                            {{ Op.fmtVal(data.duToanNamTiepTheoN2CbDauTu) }}
                                         </td>
                                         <td>
-                                            {{ Op.fmtVal(data.duToanNamTiepTheoN2ThDauTu, maDviTien) }}
+                                            {{ Op.fmtVal(data.duToanNamTiepTheoN2ThDauTu) }}
                                         </td>
                                         <td>
-                                            {{ Op.fmtVal(data.cacNamTiepTheo, maDviTien) }}
+                                            {{ Op.fmtVal(data.cacNamTiepTheo) }}
                                         </td>
                                         <td>
                                             {{ data.ghiChu }}

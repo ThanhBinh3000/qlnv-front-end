@@ -12,7 +12,7 @@
                                 </ng-container>
                                 <ng-template #editMoney>
                                     <nz-select nzShowSearch nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
-                                        (ngModelChange)="editMoneyUnit=false">
+                                        (ngModelChange)="editMoneyUnit=false; Op.setMoneyUnit(maDviTien)">
                                         <nz-option *ngFor="let item of Utils.DVI_TIEN" [nzValue]="item.id"
                                             [nzLabel]="item.tenDm">
                                         </nz-option>
@@ -106,24 +106,24 @@
                                 <th></th>
                                 <th></th>
                                 <th></th>
-                                <th>{{Op.fmtVal(total.gtTrenGt, maDviTien)}}</th>
+                                <th>{{Op.fmtVal(total.gtTrenGt)}}</th>
                                 <th></th>
-                                <th>{{Op.fmtVal(total.gtTrenGtBh, maDviTien)}}</th>
-                                <th>{{Op.fmtVal(total.gtDuoiGt, maDviTien)}}</th>
+                                <th>{{Op.fmtVal(total.gtTrenGtBh)}}</th>
+                                <th>{{Op.fmtVal(total.gtDuoiGt)}}</th>
                                 <th></th>
-                                <th>{{Op.fmtVal(total.gtDuoiGtBh, maDviTien)}}</th>
-                                <th>{{Op.fmtVal(total.tong, maDviTien)}}</th>
+                                <th>{{Op.fmtVal(total.gtDuoiGtBh)}}</th>
+                                <th>{{Op.fmtVal(total.tong)}}</th>
                                 <ng-container *ngFor="let item of total.lstDviCapDuoi">
                                     <th></th>
                                     <th></th>
                                     <th></th>
-                                    <th>{{Op.fmtVal(item.gtTrenGt, maDviTien)}}</th>
+                                    <th>{{Op.fmtVal(item.gtTrenGt)}}</th>
                                     <th></th>
-                                    <th>{{Op.fmtVal(item.gtTrenGtBh, maDviTien)}}</th>
-                                    <th>{{Op.fmtVal(item.gtDuoiGt, maDviTien)}}</th>
+                                    <th>{{Op.fmtVal(item.gtTrenGtBh)}}</th>
+                                    <th>{{Op.fmtVal(item.gtDuoiGt)}}</th>
                                     <th></th>
-                                    <th>{{Op.fmtVal(item.gtDuoiGtBh, maDviTien)}}</th>
-                                    <th>{{Op.fmtVal(item.tong, maDviTien)}}</th>
+                                    <th>{{Op.fmtVal(item.gtDuoiGtBh)}}</th>
+                                    <th>{{Op.fmtVal(item.tong)}}</th>
                                 </ng-container>
                             </tr>
                         </thead>
@@ -148,25 +148,25 @@
                                     {{Op.fmtNum(data.slTong)}}
                                 </td>
                                 <td>
-                                    {{Op.fmtVal(data.gtTrenGt, maDviTien)}}
+                                    {{Op.fmtVal(data.gtTrenGt)}}
                                 </td>
                                 <td>
                                     {{Op.fmtNum(data.gtTrenTyLeBh)}}
                                 </td>
                                 <td>
-                                    {{Op.fmtVal(data.gtTrenGtBh, maDviTien)}}
+                                    {{Op.fmtVal(data.gtTrenGtBh)}}
                                 </td>
                                 <td>
-                                    {{Op.fmtVal(data.gtDuoiGt, maDviTien)}}
+                                    {{Op.fmtVal(data.gtDuoiGt)}}
                                 </td>
                                 <td>
                                     {{Op.fmtNum(data.gtDuoiTyLeBh)}}
                                 </td>
                                 <td>
-                                    {{Op.fmtVal(data.gtDuoiGtBh, maDviTien)}}
+                                    {{Op.fmtVal(data.gtDuoiGtBh)}}
                                 </td>
                                 <td>
-                                    {{Op.fmtVal(data.tong, maDviTien)}}
+                                    {{Op.fmtVal(data.tong)}}
                                 </td>
                                 <ng-container *ngFor="let item of data.lstDviCapDuoi">
                                     <td>
@@ -179,25 +179,25 @@
                                         {{Op.fmtNum(item.slTong)}}
                                     </td>
                                     <td>
-                                        {{Op.fmtVal(item.gtTrenGt, maDviTien)}}
+                                        {{Op.fmtVal(item.gtTrenGt)}}
                                     </td>
                                     <td>
                                         {{Op.fmtNum(item.gtTrenTyLeBh)}}
                                     </td>
                                     <td>
-                                        {{Op.fmtVal(item.gtTrenGtBh, maDviTien)}}
+                                        {{Op.fmtVal(item.gtTrenGtBh)}}
                                     </td>
                                     <td>
-                                        {{Op.fmtVal(item.gtDuoiGt, maDviTien)}}
+                                        {{Op.fmtVal(item.gtDuoiGt)}}
                                     </td>
                                     <td>
                                         {{Op.fmtNum(item.gtDuoiTyLeBh)}}
                                     </td>
                                     <td>
-                                        {{Op.fmtVal(item.gtDuoiGtBh, maDviTien)}}
+                                        {{Op.fmtVal(item.gtDuoiGtBh)}}
                                     </td>
                                     <td>
-                                        {{Op.fmtVal(item.tong, maDviTien)}}
+                                        {{Op.fmtVal(item.tong)}}
                                     </td>
                                 </ng-container>
                             </tr>

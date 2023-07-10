@@ -137,7 +137,7 @@ export class Report {
     namBcao: number;
     thangBcao: number;
     trangThai: string;
-    ngayTao: string;
+    ngayTao: any;
     nguoiTao: string;
     maDvi: string;
     maDviCha: string;

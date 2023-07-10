@@ -3,7 +3,7 @@ import { NzNotificationService } from "ng-zorro-antd/notification";
 import { CurrencyMaskInputMode } from "ngx-currency";
 import { MESSAGE } from "../constants/message";
 import { QuanLyVonPhiService } from "../services/quanLyVonPhi.service";
-import { DatePipe } from '@angular/common';
+import { DatePipe, DecimalPipe } from '@angular/common';
 import * as uuid from "uuid";
 import { Injectable } from '@angular/core';
 import * as XLSX from 'xlsx'
@@ -297,12 +297,9 @@ export class Table {
 
 	//them phan tu o vi tri dau tien cua mang
 	static addHead(initItem: any, lstCtietBcao: any[]) {
-		const item: any = {
-			...initItem,
-			stt: '0.1',
-			id: !initItem.id ? uuid.v4() + 'FE' : initItem.id,
-		}
-		lstCtietBcao.push(item);
+		lstCtietBcao.push(initItem);
+		lstCtietBcao[0].stt = '0.1';
+		lstCtietBcao[0].id = !initItem.id ? uuid.v4() + 'FE' : initItem.id;
 		return lstCtietBcao;
 	}
 
@@ -321,13 +318,9 @@ export class Table {
 		}
 
 		lstCtietBcao = this.replaceIndex(lstIndex, 1, lstCtietBcao);
-		// them moi phan tu
-		const item: any = {
-			...initItem,
-			stt: head + "." + (tail + 1).toString(),
-			id: !initItem.id ? uuid.v4() + 'FE' : initItem.id,
-		}
-		lstCtietBcao.splice(ind + 1, 0, item);
+		lstCtietBcao.splice(ind + 1, 0, initItem);
+		lstCtietBcao[ind + 1].stt = head + "." + (tail + 1).toString();
+		lstCtietBcao[ind + 1].id = !initItem.id ? uuid.v4() + 'FE' : initItem.id;
 
 		return lstCtietBcao;
 	}
@@ -348,13 +341,9 @@ export class Table {
 			}
 		}
 
-		const item: any = {
-			...initItem,
-			stt: stt,
-			id: !initItem.id ? uuid.v4() + 'FE' : initItem.id,
-		}
-		lstCtietBcao.splice(index + 1, 0, item);
-
+		lstCtietBcao.splice(index + 1, 0, initItem);
+		lstCtietBcao[index + 1].stt = stt;
+		lstCtietBcao[index + 1].id = !initItem.id ? uuid.v4() + 'FE' : initItem.id;
 		return lstCtietBcao;
 	}
 
@@ -432,6 +421,7 @@ export class Operator {
 	maDviTien: string;
 	precision: number;
 	amount: any;
+
 	constructor(maDviTien: string, precision: number = 4) {
 		this.maDviTien = maDviTien;
 		this.precision = precision;
