@@ -169,7 +169,7 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
     }
     // loại hình nhập xuất
     this.listLoaiHinhNx = [];
-    let resNx = await this.danhMucService.danhMucChungGetAll("LOAI_HINH_NHAP_XUAT");
+    let resNx = await this.danhMucService.danhMucChungGetAll("LOAI_HINH_NxuấtHAP_XUAT");
     if (resNx.msg == MESSAGE.SUCCESS) {
       this.listLoaiHinhNx = resNx.data.filter(item => item.apDung == "NHAP_DT");
       this.formData.get("loaiHinhNx").setValue(this.listLoaiHinhNx[0].ma);

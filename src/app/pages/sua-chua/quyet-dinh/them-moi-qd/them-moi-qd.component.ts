@@ -55,22 +55,22 @@ export class ThemMoiQdComponent extends Base3Component implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     await Promise.all([
-      this.getId(),
-      this.initForm()
+      await this.getId(),
+      await this.initForm()
     ])
     this.spinner.hide();
   }
 
-  initForm(){
+  async initForm(){
     if(this.id){
-      this.detail(this.id).then((res)=>{
+      await this.detail(this.id).then((res)=>{
         if(res){
           console.log(res)
           let soQd = res.soQd.split('/')[0];
           this.formData.patchValue({
             soQd : soQd
           })
-          this.dataTable = chain(res.children).groupBy('scDanhSachHdr.tenChiCuc').map((value, key) => ({
+          this.dataTable = chain(res.scTrinhThamDinhHdr.children).groupBy('scDanhSachHdr.tenChiCuc').map((value, key) => ({
               tenDonVi: key,
               children: value,
             })
@@ -161,7 +161,7 @@ export class ThemMoiQdComponent extends Base3Component implements OnInit {
   }
 
   pheDuyet(){
-
+    this.approve(this.id,STATUS.BAN_HANH,"Bạn có muốn ban hành quyết định");
   }
 
   disabled(){
