@@ -16,7 +16,7 @@ import {HopdongTdscService} from "../../../../../services/qlnv-kho/tiendoxaydung
 export class HopDongSclComponent implements OnInit {
   selectedId: number = 0;
   isViewDetail: boolean;
-  isDetail: boolean = false;
+  isDetail: boolean = true;
   flagInfo: string = 'addnew';
   STATUS = STATUS;
   @Input()
