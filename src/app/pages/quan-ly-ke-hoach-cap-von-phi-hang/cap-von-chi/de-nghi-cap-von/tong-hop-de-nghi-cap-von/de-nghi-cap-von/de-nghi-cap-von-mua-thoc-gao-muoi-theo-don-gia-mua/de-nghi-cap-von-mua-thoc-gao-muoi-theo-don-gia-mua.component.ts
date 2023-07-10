@@ -14,8 +14,10 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { displayNumber, mulNumber, sumNumber } from 'src/app/Utility/func';
-import { AMOUNT, BOX_NUMBER_WIDTH, CAN_CU_GIA, CVNC, DON_VI_TIEN, LOAI_DE_NGHI, QUATITY, Utils } from 'src/app/Utility/utils';
-import { BaoCao, ItemRequest, Times, TRANG_THAI } from '../../de-nghi-cap-von.constant';
+import { AMOUNT, BOX_NUMBER_WIDTH, CAN_CU_GIA, CVNC, DON_VI_TIEN, LOAI_DE_NGHI, QUATITY, Table, Utils } from 'src/app/Utility/utils';
+import { BaoCao, ItemRequest, Times, TRANG_THAI } from '../../../de-nghi-cap-von.constant';
+import * as XLSX from 'xlsx';
+import { BtnStatus } from '../../../de-nghi-cap-von.class';
 
 @Component({
 	selector: 'app-de-nghi-cap-von-mua-thoc-gao-muoi-theo-don-gia-mua',
@@ -57,6 +59,7 @@ export class DeNghiCapVonMuaThocGaoMuoiTheoDonGiaMuaComponent implements OnInit 
 	listFile: File[] = [];
 	fileList: NzUploadFile[] = [];
 	fileDetail: NzUploadFile;
+	statusExportExcel: BtnStatus = new BtnStatus();
 	// before uploaf file
 	beforeUpload = (file: NzUploadFile): boolean => {
 		this.fileList = this.fileList.concat(file);
@@ -160,7 +163,6 @@ export class DeNghiCapVonMuaThocGaoMuoiTheoDonGiaMuaComponent implements OnInit 
 
 	async initialization() {
 		//lay id cua de nghi
-		console.log(this.baoCao)
 		this.userInfo = this.userService.getUserLogin();
 		if (this.data?.id) {
 			this.baoCao.id = this.data?.id;
@@ -361,7 +363,6 @@ export class DeNghiCapVonMuaThocGaoMuoiTheoDonGiaMuaComponent implements OnInit 
 		}
 		const baoCaoTemp = JSON.parse(JSON.stringify(this.baoCao));
 		baoCaoTemp.maLoai = '1';
-		console.log(baoCaoTemp);
 
 		if (!baoCaoTemp.fileDinhKems) {
 			baoCaoTemp.fileDinhKems = [];
@@ -488,6 +489,41 @@ export class DeNghiCapVonMuaThocGaoMuoiTheoDonGiaMuaComponent implements OnInit 
 			this.total.tongTien = sumNumber([this.total.tongTien, item.tongTien]);
 			this.total.soConDuocCap = sumNumber([this.total.soConDuocCap, item.soConDuocCap]);
 		})
+	}
+
+	exportToExcel() {
+		const header = [
+			{ t: 0, b: 1, l: 0, r: 11, val: null },
+			{ t: 0, b: 1, l: 0, r: 0, val: 'STT' },
+			{ t: 0, b: 1, l: 1, r: 1, val: 'Đơn vị' },
+			{ t: 0, b: 0, l: 2, r: 3, val: 'Số lượng' },
+			{ t: 1, b: 1, l: 2, r: 2, val: 'Kế hoạch' },
+			{ t: 1, b: 1, l: 3, r: 3, val: 'Thực hiện' },
+			{ t: 0, b: 1, l: 4, r: 4, val: 'Đơn giá (theo quyết định)' },
+			{ t: 0, b: 1, l: 5, r: 5, val: 'Giá trị thực hiện' },
+			{ t: 0, b: 1, l: 6, r: 6, val: 'Dự toán đã giao' },
+			{ t: 0, b: 0, l: 7, r: 9, val: 'Lũy kế cấp vốn đến thời điển báo cáo' },
+			{ t: 1, b: 1, l: 7, r: 7, val: 'Tổng cấp ứng' },
+			{ t: 1, b: 1, l: 8, r: 8, val: 'Tổng cấp vốn' },
+			{ t: 1, b: 1, l: 9, r: 9, val: 'Tổng cộng' },
+			{ t: 0, b: 1, l: 10, r: 10, val: 'Tổng vốn và dự toán đã cấp' },
+			{ t: 0, b: 1, l: 11, r: 11, val: 'Vốn đề nghị cấp lần này = Giá trị theo kế hoạch - Lũy kế vốn cấp' },
+		]
+		const fieldOrder = ['stt', 'tenDvi', 'slKeHoach', 'slThucHien', 'donGia', 'gtriThucHien', 'duToanDaGiao', 'luyKeTongCapUng', 'luyKeTongCapVon', 'luyKeTongCong',
+			'tongVonVaDtDaCap', 'vonDnghiCapLanNay']
+		const filterData = this.baoCao.dnghiCapvonCtiets.map(item => {
+			const row: any = {};
+			fieldOrder.forEach(field => {
+				row[field] = item[field]
+			})
+			return row;
+		})
+
+		const workbook = XLSX.utils.book_new();
+		const worksheet = Table.initExcel(header);
+		XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
+		XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
+		XLSX.writeFile(workbook, 'DE_NGHI_CAP_VON.xlsx');
 	}
 
 

@@ -61,7 +61,6 @@ export class DialogTaoMoiDeNghiCapVonComponent implements OnInit {
 		this.response = new BaoCao();
 		this.userInfo = this.userService.getUserLogin();
 		this.maDonVi = this.userInfo.MA_DVI;
-		// this.callListCapVon();
 		if (this.userService.isChiCuc()) {
 			this.canCuGias = this.canCuGias.filter(e => e.id == Utils.QD_DON_GIA);
 		}
@@ -70,37 +69,6 @@ export class DialogTaoMoiDeNghiCapVonComponent implements OnInit {
 		}
 		this.response.dnghiCapvonCtiets = [];
 	}
-
-	// async callListCapVon() {
-	// 	this.searchFilter.maDvi = this.maDonVi;
-	// 	this.searchFilter.maLoai = '0';
-	// 	const request = JSON.parse(JSON.stringify(this.searchFilter));
-	// 	await this.capVonNguonChiService.timKiemDeNghi(request).toPromise().then(
-	// 		(data) => {
-	// 			if (data.statusCode == 0) {
-	// 				this.dataTable = [];
-	// 				data.data.content.forEach(item => {
-	// 					this.dataTable.push({
-	// 						...item,
-	// 						ngayTao: this.datePipe.transform(item.ngayTao, Utils.FORMAT_DATE_STR),
-	// 						ngayTrinh: this.datePipe.transform(item.ngayTrinh, Utils.FORMAT_DATE_STR),
-	// 						ngayPheDuyet: this.datePipe.transform(item.ngayPheDuyet, Utils.FORMAT_DATE_STR),
-	// 						checked: false,
-	// 						//   isEdit: this.checkEditStatus(item.trangThai),
-	// 						//   isDelete: this.checkDeleteStatus(item),
-	// 					})
-	// 				})
-	// 				//   this.dataTableAll = cloneDeep(this.dataTable);
-	// 				//   this.totalElements = data.data.totalElements;
-	// 				//   this.totalPages = data.data.totalPages;
-	// 			} else {
-	// 				this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-	// 			}
-	// 		},
-	// 		(err) => {
-	// 			this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-	// 		})
-	// }
 
 	changeDnghi() {
 		this.loaiDns = LOAI_DE_NGHI;
@@ -190,14 +158,37 @@ export class DialogTaoMoiDeNghiCapVonComponent implements OnInit {
 			} else {
 				//neu la chi cuc thi tao moi de nghi
 				if (this.userService.isChiCuc()) {
-					this.response.dnghiCapvonCtiets = [];
-					this.response.dnghiCapvonCtiets.push({
-						... new ItemRequest(),
-						id: uuid.v4() + 'FE',
-						maDvi: this.userInfo?.MA_DVI,
-						tenDvi: this.userInfo?.TEN_DVI,
-						dnghiCapvonLuyKes: [],
-					})
+					this.searchFilter.maDvi = this.maDonVi;
+					this.searchFilter.maLoai = '0';
+					const request = JSON.parse(JSON.stringify(this.searchFilter));
+
+					await this.capVonNguonChiService.timKiemDeNghi(request).toPromise().then(
+						(data) => {
+							if (data.statusCode == 0) {
+								if (data.data.content?.length > 0) {
+									if (data.data.content[0].trangThai == Utils.TT_BC_7) {
+										const object = data.data.content[0].dnghiCapvonCtiets[0];
+										const { id, ...rest } = object;
+										this.response.dnghiCapvonCtiets = [];
+										this.response.dnghiCapvonCtiets.push({
+											...rest,
+											id: uuid.v4() + 'FE',
+											maDvi: this.userInfo?.MA_DVI,
+											tenDvi: this.userInfo?.TEN_DVI,
+											dnghiCapvonLuyKes: [],
+										})
+									}
+								}
+							} else {
+								this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+								this.response.loaiDnghi = null;
+							}
+						},
+						(err) => {
+							this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+							this.response.loaiDnghi = null;
+						}
+					);
 				} else {
 					await this.callSynthetic();
 					// if (this.userService.isCuc()) {
@@ -406,6 +397,9 @@ export class DialogTaoMoiDeNghiCapVonComponent implements OnInit {
 
 	async checkRequest() {
 		this.isRequestExist = 0;
+		this.searchFilter.maDvi = this.maDonVi;
+		this.searchFilter.maLoai = '0';
+		const request = JSON.parse(JSON.stringify(this.searchFilter));
 		// const request = {
 		// 	maDvi: this.userInfo?.MA_DVI,
 		// 	namBcao: this.response.namBcao,
@@ -418,61 +412,56 @@ export class DialogTaoMoiDeNghiCapVonComponent implements OnInit {
 		// 	},
 		// }
 
-		// await this.capVonNguonChiService.timKiemDeNghi(request).toPromise().then(
-		// 	(data) => {
-		// 		if (data.statusCode == 0) {
-		// 			if (data.data.content?.length > 0) {
-		// 				if (data.data.content[0].trangThai == Utils.TT_BC_7) {
-		// 					this.isRequestExist = 1;
-		// 					this.idRequest = data.data.content[0].id;
-		// 				} else {
-		// 					this.isRequestExist = 2;
-		// 				}
-		// 			}
-		// 		} else {
-		// 			this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-		// 			this.response.loaiDnghi = null;
-		// 		}
-		// 	},
-		// 	(err) => {
-		// 		this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-		// 		this.response.loaiDnghi = null;
-		// 	}
-		// );
-
-		this.searchFilter.maDvi = this.maDonVi;
-		this.searchFilter.maLoai = '0';
-		const request = JSON.parse(JSON.stringify(this.searchFilter));
 		await this.capVonNguonChiService.timKiemDeNghi(request).toPromise().then(
 			(data) => {
 				if (data.statusCode == 0) {
-					this.dataTable = [];
-					data.data.content.forEach(item => {
-						this.dataTable.push({
-							...item,
-							ngayTao: this.datePipe.transform(item.ngayTao, Utils.FORMAT_DATE_STR),
-							ngayTrinh: this.datePipe.transform(item.ngayTrinh, Utils.FORMAT_DATE_STR),
-							ngayPheDuyet: this.datePipe.transform(item.ngayPheDuyet, Utils.FORMAT_DATE_STR),
-							checked: false,
-							//   isEdit: this.checkEditStatus(item.trangThai),
-							//   isDelete: this.checkDeleteStatus(item),
-						})
-					})
-					if (this.dataTable.length > 0) {
-						if (this.dataTable[0].trangThai == Utils.TT_BC_7 && this.dataTable[0].soLan) {
-							this.isRequestExist = 1;
-							this.idRequest = this.dataTable[0].id;
+					if (data.data.content?.length > 0) {
+						if (data.data.content[0].trangThai == Utils.TT_BC_7) {
+							this.isRequestExist = 0;
+							this.idRequest = data.data.content[0].id;
 						} else {
 							this.isRequestExist = 2;
 						}
 					}
 				} else {
 					this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+					this.response.loaiDnghi = null;
 				}
 			},
 			(err) => {
 				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-			})
+				this.response.loaiDnghi = null;
+			}
+		);
+
+		// await this.capVonNguonChiService.timKiemDeNghi(request).toPromise().then(
+		// 	(data) => {
+		// 		if (data.statusCode == 0) {
+		// 			this.dataTable = [];
+		// 			data.data.content.forEach(item => {
+		// 				this.dataTable.push({
+		// 					...item,
+		// 					ngayTao: this.datePipe.transform(item.ngayTao, Utils.FORMAT_DATE_STR),
+		// 					ngayTrinh: this.datePipe.transform(item.ngayTrinh, Utils.FORMAT_DATE_STR),
+		// 					ngayPheDuyet: this.datePipe.transform(item.ngayPheDuyet, Utils.FORMAT_DATE_STR),
+		// 					checked: false,
+		// 				})
+		// 			})
+		// 			if (this.dataTable.length > 0) {
+		// 				if (this.dataTable[0].trangThai == Utils.TT_BC_7 && this.dataTable[0].soLan) {
+		// 					this.isRequestExist = 0;
+		// 					this.idRequest = this.dataTable[0].id;
+		// 				} else {
+		// 					this.isRequestExist = 2;
+		// 				}
+		// 			}
+		// 		} else {
+		// 			this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+		// 		}
+		// 	},
+		// 	(err) => {
+		// 		this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+		// 	})
 		this.spinner.hide();
 	}
 

@@ -72,6 +72,17 @@ export const TRANG_THAI = [
     },
 ];
 
+export const TRANG_THAI_DE_NGHI_CAP_DUOI = [
+    {
+        id: Utils.TT_BC_7,
+        tenDm: "Mới",
+    },
+    {
+        id: Utils.TT_BC_9,
+        tenDm: "Tiếp nhận",
+    },
+]
+
 export class ItemCongVan {
     fileName: string;
     fileSize: number;

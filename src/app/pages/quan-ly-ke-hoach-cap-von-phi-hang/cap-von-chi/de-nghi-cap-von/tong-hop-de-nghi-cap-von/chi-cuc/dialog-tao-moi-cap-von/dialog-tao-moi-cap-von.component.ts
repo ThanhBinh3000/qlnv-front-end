@@ -392,6 +392,7 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
       maDvi: this.userInfo?.MA_DVI,
       namHdong: this.response.namBcao,
       loaiDnghi: this.response.loaiDnghi,
+      maLoai: '1',
       paggingReq: {
         limit: 10,
         page: 1,

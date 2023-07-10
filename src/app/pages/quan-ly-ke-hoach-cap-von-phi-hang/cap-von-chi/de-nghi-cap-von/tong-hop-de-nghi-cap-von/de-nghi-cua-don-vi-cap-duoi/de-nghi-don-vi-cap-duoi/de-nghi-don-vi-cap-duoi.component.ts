@@ -1,4 +1,3 @@
-
 import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import * as fileSaver from 'file-saver';
@@ -15,18 +14,18 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { displayNumber, mulNumber, sumNumber } from 'src/app/Utility/func';
-import { AMOUNT, BOX_NUMBER_WIDTH, CAN_CU_GIA, CVNC, DON_VI_TIEN, LOAI_DE_NGHI, QUATITY, Table, Utils } from 'src/app/Utility/utils';
-import { BaoCao, ItemRequest, Times, TRANG_THAI } from '../../../de-nghi-cap-von.constant';
+import { AMOUNT, BOX_NUMBER_WIDTH, CAN_CU_GIA, CVNC, DON_VI_TIEN, LOAI_DE_NGHI, QUATITY, Roles, Table, Utils } from 'src/app/Utility/utils';
+import { BaoCao, ItemRequest, Times, TRANG_THAI, TRANG_THAI_DE_NGHI_CAP_DUOI } from '../../../de-nghi-cap-von.constant';
 import * as XLSX from 'xlsx';
 import { BtnStatus } from '../../../de-nghi-cap-von.class';
 
 @Component({
-  selector: 'app-cap-von',
-  templateUrl: './cap-von.component.html',
-  styleUrls: ['./cap-von.component.scss']
+  selector: 'app-de-nghi-don-vi-cap-duoi',
+  templateUrl: './de-nghi-don-vi-cap-duoi.component.html',
+  styleUrls: ['./de-nghi-don-vi-cap-duoi.component.scss']
 })
 
-export class CapVonComponent implements OnInit {
+export class DeNghiDonViCapDuoiComponent implements OnInit {
   @Input() data;
   @Output() dataChange = new EventEmitter();
   //thong tin dang nhap
@@ -37,12 +36,12 @@ export class CapVonComponent implements OnInit {
   //danh muc
   donVis: any[] = [];
   trangThais: any[] = TRANG_THAI;
+  trangThaiDenghiCapDuois: any[] = TRANG_THAI_DE_NGHI_CAP_DUOI;
   loaiDns: any[] = LOAI_DE_NGHI;
   canCuGias: any[] = CAN_CU_GIA;
   dviTinhs: any[] = [];
   vatTus: any[] = [];
   dviTiens: any[] = DON_VI_TIEN;
-  capVons: ItemRequest[] = [];
   amount = AMOUNT;
   quatity = QUATITY;
   scrollX: string;
@@ -55,13 +54,14 @@ export class CapVonComponent implements OnInit {
   approveStatus = true;
   copyStatus = true;
   isDataAvailable = false;
+  tiepNhan = true;
   editCache: { [key: string]: { edit: boolean; data: ItemRequest } } = {};
   //file
   listFile: File[] = [];
   fileList: NzUploadFile[] = [];
   fileDetail: NzUploadFile;
-  tabSelected: any;
   statusExportExcel: BtnStatus = new BtnStatus();
+
   // before uploaf file
   beforeUpload = (file: NzUploadFile): boolean => {
     this.fileList = this.fileList.concat(file);
@@ -112,7 +112,6 @@ export class CapVonComponent implements OnInit {
       case 'init':
         await this.initialization().then(() => {
           this.isDataAvailable = true;
-          // this.spinner.hide();
         });
         break;
       case 'detail':
@@ -150,6 +149,11 @@ export class CapVonComponent implements OnInit {
           this.isDataAvailable = true;
         })
         break;
+      case 'tiepnhan':
+        await this.onSubmit('9', null).then(() => {
+          this.isDataAvailable = true;
+        })
+        break;
       default:
         break;
     }
@@ -158,6 +162,10 @@ export class CapVonComponent implements OnInit {
 
   getStatusName() {
     return this.trangThais.find(e => e.id == this.baoCao.trangThai)?.tenDm;
+  }
+
+  getStatusNameCuc() {
+    return this.trangThaiDenghiCapDuois.find(e => e.id == this.baoCao.trangThai)?.tenDm;
   }
 
   getDate(date: any) {
@@ -170,15 +178,12 @@ export class CapVonComponent implements OnInit {
     if (this.data?.id) {
       this.baoCao.id = this.data?.id;
       await this.getDetailReport();
-
     } else {
       this.baoCao = this.data?.baoCao;
-      // this.baoCao.dnghiCapvonCtiets = [];
-      // this.baoCao.trangThai = '1';
     }
+    this.updateEditCache();
     this.getStatusButton();
     this.getTotal();
-    this.updateEditCache();
   }
 
   //check role cho các nut trinh duyet
@@ -190,6 +195,8 @@ export class CapVonComponent implements OnInit {
     this.submitStatus = Utils.statusApprove.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(CVNC.APPROVE_DN_MLT) && checkChirld && !(!this.baoCao.id);
     this.approveStatus = this.baoCao.trangThai == Utils.TT_BC_2 && this.userService.isAccessPermisson(CVNC.PHE_DUYET_DN_MLT) && checkChirld;
     this.copyStatus = Utils.statusCopy.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(CVNC.COPY_DN_MLT) && checkChirld;
+    this.tiepNhan = Utils.statusTiepNhan.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.CVNC.ACCEPT_OR_REJECT);
+    console.log(this.tiepNhan)
     if (this.status) {
       this.scrollX = (550 + 12 * BOX_NUMBER_WIDTH).toString() + 'px';
     } else {
@@ -199,7 +206,7 @@ export class CapVonComponent implements OnInit {
 
   back() {
     const obj = {
-      tabSelected: 'ds-capvon',
+      tabSelected: 'ds-denghi-donvi-capduoi',
     }
     this.dataChange.emit(obj);
   }
@@ -279,9 +286,9 @@ export class CapVonComponent implements OnInit {
         if (data.statusCode == 0) {
           this.baoCao = data.data;
           this.listFile = [];
+          this.updateEditCache();
           this.getStatusButton();
           this.getTotal();
-          this.updateEditCache()
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
@@ -368,7 +375,7 @@ export class CapVonComponent implements OnInit {
       return;
     }
     const baoCaoTemp = JSON.parse(JSON.stringify(this.baoCao));
-    baoCaoTemp.maLoai = '0'
+    baoCaoTemp.maLoai = '1';
 
     if (!baoCaoTemp.fileDinhKems) {
       baoCaoTemp.fileDinhKems = [];
@@ -397,13 +404,14 @@ export class CapVonComponent implements OnInit {
       if (item.id?.length == 38) {
         item.id = null;
       }
-      item.dnghiCapvonLuyKes.forEach(e => {
-        if (e.id?.length == 38) {
-          e.id = null;
-        }
-      })
+      // item.dnghiCapvonLuyKes.forEach(e => {
+      // 	if (e.id?.length == 38) {
+      // 		e.id = null;
+      // 	}
+      // })
     })
 
+    // this.spinner.show();
     if (!this.baoCao.id) {
       this.capVonNguonChiService.taoMoiDeNghi(baoCaoTemp).toPromise().then(
         async (data) => {
@@ -469,13 +477,10 @@ export class CapVonComponent implements OnInit {
   }
 
   changeModel(id: string) {
-    this.editCache[id].data.gtriThucHien = mulNumber(this.editCache[id].data.slThucHien, this.editCache[id].data.donGia);
+    this.editCache[id].data.gtriThucHien = mulNumber(this.editCache[id].data.slThucHien, this.editCache[id].data.soConDuocCap);
     this.editCache[id].data.luyKeTongCong = sumNumber([this.editCache[id].data.luyKeTongCapUng, this.editCache[id].data.luyKeTongCapVon]);
     this.editCache[id].data.tongVonVaDtDaCap = sumNumber([this.editCache[id].data.duToanDaGiao, this.editCache[id].data.luyKeTongCong]);
-    this.editCache[id].data.vonDnghiCapLanNay = sumNumber([this.editCache[id].data.gtriThucHien, -this.editCache[id].data.luyKeTongCong]);
-    this.editCache[id].data.vonDuyetCong = sumNumber([this.editCache[id].data.vonDuyetCapUng, this.editCache[id].data.vonDuyetCapVon]);
-    this.editCache[id].data.tongTien = sumNumber([this.editCache[id].data.tongVonVaDtDaCap, this.editCache[id].data.vonDuyetCapVon]);
-    this.editCache[id].data.soConDuocCap = sumNumber([this.editCache[id].data.gtriThucHien, -this.editCache[id].data.tongTien]);
+    this.editCache[id].data.vonDnghiCapLanNay = sumNumber([this.editCache[id].data.gtriThucHien, -this.editCache[id].data.tongVonVaDtDaCap]);
   }
 
   getTotal() {
@@ -501,7 +506,7 @@ export class CapVonComponent implements OnInit {
 
   exportToExcel() {
     const header = [
-      { t: 0, b: 1, l: 0, r: 16, val: null },
+      { t: 0, b: 1, l: 0, r: 11, val: null },
       { t: 0, b: 1, l: 0, r: 0, val: 'STT' },
       { t: 0, b: 1, l: 1, r: 1, val: 'Đơn vị' },
       { t: 0, b: 0, l: 2, r: 3, val: 'Số lượng' },
@@ -516,15 +521,9 @@ export class CapVonComponent implements OnInit {
       { t: 1, b: 1, l: 9, r: 9, val: 'Tổng cộng' },
       { t: 0, b: 1, l: 10, r: 10, val: 'Tổng vốn và dự toán đã cấp' },
       { t: 0, b: 1, l: 11, r: 11, val: 'Vốn đề nghị cấp lần này = Giá trị theo kế hoạch - Lũy kế vốn cấp' },
-      { t: 0, b: 0, l: 12, r: 14, val: 'Vốn đề duyệt cấp lần này' },
-      { t: 1, b: 1, l: 12, r: 12, val: 'Tổng cấp ứng' },
-      { t: 1, b: 1, l: 13, r: 13, val: 'Tổng cấp vốn' },
-      { t: 1, b: 1, l: 14, r: 14, val: 'Tổng cộng' },
-      { t: 0, b: 1, l: 15, r: 15, val: 'Tổng tiền (Tổng tiền được cấp sau lần này)' },
-      { t: 0, b: 1, l: 16, r: 16, val: 'Ghi chú' },
     ]
     const fieldOrder = ['stt', 'tenDvi', 'slKeHoach', 'slThucHien', 'donGia', 'gtriThucHien', 'duToanDaGiao', 'luyKeTongCapUng', 'luyKeTongCapVon', 'luyKeTongCong',
-      'tongVonVaDtDaCap', 'vonDnghiCapLanNay', 'vonDuyetCapUng', 'vonDuyetCapVon', 'vonDuyetCong', 'tongTien', 'soConDuocCap', 'ghiChu']
+      'tongVonVaDtDaCap', 'vonDnghiCapLanNay']
     const filterData = this.baoCao.dnghiCapvonCtiets.map(item => {
       const row: any = {};
       fieldOrder.forEach(field => {
@@ -537,7 +536,7 @@ export class CapVonComponent implements OnInit {
     const worksheet = Table.initExcel(header);
     XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
-    XLSX.writeFile(workbook, 'CAP_VON.xlsx');
+    XLSX.writeFile(workbook, 'DE_NGHI_CAP_VON.xlsx');
   }
 
 
