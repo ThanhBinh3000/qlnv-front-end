@@ -15,9 +15,11 @@ import { CHUC_NANG, STATUS } from 'src/app/constants/status';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { Subject } from 'rxjs';
 import { QuyetDinhDieuChuyenTCService } from 'src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-tc.service';
-import { PhieuNhapKhoService } from 'src/app/services/dieu-chuyen-noi-bo/nhap-dieu-chuyen/phieu-nhap-kho';
+import { PhieuNhapKhoService } from 'src/app/services/qlnv-hang/nhap-hang/nhap-khac/phieuNhapKho';
 import { ThongTinQuyetDinhDieuChuyenCucComponent } from 'src/app/pages/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/cuc/thong-tin-quyet-dinh-dieu-chuyen-cuc/thong-tin-quyet-dinh-dieu-chuyen-cuc.component';
 import * as uuidv4 from "uuid";
+import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.service';
+import { KIEU_NHAP_XUAT } from 'src/app/constants/config';
 
 @Component({
   selector: 'app-phieu-nhap-kho',
@@ -44,6 +46,7 @@ export class PhieuNhapKhoComponent extends Base2Component implements OnInit {
     modal: NzModalService,
     private donviService: DonviService,
     private danhMucService: DanhMucService,
+    private dmService: DanhMucDungChungService,
     private quyetDinhDieuChuyenTCService: QuyetDinhDieuChuyenTCService,
     private phieuNhapKhoService: PhieuNhapKhoService,
   ) {
@@ -55,7 +58,7 @@ export class PhieuNhapKhoComponent extends Base2Component implements OnInit {
       ngayHieuLuc: null,
       trichYeu: null,
       type: ["01"],
-      loaiDc: ["DCNB"]
+      loaiDc: [this.loaiDc]
     })
     this.filterTable = {
       nam: '',
@@ -75,7 +78,9 @@ export class PhieuNhapKhoComponent extends Base2Component implements OnInit {
     this.isVisibleChangeTab$.subscribe((value: boolean) => {
       this.visibleTab = value;
     });
-
+    this.formData.patchValue({
+      loaiDc: this.loaiDc
+    })
 
     try {
       this.initData()
@@ -90,6 +95,8 @@ export class PhieuNhapKhoComponent extends Base2Component implements OnInit {
 
 
   }
+
+
 
   isShowDS() {
     if (this.userService.isAccessPermisson('DCNB_QUYETDINHDC_TONGCUC') && this.userService.isAccessPermisson('DCNB_QUYETDINHDC_XEM'))

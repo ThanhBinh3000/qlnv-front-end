@@ -18,7 +18,7 @@ import { PhieuNhapKhoService } from "src/app/services/dieu-chuyen-noi-bo/nhap-di
 import { QuyetDinhDieuChuyenCucService } from "src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-c.service";
 import { StorageService } from "src/app/services/storage.service";
 import { convertTienTobangChu } from "src/app/shared/commonFunction";
-import { v4 as uuidv4 } from 'uuid';
+import * as uuidv4 from "uuid";
 
 @Component({
   selector: 'app-thong-tin-bang-ke-nhap-vat-tu',
@@ -529,7 +529,7 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
       // trangThai: STATUS.BAN_HANH,
       // loaiVthh: ['0101', '0102'],
       soQdinhDcc: this.formData.value.soQdinhDcc,
-      loaiDc: "DCNB",
+      loaiDc: this.loaiDc,
       // maDvi: this.userInfo.MA_DVI
       // listTrangThaiXh: [STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN],
     }

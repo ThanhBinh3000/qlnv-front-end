@@ -19,6 +19,7 @@ import { QuyetDinhDieuChuyenCucService } from "src/app/services/dieu-chuyen-noi-
 import { SoDeXuatQuyetDinhDieuChuyenService } from "src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/so-de-xuat-quyet-dinh-dieu-chinh.service";
 import { KhCnQuyChuanKyThuat } from "src/app/services/kh-cn-bao-quan/KhCnQuyChuanKyThuat";
 import { StorageService } from "src/app/services/storage.service";
+import * as uuidv4 from "uuid";
 
 @Component({
   selector: 'app-thong-tin-bien-ban-lay-mau-ban-giao-mau',
