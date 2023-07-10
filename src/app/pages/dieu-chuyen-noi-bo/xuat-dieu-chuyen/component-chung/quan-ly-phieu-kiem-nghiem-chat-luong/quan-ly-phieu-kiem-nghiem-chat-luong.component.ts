@@ -26,7 +26,7 @@ import { PhieuKiemNghiemChatLuongDieuChuyenService } from '../services/dcnb-phie
 import { STATUS } from 'src/app/constants/status';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 export interface PassDataPKNCL {
-  soPhieuKnChatLuong: string, phieuKnChatLuongId: number, soQdinhDcc: string, qdinhDccId: number, ngayQDHieuLuc: string, soBBLayMau: string, bblayMauId: number, ngaylayMau: string, tenloKho: string, maloKho: string,
+  soPhieuKnChatLuong: string, phieuKnChatLuongId: number, soQdinhDcc: string, qdinhDccId: number, ngayQDHieuLuc: string, soBBLayMau: string, bblayMauId: number, ngaylayMau: string, tenLoKho: string, maLoKho: string,
   tenNganKho: string, maNganKho: string, tenNhaKho: string, maNhaKho: string, tenDiemKho: string, maDiemKho: string, tenHangHoa: string, maHangHoa: string, tenChLoaiHangHoa: string, maChLoaiHangHoa: string,
   thuKhoId: number, tenThuKho: string, donViTinh: string, tenDonViTinh: string
 }
@@ -80,7 +80,7 @@ export class PhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base2Compon
   allChecked = false;
   indeterminate = false;
   passData: PassDataPKNCL = {
-    soPhieuKnChatLuong: '', phieuKnChatLuongId: null, soQdinhDcc: '', qdinhDccId: null, ngayQDHieuLuc: '', soBBLayMau: '', bblayMauId: null, ngaylayMau: '', tenloKho: '', maloKho: '',
+    soPhieuKnChatLuong: '', phieuKnChatLuongId: null, soQdinhDcc: '', qdinhDccId: null, ngayQDHieuLuc: '', soBBLayMau: '', bblayMauId: null, ngaylayMau: '', tenLoKho: '', maLoKho: '',
     tenNganKho: '', maNganKho: '', tenNhaKho: '', maNhaKho: '', tenDiemKho: '', maDiemKho: '', tenHangHoa: '', maHangHoa: '', tenChLoaiHangHoa: '', maChLoaiHangHoa: '', thuKhoId: null, tenThuKho: '',
     donViTinh: '', tenDonViTinh: ''
   };
@@ -146,7 +146,7 @@ export class PhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base2Compon
       //   this.isTatCa = true;
       // }
       this.formData.patchValue({ loaiDc: this.loaiDc, isVatTu: this.isVatTu, thayDoiThuKho: this.thayDoiThuKho, type: this.type, maDvi: this.userInfo.MA_DVI, trangThai: STATUS.BAN_HANH })
-      this.timKiem()
+      await this.timKiem()
     } catch (e) {
       console.log('error: ', e);
       this.notification?.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -250,9 +250,12 @@ export class PhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base2Compon
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
-
+  resetForm() {
+    this.formData.reset();
+    this.formData.patchValue({ loaiDc: this.loaiDc, isVatTu: this.isVatTu, thayDoiThuKho: this.thayDoiThuKho, type: this.type })
+  }
   clearFilter() {
-    this.formData.reset()
+    this.resetForm()
     this.timKiem();
   }
 
@@ -428,7 +431,7 @@ export class PhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base2Compon
     this.bblayMauId = bblayMauId;
     this.passData = {
       soPhieuKnChatLuong: lv2.soPhieuKnChatLuong, phieuKnChatLuongId: lv2.id, soQdinhDcc: lv2.soQdinh, qdinhDccId: lv2.qdinhDccId, ngayQDHieuLuc: lv2.ngayQDHieuLuc,
-      soBBLayMau: lv2.soBBLayMau, bblayMauId: lv2.bblayMauId, ngaylayMau: lv2.ngaylayMau, tenloKho: lv2.tenloKho, maloKho: lv2.maloKho, tenNganKho: lv2.tenNganKho,
+      soBBLayMau: lv2.soBBLayMau, bblayMauId: lv2.bblayMauId, ngaylayMau: lv2.ngaylayMau, tenLoKho: lv2.tenLoKho, maLoKho: lv2.maLoKho, tenNganKho: lv2.tenNganKho,
       maNganKho: lv2.maNganKho, tenNhaKho: lv2.tenNhaKho, maNhaKho: lv2.maNhaKho, tenDiemKho: lv2.tenDiemKho, maDiemKho: lv2.maDiemKho, tenHangHoa: lv2.tenHangHoa,
       maHangHoa: lv2.maHangHoa, tenChLoaiHangHoa: lv2.tenChLoaiHangHoa, maChLoaiHangHoa: lv2.maChLoaiHangHoa, thuKhoId: lv2.thuKhoId, tenThuKho: lv2.thuKho, donViTinh: lv2.donViTinh, tenDonViTinh: lv2.tenDonViTinh
     }
@@ -437,7 +440,7 @@ export class PhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base2Compon
   buildTableView() {
     // let removeDuplicateData = [];
     // this.dataTable.forEach((item, i) => {
-    //   const maLoNganKho = item.maLoNganKho ? item.maLoNganKho : (item.maloKho ? `${item.maloKho}${item.maNganKho}` : item.maNganKho);
+    //   const maLoNganKho = item.maLoNganKho ? item.maLoNganKho : (item.maLoKho ? `${item.maLoKho}${item.maNganKho}` : item.maNganKho);
     //   const dataIndex = removeDuplicateData.findIndex(f => f.soQdinh == item.soQdinh && f.maLoNganKho == maLoNganKho);
     //   if (dataIndex < 0) {
     //     removeDuplicateData.push({ ...item, maLoNganKho })

@@ -130,7 +130,14 @@ export class BienBanTinhKhoDieuChuyenComponent extends Base2Component implements
     }
     await this.spinner.hide();
   }
-
+  resetForm() {
+    this.formData.reset();
+    this.formData.patchValue({ loaiDc: this.loaiDc, isVatTu: this.isVatTu, thayDoiThuKho: this.thayDoiThuKho, type: this.type })
+  }
+  clearForm() {
+    this.resetForm();
+    this.timKiem()
+  }
   buildTableView() {
     const newData = this.dataTable.map(f => ({ ...f, maNganLoKho: f.maLoKho ? `${f.maLoKho}${f.maNganKho}` : f.maNganKho }))
     let dataView = chain(newData)

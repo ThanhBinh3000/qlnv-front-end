@@ -6,11 +6,11 @@
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
-      <button type="button" class="btn btn-sub xanh-nhat" (click)="taoQdinh()">
+      <button *ngIf="isTongHop" type="button" class="btn btn-sub xanh-nhat" (click)="taoQdinh()">
         <i class="icon htvbdh_tcdt_tao-qd"></i>
         <span>Tạo quyết định</span>
       </button>
-      <button *ngIf="!isView"
+      <button *ngIf="!isView && isTongHop"
               type="button" class="btn btn-main" (click)="save()">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
@@ -64,7 +64,7 @@
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col [nzSpan]="24" *ngIf="!isView">
+          <div nz-col [nzSpan]="24" *ngIf="!isView || (id == null)">
             <div class="tong-hop-button group-button-search mt-16">
               <button nz-button class="search__button--clear" (click)="clearFilter()">
                 <i class="icon  htvbdh_nhap-lai1"></i>

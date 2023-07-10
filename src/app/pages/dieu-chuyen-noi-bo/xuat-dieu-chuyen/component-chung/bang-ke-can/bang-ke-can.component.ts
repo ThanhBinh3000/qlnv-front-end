@@ -143,6 +143,14 @@ export class BangKeCanXuatDieuChuyenComponent extends Base2Component implements 
     this.buildTableView();
     await this.spinner.hide()
   }
+  resetForm() {
+    this.formData.reset();
+    this.formData.patchValue({ loaiDc: this.loaiDc, isVatTu: this.isVatTu, thayDoiThuKho: this.thayDoiThuKho, type: this.type })
+  }
+  clearForm(): void {
+    this.resetForm();
+    this.timKiem()
+  }
 
   async timKiem() {
     await this.spinner.show();
