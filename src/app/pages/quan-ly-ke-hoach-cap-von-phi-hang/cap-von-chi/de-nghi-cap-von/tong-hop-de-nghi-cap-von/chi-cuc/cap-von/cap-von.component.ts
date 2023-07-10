@@ -165,6 +165,7 @@ export class CapVonComponent implements OnInit {
   }
 
   async initialization() {
+
     //lay id cua de nghi
     this.userInfo = this.userService.getUserLogin();
     if (this.data?.id) {
