@@ -290,7 +290,7 @@
           <th class="text-center">Mã cân (A)</th>
           <th class="text-center">Số bao bì (1)</th>
           <th class="text-center">Trọng lượng bao bì (2)</th>
-          <th class="text-center" width="60px">Hành động</th>
+          <th class="text-center" width="60px"  *ngIf="formData.value.trangThai != STATUS.DA_DUYET_LDCC">Hành động</th>
         </tr>
         <tr *ngIf="formData.value.trangThai != STATUS.DA_DUYET_LDCC">
           <th class="text-center"> </th>
@@ -305,7 +305,7 @@
             <nz-input-number nz-input [nzSize]="'small'" [nzFormatter]="globals.formatter"
                              [nzParser]="globals.parser" [(ngModel)]="rowItem.trongLuongCaBi"></nz-input-number>
           </th>
-          <th >
+          <th  *ngIf="formData.value.trangThai != STATUS.DA_DUYET_LDCC">
             <a (click)="addRow()" [class.disabled]="!rowItem">
               <i class="fa fa-plus"></i>
             </a>
@@ -322,7 +322,7 @@
             <td>{{data.maCan}}</td>
             <td>{{data.trongLuongBaoBi | number : '1.0-1' : 'vi_VN'}}</td>
             <td>{{data.trongLuongCaBi | number : '1.0-1' : 'vi_VN'}}</td>
-            <td >
+            <td  *ngIf="formData.value.trangThai != STATUS.DA_DUYET_LDCC">
               <a (click)="startEdit(idx)">
                 <i class=" fa fa-pencil"></i>
               </a>
@@ -347,7 +347,7 @@
                                [(ngModel)]="dataEdit[idx].data.trongLuongCaBi"></nz-input-number>
             </td>
 
-            <td class="text-center" >
+            <td class="text-center"  *ngIf="formData.value.trangThai != STATUS.DA_DUYET_LDCC">
               <a (click)="saveEdit(idx)" class="save">
                 <i class="icon htvbdh_tcdt_save"></i>
               </a>
@@ -365,7 +365,7 @@
             'vi_VN' }}</td>
           <td style="color: black ;font-weight: bold;">{{ calcTong('trongLuongCaBi') | number : '1.0-1'
             : 'vi_VN' }}</td>
-          <td >
+          <td *ngIf="formData.value.trangThai != STATUS.DA_DUYET_LDCC">
           </td>
         </tr>
         </tfoot>

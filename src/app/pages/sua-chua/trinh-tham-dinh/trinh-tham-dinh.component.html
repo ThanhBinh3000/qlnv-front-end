@@ -75,24 +75,14 @@
     <div class="group-button">
         <h3 class="text-uppercase">Thẩm định danh sách hàng dự trữ quốc gia cần sửa chữa</h3>
         <div class="buttons">
-            <ng-container>
-                <button type="button" class="btn btn-do" (click)="deleteMulti()">
-                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
-                    <span>Xóa</span>
-                </button>
-            </ng-container>
-
             <button type="button" class="btn btn-sub" (click)="exportData()">
                 <i class="icon htvbdh_chuyen-xu-ly"></i>
                 <span>Xuất file</span>
             </button>
-
-            <ng-container>
-                <button type="button" class="btn btn-main" (click)="redirectCreate()">
-                    <i class="icon htvbdh_dau-cong"></i>
-                    <span>Tạo tờ trình thẩm định</span>
-                </button>
-            </ng-container>
+            <button type="button" class="btn btn-main" *ngIf="userService.isCuc()" (click)="redirectCreate()">
+                <i class="icon htvbdh_dau-cong"></i>
+                <span>Tạo tờ trình thẩm định</span>
+            </button>
         </div>
     </div>
     <nz-card class="mt-2px flex-card data-table card-border-content table-card">

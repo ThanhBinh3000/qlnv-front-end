@@ -48,7 +48,7 @@ export class ThemMoiTongHopKhnkComponent extends Base2Component implements OnIni
     this.formTraCuu = this.fb.group(
       {
         loaiVthh: [null, [Validators.required]],
-        tenLoaiVthh: [null, [Validators.required]],
+        tenLoaiVthh: [],
         namKhoach: [dayjs().get("year"), [Validators.required]],
         loaiHinhNx: ["", [Validators.required]]
       }
@@ -56,8 +56,8 @@ export class ThemMoiTongHopKhnkComponent extends Base2Component implements OnIni
     this.formData = this.fb.group({
       id: [],
       ngayTh: [dayjs().format("YYYY-MM-DD")],
-      trangThai: [STATUS.CHUA_TAO_QD],
-      tenTrangThai: ["Chưa tạo quyết định"],
+      trangThai: [],
+      tenTrangThai: [],
       maTh: [""],
       noiDungTh: [""],
       dxHdr: []
@@ -100,6 +100,12 @@ export class ThemMoiTongHopKhnkComponent extends Base2Component implements OnIni
   }
 
   async tongHopDeXuat() {
+    await this.spinner.show();
+    this.helperService.markFormGroupTouched(this.formTraCuu);
+    if (this.formTraCuu.invalid) {
+      await this.spinner.hide();
+      return;
+    }
     let body = this.formTraCuu.value;
     await this.tongHopDxKhNhapKhacService
       .dsDxDuocTaoQDinhPDuyet(body)
@@ -130,6 +136,7 @@ export class ThemMoiTongHopKhnkComponent extends Base2Component implements OnIni
   }
 
   async save() {
+    await this.spinner.show();
     let body = this.formData.value;
     body.loaiVthh = this.formTraCuu.get("loaiVthh").value;
     body.namKhoach = this.formTraCuu.get("namKhoach").value;
@@ -143,6 +150,7 @@ export class ThemMoiTongHopKhnkComponent extends Base2Component implements OnIni
       this.isView = true
       this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
     }
+    await this.spinner.hide();
   }
 
   async loadChiTiet() {

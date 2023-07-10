@@ -202,6 +202,7 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         });
     } else {
+      console.log("data", this.passData)
       this.formData.patchValue({
         maDvi: this.userInfo.MA_DVI,
         tenDvi: this.userInfo.TEN_DVI,
@@ -450,6 +451,7 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
   async save(isGuiDuyet?) {
     this.setValidator(isGuiDuyet)
     let body = this.formData.value;
+    console.log("body", body)
     body.loaiDc = this.loaiDc;
     body.isVatTu = this.isVatTu;
     body.thayDoiThuKho = this.thayDoiThuKho;

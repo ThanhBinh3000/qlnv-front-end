@@ -15,22 +15,20 @@ import {MESSAGE} from "../../../../../../../constants/message";
 import {Base2Component} from "../../../../../../../components/base2/base2.component";
 import {CHUC_NANG} from "../../../../../../../constants/status";
 import {
-  VtTbCoThoihanLuukhoLonHonMuoihaiThangComponent
-} from "../../vt-tb-co-thoihan-luukho-lon-hon-muoihai-thang.component";
+  TongHopDanhSachVttbService
+} from "../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/TongHopDanhSachVttb.service";
 import {
   DanhSachVttbTruocHethanLuuKhoService
 } from "../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/DanhSachVttbTruocHethanLuuKho.service";
-import {
-  TongHopDanhSachVttbService
-} from "../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/TongHopDanhSachVttb.service";
 import {LOAI_HH_XUAT_KHAC} from "../../../../../../../constants/config";
+import {VtTbCoThoihanLuukhoConSauThangComponent} from "../../vt-tb-co-thoihan-luukho-con-sau-thang.component";
 
 @Component({
-  selector: 'app-chi-tiet-tong-hop-ds-vt12th',
-  templateUrl: './chi-tiet-tong-hop-ds-vt12th.component.html',
-  styleUrls: ['./chi-tiet-tong-hop-ds-vt12th.component.scss']
+  selector: 'app-chi-tiet-tong-hop-danh-sach-vt6th',
+  templateUrl: './chi-tiet-tong-hop-danh-sach-vt6th.component.html',
+  styleUrls: ['./chi-tiet-tong-hop-danh-sach-vt6th.component.scss']
 })
-export class ChiTietTongHopDsVt12thComponent extends Base2Component implements OnInit {
+export class ChiTietTongHopDanhSachVt6thComponent extends Base2Component implements OnInit {
   @Input() loaiVthhInput: string;
   @Input() idInput: number;
   @Input() selectedItem: any = {};
@@ -53,7 +51,7 @@ export class ChiTietTongHopDsVt12thComponent extends Base2Component implements O
   expandSetString = new Set<string>();
   numberToRoman = NumberToRoman;
   maHauTo: any;
-  public vldTrangThai: VtTbCoThoihanLuukhoLonHonMuoihaiThangComponent;
+  public vldTrangThai: VtTbCoThoihanLuukhoConSauThangComponent;
 
   constructor(httpClient: HttpClient,
               storageService: StorageService,
@@ -64,10 +62,10 @@ export class ChiTietTongHopDsVt12thComponent extends Base2Component implements O
               private danhMucService: DanhMucService,
               private tongHopDanhSachVttbService: TongHopDanhSachVttbService,
               private danhSachVttbTruocHethanLuuKhoService: DanhSachVttbTruocHethanLuuKhoService,
-              private vtTbCoThoihanLuukhoLonHonMuoihaiThangComponent: VtTbCoThoihanLuukhoLonHonMuoihaiThangComponent,
+              private vtTbCoThoihanLuukhoConSauThangComponent: VtTbCoThoihanLuukhoConSauThangComponent,
               private cdr: ChangeDetectorRef) {
     super(httpClient, storageService, notification, spinner, modal, tongHopDanhSachVttbService);
-    this.vldTrangThai = vtTbCoThoihanLuukhoLonHonMuoihaiThangComponent;
+    this.vldTrangThai = vtTbCoThoihanLuukhoConSauThangComponent;
     this.formData = this.fb.group({
       id: [null],
       nam: [dayjs().get('year')],
@@ -89,11 +87,11 @@ export class ChiTietTongHopDsVt12thComponent extends Base2Component implements O
       tenDvi: [],
       tenCuc: [],
       capTh: [this.userInfo.CAP_DVI],
-      loai: [LOAI_HH_XUAT_KHAC.VT_12_THANG],
+      loai: [LOAI_HH_XUAT_KHAC.VT_6_THANG],
       tongHopDtl: [new Array()]
     })
     this.userInfo = this.userService.getUserLogin();
-    this.maHauTo = 'DSLK12';
+    this.maHauTo = 'DSLK6';
   }
 
   async ngOnInit(): Promise<void> {
@@ -114,8 +112,6 @@ export class ChiTietTongHopDsVt12thComponent extends Base2Component implements O
       await this.tongHopDanhSachVttbService.getDetail(idInput)
         .then(async (res) => {
           if (res.msg == MESSAGE.SUCCESS) {
-            // this.maHauTo = '/' + res.data.maDanhSach.split("/")[1];
-            // res.data.maDanhSach = res.data.maDanhSach.split("/")[0];
             this.selectedItem = res.data;
             this.formData.patchValue(res.data);
             this.formData.value.tongHopDtl.forEach(s => {
@@ -219,7 +215,7 @@ export class ChiTietTongHopDsVt12thComponent extends Base2Component implements O
       } else {
         await this.danhSachVttbTruocHethanLuuKhoService.search({
           type: 'TH',
-          loai:LOAI_HH_XUAT_KHAC.VT_12_THANG,
+          loai: LOAI_HH_XUAT_KHAC.VT_6_THANG,
         }).then(async res => {
           if (res.msg == MESSAGE.SUCCESS) {
             if (res.data.numberOfElements == 0) {
@@ -309,4 +305,5 @@ export class ChiTietTongHopDsVt12thComponent extends Base2Component implements O
     this.showDetail = !this.showDetail,
       this.changeShow.emit({showDetail: this.showDetail, item: this.selectedItem})
   }
+
 }

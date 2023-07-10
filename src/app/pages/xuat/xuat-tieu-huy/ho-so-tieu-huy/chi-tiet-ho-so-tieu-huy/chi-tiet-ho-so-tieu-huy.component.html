@@ -131,7 +131,7 @@
               <nz-form-control [nzErrorTip]="error" nz-col nzSpan="24">
                 <nz-select (ngModelChange)="changeMaDanhSach($event)" [nzDisabled]="isView" formControlName="idDanhSach"
                            nzAllowClear nzShowSearch>
-                  <nz-option *ngFor="let p of dsAll.dsThanhLy" [nzLabel]="'['+p.maDanhSach+'] '+p.tenDanhSach"
+                  <nz-option *ngFor="let p of dsAll.dsTieuHuy" [nzLabel]="'['+p.maDanhSach+'] '+p.tenDanhSach"
                              [nzValue]="p.id"></nz-option>
                 </nz-select>
               </nz-form-control>

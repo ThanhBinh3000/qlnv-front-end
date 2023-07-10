@@ -1,5 +1,4 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-
 import {Base2Component} from "../../../../../../components/base2/base2.component";
 import {FormGroup} from "@angular/forms";
 import {NumberToRoman} from "../../../../../../shared/commonFunction";
@@ -13,21 +12,18 @@ import {DanhMucService} from "../../../../../../services/danhmuc.service";
 import {chain, isEmpty} from "lodash";
 import {v4 as uuidv4} from "uuid";
 import {
-  TongHopDanhSachHangDTQGService
-} from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatlt/TongHopDanhSachHangDTQG.service";
-import {MESSAGE} from "../../../../../../constants/message";
-import {CHUC_NANG} from "../../../../../../constants/status";
-import {LOAI_HH_XUAT_KHAC} from "../../../../../../constants/config";
-import {
   TongHopDanhSachVttbService
 } from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/TongHopDanhSachVttb.service";
+import {LOAI_HH_XUAT_KHAC} from "../../../../../../constants/config";
+import {MESSAGE} from "../../../../../../constants/message";
+import {CHUC_NANG} from "../../../../../../constants/status";
 
 @Component({
-  selector: 'app-tong-hop-danh-sach-vt12th',
-  templateUrl: './tong-hop-danh-sach-vt12th.component.html',
-  styleUrls: ['./tong-hop-danh-sach-vt12th.component.scss']
+  selector: 'app-tong-hop-danh-sach-vt6th',
+  templateUrl: './tong-hop-danh-sach-vt6th.component.html',
+  styleUrls: ['./tong-hop-danh-sach-vt6th.component.scss']
 })
-export class TongHopDanhSachVt12thComponent extends Base2Component implements OnInit {
+export class TongHopDanhSachVt6thComponent extends Base2Component implements OnInit {
   CHUC_NANG = CHUC_NANG;
   dsDonvi: any[] = [];
   dsLoaiVthh: any[] = [];
@@ -66,7 +62,7 @@ export class TongHopDanhSachVt12thComponent extends Base2Component implements On
       ngayTao: [],
       ngayTaoTu: [],
       ngayTaoDen: [],
-      loai: [LOAI_HH_XUAT_KHAC.VT_12_THANG],
+      loai: [LOAI_HH_XUAT_KHAC.VT_6_THANG],
     })
     this.formDataDetail = this.fb.group({
       id: [],
@@ -92,7 +88,7 @@ export class TongHopDanhSachVt12thComponent extends Base2Component implements On
       tenTrangThai: [],
       tenDvi: [],
       capTh: [this.userInfo.CAP_DVI],
-      loai: [LOAI_HH_XUAT_KHAC.VT_12_THANG],
+      loai: [LOAI_HH_XUAT_KHAC.VT_6_THANG],
       tongHopDtl: [new Array()]
     })
   }
@@ -159,11 +155,6 @@ export class TongHopDanhSachVt12thComponent extends Base2Component implements On
     const dsTong = await this.donviService.layDonViCon();
     if (!isEmpty(dsTong)) {
       this.dsDonvi = dsTong.data.filter(s => s.type === 'DV');
-      /* if (this.userService.isTongCuc()) {
-         this.dsDonvi = dsTong.data.filter(s => s.type === 'DV');
-       } else {
-         this.dsDonvi = dsTong.data.filter(s => s.type === 'PB');
-       }*/
     }
   }
 
@@ -240,7 +231,6 @@ export class TongHopDanhSachVt12thComponent extends Base2Component implements On
 
   exportExcel() {
     if (this.selectedItem) {
-      console.log(this.selectedItem, 'this.selectedItemthis.selectedItem')
       this.formData.patchValue({
         maDanhSach: this.selectedItem.maDanhSach
       });
@@ -260,7 +250,6 @@ export class TongHopDanhSachVt12thComponent extends Base2Component implements On
   }
 
   async changeStep($event: any) {
-    //0=dong 1=guiduyet 2=luu(chuyen tiep sang trang2)
     if ($event.step == 0 || $event.step == 1) {
       this.showModal(false);
     } else if ($event.step == 2) {
@@ -308,5 +297,5 @@ export class TongHopDanhSachVt12thComponent extends Base2Component implements On
     this.DanhSach = true;
     this.emitTab(0)
   }
-
 }
+
