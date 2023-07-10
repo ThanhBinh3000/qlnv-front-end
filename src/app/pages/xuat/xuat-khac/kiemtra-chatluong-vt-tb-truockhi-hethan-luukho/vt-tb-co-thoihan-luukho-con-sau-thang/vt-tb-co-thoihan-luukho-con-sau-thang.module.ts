@@ -30,10 +30,11 @@ import {
     TongHopDanhSachVt6thComponent,
     ChiTietTongHopDanhSachVt6thComponent
   ],
-    exports: [
-        ToanBoDanhSachVt6ThComponent,
-        TongHopDanhSachVt6thComponent
-    ],
+  exports: [
+    ToanBoDanhSachVt6ThComponent,
+    TongHopDanhSachVt6thComponent,
+    QuyetDinhXuatGiamVatTuComponent
+  ],
     imports: [
         CommonModule,
         DirectivesModule,

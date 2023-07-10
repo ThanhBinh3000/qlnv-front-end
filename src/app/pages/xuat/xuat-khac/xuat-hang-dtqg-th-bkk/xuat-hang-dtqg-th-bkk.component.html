@@ -1,1 +1,20 @@
-<p>xuat-hang-dtqg-th-bkk works!</p>
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="level1">
+  <ul nz-menu nzMode="horizontal">
+    <li nz-menu-item [nzSelected]="tabSelected==0" (click)="selectTab(0)">
+      Toàn bộ danh sách xuất hàng DTQG trong trường hợp bất khả kháng theo quy định tại HĐ bảo hiểm
+    </li>
+    <li [nzSelected]="tabSelected==1" nz-menu-item (click)="selectTab(1)">
+      Tổng hợp danh sách hàng DTQG còn 6 tháng hết hạn lưu kho nhưng chưa có kế hoạch xuất
+    </li>
+  </ul>
+</nz-affix>
+<div class="contentBor chi-tieu__body giao-ke-hoach">
+  <div class="contentDetail">
+    <ng-container *ngIf="tabSelected == 0">
+      <app-toan-bo-ds-hang-dtqg-hethan-luukho-chua-co-kh-xuat ></app-toan-bo-ds-hang-dtqg-hethan-luukho-chua-co-kh-xuat>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 1">
+      <app-tong-hop-ds-hang-dtqg-hethan-luukho-chua-co-kh-xuat ></app-tong-hop-ds-hang-dtqg-hethan-luukho-chua-co-kh-xuat>
+    </ng-container>
+  </div>
+</div>

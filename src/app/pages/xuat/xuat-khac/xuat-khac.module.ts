@@ -40,10 +40,12 @@ import {
 import {
   KiemtraChatluongLtTruockhiHethanLuukhoModule
 } from "./kiemtra-chatluong-lt-truockhi-hethan-luukho/kiemtra-chatluong-lt-truockhi-hethan-luukho.module";
+import { ToanBoDanhSachComponent } from './xuat-hang-dtqg-th-bkk/toan-bo-danh-sach/toan-bo-danh-sach.component';
+import { TongHopDanhSachComponent } from './xuat-hang-dtqg-th-bkk/tong-hop-danh-sach/tong-hop-danh-sach.component';
 
 
 @NgModule({
-  declarations: [XuatKhacComponent, KiemtraChatluongVtTbTrongThbhComponent, KiemtraChatluongVtTbTruockhiHethanLuukhoComponent, XuatHangDtqgThBkkComponent, XuatHangKhoiDanhMucComponent],
+  declarations: [XuatKhacComponent, KiemtraChatluongVtTbTrongThbhComponent, KiemtraChatluongVtTbTruockhiHethanLuukhoComponent, XuatHangDtqgThBkkComponent, XuatHangKhoiDanhMucComponent, ToanBoDanhSachComponent, TongHopDanhSachComponent],
   imports: [
     CommonModule,
     XuatKhacRoutingModule,
