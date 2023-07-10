@@ -12,6 +12,7 @@ import * as moment from "moment/moment";
 import { cloneDeep, chain } from 'lodash';
 import {STATUS} from "../../../../constants/status";
 import {QuyetDinhScService} from "../../../../services/sua-chua/quyetDinhSc.service";
+import {Validators} from "@angular/forms";
 
 @Component({
   selector: 'app-them-moi-qd',
@@ -40,32 +41,57 @@ export class ThemMoiQdComponent extends Base3Component implements OnInit {
       id : [],
       trangThai: ['00'] ,
       tenTrangThai: ['Dự thảo'],
-      soQd : [''],
-      soTtr: [],
-      idTtr : [],
+      soQd : [null, [Validators.required]],
+      soTtr: [null, [Validators.required]],
+      idTtr : [null, [Validators.required]],
       ngayKy: [''],
-      ngayDuyetLdtc: [''],
-      thoiHanXuat: [''],
-      thoiHanNhap: [''],
-      trichYeu: [''],
+      ngayDuyetLdtc: [null, [Validators.required]],
+      thoiHanXuat: [null, [Validators.required]],
+      thoiHanNhap: [null, [Validators.required]],
+      trichYeu: [null, [Validators.required]],
     })
   }
 
-  ngOnInit(): void {
-    console.log(this.route);
+  async ngOnInit() {
+    this.spinner.show();
+    await Promise.all([
+      this.getId(),
+      this.initForm()
+    ])
+    this.spinner.hide();
+  }
+
+  initForm(){
+    if(this.id){
+      this.detail(this.id).then((res)=>{
+        if(res){
+          console.log(res)
+          let soQd = res.soQd.split('/')[0];
+          this.formData.patchValue({
+            soQd : soQd
+          })
+          this.dataTable = chain(res.children).groupBy('scDanhSachHdr.tenChiCuc').map((value, key) => ({
+              tenDonVi: key,
+              children: value,
+            })
+          ).value()
+        }
+      })
+    }
   }
 
   openDialogDanhSach() {
-    if(this.disabled()){
+    if (this.disabled()) {
       return;
     }
     this.spinner.show();
-    this.trinhThamDinhScService.getDanhSachQuyetDinh({}).then((res)=>{
+    this.trinhThamDinhScService.getDanhSachQuyetDinh({}).then((res) => {
       this.spinner.hide();
-      if(res.data){
+      if (res.data) {
         res.data?.forEach(item => {
           item.ngayDuyetLdtcFr = moment(item.ngayDuyetLdtc).format('DD/MM/yyyy');
-          item.thoiHanNhapFr = moment(item.thoiHanNhap).format('DD/MM/yyyy');;
+          item.thoiHanNhapFr = moment(item.thoiHanNhap).format('DD/MM/yyyy');
+          ;
           item.thoiHanXuatFr = moment(item.thoiHanXuat).format('DD/MM/yyyy');
         })
         const modalQD = this.modal.create({
@@ -77,24 +103,24 @@ export class ThemMoiQdComponent extends Base3Component implements OnInit {
           nzFooter: null,
           nzComponentParams: {
             dataTable: res.data,
-            dataHeader: ['Mã tờ trình','Trích yếu','Ngày duyệt','Thời hạn xuất','Thời hạn nhập'],
-            dataColumn: ['soTtr', 'trichYeu','ngayDuyetLdtcFr','thoiHanXuatFr','thoiHanNhapFr']
+            dataHeader: ['Mã tờ trình', 'Trích yếu', 'Ngày duyệt', 'Thời hạn xuất', 'Thời hạn nhập'],
+            dataColumn: ['soTtr', 'trichYeu', 'ngayDuyetLdtcFr', 'thoiHanXuatFr', 'thoiHanNhapFr']
           },
         });
         modalQD.afterClose.subscribe(async (data) => {
           if (data) {
             this.spinner.show();
             console.log(data)
-            this.trinhThamDinhScService.getDetail(data.id).then((res)=>{
+            this.trinhThamDinhScService.getDetail(data.id).then((res) => {
               this.spinner.hide();
-              if(res.data){
+              if (res.data) {
                 const dataTh = res.data
                 this.formData.patchValue({
-                  soTtr : data.soTtr,
-                  idTtr : data.id,
-                  ngayDuyetLdtc : data.ngayDuyetLdtc,
-                  thoiHanNhap : data.thoiHanNhap,
-                  thoiHanXuat : data.thoiHanXuat,
+                  soTtr: data.soTtr,
+                  idTtr: data.id,
+                  ngayDuyetLdtc: data.ngayDuyetLdtc,
+                  thoiHanNhap: data.thoiHanNhap,
+                  thoiHanXuat: data.thoiHanXuat,
                 })
                 this.dataTable = chain(dataTh.children).groupBy('scDanhSachHdr.tenChiCuc').map((value, key) => ({
                     tenDonVi: key,
@@ -107,6 +133,35 @@ export class ThemMoiQdComponent extends Base3Component implements OnInit {
         });
       }
     })
+  }
+
+  showSave(){
+    let trangThai = this.formData.value.trangThai;
+    return trangThai == STATUS.DU_THAO ;
+  }
+
+  save(isGuiDuyet?){
+    this.spinner.show();
+    let body = this.formData.value;
+    body.fileDinhKemReq = this.fileDinhKem;
+    body.fileCanCuReq = this.fileCanCu;
+    if(this.formData.value.soQd){
+      body.soQd = this.formData.value.soQd + '/QĐ-TCDT'
+    }
+    this.createUpdate(body).then((res)=>{
+      if(res){
+        if(isGuiDuyet){
+          this.id = res.id;
+          this.pheDuyet();
+        }else{
+          this.redirectDefault();
+        }
+      }
+    })
+  }
+
+  pheDuyet(){
+
   }
 
   disabled(){
