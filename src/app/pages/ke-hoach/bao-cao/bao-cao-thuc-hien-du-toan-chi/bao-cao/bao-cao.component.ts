@@ -35,6 +35,8 @@ export class BaoCaoComponent implements OnInit {
     userInfo: any;
     //thong tin chung bao cao
     baoCao: Report = new Report();
+    dataPl3: any;
+    dataPl2: any;
     //danh muc
     lstPhuLuc: any = Dtc.PHU_LUC;
     nguoiBcaos: any[];

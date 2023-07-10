@@ -412,7 +412,7 @@
                             <tr *ngFor="let data of lstCtietBcao; let i = index">
                                 <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
                                     <td nzLeft>
-                                        {{getIndex(data.stt)}}
+                                        {{ data.index() }}
                                     </td>
                                     <td nzLeft>
                                         {{data.tenDan}}
@@ -492,7 +492,7 @@
                                 </ng-container>
                                 <ng-template #editTemplate>
                                     <td nzLeft>
-                                        {{getIndex(data.stt)}}
+                                        {{ data.index() }}
                                     </td>
                                     <td nzLeft>
                                         {{editCache[data.id].data.tenDan}}
