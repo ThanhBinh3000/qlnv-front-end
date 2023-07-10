@@ -66,7 +66,7 @@
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button type="button" class="btn btn-sub xanh" (click)="openModelCreate(null, false)">
+        <button type="button" class="btn btn-sub xanh" (click)="openModalCreate(null, false)">
           <i class="icon htvbdh_dau-cong xanh"></i>
           <span>Tạo sổ kho/thẻ kho</span>
         </button>
@@ -178,7 +178,7 @@
                     <td class="bg-parent2 font-weight-bold"></td>
                     <td class="bg-parent2 font-weight-bold"></td>
                     <td nzRight class="bg-parent2 font-weight-bold">
-                      <a >
+                      <a (click)="openModalCreate(null, false)" *ngIf="!nganKho.children">
                         <i class="fa fa-plus"></i>
                       </a>
                     </td>
@@ -217,9 +217,9 @@
                             <td></td>
                             <td class="bg-parent2 font-weight-bold" [nzExpand]="expandSet.has(nam.idVirtual)"
                                 (nzExpandChange)="onExpandChange(soKho.idVirtual, $event)">{{soKho.ten}}</td>
-                            <td class="bg-parent2 font-weight-bold">555</td>
-                            <td class="bg-parent2 font-weight-bold">55</td>
-                            <td class="bg-parent2 font-weight-bold">555</td>
+                            <td class="bg-parent2 font-weight-bold"></td>
+                            <td class="bg-parent2 font-weight-bold"></td>
+                            <td class="bg-parent2 font-weight-bold"></td>
                             <td class="bg-parent2 font-weight-bold"></td>
                             <td class="bg-parent2 font-weight-bold"></td>
                             <td class="bg-parent2 font-weight-bold"></td>
@@ -232,10 +232,10 @@
                             <td class="bg-parent2 font-weight-bold"></td>
                             <td class="bg-parent2 font-weight-bold"></td>
                             <td class="bg-parent2 font-weight-bold" nzRight>
-                              <a >
+                              <a (click)="openModalCreate(soKho.id, true)" >
                                 <i class="fa fa-eye"></i>
                               </a>
-                              <a >
+                              <a (click)="openModalCreate(null, false)" >
                                 <i class="fa fa-plus"></i>
                               </a>
                             </td>
@@ -250,9 +250,9 @@
                                 <td></td>
                                 <td class="bg-parent2 font-weight-bold" [nzExpand]="expandSet.has(soKho.idVirtual)"
                                     (nzExpandChange)="onExpandChange(theKho.idVirtual, $event)">{{theKho.ten}}</td>
-                                <td class="bg-parent2 font-weight-bold">444</td>
-                                <td class="bg-parent2 font-weight-bold">444</td>
-                                <td class="bg-parent2 font-weight-bold">444</td>
+                                <td class="bg-parent2 font-weight-bold"></td>
+                                <td class="bg-parent2 font-weight-bold"></td>
+                                <td class="bg-parent2 font-weight-bold"></td>
                                 <td class="bg-parent2 font-weight-bold"></td>
                                 <td class="bg-parent2 font-weight-bold"></td>
                                 <td class="bg-parent2 font-weight-bold"></td>
@@ -264,7 +264,7 @@
                                 <td class="bg-parent2 font-weight-bold"></td>
                                 <td class="bg-parent2 font-weight-bold"></td>
                                 <td class="bg-parent2 font-weight-bold" nzRight>
-                                  <a >
+                                  <a (click)="openModalCreate(theKho.id, true)" >
                                     <i class="fa fa-eye"></i>
                                   </a>
                                 </td>
@@ -279,9 +279,9 @@
                                     <td></td>
                                     <td></td>
                                     <td class="bg-parent2 font-weight-bold" >{{phieuNhapXuat.id}}</td>
-                                    <td class="bg-parent2 font-weight-bold">123</td>
-                                    <td class="bg-parent2 font-weight-bold">123</td>
-                                    <td class="bg-parent2 font-weight-bold">123</td>
+                                    <td class="bg-parent2 font-weight-bold"></td>
+                                    <td class="bg-parent2 font-weight-bold"></td>
+                                    <td class="bg-parent2 font-weight-bold"></td>
                                     <td class="bg-parent2 font-weight-bold"></td>
                                     <td class="bg-parent2 font-weight-bold"></td>
                                     <td class="bg-parent2 font-weight-bold"></td>
