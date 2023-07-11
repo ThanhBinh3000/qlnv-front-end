@@ -10,8 +10,10 @@ import { Base2Component } from "src/app/components/base2/base2.component";
 import {
   DialogTableSelectionComponent
 } from "src/app/components/dialog/dialog-table-selection/dialog-table-selection.component";
+import { KIEU_NHAP_XUAT } from "src/app/constants/config";
 import { MESSAGE } from "src/app/constants/message";
 import { STATUS } from "src/app/constants/status";
+import { DanhMucDungChungService } from "src/app/services/danh-muc-dung-chung.service";
 import { DanhMucService } from "src/app/services/danhmuc.service";
 import { BienBanNghiemThuBaoQuanLanDauService } from "src/app/services/dieu-chuyen-noi-bo/nhap-dieu-chuyen/bien-ban-nghiem-thu-bao-quan-lan-dau.service";
 import { PhieuKiemTraChatLuongService } from "src/app/services/dieu-chuyen-noi-bo/nhap-dieu-chuyen/phieu-kiem-tra-chat-luong";
@@ -19,7 +21,7 @@ import { PhieuNhapKhoService } from "src/app/services/dieu-chuyen-noi-bo/nhap-di
 import { QuyetDinhDieuChuyenCucService } from "src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-c.service";
 import { StorageService } from "src/app/services/storage.service";
 import { convertTienTobangChu } from "src/app/shared/commonFunction";
-import { v4 as uuidv4 } from 'uuid';
+import * as uuidv4 from "uuid";
 
 @Component({
   selector: 'app-thong-tin-phieu-nhap-kho',
@@ -57,6 +59,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
     modal: NzModalService,
     private cdr: ChangeDetectorRef,
     private danhMucService: DanhMucService,
+    private dmService: DanhMucDungChungService,
     private phieuKiemTraChatLuongService: PhieuKiemTraChatLuongService,
     private quyetDinhDieuChuyenCucService: QuyetDinhDieuChuyenCucService,
     private phieuNhapKhoService: PhieuNhapKhoService,
@@ -101,8 +104,8 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
       donViNguoiGiao: [],
       diaChi: [],
       tgianGiaoNhanHang: [],
-      loaiHinhNx: [],
-      kieuNx: [],
+      tenLoaiHinhNhapXuat: [],
+      tenKieuNhapXuat: [],
       bbNghiemThuBqld: [],
       soLuongQdDcCuc: [],
       dviTinh: [],
@@ -131,7 +134,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
       soPhieuNhapKho: `${id}/${this.formData.get('nam').value}/${this.maBb}`,
 
     })
-
+    this.getDataNX()
     if (this.idInput) {
       await this.loadChiTiet(this.idInput)
     }
@@ -183,6 +186,24 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
     if (tien) {
       return convertTienTobangChu(tien);
     }
+  }
+
+  async getDataNX() {
+    await this.spinner.show()
+    const body = { loai: 'LOAI_HINH_NHAP_XUAT', ma: 96 }
+    let res = await this.dmService.search(body);
+    if (res.statusCode == 0) {
+      const data = res.data.content
+      if (data && data.length > 0) {
+        const content = data[0]
+        this.formData.patchValue({
+          tenLoaiHinhNhapXuat: content.giaTri,
+          tenKieuNhapXuat: KIEU_NHAP_XUAT[content.ghiChu]
+        });
+      }
+    }
+
+    await this.spinner.hide();
   }
 
   async loadChiTiet(id: number) {

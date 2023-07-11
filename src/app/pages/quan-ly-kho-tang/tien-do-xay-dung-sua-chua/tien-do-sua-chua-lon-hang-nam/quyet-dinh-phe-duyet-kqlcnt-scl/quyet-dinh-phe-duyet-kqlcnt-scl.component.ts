@@ -4,13 +4,7 @@ import {StorageService} from "../../../../../services/storage.service";
 import {NzNotificationService} from "ng-zorro-antd/notification";
 import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
-import {
-  QuyetdinhpheduyetKhlcntService
-} from "../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetKhlcnt.service";
 import {Base2Component} from "../../../../../components/base2/base2.component";
-import {
-  QuyetdinhpheduyetKqLcntService
-} from "../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetKqLcnt.service";
 import {MESSAGE} from "../../../../../constants/message";
 import {
   QuyetdinhpheduyetKqLcntSclService

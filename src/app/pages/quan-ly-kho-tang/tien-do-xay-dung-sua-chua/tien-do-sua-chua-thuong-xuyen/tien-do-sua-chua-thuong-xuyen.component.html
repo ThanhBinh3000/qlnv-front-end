@@ -260,15 +260,14 @@
 <!--              &lt;!&ndash;              <img *ngIf="trangThaiHopDong" class="ml-1"&ndash;&gt;-->
 <!--              &lt;!&ndash;                   src="../../../../../assets/images/icon_tick_xanh.svg" width="14" height="14"/>&ndash;&gt;-->
 <!--            </li>-->
-<!--            <li nz-menu-item-->
-<!--                [ngClass]="{'disabled-tab': !trangThaiTienDoCv}"-->
-<!--                [nzSelected]="tabSelected == '07'" (click)="selectTab('07')">-->
-<!--              Biên bản nghiệm thu-->
-<!--              &lt;!&ndash;              <img *ngIf="!trangThaiHopDong" class="ml-1"&ndash;&gt;-->
-<!--              &lt;!&ndash;                   src="../../../../../assets/images/icon_reject.svg" width="14" height="14"/>&ndash;&gt;-->
-<!--              &lt;!&ndash;              <img *ngIf="trangThaiHopDong" class="ml-1"&ndash;&gt;-->
-<!--              &lt;!&ndash;                   src="../../../../../assets/images/icon_tick_xanh.svg" width="14" height="14"/>&ndash;&gt;-->
-<!--            </li>-->
+            <li nz-menu-item
+                [nzSelected]="tabSelected == '07'" (click)="selectTab('07')">
+              Biên bản nghiệm thu
+              <!--              <img *ngIf="!trangThaiHopDong" class="ml-1"-->
+              <!--                   src="../../../../../assets/images/icon_reject.svg" width="14" height="14"/>-->
+              <!--              <img *ngIf="trangThaiHopDong" class="ml-1"-->
+              <!--                   src="../../../../../assets/images/icon_tick_xanh.svg" width="14" height="14"/>-->
+            </li>
           </ul>
         </nz-affix>
         <ng-container *ngIf="tabSelected == '01'">
@@ -296,9 +295,9 @@
 <!--        <ng-container *ngIf="tabSelected == '06'">-->
 <!--          <app-tien-do-cong-viec-scl [itemQdPdKhLcnt]="itemQdPdKhLcnt"></app-tien-do-cong-viec-scl>-->
 <!--        </ng-container>-->
-<!--        <ng-container *ngIf="tabSelected == '07'">-->
-<!--          <app-bien-ban-nghiem-thu-scl></app-bien-ban-nghiem-thu-scl>-->
-<!--        </ng-container>-->
+        <ng-container *ngIf="tabSelected == '07'">
+          <app-bien-ban-nghiem-thu-sctx [itemQdPdKhLcnt]="itemQdPdKhLcnt" [itemDuAn]="itemSelected"></app-bien-ban-nghiem-thu-sctx>
+        </ng-container>
       </nz-card>
     </div>
   </div>

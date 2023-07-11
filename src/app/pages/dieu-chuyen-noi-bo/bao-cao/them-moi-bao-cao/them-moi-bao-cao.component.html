@@ -75,7 +75,7 @@
                         </nz-form-label>
                         <nz-form-control>
                             <nz-input-group>
-                                <input nz-input readonly formControlName="donViNhan" />
+                                <input nz-input readonly formControlName="tenDviNhan" />
                             </nz-input-group>
                         </nz-form-control>
                     </nz-form-item>
@@ -84,8 +84,8 @@
                     <nz-form-item class="form-item">
                         <nz-form-label [nzNoColon]="true" nzRequired> Số báo cáo</nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
-                            <nz-input-group nzAddOnAfter="/QĐ - CDTVT">
-                                <input [readonly]="true" nz-input formControlName="soBaoCao" readonly />
+                            <nz-input-group nzAddOnAfter="/BC-CCDTVP">
+                                <input [readonly]="isView" nz-input formControlName="soBc" readonly />
                             </nz-input-group>
                         </nz-form-control>
                     </nz-form-item>
@@ -97,20 +97,20 @@
                         </nz-form-label>
                         <nz-form-control>
                             <nz-input-group>
-                                <nz-date-picker nzFormat="dd/MM/YYYY" formControlName="ngayBaoCao"
+                                <nz-date-picker nzFormat="dd/MM/YYYY" formControlName="ngayBc"
                                     zDisabled></nz-date-picker>
                             </nz-input-group>
                         </nz-form-control>
                     </nz-form-item>
                 </div>
-                <div nz-col [nzSpan]="12">
+                <div nz-col [nzSpan]="16">
                     <nz-form-item>
                         <nz-form-label [nzNoColon]="true">
                             Tên báo cáo
                         </nz-form-label>
                         <nz-form-control>
                             <nz-input-group>
-                                <input nz-input [readOnly]="isView" formControlName="tenBaoCao" />
+                                <input nz-input [readOnly]="isView" formControlName="tenBc" />
                             </nz-input-group>
                         </nz-form-control>
                     </nz-form-item>
@@ -121,8 +121,8 @@
                             Số QĐ ĐC của Cục
                         </nz-form-label>
                         <nz-form-control>
-                            <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openModalQDCuc">
-                                <input nz-input formControlName="soQinhCuc" />
+                            <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogSoQd()">
+                                <input nz-input formControlName="soQdDcCuc" />
                             </nz-input-group>
                         </nz-form-control>
                     </nz-form-item>
@@ -130,21 +130,9 @@
                 <div nz-col [nzSpan]="4">
                     <nz-form-item>
                         <nz-form-label [nzNoColon]="true">
-                            Số QĐ ĐC của Tổng cục
+                            Ngày ký quyết định của Cục
                         </nz-form-label>
-                        <nz-form-control>
-                            <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openModalQDTongCuc">
-                                <input nz-input formControlName="soQdinhTongCuc" />
-                            </nz-input-group>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-                <div nz-col [nzSpan]="4">
-                    <nz-form-item>
-                        <nz-form-label [nzNoColon]="true">
-                            Ngày ký quyết định tổng cục
-                        </nz-form-label>
-                        <nz-date-picker nzFormat="dd/MM/YYYY" formControlName="ngayKyQdTongCuc" nzDisabled>
+                        <nz-date-picker nzFormat="dd/MM/YYYY" formControlName="ngayKyQdCuc" nzDisabled>
                         </nz-date-picker>
                     </nz-form-item>
                 </div>

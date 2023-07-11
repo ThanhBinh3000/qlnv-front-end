@@ -6,16 +6,11 @@ import {NzNotificationService} from "ng-zorro-antd/notification";
 import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
 import {FormGroup} from '@angular/forms';
-import {HopdongService} from "../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/hopdong.service";
-import {chain} from "lodash";
+import {chain, cloneDeep} from "lodash";
 import {v4 as uuidv4} from "uuid";
 import {AMOUNT_NO_DECIMAL} from "../../../../../Utility/utils";
 import {STATUS} from "../../../../../constants/status";
 import {Base2Component} from "../../../../../components/base2/base2.component";
-import { cloneDeep } from 'lodash';
-import {
-  TienDoCongViecService
-} from "../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/tien-do-cong-viec.service";
 import {
   ThongTinTienDoCongViecSclComponent
 } from "./thong-tin-tien-do-cong-viec-scl/thong-tin-tien-do-cong-viec-scl.component";

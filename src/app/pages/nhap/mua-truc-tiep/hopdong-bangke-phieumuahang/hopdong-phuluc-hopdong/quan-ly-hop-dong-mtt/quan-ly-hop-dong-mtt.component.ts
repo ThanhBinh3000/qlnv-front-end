@@ -65,6 +65,7 @@ export class QuanLyHopDongMttComponent extends Base2Component implements OnInit 
   }
 
   async ngOnInit() {
+    this.dataTable = []
     await this.spinner.show()
     await Promise.all([
     ]);
@@ -106,7 +107,12 @@ export class QuanLyHopDongMttComponent extends Base2Component implements OnInit 
 
           })
           this.danhSachCtiet = res.data.danhSachCtiet;
-          this.showDetail(event, this.danhSachCtiet[0])
+          this.danhSachCtiet.forEach(item =>{
+            this.dataTable.push(...item.listHdong)
+          })
+          console.log(this.danhSachCtiet)
+          // this.showDetail(event, this.danhSachCtiet[0])
+          this.showDetailHd(event, this.dataTable[0])
         });
       }
     }
@@ -192,20 +198,20 @@ export class QuanLyHopDongMttComponent extends Base2Component implements OnInit 
     }
   }
   idRowSelect: number;
-  async showDetail($event, data: any) {
-    await this.spinner.show();
-    if ($event.type == "click") {
-      this.selected = false;
-      $event.target.parentElement.parentElement.querySelector(".selectedRow")?.classList.remove("selectedRow");
-      $event.target.parentElement.classList.add("selectedRow");
-    } else {
-      this.selected = true;
-    }
-    this.idRowSelect = data.id;
-    this.dataTable = data.listChaoGia.filter((item) => item.luaChon == true);
-    this.showDetailHd($event, this.dataTable[0])
-    await this.spinner.hide();
-  }
+  // async showDetail($event, data: any) {
+  //   await this.spinner.show();
+  //   if ($event.type == "click") {
+  //     this.selected = false;
+  //     $event.target.parentElement.parentElement.querySelector(".selectedRow")?.classList.remove("selectedRow");
+  //     $event.target.parentElement.classList.add("selectedRow");
+  //   } else {
+  //     this.selected = true;
+  //   }
+  //   this.idRowSelect = data.id;
+  //   this.dataTable = data.listHdong;
+  //   this.showDetailHd($event, this.dataTable[0])
+  //   await this.spinner.hide();
+  // }
 
   async showDetailHd($event, data: any) {
     await this.spinner.show();
@@ -217,6 +223,11 @@ export class QuanLyHopDongMttComponent extends Base2Component implements OnInit 
       this.selectedHd = true;
     }
     this.idHopDong = data.id;
+    this.id = data.idQdKq;
+
+    console.log("showDetailHd ", this.idHopDong)
+    console.log("showDetailHd ", this.loaiVthh)
+    console.log("showDetailHd ", this.id)
     await this.spinner.hide();
   }
 

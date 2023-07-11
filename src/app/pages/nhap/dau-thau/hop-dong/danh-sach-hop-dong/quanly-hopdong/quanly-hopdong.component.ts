@@ -170,7 +170,7 @@ export class QuanlyHopdongComponent implements OnInit {
       })
       this.formData.patchValue({
         soHdDaKy: soHdDaKy,
-        soLuongNhap: soLuong,
+        soLuongNhapKh: soLuong,
         tongMucDtGoiTrung: tongMucDtGoiTrung
       })
     };
@@ -199,8 +199,16 @@ export class QuanlyHopdongComponent implements OnInit {
       soGthauTruot: data.qdKhlcntDtl?.soGthauTruot,
       tenTrangThaiHd: data.tenTrangThaiHd,
       trangThaiHd: data.trangThaiHd,
-      tongMucDt: data.qdKhlcntDtl?.soLuong * data.qdKhlcntDtl?.donGiaVat * 1000
     });
+    if(data.qdKhlcntDtl?.children) {
+      let tongMucDt = 0;
+      data.qdKhlcntDtl?.children.forEach(i => {
+         tongMucDt += i.donGiaNhaThau * i.soLuong * 1000
+      })
+      this.formData.patchValue({
+        tongMucDt: tongMucDt
+      })
+    }
     this.dataTable = data.qdKhlcntDtl?.children.filter(item => item.trangThai == STATUS.THANH_CONG);
     if (data.listHopDong) {
       let soLuong = 0
@@ -221,7 +229,7 @@ export class QuanlyHopdongComponent implements OnInit {
       })
       this.formData.patchValue({
         soHdDaKy: soHdDaKy,
-        soLuongNhap: soLuong,
+        soLuongNhapKh: soLuong,
         tongMucDtGoiTrung: tongMucDtGoiTrung
       })
     };
