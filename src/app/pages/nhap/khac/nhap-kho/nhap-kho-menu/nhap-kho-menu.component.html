@@ -35,13 +35,13 @@
 </nz-affix>
 <ng-container *ngIf="typeVthh !== '02'">
   <ng-container *ngIf="tabSelected == 0">
-    <app-phieu-nhap-kho [loaiDc]="typeVthh"></app-phieu-nhap-kho>
+    <app-phieu-nhap-kho [loaiVthh]="typeVthh"></app-phieu-nhap-kho>
   </ng-container>
   <ng-container *ngIf="tabSelected == 1">
-    <app-bang-ke-can-hang [loaiDc]="typeVthh"></app-bang-ke-can-hang>
+    <app-bang-ke-can-hang [loaiVthh]="typeVthh"></app-bang-ke-can-hang>
   </ng-container>
   <ng-container *ngIf="tabSelected == 2">
-    <app-bien-ban-nhap-day-kho [loaiDc]="typeVthh"></app-bien-ban-nhap-day-kho>
+    <app-bien-ban-nhap-day-kho [loaiVthh]="typeVthh"></app-bien-ban-nhap-day-kho>
   </ng-container>
 </ng-container>
 <ng-container *ngIf="typeVthh === '02'">

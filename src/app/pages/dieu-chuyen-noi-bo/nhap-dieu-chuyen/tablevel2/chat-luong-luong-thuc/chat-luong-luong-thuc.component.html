@@ -26,7 +26,7 @@
         <app-kiem-tra-chat-luong [loaiDc]="loaiDc" *ngIf="tabSelected == 1"></app-kiem-tra-chat-luong>
       </ng-container>
       <ng-container *ngIf="tabSelected == 2">
-        <app-bien-ban-mau [loaiDc]="loaiDc" *ngIf="tabSelected == 2"></app-bien-ban-mau>
+        <app-bien-ban-mau [loaiDc]="loaiDc" [isVatTu]="false" *ngIf="tabSelected == 2"></app-bien-ban-mau>
       </ng-container>
       <ng-container *ngIf="tabSelected == 3">
         <app-kiem-nghiem-chat-luong [loaiDc]="loaiDc" *ngIf="tabSelected == 3"></app-kiem-nghiem-chat-luong>

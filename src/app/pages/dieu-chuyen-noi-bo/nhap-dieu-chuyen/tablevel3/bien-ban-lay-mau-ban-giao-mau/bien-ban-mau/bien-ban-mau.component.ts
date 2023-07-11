@@ -29,6 +29,7 @@ export class BienBanMauComponent extends Base2Component implements OnInit {
   visibleTab: boolean = true;
   tabSelected: number = 0;
   @Input() loaiDc: string;
+  @Input() isVatTu: boolean;
 
   @Input()
   loaiVthh: string;
@@ -75,7 +76,8 @@ export class BienBanMauComponent extends Base2Component implements OnInit {
       ngayHieuLuc: null,
       trichYeu: null,
       type: ["01"],
-      loaiDc: ["DCNB"]
+      loaiDc: [this.loaiDc],
+      isVatTu: [this.isVatTu]
     })
     this.filterTable = {
       nam: '',
@@ -96,16 +98,15 @@ export class BienBanMauComponent extends Base2Component implements OnInit {
   userInfo: UserLogin;
   userdetail: any = {};
   selectedId: number = 0;
-  isVatTu: boolean = false;
   isView = false;
 
-  disabledStartNgayLapKh = (startValue: Date): boolean => {
-    if (startValue && this.formData.value.ngayLapKhDen) {
-      return startValue.getTime() > this.formData.value.ngayLapKhDen.getTime();
-    } else {
-      return false;
-    }
-  };
+  // disabledStartNgayLapKh = (startValue: Date): boolean => {
+  //   if (startValue && this.formData.value.ngayLapKhDen) {
+  //     return startValue.getTime() > this.formData.value.ngayLapKhDen.getTime();
+  //   } else {
+  //     return false;
+  //   }
+  // };
 
   // disabledEndNgayLapKh = (endValue: Date): boolean => {
   //   if (!endValue || !this.formData.value.ngayLapKhTu) {
@@ -132,7 +133,10 @@ export class BienBanMauComponent extends Base2Component implements OnInit {
     this.isVisibleChangeTab$.subscribe((value: boolean) => {
       this.visibleTab = value;
     });
-
+    this.formData.patchValue({
+      loaiDc: this.loaiDc,
+      isVatTu: this.isVatTu
+    })
 
 
     try {

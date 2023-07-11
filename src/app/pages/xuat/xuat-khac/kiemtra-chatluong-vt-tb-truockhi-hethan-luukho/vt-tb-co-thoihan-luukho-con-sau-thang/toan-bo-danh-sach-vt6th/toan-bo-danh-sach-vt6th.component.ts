@@ -42,7 +42,7 @@ export class ToanBoDanhSachVt6ThComponent extends Base2Component implements OnIn
     super(httpClient, storageService, notification, spinner, modal, danhSachVttbTruocHethanLuuKhoService);
     this.formData = this.fb.group({
       id: [],
-      maDvi: [],
+      maDvi: [this.userInfo.MA_DVI],
       idTongHop: [],
       maTongHop: [],
       maDiaDiem: [],
