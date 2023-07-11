@@ -756,7 +756,14 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
   }
 
   buildTableView() {
-    let dataView = chain(this.formData.value.danhSachHangHoa)
+    let danhSachView = this.formData.value.danhSachHangHoa.map(item => {
+      // Ngăn kho C1/2-Nhà kho C1
+      return { ...item,
+        loKhoXuat: item.coLoKho ? item.tenLoKho + " - " + item.tenNhaKho : item.tenNganKho + " - " + item.tenNhaKho,
+        loKhoNhan: item.coLoKhoNhan ? item.tenLoKhoNhan + " - " + item.tenNhaKhoNhan : item.tenNganKhoNhan + " - " + item.tenNhaKhoNhan,
+      };
+    });
+    let dataView = chain(danhSachView)
       .groupBy("maChiCucNhan")
       .map((value, key) => {
         let rs = chain(value)
@@ -764,47 +771,31 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
           .map((v, k) => {
             let rssLoKho = [];
             let rss = chain(v)
-              .groupBy("maNganKho")
+              .groupBy("loKhoXuat")
               .map((vs, ks) => {
                 let rsss = chain(vs)
-                  .groupBy("maLoKho")
-                  .map((vss, ks) => {
-                      let maLoKho = vss.find(s => (s.maLoKho == ks || "" + s.maLoKho == ks));
-                      let khoNhan = vss.filter(item => !(item.maDiemKhoNhan == undefined || item.maDiemKhoNhan == ""));
-                      let rssss = chain(khoNhan)
-                        .groupBy("maNhaKhoNhan")
-                        .map((vsss, ksss) => {
-                            let maNhaKhoNhan = vsss.find(s => s.maNhaKhoNhan === ksss);
-                            return {
-                              ...maNhaKhoNhan,
-                              idVirtual: maNhaKhoNhan ? maNhaKhoNhan.idVirtual ? maNhaKhoNhan.idVirtual : uuid.v4() : uuid.v4(),
-                              childData: vss
-                            }
-                          }
-                        ).value();
+                  .groupBy("maDiemKhoNhan")
+                  .map((vss, kss) => {
+                      let maLoKho = vss.find(s => (s.maDiemKhoNhan == kss));
+                       let rssss = chain(vss)
+                         .groupBy("loKhoNhan")
+                         .map((vsss, ksss) => {
+                           let maLoKhoNhan = vsss.find(s => (s.loKhoNhan == ksss));
+                           return {
+                             ...maLoKhoNhan,
+                             idVirtual: maLoKhoNhan ? maLoKhoNhan.idVirtual ? maLoKhoNhan.idVirtual : uuid.v4() : uuid.v4(),
+                           }
+                         }).value();
                       return {
                         ...maLoKho,
                         idVirtual: maLoKho ? maLoKho.idVirtual ? maLoKho.idVirtual : uuid.v4() : uuid.v4(),
-                        maDiemKhoNhan: "",
-                        tenDiemKhoNhan: "",
-                        maNhaKhoNhan: "",
-                        tenNhaKhoNhan: "",
-                        maNganKhoNhan: "",
-                        tenNganKhoNhan: "",
-                        coLoKhoNhan: true,
-                        maLoKhoNhan: "",
-                        tenLoKhoNhan: "",
-                        soLuongPhanBo: 0,
-                        tichLuongKd: 0,
-                        slDcConLai: 0,
-                        childData: rssss
+                        childData: (kss != "null" && kss != null && kss != undefined && kss != "undefined"  )  ? rssss: []
                       }
                     }
-                  ).value();
+                  ).value().filter(it => it.maDiemKhoNhan != undefined);
                   let duToanKphi = vs.reduce((prev, cur) => prev + cur.duToanKphi, 0);
-                  let rowNganKho = vs.find(s => s.maNganKho === ks);
+                  let rowNganKho = vs.find(s => s.loKhoXuat === ks);
 
-                  rssLoKho = (rowNganKho.coLoKho? [...rsss, ...rssLoKho] : [...rssLoKho]);
                   return {
                     ...rowNganKho,
                     idVirtual: rowNganKho ? rowNganKho.idVirtual ? rowNganKho.idVirtual : uuid.v4() : uuid.v4(),
@@ -821,7 +812,7 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
                     tichLuongKd: 0,
                     slDcConLai: 0,
                     duToanKphi: duToanKphi,
-                    // childData: rowNganKho.coLoKho? rsss : []
+                    childData: rsss
                   }
                 }
               ).value();

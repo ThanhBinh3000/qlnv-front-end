@@ -19,7 +19,7 @@ import { QuyetDinhDieuChuyenCucService } from "src/app/services/dieu-chuyen-noi-
 import { BbNghiemThuBaoQuanService } from "src/app/services/qlnv-hang/nhap-hang/nhap-khac/bbNghiemThuBaoQuan.service";
 import { DanhMucTieuChuanService } from "src/app/services/quantri-danhmuc/danhMucTieuChuan.service";
 import { StorageService } from "src/app/services/storage.service";
-
+import * as uuidv4 from "uuid";
 
 @Component({
   selector: 'app-thong-tin-kiem-tra-chat-luong',

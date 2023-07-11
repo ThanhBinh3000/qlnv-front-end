@@ -52,7 +52,7 @@ export class PhuLucMttComponent extends Base2Component implements OnInit {
         ngayHluc: [null, [Validators.required]],
         soPhuLuc: ['', [Validators.required]],
         ngayHlucPhuLuc: [null, [Validators.required]],
-        noiDungPhuLuc: ['', [Validators.required]],
+        noiDungPl: ['', [Validators.required]],
         thoiGianDuKien: [null, [Validators.required]],
         tgianGnhanTu: [],
         tgianGnhanDen: [],
@@ -163,12 +163,12 @@ export class PhuLucMttComponent extends Base2Component implements OnInit {
     body.soPhuLuc = this.formData.value.soPhuLuc + this.maHopDongSuffix;
     body.phuLucDtl = this.dataTable;
     body.fileDinhKems = this.fileDinhKem;
-    let data = await this.createUpdate(body);
-    if (data) {
+    let data = await this.thongTinPhuLucHopDongService.createPl(body);
+    if (data.data) {
       if (isOther) {
         this.formData.patchValue({
-          id: data.id,
-          trangThaiPhuLuc: data.trangThaiPhuLuc
+          id: data.data.id,
+          trangThaiPhuLuc: data.data.trangThaiPhuLuc
         })
         this.pheDuyet();
       } else {

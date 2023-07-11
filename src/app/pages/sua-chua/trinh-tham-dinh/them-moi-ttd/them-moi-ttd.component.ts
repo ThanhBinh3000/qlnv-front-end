@@ -6,8 +6,6 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Base3Component } from 'src/app/components/base3/base3.component';
 import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { MmHienTrangMmService } from 'src/app/services/mm-hien-trang-mm.service';
 import { StorageService } from 'src/app/services/storage.service';
 import {TongHopScService} from "../../../../services/sua-chua/tongHopSc.service";
 import {MESSAGE} from "../../../../constants/message";
@@ -40,6 +38,7 @@ export class ThemMoiTtdComponent extends Base3Component implements OnInit {
     this.defaultURL = 'sua-chua/trinh-tham-dinh'
     this.getId();
     this.formData = this.fb.group({
+      id : [null],
       trangThai: ['00'],
       tenTrangThai: ['Dự thảo'],
       soTtr: [null, [Validators.required]],
@@ -47,10 +46,13 @@ export class ThemMoiTtdComponent extends Base3Component implements OnInit {
       maThHdr: [null, [Validators.required]],
       idThHdr: [null, [Validators.required]],
       ngayDuyetLdc: [null],
-      thoiHanXuat: [null, [Validators.required]],
-      thoiHanNhap: [null, [Validators.required]],
+      thoiHanXuat: [null,],
+      thoiHanXuatDk: [null, [Validators.required]],
+      thoiHanNhap: [null, ],
+      thoiHanNhapDk: [null, [Validators.required]],
       soQdSc: [null],
       trichYeu: [null, [Validators.required]],
+      ketQua : [null, [Validators.required]],
       lyDoTuChoi : [null],
     })
   }
@@ -66,13 +68,30 @@ export class ThemMoiTtdComponent extends Base3Component implements OnInit {
     if(this.id){
       this.detail(this.id).then((res)=>{
         if(res){
-          console.log(res)
-          this.formData.patchValue(res);
+          let ttr = res.soTtr.split('/')[0];
+          this.formData.patchValue({
+            soTtr : ttr
+          })
+          this.dataTable = chain(res.children).groupBy('scDanhSachHdr.tenChiCuc').map((value, key) => ({
+              tenDonVi: key,
+              children: value,
+            })
+          ).value()
         }
       })
     }
   }
 
+  showSave(){
+    let trangThai = this.formData.value.trangThai;
+    if(this.userService.isCuc()){
+      return trangThai == STATUS.DU_THAO;
+    }
+    if(this.userService.isTongCuc()){
+      return trangThai == STATUS.DA_DUYET_LDC ;
+    }
+    return false
+  }
   save(isGuiDuyet?){
     this.spinner.show();
     let body = this.formData.value;
@@ -91,7 +110,8 @@ export class ThemMoiTtdComponent extends Base3Component implements OnInit {
     this.createUpdate(body).then((res)=>{
       if(res){
         if(isGuiDuyet){
-          this.approve(res.data.id,STATUS.CHO_DUYET_TP,MESSAGE.GUI_DUYET_CONFIRM);
+          this.id = res.id;
+          this.pheDuyet();
         }else{
           this.redirectDefault();
         }
@@ -100,14 +120,17 @@ export class ThemMoiTtdComponent extends Base3Component implements OnInit {
   }
 
   openDialogDanhSach() {
+    if(this.disabledTrinh()){
+      return;
+    }
     this.spinner.show();
     this.tongHopScService.getDanhSachTrinhThamDinh({}).then((res)=>{
       this.spinner.hide();
       if(res.data){
           res.data?.forEach(item => {
-            item.thoiGianThFr = moment(item.thoiGianTh).format('dd/MM/yyyy HH:mm:ss');
-            item.thoiHanNhapFr = moment(item.thoiHanNhap).format('dd/MM/yyyy');;
-            item.thoiHanXuatFr = moment(item.thoiHanXuat).format('dd/MM/yyyy');
+            item.thoiGianThFr = moment(item.thoiGianTh).format('DD/MM/yyyy HH:mm:ss');
+            item.thoiHanNhapFr = moment(item.thoiHanNhap).format('DD/MM/yyyy');;
+            item.thoiHanXuatFr = moment(item.thoiHanXuat).format('DD/MM/yyyy');
           })
           const modalQD = this.modal.create({
             nzTitle: 'Danh sách sửa chữa',
@@ -132,8 +155,10 @@ export class ThemMoiTtdComponent extends Base3Component implements OnInit {
                   this.formData.patchValue({
                     maThHdr : dataTh.maDanhSach,
                     idThHdr : dataTh.id,
+                    thoiHanNhapDk : data.thoiHanNhap,
+                    thoiHanXuatDk : data.thoiHanXuat,
                     thoiHanNhap : data.thoiHanNhap,
-                    thoiHanXuat : data.thoiHanXuat
+                    thoiHanXuat : data.thoiHanXuat,
                   })
                   this.dataTable = chain(dataTh.children).groupBy('scDanhSachHdr.tenChiCuc').map((value, key) => ({
                       tenDonVi: key,
@@ -146,6 +171,72 @@ export class ThemMoiTtdComponent extends Base3Component implements OnInit {
           });
         }
     })
+  }
+
+  disabledTrinh(){
+    let trangThai = this.formData.value.trangThai;
+    return trangThai == STATUS.CHO_DUYET_TP || trangThai == STATUS.CHO_DUYET_LDC || trangThai == STATUS.DA_DUYET_LDC
+      || trangThai == STATUS.CHO_DUYET_LDV || trangThai == STATUS.CHO_DUYET_LDTC || trangThai == STATUS.DA_DUYET_LDTC;
+  }
+
+  disabledThamDinh(){
+    let trangThai = this.formData.value.trangThai;
+    return trangThai == STATUS.CHO_DUYET_LDV || trangThai == STATUS.CHO_DUYET_LDTC || trangThai == STATUS.DA_DUYET_LDTC;
+  }
+
+  showPheDuyetTuChoi(){
+    let trangThai = this.formData.value.trangThai;
+    if(this.userService.isCuc()){
+      return trangThai == STATUS.CHO_DUYET_TP || trangThai == STATUS.CHO_DUYET_LDC ;
+    }
+    if(this.userService.isTongCuc()){
+      return trangThai == STATUS.CHO_DUYET_LDV || trangThai == STATUS.CHO_DUYET_LDTC;
+    }
+    return false
+  }
+  pheDuyet(){
+    let trangThai
+    switch (this.formData.value.trangThai) {
+      case STATUS.CHO_DUYET_TP :
+        trangThai = STATUS.CHO_DUYET_LDC;
+        break;
+      case STATUS.CHO_DUYET_LDC :
+        trangThai = STATUS.DA_DUYET_LDC;
+        break;
+      case STATUS.DA_DUYET_LDC :
+        trangThai = STATUS.CHO_DUYET_LDV;
+        break;
+      case STATUS.CHO_DUYET_LDV :
+        trangThai = STATUS.CHO_DUYET_LDTC;
+        break;
+      case STATUS.CHO_DUYET_LDTC :
+        trangThai = STATUS.DA_DUYET_LDTC;
+        break;
+    }
+    this.approve(this.id,trangThai,'Bạn có muốn gửi duyệt',null,'Phê duyệt thành công');
+  }
+
+  tuChoi(){
+    let trangThai
+    switch (this.formData.value.trangThai) {
+      case STATUS.CHO_DUYET_TP :
+        trangThai = STATUS.TU_CHOI_TP;
+        break;
+      case STATUS.CHO_DUYET_LDC :
+        trangThai = STATUS.TU_CHOI_LDC;
+        break;
+      case STATUS.CHO_DUYET_LDV:
+        trangThai = STATUS.TU_CHOI_LDV;
+        break;
+      case STATUS.CHO_DUYET_LDTC :
+        trangThai = STATUS.TU_CHOI_LDTC;
+        break;
+    }
+    this.reject(this.id,trangThai);
+  }
+
+  viewTongCuc(){
+     return this.userService.isTongCuc();
   }
 
 }

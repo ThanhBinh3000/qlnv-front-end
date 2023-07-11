@@ -26,6 +26,7 @@ import { NzCollapsePanelComponent } from "ng-zorro-antd/collapse";
 })
 export class ThongtinDexuatVtComponent extends Base2Component implements OnInit {
   @Input() title;
+  @Input() titleDx;
   @Input() dataInput;
   @Input() isView: boolean = false;
   @Input() isCache: boolean = false;

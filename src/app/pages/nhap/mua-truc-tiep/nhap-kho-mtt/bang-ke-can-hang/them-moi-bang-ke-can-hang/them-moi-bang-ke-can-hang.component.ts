@@ -227,7 +227,6 @@ export class ThemMoiBangKeCanHangComponent extends Base2Component implements OnI
   }
 
   openDialogDdiemNhapHang() {
-    console.log(this.listDiaDiemNhap, 7777)
     const modalQD = this.modal.create({
       nzTitle: 'Danh sách địa điểm nhập hàng',
       nzContent: DialogTableSelectionComponent,

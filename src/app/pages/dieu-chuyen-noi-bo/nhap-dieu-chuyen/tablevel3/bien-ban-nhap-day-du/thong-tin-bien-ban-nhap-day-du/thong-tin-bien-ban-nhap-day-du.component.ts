@@ -24,7 +24,7 @@ import {
 import {
   DialogTableSelectionComponent
 } from "src/app/components/dialog/dialog-table-selection/dialog-table-selection.component";
-import { v4 as uuidv4 } from 'uuid';
+import * as uuidv4 from "uuid";
 import { chain, cloneDeep } from 'lodash';
 import { STATUS } from "src/app/constants/status";
 import { QuyetDinhDieuChuyenCucService } from "src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-c.service";
