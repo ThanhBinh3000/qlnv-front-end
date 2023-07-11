@@ -125,6 +125,7 @@ export class TongHopBaoCaoComponent implements OnInit {
             nzWidth: '900px',
             nzFooter: null,
             nzComponentParams: {
+                isSynth: true,
             },
         });
         modalTuChoi.afterClose.toPromise().then(async (res) => {

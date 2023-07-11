@@ -471,7 +471,7 @@ export class BaoCaoComponent implements OnInit {
         }
 
         // replace nhung ban ghi dc them moi id thanh null
-        baoCaoTemp.lstLapThamDinhs.forEach(item => {
+        baoCaoTemp.lstBcaos.forEach(item => {
             if (item.id?.length == 38) {
                 item.id = null;
             }

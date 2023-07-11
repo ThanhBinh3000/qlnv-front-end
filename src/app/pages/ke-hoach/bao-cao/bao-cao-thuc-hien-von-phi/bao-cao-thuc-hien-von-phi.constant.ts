@@ -1,4 +1,3 @@
-import { templateJitUrl } from "@angular/compiler";
 import { Roles, Utils } from "src/app/Utility/utils";
 
 export class Vp {
@@ -110,6 +109,32 @@ export class Vp {
         }
         return tenDm;
     }
+
+    static readonly DANH_MUC_02 = [
+        {
+            ma: '0.1',
+            ten: 'Đơn vị mua',
+        },
+        {
+            ma: '0.2',
+            ten: 'Tổng cục mua',
+        },
+    ]
+
+    static readonly DANH_MUC_03 = [
+        {
+            ma: '0.1',
+            ten: 'Xuất bán',
+        },
+        {
+            ma: '0.2',
+            ten: 'Xuất CTVT',
+        },
+        {
+            ma: '0.3',
+            ten: 'Xuất khác',
+        },
+    ]
 }
 
 export class Pagging {
@@ -181,6 +206,9 @@ export class Form {
     nguoiBcao: string;
     tuNgay: string;
     denNgay: string;
+    lstFiles: Doc[];
+    fileDinhKems: any[];
+    listIdDeleteFiles: string[];
 }
 
 export class Report {
@@ -190,7 +218,7 @@ export class Report {
     dotBcao: number;
     thangBcao: number;
     trangThai: string;
-    ngayTao: string;
+    ngayTao: any;
     nguoiTao: string;
     maDvi: string;
     maDviCha: string;
