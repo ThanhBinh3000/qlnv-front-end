@@ -125,7 +125,7 @@
                             <td colspan="8"></td>
                             <td nzRight>
                                 <a *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_BBNTBQLD_THEM')"
-                                    (click)="redirectToChiTiet(true, 0,item.id)">
+                                    (click)="redirectToChiTiet(false, 0,item.id)">
                                     <i class="fa fa-plus"></i>
                                 </a>
                                 <a *ngIf="item.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_BBNTBQLD_THEM')"
