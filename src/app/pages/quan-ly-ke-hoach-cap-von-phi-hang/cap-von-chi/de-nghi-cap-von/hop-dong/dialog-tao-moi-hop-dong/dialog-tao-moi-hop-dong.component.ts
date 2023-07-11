@@ -28,9 +28,9 @@ export class DialogTaoMoiHopDongComponent implements OnInit {
     loaiDns: any[] = LOAI_DE_NGHI;
     canCuGias: any[] = CAN_CU_GIA;
     isContract = false;
-  listNam: any[] = [];
+    listNam: any[] = [];
 
-  constructor(
+    constructor(
         private _modalRef: NzModalRef,
         private notification: NzNotificationService,
         private userService: UserService,
@@ -76,14 +76,14 @@ export class DialogTaoMoiHopDongComponent implements OnInit {
         this.spinner.hide();
     }
 
-  loadDsNam() {
-    for (let i = -3; i < 23; i++) {
-      this.listNam.push({
-        value: dayjs().get("year") - i,
-        text: dayjs().get("year") - i
-      });
+    loadDsNam() {
+        for (let i = -3; i < 23; i++) {
+            this.listNam.push({
+                value: dayjs().get("year") - i,
+                text: dayjs().get("year") - i
+            });
+        }
     }
-  }
 
     //lay chi tiet cua bao cao
     async getDetail() {
@@ -96,6 +96,7 @@ export class DialogTaoMoiHopDongComponent implements OnInit {
             maDvi: this.userInfo?.MA_DVI,
             namHdong: this.response.namBcao,
             loaiDnghi: this.response.loaiDnghi,
+            maLoai: '0',
             paggingReq: {
                 limit: 10,
                 page: 1,

@@ -8,8 +8,8 @@ import { MESSAGE } from 'src/app/constants/message';
 import { CapVonNguonChiService } from 'src/app/services/quan-ly-von-phi/capVonNguonChi.service';
 import { UserService } from 'src/app/services/user.service';
 import { CAN_CU_GIA, CVNC, LOAI_DE_NGHI, Utils } from 'src/app/Utility/utils';
-import { TRANG_THAI } from '../../de-nghi-cap-von.constant';
-import { DialogTaoMoiDeNghiCapVonComponent } from '../dialog-tao-moi-de-nghi-cap-von/dialog-tao-moi-de-nghi-cap-von.component';
+import { TRANG_THAI, TRANG_THAI_DE_NGHI_CAP_DUOI } from '../../../de-nghi-cap-von.constant';
+// import { DialogTaoMoiDeNghiCapVonComponent } from '../dialog-tao-moi-de-nghi-cap-von/dialog-tao-moi-de-nghi-cap-von.component';
 
 @Component({
   selector: 'app-danh-sach-de-nghi-tu-don-vi-cap-duoi',
@@ -58,6 +58,7 @@ export class DanhSachDeNghiTuDonViCapDuoiComponent implements OnInit {
   trangThais: any[] = TRANG_THAI;
   loaiDns: any[] = LOAI_DE_NGHI;
   canCuGias: any[] = CAN_CU_GIA;
+  trangThaiDenghiCapDuois: any[] = TRANG_THAI_DE_NGHI_CAP_DUOI;
   //phan trang
   totalElements = 0;
   totalPages = 0;
@@ -108,6 +109,8 @@ export class DanhSachDeNghiTuDonViCapDuoiComponent implements OnInit {
     const request = JSON.parse(JSON.stringify(this.searchFilter));
     request.ngayTaoDen = this.datePipe.transform(this.searchFilter.ngayTaoDen, Utils.FORMAT_DATE_STR);
     request.ngayTaoTu = this.datePipe.transform(this.searchFilter.ngayTaoTu, Utils.FORMAT_DATE_STR);
+    request.maLoai = '1';
+    request.loaiTimKiem = '1';
     this.spinner.show();
     await this.capVonNguonChiService.timKiemDeNghi(request).toPromise().then(
       (data) => {
@@ -176,6 +179,10 @@ export class DanhSachDeNghiTuDonViCapDuoiComponent implements OnInit {
     return this.trangThais.find(e => e.id == trangThai)?.tenDm;
   }
 
+  getStatusNameCuc(trangThai: string) {
+    return this.trangThaiDenghiCapDuois.find(e => e.id == trangThai)?.tenDm;
+  }
+
   //them bao cao moi
   // addNewReport() {
   //   const modalTuChoi = this.modal.create({
@@ -207,7 +214,7 @@ export class DanhSachDeNghiTuDonViCapDuoiComponent implements OnInit {
     console.log(data)
     const obj = {
       id: data.id,
-      tabSelected: data.canCuVeGia == Utils.HD_TRUNG_THAU ? (data.loaiDnghi == Utils.MUA_VTU ? 'dn-vattu' : 'dn-hopdong') : 'dn-capvon',
+      tabSelected: data.canCuVeGia == Utils.HD_TRUNG_THAU ? (data.loaiDnghi == Utils.MUA_VTU ? 'dn-vattu' : 'dn-hopdong') : 'denghi-donvi-capduoi',
     }
     this.dataChange.emit(obj);
   }
