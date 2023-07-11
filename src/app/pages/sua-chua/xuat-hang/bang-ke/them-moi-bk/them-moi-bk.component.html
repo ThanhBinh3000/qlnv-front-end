@@ -221,7 +221,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">Đơn vị tính</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <input nz-input formControlName="tenCloaiVthh" readonly />
+                  <input nz-input formControlName="donViTinh" readonly />
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -252,25 +252,19 @@
           <thead>
           <tr>
             <th nzWidth="30px">STT</th>
-            <th>Tên, nhãn hiệu, quy cách phẩm chất lượng</th>
-            <th nzWidth="80px">Mã số</th>
-            <th nzWidth="50px">Đơn vị tính</th>
-            <th nzWidth="60px">Số lượng phê duyệt</th>
-            <th nzWidth="60px">Số lượng xuất hàng thực tế</th>
+            <th>Số serial/mã sản phẩm</th>
+            <th>Số lượng</th>
             <th nzWidth="55px">Hành động</th>
           </tr>
           </thead>
           <tbody>
           <tr *ngIf="!disabled()">
             <td></td>
-            <td>{{rowItem.tenMatHang}}</td>
             <td>
-              <input [(ngModel)]="rowItem.maSo" />
+              <input [(ngModel)]="rowItem.soSerial" />
             </td>
-            <td>{{rowItem.donViTinh}}</td>
-            <td>{{rowItem.slDaDuyet | number : '1.0-1' : 'vi_VN'}}</td>
             <td>
-              <nz-input-number [nzSize]="'small'" [(ngModel)]="rowItem.slThucTe" [nzFormatter]="globals.formatter" [nzParser]="globals.parser" ></nz-input-number>
+              <nz-input-number [nzSize]="'small'" [(ngModel)]="rowItem.soLuong" [nzFormatter]="globals.formatter" [nzParser]="globals.parser" ></nz-input-number>
             </td>
             <td>
               <a (click)="addRow()" >
@@ -281,11 +275,8 @@
           <ng-container *ngFor="let item of dataTable , let i = index">
             <tr>
               <td>{{ i+1 }}</td>
-              <td>{{ item.tenMatHang }}</td>
-              <td>{{ item.maSo }}</td>
-              <td>{{ item.donViTinh }}</td>
-              <td>{{ item.slDaDuyet | number : '1.0-1' : 'vi_VN' }}</td>
-              <td>{{ item.slThucTe | number : '1.0-1' : 'vi_VN' }}</td>
+              <td>{{ item.soSerial }}</td>
+              <td>{{ item.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
               <td>
                 <a *ngIf="!disabled()" (click)="deleteRow(i)" >
                   <i class="fa fa-trash-o do"></i>
@@ -294,38 +285,14 @@
             </tr>
           </ng-container>
           </tbody>
+          <tfoot>
+            <tr>
+              <td></td>
+              <td>Tổng</td>
+              <td>{{ calTongSlThucTe() | number : '1.0-1' : 'vi_VN'}}</td>
+            </tr>
+          </tfoot>
         </nz-table>
-
-        <form nzLayout="vertical" nz-form [formGroup]="formData">
-          <div nz-row [nzGutter]="[18]">
-            <div nz-col [nzSpan]="24">
-              <nz-form-item>
-                <nz-form-label [nzNoColon]="true">Tổng số lượng ( viết bằng chữ )</nz-form-label>
-                <nz-form-control>
-                  <input nz-input [ngModel]="convertTien(this.formData.value.tongSoLuong)" [ngModelOptions]="{standalone: true}" readonly />
-                </nz-form-control>
-              </nz-form-item>
-            </div>
-            <div nz-col [nzSpan]="24">
-              <nz-form-item>
-                <nz-form-label [nzNoColon]="true">File xuất kho đã ký</nz-form-label>
-                <nz-form-control>
-                  <div class="list-file">
-                    <file-list [isViewDetail]="disabled()" [data]="fileDinhKem"></file-list>
-                  </div>
-                </nz-form-control>
-              </nz-form-item>
-            </div>
-            <div nz-col [nzSpan]="24">
-              <nz-form-item>
-                <nz-form-label [nzNoColon]="true">Ghi chú</nz-form-label>
-                <nz-form-control >
-                  <textarea rows="3" formControlName="ghiChu" nz-input [readonly]="disabled()"></textarea>
-                </nz-form-control>
-              </nz-form-item>
-            </div>
-          </div>
-        </form>
       </nz-collapse-panel>
     </nz-collapse>
   </nz-card>

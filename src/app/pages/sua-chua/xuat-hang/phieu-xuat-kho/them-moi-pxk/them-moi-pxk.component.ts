@@ -70,6 +70,7 @@ export class ThemMoiPxkComponent extends Base3Component implements OnInit {
       tenLoaiVthh : [''],
       cloaiVthh : [''],
       tenCloaiVthh : [''],
+      donViTinh : [''],
       tenThuKho : [''],
       tenLanhDaoCc : [''],
       keToanTruong : [''],
@@ -209,6 +210,7 @@ export class ThemMoiPxkComponent extends Base3Component implements OnInit {
           tenLoaiVthh : data.tenLoaiVthh,
           cloaiVthh : data.cloaiVthh,
           tenCloaiVthh : data.tenCloaiVthh,
+          donViTinh : data.donViTinh,
         })
         this.rowItem = {
           tenMatHang : data.tenCloaiVthh,

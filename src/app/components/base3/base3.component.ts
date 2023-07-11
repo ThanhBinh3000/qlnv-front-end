@@ -260,10 +260,14 @@ export class Base3Component implements OnInit {
           let body = {
             id: item.id
           };
-          this.service.delete(body).then(async () => {
-            await this.search();
+          this.service.delete(body).then(async (res) => {
             this.spinner.hide();
-            this.notification.success(MESSAGE.SUCCESS,MESSAGE.DELETE_SUCCESS);
+            if (res.msg == MESSAGE.SUCCESS) {
+              await this.search();
+              this.notification.success(MESSAGE.SUCCESS,MESSAGE.DELETE_SUCCESS);
+            }else{
+              this.notification.error(MESSAGE.ERROR,res.msg);
+            }
           });
         } catch (e) {
           console.log('error: ', e);

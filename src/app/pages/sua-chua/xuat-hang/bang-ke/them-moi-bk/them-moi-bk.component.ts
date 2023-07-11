@@ -18,6 +18,7 @@ import {MESSAGE} from "../../../../../constants/message";
 import {convertTienTobangChu} from "../../../../../shared/commonFunction";
 import {Base3Component} from "../../../../../components/base3/base3.component";
 import { cloneDeep, chain } from 'lodash';
+import {BangKeXuatScService} from "../../../../../services/sua-chua/bangKeXuatSc.service";
 
 @Component({
   selector: 'app-them-moi-bk',
@@ -37,11 +38,12 @@ export class ThemMoiBkComponent extends Base3Component implements OnInit {
     modal: NzModalService,
     route: ActivatedRoute,
     router: Router,
+    private bangKeXuatScService : BangKeXuatScService,
     private phieuXuatKhoScService: PhieuXuatKhoScService,
 
     private quyetDinhXhService: QuyetDinhXhService,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, route, router, phieuXuatKhoScService);
+    super(httpClient, storageService, notification, spinner, modal, route, router, bangKeXuatScService);
     this.defaultURL = 'sua-chua/xuat-hang/bang-ke'
     this.getId();
     this.formData = this.fb.group({
@@ -52,7 +54,7 @@ export class ThemMoiBkComponent extends Base3Component implements OnInit {
       tenDvi : ['',[Validators.required]],
       maQhns : [''],
       soBangKe : ['',[Validators.required]],
-      ngayNhap : [''],
+      ngayNhap : ['',[Validators.required]],
       soQdXh : ['',[Validators.required]],
       idQdXh : ['',[Validators.required]],
       ngayQdXh : ['',],
@@ -65,6 +67,7 @@ export class ThemMoiBkComponent extends Base3Component implements OnInit {
       diaDiemKho : [''],
       tenLoaiVthh : [''],
       tenCloaiVthh : [''],
+      donViTinh : [''],
       tenThuKho : [''],
       tenLanhDaoCc : [''],
       keToanTruong : [''],
@@ -73,9 +76,7 @@ export class ThemMoiBkComponent extends Base3Component implements OnInit {
       dviNguoiGiaoHang : [''],
       diaChi : [''],
       thoiGianGiaoNhan : [''],
-      soBangKeCanHang : [''],
-      ghiChu : [''],
-      tongSoLuong : [''],
+      ngayXuatKho : ['']
     })
   }
 
@@ -89,31 +90,26 @@ export class ThemMoiBkComponent extends Base3Component implements OnInit {
   }
 
   async initForm(){
-    this.spinner.show();
     if(this.id){
+      this.spinner.show();
       await this.detail(this.id).then((res)=>{
+        this.spinner.hide();
         if(res){
-          let data = res.children[0];
-          this.rowItem = {
-            donViTinh : data.donViTinh,
-            tenMatHang : data.tenMatHang,
-            slDaDuyet : data.slDaDuyet
-          }
           this.dataTable = res.children;
-          this.bindingDataQdXuatHang(res.idQdXh)
+          this.bindingDataQdXuatHang(res.idQdXh);
+          this.bindingDataPhieuXuatKho(res.idPhieuXuatKho);
         }
       })
     }else{
-      // await this.userService.getId("SC_BANG_KE_XUAT_VT_HDR_SEQ").then((res)=>{
-      //   this.formData.patchValue({
-      //     soPhieuXuatKho : res + '/' + this.formData.value.nam + '/BKCH-CCDTVP',
-      //     maQhns : this.userInfo.DON_VI.maQhns,
-      //     tenDvi : this.userInfo.TEN_DVI,
-      //     ngayTao : dayjs().format('YYYY-MM-DD'),
-      //     ngayXuatKho : dayjs().format('YYYY-MM-DD'),
-      //     tenThuKho : this.userInfo.TEN_DAY_DU
-      //   })
-      // });
+      await this.userService.getId("SC_BANG_KE_XUAT_VT_HDR_SEQ").then((res)=>{
+        this.formData.patchValue({
+          soBangKe : res + '/' + this.formData.value.nam + '/BKCH-CCDTVP',
+          maQhns : this.userInfo.DON_VI.maQhns,
+          tenDvi : this.userInfo.TEN_DVI,
+          ngayNhap : dayjs().format('YYYY-MM-DD'),
+          tenThuKho : this.userInfo.TEN_DAY_DU
+        })
+      });
     }
   }
 
@@ -131,7 +127,7 @@ export class ThemMoiBkComponent extends Base3Component implements OnInit {
           item.thoiHanXuatFr = moment(item.thoiHanXuat).format('DD/MM/yyyy');
         })
         const modalQD = this.modal.create({
-          nzTitle: 'Danh sách quyết định sửa chữa',
+          nzTitle: 'Danh sách quyết định xuất hàng',
           nzContent: DialogTableSelectionComponent,
           nzMaskClosable: false,
           nzClosable: false,
@@ -155,63 +151,79 @@ export class ThemMoiBkComponent extends Base3Component implements OnInit {
   bindingDataQdXuatHang(id){
     this.spinner.show();
     this.quyetDinhXhService.getDetail(id).then((res) => {
-      this.spinner.hide();
       if (res.data) {
         const data = res.data
-        console.log(data);
         this.formData.patchValue({
           soQdXh: data.soQd,
           idQdXh: data.id,
           ngayQdXh : data.ngayKy
         })
-        this.dataTablePhieuXuatKho = []
-        // data.scQuyetDinhSc.scTrinhThamDinhHdr.children.forEach( item => {
-        //   this.dataTableDiaDiem.push(item.scDanhSachHdr);
-        // })
       }
+      this.spinner.hide();
     });
   }
 
   openDialogPhieuXuatKho() {
+    if(!this.formData.value.idQdXh){
+      this.notification.error(MESSAGE.ERROR,"Vui lòng chọn số quyết định giao nhiệm vụ xuất hàng");
+      return;
+    }
     if (this.disabled()) {
       return;
     }
-    const modalQD = this.modal.create({
-      nzTitle: 'Danh sách quyết định sửa chữa',
-      nzContent: DialogTableSelectionComponent,
-      nzMaskClosable: false,
-      nzClosable: false,
-      nzWidth: '1200px',
-      nzFooter: null,
-      nzComponentParams: {
-        dataTable: this.dataTablePhieuXuatKho,
-        dataHeader: ['Điểm kho', 'Nhà kho', 'Ngăn kho', 'Lô kho', 'Tên loại','Tên chủng loại','Số luợng đã duyệt','Đơn giá đã duyệt'],
-        dataColumn: ['tenDiemKho', 'tenNhaKho', 'tenNganKho', 'tenLoKho', 'tenLoaiVthh','tenCloaiVthh','donGiaPd','slDaDuyet']
-      },
-    });
-    modalQD.afterClose.subscribe(async (data) => {
-      if (data) {
-        this.spinner.show();
-        this.dataTable = [];
-        await this.formData.patchValue({
-          idScDanhSachHdr: data.id,
-          maDiaDiem: data.maDiaDiem,
-          tenDiemKho : data.tenDiemKho,
-          tenNhaKho : data.tenNhaKho,
-          tenNganKho : data.tenNganKho,
-          tenLoKho : data.tenLoKho,
-          loaiVthh : data.loaiVthh,
-          tenLoaiVthh : data.tenLoaiVthh,
-          cloaiVthh : data.cloaiVthh,
-          tenCloaiVthh : data.tenCloaiVthh,
+    this.spinner.show();
+    this.phieuXuatKhoScService.getDanhSachTaoBangKe({idQdXh : this.formData.value.idQdXh}).then((res) => {
+      this.spinner.hide();
+      if (res.data) {
+        res.data?.forEach(item => {
+          item.ngayXuatKhoFr = moment(item.ngayXuatKho).format('DD/MM/yyyy');
+          item.thoiHanXuatFr = moment(item.thoiHanXuat).format('DD/MM/yyyy');
         })
-        this.rowItem = {
-          tenMatHang : data.tenCloaiVthh,
-          donViTinh : data.donViTinh,
-          slDaDuyet : data.slDaDuyet
-        }
-        this.spinner.hide();
+        const modalQD = this.modal.create({
+          nzTitle: 'Danh sách phiếu xuất kho',
+          nzContent: DialogTableSelectionComponent,
+          nzMaskClosable: false,
+          nzClosable: false,
+          nzWidth: '900px',
+          nzFooter: null,
+          nzComponentParams: {
+            dataTable: res.data,
+            dataHeader: ['Số phiếu xuất kho', 'Ghi chú'],
+            dataColumn: ['soPhieuXuatKho', 'ghiChu']
+          },
+        });
+        modalQD.afterClose.subscribe(async (data) => {
+          if (data) {
+            this.bindingDataPhieuXuatKho(data.id)
+          }
+        });
       }
+    })
+  }
+
+  bindingDataPhieuXuatKho(idPhieuXuatKho){
+    this.spinner.show();
+    this.phieuXuatKhoScService.getDetail(idPhieuXuatKho).then((res)=>{
+      const data = res.data;
+      this.formData.patchValue({
+        soPhieuXuatKho : data.soPhieuXuatKho,
+        idPhieuXuatKho : data.id,
+        tenDiemKho : data.tenDiemKho,
+        tenNhaKho : data.tenNhaKho,
+        tenNganKho : data.tenNganKho,
+        tenLoKho : data.tenLoKho,
+        diaDiemKho : data.diaDiemKho,
+        tenLoaiVthh : data.tenLoaiVthh,
+        tenCloaiVthh : data.tenCloaiVthh,
+        nguoiGiaoHang : data.nguoiGiaoHang,
+        soCmt : data.soCmt,
+        dviNguoiGiaoHang : data.dviNguoiGiaoHang,
+        diaChi : data.diaChi,
+        thoiGianGiaoNhan : data.thoiGianGiaoNhan,
+        donViTinh : data.donViTinh,
+        ngayXuatKho : data.ngayXuatKho
+      })
+      this.spinner.hide();
     });
   }
 
@@ -223,18 +235,7 @@ export class ThemMoiBkComponent extends Base3Component implements OnInit {
   save(isGuiDuyet?){
     this.spinner.show();
     this.helperService.markFormGroupTouched(this.formData);
-    if (this.formData.invalid) {
-      this.notification.info(MESSAGE.NOTIFICATION, MESSAGE.FORM_REQUIRED_ERROR);
-      this.spinner.hide();
-      return;
-    }
-    if(this.formData.value.tongSoLuong == null || this.formData.value.tongSoLuong <= 0){
-      this.spinner.hide();
-      this.notification.error(MESSAGE.ERROR,"Tổng số lượng xuất phải lớn hơn 0");
-      return;
-    }
     let body = this.formData.value;
-    body.fileDinhKemReq = this.fileDinhKem;
     body.children = this.dataTable;
     this.createUpdate(body).then((res)=>{
       if(res){
@@ -298,18 +299,13 @@ export class ThemMoiBkComponent extends Base3Component implements OnInit {
   }
 
   validateRow():boolean{
-    if(this.rowItem.slThucTe && this.rowItem.maSo && this.rowItem.slDaDuyet){
-      if(this.dataTable.filter(i => i.maSo == this.rowItem.maSo).length > 0){
-        this.notification.error(MESSAGE.ERROR,"Mã số đã tồn tại");
+    if(this.rowItem.soSerial && this.rowItem.soLuong){
+      if(this.dataTable.filter(i => i.soSerial == this.rowItem.soSerial).length > 0){
+        this.notification.error(MESSAGE.ERROR,"Số serial đã tồn tại");
         return false
       }
-      if(this.rowItem.slThucTe <= 0){
+      if(this.rowItem.soLuong <= 0){
         this.notification.error(MESSAGE.ERROR,"Số lượng thực tế phải lớn hơn 0");
-        return false
-      }
-      let tongSl = this.calTongSlThucTe();
-      if(tongSl + this.rowItem.slThucTe > this.rowItem.slDaDuyet){
-        this.notification.error(MESSAGE.ERROR,"Số lượng thực tế không được lớn hơn số lượng phê duyệt");
         return false
       }
     }else{
@@ -323,7 +319,7 @@ export class ThemMoiBkComponent extends Base3Component implements OnInit {
     if (this.dataTable) {
       let sum = 0
       this.dataTable.forEach(item => {
-        sum += this.nvl(item.slThucTe);
+        sum += this.nvl(item.soLuong);
       })
       return sum;
     }
