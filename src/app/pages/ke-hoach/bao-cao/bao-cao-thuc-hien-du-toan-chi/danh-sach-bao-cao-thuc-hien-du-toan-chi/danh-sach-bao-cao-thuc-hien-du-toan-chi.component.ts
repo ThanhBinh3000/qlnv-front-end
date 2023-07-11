@@ -1,5 +1,4 @@
 
-import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -10,7 +9,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { BaoCaoThucHienDuToanChiService } from 'src/app/services/quan-ly-von-phi/baoCaoThucHienDuToanChi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { Dtc } from '../bao-cao-thuc-hien-du-toan-chi.constant';
+import { Dtc, Search } from '../bao-cao-thuc-hien-du-toan-chi.constant';
 import { DialogTaoMoiComponent } from '../dialog-tao-moi/dialog-tao-moi.component';
 
 @Component({
@@ -24,24 +23,7 @@ export class DanhSachBaoCaoThucHienDuToanChiComponent implements OnInit {
 	Utils = Utils;
 	Dtc = Dtc;
 
-	searchFilter = {
-		maPhanBcao: '0',
-		maDvi: '',
-		ngayTaoTu: '',
-		ngayTaoDen: '',
-		trangThais: [],
-		maBcao: '',
-		maLoaiBcao: '526',
-		namBcao: null,
-		thangBcao: null,
-		dotBcao: '',
-		paggingReq: {
-			limit: 10,
-			page: 1
-		},
-		str: "",
-		loaiTimKiem: '0',
-	};
+	searchFilter: Search = new Search();
 
 	userInfo: any;
 	trangThai!: string;
@@ -59,7 +41,6 @@ export class DanhSachBaoCaoThucHienDuToanChiComponent implements OnInit {
 		private notification: NzNotificationService,
 		private modal: NzModalService,
 		public userService: UserService,
-		private datePipe: DatePipe,
 		public globals: Globals,
 	) { }
 
@@ -90,16 +71,8 @@ export class DanhSachBaoCaoThucHienDuToanChiComponent implements OnInit {
 
 	async search() {
 		this.spinner.show();
-		const searchFilterTemp = Object.assign({}, this.searchFilter);
-		searchFilterTemp.trangThais = [];
-		searchFilterTemp.ngayTaoTu = Utils.fmtDate(searchFilterTemp.ngayTaoTu);
-		searchFilterTemp.ngayTaoDen = Utils.fmtDate(searchFilterTemp.ngayTaoDen);
-		if (this.trangThai) {
-			searchFilterTemp.trangThais = [this.trangThai];
-		} else {
-			searchFilterTemp.trangThais = [Status.TT_01, Status.TT_02, Status.TT_03, Status.TT_04, Status.TT_05, Status.TT_07, Status.TT_08, Status.TT_09]
-		}
-		await this.baoCaoThucHienDuToanChiService.timBaoCao(searchFilterTemp).toPromise().then(res => {
+		this.searchFilter.trangThais = this.trangThai ? [this.trangThai] : [Status.TT_01, Status.TT_02, Status.TT_03, Status.TT_04, Status.TT_05, Status.TT_07, Status.TT_08, Status.TT_09]
+		await this.baoCaoThucHienDuToanChiService.timBaoCao(this.searchFilter.request()).toPromise().then(res => {
 			if (res.statusCode == 0) {
 				this.dataTable = [];
 				res.data.content.forEach(item => {
@@ -136,13 +109,8 @@ export class DanhSachBaoCaoThucHienDuToanChiComponent implements OnInit {
 
 	//reset tim kiem
 	clearFilter() {
-		this.searchFilter.maBcao = null
-		this.searchFilter.namBcao = null
-		this.searchFilter.thangBcao = null
-		this.searchFilter.ngayTaoTu = null
-		this.searchFilter.ngayTaoDen = null
-		this.trangThai = null
-		this.searchFilter.maLoaiBcao = null
+		this.searchFilter.clear();
+		this.trangThai = null;
 		this.search();
 	}
 

@@ -167,6 +167,7 @@ export class DialogTaoMoiComponent implements OnInit {
         }
         this.checkReport();
         if (!this.response.namBcao) {
+            this.clear();
             return;
         }
         this._modalRef.close(this.response);

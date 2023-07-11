@@ -10,7 +10,7 @@ import { BaoCaoThucHienDuToanChiService } from 'src/app/services/quan-ly-von-phi
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { Dtc } from '../bao-cao-thuc-hien-du-toan-chi.constant';
+import { Dtc, Search } from '../bao-cao-thuc-hien-du-toan-chi.constant';
 
 @Component({
     selector: 'app-danh-sach-bao-cao-tu-don-vi-cap-duoi',
@@ -22,24 +22,7 @@ export class DanhSachBaoCaoTuDonViCapDuoiComponent implements OnInit {
     Status = Status;
     Utils = Utils;
     Dtc = Dtc;
-    searchFilter = {
-        ngayTaoTu: '',
-        ngayTaoDen: '',
-        trangThais: [],
-        maBcao: '',
-        maLoaiBcao: '',
-        namBcao: null,
-        thangBcao: null,
-        dotBcao: '',
-        paggingReq: {
-            limit: 10,
-            page: 1
-        },
-        str: '',
-        maDvi: '',
-        maPhanBcao: '0',
-        loaiTimKiem: '1',
-    };
+    searchFilter: Search = new Search();
 
     userInfo: any;
     trangThai!: string;
@@ -67,6 +50,7 @@ export class DanhSachBaoCaoTuDonViCapDuoiComponent implements OnInit {
         this.searchFilter.thangBcao = date.getMonth();
         this.trangThai = Status.TT_07;
         this.searchFilter.maLoaiBcao = Dtc.BC_DINH_KY;
+        this.searchFilter.loaiTimKiem = '1';
         //lay danh sach ca don vi truc thuoc
         const request = {
             maDviCha: this.userInfo.maDvi,
@@ -90,12 +74,8 @@ export class DanhSachBaoCaoTuDonViCapDuoiComponent implements OnInit {
 
     async search() {
         this.spinner.show();
-        const searchFilterTemp = Object.assign({}, this.searchFilter);
-        searchFilterTemp.trangThais = [];
-        searchFilterTemp.ngayTaoTu = Utils.fmtDate(searchFilterTemp.ngayTaoTu);
-        searchFilterTemp.ngayTaoDen = Utils.fmtDate(searchFilterTemp.ngayTaoDen);
-        searchFilterTemp.trangThais = this.trangThai ? [this.trangThai] : [Status.TT_07, Status.TT_08, Status.TT_09];
-        await this.baoCaoThucHienDuToanChiService.timBaoCao(searchFilterTemp).toPromise().then(res => {
+        this.searchFilter.trangThais = this.trangThai ? [this.trangThai] : [Status.TT_07, Status.TT_08, Status.TT_09];
+        await this.baoCaoThucHienDuToanChiService.timBaoCao(this.searchFilter.request()).toPromise().then(res => {
             if (res.statusCode == 0) {
                 this.dataTable = [];
                 res.data.content.forEach(item => {
@@ -130,14 +110,8 @@ export class DanhSachBaoCaoTuDonViCapDuoiComponent implements OnInit {
 
     //reset tim kiem
     clearFilter() {
-        this.searchFilter.maBcao = null
-        this.searchFilter.namBcao = null
-        this.searchFilter.thangBcao = null
-        this.searchFilter.ngayTaoTu = null
-        this.searchFilter.ngayTaoDen = null
-        this.searchFilter.maDvi = null
-        this.searchFilter.maLoaiBcao = null
-        this.trangThai = null
+        this.searchFilter.clear();
+        this.trangThai = null;
         this.search();
     }
 
