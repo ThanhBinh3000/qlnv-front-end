@@ -2,8 +2,11 @@
     <div class="search__body" nz-row [nzGutter]="[18, 12]">
         <div nz-col nzSpan="6">
             <label class="search__label">Năm báo cáo</label>
-            <input class="search__input" nz-input [(ngModel)]="response.namBcao"
-                [class]="response.namBcao && (response.namBcao > 999 && response.namBcao < 3000) ? '' : 'input-error-validate'" />
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn năm báo cáo" [(ngModel)]="response.namBcao"
+                [class]="response.namBcao ?'' : 'input-error-validate'" (ngModelChange)="checkReport()">
+                <nz-option *ngFor="let item of lstNam" [nzValue]="item" [nzLabel]="item">
+                </nz-option>
+            </nz-select>
         </div>
         <div nz-col nzSpan="6">
             <label class="search__label">Đợt báo cáo</label>

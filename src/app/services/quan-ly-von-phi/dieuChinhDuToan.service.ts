@@ -198,4 +198,11 @@ export class DieuChinhService extends BaseService {
             this.urlDefault + '/dieu-chinh-du-toan-chi/chi-tiet/bieu-mau/' + id,
         );
     };
+
+    soLuongVp(request: any): Observable<any> {
+        return this.httpClient.post(
+            this.urlDefault + '/dieu-chinh-du-toan-chi/get-so-luong',
+            request,
+        );
+    }
 }

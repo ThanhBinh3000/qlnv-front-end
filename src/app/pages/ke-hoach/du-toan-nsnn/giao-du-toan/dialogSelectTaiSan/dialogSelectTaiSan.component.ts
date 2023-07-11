@@ -7,6 +7,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucTaiSanService } from 'src/app/services/danh-muc-tai-san.service';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { TaiSan } from './dialogSelectTaiSan.type';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
     selector: 'app-dialogSelectTaiSan',
@@ -34,10 +35,11 @@ export class DialogSelectTaiSanComponent implements OnInit {
         private danhMucService: DanhMucService,
         private dmTaiSanService: DanhMucTaiSanService,
         private notification: NzNotificationService,
+        private spinner: NgxSpinnerService,
     ) { }
 
     ngOnInit(): void {
-        // this.loadDanhMucHang();
+        // this.loadDanhMucHang()
         this.getAllDmTaiSan();
     }
 
@@ -84,21 +86,23 @@ export class DialogSelectTaiSanComponent implements OnInit {
 
 
     async getAllDmTaiSan() {
+        this.spinner.show();
         let body = {
             "moTa": "",
             "paggingReq": {
-              "limit": 10,
-              "page": 0
+                "limit": 10,
+                "page": 0
             },
             "tenTaiSan": "",
             "trangThai": ""
-          }
+        }
         let res = await this.dmTaiSanService.search(body);
+        this.spinner.hide();
         if (res.msg == MESSAGE.SUCCESS) {
             if (res.data && res.data.content && res.data.content.length > 0) {
                 this.listDmTaiSan = res.data.content;
-                console.log(this.listDmTaiSan);
-                
+                // console.log(this.listDmTaiSan);
+
                 this.listOfMapData = this.listDmTaiSan;
                 this.listOfMapDataClone = [...this.listOfMapData];
                 this.listOfMapData.forEach((item) => {

@@ -4,7 +4,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { FileFunction, GeneralFunction, NumberFunction, TableFunction } from 'src/app/Utility/func';
-import { AMOUNT, DON_VI_TIEN, MONEY_LIMIT, Utils } from 'src/app/Utility/utils';
+import { AMOUNT, DON_VI_TIEN, MONEY_LIMIT, Status, Utils } from 'src/app/Utility/utils';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
@@ -13,6 +13,8 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import * as uuid from 'uuid';
 // import { BtnStatus, Doc, Form } from '../../../lap-ke-hoach-va-tham-dinh-du-toan/lap-ke-hoach-va-tham-dinh-du-toan.class';
 import { DialogSelectTaiSanComponent } from '../../dialogSelectTaiSan/dialogSelectTaiSan.component'
+import { BtnStatus, Doc, Form } from '../../giao-du-toan.constant';
+
 
 export class ItemData {
 	id: any;
@@ -34,16 +36,16 @@ export class ItemData {
 }
 
 @Component({
-  selector: 'app-phu-luc-tai-san',
-  templateUrl: './phu-luc-tai-san.component.html',
-  styleUrls: ['../add-bao-cao.component.scss'],
+	selector: 'app-phu-luc-tai-san',
+	templateUrl: './phu-luc-tai-san.component.html',
+	styleUrls: ['../add-bao-cao.component.scss'],
 })
 
 export class PhuLucTaiSanComponent implements OnInit {
 	@Input() dataInfo;
 	//thong tin chi tiet cua bieu mau
-	// formDetail: Form = new Form();
-	formDetail: any;
+	formDetail: Form = new Form();
+	// formDetail: any;
 	total: ItemData = new ItemData();
 	maDviTien: string = '1';
 	namBcao: number;
@@ -68,7 +70,7 @@ export class PhuLucTaiSanComponent implements OnInit {
 	scrollX: string;
 	//trang thai cac nut
 	// status: BtnStatus = new BtnStatus();
-	status:any ;
+	status: BtnStatus = new BtnStatus();
 	editMoneyUnit = false;
 	isDataAvailable = false;
 	allChecked = false;
@@ -89,7 +91,7 @@ export class PhuLucTaiSanComponent implements OnInit {
 		this.fileList.forEach((file: any) => {
 			const id = file?.lastModified.toString();
 			this.formDetail.lstFiles.push({
-				// ... new Doc(),
+				... new Doc(),
 				id: id,
 				fileName: file?.name
 			});
@@ -162,7 +164,7 @@ export class PhuLucTaiSanComponent implements OnInit {
 	}
 
 	getStatusButton() {
-		this.status.ok = this.status.ok && (this.formDetail.trangThai == "2" || this.formDetail.trangThai == "5");
+		this.status.ok = this.status.ok && (this.formDetail.trangThai == Status.NOT_RATE || this.formDetail.trangThai == Status.COMPLETE);
 	}
 
 	// async getFormDetail() {

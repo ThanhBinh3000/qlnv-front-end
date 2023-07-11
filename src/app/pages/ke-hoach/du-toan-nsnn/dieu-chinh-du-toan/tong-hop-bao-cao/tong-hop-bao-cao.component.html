@@ -18,7 +18,8 @@
 
                 <nz-descriptions-item nzTitle="Trạng thái" [nzSpan]="1">
                     <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái" [(ngModel)]="trangThai">
-                        <nz-option *ngFor="let item of trangThais" [nzValue]="item.id" [nzLabel]="item.ten">
+                        <nz-option *ngFor="let item of Status.TRANG_THAI_KIEM_TRA" [nzValue]="item.id"
+                            [nzLabel]="item.tenDm">
                         </nz-option>
                     </nz-select>
                 </nz-descriptions-item>
@@ -60,56 +61,6 @@
                     <th class="text-center">Trạng thái</th>
                     <th width="90px">Hành động</th>
                 </tr>
-                <tr class="search-table">
-                    <th></th>
-                    <th>
-                        <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                            <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenDvi"
-                                (input)="filterInTable('tenDvi',filterTable.tenDvi, false)" size="small" />
-                        </nz-input-group>
-                        <ng-template #suffixTemplateInfo>
-                            <i nz-icon nzType="search"></i>
-                        </ng-template>
-                    </th>
-                    <th>
-                        <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                            <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.maBcao"
-                                (input)="filterInTable('maBcao',filterTable.maBcao, false)" size="small" />
-                        </nz-input-group>
-                        <ng-template #suffixTemplateInfo>
-                            <i nz-icon nzType="search"></i>
-                        </ng-template>
-                    </th>
-
-                    <th>
-                        <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                            <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.namHienHanh"
-                                (input)="filterInTable('namHienHanh',filterTable.namHienHanh, false)" size="small" />
-                        </nz-input-group>
-                        <ng-template #suffixTemplateInfo>
-                            <i nz-icon nzType="search"></i>
-                        </ng-template>
-                    </th>
-                    <th>
-                        <nz-date-picker nzFormat="dd/MM/yyyy" [(ngModel)]="filterTable.ngayPheDuyet"
-                            (ngModelChange)="filterInTable('ngayPheDuyet',filterTable.ngayPheDuyet, true)">
-                        </nz-date-picker>
-                    </th>
-                    <th>
-                        <nz-date-picker nzFormat="dd/MM/yyyy" [(ngModel)]="filterTable.ngayTraKq"
-                            (ngModelChange)="filterInTable('ngayTraKq',filterTable.ngayTraKq, true)">
-                        </nz-date-picker>
-                    </th>
-                    <th>
-                        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Tìm kiếm"
-                            [(ngModel)]="filterTable.trangThai"
-                            (ngModelChange)="filterInTable('trangThai',filterTable.trangThai, false)">
-                            <nz-option *ngFor="let item of trangThais" [nzValue]="item.id" [nzLabel]="item.tenDm">
-                            </nz-option>
-                        </nz-select>
-                    </th>
-                    <th></th>
-                </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let data of basicTable.data; let i = index">
@@ -132,7 +83,7 @@
                         {{ data.ngayTraKq }}
                     </td>
                     <td>
-                        {{getStatusName(data.trangThai)}}
+                        {{Status.checkStatusName(data.trangThai)}}
                     </td>
                     <td class="text-left">
                         <a (click)="viewDetail(data)">

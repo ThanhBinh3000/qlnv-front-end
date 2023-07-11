@@ -6,6 +6,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { FileManip, Roles, Status, TRANG_THAI_PHU_LUC, Utils } from 'src/app/Utility/utils';
 import { DialogChonThemBieuMauComponent } from 'src/app/components/dialog/dialog-chon-them-bieu-mau/dialog-chon-them-bieu-mau.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
@@ -14,11 +15,13 @@ import { DieuChinhService } from 'src/app/services/quan-ly-von-phi/dieuChinhDuTo
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { DCDT, FileManip, Roles, Status, TRANG_THAI_PHU_LUC, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
-import { BtnStatus, Doc, Form, PHU_LUC, PHU_LUC_TH, Report } from './add-bao-cao.constant';
+import { BtnStatus, Dcdt, Doc, Form, Report } from '../dieu-chinh-du-toan.constant';
 import { PhuLuc1Component } from './phu-luc-1/phu-luc-1.component';
 import { PhuLuc10Component } from './phu-luc-10/phu-luc-10.component';
+import { PhuLuc11Component } from './phu-luc-11/phu-luc-11.component';
+import { PhuLuc12Component } from './phu-luc-12/phu-luc-12.component';
+import { PhuLuc13Component } from './phu-luc-13/phu-luc-13.component';
 import { PhuLuc2Component } from './phu-luc-2/phu-luc-2.component';
 import { PhuLuc3Component } from './phu-luc-3/phu-luc-3.component';
 import { PhuLuc4Component } from './phu-luc-4/phu-luc-4.component';
@@ -28,9 +31,6 @@ import { PhuLuc7Component } from './phu-luc-7/phu-luc-7.component';
 import { PhuLuc8Component } from './phu-luc-8/phu-luc-8.component';
 import { PhuLuc9Component } from './phu-luc-9/phu-luc-9.component';
 import { PhuLucTongHopComponent } from './phu-luc-tong-hop/phu-luc-tong-hop.component';
-import { PhuLuc11Component } from './phu-luc-11/phu-luc-11.component';
-import { PhuLuc12Component } from './phu-luc-12/phu-luc-12.component';
-import { PhuLuc13Component } from './phu-luc-13/phu-luc-13.component';
 
 @Component({
     selector: 'app-add-bao-cao',
@@ -75,7 +75,7 @@ export class AddBaoCaoComponent implements OnInit {
     //thong tin chung bao cao
     baoCao: Report = new Report();
     //danh muc
-    listAppendix: any[] = PHU_LUC;
+    listAppendix: any[] = Dcdt.PHU_LUC;
     tabs: any[] = [];
     canBos: any[];
     //file
@@ -206,8 +206,8 @@ export class AddBaoCaoComponent implements OnInit {
         } else {
             this.baoCao = this.data.baoCao;
         }
-
-        if (Utils.statusSave.includes(this.baoCao.trangThai)) {
+        this.getStatusButton();
+        if (this.status.general) {
             await this.getListUser();
             this.listAppendix.forEach(e => {
                 e.tenDm = Utils.getName(this.baoCao.namBcao, e.tenDm);
@@ -237,16 +237,16 @@ export class AddBaoCaoComponent implements OnInit {
         this.isChild = this.userInfo.MA_DVI == this.baoCao.maDvi;
         this.isParent = this.userInfo.MA_DVI == this.baoCao.maDviCha;
         //kiem tra quyen cua cac user
-        const checkSave = isSynthetic ? this.userService.isAccessPermisson(Roles.LTD.EDIT_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(Roles.LTD.EDIT_REPORT);
-        const checkSunmit = isSynthetic ? this.userService.isAccessPermisson(Roles.LTD.APPROVE_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(Roles.LTD.APPROVE_REPORT);
-        const checkPass = isSynthetic ? this.userService.isAccessPermisson(Roles.LTD.DUYET_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(Roles.LTD.DUYET_REPORT);
-        const checkApprove = isSynthetic ? this.userService.isAccessPermisson(Roles.LTD.PHE_DUYET_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(Roles.LTD.PHE_DUYET_REPORT);
-        const checkAccept = this.userService.isAccessPermisson(Roles.LTD.TIEP_NHAN_REPORT);
-        const checkPrint = isSynthetic ? this.userService.isAccessPermisson(Roles.LTD.PRINT_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(Roles.LTD.PRINT_REPORT);
-        const checkExport = isSynthetic ? this.userService.isAccessPermisson(Roles.LTD.EXPORT_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(Roles.LTD.EXPORT_REPORT)
+        const checkSave = isSynthetic ? this.userService.isAccessPermisson(Roles.DCDT.EDIT_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(Roles.DCDT.EDIT_REPORT);
+        const checkSunmit = isSynthetic ? this.userService.isAccessPermisson(Roles.DCDT.APPROVE_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(Roles.DCDT.APPROVE_REPORT);
+        const checkPass = isSynthetic ? this.userService.isAccessPermisson(Roles.DCDT.DUYET_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(Roles.DCDT.DUYET_REPORT);
+        const checkApprove = isSynthetic ? this.userService.isAccessPermisson(Roles.DCDT.PHE_DUYET_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(Roles.DCDT.PHE_DUYET_REPORT);
+        const checkAccept = this.userService.isAccessPermisson(Roles.DCDT.TIEP_NHAN_REPORT);
+        const checkPrint = isSynthetic ? this.userService.isAccessPermisson(Roles.DCDT.PRINT_SYTHETIC_REPORT) : this.userService.isAccessPermisson(Roles.DCDT.PRINT_REPORT);
+        const checkExport = isSynthetic ? this.userService.isAccessPermisson(Roles.DCDT.EXPORT_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(Roles.DCDT.EXPORT_REPORT)
 
         this.status.general = Status.check('saveWHist', this.baoCao.trangThai) && checkSave;
-        this.status.new = Status.check('reject', this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.LTD.ADD_REPORT) && this.isChild;
+        this.status.new = Status.check('reject', this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.DCDT.ADD_REPORT) && this.isChild;
         this.status.viewAppVal = Status.check('appraisal', this.baoCao.trangThai);
         this.status.save = Status.check('saveWHist', this.baoCao.trangThai) && checkSave && this.isChild;
         this.status.submit = Status.check('submit', this.baoCao.trangThai) && checkSunmit && this.isChild && !(!this.baoCao.id);
@@ -267,13 +267,13 @@ export class AddBaoCaoComponent implements OnInit {
                 if (data.statusCode == 0) {
                     this.baoCao = data.data;
                     if (this.baoCao.lstDviTrucThuoc.length == 0) {
-                        this.listAppendix = PHU_LUC
+                        this.listAppendix = Dcdt.PHU_LUC
                     } else {
                         const isPL = this.baoCao?.lstDchinh.find(item => item.maLoai == "pl01")
                         if (this.userInfo.CAP_DVI == "2" || isPL) {
-                            this.listAppendix = PHU_LUC
+                            this.listAppendix = Dcdt.PHU_LUC
                         } else {
-                            this.listAppendix = PHU_LUC_TH
+                            this.listAppendix = Dcdt.PHU_LUC_TH
                         }
                     }
                     this.baoCao.lstDchinh.forEach(item => {

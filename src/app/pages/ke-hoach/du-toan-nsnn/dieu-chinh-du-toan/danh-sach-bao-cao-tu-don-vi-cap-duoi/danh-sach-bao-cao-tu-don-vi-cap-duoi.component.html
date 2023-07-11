@@ -18,14 +18,12 @@
                 </nz-date-picker>
             </div>
             <div nz-col nzSpan="6">
-                <ng-container *ngIf="userRole == '3'">
-                    <label class="search__label">Đơn vị lập</label>
-                    <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị lập"
-                        [(ngModel)]="searchFilter.donViTao">
-                        <nz-option *ngFor="let item of donVis" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
-                        </nz-option>
-                    </nz-select>
-                </ng-container>
+                <label class="search__label">Đơn vị lập</label>
+                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị tạo"
+                    [(ngModel)]="searchFilter.donViTao">
+                    <nz-option *ngFor="let item of donVis" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
+                    </nz-option>
+                </nz-select>
             </div>
             <div nz-col nzSpan="6">
                 <label class="search__label">Mã báo cáo</label>
@@ -35,7 +33,7 @@
                 <label class="search__label">Trạng thái</label>
                 <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái"
                     [(ngModel)]="searchFilter.trangThai">
-                    <nz-option *ngFor="let item of trangThais" [nzValue]="item.id" [nzLabel]="item.ten">
+                    <nz-option *ngFor="let item of Status.TRANG_THAI_DVCT" [nzValue]="item.id" [nzLabel]="item.tenDm">
                     </nz-option>
                 </nz-select>
             </div>
@@ -62,20 +60,21 @@
             [nzShowPagination]="false" nzBordered>
             <thead>
                 <tr>
-                    <th nzWidth="50px">STT</th>
-                    <th nzWidth="100px">Mã báo cáo</th>
-                    <th nzWidth="150px">Ngày lập</th>
-                    <th nzWidth="150px">Năm báo cáo</th>
-                    <th nzWidth="150px">Đợt báo cáo</th>
-                    <th nzWidth="150px">Ngày trình duyệt</th>
-                    <th nzWidth="150px">Ngày duyệt (Ngày trưởng bộ phận duyệt)</th>
-                    <th nzWidth="150px">Ngày duyệt (Ngày lãnh đạo duyệt)</th>
-                    <th nzWidth="150px" [hidden]="statusCaptren">Ngày cấp trên trả kết quả</th>
-                    <th nzWidth="150px">Đơn vị lập</th>
-                    <th nzWidth="150px">Trạng thái</th>
-                    <th nzWidth="50px" class="text-center"></th>
+                    <th width="60px" class="text-center">STT</th>
+                    <th>Mã báo cáo</th>
+                    <th>Ngày lập</th>
+                    <th nzWidth="20%">Công văn</th>
+                    <th>Năm báo cáo</th>
+                    <th>Đợt báo cáo</th>
+                    <th>Ngày trình duyệt</th>
+                    <th>Ngày duyệt (Ngày trưởng bộ phận duyệt)</th>
+                    <th>Ngày duyệt (Ngày lãnh đạo duyệt)</th>
+                    <th>Ngày cấp trên trả kết quả</th>
+                    <th>Đơn vị lập</th>
+                    <th>Trạng thái</th>
+                    <th width="90px" class="text-center">Hành động</th>
                 </tr>
-                <tr class="search-table">
+                <!-- <tr class="search-table">
                     <th></th>
                     <th>
                         <nz-input-group [nzSuffix]="suffixTemplateInfo">
@@ -124,7 +123,7 @@
                             (ngModelChange)="filterInTable('ngayPheDuyet',filterTable.ngayPheDuyet, true)">
                         </nz-date-picker>
                     </th>
-                    <th [hidden]="statusCaptren">
+                    <th>
                         <nz-date-picker nzFormat="dd/MM/yyyy" [(ngModel)]="filterTable.ngayTraKq"
                             (ngModelChange)="filterInTable('ngayTraKq',filterTable.ngayTraKq, true)">
                         </nz-date-picker>
@@ -147,7 +146,7 @@
                         </nz-select>
                     </th>
                     <th></th>
-                </tr>
+                </tr> -->
             </thead>
             <tbody>
                 <tr *ngFor="let data of basicTable.data; let i = index">
@@ -157,28 +156,33 @@
                             {{data.maBcao}}
                         </a>
                     </td>
-                    <td>{{data.ngayTao}}</td>
+                    <td>{{Utils.fmtDate(data.ngayTao)}}</td>
+                    <td>
+                        <div class="tep" (click)="downloadFileCv(data?.congVan?.fileUrl, data?.congVan?.fileName)">
+                            <span>{{data?.congVan?.fileName}}</span>
+                        </div>
+                    </td>
                     <td>{{data.namBcao}}</td>
                     <td>{{data.dotBcao}}</td>
                     <td>
-                        {{data.ngayTrinh}}
+                        {{Utils.fmtDate(data.ngayTrinh)}}
                     </td>
                     <td>
-                        {{data.ngayDuyet}}
+                        {{Utils.fmtDate(data.ngayDuyet)}}
                     </td>
 
                     <td>
-                        {{data.ngayPheDuyet}}
-                    </td>
-                    <td [hidden]="statusCaptren">
-                        {{data.ngayTraKq}}
+                        {{Utils.fmtDate(data.ngayPheDuyet)}}
                     </td>
                     <td>
-                        {{data.tenDvi}}
+                        {{Utils.fmtDate(data.ngayTraKq)}}
                     </td>
                     <td>
-                        {{getStatusName(data.trangThai)}}
-                        <ng-container *ngIf="data.trangThai == '8'">
+                        {{getUnitName(data.maDvi)}}
+                    </td>
+                    <td>
+                        {{Status.reportStatusName(data.trangThai, true)}}
+                        <ng-container *ngIf="data.trangThai == Status.TT_08">
                             <br />
                             Lý do: {{data.lyDoTuChoi}}
                         </ng-container>

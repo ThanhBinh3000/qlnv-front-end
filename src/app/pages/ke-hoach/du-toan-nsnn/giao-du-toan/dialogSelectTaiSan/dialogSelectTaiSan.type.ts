@@ -18,4 +18,13 @@ export interface TaiSan extends TreeNodeInterface<TaiSan> {
     nguoiSua: string;
     nguoiTao: string;
     trangThai: string;
+
+
+    // donViTinh:string,
+    // giaTri:string,
+    // loai:string,
+    // ma:string,
+    // phanLoai:null,
+    // tenTrangThai:null,
+    // thuTuHienThi:null,
 }

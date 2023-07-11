@@ -4,7 +4,7 @@
             <div nz-col nzSpan="12">
                 <label class="search__label">Năm báo cáo</label>
                 <nz-input-number [nzSize]="'small'"
-                    [class]="statusBtnValidateNam || (searchFilter.nam && searchFilter.nam >= 1000 &&  searchFilter.nam <= 2999)?'' : 'input-error-validate' "
+                    [class]="(searchFilter.nam >= 1000 &&  searchFilter.nam <= 2999) || !searchFilter.nam && this.searchFilter.nam !== 0 ?'' : 'input-error-validate'"
                     [(ngModel)]="searchFilter.nam">
                 </nz-input-number>
             </div>
@@ -25,13 +25,13 @@
             <div nz-col nzSpan="6">
                 <label class="search__label">Đợt báo cáo</label>
                 <nz-input-number [nzSize]="'small'" [(ngModel)]="searchFilter.dotBcao"
-                    [class]="statusBtnValidateDot || searchFilter.dotBcao?'' : 'input-error-validate' "></nz-input-number>
+                    [class]="!searchFilter.dotBcao && this.searchFilter.dotBcao !== 0 && this.searchFilter.dotBcao <= 0 ?'' : 'input-error-validate'"></nz-input-number>
             </div>
             <div nz-col nzSpan="12">
                 <label class="search__label">Trạng thái</label>
                 <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái"
                     [(ngModel)]="searchFilter.trangThai">
-                    <nz-option *ngFor="let item of trangThais" [nzValue]="item.id" [nzLabel]="item.tenDm">
+                    <nz-option *ngFor="let item of Status.TRANG_THAI_FULL" [nzValue]="item.id" [nzLabel]="item.tenDm">
                     </nz-option>
                 </nz-select>
             </div>
@@ -80,10 +80,11 @@
                     <th>Ngày trình duyệt</th>
                     <th>Ngày duyệt (Ngày trưởng bộ phận duyệt)</th>
                     <th>Ngày duyệt (Ngày lãnh đạo duyệt)</th>
-                    <th [hidden]="dviGuiKq">Ngày cấp trên trả kết quả</th>
+                    <th>Ngày cấp trên trả kết quả</th>
                     <th class="text-center">Trạng thái</th>
                     <th width="90px">Hành động</th>
                 </tr>
+                <!-- 
                 <tr class="search-table">
                     <th></th>
                     <th></th>
@@ -148,7 +149,7 @@
                         </nz-select>
                     </th>
                     <th></th>
-                </tr>
+                </tr> -->
             </thead>
             <tbody>
                 <tr *ngFor="let data of basicTable.data; let i = index">
@@ -163,7 +164,7 @@
                         {{ data.maBcao}}
                     </td>
                     <td>
-                        {{ data.ngayTao}}
+                        {{ Utils.fmtDate(data.ngayTao)}}
                     </td>
                     <td>
                         {{data.namBcao}}
@@ -172,19 +173,19 @@
                         {{ data.dotBcao}}
                     </td>
                     <td>
-                        {{data.ngayTrinh}}
+                        {{Utils.fmtDate(data.ngayTrinh)}}
                     </td>
                     <td>
-                        {{data.ngayDuyet}}
+                        {{Utils.fmtDate(data.ngayDuyet)}}
                     </td>
                     <td>
-                        {{data.ngayPheDuyet}}
-                    </td>
-                    <td [hidden]="dviGuiKq">
-                        {{data.ngayTraKq}}
+                        {{Utils.fmtDate(data.ngayPheDuyet)}}
                     </td>
                     <td>
-                        {{getStatusName(data.trangThai)}}
+                        {{Utils.fmtDate(data.ngayTraKq)}}
+                    </td>
+                    <td>
+                        {{Status.reportStatusName(data.trangThai)}}
                         <ng-container *ngIf="data.trangThai =='3' || data.trangThai == '5' || data.trangThai == '8'">
                             <br />
                             Lý do: {{data.lyDoTuChoi}}

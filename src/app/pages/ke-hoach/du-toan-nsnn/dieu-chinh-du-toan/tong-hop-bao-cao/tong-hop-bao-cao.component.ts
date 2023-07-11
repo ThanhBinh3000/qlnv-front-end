@@ -8,8 +8,10 @@ import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { DieuChinhService } from 'src/app/services/quan-ly-von-phi/dieuChinhDuToan.service';
 import { UserService } from 'src/app/services/user.service';
-import { DCDT, Utils } from 'src/app/Utility/utils';
+import { DCDT, Roles, Status, Utils } from 'src/app/Utility/utils';
 import { DialogTaoMoiComponent } from '../dialog-tao-moi/dialog-tao-moi.component';
+import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
+import { Dcdt } from '../dieu-chinh-du-toan.constant';
 
 @Component({
     selector: 'app-tong-hop-bao-cao',
@@ -18,58 +20,31 @@ import { DialogTaoMoiComponent } from '../dialog-tao-moi/dialog-tao-moi.componen
 })
 export class TongHopBaoCaoComponent implements OnInit {
     @Output() dataChange = new EventEmitter();
+    Status = Status;
+    Utils = Utils;
 
-    maBcao = "";
-    maLoaiBcao = "";
-    namHienTai = new Date().getFullYear();
-    tuNgay: "";
-    denNgay: "";
-    trangThai: string = Utils.TT_BC_9;
+    namHienTai: number;
+    trangThai: string = Status.TT_09;
     maDviTao: string;
-    userInfo: any;
 
+    userInfo: any;
     donVis: any[] = [];
     dataTable: any[] = [];
     dataTableAll: any[] = [];
     statusNewReport = true;
-    donViTaos: any = [];
 
     pages = {
         size: 10,
         page: 1,
-    };
+    }
     totalElements = 0;
     totalPages = 0;
 
-
-    filterTable: any = {
-        tenDvi: '',
-        maBcao: '',
-        namHienHanh: '',
-        ngayPheDuyet: '',
-        ngayTraKq: '',
-        tenTrangThai: '',
-    };
-
-    trangThais: any[] = [
-        {
-            id: '9',
-            ten: 'Tiếp nhận'
-        },
-        {
-            id: '7',
-            ten: 'Mới'
-        },
-        {
-            id: '-1',
-            ten: 'Chưa gửi đơn vị cấp trên'
-        },
-    ];
     constructor(
         private spinner: NgxSpinnerService,
         public userService: UserService,
-        private danhMuc: DanhMucHDVService,
         private notification: NzNotificationService,
+        private quanLyVonPhiService: QuanLyVonPhiService,
         private modal: NzModalService,
         private datePipe: DatePipe,
         private dieuChinhService: DieuChinhService,
@@ -80,8 +55,12 @@ export class TongHopBaoCaoComponent implements OnInit {
         this.spinner.show();
         this.maDviTao = this.userInfo.MA_DVI;
         // console.log(this.userInfo)
-        this.statusNewReport = this.userService.isAccessPermisson(DCDT.SYNTHETIC_REPORT);
-        await this.danhMuc.dMDviCon().toPromise().then(
+        this.statusNewReport = this.userService.isAccessPermisson(Roles.DCDT.SYNTHETIC_REPORT);
+        const request = {
+            maDviCha: this.userInfo.maDvi,
+            trangThai: '01',
+        }
+        await this.quanLyVonPhiService.dmDviCon(request).toPromise().then(
             data => {
                 if (data.statusCode == 0) {
                     this.donVis = data.data;
@@ -99,20 +78,19 @@ export class TongHopBaoCaoComponent implements OnInit {
 
 
     async search() {
-
         this.spinner.show();
         let trangThais: string[] = [];
         if (this.trangThai) {
             trangThais = [this.trangThai];
         } else[
-            trangThais = [Utils.TT_BC_9, Utils.TT_BC_7]
+            trangThais = [Status.TT_09, Status.TT_07]
         ]
 
         const requestReport = {
+            loaiTimKiem: "1",
             maBcao: "",
             maDvi: this.maDviTao,
             maLoaiBcao: "",
-            loaiTimKiem: "1",
             namBcao: this.namHienTai,
             ngayTaoDen: "",
             ngayTaoTu: "",
@@ -131,8 +109,6 @@ export class TongHopBaoCaoComponent implements OnInit {
                     res.data.content.forEach(item => {
                         this.dataTable.push({
                             ...item,
-                            ngayPheDuyet: this.datePipe.transform(item.ngayPheDuyet, Utils.FORMAT_DATE_STR),
-                            ngayTraKq: this.datePipe.transform(item.ngayTraKq, Utils.FORMAT_DATE_STR),
                         })
                     })
                     this.dataTableAll = cloneDeep(this.dataTable);
@@ -153,7 +129,6 @@ export class TongHopBaoCaoComponent implements OnInit {
     clearFilter() {
         this.namHienTai = null;
         this.trangThai = null;
-        this.maDviTao = null;
         this.search();
     }
 
@@ -166,7 +141,7 @@ export class TongHopBaoCaoComponent implements OnInit {
             nzWidth: '900px',
             nzFooter: null,
             nzComponentParams: {
-                tab: 'tonghop'
+                tab: Dcdt.DANH_SACH_TONG_HOP
             },
         });
         modalTuChoi.afterClose.toPromise().then(async (res) => {
@@ -174,40 +149,13 @@ export class TongHopBaoCaoComponent implements OnInit {
                 const obj = {
                     ...res,
                     id: null,
-                    tabSelected: 'addbaocao',
+                    tabSelected: Dcdt.BAO_CAO_01,
                     isSynthetic: true,
                 }
                 this.dataChange.emit(obj);
             }
         });
     };
-
-
-    // Tìm kiếm trong bảng
-    filterInTable(key: string, value: string, isDate: boolean) {
-        if (value && value != '') {
-            this.dataTable = [];
-            let temp = [];
-            if (this.dataTableAll && this.dataTableAll.length > 0) {
-                if (isDate) {
-                    value = this.datePipe.transform(value, Utils.FORMAT_DATE_STR);
-                }
-                this.dataTableAll.forEach((item) => {
-                    if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
-                        temp.push(item)
-                    }
-                });
-            }
-            this.dataTable = [...this.dataTable, ...temp];
-        } else {
-            this.dataTable = cloneDeep(this.dataTableAll);
-        }
-    };
-
-    getStatusName(trangThai: string) {
-        return this.trangThais.find(e => e.id == trangThai)?.ten;
-    };
-
     viewDetail(data: any) {
         const obj = {
             id: data.id,

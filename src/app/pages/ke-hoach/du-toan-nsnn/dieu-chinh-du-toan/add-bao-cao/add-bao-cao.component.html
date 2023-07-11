@@ -85,13 +85,13 @@
                             <td>{{Utils.fmtDate(baoCao.ngayTao)}}</td>
                             <td>{{baoCao.nguoiTao}}</td>
                             <td>
-                                <nz-upload [nzBeforeUpload]="beforeUploadCV" [hidden]="status">
+                                <nz-upload *ngIf="status.general" [nzBeforeUpload]="beforeUploadCV">
                                     <button nz-button>
                                         <i nz-icon nzType="upload"></i>
-                                        Chọn tệp
+                                        Chọn
                                     </button>
                                 </nz-upload>
-                                <div class="tep__sqd" (click)="downloadFileCv()">
+                                <div class="tep__sqd" (click)="downloadFile(null)">
                                     <span>{{baoCao.congVan?.fileName}}</span>
                                 </div>
                             </td>
@@ -136,7 +136,7 @@
                                         </td>
                                         <td>
                                             <ng-container
-                                                *ngIf="userInfo?.sub == baoCao.nguoiTao && !status && data?.id?.length==38 ;else templateNguoiBcao ">
+                                                *ngIf="userInfo?.sub == baoCao.nguoiTao && status.general && data?.id?.length==38 ;else templateNguoiBcao ">
                                                 <nz-select nzShowSearch nzAllowClear
                                                     nzPlaceHolder="Chọn cán bộ thực hiện" [(ngModel)]="data.giaoCho"
                                                     [class]="data.giaoCho ?'' : 'input-error-validate'">
@@ -155,14 +155,15 @@
                                         </td>
                                         <td>
                                             <ng-container *ngIf="baoCao.id">
-                                                <a *ngIf="!status && (userInfo?.sub == data.giaoCho)">
+                                                <a *ngIf="status.general && (userInfo?.sub == data.giaoCho)">
                                                     <i class="fa fa-pencil" (click)="viewAppendix(data.id)"></i>
                                                 </a>
-                                                <a *ngIf="(status || userInfo?.sub != data.giaoCho) && data.giaoCho">
+                                                <a
+                                                    *ngIf="(!status.general || userInfo?.sub != data.giaoCho) && data.giaoCho">
                                                     <i class="fa fa-eye" (click)="viewAppendix(data.id)"></i>
                                                 </a>
                                             </ng-container>
-                                            <a *ngIf="!status && (userInfo?.sub == baoCao.nguoiTao)">
+                                            <a *ngIf="status.general && (userInfo?.sub == baoCao.nguoiTao)">
                                                 <i class="fa fa-trash-o do" (click)="deleteAppendix(data.id)"></i>
                                             </a>
                                         </td>
@@ -172,8 +173,8 @@
                         </nz-table>
                     </nz-tab>
                     <ng-template #extraTemplate>
-                        <button *ngIf="!status && userInfo?.sub == baoCao.nguoiTao" type="button" class="btn btn-main"
-                            (click)="addAppendix()">
+                        <button *ngIf="status.general && userInfo?.sub == baoCao.nguoiTao" type="button"
+                            class="btn btn-main" (click)="addAppendix()">
                             <i class="icon htvbdh_dau-cong"></i>
                             <span>Thêm</span>
                         </button>
@@ -222,14 +223,15 @@
                     <nz-tab [nzTitle]="'Danh sách văn bản đính kèm'">
                         <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
                             <div nz-col class="gutter-row" [nzSpan]="3">
-                                <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" [hidden]="status">
+                                <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" [nzMultiple]="true"
+                                    *ngIf="status.general">
                                     <button nz-button>
                                         <i nz-icon nzType="upload"></i>
-                                        Select File
+                                        Chọn tài liệu đính kèm
                                     </button>
                                 </nz-upload>
                                 <button nz-button [nzType]="'primary'" (click)="handleUpload()"
-                                    [disabled]="fileList.length === 0" [hidden]="status" style="margin-top: 16px">
+                                    [disabled]="fileList.length === 0" *ngIf="status.general" style="margin-top: 16px">
                                     Thêm vào danh sách
                                 </button>
                             </div>
@@ -252,7 +254,7 @@
                                                 <a (click)="downloadFile(data.id)">
                                                     <i class="fa fa-eye"></i>
                                                 </a>
-                                                <a *ngIf="!status" (click)="deleteFile(data.id)">
+                                                <a *ngIf="status.general" (click)="deleteFile(data.id)">
                                                     <i class="fa fa-trash-o do"></i>
                                                 </a>
                                             </td>
