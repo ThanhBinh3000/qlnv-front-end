@@ -6,7 +6,6 @@ import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
 import {ActivatedRoute, Router} from "@angular/router";
 import {QuyetDinhScService} from "../../../../../services/sua-chua/quyetDinhSc.service";
-import {TrinhThamDinhScService} from "../../../../../services/sua-chua/trinhThamDinhSc.service";
 import {Validators} from "@angular/forms";
 import * as moment from "moment";
 import {

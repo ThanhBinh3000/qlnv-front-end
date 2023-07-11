@@ -1,14 +1,10 @@
 <nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
     <ul nz-menu nzMode="horizontal" id="mainTongCuc">
-        <li nz-menu-item nzSelected (click)="redirectUrl('/giao-nv-xh')">
-            Quyết định giao nhiệm vụ xuất hàng
+      <ng-container *ngFor="let route of routes">
+        <li nz-menu-item [class]="route.url && routerUrl.includes(route.url) ? 'ant-menu-item ng-star-inserted ant-menu-item-selected' : 'ant-menu-item ng-star-inserted'" (click)="redirectUrl(route.url)">
+          {{route.name}}
         </li>
-        <li nz-menu-item (click)="redirectUrl('/phieu-xuat-kho')">
-            Phiếu xuất kho
-        </li>
-        <li nz-menu-item (click)="redirectUrl('/bang-ke')">
-            Bảng kê xuất vật tư
-        </li>
+      </ng-container>
     </ul>
 </nz-affix>
 <router-outlet></router-outlet>
