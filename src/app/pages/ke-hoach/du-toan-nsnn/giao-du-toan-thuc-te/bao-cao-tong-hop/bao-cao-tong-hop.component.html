@@ -1,66 +1,66 @@
 <ng-container *ngIf="isDataAvailable">
-  <nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="btn-affix">
-    <div class="btn-group">
-      <button type="button" class="btn btn-sub" (click)="back()">
-        <i class="fa fa-arrow-left"></i>
-        <span>Quay lại</span>
-      </button>
-      <button class="btn btn-main" (click)="action('save')" [hidden]="statusBtnSave">
-        <i class="icon htvbdh_tcdt_save"></i>
-        <span>Lưu</span>
-      </button>
-      <button class="btn btn-main" (click)="action('submit')" [hidden]="statusBtnApprove">
-        <i class="icon htvbdh_tcdt_guiduyet"></i>
-        <span>Trình duyệt</span>
-      </button>
-      <button class="btn btn-main" (click)="action('nonpass')" [hidden]="statusBtnTBP">
-        <i class="icon htvbdh_tcdt_tuchoi"></i>
-        <span>Từ chối</span>
-      </button>
-      <button class="btn btn-main" (click)="action('pass')" [hidden]="statusBtnTBP">
-        <i class="icon htvbdh_tcdt_pheduyet"></i>
-        <span>Duyệt</span>
-      </button>
-      <button class="btn btn-main" (click)="action('nonapprove')" [hidden]="statusBtnLD">
-        <i class="icon htvbdh_tcdt_pheduyet"></i>
-        <span>Từ chối</span>
-      </button>
-      <button class="btn btn-main" (click)="action('approve')" [hidden]="statusBtnLD">
-        <i class="icon htvbdh_tcdt_tuchoi"></i>
-        <span>Phê duyệt</span>
-      </button>
-      <button class="btn btn-main" (click)="action('refuse')" [hidden]="statusBtnDVCT">
-        <i class="icon htvbdh_tcdt_pheduyet"></i>
-        <span>Từ chối</span>
-      </button>
-      <button class="btn btn-main" (click)="action('receive')" [hidden]="statusBtnDVCT">
-        <i class="icon htvbdh_tcdt_tuchoi"></i>
-        <span>Tiếp nhận</span>
-      </button>
-      <button class="btn btn-main" [hidden]="statusBtnCopy" (click)="showDialogCopy()">
-        <i nz-icon nzType="copy" nzTheme="outline"></i>
-        <span>Copy</span>
-      </button>
-      <button class="btn btn-main" [hidden]="statusBtnPrint" (click)="doPrint()">
-        <i nz-icon nzType="printer" nzTheme="outline"></i>
-        <span>In</span>
-      </button>
-    </div>
-  </nz-affix>
-  <div class="bg-trang">
-    <div class="mt16 flex-card p-lr16">
-      <div class="header mg-t-16">
-        <div class="header-text">
-          <div class="title-chi-tieu">
-            <span [ngClass]="statusClass()">{{getStatusName()}}</span>
-            <span>tổng hợp phương án </span>
-          </div>
+    <nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="btn-affix">
+        <div class="btn-group">
+            <button type="button" class="btn btn-sub" (click)="back()">
+                <i class="fa fa-arrow-left"></i>
+                <span>Quay lại</span>
+            </button>
+            <button class="btn btn-main" (click)="action('save')" [hidden]="statusBtnSave">
+                <i class="icon htvbdh_tcdt_save"></i>
+                <span>Lưu</span>
+            </button>
+            <button class="btn btn-main" (click)="action('submit')" [hidden]="statusBtnApprove">
+                <i class="icon htvbdh_tcdt_guiduyet"></i>
+                <span>Trình duyệt</span>
+            </button>
+            <button class="btn btn-main" (click)="action('nonpass')" [hidden]="statusBtnTBP">
+                <i class="icon htvbdh_tcdt_tuchoi"></i>
+                <span>Từ chối</span>
+            </button>
+            <button class="btn btn-main" (click)="action('pass')" [hidden]="statusBtnTBP">
+                <i class="icon htvbdh_tcdt_pheduyet"></i>
+                <span>Duyệt</span>
+            </button>
+            <button class="btn btn-main" (click)="action('nonapprove')" [hidden]="statusBtnLD">
+                <i class="icon htvbdh_tcdt_pheduyet"></i>
+                <span>Từ chối</span>
+            </button>
+            <button class="btn btn-main" (click)="action('approve')" [hidden]="statusBtnLD">
+                <i class="icon htvbdh_tcdt_tuchoi"></i>
+                <span>Phê duyệt</span>
+            </button>
+            <button class="btn btn-main" (click)="action('refuse')" [hidden]="statusBtnDVCT">
+                <i class="icon htvbdh_tcdt_pheduyet"></i>
+                <span>Từ chối</span>
+            </button>
+            <button class="btn btn-main" (click)="action('receive')" [hidden]="statusBtnDVCT">
+                <i class="icon htvbdh_tcdt_tuchoi"></i>
+                <span>Tiếp nhận</span>
+            </button>
+            <button class="btn btn-main" [hidden]="statusBtnCopy" (click)="showDialogCopy()">
+                <i nz-icon nzType="copy" nzTheme="outline"></i>
+                <span>Copy</span>
+            </button>
+            <button class="btn btn-main" [hidden]="statusBtnPrint" (click)="doPrint()">
+                <i nz-icon nzType="printer" nzTheme="outline"></i>
+                <span>In</span>
+            </button>
         </div>
-        <nz-card class="mt-2px flex-card data-table card-border-content table-card">
-          <nz-table class="nowrap mt-16 table-chi-tiet">
-            <thead>
-              <tr>
-                <!-- <th>
+    </nz-affix>
+    <div class="bg-trang">
+        <div class="mt16 flex-card p-lr16">
+            <div class="header mg-t-16">
+                <div class="header-text">
+                    <div class="title-chi-tieu">
+                        <span [ngClass]="statusClass()">{{getStatusName()}}</span>
+                        <span>tổng hợp phương án </span>
+                    </div>
+                </div>
+                <nz-card class="mt-2px flex-card data-table card-border-content table-card">
+                    <nz-table class="nowrap mt-16 table-chi-tiet">
+                        <thead>
+                            <tr>
+                                <!-- <th>
                   <ng-container *ngIf="statusDeleteCv(); else view">
                     <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn xóa quyết định công văn?" style="color:black"
                       (nzOnConfirm)="deleteQdCv()">Số QĐ/CV
@@ -70,17 +70,17 @@
                     Số QĐ/CV
                   </ng-template>
                 </th> -->
-                <!-- <th width="175px">Mã phương án(Mã phương án tổng cục nhập từ quyết định BTC giao)</th> -->
-                <th width="175px">Mã phương án</th>
-                <th width="175px">Năm phương án</th>
-                <th width="175px">Ngày tạo</th>
-                <th width="175px">Nơi tạo</th>
-                <th width="175px">Trạng thái</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <!-- <td>
+                                <!-- <th width="175px">Mã phương án(Mã phương án tổng cục nhập từ quyết định BTC giao)</th> -->
+                                <th width="175px">Mã phương án</th>
+                                <th width="175px">Năm phương án</th>
+                                <th width="175px">Ngày tạo</th>
+                                <th width="175px">Nơi tạo</th>
+                                <th width="175px">Trạng thái</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <!-- <td>
                   <div class="tep_sqd" (click)="downloadFileCv()">
                     <span>{{soQd?.fileName}}</span>
                   </div>
@@ -90,164 +90,168 @@
                     {{maPaCha}}
                   </a>
                 </td> -->
-                <td>{{maPa}}</td>
-                <td>{{namPa}}</td>
-                <td>{{ngayTao}}</td>
-                <td>{{getUnitName()}}</td>
-                <td>{{getStatusName()}}</td>
-              </tr>
-            </tbody>
-          </nz-table>
-        </nz-card>
-      </div>
-    </div>
-    <div class="mt16 flex-card p-lr16">
-      <nz-card class="mt-2px flex-card data-table card-border-content table-card" nzTitle="Nội dung báo cáo">
-        <div id="tablePrint">
-          <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px; margin-bottom: 10px;">
-            <div nz-col [nzSpan]="3">
-              Đơn vị:
-              <ng-container *ngIf="!status || !editMoneyUnit; else editMoney">
-                <span (click)="editMoneyUnit=true">{{getMoneyUnit()}}</span>
-              </ng-container>
-              <ng-template #editMoney>
-                <nz-select nzShowSearch nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
-                  (ngModelChange)="editMoneyUnit=false">
-                  <nz-option *ngFor="let item of donViTiens" [nzValue]="item.id" [nzLabel]="item.tenDm">
-                  </nz-option>
-                </nz-select>
-              </ng-template>
+                                <td>{{maPa}}</td>
+                                <td>{{namPa}}</td>
+                                <td>{{ngayTao}}</td>
+                                <td>{{getUnitName()}}</td>
+                                <td>{{getStatusName()}}</td>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                </nz-card>
             </div>
-          </div>
-
-          <nz-table #fixedTable class="nowrap mt-16 table-chi-tiet" nzBordered>
-            <thead>
-              <tr>
-                <th nzWidth="150px">STT</th>
-                <th nzWidth="700px">Nhóm</th>
-                <th>Tổng số</th>
-                <th>Đơn vị cấp dưới đã thực hiện</th>
-                <th>Chênh lệch</th>
-                <!-- <th [hidden]="status"></th> -->
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let data of lstCtietBcao; let i = index">
-                <td [nzIndentSize]="data.level! * 8">
-                  {{getChiMuc(data.stt)}}
-                </td>
-                <td>
-                  <div *ngFor="let item of noiDungs">
-                    <div *ngIf="item.ma == data.maNdung">
-                      <span>
-                        {{item.tenDm}}
-                      </span>
-                    </div>
-                  </div>
-                </td>
-                <td>{{displayValue(data.tongCong)}}</td>
-                <td>{{displayValue(data.dviCapDuoiTh)}}</td>
-                <td>{{displayValue(data.chenhLech)}}</td>
-              </tr>
-            </tbody>
-          </nz-table>
-
-          <ng-container *ngIf="lstDviTrucThuoc.length != 0">
-            <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
-              <div nz-col class="gutter-row" [nzSpan]="12">
-                Danh sách báo cáo từ các đơn vị trực thuộc
-                <br />
-              </div>
-            </div>
-            <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
-              <div nz-col class="gutter-row" [nzSpan]="24">
-                <nz-table [nzData]="lstDviTrucThuoc" nzBordered class="table__body">
-                  <thead>
-                    <tr>
-                      <th nzWidth="50px">STT</th>
-                      <th nzWidth="200px">Đơn vị lập</th>
-                      <th nzWidth="150px">Mã báo cáo</th>
-                      <th nzWidth="150px">Năm báo cáo</th>
-                      <th nzWidth="150px">Ngày trình duyệt <br /> (Ngày đơn vị cấp dưới gửi
-                        báo cáo)</th>
-                      <th nzWidth="150px">Ngày duyệt <br />(Ngày đơn vị cấp trên duyệt báo
-                        cáo)
-                      </th>
-                      <th nzWidth="150px">Trạng thái</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr *ngFor="let data of lstDviTrucThuoc; let i = index">
-                      <td>{{i+1}}</td>
-                      <td>{{getUnitNameDviTT(data.maDvi)}}</td>
-                      <td>
-                        <a (click)="xemChiTiet(data.id, data.maLoaiDan)" style="color: #1890ff;">
-                          {{ data.maPa}}
-                        </a>
-                      </td>
-                      <td>{{data.namPa}}</td>
-                      <td>{{data.ngayTrinh}}</td>
-                      <td>{{data.ngayDuyet}}</td>
-                      <td>{{getStatusNameDviTT(data.trangThai)}}</td>
-                    </tr>
-                  </tbody>
-                </nz-table>
-              </div>
-            </div>
-            <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
-              <div nz-col nzSpan="24">
-                <label class="search__label">Thuyết minh</label>
-                <textarea rows="2" nz-input [(ngModel)]="thuyetMinh" [disabled]="status"></textarea>
-              </div>
-            </div>
-          </ng-container>
-
-          <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
-            <div nz-col class="gutter-row" [nzSpan]="3">
-              Danh sách văn bản đính kèm
-              <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" [hidden]="status">
-                <button nz-button>
-                  <i nz-icon nzType="upload"></i>
-                  Select File
-                </button>
-              </nz-upload>
-              <button nz-button [nzType]="'primary'" (click)="handleUpload()" [disabled]="fileList.length === 0"
-                [hidden]="status" style="margin-top: 16px">
-                Thêm vào danh sách
-              </button>
-            </div>
-          </div>
-
-          <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
-            <div nz-col class="gutter-row" [nzSpan]="12">
-              <nz-table nzBordered class="table__body">
-                <thead>
-                  <tr>
-                    <th>STT</th>
-                    <th>Tên file</th>
-                    <th></th>
-                    <th class="th" [hidden]="status"></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let data of lstFiles; let i = index">
-                    <td>{{ i + 1 }} </td>
-                    <td>{{ data.fileName }}</td>
-                    <td>
-                      <button class="btn btn-function" (click)="downloadFile(data.id)">Xem</button>
-                    </td>
-                    <td [hidden]="status">
-                      <button class="btn btn-function" (click)="deleteFile(data.id)">Xóa</button>
-                    </td>
-                  </tr>
-                </tbody>
-              </nz-table>
-
-            </div>
-          </div>
-
         </div>
-      </nz-card>
+        <div class="mt16 flex-card p-lr16">
+            <nz-card class="mt-2px flex-card data-table card-border-content table-card" nzTitle="Nội dung báo cáo">
+                <div id="tablePrint">
+                    <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }"
+                        style="margin-top: 10px; margin-bottom: 10px;">
+                        <div nz-col [nzSpan]="3">
+                            Đơn vị:
+                            <ng-container *ngIf="!status || !editMoneyUnit; else editMoney">
+                                <span (click)="editMoneyUnit=true">{{getMoneyUnit()}}</span>
+                            </ng-container>
+                            <ng-template #editMoney>
+                                <nz-select nzShowSearch nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
+                                    (ngModelChange)="editMoneyUnit=false">
+                                    <nz-option *ngFor="let item of donViTiens" [nzValue]="item.id"
+                                        [nzLabel]="item.tenDm">
+                                    </nz-option>
+                                </nz-select>
+                            </ng-template>
+                        </div>
+                    </div>
+
+                    <nz-table #fixedTable class="nowrap mt-16 table-chi-tiet" nzBordered>
+                        <thead>
+                            <tr>
+                                <th nzWidth="150px">STT</th>
+                                <th nzWidth="700px">Nhóm</th>
+                                <th>Tổng số</th>
+                                <th>Đơn vị cấp dưới đã thực hiện</th>
+                                <th>Chênh lệch</th>
+                                <!-- <th [hidden]="status"></th> -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let data of lstCtietBcao; let i = index">
+                                <td [nzIndentSize]="data.level! * 8">
+                                    {{getChiMuc(data.stt)}}
+                                </td>
+                                <td>
+                                    <div *ngFor="let item of noiDungs">
+                                        <div *ngIf="item.ma == data.maNdung">
+                                            <span>
+                                                {{item.tenDm}}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>{{displayValue(data.tongCong)}}</td>
+                                <td>{{displayValue(data.dviCapDuoiTh)}}</td>
+                                <td>{{displayValue(data.chenhLech)}}</td>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+
+                    <ng-container *ngIf="lstDviTrucThuoc.length != 0">
+                        <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+                            <div nz-col class="gutter-row" [nzSpan]="12">
+                                Danh sách báo cáo từ các đơn vị trực thuộc
+                                <br />
+                            </div>
+                        </div>
+                        <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+                            <div nz-col class="gutter-row" [nzSpan]="24">
+                                <nz-table [nzData]="lstDviTrucThuoc" nzBordered class="table__body">
+                                    <thead>
+                                        <tr>
+                                            <th nzWidth="50px">STT</th>
+                                            <th nzWidth="200px">Đơn vị lập</th>
+                                            <th nzWidth="150px">Mã báo cáo</th>
+                                            <th nzWidth="150px">Năm báo cáo</th>
+                                            <th nzWidth="150px">Ngày trình duyệt <br /> (Ngày đơn vị cấp dưới gửi
+                                                báo cáo)</th>
+                                            <th nzWidth="150px">Ngày duyệt <br />(Ngày đơn vị cấp trên duyệt báo
+                                                cáo)
+                                            </th>
+                                            <th nzWidth="150px">Trạng thái</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let data of lstDviTrucThuoc; let i = index">
+                                            <td>{{i+1}}</td>
+                                            <td>{{getUnitNameDviTT(data.maDvi)}}</td>
+                                            <td>
+                                                <a (click)="xemChiTiet(data.id, data.maLoaiDan)"
+                                                    style="color: #1890ff;">
+                                                    {{ data.maPa}}
+                                                </a>
+                                            </td>
+                                            <td>{{data.namPa}}</td>
+                                            <td>{{data.ngayTrinh}}</td>
+                                            <td>{{data.ngayDuyet}}</td>
+                                            <td>{{getStatusNameDviTT(data.trangThai)}}</td>
+                                        </tr>
+                                    </tbody>
+                                </nz-table>
+                            </div>
+                        </div>
+                        <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+                            <div nz-col nzSpan="24">
+                                <label class="search__label">Thuyết minh</label>
+                                <textarea rows="2" nz-input [(ngModel)]="thuyetMinh" [disabled]="status"></textarea>
+                            </div>
+                        </div>
+                    </ng-container>
+
+                    <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+                        <div nz-col class="gutter-row" [nzSpan]="3">
+                            Danh sách văn bản đính kèm
+                            <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" [hidden]="status">
+                                <button nz-button>
+                                    <i nz-icon nzType="upload"></i>
+                                    Select File
+                                </button>
+                            </nz-upload>
+                            <button nz-button [nzType]="'primary'" (click)="handleUpload()"
+                                [disabled]="fileList.length === 0" [hidden]="status" style="margin-top: 16px">
+                                Thêm vào danh sách
+                            </button>
+                        </div>
+                    </div>
+
+                    <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+                        <div nz-col class="gutter-row" [nzSpan]="12">
+                            <nz-table nzBordered class="table__body">
+                                <thead>
+                                    <tr>
+                                        <th>STT</th>
+                                        <th>Tên file</th>
+                                        <th></th>
+                                        <th class="th" [hidden]="status"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let data of lstFiles; let i = index">
+                                        <td>{{ i + 1 }} </td>
+                                        <td>{{ data.fileName }}</td>
+                                        <td>
+                                            <button class="btn btn-function"
+                                                (click)="downloadFile(data.id)">Xem</button>
+                                        </td>
+                                        <td [hidden]="status">
+                                            <button class="btn btn-function" (click)="deleteFile(data.id)">Xóa</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </nz-table>
+
+                        </div>
+                    </div>
+
+                </div>
+            </nz-card>
+        </div>
     </div>
-  </div>
 </ng-container>

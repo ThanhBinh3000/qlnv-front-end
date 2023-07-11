@@ -15,24 +15,24 @@ import { PhuLucSuaChuaComponent } from './phu-luc-sua-chua/phu-luc-sua-chua.comp
 import { PhuLucTaiSanComponent } from './phu-luc-tai-san/phu-luc-tai-san.component';
 
 @NgModule({
-  declarations: [
-    AddBaoCaoComponent,
-    PhuLucPhanBoComponent,
-    PhuLuc03Component,
-    PhuLuc02Component,
-    PhuLuc01XuatComponent,
-    PhuLuc01NhapComponent,
-    PhuLucDaoTaoComponent,
-    PhuLucKhoaHocCongNgheComponent,
-    PhuLucQuyLuongComponent,
-    PhuLucSuaChuaComponent,
-    PhuLucTaiSanComponent,
-  ],
-  imports: [
-    CommonModule,
-    ComponentsModule,
-    DirectivesModule,
-  ],
-  exports: [AddBaoCaoComponent]
+    declarations: [
+        AddBaoCaoComponent,
+        PhuLucPhanBoComponent,
+        PhuLuc03Component,
+        PhuLuc02Component,
+        PhuLuc01XuatComponent,
+        PhuLuc01NhapComponent,
+        PhuLucDaoTaoComponent,
+        PhuLucKhoaHocCongNgheComponent,
+        PhuLucQuyLuongComponent,
+        PhuLucSuaChuaComponent,
+        PhuLucTaiSanComponent,
+    ],
+    imports: [
+        CommonModule,
+        ComponentsModule,
+        DirectivesModule,
+    ],
+    exports: [AddBaoCaoComponent]
 })
 export class AddBaoCaoModule { }

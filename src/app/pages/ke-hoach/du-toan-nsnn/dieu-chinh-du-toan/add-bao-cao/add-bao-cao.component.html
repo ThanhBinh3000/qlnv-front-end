@@ -5,42 +5,42 @@
                 <i class="fa fa-arrow-left"></i>
                 <span>Quay lại</span>
             </button>
-            <button *ngIf="saveStatus" type="button" class="btn btn-sub" (click)="action('save')">
+            <button *ngIf="status.save" type="button" class="btn btn-sub" (click)="action('save')">
                 <i class="icon htvbdh_tcdt_save"></i>
                 <span>Lưu</span>
             </button>
-            <button *ngIf="submitStatus" type="button" class="btn btn-sub" (click)="action('submit')">
+            <!-- <button *ngIf="status.new" type="button" class="btn btn-sub" (click)="newReport()">
+                <i class="icon htvbdh_tcdt_tao-qd"></i>
+                <span>Tạo mới</span>
+            </button> -->
+            <button *ngIf="status.submit" type="button" class="btn btn-sub" (click)="action('submit')">
                 <i class="icon htvbdh_tcdt_guiduyet"></i>
                 <span>Trình duyệt</span>
             </button>
-            <button *ngIf="passStatus" type="button" class="btn btn-sub" (click)="action('nonpass')">
-                <i class="icon htvbdh_tcdt_tuchoi"></i>
-                <span>Từ chối</span>
-            </button>
-            <button *ngIf="passStatus" type="button" class="btn btn-sub" (click)="action('pass')">
+            <button *ngIf="status.pass" type="button" class="btn btn-sub" (click)="action('pass')">
                 <i class="icon htvbdh_tcdt_pheduyet"></i>
                 <span>Duyệt</span>
             </button>
-            <button *ngIf="approveStatus" type="button" class="btn btn-sub" (click)="action('nonapprove')">
+            <button *ngIf="status.pass" type="button" class="btn btn-do" (click)="action('nonpass')">
                 <i class="icon htvbdh_tcdt_tuchoi"></i>
                 <span>Từ chối</span>
             </button>
-            <button *ngIf="approveStatus" type="button" class="btn btn-sub" (click)="action('approve')">
+            <button *ngIf="status.approve" type="button" class="btn btn-sub" (click)="action('approve')">
                 <i class="icon htvbdh_tcdt_pheduyet"></i>
                 <span>Phê duyệt</span>
             </button>
-            <button *ngIf="acceptStatus" type="button" class="btn btn-sub" (click)="action('nonaccept')">
+            <button *ngIf="status.approve" type="button" class="btn btn-do" (click)="action('nonapprove')">
                 <i class="icon htvbdh_tcdt_tuchoi"></i>
                 <span>Từ chối</span>
             </button>
-            <button *ngIf="acceptStatus" type="button" class="btn btn-sub" (click)="action('accept')">
+            <button *ngIf="status.accept" type="button" class="btn btn-sub" (click)="action('accept')">
                 <i class="icon htvbdh_tcdt_pheduyet"></i>
                 <span>Tiếp nhận</span>
             </button>
-            <!-- <button *ngIf="copyStatus" type="button" class="btn btn-sub" (click)="showDialogCopy()">
-        <i nz-icon nzType="copy" nzTheme="outline"></i>
-        <span>Copy</span>
-      </button> -->
+            <button *ngIf="status.accept" type="button" class="btn btn-do" (click)="action('nonaccept')">
+                <i class="icon htvbdh_tcdt_tuchoi"></i>
+                <span>Từ chối</span>
+            </button>
         </div>
     </nz-affix>
 
@@ -49,7 +49,9 @@
             <div class="header mg-t-16">
                 <div class="header-text">
                     <div class="title-chi-tieu">
-                        <span [ngClass]="statusClass()">{{getStatusName(baoCao.trangThaiBaoCao)}}</span>
+                        <span [ngClass]="Status.statusClass(baoCao.trangThai)">
+                            {{ Status.reportStatusName(baoCao.trangThai, isParent) }}
+                        </span>
                         <span>Báo cáo điều chỉnh dự toán chi ngân sách nhà nước</span>
                     </div>
                 </div>
@@ -80,23 +82,23 @@
                             <td>
                                 {{baoCao.dotBcao}}
                             </td>
-                            <td>{{baoCao.ngayNhap}}</td>
-                            <td>{{baoCao.nguoiNhap}}</td>
+                            <td>{{Utils.fmtDate(baoCao.ngayTao)}}</td>
+                            <td>{{baoCao.nguoiTao}}</td>
                             <td>
-                                <nz-upload [nzBeforeUpload]="beforeUploadCV" [hidden]="status">
+                                <nz-upload *ngIf="status.general" [nzBeforeUpload]="beforeUploadCV">
                                     <button nz-button>
                                         <i nz-icon nzType="upload"></i>
-                                        Chọn tệp
+                                        Chọn
                                     </button>
                                 </nz-upload>
-                                <div class="tep__sqd" (click)="downloadFileCv()">
+                                <div class="tep__sqd" (click)="downloadFile(null)">
                                     <span>{{baoCao.congVan?.fileName}}</span>
                                 </div>
                             </td>
-                            <td>{{baoCao.ngayTrinhDuyet}}</td>
-                            <td>{{baoCao.ngayDuyetTBP}}</td>
-                            <td>{{baoCao.ngayDuyetLD}}</td>
-                            <td>{{baoCao.ngayCapTrenTraKq}}</td>
+                            <td>{{ Utils.fmtDate(baoCao.ngayTrinh) }}</td>
+                            <td>{{ Utils.fmtDate(baoCao.ngayDuyet) }}</td>
+                            <td>{{ Utils.fmtDate(baoCao.ngayPheDuyet) }}</td>
+                            <td>{{ Utils.fmtDate(baoCao.ngayTraKq) }}</td>
                         </tr>
                     </tbody>
                 </nz-table>
@@ -126,7 +128,7 @@
                                         <td>{{data.tenPl}}</td>
                                         <td>{{data.tenDm}}</td>
                                         <td>
-                                            {{getStatusAppendixName(data.trangThai)}}
+                                            {{ Status.appendixStatusName(data.trangThai) }}
                                             <ng-container *ngIf="data.trangThai == '0'">
                                                 <br>
                                                 Lý do: {{data.lyDoTuChoi}}
@@ -134,7 +136,7 @@
                                         </td>
                                         <td>
                                             <ng-container
-                                                *ngIf="userInfo?.sub == baoCao.nguoiNhap && !status && data?.id?.length==38 ;else templateNguoiBcao ">
+                                                *ngIf="userInfo?.sub == baoCao.nguoiTao && status.general && data?.id?.length==38 ;else templateNguoiBcao ">
                                                 <nz-select nzShowSearch nzAllowClear
                                                     nzPlaceHolder="Chọn cán bộ thực hiện" [(ngModel)]="data.giaoCho"
                                                     [class]="data.giaoCho ?'' : 'input-error-validate'">
@@ -153,14 +155,15 @@
                                         </td>
                                         <td>
                                             <ng-container *ngIf="baoCao.id">
-                                                <a *ngIf="!status && (userInfo?.sub == data.giaoCho)">
-                                                    <i class="fa fa-pencil" (click)="viewAppendix(data)"></i>
+                                                <a *ngIf="status.general && (userInfo?.sub == data.giaoCho)">
+                                                    <i class="fa fa-pencil" (click)="viewAppendix(data.id)"></i>
                                                 </a>
-                                                <a *ngIf="(status || userInfo?.sub != data.giaoCho) && data.giaoCho">
-                                                    <i class="fa fa-eye" (click)="viewAppendix(data)"></i>
+                                                <a
+                                                    *ngIf="(!status.general || userInfo?.sub != data.giaoCho) && data.giaoCho">
+                                                    <i class="fa fa-eye" (click)="viewAppendix(data.id)"></i>
                                                 </a>
                                             </ng-container>
-                                            <a *ngIf="!status && (userInfo?.sub == baoCao.nguoiNhap)">
+                                            <a *ngIf="status.general && (userInfo?.sub == baoCao.nguoiTao)">
                                                 <i class="fa fa-trash-o do" (click)="deleteAppendix(data.id)"></i>
                                             </a>
                                         </td>
@@ -170,8 +173,8 @@
                         </nz-table>
                     </nz-tab>
                     <ng-template #extraTemplate>
-                        <button *ngIf="!status && userInfo?.sub == baoCao.nguoiNhap" type="button" class="btn btn-main"
-                            (click)="addAppendix()">
+                        <button *ngIf="status.general && userInfo?.sub == baoCao.nguoiTao" type="button"
+                            class="btn btn-main" (click)="addAppendix()">
                             <i class="icon htvbdh_dau-cong"></i>
                             <span>Thêm</span>
                         </button>
@@ -200,14 +203,14 @@
                             <tbody>
                                 <tr *ngFor="let data of baoCao.lstDviTrucThuoc; let i = index">
                                     <td>{{i+1}}</td>
-                                    <td>{{getUnitName(data.maDvi)}}</td>
+                                    <td></td>
                                     <td>
-                                        {{ data.maBcao}}
+                                        {{ data.maBcao }}
                                     </td>
-                                    <td>{{data.namBcao}}</td>
-                                    <td>{{data.ngayDuyet}}</td>
-                                    <td>{{data.ngayPheDuyet}}</td>
-                                    <td>{{getStatusName(data.trangThai)}}</td>
+                                    <td>{{ data.namBcao }}</td>
+                                    <td>{{ Utils.fmtDate(data.ngayDuyet) }}</td>
+                                    <td>{{ Utils.fmtDate(data.ngayPheDuyet) }}</td>
+                                    <td>{{ Status.appendixStatusName(data.trangThai) }}</td>
                                     <td>
                                         <a (click)="viewDetail(data.id)">
                                             <i class="fa fa-eye"></i>
@@ -220,14 +223,15 @@
                     <nz-tab [nzTitle]="'Danh sách văn bản đính kèm'">
                         <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
                             <div nz-col class="gutter-row" [nzSpan]="3">
-                                <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" [hidden]="status">
+                                <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" [nzMultiple]="true"
+                                    *ngIf="status.general">
                                     <button nz-button>
                                         <i nz-icon nzType="upload"></i>
-                                        Select File
+                                        Chọn tài liệu đính kèm
                                     </button>
                                 </nz-upload>
                                 <button nz-button [nzType]="'primary'" (click)="handleUpload()"
-                                    [disabled]="fileList.length === 0" [hidden]="status" style="margin-top: 16px">
+                                    [disabled]="fileList.length === 0" *ngIf="status.general" style="margin-top: 16px">
                                     Thêm vào danh sách
                                 </button>
                             </div>
@@ -250,7 +254,7 @@
                                                 <a (click)="downloadFile(data.id)">
                                                     <i class="fa fa-eye"></i>
                                                 </a>
-                                                <a *ngIf="!status" (click)="deleteFile(data.id)">
+                                                <a *ngIf="status.general" (click)="deleteFile(data.id)">
                                                     <i class="fa fa-trash-o do"></i>
                                                 </a>
                                             </td>

@@ -8,17 +8,17 @@ import { AddQuyetToanComponent } from './add-quyet-toan/add-quyet-toan.component
 import { DialogAddVatTuComponent } from './dialog-add-vat-tu/dialog-add-vat-tu.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    ComponentsModule
-  ],
-  declarations: [
-    BaoCaoQuyetToanComponent,
-    ThemBaoCaoQuyetToanComponent,
-    DialogThemBaoCaoQuyetToanComponent,
-    AddQuyetToanComponent,
-    DialogAddVatTuComponent
-  ],
-  exports: [BaoCaoQuyetToanComponent],
+    imports: [
+        CommonModule,
+        ComponentsModule
+    ],
+    declarations: [
+        BaoCaoQuyetToanComponent,
+        ThemBaoCaoQuyetToanComponent,
+        DialogThemBaoCaoQuyetToanComponent,
+        AddQuyetToanComponent,
+        DialogAddVatTuComponent
+    ],
+    exports: [BaoCaoQuyetToanComponent],
 })
 export class BaoCaoQuyetToanModule { }
