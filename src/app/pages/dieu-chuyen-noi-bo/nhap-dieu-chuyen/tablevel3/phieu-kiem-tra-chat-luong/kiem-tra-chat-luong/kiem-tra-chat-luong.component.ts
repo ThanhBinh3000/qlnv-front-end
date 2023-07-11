@@ -18,6 +18,7 @@ import { PhieuKiemTraChatLuongService } from 'src/app/services/dieu-chuyen-noi-b
 import * as uuidv4 from "uuid";
 import { ThongTinQuyetDinhDieuChuyenCucComponent } from 'src/app/pages/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/cuc/thong-tin-quyet-dinh-dieu-chuyen-cuc/thong-tin-quyet-dinh-dieu-chuyen-cuc.component';
 import { QuyetDinhDieuChuyenCucService } from 'src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-c.service';
+import { ThongTinBienBanNghiemThuBaoQuanLanDauComponent } from '../../bien-ban-nghiem-thu-bao-quan-lan-dau/thong-tin-bien-ban-nghiem-thu-bao-quan-lan-dau/thong-tin-bien-ban-nghiem-thu-bao-quan-lan-dau.component';
 
 @Component({
   selector: 'app-kiem-tra-chat-luong',
@@ -175,6 +176,23 @@ export class KiemTraChatLuongComponent extends Base2Component implements OnInit 
         isViewOnModal: true,
         isView: true,
         idInput: row.qdinhDccId
+      },
+    });
+  }
+
+  async openDialogBBBQLD(row) {
+    this.modal.create({
+      nzTitle: 'Thông tin biên bản nghiệm thu bảo quản lần đầu',
+      nzContent: ThongTinBienBanNghiemThuBaoQuanLanDauComponent,
+      nzMaskClosable: false,
+      nzClosable: true,
+      nzBodyStyle: { overflowY: 'auto' },//maxHeight: 'calc(100vh - 200px)'
+      nzWidth: '90%',
+      nzFooter: null,
+      nzComponentParams: {
+        loaiDc: this.loaiDc,
+        isView: true,
+        idInput: row.bbntLdId
       },
     });
   }

@@ -15,7 +15,7 @@
 
   <div>
 
-    <app-phieu-nhap-kho [loaiDc]="loaiDc" *ngIf="tabSelected == 0"></app-phieu-nhap-kho>
+    <app-phieu-nhap-kho [loaiDc]="loaiDc" [isVatTu]="false" *ngIf="tabSelected == 0"></app-phieu-nhap-kho>
     <app-bang-ke-can-hang [loaiDc]="loaiDc" *ngIf="tabSelected == 1"></app-bang-ke-can-hang>
     <app-bien-ban-nhap-day-du [loaiDc]="loaiDc" *ngIf="tabSelected == 2"></app-bien-ban-nhap-day-du>
 

@@ -350,7 +350,7 @@
                 Loại hình nhập xuất
               </nz-form-label>
               <nz-form-control>
-                <input nz-input formControlName="tenLoaiHinhNhapXuat" [readonly]="true" />
+                <input nz-input formControlName="loaiHinhNx" [readonly]="true" />
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -360,7 +360,7 @@
               <nz-form-label [nzNoColon]="true">Kiểu nhập xuất
               </nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
-                <input nz-input formControlName="tenKieuNhapXuat" [readonly]="true" />
+                <input nz-input formControlName="kieuNx" [readonly]="true" />
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -431,7 +431,7 @@
               <th>Theo chứng từ</th>
               <th>Thực nhập</th>
             </tr>
-            <tr>
+            <tr *ngIf="!isView">
               <th></th>
               <th>{{noiDung}}</th>
               <th>
@@ -483,10 +483,14 @@
                 <td>{{item.noiDung}}</td>
                 <td>{{item.maSo}}</td>
                 <td>{{item.dviTinh}}</td>
-                <td>{{item.soLuongNhap}}</td>
-                <td>{{item.soLuongNhapTt}}</td>
-                <td>{{item.donGia}}</td>
-                <td>{{item.thanhTien}}</td>
+                <td>{{item.soLuongNhap | number: '1.0-1':
+                  'vi_VN'}}</td>
+                <td>{{item.soLuongNhapTt | number: '1.0-1':
+                  'vi_VN'}}</td>
+                <td>{{item.donGia | number: '1.0-1':
+                  'vi_VN'}}</td>
+                <td>{{item.thanhTien | number: '1.0-1':
+                  'vi_VN'}}</td>
                 <td *ngIf="!(isDisableField() || isView)">
                   <a (click)="editRow(i)">
                     <i class="fa fa-pencil" title="Sửa"></i>
@@ -516,8 +520,10 @@
                     (ngModelChange)="onChangeSoLuongNhapTt($event,i)">
                   </nz-input-number>
                 </td>
-                <td>{{item.donGia}}</td>
-                <td>{{item.thanhTien}}</td>
+                <td>{{item.donGia | number: '1.0-1':
+                  'vi_VN'}}</td>
+                <td>{{item.thanhTien | number: '1.0-1':
+                  'vi_VN'}}</td>
                 <td>
                   <a (click)="saveEdit(i)" class="save">
                     <i class="fa fa-save"></i>

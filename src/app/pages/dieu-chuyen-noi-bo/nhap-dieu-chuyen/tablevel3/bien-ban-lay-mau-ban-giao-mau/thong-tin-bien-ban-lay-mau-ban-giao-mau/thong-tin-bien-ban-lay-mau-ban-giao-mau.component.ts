@@ -28,6 +28,7 @@ import * as uuidv4 from "uuid";
 })
 export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component implements OnInit {
   @Input() loaiDc: string;
+  @Input() isVatTu: boolean;
   @Input() idInput: number;
   @Input() isView: boolean;
   @Output()
@@ -99,7 +100,8 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
       chiTieuKiemTra: [],
       ketQuaNiemPhong: [],
       type: ["01"],
-      loaiDc: ["DCNB"]
+      loaiDc: [this.loaiDc],
+      isVatTu: [this.isVatTu]
     });
   }
 
@@ -113,7 +115,8 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
       ktvBaoQuan: this.userInfo.TEN_DAY_DU,
       soBbLayMau: `${id}/${this.formData.get('nam').value}/${this.maBb}`,
       id: id,
-      loaiDc: this.loaiDc
+      loaiDc: this.loaiDc,
+      isVatTu: this.isVatTu
     })
 
     if (this.idInput) {

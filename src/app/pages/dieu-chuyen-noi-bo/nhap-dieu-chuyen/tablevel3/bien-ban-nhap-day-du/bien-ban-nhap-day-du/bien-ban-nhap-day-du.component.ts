@@ -73,25 +73,26 @@ export class BienBanNhapDayDuComponent extends Base2Component implements OnInit 
     super(httpClient, storageService, notification, spinner, modal, bienBanNhapDayKhoService);
     this.formData = this.fb.group({
       nam: null,
-      soQdinh: null,
-      ngayDuyetTc: null,
-      ngayHieuLuc: null,
-      trichYeu: null,
+      soQdDcCuc: null,
+      soBb: null,
+      ngayBdNhap: null,
+      ngayKtNhap: null,
+      thoiHanNh: null,
       type: ["01"],
-      loaiDc: ["DCNB"]
+      loaiDc: [this.loaiDc]
     })
-    this.filterTable = {
-      nam: '',
-      soQdinh: '',
-      ngayKyQdinh: '',
-      loaiDc: '',
-      trichYeu: '',
-      maDxuat: '',
-      maThop: '',
-      soQdinhXuatCuc: '',
-      soQdinhNhapCuc: '',
-      tenTrangThai: '',
-    };
+    // this.filterTable = {
+    //   nam: '',
+    //   soQdinh: '',
+    //   ngayKyQdinh: '',
+    //   loaiDc: '',
+    //   trichYeu: '',
+    //   maDxuat: '',
+    //   maThop: '',
+    //   soQdinhXuatCuc: '',
+    //   soQdinhNhapCuc: '',
+    //   tenTrangThai: '',
+    // };
   }
 
 
@@ -135,6 +136,10 @@ export class BienBanNhapDayDuComponent extends Base2Component implements OnInit 
     this.isVisibleChangeTab$.subscribe((value: boolean) => {
       this.visibleTab = value;
     });
+
+    this.formData.patchValue({
+      loaiDc: this.loaiDc
+    })
 
 
 
@@ -192,14 +197,18 @@ export class BienBanNhapDayDuComponent extends Base2Component implements OnInit 
   }
 
   async timKiem() {
-    // if (this.formData.value.ngayDuyetTc) {
-    //   this.formData.value.ngayDuyetTcTu = dayjs(this.formData.value.ngayDuyetTc[0]).format('YYYY-MM-DD')
-    //   this.formData.value.ngayDuyetTcDen = dayjs(this.formData.value.ngayDuyetTc[1]).format('YYYY-MM-DD')
-    // }
-    // if (this.formData.value.ngayHieuLuc) {
-    //   this.formData.value.ngayHieuLucTu = dayjs(this.formData.value.ngayHieuLuc[0]).format('YYYY-MM-DD')
-    //   this.formData.value.ngayHieuLucDen = dayjs(this.formData.value.ngayHieuLuc[1]).format('YYYY-MM-DD')
-    // }
+    if (this.formData.value.ngayBdNhap) {
+      this.formData.value.tuNgayBdNhap = dayjs(this.formData.value.ngayBdNhap[0]).format('YYYY-MM-DD')
+      this.formData.value.denNgayBdNhap = dayjs(this.formData.value.ngayBdNhap[1]).format('YYYY-MM-DD')
+    }
+    if (this.formData.value.ngayKtNhap) {
+      this.formData.value.tuNgayKtNhap = dayjs(this.formData.value.ngayKtNhap[0]).format('YYYY-MM-DD')
+      this.formData.value.denNgayKtNhap = dayjs(this.formData.value.ngayKtNhap[1]).format('YYYY-MM-DD')
+    }
+    if (this.formData.value.thoiHanNh) {
+      this.formData.value.tuNgayThoiHanNh = dayjs(this.formData.value.thoiHanNh[0]).format('YYYY-MM-DD')
+      this.formData.value.denNgayThoiHanNh = dayjs(this.formData.value.thoiHanNh[1]).format('YYYY-MM-DD')
+    }
     let body = this.formData.value
     body.paggingReq = {
       limit: this.pageSize,
@@ -211,7 +220,7 @@ export class BienBanNhapDayDuComponent extends Base2Component implements OnInit 
         .map(element => {
           return {
             ...element,
-            maloNganKho: `${element.maLoKho}${element.maNganKho}`
+            maLoNganKho: `${element.maLoKho}${element.maNganKho}`
           }
         });
       this.dataTableView = this.buildTableView(data)
@@ -246,37 +255,37 @@ export class BienBanNhapDayDuComponent extends Base2Component implements OnInit 
           .groupBy("maDiemKho")
           ?.map((value2, key2) => {
             let children2 = chain(value2)
-              .groupBy("soBbNhapDayKho")
+              .groupBy("maLoNganKho")
               ?.map((value3, key3) => {
 
-                // const children3 = chain(value3).groupBy("soBbNhapDayKho")
-                //   ?.map((m, im) => {
+                const children3 = chain(value3).groupBy("soBbNhapDayKho")
+                  ?.map((value4, key4) => {
 
-                //     const maChiCucNhan = m.find(f => f.maloNganKho == im);
-                //     // const hasMaDiemKhoNhan = vs.some(f => f.maDiemKhoNhan);
-                //     // if (!hasMaDiemKhoNhan) return {
-                //     //   ...maChiCucNhan
-                //     // }
+                    const row4 = value4.find(f => f.soBbNhapDayKho == key4);
+                    // const hasMaDiemKhoNhan = vs.some(f => f.maDiemKhoNhan);
+                    // if (!hasMaDiemKhoNhan) return {
+                    //   ...maChiCucNhan
+                    // }
 
-                //     // const rssx = chain(m).groupBy("maDiemKhoNhan")?.map((n, inx) => {
+                    // const rssx = chain(m).groupBy("maDiemKhoNhan")?.map((n, inx) => {
 
-                //     //   const maDiemKhoNhan = n.find(f => f.maDiemKhoNhan == inx);
-                //     //   return {
-                //     //     ...maDiemKhoNhan,
-                //     //     children: n
-                //     //   }
-                //     // }).value()
-                //     return {
-                //       ...maChiCucNhan,
-                //       children: m
-                //     }
-                //   }).value()
+                    //   const maDiemKhoNhan = n.find(f => f.maDiemKhoNhan == inx);
+                    //   return {
+                    //     ...maDiemKhoNhan,
+                    //     children: n
+                    //   }
+                    // }).value()
+                    return {
+                      ...row4,
+                      children: value4
+                    }
+                  }).value()
 
-                const row3 = value3.find(s => s?.soBbNhapDayKho == key3);
+                const row3 = value3.find(s => s?.maLoNganKho == key3);
                 return {
                   ...row3,
                   idVirtual: row3 ? row3.idVirtual ? row3.idVirtual : uuidv4.v4() : uuidv4.v4(),
-                  children: value3,
+                  children: children3,
                 }
               }
               ).value();
@@ -305,6 +314,7 @@ export class BienBanNhapDayDuComponent extends Base2Component implements OnInit 
   }
 
   add(data: any) {
+    this.selectedId = null;
     this.data = data;
     this.isDetail = true;
     this.isView = false;
@@ -370,6 +380,7 @@ export class BienBanNhapDayDuComponent extends Base2Component implements OnInit 
 
   redirectDetail(id, b: boolean) {
     this.selectedId = id;
+    this.data = null
     this.isDetail = true;
     this.isView = b;
     // this.isViewDetail = isView ?? false;

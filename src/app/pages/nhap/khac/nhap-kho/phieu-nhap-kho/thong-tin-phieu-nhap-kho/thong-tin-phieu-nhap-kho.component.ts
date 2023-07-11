@@ -31,7 +31,7 @@ import { KIEU_NHAP_XUAT } from "src/app/constants/config";
   styleUrls: ['./thong-tin-phieu-nhap-kho.component.scss']
 })
 export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnInit {
-  @Input() loaiDc: string;
+  @Input() loaiVthh: string;
   @Input() idInput: number;
   @Input() isView: boolean;
   @Input() data: any;
@@ -76,7 +76,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
       soNo: [],
       soCo: [],
       soQdGiaoNv: [, [Validators.required]],
-      ngayQdDcCuc: [],
+      ngayQdGiaoNv: [],
       qdGiaoNvId: [],
       tenLoNganKho: [],
       tenLoKho: [, [Validators.required]],
@@ -105,8 +105,8 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
       donViNguoiGiao: [],
       diaChi: [],
       tgianGiaoNhanHang: [],
-      tenLoaiHinhNhapXuat: [],
-      tenKieuNhapXuat: [],
+      loaiHinhNx: [],
+      kieuNx: [],
       bbNghiemThuBqld: [],
       soBBNghiemThuBqld: [],
       soLuongQdDcCuc: [],
@@ -119,8 +119,6 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
       duToanKinhPhi: [],
       children: [new Array<any>(),],
       ghiChu: [],
-      type: ["01"],
-      loaiDc: ["DCNB"],
       maSo: [],
       soLuongNhap: [],
       soLuongNhapTt: [],
@@ -136,7 +134,6 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
       maQhns: this.userInfo.DON_VI.maQhns,
       thuKho: this.userInfo.TEN_DAY_DU,
       soPhieuNhapKho: `${id}/${this.formData.get('nam').value}/${this.maBb}`,
-      loaiDc: this.loaiDc
     })
     this.getDataNX()
 
@@ -202,8 +199,8 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
       if (data && data.length > 0) {
         const content = data[0]
         this.formData.patchValue({
-          tenLoaiHinhNhapXuat: content.giaTri,
-          tenKieuNhapXuat: KIEU_NHAP_XUAT[content.ghiChu]
+          loaiHinhNx: content.giaTri,
+          kieuNx: KIEU_NHAP_XUAT[content.ghiChu]
         });
       }
     }
@@ -215,8 +212,11 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
     await this.spinner.show()
     if (id) {
       let data = await this.detail(id);
-      this.formData.patchValue(data);
-      this.dsTH = data.children
+      this.formData.patchValue({
+        ...data,
+        tenLoNganKho: `${data.tenLoKho} ${data.tenNganKho}`,
+      });
+      this.dsTH = data.children || []
       this.chungTuDinhKem = data.chungTuDinhKem
       this.fileDinhKemReq = data.fileDinhKems
     }
@@ -314,11 +314,12 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
 
 
   async openDialogQD() {
+    if (this.isView) return
     await this.spinner.show();
     let body = {
       denNgayQd: null,
       // maDvi: this.userInfo.MA_DVI,
-      loaiVthh: this.loaiDc,
+      loaiVthh: this.loaiVthh,
       paggingReq: {
         limit: this.globals.prop.MAX_INTERGER,
         page: 0,
@@ -341,14 +342,15 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
       nzComponentParams: {
         dataTable: this.listDanhSachQuyetDinh,
         dataHeader: ['Số quyết định', 'Ngày quyết định', 'Loại hàng hóa'],
-        dataColumn: ['soQd', 'ngayQdinh', 'tenLoaiVthh'],
+        dataColumn: ['soQd', 'ngayQd', 'tenLoaiVthh'],
       },
     });
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
+        console.log('openDialogQD', data)
         this.formData.patchValue({
           soQdGiaoNv: data.soQd,
-          ngayQdGiaoNv: data.ngayGuiDuyet,
+          ngayQdGiaoNv: data.ngayQd,
           qdGiaoNvId: data.id,
           tenLoKho: "",
           maLoKho: "",
@@ -426,6 +428,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
   }
 
   async openDialogKhoNhap() {
+    if (this.isView) return
     await this.spinner.show();
 
     await this.spinner.hide();
@@ -455,22 +458,9 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
           maNhaKho: data.maNhaKho,
           tenDiemKho: data.tenDiemKho,
           maDiemKho: data.maDiemKho,
-          // tenLoKhoXuat: data.tenLoKho,
-          // maLoKhoXuat: data.maLoKho,
-          // tenNganKhoXuat: data.tenNganKho,
-          // maNganKhoXuat: data.maNganKho,
-          // tenNhaKhoXuat: data.tenNhaKho,
-          // maNhaKhoXuat: data.maNhaKho,
-          // tenDiemKhoXuat: data.tenDiemKho,
-          // maDiemKhoXuat: data.maDiemKho,
-          // loaiVthh: data.loaiVthh,
-          // tenLoaiVthh: data.tenLoaiVthh,
-          // cloaiVthh: data.cloaiVthh,
-          // tenCloaiVthh: data.tenCloaiVthh,
           tichLuongKhaDung: data.tichLuongKd,
           soLuongQdDcCuc: data.soLuongPhanBo,
           dviTinh: data.tenDonViTinh,
-          // idKeHoachDtl: data.id
         });
         this.dviTinh = data.tenDonViTinh || "Kg"
         this.donGia = data.donGia

@@ -18,6 +18,7 @@ import { QuyetDinhDieuChuyenTCService } from 'src/app/services/dieu-chuyen-noi-b
 import { BangKeCanHangService } from 'src/app/services/qlnv-hang/nhap-hang/nhap-khac/bangKeCanHang';
 import * as uuidv4 from "uuid";
 import { ThongTinQuyetDinhDieuChuyenCucComponent } from 'src/app/pages/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/cuc/thong-tin-quyet-dinh-dieu-chuyen-cuc/thong-tin-quyet-dinh-dieu-chuyen-cuc.component';
+import { ThemmoiQdinhNhapXuatHangKhacComponent } from '../../quyet-dinh-giao-nv-nhap-hang/themmoi-qdinh-nhap-xuat-hang-khac/themmoi-qdinh-nhap-xuat-hang-khac.component';
 @Component({
   selector: 'app-bang-ke-can-hang',
   templateUrl: './bang-ke-can-hang.component.html',
@@ -28,7 +29,6 @@ export class BangKeCanHangComponent extends Base2Component implements OnInit {
   isVisibleChangeTab$ = new Subject();
   visibleTab: boolean = true;
   tabSelected: number = 0;
-  @Input() loaiDc: string;
 
   @Input()
   loaiVthh: string;
@@ -73,25 +73,23 @@ export class BangKeCanHangComponent extends Base2Component implements OnInit {
     super(httpClient, storageService, notification, spinner, modal, bangKeCanHangService);
     this.formData = this.fb.group({
       nam: null,
-      soQdinh: null,
-      ngayDuyetTc: null,
-      ngayHieuLuc: null,
-      trichYeu: null,
-      type: ["01"],
-      loaiDc: ["DCNB"]
+      soQdGiaoNv: null,
+      soBangKe: null,
+      ngayNhapKho: null,
+      loaiVthh: [this.loaiVthh]
     })
-    this.filterTable = {
-      nam: '',
-      soQdinh: '',
-      ngayKyQdinh: '',
-      loaiDc: '',
-      trichYeu: '',
-      maDxuat: '',
-      maThop: '',
-      soQdinhXuatCuc: '',
-      soQdinhNhapCuc: '',
-      tenTrangThai: '',
-    };
+    // this.filterTable = {
+    //   nam: '',
+    //   soQdinh: '',
+    //   ngayKyQdinh: '',
+    //   loaiDc: '',
+    //   trichYeu: '',
+    //   maDxuat: '',
+    //   maThop: '',
+    //   soQdinhXuatCuc: '',
+    //   soQdinhNhapCuc: '',
+    //   tenTrangThai: '',
+    // };
   }
 
 
@@ -108,6 +106,10 @@ export class BangKeCanHangComponent extends Base2Component implements OnInit {
     this.isVisibleChangeTab$.subscribe((value: boolean) => {
       this.visibleTab = value;
     });
+
+    this.formData.patchValue({
+      loaiVthh: this.loaiVthh
+    })
 
     try {
       this.initData()
@@ -163,6 +165,10 @@ export class BangKeCanHangComponent extends Base2Component implements OnInit {
   }
 
   async timKiem() {
+    if (this.formData.value.ngayNhapKho) {
+      this.formData.value.ngayNhapKhoTu = dayjs(this.formData.value.ngayNhapKho[0]).format('YYYY-MM-DD')
+      this.formData.value.ngayNhapKhoDen = dayjs(this.formData.value.ngayNhapKho[1]).format('YYYY-MM-DD')
+    }
     let body = this.formData.value
     body.paggingReq = {
       limit: this.pageSize,
@@ -174,8 +180,7 @@ export class BangKeCanHangComponent extends Base2Component implements OnInit {
         .map(element => {
           return {
             ...element,
-            // diemKho: `${element.thoiHanDieuChuyen}${element.maDiemKho}`,
-            maloNganKho: `${element.maloKho}${element.maNganKho}`
+            maLoNganKho: `${element.maLoKho}${element.maNganKho}`
           }
         });
       this.dataTableView = this.buildTableView(data)
@@ -186,17 +191,17 @@ export class BangKeCanHangComponent extends Base2Component implements OnInit {
 
   async openDialogQD(row) {
     this.modal.create({
-      nzTitle: 'Thông tin quyết định điều chuyển',
-      nzContent: ThongTinQuyetDinhDieuChuyenCucComponent,
+      nzTitle: 'Thông tin quyết định giao nhiệm vụ nhận hàng',
+      nzContent: ThemmoiQdinhNhapXuatHangKhacComponent,
       nzMaskClosable: false,
       nzClosable: true,
       nzBodyStyle: { overflowY: 'auto' },//maxHeight: 'calc(100vh - 200px)'
       nzWidth: '95%',
       nzFooter: null,
       nzComponentParams: {
-        isViewOnModal: true,
-        isView: true,
-        idInput: row.qdinhDccId
+        isViewDetail: true,
+        loaiVthh: this.loaiVthh,
+        id: row.qdDcCucId
       },
     });
   }
@@ -204,19 +209,19 @@ export class BangKeCanHangComponent extends Base2Component implements OnInit {
 
   buildTableView(data: any[] = []) {
     let dataView = chain(data)
-      .groupBy("soQdinh")
+      .groupBy("soQdPdNk")
       ?.map((value1, key1) => {
         let children1 = chain(value1)
           .groupBy("maDiemKho")
           ?.map((value2, key2) => {
             let children2 = chain(value2)
-              .groupBy("maloNganKho")
+              .groupBy("maLoNganKho")
               ?.map((value3, key3) => {
 
-                const children3 = chain(value3).groupBy("maloNganKho")
+                const children3 = chain(value3).groupBy("maLoNganKho")
                   ?.map((m, im) => {
 
-                    const maChiCucNhan = m.find(f => f.maloNganKho == im);
+                    const maChiCucNhan = m.find(f => f.maLoNganKho == im);
                     // const hasMaDiemKhoNhan = vs.some(f => f.maDiemKhoNhan);
                     // if (!hasMaDiemKhoNhan) return {
                     //   ...maChiCucNhan
@@ -236,7 +241,7 @@ export class BangKeCanHangComponent extends Base2Component implements OnInit {
                     }
                   }).value()
 
-                const row3 = value3.find(s => s?.maloNganKho == key3);
+                const row3 = value3.find(s => s?.maLoNganKho == key3);
                 return {
                   ...row3,
                   idVirtual: row3 ? row3.idVirtual ? row3.idVirtual : uuidv4.v4() : uuidv4.v4(),
@@ -256,7 +261,7 @@ export class BangKeCanHangComponent extends Base2Component implements OnInit {
           ).value();
 
 
-        let row1 = value1?.find(s => s.soQdinh === key1);
+        let row1 = value1?.find(s => s.soQdPdNk === key1);
         return {
           ...row1,
           idVirtual: row1 ? row1.idVirtual ? row1.idVirtual : uuidv4.v4() : uuidv4.v4(),
