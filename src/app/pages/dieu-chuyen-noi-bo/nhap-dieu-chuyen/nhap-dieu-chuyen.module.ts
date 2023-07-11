@@ -82,6 +82,9 @@ import { ThongTinBienBanKetThucNhapKhoComponent } from './tablevel3/bien-ban-ket
     ThongTinBienBanGiaoNhanComponent,
     ThongTinBienBanKetThucNhapKhoComponent
   ],
+  exports: [
+    KiemTraChatLuongComponent
+  ],
   imports: [
     CommonModule,
     NhapDieuChuyenRoutingModule,
