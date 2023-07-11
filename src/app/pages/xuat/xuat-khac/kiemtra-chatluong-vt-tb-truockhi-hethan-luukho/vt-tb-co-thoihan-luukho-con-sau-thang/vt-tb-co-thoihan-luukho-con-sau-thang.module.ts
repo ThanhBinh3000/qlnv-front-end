@@ -16,6 +16,7 @@ import { ChiTietTongHopDanhSachVt6thComponent } from './tong-hop-danh-sach-vt6th
 import {
     VtTbCoThoihanLuukhoLonHonMuoihaiThangModule
 } from "../vt-tb-co-thoihan-luukho-lon-hon-muoihai-thang/vt-tb-co-thoihan-luukho-lon-hon-muoihai-thang.module";
+import { ThongTinQuyetDinhGiaoNhiemVuXuatHangComponent } from './quyet-dinh-giao-nhiem-vu-xuat-hang/thong-tin-quyet-dinh-giao-nhiem-vu-xuat-hang/thong-tin-quyet-dinh-giao-nhiem-vu-xuat-hang.component';
 
 
 
@@ -28,12 +29,14 @@ import {
     XuatKhoComponent,
     NhapKhoComponent,
     TongHopDanhSachVt6thComponent,
-    ChiTietTongHopDanhSachVt6thComponent
+    ChiTietTongHopDanhSachVt6thComponent,
+    ThongTinQuyetDinhGiaoNhiemVuXuatHangComponent
   ],
   exports: [
     ToanBoDanhSachVt6ThComponent,
     TongHopDanhSachVt6thComponent,
-    QuyetDinhXuatGiamVatTuComponent
+    QuyetDinhXuatGiamVatTuComponent,
+    QuyetDinhGiaoNhiemVuXuatHangComponent
   ],
     imports: [
         CommonModule,
