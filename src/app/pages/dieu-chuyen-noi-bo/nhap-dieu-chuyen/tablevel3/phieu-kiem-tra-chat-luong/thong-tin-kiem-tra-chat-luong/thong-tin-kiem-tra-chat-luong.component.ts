@@ -124,7 +124,7 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
       dcnbPhieuKtChatLuongDtl: [new Array<any>(),],
       nhanXetKetLuan: [],
       type: ["01"],
-      loaiDc: []
+      loaiDc: [this.loaiDc]
     }
     );
   }
@@ -387,7 +387,7 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
           });
         }
 
-        await this.getDataKho(this.data.maLoKhoNhan || this.data.maNganKhoNhan)
+        await this.getDataKho(data.maLoKhoNhan || data.maNganKhoNhan)
 
       }
     });

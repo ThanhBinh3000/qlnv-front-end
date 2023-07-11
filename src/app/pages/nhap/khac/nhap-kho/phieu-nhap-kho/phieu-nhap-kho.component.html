@@ -11,21 +11,22 @@
               </nz-select>
             </div>
             <div nz-col nzSpan="3">
-              <label class="search__label">Số QĐ ĐC của cục</label>
-              <nz-input-group nzAddOnAfter="/DCNB">
-                <nz-input-number class="search__input" formControlName="soQdinh" [nzMin]="1" [nzMax]="9" [nzStep]="1"
+              <label class="search__label">Số QĐ giao NV nhập hàng</label>
+              <input nz-input formControlName="soQdGiaoNv" />
+              <!-- <nz-input-group nzAddOnAfter="/DCNB">
+                <nz-input-number class="search__input" formControlName="soQdGiaoNv" [nzMin]="1" [nzMax]="9" [nzStep]="1"
                   [nzSize]="'small'" [nzDisabled]="isView">
                 </nz-input-number>
-              </nz-input-group>
+              </nz-input-group> -->
             </div>
             <div nz-col nzSpan="3">
               <label class="search__label">Số phiếu nhập kho</label>
-              <input nz-input formControlName="trichYeu" />
+              <input nz-input formControlName="soPhieuNhapKho" />
             </div>
 
             <div nz-col nzSpan="4">
               <label class="search__label">Ngày nhập kho</label>
-              <nz-range-picker formControlName="ngayDuyetTc" nzFormat="dd/MM/yyyy"></nz-range-picker>
+              <nz-range-picker formControlName="ngayNhapKho" nzFormat="dd/MM/yyyy"></nz-range-picker>
             </div>
 
 
@@ -46,7 +47,7 @@
         </div>
       </nz-card>
       <div class="group-button">
-        <h3 class="text-uppercase">Danh sách biên bản nghiệm thu bảo quản lần đầu nhập hàng dự trữ quốc gia</h3>
+        <h3 class="text-uppercase">Danh sách phiếu nhập kho</h3>
         <div class="buttons">
           <button type="button" class="btn btn-do" (click)="deleteMulti()"
             *ngIf="userService.isAccessPermisson('DCNB_QUYETDINHDC_XOA') && isTongCuc()">
@@ -93,7 +94,7 @@
                 <td [nzExpand]="row1.expand"
                   (nzExpandChange)="row1.expand=!row1.expand; row1.children=setExpand(row1.expand, row1.children)">
                 </td>
-                <td class="bold text-blue" (click)="openDialogQD(row1)">{{ row1.soQdinh || "" }}</td>
+                <td class="bold text-blue" (click)="openDialogQD(row1)">{{ row1.soQdPdNk || "" }}</td>
                 <td class="bold">{{ row1.namKh || "" }}</td>
                 <td></td>
                 <td></td>
@@ -190,7 +191,7 @@
   </div>
 
   <div class="chi-tiet" *ngIf="isDetail">
-    <app-thong-tin-phieu-nhap-kho [isView]="isView" [idInput]="selectedId" [loaiDc]="loaiDc"
+    <app-thong-tin-phieu-nhap-kho [isView]="isView" [idInput]="selectedId" [loaiVthh]="loaiVthh"
       (showListEvent)="quayLai()"></app-thong-tin-phieu-nhap-kho>
   </div>
 
