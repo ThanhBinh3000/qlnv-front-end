@@ -5,12 +5,12 @@ import { ComponentsModule } from 'src/app/components/components.module';
 import { DirectivesModule } from 'src/app/directives/directives.module';
 
 @NgModule({
-  declarations: [BaoCaoTuDonViCapDuoiComponent],
-  imports: [
-    CommonModule,
-    ComponentsModule,
-    DirectivesModule,
-  ],
-  exports: [BaoCaoTuDonViCapDuoiComponent],
+    declarations: [BaoCaoTuDonViCapDuoiComponent],
+    imports: [
+        CommonModule,
+        ComponentsModule,
+        DirectivesModule,
+    ],
+    exports: [BaoCaoTuDonViCapDuoiComponent],
 })
 export class BaoCaoTuDonViCapDuoiModule { }

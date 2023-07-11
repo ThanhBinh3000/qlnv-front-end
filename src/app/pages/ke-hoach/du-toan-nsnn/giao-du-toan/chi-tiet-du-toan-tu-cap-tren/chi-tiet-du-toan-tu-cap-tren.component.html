@@ -1,15 +1,15 @@
 <ng-container *ngIf="isDataAvailable">
-  <nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="btn-affix">
-    <div class="btn-group">
-      <button type="button" class="btn btn-sub" (click)="back()">
-        <i class="fa fa-arrow-left"></i>
-        <span>Quay lại</span>
-      </button>
-      <button *ngIf="isStatus == '1'" type="button" class="btn btn-sub" (click)="action('save')">
-        <i class="icon htvbdh_tcdt_save"></i>
-        <span>Tiếp nhận</span>
-      </button>
-      <!-- <ng-template #contentTemplate>
+    <nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="btn-affix">
+        <div class="btn-group">
+            <button type="button" class="btn btn-sub" (click)="back()">
+                <i class="fa fa-arrow-left"></i>
+                <span>Quay lại</span>
+            </button>
+            <button *ngIf="isStatus == '1'" type="button" class="btn btn-sub" (click)="action('save')">
+                <i class="icon htvbdh_tcdt_save"></i>
+                <span>Tiếp nhận</span>
+            </button>
+            <!-- <ng-template #contentTemplate>
         <div class="contentTemplate_chonpa">
           <a (click)="taoMoiPhuongAn(1)" class="contentTemplate_chonpa__con">1. Phương
             án phân bổ giao dự toán chi</a>
@@ -17,116 +17,118 @@
             án giao, điều chỉnh dự toán chi</a>
         </div>
       </ng-template> -->
-      <button class="btn btn-main" nz-button (click)="taoMoiPhuongAn()" [hidden]="statusBtnNew">
-        <i class="icon htvbdh_tcdt_save"></i>
-        <span>Tạo phương án</span>
-      </button>
+            <button class="btn btn-main" nz-button (click)="taoMoiPhuongAn()" [hidden]="statusBtnNew">
+                <i class="icon htvbdh_tcdt_save"></i>
+                <span>Tạo phương án</span>
+            </button>
 
-      <!-- <ng-template #contentTemplate1>
+            <!-- <ng-template #contentTemplate1>
         <div class="contentTemplate_chonpa">
           <a (click)="taoMoiBaoCao(1)" class="contentTemplate_chonpa__con">1. Báo cáo phân bổ giao dự toán chi</a>
           <a (click)="taoMoiBaoCao(2)" class="contentTemplate_chonpa__con">2. Báo cáo giao, điều chỉnh dự toán chi</a>
         </div>
       </ng-template> -->
-      <button class="btn btn-main" nz-button (click)="taoMoiBaoCao()" [hidden]="statusBtnCreateReport">
-        <i class="icon htvbdh_tcdt_save"></i>
-        <span>Tạo Báo cáo</span>
-      </button>
+            <button class="btn btn-main" nz-button (click)="taoMoiBaoCao()" [hidden]="statusBtnCreateReport">
+                <i class="icon htvbdh_tcdt_save"></i>
+                <span>Tạo Báo cáo</span>
+            </button>
 
 
-    </div>
-  </nz-affix>
-
-  <div class="bg-trang">
-    <div class="mt16 flex-card p-lr16">
-      <div class="header mg-t-16">
-        <div class="header-text">
-          <div class="title-chi-tieu">
-            <span [ngClass]="statusClass()">{{getStatusName(isStatus)}}</span>
-            <span>CHI TIẾT SỐ KIỂM TRA TRẦN CHI GIAO TỪ CẤP TRÊN </span>
-          </div>
         </div>
-        <nz-card class="mt-2px flex-card data-table card-border-content table-card">
-          <nz-table class="nowrap mt-16 table-chi-tiet">
-            <thead>
-              <tr>
-                <th width="175px">Số QĐ/CV</th>
-                <th width="175px">Mã phương án</th>
-                <th width="175px">Mã giao</th>
-                <th width="175px">Năm dự toán</th>
-                <th width="175px">Ngày tạo</th>
-                <th width="175px">Nơi tạo</th>
-                <th width="175px">Trạng thái</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  <div class="tep" (click)="downloadFileCv()">
-                    <!-- <i class="icon htvbdh_tcdt_tep"></i> -->
-                    <span>{{soQd?.fileName}}</span>
-                  </div>
-                </td>
-                <td>{{maPa}}</td>
-                <td>{{maGiao}}</td>
-                <td>{{namDtoan}}</td>
-                <td>{{ngayNhap}}</td>
-                <td>{{tenDvi}}</td>
-                <td>{{getStatusName(isStatus)}}</td>
-              </tr>
-            </tbody>
-          </nz-table>
-        </nz-card>
-      </div>
-    </div>
+    </nz-affix>
 
-
-    <!-- 123123 -->
-    <div class="mt16 flex-card p-lr16">
-      <nz-card class="mt-2px flex-card data-table card-border-content table-card" nzTitle="Nội dung báo cáo"
-        [nzExtra]="">
-        <div id="tablePrint">
-          <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px; margin-bottom: 10px;">
-            <div nz-col [nzSpan]="3">
-              Đơn vị:
-              <ng-container *ngIf="!status || !editMoneyUnit; else editMoney">
-                <span (click)="editMoneyUnit=true">{{getMoneyUnit()}}</span>
-              </ng-container>
-              <ng-template #editMoney>
-                <nz-select nzShowSearch nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
-                  (ngModelChange)="editMoneyUnit=false">
-                  <nz-option *ngFor="let item of donViTiens" [nzValue]="item.id" [nzLabel]="item.tenDm">
-                  </nz-option>
-                </nz-select>
-              </ng-template>
-            </div>
-          </div>
-          <nz-table class="nowrap mt-16 table-chi-tiet" nzBordered>
-            <thead>
-              <tr>
-                <th nzWidth="10%">STT</th>
-                <th nzWidth="65%">Nội dung</th>
-                <th nzWidth="25%">Số tiền</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let item of lstCtietBcao; let i = index">
-                <td [nzIndentSize]="item.level * 8">
-                  {{getChiMuc(item.stt)}}
-                </td>
-                <td>
-                  <div *ngFor="let e of noiDungs">
-                    <div *ngIf="e.ma == item.maNdung">
-                      {{e.tenDm}}
+    <div class="bg-trang">
+        <div class="mt16 flex-card p-lr16">
+            <div class="header mg-t-16">
+                <div class="header-text">
+                    <div class="title-chi-tieu">
+                        <span [ngClass]="statusClass()">{{getStatusName(isStatus)}}</span>
+                        <span>CHI TIẾT SỐ KIỂM TRA TRẦN CHI GIAO TỪ CẤP TRÊN </span>
                     </div>
-                  </div>
-                </td>
-                <td>{{displayValue(item.soTien)}}</td>
-              </tr>
-            </tbody>
-          </nz-table>
+                </div>
+                <nz-card class="mt-2px flex-card data-table card-border-content table-card">
+                    <nz-table class="nowrap mt-16 table-chi-tiet">
+                        <thead>
+                            <tr>
+                                <th width="175px">Số QĐ/CV</th>
+                                <th width="175px">Mã phương án</th>
+                                <th width="175px">Mã giao</th>
+                                <th width="175px">Năm dự toán</th>
+                                <th width="175px">Ngày tạo</th>
+                                <th width="175px">Nơi tạo</th>
+                                <th width="175px">Trạng thái</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="tep" (click)="downloadFileCv()">
+                                        <!-- <i class="icon htvbdh_tcdt_tep"></i> -->
+                                        <span>{{soQd?.fileName}}</span>
+                                    </div>
+                                </td>
+                                <td>{{maPa}}</td>
+                                <td>{{maGiao}}</td>
+                                <td>{{namDtoan}}</td>
+                                <td>{{ngayNhap}}</td>
+                                <td>{{tenDvi}}</td>
+                                <td>{{getStatusName(isStatus)}}</td>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                </nz-card>
+            </div>
         </div>
-      </nz-card>
+
+
+        <!-- 123123 -->
+        <div class="mt16 flex-card p-lr16">
+            <nz-card class="mt-2px flex-card data-table card-border-content table-card" nzTitle="Nội dung báo cáo"
+                [nzExtra]="">
+                <div id="tablePrint">
+                    <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }"
+                        style="margin-top: 10px; margin-bottom: 10px;">
+                        <div nz-col [nzSpan]="3">
+                            Đơn vị:
+                            <ng-container *ngIf="!status || !editMoneyUnit; else editMoney">
+                                <span (click)="editMoneyUnit=true">{{getMoneyUnit()}}</span>
+                            </ng-container>
+                            <ng-template #editMoney>
+                                <nz-select nzShowSearch nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
+                                    (ngModelChange)="editMoneyUnit=false">
+                                    <nz-option *ngFor="let item of donViTiens" [nzValue]="item.id"
+                                        [nzLabel]="item.tenDm">
+                                    </nz-option>
+                                </nz-select>
+                            </ng-template>
+                        </div>
+                    </div>
+                    <nz-table class="nowrap mt-16 table-chi-tiet" nzBordered>
+                        <thead>
+                            <tr>
+                                <th nzWidth="10%">STT</th>
+                                <th nzWidth="65%">Nội dung</th>
+                                <th nzWidth="25%">Số tiền</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of lstCtietBcao; let i = index">
+                                <td [nzIndentSize]="item.level * 8">
+                                    {{getChiMuc(item.stt)}}
+                                </td>
+                                <td>
+                                    <div *ngFor="let e of noiDungs">
+                                        <div *ngIf="e.ma == item.maNdung">
+                                            {{e.tenDm}}
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>{{displayValue(item.soTien)}}</td>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                </div>
+            </nz-card>
+        </div>
     </div>
-  </div>
 </ng-container>
