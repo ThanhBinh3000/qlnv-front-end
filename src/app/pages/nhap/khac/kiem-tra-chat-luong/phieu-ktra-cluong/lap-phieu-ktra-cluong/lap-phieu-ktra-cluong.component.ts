@@ -23,6 +23,7 @@ import {
   BbNghiemThuBaoQuanService
 } from "../../../../../../services/qlnv-hang/nhap-hang/nhap-khac/bbNghiemThuBaoQuan.service";
 import {DialogTuChoiComponent} from "../../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
+import {DanhMucService} from "../../../../../../services/danhmuc.service";
 @Component({
   selector: 'app-lap-phieu-ktra-cluong',
   templateUrl: './lap-phieu-ktra-cluong.component.html',
@@ -77,7 +78,6 @@ export class LapPhieuKtraCluongComponent extends Base2Component implements OnIni
         tenLoaiVthh: ['',],
         cloaiVthh: [''],
         tenCloaiVthh: [''],
-        moTaHangHoa: [''],
         soHd: [''],
         ngayHd: [null,],
         soLuongNhapKho: [null,],
