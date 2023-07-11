@@ -96,6 +96,7 @@
           <!-- <th>Ngày TBP duyệt</th>
           <th>Trạng thái tổng hợp</th> -->
           <th>Trạng thái</th>
+          <th>Trạng thái tổng hợp</th>
           <th width="90px">Hành động</th>
         </tr>
       </thead>
@@ -148,6 +149,13 @@
           </td>
           <td>
             {{getStatusNameCuc(data.trangThai)}}
+            <ng-container *ngIf="data.trangThai =='3' || data.trangThai == '5' || data.trangThai == '8'">
+              <br />
+              Lý do: {{data.lyDoTuChoi}}
+            </ng-container>
+          </td>
+          <td>
+            {{getStatusNameCuc(data.trangThaiThop)}}
             <ng-container *ngIf="data.trangThai =='3' || data.trangThai == '5' || data.trangThai == '8'">
               <br />
               Lý do: {{data.lyDoTuChoi}}

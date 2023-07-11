@@ -1,4 +1,3 @@
-
 import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import * as fileSaver from 'file-saver';
@@ -21,12 +20,12 @@ import * as XLSX from 'xlsx';
 import { BtnStatus } from '../../../de-nghi-cap-von.class';
 
 @Component({
-  selector: 'app-cap-von',
-  templateUrl: './cap-von.component.html',
-  styleUrls: ['./cap-von.component.scss']
+  selector: 'app-tong-hop-de-nghi-cap-duoi',
+  templateUrl: './tong-hop-de-nghi-cap-duoi.component.html',
+  styleUrls: ['./tong-hop-de-nghi-cap-duoi.component.scss']
 })
 
-export class CapVonComponent implements OnInit {
+export class TongHopDeNghiCapDuoiComponent implements OnInit {
   @Input() data;
   @Output() dataChange = new EventEmitter();
   //thong tin dang nhap
@@ -42,7 +41,6 @@ export class CapVonComponent implements OnInit {
   dviTinhs: any[] = [];
   vatTus: any[] = [];
   dviTiens: any[] = DON_VI_TIEN;
-  capVons: ItemRequest[] = [];
   amount = AMOUNT;
   quatity = QUATITY;
   scrollX: string;
@@ -60,7 +58,6 @@ export class CapVonComponent implements OnInit {
   listFile: File[] = [];
   fileList: NzUploadFile[] = [];
   fileDetail: NzUploadFile;
-  tabSelected: any;
   statusExportExcel: BtnStatus = new BtnStatus();
   // before uploaf file
   beforeUpload = (file: NzUploadFile): boolean => {
@@ -112,7 +109,6 @@ export class CapVonComponent implements OnInit {
       case 'init':
         await this.initialization().then(() => {
           this.isDataAvailable = true;
-          // this.spinner.hide();
         });
         break;
       case 'detail':
@@ -165,21 +161,17 @@ export class CapVonComponent implements OnInit {
   }
 
   async initialization() {
-
     //lay id cua de nghi
     this.userInfo = this.userService.getUserLogin();
     if (this.data?.id) {
       this.baoCao.id = this.data?.id;
       await this.getDetailReport();
-
     } else {
       this.baoCao = this.data?.baoCao;
-      // this.baoCao.dnghiCapvonCtiets = [];
-      // this.baoCao.trangThai = '1';
     }
+    this.updateEditCache();
     this.getStatusButton();
     this.getTotal();
-    this.updateEditCache();
   }
 
   //check role cho các nut trinh duyet
@@ -200,7 +192,7 @@ export class CapVonComponent implements OnInit {
 
   back() {
     const obj = {
-      tabSelected: 'ds-capvon',
+      tabSelected: 'ds-tonghop-denghi-donvi-capduoi',
     }
     this.dataChange.emit(obj);
   }
@@ -280,9 +272,9 @@ export class CapVonComponent implements OnInit {
         if (data.statusCode == 0) {
           this.baoCao = data.data;
           this.listFile = [];
+          this.updateEditCache();
           this.getStatusButton();
           this.getTotal();
-          this.updateEditCache()
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
@@ -369,7 +361,7 @@ export class CapVonComponent implements OnInit {
       return;
     }
     const baoCaoTemp = JSON.parse(JSON.stringify(this.baoCao));
-    baoCaoTemp.maLoai = '0'
+    baoCaoTemp.maLoai = '1';
 
     if (!baoCaoTemp.fileDinhKems) {
       baoCaoTemp.fileDinhKems = [];
@@ -399,12 +391,13 @@ export class CapVonComponent implements OnInit {
         item.id = null;
       }
       // item.dnghiCapvonLuyKes.forEach(e => {
-      //   if (e.id?.length == 38) {
-      //     e.id = null;
-      //   }
+      // 	if (e.id?.length == 38) {
+      // 		e.id = null;
+      // 	}
       // })
     })
 
+    // this.spinner.show();
     if (!this.baoCao.id) {
       this.capVonNguonChiService.taoMoiDeNghi(baoCaoTemp).toPromise().then(
         async (data) => {
@@ -470,41 +463,36 @@ export class CapVonComponent implements OnInit {
   }
 
   changeModel(id: string) {
-    this.editCache[id].data.gtriThucHien = mulNumber(this.editCache[id].data.slThucHien, this.editCache[id].data.donGia);
+    this.editCache[id].data.gtriThucHien = mulNumber(this.editCache[id].data.slThucHien, this.editCache[id].data.soConDuocCap);
     this.editCache[id].data.luyKeTongCong = sumNumber([this.editCache[id].data.luyKeTongCapUng, this.editCache[id].data.luyKeTongCapVon]);
     this.editCache[id].data.tongVonVaDtDaCap = sumNumber([this.editCache[id].data.duToanDaGiao, this.editCache[id].data.luyKeTongCong]);
-    this.editCache[id].data.vonDnghiCapLanNay = sumNumber([this.editCache[id].data.gtriThucHien, -this.editCache[id].data.luyKeTongCong]);
-    this.editCache[id].data.vonDuyetCong = sumNumber([this.editCache[id].data.vonDuyetCapUng, this.editCache[id].data.vonDuyetCapVon]);
-    this.editCache[id].data.tongTien = sumNumber([this.editCache[id].data.tongVonVaDtDaCap, this.editCache[id].data.vonDuyetCapVon]);
-    this.editCache[id].data.soConDuocCap = sumNumber([this.editCache[id].data.gtriThucHien, -this.editCache[id].data.tongTien]);
+    this.editCache[id].data.vonDnghiCapLanNay = sumNumber([this.editCache[id].data.gtriThucHien, -this.editCache[id].data.tongVonVaDtDaCap]);
   }
 
   getTotal() {
     this.total = new ItemRequest();
-    this.baoCao.dnghiCapvonCtiets.forEach((item, index) => {
-      if (index !== 0 && this.userService.isCuc()) {
-        this.total.slKeHoach = sumNumber([this.total.slKeHoach, item.slKeHoach]);
-        this.total.slThucHien = sumNumber([this.total.slThucHien, item.slThucHien]);
-        this.total.donGia = sumNumber([this.total.donGia, item.donGia]);
-        this.total.gtriThucHien = sumNumber([this.total.gtriThucHien, item.gtriThucHien]);
-        this.total.duToanDaGiao = sumNumber([this.total.duToanDaGiao, item.duToanDaGiao]);
-        this.total.luyKeTongCapUng = sumNumber([this.total.luyKeTongCapUng, item.luyKeTongCapUng]);
-        this.total.luyKeTongCapVon = sumNumber([this.total.luyKeTongCapVon, item.luyKeTongCapVon]);
-        this.total.luyKeTongCong = sumNumber([this.total.luyKeTongCong, item.luyKeTongCong]);
-        this.total.tongVonVaDtDaCap = sumNumber([this.total.tongVonVaDtDaCap, item.tongVonVaDtDaCap]);
-        this.total.vonDuyetCapVon = sumNumber([this.total.vonDuyetCapVon, item.vonDuyetCapVon]);
-        this.total.vonDnghiCapLanNay = sumNumber([this.total.vonDnghiCapLanNay, item.vonDnghiCapLanNay]);
-        this.total.vonDuyetCapUng = sumNumber([this.total.vonDuyetCapUng, item.vonDuyetCapUng]);
-        this.total.vonDuyetCong = sumNumber([this.total.vonDuyetCong, item.vonDuyetCong]);
-        this.total.tongTien = sumNumber([this.total.tongTien, item.tongTien]);
-        this.total.soConDuocCap = sumNumber([this.total.soConDuocCap, item.soConDuocCap]);
-      }
+    this.baoCao.dnghiCapvonCtiets.forEach(item => {
+      this.total.slKeHoach = sumNumber([this.total.slKeHoach, item.slKeHoach]);
+      this.total.slThucHien = sumNumber([this.total.slThucHien, item.slThucHien]);
+      this.total.donGia = sumNumber([this.total.donGia, item.donGia]);
+      this.total.gtriThucHien = sumNumber([this.total.gtriThucHien, item.gtriThucHien]);
+      this.total.duToanDaGiao = sumNumber([this.total.duToanDaGiao, item.duToanDaGiao]);
+      this.total.luyKeTongCapUng = sumNumber([this.total.luyKeTongCapUng, item.luyKeTongCapUng]);
+      this.total.luyKeTongCapVon = sumNumber([this.total.luyKeTongCapVon, item.luyKeTongCapVon]);
+      this.total.luyKeTongCong = sumNumber([this.total.luyKeTongCong, item.luyKeTongCong]);
+      this.total.tongVonVaDtDaCap = sumNumber([this.total.tongVonVaDtDaCap, item.tongVonVaDtDaCap]);
+      this.total.vonDuyetCapVon = sumNumber([this.total.vonDuyetCapVon, item.vonDuyetCapVon]);
+      this.total.vonDnghiCapLanNay = sumNumber([this.total.vonDnghiCapLanNay, item.vonDnghiCapLanNay]);
+      this.total.vonDuyetCapUng = sumNumber([this.total.vonDuyetCapUng, item.vonDuyetCapUng]);
+      this.total.vonDuyetCong = sumNumber([this.total.vonDuyetCong, item.vonDuyetCong]);
+      this.total.tongTien = sumNumber([this.total.tongTien, item.tongTien]);
+      this.total.soConDuocCap = sumNumber([this.total.soConDuocCap, item.soConDuocCap]);
     })
   }
 
   exportToExcel() {
     const header = [
-      { t: 0, b: 1, l: 0, r: 17, val: null },
+      { t: 0, b: 1, l: 0, r: 11, val: null },
       { t: 0, b: 1, l: 0, r: 0, val: 'STT' },
       { t: 0, b: 1, l: 1, r: 1, val: 'Đơn vị' },
       { t: 0, b: 0, l: 2, r: 3, val: 'Số lượng' },
@@ -519,16 +507,9 @@ export class CapVonComponent implements OnInit {
       { t: 1, b: 1, l: 9, r: 9, val: 'Tổng cộng' },
       { t: 0, b: 1, l: 10, r: 10, val: 'Tổng vốn và dự toán đã cấp' },
       { t: 0, b: 1, l: 11, r: 11, val: 'Vốn đề nghị cấp lần này = Giá trị theo kế hoạch - Lũy kế vốn cấp' },
-      { t: 0, b: 0, l: 12, r: 14, val: 'Vốn đề duyệt cấp lần này' },
-      { t: 1, b: 1, l: 12, r: 12, val: 'Tổng cấp ứng' },
-      { t: 1, b: 1, l: 13, r: 13, val: 'Tổng cấp vốn' },
-      { t: 1, b: 1, l: 14, r: 14, val: 'Tổng cộng' },
-      { t: 0, b: 1, l: 15, r: 15, val: 'Tổng tiền (Tổng tiền được cấp sau lần này)' },
-      { t: 0, b: 1, l: 16, r: 16, val: 'Số còn được cấp' },
-      { t: 0, b: 1, l: 17, r: 17, val: 'Ghi chú' },
     ]
     const fieldOrder = ['stt', 'tenDvi', 'slKeHoach', 'slThucHien', 'donGia', 'gtriThucHien', 'duToanDaGiao', 'luyKeTongCapUng', 'luyKeTongCapVon', 'luyKeTongCong',
-      'tongVonVaDtDaCap', 'vonDnghiCapLanNay', 'vonDuyetCapUng', 'vonDuyetCapVon', 'vonDuyetCong', 'tongTien', 'soConDuocCap', 'ghiChu']
+      'tongVonVaDtDaCap', 'vonDnghiCapLanNay']
     const filterData = this.baoCao.dnghiCapvonCtiets.map(item => {
       const row: any = {};
       fieldOrder.forEach(field => {
@@ -541,7 +522,7 @@ export class CapVonComponent implements OnInit {
     const worksheet = Table.initExcel(header);
     XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
-    XLSX.writeFile(workbook, 'CAP_VON.xlsx');
+    XLSX.writeFile(workbook, 'DE_NGHI_CAP_VON.xlsx');
   }
 
 
