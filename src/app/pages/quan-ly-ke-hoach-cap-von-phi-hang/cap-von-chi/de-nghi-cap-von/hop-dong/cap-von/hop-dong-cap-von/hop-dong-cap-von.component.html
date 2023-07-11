@@ -33,12 +33,6 @@
         <i nz-icon nzType="copy" nzTheme="outline"></i>
         <span>Copy</span>
       </button>
-      <ng-container *ngIf="baoCao.trangThai == '7'">
-        <button type="button" class="btn btn-main" *ngIf="statusExportExcel.export" (click)="exportToExcel()">
-          <span nz-icon nzType="export" nzTheme="outline" style="margin-right: 5px;"></span>
-          <span>Xuất</span>
-        </button>
-      </ng-container>
     </div>
   </nz-affix>
 
@@ -118,30 +112,37 @@
             <thead>
               <tr>
                 <th rowspan="2" nzWidth="50px" nzLeft>STT</th>
-                <th rowspan="2" nzWidth="250px" nzLeft>Đơn vị</th>
+                <th rowspan="2" nzWidth="250px" nzLeft>Cục DTNNKV</th>
                 <th colspan="2">Số lượng</th>
-                <th rowspan="2">Đơn giá (theo <br /> quyết định)</th>
-                <th rowspan="2">Giá trị thực hiện</th>
-                <th rowspan="2">Dự toán đã giao</th>
-                <th colspan="3">Lũy kế cấp vốn đến thời điểm báo cáo
+                <th rowspan="2" style="width: 170px">Giá trị hợp đồng<br /> (đã bao gồm VAT)(đồng)</th>
+                <th rowspan="2" style="width: 140px">Vi phạm hợp đồng</th>
+                <th colspan="2">Thanh lý hợp đồng</th>
+                <th colspan="3">Lũy kế vốn cấp đến thời điểm báo cáo
                 </th>
-                <th rowspan="2">Tổng vốn và<br /> dự toán đã cấp</th>
-                <th rowspan="2">Vốn đề nghị cấp<br /> lần này = Gía trị<br /> theo kế hoạch -<br /> Lũy kế vốn cấp</th>
+                <th rowspan="2" style="width: 170px">Dự toán đã giao(đồng)</th>
+                <th rowspan="2" style="width: 170px">Tổng vốn và dự toán<br />đã cấp đến trước<br />thời điểm báo
+                  cáo<br />(Dự toán đã giao
+                  +<br />Lũy kế vốn cấp<br />đến thời điểm báo cáo)</th>
+                <th rowspan="2" style="width: 170px">Vốn đề nghị cấp lần này<br />(Tổng giá trị hợp đồng<br /> - Tổng
+                  vốn và Dự toán đã
+                  giao<br /> - Vi phạm hợp đồng)</th>
                 <th colspan="3">Vốn duyệt cấp lần này</th>
-                <th rowspan="2">Tổng tiền( Tổng <br /> tiền được cấp <br />sau lần này)</th>
-                <th rowspan="2">Số còn được cấp</th>
+                <th rowspan="2" style="width: 140px">Tổng tiền( Tổng <br /> tiền được cấp <br />sau lần này)</th>
+                <th rowspan="2" style="width: 140px">Số còn được cấp</th>
                 <th rowspan="2" style="width: 200px;">Ghi chú</th>
                 <th rowspan="2" style="width: 50px;" *ngIf="status" nzRight></th>
               </tr>
               <tr>
                 <th>Kế hoạch</th>
-                <th>Thực hiện</th>
-                <th>Tổng cấp ứng</th>
-                <th>Tổng cấp vốn</th>
-                <th>Tổng cộng</th>
+                <th>Hợp đồng</th>
+                <th>Số lượng</th>
+                <th>Thành tiền</th>
+                <th>Cộng</th>
                 <th>Cấp ứng</th>
                 <th>Cấp vốn</th>
                 <th>Cộng</th>
+                <th>Cấp ứng</th>
+                <th>Cấp vốn</th>
               </tr>
               <tr>
                 <th nzLeft>A</th>
@@ -149,18 +150,20 @@
                 <th>1</th>
                 <th>2</th>
                 <th>3</th>
-                <th>4=2x3</th>
+                <th>4</th>
                 <th>5</th>
                 <th>6</th>
-                <th>7</th>
-                <th>8=6+7</th>
-                <th>9=5+8</th>
-                <th>10=4-9</th>
-                <th>11</th>
-                <th>12</th>
-                <th>13=11+12</th>
-                <th>14=9+12</th>
-                <th>15=4-14</th>
+                <th>7=8+9</th>
+                <th>8</th>
+                <th>9</th>
+                <th>10</th>
+                <th>11=7+10</th>
+                <th>12=3-4-11</th>
+                <th>13=14+15</th>
+                <th>14</th>
+                <th>15</th>
+                <th>16=11+15</th>
+                <th>17=3-16</th>
                 <th>D</th>
                 <th *ngIf="status" nzRight></th>
               </tr>
@@ -182,6 +185,8 @@
                 <th>{{displayValue(total.vonDuyetCong)}}</th>
                 <th>{{displayValue(total.tongTien)}}</th>
                 <th>{{displayValue(total.soConDuocCap)}}</th>
+                <th></th>
+                <th></th>
                 <th></th>
                 <th *ngIf="status" nzRight></th>
               </tr>

@@ -56,5 +56,13 @@
             <app-danh-sach-de-nghi-tu-don-vi-cap-duoi [data]=data (dataChange)="changeTab($event)">
             </app-danh-sach-de-nghi-tu-don-vi-cap-duoi>
         </ng-container>
+        <ng-container *ngIf="tabSelected == 'denghi-donvi-capduoi'">
+            <app-de-nghi-don-vi-cap-duoi [data]=data (dataChange)="changeTab($event)">
+            </app-de-nghi-don-vi-cap-duoi>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 'denghi-hopdong-capvon'">
+            <app-hop-dong-cap-von [data]=data (dataChange)="changeTab($event)">
+            </app-hop-dong-cap-von>
+        </ng-container>
     </div>
 </div>

@@ -85,6 +85,8 @@ export class DanhSachHopDongComponent implements OnInit {
 
     async search() {
         const request = JSON.parse(JSON.stringify(this.searchFilter));
+        request.maLoai = '1';
+        request.loaiTimKiem = '0';
         request.ngayTaoDen = this.datePipe.transform(this.searchFilter.ngayTaoDen, Utils.FORMAT_DATE_STR);
         request.ngayTaoTu = this.datePipe.transform(this.searchFilter.ngayTaoTu, Utils.FORMAT_DATE_STR);
         this.spinner.show();

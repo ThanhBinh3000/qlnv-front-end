@@ -97,13 +97,16 @@
 								<th colspan="2">Số lượng</th>
 								<th rowspan="2">Đơn giá (kg/đồng)</th>
 								<th rowspan="2">Giá trị hợp đồng (đã bao gồm VAT)(đồng)</th>
-								<!-- <th rowspan="2">Đã giao dự toán (đồng)</th> -->
+								<th rowspan="2">Vi phạm hợp đồng</th>
+								<th colspan="2">Thanh lý hợp đồng</th>
 								<th rowspan="2">Công văn</th>
 								<th rowspan="2" [hidden]="status"></th>
 							</tr>
 							<tr>
 								<th>Kế hoạch</th>
 								<th>Hợp đồng</th>
+								<th>Số lượng</th>
+								<th>Thành tiền</th>
 							</tr>
 							<tr>
 								<th>A</th>
@@ -113,6 +116,9 @@
 								<th>3</th>
 								<th>4=2*3</th>
 								<th>5</th>
+								<th>6</th>
+								<th>7</th>
+								<th>8</th>
 								<th [hidden]="status"></th>
 							</tr>
 							<tr>
@@ -122,6 +128,9 @@
 								<th>{{displayValue(total.slHopDong)}}</th>
 								<th></th>
 								<th>{{displayValue(total.gtHopDong)}}</th>
+								<th></th>
+								<th></th>
+								<th></th>
 								<th></th>
 								<th [hidden]="status"></th>
 							</tr>
@@ -149,9 +158,9 @@
 									<td>
 										{{ displayValue(data.gtHopDong) }}
 									</td>
-									<!-- <td>
-                    {{ displayValue(data.daGiaoDuToan) }}
-                  </td> -->
+									<td></td>
+									<td></td>
+									<td></td>
 									<td>
 										{{ data.soCongVan }}
 									</td>
@@ -180,9 +189,18 @@
 									<td>
 										{{ displayValue(data.gtHopDong) }}
 									</td>
-									<!-- <td>
-                    {{ displayValue(data.daGiaoDuToan) }}
-                  </td> -->
+									<td>
+										<input nz-input class="search__input"
+											[(ngModel)]="editCache[data.id].data.soCongVan" />
+									</td>
+									<td>
+										<input nz-input class="search__input"
+											[(ngModel)]="editCache[data.id].data.soCongVan" />
+									</td>
+									<td>
+										<input nz-input class="search__input"
+											[(ngModel)]="editCache[data.id].data.soCongVan" />
+									</td>
 									<td>
 										<input nz-input class="search__input"
 											[(ngModel)]="editCache[data.id].data.soCongVan" />

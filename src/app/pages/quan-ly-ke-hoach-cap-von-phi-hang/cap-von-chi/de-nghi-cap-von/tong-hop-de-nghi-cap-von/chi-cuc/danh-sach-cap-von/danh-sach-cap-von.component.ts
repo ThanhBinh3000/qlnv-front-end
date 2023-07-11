@@ -198,7 +198,7 @@ export class DanhSachCapVonComponent implements OnInit {
         const obj = {
           id: null,
           baoCao: res,
-          tabSelected: res.canCuVeGia == Utils.HD_TRUNG_THAU ? (res.loaiDnghi == Utils.MUA_VTU ? 'dn-vattu' : 'dn-hopdong') : 'dn-capvon',
+          tabSelected: res.canCuVeGia == Utils.HD_TRUNG_THAU ? (res.loaiDnghi == Utils.MUA_VTU ? 'dn-vattu' : 'denghi-hopdong-capvon') : 'dn-capvon',
           hopDong: res.hopDong,
         }
         this.dataChange.emit(obj);
@@ -210,7 +210,7 @@ export class DanhSachCapVonComponent implements OnInit {
   viewDetail(data: any) {
     const obj = {
       id: data.id,
-      tabSelected: data.canCuVeGia == Utils.HD_TRUNG_THAU ? (data.loaiDnghi == Utils.MUA_VTU ? 'dn-vattu' : 'dn-hopdong') : 'dn-capvon',
+      tabSelected: data.canCuVeGia == Utils.HD_TRUNG_THAU ? (data.loaiDnghi == Utils.MUA_VTU ? 'dn-vattu' : 'denghi-hopdong-capvon') : 'dn-capvon',
     }
     this.dataChange.emit(obj);
   }

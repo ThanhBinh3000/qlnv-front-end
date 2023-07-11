@@ -3,21 +3,21 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
-import { DialogTaoMoiCapVonComponent } from './dialog-tao-moi-cap-von.component';
+import { HopDongCapVonComponent } from './hop-dong-cap-von.component';
 
-describe('DialogTaoMoiCapVonComponent', () => {
-  let component: DialogTaoMoiCapVonComponent;
-  let fixture: ComponentFixture<DialogTaoMoiCapVonComponent>;
+describe('HopDongCapVonComponent', () => {
+  let component: HopDongCapVonComponent;
+  let fixture: ComponentFixture<HopDongCapVonComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DialogTaoMoiCapVonComponent ]
+      declarations: [ HopDongCapVonComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DialogTaoMoiCapVonComponent);
+    fixture = TestBed.createComponent(HopDongCapVonComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
