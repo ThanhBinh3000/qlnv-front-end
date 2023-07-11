@@ -123,11 +123,11 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
         tenCloaiVthh: [],
         tenLoaiVthh: [],
         tenTrangThai: ['Dự Thảo'],
-        tenNhaKho: [],
-        tenDiemKho: [],
+        tenNhaKho: ['', [Validators.required]],
+        tenDiemKho: ['', [Validators.required]],
         tenLoKho: [],
         tenNganKho: [],
-        tenNganLoKho: [],
+        tenNganLoKho: ['', [Validators.required]],
         dcnbBienBanTinhKhoDtl: [new Array()]
       }
     );

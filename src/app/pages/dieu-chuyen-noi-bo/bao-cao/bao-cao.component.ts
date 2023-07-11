@@ -51,8 +51,8 @@ export class BaoCaoComponent extends Base2Component implements OnInit {
   ) {
     super(httpClient, storageService, notification, spinner, modal, bangCaoDieuChuyenService)
     this.formData = this.fb.group({
-      soBaoCao: [''],
-      soQdinhDcc: [''],
+      soBc: [''],
+      soQdinhCuc: [''],
       trangThai: [''],
       tuNgay: [''],
       denNgay: ['']

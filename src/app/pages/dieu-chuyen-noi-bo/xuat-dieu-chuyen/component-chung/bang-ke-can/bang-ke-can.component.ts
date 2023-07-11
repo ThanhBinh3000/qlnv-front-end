@@ -260,10 +260,10 @@ export class BangKeCanXuatDieuChuyenComponent extends Base2Component implements 
     this.openPhieuXk = false;
   }
   checkRoleAdd(trangThai: string): boolean {
-    return this.userService.isChiCuc()
+    return !trangThai && this.userService.isChiCuc()
   }
   checkRoleView(trangThai: string): boolean {
-    return !this.checkRoleEdit(trangThai) && !this.checkRoleDuyet(trangThai) && !this.checkRoleDelete(trangThai)
+    return !this.checkRoleAdd(trangThai) && !this.checkRoleEdit(trangThai) && !this.checkRoleDuyet(trangThai) && !this.checkRoleDelete(trangThai)
   }
   checkRoleEdit(trangThai: string): boolean {
     return this.userService.isChiCuc() && (trangThai == STATUS.DU_THAO || trangThai == STATUS.TU_CHOI_LDCC)

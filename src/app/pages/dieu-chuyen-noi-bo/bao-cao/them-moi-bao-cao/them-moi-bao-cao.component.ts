@@ -13,6 +13,9 @@ import { MESSAGE } from 'src/app/constants/message';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import dayjs from 'dayjs';
 import { v4 as uuidv4 } from 'uuid';
+import { DonviService } from 'src/app/services/donvi.service';
+import { QuyetDinhDieuChuyenCucService } from 'src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-c.service';
+import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
 @Component({
   selector: 'app-them-moi-bao-cao',
   templateUrl: './them-moi-bao-cao.component.html',
@@ -26,6 +29,7 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
   showListEvent = new EventEmitter<any>();
   expandSetString = new Set<string>();
   dataView: any[] = [];
+  listSoQuyetDinh: any[] = [];
   TRANG_THAI: { [key: string]: string } = {
     [STATUS.DU_THAO]: "Dự thảo",
     [STATUS.CHO_DUYET_TP]: "Chờ duyệt - TP",
@@ -33,27 +37,30 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
     [STATUS.TU_CHOI_TP]: "Từ chối - TP",
     [STATUS.DA_DUYET_LDC]: "Đã duyệt - LĐ Cục",
     [STATUS.TU_CHOI_LDC]: "Từ chối - LĐ Cục"
-  }
+  };
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private bangCaoDieuChuyenService: BangCaoDieuChuyenService
+    private bangCaoDieuChuyenService: BangCaoDieuChuyenService,
+    private donviService: DonviService,
+    private quyetDinhDieuChuyenCucService: QuyetDinhDieuChuyenCucService
   ) {
     super(httpClient, storageService, notification, spinner, modal, bangCaoDieuChuyenService);
     this.formData = this.fb.group({
       nam: [dayjs().get('year'), [Validators.required]],
       tenDvi: [],
-      donViNhan: [],
-      tenBaoCao: [],
-      soBaoCao: ['', Validators.required],
-      ngayBaoCao: [dayjs().format('YYYY-MM-DD'), [Validators.required]],
-      soQinhCuc: [],
-      soQdinhTongCuc: [],
+      maDviNhan: [],
+      tenDviNhan: [],
+      tenBc: [],
+      soBc: ['', Validators.required],
+      ngayBc: [dayjs().format('YYYY-MM-DD'), [Validators.required]],
+      soQdDcCuc: [],
+      qdDcCucId: [],
+      ngayKyQdCuc: [],
       trangThai: ['00'],
-      ngayKyQdTongCuc: [],
       noiDung: [],
       fileDinhKems: [new Array()]
     })
@@ -71,26 +78,83 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
     }
   }
   async loadDetail(id: number): Promise<void> {
+    console.log("userLogin", this.userInfo)
     if (id) {
       const res = await this.bangCaoDieuChuyenService.getDetail(id);
       if (res.msg === MESSAGE.SUCCESS) {
         this.formData.patchValue({ ...res.data });
         this.dataTable = res.data.dataTable
       }
-      else {
-        this.formData.patchValue({
-          maDvi: this.userInfo.MA_DVI,
-          tenDvi: this.userInfo.TEN_DVI
-        })
-      }
+
+    }
+    else {
+      const maDviNhan = this.userInfo?.DON_VI?.maDviCha;
+      const data = await this.getChiTietDonViCha(maDviNhan);
+      this.formData.patchValue({
+        maDvi: this.userInfo.MA_DVI,
+        tenDvi: this.userInfo.TEN_DVI,
+        maDviNhan,
+        tenDviNhan: data ? data.tenDvi : ''
+      })
     }
   }
-  openModalQDCuc() {
-
+  async getChiTietDonViCha(maDviNhan: string): Promise<any> {
+    let res = await this.donviService.getDonVi({ str: maDviNhan });
+    console.log("donViCha", res)
+    if (res.msg == MESSAGE.SUCCESS) {
+      return res.data
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+      return;
+    }
   }
-  openModalQDTongCuc() {
-
+  async loadSoQuyetDinh() {
+    let body = {
+      trangThai: STATUS.BAN_HANH,
+      maDvi: this.userInfo.MA_DVI,
+      // listTrangThaiXh: [STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN],
+    }
+    try {
+      let res = await this.quyetDinhDieuChuyenCucService.getDsSoQuyetDinhDieuChuyenChiCuc(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        let data = res.data;
+        this.listSoQuyetDinh = Array.isArray(data) ? data.reduce((arr, cur) => {
+          if (arr.findIndex(f => f.soQdinh == cur.soQdinh) < 0) {
+            arr.push(cur)
+          }
+          return arr
+        }, []) : [];
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+    } catch (error) {
+      console.log("error", error)
+    }
   }
+  async openDialogSoQd() {
+    console.log('soQD')
+    await this.loadSoQuyetDinh();
+    const modalQD = this.modal.create({
+      nzTitle: 'DANH SÁCH QUYẾT ĐỊNH XUẤT ĐIỀU CHUYỂN HÀNG HÓA',
+      nzContent: DialogTableSelectionComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {
+        dataTable: this.listSoQuyetDinh,
+        // dataHeader: ['Số quyết định', 'Ngày quyết định', 'Loại hàng hóa'],
+        // dataColumn: ['soQdinh', 'ngayKyQdinh', 'tenLoaiVthh'],
+        dataHeader: ['Số quyết định', 'Ngày ký quyết định'],
+        dataColumn: ['soQdinh', 'ngayKyQdinh'],
+      },
+    })
+    modalQD.afterClose.subscribe(async (data) => {
+      if (data) {
+        console.log("data", data)
+      }
+    });
+  };
   expandAll() {
     this.dataView.forEach(s => {
       this.expandSetString.add(s.idVirtual);

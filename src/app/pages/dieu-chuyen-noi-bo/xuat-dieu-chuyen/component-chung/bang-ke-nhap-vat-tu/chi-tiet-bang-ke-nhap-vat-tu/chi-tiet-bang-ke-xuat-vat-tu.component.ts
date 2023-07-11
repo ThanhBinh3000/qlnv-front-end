@@ -171,7 +171,7 @@ export class ChiTietBangKeXuatVatTuDieuChuyenComponent extends Base2Component im
                 tenNhaKho: ['', [Validators.required]],
                 tenNganKho: ['', [Validators.required]],
                 tenLoKho: [''],
-                tenNganLoKho: [''],
+                tenNganLoKho: ['', [Validators.required]],
                 nguoiPduyet: [''],
                 nguoiGduyet: [''],
                 thuKhoId: [''],
