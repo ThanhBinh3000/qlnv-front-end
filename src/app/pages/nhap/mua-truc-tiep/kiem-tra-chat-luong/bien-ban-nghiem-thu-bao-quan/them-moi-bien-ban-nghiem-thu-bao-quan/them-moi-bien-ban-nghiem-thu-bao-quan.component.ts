@@ -145,6 +145,7 @@ export class ThemMoiBienBanNghiemThuBaoQuanComponent extends Base2Component impl
       await Promise.all([
         this.loadDataComboBox(),
         this.loadSoQuyetDinh(),
+        this.loadDonViTinh()
       ]);
       if (this.id) {
         await this.loadChiTiet(this.id);
@@ -222,8 +223,9 @@ export class ThemMoiBienBanNghiemThuBaoQuanComponent extends Base2Component impl
       moTaHangHoa: data.moTaHangHoa,
     });
     let dataChiCuc = data.hhQdGiaoNvNhangDtlList.filter(item => item.maDvi == this.userInfo.MA_DVI);
+    console.log(dataChiCuc)
     if (dataChiCuc.length > 0) {
-      this.listDiaDiemNhap = dataChiCuc[0].hhQdGiaoNvNhDdiemList;
+      this.listDiaDiemNhap = dataChiCuc[0].children;
     }
     this.loadDataComboBox();
     await this.spinner.hide();
@@ -601,6 +603,7 @@ export class ThemMoiBienBanNghiemThuBaoQuanComponent extends Base2Component impl
   async loadDonViTinh() {
     try {
       const res = await this.donViService.loadDonViTinh();
+      console.log(res)
       this.listDonViTinh = [];
       if (res.msg == MESSAGE.SUCCESS) {
         for (let i = 0; i < res.data.length; i++) {

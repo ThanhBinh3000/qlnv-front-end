@@ -149,11 +149,11 @@ export class ThemmoiQuyetdinhKetquaChaogiaComponent extends Base2Component imple
         msg = MESSAGE.PHE_DUYET_CONFIRM
         break;
       }
-      case STATUS.DA_DUYET_LDC: {
-        trangThai = STATUS.BAN_HANH;
-        msg = MESSAGE.PHE_DUYET_CONFIRM
-        break;
-      }
+      // case STATUS.DA_DUYET_LDC: {
+      //   trangThai = STATUS.BAN_HANH;
+      //   msg = MESSAGE.PHE_DUYET_CONFIRM
+      //   break;
+      // }
     }
     this.approve(this.idInput, trangThai, msg);
   }
