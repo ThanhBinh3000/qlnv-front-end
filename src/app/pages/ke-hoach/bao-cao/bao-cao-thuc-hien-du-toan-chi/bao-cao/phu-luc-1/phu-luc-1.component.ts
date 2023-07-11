@@ -127,12 +127,19 @@ export class ItemData {
     }
 
     filterNumberFields() {
-        const classProperties = Object.getOwnPropertyNames(this);
-        for (const property of classProperties) {
-            if (typeof this[property] === 'number' && property != 'level') {
-                this[property] = null;
+        Object.keys(this).forEach(key => {
+            if (typeof this[key] === 'number' && key != 'level') {
+                this[key] = null;
             }
-        }
+        })
+    }
+
+    total(data: ItemData) {
+        Object.keys(data).forEach(key => {
+            if (key != 'level' && (typeof this[key] == 'number' || typeof data[key] == 'number')) {
+                this[key] = Operator.sum([this[key], data[key]]);
+            }
+        })
     }
 
     upperBound() {
@@ -171,10 +178,6 @@ export class PhuLucIComponent implements OnInit {
     noiDungs: any[] = [];
     lstCtietBcao: ItemData[] = [];
     luyKes: ItemData[] = [];
-    keys = ['kphiSdungTcong', 'kphiSdungDtoan', 'kphiSdungNguonKhac', 'kphiSdungNguonQuy', 'kphiSdungNstt', 'kphiSdungCk', 'kphiChuyenSangTcong', 'kphiChuyenSangDtoan',
-        'kphiChuyenSangNguonKhac', 'kphiChuyenSangNguonQuy', 'kphiChuyenSangNstt', 'kphiChuyenSangCk', 'dtoanGiaoTcong', 'dtoanGiaoDtoan', 'dtoanGiaoNguonKhac',
-        'dtoanGiaoNguonQuy', 'dtoanGiaoNstt', 'dtoanGiaoCk', 'giaiNganThangBcaoTcong', 'giaiNganThangBcaoDtoan', 'giaiNganThangBcaoNguonKhac', 'giaiNganThangBcaoNguonQuy',
-        'giaiNganThangBcaoNstt', 'giaiNganThangBcaoCk', 'luyKeGiaiNganTcong', 'luyKeGiaiNganDtoan', 'luyKeGiaiNganNguonKhac', 'luyKeGiaiNganNguonQuy', 'luyKeGiaiNganNstt', 'luyKeGiaiNganCk']
     //trang thai
     status: BtnStatus = new BtnStatus();
     editMoneyUnit = false;
@@ -292,10 +295,7 @@ export class PhuLucIComponent implements OnInit {
 
         const lstCtietBcaoTemp: ItemData[] = [];
         this.lstCtietBcao.forEach(item => {
-            lstCtietBcaoTemp.push(new ItemData({
-                ...item,
-                id: item.id?.length == 38 ? null : item.id,
-            }))
+            lstCtietBcaoTemp.push(item.request())
         })
 
         const request = JSON.parse(JSON.stringify(this.formDetail));
@@ -556,9 +556,7 @@ export class PhuLucIComponent implements OnInit {
             this.lstCtietBcao[index].filterNumberFields();
             this.lstCtietBcao.forEach(item => {
                 if (Table.preIndex(item.stt) == stt) {
-                    this.keys.forEach(key => {
-                        this.lstCtietBcao[index][key] = Operator.sum([this.lstCtietBcao[index][key], item[key]]);
-                    })
+                    this.lstCtietBcao[index].total(item);
                 }
             })
             this.lstCtietBcao[index].tyLe();
@@ -571,9 +569,7 @@ export class PhuLucIComponent implements OnInit {
         this.total.filterNumberFields();
         this.lstCtietBcao.forEach(item => {
             if (item.level == 0) {
-                this.keys.forEach(key => {
-                    this.total[key] = Operator.sum([this.total[key], item[key]]);
-                })
+                this.total.total(item);
             }
         })
         this.total.tyLe();

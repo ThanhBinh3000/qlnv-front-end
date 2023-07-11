@@ -106,12 +106,19 @@ export class ItemData {
     }
 
     filterNumberFields() {
-        const classProperties = Object.getOwnPropertyNames(this);
-        for (const property of classProperties) {
-            if (typeof this[property] === 'number' && property != 'level') {
-                this[property] = null;
+        Object.keys(this).forEach(key => {
+            if (typeof this[key] === 'number' && key != 'level') {
+                this[key] = null;
             }
-        }
+        })
+    }
+
+    total(data: ItemData) {
+        Object.keys(data).forEach(key => {
+            if (key != 'level' && (typeof this[key] == 'number' || typeof data[key] == 'number')) {
+                this[key] = Operator.sum([this[key], data[key]]);
+            }
+        })
     }
 }
 
@@ -135,8 +142,6 @@ export class PhuLucIIComponent implements OnInit {
     noiDungs: any[] = [];
     lstCtietBcao: ItemData[] = [];
     luyKes: any[] = [];
-    keys = ['dtoanSdungNamTcong', 'dtoanSdungNamNguonNsnn', 'dtoanSdungNamNguonSn', 'dtoanSdungNamNguonQuy', 'giaiNganThangTcong', 'giaiNganThangNguonNsnn', 'giaiNganThangNguonSn',
-        'giaiNganThangNguonQuy', 'luyKeGiaiNganTcong', 'luyKeGiaiNganNguonNsnn', 'luyKeGiaiNganNguonSn', 'luyKeGiaiNganNguonQuy']
     //trang thai
     status: BtnStatus = new BtnStatus();
     editMoneyUnit = false;
@@ -519,9 +524,7 @@ export class PhuLucIIComponent implements OnInit {
             this.lstCtietBcao[index].filterNumberFields();
             this.lstCtietBcao.forEach(item => {
                 if (Table.preIndex(item.stt) == stt) {
-                    this.keys.forEach(key => {
-                        this.lstCtietBcao[index][key] = Operator.sum([this.lstCtietBcao[index][key], item[key]]);
-                    })
+                    this.lstCtietBcao[index].total(item);
                 }
             })
             this.lstCtietBcao[index].tyLe();
@@ -534,9 +537,7 @@ export class PhuLucIIComponent implements OnInit {
         this.total.filterNumberFields();
         this.lstCtietBcao.forEach(item => {
             if (item.level == 0) {
-                this.keys.forEach(key => {
-                    this.total[key] = Operator.sum([this.total[key], item[key]]);
-                })
+                this.total.total(item);
             }
         })
         this.total.tyLe();
