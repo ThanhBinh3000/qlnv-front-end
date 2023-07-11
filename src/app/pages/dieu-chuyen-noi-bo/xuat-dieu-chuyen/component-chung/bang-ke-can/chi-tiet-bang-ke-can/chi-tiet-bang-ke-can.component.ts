@@ -203,21 +203,6 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
     }
   }
 
-  async loadDsLoaiHinhNhapXuat() {
-    let res = await this.danhMucService.danhMucChungGetAll("LOAI_HINH_NHAP_XUAT");
-    if (res.msg === MESSAGE.SUCCESS) {
-      this.listLoaiHinhNhapXuat = res.data.filter(item => item.phanLoai === 'XUAT_CAP');
-    }
-  }
-
-  async loadDsKieuNhapXuat() {
-    let res = await this.danhMucService.danhMucChungGetAll("KIEU_NHAP_XUAT");
-    if (res.msg === MESSAGE.SUCCESS) {
-      this.listKieuNhapXuat = res.data.filter(item => item.apDung === 'XUAT_CAP');
-
-    }
-  }
-
   async loadDsVthh() {
     let res = await this.danhMucService.getDanhMucHangDvqlAsyn({});
     if (res.msg === MESSAGE.SUCCESS) {
@@ -288,8 +273,7 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
         ...this.passData,
         tenNganLoKho: this.passData.tenLoKho ? `${this.passData.tenLoKho} - ${this.passData.tenNganKho}` : this.passData.tenNganKho
       });
-      this.chiTietDiemKho(this.passData.maDiemKho);
-      await this.loadDsPhieuXuatKho(this.passData.qdinhDccId);
+      await Promise.allSettled([this.chiTietQdDc(this.passData.qdinhDccId), this.chiTietDiemKho(this.passData.maDiemKho), this.loadDsPhieuXuatKho(this.passData.qdinhDccId)]);
       this.dsPhieuXuatKho = this.dsPhieuXuatKho.filter(f => ((f.maloKho && f.maloKho === this.passData.maDiemKho) || (f.maloKho && f.maNganKho && f.maNganKho === this.passData.maNganKho)));
     }
   }
@@ -633,6 +617,12 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
       }
     } catch (error) {
       console.log("error", error)
+    }
+  }
+  async chiTietQdDc(id: number) {
+    const res = await this.quyetDinhDieuChuyenCucService.getDetail(id);
+    if (res.msg === MESSAGE.SUCCESS) {
+      this.formData.patchValue({ ngayKyQdDcc: res?.data?.ngayKyQdinh })
     }
   }
 
