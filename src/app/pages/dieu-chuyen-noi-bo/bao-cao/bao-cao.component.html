@@ -5,11 +5,11 @@
                 <div nz-row [nzGutter]="20">
                     <div nz-col nzSpan="4" class="mt-16">
                         <label class="search__label">Số báo cáo</label>
-                        <input nz-input formControlName="soBaoCao" />
+                        <input nz-input formControlName="soBc" />
                     </div>
                     <div nz-col nzSpan="4" class="mt-16">
                         <label class="search__label">Số quyết định ĐC của Cục</label>
-                        <input nz-input formControlName="soQdinhDcc" />
+                        <input nz-input formControlName="soQdinhCuc" />
                     </div>
                     <div nz-col nzSpan="4" class="mt-16">
                         <label class="search__label"> Trạng thái </label>
@@ -51,7 +51,7 @@
             </div>
         </nz-card>
         <div class="group-button">
-            <h3 class="text-uppercase">Thông tin tổng hợp kế hoạch điều chuyển nội bộ hàng DTQG</h3>
+            <h3 class="text-uppercase">Danh sách báo cáo kết quả điều chuyển hàng DTQG</h3>
             <div class="buttons">
                 <button type="button" class="btn btn-do" (click)="deleteSelect()"
                     *ngIf="!isView && userService.isAccessPermisson('DCNB_TONGHOPDC_XOA') && userService.isCuc()">
@@ -68,9 +68,10 @@
                     <i class="icon htvbdh_chuyen-xu-ly"></i>
                     <span>Xuất file</span>
                 </button>
-                <button type="button" class="btn btn-main" (click)="redirectDetail(0,true)" *ngIf="!isView">
+                <button type="button" class="btn btn-main" (click)="redirectDetail(0,false)"
+                    *ngIf="userService.isChiCuc() || userService.isCuc()">
                     <i class=" icon htvbdh_tcdt_tao-qd"></i>
-                    <span>Tổng hợp BCKQ điều chuyển</span>
+                    <span>Tạo BCKQ điều chuyển</span>
                 </button>
             </div>
         </div>

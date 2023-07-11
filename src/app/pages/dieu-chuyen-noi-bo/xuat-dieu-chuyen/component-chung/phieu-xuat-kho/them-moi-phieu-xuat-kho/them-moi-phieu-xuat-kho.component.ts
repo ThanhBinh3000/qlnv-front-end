@@ -103,7 +103,7 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
       tenNhaKho: ['', [Validators.required]],
       maNganKho: ['', [Validators.required]],
       tenNganKho: ['', [Validators.required]],
-      tenNganLoKho: [''],
+      tenNganLoKho: ['', [Validators.required]],
       maLoKho: [''],
       tenLoKho: [''],
 
@@ -128,8 +128,8 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
       loaiHinhNX: ["Nhập ĐC nội bộ Chi cục"],
       kieuNX: ["Nhập không chi tiền"],
       soBangKeCh: [''],
-      soLuongCanDc: [''],
       bangKeChId: [''],
+      soLuongCanDc: [''],
 
       // thanhTien: [],
       // thanhTienBc: [''],
@@ -573,6 +573,11 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
     }
   }
   setValidate(isGuiDuyet: boolean) {
+    if (!this.thayDoiThuKho) {
+      this.formData.controls['soPhieuKnChatLuong'].clearValidators();
+      this.formData.controls['phieuKnChatLuongHdrId'].clearValidators();
+      this.formData.controls['ngayKyPhieuKnChatLuong'].clearValidators();
+    }
     if (isGuiDuyet) {
       this.formData.controls["nguoiGiaoHang"].setValidators([Validators.required]);
       this.formData.controls["soCmt"].setValidators([Validators.required]);
@@ -580,13 +585,15 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
       this.formData.controls["diaChi"].setValidators([Validators.required]);
       this.formData.controls["thoiGianGiaoNhan"].setValidators([Validators.required])
       this.formData.controls["bangKeChId"].setValidators([Validators.required])
+      this.formData.controls["soBangKeCh"].setValidators([Validators.required])
     } else {
       this.formData.controls["nguoiGiaoHang"].clearValidators();
       this.formData.controls["soCmt"].clearValidators();
       this.formData.controls["ctyNguoiGh"].clearValidators();
       this.formData.controls["diaChi"].clearValidators();
       this.formData.controls["thoiGianGiaoNhan"].clearValidators();
-      this.formData.controls["bangKeChId"].clearValidators()
+      this.formData.controls["bangKeChId"].clearValidators();
+      this.formData.controls["soBangKeCh"].clearValidators()
     }
   }
 

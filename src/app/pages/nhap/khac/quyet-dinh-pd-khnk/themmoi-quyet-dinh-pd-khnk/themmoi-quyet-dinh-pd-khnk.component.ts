@@ -128,6 +128,7 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
       ngayQd: ['',],
       ngayHluc: ['',],
       idTh: [''],
+      maTh: [''],
       idDx: [''],
       soDxuat: [''],
       trichYeu: [''],
@@ -289,6 +290,7 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
         tenLoaiVthh: dataTongHop.tenLoaiVthh,
         namKhoach: +dataTongHop.namKhoach,
         idTh: dataTongHop.id,
+        maTh: dataTongHop.maTh,
         tchuanCluong: dataTongHop.tchuanCluong,
         phanLoai: 'TH',
       })
@@ -587,6 +589,7 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
   // }
 
   openDialogTh() {
+    debugger
     if (this.formData.get('phanLoai').value != 'TH') {
       return;
     }
@@ -599,8 +602,8 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
       nzFooter: null,
       nzComponentParams: {
         dataTable: this.listDanhSachTongHop,
-        dataHeader: ['Số tổng hợp', 'Nội dung tổng hợp'],
-        dataColumn: ['id', 'noiDung']
+        dataHeader: ['Mã tổng hợp', 'Nội dung tổng hợp'],
+        dataColumn: ['maTh', 'noiDung']
       },
     });
     modalQD.afterClose.subscribe(async (data) => {
@@ -622,6 +625,7 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
         tenKieuNx: data.dxHdr[0].tenKieuNx,
         kieuNx: data.dxHdr[0].kieuNx,
         idTh: data.id,
+        maTh: data.maTh,
         idDx: null,
         soTrHdr: null,
       })
@@ -691,6 +695,7 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
           tgianThien: data.hdr.tgianThien,
           maDvi: data.hdr.maDvi,
           idTh: null,
+          maTh: null,
           soDxuat: data.hdr.soDxuat,
           tongMucDt: tongMucDt,
           kieuNx: data.hdr.kieuNx,

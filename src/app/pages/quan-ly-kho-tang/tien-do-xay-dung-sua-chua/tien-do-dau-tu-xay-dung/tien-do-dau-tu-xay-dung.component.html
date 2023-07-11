@@ -252,8 +252,7 @@
             </li>
             <li nz-menu-item
                 [ngClass]="{'disabled-tab': !trangThaiQdPdKqLcnt}"
-                [nzSelected]="tabSelected == '06'" (click)="selectTab('06')"
-                *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_HD')">
+                [nzSelected]="tabSelected == '06'" (click)="selectTab('06')">
               Hợp đồng và PL hợp đồng
               <img *ngIf="!trangThaiHopDong" class="ml-1"
                    src="../../../../../assets/images/icon_reject.svg" width="14" height="14"/>

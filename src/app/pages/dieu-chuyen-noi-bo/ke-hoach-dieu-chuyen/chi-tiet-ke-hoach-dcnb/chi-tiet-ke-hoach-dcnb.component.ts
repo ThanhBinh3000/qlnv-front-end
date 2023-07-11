@@ -1443,7 +1443,11 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
   }
 
   tinhSlDcConLai() {
-    let items = this.formData.controls['danhSachHangHoa'].value.filter(item => (item.maLoKho == this.formDataChiTiet.controls['maLoKho'].value && item.idVirtual != this.formDataChiTiet.controls['idVirtual'].value));
+    let items = this.formData.controls['danhSachHangHoa'].value.filter(item => (
+      item.maLoKho == this.formDataChiTiet.controls['maLoKho'].value
+      && item.maNganKho == this.formDataChiTiet.controls['maNganKho'].value
+      && item.maChiCucNhan == this.formDataChiTiet.controls['maChiCucNhan'].value
+      && item.idVirtual != this.formDataChiTiet.controls['idVirtual'].value));
     const tongSoLuongPhanBo = items.reduce((total, currentValue) => {
       return total + currentValue.soLuongPhanBo;
     }, 0);
