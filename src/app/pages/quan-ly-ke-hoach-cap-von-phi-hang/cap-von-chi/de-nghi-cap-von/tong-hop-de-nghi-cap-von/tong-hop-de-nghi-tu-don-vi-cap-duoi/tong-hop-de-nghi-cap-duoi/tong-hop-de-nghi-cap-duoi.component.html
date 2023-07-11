@@ -123,14 +123,11 @@
                 <th rowspan="2">Đơn giá (theo <br /> quyết định)</th>
                 <th rowspan="2">Giá trị thực hiện</th>
                 <th rowspan="2">Dự toán đã giao</th>
-                <th colspan="3">Lũy kế cấp vốn đến thời điểm báo cáo
+                <th colspan="3">Lũy kế vốn cấp đến thời điểm báo cáo</th>
+                <th rowspan="2">Tổng vốn và dự toán đã cấp
                 </th>
-                <th rowspan="2">Tổng vốn và<br /> dự toán đã cấp</th>
-                <th rowspan="2">Vốn đề nghị cấp<br /> lần này = Gía trị<br /> theo kế hoạch -<br /> Lũy kế vốn cấp</th>
-                <th colspan="3">Vốn duyệt cấp lần này</th>
-                <th rowspan="2">Tổng tiền( Tổng <br /> tiền được cấp <br />sau lần này)</th>
-                <th rowspan="2">Số còn được cấp</th>
-                <th rowspan="2" style="width: 200px;">Ghi chú</th>
+                <th rowspan="2">Vốn đề nghị cấp <br />lần này = Giá trị <br /> theo kế hoạch -<br />Lũy
+                  kế vốn cấp</th>
                 <th rowspan="2" style="width: 50px;" *ngIf="status" nzRight></th>
               </tr>
               <tr>
@@ -139,9 +136,6 @@
                 <th>Tổng cấp ứng</th>
                 <th>Tổng cấp vốn</th>
                 <th>Tổng cộng</th>
-                <th>Cấp ứng</th>
-                <th>Cấp vốn</th>
-                <th>Cộng</th>
               </tr>
               <tr>
                 <th nzLeft>A</th>
@@ -156,12 +150,6 @@
                 <th>8=6+7</th>
                 <th>9=5+8</th>
                 <th>10=4-9</th>
-                <th>11</th>
-                <th>12</th>
-                <th>13=11+12</th>
-                <th>14=9+12</th>
-                <th>15=4-14</th>
-                <th>D</th>
                 <th *ngIf="status" nzRight></th>
               </tr>
               <tr>
@@ -169,7 +157,7 @@
                 <th nzLeft>Tổng cộng</th>
                 <th>{{displayValue(total.slKeHoach)}}</th>
                 <th>{{displayValue(total.slThucHien)}}</th>
-                <th></th>
+                <th>{{displayValue(total.donGia)}}</th>
                 <th>{{displayValue(total.gtriThucHien)}}</th>
                 <th>{{displayValue(total.duToanDaGiao)}}</th>
                 <th>{{displayValue(total.luyKeTongCapUng)}}</th>
@@ -177,12 +165,6 @@
                 <th>{{displayValue(total.luyKeTongCong)}}</th>
                 <th>{{displayValue(total.tongVonVaDtDaCap)}}</th>
                 <th>{{displayValue(total.vonDnghiCapLanNay)}}</th>
-                <th>{{displayValue(total.vonDuyetCapUng)}}</th>
-                <th>{{displayValue(total.vonDuyetCapVon)}}</th>
-                <th>{{displayValue(total.vonDuyetCong)}}</th>
-                <th>{{displayValue(total.tongTien)}}</th>
-                <th>{{displayValue(total.soConDuocCap)}}</th>
-                <th></th>
                 <th *ngIf="status" nzRight></th>
               </tr>
             </thead>
@@ -198,16 +180,6 @@
                   <td>
                     {{ displayValue(data.slKeHoach) }}
                   </td>
-                  <!-- <ng-container *ngIf="userService.isTongCuc(); else showCucAndChiCuc">
-                    <td>
-                      {{displayValue(data.gtTheoKeHoach/data.slKeHoach)}}
-                    </td>
-                  </ng-container>
-                  <ng-template #showCucAndChiCuc>
-                    <td>
-                      {{ displayValue(data.donGia) }}
-                    </td>
-                  </ng-template> -->
                   <td>
                     {{ displayValue(data.slThucHien) }}
                   </td>
@@ -235,24 +207,6 @@
                   <td>
                     {{ displayValue(data.vonDnghiCapLanNay) }}
                   </td>
-                  <td>
-                    {{ displayValue(data.vonDuyetCapUng) }}
-                  </td>
-                  <td>
-                    {{ displayValue(data.vonDuyetCapVon) }}
-                  </td>
-                  <td>
-                    {{ displayValue(data.vonDuyetCong) }}
-                  </td>
-                  <td>
-                    {{ displayValue(data.tongTien) }}
-                  </td>
-                  <td>
-                    {{ displayValue(data.soConDuocCap) }}
-                  </td>
-                  <td>
-                    {{ data.ghiChu }}
-                  </td>
                   <td *ngIf="status" nzRight>
                     <i *ngIf="data.maDvi == userInfo?.MA_DVI" class="fa fa-pencil" (click)="startEdit(data.id)"></i>
                   </td>
@@ -264,40 +218,25 @@
                   <td nzLeft>
                     {{ editCache[data.id].data.tenDvi }}
                   </td>
-                  <ng-container *ngIf="this.userService.isCuc(); else showChiCuc">
-                    <td>
-                      {{ displayValue(data.slKeHoach) }}
-                    </td>
-                    <td>
-                      {{ displayValue(data.slThucHien) }}
-                    </td>
-                    <td>
-                      {{ displayValue(data.donGia) }}
-                    </td>
-                    <td>
-                      {{ displayValue(data.gtriThucHien) }}
-                    </td>
-                  </ng-container>
-                  <ng-template #showChiCuc>
-                    <td>
-                      <input class="money-input" currencyMask [options]="amount"
-                        [(ngModel)]="editCache[data.id].data.slKeHoach" />
-                    </td>
-                    <td>
-                      <input class="money-input" currencyMask [options]="amount"
-                        [(ngModel)]="editCache[data.id].data.slThucHien" (ngModelChange)="changeModel(data.id)" />
-                    </td>
-                    <td>
-                      <input class="money-input" currencyMask [options]="amount"
-                        [(ngModel)]="editCache[data.id].data.donGia" (ngModelChange)="changeModel(data.id)" />
-                    </td>
-                    <td>
-                      {{ displayValue(editCache[data.id].data.gtriThucHien) }}
-                    </td>
-                  </ng-template>
+                  <!-- <ng-container *ngIf="baoCao.soLan != 1; else moi"> -->
                   <td>
                     <input class="money-input" currencyMask [options]="amount"
-                      [(ngModel)]="editCache[data.id].data.duToanDaGiao" />
+                      [(ngModel)]="editCache[data.id].data.slKeHoach" (ngModelChange)="changeModel(data.id)" />
+                  </td>
+                  <td>
+                    <input class="money-input" currencyMask [options]="amount"
+                      [(ngModel)]="editCache[data.id].data.slThucHien" (ngModelChange)="changeModel(data.id)" />
+                  </td>
+                  <td>
+                    <input class="money-input" currencyMask [options]="amount"
+                      [(ngModel)]="editCache[data.id].data.soConDuocCap" (ngModelChange)="changeModel(data.id)" />
+                  </td>
+                  <td>
+                    {{ displayValue(editCache[data.id].data.gtriThucHien) }}
+                  </td>
+                  <td>
+                    <input class="money-input" currencyMask [options]="amount"
+                      [(ngModel)]="editCache[data.id].data.duToanDaGiao" (ngModelChange)="changeModel(data.id)" />
                   </td>
                   <td>
                     <input class="money-input" currencyMask [options]="amount"
@@ -315,26 +254,6 @@
                   </td>
                   <td>
                     {{ displayValue(editCache[data.id].data.vonDnghiCapLanNay) }}
-                  </td>
-                  <td>
-                    <input class="money-input" currencyMask [options]="amount"
-                      [(ngModel)]="editCache[data.id].data.vonDuyetCapUng" (ngModelChange)="changeModel(data.id)" />
-                  </td>
-                  <td>
-                    <input class="money-input" currencyMask [options]="amount"
-                      [(ngModel)]="editCache[data.id].data.vonDuyetCapVon" (ngModelChange)="changeModel(data.id)" />
-                  </td>
-                  <td>
-                    {{ displayValue(editCache[data.id].data.vonDuyetCong) }}
-                  </td>
-                  <td>
-                    {{ displayValue(editCache[data.id].data.tongTien) }}
-                  </td>
-                  <td>
-                    {{ displayValue(editCache[data.id].data.soConDuocCap) }}
-                  </td>
-                  <td>
-                    <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.ghiChu" />
                   </td>
                   <td *ngIf="status" nzRight>
                     <a (click)="saveEdit(data.id)" class="save">Lưu</a>

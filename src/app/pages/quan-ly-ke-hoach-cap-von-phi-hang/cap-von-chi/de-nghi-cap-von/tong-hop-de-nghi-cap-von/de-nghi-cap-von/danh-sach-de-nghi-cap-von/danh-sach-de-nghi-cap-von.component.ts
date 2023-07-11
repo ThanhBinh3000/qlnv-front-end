@@ -9,7 +9,7 @@ import { CapVonNguonChiService } from 'src/app/services/quan-ly-von-phi/capVonNg
 import { UserService } from 'src/app/services/user.service';
 import { CAN_CU_GIA, CVNC, LOAI_DE_NGHI, Utils } from 'src/app/Utility/utils';
 import { TRANG_THAI } from '../../../de-nghi-cap-von.constant';
-import { DialogTaoMoiDeNghiCapVonComponent } from '../../dialog-tao-moi-de-nghi-cap-von/dialog-tao-moi-de-nghi-cap-von.component';
+import { DialogTaoDeNghiCapVonComponent } from '../dialog-tao-de-nghi-cap-von/dialog-tao-de-nghi-cap-von.component';
 
 @Component({
     selector: 'app-danh-sach-de-nghi-cap-von',
@@ -179,7 +179,7 @@ export class DanhSachDeNghiCapVonComponent implements OnInit {
     addNewReport() {
         const modalTuChoi = this.modal.create({
             nzTitle: 'Thông tin tạo mới đề nghị',
-            nzContent: DialogTaoMoiDeNghiCapVonComponent,
+            nzContent: DialogTaoDeNghiCapVonComponent,
             nzMaskClosable: false,
             nzClosable: false,
             nzWidth: '900px',

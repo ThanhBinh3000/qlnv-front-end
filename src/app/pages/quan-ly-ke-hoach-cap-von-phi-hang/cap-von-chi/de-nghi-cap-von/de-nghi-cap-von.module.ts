@@ -14,11 +14,14 @@ import { DialogTaoMoiDeNghiCapVonComponent } from './tong-hop-de-nghi-cap-von/di
 import { DanhSachCapVonComponent } from './tong-hop-de-nghi-cap-von/chi-cuc/danh-sach-cap-von/danh-sach-cap-von.component';
 import { CapVonComponent } from './tong-hop-de-nghi-cap-von/chi-cuc/cap-von/cap-von.component';
 import { DialogTaoMoiCapVonComponent } from './tong-hop-de-nghi-cap-von/chi-cuc/dialog-tao-moi-cap-von/dialog-tao-moi-cap-von.component';
-import { DanhSachTongHopTuDonViCapDuoiComponent } from './tong-hop-de-nghi-cap-von/danh-sach-tong-hop-tu-don-vi-cap-duoi/danh-sach-tong-hop-tu-don-vi-cap-duoi.component';
+// import { DanhSachTongHopTuDonViCapDuoiComponent } from './tong-hop-de-nghi-cap-von/tong-hop-de-nghi-tu-don-vi-cap-duoi/danh-sach-tong-hop-tu-don-vi-cap-duoi/danh-sach-tong-hop-tu-don-vi-cap-duoi.component';
 import { DanhSachDeNghiTuDonViCapDuoiComponent } from './tong-hop-de-nghi-cap-von/de-nghi-cua-don-vi-cap-duoi/danh-sach-de-nghi-tu-don-vi-cap-duoi/danh-sach-de-nghi-tu-don-vi-cap-duoi.component';
 import { HopDongCapVonComponent } from './hop-dong/cap-von/hop-dong-cap-von/hop-dong-cap-von.component';
 import { DeNghiDonViCapDuoiComponent } from './tong-hop-de-nghi-cap-von/de-nghi-cua-don-vi-cap-duoi/de-nghi-don-vi-cap-duoi/de-nghi-don-vi-cap-duoi.component';
 import { DanhSachDeNghiCapVonComponent } from './tong-hop-de-nghi-cap-von/de-nghi-cap-von/danh-sach-de-nghi-cap-von/danh-sach-de-nghi-cap-von.component';
+import { DanhSachTongHopTuDonViCapDuoiComponent } from './tong-hop-de-nghi-cap-von/tong-hop-de-nghi-tu-don-vi-cap-duoi/danh-sach-tong-hop-tu-don-vi-cap-duoi/danh-sach-tong-hop-tu-don-vi-cap-duoi.component';
+import { TongHopDeNghiCapDuoiComponent } from './tong-hop-de-nghi-cap-von/tong-hop-de-nghi-tu-don-vi-cap-duoi/tong-hop-de-nghi-cap-duoi/tong-hop-de-nghi-cap-duoi.component';
+import { DialogTaoDeNghiCapVonComponent } from './tong-hop-de-nghi-cap-von/de-nghi-cap-von/dialog-tao-de-nghi-cap-von/dialog-tao-de-nghi-cap-von.component';
 
 @NgModule({
     imports: [
@@ -43,7 +46,9 @@ import { DanhSachDeNghiCapVonComponent } from './tong-hop-de-nghi-cap-von/de-ngh
         DanhSachTongHopTuDonViCapDuoiComponent,
         DanhSachDeNghiTuDonViCapDuoiComponent,
         HopDongCapVonComponent,
-        DeNghiDonViCapDuoiComponent
+        DeNghiDonViCapDuoiComponent,
+        TongHopDeNghiCapDuoiComponent,
+        DialogTaoDeNghiCapVonComponent,
     ],
     exports: [
         DeNghiCapVonComponent,

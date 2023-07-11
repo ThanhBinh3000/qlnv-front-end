@@ -157,7 +157,7 @@
 								<th nzLeft>Tổng cộng</th>
 								<th>{{displayValue(total.slKeHoach)}}</th>
 								<th>{{displayValue(total.slThucHien)}}</th>
-								<th>{{displayValue(total.donGia)}}</th>
+								<th></th>
 								<th>{{displayValue(total.gtriThucHien)}}</th>
 								<th>{{displayValue(total.duToanDaGiao)}}</th>
 								<th>{{displayValue(total.luyKeTongCapUng)}}</th>
@@ -207,10 +207,15 @@
 									<td>
 										{{ displayValue(data.vonDnghiCapLanNay) }}
 									</td>
-									<td *ngIf="status" nzRight>
-										<i *ngIf="data.maDvi == userInfo?.MA_DVI" class="fa fa-pencil"
-											(click)="startEdit(data.id)"></i>
-									</td>
+									<ng-container *ngIf="this.userService.isCuc(); else khacChiCuc">
+										<td nzRight></td>
+									</ng-container>
+									<ng-template #khacChiCuc>
+										<td *ngIf="status" nzRight>
+											<i *ngIf="data.maDvi == userInfo?.MA_DVI" class="fa fa-pencil"
+												(click)="startEdit(data.id)"></i>
+										</td>
+									</ng-template>
 								</ng-container>
 								<ng-template #editTemplate>
 									<td nzLeft>

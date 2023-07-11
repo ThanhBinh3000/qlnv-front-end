@@ -8,8 +8,8 @@ import { MESSAGE } from 'src/app/constants/message';
 import { CapVonNguonChiService } from 'src/app/services/quan-ly-von-phi/capVonNguonChi.service';
 import { UserService } from 'src/app/services/user.service';
 import { CAN_CU_GIA, CVNC, LOAI_DE_NGHI, Utils } from 'src/app/Utility/utils';
-import { TRANG_THAI } from '../../de-nghi-cap-von.constant';
-import { DialogTaoMoiDeNghiCapVonComponent } from '../dialog-tao-moi-de-nghi-cap-von/dialog-tao-moi-de-nghi-cap-von.component';
+import { TRANG_THAI } from '../../../de-nghi-cap-von.constant';
+import { DialogTaoMoiDeNghiCapVonComponent } from '../../dialog-tao-moi-de-nghi-cap-von/dialog-tao-moi-de-nghi-cap-von.component';
 
 @Component({
   selector: 'app-danh-sach-tong-hop-tu-don-vi-cap-duoi',
@@ -109,6 +109,7 @@ export class DanhSachTongHopTuDonViCapDuoiComponent implements OnInit {
     request.ngayTaoDen = this.datePipe.transform(this.searchFilter.ngayTaoDen, Utils.FORMAT_DATE_STR);
     request.ngayTaoTu = this.datePipe.transform(this.searchFilter.ngayTaoTu, Utils.FORMAT_DATE_STR);
     this.spinner.show();
+    request.maLoai = '2'
     await this.capVonNguonChiService.timKiemDeNghi(request).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
@@ -193,10 +194,9 @@ export class DanhSachTongHopTuDonViCapDuoiComponent implements OnInit {
         const obj = {
           id: null,
           baoCao: res,
-          tabSelected: res.canCuVeGia == Utils.HD_TRUNG_THAU ? (res.loaiDnghi == Utils.MUA_VTU ? 'dn-vattu' : 'dn-hopdong') : 'dn-capvon',
+          tabSelected: res.canCuVeGia == Utils.HD_TRUNG_THAU ? (res.loaiDnghi == Utils.MUA_VTU ? 'dn-vattu' : 'dn-hopdong') : 'tonghop-denghi-donvi-capduoi',
           hopDong: res.hopDong,
         }
-        console.log(obj)
         this.dataChange.emit(obj);
       }
     });
@@ -204,10 +204,9 @@ export class DanhSachTongHopTuDonViCapDuoiComponent implements OnInit {
 
   //xem chi tiet bao cao
   viewDetail(data: any) {
-    console.log(data)
     const obj = {
       id: data.id,
-      tabSelected: data.canCuVeGia == Utils.HD_TRUNG_THAU ? (data.loaiDnghi == Utils.MUA_VTU ? 'dn-vattu' : 'dn-hopdong') : 'dn-capvon',
+      tabSelected: data.canCuVeGia == Utils.HD_TRUNG_THAU ? (data.loaiDnghi == Utils.MUA_VTU ? 'dn-vattu' : 'dn-hopdong') : 'tonghop-denghi-donvi-capduoi',
     }
     this.dataChange.emit(obj);
   }
