@@ -35,12 +35,16 @@ import {
 import {
   ThemMoiPhieuKiemNghiemChatLuongComponent
 } from "./phieu-kiem-nghiem-chat-luong/them-moi-phieu-kiem-nghiem-chat-luong/them-moi-phieu-kiem-nghiem-chat-luong.component";
+import {
+  ThemMoiBaoCaoKetQuaKiemDinhMauComponent
+} from "./bao-cao-ket-qua-kiem-dinh-mau/them-moi-bao-cao-ket-qua-kiem-dinh-mau/them-moi-bao-cao-ket-qua-kiem-dinh-mau.component";
 
 
 @NgModule({
   declarations: [
     KiemtraChatluongLtTruockhiHethanLuukhoComponent,
     BaoCaoKetQuaKiemDinhMauComponent,
+    ThemMoiBaoCaoKetQuaKiemDinhMauComponent,
     BienBanLayMauBanGiaoMauComponent,
     ThemMoiBbLayMauBanGiaoMauComponent,
     ThanhPhanThamGiaComponent,
@@ -63,6 +67,7 @@ import {
   exports: [
     KiemtraChatluongLtTruockhiHethanLuukhoComponent,
     BaoCaoKetQuaKiemDinhMauComponent,
+    ThemMoiBaoCaoKetQuaKiemDinhMauComponent,
     BienBanLayMauBanGiaoMauComponent,
     ThemMoiBbLayMauBanGiaoMauComponent,
     ThanhPhanThamGiaComponent,
