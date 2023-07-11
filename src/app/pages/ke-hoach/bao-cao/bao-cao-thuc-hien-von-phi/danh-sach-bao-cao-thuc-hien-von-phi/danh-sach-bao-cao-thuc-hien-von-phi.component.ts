@@ -133,12 +133,13 @@ export class DanhSachBaoCaoThucHienVonPhiComponent implements OnInit {
             nzWidth: '900px',
             nzFooter: null,
             nzComponentParams: {
+                isSynth: false,
             },
         });
         modalTuChoi.afterClose.toPromise().then(async (res) => {
             if (res) {
                 const obj = {
-                    ...res,
+                    baoCao: res,
                     id: null,
                     tabSelected: Vp.BAO_CAO_01,
                     isSynthetic: false,

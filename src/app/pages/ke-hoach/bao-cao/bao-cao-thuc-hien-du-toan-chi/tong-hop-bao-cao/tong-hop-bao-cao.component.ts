@@ -1,5 +1,4 @@
 
-import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -11,7 +10,7 @@ import { BaoCaoThucHienDuToanChiService } from 'src/app/services/quan-ly-von-phi
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { Dtc } from '../bao-cao-thuc-hien-du-toan-chi.constant';
+import { Dtc, Search } from '../bao-cao-thuc-hien-du-toan-chi.constant';
 import { DialogTaoMoiComponent } from '../dialog-tao-moi/dialog-tao-moi.component';
 
 @Component({
@@ -24,24 +23,7 @@ export class TongHopBaoCaoComponent implements OnInit {
     Status = Status;
     Utils = Utils;
     Dtc = Dtc;
-    searchFilter = {
-        ngayTaoTu: '',
-        ngayTaoDen: '',
-        trangThais: [Status.TT_09],
-        maBcao: '',
-        maLoaiBcao: '',
-        namBcao: null,
-        thangBcao: null,
-        dotBcao: '',
-        paggingReq: {
-            limit: 10,
-            page: 1
-        },
-        str: '',
-        donVi: '',
-        maPhanBcao: '0',
-        loaiTimKiem: '1',
-    };
+    searchFilter: Search = new Search();
 
     userInfo: any;
     trangThai!: string;
@@ -59,7 +41,6 @@ export class TongHopBaoCaoComponent implements OnInit {
         private quanLyVonPhiService: QuanLyVonPhiService,
         private modal: NzModalService,
         public userService: UserService,
-        private datePipe: DatePipe,
         public globals: Globals,
     ) { }
 
@@ -71,6 +52,7 @@ export class TongHopBaoCaoComponent implements OnInit {
         this.searchFilter.namBcao = date.getFullYear();
         this.searchFilter.thangBcao = date.getMonth();
         this.searchFilter.maLoaiBcao = Dtc.BC_DINH_KY;
+        this.searchFilter.loaiTimKiem = '1';
         //lay danh sach danh muc
         const request = {
             maDviCha: this.userInfo.maDvi,
@@ -94,7 +76,7 @@ export class TongHopBaoCaoComponent implements OnInit {
 
     async search() {
         this.spinner.show();
-        await this.baoCaoThucHienDuToanChiService.timBaoCao(this.searchFilter).toPromise().then(res => {
+        await this.baoCaoThucHienDuToanChiService.timBaoCao(this.searchFilter.request).toPromise().then(res => {
             if (res.statusCode == 0) {
                 this.dataTable = [];
                 res.data.content.forEach(e => {
@@ -128,9 +110,7 @@ export class TongHopBaoCaoComponent implements OnInit {
 
     //reset tim kiem
     clearFilter() {
-        this.searchFilter.namBcao = null
-        this.searchFilter.thangBcao = null
-        this.searchFilter.maLoaiBcao = null
+        this.searchFilter.clear()
         this.search();
     }
 

@@ -8,13 +8,13 @@ import { MESSAGE } from 'src/app/constants/message';
 import { CapVonNguonChiService } from 'src/app/services/quan-ly-von-phi/capVonNguonChi.service';
 import { UserService } from 'src/app/services/user.service';
 import { CAN_CU_GIA, CVNC, LOAI_DE_NGHI, Utils } from 'src/app/Utility/utils';
-import { TRANG_THAI } from '../../de-nghi-cap-von.constant';
-import { DialogTaoMoiDeNghiCapVonComponent } from '../dialog-tao-moi-de-nghi-cap-von/dialog-tao-moi-de-nghi-cap-von.component';
+import { TRANG_THAI } from '../../../de-nghi-cap-von.constant';
+import { DialogTaoMoiDeNghiCapVonComponent } from '../../dialog-tao-moi-de-nghi-cap-von/dialog-tao-moi-de-nghi-cap-von.component';
 
 @Component({
     selector: 'app-danh-sach-de-nghi-cap-von',
     templateUrl: './danh-sach-de-nghi-cap-von.component.html',
-    styleUrls: ['../../de-nghi-cap-von.component.scss']
+    styleUrls: ['../../../de-nghi-cap-von.component.scss']
 })
 export class DanhSachDeNghiCapVonComponent implements OnInit {
     @Output() dataChange = new EventEmitter();

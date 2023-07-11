@@ -95,7 +95,7 @@ export class BaoCaoComponent implements OnInit {
     //danh muc
     nguoiBcaos: any[];
     luyKes: Form[] = [];
-    lstBieuMaus: any[] = [];
+    lstBieuMaus: any[] = Vp.PHU_LUC;
     //file
     listFile: File[] = [];                      // list file chua ten va id de hien tai o input
     fileList: NzUploadFile[] = [];
@@ -431,7 +431,7 @@ export class BaoCaoComponent implements OnInit {
                 this.baoCao = data.data;
                 this.baoCao?.lstBcaos?.forEach(item => {
                     const app = this.lstBieuMaus.find(e => e.id == item.maLoai);
-                    item.tenPhuLuc = app.tenPl;
+                    item.tenPhuLuc = app?.tenPl;
                     item.tieuDe = app.tenDm;
                 })
                 this.listFile = [];
@@ -555,7 +555,7 @@ export class BaoCaoComponent implements OnInit {
         }
 
         // replace nhung ban ghi dc them moi id thanh null
-        baoCaoTemp.lstLapThamDinhs.forEach(item => {
+        baoCaoTemp.lstBcaos.forEach(item => {
             if (item.id?.length == 38) {
                 item.id = null;
             }
@@ -683,7 +683,7 @@ export class BaoCaoComponent implements OnInit {
     addAppendix() {
         let danhSach: any;
         this.lstBieuMaus.forEach(item => item.status = false);
-        danhSach = this.lstBieuMaus.filter(item => this.baoCao?.lstBcaos?.findIndex(data => data.maLoai == item.maPhuLuc) == -1);
+        danhSach = this.lstBieuMaus.filter(item => this.baoCao?.lstBcaos?.findIndex(data => data.maLoai == item.id) == -1);
 
         const modalIn = this.modal.create({
             nzTitle: 'Danh sách mẫu báo cáo',

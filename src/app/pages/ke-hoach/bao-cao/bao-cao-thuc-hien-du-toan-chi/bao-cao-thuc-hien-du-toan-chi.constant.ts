@@ -1,4 +1,4 @@
-import { Roles } from "src/app/Utility/utils";
+import { Roles, Utils } from "src/app/Utility/utils";
 
 export class Dtc {
     //mã màn hình
@@ -168,6 +168,54 @@ export class BtnStatus {
     ok?: boolean = true;                               // trang thai cua nut chap nhan bieu mau
     finish?: boolean = true;                           // trang thai cua nut hoan tat nhap lieu
     export: boolean = true;
+}
+
+export class Pagging {
+    limit: number = 10;
+    page: number = 1;
+}
+
+export class Search {
+    maPhanBcao: string = '0';
+    loaiTimKiem: string = '0';
+    maDvi: string;
+    maBcao: string;
+    namBcao: number;
+    maLoaiBcao: string;
+    thangBcao: number;
+    ngayTaoTu: any;
+    ngayTaoDen: any;
+    trangThais: string[] = [];
+    paggingReq: Pagging = new Pagging();
+    donVi?: string;
+
+    request() {
+        return {
+            maPhanBcao: this.maPhanBcao,
+            loaiTimKiem: this.loaiTimKiem,
+            maDvi: this.maDvi,
+            maBcao: this.maBcao,
+            namBcao: this.namBcao,
+            maLoaiBcao: this.maLoaiBcao,
+            thangBcao: this.thangBcao,
+            ngayTaoTu: this.ngayTaoTu ? Utils.fmtDate(this.ngayTaoTu) : null,
+            ngayTaoDen: this.ngayTaoDen ? Utils.fmtDate(this.ngayTaoDen) : null,
+            trangThais: this.trangThais,
+            paggingReq: this.paggingReq,
+            donVi: this.donVi,
+        }
+    }
+
+    clear() {
+        this.maDvi = null;
+        this.maBcao = null;
+        this.namBcao = null;
+        this.maLoaiBcao = null;
+        this.thangBcao = null;
+        this.ngayTaoTu = null;
+        this.ngayTaoDen = null;
+        this.donVi = null;
+    }
 }
 
 
