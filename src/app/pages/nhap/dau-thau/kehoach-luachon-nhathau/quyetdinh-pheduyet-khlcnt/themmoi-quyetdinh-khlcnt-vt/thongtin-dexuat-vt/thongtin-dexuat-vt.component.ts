@@ -18,6 +18,7 @@ import { ChiTieuKeHoachNamCapTongCucService } from "../../../../../../../service
 import { FormGroup } from "@angular/forms";
 import * as dayjs from "dayjs";
 import { NzCollapsePanelComponent } from "ng-zorro-antd/collapse";
+import {formatDate} from "@angular/common";
 
 @Component({
   selector: 'app-thongtin-dexuat-vt',
@@ -105,7 +106,9 @@ export class ThongtinDexuatVtComponent extends Base2Component implements OnInit 
       ykienThamGia: [""],
       tongMucDtBangChu: [""],
       tongSlChiTieu: [""],
-      quy: [""]
+      quy: [""],
+      soQdPdGiaCuThe: [""],
+      ngayKyQdPdGiaCuThe: [""],
     });
   }
   async ngOnChanges(changes: SimpleChanges) {
@@ -113,6 +116,9 @@ export class ThongtinDexuatVtComponent extends Base2Component implements OnInit 
     if (changes) {
       if (this.dataInput) {
         this.helperService.bidingDataInFormGroup(this.formData, this.dataInput);
+        this.formData.patchValue({
+          ngayKyQdPdGiaCuThe: formatDate(this.dataInput.ngayKyQdPdGiaCuThe, "dd/MM/yyyy", 'en-US'),
+        })
         this.listOfData = [...this.dataInput.dsGtDtlList];
         this.listOfDataCache = this.dataInput.dsGtDtlList;
         await this.getDataChiTieu();

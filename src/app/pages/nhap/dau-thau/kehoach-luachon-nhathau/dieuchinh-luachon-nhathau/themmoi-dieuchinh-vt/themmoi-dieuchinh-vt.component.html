@@ -154,14 +154,6 @@
           </nz-form-item>
         </div>
         <div nz-col [nzSpan]="12">
-          <nz-form-item class="form-item">
-            <nz-form-label [nzNoColon]="true"> Trích yếu</nz-form-label>
-            <nz-form-control>
-              <input
-                [readonly]="isViewDetail"
-                nz-input formControlName="trichYeu" />
-            </nz-form-control>
-          </nz-form-item>
         </div>
         <div nz-col [nzSpan]="24">
           <nz-form-item>
@@ -186,7 +178,7 @@
         <div nz-col [nzSpan]="24">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">
-              Nội dung quyết định
+              Nội dung quyết định điều chỉnh
             </nz-form-label>
             <nz-form-control>
               <textarea [readonly]="isViewDetail" rows="3" nz-input formControlName="noiDungQd"></textarea>
@@ -242,6 +234,7 @@
       <div nz-col [nzSpan]="12">
         <nz-card class="mg-t-10 flex-card p-lr16 ">
           <app-thongtin-dieuchinh-vt [title]="'Nội dung quyết định cần điều chỉnh'"
+                                     [titleDx]="'Phụ lục kế hoạch lựa chọn nhà thầu trước điều chỉnh'"
                                   [isView]="true"
                                   [dataInput]="dataInputCache"
                                   [listLoaiHopDong]="listLoaiHopDong"
@@ -255,6 +248,7 @@
         <nz-card class="mg-t-10 flex-card p-lr16 ">
           <app-thongtin-dieuchinh-vt #thongTinDc [isView]="isViewDetail"
                                   [title]="'Quyết định điều chỉnh của Tổng cục DTNN'"
+                                     [titleDx]="'Phụ lục kế hoạch lựa chọn nhà thầu sau điều chỉnh'"
                                   [dataInput]="dataInput"
                                   [listLoaiHopDong]="listLoaiHopDong" [listHinhThucDauThau]="listHinhThucDauThau"
                                   [listPhuongThucDauThau]="listPhuongThucDauThau" [listNguonVon]="listNguonVon">
