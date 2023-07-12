@@ -146,14 +146,14 @@ export class Report {
     ngayDuyet: string;
     ngayPheDuyet: string;
     ngayTraKq: string;
-    fileDinhKems!: any[];
-    listIdDeleteFiles: string[];     //list id file xoa khi cap nhat
+    fileDinhKems: any[] = [];
+    listIdDeleteFiles: string[] = [];     //list id file xoa khi cap nhat
     maLoaiBcao: string;
-    maPhanBcao: string;
-    lstBcaos: Form[];
-    lstFiles: any[];
-    lstBcaoDviTrucThuocs: any[];
-    tongHopTuIds: string[];
+    maPhanBcao: string = '0';
+    lstBcaos: Form[] = [];
+    lstFiles: any[] = [];
+    lstBcaoDviTrucThuocs: any[] = [];
+    tongHopTuIds: string[] = [];
 }
 
 export class BtnStatus {
