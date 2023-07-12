@@ -103,10 +103,13 @@
               <th>Ngăn/lô kho</th>
               <th>Ngày nhập kho</th>
               <th>SL tồn</th>
+              <th class="text-center">SL hết hạn <br> (<= 6 tháng)</th>
               <th>ĐVT</th>
-              <th>Ngày đề xuất</th>
-              <th>Trạng thái</th>
-              <th class="text-center">Trạng thái <br> kiểm tra chất lượng</th>
+              <th class="text-center">Ngày tổng hợp  <br> (chốt DS)</th>
+              <th class="text-center">Thời hạn lưu kho <br> (tháng)</th>
+              <th class="text-center">Thời gian đề xuất<br> xuất hàng</th>
+              <th>Trạng thái DS</th>
+              <th class="text-center">Kết quả <br> KTCL</th>
               <th>Hành động</th>
             </tr>
             </thead>
@@ -119,6 +122,9 @@
                 </td>
                 <td>{{item.nam}}</td>
                 <td>{{item.maDanhSach}}</td>
+                <td></td>
+                <td></td>
+                <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -157,6 +163,9 @@
                     <td></td>
                     <td></td>
                     <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                   </tr>
                   <ng-container *ngIf="expandSetString.has(item.idVirtual) && expandSetString.has(lv1.idVirtual)">
                     <ng-container *ngFor="let lv2 of lv1.childData,let i2=index">
@@ -168,13 +177,16 @@
                         <td>{{lv2.tenLoaiVthh}}</td>
                         <td>{{lv2.tenCloaiVthh}}</td>
                         <td>{{lv2.tenDiemKho}}</td>
-                        <td>{{lv2.tenLoKho ? lv2.tenLoKho : lv2.tenNganKho}}</td>
-                        <td>{{lv2.ngayNhapKho|date:globals.dateFormat}}</td>
-                        <td>{{lv2.slHienTai|number:globals.numberFormat}}</td>
+                        <td>{{lv2.tenLoKho ? (lv2.tenLoKho +' '+ lv2.tenNganKho): lv2.tenNganKho}}</td>
+                        <td>{{lv2.ngayNhapKho}}</td>
+                        <td>{{lv2.slTon}}</td>
+                        <td>{{lv2.slHetHan}}</td>
                         <td>{{lv2.donViTinh}}</td>
+                        <td>{{lv2.ngayTao|date:globals.dateFormat}}</td>
+                        <td>{{lv2.thoiHanLk|number:globals.numberFormat}}</td>
                         <td>{{lv2.ngayDeXuat|date:globals.dateFormat}}</td>
                         <td></td>
-                        <td>{{lv2.tenTrangThaiKtCl|date:globals.dateFormat}}</td>
+                        <td>{{lv2.soPhieuKnCl ? (lv2.kqThamDinh == true ? "Đạt" : "Không đạt") : ''}}</td>
                         <td></td>
                       </tr>
                     </ng-container>
