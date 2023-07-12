@@ -29,6 +29,9 @@ import { UploadFileService } from 'src/app/services/uploaFile.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { FormArray } from '@angular/forms';
+import {FILETYPE} from "../../../../../../constants/fileType";
+import {QuyetDinhPheDuyetKeHoachMTTService} from "../../../../../../services/quyet-dinh-phe-duyet-ke-hoach-mtt.service";
+import {ChaogiaUyquyenMualeService} from "../../../../../../services/chaogia-uyquyen-muale.service";
 @Component({
   selector: 'app-themmoi-nhiemvu-nhaphang',
   templateUrl: './themmoi-nhiemvu-nhaphang.component.html',
@@ -58,7 +61,7 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
   dsQuyetDinhNhapXuatDetailClone: Array<DetailQuyetDinhNhapXuat> = [];
   isAddQdNhapXuat: boolean = false;
   isChiTiet: boolean = false;
-  radioValue: string = 'Cancuhopdong';
+  radioValue: string = '01';
   loaiStr: string;
   maVthh: string;
   idVthh: number;
@@ -67,6 +70,7 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
   listNam: any[] = [];
   // hopDongList: any[] = [];
   listFileDinhKem: any[] = [];
+  canCuPhapLy: any[] = [];
 
   STATUS = STATUS
   maQdSuffix: string;
@@ -80,12 +84,17 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
   dataTable: any[] = [];
 
   rowItem: ThongTinDiaDiemNhap = new ThongTinDiaDiemNhap();
+  rowItemEdit: ThongTinDiaDiemNhap = new ThongTinDiaDiemNhap();
 
   listChiCuc: any[] = [];
   listDiemKho: any[] = [];
   listNhaKho: any[] = [];
   listNganKho: any[] = [];
   listNganLo: any[] = [];
+  listFile: any[] = []
+  listNhaKhoEdit: any[] = [];
+  listNganKhoEdit: any[] = [];
+  listNganLoEdit: any[] = [];
 
   constructor(
     private router: Router,
@@ -100,6 +109,8 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
     private uploadFileService: UploadFileService,
     private hopdongPhulucHopdongService: HopdongPhulucHopdongService,
     private quyetDinhPheDuyetKetQuaChaoGiaMTTService: QuyetDinhPheDuyetKetQuaChaoGiaMTTService,
+    private quyetDinhPheDuyetKeHoachMTTService : QuyetDinhPheDuyetKeHoachMTTService,
+    private chaogiaUyquyenMualeService: ChaogiaUyquyenMualeService,
     private helperService: HelperService,
   ) {
     this.formData = this.fb.group({
@@ -130,6 +141,7 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
       lyDoTuChoi: [''],
       diaDiemGiaoNhan: [''],
       ngayKyHd: [''],
+      loaiQd: [''],
       fileDinhKem: [FileDinhKem],
     })
   }
@@ -157,6 +169,25 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
       this.initForm();
     }
     this.spinner.hide();
+  }
+
+  editRow (i, y){
+    this.dataTable[i].children.forEach(i => {
+      i.edit = false;
+    })
+    this.dataTable[i].children[y].edit = true;
+    this.rowItemEdit = cloneDeep(this.dataTable[i].children[y])
+    this.changeDiemKho(true)
+  }
+
+  saveEdit (i, y){
+    this.dataTable[i].children[y] = cloneDeep(this.rowItemEdit);
+    this.dataTable[i].children[y].edit = false;
+  }
+
+  cancelEdit (i, y){
+    this.dataTable[i].children[y].edit = false;
+    this.rowItemEdit = new ThongTinDiaDiemNhap();
   }
 
   initForm() {
@@ -209,11 +240,11 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
             cloaiVthh: data.cloaiVthh,
             tenLoaiVthh: data.tenLoaiVthh,
             tenCloaiVthh: data.tenCloaiVthh,
-            donViTinh: data.donViTinh,
+            donViTinh: data.dviTinh,
             soLuong: data.soLuong,
             tgianNkho: data.tgianKthuc,
             ngayKyHd: data.ngayKy,
-
+            trichYeu: data.trichYeu
           })
           this.dataTable = data.children
         }
@@ -247,9 +278,10 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
 
   async getListCanCuUyQuyen() {
     let body = {
-      "trangThai": STATUS.DA_DUYET_LDC,
+      "trangThai": STATUS.HOAN_THANH_CAP_NHAT,
+      "pthucMuaTrucTiep": "'02', '03'",
     }
-    let res = await this.quyetDinhPheDuyetKetQuaChaoGiaMTTService.search(body);
+    let res = await this.chaogiaUyquyenMualeService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       this.listUyQuyen = res.data.content;
     } else {
@@ -273,32 +305,31 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
       nzComponentParams: {
         dataTable: this.listUyQuyen,
         dataHeader: ['Số QĐ PDKQ chào giá ', 'Ngày ký', 'Loại hàng hóa', 'Chủng loại hàng hóa'],
-        dataColumn: ['soQdPdCg', 'ngayKy', 'tenLoaiVthh', 'tenCloaiVthh']
+        dataColumn: ['soQd', 'ngayPduyet', 'tenLoaiVthh', 'tenCloaiVthh']
       },
     });
     modalQD.afterClose.subscribe(async (data) => {
 
       if (data) {
         this.spinner.show();
-        let res = await this.quyetDinhPheDuyetKetQuaChaoGiaMTTService.getDetail(data.id);
+        let res = await this.quyetDinhPheDuyetKeHoachMTTService.getDetailDtlCuc(data.id);
         if (res.msg == MESSAGE.SUCCESS) {
           this.dataTable = [];
           const data = res.data;
           console.log(data, "alo123");
           this.formData.patchValue({
-            soQdPduyet: data.soQdPduyet,
-            idQdPduyet: data.idQdPduyet,
+            soQdPdKh: data.soQd,
+            idQdPdKh: data.id,
             loaiVthh: data.loaiVthh,
             cloaiVthh: data.cloaiVthh,
             tenLoaiVthh: data.tenLoaiVthh,
             tenCloaiVthh: data.tenCloaiVthh,
             donViTinh: data.donViTinh,
-            soLuong: data.soLuong,
-            tgianNkho: data.tgianKthuc,
+            soLuong: data.tongSoLuong,
 
           })
-          if (data.hhChiTietTTinChaoGiaList) {
-            this.dataTable = data.hhChiTietTTinChaoGiaList
+          if (data.children) {
+            this.dataTable = data.children
           }
         }
         else {
@@ -415,8 +446,21 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
     let body = this.formData.value;
     console.log(body, "body");
     body.soQd = this.formData.get('soQd').value + this.maQdSuffix;
+    body.loaiQd = this.radioValue
     body.hhQdGiaoNvNhangDtlList = this.dataTable;
-    body.fileDinhKems = this.listFileDinhKem;
+    if (this.listFileDinhKem.length > 0) {
+      this.listFileDinhKem.forEach(item => {
+        item.fileType = FILETYPE.FILE_DINH_KEM
+        this.listFile.push(item)
+      })
+    }
+    if (this.canCuPhapLy.length > 0) {
+      this.canCuPhapLy.forEach(element => {
+        element.fileType = FILETYPE.CAN_CU_PHAP_LY
+        this.listFile.push(element)
+      })
+    }
+    body.fileDinhKems = this.listFile;
     let res;
     if (this.formData.get('id').value > 0) {
       res = await this.quyetDinhGiaoNvNhapHangService.update(body);
@@ -477,6 +521,8 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
             tenDvi: data.tenDvi,
             maDvi: data.maDvi,
             ngayQd: data.ngayQd,
+            loaiQd: data.loaiQd,
+            soQdPdKh: data.soQdPdKh,
             trichYeu: data.trichYeu,
             tenLoaiVthh: data.tenLoaiVthh,
             loaiVthh: data.loaiVthh,
@@ -492,12 +538,21 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
             tenHd: data.tenHd,
             tgianNkho: data.tgianKthuc,
           });
+          this.radioValue = data.loaiQd
           if (this.userService.isCuc()) {
             this.dataTable = data.hhQdGiaoNvNhangDtlList
           } else {
             this.dataTable = data.hhQdGiaoNvNhangDtlList.filter(x => x.maDvi == this.userInfo.MA_DVI);
           }
-          this.listFileDinhKem = data.children2;
+          if (data.fileDinhKems.length > 0) {
+            data.fileDinhKems.forEach(item => {
+              if (item.fileType == FILETYPE.FILE_DINH_KEM) {
+                this.listFileDinhKem.push(item)
+              } else if (item.fileType == FILETYPE.CAN_CU_PHAP_LY) {
+                this.canCuPhapLy.push(item)
+              }
+            })
+          }
           this.typeVthh = data.loaiVthh;
         } else {
           this.notification.error(MESSAGE.ERROR, res.msg);
@@ -676,7 +731,7 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
 
   calcTong(index?) {
     if (this.dataTable && index != null) {
-      const sum = this.dataTable[index].hhQdGiaoNvNhDdiemList.reduce((prev, cur) => {
+      const sum = this.dataTable[index].children.reduce((prev, cur) => {
         prev += cur.soLuong;
         return prev;
       }, 0);
@@ -762,47 +817,91 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
     }
   }
 
-  changeDiemKho() {
-    this.listNhaKho = [];
-    this.listNganKho = [];
-    this.listNganLo = [];
-    this.rowItem.maNhaKho = null;
-    this.rowItem.maNganKho = null;
-    this.rowItem.maLoKho = null;
-    let diemKho = this.listDiemKho.filter(x => x.key == this.rowItem.maDiemKho);
-    if (diemKho && diemKho.length > 0) {
-      this.listNhaKho = diemKho[0].children;
-      this.rowItem.tenDiemKho = diemKho[0].tenDvi;
-      this.rowItem.soLuongDiemKho = diemKho[0].soLuongDiemKho;
+  changeDiemKho(isEdit?) {
+    if (isEdit) {
+      this.listNhaKhoEdit = [];
+      this.listNganKhoEdit = [];
+      this.listNganLoEdit = [];
+      this.rowItemEdit.maNhaKho = null;
+      this.rowItemEdit.maNganKho = null;
+      this.rowItemEdit.maLoKho = null;
+      let diemKho = this.listDiemKho.filter(x => x.key == this.rowItemEdit.maDiemKho);
+      if (diemKho && diemKho.length > 0) {
+        this.listNhaKhoEdit = diemKho[0].children;
+        // this.rowItemEdit.tenDiemKho = diemKho[0].tenDvi;
+        // this.rowItemEdit.soLuongDiemKho = diemKho[0].soLuongDiemKho;
+      }
+    } else {
+      this.listNhaKho = [];
+      this.listNganKho = [];
+      this.listNganLo = [];
+      this.rowItem.maNhaKho = null;
+      this.rowItem.maNganKho = null;
+      this.rowItem.maLoKho = null;
+      let diemKho = this.listDiemKho.filter(x => x.key == this.rowItem.maDiemKho);
+      if (diemKho && diemKho.length > 0) {
+        this.listNhaKho = diemKho[0].children;
+        this.rowItem.tenDiemKho = diemKho[0].tenDvi;
+        this.rowItem.soLuongDiemKho = diemKho[0].soLuongDiemKho;
+      }
     }
   }
 
-  changeNhaKho() {
-    this.listNganKho = [];
-    this.listNganLo = [];
-    this.rowItem.maNganKho = null;
-    this.rowItem.maLoKho = null;
-    let nhaKho = this.listNhaKho.filter(x => x.key == this.rowItem.maNhaKho);
-    if (nhaKho && nhaKho.length > 0) {
-      this.listNganKho = nhaKho[0].children;
-      this.rowItem.tenNhaKho = nhaKho[0].tenDvi
+  changeNhaKho(isEdit?) {
+    if (isEdit) {
+      this.listNganKhoEdit = [];
+      this.listNganLoEdit = [];
+      this.rowItemEdit.maNganKho = null;
+      this.rowItemEdit.maLoKho = null;
+      let nhaKho = this.listNhaKhoEdit.filter(x => x.key == this.rowItemEdit.maNhaKho);
+      if (nhaKho && nhaKho.length > 0) {
+        this.listNganKhoEdit = nhaKho[0].children;
+        this.rowItemEdit.tenNhaKho = nhaKho[0].tenDvi
+      }
+    } else {
+      this.listNganKho = [];
+      this.listNganLo = [];
+      this.rowItem.maNganKho = null;
+      this.rowItem.maLoKho = null;
+      let nhaKho = this.listNhaKho.filter(x => x.key == this.rowItem.maNhaKho);
+      if (nhaKho && nhaKho.length > 0) {
+        this.listNganKho = nhaKho[0].children;
+        this.rowItem.tenNhaKho = nhaKho[0].tenDvi
+      }
     }
   }
 
-  changeNganKho() {
-    this.listNganLo = [];
-    this.rowItem.maLoKho = null;
-    let nganKho = this.listNganKho.filter(x => x.key == this.rowItem.maNganKho);
-    if (nganKho && nganKho.length > 0) {
-      this.listNganLo = nganKho[0].children;
-      this.rowItem.tenNganKho = nganKho[0].tenDvi
+  changeNganKho(isEdit?) {
+    if (isEdit) {
+      this.listNganLoEdit = [];
+      this.rowItemEdit.maLoKho = null;
+      let nganKho = this.listNganKhoEdit.filter(x => x.key == this.rowItemEdit.maNganKho);
+      if (nganKho && nganKho.length > 0) {
+        this.listNganLoEdit = nganKho[0].children;
+        this.rowItemEdit.tenNganKho = nganKho[0].tenDvi
+      }
+    } else {
+      this.listNganLo = [];
+      this.rowItem.maLoKho = null;
+      let nganKho = this.listNganKho.filter(x => x.key == this.rowItem.maNganKho);
+      if (nganKho && nganKho.length > 0) {
+        this.listNganLo = nganKho[0].children;
+        this.rowItem.tenNganKho = nganKho[0].tenDvi
+      }
     }
   }
 
-  changeLoKho() {
-    let loKho = this.listNganLo.filter(x => x.key == this.rowItem.maLoKho);
-    if (loKho && loKho.length > 0) {
-      this.rowItem.tenLoKho = loKho[0].tenDvi
+  changeLoKho(isEdit?) {
+    if (isEdit) {
+      let loKho = this.listNganLoEdit.filter(x => x.key == this.rowItemEdit.maLoKho);
+      if (loKho && loKho.length > 0) {
+        this.rowItemEdit.tenLoKho = loKho[0].tenDvi
+      }
+    } else {
+      let loKho = this.listNganLo.filter(x => x.key == this.rowItem.maLoKho);
+      if (loKho && loKho.length > 0) {
+        this.rowItem.tenLoKho = loKho[0].tenDvi
+      }
     }
   }
 

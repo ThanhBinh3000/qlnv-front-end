@@ -28,6 +28,12 @@
             <i class="icon htvbdh_tcdt_tuchoi do"></i>
             <span>Từ chối</span>
           </button>
+          <button (click)="reject(idInput,STATUS.TUCHOI_BTC)"
+                  *ngIf="userService.isAccessPermisson('XHDTQG_XTL_HSTL_DUYETBTC') && (formData.value.trangThai===STATUS.CHODUYET_BTC)"
+                  class="btn btn-sub" type="button">
+            <i class="icon htvbdh_tcdt_tuchoi do"></i>
+            <span>Từ chối</span>
+          </button>
           <button (click)="approve(idInput,STATUS.CHO_DUYET_LDTC,'Bạn có muốn duyệt quyết định này')"
                   *ngIf="userService.isAccessPermisson('XHDTQG_XTL_HSTL_DUYETLDV') && (formData.value.trangThai===STATUS.CHO_DUYET_LDV)"
                   class="btn btn-sub" type="button">
@@ -36,6 +42,18 @@
           </button>
           <button (click)="approve(idInput,STATUS.DA_DUYET_LDTC,'Bạn có muốn duyệt quyết định này')"
                   *ngIf="userService.isAccessPermisson('XHDTQG_XTL_HSTL_DUYETLDTC') && (formData.value.trangThai===STATUS.CHO_DUYET_LDTC)"
+                  class="btn btn-sub" type="button">
+            <i class="icon htvbdh_tcdt_pheduyet"></i>
+            <span>Duyệt</span>
+          </button>
+          <button (click)="approve(idInput,STATUS.CHODUYET_BTC,'Bạn có muốn duyệt quyết định này')"
+                  *ngIf="userService.isAccessPermisson('XHDTQG_XTL_HSTL_DUYETLDTC') && (formData.value.trangThai===STATUS.DA_DUYET_LDTC)"
+                  class="btn btn-sub" type="button">
+            <i class="icon htvbdh_tcdt_pheduyet"></i>
+            <span>Trình duyệt bộ tài chính</span>
+          </button>
+          <button (click)="approve(idInput,STATUS.DADUYET_BTC,'Bạn có muốn duyệt quyết định này')"
+                  *ngIf="userService.isAccessPermisson('XHDTQG_XTL_HSTL_DUYETBTC') && (formData.value.trangThai===STATUS.CHODUYET_BTC)"
                   class="btn btn-sub" type="button">
             <i class="icon htvbdh_tcdt_pheduyet"></i>
             <span>Duyệt</span>

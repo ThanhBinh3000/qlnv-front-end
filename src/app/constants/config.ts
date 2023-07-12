@@ -247,3 +247,11 @@ export const LOAI_HH_XUAT_KHAC = {
   VT_12_THANG: 'VT12',
   VT_6_THANG: 'VT6'
 };
+
+export const KIEU_NHAP_XUAT = {
+  '01': 'Nhập mua',
+  '02': 'Nhập không chi tiền',
+  '03': 'Xuất bán',
+  '04': 'Xuất không thu tiền',
+  '05': 'Khác'
+};

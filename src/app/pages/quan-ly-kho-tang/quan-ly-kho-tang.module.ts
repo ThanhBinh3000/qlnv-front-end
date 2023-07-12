@@ -80,7 +80,9 @@ import {TinhHinhSuDungComponent} from './tinh-hinh-su-dung/tinh-hinh-su-dung.com
 import {
   TienDoDauTuXayDungComponent
 } from './tien-do-xay-dung-sua-chua/tien-do-dau-tu-xay-dung/tien-do-dau-tu-xay-dung.component';
-import {TienDoSuaChuaLonHangNamComponent} from './tien-do-xay-dung-sua-chua/tien-do-sua-chua-lon-hang-nam/tien-do-sua-chua-lon-hang-nam.component';
+import {
+  TienDoSuaChuaLonHangNamComponent
+} from './tien-do-xay-dung-sua-chua/tien-do-sua-chua-lon-hang-nam/tien-do-sua-chua-lon-hang-nam.component';
 import {DmDuAnCongTrinhComponent} from "./ke-hoach/dm-du-an-cong-trinh/dm-du-an-cong-trinh.component";
 import {DanhMucScLonComponent} from "./ke-hoach/dm-du-an-cong-trinh/danh-muc-sc-lon/danh-muc-sc-lon.component";
 import {
@@ -110,43 +112,97 @@ import {
 import {
   ThemMoiScTcdtComponent
 } from "./ke-hoach/ke-hoach-sua-chua-hang-nam/quyet-dinh-sc-lon-tcdt/them-moi-sc-tcdt/them-moi-sc-tcdt.component";
-import { QuyetDinhPheDuyetKhlcntComponent } from './tien-do-xay-dung-sua-chua/tien-do-dau-tu-xay-dung/quyet-dinh-phe-duyet-khlcnt/quyet-dinh-phe-duyet-khlcnt.component';
-import { ThongTinQuyetDinhPheDuyetKhlcntComponent } from './tien-do-xay-dung-sua-chua/tien-do-dau-tu-xay-dung/quyet-dinh-phe-duyet-khlcnt/thong-tin-quyet-dinh-phe-duyet-khlcnt/thong-tin-quyet-dinh-phe-duyet-khlcnt.component';
-import { ToChucTrienKhaiLuaChonNhaThauComponent } from './tien-do-xay-dung-sua-chua/tien-do-dau-tu-xay-dung/to-chuc-trien-khai-lua-chon-nha-thau/to-chuc-trien-khai-lua-chon-nha-thau.component';
-import { ThongTinDauThauComponent } from './tien-do-xay-dung-sua-chua/tien-do-dau-tu-xay-dung/to-chuc-trien-khai-lua-chon-nha-thau/thong-tin-dau-thau/thong-tin-dau-thau.component';
-import { QuyetDinhPheDuyetKqlcntComponent } from './tien-do-xay-dung-sua-chua/tien-do-dau-tu-xay-dung/to-chuc-trien-khai-lua-chon-nha-thau/quyet-dinh-phe-duyet-kqlcnt/quyet-dinh-phe-duyet-kqlcnt.component';
-import { DialogQdScBtcComponent } from './ke-hoach/ke-hoach-sua-chua-hang-nam/quyet-dinh-sc-lon-btc/them-moi-qd-sc-btc/dialog-qd-sc-btc/dialog-qd-sc-btc.component';
-import { CapNhatThongTinDauThauComponent } from './tien-do-xay-dung-sua-chua/tien-do-dau-tu-xay-dung/to-chuc-trien-khai-lua-chon-nha-thau/thong-tin-dau-thau/cap-nhat-thong-tin-dau-thau/cap-nhat-thong-tin-dau-thau.component';
-import { ThongTinQuyetDinhPheDuyetKqlcntComponent } from './tien-do-xay-dung-sua-chua/tien-do-dau-tu-xay-dung/to-chuc-trien-khai-lua-chon-nha-thau/quyet-dinh-phe-duyet-kqlcnt/thong-tin-quyet-dinh-phe-duyet-kqlcnt/thong-tin-quyet-dinh-phe-duyet-kqlcnt.component';
-import { HopDongComponent } from './tien-do-xay-dung-sua-chua/tien-do-dau-tu-xay-dung/hop-dong/hop-dong.component';
-import { ThongTinHopDongComponent } from './tien-do-xay-dung-sua-chua/tien-do-dau-tu-xay-dung/hop-dong/thong-tin-hop-dong/thong-tin-hop-dong.component';
-import { ThemMoiHopDongComponent } from './tien-do-xay-dung-sua-chua/tien-do-dau-tu-xay-dung/hop-dong/thong-tin-hop-dong/them-moi-hop-dong/them-moi-hop-dong.component';
-import { PhuLucHopDongComponent } from './tien-do-xay-dung-sua-chua/tien-do-dau-tu-xay-dung/hop-dong/thong-tin-hop-dong/phu-luc-hop-dong/phu-luc-hop-dong.component';
+import {
+  QuyetDinhPheDuyetKhlcntComponent
+} from './tien-do-xay-dung-sua-chua/tien-do-dau-tu-xay-dung/quyet-dinh-phe-duyet-khlcnt/quyet-dinh-phe-duyet-khlcnt.component';
+import {
+  ThongTinQuyetDinhPheDuyetKhlcntComponent
+} from './tien-do-xay-dung-sua-chua/tien-do-dau-tu-xay-dung/quyet-dinh-phe-duyet-khlcnt/thong-tin-quyet-dinh-phe-duyet-khlcnt/thong-tin-quyet-dinh-phe-duyet-khlcnt.component';
+import {
+  ToChucTrienKhaiLuaChonNhaThauComponent
+} from './tien-do-xay-dung-sua-chua/tien-do-dau-tu-xay-dung/to-chuc-trien-khai-lua-chon-nha-thau/to-chuc-trien-khai-lua-chon-nha-thau.component';
+import {
+  ThongTinDauThauComponent
+} from './tien-do-xay-dung-sua-chua/tien-do-dau-tu-xay-dung/to-chuc-trien-khai-lua-chon-nha-thau/thong-tin-dau-thau/thong-tin-dau-thau.component';
+import {
+  QuyetDinhPheDuyetKqlcntComponent
+} from './tien-do-xay-dung-sua-chua/tien-do-dau-tu-xay-dung/to-chuc-trien-khai-lua-chon-nha-thau/quyet-dinh-phe-duyet-kqlcnt/quyet-dinh-phe-duyet-kqlcnt.component';
+import {
+  DialogQdScBtcComponent
+} from './ke-hoach/ke-hoach-sua-chua-hang-nam/quyet-dinh-sc-lon-btc/them-moi-qd-sc-btc/dialog-qd-sc-btc/dialog-qd-sc-btc.component';
+import {
+  CapNhatThongTinDauThauComponent
+} from './tien-do-xay-dung-sua-chua/tien-do-dau-tu-xay-dung/to-chuc-trien-khai-lua-chon-nha-thau/thong-tin-dau-thau/cap-nhat-thong-tin-dau-thau/cap-nhat-thong-tin-dau-thau.component';
+import {
+  ThongTinQuyetDinhPheDuyetKqlcntComponent
+} from './tien-do-xay-dung-sua-chua/tien-do-dau-tu-xay-dung/to-chuc-trien-khai-lua-chon-nha-thau/quyet-dinh-phe-duyet-kqlcnt/thong-tin-quyet-dinh-phe-duyet-kqlcnt/thong-tin-quyet-dinh-phe-duyet-kqlcnt.component';
+import {HopDongComponent} from './tien-do-xay-dung-sua-chua/tien-do-dau-tu-xay-dung/hop-dong/hop-dong.component';
+import {
+  ThongTinHopDongComponent
+} from './tien-do-xay-dung-sua-chua/tien-do-dau-tu-xay-dung/hop-dong/thong-tin-hop-dong/thong-tin-hop-dong.component';
+import {
+  ThemMoiHopDongComponent
+} from './tien-do-xay-dung-sua-chua/tien-do-dau-tu-xay-dung/hop-dong/thong-tin-hop-dong/them-moi-hop-dong/them-moi-hop-dong.component';
+import {
+  PhuLucHopDongComponent
+} from './tien-do-xay-dung-sua-chua/tien-do-dau-tu-xay-dung/hop-dong/thong-tin-hop-dong/phu-luc-hop-dong/phu-luc-hop-dong.component';
 import {
   ThemMoiThongBaoScLonComponent
 } from "./ke-hoach/ke-hoach-sua-chua-hang-nam/qd-thong-bao-sua-chua-lon/them-moi-thong-bao-sc-lon/them-moi-thong-bao-sc-lon.component";
 import {
   KeHoachSuaChuaThuongXuyenComponent
 } from "./ke-hoach/ke-hoach-sua-chua-thuong-xuyen/ke-hoach-sua-chua-thuong-xuyen.component";
-import { TongHopKhSuaChuaThuongXuyenComponent } from './ke-hoach/ke-hoach-sua-chua-thuong-xuyen/tong-hop-kh-sua-chua-thuong-xuyen/tong-hop-kh-sua-chua-thuong-xuyen.component';
-import { QuyetDinhPheDuyetKeHoachDanhMucComponent } from './ke-hoach/ke-hoach-sua-chua-thuong-xuyen/quyet-dinh-phe-duyet-ke-hoach-danh-muc/quyet-dinh-phe-duyet-ke-hoach-danh-muc.component';
-import { DeXuatKeHoachSuaChuaThuongXuyenComponent } from './ke-hoach/ke-hoach-sua-chua-thuong-xuyen/de-xuat-ke-hoach-sua-chua-thuong-xuyen/de-xuat-ke-hoach-sua-chua-thuong-xuyen.component';
-import { ThongTinDeXuatKeHoachSuaChuaThuongXuyenComponent } from './ke-hoach/ke-hoach-sua-chua-thuong-xuyen/de-xuat-ke-hoach-sua-chua-thuong-xuyen/thong-tin-de-xuat-ke-hoach-sua-chua-thuong-xuyen/thong-tin-de-xuat-ke-hoach-sua-chua-thuong-xuyen.component';
-import { DialogThemMoiDxkhthComponent } from './ke-hoach/ke-hoach-xay-dung-trung-han/de-xuat-ke-hoach/them-moi-dxkh-trung-han/dialog-them-moi-dxkhth/dialog-them-moi-dxkhth.component';
-import { ThemMoiDanhMucDuAnKhoComponent } from './ke-hoach/dm-du-an-cong-trinh/danh-muc-du-an/them-moi-danh-muc-du-an-kho/them-moi-danh-muc-du-an-kho.component';
-import { DialogThemMoiKehoachDanhmucChitietComponent } from './ke-hoach/ke-hoach-sua-chua-thuong-xuyen/de-xuat-ke-hoach-sua-chua-thuong-xuyen/thong-tin-de-xuat-ke-hoach-sua-chua-thuong-xuyen/dialog-them-moi-kehoach-danhmuc-chitiet/dialog-them-moi-kehoach-danhmuc-chitiet.component';
-import { ThongTinTongHopKhSuaChuaThuongXuyenComponent } from './ke-hoach/ke-hoach-sua-chua-thuong-xuyen/tong-hop-kh-sua-chua-thuong-xuyen/thong-tin-tong-hop-kh-sua-chua-thuong-xuyen/thong-tin-tong-hop-kh-sua-chua-thuong-xuyen.component';
-import { ThongTinQuyetDinhPheDuyetKeHoacDanhMucComponent } from './ke-hoach/ke-hoach-sua-chua-thuong-xuyen/quyet-dinh-phe-duyet-ke-hoach-danh-muc/thong-tin-quyet-dinh-phe-duyet-ke-hoac-danh-muc/thong-tin-quyet-dinh-phe-duyet-ke-hoac-danh-muc.component';
-import { TienDoSuaChuaThuongXuyenComponent } from './tien-do-xay-dung-sua-chua/tien-do-sua-chua-thuong-xuyen/tien-do-sua-chua-thuong-xuyen.component';
-import { DialogDxScLonComponent } from './ke-hoach/ke-hoach-sua-chua-hang-nam/de-xuat-kh-sc-lon/them-moi-sc-lon/dialog-dx-sc-lon/dialog-dx-sc-lon.component';
-import { TienDoCongViecComponent } from './tien-do-xay-dung-sua-chua/tien-do-dau-tu-xay-dung/tien-do-cong-viec/tien-do-cong-viec.component';
-import { BienBanNghiemThuComponent } from './tien-do-xay-dung-sua-chua/tien-do-dau-tu-xay-dung/bien-ban-nghiem-thu/bien-ban-nghiem-thu.component';
-import { QuyetDinhPheDuyetBaoCaoKtktComponent } from './tien-do-xay-dung-sua-chua/tien-do-sua-chua-lon-hang-nam/quyet-dinh-phe-duyet-bao-cao-ktkt/quyet-dinh-phe-duyet-bao-cao-ktkt.component';
 import {
-    ThongTinQdPheDuyetBaoCaoKtktComponent
+  TongHopKhSuaChuaThuongXuyenComponent
+} from './ke-hoach/ke-hoach-sua-chua-thuong-xuyen/tong-hop-kh-sua-chua-thuong-xuyen/tong-hop-kh-sua-chua-thuong-xuyen.component';
+import {
+  QuyetDinhPheDuyetKeHoachDanhMucComponent
+} from './ke-hoach/ke-hoach-sua-chua-thuong-xuyen/quyet-dinh-phe-duyet-ke-hoach-danh-muc/quyet-dinh-phe-duyet-ke-hoach-danh-muc.component';
+import {
+  DeXuatKeHoachSuaChuaThuongXuyenComponent
+} from './ke-hoach/ke-hoach-sua-chua-thuong-xuyen/de-xuat-ke-hoach-sua-chua-thuong-xuyen/de-xuat-ke-hoach-sua-chua-thuong-xuyen.component';
+import {
+  ThongTinDeXuatKeHoachSuaChuaThuongXuyenComponent
+} from './ke-hoach/ke-hoach-sua-chua-thuong-xuyen/de-xuat-ke-hoach-sua-chua-thuong-xuyen/thong-tin-de-xuat-ke-hoach-sua-chua-thuong-xuyen/thong-tin-de-xuat-ke-hoach-sua-chua-thuong-xuyen.component';
+import {
+  DialogThemMoiDxkhthComponent
+} from './ke-hoach/ke-hoach-xay-dung-trung-han/de-xuat-ke-hoach/them-moi-dxkh-trung-han/dialog-them-moi-dxkhth/dialog-them-moi-dxkhth.component';
+import {
+  ThemMoiDanhMucDuAnKhoComponent
+} from './ke-hoach/dm-du-an-cong-trinh/danh-muc-du-an/them-moi-danh-muc-du-an-kho/them-moi-danh-muc-du-an-kho.component';
+import {
+  DialogThemMoiKehoachDanhmucChitietComponent
+} from './ke-hoach/ke-hoach-sua-chua-thuong-xuyen/de-xuat-ke-hoach-sua-chua-thuong-xuyen/thong-tin-de-xuat-ke-hoach-sua-chua-thuong-xuyen/dialog-them-moi-kehoach-danhmuc-chitiet/dialog-them-moi-kehoach-danhmuc-chitiet.component';
+import {
+  ThongTinTongHopKhSuaChuaThuongXuyenComponent
+} from './ke-hoach/ke-hoach-sua-chua-thuong-xuyen/tong-hop-kh-sua-chua-thuong-xuyen/thong-tin-tong-hop-kh-sua-chua-thuong-xuyen/thong-tin-tong-hop-kh-sua-chua-thuong-xuyen.component';
+import {
+  ThongTinQuyetDinhPheDuyetKeHoacDanhMucComponent
+} from './ke-hoach/ke-hoach-sua-chua-thuong-xuyen/quyet-dinh-phe-duyet-ke-hoach-danh-muc/thong-tin-quyet-dinh-phe-duyet-ke-hoac-danh-muc/thong-tin-quyet-dinh-phe-duyet-ke-hoac-danh-muc.component';
+import {
+  TienDoSuaChuaThuongXuyenComponent
+} from './tien-do-xay-dung-sua-chua/tien-do-sua-chua-thuong-xuyen/tien-do-sua-chua-thuong-xuyen.component';
+import {
+  DialogDxScLonComponent
+} from './ke-hoach/ke-hoach-sua-chua-hang-nam/de-xuat-kh-sc-lon/them-moi-sc-lon/dialog-dx-sc-lon/dialog-dx-sc-lon.component';
+import {
+  TienDoCongViecComponent
+} from './tien-do-xay-dung-sua-chua/tien-do-dau-tu-xay-dung/tien-do-cong-viec/tien-do-cong-viec.component';
+import {
+  BienBanNghiemThuComponent
+} from './tien-do-xay-dung-sua-chua/tien-do-dau-tu-xay-dung/bien-ban-nghiem-thu/bien-ban-nghiem-thu.component';
+import {
+  QuyetDinhPheDuyetBaoCaoKtktComponent
+} from './tien-do-xay-dung-sua-chua/tien-do-sua-chua-lon-hang-nam/quyet-dinh-phe-duyet-bao-cao-ktkt/quyet-dinh-phe-duyet-bao-cao-ktkt.component';
+import {
+  ThongTinQdPheDuyetBaoCaoKtktComponent
 } from "./tien-do-xay-dung-sua-chua/tien-do-sua-chua-lon-hang-nam/quyet-dinh-phe-duyet-bao-cao-ktkt/thong-tin-qd-phe-duyet-bao-cao-ktkt/thong-tin-qd-phe-duyet-bao-cao-ktkt.component";
-import { ThongTinTienDoCongViecComponent } from './tien-do-xay-dung-sua-chua/tien-do-dau-tu-xay-dung/tien-do-cong-viec/thong-tin-tien-do-cong-viec/thong-tin-tien-do-cong-viec.component';
-import { ThongTinBienBanNghiemThuDtxdComponent } from './tien-do-xay-dung-sua-chua/tien-do-dau-tu-xay-dung/bien-ban-nghiem-thu/thong-tin-bien-ban-nghiem-thu-dtxd/thong-tin-bien-ban-nghiem-thu-dtxd.component';
+import {
+  ThongTinTienDoCongViecComponent
+} from './tien-do-xay-dung-sua-chua/tien-do-dau-tu-xay-dung/tien-do-cong-viec/thong-tin-tien-do-cong-viec/thong-tin-tien-do-cong-viec.component';
+import {
+  ThongTinBienBanNghiemThuDtxdComponent
+} from './tien-do-xay-dung-sua-chua/tien-do-dau-tu-xay-dung/bien-ban-nghiem-thu/thong-tin-bien-ban-nghiem-thu-dtxd/thong-tin-bien-ban-nghiem-thu-dtxd.component';
 import {
   QuyetDinhPheDuyetKhlcntSclComponent
 } from "./tien-do-xay-dung-sua-chua/tien-do-sua-chua-lon-hang-nam/quyet-dinh-phe-duyet-khlcnt-scl/quyet-dinh-phe-duyet-khlcnt-scl.component";
@@ -165,10 +221,18 @@ import {
 import {
   ThongTinQuyetDinhPheDuyetKqlcntSclComponent
 } from "./tien-do-xay-dung-sua-chua/tien-do-sua-chua-lon-hang-nam/quyet-dinh-phe-duyet-kqlcnt-scl/thong-tin-quyet-dinh-phe-duyet-kqlcnt-scl/thong-tin-quyet-dinh-phe-duyet-kqlcnt-scl.component";
-import { HopDongSclComponent } from './tien-do-xay-dung-sua-chua/tien-do-sua-chua-lon-hang-nam/hop-dong-scl/hop-dong-scl.component';
-import { ThongTinHopDongSclComponent } from './tien-do-xay-dung-sua-chua/tien-do-sua-chua-lon-hang-nam/hop-dong-scl/thong-tin-hop-dong-scl/thong-tin-hop-dong-scl.component';
-import { PhuLucHopDongSclComponent } from './tien-do-xay-dung-sua-chua/tien-do-sua-chua-lon-hang-nam/hop-dong-scl/thong-tin-hop-dong-scl/phu-luc-hop-dong-scl/phu-luc-hop-dong-scl.component';
-import { ThemMoiHopDongSclComponent } from './tien-do-xay-dung-sua-chua/tien-do-sua-chua-lon-hang-nam/hop-dong-scl/thong-tin-hop-dong-scl/them-moi-hop-dong-scl/them-moi-hop-dong-scl.component';
+import {
+  HopDongSclComponent
+} from './tien-do-xay-dung-sua-chua/tien-do-sua-chua-lon-hang-nam/hop-dong-scl/hop-dong-scl.component';
+import {
+  ThongTinHopDongSclComponent
+} from './tien-do-xay-dung-sua-chua/tien-do-sua-chua-lon-hang-nam/hop-dong-scl/thong-tin-hop-dong-scl/thong-tin-hop-dong-scl.component';
+import {
+  PhuLucHopDongSclComponent
+} from './tien-do-xay-dung-sua-chua/tien-do-sua-chua-lon-hang-nam/hop-dong-scl/thong-tin-hop-dong-scl/phu-luc-hop-dong-scl/phu-luc-hop-dong-scl.component';
+import {
+  ThemMoiHopDongSclComponent
+} from './tien-do-xay-dung-sua-chua/tien-do-sua-chua-lon-hang-nam/hop-dong-scl/thong-tin-hop-dong-scl/them-moi-hop-dong-scl/them-moi-hop-dong-scl.component';
 import {
   TienDoCongViecSclComponent
 } from "./tien-do-xay-dung-sua-chua/tien-do-sua-chua-lon-hang-nam/tien-do-cong-viec-scl/tien-do-cong-viec-scl.component";
@@ -181,8 +245,12 @@ import {
 import {
   ThongTinBienBanSclComponent
 } from "./tien-do-xay-dung-sua-chua/tien-do-sua-chua-lon-hang-nam/bien-ban-nghiem-thu-scl/thong-tin-bien-ban-scl/thong-tin-bien-ban-scl.component";
-import { QuyetDinhPheDuyetBaoCaoKtktSctxComponent } from './tien-do-xay-dung-sua-chua/tien-do-sua-chua-thuong-xuyen/quyet-dinh-phe-duyet-bao-cao-ktkt-sctx/quyet-dinh-phe-duyet-bao-cao-ktkt-sctx.component';
-import { ThongTinQdPheDuyetBaoCaoKtktSctxComponent } from './tien-do-xay-dung-sua-chua/tien-do-sua-chua-thuong-xuyen/quyet-dinh-phe-duyet-bao-cao-ktkt-sctx/thong-tin-qd-phe-duyet-bao-cao-ktkt-sctx/thong-tin-qd-phe-duyet-bao-cao-ktkt-sctx.component';
+import {
+  QuyetDinhPheDuyetBaoCaoKtktSctxComponent
+} from './tien-do-xay-dung-sua-chua/tien-do-sua-chua-thuong-xuyen/quyet-dinh-phe-duyet-bao-cao-ktkt-sctx/quyet-dinh-phe-duyet-bao-cao-ktkt-sctx.component';
+import {
+  ThongTinQdPheDuyetBaoCaoKtktSctxComponent
+} from './tien-do-xay-dung-sua-chua/tien-do-sua-chua-thuong-xuyen/quyet-dinh-phe-duyet-bao-cao-ktkt-sctx/thong-tin-qd-phe-duyet-bao-cao-ktkt-sctx/thong-tin-qd-phe-duyet-bao-cao-ktkt-sctx.component';
 import {
   QuyetDinhPheDuyetKhlcntSctxComponent
 } from "./tien-do-xay-dung-sua-chua/tien-do-sua-chua-thuong-xuyen/quyet-dinh-phe-duyet-khlcnt-sctx/quyet-dinh-phe-duyet-khlcnt-sctx.component";
@@ -193,129 +261,149 @@ import {
   ThongTinDauThauSctxComponent
 } from "./tien-do-xay-dung-sua-chua/tien-do-sua-chua-thuong-xuyen/thong-tin-dau-thau-sctx/thong-tin-dau-thau-sctx.component";
 import {
-    QuyetDinhPheDuyetKqlcntSctxComponent
+  QuyetDinhPheDuyetKqlcntSctxComponent
 } from "./tien-do-xay-dung-sua-chua/tien-do-sua-chua-thuong-xuyen/quyet-dinh-phe-duyet-kqlcnt-sctx/quyet-dinh-phe-duyet-kqlcnt-sctx.component";
 import {
-    ThongTinQuyetDinhPheDuyetKqlcntSctxComponent
+  ThongTinQuyetDinhPheDuyetKqlcntSctxComponent
 } from "./tien-do-xay-dung-sua-chua/tien-do-sua-chua-thuong-xuyen/quyet-dinh-phe-duyet-kqlcnt-sctx/thong-tin-quyet-dinh-phe-duyet-kqlcnt-sctx/thong-tin-quyet-dinh-phe-duyet-kqlcnt-sctx.component";
-import { HopDongSctxComponent } from './tien-do-xay-dung-sua-chua/tien-do-sua-chua-thuong-xuyen/hop-dong-sctx/hop-dong-sctx.component';
-import { ThongTinHopDongSctxComponent } from './tien-do-xay-dung-sua-chua/tien-do-sua-chua-thuong-xuyen/hop-dong-sctx/thong-tin-hop-dong-sctx/thong-tin-hop-dong-sctx.component';
-import { PhuLucHopDongSctxComponent } from './tien-do-xay-dung-sua-chua/tien-do-sua-chua-thuong-xuyen/hop-dong-sctx/thong-tin-hop-dong-sctx/phu-luc-hop-dong-sctx/phu-luc-hop-dong-sctx.component';
-import { ThemMoiHopDongSctxComponent } from './tien-do-xay-dung-sua-chua/tien-do-sua-chua-thuong-xuyen/hop-dong-sctx/thong-tin-hop-dong-sctx/them-moi-hop-dong-sctx/them-moi-hop-dong-sctx.component';
-import { TienDoCongViecSctxComponent } from './tien-do-xay-dung-sua-chua/tien-do-sua-chua-thuong-xuyen/tien-do-cong-viec-sctx/tien-do-cong-viec-sctx.component';
-import { ThongTinTienDoCongViecSctxComponent } from './tien-do-xay-dung-sua-chua/tien-do-sua-chua-thuong-xuyen/tien-do-cong-viec-sctx/thong-tin-tien-do-cong-viec-sctx/thong-tin-tien-do-cong-viec-sctx.component';
+import {
+  HopDongSctxComponent
+} from './tien-do-xay-dung-sua-chua/tien-do-sua-chua-thuong-xuyen/hop-dong-sctx/hop-dong-sctx.component';
+import {
+  ThongTinHopDongSctxComponent
+} from './tien-do-xay-dung-sua-chua/tien-do-sua-chua-thuong-xuyen/hop-dong-sctx/thong-tin-hop-dong-sctx/thong-tin-hop-dong-sctx.component';
+import {
+  PhuLucHopDongSctxComponent
+} from './tien-do-xay-dung-sua-chua/tien-do-sua-chua-thuong-xuyen/hop-dong-sctx/thong-tin-hop-dong-sctx/phu-luc-hop-dong-sctx/phu-luc-hop-dong-sctx.component';
+import {
+  ThemMoiHopDongSctxComponent
+} from './tien-do-xay-dung-sua-chua/tien-do-sua-chua-thuong-xuyen/hop-dong-sctx/thong-tin-hop-dong-sctx/them-moi-hop-dong-sctx/them-moi-hop-dong-sctx.component';
+import {
+  TienDoCongViecSctxComponent
+} from './tien-do-xay-dung-sua-chua/tien-do-sua-chua-thuong-xuyen/tien-do-cong-viec-sctx/tien-do-cong-viec-sctx.component';
+import {
+  ThongTinTienDoCongViecSctxComponent
+} from './tien-do-xay-dung-sua-chua/tien-do-sua-chua-thuong-xuyen/tien-do-cong-viec-sctx/thong-tin-tien-do-cong-viec-sctx/thong-tin-tien-do-cong-viec-sctx.component';
+import {
+  BienBanNghiemThuSctxComponent
+} from "./tien-do-xay-dung-sua-chua/tien-do-sua-chua-thuong-xuyen/bien-ban-nghiem-thu-sctx/bien-ban-nghiem-thu-sctx.component";
+import {
+  ThongTinBienBanSctxComponent
+} from "./tien-do-xay-dung-sua-chua/tien-do-sua-chua-thuong-xuyen/bien-ban-nghiem-thu-sctx/thong-tin-bien-ban-sctx/thong-tin-bien-ban-sctx.component";
 
 @NgModule({
-    declarations: [
-        QuanLyKhoTangComponent,
-        MangLuoiKhoComponent,
-        KeHoachComponent,
-        QuyHoachKhoComponent,
-        KeHoachXayDungTrungHanComponent,
-        KeHoachXayDungHangNamComponent,
-        KeHoachSuaChuaHangNamComponent,
-        QuyetDinhQuyHoachComponent,
-        QuyetDinhDieuChinhQuyHoachComponent,
-        DeXuatKeHoachComponent,
-        TongHopDeXuatKeHoachComponent,
-        QuyetDinhPheDuyetKeHoachComponent,
-        DeXuatNhuCauComponent,
-        TongHopDxNhuCauComponent,
-        QuyetDinhPheDuyetKhxdComponent,
-        ThemMoiQdComponent,
-        ThemMoiQdDcComponent,
-        ThemMoiDxkhTrungHanComponent,
-        ThemMoiTongHopKhxdTrungHanComponent,
-        ThemMoiQdPheDuyetComponent,
-        ThemMoiDxNhuCauComponent,
-        ThemMoiQdPdDxNhuCauComponent,
-        ThemMoiTongHopDxNhuCauComponent,
-        ThemMoiKhoComponent,
-        DanhMucDuAnComponent,
-        DeXuatKhScLonComponent,
-        QuyetDinhScLonBtcComponent,
-        QuyetDinhScLonTcdtComponent,
-        ThemMoiScLonComponent,
-        ThemMoiScLonComponent,
-        ThemMoiQdScBtcComponent,
-        ThemMoiScTcdtComponent,
-        TienDoXayDungSuaChuaComponent,
-        TinhHinhSuDungComponent,
-        TienDoDauTuXayDungComponent,
-        TienDoSuaChuaLonHangNamComponent,
-        DmDuAnCongTrinhComponent,
-        DanhMucScLonComponent,
-        DanhMucScThuongXuyenComponent,
-        ThongTinDmScLonComponent,
-        QuyetDinhPheDuyetDuAnDtxdComponent,
-        ThongTinQuyetDinhPheDuyetDuAnDtxdComponent,
-        ThongTinDanhMucScThuongXuyenComponent,
-        QuyetDinhPheDuyetTktcTdtComponent,
-        ThongTinQuyetDinhPheDuyetTktcTdtComponent,
-        QdThongBaoSuaChuaLonComponent,
-        QuyetDinhPheDuyetKhlcntComponent,
-        ThongTinQuyetDinhPheDuyetKhlcntComponent,
-        ToChucTrienKhaiLuaChonNhaThauComponent,
-        ThongTinDauThauComponent,
-        QuyetDinhPheDuyetKqlcntComponent,
-        DialogQdScBtcComponent,
-        CapNhatThongTinDauThauComponent,
-        ThongTinQuyetDinhPheDuyetKqlcntComponent,
-        HopDongComponent,
-        ThongTinHopDongComponent,
-        ThemMoiHopDongComponent,
-        PhuLucHopDongComponent,
-        ThemMoiThongBaoScLonComponent,
-        KeHoachSuaChuaThuongXuyenComponent,
-        TongHopKhSuaChuaThuongXuyenComponent,
-        QuyetDinhPheDuyetKeHoachDanhMucComponent,
-        DeXuatKeHoachSuaChuaThuongXuyenComponent,
-        ThongTinDeXuatKeHoachSuaChuaThuongXuyenComponent,
-        DialogThemMoiDxkhthComponent,
-        DialogThemMoiKehoachDanhmucChitietComponent,
-        ThemMoiDanhMucDuAnKhoComponent,
-        ThemMoiTongHopDxNhuCauComponent,
-        ThongTinTongHopKhSuaChuaThuongXuyenComponent,
-        ThemMoiQdPdDxNhuCauComponent,
-        ThongTinQuyetDinhPheDuyetKeHoacDanhMucComponent,
-        TienDoSuaChuaThuongXuyenComponent,
-        DialogDxScLonComponent,
-        ThongTinQuyetDinhPheDuyetKeHoacDanhMucComponent,
-        TienDoCongViecComponent,
-        BienBanNghiemThuComponent,
-        QuyetDinhPheDuyetBaoCaoKtktComponent,
-        ThongTinQdPheDuyetBaoCaoKtktComponent,
-        ThongTinTienDoCongViecComponent,
-        ThongTinBienBanNghiemThuDtxdComponent,
-        QuyetDinhPheDuyetKhlcntSclComponent,
-        ThongTinQuyetDinhPheDuyetKhlcntSclComponent,
-        ThongTinDauThauSclComponent,
-        CapNhatThongTinDauThauSclComponent,
-        QuyetDinhPheDuyetKqlcntSclComponent,
-        ThongTinQuyetDinhPheDuyetKqlcntSclComponent,
-        HopDongSclComponent,
-        ThongTinHopDongSclComponent,
-        PhuLucHopDongSclComponent,
-        ThemMoiHopDongSclComponent,
-        TienDoCongViecSclComponent,
-        ThongTinTienDoCongViecSclComponent,
-        BienBanNghiemThuSclComponent,
-        ThongTinBienBanSclComponent,
-        QuyetDinhPheDuyetBaoCaoKtktSctxComponent,
-        ThongTinQdPheDuyetBaoCaoKtktSctxComponent,
-        ThongTinQdPheDuyetBaoCaoKtktSctxComponent,
-        QuyetDinhPheDuyetKhlcntSctxComponent,
-        ThongTinQuyetDinhPheDuyetKhlcntSctxComponent,
-        ThongTinDauThauSctxComponent,
-        QuyetDinhPheDuyetKqlcntSctxComponent,
-        ThongTinQuyetDinhPheDuyetKqlcntSctxComponent,
-        HopDongSctxComponent,
-        ThongTinHopDongSctxComponent,
-        PhuLucHopDongSctxComponent,
-        ThemMoiHopDongSctxComponent,
-        TienDoCongViecSctxComponent,
-        ThongTinTienDoCongViecSctxComponent
-    ],
+  declarations: [
+    QuanLyKhoTangComponent,
+    MangLuoiKhoComponent,
+    KeHoachComponent,
+    QuyHoachKhoComponent,
+    KeHoachXayDungTrungHanComponent,
+    KeHoachXayDungHangNamComponent,
+    KeHoachSuaChuaHangNamComponent,
+    QuyetDinhQuyHoachComponent,
+    QuyetDinhDieuChinhQuyHoachComponent,
+    DeXuatKeHoachComponent,
+    TongHopDeXuatKeHoachComponent,
+    QuyetDinhPheDuyetKeHoachComponent,
+    DeXuatNhuCauComponent,
+    TongHopDxNhuCauComponent,
+    QuyetDinhPheDuyetKhxdComponent,
+    ThemMoiQdComponent,
+    ThemMoiQdDcComponent,
+    ThemMoiDxkhTrungHanComponent,
+    ThemMoiTongHopKhxdTrungHanComponent,
+    ThemMoiQdPheDuyetComponent,
+    ThemMoiDxNhuCauComponent,
+    ThemMoiQdPdDxNhuCauComponent,
+    ThemMoiTongHopDxNhuCauComponent,
+    ThemMoiKhoComponent,
+    DanhMucDuAnComponent,
+    DeXuatKhScLonComponent,
+    QuyetDinhScLonBtcComponent,
+    QuyetDinhScLonTcdtComponent,
+    ThemMoiScLonComponent,
+    ThemMoiScLonComponent,
+    ThemMoiQdScBtcComponent,
+    ThemMoiScTcdtComponent,
+    TienDoXayDungSuaChuaComponent,
+    TinhHinhSuDungComponent,
+    TienDoDauTuXayDungComponent,
+    TienDoSuaChuaLonHangNamComponent,
+    DmDuAnCongTrinhComponent,
+    DanhMucScLonComponent,
+    DanhMucScThuongXuyenComponent,
+    ThongTinDmScLonComponent,
+    QuyetDinhPheDuyetDuAnDtxdComponent,
+    ThongTinQuyetDinhPheDuyetDuAnDtxdComponent,
+    ThongTinDanhMucScThuongXuyenComponent,
+    QuyetDinhPheDuyetTktcTdtComponent,
+    ThongTinQuyetDinhPheDuyetTktcTdtComponent,
+    QdThongBaoSuaChuaLonComponent,
+    QuyetDinhPheDuyetKhlcntComponent,
+    ThongTinQuyetDinhPheDuyetKhlcntComponent,
+    ToChucTrienKhaiLuaChonNhaThauComponent,
+    ThongTinDauThauComponent,
+    QuyetDinhPheDuyetKqlcntComponent,
+    DialogQdScBtcComponent,
+    CapNhatThongTinDauThauComponent,
+    ThongTinQuyetDinhPheDuyetKqlcntComponent,
+    HopDongComponent,
+    ThongTinHopDongComponent,
+    ThemMoiHopDongComponent,
+    PhuLucHopDongComponent,
+    ThemMoiThongBaoScLonComponent,
+    KeHoachSuaChuaThuongXuyenComponent,
+    TongHopKhSuaChuaThuongXuyenComponent,
+    QuyetDinhPheDuyetKeHoachDanhMucComponent,
+    DeXuatKeHoachSuaChuaThuongXuyenComponent,
+    ThongTinDeXuatKeHoachSuaChuaThuongXuyenComponent,
+    DialogThemMoiDxkhthComponent,
+    DialogThemMoiKehoachDanhmucChitietComponent,
+    ThemMoiDanhMucDuAnKhoComponent,
+    ThemMoiTongHopDxNhuCauComponent,
+    ThongTinTongHopKhSuaChuaThuongXuyenComponent,
+    ThemMoiQdPdDxNhuCauComponent,
+    ThongTinQuyetDinhPheDuyetKeHoacDanhMucComponent,
+    TienDoSuaChuaThuongXuyenComponent,
+    DialogDxScLonComponent,
+    ThongTinQuyetDinhPheDuyetKeHoacDanhMucComponent,
+    TienDoCongViecComponent,
+    BienBanNghiemThuComponent,
+    QuyetDinhPheDuyetBaoCaoKtktComponent,
+    ThongTinQdPheDuyetBaoCaoKtktComponent,
+    ThongTinTienDoCongViecComponent,
+    ThongTinBienBanNghiemThuDtxdComponent,
+    QuyetDinhPheDuyetKhlcntSclComponent,
+    ThongTinQuyetDinhPheDuyetKhlcntSclComponent,
+    ThongTinDauThauSclComponent,
+    CapNhatThongTinDauThauSclComponent,
+    QuyetDinhPheDuyetKqlcntSclComponent,
+    ThongTinQuyetDinhPheDuyetKqlcntSclComponent,
+    HopDongSclComponent,
+    ThongTinHopDongSclComponent,
+    PhuLucHopDongSclComponent,
+    ThemMoiHopDongSclComponent,
+    TienDoCongViecSclComponent,
+    ThongTinTienDoCongViecSclComponent,
+    BienBanNghiemThuSclComponent,
+    ThongTinBienBanSclComponent,
+    QuyetDinhPheDuyetBaoCaoKtktSctxComponent,
+    ThongTinQdPheDuyetBaoCaoKtktSctxComponent,
+    ThongTinQdPheDuyetBaoCaoKtktSctxComponent,
+    QuyetDinhPheDuyetKhlcntSctxComponent,
+    ThongTinQuyetDinhPheDuyetKhlcntSctxComponent,
+    ThongTinDauThauSctxComponent,
+    QuyetDinhPheDuyetKqlcntSctxComponent,
+    ThongTinQuyetDinhPheDuyetKqlcntSctxComponent,
+    HopDongSctxComponent,
+    ThongTinHopDongSctxComponent,
+    PhuLucHopDongSctxComponent,
+    ThemMoiHopDongSctxComponent,
+    TienDoCongViecSctxComponent,
+    BienBanNghiemThuSctxComponent,
+    ThongTinBienBanSctxComponent,
+    ThongTinTienDoCongViecSctxComponent
+  ],
   imports: [CommonModule, QuanLyKhoTangRoutingModule, ComponentsModule, MainModule],
 })
 export class QuanLyKhoTangModule {

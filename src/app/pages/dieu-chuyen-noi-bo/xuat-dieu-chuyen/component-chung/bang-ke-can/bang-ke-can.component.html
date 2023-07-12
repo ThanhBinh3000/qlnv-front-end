@@ -103,12 +103,13 @@
         </thead>
         <tbody>
           <ng-container *ngFor="let item of tblData.data, let i = index;">
-            <tr [ngClass]="{'bg-selected': item.selected}">
+            <tr [ngClass]="{'bg-selected': item.selected}" class="level-1">
               <td>{{i + 1}}</td>
               <td (nzExpandChange)="onExpandStringChange(item.idVirtual, $event)"
                 [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true" style="width: 35px"></td>
               <td></td>
-              <td class="bold">{{ item.soQdinh }}</td>
+              <!-- <td class="bold">{{ item.soQdinh }}</td> -->
+              <td><a nz-button nzType="link" (click)="openQdDcModal(item.qdinhDcId)">{{item.soQdinh}}</a></td>
               <td class="bold">{{item.namKh}}</td>
               <td class="bold">{{item.thoiHanDieuChuyen | date: 'dd/MM/YYYY' }}</td>
               <td></td>
@@ -121,7 +122,7 @@
             </tr>
             <ng-container *ngIf="expandSetString.has(item.idVirtual)">
               <ng-container *ngFor="let lv1 of item.childData,let i1=index">
-                <tr>
+                <tr class="level-2">
                   <td></td>
                   <td></td>
                   <td (nzExpandChange)="onExpandStringChange(lv1.idVirtual, $event)"
@@ -140,7 +141,7 @@
                 </tr>
                 <ng-container *ngIf="expandSetString.has(lv1.idVirtual)">
                   <ng-container *ngFor="let lv2 of lv1.childData,let i2=index">
-                    <tr>
+                    <tr class="level-3">
                       <td></td>
                       <td></td>
                       <td></td>
@@ -148,18 +149,19 @@
                       <td></td>
                       <td></td>
                       <td></td>
-                      <td class="bold">{{ (lv2.tenLoKho ? lv1.tenLoKho + ' - ' : '') + (lv2.tenNganKho? lv2.tenNganKho +
+                      <td class="bold">{{ (lv2.tenLoKho ? lv2.tenLoKho + ' - ' : '') + (lv2.tenNganKho? lv2.tenNganKho +
                         " - " : "") + (lv2.tenNhaKho? lv2.tenNhaKho: "") }}</td>
                       <td></td>
                       <td></td>
                       <td></td>
                       <td></td>
-                      <td><a (click)="redirectDetail(lv2, false, null)" *ngIf="checkRoleAdd(lv2.trangThai)">
+                      <!-- <td><a (click)="redirectDetail(lv2, false, null)" *ngIf="checkRoleAdd(lv2.trangThai)">
                           <i class="fa fa-plus"></i>
-                        </a></td>
+                        </a></td> -->
+                      <td></td>
                     </tr>
                     <ng-container *ngFor="let lv3 of lv2.childData,let i3=index">
-                      <tr>
+                      <tr class="level-4">
                         <td></td>
                         <td></td>
                         <td></td>
@@ -170,13 +172,16 @@
                         <td></td>
                         <td> <a nz-button nzType="link"
                             (click)="openPhieuXkModal(lv3.phieuXuatKhoId)">{{lv3.soPhieuXuatKho}}</a></td>
-                        <td class="bold">{{lv2.soBangKeXuatDcLt}}</td>
+                        <td class="bold">{{lv3.soBangKe}}</td>
                         <td>{{lv3.ngayXuatKho | date: 'dd/MM/YYYY' }}</td>
                         <td>{{LIST_TRANG_THAI[lv3.trangThai]}}</td>
                         <td class="text-left">
                           <!-- <a (click)="redirectDetail(lv3, false, null)" *ngIf="checkRoleAdd(lv3.trangThai)">
                             <i class="fa fa-plus"></i>
                           </a> -->
+                          <a (click)="redirectDetail(lv2, false, null)" *ngIf="checkRoleAdd(lv3.trangThai)">
+                            <i class="fa fa-plus"></i>
+                          </a>
                           <a (click)="redirectDetail(lv3, true, lv3.id)" *ngIf="checkRoleView(lv3.trangThai)">
                             <i class="fa fa-eye" title="Xem chi tiết"></i>
                           </a>
@@ -232,6 +237,18 @@
   </ng-container>
   <div *nzModalFooter>
     <button nz-button (click)="closePhieuXkModal()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openQdDC" (nzOnCancel)="closeQdDcModal()">
+  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+    <app-thong-tin-quyet-dinh-dieu-chuyen-cuc [idInput]="idQdDcModal" [isViewOnModal]="true" [isView]="true">
+    </app-thong-tin-quyet-dinh-dieu-chuyen-cuc>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button (click)="closeQdDcModal()" class="modal__button--cancel">
       <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
       Đóng
     </button>

@@ -45,7 +45,9 @@ export class BangKeCanXuatDieuChuyenComponent extends Base2Component implements 
   expandSetString = new Set<string>();
   dataView: any = [];
   idPhieuXk: number = 0;
-  openPhieuXk = false;
+  openPhieuXk: boolean = false;
+  idQdDcModal: number;
+  openQdDC: boolean = false;
   LIST_TRANG_THAI = {
     [this.STATUS.DU_THAO]: "Dự thảo",
     [this.STATUS.CHO_DUYET_LDCC]: "Chờ duyệt LĐ Chi Cục",
@@ -203,6 +205,7 @@ export class BangKeCanXuatDieuChuyenComponent extends Base2Component implements 
         };
       }).value();
     this.dataView = dataView;
+    console.log("dataView", this.dataView)
     this.expandAll()
   }
 
@@ -259,11 +262,19 @@ export class BangKeCanXuatDieuChuyenComponent extends Base2Component implements 
     this.idPhieuXk = null;
     this.openPhieuXk = false;
   }
+  openQdDcModal(id: number) {
+    this.idQdDcModal = id;
+    this.openQdDC = true
+  }
+  closeQdDcModal() {
+    this.idQdDcModal = null;
+    this.openQdDC = false
+  }
   checkRoleAdd(trangThai: string): boolean {
-    return this.userService.isChiCuc()
+    return !trangThai && this.userService.isChiCuc()
   }
   checkRoleView(trangThai: string): boolean {
-    return !this.checkRoleEdit(trangThai) && !this.checkRoleDuyet(trangThai) && !this.checkRoleDelete(trangThai)
+    return trangThai && !this.checkRoleAdd(trangThai) && !this.checkRoleEdit(trangThai) && !this.checkRoleDuyet(trangThai) && !this.checkRoleDelete(trangThai)
   }
   checkRoleEdit(trangThai: string): boolean {
     return this.userService.isChiCuc() && (trangThai == STATUS.DU_THAO || trangThai == STATUS.TU_CHOI_LDCC)

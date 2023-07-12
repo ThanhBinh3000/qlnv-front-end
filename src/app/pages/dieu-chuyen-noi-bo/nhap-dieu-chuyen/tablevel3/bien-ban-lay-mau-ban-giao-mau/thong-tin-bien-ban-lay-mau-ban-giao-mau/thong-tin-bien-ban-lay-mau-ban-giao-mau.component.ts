@@ -19,6 +19,7 @@ import { QuyetDinhDieuChuyenCucService } from "src/app/services/dieu-chuyen-noi-
 import { SoDeXuatQuyetDinhDieuChuyenService } from "src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/so-de-xuat-quyet-dinh-dieu-chinh.service";
 import { KhCnQuyChuanKyThuat } from "src/app/services/kh-cn-bao-quan/KhCnQuyChuanKyThuat";
 import { StorageService } from "src/app/services/storage.service";
+import * as uuidv4 from "uuid";
 
 @Component({
   selector: 'app-thong-tin-bien-ban-lay-mau-ban-giao-mau',
@@ -27,6 +28,7 @@ import { StorageService } from "src/app/services/storage.service";
 })
 export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component implements OnInit {
   @Input() loaiDc: string;
+  @Input() isVatTu: boolean;
   @Input() idInput: number;
   @Input() isView: boolean;
   @Output()
@@ -98,7 +100,8 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
       chiTieuKiemTra: [],
       ketQuaNiemPhong: [],
       type: ["01"],
-      loaiDc: ["DCNB"]
+      loaiDc: [this.loaiDc],
+      isVatTu: [this.isVatTu]
     });
   }
 
@@ -112,7 +115,8 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
       ktvBaoQuan: this.userInfo.TEN_DAY_DU,
       soBbLayMau: `${id}/${this.formData.get('nam').value}/${this.maBb}`,
       id: id,
-      loaiDc: this.loaiDc
+      loaiDc: this.loaiDc,
+      isVatTu: this.isVatTu
     })
 
     if (this.idInput) {

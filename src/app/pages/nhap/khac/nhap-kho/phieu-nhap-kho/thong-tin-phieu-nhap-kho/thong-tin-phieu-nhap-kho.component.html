@@ -61,7 +61,7 @@
 
       <nz-card class="mg-t-16 flex-card p-lr16">
         <div nz-row [nzGutter]="24">
-          <div nz-col nzSpan="2">
+          <div nz-col nzSpan="4">
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true"> Năm kế hoạch
               </nz-form-label>
@@ -72,7 +72,7 @@
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col [nzSpan]="5">
+          <div nz-col [nzSpan]="4">
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true"> Tên đơn vị</nz-form-label>
               <nz-form-control>
@@ -80,7 +80,7 @@
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col [nzSpan]="5">
+          <div nz-col [nzSpan]="4">
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true">Mã quan hệ ngân sách</nz-form-label>
               <nz-form-control>
@@ -88,7 +88,7 @@
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col [nzSpan]="5">
+          <div nz-col [nzSpan]="4">
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true">Số phiếu nhập kho</nz-form-label>
               <nz-form-control>
@@ -96,7 +96,7 @@
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col [nzSpan]="3">
+          <div nz-col [nzSpan]="4">
             <nz-form-item>
               <nz-form-label [nzNoColon]="true"> Ngày nhập kho(ngày lập phiếu)</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
@@ -132,10 +132,10 @@
 
           <div nz-col [nzSpan]="4">
             <nz-form-item>
-              <nz-form-label [nzNoColon]="true">Số QĐ giao NV nhập hàng</nz-form-label>
+              <nz-form-label nzRequired [nzNoColon]="true">Số QĐ giao NV nhập hàng</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogQD()">
-                  <input [readonly]="true" nz-input formControlName="soQdDcCuc" readonly="true" />
+                  <input [readonly]="true" nz-input formControlName="soQdGiaoNv" readonly="true" />
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
@@ -143,9 +143,9 @@
 
           <div nz-col [nzSpan]="4">
             <nz-form-item>
-              <nz-form-label [nzNoColon]="true">Ngày ký QĐ điều chuyển</nz-form-label>
+              <nz-form-label nzRequired [nzNoColon]="true">Ngày ký QĐ điều chuyển</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <nz-date-picker [nzDisabled]="true" formControlName="ngayQdDcCuc" nzFormat="dd/MM/yyyy">
+                <nz-date-picker [nzDisabled]="true" formControlName="ngayQdGiaoNv" nzFormat="dd/MM/yyyy">
                 </nz-date-picker>
               </nz-form-control>
             </nz-form-item>
@@ -194,7 +194,7 @@
 
           <div nz-col [nzSpan]="4">
             <nz-form-item>
-              <nz-form-label [nzNoColon]="true">Số phiếu kiểm tra chất lượng</nz-form-label>
+              <nz-form-label nzRequired [nzNoColon]="true">Số phiếu kiểm tra chất lượng</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <input [readonly]="true" nz-input formControlName="soPhieuKtraCluong" readonly="true" />
                 <!-- <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogPKTCL()">
@@ -206,7 +206,7 @@
 
           <div nz-col nzSpan="4">
             <nz-form-item>
-              <nz-form-label nzRequired [nzNoColon]="true">Loại hàng DTQG
+              <nz-form-label [nzNoColon]="true">Loại hàng DTQG
               </nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
                 <input nz-input formControlName="tenLoaiVthh" [readonly]="true" />
@@ -216,7 +216,7 @@
 
           <div nz-col nzSpan="4">
             <nz-form-item>
-              <nz-form-label nzRequired [nzNoColon]="true">Chủng loại hàng DTQG
+              <nz-form-label [nzNoColon]="true">Chủng loại hàng DTQG
               </nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
                 <input nz-input formControlName="tenCloaiVthh" [readonly]="true" />
@@ -224,7 +224,7 @@
             </nz-form-item>
           </div>
 
-          <div nz-col nzSpan="4">
+          <!-- <div nz-col nzSpan="4">
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true">Tên hàng DTQG
               </nz-form-label>
@@ -232,7 +232,7 @@
                 <input nz-input formControlName="tenHang" [readonly]="true" />
               </nz-form-control>
             </nz-form-item>
-          </div>
+          </div> -->
 
           <div nz-col [nzSpan]="4">
             <nz-form-item>
@@ -286,7 +286,7 @@
 
           <div nz-col nzSpan="4">
             <nz-form-item>
-              <nz-form-label nzRequired [nzNoColon]="true">Họ tên người giao hàng
+              <nz-form-label [nzNoColon]="true">Họ tên người giao hàng
               </nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
                 <input nz-input formControlName="hoVaTenNguoiGiao" [readonly]="isView" />
@@ -296,7 +296,7 @@
 
           <div nz-col nzSpan="4">
             <nz-form-item>
-              <nz-form-label nzRequired [nzNoColon]="true">Số CMT/CCCD
+              <nz-form-label [nzNoColon]="true">Số CMT/CCCD
               </nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
                 <input nz-input formControlName="cmndNguoiGiao" [readonly]="isView" />
@@ -304,7 +304,7 @@
             </nz-form-item>
           </div>
 
-          <div nz-col [nzSpan]="4">
+          <div nz-col [nzSpan]="8">
             <nz-form-item>
               <nz-form-label [nzNoColon]="true">
                 Đơn vị/Công ty(của người giao hàng)
@@ -357,7 +357,7 @@
 
           <div nz-col nzSpan="4">
             <nz-form-item>
-              <nz-form-label nzRequired [nzNoColon]="true">Kiểu nhập xuất
+              <nz-form-label [nzNoColon]="true">Kiểu nhập xuất
               </nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
                 <input nz-input formControlName="kieuNx" [readonly]="true" />
@@ -367,10 +367,10 @@
 
           <div nz-col nzSpan="4">
             <nz-form-item>
-              <nz-form-label nzRequired [nzNoColon]="true">BB nghiệm thu BQLĐ
+              <nz-form-label [nzNoColon]="true">BB nghiệm thu BQLĐ
               </nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
-                <input nz-input formControlName="tenCloaiVthh" [readonly]="true" />
+                <input nz-input formControlName="soBBNghiemThuBqld" [readonly]="true" />
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -431,34 +431,44 @@
               <th>Theo chứng từ</th>
               <th>Thực nhập</th>
             </tr>
-            <tr>
+            <tr *ngIf="!isView">
               <th></th>
               <th>{{noiDung}}</th>
               <th>
                 <form nz-form nzLayout="vertical" [formGroup]="formData">
-                  <nz-input-number formControlName="maSo" [nzMin]="1" [nzMax]="999999999999" [nzStep]="1"
+                  <!-- <nz-input-number formControlName="maSo" [nzMin]="1" [nzMax]="999999999999" [nzStep]="1"
                     [nzSize]="'small'">
+                  </nz-input-number> -->
+                  <nz-input-number formControlName="maSo" [nzMin]="0" [nzMax]="999999999999" [nzStep]="0.1"
+                    [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
                   </nz-input-number>
                 </form>
               </th>
               <th>{{dviTinh}}</th>
               <th>
                 <form nz-form nzLayout="vertical" [formGroup]="formData">
-                  <nz-input-number formControlName="soLuongNhapDc" [nzMin]="1" [nzMax]="999999999999" [nzStep]="1"
+                  <!-- <nz-input-number formControlName="soLuongNhap" [nzMin]="1" [nzMax]="999999999999" [nzStep]="1"
                     [nzSize]="'small'">
+                  </nz-input-number> -->
+                  <nz-input-number formControlName="soLuongNhap" [nzMin]="0" [nzMax]="999999999999" [nzStep]="0.1"
+                    [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
                   </nz-input-number>
                 </form>
               </th>
 
               <th>
                 <form nz-form nzLayout="vertical" [formGroup]="formData">
-                  <nz-input-number formControlName="thucTeKinhPhi" [nzMin]="1" [nzMax]="999999999999" [nzStep]="1"
-                    [nzSize]="'small'">
+                  <nz-input-number formControlName="soLuongNhapTt" [nzMin]="0" [nzMax]="999999999999" [nzStep]="0.1"
+                    [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                    (ngModelChange)="onChangeSoLuongNhapTt($event)">
                   </nz-input-number>
+                  <!-- <nz-input-number formControlName="soLuongNhapTt" [nzMin]="1" [nzMax]="999999999999" [nzStep]="1"
+                    [nzSize]="'small'">
+                  </nz-input-number> -->
                 </form>
               </th>
               <th>{{donGia}}</th>
-              <th>{{donGia}}</th>
+              <th>{{thanhTien}}</th>
               <th>
                 <a (click)="add()">
                   <i class="icon htvbdh_dau-cong"></i>
@@ -473,9 +483,14 @@
                 <td>{{item.noiDung}}</td>
                 <td>{{item.maSo}}</td>
                 <td>{{item.dviTinh}}</td>
-                <td>{{item.soLuongNhapDc}}</td>
-                <td>{{item.duToanKinhPhi}}</td>
-                <td>{{item.thucTeKinhPhi}}</td>
+                <td>{{item.soLuongNhap | number: '1.0-1':
+                  'vi_VN'}}</td>
+                <td>{{item.soLuongNhapTt | number: '1.0-1':
+                  'vi_VN'}}</td>
+                <td>{{item.donGia | number: '1.0-1':
+                  'vi_VN'}}</td>
+                <td>{{item.thanhTien | number: '1.0-1':
+                  'vi_VN'}}</td>
                 <td *ngIf="!(isDisableField() || isView)">
                   <a (click)="editRow(i)">
                     <i class="fa fa-pencil" title="Sửa"></i>
@@ -493,12 +508,22 @@
                 </td>
                 <td>{{item.dviTinh}}</td>
                 <td>
-                  <input type="text" nz-input class="w-400" [(ngModel)]="item.soLuongNhapDc" />
+                  <nz-input-number [(ngModel)]="item.soLuongNhap" [nzMin]="0" [nzMax]="999999999999" [nzStep]="0.1"
+                    [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+                  </nz-input-number>
+                  <!-- <input type="text" nz-input class="w-400" [(ngModel)]="item.soLuongNhap" /> -->
                 </td>
-                <td>{{item.duToanKinhPhi}}</td>
                 <td>
-                  <input type="text" nz-input class="w-400" [(ngModel)]="item.thucTeKinhPhi" />
+                  <!-- <input type="text" nz-input class="w-400" [(ngModel)]="item.soLuongNhapTt" /> -->
+                  <nz-input-number [(ngModel)]="item.soLuongNhapTt" [nzMin]="0" [nzMax]="999999999999" [nzStep]="0.1"
+                    [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                    (ngModelChange)="onChangeSoLuongNhapTt($event,i)">
+                  </nz-input-number>
                 </td>
+                <td>{{item.donGia | number: '1.0-1':
+                  'vi_VN'}}</td>
+                <td>{{item.thanhTien | number: '1.0-1':
+                  'vi_VN'}}</td>
                 <td>
                   <a (click)="saveEdit(i)" class="save">
                     <i class="fa fa-save"></i>
@@ -524,7 +549,7 @@
                 Tổng số lượng
               </nz-form-label>
               <nz-form-control>
-                <input nz-input formControlName="tongSLNhapTT" [readonly]="true" />
+                <input nz-input formControlName="tongSoLuongBc" [readonly]="true" />
               </nz-form-control>
             </nz-form-item>
           </form>
@@ -538,7 +563,7 @@
                 Tổng số tiền
               </nz-form-label>
               <nz-form-control>
-                <input nz-input formControlName="tongKPDCTT" [readonly]="true" />
+                <input nz-input formControlName="tongKinhPhiBc" [readonly]="true" />
               </nz-form-control>
             </nz-form-item>
           </form>

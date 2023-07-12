@@ -4,7 +4,7 @@
             <div nz-row [nzGutter]="20">
                 <div nz-col nzSpan="4">
                     <nz-form-control>
-                        <nz-form-label>Số hồ sơ</nz-form-label>
+                        <nz-form-label>Số quyết định</nz-form-label>
                         <nz-form-item>
                             <input nz-input formControlName="maSc" />
                         </nz-form-item>
@@ -12,7 +12,7 @@
                 </div>
                 <div nz-col nzSpan="4">
                     <nz-form-control>
-                        <nz-form-label>Số QĐ sửa chữa</nz-form-label>
+                        <nz-form-label>Số tờ trình</nz-form-label>
                         <nz-form-item>
                             <input nz-input formControlName="maSc" />
                         </nz-form-item>
@@ -20,21 +20,9 @@
                 </div>
                 <div nz-col nzSpan="4">
                     <nz-form-control>
-                        <nz-form-label>Số thông báo KQ trình hồ sơ</nz-form-label>
+                        <nz-form-label>Trạng thái</nz-form-label>
                         <nz-form-item>
                             <input nz-input formControlName="maSc" />
-                        </nz-form-item>
-                    </nz-form-control>
-                </div>
-                <div nz-col nzSpan="5">
-                    <nz-form-control>
-                        <nz-form-label>
-                            Trạng thái
-                        </nz-form-label>
-                        <nz-form-item>
-                            <nz-select formControlName="maCc" nzShowSearch nzAllowClear>
-                                <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
-                            </nz-select>
                         </nz-form-item>
                     </nz-form-control>
                 </div>
@@ -73,76 +61,51 @@
         </div>
     </nz-card>
     <div class="group-button">
-        <h3 class="text-uppercase">Tổng hợp danh sách hàng QTQG cần sữa chữa</h3>
+        <h3 class="text-uppercase">Danh sách quyết định sửa chữa hàng DTQG</h3>
         <div class="buttons">
-            <!-- <ng-container>
-                <button type="button" class="btn btn-do" (click)="deleteSelect()">
-                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
-                    <span>Xóa</span>
-                </button>
-            </ng-container>
-
             <button type="button" class="btn btn-sub" (click)="exportData()">
                 <i class="icon htvbdh_chuyen-xu-ly"></i>
                 <span>Xuất file</span>
-            </button> -->
-
-            <ng-container>
-                <button type="button" class="btn btn-main" (click)="redirectCreate()">
-                    <i class="icon htvbdh_dau-cong"></i>
-                    <span>Thêm</span>
-                </button>
-            </ng-container>
+            </button>
+            <button type="button" class="btn btn-main" *ngIf="userService.isTongCuc()" (click)="redirectCreate()">
+                <i class="icon htvbdh_dau-cong"></i>
+                <span>Tạo quyết định</span>
+            </button>
         </div>
     </div>
     <nz-card class="mt-2px flex-card data-table card-border-content table-card">
         <nz-table class="nowrap" [nzData]="dataTable" nzBordered [nzFrontPagination]="false" [nzShowPagination]="false">
             <thead>
-                <tr>
-                    <th>aaaaa</th>
-                    <th nzWidth="35px">Chọn</th>
-                </tr>
+              <tr>
+                  <th nzWidth="30px" >STT</th>
+                  <th nzWidth="150px"> Số quyết định</th>
+                  <th> Trích yếu</th>
+                  <th nzWidth="80px"> Ngày ký</th>
+                  <th nzWidth="80px"> Số tờ trình</th>
+                  <th nzWidth="100px"> Trạng thái</th>
+                  <th nzWidth="55px"> Hành động</th>
+              </tr>
             </thead>
             <tbody>
-                <ng-container *ngFor="let diemKho of dataTable , let i = index">
-                    <tr>
-                        <td nzShowExpand="true" [nzExpand]="diemKho.expandSet"
-                            (nzExpandChange)="onExpandChange(diemKho, $event)" class="bold">{{ diemKho.tenDvi ||
-                            "" }}</td>
-                        <td></td>
-                        <!--Điểm kho-->
-
-                    </tr>
-                    <ng-container *ngIf="diemKho.expandSet">
-                        <ng-container *ngFor="let nhaKho of diemKho.children , let i = index">
-                            <tr>
-                                <td class="pd-l-40" nzShowExpand="true" [nzExpand]="nhaKho.expandSet"
-                                    (nzExpandChange)="onExpandChange(nhaKho, $event)">{{nhaKho.tenDvi}}</td>
-                                <!-- Nhà kho-->
-                                <td></td>
-                            </tr>
-                            <ng-container *ngIf="nhaKho.expandSet">
-                                <ng-container *ngFor="let nganKho of nhaKho.children , let i = index">
-                                    <tr>
-                                        <td class="pd-l-80" nzShowExpand="true" [nzExpand]="nganKho.expandSet"
-                                            (nzExpandChange)="onExpandChange(nganKho, $event)">
-                                            {{nganKho.tenDvi}}</td>
-                                        <td></td>
-                                        <!-- Ngăn kho-->
-                                    </tr>
-                                    <ng-container *ngIf="nganKho.expandSet">
-                                        <ng-container *ngFor="let loKho of nganKho.children , let i = index">
-                                            <tr>
-                                                <td class="pd-l-120">{{loKho.tenDvi}}</td> <!-- Lô kho-->
-                                                <td></td>
-                                            </tr>
-                                        </ng-container>
-                                    </ng-container>
-                                </ng-container>
-                            </ng-container>
-                        </ng-container>
-                    </ng-container>
-                </ng-container>
+              <tr *ngFor="let data of dataTable , let i = index">
+                <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
+                <td>{{data.soQd}}</td>
+                <td>{{data.trichYeu}}</td>
+                <td>{{data.ngayKy | date : 'dd/MM/yyyy' }}</td>
+                <td>{{data.soTtr}}</td>
+                <td>{{data.tenTrangThai}}</td>
+                <td>
+                  <a (click)="redirectDetail(data.id)">
+                    <span class="icon htvbdh_eye"></span>
+                  </a>
+                  <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="redirectDetail(data.id)">
+                    <span class="fa fa-pencil"></span>
+                  </a>
+                  <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="delete(data)" >
+                    <i class="fa fa-trash-o do"></i>
+                  </a>
+                </td>
+              </tr>
             </tbody>
         </nz-table>
         <div class="tab-content tab-menu" id="myTabContent">

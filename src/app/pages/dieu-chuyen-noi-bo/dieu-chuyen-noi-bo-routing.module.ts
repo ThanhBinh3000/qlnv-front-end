@@ -6,7 +6,8 @@ import { TongHopDieuChuyenTaiCuc } from './tong-hop-dieu-chuyen-tai-cuc/tong-hop
 import {
   TongHopDieuChuyenTaiTongCuc
 } from './tong-hop-dieu-chuyen-tai-tong-cuc/tong-hop-dieu-chuyen-tai-tong-cuc.component';
-import { BaoCaoComponent } from './bao-cao/bao-cao.component';
+import { BaoCaoComponent } from './bao-cao-dieu-chuyen/bao-cao/bao-cao.component';
+import { BaoCaoDieuChuyenComponent } from './bao-cao-dieu-chuyen/bao-cao-dieu-chuyen.component';
 
 const routes: Routes = [
   {
@@ -53,7 +54,7 @@ const routes: Routes = [
       },
       {
         path: 'bao-cao',
-        component: BaoCaoComponent
+        component: BaoCaoDieuChuyenComponent
       },
     ]
   }]

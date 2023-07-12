@@ -1,11 +1,11 @@
 <nz-affix [nzOffsetTop]="98" class="level2">
     <!-- (nzChange)="onChange($event)" -->
     <ul nz-menu nzMode="horizontal">
-        <li nz-menu-item nzSelected (click)="selectTab(0)">
-            Phiếu kiểm tra chất lượng
-        </li>
+      <li nz-menu-item nzSelected (click)="selectTab(0)">
+        Biên bản nghiệm thu bảo quản lần đầu
+      </li>
         <li nz-menu-item (click)="selectTab(1)">
-            Biên bản nghiệm thu bảo quản lần đầu
+            Phiếu kiểm tra chất lượng
         </li>
         <li nz-menu-item (click)="selectTab(2)">
             Biên bản lấy mẫu/bàn giao mẫu
@@ -17,10 +17,10 @@
 
 </nz-affix>
 <ng-container *ngIf="tabSelected == 0">
-    <app-phieu-kiem-tra-chat-luong [typeVthh]="typeVthh"></app-phieu-kiem-tra-chat-luong>
+  <app-bien-ban-nghiem-thu-bao-quan [typeVthh]="typeVthh"></app-bien-ban-nghiem-thu-bao-quan>
 </ng-container>
 <ng-container *ngIf="tabSelected == 1">
-    <app-bien-ban-nghiem-thu-bao-quan [typeVthh]="typeVthh"></app-bien-ban-nghiem-thu-bao-quan>
+    <app-phieu-kiem-tra-chat-luong [typeVthh]="typeVthh"></app-phieu-kiem-tra-chat-luong>
 </ng-container>
 <ng-container *ngIf="tabSelected == 2">
     <app-bien-ban-lay-ban-giao-mau [typeVthh]="typeVthh"></app-bien-ban-lay-ban-giao-mau>

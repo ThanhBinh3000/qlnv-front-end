@@ -11,25 +11,30 @@
               </nz-select>
             </div>
             <div nz-col nzSpan="3">
-              <label class="search__label">Số QĐ điều chuyển</label>
+              <label class="search__label">Số QĐ ĐC của Cục</label>
               <nz-input-group nzAddOnAfter="/DCNB">
-                <nz-input-number class="search__input" formControlName="soQdinh" [nzMin]="1" [nzMax]="9" [nzStep]="1"
+                <nz-input-number class="search__input" formControlName="soQdDcCuc" [nzMin]="1" [nzMax]="9" [nzStep]="1"
                   [nzSize]="'small'" [nzDisabled]="isView">
                 </nz-input-number>
               </nz-input-group>
             </div>
             <div nz-col nzSpan="3">
-              <label class="search__label">Số BB NT kê lót</label>
-              <input nz-input formControlName="trichYeu" />
+              <label class="search__label">Số BB nhập đầy kho</label>
+              <input nz-input formControlName="soBb" />
             </div>
 
             <div nz-col nzSpan="4">
-              <label class="search__label">Ngày lập biên bản</label>
-              <nz-range-picker formControlName="ngayDuyetTc" nzFormat="dd/MM/yyyy"></nz-range-picker>
+              <label class="search__label">Ngày bắt đầu nhập</label>
+              <nz-range-picker formControlName="ngayBdNhap" nzFormat="dd/MM/yyyy"></nz-range-picker>
             </div>
             <div nz-col nzSpan="4">
-              <label class="search__label">Ngày kết thúc NT kê lót, BQLĐ</label>
-              <nz-range-picker formControlName="ngayHieuLuc" nzFormat="dd/MM/yyyy"></nz-range-picker>
+              <label class="search__label">Ngày kết thúc nhập</label>
+              <nz-range-picker formControlName="ngayKtNhap" nzFormat="dd/MM/yyyy"></nz-range-picker>
+            </div>
+
+            <div nz-col nzSpan="4">
+              <label class="search__label">Thời hạn nhận hàng</label>
+              <nz-range-picker formControlName="thoiHanNh" nzFormat="dd/MM/yyyy"></nz-range-picker>
             </div>
 
 
@@ -135,9 +140,9 @@
                     <td></td>
                     <td></td>
                     <td>
-                      <a (click)="add(row2)">
+                      <!-- <a (click)="add(row2)">
                         <i class="icon htvbdh_dau-cong"></i>
-                      </a>
+                      </a> -->
                     </td>
                   </tr>
                   <ng-container>
@@ -154,14 +159,17 @@
                         <td class="bold">{{row3.soBbNhapDayKho || ""}}</td>
                         <td class="bold">{{row3.ngayBatDauNhap|date: "dd/MM/yyyy"}}</td>
                         <td class="bold">{{row3.ngayBatKetNhap|date: "dd/MM/yyyy"}}</td>
-                        <td class="bold">{{row3.soPhieuKnCl || ""}}</td>
+                        <td class="bold">{{row3.soPhieuKiemTraCl || ""}}</td>
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td></td>
+                        <td class="bold">{{row3.tenTrangThai || ""}}</td>
                         <td>
-
-                          <a *ngIf="row3.trangThai !== STATUS.DU_THAO" (click)="redirectDetail(row3.id, true)">
+                          <a *ngIf="!row3.soBbNhapDayKho" (click)="add(row3)">
+                            <i class="icon htvbdh_dau-cong"></i>
+                          </a>
+                          <a *ngIf="row3.soBbNhapDayKho && row3.trangThai !== STATUS.DU_THAO"
+                            (click)="redirectDetail(row3.id, true)">
                             <i class="fa fa-eye" title="Xem chi tiết"></i>
                           </a>
                           <a *ngIf="row3.trangThai == STATUS.DU_THAO" (click)="redirectDetail(row3.id, false)">
@@ -188,7 +196,7 @@
                           <td class="bold">{{row4.soPhieuNhapKho || ""}}</td>
                           <td class="bold">{{row4.soBangKe || ""}}</td>
                           <td class="bold">{{row4.ngayNhapDayKho|date: "dd/MM/yyyy"}}</td>
-                          <td class="bold">{{row4.tenTrangThai || ""}}</td>
+                          <td></td>
                           <td>
 
                           </td>
@@ -210,7 +218,7 @@
   </div>
 
   <div class="chi-tiet" *ngIf="isDetail">
-    <app-thong-tin-bien-ban-nhap-day-du [isView]="isView" [idInput]="selectedId"
+    <app-thong-tin-bien-ban-nhap-day-du [isView]="isView" [idInput]="selectedId" [data]="data"
       (showListEvent)="quayLai()"></app-thong-tin-bien-ban-nhap-day-du>
   </div>
 

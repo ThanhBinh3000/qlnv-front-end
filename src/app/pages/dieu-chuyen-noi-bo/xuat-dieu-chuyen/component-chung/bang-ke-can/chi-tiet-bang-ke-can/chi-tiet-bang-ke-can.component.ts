@@ -128,19 +128,19 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
         maDvi: [''],
         maQhns: [''],
         soBangKe: [''],
-        qdinhDccId: ['', Validators.required],
-        soQdinhDcc: [''],
-        ngayKyQdDcc: [''],
-        ngayNhap: [''],
-        maDiemKho: ['', Validators.required],
-        maNhaKho: [''],
-        maNganKho: [''],
+        qdinhDccId: ['', [Validators.required]],
+        soQdinhDcc: ['', [Validators.required]],
+        ngayKyQdDcc: ['', [Validators.required]],
+        ngayNhap: ['', [Validators.required]],
+        maDiemKho: ['', [Validators.required]],
+        maNhaKho: ['', [Validators.required]],
+        maNganKho: ['', [Validators.required]],
         maLoKho: [''],
         maKho: [''],
-        phieuXuatKhoId: ['', Validators.required],
-        soPhieuXuatKho: [''],
+        phieuXuatKhoId: ['', [Validators.required]],
+        soPhieuXuatKho: ['', [Validators.required]],
         ngayXuatKho: [''],
-        diaDaDiemKho: ['', Validators.required],
+        diaDaDiemKho: ['', [Validators.required]],
         loaiVthh: [''],
         cloaiVthh: [''],
         donViTinh: [''],
@@ -171,7 +171,7 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
         tenNhaKho: ['', [Validators.required]],
         tenNganKho: ['', [Validators.required]],
         tenLoKho: [''],
-        tenNganLoKho: [''],
+        tenNganLoKho: ['', [Validators.required]],
         nguoiPduyet: [''],
         nguoiGduyet: [''],
         thuKhoId: [''],
@@ -188,11 +188,9 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
   async ngOnInit() {
     try {
       await this.spinner.show();
-      // await Promise.all([
-      //   this.loadDsVthh(),
-      //   this.loadDsDonVi(),
-      //   this.loadDSQdDc(),
-      // ])
+      if (this.isViewOnModal) {
+        this.isView = true;
+      }
       this.loadDsVthh();
       await this.loadDetail(this.idInput)
     } catch (e) {
@@ -200,21 +198,6 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
     } finally {
       this.flagInit = false;
       await this.spinner.hide();
-    }
-  }
-
-  async loadDsLoaiHinhNhapXuat() {
-    let res = await this.danhMucService.danhMucChungGetAll("LOAI_HINH_NHAP_XUAT");
-    if (res.msg === MESSAGE.SUCCESS) {
-      this.listLoaiHinhNhapXuat = res.data.filter(item => item.phanLoai === 'XUAT_CAP');
-    }
-  }
-
-  async loadDsKieuNhapXuat() {
-    let res = await this.danhMucService.danhMucChungGetAll("KIEU_NHAP_XUAT");
-    if (res.msg === MESSAGE.SUCCESS) {
-      this.listKieuNhapXuat = res.data.filter(item => item.apDung === 'XUAT_CAP');
-
     }
   }
 
@@ -288,8 +271,7 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
         ...this.passData,
         tenNganLoKho: this.passData.tenLoKho ? `${this.passData.tenLoKho} - ${this.passData.tenNganKho}` : this.passData.tenNganKho
       });
-      this.chiTietDiemKho(this.passData.maDiemKho);
-      await this.loadDsPhieuXuatKho(this.passData.qdinhDccId);
+      await Promise.allSettled([this.chiTietQdDc(this.passData.qdinhDccId), this.chiTietDiemKho(this.passData.maDiemKho), this.loadDsPhieuXuatKho(this.passData.qdinhDccId)]);
       this.dsPhieuXuatKho = this.dsPhieuXuatKho.filter(f => ((f.maloKho && f.maloKho === this.passData.maDiemKho) || (f.maloKho && f.maNganKho && f.maNganKho === this.passData.maNganKho)));
     }
   }
@@ -421,12 +403,14 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
   async save() {
     try {
 
-      this.formData.disable()
+      // this.formData.disable()
       let body = this.formData.value;
       body.loaiDc = this.loaiDc;
       body.isVatTu = this.isVatTu;
       body.thayDoiThuKho = this.thayDoiThuKho;
       body.type = this.type;
+      this.helperService.markFormGroupTouched(this.formData);
+      if (!this.formData.valid) return;
       let res;
       if (body.id && body.id > 0) {
         res = await this.bangKeCanHangDieuChuyenService.update(body);
@@ -441,7 +425,8 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
         }
         this.formData.get("id").setValue(res.data.id);
         this.formData.get("trangThai").setValue(res.data.trangThai);
-        this.genSoBangKe(res.data.id)
+        this.formData.get("soBangKe").setValue(res.data.soBangKe)
+        // this.genSoBangKe(res.data.id)
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
@@ -449,7 +434,7 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
       console.log("e", error)
     }
     finally {
-      this.formData.enable();
+      // this.formData.enable();
 
     }
   }
@@ -631,6 +616,13 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
       }
     } catch (error) {
       console.log("error", error)
+    }
+  }
+  async chiTietQdDc(id: number) {
+    if (!id) return;
+    const res = await this.quyetDinhDieuChuyenCucService.getDetail(id);
+    if (res.msg === MESSAGE.SUCCESS) {
+      this.formData.patchValue({ ngayKyQdDcc: res?.data?.ngayKyQdinh })
     }
   }
 

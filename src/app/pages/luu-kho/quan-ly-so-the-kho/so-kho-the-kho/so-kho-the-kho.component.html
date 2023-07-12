@@ -66,7 +66,7 @@
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button type="button" class="btn btn-sub xanh" (click)="openModelCreate(null, false)">
+        <button type="button" class="btn btn-sub xanh" (click)="openModalCreate(null, false)">
           <i class="icon htvbdh_dau-cong xanh"></i>
           <span>Tạo sổ kho/thẻ kho</span>
         </button>
@@ -103,22 +103,6 @@
           <th class="text-center">Nhập</th>
           <th class="text-center">Xuất</th>
         </tr>
-        <ng-container *ngFor="let item of dataTable , let i = index">
-          <tr class="level-2">
-            <td>{{i + 1}}</td>
-            <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-        </ng-container>
         </thead>
         <tbody>
         <ng-container *ngFor="let diemKho of dataTable , let i = index">
@@ -194,7 +178,7 @@
                     <td class="bg-parent2 font-weight-bold"></td>
                     <td class="bg-parent2 font-weight-bold"></td>
                     <td nzRight class="bg-parent2 font-weight-bold">
-                      <a >
+                      <a (click)="openModalCreate(null, false)" *ngIf="!nganKho.children">
                         <i class="fa fa-plus"></i>
                       </a>
                     </td>
@@ -248,10 +232,10 @@
                             <td class="bg-parent2 font-weight-bold"></td>
                             <td class="bg-parent2 font-weight-bold"></td>
                             <td class="bg-parent2 font-weight-bold" nzRight>
-                              <a >
+                              <a (click)="openModalCreate(soKho.id, true)" >
                                 <i class="fa fa-eye"></i>
                               </a>
-                              <a >
+                              <a (click)="openModalCreate(null, false)" >
                                 <i class="fa fa-plus"></i>
                               </a>
                             </td>
@@ -280,14 +264,14 @@
                                 <td class="bg-parent2 font-weight-bold"></td>
                                 <td class="bg-parent2 font-weight-bold"></td>
                                 <td class="bg-parent2 font-weight-bold" nzRight>
-                                  <a >
+                                  <a (click)="openModalCreate(theKho.id, true)" >
                                     <i class="fa fa-eye"></i>
                                   </a>
                                 </td>
                               </tr>
                               <ng-container *ngIf="expandSet.has(theKho.idVirtual)">
                                 <ng-container *ngFor="let phieuNhapXuat of theKho.ctList, let y = index">
-                                  <tr [ngClass]="{'bg-selected': phieuNhapXuat.selected}" (click)="selectRow($event,theKho.ctList)">
+                                  <tr [ngClass]="{'bg-selected': phieuNhapXuat.selected}" (click)="selectRow(phieuNhapXuat,theKho.ctList)">
                                     <td></td>
                                     <td></td>
                                     <td></td>

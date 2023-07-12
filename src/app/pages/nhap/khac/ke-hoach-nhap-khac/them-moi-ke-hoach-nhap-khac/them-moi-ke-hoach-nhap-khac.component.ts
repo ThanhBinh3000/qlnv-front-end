@@ -448,9 +448,11 @@ export class ThemMoiKeHoachNhapKhacComponent extends Base2Component implements O
       this.listOfData = this.listOfData.filter(i => i.maNhaKho != data.maNhaKho)
     }
     this.convertListData();
+    this.tinhTongSlVaThanhTien();
   }
 
-  async themMoi(data?) {
+  async themMoi($event, data?) {
+    $event.stopPropagation();
     if (data) {
       this.rowThemMoi = cloneDeep(data);
       this.isEditRowThemMoi = true;

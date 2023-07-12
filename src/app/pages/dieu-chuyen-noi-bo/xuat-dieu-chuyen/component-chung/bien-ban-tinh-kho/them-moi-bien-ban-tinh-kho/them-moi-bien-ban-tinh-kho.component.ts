@@ -123,11 +123,11 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
         tenCloaiVthh: [],
         tenLoaiVthh: [],
         tenTrangThai: ['Dự Thảo'],
-        tenNhaKho: [],
-        tenDiemKho: [],
+        tenNhaKho: ['', [Validators.required]],
+        tenDiemKho: ['', [Validators.required]],
         tenLoKho: [],
         tenNganKho: [],
-        tenNganLoKho: [],
+        tenNganLoKho: ['', [Validators.required]],
         dcnbBienBanTinhKhoDtl: [new Array()]
       }
     );
@@ -156,7 +156,7 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
         .then((res) => {
           if (res.msg === MESSAGE.SUCCESS) {
             this.formData.patchValue(res.data);
-            this.formData.patchValue({ soBbTinhKho: res.data.soBbTinhKho ? res.data.soBbTinhKho : this.genSoBienBanTinhKho(res.data.id) });
+            this.formData.patchValue({ soBbTinhKho: res.data.soBbTinhKho ? res.data.soBbTinhKho : this.genSoBienBanTinhKho(res.data.id), tenNganLoKho: res.data.tenLoKho ? `${res.data.tenLoKho} - ${res.data.tenNganKho}` : res.data.tenNganKho });
             const data = res.data;
             this.fileBbTinhKhoDaKy = data.fileBbTinhKhoDaKy;
           }
@@ -417,7 +417,7 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
     //   }
     // }
     this.formData.patchValue({
-      chenhLechSlConLai: this.formData.value.slConLaiTheoSs - this.formData.value.slConLaiTheoTt
+      chenhLechSlConLai: this.formData.value.slConLaiTheoTt - this.formData.value.slConLaiTheoSs
     })
   }
 
@@ -428,6 +428,9 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
     body.isVatTu = this.isVatTu;
     body.thayDoiThuKho = this.thayDoiThuKho;
     body.type = this.type;
+    if (this.formData.value.tongSlXuatTheoQd > this.formData.value.tongSlXuatTheoTt) {
+      return this.notification.error(MESSAGE.ERROR, "Số lượng xuất thực tế nhỏ hơn số lượng xuất theo quyết định")
+    }
     let data = await this.createUpdate(body);
     if (data) {
       this.formData.patchValue({ id: data.id, trangThai: data.trangThai, soBbTinhKho: data.soBbTinhKho ? data.soBbTinhKho : this.genSoBienBanTinhKho(data.id) })
@@ -465,7 +468,7 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
         break;
       }
     }
-    this.approve(this.idInput, trangThai, msg);
+    this.approve(this.formData.value.id, trangThai, msg);
   }
 
   tuChoi() {

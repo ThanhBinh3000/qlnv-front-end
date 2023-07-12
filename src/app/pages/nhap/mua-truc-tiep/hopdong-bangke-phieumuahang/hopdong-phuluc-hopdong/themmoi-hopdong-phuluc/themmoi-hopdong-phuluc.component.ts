@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
 import { Validators } from '@angular/forms';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -25,7 +25,7 @@ import { QuyetDinhPheDuyetKeHoachMTTService } from 'src/app/services/quyet-dinh-
   styleUrls: ['./themmoi-hopdong-phuluc.component.scss']
 })
 
-export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnInit {
+export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnChanges {
   @Input() id: number;
   @Input() loaiVthh: string;
   @Input() idKqMtt: number;
@@ -39,9 +39,11 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnI
   dataTablePhuLuc: any[] = [];
   isViewPhuLuc: boolean = false;
   idPhuLuc: number = 0;
+  idKqCgia: number;
 
   maHopDongSuffix: string = '';
   objHopDongHdr: any = {};
+  dviCungCap: any;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -60,54 +62,54 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnI
         id: [],
         idQdKq: [],
         namHd: [dayjs().get('year')],
-        soQdKq: ['', [Validators.required]],
+        soQdKq: [''],
         ngayKyQdKq: [''],
         ngayMkho: [''],
         soQd: [''],
-        idDviMua: [null, [Validators.required]],
+        idDviBan: [null, [Validators.required]],
 
 
-        soHd: ['', [Validators.required]],
-        tenHd: ['', [Validators.required]],
-        ngayHluc: ['', [Validators.required]],
+        soHd: [''],
+        tenHd: [''],
+        ngayHluc: [''],
         ghiChuNgayHluc: [null],
 
-        loaiHdong: ['', [Validators.required]],
+        loaiHdong: [''],
         ghiChuLoaiHdong: [],
-        tgianThienHd: ['', [Validators.required]],
-        thoiGianDuKien: ['', [Validators.required]],
+        tgianThienHd: [''],
+        thoiGianDuKien: [''],
         tgianGnhanTu: [],
         tgianGnhanDen: [],
         ghiChuTgianGnhan: [],
-        noiDungHdong: ['', [Validators.required]],
-        dkienHanTtoan: ['', [Validators.required]],
+        noiDungHdong: [''],
+        dkienHanTtoan: [''],
 
         maDvi: [],
-        tenDvi: ['', [Validators.required]],
-        diaChi: ['', [Validators.required]],
-        mst: ['', [Validators.required]],
-        tenNguoiDdien: ['', [Validators.required]],
-        chucVu: ['', [Validators.required]],
-        sdt: ['', [Validators.required]],
-        fax: ['', [Validators.required]],
-        stk: ['', [Validators.required]],
-        moLai: ['', [Validators.required]],
-        ttinGiayUyQuyen: ['', [Validators.required]],
+        tenDvi: [''],
+        diaChi: [''],
+        mst: [''],
+        tenNguoiDdien: [''],
+        chucVu: [''],
+        sdt: [''],
+        fax: [''],
+        stk: [''],
+        moLai: [''],
+        ttinGiayUyQuyen: [''],
 
-        tenDviMua: [''],
-        diaChiDviMua: [],
-        mstDviMua: ['', [Validators.required]],
-        tenNguoiDdienDviMua: ['', [Validators.required]],
-        chucVuDviMua: ['', [Validators.required]],
-        sdtDviMua: [''],
-        faxDviMua: ['', [Validators.required]],
-        stkDviMua: ['', [Validators.required]],
-        moLaiDviMua: ['', [Validators.required]],
+        tenDviBan: [''],
+        diaChiDviBan: [],
+        mstDviBan: [''],
+        tenNguoiDdienDviBan: [''],
+        chucVuDviBan: [''],
+        sdtDviBan: [''],
+        faxDviBan: [''],
+        stkDviBan: [''],
+        moLaiDviBan: [''],
 
-        loaiVthh: ['', [Validators.required]],
-        tenLoaiVthh: ['', [Validators.required]],
-        cloaiVthh: ['', [Validators.required]],
-        tenCloaiVthh: ['', [Validators.required]],
+        loaiVthh: [''],
+        tenLoaiVthh: [''],
+        cloaiVthh: [''],
+        tenCloaiVthh: [''],
         moTaHangHoa: [''],
         dviTinh: [''],
         soLuong: [],
@@ -120,26 +122,45 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnI
         trangThai: STATUS.DU_THAO,
         tenTrangThai: ['Dự thảo'],
         fileName: [],
-        tongSoLuongQdKh: []
+        dviCungCap: [''],
+        tongSoLuongQdKh: [],
+        idKqCgia: [''],
+        idQdPdSldd: ['']
       }
     );
   }
 
-
-  async ngOnInit() {
+  async ngOnChanges() {
+    this.formData.value.namHd = dayjs().get('year');
     this.maHopDongSuffix = `/${this.formData.value.namHd}/HĐMB`;
     await Promise.all([
       this.loadDataComboBox()
     ]);
-    if (this.idKqMtt) {
-      this.onChangeKqMTT(this.idKqMtt);
-    }
     if (this.id) {
       await this.loadChiTiet(this.id);
     } else {
       this.initForm();
     }
+    if (this.idKqMtt) {
+      await this.onChangeKqMTT(this.idKqMtt);
+    }
+
   }
+
+  // async ngOnInit() {
+  //   this.maHopDongSuffix = `/${this.formData.value.namHd}/HĐMB`;
+  //   await Promise.all([
+  //     this.loadDataComboBox()
+  //   ]);
+  //   if (this.idKqMtt) {
+  //     await this.onChangeKqMTT(this.idKqMtt);
+  //   }
+  //   if (this.id) {
+  //     await this.loadChiTiet(this.id);
+  //   } else {
+  //     this.initForm();
+  //   }
+  // }
   initForm() {
     this.formData.patchValue({
       maDvi: this.userInfo.MA_DVI ?? null,
@@ -161,11 +182,22 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnI
   async loadChiTiet(id) {
     let data = await this.detail(id);
     this.formData.patchValue({
-      soHd: data.soHd.split('/')[0],
-      thoiGianDuKien: (data.tgianGnhanTu && data.tgianGnhanDen) ? [data.tgianGnhanTu, data.tgianGnhanDen] : null
+      soHd: data.soHd != null ? data.soHd.split('/')[0] : "",
+      thoiGianDuKien: (data.tgianGnhanTu && data.tgianGnhanDen) ? [data.tgianGnhanTu, data.tgianGnhanDen] : null,
+      idDviBan: data.idKqCgia,
+      dviCungCap: data.dviCungCap,
+      maDvi: this.userInfo.MA_DVI ?? null,
+      tenDvi: this.userInfo.TEN_DVI ?? null,
+      diaChi: this.userInfo.DON_VI.diaChi ?? null,
+      namHd: dayjs().get('year'),
+      id: data.id,
+      idKqCgia: data.idKqCgia,
+      idQdPdSldd: data.idQdPdSldd
     })
+    this.idKqCgia = data.idKqCgia;
+    console.log("formData1", this.formData.value)
     this.dataTable = data.children;
-    this.dataTablePhuLuc = data.phuLuc;
+    this.dataTablePhuLuc = data.phuLucDtl;
     this.objHopDongHdr = data;
     this.fileDinhKem = data.fileDinhKems;
   }
@@ -229,7 +261,7 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnI
     });
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
-        this.onChangeKqMTT(data.id);
+        await this.onChangeKqMTT(data.id);
       }
     });
   }
@@ -240,11 +272,9 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnI
         .then(async (resKq) => {
           const dataKq = resKq.data;
           let resTtin = await this.quyetDinhPheDuyetKeHoachMTTService.getDetailDtlCuc(dataKq.idPdKhDtl);
-          console.log(resTtin)
           if (resKq.data) {
             const dataThongTin = resTtin.data;
-            this.dataTable = dataThongTin.children;
-
+            this.dataTable = dataKq.danhSachCtiet;
             this.formData.patchValue({
               idQdKq: dataKq.id,
               soQdKq: dataKq.soQdKq,
@@ -259,13 +289,17 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnI
               dviTinh: "kg",
               tongSoLuongQdKh: dataThongTin.tongSoLuong * 1000
             });
-            dataThongTin.children.forEach((item) => {
+            console.log("formData2", dataKq.danhSachCtiet)
+            dataKq.danhSachCtiet.forEach((item) => {
               item.listChaoGia.forEach(res =>{
                 if (res.luaChon == true) {
                   this.listDviLquan.push(res)
                 }
               })
             })
+            if(this.idKqCgia){
+              this.changeDviCungCap(this.idKqCgia)
+            }
           }
         })
     }
@@ -352,7 +386,7 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnI
 
 
   isDisabled() {
-    if (this.formData.value.trangThai == STATUS.DU_THAO) {
+    if (!this.isQuanLy && this.formData.value.trangThai == STATUS.DU_THAO) {
       return false;
     } else {
       return true;
@@ -385,21 +419,25 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnI
 
   changeDviCungCap($event: any) {
     let dViCc = this.listDviLquan.find(s => s.id === $event);
+    console.log("dViCc ", dViCc)
     if (dViCc) {
       this.formData.patchValue({
-        idDviMua: dViCc.id,
-        tenDviMua: dViCc.canhanTochuc,
-        diaChiDviMua: dViCc.diaChi,
-        mstDviMua: dViCc.mst,
+        // idDviMua: dViCc.id,
+        tenDviBan: dViCc.canhanTochuc,
+        diaChiDviBan: dViCc.diaChi,
+        mstDviBan: dViCc.mst,
         soLuong: dViCc.soLuong,
+        dviCungCap: dViCc.dviCungCap,
         donGia: dViCc.donGia,
         donGiaGomThue: dViCc.donGia + (dViCc.donGia * dViCc.thueGtgt / 100),
-        sdtDviMua: dViCc.sdt,
+        sdtDviBan: dViCc.sdt,
         thanhTien: dViCc.soLuong * dViCc.donGia,
         tongSoLuongQdKhChuakyHd: this.formData.value.tongSoLuongQdKh - dViCc.soLuong
       })
     }
   }
+
+
 
 }
 

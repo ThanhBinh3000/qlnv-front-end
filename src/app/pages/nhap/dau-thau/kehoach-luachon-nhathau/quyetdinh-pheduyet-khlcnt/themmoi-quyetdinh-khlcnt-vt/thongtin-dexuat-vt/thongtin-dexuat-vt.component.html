@@ -194,7 +194,7 @@
               <nz-form-label [nzNoColon]="true"> Số QĐ phê duyệt giá cụ thể
               </nz-form-label>
               <nz-form-control>
-                <span class="blue-text">{{formData.value.soQdPdGia}}</span>
+                <span class="blue-text">{{formData.value.soQdPdGiaCuThe}}</span>
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -203,7 +203,7 @@
               <nz-form-label [nzNoColon]="true"> Ngày ký QĐ phê duyệt giá cụ thể
               </nz-form-label>
               <nz-form-control>
-                <span class="blue-text">{{formData.value.ngayKyQdPdGia}}</span>
+                <span class="blue-text">{{formData.value.ngayKyQdPdGiaCuThe}}</span>
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -214,7 +214,7 @@
 </nz-card>
 <nz-card class="mg-t-16 flex-card p-lr16">
   <nz-collapse nzAccordion>
-    <nz-collapse-panel [nzHeader]="'THÔNG TIN GÓI THẦU'" [nzActive]="true" [nzExtra]="themMoiGt">
+    <nz-collapse-panel [nzHeader]="titleDx" [nzActive]="true" [nzExtra]="themMoiGt">
       <nz-table [nzData]="listOfData" class="nowrap pd-10" nzBordered [nzScroll]="{ x: '1000px' }">
         <thead>
         <tr>

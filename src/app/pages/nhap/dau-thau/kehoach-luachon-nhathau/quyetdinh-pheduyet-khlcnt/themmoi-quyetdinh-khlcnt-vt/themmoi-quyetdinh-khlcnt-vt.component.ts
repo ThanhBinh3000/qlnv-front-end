@@ -139,7 +139,6 @@ export class ThemmoiQuyetdinhKhlcntVtComponent extends Base2Component implements
       tenCloaiVthh: [""],
       moTaHangHoa: [""],
       ldoTuchoi: [""],
-      phanLoai: ["", [Validators.required]],
       vat: ["5"],
       gtriDthau: [""],
       gtriHdong: [""],
@@ -202,7 +201,6 @@ export class ThemmoiQuyetdinhKhlcntVtComponent extends Base2Component implements
     this.idInput = 0;
     this.formData.patchValue({
       namKhoach: dayjs().get("year"),
-      phanLoai: "TTr"
     });
   }
 
@@ -251,6 +249,7 @@ export class ThemmoiQuyetdinhKhlcntVtComponent extends Base2Component implements
     this.formData.patchValue({
       tenDuAn: childBody.tenDuAn,
       tongMucDtDx: childBody.tongMucDtDx,
+      tongMucDt: childBody.tongMucDt,
       dienGiaiTongMucDt: childBody.dienGiaiTongMucDt,
       tgianThien: childBody.tgianThien,
       quyMo: childBody.quyMo,
@@ -404,6 +403,7 @@ export class ThemmoiQuyetdinhKhlcntVtComponent extends Base2Component implements
     this.dataInput.tenDuAn = this.formData.value.tenDuAn;
     this.dataInput.tongMucDtDx = this.formData.value.tongMucDtDx;
     this.dataInput.dienGiaiTongMucDt = this.formData.value.dienGiaiTongMucDt;
+    this.dataInput.tongMucDt = this.formData.value.tongMucDt;
     this.dataInput.tgianThien = this.formData.value.tgianThien;
     this.dataInput.quyMo = this.formData.value.quyMo;
     this.dataInput.hthucLcnt = this.formData.value.hthucLcnt;
@@ -417,14 +417,10 @@ export class ThemmoiQuyetdinhKhlcntVtComponent extends Base2Component implements
   }
 
   async openDialogTr() {
-    if (this.formData.get("phanLoai").value != "TTr") {
-      return;
-    }
     await this.spinner.show();
     // Get data tờ trình
     let bodyToTrinh = {
       trangThai: STATUS.DA_DUYET_LDV,
-      trangThaiTh: STATUS.CHUA_TONG_HOP,
       namKh: this.formData.get("namKhoach").value,
       loaiVthh: this.loaiVthh,
       paggingReq: {
@@ -464,11 +460,11 @@ export class ThemmoiQuyetdinhKhlcntVtComponent extends Base2Component implements
     if (id > 0) {
       const res = await this.dxuatKhlcntService.getDetail(id);
       if (res.msg == MESSAGE.SUCCESS) {
+        this.dataInputCache = cloneDeep(res.data);
         this.dataInput = cloneDeep(res.data);
         if (isInit) {
           this.initDataInput();
         }
-        this.dataInputCache = res.data;
         this.formData.patchValue({
           loaiHinhNx: res.data.loaiHinhNx,
           kieuNx: res.data.kieuNx,
@@ -477,7 +473,8 @@ export class ThemmoiQuyetdinhKhlcntVtComponent extends Base2Component implements
           tchuanCluong: res.data.tchuanCluong,
           ykienThamGia: res.data.ykienThamGia,
           soTrHdr: res.data.soDxuat,
-          idTrHdr: res.data.id
+          idTrHdr: res.data.id,
+          soQdCc: res.data.soQd,
         });
         this.baoGiaThiTruongList = [];
         this.canCuKhacList = [];

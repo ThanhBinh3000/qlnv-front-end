@@ -220,54 +220,54 @@
 <!--                [isQuanLy]="true">-->
 <!--            </app-themmoi-hopdong-phuluc>-->
 <!--        </nz-card>-->
-      <nz-collapse>
-        <nz-collapse-panel nzActive="true" nzHeader="Địa điểm cung cấp hàng hóa">
-          <nz-card class="mg-t-16 flex-card p-lr16">
-            <nz-table class="nowrap pd-10" #tableData [nzData]="danhSachCtiet" class="nowrap" nzBordered>
-              <thead>
-              <tr>
-                <th style="width: 2%;">STT</th>
-                <th>Chi cục</th>
-                <th>Điểm kho</th>
-                <th>Số lượng mua trực tiếp đề xuất</th>
-                <th>ĐVT</th>
-                <th>Đơn giá được duyệt có VAT (đ/kg)</th>
-                <th>Thành tiền (đ)</th>
-              </tr>
-              </thead>
-              <tbody>
-              <ng-container *ngFor="let item of tableData.data , let i = index">
-                <tr [ngClass]="{'bg-selected': i == 0 && this.selected}" (click)="showDetail($event,item)">
-                  <td [nzExpand]="true"></td>
-                  <td colspan="2">{{item.tenDvi}}</td>
-                  <td class="text-bold">{{ calcTong() | number : '1.0-1' : 'vi_VN' }}</td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                </tr>
-                <ng-container *ngFor="let diemKho of item.children, let y = index">
-                  <tr>
-                    <td></td>
-                    <td></td>
-                    <td>{{diemKho.tenDiemKho}}</td>
-                    <td>{{diemKho.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                    <td>tấn</td>
-                    <td>{{diemKho.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
-                    <td>{{diemKho.donGiaVat * diemKho.soLuong * 1000 | number : '1.0-1' : 'vi_VN'}}</td>
-                  </tr>
-                </ng-container>
-              </ng-container>
-              </tbody>
-            </nz-table>
-          </nz-card>
-        </nz-collapse-panel>
-      </nz-collapse>
+<!--      <nz-collapse>-->
+<!--        <nz-collapse-panel nzActive="true" nzHeader="Địa điểm cung cấp hàng hóa">-->
+<!--          <nz-card class="mg-t-16 flex-card p-lr16">-->
+<!--            <nz-table class="nowrap pd-10" #tableData [nzData]="danhSachCtiet" class="nowrap" nzBordered>-->
+<!--              <thead>-->
+<!--              <tr>-->
+<!--                <th style="width: 2%;">STT</th>-->
+<!--                <th>Chi cục</th>-->
+<!--                <th>Điểm kho</th>-->
+<!--                <th>Số lượng mua trực tiếp đề xuất</th>-->
+<!--                <th>ĐVT</th>-->
+<!--                <th>Đơn giá được duyệt có VAT (đ/kg)</th>-->
+<!--                <th>Thành tiền (đ)</th>-->
+<!--              </tr>-->
+<!--              </thead>-->
+<!--              <tbody>-->
+<!--              <ng-container *ngFor="let item of tableData.data , let i = index">-->
+<!--                <tr [ngClass]="{'bg-selected': i == 0 && this.selected}" (click)="showDetail($event,item)">-->
+<!--                  <td [nzExpand]="true"></td>-->
+<!--                  <td colspan="2">{{item.tenDvi}}</td>-->
+<!--                  <td class="text-bold">{{ calcTong() | number : '1.0-1' : 'vi_VN' }}</td>-->
+<!--                  <td></td>-->
+<!--                  <td></td>-->
+<!--                  <td></td>-->
+<!--                </tr>-->
+<!--                <ng-container *ngFor="let diemKho of item.children, let y = index">-->
+<!--                  <tr>-->
+<!--                    <td></td>-->
+<!--                    <td></td>-->
+<!--                    <td>{{diemKho.tenDiemKho}}</td>-->
+<!--                    <td>{{diemKho.soLuong | number : '1.0-1' : 'vi_VN'}}</td>-->
+<!--                    <td>tấn</td>-->
+<!--                    <td>{{diemKho.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>-->
+<!--                    <td>{{diemKho.donGiaVat * diemKho.soLuong * 1000 | number : '1.0-1' : 'vi_VN'}}</td>-->
+<!--                  </tr>-->
+<!--                </ng-container>-->
+<!--              </ng-container>-->
+<!--              </tbody>-->
+<!--            </nz-table>-->
+<!--          </nz-card>-->
+<!--        </nz-collapse-panel>-->
+<!--      </nz-collapse>-->
       <nz-collapse>
         <div class="header header-green-background mg-t-16">
           <div class="header-text">
             <div class="title-chi-tieu">
               <span></span>
-              <span>Phụ lục hợp đồng</span>
+              <span>DANH SÁCH HỢP ĐỒNG CẦN KÝ VỚI CÁC GÓI THẦU ĐÃ TRÚNG</span>
             </div>
           </div>
           <div class="buttons"
@@ -287,15 +287,13 @@
               <th>Số hợp đồng</th>
               <th>Tên hợp đồng</th>
               <th>Ngày ký hợp đồng</th>
-              <th width="150px">Tên cá nhân/tổ chức</th>
-              <th width="100px">MST</th>
-              <th width="200px">Địa chỉ</th>
-              <th width="200px">Số điện thoại</th>
-              <th width="100px">Ngày chào giá</th>
-              <th width="100px">Số lượng (Kg)</th>
-              <th width="100px">Đơn giá đã bao gồm thuế (đ)</th>
-              <th width="100px">Thành tiền</th>
-              <th width="100px">File đính kèm</th>
+              <th width="150px">Đơn vị cung cấp được chọn</th>
+              <th width="100px">Số lượng (kg)</th>
+              <th width="100px">Đơn giá</th>
+              <th width="100px">Thành tiền đã bao gồm thuế (đ)</th>
+              <th width="100px">Trạng thái HĐ</th>
+              <th width="100px">Số QĐ giao NV NH</th>
+              <th width="100px">Trạng thái NH</th>
               <th width="100px">Hành động</th>
             </tr>
             </thead>
@@ -306,21 +304,19 @@
                 <td>{{data.soHd}}</td>
                 <td>{{data.tenHd}}</td>
                 <td>{{data.ngayPduyet | date: 'dd/MM/YYYY' }}</td>
-                <td nzLeft>{{data.canhanTochuc}}</td>
-                <td nzLeft>{{data.mst}}</td>
-                <td nzLeft>{{data.diaChi}}</td>
-                <td nzLeft>{{data.sdt}}</td>
-                <td nzLeft>{{data.ngayChaoGia | date: 'dd/MM/YYYY'}}</td>
+                <td nzLeft>{{data.dviCungCap}}</td>
                 <td nzLeft>{{data.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                <td nzLeft>{{data.donGia | number : '1.0-1' : 'vi_VN'}}</td>
-                <td nzLeft>{{data.soLuong * data.donGia | number : '1.0-1' : 'vi_VN' }}</td>
-                <td nzLeft class="text-blue">{{data.fileDinhKems?.fileName }}</td>
+                <td nzLeft>{{data.donGiaGomThue | number : '1.0-1' : 'vi_VN'}}</td>
+                <td nzLeft>{{data.soLuong * data.donGiaGomThue | number : '1.0-1' : 'vi_VN' }}</td>
+                <td nzLeft>{{data.tenTrangThai}}</td>
+                <td nzLeft>{{data.soQd}}</td> <!-- so qd giao nv nhap hang -->
+                <td nzLeft>{{data.tenTrangThaiNh}}</td>
                 <td class="text-center">
-                  <a
+                  <a *ngIf="data.trangThai != STATUS.DA_KY"
                      (click)="redirectHopDong(true,data.id) ">
                     <i class="fa fa-pencil" title="Sửa"></i>
                   </a>
-                  <a
+                  <a *ngIf="data.trangThai != STATUS.DA_KY"
                      (click)="deleteHd(data)">
                     <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                   </a>

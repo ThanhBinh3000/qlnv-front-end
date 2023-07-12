@@ -19,7 +19,7 @@ import { QuyetDinhDieuChuyenCucService } from "src/app/services/dieu-chuyen-noi-
 import { BbNghiemThuBaoQuanService } from "src/app/services/qlnv-hang/nhap-hang/nhap-khac/bbNghiemThuBaoQuan.service";
 import { DanhMucTieuChuanService } from "src/app/services/quantri-danhmuc/danhMucTieuChuan.service";
 import { StorageService } from "src/app/services/storage.service";
-
+import * as uuidv4 from "uuid";
 
 @Component({
   selector: 'app-thong-tin-kiem-tra-chat-luong',
@@ -124,7 +124,7 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
       dcnbPhieuKtChatLuongDtl: [new Array<any>(),],
       nhanXetKetLuan: [],
       type: ["01"],
-      loaiDc: []
+      loaiDc: [this.loaiDc]
     }
     );
   }
@@ -387,7 +387,7 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
           });
         }
 
-        await this.getDataKho(this.data.maLoKhoNhan || this.data.maNganKhoNhan)
+        await this.getDataKho(data.maLoKhoNhan || data.maNganKhoNhan)
 
       }
     });

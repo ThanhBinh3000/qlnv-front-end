@@ -19,7 +19,7 @@ import { PhieuNhapKhoService } from "src/app/services/dieu-chuyen-noi-bo/nhap-di
 import { QuyetDinhDieuChuyenCucService } from "src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-c.service";
 import { StorageService } from "src/app/services/storage.service";
 import { convertTienTobangChu } from "src/app/shared/commonFunction";
-import { v4 as uuidv4 } from 'uuid';
+import * as uuidv4 from "uuid";
 
 @Component({
   selector: 'app-thong-tin-bien-ban-ket-thuc-nhap-kho',
