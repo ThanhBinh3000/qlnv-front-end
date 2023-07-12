@@ -119,7 +119,7 @@
 
 
         <nz-card class="mt-2px flex-card data-table card-border-content table-card">
-            <nz-table #basicTable class="nowrap table__container-tt" [nzData]="dataView" [nzFrontPagination]="false"
+            <nz-table #basicTable class="nowrap table-chi-tiet" [nzData]="dataView" [nzFrontPagination]="false"
                 [nzShowPagination]="false" nzBordered>
                 <thead>
                     <tr>
@@ -145,7 +145,7 @@
                 <tbody>
 
                     <ng-container *ngFor="let item of basicTable.data, let i = index;">
-                        <tr>
+                        <tr [ngClass]="{'bg-selected': item.selected}" class="level-1">
                             <td>{{i + 1}}</td>
                             <td (nzExpandChange)="onExpandStringChange(item.idVirtual, $event)"
                                 [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true"
@@ -168,7 +168,7 @@
                         </tr>
                         <ng-container *ngIf="expandSetString.has(item.idVirtual)">
                             <ng-container *ngFor="let lv1 of item.childData,let i1=index">
-                                <tr>
+                                <tr class="level-2">
                                     <td></td>
                                     <td></td>
                                     <td (nzExpandChange)="onExpandStringChange(lv1.idVirtual, $event)"
@@ -191,7 +191,7 @@
                                 </tr>
                                 <ng-container *ngIf="expandSetString.has(lv1.idVirtual)">
                                     <ng-container *ngFor="let lv2 of lv1.childData,let i2=index">
-                                        <tr>
+                                        <tr class="level-3">
                                             <td></td>
                                             <td></td>
                                             <td></td>
@@ -231,7 +231,7 @@
                                             </td>
                                         </tr>
                                         <ng-container *ngFor="let lv3 of lv2.childData,let i3=index">
-                                            <tr>
+                                            <tr class="level-4">
                                                 <td></td>
                                                 <td></td>
                                                 <td></td>

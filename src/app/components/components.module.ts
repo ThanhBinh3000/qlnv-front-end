@@ -185,6 +185,7 @@ import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatSelectModule } from "@angular/material/select";
 import { DialogSuaXuatGiamComponent } from './dialog/dialog-sua-xuat-giam/dialog-sua-xuat-giam.component';
 import { Base3Component } from './base3/base3.component';
+import { DialogTableCheckBoxComponent } from './dialog/dialog-table-check-box/dialog-table-check-box.component';
 @NgModule({
   declarations: [
     //components
@@ -288,6 +289,7 @@ import { Base3Component } from './base3/base3.component';
     TemplateErrorComponent,
     DialogSoQuyetDinhQlyKhoTangComponent,
     DialogTableSelectionComponent,
+    DialogTableCheckBoxComponent,
     DialogDiaDiemNhapKhoComponent,
     BaseComponent,
     DialogTongHopHangSuaChuaDtqgComponent,
@@ -438,6 +440,7 @@ import { Base3Component } from './base3/base3.component';
     NzResultModule,
     TemplateErrorComponent,
     DialogTableSelectionComponent,
+    DialogTableCheckBoxComponent,
     DialogDiaDiemNhapKhoComponent,
     BaseComponent,
     DialogThemChiCucComponent,

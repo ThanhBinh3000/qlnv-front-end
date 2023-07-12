@@ -1,0 +1,21 @@
+<ng-container *ngIf="!userService.isChiCuc(); else baoCaoChiCucTemplate">
+    <nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
+        <ul nz-menu nzMode="horizontal">
+            <li nz-menu-item nzSelected (click)="selectTab(0)">
+                Báo cáo kết quả điều chuyển từ chi cục
+            </li>
+            <li nz-menu-item (click)="selectTab(1)">
+                Tổng hợp báo cáo kết quả điều chuyển
+            </li>
+        </ul>
+    </nz-affix>
+    <ng-container *ngIf="tabSelected===0">
+        <app-bao-cao loaiBc="CHI_CUC" [viewOnly]="true"></app-bao-cao>
+    </ng-container>
+    <ng-container *ngIf="tabSelected===1">
+        <app-bao-cao loaiBc="CUC" [viewOnly]="userService.isTongCuc()"></app-bao-cao>
+    </ng-container>
+</ng-container>
+<ng-template #baoCaoChiCucTemplate>
+    <app-bao-cao loaiBc="CHI_CUC" [viewOnly]="false"></app-bao-cao>
+</ng-template>

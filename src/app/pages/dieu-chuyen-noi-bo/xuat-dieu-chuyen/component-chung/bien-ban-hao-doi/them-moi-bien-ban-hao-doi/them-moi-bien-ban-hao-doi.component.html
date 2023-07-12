@@ -1,4 +1,4 @@
-<nz-affix [nzOffsetTop]="141" class="btn-affix">
+<nz-affix [nzOffsetTop]="141" class="btn-affix" *ngIf="!isViewOnModal">
   <div class="btn-group">
     <button type="button" class="btn btn-sub" (click)="goBack()">
       <i class="fa fa-arrow-left"></i>
@@ -196,7 +196,7 @@
                 <td>{{item.soPhieuKtChatLuong}} </td>
                 <td>{{item.soPhieuXuatKho}}</td>
                 <td>{{item.soBangKeCanHang}}</td>
-                <td>{{item.ngayXuatKho}}</td>
+                <td>{{item.ngayXuatKho | date: "dd/MM/yyyy"}}</td>
                 <td>{{item.soLuongXuat}}</td>
               </tr>
             </ng-container>

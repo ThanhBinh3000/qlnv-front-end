@@ -98,7 +98,7 @@
 
 
         <nz-card class="mt-2px flex-card data-table card-border-content table-card">
-            <nz-table #basicTable class="nowrap table__container-tt" [nzData]="dataView" [nzFrontPagination]="false"
+            <nz-table #basicTable class="nowrap table-chi-tiet" [nzData]="dataView" [nzFrontPagination]="false"
                 [nzShowPagination]="false" nzBordered>
                 <thead>
                     <tr>
@@ -123,15 +123,17 @@
                 <tbody>
 
                     <ng-container *ngFor="let item of basicTable.data, let i = index;">
-                        <tr>
+                        <tr [ngClass]="{'bg-selected': item.selected}" class="level-1">
                             <td>{{i + 1}}</td>
                             <td (nzExpandChange)="onExpandStringChange(item.idVirtual, $event)"
                                 [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true"
                                 style="width: 35px"></td>
                             <td></td>
-                            <td>{{ item.soQdinh }}</td>
+                            <!-- <td>{{ item.soQdinh }}</td> -->
+                            <td><a nz-button nzType="link" (click)="openQdDcModal(item.qdinhDcId)">{{item.soQdinh}}</a>
+                            </td>
                             <td>{{ item.nam }}</td>
-                            <td>{{ item.thoiHanDieuChuyen }}</td>
+                            <td>{{ item.thoiHanDieuChuyen|date:'dd/MM/YYYY' }}</td>
                             <td></td>
                             <td></td>
                             <td></td>
@@ -145,7 +147,7 @@
                         </tr>
                         <ng-container *ngIf="expandSetString.has(item.idVirtual)">
                             <ng-container *ngFor="let lv1 of item.childData,let i1=index">
-                                <tr>
+                                <tr class="level-2">
                                     <td></td>
                                     <td></td>
                                     <td (nzExpandChange)="onExpandStringChange(lv1.idVirtual, $event)"
@@ -167,7 +169,7 @@
                                 </tr>
                                 <ng-container *ngIf="expandSetString.has(lv1.idVirtual)">
                                     <ng-container *ngFor="let lv2 of lv1.childData,let i2=index">
-                                        <tr>
+                                        <tr class="level-3">
                                             <td></td>
                                             <td></td>
                                             <td></td>
@@ -178,8 +180,8 @@
                                             <td>{{(lv2.tenLoKho? lv2.tenLoKho + " - ": "") + (lv2.tenNganKho?
                                                 lv2.tenNganKho + " - ": "") + (lv2.tenNhaKho ? lv2.tenNhaKho: "")}}</td>
                                             <td>{{lv2.soBbTinhKho}}</td>
-                                            <td>{{lv2.ngayBatDauXuat}}</td>
-                                            <td>{{lv2.ngayKetThucXuat}}</td>
+                                            <td>{{lv2.ngayBatDauXuat | date:'dd/MM/YYYY'}}</td>
+                                            <td>{{lv2.ngayKetThucXuat | date:'dd/MM/YYYY'}}</td>
                                             <td></td>
                                             <td></td>
                                             <td></td>
@@ -216,9 +218,12 @@
                                                 <td></td>
                                                 <td></td>
                                                 <td></td>
-                                                <td>{{lv3.soPhieuXuatKho}}</td>
+                                                <!-- <td>{{lv3.soPhieuXuatKho}}</td> -->
+                                                <td><a nz-button nzType="link"
+                                                        (click)="openPhieuXkModal(lv3.phieuXuatKhoId)">{{lv3.soPhieuXuatKho}}</a>
+                                                </td>
                                                 <td>{{lv3.soBangKeXuatDcLt}}</td>
-                                                <td>{{lv3.ngayXuatKho}}</td>
+                                                <td>{{lv3.ngayXuatKho | date:'dd/MM/YYYY'}}</td>
                                                 <td></td>
                                                 <td></td>
                                             </tr>
@@ -257,3 +262,27 @@
     </app-xuat-dcnb-them-moi-bien-ban-tinh-kho>
 </div>
 <!-- && isOwner(lv2.maDvi) -->
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openQdDC" (nzOnCancel)="closeQdDcModal()">
+    <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+        <app-thong-tin-quyet-dinh-dieu-chuyen-cuc [idInput]="idQdDcModal" [isViewOnModal]="true" [isView]="true">
+        </app-thong-tin-quyet-dinh-dieu-chuyen-cuc>
+    </ng-container>
+    <div *nzModalFooter>
+        <button nz-button (click)="closeQdDcModal()" class="modal__button--cancel">
+            <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+            Đóng
+        </button>
+    </div>
+</nz-modal>
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openPhieuXk" (nzOnCancel)="closePhieuXkModal()">
+    <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+        <app-xuat-dcnb-them-moi-phieu-xuat-kho [idInput]="idPhieuXk" [isViewOnModal]="true">
+        </app-xuat-dcnb-them-moi-phieu-xuat-kho>
+    </ng-container>
+    <div *nzModalFooter>
+        <button nz-button (click)="closePhieuXkModal()" class="modal__button--cancel">
+            <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+            Đóng
+        </button>
+    </div>
+</nz-modal>

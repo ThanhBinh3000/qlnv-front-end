@@ -161,6 +161,7 @@ export class BienBanHaoDoiDieuChuyenComponent extends Base2Component implements 
               const rowLv3 = x.find(f => f.maNganLoKho == ix);
               const rssx = chain(x).groupBy("id").map((v, iv) => {
                 const rowlv4 = v.find(f => f.id && f.id == iv);
+                if (!rowlv4) return;
                 return {
                   ...rowlv4,
                   childData: rowlv4 ? v : []
@@ -169,7 +170,7 @@ export class BienBanHaoDoiDieuChuyenComponent extends Base2Component implements 
               }).value()
               return {
                 ...rowLv3,
-                childData: rowLv3 ? rssx : []
+                childData: rowLv3 ? rssx.filter(f => !!f) : []
               }
             }).value();
             return {
@@ -248,6 +249,6 @@ export class BienBanHaoDoiDieuChuyenComponent extends Base2Component implements 
     return data.trangThai === this.STATUS.DU_THAO && this.userService.isChiCuc()
   }
   checkRoleView(data: any): boolean {
-    return !this.checkRoleAdd(data) && !this.checkRoleEdit(data) && !this.checkRoleApprove(data) && !this.checkRoleEdit(data)
+    return data.trangThai && !this.checkRoleAdd(data) && !this.checkRoleEdit(data) && !this.checkRoleApprove(data) && !this.checkRoleEdit(data)
   }
 } 
