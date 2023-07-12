@@ -15,6 +15,9 @@
     <li [nzSelected]="tabSelected==4" nz-menu-item (click)="selectTab(4)">
       Kiểm tra chất lượng
     </li>
+    <li [nzSelected]="tabSelected==5" *ngIf="userService.isChiCuc()" nz-menu-item (click)="selectTab(5)">
+      Xuất kho
+    </li>
   </ul>
 </nz-affix>
 <div class="contentBor chi-tieu__body giao-ke-hoach">
@@ -33,6 +36,9 @@
     </ng-container>
     <ng-container *ngIf="tabSelected == 4">
       <app-kiem-tra-chat-luong></app-kiem-tra-chat-luong>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 5">
+      <app-xuat-kho></app-xuat-kho>
     </ng-container>
   </div>
 </div>
