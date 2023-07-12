@@ -24,6 +24,7 @@ import {
 import {
   TongHopDanhSachHangDTQGService
 } from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatlt/TongHopDanhSachHangDTQG.service";
+import {FileDinhKem} from "../../../../../../models/FileDinhKem";
 
 @Component({
   selector: 'app-chi-tiet-tong-hop-ds-hang-dtqg',
@@ -74,8 +75,7 @@ export class ChiTietTongHopDsHangDtqgComponent extends Base2Component implements
       maDvi: [],
       maDanhSach: [],
       tenDanhSach: [, [Validators.required]],
-      ngayDeXuatTu: [],
-      ngayDeXuatDen: [],
+      ngayDeXuat: [],
       trangThai: [],
       trangThaiKtCl: [],
       ngayTao: [],
@@ -88,20 +88,16 @@ export class ChiTietTongHopDsHangDtqgComponent extends Base2Component implements
       tenTrangThai: [],
       tenDvi: [],
       tenCuc: [],
-      tongHopDtl: [new Array()]
+      tongHopDtl: [new Array()],
+      fileDinhKems: [new Array<FileDinhKem>()],
     })
     this.userInfo = this.userService.getUserLogin();
-    this.maHauTo = 'DSKTCLLTTKHHLK-';
+    this.maHauTo = 'DSLT06';
   }
 
   async ngOnInit(): Promise<void> {
     try {
       await this.spinner.show();
-      /*   await Promise.all([
-           this.loadDsDonVi(),
-           this.loadDsVthh()
-         ]);*/
-      // this.formData.patchValue(this.selectedItem)
       console.log(this.showDetail, 666)
       await this.loadDetail(this.idInput);
     } catch (e) {
@@ -118,8 +114,6 @@ export class ChiTietTongHopDsHangDtqgComponent extends Base2Component implements
       await this.tongHopDanhSachHangDTQGService.getDetail(idInput)
         .then(async (res) => {
           if (res.msg == MESSAGE.SUCCESS) {
-            // this.maHauTo = '/' + res.data.maDanhSach.split("/")[1];
-            // res.data.maDanhSach = res.data.maDanhSach.split("/")[0];
             this.selectedItem = res.data;
             this.formData.patchValue(res.data);
             this.formData.value.tongHopDtl.forEach(s => {
@@ -311,7 +305,7 @@ export class ChiTietTongHopDsHangDtqgComponent extends Base2Component implements
   }
 
   onClickShowDetail() {
-    this.showDetail = !this.showDetail,
-      this.changeShow.emit({showDetail: this.showDetail, item: this.selectedItem})
+    this.showDetail = !this.showDetail;
+    this.changeShow.emit({showDetail: this.showDetail, item: this.selectedItem})
   }
 }
