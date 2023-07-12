@@ -49,7 +49,7 @@
       </div>
     </nz-card>
     <div class="group-button">
-      <h3> DANH SÁCH QUYẾT ĐỊNH ĐIỀU CHỈNH KẾ HOẠCH LỰA CHỌN NHÀ THẦU</h3>
+      <h3> DANH SÁCH PHƯƠNG ÁN/QUYẾT ĐỊNH ĐIỀU CHỈNH KẾ HOẠCH LỰA CHỌN NHÀ THẦU</h3>
       <div class="buttons">
         <button *ngIf="userService.isTongCuc() && userService.isAccessPermisson('NHDTQG_PTDT_DCKHLCNT_XOA')"
                 type="button" class="btn btn-sub btn-xoa" (click)="deleteMulti()">
@@ -64,7 +64,7 @@
         <button type="button" class="btn btn-main" (click)="redirectToChiTiet(null, false)"
                 *ngIf="userService.isTongCuc() && userService.isAccessPermisson('NHDTQG_PTDT_DCKHLCNT_THEM')">
           <i class="icon htvbdh_soanthao"></i>
-          <span>Tạo quyết định</span>
+          <span>Tạo PA và quyết định điều chỉnh</span>
         </button>
       </div>
     </div>

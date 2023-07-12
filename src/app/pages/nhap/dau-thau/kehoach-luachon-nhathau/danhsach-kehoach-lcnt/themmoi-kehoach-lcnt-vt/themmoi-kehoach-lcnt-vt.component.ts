@@ -32,6 +32,7 @@ import {
 import {
   DialogThemMoiGoiThauComponent
 } from "../../../../../../components/dialog/dialog-them-moi-goi-thau/dialog-them-moi-goi-thau.component";
+import {AMOUNT} from "../../../../../../Utility/utils";
 
 @Component({
   selector: "app-themmoi-kehoach-lcnt-vt",
@@ -79,6 +80,7 @@ export class ThemmoiKehoachLcntVtComponent extends Base2Component implements OnI
   };
   editBaoGiaCache: { [key: string]: { edit: boolean; data: any } } = {};
   editCoSoCache: { [key: string]: { edit: boolean; data: any } } = {};
+  amount = AMOUNT
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -143,7 +145,9 @@ export class ThemmoiKehoachLcntVtComponent extends Base2Component implements OnI
       tongMucDtBangChu: [""],
       tongSlChiTieu: [""],
       quy: [""],
-      tgianThienHd: [""]
+      tgianThienHd: [""],
+      soQdPdGiaCuThe: [""],
+      ngayKyQdPdGiaCuThe: [""],
     });
   }
 
@@ -194,7 +198,8 @@ export class ThemmoiKehoachLcntVtComponent extends Base2Component implements OnI
             const dataDetail = res.data;
             this.helperService.bidingDataInFormGroup(this.formData, dataDetail);
             this.formData.patchValue({
-              soDxuat: dataDetail.soDxuat?.split("/")[0]
+              soDxuat: dataDetail.soDxuat?.split("/")[0],
+              tgianBdauTchuc: dataDetail.tgianBdauTchuc
             });
             if (dataDetail) {
               this.fileDinhKem = dataDetail.fileDinhKems;
@@ -519,7 +524,7 @@ export class ThemmoiKehoachLcntVtComponent extends Base2Component implements OnI
     this.formData.controls["pthucLcnt"].setValidators([Validators.required]);
     this.formData.controls["tgianBdauTchuc"].setValidators([Validators.required]);
     this.formData.controls["loaiHdong"].setValidators([Validators.required]);
-    this.formData.controls["tgianThien"].setValidators([Validators.required]);
+    this.formData.controls["tgianThienHd"].setValidators([Validators.required]);
     this.formData.controls["quy"].setValidators([Validators.required]);
   }
   clearValidatorLuuDuThao() {
@@ -694,7 +699,9 @@ export class ThemmoiKehoachLcntVtComponent extends Base2Component implements OnI
         });
         this.formData.patchValue({
           tongMucDt: parseFloat(tongMucDt.toFixed(2)),
-          tongSlChiTieu: tongSlChiTieu
+          tongSlChiTieu: tongSlChiTieu,
+          ngayKyQdPdGiaCuThe: res.ngayKyQdPdGiaCuThe,
+          soQdPdGiaCuThe: res.soQdPdGiaCuThe
         });
       }
     });

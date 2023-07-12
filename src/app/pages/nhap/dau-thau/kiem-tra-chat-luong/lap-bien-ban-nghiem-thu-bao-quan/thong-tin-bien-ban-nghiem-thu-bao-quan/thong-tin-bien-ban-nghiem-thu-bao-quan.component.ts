@@ -130,8 +130,8 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
         idPhieuNhapKho: [],
         soPhieuNhapKho: [],
         soLuongPhieuNhapKho: [],
-        hthucBquan: ['', [Validators.required]],
-        pthucBquan: ['', [Validators.required]],
+        hthucBquan: [''],
+        pthucBquan: [''],
         dinhMucGiao: [''],
         dinhMucThucTe: [''],
         ketLuan: [''],
@@ -191,7 +191,6 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
   async loadDataComboBox() {
     if (this.formData.value.cloaiVthh) {
       let res = await this.danhMucService.getDetail(this.formData.value.cloaiVthh);
-      console.log(res);
       if (res.msg == MESSAGE.SUCCESS) {
         this.listPhuongThucBaoQuan = res.data?.phuongPhapBq
         this.listHinhThucBaoQuan = res.data?.hinhThucBq
@@ -418,7 +417,6 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
 
 
   addRow() {
-    console.log(this.create)
     this.listDviChuDongTh = [
       ...this.listDviChuDongTh,
       this.create
@@ -833,7 +831,6 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
-    console.log(this.listCcdc)
   };
 
   convertMaCcdc(maCcdc: string) {
@@ -848,7 +845,6 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
         tichLuong: (res.data.tichLuongTkLt - res.data.tichLuongKdLt) > 0 ? res.data.tichLuongTkLt - res.data.tichLuongKdLt : 0,
         loaiHinhKho: res.data.lhKho
       });
-      console.log(this.formData.get('tichLuong').value)
     }
   }
 }
