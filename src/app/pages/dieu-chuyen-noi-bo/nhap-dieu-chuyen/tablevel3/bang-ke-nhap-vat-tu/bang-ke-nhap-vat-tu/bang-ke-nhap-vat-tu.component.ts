@@ -206,6 +206,7 @@ export class BangKeNhapVatTuComponent extends Base2Component implements OnInit {
     }
     let res = await this.bangKeNhapVatTuService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
+      this.totalRecord = res.data.totalElements;
       let data = res.data.content
         .map(element => {
           return {

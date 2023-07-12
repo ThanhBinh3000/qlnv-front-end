@@ -175,7 +175,23 @@
           </tbody>
         </nz-table>
 
-
+        <div class="tab-content tab-menu" id="myTabContent">
+          <div class="tab-pane fade show active justify-content-between">
+            <div class="trai">
+            </div>
+            <div class="canphai">
+              <!-- begin phân trang  -->
+              <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger
+                [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="changePageIndex($event)"
+                (nzPageSizeChange)="changePageSize($event)">
+                <ng-template #rangeTemplate let-range="range" let-total>
+                  {{ range[0] }}-{{ range[1] }} trên tổng số {{ total }} bản ghi
+                </ng-template>
+              </nz-pagination>
+              <!-- end phân trang -->
+            </div>
+          </div>
+        </div>
 
       </nz-card>
 

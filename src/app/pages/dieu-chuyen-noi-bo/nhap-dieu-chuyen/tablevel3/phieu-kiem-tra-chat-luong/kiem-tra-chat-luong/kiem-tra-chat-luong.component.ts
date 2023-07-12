@@ -142,6 +142,7 @@ export class KiemTraChatLuongComponent extends Base2Component implements OnInit 
       let res = await this.phieuKiemTraChatLuongService.search(body);
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data;
+        this.totalRecord = res.data.totalElements;
         this.dataTable = data.content.map(element => {
           return {
             ...element,

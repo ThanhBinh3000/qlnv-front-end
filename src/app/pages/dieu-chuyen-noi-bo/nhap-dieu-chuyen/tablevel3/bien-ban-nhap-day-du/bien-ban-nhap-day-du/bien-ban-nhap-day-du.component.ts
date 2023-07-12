@@ -216,6 +216,7 @@ export class BienBanNhapDayDuComponent extends Base2Component implements OnInit 
     }
     let res = await this.bienBanNhapDayKhoService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
+      this.totalRecord = res.data.totalElements;
       let data = res.data.content
         .map(element => {
           return {

@@ -18,6 +18,9 @@ import { QuyetDinhDieuChuyenTCService } from 'src/app/services/dieu-chuyen-noi-b
 import { BienBanNhapDayKhoService } from 'src/app/services/dieu-chuyen-noi-bo/nhap-dieu-chuyen/bien-ban-nhap-day-kho';
 import { ThongTinQuyetDinhDieuChuyenCucComponent } from 'src/app/pages/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/cuc/thong-tin-quyet-dinh-dieu-chuyen-cuc/thong-tin-quyet-dinh-dieu-chuyen-cuc.component';
 import * as uuidv4 from "uuid";
+import { BBNhapDayKhoService } from 'src/app/services/qlnv-hang/nhap-hang/nhap-khac/bbNhapDayKho';
+import { ThongTinPhieuNhapKhoComponent } from '../phieu-nhap-kho/thong-tin-phieu-nhap-kho/thong-tin-phieu-nhap-kho.component';
+import { ThemmoiQdinhNhapXuatHangKhacComponent } from '../../quyet-dinh-giao-nv-nhap-hang/themmoi-qdinh-nhap-xuat-hang-khac/themmoi-qdinh-nhap-xuat-hang-khac.component';
 
 @Component({
   selector: 'app-bien-ban-nhap-day-kho',
@@ -29,36 +32,35 @@ export class BienBanNhapDayKhoComponent extends Base2Component implements OnInit
   isVisibleChangeTab$ = new Subject();
   visibleTab: boolean = true;
   tabSelected: number = 0;
-  @Input() loaiDc: string;
 
   @Input()
   loaiVthh: string;
-  @Input()
-  loaiVthhCache: string;
+  // @Input()
+  // loaiVthhCache: string;
 
-  CHUC_NANG = CHUC_NANG;
-  listLoaiDieuChuyen: any[] = [
-    { ma: "ALL", ten: "Tất cả" },
-    { ma: "CHI_CUC", ten: "Giữa 2 chi cục trong cùng 1 cục" },
-    { ma: "CUC", ten: "Giữa 2 cục DTNN KV" },
-  ];
-  listLoaiDCFilterTable: any[] = [
-    { ma: "CHI_CUC", ten: "Giữa 2 chi cục trong cùng 1 cục" },
-    { ma: "CUC", ten: "Giữa 2 cục DTNN KV" },
-  ];
+  // CHUC_NANG = CHUC_NANG;
+  // listLoaiDieuChuyen: any[] = [
+  //   { ma: "ALL", ten: "Tất cả" },
+  //   { ma: "CHI_CUC", ten: "Giữa 2 chi cục trong cùng 1 cục" },
+  //   { ma: "CUC", ten: "Giữa 2 cục DTNN KV" },
+  // ];
+  // listLoaiDCFilterTable: any[] = [
+  //   { ma: "CHI_CUC", ten: "Giữa 2 chi cục trong cùng 1 cục" },
+  //   { ma: "CUC", ten: "Giữa 2 cục DTNN KV" },
+  // ];
   dataTableView: any[] = [];
-  listLoaiHangHoa: any[] = [];
-  listHangHoaAll: any[] = [];
-  listChungLoaiHangHoa: any[] = [];
-  listTrangThai: any[] = [
-    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
-    { ma: this.STATUS.CHO_DUYET_TP, giaTri: 'Chờ duyệt - TP' },
-    { ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối - TP' },
-    { ma: this.STATUS.CHO_DUYET_LDC, giaTri: 'Chờ duyệt - LĐ Cục' },
-    { ma: this.STATUS.TU_CHOI_LDC, giaTri: 'Từ chối - LĐ Cục' },
-    { ma: this.STATUS.DA_DUYET_LDC, giaTri: 'Đã duyệt - LĐ Cục' },
-    { ma: this.STATUS.DA_TAO_CBV, giaTri: 'Đã tạo - CB Vụ' },
-  ];
+  // listLoaiHangHoa: any[] = [];
+  // listHangHoaAll: any[] = [];
+  // listChungLoaiHangHoa: any[] = [];
+  // listTrangThai: any[] = [
+  //   { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+  //   { ma: this.STATUS.CHO_DUYET_TP, giaTri: 'Chờ duyệt - TP' },
+  //   { ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối - TP' },
+  //   { ma: this.STATUS.CHO_DUYET_LDC, giaTri: 'Chờ duyệt - LĐ Cục' },
+  //   { ma: this.STATUS.TU_CHOI_LDC, giaTri: 'Từ chối - LĐ Cục' },
+  //   { ma: this.STATUS.DA_DUYET_LDC, giaTri: 'Đã duyệt - LĐ Cục' },
+  //   { ma: this.STATUS.DA_TAO_CBV, giaTri: 'Đã tạo - CB Vụ' },
+  // ];
 
   constructor(
     httpClient: HttpClient,
@@ -69,38 +71,38 @@ export class BienBanNhapDayKhoComponent extends Base2Component implements OnInit
     private donviService: DonviService,
     private danhMucService: DanhMucService,
     private quyetDinhDieuChuyenTCService: QuyetDinhDieuChuyenTCService,
-    private bienBanNhapDayKhoService: BienBanNhapDayKhoService,
+    private bienBanNhapDayKhoService: BBNhapDayKhoService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, bienBanNhapDayKhoService);
     this.formData = this.fb.group({
       nam: null,
-      soQdinh: null,
-      ngayDuyetTc: null,
-      ngayHieuLuc: null,
-      trichYeu: null,
-      type: ["01"],
-      loaiDc: ["DCNB"]
+      soQdPdNk: null,
+      soBb: null,
+      ngayBdNhap: null,
+      ngayKtNhap: null,
+      ngayThoiHanNh: null,
+      loaiVthh: [this.loaiVthh]
     })
-    this.filterTable = {
-      nam: '',
-      soQdinh: '',
-      ngayKyQdinh: '',
-      loaiDc: '',
-      trichYeu: '',
-      maDxuat: '',
-      maThop: '',
-      soQdinhXuatCuc: '',
-      soQdinhNhapCuc: '',
-      tenTrangThai: '',
-    };
+    // this.filterTable = {
+    //   nam: '',
+    //   soQdinh: '',
+    //   ngayKyQdinh: '',
+    //   loaiDc: '',
+    //   trichYeu: '',
+    //   maDxuat: '',
+    //   maThop: '',
+    //   soQdinhXuatCuc: '',
+    //   soQdinhNhapCuc: '',
+    //   tenTrangThai: '',
+    // };
   }
 
 
-  dsDonvi: any[] = [];
-  userInfo: UserLogin;
+  // dsDonvi: any[] = [];
+  // userInfo: UserLogin;
   data: any = {};
   selectedId: number = 0;
-  isVatTu: boolean = false;
+  // isVatTu: boolean = false;
   isView = false;
 
   // disabledStartNgayLapKh = (startValue: Date): boolean => {
@@ -136,13 +138,14 @@ export class BienBanNhapDayKhoComponent extends Base2Component implements OnInit
     this.isVisibleChangeTab$.subscribe((value: boolean) => {
       this.visibleTab = value;
     });
-
+    this.formData.patchValue({
+      loaiVthh: this.loaiVthh
+    })
 
 
     try {
       this.initData()
       await this.timKiem();
-      // await this.loadDsVthh();
       await this.spinner.hide();
 
     } catch (e) {
@@ -193,14 +196,18 @@ export class BienBanNhapDayKhoComponent extends Base2Component implements OnInit
   }
 
   async timKiem() {
-    // if (this.formData.value.ngayDuyetTc) {
-    //   this.formData.value.ngayDuyetTcTu = dayjs(this.formData.value.ngayDuyetTc[0]).format('YYYY-MM-DD')
-    //   this.formData.value.ngayDuyetTcDen = dayjs(this.formData.value.ngayDuyetTc[1]).format('YYYY-MM-DD')
-    // }
-    // if (this.formData.value.ngayHieuLuc) {
-    //   this.formData.value.ngayHieuLucTu = dayjs(this.formData.value.ngayHieuLuc[0]).format('YYYY-MM-DD')
-    //   this.formData.value.ngayHieuLucDen = dayjs(this.formData.value.ngayHieuLuc[1]).format('YYYY-MM-DD')
-    // }
+    if (this.formData.value.ngayBdNhap) {
+      this.formData.value.tuNgayBdNhap = dayjs(this.formData.value.ngayBdNhap[0]).format('YYYY-MM-DD')
+      this.formData.value.tuNgayBdNhap = dayjs(this.formData.value.ngayBdNhap[1]).format('YYYY-MM-DD')
+    }
+    if (this.formData.value.ngayKtNhap) {
+      this.formData.value.tuNgayKtNhap = dayjs(this.formData.value.ngayKtNhap[0]).format('YYYY-MM-DD')
+      this.formData.value.tuNgayKtNhap = dayjs(this.formData.value.ngayKtNhap[1]).format('YYYY-MM-DD')
+    }
+    if (this.formData.value.ngayThoiHanNh) {
+      this.formData.value.tuNgayThoiHanNh = dayjs(this.formData.value.ngayThoiHanNh[0]).format('YYYY-MM-DD')
+      this.formData.value.tuNgayThoiHanNh = dayjs(this.formData.value.ngayThoiHanNh[1]).format('YYYY-MM-DD')
+    }
     let body = this.formData.value
     body.paggingReq = {
       limit: this.pageSize,
@@ -208,11 +215,12 @@ export class BienBanNhapDayKhoComponent extends Base2Component implements OnInit
     }
     let res = await this.bienBanNhapDayKhoService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
+      this.totalRecord = res.data.totalElements;
       let data = res.data.content
         .map(element => {
           return {
             ...element,
-            maloNganKho: `${element.maloKho}${element.maNganKho}`
+            maLoNganKho: `${element.maLoKho}${element.maNganKho}`
           }
         });
       this.dataTableView = this.buildTableView(data)
@@ -223,17 +231,34 @@ export class BienBanNhapDayKhoComponent extends Base2Component implements OnInit
 
   async openDialogQD(row) {
     this.modal.create({
-      nzTitle: 'Thông tin quyết định điều chuyển',
-      nzContent: ThongTinQuyetDinhDieuChuyenCucComponent,
+      nzTitle: 'Thông tin quyết định giao nhiệm vụ nhận hàng',
+      nzContent: ThemmoiQdinhNhapXuatHangKhacComponent,
       nzMaskClosable: false,
       nzClosable: true,
       nzBodyStyle: { overflowY: 'auto' },//maxHeight: 'calc(100vh - 200px)'
       nzWidth: '95%',
       nzFooter: null,
       nzComponentParams: {
-        isViewOnModal: true,
+        isViewDetail: true,
+        loaiVthh: this.loaiVthh,
+        id: row.idQdPdNk
+      },
+    });
+  }
+
+  async openDialogPNK(row) {
+    this.modal.create({
+      nzTitle: 'Thông tin phiếu nhập kho',
+      nzContent: ThongTinPhieuNhapKhoComponent,
+      nzMaskClosable: false,
+      nzClosable: true,
+      nzBodyStyle: { overflowY: 'auto' },//maxHeight: 'calc(100vh - 200px)'
+      nzWidth: '95%',
+      nzFooter: null,
+      nzComponentParams: {
         isView: true,
-        idInput: row.qdinhDccId
+        loaiVthh: this.loaiVthh,
+        idInput: row.phieuNhapKhoId
       },
     });
   }
@@ -241,7 +266,7 @@ export class BienBanNhapDayKhoComponent extends Base2Component implements OnInit
 
   buildTableView(data: any[] = []) {
     let dataView = chain(data)
-      .groupBy("soQdinh")
+      .groupBy("soQdPdNk")
       ?.map((value1, key1) => {
         let children1 = chain(value1)
           .groupBy("maDiemKho")
@@ -293,7 +318,7 @@ export class BienBanNhapDayKhoComponent extends Base2Component implements OnInit
           ).value();
 
 
-        let row1 = value1?.find(s => s.soQdinh === key1);
+        let row1 = value1?.find(s => s.soQdPdNk === key1);
         return {
           ...row1,
           idVirtual: row1 ? row1.idVirtual ? row1.idVirtual : uuidv4.v4() : uuidv4.v4(),
