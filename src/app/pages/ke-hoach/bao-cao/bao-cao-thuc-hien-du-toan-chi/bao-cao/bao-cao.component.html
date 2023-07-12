@@ -148,7 +148,7 @@
                                         </ng-template>
                                     </td>
                                     <td>
-                                        <ng-container *ngIf="baoCao.id">
+                                        <ng-container *ngIf="baoCao.id && data.id?.length == 36">
                                             <a *ngIf="status.save && (userInfo?.sub == data.nguoiBcao)">
                                                 <i class="fa fa-pencil" (click)="viewAppendix(data.id)"></i>
                                             </a>
