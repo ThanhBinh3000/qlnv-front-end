@@ -247,10 +247,7 @@
                 <nz-form-label nzRequired [nzNoColon]="true"> Tổng mức đầu tư (tỷ đồng)
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-input-number formControlName="tongMucDtDx" [nzMin]="0"
-                                   [nzMax]="globals.prop.MAX_INPUT" [nzStep]="0.1" [nzSize]="'small'"
-                                   [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
-                  </nz-input-number>
+                  <input nz-input formControlName="tongMucDtDx" class="money-input" currencyMask [options]="amount">
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -323,7 +320,7 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="12">
+            <div nz-col [nzSpan]="6">
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true"> Thời gian bắt đầu tổ chức LCNT (Thời gian bắt đầu phát
                   hành
@@ -371,7 +368,7 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="12">
+            <div nz-col [nzSpan]="18">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Diễn giải
                 </nz-form-label>
@@ -394,7 +391,7 @@
                 <nz-form-label [nzNoColon]="true"> Số QĐ phê duyệt giá cụ thể
                 </nz-form-label>
                 <nz-form-control>
-                  <span class="blue-text">{{formData.value.soQdPdGia}}</span>
+                  <span class="blue-text">{{formData.value.soQdPdGiaCuThe}}</span>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -403,7 +400,7 @@
                 <nz-form-label [nzNoColon]="true"> Ngày ký QĐ phê duyệt giá cụ thể
                 </nz-form-label>
                 <nz-form-control>
-                  <span class="blue-text">{{formData.value.ngayKyQdPdGia}}</span>
+                  <span class="blue-text">{{formData.value.ngayKyQdPdGiaCuThe}}</span>
                 </nz-form-control>
               </nz-form-item>
             </div>

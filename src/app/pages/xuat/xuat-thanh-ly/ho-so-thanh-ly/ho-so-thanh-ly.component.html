@@ -163,7 +163,8 @@
             </a>
             <a
               *ngIf="(vldTrangThai.checkStatusPermission(data,CHUC_NANG.DUYET_LDV)  && userService.isAccessPermisson('XHDTQG_XTL_HSTL_DUYETLDV')) ||
-                    (vldTrangThai.checkStatusPermission(data,CHUC_NANG.DUYET_LDTC)  && userService.isAccessPermisson('XHDTQG_XTL_HSTL_DUYETLDTC'))"
+                    (vldTrangThai.checkStatusPermission(data,CHUC_NANG.DUYET_LDTC)  && userService.isAccessPermisson('XHDTQG_XTL_HSTL_DUYETLDTC'))||
+                    (vldTrangThai.checkStatusPermission(data,CHUC_NANG.DUYET_BTC)  && userService.isAccessPermisson('XHDTQG_XTL_HSTL_DUYETBTC'))"
               (click)="redirectDetail(data.id, true)">
               <i class="icon htvbdh_tcdt_pheduyet"></i>
             </a>

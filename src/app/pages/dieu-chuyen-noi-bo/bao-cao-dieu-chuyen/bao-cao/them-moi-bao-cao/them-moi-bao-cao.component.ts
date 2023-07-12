@@ -1,5 +1,5 @@
 import { chain, cloneDeep } from 'lodash';
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { Validators } from '@angular/forms';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -16,6 +16,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { DonviService } from 'src/app/services/donvi.service';
 import { QuyetDinhDieuChuyenCucService } from 'src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-c.service';
 import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
+import { DialogTableCheckBoxComponent } from 'src/app/components/dialog/dialog-table-check-box/dialog-table-check-box.component';
 @Component({
   selector: 'app-them-moi-bao-cao',
   templateUrl: './them-moi-bao-cao.component.html',
@@ -25,6 +26,7 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
   @Input() idInput: number;
   @Input() isView: boolean;
   @Input() isViewOnModal: boolean;
+  @Input() loaiBc: string;
   @Output()
   showListEvent = new EventEmitter<any>();
   expandSetString = new Set<string>();
@@ -38,6 +40,10 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
     [STATUS.DA_DUYET_LDC]: "Đã duyệt - LĐ Cục",
     [STATUS.TU_CHOI_LDC]: "Từ chối - LĐ Cục"
   };
+  danhSachKetQua: any[] = [];
+  listBaoCaoChiCuc: any[] = [];
+  allChecked: boolean = true;
+  isTongHop: boolean = false;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -62,14 +68,16 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
       ngayKyQdCuc: [],
       trangThai: ['00'],
       noiDung: [],
-      fileDinhKems: [new Array()]
+      fileDinhKems: [new Array()],
+      listTenBaoCaoSelect: [["Tất cả"]]
+
     })
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     try {
       this.spinner.show();
-      this.loadDetail(this.idInput)
+      await this.loadDetail(this.idInput)
     } catch (error) {
       console.log('e', error)
     }
@@ -78,7 +86,6 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
     }
   }
   async loadDetail(id: number): Promise<void> {
-    console.log("userLogin", this.userInfo)
     if (id) {
       const res = await this.bangCaoDieuChuyenService.getDetail(id);
       if (res.msg === MESSAGE.SUCCESS) {
@@ -99,8 +106,10 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
     }
   }
   async getChiTietDonViCha(maDviNhan: string): Promise<any> {
+    if (this.userService.isCuc()) {
+      return { tenDvi: "Tổng cục Dự trữ Nhà nước" }
+    }
     let res = await this.donviService.getDonVi({ str: maDviNhan });
-    console.log("donViCha", res)
     if (res.msg == MESSAGE.SUCCESS) {
       return res.data
     } else {
@@ -132,7 +141,6 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
     }
   }
   async openDialogSoQd() {
-    console.log('soQD')
     await this.loadSoQuyetDinh();
     const modalQD = this.modal.create({
       nzTitle: 'DANH SÁCH QUYẾT ĐỊNH XUẤT ĐIỀU CHUYỂN HÀNG HÓA',
@@ -151,10 +159,79 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
     })
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
-        console.log("data", data)
+        this.bindingDataQd(data)
       }
     });
   };
+  bindingDataQd(data: any) {
+    this.formData.patchValue({
+      soQdDcCuc: data.soQdinh,
+      ngayKyQdCuc: data.ngayKyQdinh
+    });
+    if (this.formData.value.soQdDcCuc) {
+      this.getThongTinhNhaXuatHangHoa(this.formData.value.soQdDcCuc)
+    }
+  };
+  async getThongTinhNhaXuatHangHoa(soQdinhCuc: string) {
+    const res = await this.bangCaoDieuChuyenService.getThongTinNhapXuat({ soQdinhCuc });
+    if (res.msg === MESSAGE.SUCCESS) {
+      this.danhSachKetQua = cloneDeep(res.data)
+    }
+  }
+
+  async loadListBaoCaoChiCuc() {
+    try {
+
+      this.listBaoCaoChiCuc = [
+        { id: 111, ten: "Báo cáo số 111", donViGui: "Chi cục Việt Trì" },
+        { id: 222, ten: "Báo cáo số 222", donViGui: "Chi cục Vinh Phú" },
+        { id: 333, ten: "Báo cáo số 111", donViGui: "Chi cục phong Châu" },
+      ];
+      this.isTongHop = true;
+      return this.listBaoCaoChiCuc
+    } catch (error) {
+
+    }
+  }
+  async openDialogTongHopBaoCao() {
+    if (!this.isTongHop) {
+      await this.loadListBaoCaoChiCuc();
+
+    }
+    const modalQD = this.modal.create({
+      nzTitle: 'CHỌN BÁO CÁO TỪ CHI CỤC GỬI LÊN',
+      nzContent: DialogTableCheckBoxComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {
+        dataTable: this.listBaoCaoChiCuc,
+        // dataHeader: ['Số quyết định', 'Ngày quyết định', 'Loại hàng hóa'],
+        // dataColumn: ['soQdinh', 'ngayKyQdinh', 'tenLoaiVthh'],
+        dataHeader: ['tenBaoCao', 'Đơn vị gửi'],
+        dataColumn: ['ten', 'donViGui'],
+        allChecked: this.allChecked,
+        actionRefresh: true,
+        refreshData: this.loadListBaoCaoChiCuc
+      },
+    })
+    modalQD.afterClose.subscribe(async (data) => {
+      if (data) {
+        this.bindingDataBaoCao(data)
+      }
+    });
+  };
+  bindingDataBaoCao(data: any) {
+    this.listBaoCaoChiCuc = cloneDeep(data.data);
+    this.allChecked = data.allChecked;
+    if (this.allChecked) {
+      this.formData.patchValue({ listTenBaoCaoSelect: ['Tất cả'] })
+    }
+    else {
+      this.formData.patchValue({ listTenBaoCaoSelect: this.listBaoCaoChiCuc.filter(f => f.checked).map(m => m.ten) })
+    }
+  }
   expandAll() {
     this.dataView.forEach(s => {
       this.expandSetString.add(s.idVirtual);
@@ -186,6 +263,7 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
       await this.spinner.show();
       this.setValidator(isGuiDuyet);
       let body = this.formData.value;
+      body.danhSachKetQua = this.danhSachKetQua;
       let data = await this.createUpdate(body);
       if (!data) return;
       this.formData.patchValue({ id: data.id, trangThai: data.trangThai })

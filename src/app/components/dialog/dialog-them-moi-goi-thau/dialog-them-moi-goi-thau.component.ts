@@ -85,7 +85,9 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
       dviTinh: [this.dviTinh],
       soLuong: [null],
       donGiaVat: [null],
-      maDvi: ['']
+      maDvi: [''],
+      soQdPdGiaCuThe: [''],
+      ngayKyQdPdGiaCuThe: [''],
     });
   }
 
@@ -122,7 +124,9 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
     let pag = await this.quyetDinhGiaTCDTNNService.getPag(bodyPag)
     if (pag.msg == MESSAGE.SUCCESS) {
       this.formGoiThau.patchValue({
-        donGiaVat: pag.data.giaQdVat
+        donGiaVat: pag.data.giaQdVat,
+        soQdPdGiaCuThe: pag.data.soQdPdGiaCuThe,
+        ngayKyQdPdGiaCuThe: pag.data.ngayKyQdPdGiaCuThe,
       })
     }
     this.formGoiThau.patchValue({
@@ -235,10 +239,6 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
     }
     if (this.dataTable.length == 0) {
       this.notification.error(MESSAGE.ERROR, 'Danh sách địa điểm nhập không được để trống');
-      return;
-    }
-    if (this.giaToiDa == null) {
-      this.notification.error(MESSAGE.ERROR, 'Bạn cần lập và trình duyệt phương án giá mua tối đa, giá bán tối thiểu trước. Chỉ sau khi có giá mua tối đa bạn mới thêm được địa điểm nhập kho vì giá mua đề xuất ở đây nhập vào phải <= giá mua tối đa.');
       return;
     }
     const body = this.formGoiThau.value;
@@ -456,6 +456,10 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
     this.dataTable[i].edit = true;
   }
   saveEditCuc(i: number) {
+    if (this.thongTinCucEdit[i] > (this.dataTable[i].soLuongTheoChiTieu - this.dataTable[i].soLuongDaMua)) {
+      this.notification.error(MESSAGE.ERROR, "Số lượng đã vượt quá chỉ tiêu")
+      return false;
+    }
     this.dataTable[i].soLuong = this.thongTinCucEdit[i]
     this.dataTable[i].edit = false;
     let soLuong: number = 0;

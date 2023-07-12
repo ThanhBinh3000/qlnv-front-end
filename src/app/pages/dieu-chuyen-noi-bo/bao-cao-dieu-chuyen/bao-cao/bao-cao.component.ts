@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -15,6 +15,8 @@ import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
   styleUrls: ['./bao-cao.component.scss']
 })
 export class BaoCaoComponent extends Base2Component implements OnInit {
+  @Input() viewOnly: boolean;
+  @Input() loaiBc: string;
   userInfo: UserLogin;
   userdetail: any = {};
   selectedId: number = 0;
@@ -78,6 +80,9 @@ export class BaoCaoComponent extends Base2Component implements OnInit {
       // if (this.userService.isTongCuc()) {
       //     this.loadDsCuc()
       // }
+      if (this.viewOnly) {
+        this.isView = true
+      }
       await this.initData()
       this.timKiem();
     } catch (e) {

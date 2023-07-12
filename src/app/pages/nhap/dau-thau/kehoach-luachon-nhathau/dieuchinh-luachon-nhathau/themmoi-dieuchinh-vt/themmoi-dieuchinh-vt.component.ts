@@ -220,7 +220,6 @@ export class ThemmoiDieuchinhVtComponent extends Base2Component implements OnIni
     let res = await this.quyetDinhPheDuyetKeHoachLCNTService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       this.listQdGoc = res.data.content;
-
     }
     this.spinner.hide();
     const modalQD = this.modal.create({

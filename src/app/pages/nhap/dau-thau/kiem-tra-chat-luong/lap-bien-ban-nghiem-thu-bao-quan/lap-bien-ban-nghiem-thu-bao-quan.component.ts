@@ -274,7 +274,6 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
       this.dataTable.forEach(item =>
         item.detail = item.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0]
       );
-      console.log(this.dataTable);
       this.dataTableAll = cloneDeep(this.dataTable);
       this.totalRecord = data.totalElements;
     } else {

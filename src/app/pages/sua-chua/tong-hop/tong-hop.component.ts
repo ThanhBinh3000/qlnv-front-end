@@ -8,9 +8,9 @@ import { Base3Component } from 'src/app/components/base3/base3.component';
 import { StorageService } from 'src/app/services/storage.service';
 import { TongHopScService } from 'src/app/services/sua-chua/tongHopSc.service';
 import { ThemmoiThComponent } from './themmoi-th/themmoi-th.component';
-import {MESSAGE} from "../../../constants/message";
+import { MESSAGE } from "../../../constants/message";
 import { cloneDeep, chain } from 'lodash';
-import {ChitietThComponent} from "./chitiet-th/chitiet-th.component";
+import { ChitietThComponent } from "./chitiet-th/chitiet-th.component";
 
 @Component({
   selector: 'app-tong-hop',
@@ -39,10 +39,10 @@ export class TongHopComponent extends Base3Component implements OnInit {
     })
   }
 
-  async ngOnInit(){
+  async ngOnInit() {
     await this.spinner.show();
     await Promise.all([
-       this.search(),
+      this.search(),
     ])
     this.buildTableView()
     await this.spinner.hide();
@@ -50,19 +50,19 @@ export class TongHopComponent extends Base3Component implements OnInit {
   }
 
   async buildTableView() {
-    await this.dataTable.forEach( item => {
+    await this.dataTable.forEach(item => {
       item.expandSet = true;
       item.groupChiCuc = chain(item.children).groupBy('scDanhSachHdr.tenChiCuc').map((value, key) => ({
-          tenDonVi: key,
-          children: value,
-        })
+        tenDonVi: key,
+        children: value,
+      })
       ).value()
     })
     console.log(this.dataTable)
   }
 
   openDialogDs() {
-    if(this.userService.isAccessPermisson('SCHDTQG_THDSCSC_TONGHOP')){
+    if (this.userService.isAccessPermisson('SCHDTQG_THDSCSC_TONGHOP')) {
       const modalGT = this.modal.create({
         nzTitle: 'Tổng hợp danh sách cần sửa chữa',
         nzContent: ThemmoiThComponent,
@@ -78,8 +78,8 @@ export class TongHopComponent extends Base3Component implements OnInit {
     }
   }
 
-  showDetail(idTh){
-    if(idTh){
+  showDetail(idTh) {
+    if (idTh) {
       const modalGT = this.modal.create({
         nzTitle: 'Tổng hợp danh sách cần sửa chữa',
         nzContent: ChitietThComponent,
@@ -88,7 +88,7 @@ export class TongHopComponent extends Base3Component implements OnInit {
         nzWidth: '900px',
         nzFooter: null,
         nzComponentParams: {
-          id : idTh
+          id: idTh
         },
       });
       modalGT.afterClose.subscribe((data) => {
@@ -96,7 +96,7 @@ export class TongHopComponent extends Base3Component implements OnInit {
           this.ngOnInit()
         }
       });
-    }else {
+    } else {
       this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
     }
   }

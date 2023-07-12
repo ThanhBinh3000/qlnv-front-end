@@ -134,6 +134,7 @@ export const STATUS_LABEL = {
 export enum CHUC_NANG {
   XEM = 'XEM',
   SUA = 'SUA',
+  DUYET_BTC = 'DUYET_BTC',
   DUYET_LDTC = 'DUYET_LDTC',
   DUYET_LDV = 'DUYET_LDV',
   DUYET_TP = 'DUYET_TP',

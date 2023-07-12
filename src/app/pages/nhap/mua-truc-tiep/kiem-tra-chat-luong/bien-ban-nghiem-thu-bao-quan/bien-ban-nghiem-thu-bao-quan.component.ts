@@ -247,6 +247,7 @@ export class BienBanNghiemThuBaoQuanComponent implements OnInit {
 
         };
       });
+      console.log(this.dataTable)
       this.dataTableAll = cloneDeep(this.dataTable);
       this.totalRecord = data.totalElements;
     } else {
