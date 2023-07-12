@@ -30,6 +30,7 @@ import * as uuidv4 from "uuid";
 })
 export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnInit {
   @Input() loaiDc: string;
+  @Input() isVatTu: boolean;
   @Input() idInput: number;
   @Input() isView: boolean;
   @Input() data: any;
@@ -116,7 +117,8 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
       children: [new Array<any>(),],
       ghiChu: [],
       type: ["01"],
-      loaiDc: ["DCNB"],
+      loaiDc: [this.loaiDc],
+      isVatTu: [this.isVatTu],
       maSo: [],
       soLuongNhapDc: [],
       thucTeKinhPhi: [],
@@ -132,7 +134,8 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
       maQhns: this.userInfo.DON_VI.maQhns,
       ktvBaoQuan: this.userInfo.TEN_DAY_DU,
       soPhieuNhapKho: `${id}/${this.formData.get('nam').value}/${this.maBb}`,
-
+      loaiDc: this.loaiDc,
+      isVatTu: this.isVatTu,
     })
     this.getDataNX()
     if (this.idInput) {

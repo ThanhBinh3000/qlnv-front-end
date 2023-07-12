@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { NzModalRef, NzModalService } from "ng-zorro-antd/modal";
 import { NzCardModule, NzCardComponent } from "ng-zorro-antd/card";
-import { FormBuilder, FormGroup } from "@angular/forms";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { MangLuoiKhoService } from "src/app/services/qlnv-kho/mangLuoiKho.service";
 import { QuanLyHangTrongKhoService } from "src/app/services/quanLyHangTrongKho.service";
 import { DonviService } from "src/app/services/donvi.service";
@@ -52,41 +52,41 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
   ) {
     super(httpClient, storageService, notification, spinner, modal, quanLyHangTrongKhoService);
     this.formData = this.fb.group({
-      maChiCucNhan: [],
-      tenChiCucNhan: [],
-      maDiemKho: [],
-      tenDiemKho: [],
-      maNhaKho: [],
-      tenNhaKho: [],
-      maNganKho: [],
-      tenNganKho: [],
-      maLoKho: [],
-      tenLoKho: [],
-      maThuKho: [],
-      thuKho: [],
-      loaiVthh: [],
-      tenLoaiVthh: [],
-      cloaiVthh: [],
-      tenCloaiVthh: [],
-      tonKho: [],
-      tenDonViTinh: [],
-      soLuongDc: [],
-      duToanKphi: [],
-      thoiGianDkDc: [],
-      maDiemKhoNhan: [],
-      tenDiemKhoNhan: [],
-      maNhaKhoNhan: [],
-      tenNhaKhoNhan: [],
-      maNganKhoNhan: [],
-      tenNganKhoNhan: [],
-      maLoKhoNhan: [],
-      tenLoKhoNhan: [],
-      maThuKhoNhan: [],
-      thuKhoNhan: [],
-      thayDoiThuKho: [],
-      slDcConLai: [],
-      tichLuongKd: [],
-      soLuongPhanBo: [],
+      maChiCucNhan: [, [Validators.required]],
+      tenChiCucNhan: [, [Validators.required]],
+      maDiemKho: [, [Validators.required]],
+      tenDiemKho: [, [Validators.required]],
+      maNhaKho: [, [Validators.required]],
+      tenNhaKho: [, [Validators.required]],
+      maNganKho: [, [Validators.required]],
+      tenNganKho: [, [Validators.required]],
+      maLoKho: [, [Validators.required]],
+      tenLoKho: [, [Validators.required]],
+      maThuKho: [, [Validators.required]],
+      thuKho: [, [Validators.required]],
+      loaiVthh: [, [Validators.required]],
+      tenLoaiVthh: [, [Validators.required]],
+      cloaiVthh: [, [Validators.required]],
+      tenCloaiVthh: [, [Validators.required]],
+      tonKho: [, [Validators.required]],
+      tenDonViTinh: [, [Validators.required]],
+      soLuongDc: [, [Validators.required]],
+      duToanKphi: [, [Validators.required]],
+      thoiGianDkDc: [, [Validators.required]],
+      maDiemKhoNhan: [, [Validators.required]],
+      tenDiemKhoNhan: [, [Validators.required]],
+      maNhaKhoNhan: [, [Validators.required]],
+      tenNhaKhoNhan: [, [Validators.required]],
+      maNganKhoNhan: [, [Validators.required]],
+      tenNganKhoNhan: [, [Validators.required]],
+      maLoKhoNhan: [, [Validators.required]],
+      tenLoKhoNhan: [, [Validators.required]],
+      maThuKhoNhan: [, [Validators.required]],
+      thuKhoNhan: [, [Validators.required]],
+      thayDoiThuKho: [, [Validators.required]],
+      slDcConLai: [, [Validators.required]],
+      tichLuongKd: [, [Validators.required]],
+      soLuongPhanBo: [, [Validators.required]],
     }
     );
   }
@@ -98,6 +98,8 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
   }
 
   handleOk(item: any) {
+    this.helperService.markFormGroupTouched(this.formData);
+    if (!this.formData.valid) return
     this._modalRef.close({
       ...item,
       isUpdate: !!this.data

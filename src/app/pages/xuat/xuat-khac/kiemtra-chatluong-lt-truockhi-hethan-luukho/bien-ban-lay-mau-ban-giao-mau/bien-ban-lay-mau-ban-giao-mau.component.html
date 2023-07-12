@@ -4,7 +4,7 @@
       <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
         <div nz-row [nzGutter]="[20]">
           <div nz-col nzSpan="2">
-            <label class="search__label"> Năm kế hoạch </label>
+            <label> Năm kế hoạch </label>
             <nz-select formControlName="nam">
               <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
             </nz-select>

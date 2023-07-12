@@ -134,7 +134,6 @@ export class PhieuKiemNghiemChatLuongComponent extends Base2Component implements
       s.idVirtual = uuidv4();
       this.expandSetString.add(s.idVirtual);
     });
-    console.log(this.dataTable, "789")
     this.buildTableView();
   }
 

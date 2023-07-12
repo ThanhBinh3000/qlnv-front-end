@@ -162,8 +162,8 @@ export class PhieuKiemTraChatLuongComponent implements OnInit {
           item.detail = item.hhQdGiaoNvNhangDtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0]
         } else {
           let data = [];
-          item.hhQdGiaoNvNhangDtlList.forEach(item => {
-            data = [...data, ...item.hhQdGiaoNvNhDdiemList];
+          item.hhQdGiaoNvNhangDtlList.forEach(res => {
+            data = [...data, ...res.children.filter(x => x.idDtl == res.id)];
           })
           item.detail = {
             hhQdGiaoNvNhDdiemList: data,

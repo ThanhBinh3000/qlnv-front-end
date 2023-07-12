@@ -100,6 +100,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
         hinhThucBq: [],
         noiDung: [],
         ketLuan: [],
+        kqThamDinh: [],
         trangThai: [STATUS.DU_THAO],
         ngayGduyet: [],
         nguoiGduyetId: [],
@@ -155,8 +156,9 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
       await this.phieuKiemNgiemClLuongThucHangDTQGService.getDetail(idInput)
         .then((res) => {
           if (res.msg == MESSAGE.SUCCESS) {
-            this.formData.patchValue(res.data);
             const data = res.data;
+            this.formData.patchValue(data);
+            this.checked = data.kqThamDinh;
             this.listFileDinhKem = data.fileDinhKems;
             this.dataTableChiTieu = data.phieuKnClDtl;
           }
@@ -354,27 +356,13 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
     ];
   }
 
-  async save(isGuiDuyet?) {
-    this.setValidator(isGuiDuyet);
+  async save() {
+    this.formData.disable()
     let body = this.formData.value;
     body.fileDinhKems = this.listFileDinhKem;
     body.phieuKnClDtl = this.dataTableChiTieu;
     let data = await this.createUpdate(body);
-    if (data) {
-      if (isGuiDuyet) {
-        this.idInput = data.id;
-        this.pheDuyet();
-      }
-    }
-  }
-
-  setValidator(isGuiDuyet) {
-    if (isGuiDuyet) {
-      this.formData.controls["soBienBan"].setValidators([Validators.required]);
-      this.formData.controls["soQdGiaoNvXh"].setValidators([Validators.required]);
-      this.formData.controls["maDiemKho"].setValidators([Validators.required]);
-      this.formData.controls["tenDiemKho"].setValidators([Validators.required]);
-    }
+    this.formData.enable();
   }
 
   pheDuyet() {

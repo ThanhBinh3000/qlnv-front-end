@@ -73,7 +73,7 @@ export class HopdongPhulucHopdongComponent extends Base2Component implements OnI
   async timKiem() {
     debugger
     this.formData.patchValue({
-      trangThai: this.STATUS.BAN_HANH
+      trangThai: this.STATUS.DA_DUYET_LDC
     });
     await this.search();
   }

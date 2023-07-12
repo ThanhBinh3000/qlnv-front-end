@@ -9,7 +9,7 @@
     <li *ngIf="!userService.isChiCuc()" [nzSelected]="tabSelected==2" nz-menu-item (click)="selectTab(2)">
       Quyết định xuất giảm vật tư
     </li>
-    <li [nzSelected]="tabSelected==3" nz-menu-item (click)="selectTab(3)">
+    <li [nzSelected]="tabSelected==3" *ngIf="userService.isCuc()" nz-menu-item (click)="selectTab(3)">
       Quyết định giao nhiệm vụ xuất hàng
     </li>
     <li [nzSelected]="tabSelected==4" nz-menu-item (click)="selectTab(4)">
@@ -28,11 +28,11 @@
     <ng-container *ngIf="tabSelected == 2">
       <app-quyet-dinh-xuat-giam-vat-tu></app-quyet-dinh-xuat-giam-vat-tu>
     </ng-container>
-    <!--    <ng-container *ngIf="tabSelected == 3">-->
-    <!--      <app-tong-hop-ke-hoach-xuat-hang></app-tong-hop-ke-hoach-xuat-hang>-->
-    <!--    </ng-container>-->
-    <!--    <ng-container *ngIf="tabSelected == 4">-->
-    <!--      <app-ke-hoach-xuat-hang-cua-tong-cuc></app-ke-hoach-xuat-hang-cua-tong-cuc>-->
-    <!--    </ng-container>-->
+    <ng-container *ngIf="tabSelected == 3">
+      <app-quyet-dinh-giao-nhiem-vu-xuat-hang></app-quyet-dinh-giao-nhiem-vu-xuat-hang>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 4">
+      <app-kiem-tra-chat-luong></app-kiem-tra-chat-luong>
+    </ng-container>
   </div>
 </div>
