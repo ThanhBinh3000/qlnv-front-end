@@ -34,6 +34,10 @@ export class BienBanTinhKhoDieuChuyenComponent extends Base2Component implements
     maNhaKho: '', maNganKho: '', maLoKho: ''
   }
   LIST_TRANG_THAI = LIST_TRANG_THAI_BBTK;
+  openQdDC: boolean = false;
+  idQdDcModal: number;
+  idPhieuXk: number;
+  openPhieuXk: boolean;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -151,21 +155,25 @@ export class BienBanTinhKhoDieuChuyenComponent extends Base2Component implements
               const rowLv3 = x.find(f => f.maNganLoKho == ix);
               const rssx = chain(x).groupBy("id").map((v, iv) => {
                 const rowlv4 = v.find(f => f.id && f.id == iv);
+                if (!rowlv4) return;
                 return {
                   ...rowlv4,
-                  childData: rowlv4 ? v : []
+                  childData: rowlv4 ? v : [],
+                  level: 4,
                 }
 
-              }).value()
+              }).value();
               return {
                 ...rowLv3,
-                childData: rowLv3 ? rssx : []
+                childData: rowLv3 ? rssx.filter(f => !!f) : [],
+                level: 3,
               }
             }).value();
             return {
               ...rowLv2,
               idVirtual: uuidv4(),
-              childData: rsx
+              childData: rsx,
+              level: 2,
             }
           }
           ).value();
@@ -173,10 +181,12 @@ export class BienBanTinhKhoDieuChuyenComponent extends Base2Component implements
         return {
           ...rowLv1,
           idVirtual: uuidv4(),
-          childData: rs
+          childData: rs,
+          level: 1,
         };
       }).value();
     this.dataView = cloneDeep(dataView);
+    console.log("dataView", this.dataView)
     this.expandAll()
   }
 
@@ -238,8 +248,24 @@ export class BienBanTinhKhoDieuChuyenComponent extends Base2Component implements
       this.expandSetString.delete(id);
     }
   }
+  openQdDcModal(id: number) {
+    this.openQdDC = true;
+    this.idQdDcModal = id
+  }
+  closeQdDcModal() {
+    this.openQdDC = false;
+    this.idQdDcModal = null;
+  }
+  openPhieuXkModal(id: number) {
+    this.idPhieuXk = id;
+    this.openPhieuXk = true
+  }
+  closePhieuXkModal() {
+    this.idPhieuXk = null;
+    this.openPhieuXk = false
+  }
   checkRoleView(data: any): boolean {
-    return !this.checkRoleAdd(data) && !this.checkRoleEdit(data) && !this.checkRoleApprove(data) && !this.checkRoleDetele(data)
+    return data.trangThai && !this.checkRoleAdd(data) && !this.checkRoleEdit(data) && !this.checkRoleApprove(data) && !this.checkRoleDetele(data)
   }
   checkRoleAdd(data: any): boolean {
     return !data.trangThai && this.userService.isChiCuc()

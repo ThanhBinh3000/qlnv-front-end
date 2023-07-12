@@ -1,4 +1,4 @@
-<nz-affix [nzOffsetTop]="141" class="btn-affix">
+<nz-affix [nzOffsetTop]="141" class="btn-affix" *ngIf="!isViewOnModal">
     <div class="btn-group">
         <button type="button" class="btn btn-sub" (click)="goBack()">
             <i class="fa fa-arrow-left"></i>
@@ -255,13 +255,14 @@
                             <tr>
                                 <td>{{i + 1}}</td>
                                 <td><a *ngIf="item.phieuKtChatLuongHdrId" nz-button nzType="link"
-                                        (click)="openPhieuKNCLModal(item.phieuKiemNghiemChatLuongHdrId)">{{item.soPhieuKtChatLuong}}</a>
+                                        (click)="openPhieuKNCLModal(item.phieuKtChatLuongHdrId)">{{item.soPhieuKtChatLuong}}</a>
                                 </td>
                                 <td><a *ngIf="item.phieuXuatKhoHdrId" nz-button nzType="link"
                                         (click)="openPhieuKXModal(item.phieuXuatKhoHdrId)">{{item.soPhieuXuatKho}}</a>
                                 </td>
                                 <td><a *ngIf="item.bangKeCanHangHdrId" nz-button nzType="link"
-                                        (click)="openBKCHModal(item.bangKeCanHangHdrId)">{{item.soBKCanHang}}</a></td>
+                                        (click)="openBKCHModal(item.bangKeCanHangHdrId)">{{item.soBangKeCanHang}}</a>
+                                </td>
                                 <td>{{item.ngayXuatKho}}</td>
                                 <td>{{item.soLuongXuat |number:'1.0-1' : 'vi_VN'}}</td>
                             </tr>
@@ -329,6 +330,7 @@
                             <div nz-col nzSpan="12">Thừa: {{formData.value.chenhLechSlConLai <= 0?
                                     makePositive(formData.value.chenhLechSlConLai): "" |number:'1.0-1' : 'vi_VN'
                                     }}</div>
+
                                     <div nz-col nzSpan="12">Thiếu: {{formData.value.chenhLechSlConLai >=0 ?
                                         makePositive(formData.value.chenhLechSlConLai): "" |number:'1.0-1' : 'vi_VN'}}
                                     </div>

@@ -566,7 +566,7 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
   }
   isDisabled() {
     let trangThai = this.formData.value.trangThai;
-    if (trangThai == STATUS.CHO_DUYET_LDCC || trangThai == STATUS.DA_DUYET_LDCC) {
+    if (trangThai == STATUS.CHO_DUYET_LDCC || trangThai == STATUS.DA_DUYET_LDCC || this.isView) {
       return true;
     } else {
       return false;

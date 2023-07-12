@@ -221,7 +221,7 @@ export class PhieuXuatKhoDCNBComponent extends Base2Component implements OnInit 
   }
 
   checkRoleView(trangThai: string): boolean {
-    if (!this.checkRoleEdit(trangThai) && !this.checkRoleApprove(trangThai) && !this.checkRoleDelete(trangThai)) {
+    if (trangThai && !this.checkRoleEdit(trangThai) && !this.checkRoleApprove(trangThai) && !this.checkRoleDelete(trangThai)) {
       return true
     }
     return false

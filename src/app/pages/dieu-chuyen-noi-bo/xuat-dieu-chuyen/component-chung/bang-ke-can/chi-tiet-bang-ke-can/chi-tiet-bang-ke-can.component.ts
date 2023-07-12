@@ -188,11 +188,9 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
   async ngOnInit() {
     try {
       await this.spinner.show();
-      // await Promise.all([
-      //   this.loadDsVthh(),
-      //   this.loadDsDonVi(),
-      //   this.loadDSQdDc(),
-      // ])
+      if (this.isViewOnModal) {
+        this.isView = true;
+      }
       this.loadDsVthh();
       await this.loadDetail(this.idInput)
     } catch (e) {
@@ -427,7 +425,8 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
         }
         this.formData.get("id").setValue(res.data.id);
         this.formData.get("trangThai").setValue(res.data.trangThai);
-        this.genSoBangKe(res.data.id)
+        this.formData.get("soBangKe").setValue(res.data.soBangKe)
+        // this.genSoBangKe(res.data.id)
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
@@ -620,6 +619,7 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
     }
   }
   async chiTietQdDc(id: number) {
+    if (!id) return;
     const res = await this.quyetDinhDieuChuyenCucService.getDetail(id);
     if (res.msg === MESSAGE.SUCCESS) {
       this.formData.patchValue({ ngayKyQdDcc: res?.data?.ngayKyQdinh })

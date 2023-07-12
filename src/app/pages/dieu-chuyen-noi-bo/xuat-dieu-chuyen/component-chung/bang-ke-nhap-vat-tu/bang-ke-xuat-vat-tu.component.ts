@@ -263,7 +263,7 @@ export class BangKeXuatVatTuDieuChuyenComponent extends Base2Component implement
         return this.userService.isChiCuc()
     }
     checkRoleView(trangThai: string): boolean {
-        return !this.checkRoleEdit(trangThai) && !this.checkRoleDuyet(trangThai) && !this.checkRoleDelete(trangThai)
+        return trangThai && !this.checkRoleEdit(trangThai) && !this.checkRoleDuyet(trangThai) && !this.checkRoleDelete(trangThai)
     }
     checkRoleEdit(trangThai: string): boolean {
         return this.userService.isChiCuc() && (trangThai == STATUS.DU_THAO || trangThai == STATUS.TU_CHOI_LDCC)

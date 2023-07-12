@@ -54,6 +54,7 @@ export class ThemMoiBienBanHaoDoiDieuChuyenComponent extends Base2Component impl
   @Input() type: string;
   @Input() idInput: number;
   @Input() isView: boolean;
+  @Input() isViewOnModal: boolean;
   @Input() passData: PassDataBienBanHaoDoi;
   @Input() addChung: boolean;
   @Output()
@@ -165,6 +166,9 @@ export class ThemMoiBienBanHaoDoiDieuChuyenComponent extends Base2Component impl
   async ngOnInit() {
     try {
       this.spinner.show();
+      if (this.isViewOnModal) {
+        this.isView = true
+      }
       await Promise.all([
         this.loadSoQuyetDinh(),
         this.loadSoBbTinhKho()
