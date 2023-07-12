@@ -41,8 +41,9 @@ import { ThongTinBienBanNhapDayKhoComponent } from './bien-ban-nhap-day-kho/thon
     MainModule,
     FormsModule,
   ],
-  exports: [
-    NhapKhoComponent
-  ]
+    exports: [
+        NhapKhoComponent,
+        ThongTinPhieuNhapKhoComponent
+    ]
 })
 export class NhapKhoModule { }

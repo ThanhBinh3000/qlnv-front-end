@@ -20,6 +20,8 @@ import { ThongTinQuyetDinhGiaoNhiemVuXuatHangComponent } from './quyet-dinh-giao
 import { BienBanLayMauBanGiaoMauComponent } from './kiem-tra-chat-luong/bien-ban-lay-mau-ban-giao-mau/bien-ban-lay-mau-ban-giao-mau.component';
 import { PhieuKiemNghiemChatLuongComponent } from './kiem-tra-chat-luong/phieu-kiem-nghiem-chat-luong/phieu-kiem-nghiem-chat-luong.component';
 import { BaoCaoKetQuaKiemDinhComponent } from './kiem-tra-chat-luong/bao-cao-ket-qua-kiem-dinh/bao-cao-ket-qua-kiem-dinh.component';
+import { ThongTinPhieuXuatKhoComponent } from './xuat-kho/thong-tin-phieu-xuat-kho/thong-tin-phieu-xuat-kho.component';
+import {CuuTroVienTroModule} from "../../../xuat-cuu-tro-vien-tro/xuat-cuu-tro/cuu-tro-vien-tro.module";
 
 
 
@@ -37,22 +39,25 @@ import { BaoCaoKetQuaKiemDinhComponent } from './kiem-tra-chat-luong/bao-cao-ket
     BienBanLayMauBanGiaoMauComponent,
     PhieuKiemNghiemChatLuongComponent,
     BaoCaoKetQuaKiemDinhComponent,
+    ThongTinPhieuXuatKhoComponent,
   ],
   exports: [
     ToanBoDanhSachVt6ThComponent,
     TongHopDanhSachVt6thComponent,
     QuyetDinhXuatGiamVatTuComponent,
     QuyetDinhGiaoNhiemVuXuatHangComponent,
-    KiemTraChatLuongComponent
+    KiemTraChatLuongComponent,
+    XuatKhoComponent
   ],
-    imports: [
-        CommonModule,
-        DirectivesModule,
-        NzStatisticModule,
-        NzPipesModule,
-        MainModule,
-        ComponentsModule,
-        VtTbCoThoihanLuukhoLonHonMuoihaiThangModule,
-    ]
+  imports: [
+    CommonModule,
+    DirectivesModule,
+    NzStatisticModule,
+    NzPipesModule,
+    MainModule,
+    ComponentsModule,
+    VtTbCoThoihanLuukhoLonHonMuoihaiThangModule,
+    CuuTroVienTroModule,
+  ]
 })
 export class VtTbCoThoihanLuukhoConSauThangModule { }
