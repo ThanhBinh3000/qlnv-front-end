@@ -26,7 +26,6 @@ import {BangKeXuatScService} from "../../../../../services/sua-chua/bangKeXuatSc
   styleUrls: ['./them-moi-bk.component.scss']
 })
 export class ThemMoiBkComponent extends Base3Component implements OnInit {
-
   dataTablePhieuXuatKho: any[] = [];
   rowItem : any = {};
 

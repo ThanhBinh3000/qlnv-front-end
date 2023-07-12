@@ -197,6 +197,9 @@ export class ThemMoiTtdComponent extends Base3Component implements OnInit {
   pheDuyet(){
     let trangThai
     switch (this.formData.value.trangThai) {
+      case STATUS.DU_THAO :
+        trangThai = STATUS.CHO_DUYET_TP;
+        break;
       case STATUS.CHO_DUYET_TP :
         trangThai = STATUS.CHO_DUYET_LDC;
         break;

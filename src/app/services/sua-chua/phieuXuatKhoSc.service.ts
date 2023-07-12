@@ -18,4 +18,9 @@ export class PhieuXuatKhoScService extends BaseService {
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
 
+  getDanhSachKiemTraCl(body): Promise<OldResponseData>{
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/ds-kiem-tra-cl`;
+    return this._httpClient.post<OldResponseData>(url, body).toPromise();
+  }
+
 }
