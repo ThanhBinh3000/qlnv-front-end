@@ -7,7 +7,7 @@ import {environment} from "../../../environments/environment";
 @Injectable({
   providedIn: 'root',
 })
-export class QuyetDinhXhService extends BaseService{
+export class QuyetDinhXhService extends BaseService {
 
   constructor(public httpClient: HttpClient) {
     super(httpClient, 'sua-chua/xuat-hang', '/qlnv-hang');
@@ -15,6 +15,11 @@ export class QuyetDinhXhService extends BaseService{
 
   getDanhSachTaoPhieuXuatKho(body): Promise<OldResponseData> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/ds-phieu-xuat-kho`;
+    return this._httpClient.post<OldResponseData>(url, body).toPromise();
+  }
+
+  getDanhSachTaoQuyetDinhNhapHang(body): Promise<OldResponseData> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/ds-tao-qd-nh`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
 
