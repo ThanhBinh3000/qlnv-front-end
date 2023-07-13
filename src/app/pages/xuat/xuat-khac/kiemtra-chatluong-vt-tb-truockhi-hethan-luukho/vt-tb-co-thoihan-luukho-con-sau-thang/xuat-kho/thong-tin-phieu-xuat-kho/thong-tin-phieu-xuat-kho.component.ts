@@ -52,7 +52,6 @@ export class ThongTinPhieuXuatKhoComponent extends Base2Component implements OnI
     modal: NzModalService,
     private danhMucService: DanhMucService,
     private quyetDinhGiaoNvXuatHangService: QuyetDinhGiaoNvXuatHangService,
-    // private phieuKiemNghiemChatLuongService: PhieuKiemNghiemChatLuongService,
     private phieuXuatKhoService: PhieuXuatKhoService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, phieuXuatKhoService);
