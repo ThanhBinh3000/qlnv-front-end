@@ -89,6 +89,7 @@ export class ThemMoiPhieuNhapKhoComponent extends Base2Component implements OnIn
       diaChiNguoiGiao: [],
       thoiGianGiaoNhan: [],
       soBangKeCanHang: [''],
+      trangThaiBk: [''],
       ghiChu: [],
       trangThai: [],
       tenTrangThai: [],
@@ -194,7 +195,7 @@ export class ThemMoiPhieuNhapKhoComponent extends Base2Component implements OnIn
     });
     let dataChiCuc = data.hhQdGiaoNvNhangDtlList.filter(item => item.maDvi == this.userInfo.MA_DVI);
     if (dataChiCuc.length > 0) {
-      this.listDiaDiemNhap = dataChiCuc[0].hhQdGiaoNvNhDdiemList;
+      this.listDiaDiemNhap = dataChiCuc[0].children;
     }
     await this.spinner.hide();
   }
@@ -279,11 +280,13 @@ export class ThemMoiPhieuNhapKhoComponent extends Base2Component implements OnIn
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data) {
         const data = res.data;
+        console.log(data)
         this.helperService.bidingDataInFormGroup(this.formData, data);
         this.dataTable = data.hhPhieuNhapKhoCtList;
         this.fileDinhKems = data.fileDinhKems
         this.formData.patchValue({
-          soBangKeCanHang: data.hhBcanKeHangHdr?.soBangKeCanHang
+          soBangKeCanHang: data.hhBcanKeHangHdr?.soBangKeCanHang,
+          trangThaiBk: data.hhBcanKeHangHdr?.trangThai
         })
       }
     }
