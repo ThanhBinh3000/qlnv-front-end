@@ -66,14 +66,12 @@ export class ThongTinPhieuXuatKhoComponent extends Base2Component implements OnI
         maQhns: [],
         soPhieu: [],
         ngayXuat: ['', [Validators.required]],
-        ngayXuatKho: ['', [Validators.required]],
         taiKhoanNo: [],
         taiKhoanCo: [],
         idCanCu: [],
         soCanCu: [],
         maDiaDiem: [],
         ngayQdGiaoNvXh: [],
-        maDiemKho: ['', [Validators.required]],
         maNhaKho: [],
         maNganKho: [],
         maLoKho: [],
@@ -109,6 +107,7 @@ export class ThongTinPhieuXuatKhoComponent extends Base2Component implements OnI
         tenNganKho: ['', [Validators.required]],
         tenLoKho: [],
         fileDinhKems: [new Array<FileDinhKem>()],
+
       }
     );
     this.maPhieu = 'PXK-' + this.userInfo.DON_VI.tenVietTat;
@@ -136,9 +135,17 @@ export class ThongTinPhieuXuatKhoComponent extends Base2Component implements OnI
       await this.phieuXuatKhoService.getDetail(idInput)
         .then((res) => {
           if (res.msg == MESSAGE.SUCCESS) {
-            this.formData.patchValue(res.data);
             const data = res.data;
             this.fileDinhKems = data.fileDinhKems;
+            //load thông tin ngăn lô kho
+            let itemQD = this.listSoQuyetDinh.find(item => item.soQuyetDinh == data.soCanCu && item.id == data.idCanCu);
+            if (itemQD) {
+              this.bindingDataQd(itemQD);
+              this.formData.patchValue({
+                maDiaDiem: res.data.maDiaDiem
+              })
+            }
+            this.formData.patchValue(data);
           }
         })
         .catch((e) => {
@@ -211,12 +218,6 @@ export class ThongTinPhieuXuatKhoComponent extends Base2Component implements OnI
         soCanCu: data.soQuyetDinh,
         idCanCu: data.id,
       });
-      // let dataRes = await this.quyetDinhGiaoNvXuatHangService.getDetail(id)
-      // const data = dataRes.data;
-      // let dataChiCuc = data.noiDungCuuTro.filter(item => item.maDviChiCuc == this.userInfo.MA_DVI);
-      // if (dataChiCuc) {
-      //   this.listDiaDiemNhap = dataChiCuc;
-      // }
     } catch (e) {
       this.notification.error(MESSAGE.ERROR, e.msg);
     } finally {
@@ -224,8 +225,10 @@ export class ThongTinPhieuXuatKhoComponent extends Base2Component implements OnI
     }
   }
 
-  changeValueNganLoKho($event) {
+  async changeValueNganLoKho($event) {
     if ($event) {
+      console.log($event, '$event$event$event')
+      console.log(this.listNganLoKho, ' this.listNganLoKho this.listNganLoKho')
       let item = this.listNganLoKho.find(it => it.maDiaDiem == $event);
       if (item) {
         this.formData.patchValue({

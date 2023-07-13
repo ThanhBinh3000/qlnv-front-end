@@ -19,7 +19,7 @@
           </div>
           <div nz-col nzSpan="4">
             <nz-form-item class="form-item">
-              <nz-form-label>Số phiếu xuất kho </nz-form-label>
+              <nz-form-label>Số phiếu xuất kho</nz-form-label>
               <input placeholder="" nz-input formControlName="soPhieuXuatKho"/>
             </nz-form-item>
           </div>
@@ -145,16 +145,17 @@
                     <td>{{lv2.ngayKn | date: 'dd/MM/YYYY' }}</td>
                     <td>{{lv2.tenTrangThai}}</td>
                     <td class="text-left">
-                      <a (click)="redirectDetail(lv2.id, true)">
+                      <a *ngIf="lv2.trangThai ==STATUS.DA_DUYET_LDCC" (click)="redirectDetail(lv2.id, true)">
                         <i class="fa fa-eye" title="Xem chi tiết"></i>
                       </a>
-                      <a (click)="redirectDetail(lv2.id, false)">
+                      <a *ngIf="lv2.trangThai ==STATUS.TU_CHOI_LDCC || lv2.trangThai ==STATUS.DU_THAO"
+                         (click)="redirectDetail(lv2.id, false)">
                         <i class="fa fa-pencil" title="Sửa"></i>
                       </a>
-                      <a (click)="redirectDetail(lv2.id, true)">
+                      <a *ngIf="lv2.trangThai ==STATUS.CHO_DUYET_LDCC" (click)="redirectDetail(lv2.id, true)">
                         <i class="icon htvbdh_tcdt_pheduyet"></i>
                       </a>
-                      <a (click)="delete(lv2)">
+                      <a *ngIf="lv2.trangThai ==STATUS.DU_THAO" (click)="delete(lv2)">
                         <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                       </a>
                     </td>
@@ -188,9 +189,9 @@
   </div>
 </div>
 <div class="chi-tiet" *ngIf="isDetail">
-    <app-thong-tin-phieu-xuat-kho  [idInput]="selectedId" [isView]="isView" [loaiVthh]="loaiVthh"
-                                   (showListEvent)="showList()">
-    </app-thong-tin-phieu-xuat-kho>
+  <app-thong-tin-phieu-xuat-kho [idInput]="selectedId" [isView]="isView" [loaiVthh]="loaiVthh"
+                                (showListEvent)="showList()">
+  </app-thong-tin-phieu-xuat-kho>
 </div>
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openPhieuKnCl" (nzOnCancel)="closePhieuKnClModal()">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
