@@ -97,9 +97,9 @@
             <td class="bold">{{i + 1}}</td>
             <td (nzExpandChange)="onExpandStringChange(item.idVirtual, $event)"
                 [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true" style="width: 35px"></td>
-            <td class="bold">{{ item.soQdGiaoNvXh }}</td>
-            <td class="bold">{{ item.nam }}</td>
-            <td class="bold">{{ item.ngayQdGiaoNvXh | date: 'dd/MM/YYYY' }}</td>
+            <td class="bold">{{ item.soCanCu }}</td>
+            <td class="bold">{{ item.namKeHoach }}</td>
+            <td class="bold">{{ item.ngayQdGngayQdGiaoNvXhiaoNvXh | date: 'dd/MM/YYYY' }}</td>
             <td></td>
             <td></td>
             <td></td>
@@ -138,8 +138,8 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td class="bold">{{lv2.soPhieuXuatKho}}</td>
-                    <td>{{lv2.ngayXuatKho | date: 'dd/MM/YYYY' }}</td>
+                    <td class="bold">{{lv2.soPhieu}}</td>
+                    <td>{{lv2.ngayXuat | date: 'dd/MM/YYYY' }}</td>
                     <td><a *ngIf="lv2.soPhieuKnCl" nzType="link"
                            (click)="openPhieuKnClModal(lv2.idPhieuKnCl)">{{lv2.soPhieuKnCl}}</a></td>
                     <td>{{lv2.ngayKn | date: 'dd/MM/YYYY' }}</td>
@@ -188,7 +188,8 @@
   </div>
 </div>
 <div class="chi-tiet" *ngIf="isDetail">
-    <app-thong-tin-phieu-xuat-kho >
+    <app-thong-tin-phieu-xuat-kho  [idInput]="selectedId" [isView]="isView" [loaiVthh]="loaiVthh"
+                                   (showListEvent)="showList()">
     </app-thong-tin-phieu-xuat-kho>
 </div>
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openPhieuKnCl" (nzOnCancel)="closePhieuKnClModal()">
