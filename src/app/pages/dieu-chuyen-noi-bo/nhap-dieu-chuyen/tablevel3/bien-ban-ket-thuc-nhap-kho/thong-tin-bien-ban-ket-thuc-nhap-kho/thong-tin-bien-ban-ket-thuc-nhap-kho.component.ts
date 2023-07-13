@@ -85,7 +85,7 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
       cloaiVthh: [],
       tenCloaiVthh: [],
       donViTinh: [],
-      bcnbBBKetThucNKDtl: [new Array<any>(),],
+      dcnbBBKetThucNKDtl: [new Array<any>(),],
       ngayBatDauNhap: [],
       ngayKetThucNhap: [],
       tongSlTheoQd: [],
@@ -168,7 +168,7 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
     if (id) {
       let data = await this.detail(id);
       if (data) {
-        this.danhSach = data.bcnbBBKetThucNKDtl
+        this.danhSach = data.dcnbBBKetThucNKDtl
         this.formData.patchValue(data);
         this.fileDinhKemReq = data.fileDinhKems
       }
@@ -361,7 +361,7 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
   async save(isGuiDuyet?) {
     await this.spinner.show();
     let body = this.formData.value;
-    body.bcnbBBKetThucNKDtl = this.danhSach.filter(item => item.checked)
+    body.dcnbBBKetThucNKDtl = this.danhSach.filter(item => item.checked)
     body.fileDinhKemReq = this.fileDinhKemReq;
 
     if (this.idInput) {
