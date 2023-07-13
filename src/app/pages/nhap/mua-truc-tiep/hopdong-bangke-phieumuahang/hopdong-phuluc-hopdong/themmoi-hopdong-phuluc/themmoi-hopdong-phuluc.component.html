@@ -550,7 +550,7 @@
                     <td>{{children.diaDiemNhap}}</td>
                     <td>{{children.tenDiemKho}}</td>
                     <td>{{children.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                    <td>{{children.soLuong * children.donGia | number : '1.0-1' : 'vi_VN'}}
+                    <td>{{children.soLuong * children.donGia * 1000 | number : '1.0-1' : 'vi_VN'}}
                     </td>
                   </tr>
                 </ng-container>
