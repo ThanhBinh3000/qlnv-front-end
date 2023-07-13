@@ -22,6 +22,9 @@ import { PhieuKiemNghiemChatLuongComponent } from './kiem-tra-chat-luong/phieu-k
 import { BaoCaoKetQuaKiemDinhComponent } from './kiem-tra-chat-luong/bao-cao-ket-qua-kiem-dinh/bao-cao-ket-qua-kiem-dinh.component';
 import { ThongTinPhieuXuatKhoComponent } from './xuat-kho/thong-tin-phieu-xuat-kho/thong-tin-phieu-xuat-kho.component';
 import {CuuTroVienTroModule} from "../../../xuat-cuu-tro-vien-tro/xuat-cuu-tro/cuu-tro-vien-tro.module";
+import { ThongTinBienBanLayMauBanGiaoMauComponent } from './kiem-tra-chat-luong/bien-ban-lay-mau-ban-giao-mau/thong-tin-bien-ban-lay-mau-ban-giao-mau/thong-tin-bien-ban-lay-mau-ban-giao-mau.component';
+import { ThongTinPhieuKiemNghiemChatLuongComponent } from './kiem-tra-chat-luong/phieu-kiem-nghiem-chat-luong/thong-tin-phieu-kiem-nghiem-chat-luong/thong-tin-phieu-kiem-nghiem-chat-luong.component';
+import { ThongTinBaoCaoKetQuaKiemDinhComponent } from './kiem-tra-chat-luong/bao-cao-ket-qua-kiem-dinh/thong-tin-bao-cao-ket-qua-kiem-dinh/thong-tin-bao-cao-ket-qua-kiem-dinh.component';
 
 
 
@@ -40,6 +43,9 @@ import {CuuTroVienTroModule} from "../../../xuat-cuu-tro-vien-tro/xuat-cuu-tro/c
     PhieuKiemNghiemChatLuongComponent,
     BaoCaoKetQuaKiemDinhComponent,
     ThongTinPhieuXuatKhoComponent,
+    ThongTinBienBanLayMauBanGiaoMauComponent,
+    ThongTinPhieuKiemNghiemChatLuongComponent,
+    ThongTinBaoCaoKetQuaKiemDinhComponent,
   ],
   exports: [
     ToanBoDanhSachVt6ThComponent,
