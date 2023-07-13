@@ -1,0 +1,9 @@
+.group-button {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Khoảng cách giữa các phần tử */
+}
+
+.group-button button {
+  margin-right: 0; /* Loại bỏ khoảng cách bên phải của button */
+}

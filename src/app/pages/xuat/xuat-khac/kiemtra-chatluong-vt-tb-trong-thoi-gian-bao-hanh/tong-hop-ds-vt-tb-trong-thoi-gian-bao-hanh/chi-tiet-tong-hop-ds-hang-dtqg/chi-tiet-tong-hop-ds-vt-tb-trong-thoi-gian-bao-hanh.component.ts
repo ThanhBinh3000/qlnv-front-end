@@ -14,24 +14,21 @@ import {Validators} from "@angular/forms";
 import {MESSAGE} from "../../../../../../constants/message";
 import {chain, cloneDeep, isEmpty} from "lodash";
 import {v4 as uuidv4} from "uuid";
-import {
-  KiemtraChatluongLtTruockhiHethanLuukhoComponent
-} from "../../kiemtra-chatluong-lt-truockhi-hethan-luukho.component";
-import {
-  DanhSachHangDTQGCon6ThangService
-} from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatlt/DanhSachHangDTQGCon6Thang.service";
-import {
-  TongHopDanhSachHangDTQGService
-} from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatlt/TongHopDanhSachHangDTQG.service";
 import {FileDinhKem} from "../../../../../../models/FileDinhKem";
+import {
+  DanhSachVtTbTrongThoiGIanBaoHanh
+} from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvtbaohanh/DanhSachVtTbTrongThoiGIanBaoHanh.service";
+import {
+  TongHopDanhSachVtTbTrongThoiGIanBaoHanh
+} from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvtbaohanh/TongHopDanhSachVtTbTrongThoiGIanBaoHanh.service";
 import {LOAI_HH_XUAT_KHAC} from "../../../../../../constants/config";
 
 @Component({
-  selector: 'app-chi-tiet-tong-hop-ds-hang-dtqg',
-  templateUrl: './chi-tiet-tong-hop-ds-hang-dtqg.component.html',
-  styleUrls: ['./chi-tiet-tong-hop-ds-hang-dtqg.component.scss']
+  selector: 'app-chi-tiet-tong-hop-ds-vt-tb-trong-thoi-gian-bao-hanh',
+  templateUrl: './chi-tiet-tong-hop-ds-vt-tb-trong-thoi-gian-bao-hanh.component.html',
+  styleUrls: ['./chi-tiet-tong-hop-ds-vt-tb-trong-thoi-gian-bao-hanh.component.scss']
 })
-export class ChiTietTongHopDsHangDtqgComponent extends Base2Component implements OnInit {
+export class ChiTietTongHopDsVtTbTrongThoiGianBaoHanhComponent extends Base2Component implements OnInit {
   @Input() loaiVthhInput: string;
   @Input() idInput: number;
   @Input() selectedItem: any = {};
@@ -54,8 +51,8 @@ export class ChiTietTongHopDsHangDtqgComponent extends Base2Component implements
   expandSetString = new Set<string>();
   numberToRoman = NumberToRoman;
   maHauTo: any;
-  public vldTrangThai: KiemtraChatluongLtTruockhiHethanLuukhoComponent;
   loaiHhXuatKhac = LOAI_HH_XUAT_KHAC;
+
   constructor(httpClient: HttpClient,
               storageService: StorageService,
               notification: NzNotificationService,
@@ -63,12 +60,10 @@ export class ChiTietTongHopDsHangDtqgComponent extends Base2Component implements
               modal: NzModalService,
               private donviService: DonviService,
               private danhMucService: DanhMucService,
-              private tongHopDanhSachHangDTQGService: TongHopDanhSachHangDTQGService,
-              private danhSachHangDTQGCon6ThangService: DanhSachHangDTQGCon6ThangService,
-              private kiemtraChatluongLtTruockhiHethanLuukhoComponent: KiemtraChatluongLtTruockhiHethanLuukhoComponent,
+              private tongHopDanhSachVtTbTrongThoiGIanBaoHanh: TongHopDanhSachVtTbTrongThoiGIanBaoHanh,
+              private danhSachVtTbTrongThoiGIanBaoHanh: DanhSachVtTbTrongThoiGIanBaoHanh,
               private cdr: ChangeDetectorRef) {
-    super(httpClient, storageService, notification, spinner, modal, tongHopDanhSachHangDTQGService);
-    this.vldTrangThai = kiemtraChatluongLtTruockhiHethanLuukhoComponent;
+    super(httpClient, storageService, notification, spinner, modal, tongHopDanhSachVtTbTrongThoiGIanBaoHanh);
     this.formData = this.fb.group({
       id: [0],
       nam: [dayjs().get('year')],
@@ -88,6 +83,7 @@ export class ChiTietTongHopDsHangDtqgComponent extends Base2Component implements
       tenTrangThai: [],
       tenDvi: [],
       tenCuc: [],
+      loai: [],
       tongHopDtl: [new Array()],
       fileDinhKems: [new Array<FileDinhKem>()],
     })
@@ -99,6 +95,7 @@ export class ChiTietTongHopDsHangDtqgComponent extends Base2Component implements
     try {
       await this.spinner.show();
       console.log(this.showDetail, 666)
+      console.log(this.selectedItem, 77)
       await this.loadDetail(this.idInput);
     } catch (e) {
       console.log('error: ', e)
@@ -111,10 +108,11 @@ export class ChiTietTongHopDsHangDtqgComponent extends Base2Component implements
 
   async loadDetail(idInput: any) {
     if (idInput > 0) {
-      await this.tongHopDanhSachHangDTQGService.getDetail(idInput)
+      await this.tongHopDanhSachVtTbTrongThoiGIanBaoHanh.getDetail(idInput)
         .then(async (res) => {
           if (res.msg == MESSAGE.SUCCESS) {
             this.selectedItem = res.data;
+            console.log(this.selectedItem,888)
             this.formData.patchValue(res.data);
             this.formData.value.tongHopDtl.forEach(s => {
               s.idVirtual = uuidv4();
@@ -217,7 +215,7 @@ export class ChiTietTongHopDsHangDtqgComponent extends Base2Component implements
         this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đủ thông tin.');
         return;
       } else {
-        await this.danhSachHangDTQGCon6ThangService.search({
+        await this.danhSachVtTbTrongThoiGIanBaoHanh.search({
           type: 'TH',
         }).then(async res => {
           if (res.msg == MESSAGE.SUCCESS) {
@@ -230,7 +228,7 @@ export class ChiTietTongHopDsHangDtqgComponent extends Base2Component implements
               });
               this.formData.patchValue({
                 maDanhSach: this.selectedItem ?? this.maHauTo,
-                loai: this.loaiHhXuatKhac.LT_6_THANG,
+                loai: this.loaiHhXuatKhac.VT_BH,
                 tongHopDtl: res.data.content
               });
               let result = await this.createUpdate(this.formData.value);
@@ -279,7 +277,7 @@ export class ChiTietTongHopDsHangDtqgComponent extends Base2Component implements
                   id: this.selectedItem.id,
                   trangThai: this.STATUS.GUI_DUYET,
                 }
-                let res = await this.tongHopDanhSachHangDTQGService.approve(body);
+                let res = await this.tongHopDanhSachVtTbTrongThoiGIanBaoHanh.approve(body);
                 if (res.msg == MESSAGE.SUCCESS) {
                   this.notification.success(MESSAGE.NOTIFICATION, 'Gửi duyệt tổng hợp thành công.');
                   this.step.emit({step: 1});
