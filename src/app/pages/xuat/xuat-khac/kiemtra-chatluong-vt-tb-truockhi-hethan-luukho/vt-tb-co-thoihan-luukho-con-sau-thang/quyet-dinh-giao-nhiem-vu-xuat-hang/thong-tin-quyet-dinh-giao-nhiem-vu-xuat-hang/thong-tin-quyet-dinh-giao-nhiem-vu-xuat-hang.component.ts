@@ -130,6 +130,7 @@ export class ThongTinQuyetDinhGiaoNhiemVuXuatHangComponent extends Base2Componen
           it.tenNhaKho = item.tenNhaKho;
           it.tenNganKho = item.tenNganKho;
           it.tenLoKho = item.tenLoKho;
+          it.slTonKho = item.slTonKho;
           it.maDviTsan = "";
           it.slLayMau = 0;
           this.dataTh.push(it);
@@ -388,4 +389,5 @@ export class ItemXhXkVtQdGiaonvXhDtl {
   tenLoKho: string;
   maDviTsan: string;
   slLayMau: number;
+  slTonKho: number;
 }
