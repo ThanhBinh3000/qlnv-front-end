@@ -30,6 +30,7 @@ export class ThemMoiTongHopDxCucPvcComponent extends Base2Component implements O
   formDataTongHop: FormGroup
   expandSet = new Set<number>();
   amount = AMOUNT_ONE_DECIMAL;
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -51,7 +52,7 @@ export class ThemMoiTongHopDxCucPvcComponent extends Base2Component implements O
       fileDinhKems: [null],
       ghiChu: [null],
       lyDoTuChoi: [null],
-      soQdGiaoCtieu:[null],
+      soQdGiaoCtieu: [null],
       listQlDinhMucPvcDxCcdcDtl: [null],
     });
     this.formDataTongHop = this.fb.group({
@@ -188,8 +189,7 @@ export class ThemMoiTongHopDxCucPvcComponent extends Base2Component implements O
     let res = await this.createUpdate(this.formData.value)
     if (res) {
       this.goBack()
-    }
-    else {
+    } else {
       this.convertListData()
     }
   }
@@ -204,7 +204,7 @@ export class ThemMoiTongHopDxCucPvcComponent extends Base2Component implements O
           const data = res.data;
           this.helperService.bidingDataInFormGroup(this.formData, data);
           this.formData.patchValue({
-            soCv : this.formData.value.soCv  ? this.formData.value.soCv.split('/')[0] : null
+            soCv: this.formData.value.soCv ? this.formData.value.soCv.split('/')[0] : null
           })
           this.fileDinhKem = data.listFileDinhKems;
           this.dataTable = data.listQlDinhMucPvcDxCcdcDtl;
@@ -227,7 +227,12 @@ export class ThemMoiTongHopDxCucPvcComponent extends Base2Component implements O
     let trangThai;
     switch (this.formData.value.trangThai) {
       case STATUS.CHO_DUYET_LDTC : {
-        trangThai = STATUS.DA_DUYET_LDTC
+        trangThai = STATUS.DA_DUYET_LDTC;
+        break;
+      }
+      case STATUS.DU_THAO : {
+        trangThai = STATUS.CHO_DUYET_LDTC;
+        break;
       }
     }
     await this.approve(this.id, trangThai, 'Bạn có chắc chắn muốn duyệt?')
@@ -264,7 +269,7 @@ export class ThemMoiTongHopDxCucPvcComponent extends Base2Component implements O
     this.dataTable = arr
   }
 
-  sumSoLuong(column: string, tenCcdc : string, type?) {
+  sumSoLuong(column: string, tenCcdc: string, type?) {
     let sl = 0;
     let arr = [];
     this.dataTable.forEach(item => {
@@ -275,7 +280,7 @@ export class ThemMoiTongHopDxCucPvcComponent extends Base2Component implements O
       }
     })
     arr = arr.filter(item => item.tenCcdc == tenCcdc)
-    if (arr && arr.length> 0) {
+    if (arr && arr.length > 0) {
       if (!type) {
         const sum = arr.reduce((prev, cur) => {
           prev += cur[column]

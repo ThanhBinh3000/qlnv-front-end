@@ -26,6 +26,7 @@ export class XuatKhoComponent extends Base2Component implements OnInit {
   @Input()
   loaiVthhCache: string;
   CHUC_NANG = CHUC_NANG;
+
   // public vldTrangThai: CuuTroVienTroComponent;
 
   constructor(
@@ -140,9 +141,9 @@ export class XuatKhoComponent extends Base2Component implements OnInit {
 
   buildTableView() {
     let dataView = chain(this.dataTable)
-      .groupBy("soQdGiaoNvXh")
+      .groupBy("soCanCu")
       .map((value, key) => {
-        let quyetDinh = value.find(f => f.soQdGiaoNvXh === key)
+        let quyetDinh = value.find(f => f.soCanCu === key)
         let rs = chain(value)
           .groupBy("tenDiemKho")
           .map((v, k) => {
@@ -155,12 +156,12 @@ export class XuatKhoComponent extends Base2Component implements OnInit {
               }
             }
           ).value();
-        let nam = quyetDinh ? quyetDinh.nam : null;
-        let ngayQdGiaoNvXh = quyetDinh ? quyetDinh.ngayQdGiaoNvXh : null;
+        let namKeHoach = quyetDinh ? quyetDinh.namKeHoach : null;
+        let ngayQdGiaoNvXh = quyetDinh ? quyetDinh.ngayKy : null;
         return {
           idVirtual: uuid.v4(),
-          soQdGiaoNvXh: key != "null" ? key : '',
-          nam: nam,
+          soCanCu: key != "null" ? key : '',
+          namKeHoach: namKeHoach,
           ngayQdGiaoNvXh: ngayQdGiaoNvXh,
           childData: rs
         };
