@@ -19,6 +19,7 @@ import { BangKeCanHangService } from 'src/app/services/qlnv-hang/nhap-hang/nhap-
 import * as uuidv4 from "uuid";
 import { ThongTinQuyetDinhDieuChuyenCucComponent } from 'src/app/pages/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/cuc/thong-tin-quyet-dinh-dieu-chuyen-cuc/thong-tin-quyet-dinh-dieu-chuyen-cuc.component';
 import { ThemmoiQdinhNhapXuatHangKhacComponent } from '../../quyet-dinh-giao-nv-nhap-hang/themmoi-qdinh-nhap-xuat-hang-khac/themmoi-qdinh-nhap-xuat-hang-khac.component';
+import { ThongTinPhieuNhapKhoComponent } from '../phieu-nhap-kho/thong-tin-phieu-nhap-kho/thong-tin-phieu-nhap-kho.component';
 @Component({
   selector: 'app-bang-ke-can-hang',
   templateUrl: './bang-ke-can-hang.component.html',
@@ -176,6 +177,7 @@ export class BangKeCanHangComponent extends Base2Component implements OnInit {
     }
     let res = await this.bangKeCanHangService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
+      this.totalRecord = res.data.totalElements;
       let data = res.data.content
         .map(element => {
           return {
@@ -201,7 +203,24 @@ export class BangKeCanHangComponent extends Base2Component implements OnInit {
       nzComponentParams: {
         isViewDetail: true,
         loaiVthh: this.loaiVthh,
-        id: row.qdDcCucId
+        id: row.idQdPdNk
+      },
+    });
+  }
+
+  async openDialogPNK(row) {
+    this.modal.create({
+      nzTitle: 'Thông tin phiếu nhập kho',
+      nzContent: ThongTinPhieuNhapKhoComponent,
+      nzMaskClosable: false,
+      nzClosable: true,
+      nzBodyStyle: { overflowY: 'auto' },//maxHeight: 'calc(100vh - 200px)'
+      nzWidth: '95%',
+      nzFooter: null,
+      nzComponentParams: {
+        isView: true,
+        loaiVthh: this.loaiVthh,
+        idInput: row.phieuNhapKhoId
       },
     });
   }
@@ -218,34 +237,34 @@ export class BangKeCanHangComponent extends Base2Component implements OnInit {
               .groupBy("maLoNganKho")
               ?.map((value3, key3) => {
 
-                const children3 = chain(value3).groupBy("maLoNganKho")
-                  ?.map((m, im) => {
+                // const children3 = chain(value3).groupBy("maLoNganKho")
+                //   ?.map((m, im) => {
 
-                    const maChiCucNhan = m.find(f => f.maLoNganKho == im);
-                    // const hasMaDiemKhoNhan = vs.some(f => f.maDiemKhoNhan);
-                    // if (!hasMaDiemKhoNhan) return {
-                    //   ...maChiCucNhan
-                    // }
+                //     const maChiCucNhan = m.find(f => f.maLoNganKho == im);
+                //     // const hasMaDiemKhoNhan = vs.some(f => f.maDiemKhoNhan);
+                //     // if (!hasMaDiemKhoNhan) return {
+                //     //   ...maChiCucNhan
+                //     // }
 
-                    // const rssx = chain(m).groupBy("maDiemKhoNhan")?.map((n, inx) => {
+                //     // const rssx = chain(m).groupBy("maDiemKhoNhan")?.map((n, inx) => {
 
-                    //   const maDiemKhoNhan = n.find(f => f.maDiemKhoNhan == inx);
-                    //   return {
-                    //     ...maDiemKhoNhan,
-                    //     children: n
-                    //   }
-                    // }).value()
-                    return {
-                      ...maChiCucNhan,
-                      children: m
-                    }
-                  }).value()
+                //     //   const maDiemKhoNhan = n.find(f => f.maDiemKhoNhan == inx);
+                //     //   return {
+                //     //     ...maDiemKhoNhan,
+                //     //     children: n
+                //     //   }
+                //     // }).value()
+                //     return {
+                //       ...maChiCucNhan,
+                //       children: m
+                //     }
+                //   }).value()
 
                 const row3 = value3.find(s => s?.maLoNganKho == key3);
                 return {
                   ...row3,
                   idVirtual: row3 ? row3.idVirtual ? row3.idVirtual : uuidv4.v4() : uuidv4.v4(),
-                  children: children3,
+                  children: value3,
                 }
               }
               ).value();
