@@ -194,7 +194,7 @@ export class ThemMoiPhieuNhapKhoComponent extends Base2Component implements OnIn
     });
     let dataChiCuc = data.hhQdGiaoNvNhangDtlList.filter(item => item.maDvi == this.userInfo.MA_DVI);
     if (dataChiCuc.length > 0) {
-      this.listDiaDiemNhap = dataChiCuc[0].hhQdGiaoNvNhDdiemList;
+      this.listDiaDiemNhap = dataChiCuc[0].children;
     }
     await this.spinner.hide();
   }

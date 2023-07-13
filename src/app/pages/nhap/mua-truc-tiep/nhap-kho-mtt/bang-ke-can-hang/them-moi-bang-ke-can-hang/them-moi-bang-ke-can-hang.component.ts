@@ -221,7 +221,7 @@ export class ThemMoiBangKeCanHangComponent extends Base2Component implements OnI
     });
     let dataChiCuc = data.hhQdGiaoNvNhangDtlList.filter(item => item.maDvi == this.userInfo.MA_DVI);
     if (dataChiCuc.length > 0) {
-      this.listDiaDiemNhap = dataChiCuc[0].hhQdGiaoNvNhDdiemList;
+      this.listDiaDiemNhap = dataChiCuc[0].children;
     }
     await this.spinner.hide();
   }
