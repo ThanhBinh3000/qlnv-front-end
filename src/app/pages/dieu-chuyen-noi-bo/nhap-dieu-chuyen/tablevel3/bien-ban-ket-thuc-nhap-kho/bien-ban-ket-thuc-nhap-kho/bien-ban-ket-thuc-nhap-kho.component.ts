@@ -130,6 +130,7 @@ export class BienBanKetThucNhapKhoComponent extends Base2Component implements On
     }
     let res = await this.bienBanKetThucNhapKhoService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
+      this.totalRecord = res.data.totalElements;
       let data = res.data.content
         .map(element => {
           return {

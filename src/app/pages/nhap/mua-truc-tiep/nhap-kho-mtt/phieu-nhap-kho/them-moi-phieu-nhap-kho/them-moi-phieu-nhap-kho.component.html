@@ -9,18 +9,18 @@
             <span>In</span>
         </button>
         <button class="btn btn-sub xanh-nhat" type="button"
-            *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC) "
+            *ngIf="(formData.value.soBangKeCanHang != null && formData.value.trangThaiBk == STATUS.DA_DUYET_LDCC && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC)) "
             (click)="save(true)">
             <i class="icon htvbdh_tcdt_guiduyet"></i>
             <span>Lưu và gửi duyệt</span>
         </button>
-        <button type="button" class="btn btn-sub do" *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDCC"
+        <button type="button" class="btn btn-sub do" *ngIf="formData.value.soBangKeCanHang != null && formData.value.trangThaiBk == STATUS.DA_DUYET_LDCC && formData.value.trangThai == STATUS.CHO_DUYET_LDCC"
             (click)="tuChoi()">
             <i class="icon htvbdh_tcdt_tuchoi do"></i>
             <span>Từ chối</span>
         </button>
         <button class="btn btn-sub xanh-nhat"
-            *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDCC && userService.isAccessPermisson('NHDTQG_PTMTT_NK_LT_PNK_DUYET')"
+            *ngIf="formData.value.soBangKeCanHang != null && formData.value.trangThaiBk == STATUS.DA_DUYET_LDCC && formData.value.trangThai == STATUS.CHO_DUYET_LDCC && userService.isAccessPermisson('NHDTQG_PTMTT_NK_LT_PNK_DUYET')"
             (click)="pheDuyet()">
             <i class="icon htvbdh_tcdt_pheduyet "></i>
             <span>Duyệt</span>
@@ -300,7 +300,7 @@
                 <div nz-col nzSpan="4">
                     <nz-form-item>
                         <nz-form-label [nzNoColon]="true">
-                            Họa và tên người giao hàng
+                            Họ và tên người giao hàng
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>

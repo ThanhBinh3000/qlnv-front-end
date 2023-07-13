@@ -74,6 +74,7 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
       idQdPdNk: [],
       soPhieuNhapKho: [],
       phieuNhapKhoId: [],
+      ngayNhapKho: [],
       tenLoNganKho: [],
       tenLoKho: [],
       maLoKho: [],
@@ -424,6 +425,8 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
       if (data) {
         this.formData.patchValue({
           soPhieuNhapKho: data.soPhieuNhapKho,
+          phieuNhapKhoId: data.id,
+          ngayNhapKho: data.ngayNhapKho
         });
         await this.loadChiTietPKNK(data.id);
       }

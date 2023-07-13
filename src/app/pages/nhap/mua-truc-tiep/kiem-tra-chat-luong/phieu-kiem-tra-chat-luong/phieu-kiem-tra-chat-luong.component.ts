@@ -147,6 +147,8 @@ export class PhieuKiemTraChatLuongComponent implements OnInit {
   async search() {
     await this.spinner.show();
     let body = {
+      soQd: this.searchFilter.soQuyetDinh,
+      namNhap: this.searchFilter.namKh,
       "paggingReq": {
         "limit": this.pageSize,
         "page": this.page - 1
@@ -159,7 +161,10 @@ export class PhieuKiemTraChatLuongComponent implements OnInit {
       this.dataTable = data.content;
       this.dataTable.forEach(item => {
         if (this.userService.isChiCuc()) {
-          item.detail = item.hhQdGiaoNvNhangDtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0]
+          item.detail = item.hhQdGiaoNvNhangDtlList.filter(y => y.maDvi == this.userInfo.MA_DVI)[0]
+          item.detail = {
+            children: item.detail.children.filter(x => x.maDiemKho.includes(this.userInfo.MA_DVI))
+          }
         } else {
           let data = [];
           item.hhQdGiaoNvNhangDtlList.forEach(res => {

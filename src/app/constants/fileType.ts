@@ -2,6 +2,7 @@ export enum FILETYPE {
     CAN_CU_PHAP_LY = 'CAN_CU_PHAP_LY',
     FILE_DINH_KEM = 'FILE_DINH_KEM',
     ANH_DINH_KEM = 'ANH_DINH_KEM',
+    FILE_DINH_KEM_KTCL = 'FILE_DINH_KEM_KTCL',
 }
 
 export enum PREVIEW {

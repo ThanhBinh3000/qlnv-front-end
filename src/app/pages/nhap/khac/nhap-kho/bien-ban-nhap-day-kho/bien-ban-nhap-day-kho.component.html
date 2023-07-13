@@ -11,25 +11,30 @@
               </nz-select>
             </div>
             <div nz-col nzSpan="3">
-              <label class="search__label">Số QĐ điều chuyển</label>
-              <nz-input-group nzAddOnAfter="/DCNB">
+              <label class="search__label">Số QĐ giao NV nhập hàng</label>
+              <input nz-input formControlName="soQdPdNk" />
+              <!-- <nz-input-group nzAddOnAfter="/DCNB">
                 <nz-input-number class="search__input" formControlName="soQdinh" [nzMin]="1" [nzMax]="9" [nzStep]="1"
                   [nzSize]="'small'" [nzDisabled]="isView">
                 </nz-input-number>
-              </nz-input-group>
+              </nz-input-group> -->
             </div>
             <div nz-col nzSpan="3">
-              <label class="search__label">Số BB NT kê lót</label>
-              <input nz-input formControlName="trichYeu" />
+              <label class="search__label">Số BB nhập đầy kho</label>
+              <input nz-input formControlName="soBb" />
             </div>
 
             <div nz-col nzSpan="4">
-              <label class="search__label">Ngày lập biên bản</label>
-              <nz-range-picker formControlName="ngayDuyetTc" nzFormat="dd/MM/yyyy"></nz-range-picker>
+              <label class="search__label">Ngày bắt đầu nhập</label>
+              <nz-range-picker formControlName="ngayBdNhap" nzFormat="dd/MM/yyyy"></nz-range-picker>
             </div>
             <div nz-col nzSpan="4">
-              <label class="search__label">Ngày kết thúc NT kê lót, BQLĐ</label>
-              <nz-range-picker formControlName="ngayHieuLuc" nzFormat="dd/MM/yyyy"></nz-range-picker>
+              <label class="search__label">Ngày kết thúc nhập</label>
+              <nz-range-picker formControlName="ngayKtNhap" nzFormat="dd/MM/yyyy"></nz-range-picker>
+            </div>
+            <div nz-col nzSpan="4">
+              <label class="search__label">Thời hạn nhập hàng</label>
+              <nz-range-picker formControlName="ngayThoiHanNh" nzFormat="dd/MM/yyyy"></nz-range-picker>
             </div>
 
 
@@ -50,7 +55,7 @@
         </div>
       </nz-card>
       <div class="group-button">
-        <h3 class="text-uppercase">Danh sách biên bản nghiệm thu bảo quản lần đầu nhập hàng dự trữ quốc gia</h3>
+        <h3 class="text-uppercase">Danh sách biên bản nhập đầy kho</h3>
         <div class="buttons">
           <button type="button" class="btn btn-do" (click)="deleteMulti()"
             *ngIf="userService.isAccessPermisson('DCNB_QUYETDINHDC_XOA') && isTongCuc()">
@@ -99,7 +104,7 @@
                 <td [nzExpand]="row1.expand"
                   (nzExpandChange)="row1.expand=!row1.expand; row1.children=setExpand(row1.expand, row1.children)">
                 </td>
-                <td class="bold text-blue" (click)="openDialogQD(row1)">{{ row1.soQdinh || "" }}</td>
+                <td class="bold text-blue" (click)="openDialogQD(row1)">{{ row1.soQdPdNk || "" }}</td>
                 <td class="bold">{{ row1.namKh || "" }}</td>
                 <td class="bold">{{row1.thoiHanDieuChuyen|date: "dd/MM/yyyy"}}</td>
                 <td></td>
@@ -149,7 +154,7 @@
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td class="bold">{{ row3.tenloKho || ""}} {{ row3.tenNganKho || ""}} {{ row3.tenNhaKho||""}}
+                        <td class="bold">{{ row3.tenLoKho || ""}} {{ row3.tenNganKho || ""}} {{ row3.tenNhaKho||""}}
                         </td>
                         <td class="bold">{{row3.soBbNhapDayKho || ""}}</td>
                         <td class="bold">{{row3.ngayBatDauNhap|date: "dd/MM/yyyy"}}</td>
@@ -158,7 +163,7 @@
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td></td>
+                        <td class="bold">{{row3.tenTrangThai || ""}}</td>
                         <td>
 
                           <a *ngIf="row3.trangThai !== STATUS.DU_THAO" (click)="redirectDetail(row3.id, true)">
@@ -185,10 +190,10 @@
                           <td></td>
                           <td></td>
                           <td></td>
-                          <td class="bold">{{row4.soPhieuNhapKho || ""}}</td>
+                          <td class="bold text-blue" (click)="openDialogPNK(row1)">{{row4.soPhieuNhapKho || ""}}</td>
                           <td class="bold">{{row4.soBangKe || ""}}</td>
                           <td class="bold">{{row4.ngayNhapDayKho|date: "dd/MM/yyyy"}}</td>
-                          <td class="bold">{{row4.tenTrangThai || ""}}</td>
+                          <td></td>
                           <td>
 
                           </td>
@@ -201,7 +206,23 @@
             </ng-container>
           </tbody>
         </nz-table>
-
+        <div class="tab-content tab-menu" id="myTabContent">
+          <div class="tab-pane fade show active justify-content-between">
+            <div class="trai">
+            </div>
+            <div class="canphai">
+              <!-- begin phân trang  -->
+              <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger
+                [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="changePageIndex($event)"
+                (nzPageSizeChange)="changePageSize($event)">
+                <ng-template #rangeTemplate let-range="range" let-total>
+                  {{ range[0] }}-{{ range[1] }} trên tổng số {{ total }} bản ghi
+                </ng-template>
+              </nz-pagination>
+              <!-- end phân trang -->
+            </div>
+          </div>
+        </div>
 
       </nz-card>
 
@@ -210,7 +231,7 @@
   </div>
 
   <div class="chi-tiet" *ngIf="isDetail">
-    <app-thong-tin-bien-ban-nhap-day-kho [isView]="isView" [idInput]="selectedId"
+    <app-thong-tin-bien-ban-nhap-day-kho [isView]="isView" [idInput]="selectedId" [loaiVthh]="loaiVthh"
       (showListEvent)="quayLai()"></app-thong-tin-bien-ban-nhap-day-kho>
   </div>
 
