@@ -92,8 +92,6 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
   }
 
   ngOnInit(): void {
-    const dis = this.danhSachKeHoach.find(item => item.maChiCucNhan === this.data.maChiCucNhan)
-
     this.handleData()
   }
 
@@ -331,6 +329,8 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
           if (coLoKho)
             this.dsLoKho = this.dsNganKho.find(f => f.maDvi === value)?.children;
           else {
+            this.formData.controls["maLoKho"].clearValidators();
+            this.formData.controls["tenLoKho"].clearValidators();
             this.dsLoKho = []
             const body = {
               maDvi: value,
@@ -425,6 +425,8 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
           if (coLoKho) {
             this.dsLoKhoNhan = this.dsNganKhoNhan.find(f => f.maDvi === value)?.children;
           } else {
+            this.formData.controls["maLoKhoNhan"].clearValidators();
+            this.formData.controls["tenLoKhoNhan"].clearValidators();
             this.dsLoKhoNhan = []
             if (
               // this.formData.value.maDiemKho === this.formData.value.maDiemKhoNhan &&

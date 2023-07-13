@@ -20,8 +20,9 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { Base2Component } from './../../../../../../components/base2/base2.component';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { FileDinhKem } from './../../../../../../models/CuuTro';
+import { FileDinhKem } from 'src/app/models/FileDinhKem';
 import { UploadFileService } from './../../../../../../services/uploaFile.service';
+import {FILETYPE} from "../../../../../../constants/fileType";
 @Component({
   selector: 'app-them-moi-phieu-kiem-tra-chat-luong',
   templateUrl: './them-moi-phieu-kiem-tra-chat-luong.component.html',
@@ -52,8 +53,9 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
   listHopDong: any[] = [];
   dataTableChiTieu: any[] = [];
   listDiaDiemNhap: any[] = [];
-  listFileDinhKem: any[] = [];
-
+  listFileDinhKem: FileDinhKem[] = [];
+  listFileDinhKemKTCL: FileDinhKem[] = [];
+  listFile: any[] = []
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -222,7 +224,8 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
     });
     let dataChiCuc = data.hhQdGiaoNvNhangDtlList.filter(item => item.maDvi == this.userInfo.MA_DVI);
     if (dataChiCuc.length > 0) {
-      this.listDiaDiemNhap = dataChiCuc[0].hhQdGiaoNvNhDdiemList;
+      console.log(dataChiCuc[0].children.filter(x => x.maDiemKho.includes(this.userInfo.MA_DVI)))
+      this.listDiaDiemNhap = dataChiCuc[0].children.filter(x => x.maDiemKho.includes(this.userInfo.MA_DVI));
     }
     if (isSetTc) {
       let dmTieuChuan = await this.danhMucTieuChuanService.getDetailByMaHh(data.cloaiVthh);
@@ -314,6 +317,7 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           const data = res.data;
+          console.log(data)
           this.dataTableChiTieu = data.phieuKiemTraChatLuongDtlList;
           this.dataTableChiTieu.forEach(e => {
             e.tenTchuan = e.chiTieuCl;
@@ -322,6 +326,15 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
           });
           this.helperService.bidingDataInFormGroup(this.formData, data);
           await this.bindingDataQd(data.idQdGiaoNvNh);
+          if(data.fileDinhKems.length > 0){
+            data.fileDinhKems.forEach(item => {
+              if (item.fileType == FILETYPE.FILE_DINH_KEM) {
+                this.listFileDinhKem.push(item)
+              } else if (item.fileType == FILETYPE.FILE_DINH_KEM_KTCL) {
+                this.listFileDinhKemKTCL.push(item)
+              }
+            })
+          }
           let dataDdiem = this.listDiaDiemNhap.filter(item => item.id == data.idDdiemGiaoNvNh)[0];
           this.bindingDataDdNhap(dataDdiem);
         }
@@ -340,7 +353,22 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
         return;
       }
       let body = this.formData.value;
-      body.fileDinhKems = this.listFileDinhKem;
+      this.listFile = [];
+      if (this.listFileDinhKem.length > 0) {
+        this.listFileDinhKem.forEach(item => {
+          item.fileType = FILETYPE.FILE_DINH_KEM
+          this.listFile.push(item)
+        })
+      }
+      if (this.listFileDinhKemKTCL.length > 0) {
+        this.listFileDinhKemKTCL.forEach(element => {
+          element.fileType = FILETYPE.FILE_DINH_KEM_KTCL
+          this.listFile.push(element)
+        })
+      }
+      if (this.listFile && this.listFile.length > 0) {
+        body.fileDinhKems= this.listFile;
+      }
       body.phieuKiemTraChatLuongDtlList = this.dataTableChiTieu;
       body.phieuKiemTraChatLuongDtlList.forEach(e => {
         e.chiTieuCl = e.tenTchuan;

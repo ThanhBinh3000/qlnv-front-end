@@ -1,13 +1,15 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { MESSAGE } from 'src/app/constants/message';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
-import { STATUS } from 'src/app/constants/status';
-import { QuyetDinhNvXuatBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/quyet-dinh-nv-xuat-btt/quyet-dinh-nv-xuat-btt.service';
+import {Component, Input, OnInit} from '@angular/core';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {MESSAGE} from 'src/app/constants/message';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from 'src/app/services/storage.service';
+import {STATUS} from 'src/app/constants/status';
+import {
+  ChaoGiaMuaLeUyQuyenService
+} from "../../../../../../services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/chao-gia-mua-le-uy-quyen.service";
 
 @Component({
   selector: 'app-danh-sach-ban-truc-tiep-chi-cuc',
@@ -18,15 +20,22 @@ export class DanhSachBanTrucTiepChiCucComponent extends Base2Component implement
   @Input() loaiVthh: string;
   isQuanLy: boolean;
   isAddNew: boolean;
+
+  listTrangThai: any[] = [
+    {ma: this.STATUS.CHUA_THUC_HIEN, giaTri: 'Chưa thực hiện'},
+    {ma: this.STATUS.DANG_THUC_HIEN, giaTri: 'Đang thực hiện'},
+    {ma: this.STATUS.DA_HOAN_THANH, giaTri: 'Đã hoàn thành'},
+  ];
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private quyetDinhNvXuatBttService: QuyetDinhNvXuatBttService,
+    private chaoGiaMuaLeUyQuyenService: ChaoGiaMuaLeUyQuyenService,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, quyetDinhNvXuatBttService);
+    super(httpClient, storageService, notification, spinner, modal, chaoGiaMuaLeUyQuyenService);
     super.ngOnInit();
     this.formData = this.fb.group({
       namKh: null,
@@ -36,7 +45,8 @@ export class DanhSachBanTrucTiepChiCucComponent extends Base2Component implement
       ngayPduyetDen: null,
       loaiVthh: null,
       trangThai: null,
-      pthucBanTrucTiep: null
+      pthucBanTrucTiep: null,
+      lastest: 1
     });
     this.filterTable = {
       namKh: '',
@@ -78,8 +88,8 @@ export class DanhSachBanTrucTiepChiCucComponent extends Base2Component implement
   async timKiem() {
     this.formData.patchValue({
       loaiVthh: this.loaiVthh,
-      trangThai: STATUS.BAN_HANH,
-      pthucBanTrucTiep: '02'
+      trangThai: STATUS.HOAN_THANH_CAP_NHAT,
+      pthucBanTrucTiep: ['02']
     })
   }
 

@@ -167,6 +167,7 @@ export class KiemNghiemChatLuongComponent extends Base2Component implements OnIn
     }
     let res = await this.phieuKiemNghiemChatLuongService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
+      this.totalRecord = res.data.totalElements;
       let data = res.data.content
         .map(element => {
           return {

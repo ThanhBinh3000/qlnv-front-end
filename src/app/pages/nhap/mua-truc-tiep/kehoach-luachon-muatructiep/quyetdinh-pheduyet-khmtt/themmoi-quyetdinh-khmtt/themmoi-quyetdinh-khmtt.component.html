@@ -42,7 +42,7 @@
                 <nz-form-label nzRequired [nzNoColon]="true"> Năm kế hoạch
                 </nz-form-label>
                 <nz-form-control nz-col [nzErrorTip]="error">
-                  <nz-select formControlName="namKh" nzAllowClear [nzDisabled]="true">
+                  <nz-select formControlName="namKh" nzAllowClear [nzDisabled]="isDisabled()">
                     <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                   </nz-select>
                 </nz-form-control>

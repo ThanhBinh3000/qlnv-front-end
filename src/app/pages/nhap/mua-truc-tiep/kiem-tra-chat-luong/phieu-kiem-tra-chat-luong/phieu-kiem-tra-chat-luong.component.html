@@ -103,7 +103,7 @@
                             </td>
                         </tr>
                         <ng-container *ngIf="expandSet.has(i)">
-                            <ng-container *ngFor="let dataDdiem of item.detail.hhQdGiaoNvNhDdiemList, let y = index">
+                            <ng-container *ngFor="let dataDdiem of item.detail.children, let y = index">
                                 <tr class="level-2">
                                     <td></td>
                                     <td></td>

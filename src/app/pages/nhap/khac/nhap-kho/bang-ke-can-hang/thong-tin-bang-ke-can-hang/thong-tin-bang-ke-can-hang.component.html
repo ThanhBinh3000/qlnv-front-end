@@ -327,7 +327,7 @@
               <th>Trọng lượng cả bì(kg)</th>
               <th *ngIf="!isView">Hành động</th>
             </tr>
-            <tr>
+            <tr *ngIf="!isView">
               <th></th>
               <th>
                 <form nz-form nzLayout="vertical" [formGroup]="formData">
@@ -354,7 +354,7 @@
                 </form>
 
               </th>
-              <th>
+              <th *ngIf="!isView">
                 <a (click)="them()">
                   <i class="icon htvbdh_dau-cong"></i>
                 </a>
