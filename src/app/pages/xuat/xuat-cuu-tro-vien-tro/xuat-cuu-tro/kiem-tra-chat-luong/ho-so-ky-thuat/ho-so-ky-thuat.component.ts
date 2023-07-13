@@ -15,7 +15,7 @@ import {
 import {MESSAGE} from "../../../../../../constants/message";
 
 @Component({
-  selector: 'app-ho-so-ky-thuat',
+  selector: 'app-ho-so-ky-thuat-cuu-tro',
   templateUrl: './ho-so-ky-thuat.component.html',
   styleUrls: ['./ho-so-ky-thuat.component.scss']
 })
@@ -27,6 +27,7 @@ export class HoSoKyThuatComponent extends Base2Component implements OnInit {
 
   listHangHoaAll: any[] = [];
   listLoaiHangHoa: any[] = [];
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -38,15 +39,14 @@ export class HoSoKyThuatComponent extends Base2Component implements OnInit {
   ) {
     super(httpClient, storageService, notification, spinner, modal, hoSoKyThuatCtvtService);
     this.formData = this.fb.group({
-      id: [0],
-      nam: [],
+      id: [],
       idQdGiaoNvNh: [],
       soQdGiaoNvNh: [],
       soBbLayMau: [],
       soHd: [],
       maDvi: [],
-      tenDvi: [],
       soHoSoKyThuat: [],
+      nam: [],
       idBbLayMauXuat: [],
       kqKiemTra: [],
       loaiNhap: [],
@@ -54,6 +54,17 @@ export class HoSoKyThuatComponent extends Base2Component implements OnInit {
       maNhaKho: [],
       maNganKho: [],
       maLoKho: [],
+      tenDiemKho: [],
+      tenNhaKho: [],
+      tenNganKho: [],
+      tenLoKho: [],
+      loaiVthh: [],
+      cloaiVthh: [],
+      tenLoaiVthh: [],
+      tenCloaiVthh: [],
+      trangThai: [],
+      tenTrangThai: [],
+      tenDvi: [],
       ngayTao: []
     })
   }
@@ -63,13 +74,13 @@ export class HoSoKyThuatComponent extends Base2Component implements OnInit {
     try {
       await Promise.all([
         this.search(),
-        // this.loadDsVthh(),
       ])
-      this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
-      await this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+    finally {
+      await this.spinner.hide();
     }
   }
 
