@@ -11,21 +11,19 @@ import {CHUC_NANG} from "../../../../../constants/status";
 import {DonviService} from "../../../../../services/donvi.service";
 import {DanhMucService} from "../../../../../services/danhmuc.service";
 import {MESSAGE} from "../../../../../constants/message";
-import {
-  KiemtraChatluongLtTruockhiHethanLuukhoComponent
-} from "../kiemtra-chatluong-lt-truockhi-hethan-luukho.component";
 import {chain, isEmpty} from "lodash";
 import {v4 as uuidv4} from "uuid";
-import {
-  TongHopDanhSachHangDTQGService
-} from "../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatlt/TongHopDanhSachHangDTQG.service";
 import {LOAI_HH_XUAT_KHAC} from "../../../../../constants/config";
+import {
+  TongHopDanhSachVtTbTrongThoiGIanBaoHanh
+} from "../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvtbaohanh/TongHopDanhSachVtTbTrongThoiGIanBaoHanh.service";
+
 @Component({
-  selector: 'app-tong-hop-ds-hang-dtqg-hethan-luukho-chua-co-kh-xuat',
-  templateUrl: './tong-hop-ds-hang-dtqg-hethan-luukho-chua-co-kh-xuat.component.html',
-  styleUrls: ['./tong-hop-ds-hang-dtqg-hethan-luukho-chua-co-kh-xuat.component.scss']
+  selector: 'app-tong-hop-ds-vt-tb-trong-thoi-gian-bao-hanh',
+  templateUrl: './tong-hop-ds-vt-tb-trong-thoi-gian-bao-hanh.component.html',
+  styleUrls: ['./tong-hop-ds-vt-tb-trong-thoi-gian-bao-hanh.component.scss']
 })
-export class TongHopDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Component implements OnInit {
+export class TongHopDsVtTbTrongThoiGianBaoHanhComponent extends Base2Component implements OnInit {
   CHUC_NANG = CHUC_NANG;
   dsDonvi: any[] = [];
   dsLoaiVthh: any[] = [];
@@ -35,7 +33,6 @@ export class TongHopDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Com
   stepModal: any = '50%';
   isVisibleModal = false;
   formDataDetail: FormGroup;
-  public vldTrangThai: KiemtraChatluongLtTruockhiHethanLuukhoComponent;
   clickOk = false;
   clickCancel = false;
   flatDataTable: any;
@@ -45,9 +42,10 @@ export class TongHopDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Com
   step: any = 1;
   DanhSach: boolean = false;
   showDetail: boolean;
-  @Input()  openModal:boolean;
+  @Input() openModal: boolean;
   loaiHhXuatKhac = LOAI_HH_XUAT_KHAC;
   @Output() tabFocus = new EventEmitter<number>();
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -56,11 +54,9 @@ export class TongHopDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Com
     modal: NzModalService,
     private donviService: DonviService,
     private danhMucService: DanhMucService,
-    private tongHopDanhSachHangDTQGService: TongHopDanhSachHangDTQGService,
-    private kiemtraChatluongLtTruockhiHethanLuukhoComponent:KiemtraChatluongLtTruockhiHethanLuukhoComponent
+    private tongHopDanhSachVtTbTrongThoiGIanBaoHanh: TongHopDanhSachVtTbTrongThoiGIanBaoHanh,
   ) {
-    super(httpClient, storageService, notification, spinner, modal,tongHopDanhSachHangDTQGService);
-    this.vldTrangThai = kiemtraChatluongLtTruockhiHethanLuukhoComponent;
+    super(httpClient, storageService, notification, spinner, modal, tongHopDanhSachVtTbTrongThoiGIanBaoHanh);
     this.formData = this.fb.group({
       nam: [],
       maDanhSach: [],
@@ -106,7 +102,7 @@ export class TongHopDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Com
         this.loadDsVthh()
       ]);
       await this.timKiem();
-      if (this.openModal){
+      if (this.openModal) {
         await this.showModal(true);
       }
     } catch (e) {
@@ -140,10 +136,10 @@ export class TongHopDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Com
 
   async timKiem() {
     this.formData.patchValue({
-      loai: this.loaiHhXuatKhac.LT_6_THANG,
+      loai: this.loaiHhXuatKhac.VT_BH,
     });
     await this.search();
-
+    console.log( this.dataTable,100000)
     this.flatDataTable = this.dataTable.flatMap(s => {
       if (s.tongHopDtl && s.tongHopDtl.length > 0) {
         return s.tongHopDtl.map(s1 => {
@@ -249,8 +245,9 @@ export class TongHopDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Com
   showModal(isVisibleModal: boolean, item?: any, showDetail?: boolean) {
     this.isVisibleModal = isVisibleModal;
     this.selectedItem = item;
-    this.modalWidth = showDetail? '80vw': (item? '40vw': '40vw');
+    this.modalWidth = showDetail ? '80vw' : (item ? '40vw' : '40vw');
     // this.step = item ? '1' : '2';
+    console.log(this.selectedItem,9999)
   }
 
   async changeStep($event: any) {
@@ -262,10 +259,12 @@ export class TongHopDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Com
     }
     this.timKiem();
   }
-  async changeShowDetail($event:any){
+
+  async changeShowDetail($event: any) {
     console.log($event)
     this.showModal(true, $event.item, $event.showDetail);
   }
+
   async delete(item: any, roles?) {
     this.modal.confirm({
       nzClosable: false,
@@ -281,7 +280,7 @@ export class TongHopDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Com
           let body = {
             id: item.id
           };
-          this.tongHopDanhSachHangDTQGService.delete(body).then(async () => {
+          this.tongHopDanhSachVtTbTrongThoiGIanBaoHanh.delete(body).then(async () => {
             await this.timKiem();
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
           });
@@ -293,9 +292,11 @@ export class TongHopDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Com
       },
     });
   }
+
   emitTab(tab) {
     this.tabFocus.emit(tab);
   }
+
   danhSach() {
     this.DanhSach = true;
     this.emitTab(0)
