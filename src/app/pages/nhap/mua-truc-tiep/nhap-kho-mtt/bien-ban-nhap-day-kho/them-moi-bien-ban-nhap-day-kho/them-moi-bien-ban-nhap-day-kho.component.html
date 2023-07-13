@@ -232,7 +232,7 @@
                 </tbody>
                 <tfoot>
                     <tr>
-                        <td colspan="5" class="text-right">TỔNG</td>
+                        <td colspan="6" class="text-right">TỔNG</td>
                         <td>{{ calcTong() | number : '1.0-1' : 'vi_VN' }} </td>
                     </tr>
                 </tfoot>
@@ -339,24 +339,16 @@
                         </nz-form-control>
                     </nz-form-item>
                 </div>
-                <div nz-col [nzSpan]="24">
-                    <nz-form-item>
-                        <nz-form-label [nzNoColon]="true"> File đính kèm quyết định đã ký </nz-form-label>
-                        <nz-form-control [nzErrorTip]="error">
-                            <div class="list-file">
-                                <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                                    <input type="text" nz-input />
-                                </nz-input-group>
-                                <ng-template #suffixTemplateInfo>
-                                    <div class="icon-file-dinh-kem">
-                                        <i class="icon htvbdh_tcdt_tep"></i>
-                                        <input class="input-file" (change)="getNameFile($event)" type="file" />
-                                    </div>
-                                </ng-template>
-                            </div>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
+              <div nz-col nzSpan="24">
+                <nz-form-item>
+                  <nz-form-label required [nzNoColon]="true">
+                    File đính kèm biên bản đã ký
+                  </nz-form-label>
+                  <div class="list-file">
+                    <file-list [data]="fileDinhKems"></file-list>
+                  </div>
+                </nz-form-item>
+              </div>
             </div>
         </form>
     </nz-card>
