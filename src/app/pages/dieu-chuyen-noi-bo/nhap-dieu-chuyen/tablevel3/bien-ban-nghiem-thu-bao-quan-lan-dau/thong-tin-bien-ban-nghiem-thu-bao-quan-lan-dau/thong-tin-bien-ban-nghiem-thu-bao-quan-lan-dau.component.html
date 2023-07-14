@@ -2,7 +2,8 @@
   <div class="header header-green-background">
     <div class="header-text">
       <div class="title-chi-tieu">
-        <span [ngClass]="'da-ban-hanh'">
+        <span
+          [ngClass]="formData.value.trangThai === STATUS.DA_DUYET_LDCC ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
           {{ formData.value.tenTrangThai }}
         </span>
         <span> BIÊN BẢN NGHIỆM THU BẢO QUẢN LẦN ĐẦU</span>
@@ -38,10 +39,10 @@
         <span>Duyệt</span>
       </button>
 
-      <button *ngIf="isBanHanh()" type="button" class="btn btn-info ml-2" (click)="banHanh()">
+      <!-- <button *ngIf="isBanHanh()" type="button" class="btn btn-info ml-2" (click)="banHanh()">
         <i class="icon htvbdh_chuyenvanthu"></i>
         <span>Ban hành</span>
-      </button>
+      </button> -->
 
     </div>
   </div>
@@ -188,7 +189,7 @@
               <div nz-row [nzGutter]="24">
                 <div nz-col nzSpan="6">
                   <nz-form-item>
-                    <nz-form-label [nzNoColon]="true">Lô kho(Nhập điều chuyển)
+                    <nz-form-label [nzNoColon]="true">Lô kho (Nhập điều chuyển)
                     </nz-form-label>
                     <nz-form-control nz-col [nzErrorTip]="error">
                       <!-- <input nz-input formControlName="tenLoKho" [readonly]="true" /> -->

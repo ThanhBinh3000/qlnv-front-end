@@ -909,6 +909,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
   themLoKho(row) {
     this.typeKeHoach = "THEM_LO_KHO"
     const data = {
+      // ...row,
       hdrId: row ? row.hdrId : '',
       maDvi: row ? row.maDvi : '',
       tenDvi: row ? row.tenDvi : '',
