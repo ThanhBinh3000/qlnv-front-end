@@ -11,9 +11,6 @@ import {Subject} from "rxjs";
 import {UserLogin} from "src/app/models/userlogin";
 import {UserService} from "src/app/services/user.service";
 import {MESSAGE} from "src/app/constants/message";
-import {
-  HoSoKyThuatCtvtService
-} from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/HoSoKyThuatCtvt.service";
 import {v4 as uuidv4} from "uuid";
 import {cloneDeep} from 'lodash';
 import {FileDinhKem} from "src/app/models/FileDinhKem";
@@ -24,9 +21,12 @@ import {
 import {
   DialogTableSelectionComponent
 } from "src/app/components/dialog/dialog-table-selection/dialog-table-selection.component";
+import {
+  HoSoKyThuatBttService
+} from "src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/ktra-cluong-btt/HoSoKyThuatBtt.service";
 
 @Component({
-  selector: 'app-chi-tiet-ho-so-ky-thuat',
+  selector: 'app-chi-tiet-ho-so-ky-thuat-btt',
   templateUrl: './chi-tiet-ho-so-ky-thuat.component.html',
   styleUrls: ['./chi-tiet-ho-so-ky-thuat.component.scss']
 })
@@ -117,9 +117,9 @@ export class ChiTietHoSoKyThuatComponent extends Base2Component implements OnIni
     public userService: UserService,
     // private bienBanLayMauService: QuanLyBienBanLayMauService,
     private bienBanLayMauBanGiaoMauService: BienBanLayMauBanGiaoMauService,
-    private hoSoKyThuatCtvtService: HoSoKyThuatCtvtService
+    private hoSoKyThuatBttService: HoSoKyThuatBttService
   ) {
-    super(httpClient, storageService, notification, spinner, modal, hoSoKyThuatCtvtService);
+    super(httpClient, storageService, notification, spinner, modal, hoSoKyThuatBttService);
     super.ngOnInit();
     this.formData = this.fb.group({
       id: [],
@@ -175,7 +175,7 @@ export class ChiTietHoSoKyThuatComponent extends Base2Component implements OnIni
   }
 
   async loadDetail(id) {
-    let res = await this.hoSoKyThuatCtvtService.getDetail({id: id, type: "CTVT"});
+    let res = await this.hoSoKyThuatBttService.getDetail({id: id, type: "BTT"});
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.formData.patchValue(data);
@@ -224,7 +224,7 @@ export class ChiTietHoSoKyThuatComponent extends Base2Component implements OnIni
 
   async save() {
     try {
-      this.formData.patchValue({type: 'CTVT'});
+      this.formData.patchValue({type: 'BTT'});
       let body = this.formData.value;
       let rs = await this.createUpdate(body);
     } catch (e) {
@@ -420,7 +420,7 @@ export class ChiTietHoSoKyThuatComponent extends Base2Component implements OnIni
       },
     })
     modalQD.afterClose.subscribe(async (dataChose) => {
-      console.log(dataChose,'dataChose')
+      console.log(dataChose, 'dataChose')
       if (dataChose) {
         this.formData.patchValue({
           idBbLayMau: dataChose.id,

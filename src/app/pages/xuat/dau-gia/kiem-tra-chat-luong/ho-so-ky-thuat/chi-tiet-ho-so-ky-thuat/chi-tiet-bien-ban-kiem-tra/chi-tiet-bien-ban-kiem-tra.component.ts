@@ -18,9 +18,10 @@ import {saveAs} from 'file-saver';
 import {
   HoSoKyThuatCtvtService
 } from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/HoSoKyThuatCtvt.service";
+import { HoSoKyThuatBdgService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/kiem-tra-chat-luong/HoSoKyThuatBdg.service';
 
 @Component({
-  selector: 'app-chi-tiet-bien-ban-kiem-tra',
+  selector: 'app-chi-tiet-bien-ban-kiem-tra-dau-gia',
   templateUrl: './chi-tiet-bien-ban-kiem-tra.component.html',
   styleUrls: ['./chi-tiet-bien-ban-kiem-tra.component.scss']
 })
@@ -89,9 +90,9 @@ export class ChiTietBienBanKiemTraComponent extends Base2Component implements On
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private bienBanGuiHangService: BienBanGuiHangService,
-    private hoSoKyThuatCtvtService: HoSoKyThuatCtvtService
+    private hoSoKyThuatBdgService: HoSoKyThuatBdgService
   ) {
-    super(httpClient, storageService, notification, spinner, modal, hoSoKyThuatCtvtService);
+    super(httpClient, storageService, notification, spinner, modal, hoSoKyThuatBdgService);
     super.ngOnInit();
     this.formData = this.fb.group({
       id: [],
