@@ -110,7 +110,8 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
       bbNghiemThuBqld: [],
       soBBNghiemThuBqld: [],
       soLuongQdDcCuc: [],
-      dviTinh: [],
+      donViTinh: [],
+      tenDonViTinh: [],
       soBangKeCanHang: [],
       tongSoLuong: [],
       tongSoLuongBc: [],
@@ -374,7 +375,8 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
           tenCloaiVthh: "",
           tichLuongKhaDung: "",
           soLuongQdDcCuc: "",
-          dviTinh: "",
+          donViTinh: "",
+          tenDonViTinh: "",
         });
         await this.loadChiTietQdinh(data.id);
       }
@@ -460,7 +462,8 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
           maDiemKho: data.maDiemKho,
           tichLuongKhaDung: data.tichLuongKd,
           soLuongQdDcCuc: data.soLuongPhanBo,
-          dviTinh: data.tenDonViTinh,
+          donViTinh: data.tenDonViTinh,
+          tenDonViTinh: data.tenDonViTinh,
         });
         this.dviTinh = data.tenDonViTinh || "Kg"
         this.donGia = data.donGia

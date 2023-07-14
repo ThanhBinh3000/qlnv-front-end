@@ -71,7 +71,7 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
       tonKho: [, [Validators.required]],
       tenDonViTinh: [, [Validators.required]],
       soLuongDc: [, [Validators.required]],
-      duToanKphi: [, [Validators.required]],
+      duToanKphi: [],
       thoiGianDkDc: [, [Validators.required]],
       maDiemKhoNhan: [, [Validators.required]],
       tenDiemKhoNhan: [, [Validators.required]],
@@ -338,7 +338,7 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
             }
             const res = await this.quanLyHangTrongKhoService.getTrangThaiHt(body);
             if (res.statusCode == 0) {
-              if (res.data.length > 0) {
+              if (res.data.length === 1) {
                 this.formData.patchValue({
                   loaiVthh: res.data[0].loaiVthh,
                   tenLoaiVthh: res.data[0].tenLoaiVthh,
@@ -347,6 +347,8 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
                   tonKho: res.data[0].slHienThoi,
                   tenDonViTinh: res.data[0].tenDonViTinh,
                 })
+              } else {
+                this.notification.error(MESSAGE.ERROR, "Tìm thấy nhiều hơn 1 lô kho!" + body.tenLoKho);
               }
             }
           }
@@ -369,15 +371,19 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
           tenLoKho: loKho.tenDvi
         }
         const res = await this.quanLyHangTrongKhoService.getTrangThaiHt(body);
-        if (res.statusCode == 0 && res.data.length > 0) {
-          this.formData.patchValue({
-            loaiVthh: res.data[0].loaiVthh,
-            tenLoaiVthh: res.data[0].tenLoaiVthh,
-            cloaiVthh: res.data[0].cloaiVthh,
-            tenCloaiVthh: res.data[0].tenCloaiVthh,
-            tonKho: res.data[0].slHienThoi,
-            tenDonViTinh: res.data[0].tenDonViTinh,
-          })
+        if (res.statusCode == 0) {
+          if (res.data.length === 1) {
+            this.formData.patchValue({
+              loaiVthh: res.data[0].loaiVthh,
+              tenLoaiVthh: res.data[0].tenLoaiVthh,
+              cloaiVthh: res.data[0].cloaiVthh,
+              tenCloaiVthh: res.data[0].tenCloaiVthh,
+              tonKho: res.data[0].slHienThoi,
+              tenDonViTinh: res.data[0].tenDonViTinh,
+            })
+          } else {
+            this.notification.error(MESSAGE.ERROR, "Tìm thấy nhiều hơn 1 lô kho!" + body.tenLoKho);
+          }
         } else {
           this.formData.patchValue({
             loaiVthh: "",
@@ -411,10 +417,13 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
         const detail = await this.mangLuoiKhoService.getDetailByMa(body);
         if (detail.statusCode == 0) {
           const coLoKho = detail.data.object.coLoKho
-          const tichLuongKd = (this.formData.value.cloaiVthh.startsWith("01") || this.formData.value.cloaiVthh.startsWith("04")) ? detail.data.object.tichLuongKdLt : detail.data.object.tichLuongKdVt
-          this.formData.patchValue({
-            tichLuongKd
-          })
+          if (this.formData.value.cloaiVthh) {
+            const tichLuongKd = (this.formData.value.cloaiVthh.startsWith("01") || this.formData.value.cloaiVthh.startsWith("04")) ? detail.data.object.tichLuongKdLt : detail.data.object.tichLuongKdVt
+            this.formData.patchValue({
+              tichLuongKd
+            })
+          }
+
           const detailThuKho = detail.data.object.detailThuKho
           if (detailThuKho) {
             this.formData.patchValue({
