@@ -4,15 +4,15 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { FileManip, Operator, Status, Table, Utils } from "src/app/Utility/utils";
-import { DialogChonDanhMucComponent } from 'src/app/components/dialog/dialog-chon-danh-muc/dialog-chon-danh-muc.component';
+import { DialogChonDanhMucChoBieuMauComponent } from 'src/app/components/dialog/dialog-chon-danh-muc-cho-bieu-mau/dialog-chon-danh-muc-cho-bieu-mau.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.service';
 import { BaoCaoThucHienDuToanChiService } from 'src/app/services/quan-ly-von-phi/baoCaoThucHienDuToanChi.service';
 import * as uuid from "uuid";
-import { BtnStatus, Doc, Dtc, Form } from '../../bao-cao-thuc-hien-du-toan-chi.constant';
 import * as XLSX from 'xlsx';
+import { BtnStatus, Doc, Dtc, Form } from '../../bao-cao-thuc-hien-du-toan-chi.constant';
 
 export class ItemData {
     id: string;
@@ -193,6 +193,7 @@ export class PhuLucIIComponent implements OnInit {
         Object.assign(this.status, this.dataInfo.status);
         this.namBcao = this.dataInfo.namBcao;
         this.luyKes = this.dataInfo.luyKes?.lstCtietBcaos;
+        await this.getFormDetail();
         if (this.status.save) {
             const category = await this.danhMucService.danhMucChungGetAll('BC_DTC_PL2');
             if (category) {
@@ -238,6 +239,29 @@ export class PhuLucIIComponent implements OnInit {
         this.status.ok = this.status.ok && (this.formDetail.trangThai == Status.NOT_RATE || this.formDetail.trangThai == Status.COMPLETE);
     }
 
+    async getFormDetail() {
+        await this.baoCaoThucHienDuToanChiService.ctietBieuMau(this.dataInfo.id).toPromise().then(
+            data => {
+                if (data.statusCode == 0) {
+                    this.formDetail = data.data;
+                    this.formDetail.maDviTien = '1';
+                    this.lstCtietBcao = [];
+                    this.formDetail.lstCtietBcaos.forEach(item => {
+                        this.lstCtietBcao.push(new ItemData(item));
+                    })
+                    this.formDetail.listIdDeleteFiles = [];
+                    this.listFile = [];
+                    this.getStatusButton();
+                } else {
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                }
+            },
+            err => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+            }
+        )
+    }
+
     // luu
     async save(trangThai: string) {
         if (this.lstCtietBcao.some(e => this.editCache[e.id].edit)) {
@@ -265,7 +289,7 @@ export class PhuLucIIComponent implements OnInit {
         for (let iterator of this.listFile) {
             request.fileDinhKems.push(await this.fileManip.uploadFile(iterator, this.dataInfo.path));
         }
-        request.lstCtietLapThamDinhs = lstCtietBcaoTemp;
+        request.lstCtietBcaos = lstCtietBcaoTemp;
         request.trangThai = trangThai;
         this.spinner.show();
         this.baoCaoThucHienDuToanChiService.baoCaoCapNhatChiTiet(request).toPromise().then(
@@ -459,54 +483,47 @@ export class PhuLucIIComponent implements OnInit {
         })
     }
 
-    addLine(id: string) {
-        const maNdung: string = this.lstCtietBcao.find(e => e.id == id)?.maNdung;
-        const obj = {
-            ma: maNdung,
-            lstDanhMuc: this.noiDungs,
-        }
-
+    addLine(id?: string) {
+        const maNdung = id ? this.lstCtietBcao.find(e => e.id == id).maNdung : '0';
+        const level = maNdung.split('.').length - 1;
+        let dmNdung = this.noiDungs.filter(e => e.ma.startsWith(maNdung) && e.level == level);
+        dmNdung = dmNdung.filter(e => this.lstCtietBcao.findIndex(item => item.maNdung == e.ma) == -1);
         const modalIn = this.modal.create({
             nzTitle: 'Danh sách nội dung',
-            nzContent: DialogChonDanhMucComponent,
+            nzContent: DialogChonDanhMucChoBieuMauComponent,
             nzMaskClosable: false,
             nzClosable: false,
-            nzWidth: '65%',
+            nzWidth: '600px',
             nzFooter: null,
             nzComponentParams: {
-                obj: obj
+                danhSachBieuMau: dmNdung,
             },
         });
         modalIn.afterClose.subscribe((res) => {
             if (res) {
-                const index: number = this.lstCtietBcao.findIndex(e => e.maNdung == res.ma);
-                if (index == -1) {
-                    const data: ItemData = new ItemData({
-                        maNdung: res.ma,
-                        level: this.noiDungs.find(e => e.ma == res.ma)?.level,
-                        tenNdung: this.noiDungs.find(e => e.ma == res.ma)?.giaTri,
-                    });
-                    if (this.lstCtietBcao.length == 0) {
-                        this.lstCtietBcao = Table.addHead(data, this.lstCtietBcao);
-                    } else {
-                        this.addSame(id, data);
-                    }
-                }
-                id = this.lstCtietBcao.find(e => e.maNdung == res.ma)?.id;
-                res.lstDanhMuc.forEach(item => {
-                    if (this.lstCtietBcao.findIndex(e => e.maNdung == item.ma) == -1) {
+                res.forEach(item => {
+                    if (item.status) {
                         const data: ItemData = new ItemData({
+                            id: uuid.v4() + 'FE',
                             maNdung: item.ma,
                             level: item.level,
                             tenNdung: item.giaTri,
-                        });
-                        this.addLow(id, data);
+                        })
+                        if (this.lstCtietBcao.length == 0) {
+                            this.lstCtietBcao = Table.addHead(data, this.lstCtietBcao);
+                            id = data.id;
+                        } else {
+                            if (level == 0) {
+                                this.addSame(id, data);
+                            } else {
+                                this.addLow(id, data);
+                            }
+                        }
                     }
+                    this.updateEditCache();
                 })
-                this.updateEditCache();
             }
         });
-
     }
 
     getLowStatus(str: string) {

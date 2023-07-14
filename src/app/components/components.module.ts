@@ -181,6 +181,7 @@ import {
 import { DialogQdPdKqlcntComponent } from "./dialog/ql-kho-tang/dialog-qd-pd-kqlcnt/dialog-qd-pd-kqlcnt.component";
 import { FmInputNumberComponent } from './fm-input-number.component';
 import { TemplateErrorComponent } from './template-error/template-error.component';
+import { DialogChonDanhMucChoBieuMauComponent } from './dialog/dialog-chon-danh-muc-cho-bieu-mau/dialog-chon-danh-muc-cho-bieu-mau.component';
 @NgModule({
   declarations: [
     //components
@@ -230,6 +231,7 @@ import { TemplateErrorComponent } from './template-error/template-error.componen
     MultipleTagComponent,
     DialogDiaDiemKhoComponent,
     DialogChonPhuLucDieuChinhComponent,
+    DialogChonDanhMucChoBieuMauComponent,
     //pipes
     FilterPipe,
 

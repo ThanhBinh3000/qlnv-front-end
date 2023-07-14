@@ -113,16 +113,16 @@
                         </thead>
                         <tbody>
                             <tr *ngFor="let data of lstCtietBcao; let i = index">
+                                <td nzLeft>
+                                    {{ data.index() }}
+                                </td>
+                                <td nzLeft>
+                                    {{ data.tenDanhMuc }}
+                                </td>
+                                <td>
+                                    {{ data.dviTinh }}
+                                </td>
                                 <ng-container *ngIf="!editCache[data.id].edit; else editTemplate ">
-                                    <td nzLeft>
-                                        {{ getChiMuc(data.stt) }}
-                                    </td>
-                                    <td nzLeft>
-                                        {{ data.tenDanhMuc }}
-                                    </td>
-                                    <td>
-                                        {{ data.dviTinh }}
-                                    </td>
                                     <td>
                                         {{ Op.fmtVal(data.thienNamTruoc) }}
                                     </td>
@@ -166,15 +166,6 @@
                                     </td>
                                 </ng-container>
                                 <ng-template #editTemplate>
-                                    <td nzLeft>
-                                        {{ getChiMuc(editCache[data.id].data.stt) }}
-                                    </td>
-                                    <td nzLeft>
-                                        {{ editCache[data.id].data.tenDanhMuc }}
-                                    </td>
-                                    <td>
-                                        {{ editCache[data.id].data.dviTinh }}
-                                    </td>
                                     <ng-container *ngIf="!status.viewAppVal; else viewAppVal">
                                         <td>
                                             <input class="money-input" currencyMask [options]="Op.amount"
@@ -191,7 +182,7 @@
                                         <td>
                                             <input class="money-input" currencyMask [options]="Op.amount"
                                                 [(ngModel)]="editCache[data.id].data.sluongNamDtoan"
-                                                (ngModelChange)="changeModel(editCache[data.id].data.id)" />
+                                                (ngModelChange)="editCache[data.id].data.changeModel()" />
                                         </td>
                                         <td>
                                             {{Op.fmtVal(editCache[data.id].data.dmucNamDtoan)}}
@@ -225,7 +216,7 @@
                                         <td>
                                             <input class="money-input" currencyMask [options]="Op.amount"
                                                 [(ngModel)]="editCache[data.id].data.sluongTd"
-                                                (ngModelChange)="changeModel(editCache[data.id].data.id)" />
+                                                (ngModelChange)="editCache[data.id].data.changeModel()" />
                                         </td>
                                         <td>
                                             {{Op.fmtVal(editCache[data.id].data.ttienTd)}}

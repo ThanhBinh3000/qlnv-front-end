@@ -99,7 +99,6 @@ export class DanhSachDeNghiTuDonViCapDuoiComponent implements OnInit {
     if (!this.userService.isTongCuc()) {
       this.loaiDns = this.loaiDns.filter(e => e.id != Utils.MUA_VTU);
     }
-    console.log(this.dataTable)
 
     this.search();
     this.spinner.hide();
@@ -203,7 +202,6 @@ export class DanhSachDeNghiTuDonViCapDuoiComponent implements OnInit {
   //         tabSelected: res.canCuVeGia == Utils.HD_TRUNG_THAU ? (res.loaiDnghi == Utils.MUA_VTU ? 'dn-vattu' : 'dn-hopdong') : 'dn-capvon',
   //         hopDong: res.hopDong,
   //       }
-  //       console.log(obj)
   //       this.dataChange.emit(obj);
   //     }
   //   });
@@ -211,7 +209,6 @@ export class DanhSachDeNghiTuDonViCapDuoiComponent implements OnInit {
 
   //xem chi tiet bao cao
   viewDetail(data: any) {
-    console.log(data)
     const obj = {
       id: data.id,
       tabSelected: data.canCuVeGia == Utils.HD_TRUNG_THAU ? (data.loaiDnghi == Utils.MUA_VTU ? 'dn-vattu' : 'dn-hopdong') : 'denghi-donvi-capduoi',

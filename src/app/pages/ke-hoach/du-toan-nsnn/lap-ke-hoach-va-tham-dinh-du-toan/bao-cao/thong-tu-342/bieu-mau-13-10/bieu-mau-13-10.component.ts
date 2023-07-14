@@ -28,7 +28,6 @@ export class ItemData {
 	khMucTcap: number;
 	chenhLech: number;
 	ghiChu: string;
-
 	khDtoanNamSluong: number;
 	khDtoanNamDgia: number;
 	khDtoanNamTtien: number;
@@ -36,6 +35,56 @@ export class ItemData {
 	gtriTdinhDgia: number;
 	gtriTdinhTtien: number;
 	ykienDviCtren: string;
+
+	constructor(data: Partial<Pick<ItemData, keyof ItemData>>) {
+		Object.assign(this, data);
+	}
+
+	changeModel() {
+		this.khDtoanNamTtien = Operator.mul(this.khDtoanNamSluong, this.khDtoanNamDgia);
+		this.gtriTdinhTtien = Operator.mul(this.gtriTdinhSluong, this.gtriTdinhTtien);
+		this.chenhLech = Operator.sum([this.gtriTdinhTtien, -this.khDtoanNamTtien]);
+	}
+
+	upperBound() {
+		return this.uocThien > Utils.MONEY_LIMIT || this.namUocThien > Utils.MONEY_LIMIT || this.khDtoanNamTtien > Utils.MONEY_LIMIT || this.gtriTdinhTtien > Utils.MONEY_LIMIT;
+	}
+
+	index() {
+		const str = this.stt.substring(this.stt.indexOf('.') + 1, this.stt.length);
+		const chiSo: string[] = str.split('.');
+		const n: number = chiSo.length - 1;
+		switch (n) {
+			case 0:
+				return chiSo[n];
+			case 1:
+				return '';
+		}
+	}
+
+	clear() {
+		Object.keys(this).forEach(key => {
+			if (typeof this[key] === 'number' && key != 'level') {
+				this[key] = null;
+			}
+		})
+	}
+
+	sum(data: ItemData) {
+		Object.keys(data).forEach(key => {
+			if (key != 'level' && (typeof this[key] == 'number' || typeof data[key] == 'number')) {
+				this[key] = Operator.sum([this[key], data[key]]);
+			}
+		})
+	}
+
+	request() {
+		const temp = Object.assign({}, this);
+		if (this.id?.length == 38) {
+			temp.id = null;
+		}
+		return temp;
+	}
 }
 
 @Component({
@@ -50,7 +99,7 @@ export class BieuMau1310Component implements OnInit {
 	Utils = Utils;
 	//thong tin chi tiet cua bieu mau
 	formDetail: Form = new Form();
-	total: ItemData = new ItemData();
+	total: ItemData = new ItemData({});
 	maDviTien: string = '1';
 	namBcao: number;
 	//danh muc
@@ -125,13 +174,12 @@ export class BieuMau1310Component implements OnInit {
 		}
 		if (this.lstCtietBcao.length == 0) {
 			this.duAns.forEach(e => {
-				this.lstCtietBcao.push({
-					...new ItemData(),
+				this.lstCtietBcao.push(new ItemData({
 					id: uuid.v4() + 'FE',
 					stt: e.ma,
 					tenDmuc: e.giaTri,
 					maNdung: e.ma,
-				})
+				}))
 			})
 			// this.lstCtietBcao.forEach(item => {
 			// 	item.tenDmuc += Table.getName(item.level, item.maNdung);
@@ -158,7 +206,9 @@ export class BieuMau1310Component implements OnInit {
 				if (data.statusCode == 0) {
 					this.formDetail = data.data;
 					this.formDetail.maDviTien = '1';
-					this.lstCtietBcao = this.formDetail.lstCtietLapThamDinhs;
+					this.formDetail.lstCtietLapThamDinhs.forEach(item => {
+						this.lstCtietBcao.push(new ItemData(item));
+					})
 					this.formDetail.listIdDeleteFiles = [];
 					this.listFile = [];
 					this.getStatusButton();
@@ -179,7 +229,7 @@ export class BieuMau1310Component implements OnInit {
 			return;
 		}
 
-		if (this.lstCtietBcao.some(e => e.uocThien > Utils.MONEY_LIMIT || e.namUocThien > Utils.MONEY_LIMIT || e.khDtoanNamTtien > Utils.MONEY_LIMIT || e.gtriTdinhTtien > Utils.MONEY_LIMIT)) {
+		if (this.lstCtietBcao.some(e => e.upperBound())) {
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
 			return;
 		}
@@ -191,10 +241,7 @@ export class BieuMau1310Component implements OnInit {
 
 		const lstCtietBcaoTemp: ItemData[] = [];
 		this.lstCtietBcao.forEach(item => {
-			lstCtietBcaoTemp.push({
-				...item,
-				id: item.id?.length == 38 ? null : item.id,
-			})
+			lstCtietBcaoTemp.push(item.request())
 		})
 
 		if (this.status.general) {
@@ -255,25 +302,13 @@ export class BieuMau1310Component implements OnInit {
 			}
 		});
 	}
-	getChiMuc(str: string): string {
-		str = str.substring(str.indexOf('.') + 1, str.length);
-		const chiSo: string[] = str.split('.');
-		const n: number = chiSo.length - 1;
-		let k: number = parseInt(chiSo[n], 10);
-		switch (n) {
-			case 0:
-				return chiSo[n];
-			case 1:
-				return '';
-		}
-	}
 
 	// gan editCache.data == lstCtietBcao
 	updateEditCache(): void {
 		this.lstCtietBcao.forEach(item => {
 			this.editCache[item.id] = {
 				edit: false,
-				data: { ...item }
+				data: new ItemData(item)
 			};
 		});
 	}
@@ -293,7 +328,7 @@ export class BieuMau1310Component implements OnInit {
 		const index = this.lstCtietBcao.findIndex(item => item.id === id);
 		// lay vi tri hang minh sua
 		this.editCache[id] = {
-			data: { ...this.lstCtietBcao[index] },
+			data: new ItemData(this.lstCtietBcao[index]),
 			edit: false
 		};
 	}
@@ -308,43 +343,18 @@ export class BieuMau1310Component implements OnInit {
 	}
 
 	addLine(id: string) {
-		this.lstCtietBcao = Table.addChild(id, new ItemData(), this.lstCtietBcao);
+		this.lstCtietBcao = Table.addChild(id, new ItemData({}), this.lstCtietBcao);
 		this.updateEditCache();
-	}
-
-
-	changeModel(id: string): void {
-		this.editCache[id].data.khDtoanNamTtien = Operator.mul(this.editCache[id].data.khDtoanNamSluong, this.editCache[id].data.khDtoanNamDgia);
-		this.editCache[id].data.gtriTdinhTtien = Operator.mul(this.editCache[id].data.gtriTdinhSluong, this.editCache[id].data.gtriTdinhTtien);
-		this.editCache[id].data.chenhLech = this.editCache[id].data.gtriTdinhTtien - this.editCache[id].data.khDtoanNamTtien;
-
 	}
 
 	sum(stt: string) {
 		stt = Table.preIndex(stt);
-		const index = this.lstCtietBcao.findIndex(e => e.stt == stt);
-		const data = this.lstCtietBcao[index];
 		while (stt != '0') {
-			this.lstCtietBcao[index] = {
-				...new ItemData(),
-				id: data.id,
-				stt: data.stt,
-				maNdung: data.maNdung,
-				tenDmuc: data.tenDmuc,
-				level: data.level,
-			}
+			const index = this.lstCtietBcao.findIndex(e => e.stt == stt);
+			this.lstCtietBcao[index].clear();
 			this.lstCtietBcao.forEach(item => {
 				if (Table.preIndex(item.stt) == stt) {
-					this.lstCtietBcao[index].uocThien = Operator.sum([this.lstCtietBcao[index].uocThien, item.uocThien])
-					this.lstCtietBcao[index].namSoDtuong = Operator.sum([this.lstCtietBcao[index].namSoDtuong, item.namSoDtuong])
-					this.lstCtietBcao[index].namDtoanGiao = Operator.sum([this.lstCtietBcao[index].namDtoanGiao, item.namDtoanGiao])
-					this.lstCtietBcao[index].namUocThien = Operator.sum([this.lstCtietBcao[index].namUocThien, item.namUocThien])
-					this.lstCtietBcao[index].khDtoanNamSluong = Operator.sum([this.lstCtietBcao[index].khDtoanNamSluong, item.khDtoanNamSluong])
-					this.lstCtietBcao[index].khDtoanNamDgia = Operator.sum([this.lstCtietBcao[index].khDtoanNamDgia, item.khDtoanNamDgia])
-					this.lstCtietBcao[index].khDtoanNamTtien = Operator.sum([this.lstCtietBcao[index].khDtoanNamTtien, item.khDtoanNamTtien])
-					this.lstCtietBcao[index].gtriTdinhSluong = Operator.sum([this.lstCtietBcao[index].gtriTdinhSluong, item.gtriTdinhSluong])
-					this.lstCtietBcao[index].gtriTdinhDgia = Operator.sum([this.lstCtietBcao[index].gtriTdinhDgia, item.gtriTdinhDgia])
-					this.lstCtietBcao[index].gtriTdinhTtien = Operator.sum([this.lstCtietBcao[index].gtriTdinhTtien, item.gtriTdinhTtien])
+					this.lstCtietBcao[index].sum(item);
 				}
 			})
 			stt = Table.preIndex(stt);
@@ -353,19 +363,10 @@ export class BieuMau1310Component implements OnInit {
 	}
 
 	getTotal() {
-		this.total = new ItemData();
+		this.total.clear();
 		this.lstCtietBcao.forEach(item => {
 			if (item.level == 0) {
-				this.total.uocThien = Operator.sum([this.total.uocThien, item.uocThien]);
-				this.total.namSoDtuong = Operator.sum([this.total.namSoDtuong, item.namSoDtuong]);
-				this.total.namDtoanGiao = Operator.sum([this.total.namDtoanGiao, item.namDtoanGiao]);
-				this.total.namUocThien = Operator.sum([this.total.namUocThien, item.namUocThien]);
-				this.total.khDtoanNamSluong = Operator.sum([this.total.khDtoanNamSluong, item.khDtoanNamSluong]);
-				this.total.khDtoanNamDgia = Operator.sum([this.total.khDtoanNamDgia, item.khDtoanNamDgia]);
-				this.total.khDtoanNamTtien = Operator.sum([this.total.khDtoanNamTtien, item.khDtoanNamTtien]);
-				this.total.gtriTdinhSluong = Operator.sum([this.total.gtriTdinhSluong, item.gtriTdinhSluong]);
-				this.total.gtriTdinhDgia = Operator.sum([this.total.gtriTdinhDgia, item.gtriTdinhDgia]);
-				this.total.gtriTdinhTtien = Operator.sum([this.total.gtriTdinhTtien, item.gtriTdinhTtien]);
+				this.total.sum(item);
 			}
 		})
 	}
@@ -439,16 +440,9 @@ export class BieuMau1310Component implements OnInit {
 		const filterData = this.lstCtietBcao.map(item => {
 			const row: any = {};
 			fieldOrder.forEach(field => {
-				row[field] = item[field]
+				row[field] = field == 'stt' ? item.index() : item[field]
 			})
 			return row;
-		})
-		filterData.forEach(item => {
-			const level = item.stt.split('.').length - 2;
-			item.stt = this.getChiMuc(item.stt);
-			for (let i = 0; i < level; i++) {
-				item.stt = '   ' + item.stt;
-			}
 		})
 
 		const workbook = XLSX.utils.book_new();

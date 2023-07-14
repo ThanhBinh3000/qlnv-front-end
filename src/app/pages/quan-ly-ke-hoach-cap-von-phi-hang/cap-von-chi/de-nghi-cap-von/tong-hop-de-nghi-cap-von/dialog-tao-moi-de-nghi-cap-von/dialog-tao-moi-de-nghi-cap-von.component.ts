@@ -192,13 +192,13 @@ export class DialogTaoMoiDeNghiCapVonComponent implements OnInit {
 				} else {
 					await this.callSynthetic();
 					// if (this.userService.isCuc()) {
-					//   this.response.dnghiCapvonCtiets.push({
-					//     ... new ItemRequest(),
-					//     id: uuid.v4() + 'FE',
-					//     maDvi: this.userInfo?.MA_DVI,
-					//     tenDvi: this.userInfo?.TEN_DVI,
-					//     dnghiCapvonLuyKes: [],
-					//   })
+					// 	this.response.dnghiCapvonCtiets.push({
+					// 		... new ItemRequest(),
+					// 		id: uuid.v4() + 'FE',
+					// 		maDvi: this.userInfo?.MA_DVI,
+					// 		tenDvi: this.userInfo?.TEN_DVI,
+					// 		dnghiCapvonLuyKes: [],
+					// 	})
 					// }
 				}
 			}
@@ -264,12 +264,17 @@ export class DialogTaoMoiDeNghiCapVonComponent implements OnInit {
 		}
 	}
 
+	// tao moi de nghi cap von cuc khu vuc
+
+
 	async callSynthetic() {
 		const request = {
 			canCuVeGia: this.response.canCuVeGia,
 			loaiDnghi: this.response.loaiDnghi,
 			maDvi: this.userInfo?.MA_DVI,
 			namBcao: this.response.namBcao,
+			// loaiTimKiem: '0',
+			maLoai: '1'
 		}
 		await this.capVonNguonChiService.tongHopDeNghi(request).toPromise().then(
 			(res) => {

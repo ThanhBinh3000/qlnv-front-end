@@ -145,7 +145,7 @@
                                             </ng-template>
                                         </td>
                                         <td>
-                                            <ng-container *ngIf="baoCao.id">
+                                            <ng-container *ngIf="baoCao.id && data.id?.length == 36">
                                                 <a *ngIf="status.general && (userInfo?.sub == data.nguoiBcao)">
                                                     <i class="fa fa-pencil" (click)="viewAppendix(data.id)"></i>
                                                 </a>
@@ -204,7 +204,7 @@
                                             </ng-template>
                                         </td>
                                         <td>
-                                            <ng-container *ngIf="baoCao.id">
+                                            <ng-container *ngIf="baoCao.id && data.id?.length == 36">
                                                 <a *ngIf="status.general && (userInfo?.sub == data.nguoiBcao)">
                                                     <i class="fa fa-pencil" (click)="viewAppendix(data.id)"></i>
                                                 </a>
@@ -263,7 +263,7 @@
                                             </ng-template>
                                         </td>
                                         <td>
-                                            <ng-container *ngIf="baoCao.id">
+                                            <ng-container *ngIf="baoCao.id && data.id?.length == 36">
                                                 <a *ngIf="status.general && (userInfo?.sub == data.nguoiBcao)">
                                                     <i class="fa fa-pencil" (click)="viewAppendix(data.id)"></i>
                                                 </a>

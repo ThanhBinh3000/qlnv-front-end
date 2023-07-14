@@ -28,6 +28,7 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
   isRequestExist: number;
   isContractExist: boolean;
   idRequest!: string;
+  total: ItemRequest = new ItemRequest();
 
   constructor(
     private _modalRef: NzModalRef,
@@ -224,6 +225,7 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
       loaiDnghi: this.response.loaiDnghi,
       maDvi: this.userInfo?.MA_DVI,
       namBcao: this.response.namBcao,
+      maLoai: '1'
     }
     await this.capVonNguonChiService.tongHopDeNghi(request).toPromise().then(
       (res) => {
@@ -233,7 +235,20 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
             const id = this.response.dnghiCapvonCtiets.find(e => e.maDvi == temp.maDvi)?.id;
             temp.id = id ? id : uuid.v4() + 'FE';
             this.response.dnghiCapvonCtiets = this.response.dnghiCapvonCtiets.filter(e => e.maDvi != temp.maDvi);
-            this.response.dnghiCapvonCtiets.push(temp);
+            this.total.slKeHoach = sumNumber([this.total.slKeHoach, item.slKeHoach]);
+            this.total.slThucHien = sumNumber([this.total.slThucHien, item.slThucHien]);
+            this.total.donGia = sumNumber([this.total.donGia, item.donGia]);
+            this.total.gtriThucHien = sumNumber([this.total.gtriThucHien, item.gtriThucHien]);
+            this.response.dnghiCapvonCtiets.push({
+              ... new ItemRequest(),
+              id: uuid.v4() + 'FE',
+              maDvi: this.userInfo?.MA_DVI,
+              tenDvi: this.userInfo?.TEN_DVI,
+              slKeHoach: this.total.slKeHoach,
+              slThucHien: this.total.slThucHien,
+              donGia: this.total.donGia,
+              gtriThucHien: this.total.gtriThucHien,
+            }, temp);
           })
         } else {
           this.notification.error(MESSAGE.ERROR, res?.msg);

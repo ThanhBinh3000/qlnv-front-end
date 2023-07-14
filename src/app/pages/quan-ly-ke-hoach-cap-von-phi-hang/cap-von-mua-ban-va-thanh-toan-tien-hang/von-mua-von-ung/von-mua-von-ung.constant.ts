@@ -8,7 +8,8 @@ export class Tab {
     static readonly DS_TTKH = 'ds-ttkh';
     static readonly CUV = 'cuv';
     static readonly TIEN_THUA = 'tienthua';
-    static readonly THANH_TOAN = 'thanhtoan';
+    static readonly THANH_TOAN_HOP_DONG = 'hopdong';
+    static readonly THANH_TOAN_DON_GIA = 'dongia';
     static readonly THU_CHI = 'thu-chi';
     static readonly TAB_LIST = [
         {

@@ -32,6 +32,61 @@ export class ItemData {
     ncauChiN2!: number;
     clechTranChiVsNcauChiN2: number;
     ghiChu: string;
+
+    constructor(data: Partial<Pick<ItemData, keyof ItemData>>) {
+        Object.assign(this, data);
+    }
+
+    changeModel() {
+        this.clechTranChiVsNcauChiN = Operator.sum([this.tranChiN, -this.ncauChiN]);
+        this.ssanhNcauNVoiN1 = Operator.div(this.ncauChiN, this.namHienHanhUocThien);
+        this.clechTranChiVsNcauChiN1 = Operator.sum([this.tranChiN1, -this.ncauChiN1]);
+        this.clechTranChiVsNcauChiN2 = Operator.sum([this.tranChiN2, -this.ncauChiN2]);
+    }
+
+    upperBound() {
+        return this.namHienHanhDtoan > Utils.MONEY_LIMIT || this.namHienHanhUocThien > Utils.MONEY_LIMIT || this.tranChiN > Utils.MONEY_LIMIT ||
+            this.ncauChiN > Utils.MONEY_LIMIT || this.tranChiN1 > Utils.MONEY_LIMIT || this.ncauChiN1 > Utils.MONEY_LIMIT || this.tranChiN2 > Utils.MONEY_LIMIT || this.ncauChiN2 > Utils.MONEY_LIMIT;
+    }
+
+    index() {
+        const str = this.stt.substring(this.stt.indexOf('.') + 1, this.stt.length);
+        const chiSo: string[] = str.split('.');
+        const n: number = chiSo.length - 1;
+        let k: number = parseInt(chiSo[n], 10);
+        switch (n) {
+            case 0:
+                return String.fromCharCode(k + 64);
+            case 1:
+                return Utils.laMa(k);
+            case 2:
+                return chiSo[n];
+        }
+    }
+
+    clear() {
+        Object.keys(this).forEach(key => {
+            if (typeof this[key] === 'number' && key != 'level') {
+                this[key] = null;
+            }
+        })
+    }
+
+    sum(data: ItemData) {
+        Object.keys(data).forEach(key => {
+            if (key != 'level' && (typeof this[key] == 'number' || typeof data[key] == 'number')) {
+                this[key] = Operator.sum([this[key], data[key]]);
+            }
+        })
+    }
+
+    request() {
+        const temp = Object.assign({}, this);
+        if (this.id?.length == 38) {
+            temp.id = null;
+        }
+        return temp;
+    }
 }
 
 @Component({
@@ -45,7 +100,7 @@ export class BieuMau13Component implements OnInit {
     Utils = Utils;
     //thong tin chi tiet cua bieu mau
     formDetail: Form = new Form();
-    total: ItemData = new ItemData();
+    total: ItemData = new ItemData({});
     maDviTien: string = '1';
     namBcao: number;
     //danh muc
@@ -114,13 +169,12 @@ export class BieuMau13Component implements OnInit {
         }
         if (this.lstCtietBcao.length == 0) {
             this.noiDungs.forEach(e => {
-                this.lstCtietBcao.push({
-                    ...new ItemData(),
+                this.lstCtietBcao.push(new ItemData({
                     id: uuid.v4() + 'FE',
                     stt: e.ma,
                     maNdung: e.ma,
                     tenNdung: e.giaTri,
-                })
+                }))
             })
         } else {
             this.lstCtietBcao.forEach(item => {
@@ -151,7 +205,9 @@ export class BieuMau13Component implements OnInit {
                 if (data.statusCode == 0) {
                     this.formDetail = data.data;
                     this.formDetail.maDviTien = '1';
-                    this.lstCtietBcao = this.formDetail.lstCtietLapThamDinhs;
+                    this.formDetail.lstCtietLapThamDinhs.forEach(item => {
+                        this.lstCtietBcao.push(new ItemData(item));
+                    })
                     this.formDetail.listIdDeleteFiles = [];
                     this.listFile = [];
                     this.getStatusButton();
@@ -172,10 +228,7 @@ export class BieuMau13Component implements OnInit {
             return;
         }
 
-        if (this.lstCtietBcao.some(e => e.namHienHanhDtoan > Utils.MONEY_LIMIT || e.namHienHanhUocThien > Utils.MONEY_LIMIT ||
-            e.tranChiN > Utils.MONEY_LIMIT || e.ncauChiN > Utils.MONEY_LIMIT || e.clechTranChiVsNcauChiN > Utils.MONEY_LIMIT ||
-            e.tranChiN1 > Utils.MONEY_LIMIT || e.ncauChiN1 > Utils.MONEY_LIMIT || e.clechTranChiVsNcauChiN1 > Utils.MONEY_LIMIT ||
-            e.tranChiN2 > Utils.MONEY_LIMIT || e.ncauChiN2 > Utils.MONEY_LIMIT || e.clechTranChiVsNcauChiN2 > Utils.MONEY_LIMIT)) {
+        if (this.lstCtietBcao.some(e => e.upperBound())) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
             return;
         }
@@ -187,10 +240,7 @@ export class BieuMau13Component implements OnInit {
 
         const lstCtietBcaoTemp: ItemData[] = [];
         this.lstCtietBcao.forEach(item => {
-            lstCtietBcaoTemp.push({
-                ...item,
-                id: item.id?.length == 38 ? null : item.id,
-            })
+            lstCtietBcaoTemp.push(item.request());
         })
 
         const request = JSON.parse(JSON.stringify(this.formDetail));
@@ -244,28 +294,12 @@ export class BieuMau13Component implements OnInit {
         });
     }
 
-    // chuyển đổi stt đang được mã hóa thành dạng I, II, a, b, c, ...
-    getChiMuc(str: string): string {
-        str = str.substring(str.indexOf('.') + 1, str.length);
-        const chiSo: string[] = str.split('.');
-        const n: number = chiSo.length - 1;
-        let k: number = parseInt(chiSo[n], 10);
-        switch (n) {
-            case 0:
-                return String.fromCharCode(k + 64);
-            case 1:
-                return Utils.laMa(k);
-            case 2:
-                return chiSo[n];
-        }
-    }
-
     // gan editCache.data == lstCtietBcao
     updateEditCache(): void {
         this.lstCtietBcao.forEach(item => {
             this.editCache[item.id] = {
                 edit: false,
-                data: { ...item }
+                data: new ItemData(item)
             };
         });
     }
@@ -287,7 +321,7 @@ export class BieuMau13Component implements OnInit {
         const index = this.lstCtietBcao.findIndex(item => item.id === id);
         // lay vi tri hang minh sua
         this.editCache[id] = {
-            data: { ...this.lstCtietBcao[index] },
+            data: new ItemData(this.lstCtietBcao[index]),
             edit: false
         };
     }
@@ -301,42 +335,17 @@ export class BieuMau13Component implements OnInit {
         this.updateEditCache();
     }
 
-    changeModel(id: string): void {
-        this.editCache[id].data.clechTranChiVsNcauChiN = Operator.sum([this.editCache[id].data.tranChiN, -this.editCache[id].data.ncauChiN]);
-        this.editCache[id].data.ssanhNcauNVoiN1 = Operator.div(this.editCache[id].data.ncauChiN, this.editCache[id].data.namHienHanhUocThien);
-        this.editCache[id].data.clechTranChiVsNcauChiN1 = Operator.sum([this.editCache[id].data.tranChiN1, -this.editCache[id].data.ncauChiN1]);
-        this.editCache[id].data.clechTranChiVsNcauChiN2 = Operator.sum([this.editCache[id].data.tranChiN2, -this.editCache[id].data.ncauChiN2]);
-    }
-
     sum(stt: string) {
         stt = Table.preIndex(stt);
         while (stt != '0') {
             const index = this.lstCtietBcao.findIndex(e => e.stt == stt);
-            const data = this.lstCtietBcao[index];
-            this.lstCtietBcao[index] = {
-                ...new ItemData(),
-                id: data.id,
-                stt: data.stt,
-                maNdung: data.maNdung,
-                tenNdung: data.tenNdung,
-                level: data.level,
-            }
+            this.lstCtietBcao[index].clear();
             this.lstCtietBcao.forEach(item => {
                 if (Table.preIndex(item.stt) == stt) {
-                    this.lstCtietBcao[index].namHienHanhDtoan = Operator.sum([this.lstCtietBcao[index].namHienHanhDtoan, item.namHienHanhDtoan]);
-                    this.lstCtietBcao[index].namHienHanhUocThien = Operator.sum([this.lstCtietBcao[index].namHienHanhUocThien, item.namHienHanhUocThien]);
-                    this.lstCtietBcao[index].tranChiN = Operator.sum([this.lstCtietBcao[index].tranChiN, item.tranChiN]);
-                    this.lstCtietBcao[index].ncauChiN = Operator.sum([this.lstCtietBcao[index].ncauChiN, item.ncauChiN]);
-                    this.lstCtietBcao[index].clechTranChiVsNcauChiN = Operator.sum([this.lstCtietBcao[index].clechTranChiVsNcauChiN, item.clechTranChiVsNcauChiN]);
-                    this.lstCtietBcao[index].tranChiN1 = Operator.sum([this.lstCtietBcao[index].tranChiN1, item.tranChiN1]);
-                    this.lstCtietBcao[index].ncauChiN1 = Operator.sum([this.lstCtietBcao[index].ncauChiN1, item.ncauChiN1]);
-                    this.lstCtietBcao[index].clechTranChiVsNcauChiN1 = Operator.sum([this.lstCtietBcao[index].clechTranChiVsNcauChiN1, item.clechTranChiVsNcauChiN1]);
-                    this.lstCtietBcao[index].tranChiN2 = Operator.sum([this.lstCtietBcao[index].tranChiN2, item.tranChiN2]);
-                    this.lstCtietBcao[index].ncauChiN2 = Operator.sum([this.lstCtietBcao[index].ncauChiN2, item.ncauChiN2]);
-                    this.lstCtietBcao[index].clechTranChiVsNcauChiN2 = Operator.sum([this.lstCtietBcao[index].clechTranChiVsNcauChiN2, item.clechTranChiVsNcauChiN2]);
+                    this.lstCtietBcao[index].sum(item);
                 }
             })
-            this.lstCtietBcao[index].ssanhNcauNVoiN1 = Operator.div(this.lstCtietBcao[index].ncauChiN, this.lstCtietBcao[index].namHienHanhUocThien);
+            this.lstCtietBcao[index].changeModel();
             stt = Table.preIndex(stt);
         }
     }
@@ -387,16 +396,9 @@ export class BieuMau13Component implements OnInit {
         const filterData = this.lstCtietBcao.map(item => {
             const row: any = {};
             fieldOrder.forEach(field => {
-                row[field] = item[field]
+                row[field] = field == 'stt' ? item.index() : item[field]
             })
             return row;
-        })
-        filterData.forEach(item => {
-            const level = item.stt.split('.').length - 2;
-            item.stt = this.getChiMuc(item.stt);
-            for (let i = 0; i < level; i++) {
-                item.stt = '   ' + item.stt;
-            }
         })
 
         const workbook = XLSX.utils.book_new();

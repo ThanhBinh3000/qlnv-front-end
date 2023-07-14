@@ -119,9 +119,9 @@ export class Form {
     thuyetMinh: string;
     lyDoTuChoi: string;
     nguoiBcao: string;
-    lstFiles: Doc[];
-    fileDinhKems: any[];
-    listIdDeleteFiles: string[];
+    lstFiles: Doc[] = [];
+    fileDinhKems: any[] = [];
+    listIdDeleteFiles: string[] = [];
 }
 
 export class Doc {
@@ -129,6 +129,21 @@ export class Doc {
     fileName: string;
     fileSize: number;
     fileUrl: number;
+}
+
+export class History {
+    id: string;
+    maBcao: string;
+    namBcao: number;
+    lan: number;
+    ngayTao: string;
+    nguoiTao: string;
+    ngayTrinh: string;
+    ngayDuyet: string;
+    ngayPheDuyet: string;
+    ngayTraKq: string;
+    lyDoTuChoi: string;
+    trangThai: string;
 }
 
 export class Report {
@@ -146,14 +161,15 @@ export class Report {
     ngayDuyet: string;
     ngayPheDuyet: string;
     ngayTraKq: string;
-    fileDinhKems!: any[];
-    listIdDeleteFiles: string[];     //list id file xoa khi cap nhat
+    fileDinhKems: any[] = [];
+    listIdDeleteFiles: string[] = [];     //list id file xoa khi cap nhat
     maLoaiBcao: string;
-    maPhanBcao: string;
-    lstBcaos: Form[];
-    lstFiles: any[];
-    lstBcaoDviTrucThuocs: any[];
-    tongHopTuIds: string[];
+    maPhanBcao: string = '0';
+    lstBcaos: Form[] = [];
+    lstFiles: any[] = [];
+    lstBcaoDviTrucThuocs: any[] = [];
+    tongHopTuIds: string[] = [];
+    lichSu: History[] = [];
 }
 
 export class BtnStatus {

@@ -13,8 +13,8 @@ export class BaoCaoThucHienDuToanChiService extends BaseService {
         super(httpClient, 'quanLyVonPhi', '');
     }
 
-    urlDefault = environment.SERVICE_API + '/qlnv-khoachphi';
-    urlTest = 'http://localhost:9170';
+    isTest = false;
+    urlDefault = environment.SERVICE_API + (this.isTest ? '/qlnv-khoachphi-dev' : '/qlnv-khoachphi');
 
     //search list bao cao
     timBaoCao(request: any): Observable<any> {
@@ -64,6 +64,12 @@ export class BaoCaoThucHienDuToanChiService extends BaseService {
         );
     }
 
+    ctietBieuMau(id: string): Observable<any> {
+        return this.httpClient.get(
+            this.urlDefault + '/bao-cao/chi-tiet/bieu-mau/' + id,
+        );
+    }
+
     // cap nhat bao cao thuc hien du toan chi
     updateBaoCaoThucHienDTC(request: any): Observable<any> {
         return this.httpClient.put(
@@ -88,5 +94,23 @@ export class BaoCaoThucHienDuToanChiService extends BaseService {
             this.urlDefault + '/bao-cao/get-luy-ke'
             , request
         );
+    }
+
+    addHistory(id: string): Observable<any> {
+        return this.httpClient.get(
+            this.urlDefault + '/bao-cao/tao-moi-lich-su/' + id,
+        );
+    }
+
+    restoreReport(cId: string, rId: string): Observable<any> {
+        return this.httpClient.get(
+            this.urlDefault + '/bao-cao/khoi-phuc/currentId=' + cId + '/recoverId=' + rId,
+        );
+    }
+
+    phuLucI(id: string): Observable<any> {
+        return this.httpClient.get(
+            this.urlDefault + '/bao-cao/chi-tiet/pl1/' + id,
+        )
     }
 }

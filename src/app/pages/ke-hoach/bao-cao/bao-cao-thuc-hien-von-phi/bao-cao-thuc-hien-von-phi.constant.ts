@@ -211,6 +211,21 @@ export class Form {
     listIdDeleteFiles: string[];
 }
 
+export class History {
+    id: string;
+    maBcao: string;
+    namBcao: number;
+    lan: number;
+    ngayTao: string;
+    nguoiTao: string;
+    ngayTrinh: string;
+    ngayDuyet: string;
+    ngayPheDuyet: string;
+    ngayTraKq: string;
+    lyDoTuChoi: string;
+    trangThai: string;
+}
+
 export class Report {
     id: string;
     maBcao: string;
@@ -236,6 +251,7 @@ export class Report {
     lstFiles: any[] = [];
     lstBcaoDviTrucThuocs: any[] = [];
     tongHopTuIds: string[] = [];
+    lichSu: History[] = [];
 }
 
 export class BtnStatus {
@@ -250,4 +266,25 @@ export class BtnStatus {
     print?: boolean = true;                            // trang thai cua nut in
     ok?: boolean = true;                               // trang thai cua nut chap nhan bieu mau
     finish?: boolean = true;                           // trang thai cua nut hoan tat nhap lieu
+}
+
+export class Para {
+    slQd: string = '0.1.1';
+    slTh: string = '0.2';
+    slNamTruoc: string = '0.1.2.1';
+    slNamNay: string = '0.1.2.2';
+    kinhPhi: string = '0.1.3';
+    chiPhi: string = '0.1.4';
+    chenhLech: string = '0.1.5';
+    maDanhMuc: string = 'BC_VP_04A';
+    B: string = '0.2';
+    Bi: string = '0.2.1';
+    Bii: string = '0.2.2';
+    nvChuyenMon: string = '0.1.3.1.2';
+    ttCaNhan: string = '0.1.3.1.1';
+    cucDh: string = '0.1.3.2';
+    tongCucDh: string = '0.1.3.3';
+    loaiDm: string = '01';
+    loaiBq: string = null;
+    excel: string = '04a_BCPN-N.xlsx'
 }

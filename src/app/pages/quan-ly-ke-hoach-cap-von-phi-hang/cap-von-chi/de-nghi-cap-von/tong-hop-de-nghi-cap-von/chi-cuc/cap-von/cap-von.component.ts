@@ -398,11 +398,11 @@ export class CapVonComponent implements OnInit {
       if (item.id?.length == 38) {
         item.id = null;
       }
-      item.dnghiCapvonLuyKes.forEach(e => {
-        if (e.id?.length == 38) {
-          e.id = null;
-        }
-      })
+      // item.dnghiCapvonLuyKes.forEach(e => {
+      //   if (e.id?.length == 38) {
+      //     e.id = null;
+      //   }
+      // })
     })
 
     if (!this.baoCao.id) {
@@ -481,28 +481,30 @@ export class CapVonComponent implements OnInit {
 
   getTotal() {
     this.total = new ItemRequest();
-    this.baoCao.dnghiCapvonCtiets.forEach(item => {
-      this.total.slKeHoach = sumNumber([this.total.slKeHoach, item.slKeHoach]);
-      this.total.slThucHien = sumNumber([this.total.slThucHien, item.slThucHien]);
-      this.total.donGia = sumNumber([this.total.donGia, item.donGia]);
-      this.total.gtriThucHien = sumNumber([this.total.gtriThucHien, item.gtriThucHien]);
-      this.total.duToanDaGiao = sumNumber([this.total.duToanDaGiao, item.duToanDaGiao]);
-      this.total.luyKeTongCapUng = sumNumber([this.total.luyKeTongCapUng, item.luyKeTongCapUng]);
-      this.total.luyKeTongCapVon = sumNumber([this.total.luyKeTongCapVon, item.luyKeTongCapVon]);
-      this.total.luyKeTongCong = sumNumber([this.total.luyKeTongCong, item.luyKeTongCong]);
-      this.total.tongVonVaDtDaCap = sumNumber([this.total.tongVonVaDtDaCap, item.tongVonVaDtDaCap]);
-      this.total.vonDuyetCapVon = sumNumber([this.total.vonDuyetCapVon, item.vonDuyetCapVon]);
-      this.total.vonDnghiCapLanNay = sumNumber([this.total.vonDnghiCapLanNay, item.vonDnghiCapLanNay]);
-      this.total.vonDuyetCapUng = sumNumber([this.total.vonDuyetCapUng, item.vonDuyetCapUng]);
-      this.total.vonDuyetCong = sumNumber([this.total.vonDuyetCong, item.vonDuyetCong]);
-      this.total.tongTien = sumNumber([this.total.tongTien, item.tongTien]);
-      this.total.soConDuocCap = sumNumber([this.total.soConDuocCap, item.soConDuocCap]);
+    this.baoCao.dnghiCapvonCtiets.forEach((item, index) => {
+      if (index !== 0 && this.userService.isCuc()) {
+        this.total.slKeHoach = sumNumber([this.total.slKeHoach, item.slKeHoach]);
+        this.total.slThucHien = sumNumber([this.total.slThucHien, item.slThucHien]);
+        this.total.donGia = sumNumber([this.total.donGia, item.donGia]);
+        this.total.gtriThucHien = sumNumber([this.total.gtriThucHien, item.gtriThucHien]);
+        this.total.duToanDaGiao = sumNumber([this.total.duToanDaGiao, item.duToanDaGiao]);
+        this.total.luyKeTongCapUng = sumNumber([this.total.luyKeTongCapUng, item.luyKeTongCapUng]);
+        this.total.luyKeTongCapVon = sumNumber([this.total.luyKeTongCapVon, item.luyKeTongCapVon]);
+        this.total.luyKeTongCong = sumNumber([this.total.luyKeTongCong, item.luyKeTongCong]);
+        this.total.tongVonVaDtDaCap = sumNumber([this.total.tongVonVaDtDaCap, item.tongVonVaDtDaCap]);
+        this.total.vonDuyetCapVon = sumNumber([this.total.vonDuyetCapVon, item.vonDuyetCapVon]);
+        this.total.vonDnghiCapLanNay = sumNumber([this.total.vonDnghiCapLanNay, item.vonDnghiCapLanNay]);
+        this.total.vonDuyetCapUng = sumNumber([this.total.vonDuyetCapUng, item.vonDuyetCapUng]);
+        this.total.vonDuyetCong = sumNumber([this.total.vonDuyetCong, item.vonDuyetCong]);
+        this.total.tongTien = sumNumber([this.total.tongTien, item.tongTien]);
+        this.total.soConDuocCap = sumNumber([this.total.soConDuocCap, item.soConDuocCap]);
+      }
     })
   }
 
   exportToExcel() {
     const header = [
-      { t: 0, b: 1, l: 0, r: 16, val: null },
+      { t: 0, b: 1, l: 0, r: 17, val: null },
       { t: 0, b: 1, l: 0, r: 0, val: 'STT' },
       { t: 0, b: 1, l: 1, r: 1, val: 'Đơn vị' },
       { t: 0, b: 0, l: 2, r: 3, val: 'Số lượng' },
@@ -522,7 +524,8 @@ export class CapVonComponent implements OnInit {
       { t: 1, b: 1, l: 13, r: 13, val: 'Tổng cấp vốn' },
       { t: 1, b: 1, l: 14, r: 14, val: 'Tổng cộng' },
       { t: 0, b: 1, l: 15, r: 15, val: 'Tổng tiền (Tổng tiền được cấp sau lần này)' },
-      { t: 0, b: 1, l: 16, r: 16, val: 'Ghi chú' },
+      { t: 0, b: 1, l: 16, r: 16, val: 'Số còn được cấp' },
+      { t: 0, b: 1, l: 17, r: 17, val: 'Ghi chú' },
     ]
     const fieldOrder = ['stt', 'tenDvi', 'slKeHoach', 'slThucHien', 'donGia', 'gtriThucHien', 'duToanDaGiao', 'luyKeTongCapUng', 'luyKeTongCapVon', 'luyKeTongCong',
       'tongVonVaDtDaCap', 'vonDnghiCapLanNay', 'vonDuyetCapUng', 'vonDuyetCapVon', 'vonDuyetCong', 'tongTien', 'soConDuocCap', 'ghiChu']

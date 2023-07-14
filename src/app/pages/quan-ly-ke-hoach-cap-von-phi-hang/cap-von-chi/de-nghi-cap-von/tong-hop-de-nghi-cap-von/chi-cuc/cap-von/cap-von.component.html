@@ -169,7 +169,7 @@
                 <th nzLeft>Tổng cộng</th>
                 <th>{{displayValue(total.slKeHoach)}}</th>
                 <th>{{displayValue(total.slThucHien)}}</th>
-                <th>{{displayValue(total.donGia)}}</th>
+                <th></th>
                 <th>{{displayValue(total.gtriThucHien)}}</th>
                 <th>{{displayValue(total.duToanDaGiao)}}</th>
                 <th>{{displayValue(total.luyKeTongCapUng)}}</th>
@@ -264,21 +264,37 @@
                   <td nzLeft>
                     {{ editCache[data.id].data.tenDvi }}
                   </td>
-                  <td>
-                    <input class="money-input" currencyMask [options]="amount"
-                      [(ngModel)]="editCache[data.id].data.slKeHoach" />
-                  </td>
-                  <td>
-                    <input class="money-input" currencyMask [options]="amount"
-                      [(ngModel)]="editCache[data.id].data.slThucHien" (ngModelChange)="changeModel(data.id)" />
-                  </td>
-                  <td>
-                    <input class="money-input" currencyMask [options]="amount"
-                      [(ngModel)]="editCache[data.id].data.donGia" (ngModelChange)="changeModel(data.id)" />
-                  </td>
-                  <td>
-                    {{ displayValue(editCache[data.id].data.gtriThucHien) }}
-                  </td>
+                  <ng-container *ngIf="this.userService.isCuc(); else showChiCuc">
+                    <td>
+                      {{ displayValue(data.slKeHoach) }}
+                    </td>
+                    <td>
+                      {{ displayValue(data.slThucHien) }}
+                    </td>
+                    <td>
+                      {{ displayValue(data.donGia) }}
+                    </td>
+                    <td>
+                      {{ displayValue(data.gtriThucHien) }}
+                    </td>
+                  </ng-container>
+                  <ng-template #showChiCuc>
+                    <td>
+                      <input class="money-input" currencyMask [options]="amount"
+                        [(ngModel)]="editCache[data.id].data.slKeHoach" />
+                    </td>
+                    <td>
+                      <input class="money-input" currencyMask [options]="amount"
+                        [(ngModel)]="editCache[data.id].data.slThucHien" (ngModelChange)="changeModel(data.id)" />
+                    </td>
+                    <td>
+                      <input class="money-input" currencyMask [options]="amount"
+                        [(ngModel)]="editCache[data.id].data.donGia" (ngModelChange)="changeModel(data.id)" />
+                    </td>
+                    <td>
+                      {{ displayValue(editCache[data.id].data.gtriThucHien) }}
+                    </td>
+                  </ng-template>
                   <td>
                     <input class="money-input" currencyMask [options]="amount"
                       [(ngModel)]="editCache[data.id].data.duToanDaGiao" />
