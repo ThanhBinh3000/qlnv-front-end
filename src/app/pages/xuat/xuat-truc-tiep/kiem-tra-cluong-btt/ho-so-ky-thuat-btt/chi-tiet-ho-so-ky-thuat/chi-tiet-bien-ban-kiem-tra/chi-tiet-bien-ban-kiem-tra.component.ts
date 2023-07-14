@@ -16,11 +16,11 @@ import {v4 as uuidv4} from "uuid";
 import {cloneDeep} from 'lodash';
 import {saveAs} from 'file-saver';
 import {
-  HoSoKyThuatCtvtService
-} from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/HoSoKyThuatCtvt.service";
+  HoSoKyThuatBttService
+} from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/ktra-cluong-btt/HoSoKyThuatBtt.service';
 
 @Component({
-  selector: 'app-chi-tiet-bien-ban-kiem-tra',
+  selector: 'app-chi-tiet-bien-ban-kiem-tra-btt',
   templateUrl: './chi-tiet-bien-ban-kiem-tra.component.html',
   styleUrls: ['./chi-tiet-bien-ban-kiem-tra.component.scss']
 })
@@ -89,9 +89,9 @@ export class ChiTietBienBanKiemTraComponent extends Base2Component implements On
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private bienBanGuiHangService: BienBanGuiHangService,
-    private hoSoKyThuatCtvtService: HoSoKyThuatCtvtService
+    private hoSoKyThuatBttService: HoSoKyThuatBttService
   ) {
-    super(httpClient, storageService, notification, spinner, modal, hoSoKyThuatCtvtService);
+    super(httpClient, storageService, notification, spinner, modal, hoSoKyThuatBttService);
     super.ngOnInit();
     this.formData = this.fb.group({
       id: [],

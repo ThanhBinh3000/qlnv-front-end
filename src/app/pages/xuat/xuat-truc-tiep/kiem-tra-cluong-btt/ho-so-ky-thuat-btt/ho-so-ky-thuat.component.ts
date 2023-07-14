@@ -8,14 +8,13 @@ import {NzModalService} from "ng-zorro-antd/modal";
 import {
   PhieuKiemNghiemChatLuongService
 } from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuKiemNghiemChatLuong.service";
-import dayjs from "dayjs";
-import {
-  HoSoKyThuatCtvtService
-} from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/HoSoKyThuatCtvt.service";
 import {MESSAGE} from "src/app/constants/message";
+import {
+  HoSoKyThuatBttService
+} from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/ktra-cluong-btt/HoSoKyThuatBtt.service';
 
 @Component({
-  selector: 'app-ho-so-ky-thuat-cuu-tro',
+  selector: 'app-ho-so-ky-thuat-btt',
   templateUrl: './ho-so-ky-thuat.component.html',
   styleUrls: ['./ho-so-ky-thuat.component.scss']
 })
@@ -35,9 +34,9 @@ export class HoSoKyThuatComponent extends Base2Component implements OnInit {
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private phieuKiemNghiemChatLuongService: PhieuKiemNghiemChatLuongService,
-    private hoSoKyThuatCtvtService: HoSoKyThuatCtvtService
+    private hoSoKyThuatBttService: HoSoKyThuatBttService
   ) {
-    super(httpClient, storageService, notification, spinner, modal, hoSoKyThuatCtvtService);
+    super(httpClient, storageService, notification, spinner, modal, hoSoKyThuatBttService);
     this.formData = this.fb.group({
       id: [],
       idQdGiaoNvNh: [],
@@ -72,18 +71,17 @@ export class HoSoKyThuatComponent extends Base2Component implements OnInit {
 
   async ngOnInit() {
     await this.spinner.show();
-    this.formData.patchValue({
-      type:'CTVT'
-    });
     try {
+      this.formData.patchValue({
+        type: 'BTT'
+      });
       await Promise.all([
         this.search(),
       ])
     } catch (e) {
       console.log('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    }
-    finally {
+    } finally {
       await this.spinner.hide();
     }
   }

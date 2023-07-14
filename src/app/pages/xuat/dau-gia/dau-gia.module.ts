@@ -1,20 +1,20 @@
-import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
-import { ComponentsModule } from 'src/app/components/components.module';
-import { DirectivesModule } from 'src/app/directives/directives.module';
-import { DauGiaRoutingModule } from './dau-gia-routing.module';
-import { DauGiaComponent } from './dau-gia.component';
-import { GiaoXuatHangModule } from './giao-xuat-hang/giao-xuat-hang.module';
-import { HopDongModule } from './hop-dong/hop-dong.module';
-import { KiemTraChatLuongModule } from './kiem-tra-chat-luong/kiem-tra-chat-luong.module';
-import { TrienkhaiLuachonNhathauModule } from './trienkhai-luachon-nhathau/trienkhai-luachon-nhathau.module';
-import { KeHoachBanDauGiaComponent } from './ke-hoach-ban-dau-gia/ke-hoach-ban-dau-gia.component';
-import { KeHoachBanDauGiaModule } from "./ke-hoach-ban-dau-gia/ke-hoach-ban-dau-gia.module";
-import { ToChucTrienKhaiComponent } from './to-chuc-trien-khai/to-chuc-trien-khai.component';
-import { ToChucTrienKhaiModule } from "./to-chuc-trien-khai/to-chuc-trien-khai.module";
-import { DieuchinhKhbdgComponent } from './dieuchinh-khbdg/dieuchinh-khbdg.component';
-import { DieuchinhKhbdgModule } from "./dieuchinh-khbdg/dieuchinh-khbdg.module";
-import { XuatKhoModule } from './xuat-kho/xuat-kho.module';
+import {CommonModule} from '@angular/common';
+import {NgModule} from '@angular/core';
+import {ComponentsModule} from 'src/app/components/components.module';
+import {DirectivesModule} from 'src/app/directives/directives.module';
+import {DauGiaRoutingModule} from './dau-gia-routing.module';
+import {DauGiaComponent} from './dau-gia.component';
+import {GiaoXuatHangModule} from './giao-xuat-hang/giao-xuat-hang.module';
+import {HopDongModule} from './hop-dong/hop-dong.module';
+import {KiemTraChatLuongModule} from './kiem-tra-chat-luong/kiem-tra-chat-luong.module';
+import {TrienkhaiLuachonNhathauModule} from './trienkhai-luachon-nhathau/trienkhai-luachon-nhathau.module';
+import {KeHoachBanDauGiaComponent} from './ke-hoach-ban-dau-gia/ke-hoach-ban-dau-gia.component';
+import {KeHoachBanDauGiaModule} from "./ke-hoach-ban-dau-gia/ke-hoach-ban-dau-gia.module";
+import {ToChucTrienKhaiComponent} from './to-chuc-trien-khai/to-chuc-trien-khai.component';
+import {ToChucTrienKhaiModule} from "./to-chuc-trien-khai/to-chuc-trien-khai.module";
+import {DieuchinhKhbdgComponent} from './dieuchinh-khbdg/dieuchinh-khbdg.component';
+import {DieuchinhKhbdgModule} from "./dieuchinh-khbdg/dieuchinh-khbdg.module";
+import {XuatKhoModule} from './xuat-kho/xuat-kho.module';
 import {KiemTraChatLuongComponent} from "./kiem-tra-chat-luong/kiem-tra-chat-luong.component";
 import {ChucNangKiemTraComponent} from "./kiem-tra-chat-luong/main/chuc-nang-kiem-tra.component";
 import {TableBienBanLayMauComponent} from "./kiem-tra-chat-luong/bien-ban-lay-mau/table-bien-ban-lay-mau.component";
@@ -22,9 +22,6 @@ import {
   CreateBienBanLayMauComponent
 } from "./kiem-tra-chat-luong/bien-ban-lay-mau/create-bien-ban-lay-mau/create-bien-ban-lay-mau.component";
 import {HoSoKyThuatComponent} from "./kiem-tra-chat-luong/ho-so-ky-thuat/ho-so-ky-thuat.component";
-import {
-  ThongTinHoSoKyThuatComponent
-} from "./kiem-tra-chat-luong/ho-so-ky-thuat/thong-tin-ho-so-ky-thuat/thong-tin-ho-so-ky-thuat.component";
 import {
   QuanLyPhieuKiemNghiemChatLuongComponent
 } from "./kiem-tra-chat-luong/phieu-kiem-nghiem-cl/quan-ly-phieu-kiem-nghiem-chat-luong.component";
@@ -52,6 +49,12 @@ import {
 } from "./kiem-tra-chat-luong/bien-ban-lay-mau/create-bien-ban-lay-mau/create-dai-dien/create-dai-dien.component";
 import {XuatCapModule} from "../xuat-cuu-tro-vien-tro/xuat-cap/xuat-cap.module";
 import {CuuTroVienTroModule} from "../xuat-cuu-tro-vien-tro/xuat-cuu-tro/cuu-tro-vien-tro.module";
+import {
+  ChiTietHoSoKyThuatComponent
+} from "src/app/pages/xuat/dau-gia/kiem-tra-chat-luong/ho-so-ky-thuat/chi-tiet-ho-so-ky-thuat/chi-tiet-ho-so-ky-thuat.component";
+import {
+  ChiTietBienBanKiemTraComponent
+} from "src/app/pages/xuat/dau-gia/kiem-tra-chat-luong/ho-so-ky-thuat/chi-tiet-ho-so-ky-thuat/chi-tiet-bien-ban-kiem-tra/chi-tiet-bien-ban-kiem-tra.component";
 
 @NgModule({
   declarations: [
@@ -66,7 +69,8 @@ import {CuuTroVienTroModule} from "../xuat-cuu-tro-vien-tro/xuat-cuu-tro/cuu-tro
     CreateBienBanLayMauComponent,
     CreateDaiDienComponent,
     HoSoKyThuatComponent,
-    ThongTinHoSoKyThuatComponent,
+    ChiTietHoSoKyThuatComponent,
+    ChiTietBienBanKiemTraComponent,
     QuanLyPhieuKiemNghiemChatLuongComponent,
     ThemMoiPhieuKiemNghiemChatLuongComponent,
 
@@ -93,7 +97,8 @@ import {CuuTroVienTroModule} from "../xuat-cuu-tro-vien-tro/xuat-cuu-tro/cuu-tro
     CreateBienBanLayMauComponent,
     CreateDaiDienComponent,
     HoSoKyThuatComponent,
-    ThongTinHoSoKyThuatComponent,
+    ChiTietHoSoKyThuatComponent,
+    ChiTietBienBanKiemTraComponent,
     QuanLyPhieuKiemNghiemChatLuongComponent,
     ThemMoiPhieuKiemNghiemChatLuongComponent,
 
