@@ -179,7 +179,7 @@
           </thead>
           <tbody>
           <ng-container *ngFor="let item of tableData.data , let i = index">
-            <tr [ngClass]="{'bg-selected': i == 0 && this.selected}" (click)="showDetail($event,item)">
+            <tr>
               <td [nzExpand]="true"></td>
               <td colspan="2">{{item.tenDvi}}</td>
               <td class="text-bold">{{ calcTong() | number : '1.0-1' : 'vi_VN' }}</td>
@@ -188,7 +188,7 @@
               <td></td>
             </tr>
             <ng-container *ngFor="let diemKho of item.children, let y = index">
-              <tr>
+              <tr [ngClass]="{'bg-selected': i == 0 && this.selected}" (click)="showDetail($event,diemKho)">
                 <td></td>
                 <td></td>
                 <td>{{diemKho.tenDiemKho}}</td>

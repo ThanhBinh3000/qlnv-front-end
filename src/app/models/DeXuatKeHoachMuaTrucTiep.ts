@@ -56,6 +56,7 @@ export class CanCuXacDinh {
 export class ChiTietThongTinChaoGia {
   id: number;
   idQdPdSldd: number;
+  idDiemKho: number;
   canhanTochuc: string;
   mst: string;
   diaChi: string;
