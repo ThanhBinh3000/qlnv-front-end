@@ -10,7 +10,7 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { CapVonMuaBanTtthService } from 'src/app/services/quan-ly-von-phi/capVonMuaBanTtth.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { BtnStatus, Const, Report, ThanhToan } from '../../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
+import { BtnStatus, Cvmb, Report, ThanhToan } from '../../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
 
 @Component({
     selector: 'app-thanh-toan-theo-hop-dong',
@@ -23,17 +23,14 @@ export class ThanhToanTheoHopDongComponent implements OnInit {
     Status = Status;
     Op = Operator;
     Utils = Utils;
-    Const = Const;
+    Cvmb = Cvmb;
     //thong tin dang nhap
     userInfo: any;
     //thong tin chung bao cao
     baoCao: Report = new Report();
     lstCtiets: ThanhToan[] = [];
     editCache: { [key: string]: { edit: boolean; data: ThanhToan } } = {};
-    title: string;
     maDviTien: string = '1';
-    //danh muc
-    donVis: any[] = [];
     scrollX: string;
     //trang thai cac nut
     status: BtnStatus = new BtnStatus();
@@ -101,22 +98,22 @@ export class ThanhToanTheoHopDongComponent implements OnInit {
                 })
                 break;
             case 'nonpass':
-                await this.tuChoi('3').then(() => {
+                await this.tuChoi(Status.TT_03).then(() => {
                     this.isDataAvailable = true;
                 })
                 break;
             case 'pass':
-                await this.onSubmit('4', null).then(() => {
+                await this.onSubmit(Status.TT_04, null).then(() => {
                     this.isDataAvailable = true;
                 })
                 break;
             case 'nonapprove':
-                await this.tuChoi('5').then(() => {
+                await this.tuChoi(Status.TT_05).then(() => {
                     this.isDataAvailable = true;
                 })
                 break;
             case 'approve':
-                await this.onSubmit('7', null).then(() => {
+                await this.onSubmit(Status.TT_07, null).then(() => {
                     this.isDataAvailable = true;
                 })
                 break;
@@ -168,7 +165,9 @@ export class ThanhToanTheoHopDongComponent implements OnInit {
             async (data) => {
                 if (data.statusCode == 0) {
                     this.baoCao = data.data;
-                    this.lstCtiets = this.baoCao.lstCtiets;
+                    data.data.lstCtiets.forEach(item => {
+                        this.lstCtiets.push(new ThanhToan(item));
+                    })
                     this.listFile = [];
                     this.updateEditCache();
                     this.getStatusButton();
@@ -241,19 +240,6 @@ export class ThanhToanTheoHopDongComponent implements OnInit {
 
     // luu
     async save() {
-        //kiem tra ca trg thon tin nhan da duoc nhap du chua
-        if (this.baoCao.maLoai == Const.GHI_NHAN_CU_VON) {
-            if (!this.baoCao.ngayNhanLenhChuyenCo || !this.baoCao.tkNhan) {
-                this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
-                return;
-            }
-            //kiem tra ca ky tu trong tai khoan nhan cos phai deu la so ko
-            if (!Operator.numOnly(this.baoCao.tkNhan)) {
-                this.notification.warning(MESSAGE.WARNING, 'Trường tài khoản nhận chỉ chứa ký tự số');
-                return;
-            }
-        }
-
         if (this.lstCtiets.some(e => this.editCache[e.id].edit)) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
             return;
@@ -271,10 +257,7 @@ export class ThanhToanTheoHopDongComponent implements OnInit {
 
         const lstCtietTemp: ThanhToan[] = [];
         this.lstCtiets.forEach(item => {
-            lstCtietTemp.push({
-                ...item,
-                id: item.id?.length == 38 ? null : item.id,
-            })
+            lstCtietTemp.push(item.request())
         })
         const request = JSON.parse(JSON.stringify(this.baoCao));
         request.lstCtiets = lstCtietTemp;
@@ -319,7 +302,7 @@ export class ThanhToanTheoHopDongComponent implements OnInit {
         this.lstCtiets.forEach(item => {
             this.editCache[item.id] = {
                 edit: false,
-                data: { ...item }
+                data: new ThanhToan(item)
             };
         });
     }
@@ -333,7 +316,7 @@ export class ThanhToanTheoHopDongComponent implements OnInit {
         const index = this.lstCtiets.findIndex(item => item.id === id);
         // lay vi tri hang minh sua
         this.editCache[id] = {
-            data: { ...this.lstCtiets[index] },
+            data: new ThanhToan(this.lstCtiets[index]),
             edit: false
         };
     }
@@ -345,14 +328,8 @@ export class ThanhToanTheoHopDongComponent implements OnInit {
         this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
     }
 
-    changeModel(id: string) {
-        const index = this.lstCtiets.findIndex(e => e.id == id);
-        this.editCache[id].data.gtHopDong = Operator.mul(this.editCache[id].data.slHopDong, this.editCache[id].data.donGia);
-        this.editCache[id].data.gtThucHien = Operator.mul(this.editCache[id].data.slThucHien, this.editCache[id].data.donGia);
-        this.editCache[id].data.cong = Operator.sum([this.editCache[id].data.ung, this.editCache[id].data.cap]);
-        this.editCache[id].data.lkUng = Operator.sum([this.lstCtiets[index].lkUng, this.editCache[id].data.ung, -this.lstCtiets[index].ung]);
-        this.editCache[id].data.lkCap = Operator.sum([this.lstCtiets[index].lkCap, this.editCache[id].data.cap, -this.lstCtiets[index].cap]);
-        this.editCache[id].data.lkCong = Operator.sum([this.editCache[id].data.lkUng, this.editCache[id].data.lkCap]);
+    changeModel(data: ThanhToan) {
+        this.editCache[data.id].data.changeModel(true, data);
     }
 
     // xoa file trong bang file

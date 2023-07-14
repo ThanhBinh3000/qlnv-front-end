@@ -8,6 +8,15 @@
                 </nz-option>
             </nz-select>
         </div>
+
+        <div nz-col nzSpan="6">
+            <label class="search__label">Loại đề nghị</label>
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại đề nghị" [(ngModel)]="response.loaiDeNghi"
+                [class]="response.loaiDeNghi ?'' : 'input-error-validate'" (ngModelChange)="checkReport()">
+                <nz-option *ngFor="let item of loaiDns" [nzValue]="item.id" [nzLabel]="item.tenDm">
+                </nz-option>
+            </nz-select>
+        </div>
     </div>
 </div>
 <div class="modal-footer">

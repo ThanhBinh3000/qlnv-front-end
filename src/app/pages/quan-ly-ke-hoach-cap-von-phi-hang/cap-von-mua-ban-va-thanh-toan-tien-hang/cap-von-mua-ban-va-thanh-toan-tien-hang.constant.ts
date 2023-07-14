@@ -1,5 +1,6 @@
+import { Operator, Status, Utils } from "src/app/Utility/utils";
 
-export class Const {
+export class Cvmb {
     static readonly GHI_NHAN_CU_VON = '1';
     static readonly CU_VON_DVCD = '2';
     static readonly THANH_TOAN = '3';
@@ -19,40 +20,40 @@ export class Const {
 
     static readonly LOAI_DE_NGHI = [
         {
-            id: Const.GAO,
+            id: Cvmb.GAO,
             tenDm: "Gạo",
         },
         {
-            id: Const.THOC,
+            id: Cvmb.THOC,
             tenDm: "Thóc",
         },
         {
-            id: Const.MUOI,
+            id: Cvmb.MUOI,
             tenDm: "Muối",
         },
         {
-            id: Const.VTU,
+            id: Cvmb.VTU,
             tenDm: "Vật tư",
         },
     ];
 
     static suggestionName(id: string) {
-        return Const.LOAI_DE_NGHI.find(e => e.id == id).tenDm;
+        return Cvmb.LOAI_DE_NGHI.find(e => e.id == id).tenDm;
     }
 
     static readonly CAN_CU_GIA = [
         {
-            id: Const.HOP_DONG,
+            id: Cvmb.HOP_DONG,
             tenDm: "Hợp đồng trúng thầu",
         },
         {
-            id: Const.DON_GIA,
+            id: Cvmb.DON_GIA,
             tenDm: "Quyết định đơn giá",
         }
     ]
 
     static priceBasisName(id: string) {
-        return Const.CAN_CU_GIA.find(e => e.id == id).tenDm;
+        return Cvmb.CAN_CU_GIA.find(e => e.id == id).tenDm;
     }
 }
 
@@ -82,6 +83,45 @@ export class CapUng {
     lkVonCap: number;
     lkCong: number;
     ghiChu: string;
+
+    constructor(data: Partial<Pick<CapUng, keyof CapUng>>) {
+        Object.assign(this, data);
+    }
+
+    changeModel(data: CapUng) {
+        this.uncCong = Operator.sum([this.uncVonUng, this.uncVonCap]);
+        this.lkVonUng = Operator.sum([data.lkVonUng, this.uncVonUng, -data.uncVonUng]);
+        this.lkVonCap = Operator.sum([data.lkVonCap, this.uncVonCap, -data.uncVonCap]);
+        this.lkCong = Operator.sum([this.lkVonUng, this.lkVonCap]);
+    }
+
+    upperBound() {
+        return this.lkCong > Utils.MONEY_LIMIT;
+    }
+
+    clear() {
+        Object.keys(this).forEach(key => {
+            if (typeof this[key] === 'number') {
+                this[key] = null;
+            }
+        })
+    }
+
+    sum(data: CapUng) {
+        Object.keys(data).forEach(key => {
+            if (typeof this[key] == 'number' || typeof data[key] == 'number') {
+                this[key] = Operator.sum([this[key], data[key]]);
+            }
+        })
+    }
+
+    request() {
+        const temp = Object.assign({}, this);
+        if (this.id?.length == 38) {
+            temp.id = null;
+        }
+        return temp;
+    }
 }
 
 export class ThanhToan {
@@ -116,6 +156,53 @@ export class ThanhToan {
     dot: number;
     congVan: any;
     ghiChu: string;
+
+    constructor(data: Partial<Pick<ThanhToan, keyof ThanhToan>>) {
+        Object.assign(this, data);
+    }
+
+    changeModel(is: boolean, data?: ThanhToan) {
+        this.gtKeHoach = Operator.mul(this.slKeHoach, this.donGia);
+        this.gtHopDong = Operator.mul(this.slHopDong, this.donGia);
+        this.gtThucHien = Operator.mul(this.slThucHien, this.donGia);
+        this.cong = Operator.sum([this.ung, this.cap]);
+        if (data) {
+            this.lkUng = Operator.sum([data.lkUng, this.ung, -data.ung]);
+            this.lkCap = Operator.sum([data.lkCap, this.cap, -data.cap]);
+            this.lkCong = Operator.sum([this.lkUng, this.lkCap]);
+        }
+        this.soConDcTt = is ? Operator.sum([this.gtThucHien, -this.lkCong, -this.phatViPham]) : Operator.sum([this.gtKeHoach, -this.lkCong]);
+        this.lkSauLanNay = Operator.sum([this.lkCong, this.cong]);
+        this.soConPhaiNop = is ? Operator.sum([this.gtThucHien, -this.lkSauLanNay, -this.phatViPham]) : Operator.sum([this.gtHopDong, -this.lkSauLanNay]);
+    }
+
+    upperBound() {
+        return this.lkCong > Utils.MONEY_LIMIT;
+    }
+
+    clear() {
+        Object.keys(this).forEach(key => {
+            if (typeof this[key] === 'number') {
+                this[key] = null;
+            }
+        })
+    }
+
+    sum(data: CapUng) {
+        Object.keys(data).forEach(key => {
+            if (typeof this[key] == 'number' || typeof data[key] == 'number') {
+                this[key] = Operator.sum([this[key], data[key]]);
+            }
+        })
+    }
+
+    request() {
+        const temp = Object.assign({}, this);
+        if (this.id?.length == 38) {
+            temp.id = null;
+        }
+        return temp;
+    }
 }
 
 export class TienThua {
@@ -145,6 +232,28 @@ export class TienThua {
     lkSauLanNay: number;
     soConPhaiNop: number;
     ghiChu: string;
+
+    constructor(data: Partial<Pick<TienThua, keyof TienThua>>) {
+        Object.assign(this, data);
+    }
+
+    changeModel() {
+        this.nopTong = Operator.sum([this.nopVonUng, this.nopVonCap]);
+        this.lkSauLanNay = Operator.sum([this.daNopTong, this.nopTong]);
+        this.soConPhaiNop = Operator.sum([this.duTong, -this.lkSauLanNay]);
+    }
+
+    upperBound() {
+        return this.lkSauLanNay > Utils.MONEY_LIMIT;
+    }
+
+    request() {
+        const temp = Object.assign({}, this);
+        if (this.id?.length == 38) {
+            temp.id = null;
+        }
+        return temp;
+    }
 }
 
 export class Report {
@@ -171,10 +280,10 @@ export class Report {
     thuyetMinh: string;
     ngayNhanLenhChuyenCo: string;
     tkNhan: string;
-    lstFiles: any[];
-    lstCtiets: any[];
-    fileDinhKems: any[];
-    listIdDeleteFiles: string[];
+    lstFiles: any[] = [];
+    lstCtiets: any[] = [];
+    fileDinhKems: any[] = [];
+    listIdDeleteFiles: string[] = [];
 }
 
 export class Perm {
@@ -184,4 +293,53 @@ export class Perm {
     pass!: string;
     approve!: string;
     accept!: string;
+}
+
+export class Pagging {
+    limit: number = 10;
+    page: number = 1;
+}
+
+export class Search {
+    loaiTimKiem: string = '0';
+    maLoai: string;
+    dot: number = 1;
+    maCapUng: string;
+    maDvi: string;
+    loaiDnghi: string;
+    namDnghi: number;
+    canCuVeGia: string;
+    ngayTaoDen: any;
+    ngayTaoTu: any;
+    paggingReq: Pagging = new Pagging();
+    trangThai: string = Status.TT_01;
+
+    request() {
+        return {
+            loaiTimKiem: this.loaiTimKiem,
+            maLoai: this.maLoai,
+            dot: this.dot,
+            maCapUng: this.maCapUng,
+            maDvi: this.maDvi,
+            loaiDnghi: this.loaiDnghi,
+            namDnghi: this.namDnghi,
+            canCuVeGia: this.canCuVeGia,
+            ngayTaoTu: this.ngayTaoTu ? Utils.fmtDate(this.ngayTaoTu) : null,
+            ngayTaoDen: this.ngayTaoDen ? Utils.fmtDate(this.ngayTaoDen) : null,
+            paggingReq: this.paggingReq,
+            trangThai: this.trangThai,
+        }
+    }
+
+    clear() {
+        this.dot = null;
+        this.maCapUng = null;
+        this.maDvi = null;
+        this.loaiDnghi = null;
+        this.namDnghi = null;
+        this.canCuVeGia = null;
+        this.ngayTaoTu = null;
+        this.ngayTaoDen = null;
+        this.trangThai = null;
+    }
 }

@@ -13,7 +13,7 @@ export class BaoCaoThucHienDuToanChiService extends BaseService {
         super(httpClient, 'quanLyVonPhi', '');
     }
 
-    isTest = true;
+    isTest = false;
     urlDefault = environment.SERVICE_API + (this.isTest ? '/qlnv-khoachphi-dev' : '/qlnv-khoachphi');
 
     //search list bao cao
@@ -106,5 +106,11 @@ export class BaoCaoThucHienDuToanChiService extends BaseService {
         return this.httpClient.get(
             this.urlDefault + '/bao-cao/khoi-phuc/currentId=' + cId + '/recoverId=' + rId,
         );
+    }
+
+    phuLucI(id: string): Observable<any> {
+        return this.httpClient.get(
+            this.urlDefault + '/bao-cao/chi-tiet/pl1/' + id,
+        )
     }
 }

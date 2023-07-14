@@ -211,6 +211,21 @@ export class Form {
     listIdDeleteFiles: string[];
 }
 
+export class History {
+    id: string;
+    maBcao: string;
+    namBcao: number;
+    lan: number;
+    ngayTao: string;
+    nguoiTao: string;
+    ngayTrinh: string;
+    ngayDuyet: string;
+    ngayPheDuyet: string;
+    ngayTraKq: string;
+    lyDoTuChoi: string;
+    trangThai: string;
+}
+
 export class Report {
     id: string;
     maBcao: string;
@@ -236,6 +251,7 @@ export class Report {
     lstFiles: any[] = [];
     lstBcaoDviTrucThuocs: any[] = [];
     tongHopTuIds: string[] = [];
+    lichSu: History[] = [];
 }
 
 export class BtnStatus {
