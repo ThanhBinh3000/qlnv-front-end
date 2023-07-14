@@ -17,14 +17,16 @@ import {
     VtTbCoThoihanLuukhoLonHonMuoihaiThangModule
 } from "../vt-tb-co-thoihan-luukho-lon-hon-muoihai-thang/vt-tb-co-thoihan-luukho-lon-hon-muoihai-thang.module";
 import { ThongTinQuyetDinhGiaoNhiemVuXuatHangComponent } from './quyet-dinh-giao-nhiem-vu-xuat-hang/thong-tin-quyet-dinh-giao-nhiem-vu-xuat-hang/thong-tin-quyet-dinh-giao-nhiem-vu-xuat-hang.component';
-import { BienBanLayMauBanGiaoMauComponent } from './kiem-tra-chat-luong/bien-ban-lay-mau-ban-giao-mau/bien-ban-lay-mau-ban-giao-mau.component';
+import {
+  XkBienBanLayMauBanGiaoMauComponent
+} from './kiem-tra-chat-luong/bien-ban-lay-mau-ban-giao-mau/bien-ban-lay-mau-ban-giao-mau.component';
 import { PhieuKiemNghiemChatLuongComponent } from './kiem-tra-chat-luong/phieu-kiem-nghiem-chat-luong/phieu-kiem-nghiem-chat-luong.component';
 import { BaoCaoKetQuaKiemDinhComponent } from './kiem-tra-chat-luong/bao-cao-ket-qua-kiem-dinh/bao-cao-ket-qua-kiem-dinh.component';
 import { ThongTinPhieuXuatKhoComponent } from './xuat-kho/thong-tin-phieu-xuat-kho/thong-tin-phieu-xuat-kho.component';
-import {CuuTroVienTroModule} from "../../../xuat-cuu-tro-vien-tro/xuat-cuu-tro/cuu-tro-vien-tro.module";
 import { ThongTinBienBanLayMauBanGiaoMauComponent } from './kiem-tra-chat-luong/bien-ban-lay-mau-ban-giao-mau/thong-tin-bien-ban-lay-mau-ban-giao-mau/thong-tin-bien-ban-lay-mau-ban-giao-mau.component';
 import { ThongTinPhieuKiemNghiemChatLuongComponent } from './kiem-tra-chat-luong/phieu-kiem-nghiem-chat-luong/thong-tin-phieu-kiem-nghiem-chat-luong/thong-tin-phieu-kiem-nghiem-chat-luong.component';
 import { ThongTinBaoCaoKetQuaKiemDinhComponent } from './kiem-tra-chat-luong/bao-cao-ket-qua-kiem-dinh/thong-tin-bao-cao-ket-qua-kiem-dinh/thong-tin-bao-cao-ket-qua-kiem-dinh.component';
+import {CuuTroVienTroModule} from "../../../xuat-cuu-tro-vien-tro/xuat-cuu-tro/cuu-tro-vien-tro.module";
 
 
 
@@ -39,7 +41,7 @@ import { ThongTinBaoCaoKetQuaKiemDinhComponent } from './kiem-tra-chat-luong/bao
     TongHopDanhSachVt6thComponent,
     ChiTietTongHopDanhSachVt6thComponent,
     ThongTinQuyetDinhGiaoNhiemVuXuatHangComponent,
-    BienBanLayMauBanGiaoMauComponent,
+    XkBienBanLayMauBanGiaoMauComponent,
     PhieuKiemNghiemChatLuongComponent,
     BaoCaoKetQuaKiemDinhComponent,
     ThongTinPhieuXuatKhoComponent,
