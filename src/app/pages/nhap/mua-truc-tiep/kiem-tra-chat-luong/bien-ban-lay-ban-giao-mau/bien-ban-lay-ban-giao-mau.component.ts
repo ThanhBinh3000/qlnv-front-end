@@ -3,6 +3,7 @@ import dayjs from 'dayjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { cloneDeep } from 'lodash';
 import { MESSAGE } from 'src/app/constants/message';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
@@ -10,6 +11,7 @@ import { StorageService } from 'src/app/services/storage.service';
 import { QuyetDinhGiaoNvNhapHangService } from './../../../../../services/qlnv-hang/nhap-hang/mua-truc-tiep/qdinh-giao-nvu-nh/quyetDinhGiaoNvNhapHang.service';
 import { async } from '@angular/core/testing';
 import { MttBienBanLayMauService } from './../../../../../services/qlnv-hang/nhap-hang/mua-truc-tiep/MttBienBanLayMauService.service';
+import {STATUS} from "../../../../../constants/status";
 @Component({
   selector: 'app-bien-ban-lay-ban-giao-mau',
   templateUrl: './bien-ban-lay-ban-giao-mau.component.html',
@@ -23,6 +25,13 @@ export class BienBanLayBanGiaoMauComponent extends Base2Component implements OnI
   selectedId: number = 0;
   isView: boolean = false;
   idQdGiaoNvNh: number
+  searchFilter = {
+    soPhieu: '',
+    ngayTongHop: '',
+    ketLuan: '',
+    soQuyetDinh: '',
+    namKh: dayjs().get('year'),
+  };
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -71,6 +80,45 @@ export class BienBanLayBanGiaoMauComponent extends Base2Component implements OnI
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
+  }
+
+  async search() {
+    await this.spinner.show();
+    let body = {
+      soQd: this.searchFilter.soQuyetDinh,
+      namNhap: this.searchFilter.namKh,
+      "paggingReq": {
+        "limit": this.pageSize,
+        "page": this.page - 1
+      },
+      trangThai: STATUS.BAN_HANH
+    };
+    let res = await this.quyetDinhGiaoNvNhapHangService.search(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      let data = res.data;
+      this.dataTable = data.content;
+      this.dataTable.forEach(item => {
+        if (this.userService.isChiCuc()) {
+          item.detail = item.hhQdGiaoNvNhangDtlList.filter(y => y.maDvi == this.userInfo.MA_DVI)[0]
+          item.detail = {
+            children: item.detail.children.filter(x => x.maDiemKho.includes(this.userInfo.MA_DVI))
+          }
+        } else {
+          let data = [];
+          item.hhQdGiaoNvNhangDtlList.forEach(res => {
+            data = [...data, ...res.children.filter(x => x.idDtl == res.id)];
+          })
+          item.detail = {
+            hhQdGiaoNvNhDdiemList: data,
+          }
+        };
+      });
+      this.dataTableAll = cloneDeep(this.dataTable);
+      this.totalRecord = data.totalElements;
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+    await this.spinner.hide();
   }
 
   async showList() {
