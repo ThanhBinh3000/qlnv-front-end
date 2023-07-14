@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../../services/storage.service";
 import {NzNotificationService} from "ng-zorro-antd/notification";
@@ -6,17 +6,19 @@ import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
 import {ActivatedRoute, Router} from "@angular/router";
 import {QuyetDinhXhService} from "../../../../../services/sua-chua/quyetDinhXh.service";
-import {QuyetDinhScService} from "../../../../../services/sua-chua/quyetDinhSc.service";
 import dayjs from "dayjs";
 import {Validators} from "@angular/forms";
-import * as moment from "moment/moment";
 import {
   DialogTableSelectionComponent
 } from "../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
 import {STATUS} from "../../../../../constants/status";
 import {Base3Component} from "../../../../../components/base3/base3.component";
-import { cloneDeep, chain } from 'lodash';
-import { KiemTraChatLuongScService} from "../../../../../services/sua-chua/kiemTraChatLuongSc";
+import {chain} from 'lodash';
+import {KiemTraChatLuongScService} from "../../../../../services/sua-chua/kiemTraChatLuongSc";
+import {QuyetDinhNhService} from "../../../../../services/sua-chua/quyetDinhNh.service";
+import {
+  DialogTableCheckBoxComponent
+} from "../../../../../components/dialog/dialog-table-check-box/dialog-table-check-box.component";
 
 
 @Component({
@@ -26,7 +28,11 @@ import { KiemTraChatLuongScService} from "../../../../../services/sua-chua/kiemT
 })
 export class ThemMoiQdnhComponent extends Base3Component implements OnInit {
 
-  fileCanCu: any[] = []
+  fileCanCu: any[] = [];
+  dataTableSave : any[] = [];
+
+   map = new Map();
+
 
   constructor(
     httpClient: HttpClient,
@@ -36,13 +42,12 @@ export class ThemMoiQdnhComponent extends Base3Component implements OnInit {
     modal: NzModalService,
     route: ActivatedRoute,
     router: Router,
-    private quyetDinhXhService: QuyetDinhXhService,
+    private quyetDinhNhService : QuyetDinhNhService,
     private kiemTraChatLuongScService : KiemTraChatLuongScService,
-
-    private quyetDinhScService: QuyetDinhScService,
+    private quyetDinhXhService: QuyetDinhXhService
   ) {
-    super(httpClient, storageService, notification, spinner, modal, route, router, quyetDinhXhService);
-    this.defaultURL = 'sua-chua/nhap-hang/giao-nv-xh'
+    super(httpClient, storageService, notification, spinner, modal, route, router, quyetDinhNhService);
+    this.defaultURL = 'sua-chua/nhap-hang/giao-nv-nh'
     this.getId();
     this.formData = this.fb.group({
       id : [],
@@ -51,9 +56,11 @@ export class ThemMoiQdnhComponent extends Base3Component implements OnInit {
       nam : [dayjs().year(), [Validators.required]],
       soQd : [null, [Validators.required]],
       ngayKy: [''],
-      soQdSc: [null, [Validators.required]],
-      idQdSc : [null, [Validators.required]],
-      ngayKyQdSc : [null,],
+      soPhieuKtcl: [null, [Validators.required]],
+      idPhieuKtcl : [null, [Validators.required]],
+      ngayKiemDinh : [null,],
+      idQdXh: [null, [Validators.required]],
+      soQdXh : [null, [Validators.required]],
       thoiHanXuat: [null],
       thoiHanNhap: [null],
       duToanKinhPhi : [null],
@@ -80,11 +87,18 @@ export class ThemMoiQdnhComponent extends Base3Component implements OnInit {
           this.formData.patchValue({
             soQd : soQd
           })
-          this.dataTable = chain(res.scQuyetDinhSc.scTrinhThamDinhHdr.children).groupBy('scDanhSachHdr.tenChiCuc').map((value, key) => ({
+          this.bindingQdXh(res.idQdXh);
+          let dataTable = [];
+          res.children.forEach((item)=>{
+            console.log(item)
+            item.scDanhSachHdr.soLuongNhap = item.soLuongNhap;
+            dataTable.push(item.scDanhSachHdr);
+          })
+          this.dataTableView =  chain(dataTable).groupBy('tenChiCuc').map((value, key) => ({
               tenDonVi: key,
               children: value,
             })
-          ).value()
+          ).value();
         }
       })
     }
@@ -95,11 +109,12 @@ export class ThemMoiQdnhComponent extends Base3Component implements OnInit {
       return;
     }
     this.spinner.show();
-    this.kiemTraChatLuongScService.getDanhSachTaoQdNh({}).then((res) => {
+    this.quyetDinhXhService.getDanhSachTaoQuyetDinhNhapHang({}).then((res) => {
       this.spinner.hide();
       if (res.data) {
         res.data?.forEach(item => {
-          item.ngayKiemDinhFr = moment(item.ngayKiemDinh).format('dd/MM/yyyy');
+          item.ngayXuat = item.thoiHanXuat
+          item.ngayNhap = item.thoiHanNhap
         })
         const modalQD = this.modal.create({
           nzTitle: 'Danh sách kết quả kiểm định sau sửa chữa',
@@ -110,37 +125,106 @@ export class ThemMoiQdnhComponent extends Base3Component implements OnInit {
           nzFooter: null,
           nzComponentParams: {
             dataTable: res.data,
-            dataHeader: ['Số kiểm tra chất lượng', 'Kết quả'],
-            dataColumn: ['soPhieuKtcl', 'ketQua']
+            dataHeader: ['Số quyết định xuất hàng', 'Trích yếu','Thời hạn nhập','Thời hạn xuất'],
+            dataColumn: ['soQd', 'trichYeu','ngayXuat','ngayNhap']
           },
         });
         modalQD.afterClose.subscribe(async (data) => {
           if (data) {
             this.spinner.show();
-            console.log(data)
-            this.kiemTraChatLuongScService.getDetail(data.id).then((res) => {
-              this.spinner.hide();
-              if (res.data) {
-                console.log(res);
-                const dataTh = res.data
-                this.formData.patchValue({
-                  soQdSc: data.soQd,
-                  idQdSc: data.id,
-                  ngayKyQdSc: data.ngayKy,
-                  thoiHanNhap: data.thoiHanNhap,
-                  thoiHanXuat: data.thoiHanXuat,
-                })
-                this.dataTable = chain(dataTh.scTrinhThamDinhHdr.children).groupBy('scDanhSachHdr.tenChiCuc').map((value, key) => ({
-                    tenDonVi: key,
-                    children: value,
-                  })
-                ).value()
-              }
-            });
+            this.bindingQdXh(data.id)
           }
         });
       }
     })
+  }
+
+  bindingQdXh(idQdXh){
+    this.quyetDinhXhService.getDetail(idQdXh).then((resQdXh)=>{
+      this.spinner.hide();
+      this.formData.patchValue({
+        idQdXh: resQdXh.data.id,
+        soQdXh : resQdXh.data.soQd,
+        thoiHanXuat: resQdXh.data.thoiHanXuat,
+        thoiHanNhap: resQdXh.data.thoiHanNhap,
+      })
+      this.dataTableAll = resQdXh.data.scKiemTraChatLuongHdrList;
+    });
+  }
+
+  openDialogCanCu() {
+    if (this.disabled()) {
+      return;
+    }
+    this.dataTableAll.forEach( item => {
+      item.checked = this.formData.value.idPhieuKtcl.includes(item.id);
+      item.maDiaDiem = item.scPhieuXuatKhoHdr.maDiaDiem;
+      item.tenDiaDiem = item.scPhieuXuatKhoHdr.tenDiemKho + ' / ' + item.scPhieuXuatKhoHdr.tenNhaKho + ' / '
+        + item.scPhieuXuatKhoHdr.tenNganKho + ' / ' + item.scPhieuXuatKhoHdr.tenLoKho;
+      item.tongSoLuong = item.scPhieuXuatKhoHdr.tongSoLuong;
+      item.numberSoLuong = item.scPhieuXuatKhoHdr.tongSoLuong;
+    })
+    console.log(this.dataTableAll);
+    const modalQD = this.modal.create({
+      nzTitle: 'Danh sách kết quả kiểm định sau sửa chữa',
+      nzContent: DialogTableCheckBoxComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {
+        isView : false,
+        dataTable: this.dataTableAll,
+        dataHeader: ['Số phiếu KĐCL', 'Đểm kho / Nhà kho / Ngăn kho / Lô kho','Ngày kiểm định','Tổng số lượng'],
+        dataColumn: ['soPhieuKtcl', 'tenDiaDiem','ngayKiemDinh','numberSoLuong']
+      },
+    });
+    modalQD.afterClose.subscribe(async (res) => {
+      if (res) {
+        this.spinner.show();
+        this.dataTableAll = res.data;
+        const dataTableChecked = res.data.filter(item => item.checked == true);
+        this.dataTableView = [];
+        this.map = new Map();
+        if(res.data){
+          let ketQuaKtra = [];
+          let ketQuaId = [];
+          dataTableChecked.forEach( item => {
+            ketQuaKtra.push(item.soPhieuKtcl);
+            ketQuaId.push(item.id);
+            let data = item.scPhieuXuatKhoHdr;
+            if(this.map.has(data.idScDanhSachHdr)){
+              let body = this.map.get(data.idScDanhSachHdr);
+              body.tongSoLuong = body.tongSoLuong + data.tongSoLuong
+              body.dataPhieuKtraCl.push(item);
+              this.map.set(data.idScDanhSachHdr,body)
+            } else {
+              let body = {
+                tongSoLuong : data.tongSoLuong,
+                dataRow : data.scDanhSachHdr,
+                dataPhieuKtraCl : [item]
+              }
+              this.map.set(data.idScDanhSachHdr,body);
+            }
+          });
+          let dataTableView = [];
+          this.map?.forEach(item =>{
+              item.dataRow.soLuongNhap = item.tongSoLuong;
+              dataTableView.push(item.dataRow)
+          })
+          this.dataTableView =  chain(dataTableView).groupBy('tenChiCuc').map((value, key) => ({
+              tenDonVi: key,
+              children: value,
+            })
+          ).value();
+          this.formData.patchValue({
+            soPhieuKtcl : ketQuaKtra.join(' , '),
+            idPhieuKtcl : ketQuaId.join(',')
+          })
+        }
+        this.spinner.hide();
+      }
+    });
   }
 
   showSave(){
@@ -153,9 +237,19 @@ export class ThemMoiQdnhComponent extends Base3Component implements OnInit {
     let body = this.formData.value;
     body.fileDinhKemReq = this.fileDinhKem;
     body.fileCanCuReq = this.fileCanCu;
+    let children = []
+    this.map.forEach(item => {
+      let body = {
+        idDsHdr : item.dataRow.id,
+        soLuongNhap : item.tongSoLuong,
+      }
+      children.push(body);
+    })
+    body.children = children;
     if(this.formData.value.soQd){
       body.soQd = this.formData.value.soQd + '/QĐ-CDTVT'
     }
+    console.log(body);
     this.createUpdate(body).then((res)=>{
       if(res){
         if(isGuiDuyet){
@@ -166,6 +260,7 @@ export class ThemMoiQdnhComponent extends Base3Component implements OnInit {
         }
       }
     })
+    this.spinner.hide();
   }
 
   pheDuyet(){

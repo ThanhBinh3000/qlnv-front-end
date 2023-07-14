@@ -5,8 +5,8 @@ import {NzNotificationService} from "ng-zorro-antd/notification";
 import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
 import {ActivatedRoute, Router} from "@angular/router";
-import {QuyetDinhXhService} from "../../../../services/sua-chua/quyetDinhXh.service";
 import {Base3Component} from "../../../../components/base3/base3.component";
+import {QuyetDinhNhService} from "../../../../services/sua-chua/quyetDinhNh.service";
 
 @Component({
   selector: 'app-quyet-dinh-nh',
@@ -23,9 +23,9 @@ export class QuyetDinhNhComponent extends Base3Component implements OnInit {
     modal: NzModalService,
     route: ActivatedRoute,
     router: Router,
-    private quyetDinhXhService: QuyetDinhXhService,
+    private quyetDinhNhService: QuyetDinhNhService,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, route, router, quyetDinhXhService);
+    super(httpClient, storageService, notification, spinner, modal, route, router, quyetDinhNhService);
     this.defaultURL = 'sua-chua/nhap-hang/giao-nv-nh'
     this.formData = this.fb.group({
       nam: null,
