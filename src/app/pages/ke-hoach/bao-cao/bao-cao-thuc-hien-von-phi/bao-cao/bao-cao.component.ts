@@ -533,4 +533,46 @@ export class BaoCaoComponent implements OnInit {
             }
         });
     }
+
+    async restoreReport(id: string) {
+        await this.baoCaoThucHienVonPhiService.restoreReport(this.baoCao.id, id).toPromise().then(
+            (data) => {
+                if (data.statusCode == 0) {
+                    Object.assign(this.baoCao, data.data);
+                    this.baoCao.lstBcaos.forEach(item => {
+                        item.tenPhuLuc = this.lstBieuMaus.find(e => e.id == item.maLoai).tenPl;
+                        item.tieuDe = Vp.appendixName(item.maLoai, this.baoCao.maLoaiBcao, this.baoCao.namBcao, this.baoCao.dotBcao);
+                    })
+                    this.getStatusButton();
+                    this.notification.success(MESSAGE.SUCCESS, 'Khôi phục thành công.');
+                } else {
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+            }
+        );
+    }
+
+    async newReport() {
+        await this.baoCaoThucHienVonPhiService.addHistory(this.baoCao.id).toPromise().then(
+            (data) => {
+                if (data.statusCode == 0) {
+                    Object.assign(this.baoCao, data.data);
+                    this.baoCao.lstBcaos.forEach(item => {
+                        item.tenPhuLuc = this.lstBieuMaus.find(e => e.id == item.maLoai).tenPl;
+                        item.tieuDe = Vp.appendixName(item.maLoai, this.baoCao.maLoaiBcao, this.baoCao.namBcao, this.baoCao.dotBcao);
+                    })
+                    this.getStatusButton();
+                    this.notification.success(MESSAGE.SUCCESS, 'Tạo mới thành công.');
+                } else {
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+            }
+        );
+    }
 }

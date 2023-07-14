@@ -6,7 +6,7 @@ import { Operator, Status, Table, Utils } from 'src/app/Utility/utils';
 import { MESSAGE } from 'src/app/constants/message';
 import { CapVonMuaBanTtthService } from 'src/app/services/quan-ly-von-phi/capVonMuaBanTtth.service';
 import { UserService } from 'src/app/services/user.service';
-import { Const, TienThua } from '../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
+import { Cvmb, TienThua } from '../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
 
 @Component({
     selector: 'app-quan-ly-thu-chi',

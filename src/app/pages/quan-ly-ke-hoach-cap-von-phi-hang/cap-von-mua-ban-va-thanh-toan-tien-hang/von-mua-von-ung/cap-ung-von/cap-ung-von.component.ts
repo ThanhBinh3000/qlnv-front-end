@@ -11,7 +11,7 @@ import { CapVonMuaBanTtthService } from 'src/app/services/quan-ly-von-phi/capVon
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { BtnStatus, CapUng, Const, Report } from '../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
+import { BtnStatus, CapUng, Cvmb, Report } from '../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
 
 @Component({
     selector: 'app-cap-ung-von',
@@ -22,9 +22,9 @@ export class CapUngVonComponent implements OnInit {
     @Input() dataInfo;
     @Output() dataChange = new EventEmitter();
     Status = Status;
-    Op = Operator;
+    Op = new Operator('1');
     Utils = Utils;
-    Const = Const;
+    Cvmb = Cvmb;
     //thong tin dang nhap
     userInfo: any;
     //thong tin chung bao cao
@@ -34,7 +34,7 @@ export class CapUngVonComponent implements OnInit {
     title: string;
     maDviTien: string = '1';
     //danh muc
-    donVis: any[] = [];
+    // donVis: any[] = [];
     scrollX: string;
     //trang thai cac nut
     status: BtnStatus = new BtnStatus();
@@ -104,22 +104,22 @@ export class CapUngVonComponent implements OnInit {
                 })
                 break;
             case 'nonpass':
-                await this.tuChoi('3').then(() => {
+                await this.tuChoi(Status.TT_03).then(() => {
                     this.isDataAvailable = true;
                 })
                 break;
             case 'pass':
-                await this.onSubmit('4', null).then(() => {
+                await this.onSubmit(Status.TT_04, null).then(() => {
                     this.isDataAvailable = true;
                 })
                 break;
             case 'nonapprove':
-                await this.tuChoi('5').then(() => {
+                await this.tuChoi(Status.TT_05).then(() => {
                     this.isDataAvailable = true;
                 })
                 break;
             case 'approve':
-                await this.onSubmit('7', null).then(() => {
+                await this.onSubmit(Status.TT_07, null).then(() => {
                     this.isDataAvailable = true;
                 })
                 break;
@@ -139,7 +139,7 @@ export class CapUngVonComponent implements OnInit {
             this.baoCao = this.dataInfo?.baoCao;
             this.lstCtiets = this.baoCao.lstCtiets;
         }
-        if (this.baoCao.maLoai == Const.CU_VON_DVCD) {
+        if (this.baoCao.maLoai == Cvmb.CU_VON_DVCD) {
             this.title = 'Cấp ứng vốn cho đơn vị cấp dưới';
         } else {
             this.title = 'Ghi nhận cấp ứng vốn từ đơn vị cấp trên';
@@ -149,28 +149,28 @@ export class CapUngVonComponent implements OnInit {
         this.getStatusButton();
     }
 
-    async getChildUnit() {
-        const request = {
-            maDviCha: this.baoCao.maDvi,
-            trangThai: '01',
-        }
-        await this.quanLyVonPhiService.dmDviCon(request).toPromise().then(
-            data => {
-                if (data.statusCode == 0) {
-                    if (this.userService.isTongCuc()) {
-                        this.donVis = data.data.filter(e => e.tenVietTat && e.tenVietTat.startsWith('CDT'));
-                    } else {
-                        this.donVis = data.data.filter(e => e.tenVietTat && e.tenVietTat.startsWith('CCDT'))
-                    }
-                } else {
-                    this.notification.error(MESSAGE.ERROR, data?.msg);
-                }
-            },
-            (err) => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-            }
-        )
-    }
+    // async getChildUnit() {
+    //     const request = {
+    //         maDviCha: this.baoCao.maDvi,
+    //         trangThai: '01',
+    //     }
+    //     await this.quanLyVonPhiService.dmDviCon(request).toPromise().then(
+    //         data => {
+    //             if (data.statusCode == 0) {
+    //                 if (this.userService.isTongCuc()) {
+    //                     this.donVis = data.data.filter(e => e.tenVietTat && e.tenVietTat.startsWith('CDT'));
+    //                 } else {
+    //                     this.donVis = data.data.filter(e => e.tenVietTat && e.tenVietTat.startsWith('CCDT'))
+    //                 }
+    //             } else {
+    //                 this.notification.error(MESSAGE.ERROR, data?.msg);
+    //             }
+    //         },
+    //         (err) => {
+    //             this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+    //         }
+    //     )
+    // }
 
     //check role cho các nut trinh duyet
     getStatusButton() {
@@ -179,7 +179,7 @@ export class CapUngVonComponent implements OnInit {
         this.status.submit = Status.check('submit', this.baoCao.trangThai) && isChild && !(!this.baoCao.id);
         this.status.pass = Status.check('pass', this.baoCao.trangThai) && isChild;
         this.status.approve = Status.check('approve', this.baoCao.trangThai) && isChild;
-        if (this.baoCao.maLoai == Const.CU_VON_DVCD) {
+        if (this.baoCao.maLoai == Cvmb.CU_VON_DVCD) {
             this.status.general = this.status.general && this.userService.isAccessPermisson(Roles.CVMB.EDIT_CV);
             this.status.submit = this.status.submit && this.userService.isAccessPermisson(Roles.CVMB.SUBMIT_CV);
             this.status.pass = this.status.pass && this.userService.isAccessPermisson(Roles.CVMB.PASS_CV);
@@ -207,7 +207,9 @@ export class CapUngVonComponent implements OnInit {
             async (data) => {
                 if (data.statusCode == 0) {
                     this.baoCao = data.data;
-                    this.lstCtiets = this.baoCao.lstCtiets;
+                    this.baoCao.lstCtiets.forEach(item => {
+                        this.lstCtiets.push(new CapUng(item));
+                    })
                     this.listFile = [];
                     this.updateEditCache();
                     this.getStatusButton();
@@ -281,7 +283,7 @@ export class CapUngVonComponent implements OnInit {
     // luu
     async save() {
         //kiem tra ca trg thon tin nhan da duoc nhap du chua
-        if (this.baoCao.maLoai == Const.GHI_NHAN_CU_VON) {
+        if (this.baoCao.maLoai == Cvmb.GHI_NHAN_CU_VON) {
             if (!this.baoCao.ngayNhanLenhChuyenCo || !this.baoCao.tkNhan) {
                 this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
                 return;
@@ -310,10 +312,7 @@ export class CapUngVonComponent implements OnInit {
 
         const lstCtietTemp: CapUng[] = [];
         this.lstCtiets.forEach(item => {
-            lstCtietTemp.push({
-                ...item,
-                id: item.id?.length == 38 ? null : item.id,
-            })
+            lstCtietTemp.push(item.request())
         })
         const request = JSON.parse(JSON.stringify(this.baoCao));
         request.lstCtiets = lstCtietTemp;
@@ -358,7 +357,7 @@ export class CapUngVonComponent implements OnInit {
         this.lstCtiets.forEach(item => {
             this.editCache[item.id] = {
                 edit: false,
-                data: { ...item }
+                data: new CapUng(item)
             };
         });
     }
@@ -372,7 +371,7 @@ export class CapUngVonComponent implements OnInit {
         const index = this.lstCtiets.findIndex(item => item.id === id);
         // lay vi tri hang minh sua
         this.editCache[id] = {
-            data: { ...this.lstCtiets[index] },
+            data: new CapUng(this.lstCtiets[index]),
             edit: false
         };
     }
@@ -386,10 +385,7 @@ export class CapUngVonComponent implements OnInit {
 
     changeModel(id: string) {
         const index = this.lstCtiets.findIndex(e => e.id == id);
-        this.editCache[id].data.uncCong = Operator.sum([this.editCache[id].data.uncVonCap, this.editCache[id].data.uncVonUng]);
-        this.editCache[id].data.lkVonUng = Operator.sum([this.lstCtiets[index].lkVonUng, this.editCache[id].data.uncVonUng, -this.lstCtiets[index].uncVonUng]);
-        this.editCache[id].data.lkVonCap = Operator.sum([this.lstCtiets[index].lkVonCap, this.editCache[id].data.uncVonCap, -this.lstCtiets[index].uncVonCap]);
-        this.editCache[id].data.lkCong = Operator.sum([this.editCache[id].data.lkVonCap, this.editCache[id].data.lkVonUng]);
+        this.editCache[id].data.changeModel(this.lstCtiets[index]);
     }
 
     // xoa file trong bang file

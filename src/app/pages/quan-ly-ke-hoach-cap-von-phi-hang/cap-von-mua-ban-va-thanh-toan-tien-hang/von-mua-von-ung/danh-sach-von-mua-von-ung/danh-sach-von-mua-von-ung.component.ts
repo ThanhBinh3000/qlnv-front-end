@@ -1,3 +1,4 @@
+import { ComponentType } from '@angular/cdk/portal';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -7,11 +8,9 @@ import { Roles, Status, Utils } from 'src/app/Utility/utils';
 import { MESSAGE } from 'src/app/constants/message';
 import { CapVonMuaBanTtthService } from 'src/app/services/quan-ly-von-phi/capVonMuaBanTtth.service';
 import { UserService } from 'src/app/services/user.service';
-import { Const, Perm } from '../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
+import { Cvmb, Perm, Search } from '../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
 import { Tab } from '../von-mua-von-ung.constant';
-import { STATUS } from 'src/app/constants/status';
-import { ComponentType } from '@angular/cdk/portal';
-import { DialogTaoMoiCapVonComponent } from '../dialog-tao-moi-cap-von/dialog-tao-moi-cap-von.component';
+// import { DialogTaoMoiCapVonComponent } from '../dialog-tao-moi-cap-von/dialog-tao-moi-cap-von.component';
 
 @Component({
     selector: 'app-danh-sach-von-mua-von-ung',
@@ -23,27 +22,11 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
     @Output() dataChange = new EventEmitter();
     Utils = Utils;
     Status = Status;
-    Const = Const;
+    Cvmb = Cvmb;
     //thong tin user
     userInfo: any;
     //thong tin tim kiem
-    searchFilter = {
-        loaiTimKiem: '0',
-        maLoai: null,
-        dot: 1,
-        maCapUng: null,
-        maDvi: null,
-        loaiDnghi: null,
-        namDnghi: null,
-        canCuVeGia: null,
-        ngayTaoDen: null,
-        ngayTaoTu: null,
-        paggingReq: {
-            limit: 10,
-            page: 1,
-        },
-        trangThai: Status.TT_01,
-    };
+    searchFilter: Search = new Search();
     title: string;
     // danh sach
     dataTable: any[] = [];
@@ -82,7 +65,7 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
             case Tab.DS_GNV:
                 this.title = 'DANH SÁCH GHI NHẬN CẤP ỨNG VỐN TỪ ĐƠN VỊ CẤP TRÊN';
                 this.searchFilter.loaiTimKiem = '0';
-                this.searchFilter.maLoai = Const.GHI_NHAN_CU_VON;
+                this.searchFilter.maLoai = Cvmb.GHI_NHAN_CU_VON;
                 this.perm.create = this.userService.isTongCuc() ? Roles.CVMB.ADD_GNV_TC : 'NO';
                 this.perm.delete = this.userService.isTongCuc() ? Roles.CVMB.DEL_GNV : 'NO';
                 this.perm.edit = Roles.CVMB.EDIT_GNV;
@@ -92,7 +75,7 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
             case Tab.DS_CV:
                 this.title = 'DANH SÁCH CẤP ỨNG VỐN CHO ĐƠN VỊ CẤP DƯỚI';
                 this.searchFilter.loaiTimKiem = '0';
-                this.searchFilter.maLoai = Const.CU_VON_DVCD;
+                this.searchFilter.maLoai = Cvmb.CU_VON_DVCD;
                 this.perm.create = Roles.CVMB.ADD_CV;
                 this.perm.edit = Roles.CVMB.EDIT_CV;
                 this.perm.delete = Roles.CVMB.DEL_CV;
@@ -102,7 +85,7 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
             case Tab.DS_TT:
                 this.title = 'DANH SÁCH TIỀN THỪA NỘP LÊN ĐƠN VỊ CẤP TRÊN';
                 this.searchFilter.loaiTimKiem = '0';
-                this.searchFilter.maLoai = Const.TIEN_THUA;
+                this.searchFilter.maLoai = Cvmb.TIEN_THUA;
                 this.perm.create = Roles.CVMB.ADD_NTT;
                 this.perm.edit = Roles.CVMB.EDIT_NTT;
                 this.perm.delete = "NO";
@@ -113,7 +96,7 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
                 this.title = 'DANH SÁCH GHI NHẬN TIỀN THỪA NỘP TỪ ĐƠN VỊ CẤP DƯỚI';
                 this.trangThais = Status.TRANG_THAI_DVCT;
                 this.searchFilter.loaiTimKiem = '1';
-                this.searchFilter.maLoai = Const.TIEN_THUA;
+                this.searchFilter.maLoai = Cvmb.TIEN_THUA;
                 this.perm.create = 'NO';
                 this.perm.edit = 'NO';
                 this.perm.delete = 'NO';
@@ -125,7 +108,7 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
             case Tab.DS_TTKH:
                 this.title = 'DANH SÁCH THANH TOÁN CHO KHÁCH HÀNG';
                 this.searchFilter.loaiTimKiem = '0';
-                this.searchFilter.maLoai = Const.THANH_TOAN;
+                this.searchFilter.maLoai = Cvmb.THANH_TOAN;
                 this.perm.create = Roles.CVMB.ADD_TTKH;
                 this.perm.edit = Roles.CVMB.EDIT_TTKH;
                 this.perm.delete = Roles.CVMB.DEL_TTKH;
@@ -150,18 +133,14 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
     }
 
     async search() {
-        const request = JSON.parse(JSON.stringify(this.searchFilter));
-        request.ngayTaoDen = Utils.fmtDate(this.searchFilter.ngayTaoDen);
-        request.ngayTaoTu = Utils.fmtDate(this.searchFilter.ngayTaoTu);
         this.spinner.show();
-        await this.capVonMuaBanTtthService.timKiemVonMuaBan(request).toPromise().then(
+        await this.capVonMuaBanTtthService.timKiemVonMuaBan(this.searchFilter.request()).toPromise().then(
             (data) => {
                 if (data.statusCode == 0) {
                     this.dataTable = [];
                     data.data.content.forEach(item => {
                         this.dataTable.push({
                             ...item,
-                            lyDoTuChoi: item.lyDoTuChoi,
                             checked: false,
                             isEdit: this.checkEditStatus(item.trangThai),
                             isDelete: this.checkDeleteStatus(item.trangThai),
@@ -195,14 +174,7 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
 
     //reset tim kiem
     clearFilter() {
-        this.searchFilter.maCapUng = null
-        this.searchFilter.dot = null
-        this.searchFilter.trangThai = null
-        this.searchFilter.ngayTaoTu = null
-        this.searchFilter.ngayTaoDen = null
-        this.searchFilter.namDnghi = null
-        this.searchFilter.loaiDnghi = null
-        this.searchFilter.canCuVeGia = null
+        this.searchFilter.clear();
         this.search();
     }
 
@@ -215,26 +187,26 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
     }
 
     addNewReport() {
-        let nzContent: ComponentType<any>;
-        if (this.searchFilter.maLoai == Const.GHI_NHAN_CU_VON || this.searchFilter.maLoai == Const.CU_VON_DVCD) {
-            nzContent = DialogTaoMoiCapVonComponent;
-        }
-        const modalTuChoi = this.modal.create({
-            nzTitle: 'Thông tin tạo mới',
-            nzContent: nzContent,
-            nzMaskClosable: false,
-            nzClosable: false,
-            nzWidth: '900px',
-            nzFooter: null,
-            nzComponentParams: {
-                request: this.searchFilter
-            },
-        });
-        modalTuChoi.afterClose.toPromise().then(async (res) => {
-            if (res) {
-                this.dataChange.emit(res);
-            }
-        });
+        // let nzContent: ComponentType<any>;
+        // if (this.searchFilter.maLoai == Cvmb.GHI_NHAN_CU_VON || this.searchFilter.maLoai == Cvmb.CU_VON_DVCD) {
+        //     nzContent = DialogTaoMoiCapVonComponent;
+        // }
+        // const modalTuChoi = this.modal.create({
+        //     nzTitle: 'Thông tin tạo mới',
+        //     nzContent: nzContent,
+        //     nzMaskClosable: false,
+        //     nzClosable: false,
+        //     nzWidth: '900px',
+        //     nzFooter: null,
+        //     nzComponentParams: {
+        //         request: this.searchFilter
+        //     },
+        // });
+        // modalTuChoi.afterClose.toPromise().then(async (res) => {
+        //     if (res) {
+        //         this.dataChange.emit(res);
+        //     }
+        // });
     }
 
     //xem chi tiet bao cao
