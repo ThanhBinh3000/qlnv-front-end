@@ -193,25 +193,6 @@ export class BaoCaoComponent implements OnInit {
         this.spinner.hide();
     }
 
-    // async getChildUnit() {
-    //     const request = {
-    //         maDviCha: this.baoCao.maDvi,
-    //         trangThai: '01',
-    //     }
-    //     await this.quanLyVonPhiService.dmDviCon(request).toPromise().then(
-    //         data => {
-    //             if (data.statusCode == 0) {
-    //                 this.childUnit = data.data;
-    //             } else {
-    //                 this.notification.error(MESSAGE.ERROR, data?.msg);
-    //             }
-    //         },
-    //         (err) => {
-    //             this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-    //         }
-    //     )
-    // }
-
     getListUser() {
         this.quanLyVonPhiService.getListUser().toPromise().then(
             res => {

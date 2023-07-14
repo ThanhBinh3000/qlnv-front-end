@@ -47,6 +47,45 @@ export class ItemData {
 	namKhKhac: number;
 	checked: boolean;
 	ghiChu: string;
+
+	constructor(data: Partial<Pick<ItemData, keyof ItemData>>) {
+		Object.assign(this, data);
+	}
+
+	changeModel() {
+		this.thienQlPcap = Operator.sum([this.thienLuongBac, this.thienPcapLuong, this.thienDgopLuong, this.thienKhac]);
+		this.dtoanQluongPcap = Operator.sum([this.dtoanLuongBac, this.dtoanPcapLuong, this.dtoanDgopLuong, this.dtoanKhac]);
+		this.uocThQlPcap = Operator.sum([this.uocThLuongBac, this.uocThPCapLuong, this.uocThDgopLuong, this.uocThKhac]);
+		this.namKhQlPcap = Operator.sum([this.namKhLuongBac, this.namKhPcapLuong, this.namKhDgopLuong, this.namKhKhac]);
+	}
+
+	upperBound() {
+		return this.thienQlPcap > Utils.MONEY_LIMIT || this.dtoanQluongPcap > Utils.MONEY_LIMIT || this.uocThQlPcap > Utils.MONEY_LIMIT;
+	}
+
+	clear() {
+		Object.keys(this).forEach(key => {
+			if (typeof this[key] === 'number' && key != 'level') {
+				this[key] = null;
+			}
+		})
+	}
+
+	sum(data: ItemData) {
+		Object.keys(data).forEach(key => {
+			if (key != 'level' && (typeof this[key] == 'number' || typeof data[key] == 'number')) {
+				this[key] = Operator.sum([this[key], data[key]]);
+			}
+		})
+	}
+
+	request() {
+		const temp = Object.assign({}, this);
+		if (this.id?.length == 38) {
+			temp.id = null;
+		}
+		return temp;
+	}
 }
 
 @Component({
@@ -61,7 +100,7 @@ export class BieuMau151Component implements OnInit {
 	Utils = Utils;
 	//thong tin chi tiet cua bieu mau
 	formDetail: Form = new Form();
-	total: ItemData = new ItemData();
+	total: ItemData = new ItemData({});
 	namBcao: number;
 	maDviTien: string = '1';
 	//danh muc
@@ -146,20 +185,20 @@ export class BieuMau151Component implements OnInit {
 		if (this.dataInfo?.isSynthetic) {
 			this.donVis.forEach(item => {
 				if (this.lstCtietBcao.findIndex(e => e.maLvuc == item.maDvi) == -1) {
-					this.lstCtietBcao.push({
-						... new ItemData(),
+					this.lstCtietBcao.push(new ItemData({
+						id: uuid.v4() + 'FE',
 						maLvuc: item.maDvi,
 						tenDmuc: item.tenDvi
-					})
+					}))
 				}
 			})
 		} else {
 			if (this.lstCtietBcao.length == 0) {
-				this.lstCtietBcao.push({
-					... new ItemData(),
+				this.lstCtietBcao.push(new ItemData({
+					id: uuid.v4() + 'FE',
 					maLvuc: this.dataInfo.maDvi,
 					tenDmuc: this.dataInfo?.tenDvi
-				})
+				}))
 			}
 		}
 
@@ -179,7 +218,9 @@ export class BieuMau151Component implements OnInit {
 				if (data.statusCode == 0) {
 					this.formDetail = data.data;
 					this.formDetail.maDviTien = '1';
-					this.lstCtietBcao = this.formDetail.lstCtietLapThamDinhs;
+					this.formDetail.lstCtietLapThamDinhs.forEach(item => {
+						this.lstCtietBcao.push(new ItemData(item))
+					})
 					this.formDetail.listIdDeleteFiles = [];
 					this.listFile = [];
 					this.getStatusButton();
@@ -200,10 +241,10 @@ export class BieuMau151Component implements OnInit {
 			return;
 		}
 
-		// if (this.lstCtietBcao.some(e => e.ncauChiTongSo > MONEY_LIMIT)) {
-		// 	this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
-		// 	return;
-		// }
+		if (this.lstCtietBcao.some(e => e.upperBound())) {
+			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
+			return;
+		}
 
 		if (this.listFile.some(file => file.size > Utils.FILE_SIZE)) {
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
@@ -212,10 +253,7 @@ export class BieuMau151Component implements OnInit {
 
 		const lstCtietBcaoTemp: ItemData[] = [];
 		this.lstCtietBcao.forEach(item => {
-			lstCtietBcaoTemp.push({
-				...item,
-				id: item.id?.length == 38 ? null : item.id,
-			})
+			lstCtietBcaoTemp.push(item.request())
 		})
 
 		const request = JSON.parse(JSON.stringify(this.formDetail));
@@ -274,7 +312,7 @@ export class BieuMau151Component implements OnInit {
 		this.lstCtietBcao.forEach(item => {
 			this.editCache[item.id] = {
 				edit: false,
-				data: { ...item }
+				data: new ItemData(item),
 			};
 		});
 	}
@@ -289,7 +327,7 @@ export class BieuMau151Component implements OnInit {
 		const index = this.lstCtietBcao.findIndex(item => item.id === id);
 		// lay vi tri hang minh sua
 		this.editCache[id] = {
-			data: { ...this.lstCtietBcao[index] },
+			data: new ItemData(this.lstCtietBcao[index]),
 			edit: false
 		};
 	}
@@ -304,91 +342,24 @@ export class BieuMau151Component implements OnInit {
 		this.updateEditCache();
 	}
 
-	changeModel(id: string): void {
-		this.editCache[id].data.thienQlPcap = Operator.sum([this.editCache[id].data.thienLuongBac, this.editCache[id].data.thienPcapLuong, this.editCache[id].data.thienDgopLuong, this.editCache[id].data.thienKhac]);
-		this.editCache[id].data.dtoanQluongPcap = Operator.sum([this.editCache[id].data.dtoanLuongBac, this.editCache[id].data.dtoanPcapLuong, this.editCache[id].data.dtoanDgopLuong, this.editCache[id].data.dtoanKhac]);
-		this.editCache[id].data.uocThQlPcap = Operator.sum([this.editCache[id].data.uocThLuongBac, this.editCache[id].data.uocThPCapLuong, this.editCache[id].data.uocThDgopLuong, this.editCache[id].data.uocThKhac]);
-		this.editCache[id].data.namKhQlPcap = Operator.sum([this.editCache[id].data.namKhLuongBac, this.editCache[id].data.namKhPcapLuong, this.editCache[id].data.namKhDgopLuong, this.editCache[id].data.namKhKhac]);
-		// this.editCache[id].data.ncauChiTongSo = Operator.sum([this.editCache[id].data.ncauChiTrongDoChiCs, this.editCache[id].data.ncauChiTrongDoChiMoi]);
-	}
-
 	getTotal() {
-		this.total = new ItemData();
+		this.total.clear();
 		this.lstCtietBcao.forEach(item => {
-			this.total.thienTsoBcTdiem = Operator.sum([this.total.thienTsoBcTdiem, item.thienTsoBcTdiem]);
-			this.total.thienTsoBcTqGiao = Operator.sum([this.total.thienTsoBcTqGiao, item.thienTsoBcTqGiao]);
-			this.total.thienQlPcap = Operator.sum([this.total.thienQlPcap, item.thienQlPcap]);
-			this.total.thienLuongBac = Operator.sum([this.total.thienLuongBac, item.thienLuongBac]);
-			this.total.thienPcapLuong = Operator.sum([this.total.thienPcapLuong, item.thienPcapLuong]);
-			this.total.thienDgopLuong = Operator.sum([this.total.thienDgopLuong, item.thienDgopLuong]);
-			this.total.thienKhac = Operator.sum([this.total.thienKhac, item.thienKhac]);
-			this.total.dtoanTsoBcheTqGiao = Operator.sum([this.total.dtoanTsoBcheTqGiao, item.dtoanTsoBcheTqGiao]);
-			this.total.dtoanQluongPcap = Operator.sum([this.total.dtoanQluongPcap, item.dtoanQluongPcap]);
-			this.total.dtoanLuongBac = Operator.sum([this.total.dtoanLuongBac, item.dtoanLuongBac]);
-			this.total.dtoanPcapLuong = Operator.sum([this.total.dtoanPcapLuong, item.dtoanPcapLuong]);
-			this.total.dtoanDgopLuong = Operator.sum([this.total.dtoanDgopLuong, item.dtoanDgopLuong]);
-			this.total.dtoanKhac = Operator.sum([this.total.dtoanKhac, item.dtoanKhac]);
-			this.total.uocThTsoBcTqGiao = Operator.sum([this.total.uocThTsoBcTqGiao, item.uocThTsoBcTqGiao]);
-			this.total.uocThTsoBcTdiem = Operator.sum([this.total.uocThTsoBcTdiem, item.uocThTsoBcTdiem]);
-			this.total.uocThQlPcap = Operator.sum([this.total.uocThQlPcap, item.uocThQlPcap]);
-			this.total.uocThLuongBac = Operator.sum([this.total.uocThLuongBac, item.uocThLuongBac]);
-			this.total.uocThPCapLuong = Operator.sum([this.total.uocThPCapLuong, item.uocThPCapLuong]);
-			this.total.uocThDgopLuong = Operator.sum([this.total.uocThDgopLuong, item.uocThDgopLuong]);
-			this.total.uocThKhac = Operator.sum([this.total.uocThKhac, item.uocThKhac]);
-			this.total.namKhTsoBcTqGiao = Operator.sum([this.total.namKhTsoBcTqGiao, item.namKhTsoBcTqGiao]);
-			this.total.namKhQlPcap = Operator.sum([this.total.namKhQlPcap, item.namKhQlPcap]);
-			this.total.namKhLuongBac = Operator.sum([this.total.namKhLuongBac, item.namKhLuongBac]);
-			this.total.namKhPcapLuong = Operator.sum([this.total.namKhPcapLuong, item.namKhPcapLuong]);
-			this.total.namKhDgopLuong = Operator.sum([this.total.namKhDgopLuong, item.namKhDgopLuong]);
-			this.total.namKhKhac = Operator.sum([this.total.namKhKhac, item.namKhKhac]);
-			// }
+			this.total.sum(item);
 		})
 	}
 
 	addLine(id: number): void {
-		const item: ItemData = {
-			...new ItemData(),
-			id: uuid.v4(),
+		const item: ItemData = new ItemData({
+			id: uuid.v4() + 'FE',
 			checked: false,
-		};
+		});
 
 		this.lstCtietBcao.splice(id + 1, 0, item);
 		this.editCache[item.id] = {
 			edit: true,
-			data: { ...item }
+			data: new ItemData(item)
 		};
-	}
-	// check all
-	updateAllChecked(): void {
-		if (this.allChecked) {
-			this.lstCtietBcao = this.lstCtietBcao.map(item => ({
-				...item,
-				checked: true
-			}));
-		} else {
-			this.lstCtietBcao = this.lstCtietBcao.map(item => ({
-				...item,
-				checked: false
-			}));
-		}
-		this.getTotal();
-	}
-
-	// check tung dong
-	updateSingleChecked(): void {
-		if (this.lstCtietBcao.every(item => !item.checked)) {
-			this.allChecked = false;
-		} else if (this.lstCtietBcao.every(item => item.checked)) {
-			this.allChecked = true;
-		}
-		this.getTotal();
-	}
-
-	// xoa het
-	deleteAllChecked() {
-		this.lstCtietBcao = this.lstCtietBcao.filter(e => !e.checked);
-		this.allChecked = false;
-		this.getTotal();
 	}
 
 	// xoa theo id
