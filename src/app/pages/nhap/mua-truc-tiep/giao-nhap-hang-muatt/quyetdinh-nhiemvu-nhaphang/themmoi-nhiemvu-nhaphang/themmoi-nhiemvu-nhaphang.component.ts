@@ -538,6 +538,7 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
             tenHd: data.tenHd,
             tgianNkho: data.tgianKthuc,
           });
+          console.log(this.isViewDetail);
           this.radioValue = data.loaiQd
           if (this.userService.isCuc()) {
             this.dataTable = data.hhQdGiaoNvNhangDtlList
