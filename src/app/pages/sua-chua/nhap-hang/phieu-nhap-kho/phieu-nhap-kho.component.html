@@ -63,7 +63,7 @@
     </div>
   </nz-card>
   <div class="group-button">
-    <h3 class="text-uppercase">Danh sách phiếu xuất kho</h3>
+    <h3 class="text-uppercase">Danh sách phiếu nhập kho sau khi hoàn thành sửa chữa</h3>
     <div class="buttons">
       <button type="button" class="btn btn-sub" (click)="exportData()">
         <i class="icon htvbdh_chuyen-xu-ly"></i>
@@ -111,14 +111,14 @@
           <td></td>
         </tr>
         <ng-container *ngIf="item.expandSet">
-          <ng-container *ngFor="let dsHdr of item.scDanhSachHdrList , let i = index">
+          <ng-container *ngFor="let dsHdr of item.children , let i = index">
             <tr>
               <td></td>
               <td></td>
               <td></td>
               <td></td>
               <td></td>
-              <td>{{dsHdr.tenDiemKho}} / {{dsHdr.tenNhaKho}} / {{dsHdr.tenNganKho}} / {{dsHdr.tenLoKho}}</td>
+              <td>{{dsHdr.scDanhSachHdr.tenDiemKho}} / {{dsHdr.scDanhSachHdr.tenNhaKho}} / {{dsHdr.scDanhSachHdr.tenNganKho}} / {{dsHdr.scDanhSachHdr.tenLoKho}}</td>
               <td></td>
               <td></td>
               <td></td>
@@ -126,7 +126,7 @@
               <td></td>
               <td></td>
             </tr>
-            <ng-container *ngFor="let pxk of dsHdr.scPhieuXuatKhoList , let i = index">
+            <ng-container *ngFor="let pxk of dsHdr.scDanhSachHdr.scPhieuNhapKhoList , let i = index">
               <tr>
                 <td></td>
                 <td></td>
@@ -134,8 +134,8 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td>{{pxk.soPhieuXuatKho}}</td>
-                <td>{{pxk.ngayXuatKho | date: 'dd/MM/YYYY'}}</td>
+                <td>{{pxk.soPhieuNhapKho}}</td>
+                <td>{{pxk.ngayNhapKho | date: 'dd/MM/YYYY'}}</td>
                 <td></td>
                 <td></td>
                 <td>{{pxk.tenTrangThai}}</td>
