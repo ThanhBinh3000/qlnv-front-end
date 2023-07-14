@@ -489,6 +489,23 @@ export class DeNghiCapVonMuaThocGaoMuoiTheoDonGiaMuaComponent implements OnInit 
 				this.total.vonDuyetCong = sumNumber([this.total.vonDuyetCong, item.vonDuyetCong]);
 				this.total.tongTien = sumNumber([this.total.tongTien, item.tongTien]);
 				this.total.soConDuocCap = sumNumber([this.total.soConDuocCap, item.soConDuocCap]);
+			} else if (this.userService.isChiCuc() || this.userService.isCuc()) {
+				this.total.slKeHoach = sumNumber([this.total.slKeHoach, item.slKeHoach]);
+				this.total.slThucHien = sumNumber([this.total.slThucHien, item.slThucHien]);
+				this.total.donGia = sumNumber([this.total.donGia, item.donGia]);
+				this.total.gtriThucHien = sumNumber([this.total.gtriThucHien, item.gtriThucHien]);
+				this.total.duToanDaGiao = sumNumber([this.total.duToanDaGiao, item.duToanDaGiao]);
+				this.total.luyKeTongCapUng = sumNumber([this.total.luyKeTongCapUng, item.luyKeTongCapUng]);
+				this.total.luyKeTongCapVon = sumNumber([this.total.luyKeTongCapVon, item.luyKeTongCapVon]);
+				this.total.luyKeTongCong = sumNumber([this.total.luyKeTongCong, item.luyKeTongCong]);
+				this.total.tongVonVaDtDaCap = sumNumber([this.total.tongVonVaDtDaCap, item.tongVonVaDtDaCap]);
+				this.total.vonDuyetCapVon = sumNumber([this.total.vonDuyetCapVon, item.vonDuyetCapVon]);
+				this.total.vonDnghiCapLanNay = sumNumber([this.total.vonDnghiCapLanNay, item.vonDnghiCapLanNay]);
+				this.total.vonDuyetCapUng = sumNumber([this.total.vonDuyetCapUng, item.vonDuyetCapUng]);
+				this.total.vonDuyetCong = sumNumber([this.total.vonDuyetCong, item.vonDuyetCong]);
+				this.total.tongTien = sumNumber([this.total.tongTien, item.tongTien]);
+				this.total.soConDuocCap = sumNumber([this.total.soConDuocCap, item.soConDuocCap]);
+
 			}
 		})
 	}
