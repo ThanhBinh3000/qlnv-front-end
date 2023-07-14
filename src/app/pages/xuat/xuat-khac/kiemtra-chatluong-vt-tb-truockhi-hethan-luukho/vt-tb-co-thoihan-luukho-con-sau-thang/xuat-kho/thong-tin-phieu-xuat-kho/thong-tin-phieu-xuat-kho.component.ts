@@ -28,7 +28,7 @@ import {
   styleUrls: ['./thong-tin-phieu-xuat-kho.component.scss']
 })
 export class ThongTinPhieuXuatKhoComponent extends Base2Component implements OnInit {
-  @Input() loaiVthh: string;
+  @Input() soQdGiaoNvXh: string;
   @Input() idInput: number;
   @Input() isView: boolean;
   @Output()
@@ -162,8 +162,13 @@ export class ThongTinPhieuXuatKhoComponent extends Base2Component implements OnI
         soPhieu: `${id}/${this.formData.get('namKeHoach').value}/${this.maPhieu}`,
         ngayXuat: dayjs().format('YYYY-MM-DD'),
         ngayXuatKho: dayjs().format('YYYY-MM-DD'),
-        loaiVthh: this.loaiVthh
       });
+      if (this.soQdGiaoNvXh) {
+        let dataQdGiaoNvXh = this.listSoQuyetDinh.find(item => item.soQuyetDinh == this.soQdGiaoNvXh);
+        if (dataQdGiaoNvXh) {
+          this.bindingDataQd(dataQdGiaoNvXh);
+        }
+      }
     }
 
   }
