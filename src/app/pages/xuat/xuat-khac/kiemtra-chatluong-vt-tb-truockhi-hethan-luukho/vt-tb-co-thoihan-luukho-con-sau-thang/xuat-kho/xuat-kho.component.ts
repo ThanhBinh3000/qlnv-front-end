@@ -70,6 +70,7 @@ export class XuatKhoComponent extends Base2Component implements OnInit {
   userInfo: UserLogin;
   userdetail: any = {};
   selectedId: number = 0;
+  soQdGiaoNvXhSelected: string;
   isVatTu: boolean = false;
   isView = false;
   children: any = [];
@@ -186,10 +187,11 @@ export class XuatKhoComponent extends Base2Component implements OnInit {
   }
 
 
-  redirectDetail(id, b: boolean) {
+  redirectDetail(id, b: boolean, soQdGiaoNvXh?) {
     this.selectedId = id;
     this.isDetail = true;
     this.isView = b;
+    this.soQdGiaoNvXhSelected = soQdGiaoNvXh;
     // this.isViewDetail = isView ?? false;
   }
 
