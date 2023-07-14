@@ -1,7 +1,7 @@
 <div class="left-menu">
-  <div nz-row nzGutter="24" class="mt-2" style="border-top: 1px solid">
+  <div nz-row nzGutter="24" class="mt-2" style="border-top: 1px solid gray">
     <div nz-col nzspan="4">
-      <ul nz-menu nzMode="inline" style="max-width: 300px">
+      <ul nz-menu nzMode="inline">
         <li [nzSelected]="tabSelected==0" nz-menu-item (click)="selectTab(0)">
           <span class="bold">Biên bản lấy mẫu/bàn giao mẫu</span>
         </li>
@@ -13,18 +13,16 @@
         </li>
       </ul>
     </div>
-    <div nz-col nzSpan="19">
-      <div class="contentDetail">
-<!--        <ng-container *ngIf="tabSelected == 0">-->
-<!--          <app-bien-ban-lay-mau-ban-giao-mau></app-bien-ban-lay-mau-ban-giao-mau>-->
-<!--        </ng-container>-->
-<!--        <ng-container *ngIf="tabSelected == 1">-->
-<!--          <app-phieu-kiem-nghiem-chat-luong></app-phieu-kiem-nghiem-chat-luong>-->
-<!--        </ng-container>-->
-<!--        <ng-container *ngIf="tabSelected == 2">-->
-<!--          <app-bao-cao-ket-qua-kiem-dinh></app-bao-cao-ket-qua-kiem-dinh>-->
-<!--        </ng-container>-->
-      </div>
+    <div nz-col nzSpan="20">
+      <ng-container *ngIf="tabSelected == 0">
+        <app-xk-bien-ban-lay-mau-ban-giao-mau></app-xk-bien-ban-lay-mau-ban-giao-mau>
+      </ng-container>
+      <!--        <ng-container *ngIf="tabSelected == 1">-->
+      <!--          <app-phieu-kiem-nghiem-chat-luong></app-phieu-kiem-nghiem-chat-luong>-->
+      <!--        </ng-container>-->
+      <!--        <ng-container *ngIf="tabSelected == 2">-->
+      <!--          <app-bao-cao-ket-qua-kiem-dinh></app-bao-cao-ket-qua-kiem-dinh>-->
+      <!--        </ng-container>-->
     </div>
   </div>
 </div>
