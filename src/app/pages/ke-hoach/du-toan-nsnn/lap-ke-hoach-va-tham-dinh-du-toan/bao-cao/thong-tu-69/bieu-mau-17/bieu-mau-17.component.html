@@ -112,13 +112,13 @@
 						</thead>
 						<tbody>
 							<tr *ngFor="let data of lstCtietBcao; let i = index">
+								<td nzLeft>
+									{{ data.index() }}
+								</td>
+								<td nzLeft>
+									{{ data.tenLvucNdChi }}
+								</td>
 								<ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
-									<td nzLeft>
-										{{ getChiMuc(data.stt) }}
-									</td>
-									<td nzLeft>
-										{{ data.tenLvucNdChi }}
-									</td>
 									<td>
 										{{ Op.fmtVal(data.thNamHienHanhN1) }}
 									</td>
@@ -140,12 +140,6 @@
 									</td>
 								</ng-container>
 								<ng-template #editTemplate>
-									<td nzLeft>
-										{{ getChiMuc(editCache[data.id].data.stt) }}
-									</td>
-									<td nzLeft>
-										{{ editCache[data.id].data.tenLvucNdChi }}
-									</td>
 									<td>
 										<input class="money-input" currencyMask [options]="Op.amount"
 											[(ngModel)]="editCache[data.id].data.thNamHienHanhN1"

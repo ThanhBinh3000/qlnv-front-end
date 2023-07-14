@@ -226,6 +226,7 @@ export class PhuLucIIIComponent implements OnInit {
         Object.assign(this.status, this.dataInfo.status);
         this.namBcao = this.dataInfo.namBcao;
         this.luyKes = this.dataInfo.luyKes?.lstCtietBcaos;
+        await this.getFormDetail();
         if (this.status.save) {
             const category = await this.danhMucService.danhMucChungGetAll('BC_DTC_PL3');
             if (category) {
@@ -271,6 +272,29 @@ export class PhuLucIIIComponent implements OnInit {
         this.status.ok = this.status.ok && (this.formDetail.trangThai == Status.NOT_RATE || this.formDetail.trangThai == Status.COMPLETE);
     }
 
+    async getFormDetail() {
+        await this.baoCaoThucHienDuToanChiService.ctietBieuMau(this.dataInfo.id).toPromise().then(
+            data => {
+                if (data.statusCode == 0) {
+                    this.formDetail = data.data;
+                    this.formDetail.maDviTien = '1';
+                    this.lstCtietBcao = [];
+                    this.formDetail.lstCtietBcaos.forEach(item => {
+                        this.lstCtietBcao.push(new ItemData(item));
+                    })
+                    this.formDetail.listIdDeleteFiles = [];
+                    this.listFile = [];
+                    this.getStatusButton();
+                } else {
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                }
+            },
+            err => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+            }
+        )
+    }
+
     // luu
     async save(trangThai: string) {
         if (this.lstCtietBcao.some(e => this.editCache[e.id].edit)) {
@@ -298,7 +322,7 @@ export class PhuLucIIIComponent implements OnInit {
         for (let iterator of this.listFile) {
             request.fileDinhKems.push(await this.fileManip.uploadFile(iterator, this.dataInfo.path));
         }
-        request.lstCtietLapThamDinhs = lstCtietBcaoTemp;
+        request.lstCtietBcaos = lstCtietBcaoTemp;
         request.trangThai = trangThai;
         this.spinner.show();
         this.baoCaoThucHienDuToanChiService.baoCaoCapNhatChiTiet(request).toPromise().then(

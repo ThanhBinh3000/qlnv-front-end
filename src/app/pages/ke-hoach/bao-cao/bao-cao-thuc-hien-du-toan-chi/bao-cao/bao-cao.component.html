@@ -9,10 +9,10 @@
                 <i class="icon htvbdh_tcdt_save"></i>
                 <span>Lưu</span>
             </button>
-            <!-- <button *ngIf="status.new" type="button" class="btn btn-sub" (click)="newReport()">
+            <button *ngIf="status.new" type="button" class="btn btn-sub" (click)="newReport()">
                 <i class="icon htvbdh_tcdt_tao-qd"></i>
                 <span>Tạo mới</span>
-            </button> -->
+            </button>
             <button *ngIf="status.submit" type="button" class="btn btn-sub" (click)="action('submit')">
                 <i class="icon htvbdh_tcdt_guiduyet"></i>
                 <span>Trình duyệt</span>
@@ -178,14 +178,14 @@
                         <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
                             <div nz-col class="gutter-row" [nzSpan]="3">
                                 <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" [nzMultiple]="true"
-                                    *ngIf="status.general">
+                                    *ngIf="status.save">
                                     <button nz-button>
                                         <i nz-icon nzType="upload"></i>
                                         Chọn tài liệu đính kèm
                                     </button>
                                 </nz-upload>
                                 <button nz-button [nzType]="'primary'" (click)="handleUpload()"
-                                    [disabled]="fileList.length === 0" *ngIf="status.general" style="margin-top: 16px">
+                                    [disabled]="fileList.length === 0" *ngIf="status.save" style="margin-top: 16px">
                                     Thêm vào danh sách
                                 </button>
                             </div>
@@ -208,7 +208,7 @@
                                                 <a (click)="downloadFile(data.id)">
                                                     <i class="fa fa-eye"></i>
                                                 </a>
-                                                <a *ngIf="status.general" (click)="deleteFile(data.id)">
+                                                <a *ngIf="status.save" (click)="deleteFile(data.id)">
                                                     <i class="fa fa-trash-o do"></i>
                                                 </a>
                                             </td>
@@ -218,17 +218,21 @@
                             </div>
                         </div>
                     </nz-tab>
-                    <!-- <nz-tab *ngIf="baoCao.lichSu && baoCao.lichSu.length > 0" [nzTitle]="'Lịch sử'">
-                        <div nz-col class="gutter-row" [nzSpan]="12">
+                    <nz-tab *ngIf="baoCao.lichSu && baoCao.lichSu.length > 0" [nzTitle]="'Lịch sử'">
+                        <div nz-col class="gutter-row" [nzSpan]="24">
                             <nz-table nzBordered class="table__body">
                                 <thead>
                                     <tr>
                                         <th>Mã báo cáo</th>
                                         <th>Lần</th>
                                         <th>Ngày tạo</th>
-                                        <th>Người tạo</th>
+                                        <th>Ngày trình duyệt</th>
+                                        <th>Ngày duyệt</th>
+                                        <th>Ngày phê duyệt</th>
+                                        <th>Ngày cấp trên trả kết quả</th>
                                         <th>Trạng thái</th>
-                                        <th *ngIf="status.general"></th>
+                                        <th>Lý do từ chối</th>
+                                        <th *ngIf="status.save">Hành động</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -238,16 +242,20 @@
                                         </td>
                                         <td>{{ data.lan }}</td>
                                         <td>{{ Utils.fmtDate(data.ngayTao) }}</td>
-                                        <td>{{ data.nguoiTao }}</td>
+                                        <td>{{ Utils.fmtDate(data.ngayTrinh) }}</td>
+                                        <td>{{ Utils.fmtDate(data.ngayDuyet) }}</td>
+                                        <td>{{ Utils.fmtDate(data.ngayPheDuyet) }}</td>
+                                        <td>{{ Utils.fmtDate(data.ngayTraKq) }}</td>
                                         <td>{{ Status.reportStatusName(data.trangThai) }}</td>
-                                        <td *ngIf="status.general">
+                                        <td>{{ data.lyDoTuChoi }}</td>
+                                        <td *ngIf="status.save">
                                             <a class="save" (click)="restoreReport(data.id)">Khôi phục</a>
                                         </td>
                                     </tr>
                                 </tbody>
                             </nz-table>
                         </div>
-                    </nz-tab> -->
+                    </nz-tab>
                     <nz-tab *ngIf="baoCao.lstBcaoDviTrucThuocs && baoCao.lstBcaoDviTrucThuocs.length > 0"
                         [nzTitle]="'Danh sách báo cáo từ các đơn vị trực thuộc'">
                         <nz-table #basicTable class="nowrap">

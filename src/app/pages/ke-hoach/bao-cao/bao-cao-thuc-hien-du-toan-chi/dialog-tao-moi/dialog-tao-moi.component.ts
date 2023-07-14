@@ -52,7 +52,7 @@ export class DialogTaoMoiComponent implements OnInit {
             namBcao: this.response.namBcao,
             thangBcao: this.response.thangBcao,
             maLoaiBcao: this.response.maLoaiBcao,
-            trangThais: [Status.TT_01, Status.TT_02, Status.TT_04, Status.TT_07, Status.TT_09],
+            trangThais: [Status.TT_01, Status.TT_02, Status.TT_03, Status.TT_04, Status.TT_05, Status.TT_07, Status.TT_08, Status.TT_09],
             paggingReq: {
                 limit: 10,
                 page: 1
@@ -98,6 +98,7 @@ export class DialogTaoMoiComponent implements OnInit {
                     maLoai: item.id,
                     tenPhuLuc: item.tenPl,
                     tieuDe: item.tenDm,
+                    nguoiBcao: this.userInfo.sub,
                     trangThai: Status.NEW,
                     maDviTien: '1',
                     lstCtietBcaos: [],

@@ -80,7 +80,7 @@
 							<tr *ngFor="let data of lstCtietBcao; let i = index">
 								<ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
 									<td nzLeft>
-										{{ getChiMuc(data.stt) }}
+										{{ data.index() }}
 									</td>
 									<td nzLeft>
 										{{ data.tenDmuc }}
@@ -121,7 +121,7 @@
 								</ng-container>
 								<ng-template #editTemplate>
 									<td class="text-center" nzLeft>
-										{{getChiMuc(editCache[data.id].data.stt)}}
+										{{ editCache[data.id].data.index() }}
 									</td>
 									<ng-container *ngIf="!status.viewAppVal; else viewAppVal">
 										<td nzLeft>
@@ -171,7 +171,7 @@
 										<td>
 											<input class="money-input" currencyMask [options]="Op.amount"
 												[(ngModel)]="editCache[data.id].data.giaTriThamDinh"
-												(ngModelChange)="changeModel(data.id)" />
+												(ngModelChange)="editCache[data.id].data.changeModel()" />
 										</td>
 										<td>
 											{{ Op.fmtVal(editCache[data.id].data.chenhLech) }}

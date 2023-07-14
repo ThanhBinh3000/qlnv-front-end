@@ -108,13 +108,13 @@
                         </thead>
                         <tbody>
                             <tr *ngFor="let data of lstCtietBcao; let i = index">
+                                <td nzLeft>
+                                    {{ data.index() }}
+                                </td>
+                                <td nzLeft>
+                                    {{ data.tenNdung }}
+                                </td>
                                 <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
-                                    <td nzLeft>
-                                        {{ getChiMuc(data.stt) }}
-                                    </td>
-                                    <td nzLeft>
-                                        {{ data.tenNdung }}
-                                    </td>
                                     <td>
                                         {{ Op.fmtVal(data.namHienHanhDtoan) }}
                                     </td>
@@ -160,12 +160,6 @@
                                     </td>
                                 </ng-container>
                                 <ng-template #editTemplate>
-                                    <td nzLeft>
-                                        {{ getChiMuc(editCache[data.id].data.stt) }}
-                                    </td>
-                                    <td nzLeft>
-                                        {{ editCache[data.id].data.tenNdung }}
-                                    </td>
                                     <ng-container *ngIf="!isEdit(data.stt); else edit">
                                         <td>
                                             {{ Op.fmtVal(editCache[data.id].data.namHienHanhDtoan) }}
@@ -178,20 +172,20 @@
                                         <td>
                                             <input class="money-input" currencyMask [options]="Op.amount"
                                                 [(ngModel)]="editCache[data.id].data.namHienHanhDtoan"
-                                                (ngModelChange)="changeModel(data.id)"
+                                                (ngModelChange)="editCache[data.id].data.changeModel()"
                                                 [class]="editCache[data.id].data.namHienHanhDtoan || editCache[data.id].data.namHienHanhDtoan === 0 ? '' : 'input-error-validate'" />
                                         </td>
                                         <td>
                                             <input class="money-input" currencyMask [options]="Op.amount"
                                                 [(ngModel)]="editCache[data.id].data.namHienHanhUocThien"
-                                                (ngModelChange)="changeModel(data.id)"
+                                                (ngModelChange)="editCache[data.id].data.changeModel()"
                                                 [class]="editCache[data.id].data.namHienHanhUocThien || editCache[data.id].data.namHienHanhUocThien === 0 ? '' : 'input-error-validate'" />
                                         </td>
                                     </ng-template>
                                     <td>
                                         <input class="money-input" currencyMask [options]="Op.amount"
                                             [(ngModel)]="editCache[data.id].data.tranChiN"
-                                            (ngModelChange)="changeModel(data.id)" />
+                                            (ngModelChange)="editCache[data.id].data.changeModel()" />
                                     </td>
                                     <td>
                                         {{ Op.fmtVal(editCache[data.id].data.ncauChiN) }}
@@ -205,12 +199,12 @@
                                     <td>
                                         <input class="money-input" currencyMask [options]="Op.amount"
                                             [(ngModel)]="editCache[data.id].data.tranChiN1"
-                                            (ngModelChange)="changeModel(data.id)" />
+                                            (ngModelChange)="editCache[data.id].data.changeModel()" />
                                     </td>
                                     <td>
                                         <input class="money-input" currencyMask [options]="Op.amount"
                                             [(ngModel)]="editCache[data.id].data.ncauChiN1"
-                                            (ngModelChange)="changeModel(data.id)"
+                                            (ngModelChange)="editCache[data.id].data.changeModel()"
                                             [class]="editCache[data.id].data.ncauChiN1 || editCache[data.id].data.ncauChiN1 === 0 ? '' : 'input-error-validate'" />
                                     </td>
                                     <td>
@@ -219,12 +213,12 @@
                                     <td>
                                         <input class="money-input" currencyMask [options]="Op.amount"
                                             [(ngModel)]="editCache[data.id].data.tranChiN2"
-                                            (ngModelChange)="changeModel(data.id)" />
+                                            (ngModelChange)="editCache[data.id].data.changeModel()" />
                                     </td>
                                     <td>
                                         <input class="money-input" currencyMask [options]="Op.amount"
                                             [(ngModel)]="editCache[data.id].data.ncauChiN2"
-                                            (ngModelChange)="changeModel(data.id)" />
+                                            (ngModelChange)="editCache[data.id].data.changeModel()" />
                                     </td>
                                     <td>
                                         {{ Op.fmtVal(editCache[data.id].data.clechTranChiVsNcauChiN2) }}

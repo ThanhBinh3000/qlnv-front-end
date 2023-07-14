@@ -56,6 +56,62 @@ export class ItemData {
 	level: any;
 	checked: boolean;
 	ghiChu: string;
+
+	constructor(data: Partial<Pick<ItemData, keyof ItemData>>) {
+		Object.assign(this, data);
+	}
+
+	changeModel() {
+		this.dtQlPcapTso = Operator.sum([this.dtQlPcapLuongBac, this.dtQlPcapPcapLuong, this.dtQlPcapDgopLuong]);
+		this.uocThQlPcapTso = Operator.sum([this.uocThQlPcapLuongBac, this.uocThQlPcapPcapLuong, this.uocThQlPcapDgopLuong]);
+		this.namKhQlPcapTso = Operator.sum([this.namKhQlPcapLuongBac, this.namKhQlPcapPcapLuong, this.namKhQlPcapDgopLuong]);
+		this.dtTongQlPcap = Operator.sum([this.dtQlPcapTso, this.dtQlPcapHdLd]);
+		this.uocThTongQlPcap = Operator.sum([this.uocThQlPcapTso, this.uocThQlPcapHdLd]);
+		this.namKhTongQlPcap = Operator.sum([this.namKhQlPcapTso, this.namKhQlPcapHdLd]);
+	}
+
+	upperBound() {
+		return this.dtTongQlPcap > Utils.MONEY_LIMIT || this.dtKphiNsnn > Utils.MONEY_LIMIT || this.dtKphiSnDvu > Utils.MONEY_LIMIT || this.dtKphiPhiDlai > Utils.MONEY_LIMIT || this.dtKphiHphap > Utils.MONEY_LIMIT ||
+			this.uocThTongQlPcap > Utils.MONEY_LIMIT || this.uocThKphiNsnn > Utils.MONEY_LIMIT || this.uocThKphiSnDvu > Utils.MONEY_LIMIT || this.uocThKphiPhiDlai > Utils.MONEY_LIMIT || this.uocThKphiHphap > Utils.MONEY_LIMIT ||
+			this.namKhTongQlPcap > Utils.MONEY_LIMIT || this.namKhKphiNsnn > Utils.MONEY_LIMIT || this.namKhKphiSnDvu > Utils.MONEY_LIMIT || this.namKhKphiPhiDlai > Utils.MONEY_LIMIT || this.namKhKphiHphap > Utils.MONEY_LIMIT;
+	}
+
+	index() {
+		const str = this.stt.substring(this.stt.indexOf('.') + 1, this.stt.length);
+		const chiSo: string[] = str.split('.');
+		const n: number = chiSo.length - 1;
+		let k: number = parseInt(chiSo[n], 10);
+		switch (n) {
+			case 0:
+				return Utils.laMa(k);
+			case 1:
+				return chiSo[n];
+		}
+	}
+
+	clear() {
+		Object.keys(this).forEach(key => {
+			if (typeof this[key] === 'number' && key != 'level') {
+				this[key] = null;
+			}
+		})
+	}
+
+	sum(data: ItemData) {
+		Object.keys(data).forEach(key => {
+			if (key != 'level' && (typeof this[key] == 'number' || typeof data[key] == 'number')) {
+				this[key] = Operator.sum([this[key], data[key]]);
+			}
+		})
+	}
+
+	request() {
+		const temp = Object.assign({}, this);
+		if (this.id?.length == 38) {
+			temp.id = null;
+		}
+		return temp;
+	}
 }
 
 @Component({
@@ -70,17 +126,12 @@ export class BieuMau152Component implements OnInit {
 	Utils = Utils;
 	//thong tin chi tiet cua bieu mau
 	formDetail: Form = new Form();
-	total: ItemData = new ItemData();
+	total: ItemData = new ItemData({});
 	maDviTien: string = '1';
 	namBcao: number;
 	//danh muc
 	linhVucChis: any[] = [];
 	lstCtietBcao: ItemData[] = [];
-	keys = ['dtTsoNguoiLv', 'dtTongQlPcap', 'dtQlPcapTso', 'dtQlPcapLuongBac', 'dtQlPcapPcapLuong', 'dtQlPcapDgopLuong', 'dtQlPcapHdLd', 'dtKphiNsnn',
-		'dtKphiSnDvu', 'dtKphiPhiDlai', 'dtKphiHphap', 'uocThTsoNguoiLv', 'uocThTsoBcTdiem', 'uocThTsoVcCc', 'uocThTongQlPcap', 'uocThQlPcapTso',
-		'uocThQlPcapLuongBac', 'uocThQlPcapPcapLuong', 'uocThQlPcapDgopLuong', 'uocThQlPcapHdLd', 'uocThKphiNsnn', 'uocThKphiSnDvu', 'uocThKphiPhiDlai',
-		'uocThKphiHphap', 'namKhTsoNguoiLv', 'namKhTongQlPcap', 'namKhQlPcapTso', 'namKhQlPcapLuongBac', 'namKhQlPcapPcapLuong', 'namKhQlPcapDgopLuong',
-		'namKhQlPcapHdLd', 'namKhKphiNsnn', 'namKhKphiSnDvu', 'namKhKphiPhiDlai', 'namKhKphiHphap']
 	scrollX: string;
 	//trang thai cac nut
 	status: BtnStatus = new BtnStatus();
@@ -149,13 +200,12 @@ export class BieuMau152Component implements OnInit {
 
 		if (this.lstCtietBcao.length == 0) {
 			this.listDonVi.forEach(e => {
-				this.lstCtietBcao.push({
-					...new ItemData(),
+				this.lstCtietBcao.push(new ItemData({
 					id: uuid.v4() + 'FE',
 					stt: e.ma,
 					donVi: e.ma,
 					tenDmuc: e.giaTri,
-				})
+				}))
 			})
 		} else if (!this.lstCtietBcao[0]?.stt) {
 			this.lstCtietBcao.forEach(item => {
@@ -179,7 +229,9 @@ export class BieuMau152Component implements OnInit {
 				if (data.statusCode == 0) {
 					this.formDetail = data.data;
 					this.formDetail.maDviTien = '1';
-					this.lstCtietBcao = this.formDetail.lstCtietLapThamDinhs;
+					this.formDetail.lstCtietLapThamDinhs.forEach(item => {
+						this.lstCtietBcao.push(new ItemData(item));
+					})
 					this.formDetail.listIdDeleteFiles = [];
 					this.listFile = [];
 					this.getStatusButton();
@@ -200,9 +252,7 @@ export class BieuMau152Component implements OnInit {
 			return;
 		}
 
-		if (this.lstCtietBcao.some(e => e.dtTongQlPcap > Utils.MONEY_LIMIT || e.dtKphiNsnn > Utils.MONEY_LIMIT || e.dtKphiSnDvu > Utils.MONEY_LIMIT || e.dtKphiPhiDlai > Utils.MONEY_LIMIT || e.dtKphiHphap > Utils.MONEY_LIMIT ||
-			e.uocThTongQlPcap > Utils.MONEY_LIMIT || e.uocThKphiNsnn > Utils.MONEY_LIMIT || e.uocThKphiSnDvu > Utils.MONEY_LIMIT || e.uocThKphiPhiDlai > Utils.MONEY_LIMIT || e.uocThKphiHphap > Utils.MONEY_LIMIT ||
-			e.namKhTongQlPcap > Utils.MONEY_LIMIT || e.namKhKphiNsnn > Utils.MONEY_LIMIT || e.namKhKphiSnDvu > Utils.MONEY_LIMIT || e.namKhKphiPhiDlai > Utils.MONEY_LIMIT || e.namKhKphiHphap > Utils.MONEY_LIMIT)) {
+		if (this.lstCtietBcao.some(e => e.upperBound())) {
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
 			return;
 		}
@@ -214,10 +264,7 @@ export class BieuMau152Component implements OnInit {
 
 		const lstCtietBcaoTemp: ItemData[] = [];
 		this.lstCtietBcao.forEach(item => {
-			lstCtietBcaoTemp.push({
-				...item,
-				id: item.id?.length == 38 ? null : item.id,
-			})
+			lstCtietBcaoTemp.push(item.request())
 		})
 
 		const request = JSON.parse(JSON.stringify(this.formDetail));
@@ -286,7 +333,7 @@ export class BieuMau152Component implements OnInit {
 		const index = this.lstCtietBcao.findIndex(item => item.id === id);
 		// lay vi tri hang minh sua
 		this.editCache[id] = {
-			data: { ...this.lstCtietBcao[index] },
+			data: new ItemData(this.lstCtietBcao[index]),
 			edit: false
 		};
 	}
@@ -315,30 +362,6 @@ export class BieuMau152Component implements OnInit {
 		this.editCache[id].edit = true;
 	}
 
-	// click o checkbox single
-	updateSingleChecked(): void {
-		if (this.lstCtietBcao.every(item => item.checked)) {     // tat ca o checkbox deu = true thi set o checkbox all = true
-			this.allChecked = true;
-		} else {                                                        // o checkbox vua = false, vua = true thi set o checkbox all = indeterminate
-			this.allChecked = false;
-		}
-	}
-
-	// click o checkbox all
-	updateAllChecked(): void {
-		if (this.allChecked) {                                    // checkboxall == true thi set lai lstCTietBCao.checked = true
-			this.lstCtietBcao = this.lstCtietBcao.map(item => ({
-				...item,
-				checked: true
-			}));
-		} else {
-			this.lstCtietBcao = this.lstCtietBcao.map(item => ({    // checkboxall == false thi set lai lstCTietBCao.checked = false
-				...item,
-				checked: false
-			}));
-		}
-	}
-
 	deleteLine(id: string) {
 		const stt = this.lstCtietBcao.find(e => e.id === id)?.stt;
 		this.lstCtietBcao = Table.deleteRow(id, this.lstCtietBcao);
@@ -348,7 +371,7 @@ export class BieuMau152Component implements OnInit {
 	// them dong moi
 
 	addLine(id: string) {
-		this.lstCtietBcao = Table.addChild(id, new ItemData(), this.lstCtietBcao);
+		this.lstCtietBcao = Table.addChild(id, new ItemData({}), this.lstCtietBcao);
 		this.updateEditCache();
 	}
 
@@ -366,38 +389,14 @@ export class BieuMau152Component implements OnInit {
 		return false;
 	}
 
-	getChiMuc(str: string): string {
-		str = str.substring(str.indexOf('.') + 1, str.length);
-		const chiSo: string[] = str.split('.');
-		const n: number = chiSo.length - 1;
-		let k: number = parseInt(chiSo[n], 10);
-		switch (n) {
-			case 0:
-				return Utils.laMa(k);
-			case 1:
-				return chiSo[n];
-		}
-	}
-
 	sum(stt: string) {
 		stt = Table.preIndex(stt);
 		while (stt != '0') {
 			const index = this.lstCtietBcao.findIndex(e => e.stt == stt);
-			const data = this.lstCtietBcao[index];
-			this.lstCtietBcao[index] = {
-				...new ItemData(),
-				id: data.id,
-				stt: data.stt,
-				donVi: data.donVi,
-				tenDmuc: data.tenDmuc,
-				level: data.level,
-			}
+			this.lstCtietBcao[index].clear();
 			this.lstCtietBcao.forEach(item => {
 				if (Table.preIndex(item.stt) == stt) {
-					this.keys.forEach(key => {
-						this.lstCtietBcao[index][key] = Operator.sum([this.lstCtietBcao[index][key], item[key]]);
-					})
-
+					this.lstCtietBcao[index].sum(item);
 				}
 			})
 			stt = Table.preIndex(stt);
@@ -406,23 +405,12 @@ export class BieuMau152Component implements OnInit {
 	}
 
 	getTotal() {
-		this.total = new ItemData();
+		this.total.clear();
 		this.lstCtietBcao.forEach(item => {
 			if (item.level == 0) {
-				this.keys.forEach(key => {
-					this.total[key] = Operator.sum([this.total[key], item[key]]);
-				})
+				this.total.sum(item);
 			}
 		})
-	}
-	changeModel(id: string): void {
-		this.editCache[id].data.dtQlPcapTso = this.editCache[id].data.dtQlPcapLuongBac + this.editCache[id].data.dtQlPcapPcapLuong + this.editCache[id].data.dtQlPcapDgopLuong;
-		this.editCache[id].data.uocThQlPcapTso = this.editCache[id].data.uocThQlPcapLuongBac + this.editCache[id].data.uocThQlPcapPcapLuong + this.editCache[id].data.uocThQlPcapDgopLuong;
-		this.editCache[id].data.namKhQlPcapTso = this.editCache[id].data.namKhQlPcapLuongBac + this.editCache[id].data.namKhQlPcapPcapLuong + this.editCache[id].data.namKhQlPcapDgopLuong;
-		this.editCache[id].data.dtTongQlPcap = this.editCache[id].data.dtQlPcapTso + this.editCache[id].data.dtQlPcapHdLd;
-		this.editCache[id].data.uocThTongQlPcap = this.editCache[id].data.uocThQlPcapTso + this.editCache[id].data.uocThQlPcapHdLd;
-		this.editCache[id].data.namKhTongQlPcap = this.editCache[id].data.namKhQlPcapTso + this.editCache[id].data.namKhQlPcapHdLd;
-
 	}
 
 	// gan editCache.data == lstCtietBcao
@@ -430,7 +418,7 @@ export class BieuMau152Component implements OnInit {
 		this.lstCtietBcao.forEach(item => {
 			this.editCache[item.id] = {
 				edit: false,
-				data: { ...item }
+				data: new ItemData(item)
 			};
 		});
 	}
@@ -510,16 +498,9 @@ export class BieuMau152Component implements OnInit {
 		const filterData = this.lstCtietBcao.map(item => {
 			const row: any = {};
 			fieldOrder.forEach(field => {
-				row[field] = item[field]
+				row[field] = field == 'stt' ? item.index() : item[field]
 			})
 			return row;
-		})
-		filterData.forEach(item => {
-			const level = item.stt.split('.').length - 2;
-			item.stt = this.getChiMuc(item.stt);
-			for (let i = 0; i < level; i++) {
-				item.stt = '   ' + item.stt;
-			}
 		})
 
 		const workbook = XLSX.utils.book_new();
