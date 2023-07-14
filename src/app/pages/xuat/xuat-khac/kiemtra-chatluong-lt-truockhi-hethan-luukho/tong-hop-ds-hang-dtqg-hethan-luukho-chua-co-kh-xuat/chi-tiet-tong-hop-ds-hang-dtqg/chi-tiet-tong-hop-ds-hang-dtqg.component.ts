@@ -17,7 +17,6 @@ import {v4 as uuidv4} from "uuid";
 import {
   KiemtraChatluongLtTruockhiHethanLuukhoComponent
 } from "../../kiemtra-chatluong-lt-truockhi-hethan-luukho.component";
-import {LOAI_HH_XUAT_KHAC} from "../../../../../../constants/config";
 import {
   DanhSachHangDTQGCon6ThangService
 } from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatlt/DanhSachHangDTQGCon6Thang.service";
@@ -25,6 +24,7 @@ import {
   TongHopDanhSachHangDTQGService
 } from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatlt/TongHopDanhSachHangDTQG.service";
 import {FileDinhKem} from "../../../../../../models/FileDinhKem";
+import {LOAI_HH_XUAT_KHAC} from "../../../../../../constants/config";
 
 @Component({
   selector: 'app-chi-tiet-tong-hop-ds-hang-dtqg',
@@ -55,7 +55,7 @@ export class ChiTietTongHopDsHangDtqgComponent extends Base2Component implements
   numberToRoman = NumberToRoman;
   maHauTo: any;
   public vldTrangThai: KiemtraChatluongLtTruockhiHethanLuukhoComponent;
-
+  loaiHhXuatKhac = LOAI_HH_XUAT_KHAC;
   constructor(httpClient: HttpClient,
               storageService: StorageService,
               notification: NzNotificationService,
@@ -230,6 +230,7 @@ export class ChiTietTongHopDsHangDtqgComponent extends Base2Component implements
               });
               this.formData.patchValue({
                 maDanhSach: this.selectedItem ?? this.maHauTo,
+                loai: this.loaiHhXuatKhac.LT_6_THANG,
                 tongHopDtl: res.data.content
               });
               let result = await this.createUpdate(this.formData.value);

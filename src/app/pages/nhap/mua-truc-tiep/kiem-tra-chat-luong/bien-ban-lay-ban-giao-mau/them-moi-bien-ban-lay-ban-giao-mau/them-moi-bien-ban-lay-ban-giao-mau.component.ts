@@ -450,7 +450,7 @@ export class ThemMoiBienBanLayBanGiaoMauComponent extends Base2Component impleme
     let dataChiCuc = data.hhQdGiaoNvNhangDtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0];
     // this.listDiaDiemNhap = dataChiCuc.hhQdGiaoNvNhDdiemList.filter(item => !isEmpty(item.bienBanNhapDayKho) && isEmpty(item.bienBanLayMau));
     if (dataChiCuc) {
-      this.listDiaDiemNhap = dataChiCuc.hhQdGiaoNvNhDdiemList.filter(item => !isEmpty(item.bienBanNhapDayKho) && isEmpty(item.bienBanLayMau));
+      this.listDiaDiemNhap = dataChiCuc.children.filter(item => !isEmpty(item.bienBanNhapDayKho) && isEmpty(item.bienBanLayMau));
     }
     await this.spinner.hide();
   }

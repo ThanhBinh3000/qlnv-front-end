@@ -166,6 +166,7 @@ export class BienBanNhapDayKhoComponent extends Base2Component implements OnInit
     // this.dataTable.forEach(item => {
     //   item.detail = item.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0];
     // });
+    console.log(1)
     this.dataTable.forEach(item => {
       if (this.userService.isChiCuc()) {
         item.detail = item.hhBienBanDayKhoHdrList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0]

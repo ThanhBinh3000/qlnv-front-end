@@ -8,7 +8,7 @@ import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
 import { PhieuKtraCluongBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/ktra-cluong-btt/phieu-ktra-cluong-btt.service';
 import { chain } from 'lodash';
-import { v4 as uuidv4 } from 'uuid';
+import * as uuid from "uuid";
 
 @Component({
   selector: 'app-phieu-ktra-cluong-btt',
@@ -25,7 +25,6 @@ export class PhieuKtraCluongBttComponent extends Base2Component implements OnIni
   isViewBienBan: boolean = false;
   selectedId: number = 0;
   isView = false;
-  dataView: any = [];
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -67,7 +66,6 @@ export class PhieuKtraCluongBttComponent extends Base2Component implements OnIni
   async ngOnInit() {
     await this.spinner.show();
     try {
-      this.timKiem();
       await this.search();
     } catch (e) {
       console.log('error: ', e)
@@ -77,81 +75,50 @@ export class PhieuKtraCluongBttComponent extends Base2Component implements OnIni
   }
 
   async search(roles?): Promise<void> {
-    await this.spinner.show()
+    this.formData.patchValue({
+      loaiVthh: this.loaiVthh,
+      maDvi: this.userInfo.MA_DVI,
+      trangThai : this.userService.isCuc() ? null :  this.STATUS.DA_DUYET_LDC
+    })
     await super.search(roles);
     this.buildTableView();
-    await this.spinner.hide()
-  }
-
-  timKiem() {
-    if (this.userService.isCuc()) {
-      this.formData.patchValue({
-        loaiVthh: this.loaiVthh,
-        maDvi: this.userInfo.MA_DVI,
-      })
-    } else {
-      this.formData.patchValue({
-        loaiVthh: this.loaiVthh,
-        maChiCuc: this.userInfo.MA_DVI,
-        trangThai: this.STATUS.DA_DUYET_LDC
-      })
-    }
-
   }
 
   clearFilter() {
     this.formData.reset();
-    this.timKiem();
     this.search();
   }
 
   buildTableView() {
-    let dataView = chain(this.dataTable)
-      .groupBy("soQdNv")
-      .map((value, key) => {
-        let rs = chain(value)
-          .groupBy("maDiemKho")
-          .map((v, k) => {
-            let rowLv2 = v.find(s => s.maDiemKho === k);
-            return {
-              id: rowLv2.id,
-              maDiemKho: k,
-              idVirtual: uuidv4(),
-              maLoKho: rowLv2.maLoKho,
-              tenDiemKho: rowLv2.tenDiemKho,
-              maNhaKho: rowLv2.maNhaKho,
-              tenNhaKho: rowLv2.tenNhaKho,
-              maNganKho: rowLv2.maNganKho,
-              tenNganKho: rowLv2.tenNganKho,
-              tenLoKho: rowLv2.tenLoKho,
-              soPhieu: rowLv2.soPhieu,
-              ngayKnghiem: rowLv2.ngayKnghiem,
-              soBienBan: rowLv2.soBienBan,
-              ngayLayMau: rowLv2.ngayLayMau,
-              soBbXuatDoc: rowLv2.soBbXuatDoc,
-              ngayXuatDocKho: rowLv2.ngayXuatDocKho,
-              trangThai: rowLv2.trangThai,
-              tenTrangThai: rowLv2.tenTrangThai,
-              childData: v
-            }
-          }
-          ).value();
-        let rowLv1 = value.find(s => s.soQdNv === key);
+    let dataView = chain(this.dataTable).groupBy("soQdNv").map((value, key) => {
+      let quyetDinh = value.find(f => f.soQdNv === key)
+      let rs = chain(value).groupBy("maDiemKho").map((v, k) => {
+        let diaDiem = v.find(s => s.maDiemKho === k)
         return {
-          idVirtual: uuidv4(),
-          soQdNv: key,
-          namKh: rowLv1.namKh,
-          ngayQd: rowLv1.ngayQd,
-          idQdNv: rowLv1.idQdNv,
-          childData: rs
-        };
+          idVirtual: uuid.v4(),
+          maDiemKho: k != null ? k : '',
+          tenDiemKho: diaDiem ? diaDiem.tenDiemKho : null,
+          childData: v
+        }
       }).value();
-    this.dataView = dataView
+      let idQdNv = quyetDinh ? quyetDinh.idQdNv : null;
+      let namKh = quyetDinh ? quyetDinh.namKh : null;
+      let ngayQdNv = quyetDinh ? quyetDinh.ngayQdNv : null;
+      return {
+        idVirtual: uuid.v4(),
+        idQdNv: idQdNv,
+        soQdNv: key != null ? key : '',
+        namKh: namKh,
+        ngayQdNv: ngayQdNv,
+        childData: rs
+      }
+    }).value();
+    this.children = dataView
     this.expandAll()
   }
 
   expandAll() {
-    this.dataView.forEach(s => {
+    this.children.forEach(s => {
       this.expandSetString.add(s.idVirtual);
     })
   }

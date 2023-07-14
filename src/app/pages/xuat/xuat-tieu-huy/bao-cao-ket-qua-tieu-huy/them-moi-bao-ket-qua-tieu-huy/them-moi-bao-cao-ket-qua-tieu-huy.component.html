@@ -54,7 +54,7 @@
         <span [ngClass]="formData.value.trangThai == STATUS.BAN_HANH ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
           {{ formData.value.tenTrangThai }}
         </span>
-        <span> BÁO CÁO KÊT QUẢ BÁN TIÊU HỦY HÀNG DTQG </span>
+        <span> BÁO CÁO KẾT QUẢ BÁN TIÊU HỦY HÀNG DTQG </span>
       </div>
     </div>
   </div>
@@ -76,7 +76,15 @@
       </div>
       <form nz-form nzLayout="vertical" [formGroup]="formData">
         <div nz-row [nzGutter]="24">
-          <div nz-col [nzSpan]="6">
+          <div nz-col nzSpan="2">
+            <nz-form-item>
+              <nz-form-label [nzNoColon]="true"> Năm </nz-form-label>
+              <nz-select formControlName="nam">
+                <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+              </nz-select>
+            </nz-form-item>
+          </div>
+          <div nz-col [nzSpan]="4">
             <nz-form-item>
               <nz-form-label [nzNoColon]="true"> Đơn vị báo cáo</nz-form-label>
               <nz-form-control [nzErrorTip]="error">

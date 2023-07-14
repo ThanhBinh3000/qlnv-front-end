@@ -352,8 +352,13 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
     body.fileDinhKemReq = this.fileDinhKem;
     body.children = this.dataTable;
     body.ccXdgReq = [...this.canCuKhacList];
-    let res = await this.createUpdate(body);
-    if (res) {
+    let res = null;
+    if(body.id){
+      res = await this.danhSachMuaTrucTiepService.update(body);
+    }else{
+    res = await this.danhSachMuaTrucTiepService.create(body);
+    }
+    if (res.data) {
       if (isGuiDuyet) {
         await this.guiDuyet();
       }

@@ -93,7 +93,7 @@ export class ThemMoiBangKeCanHangComponent extends Base2Component implements OnI
       cloaiVthh: [''],
       tenCloaiVthh: [''],
       moTaHangHoa: [''],
-      donViTinh: [''],
+      donViTinh: ['kg'],
       nguoiPduyet: [''],
       nguoiTao: [''],
       trangThai: [''],
@@ -111,6 +111,9 @@ export class ThemMoiBangKeCanHangComponent extends Base2Component implements OnI
       await Promise.all([
         // this.loadSoQuyetDinh(),
       ]);
+      if(this.idQdGiaoNvNh){
+        await this.bindingDataQd(this.idQdGiaoNvNh)
+      }
       if (this.id) {
         await this.loadChiTiet(this.id);
       } else {
@@ -217,11 +220,10 @@ export class ThemMoiBangKeCanHangComponent extends Base2Component implements OnI
       moTaHangHoa: data.moTaHangHoa,
       soHdong: data.soHd,
       ngayKiHdong: data.ngayKyHd,
-      donViTinh: data.dviTinh
     });
     let dataChiCuc = data.hhQdGiaoNvNhangDtlList.filter(item => item.maDvi == this.userInfo.MA_DVI);
     if (dataChiCuc.length > 0) {
-      this.listDiaDiemNhap = dataChiCuc[0].hhQdGiaoNvNhDdiemList;
+      this.listDiaDiemNhap = dataChiCuc[0].children;
     }
     await this.spinner.hide();
   }

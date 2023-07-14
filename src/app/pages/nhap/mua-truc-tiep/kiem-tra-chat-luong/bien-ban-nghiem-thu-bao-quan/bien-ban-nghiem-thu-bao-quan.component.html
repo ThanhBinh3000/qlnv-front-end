@@ -62,7 +62,8 @@
                         <th>Số QĐ giao NV NH</th>
                         <th>Năm kế hoạch</th>
                         <th>Thời hạn NH trước ngày</th>
-<!--                        <th>Điểm kho</th>-->
+                        <th>Điểm kho</th>
+                        <th>Lô kho</th>
                         <th>Số BB NT kê lót, BQLĐ</th>
                         <th>Ngày lập biên bản</th>
                         <th>Ngày kết thúc NT kê lót, BQLĐ</th>
@@ -80,7 +81,7 @@
                             <td class="link bold">{{ item.soQd }}</td>
                             <td class="bold">{{ item.namNhap }}</td>
                             <td class="bold">{{ item.tgianNkho }}</td>
-                            <td colspan="6"></td>
+                            <td colspan="8"></td>
                             <td>
                                 <a *ngIf="userService.isChiCuc()&& userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBNTBQLD_THEM')
                                 " (click)="redirectToChiTiet(false, 0,item.id)">
@@ -90,33 +91,51 @@
                         </tr>
                         <ng-container *ngIf="expandSet.has(i)">
                             <ng-container
-                                *ngFor="let bbNghiemThuBq of item.detail.listBienBanNghiemThuBq, let y = index">
+                                *ngFor="let ddNhang of item.detail.children, let y = index">
                                 <tr>
                                     <td></td>
                                     <td></td>
                                     <td colspan="3"></td>
-<!--                                    <td>{{bbNghiemThuBq.tenDiemKho}}</td>-->
-                                    <td>{{bbNghiemThuBq.soBb}}</td>
-                                    <td>{{bbNghiemThuBq.ngayTao | date: 'dd/MM/YYYY' }}</td>
-                                    <td>{{bbNghiemThuBq.ngayNghiemThu | date: 'dd/MM/YYYY' }}</td>
-                                    <td>{{bbNghiemThuBq.kinhPhiThucTe}}</td>
-                                    <td>{{bbNghiemThuBq.kinhPhiTcPd}}</td>
-                                    <td>{{bbNghiemThuBq.tenTrangThai}}</td>
-                                    <td>
-                                        <a *ngIf="bbNghiemThuBq.trangThai == STATUS.DA_DUYET_LDCC && userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBNTBQLD_XEM')"
-                                            (click)="redirectToChiTiet(false, bbNghiemThuBq.id)">
-                                            <i class="fa fa-eye" title="Xem chi tiết"></i>
-                                        </a>
-                                        <a *ngIf="bbNghiemThuBq.trangThai != STATUS.DA_DUYET_LDCC && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_THEM')"
-                                            (click)="redirectToChiTiet(false, bbNghiemThuBq.id)">
-                                            <i class="fa fa-pencil" title="Sửa"></i>
-                                        </a>
-                                        <a *ngIf="bbNghiemThuBq.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBNTBQLD_XOA')"
-                                            (click)="xoaItem(bbNghiemThuBq)">
-                                            <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
-                                        </a>
-                                    </td>
+                                    <td>{{ddNhang.tenDiemKho}}</td>
+                                    <td>{{ddNhang.tenLoKho}}</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
                                 </tr>
+                              <ng-container
+                                *ngFor="let bbNghiemThuBq of ddNhang.listBienBanNghiemThuBq, let k = index">
+                                <tr>
+                                  <td></td>
+                                  <td></td>
+                                  <td colspan="3"></td>
+                                  <td></td>
+                                  <td></td>
+                                  <td class="bold">{{bbNghiemThuBq.soBb}}</td>
+                                  <td>{{bbNghiemThuBq.ngayTao | date: 'dd/MM/YYYY' }}</td>
+                                  <td>{{bbNghiemThuBq.ngayNghiemThu | date: 'dd/MM/YYYY' }}</td>
+                                  <td>{{bbNghiemThuBq.kinhPhiThucTe}}</td>
+                                  <td>{{bbNghiemThuBq.kinhPhiTcPd}}</td>
+                                  <td>{{bbNghiemThuBq.tenTrangThai}}</td>
+                                  <td>
+                                    <a *ngIf="bbNghiemThuBq.trangThai == STATUS.DA_DUYET_LDCC && userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBNTBQLD_XEM')"
+                                       (click)="redirectToChiTiet(false, bbNghiemThuBq.id)">
+                                      <i class="fa fa-eye" title="Xem chi tiết"></i>
+                                    </a>
+                                    <a *ngIf="bbNghiemThuBq.trangThai != STATUS.DA_DUYET_LDCC && userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBNTBQLD_THEM')"
+                                       (click)="redirectToChiTiet(false, bbNghiemThuBq.id)">
+                                      <i class="fa fa-pencil" title="Sửa"></i>
+                                    </a>
+                                    <a *ngIf="bbNghiemThuBq.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBNTBQLD_XOA')"
+                                       (click)="xoaItem(bbNghiemThuBq)">
+                                      <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+                                    </a>
+                                  </td>
+                                </tr>
+                              </ng-container>
                             </ng-container>
                         </ng-container>
                     </ng-container>

@@ -152,4 +152,7 @@ export enum TRANG_THAI_QUY_CHUAN_TIEU_CHUAN {
   HET_HIEU_LUC = "00",
 }
 
-
+export enum HSKT_LOAI_DOI_TUONG {
+  HO_SO = "HS",
+  NGUOI_LIEN_QUAN = "NLQ"
+}

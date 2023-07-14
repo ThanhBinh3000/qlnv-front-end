@@ -19,7 +19,7 @@ import {STATUS} from "../../../../constants/status";
 import {convertTienTobangChu} from "../../../../shared/commonFunction";
 import {Base3Component} from "../../../../components/base3/base3.component";
 import { cloneDeep, chain } from 'lodash';
-import {KiemTraChatLuongSc} from "../../../../services/sua-chua/kiemTraChatLuongSc";
+import {KiemTraChatLuongScService} from "../../../../services/sua-chua/kiemTraChatLuongSc";
 import {DanhMucTieuChuanService} from "../../../../services/quantri-danhmuc/danhMucTieuChuan.service";
 
 @Component({
@@ -42,7 +42,7 @@ export class ThemMoiKtraclComponent extends Base3Component implements OnInit {
     modal: NzModalService,
     route: ActivatedRoute,
     router: Router,
-    private kiemTraChatLuongSc : KiemTraChatLuongSc,
+    private kiemTraChatLuongSc : KiemTraChatLuongScService,
     private phieuXuatKhoScService: PhieuXuatKhoScService,
     private quyetDinhXhService: QuyetDinhXhService,
     private danhMucTieuChuanService : DanhMucTieuChuanService
@@ -57,7 +57,7 @@ export class ThemMoiKtraclComponent extends Base3Component implements OnInit {
       nam : [dayjs().year(), [Validators.required]],
       tenDvi : ['',[Validators.required]],
       maQhns : [''],
-      soPhieuKdcl : ['',[Validators.required]],
+      soPhieuKtcl : ['',[Validators.required]],
       ngayLap : ['',[Validators.required]],
       tenNguoiTao : [''],
       tenTruongPhongKtbq : [''],
@@ -105,7 +105,7 @@ export class ThemMoiKtraclComponent extends Base3Component implements OnInit {
     }else{
       await this.userService.getId("SC_KIEM_TRA_CL_HDR_SEQ").then((res)=>{
         this.formData.patchValue({
-          soPhieuKdcl : res + '/' + this.formData.value.nam + '/PKNCL-CCDTVP',
+          soPhieuKtcl : res + '/' + this.formData.value.nam + '/PKNCL-CCDTVP',
           maQhns : this.userInfo.DON_VI.maQhns,
           tenDvi : this.userInfo.TEN_DVI,
           ngayLap : dayjs().format('YYYY-MM-DD'),

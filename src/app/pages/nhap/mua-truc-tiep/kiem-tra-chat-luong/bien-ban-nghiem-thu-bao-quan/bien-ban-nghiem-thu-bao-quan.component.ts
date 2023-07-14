@@ -235,14 +235,17 @@ export class BienBanNghiemThuBaoQuanComponent implements OnInit {
       this.dataTable = data.content;
       this.dataTable.forEach(item => {
         if (this.userService.isChiCuc()) {
-          item.detail = item.hhQdGiaoNvNhangDtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0]
+          item.detail = item.hhQdGiaoNvNhangDtlList.filter(y => y.maDvi == this.userInfo.MA_DVI)[0]
+          item.detail = {
+            children: item.detail.children.filter(x => x.maDiemKho.includes(this.userInfo.MA_DVI))
+          }
         } else {
           let data = [];
-          item.hhQdGiaoNvNhangDtlList.forEach(item => {
-            data = [...data, ...item.listBienBanNghiemThuBq];
+          item.hhQdGiaoNvNhangDtlList.forEach(res => {
+            data = [...data, ...res.children.filter(x => x.idDtl == res.id)];
           })
           item.detail = {
-            listBienBanNghiemThuBq: data
+            children: data
           }
 
         };
