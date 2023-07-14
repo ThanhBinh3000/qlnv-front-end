@@ -19,6 +19,7 @@ import {QuyetDinhNhService} from "../../../../../services/sua-chua/quyetDinhNh.s
 import {
   DialogTableCheckBoxComponent
 } from "../../../../../components/dialog/dialog-table-check-box/dialog-table-check-box.component";
+import {MESSAGE} from "../../../../../constants/message";
 
 
 @Component({
@@ -90,7 +91,6 @@ export class ThemMoiQdnhComponent extends Base3Component implements OnInit {
           this.bindingQdXh(res.idQdXh);
           let dataTable = [];
           res.children.forEach((item)=>{
-            console.log(item)
             item.scDanhSachHdr.soLuongNhap = item.soLuongNhap;
             dataTable.push(item.scDanhSachHdr);
           })
@@ -148,83 +148,90 @@ export class ThemMoiQdnhComponent extends Base3Component implements OnInit {
         thoiHanXuat: resQdXh.data.thoiHanXuat,
         thoiHanNhap: resQdXh.data.thoiHanNhap,
       })
-      this.dataTableAll = resQdXh.data.scKiemTraChatLuongHdrList;
     });
   }
 
   openDialogCanCu() {
+    if(!this.formData.value.idQdXh){
+      this.notification.error(MESSAGE.ERROR,"Vui lòng chọn số quyết định giao nhiệm vụ xuất hàng");
+      return;
+    }
     if (this.disabled()) {
       return;
     }
-    this.dataTableAll.forEach( item => {
-      item.checked = this.formData.value.idPhieuKtcl.includes(item.id);
-      item.maDiaDiem = item.scPhieuXuatKhoHdr.maDiaDiem;
-      item.tenDiaDiem = item.scPhieuXuatKhoHdr.tenDiemKho + ' / ' + item.scPhieuXuatKhoHdr.tenNhaKho + ' / '
-        + item.scPhieuXuatKhoHdr.tenNganKho + ' / ' + item.scPhieuXuatKhoHdr.tenLoKho;
-      item.tongSoLuong = item.scPhieuXuatKhoHdr.tongSoLuong;
-      item.numberSoLuong = item.scPhieuXuatKhoHdr.tongSoLuong;
-    })
-    console.log(this.dataTableAll);
-    const modalQD = this.modal.create({
-      nzTitle: 'Danh sách kết quả kiểm định sau sửa chữa',
-      nzContent: DialogTableCheckBoxComponent,
-      nzMaskClosable: false,
-      nzClosable: false,
-      nzWidth: '900px',
-      nzFooter: null,
-      nzComponentParams: {
-        isView : false,
-        dataTable: this.dataTableAll,
-        dataHeader: ['Số phiếu KĐCL', 'Đểm kho / Nhà kho / Ngăn kho / Lô kho','Ngày kiểm định','Tổng số lượng'],
-        dataColumn: ['soPhieuKtcl', 'tenDiaDiem','ngayKiemDinh','numberSoLuong']
-      },
-    });
-    modalQD.afterClose.subscribe(async (res) => {
-      if (res) {
-        this.spinner.show();
-        this.dataTableAll = res.data;
-        const dataTableChecked = res.data.filter(item => item.checked == true);
-        this.dataTableView = [];
-        this.map = new Map();
-        if(res.data){
-          let ketQuaKtra = [];
-          let ketQuaId = [];
-          dataTableChecked.forEach( item => {
-            ketQuaKtra.push(item.soPhieuKtcl);
-            ketQuaId.push(item.id);
-            let data = item.scPhieuXuatKhoHdr;
-            if(this.map.has(data.idScDanhSachHdr)){
-              let body = this.map.get(data.idScDanhSachHdr);
-              body.tongSoLuong = body.tongSoLuong + data.tongSoLuong
-              body.dataPhieuKtraCl.push(item);
-              this.map.set(data.idScDanhSachHdr,body)
-            } else {
-              let body = {
-                tongSoLuong : data.tongSoLuong,
-                dataRow : data.scDanhSachHdr,
-                dataPhieuKtraCl : [item]
+    this.spinner.show();
+    this.kiemTraChatLuongScService.getDanhSachTaoQdNh({idQdXh : this.formData.value.idQdXh,id : this.formData.value.id}).then((res)=>{
+      this.spinner.hide();
+      this.dataTableAll = res.data;
+      this.dataTableAll.forEach( item => {
+        item.checked = this.formData.value.idPhieuKtcl?.includes(item.id);
+        item.maDiaDiem = item.scPhieuXuatKhoHdr.maDiaDiem;
+        item.tenDiaDiem = item.scPhieuXuatKhoHdr.tenDiemKho + ' / ' + item.scPhieuXuatKhoHdr.tenNhaKho + ' / '
+          + item.scPhieuXuatKhoHdr.tenNganKho + ' / ' + item.scPhieuXuatKhoHdr.tenLoKho;
+        item.tongSoLuong = item.scPhieuXuatKhoHdr.tongSoLuong;
+        item.numberSoLuong = item.scPhieuXuatKhoHdr.tongSoLuong;
+      })
+      const modalQD = this.modal.create({
+        nzTitle: 'Danh sách kết quả kiểm định sau sửa chữa',
+        nzContent: DialogTableCheckBoxComponent,
+        nzMaskClosable: false,
+        nzClosable: false,
+        nzWidth: '900px',
+        nzFooter: null,
+        nzComponentParams: {
+          isView : false,
+          dataTable: this.dataTableAll,
+          dataHeader: ['Số phiếu KĐCL', 'Đểm kho / Nhà kho / Ngăn kho / Lô kho','Ngày kiểm định','Tổng số lượng'],
+          dataColumn: ['soPhieuKtcl', 'tenDiaDiem','ngayKiemDinh','numberSoLuong']
+        },
+      });
+      modalQD.afterClose.subscribe(async (res) => {
+        if (res) {
+          this.spinner.show();
+          this.dataTableAll = res.data;
+          const dataTableChecked = res.data.filter(item => item.checked == true);
+          this.dataTableView = [];
+          this.map = new Map();
+          if(dataTableChecked){
+            let ketQuaKtra = [];
+            let ketQuaId = [];
+            dataTableChecked.forEach( item => {
+              ketQuaKtra.push(item.soPhieuKtcl);
+              ketQuaId.push(item.id);
+              let pxk = item.scPhieuXuatKhoHdr;
+              if(this.map.has(pxk.idScDanhSachHdr)){
+                let body = this.map.get(pxk.idScDanhSachHdr);
+                body.tongSoLuong = body.tongSoLuong + pxk.tongSoLuong
+                body.dataPhieuKtraCl.push(item);
+                this.map.set(pxk.idScDanhSachHdr,body)
+              } else {
+                let body = {
+                  tongSoLuong : pxk.tongSoLuong,
+                  dataRow : pxk.scDanhSachHdr,
+                  dataPhieuKtraCl : [item]
+                }
+                this.map.set(pxk.idScDanhSachHdr,body);
               }
-              this.map.set(data.idScDanhSachHdr,body);
-            }
-          });
-          let dataTableView = [];
-          this.map?.forEach(item =>{
-              item.dataRow.soLuongNhap = item.tongSoLuong;
-              dataTableView.push(item.dataRow)
-          })
-          this.dataTableView =  chain(dataTableView).groupBy('tenChiCuc').map((value, key) => ({
-              tenDonVi: key,
-              children: value,
+            });
+            let dataTableView = [];
+            this.map?.forEach(item =>{
+                item.dataRow.soLuongNhap = item.tongSoLuong;
+                dataTableView.push(item.dataRow)
             })
-          ).value();
-          this.formData.patchValue({
-            soPhieuKtcl : ketQuaKtra.join(' , '),
-            idPhieuKtcl : ketQuaId.join(',')
-          })
+            this.dataTableView =  chain(dataTableView).groupBy('tenChiCuc').map((value, key) => ({
+                tenDonVi: key,
+                children: value,
+              })
+            ).value();
+            this.formData.patchValue({
+              soPhieuKtcl : ketQuaKtra.join(' , '),
+              idPhieuKtcl : ketQuaId.join(',')
+            })
+          }
+          this.spinner.hide();
         }
-        this.spinner.hide();
-      }
-    });
+      });
+    })
   }
 
   showSave(){
@@ -249,7 +256,6 @@ export class ThemMoiQdnhComponent extends Base3Component implements OnInit {
     if(this.formData.value.soQd){
       body.soQd = this.formData.value.soQd + '/QĐ-CDTVT'
     }
-    console.log(body);
     this.createUpdate(body).then((res)=>{
       if(res){
         if(isGuiDuyet){
