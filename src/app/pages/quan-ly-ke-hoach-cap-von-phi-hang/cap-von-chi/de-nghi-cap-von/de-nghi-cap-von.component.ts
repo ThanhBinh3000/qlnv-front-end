@@ -23,7 +23,7 @@ export class DeNghiCapVonComponent implements OnInit {
         if (this.userService.isChiCuc()) {
             this.tabList = this.tabList.filter(e => e.code != 'ds-hopdong' && e.code != 'ds-denghi-donvi-capduoi' && e.code != 'ds-tonghop-denghi-donvi-capduoi');
         } else if (this.userService.isTongCuc()) {
-            this.tabList = this.tabList.filter(e => e.code == 'ds-capvon')
+            this.tabList = this.tabList.filter(e => e.code != 'ds-hopdong' && e.code != 'ds-denghi');
         } else {
             this.tabList[1].isSelected = false;
         }

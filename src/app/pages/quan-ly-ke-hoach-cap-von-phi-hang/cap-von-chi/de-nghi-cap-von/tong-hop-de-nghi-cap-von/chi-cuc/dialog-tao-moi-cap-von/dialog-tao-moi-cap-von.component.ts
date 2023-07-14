@@ -145,16 +145,17 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
             tenDvi: this.userInfo?.TEN_DVI,
             dnghiCapvonLuyKes: [],
           })
+        } else if (this.userService.isTongCuc()) {
+          this.response.dnghiCapvonCtiets.push({
+            ... new ItemRequest(),
+            id: uuid.v4() + 'FE',
+            maDvi: this.userInfo?.MA_DVI,
+            tenDvi: this.userInfo?.TEN_DVI,
+            dnghiCapvonLuyKes: [],
+          })
         } else {
           await this.callSynthetic();
           // if (this.userService.isCuc()) {
-          //   this.response.dnghiCapvonCtiets.push({
-          //     ... new ItemRequest(),
-          //     id: uuid.v4() + 'FE',
-          //     maDvi: this.userInfo?.MA_DVI,
-          //     tenDvi: this.userInfo?.TEN_DVI,
-          //     dnghiCapvonLuyKes: [],
-          //   })
           // }
         }
       }

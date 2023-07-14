@@ -208,7 +208,7 @@
 										{{ displayValue(data.vonDnghiCapLanNay) }}
 									</td>
 									<ng-container *ngIf="this.userService.isCuc(); else khacChiCuc">
-										<td nzRight></td>
+										<td *ngIf="status" nzRight></td>
 									</ng-container>
 									<ng-template #khacChiCuc>
 										<td *ngIf="status" nzRight>
