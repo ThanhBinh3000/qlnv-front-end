@@ -61,6 +61,9 @@ import {
   ThemMoiBienBanHaoDoiComponent
 } from "./xuat-kho/bien-ban-hao-doi/them-moi-bien-ban-hao-doi/them-moi-bien-ban-hao-doi.component";
 import {ChiTietBangKeCanComponent} from "./xuat-kho/bang-ke-can/chi-tiet-bang-ke-can/chi-tiet-bang-ke-can.component";
+import {
+  ChiTietBienBanKiemTraComponent
+} from './kiem-tra-chat-luong/ho-so-ky-thuat/chi-tiet-ho-so-ky-thuat/chi-tiet-bien-ban-kiem-tra/chi-tiet-bien-ban-kiem-tra.component';
 
 @NgModule({
   declarations: [
@@ -97,7 +100,8 @@ import {ChiTietBangKeCanComponent} from "./xuat-kho/bang-ke-can/chi-tiet-bang-ke
     ThemMoiBienBanHaoDoiComponent,
     XuatKhoComponent,
 
-    ChiTietBangKeCanComponent
+    ChiTietBangKeCanComponent,
+    ChiTietBienBanKiemTraComponent
   ],
   imports: [
     CommonModule,
@@ -141,7 +145,8 @@ import {ChiTietBangKeCanComponent} from "./xuat-kho/bang-ke-can/chi-tiet-bang-ke
     ThemMoiBienBanHaoDoiComponent,
     XuatKhoComponent,
 
-    ChiTietBangKeCanComponent
+    ChiTietBangKeCanComponent,
+    ChiTietBienBanKiemTraComponent
   ]
 })
 export class CuuTroVienTroModule {
