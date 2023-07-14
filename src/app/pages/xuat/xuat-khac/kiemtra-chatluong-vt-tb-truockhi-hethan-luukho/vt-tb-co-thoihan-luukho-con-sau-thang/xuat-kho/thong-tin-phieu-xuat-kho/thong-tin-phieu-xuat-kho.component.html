@@ -144,8 +144,9 @@
               Số QĐ giao NVXH
             </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogSoQd()">
-                <input nz-input [readonly]="isView" formControlName="soCanCu" readonly/>
+              <nz-input-group nzAddOnAfterIcon="folder-open"
+                              (click)="!soQdGiaoNvXh ? openDialogSoQd() : 'javascript;:'">
+                <input nz-input [readonly]="isView || soQdGiaoNvXh" formControlName="soCanCu" readonly/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
