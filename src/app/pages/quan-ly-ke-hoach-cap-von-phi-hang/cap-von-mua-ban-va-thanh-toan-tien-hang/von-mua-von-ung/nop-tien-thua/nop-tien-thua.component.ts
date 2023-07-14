@@ -10,7 +10,7 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { CapVonMuaBanTtthService } from 'src/app/services/quan-ly-von-phi/capVonMuaBanTtth.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { BtnStatus, Const, Report, TienThua } from '../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
+import { BtnStatus, Cvmb, Report, TienThua } from '../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
 
 @Component({
     selector: 'app-nop-tien-thua',
@@ -22,9 +22,8 @@ export class NopTienThuaComponent implements OnInit {
     @Input() dataInfo;
     @Output() dataChange = new EventEmitter();
     Status = Status;
-    Op = Operator;
+    Op = new Operator('1');
     Utils = Utils;
-    Const = Const;
     //thong tin dang nhap
     userInfo: any;
     //thong tin chung bao cao
@@ -101,22 +100,22 @@ export class NopTienThuaComponent implements OnInit {
                 })
                 break;
             case 'nonpass':
-                await this.tuChoi('3').then(() => {
+                await this.tuChoi(Status.TT_03).then(() => {
                     this.isDataAvailable = true;
                 })
                 break;
             case 'pass':
-                await this.onSubmit('4', null).then(() => {
+                await this.onSubmit(Status.TT_04, null).then(() => {
                     this.isDataAvailable = true;
                 })
                 break;
             case 'nonapprove':
-                await this.tuChoi('5').then(() => {
+                await this.tuChoi(Status.TT_05).then(() => {
                     this.isDataAvailable = true;
                 })
                 break;
             case 'approve':
-                await this.onSubmit('7', null).then(() => {
+                await this.onSubmit(Status.TT_07, null).then(() => {
                     this.isDataAvailable = true;
                 })
                 break;
@@ -162,7 +161,9 @@ export class NopTienThuaComponent implements OnInit {
             async (data) => {
                 if (data.statusCode == 0) {
                     this.baoCao = data.data;
-                    this.lstCtiets = this.baoCao.lstCtiets;
+                    data.data.lstCtiets.forEach(item => {
+                        this.lstCtiets.push(new TienThua(item));
+                    })
                     this.listFile = [];
                     this.updateEditCache();
                     this.getStatusButton();
@@ -263,10 +264,7 @@ export class NopTienThuaComponent implements OnInit {
 
         const lstCtietTemp: TienThua[] = [];
         this.lstCtiets.forEach(item => {
-            lstCtietTemp.push({
-                ...item,
-                id: item.id?.length == 38 ? null : item.id,
-            })
+            lstCtietTemp.push(item.request())
         })
         const request = JSON.parse(JSON.stringify(this.baoCao));
         request.lstCtiets = lstCtietTemp;
@@ -311,7 +309,7 @@ export class NopTienThuaComponent implements OnInit {
         this.lstCtiets.forEach(item => {
             this.editCache[item.id] = {
                 edit: false,
-                data: { ...item }
+                data: new TienThua(item),
             };
         });
     }
@@ -324,7 +322,7 @@ export class NopTienThuaComponent implements OnInit {
     cancelEdit(id: string): void {
         const index = this.lstCtiets.findIndex(item => item.id === id);
         this.editCache[id] = {
-            data: { ...this.lstCtiets[index] },
+            data: new TienThua(this.lstCtiets[index]),
             edit: false
         };
     }
@@ -334,12 +332,6 @@ export class NopTienThuaComponent implements OnInit {
         const index = this.lstCtiets.findIndex(item => item.id === id); // lay vi tri hang minh sua
         Object.assign(this.lstCtiets[index], this.editCache[id].data); // set lai data cua lstCtietBcao[index] = this.editCache[id].data
         this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
-    }
-
-    changeModel(id: string) {
-        this.editCache[id].data.nopTong = Operator.sum([this.editCache[id].data.nopVonUng, this.editCache[id].data.nopVonCap]);
-        this.editCache[id].data.lkSauLanNay = Operator.sum([this.editCache[id].data.daNopTong, this.editCache[id].data.nopTong]);
-        this.editCache[id].data.soConPhaiNop = Operator.sum([this.editCache[id].data.duTong, -this.editCache[id].data.lkSauLanNay]);
     }
 
     // xoa file trong bang file

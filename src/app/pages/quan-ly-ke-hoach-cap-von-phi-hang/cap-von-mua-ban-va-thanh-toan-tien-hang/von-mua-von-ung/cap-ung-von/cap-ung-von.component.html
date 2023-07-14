@@ -66,7 +66,7 @@
                                 {{ baoCao.namDnghi }}
                             </td>
                             <td>
-                                {{ Const.suggestionName(baoCao.loaiDeNghi)}}
+                                {{ Cvmb.suggestionName(baoCao.loaiDeNghi)}}
                             </td>
                             <td>
                                 {{ Utils.fmtDate(baoCao.ngayTao) }}
@@ -97,7 +97,7 @@
                         </ng-container>
                         <ng-template #editMoney>
                             <nz-select nzShowSearch nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
-                                (ngModelChange)="editMoneyUnit=false">
+                                (ngModelChange)="editMoneyUnit=false; Op.setMoneyUnit(maDviTien)">
                                 <nz-option *ngFor="let item of Utils.DVI_TIEN" [nzValue]="item.id"
                                     [nzLabel]="item.tenDm">
                                 </nz-option>
@@ -203,22 +203,22 @@
                                     {{ data.tuTk }}
                                 </td>
                                 <td>
-                                    {{ Op.fmtVal(data.uncVonUng, maDviTien) }}
+                                    {{ Op.fmtVal(data.uncVonUng) }}
                                 </td>
                                 <td>
-                                    {{ Op.fmtVal(data.uncVonCap, maDviTien) }}
+                                    {{ Op.fmtVal(data.uncVonCap) }}
                                 </td>
                                 <td>
-                                    {{ Op.fmtVal(data.uncCong, maDviTien) }}
+                                    {{ Op.fmtVal(data.uncCong) }}
                                 </td>
                                 <td>
-                                    {{ Op.fmtVal(data.lkVonUng, maDviTien) }}
+                                    {{ Op.fmtVal(data.lkVonUng) }}
                                 </td>
                                 <td>
-                                    {{ Op.fmtVal(data.lkVonCap, maDviTien) }}
+                                    {{ Op.fmtVal(data.lkVonCap) }}
                                 </td>
                                 <td>
-                                    {{ Op.fmtVal(data.lkCong, maDviTien) }}
+                                    {{ Op.fmtVal(data.lkCong) }}
                                 </td>
                                 <td>
                                     {{ data.ghiChu }}
@@ -262,16 +262,16 @@
                                         (ngModelChange)="changeModel(data.id)" />
                                 </td>
                                 <td>
-                                    {{ Op.fmtVal(editCache[data.id].data.uncCong, maDviTien) }}
+                                    {{ Op.fmtVal(editCache[data.id].data.uncCong) }}
                                 </td>
                                 <td>
-                                    {{ Op.fmtVal(editCache[data.id].data.lkVonUng, maDviTien) }}
+                                    {{ Op.fmtVal(editCache[data.id].data.lkVonUng) }}
                                 </td>
                                 <td>
-                                    {{ Op.fmtVal(editCache[data.id].data.lkVonCap, maDviTien) }}
+                                    {{ Op.fmtVal(editCache[data.id].data.lkVonCap) }}
                                 </td>
                                 <td>
-                                    {{ Op.fmtVal(editCache[data.id].data.lkCong, maDviTien) }}
+                                    {{ Op.fmtVal(editCache[data.id].data.lkCong) }}
                                 </td>
                                 <td>
                                     <input nz-input [(ngModel)]="editCache[data.id].data.ghiChu" />
@@ -290,8 +290,8 @@
             </nz-card>
             <nz-card class="mt-2px flex-card data-table card-border-content table-card">
                 <nz-tabset>
-                    <nz-tab *ngIf="baoCao.maLoai == Const.GHI_NHAN_CU_VON" nzTitle="Thông tin nhận">
-                        <div nz-row *ngIf="baoCao.maLoai == Const.GHI_NHAN_CU_VON"
+                    <nz-tab *ngIf="baoCao.maLoai == Cvmb.GHI_NHAN_CU_VON" nzTitle="Thông tin nhận">
+                        <div nz-row *ngIf="baoCao.maLoai == Cvmb.GHI_NHAN_CU_VON"
                             [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" class="tb-box">
                             <ng-container *ngIf="!status.general; else nhap">
                                 <div nz-col nzSpan="6">
@@ -325,7 +325,7 @@
                     <nz-tab nzTitle="Tài liệu đính kèm">
                         <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" class="top-box">
                             <div nz-col class="gutter-row" [nzSpan]="3">
-                                <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload"
+                                <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" [nzMultiple]="true"
                                     *ngIf="status.general">
                                     <button nz-button>
                                         <i nz-icon nzType="upload"></i>

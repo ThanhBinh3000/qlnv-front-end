@@ -70,7 +70,7 @@
                                 {{ baoCao.quyetDinh }}
                             </td>
                             <td>
-                                {{ Const.suggestionName(baoCao.loaiDeNghi)}}
+                                {{ Cvmb.suggestionName(baoCao.loaiDeNghi)}}
                             </td>
                             <td>
                                 {{ Utils.fmtDate(baoCao.ngayTao) }}
@@ -101,7 +101,7 @@
                         </ng-container>
                         <ng-template #editMoney>
                             <nz-select nzShowSearch nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
-                                (ngModelChange)="editMoneyUnit=false">
+                                (ngModelChange)="editMoneyUnit=false; Op.setMoneyUnit(maDviTien)">
                                 <nz-option *ngFor="let item of Utils.DVI_TIEN" [nzValue]="item.id"
                                     [nzLabel]="item.tenDm">
                                 </nz-option>
@@ -128,13 +128,13 @@
                                 Giá trị theo kế hoạch
                             </th>
                             <th colspan="3">
-                                Số thanh toán lũy kế
+                                Số thanh toán lũy kế (Bao gồm số thanh toán lần này)
                             </th>
                             <th rowspan="2">
                                 Số còn được thanh toán
                             </th>
                             <th rowspan="2">
-                                Số thanh toán lần này
+                                Số duyệt thanh toán lần này
                             </th>
                             <th colspan="5">
                                 Ủy nhiệm chi (Số thanh toán đợt {{baoCao.dot}})
@@ -203,25 +203,25 @@
                                     {{ Op.fmtNum(data.slKeHoach) }}
                                 </td>
                                 <td>
-                                    {{ Op.fmtVal(data.donGia, maDviTien) }}
+                                    {{ Op.fmtVal(data.donGia) }}
                                 </td>
                                 <td>
-                                    {{ Op.fmtVal(data.gtKeHoach, maDviTien) }}
+                                    {{ Op.fmtVal(data.gtKeHoach) }}
                                 </td>
                                 <td>
-                                    {{ Op.fmtVal(data.lkUng, maDviTien) }}
+                                    {{ Op.fmtVal(data.lkUng) }}
                                 </td>
                                 <td>
-                                    {{ Op.fmtVal(data.lkCap, maDviTien) }}
+                                    {{ Op.fmtVal(data.lkCap) }}
                                 </td>
                                 <td>
-                                    {{ Op.fmtVal(data.lkCong, maDviTien) }}
+                                    {{ Op.fmtVal(data.lkCong) }}
                                 </td>
                                 <td>
-                                    {{ Op.fmtVal(data.soConDcTt, maDviTien) }}
+                                    {{ Op.fmtVal(data.soConDcTt) }}
                                 </td>
                                 <td>
-                                    {{ Op.fmtVal(data.soDuyetTt, maDviTien) }}
+                                    {{ Op.fmtVal(data.soDuyetTt) }}
                                 </td>
                                 <td>
                                     {{ Utils.fmtDate(data.uncNgay) }}
@@ -230,13 +230,13 @@
                                     {{ data.uncNienDoNs }}
                                 </td>
                                 <td>
-                                    {{ Op.fmtVal(data.ung, maDviTien) }}
+                                    {{ Op.fmtVal(data.ung) }}
                                 </td>
                                 <td>
-                                    {{ Op.fmtVal(data.cap, maDviTien) }}
+                                    {{ Op.fmtVal(data.cap) }}
                                 </td>
                                 <td>
-                                    {{ Op.fmtVal(data.cong, maDviTien) }}
+                                    {{ Op.fmtVal(data.cong) }}
                                 </td>
                                 <td>
                                     {{ data.ghiChu }}
@@ -249,27 +249,27 @@
                                 <td>
                                     <input class="money-input" currencyMask [options]="Op.amount"
                                         [(ngModel)]="editCache[data.id].data.slKeHoach"
-                                        (ngModelChange)="changeModel(data.id)" />
+                                        (ngModelChange)="changeModel(data)" />
                                 </td>
                                 <td>
                                     <input class="money-input" currencyMask [options]="Op.amount"
                                         [(ngModel)]="editCache[data.id].data.donGia"
-                                        (ngModelChange)="changeModel(data.id)" />
+                                        (ngModelChange)="changeModel(data)" />
                                 </td>
                                 <td>
-                                    {{ Op.fmtVal(editCache[data.id].data.gtKeHoach, maDviTien) }}
+                                    {{ Op.fmtVal(editCache[data.id].data.gtKeHoach) }}
                                 </td>
                                 <td>
-                                    {{ Op.fmtVal(editCache[data.id].data.lkUng, maDviTien) }}
+                                    {{ Op.fmtVal(editCache[data.id].data.lkUng) }}
                                 </td>
                                 <td>
-                                    {{ Op.fmtVal(editCache[data.id].data.lkCap, maDviTien) }}
+                                    {{ Op.fmtVal(editCache[data.id].data.lkCap) }}
                                 </td>
                                 <td>
-                                    {{ Op.fmtVal(editCache[data.id].data.lkCong, maDviTien) }}
+                                    {{ Op.fmtVal(editCache[data.id].data.lkCong) }}
                                 </td>
                                 <td>
-                                    {{ Op.fmtVal(editCache[data.id].data.soConDcTt, maDviTien) }}
+                                    {{ Op.fmtVal(editCache[data.id].data.soConDcTt) }}
                                 </td>
                                 <td>
                                     <input class="money-input" currencyMask [options]="Op.amount"
@@ -285,16 +285,14 @@
                                 </td>
                                 <td>
                                     <input class="money-input" currencyMask [options]="Op.amount"
-                                        [(ngModel)]="editCache[data.id].data.ung"
-                                        (ngModelChange)="changeModel(data.id)" />
+                                        [(ngModel)]="editCache[data.id].data.ung" (ngModelChange)="changeModel(data)" />
                                 </td>
                                 <td>
                                     <input class="money-input" currencyMask [options]="Op.amount"
-                                        [(ngModel)]="editCache[data.id].data.cap"
-                                        (ngModelChange)="changeModel(data.id)" />
+                                        [(ngModel)]="editCache[data.id].data.cap" (ngModelChange)="changeModel(data)" />
                                 </td>
                                 <td>
-                                    {{ Op.fmtVal(editCache[data.id].data.cong, maDviTien) }}
+                                    {{ Op.fmtVal(editCache[data.id].data.cong) }}
                                 </td>
                                 <td>
                                     <input nz-input [(ngModel)]="editCache[data.id].data.ghiChu" />
@@ -320,7 +318,7 @@
                     <nz-tab nzTitle="Tài liệu đính kèm">
                         <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" class="top-box">
                             <div nz-col class="gutter-row" [nzSpan]="3">
-                                <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload"
+                                <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" [nzMultiple]="true"
                                     *ngIf="status.save">
                                     <button nz-button>
                                         <i nz-icon nzType="upload"></i>

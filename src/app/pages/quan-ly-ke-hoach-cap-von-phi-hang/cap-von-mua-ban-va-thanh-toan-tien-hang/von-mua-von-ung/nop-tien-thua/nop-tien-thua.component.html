@@ -92,7 +92,7 @@
                         </ng-container>
                         <ng-template #editMoney>
                             <nz-select nzShowSearch nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
-                                (ngModelChange)="editMoneyUnit=false">
+                                (ngModelChange)="editMoneyUnit=false; Op.setMoneyUnit(maDviTien)">
                                 <nz-option *ngFor="let item of Utils.DVI_TIEN" [nzValue]="item.id"
                                     [nzLabel]="item.tenDm">
                                 </nz-option>
@@ -191,68 +191,68 @@
                                 {{ data.tenHangDtqg }}
                             </td>
                             <td>
-                                {{ Op.fmtVal(data.nhanVonUng, maDviTien) }}
+                                {{ Op.fmtVal(data.nhanVonUng) }}
                             </td>
                             <td>
-                                {{ Op.fmtVal(data.nhanVonCap, maDviTien) }}
+                                {{ Op.fmtVal(data.nhanVonCap) }}
                             </td>
                             <td>
-                                {{ Op.fmtVal(data.nhanTong, maDviTien) }}
+                                {{ Op.fmtVal(data.nhanTong) }}
                             </td>
                             <td *ngIf="!userService.isChiCuc()">
-                                {{ Op.fmtVal(data.giaoCapUng, maDviTien) }}
+                                {{ Op.fmtVal(data.giaoCapUng) }}
                             </td>
                             <td *ngIf="!userService.isChiCuc()">
-                                {{ Op.fmtVal(data.giaoCapVon, maDviTien) }}
+                                {{ Op.fmtVal(data.giaoCapVon) }}
                             </td>
                             <td *ngIf="!userService.isChiCuc()">
-                                {{ Op.fmtVal(data.giaoTong, maDviTien) }}
+                                {{ Op.fmtVal(data.giaoTong) }}
                             </td>
                             <td>
-                                {{ Op.fmtVal(data.ttVonUng, maDviTien) }}
+                                {{ Op.fmtVal(data.ttVonUng) }}
                             </td>
                             <td>
-                                {{ Op.fmtVal(data.ttVonCap, maDviTien) }}
+                                {{ Op.fmtVal(data.ttVonCap) }}
                             </td>
                             <td>
-                                {{ Op.fmtVal(data.ttTong, maDviTien) }}
+                                {{ Op.fmtVal(data.ttTong) }}
                             </td>
                             <td>
-                                {{ Op.fmtVal(data.duVonUng, maDviTien) }}
+                                {{ Op.fmtVal(data.duVonUng) }}
                             </td>
                             <td>
-                                {{ Op.fmtVal(data.duVonCap, maDviTien) }}
+                                {{ Op.fmtVal(data.duVonCap) }}
                             </td>
                             <td>
-                                {{ Op.fmtVal(data.duTong, maDviTien) }}
+                                {{ Op.fmtVal(data.duTong) }}
                             </td>
                             <td>
-                                {{ Op.fmtVal(data.daNopVonUng, maDviTien) }}
+                                {{ Op.fmtVal(data.daNopVonUng) }}
                             </td>
                             <td>
-                                {{ Op.fmtVal(data.daNopVonCap, maDviTien) }}
+                                {{ Op.fmtVal(data.daNopVonCap) }}
                             </td>
                             <td>
-                                {{ Op.fmtVal(data.daNopTong, maDviTien) }}
+                                {{ Op.fmtVal(data.daNopTong) }}
                             </td>
                             <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
                                 <td>
                                     {{ Utils.fmtDate(data.nopUncNgay) }}
                                 </td>
                                 <td>
-                                    {{ Op.fmtVal(data.nopVonUng, maDviTien) }}
+                                    {{ Op.fmtVal(data.nopVonUng) }}
                                 </td>
                                 <td>
-                                    {{ Op.fmtVal(data.nopVonCap, maDviTien) }}
+                                    {{ Op.fmtVal(data.nopVonCap) }}
                                 </td>
                                 <td>
-                                    {{ Op.fmtVal(data.nopTong, maDviTien) }}
+                                    {{ Op.fmtVal(data.nopTong) }}
                                 </td>
                                 <td>
-                                    {{ Op.fmtVal(data.lkSauLanNay, maDviTien) }}
+                                    {{ Op.fmtVal(data.lkSauLanNay) }}
                                 </td>
                                 <td>
-                                    {{ Op.fmtVal(data.soConPhaiNop, maDviTien) }}
+                                    {{ Op.fmtVal(data.soConPhaiNop) }}
                                 </td>
                                 <td>
                                     {{ data.ghiChu }}
@@ -270,21 +270,21 @@
                                 <td>
                                     <input class="money-input" currencyMask [options]="amount"
                                         [(ngModel)]="editCache[data.id].data.nopVonUng"
-                                        (ngModelChange)="changeModel(data.id)" />
+                                        (ngModelChange)="editCache[data.id].data.changeModel()" />
                                 </td>
                                 <td>
                                     <input class="money-input" currencyMask [options]="amount"
                                         [(ngModel)]="editCache[data.id].data.nopVonCap"
-                                        (ngModelChange)="changeModel(data.id)" />
+                                        (ngModelChange)="editCache[data.id].data.changeModel()" />
                                 </td>
                                 <td>
-                                    {{ Op.fmtVal(editCache[data.id].data.nopTong, maDviTien) }}
+                                    {{ Op.fmtVal(editCache[data.id].data.nopTong) }}
                                 </td>
                                 <td>
-                                    {{ Op.fmtVal(editCache[data.id].data.lkSauLanNay, maDviTien) }}
+                                    {{ Op.fmtVal(editCache[data.id].data.lkSauLanNay) }}
                                 </td>
                                 <td>
-                                    {{ Op.fmtVal(editCache[data.id].data.soConPhaiNop, maDviTien) }}
+                                    {{ Op.fmtVal(editCache[data.id].data.soConPhaiNop) }}
                                 </td>
                                 <td>
                                     <input nz-input [(ngModel)]="editCache[data.id].data.ghiChu" />
@@ -301,79 +301,57 @@
                     </tbody>
                 </nz-table>
             </nz-card>
-            <nz-card class="mt-2px flex-card data-table card-border-content table-card" style="margin-top: 20px;"
-                nzTitle="Thông tin nhận">
-                <div nz-row *ngIf="status.accept" [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }"
-                    style="margin-top: 10px">
-                    <ng-container *ngIf="!status.accept; else nhap">
-                        <div nz-col nzSpan="6">
-                            Ngày nhận lệnh chuyển có: <span>{{ Utils.fmtDate(baoCao.ngayNhanLenhChuyenCo) }}</span>
+            <nz-card class="mt-2px flex-card data-table card-border-content table-card" style="margin-top: 20px;">
+                <nz-tabset>
+                    <nz-tab nzTitle="Thuyết minh">
+                        <textarea nz-input nzAutosize="{minRows: 4, maxRows: 16}" [(ngModel)]="baoCao.thuyetMinh"
+                            [disabled]="!status.general" class="tb-box"></textarea>
+                    </nz-tab>
+                    <nz-tab nzTitle="Tài liệu đính kèm">
+                        <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" class="top-box">
+                            <div nz-col class="gutter-row" [nzSpan]="3">
+                                <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" [nzMultiple]="true"
+                                    *ngIf="status.general">
+                                    <button nz-button>
+                                        <i nz-icon nzType="upload"></i>
+                                        Chọn tài liệu đính kèm
+                                    </button>
+                                </nz-upload>
+                                <button nz-button [nzType]="'primary'" (click)="handleUpload()"
+                                    [disabled]="fileList.length === 0" *ngIf="status.general" style="margin-top: 16px">
+                                    Thêm vào danh sách
+                                </button>
+                            </div>
                         </div>
-                        <div nz-col nzSpan="6">
-                            Tài khoản nhận: <span>{{ baoCao.tkNhan }}</span>
+                        <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" class="tb-box">
+                            <div nz-col class="gutter-row" [nzSpan]="13">
+                                <nz-table nzBordered class="table__body">
+                                    <thead>
+                                        <tr>
+                                            <th nzWidth="7%">STT</th>
+                                            <th>Tên file</th>
+                                            <th nzWidth="15%"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let data of baoCao.lstFiles; let i = index">
+                                            <td>{{ i + 1 }} </td>
+                                            <td>{{ data.fileName }}</td>
+                                            <td>
+                                                <a (click)="downloadFile(data.id)">
+                                                    <i class="fa fa-eye"></i>
+                                                </a>
+                                                <a (click)="deleteFile(data.id)">
+                                                    <i class="fa fa-trash-o do"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </nz-table>
+                            </div>
                         </div>
-                    </ng-container>
-                    <ng-template #nhap>
-                        <div nz-col nzSpan="6">
-                            <label class="search__label">Ngày nhận lệnh chuyển có</label>
-                            <nz-date-picker class="search__input" [(ngModel)]="baoCao.ngayNhanLenhChuyenCo"
-                                nzFormat="dd/MM/yyyy"
-                                [class]="baoCao.ngayNhanLenhChuyenCo ?'' : 'input-error-validate' ">
-                            </nz-date-picker>
-                        </div>
-                        <div nz-col nzSpan="6">
-                            <label class="search__label">Tài khoản nhận</label>
-                            <input nz-input [class]="baoCao.tkNhan ?'' : 'input-error-validate' "
-                                [(ngModel)]="baoCao.ttNhan.tkNhan" />
-                        </div>
-                    </ng-template>
-                </div>
-                <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
-                    <textarea nz-input nzAutosize="{minRows: 4, maxRows: 16}" [(ngModel)]="baoCao.thuyetMinh"
-                        [disabled]="!status.save"></textarea>
-                </div>
-                <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
-                    Danh sách văn bản đính kèm
-                    <div nz-col class="gutter-row" [nzSpan]="3">
-                        <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" *ngIf="status.save">
-                            <button nz-button>
-                                <i nz-icon nzType="upload"></i>
-                                Chọn tài liệu đính kèm
-                            </button>
-                        </nz-upload>
-                        <button nz-button [nzType]="'primary'" (click)="handleUpload()"
-                            [disabled]="fileList.length === 0" *ngIf="status.general" style="margin-top: 16px">
-                            Thêm vào danh sách
-                        </button>
-                    </div>
-                </div>
-                <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
-                    <div nz-col class="gutter-row" [nzSpan]="13">
-                        <nz-table nzBordered class="table__body">
-                            <thead>
-                                <tr>
-                                    <th nzWidth="7%">STT</th>
-                                    <th>Tên file</th>
-                                    <th nzWidth="15%"></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let data of baoCao.lstFiles; let i = index">
-                                    <td>{{ i + 1 }} </td>
-                                    <td>{{ data.fileName }}</td>
-                                    <td>
-                                        <a (click)="downloadFile(data.id)">
-                                            <i class="fa fa-eye"></i>
-                                        </a>
-                                        <a (click)="deleteFile(data.id)">
-                                            <i class="fa fa-trash-o do"></i>
-                                        </a>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </nz-table>
-                    </div>
-                </div>
+                    </nz-tab>
+                </nz-tabset>
             </nz-card>
         </div>
     </div>

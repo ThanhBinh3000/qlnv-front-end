@@ -10,16 +10,16 @@ import { CapVonMuaBanTtthService } from 'src/app/services/quan-ly-von-phi/capVon
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
-import { CapUng, Const, Report } from '../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
-import { Tab } from '../von-mua-von-ung.constant';
+import { CapUng, Cvmb, Report } from '../../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
+import { Tab } from '../../von-mua-von-ung.constant';
 
 @Component({
-    selector: 'dialog-tao-moi-cap-von',
-    templateUrl: './dialog-tao-moi-cap-von.component.html',
-    styleUrls: ['../von-mua-von-ung.component.scss'],
+    selector: 'dialog-tao-moi-cap-ung-von',
+    templateUrl: './dialog-tao-moi-cap-ung-von.component.html',
+    styleUrls: ['../../von-mua-von-ung.component.scss'],
 })
 
-export class DialogTaoMoiCapVonComponent implements OnInit {
+export class DialogTaoMoiCapUngVonComponent implements OnInit {
     @Input() request: any;
 
     userInfo: any;
@@ -40,11 +40,11 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
     async ngOnInit() {
         this.response.maLoai = this.request.maLoai;
         if (this.userService.isTongCuc()) {
-            this.loaiDns = this.response.maLoai == Const.CU_VON_DVCD ? Const.LOAI_DE_NGHI.filter(e => e.id != Const.VTU) : Const.LOAI_DE_NGHI;
+            this.loaiDns = this.response.maLoai == Cvmb.CU_VON_DVCD ? Cvmb.LOAI_DE_NGHI.filter(e => e.id != Cvmb.VTU) : Cvmb.LOAI_DE_NGHI;
         } else if (this.userService.isCuc()) {
-            this.loaiDns = this.response.maLoai == Const.CU_VON_DVCD ? Const.LOAI_DE_NGHI.filter(e => e.id == Const.THOC) : Const.LOAI_DE_NGHI.filter(e => e.id != Const.VTU);
+            this.loaiDns = this.response.maLoai == Cvmb.CU_VON_DVCD ? Cvmb.LOAI_DE_NGHI.filter(e => e.id == Cvmb.THOC) : Cvmb.LOAI_DE_NGHI.filter(e => e.id != Cvmb.VTU);
         } else {
-            this.loaiDns = Const.LOAI_DE_NGHI.filter(e => e.id == Const.THOC);
+            this.loaiDns = Cvmb.LOAI_DE_NGHI.filter(e => e.id == Cvmb.THOC);
         }
         this.userInfo = this.userService.getUserLogin();
 
@@ -70,18 +70,13 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
                     let lstBcao = [];
                     if (data.data.content?.length > 0) {
                         lstBcao = data.data.content;
-                        lstBcao.sort((a, b) => {
-                            if (a.dot < b.dot) {
-                                return 1;
-                            }
-                            return -1
-                        })
+                        lstBcao.sort((a, b) => b.dot - a.dot);
                         if ([Status.TT_02, Status.TT_04, Status.TT_01].includes(lstBcao[0].trangThai)) {
                             this.notification.warning(MESSAGE.WARNING, 'Trạng thái của đợt trước không cho phép tạo mới!')
                             this.response.loaiDeNghi = null;
                             return;
                         } else {
-                            const index = lstBcao.findIndex(e => Status.check('reject', e.trangThai));
+                            const index = lstBcao.findIndex(e => !Status.check('reject', e.trangThai));
                             if (index != -1) {
                                 Object.assign(initItem, lstBcao[index]);
                             }
@@ -110,32 +105,35 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
         this.response.lstFiles = [];
         this.response.lstCtiets = [];
         await this.getMaDnghi();
-        if (this.response.maLoai == Const.GHI_NHAN_CU_VON) {
-            this.response.lstCtiets.push({
-                ... new CapUng(),
-                id: uuid.v4() + 'FE',
-                maDvi: this.response.maDvi,
-                tenDvi: this.userInfo.TEN_DVI,
-            })
-        } else {
-            await this.getChildUnit();
-            this.donVis.forEach(item => {
-                this.response.lstCtiets.push({
-                    ... new CapUng(),
+        if (initItem.lstCtiets?.length == 0) {
+            if (this.response.maLoai == Cvmb.GHI_NHAN_CU_VON) {
+                this.response.lstCtiets.push(new CapUng({
                     id: uuid.v4() + 'FE',
-                    maDvi: item.maDvi,
-                    tenDvi: item.tenDvi,
+                    maDvi: this.response.maDvi,
+                    tenDvi: this.userInfo.TEN_DVI,
+                }))
+            } else {
+                await this.getChildUnit();
+                this.donVis.forEach(item => {
+                    this.response.lstCtiets.push(new CapUng({
+                        id: uuid.v4() + 'FE',
+                        maDvi: item.maDvi,
+                        tenDvi: item.tenDvi,
+                    }))
                 })
+            }
+        } else {
+            initItem.lstCtiets.forEach(item => {
+                this.response.lstCtiets.push(new CapUng({
+                    ...item,
+                    id: uuid.v4() + 'FE',
+                    uncVonUng: 0,
+                    uncVonCap: 0,
+                    uncCong: 0,
+                    ghiChu: null,
+                }))
             })
         }
-        initItem.lstCtiets.forEach(item => {
-            const data = initItem.lstCtiets.find(e => e.maDvi == item.maDvi);
-            if (data) {
-                item.lkVonUng = data.lkVonUng;
-                item.lkVonCap = data.lkVonCap;
-                item.lkCong = data.lkCong;
-            }
-        })
     }
 
     async getMaDnghi() {

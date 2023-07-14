@@ -73,6 +73,12 @@ export class BaoCaoThucHienVonPhiService extends BaseService {
         );
     }
 
+    ctietBieuMau(id: string): Observable<any> {
+        return this.httpClient.get(
+            this.urlDefault + '/bao-cao/chi-tiet/bieu-mau/' + id,
+        );
+    }
+
     //tong hop bao cao ket qua thuc hien von phi hang DTQG
     tongHopBaoCaoKetQua(request: any): Observable<any> {
         return this.httpClient.post(
@@ -117,5 +123,17 @@ export class BaoCaoThucHienVonPhiService extends BaseService {
             this.urlDefault + '/bao-cao/them-moi-vp',
             request,
         )
+    }
+
+    addHistory(id: string): Observable<any> {
+        return this.httpClient.get(
+            this.urlDefault + '/bao-cao/tao-moi-lich-su/' + id,
+        );
+    }
+
+    restoreReport(cId: string, rId: string): Observable<any> {
+        return this.httpClient.get(
+            this.urlDefault + '/bao-cao/khoi-phuc/currentId=' + cId + '/recoverId=' + rId,
+        );
     }
 }
