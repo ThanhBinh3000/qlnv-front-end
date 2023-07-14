@@ -179,16 +179,16 @@
 						</thead>
 						<tbody>
 							<tr *ngFor="let data of lstCtietBcao; let i = index">
+								<td nzLeft>
+									{{ data.index() }}
+								</td>
+								<td nzLeft>
+									{{ data.tenDanhMuc }}
+								</td>
+								<td>
+									{{ data.dviTinh }}
+								</td>
 								<ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
-									<td nzLeft>
-										{{ getChiMuc(data.stt) }}
-									</td>
-									<td nzLeft>
-										{{ data.tenDanhMuc }}
-									</td>
-									<td>
-										{{ data.dviTinh }}
-									</td>
 									<td>
 										{{ Op.fmtVal(data.thNamTruoc) }}
 									</td>
@@ -244,15 +244,6 @@
 									</td>
 								</ng-container>
 								<ng-template #editTemplate>
-									<td nzLeft>
-										{{ getChiMuc(data.stt) }}
-									</td>
-									<td nzLeft>
-										{{ data.tenDanhMuc }}
-									</td>
-									<td>
-										{{ editCache[data.id].data.dviTinh }}
-									</td>
 									<ng-container *ngIf="!status.viewAppVal; else viewAppVal">
 										<td>
 											<input class="money-input" currencyMask [options]="Op.amount"
@@ -269,7 +260,7 @@
 										<td>
 											<input class="money-input" currencyMask [options]="Op.amount"
 												[(ngModel)]="editCache[data.id].data.sluongTaiKho"
-												(ngModelChange)="changeModel(data.id)" />
+												(ngModelChange)="editCache[data.id].data.changeModel()" />
 										</td>
 										<td>
 											{{ Op.fmtVal(editCache[data.id].data.dmucTaiKho) }}
@@ -280,7 +271,7 @@
 										<td>
 											<input class="money-input" currencyMask [options]="Op.amount"
 												[(ngModel)]="editCache[data.id].data.binhQuanNgoaiKho"
-												(ngModelChange)="changeModel(data.id)" />
+												(ngModelChange)="editCache[data.id].data.changeModel()" />
 										</td>
 										<td>
 											{{ Op.fmtVal(editCache[data.id].data.ttienNgoaiKho) }}
@@ -323,7 +314,7 @@
 										<td>
 											<input class="money-input" currencyMask [options]="Op.amount"
 												[(ngModel)]="editCache[data.id].data.tdinhKhoSluong"
-												(ngModelChange)="changeModel(data.id)" />
+												(ngModelChange)="editCache[data.id].data.changeModel()" />
 										</td>
 										<td>
 											{{ Op.fmtVal(editCache[data.id].data.tdinhKhoTtien) }}

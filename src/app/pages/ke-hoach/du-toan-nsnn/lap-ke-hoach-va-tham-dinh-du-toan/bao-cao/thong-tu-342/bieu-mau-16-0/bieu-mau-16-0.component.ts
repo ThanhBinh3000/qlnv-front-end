@@ -35,6 +35,42 @@ export class ItemData {
 	chenhLech: number;
 	ghiChu: string;
 	ykienDviCtren: string;
+
+	constructor(data: Partial<Pick<ItemData, keyof ItemData>>) {
+		Object.assign(this, data);
+	}
+
+	changeModel() {
+		this.chenhLech = Operator.sum([this.tdinhTtien, -this.khTtien])
+	}
+
+	upperBound() {
+		return this.khTtien > Utils.MONEY_LIMIT || this.namKhTtien > Utils.MONEY_LIMIT || this.tdinhTtien > Utils.MONEY_LIMIT || this.uocThTtien > Utils.MONEY_LIMIT;
+	}
+
+	clear() {
+		Object.keys(this).forEach(key => {
+			if (typeof this[key] === 'number' && key != 'level') {
+				this[key] = null;
+			}
+		})
+	}
+
+	sum(data: ItemData) {
+		Object.keys(data).forEach(key => {
+			if (key != 'level' && (typeof this[key] == 'number' || typeof data[key] == 'number')) {
+				this[key] = Operator.sum([this[key], data[key]]);
+			}
+		})
+	}
+
+	request() {
+		const temp = Object.assign({}, this);
+		if (this.id?.length == 38) {
+			temp.id = null;
+		}
+		return temp;
+	}
 }
 
 @Component({
@@ -48,7 +84,7 @@ export class BieuMau160Component implements OnInit {
 	Utils = Utils;
 	//thong tin chi tiet cua bieu mau
 	formDetail: Form = new Form();
-	total: ItemData = new ItemData();
+	total: ItemData = new ItemData({});
 	maDviTien: string = '1';
 	namBcao: number;
 	//danh muc
@@ -140,7 +176,9 @@ export class BieuMau160Component implements OnInit {
 				if (data.statusCode == 0) {
 					this.formDetail = data.data;
 					this.formDetail.maDviTien = '1';
-					this.lstCtietBcao = this.formDetail.lstCtietLapThamDinhs;
+					this.formDetail.lstCtietLapThamDinhs.forEach(item => {
+						this.lstCtietBcao.push(new ItemData(item));
+					})
 					this.formDetail.listIdDeleteFiles = [];
 					this.listFile = [];
 					this.getStatusButton();
@@ -161,7 +199,7 @@ export class BieuMau160Component implements OnInit {
 			return;
 		}
 
-		if (this.lstCtietBcao.some(e => e.khTtien > Utils.MONEY_LIMIT || e.namKhTtien > Utils.MONEY_LIMIT || e.tdinhTtien > Utils.MONEY_LIMIT || e.uocThTtien > Utils.MONEY_LIMIT)) {
+		if (this.lstCtietBcao.some(e => e.upperBound())) {
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
 			return;
 		}
@@ -173,10 +211,7 @@ export class BieuMau160Component implements OnInit {
 
 		const lstCtietBcaoTemp: ItemData[] = [];
 		this.lstCtietBcao.forEach(item => {
-			lstCtietBcaoTemp.push({
-				...item,
-				id: item.id?.length == 38 ? null : item.id,
-			})
+			lstCtietBcaoTemp.push(item.request())
 		})
 
 		if (this.status.general) {
@@ -308,46 +343,26 @@ export class BieuMau160Component implements OnInit {
 		this.lstCtietBcao = this.lstCtietBcao.filter(item => item.id != id)
 	}
 
-	addLine(id: any) {
-		const item: ItemData = {
-			... new ItemData(),
-			id: uuid.v4(),
-		};
-
-		this.lstCtietBcao.splice(id, 0, item);
-		this.editCache[item.id] = {
-			edit: true,
-			data: { ...item }
-		};
-	}
-
-	updateAllChecked(): void {
-		if (this.allChecked) {
-			this.lstCtietBcao = this.lstCtietBcao.map(item => ({
-				...item,
-				checked: true
-			}));
-		} else {
-			this.lstCtietBcao = this.lstCtietBcao.map(item => ({
-				...item,
-				checked: false
-			}));
-		}
-	}
-
-	deleteAllChecked() {
-		this.lstCtietBcao = this.lstCtietBcao.filter(e => !e.checked);
-		this.allChecked = false;
-	}
-
 	// gan editCache.data == lstCtietBcao
 	updateEditCache(): void {
 		this.lstCtietBcao.forEach(item => {
 			this.editCache[item.id] = {
 				edit: false,
-				data: { ...item }
+				data: new ItemData(item)
 			};
 		});
+	}
+
+	addLine(id: any) {
+		const item: ItemData = new ItemData({
+			id: uuid.v4(),
+		});
+
+		this.lstCtietBcao.splice(id, 0, item);
+		this.editCache[item.id] = {
+			edit: true,
+			data: new ItemData(item)
+		};
 	}
 
 	// start edit
@@ -360,7 +375,7 @@ export class BieuMau160Component implements OnInit {
 		const index = this.lstCtietBcao.findIndex(item => item.id === id);
 		// lay vi tri hang minh sua
 		this.editCache[id] = {
-			data: { ...this.lstCtietBcao[index] },
+			data: new ItemData(this.lstCtietBcao[index]),
 			edit: false
 		};
 	}
@@ -378,17 +393,10 @@ export class BieuMau160Component implements OnInit {
 		this.updateEditCache();
 	}
 
-	changeModel(id: string): void {
-		this.editCache[id].data.chenhLech = this.editCache[id].data.tdinhTtien - this.editCache[id].data.khTtien
-	}
-
 	getTotal() {
-		this.total = new ItemData();
+		this.total.clear();
 		this.lstCtietBcao.forEach(item => {
-			this.total.khTtien = Operator.sum([this.total.khTtien, item.khTtien])
-			this.total.uocThTtien = Operator.sum([this.total.uocThTtien, item.uocThTtien])
-			this.total.namKhTtien = Operator.sum([this.total.namKhTtien, item.namKhTtien])
-			this.total.tdinhTtien = Operator.sum([this.total.tdinhTtien, item.tdinhTtien])
+			this.total.sum(item);
 		})
 	}
 

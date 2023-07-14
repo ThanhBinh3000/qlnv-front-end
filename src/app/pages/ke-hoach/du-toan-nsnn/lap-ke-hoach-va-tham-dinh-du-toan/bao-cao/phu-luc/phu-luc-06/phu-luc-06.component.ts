@@ -33,6 +33,48 @@ export class ItemData {
     chenhLech: number;
     thuyetMinh: string;
     ykienDviCtren: string
+
+    constructor(data: Partial<Pick<ItemData, keyof ItemData>>) {
+        Object.assign(this, data);
+    }
+
+    changeModel() {
+        this.sluongTsanTcong = Operator.sum([this.sluongTsanTdiemBcao, this.sluongTsanDaNhan, this.sluongTsanPduyet]);
+        if (this.dtoanDnghiSluong > Operator.sum([this.tchuanDmucTda, -this.sluongTsanTcong])) {
+            this.dtoanDnghiSluong = Operator.sum([this.tchuanDmucTda, -this.sluongTsanTcong]);
+        }
+        this.thanhTien = Operator.mul(this.dtoanDnghiSluong, this.dtoanDnghiMgia);
+        this.tdinhTtien = Operator.mul(this.tdinhSluong, this.dtoanDnghiMgia);
+        this.chenhLech = Operator.sum([this.tdinhTtien, -this.thanhTien]);
+    }
+
+    upperBound() {
+        return this.sluongTsanTdiemBcao > Utils.MONEY_LIMIT;
+    }
+
+    clear() {
+        Object.keys(this).forEach(key => {
+            if (typeof this[key] === 'number' && key != 'level') {
+                this[key] = null;
+            }
+        })
+    }
+
+    sum(data: ItemData) {
+        Object.keys(data).forEach(key => {
+            if (key != 'level' && (typeof this[key] == 'number' || typeof data[key] == 'number')) {
+                this[key] = Operator.sum([this[key], data[key]]);
+            }
+        })
+    }
+
+    request() {
+        const temp = Object.assign({}, this);
+        if (this.id?.length == 38) {
+            temp.id = null;
+        }
+        return temp;
+    }
 }
 @Component({
     selector: 'app-phu-luc-06',
@@ -46,7 +88,7 @@ export class PhuLuc06Component implements OnInit {
     Utils = Utils;
     //thong tin chi tiet cua bieu mau
     formDetail: Form = new Form();
-    total: ItemData = new ItemData();
+    total: ItemData = new ItemData({});
     maDviTien: string = '1';
     namBcao: number;
     //danh muc
@@ -137,7 +179,9 @@ export class PhuLuc06Component implements OnInit {
                 if (data.statusCode == 0) {
                     this.formDetail = data.data;
                     this.formDetail.maDviTien = '1';
-                    this.lstCtietBcao = this.formDetail.lstCtietLapThamDinhs;
+                    this.formDetail.lstCtietLapThamDinhs.forEach(item => {
+                        this.lstCtietBcao.push(new ItemData(item));
+                    })
                     this.formDetail.listIdDeleteFiles = [];
                     this.listFile = [];
                     this.getStatusButton();
@@ -158,7 +202,7 @@ export class PhuLuc06Component implements OnInit {
             return;
         }
 
-        if (this.lstCtietBcao.some(e => e.sluongTsanTdiemBcao > Utils.MONEY_LIMIT)) {
+        if (this.lstCtietBcao.some(e => e.upperBound())) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
             return;
         }
@@ -170,10 +214,7 @@ export class PhuLuc06Component implements OnInit {
 
         const lstCtietBcaoTemp: ItemData[] = [];
         this.lstCtietBcao.forEach(item => {
-            lstCtietBcaoTemp.push({
-                ...item,
-                id: item.id?.length == 38 ? null : item.id,
-            })
+            lstCtietBcaoTemp.push(item.request())
         })
 
         if (this.status.general) {
@@ -248,7 +289,7 @@ export class PhuLuc06Component implements OnInit {
         const index = this.lstCtietBcao.findIndex(item => item.id === id);
         // lay vi tri hang minh sua
         this.editCache[id] = {
-            data: { ...this.lstCtietBcao[index] },
+            data: new ItemData(this.lstCtietBcao[index]),
             edit: false
         };
     }
@@ -294,16 +335,15 @@ export class PhuLuc06Component implements OnInit {
 
     // them dong moi
     addLine(id: number): void {
-        const item: ItemData = {
-            ... new ItemData(),
+        const item: ItemData = new ItemData({
             id: uuid.v4() + 'FE',
             checked: false,
-        }
+        })
 
         this.lstCtietBcao.splice(id + 1, 0, item);
         this.editCache[item.id] = {
             edit: true,
-            data: { ...item }
+            data: new ItemData(item)
         };
     }
 
@@ -313,24 +353,10 @@ export class PhuLuc06Component implements OnInit {
     }
 
     tinhTong() {
-        this.total = new ItemData();
+        this.total.clear();
         this.lstCtietBcao.forEach(item => {
-            this.total.tchuanDmucTda = Operator.sum([this.total.tchuanDmucTda, item.tchuanDmucTda]);
-            this.total.dtoanDnghiMgia = Operator.sum([this.total.dtoanDnghiMgia, item.dtoanDnghiMgia]);
-            this.total.thanhTien = Operator.sum([this.total.thanhTien, item.thanhTien]);
-            this.total.tdinhTtien = Operator.sum([this.total.tdinhTtien, item.tdinhTtien]);
-            this.total.chenhLech = Operator.sum([this.total.chenhLech, item.chenhLech]);
+            this.total.sum(item);
         })
-    }
-
-    changeModel(id: string): void {
-        this.editCache[id].data.sluongTsanTcong = Operator.sum([this.editCache[id].data.sluongTsanTdiemBcao, this.editCache[id].data.sluongTsanDaNhan, this.editCache[id].data.sluongTsanPduyet]);
-        if (this.editCache[id].data.dtoanDnghiSluong > Operator.sum([this.editCache[id].data.tchuanDmucTda, -this.editCache[id].data.sluongTsanTcong])) {
-            this.editCache[id].data.dtoanDnghiSluong = Operator.sum([this.editCache[id].data.tchuanDmucTda, -this.editCache[id].data.sluongTsanTcong]);
-        }
-        this.editCache[id].data.thanhTien = Operator.mul(this.editCache[id].data.dtoanDnghiSluong, this.editCache[id].data.dtoanDnghiMgia);
-        this.editCache[id].data.tdinhTtien = Operator.mul(this.editCache[id].data.tdinhSluong, this.editCache[id].data.dtoanDnghiMgia);
-        this.editCache[id].data.chenhLech = Operator.sum([this.editCache[id].data.tdinhTtien, -this.editCache[id].data.thanhTien]);
     }
 
     // gan editCache.data == lstCtietBcao
@@ -338,7 +364,7 @@ export class PhuLuc06Component implements OnInit {
         this.lstCtietBcao.forEach(item => {
             this.editCache[item.id] = {
                 edit: false,
-                data: { ...item }
+                data: new ItemData(item)
             };
         });
     }

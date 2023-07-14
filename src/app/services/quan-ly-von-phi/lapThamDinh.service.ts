@@ -13,8 +13,8 @@ export class LapThamDinhService extends BaseService {
         super(httpClient, 'quanLyVonPhi', '');
     }
 
-    urlTest = 'http://localhost:9159';
-    urlDefault = environment.SERVICE_API + '/qlnv-khoachphi';
+    isTest = false;
+    urlDefault = environment.SERVICE_API + (this.isTest ? '/qlnv-khoachphi-dev' : '/qlnv-khoachphi');
 
     //search list bao cao
     timBaoCaoLapThamDinh(request: any): Observable<any> {

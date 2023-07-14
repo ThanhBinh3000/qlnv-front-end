@@ -17,64 +17,7 @@ import * as uuid from 'uuid';
 import { BtnStatus, Doc, Form, Report, Vp } from '../bao-cao-thuc-hien-von-phi.constant';
 import { BaoCao02Component } from './bao-cao-02/bao-cao-02.component';
 import { BaoCao03Component } from './bao-cao-03/bao-cao-03.component';
-import { BaoCao04anComponent } from './bao-cao-04an/bao-cao-04an.component';
-import { BaoCao04axComponent } from './bao-cao-04ax/bao-cao-04ax.component';
-import { BaoCao04bComponent } from './bao-cao-04b/bao-cao-04b.component';
-import { BaoCao05Component } from './bao-cao-05/bao-cao-05.component';
-
-// export class ItemDanhSach {
-//     id!: any;
-//     maBcao!: string;
-//     namBcao!: number;
-//     dotBcao!: number;
-//     thangBcao!: number;
-//     trangThai!: string;
-//     ngayTao!: string;
-//     nguoiTao!: string;
-//     maDviTien!: string;
-//     maDvi: number;
-//     congVan!: ItemCongVan;
-//     ngayTrinh!: string;
-//     ngayDuyet!: string;
-//     ngayPheDuyet!: string;
-//     ngayTraKq!: string;
-//     // dung cho request
-//     fileDinhKems!: any[];
-//     listIdDeletes!: string;
-//     listIdDeleteFiles = '';
-//     maPhanBcao = "1";
-
-//     maLoaiBcao!: string;
-//     stt!: string;
-//     checked!: boolean;
-//     lstBcaos: ItemData[] = [];
-//     lstFile: any[] = [];
-//     lstBcaoDviTrucThuocs: any[] = [];
-//     tongHopTuIds!: [];
-// }
-
-// export class ItemCongVan {
-//     fileName: string;
-//     fileSize: number;
-//     fileUrl: number;
-// }
-// export class ItemData {
-//     id!: any;
-//     maLoai!: string;
-//     maDviTien!: any;
-//     lstCtietBcaos!: any;
-//     trangThai!: string;
-//     checked!: boolean;
-//     tieuDe!: string;
-//     tenPhuLuc!: string;
-//     thuyetMinh!: string;
-//     lyDoTuChoi!: string;
-//     lstIdDeletes!: [];
-//     nguoiBcao!: string;
-//     bcaoId!: string;
-//     tuNgay: string;
-//     denNgay: string;
-// }
+import { BaoCao04aComponent } from './bao-cao-04a/bao-cao-04a.component';
 
 @Component({
     selector: 'app-bao-cao',
@@ -218,65 +161,10 @@ export class BaoCaoComponent implements OnInit {
         this.userInfo = this.userService.getUserLogin();
         this.isOffice = this.userInfo.DON_VI.tenVietTat.indexOf('_VP') != -1;
 
-        // await this.danhMucService.dMDviCon().toPromise().then(
-        //     (data) => {
-        //         if (data.statusCode == 0) {
-        //             this.childUnit = data.data;
-        //         } else {
-        //             this.notification.error(MESSAGE.ERROR, data?.msg);
-        //         }
-        //     },
-        //     (err) => {
-        //         this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-        //     }
-        // )
-
-        // await this.getListVatTu();
-
-        this.getListUser();
         if (this.baoCao.id) {
             await this.getDetailReport();
         } else {
             this.baoCao = this.data.baoCao;
-            // this.baoCao.maDvi = this.userInfo?.MA_DVI;
-            // await this.getDviCon();
-            // this.baoCaoThucHienVonPhiService.taoMaBaoCao().toPromise().then(
-            //     (data) => {
-            //         if (data.statusCode == 0) {
-            //             this.baoCao.maBcao = data.data;
-            //         } else {
-            //             this.notification.error(MESSAGE.ERROR, data?.msg);
-            //         }
-            //     },
-            //     (err) => {
-            //         this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-            //     }
-            // );
-            // this.baoCao.maLoaiBcao = this.data?.maLoaiBcao;
-            // this.baoCao.namBcao = this.data?.namBcao;
-            // this.baoCao.dotBcao = this.data?.dotBcao == 0 ? null : this.data?.dotBcao;
-            // this.baoCao.nguoiTao = this.userInfo.sub;
-            // this.baoCao.ngayTao = this.datePipe.transform(new Date(), Utils.FORMAT_DATE_STR);
-            // this.baoCao.trangThai = "1";
-            // this.lstBieuMaus = this.baoCao.maLoaiBcao == BAO_CAO_DOT ? LISTBIEUMAUDOT : LISTBIEUMAUNAM;
-            // if (this.data?.isSynthetic || (this.isOffice)) {
-            //     await this.callSynthetic();
-            // } else {
-            //     this.lstBieuMaus.forEach(item => {
-            //         this.baoCao.lstBcaos.push({
-            //             ... new Form(),
-            //             id: uuid.v4() + 'FE',
-            //             tieuDe: item.tieuDe + (this.baoCao.maLoaiBcao == BAO_CAO_DOT ? this.baoCao.dotBcao : this.baoCao.namBcao),
-            //             maLoai: item.maPhuLuc,
-            //             tenPhuLuc: item.tenPhuLuc,
-            //             trangThai: '3',
-            //             lstCtietBcaos: [],
-            //         });
-            //     })
-            //     if (this.isOffice) {
-            //         this.baoCao.lstBcaos = this.baoCao.lstBcaos.filter(e => e.maLoai != '4' && e.maLoai != '5');
-            //     }
-            // }
         }
         this.getStatusButton();
         if (this.status.save) {
@@ -289,52 +177,6 @@ export class BaoCaoComponent implements OnInit {
         this.path = this.baoCao.maDvi + '/' + this.baoCao.maBcao;
         this.spinner.hide();
     }
-
-    // async getListVatTu() {
-    //     let vatTus: any;
-    //     await this.danhMucService.dMVatTu().toPromise().then(res => {
-    //         if (res.statusCode == 0) {
-    //             vatTus = res.data;
-    //         } else {
-    //             this.notification.error(MESSAGE.ERROR, res?.msg);
-    //         }
-    //     }, err => {
-    //         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    //     })
-    //     vatTus.forEach(element => {
-    //         this.getFullVatu(element);
-    //     })
-    // }
-
-    // getFullVatu(vatTu: any) {
-    //     this.lstVatTus.push({
-    //         id: vatTu.id,
-    //         ma: vatTu.ma,
-    //         ten: vatTu.ten,
-    //     })
-    //     vatTu?.child.forEach(item => {
-    //         this.getFullVatu(item);
-    //     })
-    // }
-
-    // async getDviCon() {
-    //     const request = {
-    //         maDviCha: this.baoCao.maDvi,
-    //         trangThai: '01',
-    //     }
-    //     await this.quanLyVonPhiService.dmDviCon(request).toPromise().then(
-    //         data => {
-    //             if (data.statusCode == 0) {
-    //                 this.donVis = data.data;
-    //             } else {
-    //                 this.notification.error(MESSAGE.ERROR, data?.msg);
-    //             }
-    //         },
-    //         (err) => {
-    //             this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-    //         }
-    //     )
-    // }
 
     getLuyKe() {
         const request = {
@@ -377,8 +219,6 @@ export class BaoCaoComponent implements OnInit {
         const checkPass = isSynthetic ? this.userService.isAccessPermisson(Roles.VP.PASS_SYNTH_REPORT) : this.userService.isAccessPermisson(Roles.VP.PASS_REPORT);
         const checkApprove = isSynthetic ? this.userService.isAccessPermisson(Roles.VP.APPROVE_SYNTH_REPORT) : this.userService.isAccessPermisson(Roles.VP.APPROVE_REPORT);
         const checkAccept = this.userService.isAccessPermisson(Roles.VP.ACCEPT_REPORT);
-        // const checkCopy = isSynthetic ? this.userService.isAccessPermisson(Roles.VP.COPY_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(Roles.VP.COPY_REPORT);
-        // const checkPrint = isSynthetic ? this.userService.isAccessPermisson(Roles.VP.PRINT_SYTHETIC_REPORT) : this.userService.isAccessPermisson(Roles.VP.PRINT_REPORT);
         const checkExport = this.userService.isAccessPermisson(Roles.VP.EXPORT_EXCEL_REPORT);
 
         this.status.save = Status.check('saveWOHist', this.baoCao.trangThai) && checkSave && this.isChild;
@@ -387,7 +227,6 @@ export class BaoCaoComponent implements OnInit {
         this.status.pass = Status.check('pass', this.baoCao.trangThai) && checkPass && this.isChild;
         this.status.approve = Status.check('approve', this.baoCao.trangThai) && checkApprove && this.isChild;
         this.status.accept = Status.check('accept', this.baoCao.trangThai) && checkAccept && this.isParent;
-        // this.status.print = Utils.statusPrint.includes(this.baoCao.trangThai) && checkPrint && isChild;
         this.status.export = Status.check('export', this.baoCao.trangThai) && checkExport && this.isChild;
         this.status.ok = this.status.accept || this.status.approve || this.status.pass
         this.status.finish = this.status.save;
@@ -597,79 +436,6 @@ export class BaoCaoComponent implements OnInit {
         }
     }
 
-    // call tong hop bao cao
-    // async callSynthetic() {
-    //     const request = {
-    //         maLoaiBcao: this.baoCao.maLoaiBcao,
-    //         namBcao: this.baoCao.namBcao,
-    //         thangBcao: null,
-    //         dotBcao: this.baoCao.dotBcao,
-    //         maPhanBcao: '1',
-    //     }
-    //     if (this.isOffice) {
-    //         await this.baoCaoThucHienVonPhiService.tongHopVanPhong(request).toPromise().then(
-    //             async (data) => {
-    //                 if (data.statusCode == 0) {
-    //                     this.baoCao.lstBcaos = data.data.lstBcaos;
-    //                     // this.baoCao.lstBcaoDviTrucThuocs = data.data.lstBcaoDviTrucThuocs;
-    //                 } else {
-    //                     this.notification.error(MESSAGE.ERROR, data?.msg);
-    //                 }
-    //             },
-    //             (err) => {
-    //                 this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-    //             }
-    //         );
-    //     } else {
-    //         await this.baoCaoThucHienVonPhiService.tongHopBaoCaoKetQua(request).toPromise().then(
-    //             async (data) => {
-    //                 if (data.statusCode == 0) {
-    //                     this.baoCao.lstBcaos = data.data.lstBcaos;
-    //                     this.baoCao.lstBcaoDviTrucThuocs = data.data.lstBcaoDviTrucThuocs;
-    //                 } else {
-    //                     this.notification.error(MESSAGE.ERROR, data?.msg);
-    //                 }
-    //             },
-    //             (err) => {
-    //                 this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-    //             }
-    //         );
-    //     }
-
-    //     this.baoCao?.lstBcaos?.forEach(item => {
-    //         item.id = uuid.v4() + "FE";
-    //         item.maDviTien = '1';
-    //         item.checked = false;
-    //         item.trangThai = '3';
-    //         item.nguoiBcao = this.userInfo?.sub;
-    //         const index = this.lstBieuMaus.findIndex(data => data.maPhuLuc == item.maLoai);
-    //         if (index != -1) {
-    //             item.tieuDe = this.lstBieuMaus[index].tieuDe + (this.baoCao.maLoaiBcao == BAO_CAO_DOT ? this.baoCao.dotBcao : this.baoCao.namBcao);
-    //             item.tenPhuLuc = this.lstBieuMaus[index].tenPhuLuc;
-    //         }
-    //         if (item.maLoai == '4') {
-    //             item.lstCtietBcaos.forEach(e => {
-    //                 e.khGiaMuaTd = divNumber(e.khTtien, e.khSoLuong);
-    //                 e.thGiaMuaTd = divNumber(e.thTtien, e.thSoLuong);
-    //             })
-    //         }
-    //         if (item.maLoai == '5') {
-    //             item.lstCtietBcaos.forEach(e => {
-    //                 e.ttClechGiaTteVaGiaHtoan = sumNumber([e.ttGiaBanTte, -e.ttGiaHtoan]);
-    //             })
-    //         }
-    //     })
-
-    //     this.baoCao?.lstBcaoDviTrucThuocs?.forEach(item => {
-    //         item.ngayTrinh = this.datePipe.transform(item.ngayTrinh, Utils.FORMAT_DATE_STR);
-    //         item.ngayDuyet = this.datePipe.transform(item.ngayDuyet, Utils.FORMAT_DATE_STR);
-    //         item.ngayPheDuyet = this.datePipe.transform(item.ngayPheDuyet, Utils.FORMAT_DATE_STR);
-    //         item.ngayTraKq = this.datePipe.transform(item.ngayTraKq, Utils.FORMAT_DATE_STR);
-    //     })
-    //     this.listFile = [];
-    //     this.baoCao.trangThai = "1";
-    // }
-
     viewDetail(id) {
         const obj = {
             id: id,
@@ -730,7 +496,9 @@ export class BaoCaoComponent implements OnInit {
             namBcao: this.baoCao.namBcao,
             path: this.path,
             status: new BtnStatus(),
+            maLoai: bieuMau.maLoai,
             luyKes: this.luyKes.find(e => e.maLoai == bieuMau.maLoai),
+            isOffice: this.isOffice,
         }
         Object.assign(dataInfo.status, this.status);
         dataInfo.status.save = dataInfo.status.save && (this.userInfo?.sub == bieuMau.nguoiBcao);
@@ -744,19 +512,8 @@ export class BaoCaoComponent implements OnInit {
             case Vp.BM_03:
                 nzContent = BaoCao03Component;
                 break;
-            case Vp.BM_04AN:
-                nzContent = BaoCao04anComponent;
-                break;
-            case Vp.BM_04AX:
-                nzContent = BaoCao04axComponent;
-                break;
-            case Vp.BM_04B:
-                nzContent = BaoCao04bComponent;
-                break;
-            case Vp.BM_05:
-                nzContent = BaoCao05Component;
-                break;
             default:
+                nzContent = BaoCao04aComponent;
                 break;
         }
         const modalAppendix = this.modal.create({
@@ -776,191 +533,4 @@ export class BaoCaoComponent implements OnInit {
             }
         });
     }
-
-    // // xoa phu luc
-    // deletePhuLucList(id: string) {
-    //     this.baoCao.lstBcaos = this.baoCao?.lstBcaos.filter(item => item.checked == false);
-    //     if (this.baoCao?.lstBcaos?.findIndex(item => item.maLoai == this.tabSelected) == -1) {
-    //         this.tabSelected = null;
-    //     }
-    //     this.allChecked = false;
-    // }
-
-    // // click o checkbox single
-    // updateSingleChecked(): void {
-    //     if (this.baoCao?.lstBcaos.every(item => !item.checked)) {           // tat ca o checkbox deu = false thi set o checkbox all = false
-    //         this.allChecked = false;
-    //     } else if (this.baoCao?.lstBcaos.every(item => item.checked)) {     // tat ca o checkbox deu = true thi set o checkbox all = true
-    //         this.allChecked = true;
-    //     }
-    // }
-
-    // updateAllChecked(): void {
-    //     this.baoCao?.lstBcaos.filter(item =>
-    //         item.checked = this.allChecked
-    //     );
-    // }
-
-    // closeTab({ index }: { index: number }): void {
-    //     this.tabs.splice(index - 1, 1);
-    // }
-
-    // newTab(maPhuLuc: any): void {
-    //     const index: number = this.tabs.findIndex(e => e.id === maPhuLuc);
-    //     if (index != -1) {
-    //         this.selectedIndex = index + 1;
-    //     } else {
-    //         const item = this.baoCao.lstBcaos.find(e => e.maLoai == maPhuLuc);
-    //         this.tabData = {
-    //             ...item,
-    //             trangThaiBaoCao: this.baoCao.trangThai,
-    //             status: this.status,
-    //             idBaoCao: this.baoCao.id,
-    //             luyKes: this.luyKes,
-    //             namBcao: this.baoCao.namBcao,
-    //             maDvi: this.baoCao.maDvi,
-    //             dotBcao: this.baoCao.dotBcao,
-    //             isOffice: this.isOffice,
-    //             isSynthetic: this.baoCao.lstBcaoDviTrucThuocs.length != 0,
-    //             lstVtus: this.lstVatTus,
-    //         }
-    //         this.tabs = [];
-    //         this.tabs.push(this.baoCao?.lstBcaos.find(item => item.maLoai == maPhuLuc));
-    //         this.selectedIndex = this.tabs.length + 1;
-    //     }
-    // }
-
-    // getNewData(obj: any) {
-    //     const index = this.baoCao?.lstBcaos.findIndex(e => e.maLoai == this.tabs[0].maLoai);
-    //     if (obj?.lstCtietBcaos) {
-    //         this.baoCao.lstBcaos[index].maDviTien = obj.maDviTien;
-    //         this.baoCao.lstBcaos[index].lstCtietBcaos = obj.lstCtietBcaos;
-    //         this.baoCao.lstBcaos[index].trangThai = obj.trangThai;
-    //         this.baoCao.lstBcaos[index].thuyetMinh = obj.thuyetMinh;
-    //         this.baoCao.lstBcaos[index].lyDoTuChoi = obj.lyDoTuChoi;
-    //         this.baoCao.lstBcaos[index].tuNgay = obj.tuNgay;
-    //         this.baoCao.lstBcaos[index].denNgay = obj.denNgay;
-    //     } else {
-    //         this.baoCao.lstBcaos[index].trangThai = obj?.trangThai;
-    //         this.baoCao.lstBcaos[index].lyDoTuChoi = obj?.lyDoTuChoi;
-    //     }
-    //     this.tabs = [];
-    //     this.selectedIndex = 0;
-    // }
-
-    // viewDetail(id) {
-    //     const obj = {
-    //         id: id,
-    //         preData: this.data,
-    //         tabSelected: 'next' + this.data?.tabSelected,
-    //     }
-    //     this.dataChange.emit(obj);
-    // }
-
-    // showDialogCopy() {
-    //     const modalTuChoi = this.modal.create({
-    //         nzTitle: 'Copy Báo Cáo',
-    //         nzContent: DialogBaoCaoCopyComponent,
-    //         nzMaskClosable: false,
-    //         nzClosable: false,
-    //         nzWidth: '900px',
-    //         nzFooter: null,
-    //         nzComponentParams: {
-    //             maPhanBcao: '1',
-    //             maLoaiBcao: this.baoCao.maLoaiBcao,
-    //             namBcao: this.baoCao.namBcao,
-    //             dotBcao: this.baoCao.dotBcao,
-    //             thangBcao: this.baoCao.thangBcao,
-    //             checkDvtt: this.baoCao.lstBcaoDviTrucThuocs.length > 0 ? true : false,
-    //         },
-    //     });
-    //     modalTuChoi.afterClose.toPromise().then(async (response) => {
-    //         if (response) {
-    //             this.doCopy(response);
-    //         }
-    //     });
-    // }
-
-    // async doCopy(response) {
-    //     const maBaoCao = await this.baoCaoThucHienVonPhiService.taoMaBaoCao().toPromise().then(
-    //         (data) => {
-    //             if (data.statusCode == 0) {
-    //                 return data.data;
-    //             } else {
-    //                 this.notification.error(MESSAGE.ERROR, data?.msg);
-    //                 return null;
-    //             }
-    //         },
-    //         (err) => {
-    //             this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-    //             return null;
-    //         }
-    //     );
-    //     if (!maBaoCao) {
-    //         return;
-    //     }
-
-    //     const baoCaoTemp = JSON.parse(JSON.stringify(this.baoCao));
-    //     baoCaoTemp.congVan = null;
-    //     // set nambao,dot bao cao tu dialog gui ve
-    //     baoCaoTemp.namBcao = response.namBcao;
-    //     baoCaoTemp.dotBcao = response.dotBcao;
-    //     if (response.loaiCopy == 'D') {
-    //         //xoa lst don vi truc thuoc theo lua chon tu dialog
-    //         baoCaoTemp.lstBcaoDviTrucThuocs = [];
-    //     }
-    //     // replace nhung ban ghi dc them moi id thanh null
-    //     baoCaoTemp?.lstBcaos?.filter(item => {
-    //         item.id = null;
-    //         item.listIdDelete = null;
-    //         item.trangThai = '3'; // set trang thai phu luc la chua danh gia
-    //         item?.lstCtietBcaos.filter(data => {
-    //             data.id = null;
-    //         })
-    //     })
-    //     // replace nhung ban ghi dc them moi id thanh null
-    //     baoCaoTemp.id = null;
-    //     baoCaoTemp.maBcao = maBaoCao;
-    //     baoCaoTemp.tongHopTuIds = [];
-    //     baoCaoTemp?.lstBcaoDviTrucThuocs?.filter(item => {
-    //         baoCaoTemp.tongHopTuIds.push(item.id);
-    //     })
-    //     baoCaoTemp.fileDinhKems = [];
-    //     baoCaoTemp.listIdFiles = null;
-    //     baoCaoTemp.trangThai = "1";
-    //     //baoCaoTemp.maDvi = this.maDonViTao;
-    //     baoCaoTemp.maPhanBcao = '1';
-
-    //     //call service them moi
-    //     this.baoCaoThucHienVonPhiService.trinhDuyetBaoCaoThucHienDTCService(baoCaoTemp).toPromise().then(
-    //         async data => {
-    //             if (data.statusCode == 0) {
-    //                 const modalCopy = this.modal.create({
-    //                     nzTitle: MESSAGE.ALERT,
-    //                     nzContent: DialogCopyComponent,
-    //                     nzMaskClosable: false,
-    //                     nzClosable: false,
-    //                     nzWidth: '900px',
-    //                     nzFooter: null,
-    //                     nzComponentParams: {
-    //                         maBcao: maBaoCao
-    //                     },
-    //                 });
-    //             } else {
-    //                 this.notification.error(MESSAGE.ERROR, data?.msg);
-    //             }
-    //         },
-    //         err => {
-    //             this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    //         },
-    //     );
-    // }
-
-    // statusClass() {
-    //     if (Utils.statusSave.includes(this.baoCao.trangThai)) {
-    //         return 'du-thao-va-lanh-dao-duyet';
-    //     } else {
-    //         return 'da-ban-hanh';
-    //     }
-    // }
 }

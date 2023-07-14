@@ -323,7 +323,7 @@ export class KhoComponent implements OnInit {
     // luu thay doi
     saveEdit(id: string): void {
         if (this.editCache[id].data.khoiTichTren && this.editCache[id].data.khoiTichTren < this.khoiTich) {
-            this.notification.warning(MESSAGE.WARNING, "Giá trị của khối kho từ 5000m3 trở lên không phù hợp!");
+            this.notification.warning(MESSAGE.WARNING, "Giá trị của khối kho từ " + this.khoiTich.toString() + " m3 trở lên không phù hợp!");
             return;
         }
         const index = this.lstCtietBcao.findIndex(item => item.id === id); // lay vi tri hang minh sua
