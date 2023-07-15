@@ -64,7 +64,7 @@ export class ToanBoDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Comp
       ngayTongHop: [],
       ngayTongHopTu: [],
       ngayTongHopDen: [],
-      tgianLuuKho:[],
+      thoiHanLk:[],
       lyDo: [],
       trangThai: [],
       loai: [],
