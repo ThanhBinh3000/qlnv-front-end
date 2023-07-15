@@ -100,13 +100,12 @@
               <th>Chủng loại</th>
               <th>Điểm kho</th>
               <th>Lô kho</th>
+              <th>Số lượng </th>
+              <th>Thời gian BH còn lại <br>theo HĐ</th>
               <th>Tồn kho</th>
               <th>Ngày nhập kho</th>
-              <th>SL hết hạn <br/> (<= 6 tháng)</th>
               <th>ĐVT</th>
               <th>Ngày tổng hợp <br> (chốt DS)</th>
-              <th>Thời gian lưu kho <br> (tháng)</th>
-              <th>Thời gian đề xuất <br> xuất hàng</th>
               <th>Trạng thái</th>
               <th>Mã danh sách</th>
             </tr>
@@ -130,7 +129,6 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td></td>
               </tr>
               <ng-container *ngIf="expandSetString.has(item.idVirtual) && expandSetString.has(item.idVirtual)">
                 <ng-container *ngFor="let lv1 of item.childData,let i1=index">
@@ -140,13 +138,12 @@
                     <td>{{lv1.tenCloaiVthh}}</td>
                     <td>{{lv1.tenDiemKho}}</td>
                     <td>{{lv1.tenLoKho == null ? lv1.tenNganKho : lv1.tenLoKho}}</td>
+                    <td>{{lv1.slHetHan|number:globals.numberFormat}}</td>
+                    <td>{{lv1.thoiHanLk}}</td>
                     <td>{{lv1.slTonKho|number:globals.numberFormat}}</td>
                     <td>{{lv1.ngayNhapKho|date:globals.dateFormat}}</td>
-                    <td>{{lv1.slHetHan|number:globals.numberFormat}}</td>
                     <td>{{lv1.donViTinh}}</td>
                     <td>{{lv1.ngayTongHop|date:globals.dateFormat}}</td>
-                    <td>{{lv1.tgianLuuKho}}</td>
-                    <td>{{lv1.ngayDeXuat|date:globals.dateFormat}}</td>
                     <td>{{lv1.tenTrangThai}}</td>
                     <td>{{lv1.maTongHop}}</td>
 
