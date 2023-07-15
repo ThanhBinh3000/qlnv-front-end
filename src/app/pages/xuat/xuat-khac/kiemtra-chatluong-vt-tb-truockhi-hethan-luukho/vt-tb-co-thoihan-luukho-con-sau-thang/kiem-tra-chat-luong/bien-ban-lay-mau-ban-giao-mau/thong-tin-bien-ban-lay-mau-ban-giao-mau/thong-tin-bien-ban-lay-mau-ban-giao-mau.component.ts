@@ -33,7 +33,7 @@ import {FILETYPE} from "../../../../../../../../constants/fileType";
   styleUrls: ['./thong-tin-bien-ban-lay-mau-ban-giao-mau.component.scss']
 })
 export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component implements OnInit {
-
+  @Input() soQdGiaoNvXh: string;
   @Input() idInput: number;
   @Input() isView: boolean;
   @Input() isViewOnModal: boolean;
@@ -148,6 +148,29 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
             this.formData.patchValue(res.data);
             const data = res.data;
             this.checked = data.ketQuaNiemPhong;
+            let itemQd = this.listSoQuyetDinh.find(item => item.soQuyetDinh == data.soQdGiaoNvXh);
+            if (itemQd) {
+              this.bindingDataQd(itemQd);
+            }
+            this.formData.patchValue({
+              soPhieuXuatKho: data.soPhieuXuatKho,
+              tenDiaDiem: data.tenLoKho ? data.tenLoKho + ' - ' + data.tenNganKho : data.tenNganKho,
+            })
+            //Xử lý pp lấy mẫu và chỉ tiêu kiểm tra chất lượng
+            if (data.ppLayMau) {
+              let ppLayMauOptions = data.ppLayMau.indexOf(",") > 0 ? data.ppLayMau.split(",") : "";
+              ppLayMauOptions = ppLayMauOptions.map((str, index) => ({label: str, value: index + 1, checked: true}));
+              this.formData.patchValue({
+                ppLayMauList: ppLayMauOptions,
+              })
+            }
+            if (data.chiTieuKiemTra) {
+              let chiTieuOptions = data.chiTieuKiemTra.indexOf(",") > 0 ? data.chiTieuKiemTra.split(",") : "";
+              chiTieuOptions = chiTieuOptions.map((str, index) => ({label: str, value: index + 1, checked: true}));
+              this.formData.patchValue({
+                chiTieuKiemTraList: chiTieuOptions,
+              })
+            }
             this.listDaiDienChiCuc = data.xhXkVtBbLayMauDtl.filter(x => x.loaiDaiDien == 'CHI_CUC')
             this.listDaiDienCuc = data.xhXkVtBbLayMauDtl.filter(x => x.loaiDaiDien == 'CUC')
           }
@@ -166,6 +189,12 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
         ktvBaoQuan: this.userInfo.TEN_DAY_DU,
         soBienBan: `${id}/${this.formData.get('nam').value}/${this.maBb}`,
       });
+      if (this.soQdGiaoNvXh) {
+        let dataQdGiaoNvXh = this.listSoQuyetDinh.find(item => item.soQuyetDinh == this.soQdGiaoNvXh);
+        if (dataQdGiaoNvXh) {
+          this.bindingDataQd(dataQdGiaoNvXh);
+        }
+      }
     }
   }
 
@@ -365,14 +394,14 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
     let trangThai = '';
     let msg = '';
     switch (this.formData.value.trangThai) {
-      case STATUS.TU_CHOI_LDCC:
+      case STATUS.TU_CHOI_LDC:
       case STATUS.DU_THAO: {
-        trangThai = STATUS.CHO_DUYET_LDCC;
+        trangThai = STATUS.CHO_DUYET_LDC;
         msg = MESSAGE.GUI_DUYET_CONFIRM;
         break;
       }
-      case STATUS.CHO_DUYET_LDCC: {
-        trangThai = STATUS.DA_DUYET_LDCC;
+      case STATUS.CHO_DUYET_LDC: {
+        trangThai = STATUS.DA_DUYET_LDC;
         msg = MESSAGE.GUI_DUYET_CONFIRM;
         break;
       }
@@ -383,8 +412,8 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
   tuChoi() {
     let trangThai = '';
     switch (this.formData.value.trangThai) {
-      case STATUS.CHO_DUYET_LDCC: {
-        trangThai = STATUS.TU_CHOI_LDCC;
+      case STATUS.CHO_DUYET_LDC: {
+        trangThai = STATUS.TU_CHOI_LDC;
         break;
       }
     }
@@ -393,7 +422,7 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
 
   isDisabled() {
     let trangThai = this.formData.value.trangThai;
-    if (trangThai == STATUS.CHO_DUYET_LDCC) {
+    if (trangThai == STATUS.CHO_DUYET_LDC) {
       return true
     }
     return false;
