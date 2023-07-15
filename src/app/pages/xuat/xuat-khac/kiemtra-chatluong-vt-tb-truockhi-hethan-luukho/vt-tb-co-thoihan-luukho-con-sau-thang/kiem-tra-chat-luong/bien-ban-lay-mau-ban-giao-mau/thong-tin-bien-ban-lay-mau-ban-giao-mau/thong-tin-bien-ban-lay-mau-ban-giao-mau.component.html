@@ -40,11 +40,11 @@
       </div>
     </div>
   </nz-affix>
-  <nz-alert class="mg-t-10" *ngIf="formData.value.trangThai == STATUS. " nzShowIcon nzType="error"
+  <nz-alert class="mg-t-10" *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDC" nzShowIcon nzType="error"
             nzMessage="Lý do từ chối" nzDescription="{{formData.value.lyDoTuChoi}}">
   </nz-alert>
   <nz-card class="mt16 flex-card p-lr16">
-    <!-- //Thông tin chung -->
+    <!-- Thông tin chung -->
     <nz-collapse nzAccordion>
       <nz-collapse-panel [nzHeader]="'Thông tin chung'" [nzActive]="true">
         <form nzLayout="vertical" nz-form [formGroup]="formData">
@@ -140,11 +140,6 @@
                 <nz-form-label [nzNoColon]="true"> Ngăn/Lô kho</nz-form-label>
                 <nz-form-control>
                   <input [readonly]="true" nz-input formControlName="tenDiaDiem" readonly/>
-                  <!--                  <nz-select formControlName="maDiaDiem" [nzDisabled]="true">-->
-                  <!--                    <nz-option *ngFor="let p of listNganLoKho" [nzValue]="p.maDiaDiem"-->
-                  <!--                               [nzLabel]="p.tenLoKho ? p.tenLoKho + ' - ' + p.tenNganKho : p.tenNganKho">-->
-                  <!--                    </nz-option>-->
-                  <!--                  </nz-select>-->
                 </nz-form-control>
               </nz-form-item>
             </div>
