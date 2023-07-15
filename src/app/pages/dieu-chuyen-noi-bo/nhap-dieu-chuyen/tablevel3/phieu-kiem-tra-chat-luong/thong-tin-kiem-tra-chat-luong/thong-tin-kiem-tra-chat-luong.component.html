@@ -357,7 +357,7 @@
                 Người giao hàng
               </nz-form-label>
               <nz-form-control>
-                <input nz-input formControlName="nguoiGH" [readonly]="isView" />
+                <input nz-input formControlName="nguoiGiaoHang" [readonly]="isView" />
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -367,7 +367,7 @@
                 Số CMT/CCCD
               </nz-form-label>
               <nz-form-control>
-                <input nz-input formControlName="cccd" [readonly]="isView" />
+                <input nz-input formControlName="soCmt" [readonly]="isView" />
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -377,7 +377,7 @@
                 Đơn vị/Công ty(của người giao hàng)
               </nz-form-label>
               <nz-form-control>
-                <input nz-input formControlName="dvNguoiGH" [readonly]="isView" />
+                <input nz-input formControlName="dvgiaoHang" [readonly]="isView" />
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -387,7 +387,7 @@
                 Địa chỉ
               </nz-form-label>
               <nz-form-control>
-                <input nz-input formControlName="dcNguoiGH" [readonly]="isView" />
+                <input nz-input formControlName="diaChiDonViGiaoHang" [readonly]="isView" />
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -398,7 +398,7 @@
                 Biển số xe của phương tiện vận tải
               </nz-form-label>
               <nz-form-control>
-                <input nz-input formControlName="biensoxe" [readonly]="isView" />
+                <input nz-input formControlName="bienSoXe" [readonly]="isView" />
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -409,7 +409,7 @@
                 SL nhập vào lô kho
               </nz-form-label>
               <nz-form-control>
-                <span class="text-blue">{{formData.value.slNhapLoKho|number: '1.0-1':
+                <span class="text-blue">{{formData.value.slNhapTheoQd|number: '1.0-1':
                   'vi_VN'}} {{formData.value.tenDonViTinh}}</span>
               </nz-form-control>
             </nz-form-item>
@@ -420,7 +420,7 @@
                 Khối lượng khách hàng khai báo(kg)
               </nz-form-label>
               <nz-form-control>
-                <input nz-input formControlName="slKhaiBao" [readonly]="isView" />
+                <input nz-input formControlName="slNhapTheoKb" [readonly]="isView" />
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -430,7 +430,7 @@
                 Khối lượng hàng thực tế kiểm tra(kg)
               </nz-form-label>
               <nz-form-control>
-                <input nz-input formControlName="slThucTe" [readonly]="isView" />
+                <input nz-input formControlName="slNhapTheoKt" [readonly]="isView" />
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -452,7 +452,7 @@
                 Chứng thư giám định số
               </nz-form-label>
               <nz-form-control>
-                <input nz-input formControlName="soGiamDinh" [readonly]="isView" />
+                <input nz-input formControlName="soChungThuGiamDinh" [readonly]="isView" />
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -473,7 +473,7 @@
                 Tổ chức giám định
               </nz-form-label>
               <nz-form-control>
-                <input nz-input formControlName="tcGiamDinh" [readonly]="isView" />
+                <input nz-input formControlName="toChucGiamDinh" [readonly]="isView" />
               </nz-form-control>
             </nz-form-item>
           </div>
