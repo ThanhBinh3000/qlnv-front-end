@@ -144,6 +144,7 @@ export class DialogTaoDeNghiCapVonComponent implements OnInit {
       //bao cao chua ton tai
       if (this.response.canCuVeGia == Utils.HD_TRUNG_THAU) {
         if (this.response.loaiDnghi == Utils.MUA_VTU) {
+          debugger
           await this.getContractData();
         } else {
           if (this.userService.isCuc()) {
@@ -441,6 +442,7 @@ export class DialogTaoDeNghiCapVonComponent implements OnInit {
         page: 1,
       },
       trangThai: Utils.TT_BC_7,
+      maLoai: '2',
     }
     await this.capVonNguonChiService.timKiemHopDong(request).toPromise().then(
       (data) => {

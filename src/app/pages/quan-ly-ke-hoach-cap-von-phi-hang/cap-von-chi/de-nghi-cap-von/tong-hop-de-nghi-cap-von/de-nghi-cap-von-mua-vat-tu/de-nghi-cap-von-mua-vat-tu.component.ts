@@ -428,9 +428,9 @@ export class DeNghiCapVonMuaVatTuComponent implements OnInit {
     updateEditCache(): void {
         this.baoCao.dnghiCapvonCtiets.forEach(item => {
             const data: Times[] = [];
-            item.dnghiCapvonLuyKes.forEach(e => {
-                data.push({ ...e });
-            })
+            // item.dnghiCapvonLuyKes.forEach(e => {
+            //     data.push({ ...e });
+            // })
             this.editCache[item.id] = {
                 edit: false,
                 data: {

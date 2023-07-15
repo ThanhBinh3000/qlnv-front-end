@@ -473,7 +473,7 @@ export class DeNghiCapVonMuaThocGaoMuoiTheoDonGiaMuaComponent implements OnInit 
 	getTotal() {
 		this.total = new ItemRequest();
 		this.baoCao.dnghiCapvonCtiets.forEach((item, index) => {
-			if (index !== 0) {
+			if (index !== 0 && this.userService.isCuc()) {
 				this.total.slKeHoach = sumNumber([this.total.slKeHoach, item.slKeHoach]);
 				this.total.slThucHien = sumNumber([this.total.slThucHien, item.slThucHien]);
 				this.total.donGia = sumNumber([this.total.donGia, item.donGia]);
