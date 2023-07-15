@@ -158,18 +158,18 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
             })
             //Xử lý pp lấy mẫu và chỉ tiêu kiểm tra chất lượng
             if (data.ppLayMau) {
-              let ppLayMauOptions = data.ppLayMau.indexOf(",") > 0 ? data.ppLayMau.split(",") : "";
+              let ppLayMauOptions = data.ppLayMau.indexOf(",") > 0 ? data.ppLayMau.split(",") : Array.from(data.ppLayMau);
               ppLayMauOptions = ppLayMauOptions.map((str, index) => ({label: str, value: index + 1, checked: true}));
               this.formData.patchValue({
                 ppLayMauList: ppLayMauOptions,
-              })
+              });
             }
             if (data.chiTieuKiemTra) {
-              let chiTieuOptions = data.chiTieuKiemTra.indexOf(",") > 0 ? data.chiTieuKiemTra.split(",") : "";
+              let chiTieuOptions = data.chiTieuKiemTra.indexOf(",") > 0 ? data.chiTieuKiemTra.split(",") : Array.from(data.chiTieuKiemTra);
               chiTieuOptions = chiTieuOptions.map((str, index) => ({label: str, value: index + 1, checked: true}));
               this.formData.patchValue({
                 chiTieuKiemTraList: chiTieuOptions,
-              })
+              });
             }
             this.listDaiDienChiCuc = data.xhXkVtBbLayMauDtl.filter(x => x.loaiDaiDien == 'CHI_CUC')
             this.listDaiDienCuc = data.xhXkVtBbLayMauDtl.filter(x => x.loaiDaiDien == 'CUC')
