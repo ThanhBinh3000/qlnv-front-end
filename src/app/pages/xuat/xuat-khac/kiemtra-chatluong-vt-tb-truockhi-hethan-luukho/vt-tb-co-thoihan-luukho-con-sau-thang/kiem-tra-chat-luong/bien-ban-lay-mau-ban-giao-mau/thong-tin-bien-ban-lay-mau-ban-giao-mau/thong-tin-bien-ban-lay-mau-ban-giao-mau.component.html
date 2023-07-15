@@ -14,19 +14,19 @@
           <i class="fa fa-arrow-left"></i>
           <span>Quay lại</span>
         </button>
-        <button *ngIf="this.userService.isCuc() && !isDisabled() && formData.value.trangThai != STATUS.DA_DUYET_LDCC"
+        <button *ngIf="this.userService.isCuc() && !isDisabled() && formData.value.trangThai != STATUS.DA_DUYET_LDC"
                 class="btn btn-sub xanh-nhat mr-2" (click)="save(true)">
           <i class="icon htvbdh_tcdt_guiduyet"></i>
           <span>Lưu và gửi duyệt</span>
         </button>
         <button
-          *ngIf="this.userService.isCuc() && isDisabled() && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_BBLMBGM_DUYET_LDCCUC')"
+          *ngIf="this.userService.isCuc() && isDisabled()"
           type="button" class="btn btn-sub do mr-2" (click)="tuChoi()">
           <i class="icon htvbdh_tcdt_tuchoi do"></i>
           <span>Từ chối</span>
         </button>
         <button
-          *ngIf="this.userService.isCuc() && isDisabled() && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_BBLMBGM_DUYET_LDCCUC')"
+          *ngIf="this.userService.isCuc() && isDisabled() "
           class="btn btn-sub xanh-nhat mr-2" (click)="pheDuyet()">
           <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Duyệt</span>
@@ -40,7 +40,7 @@
       </div>
     </div>
   </nz-affix>
-  <nz-alert class="mg-t-10" *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDCC " nzShowIcon nzType="error"
+  <nz-alert class="mg-t-10" *ngIf="formData.value.trangThai == STATUS. " nzShowIcon nzType="error"
             nzMessage="Lý do từ chối" nzDescription="{{formData.value.lyDoTuChoi}}">
   </nz-alert>
   <nz-card class="mt16 flex-card p-lr16">
