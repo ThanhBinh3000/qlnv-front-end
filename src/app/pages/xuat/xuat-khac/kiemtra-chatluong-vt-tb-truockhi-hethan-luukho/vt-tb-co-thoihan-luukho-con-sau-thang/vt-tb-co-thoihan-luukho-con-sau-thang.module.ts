@@ -20,7 +20,7 @@ import { ThongTinQuyetDinhGiaoNhiemVuXuatHangComponent } from './quyet-dinh-giao
 import {
   XkBienBanLayMauBanGiaoMauComponent
 } from './kiem-tra-chat-luong/bien-ban-lay-mau-ban-giao-mau/bien-ban-lay-mau-ban-giao-mau.component';
-import { PhieuKiemNghiemChatLuongComponent } from './kiem-tra-chat-luong/phieu-kiem-nghiem-chat-luong/phieu-kiem-nghiem-chat-luong.component';
+import { XkVtPhieuKiemNghiemChatLuongComponent } from './kiem-tra-chat-luong/phieu-kiem-nghiem-chat-luong/phieu-kiem-nghiem-chat-luong.component';
 import { BaoCaoKetQuaKiemDinhComponent } from './kiem-tra-chat-luong/bao-cao-ket-qua-kiem-dinh/bao-cao-ket-qua-kiem-dinh.component';
 import { ThongTinPhieuXuatKhoComponent } from './xuat-kho/thong-tin-phieu-xuat-kho/thong-tin-phieu-xuat-kho.component';
 import { ThongTinBienBanLayMauBanGiaoMauComponent } from './kiem-tra-chat-luong/bien-ban-lay-mau-ban-giao-mau/thong-tin-bien-ban-lay-mau-ban-giao-mau/thong-tin-bien-ban-lay-mau-ban-giao-mau.component';
@@ -42,7 +42,7 @@ import {CuuTroVienTroModule} from "../../../xuat-cuu-tro-vien-tro/xuat-cuu-tro/c
     ChiTietTongHopDanhSachVt6thComponent,
     ThongTinQuyetDinhGiaoNhiemVuXuatHangComponent,
     XkBienBanLayMauBanGiaoMauComponent,
-    PhieuKiemNghiemChatLuongComponent,
+    XkVtPhieuKiemNghiemChatLuongComponent,
     BaoCaoKetQuaKiemDinhComponent,
     ThongTinPhieuXuatKhoComponent,
     ThongTinBienBanLayMauBanGiaoMauComponent,
