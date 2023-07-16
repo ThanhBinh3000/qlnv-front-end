@@ -221,7 +221,7 @@ export class BaoCaoComponent implements OnInit {
         const checkAccept = this.userService.isAccessPermisson(Roles.VP.ACCEPT_REPORT);
         const checkExport = this.userService.isAccessPermisson(Roles.VP.EXPORT_EXCEL_REPORT);
 
-        this.status.save = Status.check('saveWOHist', this.baoCao.trangThai) && checkSave && this.isChild;
+        this.status.save = Status.check('saveWHist', this.baoCao.trangThai) && checkSave && this.isChild;
         this.status.new = Status.check('reject', this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.VP.ADD_REPORT) && this.isChild && this.data.preTab == Vp.DANH_SACH_BAO_CAO;
         this.status.submit = Status.check('submit', this.baoCao.trangThai) && checkSunmit && this.isChild && !(!this.baoCao.id);
         this.status.pass = Status.check('pass', this.baoCao.trangThai) && checkPass && this.isChild;
@@ -271,7 +271,7 @@ export class BaoCaoComponent implements OnInit {
                 this.baoCao?.lstBcaos?.forEach(item => {
                     const app = this.lstBieuMaus.find(e => e.id == item.maLoai);
                     item.tenPhuLuc = app?.tenPl;
-                    item.tieuDe = app.tenDm;
+                    item.tieuDe = Vp.appendixName(item.maLoai, this.baoCao.maLoaiBcao, this.baoCao.namBcao, this.baoCao.dotBcao);
                 })
                 this.listFile = [];
             } else {
@@ -393,6 +393,8 @@ export class BaoCaoComponent implements OnInit {
             return;
         }
 
+        baoCaoTemp.maPhanBcao = '1';
+
         // replace nhung ban ghi dc them moi id thanh null
         baoCaoTemp.lstBcaos.forEach(item => {
             if (item.id?.length == 38) {
@@ -469,7 +471,7 @@ export class BaoCaoComponent implements OnInit {
                         this.baoCao.lstBcaos.push({
                             ... new Form(),
                             id: uuid.v4() + 'FE',
-                            tieuDe: item.tenDm,
+                            tieuDe: Vp.appendixName(item.id, this.baoCao.maLoaiBcao, this.baoCao.namBcao, this.baoCao.dotBcao),
                             maLoai: item.id,
                             tenPhuLuc: item.tenPl,
                             trangThai: Status.NEW,
@@ -538,11 +540,7 @@ export class BaoCaoComponent implements OnInit {
         await this.baoCaoThucHienVonPhiService.restoreReport(this.baoCao.id, id).toPromise().then(
             (data) => {
                 if (data.statusCode == 0) {
-                    Object.assign(this.baoCao, data.data);
-                    this.baoCao.lstBcaos.forEach(item => {
-                        item.tenPhuLuc = this.lstBieuMaus.find(e => e.id == item.maLoai).tenPl;
-                        item.tieuDe = Vp.appendixName(item.maLoai, this.baoCao.maLoaiBcao, this.baoCao.namBcao, this.baoCao.dotBcao);
-                    })
+                    this.action('detail');
                     this.getStatusButton();
                     this.notification.success(MESSAGE.SUCCESS, 'Khôi phục thành công.');
                 } else {
@@ -559,13 +557,8 @@ export class BaoCaoComponent implements OnInit {
         await this.baoCaoThucHienVonPhiService.addHistory(this.baoCao.id).toPromise().then(
             (data) => {
                 if (data.statusCode == 0) {
-                    Object.assign(this.baoCao, data.data);
-                    this.baoCao.lstBcaos.forEach(item => {
-                        item.tenPhuLuc = this.lstBieuMaus.find(e => e.id == item.maLoai).tenPl;
-                        item.tieuDe = Vp.appendixName(item.maLoai, this.baoCao.maLoaiBcao, this.baoCao.namBcao, this.baoCao.dotBcao);
-                    })
-                    this.getStatusButton();
                     this.notification.success(MESSAGE.SUCCESS, 'Tạo mới thành công.');
+                    this.back();
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
                 }

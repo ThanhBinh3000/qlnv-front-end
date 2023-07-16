@@ -254,6 +254,8 @@ export class PhuLucIIIComponent implements OnInit {
             this.scrollX = Table.tableWidth(350, 40, 6, 0);
         }
 
+        this.lstCtietBcao.forEach(item => item.tyLe());
+
         if (this.lstCtietBcao.length > 0) {
             if (!this.lstCtietBcao[0].stt) {
                 this.lstCtietBcao = Table.sortWithoutIndex(this.lstCtietBcao, 'maDan');
@@ -329,15 +331,8 @@ export class PhuLucIIIComponent implements OnInit {
             async data => {
                 if (data.statusCode == 0) {
                     this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-                    const detail = {
-                        maNdung: Dtc.CNTT,
-                        dtoanGiaoDtoan: this.total.khoachNamVonScl,
-                        giaiNganThangBcaoDtoan: this.total.giaiNganNsnnVonScl,
-                        luyKeGiaiNganDtoan: this.total.luyKeGiaiNganDauNamNsnnVonScl,
-                    }
                     this._modalRef.close({
                         trangThai: data.data.trangThai,
-                        data: detail,
                     });
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);

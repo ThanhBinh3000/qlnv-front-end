@@ -1,16 +1,14 @@
 import { Component, Input, OnInit } from '@angular/core';
+import * as dayjs from 'dayjs';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { BAO_CAO_DOT, Status } from 'src/app/Utility/utils';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
-import { BAO_CAO_DOT, LBC_KET_QUA_THUC_HIEN_HANG_DTQG, Status, Utils } from 'src/app/Utility/utils';
-import * as dayjs from 'dayjs';
 import { BaoCaoThucHienVonPhiService } from 'src/app/services/quan-ly-von-phi/baoCaoThucHienVonPhi.service';
-import { Form, Report } from '../bao-cao-thuc-hien-von-phi.constant';
-import { BC_DOT, LBC_VON_PHI } from '../../bao-cao.constant';
-import { Vp } from '../bao-cao-thuc-hien-von-phi.constant';
-import * as uuid from 'uuid';
 import { UserService } from 'src/app/services/user.service';
+import * as uuid from 'uuid';
+import { Form, Report, Vp } from '../bao-cao-thuc-hien-von-phi.constant';
 
 @Component({
     selector: 'dialog-tao-moi',
@@ -24,6 +22,7 @@ export class DialogTaoMoiComponent implements OnInit {
     userInfo: any;
     response: Report = new Report();
     lstNam: number[] = [];
+    isOffice: boolean = false;
 
     constructor(
         private _modalRef: NzModalRef,
@@ -34,6 +33,7 @@ export class DialogTaoMoiComponent implements OnInit {
 
     async ngOnInit() {
         this.userInfo = this.userService.getUserLogin();
+        this.isOffice = this.userInfo.DON_VI.tenVietTat.indexOf('_VP') != -1;
         const thisYear = dayjs().get('year');
         for (let i = -5; i < 10; i++) {
             this.lstNam.push(thisYear + i);
@@ -47,12 +47,17 @@ export class DialogTaoMoiComponent implements OnInit {
     }
 
     async checkReport() {
+        if (!this.response.namBcao || !this.response.maLoaiBcao ||
+            (!this.response.dotBcao && this.response.maLoaiBcao == BAO_CAO_DOT)) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+            return;
+        }
         const request = {
-            maPhanBcao: '0',
+            maPhanBcao: '1',
             namBcao: this.response.namBcao,
-            thangBcao: this.response.thangBcao,
+            dotBcao: this.response.dotBcao,
             maLoaiBcao: this.response.maLoaiBcao,
-            trangThais: [Status.TT_01, Status.TT_02, Status.TT_04, Status.TT_07, Status.TT_09],
+            trangThais: [Status.TT_01, Status.TT_02, Status.TT_03, Status.TT_04, Status.TT_05, Status.TT_07, Status.TT_08, Status.TT_09],
             paggingReq: {
                 limit: 10,
                 page: 1
@@ -62,7 +67,7 @@ export class DialogTaoMoiComponent implements OnInit {
         }
         await this.baoCaoThucHienVonPhiService.timBaoCao(request).toPromise().then(res => {
             if (res.statusCode == 0) {
-                if (res.data?.empty) {
+                if (res.data.empty) {
                     this.initReport();
                 } else {
                     this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.EXIST_REPORT);
@@ -83,12 +88,12 @@ export class DialogTaoMoiComponent implements OnInit {
         this.response.nguoiTao = this.userInfo.sub;
         this.response.ngayTao = new Date();
         this.response.trangThai = Status.TT_01;
-        this.response.lstBcaos = [];
-        this.response.lstBcaoDviTrucThuocs = [];
-        this.response.lstFiles = [];
-        this.response.listIdDeleteFiles = [];
+        // this.response.lstBcaos = [];
+        // this.response.lstBcaoDviTrucThuocs = [];
+        // this.response.lstFiles = [];
+        // this.response.listIdDeleteFiles = [];
         await this.getMaBcao();
-        if (this.isSynth) {
+        if (this.isSynth || this.isOffice) {
             this.callSynthtic();
         } else {
             Vp.PHU_LUC.forEach(item => {
@@ -97,7 +102,7 @@ export class DialogTaoMoiComponent implements OnInit {
                     id: uuid.v4() + 'FE',
                     maLoai: item.id,
                     tenPhuLuc: item.tenPl,
-                    tieuDe: item.tenDm,
+                    tieuDe: Vp.appendixName(item.id, this.response.maLoaiBcao, this.response.namBcao, this.response.dotBcao),
                     nguoiBcao: this.userInfo?.sub,
                     trangThai: Status.NEW,
                     maDviTien: '1',
@@ -130,32 +135,49 @@ export class DialogTaoMoiComponent implements OnInit {
             namBcao: this.response.namBcao,
             thangBcao: null,
             dotBcao: this.response.dotBcao,
-            maPhanBcao: '0',
+            maPhanBcao: '1',
         }
-        await this.baoCaoThucHienVonPhiService.tongHopBaoCaoKetQua(request).toPromise().then(
-            async (data) => {
-                if (data.statusCode == 0) {
-                    this.response.lstBcaos = data.data.lstBcaos;
-                    this.response.lstBcaoDviTrucThuocs = data.data.lstBcaoDviTrucThuocs;
-                    this.response.lstBcaos.forEach(e => {
-                        const appendix = Vp.PHU_LUC.find(item => item.id == e.maLoai);
-                        e.tenPhuLuc = appendix.tenPl;
-                        e.tieuDe = Vp.appendixName(e.maLoai, this.response.maLoaiBcao, this.response.namBcao, this.response.dotBcao);
-                        e.trangThai = Status.NEW;
-                        e.id = uuid.v4() + 'FE';
-                        e.nguoiBcao = this.userInfo?.sub;
-                        e.maDviTien = '1';
-                    })
-                } else {
-                    this.notification.error(MESSAGE.ERROR, data?.msg);
+        if (this.isOffice) {
+            await this.baoCaoThucHienVonPhiService.tongHopVanPhong(request).toPromise().then(
+                async (data) => {
+                    if (data.statusCode == 0) {
+                        this.response.lstBcaos = data.data.lstBcaos;
+                    } else {
+                        this.notification.error(MESSAGE.ERROR, data?.msg);
+                        this.clear();
+                    }
+                },
+                (err) => {
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
                     this.clear();
                 }
-            },
-            (err) => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-                this.clear();
-            }
-        );
+            );
+        } else {
+            await this.baoCaoThucHienVonPhiService.tongHopBaoCaoKetQua(request).toPromise().then(
+                async (data) => {
+                    if (data.statusCode == 0) {
+                        this.response.lstBcaos = data.data.lstBcaos;
+                        this.response.lstBcaoDviTrucThuocs = data.data.lstBcaoDviTrucThuocs;
+                    } else {
+                        this.notification.error(MESSAGE.ERROR, data?.msg);
+                        this.clear();
+                    }
+                },
+                (err) => {
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+                    this.clear();
+                }
+            );
+        }
+        this.response.lstBcaos.forEach(e => {
+            const appendix = Vp.PHU_LUC.find(item => item.id == e.maLoai);
+            e.tenPhuLuc = appendix.tenPl;
+            e.tieuDe = Vp.appendixName(e.maLoai, this.response.maLoaiBcao, this.response.namBcao, this.response.dotBcao);
+            e.trangThai = Status.NEW;
+            e.id = uuid.v4() + 'FE';
+            e.nguoiBcao = this.userInfo?.sub;
+            e.maDviTien = '1';
+        })
     }
 
     clear() {
@@ -170,11 +192,11 @@ export class DialogTaoMoiComponent implements OnInit {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
             return;
         }
-        this.checkReport();
-        if (!this.response.namBcao) {
-            this.clear();
-            return;
-        }
+        // this.checkReport();
+        // if (!this.response.namBcao) {
+        //     this.clear();
+        //     return;
+        // }
         this._modalRef.close(this.response);
     }
 

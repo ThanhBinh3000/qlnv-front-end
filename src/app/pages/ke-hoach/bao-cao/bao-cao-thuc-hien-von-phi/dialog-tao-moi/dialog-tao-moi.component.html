@@ -19,7 +19,7 @@
         <div nz-col nzSpan="6" *ngIf="response.maLoaiBcao && response.maLoaiBcao == Vp.BC_DOT">
             <label class="search__label">Đợt báo cáo</label>
             <nz-input-number nzSize="small" [(ngModel)]="response.dotBcao" [nzMin]="1"
-                [class]="response.dotBcao? '' : 'input-error-validate'">
+                [class]="response.dotBcao? '' : 'input-error-validate'" (change)="checkReport()">
             </nz-input-number>
         </div>
     </div>

@@ -53,6 +53,7 @@ export class TongHopBaoCaoComponent implements OnInit {
         this.searchFilter.thangBcao = date.getMonth();
         this.searchFilter.maLoaiBcao = Dtc.BC_DINH_KY;
         this.searchFilter.loaiTimKiem = '1';
+        this.searchFilter.trangThais = [Status.TT_09];
         //lay danh sach danh muc
         const request = {
             maDviCha: this.userInfo.maDvi,
@@ -76,7 +77,7 @@ export class TongHopBaoCaoComponent implements OnInit {
 
     async search() {
         this.spinner.show();
-        await this.baoCaoThucHienDuToanChiService.timBaoCao(this.searchFilter.request).toPromise().then(res => {
+        await this.baoCaoThucHienDuToanChiService.timBaoCao(this.searchFilter.request()).toPromise().then(res => {
             if (res.statusCode == 0) {
                 this.dataTable = [];
                 res.data.content.forEach(e => {

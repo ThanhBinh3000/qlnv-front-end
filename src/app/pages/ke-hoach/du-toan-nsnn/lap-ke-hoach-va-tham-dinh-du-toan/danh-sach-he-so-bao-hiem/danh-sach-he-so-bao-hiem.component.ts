@@ -54,6 +54,9 @@ export class DanhSachHeSoBaoHiemComponent implements OnInit {
 
     async ngOnInit() {
         this.userInfo = this.userService.getUserLogin();
+        if (!this.userService.isTongCuc()) {
+            this.searchFilter.trangThai = Status.TT_07;
+        }
         this.spinner.show();
         //khoi tao gia tri mac dinh
         this.searchFilter.denNgay = new Date();
@@ -130,7 +133,9 @@ export class DanhSachHeSoBaoHiemComponent implements OnInit {
         this.searchFilter.nam = null
         this.searchFilter.tuNgay = null
         this.searchFilter.denNgay = null
-        this.searchFilter.trangThai = null;
+        if (this.userService.isTongCuc()) {
+            this.searchFilter.trangThai = null;
+        }
         this.search();
     }
 
