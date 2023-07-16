@@ -110,7 +110,7 @@
                         {{ Utils.fmtDate(data.ngayTraKq) }}
                     </td>
                     <td>
-                        {{ Status.reportStatusName(data.trangThai) }}
+                        {{ Status.reportStatusName(data.trangThai, true) }}
                         <ng-container *ngIf="data.trangThai == Status.TT_08">
                             <br />
                             Lý do: {{data.lyDoTuChoi}}

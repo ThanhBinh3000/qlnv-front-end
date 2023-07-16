@@ -17,7 +17,7 @@
                 <nz-date-picker class="search__input" [(ngModel)]="searchFilter.denNgay" nzFormat="dd/MM/yyyy">
                 </nz-date-picker>
             </div>
-            <div nz-col nzSpan="3">
+            <div *ngIf="userService.isTongCuc()" nz-col nzSpan="3">
                 <label class="search__label">Trạng thái</label>
                 <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái"
                     [(ngModel)]="searchFilter.trangThai">

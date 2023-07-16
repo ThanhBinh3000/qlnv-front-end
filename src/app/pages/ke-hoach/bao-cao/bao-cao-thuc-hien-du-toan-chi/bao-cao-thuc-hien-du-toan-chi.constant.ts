@@ -66,7 +66,7 @@ export class Dtc {
         {
             id: Dtc.PHU_LUC_III,
             tenDm: 'Báo cáo công tác giải ngân vốn đầu tư xây dựng và sửa chữa lớn định kỳ',
-            tenPl: 'Phụ lục II',
+            tenPl: 'Phụ lục III',
             status: false,
         },
     ]
@@ -78,25 +78,25 @@ export class Dtc {
     //địa điểm xây dựng
     static readonly DIA_DIEM = [
         {
-            id: 100,
+            id: '100',
             tenDm: "Hà Nội",
             level: 0,
             idCha: 0,
         },
         {
-            id: 200,
+            id: '200',
             tenDm: "Thái Bình",
             level: 0,
             idCha: 0,
         },
         {
-            id: 300,
+            id: '300',
             tenDm: "Lào Cai",
             level: 0,
             idCha: 0,
         },
         {
-            id: 400,
+            id: '400',
             tenDm: "Tuyên Quang",
             level: 0,
             idCha: 0,

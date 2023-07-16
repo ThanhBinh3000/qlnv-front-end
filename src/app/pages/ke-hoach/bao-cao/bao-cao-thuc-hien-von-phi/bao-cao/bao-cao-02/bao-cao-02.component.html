@@ -21,20 +21,20 @@
                                     </nz-select>
                                 </ng-template>
                             </div>
-                            <div style="margin-left: 40px;">Từ ngày</div>
+                            <div style="margin-left: 40px;">Từ ngày:</div>
                             <div style="margin-left: 10px;">
-                                <ng-container *ngIf="!status; else tu">
-                                    {{ formDetail.tuNgay }}
+                                <ng-container *ngIf="!status.save; else tu">
+                                    {{ Utils.fmtDate(formDetail.tuNgay) }}
                                 </ng-container>
                                 <ng-template #tu>
                                     <nz-date-picker class="search__input" [(ngModel)]="formDetail.tuNgay"
                                         nzFormat="dd/MM/yyyy"></nz-date-picker>
                                 </ng-template>
                             </div>
-                            <div style="margin-left: 20px;">Đến ngày</div>
+                            <div style="margin-left: 20px;">Đến ngày:</div>
                             <div style="margin-left: 10px;">
-                                <ng-container *ngIf="!status; else den">
-                                    {{ formDetail.denNgay }}
+                                <ng-container *ngIf="!status.save; else den">
+                                    {{ Utils.fmtDate(formDetail.denNgay) }}
                                 </ng-container>
                                 <ng-template #den>
                                     <nz-date-picker class="search__input" [(ngModel)]="formDetail.denNgay"
