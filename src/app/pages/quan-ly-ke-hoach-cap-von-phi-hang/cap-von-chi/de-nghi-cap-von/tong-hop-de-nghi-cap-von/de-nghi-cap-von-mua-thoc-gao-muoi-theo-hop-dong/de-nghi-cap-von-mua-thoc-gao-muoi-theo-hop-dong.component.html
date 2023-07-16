@@ -107,7 +107,7 @@
 
 		<div class="mt-16 flex-card p-lr16">
 			<nz-card class="mt-2px flex-card data-table card-border-content table-card" nzTitle="Danh sách hợp đồng">
-				<div id="tablePrint">
+				<!-- <div id="tablePrint">
 					<nz-table class="table__body" nzBordered [nzScroll]="{x: scrollX}">
 						<thead>
 							<tr>
@@ -305,24 +305,174 @@
 							</tr>
 						</tbody>
 					</nz-table>
-				</div>
+				</div> -->
+				<nz-tabset class="tab__container" [(nzSelectedIndex)]="selectedIndex"
+					[nzTabBarExtraContent]="extraTemplate">
+					<nz-tab [nzTitle]="'HỢP ĐỒNG'">
+						<nz-table nzBordered class="table__body">
+							<thead>
+								<tr>
+									<th rowspan="2">Cục DTNNKV</th>
+									<th rowspan="2">Quyết định phê duyệt kết quả<br />lựa chọn nhà
+										thầu/Hợp đồng</th>
+									<th colspan="2">Số lương</th>
+									<th rowspan="2">Đơn giá(đồng/kg)</th>
+									<th rowspan="2">Giá trị hợp<br />đồng(đã bao gồm<br />VAT)(đồng)</th>
+									<th rowspan="2">Vi phạm hợp đồng</th>
+									<th colspan="2">Thanh lý hợp đồng</th>
+								</tr>
+								<tr>
+									<th>Kế hoạch</th>
+									<th>Hợp đồng</th>
+									<th>Số lượng</th>
+									<th>Thành tiền</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr *ngFor="let data of baoCao.dnghiCapvonCtiets; let i = index">
+									<!-- <ng-container *ngIf="data.maBieuMau.startsWith('pl')"> -->
+									<!-- <td>{{ getIndex(data.maBieuMau) }}</td>
+										<td>{{data.tenPl}}</td>
+										<td>{{data.tenDm}}</td>
+										<td>
+											{{Status.appendixStatusName(data.trangThai)}}
+											<ng-container *ngIf="data.trangThai == '0'">
+												<br>
+												Lý do: {{data.lyDoTuChoi}}
+											</ng-container>
+										</td>
+										<td>
+											<ng-container
+												*ngIf="userInfo?.sub == baoCao.nguoiTao && status.general && data?.id?.length==38 ;else templateNguoiBcao ">
+												<nz-select nzShowSearch nzAllowClear
+													nzPlaceHolder="Chọn cán bộ thực hiện" [(ngModel)]="data.nguoiBcao"
+													[class]="data.nguoiBcao ?'' : 'input-error-validate'">
+													<nz-option *ngFor="let item of canBos" [nzValue]="item.username"
+														[nzLabel]="item.username">
+													</nz-option>
+												</nz-select>
+											</ng-container>
+											<ng-template #templateNguoiBcao>
+												{{data.nguoiBcao}}
+											</ng-template>
+										</td> -->
+									<!-- <td>
+											<ng-container *ngIf="baoCao.id && data.id?.length == 36"> -->
+									<!-- <a *ngIf="status.general && (userInfo?.sub == data.nguoiBcao)"> -->
+									<!-- <i class="fa fa-pencil" (click)="viewAppendix(data.id)"></i> -->
+									<!-- </a>
+												<a
+													*ngIf="(!status.general || userInfo?.sub != data.nguoiBcao) && data.nguoiBcao"> -->
+									<!-- <i class="fa fa-eye" (click)="viewAppendix(data.id)"></i> -->
+									<!-- </a>
+											</ng-container>
+											<a *ngIf="status.general && (userInfo?.sub == baoCao.nguoiTao)"> -->
+									<!-- <i class="fa fa-trash-o do" (click)="deleteAppendix(data.id)"></i> -->
+									<!-- </a>
+										</td> -->
+									<!-- </ng-container> -->
+								</tr>
+							</tbody>
+						</nz-table>
+					</nz-tab>
+					<nz-tab [nzTitle]="'ĐỀ NGHỊ'">
+						<nz-table nzBordered class="table__body">
+							<thead>
+								<tr>
+									<th rowspan="2">STT</th>
+									<th rowspan="2">Cục DTNNKV</th>
+									<th colspan="2">Số lượng</th>
+									<th rowspan="2">Giá trị hợp đồng<br />(đã bao gồm VAT)(đồng)</th>
+									<th rowspan="2">Vi phạm hợp đồng</th>
+									<th colspan="2">Thanh lý hợp đồng</th>
+									<th colspan="3">Lũy kế cấp vốn đến thời điểm báo cáo</th>
+									<th rowspan="2">Dự toán đã giao(đồng)</th>
+									<th rowspan="2">Tổng vốn và Dự toán<br />đã cấp đến trước<br />thời điểm báo cáo
+									</th>
+									<th rowspan="2">Vốn để nghị cấp lần này</th>
+								</tr>
+								<tr>
+									<th>Kế hoạch</th>
+									<th>Hợp đồng</th>
+									<th>Số lượng</th>
+									<th>Thành tiền</th>
+									<th>Cộng</th>
+									<th>Cấp ứng</th>
+									<th>Cấp vốn</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr *ngFor="let data of baoCao.dnghiCapvonCtiets; let i = index">
+									<!-- <ng-container *ngIf="data.maBieuMau.startsWith('TT342')">
+										<td>{{ getIndex(data.maBieuMau) }}</td>
+										<td>{{data.tenPl}}</td>
+										<td>{{data.tenDm}}</td>
+										<td>
+											{{Status.appendixStatusName(data.trangThai)}}
+											<ng-container *ngIf="data.trangThai == '0'">
+												<br>
+												Lý do: {{data.lyDoTuChoi}}
+											</ng-container>
+										</td>
+										<td>
+											<ng-container
+												*ngIf="userInfo?.sub == baoCao.nguoiTao && status.general && data?.id?.length==38 ;else templateNguoiBcao ">
+												<nz-select nzShowSearch nzAllowClear
+													nzPlaceHolder="Chọn cán bộ thực hiện" [(ngModel)]="data.nguoiBcao"
+													[class]="data.nguoiBcao ?'' : 'input-error-validate'">
+													<nz-option *ngFor="let item of canBos" [nzValue]="item.username"
+														[nzLabel]="item.username">
+													</nz-option>
+												</nz-select>
+											</ng-container>
+											<ng-template #templateNguoiBcao>
+												{{data.nguoiBcao}}
+											</ng-template>
+										</td>
+										<td>
+											<ng-container *ngIf="baoCao.id && data.id?.length == 36">
+												<a *ngIf="status.general && (userInfo?.sub == data.nguoiBcao)">
+													<!-- <i class="fa fa-pencil" (click)="viewAppendix(data.id)"></i> -->
+									<!-- </a> -->
+									<!-- <a -->
+									<!-- *ngIf="(!status.general || userInfo?.sub != data.nguoiBcao) && data.nguoiBcao"> -->
+									<!-- <i class="fa fa-eye" (click)="viewAppendix(data.id)"></i> -->
+									<!-- </a> -->
+									<!-- </ng-container> -->
+									<!-- <a *ngIf="status.general && (userInfo?.sub == baoCao.nguoiTao)"> -->
+									<!-- <i class="fa fa-trash-o do" (click)="deleteAppendix(data.id)"></i> -->
+									<!-- </a> -->
+									<!-- </td> -->
+									<!-- </ng-container> -->
+								</tr>
+							</tbody>
+						</nz-table>
+					</nz-tab>
+					<ng-template #extraTemplate>
+						<button *ngIf="status.general && userInfo?.sub == baoCao.nguoiTao" type="button"
+							class="btn btn-main" (click)="addAppendix()">
+							<i class="icon htvbdh_dau-cong"></i>
+							<span>Thêm</span>
+						</button>
+					</ng-template>
+				</nz-tabset>
 				<div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
 					<div nz-col nzSpan="24">
 						<label class="search__label">Thuyết minh</label>
-						<textarea rows="2" nz-input [(ngModel)]="baoCao.thuyetMinh" [disabled]="!status"></textarea>
+						<textarea rows="2" nz-input [(ngModel)]="baoCao.thuyetMinh" [disabled]="status.new"></textarea>
 					</div>
 				</div>
 				<div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
 					<div nz-col class="gutter-row" [nzSpan]="3">
 						Danh sách văn bản đính kèm
-						<nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" *ngIf="status">
+						<nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" *ngIf="!status.new">
 							<button nz-button>
 								<i nz-icon nzType="upload"></i>
 								Chọn tệp
 							</button>
 						</nz-upload>
 						<button nz-button [nzType]="'primary'" (click)="handleUpload()"
-							[disabled]="fileList.length === 0" *ngIf="status" style="margin-top: 16px">
+							[disabled]="fileList.length === 0" *ngIf="!status.new" style="margin-top: 16px">
 							Thêm vào danh sách
 						</button>
 					</div>

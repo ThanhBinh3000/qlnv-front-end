@@ -8,7 +8,7 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { CapVonNguonChiService } from 'src/app/services/quan-ly-von-phi/capVonNguonChi.service';
 import { UserService } from 'src/app/services/user.service';
 import { divNumber, mulNumber, sumNumber } from 'src/app/Utility/func';
-import { CAN_CU_GIA, LOAI_DE_NGHI, Utils } from 'src/app/Utility/utils';
+import { CAN_CU_GIA, LOAI_DE_NGHI, Operator, Utils } from 'src/app/Utility/utils';
 import * as uuid from "uuid";
 import { BaoCao, ItemRequest } from '../../../de-nghi-cap-von.constant';
 
@@ -236,10 +236,10 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
             const id = this.response.dnghiCapvonCtiets.find(e => e.maDvi == temp.maDvi)?.id;
             temp.id = id ? id : uuid.v4() + 'FE';
             this.response.dnghiCapvonCtiets = this.response.dnghiCapvonCtiets.filter(e => e.maDvi != temp.maDvi);
-            this.total.slKeHoach = sumNumber([this.total.slKeHoach, item.slKeHoach]);
-            this.total.slThucHien = sumNumber([this.total.slThucHien, item.slThucHien]);
-            this.total.donGia = sumNumber([this.total.donGia, item.donGia]);
-            this.total.gtriThucHien = sumNumber([this.total.gtriThucHien, item.gtriThucHien]);
+            this.total.slKeHoach = Operator.sum([this.total.slKeHoach, item.slKeHoach]);
+            this.total.slThucHien = Operator.sum([this.total.slThucHien, item.slThucHien]);
+            this.total.donGia = Operator.sum([this.total.donGia, item.donGia]);
+            this.total.gtriThucHien = Operator.sum([this.total.gtriThucHien, item.gtriThucHien]);
             this.response.dnghiCapvonCtiets.push({
               ... new ItemRequest(),
               id: uuid.v4() + 'FE',
@@ -418,9 +418,16 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
     await this.capVonNguonChiService.timKiemHopDong(request).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
-          if (data.data.content?.length > 0) {
-            this.isContractExist = true;
-          }
+          data.data.content.forEach(item => {
+            const temp = item;
+            this.response.dnghiCapvonCtiets.push({
+              ... new ItemRequest(),
+              id: uuid.v4() + 'FE'
+            })
+          })
+          // if (data.data.content?.length > 0) {
+          //   this.isContractExist = true;
+          // }
         } else {
           this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
           this.response.loaiDnghi = null;
