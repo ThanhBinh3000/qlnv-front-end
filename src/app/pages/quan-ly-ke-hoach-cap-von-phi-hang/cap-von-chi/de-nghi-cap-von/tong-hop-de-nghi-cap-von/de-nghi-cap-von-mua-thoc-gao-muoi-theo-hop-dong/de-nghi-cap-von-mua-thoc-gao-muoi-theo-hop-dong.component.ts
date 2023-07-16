@@ -14,8 +14,11 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { displayNumber, sumNumber } from 'src/app/Utility/func';
-import { AMOUNT, BOX_NUMBER_WIDTH, CAN_CU_GIA, CVNC, DON_VI_TIEN, LOAI_DE_NGHI, QUATITY, Utils } from 'src/app/Utility/utils';
+import { AMOUNT, BOX_NUMBER_WIDTH, CAN_CU_GIA, CVNC, DON_VI_TIEN, LOAI_DE_NGHI, QUATITY, Status, Utils } from 'src/app/Utility/utils';
 import { BaoCao, ItemRequest, Times, TRANG_THAI } from '../../de-nghi-cap-von.constant';
+import { DialogChonThemBieuMauComponent } from 'src/app/components/dialog/dialog-chon-them-bieu-mau/dialog-chon-them-bieu-mau.component';
+import { BtnStatus } from '../../de-nghi-cap-von.class';
+import { Ltd } from 'src/app/pages/ke-hoach/du-toan-nsnn/lap-ke-hoach-va-tham-dinh-du-toan/lap-ke-hoach-va-tham-dinh-du-toan.constant';
 
 @Component({
 	selector: 'app-de-nghi-cap-von-mua-thoc-gao-muoi-theo-hop-dong',
@@ -44,7 +47,7 @@ export class DeNghiCapVonMuaThocGaoMuoiTheoHopDongComponent implements OnInit {
 	quatity = QUATITY;
 	scrollX: string;
 	//trang thai cac nut
-	status = false;
+	// status = false;
 	statusCv = false;
 	saveStatus = true;
 	submitStatus = true;
@@ -57,6 +60,11 @@ export class DeNghiCapVonMuaThocGaoMuoiTheoHopDongComponent implements OnInit {
 	listFile: File[] = [];
 	fileList: NzUploadFile[] = [];
 	fileDetail: NzUploadFile;
+	selectedIndex = 0;
+	listAppendix: any[] = Ltd.PHU_LUC;
+	Status = Status;
+	status: BtnStatus = new BtnStatus();
+	canBos: any[];
 	// before uploaf file
 	beforeUpload = (file: NzUploadFile): boolean => {
 		this.fileList = this.fileList.concat(file);
@@ -179,7 +187,7 @@ export class DeNghiCapVonMuaThocGaoMuoiTheoHopDongComponent implements OnInit {
 	//check role cho các nut trinh duyet
 	getStatusButton() {
 		const checkChirld = this.baoCao.maDvi == this.userInfo?.MA_DVI;
-		this.status = Utils.statusSave.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(CVNC.EDIT_DN_MLT) && !this.userService.isTongCuc();
+		this.status.new = Utils.statusSave.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(CVNC.EDIT_DN_MLT) && !this.userService.isTongCuc();
 		this.statusCv = Utils.statusSave.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(CVNC.EDIT_DN_MLT);
 		this.saveStatus = Utils.statusSave.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(CVNC.EDIT_DN_MLT) && checkChirld;
 		this.submitStatus = Utils.statusApprove.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(CVNC.APPROVE_DN_MLT) && checkChirld && !(!this.baoCao.id);
@@ -435,9 +443,9 @@ export class DeNghiCapVonMuaThocGaoMuoiTheoHopDongComponent implements OnInit {
 	updateEditCache(): void {
 		this.baoCao.dnghiCapvonCtiets.forEach(item => {
 			const data: Times[] = [];
-			item.dnghiCapvonLuyKes.forEach(e => {
-				data.push({ ...e });
-			})
+			// item.dnghiCapvonLuyKes.forEach(e => {
+			// 	data.push({ ...e });
+			// })
 			this.editCache[item.id] = {
 				edit: false,
 				data: {
@@ -612,5 +620,76 @@ export class DeNghiCapVonMuaThocGaoMuoiTheoHopDongComponent implements OnInit {
 		} else {
 			return 'da-ban-hanh';
 		}
+	}
+
+	addAppendix() {
+		let danhMuc = [];
+		let danhSach = [];
+		let title = '';
+		switch (this.selectedIndex) {
+			case 0:
+				danhMuc = this.listAppendix.filter(e => e.id.startsWith('hopdong'));
+				// danhSach = danhMuc.filter(item => this.baoCao.dnghiCapvonCtiets.findIndex(e => e.maBieuMau == item.id) == -1);
+				title = 'Danh sách hơp đồng';
+				break;
+			case 1:
+				danhMuc = this.listAppendix.filter(e => e.id.startsWith('denghi'));
+				// danhSach = danhMuc.filter(item => this.baoCao.dnghiCapvonCtiets.findIndex(e => e.maBieuMau == item.id) == -1);
+				title = 'Danh sách đề nghị';
+				break;
+			default:
+				break;
+		}
+
+		const modalIn = this.modal.create({
+			nzTitle: title,
+			nzContent: DialogChonThemBieuMauComponent,
+			nzBodyStyle: { overflowY: 'auto', maxHeight: 'calc(100vh - 200px)' },
+			nzMaskClosable: false,
+			nzClosable: false,
+			nzWidth: '600px',
+			nzFooter: null,
+			nzComponentParams: {
+				danhSachBieuMau: danhSach
+			},
+		});
+		// modalIn.afterClose.subscribe((res) => {
+		//     if (res) {
+		//         res.forEach(item => {
+		//             if (item.status) {
+		//                 const newItem: Form = {
+		//                     ... new Form(),
+		//                     id: uuid.v4() + 'FE',
+		//                     maBieuMau: item.id,
+		//                     tenPl: item.tenPl,
+		//                     tenDm: item.tenDm,
+		//                     trangThai: '3',
+		//                     lstCtietLapThamDinhs: [],
+		//                 }
+		//                 this.baoCao.lstLapThamDinhs.push(newItem);
+		//             }
+		//         })
+		//     }
+		// });
+	}
+
+	getIndex(maBieuMau: string) {
+		let header = '';
+		if (maBieuMau.startsWith('hopdong')) {
+			header = 'hopdong';
+		};
+		if (maBieuMau.startsWith('denghi')) {
+			header = 'denghi';
+		};
+		let index = 0;
+		// for (let i = 0; i < this.baoCao.lstLapThamDinhs.length; i++) {
+		//     if (this.baoCao.lstLapThamDinhs[i].maBieuMau.startsWith(header)) {
+		//         index += 1;
+		//     }
+		//     if (this.baoCao.lstLapThamDinhs[i].maBieuMau == maBieuMau) {
+		//         break;
+		//     }
+		// }
+		return index;
 	}
 }
