@@ -14,7 +14,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { displayNumber, mulNumber, sumNumber } from 'src/app/Utility/func';
-import { AMOUNT, BOX_NUMBER_WIDTH, CAN_CU_GIA, CVNC, DON_VI_TIEN, LOAI_DE_NGHI, QUATITY, Utils } from 'src/app/Utility/utils';
+import { AMOUNT, BOX_NUMBER_WIDTH, CAN_CU_GIA, CVNC, DON_VI_TIEN, LOAI_DE_NGHI, Operator, QUATITY, Utils } from 'src/app/Utility/utils';
 import { BaoCao, ItemRequest, Times, TRANG_THAI } from '../../de-nghi-cap-von.constant';
 
 @Component({
@@ -473,16 +473,16 @@ export class DeNghiCapVonMuaVatTuComponent implements OnInit {
     }
 
     changeModel(id: string) {
-        this.editCache[id].data.gtriThucHien = mulNumber(this.editCache[id].data.slThucHien, this.editCache[id].data.donGia);
-        this.editCache[id].data.soConDuocTt = sumNumber([this.editCache[id].data.gtriThucHien, -this.editCache[id].data.soTtLuyKe]);
-        this.editCache[id].data.soConDuocTtSauTtLanNay = sumNumber([this.editCache[id].data.soConDuocTt, -this.editCache[id].data.uyNhchiNienSoTien]);
+        this.editCache[id].data.gtriThucHien = Operator.mul(this.editCache[id].data.slThucHien, this.editCache[id].data.donGia);
+        this.editCache[id].data.soConDuocTt = Operator.sum([this.editCache[id].data.gtriThucHien, -this.editCache[id].data.soTtLuyKe]);
+        this.editCache[id].data.soConDuocTtSauTtLanNay = Operator.sum([this.editCache[id].data.soConDuocTt, -this.editCache[id].data.uyNhchiNienSoTien]);
     }
 
     sum() {
         this.baoCao.dnghiCapvonCtiets.forEach(item => {
             if (item.isParent) {
-                item.soConDuocTt = sumNumber([item.gtriThucHien, -item.soTtLuyKe]);
-                item.soConDuocTtSauTtLanNay = sumNumber([item.soConDuocTt, -item.uyNhchiNienSoTien]);
+                item.soConDuocTt = Operator.sum([item.gtriThucHien, -item.soTtLuyKe]);
+                item.soConDuocTtSauTtLanNay = Operator.sum([item.soConDuocTt, -item.uyNhchiNienSoTien]);
             }
         })
     }
