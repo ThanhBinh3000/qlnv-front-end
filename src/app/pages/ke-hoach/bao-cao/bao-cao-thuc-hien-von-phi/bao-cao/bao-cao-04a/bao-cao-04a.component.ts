@@ -22,7 +22,7 @@ export class ItemData {
     checked: boolean;
     level: number;
     maNdungChi: string;
-    tenNdung: string;
+    tenNdungChi: string;
     trongDotTcong: number;
     luyKeTcong: number;
     listCtiet: Materials[] = [];
@@ -40,7 +40,7 @@ export class ItemData {
             this.listCtiet.forEach(item => {
                 if (item.loaiMatHang == 0) {
                     this.trongDotTcong = Operator.sum([this.trongDotTcong, item.sl]);
-                    const sl = data?.find(e => e.maVtu == item.maVtu && e.loaiMatHang == 1) ? data.find(e => e.maVtu == item.maVtu && e.loaiMatHang == 1) : 0;
+                    const sl = data?.find(e => e.maVtu == item.maVtu && e.loaiMatHang == 1)?.sl ? data.find(e => e.maVtu == item.maVtu && e.loaiMatHang == 1)?.sl : 0;
                     this.listCtiet.find(e => e.maVtu == item.maVtu && e.loaiMatHang == 1).sl = Operator.sum([item.sl, sl]);
                     this.luyKeTcong = Operator.sum([this.luyKeTcong, item.sl, sl]);
                 }
@@ -154,7 +154,7 @@ export class BaoCao04aComponent implements OnInit {
     lstCtietBcao: ItemData[] = [];
     noiDungChis: any[] = [];
     dinhMucs: any[] = [];
-    luyKes: ItemData[] = [];
+    luyKes: any[] = [];
     lstCol: Materials[] = [];
     editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
     //trang thai
@@ -208,11 +208,13 @@ export class BaoCao04aComponent implements OnInit {
         this.setParameters();
         //thong tin chung cua bieu mau
         Object.assign(this.status, this.dataInfo.status);
+        await this.getFormDetail();
         // nếu trạng thái là đang được sửa thì lấy danh mục và định mức của nó ra.
         if (this.status.save) {
             await this.getListNdung();
             await this.getDinhMuc();
         }
+        this.luyKes = this.dataInfo.luyKes?.lstCtietBcaos;
         // nếu là báo cáo văn phòng thì lấy ra các dòng số lượng của nó
         if (this.dataInfo.isOffice && this.formDetail.trangThai == Status.NEW) {
             this.slTheoQd = this.lstCtietBcao.find(e => e.maNdungChi == this.para.slQd);
@@ -252,7 +254,7 @@ export class BaoCao04aComponent implements OnInit {
                     }
                     this.lstCtietBcao.push(new ItemData({
                         maNdungChi: item.ma,
-                        tenNdung: item.giaTri,
+                        tenNdungChi: item.giaTri,
                         stt: item.ma,
                         listCtiet: lstCtiet,
                         id: uuid.v4() + "FE",
@@ -296,6 +298,29 @@ export class BaoCao04aComponent implements OnInit {
 
     getStatusButton() {
         this.status.ok = this.status.ok && (this.formDetail.trangThai == Status.NOT_RATE || this.formDetail.trangThai == Status.COMPLETE);
+    }
+
+    async getFormDetail() {
+        await this.baoCaoThucHienVonPhiService.ctietBieuMau(this.dataInfo.id).toPromise().then(
+            data => {
+                if (data.statusCode == 0) {
+                    this.formDetail = data.data;
+                    this.formDetail.maDviTien = '1';
+                    this.lstCtietBcao = [];
+                    this.formDetail.lstCtietBcaos.forEach(item => {
+                        this.lstCtietBcao.push(new ItemData(item));
+                    })
+                    this.formDetail.listIdDeleteFiles = [];
+                    this.listFile = [];
+                    this.getStatusButton();
+                } else {
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                }
+            },
+            err => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+            }
+        )
     }
 
     setParameters() {
@@ -400,7 +425,7 @@ export class BaoCao04aComponent implements OnInit {
         for (let iterator of this.listFile) {
             request.fileDinhKems.push(await this.fileManip.uploadFile(iterator, this.dataInfo.path));
         }
-        request.lstCtietLapThamDinhs = lstCtietBcaoTemp;
+        request.lstCtietBcaos = lstCtietBcaoTemp;
         request.trangThai = trangThai;
         //call service cap nhat phu luc
         this.spinner.show();
@@ -718,7 +743,7 @@ export class BaoCao04aComponent implements OnInit {
                             id: uuid.v4() + 'FE',
                             maNdungChi: item.ma,
                             level: item.level,
-                            tenNdung: item.giaTri,
+                            tenNdungChi: item.giaTri,
                             listCtiet: [],
                         })
                         this.lstCol.forEach(e => {
@@ -774,16 +799,14 @@ export class BaoCao04aComponent implements OnInit {
                     const objTrongD = {
                         id: uuid.v4() + 'FE',
                         maVtu: res.ma,
-                        tenVtu: res.ten,
+                        tenVtu: res.ten + ' (' + res.maDviTinh + ')',
                         loaiMatHang: 0,
                         sl: 0,
                     }
                     const objLke = {
+                        ...objTrongD,
                         id: uuid.v4() + 'FE',
-                        maVtu: res.ma,
-                        tenVtu: res.ten,
                         loaiMatHang: 1,
-                        sl: 0,
                     }
                     data.listCtiet.push(objTrongD);
                     data.listCtiet.push(objLke);
@@ -791,7 +814,7 @@ export class BaoCao04aComponent implements OnInit {
                 this.lstCol.push({
                     ... new Materials(),
                     maVtu: res.ma,
-                    tenVtu: res.ten,
+                    tenVtu: res.ten + ' (' + res.maDviTinh + ')',
                 });
                 this.setWidth();
                 this.updateEditCache();
@@ -870,7 +893,7 @@ export class BaoCao04aComponent implements OnInit {
     }
 
     statusDeleteCol(maVtu: string) {
-        if (this.luyKes.length > 0) {
+        if (this.luyKes?.length > 0) {
             if (this.luyKes[0].listCtiet.findIndex(e => e.maVtu == maVtu) != -1) {
                 return true;
             }
@@ -879,7 +902,7 @@ export class BaoCao04aComponent implements OnInit {
     }
 
     checkDelete(item: ItemData) {
-        if (this.luyKes.findIndex(e => e.maNdungChi == item.maNdungChi) != -1) {
+        if (this.luyKes?.findIndex(e => e.maNdungChi == item.maNdungChi) != -1) {
             return false;
         }
         if (item.level <= 3) {
@@ -925,7 +948,7 @@ export class BaoCao04aComponent implements OnInit {
         this.lstCtietBcao.forEach((item, index) => {
             const row = 2 + index;
             header.push({ t: row, b: row, l: 0, r: 0, val: item.index() })
-            header.push({ t: row, b: row, l: 1, r: 1, val: item.tenNdung })
+            header.push({ t: row, b: row, l: 1, r: 1, val: item.tenNdungChi })
             header.push({ t: row, b: row, l: 2, r: 2, val: item.trongDotTcong?.toString() })
             header.push({ t: row, b: row, l: 3 + num, r: 3 + num, val: item.luyKeTcong?.toString() })
             header.push({ t: row, b: row, l: 4 + 2 * num, r: 4 + 2 * num, val: item.ghiChu })

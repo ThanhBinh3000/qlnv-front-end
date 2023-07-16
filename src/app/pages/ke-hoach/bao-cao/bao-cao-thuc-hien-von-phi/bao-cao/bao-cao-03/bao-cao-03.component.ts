@@ -150,6 +150,7 @@ export class BaoCao03Component implements OnInit {
     async initialization() {
         this.spinner.show();
         Object.assign(this.status, this.dataInfo.status);
+        await this.getFormDetail();
         if (this.status.save) {
             this.scrollX = Table.tableWidth(350, 9, 1, 160);
         } else {
@@ -176,6 +177,28 @@ export class BaoCao03Component implements OnInit {
         this.status.ok = this.status.ok && (this.formDetail.trangThai == Status.NOT_RATE || this.formDetail.trangThai == Status.COMPLETE);
     }
 
+    async getFormDetail() {
+        await this.baoCaoThucHienVonPhiService.ctietBieuMau(this.dataInfo.id).toPromise().then(
+            data => {
+                if (data.statusCode == 0) {
+                    this.formDetail = data.data;
+                    this.formDetail.maDviTien = '1';
+                    this.lstCtietBcao = [];
+                    this.formDetail.lstCtietBcaos.forEach(item => {
+                        this.lstCtietBcao.push(new ItemData(item));
+                    })
+                    this.formDetail.listIdDeleteFiles = [];
+                    this.listFile = [];
+                    this.getStatusButton();
+                } else {
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                }
+            },
+            err => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+            }
+        )
+    }
 
     async save(trangThai: string) {
         if (this.lstCtietBcao.some(e => this.editCache[e.id].edit)) {
@@ -203,7 +226,9 @@ export class BaoCao03Component implements OnInit {
         for (let iterator of this.listFile) {
             request.fileDinhKems.push(await this.fileManip.uploadFile(iterator, this.dataInfo.path));
         }
-        request.lstCtietLapThamDinhs = lstCtietBcaoTemp;
+        // request.tuNgay = Utils.fmtDate(request.tuNgay);
+        // request.denNgay = Utils.fmtDate(request.denNgay);
+        request.lstCtietBcaos = lstCtietBcaoTemp;
         request.trangThai = trangThai;
         //call service cap nhat phu luc
         this.spinner.show();

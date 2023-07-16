@@ -47,6 +47,10 @@ export class DialogTaoMoiComponent implements OnInit {
     }
 
     async checkReport() {
+        if (!this.response.namBcao || !this.response.maLoaiBcao || !this.response.thangBcao) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+            return;
+        }
         const request = {
             maPhanBcao: '0',
             namBcao: this.response.namBcao,
@@ -135,7 +139,7 @@ export class DialogTaoMoiComponent implements OnInit {
         await this.baoCaoThucHienDuToanChiService.tongHopBaoCaoKetQua(request).toPromise().then(
             async (data) => {
                 if (data.statusCode == 0) {
-                    this.response.lstBcaos = data.data.lstBcaos;
+                    this.response.lstBcaos = data.data.lstBcaos.filter(e => e !== null);
                     this.response.lstBcaoDviTrucThuocs = data.data.lstBcaoDviTrucThuocs;
                     this.response.lstBcaos.forEach(e => {
                         [e.tenPhuLuc, e.tieuDe] = Dtc.appendixName(e.maLoai);
@@ -164,11 +168,6 @@ export class DialogTaoMoiComponent implements OnInit {
     async handleOk() {
         if (!this.response.namBcao || !this.response.maLoaiBcao || !this.response.thangBcao) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
-            return;
-        }
-        this.checkReport();
-        if (!this.response.namBcao) {
-            this.clear();
             return;
         }
         this._modalRef.close(this.response);

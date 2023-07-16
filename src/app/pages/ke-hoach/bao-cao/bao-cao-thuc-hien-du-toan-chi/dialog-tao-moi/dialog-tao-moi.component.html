@@ -18,8 +18,8 @@
         </div>
         <div nz-col nzSpan="6" *ngIf="response.maLoaiBcao && response.maLoaiBcao == Dtc.BC_DINH_KY">
             <label class="search__label">Tháng báo cáo</label>
-            <nz-select nzShowSearch nzPlaceHolder="Chọn năm báo cáo" [(ngModel)]="response.thangBcao"
-                [class]="response.thangBcao ?'' : 'input-error-validate'">
+            <nz-select nzShowSearch nzPlaceHolder="Chọn tháng báo cáo" [(ngModel)]="response.thangBcao"
+                [class]="response.thangBcao ?'' : 'input-error-validate'" (ngModelChange)="checkReport()">
                 <nz-option *ngFor="let item of lstThang" [nzValue]="item" [nzLabel]="item">
                 </nz-option>
             </nz-select>
