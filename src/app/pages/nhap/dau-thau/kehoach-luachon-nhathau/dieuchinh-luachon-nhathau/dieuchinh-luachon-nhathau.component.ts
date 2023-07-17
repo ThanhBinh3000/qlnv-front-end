@@ -167,4 +167,30 @@ export class DieuchinhLuachonNhathauComponent extends Base2Component implements 
     return endValue.getTime() <= this.tuNgayQd.getTime();
   };
 
+  disableXem(trangThai) {
+    switch (trangThai){
+      case this.STATUS.DA_LAP: {
+        if (this.userService.isAccessPermisson("NHDTQG_PTDT_DCKHLCNT_THEM")) {
+          return false;
+        } else if (this.userService.isAccessPermisson("NHDTQG_PTDT_DCKHLCNT_XEM")) {
+          return true;
+        }
+        break;
+      }
+      case this.STATUS.CHO_DUYET_LDV: {
+        if (this.userService.isAccessPermisson("NHDTQG_PTDT_DCKHLCNT_BANHANH")) {
+          return false;
+        } else if (this.userService.isAccessPermisson("NHDTQG_PTDT_DCKHLCNT_XEM")) {
+          return true;
+        }
+        break;
+      }
+      case this.STATUS.BAN_HANH: {
+        if (this.userService.isAccessPermisson("NHDTQG_PTDT_DCKHLCNT_XEM")) {
+          return true;
+        }
+        break;
+      }
+    }
+  }
 }

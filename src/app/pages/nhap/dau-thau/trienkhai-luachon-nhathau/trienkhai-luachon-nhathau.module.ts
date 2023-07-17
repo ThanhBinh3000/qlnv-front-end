@@ -11,6 +11,9 @@ import { ThemmoiQuyetdinhKetquaLcntComponent } from './quyetdinh-ketqua-lcnt/the
 import { TheoPhuongThucDauThauComponent } from './theo-phuong-thuc-dau-thau/theo-phuong-thuc-dau-thau.component';
 import { ThemmoiThongtinDauthauComponent } from './thongtin-dauthau/themmoi-thongtin-dauthau/themmoi-thongtin-dauthau.component';
 import { KehoachLuachonNhathauModule } from '../kehoach-luachon-nhathau/kehoach-luachon-nhathau.module';
+import { QdPdHsMoiThauComponent } from './qd-pd-hs-moi-thau/qd-pd-hs-moi-thau.component';
+import { ThemMoiQdPdHsMtVtComponent } from './qd-pd-hs-moi-thau/them-moi-qd-pd-hs-mt-vt/them-moi-qd-pd-hs-mt-vt.component';
+import { ThemmoiThongtinDauthauVtComponent } from './thongtin-dauthau/themmoi-thongtin-dauthau-vt/themmoi-thongtin-dauthau-vt.component';
 
 
 @NgModule({
@@ -21,6 +24,9 @@ import { KehoachLuachonNhathauModule } from '../kehoach-luachon-nhathau/kehoach-
     TheoPhuongThucDauThauComponent,
     ThongtinDauthauComponent,
     ThemmoiThongtinDauthauComponent,
+    QdPdHsMoiThauComponent,
+    ThemMoiQdPdHsMtVtComponent,
+    ThemmoiThongtinDauthauVtComponent,
   ],
   imports: [
     CommonModule,
