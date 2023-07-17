@@ -144,7 +144,6 @@ export class DialogTaoDeNghiCapVonComponent implements OnInit {
       //bao cao chua ton tai
       if (this.response.canCuVeGia == Utils.HD_TRUNG_THAU) {
         if (this.response.loaiDnghi == Utils.MUA_VTU) {
-          debugger
           await this.getContractData();
         } else {
           if (this.userService.isCuc()) {

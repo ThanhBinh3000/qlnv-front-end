@@ -25,6 +25,12 @@
 				<i nz-icon nzType="copy" nzTheme="outline"></i>
 				<span>Copy</span>
 			</button>
+			<ng-container *ngIf="baoCao.trangThai == '7'">
+				<button type="button" class="btn btn-main" *ngIf="statusExportExcel.export" (click)="exportToExcel()">
+					<span nz-icon nzType="export" nzTheme="outline" style="margin-right: 5px;"></span>
+					<span>Xuất</span>
+				</button>
+			</ng-container>
 		</div>
 	</nz-affix>
 
@@ -128,9 +134,9 @@
 								<th>{{displayValue(total.slHopDong)}}</th>
 								<th></th>
 								<th>{{displayValue(total.gtHopDong)}}</th>
-								<th></th>
-								<th></th>
-								<th></th>
+								<th>{{displayValue(total.viPhamHopDong)}}</th>
+								<th>{{displayValue(total.thanhLyHdongSl)}}</th>
+								<th>{{displayValue(total.thanhLyHdongTt)}}</th>
 								<th></th>
 								<th [hidden]="status"></th>
 							</tr>
@@ -158,11 +164,17 @@
 									<td>
 										{{ displayValue(data.gtHopDong) }}
 									</td>
-									<td></td>
-									<td></td>
-									<td></td>
 									<td>
-										{{ data.soCongVan }}
+										{{displayValue(data.viPhamHopDong)}}
+									</td>
+									<td>
+										{{ displayValue(data.thanhLyHdongSl)}}
+									</td>
+									<td>
+										{{displayValue(data.thanhLyHdongTt)}}
+									</td>
+									<td>
+										{{ data.congVan }}
 									</td>
 									<td [hidden]="status">
 										<i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
@@ -191,19 +203,19 @@
 									</td>
 									<td>
 										<input nz-input class="search__input"
-											[(ngModel)]="editCache[data.id].data.soCongVan" />
+											[(ngModel)]="editCache[data.id].data.viPhamHopDong" />
 									</td>
 									<td>
 										<input nz-input class="search__input"
-											[(ngModel)]="editCache[data.id].data.soCongVan" />
+											[(ngModel)]="editCache[data.id].data.thanhLyHdongSl" />
 									</td>
 									<td>
 										<input nz-input class="search__input"
-											[(ngModel)]="editCache[data.id].data.soCongVan" />
+											[(ngModel)]="editCache[data.id].data.thanhLyHdongTt" />
 									</td>
 									<td>
 										<input nz-input class="search__input"
-											[(ngModel)]="editCache[data.id].data.soCongVan" />
+											[(ngModel)]="editCache[data.id].data.congVan" />
 									</td>
 									<td [hidden]="status">
 										<a (click)="saveEdit(data.id)" class="save">Lưu</a>
