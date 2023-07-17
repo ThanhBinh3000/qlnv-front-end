@@ -46,6 +46,7 @@ export class ThongTinKsgComponent implements OnInit, OnChanges {
 
   dsChiCuc : any[]=[]
   userInfo  : UserLogin
+  isApDung: boolean;
   rowItem: ThongTinKhaoSatGia = new ThongTinKhaoSatGia();
   dataEdit: { [key: string]: { edit: boolean; data: ThongTinKhaoSatGia }} = {};
   constructor(
@@ -69,6 +70,7 @@ export class ThongTinKsgComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (this.dataCloaiVthh) {
       this.rowItem.cloaiVthh = (this.dataCloaiVthh.tenCloaiVthh ? this.dataCloaiVthh.tenCloaiVthh  + '; ' : '') + (this.dataCloaiVthh.moTa ? this.dataCloaiVthh.moTa + '; ' : '') + (this.dataCloaiVthh.tchuanCluong ? this.dataCloaiVthh.tchuanCluong : '' )
+      this.isApDung = this.dataCloaiVthh.apDungTatCa
     }
   }
 
@@ -106,6 +108,8 @@ export class ThongTinKsgComponent implements OnInit, OnChanges {
       msgRequired = "Không được để trống chủng loại hàng hóa";
     } else if (!item.donGia) {
       msgRequired = "Không được để trống đơn giá";
+    } else if (!item.maChiCuc && !this.isApDung) {
+      msgRequired = "Không được để trống Chi cục"
     }
     return msgRequired;
   }

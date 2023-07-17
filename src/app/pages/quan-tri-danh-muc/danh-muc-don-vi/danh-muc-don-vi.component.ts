@@ -38,6 +38,7 @@ export class DanhMucDonViComponent implements OnInit {
   levelNode: number = 0;
   isEditData: boolean = false;
   userInfo: UserLogin;
+  listVungMien: any[] = [];
   listTinhThanh: any[] = [];
   listQuanHuyen: any[] = [];
   listPhuongXa: any[] = [];
@@ -80,6 +81,7 @@ export class DanhMucDonViComponent implements OnInit {
     this.userInfo = this.userService.getUserLogin();
     this.layTatCaDonViTheoTree();
     this.loadDsKhuVuc();
+    this.loadDsVungMien();
     this.spinner.hide();
   }
 
@@ -124,6 +126,13 @@ export class DanhMucDonViComponent implements OnInit {
       if (this.listAllDiaDanh && this.listAllDiaDanh.length > 0) {
         this.listTinhThanh = this.listAllDiaDanh.filter(item => item.capDiaDanh === 1);
       }
+    }
+  }
+
+  async loadDsVungMien() {
+    let res = await this.danhMucService.danhMucChungGetAll('VUNG_MIEN');
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listVungMien = res.data;
     }
   }
 
