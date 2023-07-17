@@ -2,9 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
-import { CurrencyMaskInputMode } from 'ngx-currency';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { displayNumber, exchangeMoney } from 'src/app/Utility/func';
 import { FileManip, Operator, Status, Table, Utils } from 'src/app/Utility/utils';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
@@ -32,6 +30,9 @@ export class ItemData {
     dtoanDchinh: number;
     dtoanVuTvqtDnghi: number;
     maNoiDung: string;
+    chenhLech: number;
+    ykienDviCtren: string;
+    ghiChu: string;
 }
 
 @Component({
@@ -184,11 +185,6 @@ export class PhuLuc3Component implements OnInit {
             }));
         }
     }
-
-    displayValue(num: number): string {
-        num = exchangeMoney(num, '1', this.maDviTien);
-        return displayNumber(num);
-    };
 
     getTotal() {
         this.total = new ItemData();
@@ -357,6 +353,8 @@ export class PhuLuc3Component implements OnInit {
         this.editCache[id].data.dtoanKphiCong = this.editCache[id].data.dtoanKphiNtruoc + this.editCache[id].data.dtoanKphiDaGiao;
         // this.editCache[id].data.dtoanDchinh = this.editCache[id].data.ncauKphi - this.editCache[id].data.dtoanKphiCong;
         this.editCache[id].data.dtoanDchinh = Operator.sum([this.editCache[id].data.ncauKphi, -this.editCache[id].data.dtoanKphiCong]);
+        this.editCache[id].data.chenhLech = Operator.sum([this.editCache[id].data.dtoanVuTvqtDnghi, -this.editCache[id].data.dtoanDchinh]);
+
     };
 
     getChiMuc(str: string): string {
@@ -389,34 +387,53 @@ export class PhuLuc3Component implements OnInit {
 
     exportToExcel() {
         const header = [
-            { t: 0, b: 2, l: 0, r: 17, val: null },
+            { t: 0, b: 2, l: 0, r: 13, val: null },
             { t: 0, b: 2, l: 0, r: 0, val: 'STT' },
-            { t: 0, b: 2, l: 1, r: 1, val: 'Danh mục' },
-            { t: 0, b: 2, l: 2, r: 2, val: 'Đơn vị tính' },
-            { t: 0, b: 2, l: 3, r: 3, val: 'Thực hiện năm trước' },
-            { t: 0, b: 0, l: 4, r: 5, val: 'Năm ' + (this.namBcao - 1).toString() },
-            { t: 1, b: 2, l: 4, r: 4, val: 'Dự toán' },
-            { t: 1, b: 2, l: 5, r: 5, val: 'Ước thực hiện' },
-            { t: 0, b: 0, l: 6, r: 11, val: 'Năm dự toán' },
-            { t: 1, b: 1, l: 6, r: 8, val: 'Chi phí tại cửa kho' },
-            { t: 2, b: 2, l: 6, r: 6, val: 'Số lượng' },
-            { t: 2, b: 2, l: 7, r: 7, val: 'Định mức' },
-            { t: 2, b: 2, l: 8, r: 8, val: 'Thành tiền' },
-            { t: 1, b: 1, l: 9, r: 10, val: 'Chí phí ngoài cửa kho' },
-            { t: 2, b: 2, l: 9, r: 9, val: 'Bình quân' },
-            { t: 2, b: 2, l: 10, r: 10, val: 'Thành tiền' },
-            { t: 1, b: 2, l: 11, r: 11, val: 'Tổng cộng' },
-            { t: 0, b: 0, l: 12, r: 14, val: 'Thẩm định' },
-            { t: 1, b: 1, l: 12, r: 13, val: 'Chi phí tại cửa kho' },
-            { t: 2, b: 2, l: 12, r: 12, val: 'Số lượng' },
-            { t: 2, b: 2, l: 13, r: 13, val: 'Thành tiền' },
-            { t: 1, b: 2, l: 14, r: 14, val: 'Tổng cộng' },
-            { t: 0, b: 2, l: 15, r: 15, val: 'Chênh lệch giữa thẩm định của DVCT và nhu cầu của DVCD' },
-            { t: 0, b: 2, l: 16, r: 16, val: 'Ghi chú' },
-            { t: 0, b: 2, l: 17, r: 17, val: 'Ý kiến của đơn vị cấp trên' },
+            { t: 0, b: 2, l: 1, r: 1, val: 'Nội dung' },
+            { t: 0, b: 2, l: 2, r: 2, val: 'Loại Khoản' },
+            { t: 0, b: 2, l: 3, r: 3, val: 'Nhu cầu dự toán kinh phí năm ' + (this.namBcao - 1).toString() },
+            { t: 0, b: 0, l: 4, r: 6, val: 'Dự toán kinh phí được sử dụng trong năm' },
+            { t: 0, b: 2, l: 7, r: 7, val: 'Kinh phí ước thực hiện cả năm' },
+            { t: 0, b: 2, l: 8, r: 8, val: 'Dự toán điều chỉnh Tăng(+)/Giảm(-) ' },
+            { t: 0, b: 2, l: 9, r: 9, val: 'Dự toán Vụ TVQT đề nghị (+ tăng) (- giảm)' },
+            { t: 0, b: 2, l: 10, r: 10, val: 'Ghi chú' },
+            { t: 0, b: 2, l: 11, r: 11, val: 'Dự toán chênh lệch giữa Vụ TVQT điều chỉnh vàDự toán chênh lệch giữa Vụ TVQT điều chỉnh và đơn vị đề nghị (+ tăng) (- giảm)' },
+            { t: 0, b: 2, l: 12, r: 12, val: 'Ý kiến của đơn vị cấp trên' },
+
+            { t: 1, b: 2, l: 4, r: 4, val: 'Năm trước chuyển sang' },
+            { t: 1, b: 2, l: 5, r: 5, val: 'Dự toán đã giao trong năm' },
+            { t: 1, b: 2, l: 6, r: 6, val: 'Cộng' },
+
+            { t: 3, b: 3, l: 1, r: 1, val: 'A' },
+            { t: 3, b: 3, l: 2, r: 2, val: 'B' },
+            { t: 3, b: 3, l: 3, r: 3, val: 'C' },
+            { t: 3, b: 3, l: 4, r: 4, val: '1' },
+            { t: 3, b: 3, l: 5, r: 5, val: '2' },
+            { t: 3, b: 3, l: 6, r: 6, val: '3' },
+            { t: 3, b: 3, l: 7, r: 7, val: '4 = 2 + 3' },
+            { t: 3, b: 3, l: 8, r: 8, val: '5' },
+            { t: 3, b: 3, l: 9, r: 9, val: '6 = 1 - 4' },
+            { t: 3, b: 3, l: 10, r: 10, val: '7' },
+            { t: 3, b: 3, l: 11, r: 11, val: '8' },
+            { t: 3, b: 3, l: 12, r: 12, val: '9' },
+            { t: 3, b: 3, l: 13, r: 13, val: '10' },
+
         ]
-        const fieldOrder = ['stt', 'tenDanhMuc', 'dviTinh', 'thNamTruoc', 'namDtoan', 'namUocTh', 'sluongTaiKho', 'dmucTaiKho', 'ttienTaiKho',
-            'binhQuanNgoaiKho', 'ttienNgoaiKho', 'tongCong', 'tdinhKhoSluong', 'tdinhKhoTtien', 'tdinhTcong', 'chenhLech', 'ghiChu', 'ykienDviCtren']
+        const fieldOrder = [
+            'stt',
+            'noiDung',
+            'loaiKhoan',
+            'ncauKphi',
+            'dtoanKphiNtruoc',
+            'dtoanKphiDaGiao',
+            'dtoanKphiCong',
+            'kphiUocThien',
+            'dtoanDchinh',
+            'dtoanVuTvqtDnghi',
+            'chenhLech',
+            'ykienDviCtren',
+            'ghiChu',
+        ]
 
         const filterData = this.lstCtietBcao.map(item => {
             const row: any = {};
@@ -437,7 +454,7 @@ export class PhuLuc3Component implements OnInit {
         const worksheet = Table.initExcel(header);
         XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
-        XLSX.writeFile(workbook, this.dataInfo.maBcao + '_Phu_luc_II.xlsx');
+        XLSX.writeFile(workbook, this.dataInfo.maBcao + '_DC_PL03.xlsx');
     }
 }
 
