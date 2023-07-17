@@ -239,10 +239,10 @@
 </ng-container>
 
 <ng-template #templateThemmoi>
-  <app-them-tong-hop-phuong-an-gia *ngIf="isTongHop" [type]="type" [isView]="isViewDetail" [idInput]="idSelected"
+  <app-them-tong-hop-phuong-an-gia *ngIf="isTongHop" [type]="type" [pagType]="pagType" [isView]="isViewDetail" [idInput]="idSelected"
                                    (onClose)="onClose()">
   </app-them-tong-hop-phuong-an-gia>
-  <app-them-moi-to-trinh-pag *ngIf="!isTongHop" [type]="type" [isView]="isViewDetail" [idInput]="idSelected"
+  <app-them-moi-to-trinh-pag *ngIf="!isTongHop" [type]="type" [pagType]="pagType" [isView]="isViewDetail" [idInput]="idSelected"
                              (onClose)="onClose()">
   </app-them-moi-to-trinh-pag>
 </ng-template>

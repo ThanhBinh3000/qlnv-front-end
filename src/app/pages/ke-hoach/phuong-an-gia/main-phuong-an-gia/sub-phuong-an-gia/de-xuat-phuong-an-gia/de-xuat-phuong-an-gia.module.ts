@@ -18,6 +18,6 @@ import { ThemMoiDeXuatPagComponent } from './them-dx-pag-vt/them-dx-pag-vt';
   imports: [CommonModule,
     ComponentsModule
   ],
-  exports: [DeXuatPhuongAnGiaComponent],
+  exports: [DeXuatPhuongAnGiaComponent, ThemDeXuatPagLuongThucComponent, ThemMoiDeXuatPagComponent],
 })
 export class DeXuatPhuongAnGiaModule { }
