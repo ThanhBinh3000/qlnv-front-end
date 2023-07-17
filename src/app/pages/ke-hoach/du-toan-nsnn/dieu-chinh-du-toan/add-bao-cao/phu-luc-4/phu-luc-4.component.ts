@@ -611,27 +611,34 @@ export class PhuLuc4Component implements OnInit {
 
     exportToExcel() {
         const header = [
-            { t: 0, b: 1, l: 0, r: 13, val: null },
+            { t: 0, b: 1, l: 0, r: 11, val: null },
             { t: 0, b: 1, l: 0, r: 0, val: 'STT' },
-            { t: 0, b: 1, l: 1, r: 1, val: 'Mặt hàng' },
-            { t: 0, b: 1, l: 2, r: 2, val: 'Đơn vị tính' },
-            { t: 0, b: 1, l: 3, r: 3, val: 'Thực hiện năm trước' },
-            { t: 0, b: 0, l: 4, r: 5, val: 'Năm ' + (this.namBcao - 1).toString() },
-            { t: 1, b: 1, l: 4, r: 4, val: 'Dự toán' },
-            { t: 1, b: 1, l: 5, r: 5, val: 'Ước thực hiện' },
-            { t: 0, b: 0, l: 6, r: 8, val: 'Năm dự toán' },
-            { t: 1, b: 1, l: 6, r: 6, val: 'Định mức' },
-            { t: 1, b: 1, l: 7, r: 7, val: 'Số lượng bảo quản' },
-            { t: 1, b: 1, l: 8, r: 8, val: 'Thành tiền' },
-            { t: 0, b: 0, l: 9, r: 10, val: 'Thẩm định' },
-            { t: 1, b: 1, l: 9, r: 9, val: 'Số lượng bảo quản' },
-            { t: 1, b: 1, l: 10, r: 10, val: 'Thành tiền' },
-            { t: 0, b: 1, l: 11, r: 11, val: 'Chênh lệch giữa thẩm định của DVCT và nhu cầu của DVCD' },
-            { t: 0, b: 1, l: 12, r: 12, val: 'Ghi chú' },
-            { t: 0, b: 1, l: 13, r: 13, val: 'Ý kiến của đơn vị cấp trên' },
+            { t: 0, b: 1, l: 1, r: 1, val: 'Nội dung' },
+            { t: 0, b: 1, l: 2, r: 2, val: 'Kế hoạch vốn năm  ' + (this.namBcao - 1).toString() },
+            { t: 0, b: 1, l: 3, r: 3, val: 'Dự toán đã giao lũy kế (đến 31/05/ ' + (this.namBcao - 1).toString() + ')' },
+            { t: 0, b: 1, l: 4, r: 4, val: 'Quyết toán, giá trị dự toán hoặc tổng mức đầu tư' },
+            { t: 0, b: 1, l: 5, r: 5, val: 'Kế hoạch điều chỉnh (+ tăng) (- giảm)' },
+            { t: 0, b: 1, l: 6, r: 6, val: 'Kế hoạch năm' + (this.namBcao + 1) + 'sau điều chỉnh' },
+            { t: 0, b: 1, l: 7, r: 7, val: 'Dự toán đề nghị điều chỉnh lần này' },
+            { t: 0, b: 1, l: 8, r: 8, val: 'Dự toán Vụ TVQT đề nghị (+ tăng) (- giảm)' },
+            { t: 0, b: 1, l: 9, r: 9, val: 'Ghi chú (Đã duyệt quyết toán/ chưa duyệt quyết toán)' },
+            { t: 0, b: 1, l: 10, r: 10, val: 'Dự toán chênh lệch giữa Vụ TVQT điều chỉnh và đơn vị đề nghị (+ tăng) (- giảm)' },
+            { t: 0, b: 1, l: 11, r: 11, val: 'Ý kiến của đơn vị cấp trên' },
         ]
-        const fieldOrder = ['stt', 'tenMatHang', 'dviTinh', 'thucHienNamTruoc', 'dtoanNamHtai', 'uocThNamHtai', 'dmucNamDtoan', 'sluongNamDtoan', 'ttienNamDtoan',
-            'sluongNamN1Td', 'ttienNamN1Td', 'chenhLech', 'ghiChu', 'ykienDviCtren']
+        const fieldOrder = [
+            "stt",
+            "noiDung",
+            "keHoachVon",
+            "dtoanDaGiaoLke",
+            "qtoanGtriDtoan",
+            "dtoanDchinhDnghi",
+            "khoachSauDchinh",
+            "dtoanDchinhDnghiLanNay",
+            "dtoanVuTvqtDnghi",
+            "ghiChu",
+            "chenhLech",
+            "ykienDviCtren",
+        ]
 
         const filterData = this.lstCtietBcao.map(item => {
             const row: any = {};
@@ -652,7 +659,7 @@ export class PhuLuc4Component implements OnInit {
         const worksheet = Table.initExcel(header);
         XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
-        XLSX.writeFile(workbook, this.dataInfo.maBcao + '_Phu_luc_III.xlsx');
+        XLSX.writeFile(workbook, this.dataInfo.maBcao + '_DC_PL04.xlsx');
     }
 
 

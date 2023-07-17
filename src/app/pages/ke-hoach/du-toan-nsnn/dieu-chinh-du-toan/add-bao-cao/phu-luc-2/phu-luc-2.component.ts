@@ -2,20 +2,17 @@ import { Component, Input, OnInit } from '@angular/core';
 import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
-import { CurrencyMaskInputMode } from 'ngx-currency';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { TableFunction, displayNumber, exchangeMoney } from 'src/app/Utility/func';
-import { AMOUNT, DON_VI_TIEN, FileManip, Operator, Status, Table, Utils } from 'src/app/Utility/utils';
+import { FileManip, Operator, Status, Table, Utils } from 'src/app/Utility/utils';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
-import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.service';
 import { DieuChinhService } from 'src/app/services/quan-ly-von-phi/dieuChinhDuToan.service';
 import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
 import * as XLSX from 'xlsx';
-import { BtnStatus, Doc, Form } from '../../dieu-chinh-du-toan.constant';
 import { DialogSelectTaiSanComponent } from '../../../giao-du-toan/dialogSelectTaiSan/dialogSelectTaiSan.component';
+import { BtnStatus, Doc, Form } from '../../dieu-chinh-du-toan.constant';
 
 export class ItemData {
     id: string;
@@ -109,7 +106,7 @@ export class PhuLuc2Component implements OnInit {
         public userService: UserService,
         // private danhMucService: DanhMucDungChungService,
         private fileManip: FileManip,
-        private tableFunc: TableFunction,
+        // private tableFunc: TableFunction,
     ) { }
 
     async ngOnInit() {
@@ -180,11 +177,6 @@ export class PhuLuc2Component implements OnInit {
 
     //     }
     // };
-
-    displayValue(num: number): string {
-        num = exchangeMoney(num, '1', this.maDviTien);
-        return displayNumber(num);
-    };
 
     getTotal() {
         this.total = new ItemData();
@@ -290,7 +282,7 @@ export class PhuLuc2Component implements OnInit {
     };
 
     deleteLine(id: string) {
-        this.lstCtietBcao = this.tableFunc.deleteRow(id, this.lstCtietBcao);
+        this.lstCtietBcao = Table.deleteRow(id, this.lstCtietBcao);
         this.updateEditCache();
     }
 
@@ -517,7 +509,7 @@ export class PhuLuc2Component implements OnInit {
         XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
         let excelName = this.dataInfo.maBcao;
-        excelName = excelName + '_Phu_luc_II.xlsx'
+        excelName = excelName + '_DC_PL02.xlsx'
         XLSX.writeFile(workbook, excelName);
     }
 

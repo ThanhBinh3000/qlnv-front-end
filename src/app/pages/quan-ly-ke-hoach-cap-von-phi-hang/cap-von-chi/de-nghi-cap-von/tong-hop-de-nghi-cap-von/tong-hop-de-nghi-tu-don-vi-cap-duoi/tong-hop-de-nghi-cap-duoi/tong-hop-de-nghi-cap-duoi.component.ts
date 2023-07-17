@@ -14,7 +14,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { displayNumber, mulNumber, sumNumber } from 'src/app/Utility/func';
-import { AMOUNT, BOX_NUMBER_WIDTH, CAN_CU_GIA, CVNC, DON_VI_TIEN, LOAI_DE_NGHI, QUATITY, Table, Utils } from 'src/app/Utility/utils';
+import { AMOUNT, BOX_NUMBER_WIDTH, CAN_CU_GIA, CVNC, DON_VI_TIEN, LOAI_DE_NGHI, Operator, QUATITY, Table, Utils } from 'src/app/Utility/utils';
 import { BaoCao, ItemRequest, Times, TRANG_THAI } from '../../../de-nghi-cap-von.constant';
 import * as XLSX from 'xlsx';
 import { BtnStatus } from '../../../de-nghi-cap-von.class';
@@ -463,30 +463,30 @@ export class TongHopDeNghiCapDuoiComponent implements OnInit {
   }
 
   changeModel(id: string) {
-    this.editCache[id].data.gtriThucHien = mulNumber(this.editCache[id].data.slThucHien, this.editCache[id].data.soConDuocCap);
-    this.editCache[id].data.luyKeTongCong = sumNumber([this.editCache[id].data.luyKeTongCapUng, this.editCache[id].data.luyKeTongCapVon]);
-    this.editCache[id].data.tongVonVaDtDaCap = sumNumber([this.editCache[id].data.duToanDaGiao, this.editCache[id].data.luyKeTongCong]);
-    this.editCache[id].data.vonDnghiCapLanNay = sumNumber([this.editCache[id].data.gtriThucHien, -this.editCache[id].data.tongVonVaDtDaCap]);
+    this.editCache[id].data.gtriThucHien = Operator.mul(this.editCache[id].data.slThucHien, this.editCache[id].data.soConDuocCap);
+    this.editCache[id].data.luyKeTongCong = Operator.sum([this.editCache[id].data.luyKeTongCapUng, this.editCache[id].data.luyKeTongCapVon]);
+    this.editCache[id].data.tongVonVaDtDaCap = Operator.sum([this.editCache[id].data.duToanDaGiao, this.editCache[id].data.luyKeTongCong]);
+    this.editCache[id].data.vonDnghiCapLanNay = Operator.sum([this.editCache[id].data.gtriThucHien, -this.editCache[id].data.tongVonVaDtDaCap]);
   }
 
   getTotal() {
     this.total = new ItemRequest();
     this.baoCao.dnghiCapvonCtiets.forEach(item => {
-      this.total.slKeHoach = sumNumber([this.total.slKeHoach, item.slKeHoach]);
-      this.total.slThucHien = sumNumber([this.total.slThucHien, item.slThucHien]);
-      this.total.donGia = sumNumber([this.total.donGia, item.donGia]);
-      this.total.gtriThucHien = sumNumber([this.total.gtriThucHien, item.gtriThucHien]);
-      this.total.duToanDaGiao = sumNumber([this.total.duToanDaGiao, item.duToanDaGiao]);
-      this.total.luyKeTongCapUng = sumNumber([this.total.luyKeTongCapUng, item.luyKeTongCapUng]);
-      this.total.luyKeTongCapVon = sumNumber([this.total.luyKeTongCapVon, item.luyKeTongCapVon]);
-      this.total.luyKeTongCong = sumNumber([this.total.luyKeTongCong, item.luyKeTongCong]);
-      this.total.tongVonVaDtDaCap = sumNumber([this.total.tongVonVaDtDaCap, item.tongVonVaDtDaCap]);
-      this.total.vonDuyetCapVon = sumNumber([this.total.vonDuyetCapVon, item.vonDuyetCapVon]);
-      this.total.vonDnghiCapLanNay = sumNumber([this.total.vonDnghiCapLanNay, item.vonDnghiCapLanNay]);
-      this.total.vonDuyetCapUng = sumNumber([this.total.vonDuyetCapUng, item.vonDuyetCapUng]);
-      this.total.vonDuyetCong = sumNumber([this.total.vonDuyetCong, item.vonDuyetCong]);
-      this.total.tongTien = sumNumber([this.total.tongTien, item.tongTien]);
-      this.total.soConDuocCap = sumNumber([this.total.soConDuocCap, item.soConDuocCap]);
+      this.total.slKeHoach = Operator.sum([this.total.slKeHoach, item.slKeHoach]);
+      this.total.slThucHien = Operator.sum([this.total.slThucHien, item.slThucHien]);
+      this.total.donGia = Operator.sum([this.total.donGia, item.donGia]);
+      this.total.gtriThucHien = Operator.sum([this.total.gtriThucHien, item.gtriThucHien]);
+      this.total.duToanDaGiao = Operator.sum([this.total.duToanDaGiao, item.duToanDaGiao]);
+      this.total.luyKeTongCapUng = Operator.sum([this.total.luyKeTongCapUng, item.luyKeTongCapUng]);
+      this.total.luyKeTongCapVon = Operator.sum([this.total.luyKeTongCapVon, item.luyKeTongCapVon]);
+      this.total.luyKeTongCong = Operator.sum([this.total.luyKeTongCong, item.luyKeTongCong]);
+      this.total.tongVonVaDtDaCap = Operator.sum([this.total.tongVonVaDtDaCap, item.tongVonVaDtDaCap]);
+      this.total.vonDuyetCapVon = Operator.sum([this.total.vonDuyetCapVon, item.vonDuyetCapVon]);
+      this.total.vonDnghiCapLanNay = Operator.sum([this.total.vonDnghiCapLanNay, item.vonDnghiCapLanNay]);
+      this.total.vonDuyetCapUng = Operator.sum([this.total.vonDuyetCapUng, item.vonDuyetCapUng]);
+      this.total.vonDuyetCong = Operator.sum([this.total.vonDuyetCong, item.vonDuyetCong]);
+      this.total.tongTien = Operator.sum([this.total.tongTien, item.tongTien]);
+      this.total.soConDuocCap = Operator.sum([this.total.soConDuocCap, item.soConDuocCap]);
     })
   }
 

@@ -544,7 +544,6 @@ export class CapVonComponent implements OnInit {
     XLSX.writeFile(workbook, 'CAP_VON.xlsx');
   }
 
-
   showDialogCopy() {
     // const obj = {
     //     qdChiTieu: this.qdChiTieu,
