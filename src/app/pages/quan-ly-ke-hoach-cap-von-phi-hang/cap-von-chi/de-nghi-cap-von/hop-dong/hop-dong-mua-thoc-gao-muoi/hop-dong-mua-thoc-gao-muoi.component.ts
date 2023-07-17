@@ -13,8 +13,10 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { displayNumber, sumNumber } from 'src/app/Utility/func';
-import { AMOUNT, CVNC, DON_VI_TIEN, LOAI_DE_NGHI, Operator, QUATITY, Utils } from 'src/app/Utility/utils';
+import { AMOUNT, CVNC, DON_VI_TIEN, LOAI_DE_NGHI, Operator, QUATITY, Roles, Table, Utils } from 'src/app/Utility/utils';
 import { BaoCao, ItemContract, TRANG_THAI } from '../../de-nghi-cap-von.constant';
+import { BtnStatus } from '../../de-nghi-cap-von.class';
+import * as XLSX from 'xlsx';
 
 
 @Component({
@@ -54,6 +56,7 @@ export class HopDongMuaThocGaoMuoiComponent implements OnInit {
     listFile: File[] = [];
     fileList: NzUploadFile[] = [];
     fileDetail: NzUploadFile;
+    statusExportExcel: BtnStatus = new BtnStatus();
     // before uploaf file
     beforeUpload = (file: NzUploadFile): boolean => {
         this.fileList = this.fileList.concat(file);
@@ -162,15 +165,15 @@ export class HopDongMuaThocGaoMuoiComponent implements OnInit {
     //check role cho các nut trinh duyet
     getStatusButton() {
         const checkChirld = this.baoCao.maDvi == this.userInfo?.MA_DVI;
-        if (Utils.statusSave.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(CVNC.EDIT_DN_MLT)) {
+        if (Utils.statusSave.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.CVNC.EDIT_DN_MLT)) {
             this.status = false;
         } else {
             this.status = true;
         }
-        this.saveStatus = Utils.statusSave.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(CVNC.EDIT_DN_MLT) && checkChirld;
-        this.submitStatus = Utils.statusApprove.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(CVNC.APPROVE_DN_MLT) && checkChirld && !(!this.baoCao.id);
-        this.approveStatus = this.baoCao.trangThai == Utils.TT_BC_2 && this.userService.isAccessPermisson(CVNC.PHE_DUYET_DN_MLT) && checkChirld;
-        this.copyStatus = Utils.statusCopy.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(CVNC.COPY_DN_MLT) && checkChirld;
+        this.saveStatus = Utils.statusSave.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.CVNC.EDIT_DN_MLT) && checkChirld && !(this.baoCao.id);
+        this.submitStatus = Utils.statusApprove.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.CVNC.APPROVE_DN_MLT) && checkChirld && !(!this.baoCao.id);
+        this.approveStatus = this.baoCao.trangThai == Utils.TT_BC_2 && this.userService.isAccessPermisson(Roles.CVNC.PHE_DUYET_DN_MLT) && checkChirld;
+        this.copyStatus = Utils.statusCopy.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.CVNC.COPY_DN_MLT) && checkChirld;
     }
 
     back() {
@@ -375,6 +378,7 @@ export class HopDongMuaThocGaoMuoiComponent implements OnInit {
 
         this.spinner.show();
         if (!this.baoCao.id) {
+            baoCaoTemp.maLoai = '0';
             this.capVonNguonChiService.themMoiHopDong(baoCaoTemp).toPromise().then(
                 async (data) => {
                     if (data.statusCode == 0) {
@@ -454,8 +458,43 @@ export class HopDongMuaThocGaoMuoiComponent implements OnInit {
                 this.total.slHopDong = Operator.sum([this.total.slHopDong, item.slHopDong]);
                 this.total.gtHopDong = Operator.sum([this.total.gtHopDong, item.gtHopDong]);
                 this.total.daGiaoDuToan = Operator.sum([this.total.daGiaoDuToan, item.daGiaoDuToan]);
+                this.total.viPhamHopDong = Operator.sum([this.total.viPhamHopDong, item.viPhamHopDong]);
+                this.total.thanhLyHdongSl = Operator.sum([this.total.thanhLyHdongSl, item.thanhLyHdongSl]);
+                this.total.thanhLyHdongTt = Operator.sum([this.total.thanhLyHdongTt, item.thanhLyHdongTt]);
             }
         })
+    }
+
+    exportToExcel() {
+        const header = [
+            { t: 0, b: 1, l: 0, r: 10, val: null },
+            { t: 0, b: 1, l: 0, r: 0, val: 'Cục DTNNKV' },
+            { t: 0, b: 1, l: 1, r: 1, val: 'Quyết định phê duyệt kết quả lựa chọn nhà thầu/Hợp đồng' },
+            { t: 0, b: 0, l: 2, r: 3, val: 'Số lượng' },
+            { t: 1, b: 1, l: 2, r: 2, val: 'Kế hoạch' },
+            { t: 1, b: 1, l: 3, r: 3, val: 'Thực hiện' },
+            { t: 0, b: 1, l: 4, r: 4, val: 'Đơn giá (kg/đồng)' },
+            { t: 0, b: 1, l: 5, r: 5, val: 'Giá trị hợp đồng(đã bao gồm VAT)(đồng)' },
+            { t: 0, b: 1, l: 6, r: 6, val: 'Vi phạm hợp đồng' },
+            { t: 0, b: 0, l: 7, r: 8, val: 'Thanh lý hợp đồng' },
+            { t: 1, b: 1, l: 7, r: 7, val: 'Số lượng' },
+            { t: 1, b: 1, l: 8, r: 8, val: 'Thành tiền' },
+            { t: 1, b: 1, l: 9, r: 9, val: 'Công văn' },
+        ]
+        const fieldOrder = ['tenDvi', 'qdPheDuyetKqNhaThau', 'slKeHoach', 'slHopDong', 'donGia', 'gtHopDong', 'viPhamHopDong', 'thanhLyHdongSl', 'thanhLyHdongTt', 'congVan']
+        const filterData = this.baoCao.dnghiCvHopDongCtiets.map(item => {
+            const row: any = {};
+            fieldOrder.forEach(field => {
+                row[field] = item[field]
+            })
+            return row;
+        })
+
+        const workbook = XLSX.utils.book_new();
+        const worksheet = Table.initExcel(header);
+        XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
+        XLSX.writeFile(workbook, 'HOP_DONG.xlsx');
     }
 
     showDialogCopy() {
