@@ -194,16 +194,16 @@
                         </nz-form-control>
                     </nz-form-item>
                 </div>
-                <div nz-col [nzSpan]="12">
-                    <nz-form-item>
-                        <nz-form-label [nzNoColon]="true"> Địa điểm kho </nz-form-label>
-                        <nz-form-control>
-                            <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogDdiemNhapHang()">
-                                <input [readonly]="true" nz-input formControlName="diaDiemKho" readonly />
-                            </nz-input-group>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
+<!--                <div nz-col [nzSpan]="12">-->
+<!--                    <nz-form-item>-->
+<!--                        <nz-form-label [nzNoColon]="true"> Địa điểm kho </nz-form-label>-->
+<!--                        <nz-form-control>-->
+<!--                            <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogDdiemNhapHang()">-->
+<!--                                <input [readonly]="true" nz-input formControlName="diaDiemKho" readonly />-->
+<!--                            </nz-input-group>-->
+<!--                        </nz-form-control>-->
+<!--                    </nz-form-item>-->
+<!--                </div>-->
                 <div nz-col nzSpan="6">
                     <nz-form-item>
                         <nz-form-label [nzNoColon]="true">
@@ -282,8 +282,8 @@
                             Thời gian giao,nhận hàng
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
-                            <nz-date-picker formControlName="thoiGianGiaoNhan" nzFormat="HH:mm dd/MM/yyyy"
-                                [nzShowTime]="{ nzFormat: 'HH:mm' }" nzDisabled>
+                            <nz-date-picker formControlName="thoiGianGiaoNhan" nzFormat="dd/MM/yyyy"
+                                nzDisabled>
                             </nz-date-picker>
                         </nz-form-control>
                     </nz-form-item>
@@ -319,7 +319,7 @@
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
-                                <input nz-input formControlName="moTaHangHoa" readonly />
+                                <input nz-input formControlName="tenCloaiVthh" readonly />
                             </nz-input-group>
                         </nz-form-control>
                     </nz-form-item>

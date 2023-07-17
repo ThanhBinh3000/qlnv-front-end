@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, SimpleChanges } from "@angular/core";
+import {Component, EventEmitter, Input, OnInit, Output, SimpleChanges} from "@angular/core";
 import { Base2Component } from "../../../../../../../components/base2/base2.component";
 import { HttpClient } from "@angular/common/http";
 import { StorageService } from "../../../../../../../services/storage.service";
@@ -18,6 +18,7 @@ import { DanhSachGoiThau } from "../../../../../../../models/DeXuatKeHoachuaChon
 import {
   DialogThemMoiGoiThauComponent
 } from "../../../../../../../components/dialog/dialog-them-moi-goi-thau/dialog-them-moi-goi-thau.component";
+import {formatDate} from "@angular/common";
 
 @Component({
   selector: 'app-thongtin-dieuchinh-vt',
@@ -30,9 +31,11 @@ export class ThongtinDieuchinhVtComponent extends Base2Component implements OnIn
   @Input() listHinhThucDauThau: any[] = [];
   @Input() listLoaiHopDong: any[] = [];
   @Input() title;
+  @Input() titleDx;
   @Input() dataInput;
   @Input() isView: boolean = false;
   @Input() isCache: boolean = false;
+  @Output() dsDxChange = new EventEmitter<any>();
   listOfData: any[] = [];
   listOfDataCache: any[] = [];
   listQuy: any[] = [];
@@ -100,7 +103,9 @@ export class ThongtinDieuchinhVtComponent extends Base2Component implements OnIn
       ykienThamGia: [""],
       tongMucDtBangChu: [""],
       tongSlChiTieu: [""],
-      quy: [""]
+      quy: [""],
+      soQdPdGiaCuThe: [""],
+      ngayKyQdPdGiaCuThe: [""],
     });
   }
 
@@ -112,8 +117,18 @@ export class ThongtinDieuchinhVtComponent extends Base2Component implements OnIn
     if (changes) {
       if (this.dataInput) {
         this.helperService.bidingDataInFormGroup(this.formData, this.dataInput);
-        this.listOfData = [...this.dataInput.dsGtDtlList];
-        this.listOfDataCache = this.dataInput.dsGtDtlList;
+        this.formData.patchValue({
+          nguonVon: this.dataInput.dxKhlcntHdr.nguonVon,
+          cviecDaTh: this.dataInput.dxKhlcntHdr.cviecDaTh,
+          cviecKhongTh: this.dataInput.dxKhlcntHdr.cviecKhongTh,
+          quy: this.dataInput.dxKhlcntHdr.quy,
+          tongMucDt: this.dataInput.dxKhlcntHdr.tongMucDt,
+          soQdPdGiaCuThe: this.dataInput.dxKhlcntHdr.soQdPdGiaCuThe,
+          ngayKyQdPdGiaCuThe: formatDate(this.dataInput.dxKhlcntHdr.ngayKyQdPdGiaCuThe, "dd/MM/yyyy", 'en-US'),
+        })
+        this.listOfData = [...this.dataInput.dsGthau];
+        this.listOfDataCache = [...this.dataInput.dsGthau];
+        this.dsDxChange.emit(this.listOfData);
         await this.getDataChiTieu();
         this.initListQuy();
       }
@@ -218,9 +233,7 @@ export class ThongtinDieuchinhVtComponent extends Base2Component implements OnIn
           tongMucDt: parseFloat(tongMucDt.toFixed(2)),
           tongSlChiTieu: tongSlChiTieu
         });
-        // this.dsDxChange.emit(this.listOfData);
-        console.log(this.listOfData)
-        console.log(this.isCache)
+        this.dsDxChange.emit(this.listOfData);
       }
     });
   }

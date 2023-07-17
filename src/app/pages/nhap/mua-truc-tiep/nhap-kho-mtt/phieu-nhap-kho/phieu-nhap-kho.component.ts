@@ -220,6 +220,7 @@ export class PhieuNhapKhoComponent implements OnInit {
         }
       };
     });
+    console.log(this.dataTable)
   }
 
 

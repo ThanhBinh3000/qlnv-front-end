@@ -15,6 +15,7 @@ import {MangLuoiKhoService} from "../../../../../services/qlnv-kho/mangLuoiKho.s
 import {OldResponseData} from "../../../../../interfaces/response";
 import {AMOUNT} from "../../../../../Utility/utils";
 import {Validators} from "@angular/forms";
+import {FILETYPE} from "../../../../../constants/fileType";
 
 @Component({
   selector: 'app-them-so-kho-the-kho',
@@ -277,9 +278,27 @@ export class ThemSoKhoTheKhoComponent extends Base2Component implements OnInit {
     this._modalRef.close();
   }
 
-  async getDetail(id: number) {
-
+  async getDetail(id) {
+    this.spinner.show();
+    try {
+      let res = await this.quanLySoKhoTheKhoService.getDetail(id);
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (res.data) {
+          const data = res.data;
+          this.helperService.bidingDataInFormGroup(this.formData, data);
+        }
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+        this.spinner.hide();
+      }
+    } catch (e) {
+      this.notification.error(MESSAGE.ERROR, e);
+      this.spinner.hide();
+    } finally {
+      this.spinner.hide();
+    }
   }
+
 
   initForm() {
     this.formData.patchValue({

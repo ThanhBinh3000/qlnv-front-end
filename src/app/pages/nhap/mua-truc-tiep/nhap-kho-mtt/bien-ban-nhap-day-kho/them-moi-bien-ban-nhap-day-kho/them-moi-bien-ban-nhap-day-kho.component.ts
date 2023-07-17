@@ -49,6 +49,7 @@ export class ThemMoiBienBanNhapDayKhoComponent extends Base2Component implements
   listDiaDiemNhap: any[] = [];
   dataTable: any[] = [];
   listNghiemThuBaoQuan: any[] = [];
+  fileDinhKems: FileDinhKem[] = [];
 
   create: any = {};
   editDataCache: { [key: string]: { edit: boolean; data: any } } = {};
@@ -205,7 +206,7 @@ export class ThemMoiBienBanNhapDayKhoComponent extends Base2Component implements
     });
     let dataChiCuc = data.hhQdGiaoNvNhangDtlList.filter(item => item.maDvi == this.userInfo.MA_DVI);
     if (dataChiCuc.length > 0) {
-      this.listDiaDiemNhap = dataChiCuc[0].hhQdGiaoNvNhDdiemList;
+      this.listDiaDiemNhap = dataChiCuc[0].children;
     }
     await this.spinner.hide();
   }
@@ -304,6 +305,7 @@ export class ThemMoiBienBanNhapDayKhoComponent extends Base2Component implements
           return;
         }
         let body = this.formData.value;
+        body.fileDinhKems = this.fileDinhKems;
         body.hhBienBanDayKhoDtlReqList = this.dataTable;
         let res;
         if (this.formData.get('id').value > 0) {
@@ -453,6 +455,7 @@ export class ThemMoiBienBanNhapDayKhoComponent extends Base2Component implements
           const data = res.data;
           this.helperService.bidingDataInFormGroup(this.formData, data);
           this.dataTable = data.hhBienBanDayKhoDtlList;
+          this.fileDinhKems = data.fileDinhKems
           await this.bindingDataQd(data.idQdGiaoNvNh);
           let dataDdnhap = this.listDiaDiemNhap.filter(item => item.id == data.idDdiemGiaoNvNh)[0];
           await this.bindingDataDdNhap(dataDdnhap, true);

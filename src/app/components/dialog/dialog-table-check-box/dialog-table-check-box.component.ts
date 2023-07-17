@@ -15,7 +15,6 @@ export class DialogTableCheckBoxComponent implements OnInit {
     dataColumn: any[] = []
     dataTable: any[] = [];
     isView: boolean = false;
-    code: string;
     allChecked: boolean = true;
     indeterminate: boolean = false;
     actionRefresh: boolean = false;

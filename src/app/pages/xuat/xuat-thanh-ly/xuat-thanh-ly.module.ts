@@ -13,7 +13,6 @@ import {QuyetDinhThanhLyComponent} from './quyet-dinh-thanh-ly/quyet-dinh-thanh-
 import {
   ThemMoiQuyetDinhThanhLyComponent
 } from './quyet-dinh-thanh-ly/them-moi-quyet-dinh-thanh-ly/them-moi-quyet-dinh-thanh-ly.component';
-import {CuuTroVienTroModule} from "../xuat-cuu-tro-vien-tro/xuat-cuu-tro/cuu-tro-vien-tro.module";
 import {BaoCaoKetQuaThanhLyComponent} from "./bao-cao-ket-qua/bao-cao-ket-qua-thanh-ly.component";
 import {
   ThemMoiBaoCaoKetQuaThanhLyComponent
@@ -28,6 +27,15 @@ import {
 } from "./thong-bao-ket-qua/them-moi-thong-bao-ket-qua/them-moi-thong-bao-ket-qua.component";
 import {HoSoThanhLyComponent} from './ho-so-thanh-ly/ho-so-thanh-ly.component';
 import {ChiTietHoSoThanhLyComponent} from './ho-so-thanh-ly/chi-tiet-ho-so-thanh-ly/chi-tiet-ho-so-thanh-ly.component';
+import { ToChucThucHienThanhLyComponent } from './to-chuc-thuc-hien-thanh-ly/to-chuc-thuc-hien-thanh-ly.component';
+import { ThongTinDauGiaThanhLyComponent } from './to-chuc-thuc-hien-thanh-ly/thong-tin-dau-gia-thanh-ly/thong-tin-dau-gia-thanh-ly.component';
+import { QuyetDinhPheDuyetKqBdgThanhLyComponent } from './to-chuc-thuc-hien-thanh-ly/quyet-dinh-phe-duyet-kq-bdg-thanh-ly/quyet-dinh-phe-duyet-kq-bdg-thanh-ly.component';
+import {
+  ChiTietThongTinDauGiaThanhLyComponent
+} from "./to-chuc-thuc-hien-thanh-ly/thong-tin-dau-gia-thanh-ly/chi-tiet-thong-tin-dau-gia-thanh-ly/chi-tiet-thong-tin-dau-gia-thanh-ly.component";
+import {
+  ThongTinChiTietDauGiaThanhLyComponent
+} from "./to-chuc-thuc-hien-thanh-ly/thong-tin-dau-gia-thanh-ly/chi-tiet-thong-tin-dau-gia-thanh-ly/thong-tin-dau-gia-thanh-ly/thong-tin-chi-tiet-dau-gia-thanh-ly.component";
 
 
 @NgModule({
@@ -44,7 +52,13 @@ import {ChiTietHoSoThanhLyComponent} from './ho-so-thanh-ly/chi-tiet-ho-so-thanh
     ThongBaoKetQuaComponent,
     ThemMoiThongBaoKetQuaComponent,
     HoSoThanhLyComponent,
-    ChiTietHoSoThanhLyComponent
+    ChiTietHoSoThanhLyComponent,
+    ToChucThucHienThanhLyComponent,
+    ThongTinDauGiaThanhLyComponent,
+    QuyetDinhPheDuyetKqBdgThanhLyComponent,
+    ChiTietThongTinDauGiaThanhLyComponent,
+    ThongTinChiTietDauGiaThanhLyComponent,
+
   ],
   imports: [
     CommonModule,

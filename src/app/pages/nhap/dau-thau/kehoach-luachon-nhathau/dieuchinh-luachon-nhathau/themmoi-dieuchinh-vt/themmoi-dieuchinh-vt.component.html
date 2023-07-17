@@ -4,7 +4,13 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button *ngIf="(formData.value.trangThai == STATUS.DA_LAP ) && userService.isAccessPermisson('NHDTQG_PTDT_DCKHLCNT_BANHANH')"
+    <button
+      *ngIf="(formData.value.trangThai == STATUS.DA_LAP && userService.isAccessPermisson('NHDTQG_PTDT_DCKHLCNT_THEM'))"
+      type="button" class="btn btn-sub xanh-nhat" (click)="save(true)">
+      <i class="icon htvbdh_tcdt_guiduyet"></i>
+      <span>Lưu và gửi duyệt</span>
+    </button>
+    <button *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDV ) && userService.isAccessPermisson('NHDTQG_PTDT_DCKHLCNT_BANHANH')"
             class="btn btn-sub xanh-nhat" (click)="save(true)">
       <i [class]="'icon htvbdh_chuyenvanthu'"></i>
       <span>Ban hành</span>
@@ -70,7 +76,7 @@
             <nz-form-control>
               <input
                 [readonly]="isViewDetail"
-                nz-input formControlName="trichYeuTtr" />
+                nz-input formControlName="trichYeu" />
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -128,7 +134,7 @@
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfter="{{maQd}}">
                 <input nz-input formControlName="soQdDc"
-                       [readonly]="isViewDetail" />
+                       [readonly]="checkDisableQdDc()" />
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -137,8 +143,8 @@
           <nz-form-item class="form-item">
             <nz-form-label [nzNoColon]="true" nzRequired> Ngày ký QĐ điều chỉnh</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-date-picker formControlName="ngayQd" nzFormat="dd/MM/yyyy"
-                              [nzDisabled]="isViewDetail">
+              <nz-date-picker formControlName="ngayQdDc" nzFormat="dd/MM/yyyy"
+                              [nzDisabled]="checkDisableQdDc()">
               </nz-date-picker>
             </nz-form-control>
           </nz-form-item>
@@ -148,20 +154,12 @@
             <nz-form-label [nzNoColon]="true" nzRequired> Ngày hiệu lực của QĐ điều chỉnh</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-date-picker formControlName="ngayHluc" nzFormat="dd/MM/yyyy"
-                              [nzDisabled]="isViewDetail">
+                              [nzDisabled]="checkDisableQdDc()">
               </nz-date-picker>
             </nz-form-control>
           </nz-form-item>
         </div>
         <div nz-col [nzSpan]="12">
-          <nz-form-item class="form-item">
-            <nz-form-label [nzNoColon]="true"> Trích yếu</nz-form-label>
-            <nz-form-control>
-              <input
-                [readonly]="isViewDetail"
-                nz-input formControlName="trichYeu" />
-            </nz-form-control>
-          </nz-form-item>
         </div>
         <div nz-col [nzSpan]="24">
           <nz-form-item>
@@ -169,7 +167,7 @@
               File đính kèm QĐ điều chỉnh đã ký và đóng dấu
             </nz-form-label>
             <div class="list-file">
-              <file-list [data]="fileDinhKems" [isViewDetail]="isViewDetail"></file-list>
+              <file-list [data]="fileDinhKems" [isViewDetail]="checkDisableQdDc()"></file-list>
             </div>
           </nz-form-item>
         </div>
@@ -179,17 +177,17 @@
               Căn cứ pháp lý
             </nz-form-label>
             <div class="list-file">
-              <file-list [data]="listCcPhapLy" [isViewDetail]="isViewDetail"></file-list>
+              <file-list [data]="listCcPhapLy" [isViewDetail]="checkDisableQdDc()"></file-list>
             </div>
           </nz-form-item>
         </div>
         <div nz-col [nzSpan]="24">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">
-              Nội dung quyết định
+              Nội dung quyết định điều chỉnh
             </nz-form-label>
             <nz-form-control>
-              <textarea [readonly]="isViewDetail" rows="3" nz-input formControlName="noiDungQd"></textarea>
+              <textarea [readonly]="checkDisableQdDc()" rows="3" nz-input formControlName="noiDungQd"></textarea>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -242,6 +240,7 @@
       <div nz-col [nzSpan]="12">
         <nz-card class="mg-t-10 flex-card p-lr16 ">
           <app-thongtin-dieuchinh-vt [title]="'Nội dung quyết định cần điều chỉnh'"
+                                     [titleDx]="'Phụ lục kế hoạch lựa chọn nhà thầu trước điều chỉnh'"
                                   [isView]="true"
                                   [dataInput]="dataInputCache"
                                   [listLoaiHopDong]="listLoaiHopDong"
@@ -255,9 +254,11 @@
         <nz-card class="mg-t-10 flex-card p-lr16 ">
           <app-thongtin-dieuchinh-vt #thongTinDc [isView]="isViewDetail"
                                   [title]="'Quyết định điều chỉnh của Tổng cục DTNN'"
+                                     [titleDx]="'Phụ lục kế hoạch lựa chọn nhà thầu sau điều chỉnh'"
                                   [dataInput]="dataInput"
                                   [listLoaiHopDong]="listLoaiHopDong" [listHinhThucDauThau]="listHinhThucDauThau"
-                                  [listPhuongThucDauThau]="listPhuongThucDauThau" [listNguonVon]="listNguonVon">
+                                  [listPhuongThucDauThau]="listPhuongThucDauThau" [listNguonVon]="listNguonVon"
+                                     (dsDxChange)="setNewDanhsachDx($event)">
           </app-thongtin-dieuchinh-vt>
         </nz-card>
       </div>

@@ -1,4 +1,4 @@
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import dayjs from 'dayjs';
 import {NzModalService} from 'ng-zorro-antd/modal';
@@ -8,10 +8,10 @@ import {
   DialogDdiemDeHangComponent
 } from 'src/app/components/dialog/dialog-ddiem-de-hang/dialog-ddiem-de-hang.component';
 import {DialogTuChoiComponent} from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
-import {API_STATUS_CODE, TYPE_PAG} from 'src/app/constants/config';
+import {TYPE_PAG} from 'src/app/constants/config';
 import {MESSAGE} from 'src/app/constants/message';
 import {STATUS} from 'src/app/constants/status';
-import {CanCuXacDinhPag, ThongTinChungPag, ThongTinKhaoSatGia} from 'src/app/models/DeXuatPhuongAnGia';
+import {CanCuXacDinhPag, ThongTinChungPag} from 'src/app/models/DeXuatPhuongAnGia';
 import {FileDinhKem} from 'src/app/models/FileDinhKem';
 import {UserLogin} from 'src/app/models/userlogin';
 import {ChiTieuKeHoachNamCapTongCucService} from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';

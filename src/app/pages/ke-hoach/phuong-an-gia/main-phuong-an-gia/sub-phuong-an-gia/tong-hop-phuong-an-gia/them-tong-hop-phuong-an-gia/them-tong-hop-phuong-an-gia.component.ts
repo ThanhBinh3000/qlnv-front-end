@@ -1,21 +1,23 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import dayjs from 'dayjs';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { API_STATUS_CODE, PAGE_SIZE_DEFAULT, TYPE_PAG } from 'src/app/constants/config';
-import { MESSAGE } from 'src/app/constants/message';
-import { STATUS } from 'src/app/constants/status';
-import { Detail } from 'src/app/models/HopDong';
-import { UserLogin } from 'src/app/models/userlogin';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { DanhMucTieuChuanService } from 'src/app/services/quantri-danhmuc/danhMucTieuChuan.service';
-import { DonviService } from 'src/app/services/donvi.service';
-import { HelperService } from 'src/app/services/helper.service';
-import { TongHopPhuongAnGiaService } from 'src/app/services/ke-hoach/phuong-an-gia/tong-hop-phuong-an-gia.service';
-import { UserService } from 'src/app/services/user.service';
-import { Globals } from 'src/app/shared/globals';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {API_STATUS_CODE, PAGE_SIZE_DEFAULT, TYPE_PAG} from 'src/app/constants/config';
+import {MESSAGE} from 'src/app/constants/message';
+import {STATUS} from 'src/app/constants/status';
+import {UserLogin} from 'src/app/models/userlogin';
+import {DanhMucService} from 'src/app/services/danhmuc.service';
+import {DanhMucTieuChuanService} from 'src/app/services/quantri-danhmuc/danhMucTieuChuan.service';
+import {DonviService} from 'src/app/services/donvi.service';
+import {HelperService} from 'src/app/services/helper.service';
+import {TongHopPhuongAnGiaService} from 'src/app/services/ke-hoach/phuong-an-gia/tong-hop-phuong-an-gia.service';
+import {UserService} from 'src/app/services/user.service';
+import {Globals} from 'src/app/shared/globals';
+import {chain} from "lodash";
+import {v4 as uuidv4} from "uuid";
+
 @Component({
   selector: 'app-them-tong-hop-phuong-an-gia',
   templateUrl: './them-tong-hop-phuong-an-gia.component.html',
@@ -44,6 +46,7 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
   giaDng: any[] = [];
   giaDngVat: any[] = [];
   dataTable: any[] = [];
+  dataTableView: any[] = [];
   listCuc: any[] = [];
   isTongHop: boolean = false;
   isMain: boolean = true;
@@ -51,6 +54,7 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
   fileDinhKem: any[] = [];
   STATUS = STATUS
   typeConst = TYPE_PAG
+  expandSet = new Set<number>();
   constructor(
     private readonly fb: FormBuilder,
     private readonly modal: NzModalService,
@@ -113,6 +117,8 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
     ])
     this.spinner.hide();
   }
+
+
 
   async getListCuc() {
     const res = await this.donviService.layTatCaDonViByLevel(2);
@@ -298,6 +304,40 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
     this.dataTable = data.pagChiTiets;
     if(this.dataTable && this.dataTable.length > 0) {
       this.dataTable.sort((a,b) => a.giaDn- b.giaDn);
+      this.buildTreePagCt();
+    }
+  }
+
+  buildTreePagCt() {
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTableView = chain(this.dataTable)
+          .groupBy("tenVungMien")
+          .map((value, key) => {
+            let rs = chain(value)
+              .groupBy("tenDvi")
+              .map((v, k) => {
+                  return {
+                    idVirtual: uuidv4(),
+                    tenDvi: k,
+                    children: v
+                  }
+                }
+              ).value();
+            return {
+              idVirtual: uuidv4(),
+              tenVungMien: key,
+              children: rs
+            };
+          }).value();
+      }
+      this.expandAll()
+  }
+
+  expandAll() {
+    if (this.dataTableView && this.dataTableView.length > 0) {
+      this.dataTableView.forEach(s => {
+        this.expandSet.add(s.idVirtual);
+      });
     }
   }
 

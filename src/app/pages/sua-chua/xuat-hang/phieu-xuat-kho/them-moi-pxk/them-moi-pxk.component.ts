@@ -132,9 +132,8 @@ export class ThemMoiPxkComponent extends Base3Component implements OnInit {
       this.spinner.hide();
       if (res.data) {
         res.data?.forEach(item => {
-          item.ngayKyFr = moment(item.ngayKy).format('DD/MM/yyyy');
-          item.thoiHanNhapFr = moment(item.thoiHanNhap).format('DD/MM/yyyy');
-          item.thoiHanXuatFr = moment(item.thoiHanXuat).format('DD/MM/yyyy');
+          item.ngayXuat = item.thoiHanXuat
+          item.ngayNhap = item.thoiHanNhap
         })
         const modalQD = this.modal.create({
           nzTitle: 'Danh sách quyết định sửa chữa',
@@ -146,7 +145,7 @@ export class ThemMoiPxkComponent extends Base3Component implements OnInit {
           nzComponentParams: {
             dataTable: res.data,
             dataHeader: ['Số quyết định xuất hàng', 'Trích yếu', 'Ngày ký', 'Thời hạn xuất', 'Thời hạn nhập'],
-            dataColumn: ['soQd', 'trichYeu', 'ngayKyFr', 'thoiHanXuatFr', 'thoiHanNhapFr']
+            dataColumn: ['soQd', 'trichYeu', 'ngayKy', 'ngayXuat', 'ngayNhap']
           },
         });
         modalQD.afterClose.subscribe(async (data) => {
@@ -192,7 +191,7 @@ export class ThemMoiPxkComponent extends Base3Component implements OnInit {
       nzComponentParams: {
         dataTable: this.dataTableDiaDiem,
         dataHeader: ['Điểm kho', 'Nhà kho', 'Ngăn kho', 'Lô kho', 'Tên loại','Tên chủng loại','Số luợng đã duyệt','Đơn giá đã duyệt'],
-        dataColumn: ['tenDiemKho', 'tenNhaKho', 'tenNganKho', 'tenLoKho', 'tenLoaiVthh','tenCloaiVthh','donGiaPd','slDaDuyet']
+        dataColumn: ['tenDiemKho', 'tenNhaKho', 'tenNganKho', 'tenLoKho', 'tenLoaiVthh','tenCloaiVthh','slDaDuyet','donGiaPd']
       },
     });
     modalQD.afterClose.subscribe(async (data) => {

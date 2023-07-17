@@ -53,23 +53,23 @@
             <nz-collapse-panel [nzHeader]="'Thông tin chung'" [nzActive]="true">
                 <form nzLayout="vertical" nz-form [formGroup]="formData">
                     <div nz-row [nzGutter]="24">
-                        <div nz-col [nzSpan]="8">
-                            <nz-form-item>
-                                <nz-form-label [nzNoColon]="true"> Loại biên bản </nz-form-label>
-                                <nz-radio-group [(ngModel)]="radioValue" nzName="radiogroup"
-                                    [nzDisabled]="formData.value.trangThai !== '00' " nzSize="small" class="rdo-input"
-                                    formControlName="loaiBienBan">
+<!--                        <div nz-col [nzSpan]="8">-->
+<!--                            <nz-form-item>-->
+<!--                                <nz-form-label [nzNoColon]="true"> Loại biên bản </nz-form-label>-->
+<!--                                <nz-radio-group [(ngModel)]="radioValue" nzName="radiogroup"-->
+<!--                                    [nzDisabled]="formData.value.trangThai !== '00' " nzSize="small" class="rdo-input"-->
+<!--                                    formControlName="loaiBienBan">-->
 
-                                    <label nz-radio nzValue="ALL">Lấy và bàn giao mẫu</label>
+<!--                                    <label nz-radio nzValue="ALL">Lấy và bàn giao mẫu</label>-->
 
-                                    <label nz-radio nzValue="LM">Lấy mẫu</label>
+<!--                                    <label nz-radio nzValue="LM">Lấy mẫu</label>-->
 
-                                    <label nz-radio nzValue="BGM">Bàn giao mẫu</label>
+<!--                                    <label nz-radio nzValue="BGM">Bàn giao mẫu</label>-->
 
-                                </nz-radio-group>
-                            </nz-form-item>
-                        </div>
-                        <div nz-col [nzSpan]="16"></div>
+<!--                                </nz-radio-group>-->
+<!--                            </nz-form-item>-->
+<!--                        </div>-->
+<!--                        <div nz-col [nzSpan]="16"></div>-->
                         <div nz-col nzSpan="2">
                             <nz-form-item class="form-item">
                                 <nz-form-label [nzNoColon]="true" nzRequired>
@@ -255,25 +255,17 @@
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
-
-                        <div nz-col [nzSpan]="24">
-                            <nz-form-item>
-                                <nz-form-label [nzNoColon]="true"> File đính kèm biên bản đã ký </nz-form-label>
-                                <nz-form-control [nzErrorTip]="error">
-                                    <div class="list-file">
-                                        <nz-input-group [nzSuffix]="suffixTemplateInfo" nzSize="small">
-                                            <input type="text" nz-input />
-                                        </nz-input-group>
-                                        <ng-template #suffixTemplateInfo>
-                                            <div class="icon-file-dinh-kem">
-                                                <i class="icon htvbdh_tcdt_tep"></i>
-                                                <input readonly class="input-file" (change)="getNameFile($event)"
-                                                    type="file" />
-                                            </div>
-                                        </ng-template>
-                                    </div>
-                                </nz-form-control>
-                            </nz-form-item>
+                        <div nz-col nzSpan="24">
+                          <nz-form-item>
+                            <nz-form-label [nzNoColon]="true" nzSpan="24">
+                              File đính kèm biên bản đã ký
+                            </nz-form-label>
+                          </nz-form-item>
+                          <nz-form-item>
+                            <div class="list-file" nz-col nzSpan="24">
+                              <file-list [data]="listBbDaKy" [isViewDetail]="isDisableField()"></file-list>
+                            </div>
+                          </nz-form-item>
                         </div>
                         <div nz-col nzSpan="24">
                             <nz-form-item>
@@ -283,8 +275,7 @@
                             </nz-form-item>
                             <nz-form-item>
                                 <div class="list-file" nz-col nzSpan="24">
-                                    <file-list>
-                                    </file-list>
+                                  <file-list [data]="listCanCuPhapLy" [isViewDetail]="isDisableField()"></file-list>
                                 </div>
                             </nz-form-item>
                         </div>
@@ -382,26 +373,14 @@
                     <label nz-checkbox formControlName="ketQuaNiemPhong" [(ngModel)]="checked">Đã niêm phong mẫu</label>
                 </nz-form-item>
             </div>
-            <div nz-col nzSpan="24">
-                <nz-form-item>
-                    <nz-form-label [nzNoColon]="true" nzRequired>
-                        File đính kèm ảnh chụp mẫu đã niêm phong
-                    </nz-form-label>
-                    <nz-form-control [nzErrorTip]="error">
-                        <div class="list-file">
-                            <nz-input-group [nzSuffix]="suffixTemplateInfo" nzSize="small">
-                                <input type="text" nz-input />
-                            </nz-input-group>
-                            <ng-template #suffixTemplateInfo>
-                                <div class="icon-file-dinh-kem">
-                                    <i class="icon htvbdh_tcdt_tep"></i>
-                                    <input readonly class="input-file" (change)="getNameFile($event)" type="file" />
-                                </div>
-                            </ng-template>
-                        </div>
-                    </nz-form-control>
-                </nz-form-item>
-            </div>
+          <div nz-col nzSpan="24">
+            <nz-form-item class="form-item">
+              <nz-form-label [nzNoColon]="true">
+                File đính kèm ảnh chụp mẫu đã niêm phong
+              </nz-form-label>
+            </nz-form-item>
+            <file-list [data]="listFileDinhKem" [isViewDetail]="isDisableField()"></file-list>
+          </div>
         </div>
     </form>
 </nz-card>

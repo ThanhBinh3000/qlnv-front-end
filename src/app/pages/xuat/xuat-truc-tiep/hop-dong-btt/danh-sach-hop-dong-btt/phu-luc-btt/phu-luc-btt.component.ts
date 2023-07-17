@@ -1,20 +1,18 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Validators } from '@angular/forms';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Validators} from '@angular/forms';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
 import dayjs from 'dayjs';
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { convertTienTobangChu } from 'src/app/shared/commonFunction';
-import { HopDongBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/hop-dong-btt/hop-dong-btt.service';
-import { STATUS } from 'src/app/constants/status';
-import { DonviService } from 'src/app/services/donvi.service';
-import { isEmpty } from 'lodash';
-import { MESSAGE } from 'src/app/constants/message';
-
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from 'src/app/services/storage.service';
+import {DanhMucService} from 'src/app/services/danhmuc.service';
+import {convertTienTobangChu} from 'src/app/shared/commonFunction';
+import {HopDongBttService} from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/hop-dong-btt/hop-dong-btt.service';
+import {STATUS} from 'src/app/constants/status';
+import {DonviService} from 'src/app/services/donvi.service';
+import {MESSAGE} from 'src/app/constants/message';
 
 @Component({
   selector: 'app-phu-luc-btt',
@@ -29,7 +27,6 @@ export class PhuLucBttComponent extends Base2Component implements OnInit {
   @Input() objHopDongHdr: any = {}
   @Output()
   showListEvent = new EventEmitter<any>();
-
   maHopDongSuffix: string = '';
   dsDonvi: any[] = [];
 
@@ -48,6 +45,8 @@ export class PhuLucBttComponent extends Base2Component implements OnInit {
       {
         id: [],
         idHd: [],
+        maDvi: [],
+        tenDvi: [],
         namHd: [dayjs().get('year')],
         soHd: [''],
         tenHd: [''],
@@ -65,22 +64,39 @@ export class PhuLucBttComponent extends Base2Component implements OnInit {
         tgianThienHdSauDc: [null],
         noiDungDcKhac: [],
         ghiChuPhuLuc: [],
-        trangThaiPhuLuc: STATUS.DU_THAO,
-        tenTrangThaiPhuLuc: ['Dự thảo'],
+        trangThai: [STATUS.DU_THAO],
+        tenTrangThai: ['Dự thảo'],
         kieuNx: [],
       }
     );
   }
 
   async ngOnInit() {
-    this.maHopDongSuffix = `/${this.formData.value.namHd}/HĐMB`;
-    await Promise.all([
-      this.loadDsHopDong(),
-    ]);
-    if (this.idPhuLuc) {
-      await this.loadChiTiet(this.idPhuLuc);
+    await this.spinner.show();
+    try {
+      this.maHopDongSuffix = `/${this.formData.value.namHd}/HĐMB`;
+      if (this.idPhuLuc) {
+        await this.loadChiTiet(this.idPhuLuc);
+      } else {
+        await Promise.all([
+          this.loadDsHopDong(),
+          this.initForm(),
+        ]);
+      }
+      await this.loadDsDonVi();
+      await this.spinner.hide();
+    } catch (e) {
+      console.log('error: ', e)
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
-    await this.loadDsDonVi()
+  }
+
+  initForm() {
+    this.formData.patchValue({
+      maDvi: this.userInfo.MA_DVI ?? null,
+      tenDvi: this.userInfo.TEN_DVI ?? null,
+    })
   }
 
   async loadChiTiet(id) {
@@ -90,7 +106,7 @@ export class PhuLucBttComponent extends Base2Component implements OnInit {
       thoiGianDuKienSauDc: (data.ngayHlucSauDcTu && data.ngayHlucSauDcDen) ? [data.ngayHlucSauDcTu, data.ngayHlucSauDcDen] : null,
       thoiGianDuKien: (data.tgianGnhanTu && data.tgianGnhanDen) ? [data.tgianGnhanTu, data.tgianGnhanDen] : null
     })
-    this.dataTable = data.phuLucDtl;
+    this.dataTable = data.children;
     if (this.objHopDongHdr) {
       this.dataTable.forEach(s => {
         s.donGia = this.objHopDongHdr.donGiaBanTrucTiep ?? null;
@@ -106,7 +122,7 @@ export class PhuLucBttComponent extends Base2Component implements OnInit {
       trangThai: '01',
     };
     let res = await this.donViService.getAll(body);
-    if (!isEmpty(res)) {
+    if (res.msg == MESSAGE.SUCCESS) {
       this.dsDonvi = res.data;
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
@@ -115,7 +131,7 @@ export class PhuLucBttComponent extends Base2Component implements OnInit {
 
   onChangeDiaChi($event, index) {
     let diaChiChiCuc = this.dsDonvi.filter(item => item.maDvi == $event);
-    if (diaChiChiCuc.length > 0) {
+    if (diaChiChiCuc && diaChiChiCuc.length > 0) {
       this.dataTable[index].diaChi = diaChiChiCuc[0].diaChi
     }
   }
@@ -129,8 +145,6 @@ export class PhuLucBttComponent extends Base2Component implements OnInit {
         ngayHluc: this.objHopDongHdr.ngayHluc ?? null,
         thoiGianDuKien: (this.objHopDongHdr.tgianGnhanTu && this.objHopDongHdr.tgianGnhanDen) ? [this.objHopDongHdr.tgianGnhanTu, this.objHopDongHdr.tgianGnhanDen] : null,
         tgianThienHd: this.objHopDongHdr.tgianThienHd ?? null,
-        // trangThaiPhuLuc: this.objHopDongHdr.trangThaiPhuLuc ?? null,
-        // tenTrangThaiPhuLuc: this.objHopDongHdr.tenTrangThaiPhuLuc ?? null,
       });
       this.objHopDongHdr.children.forEach(s => {
         let row = {
@@ -170,7 +184,7 @@ export class PhuLucBttComponent extends Base2Component implements OnInit {
       if (isOther) {
         this.formData.patchValue({
           id: data.id,
-          trangThaiPhuLuc: data.trangThaiPhuLuc
+          trangThai: data.trangThai
         })
         this.pheDuyet();
       } else {
@@ -198,7 +212,7 @@ export class PhuLucBttComponent extends Base2Component implements OnInit {
         try {
           let body = {
             id: this.formData.get('id').value,
-            trangThaiPhuLuc: STATUS.DA_KY
+            trangThai: STATUS.DA_KY
           };
           let res = await this.hopDongBttService.approve(body);
           if (res.msg == MESSAGE.SUCCESS) {
@@ -221,7 +235,7 @@ export class PhuLucBttComponent extends Base2Component implements OnInit {
   }
 
   isDisabled() {
-    if (this.formData.value.trangThaiPhuLuc == STATUS.DU_THAO) {
+    if (this.formData.value.trangThai == STATUS.DU_THAO) {
       return false;
     } else {
       return true;
@@ -231,7 +245,6 @@ export class PhuLucBttComponent extends Base2Component implements OnInit {
   convertTienTobangChu(tien: number): string {
     return convertTienTobangChu(tien);
   }
-
 
   setValidator(isOther) {
     if (isOther) {
@@ -258,6 +271,5 @@ export class PhuLucBttComponent extends Base2Component implements OnInit {
       this.formData.controls["tgianThienHdSauDc"].clearValidators();
     }
   }
-
 }
 

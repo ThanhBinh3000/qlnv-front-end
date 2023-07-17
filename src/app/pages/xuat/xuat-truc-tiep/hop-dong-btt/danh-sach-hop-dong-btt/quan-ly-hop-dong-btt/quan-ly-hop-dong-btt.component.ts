@@ -1,26 +1,31 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { MESSAGE } from 'src/app/constants/message';
-import { STATUS } from 'src/app/constants/status';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { QuyetDinhPdKhBanTrucTiepService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/quyet-dinh-pd-kh-ban-truc-tiep.service';
-import { HopDongBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/hop-dong-btt/hop-dong-btt.service';
-import { QuyetDinhNvXuatBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/quyet-dinh-nv-xuat-btt/quyet-dinh-nv-xuat-btt.service';
-import { QdPdKetQuaBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/qd-pd-ket-qua-btt.service';
-import { StorageService } from 'src/app/services/storage.service';
+import {HttpClient} from '@angular/common/http';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {MESSAGE} from 'src/app/constants/message';
+import {STATUS} from 'src/app/constants/status';
+import {DanhMucService} from 'src/app/services/danhmuc.service';
+import {
+  QuyetDinhPdKhBanTrucTiepService
+} from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/quyet-dinh-pd-kh-ban-truc-tiep.service';
+import {HopDongBttService} from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/hop-dong-btt/hop-dong-btt.service';
+import {
+  QdPdKetQuaBttService
+} from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/qd-pd-ket-qua-btt.service';
+import {StorageService} from 'src/app/services/storage.service';
+import {
+  ChaoGiaMuaLeUyQuyenService
+} from "../../../../../../services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/chao-gia-mua-le-uy-quyen.service";
+
 @Component({
   selector: 'app-quan-ly-hop-dong-btt',
   templateUrl: './quan-ly-hop-dong-btt.component.html',
   styleUrls: ['./quan-ly-hop-dong-btt.component.scss']
 })
 export class QuanLyHopDongBttComponent extends Base2Component implements OnInit {
-
   @Input() id: number;
-  @Input() idQdPdKh: number;
   @Input() loaiVthh: string;
   @Output()
   showListEvent = new EventEmitter<any>();
@@ -38,9 +43,8 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
     private hopDongBttService: HopDongBttService,
     private qdPdKetQuaBttService: QdPdKetQuaBttService,
     private quyetDinhPdKhBanTrucTiepService: QuyetDinhPdKhBanTrucTiepService,
-    private quyetDinhNvXuatBttService: QuyetDinhNvXuatBttService,
+    private chaoGiaMuaLeUyQuyenService: ChaoGiaMuaLeUyQuyenService,
     private danhMucService: DanhMucService,
-
   ) {
     super(httpClient, storageService, notification, spinner, modal, qdPdKetQuaBttService);
     this.formData = this.fb.group({
@@ -58,7 +62,7 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
       tenLoaiVthh: [],
       cloaiVthh: [],
       tenCloaiVthh: [],
-      vat: ['5'],
+      vat: [''],
       loaiHinhNx: [''],
       kieuNx: [''],
       trangThaiHd: [''],
@@ -67,15 +71,19 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
   }
 
   async ngOnInit() {
-    await this.spinner.show()
-    await Promise.all([
-    ]);
-    if (this.id) {
-      await this.getDetail(this.id)
-      await this.loadDataComboBox()
+    try {
+      await this.spinner.show();
+      if (this.id) {
+        await Promise.all([
+          this.getDetail(this.id),
+          this.loadDataComboBox()
+        ]);
+      }
+    } catch (e) {
+      console.log('error: ', e)
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
-    this.initForm();
-    await this.spinner.hide()
   }
 
   async loadDataComboBox() {
@@ -93,64 +101,69 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
     }
   }
 
-
-  initForm() {
-    this.formData.patchValue({
-      tenDvi: this.userInfo.TEN_DVI,
-    })
-  }
-
   async getDetail(id) {
-    if (id) {
+    await this.spinner.show();
+    if (id > 0) {
       if (this.userService.isChiCuc()) {
-        await this.quyetDinhNvXuatBttService.getDetail(id).then
-          (async (resQdNv) => {
-            if (resQdNv.data) {
-              const dataQdNv = resQdNv.data;
-              let restQdKh = await this.quyetDinhPdKhBanTrucTiepService.getDtlDetail(dataQdNv.idQdPdDtl);
-              const dataQdKh = restQdKh.data
+        await this.quyetDinhPdKhBanTrucTiepService.getDtlDetail(id)
+          .then((res) => {
+            if (res.msg == MESSAGE.SUCCESS) {
+              const data = res.data
               this.formData.patchValue({
-                namKh: dataQdNv.namKh,
-                soQdPd: dataQdNv.soQdPd,
-                trangThaiHd: dataQdNv.trangThaiHd,
-                tenTrangThaiHd: dataQdNv.tenTrangThaiHd,
-                loaiVthh: dataQdNv.loaiVthh,
-                tenLoaiVthh: dataQdNv.tenLoaiVthh,
-                cloaiVthh: dataQdNv.cloaiVthh,
-                tenCloaiVthh: dataQdNv.tenCloaiVthh,
-                loaiHinhNx: dataQdKh.xhQdPdKhBttHdr.loaiHinhNx != null ? 'Xuất bán đấu giá' : null,
-                kieuNx: dataQdKh.xhQdPdKhBttHdr.kieuNx != null ? 'Xuất bán' : null,
+                trangThaiHd: data.trangThaiHd,
+                tenTrangThaiHd: data.tenTrangThaiHd,
+                namKh: data.xhQdPdKhBttHdr.namKh,
+                soQdPd: data.xhQdPdKhBttHdr.soQdPd,
+                loaiVthh: data.xhQdPdKhBttHdr.loaiVthh,
+                tenLoaiVthh: data.xhQdPdKhBttHdr.tenLoaiVthh,
+                cloaiVthh: data.xhQdPdKhBttHdr.cloaiVthh,
+                tenCloaiVthh: data.xhQdPdKhBttHdr.tenCloaiVthh,
+                loaiHinhNx: data.xhQdPdKhBttHdr.loaiHinhNx != null ? 'Xuất bán đấu giá' : null,
+                kieuNx: data.xhQdPdKhBttHdr.kieuNx != null ? 'Xuất bán' : null,
+                vat: '5 %',
               })
-              this.dataTable = dataQdNv.listHopDongBtt;
+              this.dataTable = data.listHopDongBtt;
               if (this.dataTable && this.dataTable.length > 0) {
                 this.showFirstRow(event, this.dataTable[0].id);
               }
             }
+          }).catch((e) => {
+            console.log('error: ', e);
+            this.spinner.hide();
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
           });
       } else {
-        let res = await this.qdPdKetQuaBttService.getDetail(id);
-        if (res.msg == MESSAGE.SUCCESS) {
-          const data = res.data;
-          this.formData.patchValue({
-            namKh: data.namKh,
-            soQdKq: data.soQdKq,
-            soQdPd: data.soQdPd,
-            trangThaiHd: data.trangThaiHd,
-            tenTrangThaiHd: data.tenTrangThaiHd,
-            loaiVthh: data.loaiVthh,
-            tenLoaiVthh: data.tenLoaiVthh,
-            cloaiVthh: data.cloaiVthh,
-            tenCloaiVthh: data.tenCloaiVthh,
-            loaiHinhNx: data.loaiHinhNx != null ? 'Xuất bán đấu giá' : null,
-            kieuNx: data.kieuNx != null ? 'Xuất bán' : null,
-          })
-          this.dataTable = data.listHopDongBtt;
-          if (this.dataTable && this.dataTable.length > 0) {
-            this.showFirstRow(event, this.dataTable[0].id);
-          }
-        }
+        await this.qdPdKetQuaBttService.getDetail(id)
+          .then((res) => {
+            if (res.msg == MESSAGE.SUCCESS) {
+              const data = res.data
+              this.formData.patchValue({
+                trangThaiHd: data.trangThaiHd,
+                tenTrangThaiHd: data.tenTrangThaiHd,
+                namKh: data.namKh,
+                soQdPd: data.soQdPd,
+                soQdKq: data.soQdKq,
+                loaiVthh: data.loaiVthh,
+                tenLoaiVthh: data.tenLoaiVthh,
+                cloaiVthh: data.cloaiVthh,
+                tenCloaiVthh: data.tenCloaiVthh,
+                loaiHinhNx: data.loaiHinhNx != null ? 'Xuất bán đấu giá' : null,
+                kieuNx: data.kieuNx != null ? 'Xuất bán' : null,
+                vat: '5 %',
+              });
+              this.dataTable = data.listHopDongBtt;
+              if (this.dataTable && this.dataTable.length > 0) {
+                this.showFirstRow(event, this.dataTable[0].id);
+              }
+            }
+          }).catch((e) => {
+            console.log('error: ', e);
+            this.spinner.hide();
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          });
       }
     }
+    await this.spinner.hide();
   }
 
   async showFirstRow($event, id: any) {
@@ -158,6 +171,7 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
   }
 
   idHopDong: number;
+
   async showDetail($event, id: number) {
     await this.spinner.show();
     if ($event.type == 'click') {
@@ -200,55 +214,84 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
   }
 
   async guiDuyetCuc() {
-    await this.spinner.show();
-    try {
-      if (this.validateData()) {
-        this.approve(this.id, STATUS.DA_HOAN_THANH, "Bạn có muốn hoành thành thực hiện hợp đồng ?")
-      }
-      await this.spinner.hide();
-    } catch (e) {
-      console.log('error: ', e);
-      await this.spinner.hide();
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    await this.spinner.show()
+    if (this.validateData()) {
+      this.modal.confirm({
+        nzClosable: false,
+        nzTitle: 'Xác nhận',
+        nzContent: 'Bạn có muốn hoành thành thực hiện hợp đồng ?',
+        nzOkText: 'Đồng ý',
+        nzCancelText: 'Không',
+        nzOkDanger: true,
+        nzWidth: 350,
+        nzOnOk: async () => {
+          await this.spinner.show();
+          try {
+            let body = {
+              id: this.id,
+              trangThai: STATUS.DA_HOAN_THANH,
+            };
+            let res = await this.quyetDinhPdKhBanTrucTiepService.approve(body);
+            if (res.msg == MESSAGE.SUCCESS) {
+              this.notification.success(
+                MESSAGE.SUCCESS,
+                MESSAGE.DUYET_SUCCESS,
+              );
+              this.goBack();
+            } else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+            }
+            await this.spinner.hide();
+          } catch (e) {
+            console.log('error: ', e);
+            await this.spinner.hide();
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          }
+        },
+      });
     }
+    await this.spinner.hide()
   }
 
   async guiDuyetChiCuc() {
-    this.modal.confirm({
-      nzClosable: false,
-      nzTitle: 'Xác nhận',
-      nzContent: 'Bạn có muốn hoành thành thực hiện hợp đồng ?',
-      nzOkText: 'Đồng ý',
-      nzCancelText: 'Không',
-      nzOkDanger: true,
-      nzWidth: 350,
-      nzOnOk: async () => {
-        await this.spinner.show();
-        try {
-          let body = {
-            id: this.id,
-            trangThai: STATUS.DA_HOAN_THANH,
-          };
-          let res = await this.quyetDinhNvXuatBttService.approve(body);
-          if (res.msg == MESSAGE.SUCCESS) {
-            this.notification.success(
-              MESSAGE.SUCCESS,
-              MESSAGE.DUYET_SUCCESS,
-            );
-            this.goBack();
-          } else {
-            this.notification.error(MESSAGE.ERROR, res.msg);
+    await this.spinner.show()
+    if (this.validateData()) {
+      this.modal.confirm({
+        nzClosable: false,
+        nzTitle: 'Xác nhận',
+        nzContent: 'Bạn có muốn hoành thành thực hiện hợp đồng ?',
+        nzOkText: 'Đồng ý',
+        nzCancelText: 'Không',
+        nzOkDanger: true,
+        nzWidth: 350,
+        nzOnOk: async () => {
+          await this.spinner.show();
+          try {
+            let body = {
+              id: this.id,
+              trangThai: STATUS.DA_HOAN_THANH,
+            };
+            let res = await this.chaoGiaMuaLeUyQuyenService.approve(body);
+            if (res.msg == MESSAGE.SUCCESS) {
+              this.notification.success(
+                MESSAGE.SUCCESS,
+                MESSAGE.DUYET_SUCCESS,
+              );
+              this.goBack();
+            } else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+            }
+            await this.spinner.hide();
+          } catch (e) {
+            console.log('error: ', e);
+            await this.spinner.hide();
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
           }
-          await this.spinner.hide();
-        } catch (e) {
-          console.log('error: ', e);
-          await this.spinner.hide();
-          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        }
-      },
-    });
+        },
+      });
+    }
+    await this.spinner.hide()
   }
-
 
   validateData(): boolean {
     let result = true;

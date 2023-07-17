@@ -114,7 +114,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
       text: "Khác"
     }
   ];
-
+  nzActive: boolean = true
   selected: number = 0
   danhSachKeHoach: any[] = []
   typeKeHoach: string = "ADD"
@@ -643,6 +643,9 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
     }, {});
   }
 
+  nzActiveChange(value) {
+    console.log('nzActiveChange', value, this.nzActive)
+  }
 
   async add(row?: any) {
     await this.spinner.show();
@@ -666,6 +669,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
       },
     });
     modalQD.afterClose.subscribe(async (data) => {
+      this.nzActive = true
       if (data) {
         if (data.isUpdate) {
           if (this.typeKeHoach === "LO_KHO_NHAN")
@@ -905,6 +909,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
   themLoKho(row) {
     this.typeKeHoach = "THEM_LO_KHO"
     const data = {
+      // ...row,
       hdrId: row ? row.hdrId : '',
       maDvi: row ? row.maDvi : '',
       tenDvi: row ? row.tenDvi : '',
@@ -1058,10 +1063,6 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
       this.formData.patchValue({
         danhSachQuyetDinh: dsQuyetDinh
       })
-
-      console.log('xoaDiemKhoNhanCCqDinh', qDinh)
-      console.log('xoaDiemKhoNhanCCkeHoach', keHoach)
-      console.log('xoaDiemKhoNhanCC', dsQuyetDinh)
     }
   }
 
@@ -1095,8 +1096,6 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
 
     const data = {
       ...row,
-      // maDiemKhoNhan: "",
-      // tenDiemKhoNhan: "",
       maNhaKhoNhan: "",
       tenNhaKhoNhan: "",
       maNganKhoNhan: "",

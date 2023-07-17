@@ -134,6 +134,7 @@ export const STATUS_LABEL = {
 export enum CHUC_NANG {
   XEM = 'XEM',
   SUA = 'SUA',
+  DUYET_BTC = 'DUYET_BTC',
   DUYET_LDTC = 'DUYET_LDTC',
   DUYET_LDV = 'DUYET_LDV',
   DUYET_TP = 'DUYET_TP',
@@ -151,4 +152,7 @@ export enum TRANG_THAI_QUY_CHUAN_TIEU_CHUAN {
   HET_HIEU_LUC = "00",
 }
 
-
+export enum HSKT_LOAI_DOI_TUONG {
+  HO_SO = "HS",
+  NGUOI_LIEN_QUAN = "NLQ"
+}

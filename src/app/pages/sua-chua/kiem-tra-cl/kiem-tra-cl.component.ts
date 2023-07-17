@@ -4,11 +4,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { Base2Component } from 'src/app/components/base2/base2.component';
 import { Base3Component } from 'src/app/components/base3/base3.component';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { MmHienTrangMmService } from 'src/app/services/mm-hien-trang-mm.service';
 import { StorageService } from 'src/app/services/storage.service';
+import { KiemTraChatLuongScService} from "../../../services/sua-chua/kiemTraChatLuongSc";
 
 @Component({
   selector: 'app-kiem-tra-cl',
@@ -25,21 +23,21 @@ export class KiemTraClComponent extends Base3Component implements OnInit {
     modal: NzModalService,
     route: ActivatedRoute,
     router: Router,
-    private hienTrangSv: MmHienTrangMmService,
-    private danhMucSv: DanhMucService,
+    private kiemTraChatLuongSc : KiemTraChatLuongScService,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, route, router, hienTrangSv);
+    super(httpClient, storageService, notification, spinner, modal, route, router, kiemTraChatLuongSc);
     this.defaultURL = 'sua-chua/kiem-tra-cl'
     this.formData = this.fb.group({
       nam: null,
-      maSc: null,
-      maCc: null,
+      soQd: null,
+      trichYeu: null,
       ngayTu: null,
       ngayDen: null,
     })
   }
 
   ngOnInit(): void {
+    this.search();
   }
 
 }

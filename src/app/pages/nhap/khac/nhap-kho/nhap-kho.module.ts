@@ -18,6 +18,9 @@ import { ThongTinBienBanNhapDayKhoComponent } from './bien-ban-nhap-day-kho/thon
 import { ThongTinBangKeNhapKhacNhapVatTuComponent } from './bang-ke-nhap-vat-tu/thong-tin-bang-ke-nhap-khac-nhap-vat-tu/thong-tin-bang-ke-nhap-khac-nhap-vat-tu.component';
 import { BienBanKetThucNhapKhacNhapKhoVatTuComponent } from './bien-ban-ket-thuc-nhap-kho/bien-ban-ket-thuc-nhap-khac-nhap-kho-vt.component';
 import { ThongTinBienBanKetThucNhapKhacNhapKhoVatTuComponent } from './bien-ban-ket-thuc-nhap-kho/chi-tiet-bien-ban-ket-thuc-nhap-khac-nhap-kho-vt/chi-tiet-bien-ban-ket-thuc-nhap-khac-nhap-kho-vt.component';
+import { ThongTinBienBanGiaoNhanComponent } from './bien-ban-giao-nhan/thong-tin-bien-ban-giao-nhan/thong-tin-bien-ban-giao-nhan.component';
+
+
 
 @NgModule({
   declarations: [
@@ -35,7 +38,8 @@ import { ThongTinBienBanKetThucNhapKhacNhapKhoVatTuComponent } from './bien-ban-
     ThongTinBangKeCanHangComponent,
     ThongTinBienBanNhapDayKhoComponent,
     ThongTinBienBanKetThucNhapKhacNhapKhoVatTuComponent,
-    ThongTinBangKeNhapKhacNhapVatTuComponent
+    ThongTinBangKeNhapKhacNhapVatTuComponent,
+    ThongTinBienBanGiaoNhanComponent,
   ],
   imports: [
     CommonModule,
@@ -44,7 +48,8 @@ import { ThongTinBienBanKetThucNhapKhacNhapKhoVatTuComponent } from './bien-ban-
     FormsModule,
   ],
   exports: [
-    NhapKhoComponent
+    NhapKhoComponent,
+    ThongTinPhieuNhapKhoComponent
   ]
 })
 export class NhapKhoModule { }
