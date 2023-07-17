@@ -240,14 +240,27 @@ export class PhuLucIIIComponent implements OnInit {
                 )
             }
             if (this.lstCtietBcao.length == 0) {
-                this.luyKes.forEach(item => {
-                    const data: ItemData = new ItemData({
-                        ...item,
-                        id: uuid.v4() + 'FE',
+                if (this.luyKes?.length > 0) {
+                    this.luyKes?.forEach(item => {
+                        const data: ItemData = new ItemData({
+                            ...item,
+                            id: uuid.v4() + 'FE',
+                        })
+                        data.sum()
+                        data.tyLe();
+                        this.lstCtietBcao.push(data)
                     })
-                    data.tyLe();
-                    this.lstCtietBcao?.push(data);
-                })
+                } else {
+                    this.maDans.forEach(item => {
+                        this.lstCtietBcao.push(new ItemData({
+                            id: uuid.v4() + 'FE',
+                            maDan: item.ma,
+                            stt: item.ma,
+                            tenDan: item.giaTri,
+                            level: item.level,
+                        }))
+                    })
+                }
             }
             this.scrollX = Table.tableWidth(350, 40, 6, 200);
         } else {
