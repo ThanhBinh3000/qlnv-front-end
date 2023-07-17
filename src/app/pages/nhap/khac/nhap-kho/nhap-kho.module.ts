@@ -10,15 +10,14 @@ import { BienBanNhapDayKhoComponent } from './bien-ban-nhap-day-kho/bien-ban-nha
 import { NhapKhoMenuComponent } from './nhap-kho-menu/nhap-kho-menu.component';
 import { PhieuNhapKhoTamGuiComponent } from './phieu-nhap-kho-tam-gui/phieu-nhap-kho-tam-gui.component';
 import { BienBanGuiHangComponent } from './bien-ban-gui-hang/bien-ban-gui-hang.component';
-import { BangKeNhapVatTuComponent } from './bang-ke-nhap-vat-tu/bang-ke-nhap-vat-tu.component';
-import { BienBanKetThucNhapKhoComponent } from './bien-ban-ket-thuc-nhap-kho/bien-ban-ket-thuc-nhap-kho.component';
+import { BangKeNhapKhacNhapVatTuComponent } from './bang-ke-nhap-vat-tu/bang-ke-nhap-khac-nhap-vat-tu.component';
 import { BienBanGiaoNhanComponent } from './bien-ban-giao-nhan/bien-ban-giao-nhan.component';
 import { ThongTinPhieuNhapKhoComponent } from './phieu-nhap-kho/thong-tin-phieu-nhap-kho/thong-tin-phieu-nhap-kho.component';
 import { ThongTinBangKeCanHangComponent } from './bang-ke-can-hang/thong-tin-bang-ke-can-hang/thong-tin-bang-ke-can-hang.component';
 import { ThongTinBienBanNhapDayKhoComponent } from './bien-ban-nhap-day-kho/thong-tin-bien-ban-nhap-day-kho/thong-tin-bien-ban-nhap-day-kho.component';
-import { ThongTinBienBanKetThucNhapKhoComponent } from './bien-ban-ket-thuc-nhap-kho/chi-tiet-bien-ban-ket-thuc-nhap-day-kho/chi-tiet-bien-ban-ket-thuc-nhap-kho.component';
-
-
+import { ThongTinBangKeNhapKhacNhapVatTuComponent } from './bang-ke-nhap-vat-tu/thong-tin-bang-ke-nhap-khac-nhap-vat-tu/thong-tin-bang-ke-nhap-khac-nhap-vat-tu.component';
+import { BienBanKetThucNhapKhacNhapKhoVatTuComponent } from './bien-ban-ket-thuc-nhap-kho/bien-ban-ket-thuc-nhap-khac-nhap-kho-vt.component';
+import { ThongTinBienBanKetThucNhapKhacNhapKhoVatTuComponent } from './bien-ban-ket-thuc-nhap-kho/chi-tiet-bien-ban-ket-thuc-nhap-khac-nhap-kho-vt/chi-tiet-bien-ban-ket-thuc-nhap-khac-nhap-kho-vt.component';
 
 @NgModule({
   declarations: [
@@ -29,13 +28,14 @@ import { ThongTinBienBanKetThucNhapKhoComponent } from './bien-ban-ket-thuc-nhap
     NhapKhoMenuComponent,
     PhieuNhapKhoTamGuiComponent,
     BienBanGuiHangComponent,
-    BangKeNhapVatTuComponent,
-    BienBanKetThucNhapKhoComponent,
+    BangKeNhapKhacNhapVatTuComponent,
+    BienBanKetThucNhapKhacNhapKhoVatTuComponent,
     BienBanGiaoNhanComponent,
     ThongTinPhieuNhapKhoComponent,
     ThongTinBangKeCanHangComponent,
     ThongTinBienBanNhapDayKhoComponent,
-    ThongTinBienBanKetThucNhapKhoComponent,
+    ThongTinBienBanKetThucNhapKhacNhapKhoVatTuComponent,
+    ThongTinBangKeNhapKhacNhapVatTuComponent
   ],
   imports: [
     CommonModule,

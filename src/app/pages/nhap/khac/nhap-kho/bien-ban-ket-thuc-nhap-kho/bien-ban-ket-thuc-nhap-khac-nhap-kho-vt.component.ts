@@ -1,13 +1,14 @@
+import { QuanLyPhieuNhapDayKhoService } from './../../../../../services/qlnv-hang/nhap-hang/dau-thau/nhap-kho/quanLyPhieuNhapDayKho.service';
 import { saveAs } from 'file-saver';
-import { cloneDeep } from 'lodash';
+import { cloneDeep, chain } from 'lodash';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
+import { HttpClient } from '@angular/common/http';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { DonviService } from 'src/app/services/donvi.service';
-import { QuanLyPhieuNhapDayKhoService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/nhap-kho/quanLyPhieuNhapDayKho.service';
 import * as dayjs from 'dayjs';
 import { LOAI_HANG_DTQG, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -18,13 +19,18 @@ import { Globals } from 'src/app/shared/globals';
 import { STATUS } from 'src/app/constants/status';
 import { QuyetDinhGiaoNhiemVuXuatHangService } from 'src/app/services/quyetDinhGiaoNhiemVuXuatHang.service';
 import { QuyetDinhGiaoNhapHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service';
+import { BienBanKetThucNhapKhacNhapKhoVatTuService } from './bien-ban-ket-thuc-nhap-khac-nhap-kho-vt.service';
+import { Base2Component } from 'src/app/components/base2/base2.component';
+import { StorageService } from 'src/app/services/storage.service';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
+import * as uuidv4 from "uuid";
 
 @Component({
-  selector: 'app-bien-ban-ket-thuc-nhap-kho',
-  templateUrl: './bien-ban-ket-thuc-nhap-kho.component.html',
-  styleUrls: ['./bien-ban-ket-thuc-nhap-kho.component.scss']
+  selector: 'app-bien-ban-ket-thuc-nhap-khac-nhap-kho-vt',
+  templateUrl: './bien-ban-ket-thuc-nhap-khac-nhap-kho-vt.component.html',
+  styleUrls: ['./bien-ban-ket-thuc-nhap-khac-nhap-kho-vt.component.scss']
 })
-export class BienBanKetThucNhapKhoComponent implements OnInit {
+export class BienBanKetThucNhapKhacNhapKhoVatTuComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
 
   searchFilter = {
@@ -78,18 +84,33 @@ export class BienBanKetThucNhapKhoComponent implements OnInit {
     tenTrangThai: '',
   }
   dataTableAll: any[] = [];
-
+  dataTableView: any[] = [];
   constructor(
-    private spinner: NgxSpinnerService,
-    private quanLyPhieuNhapDayKhoService: QuanLyPhieuNhapDayKhoService,
-    private notification: NzNotificationService,
+    httpClient: HttpClient,
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
+    private donviService: DonviService,
+    private danhMucService: DanhMucService,
     private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
-    private router: Router,
-    private modal: NzModalService,
-    public userService: UserService,
-    public globals: Globals,
-    private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService
-  ) { }
+    private bienBanKetThucNhapKhacNhapKhoVatTuService: BienBanKetThucNhapKhacNhapKhoVatTuService,
+  ) {
+    super(httpClient, storageService, notification, spinner, modal, bienBanKetThucNhapKhacNhapKhoVatTuService);
+    this.formData = this.fb.group({
+      nam: null,
+      // loaiVthh: '02',
+      soQdPdNk: null,
+      soBangKe: null,
+      tuNgayThoiHan: null,
+      denNgayThoiHan: null,
+      tuNgayNhapKho: null,
+      denNgayNhapKho: null,
+
+      tuNgayKtnk: null,
+      denNgayKtnk: null
+    })
+  }
 
   async ngOnInit() {
     this.spinner.show();
@@ -149,45 +170,64 @@ export class BienBanKetThucNhapKhoComponent implements OnInit {
       },
       loaiVthh: this.loaiVthh
     };
-    let res = await this.quyetDinhGiaoNhapHangService.search(body);
+    let res = await this.bienBanKetThucNhapKhacNhapKhoVatTuService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
-      this.convertDataTable();
+      this.dataTableView = this.buildTableView(this.dataTable.map(f => ({ ...f, maLoNganKho: f.maLoKho ? `${f.maLoKho}${f.maNganKho}` : f.maNganKho })));
       this.totalRecord = data.totalElements;
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
     await this.spinner.hide();
   }
+  buildTableView(data: any[] = []) {
+    let dataView = chain(data)
+      .groupBy("soQdPdNk")
+      ?.map((value1, key1) => {
+        let children1 = chain(value1)
+          .groupBy("maDiemKho")
+          ?.map((value2, key2) => {
+            let children2 = chain(value2)
+              .groupBy("maLoNganKho")
+              ?.map((value3, key3) => {
+                const row3 = value3.find(s => s?.maLoNganKho == key3);
+                if (!row3) return;
+                return {
+                  ...row3,
+                  expand: true,
+                  children: value3.filter(f => f.phieuNhapKhoId),
+                }
+              }
+              ).value();
 
-  convertDataTable() {
-    // this.dataTable.forEach(item => {
-    //   item.detail = item.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0];
-    // });
-    this.dataTable.forEach(item => {
-      if (this.userService.isChiCuc()) {
-        item.detail = item.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0]
-      } else {
-        let data = [];
-        item.dtlList.forEach(item => {
-          data = [...data, ...item.listBienBanNhapDayKho];
-        })
-        item.detail = {
-          listBienBanNhapDayKho: data
-        }
-      };
-    });
-    // this.dataTable.forEach(item => {
-    //   item.detail.children.forEach(ddNhap => {
-    //     ddNhap.listPhieuNhapKho.forEach(x => {
-    //       x.phieuKiemTraCl = ddNhap.listPhieuKtraCl.filter(item => item.soPhieu == x.soPhieuKtraCl)[0];
-    //     });
-    //   })
-    // });
-    console.log(this.dataTable);
+            let row2 = value2?.find(s => s.maDiemKho == key2);
+
+            return {
+              ...row2,
+              expand: true,
+              children: children2,
+            }
+          }
+          ).value();
+
+
+        let row1 = value1?.find(s => s.soQdPdNk === key1);
+        return {
+          ...row1,
+          expand: true,
+          children: children1,
+        };
+      }).value();
+
+    return dataView
   }
-
+  setExpand(parantExpand: boolean = false, children: any = []): void {
+    if (parantExpand) {
+      return children.map(f => ({ ...f, expand: false }))
+    }
+    return children
+  }
   clearFilter() {
     this.searchFilter = {
       soQd: '',
@@ -213,7 +253,7 @@ export class BienBanKetThucNhapKhoComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.quanLyPhieuNhapDayKhoService.delete({ id: item.id }).then((res) => {
+          this.bienBanKetThucNhapKhacNhapKhoVatTuService.delete({ id: item.id }).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
@@ -344,7 +384,7 @@ export class BienBanKetThucNhapKhoComponent implements OnInit {
           "str": null,
           "trangThai": null
         }
-        this.quanLyPhieuNhapDayKhoService.export(body)
+        this.bienBanKetThucNhapKhacNhapKhoVatTuService.export(body)
           .subscribe((blob) =>
             saveAs(blob, 'danh-sach-phieu-nhap-day-kho.xlsx'),
           );
@@ -380,7 +420,7 @@ export class BienBanKetThucNhapKhoComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.quanLyPhieuNhapDayKhoService.deleteMuti({ ids: dataDelete });
+            let res = await this.bienBanKetThucNhapKhacNhapKhoVatTuService.deleteMuti({ ids: dataDelete });
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();
@@ -437,24 +477,47 @@ export class BienBanKetThucNhapKhoComponent implements OnInit {
     }
   }
 
+  disabledTuNgayNhapDayKho(startValue: Date) {
+    console.log('denNgayThoiHan', this.formData)
+    if (startValue && this.formData.value.denNgayThoiHan) {
+      return startValue.getTime() > this.formData.value.denNgayThoiHan.getTime();
+    }
+    return false;
+  }
+  disabledDenNgayNhapDayKho(endValue: Date) {
+    if (!endValue || !this.formData.value.tuNgayThoiHan) {
+      return false;
+    }
+    return endValue.getTime() <= this.formData.value.tuNgayThoiHan.getTime();
+  }
+  disabledTuNgayKetThucNhap(startValue: Date) {
+    if (startValue && this.formData.value.denNgayKtnk) {
+      return startValue.getTime() > this.formData.value.denNgayKtnk.getTime();
+    }
+    return false;
+  }
+  disabledDenNgayKetThucNhap(endValue: Date) {
+    if (!endValue || !this.formData.value.tuNgayKtnk) {
+      return false;
+    }
+    return endValue.getTime() <= this.formData.value.tuNgayKtnk.getTime();
+  }
   print() {
 
   }
-
-  expandSet = new Set<number>();
-  onExpandChange(id: number, checked: boolean): void {
-    if (checked) {
-      this.expandSet.add(id);
-    } else {
-      this.expandSet.delete(id);
-    }
+  checkRoleAdd() {
+    return this.userService.isChiCuc();
   }
-  expandSet2 = new Set<number>();
-  onExpandChange2(id: number, checked: boolean): void {
-    if (checked) {
-      this.expandSet2.add(id);
-    } else {
-      this.expandSet2.delete(id);
-    }
+  checkRoleView(trangThai: STATUS): boolean {
+    return trangThai && !this.checkRoleEdit(trangThai) && !this.checkRoleApprove(trangThai) && !this.checkRoleDelete(trangThai)
+  }
+  checkRoleEdit(trangThai: STATUS): boolean {
+    return this.userService.isChiCuc() && [STATUS.DU_THAO, STATUS.TU_CHOI_LDCC].includes(trangThai)
+  }
+  checkRoleApprove(trangThai: STATUS): boolean {
+    return this.userService.isChiCuc() && STATUS.CHO_DUYET_LDCC === trangThai
+  }
+  checkRoleDelete(trangThai: STATUS): boolean {
+    return this.userService.isChiCuc() && STATUS.DU_THAO === trangThai
   }
 }
