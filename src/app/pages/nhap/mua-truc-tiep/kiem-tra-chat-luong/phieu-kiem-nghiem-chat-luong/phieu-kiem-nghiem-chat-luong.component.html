@@ -100,7 +100,7 @@
                             </td>
                         </tr>
                         <ng-container *ngIf="expandSet.has(i)">
-                            <ng-container *ngFor="let bb of item.detail.children, let y = index">
+                            <ng-container *ngFor="let bb of item.detail.listPhieuKiemNghiemCl, let y = index">
                                 <tr>
                                     <td></td>
                                     <td></td>
@@ -112,9 +112,9 @@
                                     <td>{{bb.soBbLayMau}}</td>
                                     <td>{{bb.ngayLayMau | date: 'dd/MM/YYYY' }}</td>
                                     <td>{{
-                                        bb.soBienBanNhapDayKho }}</td>
+                                        bb.soBbNhapDayKho }}</td>
                                     <td>{{
-                                        bb.ngayKetThucNhap | date:
+                                        bb.ngayNhapDayKho | date:
                                         'dd/MM/YYYY'
                                         }}
                                     </td>

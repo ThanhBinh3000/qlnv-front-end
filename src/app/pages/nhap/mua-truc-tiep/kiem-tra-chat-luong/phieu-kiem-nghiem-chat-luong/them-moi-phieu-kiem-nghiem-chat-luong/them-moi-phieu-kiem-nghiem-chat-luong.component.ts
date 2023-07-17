@@ -12,7 +12,6 @@ import { StorageService } from 'src/app/services/storage.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { DialogTableSelectionComponent } from './../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component';
 import { UploadFileService } from './../../../../../../services/uploaFile.service';
-import { FileDinhKem } from './../../../../../../models/DeXuatKeHoachuaChonNhaThau';
 import { DialogTuChoiComponent } from './../../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { PhuongPhapLayMau } from './../../../../../../models/PhuongPhapLayMau';
 import { isEmpty, cloneDeep } from 'lodash';
@@ -20,6 +19,8 @@ import { MttBienBanLayMauService } from './../../../../../../services/qlnv-hang/
 import { DanhMucTieuChuanService } from './../../../../../../services/quantri-danhmuc/danhMucTieuChuan.service';
 import { KetQuaKiemNghiemChatLuongHang, PhieuKiemNghiemChatLuongHang } from './../../../../../../models/PhieuKiemNghiemChatLuongThoc';
 import { MttPhieuKiemNghiemChatLuongService } from './../../../../../../services/qlnv-hang/nhap-hang/mua-truc-tiep/MttPhieuKiemNghiemChatLuongService.service';
+import {FILETYPE} from "../../../../../../constants/fileType";
+import {FileDinhKem} from "../../../../../../models/FileDinhKem";
 
 @Component({
   selector: 'app-them-moi-phieu-kiem-nghiem-chat-luong',
@@ -56,6 +57,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
   listBbBanGiaoMau: any = [];
   dataTableChiTieu: any = [];
   listHinhThucBaoQuan: any[] = [];
+  listFileDinhKemKTCL: FileDinhKem[] = [];
   maVthh: string;
 
   phieuKiemNghiemChatLuongHang: PhieuKiemNghiemChatLuongHang =
@@ -182,7 +184,12 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
         const data = res.data;
         data.tenDvi = this.userInfo.TEN_DVI;
         this.helperService.bidingDataInFormGroup(this.formData, data);
-        this.bindingDataBbLayMau(data.soBbLayMau.split('/')[0], true);
+        if(data.fileDinhKems.length > 0){
+          data.fileDinhKems.forEach(item => {
+            this.listFileDinhKemKTCL.push(item)
+          })
+        }
+        this.bindingDataBbLayMau(data, true);
         this.dataTableChiTieu = data.hhPhieuKnCluongDtlList;
         this.dataTableChiTieu.forEach(e => {
           e.tenTchuan = e.ctieuCl;
@@ -212,7 +219,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
           return;
         }
         let body = this.formData.value;
-        body.fileDinhKems = this.listFileDinhKem;
+        body.fileDinhKems = this.listFileDinhKemKTCL;
         body.bbanLayMauDtlList = [...this.listDaiDienChiCuc, ...this.listDaiDienCuc];
         body.phieuKnCluongDtlReqList = this.dataTableChiTieu;
         body.phieuKnCluongDtlReqList.forEach(e => {
@@ -422,14 +429,14 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
 
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
-        this.bindingDataBbLayMau(data.id, false);
+        this.bindingDataBbLayMau(data, false);
       }
     });
 
   }
 
   async bindingDataBbLayMau(id, isChiTiet) {
-    let res = await this.bienBanLayMauServive.getDetail(id);
+    let res = await this.bienBanLayMauServive.getDetailBySoQd(id);
     if (res.msg == MESSAGE.SUCCESS) {
       const data = res.data;
       this.formData.patchValue({
@@ -451,10 +458,11 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
         cloaiVthh: data.cloaiVthh,
         tenLoaiVthh: data.tenLoaiVthh,
         tenCloaiVthh: data.tenCloaiVthh,
-        moTaHangHoa: data.moTaHangHoa,
+        moTaHangHoa: data.tenCloaiVthh,
         soLuongNhapDayKho: data.bbNhapDayKho.tongSoLuongNhap,
         ngayNhapDayKho: data.bbNhapDayKho.ngayKthucNhap,
-        tenThuKho: data.bbNhapDayKho.nguoiTao
+        tenThuKho: data.bbNhapDayKho.nguoiTao,
+        tenKyThuatVien: this.userInfo.TEN_DAY_DU,
       })
       if (!isChiTiet) {
         let dmTieuChuan = await this.danhMucTieuChuanService.getDetailByMaHh(data.cloaiVthh);
