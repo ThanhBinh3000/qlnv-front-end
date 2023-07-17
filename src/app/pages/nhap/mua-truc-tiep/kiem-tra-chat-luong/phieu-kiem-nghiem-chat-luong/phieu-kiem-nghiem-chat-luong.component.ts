@@ -64,20 +64,20 @@ export class PhieuKiemNghiemChatLuongComponent extends Base2Component implements
     await this.search();
     await this.convertDataTable();
   }
-  convertDataTable() {
+  async convertDataTable() {
     this.dataTable.forEach(item => {
       if (this.userService.isChiCuc()) {
         item.detail = item.hhQdGiaoNvNhangDtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0]
-        if (item.detail) {
-          item.detail.children = item.detail.listPhieuKiemNghiemCl
-        }
+        // if (item.detail) {
+        //   item.detail.children = item.detail.listPhieuKiemNghiemCl
+        // }
       } else {
         let data = [];
         item.hhQdGiaoNvNhangDtlList.forEach(item => {
           data = [...data, ...item.listPhieuKiemNghiemCl];
         })
         item.detail = {
-          children: data
+          listPhieuKiemNghiemCl: data
         }
 
       };
