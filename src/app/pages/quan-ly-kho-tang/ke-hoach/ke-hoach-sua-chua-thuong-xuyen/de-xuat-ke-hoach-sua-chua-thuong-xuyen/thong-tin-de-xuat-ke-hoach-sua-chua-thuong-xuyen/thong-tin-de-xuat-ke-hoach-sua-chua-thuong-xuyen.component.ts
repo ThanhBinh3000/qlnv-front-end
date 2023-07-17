@@ -5,30 +5,20 @@ import {StorageService} from "../../../../../../services/storage.service";
 import {NzNotificationService} from "ng-zorro-antd/notification";
 import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
-import {
-  QuyetdinhpheduyetduandtxdService
-} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetduandtxd.service";
-import {KtQdXdHangNamService} from "../../../../../../services/kt-qd-xd-hang-nam.service";
 import {DonviService} from "../../../../../../services/donvi.service";
 import {Base2Component} from "../../../../../../components/base2/base2.component";
 import dayjs from "dayjs";
 import {v4 as uuidv4} from "uuid";
-import {DeXuatKeHoachSuaChuaThuongXuyenComponent} from "../de-xuat-ke-hoach-sua-chua-thuong-xuyen.component";
 import {
   DeXuatScThuongXuyenService
 } from "../../../../../../services/qlnv-kho/quy-hoach-ke-hoach/ke-hoach-sc-thuong-xuyen/de-xuat-sc-thuong-xuyen.service";
-import {DanhMucKho} from "../../../dm-du-an-cong-trinh/danh-muc-du-an/danh-muc-du-an.component";
 import {MESSAGE} from "../../../../../../constants/message";
 import {DanhMucService} from "../../../../../../services/danhmuc.service";
 import {chain} from "lodash";
 import {
-  DialogThemMoiDxkhthComponent
-} from "../../../ke-hoach-xay-dung-trung-han/de-xuat-ke-hoach/them-moi-dxkh-trung-han/dialog-them-moi-dxkhth/dialog-them-moi-dxkhth.component";
-import {
   DialogThemMoiKehoachDanhmucChitietComponent
 } from "./dialog-them-moi-kehoach-danhmuc-chitiet/dialog-them-moi-kehoach-danhmuc-chitiet.component";
 import {STATUS} from "../../../../../../constants/status";
-import {DanhMucKhoService} from "../../../../../../services/danh-muc-kho.service";
 import {DM_SC_TYPE} from "../../../../../../constants/config";
 import {
   DanhMucSuaChuaService
