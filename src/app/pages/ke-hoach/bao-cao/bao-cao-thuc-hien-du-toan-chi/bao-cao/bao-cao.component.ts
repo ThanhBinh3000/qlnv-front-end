@@ -217,24 +217,26 @@ export class BaoCaoComponent implements OnInit {
 
     //check role cho các nut trinh duyet
     getStatusButton() {
-        const isSynthetic = this.baoCao.lstBcaoDviTrucThuocs?.length != 0;
+        const isSynth = this.baoCao.lstBcaoDviTrucThuocs?.length != 0;
         this.isChild = this.baoCao.maDvi == this.userInfo?.MA_DVI;
         this.isParent = this.baoCao.maDviCha == this.userInfo?.MA_DVI;
         //kiem tra quyen cua cac user
-        const checkSave = isSynthetic ? this.userService.isAccessPermisson(Roles.DTC.EDIT_SYNTH_REPORT) : this.userService.isAccessPermisson(Roles.DTC.EDIT_REPORT);
-        const checkSunmit = isSynthetic ? this.userService.isAccessPermisson(Roles.DTC.SUBMIT_SYNTH_REPORT) : this.userService.isAccessPermisson(Roles.DTC.SUBMIT_REPORT);
-        const checkPass = isSynthetic ? this.userService.isAccessPermisson(Roles.DTC.PASS_SYNTH_REPORT) : this.userService.isAccessPermisson(Roles.DTC.PASS_REPORT);
-        const checkApprove = isSynthetic ? this.userService.isAccessPermisson(Roles.DTC.APPROVE_SYNTH_REPORT) : this.userService.isAccessPermisson(Roles.DTC.APPROVE_REPORT);
+        const checkSave = isSynth ? this.userService.isAccessPermisson(Roles.DTC.EDIT_SYNTH_REPORT) : this.userService.isAccessPermisson(Roles.DTC.EDIT_REPORT);
+        const checkSunmit = isSynth ? this.userService.isAccessPermisson(Roles.DTC.SUBMIT_SYNTH_REPORT) : this.userService.isAccessPermisson(Roles.DTC.SUBMIT_REPORT);
+        const checkPass = isSynth ? this.userService.isAccessPermisson(Roles.DTC.PASS_SYNTH_REPORT) : this.userService.isAccessPermisson(Roles.DTC.PASS_REPORT);
+        const checkApprove = isSynth ? this.userService.isAccessPermisson(Roles.DTC.APPROVE_SYNTH_REPORT) : this.userService.isAccessPermisson(Roles.DTC.APPROVE_REPORT);
         const checkAccept = this.userService.isAccessPermisson(Roles.DTC.ACCEPT_REPORT);
-        const checkCopy = isSynthetic ? this.userService.isAccessPermisson(Roles.DTC.COPY_SYNTH_REPORT) : this.userService.isAccessPermisson(Roles.DTC.COPY_REPORT);
-        const checkPrint = isSynthetic ? this.userService.isAccessPermisson(Roles.DTC.PRINT_SYTH_REPORT) : this.userService.isAccessPermisson(Roles.DTC.PRINT_REPORT);
+        const checkExcel = isSynth ? this.userService.isAccessPermisson(Roles.DTC.EXPORT_SYNTH_REPORT) : this.userService.isAccessPermisson(Roles.DTC.EXPORT_REPORT);
+        const checkCopy = isSynth ? this.userService.isAccessPermisson(Roles.DTC.COPY_SYNTH_REPORT) : this.userService.isAccessPermisson(Roles.DTC.COPY_REPORT);
+        const checkPrint = isSynth ? this.userService.isAccessPermisson(Roles.DTC.PRINT_SYTH_REPORT) : this.userService.isAccessPermisson(Roles.DTC.PRINT_REPORT);
 
-        this.status.save = Status.check('saveWHist', this.baoCao.trangThai) && checkSave && this.isChild;
+        this.status.save = Status.check('saveWOHist', this.baoCao.trangThai) && checkSave && this.isChild;
         this.status.new = Status.check('reject', this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.DTC.ADD_REPORT) && this.isChild && this.data.preTab == Dtc.DANH_SACH_BAO_CAO;
         this.status.submit = Status.check('submit', this.baoCao.trangThai) && checkSunmit && this.isChild && !(!this.baoCao.id);
         this.status.pass = Status.check('pass', this.baoCao.trangThai) && checkPass && this.isChild;
         this.status.approve = Status.check('approve', this.baoCao.trangThai) && checkApprove && this.isChild;
         this.status.accept = Status.check('accept', this.baoCao.trangThai) && checkAccept && this.isParent;
+        this.status.export = Status.check('export', this.baoCao.trangThai) && checkExcel && this.isChild;
 
         this.status.ok = this.status.accept || this.status.approve || this.status.pass;
         this.status.finish = this.status.save;
@@ -418,6 +420,8 @@ export class BaoCaoComponent implements OnInit {
             }
         })
 
+        baoCaoTemp.maPhanBcao = '0';
+
         if (!this.baoCao.id) {
             await this.baoCaoThucHienDuToanChiService.trinhDuyetBaoCaoThucHienDTCService(baoCaoTemp).toPromise().then(
                 async data => {
@@ -509,6 +513,7 @@ export class BaoCaoComponent implements OnInit {
         const bieuMau = this.baoCao.lstBcaos.find(e => e.id == id);
         const dataInfo = {
             id: id,
+            baoCaoId: this.baoCao.id,
             maBcao: this.baoCao.maBcao,
             maDvi: this.baoCao.maDvi,
             namBcao: this.baoCao.namBcao,
@@ -556,10 +561,7 @@ export class BaoCaoComponent implements OnInit {
         await this.baoCaoThucHienDuToanChiService.restoreReport(this.baoCao.id, id).toPromise().then(
             (data) => {
                 if (data.statusCode == 0) {
-                    Object.assign(this.baoCao, data.data);
-                    this.baoCao.lstBcaos.forEach(item => {
-                        [item.tenPhuLuc, item.tieuDe] = Dtc.appendixName(item.maLoai);
-                    })
+                    this.action('detail');
                     this.getStatusButton();
                     this.notification.success(MESSAGE.SUCCESS, 'Khôi phục thành công.');
                 } else {
@@ -576,12 +578,8 @@ export class BaoCaoComponent implements OnInit {
         await this.baoCaoThucHienDuToanChiService.addHistory(this.baoCao.id).toPromise().then(
             (data) => {
                 if (data.statusCode == 0) {
-                    Object.assign(this.baoCao, data.data);
-                    this.baoCao.lstBcaos.forEach(item => {
-                        [item.tenPhuLuc, item.tieuDe] = Dtc.appendixName(item.maLoai);
-                    })
-                    this.getStatusButton();
                     this.notification.success(MESSAGE.SUCCESS, 'Tạo mới thành công.');
+                    this.back();
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
                 }

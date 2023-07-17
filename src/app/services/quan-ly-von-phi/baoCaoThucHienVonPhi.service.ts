@@ -87,11 +87,11 @@ export class BaoCaoThucHienVonPhiService extends BaseService {
     }
 
     //tao bao cao tai van phong
-    addOfficeReport(request: any): Observable<any> {
-        return this.httpClient.post(
-            this.urlDefault + '/bao-cao/tong-hop-vp',
-            request);
-    }
+    // addOfficeReport(request: any): Observable<any> {
+    //     return this.httpClient.post(
+    //         this.urlDefault + '/bao-cao/tong-hop-vp',
+    //         request);
+    // }
 
     // call api chức năng duyet bieu mau
     approveBieuMau(request: any): Observable<any> {

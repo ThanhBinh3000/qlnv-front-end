@@ -222,6 +222,8 @@ export class PhuLucIIComponent implements OnInit {
             this.scrollX = Table.tableWidth(350, 20, 0, 0);
         }
 
+        this.lstCtietBcao.forEach(item => item.tyLe());
+
         if (this.lstCtietBcao.length > 0) {
             if (!this.lstCtietBcao[0].stt) {
                 this.lstCtietBcao = Table.sortWithoutIndex(this.lstCtietBcao, 'maNdung');
@@ -296,18 +298,6 @@ export class PhuLucIIComponent implements OnInit {
             async data => {
                 if (data.statusCode == 0) {
                     this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-                    const detail = {
-                        maNdung: Dtc.SUA_CHUA,
-                        dtoanGiaoDtoan: this.total.dtoanSdungNamNguonNsnn,
-                        dtoanGiaoNguonKhac: this.total.dtoanSdungNamNguonSn,
-                        dtoanGiaoNguonQuy: this.total.dtoanSdungNamNguonQuy,
-                        giaiNganThangBcaoDtoan: this.total.giaiNganThangNguonNsnn,
-                        giaNganThangBcaoNguonKhac: this.total.giaiNganThangNguonSn,
-                        giaiNganThangBcaoNguonQuy: this.total.giaiNganThangNguonQuy,
-                        luyKeGiaiNganDtoan: this.total.luyKeGiaiNganNguonNsnn,
-                        luyKeGiaiNganNguonKhac: this.total.luyKeGiaiNganNguonSn,
-                        luyKeGiaiNganNguonQuy: this.total.luyKeGiaiNganNguonQuy,
-                    }
                     this._modalRef.close({
                         trangThai: data.data.trangThai,
                     });

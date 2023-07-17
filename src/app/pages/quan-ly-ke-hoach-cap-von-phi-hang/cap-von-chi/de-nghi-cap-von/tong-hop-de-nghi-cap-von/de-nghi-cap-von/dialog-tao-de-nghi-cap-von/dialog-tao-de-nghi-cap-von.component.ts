@@ -441,6 +441,7 @@ export class DialogTaoDeNghiCapVonComponent implements OnInit {
         page: 1,
       },
       trangThai: Utils.TT_BC_7,
+      maLoai: '2',
     }
     await this.capVonNguonChiService.timKiemHopDong(request).toPromise().then(
       (data) => {

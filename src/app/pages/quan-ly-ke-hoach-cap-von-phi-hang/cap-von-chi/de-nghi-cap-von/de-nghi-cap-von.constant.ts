@@ -123,6 +123,9 @@ export class BaoCao {
     fileDinhKems: any[];
     listIdDeleteFiles: string[];
     maLoai: string;
+    viPhamHopDong: number;
+    thanhLyHdongSl: number;
+    thanhLyHdongTt: number;
 }
 
 export class ItemContract {
@@ -143,6 +146,10 @@ export class ItemContract {
     soTtLuyKe: number;
     soCongVan: string;
     ghiChu: string;
+    viPhamHopDong: number;
+    thanhLyHdongSl: number;
+    thanhLyHdongTt: number;
+    congVan: string
 }
 
 export class ItemRequest {
@@ -186,6 +193,7 @@ export class ItemRequest {
     luyKeTongCong: number;
     soLan: number;
     tongTien: number;
+    maLoai: string;
 }
 
 export class Times {

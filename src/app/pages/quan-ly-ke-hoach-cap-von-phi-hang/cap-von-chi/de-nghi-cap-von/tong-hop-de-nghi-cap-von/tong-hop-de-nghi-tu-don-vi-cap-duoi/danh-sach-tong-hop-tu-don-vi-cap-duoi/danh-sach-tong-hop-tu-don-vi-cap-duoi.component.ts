@@ -98,8 +98,6 @@ export class DanhSachTongHopTuDonViCapDuoiComponent implements OnInit {
     if (!this.userService.isTongCuc()) {
       this.loaiDns = this.loaiDns.filter(e => e.id != Utils.MUA_VTU);
     }
-    console.log(this.dataTable)
-
     this.search();
     this.spinner.hide();
   }
@@ -109,7 +107,7 @@ export class DanhSachTongHopTuDonViCapDuoiComponent implements OnInit {
     request.ngayTaoDen = this.datePipe.transform(this.searchFilter.ngayTaoDen, Utils.FORMAT_DATE_STR);
     request.ngayTaoTu = this.datePipe.transform(this.searchFilter.ngayTaoTu, Utils.FORMAT_DATE_STR);
     this.spinner.show();
-    request.maLoai = '2'
+    request.maLoai = '2';
     await this.capVonNguonChiService.timKiemDeNghi(request).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {

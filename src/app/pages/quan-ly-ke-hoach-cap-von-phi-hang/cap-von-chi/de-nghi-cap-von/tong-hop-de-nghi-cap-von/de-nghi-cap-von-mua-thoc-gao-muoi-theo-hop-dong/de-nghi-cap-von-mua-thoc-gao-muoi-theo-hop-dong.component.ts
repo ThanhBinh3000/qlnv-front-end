@@ -14,8 +14,11 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { displayNumber, sumNumber } from 'src/app/Utility/func';
-import { AMOUNT, BOX_NUMBER_WIDTH, CAN_CU_GIA, CVNC, DON_VI_TIEN, LOAI_DE_NGHI, QUATITY, Utils } from 'src/app/Utility/utils';
+import { AMOUNT, BOX_NUMBER_WIDTH, CAN_CU_GIA, CVNC, DON_VI_TIEN, LOAI_DE_NGHI, Operator, QUATITY, Status, Utils } from 'src/app/Utility/utils';
 import { BaoCao, ItemRequest, Times, TRANG_THAI } from '../../de-nghi-cap-von.constant';
+import { DialogChonThemBieuMauComponent } from 'src/app/components/dialog/dialog-chon-them-bieu-mau/dialog-chon-them-bieu-mau.component';
+import { BtnStatus } from '../../de-nghi-cap-von.class';
+import { Ltd } from 'src/app/pages/ke-hoach/du-toan-nsnn/lap-ke-hoach-va-tham-dinh-du-toan/lap-ke-hoach-va-tham-dinh-du-toan.constant';
 
 @Component({
 	selector: 'app-de-nghi-cap-von-mua-thoc-gao-muoi-theo-hop-dong',
@@ -44,7 +47,7 @@ export class DeNghiCapVonMuaThocGaoMuoiTheoHopDongComponent implements OnInit {
 	quatity = QUATITY;
 	scrollX: string;
 	//trang thai cac nut
-	status = false;
+	// status = false;
 	statusCv = false;
 	saveStatus = true;
 	submitStatus = true;
@@ -57,6 +60,11 @@ export class DeNghiCapVonMuaThocGaoMuoiTheoHopDongComponent implements OnInit {
 	listFile: File[] = [];
 	fileList: NzUploadFile[] = [];
 	fileDetail: NzUploadFile;
+	selectedIndex = 0;
+	listAppendix: any[] = Ltd.PHU_LUC;
+	Status = Status;
+	status: BtnStatus = new BtnStatus();
+	canBos: any[];
 	// before uploaf file
 	beforeUpload = (file: NzUploadFile): boolean => {
 		this.fileList = this.fileList.concat(file);
@@ -179,7 +187,7 @@ export class DeNghiCapVonMuaThocGaoMuoiTheoHopDongComponent implements OnInit {
 	//check role cho các nut trinh duyet
 	getStatusButton() {
 		const checkChirld = this.baoCao.maDvi == this.userInfo?.MA_DVI;
-		this.status = Utils.statusSave.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(CVNC.EDIT_DN_MLT) && !this.userService.isTongCuc();
+		this.status.new = Utils.statusSave.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(CVNC.EDIT_DN_MLT) && !this.userService.isTongCuc();
 		this.statusCv = Utils.statusSave.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(CVNC.EDIT_DN_MLT);
 		this.saveStatus = Utils.statusSave.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(CVNC.EDIT_DN_MLT) && checkChirld;
 		this.submitStatus = Utils.statusApprove.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(CVNC.APPROVE_DN_MLT) && checkChirld && !(!this.baoCao.id);
@@ -435,9 +443,9 @@ export class DeNghiCapVonMuaThocGaoMuoiTheoHopDongComponent implements OnInit {
 	updateEditCache(): void {
 		this.baoCao.dnghiCapvonCtiets.forEach(item => {
 			const data: Times[] = [];
-			item.dnghiCapvonLuyKes.forEach(e => {
-				data.push({ ...e });
-			})
+			// item.dnghiCapvonLuyKes.forEach(e => {
+			// 	data.push({ ...e });
+			// })
 			this.editCache[item.id] = {
 				edit: false,
 				data: {
@@ -471,40 +479,40 @@ export class DeNghiCapVonMuaThocGaoMuoiTheoHopDongComponent implements OnInit {
 	}
 
 	changeModel(id: string) {
-		this.editCache[id].data.tongVonVaDtDaCap = sumNumber([this.editCache[id].data.duToanDaGiao, this.editCache[id].data.luyKeCong]);
-		this.editCache[id].data.vonDnghiCapLanNay = sumNumber([this.editCache[id].data.gtHopDong, -this.editCache[id].data.tongVonVaDtDaCap]);
-		this.editCache[id].data.vonDuyetCong = sumNumber([this.editCache[id].data.vonDuyetCapUng, this.editCache[id].data.vonDuyetCapVon]);
-		this.editCache[id].data.tongCap = sumNumber([this.editCache[id].data.tongVonVaDtDaCap, this.editCache[id].data.vonDuyetCong]);
-		this.editCache[id].data.soConDuocCap = sumNumber([this.editCache[id].data.gtHopDong, -this.editCache[id].data.tongCap]);
+		this.editCache[id].data.tongVonVaDtDaCap = Operator.sum([this.editCache[id].data.duToanDaGiao, this.editCache[id].data.luyKeCong]);
+		this.editCache[id].data.vonDnghiCapLanNay = Operator.sum([this.editCache[id].data.gtHopDong, -this.editCache[id].data.tongVonVaDtDaCap]);
+		this.editCache[id].data.vonDuyetCong = Operator.sum([this.editCache[id].data.vonDuyetCapUng, this.editCache[id].data.vonDuyetCapVon]);
+		this.editCache[id].data.tongCap = Operator.sum([this.editCache[id].data.tongVonVaDtDaCap, this.editCache[id].data.vonDuyetCong]);
+		this.editCache[id].data.soConDuocCap = Operator.sum([this.editCache[id].data.gtHopDong, -this.editCache[id].data.tongCap]);
 	}
 
 	getTotal() {
 		this.total = new ItemRequest();
 		this.baoCao.dnghiCapvonCtiets.forEach(item => {
-			this.total.slKeHoach = sumNumber([this.total.slKeHoach, item.slKeHoach]);
-			this.total.slHopDong = sumNumber([this.total.slHopDong, item.slHopDong]);
-			this.total.gtHopDong = sumNumber([this.total.gtHopDong, item.gtHopDong]);
-			this.total.duToanDaGiao = sumNumber([this.total.duToanDaGiao, item.duToanDaGiao]);
-			this.total.luyKeCapUng = sumNumber([this.total.luyKeCapUng, item.luyKeCapUng]);
-			this.total.luyKeCapVon = sumNumber([this.total.luyKeCapVon, item.luyKeCapVon]);
-			this.total.luyKeCong = sumNumber([this.total.luyKeCong, item.luyKeCong]);
-			this.total.tongVonVaDtDaCap = sumNumber([this.total.duToanDaGiao, this.total.luyKeCong]);
-			this.total.vonDnghiCapLanNay = sumNumber([this.total.gtHopDong, -this.total.tongVonVaDtDaCap]);
-			this.total.vonDuyetCapUng = sumNumber([this.total.vonDuyetCapUng, item.vonDuyetCapUng]);
-			this.total.vonDuyetCapVon = sumNumber([this.total.vonDuyetCapVon, item.vonDuyetCapVon])
-			this.total.vonDuyetCong = sumNumber([this.total.vonDuyetCong, item.vonDuyetCong]);
-			this.total.tongCap = sumNumber([this.total.tongCap, item.tongCap]);
-			this.total.soConDuocCap = sumNumber([this.total.soConDuocCap, item.soConDuocCap]);
+			this.total.slKeHoach = Operator.sum([this.total.slKeHoach, item.slKeHoach]);
+			this.total.slHopDong = Operator.sum([this.total.slHopDong, item.slHopDong]);
+			this.total.gtHopDong = Operator.sum([this.total.gtHopDong, item.gtHopDong]);
+			this.total.duToanDaGiao = Operator.sum([this.total.duToanDaGiao, item.duToanDaGiao]);
+			this.total.luyKeCapUng = Operator.sum([this.total.luyKeCapUng, item.luyKeCapUng]);
+			this.total.luyKeCapVon = Operator.sum([this.total.luyKeCapVon, item.luyKeCapVon]);
+			this.total.luyKeCong = Operator.sum([this.total.luyKeCong, item.luyKeCong]);
+			this.total.tongVonVaDtDaCap = Operator.sum([this.total.duToanDaGiao, this.total.luyKeCong]);
+			this.total.vonDnghiCapLanNay = Operator.sum([this.total.gtHopDong, -this.total.tongVonVaDtDaCap]);
+			this.total.vonDuyetCapUng = Operator.sum([this.total.vonDuyetCapUng, item.vonDuyetCapUng]);
+			this.total.vonDuyetCapVon = Operator.sum([this.total.vonDuyetCapVon, item.vonDuyetCapVon])
+			this.total.vonDuyetCong = Operator.sum([this.total.vonDuyetCong, item.vonDuyetCong]);
+			this.total.tongCap = Operator.sum([this.total.tongCap, item.tongCap]);
+			this.total.soConDuocCap = Operator.sum([this.total.soConDuocCap, item.soConDuocCap]);
 		})
 	}
 
 	sum() {
 		this.baoCao.dnghiCapvonCtiets.forEach(item => {
 			if (item.isParent) {
-				item.tongVonVaDtDaCap = sumNumber([item.duToanDaGiao, item.luyKeCong]);
-				item.vonDnghiCapLanNay = sumNumber([item.gtHopDong, -item.tongVonVaDtDaCap]);
-				item.tongCap = sumNumber([item.tongVonVaDtDaCap, item.vonDuyetCong]);
-				item.soConDuocCap = sumNumber([item.gtHopDong, -item.tongCap]);
+				item.tongVonVaDtDaCap = Operator.sum([item.duToanDaGiao, item.luyKeCong]);
+				item.vonDnghiCapLanNay = Operator.sum([item.gtHopDong, -item.tongVonVaDtDaCap]);
+				item.tongCap = Operator.sum([item.tongVonVaDtDaCap, item.vonDuyetCong]);
+				item.soConDuocCap = Operator.sum([item.gtHopDong, -item.tongCap]);
 			}
 		})
 	}
@@ -612,5 +620,76 @@ export class DeNghiCapVonMuaThocGaoMuoiTheoHopDongComponent implements OnInit {
 		} else {
 			return 'da-ban-hanh';
 		}
+	}
+
+	addAppendix() {
+		let danhMuc = [];
+		let danhSach = [];
+		let title = '';
+		switch (this.selectedIndex) {
+			case 0:
+				danhMuc = this.listAppendix.filter(e => e.id.startsWith('hopdong'));
+				// danhSach = danhMuc.filter(item => this.baoCao.dnghiCapvonCtiets.findIndex(e => e.maBieuMau == item.id) == -1);
+				title = 'Danh sách hơp đồng';
+				break;
+			case 1:
+				danhMuc = this.listAppendix.filter(e => e.id.startsWith('denghi'));
+				// danhSach = danhMuc.filter(item => this.baoCao.dnghiCapvonCtiets.findIndex(e => e.maBieuMau == item.id) == -1);
+				title = 'Danh sách đề nghị';
+				break;
+			default:
+				break;
+		}
+
+		const modalIn = this.modal.create({
+			nzTitle: title,
+			nzContent: DialogChonThemBieuMauComponent,
+			nzBodyStyle: { overflowY: 'auto', maxHeight: 'calc(100vh - 200px)' },
+			nzMaskClosable: false,
+			nzClosable: false,
+			nzWidth: '600px',
+			nzFooter: null,
+			nzComponentParams: {
+				danhSachBieuMau: danhSach
+			},
+		});
+		// modalIn.afterClose.subscribe((res) => {
+		//     if (res) {
+		//         res.forEach(item => {
+		//             if (item.status) {
+		//                 const newItem: Form = {
+		//                     ... new Form(),
+		//                     id: uuid.v4() + 'FE',
+		//                     maBieuMau: item.id,
+		//                     tenPl: item.tenPl,
+		//                     tenDm: item.tenDm,
+		//                     trangThai: '3',
+		//                     lstCtietLapThamDinhs: [],
+		//                 }
+		//                 this.baoCao.lstLapThamDinhs.push(newItem);
+		//             }
+		//         })
+		//     }
+		// });
+	}
+
+	getIndex(maBieuMau: string) {
+		let header = '';
+		if (maBieuMau.startsWith('hopdong')) {
+			header = 'hopdong';
+		};
+		if (maBieuMau.startsWith('denghi')) {
+			header = 'denghi';
+		};
+		let index = 0;
+		// for (let i = 0; i < this.baoCao.lstLapThamDinhs.length; i++) {
+		//     if (this.baoCao.lstLapThamDinhs[i].maBieuMau.startsWith(header)) {
+		//         index += 1;
+		//     }
+		//     if (this.baoCao.lstLapThamDinhs[i].maBieuMau == maBieuMau) {
+		//         break;
+		//     }
+		// }
+		return index;
 	}
 }

@@ -33,6 +33,12 @@
         <i nz-icon nzType="copy" nzTheme="outline"></i>
         <span>Copy</span>
       </button>
+      <!-- <ng-container *ngIf="baoCao.trangThai == '7'"> -->
+      <button type="button" class="btn btn-main" *ngIf="statusExportExcel.export" (click)="exportToExcel()">
+        <span nz-icon nzType="export" nzTheme="outline" style="margin-right: 5px;"></span>
+        <span>Xuất</span>
+      </button>
+      <!-- </ng-container> -->
     </div>
   </nz-affix>
 
