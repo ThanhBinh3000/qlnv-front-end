@@ -538,6 +538,7 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
             tenHd: data.tenHd,
             tgianNkho: data.tgianKthuc,
           });
+          console.log(this.isViewDetail);
           this.radioValue = data.loaiQd
           if (this.userService.isCuc()) {
             this.dataTable = data.hhQdGiaoNvNhangDtlList
@@ -707,7 +708,7 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
     console.log(this.validatorDdiemNhap(indexTable), 1);
     console.log(this.validateButtonThem('ddiemNhap'), 2);
     if (this.validatorDdiemNhap(indexTable) && this.validateButtonThem('ddiemNhap')) {
-      this.dataTable[indexTable].hhQdGiaoNvNhDdiemList = [...this.dataTable[indexTable].hhQdGiaoNvNhDdiemList, this.rowItem]
+      this.dataTable[indexTable].children = [...this.dataTable[indexTable].children, this.rowItem]
       this.rowItem = new ThongTinDiaDiemNhap();
     }
   }

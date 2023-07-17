@@ -267,7 +267,8 @@
         </div>
       </div>
       <nz-card class="mt-2px flex-card data-table card-border-content table-card">
-        <nz-table #rowSelectionTable class="nowrap" nzBordered [nzData]="dataTable">
+        <nz-table #rowSelectionTable class="nowrap" nzBordered [nzData]="dataTable"
+                  *ngIf="formTraCuu.value.loaiGia == 'LG01' || formTraCuu.value.loaiGia == 'LG03'">
           <thead>
           <tr class="header-row">
             <th class="text-center" rowSpan="2" nzWidth="45px">STT</th>
@@ -293,23 +294,58 @@
           </tr>
           </thead>
           <tbody>
-                                  <tr *ngFor="let data of rowSelectionTable.data; let idx = index">
-                                      <td class="text-center">{{(page-1)*pageSize+idx+1}}</td>
-                                      <td>{{ data.soDx }}</td>
-                                      <td>{{ data.tenDvi}}</td>
-                                      <td class="text-right">{{ data.soLuong | number : '1.0-1' : 'vi-VN' }}</td>
-                                      <td class="text-right">{{ data.giaDn | number : '1.0-1' : 'vi-VN' }}</td>
-                                      <td class="text-right">{{ data.giaDnVat | number : '1.0-1' : 'vi-VN' }}</td>
-                                    <td class="text-right">{{ data.soLuong | number : '1.0-1' : 'vi-VN' }}</td>
-                                    <td class="text-right">{{ data.giaDn | number : '1.0-1' : 'vi-VN' }}</td>
-                                    <td class="text-right">{{ data.giaDnVat | number : '1.0-1' : 'vi-VN' }}</td>
-                                    <td class="text-right">{{ data.soLuong | number : '1.0-1' : 'vi-VN' }}</td>
-                                    <td class="text-right">{{ data.giaDn | number : '1.0-1' : 'vi-VN' }}</td>
-                                    <td class="text-right">{{ data.giaDnVat | number : '1.0-1' : 'vi-VN' }}</td>
-                                    <td class="text-right">{{ data.soLuong | number : '1.0-1' : 'vi-VN' }}</td>
-                                    <td class="text-right">{{ data.giaDn | number : '1.0-1' : 'vi-VN' }}</td>
-                                  </tr>
-                              </tbody>
+          <tr *ngFor="let data of rowSelectionTable.data; let idx = index">
+            <td class="text-center">{{(page - 1) * pageSize + idx + 1}}</td>
+            <td>{{ data.soDx }}</td>
+            <td>{{ data.tenDvi}}</td>
+            <td class="text-right">{{ data.soLuong | number : '1.0-1' : 'vi-VN' }}</td>
+            <td class="text-right">{{ data.giaDn | number : '1.0-1' : 'vi-VN' }}</td>
+            <td class="text-right">{{ data.giaDnVat | number : '1.0-1' : 'vi-VN' }}</td>
+            <td class="text-right">{{ data.soLuong | number : '1.0-1' : 'vi-VN' }}</td>
+            <td class="text-right">{{ data.giaDn | number : '1.0-1' : 'vi-VN' }}</td>
+            <td class="text-right">{{ data.giaDnVat | number : '1.0-1' : 'vi-VN' }}</td>
+            <td class="text-right">{{ data.soLuong | number : '1.0-1' : 'vi-VN' }}</td>
+            <td class="text-right">{{ data.giaDn | number : '1.0-1' : 'vi-VN' }}</td>
+            <td class="text-right">{{ data.giaDnVat | number : '1.0-1' : 'vi-VN' }}</td>
+            <td class="text-right">{{ data.soLuong | number : '1.0-1' : 'vi-VN' }}</td>
+            <td class="text-right">{{ data.giaDn | number : '1.0-1' : 'vi-VN' }}</td>
+          </tr>
+          </tbody>
+        </nz-table>
+        <nz-table #rowSelectionTable class="nowrap" nzBordered [nzData]="dataTable"
+                  *ngIf="formTraCuu.value.loaiGia == 'LG02' || formTraCuu.value.loaiGia == 'LG04'">
+          <thead>
+          <tr class="header-row">
+            <th class="text-center" rowSpan="2" nzWidth="45px">STT</th>
+            <th class="text-center" rowSpan="2">Số đề xuất</th>
+            <th class="text-center" rowSpan="2">Cục DTNN KV</th>
+            <th class="text-center" rowSpan="2">Vùng miền</th>
+            <th class="text-center" rowSpan="2">Chi cục DTNN</th>
+            <th class="text-center" rowSpan="2">Số lượng</th>
+            <th class="text-center" colSpan="2">Giá khảo sát <br>không có VAT</th>
+            <th class="text-center" colSpan="2">Giá Cục đề nghị <br> không có VAT</th>
+            <th class="text-center" colSpan="2">Giá TC đề xuất <br> không có VAT</th>
+            <th class="text-center" colSpan="2">Giá QĐ của BTC <br> không có VAT</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let data of rowSelectionTable.data; let idx = index">
+            <td class="text-center">{{idx + 1}}</td>
+            <td>{{ data.soDx }}</td>
+            <td>{{ data.tenDvi}}</td>
+            <td class="text-right">{{ data.soLuong | number : '1.0-1' : 'vi-VN' }}</td>
+            <td class="text-right">{{ data.giaDn | number : '1.0-1' : 'vi-VN' }}</td>
+            <td class="text-right">{{ data.giaDnVat | number : '1.0-1' : 'vi-VN' }}</td>
+            <td class="text-right">{{ data.soLuong | number : '1.0-1' : 'vi-VN' }}</td>
+            <td class="text-right">{{ data.giaDn | number : '1.0-1' : 'vi-VN' }}</td>
+            <td class="text-right">{{ data.giaDnVat | number : '1.0-1' : 'vi-VN' }}</td>
+            <td class="text-right">{{ data.soLuong | number : '1.0-1' : 'vi-VN' }}</td>
+            <td class="text-right">{{ data.giaDn | number : '1.0-1' : 'vi-VN' }}</td>
+            <td class="text-right">{{ data.giaDnVat | number : '1.0-1' : 'vi-VN' }}</td>
+            <td class="text-right">{{ data.soLuong | number : '1.0-1' : 'vi-VN' }}</td>
+            <td class="text-right">{{ data.giaDn | number : '1.0-1' : 'vi-VN' }}</td>
+          </tr>
+          </tbody>
         </nz-table>
       </nz-card>
       <form nzLayout="vertical" nz-form [formGroup]="formData">

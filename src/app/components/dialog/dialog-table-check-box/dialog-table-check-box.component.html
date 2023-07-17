@@ -4,7 +4,6 @@
             <tr>
                 <th [width]="35">STT</th>
                 <th *ngFor="let data of dataHeader">{{data}}</th>
-                <!-- <th *ngIf="!isView" [width]="35" class=" text-center">Chọn</th> -->
                 <th *ngIf="!isView" class=" text-center wrapper-mr-0"><label nz-checkbox [(ngModel)]="allChecked"
                         (ngModelChange)="updateAllChecked()" [nzIndeterminate]="indeterminate"></label></th>
             </tr>
@@ -13,17 +12,14 @@
             <tr *ngFor="let data of basicTable.data; let i = index">
                 <td class="text-center">{{i + 1}}</td>
                 <td *ngFor="let column of dataColumn;">
-                    {{ (column === 'donGiaNhaThau' ? (data[column] | number: '1.0-1' :'vi_VN')
+                    {{(column === 'donGiaNhaThau' ? (data[column] | number: '1.0-1' :'vi_VN')
                     : column === 'ngayKy' ? (data[column] | date: 'dd/MM/YYYY')
                     : column === 'ngayTao' ? (data[column] | date: 'dd/MM/YYYY')
                     : column.startsWith('ngay') ? (data[column] | date: 'dd/MM/YYYY')
-                    : data[column]) }}
+                    : column.startsWith('number') ? (data[column] | number: '1.0-1' :'vi_VN')
+                    : data[column])
+                  }}
                 </td>
-                <!-- <td *ngIf="!isView" class="text-center">
-            <a (click)="handleOk(data)">
-              <i class="icon htvbdh_dau-cong"></i>
-            </a>
-          </td> -->
                 <td *ngIf="!isView" class="text-center">
                     <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
                         [nzDisabled]="isView"></label>

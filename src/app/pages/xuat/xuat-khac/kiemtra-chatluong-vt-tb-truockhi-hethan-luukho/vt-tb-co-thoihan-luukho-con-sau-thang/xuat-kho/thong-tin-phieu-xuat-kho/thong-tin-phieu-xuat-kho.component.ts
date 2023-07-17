@@ -28,7 +28,7 @@ import {
   styleUrls: ['./thong-tin-phieu-xuat-kho.component.scss']
 })
 export class ThongTinPhieuXuatKhoComponent extends Base2Component implements OnInit {
-  @Input() loaiVthh: string;
+  @Input() soQdGiaoNvXh: string;
   @Input() idInput: number;
   @Input() isView: boolean;
   @Output()
@@ -52,7 +52,6 @@ export class ThongTinPhieuXuatKhoComponent extends Base2Component implements OnI
     modal: NzModalService,
     private danhMucService: DanhMucService,
     private quyetDinhGiaoNvXuatHangService: QuyetDinhGiaoNvXuatHangService,
-    // private phieuKiemNghiemChatLuongService: PhieuKiemNghiemChatLuongService,
     private phieuXuatKhoService: PhieuXuatKhoService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, phieuXuatKhoService);
@@ -163,8 +162,13 @@ export class ThongTinPhieuXuatKhoComponent extends Base2Component implements OnI
         soPhieu: `${id}/${this.formData.get('namKeHoach').value}/${this.maPhieu}`,
         ngayXuat: dayjs().format('YYYY-MM-DD'),
         ngayXuatKho: dayjs().format('YYYY-MM-DD'),
-        loaiVthh: this.loaiVthh
       });
+      if (this.soQdGiaoNvXh) {
+        let dataQdGiaoNvXh = this.listSoQuyetDinh.find(item => item.soQuyetDinh == this.soQdGiaoNvXh);
+        if (dataQdGiaoNvXh) {
+          this.bindingDataQd(dataQdGiaoNvXh);
+        }
+      }
     }
 
   }
@@ -227,8 +231,6 @@ export class ThongTinPhieuXuatKhoComponent extends Base2Component implements OnI
 
   async changeValueNganLoKho($event) {
     if ($event) {
-      console.log($event, '$event$event$event')
-      console.log(this.listNganLoKho, ' this.listNganLoKho this.listNganLoKho')
       let item = this.listNganLoKho.find(it => it.maDiaDiem == $event);
       if (item) {
         this.formData.patchValue({

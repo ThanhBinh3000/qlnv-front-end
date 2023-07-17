@@ -193,9 +193,14 @@
           <td>{{data.tgianNhapKho}}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-left">
-            <a *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_DCKHLCNT_XEM')"
+            <a *ngIf="disableXem(data.trangThai)"
                (click)="redirectToChiTiet(data.id,true)">
               <i class="fa fa-eye" title="Xem chi tiết"></i>
+            </a>
+            <a *ngIf="data.trangThai == STATUS.CHO_DUYET_LDV
+              && userService.isAccessPermisson('NHDTQG_PTDT_DCKHLCNT_BANHANH')"
+              (click)="redirectToChiTiet(data.id,true)">
+              <i class="icon htvbdh_tcdt_pheduyet" title="Phê duyệt"></i>
             </a>
             <a *ngIf="data.trangThai == STATUS.DA_LAP
               && userService.isAccessPermisson('NHDTQG_PTDT_DCKHLCNT_THEM')" (click)="redirectToChiTiet(data.id,false)">

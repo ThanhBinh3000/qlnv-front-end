@@ -99,7 +99,7 @@
                 [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true" style="width: 35px"></td>
             <td class="bold">{{ item.soCanCu }}</td>
             <td class="bold">{{ item.namKeHoach }}</td>
-            <td class="bold">{{ item.ngayQdGngayQdGiaoNvXhiaoNvXh | date: 'dd/MM/YYYY' }}</td>
+            <td class="bold">{{ item.ngayQdGiaoNvXh | date: 'dd/MM/YYYY' }}</td>
             <td></td>
             <td></td>
             <td></td>
@@ -125,7 +125,9 @@
                 <td></td>
                 <td></td>
                 <td class="text-left">
-
+                  <a (click)="redirectDetail(lv1.id, false,item.soCanCu)">
+                    <i class="icon htvbdh_dau-cong" title="Thêm mới"></i>
+                  </a>
                 </td>
               </tr>
               <ng-container *ngIf="expandSetString.has(item.idVirtual)">
@@ -189,19 +191,19 @@
   </div>
 </div>
 <div class="chi-tiet" *ngIf="isDetail">
-  <app-thong-tin-phieu-xuat-kho [idInput]="selectedId" [isView]="isView" [loaiVthh]="loaiVthh"
+  <app-thong-tin-phieu-xuat-kho [idInput]="selectedId" [isView]="isView" [soQdGiaoNvXh]="soQdGiaoNvXhSelected"
                                 (showListEvent)="showList()">
   </app-thong-tin-phieu-xuat-kho>
 </div>
-<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openPhieuKnCl" (nzOnCancel)="closePhieuKnClModal()">
-  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-    <!--    <app-them-moi-phieu-kn-cl [idInput]="idPhieuKnCl" [loaiVthh]="loaiVthh" [isView]="true">-->
-    <!--    </app-them-moi-phieu-kn-cl>-->
-  </ng-container>
-  <div *nzModalFooter>
-    <button nz-button (click)="closePhieuKnClModal()" class="modal__button--cancel">
-      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
-      Đóng
-    </button>
-  </div>
-</nz-modal>
+<!--<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openPhieuKnCl" (nzOnCancel)="closePhieuKnClModal()">-->
+<!--  <ng-container *nzModalContent class="modal__content custom-scroll-modal">-->
+<!--    &lt;!&ndash;    <app-them-moi-phieu-kn-cl [idInput]="idPhieuKnCl" [loaiVthh]="loaiVthh" [isView]="true">&ndash;&gt;-->
+<!--    &lt;!&ndash;    </app-them-moi-phieu-kn-cl>&ndash;&gt;-->
+<!--  </ng-container>-->
+<!--  <div *nzModalFooter>-->
+<!--    <button nz-button (click)="closePhieuKnClModal()" class="modal__button&#45;&#45;cancel">-->
+<!--      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>-->
+<!--      Đóng-->
+<!--    </button>-->
+<!--  </div>-->
+<!--</nz-modal>-->

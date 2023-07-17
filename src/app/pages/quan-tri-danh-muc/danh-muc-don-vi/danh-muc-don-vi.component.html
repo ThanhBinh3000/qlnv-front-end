@@ -127,9 +127,7 @@
                 <nz-form-label [nzNoColon]="true"> Vùng miền</nz-form-label>
                 <nz-form-control>
                   <nz-select  formControlName="vungMien" [nzDisabled]="!isEditData">
-                    <nz-option nzValue="Miền Bắc" nzLabel="Miền Bắc"></nz-option>
-                    <nz-option nzValue="Miền Trung" nzLabel="Miền Trung"></nz-option>
-                    <nz-option nzValue="Miền Nam"  nzLabel="Miền Nam"></nz-option>
+                    <nz-option *ngFor="let item of listVungMien" [nzValue]="item.ma" [nzLabel]="item.giaTri"></nz-option>
                   </nz-select>
                 </nz-form-control>
               </nz-form-item>

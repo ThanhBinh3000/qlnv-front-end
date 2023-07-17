@@ -251,7 +251,6 @@ export class TongHopDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Com
     this.selectedItem = item;
     this.modalWidth = showDetail? '80vw': (item? '40vw': '40vw');
     // this.step = item ? '1' : '2';
-    console.log(this.selectedItem,555)
   }
 
   async changeStep($event: any) {

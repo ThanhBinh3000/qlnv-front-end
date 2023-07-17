@@ -8,10 +8,10 @@ import {BaseService} from "../../../base.service";
   providedIn: 'root',
 })
 export class QuanLyBienBanLayMauKhacService extends BaseService {
-  GATEWAY = '';
+  GATEWAY = '/qlnv-hang';
 
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'bban-lay-mau-khac', '');
+    super(httpClient, 'bban-lay-mau-khac', '/qlnv-hang');
   }
 
   timKiem(body: any): Promise<any> {

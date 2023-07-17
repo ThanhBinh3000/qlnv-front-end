@@ -56,7 +56,7 @@
                 <nz-form-label [nzNoColon]="true"> Năm kế hoạch
                 </nz-form-label>
                 <nz-form-control nz-col [nzErrorTip]="error">
-                  <nz-select formControlName="namKh" nzAllowClear [nzDisabled]="true">
+                  <nz-select formControlName="namKh" nzAllowClear [nzDisabled]="isDisabled()">
                     <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                   </nz-select>
                 </nz-form-control>
@@ -253,7 +253,7 @@
               <th width="200px">Địa chỉ</th>
               <th width="200px">Số điện thoại</th>
               <th width="100px">Ngày chào giá</th>
-              <th width="100px">Số lượng (Kg)</th>
+              <th width="100px">Số lượng (tấn)</th>
               <th width="100px">Đơn giá đã bao gồm thuế (đ)</th>
               <th width="100px">Thành tiền</th>
               <th width="100px">File đính kèm</th>
@@ -270,7 +270,7 @@
                 <td nzLeft>{{data.diaChi}}</td>
                 <td nzLeft>{{data.sdt}}</td>
                 <td nzLeft>{{data.ngayChaoGia | date: 'dd/MM/YYYY'}}</td>
-                <td nzLeft>{{data.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+                <td nzLeft>{{data.soLuong / 1000 | number : '1.0-1' : 'vi_VN'}}</td>
                 <td nzLeft>{{data.donGia | number : '1.0-1' : 'vi_VN'}}</td>
                 <td nzLeft>{{data.soLuong * data.donGia | number : '1.0-1' : 'vi_VN' }}</td>
                 <td nzLeft class="text-blue">{{data.fileDinhKems?.fileName }}</td>

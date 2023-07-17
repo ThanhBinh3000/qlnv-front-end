@@ -21,13 +21,7 @@ import {PhieuXuatKhoService} from "../../../../../../services/qlnv-hang/xuat-han
 })
 export class XuatKhoComponent extends Base2Component implements OnInit {
 
-  @Input()
-  loaiVthh: string;
-  @Input()
-  loaiVthhCache: string;
   CHUC_NANG = CHUC_NANG;
-
-  // public vldTrangThai: CuuTroVienTroComponent;
 
   constructor(
     httpClient: HttpClient,
@@ -49,7 +43,6 @@ export class XuatKhoComponent extends Base2Component implements OnInit {
       ngayXuatKho: null,
       ngayXuatKhoTu: null,
       ngayXuatKhoDen: null,
-      loaiVthh: null,
       type: null
     })
     this.filterTable = {
@@ -70,6 +63,7 @@ export class XuatKhoComponent extends Base2Component implements OnInit {
   userInfo: UserLogin;
   userdetail: any = {};
   selectedId: number = 0;
+  soQdGiaoNvXhSelected: string;
   isVatTu: boolean = false;
   isView = false;
   children: any = [];
@@ -102,10 +96,6 @@ export class XuatKhoComponent extends Base2Component implements OnInit {
   }
 
   async search(roles?): Promise<void> {
-    this.formData.patchValue({
-      loaiVthh: this.loaiVthh,
-      type: "XUAT_CTVT"
-    });
     await super.search(roles);
     this.buildTableView();
   }
@@ -186,10 +176,11 @@ export class XuatKhoComponent extends Base2Component implements OnInit {
   }
 
 
-  redirectDetail(id, b: boolean) {
+  redirectDetail(id, b: boolean, soQdGiaoNvXh?) {
     this.selectedId = id;
     this.isDetail = true;
     this.isView = b;
+    this.soQdGiaoNvXhSelected = soQdGiaoNvXh;
     // this.isViewDetail = isView ?? false;
   }
 

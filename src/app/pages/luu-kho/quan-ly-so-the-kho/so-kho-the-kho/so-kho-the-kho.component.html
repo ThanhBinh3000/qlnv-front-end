@@ -83,7 +83,7 @@
           <th nzWidth="" rowSpan="2" class="text-center">Nhà kho</th>
           <th nzWidth="" rowSpan="2" class="text-center">Ngăn/lô kho</th>
           <th nzWidth="" rowSpan="2" class="text-center">Năm nhập</th>
-          <th nzWidth="" rowSpan="2" class="text-center">Số sổ kho</th>
+          <th nzWidth="" rowSpan="2" class="text-center">Sổ kho</th>
           <th nzWidth="" rowSpan="2" class="text-center">Thẻ kho</th>
           <th nzWidth="" rowSpan="2" class="text-center">Thời gian tạo</th>
           <th nzWidth="" rowSpan="2" class="text-center">Thời gian đóng</th>
@@ -152,7 +152,7 @@
                 <td class="bg-parent2 font-weight-bold"></td>
                 <td class="bg-parent2 font-weight-bold"></td>
                 <td class="bg-parent2 font-weight-bold"></td>
-                <td nzRight class="bg-parent2 font-weight-bold" ></td>
+                <td nzRight class="bg-parent2 font-weight-bold"></td>
               </tr>
               <ng-container *ngIf="expandSet.has(nhaKho.idVirtual)">
                 <ng-container *ngFor="let nganKho of nhaKho.children, let y = index">
@@ -215,11 +215,11 @@
                             <td></td>
                             <td></td>
                             <td></td>
+                            <td></td>
                             <td class="bg-parent2 font-weight-bold" [nzExpand]="expandSet.has(nam.idVirtual)"
                                 (nzExpandChange)="onExpandChange(soKho.idVirtual, $event)">{{soKho.ten}}</td>
-                            <td class="bg-parent2 font-weight-bold"></td>
-                            <td class="bg-parent2 font-weight-bold"></td>
-                            <td class="bg-parent2 font-weight-bold"></td>
+                            <td class="bg-parent2 font-weight-bold">{{soKho.ngayMo | date : 'dd/MM/yyyy' }}</td>
+                            <td class="bg-parent2 font-weight-bold">{{soKho.ngayDong | date : 'dd/MM/yyyy' }}</td>
                             <td class="bg-parent2 font-weight-bold"></td>
                             <td class="bg-parent2 font-weight-bold"></td>
                             <td class="bg-parent2 font-weight-bold"></td>
@@ -232,10 +232,10 @@
                             <td class="bg-parent2 font-weight-bold"></td>
                             <td class="bg-parent2 font-weight-bold"></td>
                             <td class="bg-parent2 font-weight-bold" nzRight>
-                              <a (click)="openModalCreate(soKho.id, true)" >
+                              <a (click)="openModalCreate(soKho.id, true)">
                                 <i class="fa fa-eye"></i>
                               </a>
-                              <a (click)="openModalCreate(null, false)" >
+                              <a (click)="openModalCreate(null, false)">
                                 <i class="fa fa-plus"></i>
                               </a>
                             </td>
@@ -248,11 +248,11 @@
                                 <td></td>
                                 <td></td>
                                 <td></td>
+                                <td></td>
                                 <td class="bg-parent2 font-weight-bold" [nzExpand]="expandSet.has(soKho.idVirtual)"
                                     (nzExpandChange)="onExpandChange(theKho.idVirtual, $event)">{{theKho.ten}}</td>
-                                <td class="bg-parent2 font-weight-bold"></td>
-                                <td class="bg-parent2 font-weight-bold"></td>
-                                <td class="bg-parent2 font-weight-bold"></td>
+                                <td class="bg-parent2 font-weight-bold">{{theKho.ngayMo | date : 'dd/MM/yyyy' }}</td>
+                                <td class="bg-parent2 font-weight-bold">{{theKho.ngayDong | date : 'dd/MM/yyyy' }}</td>
                                 <td class="bg-parent2 font-weight-bold"></td>
                                 <td class="bg-parent2 font-weight-bold"></td>
                                 <td class="bg-parent2 font-weight-bold"></td>
@@ -264,22 +264,24 @@
                                 <td class="bg-parent2 font-weight-bold"></td>
                                 <td class="bg-parent2 font-weight-bold"></td>
                                 <td class="bg-parent2 font-weight-bold" nzRight>
-                                  <a (click)="openModalCreate(theKho.id, true)" >
+                                  <a (click)="openModalCreate(theKho.id, true)">
                                     <i class="fa fa-eye"></i>
                                   </a>
                                 </td>
                               </tr>
                               <ng-container *ngIf="expandSet.has(theKho.idVirtual)">
                                 <ng-container *ngFor="let phieuNhapXuat of theKho.ctList, let y = index">
-                                  <tr [ngClass]="{'bg-selected': phieuNhapXuat.selected}" (click)="selectRow(phieuNhapXuat,theKho.ctList)">
+                                  <tr [ngClass]="{'bg-selected': phieuNhapXuat.selected}"
+                                      (click)="selectRow(phieuNhapXuat,theKho.ctList)">
                                     <td></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
-                                    <td class="bg-parent2 font-weight-bold" >{{phieuNhapXuat.id}}</td>
-                                    <td class="bg-parent2 font-weight-bold"></td>
+                                    <td></td>
+                                    <td
+                                      class="bg-parent2 font-weight-bold">{{phieuNhapXuat.ngay | date : 'dd/MM/yyyy'  }}</td>
                                     <td class="bg-parent2 font-weight-bold"></td>
                                     <td class="bg-parent2 font-weight-bold"></td>
                                     <td class="bg-parent2 font-weight-bold"></td>
@@ -292,7 +294,7 @@
                                     <td class="bg-parent2 font-weight-bold"></td>
                                     <td class="bg-parent2 font-weight-bold"></td>
                                     <td class="bg-parent2 font-weight-bold" nzRight>
-                                      <a >
+                                      <a>
                                         <i class="fa fa-eye"></i>
                                       </a>
                                     </td>
@@ -318,3 +320,15 @@
     </nz-card>
   </div>
 </div>
+
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openPhieuNx" (nzOnCancel)="closeHdModal()">
+  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button (click)="closeHdModal()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>

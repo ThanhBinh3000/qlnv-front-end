@@ -132,7 +132,7 @@
                          (click)="redirectToChiTiet(false, lk.bbLayMau?.id)">
                         <i class="fa fa-eye"></i>
                       </a>
-                      <a *ngIf="lk.bbLayMau && bb.bbLayMau?.trangThai != STATUS.DA_DUYET_LDCC"
+                      <a *ngIf="lk.bbLayMau && lk.bbLayMau?.trangThai != STATUS.DA_DUYET_LDCC"
                          (click)="redirectToChiTiet(false, lk.bbLayMau?.id)">
                         <i class="fa fa-pencil"></i>
                       </a>

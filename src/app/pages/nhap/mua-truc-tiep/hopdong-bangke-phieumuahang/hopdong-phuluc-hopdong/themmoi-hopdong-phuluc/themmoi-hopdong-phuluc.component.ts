@@ -197,6 +197,7 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
     this.idKqCgia = data.idKqCgia;
     console.log("formData1", this.formData.value)
     this.dataTable = data.children;
+    console.log(this.dataTable)
     this.dataTablePhuLuc = data.phuLucDtl;
     this.objHopDongHdr = data;
     this.fileDinhKem = data.fileDinhKems;
@@ -274,7 +275,7 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
           let resTtin = await this.quyetDinhPheDuyetKeHoachMTTService.getDetailDtlCuc(dataKq.idPdKhDtl);
           if (resKq.data) {
             const dataThongTin = resTtin.data;
-            this.dataTable = dataKq.danhSachCtiet;
+            // this.dataTable = dataKq.danhSachCtiet;
             this.formData.patchValue({
               idQdKq: dataKq.id,
               soQdKq: dataKq.soQdKq,
