@@ -7,10 +7,6 @@ import { VonBanComponent } from './von-ban.component';
 @NgModule({
     declarations: [
         VonBanComponent,
-        // DanhSachVonBanComponent,
-        // VonBanTheoHopDongComponent,
-        // VonBanTheoDonGiaComponent,
-        // DialogTaoMoiVonBanComponent,
     ],
     imports: [
         CommonModule,
@@ -19,10 +15,6 @@ import { VonBanComponent } from './von-ban.component';
     ],
     exports: [
         VonBanComponent,
-        // DanhSachVonBanComponent,
-        // VonBanTheoHopDongComponent,
-        // VonBanTheoDonGiaComponent,
-        // DialogTaoMoiVonBanComponent,
     ]
 })
 export class VonBanModule { }

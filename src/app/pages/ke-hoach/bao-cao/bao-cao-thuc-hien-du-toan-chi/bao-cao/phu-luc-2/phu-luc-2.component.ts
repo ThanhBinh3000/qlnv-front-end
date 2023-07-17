@@ -208,14 +208,27 @@ export class PhuLucIIComponent implements OnInit {
                 )
             }
             if (this.lstCtietBcao.length == 0) {
-                this.luyKes?.forEach(item => {
-                    const data: ItemData = new ItemData({
-                        ...item,
-                        id: uuid.v4() + 'FE',
+                if (this.luyKes?.length > 0) {
+                    this.luyKes?.forEach(item => {
+                        const data: ItemData = new ItemData({
+                            ...item,
+                            id: uuid.v4() + 'FE',
+                        })
+                        data.sum()
+                        data.tyLe();
+                        this.lstCtietBcao.push(data)
                     })
-                    this.dataInfo.tyLe();
-                    this.lstCtietBcao.push(data);
-                })
+                } else {
+                    this.noiDungs.forEach(item => {
+                        this.lstCtietBcao.push(new ItemData({
+                            id: uuid.v4() + 'FE',
+                            maNdung: item.ma,
+                            stt: item.ma,
+                            tenNdung: item.giaTri,
+                            level: item.level,
+                        }))
+                    })
+                }
             }
             this.scrollX = Table.tableWidth(350, 20, 0, 200);
         } else {
