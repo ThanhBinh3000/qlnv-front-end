@@ -26,7 +26,7 @@ export class NhapHangComponent implements OnInit {
       name : 'Bảng kê nhập vật tư'
     },
     {
-      url : '/bb-thuc-nhap',
+      url : '/bb-kt-nhap',
       name : 'Bảng bản giao nhận/kết thúc nhập kho'
     }
   ]
