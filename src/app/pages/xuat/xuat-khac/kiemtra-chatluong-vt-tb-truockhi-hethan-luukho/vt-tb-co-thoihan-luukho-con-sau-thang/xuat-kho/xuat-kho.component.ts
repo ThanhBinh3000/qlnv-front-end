@@ -137,14 +137,25 @@ export class XuatKhoComponent extends Base2Component implements OnInit {
         let rs = chain(value)
           .groupBy("tenDiemKho")
           .map((v, k) => {
-              let child = v.find(s => s.tenDiemKho === k)
+              // let child = v.find(s => s.tenDiemKho === k)
+              let rs1 = chain(v)
+                .groupBy("tenCloaiVthh")
+                .map((v1, k1) => {
+                    let childOfChild = v1.find(s => s.tenCloaiVthh === k1)
+                    return {
+                      idVirtual: uuid.v4(),
+                      tenCloaiVthh: k1 != "null" ? k1 : '',
+                      tenLoKho: childOfChild ? childOfChild.tenLoKho : null,
+                      tenNganKho: childOfChild ? childOfChild.tenNganKho : null,
+                      childData: v1
+                    }
+                  }
+                ).value();
               return {
                 idVirtual: uuid.v4(),
                 tenDiemKho: k != "null" ? k : '',
-                tenLoKho: child ? child.tenLoKho : null,
-                tenNganKho: child ? child.tenNganKho : null,
-                tenLoaiVthh: child ? child.tenLoaiVthh : null,
-                childData: v
+                // tenLoaiVthh: child ? child.tenLoaiVthh : null,
+                childData: rs1
               }
             }
           ).value();
