@@ -231,8 +231,6 @@ export class ThongTinPhieuXuatKhoComponent extends Base2Component implements OnI
 
   async changeValueNganLoKho($event) {
     if ($event) {
-      console.log($event, '$event$event$event')
-      console.log(this.listNganLoKho, ' this.listNganLoKho this.listNganLoKho')
       let item = this.listNganLoKho.find(it => it.maDiaDiem == $event);
       if (item) {
         this.formData.patchValue({

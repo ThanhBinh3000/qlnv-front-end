@@ -4,7 +4,6 @@ import { ComponentsModule } from 'src/app/components/components.module';
 import { DirectivesModule } from 'src/app/directives/directives.module';
 import { ChucNangKiemTraComponent } from './main/chuc-nang-kiem-tra.component';
 import { HoSoKyThuatComponent } from './ho-so-ky-thuat/ho-so-ky-thuat.component';
-import { ThongTinHoSoKyThuatComponent } from './ho-so-ky-thuat/thong-tin-ho-so-ky-thuat/thong-tin-ho-so-ky-thuat.component';
 import { KiemTraChatLuongComponent } from './kiem-tra-chat-luong.component';
 import { TableBienBanLayMauComponent } from './bien-ban-lay-mau/table-bien-ban-lay-mau.component';
 import { CreateBienBanLayMauComponent } from './bien-ban-lay-mau/create-bien-ban-lay-mau/create-bien-ban-lay-mau.component';

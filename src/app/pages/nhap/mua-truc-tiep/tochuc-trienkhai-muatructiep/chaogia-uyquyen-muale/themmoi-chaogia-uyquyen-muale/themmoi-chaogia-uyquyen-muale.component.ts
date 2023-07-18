@@ -142,9 +142,7 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
     }
   }
   idRowSelect: number;
-  idDiemKho: number;
   async showDetail($event, data: any) {
-    console.log(data)
     await this.spinner.show();
     if ($event.type == "click") {
       this.selected = false;
@@ -153,8 +151,7 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
     } else {
       this.selected = true;
     }
-    this.idRowSelect = data.idDiaDiem;
-    this.idDiemKho = data.id;
+    this.idRowSelect = data.id;
     this.dataTable = data.listChaoGia
     this.updateEditCache()
     await this.spinner.hide();
@@ -252,16 +249,13 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
       this.dataTable = [];
     }
     this.rowItem.idQdPdSldd = this.idRowSelect;
-    this.rowItem.idDiemKho = this.idDiemKho;
     this.dataTable = [...this.dataTable, this.rowItem];
     this.danhSachCtiet.forEach((itemA) => {
-      itemA.children.forEach(chil =>{
-        const itemsB = this.dataTable.filter((item) => item.idDiemKho === chil.id);
-        if (itemsB.length > 0) {
-          chil.listChaoGia = [];
-          chil.listChaoGia.push(...itemsB);
-        }
-      })
+      const itemsB = this.dataTable.filter((item) => item.idQdPdSldd === itemA.id);
+      if (itemsB.length > 0) {
+        itemA.listChaoGia = [];
+        itemA.listChaoGia.push(...itemsB);
+      }
     });
     this.rowItem = new ChiTietThongTinChaoGia();
     this.emitDataTable();

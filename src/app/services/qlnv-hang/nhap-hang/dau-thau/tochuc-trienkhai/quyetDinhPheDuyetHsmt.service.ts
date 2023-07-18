@@ -7,6 +7,6 @@ import {BaseService} from "../../../../base.service";
 export class QuyetDinhPheDuyetHsmtService extends BaseService{
   GATEWAY = '/qlnv-hang';
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'tc-tk/qd-pd-hsmt', '/qlnv-hang');
+    super(httpClient, 'dau-thau-vt/qd-pd-hsmt', '/qlnv-hang');
   }
 }

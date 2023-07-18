@@ -1,18 +1,18 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Base2Component} from "../../../../../../components/base2/base2.component";
+import {Base2Component} from "src/app/components/base2/base2.component";
 import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../../../services/storage.service";
+import {StorageService} from "src/app/services/storage.service";
 import {NzNotificationService} from "ng-zorro-antd/notification";
 import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
 import {
   PhieuKiemNghiemChatLuongService
-} from "../../../../../../services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuKiemNghiemChatLuong.service";
+} from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuKiemNghiemChatLuong.service";
 import dayjs from "dayjs";
 import {
   HoSoKyThuatCtvtService
-} from "../../../../../../services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/HoSoKyThuatCtvt.service";
-import {MESSAGE} from "../../../../../../constants/message";
+} from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/HoSoKyThuatCtvt.service";
+import {MESSAGE} from "src/app/constants/message";
 
 @Component({
   selector: 'app-ho-so-ky-thuat-cuu-tro',
@@ -65,12 +65,16 @@ export class HoSoKyThuatComponent extends Base2Component implements OnInit {
       trangThai: [],
       tenTrangThai: [],
       tenDvi: [],
-      ngayTao: []
+      ngayTao: [],
+      type: []
     })
   }
 
   async ngOnInit() {
     await this.spinner.show();
+    this.formData.patchValue({
+      type:'CTVT'
+    });
     try {
       await Promise.all([
         this.search(),

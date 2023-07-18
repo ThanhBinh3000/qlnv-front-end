@@ -178,7 +178,7 @@
                                 <span class="icon htvbdh_eye"></span>
                             </a>
                             <a (click)="redirectToThongTin(data.id, false)"
-                                *ngIf="userService.isCuc() && ( data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_TP || data.trangThai == STATUS.TU_CHOI_LDC ) ">
+                                *ngIf="!userService.isTongCuc() && ( data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_TP || data.trangThai == STATUS.TU_CHOI_LDC ) ">
                                 <i class="fa fa-pencil" title="Sửa"></i>
                             </a>
                             <a (click)="xoaItem(data)" *ngIf="userService.isCuc() && data.trangThai == STATUS.DU_THAO">

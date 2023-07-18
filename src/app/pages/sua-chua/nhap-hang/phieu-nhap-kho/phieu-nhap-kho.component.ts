@@ -7,6 +7,7 @@ import {NzModalService} from "ng-zorro-antd/modal";
 import {ActivatedRoute, Router} from "@angular/router";
 import {PhieuXuatKhoScService} from "../../../../services/sua-chua/phieuXuatKhoSc.service";
 import {Base3Component} from "../../../../components/base3/base3.component";
+import {PhieuNhapKhoScService} from "../../../../services/sua-chua/phieuNhapKhoSc.service";
 
 @Component({
   selector: 'app-phieu-nhap-kho',
@@ -23,9 +24,9 @@ export class PhieuNhapKhoComponent extends Base3Component implements OnInit {
     modal: NzModalService,
     route: ActivatedRoute,
     router: Router,
-    private phieuXuatKhoScService: PhieuXuatKhoScService,
+    private phieuNhapKhoScService: PhieuNhapKhoScService,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, route, router, phieuXuatKhoScService);
+    super(httpClient, storageService, notification, spinner, modal, route, router, phieuNhapKhoScService);
     this.defaultURL = 'sua-chua/nhap-hang/phieu-nhap-kho'
     this.formData = this.fb.group({
       nam: null,

@@ -1,16 +1,16 @@
 import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
-import {Base2Component} from "../../../../../../../components/base2/base2.component";
+import {Base2Component} from "src/app/components/base2/base2.component";
 import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../../../../services/storage.service";
+import {StorageService} from "src/app/services/storage.service";
 import {NzNotificationService} from "ng-zorro-antd/notification";
 import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
-import {HSKT_LOAI_DOI_TUONG, LOAI_BIEN_BAN, STATUS} from "../../../../../../../constants/status";
+import {HSKT_LOAI_DOI_TUONG, LOAI_BIEN_BAN, STATUS} from "src/app/constants/status";
 import {NzDatePickerComponent} from "ng-zorro-antd/date-picker";
 import {Subject} from "rxjs";
-import {UserLogin} from "../../../../../../../models/userlogin";
-import {UserService} from "../../../../../../../services/user.service";
-import {MESSAGE} from "../../../../../../../constants/message";
+import {UserLogin} from "src/app/models/userlogin";
+import {UserService} from "src/app/services/user.service";
+import {MESSAGE} from "src/app/constants/message";
 import {
   HoSoKyThuatCtvtService
 } from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/HoSoKyThuatCtvt.service";

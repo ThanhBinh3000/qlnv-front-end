@@ -207,6 +207,7 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
         });
       });
     }
+    console.log(this.dataTable)
     // this.sumThanhTien()
   }
 

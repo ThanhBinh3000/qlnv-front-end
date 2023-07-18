@@ -18,6 +18,7 @@ import { DialogTuChoiComponent } from './../../../../../../components/dialog/dia
 import { PhuongPhapLayMau } from './../../../../../../models/PhuongPhapLayMau';
 import { isEmpty } from 'lodash';
 import { MttBienBanLayMauService } from './../../../../../../services/qlnv-hang/nhap-hang/mua-truc-tiep/MttBienBanLayMauService.service';
+import {FILETYPE} from "../../../../../../constants/fileType";
 
 @Component({
   selector: 'app-them-moi-bien-ban-lay-ban-giao-mau',
@@ -44,6 +45,9 @@ export class ThemMoiBienBanLayBanGiaoMauComponent extends Base2Component impleme
   listDaiDien: any[] = [];
   bienBanLayMau: any;
   listFileDinhKem: any[] = [];
+  listCanCuPhapLy: any[] = [];
+  listBbDaKy: any[] = [];
+  listFile: any[] = []
 
   listDaiDienCuc: any[] = [];
   listDaiDienChiCuc: any[] = [];
@@ -180,7 +184,25 @@ export class ThemMoiBienBanLayBanGiaoMauComponent extends Base2Component impleme
           return;
         }
         let body = this.formData.value;
-        body.fileDinhKems = this.listFileDinhKem;
+        if (this.listFileDinhKem.length > 0) {
+          this.listFileDinhKem.forEach(item => {
+            item.fileType = FILETYPE.FILE_DINH_KEM
+            this.listFile.push(item)
+          })
+        }
+        if (this.listCanCuPhapLy.length > 0) {
+          this.listCanCuPhapLy.forEach(element => {
+            element.fileType = FILETYPE.CAN_CU_PHAP_LY
+            this.listFile.push(element)
+          })
+        }
+        if (this.listBbDaKy.length > 0) {
+          this.listBbDaKy.forEach(element => {
+            element.fileType = FILETYPE.FILE_DINH_KEM_BB_DA_KY
+            this.listFile.push(element)
+          })
+        }
+        body.fileDinhKems = this.listFile;
         body.bbanLayMauDtlList = [...this.listDaiDienChiCuc, ...this.listDaiDienCuc];
         let res;
         if (this.formData.get('id').value > 0) {
@@ -368,6 +390,17 @@ export class ThemMoiBienBanLayBanGiaoMauComponent extends Base2Component impleme
       this.checked = data.ketQuaNiemPhong;
       this.listDaiDienChiCuc = data.bbanLayMauDtlList.filter(x => x.loaiDaiDien == 'CHI_CUC')
       this.listDaiDienCuc = data.bbanLayMauDtlList.filter(x => x.loaiDaiDien == 'CUC')
+      if (data.fileDinhKems.length > 0) {
+        data.fileDinhKems.forEach(item => {
+          if (item.fileType == FILETYPE.FILE_DINH_KEM) {
+            this.listFileDinhKem.push(item)
+          } else if (item.fileType == FILETYPE.CAN_CU_PHAP_LY) {
+            this.listCanCuPhapLy.push(item)
+          } else if (item.fileType == FILETYPE.FILE_DINH_KEM_BB_DA_KY) {
+            this.listBbDaKy.push(item)
+          }
+        })
+      }
       await this.bindingDataQd(data.idQdGiaoNvNh);
     }
     else {

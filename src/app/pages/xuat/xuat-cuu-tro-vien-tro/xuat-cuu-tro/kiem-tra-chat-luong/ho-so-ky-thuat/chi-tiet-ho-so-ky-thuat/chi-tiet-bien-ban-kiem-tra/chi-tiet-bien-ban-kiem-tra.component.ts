@@ -210,9 +210,6 @@ export class ChiTietBienBanKiemTraComponent extends Base2Component implements On
       this.formData.patchValue({trangThai: STATUS.DA_KY});
       Object.assign(this.dataHdr.xhHoSoKyThuatDtl.find(s => s.idVirtual == this.formData.value.idVirtual), this.formData.value)
       await this.createUpdate(this.dataHdr);
-      // this.formData.patchValue({type: 'CTVT'});
-      // let body = cloneDeep(this.formData.value);
-      // await this.createUpdate(body);
     } catch (e) {
       console.log(e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);

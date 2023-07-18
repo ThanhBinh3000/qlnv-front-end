@@ -121,9 +121,8 @@ export class ThemMoiBkComponent extends Base3Component implements OnInit {
       this.spinner.hide();
       if (res.data) {
         res.data?.forEach(item => {
-          item.ngayKyFr = moment(item.ngayKy).format('DD/MM/yyyy');
-          item.thoiHanNhapFr = moment(item.thoiHanNhap).format('DD/MM/yyyy');
-          item.thoiHanXuatFr = moment(item.thoiHanXuat).format('DD/MM/yyyy');
+          item.ngayNhap = item.thoiHanNhap;
+          item.ngayXuat =  item.thoiHanXuat;
         })
         const modalQD = this.modal.create({
           nzTitle: 'Danh sách quyết định xuất hàng',
@@ -135,7 +134,7 @@ export class ThemMoiBkComponent extends Base3Component implements OnInit {
           nzComponentParams: {
             dataTable: res.data,
             dataHeader: ['Số quyết định xuất hàng', 'Trích yếu', 'Ngày ký', 'Thời hạn xuất', 'Thời hạn nhập'],
-            dataColumn: ['soQd', 'trichYeu', 'ngayKyFr', 'thoiHanXuatFr', 'thoiHanNhapFr']
+            dataColumn: ['soQd', 'trichYeu', 'ngayKy', 'ngayXuat', 'ngayNhap']
           },
         });
         modalQD.afterClose.subscribe(async (data) => {
