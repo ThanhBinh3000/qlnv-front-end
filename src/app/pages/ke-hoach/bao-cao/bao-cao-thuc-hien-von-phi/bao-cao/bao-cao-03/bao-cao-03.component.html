@@ -62,8 +62,8 @@
                                 <th rowspan="2">Chênh lệch giữa giá bán thực tế và giá hạch toán</th>
                                 <th rowspan="2" class="text-col">Ghi chú</th>
                                 <th style="width: 50px;" rowspan="2" *ngIf="status" nzRight></th>
-                                <th style="width: 55px;" rowspan="2" *ngIf="status" nzRight></th>
-                                <th style="width: 55px;" rowspan="2" *ngIf="status" nzRight></th>
+                                <th style="width: 60px;" rowspan="2" *ngIf="status" nzRight></th>
+                                <th style="width: 60px;" rowspan="2" *ngIf="status" nzRight></th>
                                 <!-- <th style="width: 40px;" rowspan="2" *ngIf="status" nzRight> -->
                                 <!-- </th> -->
                             </tr>
@@ -133,7 +133,7 @@
                                         {{ data.ghiChu }}
                                     </td>
                                     <td *ngIf="status.save" nzRight>
-                                        <i *ngIf="data.level > 0" class="fa fa-trash-o do"
+                                        <i *ngIf="data.level > 1" class="fa fa-trash-o do"
                                             (click)="deleteLine(data.id)"></i>
                                     </td>
                                     <td *ngIf="status.save" nzRight>
@@ -141,7 +141,8 @@
                                             (click)="startEdit(data.id)"></i>
                                     </td>
                                     <td *ngIf="status.save" nzRight>
-                                        <i *ngIf="data.level < 2" class="fa fa-plus" (click)="addLine(data.id)"></i>
+                                        <i *ngIf="data.level < 1" class="fa fa-plus"
+                                            (click)="selectGoods(data.stt)"></i>
                                     </td>
                                     <!-- <td *ngIf="status.save" nzRight>
                                         <label *ngIf="data.level > 0" nz-checkbox [nzValue]="data.id"
@@ -185,7 +186,7 @@
                                         <input nz-input [(ngModel)]="editCache[data.id].data.ghiChu" />
                                     </td>
                                     <td *ngIf="status.save" nzRight>
-                                        <i *ngIf="data.level > 0" class="fa fa-trash-o do"
+                                        <i *ngIf="data.level > 1" class="fa fa-trash-o do"
                                             (click)="deleteLine(data.id)"></i>
                                     </td>
                                     <td nzRight>

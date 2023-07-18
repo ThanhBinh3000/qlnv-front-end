@@ -262,7 +262,7 @@ export class PhuLucIIIComponent implements OnInit {
                     })
                 }
             }
-            this.scrollX = Table.tableWidth(350, 40, 6, 200);
+            this.scrollX = Table.tableWidth(350, 40, 6, 170);
         } else {
             this.scrollX = Table.tableWidth(350, 40, 6, 0);
         }

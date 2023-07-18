@@ -33,17 +33,15 @@ export class ItemData {
     }
 
     changeModel(luyKes: ItemData[]) {
-        const data: Materials[] = luyKes.find(e => e.maNdungChi == this.maNdungChi)?.listCtiet;
+        const origin = luyKes?.find(e => e.maNdungChi == this.maNdungChi);
         this.trongDotTcong = null;
         this.luyKeTcong = null;
         if (this.listCtiet.length > 0) {
             this.listCtiet.forEach(item => {
-                if (item.loaiMatHang == 0) {
-                    this.trongDotTcong = Operator.sum([this.trongDotTcong, item.sl]);
-                    const sl = data?.find(e => e.maVtu == item.maVtu && e.loaiMatHang == 1)?.sl ? data.find(e => e.maVtu == item.maVtu && e.loaiMatHang == 1)?.sl : 0;
-                    this.listCtiet.find(e => e.maVtu == item.maVtu && e.loaiMatHang == 1).sl = Operator.sum([item.sl, sl]);
-                    this.luyKeTcong = Operator.sum([this.luyKeTcong, item.sl, sl]);
-                }
+                this.trongDotTcong = Operator.sum([this.trongDotTcong, item.gtri]);
+                const data = origin?.listCtiet.find(e => e.maVtu == item.maVtu && e.loaiDm == item.loaiDm);
+                item.lkGtri = Operator.sum([data?.lkGtri, -data?.gtri, item.gtri]);
+                this.luyKeTcong = Operator.sum([this.luyKeTcong, item.lkGtri]);
             })
         }
     }
@@ -52,8 +50,8 @@ export class ItemData {
         this.trongDotTcong = null;
         this.luyKeTcong = null;
         this.listCtiet.forEach(item => {
-            this.trongDotTcong = Operator.sum([this.trongDotTcong, item.loaiMatHang == 0 ? item.sl : 0]);
-            this.luyKeTcong = Operator.sum([this.luyKeTcong, item.loaiMatHang == 1 ? item.sl : 0])
+            this.trongDotTcong = Operator.sum([this.trongDotTcong, item.gtri]);
+            this.luyKeTcong = Operator.sum([this.luyKeTcong, item.lkGtri])
         })
     }
 
@@ -93,15 +91,19 @@ export class ItemData {
     clear() {
         this.trongDotTcong = null;
         this.luyKeTcong = null;
-        this.listCtiet?.forEach(item => item.sl = null);
+        this.listCtiet?.forEach(item => {
+            item.gtri = null;
+            item.lkGtri = null;
+        });
     }
 
     sum(coe: number, data: ItemData) {
         this.trongDotTcong = Operator.sum([this.trongDotTcong, Operator.mul(coe, data.trongDotTcong)]);
         this.luyKeTcong = Operator.sum([this.luyKeTcong, Operator.mul(coe, data.luyKeTcong)]);
         this.listCtiet.forEach(item => {
-            const sl = data.listCtiet.find(e => e.maVtu == item.maVtu && e.loaiMatHang == item.loaiMatHang).sl;
-            item.sl = Operator.sum([item.sl, Operator.mul(coe, sl)]);
+            const gtri = data.listCtiet.find(e => e.maVtu == item.maVtu && e.loaiDm == item.loaiDm);
+            item.gtri = Operator.sum([item.gtri, Operator.mul(coe, gtri.gtri)]);
+            item.lkGtri = Operator.sum([item.lkGtri, Operator.mul(coe, gtri.lkGtri)]);
         })
     }
 
@@ -127,8 +129,9 @@ export class Materials {
     id: string;
     maVtu: string;
     tenVtu: string;
-    loaiMatHang: number;
-    sl: number;
+    loaiDm: string;
+    gtri: number;
+    lkGtri: number;
 }
 
 @Component({
@@ -153,7 +156,13 @@ export class BaoCao04aComponent implements OnInit {
     //danh muc
     lstCtietBcao: ItemData[] = [];
     noiDungChis: any[] = [];
-    dinhMucs: any[] = [];
+    dinhMucs: any = {
+        '01': [],
+        '02': [],
+        'LD': [],
+        'LDM': [],
+        'LDBS': [],
+    };
     luyKes: any[] = [];
     lstCol: Materials[] = [];
     editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
@@ -230,7 +239,8 @@ export class BaoCao04aComponent implements OnInit {
                     item.listCtiet.forEach(e => {
                         lstCtiet.push({
                             ...e,
-                            sl: (e.loaiMatHang == 1) ? e.sl : 0,
+                            gtri: 0,
+                            id: uuid.v4() + 'FE',
                         })
                     })
                     this.lstCtietBcao.push(new ItemData({
@@ -248,7 +258,6 @@ export class BaoCao04aComponent implements OnInit {
                             lstCtiet.push({
                                 ...e,
                                 id: uuid.v4() + 'FE',
-                                sl: null,
                             })
                         })
                     }
@@ -267,19 +276,25 @@ export class BaoCao04aComponent implements OnInit {
         }
         // sắp xếp lại thứ tự các trường trong listCtiet 
         this.lstCtietBcao.forEach(item => {
-            item.listCtiet.sort((a, b) => parseInt(a.maVtu, 10) - parseInt(b.maVtu, 10));
+            item.listCtiet.sort((a, b) => {
+                if (parseInt(a.maVtu, 10) > parseInt(b.maVtu, 10)) {
+                    return 1
+                }
+                if (parseInt(a.maVtu, 10) < parseInt(b.maVtu, 10)) {
+                    return -1
+                }
+                if (a.loaiDm == 'LDM') {
+                    return -1
+                }
+                return 1
+            });
         })
         // lấy thông tin của các cột đã được sắp xếp
         this.lstCtietBcao[0]?.listCtiet.forEach(item => {
-            if (item.loaiMatHang == 0) {
-                this.lstCol.push(item);
-            }
+            this.lstCol.push(item);
         });
         this.setWidth();
-        // tính lại
-        // if (this.trangThaiPhuLuc == '3' && this.data?.isSynthetic) {
-        //     this.lstCtietBcao.forEach(e => e.total());
-        // }
+
         if (this.lstCtietBcao.length > 0) {
             if (!this.lstCtietBcao[0].stt) {
                 this.lstCtietBcao = Table.sortWithoutIndex(this.lstCtietBcao, 'maNdungChi');
@@ -343,7 +358,6 @@ export class BaoCao04aComponent implements OnInit {
             case Vp.BM_05:
                 this.para.maDanhMuc = 'BC_VP_05';
                 this.para.loaiDm = '03';
-                this.para.loaiBq = 'LD';
                 this.para.cucDh = '1';
                 this.para.tongCucDh = '0.1.3.2';
                 this.para.excel = '05_BCBPQ.xlsx'
@@ -356,13 +370,20 @@ export class BaoCao04aComponent implements OnInit {
     async getDinhMuc() {
         const request = {
             loaiDinhMuc: this.para.loaiDm,
-            loaiBaoQuan: this.para.loaiBq,
             maDvi: this.dataInfo.maDvi,
         }
         await this.baoCaoThucHienVonPhiService.getDinhMuc(request).toPromise().then(
             res => {
                 if (res.statusCode == 0) {
-                    this.dinhMucs = res.data;
+                    if (this.dataInfo.maLoai != Vp.BM_05) {
+                        this.dinhMucs[this.para.loaiDm] = res.data;
+                    } else {
+                        res.data.forEach(item => {
+                            if (['LD', 'LDM', 'LDBS'].includes(item.loaiBaoQuan)) {
+                                this.dinhMucs[item.loaiBaoQuan].push(item);
+                            }
+                        })
+                    }
                 } else {
                     this.notification.error(MESSAGE.ERROR, res?.msg);
                 }
@@ -393,8 +414,9 @@ export class BaoCao04aComponent implements OnInit {
         this.lstCtietBcao[index].trongDotTcong = data.trongDotTcong;
         this.lstCtietBcao[index].luyKeTcong = Operator.sum([this.lstCtietBcao[index].luyKeTcong, data.trongDotTcong]);
         this.lstCtietBcao[index].listCtiet.forEach(item => {
-            const sl = data.listCtiet.find(e => e.maVtu == item.maVtu && e.loaiMatHang == 0)?.sl;
-            item.sl = item.loaiMatHang == 0 ? sl : Operator.sum([item.sl, sl]);
+            const vtu = data.listCtiet.find(e => e.maVtu == item.maVtu && e.loaiDm == item.loaiDm);
+            item.gtri = vtu.gtri;
+            item.lkGtri = Operator.sum([item.lkGtri, vtu.gtri]);
         })
         this.sum(this.lstCtietBcao[index].stt);
     }
@@ -594,70 +616,27 @@ export class BaoCao04aComponent implements OnInit {
         return Operator.sum([cuc, vp]);
     }
 
+    tinhCtietDm(maNdungChi: string, sl: Materials[], keyDvi: string, keyVp?: string) {
+        const index = this.lstCtietBcao.findIndex(e => e.maNdungChi == maNdungChi);
+        if (index && index != -1) {
+            this.lstCtietBcao[index].listCtiet.forEach(item => {
+                const gtri = sl.find(e => e.maVtu == item.maVtu && e.loaiDm == item.loaiDm).gtri;
+                const dm = this.dinhMucs[item.loaiDm].find(e => e.cloaiVthh == item.maVtu);
+                if (dm) {
+                    item.gtri = keyVp ? Operator.mul(gtri, this.getDmValue(dm[keyDvi], dm[keyVp])) : Operator.mul(gtri, dm[keyDvi]);
+                }
+            })
+            this.lstCtietBcao[index].changeModel(this.luyKes);
+            this.sum(this.lstCtietBcao[index].stt);
+        }
+    }
+
     tinhDinhMuc(data: ItemData) {
         if (!data) { return; }
-        const soLuong = data.listCtiet.filter(e => e.loaiMatHang == 0);
-        const nvChuyenMon = this.lstCtietBcao.findIndex(e => e.maNdungChi == this.para.nvChuyenMon);
-        const ttCaNhan = this.lstCtietBcao.findIndex(e => e.maNdungChi == this.para.ttCaNhan);
-        const cucDh = this.lstCtietBcao.findIndex(e => e.maNdungChi == this.para.cucDh);
-        const tongCucDh = this.lstCtietBcao.findIndex(e => e.maNdungChi == this.para.tongCucDh);
-        //tinh dinh muc cho nghiep vu chuyen mon
-        if (nvChuyenMon && nvChuyenMon != -1) {
-            this.lstCtietBcao[nvChuyenMon]?.listCtiet.forEach(item => {
-                if (item.loaiMatHang == 0) {
-                    const sl = soLuong.find(e => e.maVtu == item.maVtu)?.sl;
-                    const dm = this.dinhMucs.find(e => e.cloaiVthh == item.maVtu);
-                    if (dm) {
-                        item.sl = Operator.mul(sl, this.getDmValue(dm.nvChuyenMonDviTt, dm.nvChuyenMonVp));
-                    }
-                }
-            })
-            this.lstCtietBcao[nvChuyenMon].changeModel(this.luyKes);
-            this.sum(this.lstCtietBcao[nvChuyenMon].stt);
-        }
-
-        //tinh dinh muc cho thanh toan ca nhan        
-        if (ttCaNhan && ttCaNhan != -1) {
-            this.lstCtietBcao[ttCaNhan]?.listCtiet.forEach(item => {
-                if (item.loaiMatHang == 0) {
-                    const sl = soLuong.find(e => e.maVtu == item.maVtu)?.sl;
-                    const dm = this.dinhMucs.find(e => e.cloaiVthh == item.maVtu);
-                    if (dm) {
-                        item.sl = Operator.mul(sl, this.getDmValue(dm.ttCaNhanDviTt, dm.ttCaNhanVp));
-                    }
-                }
-            })
-            this.lstCtietBcao[ttCaNhan].changeModel(this.luyKes);
-            this.sum(this.lstCtietBcao[ttCaNhan].stt);
-        }
-        //tinh dinh muc cho cuc dieu hanh
-        if (cucDh && cucDh != -1) {
-            this.lstCtietBcao[cucDh]?.listCtiet.forEach(item => {
-                if (item.loaiMatHang == 0) {
-                    const sl = soLuong.find(e => e.maVtu == item.maVtu)?.sl;
-                    const dm = this.dinhMucs.find(e => e.cloaiVthh == item.maVtu);
-                    if (dm) {
-                        item.sl = Operator.mul(sl, this.getDmValue(dm.dieuHanhDviTt, dm.dieuHanhVp));
-                    }
-                }
-            })
-            this.lstCtietBcao[cucDh].changeModel(this.luyKes);
-            this.sum(this.lstCtietBcao[cucDh].stt);
-        }
-        //tinh dinh muc cho tong cuc dieu hanh
-        if (tongCucDh && tongCucDh != -1) {
-            this.lstCtietBcao[tongCucDh]?.listCtiet.forEach(item => {
-                if (item.loaiMatHang == 0) {
-                    const sl = soLuong.find(e => e.maVtu == item.maVtu)?.sl;
-                    const dm = this.dinhMucs.find(e => e.cloaiVthh == item.maVtu);
-                    if (dm) {
-                        item.sl = Operator.mul(sl, dm.tcDhNvCm);
-                    }
-                }
-            })
-            this.lstCtietBcao[tongCucDh].changeModel(this.luyKes);
-            this.sum(this.lstCtietBcao[tongCucDh].stt);
-        }
+        this.tinhCtietDm(this.para.nvChuyenMon, data.listCtiet, 'nvChuyenMonDviTt', 'nvChuyenMonVp');
+        this.tinhCtietDm(this.para.ttCaNhan, data.listCtiet, 'ttCaNhanDviTt', 'ttCaNhanVp');
+        this.tinhCtietDm(this.para.cucDh, data.listCtiet, 'dieuHanhDviTt', 'dieuHanhVp');
+        this.tinhCtietDm(this.para.tongCucDh, data.listCtiet, 'tcDhNvCm');
     }
 
     updateChecked(id: string) {
@@ -748,18 +727,10 @@ export class BaoCao04aComponent implements OnInit {
                         })
                         this.lstCol.forEach(e => {
                             data.listCtiet.push({
+                                ...e,
                                 id: uuid.v4() + 'FE',
-                                maVtu: e.maVtu,
-                                tenVtu: e.tenVtu,
-                                loaiMatHang: 0,
-                                sl: null,
-                            })
-                            data.listCtiet.push({
-                                id: uuid.v4() + 'FE',
-                                maVtu: e.maVtu,
-                                tenVtu: e.tenVtu,
-                                loaiMatHang: 1,
-                                sl: null,
+                                gtri: null,
+                                lkGtri: null,
                             })
                         })
                         if (this.lstCtietBcao.length == 0) {
@@ -795,27 +766,55 @@ export class BaoCao04aComponent implements OnInit {
                 if (this.lstCol.findIndex(e => e.maVtu == res.ma) != -1) {
                     return;
                 }
-                this.lstCtietBcao.forEach(data => {
-                    const objTrongD = {
-                        id: uuid.v4() + 'FE',
-                        maVtu: res.ma,
-                        tenVtu: res.ten + ' (' + res.maDviTinh + ')',
-                        loaiMatHang: 0,
-                        sl: 0,
-                    }
-                    const objLke = {
-                        ...objTrongD,
-                        id: uuid.v4() + 'FE',
-                        loaiMatHang: 1,
-                    }
-                    data.listCtiet.push(objTrongD);
-                    data.listCtiet.push(objLke);
-                })
-                this.lstCol.push({
-                    ... new Materials(),
+                const obj: Materials = {
+                    ...new Materials(),
                     maVtu: res.ma,
                     tenVtu: res.ten + ' (' + res.maDviTinh + ')',
-                });
+                }
+                if (this.dataInfo.maLoai != Vp.BM_05) {
+                    obj.loaiDm = this.para.loaiDm;
+                    this.lstCol.push(obj);
+                    this.lstCtietBcao.forEach(item => {
+                        item.listCtiet.push({
+                            ...obj,
+                            id: uuid.v4() + 'FE',
+                        })
+                    })
+                } else {
+                    if (res.ma.startsWith('01')) {
+                        const objLDM: Materials = {
+                            ...obj,
+                            tenVtu: obj.tenVtu + ' - LDM',
+                            loaiDm: 'LDM',
+                        }
+                        const objLDBS: Materials = {
+                            ...obj,
+                            tenVtu: obj.tenVtu + ' - LDBS',
+                            loaiDm: 'LDBS',
+                        }
+                        this.lstCol.push(objLDM);
+                        this.lstCol.push(objLDBS);
+                        this.lstCtietBcao.forEach(item => {
+                            item.listCtiet.push({
+                                ...objLDM,
+                                id: uuid.v4() + 'FE',
+                            })
+                            item.listCtiet.push({
+                                ...objLDBS,
+                                id: uuid.v4() + 'FE',
+                            })
+                        })
+                    } else {
+                        obj.loaiDm = 'LD';
+                        this.lstCol.push(obj);
+                        this.lstCtietBcao.forEach(item => {
+                            item.listCtiet.push({
+                                ...obj,
+                                id: uuid.v4() + 'FE',
+                            })
+                        })
+                    }
+                }
                 this.setWidth();
                 this.updateEditCache();
             }
@@ -834,7 +833,7 @@ export class BaoCao04aComponent implements OnInit {
 
     setWidth() {
         if (this.status.save) {
-            this.scrollX = Table.tableWidth(350, (this.lstCol.length + 1) * 2, 1, 200);
+            this.scrollX = Table.tableWidth(350, (this.lstCol.length + 1) * 2, 1, 170);
         } else {
             this.scrollX = Table.tableWidth(350, (this.lstCol.length + 1) * 2, 1, 0);
         }
@@ -880,13 +879,11 @@ export class BaoCao04aComponent implements OnInit {
             const indexII = this.lstCtietBcao.findIndex(e => e.maNdungChi.startsWith(this.para.chiPhi) && e.maNdungChi.substring(this.para.chiPhi.length) == tail);
             const indexIII = this.lstCtietBcao.findIndex(e => e.maNdungChi.startsWith(this.para.chenhLech) && e.maNdungChi.substring(this.para.chenhLech.length) == tail);
             if (indexIII != -1) {
-                this.lstCtietBcao[indexIII].listCtiet.forEach(item => {
-                    const value1 = indexI == -1 ? 0 : this.lstCtietBcao[indexI].listCtiet.find(e => e.maVtu == item.maVtu && e.loaiMatHang == item.loaiMatHang)?.sl;
-                    const value2 = indexII == -1 ? 0 : this.lstCtietBcao[indexII].listCtiet.find(e => e.maVtu == item.maVtu && e.loaiMatHang == item.loaiMatHang)?.sl;
-                    item.sl = Operator.sum([value1, - value2]);
-                })
-                this.lstCtietBcao[indexIII].trongDotTcong = Operator.sum([indexI == -1 ? 0 : this.lstCtietBcao[indexI].trongDotTcong, indexII == -1 ? 0 : -this.lstCtietBcao[indexII].trongDotTcong]);
-                this.lstCtietBcao[indexIII].luyKeTcong = Operator.sum([indexI == -1 ? 0 : this.lstCtietBcao[indexI].luyKeTcong, indexII == -1 ? 0 : -this.lstCtietBcao[indexII].luyKeTcong]);
+                const value1 = indexI == -1 ? new ItemData({}) : this.lstCtietBcao[indexI];
+                const value2 = indexII == -1 ? new ItemData({}) : this.lstCtietBcao[indexII];
+                this.lstCtietBcao[indexIII].clear();
+                this.lstCtietBcao[indexIII].sum(1, value1);
+                this.lstCtietBcao[indexIII].sum(-1, value2);
             }
 
         }
@@ -953,10 +950,9 @@ export class BaoCao04aComponent implements OnInit {
             header.push({ t: row, b: row, l: 3 + num, r: 3 + num, val: item.luyKeTcong?.toString() })
             header.push({ t: row, b: row, l: 4 + 2 * num, r: 4 + 2 * num, val: item.ghiChu })
             this.lstCol.forEach((e, ind) => {
-                const sl1 = item.listCtiet.find(d => d.maVtu == e.maVtu && d.loaiMatHang == 0).sl;
-                const sl2 = item.listCtiet.find(d => d.maVtu == e.maVtu && d.loaiMatHang == 1).sl;
-                header.push({ t: row, b: row, l: 3 + ind, r: 3 + ind, val: sl1.toString() })
-                header.push({ t: row, b: row, l: 4 + ind + num, r: 4 + ind + num, val: sl2.toString() })
+                const sl = item.listCtiet.find(d => d.maVtu == e.maVtu && d.loaiDm == e.loaiDm);
+                header.push({ t: row, b: row, l: 3 + ind, r: 3 + ind, val: sl.gtri?.toString() })
+                header.push({ t: row, b: row, l: 4 + ind + num, r: 4 + ind + num, val: sl.lkGtri?.toString() })
             })
         })
         const workbook = XLSX.utils.book_new();

@@ -170,7 +170,11 @@ export class DialogTaoMoiComponent implements OnInit {
     //tong hop theo nam bao cao
     async synthetic() {
         this.spinner.show();
-        await this.lapThamDinhService.tongHop(this.response.namBcao).toPromise().then(
+        const request = {
+            lan: this.response.lan,
+            namHienTai: this.response.namBcao,
+        }
+        await this.lapThamDinhService.tongHop(request).toPromise().then(
             (data) => {
                 if (data.statusCode == 0) {
                     this.response.lstLapThamDinhs = data.data.lstLapThamDinhs;

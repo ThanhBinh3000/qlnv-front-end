@@ -13,7 +13,7 @@ export class BaoCaoThucHienVonPhiService extends BaseService {
         super(httpClient, 'quanLyVonPhi', '');
     }
 
-    isTest = false;
+    isTest = true;
     urlDefault = environment.SERVICE_API + (this.isTest ? '/qlnv-khoachphi-dev' : '/qlnv-khoachphi');
 
     //search list bao cao
