@@ -13,6 +13,14 @@ import * as XLSX from 'xlsx';
 import { BtnStatus, Doc, Form } from '../../dieu-chinh-du-toan.constant';
 import { DANH_MUC_PL_TH } from './phu-luc-tong-hop.constant';
 
+
+export class ItemDvi {
+    id: string;
+    maDviBcao: string;
+    dtoanVuTvqtDnghi: number;
+}
+
+
 export class ItemData {
     id: string;
     stt: string;
@@ -73,11 +81,6 @@ export class ItemData {
     }
 }
 
-export class ItemDvi {
-    id: string;
-    maDviBcao: string;
-    dtoanVuTvqtDnghi: number;
-}
 
 @Component({
     selector: 'app-phu-luc-tong-hop',
