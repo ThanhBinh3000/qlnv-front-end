@@ -663,7 +663,7 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
         tenLoaiVthh: dataRes.data.tenLoaiVthh,
         tenCloaiVthh: dataRes.data.tenCloaiVthh,
         donViTinh: dataRes.data.donViTinh,
-        tenDonViTinh: dataRes.data.tenDonViTinh,
+        tenDonViTinh: dataRes.data.tenDonViTinh ? dataRes.data.tenDonViTinh : dataRes.data.donViTinh,
         thoiGianGiaoNhan: dataRes.data.thoiGianGiaoNhan,
 
         maLoKho: dataRes.data.maLoKho,

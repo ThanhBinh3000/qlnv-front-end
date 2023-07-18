@@ -183,6 +183,10 @@ export class ThemMoiPnkComponent extends Base3Component implements OnInit {
   }
 
   openDialogDiaDiem() {
+    if(!this.formData.value.idQdNh){
+      this.notification.error(MESSAGE.ERROR,"Vui lòng chọn số quyết định giao nhiệm vụ nhập hàng");
+      return;
+    }
     if (this.disabled()) {
       return;
     }

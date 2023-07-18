@@ -11,7 +11,7 @@ import { MESSAGE } from "src/app/constants/message";
 import { CHUC_NANG } from 'src/app/constants/status';
 import { v4 as uuidv4 } from "uuid";
 import { Base2Component } from "src/app/components/base2/base2.component";
-import { DanhSachSuaChuaService } from "src/app/services/qlnv-hang/xuat-hang/sua-chua-hang/DanhSachSuaChua.service";
+import { DanhSachSuaChuaService } from "src/app/services/sua-chua/DanhSachSuaChua.service";
 import { chain, isEmpty } from "lodash";
 import { SuaChuaComponent } from "src/app/pages/sua-chua/sua-chua.component";
 import { Base3Component } from 'src/app/components/base3/base3.component';

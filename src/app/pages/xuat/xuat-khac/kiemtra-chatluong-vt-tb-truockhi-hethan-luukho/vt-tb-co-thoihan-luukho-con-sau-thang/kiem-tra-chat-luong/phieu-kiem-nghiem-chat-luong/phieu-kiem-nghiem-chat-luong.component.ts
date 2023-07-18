@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Base2Component} from "../../../../../../../components/base2/base2.component";
 import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../../../../services/storage.service";
@@ -14,6 +14,9 @@ import {UserLogin} from "../../../../../../../models/userlogin";
 import {MESSAGE} from "../../../../../../../constants/message";
 import dayjs from "dayjs";
 import {CHUC_NANG} from "../../../../../../../constants/status";
+import {
+  PhieuKdclVtKtclService
+} from "../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/PhieuKdclVtKtcl.service";
 
 @Component({
   selector: 'app-xk-vt-phieu-kiem-nghiem-chat-luong',
@@ -29,19 +32,18 @@ export class XkVtPhieuKiemNghiemChatLuongComponent extends Base2Component implem
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private bienBanLayMauVtKtclService: BienBanLayMauVtKtclService,
+    private phieuKdclVtKtclService: PhieuKdclVtKtclService,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, bienBanLayMauVtKtclService);
+    super(httpClient, storageService, notification, spinner, modal, phieuKdclVtKtclService);
     this.formData = this.fb.group({
       tenDvi: [],
       maDvi: [],
       nam: [],
-      dviKiemDinh: [],
+      soBbLayMau: [],
       soQdGiaoNvXh: [],
-      soBienBan: [],
-      ngayXuatKho: [],
-      ngayLayMauTu: [],
-      ngayLayMauDen: [],
+      soPhieu: [],
+      ngayKiemDinhTu: [],
+      ngayKiemDinhDen: [],
     })
   }
 
@@ -57,17 +59,17 @@ export class XkVtPhieuKiemNghiemChatLuongComponent extends Base2Component implem
   openPhieuKnCl = false;
 
   disabledStartNgayLayMau = (startValue: Date): boolean => {
-    if (startValue && this.formData.value.ngayLayMauDen) {
-      return startValue.getTime() >= this.formData.value.ngayLayMauDen.getTime();
+    if (startValue && this.formData.value.ngayKiemDinhDen) {
+      return startValue.getTime() >= this.formData.value.ngayKiemDinhDen.getTime();
     }
     return false;
   };
 
   disabledEndNgayLayMau = (endValue: Date): boolean => {
-    if (!endValue || !this.formData.value.ngayLayMauTu) {
+    if (!endValue || !this.formData.value.ngayKiemDinhTu) {
       return false;
     }
-    return endValue.getTime() <= this.formData.value.ngayLayMauTu.getTime();
+    return endValue.getTime() <= this.formData.value.ngayKiemDinhTu.getTime();
   };
 
   ngOnInit(): void {
@@ -117,23 +119,29 @@ export class XkVtPhieuKiemNghiemChatLuongComponent extends Base2Component implem
 
   buildTableView() {
     let dataView = chain(this.dataTable)
-      .groupBy("tenDiemKho")
+      .groupBy("soQdGiaoNvXh")
       .map((value, key) => {
-        let bb = value.find(f => f.tenDiemKho === key)
-        let nam = bb ? bb.nam : null;
-        let soQd = bb ? bb.soQdGiaoNvXh : null;
-        let ngayXuatHangLayMau = bb ? bb.ngayXuatLayMau : null;
+        let parent = value.find(f => f.soQdGiaoNvXh === key)
+        let rs = chain(value)
+          .groupBy("tenDiemKho")
+          .map((v, k) => {
+              // let bb = v.find(s => s.tenDiemKho === k)
+              return {
+                idVirtual: uuid.v4(),
+                tenDiemKho: k != "null" ? k : '',
+                childData: v,
+              };
+            }
+          ).value();
         return {
           idVirtual: uuid.v4(),
-          tenDiemKho: key != "null" ? key : '',
-          nam: nam,
-          soQdGiaoNvXh: soQd,
-          childData: value,
-          ngayXuatLayMau: ngayXuatHangLayMau
+          soQdGiaoNvXh: key != "null" ? key : '',
+          nam: parent ? parent.nam : null,
+          ngayXuatLayMau: parent ? parent.ngayXuatLayMau : null,
+          childData: rs
         };
       }).value();
     this.children = dataView
-    console.log(this.children, 'childrenchildrenchildren');
     this.expandAll()
   }
 
