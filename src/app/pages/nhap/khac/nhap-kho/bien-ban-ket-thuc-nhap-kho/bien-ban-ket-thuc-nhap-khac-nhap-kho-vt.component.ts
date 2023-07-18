@@ -101,7 +101,7 @@ export class BienBanKetThucNhapKhacNhapKhoVatTuComponent extends Base2Component 
       nam: null,
       // loaiVthh: '02',
       soQdPdNk: null,
-      soBangKe: null,
+      soBb: null,
       tuNgayThoiHan: null,
       denNgayThoiHan: null,
       tuNgayNhapKho: null,
@@ -477,26 +477,25 @@ export class BienBanKetThucNhapKhacNhapKhoVatTuComponent extends Base2Component 
     }
   }
 
-  disabledTuNgayNhapDayKho(startValue: Date) {
-    console.log('denNgayThoiHan', this.formData)
+  disabledTuNgayNhapDayKho = (startValue: Date): boolean => {
     if (startValue && this.formData.value.denNgayThoiHan) {
       return startValue.getTime() > this.formData.value.denNgayThoiHan.getTime();
     }
     return false;
   }
-  disabledDenNgayNhapDayKho(endValue: Date) {
+  disabledDenNgayNhapDayKho = (endValue: Date): boolean => {
     if (!endValue || !this.formData.value.tuNgayThoiHan) {
       return false;
     }
     return endValue.getTime() <= this.formData.value.tuNgayThoiHan.getTime();
   }
-  disabledTuNgayKetThucNhap(startValue: Date) {
+  disabledTuNgayKetThucNhap = (startValue: Date): boolean => {
     if (startValue && this.formData.value.denNgayKtnk) {
       return startValue.getTime() > this.formData.value.denNgayKtnk.getTime();
     }
     return false;
   }
-  disabledDenNgayKetThucNhap(endValue: Date) {
+  disabledDenNgayKetThucNhap = (endValue: Date) => {
     if (!endValue || !this.formData.value.tuNgayKtnk) {
       return false;
     }
