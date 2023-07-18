@@ -6,7 +6,6 @@
     <span>CẬP NHẬP THÔNG TIN ĐẤU GIÁ</span>
   </div>
 </div>
-
 <nz-card class="flex-card p-lr16 ">
   <div class="bg-trang">
     <nz-collapse nzAccordion>
@@ -255,7 +254,7 @@
                       <div nz-col [nzSpan]="3">
                         <nz-form-item>
                           <nz-form-label nzRequired [nzNoColon]="true">% Khoảng tiền đặt trước</nz-form-label>
-                          <nz-input-number [nzDisabled]="isDisable()" formControlName="khoanTienDatTruoc" [nzMin]="1"
+                          <nz-input-number [nzDisabled]="isDisable()" formControlName="khoanTienDatTruoc" (ngModelChange)="calculatorTable()" [nzMin]="1"
                                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
                                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
                           </nz-input-number>
@@ -431,14 +430,14 @@
                             Căn cứ pháp lý
                           </nz-form-label>
                           <div class="list-file">
-                            <file-list [disabled]="isDisabled()" [data]="fileDinhKem"></file-list>
+                            <file-list [disabled]="isDisabled()" [data]="fileCanCu"></file-list>
                           </div>
                         </nz-form-item>
                       </div>
                       <div nz-col [nzSpan]="24">
                         <nz-form-item>
                           <nz-form-label [nzNoColon]="true">
-                            Tài liệu điính kèm
+                            Tài liệu đính kèm
                           </nz-form-label>
                           <div class="list-file">
                             <file-list [disabled]="isDisabled()" [data]="fileDinhKem"></file-list>
@@ -520,7 +519,7 @@
             <div nz-row [nzGutter]="[24, 16]">
               <div nz-col [nzSpan]="24">
                 <nz-form-control nz-col [nzErrorTip]="error">
-                  <nz-radio-group formControlName="ketQua" [nzDisabled]="isDisabled() || isDisable()">
+                  <nz-radio-group formControlName="ketQua" (ngModelChange)="calculatorTable()" [nzDisabled]="isDisabled() || isDisable()">
                     <label nz-radio nzValue="1"> Đấu giá thành công </label>
                     <label nz-radio nzValue="0"> Đấu giá không thành công </label>
                   </nz-radio-group>
@@ -859,7 +858,6 @@
                         <th nzWidth="120px" class="text-center wrap"> SL bán đấu giá</th>
                         <th nzWidth="50px" class="text-center wrap"> ĐVT</th>
                         <th nzWidth="120px" class="text-center wrap"> Giá TL không VAT(đ)</th>
-                        <th nzWidth="120px" class="text-center wrap"> Giá khởi điểm (đ)</th>
                         <th nzWidth="120px" class="text-center wrap"> Số tiền đặt trước (đ)</th>
                       </tr>
                       </thead>
@@ -876,7 +874,6 @@
                           <td></td>
                           <td></td>
                           <td></td>
-                          <td></td>
                         </tr>
                         <ng-container *ngIf="expandSetString.has(item.idVirtual)">
                           <tr *ngFor="let lv1 of item.childData,let i1=index">
@@ -885,12 +882,10 @@
                             <td>{{lv1.tenDiemKho}} </td>
                             <td>{{ (lv1.tenLoKho ? lv1.tenLoKho + ' - ' : '') + lv1.tenNganKho }}</td>
                             <td>{{lv1.tenCloaiVthh}}</td>
-                            <td></td>
+                            <td><input  nz-input [(ngModel)]="lv1.maDviTsan"/></td>
                             <td>{{lv1.slDauGia | number : '1.0-1' : 'vi_VN'}} </td>
                             <td>{{lv1.donViTinh}} </td>
                             <td>{{lv1.giaTlKhongVat | number : '1.0-1'
-                              : 'vi_VN'}} </td>
-                            <td>{{lv1.giaKhoiDiem | number : '1.0-1'
                               : 'vi_VN'}} </td>
                             <td>{{lv1.soTienDatTruoc | number : '1.0-1'
                               : 'vi_VN'}} </td>
@@ -908,7 +903,7 @@
                         File đính kèm biên bản đã ký
                       </nz-form-label>
                       <div class="list-file">
-                        <file-list [disabled]="isDisabled()" [data]="fileDinhKems"></file-list>
+                        <file-list [disabled]="isDisabled()" [data]="fileDinhKemDaKy"></file-list>
                       </div>
                     </nz-form-item>
                   </div>

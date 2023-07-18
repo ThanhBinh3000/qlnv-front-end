@@ -15,11 +15,9 @@ import {
   QuyetDinhThanhLyService
 } from "../../../../../../../services/qlnv-hang/xuat-hang/xuat-thanh-ly/QuyetDinhThanhLyService.service";
 import {
-  QuyetDinhDtl
-} from "../../../../quyet-dinh-thanh-ly/them-moi-quyet-dinh-thanh-ly/them-moi-quyet-dinh-thanh-ly.component";
-import {
   ToChucThucHienThanhLyService
 } from "../../../../../../../services/qlnv-hang/xuat-hang/xuat-thanh-ly/ToChucThucHienThanhLy.service";
+import {Validators} from "@angular/forms";
 
 @Component({
   selector: 'app-thong-tin-chi-tiet-dau-gia-thanh-ly',
@@ -36,7 +34,8 @@ export class ThongTinChiTietDauGiaThanhLyComponent extends Base2Component implem
   soQdTl: string;
   dataDetail: any;
   soLanDauGia: number;
-  fileDinhKems: any[] = []
+  fileCanCu: any[] = []
+  fileDinhKemDaKy: any[] = []
   rowItemKhach: any = {};
   rowItemDgv: any = {};
   rowItemToChuc: any = {};
@@ -88,7 +87,7 @@ export class ThongTinChiTietDauGiaThanhLyComponent extends Base2Component implem
       tienMuaHoSo: [''],
       buocGia: [''],
       ghiChuBuocGia: [''],
-      khoanTienDatTruoc: [],
+      khoanTienDatTruoc: [, [Validators.required]],
       tgianXem: [''],
       tgianXemTu: [''],
       tgianXemDen: [''],
@@ -124,7 +123,6 @@ export class ThongTinChiTietDauGiaThanhLyComponent extends Base2Component implem
       thongBaoKhongThanh: [''],
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['DU Thảo'],
-      toChucDtl: [new Array<QuyetDinhDtl>()],
     })
   }
 
@@ -143,7 +141,6 @@ export class ThongTinChiTietDauGiaThanhLyComponent extends Base2Component implem
       this.spinner.show();
       if (this.dataDetail) {
         this.getDetail(this.dataDetail.id)
-        this.formData.value.trangThai = this.dataDetail.trangThai
       } else {
         if (!this.isView) {
           this.spinner.show();
@@ -159,9 +156,6 @@ export class ThongTinChiTietDauGiaThanhLyComponent extends Base2Component implem
           });
           this.spinner.hide();
         }
-      }
-      if (this.idInput > 0 && this.idInput) {
-        this.getDetail(this.idInput)
       }
       await this.loadDataComboBox();
     } catch (e) {
@@ -294,14 +288,19 @@ export class ThongTinChiTietDauGiaThanhLyComponent extends Base2Component implem
   }
 
   calculatorTable() {
-    this.dataTable.forEach(item => {
-      item.childData.forEach(child => {
-        child.slDauGia = child.slDeXuat
-        child.giaTlKhongVat = child.donGia
-        child.giaKhoiDiem = child.slDeXuat * child.donGia
-        child.thanhTien = child.donGiaCaoNhat * child.slDeXuat
+      this.dataTable.forEach(item => {
+        item.childData.forEach(child => {
+          if (this.dataDetail){
+            child.giaKhoiDiem = child.slDauGia * child.giaTlKhongVat
+          }else {
+            child.slDauGia = child.slDeXuat
+            child.giaTlKhongVat = child.donGia
+            this.formData.value.ketQua == '1' ? child.giaKhoiDiem = child.slDeXuat * child.donGia : child.giaKhoiDiem = null ;
+            this.formData.value.ketQua == '1' ? child.thanhTien = child.donGiaCaoNhat * child.slDeXuat : child.thanhTien = null ;
+            this.formData.value.ketQua == '1' ? child.soTienDatTruoc = null : child.soTienDatTruoc = child.slDeXuat * child.donGia * this.formData.value.khoanTienDatTruoc/100 ;
+          }
+        })
       })
-    })
   }
 
   async getDetail(id) {
@@ -320,8 +319,9 @@ export class ThongTinChiTietDauGiaThanhLyComponent extends Base2Component implem
             })
             this.buildTableView(data.toChucDtl);
             this.dataNguoiTgia = data.toChucNlq
+            this.fileCanCu = data.fileCanCu;
             this.fileDinhKem = data.fileDinhKem;
-            this.fileDinhKems = data.fileDinhKems;
+            this.fileDinhKemDaKy = data.fileDinhKemDaKy;
             this.dataNguoiShow = chain(this.dataNguoiTgia).groupBy('loai').map((value, key) => ({
               loai: key,
               dataChild: value
@@ -376,12 +376,9 @@ export class ThongTinChiTietDauGiaThanhLyComponent extends Base2Component implem
       body.tgianDauGiaTu = body.tgianDauGia[0];
       body.tgianDauGiaDen = body.tgianDauGia[1];
     }
-    body.fileDinhKems = this.fileDinhKems;
+    body.fileCanCu = this.fileCanCu;
     body.fileDinhKem = this.fileDinhKem;
-    body.toChucNlq = this.dataNguoiTgia;
-    let dt = this.dataTable.flatMap((item) => item.childData);
-    body.toChucDtl = dt;
-    body.trangThai = isHoanThanh ? this.STATUS.DA_HOAN_THANH : this.STATUS.DU_THAO
+    body.fileDinhKemDaKy = this.fileDinhKemDaKy;
     let soLuongDviTsan = 0
     let soLuongTrung = 0
     let soLuongTruot = 0
@@ -389,7 +386,7 @@ export class ThongTinChiTietDauGiaThanhLyComponent extends Base2Component implem
       if (this.formData.value.ketQua == 1) {
         soLuongTrung += item.childData.filter(item => item.soLanTraGia > 0 && item.toChucCaNhan != null).length;
       } else {
-        item.children.forEach(s => {
+        item.childData.forEach(s => {
           s.toChucCaNhan = null;
           s.soLanTraGia = null;
         })
@@ -397,6 +394,10 @@ export class ThongTinChiTietDauGiaThanhLyComponent extends Base2Component implem
       }
       soLuongDviTsan += item.childData.length;
     });
+    let dt = this.dataTable.flatMap((item) => item.childData);
+    body.toChucDtl = dt;
+    body.toChucNlq = this.dataNguoiTgia;
+    body.trangThai = isHoanThanh ? this.STATUS.DA_HOAN_THANH : this.STATUS.DU_THAO
     if (this.formData.value.ketQua == 1) {
       body.ketQuaSl = soLuongTrung + "/" + soLuongDviTsan;
       body.soDviTsan = soLuongTrung;
@@ -476,26 +477,28 @@ export class ThongTinChiTietDauGiaThanhLyComponent extends Base2Component implem
   }
 
   confirmDone() {
-    this.modal.confirm({
-      nzClosable: false,
-      nzTitle: 'Xác nhận',
-      nzContent: 'Bạn có chắc chắn hoàn thành thông tin đấu giá?',
-      nzOkText: 'Đồng ý',
-      nzCancelText: 'Không',
-      nzOkDanger: true,
-      nzWidth: 310,
-      nzOnOk: () => {
-        this.spinner.show();
-        try {
-          this.handleOk(true);
-        } catch (e) {
-          console.log('error: ', e);
-          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        } finally {
-          this.spinner.hide();
-        }
-      },
-    });
+    if (this.validatemaDviTsan()) {
+      this.modal.confirm({
+        nzClosable: false,
+        nzTitle: 'Xác nhận',
+        nzContent: 'Bạn có chắc chắn hoàn thành thông tin đấu giá?',
+        nzOkText: 'Đồng ý',
+        nzCancelText: 'Không',
+        nzOkDanger: true,
+        nzWidth: 310,
+        nzOnOk: () => {
+          this.spinner.show();
+          try {
+            this.handleOk(true);
+          } catch (e) {
+            console.log('error: ', e);
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          } finally {
+            this.spinner.hide();
+          }
+        },
+      });
+    }
   }
 
   deleteRow(idVirtual) {
@@ -551,11 +554,38 @@ export class ThongTinChiTietDauGiaThanhLyComponent extends Base2Component implem
       return;
     }
     let currentRow = this.dataTable[index].childData[indexLv2];
-    if(currentRow.toChucCaNhan){
+    if (currentRow.toChucCaNhan) {
       currentRow.soTienDatTruoc = currentRow.slDauGia * currentRow.giaTlKhongVat * this.formData.value.khoanTienDatTruoc / 100
     }
     if (currentRow.toChucCaNhan && (currentRow.soLanTraGia == null || currentRow.soLanTraGia == 0)) {
       currentRow.soLanTraGia = 1
     }
+  }
+
+  validatemaDviTsan(): boolean {
+    if (this.dataTable && this.dataTable.length > 0) {
+      let data = this.dataTable.flatMap(s => s.childData)
+      const checkMaDviTsan = {};
+      data.forEach((item) => {
+        const maDviTsan = item.maDviTsan;
+        if (checkMaDviTsan[maDviTsan]) {
+          checkMaDviTsan[maDviTsan]++;
+        } else {
+          checkMaDviTsan[maDviTsan] = 1;
+        }
+      });
+      let result = '';
+      for (let prop in checkMaDviTsan) {
+        if (checkMaDviTsan[prop] > 1) {
+          result += `${prop} ( hiện đang bị lặp lại ${checkMaDviTsan[prop]} lần), `;
+        }
+      }
+      let rs = Object.values(checkMaDviTsan).some(value => +value > 1);
+      if (rs == true) {
+        this.notification.error(MESSAGE.ERROR, "Mã đơn vị tài sản " + result.slice(0, -2) + " vui lòng nhập lại");
+        return false;
+      }
+    }
+    return true;
   }
 }

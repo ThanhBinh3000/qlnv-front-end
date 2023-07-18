@@ -68,10 +68,9 @@ import { ThemMoiBienBanTinhKhoDieuChuyenComponent } from './component-chung/bien
 import { BienBanHaoDoiDieuChuyenComponent } from './component-chung/bien-ban-hao-doi/bien-ban-hao-doi.component';
 import { ThemMoiBienBanHaoDoiDieuChuyenComponent } from './component-chung/bien-ban-hao-doi/them-moi-bien-ban-hao-doi/them-moi-bien-ban-hao-doi.component';
 import { NbccTdtkXkltBienBanHaoDoiComponent } from './noi-bo-chi-cuc/thay-doi-thu-kho/xuat-kho-luong-thuc/bien-ban-hao-doi/nbcc-tdtk-xklt-bien-ban-hao-doi.component';
-import { BangKeXuatVatTuDieuChuyenComponent } from './component-chung/bang-ke-nhap-vat-tu/bang-ke-xuat-vat-tu.component';
+import { BangKeXuatVatTuDieuChuyenComponent } from './component-chung/bang-ke-xuat-vat-tu/bang-ke-xuat-vat-tu.component';
 import { NbccTdtkXkvtBangKeXuatVatTuComponent } from './noi-bo-chi-cuc/thay-doi-thu-kho/xuat-kho-vat-tu/bang-ke-xuat-vat-tu/dcnb-nbcc-tdtk-xkvt-bang-ke-xuat-vat-tu.component';
 import { NbccTdtkXkvtBienBanTinhKhoComponent } from './noi-bo-chi-cuc/thay-doi-thu-kho/xuat-kho-vat-tu/bien-ban-tinh-kho/nbcc-tdtk-xkvt-bien-ban-tinh-kho.component';
-import { ChiTietBangKeXuatVatTuDieuChuyenComponent } from './component-chung/bang-ke-nhap-vat-tu/chi-tiet-bang-ke-nhap-vat-tu/chi-tiet-bang-ke-xuat-vat-tu.component';
 import { GhccKtclltBienBanLayMauBanGiaoComponent } from './giua-hai-chi-cuc/kiem-tra-chat-luong-luong-thuc/bien-ban-lay-mau-ban-giao/ghcc-ktcllt-bien-ban-lay-mau-ban-giao.component';
 import { GhccKtclltPhieuKiemNghiemChatLuongComponent } from './giua-hai-chi-cuc/kiem-tra-chat-luong-luong-thuc/phieu-kiem-nghiem-chat-luong/ghcc-ktcllt-phieu-kiem-nghiem-chat-luong.component';
 import { GhccKiemTraChatLuongLuongThucComponent } from './giua-hai-chi-cuc/kiem-tra-chat-luong-luong-thuc/ghcc-kiem-tra-chat-luong-luong-thuc.component';
@@ -106,6 +105,7 @@ import { DCNBGHCXkvtPhieuXuatKhoComponent } from './giua-hai-cuc/xuat-kho-vat-tu
 import { DCNBGHCXkvtBangKeXuatVatTuComponent } from './giua-hai-cuc/xuat-kho-vat-tu/bang-ke-xuat-vat-tu/dcnb-ghc-xkvt-bang-ke-xuat-vat-tu.component';
 import { DCNBGHCXkvtBienBanTinhKhoComponent } from './giua-hai-cuc/xuat-kho-vat-tu/bien-ban-tinh-kho/dcnb-ghc-xkvt-bien-ban-tinh-kho.component';
 import { DCNBGHCKtclvtHoSoKyThuatComponent } from './giua-hai-cuc/kiem-tra-chat-luong-vat-tu/ho-so-ky-thuat/dcnb-ghc-ktclvt-ho-so-ky-thuat.component';
+import { ChiTietBangKeXuatVatTuDieuChuyenComponent } from './component-chung/bang-ke-xuat-vat-tu/chi-tiet-bang-ke-xuat-vat-tu/chi-tiet-bang-ke-xuat-vat-tu.component';
 
 @NgModule({
   declarations: [
