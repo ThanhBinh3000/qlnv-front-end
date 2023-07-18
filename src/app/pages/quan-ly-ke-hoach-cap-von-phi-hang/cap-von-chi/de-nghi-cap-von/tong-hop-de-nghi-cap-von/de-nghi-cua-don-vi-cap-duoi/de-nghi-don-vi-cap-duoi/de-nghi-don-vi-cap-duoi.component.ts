@@ -28,6 +28,7 @@ import { BtnStatus } from '../../../de-nghi-cap-von.class';
 export class DeNghiDonViCapDuoiComponent implements OnInit {
   @Input() data;
   @Output() dataChange = new EventEmitter();
+  Op = new Operator('1');
   //thong tin dang nhap
   userInfo: any;
   //thong tin chung bao cao

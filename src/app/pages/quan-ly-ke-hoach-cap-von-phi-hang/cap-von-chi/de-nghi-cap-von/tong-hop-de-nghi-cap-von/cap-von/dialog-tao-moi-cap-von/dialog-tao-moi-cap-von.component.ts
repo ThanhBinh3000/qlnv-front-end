@@ -30,6 +30,7 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
   idRequest!: string;
   total: ItemRequest = new ItemRequest();
   responeHopDong: ItemContract = new ItemContract()
+  a: BaoCao;
 
   constructor(
     private _modalRef: NzModalRef,
@@ -49,6 +50,7 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
       this.loaiDns = this.loaiDns.filter(e => e.id != Utils.MUA_VTU);
     }
     this.response.dnghiCapvonCtiets = [];
+    this.response.dnghiCvHopDongCtiets = [];
   }
 
   changeDnghi() {
@@ -129,7 +131,14 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
               this.notification.warning(MESSAGE.WARNING, 'Không tồn tại hợp đồng cho loại đề nghị đã chọn');
               return;
             } else {
-              await this.syntheticContract();
+              // await this.syntheticContract();
+              this.response.dnghiCvHopDongCtiets = [];
+              this.response.dnghiCvHopDongCtiets.push({
+                ... new ItemContract,
+                id: uuid.v4() + 'FE',
+                maDvi: this.userInfo?.MA_DVI,
+                tenDvi: this.userInfo?.TEN_DVI,
+              })
             }
           } else {
             await this.callSynthetic();
@@ -316,7 +325,7 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
       loaiDnghi: this.response.loaiDnghi,
       maDvi: this.userInfo?.MA_DVI,
       namHdong: this.response.namBcao,
-      maLoai: '1'
+      maLoai: '3'
     }
     await this.capVonNguonChiService.tongHopHd(request).toPromise().then(
       (res) => {
@@ -365,89 +374,41 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
     );
   }
 
-  // async getMaHopDong() {
-  //   await this.capVonNguonChiService.maDeNghi().toPromise().then(
-  //     (res) => {
-  //       if (res.statusCode == 0) {
-  //         this.response.maHopDong = res.data;
-  //       } else {
-  //         this.notification.error(MESSAGE.ERROR, res?.msg);
-  //       }
-  //     },
-  //     (err) => {
-  //       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-  //     });
-  // }
-
   async checkRequest() {
     this.isRequestExist = 0;
-    if (this.userService.isChiCuc()) {
-      const request = {
-        maDvi: this.userInfo?.MA_DVI,
-        namBcao: this.response.namBcao,
-        loaiDnghi: this.response.loaiDnghi,
-        canCuVeGia: this.response.canCuVeGia,
-        maLoai: '0',
-        paggingReq: {
-          limit: 10,
-          page: 1,
-        },
-      }
-      await this.capVonNguonChiService.timKiemDeNghi(request).toPromise().then(
-        (data) => {
-          if (data.statusCode == 0) {
-            if (data.data.length > 0) {
-              if (data.data.trangThai == Utils.TT_BC_7) {
-                this.isRequestExist = 1;
-                this.idRequest = data.data.id;
-              } else {
-                this.isRequestExist = 2;
-              }
-            }
-          } else {
-            this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-            this.response.loaiDnghi = null;
-          }
-        },
-        (err) => {
-          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-          this.response.loaiDnghi = null;
-        }
-      );
-    } else if (this.userService.isCuc()) {
-      const request = {
-        maDvi: this.userInfo?.MA_DVI,
-        namBcao: this.response.namBcao,
-        loaiDnghi: this.response.loaiDnghi,
-        canCuVeGia: this.response.canCuVeGia,
-        maLoai: '0',
-        paggingReq: {
-          limit: 10,
-          page: 1,
-        },
-      }
-      await this.capVonNguonChiService.timKiemHopDong(request).toPromise().then(
-        (data) => {
-          if (data.statusCode == 0) {
-            if (data.data.length > 0) {
-              if (data.data.trangThai == Utils.TT_BC_7) {
-                this.isRequestExist = 1;
-                this.idRequest = data.data.id;
-              } else {
-                this.isRequestExist = 2;
-              }
-            }
-          } else {
-            this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-            this.response.loaiDnghi = null;
-          }
-        },
-        (err) => {
-          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-          this.response.loaiDnghi = null;
-        }
-      );
+    const request = {
+      maDvi: this.userInfo?.MA_DVI,
+      namBcao: this.response.namBcao,
+      loaiDnghi: this.response.loaiDnghi,
+      canCuVeGia: this.response.canCuVeGia,
+      maLoai: '0',
+      paggingReq: {
+        limit: 10,
+        page: 1,
+      },
     }
+    await this.capVonNguonChiService.timKiemDeNghi(request).toPromise().then(
+      (data) => {
+        if (data.statusCode == 0) {
+          if (data.data.length > 0) {
+            if (data.data.trangThai == Utils.TT_BC_7) {
+              this.isRequestExist = 1;
+              this.idRequest = data.data.id;
+            } else {
+              this.isRequestExist = 2;
+            }
+          }
+        } else {
+          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+          this.response.loaiDnghi = null;
+        }
+      },
+      (err) => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        this.response.loaiDnghi = null;
+      }
+    );
+
     this.spinner.hide();
   }
   // check hop dong
@@ -467,9 +428,9 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
     await this.capVonNguonChiService.timKiemHopDong(request).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
+          this.a = data.data.content
           if (data.data.content?.length > 0) {
             this.isContractExist = true;
-            // this.response = data.data.content;
           }
         } else {
           this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);

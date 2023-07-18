@@ -445,7 +445,7 @@ export class PhuLuc2Component implements OnInit {
 
     exportToExcel() {
         const header = [
-            { t: 0, b: 1, l: 0, r: 19, val: null },
+            { t: 0, b: 1, l: 0, r: 17, val: null },
             { t: 0, b: 1, l: 0, r: 0, val: 'STT' },
             { t: 0, b: 1, l: 1, r: 1, val: 'Tên tài sản (theo danh mục được phê duyệt tại Quyết định số 149/QĐ-TCDT)' },
             { t: 0, b: 1, l: 2, r: 2, val: 'Đơn vị tính' },
@@ -509,7 +509,7 @@ export class PhuLuc2Component implements OnInit {
         XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
         let excelName = this.dataInfo.maBcao;
-        excelName = excelName + '_DC_PL02.xlsx'
+        excelName = excelName + '_BCDC_PL02.xlsx'
         XLSX.writeFile(workbook, excelName);
     }
 
