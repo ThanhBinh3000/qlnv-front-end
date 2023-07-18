@@ -7,6 +7,7 @@ import {NzModalService} from "ng-zorro-antd/modal";
 import {ActivatedRoute, Router} from "@angular/router";
 import {BangKeXuatScService} from "../../../../services/sua-chua/bangKeXuatSc.service";
 import {Base3Component} from "../../../../components/base3/base3.component";
+import {BangKeNhapScService} from "../../../../services/sua-chua/bangKeNhapSc.service";
 
 @Component({
   selector: 'app-bang-ke-nhap',
@@ -23,10 +24,10 @@ export class BangKeNhapComponent extends Base3Component implements OnInit {
     modal: NzModalService,
     route: ActivatedRoute,
     router: Router,
-    private bangKeXuatScService : BangKeXuatScService,
+    private bangKeNhapScService : BangKeNhapScService,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, route, router, bangKeXuatScService);
-    this.defaultURL = 'sua-chua/xuat-hang/bang-ke'
+    super(httpClient, storageService, notification, spinner, modal, route, router, bangKeNhapScService);
+    this.defaultURL = 'sua-chua/nhap-hang/bang-ke-nhap'
     this.formData = this.fb.group({
       nam: null,
       soQd: null,
