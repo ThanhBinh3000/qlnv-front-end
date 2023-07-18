@@ -70,7 +70,6 @@ export class ThongTinKsgVtComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (this.dataCloaiVthh) {
       this.rowItem.cloaiVthh = (this.dataCloaiVthh.tenCloaiVthh ? this.dataCloaiVthh.tenCloaiVthh  + '; ' : '') + (this.dataCloaiVthh.moTa ? this.dataCloaiVthh.moTa + '; ' : '') + (this.dataCloaiVthh.tchuanCluong ? this.dataCloaiVthh.tchuanCluong : '' )
-      this.isApDung = this.dataCloaiVthh.apDungTatCa
     }
   }
 
@@ -108,8 +107,6 @@ export class ThongTinKsgVtComponent implements OnInit, OnChanges {
       msgRequired = "Không được để trống chủng loại hàng hóa";
     } else if (!item.donGia) {
       msgRequired = "Không được để trống đơn giá";
-    } else if (!item.maChiCuc && !this.isApDung) {
-      msgRequired = "Không được để trống Chi cục"
     }
     return msgRequired;
   }

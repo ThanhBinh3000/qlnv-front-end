@@ -603,12 +603,17 @@
     <nz-tab [nzTitle]="'Thông tin khảo sát giá'">
       <nz-card class="mt16 p-lr16 card-table pd-10">
         <span class="sub-title mb-10">KẾT QUẢ KHẢO SÁT GIÁ THỊ TRƯỜNG</span>
-        <app-thong-tin-ksg-vt ></app-thong-tin-ksg-vt>
+        <app-thong-tin-ksg-vt [dataCloaiVthh]="formData.value" [isView]="isView" *ngIf="dataTableKsGia || !idInput"
+                              [vat]="formData.value.vat  ? formData.value.vat  : 0 " [isTabNdKhac]="false"
+                              [isTableKetQua]="true" [listCloaiVthh]="listCloaiVthh" [(dataTable)]="dataTableKsGia"
+                              [isVat]="formData.value.loaiGia == 'LG01' || formData.value.loaiGia == 'LG03'" ></app-thong-tin-ksg-vt>
         <span class="sub-title mb-10">KẾT QUẢ THẨM ĐỊNH GIÁ</span>
-        <app-thong-tin-ksg-vt></app-thong-tin-ksg-vt>
+        <app-thong-tin-ksg-vt [dataCloaiVthh]="formData.value" [isView]="isView" *ngIf="dataTableKsGia || !idInput"
+                              [vat]="formData.value.vat ? formData.value.vat  : 0 " [isTabNdKhac]="false"
+                              [isTableKetQua]="false" [(dataTable)]="dataTableKqGia"
+                              [isVat]="formData.value.loaiGia == 'LG01' || formData.value.loaiGia == 'LG03'"></app-thong-tin-ksg-vt>
       </nz-card>
     </nz-tab>
-
     <nz-tab [nzTitle]="'Phân tích, dự báo biến động giá'">
       <form nzLayout="vertical" nz-form [formGroup]="formData" class="mb-10">
         <div nz-col [nzSpan]="24">

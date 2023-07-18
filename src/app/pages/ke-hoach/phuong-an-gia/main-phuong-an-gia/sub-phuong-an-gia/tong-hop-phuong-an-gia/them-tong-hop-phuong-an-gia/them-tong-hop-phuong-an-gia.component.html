@@ -331,8 +331,9 @@
           <tbody>
           <tr *ngFor="let data of rowSelectionTable.data; let idx = index">
             <td class="text-center">{{idx + 1}}</td>
-            <td>{{ data.soDx }}</td>
+            <td> <a nz-button nzType="link" (click)="openModalDxChinhSua(data.pagId)">{{ data.soDx }}</a></td>
             <td>{{ data.tenDvi}}</td>
+            <td>{{ data.tenVungMien}}</td>
             <td class="text-right">{{ data.soLuong | number : '1.0-1' : 'vi-VN' }}</td>
             <td class="text-right">{{ data.giaDn | number : '1.0-1' : 'vi-VN' }}</td>
             <td class="text-right">{{ data.giaDnVat | number : '1.0-1' : 'vi-VN' }}</td>
