@@ -1,160 +1,184 @@
 <ng-container *ngIf="isDataAvailable">
-
     <div class="modal__content">
-        <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
-            <div nz-col [nzSpan]="20" style="display:flex;">
-                <div>
-                    Đơn vị:
-                </div>
-                <div style="padding-left: 5px;">
-                    <ng-container *ngIf="!status || !editMoneyUnit; else editMoney">
-                        <span (click)="editMoneyUnit=true">{{getMoneyUnit()}}</span>
-                    </ng-container>
-                    <ng-template #editMoney>
-                        <nz-select nzShowSearch nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
-                            (ngModelChange)="editMoneyUnit=false">
-                            <nz-option *ngFor="let item of donViTiens" [nzValue]="item.id" [nzLabel]="item.tenDm">
-                            </nz-option>
-                        </nz-select>
-                    </ng-template>
-                </div>
-            </div>
-            <div nz-col [nzSpan]="4" class="gutter-row canphai phai" style="display:flex; justify-content: end;">
-            </div>
-        </div>
 
-        <nz-table nzBordered class="table__body" [nzScroll]="{x: scrollX}">
-            <thead>
-                <tr>
-                    <th rowspan="2" nzWidth="50px">STT</th>
-                    <th rowspan="2" nzWidth="300px">Nhóm</th>
-                    <th rowspan="2">Tổng điều chỉnh giảm </th>
-                    <th rowspan="2">Tổng điều chỉnh tăng</th>
-                    <th colspan="{{lstDvi.length}}">Danh sách đơn vị</th>
-                    <!-- <th rowspan="2" colspan="3" [hidden]="status"></th> -->
-                </tr>
-                <tr>
-                    <th *ngFor="let item of lstDvi">
-                        {{item.tenDvi}}
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="text-center"></td>
-                    <td>Tổng cộng</td>
-                    <td>{{displayValue(total.tongDchinhGiam)}}</td>
-                    <td>{{displayValue(total.tongDchinhTang)}}</td>
-                    <td *ngFor="let item of lstDvi">
-                        <div *ngFor="let data of lstCtietBcao">
-                            <div *ngFor="let e of data.child;">
-                                <div *ngIf="e.maDviBcao == item.maDvi">
-                                    <!-- {{displayValue(e.dtoanVuTvqtDnghi)}} -->
-                                </div>
+        <nz-tabset>
+            <nz-tab nzTitle="Dữ liệu">
+                <div id="tablePrint">
+                    <div class="nut" style="margin-top: 10px;">
+                        <div class="cantrai">
+                            <div> Đơn vị: </div>
+                            <div style="margin-left: 10px;">
+                                <ng-container *ngIf="status || !editMoneyUnit; else editMoney">
+                                    <span (click)="editMoneyUnit=true">
+                                        {{ Utils.moneyUnitName(maDviTien) }}
+                                    </span>
+                                </ng-container>
+                                <ng-template #editMoney>
+                                    <nz-select nzShowSearch nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
+                                        (ngModelChange)="editMoneyUnit=false; Op.setMoneyUnit(maDviTien)">
+                                        <nz-option *ngFor="let item of Utils.DVI_TIEN" [nzValue]="item.id"
+                                            [nzLabel]="item.tenDm">
+                                        </nz-option>
+                                    </nz-select>
+                                </ng-template>
                             </div>
                         </div>
-                    </td>
-                </tr>
-                <tr *ngFor="let data of lstCtietBcao; let i = index">
-                    <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
-                        <td [nzIndentSize]="data.level! * 8">
-                            {{getChiMuc(data.stt)}}
-                        </td>
-                        <td>
-                            <div *ngFor="let item of noiDungs">
-                                <div *ngIf="item.ma ==data.maNoiDung">
-                                    {{item.giaTri}}
-                                </div>
-                            </div>
-                        </td>
-                        <td>{{displayValue(data.tongDchinhGiam)}}</td>
-                        <td>{{displayValue(data.tongDchinhTang)}}</td>
-                        <td *ngFor="let item of lstDvi">
-                            <div *ngFor="let e of data.child;">
-                                <div *ngIf="e.maDviBcao == item.maDvi">
-                                    {{displayValue(e.dtoanVuTvqtDnghi)}}
-                                </div>
-                            </div>
-                        </td>
-                        <!-- <td [hidden]="status">
-              <ng-container *ngIf="!getLowStatus(data.stt)">
-                <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
-              </ng-container>
-            </td> -->
-                    </ng-container>
-                    <ng-template #editTemplate>
-                        <td [nzIndentSize]="data.level * 8">
-                            {{getChiMuc(editCache[data.id].data.stt)}}
-                        </td>
-                        <td>
-                            <div *ngFor="let item of noiDungs;">
-                                <div *ngIf="item.ma == data.maNoiDung">
-                                    {{item.giaTri}}
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            {{displayValue(editCache[data.id].data.tongCong)}}
-                        </td>
-                        <td>
-                            {{displayValue(editCache[data.id].data.dtoanGiao)}}
-                        </td>
-                        <td *ngFor="let item of lstDvi">
-                            <div *ngFor="let e of editCache[data.id].data.child">
-                                <div *ngIf="e.maDviBcao == item.maDvi">
-                                    <input class="money-input" currencyMask [(ngModel)]="e.dtoanVuTvqtDnghi"
-                                        [class]="(e.dtoanVuTvqtDnghi || e.dtoanVuTvqtDnghi === 0) && e.dtoanVuTvqtDnghi >= 0 ?'' : 'input-error-validate'"
-                                        (ngModelChange)="changeModel(data.id)" [options]="amount" />
-                                </div>
-                            </div>
-                        </td>
-                        <!-- <td>
-              <a (click)="saveEdit(data.id)" class="save">Lưu</a>
-            </td>
-            <td [hidden]="status">
-              <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
-                (nzOnConfirm)="cancelEdit(data.id)" class="save">
-                Hủy
-              </a>
-            </td> -->
-                    </ng-template>
-                </tr>
-            </tbody>
-        </nz-table>
+                    </div>
 
-        <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
-            <div nz-col nzSpan="24">
-                <label class="search__label">Thuyết minh</label>
-                <textarea rows="2" nz-input [(ngModel)]="thuyetMinh" [disabled]="status"></textarea>
-            </div>
-        </div>
+                    <nz-table nzBordered class="table__body" [nzScroll]="{x: scrollX}">
+                        <thead>
+                            <tr>
+                                <th rowspan="2" nzWidth="50px">STT</th>
+                                <th rowspan="2" nzWidth="300px">Nhóm</th>
+                                <th rowspan="2">Tổng điều chỉnh giảm </th>
+                                <th rowspan="2">Tổng điều chỉnh tăng</th>
+                                <th colspan="{{lstDvi.length}}">Danh sách đơn vị</th>
+                            </tr>
+                            <tr>
+                                <th *ngFor="let item of lstDvi">
+                                    {{item.tenDvi}}
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="text-center"></td>
+                                <td>Tổng cộng</td>
+                                <td>{{Op.fmtVal(total.tongDchinhGiam)}}</td>
+                                <td>{{Op.fmtVal(total.tongDchinhTang)}}</td>
+                                <td *ngFor="let item of lstDvi">
+                                    <div *ngFor="let data of lstCtietBcao">
+                                        <div *ngFor="let e of data.child;">
+                                            <div *ngIf="e.maDviBcao == item.maDvi">
+                                                <!-- {{Op.fmtVal(e.dtoanVuTvqtDnghi)}} -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr *ngFor="let data of lstCtietBcao; let i = index">
+                                <td [nzIndentSize]="data.level! * 8">
+                                    {{data.index()}}
+                                </td>
+                                <td>
+                                    <div *ngFor="let item of noiDungs">
+                                        <div *ngIf="item.ma ==data.maNoiDung">
+                                            {{item.giaTri}}
+                                        </div>
+                                    </div>
+                                </td>
+                                <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
+                                    <td>{{Op.fmtVal(data.tongDchinhGiam)}}</td>
+                                    <td>{{Op.fmtVal(data.tongDchinhTang)}}</td>
+                                    <td *ngFor="let item of lstDvi">
+                                        <div *ngFor="let e of data.child;">
+                                            <div *ngIf="e.maDviBcao == item.maDvi">
+                                                {{Op.fmtVal(e.dtoanVuTvqtDnghi)}}
+                                            </div>
+                                        </div>
+                                    </td>
+                                </ng-container>
+                                <ng-template #editTemplate>
+                                    <td>
+                                        {{Op.fmtVal(editCache[data.id].data.tongCong)}}
+                                    </td>
+                                    <td>
+                                        {{Op.fmtVal(editCache[data.id].data.dtoanGiao)}}
+                                    </td>
+                                    <td *ngFor="let item of lstDvi">
+                                        <div *ngFor="let e of editCache[data.id].data.child">
+                                            <div *ngIf="e.maDviBcao == item.maDvi">
+                                                <input class="money-input" currencyMask [(ngModel)]="e.dtoanVuTvqtDnghi"
+                                                    [class]="(e.dtoanVuTvqtDnghi || e.dtoanVuTvqtDnghi === 0) && e.dtoanVuTvqtDnghi >= 0 ?'' : 'input-error-validate'"
+                                                    (ngModelChange)="changeModel(data.id)" [options]="Op.amount" />
+                                            </div>
+                                        </div>
+                                    </td>
+                                </ng-template>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                </div>
+            </nz-tab>
+            <nz-tab nzTitle="Thuyết minh">
+                <textarea nz-input nzAutosize="{minRows: 4, maxRows: 16}" [(ngModel)]="formDetail.thuyetMinh"
+                    [disabled]="status.general"></textarea>
+            </nz-tab>
+            <nz-tab nzTitle="Tài liệu đính kèm">
+                <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+                    <div nz-col class="gutter-row" [nzSpan]="3">
+                        <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" [nzMultiple]="true"
+                            *ngIf="status.general">
+                            <button nz-button>
+                                <i nz-icon nzType="upload"></i>
+                                Chọn tài liệu đính kèm
+                            </button>
+                        </nz-upload>
+                        <button nz-button [nzType]="'primary'" (click)="handleUpload()"
+                            [disabled]="fileList.length === 0" *ngIf="status.general" style="margin-top: 16px">
+                            Thêm vào danh sách
+                        </button>
+                    </div>
+                </div>
+                <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+                    <div nz-col class="gutter-row" [nzSpan]="13">
+                        <nz-table nzBordered class="table__body">
+                            <thead>
+                                <tr>
+                                    <th nzWidth="7%">STT</th>
+                                    <th>Tên file</th>
+                                    <th nzWidth="15%"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let data of formDetail.lstFiles; let i = index">
+                                    <td>{{ i + 1 }} </td>
+                                    <td>{{ data.fileName }}</td>
+                                    <td>
+                                        <a (click)="downloadFile(data.id)">
+                                            <i class="fa fa-eye"></i>
+                                        </a>
+                                        <a (click)="deleteFile(data.id)">
+                                            <i class="fa fa-trash-o do"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </nz-table>
+                    </div>
+                </div>
+            </nz-tab>
+        </nz-tabset>
     </div>
-
 
     <div class="modal-footer">
         <div class="nut">
             <div class="cantrai">
-                <button type="button" class="btn btn-main" [hidden]="!statusPrint" (click)="doPrint()">
-                    <i nz-icon nzType="printer" nzTheme="outline"></i>
-                    <span>In</span>
+                <button type="button" class="btn btn-main" *ngIf="status.export" (click)="exportToExcel()">
+                    <span nz-icon nzType="export" nzTheme="outline" style="margin-right: 5px;"></span>
+                    <span>Xuất</span>
                 </button>
-                <button type="button" class="btn btn-main" (click)="save('5', null)" [hidden]="statusBtnFinish">
+                <!-- <button type="button" class="btn btn-main" *ngIf="status.print" (click)="genFunc.doPrint()">
+					<i nz-icon nzType="printer" nzTheme="outline"></i>
+					<span>In</span>
+				</button> -->
+                <button type="button" class="btn btn-sub" (click)="save('5', null)" *ngIf="status.finish">
                     <i nz-icon nzType="check" nzTheme="outline"></i>
                     <span>Hoàn tất nhập liệu</span>
                 </button>
-                <button type="button" class="btn btn-main" (click)="save('4', null)" [hidden]="statusBtnFinish">
+                <button type="button" class="btn btn-sub" (click)="save('4', null)" *ngIf="status.finish">
                     <i class="icon htvbdh_tcdt_save"></i>
                     <span>Lưu</span>
                 </button>
-                <button type="button" class="btn btn-main" (click)="save('1', null)" [hidden]="statusBtnOk">
+                <button type="button" class="btn btn-sub" (click)="save('1', null)" *ngIf="status.ok">
                     <i nz-icon nzType="check" nzTheme="outline"></i>
-                    <span>Chấp nhận</span>
+                    <span>Chấp nhận</span>
                 </button>
             </div>
             <div class="canphai">
-                <button type="button" class="btn btn-do" (click)="tuChoi('0')" [hidden]="statusBtnOk">
+                <button type="button" class="btn btn-do" (click)="tuChoi('0')" *ngIf="status.ok">
                     <i nz-icon nzType="close" nzTheme="outline"></i>
-                    <span>Không chấp nhận</span>
+                    <span>Không chấp nhận</span>
                 </button>
                 <button nz-button (click)="handleCancel()" class="modal__button--cancel">
                     <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>

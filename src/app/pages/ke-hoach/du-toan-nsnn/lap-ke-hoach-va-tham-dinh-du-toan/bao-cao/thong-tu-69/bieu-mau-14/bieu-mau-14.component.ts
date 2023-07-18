@@ -187,7 +187,7 @@ export class BieuMau14Component implements OnInit {
                     this.formDetail = data.data;
                     this.formDetail.maDviTien = '1';
                     this.formDetail.lstCtietLapThamDinhs.forEach(item => {
-                        this.lstCtietBcao.push(item);
+                        this.lstCtietBcao.push(new ItemData(item));
                     })
                     this.formDetail.listIdDeleteFiles = [];
                     this.listFile = [];

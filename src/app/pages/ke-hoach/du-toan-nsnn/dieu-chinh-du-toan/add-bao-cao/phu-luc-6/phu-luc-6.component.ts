@@ -1,8 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { CurrencyMaskInputMode } from 'ngx-currency';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { FileManip, Operator, Status, Table, Utils } from 'src/app/Utility/utils';
 import { DialogDanhSachVatTuHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-vat-tu-hang-hoa/dialog-danh-sach-vat-tu-hang-hoa.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
@@ -10,12 +12,9 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { DieuChinhService } from 'src/app/services/quan-ly-von-phi/dieuChinhDuToan.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { displayNumber, exchangeMoney, getHead, mulNumber } from 'src/app/Utility/func';
-import { AMOUNT, DON_VI_TIEN, FileManip, LA_MA, MONEY_LIMIT, Operator, Status, Table, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
+import * as XLSX from 'xlsx';
 import { BtnStatus, Doc, Form } from '../../dieu-chinh-du-toan.constant';
-import { NzUploadFile } from 'ng-zorro-antd/upload';
-import * as XLSX from 'xlsx'
 export class ItemData {
     level: any;
     checked: boolean;
@@ -609,7 +608,7 @@ export class PhuLuc6Component implements OnInit {
         this.dToanVuGiam = 0;
         this.lstCtietBcao.forEach(item => {
             const str = item.stt
-            if (!(this.lstCtietBcao.findIndex(e => getHead(e.stt) == str) != -1)) {
+            if (!(this.lstCtietBcao.findIndex(e => Table.preIndex(e.stt) == str) != -1)) {
                 if (item.dtoanDchinh < 0) {
                     this.tongDieuChinhGiam += Number(item?.dtoanDchinh);
                 } else {
@@ -706,27 +705,44 @@ export class PhuLuc6Component implements OnInit {
 
     exportToExcel() {
         const header = [
-            { t: 0, b: 1, l: 0, r: 13, val: null },
-            { t: 0, b: 1, l: 0, r: 0, val: 'STT' },
-            { t: 0, b: 1, l: 1, r: 1, val: 'Danh mục' },
-            { t: 0, b: 1, l: 2, r: 2, val: 'Đơn vị tính' },
-            { t: 0, b: 1, l: 3, r: 3, val: 'Thực hiện năm trước' },
-            { t: 0, b: 0, l: 4, r: 5, val: 'Năm ' + (this.namBcao - 1).toString() },
-            { t: 1, b: 1, l: 4, r: 4, val: 'Dự toán' },
-            { t: 1, b: 1, l: 5, r: 5, val: 'Ước thực hiện' },
-            { t: 0, b: 0, l: 6, r: 8, val: 'Năm dự toán' },
-            { t: 1, b: 1, l: 6, r: 6, val: 'Số lượng' },
-            { t: 1, b: 1, l: 7, r: 7, val: 'Định mức' },
-            { t: 1, b: 1, l: 8, r: 8, val: 'Thành tiền' },
-            { t: 0, b: 0, l: 9, r: 10, val: 'Thẩm định' },
-            { t: 1, b: 1, l: 9, r: 9, val: 'Số lượng' },
-            { t: 1, b: 1, l: 10, r: 10, val: 'Thành tiền' },
-            { t: 0, b: 1, l: 11, r: 11, val: 'Chênh lệch giữa thẩm định của DVCT và nhu cầu của DVCD' },
-            { t: 0, b: 1, l: 12, r: 12, val: 'Ghi chú' },
-            { t: 0, b: 1, l: 13, r: 13, val: 'Ý kiến của đơn vị cấp trên' },
+            { t: 0, b: 2, l: 0, r: 16, val: null },
+            { t: 0, b: 2, l: 0, r: 0, val: 'STT' },
+            { t: 0, b: 2, l: 1, r: 1, val: 'Nội dung' },
+            { t: 0, b: 2, l: 2, r: 2, val: 'Đơn vị tính' },
+            { t: 0, b: 2, l: 3, r: 3, val: 'Số lượng theo KH được giao năm' + (this.namBcao - 1).toString() },
+            { t: 0, b: 0, l: 4, r: 8, val: 'Số lượng thực hiện năm' + (this.namBcao - 1).toString() },
+            { t: 0, b: 2, l: 9, r: 9, val: 'Dự toán đã giao lũy kế' },
+            { t: 0, b: 2, l: 10, r: 10, val: 'Dự toán điều chỉnh' },
+            { t: 0, b: 2, l: 11, r: 11, val: 'Dự toán Vụ TVQT đề nghị (+ tăng) (- giảm)' },
+            { t: 0, b: 2, l: 12, r: 12, val: 'Kinh phí thiếu năm ' + (this.namBcao - 1).toString() },
+            { t: 0, b: 2, l: 13, r: 13, val: 'Dự toán chênh lệch giữa Vụ TVQT và đơn vị đề nghị (+ tăng) (- giảm)' },
+            { t: 0, b: 2, l: 14, r: 14, val: 'Ý kiến của đơn vị cấp trên' },
+            { t: 0, b: 2, l: 15, r: 15, val: 'Ghi chú' },
+
+            { t: 1, b: 2, l: 4, r: 4, val: 'Số lượng thực tế đã thực hiện đến thời điểm báo cáo' },
+            { t: 1, b: 1, l: 5, r: 5, val: 'Số lượng ước thực hiện từ thời điểm báo cáo đến cuối năm' },
+            { t: 1, b: 2, l: 6, r: 6, val: 'Cộng' },
+            { t: 1, b: 2, l: 7, r: 7, val: 'Định mức' },
+            { t: 1, b: 2, l: 8, r: 8, val: 'Thành tiền (đồng) (Tổng nhu cầu năm nay)' },
         ]
-        const fieldOrder = ['stt', 'tenDanhMuc', 'dviTinh', 'thienNamTruoc', 'dtoanNamHtai', 'uocNamHtai', 'sluongNamDtoan',
-            'sluongNamDtoan', 'dmucNamDtoan', 'ttienNamDtoan', 'sluongTd', 'ttienTd', 'chenhLech', 'ghiChu', 'ykienDviCtren']
+        const fieldOrder = [
+            'stt',
+            'noiDung',
+            'maDviTinh',
+            'sluongKhGiao',
+            'sluongThienTte',
+            'sluongThienUocThien',
+            'sluongThienCong',
+            'sluongThienDmuc',
+            'sluongThienTtien',
+            'dtoanGiaoLke',
+            'dtoanDchinh',
+            'dtoanVuTvqtDnghi',
+            'kphiThieu',
+            'chenhLech',
+            'ghiChu',
+            'ykienDviCtren',
+        ]
 
         const filterData = this.lstCtietBcao.map(item => {
             const row: any = {};
