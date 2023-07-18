@@ -1,9 +1,11 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
+import { cloneDeep } from 'lodash';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { Utils } from 'src/app/Utility/utils';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
@@ -11,8 +13,6 @@ import { DataService } from 'src/app/services/data.service';
 import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { Utils } from 'src/app/Utility/utils';
-import { cloneDeep } from 'lodash';
 export const TRANG_THAI_GIAO_DU_TOAN = [
     {
         id: '0',
@@ -90,13 +90,11 @@ export class DanhSachDuToanGiaoTuCapTrenComponent implements OnInit {
     };
 
     constructor(
-        private quanLyVonPhiService: QuanLyVonPhiService,
         private giaoDuToanChiService: GiaoDuToanChiService,
         private danhMuc: DanhMucHDVService,
         private router: Router,
         private datePipe: DatePipe,
         private notification: NzNotificationService,
-        private fb: FormBuilder,
         private spinner: NgxSpinnerService,
         private userService: UserService,
         private dataSource: DataService,

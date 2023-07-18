@@ -540,34 +540,67 @@ export class PhuLuc11Component implements OnInit {
 
     exportToExcel() {
         const header = [
-            { t: 0, b: 2, l: 0, r: 17, val: null },
+            { t: 0, b: 3, l: 0, r: 16, val: null },
             { t: 0, b: 2, l: 0, r: 0, val: 'STT' },
-            { t: 0, b: 2, l: 1, r: 1, val: 'Danh mục' },
-            { t: 0, b: 2, l: 2, r: 2, val: 'Đơn vị tính' },
-            { t: 0, b: 2, l: 3, r: 3, val: 'Thực hiện năm trước' },
-            { t: 0, b: 0, l: 4, r: 5, val: 'Năm ' + (this.namBcao - 1).toString() },
-            { t: 1, b: 2, l: 4, r: 4, val: 'Dự toán' },
-            { t: 1, b: 2, l: 5, r: 5, val: 'Ước thực hiện' },
-            { t: 0, b: 0, l: 6, r: 11, val: 'Năm dự toán' },
-            { t: 1, b: 1, l: 6, r: 8, val: 'Chi phí tại cửa kho' },
-            { t: 2, b: 2, l: 6, r: 6, val: 'Số lượng' },
-            { t: 2, b: 2, l: 7, r: 7, val: 'Định mức' },
-            { t: 2, b: 2, l: 8, r: 8, val: 'Thành tiền' },
-            { t: 1, b: 1, l: 9, r: 10, val: 'Chí phí ngoài cửa kho' },
-            { t: 2, b: 2, l: 9, r: 9, val: 'Bình quân' },
-            { t: 2, b: 2, l: 10, r: 10, val: 'Thành tiền' },
-            { t: 1, b: 2, l: 11, r: 11, val: 'Tổng cộng' },
-            { t: 0, b: 0, l: 12, r: 14, val: 'Thẩm định' },
-            { t: 1, b: 1, l: 12, r: 13, val: 'Chi phí tại cửa kho' },
-            { t: 2, b: 2, l: 12, r: 12, val: 'Số lượng' },
-            { t: 2, b: 2, l: 13, r: 13, val: 'Thành tiền' },
-            { t: 1, b: 2, l: 14, r: 14, val: 'Tổng cộng' },
-            { t: 0, b: 2, l: 15, r: 15, val: 'Chênh lệch giữa thẩm định của DVCT và nhu cầu của DVCD' },
-            { t: 0, b: 2, l: 16, r: 16, val: 'Ghi chú' },
-            { t: 0, b: 2, l: 17, r: 17, val: 'Ý kiến của đơn vị cấp trên' },
+            { t: 0, b: 2, l: 1, r: 1, val: 'Nội dung đào tạo, bồi dưỡng' },
+            { t: 0, b: 2, l: 2, r: 2, val: 'Đối tượng' },
+            { t: 0, b: 2, l: 3, r: 3, val: 'Thời gian học' },
+            { t: 0, b: 1, l: 4, r: 6, val: 'Số lượng' },
+            { t: 0, b: 2, l: 7, r: 7, val: 'Kinh phí hỗ trợ (đồng/người)' },
+            { t: 0, b: 2, l: 8, r: 8, val: 'Tổng nhu cầu dự toán, kinh phí' },
+            { t: 0, b: 1, l: 9, r: 11, val: 'Dự toán, kinh phí được sử dụng trong năm' },
+            { t: 0, b: 2, l: 12, r: 12, val: 'Dự toán đề nghị điều chỉnh (+ tăng )(- giảm)' },
+            { t: 0, b: 2, l: 13, r: 13, val: 'Dự toán Vụ TVQT đề nghị (+ tăng) (- giảm)' },
+            { t: 0, b: 2, l: 14, r: 14, val: 'Chênh lệch giữa thẩm định của DVCT và nhu cầu của DVCD' },
+            { t: 0, b: 2, l: 15, r: 15, val: 'Ghi chú' },
+            { t: 0, b: 2, l: 16, r: 16, val: 'Ý kiến của đơn vị cấp trên' },
+
+
+            { t: 2, b: 2, l: 4, r: 4, val: 'Trong nước' },
+            { t: 2, b: 2, l: 5, r: 5, val: 'Ngoài nước' },
+            { t: 2, b: 2, l: 6, r: 6, val: 'Tổng số' },
+            { t: 2, b: 2, l: 9, r: 9, val: 'Dự toán năm trước chuyển sang được <br> phép sử dụng cho năm nay' },
+            { t: 2, b: 2, l: 10, r: 10, val: 'Dự toán, kinh phí đã giao trong năm' },
+            { t: 2, b: 2, l: 11, r: 11, val: 'Tổng số' },
+
+            { t: 3, b: 3, l: 0, r: 4, val: 'A' },
+            { t: 3, b: 3, l: 1, r: 1, val: 'B' },
+            { t: 3, b: 3, l: 2, r: 2, val: 'C' },
+            { t: 3, b: 3, l: 3, r: 3, val: 'D' },
+            { t: 3, b: 3, l: 4, r: 4, val: '1' },
+            { t: 3, b: 3, l: 5, r: 5, val: '2' },
+            { t: 3, b: 3, l: 6, r: 6, val: '3 = 1 + 2' },
+            { t: 3, b: 3, l: 7, r: 7, val: '4' },
+            { t: 3, b: 3, l: 8, r: 8, val: '5 = 3 x 4' },
+            { t: 3, b: 3, l: 9, r: 9, val: '6' },
+            { t: 3, b: 3, l: 10, r: 10, val: '7' },
+            { t: 3, b: 3, l: 11, r: 11, val: '8 = 6 + 7' },
+            { t: 3, b: 3, l: 12, r: 12, val: '9 = 5 - 8' },
+            { t: 3, b: 3, l: 13, r: 13, val: '10' },
+            { t: 3, b: 3, l: 14, r: 14, val: '11 = 10 - 9' },
+            { t: 3, b: 3, l: 15, r: 15, val: '12' },
+            { t: 3, b: 3, l: 16, r: 16, val: '13' },
+
         ]
-        const fieldOrder = ['stt', 'tenDanhMuc', 'dviTinh', 'thNamTruoc', 'namDtoan', 'namUocTh', 'sluongTaiKho', 'dmucTaiKho', 'ttienTaiKho',
-            'binhQuanNgoaiKho', 'ttienNgoaiKho', 'tongCong', 'tdinhKhoSluong', 'tdinhKhoTtien', 'tdinhTcong', 'chenhLech', 'ghiChu', 'ykienDviCtren']
+        const fieldOrder = [
+            'stt',
+            'tenNoiDung',
+            'doiTuong',
+            'thoiGianHoc',
+            'sLuongTrongNuoc',
+            'sLuongNgoaiNuoc',
+            'sLuongTongSo',
+            'KinhPhiHoTro',
+            'TongNCDtoanKp',
+            'dToanNamTruoc',
+            'dToanDaGiao',
+            'dToanTongSo',
+            'dtoanDnghiDchinh',
+            'dtoanVuTvqtDnghi',
+            'chenhLech',
+            'ykienDviCtren',
+            'ghiChu',
+        ]
 
         const filterData = this.lstCtietBcao.map(item => {
             const row: any = {};
@@ -588,7 +621,7 @@ export class PhuLuc11Component implements OnInit {
         const worksheet = Table.initExcel(header);
         XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
-        XLSX.writeFile(workbook, this.dataInfo.maBcao + '_Phu_luc_II.xlsx');
+        XLSX.writeFile(workbook, this.dataInfo.maBcao + '_DC_PL11.xlsx');
     }
 
 
