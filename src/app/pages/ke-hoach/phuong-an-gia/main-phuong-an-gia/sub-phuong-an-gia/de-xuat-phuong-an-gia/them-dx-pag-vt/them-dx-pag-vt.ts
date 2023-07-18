@@ -10,21 +10,21 @@ import {DeXuatPAGService} from "../../../../../../../services/ke-hoach/phuong-an
 import {NzNotificationService} from "ng-zorro-antd/notification";
 import {DanhMucService} from "../../../../../../../services/danhmuc.service";
 import dayjs from "dayjs";
-import {API_STATUS_CODE, LIST_VAT_TU_HANG_HOA, TYPE_PAG} from "../../../../../../../constants/config";
+import {API_STATUS_CODE, TYPE_PAG} from "../../../../../../../constants/config";
 import {MESSAGE} from "../../../../../../../constants/message";
 import {DanhMucTieuChuanService} from "../../../../../../../services/quantri-danhmuc/danhMucTieuChuan.service";
 import {UploadFileService} from "../../../../../../../services/uploaFile.service";
 import {ChiTieuKeHoachNamCapTongCucService} from "../../../../../../../services/chiTieuKeHoachNamCapTongCuc.service";
 import {saveAs} from 'file-saver';
-import {
-  CanCuXacDinhPag,
-  PhuongPhapXacDinhGia,
-  ThongTinChungPag,
-} from "../../../../../../../models/DeXuatPhuongAnGia";
+import {CanCuXacDinhPag, PhuongPhapXacDinhGia, ThongTinChungPag,} from "../../../../../../../models/DeXuatPhuongAnGia";
 import {FileDinhKem} from "../../../../../../../models/FileDinhKem";
 import {STATUS} from "../../../../../../../constants/status";
 import {DialogTuChoiComponent} from "../../../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
-import { uniqBy } from 'lodash';
+import {uniqBy} from 'lodash';
+import {
+  DialogTableSelectionComponent
+} from "../../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
+
 @Component({
   selector: 'app-them-moi-de-xuat-pag',
   templateUrl: './them-dx-pag-vt.html',
@@ -59,6 +59,8 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
   rowItemCcXdg: CanCuXacDinhPag = new CanCuXacDinhPag();
   rowItemTtc: ThongTinChungPag = new ThongTinChungPag();
   rowItemPpxdg: PhuongPhapXacDinhGia = new PhuongPhapXacDinhGia();
+  listDxCanSua: any[] = []
+  dsLoaiDx: any[] = []
   pagTtChungs: any[] = []
   maDx: string;
   dataTable: any[] = [];
@@ -68,6 +70,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
   STATUS = STATUS;
   fileDinhKemList: any[] = [];
   typeConst = TYPE_PAG;
+
   constructor(
     private readonly fb: FormBuilder,
     private readonly modal: NzModalService,
@@ -117,17 +120,17 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
 
   async ngOnInit() {
     this.spinner.show();
-    await Promise.all([
-      this.userInfo = this.userService.getUserLogin(),
-      this.loadDsNam(),
+    this.userInfo = this.userService.getUserLogin();
+    this.maDx = '/TCDT-KH';
+      this.loadDsNam();
       // this.getDataChiTieu(),
-      this.loadDsPhuongAnGia(),
-      this.loadDsVthh(),
-      this.loadDsHangHoaPag(),
-      this.loadDsLoaiGia(),
-      this.maDx = '/TCDT-KH',
-      this.getDataDetail(this.idInput)
-    ])
+      this.loadDsPhuongAnGia();
+      this.loadDsVthh();
+      this.loadDsHangHoaPag();
+      this.loadDsLoaiGia();
+      this.loadDsLoaiDx();
+      this.loadDsDxCanSua();
+      this.getDataDetail(this.idInput);
     this.spinner.hide();
   }
 
@@ -147,6 +150,17 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
       this.dataEditPp[id].edit = false;
     }
 
+  }
+
+  async loadDsLoaiDx() {
+    this.dsLoaiGia = [];
+    let res = await this.danhMucService.danhMucChungGetAll('LOAI_DE_XUAT');
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.dsLoaiDx = res.data;
+      if (this.dsLoaiDx.length > 0) {
+        this.dsLoaiDx.sort((a, b) => (a.ma - b.ma))
+      }
+    }
   }
 
   async onChangeCloaiVthh(event) {
@@ -205,6 +219,89 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       this.dsLoaiHangXdg = res.data;
     }
+  }
+
+  openModalSoDx() {
+    if (!this.isView && !this.isModal) {
+      const modalQD = this.modal.create({
+        nzTitle: 'Danh sách điều chỉnh đề xuất Phương án giá',
+        nzContent: DialogTableSelectionComponent,
+        nzMaskClosable: false,
+        nzClosable: false,
+        nzWidth: '900px',
+        nzFooter: null,
+        nzComponentParams: {
+          dataTable: this.listDxCanSua,
+          dataHeader: ['Số công văn', 'Ngày ký', 'Loại hàng hoa'],
+          dataColumn: ['soDeXuat', 'ngayKy', 'tenLoaiVthh'],
+        },
+      })
+      modalQD.afterClose.subscribe(async (data) => {
+        if (data) {
+          await this.bindingDataQd(data.id);
+        }
+      });
+    }
+  }
+
+  async bindingDataQd(id) {
+    let res = await this.giaDeXuatGiaService.getDetail(id);
+    const data = res.data;
+    this.formData.patchValue({
+      namKeHoach: data.namKeHoach,
+      soDeXuatDc: data.soDeXuat,
+      loaiVthh: data.loaiVthh,
+      ngayKy: data.ngayKy,
+      loaiGia: data.loaiGia,
+      trichYeu: data.trichYeu,
+      cloaiVthh: data.cloaiVthh,
+      moTa: data.moTa,
+      tchuanCluong: data.tchuanCluong,
+      giaDeNghi: data.giaDeNghi,
+      vat: data.vat ? data.vat.toString() : '',
+      giaDeNghiVat: data.giaDeNghiVat,
+      soLuong: data.soLuong,
+      ghiChu: data.ghiChu,
+      diaDiemDeHang: data.diaDiemDeHang,
+      maPphapXdg: data.maPphapXdg,
+      loaiHangXdg: data.loaiHangXdg,
+      giaVonNk: data.giaVonNk,
+      chiPhiChung: data.chiPhiChung,
+      chiPhiPbo: data.chiPhiPbo,
+      tongChiPhi: data.tongChiPhi,
+      noiDung: data.noiDung,
+      tgianNhang: data.tgianNhang,
+      soCanCu: data.soCanCu,
+      qdCtKhNam: data.qdCtKhNam,
+    })
+    // await this.loadDsQdPduyetKhlcnt();
+    this.updateEditCache('ttc');
+    this.updateEditCache('ppxdg');
+  }
+
+
+  async loadDsDxCanSua() {
+    this.spinner.show();
+
+    let body = {
+      namKh : this.formData.value.namKeHoach,
+      type : this.type,
+      pagType : this.loaiVthh,
+      maDvi : this.userInfo.MA_DVI,
+      paggingReq : {
+        limit: 99999,
+        page: 0,
+      }
+    }
+    let res = await this.giaDeXuatGiaService.search(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      let data = res.data;
+      this.listDxCanSua = data.content;
+      if (this.listDxCanSua && this.listDxCanSua.length > 0) {
+        this.listDxCanSua = this.listDxCanSua.filter(item => item.trangThai == STATUS.DA_DUYET_CBV);
+      }
+    }
+    this.spinner.hide();
   }
 
   deleteItem(index: number, page: string) {
@@ -302,7 +399,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
       this.formData.patchValue({
         id: data.id,
         namKeHoach: data.namKeHoach,
-        soDeXuat: data.soDeXuat? data.soDeXuat.split("/")[0] : '',
+        soDeXuat: data.soDeXuat ? data.soDeXuat.split("/")[0] : '',
         loaiVthh: data.loaiVthh,
         ngayKy: data.ngayKy,
         nguoiKy: data.nguoiKy,
@@ -536,12 +633,13 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     }
   }
 
-  cancelEdit(index: number, page : string) {
+  cancelEdit(index: number, page: string) {
     if (page == 'ttc') {
       this.dataEdit[index] = {
         data: {...this.pagTtChungs[index]},
         edit: false,
-      };    }
+      };
+    }
     if (page == 'ccXdg') {
       this.dataEditCc[index] = {
         data: {...this.dataTableCanCuXdg[index]},
@@ -586,7 +684,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
       if (res.msg == MESSAGE.SUCCESS) {
         let arr = res.data;
         if (arr) {
-          this.listQdCtKh = uniqBy(arr,'id');
+          this.listQdCtKh = uniqBy(arr, 'id');
         }
       } else {
         this.notification.error(MESSAGE.ERROR, 'Không tồn tại quyết định giao chỉ tiêu kế hoạch năm!')

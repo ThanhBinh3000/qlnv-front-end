@@ -67,6 +67,29 @@
         </div>
         <div nz-col [nzSpan]="3">
           <nz-form-item class="form-item">
+            <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="nam-qd">Loại đề xuất
+            </nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-select formControlName="loaiDeXuat" [nzDisabled]="idInput > 0" nzAllowClear="true">
+                <nz-option *ngFor="let p of dsLoaiDx" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+                </nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="4" *ngIf="formData.value.loaiDeXuat != '00'">
+          <nz-form-item class="form-item">
+            <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true">Số công văn cần điều chỉnh
+            </nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-input-group nzAddOnAfterIcon="folder-open">
+                <input type="text" nz-input formControlName="soDeXuatDc" [readonly]="true" (click)="openModalSoDx()">
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="3">
+          <nz-form-item class="form-item">
             <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="so-qd">Số công văn
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
@@ -100,29 +123,6 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="24">
-          <nz-form-item class="form-item">
-            <nz-form-label nzRequired [nzNoColon]="true" nzFor="ngay-qd">Trích yếu</nz-form-label>
-            <nz-form-control>
-              <textarea [readOnly]="isView" formControlName="trichYeu" rows="3" class="search__input"
-                        nz-input></textarea>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-        <div nz-col nzSpan="24">
-          <nz-form-item>
-            <nz-form-label [nzNoColon]="true" nzSpan="24">
-              Căn cứ pháp lý
-            </nz-form-label>
-          </nz-form-item>
-          <nz-form-item>
-            <div class="list-file" nz-col nzSpan="24">
-              <file-list [data]="fileDinhKemList"
-                         [disabled]="isView">
-              </file-list>
-            </div>
-          </nz-form-item>
-        </div>
         <div nz-col [nzSpan]="4">
           <nz-form-item class="form-item">
             <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true">Loại hàng hóa
@@ -146,6 +146,29 @@
                 </nz-option>
               </nz-select>
             </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="24">
+          <nz-form-item class="form-item">
+            <nz-form-label nzRequired [nzNoColon]="true" nzFor="ngay-qd">Trích yếu</nz-form-label>
+            <nz-form-control>
+              <textarea [readOnly]="isView" formControlName="trichYeu" rows="3" class="search__input"
+                        nz-input></textarea>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="24">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true" nzSpan="24">
+              Căn cứ pháp lý
+            </nz-form-label>
+          </nz-form-item>
+          <nz-form-item>
+            <div class="list-file" nz-col nzSpan="24">
+              <file-list [data]="fileDinhKemList"
+                         [disabled]="isView">
+              </file-list>
+            </div>
           </nz-form-item>
         </div>
         <!--        <div nz-col [nzSpan]="5" *ngIf="type=='GMTDBTT'">-->
@@ -562,15 +585,9 @@
     <nz-tab [nzTitle]="'Thông tin khảo sát giá'">
       <nz-card class="mt16 p-lr16 card-table pd-10">
         <span class="sub-title mb-10">KẾT QUẢ KHẢO SÁT GIÁ THỊ TRƯỜNG</span>
-        <app-thong-tin-ksg [isView]="isView" [vat]="formData.value.vat ? formData.value.vat  : 0 "
-                           *ngIf="!idInput || dataTableKsGia" [isTableKetQua]="true" [listCloaiVthh]="listCloaiVthh"
-                           [(dataTable)]="dataTableKsGia"
-                           [isVat]="formData.value.loaiGia == 'LG01' || formData.value.loaiGia == 'LG03'">
-        </app-thong-tin-ksg>
+        <app-thong-tin-ksg-vt></app-thong-tin-ksg-vt>
         <span class="sub-title mb-10">KẾT QUẢ THẨM ĐỊNH GIÁ</span>
-        <app-thong-tin-ksg [isView]="isView" [vat]="formData.value.vat ? formData.value.vat  : 0 "
-                           *ngIf="!idInput || dataTableKqGia" [isTableKetQua]="false" [(dataTable)]="dataTableKqGia"
-                           [isVat]="formData.value.loaiGia == 'LG01' || formData.value.loaiGia == 'LG03'"></app-thong-tin-ksg>
+        <app-thong-tin-ksg-vt></app-thong-tin-ksg-vt>
       </nz-card>
     </nz-tab>
 
