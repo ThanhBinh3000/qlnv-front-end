@@ -28,6 +28,12 @@ import {
   ThongTinQdGiaoNhiemVuXuatHangTrongThoiGianBaoHanhComponent
 } from "./qd-giao-nhiem-vu-xuat-hang-trong-thoi-gian-bao-hanh/thong-tin-qd-giao-nhiem-vu-xuat-hang-trong-thoi-gian-bao-hanh/thong-tin-qd-giao-nhiem-vu-xuat-hang-trong-thoi-gian-bao-hanh.component";
 import {DieuChuyenNoiBoModule} from "../../../dieu-chuyen-noi-bo/dieu-chuyen-noi-bo.module";
+import {
+  XuatKhoVtTbTrongThoiGianBaoHanhComponent
+} from "./xuat-kho-vt-tb-trong-thoi-gian-bao-hanh/xuat-kho-vt-tb-trong-thoi-gian-bao-hanh.component";
+import {
+  ThongTinXuatKhoVtTbTrongThoiGianBaoHanhComponent
+} from "./xuat-kho-vt-tb-trong-thoi-gian-bao-hanh/thong-tin-xuat-kho-vt-tb-trong-thoi-gian-bao-hanh/thong-tin-xuat-kho-vt-tb-trong-thoi-gian-bao-hanh.component";
 
 
 @NgModule({
@@ -37,7 +43,9 @@ import {DieuChuyenNoiBoModule} from "../../../dieu-chuyen-noi-bo/dieu-chuyen-noi
     TongHopDsVtTbTrongThoiGianBaoHanhComponent,
     ChiTietTongHopDsVtTbTrongThoiGianBaoHanhComponent,
     QdGiaoNhiemVuXuatHangTrongThoiGianBaoHanhComponent,
-    ThongTinQdGiaoNhiemVuXuatHangTrongThoiGianBaoHanhComponent
+    ThongTinQdGiaoNhiemVuXuatHangTrongThoiGianBaoHanhComponent,
+    XuatKhoVtTbTrongThoiGianBaoHanhComponent,
+    ThongTinXuatKhoVtTbTrongThoiGianBaoHanhComponent,
 
   ],
   imports: [
@@ -57,7 +65,9 @@ import {DieuChuyenNoiBoModule} from "../../../dieu-chuyen-noi-bo/dieu-chuyen-noi
     TongHopDsVtTbTrongThoiGianBaoHanhComponent,
     ChiTietTongHopDsVtTbTrongThoiGianBaoHanhComponent,
     QdGiaoNhiemVuXuatHangTrongThoiGianBaoHanhComponent,
-    ThongTinQdGiaoNhiemVuXuatHangTrongThoiGianBaoHanhComponent
+    ThongTinQdGiaoNhiemVuXuatHangTrongThoiGianBaoHanhComponent,
+    XuatKhoVtTbTrongThoiGianBaoHanhComponent,
+    ThongTinXuatKhoVtTbTrongThoiGianBaoHanhComponent
   ],
   providers: [DatePipe]
 })
