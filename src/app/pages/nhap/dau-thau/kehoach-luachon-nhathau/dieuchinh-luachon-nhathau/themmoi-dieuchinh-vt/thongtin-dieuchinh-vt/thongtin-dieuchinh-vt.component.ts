@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, SimpleChanges } from "@angular/core";
+import {Component, EventEmitter, Input, OnInit, Output, SimpleChanges} from "@angular/core";
 import { Base2Component } from "../../../../../../../components/base2/base2.component";
 import { HttpClient } from "@angular/common/http";
 import { StorageService } from "../../../../../../../services/storage.service";
@@ -35,6 +35,7 @@ export class ThongtinDieuchinhVtComponent extends Base2Component implements OnIn
   @Input() dataInput;
   @Input() isView: boolean = false;
   @Input() isCache: boolean = false;
+  @Output() dsDxChange = new EventEmitter<any>();
   listOfData: any[] = [];
   listOfDataCache: any[] = [];
   listQuy: any[] = [];
@@ -127,6 +128,7 @@ export class ThongtinDieuchinhVtComponent extends Base2Component implements OnIn
         })
         this.listOfData = [...this.dataInput.dsGthau];
         this.listOfDataCache = [...this.dataInput.dsGthau];
+        this.dsDxChange.emit(this.listOfData);
         await this.getDataChiTieu();
         this.initListQuy();
       }
@@ -231,9 +233,7 @@ export class ThongtinDieuchinhVtComponent extends Base2Component implements OnIn
           tongMucDt: parseFloat(tongMucDt.toFixed(2)),
           tongSlChiTieu: tongSlChiTieu
         });
-        // this.dsDxChange.emit(this.listOfData);
-        console.log(this.listOfData)
-        console.log(this.isCache)
+        this.dsDxChange.emit(this.listOfData);
       }
     });
   }

@@ -65,7 +65,7 @@ export class ToanBoDsVtTbTrongThoiGianBaoHanhComponent extends Base2Component im
       ngayTongHop: [],
       ngayTongHopTu: [],
       ngayTongHopDen: [],
-      tgianLuuKho: [],
+      thoiHanLk: [],
       lyDo: [],
       trangThai: [],
       loai: [],

@@ -106,19 +106,19 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
       dsBBNTBQ: [],
       tongKinhPhiDaTh: [],
 
-      nguoiGH: [],
-      cccd: [],
-      dvNguoiGH: [],
-      dcNguoiGH: [],
-      biensoxe: [],
-      slNhapLoKho: [],
-      slKhaiBao: [],
-      slThucTe: [],
+      nguoiGiaoHang: [],
+      soCmt: [],
+      dvgiaoHang: [],
+      diaChiDonViGiaoHang: [],
+      bienSoXe: [],
+      slNhapTheoQd: [],
+      slNhapTheoKb: [],
+      slNhapTheoKt: [],
       lanhDao: [],
 
-      soGiamDinh: [],
+      soChungThuGiamDinh: [],
       ngayGiamDinh: [],
-      tcGiamDinh: [],
+      toChucGiamDinh: [],
 
       danhGiaCamQuan: [],
       dcnbPhieuKtChatLuongDtl: [new Array<any>(),],
@@ -208,7 +208,9 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
       let data = await this.detail(id);
       if (data) {
         this.dataTableChiTieu = data.dcnbPhieuKtChatLuongDtl
+        this.bienBanLayMauDinhKem = data.bienBanLayMauDinhKem
         this.formData.patchValue(data);
+        await this.loadChiTietQdinh(data.qdDcId);
       }
 
     }
@@ -369,7 +371,7 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
           tenCloaiVthh: data.tenCloaiVthh,
           tichLuongKhaDung: data.tichLuongKd,
           tenDonViTinh: data.tenDonViTinh,
-          slNhapLoKho: data.soLuongPhanBo
+          slNhapTheoQd: data.soLuongPhanBo
         });
 
         let dmTieuChuan = await this.danhMucTieuChuanService.getDetailByMaHh(data.cloaiVthh);

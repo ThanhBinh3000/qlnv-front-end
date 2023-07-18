@@ -12,9 +12,8 @@ import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../services/storage.service";
 import {Router} from "@angular/router";
 import {ThemSoKhoTheKhoComponent} from "./them-so-kho-the-kho/them-so-kho-the-kho.component";
-import {chain, cloneDeep} from "lodash";
+import {chain} from "lodash";
 import {v4 as uuidv4} from 'uuid';
-import {PAGE_SIZE_DEFAULT} from "../../../../constants/config";
 
 @Component({
   selector: 'app-so-kho-the-kho',
@@ -28,7 +27,8 @@ export class SoKhoTheKhoComponent extends Base2Component implements OnInit {
   listLoaiHangHoa: any[] = [];
   listChungLoaiHangHoa: any[] = [];
   dsDonVi: any = [];
-
+  openPhieuNx = false;
+  idPhieuNx: any;
   constructor(
     private httpClient: HttpClient,
     private storageService: StorageService,
@@ -236,5 +236,13 @@ export class SoKhoTheKhoComponent extends Base2Component implements OnInit {
     }
   }
 
-  protected readonly PAGE_SIZE_DEFAULT = PAGE_SIZE_DEFAULT;
+  openHdModal(id: number) {
+    this.idPhieuNx = id;
+    this.openPhieuNx = true;
+  }
+
+  closeHdModal() {
+    this.idPhieuNx = null;
+    this.openPhieuNx = false;
+  }
 }
