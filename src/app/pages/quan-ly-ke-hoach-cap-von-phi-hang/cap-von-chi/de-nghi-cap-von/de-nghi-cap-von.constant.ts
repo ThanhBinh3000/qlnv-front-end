@@ -149,7 +149,18 @@ export class ItemContract {
     viPhamHopDong: number;
     thanhLyHdongSl: number;
     thanhLyHdongTt: number;
-    congVan: string
+    congVan: string;
+    luyKeCapUng: number;
+    luyKeCapVon: number;
+    luyKeCong: number;
+    duToanDaGiao: number;
+    tongVonVaDuToanDaCap: number;
+    vonDnghiCapLanNay: number;
+    tongTien: number;
+    soConDuocCap: number;
+    cong: number;
+    capUng: number;
+    capVon: number;
 }
 
 export class ItemRequest {

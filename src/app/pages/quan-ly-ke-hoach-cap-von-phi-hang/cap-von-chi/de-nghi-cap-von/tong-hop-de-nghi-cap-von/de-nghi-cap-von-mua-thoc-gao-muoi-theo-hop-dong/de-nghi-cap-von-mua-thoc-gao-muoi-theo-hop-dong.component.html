@@ -158,20 +158,20 @@
 							<tr>
 								<th nzLeft></th>
 								<th nzLeft>Tổng cộng</th>
-								<th>{{displayValue(total.slKeHoach)}}</th>
-								<th>{{displayValue(total.slHopDong)}}</th>
-								<th>{{displayValue(total.gtHopDong)}}</th>
-								<th>{{displayValue(total.duToanDaGiao)}}</th>
-								<th>{{displayValue(total.luyKeCong)}}</th>
-								<th>{{displayValue(total.luyKeCapVon)}}</th>
-								<th>{{displayValue(total.luyKeCapUng)}}</th>
-								<th>{{displayValue(total.tongVonVaDtDaCap)}}</th>
-								<th>{{displayValue(total.vonDnghiCapLanNay)}}</th>
-								<th>{{displayValue(total.vonDuyetCong)}}</th>
-								<th>{{displayValue(total.vonDuyetCapVon)}}</th>
-								<th>{{displayValue(total.vonDuyetCapUng)}}</th>
-								<th>{{displayValue(total.tongCap)}}</th>
-								<th>{{displayValue(total.soConDuocCap)}}</th>
+								<th>{{Op.fmtVal(total.slKeHoach)}}</th>
+								<th>{{Op.fmtVal(total.slHopDong)}}</th>
+								<th>{{Op.fmtVal(total.gtHopDong)}}</th>
+								<th>{{Op.fmtVal(total.duToanDaGiao)}}</th>
+								<th>{{Op.fmtVal(total.luyKeCong)}}</th>
+								<th>{{Op.fmtVal(total.luyKeCapVon)}}</th>
+								<th>{{Op.fmtVal(total.luyKeCapUng)}}</th>
+								<th>{{Op.fmtVal(total.tongVonVaDtDaCap)}}</th>
+								<th>{{Op.fmtVal(total.vonDnghiCapLanNay)}}</th>
+								<th>{{Op.fmtVal(total.vonDuyetCong)}}</th>
+								<th>{{Op.fmtVal(total.vonDuyetCapVon)}}</th>
+								<th>{{Op.fmtVal(total.vonDuyetCapUng)}}</th>
+								<th>{{Op.fmtVal(total.tongCap)}}</th>
+								<th>{{Op.fmtVal(total.soConDuocCap)}}</th>
 								<th></th>
 								<th *ngIf="status" nzRight></th>
 							</tr>
@@ -186,46 +186,46 @@
 										{{ data.tenDvi }}
 									</td>
 									<td>
-										{{ displayValue(data.slKeHoach) }}
+										{{ Op.fmtVal(data.slKeHoach) }}
 									</td>
 									<td>
-										{{ displayValue(data.slHopDong) }}
+										{{ Op.fmtVal(data.slHopDong) }}
 									</td>
 									<td>
-										{{ displayValue(data.gtHopDong) }}
+										{{ Op.fmtVal(data.gtHopDong) }}
 									</td>
 									<td>
-										{{ displayValue(data.duToanDaGiao) }}
+										{{ Op.fmtVal(data.duToanDaGiao) }}
 									</td>
 									<td>
-										{{ displayValue(data.luyKeCong) }}
+										{{ Op.fmtVal(data.luyKeCong) }}
 									</td>
 									<td>
-										{{ displayValue(data.luyKeCapVon) }}
+										{{ Op.fmtVal(data.luyKeCapVon) }}
 									</td>
 									<td>
-										{{ displayValue(data.luyKeCapUng) }}
+										{{ Op.fmtVal(data.luyKeCapUng) }}
 									</td>
 									<td>
-										{{displayValue(data.tongVonVaDtDaCap)}}
+										{{Op.fmtVal(data.tongVonVaDtDaCap)}}
 									</td>
 									<td>
-										{{ displayValue((data.vonDnghiCapLanNay)) }}
+										{{ Op.fmtVal((data.vonDnghiCapLanNay)) }}
 									</td>
 									<td>
-										{{ displayValue(data.vonDuyetCong) }}
+										{{ Op.fmtVal(data.vonDuyetCong) }}
 									</td>
 									<td>
-										{{ displayValue(data.vonDuyetCapVon) }}
+										{{ Op.fmtVal(data.vonDuyetCapVon) }}
 									</td>
 									<td>
-										{{ displayValue(data.vonDuyetCapUng) }}
+										{{ Op.fmtVal(data.vonDuyetCapUng) }}
 									</td>
 									<td>
-										{{ displayValue(data.tongCap) }}
+										{{ Op.fmtVal(data.tongCap) }}
 									</td>
 									<td>
-										{{ displayValue(data.soConDuocCap) }}
+										{{ Op.fmtVal(data.soConDuocCap) }}
 									</td>
 									<td>
 										{{ data.ghiChu }}
@@ -242,13 +242,13 @@
 										{{ editCache[data.id].data.tenDvi }}
 									</td>
 									<td>
-										{{ displayValue(editCache[data.id].data.slKeHoach) }}
+										{{ Op.fmtVal(editCache[data.id].data.slKeHoach) }}
 									</td>
 									<td>
-										{{ displayValue(editCache[data.id].data.slHopDong) }}
+										{{ Op.fmtVal(editCache[data.id].data.slHopDong) }}
 									</td>
 									<td>
-										{{ displayValue(editCache[data.id].data.gtHopDong) }}
+										{{ Op.fmtVal(editCache[data.id].data.gtHopDong) }}
 									</td>
 									<td>
 										<input class="money-input" currencyMask [options]="amount"
@@ -256,23 +256,23 @@
 											(ngModelChange)="changeModel(data.id)" />
 									</td>
 									<td>
-										{{ displayValue(editCache[data.id].data.luyKeCong) }}
+										{{ Op.fmtVal(editCache[data.id].data.luyKeCong) }}
 									</td>
 									<td>
-										{{ displayValue(editCache[data.id].data.luyKeCapVon) }}
+										{{ Op.fmtVal(editCache[data.id].data.luyKeCapVon) }}
 									</td>
 									<td>
-										{{ displayValue(editCache[data.id].data.luyKeCapUng) }}
+										{{ Op.fmtVal(editCache[data.id].data.luyKeCapUng) }}
 									</td>
 
 									<td>
-										{{ displayValue(editCache[data.id].data.tongVonVaDtDaCap) }}
+										{{ Op.fmtVal(editCache[data.id].data.tongVonVaDtDaCap) }}
 									</td>
 									<td>
-										{{ displayValue(editCache[data.id].data.vonDnghiCapLanNay) }}
+										{{ Op.fmtVal(editCache[data.id].data.vonDnghiCapLanNay) }}
 									</td>
 									<td>
-										{{ displayValue(editCache[data.id].data.vonDuyetCong) }}
+										{{ Op.fmtVal(editCache[data.id].data.vonDuyetCong) }}
 									</td>
 									<td>
 										<input class="money-input" currencyMask [options]="amount"
@@ -285,10 +285,10 @@
 											(ngModelChange)="changeModel(data.id)" />
 									</td>
 									<td>
-										{{ displayValue(editCache[data.id].data.tongCap) }}
+										{{ Op.fmtVal(editCache[data.id].data.tongCap) }}
 									</td>
 									<td>
-										{{ displayValue(editCache[data.id].data.soConDuocCap) }}
+										{{ Op.fmtVal(editCache[data.id].data.soConDuocCap) }}
 									</td>
 									<td>
 										<input nz-input class="search__input"
