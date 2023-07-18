@@ -59,6 +59,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
   rowItemCcXdg: CanCuXacDinhPag = new CanCuXacDinhPag();
   rowItemTtc: ThongTinChungPag = new ThongTinChungPag();
   rowItemPpxdg: PhuongPhapXacDinhGia = new PhuongPhapXacDinhGia();
+  listVat: any[] = []
   listDxCanSua: any[] = []
   dsLoaiDx: any[] = []
   pagTtChungs: any[] = []
@@ -99,6 +100,8 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
         tenTrangThai: ['Dự Thảo'],
         ghiChu: [],
         noiDung: [null],
+        soDeXuatDc: [null],
+        loaiDeXuat: [null],
         lyDoTuChoi: [],
         qdCtKhNam: [null],
         soCanCu: [null],
@@ -130,8 +133,27 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
       this.loadDsLoaiGia();
       this.loadDsLoaiDx();
       this.loadDsDxCanSua();
+      this.loadTiLeThue();
       this.getDataDetail(this.idInput);
     this.spinner.hide();
+  }
+
+  async loadTiLeThue() {
+    this.spinner.show();
+    try {
+      let res = await this.danhMucService.danhMucChungGetAll("THUE_SUAT_VAT");
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.listVat = res.data;
+        if (this.listVat && this.listVat.length > 0) {
+          this.listVat.sort((a,b) => (a.giaTri - b.giaTri))
+        }
+      }
+      this.spinner.hide();
+    } catch (e) {
+      console.log('error: ', e)
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
   }
 
   luuEdit(id: number, page: string): void {
