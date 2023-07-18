@@ -245,19 +245,31 @@ export class PhuLucIComponent implements OnInit {
                     }
                 )
             }
-            if (this.lstCtietBcao.length == 0) {
-                this.luyKes?.forEach(item => {
-                    const data: ItemData = new ItemData({
-                        ...item,
-                        id: uuid.v4() + 'FE',
-                    })
-                    data.sum()
-                    data.tyLe();
-                    this.lstCtietBcao.push(data)
-                })
-            }
             await this.getFormData();
             this.scrollX = Table.tableWidth(350, 42, 0, 200);
+            if (this.lstCtietBcao.length == 0) {
+                if (this.luyKes?.length > 0) {
+                    this.luyKes?.forEach(item => {
+                        const data: ItemData = new ItemData({
+                            ...item,
+                            id: uuid.v4() + 'FE',
+                        })
+                        data.sum()
+                        data.tyLe();
+                        this.lstCtietBcao.push(data)
+                    })
+                } else {
+                    this.noiDungs.forEach(item => {
+                        this.lstCtietBcao.push(new ItemData({
+                            id: uuid.v4() + 'FE',
+                            maNdung: item.ma,
+                            stt: item.ma,
+                            tenNdung: item.giaTri,
+                            level: item.level,
+                        }))
+                    })
+                }
+            }
         } else {
             this.scrollX = Table.tableWidth(350, 42, 0, 0);
         }

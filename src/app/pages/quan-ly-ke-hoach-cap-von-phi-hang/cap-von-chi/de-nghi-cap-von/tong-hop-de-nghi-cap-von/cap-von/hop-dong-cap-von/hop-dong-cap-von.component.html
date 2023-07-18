@@ -33,12 +33,12 @@
         <i nz-icon nzType="copy" nzTheme="outline"></i>
         <span>Copy</span>
       </button>
-      <!-- <ng-container *ngIf="baoCao.trangThai == '7'"> -->
-      <button type="button" class="btn btn-main" *ngIf="statusExportExcel.export" (click)="exportToExcel()">
-        <span nz-icon nzType="export" nzTheme="outline" style="margin-right: 5px;"></span>
-        <span>Xuất</span>
-      </button>
-      <!-- </ng-container> -->
+      <ng-container *ngIf="baoCao.trangThai == '7'">
+        <button type="button" class="btn btn-main" *ngIf="statusExportExcel.export" (click)="exportToExcel()">
+          <span nz-icon nzType="export" nzTheme="outline" style="margin-right: 5px;"></span>
+          <span>Xuất</span>
+        </button>
+      </ng-container>
     </div>
   </nz-affix>
 
@@ -176,29 +176,29 @@
               <tr>
                 <th nzLeft></th>
                 <th nzLeft>Tổng cộng</th>
-                <th>{{displayValue(total.slKeHoach)}}</th>
-                <th>{{displayValue(total.slThucHien)}}</th>
-                <th>{{displayValue(total.donGia)}}</th>
-                <th>{{displayValue(total.gtriThucHien)}}</th>
-                <th>{{displayValue(total.duToanDaGiao)}}</th>
-                <th>{{displayValue(total.luyKeTongCapUng)}}</th>
-                <th>{{displayValue(total.luyKeTongCapVon)}}</th>
-                <th>{{displayValue(total.luyKeTongCong)}}</th>
-                <th>{{displayValue(total.tongVonVaDtDaCap)}}</th>
-                <th>{{displayValue(total.vonDnghiCapLanNay)}}</th>
-                <th>{{displayValue(total.vonDuyetCapUng)}}</th>
-                <th>{{displayValue(total.vonDuyetCapVon)}}</th>
-                <th>{{displayValue(total.vonDuyetCong)}}</th>
-                <th>{{displayValue(total.tongTien)}}</th>
-                <th>{{displayValue(total.soConDuocCap)}}</th>
-                <th></th>
-                <th></th>
+                <th>{{Op.fmtVal(total.slKeHoach)}}</th>
+                <th>{{Op.fmtVal(total.slHopDong)}}</th>
+                <th>{{Op.fmtVal(total.gtHopDong)}}</th>
+                <th>{{Op.fmtVal(total.viPhamHopDong)}}</th>
+                <th>{{Op.fmtVal(total.thanhLyHdongSl)}}</th>
+                <th>{{Op.fmtVal(total.thanhLyHdongTt)}}</th>
+                <th>{{Op.fmtVal(total.luyKeCong)}}</th>
+                <th>{{Op.fmtVal(total.luyKeCapUng)}}</th>
+                <th>{{Op.fmtVal(total.luyKeCapVon)}}</th>
+                <th>{{Op.fmtVal(total.duToanDaGiao)}}</th>
+                <th>{{Op.fmtVal(total.tongVonVaDuToanDaCap)}}</th>
+                <th>{{Op.fmtVal(total.vonDnghiCapLanNay)}}</th>
+                <th>{{Op.fmtVal(total.cong)}}</th>
+                <th>{{Op.fmtVal(total.capUng)}}</th>
+                <th>{{Op.fmtVal(total.capVon)}}</th>
+                <th>{{Op.fmtVal(total.tongTien)}}</th>
+                <th>{{Op.fmtVal(total.soConDuocCap)}}</th>
                 <th></th>
                 <th *ngIf="status" nzRight></th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let data of baoCao.dnghiCapvonCtiets; let i = index">
+              <tr *ngFor="let data of baoCao.dnghiCvHopDongCtiets; let i = index">
                 <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
                   <td nzLeft>
                     {{ i+1 }}
@@ -207,59 +207,55 @@
                     {{ data.tenDvi }}
                   </td>
                   <td>
-                    {{ displayValue(data.slKeHoach) }}
-                  </td>
-                  <!-- <ng-container *ngIf="userService.isTongCuc(); else showCucAndChiCuc">
-                    <td>
-                      {{displayValue(data.gtTheoKeHoach/data.slKeHoach)}}
-                    </td>
-                  </ng-container>
-                  <ng-template #showCucAndChiCuc>
-                    <td>
-                      {{ displayValue(data.donGia) }}
-                    </td>
-                  </ng-template> -->
-                  <td>
-                    {{ displayValue(data.slThucHien) }}
+                    {{ Op.fmtVal(data.slKeHoach) }}
                   </td>
                   <td>
-                    {{ displayValue(data.donGia) }}
+                    {{ Op.fmtVal(data.slHopDong) }}
                   </td>
                   <td>
-                    {{ displayValue(data.gtriThucHien) }}
+                    {{Op.fmtVal(data.gtHopDong)}}
                   </td>
                   <td>
-                    {{ displayValue(data.duToanDaGiao) }}
+                    {{Op.fmtVal(data.viPhamHopDong)}}
                   </td>
                   <td>
-                    {{ displayValue(data.luyKeTongCapUng)}}
+                    {{Op.fmtVal(data.thanhLyHdongSl)}}
                   </td>
                   <td>
-                    {{ displayValue(data.luyKeTongCapVon) }}
+                    {{Op.fmtVal(data.thanhLyHdongTt)}}
                   </td>
                   <td>
-                    {{ displayValue(data.luyKeTongCong) }}
+                    {{Op.fmtVal(data.luyKeCong)}}
                   </td>
                   <td>
-                    {{ displayValue(data.tongVonVaDtDaCap) }}
+                    {{Op.fmtVal(data.luyKeCapUng)}}
                   </td>
                   <td>
-                    {{ displayValue(data.vonDnghiCapLanNay) }}
+                    {{Op.fmtVal(data.luyKeCapVon)}}
                   </td>
                   <td>
-                    {{ displayValue(data.vonDuyetCapUng) }}
+                    {{Op.fmtVal(data.duToanDaGiao)}}
                   </td>
                   <td>
-                    {{ displayValue(data.vonDuyetCapVon) }}
+                    {{Op.fmtVal(data.tongVonVaDuToanDaCap)}}
                   </td>
                   <td>
-                    {{ displayValue(data.vonDuyetCong) }}
+                    {{Op.fmtVal(data.vonDnghiCapLanNay)}}
                   </td>
                   <td>
-                    {{ displayValue(data.tongTien) }}
+                    {{Op.fmtVal(data.cong)}}
                   </td>
                   <td>
-                    {{ displayValue(data.soConDuocCap) }}
+                    {{Op.fmtVal(data.capUng)}}
+                  </td>
+                  <td>
+                    {{Op.fmtVal(data.capVon)}}
+                  </td>
+                  <td>
+                    {{Op.fmtVal(data.tongTien)}}
+                  </td>
+                  <td>
+                    {{Op.fmtVal(data.soConDuocCap)}}
                   </td>
                   <td>
                     {{ data.ghiChu }}
@@ -281,52 +277,61 @@
                   </td>
                   <td>
                     <input class="money-input" currencyMask [options]="amount"
-                      [(ngModel)]="editCache[data.id].data.slThucHien" (ngModelChange)="changeModel(data.id)" />
+                      [(ngModel)]="editCache[data.id].data.slHopDong" />
                   </td>
                   <td>
                     <input class="money-input" currencyMask [options]="amount"
-                      [(ngModel)]="editCache[data.id].data.donGia" (ngModelChange)="changeModel(data.id)" />
-                  </td>
-                  <td>
-                    {{ displayValue(editCache[data.id].data.gtriThucHien) }}
+                      [(ngModel)]="editCache[data.id].data.slKeHoach" />
                   </td>
                   <td>
                     <input class="money-input" currencyMask [options]="amount"
-                      [(ngModel)]="editCache[data.id].data.duToanDaGiao" />
+                      [(ngModel)]="editCache[data.id].data.viPhamHopDong" />
                   </td>
                   <td>
                     <input class="money-input" currencyMask [options]="amount"
-                      [(ngModel)]="editCache[data.id].data.luyKeTongCapUng" (ngModelChange)="changeModel(data.id)" />
+                      [(ngModel)]="editCache[data.id].data.thanhLyHdongSl" />
                   </td>
                   <td>
                     <input class="money-input" currencyMask [options]="amount"
-                      [(ngModel)]="editCache[data.id].data.luyKeTongCapVon" (ngModelChange)="changeModel(data.id)" />
+                      [(ngModel)]="editCache[data.id].data.thanhLyHdongTt" />
                   </td>
                   <td>
-                    {{ displayValue(editCache[data.id].data.luyKeTongCong) }}
-                  </td>
-                  <td>
-                    {{ displayValue(editCache[data.id].data.tongVonVaDtDaCap) }}
-                  </td>
-                  <td>
-                    {{ displayValue(editCache[data.id].data.vonDnghiCapLanNay) }}
+                    {{ Op.fmtVal(editCache[data.id].data.luyKeCong) }}
                   </td>
                   <td>
                     <input class="money-input" currencyMask [options]="amount"
-                      [(ngModel)]="editCache[data.id].data.vonDuyetCapUng" (ngModelChange)="changeModel(data.id)" />
+                      [(ngModel)]="editCache[data.id].data.luyKeCapUng" (ngModelChange)="changeModel(data.id)" />
                   </td>
                   <td>
                     <input class="money-input" currencyMask [options]="amount"
-                      [(ngModel)]="editCache[data.id].data.vonDuyetCapVon" (ngModelChange)="changeModel(data.id)" />
+                      [(ngModel)]="editCache[data.id].data.luyKeCapVon" (ngModelChange)="changeModel(data.id)" />
                   </td>
                   <td>
-                    {{ displayValue(editCache[data.id].data.vonDuyetCong) }}
+                    <input class="money-input" currencyMask [options]="amount"
+                      [(ngModel)]="editCache[data.id].data.duToanDaGiao" (ngModelChange)="changeModel(data.id)" />
                   </td>
                   <td>
-                    {{ displayValue(editCache[data.id].data.tongTien) }}
+                    {{ Op.fmtVal(editCache[data.id].data.tongVonVaDuToanDaCap) }}
                   </td>
                   <td>
-                    {{ displayValue(editCache[data.id].data.soConDuocCap) }}
+                    {{ Op.fmtVal(editCache[data.id].data.vonDnghiCapLanNay) }}
+                  </td>
+                  <td>
+                    {{ Op.fmtVal(editCache[data.id].data.cong) }}
+                  </td>
+                  <td>
+                    <input class="money-input" currencyMask [options]="amount"
+                      [(ngModel)]="editCache[data.id].data.capUng" (ngModelChange)="changeModel(data.id)" />
+                  </td>
+                  <td>
+                    <input class="money-input" currencyMask [options]="amount"
+                      [(ngModel)]="editCache[data.id].data.capVon" (ngModelChange)="changeModel(data.id)" />
+                  </td>
+                  <td>
+                    {{ Op.fmtVal(editCache[data.id].data.tongTien) }}
+                  </td>
+                  <td>
+                    {{ Op.fmtVal(editCache[data.id].data.soConDuocCap) }}
                   </td>
                   <td>
                     <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.ghiChu" />

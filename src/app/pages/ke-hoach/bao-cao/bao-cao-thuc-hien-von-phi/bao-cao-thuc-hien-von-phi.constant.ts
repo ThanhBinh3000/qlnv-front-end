@@ -103,11 +103,10 @@ export class Vp {
         const appendix = Vp.PHU_LUC.find(e => e.id == id);
         let tenDm: string = appendix.tenDm;
         if (loaiBcao == Vp.BC_DOT) {
-            tenDm = tenDm + ' đợt ' + dot.toString();
+            return tenDm + ' đợt ' + dot.toString();
         } else {
-            tenDm = tenDm + ' năm ' + nam.toString();
+            return tenDm + ' năm ' + nam.toString();
         }
-        return tenDm;
     }
 
     static readonly DANH_MUC_02 = [

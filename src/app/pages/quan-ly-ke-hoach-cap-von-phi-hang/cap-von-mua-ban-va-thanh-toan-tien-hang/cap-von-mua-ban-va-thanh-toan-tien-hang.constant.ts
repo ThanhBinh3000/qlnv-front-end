@@ -1,4 +1,5 @@
 import { Operator, Status, Utils } from "src/app/Utility/utils";
+import { utils } from "xlsx";
 
 export class Cvmb {
     static readonly GHI_NHAN_CU_VON = '1';
@@ -6,9 +7,8 @@ export class Cvmb {
     static readonly THANH_TOAN = '3';
     static readonly TIEN_THUA = '4';
     static readonly VON_BAN = '5';
-    static readonly TONG_HOP_VON_BAN = '6';
-    static readonly HOP_DONG_VON_BAN = '7';
-    static readonly QUAN_LY_THU_CHI = '8';
+    static readonly HOP_DONG_VON_BAN = '6';
+    static readonly QUAN_LY_THU_CHI = '7';
 
     static readonly THOC = "0";
     static readonly GAO = "1";
@@ -126,6 +126,7 @@ export class CapUng {
 
 export class ThanhToan {
     id: string;
+    idCapDuoi: string;
     stt: string;
     tenKhachHang: string;
     qdPheDuyet: string;
@@ -177,7 +178,7 @@ export class ThanhToan {
     }
 
     upperBound() {
-        return this.lkCong > Utils.MONEY_LIMIT;
+        return this.gtKeHoach > Utils.MONEY_LIMIT || this.gtHopDong > Utils.MONEY_LIMIT || this.gtThucHien > Utils.MONEY_LIMIT || this.lkCong > Utils.MONEY_LIMIT || this.lkSauLanNay > Utils.MONEY_LIMIT;
     }
 
     clear() {

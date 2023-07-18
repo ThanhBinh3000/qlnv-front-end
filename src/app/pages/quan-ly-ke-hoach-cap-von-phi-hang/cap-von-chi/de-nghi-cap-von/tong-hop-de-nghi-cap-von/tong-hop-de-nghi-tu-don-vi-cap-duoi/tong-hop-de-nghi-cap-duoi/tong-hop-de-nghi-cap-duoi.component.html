@@ -155,16 +155,16 @@
               <tr>
                 <th nzLeft></th>
                 <th nzLeft>Tổng cộng</th>
-                <th>{{displayValue(total.slKeHoach)}}</th>
-                <th>{{displayValue(total.slThucHien)}}</th>
+                <th>{{Op.fmtVal(total.slKeHoach)}}</th>
+                <th>{{Op.fmtVal(total.slThucHien)}}</th>
                 <th></th>
-                <th>{{displayValue(total.gtriThucHien)}}</th>
-                <th>{{displayValue(total.duToanDaGiao)}}</th>
-                <th>{{displayValue(total.luyKeTongCapUng)}}</th>
-                <th>{{displayValue(total.luyKeTongCapVon)}}</th>
-                <th>{{displayValue(total.luyKeTongCong)}}</th>
-                <th>{{displayValue(total.tongVonVaDtDaCap)}}</th>
-                <th>{{displayValue(total.vonDnghiCapLanNay)}}</th>
+                <th>{{Op.fmtVal(total.gtriThucHien)}}</th>
+                <th>{{Op.fmtVal(total.duToanDaGiao)}}</th>
+                <th>{{Op.fmtVal(total.luyKeTongCapUng)}}</th>
+                <th>{{Op.fmtVal(total.luyKeTongCapVon)}}</th>
+                <th>{{Op.fmtVal(total.luyKeTongCong)}}</th>
+                <th>{{Op.fmtVal(total.tongVonVaDtDaCap)}}</th>
+                <th>{{Op.fmtVal(total.vonDnghiCapLanNay)}}</th>
                 <th *ngIf="status" nzRight></th>
               </tr>
             </thead>
@@ -178,34 +178,34 @@
                     {{ data.tenDvi }}
                   </td>
                   <td>
-                    {{ displayValue(data.slKeHoach) }}
+                    {{ Op.fmtVal(data.slKeHoach) }}
                   </td>
                   <td>
-                    {{ displayValue(data.slThucHien) }}
+                    {{ Op.fmtVal(data.slThucHien) }}
                   </td>
                   <td>
-                    {{ displayValue(data.donGia) }}
+                    {{ Op.fmtVal(data.donGia) }}
                   </td>
                   <td>
-                    {{ displayValue(data.gtriThucHien) }}
+                    {{ Op.fmtVal(data.gtriThucHien) }}
                   </td>
                   <td>
-                    {{ displayValue(data.duToanDaGiao) }}
+                    {{ Op.fmtVal(data.duToanDaGiao) }}
                   </td>
                   <td>
-                    {{ displayValue(data.luyKeTongCapUng)}}
+                    {{ Op.fmtVal(data.luyKeTongCapUng)}}
                   </td>
                   <td>
-                    {{ displayValue(data.luyKeTongCapVon) }}
+                    {{ Op.fmtVal(data.luyKeTongCapVon) }}
                   </td>
                   <td>
-                    {{ displayValue(data.luyKeTongCong) }}
+                    {{ Op.fmtVal(data.luyKeTongCong) }}
                   </td>
                   <td>
-                    {{ displayValue(data.tongVonVaDtDaCap) }}
+                    {{ Op.fmtVal(data.tongVonVaDtDaCap) }}
                   </td>
                   <td>
-                    {{ displayValue(data.vonDnghiCapLanNay) }}
+                    {{ Op.fmtVal(data.vonDnghiCapLanNay) }}
                   </td>
                   <td *ngIf="status" nzRight>
                     <i *ngIf="data.maDvi == userInfo?.MA_DVI" class="fa fa-pencil" (click)="startEdit(data.id)"></i>
@@ -232,7 +232,7 @@
                       [(ngModel)]="editCache[data.id].data.soConDuocCap" (ngModelChange)="changeModel(data.id)" />
                   </td>
                   <td>
-                    {{ displayValue(editCache[data.id].data.gtriThucHien) }}
+                    {{ Op.fmtVal(editCache[data.id].data.gtriThucHien) }}
                   </td>
                   <td>
                     <input class="money-input" currencyMask [options]="amount"
@@ -247,13 +247,13 @@
                       [(ngModel)]="editCache[data.id].data.luyKeTongCapVon" (ngModelChange)="changeModel(data.id)" />
                   </td>
                   <td>
-                    {{ displayValue(editCache[data.id].data.luyKeTongCong) }}
+                    {{ Op.fmtVal(editCache[data.id].data.luyKeTongCong) }}
                   </td>
                   <td>
-                    {{ displayValue(editCache[data.id].data.tongVonVaDtDaCap) }}
+                    {{ Op.fmtVal(editCache[data.id].data.tongVonVaDtDaCap) }}
                   </td>
                   <td>
-                    {{ displayValue(editCache[data.id].data.vonDnghiCapLanNay) }}
+                    {{ Op.fmtVal(editCache[data.id].data.vonDnghiCapLanNay) }}
                   </td>
                   <td *ngIf="status" nzRight>
                     <a (click)="saveEdit(data.id)" class="save">Lưu</a>

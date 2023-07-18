@@ -201,6 +201,8 @@ export class DanhSachCapVonComponent implements OnInit {
           tabSelected: res.canCuVeGia == Utils.HD_TRUNG_THAU ? (res.loaiDnghi == Utils.MUA_VTU ? 'dn-vattu' : 'denghi-hopdong-capvon') : 'dn-capvon',
           hopDong: res.hopDong,
         }
+        console.log(obj);
+
         this.dataChange.emit(obj);
       }
     });
