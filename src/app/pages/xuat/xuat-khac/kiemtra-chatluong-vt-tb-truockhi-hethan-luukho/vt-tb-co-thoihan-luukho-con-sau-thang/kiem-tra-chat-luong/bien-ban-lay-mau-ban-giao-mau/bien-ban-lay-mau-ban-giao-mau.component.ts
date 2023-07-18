@@ -120,23 +120,29 @@ export class XkBienBanLayMauBanGiaoMauComponent extends Base2Component implement
 
   buildTableView() {
     let dataView = chain(this.dataTable)
-      .groupBy("tenDiemKho")
+      .groupBy("soQdGiaoNvXh")
       .map((value, key) => {
-        let bb = value.find(f => f.tenDiemKho === key)
-        let nam = bb ? bb.nam : null;
-        let soQd = bb ? bb.soQdGiaoNvXh : null;
-        let ngayXuatHangLayMau = bb ? bb.ngayXuatLayMau : null;
+        let parent = value.find(f => f.soQdGiaoNvXh === key)
+        let rs = chain(value)
+          .groupBy("tenDiemKho")
+          .map((v, k) => {
+              // let bb = v.find(s => s.tenDiemKho === k)
+              return {
+                idVirtual: uuid.v4(),
+                tenDiemKho: k != "null" ? k : '',
+                childData: v,
+              };
+            }
+          ).value();
         return {
           idVirtual: uuid.v4(),
-          tenDiemKho: key != "null" ? key : '',
-          nam: nam,
-          soQdGiaoNvXh: soQd,
-          childData: value,
-          ngayXuatLayMau: ngayXuatHangLayMau
+          soQdGiaoNvXh: key != "null" ? key : '',
+          nam: parent ? parent.nam : null,
+          ngayXuatLayMau:  parent ? parent.ngayXuatLayMau : null,
+          childData: rs
         };
       }).value();
     this.children = dataView
-    console.log(this.children, 'childrenchildrenchildren');
     this.expandAll()
   }
 

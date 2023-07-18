@@ -133,32 +133,31 @@ export class XuatKhoComponent extends Base2Component implements OnInit {
     let dataView = chain(this.dataTable)
       .groupBy("soCanCu")
       .map((value, key) => {
-        let quyetDinh = value.find(f => f.soCanCu === key)
+        let parent = value.find(f => f.soCanCu === key)
         let rs = chain(value)
           .groupBy("tenDiemKho")
           .map((v, k) => {
-              let diaDiem = v.find(s => s.tenDiemKho === k)
+              let child = v.find(s => s.tenDiemKho === k)
               return {
                 idVirtual: uuid.v4(),
                 tenDiemKho: k != "null" ? k : '',
-                tenLoKho: diaDiem ? diaDiem.tenLoKho : null,
+                tenLoKho: child ? child.tenLoKho : null,
+                tenNganKho: child ? child.tenNganKho : null,
+                tenLoaiVthh: child ? child.tenLoaiVthh : null,
                 childData: v
               }
             }
           ).value();
-        let namKeHoach = quyetDinh ? quyetDinh.namKeHoach : null;
-        let ngayQdGiaoNvXh = quyetDinh ? quyetDinh.ngayKy : null;
         return {
           idVirtual: uuid.v4(),
           soCanCu: key != "null" ? key : '',
-          namKeHoach: namKeHoach,
-          ngayQdGiaoNvXh: ngayQdGiaoNvXh,
+          namKeHoach: parent ? parent.namKeHoach : null,
+          ngayQdGiaoNvXh: parent ? parent.ngayKy : null,
           childData: rs
         };
       }).value();
     this.children = dataView
     this.expandAll()
-
   }
 
   expandAll() {

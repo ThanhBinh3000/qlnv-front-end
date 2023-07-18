@@ -493,7 +493,7 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
           cloaiVthh: item.cloaiVthh,
           tenCloaiVthh: item.tenCloaiVthh,
           ngayXuatLayMau: item.ngayXuat,
-        })
+        });
         await this.loadPhuongPhapLayMau(item.cloaiVthh);
         await this.loadChiTieuCl(item.cloaiVthh);
       }
