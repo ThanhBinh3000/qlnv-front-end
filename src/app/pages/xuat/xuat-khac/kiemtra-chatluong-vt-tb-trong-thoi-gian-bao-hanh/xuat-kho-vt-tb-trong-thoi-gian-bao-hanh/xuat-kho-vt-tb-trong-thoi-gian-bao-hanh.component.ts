@@ -1,27 +1,35 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Base2Component} from "../../../../../../components/base2/base2.component";
-import {CuuTroVienTroComponent} from "../../../../xuat-cuu-tro-vien-tro/xuat-cuu-tro/cuu-tro-vien-tro.component";
 import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../../../services/storage.service";
 import {NzNotificationService} from "ng-zorro-antd/notification";
 import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
-import {UserLogin} from "../../../../../../models/userlogin";
 import {MESSAGE} from 'src/app/constants/message';
 import {chain} from 'lodash';
 import * as uuid from "uuid";
 import dayjs from "dayjs";
-import {CHUC_NANG} from "../../../../../../constants/status";
-import {PhieuXuatKhoService} from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/PhieuXuatKho.service";
+import {Base2Component} from "../../../../../components/base2/base2.component";
+import {StorageService} from "../../../../../services/storage.service";
+import {CHUC_NANG} from "../../../../../constants/status";
+import {UserLogin} from "../../../../../models/userlogin";
+import {
+  PhieuXuatKhoVtTbTrongThoiGianBaoHanhService
+} from "../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvtbaohanh/PhieuXuatKhoVtTbTrongThoiGianBaoHanh.service";
+
 
 @Component({
-  selector: 'app-xuat-kho',
-  templateUrl: './xuat-kho.component.html',
-  styleUrls: ['./xuat-kho.component.scss']
+  selector: 'app-xuat-kho-vt-tb-trong-thoi-gian-bao-hanh',
+  templateUrl: './xuat-kho-vt-tb-trong-thoi-gian-bao-hanh.component.html',
+  styleUrls: ['./xuat-kho-vt-tb-trong-thoi-gian-bao-hanh.component.scss']
 })
-export class XuatKhoComponent extends Base2Component implements OnInit {
+export class XuatKhoVtTbTrongThoiGianBaoHanhComponent extends Base2Component implements OnInit {
 
+  @Input()
+  loaiVthh: string;
+  @Input()
+  loaiVthhCache: string;
   CHUC_NANG = CHUC_NANG;
+
+  // public vldTrangThai: CuuTroVienTroComponent;
 
   constructor(
     httpClient: HttpClient,
@@ -30,9 +38,9 @@ export class XuatKhoComponent extends Base2Component implements OnInit {
     spinner: NgxSpinnerService,
     modal: NzModalService,
     // private cuuTroVienTroComponent: CuuTroVienTroComponent,
-    private phieuXuatKhoService: PhieuXuatKhoService,
+    private phieuXuatKhoVtTbTrongThoiGianBaoHanhService: PhieuXuatKhoVtTbTrongThoiGianBaoHanhService,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, phieuXuatKhoService);
+    super(httpClient, storageService, notification, spinner, modal, phieuXuatKhoVtTbTrongThoiGianBaoHanhService);
     // this.vldTrangThai = this.cuuTroVienTroComponent;
     this.formData = this.fb.group({
       tenDvi: null,
@@ -43,6 +51,7 @@ export class XuatKhoComponent extends Base2Component implements OnInit {
       ngayXuatKho: null,
       ngayXuatKhoTu: null,
       ngayXuatKhoDen: null,
+      loaiVthh: null,
       type: null
     })
     this.filterTable = {
@@ -63,7 +72,6 @@ export class XuatKhoComponent extends Base2Component implements OnInit {
   userInfo: UserLogin;
   userdetail: any = {};
   selectedId: number = 0;
-  soQdGiaoNvXhSelected: string;
   isVatTu: boolean = false;
   isView = false;
   children: any = [];
@@ -96,6 +104,10 @@ export class XuatKhoComponent extends Base2Component implements OnInit {
   }
 
   async search(roles?): Promise<void> {
+    this.formData.patchValue({
+      loaiVthh: this.loaiVthh,
+      type: "XUAT_CTVT"
+    });
     await super.search(roles);
     this.buildTableView();
   }
@@ -133,31 +145,32 @@ export class XuatKhoComponent extends Base2Component implements OnInit {
     let dataView = chain(this.dataTable)
       .groupBy("soCanCu")
       .map((value, key) => {
-        let parent = value.find(f => f.soCanCu === key)
+        let quyetDinh = value.find(f => f.soCanCu === key)
         let rs = chain(value)
           .groupBy("tenDiemKho")
           .map((v, k) => {
-              let child = v.find(s => s.tenDiemKho === k)
+              let diaDiem = v.find(s => s.tenDiemKho === k)
               return {
                 idVirtual: uuid.v4(),
                 tenDiemKho: k != "null" ? k : '',
-                tenLoKho: child ? child.tenLoKho : null,
-                tenNganKho: child ? child.tenNganKho : null,
-                tenLoaiVthh: child ? child.tenLoaiVthh : null,
+                tenLoKho: diaDiem ? diaDiem.tenLoKho : null,
                 childData: v
               }
             }
           ).value();
+        let namKeHoach = quyetDinh ? quyetDinh.namKeHoach : null;
+        let ngayQdGiaoNvXh = quyetDinh ? quyetDinh.ngayXuat : null;
         return {
           idVirtual: uuid.v4(),
           soCanCu: key != "null" ? key : '',
-          namKeHoach: parent ? parent.namKeHoach : null,
-          ngayQdGiaoNvXh: parent ? parent.ngayKy : null,
+          namKeHoach: namKeHoach,
+          ngayQdGiaoNvXh: ngayQdGiaoNvXh,
           childData: rs
         };
       }).value();
     this.children = dataView
     this.expandAll()
+
   }
 
   expandAll() {
@@ -175,11 +188,10 @@ export class XuatKhoComponent extends Base2Component implements OnInit {
   }
 
 
-  redirectDetail(id, b: boolean, soQdGiaoNvXh?) {
+  redirectDetail(id, b: boolean) {
     this.selectedId = id;
     this.isDetail = true;
     this.isView = b;
-    this.soQdGiaoNvXhSelected = soQdGiaoNvXh;
     // this.isViewDetail = isView ?? false;
   }
 
