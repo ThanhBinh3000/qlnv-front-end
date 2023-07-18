@@ -126,12 +126,48 @@ export class Vp {
             ten: 'Xuất bán',
         },
         {
+            ma: '0.1.1',
+            ten: 'Lương thực',
+        },
+        {
+            ma: '0.1.2',
+            ten: 'Muối',
+        },
+        {
+            ma: '0.1.3',
+            ten: 'Vật tư thiết bị',
+        },
+        {
             ma: '0.2',
             ten: 'Xuất CTVT',
         },
         {
+            ma: '0.2.1',
+            ten: 'Lương thực',
+        },
+        {
+            ma: '0.2.2',
+            ten: 'Muối',
+        },
+        {
+            ma: '0.2.3',
+            ten: 'Vật tư thiết bị',
+        },
+        {
             ma: '0.3',
             ten: 'Xuất khác',
+        },
+        {
+            ma: '0.3.1',
+            ten: 'Lương thực',
+        },
+        {
+            ma: '0.3.2',
+            ten: 'Muối',
+        },
+        {
+            ma: '0.3.3',
+            ten: 'Vật tư thiết bị',
         },
     ]
 }

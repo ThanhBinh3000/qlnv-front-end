@@ -246,7 +246,7 @@ export class PhuLucIComponent implements OnInit {
                 )
             }
             await this.getFormData();
-            this.scrollX = Table.tableWidth(350, 42, 0, 200);
+            this.scrollX = Table.tableWidth(350, 42, 0, 170);
             if (this.lstCtietBcao.length == 0) {
                 if (this.luyKes?.length > 0) {
                     this.luyKes?.forEach(item => {
@@ -347,7 +347,7 @@ export class PhuLucIComponent implements OnInit {
     changeData(maNdung: string) {
         const data = this.extraData.find(e => e.maNdung == maNdung);
         const index = this.lstCtietBcao.findIndex(e => e.maNdung == maNdung);
-        const keys = ['dtoanGiaoDtoan', 'dtoanGiaoNguonKhac', 'dtoanGiaoNguonQuy', 'giaiNganThangBcaoDtoan', 'giaNganThangBcaoNguonKhac',
+        const keys = ['dtoanGiaoDtoan', 'dtoanGiaoNguonKhac', 'dtoanGiaoNguonQuy', 'giaiNganThangBcaoDtoan', 'giaiNganThangBcaoNguonKhac',
             'giaiNganThangBcaoNguonQuy', 'luyKeGiaiNganDtoan', 'luyKeGiaiNganNguonKhac', 'luyKeGiaiNganNguonQuy'];
         keys.forEach(key => {
             if (data[key]) {
@@ -357,6 +357,7 @@ export class PhuLucIComponent implements OnInit {
         this.lstCtietBcao[index].sum();
         this.lstCtietBcao[index].luyKe(this.luyKes?.find(e => e.maNdung == maNdung));
         this.lstCtietBcao[index].tyLe();
+        this.sum(this.lstCtietBcao[index].stt)
     }
 
     // luu
