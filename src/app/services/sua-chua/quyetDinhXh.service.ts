@@ -23,4 +23,14 @@ export class QuyetDinhXhService extends BaseService {
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
 
+  getDanhSachTaoBaoCao(body): Promise<OldResponseData> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/ds-tao-bao-cao`;
+    return this._httpClient.post<OldResponseData>(url, body).toPromise();
+  }
+
+  getChiTietBaoCao(id): Promise<OldResponseData> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/chi-tiet-bao-cao/${id}`;
+    return this._httpClient.get<OldResponseData>(url).toPromise();
+  }
+
 }

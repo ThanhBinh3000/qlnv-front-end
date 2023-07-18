@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+  import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { SuaChuaComponent } from "src/app/pages/sua-chua/sua-chua.component";
 import { DanhSachSuaChuaComponent } from "src/app/pages/sua-chua/danh-sach-sua-chua/danh-sach-sua-chua.component";
