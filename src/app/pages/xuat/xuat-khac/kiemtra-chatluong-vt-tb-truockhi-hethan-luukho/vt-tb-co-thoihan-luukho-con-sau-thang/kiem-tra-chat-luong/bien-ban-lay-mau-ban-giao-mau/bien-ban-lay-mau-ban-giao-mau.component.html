@@ -87,7 +87,6 @@
           <th width="">Năm</th>
           <th width="">Thời gian xuất lấy mẫu</th>
           <th width="">Điểm kho</th>
-          <th width="">Nhà kho</th>
           <th width="">Ngăn/Lô kho</th>
           <th width="">Chủng loại hàng</th>
           <th width="">Số BB LM/BGM</th>
@@ -112,7 +111,6 @@
             <td></td>
             <td></td>
             <td></td>
-            <td></td>
             <td class="text-left">
               <a (click)="redirectDetail(item.id, false,item.soQdGiaoNvXh)">
                 <i class="icon htvbdh_dau-cong" title="Thêm mới"></i>
@@ -127,29 +125,50 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td>{{lv1.tenDiemKho}}</td>
-                <td>{{lv1.tenNhaKho}}</td>
-                <td>{{lv1.tenLoKho ? lv1.tenNganKho + ' - ' + lv1.tenLoKho : lv1.tenNganKho}}</td>
-                <td>{{lv1.tenCloaiVthh}}</td>
-                <td>{{lv1.soBienBan}}</td>
-                <td>{{lv1.ngayLayMau | date: 'dd/MM/YYYY' }}</td>
-                <td>{{lv1.tenTrangThai}}</td>
+                <td class="bold">{{lv1.tenDiemKho}}</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
                 <td class="text-left">
-                  <a *ngIf="lv1.trangThai ==STATUS.DA_DUYET_LDC" (click)="redirectDetail(lv1.id, true)">
-                    <i class="fa fa-eye" title="Xem chi tiết"></i>
-                  </a>
-                  <a *ngIf="lv1.trangThai ==STATUS.TU_CHOI_LDC || lv1.trangThai ==STATUS.DU_THAO"
-                     (click)="redirectDetail(lv1.id, false)">
-                    <i class="fa fa-pencil" title="Sửa"></i>
-                  </a>
-                  <a *ngIf="lv1.trangThai ==STATUS.CHO_DUYET_LDC" (click)="redirectDetail(lv1.id, true)">
-                    <i class="icon htvbdh_tcdt_pheduyet"></i>
-                  </a>
-                  <a *ngIf="lv1.trangThai ==STATUS.DU_THAO" (click)="delete(lv1)">
-                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+                  <a (click)="redirectDetail(item.id, false,item.soQdGiaoNvXh)">
+                    <i class="icon htvbdh_dau-cong" title="Thêm mới"></i>
                   </a>
                 </td>
               </tr>
+              <ng-container *ngIf="expandSetString.has(item.idVirtual)">
+                <ng-container *ngFor="let lv2 of lv1.childData,let i2=index">
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>{{lv2.tenLoKho ? lv2.tenNganKho + ' - ' + lv2.tenLoKho : lv2.tenNganKho}}</td>
+                    <td>{{lv2.tenCloaiVthh }}</td>
+                    <td class="bold">{{lv2.soBienBan}}</td>
+                    <td>{{lv2.ngayLayMau | date: 'dd/MM/YYYY' }}</td>
+                    <td>{{lv2.tenTrangThai}}</td>
+                    <td class="text-left">
+                      <a *ngIf="lv2.trangThai ==STATUS.DA_DUYET_LDC" (click)="redirectDetail(lv2.id, true)">
+                        <i class="fa fa-eye" title="Xem chi tiết"></i>
+                      </a>
+                      <a *ngIf="lv2.trangThai ==STATUS.TU_CHOI_LDC || lv2.trangThai ==STATUS.DU_THAO"
+                         (click)="redirectDetail(lv2.id, false)">
+                        <i class="fa fa-pencil" title="Sửa"></i>
+                      </a>
+                      <a *ngIf="lv2.trangThai ==STATUS.CHO_DUYET_LDC" (click)="redirectDetail(lv2.id, true)">
+                        <i class="icon htvbdh_tcdt_pheduyet"></i>
+                      </a>
+                      <a *ngIf="lv2.trangThai ==STATUS.DU_THAO" (click)="delete(lv2)">
+                        <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+                      </a>
+                    </td>
+                  </tr>
+                </ng-container>
+              </ng-container>
             </ng-container>
           </ng-container>
         </ng-container>
@@ -177,7 +196,8 @@
   </div>
 </div>
 <div class="chi-tiet" *ngIf="isDetail">
-  <app-thong-tin-bien-ban-lay-mau-ban-giao-mau [idInput]="selectedId" [isView]="isView"   [soQdGiaoNvXh]="soQdGiaoNvXhSelected"
+  <app-thong-tin-bien-ban-lay-mau-ban-giao-mau [idInput]="selectedId" [isView]="isView"
+                                               [soQdGiaoNvXh]="soQdGiaoNvXhSelected"
                                                (showListEvent)="showList()">
   </app-thong-tin-bien-ban-lay-mau-ban-giao-mau>
 </div>
