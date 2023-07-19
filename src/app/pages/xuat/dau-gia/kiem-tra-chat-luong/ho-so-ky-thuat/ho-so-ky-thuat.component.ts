@@ -66,6 +66,9 @@ export class HoSoKyThuatComponent extends Base2Component implements OnInit {
       tenTrangThai: [],
       tenDvi: [],
       ngayTao: [],
+      soBbKtNgoaiQuan: [],
+      soBbKtVanHanh: [],
+      soBbKtHskt: [],
       type: []
     })
   }
