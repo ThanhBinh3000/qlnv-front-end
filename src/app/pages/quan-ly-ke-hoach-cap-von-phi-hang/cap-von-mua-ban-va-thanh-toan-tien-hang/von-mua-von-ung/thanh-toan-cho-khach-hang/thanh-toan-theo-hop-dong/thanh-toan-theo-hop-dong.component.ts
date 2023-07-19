@@ -21,7 +21,7 @@ export class ThanhToanTheoHopDongComponent implements OnInit {
     @Input() dataInfo;
     @Output() dataChange = new EventEmitter();
     Status = Status;
-    Op = Operator;
+    Op = new Operator('1');
     Utils = Utils;
     Cvmb = Cvmb;
     //thong tin dang nhap

@@ -1,16 +1,14 @@
 import { Component, Input, OnInit } from '@angular/core';
-import * as dayjs from 'dayjs';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { Status } from 'src/app/Utility/utils';
+import { Status, Utils } from 'src/app/Utility/utils';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { CapVonMuaBanTtthService } from 'src/app/services/quan-ly-von-phi/capVonMuaBanTtth.service';
-import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
-import { CapUng, Cvmb, Report, ThanhToan } from '../../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
+import { Cvmb, Report, ThanhToan } from '../../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
 import { Tab } from '../../von-mua-von-ung.constant';
 
 @Component({
@@ -32,7 +30,6 @@ export class DialogTaoMoiThanhToanComponent implements OnInit {
     constructor(
         private _modalRef: NzModalRef,
         private notification: NzNotificationService,
-        private quanLyVonPhiService: QuanLyVonPhiService,
         public userService: UserService,
         private capVonMuaBanTtthService: CapVonMuaBanTtthService,
         private spinner: NgxSpinnerService,
@@ -44,18 +41,24 @@ export class DialogTaoMoiThanhToanComponent implements OnInit {
         if (this.userService.isChiCuc()) {
             this.canCuGias = Cvmb.CAN_CU_GIA.filter(e => e.id == Cvmb.DON_GIA);
             this.loaiDns = Cvmb.LOAI_DE_NGHI.filter(e => e.id == Cvmb.THOC);
-        } else {
+        } else if (this.userService.isTongCuc()) {
             this.canCuGias = Cvmb.CAN_CU_GIA.filter(e => e.id == Cvmb.HOP_DONG);
-            if (this.userService.isTongCuc()) {
-                this.loaiDns = Cvmb.LOAI_DE_NGHI;
-            } else {
-                this.loaiDns = Cvmb.LOAI_DE_NGHI.filter(e => e.id != Cvmb.VTU);
-            }
+            this.loaiDns = Cvmb.LOAI_DE_NGHI.filter(e => e.id == Cvmb.VTU);
+        } else {
+            this.loaiDns = Cvmb.LOAI_DE_NGHI.filter(e => e.id != Cvmb.VTU);
         }
 
-        const thisYear = dayjs().get('year');
-        for (let i = -5; i < 10; i++) {
-            this.lstNam.push(thisYear + i);
+        this.lstNam = Utils.getListYear(5, 10);
+    }
+
+    changeModel() {
+        if (this.userService.isCuc()) {
+            this.loaiDns = Cvmb.LOAI_DE_NGHI.filter(e => e.id != Cvmb.VTU);
+            if (this.response.canCuVeGia == Cvmb.DON_GIA) {
+                this.loaiDns = Cvmb.LOAI_DE_NGHI.filter(e => e.id == Cvmb.THOC);
+            } else {
+                this.loaiDns = Cvmb.LOAI_DE_NGHI.filter(e => e.id == Cvmb.GAO || e.id == Cvmb.MUOI);
+            }
         }
     }
 
@@ -225,7 +228,7 @@ export class DialogTaoMoiThanhToanComponent implements OnInit {
         this._modalRef.close({
             baoCao: this.response,
             id: null,
-            tabSelected: Tab.CUV,
+            tabSelected: this.response.canCuVeGia == Cvmb.DON_GIA ? Tab.THANH_TOAN_DON_GIA : Tab.THANH_TOAN_HOP_DONG,
         });
     }
 

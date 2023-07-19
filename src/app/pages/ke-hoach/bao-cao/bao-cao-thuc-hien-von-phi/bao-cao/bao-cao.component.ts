@@ -38,7 +38,7 @@ export class BaoCaoComponent implements OnInit {
     //danh muc
     nguoiBcaos: any[];
     luyKes: Form[] = [];
-    lstBieuMaus: any[] = Vp.PHU_LUC;
+    // lstBieuMaus: any[] = Vp.PHU_LUC;
     //file
     listFile: File[] = [];                      // list file chua ten va id de hien tai o input
     fileList: NzUploadFile[] = [];
@@ -170,9 +170,9 @@ export class BaoCaoComponent implements OnInit {
         if (this.status.save) {
             await this.getListUser();
             this.getLuyKe();
-            this.lstBieuMaus.forEach(item => {
-                item.tenDm = Vp.appendixName(item.id, this.baoCao.maLoaiBcao, this.baoCao.namBcao, this.baoCao.dotBcao)
-            })
+            // this.lstBieuMaus.forEach(item => {
+            //     item.tenDm = Vp.appendixName(item.id, this.baoCao.maLoaiBcao, this.baoCao.namBcao, this.baoCao.dotBcao)
+            // })
         }
         this.path = this.baoCao.maDvi + '/' + this.baoCao.maBcao;
         this.spinner.hide();
@@ -269,7 +269,7 @@ export class BaoCaoComponent implements OnInit {
             if (data.statusCode == 0) {
                 this.baoCao = data.data;
                 this.baoCao?.lstBcaos?.forEach(item => {
-                    const app = this.lstBieuMaus.find(e => e.id == item.maLoai);
+                    const app = Vp.PHU_LUC.find(e => e.id == item.maLoai);
                     item.tenPhuLuc = app?.tenPl;
                     item.tieuDe = Vp.appendixName(item.maLoai, this.baoCao.maLoaiBcao, this.baoCao.namBcao, this.baoCao.dotBcao);
                 })
@@ -449,9 +449,14 @@ export class BaoCaoComponent implements OnInit {
 
     // them phu luc
     addAppendix() {
-        let danhSach: any;
-        this.lstBieuMaus.forEach(item => item.status = false);
-        danhSach = this.lstBieuMaus.filter(item => this.baoCao?.lstBcaos?.findIndex(data => data.maLoai == item.id) == -1);
+        let danhSach = [];
+        Vp.PHU_LUC.forEach(item => {
+            danhSach.push({
+                ...item,
+                status: false,
+            })
+        })
+        danhSach = danhSach.filter(item => this.baoCao?.lstBcaos?.findIndex(data => data.maLoai == item.id) == -1);
 
         const modalIn = this.modal.create({
             nzTitle: 'Danh sách mẫu báo cáo',
@@ -501,6 +506,7 @@ export class BaoCaoComponent implements OnInit {
             maLoai: bieuMau.maLoai,
             luyKes: this.luyKes.find(e => e.maLoai == bieuMau.maLoai),
             isOffice: this.isOffice,
+            isSynth: this.baoCao.lstBcaoDviTrucThuocs.length > 0,
         }
         Object.assign(dataInfo.status, this.status);
         dataInfo.status.save = dataInfo.status.save && (this.userInfo?.sub == bieuMau.nguoiBcao);
@@ -537,6 +543,7 @@ export class BaoCaoComponent implements OnInit {
     }
 
     async restoreReport(id: string) {
+        this.spinner.show();
         await this.baoCaoThucHienVonPhiService.restoreReport(this.baoCao.id, id).toPromise().then(
             (data) => {
                 if (data.statusCode == 0) {
@@ -551,6 +558,7 @@ export class BaoCaoComponent implements OnInit {
                 this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
             }
         );
+        this.spinner.hide();
     }
 
     async newReport() {

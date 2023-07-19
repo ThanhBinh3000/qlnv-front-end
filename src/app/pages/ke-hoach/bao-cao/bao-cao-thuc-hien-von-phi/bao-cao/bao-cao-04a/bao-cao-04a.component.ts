@@ -258,6 +258,8 @@ export class BaoCao04aComponent implements OnInit {
                             lstCtiet.push({
                                 ...e,
                                 id: uuid.v4() + 'FE',
+                                gtri: null,
+                                lkGtri: null,
                             })
                         })
                     }
