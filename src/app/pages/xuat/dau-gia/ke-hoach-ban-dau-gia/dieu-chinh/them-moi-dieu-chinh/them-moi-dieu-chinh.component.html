@@ -5,7 +5,7 @@
       <span>Quay lại</span>
     </button>
     <button *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDV ) " type="button" class="btn btn-sub do"
-      (click)="tuChoi()">
+            (click)="tuChoi()">
       <i class="icon htvbdh_tcdt_tuchoi"></i>
       <span>Từ chối</span>
     </button>
@@ -16,7 +16,7 @@
       <span>Duyệt</span>
     </button>
     <button *ngIf="formData.value.trangThai == STATUS.DA_DUYET_LDV && userService.isTongCuc()" type="button"
-      class="btn btn-sub xanh-nhat" (click)="save(true)">
+            class="btn btn-sub xanh-nhat" (click)="save(true)">
       <i class="icon htvbdh_chuyenvanthu"></i>
       <span>Ban hành</span>
     </button>
@@ -27,7 +27,7 @@
       <span>Lưu và gửi duyệt</span>
     </button>
     <button *ngIf="formData.value.trangThai == STATUS.DU_THAO && userService.isTongCuc()" type="button"
-      class="btn btn-main" (click)="save()">
+            class="btn btn-main" (click)="save()">
       <i class="icon htvbdh_tcdt_save"></i>
       <span>Lưu</span>
     </button>
@@ -45,8 +45,8 @@
     </div>
   </div>
   <nz-alert class="mg-t-10"
-    *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDV || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDV || formData.value.trangThai == STATUS.TU_CHOI_CBV"
-    nzShowIcon nzType="error" nzMessage="Lý do từ chối" nzDescription="{{formData.value.lyDoTuChoi}}">
+            *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDV || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDV || formData.value.trangThai == STATUS.TU_CHOI_CBV"
+            nzShowIcon nzType="error" nzMessage="Lý do từ chối" nzDescription="{{formData.value.lyDoTuChoi}}">
   </nz-alert>
   <nz-card class="mg-t-16 flex-card p-lr16">
     <nz-collapse>
@@ -69,7 +69,7 @@
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group nzAddOnAfter="/{{maQd}}">
                     <nz-input-number formControlName="soQdDc" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
-                      [nzSize]="'small'" [nzDisabled]="isDisabled()">
+                                     [nzSize]="'small'" [nzDisabled]="isDisabled()">
                     </nz-input-number>
                   </nz-input-group>
                 </nz-form-control>
@@ -217,7 +217,7 @@
                 <nz-form-label nzRequired [nzNoColon]="true">Tiêu chuẩn chất lượng </nz-form-label>
                 <nz-form-control nz-col>
                   <textarea rows="3" class="search__input" nz-input formControlName="tchuanCluong"
-                    [readonly]="true"></textarea>
+                            [readonly]="true"></textarea>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -225,33 +225,33 @@
         </form>
         <nz-table class="pd-10" nzBordered [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false">
           <thead>
-            <tr>
-              <th [width]="30">STT</th>
-              <th>Cục DTNN KV</th>
-              <th>Địa chỉ</th>
-              <th>Số kế hoạch/tờ trình</th>
-              <th>Ngày lập KH</th>
-              <th>Ngày duyệt KH</th>
-              <th>Trích yếu</th>
-              <th>Số ĐV tài sản</th>
-              <th>Số lượng xuất bán</th>
-              <th>Khoản tiền đặt trước (đ)</th>
-            </tr>
+          <tr>
+            <th [width]="30">STT</th>
+            <th>Cục DTNN KV</th>
+            <th>Địa chỉ</th>
+            <th>Số kế hoạch/tờ trình</th>
+            <th>Ngày lập KH</th>
+            <th>Ngày duyệt KH</th>
+            <th>Trích yếu</th>
+            <th>Số ĐV tài sản</th>
+            <th>Số lượng xuất bán</th>
+            <th>Khoản tiền đặt trước (đ)</th>
+          </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let data of dataTable ;let i = index" [ngClass]="{'bg-selected': i == 0 && this.selected}"
+          <tr *ngFor="let data of dataTable ;let i = index" [ngClass]="{'bg-selected': i == 0 && this.selected}"
               (click)="showDetail($event,i)">
-              <td class="text-center">{{i + 1}} </td>
-              <td>{{ data.tenDvi }}</td>
-              <td>{{ data.diaChi }}</td>
-              <td>{{ data.soDxuat }}</td>
-              <td>{{ data.ngayTao | date: 'dd/MM/YYYY' }}</td>
-              <td>{{ data.ngayPduyet | date: 'dd/MM/YYYY' }}</td>
-              <td>{{ data.trichYeu }}</td>
-              <td>{{ data.slDviTsan }}</td>
-              <td>{{ data.tongSoLuong | number: '1.0-1' }}</td>
-              <td>{{ data.tongTienDatTruocDonGia | number: '1.0-1' }}</td>
-            </tr>
+            <td class="text-center">{{i + 1}} </td>
+            <td>{{ data.tenDvi }}</td>
+            <td>{{ data.diaChi }}</td>
+            <td>{{ data.soDxuat }}</td>
+            <td>{{ data.ngayTao | date: 'dd/MM/YYYY' }}</td>
+            <td>{{ data.ngayPduyet | date: 'dd/MM/YYYY' }}</td>
+            <td>{{ data.trichYeu }}</td>
+            <td>{{ data.slDviTsan }}</td>
+            <td>{{ data.tongSoLuong | number: '1.0-1' }}</td>
+            <td>{{ data.tongTienDatTruocDonGia | number: '1.0-1' }}</td>
+          </tr>
           </tbody>
         </nz-table>
       </nz-collapse-panel>
@@ -259,16 +259,16 @@
     <div nz-row [nzGutter]="24">
       <div nz-col [nzSpan]="12">
         <nz-card class="mg-t-10 flex-card p-lr16 ">
-          <app-thongtin-qd-dieuchinh-khbdg [title]="'Nội dung quyết định gốc'" [dataInput]="dataInputCache"
-            [isView]="true" [isCache]="true">
-          </app-thongtin-qd-dieuchinh-khbdg>
+          <app-thong-tin-dieu-chinh [title]="'Nội dung quyết định gốc'" [dataInput]="dataInputCache"
+                                           [isView]="true" [isCache]="true">
+          </app-thong-tin-dieu-chinh>
         </nz-card>
       </div>
       <div nz-col [nzSpan]="12">
         <nz-card class="mg-t-10 flex-card p-lr16 ">
-          <app-thongtin-qd-dieuchinh-khbdg [title]="'Quyết định điều chỉnh'" [dataInput]="dataInput"
-            [isView]="formData.value.trangThai == STATUS.DU_THAO">
-          </app-thongtin-qd-dieuchinh-khbdg>
+          <app-thong-tin-dieu-chinh [title]="'Quyết định điều chỉnh'" [dataInput]="dataInput"
+                                           [isView]="formData.value.trangThai == STATUS.DU_THAO">
+          </app-thong-tin-dieu-chinh>
         </nz-card>
       </div>
     </div>
