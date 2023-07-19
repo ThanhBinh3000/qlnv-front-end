@@ -275,8 +275,8 @@
                       class="min-h-24 f-size-13 text-black text-bold" *ngFor="let item of listHinhThucBaoQuan">
                       {{item.giaTri}}
                     </label> -->
-                    <label [ngModelOptions]="{standalone: true}" [(ngModel)]="item.checked" [nzDisabled]="true"
-                      nz-checkbox *ngFor="let item of listHinhThucBaoQuan" class="text-bold"> {{item.giaTri}}
+                    <label [ngModelOptions]="{standalone: true}" [ngModel]="item.checked" [nzDisabled]="true"
+                      nz-checkbox *ngFor="let item of phuongPhapLayMaus" class="text-bold"> {{item.giaTri}}
                     </label>
                   </div>
                 </nz-form-control>
