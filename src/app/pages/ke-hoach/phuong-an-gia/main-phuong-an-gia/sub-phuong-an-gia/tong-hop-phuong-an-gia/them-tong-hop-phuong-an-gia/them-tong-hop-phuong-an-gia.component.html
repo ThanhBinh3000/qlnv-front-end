@@ -28,7 +28,7 @@
                       [ngClass]="formData.value.trangThaiTh == STATUS.DA_TAO_TT ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
                         {{ formData.value.tenTrangThaiTh }}
                     </span>
-          <span>TIÊU CHÍ TỔNG HỢP</span>
+          <span>TỔNG HỢP PHƯƠNG ÁN GIÁ</span>
         </div>
       </div>
     </div>
@@ -37,7 +37,7 @@
         <div nz-row [nzGutter]="20" class="mb-10">
           <div nz-col [nzSpan]="2">
             <nz-form-item class="form-item">
-              <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="nam-qd">Năm tổng hợp
+              <nz-form-label [nzNoColon]="true" [nzNoColon]="true" nzFor="nam-qd">Năm tổng hợp
               </nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-select formControlName="namTongHop" [nzDisabled]="idInput > 0" nzAllowClear="true">
@@ -86,7 +86,7 @@
           </div>
           <div nz-col [nzSpan]="8">
             <nz-form-item>
-              <nz-form-label nzRequired [nzNoColon]="true"> Cục DTNNKV</nz-form-label>
+              <nz-form-label [nzNoColon]="true"> Cục DTNNKV</nz-form-label>
               <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
                 <nz-select formControlName="maDvis" [nzDisabled]="idInput > 0" [nzMaxTagCount]="2"
                            nzMode="multiple" [(ngModel)]="listCucSelected">
@@ -100,7 +100,7 @@
           </div>
           <div nz-col [nzSpan]="5">
             <nz-form-item class="form-item">
-              <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="ngay-qd"> Ngày đề
+              <nz-form-label [nzNoColon]="true" [nzNoColon]="true" nzFor="ngay-qd"> Ngày đề
                 xuất
               </nz-form-label>
               <nz-form-control [nzErrorTip]="error">
