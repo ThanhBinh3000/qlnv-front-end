@@ -13,6 +13,9 @@ import { ThongtinDexuatKhbdgComponent } from './quyet-dinh/them-quyet-dinh-ban-d
 import {
   KeHoachVonDauNamModule
 } from "../../../ke-hoach/giao-ke-hoach-va-du-toan/ke-hoach-von-dau-nam/ke-hoach-von-dau-nam.module";
+import { DieuChinhComponent } from './dieu-chinh/dieu-chinh.component';
+import { ThemMoiDieuChinhComponent } from './dieu-chinh/them-moi-dieu-chinh/them-moi-dieu-chinh.component';
+import { ThongTinDieuChinhComponent } from './dieu-chinh/them-moi-dieu-chinh/thong-tin-dieu-chinh/thong-tin-dieu-chinh.component';
 
 
 
@@ -25,7 +28,10 @@ import {
     ThemDeXuatKeHoachBanDauGiaComponent,
     ThemMoiTongHopKeHoachBanDauGiaComponent,
     ThemQuyetDinhBanDauGiaComponent,
-    ThongtinDexuatKhbdgComponent
+    ThongtinDexuatKhbdgComponent,
+    DieuChinhComponent,
+    ThemMoiDieuChinhComponent,
+    ThongTinDieuChinhComponent
   ],
   exports: [
     DeXuatComponent,

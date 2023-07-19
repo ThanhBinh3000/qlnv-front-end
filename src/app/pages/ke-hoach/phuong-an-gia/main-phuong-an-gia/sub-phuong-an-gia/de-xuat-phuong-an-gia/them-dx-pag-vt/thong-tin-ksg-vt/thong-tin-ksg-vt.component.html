@@ -6,7 +6,6 @@
     <th *ngIf="isTableKetQua && !isTabNdKhac"> Đơn vị báo giá, khảo sát giá</th>
     <th *ngIf="isTabNdKhac"> Thông tin tham khảo</th>
     <th *ngIf="!isTabNdKhac">Chủng loại hàng hóa, tiêu chuẩn chất lượng</th>
-    <th *ngIf="!isTabNdKhac && !isApDung ">Chi cục</th>
     <th>Đơn giá chưa VAT (đồng/kg)</th>
     <th *ngIf="isVat">Đơn giá có VAT (đồng/kg)</th>
     <th *ngIf="isTabNdKhac">Chỉ số CPI</th>
@@ -29,15 +28,6 @@
     </th>
     <th *ngIf="!isTabNdKhac">
       <input [readonly]="isView" type="text" [(ngModel)]="rowItem.cloaiVthh" nz-input/>
-    </th>
-    <th *ngIf="!isTabNdKhac && !isApDung">
-      <nz-input-group>
-        <nz-select [(ngModel)]="rowItem.maChiCuc" nzAllowClear (ngModelChange)="changeChiCuc($event)">
-          <nz-option nzValue="null" nzDisabled nzHide></nz-option>
-          <nz-option nzValue="{{item.maDvi}}" nzLabel="{{item.tenDvi}}" *ngFor="let item of dsChiCuc">
-          </nz-option>
-        </nz-select>
-      </nz-input-group>
     </th>
     <th>
       <nz-input-number [nzDisabled]="isView" [nzSize]="'small'" [(ngModel)]="rowItem.donGia"
@@ -90,7 +80,6 @@
       <td *ngIf="!isTableKetQua && !isTabNdKhac">{{ data.tenDviThamDinh }}</td>
       <td *ngIf="isTabNdKhac">{{ data.ttThamKhao }}</td>
       <td *ngIf="!isTabNdKhac">{{ data.cloaiVthh }}</td>
-      <td *ngIf="!isTabNdKhac && !isApDung">{{ data.tenChiCuc }}</td>
       <td>{{data.donGia | number : '1.0-1' : 'vi_VN' }}</td>
       <td *ngIf="isVat">{{data.donGiaVat | number : '1.0-1' : 'vi_VN' }}</td>
       <td *ngIf="!isTabNdKhac">{{data.thoiHanBaoGia }}</td>
@@ -122,9 +111,6 @@
       </td>
       <td *ngIf="!isTabNdKhac">
         <input type="text" [(ngModel)]="dataEdit[idx].data.cloaiVthh" nz-input/>
-      </td>
-      <td *ngIf="!isTabNdKhac && !isApDung">
-        <input type="text" [(ngModel)]="dataEdit[idx].data.tenChiCuc" readonly nz-input/>
       </td>
       <td>
         <nz-input-number [nzSize]="'small'" [(ngModel)]="dataEdit[idx].data.donGia" [nzFormatter]="globals.formatter"

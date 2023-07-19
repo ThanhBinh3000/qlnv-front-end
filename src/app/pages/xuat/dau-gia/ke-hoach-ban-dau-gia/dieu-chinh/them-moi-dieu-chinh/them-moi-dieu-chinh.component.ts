@@ -1,33 +1,37 @@
-import { Component, Input, OnInit, } from '@angular/core';
-import { Validators } from '@angular/forms';
-import * as dayjs from 'dayjs';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
+import {Component, Input, OnInit} from '@angular/core';
+import {Base2Component} from "../../../../../../components/base2/base2.component";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../../../services/storage.service";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {DanhMucService} from "../../../../../../services/danhmuc.service";
 import {
-  DialogTableSelectionComponent
-} from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
-import { MESSAGE } from 'src/app/constants/message';
+  DeXuatKhBanDauGiaService
+} from "../../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/deXuatKhBanDauGia.service";
 import {
   QuyetDinhPdKhBdgService
-} from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/quyetDinhPdKhBdg.service';
-import { TongHopDeXuatKeHoachBanDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/tongHopDeXuatKeHoachBanDauGia.service';
-import { STATUS } from 'src/app/constants/status';
+} from "../../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/quyetDinhPdKhBdg.service";
 import {
   QuyetDinhDchinhKhBdgService
 } from "../../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/dieuchinh-kehoach/quyetDinhDchinhKhBdg.service";
-import { DeXuatKhBanDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/deXuatKhBanDauGia.service';
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
+import {
+  TongHopDeXuatKeHoachBanDauGiaService
+} from "../../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/tongHopDeXuatKeHoachBanDauGia.service";
+import * as dayjs from "dayjs";
+import {Validators} from "@angular/forms";
+import {STATUS} from "../../../../../../constants/status";
+import {MESSAGE} from "../../../../../../constants/message";
+import {
+  DialogTableSelectionComponent
+} from "../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
 
 @Component({
-  selector: 'app-chitiet-qd-dieuchinh-hkbdg',
-  templateUrl: './chitiet-qd-dieuchinh-hkbdg.component.html',
-  styleUrls: ['./chitiet-qd-dieuchinh-hkbdg.component.scss']
+  selector: 'app-them-moi-dieu-chinh',
+  templateUrl: './them-moi-dieu-chinh.component.html',
+  styleUrls: ['./them-moi-dieu-chinh.component.scss']
 })
-export class ChitietQdDieuchinhHkbdgComponent extends Base2Component implements OnInit {
+export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit {
 
   @Input() loaiVthh: string
   @Input() idInput: number = 0;

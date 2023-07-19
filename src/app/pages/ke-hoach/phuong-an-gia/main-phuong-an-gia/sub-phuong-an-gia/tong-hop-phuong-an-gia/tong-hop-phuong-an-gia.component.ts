@@ -1,18 +1,19 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {FormBuilder, FormGroup} from '@angular/forms';
 import dayjs from 'dayjs';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import {LIST_VAT_TU_HANG_HOA, PAGE_SIZE_DEFAULT, TYPE_PAG} from 'src/app/constants/config';
-import { MESSAGE } from 'src/app/constants/message';
-import { UserService } from 'src/app/services/user.service';
-import { cloneDeep } from 'lodash';
-import { saveAs } from 'file-saver';
-import { TongHopPhuongAnGiaService } from 'src/app/services/ke-hoach/phuong-an-gia/tong-hop-phuong-an-gia.service';
-import { STATUS } from 'src/app/constants/status';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {PAGE_SIZE_DEFAULT, TYPE_PAG} from 'src/app/constants/config';
+import {MESSAGE} from 'src/app/constants/message';
+import {UserService} from 'src/app/services/user.service';
+import {cloneDeep} from 'lodash';
+import {saveAs} from 'file-saver';
+import {TongHopPhuongAnGiaService} from 'src/app/services/ke-hoach/phuong-an-gia/tong-hop-phuong-an-gia.service';
+import {STATUS} from 'src/app/constants/status';
 import {DanhMucService} from "../../../../../../services/danhmuc.service";
 import {Router} from "@angular/router";
+
 @Component({
   selector: 'app-tong-hop-phuong-an-gia',
   templateUrl: './tong-hop-phuong-an-gia.component.html',
@@ -20,6 +21,7 @@ import {Router} from "@angular/router";
 })
 export class TongHopPhuongAnGiaComponent implements OnInit {
   @Input() type: string;
+  @Input() pagType: string;
   @Output()
   getCount = new EventEmitter<any>();
   isAddNew = false;

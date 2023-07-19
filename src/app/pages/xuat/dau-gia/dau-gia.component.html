@@ -5,57 +5,43 @@
       *ngIf="!userService.isChiCuc() && userService.isAccessPermisson('XHDTQG_PTDG_KHBDG')">
       Kế hoạch bán đấu giá
     </li>
-    <!--<li nz-menu-item nzSelected (click)="selectTab(0)">
-      Kế hoạch bán đấu giá
-    </li>-->
     <li nz-menu-item (click)="selectTab(1)"
       *ngIf="!userService.isChiCuc() && userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG')">
       Tổ chức triển khai KH bán đấu giá
     </li>
     <li nz-menu-item (click)="selectTab(2)" *ngIf="!userService.isChiCuc()">
-      Điều chỉnh KH bán đấu giá
-    </li>
-    <li nz-menu-item (click)="selectTab(3)" *ngIf="!userService.isChiCuc()">
       Hợp đồng
     </li>
-    <li nz-menu-item (click)="selectTab(4)" *ngIf="!userService.isTongCuc()">
+    <li nz-menu-item (click)="selectTab(3)" *ngIf="!userService.isTongCuc()">
       Quyết định giao nhiệm vụ xuất hàng
     </li>
-    <li nz-menu-item (click)="selectTab(5)" *ngIf="!userService.isTongCuc()">
+    <li nz-menu-item (click)="selectTab(4)" *ngIf="!userService.isTongCuc()">
       Kiểm tra chất lượng
     </li>
-    <li nz-menu-item (click)="selectTab(6)" *ngIf="!userService.isTongCuc()">
+    <li nz-menu-item (click)="selectTab(5)" *ngIf="!userService.isTongCuc()">
       Xuất kho
     </li>
   </ul>
 </nz-affix>
 <div class="contentBor chi-tieu__body giao-ke-hoach">
   <div class="contentDetail">
-    <!--     <ng-container *ngIf="tabSelected == 0">-->
-    <!--      <app-kehoach-luachon-nhathau></app-kehoach-luachon-nhathau>-->
-    <!--    </ng-container>-->
+
     <ng-container *ngIf="tabSelected == 0">
       <app-ke-hoach-ban-dau-gia></app-ke-hoach-ban-dau-gia>
     </ng-container>
-    <!--<ng-container *ngIf="tabSelected == 1">
-      <app-trienkhai-luachon-nhathau></app-trienkhai-luachon-nhathau>
-    </ng-container>-->
     <ng-container *ngIf="tabSelected == 1">
       <app-to-chuc-trien-khai></app-to-chuc-trien-khai>
     </ng-container>
     <ng-container *ngIf="tabSelected == 2">
-      <app-dieuchinh-khbdg></app-dieuchinh-khbdg>
-    </ng-container>
-    <ng-container *ngIf="tabSelected == 3">
       <app-hop-dong></app-hop-dong>
     </ng-container>
-    <ng-container *ngIf="tabSelected == 4">
+    <ng-container *ngIf="tabSelected == 3">
       <app-giao-xuat-hang></app-giao-xuat-hang>
     </ng-container>
-    <ng-container *ngIf="tabSelected == 5">
+    <ng-container *ngIf="tabSelected == 4">
       <app-bdg-kiem-tra-chat-luong></app-bdg-kiem-tra-chat-luong>
     </ng-container>
-    <ng-container *ngIf="tabSelected == 6">
+    <ng-container *ngIf="tabSelected == 5">
       <app-bdg-xuat-kho></app-bdg-xuat-kho>
     </ng-container>
   </div>
