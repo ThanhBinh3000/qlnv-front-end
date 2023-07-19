@@ -272,28 +272,22 @@
                     {{ editCache[data.id].data.tenDvi }}
                   </td>
                   <td>
-                    <input class="money-input" currencyMask [options]="amount"
-                      [(ngModel)]="editCache[data.id].data.slKeHoach" />
+                    {{ Op.fmtVal(data.slKeHoach) }}
                   </td>
                   <td>
-                    <input class="money-input" currencyMask [options]="amount"
-                      [(ngModel)]="editCache[data.id].data.slHopDong" />
+                    {{ Op.fmtVal(data.slHopDong) }}
                   </td>
                   <td>
-                    <input class="money-input" currencyMask [options]="amount"
-                      [(ngModel)]="editCache[data.id].data.slKeHoach" />
+                    {{Op.fmtVal(data.gtHopDong)}}
                   </td>
                   <td>
-                    <input class="money-input" currencyMask [options]="amount"
-                      [(ngModel)]="editCache[data.id].data.viPhamHopDong" />
+                    {{Op.fmtVal(data.viPhamHopDong)}}
                   </td>
                   <td>
-                    <input class="money-input" currencyMask [options]="amount"
-                      [(ngModel)]="editCache[data.id].data.thanhLyHdongSl" />
+                    {{Op.fmtVal(data.thanhLyHdongSl)}}
                   </td>
                   <td>
-                    <input class="money-input" currencyMask [options]="amount"
-                      [(ngModel)]="editCache[data.id].data.thanhLyHdongTt" />
+                    {{Op.fmtVal(data.thanhLyHdongTt)}}
                   </td>
                   <td>
                     {{ Op.fmtVal(editCache[data.id].data.luyKeCong) }}
