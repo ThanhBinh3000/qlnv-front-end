@@ -1,5 +1,4 @@
 import { Operator, Status, Utils } from "src/app/Utility/utils";
-import { utils } from "xlsx";
 
 export class Cvmb {
     static readonly GHI_NHAN_CU_VON = '1';

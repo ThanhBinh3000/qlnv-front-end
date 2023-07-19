@@ -156,7 +156,7 @@ export class BaoCao03Component implements OnInit {
         Object.assign(this.status, this.dataInfo.status);
         await this.getFormDetail();
         if (this.status.save) {
-            this.scrollX = Table.tableWidth(350, 9, 1, 170);
+            this.scrollX = Table.tableWidth(350, 9, 1, 120);
         } else {
             this.scrollX = Table.tableWidth(350, 9, 1, 0);
         }
@@ -170,6 +170,9 @@ export class BaoCao03Component implements OnInit {
                     tenVtu: item.ten,
                 }))
             })
+        }
+        if (this.dataInfo.isSynth && this.formDetail.trangThai == Status.NEW) {
+            this.setIndex();
         }
         this.lstCtietBcao = Table.sortByIndex(this.lstCtietBcao);
         this.updateEditCache();
@@ -279,6 +282,21 @@ export class BaoCao03Component implements OnInit {
             this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         });
         this.spinner.hide();
+    }
+
+    setIndex() {
+        this.lstCtietBcao.forEach(item => {
+            if (item.maVtu.split('.').length > 1) {
+                item.stt = item.maVtu;
+            }
+        })
+        const temp = Vp.DANH_MUC_03.filter(e => e.loaiVtu);
+        temp.forEach(data => {
+            this.lstCtietBcao.filter(e => e.stt == Table.preIndex(data.ma) && e.maVtu.startsWith(data.loaiVtu)).forEach((item, index) => {
+                item.stt = data.ma + '.' + (index + 1).toString();
+            })
+        })
+
     }
 
     //show popup tu choi

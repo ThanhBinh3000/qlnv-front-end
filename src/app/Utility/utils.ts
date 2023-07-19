@@ -7,6 +7,7 @@ import { DatePipe, DecimalPipe } from '@angular/common';
 import * as uuid from "uuid";
 import { Injectable } from '@angular/core';
 import * as XLSX from 'xlsx'
+import * as dayjs from 'dayjs';
 import { displayNumber } from './func';
 
 export class Status {
@@ -815,6 +816,15 @@ export class Utils {
 
 	static readonly MONEY_LIMIT = 9000000000000000;
 	static readonly FILE_SIZE = 2097152;
+
+	static getListYear(start: number, end: number) {
+		const thisYear = dayjs().get('year');
+		const lstNam = [];
+		for (let i = -start; i < end; i++) {
+			lstNam.push(thisYear + i);
+		}
+		return lstNam
+	}
 
 	public static ROUND = 4;
 

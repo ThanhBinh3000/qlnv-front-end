@@ -176,6 +176,9 @@ export class BaoCao02Component implements OnInit {
                 }))
             })
         }
+        if (this.dataInfo.isSynth && this.formDetail.trangThai == Status.NEW) {
+            this.setIndex();
+        }
         this.lstCtietBcao = Table.sortByIndex(this.lstCtietBcao);
         this.updateEditCache();
         this.getStatusButton();
@@ -315,6 +318,15 @@ export class BaoCao02Component implements OnInit {
         let file: any = this.listFile.find(element => element?.lastModified.toString() == id);
         let doc: any = this.formDetail.lstFiles.find(element => element?.id == id);
         await this.fileManip.downloadFile(file, doc);
+    }
+
+    setIndex() {
+        Vp.DANH_MUC_02.forEach(data => {
+            this.lstCtietBcao.filter(e => e.stt == data.ma && e.maVtu != data.ma).forEach((item, index) => {
+                item.stt = data.ma + '.' + (index + 1).toString();
+            })
+        })
+
     }
 
     updateEditCache(): void {

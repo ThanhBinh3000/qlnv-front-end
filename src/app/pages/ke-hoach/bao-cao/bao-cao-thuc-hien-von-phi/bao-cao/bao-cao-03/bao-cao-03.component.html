@@ -61,9 +61,9 @@
                                 <th colspan="2">Thành tiền</th>
                                 <th rowspan="2">Chênh lệch giữa giá bán thực tế và giá hạch toán</th>
                                 <th rowspan="2" class="text-col">Ghi chú</th>
-                                <th style="width: 50px;" rowspan="2" *ngIf="status" nzRight></th>
                                 <th style="width: 60px;" rowspan="2" *ngIf="status" nzRight></th>
                                 <th style="width: 60px;" rowspan="2" *ngIf="status" nzRight></th>
+                                <!-- <th style="width: 60px;" rowspan="2" *ngIf="status" nzRight></th> -->
                                 <!-- <th style="width: 40px;" rowspan="2" *ngIf="status" nzRight> -->
                                 <!-- </th> -->
                             </tr>
@@ -89,7 +89,7 @@
                                 <th>D</th>
                                 <th *ngIf="status" nzRight></th>
                                 <th *ngIf="status" nzRight></th>
-                                <th *ngIf="status" nzRight></th>
+                                <!-- <th *ngIf="status" nzRight></th> -->
                                 <!-- <th *ngIf="status" nzRight></th> -->
                             </tr>
                         </thead>
@@ -133,17 +133,18 @@
                                         {{ data.ghiChu }}
                                     </td>
                                     <td *ngIf="status.save" nzRight>
-                                        <i *ngIf="data.level > 1" class="fa fa-trash-o do"
-                                            (click)="deleteLine(data.id)"></i>
-                                    </td>
-                                    <td *ngIf="status.save" nzRight>
+                                        <i *ngIf="data.level < 1" class="fa fa-plus"
+                                            (click)="selectGoods(data.stt)"></i>
                                         <i *ngIf="data.level == 2" class="fa fa-pencil"
                                             (click)="startEdit(data.id)"></i>
                                     </td>
                                     <td *ngIf="status.save" nzRight>
-                                        <i *ngIf="data.level < 1" class="fa fa-plus"
-                                            (click)="selectGoods(data.stt)"></i>
+                                        <i *ngIf="data.level > 1" class="fa fa-trash-o do"
+                                            (click)="deleteLine(data.id)"></i>
                                     </td>
+                                    <!-- <td *ngIf="status.save" nzRight>
+
+                                    </td> -->
                                     <!-- <td *ngIf="status.save" nzRight>
                                         <label *ngIf="data.level > 0" nz-checkbox [nzValue]="data.id"
                                             [(ngModel)]="data.checked" (ngModelChange)="updateChecked(data.id)"></label>
@@ -186,12 +187,13 @@
                                         <input nz-input [(ngModel)]="editCache[data.id].data.ghiChu" />
                                     </td>
                                     <td *ngIf="status.save" nzRight>
-                                        <i *ngIf="data.level > 1" class="fa fa-trash-o do"
-                                            (click)="deleteLine(data.id)"></i>
-                                    </td>
-                                    <td nzRight>
                                         <a (click)="saveEdit(data.id)" class="save">Lưu</a>
+                                        <!-- <i *ngIf="data.level > 1" class="fa fa-trash-o do"
+                                            (click)="deleteLine(data.id)"></i> -->
                                     </td>
+                                    <!-- <td nzRight>
+                                        
+                                    </td> -->
                                     <td *ngIf="status.save" nzRight>
                                         <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
                                             (nzOnConfirm)="cancelEdit(data.id)" class="save">

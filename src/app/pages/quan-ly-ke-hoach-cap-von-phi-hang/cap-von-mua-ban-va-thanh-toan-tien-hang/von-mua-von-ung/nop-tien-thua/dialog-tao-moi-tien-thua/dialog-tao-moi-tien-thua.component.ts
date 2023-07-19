@@ -1,25 +1,23 @@
 import { Component, Input, OnInit } from '@angular/core';
-import * as dayjs from 'dayjs';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { Operator, Status } from 'src/app/Utility/utils';
+import { Operator, Status, Utils } from 'src/app/Utility/utils';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { CapVonMuaBanTtthService } from 'src/app/services/quan-ly-von-phi/capVonMuaBanTtth.service';
-import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
-import { CapUng, Cvmb, Report, TienThua } from '../../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
+import { Report, TienThua } from '../../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
 import { Tab } from '../../von-mua-von-ung.constant';
 
 @Component({
-    selector: 'dialog-tao-moi-cap-ung-von',
-    templateUrl: './dialog-tao-moi-cap-ung-von.component.html',
+    selector: 'dialog-tao-moi-tien-thua',
+    templateUrl: './dialog-tao-moi-tien-thua.component.html',
     styleUrls: ['../../von-mua-von-ung.component.scss'],
 })
 
-export class DialogTaoMoiCapUngVonComponent implements OnInit {
+export class DialogTaoMoiTienThuaComponent implements OnInit {
     @Input() request: any;
 
     userInfo: any;
@@ -32,17 +30,14 @@ export class DialogTaoMoiCapUngVonComponent implements OnInit {
     constructor(
         private _modalRef: NzModalRef,
         private notification: NzNotificationService,
-        private quanLyVonPhiService: QuanLyVonPhiService,
         public userService: UserService,
         private capVonMuaBanTtthService: CapVonMuaBanTtthService,
         private spinner: NgxSpinnerService,
     ) { }
 
     async ngOnInit() {
-        const thisYear = dayjs().get('year');
-        for (let i = -5; i < 10; i++) {
-            this.lstNam.push(thisYear + i);
-        }
+        this.userInfo = this.userService.getUserLogin();
+        this.lstNam = Utils.getListYear(5, 10);
     }
 
     async checkReport() {
