@@ -1,24 +1,22 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { MESSAGE } from "../../../../../constants/message";
-import * as dayjs from "dayjs";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { UserService } from "../../../../../services/user.service";
-
+import {Component, Input, OnInit} from '@angular/core';
+import {Base2Component} from "../../../../../components/base2/base2.component";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../../services/storage.service";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzModalService} from "ng-zorro-antd/modal";
 import {
   QuyetDinhDchinhKhBdgService
 } from "../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/dieuchinh-kehoach/quyetDinhDchinhKhBdg.service";
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { StorageService } from 'src/app/services/storage.service';
-import { HttpClient } from '@angular/common/http';
+import {UserService} from "../../../../../services/user.service";
+import {MESSAGE} from "../../../../../constants/message";
 
 @Component({
-  selector: 'app-qd-dieuchinh-khbdg',
-  templateUrl: './qd-dieuchinh-khbdg.component.html',
-  styleUrls: ['./qd-dieuchinh-khbdg.component.scss']
+  selector: 'app-dieu-chinh',
+  templateUrl: './dieu-chinh.component.html',
+  styleUrls: ['./dieu-chinh.component.scss']
 })
-export class QdDieuchinhKhbdgComponent extends Base2Component implements OnInit {
+export class DieuChinhComponent extends Base2Component implements OnInit {
 
   @Input() loaiVthh: string;
   idQdPdGoc: number = 0;

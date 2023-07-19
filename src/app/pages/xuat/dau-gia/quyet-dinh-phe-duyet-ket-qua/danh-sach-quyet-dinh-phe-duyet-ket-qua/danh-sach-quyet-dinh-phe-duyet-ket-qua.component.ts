@@ -1,23 +1,23 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Base2Component } from "../../../../../../components/base2/base2.component";
-import { HttpClient } from "@angular/common/http";
-import { StorageService } from "../../../../../../services/storage.service";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzModalService } from "ng-zorro-antd/modal";
+import {Component, Input, OnInit} from '@angular/core';
+import {Base2Component} from "../../../../../components/base2/base2.component";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../../services/storage.service";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {DanhMucService} from "../../../../../services/danhmuc.service";
 import {
   QdPdKetQuaBanDauGiaService
-} from "../../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/qdPdKetQuaBanDauGia.service";
-import { MESSAGE } from 'src/app/constants/message';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { LOAI_HANG_DTQG } from 'src/app/constants/config';
+} from "../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/qdPdKetQuaBanDauGia.service";
+import {MESSAGE} from "../../../../../constants/message";
+import {LOAI_HANG_DTQG} from "../../../../../constants/config";
 
 @Component({
-  selector: 'app-qd-pd-ket-qua-bdg',
-  templateUrl: './qd-pd-ket-qua-bdg.component.html',
-  styleUrls: ['./qd-pd-ket-qua-bdg.component.scss']
+  selector: 'app-danh-sach-quyet-dinh-phe-duyet-ket-qua',
+  templateUrl: './danh-sach-quyet-dinh-phe-duyet-ket-qua.component.html',
+  styleUrls: ['./danh-sach-quyet-dinh-phe-duyet-ket-qua.component.scss']
 })
-export class QdPdKetQuaBdgComponent extends Base2Component implements OnInit {
+export class DanhSachQuyetDinhPheDuyetKetQuaComponent extends Base2Component implements OnInit {
   @Input()
   loaiVthh: string;
   @Input()
@@ -29,13 +29,13 @@ export class QdPdKetQuaBdgComponent extends Base2Component implements OnInit {
   idThongTin: number = 0;
   isViewThongTin: boolean = false;
   listTrangThai: any[] = [
-    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
-    { ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối - TP' },
-    { ma: this.STATUS.CHO_DUYET_TP, giaTri: 'Chờ duyệt - TP' },
-    { ma: this.STATUS.CHO_DUYET_LDC, giaTri: 'Chờ duyệt - LĐ Cục' },
-    { ma: this.STATUS.TU_CHOI_LDC, giaTri: 'Từ chối - LĐ Cục' },
-    { ma: this.STATUS.DA_DUYET_LDC, giaTri: 'Đã duyệt - LĐ Cục' },
-    { ma: this.STATUS.BAN_HANH, giaTri: 'Ban Hành' },
+    {ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo'},
+    {ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối - TP'},
+    {ma: this.STATUS.CHO_DUYET_TP, giaTri: 'Chờ duyệt - TP'},
+    {ma: this.STATUS.CHO_DUYET_LDC, giaTri: 'Chờ duyệt - LĐ Cục'},
+    {ma: this.STATUS.TU_CHOI_LDC, giaTri: 'Từ chối - LĐ Cục'},
+    {ma: this.STATUS.DA_DUYET_LDC, giaTri: 'Đã duyệt - LĐ Cục'},
+    {ma: this.STATUS.BAN_HANH, giaTri: 'Ban Hành'},
   ];
 
   constructor(

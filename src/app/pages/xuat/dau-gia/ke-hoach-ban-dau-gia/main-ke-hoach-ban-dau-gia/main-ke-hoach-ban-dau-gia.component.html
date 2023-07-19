@@ -35,6 +35,9 @@
     <li nz-menu-item (click)="selectTab(2)" *ngIf="userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_QDLCNT')">
       Quyết định phê duyệt KH bán đấu giá
     </li>
+    <li nz-menu-item (click)="selectTab(3)" *ngIf="userService.isAccessPermisson('XHDTQG_PTDG_DCKHBDG')">
+      Điều chỉnh KH bán đấu giá
+    </li>
   </ul>
 </nz-affix>
 <ng-container *ngIf="tabSelected == 0">
@@ -45,4 +48,7 @@
 </ng-container>
 <ng-container *ngIf="tabSelected == 2">
   <app-quyet-dinh [loaiVthh]="inputLoaiVthh"></app-quyet-dinh>
+</ng-container>
+<ng-container *ngIf="tabSelected == 3">
+  <app-dieu-chinh [loaiVthh]="inputLoaiVthh"></app-dieu-chinh>
 </ng-container>
