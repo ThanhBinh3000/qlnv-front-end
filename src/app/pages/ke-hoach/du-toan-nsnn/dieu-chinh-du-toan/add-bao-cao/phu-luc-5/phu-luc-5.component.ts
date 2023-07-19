@@ -134,24 +134,24 @@ export class PhuLuc5Component implements OnInit {
         Object.assign(this.status, this.dataInfo.status);
         await this.getFormDetail();
         this.namBcao = this.dataInfo.namBcao;
-        this.formDetail?.lstCtietDchinh.forEach(item => {
-            this.lstCtietBcao.push({
-                ...item,
-            })
-        })
+        // this.formDetail?.lstCtietDchinh.forEach(item => {
+        //     this.lstCtietBcao.push({
+        //         ...item,
+        //     })
+        // })
         await this.getDinhMucPL2N();
 
-        this.lstCtietBcao.forEach(item => {
-            if (!item.noiDung) {
-                const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.maNoiDung);
-                item.noiDung = dinhMuc?.tenDinhMuc;
-                item.dinhMuc = dinhMuc?.tongDmuc;
-                item.dviTinh = dinhMuc?.donViTinh;
-                item.thanhTien = Operator.mul(item.dinhMuc, item.tongCong);
-            }
-        })
+        // this.lstCtietBcao.forEach(item => {
+        //     if (!item.noiDung) {
+        //         const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.maNoiDung);
+        //         item.noiDung = dinhMuc?.tenDinhMuc;
+        //         item.dinhMuc = dinhMuc?.tongDmuc;
+        //         item.dviTinh = dinhMuc?.donViTinh;
+        //         item.thanhTien = Operator.mul(item.dinhMuc, item.tongCong);
+        //     }
+        // })
 
-        if (this.dataInfo.isSynthetic) {
+        if (this.dataInfo?.isSynthetic && this.formDetail.trangThai == Status.NEW) {
             this.lstCtietBcao.forEach(item => {
                 const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.maNoiDung && e.loaiDinhMuc == item.maDmuc);
                 if (!item.noiDung) {
@@ -163,6 +163,9 @@ export class PhuLuc5Component implements OnInit {
                 // item.dtoanDchinh = item.thanhTien - item.dtoanDaGiaoLke;
                 // item.dtoanVuTvqtDnghi = item.thanhTien - item.dtoanDaGiaoLke;
             })
+        }
+        if (!this.lstCtietBcao[0]?.stt) {
+            this.setIndex();
         }
 
         if (this.status.editAppVal) {

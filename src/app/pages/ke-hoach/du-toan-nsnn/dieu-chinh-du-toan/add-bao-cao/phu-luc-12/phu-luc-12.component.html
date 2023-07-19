@@ -90,7 +90,7 @@
                                 <th>D</th>
                                 <th>E</th>
                                 <th>1</th>
-                                <th>2=1+2</th>
+                                <th>2</th>
                                 <th>3 = 1 + 2</th>
                                 <th>4</th>
                                 <th>5 = 4 - 3 </th>
@@ -299,7 +299,7 @@
             </nz-tab>
             <nz-tab nzTitle="Thuyết minh">
                 <textarea nz-input nzAutosize="{minRows: 4, maxRows: 16}" [(ngModel)]="formDetail.thuyetMinh"
-                    [disabled]="status.general"></textarea>
+                    *ngIf="status.general"></textarea>
             </nz-tab>
             <nz-tab nzTitle="Tài liệu đính kèm">
                 <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">

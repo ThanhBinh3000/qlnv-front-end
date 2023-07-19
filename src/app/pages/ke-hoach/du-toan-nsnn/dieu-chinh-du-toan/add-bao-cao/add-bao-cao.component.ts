@@ -212,6 +212,16 @@ export class AddBaoCaoComponent implements OnInit {
             this.listAppendix.forEach(e => {
                 e.tenDm = Utils.getName(this.baoCao.namBcao, e.tenDm);
             })
+            this.baoCao.lstDchinh.forEach(item => {
+                const appendix = this.listAppendix.find(e => e.id == item.maLoai);
+                item.tenPl = appendix.tenPl;
+                item.tenDm = Utils.getName(this.baoCao.namBcao, appendix.tenDm);
+                if (item.tenPl == "Phụ lục I") {
+                    const tenDm1 = item.tenDm.split('');
+                    tenDm1.splice(Number(item.tenDm.indexOf("đợt")) - 9, 0, `${this.baoCao.dotBcao}`);
+                    item.tenDm = tenDm1.join('');
+                }
+            })
         }
 
         this.path = this.baoCao.maDvi + '/' + this.baoCao.maBcao;
@@ -280,7 +290,13 @@ export class AddBaoCaoComponent implements OnInit {
                         const appendix = this.listAppendix.find(e => e.id == item.maLoai);
                         item.tenPl = appendix.tenPl;
                         item.tenDm = Utils.getName(this.baoCao.namBcao, appendix.tenDm);
+                        if (item.tenPl == "Phụ lục I") {
+                            const tenDm1 = item.tenDm.split('');
+                            tenDm1.splice(Number(item.tenDm.indexOf("đợt")) - 9, 0, `${this.baoCao.dotBcao}`);
+                            item.tenDm = tenDm1.join('');
+                        }
                     })
+                    console.log(this.baoCao.lstDchinh);
                     this.listFile = [];
                     this.getStatusButton();
                 } else {

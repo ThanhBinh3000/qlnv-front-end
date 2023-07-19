@@ -162,9 +162,9 @@ export class PhuLuc12Component implements OnInit {
 			}
 		}
 
-		this.lstCtietBcao.forEach(item => {
-			item.tenNoiDung = this.noiDungs.find(e => e.ma == item.maNoiDung)?.giaTri;
-		})
+		// this.lstCtietBcao.forEach(item => {
+		// 	item.tenNoiDung = this.noiDungs.find(e => e.ma == item.maNoiDung)?.giaTri;
+		// })
 
 		this.getTotal();
 		this.tinhTong();

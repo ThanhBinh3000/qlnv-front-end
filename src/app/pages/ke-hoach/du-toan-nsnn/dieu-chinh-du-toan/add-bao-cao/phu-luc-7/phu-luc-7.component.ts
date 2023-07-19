@@ -151,14 +151,14 @@ export class PhuLuc7Component implements OnInit {
             // if (category) {
             this.noiDungs = TEN_HANG;
             // }
-            this.scrollX = Table.tableWidth(350, 10, 1, 110);
+            this.scrollX = Table.tableWidth(350, 21, 1, 110);
         } else {
             if (this.status.editAppVal) {
-                this.scrollX = Table.tableWidth(350, 14, 2, 60);
+                this.scrollX = Table.tableWidth(350, 24, 2, 60);
             } else if (this.status.viewAppVal) {
-                this.scrollX = Table.tableWidth(350, 14, 2, 0);
+                this.scrollX = Table.tableWidth(350, 24, 2, 0);
             } else {
-                this.scrollX = Table.tableWidth(350, 10, 1, 0);
+                this.scrollX = Table.tableWidth(350, 21, 1, 0);
             }
         }
 
@@ -350,12 +350,19 @@ export class PhuLuc7Component implements OnInit {
         this._modalRef.close();
     };
 
-    deleteLine(id: any): void {
-        this.lstCtietBcao = this.lstCtietBcao.filter(item => item.id != id)
-        if (typeof id == "number") {
-            this.listIdDelete += id + ","
-        }
-    };
+    // deleteLine(id: any): void {
+    //     this.lstCtietBcao = this.lstCtietBcao.filter(item => item.id != id)
+    //     if (typeof id == "number") {
+    //         this.listIdDelete += id + ","
+    //     }
+    // };
+
+    deleteLine(id: string) {
+        const stt = this.lstCtietBcao.find(e => e.id === id)?.stt;
+        this.lstCtietBcao = Table.deleteRow(id, this.lstCtietBcao);
+        this.sum(stt);
+        this.updateEditCache();
+    }
 
     startEdit(id: string): void {
         this.editCache[id].edit = true;
@@ -368,7 +375,7 @@ export class PhuLuc7Component implements OnInit {
 
     checkDelete(stt: string) {
         const level = stt.split('.').length - 2;
-        if (level == 2) {
+        if (level == 1 || level == 2) {
             return true;
         }
         return false;
