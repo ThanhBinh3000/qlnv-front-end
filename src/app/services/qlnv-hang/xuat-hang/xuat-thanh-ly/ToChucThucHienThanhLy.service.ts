@@ -9,6 +9,6 @@ export class ToChucThucHienThanhLyService extends BaseService {
   GATEWAY = '/qlnv-hang';
 
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'xuat-hang/xuat-thanh-ly/to-chuc-thuc-hien', '');
+    super(httpClient, 'xuat-hang/xuat-thanh-ly/hop-dong', '');
   }
 }
