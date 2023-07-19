@@ -10,6 +10,7 @@ export class CanCuXacDinhPag {
 export class ThongTinKhaoSatGia {
   id: number;
   tenDviBaoGia: string;
+  maDvi: string;
   maChiCuc: string;
   tenChiCuc: string;
   ttThamKhao : string;

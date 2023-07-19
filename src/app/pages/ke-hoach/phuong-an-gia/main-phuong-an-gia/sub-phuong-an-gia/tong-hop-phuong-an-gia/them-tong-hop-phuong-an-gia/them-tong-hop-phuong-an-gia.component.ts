@@ -98,12 +98,12 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
     this.formTraCuu = this.fb.group(
       {
         id: [],
-        namTongHop: [dayjs().get('year'), [Validators.required]],
+        namTongHop: [dayjs().get('year')],
         loaiVthh: [null, [Validators.required]],
         cloaiVthh: [null, [Validators.required]],
         loaiGia: [null, [Validators.required]],
         maDvis: [[]],
-        ngayDx: [null, [Validators.required]],
+        ngayDx: [null],
       }
     );
   }
