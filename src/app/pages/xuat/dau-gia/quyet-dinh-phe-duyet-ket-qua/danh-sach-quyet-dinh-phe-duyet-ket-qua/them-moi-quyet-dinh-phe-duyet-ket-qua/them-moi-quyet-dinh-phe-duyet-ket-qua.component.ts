@@ -1,29 +1,36 @@
-import { Component, Input, OnInit } from '@angular/core';
-import * as dayjs from "dayjs";
-import { Base2Component } from "../../../../../../../components/base2/base2.component";
-import { HttpClient } from "@angular/common/http";
-import { StorageService } from "../../../../../../../services/storage.service";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzModalService } from "ng-zorro-antd/modal";
+import {Component, Input, OnInit} from '@angular/core';
+import {Base2Component} from "../../../../../../components/base2/base2.component";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../../../services/storage.service";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {DanhMucService} from "../../../../../../services/danhmuc.service";
 import {
   QdPdKetQuaBanDauGiaService
-} from "../../../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/qdPdKetQuaBanDauGia.service";
-import { STATUS } from 'src/app/constants/status';
-import { MESSAGE } from 'src/app/constants/message';
-import { ThongTinDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/thongTinDauGia.service';
-import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { QuyetDinhPdKhBdgService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/quyetDinhPdKhBdg.service';
-import { cloneDeep } from 'lodash';
-import { Validators } from '@angular/forms';
+} from "../../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/qdPdKetQuaBanDauGia.service";
+import {
+  ThongTinDauGiaService
+} from "../../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/thongTinDauGia.service";
+import {
+  QuyetDinhPdKhBdgService
+} from "../../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/quyetDinhPdKhBdg.service";
+import * as dayjs from "dayjs";
+import {Validators} from "@angular/forms";
+import {STATUS} from "../../../../../../constants/status";
+import {MESSAGE} from "../../../../../../constants/message";
+import {
+  DialogTableSelectionComponent
+} from "../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
+import {cloneDeep} from 'lodash';
+
 
 @Component({
-  selector: 'app-chi-tiet-qd-pd-ket-qua-bdg',
-  templateUrl: './chi-tiet-qd-pd-ket-qua-bdg.component.html',
-  styleUrls: ['./chi-tiet-qd-pd-ket-qua-bdg.component.scss']
+  selector: 'app-them-moi-quyet-dinh-phe-duyet-ket-qua',
+  templateUrl: './them-moi-quyet-dinh-phe-duyet-ket-qua.component.html',
+  styleUrls: ['./them-moi-quyet-dinh-phe-duyet-ket-qua.component.scss']
 })
-export class ChiTietQdPdKetQuaBdgComponent extends Base2Component implements OnInit {
+export class ThemMoiQuyetDinhPheDuyetKetQuaComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
   @Input() idInput: number;
   @Input() isViewOnModal: boolean;
@@ -32,10 +39,7 @@ export class ChiTietQdPdKetQuaBdgComponent extends Base2Component implements OnI
   listKieuNx: any[] = [];
   loadDsQuyetDinhKq: any[] = [];
   dataMaThongBao: any[] = [];
-
   maTrinh: String;
-
-  chiu: any[] = [];
 
   constructor(
     private httpClient: HttpClient,
@@ -94,7 +98,7 @@ export class ChiTietQdPdKetQuaBdgComponent extends Base2Component implements OnI
         this.getDetail(this.idInput);
       }
       await this.loadDataComboBox();
-    }catch (e) {
+    } catch (e) {
       this.notification.error(MESSAGE.ERROR, 'Có lỗi xảy ra.');
       await this.spinner.hide();
     } finally {
@@ -194,7 +198,8 @@ export class ChiTietQdPdKetQuaBdgComponent extends Base2Component implements OnI
         trangThai = STATUS.TU_CHOI_LDC;
         break;
       }
-    };
+    }
+    ;
     this.reject(this.idInput, trangThai);
   }
 
@@ -226,10 +231,10 @@ export class ChiTietQdPdKetQuaBdgComponent extends Base2Component implements OnI
     let res = await this.thongTinDauGiaService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       const data = res.data.content
-      if(data && data.length > 0){
-        let set = new Set(this.loadDsQuyetDinhKq.map(item =>JSON.stringify({maThongBao: item.maThongBao})));
-        this.dataMaThongBao = data.filter(item =>{
-          const key = JSON.stringify({ maThongBao: item.maThongBao });
+      if (data && data.length > 0) {
+        let set = new Set(this.loadDsQuyetDinhKq.map(item => JSON.stringify({maThongBao: item.maThongBao})));
+        this.dataMaThongBao = data.filter(item => {
+          const key = JSON.stringify({maThongBao: item.maThongBao});
           return !set.has(key);
         });
       }
@@ -265,7 +270,7 @@ export class ChiTietQdPdKetQuaBdgComponent extends Base2Component implements OnI
           if (res.msg == MESSAGE.SUCCESS) {
             const dataTb = res.data
             let resQdKhDtl = await this.quyetDinhPdKhBdgService.getDtlDetail(dataTb.idQdPdDtl);
-            if(resQdKhDtl.data){
+            if (resQdKhDtl.data) {
               const dataQdKhDtl = resQdKhDtl.data;
               this.formData.patchValue({
                 idThongTin: dataTb.id,
@@ -337,7 +342,7 @@ export class ChiTietQdPdKetQuaBdgComponent extends Base2Component implements OnI
     let res = await this.qdPdKetQuaBanDauGiaService.search(body)
     if (res.msg == MESSAGE.SUCCESS) {
       const data = res.data
-      if(data && data.content && data.content.length >0){
+      if (data && data.content && data.content.length > 0) {
         this.loadDsQuyetDinhKq = data.content
       }
     } else {
