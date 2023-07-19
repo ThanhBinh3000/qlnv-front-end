@@ -22,10 +22,10 @@ import {UserService} from "../../../../../../../services/user.service";
 })
 export class ThemMoiToTrinhPagComponent implements OnInit {
   @Input('isView') isView: boolean;
-  @Input()
-  idInput: number;
+  @Input() idInput: number;
   @Output('onClose') onClose = new EventEmitter<any>();
   @Input() type: string;
+  @Input() pagType: string;
 
   STATUS = STATUS;
   TYPE_PAG: any;
