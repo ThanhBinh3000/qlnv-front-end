@@ -12,8 +12,6 @@ import {KeHoachBanDauGiaComponent} from './ke-hoach-ban-dau-gia/ke-hoach-ban-dau
 import {KeHoachBanDauGiaModule} from "./ke-hoach-ban-dau-gia/ke-hoach-ban-dau-gia.module";
 import {ToChucTrienKhaiComponent} from './to-chuc-trien-khai/to-chuc-trien-khai.component';
 import {ToChucTrienKhaiModule} from "./to-chuc-trien-khai/to-chuc-trien-khai.module";
-import {DieuchinhKhbdgComponent} from './dieuchinh-khbdg/dieuchinh-khbdg.component';
-import {DieuchinhKhbdgModule} from "./dieuchinh-khbdg/dieuchinh-khbdg.module";
 import {XuatKhoModule} from './xuat-kho/xuat-kho.module';
 import {KiemTraChatLuongComponent} from "./kiem-tra-chat-luong/kiem-tra-chat-luong.component";
 import {ChucNangKiemTraComponent} from "./kiem-tra-chat-luong/main/chuc-nang-kiem-tra.component";
@@ -61,7 +59,7 @@ import {
     DauGiaComponent,
     KeHoachBanDauGiaComponent,
     ToChucTrienKhaiComponent,
-    DieuchinhKhbdgComponent,
+
 
     KiemTraChatLuongComponent,
     ChucNangKiemTraComponent,
@@ -89,7 +87,6 @@ import {
     DauGiaComponent,
     KeHoachBanDauGiaComponent,
     ToChucTrienKhaiComponent,
-    DieuchinhKhbdgComponent,
 
     KiemTraChatLuongComponent,
     ChucNangKiemTraComponent,
@@ -124,7 +121,6 @@ import {
     TrienkhaiLuachonNhathauModule,
     KeHoachBanDauGiaModule,
     ToChucTrienKhaiModule,
-    DieuchinhKhbdgModule,
     XuatKhoModule,
     XuatCapModule,
     CuuTroVienTroModule,
