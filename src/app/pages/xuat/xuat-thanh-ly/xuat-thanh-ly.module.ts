@@ -37,6 +37,7 @@ import {
   ThongTinChiTietDauGiaThanhLyComponent
 } from "./to-chuc-thuc-hien-thanh-ly/thong-tin-dau-gia-thanh-ly/chi-tiet-thong-tin-dau-gia-thanh-ly/thong-tin-dau-gia-thanh-ly/thong-tin-chi-tiet-dau-gia-thanh-ly.component";
 import { HopDongThanhLyComponent } from './to-chuc-thuc-hien-thanh-ly/hop-dong-thanh-ly/hop-dong-thanh-ly.component';
+import { ChiTietQuyetDinhPheDuyetBdgThanhLyComponent } from './to-chuc-thuc-hien-thanh-ly/quyet-dinh-phe-duyet-kq-bdg-thanh-ly/chi-tiet-quyet-dinh-phe-duyet-bdg-thanh-ly/chi-tiet-quyet-dinh-phe-duyet-bdg-thanh-ly.component';
 
 
 @NgModule({
@@ -61,6 +62,8 @@ import { HopDongThanhLyComponent } from './to-chuc-thuc-hien-thanh-ly/hop-dong-t
     ThongTinChiTietDauGiaThanhLyComponent,
     HopDongThanhLyComponent,
 
+    QuyetDinhPheDuyetKqBdgThanhLyComponent,
+    ChiTietQuyetDinhPheDuyetBdgThanhLyComponent
   ],
   imports: [
     CommonModule,
