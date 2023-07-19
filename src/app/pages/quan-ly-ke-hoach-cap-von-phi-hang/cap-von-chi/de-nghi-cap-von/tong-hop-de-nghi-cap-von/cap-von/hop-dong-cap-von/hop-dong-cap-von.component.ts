@@ -176,7 +176,6 @@ export class HopDongCapVonComponent implements OnInit {
       // this.baoCao.dnghiCvHopDongCtiets = this.data?.baoCao.dnghiCvHopDongCtiets;
       // this.baoCao.trangThai = '1';
     }
-    console.log(this.baoCao)
     this.getStatusButton();
     this.getTotal();
     this.updateEditCache();
@@ -421,7 +420,7 @@ export class HopDongCapVonComponent implements OnInit {
         },
       );
     } else {
-      this.capVonNguonChiService.updateHopDong(baoCaoTemp).toPromise().then(
+      this.capVonNguonChiService.updateDeNghi(baoCaoTemp).toPromise().then(
         async data => {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);

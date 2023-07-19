@@ -110,7 +110,7 @@ export class DanhSachCapVonComponent implements OnInit {
 
   async search() {
     const request = JSON.parse(JSON.stringify(this.searchFilter));
-    request.maLoai = '0';
+    request.maLoai = '1';
     request.ngayTaoDen = this.datePipe.transform(this.searchFilter.ngayTaoDen, Utils.FORMAT_DATE_STR);
     request.ngayTaoTu = this.datePipe.transform(this.searchFilter.ngayTaoTu, Utils.FORMAT_DATE_STR);
     this.spinner.show();
@@ -201,8 +201,6 @@ export class DanhSachCapVonComponent implements OnInit {
           tabSelected: res.canCuVeGia == Utils.HD_TRUNG_THAU ? (res.loaiDnghi == Utils.MUA_VTU ? 'dn-vattu' : 'denghi-hopdong-capvon') : 'dn-capvon',
           hopDong: res.hopDong,
         }
-        console.log(obj);
-
         this.dataChange.emit(obj);
       }
     });

@@ -7,7 +7,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { CapVonNguonChiService } from 'src/app/services/quan-ly-von-phi/capVonNguonChi.service';
 import { UserService } from 'src/app/services/user.service';
-import { CVNC, LOAI_DE_NGHI, Utils } from 'src/app/Utility/utils';
+import { CVNC, LOAI_DE_NGHI, Roles, Utils } from 'src/app/Utility/utils';
 import { TRANG_THAI } from '../../de-nghi-cap-von.constant';
 import { DialogTaoMoiHopDongComponent } from '../dialog-tao-moi-hop-dong/dialog-tao-moi-hop-dong.component';
 
@@ -70,11 +70,11 @@ export class DanhSachHopDongComponent implements OnInit {
         this.searchFilter.ngayTaoTu = newDate;
         this.searchFilter.maDvi = this.userInfo?.MA_DVI;
         // trang thai cua nut tao moi
-        this.statusNewReport = this.userService.isAccessPermisson(CVNC.ADD_DN_MLT) || this.userService.isAccessPermisson(CVNC.ADD_DN_MVT);
-        this.statusDelete = this.userService.isAccessPermisson(CVNC.DELETE_DN_MLT) || this.userService.isAccessPermisson(CVNC.DELETE_DN_MVT);
+        this.statusNewReport = this.userService.isAccessPermisson(Roles.CVNC.ADD_DN_MLT) || this.userService.isAccessPermisson(Roles.CVNC.ADD_DN_MVT);
+        this.statusDelete = this.userService.isAccessPermisson(Roles.CVNC.DELETE_DN_MLT) || this.userService.isAccessPermisson(Roles.CVNC.DELETE_DN_MVT);
 
         //neu cos quyen phe duyet thi trang thai mac dinh la trinh duyet
-        if (this.userService.isAccessPermisson(CVNC.PHE_DUYET_DN_MLT) || this.userService.isAccessPermisson(CVNC.PHE_DUYET_DN_MVT)) {
+        if (this.userService.isAccessPermisson(Roles.CVNC.PHE_DUYET_DN_MLT) || this.userService.isAccessPermisson(Roles.CVNC.PHE_DUYET_DN_MVT)) {
             this.searchFilter.trangThai = Utils.TT_BC_2;
         }
         this.loaiDns = this.loaiDns.filter(e => e.id != Utils.MUA_VTU);
@@ -146,12 +146,12 @@ export class DanhSachHopDongComponent implements OnInit {
 
     checkEditStatus(trangThai: string) {
         return Utils.statusSave.includes(trangThai) &&
-            (this.userService.isAccessPermisson(CVNC.EDIT_DN_MLT) || this.userService.isAccessPermisson(CVNC.EDIT_DN_MVT));
+            (this.userService.isAccessPermisson(Roles.CVNC.EDIT_DN_MLT) || this.userService.isAccessPermisson(Roles.CVNC.EDIT_DN_MVT));
     }
 
     checkDeleteStatus(trangThai: string) {
         return Utils.statusDelete.includes(trangThai) &&
-            (this.userService.isAccessPermisson(CVNC.DELETE_DN_MLT) || this.userService.isAccessPermisson(CVNC.DELETE_DN_MVT));
+            (this.userService.isAccessPermisson(Roles.CVNC.DELETE_DN_MLT) || this.userService.isAccessPermisson(Roles.CVNC.DELETE_DN_MVT));
     }
 
     getStatusName(trangThai: string) {

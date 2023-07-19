@@ -131,14 +131,8 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
               this.notification.warning(MESSAGE.WARNING, 'Không tồn tại hợp đồng cho loại đề nghị đã chọn');
               return;
             } else {
+              // await this.checkContract();
               // await this.syntheticContract();
-              this.response.dnghiCvHopDongCtiets = [];
-              this.response.dnghiCvHopDongCtiets.push({
-                ... new ItemContract,
-                id: uuid.v4() + 'FE',
-                maDvi: this.userInfo?.MA_DVI,
-                tenDvi: this.userInfo?.TEN_DVI,
-              })
             }
           } else {
             await this.callSynthetic();
@@ -428,7 +422,19 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
     await this.capVonNguonChiService.timKiemHopDong(request).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
-          this.a = data.data.content
+          const dataRequest = data.data.content[0].dnghiCvHopDongCtiets[0];
+          this.response.dnghiCvHopDongCtiets.push({
+            ... new ItemContract,
+            id: uuid.v4() + 'FE',
+            maDvi: this.userInfo?.MA_DVI,
+            tenDvi: this.userInfo?.TEN_DVI,
+            slKeHoach: dataRequest.slKeHoach,
+            slHopDong: dataRequest.slHopDong,
+            gtHopDong: dataRequest.gtHopDong,
+            viPhamHopDong: dataRequest.viPhamHopDong,
+            thanhLyHdongSl: dataRequest.thanhLyHdongSl,
+            thanhLyHdongTt: dataRequest.thanhLyHdongTt,
+          })
           if (data.data.content?.length > 0) {
             this.isContractExist = true;
           }
