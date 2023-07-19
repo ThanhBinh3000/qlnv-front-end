@@ -32,9 +32,7 @@ import {BienBanKetThucNhapScService} from "../../../../../services/sua-chua/bien
 export class ThemMoiKthucComponent extends Base3Component implements OnInit {
 
   dataTableDiaDiem: any[] = [];
-
   fileCanCu: any[] = []
-
   rowItem : any = {};
 
   dropdownLoaiDaiDien : any[] = [];
