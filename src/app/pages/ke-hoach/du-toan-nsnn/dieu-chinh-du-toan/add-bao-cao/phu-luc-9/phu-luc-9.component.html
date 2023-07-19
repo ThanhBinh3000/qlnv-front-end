@@ -340,7 +340,7 @@
                                     <td>
                                         {{editCache[data.id].data.tenDvi}}
                                     </td>
-                                    <ng-container *ngIf="status.viewAppVal; else viewAppVal">
+                                    <ng-container *ngIf="!status.viewAppVal; else viewAppVal">
                                         <td>{{Op.fmtVal(editCache[data.id].data.bcheGiao2021)}}</td>
                                         <td>
                                             <input class="money-input" currencyMask

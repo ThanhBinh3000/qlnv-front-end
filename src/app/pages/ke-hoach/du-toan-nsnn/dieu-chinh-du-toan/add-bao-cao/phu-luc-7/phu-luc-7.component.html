@@ -34,13 +34,13 @@
 					<nz-table nzBordered class="table__body" [nzScroll]="{x: scrollX}">
 						<thead>
 							<tr>
-								<th rowspan="2" *ngIf="status.general" class="text-center" nzWidth="50px">
+								<!-- <th rowspan="2" *ngIf="status.general" class="text-center" nzWidth="50px">
 									<label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
 										style="margin-right: 0;">
 									</label>
-								</th>
+								</th> -->
 								<th rowSpan="2" nzWidth="50px">STT</th>
-								<th rowSpan="2" nzWidth="50px">
+								<th rowSpan="2">
 									Danh mục hàng
 								</th>
 								<th rowSpan="2">Đơn vị tính</th>
@@ -48,7 +48,7 @@
 								<th rowSpan="2">Định mức (chi phí hàng tại cửa kho)</th>
 								<th rowSpan="2">Bình quân(chi phí hàng ngoài cửa kho)</th>
 								<th colSpan="5">Đơn vị đã thực hiện đến thời điểm báo cáo </th>
-								<th colSpan="4" nzWidth="400px">Dự kiến thực hiện từ <br> thời điểm báo cáo đến cuối năm
+								<th colSpan="4">Dự kiến thực hiện từ <br> thời điểm báo cáo đến cuối năm
 								</th>
 								<th rowSpan="2">Nhu cầu dự toán năm {{namBcao}} </th>
 								<th rowSpan="2">Dự toán lũy kế đã giao</th>
@@ -69,6 +69,7 @@
 								<th>Địa phương nhận</th>
 								<th>QĐ giao nhiệm vụ <br> của Tổng cục / Cục</th>
 								<th>Lượng(kg)</th>
+								<th>Lượng(kg)</th>
 								<th>Chi phí tại cửa kho</th>
 								<th>Chi phí ngoài cửa kho</th>
 								<th>Tổng cộng</th>
@@ -79,7 +80,7 @@
 								<th>Tổng cộng</th>
 							</tr>
 							<tr>
-								<th *ngIf="status.general"></th>
+								<!-- <th *ngIf="status.general"></th> -->
 								<th>A</th>
 								<th>B</th>
 								<th>C</th>
@@ -112,7 +113,7 @@
 						</thead>
 						<tbody>
 							<tr>
-								<td *ngIf="status.general"></td>
+								<!-- <td *ngIf="status.general"></td> -->
 								<td></td>
 								<td>Tổng cộng</td>
 								<td></td>
@@ -143,7 +144,7 @@
 								<td *ngIf="status.general"></td>
 							</tr>
 							<tr>
-								<td *ngIf="status.general"></td>
+								<!-- <td *ngIf="status.general"></td> -->
 								<td></td>
 								<td>Phát sinh điều chỉnh tăng</td>
 								<td></td>
@@ -174,7 +175,7 @@
 								<td *ngIf="status.general"></td>
 							</tr>
 							<tr>
-								<td *ngIf="status.general"></td>
+								<!-- <td *ngIf="status.general"></td> -->
 								<td></td>
 								<td>Phát sinh điều chỉnh giảm</td>
 								<td></td>
@@ -206,10 +207,10 @@
 							</tr>
 							<tr *ngFor="let data of lstCtietBcao; let i = index">
 								<ng-container *ngIf="!editCache[data.id].edit; else editTemplate ">
-									<td [hidden]="status " class="text-center">
-										<label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
-											(ngModelChange)="updateSingleChecked()"></label>
-									</td>
+									<!-- <td *ngIf="status.general" class="text-center">
+										<label nz-checkbox *ngIf="checkDelete(data.stt)" [nzValue]="data.id"
+											[(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"></label>
+									</td> -->
 									<td class="text-center">
 										{{getChiMuc(data.stt)}}
 									</td>
@@ -261,10 +262,10 @@
 									</td>
 								</ng-container>
 								<ng-template #editTemplate>
-									<td *ngIf="status.general" class="text-center">
-										<label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
-											(ngModelChange)="updateSingleChecked()"></label>
-									</td>
+									<!-- <td *ngIf="status.general" class="text-center">
+										<label *ngIf="checkDelete(data.stt)" nz-checkbox [nzValue]="data.id"
+											[(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"></label>
+									</td> -->
 									<td class="text-center">
 										{{getChiMuc(editCache[data.id].data.stt)}}
 									</td>

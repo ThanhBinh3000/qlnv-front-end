@@ -1,4 +1,4 @@
-import { Roles } from "src/app/Utility/utils";
+import { Roles, Utils } from "src/app/Utility/utils";
 
 
 
@@ -117,7 +117,7 @@ export class Dcdt {
     static readonly PHU_LUC = [
         {
             id: 'pl01',
-            tenDm: 'Tổng hợp điều chỉnh dự toán chi NSNN đợt I/',
+            tenDm: 'Tổng hợp điều chỉnh dự toán chi NSNN đợt / năm $n$',
             tenPl: 'Phụ lục I',
             status: false,
         },
@@ -129,13 +129,13 @@ export class Dcdt {
         },
         {
             id: 'pl03',
-            tenDm: 'Chi tiết chi quản lý hành chính ',
+            tenDm: 'Chi tiết chi quản lý hành chính năm $n$ ',
             tenPl: 'Phụ lục III',
             status: false,
         },
         {
             id: 'pl04',
-            tenDm: 'Chi tiết dự toán chi ứng dụng công nghệ thông tin ',
+            tenDm: 'Chi tiết dự toán chi ứng dụng công nghệ thông tin năm $n$ ',
             tenPl: 'Phụ lục IV',
             status: false,
         },
@@ -198,7 +198,7 @@ export class Dcdt {
     static readonly PHU_LUC_TH = [
         {
             id: 'pl01TH',
-            tenDm: 'Tổng hợp điều chỉnh dự toán chi NSNN đợt I/',
+            tenDm: 'Tổng hợp điều chỉnh dự toán chi NSNN đợt/năm $n$ ',
             tenPl: 'Phụ lục I',
             status: false,
         },
@@ -275,4 +275,9 @@ export class Dcdt {
             status: false,
         },
     ];
+
+    static appendixName(id: string, nam: number) {
+        const appendix = Dcdt.PHU_LUC.find(e => e.id == id);
+        return [appendix.tenPl, Utils.getName(nam, appendix.tenDm)];
+    }
 }

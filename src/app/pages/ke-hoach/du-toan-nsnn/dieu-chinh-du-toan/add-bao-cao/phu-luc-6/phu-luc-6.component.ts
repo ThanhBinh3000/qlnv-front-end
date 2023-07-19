@@ -205,7 +205,7 @@ export class PhuLuc6Component implements OnInit {
     async getDinhMucPL2X() {
         const request = {
             loaiDinhMuc: '02',
-            maDvi: this.dataInfo.maDviTao,
+            maDvi: this.dataInfo.maDvi,
         }
         await this.quanLyVonPhiService.getDinhMuc(request).toPromise().then(
             res => {

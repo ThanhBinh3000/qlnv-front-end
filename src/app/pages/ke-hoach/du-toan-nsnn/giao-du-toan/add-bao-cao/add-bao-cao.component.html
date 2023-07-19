@@ -161,17 +161,18 @@
                                                 </div>
                                             </ng-template>
                                         </td>
-                                        <!-- <td>
-                      <ng-container *ngIf="baoCao.id">
-                        <a *ngIf="!status && (userInfo?.sub == data.nguoiBcao)">
-                          <i class="fa fa-pencil" (click)="viewAppendix(data)"></i>
-                        </a>
-                        <a *ngIf="(status || userInfo?.sub != data.nguoiBcao) && data.nguoiBcao">
-                          <i class="fa fa-eye" (click)="viewAppendix(data)"></i>
-                        </a>
-                      </ng-container>
-                    </td> -->
                                         <td>
+                                            <ng-container *ngIf="baoCao.id">
+                                                <a *ngIf="!status && (userInfo?.sub == data.nguoiBcao)">
+                                                    <i class="fa fa-pencil" (click)="viewAppendix(data)"></i>
+                                                </a>
+                                                <a
+                                                    *ngIf="(status || userInfo?.sub != data.nguoiBcao) && data.nguoiBcao">
+                                                    <i class="fa fa-eye" (click)="viewAppendix(data)"></i>
+                                                </a>
+                                            </ng-container>
+                                        </td>
+                                        <!-- <td>
                                             <i class="fa fa-pencil" (click)="viewAppendix(data)"></i>
                                             <ng-container *ngIf="baoCao.id">
                                                 <a *ngIf="!status && (userInfo?.sub == data.nguoiBcao)">
@@ -185,7 +186,7 @@
                                             <a *ngIf="!status && (userInfo?.sub == baoCao.nguoiTao)">
                                                 <i class="fa fa-trash-o do" (click)="deleteAppendix(data.id)"></i>
                                             </a>
-                                        </td>
+                                        </td> -->
                                     </ng-container>
                                 </tr>
                             </tbody>
