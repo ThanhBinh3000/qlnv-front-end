@@ -44,7 +44,7 @@ export class Tab {
             name: 'Tiền thừa từ đơn vị cấp dưới',
             code: Tab.DS_GN_TT,
             status: true,
-            role: Roles.CVMB.ACCEPT_NTT,
+            role: Roles.CVMB.VIEW_NTT_GN,
             isSelected: false,
         },
         {

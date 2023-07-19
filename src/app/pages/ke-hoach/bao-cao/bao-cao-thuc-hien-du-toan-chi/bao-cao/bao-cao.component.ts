@@ -158,9 +158,10 @@ export class BaoCaoComponent implements OnInit {
         //lay thong tin chung bao cao
         this.baoCao.id = this.data?.id;
         this.userInfo = this.userService.getUserLogin();
+        const isOffice = this.userInfo.DON_VI.tenVietTat.indexOf('_VP') != -1;
         if (this.userInfo?.DON_VI?.tenVietTat == 'CCNTT') {
             this.lstPhuLuc = this.lstPhuLuc.filter(e => e.id != Dtc.PHU_LUC_III);
-        } else if (this.userService.isChiCuc()) {
+        } else if (this.userService.isChiCuc() && !isOffice) {
             this.lstPhuLuc = this.lstPhuLuc.filter(e => e.id == Dtc.PHU_LUC_I)
         } else {
             if (!this.userService.isTongCuc()) {

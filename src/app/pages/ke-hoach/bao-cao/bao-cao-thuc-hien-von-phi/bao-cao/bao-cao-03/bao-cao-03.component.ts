@@ -42,19 +42,21 @@ export class ItemData {
     }
 
     sum(data: ItemData) {
-        this.soLuongKhoach = Operator.sum([this.soLuongKhoach, data.soLuongKhoach]);
-        this.soLuongTte = Operator.sum([this.soLuongTte, data.soLuongTte]);
+        // this.soLuongKhoach = Operator.sum([this.soLuongKhoach, data.soLuongKhoach]);
+        // this.soLuongTte = Operator.sum([this.soLuongTte, data.soLuongTte]);
         this.ttGiaHtoan = Operator.sum([this.ttGiaHtoan, data.ttGiaHtoan]);
         this.ttGiaBanTte = Operator.sum([this.ttGiaBanTte, data.ttGiaBanTte]);
         this.ttClechGiaTteVaGiaHtoan = Operator.sum([this.ttClechGiaTteVaGiaHtoan, data.ttClechGiaTteVaGiaHtoan]);
     }
 
     clear() {
-        Object.keys(this).forEach(key => {
-            if (typeof this[key] === 'number' && key != 'level') {
-                this[key] = null;
-            }
-        })
+        this.ttGiaHtoan = null,
+            this.ttGiaBanTte = null;
+        // Object.keys(this).forEach(key => {
+        //     if (typeof this[key] === 'number' && key != 'level') {
+        //         this[key] = null;
+        //     }
+        // })
     }
 
     upperBound() {
@@ -71,6 +73,8 @@ export class ItemData {
                 return Utils.laMa(k);
             case 1:
                 return chiSo[n];
+            case 2:
+                return '-';
             default:
                 return "";
         }
@@ -152,7 +156,7 @@ export class BaoCao03Component implements OnInit {
         Object.assign(this.status, this.dataInfo.status);
         await this.getFormDetail();
         if (this.status.save) {
-            this.scrollX = Table.tableWidth(350, 9, 1, 160);
+            this.scrollX = Table.tableWidth(350, 9, 1, 120);
         } else {
             this.scrollX = Table.tableWidth(350, 9, 1, 0);
         }
@@ -166,6 +170,9 @@ export class BaoCao03Component implements OnInit {
                     tenVtu: item.ten,
                 }))
             })
+        }
+        if (this.dataInfo.isSynth && this.formDetail.trangThai == Status.NEW) {
+            this.setIndex();
         }
         this.lstCtietBcao = Table.sortByIndex(this.lstCtietBcao);
         this.updateEditCache();
@@ -277,6 +284,21 @@ export class BaoCao03Component implements OnInit {
         this.spinner.hide();
     }
 
+    setIndex() {
+        this.lstCtietBcao.forEach(item => {
+            if (item.maVtu.split('.').length > 1) {
+                item.stt = item.maVtu;
+            }
+        })
+        const temp = Vp.DANH_MUC_03.filter(e => e.loaiVtu);
+        temp.forEach(data => {
+            this.lstCtietBcao.filter(e => e.stt == Table.preIndex(data.ma) && e.maVtu.startsWith(data.loaiVtu)).forEach((item, index) => {
+                item.stt = data.ma + '.' + (index + 1).toString();
+            })
+        })
+
+    }
+
     //show popup tu choi
     tuChoi(mcn: string) {
         const modalTuChoi = this.modal.create({
@@ -317,7 +339,7 @@ export class BaoCao03Component implements OnInit {
         });
     }
 
-    selectGoods(id: string) {
+    selectGoods(index: string) {
         const modalTuChoi = this.modal.create({
             nzTitle: 'Danh sách hàng hóa',
             nzContent: DialogDanhSachVatTuHangHoaComponent,
@@ -330,14 +352,22 @@ export class BaoCao03Component implements OnInit {
         });
         modalTuChoi.afterClose.subscribe(async (data) => {
             if (data) {
-                if (this.lstCtietBcao.findIndex(e => e.maVtu == data.ma && e.level == 1) == -1) {
+                if (this.lstCtietBcao.findIndex(e => e.maVtu == data.ma && e.stt.startsWith(index)) == -1) {
                     const item: ItemData = new ItemData({
                         id: uuid.v4() + 'FE',
                         maVtu: data.ma,
                         tenVtu: data.ten,
                         maDviTinh: data.maDviTinh,
-                        level: 1,
+                        level: 2,
                     })
+                    let id: string;
+                    if (item.maVtu.startsWith('01')) {
+                        id = this.lstCtietBcao.find(e => Table.preIndex(e.stt) == index && Table.subIndex(e.stt) == 1)?.id;
+                    } else if (item.maVtu.startsWith('04')) {
+                        id = this.lstCtietBcao.find(e => Table.preIndex(e.stt) == index && Table.subIndex(e.stt) == 2)?.id;
+                    } else {
+                        id = this.lstCtietBcao.find(e => Table.preIndex(e.stt) == index && Table.subIndex(e.stt) == 3)?.id;
+                    }
                     this.lstCtietBcao = Table.addChild(id, item, this.lstCtietBcao);
                     const stt = this.lstCtietBcao.find(e => e.id == item.id).stt;
                     this.sum(stt);
@@ -359,15 +389,6 @@ export class BaoCao03Component implements OnInit {
         const stt = this.lstCtietBcao.find(e => e.id == item.id).stt;
         this.sum(stt);
         this.updateEditCache();
-    }
-
-    addLine(id: string) {
-        const level = this.lstCtietBcao.find(e => e.id == id)?.level;
-        if (level == 0) {
-            this.selectGoods(id);
-        } else {
-            this.addLow(id);
-        }
     }
 
     //xóa dòng

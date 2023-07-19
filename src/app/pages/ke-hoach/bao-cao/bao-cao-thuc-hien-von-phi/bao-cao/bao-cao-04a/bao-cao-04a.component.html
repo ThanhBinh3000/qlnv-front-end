@@ -31,10 +31,10 @@
                                 <i class="icon htvbdh_dau-cong"></i>
                                 <span>Thêm hàng</span>
                             </button>
-                            <button *ngIf="status.save" type="button" class="btn btn-do" (click)="deleteAllChecked()">
+                            <!-- <button *ngIf="status.save" type="button" class="btn btn-do" (click)="deleteAllChecked()">
                                 <i class="fa fa-trash-o"></i>
                                 <span>Xóa</span>
-                            </button>
+                            </button> -->
                         </div>
                     </div>
                     <nz-table nzBordered class="table__body" [nzScroll]="{x: scrollX}">
@@ -56,12 +56,12 @@
                                     Ghi chú
                                 </th>
                                 <th style="width: 50px;" rowspan="2" *ngIf="status.save" nzRight></th>
-                                <th style="width: 55px;" rowspan="2" *ngIf="status.save" nzRight></th>
-                                <th style="width: 55px;" rowspan="2" *ngIf="status.save" nzRight></th>
-                                <th style="width: 40px;" rowspan="2" *ngIf="status.save" nzRight>
+                                <th style="width: 60px;" rowspan="2" *ngIf="status.save" nzRight></th>
+                                <th style="width: 60px;" rowspan="2" *ngIf="status.save" nzRight></th>
+                                <!-- <th style="width: 40px;" rowspan="2" *ngIf="status.save" nzRight>
                                     <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()">
                                     </label>
-                                </th>
+                                </th> -->
                             </tr>
                             <tr>
                                 <th>
@@ -105,21 +105,17 @@
                                         {{ fmtVal(data.trongDotTcong, data) }}
                                     </td>
                                     <ng-container *ngFor="let e of data.listCtiet">
-                                        <ng-container *ngIf="e.loaiMatHang == 0">
-                                            <td>
-                                                {{ fmtVal(e.sl, data) }}
-                                            </td>
-                                        </ng-container>
+                                        <td>
+                                            {{ fmtVal(e.gtri, data) }}
+                                        </td>
                                     </ng-container>
                                     <td>
                                         {{ fmtVal(data.luyKeTcong, data)}}
                                     </td>
                                     <ng-container *ngFor="let e of data.listCtiet">
-                                        <ng-container *ngIf="e.loaiMatHang == 1">
-                                            <td>
-                                                {{ fmtVal(e.sl, data)}}
-                                            </td>
-                                        </ng-container>
+                                        <td>
+                                            {{ fmtVal(e.lkGtri, data)}}
+                                        </td>
                                     </ng-container>
                                     <td>
                                         {{ data.ghiChu }}</td>
@@ -134,35 +130,31 @@
                                     <td *ngIf="status.save" nzRight>
                                         <i class="fa fa-plus" (click)="addLine(data.id)"></i>
                                     </td>
-                                    <td *ngIf="status.save" nzRight>
+                                    <!-- <td *ngIf="status.save" nzRight>
                                         <ng-container *ngIf="checkDelete(data)">
                                             <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
                                                 (ngModelChange)="updateChecked(data.id)"></label>
                                         </ng-container>
-                                    </td>
+                                    </td> -->
                                 </ng-container>
                                 <ng-template #editTemplate>
                                     <td>
                                         {{ fmtVal(editCache[data.id].data.trongDotTcong, data) }}
                                     </td>
                                     <ng-container *ngFor="let kv of editCache[data.id].data.listCtiet">
-                                        <ng-container *ngIf="kv.loaiMatHang == 0">
-                                            <td>
-                                                <input class="money-input" currencyMask [options]="Op.amount"
-                                                    [(ngModel)]="kv.sl"
-                                                    (ngModelChange)="editCache[data.id].data.changeModel(luyKes)" />
-                                            </td>
-                                        </ng-container>
+                                        <td>
+                                            <input class="money-input" currencyMask [options]="Op.amount"
+                                                [(ngModel)]="kv.gtri"
+                                                (ngModelChange)="editCache[data.id].data.changeModel(luyKes)" />
+                                        </td>
                                     </ng-container>
                                     <td>
                                         {{ fmtVal(editCache[data.id].data.luyKeTcong, data) }}
                                     </td>
                                     <ng-container *ngFor="let kv of editCache[data.id].data.listCtiet">
-                                        <ng-container *ngIf="kv.loaiMatHang == 1">
-                                            <td>
-                                                {{ fmtVal(kv.sl, data) }}
-                                            </td>
-                                        </ng-container>
+                                        <td>
+                                            {{ fmtVal(kv.lkGtri, data) }}
+                                        </td>
                                     </ng-container>
                                     <td>
                                         <input nz-input [(ngModel)]="editCache[data.id].data.ghiChu" />
@@ -178,12 +170,12 @@
                                         <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
                                             (nzOnConfirm)="cancelEdit(data.id)" class="save">Hủy</a>
                                     </td>
-                                    <td *ngIf="status.save" nzRight>
+                                    <!-- <td *ngIf="status.save" nzRight>
                                         <ng-container *ngIf="checkDelete(data)">
                                             <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
                                                 (ngModelChange)="updateChecked(data.id)"></label>
                                         </ng-container>
-                                    </td>
+                                    </td> -->
                                 </ng-template>
                             </tr>
                         </tbody>

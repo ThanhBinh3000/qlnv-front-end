@@ -9,17 +9,14 @@ import { MESSAGE } from 'src/app/constants/message';
 import { CapVonMuaBanTtthService } from 'src/app/services/quan-ly-von-phi/capVonMuaBanTtth.service';
 import { UserService } from 'src/app/services/user.service';
 import { Cvmb, Perm, Search } from '../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
-import { Tab } from '../von-mua-von-ung.constant';
-import { DialogTaoMoiCapUngVonComponent } from '../cap-ung-von/dialog-tao-moi-cap-ung-von/dialog-tao-moi-cap-ung-von.component';
-import { DialogTaoMoiTienThuaComponent } from '../nop-tien-thua/dialog-tao-moi-tien-thua/dialog-tao-moi-tien-thua.component';
-import { DialogTaoMoiThanhToanComponent } from '../thanh-toan-cho-khach-hang/dialog-tao-moi-thanh-toan/dialog-tao-moi-thanh-toan.component';
+import { Tab } from '../von-ban.constant';
+// import { DialogTaoMoiCapVonComponent } from '../dialog-tao-moi-cap-von/dialog-tao-moi-cap-von.component';
 
 @Component({
     selector: 'app-danh-sach-von-mua-von-ung',
     templateUrl: './danh-sach-von-mua-von-ung.component.html',
     styleUrls: ['../von-mua-von-ung.component.scss']
 })
-
 export class DanhSachVonMuaVonUngComponent implements OnInit {
     @Input() dataInfo: any;
     @Output() dataChange = new EventEmitter();
@@ -42,6 +39,7 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
     allChecked = false;
     statusNewReport = false;
     statusDelete = false;
+    isExistTienThua: boolean;
     //phan trang
     totalElements = 0;
     totalPages = 0;
@@ -104,8 +102,8 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
                 this.perm.delete = 'NO';
                 this.perm.pass = 'NO';
                 this.perm.approve = 'NO';
-                this.perm.accept = Roles.CVMB.ACCEPT_NTT;
-                this.isParent = true;
+                this.perm.accept = Roles.CVMB.ACCEPT_NTT,
+                    this.isParent = true;
                 break;
             case Tab.DS_TTKH:
                 this.title = 'DANH SÁCH THANH TOÁN CHO KHÁCH HÀNG';
@@ -189,30 +187,26 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
     }
 
     addNewReport() {
-        let nzContent: ComponentType<any>;
-        if (this.searchFilter.maLoai == Cvmb.GHI_NHAN_CU_VON || this.searchFilter.maLoai == Cvmb.CU_VON_DVCD) {
-            nzContent = DialogTaoMoiCapUngVonComponent;
-        } else if (this.searchFilter.maLoai == Cvmb.TIEN_THUA) {
-            nzContent = DialogTaoMoiTienThuaComponent;
-        } else {
-            nzContent = DialogTaoMoiThanhToanComponent;
-        }
-        const modalTuChoi = this.modal.create({
-            nzTitle: 'Thông tin tạo mới',
-            nzContent: nzContent,
-            nzMaskClosable: false,
-            nzClosable: false,
-            nzWidth: '900px',
-            nzFooter: null,
-            nzComponentParams: {
-                request: this.searchFilter
-            },
-        });
-        modalTuChoi.afterClose.toPromise().then(async (res) => {
-            if (res) {
-                this.dataChange.emit(res);
-            }
-        });
+        // let nzContent: ComponentType<any>;
+        // if (this.searchFilter.maLoai == Cvmb.GHI_NHAN_CU_VON || this.searchFilter.maLoai == Cvmb.CU_VON_DVCD) {
+        //     nzContent = DialogTaoMoiCapVonComponent;
+        // }
+        // const modalTuChoi = this.modal.create({
+        //     nzTitle: 'Thông tin tạo mới',
+        //     nzContent: nzContent,
+        //     nzMaskClosable: false,
+        //     nzClosable: false,
+        //     nzWidth: '900px',
+        //     nzFooter: null,
+        //     nzComponentParams: {
+        //         request: this.searchFilter
+        //     },
+        // });
+        // modalTuChoi.afterClose.toPromise().then(async (res) => {
+        //     if (res) {
+        //         this.dataChange.emit(res);
+        //     }
+        // });
     }
 
     //xem chi tiet bao cao

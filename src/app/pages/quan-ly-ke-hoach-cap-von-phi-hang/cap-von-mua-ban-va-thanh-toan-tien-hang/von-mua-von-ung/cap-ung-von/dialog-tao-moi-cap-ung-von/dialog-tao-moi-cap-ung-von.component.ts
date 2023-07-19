@@ -1,9 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
-import * as dayjs from 'dayjs';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { Status } from 'src/app/Utility/utils';
+import { Status, Utils } from 'src/app/Utility/utils';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { CapVonMuaBanTtthService } from 'src/app/services/quan-ly-von-phi/capVonMuaBanTtth.service';
@@ -48,10 +47,7 @@ export class DialogTaoMoiCapUngVonComponent implements OnInit {
         }
         this.userInfo = this.userService.getUserLogin();
 
-        const thisYear = dayjs().get('year');
-        for (let i = -5; i < 10; i++) {
-            this.lstNam.push(thisYear + i);
-        }
+        this.lstNam = Utils.getListYear(5, 10);
     }
 
     async checkReport() {

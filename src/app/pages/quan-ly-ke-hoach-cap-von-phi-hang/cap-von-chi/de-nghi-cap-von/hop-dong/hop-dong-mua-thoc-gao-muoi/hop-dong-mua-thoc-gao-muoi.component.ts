@@ -438,6 +438,7 @@ export class HopDongMuaThocGaoMuoiComponent implements OnInit {
         const index = this.baoCao.dnghiCvHopDongCtiets.findIndex(item => item.id === id); // lay vi tri hang minh sua
         Object.assign(this.baoCao.dnghiCvHopDongCtiets[index], this.editCache[id].data); // set lai data cua lstCtietBcao[index] = this.editCache[id].data
         this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
+        this.getTotal();
     }
 
     sortReport() {

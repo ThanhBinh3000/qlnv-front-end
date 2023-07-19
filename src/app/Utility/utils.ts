@@ -7,6 +7,7 @@ import { DatePipe, DecimalPipe } from '@angular/common';
 import * as uuid from "uuid";
 import { Injectable } from '@angular/core';
 import * as XLSX from 'xlsx'
+import * as dayjs from 'dayjs';
 import { displayNumber } from './func';
 
 export class Status {
@@ -480,7 +481,7 @@ export class Operator {
 
 	//nhan hai so
 	static mul(num1: number, num2: number) {
-		if ((!num1 && num1 !== 0) && (!num2 && num2 !== 0)) {
+		if (((!num1 && num1 !== 0) || num1 == 1 || num1 == -1) && (!num2 && num2 !== 0)) {
 			return null;
 		}
 		if (!num1) {
@@ -815,6 +816,15 @@ export class Utils {
 
 	static readonly MONEY_LIMIT = 9000000000000000;
 	static readonly FILE_SIZE = 2097152;
+
+	static getListYear(start: number, end: number) {
+		const thisYear = dayjs().get('year');
+		const lstNam = [];
+		for (let i = -start; i < end; i++) {
+			lstNam.push(thisYear + i);
+		}
+		return lstNam
+	}
 
 	public static ROUND = 4;
 
@@ -1173,14 +1183,14 @@ export class Roles {
 		EXPORT_NTT: 'VONPHIHANG_VONMBANTT_XUAT_BC_NTV_TH',
 		//ghi nhan tien von thua
 		// ADD_REPORT_GNV_TH: 'VONPHIHANG_VONMBANTT_LAP_BC_GNV_TH',
-		// APPROVE_REPORT_GNV_TH: 'VONPHIHANG_VONMBANTT_TRINHDUYET_BC_GNV_TH',
-		// EDIT_REPORT_GNV_TH: 'VONPHIHANG_VONMBANTT_SUA_BC_GNV_TH',
-		// COPY_REPORT_GNV_TH: 'VONPHIHANG_VONMBANTT_COPY_BC_GNV_TH',
-		// DUYET_REPORT_GNV_TH: 'VONPHIHANG_VONMBANTT_DUYET_TUCHOIDUYET_BC_GNV_TH',
-		// PHE_DUYET_REPORT_GNV_TH: 'VONPHIHANG_VONMBANTT_PHEDUYET_TUCHOIPHEDUYET_BC_GNV_TH',
-		// VIEW_REPORT_GNV_TH: 'VONPHIHANG_VONMBANTT_XEM_BC_GNV_TH',
-		// PRINT_REPORT_GNV_TH: 'VONPHIHANG_VONMBANTT_IN_BC_GNV_TH',
-		// EXPORT_REPORT_GNV_TH: 'VONPHIHANG_VONMBANTT_XUAT_BC_GNV_TH',
+		SUBMIT_NTT_GN: 'VONPHIHANG_VONMBANTT_TRINHDUYET_BC_GNV_TH',
+		// EDIT_NTT_GN: 'VONPHIHANG_VONMBANTT_SUA_BC_GNV_TH',
+		COPY_NTT_GN: 'VONPHIHANG_VONMBANTT_COPY_BC_GNV_TH',
+		PASS_NTT_GN: 'VONPHIHANG_VONMBANTT_DUYET_TUCHOIDUYET_BC_GNV_TH',
+		APPROVE_NTT_GN: 'VONPHIHANG_VONMBANTT_PHEDUYET_TUCHOIPHEDUYET_BC_GNV_TH',
+		VIEW_NTT_GN: 'VONPHIHANG_VONMBANTT_XEM_BC_GNV_TH',
+		PRINT_NTT_GN: 'VONPHIHANG_VONMBANTT_IN_BC_GNV_TH',
+		EXPORT_NTT_GN: 'VONPHIHANG_VONMBANTT_XUAT_BC_GNV_TH',
 	};
 
 	static readonly CVNC = {

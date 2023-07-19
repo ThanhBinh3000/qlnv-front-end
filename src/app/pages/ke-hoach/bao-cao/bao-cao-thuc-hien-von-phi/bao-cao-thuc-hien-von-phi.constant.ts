@@ -101,11 +101,10 @@ export class Vp {
 
     static appendixName(id: string, loaiBcao: string, nam: number, dot: number) {
         const appendix = Vp.PHU_LUC.find(e => e.id == id);
-        let tenDm: string = appendix.tenDm;
         if (loaiBcao == Vp.BC_DOT) {
-            return tenDm + ' đợt ' + dot.toString();
+            return appendix.tenDm + ' đợt ' + dot.toString();
         } else {
-            return tenDm + ' năm ' + nam.toString();
+            return appendix.tenDm + ' năm ' + nam.toString();
         }
     }
 
@@ -126,12 +125,57 @@ export class Vp {
             ten: 'Xuất bán',
         },
         {
+            ma: '0.1.1',
+            ten: 'Lương thực',
+            loaiVtu: '01',
+        },
+        {
+            ma: '0.1.2',
+            ten: 'Muối',
+            loaiVtu: '04',
+        },
+        {
+            ma: '0.1.3',
+            ten: 'Vật tư thiết bị',
+            loaiVtu: '02',
+        },
+        {
             ma: '0.2',
             ten: 'Xuất CTVT',
         },
         {
+            ma: '0.2.1',
+            ten: 'Lương thực',
+            loaiVtu: '01',
+        },
+        {
+            ma: '0.2.2',
+            ten: 'Muối',
+            loaiVtu: '04',
+        },
+        {
+            ma: '0.2.3',
+            ten: 'Vật tư thiết bị',
+            loaiVtu: '02',
+        },
+        {
             ma: '0.3',
             ten: 'Xuất khác',
+        },
+        {
+            ma: '0.3.1',
+            ten: 'Lương thực',
+            loaiVtu: '01',
+        },
+        {
+            ma: '0.3.2',
+            ten: 'Muối',
+            loaiVtu: '04',
+        },
+        {
+            ma: '0.3.3',
+            ten: 'Vật tư thiết bị',
+            loaiVtu: '02',
         },
     ]
 }
