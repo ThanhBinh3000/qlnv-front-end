@@ -8,7 +8,7 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { CapVonNguonChiService } from 'src/app/services/quan-ly-von-phi/capVonNguonChi.service';
 import { UserService } from 'src/app/services/user.service';
 import { mulNumber, sumNumber } from 'src/app/Utility/func';
-import { CAN_CU_GIA, LOAI_DE_NGHI, Utils } from 'src/app/Utility/utils';
+import { CAN_CU_GIA, LOAI_DE_NGHI, Operator, Utils } from 'src/app/Utility/utils';
 import * as uuid from "uuid";
 import { BaoCao, ItemContract } from '../../de-nghi-cap-von.constant';
 import dayjs from "dayjs";
@@ -120,10 +120,11 @@ export class DialogTaoMoiHopDongComponent implements OnInit {
                 this.response.loaiDnghi = null;
             }
         );
-        if (isExist) {
-            this.notification.warning(MESSAGE.WARNING, 'Hợp đồng cấp vốn đã tồn tại');
-            return;
-        }
+        console.log(this.response);
+        // if (isExist) {
+        //     this.notification.warning(MESSAGE.WARNING, 'Hợp đồng cấp vốn đã tồn tại');
+        //     return;
+        // }
         if (!this.userService.isTongCuc() || this.response.loaiDnghi == Utils.MUA_VTU) {
             this.getContract();
         } else {
@@ -215,13 +216,13 @@ export class DialogTaoMoiHopDongComponent implements OnInit {
                             if (this.response.dnghiCvHopDongCtiets[index].qdPheDuyetKqNhaThau.indexOf(item.soQdPdKhlcnt) == -1) {
                                 this.response.dnghiCvHopDongCtiets[index].qdPheDuyetKqNhaThau += ', ' + item.soQdPdKhlcnt;
                             }
-                            this.response.dnghiCvHopDongCtiets[index].slHopDong = sumNumber([this.response.dnghiCvHopDongCtiets[index].slHopDong, temp.slHopDong]);
-                            this.response.dnghiCvHopDongCtiets[index].slKeHoach = sumNumber([this.response.dnghiCvHopDongCtiets[index].slKeHoach, temp.slKeHoach]);
-                            this.response.dnghiCvHopDongCtiets[index].slThucHien = sumNumber([this.response.dnghiCvHopDongCtiets[index].slThucHien, temp.slThucHien]);
-                            this.response.dnghiCvHopDongCtiets[index].gtHopDong = sumNumber([this.response.dnghiCvHopDongCtiets[index].gtHopDong, temp.gtHopDong]);
-                            this.response.dnghiCvHopDongCtiets[index].gtriThucHien = sumNumber([this.response.dnghiCvHopDongCtiets[index].gtriThucHien, temp.gtriThucHien]);
-                            this.response.dnghiCvHopDongCtiets[index].daGiaoDuToan = sumNumber([this.response.dnghiCvHopDongCtiets[index].daGiaoDuToan, temp.daGiaoDuToan]);
-                            this.response.dnghiCvHopDongCtiets[index].soTtLuyKe = sumNumber([this.response.dnghiCvHopDongCtiets[index].soTtLuyKe, temp.soTtLuyKe]);
+                            this.response.dnghiCvHopDongCtiets[index].slHopDong = Operator.sum([this.response.dnghiCvHopDongCtiets[index].slHopDong, temp.slHopDong]);
+                            this.response.dnghiCvHopDongCtiets[index].slKeHoach = Operator.sum([this.response.dnghiCvHopDongCtiets[index].slKeHoach, temp.slKeHoach]);
+                            this.response.dnghiCvHopDongCtiets[index].slThucHien = Operator.sum([this.response.dnghiCvHopDongCtiets[index].slThucHien, temp.slThucHien]);
+                            this.response.dnghiCvHopDongCtiets[index].gtHopDong = Operator.sum([this.response.dnghiCvHopDongCtiets[index].gtHopDong, temp.gtHopDong]);
+                            this.response.dnghiCvHopDongCtiets[index].gtriThucHien = Operator.sum([this.response.dnghiCvHopDongCtiets[index].gtriThucHien, temp.gtriThucHien]);
+                            this.response.dnghiCvHopDongCtiets[index].daGiaoDuToan = Operator.sum([this.response.dnghiCvHopDongCtiets[index].daGiaoDuToan, temp.daGiaoDuToan]);
+                            this.response.dnghiCvHopDongCtiets[index].soTtLuyKe = Operator.sum([this.response.dnghiCvHopDongCtiets[index].soTtLuyKe, temp.soTtLuyKe]);
                         }
                     })
                 } else {
