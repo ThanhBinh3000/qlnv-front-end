@@ -120,7 +120,6 @@ export class DialogTaoMoiHopDongComponent implements OnInit {
                 this.response.loaiDnghi = null;
             }
         );
-        console.log(this.response);
         // if (isExist) {
         //     this.notification.warning(MESSAGE.WARNING, 'Hợp đồng cấp vốn đã tồn tại');
         //     return;
