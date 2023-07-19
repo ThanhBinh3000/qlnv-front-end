@@ -296,9 +296,9 @@
           <tbody>
           <tr *ngFor="let data of rowSelectionTable.data; let idx = index">
             <td class="text-center">{{(page - 1) * pageSize + idx + 1}}</td>
-            <td>{{ data.soDx }}</td>
+            <td> <a nz-button nzType="link" (click)="openModalDxChinhSua(data.pagId)">{{ data.soDx }}</a></td>
             <td>{{ data.tenDvi}}</td>
-            <td class="text-right">{{ data.soLuong | number : '1.0-1' : 'vi-VN' }}</td>
+            <td>{{ data.tenVungMien}}</td>
             <td class="text-right">{{ data.giaDn | number : '1.0-1' : 'vi-VN' }}</td>
             <td class="text-right">{{ data.giaDnVat | number : '1.0-1' : 'vi-VN' }}</td>
             <td class="text-right">{{ data.soLuong | number : '1.0-1' : 'vi-VN' }}</td>
@@ -331,8 +331,9 @@
           <tbody>
           <tr *ngFor="let data of rowSelectionTable.data; let idx = index">
             <td class="text-center">{{idx + 1}}</td>
-            <td>{{ data.soDx }}</td>
+            <td> <a nz-button nzType="link" (click)="openModalDxChinhSua(data.pagId)">{{ data.soDx }}</a></td>
             <td>{{ data.tenDvi}}</td>
+            <td>{{ data.tenVungMien}}</td>
             <td class="text-right">{{ data.soLuong | number : '1.0-1' : 'vi-VN' }}</td>
             <td class="text-right">{{ data.giaDn | number : '1.0-1' : 'vi-VN' }}</td>
             <td class="text-right">{{ data.giaDnVat | number : '1.0-1' : 'vi-VN' }}</td>
@@ -369,6 +370,23 @@
   <app-them-moi-to-trinh-pag [type]="type" [isView]="isView" [idInput]="formData.value.id" (onClose)="reOpenMain()">
   </app-them-moi-to-trinh-pag>
 </ng-template>
+
+<nz-modal [nzWidth]="'100%'" [nzBodyStyle]="{ 'overflow-y': 'auto' }"
+          [(nzVisible)]="isViewModal" (nzOnCancel)="closeDxPaModal()">
+  <ng-container *nzModalContent>
+    <app-them-dx-pag-lt *ngIf="pagType=='LT'" [pagType]="pagType" [type]="type" [isView]="true" [isModal]="true"
+                        [idInput]="idSelected">
+    </app-them-dx-pag-lt>
+    <app-them-moi-de-xuat-pag *ngIf="pagType=='VT'" [loaiVthh]="pagType" [type]="type" [isView]="true"  [isModal]="true"
+                              [idInput]="idSelected"></app-them-moi-de-xuat-pag>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button (click)="closeDxPaModal()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>
 
 <ng-template #error let-control>
   <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
