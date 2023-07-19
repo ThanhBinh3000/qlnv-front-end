@@ -11,11 +11,11 @@
       <tr *ngFor="let data of basicTable.data; let i = index">
         <td class="text-center">{{i + 1}}</td>
         <td *ngFor="let column of dataColumn;">
-          {{ (column === 'donGiaNhaThau' ? (data[column] | number: '1.0-1' :'vi_VN')
-          : column === 'ngayKy' ? (data[column] | date: 'dd/MM/YYYY')
-          : column === 'ngayTao' ? (data[column] | date: 'dd/MM/YYYY')
-          : column.startsWith('ngay') ? (data[column] | date: 'dd/MM/YYYY')
-          : data[column]) }}
+          {{
+          (
+            column === 'donGiaNhaThau' || column.startsWith('number') ? (data[column] | number: '1.0-1' :'vi_VN') :
+            column === 'ngayKy' || column === 'ngayTao' || column.startsWith('ngay') ? (data[column] | date: 'dd/MM/YYYY') :
+            data[column]) }}
         </td>
         <td *ngIf="!isView" class="text-center">
           <a (click)="handleOk(data)">

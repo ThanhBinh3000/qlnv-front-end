@@ -85,6 +85,7 @@ export class ThemMoiPnkComponent extends Base3Component implements OnInit {
       soBangKeCanHang : [''],
       ghiChu : [''],
       tongSoLuong : [''],
+      tongKinhPhiThucTe : ['']
     })
   }
 
@@ -183,6 +184,10 @@ export class ThemMoiPnkComponent extends Base3Component implements OnInit {
   }
 
   openDialogDiaDiem() {
+    if(!this.formData.value.idQdNh){
+      this.notification.error(MESSAGE.ERROR,"Vui lòng chọn số quyết định giao nhiệm vụ nhập hàng");
+      return;
+    }
     if (this.disabled()) {
       return;
     }
@@ -299,15 +304,19 @@ export class ThemMoiPnkComponent extends Base3Component implements OnInit {
       this.dataTable.push(dataRow);
       this.rowItem.slThucTe = 0;
       this.rowItem.maSo = null;
-      console.log(this.calTongSlThucTe());
       this.formData.patchValue({
-        tongSoLuong : this.calTongSlThucTe()
+        tongSoLuong : this.calTongSlThucTe(),
+        tongKinhPhiThucTe : this.calTongTienThucTe()
       })
     }
   }
 
   deleteRow(i: number): void {
     this.dataTable = this.dataTable.filter((d, index) => index !== i);
+    this.formData.patchValue({
+      tongSoLuong : this.calTongSlThucTe(),
+      tongKinhPhiThucTe : this.calTongTienThucTe()
+    })
   }
 
   validateRow():boolean{

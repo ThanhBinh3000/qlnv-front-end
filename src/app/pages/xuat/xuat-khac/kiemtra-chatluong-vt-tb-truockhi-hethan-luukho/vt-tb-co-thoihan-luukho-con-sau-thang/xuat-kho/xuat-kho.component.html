@@ -82,8 +82,10 @@
           <th width="">Thời hạn XH trước ngày</th>
           <th width="">Điểm Kho</th>
           <th width="">Lô kho</th>
+          <th width="">Chủng loại hàng</th>
           <th width="">Số phiếu xuất kho</th>
           <th width="">Ngày xuất kho</th>
+          <th width="">Loại hình nhập xuất</th>
           <th width="">Số phiếu KNCL</th>
           <th width="">Ngày giám định</th>
           <th width="">Trạng thái</th>
@@ -108,6 +110,7 @@
             <td></td>
             <td></td>
             <td></td>
+            <td></td>
           </tr>
           <ng-container *ngIf="expandSetString.has(item.idVirtual)">
             <ng-container *ngFor="let lv1 of item.childData,let i1=index">
@@ -118,7 +121,9 @@
                 <td></td>
                 <td></td>
                 <td class="bold">{{lv1.tenDiemKho}}</td>
-                <td class="bold">{{lv1.tenLoKho}}</td>
+                <td class="bold">{{lv1.tenLoKho ? lv1.tenLoKho + ' - ' + lv1.tenNganKho : lv1.tenNganKho}}</td>
+                <td class="bold">{{lv1.tenLoaiVthh}}</td>
+                <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -140,8 +145,10 @@
                     <td></td>
                     <td></td>
                     <td></td>
+                    <td></td>
                     <td class="bold">{{lv2.soPhieu}}</td>
                     <td>{{lv2.ngayXuat | date: 'dd/MM/YYYY' }}</td>
+                    <td>{{lv2.tenLoai}}</td>
                     <td><a *ngIf="lv2.soPhieuKnCl" nzType="link"
                            (click)="openPhieuKnClModal(lv2.idPhieuKnCl)">{{lv2.soPhieuKnCl}}</a></td>
                     <td>{{lv2.ngayKn | date: 'dd/MM/YYYY' }}</td>

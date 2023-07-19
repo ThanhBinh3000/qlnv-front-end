@@ -168,7 +168,7 @@ export class ThemMoiBknComponent extends Base3Component implements OnInit {
 
   openDialogPhieuXuatKho() {
     if(!this.formData.value.idQdNh){
-      this.notification.error(MESSAGE.ERROR,"Vui lòng chọn số quyết định giao nhiệm vụ xuất hàng");
+      this.notification.error(MESSAGE.ERROR,"Vui lòng chọn số quyết định giao nhiệm vụ nhập hàng");
       return;
     }
     if (this.disabled()) {

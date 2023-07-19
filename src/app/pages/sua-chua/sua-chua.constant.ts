@@ -75,6 +75,6 @@ export const ROUTE_LIST: Array<ChiTietMenu> = [
     dropdown: 'bao-cao',
     idHover: 'bao-cao',
     hasTab: false,
-    // accessPermisson: 'DCNB_KHDC'
+    accessPermisson: 'SCHDTQG_NH'
   },
 ];
