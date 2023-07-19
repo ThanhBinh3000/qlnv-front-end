@@ -30,6 +30,7 @@ import {
   PhieuKdclVtKtclService
 } from "../../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/PhieuKdclVtKtcl.service";
 import {MangLuoiKhoService} from "../../../../../../../../services/qlnv-kho/mangLuoiKho.service";
+import {DataService} from "../../../../../../../../services/data.service";
 
 @Component({
   selector: 'app-thong-tin-phieu-kiem-nghiem-chat-luong',
@@ -58,6 +59,7 @@ export class ThongTinPhieuKiemNghiemChatLuongComponent extends Base2Component im
   maPhieu: string;
   radioValue: any;
   checked: boolean = false;
+  fromParent: boolean = true;
   canCu: any = [];
   fileNiemPhong: any = [];
   bienBan: any[] = [];
@@ -72,6 +74,7 @@ export class ThongTinPhieuKiemNghiemChatLuongComponent extends Base2Component im
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
+    private dataService: DataService,
     private danhMucService: DanhMucService,
     private quyetDinhGiaoNvXuatHangService: QuyetDinhGiaoNvXuatHangService,
     private phieuXuatKhoService: PhieuXuatKhoService,
@@ -133,13 +136,13 @@ export class ThongTinPhieuKiemNghiemChatLuongComponent extends Base2Component im
     this.maPhieu = 'PKNCL-' + this.userInfo.DON_VI.tenVietTat;
   }
 
+
   async ngOnInit() {
     try {
       this.spinner.show();
       await Promise.all([
         this.loadSoQuyetDinhGiaoNvXh(),
-        // this.loadPhuongPhapLayMau(),
-      ])
+      ]);
       await this.loadDetail(this.idInput)
       this.spinner.hide();
     } catch (e) {

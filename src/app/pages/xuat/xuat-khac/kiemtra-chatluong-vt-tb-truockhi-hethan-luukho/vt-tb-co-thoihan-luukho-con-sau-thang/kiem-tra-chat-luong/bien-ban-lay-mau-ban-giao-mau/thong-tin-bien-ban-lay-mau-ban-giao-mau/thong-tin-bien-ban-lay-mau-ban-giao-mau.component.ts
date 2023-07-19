@@ -56,8 +56,6 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
   fileDinhKems: any[] = [];
   listFiles: any = [];
   listPhieuXuatKho: any = [];
-  ppLayMauOptions: any = [];
-  chiTieuClOptions: any = [];
 
   constructor(
     httpClient: HttpClient,

@@ -107,9 +107,9 @@ export class XkBienBanLayMauBanGiaoMauComponent extends Base2Component implement
   async timKiem() {
     await this.spinner.show();
     try {
-      if (this.formData.value.ngayXuatKho) {
-        this.formData.value.ngayXuatKhoTu = dayjs(this.formData.value.ngayXuatKho[0]).format('YYYY-MM-DD')
-        this.formData.value.ngayXuatKhoDen = dayjs(this.formData.value.ngayXuatKho[1]).format('YYYY-MM-DD')
+      if (this.formData.value.ngayLayMau) {
+        this.formData.value.ngayLayMauTu = dayjs(this.formData.value.ngayLayMau[0]).format('YYYY-MM-DD')
+        this.formData.value.ngayLayMauDen = dayjs(this.formData.value.ngayLayMau[1]).format('YYYY-MM-DD')
       }
       await this.search();
     } catch (e) {
@@ -138,7 +138,7 @@ export class XkBienBanLayMauBanGiaoMauComponent extends Base2Component implement
           idVirtual: uuid.v4(),
           soQdGiaoNvXh: key != "null" ? key : '',
           nam: parent ? parent.nam : null,
-          ngayXuatLayMau:  parent ? parent.ngayXuatLayMau : null,
+          ngayXuatLayMau: parent ? parent.ngayXuatLayMau : null,
           childData: rs
         };
       }).value();

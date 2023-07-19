@@ -13,6 +13,7 @@ import * as uuid from "uuid";
 import dayjs from "dayjs";
 import {CHUC_NANG} from "../../../../../../constants/status";
 import {PhieuXuatKhoService} from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/PhieuXuatKho.service";
+import {DataService} from "../../../../../../services/data.service";
 
 @Component({
   selector: 'app-xuat-kho',
@@ -29,7 +30,7 @@ export class XuatKhoComponent extends Base2Component implements OnInit {
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    // private cuuTroVienTroComponent: CuuTroVienTroComponent,
+    private dataService: DataService,
     private phieuXuatKhoService: PhieuXuatKhoService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, phieuXuatKhoService);
