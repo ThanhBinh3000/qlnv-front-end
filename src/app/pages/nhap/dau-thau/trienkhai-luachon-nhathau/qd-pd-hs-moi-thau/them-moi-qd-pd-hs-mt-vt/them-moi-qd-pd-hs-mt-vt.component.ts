@@ -124,7 +124,7 @@ export class ThemMoiQdPdHsMtVtComponent extends Base2Component implements OnInit
           tenDuAn: data.dchinhDxKhLcntHdr ? data.dchinhDxKhLcntHdr.tenDuAn : data.tenDuAn,
           tenLoaiVthh: data.tenLoaiVthh,
           loaiVthh: data.loaiVthh,
-          tchuanCluong: data.dxKhlcntHdr.tchuanCluong,
+          tchuanCluong: data.dxKhlcntHdr?.tchuanCluong,
           quy: data.dxKhlcntHdr.quy,
           tgianBdauTchuc: data.dchinhDxKhLcntHdr ? data.dchinhDxKhLcntHdr.tgianBdauTchuc : data.tgianBdauTchuc,
         })
