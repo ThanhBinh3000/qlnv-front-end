@@ -5,6 +5,8 @@ import {StorageService} from "../../../../../../../../services/storage.service";
 import {NzNotificationService} from "ng-zorro-antd/notification";
 import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
+import {chain} from 'lodash';
+import * as uuid from "uuid";
 import {
   BckqKiemDinhMauService
 } from "../../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/BckqKiemDinhMau.service";
@@ -12,6 +14,16 @@ import {CHUC_NANG, STATUS} from "../../../../../../../../constants/status";
 import {PhuongPhapLayMau} from "../../../../../../../../models/PhuongPhapLayMau";
 import {FILETYPE} from "../../../../../../../../constants/fileType";
 import {MESSAGE} from "../../../../../../../../constants/message";
+import {NzSelectSizeType} from "ng-zorro-antd/select";
+import {
+  QuyetDinhGiaoNvXuatHangService
+} from "../../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/QuyetDinhGiaoNvXuatHang.service";
+import dayjs from "dayjs";
+import {Validators} from "@angular/forms";
+import {
+  PhieuXuatKhoService
+} from "../../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/PhieuXuatKho.service";
+import {isArray} from "rxjs/internal-compatibility";
 
 @Component({
   selector: 'app-thong-tin-bao-cao-ket-qua-kiem-dinh',
@@ -21,28 +33,25 @@ import {MESSAGE} from "../../../../../../../../constants/message";
 export class ThongTinBaoCaoKetQuaKiemDinhComponent extends Base2Component implements OnInit {
   CHUC_NANG = CHUC_NANG;
   STATUS = STATUS;
+  size: NzSelectSizeType = 'default';
   @Input() soQdGiaoNvXh: string;
   @Input() idInput: number;
   @Input() isView: boolean;
   @Input() isViewOnModal: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
-  listChiCuc: any[] = [];
-  listDiemKho: any[] = [];
   listSoQuyetDinh: any[] = [];
-  listDiaDiemNhap: any[] = [];
-  phuongPhapLayMaus: Array<PhuongPhapLayMau>;
   listDaiDienCuc: any[] = [];
   listDaiDienChiCuc: any[] = [];
   maBb: string;
-  radioValue: any;
   checked: boolean = false;
-  canCu: any = [];
-  fileNiemPhong: any = [];
-  bienBan: any[] = [];
   fileDinhKems: any[] = [];
-  listFiles: any = [];
-  listPhieuXuatKho: any = [];
+  listQdGiaoNvXhOption: any[] = [];
+  listPhieuXuatKho: any[] = [];
+  children: any = [];
+  expandSetString = new Set<string>();
+  idPhieuKnCl: number = 0;
+  openPhieuKnCl = false;
 
   constructor(
     httpClient: HttpClient,
@@ -50,18 +59,86 @@ export class ThongTinBaoCaoKetQuaKiemDinhComponent extends Base2Component implem
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
+    private phieuXuatKhoService: PhieuXuatKhoService,
+    private quyetDinhGiaoNvXuatHangService: QuyetDinhGiaoNvXuatHangService,
     private bckqKiemDinhMauService: BckqKiemDinhMauService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, bckqKiemDinhMauService);
     this.formData = this.fb.group({
       tenDvi: [],
-      maDvi: [],
-      nam: [],
+      nam: [dayjs().get("year")],
+      maDvi: [, [Validators.required]],
+      tenTrangThai: ['Dự Thảo'],
+      trangThai: [STATUS.DU_THAO],
+      tenDviNhan: [],
       tenBaoCao: [],
+      soBaoCao: [],
       soQdGiaoNvXh: [],
-      ngayBaoCaoTu: [],
-      ngayBaoCaoDen: [],
+      ngayBaoCao: [],
     })
+  }
+
+  async ngOnInit() {
+    try {
+      this.spinner.show();
+      await Promise.all([
+        this.loadSoQuyetDinhGiaoNvXh(),
+      ])
+      await this.loadDetail(this.idInput)
+      this.spinner.hide();
+    } catch (e) {
+      this.notification.error(MESSAGE.ERROR, 'Có lỗi xảy ra.');
+      this.spinner.hide();
+    } finally {
+      this.spinner.hide();
+    }
+  }
+
+  async loadSoQuyetDinhGiaoNvXh() {
+    let body = {
+      namKeHoach: this.formData.get("nam").value,
+      dvql: this.userInfo.MA_DVI,
+      trangThai: STATUS.DA_DUYET_LDC,
+    }
+    let res = await this.quyetDinhGiaoNvXuatHangService.search(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      let data = res.data;
+      this.listQdGiaoNvXhOption = data.content;
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
+
+  async loadDetail(idInput: number) {
+    if (idInput > 0) {
+      await this.bckqKiemDinhMauService.getDetail(idInput)
+        .then((res) => {
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.formData.patchValue(res.data);
+            this.formData.patchValue({
+              soQdGiaoNvXh: res.data ? (res.data.soQdGiaoNvXh.indexOf(",") > 0 ? res.data.soQdGiaoNvXh.split(",") : [res.data.soQdGiaoNvXh]) : []
+            });
+            // let idsQdGiaoNxXh = res.data ? (res.data.idQdGiaoNvXh.indexOf(",") > 0 ? res.data.idQdGiaoNvXh.split(",") : [res.data.idQdGiaoNvXh]) : [];
+            // this.getDetailPxk(idsQdGiaoNxXh);
+          }
+        })
+        .catch((e) => {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        });
+    } else {
+      this.formData.patchValue({
+        maDvi: this.userInfo.MA_DVI,
+        tenDvi: this.userInfo.TEN_DVI,
+      });
+      if (this.soQdGiaoNvXh) {
+        let dataQdGiaoNvXh = this.listSoQuyetDinh.find(item => item.soQuyetDinh == this.soQdGiaoNvXh);
+        if (dataQdGiaoNvXh) {
+          // this.bindingDataQd(dataQdGiaoNvXh);
+        }
+      }
+    }
   }
 
   isDisabled() {
@@ -72,54 +149,65 @@ export class ThongTinBaoCaoKetQuaKiemDinhComponent extends Base2Component implem
     return false;
   }
 
+  async changeValueQdGiaoNvXh(event) {
+    try {
+      this.spinner.show();
+      if (event && event.length > 0) {
+        const arrayQdGiaoNvXh = this.listQdGiaoNvXhOption.filter(obj1 =>
+          event.some(obj2 => obj1.soQuyetDinh === obj2)
+        );
+        const idsQdGiaoNvXh = arrayQdGiaoNvXh && arrayQdGiaoNvXh.length > 0 ? arrayQdGiaoNvXh.map(item => item.id) : [];
+        this.getDetailPxk(idsQdGiaoNvXh);
+      }
+    } catch (e) {
+      this.notification.error(MESSAGE.ERROR, 'Có lỗi xảy ra.');
+      this.spinner.hide();
+    } finally {
+      this.spinner.hide();
+    }
+  }
+
+  async getDetailPxk(idsQdGiaoNvXh) {
+    if (idsQdGiaoNvXh && idsQdGiaoNvXh.length > 0) {
+      await this.phieuXuatKhoService.search({
+        canCus: idsQdGiaoNvXh,
+        namKeHoach: this.formData.get("nam").value,
+        dvql: this.userInfo.MA_DVI,
+        loai: "XUAT_MAU",
+      }).then((res) => {
+        if (res.msg == MESSAGE.SUCCESS) {
+          this.listPhieuXuatKho = res.data.content;
+          this.buildTableView();
+        }
+      });
+    }
+  }
+
+  buildTableView() {
+    let dataView = chain(this.listPhieuXuatKho)
+      .groupBy("soCanCu")
+      .map((value, key) => {
+        let qdGiaoNvXh = value.find(f => f.soCanCu === key)
+        return {
+          idVirtual: uuid.v4(),
+          soQdGiaoNvXh: key != "null" ? key : '',
+          tenTrangThaiXhQdGiaoNvXh: qdGiaoNvXh ? qdGiaoNvXh.tenTrangThaiXhQdGiaoNvXh : "",
+          childData: value
+        };
+      }).value();
+    this.children = dataView
+    console.log(this.children, 'this.children this.children this.children');
+    this.expandAll()
+  }
+
   async save(isGuiDuyet?) {
     let body = this.formData.value;
-    //xử lý 3 loại file đính kèm , căn cứ pháp lý và ảnh biên bản lấy mẫu đc chụp
-    this.listFiles = [];
-    if (this.fileDinhKems.length > 0) {
-      this.fileDinhKems.forEach(item => {
-        item.fileType = FILETYPE.FILE_DINH_KEM
-        this.listFiles.push(item)
-      })
+    if (this.fileDinhKems && this.fileDinhKems.length > 0) {
+      body.fileDinhKems = this.fileDinhKems;
     }
-    if (this.canCu.length > 0) {
-      this.canCu.forEach(element => {
-        element.fileType = FILETYPE.CAN_CU_PHAP_LY
-        this.listFiles.push(element)
-      })
+    if (body.soQdGiaoNvXh && isArray(body.soQdGiaoNvXh)) {
+      body.soQdGiaoNvXh = body.soQdGiaoNvXh.join(",");
     }
-    if (this.fileNiemPhong.length > 0) {
-      this.fileNiemPhong.forEach(element => {
-        element.fileType = FILETYPE.ANH_DINH_KEM
-        this.listFiles.push(element)
-      })
-    }
-    if (this.listFiles && this.listFiles.length > 0) {
-      body.fileDinhKems = this.listFiles;
-    }
-    // xử lý pp lấy mẫu và tiêu chuẩn cần lấy mẫu kiểm tra
-    if (body.ppLayMauList && body.ppLayMauList.length > 0) {
-      body.ppLayMau = body.ppLayMauList.map(function (item) {
-        return item['label'];
-      }).join(",");
-    }
-    if (body.chiTieuKiemTraList && body.chiTieuKiemTraList.length > 0) {
-      body.chiTieuKiemTra = body.chiTieuKiemTraList.map(function (item) {
-        return item['label'];
-      }).join(",");
-    }
-    // xử lý người liên quan
-    if (this.listDaiDienChiCuc && this.listDaiDienChiCuc.length > 0) {
-      this.listDaiDienChiCuc.forEach(item => {
-        item.loaiDaiDien = "CHI_CUC";
-      })
-    }
-    if (this.listDaiDienCuc && this.listDaiDienCuc.length > 0) {
-      this.listDaiDienCuc.forEach(item => {
-        item.loaiDaiDien = "CUC";
-      })
-    }
-    body.xhXkVtBbLayMauDtl = [...this.listDaiDienChiCuc, ...this.listDaiDienCuc];
     let data = await this.createUpdate(body);
     if (data) {
       if (isGuiDuyet) {
@@ -159,4 +247,27 @@ export class ThongTinBaoCaoKetQuaKiemDinhComponent extends Base2Component implem
     this.reject(this.idInput, trangThai)
   }
 
+  expandAll() {
+    this.children.forEach(s => {
+      this.expandSetString.add(s.idVirtual);
+    })
+  }
+
+  onExpandStringChange(id: string, checked: boolean): void {
+    if (checked) {
+      this.expandSetString.add(id);
+    } else {
+      this.expandSetString.delete(id);
+    }
+  }
+
+  openPhieuKnClModal(id: number) {
+    this.idPhieuKnCl = id;
+    this.openPhieuKnCl = true;
+  }
+
+  closePhieuKnClModal() {
+    this.idPhieuKnCl = null;
+    this.openPhieuKnCl = false;
+  }
 }

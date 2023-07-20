@@ -95,18 +95,30 @@
           </td>
           <td>{{(page - 1) * pageSize + idx +
           1}}</td>
-          <td> {{ data.namKeHoach }} </td>
-          <td>{{ data.soQuyetDinh }}</td>
-          <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
-          <td>{{ data.tenLoai }}</td>
-          <td>{{ data.soCanCu }}</td>
+          <td> {{ data.nam }} </td>
+          <td>{{ data.soBaoCao }}</td>
+          <td>{{ data.tenBaoCao }}</td>
+          <td>{{ data.ngayBaoCao | date: 'dd/MM/YYYY' }}</td>
+          <td>{{ data.soQdGiaoNvXh }}</td>
           <td></td>
-          <td>{{ data.thoiHanXuatHang | date: 'dd/MM/YYYY' }}</td>
-          <td>{{ data.trichYeu }}</td>
+          <td></td>
           <td>{{ data.tenTrangThai }}</td>
-          <td>{{ data.tenTrangThaiXh }}</td>
           <td class="text-left">
-
+            <a *ngIf="data.trangThai ==STATUS.DA_DUYET_LDC" (click)="redirectDetail(data.id, true)">
+              <i class="fa fa-eye" title="Xem chi tiết"></i>
+            </a>
+            <a
+              *ngIf="data.trangThai == STATUS.TU_CHOI_LDC || data.trangThai == STATUS.TU_CHOI_TBP_KTBQ || data.trangThai ==STATUS.DU_THAO"
+              (click)="redirectDetail(data.id, false)">
+              <i class="fa fa-pencil" title="Sửa"></i>
+            </a>
+            <a *ngIf="data.trangThai ==STATUS.CHO_DUYET_LDC || data.trangThai == STATUS.CHO_DUYET_TBP_KTBQ"
+               (click)="redirectDetail(data.id, true)">
+              <i class="icon htvbdh_tcdt_pheduyet"></i>
+            </a>
+            <a *ngIf="data.trangThai ==STATUS.DU_THAO" (click)="delete(data)">
+              <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+            </a>
           </td>
         </tr>
         </tbody>
