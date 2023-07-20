@@ -13,7 +13,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { displayNumber, sumNumber } from 'src/app/Utility/func';
-import { AMOUNT, CVNC, DON_VI_TIEN, LOAI_DE_NGHI, Operator, QUATITY, Roles, Table, Utils } from 'src/app/Utility/utils';
+import { AMOUNT, CAN_CU_GIA, CVNC, DON_VI_TIEN, LOAI_DE_NGHI, Operator, QUATITY, Roles, Table, Utils } from 'src/app/Utility/utils';
 import { BaoCao, ItemContract, TRANG_THAI } from '../../de-nghi-cap-von.constant';
 import { BtnStatus } from '../../de-nghi-cap-von.class';
 import * as XLSX from 'xlsx';
@@ -57,6 +57,7 @@ export class HopDongMuaThocGaoMuoiComponent implements OnInit {
     fileList: NzUploadFile[] = [];
     fileDetail: NzUploadFile;
     statusExportExcel: BtnStatus = new BtnStatus();
+    canCuGias: any[] = CAN_CU_GIA;
     // before uploaf file
     beforeUpload = (file: NzUploadFile): boolean => {
         this.fileList = this.fileList.concat(file);
@@ -253,7 +254,7 @@ export class HopDongMuaThocGaoMuoiComponent implements OnInit {
 
     // call chi tiet bao cao
     async getDetailReport() {
-        await this.capVonNguonChiService.ctietHopDong(this.baoCao.id).toPromise().then(
+        await this.capVonNguonChiService.ctietDeNghi(this.baoCao.id).toPromise().then(
             async (data) => {
                 if (data.statusCode == 0) {
                     this.baoCao = data.data;
@@ -296,7 +297,7 @@ export class HopDongMuaThocGaoMuoiComponent implements OnInit {
             maChucNang: mcn,
             lyDoTuChoi: lyDoTuChoi,
         };
-        await this.capVonNguonChiService.trinhHopDong(requestGroupButtons).toPromise().then(async (data) => {
+        await this.capVonNguonChiService.trinhDeNghi(requestGroupButtons).toPromise().then(async (data) => {
             if (data.statusCode == 0) {
                 this.baoCao.trangThai = mcn;
                 this.getStatusButton();
@@ -370,7 +371,7 @@ export class HopDongMuaThocGaoMuoiComponent implements OnInit {
         }
 
         // replace nhung ban ghi dc them moi id thanh null
-        baoCaoTemp.dnghiCvHopDongCtiets.forEach(item => {
+        baoCaoTemp.lstCtiets.forEach(item => {
             if (item.id?.length == 38) {
                 item.id = null;
             }
@@ -378,8 +379,11 @@ export class HopDongMuaThocGaoMuoiComponent implements OnInit {
 
         this.spinner.show();
         if (!this.baoCao.id) {
-            baoCaoTemp.maLoai = '0';
-            this.capVonNguonChiService.themMoiHopDong(baoCaoTemp).toPromise().then(
+            baoCaoTemp.maLoai = '3';
+            baoCaoTemp.maDviTien = '1';
+            baoCaoTemp.soQdChiTieu = 'ABC-123';
+            baoCaoTemp.canCuVeGia = this.canCuGias[0].id;
+            this.capVonNguonChiService.taoMoiDeNghi(baoCaoTemp).toPromise().then(
                 async (data) => {
                     if (data.statusCode == 0) {
                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
@@ -394,7 +398,7 @@ export class HopDongMuaThocGaoMuoiComponent implements OnInit {
                 },
             );
         } else {
-            this.capVonNguonChiService.updateHopDong(baoCaoTemp).toPromise().then(
+            this.capVonNguonChiService.updateDeNghi(baoCaoTemp).toPromise().then(
                 async data => {
                     if (data.statusCode == 0) {
                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
@@ -411,7 +415,7 @@ export class HopDongMuaThocGaoMuoiComponent implements OnInit {
     }
 
     updateEditCache(): void {
-        this.baoCao.dnghiCvHopDongCtiets.forEach(item => {
+        this.baoCao.lstCtiets.forEach(item => {
             this.editCache[item.id] = {
                 edit: false,
                 data: { ...item }
@@ -425,35 +429,35 @@ export class HopDongMuaThocGaoMuoiComponent implements OnInit {
 
     // huy thay doi
     cancelEdit(id: string): void {
-        const index = this.baoCao.dnghiCvHopDongCtiets.findIndex(item => item.id === id);
+        const index = this.baoCao.lstCtiets.findIndex(item => item.id === id);
         // lay vi tri hang minh sua
         this.editCache[id] = {
-            data: { ...this.baoCao.dnghiCvHopDongCtiets[index] },
+            data: { ...this.baoCao.lstCtiets[index] },
             edit: false
         };
     }
 
     // luu thay doi
     saveEdit(id: string): void {
-        const index = this.baoCao.dnghiCvHopDongCtiets.findIndex(item => item.id === id); // lay vi tri hang minh sua
-        Object.assign(this.baoCao.dnghiCvHopDongCtiets[index], this.editCache[id].data); // set lai data cua lstCtietBcao[index] = this.editCache[id].data
+        const index = this.baoCao.lstCtiets.findIndex(item => item.id === id); // lay vi tri hang minh sua
+        Object.assign(this.baoCao.lstCtiets[index], this.editCache[id].data); // set lai data cua lstCtietBcao[index] = this.editCache[id].data
         this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
         this.getTotal();
     }
 
     sortReport() {
-        const lstCtietBcao = this.baoCao.dnghiCvHopDongCtiets;
-        const lstParent = this.baoCao.dnghiCvHopDongCtiets.filter(e => e.isParent);
-        this.baoCao.dnghiCvHopDongCtiets = [];
+        const lstCtietBcao = this.baoCao.lstCtiets;
+        const lstParent = this.baoCao.lstCtiets.filter(e => e.isParent);
+        this.baoCao.lstCtiets = [];
         lstParent.forEach(item => {
-            this.baoCao.dnghiCvHopDongCtiets.push(item);
-            this.baoCao.dnghiCvHopDongCtiets = this.baoCao.dnghiCvHopDongCtiets.concat(lstCtietBcao.filter(e => e.maDvi == item.maDvi && !e.isParent));
+            this.baoCao.lstCtiets.push(item);
+            this.baoCao.lstCtiets = this.baoCao.lstCtiets.concat(lstCtietBcao.filter(e => e.maDvi == item.maDvi && !e.isParent));
         })
     }
 
     getTotal() {
         this.total = new ItemContract();
-        this.baoCao.dnghiCvHopDongCtiets.forEach(item => {
+        this.baoCao.lstCtiets.forEach(item => {
             if (item.isParent) {
                 this.total.slKeHoach = Operator.sum([this.total.slKeHoach, item.slKeHoach]);
                 this.total.slHopDong = Operator.sum([this.total.slHopDong, item.slHopDong]);
@@ -483,7 +487,7 @@ export class HopDongMuaThocGaoMuoiComponent implements OnInit {
             { t: 1, b: 1, l: 9, r: 9, val: 'Công văn' },
         ]
         const fieldOrder = ['tenDvi', 'qdPheDuyetKqNhaThau', 'slKeHoach', 'slHopDong', 'donGia', 'gtHopDong', 'viPhamHopDong', 'thanhLyHdongSl', 'thanhLyHdongTt', 'congVan']
-        const filterData = this.baoCao.dnghiCvHopDongCtiets.map(item => {
+        const filterData = this.baoCao.lstCtiets.map(item => {
             const row: any = {};
             fieldOrder.forEach(field => {
                 row[field] = item[field]

@@ -85,12 +85,12 @@ export class DanhSachHopDongComponent implements OnInit {
 
     async search() {
         const request = JSON.parse(JSON.stringify(this.searchFilter));
-        request.maLoai = '0';
+        request.maLoai = '3';
         request.loaiTimKiem = '0';
         request.ngayTaoDen = this.datePipe.transform(this.searchFilter.ngayTaoDen, Utils.FORMAT_DATE_STR);
         request.ngayTaoTu = this.datePipe.transform(this.searchFilter.ngayTaoTu, Utils.FORMAT_DATE_STR);
         this.spinner.show();
-        await this.capVonNguonChiService.timKiemHopDong(request).toPromise().then(
+        await this.capVonNguonChiService.timKiemDeNghi(request).toPromise().then(
             (data) => {
                 if (data.statusCode == 0) {
                     this.dataTable = [];
@@ -233,7 +233,7 @@ export class DanhSachHopDongComponent implements OnInit {
                         })
                     }
                 }
-                this.capVonNguonChiService.xoaHopDong(request).toPromise().then(
+                this.capVonNguonChiService.xoaDeNghi(request).toPromise().then(
                     data => {
                         if (data.statusCode == 0) {
                             this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);

@@ -46,7 +46,7 @@ export class DialogTaoMoiHopDongComponent implements OnInit {
         this.response.maDvi = this.userInfo?.MA_DVI;
         this.response.trangThai = Utils.TT_BC_1;
         this.loaiDns = this.loaiDns.filter(e => e.id != Utils.MUA_VTU);
-        this.response.dnghiCvHopDongCtiets = [];
+        this.response.lstCtiets = [];
     }
     //lay ra so quyet dinh chi tieu cho de nghi
     getSoQdChiTieu() {
@@ -96,13 +96,13 @@ export class DialogTaoMoiHopDongComponent implements OnInit {
             maDvi: this.userInfo?.MA_DVI,
             namHdong: this.response.namBcao,
             loaiDnghi: this.response.loaiDnghi,
-            maLoai: '0',
+            maLoai: '3',
             paggingReq: {
                 limit: 10,
                 page: 1,
             },
         }
-        await this.capVonNguonChiService.timKiemHopDong(request).toPromise().then(
+        await this.capVonNguonChiService.timKiemDeNghi(request).toPromise().then(
             (data) => {
                 if (data.statusCode == 0) {
                     data.data.content.forEach(item => {
@@ -110,6 +110,8 @@ export class DialogTaoMoiHopDongComponent implements OnInit {
                             isExist = true;
                         }
                     })
+                    const demSoLan = data.data.content.length;
+                    this.response.soLan = demSoLan + 1;
                 } else {
                     this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
                     this.response.loaiDnghi = null;
@@ -141,8 +143,8 @@ export class DialogTaoMoiHopDongComponent implements OnInit {
         await this.capVonNguonChiService.tongHopHopDong(request).toPromise().then(
             async (data) => {
                 if (data.statusCode == 0) {
-                    this.response.dnghiCvHopDongCtiets = data.data;
-                    this.response.dnghiCvHopDongCtiets.forEach(item => {
+                    this.response.lstCtiets = data.data;
+                    this.response.lstCtiets.forEach(item => {
                         item.id = uuid.v4() + 'FE';
                     })
                 } else {
@@ -196,15 +198,15 @@ export class DialogTaoMoiHopDongComponent implements OnInit {
                             soTtLuyKe: item.soTtLuyKe,
                             daGiaoDuToan: item.daGiaoDuToan,
                         }
-                        this.response.dnghiCvHopDongCtiets.push(temp);
+                        this.response.lstCtiets.push(temp);
                         let index: number;
                         if (this.response.loaiDnghi != Utils.MUA_VTU) {
-                            index = this.response.dnghiCvHopDongCtiets.findIndex(e => e.maDvi == temp.maDvi && e.isParent);
+                            index = this.response.lstCtiets.findIndex(e => e.maDvi == temp.maDvi && e.isParent);
                         } else {
-                            index = this.response.dnghiCvHopDongCtiets.findIndex(e => e.tenKhachHang == temp.tenKhachHang && e.isParent);
+                            index = this.response.lstCtiets.findIndex(e => e.tenKhachHang == temp.tenKhachHang && e.isParent);
                         }
                         if (index == -1) {
-                            this.response.dnghiCvHopDongCtiets.push({
+                            this.response.lstCtiets.push({
                                 ...temp,
                                 id: uuid.v4() + 'FE',
                                 isParent: true,
@@ -212,16 +214,16 @@ export class DialogTaoMoiHopDongComponent implements OnInit {
                                 donGia: null,
                             })
                         } else {
-                            if (this.response.dnghiCvHopDongCtiets[index].qdPheDuyetKqNhaThau.indexOf(item.soQdPdKhlcnt) == -1) {
-                                this.response.dnghiCvHopDongCtiets[index].qdPheDuyetKqNhaThau += ', ' + item.soQdPdKhlcnt;
+                            if (this.response.lstCtiets[index].qdPheDuyetKqNhaThau.indexOf(item.soQdPdKhlcnt) == -1) {
+                                this.response.lstCtiets[index].qdPheDuyetKqNhaThau += ', ' + item.soQdPdKhlcnt;
                             }
-                            this.response.dnghiCvHopDongCtiets[index].slHopDong = Operator.sum([this.response.dnghiCvHopDongCtiets[index].slHopDong, temp.slHopDong]);
-                            this.response.dnghiCvHopDongCtiets[index].slKeHoach = Operator.sum([this.response.dnghiCvHopDongCtiets[index].slKeHoach, temp.slKeHoach]);
-                            this.response.dnghiCvHopDongCtiets[index].slThucHien = Operator.sum([this.response.dnghiCvHopDongCtiets[index].slThucHien, temp.slThucHien]);
-                            this.response.dnghiCvHopDongCtiets[index].gtHopDong = Operator.sum([this.response.dnghiCvHopDongCtiets[index].gtHopDong, temp.gtHopDong]);
-                            this.response.dnghiCvHopDongCtiets[index].gtriThucHien = Operator.sum([this.response.dnghiCvHopDongCtiets[index].gtriThucHien, temp.gtriThucHien]);
-                            this.response.dnghiCvHopDongCtiets[index].daGiaoDuToan = Operator.sum([this.response.dnghiCvHopDongCtiets[index].daGiaoDuToan, temp.daGiaoDuToan]);
-                            this.response.dnghiCvHopDongCtiets[index].soTtLuyKe = Operator.sum([this.response.dnghiCvHopDongCtiets[index].soTtLuyKe, temp.soTtLuyKe]);
+                            this.response.lstCtiets[index].slHopDong = Operator.sum([this.response.lstCtiets[index].slHopDong, temp.slHopDong]);
+                            this.response.lstCtiets[index].slKeHoach = Operator.sum([this.response.lstCtiets[index].slKeHoach, temp.slKeHoach]);
+                            this.response.lstCtiets[index].slThucHien = Operator.sum([this.response.lstCtiets[index].slThucHien, temp.slThucHien]);
+                            this.response.lstCtiets[index].gtHopDong = Operator.sum([this.response.lstCtiets[index].gtHopDong, temp.gtHopDong]);
+                            this.response.lstCtiets[index].gtriThucHien = Operator.sum([this.response.lstCtiets[index].gtriThucHien, temp.gtriThucHien]);
+                            this.response.lstCtiets[index].daGiaoDuToan = Operator.sum([this.response.lstCtiets[index].daGiaoDuToan, temp.daGiaoDuToan]);
+                            this.response.lstCtiets[index].soTtLuyKe = Operator.sum([this.response.lstCtiets[index].soTtLuyKe, temp.soTtLuyKe]);
                         }
                     })
                 } else {
@@ -235,10 +237,10 @@ export class DialogTaoMoiHopDongComponent implements OnInit {
     }
 
     async getMaHd() {
-        await this.capVonNguonChiService.maHopDong().toPromise().then(
+        await this.capVonNguonChiService.maDeNghi().toPromise().then(
             (res) => {
                 if (res.statusCode == 0) {
-                    this.response.maHopDong = res.data;
+                    this.response.maDnghi = res.data;
                 } else {
                     this.notification.error(MESSAGE.ERROR, res?.msg);
                 }

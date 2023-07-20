@@ -31,6 +31,7 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
   total: ItemRequest = new ItemRequest();
   responeHopDong: ItemContract = new ItemContract()
   a: BaoCao;
+  idCallChitiet!: string;
 
   constructor(
     private _modalRef: NzModalRef,
@@ -51,6 +52,7 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
     }
     this.response.dnghiCapvonCtiets = [];
     this.response.dnghiCvHopDongCtiets = [];
+    this.response.lstCtiets = [];
   }
 
   changeDnghi() {
@@ -64,8 +66,6 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
     }
     if (this.response.canCuVeGia == Utils.QD_DON_GIA) {
       this.loaiDns = this.loaiDns.filter(e => e.id != Utils.MUA_GAO && e.id != Utils.MUA_MUOI);
-    } else {
-      this.loaiDns = this.loaiDns.filter(e => e.id != Utils.MUA_THOC);
     }
   }
 
@@ -131,8 +131,35 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
               this.notification.warning(MESSAGE.WARNING, 'Không tồn tại hợp đồng cho loại đề nghị đã chọn');
               return;
             } else {
-              // await this.checkContract();
-              // await this.syntheticContract();
+              await this.capVonNguonChiService.ctietDeNghi(this.idCallChitiet).toPromise().then(
+                async (data) => {
+                  if (data.statusCode == 0) {
+                    const dataRequest = data.data.lstCtiets[0];
+                    this.response.lstCtiets.push({
+                      ... new ItemContract,
+                      id: uuid.v4() + 'FE',
+                      maDvi: this.userInfo?.MA_DVI,
+                      tenDvi: this.userInfo?.TEN_DVI,
+                      slKeHoach: dataRequest.slKeHoach,
+                      slHopDong: dataRequest.slHopDong,
+                      gtHopDong: dataRequest.gtHopDong,
+                      viPhamHopDong: dataRequest.viPhamHopDong,
+                      thanhLyHdongSl: dataRequest.thanhLyHdongSl,
+                      thanhLyHdongTt: dataRequest.thanhLyHdongTt,
+                    })
+                    // this.baoCao = data.data;
+                    // this.listFile = [];
+                    // this.getStatusButton();
+                    // this.getTotal();
+                    // this.updateEditCache()
+                  } else {
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                  }
+                },
+                (err) => {
+                  this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+                },
+              );
             }
           } else {
             await this.callSynthetic();
@@ -412,29 +439,18 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
       maDvi: this.userInfo?.MA_DVI,
       namHdong: this.response.namBcao,
       loaiDnghi: this.response.loaiDnghi,
-      maLoai: '0',
+      maDviTien: '1',
+      maLoai: '3',
       paggingReq: {
         limit: 10,
         page: 1,
       },
       trangThai: Utils.TT_BC_7,
     }
-    await this.capVonNguonChiService.timKiemHopDong(request).toPromise().then(
+    await this.capVonNguonChiService.timKiemDeNghi(request).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
-          const dataRequest = data.data.content[0].dnghiCvHopDongCtiets[0];
-          this.response.dnghiCvHopDongCtiets.push({
-            ... new ItemContract,
-            id: uuid.v4() + 'FE',
-            maDvi: this.userInfo?.MA_DVI,
-            tenDvi: this.userInfo?.TEN_DVI,
-            slKeHoach: dataRequest.slKeHoach,
-            slHopDong: dataRequest.slHopDong,
-            gtHopDong: dataRequest.gtHopDong,
-            viPhamHopDong: dataRequest.viPhamHopDong,
-            thanhLyHdongSl: dataRequest.thanhLyHdongSl,
-            thanhLyHdongTt: dataRequest.thanhLyHdongTt,
-          })
+          this.idCallChitiet = data.data.content[0].id;
           if (data.data.content?.length > 0) {
             this.isContractExist = true;
           }
@@ -448,6 +464,10 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
         this.response.loaiDnghi = null;
       }
     );
+  }
+
+  async callChitiet() {
+
   }
 
   handleOk() {
