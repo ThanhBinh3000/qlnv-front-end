@@ -249,7 +249,7 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
       nzComponentParams: {
         dataTable: dataQdDc,
         dataHeader: ['Số quyết định', 'Ngày ký quyết định'],
-        dataColumn: ['soQdinh', 'ngayKyQddc'],
+        dataColumn: ['soQdinh', 'ngayKyQdinh'],
       },
     })
     modalQD.afterClose.subscribe(async (dataChose) => {

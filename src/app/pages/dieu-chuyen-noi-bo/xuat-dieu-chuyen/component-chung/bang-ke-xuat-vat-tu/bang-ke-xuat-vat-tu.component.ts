@@ -243,7 +243,7 @@ export class BangKeXuatVatTuDieuChuyenComponent extends Base2Component implement
         this.isView = b;
         // this.isViewDetail = isView ?? false;
         this.passData = {
-            soQdinhDcc: data.soQdinh, qdinhDccId: data.qdinhDcId, ngayKyQdDcc: data.ngayKyQdinh, thoiHanDieuChuyen: data.thoiHanDieuChuyen, maDiemKho: data.maDiemKho, tenDiemKho: data.tenDiemKho, maNhaKho: data.maNhaKho, tenNhaKho: data.tenNhaKho, maNganKho: data.maNganKho, tenNganKho: data.tenNganKho,
+            soQdinhDcc: data.soQdinh, qdinhDccId: data.qdinhDccId, ngayKyQdDcc: data.ngayKyQd, thoiHanDieuChuyen: data.thoiHanDieuChuyen, maDiemKho: data.maDiemKho, tenDiemKho: data.tenDiemKho, maNhaKho: data.maNhaKho, tenNhaKho: data.tenNhaKho, maNganKho: data.maNganKho, tenNganKho: data.tenNganKho,
             maLoKho: data.maLoKho, tenLoKho: data.tenLoKho, soPhieuXuatKho: data.soPhieuXuatKho, phieuXuatKhoId: data.phieuXuatKhoId, loaiVthh: data.maHangHoa, tenLoaiVthh: data.tenHangHoa, cloaiVthh: data.maChLoaiHangHoa, tenCloaiVthh: data.tenChLoaiHangHoa, diaDaDiemKho: '', tenNguoiGiaoHang: data.nguoiGiaoHang, cccd: data.soCmt,
             donViNguoiGiaoHang: data.ctyNguoiGh, diaChiDonViNguoiGiaoHang: data.diaChi, donViTinh: data.donViTinh, tenDonViTinh: data.tenDonViTinh, thoiGianGiaoNhan: data.thoiGianGiaoNhan
         }

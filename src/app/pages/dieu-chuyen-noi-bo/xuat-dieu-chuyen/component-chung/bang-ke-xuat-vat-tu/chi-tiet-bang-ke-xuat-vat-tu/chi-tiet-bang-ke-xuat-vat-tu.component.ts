@@ -268,7 +268,7 @@ export class ChiTietBangKeXuatVatTuDieuChuyenComponent extends Base2Component im
             await this.bangKeXuatVatTuDieuChuyenService.getDetail(idInput)
                 .then((res) => {
                     if (res.msg === MESSAGE.SUCCESS) {
-                        this.formData.patchValue({ ...res.data, soBangKe: res.data.soBangKe ? res.data.soBangKe : this.genSoBangKe(res.data.id), tenNganLoKho: res.data.tenLoKho ? `${res.data.tenLoKho} - ${res.data.tenNganKho}` : res.data.tenNganKho });
+                        this.formData.patchValue({ ...res.data, tenDonViTinh: res.data.tenDonViTinh ? res.data.tenDonViTinh : res.data.donViTinh, soBangKe: res.data.soBangKe ? res.data.soBangKe : this.genSoBangKe(res.data.id), tenNganLoKho: res.data.tenLoKho ? `${res.data.tenLoKho} - ${res.data.tenNganKho}` : res.data.tenNganKho });
                     }
                 })
                 .catch((e) => {
@@ -284,6 +284,7 @@ export class ChiTietBangKeXuatVatTuDieuChuyenComponent extends Base2Component im
                 thuKhoId: null,
                 tenThuKho: this.userInfo.TEN_DAY_DU,
                 ...this.passData,
+                tenDonViTinh: this.passData?.tenDonViTinh ? this.passData.tenDonViTinh : this.passData.donViTinh,
                 tenNganLoKho: this.passData.tenLoKho ? `${this.passData.tenLoKho} - ${this.passData.tenNganKho}` : this.passData.tenNganKho
             });
             this.chiTietDiemKho(this.passData.maDiemKho);
@@ -509,7 +510,7 @@ export class ChiTietBangKeXuatVatTuDieuChuyenComponent extends Base2Component im
 
     async addRow() {
         if (Object.keys(this.dcnbBangKeXuatVTDtlCreate).length !== 0) {
-            this.formData.value.dcnbBangKeXuatVTDtl = [...this.formData.value.dcnbBangKeXuatVTDtl, this.dcnbBangKeXuatVTDtlCreate];
+            this.formData.patchValue({ dcnbBangKeXuatVTDtl: [...this.formData.value.dcnbBangKeXuatVTDtl, this.dcnbBangKeXuatVTDtlCreate] });
             this.clearRow();
         }
         this.tinhTongSl()
@@ -669,7 +670,7 @@ export class ChiTietBangKeXuatVatTuDieuChuyenComponent extends Base2Component im
                 tenLoaiVthh: dataRes.data.tenLoaiVthh,
                 tenCloaiVthh: dataRes.data.tenCloaiVthh,
                 donViTinh: dataRes.data.donViTinh,
-                tenDonViTinh: dataRes.data.tenDonViTinh,
+                tenDonViTinh: dataRes.data.tenDonViTinh ? dataRes.data.tenDonViTinh : dataRes.data.donViTinh,
                 thoiGianGiaoNhan: dataRes.data.thoiGianGiaoNhan,
 
                 maLoKho: dataRes.data.maLoKho,
