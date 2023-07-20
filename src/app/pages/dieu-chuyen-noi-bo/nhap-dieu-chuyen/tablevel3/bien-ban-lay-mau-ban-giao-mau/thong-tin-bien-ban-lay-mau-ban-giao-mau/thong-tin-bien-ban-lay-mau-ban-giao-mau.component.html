@@ -92,7 +92,7 @@
           </div>
           <div nz-col [nzSpan]="6">
             <nz-form-item>
-              <nz-form-label nzRequired [nzNoColon]="true"> Tên đơn vị</nz-form-label>
+              <nz-form-label [nzNoColon]="true"> Đơn vị</nz-form-label>
               <nz-form-control>
                 <input nz-input formControlName="tenDvi" [readonly]="true" />
               </nz-form-control>
@@ -156,19 +156,19 @@
             </nz-form-item>
           </div>
 
-          <div nz-col nzSpan="4">
+          <div nz-col nzSpan="8">
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true">Lô kho(Nhập điều chuyển)
               </nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
                 <!-- <input nz-input formControlName="tenLoKho" [readonly]="true" /> -->
                 <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogKhoNhap()">
-                  <input [readonly]="true" nz-input formControlName="tenLoKho" readonly="true" />
+                  <input [readonly]="true" nz-input formControlName="tenLoNganKho" readonly="true" />
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col nzSpan="4">
+          <!-- <div nz-col nzSpan="4">
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true">Ngăn kho
               </nz-form-label>
@@ -177,7 +177,7 @@
 
               </nz-form-control>
             </nz-form-item>
-          </div>
+          </div> -->
           <div nz-col nzSpan="4">
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true">Nhà kho
@@ -200,7 +200,7 @@
 
           <div nz-col nzSpan="4">
             <nz-form-item>
-              <nz-form-label nzRequired [nzNoColon]="true">Loại hàng hoá
+              <nz-form-label [nzNoColon]="true">Loại hàng
               </nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
                 <input nz-input formControlName="tenLoaiVthh" [readonly]="true" />
@@ -209,7 +209,7 @@
           </div>
           <div nz-col nzSpan="4">
             <nz-form-item>
-              <nz-form-label nzRequired [nzNoColon]="true">Chủng loại hàng hoá
+              <nz-form-label [nzNoColon]="true">Chủng loại hàng
               </nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
                 <input nz-input formControlName="tenCloaiVthh" [readonly]="true" />
@@ -254,7 +254,7 @@
 
           <div nz-col [nzSpan]="24">
             <nz-form-item>
-              <nz-form-label nzRequired [nzNoColon]="true">Số biên bản nghiệm thu bảo quản lần đầu
+              <nz-form-label [nzNoColon]="true">Số biên bản nghiệm thu bảo quản lần đầu
               </nz-form-label>
               <nz-form-control>
                 <span class="text-blue">{{formData.value.soBbNT}}</span>

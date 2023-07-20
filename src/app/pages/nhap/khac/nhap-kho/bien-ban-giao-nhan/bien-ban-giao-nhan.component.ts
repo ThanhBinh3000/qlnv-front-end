@@ -15,9 +15,9 @@ import { CHUC_NANG, STATUS } from 'src/app/constants/status';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { Subject } from 'rxjs';
 import { QuyetDinhDieuChuyenTCService } from 'src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-tc.service';
-import { BienBanGiaoNhanService } from 'src/app/services/dieu-chuyen-noi-bo/nhap-dieu-chuyen/bien-ban-giao-nhan';
 import * as uuidv4 from "uuid";
 import { ThongTinQuyetDinhDieuChuyenCucComponent } from 'src/app/pages/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/cuc/thong-tin-quyet-dinh-dieu-chuyen-cuc/thong-tin-quyet-dinh-dieu-chuyen-cuc.component';
+import { BBGiaoNhanService } from 'src/app/services/qlnv-hang/nhap-hang/nhap-khac/BBGiaoNhan';
 @Component({
   selector: 'app-bien-ban-giao-nhan',
   templateUrl: './bien-ban-giao-nhan.component.html',
@@ -67,7 +67,7 @@ export class BienBanGiaoNhanComponent extends Base2Component implements OnInit {
     modal: NzModalService,
     private donviService: DonviService,
     private danhMucService: DanhMucService,
-    private bienBanGiaoNhanService: BienBanGiaoNhanService,
+    private bienBanGiaoNhanService: BBGiaoNhanService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, bienBanGiaoNhanService);
     this.formData = this.fb.group({

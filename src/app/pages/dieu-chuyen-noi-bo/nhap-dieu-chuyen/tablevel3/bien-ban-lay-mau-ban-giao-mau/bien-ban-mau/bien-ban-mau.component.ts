@@ -305,6 +305,7 @@ export class BienBanMauComponent extends Base2Component implements OnInit {
 
   add(data: any) {
     this.data = data;
+    this.selectedId = 0
     this.isDetail = true;
     this.isView = false;
   }
@@ -338,10 +339,10 @@ export class BienBanMauComponent extends Base2Component implements OnInit {
   }
 
   redirectDetail(id, b: boolean) {
+    this.data = null
     this.selectedId = id;
     this.isDetail = true;
     this.isView = b;
-    // this.isViewDetail = isView ?? false;
   }
 
   quayLai() {

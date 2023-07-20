@@ -80,6 +80,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
       soQdDcCuc: [],
       ngayQdDcCuc: [],
       qdDcCucId: [],
+      tenLoNganKho: [],
       tenLoKho: [],
       maLoKho: [],
       tenNganKho: [],
@@ -142,38 +143,32 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
       await this.loadChiTiet(this.idInput)
     }
 
-    // if (this.data) {
-    //   this.formData.patchValue({
-    //     soQdDcCuc: this.data.soQdinh,
-    //     ngayQdDcCuc: this.data.thoiHanDieuChuyen,
-    //     qdDcCucId: this.data.qdinhDccId,
-    //     tenLoKho: this.data.tenLoKhoNhan,
-    //     maLoKho: this.data.maLoKhoNhan,
-    //     tenNganKho: this.data.tenNganKhoNhan,
-    //     maNganKho: this.data.maNganKhoNhan,
-    //     tenNhaKho: this.data.tenNhaKhoNhan,
-    //     maNhaKho: this.data.maNhaKhoNhan,
-    //     tenDiemKho: this.data.tenDiemKhoNhan,
-    //     maDiemKho: this.data.maDiemKhoNhan,
-    //     tenLoKhoXuat: this.data.tenLoKhoXuat,
-    //     maLoKhoXuat: this.data.maLoKhoXuat,
-    //     tenNganKhoXuat: this.data.tenNganKhoXuat,
-    //     maNganKhoXuat: this.data.maNganKhoXuat,
-    //     tenNhaKhoXuat: this.data.tenNhaKhoXuat,
-    //     maNhaKhoXuat: this.data.maNhaKhoXuat,
-    //     tenDiemKhoXuat: this.data.tenDiemKhoXuat,
-    //     maDiemKhoXuat: this.data.maDiemKhoXuat,
-    //     loaiVthh: this.data.loaiVthh,
-    //     tenLoaiVthh: this.data.tenLoaiVthh,
-    //     cloaiVthh: this.data.cloaiVthh,
-    //     tenCloaiVthh: this.data.tenCloaiVthh,
-    //     tichLuongKhaDung: this.data.tichLuongKd,
-    //     tenDonViTinh: this.data.tenDonViTinh,
-    //     idKeHoachDtl: this.data.qdinhDccId
-    //   });
-    //   await this.loadChiTietQdinh(this.data.qdinhDccId);
-    //   await this.loadDataBaoQuan(this.data.cloaiVthh || "010101")
-    // }
+    if (this.data) {
+      console.log('this.data', this.data)
+      this.formData.patchValue({
+        trangThai: STATUS.DU_THAO,
+        tenTrangThai: 'Dự thảo',
+        soQdDcCuc: this.data.soQdinh,
+        ngayQdDcCuc: this.data.ngayKyQdinh,
+        qdDcCucId: this.data.qdDcCucId,
+        tenLoNganKho: `${this.data.tenLoKho || ""} ${this.data.tenNganKho}`,
+        tenLoKho: this.data.tenLoKho,
+        maLoKho: this.data.maLoKho,
+        tenNganKho: this.data.tenNganKho,
+        maNganKho: this.data.maNganKho,
+        tenNhaKho: this.data.tenNhaKho,
+        maNhaKho: this.data.maNhaKho,
+        tenDiemKho: this.data.tenDiemKho,
+        maDiemKho: this.data.maDiemKho,
+        loaiVthh: this.data.maHangHoa,
+        tenLoaiVthh: this.data.tenHangHoa,
+        cloaiVthh: this.data.maChLoaiHangHoa,
+        tenCloaiVthh: this.data.tenChLoaiHangHoa,
+        soLuongQdDcCuc: this.data.slDienChuyen,
+        dviTinh: this.data.tenDonvitinh,
+      });
+      await this.loadChiTietQdinh(this.data.qdDcCucId);
+    }
 
   }
 
@@ -213,7 +208,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
     await this.spinner.show()
     if (id) {
       let data = await this.detail(id);
-      this.formData.patchValue(data);
+      this.formData.patchValue({ ...data, tenLoNganKho: `${data.tenLoKho || ""} ${data.tenNganKho}` });
       this.dsTH = data.children
       this.chungTuDinhKem = data.chungTuDinhKem
       this.fileDinhKemReq = data.fileDinhKems
@@ -366,14 +361,6 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
           maNhaKho: "",
           tenDiemKho: "",
           maDiemKho: "",
-          tenLoKhoXuat: "",
-          maLoKhoXuat: "",
-          tenNganKhoXuat: "",
-          maNganKhoXuat: "",
-          tenNhaKhoXuat: "",
-          maNhaKhoXuat: "",
-          tenDiemKhoXuat: "",
-          maDiemKhoXuat: "",
           loaiVthh: "",
           tenLoaiVthh: "",
           cloaiVthh: "",
@@ -421,6 +408,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
       if (data) {
         this.formData.patchValue({
           soPhieuKtraCluong: data.soPhieuKtChatLuong,
+          idPhieuKtraCluong: data.id
         });
         await this.loadChiTietKTCL(data.id);
       }
@@ -458,6 +446,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
         this.formData.patchValue({
+          tenLoNganKho: `${data.tenLoKhoNhan || ""} ${data.tenNganKhoNhan}`,
           tenLoKho: data.tenLoKhoNhan,
           maLoKho: data.maLoKhoNhan,
           tenNganKho: data.tenNganKhoNhan,
@@ -466,14 +455,6 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
           maNhaKho: data.maNhaKhoNhan,
           tenDiemKho: data.tenDiemKhoNhan,
           maDiemKho: data.maDiemKhoNhan,
-          tenLoKhoXuat: data.tenLoKho,
-          maLoKhoXuat: data.maLoKho,
-          tenNganKhoXuat: data.tenNganKho,
-          maNganKhoXuat: data.maNganKho,
-          tenNhaKhoXuat: data.tenNhaKho,
-          maNhaKhoXuat: data.maNhaKho,
-          tenDiemKhoXuat: data.tenDiemKho,
-          maDiemKhoXuat: data.maDiemKho,
           loaiVthh: data.loaiVthh,
           tenLoaiVthh: data.tenLoaiVthh,
           cloaiVthh: data.cloaiVthh,

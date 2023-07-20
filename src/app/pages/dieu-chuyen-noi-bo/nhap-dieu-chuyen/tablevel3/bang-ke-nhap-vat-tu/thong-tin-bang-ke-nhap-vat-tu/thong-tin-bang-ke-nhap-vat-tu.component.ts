@@ -122,38 +122,31 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
       await this.loadChiTiet(this.idInput)
     }
 
-    // if (this.data) {
-    //   this.formData.patchValue({
-    //     soQdDcCuc: this.data.soQdinh,
-    //     ngayQdDcCuc: this.data.thoiHanDieuChuyen,
-    //     qdDcCucId: this.data.qdinhDccId,
-    //     tenLoKho: this.data.tenLoKhoNhan,
-    //     maLoKho: this.data.maLoKhoNhan,
-    //     tenNganKho: this.data.tenNganKhoNhan,
-    //     maNganKho: this.data.maNganKhoNhan,
-    //     tenNhaKho: this.data.tenNhaKhoNhan,
-    //     maNhaKho: this.data.maNhaKhoNhan,
-    //     tenDiemKho: this.data.tenDiemKhoNhan,
-    //     maDiemKho: this.data.maDiemKhoNhan,
-    //     tenLoKhoXuat: this.data.tenLoKhoXuat,
-    //     maLoKhoXuat: this.data.maLoKhoXuat,
-    //     tenNganKhoXuat: this.data.tenNganKhoXuat,
-    //     maNganKhoXuat: this.data.maNganKhoXuat,
-    //     tenNhaKhoXuat: this.data.tenNhaKhoXuat,
-    //     maNhaKhoXuat: this.data.maNhaKhoXuat,
-    //     tenDiemKhoXuat: this.data.tenDiemKhoXuat,
-    //     maDiemKhoXuat: this.data.maDiemKhoXuat,
-    //     loaiVthh: this.data.loaiVthh,
-    //     tenLoaiVthh: this.data.tenLoaiVthh,
-    //     cloaiVthh: this.data.cloaiVthh,
-    //     tenCloaiVthh: this.data.tenCloaiVthh,
-    //     tichLuongKhaDung: this.data.tichLuongKd,
-    //     tenDonViTinh: this.data.tenDonViTinh,
-    //     idKeHoachDtl: this.data.qdinhDccId
-    //   });
-    //   await this.loadChiTietQdinh(this.data.qdinhDccId);
-    //   await this.loadDataBaoQuan(this.data.cloaiVthh || "010101")
-    // }
+    if (this.data) {
+      console.log('this.data', this.data)
+      this.formData.patchValue({
+        soQdinhDcc: this.data.soQdinh,
+        ngayKyQdinhDcc: this.data.ngayKyQd,
+        qdinhDccId: this.data.qdinhDcId,
+        tenLoNganKho: `${this.data.tenLoKho} ${this.data.tenNganKho}`,
+        tenLoKho: this.data.tenLoKho,
+        maLoKho: this.data.maLoKho,
+        tenNganKho: this.data.tenNganKho,
+        maNganKho: this.data.maNganKho,
+        tenNhaKho: this.data.tenNhaKho,
+        maNhaKho: this.data.maNhaKhoNhan,
+        tenDiemKho: this.data.tenDiemKho,
+        maDiemKho: this.data.maDiemKho,
+        loaiVthh: this.data.maHangHoa,
+        tenLoaiVthh: this.data.tenHangHoa,
+        cloaiVthh: this.data.maChLoaiHangHoa,
+        tenCloaiVthh: this.data.tenChLoaiHangHoa,
+        soLuongQdDcCuc: this.data.soLuongDc,
+        donViTinh: this.data.tenDonViTinh,
+      });
+      await this.loadChiTietQdinh(this.data.qdinhDcId);
+      await this.layDonViCon(this.data.maDiemKho)
+    }
 
   }
 
@@ -280,14 +273,6 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
           maNhaKho: "",
           tenDiemKho: "",
           maDiemKho: "",
-          tenLoKhoXuat: "",
-          maLoKhoXuat: "",
-          tenNganKhoXuat: "",
-          maNganKhoXuat: "",
-          tenNhaKhoXuat: "",
-          maNhaKhoXuat: "",
-          tenDiemKhoXuat: "",
-          maDiemKhoXuat: "",
           loaiVthh: "",
           tenLoaiVthh: "",
           cloaiVthh: "",
@@ -316,20 +301,20 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
       nzComponentParams: {
         dataTable: this.dsKeHoach,
         dataHeader: ['Lô kho nhập', 'Ngăn kho nhập', 'Nhà kho nhập', 'Điểm kho nhập'],
-        dataColumn: ['tenLoKhoNhan', 'tenNganKhoNhan', 'tenNhaKhoNhan', 'tenDiemKhoNhan']
+        dataColumn: ['tenLoKho', 'tenNganKho', 'tenNhaKho', 'tenDiemKho']
       },
     });
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
         this.formData.patchValue({
-          tenLoKho: data.tenLoKhoNhan,
-          maLoKho: data.maLoKhoNhan,
-          tenNganKho: data.tenNganKhoNhan,
-          maNganKho: data.maNganKhoNhan,
-          tenNhaKho: data.tenNhaKhoNhan,
-          maNhaKho: data.maNhaKhoNhan,
-          tenDiemKho: data.tenDiemKhoNhan,
-          maDiemKho: data.maDiemKhoNhan,
+          tenLoKho: data.tenLoKho,
+          maLoKho: data.maLoKho,
+          tenNganKho: data.tenNganKho,
+          maNganKho: data.maNganKho,
+          tenNhaKho: data.tenNhaKho,
+          maNhaKho: data.maNhaKho,
+          tenDiemKho: data.tenDiemKho,
+          maDiemKho: data.maDiemKho,
           loaiVthh: data.loaiVthh,
           tenLoaiVthh: data.tenLoaiVthh,
           cloaiVthh: data.cloaiVthh,
@@ -339,7 +324,7 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
 
         });
 
-        await this.layDonViCon(data.maDiemKhoNhan)
+        await this.layDonViCon(data.maDiemKho)
       }
     });
   }
@@ -475,30 +460,17 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
   }
 
   isTuChoi() {
-    return this.formData.value.trangThai == STATUS.CHO_DUYET_TP || this.formData.value.trangThai == STATUS.TU_CHOI_TP || this.formData.value.trangThai == STATUS.CHO_DUYET_LDC || this.formData.value.trangThai == STATUS.TU_CHOI_LDC
+    return this.formData.value.trangThai == STATUS.CHODUYET_TBP_TVQT || this.formData.value.trangThai == STATUS.CHO_DUYET_LDCC
   }
 
   async tuChoi() {
-    // if (this.isCuc()) {
-    //   let trangThai = () => {
-    //     if (this.formData.value.trangThai == STATUS.CHO_DUYET_TP)
-    //       return STATUS.TU_CHOI_TP
-    //     if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDC)
-    //       return STATUS.TU_CHOI_LDC
-    //     return STATUS.CHO_DUYET_TP;
-    //   };
-    //   this.reject(this.idInput, trangThai());
-    // }
-    // if (this.isChiCuc()) {
-    //   let trangThai = () => {
-    //     if (this.formData.value.trangThai == STATUS.CHODUYET_TBP_TVQT)
-    //       return STATUS.TUCHOI_TBP_TVQT
-    //     if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDCC)
-    //       return STATUS.TU_CHOI_LDCC
-    //     return STATUS.CHODUYET_TBP_TVQT;
-    //   };
-    //   this.reject(this.idInput, trangThai());
-    // }
+    let trangThai = () => {
+      if (this.formData.value.trangThai == STATUS.CHODUYET_TBP_TVQT)
+        return STATUS.TUCHOI_TBP_TVQT
+      if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDCC)
+        return STATUS.TU_CHOI_LDCC
+    };
+    this.reject(this.idInput, trangThai());
   }
 
   isPheDuyet() {
