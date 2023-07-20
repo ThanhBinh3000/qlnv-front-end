@@ -1,170 +1,174 @@
 <nz-table #basicTable nzBordered [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false">
-    <thead>
-        <tr>
-            <th style="width: 2%;">STT</th>
-            <th *ngIf="!isTableKetQua && !isTabNdKhac"> Đơn vị thẩm định</th>
-            <th *ngIf="isTableKetQua && !isTabNdKhac"> Đơn vị báo giá, khảo sát giá</th>
-            <th *ngIf="isTabNdKhac"> Thông tin tham khảo</th>
-            <th *ngIf="!isTabNdKhac">Chủng loại hàng hóa, tiêu chuẩn chất lượng</th>
-            <th *ngIf="!isTabNdKhac && !isApDung ">Chi cục</th>
-            <th>Đơn giá chưa VAT (đồng/kg)</th>
-            <th *ngIf="isVat" >Đơn giá có VAT (đồng/kg)</th>
-            <th *ngIf="isTabNdKhac" >Chỉ số CPI</th>
-            <th *ngIf="isTableKetQua && !isTabNdKhac">Thời hạn báo giá</th>
-            <th *ngIf="!isTableKetQua && !isTabNdKhac">Thời hạn thẩm định</th>
-            <th>File đính kèm</th>
-            <th *ngIf="isTableKetQua && !isTabNdKhac">Ghi chú</th>
-            <th style="width: 8%;">Hành động</th>
-        </tr>
-        <tr>
-            <th class="text-center"> </th>
-            <th *ngIf="!isTableKetQua && !isTabNdKhac">
-                <input [readonly]="isView" type="text" [(ngModel)]="rowItem.tenDviThamDinh" nz-input />
-            </th>
-          <th *ngIf="isTableKetQua && !isTabNdKhac">
-            <input [readonly]="isView" type="text" [(ngModel)]="rowItem.tenDviBaoGia" nz-input />
-          </th>
-          <th *ngIf="isTabNdKhac">
-            <input [readonly]="isView" type="text" [(ngModel)]="rowItem.ttThamKhao" nz-input />
-          </th>
-            <th *ngIf="!isTabNdKhac">
-                <input [readonly]="isView" type="text" [(ngModel)]="rowItem.cloaiVthh" nz-input />
-            </th>
-          <th *ngIf="!isTabNdKhac && !isApDung" >
-            <nz-input-group>
-              <nz-select [(ngModel)]="rowItem.maChiCuc" nzAllowClear (ngModelChange)="changeChiCuc($event)">
-                <nz-option nzValue="null" nzDisabled nzHide></nz-option>
-                <nz-option nzValue="{{item.maDvi}}" nzLabel="{{item.tenDvi}}" *ngFor="let item of dsChiCuc">
-                </nz-option>
-              </nz-select>
-            </nz-input-group>
-          </th>
-            <th>
-                <nz-input-number [nzDisabled]="isView" [nzSize]="'small'" [(ngModel)]="rowItem.donGia" [nzFormatter]="globals.formatter"
-                    [nzParser]="globals.parser">
-                </nz-input-number>
-            </th>
-            <th *ngIf="isVat"  >
-                <nz-input-number disabled [nzSize]="'small'" [(ngModel)]=" rowItem.donGia + rowItem.donGia * vat" [nzFormatter]="globals.formatter"
-                    [nzParser]="globals.parser">
-                </nz-input-number>
-            </th>
-          <th *ngIf="isTabNdKhac">
-            <input [readonly]="isView" type="text" [(ngModel)]="rowItem.chiSoCpi" nz-input />
-          </th>
-            <th *ngIf="!isTabNdKhac" >
-                <input [readonly]="isView" type="text" [(ngModel)]="rowItem.thoiHanBaoGia" nz-input />
-            </th>
-            <th>
-                <nz-form-control>
-                    <nz-input-group nzSize="large" [nzAddOnAfter]="suffixIcon">
-                        <input placeholder="Chọn file" [(ngModel)]="rowItem.fileDinhKem.fileName" nz-input disabled />
-                    </nz-input-group>
-                    <ng-template #suffixIcon>
-                        <i class="icon htvbdh_tcdt_tep"></i>
-                        <input class="input-file" (change)="getNameFile($event)" type="file" />
-                    </ng-template>
-                </nz-form-control>
-            </th>
+  <thead>
+  <tr>
+    <th style="width: 2%;">STT</th>
+    <th *ngIf="!isTableKetQua && !isTabNdKhac"> Đơn vị thẩm định</th>
+    <th *ngIf="isTableKetQua && !isTabNdKhac"> Đơn vị báo giá, khảo sát giá</th>
+    <th *ngIf="isTabNdKhac"> Thông tin tham khảo</th>
+    <th *ngIf="!isTabNdKhac">Chủng loại hàng hóa, tiêu chuẩn chất lượng</th>
+    <th *ngIf="!isTabNdKhac && !isApDung ">Chi cục</th>
+    <th>Đơn giá chưa VAT (đồng/kg)</th>
+    <th *ngIf="isVat">Đơn giá có VAT (đồng/kg)</th>
+    <th *ngIf="isTabNdKhac">Chỉ số CPI</th>
+    <th *ngIf="isTableKetQua && !isTabNdKhac">Thời hạn báo giá</th>
+    <th *ngIf="!isTableKetQua && !isTabNdKhac">Thời hạn thẩm định</th>
+    <th>File đính kèm</th>
+    <th *ngIf="isTableKetQua && !isTabNdKhac">Ghi chú</th>
+    <th style="width: 8%;">Hành động</th>
+  </tr>
+  <tr>
+    <th class="text-center"></th>
+    <th *ngIf="!isTableKetQua && !isTabNdKhac">
+      <input [readonly]="isView" type="text" [(ngModel)]="rowItem.tenDviThamDinh" nz-input/>
+    </th>
+    <th *ngIf="isTableKetQua && !isTabNdKhac">
+      <input [readonly]="isView" type="text" [(ngModel)]="rowItem.tenDviBaoGia" nz-input/>
+    </th>
+    <th *ngIf="isTabNdKhac">
+      <input [readonly]="isView" type="text" [(ngModel)]="rowItem.ttThamKhao" nz-input/>
+    </th>
+    <th *ngIf="!isTabNdKhac">
+      <input [readonly]="isView" type="text" [(ngModel)]="rowItem.cloaiVthh" nz-input/>
+    </th>
+    <th *ngIf="!isTabNdKhac && !isApDung">
+      <nz-input-group>
+        <nz-select [(ngModel)]="rowItem.maChiCuc" nzAllowClear (ngModelChange)="changeChiCuc($event)">
+          <nz-option nzValue="null" nzDisabled nzHide></nz-option>
+          <nz-option nzValue="{{item.maDvi}}" nzLabel="{{item.tenDvi}}" *ngFor="let item of dsChiCuc">
+          </nz-option>
+        </nz-select>
+      </nz-input-group>
+    </th>
+    <th>
+      <nz-input-number [nzDisabled]="isView" [nzSize]="'small'" [(ngModel)]="rowItem.donGia"
+                       [nzFormatter]="globals.formatter"
+                       [nzParser]="globals.parser">
+      </nz-input-number>
+    </th>
+    <th *ngIf="isVat">
+      <nz-input-number disabled [nzSize]="'small'" [(ngModel)]=" rowItem.donGia + rowItem.donGia * vat"
+                       [nzFormatter]="globals.formatter"
+                       [nzParser]="globals.parser">
+      </nz-input-number>
+    </th>
+    <th *ngIf="isTabNdKhac">
+      <input [readonly]="isView" type="text" [(ngModel)]="rowItem.chiSoCpi" nz-input/>
+    </th>
+    <th *ngIf="!isTabNdKhac">
+      <input [readonly]="isView" type="text" [(ngModel)]="rowItem.thoiHanBaoGia" nz-input/>
+    </th>
+    <th>
+      <nz-form-control>
+        <nz-input-group nzSize="large" [nzAddOnAfter]="suffixIcon">
+          <input placeholder="Chọn file" [(ngModel)]="rowItem.fileDinhKem.fileName" nz-input disabled/>
+        </nz-input-group>
+        <ng-template #suffixIcon>
+          <i class="icon htvbdh_tcdt_tep"></i>
+          <input class="input-file" (change)="getNameFile($event)" type="file"/>
+        </ng-template>
+      </nz-form-control>
+    </th>
 
-            <th *ngIf="isTableKetQua && !isTabNdKhac">
-                <input [readonly]="isView" type="text" [(ngModel)]="rowItem.ghiChu" nz-input />
-            </th>
-            <th style="text-align: center">
-                <a *ngIf="!isView">
-                    <i class="icon htvbdh_dau-cong" (click)="themDataTable()"></i>
-                </a>
-                <a *ngIf="! isView">
-                    <i class="icon  htvbdh_nhap-lai1 "></i>
-                </a>
-            </th>
-        </tr>
-    </thead>
-    <tbody >
-        <tr *ngFor="let data of dataTable; let idx = index">
-          <ng-container *ngIf="!dataEdit[idx].edit ; else editTemplate ">
-            <td class="text-center">{{ idx + 1 }}</td>
-            <td *ngIf="isTableKetQua && !isTabNdKhac">{{ data.tenDviBaoGia }}</td>
-            <td *ngIf="!isTableKetQua && !isTabNdKhac">{{ data.tenDviThamDinh }}</td>
-            <td *ngIf="isTabNdKhac">{{ data.ttThamKhao }}</td>
-            <td *ngIf="!isTabNdKhac" >{{ data.cloaiVthh }}</td>
-            <td *ngIf="!isTabNdKhac && !isApDung" >{{ data.tenChiCuc }}</td>
-            <td>{{data.donGia | number : '1.0-1' : 'vi_VN' }}</td>
-            <td *ngIf="isVat" >{{data.donGiaVat | number : '1.0-1' : 'vi_VN' }}</td>
-            <td *ngIf="!isTabNdKhac">{{data.thoiHanBaoGia }}</td>
-            <td *ngIf="isTabNdKhac">{{data.chiSoCpi }}</td>
-            <td>{{data.fileDinhKem?.fileName }}</td>
-            <td *ngIf="isTableKetQua && !isTabNdKhac">{{data.ghiChu }}</td>
-            <td style="text-align: center">
-                <a (click)="downloadFile(data.fileDinhKem)">
-                    <i class="icon htvbdh_tcdt_import "></i>
-                </a>
-                <a *ngIf="!isView" (click)="editRow(idx)">
-                    <i class="fa fa-pencil" title="Sửa"></i>
-                </a>
-                <a *ngIf="!isView" (click)="deleteItem(idx)">
-                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
-                </a>
-            </td>
-          </ng-container>
-          <ng-template #editTemplate>
-          <td class="text-center"> </td>
-          <td *ngIf="!isTableKetQua && !isTabNdKhac">
-            <input type="text" [(ngModel)]="dataEdit[idx].data.tenDviThamDinh" nz-input />
-          </td>
-          <td *ngIf="isTableKetQua && !isTabNdKhac">
-            <input type="text" [(ngModel)]="dataEdit[idx].data.tenDviBaoGia" nz-input />
-          </td>
-            <td *ngIf="isTabNdKhac">
-              <input type="text" [(ngModel)]="dataEdit[idx].data.ttThamKhao" nz-input />
-            </td>
-          <td *ngIf="!isTabNdKhac">
-            <input type="text" [(ngModel)]="dataEdit[idx].data.cloaiVthh" nz-input />
-          </td>
-            <td *ngIf="!isTabNdKhac && !isApDung">
-              <input type="text" [(ngModel)]="dataEdit[idx].data.tenChiCuc" readonly nz-input />
-            </td>
-          <td>
-            <nz-input-number [nzSize]="'small'" [(ngModel)]="dataEdit[idx].data.donGia" [nzFormatter]="globals.formatter"
-                             [nzParser]="globals.parser">
-            </nz-input-number>
-          </td>
-          <td>
-            <nz-input-number *ngIf="isVat" disabled [nzSize]="'small'" [(ngModel)]="dataEdit[idx].data.donGia * vat + dataEdit[idx].data.donGia" [nzFormatter]="globals.formatter"
-                             [nzParser]="globals.parser">
-            </nz-input-number>
-          </td>
-          <td *ngIf="!isTabNdKhac">
-            <input type="text" [(ngModel)]="dataEdit[idx].data.thoiHanBaoGia" nz-input />
-          </td>
-            <td *ngIf="isTabNdKhac">
-              <input type="text" [(ngModel)]="dataEdit[idx].data.chiSoCpi" nz-input />
-            </td>
-          <td>
-            <nz-form-control>
-              <nz-input-group nzSize="large" [nzAddOnAfter]="suffixIcon">
-                <input placeholder="Chọn file" [(ngModel)]="dataEdit[idx].data.fileDinhKem.fileName" nz-input disabled />
-              </nz-input-group>
-              <ng-template #suffixIcon>
-                <i class="icon htvbdh_tcdt_tep"></i>
-                <input class="input-file" (change)="getNameFile($event, '',null,dataEdit[idx].data )" type="file" />
-              </ng-template>
-            </nz-form-control>
-          </td>
-          <td *ngIf="isTableKetQua && !isTabNdKhac" >
-            <input type="text" [(ngModel)]="dataEdit[idx].data.ghiChu" nz-input />
-          </td>
-            <td style="text-align: center">
-              <a (click)="downloadFile(dataEdit[idx].data.fileDinhKem)">
-                <i class="icon htvbdh_tcdt_import "></i>
-              </a>
-              <a (click)="saveEdit(idx)" class="save">
-                <i class="fa fa-save"></i>
-              </a>
-              <a (click)="cancelEdit(idx)">
-                <i class="fa fa-ban do"></i> </a>
-            </td>
+    <th *ngIf="isTableKetQua && !isTabNdKhac">
+      <input [readonly]="isView" type="text" [(ngModel)]="rowItem.ghiChu" nz-input/>
+    </th>
+    <th style="text-align: center">
+      <a *ngIf="!isView">
+        <i class="icon htvbdh_dau-cong" (click)="themDataTable()"></i>
+      </a>
+      <a *ngIf="! isView">
+        <i class="icon  htvbdh_nhap-lai1 "></i>
+      </a>
+    </th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let data of dataTable; let idx = index">
+    <ng-container *ngIf="!dataEdit[idx].edit ; else editTemplate ">
+      <td class="text-center">{{ idx + 1 }}</td>
+      <td *ngIf="isTableKetQua && !isTabNdKhac">{{ data.tenDviBaoGia }}</td>
+      <td *ngIf="!isTableKetQua && !isTabNdKhac">{{ data.tenDviThamDinh }}</td>
+      <td *ngIf="isTabNdKhac">{{ data.ttThamKhao }}</td>
+      <td *ngIf="!isTabNdKhac">{{ data.cloaiVthh }}</td>
+      <td *ngIf="!isTabNdKhac && !isApDung">{{ data.tenChiCuc }}</td>
+      <td>{{data.donGia | number : '1.0-1' : 'vi_VN' }}</td>
+      <td *ngIf="isVat">{{data.donGiaVat | number : '1.0-1' : 'vi_VN' }}</td>
+      <td *ngIf="!isTabNdKhac">{{data.thoiHanBaoGia }}</td>
+      <td *ngIf="isTabNdKhac">{{data.chiSoCpi }}</td>
+      <td>{{data.fileDinhKem?.fileName }}</td>
+      <td *ngIf="isTableKetQua && !isTabNdKhac">{{data.ghiChu }}</td>
+      <td style="text-align: center">
+        <a (click)="downloadFile(data.fileDinhKem)">
+          <i class="icon htvbdh_tcdt_import "></i>
+        </a>
+        <a *ngIf="!isView" (click)="editRow(idx)">
+          <i class="fa fa-pencil" title="Sửa"></i>
+        </a>
+        <a *ngIf="!isView" (click)="deleteItem(idx)">
+          <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+        </a>
+      </td>
+    </ng-container>
+    <ng-template #editTemplate>
+      <td class="text-center"></td>
+      <td *ngIf="!isTableKetQua && !isTabNdKhac">
+        <input type="text" [(ngModel)]="dataEdit[idx].data.tenDviThamDinh" nz-input/>
+      </td>
+      <td *ngIf="isTableKetQua && !isTabNdKhac">
+        <input type="text" [(ngModel)]="dataEdit[idx].data.tenDviBaoGia" nz-input/>
+      </td>
+      <td *ngIf="isTabNdKhac">
+        <input type="text" [(ngModel)]="dataEdit[idx].data.ttThamKhao" nz-input/>
+      </td>
+      <td *ngIf="!isTabNdKhac">
+        <input type="text" [(ngModel)]="dataEdit[idx].data.cloaiVthh" nz-input/>
+      </td>
+      <td *ngIf="!isTabNdKhac && !isApDung">
+        <input type="text" [(ngModel)]="dataEdit[idx].data.tenChiCuc" readonly nz-input/>
+      </td>
+      <td>
+        <nz-input-number [nzSize]="'small'" [(ngModel)]="dataEdit[idx].data.donGia" [nzFormatter]="globals.formatter"
+                         [nzParser]="globals.parser">
+        </nz-input-number>
+      </td>
+      <td *ngIf="isVat">
+        <nz-input-number disabled [nzSize]="'small'"
+                         [(ngModel)]="dataEdit[idx].data.donGia * vat + dataEdit[idx].data.donGia"
+                         [nzFormatter]="globals.formatter"
+                         [nzParser]="globals.parser">
+        </nz-input-number>
+      </td>
+      <td *ngIf="!isTabNdKhac">
+        <input type="text" [(ngModel)]="dataEdit[idx].data.thoiHanBaoGia" nz-input/>
+      </td>
+      <td *ngIf="isTabNdKhac">
+        <input type="text" [(ngModel)]="dataEdit[idx].data.chiSoCpi" nz-input/>
+      </td>
+      <td>
+        <nz-form-control>
+          <nz-input-group nzSize="large" [nzAddOnAfter]="suffixIcon">
+            <input placeholder="Chọn file" [(ngModel)]="dataEdit[idx].data.fileDinhKem.fileName" nz-input disabled/>
+          </nz-input-group>
+          <ng-template #suffixIcon>
+            <i class="icon htvbdh_tcdt_tep"></i>
+            <input class="input-file" (change)="getNameFile($event, '',null,dataEdit[idx].data )" type="file"/>
           </ng-template>
-        </tr>
-    </tbody>
+        </nz-form-control>
+      </td>
+      <td *ngIf="isTableKetQua && !isTabNdKhac">
+        <input type="text" [(ngModel)]="dataEdit[idx].data.ghiChu" nz-input/>
+      </td>
+      <td style="text-align: center">
+        <a (click)="downloadFile(dataEdit[idx].data.fileDinhKem)">
+          <i class="icon htvbdh_tcdt_import "></i>
+        </a>
+        <a (click)="saveEdit(idx)" class="save">
+          <i class="fa fa-save"></i>
+        </a>
+        <a (click)="cancelEdit(idx)">
+          <i class="fa fa-ban do"></i> </a>
+      </td>
+    </ng-template>
+  </tr>
+  </tbody>
 </nz-table>

@@ -14,7 +14,6 @@ import {QuyetDinhScService} from "../../../services/sua-chua/quyetDinhSc.service
   styleUrls: ['./quyet-dinh.component.scss']
 })
 export class QuyetDinhComponent extends Base3Component implements OnInit {
-
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,

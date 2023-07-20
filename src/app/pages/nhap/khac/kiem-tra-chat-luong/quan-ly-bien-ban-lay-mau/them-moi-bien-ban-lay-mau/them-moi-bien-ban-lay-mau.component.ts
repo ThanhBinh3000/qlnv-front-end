@@ -76,7 +76,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
   nameFile: string;
   formTaiLieu: any;
   formTaiLieuClone: any;
-
+  maCloaiVthh: any;
   listHangHoa: any[] = [];
   listDaiDien: any[] = [
     {
@@ -234,6 +234,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
       return;
     }
     let body = this.formData.value;
+    console.log(this.formData.value)
     if (this.listFileDinhKem.length > 0) {
       this.listFileDinhKem.forEach(item => {
         item.fileType = FILETYPE.FILE_DINH_KEM
@@ -498,7 +499,6 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
       idQdGiaoNvNh: data.id,
       ngayQdGiaoNvNh: data.ngayQdinh,
       loaiVthh: data.loaiVthh,
-      cloaiVthh: data.cloaiVthh,
       tenLoaiVthh: data.tenLoaiVthh,
       moTaHangHoa: data.moTaHangHoa,
     });
@@ -506,6 +506,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
       if(item.idBbLayMau == this.id){
         this.formData.patchValue({
           tenCloaiVthh: item.tenCloaiVthh,
+          cloaiVthh: item.cloaiVthh,
           tenNganLoKho: item.tenNganLoKho,
         });
       }

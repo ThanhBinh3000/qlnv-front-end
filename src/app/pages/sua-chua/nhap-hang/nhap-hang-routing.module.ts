@@ -61,15 +61,15 @@ const routes: Routes = [
       },
       // Region biên bản giao nhận/kết thúc nhâp kho
       {
-        path: 'bb-thuc-nhap',
+        path: 'bb-kt-nhap',
         component: BbKthucNhapComponent
       },
       {
-        path: 'bb-thuc-nhap/them-moi',
+        path: 'bb-kt-nhap/them-moi',
         component: ThemMoiKthucComponent
       },
       {
-        path: 'bb-thuc-nhap/chi-tiet/:id',
+        path: 'bb-kt-nhap/chi-tiet/:id',
         component: ThemMoiKthucComponent
       },
     ]

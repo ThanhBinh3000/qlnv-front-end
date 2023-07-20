@@ -24,6 +24,7 @@ import {v4 as uuidv4} from "uuid";
   styleUrls: ['./them-tong-hop-phuong-an-gia.component.scss']
 })
 export class ThemTongHopPhuongAnGiaComponent implements OnInit {
+  @Input() pagType: string;
   @Input('isView') isView: boolean;
   @Input()
   idInput: number;
@@ -55,6 +56,8 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
   STATUS = STATUS
   typeConst = TYPE_PAG
   expandSet = new Set<number>();
+  idSelected: number;
+  isViewModal: boolean = false;
   constructor(
     private readonly fb: FormBuilder,
     private readonly modal: NzModalService,
@@ -95,12 +98,12 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
     this.formTraCuu = this.fb.group(
       {
         id: [],
-        namTongHop: [dayjs().get('year'), [Validators.required]],
+        namTongHop: [dayjs().get('year')],
         loaiVthh: [null, [Validators.required]],
         cloaiVthh: [null, [Validators.required]],
         loaiGia: [null, [Validators.required]],
         maDvis: [[]],
-        ngayDx: [null, [Validators.required]],
+        ngayDx: [null],
       }
     );
   }
@@ -119,12 +122,11 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
   }
 
 
-
   async getListCuc() {
     const res = await this.donviService.layTatCaDonViByLevel(2);
     if (res.msg == MESSAGE.SUCCESS) {
       this.listCuc = res.data;
-      if (this.listCuc && this.listCuc.length > 0  ) {
+      if (this.listCuc && this.listCuc.length > 0) {
         this.listCuc = this.listCuc.filter(item => item.type != 'PB')
       }
     }
@@ -174,7 +176,8 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
     }
   }
 
-  downloadFileKeHoach(event) { }
+  downloadFileKeHoach(event) {
+  }
 
   quayLai() {
     this.onClose.emit();
@@ -302,35 +305,35 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
       tenTrangThaiTh: data.tenTrangThaiTh ? data.tenTrangThaiTh : 'Chưa tạo tờ trình',
     })
     this.dataTable = data.pagChiTiets;
-    if(this.dataTable && this.dataTable.length > 0) {
-      this.dataTable.sort((a,b) => a.giaDn- b.giaDn);
+    if (this.dataTable && this.dataTable.length > 0) {
+      this.dataTable.sort((a, b) => a.giaDn - b.giaDn);
       this.buildTreePagCt();
     }
   }
 
   buildTreePagCt() {
-      if (this.dataTable && this.dataTable.length > 0) {
-        this.dataTableView = chain(this.dataTable)
-          .groupBy("tenVungMien")
-          .map((value, key) => {
-            let rs = chain(value)
-              .groupBy("tenDvi")
-              .map((v, k) => {
-                  return {
-                    idVirtual: uuidv4(),
-                    tenDvi: k,
-                    children: v
-                  }
+    if (this.dataTable && this.dataTable.length > 0) {
+      this.dataTableView = chain(this.dataTable)
+        .groupBy("tenVungMien")
+        .map((value, key) => {
+          let rs = chain(value)
+            .groupBy("tenDvi")
+            .map((v, k) => {
+                return {
+                  idVirtual: uuidv4(),
+                  tenDvi: k,
+                  children: v
                 }
-              ).value();
-            return {
-              idVirtual: uuidv4(),
-              tenVungMien: key,
-              children: rs
-            };
-          }).value();
-      }
-      this.expandAll()
+              }
+            ).value();
+          return {
+            idVirtual: uuidv4(),
+            tenVungMien: key,
+            children: rs
+          };
+        }).value();
+    }
+    this.expandAll()
   }
 
   expandAll() {
@@ -347,6 +350,16 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
 
   reOpenMain() {
     this.isMain = true;
+  }
+
+  async openModalDxChinhSua(pagId: number) {
+    this.idSelected = pagId
+    this.isViewModal = true;
+  }
+
+  closeDxPaModal() {
+    this.idSelected = null;
+    this.isViewModal = false;
   }
 }
 

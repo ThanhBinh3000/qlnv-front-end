@@ -89,7 +89,7 @@ export class ThemSoKhoTheKhoComponent extends Base2Component implements OnInit {
     try {
       this.loadDiemKho();
       if (this.idInput > 0) {
-        this.getDetail(this.idInput)
+        await this.getDetail(this.idInput)
       } else {
         this.initForm();
       }
