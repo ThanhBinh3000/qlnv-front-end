@@ -28,6 +28,7 @@ import {
 } from "src/app/components/dialog/dialog-table-selection/dialog-table-selection.component";
 import { convertTienTobangChu } from 'src/app/shared/commonFunction';
 import { PassDataXuatBangKeXuatVatTu } from '../bang-ke-xuat-vat-tu.component';
+import { BangKeXuatVatTuDieuChuyenService } from '../../services/dcnb-bang-ke-xuat-vat-tu.service';
 
 
 @Component({
@@ -111,10 +112,10 @@ export class ChiTietBangKeXuatVatTuDieuChuyenComponent extends Base2Component im
         private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
         private dmTieuChuanService: DanhMucTieuChuanService,
         private quyetDinhDieuChuyenCucService: QuyetDinhDieuChuyenCucService,
-        private bangKeCanHangDieuChuyenService: BangKeCanHangDieuChuyenService,
+        private bangKeXuatVatTuDieuChuyenService: BangKeXuatVatTuDieuChuyenService,
         private phieuXuatKhoDieuChuyenService: PhieuXuatKhoDieuChuyenService,
     ) {
-        super(httpClient, storageService, notification, spinner, modal, bangKeCanHangDieuChuyenService);
+        super(httpClient, storageService, notification, spinner, modal, bangKeXuatVatTuDieuChuyenService);
         for (let i = -3; i < 23; i++) {
             this.listNam.push({
                 value: dayjs().get('year') - i,
@@ -264,7 +265,7 @@ export class ChiTietBangKeXuatVatTuDieuChuyenComponent extends Base2Component im
 
     async loadDetail(idInput: number) {
         if (idInput > 0) {
-            await this.bangKeCanHangDieuChuyenService.getDetail(idInput)
+            await this.bangKeXuatVatTuDieuChuyenService.getDetail(idInput)
                 .then((res) => {
                     if (res.msg === MESSAGE.SUCCESS) {
                         this.formData.patchValue({ ...res.data, soBangKe: res.data.soBangKe ? res.data.soBangKe : this.genSoBangKe(res.data.id), tenNganLoKho: res.data.tenLoKho ? `${res.data.tenLoKho} - ${res.data.tenNganKho}` : res.data.tenNganKho });
@@ -426,9 +427,9 @@ export class ChiTietBangKeXuatVatTuDieuChuyenComponent extends Base2Component im
             body.type = this.type;
             let res;
             if (body.id && body.id > 0) {
-                res = await this.bangKeCanHangDieuChuyenService.update(body);
+                res = await this.bangKeXuatVatTuDieuChuyenService.update(body);
             } else {
-                res = await this.bangKeCanHangDieuChuyenService.create(body);
+                res = await this.bangKeXuatVatTuDieuChuyenService.create(body);
             }
             if (res.msg === MESSAGE.SUCCESS) {
                 if (this.formData.get('id').value) {

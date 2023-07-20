@@ -20,6 +20,7 @@ import { HopDongBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc
 import { QuyetDinhDieuChuyenCucService } from 'src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-c.service';
 import { PassDataXK } from '../phieu-xuat-kho.component';
 import { CurrencyMaskInputMode } from 'ngx-currency';
+import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.service';
 @Component({
   selector: 'app-xuat-dcnb-them-moi-phieu-xuat-kho',
   templateUrl: './them-moi-phieu-xuat-kho.component.html',
@@ -68,6 +69,13 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
     inputMode: CurrencyMaskInputMode.NATURAL,
   }
   maBb: string;
+  TEN_KIEU_NHAP_XUAT: { [key: number]: any } = {
+    1: "Nhập mua",
+    2: "Nhập không chi tiền",
+    3: "Xuất bán",
+    4: "Xuất không thu tiền",
+    5: "Khác"
+  };
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -75,6 +83,7 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private hopDongBttService: HopDongBttService,
+    private danhMucDungChungService: DanhMucDungChungService,
     private phieuXuatKhoDieuChuyenService: PhieuXuatKhoDieuChuyenService,
     private quyetDinhDieuChuyenCucService: QuyetDinhDieuChuyenCucService,
     private phieuKiemNghiemChatLuongDieuChuyenService: PhieuKiemNghiemChatLuongDieuChuyenService
@@ -125,8 +134,8 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
       ctyNguoiGh: [''],
       diaChi: [''],
       thoiGianGiaoNhan: [''],
-      loaiHinhNX: ["Nhập ĐC nội bộ Chi cục"],
-      kieuNX: ["Nhập không chi tiền"],
+      // loaiHinhNX: [""],
+      // kieuNX: [""],
       soBangKeCh: [''],
       bangKeChId: [''],
       soLuongCanDc: [''],
@@ -145,6 +154,11 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
       tenTrangThai: ['Dự Thảo'],
       lyDoTuChoi: [],
 
+      loaiHinhNhapXuat: [""],
+      tenLoaiHinhNhapXuat: [""],
+      kieuNhapXuat: [""],
+      tenKieuNhapXuat: [""]
+
     });
     this.maBb = 'BBLM-' + this.userInfo.DON_VI.tenVietTat;
   }
@@ -155,6 +169,13 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
         this.isView = true
       }
       this.userInfo = this.userService.getUserLogin();
+      if (this.loaiDc === "CHI_CUC") {
+        this.getLoaiHinhNhapXuat({ loai: 'LOAI_HINH_NHAP_XUAT', ma: '94' });
+      } else if (this.loaiDc === "CUC") {
+        this.getLoaiHinhNhapXuat({ loai: 'LOAI_HINH_NHAP_XUAT', ma: '144' });
+      } else {
+        this.getLoaiHinhNhapXuat({ loai: 'LOAI_HINH_NHAP_XUAT', ma: '90' });
+      }
       if (this.idInput) {
         await this.loadChiTiet(this.idInput);
       } else {
@@ -187,7 +208,21 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
     }
     this.loadPhieuKiemNghiemCl(this.passData.phieuKnChatLuongHdrId);
   }
+  async getLoaiHinhNhapXuat(params) {
+    try {
+      const res = await this.danhMucDungChungService.search(params);
+      if (res.msg === MESSAGE.SUCCESS) {
+        const loaiHinhNhapXuat = res.data.content[0] ? { ...res.data.content[0] } : {};
+        this.formData.patchValue({ loaiHinhNhapXuat: loaiHinhNhapXuat.ma, tenLoaiHinhNhapXuat: loaiHinhNhapXuat.giaTri, kieuNhapXuat: loaiHinhNhapXuat.ghiChu, tenKieuNhapXuat: this.TEN_KIEU_NHAP_XUAT[Number(loaiHinhNhapXuat.ghiChu)] })
+      } else {
+        this.notification.error(MESSAGE.ERROR, "Có lỗi xảy ra.")
+      }
 
+    } catch (error) {
+      console.log("e", error);
+      this.notification.error(MESSAGE.ERROR, "Có lỗi xảy ra.")
+    }
+  }
   async openDialogSoQdDC() {
     let dataQdDc = [];
     let body = {
