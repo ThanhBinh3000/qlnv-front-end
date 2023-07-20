@@ -14,7 +14,7 @@ import {v4 as uuidv4} from "uuid";
 import {LOAI_HH_XUAT_KHAC} from "../../../../../constants/config";
 import {
   DanhSachVtTbTrongThoiGIanBaoHanh
-} from "../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvtbaohanh/DanhSachVtTbTrongThoiGIanBaoHanh.service";
+} from "../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvtbaohanh/DanhSachVtTbTrongThoiGianBaoHanh.service";
 
 @Component({
   selector: 'app-toan-bo-ds-vt-tb-trong-thoi-gian-bao-hanh',

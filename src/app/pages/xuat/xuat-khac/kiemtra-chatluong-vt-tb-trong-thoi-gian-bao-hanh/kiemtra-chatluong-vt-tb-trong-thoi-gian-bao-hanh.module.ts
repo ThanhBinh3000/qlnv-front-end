@@ -34,6 +34,15 @@ import {
 import {
   ThongTinXuatKhoVtTbTrongThoiGianBaoHanhComponent
 } from "./xuat-kho-vt-tb-trong-thoi-gian-bao-hanh/thong-tin-xuat-kho-vt-tb-trong-thoi-gian-bao-hanh/thong-tin-xuat-kho-vt-tb-trong-thoi-gian-bao-hanh.component";
+import {
+  KiemTraChatLuongVtTbComponent
+} from "./kiem-tra-chat-luong-vt-tb-trong-thoi-gian-bao-hanh/kiem-tra-chat-luong-vt-tb.component";
+import {
+  XkBienBanLayMauBanGiaoMauComponent
+} from "./kiem-tra-chat-luong-vt-tb-trong-thoi-gian-bao-hanh/bien-ban-lay-mau-ban-giao-mau-vt-tb/bien-ban-lay-mau-ban-giao-mau-vt-tb.component";
+import {
+  ThongTinBienBanLayMauBanGiaoMauVtTbComponent
+} from "./kiem-tra-chat-luong-vt-tb-trong-thoi-gian-bao-hanh/bien-ban-lay-mau-ban-giao-mau-vt-tb/thong-tin-bien-ban-lay-mau-ban-giao-mau-vt-tb/thong-tin-bien-ban-lay-mau-ban-giao-mau-vt-tb.component";
 
 
 @NgModule({
@@ -46,7 +55,9 @@ import {
     ThongTinQdGiaoNhiemVuXuatHangTrongThoiGianBaoHanhComponent,
     XuatKhoVtTbTrongThoiGianBaoHanhComponent,
     ThongTinXuatKhoVtTbTrongThoiGianBaoHanhComponent,
-
+    KiemTraChatLuongVtTbComponent,
+    XkBienBanLayMauBanGiaoMauComponent,
+    ThongTinBienBanLayMauBanGiaoMauVtTbComponent,
   ],
   imports: [
     CommonModule,
@@ -67,7 +78,10 @@ import {
     QdGiaoNhiemVuXuatHangTrongThoiGianBaoHanhComponent,
     ThongTinQdGiaoNhiemVuXuatHangTrongThoiGianBaoHanhComponent,
     XuatKhoVtTbTrongThoiGianBaoHanhComponent,
-    ThongTinXuatKhoVtTbTrongThoiGianBaoHanhComponent
+    ThongTinXuatKhoVtTbTrongThoiGianBaoHanhComponent,
+    KiemTraChatLuongVtTbComponent,
+    XkBienBanLayMauBanGiaoMauComponent,
+    ThongTinBienBanLayMauBanGiaoMauVtTbComponent,
   ],
   providers: [DatePipe]
 })
