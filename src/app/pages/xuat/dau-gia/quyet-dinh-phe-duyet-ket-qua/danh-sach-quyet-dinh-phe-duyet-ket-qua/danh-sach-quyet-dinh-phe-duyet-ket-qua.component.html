@@ -210,8 +210,8 @@
             data.maThongBao}}</a>
         </td>
 
-        <td>{{ data.hinhThucDauGia == '01' ? 'Đấu giá bằng bỏ phiếu trực tiếp tại cuộc đấu giá' : null }}</td>
-        <td>{{ data.pthucDauGia == '01' ? 'Phương thức trả giá lên, bán riêng từng đơn vị tài sản' : null }}</td>
+        <td>{{ data.tenHinhThucDauGia }}</td>
+        <td>{{ data.tenPthucDauGia }}</td>
         <td>{{ data.soTbKhongThanh }}</td>
         <td>
           <a *ngIf="data.soBienBan && data.idThongTin" nz-button nzType="link"
