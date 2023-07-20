@@ -34,7 +34,8 @@ export class ThongTinChungPag {
   cloaiVthh?: string;
   tenCloaiVthh?: string;
   tchuanCluong?: string;
-  soLuong?: number;
+  soLuong: number;
+  soLuongCtieu: number;
   donViTinh?: string;
   giaDn?: number;
   giaDnVat?: number;
