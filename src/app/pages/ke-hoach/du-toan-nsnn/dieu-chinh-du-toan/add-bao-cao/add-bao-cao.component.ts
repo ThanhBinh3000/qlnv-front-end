@@ -623,7 +623,6 @@ export class AddBaoCaoComponent implements OnInit {
             nzContent: nzContent,
             nzBodyStyle: { overflowY: 'auto', maxHeight: 'calc(100vh - 200px)' },
             nzMaskClosable: false,
-            nzClosable: false,
             nzWidth: '90%',
             nzFooter: null,
             nzComponentParams: {

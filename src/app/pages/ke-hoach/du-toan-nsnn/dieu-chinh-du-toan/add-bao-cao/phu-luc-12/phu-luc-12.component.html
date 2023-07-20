@@ -215,23 +215,23 @@
                                     <td class="text-center" nzLeft>
                                         {{getIndex(editCache[data.id].data.stt)}}
                                     </td>
-                                    <td nzLeft>
-                                        <input nz-input class="search__input"
-                                            [(ngModel)]="editCache[data.id].data.tenNoiDung" />
-                                    </td>
-                                    <td>
-                                        <input nz-input class="search__input"
-                                            [(ngModel)]="editCache[data.id].data.coQuan" />
-                                    </td>
-                                    <td>
-                                        <input nz-input class="search__input"
-                                            [(ngModel)]="editCache[data.id].data.thoiGian" />
-                                    </td>
-                                    <td>
-                                        <input nz-input class="search__input"
-                                            [(ngModel)]="editCache[data.id].data.qDinhPheDuyet" />
-                                    </td>
                                     <ng-container *ngIf="!status.viewAppVal else viewAppVal">
+                                        <td nzLeft>
+                                            <input nz-input class="search__input"
+                                                [(ngModel)]="editCache[data.id].data.tenNoiDung" />
+                                        </td>
+                                        <td>
+                                            <input nz-input class="search__input"
+                                                [(ngModel)]="editCache[data.id].data.coQuan" />
+                                        </td>
+                                        <td>
+                                            <input nz-input class="search__input"
+                                                [(ngModel)]="editCache[data.id].data.thoiGian" />
+                                        </td>
+                                        <td>
+                                            <input nz-input class="search__input"
+                                                [(ngModel)]="editCache[data.id].data.qDinhPheDuyet" />
+                                        </td>
                                         <td>
                                             <input class="money-input" currencyMask
                                                 [(ngModel)]="editCache[data.id].data.dToanNamTruoc"
@@ -261,6 +261,10 @@
                                         </td>
                                     </ng-container>
                                     <ng-template #viewAppVal>
+                                        <td>{{editCache[data.id].data.tenNoiDung}}</td>
+                                        <td>{{editCache[data.id].data.coQuan}}</td>
+                                        <td>{{editCache[data.id].data.thoiGian}}</td>
+                                        <td>{{editCache[data.id].data.qDinhPheDuyet}}</td>
                                         <td>{{Op.fmtVal(editCache[data.id].data.dToanNamTruoc)}}</td>
                                         <td>{{Op.fmtVal(editCache[data.id].data.dToanDaGiao)}}</td>
                                         <td>{{Op.fmtVal(editCache[data.id].data.dToanTongSo)}}</td>
@@ -373,10 +377,6 @@
                 <button type="button" class="btn btn-do" (click)="tuChoi('0')" *ngIf="status.ok">
                     <i nz-icon nzType="close" nzTheme="outline"></i>
                     <span>Không chấp nhận</span>
-                </button>
-                <button nz-button (click)="handleCancel()" class="modal__button--cancel">
-                    <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
-                    Đóng
                 </button>
             </div>
         </div>
