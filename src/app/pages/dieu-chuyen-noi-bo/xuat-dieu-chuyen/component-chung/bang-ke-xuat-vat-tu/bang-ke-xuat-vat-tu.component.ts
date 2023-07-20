@@ -72,7 +72,7 @@ export class BangKeXuatVatTuDieuChuyenComponent extends Base2Component implement
         super(httpClient, storageService, notification, spinner, modal, bangKeXuatVatTuDieuChuyenService);
         // this.vldTrangThai = xuatCuuTroVienTroComponent;
         this.formData = this.fb.group({
-            id: [0],
+            id: [],
             nam: [],
             soQdinhDcc: [],
             soBangKe: [],
