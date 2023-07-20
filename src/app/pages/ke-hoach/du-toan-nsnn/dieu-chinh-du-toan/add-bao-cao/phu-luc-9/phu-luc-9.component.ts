@@ -253,54 +253,15 @@ export class PhuLuc9Component implements OnInit {
 
     getTotal() {
         this.total = new ItemData();
-        // this.lstCtietBcao.forEach(item => {
-        //     this.total.bcheGiao2021 = Operator.sum([this.total.bcheGiao2021, item.bcheGiao2021]);
-        //     this.total.bcheCoMat = Operator.sum([this.total.bcheCoMat, item.bcheCoMat]);
-        //     this.total.bcheChuaTuyen = Operator.sum([this.total.bcheChuaTuyen, item.bcheChuaTuyen]);
-        //     this.total.hslPcapTso = Operator.sum([this.total.hslPcapTso, item.hslPcapTso]);
-        //     this.total.hslPcapHsl = Operator.sum([this.total.hslPcapHsl, item.hslPcapHsl]);
-        //     this.total.hslPcapTong = Operator.sum([this.total.hslPcapTong, item.hslPcapTong]);
-        //     this.total.hslPcapChucVu = Operator.sum([this.total.hslPcapChucVu, item.hslPcapChucVu]);
-        //     this.total.hslPcapTnhiem = Operator.sum([this.total.hslPcapTnhiem, item.hslPcapTnhiem]);
-        //     this.total.hslPcapTnienVkhung = Operator.sum([this.total.hslPcapTnienVkhung, item.hslPcapTnienVkhung]);
-        //     this.total.hslPcapHsbl = Operator.sum([this.total.hslPcapHsbl, item.hslPcapHsbl]);
-        //     this.total.hslPcapCongVu = Operator.sum([this.total.hslPcapCongVu, item.hslPcapCongVu]);
-        //     this.total.hslPcapTnien = Operator.sum([this.total.hslPcapTnien, item.hslPcapTnien]);
-        //     this.total.hslPcapUdai = Operator.sum([this.total.hslPcapUdai, item.hslPcapUdai]);
-        //     this.total.hslPcapKvuc = Operator.sum([this.total.hslPcapKvuc, item.hslPcapKvuc]);
-        //     this.total.hslPcapKhac = Operator.sum([this.total.hslPcapKhac, item.hslPcapKhac]);
-        //     this.total.tqtlPcapTso = Operator.sum([this.total.tqtlPcapTso, item.tqtlPcapTso]);
-        //     this.total.tqtlPcapTluong = Operator.sum([this.total.tqtlPcapTluong, item.tqtlPcapTluong]);
-        //     this.total.tqtlPcapTong = Operator.sum([this.total.tqtlPcapTong, item.tqtlPcapTong]);
-        //     this.total.tqtlPcapChucVu = Operator.sum([this.total.tqtlPcapChucVu, item.tqtlPcapChucVu]);
-        //     this.total.tqtlPcapTniem = Operator.sum([this.total.tqtlPcapTniem, item.tqtlPcapTniem]);
-        //     this.total.tqtlPcapTnienVkhung = Operator.sum([this.total.tqtlPcapTnienVkhung, item.tqtlPcapTnienVkhung]);
-        //     this.total.tqtlPcapHsbl = Operator.sum([this.total.tqtlPcapHsbl, item.tqtlPcapHsbl]);
-        //     this.total.tqtlPcapCongVu = Operator.sum([this.total.tqtlPcapCongVu, item.tqtlPcapCongVu]);
-        //     this.total.tqtlPcapTnien = Operator.sum([this.total.tqtlPcapTnien, item.tqtlPcapTnien]);
-        //     this.total.tqtlPcapUdai = Operator.sum([this.total.tqtlPcapUdai, item.tqtlPcapUdai]);
-        //     this.total.tqtlPcapKvuc = Operator.sum([this.total.tqtlPcapKvuc, item.tqtlPcapKvuc]);
-        //     this.total.tqtlPcapKhac = Operator.sum([this.total.tqtlPcapKhac, item.tqtlPcapKhac]);
-        //     this.total.tongNcauTluong = Operator.sum([this.total.tongNcauTluong, item.tongNcauTluong]);
-        //     this.total.baoGomTluongBche = Operator.sum([this.total.baoGomTluongBche, item.baoGomTluongBche]);
-        //     this.total.baoGomKhoanDgop = Operator.sum([this.total.baoGomKhoanDgop, item.baoGomKhoanDgop]);
-        //     this.total.baoGomLuongCbcc = Operator.sum([this.total.baoGomLuongCbcc, item.baoGomLuongCbcc]);
-        //     this.total.baoGomLuongTheoCheDo = Operator.sum([this.total.baoGomLuongTheoCheDo, item.baoGomLuongTheoCheDo]);
-        //     this.total.dtoanKphiDtoanNtruoc = Operator.sum([this.total.dtoanKphiDtoanNtruoc, item.dtoanKphiDtoanNtruoc]);
-        //     this.total.dtoanKphiDaGiao = Operator.sum([this.total.dtoanKphiDaGiao, item.dtoanKphiDaGiao]);
-        //     this.total.dtoanKphiCong = Operator.sum([this.total.dtoanKphiCong, item.dtoanKphiCong]);
-        //     this.total.dtoanDnghiDchinh = Operator.sum([this.total.dtoanDnghiDchinh, item.dtoanDnghiDchinh]);
-        //     this.total.dtoanVuTvqtDnghi = Operator.sum([this.total.dtoanVuTvqtDnghi, item.dtoanVuTvqtDnghi]);
-        // })
-
         this.lstCtietBcao.forEach(item => {
-            if (item.level == 0) {
-                this.keys.forEach(key => {
-                    this.total[key] = Operator.sum([this.total[key], item[key]]);
-                })
-            }
+            // if (item.level == 0) {
+            this.keys.forEach(key => {
+                this.total[key] = Operator.sum([this.total[key], item[key]]);
+            })
+            // }
         })
     };
+
 
     tinhTong() {
         this.tongDieuChinhGiam = 0;
@@ -487,9 +448,9 @@ export class PhuLuc9Component implements OnInit {
         const index = this.lstCtietBcao.findIndex(item => item.id === id); // lay vi tri hang minh sua
         Object.assign(this.lstCtietBcao[index], this.editCache[id].data); // set lai data cua lstCtietBcao[index] = this.editCache[id].data
         this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
-        this.updateEditCache();
-        this.tinhTong();
         this.getTotal();
+        this.tinhTong();
+        this.updateEditCache();
     };
 
 

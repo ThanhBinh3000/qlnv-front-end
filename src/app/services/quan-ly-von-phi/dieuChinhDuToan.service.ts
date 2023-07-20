@@ -13,7 +13,7 @@ export class DieuChinhService extends BaseService {
         super(httpClient, 'quanLyVonPhi', '');
     }
     urlTest = 'http://localhost:9159';
-    urlDefault = environment.SERVICE_API + '/qlnv-khoachphi-dev';
+    urlDefault = environment.SERVICE_API + '/qlnv-khoachphi';
 
     //sinh ma bao cao dieu chinh du toan
     sinhMaBaoCaoDieuChinh(): Observable<any> {

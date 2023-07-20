@@ -73,6 +73,9 @@ export class PhuLuc11Component implements OnInit {
     noiDungs: any[] = DANH_MUC;
     lstCtietBcao: ItemData[] = [];
     keys = [
+        "sLuongTrongNuoc",
+        "sLuongNgoaiNuoc",
+        "sLuongTongSo",
         "KinhPhiHoTro",
         "TongNCDtoanKp",
         "dToanNamTruoc",
@@ -182,9 +185,9 @@ export class PhuLuc11Component implements OnInit {
             }
         }
 
-        this.lstCtietBcao.forEach(item => {
-            item.tenNoiDung = this.noiDungs.find(e => e.ma == item.maNoiDung)?.giaTri;
-        })
+        // this.lstCtietBcao.forEach(item => {
+        //     item.tenNoiDung = this.noiDungs.find(e => e.ma == item.maNoiDung)?.giaTri;
+        // })
 
         this.getTotal();
         this.tinhTong();
@@ -460,6 +463,7 @@ export class PhuLuc11Component implements OnInit {
         this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
         this.sum(this.lstCtietBcao[index].stt);
         this.getTotal()
+        this.tinhTong()
         this.updateEditCache();
     };
 
