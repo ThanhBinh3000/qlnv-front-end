@@ -165,7 +165,7 @@
                                     <td>{{data.ghiChu}}</td>
                                     <td *ngIf="status.viewAppVal">{{Op.fmtVal(data.chenhLech)}}</td>
                                     <td *ngIf="status.viewAppVal">{{data.ykienDviCtren}}</td>
-                                    <td *ngIf="status.general && status.editAppVal">
+                                    <td *ngIf="status.general || status.editAppVal">
                                         <i *ngIf="checkEdit(data.stt)" class="fa fa-pencil"
                                             (click)="startEdit(data.id)"></i>
                                     </td>
@@ -314,10 +314,6 @@
                 <button type="button" class="btn btn-do" (click)="tuChoi('0')" *ngIf="status.ok">
                     <i nz-icon nzType="close" nzTheme="outline"></i>
                     <span>Không chấp nhận</span>
-                </button>
-                <button nz-button (click)="handleCancel()" class="modal__button--cancel">
-                    <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
-                    Đóng
                 </button>
             </div>
         </div>

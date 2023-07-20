@@ -23,11 +23,11 @@
 							</div>
 						</div>
 						<div class="canphai">
-							<button type="button" class="btn btn-main" (click)="deleteAllChecked()"
+							<!-- <button type="button" class="btn btn-main" (click)="deleteAllChecked()"
 								*ngIf="status.general">
 								<i class="fa fa-trash-o"></i>
 								<span>Xóa</span>
-							</button>
+							</button> -->
 						</div>
 					</div>
 
@@ -275,15 +275,15 @@
 									<td>
 										{{editCache[data.id].data.donViTinh}}
 									</td>
-									<td>
-										<input type="text" class="search__input" nz-input
-											[(ngModel)]="editCache[data.id].data.khoachDpNhan" />
-									</td>
-									<td>
-										<input type="text" class="search__input" nz-input
-											[(ngModel)]="editCache[data.id].data.khoachQdGiaoNvu" />
-									</td>
-									<ng-container *ngIf="status.viewAppVal; else viewAppVal">
+									<ng-container *ngIf="!status.viewAppVal; else viewAppVal">
+										<td>
+											<input type="text" class="search__input" nz-input
+												[(ngModel)]="editCache[data.id].data.khoachDpNhan" />
+										</td>
+										<td>
+											<input type="text" class="search__input" nz-input
+												[(ngModel)]="editCache[data.id].data.khoachQdGiaoNvu" />
+										</td>
 										<td>
 											<input class="money-input" currencyMask
 												[(ngModel)]="editCache[data.id].data.khoachLuong"
@@ -352,6 +352,8 @@
 										</td>
 									</ng-container>
 									<ng-template #viewAppVal>
+										<td> {{editCache[data.id].data.khoachDpNhan}} </td>
+										<td> {{editCache[data.id].data.khoachQdGiaoNvu}} </td>
 										<td> {{Op.fmtVal(editCache[data.id].data.khoachLuong)}} </td>
 										<td> {{Op.fmtVal(editCache[data.id].data.dMucChiPhiTaiCuaKho)}} </td>
 										<td> {{Op.fmtVal(editCache[data.id].data.binhQuanChiPhiNgoaiCuaKho)}} </td>
@@ -474,10 +476,6 @@
 				<button type="button" class="btn btn-do" (click)="tuChoi('0')" *ngIf="status.ok">
 					<i nz-icon nzType="close" nzTheme="outline"></i>
 					<span>Không chấp nhận</span>
-				</button>
-				<button nz-button (click)="handleCancel()" class="modal__button--cancel">
-					<i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
-					Đóng
 				</button>
 			</div>
 		</div>

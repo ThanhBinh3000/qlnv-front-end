@@ -22,13 +22,14 @@
                                 </ng-template>
                             </div>
                         </div>
-                        <div class="canphai">
-                            <button type="button" class="btn btn-do" (click)="deleteAllChecked()"
+                        <div class="canphai" *ngIf="status.general">
+                            <!-- <button type="button" class="btn btn-do" (click)="deleteAllChecked()"
                                 *ngIf="status.general">
                                 <i class="fa fa-trash-o"></i>
                                 <span>Xóa</span>
-                            </button>
-                            <button type="button" class="btn btn-main" (click)="addLine(null)" *ngIf="status.general">
+                            </button> -->
+                            <button type="button" class="btn btn-main" (click)="addLine(null)"
+                                *ngIf="lstCtietBcao.length == 0">
                                 <i class="icon htvbdh_dau-cong"></i>
                                 <span>Thêm</span>
                             </button>
@@ -333,10 +334,6 @@
                 <button type="button" class="btn btn-do" (click)="tuChoi('0')" *ngIf="status.ok">
                     <i nz-icon nzType="close" nzTheme="outline"></i>
                     <span>Không chấp nhận</span>
-                </button>
-                <button nz-button (click)="handleCancel()" class="modal__button--cancel">
-                    <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
-                    Đóng
                 </button>
             </div>
         </div>

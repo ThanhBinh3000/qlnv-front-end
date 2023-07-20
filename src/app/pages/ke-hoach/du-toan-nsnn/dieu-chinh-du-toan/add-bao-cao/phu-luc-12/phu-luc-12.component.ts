@@ -145,9 +145,9 @@ export class PhuLuc12Component implements OnInit {
 				})
 			})
 			this.setLevel();
-			this.lstCtietBcao.forEach(item => {
-				item.tenNoiDung += Utils.getName(item.level, item.maNoiDung);
-			})
+			// this.lstCtietBcao.forEach(item => {
+			// 	item.tenNoiDung += Utils.getName(item.level, item.maNoiDung);
+			// })
 		} else if (!this.lstCtietBcao[0]?.stt) {
 			this.lstCtietBcao.forEach(item => {
 				item.stt = item.maNoiDung;

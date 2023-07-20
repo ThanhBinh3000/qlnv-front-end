@@ -63,7 +63,7 @@
                                 <td>
                                     <div *ngFor="let item of noiDungs">
                                         <div *ngIf="item.ma ==data.maNoiDung">
-                                            {{item.giaTri}}
+                                            {{item.tenDm}}
                                         </div>
                                     </div>
                                 </td>
@@ -179,10 +179,6 @@
                 <button type="button" class="btn btn-do" (click)="tuChoi('0')" *ngIf="status.ok">
                     <i nz-icon nzType="close" nzTheme="outline"></i>
                     <span>Không chấp nhận</span>
-                </button>
-                <button nz-button (click)="handleCancel()" class="modal__button--cancel">
-                    <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
-                    Đóng
                 </button>
             </div>
         </div>
