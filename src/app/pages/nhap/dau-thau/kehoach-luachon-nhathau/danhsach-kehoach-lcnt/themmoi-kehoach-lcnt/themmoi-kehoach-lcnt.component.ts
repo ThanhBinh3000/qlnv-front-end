@@ -103,10 +103,10 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
     trangThai: '',
   };
 
-  listDsGthau: any = {
+  listDsGthau: any = [{
     tenDvi: '',
     soLuong: ''
-  };
+  }];
 
   constructor(
     httpClient: HttpClient,

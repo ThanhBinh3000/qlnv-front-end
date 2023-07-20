@@ -62,7 +62,9 @@ export class QuanlyHopdongComponent extends Base2Component implements OnInit {
       donGiaTrungThau: [],
       tongTien: [''],
       loaiHinhNx: [''],
+      tenLoaiHinhNx: [''],
       kieuNx: [''],
+      tenKieuNx: [''],
       trangThaiHd: [''],
       tenTrangThaiHd: [''],
     });
@@ -96,8 +98,10 @@ export class QuanlyHopdongComponent extends Base2Component implements OnInit {
             soLuongDviTsan: data.tongDvts,
             soLuongXuatBan: data.tongSlXuat,
             tongTien: data.thanhTien,
-            loaiHinhNx: data.loaiHinhNx != null ? 'Xuất bán đấu giá' : null,
-            kieuNx: data.kieuNx != null ? 'Xuất bán' : null,
+            loaiHinhNx: data.loaiHinhNx,
+            tenLoaiHinhNx: data.tenLoaiHinhNx,
+            kieuNx: data.kieuNx,
+            tenKieuNx : data.tenKieuNx,
             soLuongDviTsanTrung: data.soDvtsDgTc,
             soLuongDviTsanTruot: data.tongDvts - data.soDvtsDgTc,
           })

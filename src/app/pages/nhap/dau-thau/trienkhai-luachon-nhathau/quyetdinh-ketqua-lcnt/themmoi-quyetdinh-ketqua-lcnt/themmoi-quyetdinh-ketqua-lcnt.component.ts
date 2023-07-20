@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import * as dayjs from 'dayjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -7,9 +7,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { dauThauGoiThauService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/tochuc-trienkhai/dauThauGoiThau.service';
 import { HelperService } from 'src/app/services/helper.service';
-import { QuyetDinhPheDuyetKeHoachLCNTService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/quyetDinhPheDuyetKeHoachLCNT.service';
 import { QuyetDinhPheDuyetKetQuaLCNTService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/tochuc-trienkhai/quyetDinhPheDuyetKetQuaLCNT.service';
 import { UploadFileService } from 'src/app/services/uploaFile.service';
 import { UserService } from 'src/app/services/user.service';
@@ -25,6 +23,9 @@ import { StorageService } from "../../../../../../services/storage.service";
 import { HttpClient } from "@angular/common/http";
 import { FileDinhKem } from 'src/app/models/FileDinhKem';
 import { FILETYPE } from 'src/app/constants/fileType';
+import {
+  ThemmoiThongtinDauthauVtComponent
+} from "../../thongtin-dauthau/themmoi-thongtin-dauthau-vt/themmoi-thongtin-dauthau-vt.component";
 
 @Component({
   selector: 'app-themmoi-quyetdinh-ketqua-lcnt',
@@ -41,6 +42,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
   @Input() isViewOnModal: boolean;
 
   @Input() isView: boolean;
+  @ViewChild('thongtindtvt') thongTinDauThauVt: ThemmoiThongtinDauthauVtComponent;
 
   formData: FormGroup;
 
@@ -75,16 +77,16 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
       {
         id: [],
         soQd: [],
-        ngayKy: [dayjs().format('YYYY-MM-DD')],
-        ngayHluc: [dayjs().format('YYYY-MM-DD')],
+        ngayKy: [],
+        ngayHluc: [],
         namKhoach: [dayjs().get('year')],
         trichYeu: [null],
         soQdPdKhlcnt: ['', [Validators.required]],
         idQdPdKhlcnt: [''],
         idQdPdKhlcntDtl: [''],
         ghiChu: [null,],
-        trangThai: ['00'],
-        tenTrangThai: ['Dự thảo'],
+        trangThai: [this.STATUS.DANG_NHAP_DU_LIEU],
+        tenTrangThai: ["Đang nhập dữ liệu"],
         loaiVthh: [''],
         cloaiVthh: [''],
         fileDinhKems: new FormControl([]),
@@ -93,7 +95,6 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
   }
 
   async ngOnInit() {
-    console.log(this.isViewDetail);
     await this.spinner.show();
     this.userInfo = this.userService.getUserLogin();
     this.maQd = "/" + this.userInfo.MA_QD;
@@ -130,13 +131,14 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
       if (id > 0) {
         res = await this.quyetDinhPheDuyetKetQuaLCNTService.getDetail(id);
       }
-      console.log(res)
       if (res.msg == MESSAGE.SUCCESS) {
         const dataDetail = res.data;
         this.helperService.bidingDataInFormGroup(this.formData, dataDetail);
         this.formData.patchValue({
           soQd: dataDetail.soQd?.split('/')[0],
         })
+        this.danhSachFileDinhKem = dataDetail.fileDinhKems;
+        this.danhSachFileCanCuPL = dataDetail.canCuPhapLy;
         if (dataDetail.children.length > 0) {
           dataDetail.children.forEach(item => {
             if (item.fileType == FILETYPE.FILE_DINH_KEM) {
@@ -160,21 +162,42 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
     if (this.formData.value.soQd) {
       body.soQd = this.formData.value.soQd + this.maQd;
     }
-    console.log(this.danhSachFileCanCuPL)
-    console.log(this.danhSachFileDinhKem)
-    if (this.danhSachFileDinhKem.length > 0) {
-      this.danhSachFileDinhKem.forEach(item => {
-        item.fileType = FILETYPE.FILE_DINH_KEM
-        this.listFile.push(item)
+    if (this.loaiVthh.startsWith('02')) {
+      body.fileDinhKems = this.danhSachFileDinhKem;
+      body.listCcPhapLy = this.danhSachFileCanCuPL;
+      let detail = [];
+      let type = "GOC";
+      if(this.thongTinDauThauVt.isDieuChinh) {
+        type = "DC"
+      }
+      this.thongTinDauThauVt.danhsachDx.forEach(item => {
+        let dtl = {
+          idGoiThau: item.id,
+          idNhaThau: item.kqlcntDtl?.idNhaThau,
+          donGiaVat: item.kqlcntDtl?.donGiaVat,
+          trangThai: item.kqlcntDtl?.trangThai,
+          type: type,
+          tenNhaThau: item.kqlcntDtl?.tenNhaThau
+        }
+        detail.push(dtl)
       })
+      body.detailList = detail;
+    } else {
+      if (this.danhSachFileDinhKem.length > 0) {
+        this.danhSachFileDinhKem.forEach(item => {
+          item.fileType = FILETYPE.FILE_DINH_KEM
+          this.listFile.push(item)
+        })
+      }
+      if (this.danhSachFileCanCuPL.length > 0) {
+        this.danhSachFileCanCuPL.forEach(element => {
+          element.fileType = FILETYPE.CAN_CU_PHAP_LY
+          this.listFile.push(element)
+        })
+      }
+      body.fileDinhKems = this.listFile;
     }
-    if (this.danhSachFileCanCuPL.length > 0) {
-      this.danhSachFileCanCuPL.forEach(element => {
-        element.fileType = FILETYPE.CAN_CU_PHAP_LY
-        this.listFile.push(element)
-      })
-    }
-    body.fileDinhKems = this.listFile;
+
     let res;
     if (this.formData.get('id').value > 0) {
       res = await this.quyetDinhPheDuyetKetQuaLCNTService.update(body);
@@ -217,7 +240,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
     let trangThai = '';
     let msg = '';
     switch (this.formData.get('trangThai').value) {
-      case STATUS.DU_THAO: {
+      case STATUS.DANG_NHAP_DU_LIEU: {
         trangThai = STATUS.BAN_HANH;
         msg = 'Bạn có muốn ban hành ?'
         break;
@@ -269,7 +292,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
         },
         loaiVthh: this.loaiVthh,
         trangThai: STATUS.BAN_HANH,
-        lastest: 1
+        lastest: 0
       };
     } else {
       body = {
@@ -286,7 +309,6 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
 
     let res = await this.thongTinDauThauService.search(body);
     this.listQdPdKhlcnt = res.data.content.filter(item => isEmpty(item.soQdPdKqLcnt));
-    console.log(this.listQdPdKhlcnt);
 
     this.listQdPdKhlcnt.forEach(element => {
       if (this.loaiVthh == '02') {
@@ -304,7 +326,6 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
         element.tenCloaiVthh = element.hhQdKhlcntHdr?.tenCloaiVthh;
       }
     });
-  console.log(this.listQdPdKhlcnt)
     const modalQD = this.modal.create({
       nzTitle: 'Danh sách số quyết định kế hoạch lựa chọn nhà thầu',
       nzContent: DialogTableSelectionComponent,
