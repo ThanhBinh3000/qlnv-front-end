@@ -101,35 +101,6 @@ export class BienBanGiaoNhanComponent extends Base2Component implements OnInit {
   isVatTu: boolean = false;
   isView = false;
 
-  // disabledStartNgayLapKh = (startValue: Date): boolean => {
-  //   if (startValue && this.formData.value.ngayLapKhDen) {
-  //     return startValue.getTime() > this.formData.value.ngayLapKhDen.getTime();
-  //   } else {
-  //     return false;
-  //   }
-  // };
-
-  // disabledEndNgayLapKh = (endValue: Date): boolean => {
-  //   if (!endValue || !this.formData.value.ngayLapKhTu) {
-  //     return false;
-  //   }
-  //   return endValue.getTime() <= this.formData.value.ngayLapKhDen.getTime();
-  // };
-
-  // disabledStartNgayDuyetLdc = (startValue: Date): boolean => {
-  //   if (startValue && this.formData.value.ngayDuyetLdcDen) {
-  //     return startValue.getTime() > this.formData.value.ngayDuyetLdcDen.getTime();
-  //   }
-  //   return false;
-  // };
-
-  // disabledEndNgayDuyetLdc = (endValue: Date): boolean => {
-  //   if (!endValue || !this.formData.value.ngayDuyetLdcTu) {
-  //     return false;
-  //   }
-  //   return endValue.getTime() <= this.formData.value.ngayDuyetLdcDen.getTime();
-  // };
-
   async ngOnInit() {
     this.isVisibleChangeTab$.subscribe((value: boolean) => {
       this.visibleTab = value;
@@ -202,6 +173,7 @@ export class BienBanGiaoNhanComponent extends Base2Component implements OnInit {
     // console.log('DSQuyetDinhDieuChuyenComponent/this.formData.value=>', this.formData.value)
     // await this.search();
     let body = this.formData.value
+    if (body.soQdinh) body.soQdinh = `${body.soQdinh}\DCNB`
     body.paggingReq = {
       limit: this.pageSize,
       page: this.page - 1
@@ -273,6 +245,7 @@ export class BienBanGiaoNhanComponent extends Base2Component implements OnInit {
 
   add(data: any) {
     this.data = data;
+    this.selectedId = 0
     this.isDetail = true;
     this.isView = false;
   }
@@ -336,10 +309,10 @@ export class BienBanGiaoNhanComponent extends Base2Component implements OnInit {
   }
 
   redirectDetail(id, b: boolean) {
+    this.data = null
     this.selectedId = id;
     this.isDetail = true;
     this.isView = b;
-    // this.isViewDetail = isView ?? false;
   }
 
   quayLai() {

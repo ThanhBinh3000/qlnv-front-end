@@ -72,16 +72,16 @@
             <tr>
               <th width="60px" class="text-center">STT</th>
               <th></th>
-              <th class="text-center">Số QĐ giao nhiệm vụ</th>
+              <th class="text-center">Số QĐ ĐC của Cục</th>
               <th class="text-center">Năm KH</th>
-              <th class="text-center">Thời hạn NH</th>
+              <th class="text-center">Thời hạn ĐC</th>
               <th class="text-center">Điểm kho</th>
               <th class="text-center">Lô kho</th>
-              <!-- <th class="text-center">BB NTBQLĐ</th> -->
+              <th class="text-center">BB NTBQLĐ</th>
               <th class="text-center">Số phiếu nhập kho</th>
               <th class="text-center">Ngày nhập kho</th>
               <th class="text-center">Số phiếu KTCL</th>
-              <!-- <th class="text-center">Ngày giám định</th> -->
+              <th class="text-center">Ngày giám định</th>
               <th class="text-center">Trạng thái</th>
               <th class="text-center">Hành động</th>
             </tr>
@@ -103,8 +103,8 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <!-- <td></td>
-                <td></td> -->
+                <td></td>
+                <td></td>
               </tr>
               <ng-container *ngIf="row1.expand">
                 <ng-container *ngFor="let row2 of row1.children, let y = index">
@@ -122,8 +122,8 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <!-- <td></td>
-                    <td></td> -->
+                    <td></td>
+                    <td></td>
                   </tr>
                   <ng-container>
                     <ng-container *ngFor="let row3 of row2.children, let y = index">
@@ -134,8 +134,10 @@
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td class="bold">{{ row3.tenLoKho || ""}} {{ row3.tenNganKho || ""}} {{ row3.tenNhaKho||""}}
+                        <td class="bold">{{ row3.tenLoKho || ""}} - {{ row3.tenNganKho || ""}} - {{ row3.tenNhaKho||""}}
                         </td>
+                        <td></td>
+                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -155,11 +157,11 @@
                           <td></td>
                           <td></td>
                           <td></td>
+                          <td></td>
                           <td class="bold">{{row4.soPhieuNhapKho || ""}}</td>
-                          <!-- <td></td>
-                          <td></td> -->
                           <td class="bold">{{row4.ngayNhapKho|date: "dd/MM/yyyy"}}</td>
                           <td class="bold">{{row4.soPhieuKiemTraCl || ""}}</td>
+                          <td></td>
                           <td class="bold">{{row4.tenTrangThai || ""}}</td>
                           <td>
                             <a *ngIf="row4.trangThai !== STATUS.DU_THAO" (click)="redirectDetail(row4.id, true)">
@@ -206,7 +208,7 @@
   </div>
 
   <div class="chi-tiet" *ngIf="isDetail">
-    <app-thong-tin-phieu-nhap-kho [isView]="isView" [idInput]="selectedId" [isVatTu]="isVatTu"
+    <app-thong-tin-phieu-nhap-kho [isView]="isView" [idInput]="selectedId" [isVatTu]="isVatTu" [data]="data"
       (showListEvent)="quayLai()"></app-thong-tin-phieu-nhap-kho>
   </div>
 

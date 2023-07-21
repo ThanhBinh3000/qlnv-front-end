@@ -20,6 +20,7 @@ import { convertTienTobangChu } from "src/app/shared/commonFunction";
 import * as uuidv4 from "uuid";
 import { ThongTinHangDtqgComponent } from "../thong-tin-hang-dtqg/thong-tin-hang-dtqg.component";
 import { BbNghiemThuBaoQuanService } from "src/app/services/qlnv-hang/nhap-hang/nhap-khac/bbNghiemThuBaoQuan.service";
+import { MangLuoiKhoService } from "src/app/services/qlnv-kho/mangLuoiKho.service";
 
 
 @Component({
@@ -59,6 +60,7 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
     private danhMucService: DanhMucService,
     private quyetDinhDieuChuyenCucService: QuyetDinhDieuChuyenCucService,
     private bbNghiemThuBaoQuanService: BbNghiemThuBaoQuanService,
+    private mangLuoiKhoService: MangLuoiKhoService,
     private bbNghiemThuBaoQuanLanDauService: BienBanNghiemThuBaoQuanLanDauService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, bbNghiemThuBaoQuanLanDauService);
@@ -164,8 +166,9 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
         idKeHoachDtl: this.data.qdinhDccId
       });
       await this.loadChiTietQdinh(this.data.qdinhDccId);
-      await this.loadDataBaoQuan(this.data.cloaiVthh || "010101")
+      await this.loadDataBaoQuan(this.data.cloaiVthh)
       await this.getDataKho(this.data.maLoKhoNhan || this.data.maNganKhoNhan)
+      await this.getTLKD()
     }
 
   }
@@ -182,6 +185,18 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
     if (tien) {
       return convertTienTobangChu(tien);
     }
+  }
+
+  async getTLKD() {
+    let body = {
+      maDvi: this.formData.value.maNganKho,
+      capDvi: "6"
+    }
+    const detail = await this.mangLuoiKhoService.getDetailByMa(body);
+    const tichLuongKhaDung = (this.formData.value.cloaiVthh.startsWith("01") || this.formData.value.cloaiVthh.startsWith("04")) ? detail.data.object.tichLuongKdLt : detail.data.object.tichLuongKdVt
+    this.formData.patchValue({
+      tichLuongKhaDung
+    })
   }
 
   async loadChiTiet(id: number) {
@@ -670,7 +685,6 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
     if (maDvi) {
       let res = await this.bbNghiemThuBaoQuanService.getDataKho(maDvi);
       this.formData.patchValue({
-        // tichLuong: (res.data.tichLuongTkLt - res.data.tichLuongKdLt) > 0 ? res.data.tichLuongTkLt - res.data.tichLuongKdLt : 0,
         loaiHinhKho: res.data.lhKho
       });
     }

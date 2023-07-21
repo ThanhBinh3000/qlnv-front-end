@@ -140,6 +140,7 @@ export class PhieuNhapKhoComponent extends Base2Component implements OnInit {
 
   async timKiem() {
     let body = this.formData.value
+    if (body.soQdinh) body.soQdinh = `${body.soQdinh}\DCNB`
     body.paggingReq = {
       limit: this.pageSize,
       page: this.page - 1
@@ -247,6 +248,7 @@ export class PhieuNhapKhoComponent extends Base2Component implements OnInit {
 
   add(data: any) {
     this.data = data;
+    this.selectedId = 0
     this.isDetail = true;
     this.isView = false;
   }
@@ -310,10 +312,10 @@ export class PhieuNhapKhoComponent extends Base2Component implements OnInit {
   }
 
   redirectDetail(id, b: boolean) {
+    this.data = null
     this.selectedId = id;
     this.isDetail = true;
     this.isView = b;
-    // this.isViewDetail = isView ?? false;
   }
 
   quayLai() {
