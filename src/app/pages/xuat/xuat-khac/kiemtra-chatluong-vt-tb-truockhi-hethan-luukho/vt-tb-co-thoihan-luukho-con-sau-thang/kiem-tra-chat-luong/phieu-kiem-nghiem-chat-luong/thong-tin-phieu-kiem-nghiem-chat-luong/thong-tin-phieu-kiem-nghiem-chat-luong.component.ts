@@ -346,7 +346,6 @@ export class ThongTinPhieuKiemNghiemChatLuongComponent extends Base2Component im
       body.fileDinhKems = this.fileDinhKems
     }
     body.xhXkVtPhieuKdclDtl = this.dataTableChiTieu;
-    console.log(body, 'bodybodybody');
     let data = await this.createUpdate(body);
     if (data) {
       if (isGuiDuyet) {

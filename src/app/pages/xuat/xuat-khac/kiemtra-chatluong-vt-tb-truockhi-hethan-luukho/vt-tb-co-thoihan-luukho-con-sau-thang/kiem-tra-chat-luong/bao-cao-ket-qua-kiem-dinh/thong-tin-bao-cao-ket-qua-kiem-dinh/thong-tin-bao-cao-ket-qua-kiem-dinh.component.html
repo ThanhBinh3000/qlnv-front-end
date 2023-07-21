@@ -14,7 +14,7 @@
           <i class="fa fa-arrow-left"></i>
           <span>Quay lại</span>
         </button>
-        <button *ngIf="this.userService.isCuc() && !isDisabled() && formData.value.trangThai != STATUS.DA_DUYET_LDC"
+        <button *ngIf="this.userService.isCuc() && !isDisabled()"
                 class="btn btn-sub xanh-nhat mr-2" (click)="save(true)">
           <i class="icon htvbdh_tcdt_guiduyet"></i>
           <span>Lưu và gửi duyệt</span>
@@ -118,7 +118,7 @@
                 <nz-form-control [nzErrorTip]="error">
                   <nz-select formControlName="soQdGiaoNvXh" [nzSize]="size"
                              (ngModelChange)="changeValueQdGiaoNvXh($event)" nzMode="multiple"
-                             nzPlaceHolder="Chọn số QĐ giao nhiệm vụ xuất hàng">
+                             nzPlaceHolder="Chọn số QĐ giao nhiệm vụ xuất hàng" [nzDisabled]="idInput > 0">
                     <nz-option *ngFor="let option of listQdGiaoNvXhOption" [nzLabel]="option.soQuyetDinh"
                                [nzValue]="option.soQuyetDinh"></nz-option>
                   </nz-select>
@@ -196,7 +196,9 @@
               <td>{{lv1.ketQuaKiemDinh == 1 ? 'Đạt' : 'Không đạt'}}</td>
               <td><a *ngIf="lv1.soPhieuKncl" nzType="link"
                      (click)="openPhieuKnClModal(lv1.idPhieuKncl)">{{lv1.soPhieuKncl}}</a></td>
-              <td></td>
+              <td class="text-center">
+                <label nz-checkbox [(ngModel)]="lv1.mauBiHuy"></label>
+              </td>
               <td></td>
             </tr>
           </ng-container>

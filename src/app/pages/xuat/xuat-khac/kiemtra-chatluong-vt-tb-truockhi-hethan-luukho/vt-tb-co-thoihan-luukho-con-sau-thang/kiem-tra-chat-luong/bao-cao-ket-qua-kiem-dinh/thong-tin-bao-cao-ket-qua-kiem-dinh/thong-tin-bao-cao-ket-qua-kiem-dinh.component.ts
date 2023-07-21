@@ -76,16 +76,18 @@ export class ThongTinBaoCaoKetQuaKiemDinhComponent extends Base2Component implem
   ) {
     super(httpClient, storageService, notification, spinner, modal, bckqKiemDinhMauService);
     this.formData = this.fb.group({
-      tenDvi: [],
+      tenDvi: [null, [Validators.required]],
       nam: [dayjs().get("year")],
       maDvi: [, [Validators.required]],
       tenTrangThai: ['Dự Thảo'],
       trangThai: [STATUS.DU_THAO],
       tenDviNhan: [],
-      tenBaoCao: [],
-      soBaoCao: [],
-      soQdGiaoNvXh: [],
-      ngayBaoCao: [],
+      tenBaoCao: [null, [Validators.required]],
+      soBaoCao: [null, [Validators.required]],
+      soQdGiaoNvXh: [null, [Validators.required]],
+      idQdGiaoNvXh: [null, [Validators.required]],
+      ngayBaoCao: [null, [Validators.required]],
+      listDetailPxk: [new Array()],
     })
   }
 
@@ -114,7 +116,7 @@ export class ThongTinBaoCaoKetQuaKiemDinhComponent extends Base2Component implem
     let res = await this.quyetDinhGiaoNvXuatHangService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
-      this.listQdGiaoNvXhOption = data.content;
+      this.listQdGiaoNvXhOption = this.idInput > 0 ? data.content : data.content.filter(item => !item.soBaoCaoKdm);
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
@@ -132,6 +134,7 @@ export class ThongTinBaoCaoKetQuaKiemDinhComponent extends Base2Component implem
               soBaoCao: res.data.soBaoCao,
               ngayBaoCao: res.data.ngayBaoCao,
               tenBaoCao: res.data.tenBaoCao,
+              trangThai:res.data.trangThai,
               soQdGiaoNvXh: res.data?.soQdGiaoNvXh ? (res.data.soQdGiaoNvXh.indexOf(",") > 0 ? res.data.soQdGiaoNvXh.split(",") : [res.data.soQdGiaoNvXh]) : []
             });
           }
@@ -171,7 +174,16 @@ export class ThongTinBaoCaoKetQuaKiemDinhComponent extends Base2Component implem
           event.some(obj2 => obj1.soQuyetDinh === obj2)
         );
         const idsQdGiaoNvXh = arrayQdGiaoNvXh && arrayQdGiaoNvXh.length > 0 ? arrayQdGiaoNvXh.map(item => item.id) : [];
+        this.formData.patchValue({
+          idQdGiaoNvXh: idsQdGiaoNvXh
+        });
         this.getDetailPxk(idsQdGiaoNvXh);
+      } else {
+        this.listPhieuXuatKho = [];
+        this.buildTableView();
+        this.formData.patchValue({
+          idQdGiaoNvXh: null
+        });
       }
     } catch (e) {
       this.notification.error(MESSAGE.ERROR, 'Có lỗi xảy ra.');
@@ -224,13 +236,31 @@ export class ThongTinBaoCaoKetQuaKiemDinhComponent extends Base2Component implem
     if (body.soQdGiaoNvXh && isArray(body.soQdGiaoNvXh)) {
       body.soQdGiaoNvXh = body.soQdGiaoNvXh.join(",");
     }
+    if (body.idQdGiaoNvXh && isArray(body.idQdGiaoNvXh)) {
+      body.idQdGiaoNvXh = body.idQdGiaoNvXh.join(",");
+    }
+    body.listDetailPxk = this.children && this.children.length > 0 ? this.conVertTreeToList(this.children) : [];
     let data = await this.createUpdate(body);
     if (data) {
+      this.idInput = data.id;
       if (isGuiDuyet) {
-        this.idInput = data.id;
         this.pheDuyet();
       }
     }
+  }
+
+  conVertTreeToList(data) {
+    let arr = [];
+    data.forEach(item => {
+      if (item.childData && item.childData.length > 0) {
+        item.childData.forEach(data => {
+          arr.push(data);
+        });
+      } else {
+        arr.push(item);
+      }
+    });
+    return arr;
   }
 
   pheDuyet() {
