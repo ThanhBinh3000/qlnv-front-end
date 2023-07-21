@@ -126,6 +126,8 @@ export class BaoCao {
     viPhamHopDong: number;
     thanhLyHdongSl: number;
     thanhLyHdongTt: number;
+    lstCtiets: ItemContract[];
+    lstCtietsDnghiCapVon: ItemContract[];
 }
 
 export class ItemContract {
@@ -161,6 +163,7 @@ export class ItemContract {
     cong: number;
     capUng: number;
     capVon: number;
+    checkTab: string;
 }
 
 export class ItemRequest {

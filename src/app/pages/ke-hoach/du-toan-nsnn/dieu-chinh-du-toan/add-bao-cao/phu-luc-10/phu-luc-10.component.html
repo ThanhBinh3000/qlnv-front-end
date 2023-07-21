@@ -22,13 +22,14 @@
                                 </ng-template>
                             </div>
                         </div>
-                        <div class="canphai">
-                            <button type="button" class="btn btn-do" (click)="deleteAllChecked()"
+                        <div class="canphai" *ngIf="status.general">
+                            <!-- <button type="button" class="btn btn-do" (click)="deleteAllChecked()"
                                 *ngIf="status.general">
                                 <i class="fa fa-trash-o"></i>
                                 <span>Xóa</span>
-                            </button>
-                            <button type="button" class="btn btn-main" (click)="addLine(null)" *ngIf="status.general">
+                            </button> -->
+                            <button type="button" class="btn btn-main" (click)="addLine(null)"
+                                *ngIf="lstCtietBcao.length == 0">
                                 <i class="icon htvbdh_dau-cong"></i>
                                 <span>Thêm</span>
                             </button>
@@ -38,11 +39,11 @@
                     <nz-table nzBordered class="table__body" [nzScroll]="{x: scrollX}">
                         <thead>
                             <tr>
-                                <th rowspan="2" *ngIf="status.general" class="text-center" nzWidth="50px">
+                                <!-- <th rowspan="2" *ngIf="status.general" class="text-center" nzWidth="50px">
                                     <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
                                         style="margin-right: 0;">
                                     </label>
-                                </th>
+                                </th> -->
                                 <th nzWidth="50px">STT</th>
                                 <th nzWidth="450px">Tên công trình <br> (Ghi chính xác theo <br> danh mục kế hoạch
                                     năm
@@ -85,7 +86,7 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td *ngIf="status.general"></td>
+                                <!-- <td *ngIf="status.general"></td> -->
                                 <td></td>
                                 <td>Tổng cộng</td>
                                 <td>{{Op.fmtVal(total.kh2021)}}</td>
@@ -103,7 +104,7 @@
                                 <td *ngIf="status.general || status.editAppVal"></td>
                             </tr>
                             <tr>
-                                <td *ngIf="status.general"></td>
+                                <!-- <td *ngIf="status.general"></td> -->
                                 <td></td>
                                 <td>Phát sinh điều chỉnh tăng</td>
                                 <td></td>
@@ -121,7 +122,7 @@
                                 <td *ngIf="status.general || status.editAppVal"></td>
                             </tr>
                             <tr>
-                                <td *ngIf="status.general"></td>
+                                <!-- <td *ngIf="status.general"></td> -->
                                 <td></td>
                                 <td>Phát sinh điều chỉnh giảm</td>
                                 <td></td>
@@ -140,10 +141,10 @@
                             </tr>
                             <tr *ngFor="let data of lstCtietBcao; let i = index">
                                 <ng-container *ngIf="!editCache[data.id].edit; else editTemplate ">
-                                    <td *ngIf="status.general" class="text-center">
+                                    <!-- <td *ngIf="status.general" class="text-center">
                                         <label *ngIf="checkDelete(data.stt)" nz-checkbox [nzValue]="data.id"
                                             [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"></label>
-                                    </td>
+                                    </td> -->
                                     <td class="text-center">
                                         {{getIndex(data.stt)}}
                                     </td>
@@ -176,10 +177,10 @@
                                     </td>
                                 </ng-container>
                                 <ng-template #editTemplate>
-                                    <td *ngIf="status.general" class="text-center">
+                                    <!-- <td *ngIf="status.general" class="text-center">
                                         <label *ngIf="checkDelete(data.stt)" nz-checkbox [nzValue]="data.id"
                                             [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"></label>
-                                    </td>
+                                    </td> -->
                                     <td class="text-center">
                                         {{getIndex(editCache[data.id].data.stt)}}
                                     </td>
@@ -261,7 +262,7 @@
             </nz-tab>
             <nz-tab nzTitle="Thuyết minh">
                 <textarea nz-input nzAutosize="{minRows: 4, maxRows: 16}" [(ngModel)]="formDetail.thuyetMinh"
-                    [disabled]="status.general"></textarea>
+                    *ngIf="status.general"></textarea>
             </nz-tab>
             <nz-tab nzTitle="Tài liệu đính kèm">
                 <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
@@ -333,10 +334,6 @@
                 <button type="button" class="btn btn-do" (click)="tuChoi('0')" *ngIf="status.ok">
                     <i nz-icon nzType="close" nzTheme="outline"></i>
                     <span>Không chấp nhận</span>
-                </button>
-                <button nz-button (click)="handleCancel()" class="modal__button--cancel">
-                    <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
-                    Đóng
                 </button>
             </div>
         </div>

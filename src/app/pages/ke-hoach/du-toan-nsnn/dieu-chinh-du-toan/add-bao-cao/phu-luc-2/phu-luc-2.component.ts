@@ -181,7 +181,7 @@ export class PhuLuc2Component implements OnInit {
     getTotal() {
         this.total = new ItemData();
         this.lstCtietBcao.forEach(item => {
-            this.total.dToanDnghiMucGia = Operator.sum([this.total.dToanDnghiMucGia, item.dToanDnghiMucGia]);
+            // this.total.dToanDnghiMucGia = Operator.sum([this.total.dToanDnghiMucGia, item.dToanDnghiMucGia]);
             this.total.dToanDnghiThanhTien = Operator.sum([this.total.dToanDnghiThanhTien, item.dToanDnghiThanhTien]);
             this.total.dToanKpNamTruoc = Operator.sum([this.total.dToanKpNamTruoc, item.dToanKpNamTruoc]);
             this.total.dToanKpDaGiao = Operator.sum([this.total.dToanKpDaGiao, item.dToanKpDaGiao]);
@@ -245,7 +245,6 @@ export class PhuLuc2Component implements OnInit {
             async data => {
                 if (data.statusCode == 0) {
                     this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-                    this.formDetail = data.data;
                     this._modalRef.close({
                         trangThai: data.data.trangThai,
                     });
@@ -296,7 +295,7 @@ export class PhuLuc2Component implements OnInit {
     };
 
     saveEdit(id: string): void {
-        // debugger
+        const index = this.lstCtietBcao.findIndex(item => item.id === id); // lay vi tri hang minh sua
         if (this.editCache[id].data.dToanDnghiSl > (this.editCache[id].data.sluongTsTcDinhMuc - this.editCache[id].data.sluongTsCong)) {
             this.notification.warning(
                 MESSAGE.WARNING,
@@ -304,11 +303,11 @@ export class PhuLuc2Component implements OnInit {
             ).onClose.subscribe(() => {
                 this.statusCanhBao = false
             })
+            return
         } else {
+            Object.assign(this.lstCtietBcao[index], this.editCache[id].data); // set lai data cua lstCtietBcao[index] = this.editCache[id].data
             this.statusCanhBao = true
         }
-        const index = this.lstCtietBcao.findIndex(item => item.id === id); // lay vi tri hang minh sua
-        Object.assign(this.lstCtietBcao[index], this.editCache[id].data); // set lai data cua lstCtietBcao[index] = this.editCache[id].data
         this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
         this.tinhTong();
         this.getTotal();

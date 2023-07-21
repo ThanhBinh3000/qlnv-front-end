@@ -23,11 +23,11 @@
 							</div>
 						</div>
 						<div class="canphai">
-							<button type="button" class="btn btn-main" (click)="deleteAllChecked()"
+							<!-- <button type="button" class="btn btn-main" (click)="deleteAllChecked()"
 								*ngIf="status.general">
 								<i class="fa fa-trash-o"></i>
 								<span>Xóa</span>
-							</button>
+							</button> -->
 							<button type="button" class="btn btn-sub" (click)="selectGoods()" *ngIf="status.general">
 								<i class="icon htvbdh_dau-cong"></i>
 								<span>Thêm</span>
@@ -38,11 +38,11 @@
 					<nz-table nzBordered class="table__body" [nzScroll]="{x: scrollX}">
 						<thead>
 							<tr>
-								<th rowspan="2" *ngIf="status.general" class="text-center" nzWidth="50px">
+								<!-- <th rowspan="2" *ngIf="status.general" class="text-center" nzWidth="50px">
 									<label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
 										style="margin-right: 0;">
 									</label>
-								</th>
+								</th> -->
 								<th rowSpan="2" nzWidth="50px">STT</th>
 								<th nzWidth="300px" rowSpan="2">Mặt hàng</th>
 								<th rowSpan="2">ĐVT</th>
@@ -54,6 +54,8 @@
 								<th rowSpan="2">Dự toán điều chỉnh <br> (+ tăng) (- giảm)</th>
 								<th rowSpan="2" *ngIf="status.viewAppVal">Dự toán Vụ TVQT <br> đề nghị (+ tăng) (-
 									giảm)</th>
+								<th rowSpan="2">Dự toán phí bảo quản thiếu năm 2020
+								</th>
 								<th rowSpan="2" *ngIf="status.viewAppVal">Dự toán chênh lệch giữa <br> Vụ TVQT
 									điều chỉnh <br> và đơn vị đề nghị <br>(+ tăng)(- giảm)</th>
 								<th rowSpan="2" *ngIf="status.viewAppVal">ý kiến của đơn vị cấp trên</th>
@@ -70,7 +72,7 @@
 								<th>Dự toán đã giao trong năm</th>
 							</tr>
 							<tr>
-								<th *ngIf="status.general"></th>
+								<!-- <th *ngIf="status.general"></th> -->
 								<th>A</th>
 								<th>B</th>
 								<th>C</th>
@@ -95,7 +97,7 @@
 						</thead>
 						<tbody>
 							<tr>
-								<td *ngIf="status.general"></td>
+								<!-- <td *ngIf="status.general"></td> -->
 								<td></td>
 								<td>Tổng cộng</td>
 								<td></td>
@@ -118,7 +120,7 @@
 								<td *ngIf="status.general || status.editAppVal"></td>
 							</tr>
 							<tr>
-								<td *ngIf="status.general"></td>
+								<!-- <td *ngIf="status.general"></td> -->
 								<td></td>
 								<td>Phát sinh điều chỉnh tăng</td>
 								<td></td>
@@ -141,7 +143,7 @@
 								<td *ngIf="status.general || status.editAppVal"></td>
 							</tr>
 							<tr>
-								<td *ngIf="status.general"></td>
+								<!-- <td *ngIf="status.general"></td> -->
 								<td></td>
 								<td>Phát sinh điều chỉnh giảm</td>
 								<td></td>
@@ -165,10 +167,10 @@
 							</tr>
 							<tr *ngFor="let data of lstCtietBcao; let i = index">
 								<ng-container *ngIf="!editCache[data.id].edit; else editTemplate ">
-									<td [hidden]="status " class="text-center">
+									<!-- <td [hidden]="status " class="text-center">
 										<label *ngIf="checkDelete(data.stt)" nz-checkbox [nzValue]="data.id"
 											[(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"></label>
-									</td>
+									</td> -->
 									<td class="text-center">
 										{{getChiMuc(data.stt)}}
 									</td>
@@ -212,10 +214,10 @@
 
 								</ng-container>
 								<ng-template #editTemplate>
-									<td *ngIf="status.general" class="text-center">
+									<!-- <td *ngIf="status.general" class="text-center">
 										<label *ngIf="checkDelete(data.stt)" nz-checkbox [nzValue]="data.id"
 											[(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"></label>
-									</td>
+									</td> -->
 									<td class="text-center">
 										{{getChiMuc(editCache[data.id].data.stt)}}
 									</td>
@@ -225,7 +227,7 @@
 									<td>
 										{{editCache[data.id].data.maDviTinh}}
 									</td>
-									<ng-container *ngIf="status.viewAppVal; else viewAppVal">
+									<ng-container *ngIf="!status.viewAppVal; else viewAppVal">
 										<td>
 											<input class="money-input" currencyMask
 												[(ngModel)]="editCache[data.id].data.slBquanKh" [options]="Op.amount" />
@@ -397,10 +399,6 @@
 				<button type="button" class="btn btn-do" (click)="tuChoi('0')" *ngIf="status.ok">
 					<i nz-icon nzType="close" nzTheme="outline"></i>
 					<span>Không chấp nhận</span>
-				</button>
-				<button nz-button (click)="handleCancel()" class="modal__button--cancel">
-					<i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
-					Đóng
 				</button>
 			</div>
 		</div>

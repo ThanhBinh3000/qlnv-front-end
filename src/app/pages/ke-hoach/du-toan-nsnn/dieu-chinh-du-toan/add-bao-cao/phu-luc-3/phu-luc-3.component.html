@@ -184,7 +184,7 @@
 			</nz-tab>
 			<nz-tab nzTitle="Thuyết minh">
 				<textarea nz-input nzAutosize="{minRows: 4, maxRows: 16}" [(ngModel)]="formDetail.thuyetMinh"
-					[disabled]="status.general"></textarea>
+					*ngIf="status.general"></textarea>
 			</nz-tab>
 			<nz-tab nzTitle="Tài liệu đính kèm">
 				<div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
@@ -256,10 +256,6 @@
 				<button type="button" class="btn btn-do" (click)="tuChoi('0')" *ngIf="status.ok">
 					<i nz-icon nzType="close" nzTheme="outline"></i>
 					<span>Không chấp nhận</span>
-				</button>
-				<button nz-button (click)="handleCancel()" class="modal__button--cancel">
-					<i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
-					Đóng
 				</button>
 			</div>
 		</div>

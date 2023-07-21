@@ -11,7 +11,7 @@ import { DieuChinhService } from 'src/app/services/quan-ly-von-phi/dieuChinhDuTo
 import * as uuid from "uuid";
 import * as XLSX from 'xlsx';
 import { BtnStatus, Doc, Form } from '../../dieu-chinh-du-toan.constant';
-import { DANH_MUC_PL10 } from './phu-luc-1.constant';
+import { NOI_DUNG } from './phu-luc-1.constant';
 
 export class ItemData {
     level: any;
@@ -121,7 +121,7 @@ export class PhuLuc1Component implements OnInit {
     dToanVuGiam: number;
     //danh muc
     lstCtietBcao: ItemData[] = [];
-    noiDungs: any[] = DANH_MUC_PL10;
+    noiDungs: any[] = NOI_DUNG;
     //trang thai cac nut
     status: BtnStatus = new BtnStatus();
     editMoneyUnit = false;
@@ -196,7 +196,7 @@ export class PhuLuc1Component implements OnInit {
                     id: uuid.v4() + 'FE',
                     stt: e.ma,
                     maNoiDung: e.ma,
-                    noiDung: e.giaTri,
+                    noiDung: e.tenDm,
                     dtoanDnghiDchinh: 0,
                     dtoanVuTvqtDnghi: 0,
                     tong: 0,

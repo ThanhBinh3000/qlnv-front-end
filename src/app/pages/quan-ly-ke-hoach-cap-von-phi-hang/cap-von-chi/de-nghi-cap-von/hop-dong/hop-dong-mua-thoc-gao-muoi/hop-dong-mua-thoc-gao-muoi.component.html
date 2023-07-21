@@ -61,7 +61,7 @@
 					</thead>
 					<tbody>
 						<tr>
-							<td>{{ baoCao.maHopDong }}</td>
+							<td>{{ baoCao.maDnghi }}</td>
 							<td>{{ baoCao.namBcao }}</td>
 							<td>{{ baoCao.soQdChiTieu }}</td>
 							<td>
@@ -142,7 +142,7 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr *ngFor="let data of baoCao.dnghiCvHopDongCtiets; let i = index">
+							<tr *ngFor="let data of baoCao.lstCtiets; let i = index">
 								<ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
 									<td>
 										<ng-container *ngIf="data.isParent">

@@ -15,9 +15,9 @@ import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { displayNumber, sumNumber } from 'src/app/Utility/func';
 import { AMOUNT, BOX_NUMBER_WIDTH, CAN_CU_GIA, CVNC, DON_VI_TIEN, LOAI_DE_NGHI, Operator, QUATITY, Status, Utils } from 'src/app/Utility/utils';
-import { BaoCao, ItemRequest, Times, TRANG_THAI } from '../../de-nghi-cap-von.constant';
+import { BaoCao, ItemContract, ItemRequest, Times, TRANG_THAI } from '../../../de-nghi-cap-von.constant';
 import { DialogChonThemBieuMauComponent } from 'src/app/components/dialog/dialog-chon-them-bieu-mau/dialog-chon-them-bieu-mau.component';
-import { BtnStatus } from '../../de-nghi-cap-von.class';
+import { BtnStatus } from '../../../de-nghi-cap-von.class';
 import { Ltd } from 'src/app/pages/ke-hoach/du-toan-nsnn/lap-ke-hoach-va-tham-dinh-du-toan/lap-ke-hoach-va-tham-dinh-du-toan.constant';
 
 @Component({
@@ -35,7 +35,8 @@ export class DeNghiCapVonMuaThocGaoMuoiTheoHopDongComponent implements OnInit {
 	userInfo: any;
 	//thong tin chung bao cao
 	baoCao: BaoCao = new BaoCao();
-	total: ItemRequest = new ItemRequest();
+	// total: ItemRequest = new ItemRequest();
+	total: ItemContract = new ItemContract();
 	//danh muc
 	donVis: any[] = [];
 	trangThais: any[] = TRANG_THAI;
@@ -175,7 +176,7 @@ export class DeNghiCapVonMuaThocGaoMuoiTheoHopDongComponent implements OnInit {
 			await this.getDetailReport();
 		} else {
 			this.baoCao = this.data?.baoCao;
-			this.sum();
+			// this.sum();
 		}
 		this.updateEditCache();
 		this.getStatusButton();
@@ -373,6 +374,7 @@ export class DeNghiCapVonMuaThocGaoMuoiTheoHopDongComponent implements OnInit {
 			return;
 		}
 		const baoCaoTemp = JSON.parse(JSON.stringify(this.baoCao));
+		baoCaoTemp.maLoai = '1'
 
 		if (!baoCaoTemp.fileDinhKems) {
 			baoCaoTemp.fileDinhKems = [];
@@ -397,15 +399,15 @@ export class DeNghiCapVonMuaThocGaoMuoiTheoHopDongComponent implements OnInit {
 		}
 
 		// replace nhung ban ghi dc them moi id thanh null
-		baoCaoTemp.dnghiCapvonCtiets.forEach(item => {
+		baoCaoTemp.lstCtiets.forEach(item => {
 			if (item.id?.length == 38) {
 				item.id = null;
 			};
-			item.dnghiCapvonLuyKes.forEach(e => {
-				if (e.id?.length == 38) {
-					e.id = null;
-				}
-			})
+			// item.dnghiCapvonLuyKes.forEach(e => {
+			// 	if (e.id?.length == 38) {
+			// 		e.id = null;
+			// 	}
+			// })
 		})
 
 		this.spinner.show();
@@ -442,19 +444,19 @@ export class DeNghiCapVonMuaThocGaoMuoiTheoHopDongComponent implements OnInit {
 	}
 
 	updateEditCache(): void {
-		this.baoCao.dnghiCapvonCtiets.forEach(item => {
-			const data: Times[] = [];
-			// item.dnghiCapvonLuyKes.forEach(e => {
-			// 	data.push({ ...e });
-			// })
-			this.editCache[item.id] = {
-				edit: false,
-				data: {
-					...item,
-					dnghiCapvonLuyKes: data,
-				}
-			};
-		});
+		// this.baoCao.lstCtiets.forEach(item => {
+		// 	const data: Times[] = [];
+		// 	// item.dnghiCapvonLuyKes.forEach(e => {
+		// 	// 	data.push({ ...e });
+		// 	// })
+		// 	// this.editCache[item.id] = {
+		// 	// 	edit: false,
+		// 	// 	data: {
+		// 	// 		...item,
+		// 	// 		dnghiCapvonLuyKes: data,
+		// 	// 	}
+		// 	// };
+		// });
 	}
 
 	startEdit(id: string): void {
@@ -463,18 +465,18 @@ export class DeNghiCapVonMuaThocGaoMuoiTheoHopDongComponent implements OnInit {
 
 	// huy thay doi
 	cancelEdit(id: string): void {
-		const index = this.baoCao.dnghiCapvonCtiets.findIndex(item => item.id === id);
+		const index = this.baoCao.lstCtiets.findIndex(item => item.id === id);
 		// lay vi tri hang minh sua
-		this.editCache[id] = {
-			data: { ...this.baoCao.dnghiCapvonCtiets[index] },
-			edit: false
-		};
+		// this.editCache[id] = {
+		// 	data: { ...this.baoCao.lstCtiets[index] },
+		// 	edit: false
+		// };
 	}
 
 	// luu thay doi
 	saveEdit(id: string): void {
-		const index = this.baoCao.dnghiCapvonCtiets.findIndex(item => item.id === id); // lay vi tri hang minh sua
-		Object.assign(this.baoCao.dnghiCapvonCtiets[index], this.editCache[id].data); // set lai data cua lstCtietBcao[index] = this.editCache[id].data
+		const index = this.baoCao.lstCtiets.findIndex(item => item.id === id); // lay vi tri hang minh sua
+		Object.assign(this.baoCao.lstCtiets[index], this.editCache[id].data); // set lai data cua lstCtietBcao[index] = this.editCache[id].data
 		this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
 		this.getTotal();
 	}
@@ -488,35 +490,30 @@ export class DeNghiCapVonMuaThocGaoMuoiTheoHopDongComponent implements OnInit {
 	}
 
 	getTotal() {
-		this.total = new ItemRequest();
-		this.baoCao.dnghiCapvonCtiets.forEach(item => {
-			this.total.slKeHoach = Operator.sum([this.total.slKeHoach, item.slKeHoach]);
-			this.total.slHopDong = Operator.sum([this.total.slHopDong, item.slHopDong]);
-			this.total.gtHopDong = Operator.sum([this.total.gtHopDong, item.gtHopDong]);
-			this.total.duToanDaGiao = Operator.sum([this.total.duToanDaGiao, item.duToanDaGiao]);
-			this.total.luyKeCapUng = Operator.sum([this.total.luyKeCapUng, item.luyKeCapUng]);
-			this.total.luyKeCapVon = Operator.sum([this.total.luyKeCapVon, item.luyKeCapVon]);
-			this.total.luyKeCong = Operator.sum([this.total.luyKeCong, item.luyKeCong]);
-			this.total.tongVonVaDtDaCap = Operator.sum([this.total.duToanDaGiao, this.total.luyKeCong]);
-			this.total.vonDnghiCapLanNay = Operator.sum([this.total.gtHopDong, -this.total.tongVonVaDtDaCap]);
-			this.total.vonDuyetCapUng = Operator.sum([this.total.vonDuyetCapUng, item.vonDuyetCapUng]);
-			this.total.vonDuyetCapVon = Operator.sum([this.total.vonDuyetCapVon, item.vonDuyetCapVon])
-			this.total.vonDuyetCong = Operator.sum([this.total.vonDuyetCong, item.vonDuyetCong]);
-			this.total.tongCap = Operator.sum([this.total.tongCap, item.tongCap]);
-			this.total.soConDuocCap = Operator.sum([this.total.soConDuocCap, item.soConDuocCap]);
-		})
-	}
-
-	sum() {
-		this.baoCao.dnghiCapvonCtiets.forEach(item => {
+		this.total = new ItemContract();
+		this.baoCao.lstCtiets.forEach(item => {
 			if (item.isParent) {
-				item.tongVonVaDtDaCap = Operator.sum([item.duToanDaGiao, item.luyKeCong]);
-				item.vonDnghiCapLanNay = Operator.sum([item.gtHopDong, -item.tongVonVaDtDaCap]);
-				item.tongCap = Operator.sum([item.tongVonVaDtDaCap, item.vonDuyetCong]);
-				item.soConDuocCap = Operator.sum([item.gtHopDong, -item.tongCap]);
+				this.total.slKeHoach = Operator.sum([this.total.slKeHoach, item.slKeHoach]);
+				this.total.slHopDong = Operator.sum([this.total.slHopDong, item.slHopDong]);
+				this.total.gtHopDong = Operator.sum([this.total.gtHopDong, item.gtHopDong]);
+				this.total.daGiaoDuToan = Operator.sum([this.total.daGiaoDuToan, item.daGiaoDuToan]);
+				this.total.viPhamHopDong = Operator.sum([this.total.viPhamHopDong, item.viPhamHopDong]);
+				this.total.thanhLyHdongSl = Operator.sum([this.total.thanhLyHdongSl, item.thanhLyHdongSl]);
+				this.total.thanhLyHdongTt = Operator.sum([this.total.thanhLyHdongTt, item.thanhLyHdongTt]);
 			}
 		})
 	}
+
+	// sum() {
+	// 	this.baoCao.lstCtiets.forEach(item => {
+	// 		if (item.isParent) {
+	// 			item.tongVonVaDtDaCap = Operator.sum([item.duToanDaGiao, item.luyKeCong]);
+	// 			item.vonDnghiCapLanNay = Operator.sum([item.gtHopDong, -item.tongVonVaDtDaCap]);
+	// 			item.tongCap = Operator.sum([item.tongVonVaDtDaCap, item.vonDuyetCong]);
+	// 			item.soConDuocCap = Operator.sum([item.gtHopDong, -item.tongCap]);
+	// 		}
+	// 	})
+	// }
 
 	showDialogCopy() {
 		// const obj = {
@@ -571,7 +568,7 @@ export class DeNghiCapVonMuaThocGaoMuoiTheoHopDongComponent implements OnInit {
 		//     id: null,
 		//     fileDinhKems: [],
 		//     listIdDeleteFiles: [],
-		//     dnghiCapvonCtiets: lstCtietBcaoTemp,
+		//     lstCtiets: lstCtietBcaoTemp,
 		//     congVan: null,
 		//     maDvi: this.maDviTao,
 		//     maDnghi: maDeNghiNew,
@@ -630,12 +627,12 @@ export class DeNghiCapVonMuaThocGaoMuoiTheoHopDongComponent implements OnInit {
 		switch (this.selectedIndex) {
 			case 0:
 				danhMuc = this.listAppendix.filter(e => e.id.startsWith('hopdong'));
-				// danhSach = danhMuc.filter(item => this.baoCao.dnghiCapvonCtiets.findIndex(e => e.maBieuMau == item.id) == -1);
+				// danhSach = danhMuc.filter(item => this.baoCao.lstCtiets.findIndex(e => e.maBieuMau == item.id) == -1);
 				title = 'Danh sách hơp đồng';
 				break;
 			case 1:
 				danhMuc = this.listAppendix.filter(e => e.id.startsWith('denghi'));
-				// danhSach = danhMuc.filter(item => this.baoCao.dnghiCapvonCtiets.findIndex(e => e.maBieuMau == item.id) == -1);
+				// danhSach = danhMuc.filter(item => this.baoCao.lstCtiets.findIndex(e => e.maBieuMau == item.id) == -1);
 				title = 'Danh sách đề nghị';
 				break;
 			default:

@@ -46,7 +46,7 @@
                                 </th>
                                 <th rowSpan="2">ĐVT</th>
                                 <th colSpan="5">Số lượng tài sản, máy móc, thiết bị hiện có</th>
-                                <th colSpan="3">Dự toán đề nghị trang bị năm N {{namBcao}}</th>
+                                <th colSpan="3">Dự toán đề nghị trang bị năm {{namBcao}}</th>
                                 <th colSpan="3">Dự toán, kinh phí được sử dụng trong năm </th>
                                 <th rowSpan="2">Dự toán đề nghị điều chỉnh <br> (+ tăng) (- giảm)</th>
                                 <th rowSpan="2" *ngIf="status.viewAppVal">Dự toán vụ TVQT <br> đề nghị <br> (+ tăng)
@@ -334,12 +334,13 @@
             </nz-tab>
             <nz-tab nzTitle="Thuyết minh">
                 <textarea nz-input nzAutosize="{minRows: 4, maxRows: 16}" [(ngModel)]="formDetail.thuyetMinh"
-                    [disabled]="status.general"></textarea>
+                    *ngIf="status.general"></textarea>
             </nz-tab>
             <nz-tab nzTitle="Tài liệu đính kèm">
                 <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
                     <div nz-col class="gutter-row" [nzSpan]="3">
-                        <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" *ngIf="status.general">
+                        <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload " [nzMultiple]="true"
+                            *ngIf="status.general">
                             <button nz-button>
                                 <i nz-icon nzType="upload"></i>
                                 Chọn tài liệu đính kèm
@@ -406,10 +407,6 @@
                 <button type="button" class="btn btn-do" (click)="tuChoi('0')" *ngIf="status.ok">
                     <i nz-icon nzType="close" nzTheme="outline"></i>
                     <span>Không chấp nhận</span>
-                </button>
-                <button nz-button (click)="handleCancel()" class="modal__button--cancel">
-                    <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
-                    Đóng
                 </button>
             </div>
         </div>
