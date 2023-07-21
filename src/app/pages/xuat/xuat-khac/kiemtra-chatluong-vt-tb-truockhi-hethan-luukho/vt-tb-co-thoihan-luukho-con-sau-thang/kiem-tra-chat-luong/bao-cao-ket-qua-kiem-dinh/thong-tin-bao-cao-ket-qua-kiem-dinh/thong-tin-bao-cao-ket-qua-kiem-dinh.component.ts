@@ -134,7 +134,8 @@ export class ThongTinBaoCaoKetQuaKiemDinhComponent extends Base2Component implem
               soBaoCao: res.data.soBaoCao,
               ngayBaoCao: res.data.ngayBaoCao,
               tenBaoCao: res.data.tenBaoCao,
-              trangThai:res.data.trangThai,
+              trangThai: res.data.trangThai,
+              tenTrangThai: res.data.tenTrangThai,
               soQdGiaoNvXh: res.data?.soQdGiaoNvXh ? (res.data.soQdGiaoNvXh.indexOf(",") > 0 ? res.data.soQdGiaoNvXh.split(",") : [res.data.soQdGiaoNvXh]) : []
             });
           }
