@@ -77,14 +77,17 @@
         <tr>
           <th width="60px" class="text-center">STT</th>
           <th></th>
-          <th width="">Số QĐ giao nhiệm vụ XH</th>
-          <th width="">Năm KH</th>
+          <th width="">Số QĐ giao NVXH</th>
+          <th width="">Năm</th>
           <th width="">Thời hạn XH trước ngày</th>
           <th width="">Điểm Kho</th>
-          <th width="">Lô kho</th>
+          <th width="">Ngăn/Lô kho</th>
+          <th width="">Loại hàng hóa</th>
           <th width="">Số phiếu xuất kho</th>
           <th width="">Ngày xuất kho</th>
+          <th width="">Loại phiếu xuất</th>
           <th width="">Số phiếu KNCL</th>
+          <th width="">Lần lấy mẫu</th>
           <th width="">Ngày giám định</th>
           <th width="">Trạng thái</th>
           <th width="90px">Hành động</th>
@@ -99,7 +102,7 @@
                 [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true" style="width: 35px"></td>
             <td class="bold">{{ item.soCanCu }}</td>
             <td class="bold">{{ item.namKeHoach }}</td>
-            <td class="bold">{{ item.ngayQdGiaoNvXh | date: 'dd/MM/YYYY' }}</td>
+            <td class="bold">{{ item.ngayQdGiaoNvXh | date:globals.dateFormat}}</td>
             <td></td>
             <td></td>
             <td></td>
@@ -108,6 +111,11 @@
             <td></td>
             <td></td>
             <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+
           </tr>
           <ng-container *ngIf="expandSetString.has(item.idVirtual)">
             <ng-container *ngFor="let lv1 of item.childData,let i1=index">
@@ -118,15 +126,16 @@
                 <td></td>
                 <td></td>
                 <td class="bold">{{lv1.tenDiemKho}}</td>
-                <td class="bold">{{lv1.tenLoKho}}</td>
                 <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
-                <td class="text-left">
-
-                </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
               </tr>
               <ng-container *ngIf="expandSetString.has(item.idVirtual)">
                 <ng-container *ngFor="let lv2 of lv1.childData,let i2=index">
@@ -137,29 +146,54 @@
                     <td></td>
                     <td></td>
                     <td></td>
+                    <td>{{lv2.tenLoKho ? (lv2.tenLoKho +' '+ lv2.tenNganKho): lv2.tenNganKho}}</td>
                     <td></td>
-                    <td class="bold">{{lv2.soPhieu}}</td>
-                    <td>{{lv2.ngayXuat | date: 'dd/MM/YYYY' }}</td>
-                    <td><a *ngIf="lv2.soPhieuKnCl" nzType="link"
-                           (click)="openPhieuKnClModal(lv2.idPhieuKnCl)">{{lv2.soPhieuKnCl}}</a></td>
-                    <td>{{lv2.ngayKn | date: 'dd/MM/YYYY' }}</td>
-                    <td>{{lv2.tenTrangThai}}</td>
-                    <td class="text-left">
-                      <a *ngIf="lv2.trangThai ==STATUS.DA_DUYET_LDCC" (click)="redirectDetail(lv2.id, true)">
-                        <i class="fa fa-eye" title="Xem chi tiết"></i>
-                      </a>
-                      <a *ngIf="lv2.trangThai ==STATUS.TU_CHOI_LDCC || lv2.trangThai ==STATUS.DU_THAO"
-                         (click)="redirectDetail(lv2.id, false)">
-                        <i class="fa fa-pencil" title="Sửa"></i>
-                      </a>
-                      <a *ngIf="lv2.trangThai ==STATUS.CHO_DUYET_LDCC" (click)="redirectDetail(lv2.id, true)">
-                        <i class="icon htvbdh_tcdt_pheduyet"></i>
-                      </a>
-                      <a *ngIf="lv2.trangThai ==STATUS.DU_THAO" (click)="delete(lv2)">
-                        <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
-                      </a>
-                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                   </tr>
+                  <ng-container *ngIf="expandSetString.has(item.idVirtual)">
+                    <ng-container *ngFor="let lv3 of lv2.childData,let i3=index">
+                      <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class="bold">{{lv3.tenLoaiVthh}}</td>
+                        <td class="bold">{{lv3.soPhieu}}</td>
+                        <td >{{lv3.ngayTao| date:globals.dateFormat}}</td>
+                        <td>{{ lv3.loai === 'XUAT_MAU' ? 'Xuất hàng lấy mẫu' : (lv3.loai === 'XUAT_HUY' ? 'Xuất mẫu bị hủy khỏi kho' : '') }}</td>
+                        <td><a *ngIf="lv3.soPhieuKnCl" nzType="link"
+                               (click)="openPhieuKnClModal(lv3.idPhieuKnCl)">{{lv3.soPhieuKnCl}}</a></td>
+                        <td>{{lv3.soLanLm}}</td>
+                        <td>{{lv3.ngayGiamDinh| date:globals.dateFormat }}</td>
+                        <td>{{lv3.tenTrangThai}}</td>
+                        <td class="text-left">
+                          <a *ngIf="lv3.trangThai ==STATUS.DA_DUYET_LDCC" (click)="redirectDetail(lv3.id, true)">
+                            <i class="fa fa-eye" title="Xem chi tiết"></i>
+                          </a>
+                          <a *ngIf="lv3.trangThai ==STATUS.TU_CHOI_LDCC || lv3.trangThai ==STATUS.DU_THAO"
+                             (click)="redirectDetail(lv3.id, false)">
+                            <i class="fa fa-pencil" title="Sửa"></i>
+                          </a>
+                          <a *ngIf="lv3.trangThai ==STATUS.CHO_DUYET_LDCC" (click)="redirectDetail(lv3.id, true)">
+                            <i class="icon htvbdh_tcdt_pheduyet"></i>
+                          </a>
+                          <a *ngIf="lv3.trangThai ==STATUS.DU_THAO" (click)="delete(lv3)">
+                            <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+                          </a>
+                        </td>
+                      </tr>
+                    </ng-container>
+                  </ng-container>
                 </ng-container>
               </ng-container>
             </ng-container>

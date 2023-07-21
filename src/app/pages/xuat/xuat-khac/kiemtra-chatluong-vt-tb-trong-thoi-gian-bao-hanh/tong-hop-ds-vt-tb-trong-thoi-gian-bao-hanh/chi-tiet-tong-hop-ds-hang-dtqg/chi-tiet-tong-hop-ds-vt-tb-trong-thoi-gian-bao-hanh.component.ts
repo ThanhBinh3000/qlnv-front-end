@@ -17,7 +17,7 @@ import {v4 as uuidv4} from "uuid";
 import {FileDinhKem} from "../../../../../../models/FileDinhKem";
 import {
   DanhSachVtTbTrongThoiGIanBaoHanh
-} from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvtbaohanh/DanhSachVtTbTrongThoiGIanBaoHanh.service";
+} from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvtbaohanh/DanhSachVtTbTrongThoiGianBaoHanh.service";
 import {
   TongHopDanhSachVtTbTrongThoiGIanBaoHanh
 } from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvtbaohanh/TongHopDanhSachVtTbTrongThoiGIanBaoHanh.service";

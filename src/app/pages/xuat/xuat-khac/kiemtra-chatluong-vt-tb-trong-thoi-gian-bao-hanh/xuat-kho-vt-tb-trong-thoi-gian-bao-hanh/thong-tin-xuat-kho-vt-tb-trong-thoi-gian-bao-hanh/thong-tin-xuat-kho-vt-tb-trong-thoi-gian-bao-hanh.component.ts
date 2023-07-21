@@ -217,6 +217,7 @@ export class ThongTinXuatKhoVtTbTrongThoiGianBaoHanhComponent extends Base2Compo
         soCanCu: data.soQuyetDinh,
         idCanCu: data.id,
         ngayXuat: data.thoiHanXuatHang,
+        soLanLm: data.soLanLm,
       });
     } catch (e) {
       this.notification.error(MESSAGE.ERROR, e.msg);
@@ -240,7 +241,6 @@ export class ThongTinXuatKhoVtTbTrongThoiGianBaoHanhComponent extends Base2Compo
           cloaiVthh: item.cloaiVthh,
           tenCloaiVthh: item.tenCloaiVthh,
           donViTinh: item.donViTinh,
-          slLayMau: item.slLayMau
         })
       }
     }

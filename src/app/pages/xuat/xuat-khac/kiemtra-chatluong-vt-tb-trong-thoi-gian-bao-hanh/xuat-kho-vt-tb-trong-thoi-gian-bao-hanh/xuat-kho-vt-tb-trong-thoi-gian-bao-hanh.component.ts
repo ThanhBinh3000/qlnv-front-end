@@ -29,7 +29,6 @@ export class XuatKhoVtTbTrongThoiGianBaoHanhComponent extends Base2Component imp
   loaiVthhCache: string;
   CHUC_NANG = CHUC_NANG;
 
-  // public vldTrangThai: CuuTroVienTroComponent;
 
   constructor(
     httpClient: HttpClient,
@@ -37,11 +36,9 @@ export class XuatKhoVtTbTrongThoiGianBaoHanhComponent extends Base2Component imp
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    // private cuuTroVienTroComponent: CuuTroVienTroComponent,
     private phieuXuatKhoVtTbTrongThoiGianBaoHanhService: PhieuXuatKhoVtTbTrongThoiGianBaoHanhService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, phieuXuatKhoVtTbTrongThoiGianBaoHanhService);
-    // this.vldTrangThai = this.cuuTroVienTroComponent;
     this.formData = this.fb.group({
       tenDvi: null,
       maDvi: null,
@@ -145,19 +142,31 @@ export class XuatKhoVtTbTrongThoiGianBaoHanhComponent extends Base2Component imp
     let dataView = chain(this.dataTable)
       .groupBy("soCanCu")
       .map((value, key) => {
-        let quyetDinh = value.find(f => f.soCanCu === key)
+        let quyetDinh = value.find(f => f.soCanCu === key);
         let rs = chain(value)
           .groupBy("tenDiemKho")
           .map((v, k) => {
-              let diaDiem = v.find(s => s.tenDiemKho === k)
-              return {
-                idVirtual: uuid.v4(),
-                tenDiemKho: k != "null" ? k : '',
-                tenLoKho: diaDiem ? diaDiem.tenLoKho : null,
-                childData: v
-              }
-            }
-          ).value();
+            let childData = chain(v)
+              .groupBy("tenNganKho")
+              .map((v1, k1) => {
+                let nganLo = v1.find(s1 => s1.tenNganKho === k1); // Lấy đối tượng đầu tiên có trường "tenNganKho" trùng khớp
+                return {
+                  idVirtual: uuid.v4(),
+                  tenNganKho: k1 != "null" ? k1 : '', // Kiểm tra nếu k1 là "null" thì gán giá trị rỗng
+                  tenLoKho: nganLo ? nganLo.tenLoKho : null,
+                  childData: v1
+                };
+              })
+              .value();
+
+            return {
+              idVirtual: uuid.v4(),
+              tenDiemKho: k != "null" ? k : '',
+              childData: childData
+            };
+          })
+          .value();
+
         let namKeHoach = quyetDinh ? quyetDinh.namKeHoach : null;
         let ngayQdGiaoNvXh = quyetDinh ? quyetDinh.ngayXuat : null;
         return {
@@ -167,11 +176,14 @@ export class XuatKhoVtTbTrongThoiGianBaoHanhComponent extends Base2Component imp
           ngayQdGiaoNvXh: ngayQdGiaoNvXh,
           childData: rs
         };
-      }).value();
-    this.children = dataView
-    this.expandAll()
+      })
+      .value();
 
+    this.children = dataView;
+    console.log(this.children, "this.children");
+    this.expandAll();
   }
+
 
   expandAll() {
     this.children.forEach(s => {
