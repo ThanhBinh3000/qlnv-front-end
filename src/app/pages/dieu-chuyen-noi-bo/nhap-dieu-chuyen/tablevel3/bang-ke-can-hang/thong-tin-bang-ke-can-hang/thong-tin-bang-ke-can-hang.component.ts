@@ -122,7 +122,7 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
       maQhns: this.userInfo.DON_VI.maQhns,
       ktvBaoQuan: this.userInfo.TEN_DAY_DU,
       soBangKe: `${id}/${this.formData.get('nam').value}/${this.maBb}`,
-
+      loaiDc: this.loaiDc
     })
 
     if (this.idInput) {

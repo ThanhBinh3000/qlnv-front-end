@@ -50,6 +50,7 @@ export class BienBanChuanBiKhoComponent extends Base2Component implements OnInit
       ngayLap: null,
       ngayKetThuc: null,
       type: ["01"],
+      isVatTu: [true],
       loaiDc: ["DCNB"]
     })
   }
@@ -65,7 +66,9 @@ export class BienBanChuanBiKhoComponent extends Base2Component implements OnInit
     this.isVisibleChangeTab$.subscribe((value: boolean) => {
       this.visibleTab = value;
     });
-
+    this.formData.patchValue({
+      loaiDc: this.loaiDc
+    })
 
     try {
       this.initData()

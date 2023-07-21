@@ -77,7 +77,8 @@ export class BienBanGiaoNhanComponent extends Base2Component implements OnInit {
       ngayHieuLuc: null,
       trichYeu: null,
       type: ["01"],
-      loaiDc: ["DCNB"]
+      loaiDc: ["DCNB"],
+      isVatTu: [true],
     })
     this.filterTable = {
       nam: '',
@@ -105,7 +106,9 @@ export class BienBanGiaoNhanComponent extends Base2Component implements OnInit {
     this.isVisibleChangeTab$.subscribe((value: boolean) => {
       this.visibleTab = value;
     });
-
+    this.formData.patchValue({
+      loaiDc: this.loaiDc
+    })
 
 
     try {

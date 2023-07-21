@@ -61,6 +61,7 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
     this.formData = this.fb.group({
       type: ["01"],
       loaiDc: ["DCNB"],
+      isVatTu: [true],
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự thảo'],
       nam: [dayjs().get("year"), [Validators.required]],
@@ -115,7 +116,7 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
       maQhns: this.userInfo.DON_VI.maQhns,
       tenThuKho: this.userInfo.TEN_DAY_DU,
       soBangKe: `${id}/${this.formData.get('nam').value}/${this.maBb}`,
-
+      loaiDc: this.loaiDc
     })
 
     if (this.idInput) {
