@@ -144,18 +144,18 @@
 
 
 
-          <div nz-col nzSpan="4">
+          <div nz-col nzSpan="8">
             <nz-form-item>
-              <nz-form-label nzRequired [nzNoColon]="true">Lô kho
+              <nz-form-label nzRequired [nzNoColon]="true">Lô/Ngăn kho
               </nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
                 <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogKhoNhap()">
-                  <input [readonly]="true" nz-input formControlName="tenLoKho" readonly="true" />
+                  <input [readonly]="true" nz-input formControlName="tenLoNganKho" readonly="true" />
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col nzSpan="4">
+          <!-- <div nz-col nzSpan="4">
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true">Ngăn kho
               </nz-form-label>
@@ -164,7 +164,7 @@
 
               </nz-form-control>
             </nz-form-item>
-          </div>
+          </div> -->
           <div nz-col nzSpan="4">
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true">Nhà kho
@@ -190,7 +190,7 @@
               <nz-form-label [nzNoColon]="true">Số hồ sơ kỹ thuật
               </nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
-                <input [readonly]="true" nz-input formControlName="tenLoKho" readonly="true" />
+                <input [readonly]="true" nz-input formControlName="soHoSoKyThuat" readonly="true" />
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -338,7 +338,7 @@
                 Tổng số lượng điều chuyển theo QĐ
               </nz-form-label>
               <nz-form-control>
-                <span class="text-blue">{{formData.value.soLuongQdDcCuc}}</span><span>
+                <span class="text-blue">{{formData.value.soLuongQd}}</span><span>
                   ({{formData.value.tenDonViTinh}})</span>
               </nz-form-control>
             </nz-form-item>
