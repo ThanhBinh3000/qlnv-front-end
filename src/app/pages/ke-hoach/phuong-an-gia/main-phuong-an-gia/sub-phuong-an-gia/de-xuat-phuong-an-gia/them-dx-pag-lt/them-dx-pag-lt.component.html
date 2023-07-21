@@ -133,7 +133,7 @@
         </div>
         <div nz-col [nzSpan]="4">
           <nz-form-item class="form-item">
-            <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true">Số công văn cần điều chỉnh
+            <nz-form-label [nzNoColon]="true" [nzNoColon]="true">Số công văn cần điều chỉnh
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfterIcon="folder-open">
@@ -275,15 +275,14 @@
           </div>
         </div>
       </form>
-      <nz-table nzBordered [nzData]="pagTtChungs" [nzFrontPagination]="false" [nzShowPagination]="false"
-                *ngIf="formData.value.apDungTatCa == false">
+      <nz-table nzBordered [nzData]="pagTtChungs" [nzFrontPagination]="false" [nzShowPagination]="false">
         <thead>
         <tr>
           <th class="text-center" nzWidth="45px">STT</th>
           <th class="text-center">Chi cục</th>
           <th class="text-center" nzWidth="200px">Chỉ tiêu theo KH được giao(tấn)</th>
-          <th class="text-center" nzWidth="150px">Số lượng</th>
-          <th class="text-center" nzWidth="350px">Đơn giá chưa VAT (đồng)</th>
+          <th class="text-center" nzWidth="150px">Số lượng(tấn)</th>
+          <th class="text-center" nzWidth="350px">Đơn giá chưa VAT (đ/kg)</th>
           <th class="text-center" nzWidth="150px"
               *ngIf="formData.value.loaiGia == 'LG01' || formData.value.loaiGia == 'LG03'">Đơn giá có VAT (đồng)
           </th>
@@ -320,7 +319,7 @@
           <td>{{ data.tenChiCuc }}</td>
           <td class="text-right">{{ data.soLuongCtieu | number : '1.0-1' : 'vi-VN'}}</td>
           <td class="text-right">
-            <nz-input-number  [(ngModel)]="data.soLuong" [nzSize]="'small'" nz-input [nzMin]="0" [nzFormatter]="globals.formatter" [nzMax]="data.soLuongCtieu > 0 ? data.soLuongCtieu : 9999999999999"
+            <nz-input-number  [(ngModel)]="data.soLuong" (ngModelChange)="changeSoLuong(data)" [nzSize]="'small'" nz-input [nzMin]="0" [nzFormatter]="globals.formatter" [nzMax]="data.soLuongCtieu > 0 ? data.soLuongCtieu : 9999999999999"
                               [nzParser]="globals.parser">
             </nz-input-number>
           </td>
