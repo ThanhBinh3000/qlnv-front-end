@@ -165,9 +165,11 @@ export class ThanhToanTheoHopDongComponent implements OnInit {
             async (data) => {
                 if (data.statusCode == 0) {
                     this.baoCao = data.data;
+                    this.lstCtiets = [];
                     data.data.lstCtiets.forEach(item => {
                         this.lstCtiets.push(new ThanhToan(item));
                     })
+                    this.lstCtiets = Table.sortByIndex(this.lstCtiets);
                     this.listFile = [];
                     this.updateEditCache();
                     this.getStatusButton();
@@ -326,10 +328,25 @@ export class ThanhToanTheoHopDongComponent implements OnInit {
         const index = this.lstCtiets.findIndex(item => item.id === id); // lay vi tri hang minh sua
         Object.assign(this.lstCtiets[index], this.editCache[id].data); // set lai data cua lstCtietBcao[index] = this.editCache[id].data
         this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
+        this.sum(this.lstCtiets[index].stt)
     }
 
     changeModel(data: ThanhToan) {
         this.editCache[data.id].data.changeModel(true, data);
+    }
+
+    sum(stt: string) {
+        stt = Table.preIndex(stt);
+        while (stt != '0') {
+            const index = this.lstCtiets.findIndex(e => e.stt == stt);
+            this.lstCtiets[index].clear();
+            this.lstCtiets.forEach(item => {
+                if (Table.preIndex(item.stt) == stt) {
+                    this.lstCtiets[index].sum(item);
+                }
+            })
+            stt = Table.preIndex(stt);
+        }
     }
 
     // xoa file trong bang file

@@ -56,6 +56,7 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
 
     async ngOnInit() {
         this.userInfo = this.userService.getUserLogin();
+        this.searchFilter.maDvi = this.userInfo.MA_DVI;
         this.spinner.show();
         //khoi tao gia tri mac dinh
         this.searchFilter.ngayTaoDen = new Date();
@@ -90,7 +91,7 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
                 this.searchFilter.maLoai = Cvmb.TIEN_THUA;
                 this.perm.create = Roles.CVMB.ADD_NTT;
                 this.perm.edit = Roles.CVMB.EDIT_NTT;
-                this.perm.delete = "NO";
+                this.perm.delete = Roles.CVMB.DEL_NTT;
                 this.perm.pass = Roles.CVMB.PASS_NTT;
                 this.perm.approve = Roles.CVMB.APPROVE_NTT;
                 break;
@@ -102,9 +103,8 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
                 this.perm.create = 'NO';
                 this.perm.edit = 'NO';
                 this.perm.delete = 'NO';
-                this.perm.pass = 'NO';
-                this.perm.approve = 'NO';
-                this.perm.accept = Roles.CVMB.ACCEPT_NTT;
+                this.perm.pass = Roles.CVMB.PASS_NTT_GN;
+                this.perm.approve = Roles.CVMB.APPROVE_NTT_GN;
                 this.isParent = true;
                 break;
             case Tab.DS_TTKH:
@@ -217,41 +217,37 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
 
     //xem chi tiet bao cao
     async viewDetail(data: any) {
-        // const obj = {
-        //     id: data.id,
-        //     tabSelected: '',
+        const obj = {
+            id: data.id,
+            tabSelected: '',
+        }
+        switch (this.searchFilter.maLoai) {
+            case Cvmb.GHI_NHAN_CU_VON:
+                obj.tabSelected = Tab.CUV;
+                break;
+            case Cvmb.CU_VON_DVCD:
+                obj.tabSelected = Tab.CUV;
+                break;
+            case Cvmb.TIEN_THUA:
+                obj.tabSelected = Tab.TIEN_THUA;
+                break;
+            case Cvmb.THANH_TOAN:
+                if (data.canCuVeGia == Cvmb.HOP_DONG) {
+                    obj.tabSelected = Tab.THANH_TOAN_HOP_DONG;
+                } else {
+                    obj.tabSelected = Tab.THANH_TOAN_DON_GIA;
+                }
+                break;
+            default:
+                break;
+        }
+        // if (data.maLoai == 2 && data.ttNhan.trangThai == Utils.TT_BC_1) {
+        //     await this.checkExistTienThua(data.namDnghi);
+        //     if (!this.isExistTienThua) {
+        //         await this.addVonBanGuiDvct(data.namDnghi);
+        //     }
         // }
-        // switch (this.searchFilter.maLoai) {
-        //     case 2:
-        //         obj.tabSelected = 'gnv-cv';
-        //         break;
-        //     case 3:
-        //         obj.tabSelected = 'gnv-cv';
-        //         break;
-        //     case 5:
-        //         if (data.loaiDnghi == Utils.MUA_VTU) {
-        //             obj.tabSelected = 'tt-vattu';
-        //         } else {
-        //             if (data.canCuVeGia == Utils.HD_TRUNG_THAU) {
-        //                 obj.tabSelected = 'tt-hopdong';
-        //             } else {
-        //                 obj.tabSelected = 'tt-dongia';
-        //             }
-        //         }
-        //         break;
-        //     case 6:
-        //         obj.tabSelected = 'tienthua';
-        //         break;
-        //     default:
-        //         break;
-        // }
-        // // if (data.maLoai == 2 && data.ttNhan.trangThai == Utils.TT_BC_1) {
-        // //     await this.checkExistTienThua(data.namDnghi);
-        // //     if (!this.isExistTienThua) {
-        // //         await this.addVonBanGuiDvct(data.namDnghi);
-        // //     }
-        // // }
-        // this.dataChange.emit(obj);
+        this.dataChange.emit(obj);
     }
 
     updateAllChecked(): void {

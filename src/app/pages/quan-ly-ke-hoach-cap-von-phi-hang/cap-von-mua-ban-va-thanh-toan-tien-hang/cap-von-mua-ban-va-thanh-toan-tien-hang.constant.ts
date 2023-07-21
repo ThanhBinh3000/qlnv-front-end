@@ -154,7 +154,7 @@ export class ThanhToan {
     lkSauLanNay: number;
     soConPhaiNop: number;
     dot: number;
-    congVan: any;
+    congVan: string;
     ghiChu: string;
 
     constructor(data: Partial<Pick<ThanhToan, keyof ThanhToan>>) {
@@ -182,15 +182,15 @@ export class ThanhToan {
 
     clear() {
         Object.keys(this).forEach(key => {
-            if (typeof this[key] === 'number') {
+            if (typeof this[key] === 'number' && key != 'dot') {
                 this[key] = null;
             }
         })
     }
 
-    sum(data: CapUng) {
+    sum(data: ThanhToan) {
         Object.keys(data).forEach(key => {
-            if (typeof this[key] == 'number' || typeof data[key] == 'number') {
+            if ((key != 'dot') && (typeof this[key] == 'number' || typeof data[key] == 'number')) {
                 this[key] = Operator.sum([this[key], data[key]]);
             }
         })
@@ -262,7 +262,7 @@ export class Report {
     maDviCha: string;
     maCapUng: string;
     namDnghi: number;
-    loaiDeNghi: string;
+    loaiDnghi: string;
     canCuVeGia: string;
     quyetDinh: string;
     maLoai: string;
@@ -274,6 +274,10 @@ export class Report {
     ngayPheDuyet: string;
     ngayTraKq: string;
     trangThai: string;
+    ngayTrinhDvct: string;
+    ngayDuyetDvct: string;
+    ngayPheDuyetDvct: string;
+    trangThaiDvct: string;
     trangThaiThop: string;
     maDviTien: string;
     lyDoTuChoi: string;

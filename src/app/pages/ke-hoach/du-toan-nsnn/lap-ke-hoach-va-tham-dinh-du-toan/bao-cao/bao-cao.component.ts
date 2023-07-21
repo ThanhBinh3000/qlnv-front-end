@@ -67,6 +67,7 @@ export class BaoCaoComponent implements OnInit {
     isDataAvailable = false;
     isChild: boolean;
     isParent: boolean;
+    isOffice: boolean;
     //phan tab
     selectedIndex = 0;
     // before uploaf file
@@ -174,7 +175,7 @@ export class BaoCaoComponent implements OnInit {
         //lay thong tin chung bao cao
         this.baoCao.id = this.data?.id;
         this.userInfo = this.userService.getUserLogin();
-
+        this.isOffice = this.userInfo.DON_VI.tenVietTat.indexOf('_VP') != -1;
         if (this.baoCao.id) {
             await this.getDetailReport();
         } else {
@@ -555,7 +556,8 @@ export class BaoCaoComponent implements OnInit {
             namBcao: this.baoCao.namBcao,
             path: this.path,
             status: new BtnStatus(),
-            isSynthetic: isSynthetic
+            isSynthetic: isSynthetic,
+            isOffice: this.isOffice,
         }
         Object.assign(dataInfo.status, this.status);
         dataInfo.status.general = dataInfo.status.general && (this.userInfo?.sub == bieuMau.nguoiBcao);

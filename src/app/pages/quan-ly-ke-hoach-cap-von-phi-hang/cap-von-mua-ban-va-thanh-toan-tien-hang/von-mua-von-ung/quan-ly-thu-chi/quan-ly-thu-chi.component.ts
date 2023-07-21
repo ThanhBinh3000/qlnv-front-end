@@ -2,11 +2,11 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import dayjs from 'dayjs';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { Operator, Status, Table, Utils } from 'src/app/Utility/utils';
+import { Operator, Table } from 'src/app/Utility/utils';
 import { MESSAGE } from 'src/app/constants/message';
 import { CapVonMuaBanTtthService } from 'src/app/services/quan-ly-von-phi/capVonMuaBanTtth.service';
 import { UserService } from 'src/app/services/user.service';
-import { Cvmb, TienThua } from '../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
+import { Cvmb, Search, TienThua } from '../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
 
 @Component({
     selector: 'app-quan-ly-thu-chi',
@@ -18,6 +18,7 @@ export class QuanLyThuChiComponent implements OnInit {
     @Output() dataChange = new EventEmitter();
     Op = Operator;
     namDnghi: number;
+    id: string;
     lstCtiets: TienThua[] = [];
     scrollX: string;
     lstNam: number[] = [];
@@ -39,18 +40,22 @@ export class QuanLyThuChiComponent implements OnInit {
     }
 
     async search() {
-        // this.spinner.show();
-        // await this.capVonMuaBanTtthService.timKiemVonMuaBan('').toPromise().then(
-        //     (data) => {
-        //         if (data.statusCode == 0) {
-        //         } else {
-        //             this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-        //         }
-        //     },
-        //     (err) => {
-        //         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        //     }
-        // );
-        // this.spinner.hide();
+        this.spinner.show();
+        await this.capVonMuaBanTtthService.ctietThuChi(this.namDnghi).toPromise().then(
+            async (data) => {
+                if (data.statusCode == 0) {
+                    this.lstCtiets = [];
+                    data.data.forEach(item => {
+                        this.lstCtiets.push(new TienThua(item));
+                    })
+                } else {
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            },
+        );
+        this.spinner.hide();
     }
 }
