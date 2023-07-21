@@ -16,7 +16,7 @@
     <th *ngIf="isTableKetQua && !isTabNdKhac">Ghi chú</th>
     <th style="width: 8%;">Hành động</th>
   </tr>
-  <tr>
+  <tr *ngIf="!isView">
     <th class="text-center"></th>
     <th *ngIf="!isTableKetQua && !isTabNdKhac">
       <input [readonly]="isView" type="text" [(ngModel)]="rowItem.tenDviThamDinh" nz-input/>

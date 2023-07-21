@@ -296,14 +296,14 @@
             <div nz-row [nzGutter]="24">
               <div nz-col [nzSpan]="8">
                 <nz-input-group>
-                  <nz-input-number name="giaDn" [(ngModel)]="giaDn" [nzSize]="'small'" nz-input [nzMin]="0" [nzFormatter]="globals.formatter"
+                  <nz-input-number [(ngModel)]="giaDn" [nzSize]="'small'" nz-input [nzMin]="0" [nzFormatter]="globals.formatter" [nzDisabled]="isView"
                                    [nzParser]="globals.parser">
                   </nz-input-number>
                 </nz-input-group>
               </div>
               <div nz-col [nzSpan]="16">
                 <nz-input-group>
-                  <label nz-checkbox [(ngModel)]="isApDungTatCa" (ngModelChange)="onChangeIsApDungTatCa()">Áp dụng cho tất cả các Chi cục</label>
+                  <label nz-checkbox [(ngModel)]="isApDungTatCa" [nzDisabled]="isView" (ngModelChange)="onChangeIsApDungTatCa($event)">Áp dụng cho tất cả các Chi cục</label>
                 </nz-input-group>
               </div>
             </div>
@@ -319,18 +319,18 @@
           <td>{{ data.tenChiCuc }}</td>
           <td class="text-right">{{ data.soLuongCtieu | number : '1.0-1' : 'vi-VN'}}</td>
           <td class="text-right">
-            <nz-input-number  [(ngModel)]="data.soLuong" (ngModelChange)="changeSoLuong(data)" [nzSize]="'small'" nz-input [nzMin]="0" [nzFormatter]="globals.formatter" [nzMax]="data.soLuongCtieu > 0 ? data.soLuongCtieu : 9999999999999"
-                              [nzParser]="globals.parser">
+            <nz-input-number  [(ngModel)]="data.soLuong" [nzSize]="'small'" nz-input [nzMin]="0" [nzFormatter]="globals.formatter" [nzMax]="data.soLuongCtieu > 0 ? data.soLuongCtieu : 9999999999999"
+                              [nzParser]="globals.parser" [nzDisabled]="isView">
             </nz-input-number>
           </td>
           <td class="text-right" *ngIf="isApDungTatCa == true">{{ data.giaDn | number : '1.0-1' : 'vi-VN' }}</td>
           <td  *ngIf="isApDungTatCa == false">
-            <nz-input-number  [(ngModel)]="data.giaDn" [nzSize]="'small'" nz-input [nzMin]="0" [nzFormatter]="globals.formatter"
+            <nz-input-number  [(ngModel)]="data.giaDn" [nzSize]="'small'" nz-input [nzMin]="0" [nzFormatter]="globals.formatter" [nzDisabled]="isView"
                               [nzParser]="globals.parser">
             </nz-input-number>
           </td>
           <td class="text-right"
-              *ngIf="formData.value.loaiGia == 'LG01' || formData.value.loaiGia == 'LG03'">{{ data.giaDnVat | number : '1.0-1' : 'vi-VN' }}</td>
+              *ngIf="formData.value.loaiGia == 'LG01' || formData.value.loaiGia == 'LG03'">{{ formData.value.vat ? ( data.giaDn + data.giaDn * formData.value.vat | number : '1.0-1' : 'vi-VN' ) : 0   }}</td>
         </tr>
         </tbody>
       </nz-table>
@@ -348,7 +348,7 @@
             <th style="width: 16%;">File đính kèm</th>
             <th style="width: 6%;">Hành động</th>
           </tr>
-          <tr>
+          <tr *ngIf="!isView">
             <th class="text-center"></th>
             <th>
               <input type="text" [readonly]="isView" [(ngModel)]="rowItemCcXdg.moTa" nz-input/>

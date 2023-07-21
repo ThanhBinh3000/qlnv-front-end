@@ -134,32 +134,6 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
         tgianNhang: []
       }
     );
-    this.formData.controls['giaDeNghi'].valueChanges.subscribe(value => {
-      const gtriHdSauVat = this.formData.controls.giaDeNghi.value + (this.formData.controls.giaDeNghi.value * this.formData.controls.vat.value);
-      this.formData.controls['giaDeNghiVat'].setValue(gtriHdSauVat);
-    });
-    this.formData.controls['vat'].valueChanges.subscribe(value => {
-      const gtriHdSauVat = this.formData.controls.giaDeNghi.value + (this.formData.controls.giaDeNghi.value * this.formData.controls.vat.value);
-      this.formData.controls['giaDeNghiVat'].setValue(gtriHdSauVat);
-    })
-    this.formData.controls['giaVonNk'].valueChanges.subscribe(value => {
-      const tongChiPhi = this.formData.controls.giaVonNk.value + this.formData.controls.chiPhiChung.value + this.formData.controls.chiPhiPbo.value
-      this.formData.controls['tongChiPhi'].setValue(tongChiPhi);
-    })
-    this.formData.controls['chiPhiChung'].valueChanges.subscribe(value => {
-      if (this.formData.value.loaiHangXdg == 'XDG_LH02') {
-        const tongChiPhi = this.formData.controls.giaVonNk.value + this.formData.controls.chiPhiChung.value - this.formData.controls.chiPhiPbo.value
-        this.formData.controls['tongChiPhi'].setValue(tongChiPhi);
-      } else {
-        const tongChiPhi = this.formData.controls.giaVonNk.value + this.formData.controls.chiPhiChung.value
-        this.formData.controls['tongChiPhi'].setValue(tongChiPhi);
-      }
-
-    })
-    this.formData.controls['chiPhiPbo'].valueChanges.subscribe(value => {
-      const tongChiPhi = this.formData.controls.giaVonNk.value + this.formData.controls.chiPhiChung.value - this.formData.controls.chiPhiPbo.value
-      this.formData.controls['tongChiPhi'].setValue(tongChiPhi);
-    })
   }
 
   async ngOnInit() {
@@ -235,10 +209,6 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
         tenTrangThai: data.tenTrangThai,
         lyDoTuChoi: data.lyDoTuChoi
       })
-      this.isApDungTatCa = data.apDungTatCa;
-      if (this.isApDungTatCa == true) {
-        this.giaDn = this.pagTtChungs[0]?.giaDn
-      }
       this.dataTableCanCuXdg = data.canCuPhapLy;
       this.dsDiaDiemDeHang = data.diaDiemDeHangs;
       this.pagTtChungs = data.pagTtChungs;
@@ -247,6 +217,10 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
       this.dataTableTtThamKhao = data.ketQuaKhaoSatTtThamKhao;
       this.fileDinhKem = data.fileDinhKems;
       this.fileDkPhanTich = data.filePhanTich;
+      this.isApDungTatCa = data.apDungTatCa;
+      if (this.isApDungTatCa == true) {
+        this.giaDn = this.pagTtChungs[0]?.giaDn
+      }
       this.updateEditCache();
     }
   }
@@ -349,6 +323,9 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
   }
 
   async onChangeCloaiVthh(event) {
+    this.pagTtChungs.forEach(item => {
+      item.cloaiVthh = event;
+    })
     let list = this.listCloaiVthh.filter(item => item.ma == event)
     this.formData.patchValue({
       tenCloaiVthh: list && list.length > 0 ? list[0].ten : ''
@@ -462,10 +439,11 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
     } else {
       body.soDeXuat = ''
     }
+    body.apDungTatCa = this.isApDungTatCa;
     body.canCuPhapLy = this.dataTableCanCuXdg;
     body.ketQuaKhaoSatGiaThiTruong = this.dataTableKsGia;
     body.ketQuaThamDinhGia = this.dataTableKqGia;
-    body.pagTtChungs = body.apDungTatCa == true ? [] : this.pagTtChungs;
+    body.pagTtChungs = this.pagTtChungs;
     body.ketQuaKhaoSatTtThamKhao = this.dataTableTtThamKhao;
     body.diaDiemDeHangs = this.dsDiaDiemDeHang;
     body.fileDinhKemReqs = this.fileDinhKem;
@@ -727,7 +705,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
   }
 
   openModalSoDx() {
-    if (!this.isView && !this.isModal) {
+    if (!this.idInput && !this.isModal) {
       const modalQD = this.modal.create({
         nzTitle: 'Danh sách điều chỉnh đề xuất Phương án giá',
         nzContent: DialogTableSelectionComponent,
@@ -762,12 +740,8 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
       cloaiVthh: data.cloaiVthh,
       moTa: data.moTa,
       tchuanCluong: data.tchuanCluong,
-      giaDeNghi: data.giaDeNghi,
       vat: data.vat ? data.vat.toString() : '',
-      giaDeNghiVat: data.giaDeNghiVat,
-      soLuong: data.soLuong,
       ghiChu: data.ghiChu,
-      diaDiemDeHang: data.diaDiemDeHang,
       maPphapXdg: data.maPphapXdg,
       loaiHangXdg: data.loaiHangXdg,
       giaVonNk: data.giaVonNk,
@@ -782,20 +756,39 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
       loaiDeXuat: data.loaiDeXuat > 0 ? data.loaiDeXuat + 1 : 1
     })
     this.dataTableCanCuXdg = data.canCuPhapLy;
-    this.dsDiaDiemDeHang = data.diaDiemDeHangs;
+    this.dataTableCanCuXdg.forEach(item => {
+      item.id = null;
+    })
+    this.pagTtChungs = data.pagTtChungs;
+    this.pagTtChungs.forEach(item => {
+      item.id = null;
+    })
     this.dataTableKsGia = data.ketQuaKhaoSatGiaThiTruong;
+    this.dataTableKsGia.forEach(item => {
+      item.id = null;
+    })
     this.dataTableKqGia = data.ketQuaThamDinhGia;
+    this.dataTableKqGia.forEach(item => {
+      item.id = null;
+    })
     this.dataTableTtThamKhao = data.ketQuaKhaoSatTtThamKhao;
-    this.fileDinhKem = data.fileDinhKems;
-    this.fileDkPhanTich = data.filePhanTich;
+    this.dataTableTtThamKhao.forEach(item => {
+      item.id = null;
+    })
+    this.isApDungTatCa = data.apDungTatCa;
+    if (this.isApDungTatCa == true) {
+      this.giaDn = this.pagTtChungs[0]?.giaDn
+    }
     this.updateEditCache();
   }
 
-  onChangeIsApDungTatCa() {
-    this.pagTtChungs.forEach(item => {
-      item.giaDn = this.giaDn;
-    })
-    this.updateEditCache();
+  onChangeIsApDungTatCa(event) {
+    if (event == true) {
+      this.pagTtChungs.forEach(item => {
+        item.giaDn = this.giaDn;
+      })
+      this.updateEditCache();
+    }
   }
 
   async loadDsChiCuc() {
@@ -822,22 +815,11 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
   }
 
   updatePagTtChungs() {
-    if (this.formData.value.apDungTatCa == true) {
-      this.pagTtChungs = [];
-    } else {
-      this.formData.patchValue({
-        giaDeNghi: null,
-        giaDeNghiVat: null,
-        soLuong: null,
-        diaDiemDeHang: null,
-      })
-    }
-  }
-
-  changeSoLuong(data) {
-    if (this.formData.value.loaiGia == 'LG01' || this.formData.value.loaiGia == 'LG03') {
-
-    }
+    this.pagTtChungs.forEach(item => {
+      if (this.formData.value.vat) {
+        item.giaDnVat = item.giaDn + item.giaDn * this.formData.value.vat
+      }
+    })
   }
 }
 
