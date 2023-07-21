@@ -91,6 +91,17 @@ export const TRANG_THAI_DE_NGHI_CAP_DUOI = [
     },
 ]
 
+export const TABS = [
+    {
+        id: 1,
+        tabName: 'HỢP ĐỒNG'
+    },
+    {
+        id: 2,
+        tabName: 'ĐỀ NGHỊ'
+    }
+]
+
 export class ItemCongVan {
     fileName: string;
     fileSize: number;
@@ -164,6 +175,10 @@ export class ItemContract {
     capUng: number;
     capVon: number;
     checkTab: string;
+    soLuongKehoach: number;
+    soQdPdKhlcnt: string;
+    gtriHdSauVat: number;
+    soLuong: number;
 }
 
 export class ItemRequest {

@@ -10,7 +10,7 @@ import { UserService } from 'src/app/services/user.service';
 import { divNumber, mulNumber, sortByIndex, sumNumber } from 'src/app/Utility/func';
 import { CAN_CU_GIA, LOAI_DE_NGHI, Utils } from 'src/app/Utility/utils';
 import * as uuid from "uuid";
-import { BaoCao, ItemContract, ItemRequest } from '../../../de-nghi-cap-von.constant';
+import { BaoCao, ItemContract, ItemRequest, TABS } from '../../../de-nghi-cap-von.constant';
 import { DatePipe } from '@angular/common';
 
 @Component({
@@ -52,6 +52,8 @@ export class DialogTaoDeNghiCapVonComponent implements OnInit {
   isFirstRecord = true;
   idCallChitiet!: string;
   idCallChitietCapVon!: string;
+  selectedIndex = 0;
+  tabs: any[] = TABS;
 
   constructor(
     private _modalRef: NzModalRef,
@@ -161,26 +163,6 @@ export class DialogTaoDeNghiCapVonComponent implements OnInit {
                     const dataRequest = data.data.lstCtiets;
                     for (const item of dataRequest) {
                       this.response.lstCtiets.push({ ...item });
-                    }
-                  } else {
-                    this.notification.error(MESSAGE.ERROR, data?.msg);
-                  }
-                },
-                (err) => {
-                  this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-                },
-              );
-              await this.capVonNguonChiService.ctietDeNghi(this.idCallChitietCapVon).toPromise().then(
-                async (data) => {
-                  if (data.statusCode == 0) {
-                    const dataRequest = data.data.lstCtiets;
-                    for (const item of dataRequest) {
-                      this.response.lstCtiets.push({
-                        ...item,
-                        id: uuid.v4() + 'FE',
-                        maDvi: this.userInfo?.MA_DVI,
-                        tenDvi: this.userInfo?.TEN_DVI,
-                      });
                     }
                   } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -454,34 +436,6 @@ export class DialogTaoDeNghiCapVonComponent implements OnInit {
         this.response.loaiDnghi = null;
       }
     );
-
-    const requestData = {
-      maDvi: this.userInfo?.MA_DVI,
-      namHdong: this.response.namBcao,
-      loaiDnghi: this.response.loaiDnghi,
-      maDviTien: '1',
-      maLoai: '0',
-      paggingReq: {
-        limit: 10,
-        page: 1,
-      },
-      trangThai: Utils.TT_BC_7,
-    }
-    this.spinner.show();
-    await this.capVonNguonChiService.timKiemDeNghi(requestData).toPromise().then(
-      (data) => {
-        if (data.statusCode == 0) {
-          this.idCallChitietCapVon = data.data.content[0].id;
-          this.isContractExist = true;
-        } else {
-          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-        }
-      },
-      (err) => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      }
-    );
-    this.spinner.hide();
   }
 
   handleOk() {
