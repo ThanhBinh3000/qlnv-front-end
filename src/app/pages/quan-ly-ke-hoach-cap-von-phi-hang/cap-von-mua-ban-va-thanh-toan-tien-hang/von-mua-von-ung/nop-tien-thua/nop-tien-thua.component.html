@@ -29,14 +29,6 @@
                 <i class="icon htvbdh_tcdt_pheduyet"></i>
                 <span>Phê duyệt</span>
             </button>
-            <button *ngIf="status.accept" type="button" class="btn btn-do" (click)="action('nonaccept')">
-                <i class="icon htvbdh_tcdt_tuchoi"></i>
-                <span>Từ chối</span>
-            </button>
-            <button *ngIf="status.accept" type="button" class="btn btn-sub" (click)="action('accept')">
-                <i class="icon htvbdh_tcdt_pheduyet"></i>
-                <span>Tiếp nhận</span>
-            </button>
         </div>
     </nz-affix>
 
@@ -45,8 +37,8 @@
             <div class="header mg-t-16">
                 <div class="header-text">
                     <div class="title-chi-tieu">
-                        <span [ngClass]="Status.statusClass(baoCao.trangThai)">
-                            {{ Status.reportStatusName(baoCao.trangThai, isParent)}}
+                        <span [ngClass]="statusClass()">
+                            {{ getStatusName() }}
                         </span>
                         <span>Nộp tiền vốn thừa</span>
                     </div>
@@ -58,22 +50,30 @@
                         <tr>
                             <th>Mã cấp ứng</th>
                             <th>Năm</th>
+                            <th>Đợt</th>
                             <th>Ngày tạo</th>
                             <th>Ngày trình duyệt</th>
                             <th>Ngày duyệt</th>
                             <th>Ngày phê duyệt</th>
-                            <th>Ngày tiếp nhận</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                             <td>{{ baoCao.maCapUng }}</td>
                             <td>{{ baoCao.namDnghi }}</td>
-                            <td>{{ Utils.fmtDate(baoCao.ngayTao) }}</td>
-                            <td>{{ Utils.fmtDate(baoCao.ngayTrinh) }}</td>
-                            <td>{{ Utils.fmtDate(baoCao.ngayDuyet) }}</td>
-                            <td>{{ Utils.fmtDate(baoCao.ngayPheDuyet) }}</td>
-                            <td>{{ Utils.fmtDate(baoCao.ngayTraKq) }}</td>
+                            <td>{{ baoCao.dot }}</td>
+                            <ng-container *ngIf="isParent; else dvcd">
+                                <td>{{ Utils.fmtDate(baoCao.ngayPheDuyet) }}</td>
+                                <td>{{ Utils.fmtDate(baoCao.ngayTrinhDvct) }}</td>
+                                <td>{{ Utils.fmtDate(baoCao.ngayDuyetDvct) }}</td>
+                                <td>{{ Utils.fmtDate(baoCao.ngayPheDuyetDvct) }}</td>
+                            </ng-container>
+                            <ng-template #dvcd>
+                                <td>{{ Utils.fmtDate(baoCao.ngayTao) }}</td>
+                                <td>{{ Utils.fmtDate(baoCao.ngayTrinh) }}</td>
+                                <td>{{ Utils.fmtDate(baoCao.ngayDuyet) }}</td>
+                                <td>{{ Utils.fmtDate(baoCao.ngayPheDuyet) }}</td>
+                            </ng-template>
                         </tr>
                     </tbody>
                 </nz-table>

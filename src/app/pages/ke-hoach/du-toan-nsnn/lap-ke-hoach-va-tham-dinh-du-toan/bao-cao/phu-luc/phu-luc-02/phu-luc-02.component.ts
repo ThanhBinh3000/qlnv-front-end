@@ -294,7 +294,7 @@ export class PhuLuc02Component implements OnInit {
 			lstCtietBcaoTemp.push(item.request())
 		})
 
-		if (this.status.general) {
+		if (this.status.general && !this.dataInfo.isOffice) {
 			lstCtietBcaoTemp?.forEach(item => {
 				item.tdinhKhoSluong = item.sluongTaiKho;
 				item.tdinhKhoTtien = item.ttienTaiKho;

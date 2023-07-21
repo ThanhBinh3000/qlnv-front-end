@@ -196,6 +196,41 @@ export class Status {
 	static checkStatusName(status: string) {
 		return Status.TRANG_THAI_KIEM_TRA.find(e => e.id == status)?.tenDm;
 	}
+
+	static readonly TRANG_THAI_PD_DVCT = [
+		{
+			id: Status.TT_01,
+			tenDm: 'Mới',
+		},
+		{
+			id: Status.TT_02,
+			tenDm: 'Trình duyệt',
+		},
+		{
+			id: Status.TT_03,
+			tenDm: 'Từ chối duyệt',
+		},
+		{
+			id: Status.TT_04,
+			tenDm: 'Duyệt',
+		},
+		{
+			id: Status.TT_05,
+			tenDm: 'Từ chối phê duyệt',
+		},
+		{
+			id: Status.TT_06,
+			tenDm: 'Phê duyệt',
+		},
+		{
+			id: Status.TT_07,
+			tenDm: 'Phê duyệt',
+		},
+	]
+
+	static statusDvctName(id: string) {
+		return Status.TRANG_THAI_PD_DVCT.find(e => e.id == id)?.tenDm;
+	}
 }
 
 export class Table {

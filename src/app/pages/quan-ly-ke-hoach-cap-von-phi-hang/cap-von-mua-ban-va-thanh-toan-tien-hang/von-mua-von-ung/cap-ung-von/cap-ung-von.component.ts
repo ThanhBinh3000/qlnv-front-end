@@ -175,18 +175,18 @@ export class CapUngVonComponent implements OnInit {
     //check role cho các nut trinh duyet
     getStatusButton() {
         const isChild = this.baoCao.maDvi == this.userInfo?.MA_DVI;
-        this.status.general = Status.check('saveWHist', this.baoCao.trangThai) && isChild;
+        this.status.save = Status.check('saveWHist', this.baoCao.trangThai) && isChild;
         this.status.submit = Status.check('submit', this.baoCao.trangThai) && isChild && !(!this.baoCao.id);
         this.status.pass = Status.check('pass', this.baoCao.trangThai) && isChild;
         this.status.approve = Status.check('approve', this.baoCao.trangThai) && isChild;
         if (this.baoCao.maLoai == Cvmb.CU_VON_DVCD) {
-            this.status.general = this.status.general && this.userService.isAccessPermisson(Roles.CVMB.EDIT_CV);
+            this.status.save = this.status.save && this.userService.isAccessPermisson(Roles.CVMB.EDIT_CV);
             this.status.submit = this.status.submit && this.userService.isAccessPermisson(Roles.CVMB.SUBMIT_CV);
             this.status.pass = this.status.pass && this.userService.isAccessPermisson(Roles.CVMB.PASS_CV);
             this.status.approve = this.status.approve && this.userService.isAccessPermisson(Roles.CVMB.APPROVE_CV);
-            this.scrollX = this.status.general ? Table.tableWidth(350, 6, 6, 60) : Table.tableWidth(350, 6, 6, 0);
+            this.scrollX = this.status.save ? Table.tableWidth(350, 6, 6, 60) : Table.tableWidth(350, 6, 6, 0);
         } else {
-            this.status.general = this.status.general && this.userService.isAccessPermisson(Roles.CVMB.EDIT_GNV);
+            this.status.save = this.status.save && this.userService.isAccessPermisson(Roles.CVMB.EDIT_GNV);
             this.status.submit = this.status.submit && this.userService.isAccessPermisson(Roles.CVMB.SUBMIT_GNV);
             this.status.pass = this.status.pass && this.userService.isAccessPermisson(Roles.CVMB.PASS_GNV);
             this.status.approve = this.status.approve && this.userService.isAccessPermisson(Roles.CVMB.APPROVE_GNV);
@@ -207,7 +207,8 @@ export class CapUngVonComponent implements OnInit {
             async (data) => {
                 if (data.statusCode == 0) {
                     this.baoCao = data.data;
-                    this.baoCao.lstCtiets.forEach(item => {
+                    this.lstCtiets = [];
+                    data.data.lstCtiets.forEach(item => {
                         this.lstCtiets.push(new CapUng(item));
                     })
                     this.listFile = [];
@@ -248,6 +249,9 @@ export class CapUngVonComponent implements OnInit {
         await this.capVonMuaBanTtthService.trinhDuyetVonMuaBan(requestGroupButtons).toPromise().then(async (data) => {
             if (data.statusCode == 0) {
                 this.baoCao.trangThai = mcn;
+                this.baoCao.ngayTrinh = data.data.ngayTrinh;
+                this.baoCao.ngayDuyet = data.data.ngayDuyet;
+                this.baoCao.ngayPheDuyet = data.data.ngayPheDuyet;
                 this.getStatusButton();
                 if (Status.check('reject', mcn)) {
                     this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);

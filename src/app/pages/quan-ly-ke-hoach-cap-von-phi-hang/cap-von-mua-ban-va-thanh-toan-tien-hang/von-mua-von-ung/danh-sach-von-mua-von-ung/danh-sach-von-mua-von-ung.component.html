@@ -84,8 +84,9 @@
                     <th *ngIf="searchFilter.loaiTimKiem == '1'">Đơn vị</th>
                     <th>Mã cấp ứng</th>
                     <th>Năm</th>
-                    <th>Loại</th>
-                    <th *ngIf="searchFilter.maLoai == '5'">Căn cứ về giá</th>
+                    <th>Đợt</th>
+                    <th *ngIf="searchFilter.maLoai != Cvmb.TIEN_THUA">Loại</th>
+                    <th *ngIf="searchFilter.maLoai == Cvmb.THANH_TOAN">Căn cứ về giá</th>
                     <th>Ngày tạo</th>
                     <th>Ngày trình duyệt</th>
                     <th>Ngày duyệt</th>
@@ -113,9 +114,12 @@
                         {{ data.namDnghi }}
                     </td>
                     <td>
+                        {{ data.dot }}
+                    </td>
+                    <td *ngIf="searchFilter.maLoai != Cvmb.TIEN_THUA">
                         {{ Cvmb.suggestionName(data.loaiDnghi)}}
                     </td>
-                    <td>
+                    <td *ngIf="searchFilter.maLoai == Cvmb.THANH_TOAN">
                         {{ Cvmb.priceBasisName(data.canCuVeGia) }}
                     </td>
                     <td>
@@ -137,7 +141,7 @@
                         </ng-container>
                     </td>
                     <td class="text-left">
-                        <!-- <a (click)="viewDetail(data)">
+                        <a (click)="viewDetail(data)">
                             <ng-container *ngIf="data.isEdit; else view">
                                 <i class="fa fa-pencil"></i>
                             </ng-container>
@@ -147,7 +151,7 @@
                         </a>
                         <a *ngIf="data.isDelete" (click)="deleteReport(data.id)">
                             <i class="fa fa-trash-o do"></i>
-                        </a> -->
+                        </a>
                     </td>
                 </tr>
             </tbody>
