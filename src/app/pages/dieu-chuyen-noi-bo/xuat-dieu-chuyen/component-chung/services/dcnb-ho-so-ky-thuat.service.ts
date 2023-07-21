@@ -5,8 +5,8 @@ import { BaseService } from "../../../../../services/base.service";
 @Injectable({
     providedIn: 'root',
 })
-export class XuatDieuChuyenService extends BaseService {
+export class HoSoKyThuatXuatDieuChuyenService extends BaseService {
     constructor(public httpClient: HttpClient) {
-        super(httpClient, 'dieu-chuyen-noi-bo/phieu-kiem-tra-chat-luong', '/qlnv-hang');
+        super(httpClient, '/dieu-chuyen-noi-bo/ho-so-ky-thuat', '/qlnv-hang');
     }
 }

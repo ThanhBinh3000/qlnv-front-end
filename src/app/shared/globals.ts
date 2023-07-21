@@ -11,4 +11,5 @@ export class Globals {
   dateFormat = 'dd/MM/yyyy';
   dateTimeFormat = 'HH:mm:ss dd/MM/yyyy';
   numberFormat: string = '1.0-1';
+  locale: string = 'vi_VN';
 }

@@ -24,6 +24,9 @@ import {
   PhieuXuatKhoService
 } from "../../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/PhieuXuatKho.service";
 import {isArray} from "rxjs/internal-compatibility";
+import {
+  PhieuKdclVtKtclService
+} from "../../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/PhieuKdclVtKtcl.service";
 
 @Component({
   selector: 'app-thong-tin-bao-cao-ket-qua-kiem-dinh',
@@ -52,6 +55,13 @@ export class ThongTinBaoCaoKetQuaKiemDinhComponent extends Base2Component implem
   expandSetString = new Set<string>();
   idPhieuKnCl: number = 0;
   openPhieuKnCl = false;
+  itemSelected: any;
+  dataTableChiTieu: any[] = [];
+  LIST_DANH_GIA: any[] = [
+    {value: 0, label: "Không đạt"},
+    {value: 1, label: "Đạt"}
+  ]
+  dataPhieuKncl: any;
 
   constructor(
     httpClient: HttpClient,
@@ -60,6 +70,7 @@ export class ThongTinBaoCaoKetQuaKiemDinhComponent extends Base2Component implem
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private phieuXuatKhoService: PhieuXuatKhoService,
+    private phieuKdclVtKtclService: PhieuKdclVtKtclService,
     private quyetDinhGiaoNvXuatHangService: QuyetDinhGiaoNvXuatHangService,
     private bckqKiemDinhMauService: BckqKiemDinhMauService,
   ) {
@@ -114,12 +125,15 @@ export class ThongTinBaoCaoKetQuaKiemDinhComponent extends Base2Component implem
       await this.bckqKiemDinhMauService.getDetail(idInput)
         .then((res) => {
           if (res.msg == MESSAGE.SUCCESS) {
-            this.formData.patchValue(res.data);
+            // this.formData.patchValue(res.data);
             this.formData.patchValue({
-              soQdGiaoNvXh: res.data ? (res.data.soQdGiaoNvXh.indexOf(",") > 0 ? res.data.soQdGiaoNvXh.split(",") : [res.data.soQdGiaoNvXh]) : []
+              id: res.data.id,
+              tenDvi: res.data.tenDvi,
+              soBaoCao: res.data.soBaoCao,
+              ngayBaoCao: res.data.ngayBaoCao,
+              tenBaoCao: res.data.tenBaoCao,
+              soQdGiaoNvXh: res.data?.soQdGiaoNvXh ? (res.data.soQdGiaoNvXh.indexOf(",") > 0 ? res.data.soQdGiaoNvXh.split(",") : [res.data.soQdGiaoNvXh]) : []
             });
-            // let idsQdGiaoNxXh = res.data ? (res.data.idQdGiaoNvXh.indexOf(",") > 0 ? res.data.idQdGiaoNvXh.split(",") : [res.data.idQdGiaoNvXh]) : [];
-            // this.getDetailPxk(idsQdGiaoNxXh);
           }
         })
         .catch((e) => {
@@ -132,12 +146,12 @@ export class ThongTinBaoCaoKetQuaKiemDinhComponent extends Base2Component implem
         maDvi: this.userInfo.MA_DVI,
         tenDvi: this.userInfo.TEN_DVI,
       });
-      if (this.soQdGiaoNvXh) {
-        let dataQdGiaoNvXh = this.listSoQuyetDinh.find(item => item.soQuyetDinh == this.soQdGiaoNvXh);
-        if (dataQdGiaoNvXh) {
-          // this.bindingDataQd(dataQdGiaoNvXh);
-        }
-      }
+      // if (this.soQdGiaoNvXh) {
+      //   let dataQdGiaoNvXh = this.listSoQuyetDinh.find(item => item.soQuyetDinh == this.soQdGiaoNvXh);
+      //   if (dataQdGiaoNvXh) {
+      //     // this.bindingDataQd(dataQdGiaoNvXh);
+      //   }
+      // }
     }
   }
 
@@ -177,7 +191,10 @@ export class ThongTinBaoCaoKetQuaKiemDinhComponent extends Base2Component implem
       }).then((res) => {
         if (res.msg == MESSAGE.SUCCESS) {
           this.listPhieuXuatKho = res.data.content;
+          this.selectRow(this.listPhieuXuatKho[0]);
           this.buildTableView();
+        } else {
+          this.notification.error(MESSAGE.ERROR, 'Có lỗi xảy ra.' + res.msg);
         }
       });
     }
@@ -196,7 +213,6 @@ export class ThongTinBaoCaoKetQuaKiemDinhComponent extends Base2Component implem
         };
       }).value();
     this.children = dataView
-    console.log(this.children, 'this.children this.children this.children');
     this.expandAll()
   }
 
@@ -269,5 +285,28 @@ export class ThongTinBaoCaoKetQuaKiemDinhComponent extends Base2Component implem
   closePhieuKnClModal() {
     this.idPhieuKnCl = null;
     this.openPhieuKnCl = false;
+  }
+
+  async selectRow(data) {
+    if (this.itemSelected) {
+      this.itemSelected = null;
+      this.dataTable.forEach(parent => {
+        if (parent.dataChild && parent.dataChild.length > 0) {
+          parent.dataChild.forEach(lv1 => {
+            lv1.selected = false;
+          });
+        }
+      });
+    }
+    await await this.phieuKdclVtKtclService.getDetail(data.idPhieuKncl).then((res) => {
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.dataTableChiTieu = res.data.xhXkVtPhieuKdclDtl;
+        this.dataPhieuKncl = res.data;
+      } else {
+        this.notification.error(MESSAGE.ERROR, 'Có lỗi xảy ra.' + res.msg);
+      }
+    });
+    data.selected = true;
+    this.itemSelected = data;
   }
 }

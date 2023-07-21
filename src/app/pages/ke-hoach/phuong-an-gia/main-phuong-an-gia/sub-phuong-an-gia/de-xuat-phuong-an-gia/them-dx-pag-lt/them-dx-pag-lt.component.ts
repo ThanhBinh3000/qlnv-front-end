@@ -233,9 +233,12 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
         soCanCu: data.soCanCu,
         qdCtKhNam: data.qdCtKhNam,
         tenTrangThai: data.tenTrangThai,
-        apDungTatCa: data.apDungTatCa,
         lyDoTuChoi: data.lyDoTuChoi
       })
+      this.isApDungTatCa = data.apDungTatCa;
+      if (this.isApDungTatCa == true) {
+        this.giaDn = this.pagTtChungs[0]?.giaDn
+      }
       this.dataTableCanCuXdg = data.canCuPhapLy;
       this.dsDiaDiemDeHang = data.diaDiemDeHangs;
       this.pagTtChungs = data.pagTtChungs;
@@ -313,24 +316,24 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
       this.listCtieuKeHoach = this.dataChiTieu && this.dataChiTieu.khMuoiDuTru && this.dataChiTieu.khMuoiDuTru.length > 0 ? this.dataChiTieu.khMuoiDuTru : [];
     }
     if (this.listCtieuKeHoach && this.listCtieuKeHoach.length > 0) {
-        if (this.pagTtChungs && this.pagTtChungs.length > 0) {
-          this.pagTtChungs.forEach(pagTtChung => {
-            pagTtChung.soLuongCtieu = '';
-            let ctieuChiCuc = this.listCtieuKeHoach.filter(ctieu => ctieu.maDonVi == pagTtChung.maChiCuc);
-            if (ctieuChiCuc && ctieuChiCuc.length > 0) {
-              if (event.startsWith("0101")) {
-                pagTtChung.soLuongCtieu = ctieuChiCuc[0]?.ntnThoc
-              }
-              if (event.startsWith("0102")) {
-                pagTtChung.soLuongCtieu = ctieuChiCuc[0]?.ntnGao
-              }
-              if (event.startsWith("04")) {
-                pagTtChung.soLuongCtieu = ctieuChiCuc[0]?.nhapTrongNam
-              }
+      if (this.pagTtChungs && this.pagTtChungs.length > 0) {
+        this.pagTtChungs.forEach(pagTtChung => {
+          pagTtChung.soLuongCtieu = '';
+          let ctieuChiCuc = this.listCtieuKeHoach.filter(ctieu => ctieu.maDonVi == pagTtChung.maChiCuc);
+          if (ctieuChiCuc && ctieuChiCuc.length > 0) {
+            if (event.startsWith("0101")) {
+              pagTtChung.soLuongCtieu = ctieuChiCuc[0]?.ntnThoc
             }
-          })
-        }
+            if (event.startsWith("0102")) {
+              pagTtChung.soLuongCtieu = ctieuChiCuc[0]?.ntnGao
+            }
+            if (event.startsWith("04")) {
+              pagTtChung.soLuongCtieu = ctieuChiCuc[0]?.nhapTrongNam
+            }
+          }
+        })
       }
+    }
     let body = {
       "str": event
     };
@@ -615,9 +618,9 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
 
   required(): string {
     let message;
-      if (!this.rowItemCcXdg.moTa || !this.rowItemCcXdg.fileDinhKem) {
-        message = 'Vui lòng nhập đủ thông tin'
-      }
+    if (!this.rowItemCcXdg.moTa || !this.rowItemCcXdg.fileDinhKem) {
+      message = 'Vui lòng nhập đủ thông tin'
+    }
     return message;
   }
 
@@ -628,20 +631,20 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
       this.spinner.hide();
       return;
     }
-      this.dataTableCanCuXdg = [...this.dataTableCanCuXdg, this.rowItemCcXdg];
-      this.rowItemCcXdg = new CanCuXacDinhPag();
-      this.updateEditCache();
-    }
+    this.dataTableCanCuXdg = [...this.dataTableCanCuXdg, this.rowItemCcXdg];
+    this.rowItemCcXdg = new CanCuXacDinhPag();
+    this.updateEditCache();
+  }
 
   startEdit(index: number) {
-      this.dataEdit[index].edit = true;
+    this.dataEdit[index].edit = true;
   }
 
   cancelEdit(index: number) {
-      this.dataEdit[index] = {
-        data: {...this.dataTableCanCuXdg[index]},
-        edit: false,
-      };
+    this.dataEdit[index] = {
+      data: {...this.dataTableCanCuXdg[index]},
+      edit: false,
+    };
   }
 
   saveEdit(idx: number) {
@@ -659,8 +662,8 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
       nzWidth: 400,
       nzOnOk: async () => {
         try {
-            this.dataTableCanCuXdg.splice(index, 1);
-            this.updateEditCache();
+          this.dataTableCanCuXdg.splice(index, 1);
+          this.updateEditCache();
         } catch (e) {
           console.log('error', e);
         }
@@ -669,14 +672,14 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
   }
 
   updateEditCache(): void {
-      if (this.dataTableCanCuXdg) {
-        this.dataTableCanCuXdg.forEach((item, index) => {
-          this.dataEdit[index] = {
-            edit: false,
-            data: {...item},
-          };
-        });
-      }
+    if (this.dataTableCanCuXdg) {
+      this.dataTableCanCuXdg.forEach((item, index) => {
+        this.dataEdit[index] = {
+          edit: false,
+          data: {...item},
+        };
+      });
+    }
   }
 
   onChangePp() {
@@ -775,7 +778,8 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
       tgianNhang: data.tgianNhang,
       soCanCu: data.soCanCu,
       qdCtKhNam: data.qdCtKhNam,
-      loaiDeXuat  : data.loaiDeXuat > 0 ? data.loaiDeXuat.toNumber() + 1 : 1
+      type: data.type,
+      loaiDeXuat: data.loaiDeXuat > 0 ? data.loaiDeXuat + 1 : 1
     })
     this.dataTableCanCuXdg = data.canCuPhapLy;
     this.dsDiaDiemDeHang = data.diaDiemDeHangs;
@@ -827,6 +831,12 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
         soLuong: null,
         diaDiemDeHang: null,
       })
+    }
+  }
+
+  changeSoLuong(data) {
+    if (this.formData.value.loaiGia == 'LG01' || this.formData.value.loaiGia == 'LG03') {
+
     }
   }
 }

@@ -164,10 +164,8 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
       // if (!this.idInput) {
       //   this.formData.patchValue({ ...this.passData });
       // }
-      this.spinner.hide();
     } catch (e) {
       this.notification.error(MESSAGE.ERROR, 'Có lỗi xảy ra.');
-      this.spinner.hide();
       console.log("error", e)
     } finally {
       this.spinner.hide();
@@ -219,7 +217,7 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
         const [chiTietHangHoa, dataChiTieu] = await Promise.all([this.danhMucService.loadDanhMucHangChiTiet(this.passData.cloaiVthh), this.getTieuChiCanKiemTra(this.passData.loaiVthh)]);
         this.phuongPhapLayMaus = Array.isArray(chiTietHangHoa?.data?.ppLayMau) ? chiTietHangHoa?.data?.ppLayMau.map(f => ({ ...f, checked: false })) : [];
         if (dataChiTieu?.msg === MESSAGE.SUCCESS) {
-          this.getChiTietTieuChiCanKiemTra(dataChiTieu.data?.content[0]?.id, this.passData.cloaiVthh)
+          await this.getChiTietTieuChiCanKiemTra(dataChiTieu.data?.content[0]?.id, this.passData.cloaiVthh)
         }
       }
     }

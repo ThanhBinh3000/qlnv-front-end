@@ -52,8 +52,7 @@
     <div class="group-button">
       <h3> DANH SÁCH QUYẾT ĐỊNH GIAO NHIỆM VỤ NHẬP HÀNG </h3>
       <div class="buttons">
-        <button type="button" class="btn btn-do" (click)="deleteSelect()" *ngIf="userService.isCuc()
-        && userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_XOA')">
+        <button type="button" class="btn btn-do" (click)="deleteSelect()">
           <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
           <span>Xóa</span>
         </button>
@@ -62,8 +61,7 @@
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button type="button" class="btn btn-main" (click)="redirectToThongTin(0)" *ngIf="userService.isCuc()
-        && userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_THEM') ">
+        <button type="button" class="btn btn-main" (click)="redirectToThongTin(0)">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Tạo quyết định</span>
         </button>
@@ -209,8 +207,7 @@
                (click)="redirectToThongTin(data.id, true)">
               <i class="icon htvbdh_tcdt_pheduyet"></i>
             </a>
-            <a (click)="xoaItem(data)" *ngIf="userService.isCuc() && data.trangThai == STATUS.DU_THAO
-              && userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_XOA')">
+            <a (click)="xoaItem(data)">
               <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>
