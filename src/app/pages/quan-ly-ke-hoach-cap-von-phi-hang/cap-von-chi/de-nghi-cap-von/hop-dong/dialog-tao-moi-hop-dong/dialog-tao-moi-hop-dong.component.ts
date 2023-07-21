@@ -181,7 +181,6 @@ export class DialogTaoMoiHopDongComponent implements OnInit {
             (data) => {
                 if (data.statusCode == 0) {
                     data.data.forEach(item => {
-                        console.log('item', item)
                         const temp: ItemContract = {
                             ... new ItemContract(),
                             id: uuid.v4() + 'FE',
