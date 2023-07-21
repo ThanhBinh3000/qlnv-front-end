@@ -97,14 +97,13 @@ export class KiemNghiemChatLuongComponent extends Base2Component implements OnIn
     this.isVisibleChangeTab$.subscribe((value: boolean) => {
       this.visibleTab = value;
     });
-    console.log('KiemNghiemChatLuongComponentloaiDc', this.loaiDc)
-    // if (this.idTHop)
-    //   this.redirectDetail(0, false)
+    this.formData.patchValue({
+      loaiDc: this.loaiDc
+    })
 
     try {
       this.initData()
       await this.timKiem();
-      // await this.loadDsVthh();
       await this.spinner.hide();
 
     } catch (e) {

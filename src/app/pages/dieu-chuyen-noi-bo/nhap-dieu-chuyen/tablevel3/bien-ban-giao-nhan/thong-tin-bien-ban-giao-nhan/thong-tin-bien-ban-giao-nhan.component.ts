@@ -81,6 +81,7 @@ export class ThongTinBienBanGiaoNhanComponent extends Base2Component implements 
     this.formData = this.fb.group({
       type: ["01"],
       loaiDc: [this.loaiDc],
+      isVatTu: [true],
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự thảo'],
       nam: [dayjs().get("year"), [Validators.required]],

@@ -30,34 +30,7 @@ export class BangKeNhapVatTuComponent extends Base2Component implements OnInit {
   tabSelected: number = 0;
   @Input() loaiDc: string;
 
-  // @Input()
-  // loaiVthh: string;
-  // @Input()
-  // loaiVthhCache: string;
-
-  // CHUC_NANG = CHUC_NANG;
-  // listLoaiDieuChuyen: any[] = [
-  //   { ma: "ALL", ten: "Tất cả" },
-  //   { ma: "CHI_CUC", ten: "Giữa 2 chi cục trong cùng 1 cục" },
-  //   { ma: "CUC", ten: "Giữa 2 cục DTNN KV" },
-  // ];
-  // listLoaiDCFilterTable: any[] = [
-  //   { ma: "CHI_CUC", ten: "Giữa 2 chi cục trong cùng 1 cục" },
-  //   { ma: "CUC", ten: "Giữa 2 cục DTNN KV" },
-  // ];
   dataTableView: any[] = [];
-  // listLoaiHangHoa: any[] = [];
-  // listHangHoaAll: any[] = [];
-  // listChungLoaiHangHoa: any[] = [];
-  // listTrangThai: any[] = [
-  //   { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
-  //   { ma: this.STATUS.CHO_DUYET_TP, giaTri: 'Chờ duyệt - TP' },
-  //   { ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối - TP' },
-  //   { ma: this.STATUS.CHO_DUYET_LDC, giaTri: 'Chờ duyệt - LĐ Cục' },
-  //   { ma: this.STATUS.TU_CHOI_LDC, giaTri: 'Từ chối - LĐ Cục' },
-  //   { ma: this.STATUS.DA_DUYET_LDC, giaTri: 'Đã duyệt - LĐ Cục' },
-  //   { ma: this.STATUS.DA_TAO_CBV, giaTri: 'Đã tạo - CB Vụ' },
-  // ];
 
   constructor(
     httpClient: HttpClient,
@@ -77,7 +50,8 @@ export class BangKeNhapVatTuComponent extends Base2Component implements OnInit {
       ngayHieuLuc: null,
       trichYeu: null,
       type: ["01"],
-      loaiDc: ["DCNB"]
+      loaiDc: ["DCNB"],
+      isVatTu: [true],
     })
     this.filterTable = {
       nam: '',
@@ -93,54 +67,23 @@ export class BangKeNhapVatTuComponent extends Base2Component implements OnInit {
     };
   }
 
-
-  // dsDonvi: any[] = [];
-  // userInfo: UserLogin;
   data: any = {};
   selectedId: number = 0;
-  // isVatTu: boolean = false;
   isView = false;
 
-  // disabledStartNgayLapKh = (startValue: Date): boolean => {
-  //   if (startValue && this.formData.value.ngayLapKhDen) {
-  //     return startValue.getTime() > this.formData.value.ngayLapKhDen.getTime();
-  //   } else {
-  //     return false;
-  //   }
-  // };
-
-  // disabledEndNgayLapKh = (endValue: Date): boolean => {
-  //   if (!endValue || !this.formData.value.ngayLapKhTu) {
-  //     return false;
-  //   }
-  //   return endValue.getTime() <= this.formData.value.ngayLapKhDen.getTime();
-  // };
-
-  // disabledStartNgayDuyetLdc = (startValue: Date): boolean => {
-  //   if (startValue && this.formData.value.ngayDuyetLdcDen) {
-  //     return startValue.getTime() > this.formData.value.ngayDuyetLdcDen.getTime();
-  //   }
-  //   return false;
-  // };
-
-  // disabledEndNgayDuyetLdc = (endValue: Date): boolean => {
-  //   if (!endValue || !this.formData.value.ngayDuyetLdcTu) {
-  //     return false;
-  //   }
-  //   return endValue.getTime() <= this.formData.value.ngayDuyetLdcDen.getTime();
-  // };
 
   async ngOnInit() {
     this.isVisibleChangeTab$.subscribe((value: boolean) => {
       this.visibleTab = value;
     });
 
-
+    this.formData.patchValue({
+      loaiDc: this.loaiDc
+    })
 
     try {
       this.initData()
       await this.timKiem();
-      // await this.loadDsVthh();
       await this.spinner.hide();
 
     } catch (e) {

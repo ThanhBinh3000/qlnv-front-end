@@ -47,7 +47,8 @@ export class BienBanKetThucNhapKhoComponent extends Base2Component implements On
       ngayLap: null,
       ngayKetThucNt: null,
       type: ["01"],
-      loaiDc: ["DCNB"]
+      loaiDc: ["DCNB"],
+      isVatTu: [true]
     })
   }
 
@@ -60,7 +61,9 @@ export class BienBanKetThucNhapKhoComponent extends Base2Component implements On
     this.isVisibleChangeTab$.subscribe((value: boolean) => {
       this.visibleTab = value;
     });
-
+    this.formData.patchValue({
+      loaiDc: this.loaiDc
+    })
 
     try {
       this.initData()

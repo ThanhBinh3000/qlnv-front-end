@@ -109,6 +109,10 @@ export class BangKeCanHangComponent extends Base2Component implements OnInit {
       this.visibleTab = value;
     });
 
+    this.formData.patchValue({
+      loaiDc: this.loaiDc
+    })
+
     try {
       this.initData()
       await this.timKiem();

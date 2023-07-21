@@ -123,7 +123,7 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
       nhanXet: [],
       type: ["01"],
       loaiDc: ["DCNB"],
-
+      isVatTu: [true],
       noiDung: [],
       soLuongTrongNam: [],
       donGiaTrongNam: [],
@@ -141,7 +141,7 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
       maQhns: this.userInfo.DON_VI.maQhns,
       ktvBaoQuan: this.userInfo.TEN_DAY_DU,
       soBban: `${id}/${this.formData.get('nam').value}/${this.maBb}`,
-
+      loaiDc: this.loaiDc
     })
     await this.getListNhomCcdc()
     if (this.idInput) {
