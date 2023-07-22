@@ -97,14 +97,13 @@ export class KiemNghiemChatLuongComponent extends Base2Component implements OnIn
     this.isVisibleChangeTab$.subscribe((value: boolean) => {
       this.visibleTab = value;
     });
-    console.log('KiemNghiemChatLuongComponentloaiDc', this.loaiDc)
-    // if (this.idTHop)
-    //   this.redirectDetail(0, false)
+    this.formData.patchValue({
+      loaiDc: this.loaiDc
+    })
 
     try {
       this.initData()
       await this.timKiem();
-      // await this.loadDsVthh();
       await this.spinner.hide();
 
     } catch (e) {
@@ -258,6 +257,7 @@ export class KiemNghiemChatLuongComponent extends Base2Component implements OnIn
 
   add(data: any) {
     this.data = data;
+    this.selectedId = 0
     this.isDetail = true;
     this.isView = false;
   }
@@ -291,10 +291,10 @@ export class KiemNghiemChatLuongComponent extends Base2Component implements OnIn
   }
 
   redirectDetail(id, b: boolean) {
+    this.data = null
     this.selectedId = id;
     this.isDetail = true;
     this.isView = b;
-    // this.isViewDetail = isView ?? false;
   }
 
   quayLai() {

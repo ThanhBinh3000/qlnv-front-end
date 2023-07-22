@@ -67,7 +67,9 @@ export class KiemTraChatLuongComponent extends Base2Component implements OnInit 
       this.visibleTab = value;
     });
 
-
+    this.formData.patchValue({
+      loaiDc: this.loaiDc
+    })
 
     try {
       this.initData()
@@ -95,6 +97,10 @@ export class KiemTraChatLuongComponent extends Base2Component implements OnInit 
 
   isCuc() {
     return this.userService.isCuc()
+  }
+
+  isSua(row) {
+    return row.trangThai == STATUS.DU_THAO || row.trangThai == STATUS.TU_CHOI_LDC
   }
 
   selectTab(tab: number) {
@@ -296,6 +302,7 @@ export class KiemTraChatLuongComponent extends Base2Component implements OnInit 
 
   add(data: any) {
     this.data = data;
+    this.selectedId = 0
     this.isDetail = true;
     this.isView = false;
   }
@@ -329,6 +336,7 @@ export class KiemTraChatLuongComponent extends Base2Component implements OnInit 
   }
 
   redirectDetail(id, b: boolean) {
+    this.data = null
     this.selectedId = id;
     this.isDetail = true;
     this.isView = b;

@@ -72,6 +72,7 @@ export class ThongTinKsgComponent implements OnInit, OnChanges {
       this.rowItem.cloaiVthh = (this.dataCloaiVthh.tenCloaiVthh ? this.dataCloaiVthh.tenCloaiVthh  + '; ' : '') + (this.dataCloaiVthh.moTa ? this.dataCloaiVthh.moTa + '; ' : '') + (this.dataCloaiVthh.tchuanCluong ? this.dataCloaiVthh.tchuanCluong : '' )
       this.isApDung = this.dataCloaiVthh.apDungTatCa
     }
+    this.updateEditCache();
   }
 
 

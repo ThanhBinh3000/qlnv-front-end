@@ -147,9 +147,12 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
     }
 
     if (this.data) {
+      console.log('this.data', this.data)
       this.formData.patchValue({
+        trangThai: STATUS.DU_THAO,
+        tenTrangThai: 'Dự thảo',
         soQdinhDc: this.data.soQdinh,
-        ngayQdinhDc: this.data.ngayKyQdinh,
+        ngayQdinhDc: this.data.ngayHieuLucQd,
         qdDcId: this.data.qdinhDccId,
         tenLoKho: this.data.tenLoKhoNhan,
         maLoKho: this.data.maLoKhoNhan,
@@ -167,10 +170,10 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
         maNhaKhoXuat: this.data.maNhaKhoXuat,
         tenDiemKhoXuat: this.data.tenDiemKhoXuat,
         maDiemKhoXuat: this.data.maDiemKhoXuat,
-        loaiVthh: this.data.loaiVthh,
-        tenLoaiVthh: this.data.tenLoaiVthh,
-        cloaiVthh: this.data.cloaiVthh,
-        tenCloaiVthh: this.data.tenCloaiVthh,
+        loaiVthh: this.data.maHangHoa,
+        tenLoaiVthh: this.data.tenHangHoa,
+        cloaiVthh: this.data.maChLoaiHangHoa,
+        tenCloaiVthh: this.data.tenChLoaiHangHoa,
         tichLuongKhaDung: this.data.tichLuongKd,
         tenDonViTinh: this.data.tenDonViTinh,
       });
@@ -458,28 +461,38 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
   }
 
   async guiDuyet() {
-    let trangThai = STATUS.CHO_DUYET_LDC;
+    let trangThai = STATUS.CHO_DUYET_TP;
     let mesg = 'Bạn muốn gửi duyệt văn bản?'
     this.approve(this.idInput, trangThai, mesg);
   }
 
   isTuChoi() {
-    return this.formData.value.trangThai == STATUS.CHO_DUYET_LDC
+    return this.formData.value.trangThai == STATUS.CHO_DUYET_TP || this.formData.value.trangThai == STATUS.CHO_DUYET_LDC
   }
 
   async tuChoi() {
-    let trangThai = STATUS.TU_CHOI_LDC;
-    this.reject(this.idInput, trangThai);
+    let trangThai = () => {
+      if (this.formData.value.trangThai == STATUS.CHO_DUYET_TP)
+        return STATUS.TU_CHOI_TP
+      if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDC)
+        return STATUS.TU_CHOI_LDC
+    };
+    this.reject(this.idInput, trangThai());
   }
 
   isPheDuyet() {
-    return this.formData.value.trangThai == STATUS.CHO_DUYET_LDC
+    return this.formData.value.trangThai == STATUS.CHO_DUYET_TP || this.formData.value.trangThai == STATUS.CHO_DUYET_LDC
   }
 
   async pheDuyet() {
-    let trangThai = STATUS.DA_DUYET_LDC;
+    let trangThai = () => {
+      if (this.formData.value.trangThai == STATUS.CHO_DUYET_TP)
+        return STATUS.CHO_DUYET_LDC
+      if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDC)
+        return STATUS.DA_DUYET_LDC
+    };
     let mesg = 'Bạn muốn phê duyệt văn bản?'
-    this.approve(this.idInput, trangThai, mesg);
+    this.approve(this.idInput, trangThai(), mesg);
 
   }
 

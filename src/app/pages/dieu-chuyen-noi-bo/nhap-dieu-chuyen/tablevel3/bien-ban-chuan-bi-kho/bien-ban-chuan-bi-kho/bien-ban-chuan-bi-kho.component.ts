@@ -32,34 +32,7 @@ export class BienBanChuanBiKhoComponent extends Base2Component implements OnInit
   tabSelected: number = 0;
   @Input() loaiDc: string;
 
-  // @Input()
-  // loaiVthh: string;
-  // @Input()
-  // loaiVthhCache: string;
-
-  // CHUC_NANG = CHUC_NANG;
-  // listLoaiDieuChuyen: any[] = [
-  //   { ma: "ALL", ten: "Tất cả" },
-  //   { ma: "CHI_CUC", ten: "Giữa 2 chi cục trong cùng 1 cục" },
-  //   { ma: "CUC", ten: "Giữa 2 cục DTNN KV" },
-  // ];
-  // listLoaiDCFilterTable: any[] = [
-  //   { ma: "CHI_CUC", ten: "Giữa 2 chi cục trong cùng 1 cục" },
-  //   { ma: "CUC", ten: "Giữa 2 cục DTNN KV" },
-  // ];
   dataTableView: any[] = [];
-  // listLoaiHangHoa: any[] = [];
-  // listHangHoaAll: any[] = [];
-  // listChungLoaiHangHoa: any[] = [];
-  // listTrangThai: any[] = [
-  //   { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
-  //   { ma: this.STATUS.CHO_DUYET_TP, giaTri: 'Chờ duyệt - TP' },
-  //   { ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối - TP' },
-  //   { ma: this.STATUS.CHO_DUYET_LDC, giaTri: 'Chờ duyệt - LĐ Cục' },
-  //   { ma: this.STATUS.TU_CHOI_LDC, giaTri: 'Từ chối - LĐ Cục' },
-  //   { ma: this.STATUS.DA_DUYET_LDC, giaTri: 'Đã duyệt - LĐ Cục' },
-  //   { ma: this.STATUS.DA_TAO_CBV, giaTri: 'Đã tạo - CB Vụ' },
-  // ];
 
   constructor(
     httpClient: HttpClient,
@@ -77,16 +50,14 @@ export class BienBanChuanBiKhoComponent extends Base2Component implements OnInit
       ngayLap: null,
       ngayKetThuc: null,
       type: ["01"],
+      isVatTu: [true],
       loaiDc: ["DCNB"]
     })
   }
 
 
-  // dsDonvi: any[] = [];
-  // userInfo: UserLogin;
   data: any = {};
   selectedId: number = 0;
-  // isVatTu: boolean = false;
   isView = false;
 
 
@@ -95,14 +66,13 @@ export class BienBanChuanBiKhoComponent extends Base2Component implements OnInit
     this.isVisibleChangeTab$.subscribe((value: boolean) => {
       this.visibleTab = value;
     });
-
-    // if (this.idTHop)
-    //   this.redirectDetail(0, false)
+    this.formData.patchValue({
+      loaiDc: this.loaiDc
+    })
 
     try {
       this.initData()
       await this.timKiem();
-      // await this.loadDsVthh();
       await this.spinner.hide();
 
     } catch (e) {
@@ -181,6 +151,7 @@ export class BienBanChuanBiKhoComponent extends Base2Component implements OnInit
     // console.log('DSQuyetDinhDieuChuyenComponent/this.formData.value=>', this.formData.value)
     // await this.search();
     let body = this.formData.value
+    if (body.soQdinh) body.soQdinh = `${body.soQdinh}\DCNB`
     body.paggingReq = {
       limit: this.pageSize,
       page: this.page - 1
@@ -235,6 +206,7 @@ export class BienBanChuanBiKhoComponent extends Base2Component implements OnInit
 
   add(data: any) {
     this.data = data;
+    this.selectedId = 0
     this.isDetail = true;
     this.isView = false;
   }
@@ -298,10 +270,10 @@ export class BienBanChuanBiKhoComponent extends Base2Component implements OnInit
   }
 
   redirectDetail(id, b: boolean) {
+    this.data = null
     this.selectedId = id;
     this.isDetail = true;
     this.isView = b;
-    // this.isViewDetail = isView ?? false;
   }
 
   quayLai() {

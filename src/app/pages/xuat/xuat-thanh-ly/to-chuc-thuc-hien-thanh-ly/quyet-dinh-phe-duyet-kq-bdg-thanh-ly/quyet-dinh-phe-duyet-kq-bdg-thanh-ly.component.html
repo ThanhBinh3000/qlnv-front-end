@@ -251,33 +251,22 @@
   </nz-card>
 </div>
 <div *ngIf="isDetail" class="chi-tiet">
-  <!--  <app-chi-tiet-qd-pd-ket-qua-bdg [loaiVthh]="loaiVthh" [idInput]="idSelected" (showListEvent)="showList()">-->
-  <!--  </app-chi-tiet-qd-pd-ket-qua-bdg>-->
+  <app-chi-tiet-quyet-dinh-phe-duyet-bdg-thanh-ly [idSelected]="idSelected" [isView]="isView"
+                                                  (showListEvent)="showList()">
+  </app-chi-tiet-quyet-dinh-phe-duyet-bdg-thanh-ly>
 </div>
 
-<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdPd" (nzOnCancel)="closeModalQdPd()">
-  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-    <!--    <app-them-quyet-dinh-ban-dau-gia [idInput]="idQdPd" [loaiVthh]="loaiVthh" [isViewOnModal]="true">-->
-    <!--    </app-them-quyet-dinh-ban-dau-gia>-->
-  </ng-container>
-  <div *nzModalFooter>
-    <button nz-button (click)="closeModalQdPd()" class="modal__button--cancel">
-      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
-      Đóng
-    </button>
-  </div>
-</nz-modal>
 
-<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewThongTin"
+<!--<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewThongTin"
           (nzOnCancel)="closeModalMaThongBao()">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-<!--    <app-chi-tiet-quyet-dinh-phe-duyet-bdg-thanh-ly [id]="idThongTin" [isView]="isEdit">-->
-<!--    </app-chi-tiet-quyet-dinh-phe-duyet-bdg-thanh-ly>-->
+    <app-chi-tiet-quyet-dinh-phe-duyet-bdg-thanh-ly [id]="idThongTin" [isView]="isView">
+    </app-chi-tiet-quyet-dinh-phe-duyet-bdg-thanh-ly>
   </ng-container>
   <div *nzModalFooter>
-    <button nz-button (click)="closeModalMaThongBao()" class="modal__button--cancel">
+    <button nz-button (click)="closeModalMaThongBao()" class="modal__button&#45;&#45;cancel">
       <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
       Đóng
     </button>
   </div>
-</nz-modal>
+</nz-modal>-->

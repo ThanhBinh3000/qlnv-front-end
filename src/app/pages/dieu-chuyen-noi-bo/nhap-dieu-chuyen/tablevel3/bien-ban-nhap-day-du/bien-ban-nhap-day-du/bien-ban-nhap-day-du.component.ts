@@ -315,7 +315,7 @@ export class BienBanNhapDayDuComponent extends Base2Component implements OnInit 
   }
 
   add(data: any) {
-    this.selectedId = null;
+    this.selectedId = 0;
     this.data = data;
     this.isDetail = true;
     this.isView = false;
@@ -384,7 +384,6 @@ export class BienBanNhapDayDuComponent extends Base2Component implements OnInit 
     this.data = null
     this.isDetail = true;
     this.isView = b;
-    // this.isViewDetail = isView ?? false;
   }
 
   quayLai() {

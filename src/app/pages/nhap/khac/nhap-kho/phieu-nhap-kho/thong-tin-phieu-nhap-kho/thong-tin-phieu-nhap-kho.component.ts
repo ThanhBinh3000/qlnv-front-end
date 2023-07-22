@@ -465,7 +465,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
           donViTinh: data.tenDonViTinh,
           tenDonViTinh: data.tenDonViTinh,
         });
-        this.dviTinh = data.tenDonViTinh || "Kg"
+        this.dviTinh = data.tenDonViTinh
         this.donGia = data.donGia
 
         let body = {

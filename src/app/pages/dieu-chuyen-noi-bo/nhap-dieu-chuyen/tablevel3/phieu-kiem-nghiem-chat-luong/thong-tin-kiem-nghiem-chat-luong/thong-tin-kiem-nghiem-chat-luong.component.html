@@ -233,7 +233,7 @@
             <nz-form-item>
               <nz-form-label [nzNoColon]="true">Số BB nhập đầy kho</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogBBLM()">
+                <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogBBNDK()">
                   <input [readonly]="true" nz-input formControlName="soBbTinhKho" readonly="true" />
                 </nz-input-group>
               </nz-form-control>
@@ -242,7 +242,7 @@
 
           <div nz-col nzSpan="4">
             <nz-form-item>
-              <nz-form-label nzRequired [nzNoColon]="true">Số lượng hàng bảo quản
+              <nz-form-label [nzNoColon]="true">Số lượng hàng bảo quản
               </nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
                 <input nz-input formControlName="slHangBQ" [readonly]="true" />
@@ -262,16 +262,16 @@
 
           <div nz-col nzSpan="4">
             <nz-form-item>
-              <nz-form-label nzRequired [nzNoColon]="true">Loại hàng hoá
+              <nz-form-label [nzNoColon]="true">Loại hàng
               </nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
-                <input nz-input formControlName="loaiVthh" [readonly]="true" />
+                <input nz-input formControlName="tenLoaiVthh" [readonly]="true" />
               </nz-form-control>
             </nz-form-item>
           </div>
           <div nz-col nzSpan="4">
             <nz-form-item>
-              <nz-form-label nzRequired [nzNoColon]="true">Chủng loại hàng hoá
+              <nz-form-label [nzNoColon]="true">Chủng loại hàng
               </nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
                 <input nz-input formControlName="tenCloaiVthh" [readonly]="true" />
@@ -281,7 +281,7 @@
 
           <div nz-col nzSpan="4">
             <nz-form-item>
-              <nz-form-label nzRequired [nzNoColon]="true">Đơn vị tính
+              <nz-form-label [nzNoColon]="true">Đơn vị tính
               </nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
                 <input nz-input formControlName="tenDonViTinh" [readonly]="true" />

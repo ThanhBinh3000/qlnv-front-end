@@ -13,6 +13,7 @@ import { MESSAGE } from "src/app/constants/message";
 import { STATUS } from "src/app/constants/status";
 import { DanhMucService } from "src/app/services/danhmuc.service";
 import { BienBanNghiemThuBaoQuanLanDauService } from "src/app/services/dieu-chuyen-noi-bo/nhap-dieu-chuyen/bien-ban-nghiem-thu-bao-quan-lan-dau.service";
+import { BienBanNhapDayKhoService } from "src/app/services/dieu-chuyen-noi-bo/nhap-dieu-chuyen/bien-ban-nhap-day-kho";
 import { PhieuKiemNghiemChatLuongService } from "src/app/services/dieu-chuyen-noi-bo/nhap-dieu-chuyen/phieu-kiem-nghiem-chat-luong";
 import { QuyetDinhDieuChuyenCucService } from "src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-c.service";
 import { DanhMucTieuChuanService } from "src/app/services/quantri-danhmuc/danhMucTieuChuan.service";
@@ -28,6 +29,7 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
   @Input() loaiDc: string;
   @Input() idInput: number;
   @Input() isView: boolean;
+  @Input() data: any;
   @Output()
   showListEvent = new EventEmitter<any>();
 
@@ -57,6 +59,7 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
     private danhMucService: DanhMucService,
     private danhMucTieuChuanService: DanhMucTieuChuanService,
     private quyetDinhDieuChuyenCucService: QuyetDinhDieuChuyenCucService,
+    private bienBanNhapDayKhoService: BienBanNhapDayKhoService,
     private phieuKiemNghiemChatLuongService: PhieuKiemNghiemChatLuongService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, phieuKiemNghiemChatLuongService);
@@ -87,6 +90,7 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
       thuKhoId: [],
       soBbLayMau: [],
       ngayLayMau: [],
+      bbLayMauId: [],
       ngayKiem: [],
       soBbTinhKho: [],
       slHangBQ: [],
@@ -122,6 +126,47 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
 
     if (this.idInput) {
       await this.loadChiTiet(this.idInput)
+    }
+
+    if (this.data) {
+      console.log('this.data', this.data)
+      this.formData.patchValue({
+        trangThai: STATUS.DU_THAO,
+        tenTrangThai: 'Dự thảo',
+        soQdinhDc: this.data.soQdinh,
+        ngayQdinhDc: this.data.ngayKyQdinh,
+        qdDcId: this.data.qdinhDccId,
+        tenLoKho: this.data.tenLoKho,
+        maLoKho: this.data.maLoKho,
+        tenNganKho: this.data.tenNganKho,
+        maNganKho: this.data.maNganKho,
+        tenNhaKho: this.data.tenNhaKho,
+        maNhaKho: this.data.maNhaKho,
+        tenDiemKho: this.data.tenDiemKho,
+        maDiemKho: this.data.maDiemKho,
+        loaiVthh: this.data.maHangHoa,
+        tenLoaiVthh: this.data.tenHangHoa,
+        cloaiVthh: this.data.maChLoaiHangHoa,
+        tenCloaiVthh: this.data.tenChLoaiHangHoa,
+        tichLuongKhaDung: this.data.tichLuongKd,
+        tenDonViTinh: this.data.tenDonViTinh,
+      });
+      await this.loadChiTietQdinh(this.data.qdinhDccId);
+      let dmTieuChuan = await this.danhMucTieuChuanService.getDetailByMaHh(this.data.maChLoaiHangHoa);
+      if (dmTieuChuan.data) {
+        this.dataTableChiTieu = dmTieuChuan.data.children;
+        this.dataTableChiTieu = this.dataTableChiTieu.map(element => {
+          return {
+            ...element,
+            edit: false,
+            chiSoCl: element.tenTchuan,
+            chiTieuCl: element.chiSoNhap,
+            ketQuaPt: element.ketQuaPt,
+            danhGia: element.danhGia
+          }
+        });
+      }
+      await this.dsHinhThucBaoQuan(this.data.maChLoaiHangHoa)
     }
 
   }
@@ -228,7 +273,7 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
     let body = {
       trangThai: STATUS.BAN_HANH,
       loaiVthh: ['0101', '0102'],
-      loaiDc: "DCNB",
+      loaiDc: this.loaiDc,
       maDvi: this.userInfo.MA_DVI
       // listTrangThaiXh: [STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN],
     }
@@ -287,13 +332,13 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
   async openDialogBBLM() {
     await this.spinner.show();
     let body = {
-      trangThai: STATUS.BAN_HANH,
-      loaiVthh: ['0101', '0102'],
-      loaiDc: "DCNB",
-      maDvi: this.userInfo.MA_DVI
-      // listTrangThaiXh: [STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN],
+      loaiDc: this.loaiDc,
+      type: "01",
+      maLoKho: this.formData.value.maLoKho,
+      maNganKho: this.formData.value.maNganKho,
+      soQdinhDcc: this.formData.value.soQdinhDc,
     }
-    let res = await this.phieuKiemNghiemChatLuongService.dsBienBanLayMau({});
+    let res = await this.phieuKiemNghiemChatLuongService.dsBienBanLayMau(body);
     if (res.msg == MESSAGE.SUCCESS) {
       this.listDanhSachBBLM = res.data
     }
@@ -316,9 +361,48 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
       if (data) {
         this.formData.patchValue({
           soBbLayMau: data.soBbLayMau,
-          ngayLayMau: data.ngayLayMau
+          ngayLayMau: data.ngayLayMau,
+          bbLayMauId: data.id
         });
         await this.dsHinhThucBaoQuan(data.cloaiVthh)
+      }
+    });
+  }
+
+  async openDialogBBNDK() {
+    await this.spinner.show();
+    let body = {
+      // trangThai: STATUS.BAN_HANH,
+      loaiDc: this.loaiDc,
+      // maDvi: this.userInfo.MA_DVI
+      // maLoKho: this.formData.value.maLoKho,
+      // maNganKho: this.formData.value.maNganKho,
+    }
+    let res = await this.bienBanNhapDayKhoService.getDanhSach(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listDanhSachBBLM = res.data
+    }
+    await this.spinner.hide();
+
+    const modalQD = this.modal.create({
+      nzTitle: 'Danh sách quyết định',
+      nzContent: DialogTableSelectionComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {
+        dataTable: this.listDanhSachBBLM,
+        dataHeader: ['Số biên bản nhập đầy kho'],
+        dataColumn: ['soBb']
+      },
+    });
+    modalQD.afterClose.subscribe(async (data) => {
+      if (data) {
+        this.formData.patchValue({
+          soBbTinhKho: data.soBb,
+          bbTinhKhoId: data.id
+        });
       }
     });
   }

@@ -32,8 +32,7 @@ export class QuyetDinhPheDuyetKqBdgThanhLyComponent extends Base2Component imple
   idThongTin: number = 0;
   isViewThongTin: boolean = false;
   isDetail: boolean = false;
-  selectedId: number = 0;
-  isEdit = false;
+  isView = false;
   listTrangThai: any[] = [
     {ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo'},
     {ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối - TP'},
@@ -116,10 +115,10 @@ export class QuyetDinhPheDuyetKqBdgThanhLyComponent extends Base2Component imple
     this.search();
   }
 
-  redirectDetail(id, isEdit: boolean) {
-    this.selectedId = id;
+  redirectDetail(id, isView: boolean) {
+    this.idSelected = id;
     this.isDetail = true;
-    this.isEdit = isEdit;
+    this.isView = isView;
   }
 
   disabledNgayKyTu = (startValue: Date): boolean => {
