@@ -48,10 +48,6 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
   dviTinh: string;
   duToanKinhPhi: string;
 
-  // danhSach: any[] = []
-  // typeData: string;
-  // typeAction: string;
-
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
