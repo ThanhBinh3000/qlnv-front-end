@@ -53,46 +53,46 @@ export class DialogTaoMoiCapUngVonComponent implements OnInit {
     async checkReport() {
         if (!this.response.namDnghi) {
             this.notification.warning(MESSAGE.WARNING, 'Vui lòng chọn năm đề nghị!')
-            this.response.loaiDeNghi = null;
+            this.response.loaiDnghi = null;
             return;
         }
         this.request.namDnghi = this.response.namDnghi;
-        this.request.loaiDnghi = this.response.loaiDeNghi;
+        this.request.loaiDnghi = this.response.loaiDnghi;
         this.spinner.show();
-        await this.capVonMuaBanTtthService.timKiemVonMuaBan(this.request).toPromise().then(
+        await this.capVonMuaBanTtthService.timKiemVonMuaBan(this.request.request()).toPromise().then(
             (data) => {
                 if (data.statusCode == 0) {
-                    let initItem = new Report();
                     let lstBcao = [];
                     if (data.data.content?.length > 0) {
                         lstBcao = data.data.content;
                         lstBcao.sort((a, b) => b.dot - a.dot);
                         if ([Status.TT_02, Status.TT_04, Status.TT_01].includes(lstBcao[0].trangThai)) {
                             this.notification.warning(MESSAGE.WARNING, 'Trạng thái của đợt trước không cho phép tạo mới!')
-                            this.response.loaiDeNghi = null;
+                            this.response.loaiDnghi = null;
                             return;
                         } else {
                             const index = lstBcao.findIndex(e => !Status.check('reject', e.trangThai));
                             if (index != -1) {
-                                Object.assign(initItem, lstBcao[index]);
+                                this.initReport(lstBcao?.length + 1, lstBcao[index].id)
                             }
                         }
+                    } else {
+                        this.initReport(lstBcao?.length + 1);
                     }
-                    this.initReport(lstBcao?.length + 1, initItem);
                 } else {
                     this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-                    this.response.loaiDeNghi = null;
+                    this.response.loaiDnghi = null;
                 }
             },
             (err) => {
                 this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-                this.response.loaiDeNghi = null;
+                this.response.loaiDnghi = null;
             }
         );
         this.spinner.hide();
     }
 
-    async initReport(dot: number, initItem: Report) {
+    async initReport(dot: number, id?: string) {
         this.response.ngayTao = new Date();
         this.response.maDvi = this.userInfo.MA_DVI;
         this.response.dot = dot;
@@ -101,7 +101,7 @@ export class DialogTaoMoiCapUngVonComponent implements OnInit {
         this.response.lstFiles = [];
         this.response.lstCtiets = [];
         await this.getMaDnghi();
-        if (initItem.lstCtiets?.length == 0) {
+        if (!id) {
             if (this.response.maLoai == Cvmb.GHI_NHAN_CU_VON) {
                 this.response.lstCtiets.push(new CapUng({
                     id: uuid.v4() + 'FE',
@@ -119,16 +119,29 @@ export class DialogTaoMoiCapUngVonComponent implements OnInit {
                 })
             }
         } else {
-            initItem.lstCtiets.forEach(item => {
-                this.response.lstCtiets.push(new CapUng({
-                    ...item,
-                    id: uuid.v4() + 'FE',
-                    uncVonUng: 0,
-                    uncVonCap: 0,
-                    uncCong: 0,
-                    ghiChu: null,
-                }))
-            })
+            await this.capVonMuaBanTtthService.ctietVonMuaBan(id).toPromise().then(
+                async (data) => {
+                    if (data.statusCode == 0) {
+                        data.data.lstCtiets?.forEach(item => {
+                            this.response.lstCtiets.push(new CapUng({
+                                ...item,
+                                id: uuid.v4() + 'FE',
+                                uncVonUng: null,
+                                uncVonCap: null,
+                                uncCong: null,
+                                ghiChu: null,
+                            }))
+                        })
+                    } else {
+                        this.notification.error(MESSAGE.ERROR, data?.msg);
+                        this.response.namDnghi = null;
+                    }
+                },
+                (err) => {
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+                    this.response.namDnghi = null;
+                },
+            );
         }
     }
 
@@ -175,7 +188,7 @@ export class DialogTaoMoiCapUngVonComponent implements OnInit {
     }
 
     handleOk() {
-        if (!this.response.namDnghi || !this.response.loaiDeNghi) {
+        if (!this.response.namDnghi || !this.response.loaiDnghi) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
             return;
         }
