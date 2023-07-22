@@ -204,6 +204,8 @@ export class AddBaoCaoComponent implements OnInit {
         if (this.baoCao.id) {
             await this.getDetailReport();
         } else {
+            console.log(this.data);
+
             this.baoCao = this.data.baoCao;
         }
         this.getStatusButton();

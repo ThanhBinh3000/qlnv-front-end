@@ -43,7 +43,7 @@ export class DieuChinhService extends BaseService {
     // upload phu luc dieu chinh du toan NSNN
     updatePLDieuChinh(request: any): Observable<any> {
         return this.httpClient.put(
-            this.urlDefault + '/dieu-chinh-du-toan-chi/chi-tiet',
+            this.urlDefault + '/dieu-chinh-du-toan-chi/chi-tiet/cap-nhat',
             // 'http://192.168.1.105:8094/dieu-chinh-du-toan-chi/chi-tiet',
             request,
         );

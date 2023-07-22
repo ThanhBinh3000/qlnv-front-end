@@ -22,10 +22,10 @@ export class ItemData {
 	maNoiDung: string;
 	coQuan: string;
 	thoiGian: string;
-	qDinhPheDuyet: number;
-	dToanNamTruoc: number;
-	dToanDaGiao: number;
-	dToanTongSo: number;
+	qdinhPheDuyet: number;
+	dtoanNamTruoc: number;
+	dtoanDaGiao: number;
+	dtoanTongSo: number;
 	tongNcauDtoan: number;
 	dtoanDnghiDchinh: number;
 	dtoanVuTvqtDnghi: number;
@@ -50,15 +50,15 @@ export class PhuLuc12Component implements OnInit {
 	namBcao: number;
 	tongDieuChinhGiam: number;
 	tongDieuChinhTang: number;
-	dToanVuTang: number;
-	dToanVuGiam: number;
+	dtoanVuTang: number;
+	dtoanVuGiam: number;
 	//danh muc
 	noiDungs: any[] = DANH_MUC;
 	lstCtietBcao: ItemData[] = [];
 	keys = [
-		"dToanNamTruoc",
-		"dToanDaGiao",
-		"dToanTongSo",
+		"dtoanNamTruoc",
+		"dtoanDaGiao",
+		"dtoanTongSo",
 		"tongNcauDtoan",
 		"dtoanDnghiDchinh",
 		"dtoanVuTvqtDnghi",
@@ -379,8 +379,8 @@ export class PhuLuc12Component implements OnInit {
 	};
 
 	changeModel(id: string): void {
-		this.editCache[id].data.dToanTongSo = Operator.sum([this.editCache[id].data.dToanNamTruoc, this.editCache[id].data.dToanDaGiao]);
-		this.editCache[id].data.dtoanDnghiDchinh = Operator.sum([this.editCache[id].data.tongNcauDtoan, - this.editCache[id].data.dToanTongSo]);
+		this.editCache[id].data.dtoanTongSo = Operator.sum([this.editCache[id].data.dtoanNamTruoc, this.editCache[id].data.dtoanDaGiao]);
+		this.editCache[id].data.dtoanDnghiDchinh = Operator.sum([this.editCache[id].data.tongNcauDtoan, - this.editCache[id].data.dtoanTongSo]);
 		this.editCache[id].data.chenhLech = Operator.sum([this.editCache[id].data.dtoanVuTvqtDnghi, - this.editCache[id].data.dtoanDnghiDchinh]);
 	};
 
@@ -438,8 +438,8 @@ export class PhuLuc12Component implements OnInit {
 	tinhTong() {
 		this.tongDieuChinhGiam = 0;
 		this.tongDieuChinhTang = 0;
-		this.dToanVuTang = 0;
-		this.dToanVuGiam = 0;
+		this.dtoanVuTang = 0;
+		this.dtoanVuGiam = 0;
 		this.lstCtietBcao.forEach(item => {
 			const str = item.stt
 			if (!(this.lstCtietBcao.findIndex(e => Table.preIndex(e.stt) == str) != -1)) {
@@ -450,9 +450,9 @@ export class PhuLuc12Component implements OnInit {
 				}
 
 				if (item.dtoanVuTvqtDnghi < 0) {
-					Number(this.dToanVuGiam += Number(item?.dtoanVuTvqtDnghi));
+					Number(this.dtoanVuGiam += Number(item?.dtoanVuTvqtDnghi));
 				} else {
-					Number(this.dToanVuTang += Number(item?.dtoanVuTvqtDnghi));
+					Number(this.dtoanVuTang += Number(item?.dtoanVuTvqtDnghi));
 				}
 			}
 		})
@@ -511,10 +511,10 @@ export class PhuLuc12Component implements OnInit {
 			'tenNoiDung',
 			'coQuan',
 			'thoiGian',
-			'qDinhPheDuyet',
-			'dToanNamTruoc',
-			'dToanDaGiao',
-			'dToanTongSo',
+			'qdinhPheDuyet',
+			'dtoanNamTruoc',
+			'dtoanDaGiao',
+			'dtoanTongSo',
 			'tongNcauDtoan',
 			'dtoanDnghiDchinh',
 			'dtoanVuTvqtDnghi',

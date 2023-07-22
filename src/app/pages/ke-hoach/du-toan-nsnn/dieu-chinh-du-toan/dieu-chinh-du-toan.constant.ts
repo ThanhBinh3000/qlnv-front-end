@@ -30,9 +30,15 @@ export class Form {
 export class History {
     id: string;
     maBcao: string;
+    namBcao: number;
     lan: number;
     ngayTao: string;
     nguoiTao: string;
+    ngayTrinh: string;
+    ngayDuyet: string;
+    ngayPheDuyet: string;
+    ngayTraKq: string;
+    lyDoTuChoi: string;
     trangThai: string;
 }
 
