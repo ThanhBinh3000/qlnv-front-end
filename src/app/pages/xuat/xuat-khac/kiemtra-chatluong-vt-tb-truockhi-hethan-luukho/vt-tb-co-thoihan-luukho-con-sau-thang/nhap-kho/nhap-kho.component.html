@@ -1,1 +1,22 @@
-<p>nhap-kho works!</p>
+<div class="left-menu">
+  <div nz-row nzGutter="24" class="mt-2" style="border-top: 1px solid gray">
+    <div nz-col nzSpan="4">
+      <ul nz-menu nzMode="inline" style="width: 100%">
+        <li [nzSelected]="tabSelected==0" nz-menu-item (click)="selectTab(0)">
+          <span class="bold">Phiếu nhập kho</span>
+        </li>
+        <li [nzSelected]="tabSelected==1" nz-menu-item (click)="selectTab(1)">
+          <span class="bold">Biên bản kết thúc nhập kho</span>
+        </li>
+      </ul>
+    </div>
+    <div nz-col nzSpan="20">
+      <ng-container *ngIf="tabSelected == 0">
+        <app-phieu-nhap-kho></app-phieu-nhap-kho>
+      </ng-container>
+      <ng-container *ngIf="tabSelected == 1">
+        <app-bien-ban-ket-thuc-nhap-kho></app-bien-ban-ket-thuc-nhap-kho>
+      </ng-container>
+    </div>
+  </div>
+</div>
