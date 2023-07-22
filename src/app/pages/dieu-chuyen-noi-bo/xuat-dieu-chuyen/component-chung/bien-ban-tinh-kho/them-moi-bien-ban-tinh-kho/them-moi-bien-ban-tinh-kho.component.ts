@@ -428,9 +428,9 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
     body.isVatTu = this.isVatTu;
     body.thayDoiThuKho = this.thayDoiThuKho;
     body.type = this.type;
-    if (this.formData.value.tongSlXuatTheoQd > this.formData.value.tongSlXuatTheoTt) {
-      return this.notification.error(MESSAGE.ERROR, "Số lượng xuất thực tế nhỏ hơn số lượng xuất theo quyết định")
-    }
+    // if (this.formData.value.tongSlXuatTheoQd > this.formData.value.tongSlXuatTheoTt) {
+    //   return this.notification.error(MESSAGE.ERROR, "Số lượng xuất thực tế nhỏ hơn số lượng xuất theo quyết định")
+    // }
     let data = await this.createUpdate(body);
     if (data) {
       this.formData.patchValue({ id: data.id, trangThai: data.trangThai, soBbTinhKho: data.soBbTinhKho ? data.soBbTinhKho : this.genSoBienBanTinhKho(data.id) })
