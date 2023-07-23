@@ -11,17 +11,12 @@
     </li>
     <li nz-menu-item (click)="selectTab(2)" *ngIf="(userService.isTongCuc() && type == typeConst.GIA_MUA_TOI_DA && loaiVthh == 'LT' && userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_MTDBTT_QD'))
           || (userService.isTongCuc() && type == typeConst.GIA_MUA_TOI_DA && loaiVthh == 'VT' && userService.isAccessPermisson('KHVDTNSNN_PAGIA_VT_MTDBTT_QD'))" >
-      Quyết định giá của BTC
+      Quyết định giá/điều chỉnh giá của BTC
     </li>
     <li nz-menu-item (click)="selectTab(3)" *ngIf="(loaiVthh == 'LT'&& type == typeConst.GIA_CU_THE && userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_GCT_QDTC'))
 || (loaiVthh == 'VT'&& type == typeConst.GIA_CU_THE && userService.isAccessPermisson('KHVDTNSNN_PAGIA_VT_GCT_QDTC'))
 ">
-      Quyết định giá của TCDTNN
-    </li>
-    <li nz-menu-item (click)="selectTab(4)" *ngIf="(loaiVthh == 'LT'&& type == typeConst.GIA_CU_THE && userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_GCT_QDDCTC'))
-|| (loaiVthh == 'VT'&& type == typeConst.GIA_CU_THE && userService.isAccessPermisson('KHVDTNSNN_PAGIA_VT_GCT_QDDCTC'))
-">
-      Quyết định điều chỉnh giá của TCDTNN
+      Quyết định giá/điều chỉnh giá của TCDTNN
     </li>
   </ul>
 </nz-affix>
@@ -36,8 +31,4 @@
 </ng-container>
 <ng-container *ngIf="tabSelected == 3">
   <app-quyet-dinh-gia-cua-tcdtnn [pagType]="loaiVthh" [type]="type"></app-quyet-dinh-gia-cua-tcdtnn>
-</ng-container>
-<ng-container *ngIf="tabSelected == 4">
-  <app-quyet-dinh-dieu-chinh-gia-cua-tcdtnn [type]="type"
-                                            [pagType]="loaiVthh"></app-quyet-dinh-dieu-chinh-gia-cua-tcdtnn>
 </ng-container>

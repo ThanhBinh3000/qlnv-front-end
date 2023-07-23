@@ -124,21 +124,21 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
         diaDiemDeHang: [null],
         //Form căn cứ phương pháp xác định giá
         maPphapXdg: [null, [Validators.required]],
-        loaiHangXdg: [],
-        giaVonNk: [],
-        chiPhiChung: [],
-        chiPhiPbo: [],
-        tongChiPhi: [],
+        loaiHangXdg: ['XDG_LH01'],
+        giaVonNk: [null],
+        chiPhiChung: [null],
+        chiPhiPbo: [null],
+        tongChiPhi: [null],
         noiDung: [null],
-        lyDoTuChoi: [],
-        tgianNhang: []
+        lyDoTuChoi: [null],
+        tgianNhang: [null]
       }
     );
   }
 
   async ngOnInit() {
     this.spinner.show();
-    this.isGiaMuaToiDa = this.type == TYPE_PAG.GIA_MUA_TOI_DA;
+    this.isGiaMuaToiDa = this.type == TYPE_PAG.GIA_MUA_TOI_DA ? true : false;
     this.userInfo = this.userService.getUserLogin();
     this.maDx = '/' + this.userInfo.DON_VI.tenVietTat + '-KH&QLHDT';
     this.loadDsNam();

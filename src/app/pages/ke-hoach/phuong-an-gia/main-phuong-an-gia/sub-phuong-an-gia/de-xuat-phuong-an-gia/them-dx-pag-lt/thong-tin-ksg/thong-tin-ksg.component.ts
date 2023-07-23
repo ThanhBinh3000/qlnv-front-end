@@ -18,33 +18,15 @@ import {UserService} from "../../../../../../../../services/user.service";
   styleUrls: ['./thong-tin-ksg.component.scss']
 })
 export class ThongTinKsgComponent implements OnInit, OnChanges {
-  @Input()
-  vat: any;
-
-  @Input()
-  isTableKetQua: boolean;
-
-  @Input()
-  isTabNdKhac: boolean;
-
+  @Input() isTableKetQua: boolean;
+  @Input() isTabNdKhac: boolean;
   @Input() dataTable : any[] = [];
-
-  @Output()
-  dataTableChange = new EventEmitter<any>();
-
-  @Input()
+  @Output() dataTableChange = new EventEmitter<any>();
+  @Input() isView: boolean;
+  @Input() dataParent : any;
   isVat: boolean;
-
-  @Input()
-  listCloaiVthh = [];
-
-  @Input()
-  isView: boolean;
-
-  @Input()
-  dataCloaiVthh : any;
-
-  dsChiCuc : any[]=[]
+  vat: any;
+  dsChiCuc : any[] = []
   userInfo  : UserLogin
   isApDung: boolean;
   rowItem: ThongTinKhaoSatGia = new ThongTinKhaoSatGia();
@@ -61,16 +43,18 @@ export class ThongTinKsgComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
+    this.isVat = this.dataParent && this.dataParent.loaiGia && (this.dataParent.loaiGia == 'LG01' || this.dataParent.loaiGia == 'LG01') ? true : false
+    this.vat = this.dataParent && this.dataParent.vat ? this.dataParent.vat  : 0
     this.userInfo = this.userService.getUserLogin();
+    this.loadDsChiCuc();
     this.emitDataTable();
     this.updateEditCache();
-    this.loadDsChiCuc();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (this.dataCloaiVthh) {
-      this.rowItem.cloaiVthh = (this.dataCloaiVthh.tenCloaiVthh ? this.dataCloaiVthh.tenCloaiVthh  + '; ' : '') + (this.dataCloaiVthh.moTa ? this.dataCloaiVthh.moTa + '; ' : '') + (this.dataCloaiVthh.tchuanCluong ? this.dataCloaiVthh.tchuanCluong : '' )
-      this.isApDung = this.dataCloaiVthh.apDungTatCa
+    if (this.dataParent) {
+      this.rowItem.cloaiVthh = (this.dataParent.tenCloaiVthh ? this.dataParent.tenCloaiVthh  + '; ' : '') + (this.dataParent.moTa ? this.dataParent.moTa + '; ' : '') + (this.dataParent.tchuanCluong ? this.dataParent.tchuanCluong : '' )
+      this.isApDung = this.dataParent.apDungTatCa
     }
     this.updateEditCache();
   }
