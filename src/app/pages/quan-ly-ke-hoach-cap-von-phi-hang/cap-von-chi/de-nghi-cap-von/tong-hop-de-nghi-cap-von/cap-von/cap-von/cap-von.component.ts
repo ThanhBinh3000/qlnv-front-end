@@ -15,8 +15,8 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { displayNumber, mulNumber, sumNumber } from 'src/app/Utility/func';
-import { AMOUNT, BOX_NUMBER_WIDTH, CAN_CU_GIA, CVNC, DON_VI_TIEN, LOAI_DE_NGHI, Operator, QUATITY, Table, Utils } from 'src/app/Utility/utils';
-import { BaoCao, ItemRequest, Times, TRANG_THAI } from '../../../de-nghi-cap-von.constant';
+import { AMOUNT, BOX_NUMBER_WIDTH, CAN_CU_GIA, CVNC, DON_VI_TIEN, LOAI_DE_NGHI, Operator, QUATITY, Roles, Table, Utils } from 'src/app/Utility/utils';
+import { BaoCao, ItemContract, Times, TRANG_THAI } from '../../../de-nghi-cap-von.constant';
 import * as XLSX from 'xlsx';
 import { BtnStatus } from '../../../de-nghi-cap-von.class';
 
@@ -34,7 +34,7 @@ export class CapVonComponent implements OnInit {
   userInfo: any;
   //thong tin chung bao cao
   baoCao: BaoCao = new BaoCao();
-  total: ItemRequest = new ItemRequest();
+  total: ItemContract = new ItemContract();
   //danh muc
   donVis: any[] = [];
   trangThais: any[] = TRANG_THAI;
@@ -43,27 +43,19 @@ export class CapVonComponent implements OnInit {
   dviTinhs: any[] = [];
   vatTus: any[] = [];
   dviTiens: any[] = DON_VI_TIEN;
-  capVons: ItemRequest[] = [];
+  capVons: ItemContract[] = [];
   amount = AMOUNT;
   quatity = QUATITY;
   scrollX: string;
   //trang thai cac nut
-  status = false;
-  statusCv = false;
-  saveStatus = true;
-  submitStatus = true;
-  passStatus = true;
-  approveStatus = true;
-  copyStatus = true;
+  status: BtnStatus = new BtnStatus();
   isDataAvailable = false;
-  editCache: { [key: string]: { edit: boolean; data: ItemRequest } } = {};
+  editCache: { [key: string]: { edit: boolean; data: ItemContract } } = {};
   //file
   listFile: File[] = [];
   fileList: NzUploadFile[] = [];
   fileDetail: NzUploadFile;
   tabSelected: any;
-  statusExportExcel: BtnStatus = new BtnStatus();
-  // before uploaf file
   beforeUpload = (file: NzUploadFile): boolean => {
     this.fileList = this.fileList.concat(file);
     return false;
@@ -175,8 +167,6 @@ export class CapVonComponent implements OnInit {
 
     } else {
       this.baoCao = this.data?.baoCao;
-      // this.baoCao.dnghiCapvonCtiets = [];
-      // this.baoCao.trangThai = '1';
     }
     this.getStatusButton();
     this.getTotal();
@@ -186,12 +176,11 @@ export class CapVonComponent implements OnInit {
   //check role cho các nut trinh duyet
   getStatusButton() {
     const checkChirld = this.baoCao.maDvi == this.userInfo?.MA_DVI;
-    this.status = Utils.statusSave.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(CVNC.EDIT_DN_MLT) && !this.userService.isTongCuc();
-    this.statusCv = Utils.statusSave.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(CVNC.EDIT_DN_MLT);
-    this.saveStatus = Utils.statusSave.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(CVNC.EDIT_DN_MLT) && checkChirld;
-    this.submitStatus = Utils.statusApprove.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(CVNC.APPROVE_DN_MLT) && checkChirld && !(!this.baoCao.id);
-    this.approveStatus = this.baoCao.trangThai == Utils.TT_BC_2 && this.userService.isAccessPermisson(CVNC.PHE_DUYET_DN_MLT) && checkChirld;
-    this.copyStatus = Utils.statusCopy.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(CVNC.COPY_DN_MLT) && checkChirld;
+    this.status.general = Utils.statusSave.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.CVNC.EDIT_DN_MLT);
+    this.status.save = Utils.statusSave.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.CVNC.EDIT_DN_MLT) && checkChirld;
+    this.status.submit = Utils.statusApprove.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.CVNC.APPROVE_DN_MLT) && checkChirld && !(!this.baoCao.id);
+    this.status.approve = this.baoCao.trangThai == Utils.TT_BC_2 && this.userService.isAccessPermisson(Roles.CVNC.PHE_DUYET_DN_MLT) && checkChirld;
+    this.status.copy = Utils.statusCopy.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.CVNC.COPY_DN_MLT) && checkChirld;
     if (this.status) {
       this.scrollX = (550 + 12 * BOX_NUMBER_WIDTH).toString() + 'px';
     } else {
@@ -327,7 +316,7 @@ export class CapVonComponent implements OnInit {
         if (mcn == Utils.TT_BC_8 || mcn == Utils.TT_BC_5) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
         } else {
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.TRINH_DUYET_SUCCESS);
         }
       } else {
         this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -395,7 +384,7 @@ export class CapVonComponent implements OnInit {
     }
 
     // replace nhung ban ghi dc them moi id thanh null
-    baoCaoTemp.dnghiCapvonCtiets.forEach(item => {
+    baoCaoTemp.lstCtiets.forEach(item => {
       if (item.id?.length == 38) {
         item.id = null;
       }
@@ -440,7 +429,7 @@ export class CapVonComponent implements OnInit {
   }
 
   updateEditCache(): void {
-    this.baoCao.dnghiCapvonCtiets.forEach(item => {
+    this.baoCao.lstCtiets.forEach(item => {
       this.editCache[item.id] = {
         edit: false,
         data: { ...item }
@@ -454,18 +443,18 @@ export class CapVonComponent implements OnInit {
 
   // huy thay doi
   cancelEdit(id: string): void {
-    const index = this.baoCao.dnghiCapvonCtiets.findIndex(item => item.id === id);
+    const index = this.baoCao.lstCtiets.findIndex(item => item.id === id);
     // lay vi tri hang minh sua
     this.editCache[id] = {
-      data: { ...this.baoCao.dnghiCapvonCtiets[index] },
+      data: { ...this.baoCao.lstCtiets[index] },
       edit: false
     };
   }
 
   // luu thay doi
   saveEdit(id: string): void {
-    const index = this.baoCao.dnghiCapvonCtiets.findIndex(item => item.id === id); // lay vi tri hang minh sua
-    Object.assign(this.baoCao.dnghiCapvonCtiets[index], this.editCache[id].data); // set lai data cua lstCtietBcao[index] = this.editCache[id].data
+    const index = this.baoCao.lstCtiets.findIndex(item => item.id === id); // lay vi tri hang minh sua
+    Object.assign(this.baoCao.lstCtiets[index], this.editCache[id].data); // set lai data cua lstCtietBcao[index] = this.editCache[id].data
     this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
     this.getTotal();
   }
@@ -481,9 +470,25 @@ export class CapVonComponent implements OnInit {
   }
 
   getTotal() {
-    this.total = new ItemRequest();
-    this.baoCao.dnghiCapvonCtiets.forEach((item, index) => {
-      if (index !== 0 && this.userService.isCuc()) {
+    this.total = new ItemContract();
+    this.baoCao.lstCtiets.forEach((item, index) => {
+      if ((index !== 0 && this.userService.isCuc()) || (index !== 0 && this.userService.isTongCuc())) {
+        this.total.slKeHoach = Operator.sum([this.total.slKeHoach, item.slKeHoach]);
+        this.total.slThucHien = Operator.sum([this.total.slThucHien, item.slThucHien]);
+        this.total.donGia = Operator.sum([this.total.donGia, item.donGia]);
+        this.total.gtriThucHien = Operator.sum([this.total.gtriThucHien, item.gtriThucHien]);
+        this.total.duToanDaGiao = Operator.sum([this.total.duToanDaGiao, item.duToanDaGiao]);
+        this.total.luyKeTongCapUng = Operator.sum([this.total.luyKeTongCapUng, item.luyKeTongCapUng]);
+        this.total.luyKeTongCapVon = Operator.sum([this.total.luyKeTongCapVon, item.luyKeTongCapVon]);
+        this.total.luyKeTongCong = Operator.sum([this.total.luyKeTongCong, item.luyKeTongCong]);
+        this.total.tongVonVaDtDaCap = Operator.sum([this.total.tongVonVaDtDaCap, item.tongVonVaDtDaCap]);
+        this.total.vonDuyetCapVon = Operator.sum([this.total.vonDuyetCapVon, item.vonDuyetCapVon]);
+        this.total.vonDnghiCapLanNay = Operator.sum([this.total.vonDnghiCapLanNay, item.vonDnghiCapLanNay]);
+        this.total.vonDuyetCapUng = Operator.sum([this.total.vonDuyetCapUng, item.vonDuyetCapUng]);
+        this.total.vonDuyetCong = Operator.sum([this.total.vonDuyetCong, item.vonDuyetCong]);
+        this.total.tongTien = Operator.sum([this.total.tongTien, item.tongTien]);
+        this.total.soConDuocCap = Operator.sum([this.total.soConDuocCap, item.soConDuocCap]);
+      } else if (this.userService.isChiCuc()) {
         this.total.slKeHoach = Operator.sum([this.total.slKeHoach, item.slKeHoach]);
         this.total.slThucHien = Operator.sum([this.total.slThucHien, item.slThucHien]);
         this.total.donGia = Operator.sum([this.total.donGia, item.donGia]);
@@ -530,7 +535,7 @@ export class CapVonComponent implements OnInit {
     ]
     const fieldOrder = ['stt', 'tenDvi', 'slKeHoach', 'slThucHien', 'donGia', 'gtriThucHien', 'duToanDaGiao', 'luyKeTongCapUng', 'luyKeTongCapVon', 'luyKeTongCong',
       'tongVonVaDtDaCap', 'vonDnghiCapLanNay', 'vonDuyetCapUng', 'vonDuyetCapVon', 'vonDuyetCong', 'tongTien', 'soConDuocCap', 'ghiChu']
-    const filterData = this.baoCao.dnghiCapvonCtiets.map(item => {
+    const filterData = this.baoCao.lstCtiets.map(item => {
       const row: any = {};
       fieldOrder.forEach(field => {
         row[field] = item[field]
@@ -598,7 +603,7 @@ export class CapVonComponent implements OnInit {
     //     id: null,
     //     fileDinhKems: [],
     //     listIdDeleteFiles: [],
-    //     dnghiCapvonCtiets: lstCtietBcaoTemp,
+    //     lstCtiets: lstCtietBcaoTemp,
     //     congVan: null,
     //     maDvi: this.maDviTao,
     //     maDnghi: maDeNghiNew,

@@ -23,6 +23,7 @@ import { CapVonComponent } from './tong-hop-de-nghi-cap-von/cap-von/cap-von/cap-
 import { DialogTaoMoiCapVonComponent } from './tong-hop-de-nghi-cap-von/cap-von/dialog-tao-moi-cap-von/dialog-tao-moi-cap-von.component';
 import { HopDongCapVonComponent } from './tong-hop-de-nghi-cap-von/cap-von/hop-dong-cap-von/hop-dong-cap-von.component';
 import { DeNghiCapVonMuaThocGaoMuoiTheoHopDongComponent } from './tong-hop-de-nghi-cap-von/de-nghi-cap-von/de-nghi-cap-von-mua-thoc-gao-muoi-theo-hop-dong/de-nghi-cap-von-mua-thoc-gao-muoi-theo-hop-dong.component';
+import { DeNghiCuaDonViCapDuoiTheoHopDongComponent } from './tong-hop-de-nghi-cap-von/de-nghi-cua-don-vi-cap-duoi/de-nghi-cua-don-vi-cap-duoi-theo-hop-dong/de-nghi-cua-don-vi-cap-duoi-theo-hop-dong.component';
 
 @NgModule({
     imports: [
@@ -50,6 +51,7 @@ import { DeNghiCapVonMuaThocGaoMuoiTheoHopDongComponent } from './tong-hop-de-ng
         DeNghiDonViCapDuoiComponent,
         TongHopDeNghiCapDuoiComponent,
         DialogTaoDeNghiCapVonComponent,
+        DeNghiCuaDonViCapDuoiTheoHopDongComponent
     ],
     exports: [
         DeNghiCapVonComponent,

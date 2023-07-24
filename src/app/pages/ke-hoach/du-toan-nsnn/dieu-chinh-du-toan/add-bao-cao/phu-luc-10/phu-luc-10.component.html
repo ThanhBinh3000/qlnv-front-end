@@ -44,8 +44,9 @@
                                         style="margin-right: 0;">
                                     </label>
                                 </th> -->
-                                <th nzWidth="50px">STT</th>
-                                <th nzWidth="450px">Tên công trình <br> (Ghi chính xác theo <br> danh mục kế hoạch
+                                <th nzWidth="50px" nzLeft>STT</th>
+                                <th nzWidth="450px" nzLeft>Tên công trình <br> (Ghi chính xác theo <br> danh mục kế
+                                    hoạch
                                     năm
                                     ...)</th>
                                 <th>Kế hoạch vốn năm {{namBcao}}</th>
@@ -67,8 +68,8 @@
                                 <th *ngIf="status.general || status.editAppVal"></th>
                             </tr>
                             <tr>
-                                <th>A</th>
-                                <th>B</th>
+                                <th nzLeft>A</th>
+                                <th nzLeft>B</th>
                                 <th>1</th>
                                 <th>2</th>
                                 <th>3</th>
@@ -87,8 +88,8 @@
                         <tbody>
                             <tr>
                                 <!-- <td *ngIf="status.general"></td> -->
-                                <td></td>
-                                <td>Tổng cộng</td>
+                                <td nzLeft></td>
+                                <td nzLeft>Tổng cộng</td>
                                 <td>{{Op.fmtVal(total.kh2021)}}</td>
                                 <td>{{Op.fmtVal(total.dtoanGiaoLke)}}</td>
                                 <td>{{Op.fmtVal(total.gtriCtrinh)}}</td>
@@ -105,8 +106,8 @@
                             </tr>
                             <tr>
                                 <!-- <td *ngIf="status.general"></td> -->
-                                <td></td>
-                                <td>Phát sinh điều chỉnh tăng</td>
+                                <td nzLeft></td>
+                                <td nzLeft>Phát sinh điều chỉnh tăng</td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
@@ -123,8 +124,8 @@
                             </tr>
                             <tr>
                                 <!-- <td *ngIf="status.general"></td> -->
-                                <td></td>
-                                <td>Phát sinh điều chỉnh giảm</td>
+                                <td nzLeft></td>
+                                <td nzLeft>Phát sinh điều chỉnh giảm</td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
@@ -145,10 +146,10 @@
                                         <label *ngIf="checkDelete(data.stt)" nz-checkbox [nzValue]="data.id"
                                             [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"></label>
                                     </td> -->
-                                    <td class="text-center">
+                                    <td class="text-center" nzLeft>
                                         {{getIndex(data.stt)}}
                                     </td>
-                                    <td>
+                                    <td nzLeft>
                                         {{data.congTrinh}}
                                     </td>
                                     <td>{{Op.fmtVal(data.kh2021)}}</td>
@@ -181,10 +182,10 @@
                                         <label *ngIf="checkDelete(data.stt)" nz-checkbox [nzValue]="data.id"
                                             [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"></label>
                                     </td> -->
-                                    <td class="text-center">
+                                    <td class="text-center" nzLeft>
                                         {{getIndex(editCache[data.id].data.stt)}}
                                     </td>
-                                    <td>
+                                    <td nzLeft>
                                         {{editCache[data.id].data.congTrinh}}
                                     </td>
                                     <ng-container *ngIf="!status.viewAppVal; else viewAppVal">

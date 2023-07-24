@@ -83,7 +83,7 @@
             <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"></label>
           </th>
           <th width="60px" class="text-center">STT</th>
-          <th>Đơn vị</th>
+          <!-- <th>Đơn vị</th> -->
           <th>Mã đề nghị</th>
           <th>Năm đề nghị</th>
           <th>Lần đề nghị</th>
@@ -109,7 +109,7 @@
           <td class="text-center">
             {{ (i + 1) + (searchFilter.paggingReq.page - 1)*searchFilter.paggingReq.limit }}
           </td>
-          <td *ngFor="let item of data.dnghiCapvonCtiets">
+          <td *ngFor="let item of data.lstCtiets">
             {{ item.tenDvi}}
           </td>
           <td>

@@ -63,10 +63,6 @@ export class DanhSachBaoCaoTuDonViCapDuoiComponent implements OnInit {
         const newDate = new Date();
         newDate.setMonth(newDate.getMonth() - 1);
         this.searchFilter.tuNgay = newDate;
-        const request = {
-            maDviCha: this.userInfo.maDvi,
-            trangThai: '01',
-        }
         await this.danhMuc.dMDviCon().toPromise().then(
             data => {
                 if (data.statusCode == 0) {

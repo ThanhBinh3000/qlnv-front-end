@@ -3,7 +3,6 @@ import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { displayNumber, exchangeMoney, getHead, getName, sumNumber } from 'src/app/Utility/func';
 import { FileManip, Operator, Status, Table, Utils } from 'src/app/Utility/utils';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
@@ -21,10 +20,10 @@ export class ItemData {
     stt: string;
     tenNoiDung: string;
     maNoiDung: string;
-    dToanNamTruoc: number;
-    dToanDaGiao: number;
-    dToanTongSo: number;
-    TongNCDtoanKp: number;
+    dtoanNamTruoc: number;
+    dtoanDaGiao: number;
+    dtoanTongSo: number;
+    tongNCDtoanKp: number;
     dtoanDnghiDchinh: number;
     dtoanVuTvqtDnghi: number;
     chenhLech: number;
@@ -36,13 +35,13 @@ export class ItemData {
     }
 
     changeModel() {
-        this.dToanTongSo = Operator.mul(this.dToanNamTruoc, this.dToanDaGiao);
-        this.dtoanDnghiDchinh = Operator.mul(this.TongNCDtoanKp, - this.dToanTongSo);
+        this.dtoanTongSo = Operator.mul(this.dtoanNamTruoc, this.dtoanDaGiao);
+        this.dtoanDnghiDchinh = Operator.mul(this.tongNCDtoanKp, - this.dtoanTongSo);
         this.chenhLech = Operator.sum([this.dtoanVuTvqtDnghi, - this.dtoanDnghiDchinh]);
     }
 
     upperBound() {
-        return this.dToanNamTruoc > Utils.MONEY_LIMIT || this.dToanDaGiao > Utils.MONEY_LIMIT || this.dToanTongSo > Utils.MONEY_LIMIT || this.TongNCDtoanKp > Utils.MONEY_LIMIT || this.dtoanDnghiDchinh > Utils.MONEY_LIMIT || this.dtoanVuTvqtDnghi > Utils.MONEY_LIMIT;
+        return this.dtoanNamTruoc > Utils.MONEY_LIMIT || this.dtoanDaGiao > Utils.MONEY_LIMIT || this.dtoanTongSo > Utils.MONEY_LIMIT || this.tongNCDtoanKp > Utils.MONEY_LIMIT || this.dtoanDnghiDchinh > Utils.MONEY_LIMIT || this.dtoanVuTvqtDnghi > Utils.MONEY_LIMIT;
     }
 
     index() {
@@ -123,8 +122,8 @@ export class PhuLuc13Component implements OnInit {
     namBcao: number;
     tongDieuChinhTang: number;
     tongDieuChinhGiam: number;
-    dToanVuTang: number;
-    dToanVuGiam: number;
+    dtoanVuTang: number;
+    dtoanVuGiam: number;
 
     //danh muc
     noiDungs: any[] = DANH_MUC;
@@ -392,10 +391,10 @@ export class PhuLuc13Component implements OnInit {
     //         }
     //         this.lstCtietBcao.forEach(item => {
     //             if (getHead(item.stt) == stt) {
-    //                 this.lstCtietBcao[index].TongNCDtoanKp = Number(sumNumber([this.lstCtietBcao[index].TongNCDtoanKp, item.TongNCDtoanKp]))
-    //                 this.lstCtietBcao[index].dToanNamTruoc = Number(sumNumber([this.lstCtietBcao[index].dToanNamTruoc, item.dToanNamTruoc]))
-    //                 this.lstCtietBcao[index].dToanDaGiao = Number(sumNumber([this.lstCtietBcao[index].dToanDaGiao, item.dToanDaGiao]))
-    //                 this.lstCtietBcao[index].dToanTongSo = Number(sumNumber([this.lstCtietBcao[index].dToanTongSo, item.dToanTongSo]))
+    //                 this.lstCtietBcao[index].tongNCDtoanKp = Number(sumNumber([this.lstCtietBcao[index].tongNCDtoanKp, item.tongNCDtoanKp]))
+    //                 this.lstCtietBcao[index].dtoanNamTruoc = Number(sumNumber([this.lstCtietBcao[index].dtoanNamTruoc, item.dtoanNamTruoc]))
+    //                 this.lstCtietBcao[index].dtoanDaGiao = Number(sumNumber([this.lstCtietBcao[index].dtoanDaGiao, item.dtoanDaGiao]))
+    //                 this.lstCtietBcao[index].dtoanTongSo = Number(sumNumber([this.lstCtietBcao[index].dtoanTongSo, item.dtoanTongSo]))
     //                 this.lstCtietBcao[index].dtoanDnghiDchinh = Number(sumNumber([this.lstCtietBcao[index].dtoanDnghiDchinh, item.dtoanDnghiDchinh]))
     //                 this.lstCtietBcao[index].dtoanVuTvqtDnghi = Number(sumNumber([this.lstCtietBcao[index].dtoanVuTvqtDnghi, item.dtoanVuTvqtDnghi]))
     //             }
@@ -471,8 +470,8 @@ export class PhuLuc13Component implements OnInit {
     };
 
     // changeModel(id: string): void {
-    //     this.editCache[id].data.dToanTongSo = Operator.sum([this.editCache[id].data.dToanNamTruoc, this.editCache[id].data.dToanDaGiao]);
-    //     this.editCache[id].data.dtoanDnghiDchinh = ([this.editCache[id].data.TongNCDtoanKp, - this.editCache[id].data.dToanTongSo]);
+    //     this.editCache[id].data.dtoanTongSo = Operator.sum([this.editCache[id].data.dtoanNamTruoc, this.editCache[id].data.dtoanDaGiao]);
+    //     this.editCache[id].data.dtoanDnghiDchinh = ([this.editCache[id].data.tongNCDtoanKp, - this.editCache[id].data.dtoanTongSo]);
     // };
 
     getLowStatus(str: string) {
@@ -533,6 +532,43 @@ export class PhuLuc13Component implements OnInit {
     //     return false;
     // };
 
+    checkAdd(data: ItemData) {
+        if (
+            data.level == 1
+        ) {
+            return true;
+        }
+        return false;
+    };
+
+    addLine(data: any) {
+        let parentItem: ItemData = this.lstCtietBcao.find(e => Table.preIndex(e.stt) == data.stt);
+        parentItem = new ItemData({
+            id: uuid.v4() + 'FE',
+            maNoiDung: "",
+            level: data.level + 1,
+            tenNoiDung: "",
+        }),
+            this.lstCtietBcao = Table.addChild(data.id, parentItem, this.lstCtietBcao);
+        this.updateEditCache();
+    };
+
+
+    checkDelete(stt: string) {
+        const level = stt.split('.').length - 2;
+        if (level == 2) {
+            return true;
+        }
+        return false;
+    };
+
+    deleteLine(id: string) {
+        const stt = this.lstCtietBcao.find(e => e.id === id)?.stt;
+        this.lstCtietBcao = Table.deleteRow(id, this.lstCtietBcao);
+        this.sum(stt);
+        this.updateEditCache();
+    }
+
     getTotal() {
         this.total.clear();
         this.lstCtietBcao.forEach(item => {
@@ -546,8 +582,8 @@ export class PhuLuc13Component implements OnInit {
     tinhTong() {
         this.tongDieuChinhGiam = 0;
         this.tongDieuChinhTang = 0;
-        this.dToanVuTang = 0;
-        this.dToanVuGiam = 0;
+        this.dtoanVuTang = 0;
+        this.dtoanVuGiam = 0;
         this.lstCtietBcao.forEach(item => {
             const str = item.stt
             if (!(this.lstCtietBcao.findIndex(e => Table.preIndex(e.stt) == str) != -1)) {
@@ -558,9 +594,9 @@ export class PhuLuc13Component implements OnInit {
                 }
 
                 if (item.dtoanVuTvqtDnghi < 0) {
-                    Number(this.dToanVuGiam += Number(item?.dtoanVuTvqtDnghi));
+                    Number(this.dtoanVuGiam += Number(item?.dtoanVuTvqtDnghi));
                 } else {
-                    Number(this.dToanVuTang += Number(item?.dtoanVuTvqtDnghi));
+                    Number(this.dtoanVuTang += Number(item?.dtoanVuTvqtDnghi));
                 }
             }
         })
@@ -616,10 +652,10 @@ export class PhuLuc13Component implements OnInit {
         const fieldOrder = [
             'stt',
             'tenNoiDung',
-            'dToanNamTruoc',
-            'dToanDaGiao',
-            'dToanTongSo',
-            'TongNCDtoanKp',
+            'dtoanNamTruoc',
+            'dtoanDaGiao',
+            'dtoanTongSo',
+            'tongNCDtoanKp',
             'dtoanDnghiDchinh',
             'dtoanVuTvqtDnghi',
             'chenhLech',

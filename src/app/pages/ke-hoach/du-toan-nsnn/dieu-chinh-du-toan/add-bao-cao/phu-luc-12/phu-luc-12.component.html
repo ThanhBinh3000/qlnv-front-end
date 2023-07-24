@@ -36,10 +36,10 @@
                     <nz-table nzBordered class="table__body" [nzScroll]="{x:scrollX}">
                         <thead>
                             <tr>
-                                <th nzLeft nzWidth="50px" rowSpan="2">
+                                <th nzLeft nzWidth="50px" rowSpan="2" nzLeft>
                                     STT
                                 </th>
-                                <th nzLeft nzWidth="300px" rowSpan="2">
+                                <th nzLeft nzWidth="300px" rowSpan="2" nzLeft>
                                     Chương Trình/ Đề tài/ <br> Dự án/ Nhiệm vụ HK&CN
                                 </th>
                                 <th rowSpan="2">
@@ -110,9 +110,9 @@
                                 <td></td>
                                 <td></td>
                                 <td></td>
-                                <td>{{Op.fmtVal(total.dToanNamTruoc)}}</td>
-                                <td>{{Op.fmtVal(total.dToanDaGiao)}}</td>
-                                <td>{{Op.fmtVal(total.dToanTongSo)}}</td>
+                                <td>{{Op.fmtVal(total.dtoanNamTruoc)}}</td>
+                                <td>{{Op.fmtVal(total.dtoanDaGiao)}}</td>
+                                <td>{{Op.fmtVal(total.dtoanTongSo)}}</td>
                                 <td>{{Op.fmtVal(total.tongNcauDtoan)}}</td>
                                 <td>{{Op.fmtVal(total.dtoanDnghiDchinh)}}</td>
                                 <td *ngIf="status.viewAppVal">{{Op.fmtVal(total.dtoanVuTvqtDnghi)}}</td>
@@ -134,7 +134,7 @@
                                 <td></td>
                                 <td></td>
                                 <td>{{Op.fmtVal(tongDieuChinhTang)}}</td>
-                                <td *ngIf="status.viewAppVal">{{Op.fmtVal(dToanVuTang)}}</td>
+                                <td *ngIf="status.viewAppVal">{{Op.fmtVal(dtoanVuTang)}}</td>
                                 <td></td>
                                 <td *ngIf="status.viewAppVal"></td>
                                 <td *ngIf="status.viewAppVal"></td>
@@ -153,7 +153,7 @@
                                 <td></td>
                                 <td></td>
                                 <td>{{Op.fmtVal(tongDieuChinhGiam)}}</td>
-                                <td *ngIf="status.viewAppVal">{{Op.fmtVal(dToanVuGiam)}}</td>
+                                <td *ngIf="status.viewAppVal">{{Op.fmtVal(dtoanVuGiam)}}</td>
                                 <td></td>
                                 <td *ngIf="status.viewAppVal"></td>
                                 <td *ngIf="status.viewAppVal"></td>
@@ -176,16 +176,16 @@
                                         {{data.thoiGian}}
                                     </td>
                                     <td>
-                                        {{data.qDinhPheDuyet}}
+                                        {{data.qdinhPheDuyet}}
                                     </td>
                                     <td>
-                                        {{Op.fmtVal(data.dToanNamTruoc)}}
+                                        {{Op.fmtVal(data.dtoanNamTruoc)}}
                                     </td>
                                     <td>
-                                        {{Op.fmtVal(data.dToanDaGiao)}}
+                                        {{Op.fmtVal(data.dtoanDaGiao)}}
                                     </td>
                                     <td>
-                                        {{Op.fmtVal(data.dToanTongSo)}}
+                                        {{Op.fmtVal(data.dtoanTongSo)}}
                                     </td>
                                     <td>
                                         {{Op.fmtVal(data.tongNcauDtoan)}}
@@ -230,22 +230,22 @@
                                         </td>
                                         <td>
                                             <input nz-input class="search__input"
-                                                [(ngModel)]="editCache[data.id].data.qDinhPheDuyet" />
+                                                [(ngModel)]="editCache[data.id].data.qdinhPheDuyet" />
                                         </td>
                                         <td>
                                             <input class="money-input" currencyMask
-                                                [(ngModel)]="editCache[data.id].data.dToanNamTruoc"
+                                                [(ngModel)]="editCache[data.id].data.dtoanNamTruoc"
                                                 (ngModelChange)="changeModel(editCache[data.id].data.id)"
                                                 [options]="Op.amount" />
                                         </td>
                                         <td>
                                             <input class="money-input" currencyMask
-                                                [(ngModel)]="editCache[data.id].data.dToanDaGiao"
+                                                [(ngModel)]="editCache[data.id].data.dtoanDaGiao"
                                                 (ngModelChange)="changeModel(editCache[data.id].data.id)"
                                                 [options]="Op.amount" />
                                         </td>
                                         <td>
-                                            {{Op.fmtVal(editCache[data.id].data.dToanTongSo)}}
+                                            {{Op.fmtVal(editCache[data.id].data.dtoanTongSo)}}
                                         </td>
                                         <td>
                                             <input class="money-input" currencyMask
@@ -261,13 +261,13 @@
                                         </td>
                                     </ng-container>
                                     <ng-template #viewAppVal>
-                                        <td>{{editCache[data.id].data.tenNoiDung}}</td>
+                                        <td nzLeft>{{editCache[data.id].data.tenNoiDung}}</td>
                                         <td>{{editCache[data.id].data.coQuan}}</td>
                                         <td>{{editCache[data.id].data.thoiGian}}</td>
-                                        <td>{{editCache[data.id].data.qDinhPheDuyet}}</td>
-                                        <td>{{Op.fmtVal(editCache[data.id].data.dToanNamTruoc)}}</td>
-                                        <td>{{Op.fmtVal(editCache[data.id].data.dToanDaGiao)}}</td>
-                                        <td>{{Op.fmtVal(editCache[data.id].data.dToanTongSo)}}</td>
+                                        <td>{{editCache[data.id].data.qdinhPheDuyet}}</td>
+                                        <td>{{Op.fmtVal(editCache[data.id].data.dtoanNamTruoc)}}</td>
+                                        <td>{{Op.fmtVal(editCache[data.id].data.dtoanDaGiao)}}</td>
+                                        <td>{{Op.fmtVal(editCache[data.id].data.dtoanTongSo)}}</td>
                                         <td>{{Op.fmtVal(editCache[data.id].data.tongNcauDtoan)}}</td>
                                         <td>{{Op.fmtVal(editCache[data.id].data.dtoanDnghiDchinh)}}</td>
                                         <td>

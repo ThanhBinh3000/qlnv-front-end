@@ -8,7 +8,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { GDT, TRANG_THAI_PHU_LUC, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { GDT, Roles, Status, TRANG_THAI_PHU_LUC, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import * as fileSaver from 'file-saver';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { ComponentType } from '@angular/cdk/portal';
@@ -27,6 +27,7 @@ import { PhuLucTaiSanComponent } from './phu-luc-tai-san/phu-luc-tai-san.compone
 import { PhuLucQuyLuongComponent } from './phu-luc-quy-luong/phu-luc-quy-luong.component';
 import { PhuLucDaoTaoComponent } from './phu-luc-dao-tao/phu-luc-dao-tao.component';
 import { PhuLucKhoaHocCongNgheComponent } from './phu-luc-khoa-hoc-cong-nghe/phu-luc-khoa-hoc-cong-nghe.component';
+import { BtnStatus, Gdt } from '../giao-du-toan.constant';
 
 
 export class ItemCongVan {
@@ -60,13 +61,13 @@ export class BaoCao {
     maDviCha: string; // chưa dùng	
     maGiao: string;
     soQd: ItemCongVan;
-    maLoaiDan: string;
-    maPhanGiao: string;
+    // maLoaiDan: string;
+    // maPhanGiao: string;
     maPaCha: string;
     ngayQd: any;
     namDtoan: number;
     noiQd: string;
-    nam: number;
+    namBcao: number;
     maDviTien: string;
     thuyetMinh: string;
     ngayTao: any;
@@ -107,7 +108,7 @@ export class AddBaoCaoComponent implements OnInit {
     trangThais: any[] = TRANG_THAI_TIM_KIEM;
     canBos: any[];
     isDataAvailable = false;
-    status = false;                             // trang thai an/ hien cua trang thai
+    // status = false;                             // trang thai an/ hien cua trang thai
     saveStatus = true;                          // trang thai an/hien nut luu
     submitStatus = true;                        // trang thai an/hien nut trinh duyet
     passStatus = true;                          // trang thai an/hien nut truong bo phan
@@ -245,12 +246,12 @@ export class AddBaoCaoComponent implements OnInit {
         if (this.baoCao.id) {
             await this.getDetailReport();
         } else {
-            this.baoCao.nam = this.data.namDtoan;
+            this.baoCao.namBcao = this.data.namPa;
             this.baoCao.maPa = this.data?.maPa;
             this.baoCao.maPaCha = this.data?.maPaCha;
             this.baoCao.maDvi = this.data?.maDvi ? this.data?.maDvi : this.userInfo?.MA_DVI;
-            this.baoCao.maLoaiDan = this.data?.maLoaiDan
-            this.baoCao.maPhanGiao = "3"
+            // this.baoCao.maLoaiDan = this.data?.maLoaiDan
+            // this.baoCao.maPhanGiao = "3"
             this.baoCao.maBcao = this.data?.maBcao
             this.baoCao.soQd = this.data?.soQd
             if (this.data.preTab == "tongHopBaoCaoCapDuoi") {
@@ -340,7 +341,6 @@ export class AddBaoCaoComponent implements OnInit {
                             s.id = null
                         })
                     }
-
                 })
             }
         }
@@ -429,26 +429,26 @@ export class AddBaoCaoComponent implements OnInit {
             })
     };
 
-    viewAppendix(formDetail: ItemData) {
+    viewAppendix(id: string) {
         const isSynthetic = this.baoCao.lstGiaoDtoanTrucThuocs && this.baoCao.lstGiaoDtoanTrucThuocs.length != 0;
+        const bieuMau = this.baoCao.lstCtiets.find(e => e.id == id);
         const dataInfo = {
-            data: formDetail,
+            // data: formDetail,
             extraData: null,
             maDvi: this.baoCao.maDvi,
-            nam: this.baoCao.nam,
+            namBcao: this.baoCao.namBcao,
             statusBtnOk: this.okStatus,
             statusBtnFinish: this.finishStatus,
             statusBtnPrint: this.printStatus,
             acceptStatus: this.acceptStatus,
-            status: this.status || !(this.userInfo?.sub == formDetail.nguoiBcao),
+            status: new BtnStatus(),
             isSynthetic: isSynthetic
         };
+        Object.assign(dataInfo.status, this.status);
+        dataInfo.status.general = dataInfo.status.general && (this.userInfo?.sub == bieuMau.nguoiBcao);
 
-
-
-        dataInfo.data.maDviTien = '1';
         let nzContent: ComponentType<any>;
-        switch (formDetail.maBieuMau) {
+        switch (bieuMau.maBieuMau) {
             case 'pl01N':
                 nzContent = PhuLuc01NhapComponent;
                 break;
@@ -478,395 +478,395 @@ export class AddBaoCaoComponent implements OnInit {
                 break;
             case 'pl09':
                 nzContent = PhuLucPhanBoComponent;
-                if (isSynthetic == false) {
-                    dataInfo.extraData = [];
-                    const data1N = this.baoCao.lstCtiets.find(e => e.maBieuMau == 'pl01N');
-                    const data1X = this.baoCao.lstCtiets.find(e => e.maBieuMau == 'pl01X');
-                    const data2 = this.baoCao.lstCtiets.find(e => e.maBieuMau == 'pl02');
-                    const data3 = this.baoCao.lstCtiets.find(e => e.maBieuMau == 'pl03');
-                    const data4 = this.baoCao.lstCtiets.find(e => e.maBieuMau == 'pl04');
-                    const data5 = this.baoCao.lstCtiets.find(e => e.maBieuMau == 'pl05');
-                    const data6 = this.baoCao.lstCtiets.find(e => e.maBieuMau == 'pl06');
-                    const data7 = this.baoCao.lstCtiets.find(e => e.maBieuMau == 'pl07');
-                    const data8 = this.baoCao.lstCtiets.find(e => e.maBieuMau == 'pl08');
-                    let tongPl1N = 0
-                    let tongPl1X = 0
-                    let tongPl2 = 0
-                    let tongPl3 = 0
-                    let tongPl4 = 0
-                    let tongPl5 = 0
-                    let tongPl6 = 0
-                    let tongPl7 = 0
-                    let tongPl8 = 0
+                // if (isSynthetic == false) {
+                //     dataInfo.extraData = [];
+                //     const data1N = this.baoCao.lstCtiets.find(e => e.maBieuMau == 'pl01N');
+                //     const data1X = this.baoCao.lstCtiets.find(e => e.maBieuMau == 'pl01X');
+                //     const data2 = this.baoCao.lstCtiets.find(e => e.maBieuMau == 'pl02');
+                //     const data3 = this.baoCao.lstCtiets.find(e => e.maBieuMau == 'pl03');
+                //     const data4 = this.baoCao.lstCtiets.find(e => e.maBieuMau == 'pl04');
+                //     const data5 = this.baoCao.lstCtiets.find(e => e.maBieuMau == 'pl05');
+                //     const data6 = this.baoCao.lstCtiets.find(e => e.maBieuMau == 'pl06');
+                //     const data7 = this.baoCao.lstCtiets.find(e => e.maBieuMau == 'pl07');
+                //     const data8 = this.baoCao.lstCtiets.find(e => e.maBieuMau == 'pl08');
+                //     let tongPl1N = 0
+                //     let tongPl1X = 0
+                //     let tongPl2 = 0
+                //     let tongPl3 = 0
+                //     let tongPl4 = 0
+                //     let tongPl5 = 0
+                //     let tongPl6 = 0
+                //     let tongPl7 = 0
+                //     let tongPl8 = 0
 
-                    if (data1N && data1N?.trangThai != '3') {
-                        const dataPL1N = this.baoCao.lstCtiets.find(e => e.maBieuMau == 'pl01N')?.lstCtietBcaos;
-                        let lstN = []
-                        dataPL1N?.forEach(i => {
-                            if (i.stt.length == 3) {
-                                lstN.push(i)
-                            }
-                        })
-                        if (lstN.length > 0) {
-                            lstN?.forEach(i => {
-                                tongPl1N += i.namDtTtien ? i.namDtTtien : 0;
-                            })
-                        }
-                    }
-                    if (data1X && data1X?.trangThai != '3') {
-                        const dataPL1X = this.baoCao.lstCtiets.find(e => e.maBieuMau == 'pl01X')?.lstCtietBcaos;
-                        let lstX = []
-                        dataPL1X?.forEach(i => {
-                            if (i.stt.length == 3) {
-                                lstX.push(i)
-                            }
-                        })
-                        if (lstX.length > 0) {
-                            lstX?.forEach(i => {
-                                tongPl1X += i.namDtTtien ? i.namDtTtien : 0;
-                            })
-                        }
-                    }
+                //     if (data1N && data1N?.trangThai != '3') {
+                //         const dataPL1N = this.baoCao.lstCtiets.find(e => e.maBieuMau == 'pl01N')?.lstCtietBcaos;
+                //         let lstN = []
+                //         dataPL1N?.forEach(i => {
+                //             if (i.stt.length == 3) {
+                //                 lstN.push(i)
+                //             }
+                //         })
+                //         if (lstN.length > 0) {
+                //             lstN?.forEach(i => {
+                //                 tongPl1N += i.namDtTtien ? i.namDtTtien : 0;
+                //             })
+                //         }
+                //     }
+                //     if (data1X && data1X?.trangThai != '3') {
+                //         const dataPL1X = this.baoCao.lstCtiets.find(e => e.maBieuMau == 'pl01X')?.lstCtietBcaos;
+                //         let lstX = []
+                //         dataPL1X?.forEach(i => {
+                //             if (i.stt.length == 3) {
+                //                 lstX.push(i)
+                //             }
+                //         })
+                //         if (lstX.length > 0) {
+                //             lstX?.forEach(i => {
+                //                 tongPl1X += i.namDtTtien ? i.namDtTtien : 0;
+                //             })
+                //         }
+                //     }
 
-                    if (data2 && data2?.trangThai != '3') {
-                        const dataPL2 = this.baoCao.lstCtiets.find(e => e.maBieuMau == 'pl02')?.lstCtietBcaos;
-                        let lstPl2 = []
-                        dataPL2?.forEach(i => {
-                            if (i.stt.length == 3) {
-                                lstPl2.push(i)
-                            }
-                        })
-                        if (lstPl2.length > 0) {
-                            lstPl2?.forEach(i => {
-                                tongPl2 += i.namDtTtien ? i.namDtTtien : 0;
-                            })
-                        }
-                    }
+                //     if (data2 && data2?.trangThai != '3') {
+                //         const dataPL2 = this.baoCao.lstCtiets.find(e => e.maBieuMau == 'pl02')?.lstCtietBcaos;
+                //         let lstPl2 = []
+                //         dataPL2?.forEach(i => {
+                //             if (i.stt.length == 3) {
+                //                 lstPl2.push(i)
+                //             }
+                //         })
+                //         if (lstPl2.length > 0) {
+                //             lstPl2?.forEach(i => {
+                //                 tongPl2 += i.namDtTtien ? i.namDtTtien : 0;
+                //             })
+                //         }
+                //     }
 
-                    if (data3 && data3?.trangThai != '3') {
-                        const dataPL3 = this.baoCao.lstCtiets.find(e => e.maBieuMau == 'pl03')?.lstCtietBcaos;
-                        let lstPl3 = []
-                        dataPL3?.forEach(i => {
-                            if (i.stt.length == 3) {
-                                lstPl3.push(i)
-                            }
-                        })
-                        if (lstPl3.length > 0) {
-                            lstPl3?.forEach(i => {
-                                tongPl3 += i.namDtTcong ? i.namDtTcong : 0
-                            })
-                        }
-                    }
+                //     if (data3 && data3?.trangThai != '3') {
+                //         const dataPL3 = this.baoCao.lstCtiets.find(e => e.maBieuMau == 'pl03')?.lstCtietBcaos;
+                //         let lstPl3 = []
+                //         dataPL3?.forEach(i => {
+                //             if (i.stt.length == 3) {
+                //                 lstPl3.push(i)
+                //             }
+                //         })
+                //         if (lstPl3.length > 0) {
+                //             lstPl3?.forEach(i => {
+                //                 tongPl3 += i.namDtTcong ? i.namDtTcong : 0
+                //             })
+                //         }
+                //     }
 
-                    if (data4 && data4?.trangThai != '3') {
-                        const dataPL4 = this.baoCao.lstCtiets.find(e => e.maBieuMau == 'pl04')?.lstCtietBcaos;
-                        let lstPl4 = []
-                        dataPL4?.forEach(i => {
-                            if (i.stt.length == 3) {
-                                lstPl4.push(i)
-                            }
-                        })
-                        if (lstPl4.length > 0) {
-                            lstPl4?.forEach(i => {
-                                tongPl4 += i.dToanNam ? i.dToanNam : 0
-                            })
-                        }
-                    }
+                //     if (data4 && data4?.trangThai != '3') {
+                //         const dataPL4 = this.baoCao.lstCtiets.find(e => e.maBieuMau == 'pl04')?.lstCtietBcaos;
+                //         let lstPl4 = []
+                //         dataPL4?.forEach(i => {
+                //             if (i.stt.length == 3) {
+                //                 lstPl4.push(i)
+                //             }
+                //         })
+                //         if (lstPl4.length > 0) {
+                //             lstPl4?.forEach(i => {
+                //                 tongPl4 += i.dToanNam ? i.dToanNam : 0
+                //             })
+                //         }
+                //     }
 
-                    if (data5 && data5?.trangThai != '3') {
-                        const dataPL5 = this.baoCao.lstCtiets.find(e => e.maBieuMau == 'pl05')?.lstCtietBcaos;
-                        let lstPl5 = []
-                        dataPL5?.forEach(i => {
-                            if (i.stt.length == 3) {
-                                lstPl5.push(i)
-                            }
-                        })
-                        if (lstPl5.length > 0) {
-                            lstPl5?.forEach(i => {
-                                tongPl5 += i.ttien ? i.ttien : 0
-                            })
-                        }
-                    }
+                //     if (data5 && data5?.trangThai != '3') {
+                //         const dataPL5 = this.baoCao.lstCtiets.find(e => e.maBieuMau == 'pl05')?.lstCtietBcaos;
+                //         let lstPl5 = []
+                //         dataPL5?.forEach(i => {
+                //             if (i.stt.length == 3) {
+                //                 lstPl5.push(i)
+                //             }
+                //         })
+                //         if (lstPl5.length > 0) {
+                //             lstPl5?.forEach(i => {
+                //                 tongPl5 += i.ttien ? i.ttien : 0
+                //             })
+                //         }
+                //     }
 
-                    if (data6 && data6?.trangThai != '3') {
-                        const dataPL6 = this.baoCao.lstCtiets.find(e => e.maBieuMau == 'pl06')?.lstCtietBcaos;
-                        let lstPl6 = []
-                        dataPL6?.forEach(i => {
-                            if (i.stt.length == 3) {
-                                lstPl6.push(i)
-                            }
-                        })
-                        if (lstPl6.length > 0) {
-                            lstPl6?.forEach(i => {
-                                tongPl6 += i.ttien ? i.ttien : 0
-                            })
-                        }
-                    }
+                //     if (data6 && data6?.trangThai != '3') {
+                //         const dataPL6 = this.baoCao.lstCtiets.find(e => e.maBieuMau == 'pl06')?.lstCtietBcaos;
+                //         let lstPl6 = []
+                //         dataPL6?.forEach(i => {
+                //             if (i.stt.length == 3) {
+                //                 lstPl6.push(i)
+                //             }
+                //         })
+                //         if (lstPl6.length > 0) {
+                //             lstPl6?.forEach(i => {
+                //                 tongPl6 += i.ttien ? i.ttien : 0
+                //             })
+                //         }
+                //     }
 
-                    if (data7 && data7?.trangThai != '3') {
-                        const dataPL7 = this.baoCao.lstCtiets.find(e => e.maBieuMau == 'pl07')?.lstCtietBcaos;
-                        let lstPl7 = []
-                        dataPL7?.forEach(i => {
-                            if (i.stt.length == 3) {
-                                lstPl7.push(i)
-                            }
-                        })
-                        if (lstPl7.length > 0) {
-                            lstPl7?.forEach(i => {
-                                tongPl7 += i.TongNCDtoanKp ? i.TongNCDtoanKp : 0
-                            })
-                        }
-                    }
+                //     if (data7 && data7?.trangThai != '3') {
+                //         const dataPL7 = this.baoCao.lstCtiets.find(e => e.maBieuMau == 'pl07')?.lstCtietBcaos;
+                //         let lstPl7 = []
+                //         dataPL7?.forEach(i => {
+                //             if (i.stt.length == 3) {
+                //                 lstPl7.push(i)
+                //             }
+                //         })
+                //         if (lstPl7.length > 0) {
+                //             lstPl7?.forEach(i => {
+                //                 tongPl7 += i.TongNCDtoanKp ? i.TongNCDtoanKp : 0
+                //             })
+                //         }
+                //     }
 
-                    if (data8 && data8?.trangThai != '3') {
-                        const dataPL8 = this.baoCao.lstCtiets.find(e => e.maBieuMau == 'pl08')?.lstCtietBcaos;
-                        let lstPl8 = []
-                        dataPL8?.forEach(i => {
-                            if (i.stt.length == 3) {
-                                lstPl8.push(i)
-                            }
-                        })
-                        if (lstPl8.length > 0) {
-                            lstPl8?.forEach(i => {
-                                tongPl8 += i.tongNcauDtoan ? i.tongNcauDtoan : 0
-                            })
-                        }
-                    }
+                //     if (data8 && data8?.trangThai != '3') {
+                //         const dataPL8 = this.baoCao.lstCtiets.find(e => e.maBieuMau == 'pl08')?.lstCtietBcaos;
+                //         let lstPl8 = []
+                //         dataPL8?.forEach(i => {
+                //             if (i.stt.length == 3) {
+                //                 lstPl8.push(i)
+                //             }
+                //         })
+                //         if (lstPl8.length > 0) {
+                //             lstPl8?.forEach(i => {
+                //                 tongPl8 += i.tongNcauDtoan ? i.tongNcauDtoan : 0
+                //             })
+                //         }
+                //     }
 
-                    let soTranChi = tongPl1N + tongPl1X + tongPl3 + tongPl2 + tongPl4
-                    const lstCtietPlTong = this.baoCao.lstCtiets.find(item => item.maBieuMau == "pl09")
-                    let tongCong = lstCtietPlTong?.lstCtietBcaos.find(itm => itm.stt == "0.1.2.2")?.tongCong
-                    let tongCong1N = lstCtietPlTong?.lstCtietBcaos.find(itm => itm.stt == "0.1.2.2.1")?.tongCong
-                    let tongCong1X = lstCtietPlTong?.lstCtietBcaos.find(itm => itm.stt == "0.1.2.2.2")?.tongCong
-                    let tongCong2 = lstCtietPlTong?.lstCtietBcaos.find(itm => itm.stt == "0.1.2.2.3")?.tongCong
-                    let tongCong3 = lstCtietPlTong?.lstCtietBcaos.find(itm => itm.stt == "0.1.2.2.4")?.tongCong
-                    let tongCong4 = lstCtietPlTong?.lstCtietBcaos.find(itm => itm.stt == "0.1.2.1")?.tongCong
-                    let tongCong5 = lstCtietPlTong?.lstCtietBcaos.find(itm => itm.stt == "0.1.2.4.1")?.tongCong
-                    let tongCong6 = lstCtietPlTong?.lstCtietBcaos.find(itm => itm.stt == "0.2.1.1")?.tongCong
-                    let tongCong7 = lstCtietPlTong?.lstCtietBcaos.find(itm => itm.stt == "0.3.1")?.tongCong
-                    let tongCong8 = lstCtietPlTong?.lstCtietBcaos.find(itm => itm.stt == "0.1.2.4.1")?.tongCong
+                //     let soTranChi = tongPl1N + tongPl1X + tongPl3 + tongPl2 + tongPl4
+                //     const lstCtietPlTong = this.baoCao.lstCtiets.find(item => item.maBieuMau == "pl09")
+                //     let tongCong = lstCtietPlTong?.lstCtietBcaos.find(itm => itm.stt == "0.1.2.2")?.tongCong
+                //     let tongCong1N = lstCtietPlTong?.lstCtietBcaos.find(itm => itm.stt == "0.1.2.2.1")?.tongCong
+                //     let tongCong1X = lstCtietPlTong?.lstCtietBcaos.find(itm => itm.stt == "0.1.2.2.2")?.tongCong
+                //     let tongCong2 = lstCtietPlTong?.lstCtietBcaos.find(itm => itm.stt == "0.1.2.2.3")?.tongCong
+                //     let tongCong3 = lstCtietPlTong?.lstCtietBcaos.find(itm => itm.stt == "0.1.2.2.4")?.tongCong
+                //     let tongCong4 = lstCtietPlTong?.lstCtietBcaos.find(itm => itm.stt == "0.1.2.1")?.tongCong
+                //     let tongCong5 = lstCtietPlTong?.lstCtietBcaos.find(itm => itm.stt == "0.1.2.4.1")?.tongCong
+                //     let tongCong6 = lstCtietPlTong?.lstCtietBcaos.find(itm => itm.stt == "0.2.1.1")?.tongCong
+                //     let tongCong7 = lstCtietPlTong?.lstCtietBcaos.find(itm => itm.stt == "0.3.1")?.tongCong
+                //     let tongCong8 = lstCtietPlTong?.lstCtietBcaos.find(itm => itm.stt == "0.1.2.4.1")?.tongCong
 
-                    if (
-                        (
-                            data1N ||
-                            data1X ||
-                            data2 ||
-                            data3 ||
-                            data4
-                        )
-                        &&
-                        lstCtietPlTong?.trangThai != '3'
-                    ) {
-                        dataInfo.extraData.push({
-                            dtoanGiao: tongCong,
-                            id: uuid.v4() + "FE",
-                            stt: "0.1.2.2",
-                            loaiPa: null,
-                            nguonKhac: null,
-                            nguonNsnn: null,
-                            panDtCtietId: null,
-                            lstCtietDvis: [
-                                {
-                                    id: uuid.v4() + "FE",
-                                    maDviNhan: this.baoCao.maDvi,
-                                    soTranChi: soTranChi
-                                }
-                            ],
-                            maNdung: "0.1.2.2",
-                            tongCong: soTranChi
-                        })
-                    }
-                    if (data1N && data1N?.trangThai != '3') {
-                        dataInfo.extraData.push({
-                            dtoanGiao: tongCong1N,
-                            id: uuid.v4() + "FE",
-                            stt: "0.1.2.2.2",
-                            loaiPa: null,
-                            nguonKhac: null,
-                            nguonNsnn: null,
-                            panDtCtietId: null,
-                            lstCtietDvis: [
-                                {
-                                    id: uuid.v4() + "FE",
-                                    maDviNhan: this.baoCao.maDvi,
-                                    soTranChi: tongPl1N
-                                }
-                            ],
-                            maNdung: "0.1.2.2.2",
-                            tongCong: tongPl1N
-                        })
-                    }
+                //     if (
+                //         (
+                //             data1N ||
+                //             data1X ||
+                //             data2 ||
+                //             data3 ||
+                //             data4
+                //         )
+                //         &&
+                //         lstCtietPlTong?.trangThai != '3'
+                //     ) {
+                //         dataInfo.extraData.push({
+                //             dtoanGiao: tongCong,
+                //             id: uuid.v4() + "FE",
+                //             stt: "0.1.2.2",
+                //             loaiPa: null,
+                //             nguonKhac: null,
+                //             nguonNsnn: null,
+                //             panDtCtietId: null,
+                //             lstCtietDvis: [
+                //                 {
+                //                     id: uuid.v4() + "FE",
+                //                     maDviNhan: this.baoCao.maDvi,
+                //                     soTranChi: soTranChi
+                //                 }
+                //             ],
+                //             maNdung: "0.1.2.2",
+                //             tongCong: soTranChi
+                //         })
+                //     }
+                //     if (data1N && data1N?.trangThai != '3') {
+                //         dataInfo.extraData.push({
+                //             dtoanGiao: tongCong1N,
+                //             id: uuid.v4() + "FE",
+                //             stt: "0.1.2.2.2",
+                //             loaiPa: null,
+                //             nguonKhac: null,
+                //             nguonNsnn: null,
+                //             panDtCtietId: null,
+                //             lstCtietDvis: [
+                //                 {
+                //                     id: uuid.v4() + "FE",
+                //                     maDviNhan: this.baoCao.maDvi,
+                //                     soTranChi: tongPl1N
+                //                 }
+                //             ],
+                //             maNdung: "0.1.2.2.2",
+                //             tongCong: tongPl1N
+                //         })
+                //     }
 
-                    if (data1X && data1X?.trangThai != '3') {
-                        dataInfo.extraData.push({
-                            dtoanGiao: tongCong1X,
-                            id: uuid.v4() + "FE",
-                            stt: "0.1.2.2.3",
-                            loaiPa: null,
-                            nguonKhac: null,
-                            nguonNsnn: null,
-                            panDtCtietId: null,
-                            lstCtietDvis: [
-                                {
-                                    id: uuid.v4() + "FE",
-                                    maDviNhan: this.baoCao.maDvi,
-                                    soTranChi: tongPl1X
-                                }
-                            ],
-                            maNdung: "0.1.2.2.3",
-                            tongCong: tongPl1X
-                        })
-                    }
+                //     if (data1X && data1X?.trangThai != '3') {
+                //         dataInfo.extraData.push({
+                //             dtoanGiao: tongCong1X,
+                //             id: uuid.v4() + "FE",
+                //             stt: "0.1.2.2.3",
+                //             loaiPa: null,
+                //             nguonKhac: null,
+                //             nguonNsnn: null,
+                //             panDtCtietId: null,
+                //             lstCtietDvis: [
+                //                 {
+                //                     id: uuid.v4() + "FE",
+                //                     maDviNhan: this.baoCao.maDvi,
+                //                     soTranChi: tongPl1X
+                //                 }
+                //             ],
+                //             maNdung: "0.1.2.2.3",
+                //             tongCong: tongPl1X
+                //         })
+                //     }
 
-                    if (data3 && data3?.trangThai != '3') {
-                        dataInfo.extraData.push({
-                            dtoanGiao: tongCong3,
-                            id: uuid.v4() + "FE",
-                            stt: "0.1.2.2.4",
-                            loaiPa: null,
-                            nguonKhac: null,
-                            nguonNsnn: null,
-                            panDtCtietId: null,
-                            lstCtietDvis: [
-                                {
-                                    id: uuid.v4() + "FE",
-                                    maDviNhan: this.baoCao.maDvi,
-                                    soTranChi: tongPl3
-                                }
-                            ],
-                            maNdung: "0.1.2.2.4",
-                            tongCong: tongPl3
-                        })
-                    }
+                //     if (data3 && data3?.trangThai != '3') {
+                //         dataInfo.extraData.push({
+                //             dtoanGiao: tongCong3,
+                //             id: uuid.v4() + "FE",
+                //             stt: "0.1.2.2.4",
+                //             loaiPa: null,
+                //             nguonKhac: null,
+                //             nguonNsnn: null,
+                //             panDtCtietId: null,
+                //             lstCtietDvis: [
+                //                 {
+                //                     id: uuid.v4() + "FE",
+                //                     maDviNhan: this.baoCao.maDvi,
+                //                     soTranChi: tongPl3
+                //                 }
+                //             ],
+                //             maNdung: "0.1.2.2.4",
+                //             tongCong: tongPl3
+                //         })
+                //     }
 
-                    if (data2 && data2?.trangThai != '3') {
-                        dataInfo.extraData.push({
-                            dtoanGiao: tongCong2,
-                            id: uuid.v4() + "FE",
-                            stt: "0.1.2.2.1",
-                            loaiPa: null,
-                            nguonKhac: null,
-                            nguonNsnn: null,
-                            panDtCtietId: null,
-                            lstCtietDvis: [
-                                {
-                                    id: uuid.v4() + "FE",
-                                    maDviNhan: this.baoCao.maDvi,
-                                    soTranChi: tongPl2
-                                }
-                            ],
-                            maNdung: "0.1.2.2.1",
-                            tongCong: tongPl2
-                        })
-                    }
+                //     if (data2 && data2?.trangThai != '3') {
+                //         dataInfo.extraData.push({
+                //             dtoanGiao: tongCong2,
+                //             id: uuid.v4() + "FE",
+                //             stt: "0.1.2.2.1",
+                //             loaiPa: null,
+                //             nguonKhac: null,
+                //             nguonNsnn: null,
+                //             panDtCtietId: null,
+                //             lstCtietDvis: [
+                //                 {
+                //                     id: uuid.v4() + "FE",
+                //                     maDviNhan: this.baoCao.maDvi,
+                //                     soTranChi: tongPl2
+                //                 }
+                //             ],
+                //             maNdung: "0.1.2.2.1",
+                //             tongCong: tongPl2
+                //         })
+                //     }
 
-                    if (data4 && data4?.trangThai != '3') {
-                        dataInfo.extraData.push({
-                            dtoanGiao: tongCong4,
-                            id: uuid.v4() + "FE",
-                            stt: "0.1.2.1",
-                            loaiPa: null,
-                            nguonKhac: null,
-                            nguonNsnn: null,
-                            panDtCtietId: null,
-                            lstCtietDvis: [
-                                {
-                                    id: uuid.v4() + "FE",
-                                    maDviNhan: this.baoCao.maDvi,
-                                    soTranChi: tongPl4
-                                }
-                            ],
-                            maNdung: "0.1.2.1",
-                            tongCong: tongPl4
-                        })
-                    }
-                    if (data5 && data5?.trangThai != '3') {
-                        dataInfo.extraData.push({
-                            dtoanGiao: tongCong5,
-                            id: uuid.v4() + "FE",
-                            stt: "0.1.2.4.1",
-                            loaiPa: null,
-                            nguonKhac: null,
-                            nguonNsnn: null,
-                            panDtCtietId: null,
-                            lstCtietDvis: [
-                                {
-                                    id: uuid.v4() + "FE",
-                                    maDviNhan: this.baoCao.maDvi,
-                                    soTranChi: tongPl5
-                                }
-                            ],
-                            maNdung: "0.1.2.4.1",
-                            tongCong: tongPl5
-                        })
-                    }
-                    if (data6 && data6?.trangThai != '3') {
-                        dataInfo.extraData.push({
-                            dtoanGiao: tongCong6,
-                            id: uuid.v4() + "FE",
-                            stt: "0.2.1.1",
-                            loaiPa: null,
-                            nguonKhac: null,
-                            nguonNsnn: null,
-                            panDtCtietId: null,
-                            lstCtietDvis: [
-                                {
-                                    id: uuid.v4() + "FE",
-                                    maDviNhan: this.baoCao.maDvi,
-                                    soTranChi: tongPl6
-                                }
-                            ],
-                            maNdung: "0.2.1.1",
-                            tongCong: tongPl6
-                        })
-                    }
-                    if (data7 && data7?.trangThai != '3') {
-                        dataInfo.extraData.push({
-                            dtoanGiao: tongCong7,
-                            id: uuid.v4() + "FE",
-                            stt: "0.3.1",
-                            loaiPa: null,
-                            nguonKhac: null,
-                            nguonNsnn: null,
-                            panDtCtietId: null,
-                            lstCtietDvis: [
-                                {
-                                    id: uuid.v4() + "FE",
-                                    maDviNhan: this.baoCao.maDvi,
-                                    soTranChi: tongPl7
-                                }
-                            ],
-                            maNdung: "0.3.1",
-                            tongCong: tongPl7
-                        })
-                    }
-                    if (data8 && data8?.trangThai != '3') {
-                        dataInfo.extraData.push({
-                            dtoanGiao: tongCong8,
-                            id: uuid.v4() + "FE",
-                            stt: "0.3.1",
-                            loaiPa: null,
-                            nguonKhac: null,
-                            nguonNsnn: null,
-                            panDtCtietId: null,
-                            lstCtietDvis: [
-                                {
-                                    id: uuid.v4() + "FE",
-                                    maDviNhan: this.baoCao.maDvi,
-                                    soTranChi: tongPl8
-                                }
-                            ],
-                            maNdung: "0.3.1",
-                            tongCong: tongPl8
-                        })
-                    }
-                }
+                //     if (data4 && data4?.trangThai != '3') {
+                //         dataInfo.extraData.push({
+                //             dtoanGiao: tongCong4,
+                //             id: uuid.v4() + "FE",
+                //             stt: "0.1.2.1",
+                //             loaiPa: null,
+                //             nguonKhac: null,
+                //             nguonNsnn: null,
+                //             panDtCtietId: null,
+                //             lstCtietDvis: [
+                //                 {
+                //                     id: uuid.v4() + "FE",
+                //                     maDviNhan: this.baoCao.maDvi,
+                //                     soTranChi: tongPl4
+                //                 }
+                //             ],
+                //             maNdung: "0.1.2.1",
+                //             tongCong: tongPl4
+                //         })
+                //     }
+                //     if (data5 && data5?.trangThai != '3') {
+                //         dataInfo.extraData.push({
+                //             dtoanGiao: tongCong5,
+                //             id: uuid.v4() + "FE",
+                //             stt: "0.1.2.4.1",
+                //             loaiPa: null,
+                //             nguonKhac: null,
+                //             nguonNsnn: null,
+                //             panDtCtietId: null,
+                //             lstCtietDvis: [
+                //                 {
+                //                     id: uuid.v4() + "FE",
+                //                     maDviNhan: this.baoCao.maDvi,
+                //                     soTranChi: tongPl5
+                //                 }
+                //             ],
+                //             maNdung: "0.1.2.4.1",
+                //             tongCong: tongPl5
+                //         })
+                //     }
+                //     if (data6 && data6?.trangThai != '3') {
+                //         dataInfo.extraData.push({
+                //             dtoanGiao: tongCong6,
+                //             id: uuid.v4() + "FE",
+                //             stt: "0.2.1.1",
+                //             loaiPa: null,
+                //             nguonKhac: null,
+                //             nguonNsnn: null,
+                //             panDtCtietId: null,
+                //             lstCtietDvis: [
+                //                 {
+                //                     id: uuid.v4() + "FE",
+                //                     maDviNhan: this.baoCao.maDvi,
+                //                     soTranChi: tongPl6
+                //                 }
+                //             ],
+                //             maNdung: "0.2.1.1",
+                //             tongCong: tongPl6
+                //         })
+                //     }
+                //     if (data7 && data7?.trangThai != '3') {
+                //         dataInfo.extraData.push({
+                //             dtoanGiao: tongCong7,
+                //             id: uuid.v4() + "FE",
+                //             stt: "0.3.1",
+                //             loaiPa: null,
+                //             nguonKhac: null,
+                //             nguonNsnn: null,
+                //             panDtCtietId: null,
+                //             lstCtietDvis: [
+                //                 {
+                //                     id: uuid.v4() + "FE",
+                //                     maDviNhan: this.baoCao.maDvi,
+                //                     soTranChi: tongPl7
+                //                 }
+                //             ],
+                //             maNdung: "0.3.1",
+                //             tongCong: tongPl7
+                //         })
+                //     }
+                //     if (data8 && data8?.trangThai != '3') {
+                //         dataInfo.extraData.push({
+                //             dtoanGiao: tongCong8,
+                //             id: uuid.v4() + "FE",
+                //             stt: "0.3.1",
+                //             loaiPa: null,
+                //             nguonKhac: null,
+                //             nguonNsnn: null,
+                //             panDtCtietId: null,
+                //             lstCtietDvis: [
+                //                 {
+                //                     id: uuid.v4() + "FE",
+                //                     maDviNhan: this.baoCao.maDvi,
+                //                     soTranChi: tongPl8
+                //                 }
+                //             ],
+                //             maNdung: "0.3.1",
+                //             tongCong: tongPl8
+                //         })
+                //     }
+                // }
                 break;
             default:
                 break;
         }
         const modalAppendix = this.modal.create({
-            nzTitle: formDetail.tenDm,
+            nzTitle: bieuMau.tenDm,
             nzContent: nzContent,
             nzBodyStyle: { overflowY: 'auto', maxHeight: 'calc(100vh - 200px)' },
             nzMaskClosable: false,
@@ -882,8 +882,8 @@ export class AddBaoCaoComponent implements OnInit {
                 //gan lai thong tin sau khi bieu mau duoc luu
                 const index = this.baoCao.lstCtiets.findIndex(e => e.maBieuMau == res.formDetail.maBieuMau);
                 this.baoCao.lstCtiets[index] = res.formDetail;
-                this.baoCao.lstCtiets[index].tenPl = formDetail.tenPl;
-                this.baoCao.lstCtiets[index].tenDm = formDetail.tenDm;
+                this.baoCao.lstCtiets[index].tenPl = bieuMau.tenPl;
+                this.baoCao.lstCtiets[index].tenDm = bieuMau.tenDm;
             }
         });
     }
@@ -1209,42 +1209,73 @@ export class AddBaoCaoComponent implements OnInit {
     }
 
 
-    getStatusButton() {
-        const isSynthetic = this.baoCao.lstGiaoDtoanTrucThuocs && this.baoCao.lstGiaoDtoanTrucThuocs.length != 0;
-        const isChild = this.userInfo.MA_DVI == this.baoCao.maDvi;
-        const isParent = this.userInfo.MA_DVI == this.baoCao.maDviCha;
-        //kiem tra quyen cua cac user
-        const checkSave = isSynthetic ? this.userService.isAccessPermisson(GDT.EDIT_REPORT_TH) : this.userService.isAccessPermisson(GDT.EDIT_REPORT_TH);
-        const checkSunmit = isSynthetic ? this.userService.isAccessPermisson(GDT.APPROVE_REPORT_TH) : this.userService.isAccessPermisson(GDT.APPROVE_REPORT_TH);
-        const checkPass = isSynthetic ? this.userService.isAccessPermisson(GDT.DUYET_REPORT_TH) : this.userService.isAccessPermisson(GDT.DUYET_REPORT_TH);
-        const checkApprove = isSynthetic ? this.userService.isAccessPermisson(GDT.PHEDUYET_REPORT_TH) : this.userService.isAccessPermisson(GDT.PHEDUYET_REPORT_TH);
-        const checkAccept = this.userService.isAccessPermisson(GDT.TIEP_NHAN_TC_REPORT_TH);
-        const checkCopy = isSynthetic ? this.userService.isAccessPermisson(GDT.COPY_REPORT_TH) : this.userService.isAccessPermisson(GDT.COPY_REPORT_PA_PBDT);
-        const checkPrint = isSynthetic ? this.userService.isAccessPermisson(GDT.IN_PA_TONGHOP_PBDT) : this.userService.isAccessPermisson(GDT.PRINT_REPORT_PA_PBDT);
-        if (Utils.statusSave.includes(this.baoCao.trangThai) && checkSave) {
-            this.status = false;
-        } else {
-            this.status = true;
-        }
-        this.saveStatus = Utils.statusSave.includes(this.baoCao.trangThai) && checkSave && isChild;
-        this.submitStatus = Utils.statusApprove.includes(this.baoCao.trangThai) && checkSunmit && isChild && !(!this.baoCao.id);
-        this.passStatus = Utils.statusDuyet.includes(this.baoCao.trangThai) && checkPass && isChild;
-        this.approveStatus = Utils.statusPheDuyet.includes(this.baoCao.trangThai) && checkApprove && isChild;
-        this.acceptStatus = Utils.statusTiepNhan.includes(this.baoCao.trangThai) && checkAccept && isParent;
-        this.copyStatus = Utils.statusCopy.includes(this.baoCao.trangThai) && checkCopy && isChild;
-        this.printStatus = Utils.statusPrint.includes(this.baoCao.trangThai) && checkPrint && isChild;
+    // getStatusButton() {
+    //     const isSynthetic = this.baoCao.lstGiaoDtoanTrucThuocs && this.baoCao.lstGiaoDtoanTrucThuocs.length != 0;
+    //     const isChild = this.userInfo.MA_DVI == this.baoCao.maDvi;
+    //     const isParent = this.userInfo.MA_DVI == this.baoCao.maDviCha;
+    //     //kiem tra quyen cua cac user
+    //     const checkSave = isSynthetic ? this.userService.isAccessPermisson(GDT.EDIT_REPORT_TH) : this.userService.isAccessPermisson(GDT.EDIT_REPORT_TH);
+    //     const checkSunmit = isSynthetic ? this.userService.isAccessPermisson(GDT.APPROVE_REPORT_TH) : this.userService.isAccessPermisson(GDT.APPROVE_REPORT_TH);
+    //     const checkPass = isSynthetic ? this.userService.isAccessPermisson(GDT.DUYET_REPORT_TH) : this.userService.isAccessPermisson(GDT.DUYET_REPORT_TH);
+    //     const checkApprove = isSynthetic ? this.userService.isAccessPermisson(GDT.PHEDUYET_REPORT_TH) : this.userService.isAccessPermisson(GDT.PHEDUYET_REPORT_TH);
+    //     const checkAccept = this.userService.isAccessPermisson(GDT.TIEP_NHAN_TC_REPORT_TH);
+    //     const checkCopy = isSynthetic ? this.userService.isAccessPermisson(GDT.COPY_REPORT_TH) : this.userService.isAccessPermisson(GDT.COPY_REPORT_PA_PBDT);
+    //     const checkPrint = isSynthetic ? this.userService.isAccessPermisson(GDT.IN_PA_TONGHOP_PBDT) : this.userService.isAccessPermisson(GDT.PRINT_REPORT_PA_PBDT);
+    //     if (Utils.statusSave.includes(this.baoCao.trangThai) && checkSave) {
+    //         this.status = false;
+    //     } else {
+    //         this.status = true;
+    //     }
+    //     this.saveStatus = Utils.statusSave.includes(this.baoCao.trangThai) && checkSave && isChild;
+    //     this.submitStatus = Utils.statusApprove.includes(this.baoCao.trangThai) && checkSunmit && isChild && !(!this.baoCao.id);
+    //     this.passStatus = Utils.statusDuyet.includes(this.baoCao.trangThai) && checkPass && isChild;
+    //     this.approveStatus = Utils.statusPheDuyet.includes(this.baoCao.trangThai) && checkApprove && isChild;
+    //     this.acceptStatus = Utils.statusTiepNhan.includes(this.baoCao.trangThai) && checkAccept && isParent;
+    //     this.copyStatus = Utils.statusCopy.includes(this.baoCao.trangThai) && checkCopy && isChild;
+    //     this.printStatus = Utils.statusPrint.includes(this.baoCao.trangThai) && checkPrint && isChild;
 
-        if (this.acceptStatus || this.approveStatus || this.passStatus) {
-            this.okStatus = true;
-        } else {
-            this.okStatus = false;
-        }
-        if (this.saveStatus) {
-            this.finishStatus = false;
-        } else {
-            this.finishStatus = true;
-        }
-    };
+    //     if (this.acceptStatus || this.approveStatus || this.passStatus) {
+    //         this.okStatus = true;
+    //     } else {
+    //         this.okStatus = false;
+    //     }
+    //     if (this.saveStatus) {
+    //         this.finishStatus = false;
+    //     } else {
+    //         this.finishStatus = true;
+    //     }
+    // };
+    isChild: boolean;
+    isParent: boolean;
+    status: BtnStatus = new BtnStatus();
+    //check role cho các nut trinh duyet
+    getStatusButton() {
+        const isSynthetic = this.baoCao.lstGiaoDtoanTrucThuocs && this.baoCao.lstCtiets.length != 0;
+        this.isChild = this.userInfo.MA_DVI == this.baoCao.maDvi;
+        this.isParent = this.userInfo.MA_DVI == this.baoCao.maDviCha;
+        //kiem tra quyen cua cac user
+        const checkSave = isSynthetic ? this.userService.isAccessPermisson(Roles.GDT.EDIT_REPORT_TH) : this.userService.isAccessPermisson(Roles.LTD.EDIT_REPORT);
+        const checkSunmit = isSynthetic ? this.userService.isAccessPermisson(Roles.LTD.SUBMIT_SYNTH_REPORT) : this.userService.isAccessPermisson(Roles.LTD.SUBMIT_REPORT);
+        const checkPass = isSynthetic ? this.userService.isAccessPermisson(Roles.LTD.PASS_SYNTH_REPORT) : this.userService.isAccessPermisson(Roles.LTD.PASS_REPORT);
+        const checkApprove = isSynthetic ? this.userService.isAccessPermisson(Roles.LTD.APPROVE_SYNTH_REPORT) : this.userService.isAccessPermisson(Roles.LTD.APPROVE_REPORT);
+        const checkAccept = this.userService.isAccessPermisson(Roles.LTD.ACCEPT_REPORT);
+        const checkPrint = isSynthetic ? this.userService.isAccessPermisson(Roles.LTD.PRINT_SYNTH_REPORT) : this.userService.isAccessPermisson(Roles.LTD.PRINT_REPORT);
+        const checkExport = isSynthetic ? this.userService.isAccessPermisson(Roles.LTD.EXPORT_SYNTH_REPORT) : this.userService.isAccessPermisson(Roles.LTD.EXPORT_REPORT)
+
+        this.status.general = Status.check('saveWHist', this.baoCao.trangThai) && checkSave;
+        this.status.new = Status.check('reject', this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.LTD.ADD_REPORT) && this.isChild && this.data.preTab == Gdt.DANH_SACH_BAO_CAO;
+        this.status.viewAppVal = Status.check('appraisal', this.baoCao.trangThai);
+        this.status.save = Status.check('saveWHist', this.baoCao.trangThai) && checkSave && this.isChild;
+        this.status.submit = Status.check('submit', this.baoCao.trangThai) && checkSunmit && this.isChild && !(!this.baoCao.id);
+        this.status.pass = Status.check('pass', this.baoCao.trangThai) && checkPass && this.isChild;
+        this.status.approve = Status.check('approve', this.baoCao.trangThai) && checkApprove && this.isChild;
+        this.status.accept = Status.check('accept', this.baoCao.trangThai) && checkAccept && this.isParent;
+        // this.status.print = Utils.statusPrint.includes(this.baoCao.trangThai) && checkPrint && this.isChild;
+        this.status.export = Status.check('export', this.baoCao.trangThai) && checkExport && this.isChild;
+        this.status.ok = this.status.accept || this.status.approve || this.status.pass
+        this.status.finish = this.status.general;
+        this.status.editAppVal = this.status.accept;
+    }
 
     async getChildUnit() {
         const request = {
@@ -1273,7 +1304,7 @@ export class AddBaoCaoComponent implements OnInit {
         const request = JSON.parse(JSON.stringify(
             {
                 id: null,
-                namDtoan: this.baoCao.nam,
+                namDtoan: this.baoCao.namBcao,
                 maPa: this.baoCao.maBcao,
                 soQd: this.baoCao.soQd,
                 maGiao: this.baoCao.maGiao,

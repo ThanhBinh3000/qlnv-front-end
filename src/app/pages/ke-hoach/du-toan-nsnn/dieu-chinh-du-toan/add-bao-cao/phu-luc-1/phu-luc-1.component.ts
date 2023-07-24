@@ -190,22 +190,22 @@ export class PhuLuc1Component implements OnInit {
             }
         }
 
-        if (this.lstCtietBcao.length == 0) {
-            this.noiDungs.forEach(e => {
-                this.lstCtietBcao.push(new ItemData({
-                    id: uuid.v4() + 'FE',
-                    stt: e.ma,
-                    maNoiDung: e.ma,
-                    noiDung: e.tenDm,
-                    dtoanDnghiDchinh: 0,
-                    dtoanVuTvqtDnghi: 0,
-                    tong: 0,
-                    dtoanKphiNamNay: 0,
-                    dtoanKphiNamTruoc: 0,
-                    tongDtoanTrongNam: 0,
-                }))
-            })
-        }
+        // if (this.lstCtietBcao.length == 0) {
+        //     this.noiDungs.forEach(e => {
+        //         this.lstCtietBcao.push(new ItemData({
+        //             id: uuid.v4() + 'FE',
+        //             stt: e.ma,
+        //             maNoiDung: e.ma,
+        //             noiDung: e.tenDm,
+        //             dtoanDnghiDchinh: 0,
+        //             dtoanVuTvqtDnghi: 0,
+        //             tong: 0,
+        //             dtoanKphiNamNay: 0,
+        //             dtoanKphiNamTruoc: 0,
+        //             tongDtoanTrongNam: 0,
+        //         }))
+        //     })
+        // }
 
         // if (this.dataInfo?.extraData && this.dataInfo.extraData.length > 0) {
         //     this.lstCtietBcao = this.lstCtietBcao.filter(e => e.maNoiDung);
@@ -292,6 +292,8 @@ export class PhuLuc1Component implements OnInit {
                     this.formDetail.listIdDeleteFiles = [];
                     this.listFile = [];
                     this.getStatusButton();
+                    console.log(this.lstCtietBcao);
+
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
                 }

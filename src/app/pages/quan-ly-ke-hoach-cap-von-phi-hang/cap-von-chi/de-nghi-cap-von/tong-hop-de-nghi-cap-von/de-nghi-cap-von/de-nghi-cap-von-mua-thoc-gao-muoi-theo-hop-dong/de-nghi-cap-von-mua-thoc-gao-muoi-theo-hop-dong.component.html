@@ -108,7 +108,7 @@
 		<div class="mt-16 flex-card p-lr16">
 			<nz-card class="mt-2px flex-card data-table card-border-content table-card" nzTitle="Danh sách hợp đồng">
 				<nz-tabset class="tab__container" [(nzSelectedIndex)]="selectedIndex"
-					[nzTabBarExtraContent]="extraTemplate">
+					[nzTabBarExtraContent]="extraTemplate" (click)="selectab()">
 					<nz-tab [nzTitle]="'HỢP ĐỒNG'">
 						<nz-table nzBordered class="table__body">
 							<thead>
@@ -232,9 +232,9 @@
 								<tr></tr>
 							</thead>
 							<tbody>
-								<tr *ngFor="let data of baoCao.lstCtiets; let i = index">
+								<tr *ngFor="let data of response.lstCtiets; let i = index">
 									<td>
-										{{ i-1 }}
+										{{i+1}}
 									</td>
 									<td>
 										{{ data.tenDvi }}

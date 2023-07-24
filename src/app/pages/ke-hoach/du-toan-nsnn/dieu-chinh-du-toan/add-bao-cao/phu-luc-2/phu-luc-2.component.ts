@@ -26,14 +26,14 @@ export class ItemData {
     sluongTsDaPd: number;
     sluongTsCong: number;
     sluongTsTcDinhMuc: number;
-    dToanDnghiSl: number;
-    dToanDnghiMucGia: number;
-    dToanDnghiThanhTien: number;
-    dToanKpNamTruoc: number;
-    dToanKpDaGiao: number;
-    dToanKpCong: number;
-    dToanDieuChinh: number;
-    dToanVuDnghi: number;
+    dtoanDnghiSl: number;
+    dtoanDnghiMucGia: number;
+    dtoanDnghiThanhTien: number;
+    dtoanKpNamTruoc: number;
+    dtoanKpDaGiao: number;
+    dtoanKpCong: number;
+    dtoanKpDieuChinh: number;
+    dtoanVuDnghi: number;
     thuyetMinh: string;
     chenhLech: number;
     ykienDviCtren: string;
@@ -181,13 +181,13 @@ export class PhuLuc2Component implements OnInit {
     getTotal() {
         this.total = new ItemData();
         this.lstCtietBcao.forEach(item => {
-            // this.total.dToanDnghiMucGia = Operator.sum([this.total.dToanDnghiMucGia, item.dToanDnghiMucGia]);
-            this.total.dToanDnghiThanhTien = Operator.sum([this.total.dToanDnghiThanhTien, item.dToanDnghiThanhTien]);
-            this.total.dToanKpNamTruoc = Operator.sum([this.total.dToanKpNamTruoc, item.dToanKpNamTruoc]);
-            this.total.dToanKpDaGiao = Operator.sum([this.total.dToanKpDaGiao, item.dToanKpDaGiao]);
-            this.total.dToanKpCong = Operator.sum([this.total.dToanKpCong, item.dToanKpCong]);
-            this.total.dToanDieuChinh = Operator.sum([this.total.dToanDieuChinh, item.dToanDieuChinh]);
-            this.total.dToanVuDnghi = Operator.sum([this.total.dToanVuDnghi, item.dToanVuDnghi]);
+            // this.total.dtoanDnghiMucGia = Operator.sum([this.total.dtoanDnghiMucGia, item.dtoanDnghiMucGia]);
+            this.total.dtoanDnghiThanhTien = Operator.sum([this.total.dtoanDnghiThanhTien, item.dtoanDnghiThanhTien]);
+            this.total.dtoanKpNamTruoc = Operator.sum([this.total.dtoanKpNamTruoc, item.dtoanKpNamTruoc]);
+            this.total.dtoanKpDaGiao = Operator.sum([this.total.dtoanKpDaGiao, item.dtoanKpDaGiao]);
+            this.total.dtoanKpCong = Operator.sum([this.total.dtoanKpCong, item.dtoanKpCong]);
+            this.total.dtoanKpDieuChinh = Operator.sum([this.total.dtoanKpDieuChinh, item.dtoanKpDieuChinh]);
+            this.total.dtoanVuDnghi = Operator.sum([this.total.dtoanVuDnghi, item.dtoanVuDnghi]);
         })
     };
 
@@ -202,7 +202,7 @@ export class PhuLuc2Component implements OnInit {
             return;
         }
 
-        if (this.lstCtietBcao.some(e => e.dToanKpDaGiao > Utils.MONEY_LIMIT)) {
+        if (this.lstCtietBcao.some(e => e.dtoanKpDaGiao > Utils.MONEY_LIMIT)) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
             return;
         }
@@ -222,7 +222,7 @@ export class PhuLuc2Component implements OnInit {
 
         if (this.status.general) {
             lstCtietBcaoTemp?.forEach(item => {
-                item.dToanVuDnghi = item.dToanDieuChinh;
+                item.dtoanVuDnghi = item.dtoanKpDieuChinh;
             })
         }
 
@@ -296,7 +296,7 @@ export class PhuLuc2Component implements OnInit {
 
     saveEdit(id: string): void {
         const index = this.lstCtietBcao.findIndex(item => item.id === id); // lay vi tri hang minh sua
-        if (this.editCache[id].data.dToanDnghiSl > (this.editCache[id].data.sluongTsTcDinhMuc - this.editCache[id].data.sluongTsCong)) {
+        if (this.editCache[id].data.dtoanDnghiSl > (this.editCache[id].data.sluongTsTcDinhMuc - this.editCache[id].data.sluongTsCong)) {
             this.notification.warning(
                 MESSAGE.WARNING,
                 "Dự toán số lượng đề nghị trang bị không được lớn hơn hiệu của tiêu chuẩn định mức và tổng số lượng tài sản hiện có"
@@ -337,33 +337,33 @@ export class PhuLuc2Component implements OnInit {
 
     tongDieuChinhTang: number;
     tongDieuChinhGiam: number;
-    dToanVuTang: number;
-    dToanVuGiam: number;
+    dtoanVuTang: number;
+    dtoanVuGiam: number;
     tinhTong() {
         this.tongDieuChinhGiam = 0;
         this.tongDieuChinhTang = 0;
-        this.dToanVuTang = 0;
-        this.dToanVuGiam = 0;
+        this.dtoanVuTang = 0;
+        this.dtoanVuGiam = 0;
         this.lstCtietBcao.forEach(item => {
-            if (item.dToanDieuChinh < 0) {
-                this.tongDieuChinhGiam += Number(item.dToanDieuChinh);
+            if (item.dtoanKpDieuChinh < 0) {
+                this.tongDieuChinhGiam += Number(item.dtoanKpDieuChinh);
             } else {
-                this.tongDieuChinhTang += Number(item.dToanDieuChinh);
+                this.tongDieuChinhTang += Number(item.dtoanKpDieuChinh);
             }
 
-            if (item.dToanVuDnghi < 0) {
-                this.dToanVuGiam += Number(item.dToanVuDnghi);
+            if (item.dtoanVuDnghi < 0) {
+                this.dtoanVuGiam += Number(item.dtoanVuDnghi);
             } else {
-                this.dToanVuTang += Number(item.dToanVuDnghi);
+                this.dtoanVuTang += Number(item.dtoanVuDnghi);
             }
         })
     };
 
     changeModel(id: string): void {
         this.editCache[id].data.sluongTsCong = Operator.sum([this.editCache[id].data.sluongTsDenTd, this.editCache[id].data.sluongTsDaNhan, this.editCache[id].data.sluongTsDaPd]);
-        this.editCache[id].data.dToanDnghiThanhTien = Operator.mul(this.editCache[id].data.dToanDnghiSl, this.editCache[id].data.dToanDnghiMucGia);
-        this.editCache[id].data.dToanKpCong = Operator.sum([this.editCache[id].data.dToanKpNamTruoc, this.editCache[id].data.dToanKpDaGiao]);
-        this.editCache[id].data.dToanDieuChinh = Operator.sum([this.editCache[id].data.dToanDnghiThanhTien, -this.editCache[id].data.dToanKpCong]);
+        this.editCache[id].data.dtoanDnghiThanhTien = Operator.mul(this.editCache[id].data.dtoanDnghiSl, this.editCache[id].data.dtoanDnghiMucGia);
+        this.editCache[id].data.dtoanKpCong = Operator.sum([this.editCache[id].data.dtoanKpNamTruoc, this.editCache[id].data.dtoanKpDaGiao]);
+        this.editCache[id].data.dtoanKpDieuChinh = Operator.sum([this.editCache[id].data.dtoanDnghiThanhTien, - this.editCache[id].data.dtoanKpCong]);
 
     };
 
@@ -395,14 +395,14 @@ export class PhuLuc2Component implements OnInit {
             sluongTsDaPd: 0,
             sluongTsCong: 0,
             sluongTsTcDinhMuc: 5,
-            dToanDnghiSl: 0,
-            dToanDnghiMucGia: 0,
-            dToanDnghiThanhTien: 0,
-            dToanKpNamTruoc: 0,
-            dToanKpDaGiao: 0,
-            dToanKpCong: 0,
-            dToanDieuChinh: 0,
-            dToanVuDnghi: 0,
+            dtoanDnghiSl: 0,
+            dtoanDnghiMucGia: 0,
+            dtoanDnghiThanhTien: 0,
+            dtoanKpNamTruoc: 0,
+            dtoanKpDaGiao: 0,
+            dtoanKpCong: 0,
+            dtoanKpDieuChinh: 0,
+            dtoanVuDnghi: 0,
             thuyetMinh: "",
             ghiChu: "",
             chenhLech: 0,
@@ -477,14 +477,14 @@ export class PhuLuc2Component implements OnInit {
             'sluongTsDaPd',
             'sluongTsCong',
             'sluongTsTcDinhMuc',
-            'dToanDnghiSl',
-            'dToanDnghiMucGia',
-            'dToanDnghiThanhTien',
-            'dToanKpNamTruoc',
-            'dToanKpDaGiao',
-            'dToanKpCong',
-            'dToanDieuChinh',
-            'dToanVuDnghi',
+            'dtoanDnghiSl',
+            'dtoanDnghiMucGia',
+            'dtoanDnghiThanhTien',
+            'dtoanKpNamTruoc',
+            'dtoanKpDaGiao',
+            'dtoanKpCong',
+            'dtoanKpDieuChinh',
+            'dtoanVuDnghi',
             'thuyetMinh',
             'ghiChu'
         ]

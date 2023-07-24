@@ -12,4 +12,7 @@ export class BtnStatus {
     export: boolean = true;
     viewAppVal?: boolean = true;                       // quyen xem tham dinh
     editAppVal?: boolean = true;                       // quyen sua tham dinh
+    copy?: boolean = true;                             // copy
+    addNewReport?: boolean = true;                     // them moi bao cao
+    deleteReport?: boolean = true;                     // xoa bao cao
 }

@@ -5,42 +5,38 @@
                 <i class="fa fa-arrow-left"></i>
                 <span>Quay lại</span>
             </button>
-            <button *ngIf="saveStatus" type="button" class="btn btn-sub" (click)="action('save')">
+            <button *ngIf="status.save" type="button" class="btn btn-sub" (click)="action('save')">
                 <i class="icon htvbdh_tcdt_save"></i>
                 <span>Lưu</span>
             </button>
-            <button *ngIf="submitStatus" type="button" class="btn btn-sub" (click)="action('submit')">
+            <button *ngIf="status.submit" type="button" class="btn btn-sub" (click)="action('submit')">
                 <i class="icon htvbdh_tcdt_guiduyet"></i>
                 <span>Trình duyệt</span>
             </button>
-            <button *ngIf="passStatus" type="button" class="btn btn-sub" (click)="action('nonpass')">
-                <i class="icon htvbdh_tcdt_tuchoi"></i>
-                <span>Từ chối</span>
-            </button>
-            <button *ngIf="passStatus" type="button" class="btn btn-sub" (click)="action('pass')">
+            <button *ngIf="status.pass" type="button" class="btn btn-sub" (click)="action('pass')">
                 <i class="icon htvbdh_tcdt_pheduyet"></i>
                 <span>Duyệt</span>
             </button>
-            <button *ngIf="approveStatus" type="button" class="btn btn-sub" (click)="action('nonapprove')">
+            <button *ngIf="status.pass" type="button" class="btn btn-do" (click)="action('nonpass')">
                 <i class="icon htvbdh_tcdt_tuchoi"></i>
                 <span>Từ chối</span>
             </button>
-            <button *ngIf="approveStatus" type="button" class="btn btn-sub" (click)="action('approve')">
+            <button *ngIf="status.approve" type="button" class="btn btn-sub" (click)="action('approve')">
                 <i class="icon htvbdh_tcdt_pheduyet"></i>
                 <span>Phê duyệt</span>
             </button>
-            <button *ngIf="acceptStatus" type="button" class="btn btn-sub" (click)="action('nonaccept')">
+            <button *ngIf="status.approve" type="button" class="btn btn-do" (click)="action('nonapprove')">
                 <i class="icon htvbdh_tcdt_tuchoi"></i>
                 <span>Từ chối</span>
             </button>
-            <button *ngIf="acceptStatus" type="button" class="btn btn-sub" (click)="action('accept')">
+            <button *ngIf="status.accept" type="button" class="btn btn-sub" (click)="action('accept')">
                 <i class="icon htvbdh_tcdt_pheduyet"></i>
                 <span>Tiếp nhận</span>
             </button>
-            <!-- <button *ngIf="copyStatus" type="button" class="btn btn-sub" (click)="showDialogCopy()">
-        <i nz-icon nzType="copy" nzTheme="outline"></i>
-        <span>Copy</span>
-      </button> -->
+            <button *ngIf="status.accept" type="button" class="btn btn-do" (click)="action('nonaccept')">
+                <i class="icon htvbdh_tcdt_tuchoi"></i>
+                <span>Từ chối</span>
+            </button>
         </div>
     </nz-affix>
 
@@ -142,7 +138,7 @@
                                                 Lý do: {{data.lyDoTuChoi}}
                                             </ng-container>
                                         </td>
-                                        <td>
+                                        <!-- <td>
                                             <ng-container
                                                 *ngIf="userInfo?.sub == baoCao.nguoiTao && !status && data?.id?.length==38 ;else templateNguoiBcao ">
                                                 <nz-select nzShowSearch nzAllowClear
@@ -160,17 +156,38 @@
                                                     </div>
                                                 </div>
                                             </ng-template>
+                                        </td> -->
+
+
+                                        <td>
+                                            <ng-container
+                                                *ngIf="userInfo?.sub == baoCao.nguoiTao && status.general && data?.id?.length==38 ;else templateNguoiBcao ">
+                                                <nz-select nzShowSearch nzAllowClear
+                                                    nzPlaceHolder="Chọn cán bộ thực hiện" [(ngModel)]="data.nguoiBcao"
+                                                    [class]="data.nguoiBcao ?'' : 'input-error-validate'">
+                                                    <nz-option *ngFor="let item of canBos" [nzValue]="item.username"
+                                                        [nzLabel]="item.username">
+                                                    </nz-option>
+                                                </nz-select>
+                                            </ng-container>
+                                            <ng-template #templateNguoiBcao>
+                                                {{data.nguoiBcao}}
+                                            </ng-template>
                                         </td>
+
                                         <td>
                                             <ng-container *ngIf="baoCao.id">
-                                                <a *ngIf="!status && (userInfo?.sub == data.nguoiBcao)">
-                                                    <i class="fa fa-pencil" (click)="viewAppendix(data)"></i>
+                                                <a *ngIf="status.general && (userInfo?.sub == data.nguoiBcao)">
+                                                    <i class="fa fa-pencil" (click)="viewAppendix(data.id)"></i>
                                                 </a>
                                                 <a
-                                                    *ngIf="(status || userInfo?.sub != data.nguoiBcao) && data.nguoiBcao">
-                                                    <i class="fa fa-eye" (click)="viewAppendix(data)"></i>
+                                                    *ngIf="(!status.general || userInfo?.sub != data.nguoiBcao) && data.nguoiBcao">
+                                                    <i class="fa fa-eye" (click)="viewAppendix(data.id)"></i>
                                                 </a>
                                             </ng-container>
+                                            <a *ngIf="status.general && (userInfo?.sub == baoCao.nguoiTao)">
+                                                <i class="fa fa-trash-o do" (click)="deleteAppendix(data.id)"></i>
+                                            </a>
                                         </td>
                                         <!-- <td>
                                             <i class="fa fa-pencil" (click)="viewAppendix(data)"></i>
@@ -193,8 +210,8 @@
                         </nz-table>
                     </nz-tab>
                     <ng-template #extraTemplate>
-                        <button *ngIf="!status && userInfo?.sub == baoCao.nguoiTao" type="button" class="btn btn-main"
-                            (click)="addAppendix()">
+                        <button *ngIf="status.general && userInfo?.sub == baoCao.nguoiTao" type="button"
+                            class="btn btn-main" (click)="addAppendix()">
                             <i class="icon htvbdh_dau-cong"></i>
                             <span>Thêm</span>
                         </button>

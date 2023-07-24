@@ -204,6 +204,8 @@ export class AddBaoCaoComponent implements OnInit {
         if (this.baoCao.id) {
             await this.getDetailReport();
         } else {
+            console.log(this.data);
+
             this.baoCao = this.data.baoCao;
         }
         this.getStatusButton();
@@ -413,7 +415,7 @@ export class AddBaoCaoComponent implements OnInit {
         const obj = {
             id: id,
             preData: this.data,
-            tabSelected: 'next-' + this.data?.tabSelected,
+            tabSelected: this.data.tabSelected == Dcdt.BAO_CAO_01 ? Dcdt.BAO_CAO_02 : Dcdt.BAO_CAO_01,
         }
         this.dataChange.emit(obj);
     }

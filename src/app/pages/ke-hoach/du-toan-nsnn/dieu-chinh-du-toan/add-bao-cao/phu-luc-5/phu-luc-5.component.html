@@ -32,13 +32,13 @@
                     <nz-table nzBordered class="table__body" [nzScroll]="{x: scrollX}">
                         <thead>
                             <tr>
-                                <th rowspan="2" *ngIf="status.general" class="text-center" nzWidth="50px">
+                                <!-- <th rowspan="2" *ngIf="status.general" class="text-center" nzWidth="50px">
                                     <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
                                         style="margin-right: 0;">
                                     </label>
-                                </th>
-                                <th rowspan="2" class="text-center" nzWidth="50px">STT</th>
-                                <th rowspan="2" nzWidth="300px">Nội dung</th>
+                                </th> -->
+                                <th rowspan="2" class="text-center" nzWidth="50px" nzLeft>STT</th>
+                                <th rowspan="2" nzWidth="300px" nzLeft>Nội dung</th>
                                 <th rowspan="2" nzWidth="150px">ĐVT</th>
                                 <th rowspan="2">Số lượng theo KH được giao năm {{namBcao}}</th>
                                 <th colspan="5">Số lượng thực hiện năm {{namBcao}}</th>
@@ -62,9 +62,9 @@
                                 <th>Thành tiền (đồng) <br> (Tổng nhu cầu năm nay)</th>
                             </tr>
                             <tr>
-                                <th *ngIf="status.general"></th>
-                                <th>A</th>
-                                <th>B</th>
+                                <!-- <th *ngIf="status.general"></th> -->
+                                <th nzLeft>A</th>
+                                <th nzLeft>B</th>
                                 <th>C</th>
                                 <th>1</th>
                                 <th>2</th>
@@ -85,9 +85,9 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td *ngIf="status.general"></td>
-                                <td></td>
-                                <td>Tổng cộng</td>
+                                <!-- <td *ngIf="status.general"></td> -->
+                                <td nzLeft></td>
+                                <td nzLeft>Tổng cộng</td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
@@ -98,7 +98,7 @@
                                 <td>{{Op.fmtVal(total.dtoanDaGiaoLke)}}</td>
                                 <td>{{Op.fmtVal(total.dtoanDchinh)}}</td>
                                 <td *ngIf="status.viewAppVal">{{Op.fmtVal(total.dtoanVuTvqtDnghi)}}</td>
-                                <td>{{Op.fmtVal(total.kphiThieu)}}</td>
+                                <td>{{Op.fmtVal(total.kphiConThieu)}}</td>
                                 <td *ngIf="status.viewAppVal">{{Op.fmtVal(total.chenhLech)}}</td>
                                 <td *ngIf="status.viewAppVal"></td>
                                 <td></td>
@@ -106,9 +106,9 @@
                                 <td *ngIf="status.general || status.editAppVal"></td>
                             </tr>
                             <tr>
-                                <td *ngIf="status.general"></td>
-                                <td></td>
-                                <td>Phát sinh điều chỉnh tăng</td>
+                                <!-- <td *ngIf="status.general"></td> -->
+                                <td nzLeft></td>
+                                <td nzLeft>Phát sinh điều chỉnh tăng</td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
@@ -128,9 +128,9 @@
                                 <td *ngIf="status.general || status.editAppVal"></td>
                             </tr>
                             <tr>
-                                <td *ngIf="status.general"></td>
-                                <td></td>
-                                <td>Phát sinh điều chỉnh giảm</td>
+                                <!-- <td *ngIf="status.general"></td> -->
+                                <td nzLeft></td>
+                                <td nzLeft>Phát sinh điều chỉnh giảm</td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
@@ -151,14 +151,14 @@
                             </tr>
                             <tr *ngFor="let data of lstCtietBcao; let i = index">
                                 <ng-container *ngIf="!editCache[data.id].edit; else editTemplate ">
-                                    <td *ngIf="status.general " class="text-center">
+                                    <!-- <td *ngIf="status.general " class="text-center">
                                         <label *ngIf="checkDelete(data.stt)" nz-checkbox [nzValue]="data.id"
                                             [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"></label>
-                                    </td>
-                                    <td class="text-center">
+                                    </td> -->
+                                    <td class="text-center" nzLeft>
                                         {{ getChiMuc(data.stt) }}
                                     </td>
-                                    <td>
+                                    <td nzLeft>
                                         {{ data.noiDung }}
                                     </td>
                                     <td>
@@ -192,7 +192,7 @@
                                         {{ Op.fmtVal(data.dtoanVuTvqtDnghi) }}
                                     </td>
                                     <td>
-                                        {{ Op.fmtVal(data.kphiThieu) }}
+                                        {{ Op.fmtVal(data.kphiConThieu) }}
                                     </td>
                                     <td *ngIf="status.viewAppVal">
                                         {{ Op.fmtVal(data.chenhLech) }}
@@ -214,14 +214,14 @@
 
                                 </ng-container>
                                 <ng-template #editTemplate>
-                                    <td *ngIf="status.general" class="text-center">
+                                    <!-- <td *ngIf="status.general" class="text-center">
                                         <label *ngIf="checkDelete(data.stt)" nz-checkbox [nzValue]="data.id"
                                             [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"></label>
-                                    </td>
-                                    <td class="text-center">
+                                    </td> -->
+                                    <td class="text-center" nzLeft>
                                         {{getChiMuc(editCache[data.id].data.stt)}}
                                     </td>
-                                    <td>
+                                    <td nzLeft>
                                         {{editCache[data.id].data.noiDung}}
                                     </td>
                                     <td>
@@ -266,7 +266,8 @@
                                         </td>
                                         <td>
                                             <input class="money-input" currencyMask
-                                                [(ngModel)]="editCache[data.id].data.kphiThieu" [options]="Op.amount" />
+                                                [(ngModel)]="editCache[data.id].data.kphiConThieu"
+                                                [options]="Op.amount" />
                                         </td>
                                         <td>
                                             <input nz-input [(ngModel)]="editCache[data.id].data.ghiChu" />
@@ -302,7 +303,7 @@
                                                 [(ngModel)]="editCache[data.id].data.dtoanVuTvqtDnghi"
                                                 [options]="Op.amount" />
                                         </td>
-                                        <td>{{Op.fmtVal(editCache[data.id].data.kphiThieu)}}</td>
+                                        <td>{{Op.fmtVal(editCache[data.id].data.kphiConThieu)}}</td>
 
                                         <td>
                                             {{ Op.fmtVal(editCache[data.id].data.chenhLech) }}
