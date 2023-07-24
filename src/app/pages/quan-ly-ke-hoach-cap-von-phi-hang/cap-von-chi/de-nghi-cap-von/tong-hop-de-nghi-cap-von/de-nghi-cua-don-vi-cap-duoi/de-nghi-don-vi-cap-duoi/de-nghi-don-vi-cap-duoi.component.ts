@@ -174,6 +174,7 @@ export class DeNghiDonViCapDuoiComponent implements OnInit {
   }
 
   async initialization() {
+    debugger
     //lay id cua de nghi
     this.userInfo = this.userService.getUserLogin();
     if (this.data?.id) {
@@ -197,7 +198,7 @@ export class DeNghiDonViCapDuoiComponent implements OnInit {
     this.approveStatus = this.baoCao.trangThai == Utils.TT_BC_2 && this.userService.isAccessPermisson(CVNC.PHE_DUYET_DN_MLT) && checkChirld;
     this.copyStatus = Utils.statusCopy.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(CVNC.COPY_DN_MLT) && checkChirld;
     this.tiepNhan = Utils.statusTiepNhan.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.CVNC.ACCEPT_OR_REJECT);
-    console.log(this.tiepNhan); if (this.status) {
+    if (this.status) {
       this.scrollX = (550 + 12 * BOX_NUMBER_WIDTH).toString() + 'px';
     } else {
       this.scrollX = (500 + 12 * BOX_NUMBER_WIDTH).toString() + 'px';
@@ -205,6 +206,7 @@ export class DeNghiDonViCapDuoiComponent implements OnInit {
   }
 
   back() {
+    debugger
     const obj = {
       tabSelected: 'ds-denghi-donvi-capduoi',
     }

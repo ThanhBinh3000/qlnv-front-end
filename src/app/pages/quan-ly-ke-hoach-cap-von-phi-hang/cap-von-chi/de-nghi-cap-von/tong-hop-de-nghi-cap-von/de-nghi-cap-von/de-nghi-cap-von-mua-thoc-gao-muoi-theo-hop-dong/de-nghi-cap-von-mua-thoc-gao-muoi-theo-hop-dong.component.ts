@@ -536,7 +536,6 @@ export class DeNghiCapVonMuaThocGaoMuoiTheoHopDongComponent implements OnInit {
 				this.spinner.show();
 				await this.capVonNguonChiService.timKiemDeNghi(requestData).toPromise().then(
 					(data) => {
-						debugger
 						if (data.statusCode == 0) {
 							this.idCallChitietCapVon = data.data.content[0].id;
 						} else {

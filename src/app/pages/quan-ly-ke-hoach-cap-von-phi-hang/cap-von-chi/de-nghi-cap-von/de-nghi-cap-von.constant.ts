@@ -138,7 +138,7 @@ export class BaoCao {
     thanhLyHdongSl: number;
     thanhLyHdongTt: number;
     lstCtiets: ItemContract[];
-    lstCtietsDnghiCapVon: ItemContract[];
+    // lstCtietsDnghiCapVon: ItemContract[];
 }
 
 export class ItemContract {
@@ -179,6 +179,26 @@ export class ItemContract {
     soQdPdKhlcnt: string;
     gtriHdSauVat: number;
     soLuong: number;
+    gtTheoKeHoach: number;
+    soConDuocTt: number;
+    soDuyetTtLanNay: number;
+    soConDuocTtSauTtLanNay: number;
+    vonDuyetCong: number;
+    vonDuyetCapUng: number;
+    vonDuyetCapVon: number;
+    uyNhchiNgay: string;
+    uyNhchiMaNguonNs: string;
+    uyNhchiNienDoNs: string;
+    uyNhchiNienSoTien: number;
+    tongVonVaDtDaCap: number;
+    soLkeSauKhiCapLanNay: number;
+    tongCap: number;
+    dnghiCapvonLuyKes: Times[];
+    luyKeTongCapUng: number;
+    luyKeTongCapVon: number;
+    luyKeTongCong: number;
+    soLan: number;
+    maLoai: string;
 }
 
 export class ItemRequest {
