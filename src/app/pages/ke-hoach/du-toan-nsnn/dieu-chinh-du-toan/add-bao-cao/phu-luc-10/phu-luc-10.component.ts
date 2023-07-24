@@ -4,7 +4,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { CurrencyMaskInputMode } from 'ngx-currency';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { addChild, addParent, deleteRow, getHead, getName } from 'src/app/Utility/func';
+// import { addChild, addParent, deleteRow, getHead, getName } from 'src/app/Utility/func';
 import { FileManip, Operator, Status, Table, Utils } from 'src/app/Utility/utils';
 import { DialogChonDanhMucComponent } from 'src/app/components/dialog/dialog-chon-danh-muc/dialog-chon-danh-muc.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
@@ -146,7 +146,7 @@ export class PhuLuc10Component implements OnInit {
 						this.noiDungs.push({
 							...item,
 							level: item.ma?.split('.').length - 2,
-							giaTri: getName(this.namBcao, item.giaTri),
+							giaTri: Utils.getName(this.namBcao, item.giaTri),
 						})
 					}
 				)
@@ -203,7 +203,7 @@ export class PhuLuc10Component implements OnInit {
 	}
 
 	getLowStatus(str: string) {
-		return this.lstCtietBcao.findIndex(e => getHead(e.stt) == str) != -1;
+		return this.lstCtietBcao.findIndex(e => Table.preIndex(e.stt) == str) != -1;
 	}
 
 	updateAllChecked(): void {
@@ -317,7 +317,7 @@ export class PhuLuc10Component implements OnInit {
 
 	deleteLine(id: string) {
 		const stt = this.lstCtietBcao.find(e => e.id === id)?.stt;
-		this.lstCtietBcao = deleteRow(id, this.lstCtietBcao);
+		this.lstCtietBcao = Table.deleteRow(id, this.lstCtietBcao);
 		this.sum(stt);
 		this.updateEditCache();
 	}
@@ -401,7 +401,7 @@ export class PhuLuc10Component implements OnInit {
 		this.dToanVuGiam = 0;
 		this.lstCtietBcao.forEach(item => {
 			const str = item.stt
-			if (!(this.lstCtietBcao.findIndex(e => getHead(e.stt) == str) != -1)) {
+			if (!(this.lstCtietBcao.findIndex(e => Table.preIndex(e.stt) == str) != -1)) {
 				if (item.dtoanDnghiDchinhLnay < 0) {
 					Number(this.tongDieuChinhGiam += Number(item?.dtoanDnghiDchinhLnay));
 				} else {
@@ -532,12 +532,12 @@ export class PhuLuc10Component implements OnInit {
 	};
 
 	addSame(id: string, initItem: ItemData) {
-		this.lstCtietBcao = addParent(id, initItem, this.lstCtietBcao);
+		this.lstCtietBcao = Table.addParent(id, initItem, this.lstCtietBcao);
 	};
 
 
 	addLow(id: string, initItem: ItemData) {
-		this.lstCtietBcao = addChild(id, initItem, this.lstCtietBcao);
+		this.lstCtietBcao = Table.addChild(id, initItem, this.lstCtietBcao);
 	};
 
 	// xoa file trong bang file

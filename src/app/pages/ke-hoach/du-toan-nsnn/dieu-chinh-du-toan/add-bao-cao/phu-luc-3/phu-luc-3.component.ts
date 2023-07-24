@@ -224,7 +224,7 @@ export class PhuLuc3Component implements OnInit {
 
         if (this.status.general) {
             lstCtietBcaoTemp?.forEach(item => {
-                item.dtoanDchinh = item.dtoanVuTvqtDnghi;
+                item.dtoanVuTvqtDnghi = item.dtoanDchinh;
             })
         }
 

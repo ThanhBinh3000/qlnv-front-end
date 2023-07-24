@@ -133,14 +133,14 @@ export class DialogTaoMoiComponent implements OnInit {
         if (this.tab == Dcdt.DANH_SACH_BAO_CAO) {
             if (this.userInfo.DON_VI.tenVietTat.indexOf('_VP') != -1) {
                 const request = {
-                    lan: lan,
-                    maDvi: this.userInfo.MA_DVI,
-                    namHienTai: this.response.namBcao,
+                    dotBcao: lan,
+                    // maDvi: this.userInfo.MA_DVI,
+                    namBcao: this.response.namBcao,
                 }
                 await this.dieuChinhService.soLuongVp(request).toPromise().then(
                     (data) => {
                         if (data.statusCode == 0) {
-                            this.response.lstDchinh = data.data.lstDchinh;
+                            this.response.lstDchinh = data.data.lstDchinhs;
                             this.response.lstDchinh.forEach(item => {
                                 if (!item.id) {
                                     item.id = uuid.v4() + 'FE';
@@ -185,11 +185,15 @@ export class DialogTaoMoiComponent implements OnInit {
     //tong hop theo nam bao cao
     async synthetic() {
         this.spinner.show();
-        await this.dieuChinhService.tongHopDieuChinhDuToan(this.response.namBcao).toPromise().then(
+        const requestReport = {
+            dotBcao: this.response.dotBcao,
+            namBcao: this.response.namBcao,
+        };
+        await this.dieuChinhService.tongHopDieuChinhDuToan(requestReport).toPromise().then(
             (data) => {
                 if (data.statusCode == 0) {
-                    this.response.lstDchinh = data.data.lstLapThamDinhs;
-                    this.response.lstDviTrucThuoc = data.data.lstBcaoDviTrucThuocs;
+                    this.response.lstDchinh = data.data?.lstDchinhs;
+                    this.response.lstDviTrucThuoc = data.data?.lstDchinhDviTrucThuocs;
                     this.response.lstDchinh.forEach(item => {
                         if (!item.id) {
                             item.id = uuid.v4() + 'FE';

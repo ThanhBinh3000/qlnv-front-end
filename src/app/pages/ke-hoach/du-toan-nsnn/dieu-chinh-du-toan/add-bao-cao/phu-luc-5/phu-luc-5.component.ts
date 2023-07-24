@@ -31,7 +31,7 @@ export class ItemData {
     dtoanDaGiaoLke: number;
     dtoanDchinh: number;
     dtoanVuTvqtDnghi: number;
-    kphiThieu: number;
+    kphiConThieu: number;
     maNoiDung: string;
     maDmuc: string;
     chenhLech: number;
@@ -550,7 +550,7 @@ export class PhuLuc5Component implements OnInit {
                     this.lstCtietBcao[index].dtoanDaGiaoLke = Operator.sum([this.lstCtietBcao[index].dtoanDaGiaoLke, item.dtoanDaGiaoLke]);
                     this.lstCtietBcao[index].dtoanDchinh = Operator.sum([this.lstCtietBcao[index].dtoanDchinh, item.dtoanDchinh]);
                     this.lstCtietBcao[index].dtoanVuTvqtDnghi = Operator.sum([this.lstCtietBcao[index].dtoanVuTvqtDnghi, item.dtoanVuTvqtDnghi]);
-                    this.lstCtietBcao[index].kphiThieu = Operator.sum([this.lstCtietBcao[index].kphiThieu, item.kphiThieu]);
+                    this.lstCtietBcao[index].kphiConThieu = Operator.sum([this.lstCtietBcao[index].kphiConThieu, item.kphiConThieu]);
                 }
             })
             stt = Table.preIndex(stt)
@@ -586,7 +586,7 @@ export class PhuLuc5Component implements OnInit {
                         this.lstCtietBcao[index].dtoanDaGiaoLke = Operator.sum([this.lstCtietBcao[index].dtoanDaGiaoLke, item.dtoanDaGiaoLke]);
                         this.lstCtietBcao[index].dtoanDchinh = Operator.sum([this.lstCtietBcao[index].dtoanDchinh, item.dtoanDchinh]);
                         this.lstCtietBcao[index].dtoanVuTvqtDnghi = Operator.sum([this.lstCtietBcao[index].dtoanVuTvqtDnghi, item.dtoanVuTvqtDnghi]);
-                        this.lstCtietBcao[index].kphiThieu = Operator.sum([this.lstCtietBcao[index].kphiThieu, item.kphiThieu]);
+                        this.lstCtietBcao[index].kphiConThieu = Operator.sum([this.lstCtietBcao[index].kphiConThieu, item.kphiConThieu]);
                     }
                 })
                 stt = Table.preIndex(stt);
@@ -605,7 +605,7 @@ export class PhuLuc5Component implements OnInit {
                 this.total.dtoanDaGiaoLke = Operator.sum([this.total.dtoanDaGiaoLke, item.dtoanDaGiaoLke]);
                 this.total.dtoanDchinh = Operator.sum([this.total.dtoanDchinh, item.dtoanDchinh]);
                 this.total.dtoanVuTvqtDnghi = Operator.sum([this.total.dtoanVuTvqtDnghi, item.dtoanVuTvqtDnghi]);
-                this.total.kphiThieu = Operator.sum([this.total.kphiThieu, item.kphiThieu]);
+                this.total.kphiConThieu = Operator.sum([this.total.kphiConThieu, item.kphiConThieu]);
             }
         })
     };
@@ -738,7 +738,7 @@ export class PhuLuc5Component implements OnInit {
             "dtoanDaGiaoLke",
             "dtoanDchinh",
             "dtoanVuTvqtDnghi",
-            "kphiThieu",
+            "kphiConThieu",
             "chenhLech",
             "ykienDviCtren",
             "ghiChu",

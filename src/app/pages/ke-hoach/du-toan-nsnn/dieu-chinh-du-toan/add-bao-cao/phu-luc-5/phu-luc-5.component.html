@@ -98,7 +98,7 @@
                                 <td>{{Op.fmtVal(total.dtoanDaGiaoLke)}}</td>
                                 <td>{{Op.fmtVal(total.dtoanDchinh)}}</td>
                                 <td *ngIf="status.viewAppVal">{{Op.fmtVal(total.dtoanVuTvqtDnghi)}}</td>
-                                <td>{{Op.fmtVal(total.kphiThieu)}}</td>
+                                <td>{{Op.fmtVal(total.kphiConThieu)}}</td>
                                 <td *ngIf="status.viewAppVal">{{Op.fmtVal(total.chenhLech)}}</td>
                                 <td *ngIf="status.viewAppVal"></td>
                                 <td></td>
@@ -192,7 +192,7 @@
                                         {{ Op.fmtVal(data.dtoanVuTvqtDnghi) }}
                                     </td>
                                     <td>
-                                        {{ Op.fmtVal(data.kphiThieu) }}
+                                        {{ Op.fmtVal(data.kphiConThieu) }}
                                     </td>
                                     <td *ngIf="status.viewAppVal">
                                         {{ Op.fmtVal(data.chenhLech) }}
@@ -266,7 +266,8 @@
                                         </td>
                                         <td>
                                             <input class="money-input" currencyMask
-                                                [(ngModel)]="editCache[data.id].data.kphiThieu" [options]="Op.amount" />
+                                                [(ngModel)]="editCache[data.id].data.kphiConThieu"
+                                                [options]="Op.amount" />
                                         </td>
                                         <td>
                                             <input nz-input [(ngModel)]="editCache[data.id].data.ghiChu" />
@@ -302,7 +303,7 @@
                                                 [(ngModel)]="editCache[data.id].data.dtoanVuTvqtDnghi"
                                                 [options]="Op.amount" />
                                         </td>
-                                        <td>{{Op.fmtVal(editCache[data.id].data.kphiThieu)}}</td>
+                                        <td>{{Op.fmtVal(editCache[data.id].data.kphiConThieu)}}</td>
 
                                         <td>
                                             {{ Op.fmtVal(editCache[data.id].data.chenhLech) }}
