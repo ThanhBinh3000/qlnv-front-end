@@ -42,7 +42,7 @@ export class QuyetdinhPheduyetKhmttComponent extends Base2Component implements O
       trichYeu: null,
       trangThai: null,
       ngayQd: null,
-      lastest: 0,
+      lastest: null,
       ngayQdTu: null,
       maDvi: null,
       ngayQdDen: null

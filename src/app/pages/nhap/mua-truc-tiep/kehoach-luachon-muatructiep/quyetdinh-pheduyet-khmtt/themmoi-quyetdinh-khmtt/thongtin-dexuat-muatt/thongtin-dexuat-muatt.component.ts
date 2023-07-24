@@ -13,6 +13,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import dayjs from 'dayjs';
 import { DanhSachMuaTrucTiepService } from 'src/app/services/danh-sach-mua-truc-tiep.service';
 import { DialogThemMoiKeHoachMuaTrucTiepComponent } from 'src/app/components/dialog/dialog-them-moi-ke-hoach-mua-truc-tiep/dialog-them-moi-ke-hoach-mua-truc-tiep.component';
+import {ChiTieuKeHoachNamCapTongCucService} from "../../../../../../../services/chiTieuKeHoachNamCapTongCuc.service";
 
 @Component({
   selector: 'app-thongtin-dexuat-muatt',
@@ -23,14 +24,17 @@ export class ThongtinDexuatMuattComponent implements OnChanges {
   @Input() title;
   @Input() dataInput;
   @Output() soLuongChange = new EventEmitter<number>();
+  @Output() objectChange = new EventEmitter<number>();
   @Input() isView;
   @Input() isCache: boolean = false;
   @Input() isTongHop;
+  @Input() dataChiTieu;
 
   formData: FormGroup
   dataTable: any[] = [];
   listNguonVon: any[] = [];
-  dataChiTieu: any;
+  tgianMkhoChange: Date | null = null;
+  tgianKthucChange: Date | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -38,6 +42,7 @@ export class ThongtinDexuatMuattComponent implements OnChanges {
     private danhMucService: DanhMucService,
     private danhSachMuaTrucTiepService: DanhSachMuaTrucTiepService,
     private spinner: NgxSpinnerService,
+    private chiTieuKeHoachNamCapTongCucService: ChiTieuKeHoachNamCapTongCucService,
     private helperService: HelperService,
     private modal: NzModalService,
     private notification: NzNotificationService,
@@ -70,6 +75,9 @@ export class ThongtinDexuatMuattComponent implements OnChanges {
     if (changes) {
       if (this.dataInput) {
         this.helperService.bidingDataInFormGroup(this.formData, this.dataInput);
+        this.tgianMkhoChange = this.dataInput.tgianMkho
+        this.tgianKthucChange = this.dataInput.tgianKthuc
+        console.log(this.formData.value)
         this.dataTable = this.dataInput.children
         this.calculatorTable();
       } else {
@@ -108,14 +116,22 @@ export class ThongtinDexuatMuattComponent implements OnChanges {
       nzFooter: null,
       nzComponentParams: {
         dataEdit: data,
+        dataAll: this.dataTable,
+        dataChiTieu: this.dataChiTieu
       },
     });
     modalGT.afterClose.subscribe((data) => {
       if (!data) {
         return;
       }
-      if (index >= 0) {
+      if (index && index >= 0) {
         this.dataTable[index] = data;
+      }else{
+        for (let i = 0; i < this.dataTable.length; i++) {
+          if(this.dataTable[i].maDvi == data.maDvi){
+            this.dataTable[i] = data
+          }
+        }
       }
       this.calculatorTable();
     });
@@ -145,6 +161,15 @@ export class ThongtinDexuatMuattComponent implements OnChanges {
 
   convertTienTobangChu(tien: number): string {
     return convertTienTobangChu(tien);
+  }
+
+  onDateChanged(value: any, type: any) {
+    if (type == 'tgianMkho') {
+      this.formData.get('tgianMkho').setValue(value);
+    } else if (type == 'tgianKthuc') {
+      this.formData.get('tgianKthuc').setValue(value);
+    }
+    this.objectChange.emit(this.formData.value)
   }
 
 

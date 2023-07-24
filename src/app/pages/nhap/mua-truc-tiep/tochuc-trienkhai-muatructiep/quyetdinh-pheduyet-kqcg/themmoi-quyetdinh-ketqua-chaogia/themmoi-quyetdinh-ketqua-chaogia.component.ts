@@ -236,7 +236,7 @@ export class ThemmoiQuyetdinhKetquaChaogiaComponent extends Base2Component imple
         idPdKhDtl: data.id,
         idPdKhHdr: data.hhQdPheduyetKhMttHdr.id
       })
-      this.danhSachCtiet = data.children;
+      this.danhSachCtiet = data.children.length > 0 ? data.children : data.children2;
       this.showDetail(event, this.danhSachCtiet[0])
       // if (this.dataTable) {
       //   this.dataTable.forEach((item) => {
