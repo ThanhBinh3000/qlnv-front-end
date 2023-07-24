@@ -16,12 +16,12 @@
           <span>Quay lại</span>
         </button>
         <button class="btn btn-sub ml-2" (click)="pheDuyet()"
-                *ngIf="(formData.value.trangThai == STATUS.DU_THAO && id > 0 && !isView) && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_HDMUASAM_THEM')">
+                *ngIf="(formData.value.trangThai == STATUS.DU_THAO && id > 0 && !isView) && userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_HDMUASAM_THEM')">
           <i class="icon htvbdh_trinh "></i>
           <span>Đã ký</span>
         </button>
         <button type="button" class="btn btn-sub xanh ml-2" (click)="save()"
-                *ngIf=" !isView && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDTC) ">
+                *ngIf=" !isView && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDTC) && userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_HDMUASAM_THEM') ">
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
@@ -457,7 +457,7 @@
           </div>
         </div>
         <div class="btn-group">
-          <button type="button" class="btn btn-sub xanh" (click)="redirectToPhuLuc(false, null)">
+          <button type="button" class="btn btn-sub xanh" (click)="redirectToPhuLuc(false, null)" *ngIf="userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_HDMUASAM_XOA')">
             <i class="icon htvbdh_dau-cong"></i>
             <span>Thêm PL hợp đồng</span>
           </button>
@@ -484,13 +484,13 @@
           <td>{{data.veViec  }}</td>
           <td>{{data.tenTrangThai }}</td>
           <td class="text-center">
-            <a (click)="redirectToPhuLuc(true, data.id)" *ngIf="data.trangThai == STATUS.DA_KY">
+            <a (click)="redirectToPhuLuc(true, data.id)" *ngIf="data.trangThai == STATUS.DA_KY && userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_HDMUASAM_XEM')">
               <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
-            <a (click)="redirectToPhuLuc(false, data.id)" *ngIf="data.trangThai == STATUS.DU_THAO">
+            <a (click)="redirectToPhuLuc(false, data.id)" *ngIf="data.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_HDMUASAM_THEM')">
               <i class="fa fa-pencil" title="Sửa"></i>
             </a>
-            <a (click)="deleteDetail(data) " *ngIf="data.trangThai == STATUS.DU_THAO">
+            <a (click)="deleteDetail(data) " *ngIf="data.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_HDMUASAM_THEM')">
               <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>

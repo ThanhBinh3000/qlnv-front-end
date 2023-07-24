@@ -40,16 +40,16 @@
     <div class="group-button">
       <h3>DANH SÁCH TỔNG HỢP ĐỀ XUẤT NHU CẦU MÀNG PVC VÀ CÔNG CỤ DỤNG CỤ CỦA CỤC</h3>
       <div class="buttons">
-        <button type="button" class="btn btn-do" (click)="deleteMulti()" *ngIf="userService.isTongCuc() && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_THDEXUATCC_XOA')">
+        <button type="button" class="btn btn-do" (click)="deleteMulti()" *ngIf="userService.isTongCuc() && userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_THDEXUATCUC_XOA')">
           <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
           <span>Xóa</span>
         </button>
-        <button type="button" class="btn btn-sub" (click)="exportData()" *ngIf="userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_THDEXUATCC_EXP')">
+        <button type="button" class="btn btn-sub" (click)="exportData()" *ngIf="userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_THDEXUATCUC_EXP')">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
         <button type="button" class="btn btn-sub xanh" (click)="redirectToChiTiet(false, 0)"
-                *ngIf="userService.isTongCuc() && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_THDEXUATCC_THEM')">
+                *ngIf="userService.isTongCuc() && userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_THDEXUATCUC_THEM')">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Tổng hợp</span>
         </button>
@@ -148,11 +148,11 @@
             <a (click)="redirectToChiTiet(true, data.id)" *ngIf=" userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_THDEXUATCC_XEM')">
               <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
-            <a *ngIf="((data.trangThai == STATUS.TU_CHOI_CBV || data.trangThai == STATUS.DU_THAO) && userService.isTongCuc()) && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_THDEXUATCC_SUA')"
+            <a *ngIf="((data.trangThai == STATUS.TU_CHOI_CBV || data.trangThai == STATUS.DU_THAO) && userService.isTongCuc()) && userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_THDEXUATCUC_SUA')"
                (click)="redirectToChiTiet(false, data.id)">
               <i class="fa fa-pencil" title="Sửa"></i>
             </a>
-            <a *ngIf="data.trangThai == globals.prop.NHAP_DU_THAO && userService.isTongCuc() && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_THDEXUATCC_XOA')" (click)="delete(data)">
+            <a *ngIf="data.trangThai == globals.prop.NHAP_DU_THAO && userService.isTongCuc() && userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_THDEXUATCUC_XOA')" (click)="delete(data)">
               <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>
