@@ -113,12 +113,12 @@ export class ThemMoiToTrinhPagComponent implements OnInit {
   }
 
   bindingDataTongHop(data) {
-    let giaKsTt = data.giaKsTtTu && data.giaKsTtDen ? data.giaKsTtTu + " - " + data.giaKsTtDen : null;
-    let giaKsTtVat = data.giaKsTtVatTu && data.giaKsTtVatDen ? data.giaKsTtVatTu + " - " + data.giaKsTtVatDen : null;
-    let kqTd = data.giaTdTu && data.giaTdDen ? data.giaTdTu + " - " + data.giaTdDen : null;
-    let kqTdVat = data.giaTdVatTu && data.giaTdVatDen ? data.giaTdVatTu + " - " + data.giaTdVatDen : null;
-    let giaDng = data.giaDnTu && data.giaDnDen ? data.giaDnTu + " - " + data.giaDnDen : null;
-    let giaDngVat = data.giaDnVatTu && data.giaDnVatDen ? data.giaDnVatTu + " - " + data.giaDnVatDen : null;
+    let giaKsTt = data.giaKsTtTu && data.giaKsTtDen ? Intl.NumberFormat('vi-VN').format(data.giaKsTtTu) + " - " + Intl.NumberFormat('vi-VN').format(data.giaKsTtDen) : null;
+    let giaKsTtVat = data.giaKsTtVatTu && data.giaKsTtVatDen ? Intl.NumberFormat('vi-VN').format(data.giaKsTtVatTu) + " - " + Intl.NumberFormat('vi-VN').format(data.giaKsTtVatDen) : null;
+    let kqTd = data.giaTdTu && data.giaTdDen ? Intl.NumberFormat('vi-VN').format(data.giaTdTu) + " - " + Intl.NumberFormat('vi-VN').format(data.giaTdDen) : null;
+    let kqTdVat = data.giaTdVatTu && data.giaTdVatDen ? Intl.NumberFormat('vi-VN').format(data.giaTdVatTu) + " - " + Intl.NumberFormat('vi-VN').format(data.giaTdVatDen) : null;
+    let giaDng = data.giaDnTu && data.giaDnDen ? Intl.NumberFormat('vi-VN').format(data.giaDnTu) + " - " + Intl.NumberFormat('vi-VN').format(data.giaDnDen) : null;
+    let giaDngVat = data.giaDnVatTu && data.giaDnVatDen ? Intl.NumberFormat('vi-VN').format(data.giaDnVatTu) + " - " + Intl.NumberFormat('vi-VN').format(data.giaDnVatDen) : null;
     this.formData.patchValue({
       soToTrinh: data.soToTrinh ? data.soToTrinh.split("/")[0] : null,
       qdGtdttBtc: data.qdGtdttBtc,
@@ -138,17 +138,18 @@ export class ThemMoiToTrinhPagComponent implements OnInit {
       kqTdVat: kqTdVat,
       giaDng: giaDng,
       giaDngVat: giaDngVat,
-
       ttGiaDn: data.ttGiaDn,
       ttGiaDnVat: data.ttGiaDnVat,
       ghiChu: data.ghiChu,
 
     })
     this.dataTable = data.pagChiTiets;
-    this.dataTable.forEach(item => {
-      item.giaQdTcdtnn = item.giaCucDn;
-      item.giaQdVatTcdtnn = item.giaCucDnVat;
-    })
+    if (data.trangThaiTh == STATUS.CHUA_TAO_TT) {
+      this.dataTable.forEach(item => {
+        item.giaQdTcdtnn = item.giaCucDn;
+        item.giaQdVatTcdtnn = item.giaCucDnVat;
+      })
+    }
     this.buildTreePagCt();
   }
 
@@ -160,9 +161,20 @@ export class ThemMoiToTrinhPagComponent implements OnInit {
       this.spinner.hide();
       return;
     }
+    this.convertTreeToList();
     let body = this.formData.value;
     body.type = this.type;
     body.soToTrinh = body.soToTrinh + this.maSuffix;
+    if (this.dataTable && this.dataTable.length > 0) {
+      if (this.formData.value.loaiGia == 'LG01' || this.formData.value.loaiGia == 'LG03') {
+        this.dataTable.forEach(item => {
+          if (item.vat) {
+            item.giaQdVatTcdtnn = item.giaQdTcdtnn + item.giaQdTcdtnn * item.vat
+          }
+        })
+      }
+    }
+    body.pagChiTiets = this.dataTable
     let res = await this.toTrinhPAGService.update(body);
     if (res.msg == MESSAGE.SUCCESS) {
       if (isGuiDuyet) {
@@ -303,6 +315,19 @@ export class ThemMoiToTrinhPagComponent implements OnInit {
       this.dataTableView.forEach(s => {
         this.expandSet.add(s.idVirtual);
       });
+    }
+  }
+
+  convertTreeToList() {
+    if (this.dataTableView && this.dataTableView.length > 0 ) {
+      this.dataTable = [];
+      this.dataTableView.forEach(item => {
+        if (item.children && item.children.length > 0) {
+          item.children.forEach(child => {
+            this.dataTable.push(child);
+          })
+        }
+      })
     }
   }
 }
