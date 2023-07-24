@@ -150,7 +150,7 @@
                     <td></td>
                     <td></td>
                     <td class="text-left">
-                      <a (click)="redirectDetail(lv2.id, false,item.soCanCu)">
+                      <a (click)="redirectDetail(lv2.id, false,item.soCanCu,lv2.maDiaDiem)">
                         <i class="icon htvbdh_dau-cong" title="Thêm mới"></i>
                       </a>
                     </td>
@@ -220,6 +220,7 @@
 </div>
 <div class="chi-tiet" *ngIf="isDetail">
   <app-thong-tin-phieu-nhap-kho [idInput]="selectedId" [isView]="isView" [soBcKqkdMau]="soBaoCaoKqkdMau"
+                                [nganLoKho]="nganLoKho"
                                 (showListEvent)="showList()">
   </app-thong-tin-phieu-nhap-kho>
 </div>
