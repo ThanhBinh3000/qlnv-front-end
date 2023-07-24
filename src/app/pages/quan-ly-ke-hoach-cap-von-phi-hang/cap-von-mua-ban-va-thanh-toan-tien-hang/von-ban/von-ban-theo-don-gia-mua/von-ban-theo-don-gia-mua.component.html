@@ -58,7 +58,9 @@
                         <tr>
                             <th>Mã cấp ứng</th>
                             <th>Năm</th>
+                            <th>Đợt</th>
                             <th>Quyết định</th>
+                            <th>Căn cứ về giá</th>
                             <th>Loại đề nghị</th>
                             <th>Ngày tạo</th>
                             <th>Ngày trình duyệt</th>
@@ -75,10 +77,16 @@
                                 {{ baoCao.namDnghi }}
                             </td>
                             <td>
+                                {{ baoCao.dot }}
+                            </td>
+                            <td>
                                 {{ baoCao.quyetDinh }}
                             </td>
                             <td>
-                                {{ Cvmb.suggestionName(baoCao.loaiDeNghi)}}
+                                {{ Cvmb.priceBasisName(baoCao.canCuVeGia) }}
+                            </td>
+                            <td>
+                                {{ Cvmb.suggestionName(baoCao.loaiDnghi)}}
                             </td>
                             <td>
                                 {{ Utils.fmtDate(baoCao.ngayTao) }}
@@ -126,7 +134,7 @@
                             <th rowspan="2" nzWidth="300px" nzLeft>
                                 Đơn vị
                             </th>
-                            <th rowspan="2">
+                            <th colspan="2">
                                 Số lượng
                             </th>
                             <th rowspan="2">
@@ -150,8 +158,8 @@
                             <th rowspan="2">
                                 Số còn phải nộp
                             </th>
-                            <th *ngIf="!userService.isChiCuc()" rowspan="2">
-                                Đợt (đề nghị cấp vốn của đơn vị cấp dưới)
+                            <th rowspan="2" class="text-col">
+                                Ghi chú
                             </th>
                             <th *ngIf="status.save" rowSpan="2" style="width: 60px;" nzRight></th>
                         </tr>
@@ -256,8 +264,8 @@
                                 <td>
                                     {{ Op.fmtVal(data.soConPhaiNop) }}
                                 </td>
-                                <td *ngIf="!userService.isChiCuc()">
-                                    {{ data.dot }}
+                                <td>
+                                    {{ data.ghiChu }}
                                 </td>
                                 <td *ngIf="status.save" nzRight>
                                     <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
@@ -330,7 +338,7 @@
                                     {{ Op.fmtVal(editCache[data.id].data.soConPhaiNop) }}
                                 </td>
                                 <td>
-                                    {{ data.dot }}
+                                    <input nz-input [(ngModel)]="editCache[data.id].data.ghiChu" />
                                 </td>
                                 <td *ngIf="status.save" nzRight>
                                     <a (click)="saveEdit(data.id)" class="save">Lưu</a>

@@ -127,6 +127,7 @@ export class ThanhToan {
     id: string;
     idCapDuoi: string;
     stt: string;
+    level: number;
     tenKhachHang: string;
     qdPheDuyet: string;
     maDvi: string;
@@ -182,7 +183,7 @@ export class ThanhToan {
 
     clear() {
         Object.keys(this).forEach(key => {
-            if (typeof this[key] === 'number' && key != 'dot') {
+            if (typeof this[key] === 'number' && key != 'dot' && key != 'level') {
                 this[key] = null;
             }
         })
@@ -190,7 +191,7 @@ export class ThanhToan {
 
     sum(data: ThanhToan) {
         Object.keys(data).forEach(key => {
-            if ((key != 'dot') && (typeof this[key] == 'number' || typeof data[key] == 'number')) {
+            if ((key != 'dot' && key != 'level') && (typeof this[key] == 'number' || typeof data[key] == 'number')) {
                 this[key] = Operator.sum([this[key], data[key]]);
             }
         })
@@ -338,7 +339,6 @@ export class Search {
     clear() {
         this.dot = null;
         this.maCapUng = null;
-        this.maDvi = null;
         this.loaiDnghi = null;
         this.namDnghi = null;
         this.canCuVeGia = null;
