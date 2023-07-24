@@ -19,7 +19,9 @@
       <i class="icon htvbdh_tcdt_pheduyet "></i>
       <span>Duyệt</span>
     </button>
-    <button type="button" class="btn btn-main" (click)="save()">
+    <button type="button" class="btn btn-main"
+      *ngIf="formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_KTVBQ || formData.value.trangThai== STATUS.TU_CHOI_KT ||formData.value.trangThai == STATUS.TU_CHOI_LDCC"
+      (click)="save()">
       <i class="icon htvbdh_tcdt_save"></i>
       <span>Lưu</span>
     </button>
