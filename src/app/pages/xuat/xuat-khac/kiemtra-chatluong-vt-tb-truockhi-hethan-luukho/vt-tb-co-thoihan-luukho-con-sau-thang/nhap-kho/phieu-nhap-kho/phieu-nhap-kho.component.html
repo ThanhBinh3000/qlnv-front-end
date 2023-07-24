@@ -110,7 +110,6 @@
             <td></td>
             <td></td>
             <td></td>
-            <td></td>
           </tr>
           <ng-container *ngIf="expandSetString.has(item.idVirtual)">
             <ng-container *ngFor="let lv1 of item.childData,let i1=index">
@@ -119,11 +118,10 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td></td>
                 <td class="bold">{{lv1.tenDiemKho}}</td>
-                <td class="bold"></td>
-                <td class="bold"></td>
                 <td></td>
+                <td class="bold"></td>
+                <td class="bold"></td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -138,7 +136,6 @@
               <ng-container *ngIf="expandSetString.has(item.idVirtual)">
                 <ng-container *ngFor="let lv2 of lv1.childData,let i2=index">
                   <tr>
-                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -168,13 +165,12 @@
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td></td>
                         <td class="bold">{{lv3.soPhieu}}</td>
-                        <td>{{lv3.ngayXuat | date: 'dd/MM/YYYY' }}</td>
-                        <td>{{lv3.tenLoai}}</td>
+                        <td>{{lv3.ngayXuatNhap | date: 'dd/MM/YYYY' }}</td>
                         <td><a *ngIf="lv3.soPhieuKncl" nzType="link"
                                (click)="openPhieuKnClModal(lv3.idPhieuKncl)">{{lv3.soPhieuKncl}}</a></td>
                         <td>{{lv3.ngayKn | date: 'dd/MM/YYYY' }}</td>
+                        <td>{{lv3.soBbKtnk}}</td>
                         <td>{{lv3.tenTrangThai}}</td>
                         <td class="text-left">
                           <a *ngIf="lv3.trangThai ==STATUS.DA_DUYET_LDCC" (click)="redirectDetail(lv3.id, true)">

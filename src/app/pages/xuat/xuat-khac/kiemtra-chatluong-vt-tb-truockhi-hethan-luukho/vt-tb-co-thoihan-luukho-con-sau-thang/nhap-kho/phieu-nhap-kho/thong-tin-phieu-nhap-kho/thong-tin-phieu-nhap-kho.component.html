@@ -51,7 +51,7 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Loại hình nhập xuất</nz-form-label>
             <nz-form-control>
-              <nz-radio-group formControlName="loai" [nzDisabled]="isView" nzName="radiogroup">
+              <nz-radio-group formControlName="loai" [nzDisabled]="true" nzName="radiogroup">
                 <label nz-radio nzValue="NHAP_MAU"> Nhập mẫu không bị hủy vào kho</label>
               </nz-radio-group>
             </nz-form-control>
@@ -137,7 +137,7 @@
             </nz-input-number>
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="4">
+        <div nz-col nzSpan="3">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">
               Căn cứ báo cáo KQKĐ mẫu
@@ -150,7 +150,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="4">
+        <div nz-col [nzSpan]="3">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Ngăn/Lô kho</nz-form-label>
             <nz-form-control>
@@ -163,7 +163,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="4">
+        <div nz-col [nzSpan]="2">
           <nz-form-item>
             <nz-form-label nzRequired> Tồn kho</nz-form-label>
             <nz-form-control>
@@ -252,11 +252,11 @@
         <div nz-col nzSpan="4">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">
-              KTTV Bảo Quản
+              Thủ kho
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
-                <input nz-input formControlName="ktvBaoQuan" readonly/>
+                <input nz-input formControlName="thuKho" readonly/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -333,6 +333,18 @@
             </nz-form-control>
           </nz-form-item>
         </div>
+        <div nz-col nzSpan="4">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true">
+              Số BB kết thúc nhập kho
+            </nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-input-group>
+                <input nz-input formControlName="soBbKetThucNk" [readonly]="isView"/>
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
       </div>
     </form>
     <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
@@ -345,11 +357,11 @@
             <th rowSpan="2">Tên, nhãn hiệu, quy cách phẩm chất hàng hóa (B)</th>
             <th rowSpan="2">Mã số (C)</th>
             <th rowSpan="2">Đơn vị tính (D)</th>
-            <th colSpan="2">Số lượng xuất</th>
+            <th colSpan="2">Số lượng nhập</th>
           </tr>
           <tr>
-            <th>Theo QĐ giao NV xuất hàng (1)</th>
-            <th>Thực Xuất (2)</th>
+            <th>Theo căn cứ báo cáo KQKĐ mẫu (1)</th>
+            <th>Thực nhập (2)</th>
           </tr>
           <tr>
           </tr>
