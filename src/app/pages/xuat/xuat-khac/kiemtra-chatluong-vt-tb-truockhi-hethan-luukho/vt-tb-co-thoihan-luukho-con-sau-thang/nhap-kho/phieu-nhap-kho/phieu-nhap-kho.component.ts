@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../../../../services/storage.service";
 import {NzNotificationService} from "ng-zorro-antd/notification";
@@ -8,8 +8,8 @@ import {DataService} from "../../../../../../../services/data.service";
 import {chain} from 'lodash';
 import * as uuid from "uuid";
 import {
-  PhieuXuatKhoService
-} from "../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/PhieuXuatKho.service";
+  PhieuXuatNhapKhoService
+} from "../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/PhieuXuatNhapKho.service";
 import {UserLogin} from "../../../../../../../models/userlogin";
 import {MESSAGE} from "../../../../../../../constants/message";
 import dayjs from "dayjs";
@@ -31,7 +31,7 @@ export class PhieuNhapKhoComponent extends Base2Component implements OnInit {
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private dataService: DataService,
-    private phieuXuatKhoService: PhieuXuatKhoService,
+    private phieuXuatKhoService: PhieuXuatNhapKhoService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, phieuXuatKhoService);
     // this.vldTrangThai = this.cuuTroVienTroComponent;
@@ -39,12 +39,12 @@ export class PhieuNhapKhoComponent extends Base2Component implements OnInit {
       tenDvi: null,
       maDvi: null,
       nam: null,
-      soQdGiaoNvXh: null,
-      soPhieuXuatKho: null,
-      ngayXuatKho: null,
-      ngayXuatKhoTu: null,
-      ngayXuatKhoDen: null,
-      type: null
+      soBckqKdm: null,
+      soPhieu: null,
+      ngayXuatNhapTu: null,
+      ngayXuatNhapDen: null,
+      type: null,
+      loaiPhieu: 'NHAP'
     })
     this.filterTable = {
       soQdGiaoNvXh: '',
@@ -64,7 +64,7 @@ export class PhieuNhapKhoComponent extends Base2Component implements OnInit {
   userInfo: UserLogin;
   userdetail: any = {};
   selectedId: number = 0;
-  soQdGiaoNvXhSelected: string;
+  soBaoCaoKqkdMau: string;
   isVatTu: boolean = false;
   isView = false;
   children: any = [];
@@ -119,10 +119,6 @@ export class PhieuNhapKhoComponent extends Base2Component implements OnInit {
   async timKiem() {
     await this.spinner.show();
     try {
-      if (this.formData.value.ngayXuatKho) {
-        this.formData.value.ngayXuatKhoTu = dayjs(this.formData.value.ngayXuatKho[0]).format('YYYY-MM-DD')
-        this.formData.value.ngayXuatKhoDen = dayjs(this.formData.value.ngayXuatKho[1]).format('YYYY-MM-DD')
-      }
       await this.search();
     } catch (e) {
       console.log(e)
@@ -187,11 +183,11 @@ export class PhieuNhapKhoComponent extends Base2Component implements OnInit {
   }
 
 
-  redirectDetail(id, b: boolean, soQdGiaoNvXh?) {
+  redirectDetail(id, b: boolean, soBaoCaoKqkdMau?) {
     this.selectedId = id;
     this.isDetail = true;
     this.isView = b;
-    this.soQdGiaoNvXhSelected = soQdGiaoNvXh;
+    this.soBaoCaoKqkdMau = soBaoCaoKqkdMau;
     // this.isViewDetail = isView ?? false;
   }
 

@@ -12,7 +12,7 @@ import {chain} from 'lodash';
 import * as uuid from "uuid";
 import dayjs from "dayjs";
 import {CHUC_NANG} from "../../../../../../constants/status";
-import {PhieuXuatKhoService} from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/PhieuXuatKho.service";
+import {PhieuXuatNhapKhoService} from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/PhieuXuatNhapKho.service";
 import {DataService} from "../../../../../../services/data.service";
 
 @Component({
@@ -31,7 +31,7 @@ export class XuatKhoComponent extends Base2Component implements OnInit {
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private dataService: DataService,
-    private phieuXuatKhoService: PhieuXuatKhoService,
+    private phieuXuatKhoService: PhieuXuatNhapKhoService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, phieuXuatKhoService);
     // this.vldTrangThai = this.cuuTroVienTroComponent;
@@ -40,11 +40,12 @@ export class XuatKhoComponent extends Base2Component implements OnInit {
       maDvi: null,
       nam: null,
       soQdGiaoNvXh: null,
-      soPhieuXuatKho: null,
+      soPhieu: null,
       ngayXuatKho: null,
-      ngayXuatKhoTu: null,
-      ngayXuatKhoDen: null,
-      type: null
+      ngayXuatNhapTu: null,
+      ngayXuatNhapDen: null,
+      type: null,
+      loaiPhieu: 'XUAT'
     })
     this.filterTable = {
       soQdGiaoNvXh: '',
@@ -72,17 +73,17 @@ export class XuatKhoComponent extends Base2Component implements OnInit {
   idPhieuKnCl: number = 0;
   openPhieuKnCl = false;
   disabledStartNgayXk = (startValue: Date): boolean => {
-    if (startValue && this.formData.value.ngayXuatKhoDen) {
-      return startValue.getTime() >= this.formData.value.ngayXuatKhoDen.getTime();
+    if (startValue && this.formData.value.ngayXuatNhapDen) {
+      return startValue.getTime() >= this.formData.value.ngayXuatNhapDen.getTime();
     }
     return false;
   };
 
   disabledEndNgayXk = (endValue: Date): boolean => {
-    if (!endValue || !this.formData.value.ngayXuatKhoTu) {
+    if (!endValue || !this.formData.value.ngayXuatNhapTu) {
       return false;
     }
-    return endValue.getTime() <= this.formData.value.ngayXuatKhoTu.getTime();
+    return endValue.getTime() <= this.formData.value.ngayXuatNhapTu.getTime();
   };
 
   ngOnInit(): void {
@@ -119,10 +120,10 @@ export class XuatKhoComponent extends Base2Component implements OnInit {
   async timKiem() {
     await this.spinner.show();
     try {
-      if (this.formData.value.ngayXuatKho) {
-        this.formData.value.ngayXuatKhoTu = dayjs(this.formData.value.ngayXuatKho[0]).format('YYYY-MM-DD')
-        this.formData.value.ngayXuatKhoDen = dayjs(this.formData.value.ngayXuatKho[1]).format('YYYY-MM-DD')
-      }
+      // if (this.formData.value.ngayXuatKho) {
+      //   this.formData.value.ngayXuatNhapTu = dayjs(this.formData.value.ngayXuatKho[0]).format('YYYY-MM-DD')
+      //   this.formData.value.ngayXuatNhapDen = dayjs(this.formData.value.ngayXuatKho[1]).format('YYYY-MM-DD')
+      // }
       await this.search();
     } catch (e) {
       console.log(e)

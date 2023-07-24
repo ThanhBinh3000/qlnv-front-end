@@ -209,7 +209,7 @@
 
   <div class="chi-tiet" *ngIf="isDetail">
     <app-thong-tin-phieu-nhap-kho [isView]="isView" [idInput]="selectedId" [isVatTu]="isVatTu" [data]="data"
-      (showListEvent)="quayLai()"></app-thong-tin-phieu-nhap-kho>
+      [loaiDc]="loaiDc" (showListEvent)="quayLai()"></app-thong-tin-phieu-nhap-kho>
   </div>
 
 </div>

@@ -384,7 +384,7 @@
                         </nz-form-control>
                     </nz-form-item>
                 </div>
-                <div nz-col [nzSpan]="4">
+                <div nz-col [nzSpan]="4" *ngIf="!isVatTu">
                     <nz-form-item>
                         <nz-form-label nzRequired [nzNoColon]="true">
                             Số Bảng kê cân hàng
@@ -392,6 +392,18 @@
                         <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
                                 <input nz-input [readonly]="true" formControlName="soBangKeCh" />
+                            </nz-input-group>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="4" *ngIf="isVatTu">
+                    <nz-form-item>
+                        <nz-form-label nzRequired [nzNoColon]="true">
+                            Số Bảng kê vật tư
+                        </nz-form-label>
+                        <nz-form-control [nzErrorTip]="error">
+                            <nz-input-group>
+                                <input nz-input [readonly]="true" formControlName="soBangKeVt" />
                             </nz-input-group>
                         </nz-form-control>
                     </nz-form-item>

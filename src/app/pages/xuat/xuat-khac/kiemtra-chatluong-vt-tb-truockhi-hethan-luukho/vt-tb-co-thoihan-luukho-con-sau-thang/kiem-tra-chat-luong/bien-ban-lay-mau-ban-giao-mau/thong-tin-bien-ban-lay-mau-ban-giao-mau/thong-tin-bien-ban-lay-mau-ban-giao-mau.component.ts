@@ -22,8 +22,8 @@ import {
   BienBanLayMauVtKtclService
 } from "../../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/BienBanLayMauVtKtcl.service";
 import {
-  PhieuXuatKhoService
-} from "../../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/PhieuXuatKho.service";
+  PhieuXuatNhapKhoService
+} from "../../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/PhieuXuatNhapKho.service";
 import {KhCnQuyChuanKyThuat} from "../../../../../../../../services/kh-cn-bao-quan/KhCnQuyChuanKyThuat";
 import {FILETYPE} from "../../../../../../../../constants/fileType";
 
@@ -65,7 +65,7 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
     modal: NzModalService,
     private danhMucService: DanhMucService,
     private quyetDinhGiaoNvXuatHangService: QuyetDinhGiaoNvXuatHangService,
-    private phieuXuatKhoService: PhieuXuatKhoService,
+    private phieuXuatKhoService: PhieuXuatNhapKhoService,
     private khCnQuyChuanKyThuat: KhCnQuyChuanKyThuat,
     private bienBanLayMauVtKtclService: BienBanLayMauVtKtclService
   ) {

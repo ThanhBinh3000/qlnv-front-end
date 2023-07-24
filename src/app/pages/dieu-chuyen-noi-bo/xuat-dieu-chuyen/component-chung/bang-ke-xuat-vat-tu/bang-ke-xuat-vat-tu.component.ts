@@ -185,7 +185,7 @@ export class BangKeXuatVatTuDieuChuyenComponent extends Base2Component implement
                             return {
                                 ...rowLv3,
                                 idVirtual: uuidv4(),
-                                childData: rowLv3?.phieuXuatKhoId ? x : []
+                                childData: x.filter(f => !!f.phieuXuatKhoId)
                             }
                         }).value();
                         return {
@@ -203,6 +203,7 @@ export class BangKeXuatVatTuDieuChuyenComponent extends Base2Component implement
                 };
             }).value();
         this.dataView = dataView;
+        console.log("dataView", dataView)
         this.expandAll()
     }
 

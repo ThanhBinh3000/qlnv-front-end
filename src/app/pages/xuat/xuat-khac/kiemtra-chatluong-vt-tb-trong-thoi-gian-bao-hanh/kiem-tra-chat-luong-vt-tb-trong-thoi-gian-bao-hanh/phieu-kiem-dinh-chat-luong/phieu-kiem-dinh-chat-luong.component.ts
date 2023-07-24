@@ -1,29 +1,26 @@
 import {Component, OnInit} from '@angular/core';
-import {Base2Component} from "../../../../../../../components/base2/base2.component";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../../../../services/storage.service";
 import {NzNotificationService} from "ng-zorro-antd/notification";
 import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
 import {chain} from 'lodash';
 import * as uuid from "uuid";
-import {
-  PhieuXuatNhapKhoService
-} from "../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/PhieuXuatNhapKho.service";
-import {UserLogin} from "../../../../../../../models/userlogin";
-import {MESSAGE} from "../../../../../../../constants/message";
+import {Base2Component} from "../../../../../../components/base2/base2.component";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../../../services/storage.service";
+import {CHUC_NANG} from "../../../../../../constants/status";
+import {UserLogin} from "../../../../../../models/userlogin";
+import {MESSAGE} from "../../../../../../constants/message";
 import dayjs from "dayjs";
-import {CHUC_NANG} from "../../../../../../../constants/status";
 import {
-  BienBanLayMauVtKtclService
-} from "../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/BienBanLayMauVtKtcl.service";
+  PhieuKdclVtTbTrongThoiGianBaoHanhService
+} from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvtbaohanh/PhieuKdclVtTbTrongThoiGianBaoHanh.service";
 
 @Component({
-  selector: 'app-xk-bien-ban-lay-mau-ban-giao-mau',
-  templateUrl: './bien-ban-lay-mau-ban-giao-mau.component.html',
-  styleUrls: ['./bien-ban-lay-mau-ban-giao-mau.component.scss']
+  selector: 'app-phieu-kiem-dinh-chat-luong',
+  templateUrl: './phieu-kiem-dinh-chat-luong.component.html',
+  styleUrls: ['./phieu-kiem-dinh-chat-luong.component.scss']
 })
-export class XkBienBanLayMauBanGiaoMauComponent extends Base2Component implements OnInit {
+export class XkVtPhieuKiemNghiemChatLuongComponent extends Base2Component implements OnInit {
   CHUC_NANG = CHUC_NANG;
 
   constructor(
@@ -32,19 +29,18 @@ export class XkBienBanLayMauBanGiaoMauComponent extends Base2Component implement
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private bienBanLayMauVtKtclService: BienBanLayMauVtKtclService,
+    private phieuKdclVtTbTrongThoiGianBaoHanhService: PhieuKdclVtTbTrongThoiGianBaoHanhService,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, bienBanLayMauVtKtclService);
+    super(httpClient, storageService, notification, spinner, modal, phieuKdclVtTbTrongThoiGianBaoHanhService);
     this.formData = this.fb.group({
       tenDvi: [],
       maDvi: [],
       nam: [],
-      dviKiemDinh: [],
+      soBbLayMau: [],
       soQdGiaoNvXh: [],
-      soBienBan: [],
-      ngayXuatKho: [],
-      ngayLayMauTu: [],
-      ngayLayMauDen: [],
+      soPhieu: [],
+      ngayKiemDinhTu: [],
+      ngayKiemDinhDen: [],
     })
   }
 
@@ -60,17 +56,17 @@ export class XkBienBanLayMauBanGiaoMauComponent extends Base2Component implement
   openPhieuKnCl = false;
 
   disabledStartNgayLayMau = (startValue: Date): boolean => {
-    if (startValue && this.formData.value.ngayLayMauDen) {
-      return startValue.getTime() >= this.formData.value.ngayLayMauDen.getTime();
+    if (startValue && this.formData.value.ngayKiemDinhDen) {
+      return startValue.getTime() >= this.formData.value.ngayKiemDinhDen.getTime();
     }
     return false;
   };
 
   disabledEndNgayLayMau = (endValue: Date): boolean => {
-    if (!endValue || !this.formData.value.ngayLayMauTu) {
+    if (!endValue || !this.formData.value.ngayKiemDinhTu) {
       return false;
     }
-    return endValue.getTime() <= this.formData.value.ngayLayMauTu.getTime();
+    return endValue.getTime() <= this.formData.value.ngayKiemDinhTu.getTime();
   };
 
   ngOnInit(): void {
@@ -107,9 +103,9 @@ export class XkBienBanLayMauBanGiaoMauComponent extends Base2Component implement
   async timKiem() {
     await this.spinner.show();
     try {
-      if (this.formData.value.ngayLayMau) {
-        this.formData.value.ngayLayMauTu = dayjs(this.formData.value.ngayLayMau[0]).format('YYYY-MM-DD')
-        this.formData.value.ngayLayMauDen = dayjs(this.formData.value.ngayLayMau[1]).format('YYYY-MM-DD')
+      if (this.formData.value.ngayXuatKho) {
+        this.formData.value.ngayXuatKhoTu = dayjs(this.formData.value.ngayXuatKho[0]).format('YYYY-MM-DD')
+        this.formData.value.ngayXuatKhoDen = dayjs(this.formData.value.ngayXuatKho[1]).format('YYYY-MM-DD')
       }
       await this.search();
     } catch (e) {
