@@ -181,28 +181,20 @@
         </td>
         <td class="text-center">{{(page - 1) * pageSize + idx + 1}}</td>
         <td>{{ data.nam }}</td>
-        <td>{{ data.soQdKq }}</td>
+        <td>{{ data.soQd }}</td>
         <td>{{ data.ngayPduyet | date: 'dd/MM/YYYY' }}</td>
         <td>{{ data.trichYeu }}</td>
-        <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
-        <td>
-          <a *ngIf="data.soQdPd && data.idQdPd" nz-button nzType="link" (click)="openModalQdPd(data.idQdPd)">{{
-            data.soQdPd}}</a>
-        </td>
-        <td>
-          <a *ngIf="data.maThongBao && data.idThongTin" nz-button nzType="link"
-             (click)="openModalMaThongBao(data.idThongTin)">{{
-            data.maThongBao}}</a>
-        </td>
-
-        <td>{{ data.hinhThucDauGia == '01' ? 'Đấu giá bằng bỏ phiếu trực tiếp tại cuộc đấu giá' : null }}</td>
-        <td>{{ data.pthucDauGia == '01' ? 'Phương thức trả giá lên, bán riêng từng đơn vị tài sản' : null }}</td>
-        <td>{{ data.soTbKhongThanh }}</td>
-        <td>
-          <a *ngIf="data.soBienBan && data.idThongTin" nz-button nzType="link"
-             (click)="openModalMaThongBao(data.idThongTin)">{{
-            data.soBienBan}}</a>
-        </td>
+        <td></td>
+        <td></td>
+        <td><a *ngIf="data.maThongBao && data.idThongBao" nz-button nzType="link"
+             (click)="openModalMaThongBao(data.idThongBao)">{{
+            data.maThongBao}}</a></td>
+        <td>{{ data.tenHthucDgia }}</td>
+        <td>{{ data.tenPthucDgia }}</td>
+        <td>{{ data.thongBaoKhongThanh }}</td>
+        <td><a *ngIf="data.soBienBan && data.idThongBao" nz-button nzType="link"
+               (click)="openModalMaThongBao(data.idThongBao)">{{
+          data.soBienBan}}</a></td>
         <td>{{ data.tenTrangThai }}</td>
         <td class="text-left">
           <a (click)="redirectDetail(data.id, true)"
@@ -256,12 +248,11 @@
   </app-chi-tiet-quyet-dinh-phe-duyet-bdg-thanh-ly>
 </div>
 
-
-<!--<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewThongTin"
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewThongBao"
           (nzOnCancel)="closeModalMaThongBao()">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-    <app-chi-tiet-quyet-dinh-phe-duyet-bdg-thanh-ly [id]="idThongTin" [isView]="isView">
-    </app-chi-tiet-quyet-dinh-phe-duyet-bdg-thanh-ly>
+    <app-thong-tin-chi-tiet-dau-gia-thanh-ly [idInput]="idThongBao" [isView]="isView">
+    </app-thong-tin-chi-tiet-dau-gia-thanh-ly>
   </ng-container>
   <div *nzModalFooter>
     <button nz-button (click)="closeModalMaThongBao()" class="modal__button&#45;&#45;cancel">
@@ -269,4 +260,4 @@
       Đóng
     </button>
   </div>
-</nz-modal>-->
+</nz-modal>

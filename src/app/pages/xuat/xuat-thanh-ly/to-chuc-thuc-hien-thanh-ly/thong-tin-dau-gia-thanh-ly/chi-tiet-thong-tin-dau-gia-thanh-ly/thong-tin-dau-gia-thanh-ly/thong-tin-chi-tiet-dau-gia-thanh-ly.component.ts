@@ -47,6 +47,7 @@ export class ThongTinChiTietDauGiaThanhLyComponent extends Base2Component implem
   listPhuongThucGiaoNhanBDG: any[] = [];
   listPhuongThucThanhToan: any[] = [];
   expandSetString = new Set<string>();
+  dataDauGia: any[] = [];
 
   constructor(
     httpClient: HttpClient,
@@ -157,6 +158,9 @@ export class ThongTinChiTietDauGiaThanhLyComponent extends Base2Component implem
           this.spinner.hide();
         }
       }
+      if (this.idInput > 0 && this.idInput) {
+        this.getDetail(this.idInput)
+      }
       await this.loadDataComboBox();
     } catch (e) {
       this.notification.error(MESSAGE.ERROR, 'Có lỗi xảy ra.');
@@ -226,7 +230,7 @@ export class ThongTinChiTietDauGiaThanhLyComponent extends Base2Component implem
     //   Phương thức giao nhận
     this.listPhuongThucGiaoNhanBDG = [];
     let resPtGnBdg = await this.danhMucService.danhMucChungGetAll('PT_GIAO_HANG');
-    if (resPtBdg.msg == MESSAGE.SUCCESS) {
+    if (resPtGnBdg.msg == MESSAGE.SUCCESS) {
       this.listPhuongThucGiaoNhanBDG = resPtGnBdg.data
     }
   }
@@ -238,12 +242,6 @@ export class ThongTinChiTietDauGiaThanhLyComponent extends Base2Component implem
         .then(async (res) => {
           if (res.msg == MESSAGE.SUCCESS) {
             const data = res.data
-            this.formData.patchValue({
-              loaiVthh: data.loaiVthh,
-              cloaiVthh: data.cloaiVthh,
-              moTaHangHoa: data.moTaHangHoa,
-              khoanTienDatTruoc: data.khoanTienDatTruoc
-            })
             // Nếu có thông tin đấu thầu thì sẽ lấy data laster => Set dataTable = children data lastest ý
             if (this.idQdTlDtl) {
               let dataDtl = data.quyetDinhDtl.filter(s => s.id == this.idQdTlDtl);
@@ -255,6 +253,7 @@ export class ThongTinChiTietDauGiaThanhLyComponent extends Base2Component implem
                     s.idVirtual = uuid.v4();
                   });
                   this.buildTableView(tTinDthau.data.toChucDtl);
+                  this.dataDauGia = tTinDthau.data.toChucDtl;
                 } else {
                   data.quyetDinhDtl.forEach(s => {
                     s.idVirtual = uuid.v4();
@@ -288,19 +287,23 @@ export class ThongTinChiTietDauGiaThanhLyComponent extends Base2Component implem
   }
 
   calculatorTable() {
-      this.dataTable.forEach(item => {
-        item.childData.forEach(child => {
-          if (this.dataDetail){
-            child.giaKhoiDiem = child.slDauGia * child.giaTlKhongVat
+    this.dataTable.forEach(item => {
+      item.childData.forEach(child => {
+        if (this.dataDetail) {
+          child.giaKhoiDiem = child.slDauGia * child.giaTlKhongVat
+        } else {
+          if(this.dataDauGia.length > 0){
+            this.formData.value.ketQua == '1' ? child.soTienDatTruoc = null : child.soTienDatTruoc = child.slDauGia * child.giaTlKhongVat * this.formData.value.khoanTienDatTruoc / 100;
           }else {
             child.slDauGia = child.slDeXuat
             child.giaTlKhongVat = child.donGia
-            this.formData.value.ketQua == '1' ? child.giaKhoiDiem = child.slDeXuat * child.donGia : child.giaKhoiDiem = null ;
-            this.formData.value.ketQua == '1' ? child.thanhTien = child.donGiaCaoNhat * child.slDeXuat : child.thanhTien = null ;
-            this.formData.value.ketQua == '1' ? child.soTienDatTruoc = null : child.soTienDatTruoc = child.slDeXuat * child.donGia * this.formData.value.khoanTienDatTruoc/100 ;
+            this.formData.value.ketQua == '1' ? child.giaKhoiDiem = child.slDeXuat * child.donGia : child.giaKhoiDiem = null;
+            this.formData.value.ketQua == '1' ? child.thanhTien = child.donGiaCaoNhat * child.slDeXuat : child.thanhTien = null;
+            this.formData.value.ketQua == '1' ? child.soTienDatTruoc = null : child.soTienDatTruoc = child.slDeXuat * child.donGia * this.formData.value.khoanTienDatTruoc / 100;
           }
-        })
+        }
       })
+    })
   }
 
   async getDetail(id) {

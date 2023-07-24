@@ -27,10 +27,8 @@ export class QuyetDinhPheDuyetKqBdgThanhLyComponent extends Base2Component imple
   id:any=[];
   listVthh: any[] = [];
   listCloaiVthh: any[] = [];
-  idQdPd: number = 0;
-  isViewQdPd: boolean = false;
-  idThongTin: number = 0;
-  isViewThongTin: boolean = false;
+  idThongBao: number = 0;
+  isViewThongBao: boolean = false;
   isDetail: boolean = false;
   isView = false;
   listTrangThai: any[] = [
@@ -135,23 +133,13 @@ export class QuyetDinhPheDuyetKqBdgThanhLyComponent extends Base2Component imple
     return endValue.getTime() <= this.formData.value.ngayKyTu.getTime();
   };
 
-  openModalQdPd(id: number) {
-    this.idQdPd = id;
-    this.isViewQdPd = true;
-  }
-
-  closeModalQdPd() {
-    this.idQdPd = null;
-    this.isViewQdPd = false;
-  }
-
   openModalMaThongBao(id: number) {
-    this.idThongTin = id;
-    this.isViewThongTin = true;
+    this.idThongBao = id;
+    this.isViewThongBao = true;
   }
 
   closeModalMaThongBao() {
-    this.idThongTin = null;
-    this.isViewThongTin = false;
+    this.idThongBao = null;
+    this.isViewThongBao = false;
   }
 }
