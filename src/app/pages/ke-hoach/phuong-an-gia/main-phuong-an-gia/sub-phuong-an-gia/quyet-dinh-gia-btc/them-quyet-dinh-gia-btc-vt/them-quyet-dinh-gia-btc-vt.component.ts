@@ -1,23 +1,21 @@
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
-import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import dayjs from "dayjs";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NgxSpinnerService } from "ngx-spinner";
-import { MESSAGE } from "src/app/constants/message";
-import { UserLogin } from "src/app/models/userlogin";
-import { HelperService } from "src/app/services/helper.service";
-import { UserService } from "src/app/services/user.service";
-import { Globals } from "src/app/shared/globals";
-import { STATUS } from "src/app/constants/status";
-import { QuyetDinhGiaCuaBtcService } from "src/app/services/ke-hoach/phuong-an-gia/quyetDinhGiaCuaBtc.service";
-import { DanhMucService } from "src/app/services/danhmuc.service";
-import { TongHopPhuongAnGiaService } from "src/app/services/ke-hoach/phuong-an-gia/tong-hop-phuong-an-gia.service";
-import { QuyetDinhGiaBtcThongTinGia } from "src/app/models/QuyetDinhBtcThongTinGia";
-import { DanhMucTieuChuanService } from "src/app/services/quantri-danhmuc/danhMucTieuChuan.service";
-import {
-  DialogToTrinhDeXuatComponent
-} from "../../../../../../../components/dialog/dialog-ke-hoach-phuong-an-gia/dialog-to-trinh-de-xuat/dialog-to-trinh-de-xuat.component";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {MESSAGE} from "src/app/constants/message";
+import {UserLogin} from "src/app/models/userlogin";
+import {HelperService} from "src/app/services/helper.service";
+import {UserService} from "src/app/services/user.service";
+import {Globals} from "src/app/shared/globals";
+import {STATUS} from "src/app/constants/status";
+import {QuyetDinhGiaCuaBtcService} from "src/app/services/ke-hoach/phuong-an-gia/quyetDinhGiaCuaBtc.service";
+import {DanhMucService} from "src/app/services/danhmuc.service";
+import {TongHopPhuongAnGiaService} from "src/app/services/ke-hoach/phuong-an-gia/tong-hop-phuong-an-gia.service";
+import {QuyetDinhGiaBtcThongTinGia} from "src/app/models/QuyetDinhBtcThongTinGia";
+import {DanhMucTieuChuanService} from "src/app/services/quantri-danhmuc/danhMucTieuChuan.service";
+import {DialogPagQdBtcComponent} from "../dialog-pag-qd-btc/dialog-pag-qd-btc.component";
 
 @Component({
   selector: "app-them-quyet-dinh-gia-btc-vt",
@@ -427,14 +425,12 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
     if (!this.noEdit) {
       let modalQD = this.modal.create({
         nzTitle: 'TỜ TRÌNH PHƯƠNG ÁN GIÁ CỦA VỤ KẾ HOẠCH',
-        nzContent: DialogToTrinhDeXuatComponent,
+        nzContent: DialogPagQdBtcComponent,
         nzMaskClosable: false,
         nzClosable: false,
         nzWidth: '700px',
         nzFooter: null,
         nzComponentParams: {
-          radioValue,
-          type: this.type
         },
       });
       modalQD.afterClose.subscribe((data) => {

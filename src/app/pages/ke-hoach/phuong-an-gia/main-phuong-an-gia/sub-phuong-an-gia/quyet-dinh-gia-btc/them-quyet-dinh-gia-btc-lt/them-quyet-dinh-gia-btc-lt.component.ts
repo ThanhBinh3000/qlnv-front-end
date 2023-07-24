@@ -1,22 +1,21 @@
-import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
-import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from "@angular/forms";
+import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
+import {AbstractControl, FormBuilder, FormGroup, Validators} from "@angular/forms";
 import dayjs from "dayjs";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NgxSpinnerService } from "ngx-spinner";
-import { LIST_VAT_TU_HANG_HOA } from "src/app/constants/config";
-import { MESSAGE } from "src/app/constants/message";
-import { UserLogin } from "src/app/models/userlogin";
-import { HelperService } from "src/app/services/helper.service";
-import { UserService } from "src/app/services/user.service";
-import { Globals } from "src/app/shared/globals";
-import { STATUS } from "src/app/constants/status";
-import { QuyetDinhGiaCuaBtcService } from "src/app/services/ke-hoach/phuong-an-gia/quyetDinhGiaCuaBtc.service";
-import { DanhMucService } from "src/app/services/danhmuc.service";
-import { TongHopPhuongAnGiaService } from "src/app/services/ke-hoach/phuong-an-gia/tong-hop-phuong-an-gia.service";
-import { QuyetDinhGiaBtcThongTinGia } from "src/app/models/QuyetDinhBtcThongTinGia";
-import { DanhMucTieuChuanService } from "src/app/services/quantri-danhmuc/danhMucTieuChuan.service";
-import { DialogToTrinhTongHopComponent } from "src/app/components/dialog/dialog-ke-hoach-phuong-an-gia/dialog-to-trinh-tong-hop/dialog-to-trinh-tong-hop.component";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {MESSAGE} from "src/app/constants/message";
+import {UserLogin} from "src/app/models/userlogin";
+import {HelperService} from "src/app/services/helper.service";
+import {UserService} from "src/app/services/user.service";
+import {Globals} from "src/app/shared/globals";
+import {STATUS} from "src/app/constants/status";
+import {QuyetDinhGiaCuaBtcService} from "src/app/services/ke-hoach/phuong-an-gia/quyetDinhGiaCuaBtc.service";
+import {DanhMucService} from "src/app/services/danhmuc.service";
+import {TongHopPhuongAnGiaService} from "src/app/services/ke-hoach/phuong-an-gia/tong-hop-phuong-an-gia.service";
+import {QuyetDinhGiaBtcThongTinGia} from "src/app/models/QuyetDinhBtcThongTinGia";
+import {DanhMucTieuChuanService} from "src/app/services/quantri-danhmuc/danhMucTieuChuan.service";
+import {DialogPagQdBtcComponent} from "../dialog-pag-qd-btc/dialog-pag-qd-btc.component";
 
 @Component({
   selector: "app-them-quyet-dinh-gia-btc-lt",
@@ -38,14 +37,11 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
   dsLoaiGia: any[] = [];
   dsToTrinhDeXuat: any[] = [];
   arrThongTinGia: Array<QuyetDinhGiaBtcThongTinGia> = [];
-
   taiLieuDinhKemList: any[] = [];
   dsNam: any[] = [];
   dsBoNganh: any[] = [];
-
   userInfo: UserLogin;
   soDeXuat: string;
-
   muaTangList: any[] = [];
   xuatGiamList: any[] = [];
   xuatBanList: any[] = [];
@@ -68,8 +64,7 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
     private quyetDinhGiaCuaBtcService: QuyetDinhGiaCuaBtcService,
     private danhMucService: DanhMucService,
     private tongHopPhuongAnGiaService: TongHopPhuongAnGiaService,
-    private notification: NzNotificationService,
-    private danhMucTieuChuanService: DanhMucTieuChuanService
+    private notification: NzNotificationService
   ) {
     this.formData = this.fb.group(
       {
@@ -429,15 +424,13 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
     let radioValue = this.radioValue;
     if (!this.noEdit) {
       let modalQD = this.modal.create({
-        nzTitle: 'TỜ TRÌNH PHƯƠNG ÁN GIÁ CỦA VỤ KẾ HOẠCH',
-        nzContent: DialogToTrinhTongHopComponent,
+        nzTitle: 'CHỌN SỐ TỜ TRÌNH HỒ SƠ PHƯƠNG ÁN GIÁ HOẶC SỐ TỜ TRÌNH ĐỀ XUẤT ĐIỀU CHỈNH GIÁ',
+        nzContent: DialogPagQdBtcComponent,
         nzMaskClosable: false,
         nzClosable: false,
-        nzWidth: '700px',
+        nzWidth: '1200px',
         nzFooter: null,
         nzComponentParams: {
-          radioValue,
-          type: this.type
         },
       });
       modalQD.afterClose.subscribe((data) => {

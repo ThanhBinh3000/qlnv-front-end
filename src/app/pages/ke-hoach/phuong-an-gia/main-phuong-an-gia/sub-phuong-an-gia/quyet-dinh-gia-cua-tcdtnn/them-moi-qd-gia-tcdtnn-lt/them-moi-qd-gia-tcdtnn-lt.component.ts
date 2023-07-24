@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import dayjs from 'dayjs';
-import {AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators} from "@angular/forms";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {NzModalService} from 'ng-zorro-antd/modal';
 import {NzNotificationService} from 'ng-zorro-antd/notification';
 import {NgxSpinnerService} from 'ngx-spinner';
@@ -15,13 +15,11 @@ import {QuyetDinhGiaTCDTNNService} from 'src/app/services/ke-hoach/phuong-an-gia
 import {UserService} from 'src/app/services/user.service';
 import {Globals} from 'src/app/shared/globals';
 import {
-  DialogQuyetDinhGiaCuaTcdtnnComponent
-} from 'src/app/components/dialog/dialog-ke-hoach-phuong-an-gia/dialog-quyet-dinh-gia-cua-tcdtnn/dialog-quyet-dinh-gia-cua-tcdtnn.component';
-import {
   TongHopPhuongAnGiaService
 } from "../../../../../../../services/ke-hoach/phuong-an-gia/tong-hop-phuong-an-gia.service";
 import {DANH_MUC_LEVEL} from "../../../../../../luu-kho/luu-kho.constant";
 import {DonviService} from "../../../../../../../services/donvi.service";
+import {DialogPagQdTcdtnnComponent} from "../dialog-pag-qd-tcdtnn/dialog-pag-qd-tcdtnn.component";
 
 @Component({
   selector: 'app-them-moi-qd-gia-tcdtnn-lt',
@@ -377,15 +375,12 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
     if (!this.isView) {
       let modalQD = this.modal.create({
         nzTitle: 'TỜ TRÌNH PHƯƠNG ÁN GIÁ CỦA VỤ KẾ HOẠCH',
-        nzContent: DialogQuyetDinhGiaCuaTcdtnnComponent,
+        nzContent: DialogPagQdTcdtnnComponent,
         nzMaskClosable: false,
         nzClosable: false,
         nzWidth: '700px',
         nzFooter: null,
         nzComponentParams: {
-          pagtype: this.pagType,
-          type: this.type,
-          radioValue
         },
       });
       modalQD.afterClose.subscribe((data) => {

@@ -87,6 +87,7 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
         trangThaiTh: [],
         trangThaiTt: [],
         tenTrangThaiTh: [],
+        tenTrangThaiTt: [],
       }
     );
     this.formTraCuu = this.fb.group(
@@ -196,14 +197,6 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
       this.spinner.hide();
       return;
     }
-    if (this.dataTable && this.dataTable.length > 0) {
-      if (this.formTraCuu.value.loaiGia == 'LG01' || this.formTraCuu.value.loaiGia == 'LG03') {}
-      this.dataTable.forEach(item => {
-        if (item.vat) {
-          item.giaQdVatTcdtnn = item.giaQdTcdtnn + item.giaQdTcdtnn * item.vat
-        }
-      })
-    }
     let body = this.formData.value;
     body.fileDinhKemReq = this.fileDinhKem;
     body.type = this.type;
@@ -287,12 +280,12 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
   }
 
   bindingDataTongHop(data, reqBody) {
-    let giaKsTt = data.giaKsTtTu && data.giaKsTtDen ? data.giaKsTtTu + " - " + data.giaKsTtDen : null;
-    let giaKsTtVat = data.giaKsTtVatTu && data.giaKsTtVatDen ? data.giaKsTtVatTu + " - " + data.giaKsTtVatDen : null;
-    let kqTd = data.giaTdTu && data.giaTdDen ? data.giaTdTu + " - " + data.giaTdDen : null;
-    let kqTdVat = data.giaTdVatTu && data.giaTdVatDen ? data.giaTdVatTu + " - " + data.giaTdVatDen : null;
-    let giaDng = data.giaDnTu && data.giaDnDen ? data.giaDnTu + " - " + data.giaDnDen : null;
-    let giaDngVat = data.giaDnVatTu && data.giaDnVatDen ? data.giaDnVatTu + " - " + data.giaDnVatDen : null;
+    let giaKsTt = data.giaKsTtTu && data.giaKsTtDen ? Intl.NumberFormat('vi-VN').format(data.giaKsTtTu) + " - " + Intl.NumberFormat('vi-VN').format(data.giaKsTtDen) : null;
+    let giaKsTtVat = data.giaKsTtVatTu && data.giaKsTtVatDen ? Intl.NumberFormat('vi-VN').format(data.giaKsTtVatTu) + " - " + Intl.NumberFormat('vi-VN').format(data.giaKsTtVatDen) : null;
+    let kqTd = data.giaTdTu && data.giaTdDen ? Intl.NumberFormat('vi-VN').format(data.giaTdTu) + " - " + Intl.NumberFormat('vi-VN').format(data.giaTdDen) : null;
+    let kqTdVat = data.giaTdVatTu && data.giaTdVatDen ? Intl.NumberFormat('vi-VN').format(data.giaTdVatTu) + " - " + Intl.NumberFormat('vi-VN').format(data.giaTdVatDen) : null;
+    let giaDng = data.giaDnTu && data.giaDnDen ? Intl.NumberFormat('vi-VN').format(data.giaDnTu) + " - " + Intl.NumberFormat('vi-VN').format(data.giaDnDen) : null;
+    let giaDngVat = data.giaDnVatTu && data.giaDnVatDen ? Intl.NumberFormat('vi-VN').format(data.giaDnVatTu) + " - " + Intl.NumberFormat('vi-VN').format(data.giaDnVatDen) : null;
     this.formData.patchValue({
       id: data.id,
       namTongHop: data.namTongHop ?? reqBody.namTongHop,
@@ -311,7 +304,8 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
       giaDng: giaDng,
       giaDngVat: giaDngVat,
       trangThaiTh: data.trangThaiTh,
-      trangThaiTt: data.tenTrangThaiTh,
+      trangThaiTt: data.trangThaiTt,
+      tenTrangThaiTt: data.tenTrangThaiTt,
       tenTrangThaiTh: data.tenTrangThaiTh ? data.tenTrangThaiTh : 'Chưa tạo tờ trình',
     })
     this.dataTable = data.pagChiTiets;
@@ -353,10 +347,14 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
 
   taoTtrinh() {
     this.isMain = false;
+    if (this.formData.value.trangThaiTh == STATUS.CHUA_TAO_TT || this.formData.value.trangThaiTt == STATUS.DU_THAO || this.formData.value.trangThaiTt == STATUS.TU_CHOI_LDV ) {
+      this.isView = false;
+    }
   }
 
   reOpenMain() {
     this.isMain = true;
+    this.getDataDetail(this.idInput);
   }
 
   async openModalDxChinhSua(pagId: number) {
