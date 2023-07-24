@@ -36,10 +36,10 @@
                     <nz-table nzBordered class="table__body" [nzScroll]="{x:scrollX}">
                         <thead>
                             <tr>
-                                <th nzLeft nzWidth="50px" rowSpan="2">
+                                <th nzLeft nzWidth="50px" rowSpan="2" nzLeft>
                                     STT
                                 </th>
-                                <th nzLeft nzWidth="300px" rowSpan="2">
+                                <th nzLeft nzWidth="300px" rowSpan="2" nzLeft>
                                     Chương Trình/ Đề tài/ <br> Dự án/ Nhiệm vụ HK&CN
                                 </th>
                                 <th rowSpan="2">
@@ -261,7 +261,7 @@
                                         </td>
                                     </ng-container>
                                     <ng-template #viewAppVal>
-                                        <td>{{editCache[data.id].data.tenNoiDung}}</td>
+                                        <td nzLeft>{{editCache[data.id].data.tenNoiDung}}</td>
                                         <td>{{editCache[data.id].data.coQuan}}</td>
                                         <td>{{editCache[data.id].data.thoiGian}}</td>
                                         <td>{{editCache[data.id].data.qdinhPheDuyet}}</td>
