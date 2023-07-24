@@ -31,7 +31,6 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
   @Output('onClose') onClose = new EventEmitter<any>();
   formData: FormGroup;
   @Input() type: string;
-  pagChiTiet: any[] = [];
   formTraCuu: FormGroup;
   listVthh: any[] = [];
   listCloaiVthh: any[] = [];
@@ -39,25 +38,20 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
   page: number = 1;
   dsNam: any[] = [];
   userInfo: UserLogin;
+  listCucSelected: any[] = [];
   dsLoaiGia: any[] = [];
-  giaKsTt: any[] = [];
-  giaKsTtVat: any[] = [];
-  kqTdVat: any[] = [];
-  kqTd: any[] = [];
-  giaDng: any[] = [];
-  giaDngVat: any[] = [];
   dataTable: any[] = [];
   dataTableView: any[] = [];
   listCuc: any[] = [];
   isTongHop: boolean = false;
   isMain: boolean = true;
-  listCucSelected: any[] = [];
   fileDinhKem: any[] = [];
   STATUS = STATUS
   typeConst = TYPE_PAG
   expandSet = new Set<number>();
   idSelected: number;
   isViewModal: boolean = false;
+
   constructor(
     private readonly fb: FormBuilder,
     private readonly modal: NzModalService,
@@ -103,7 +97,8 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
         cloaiVthh: [null, [Validators.required]],
         loaiGia: [null, [Validators.required]],
         maDvis: [[]],
-        ngayDx: [null],
+        ngayDxTu: [null],
+        ngayDxDen: [null],
       }
     );
   }
@@ -125,9 +120,14 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
   async getListCuc() {
     const res = await this.donviService.layTatCaDonViByLevel(2);
     if (res.msg == MESSAGE.SUCCESS) {
-      this.listCuc = res.data;
-      if (this.listCuc && this.listCuc.length > 0) {
-        this.listCuc = this.listCuc.filter(item => item.type != 'PB')
+      if (res.data && res.data.length > 0) {
+        this.listCuc.push({tenDvi: "Tất cả", maDvi: "all", type: "DV"})
+        this.listCuc = [...this.listCuc, res.data].flat();
+        if (this.listCuc && this.listCuc.length > 0) {
+          this.listCuc = this.listCuc.filter(item => item.type != 'PB')
+        }
+      } else {
+        this.listCuc = []
       }
     }
   }
@@ -142,9 +142,11 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
         loaiVthh: data.loaiVthh,
         cloaiVthh: data.cloaiVthh,
         maDvis: data.maDvis,
-        ngayDx: [data.ngayDxTu, data.ngayDxDen],
+        ngayDxTu: data.ngayDxTu,
+        ngayDxDen: data.ngayDxDen,
         loaiGia: data.loaiGia
       });
+      this.listCucSelected = data.maDvis && data.maDvis.length > 0 ? data.maDvis : []
       this.bindingDataTongHop(res.data, null)
       this.fileDinhKem = data.fileDinhKems;
     }
@@ -194,9 +196,18 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
       this.spinner.hide();
       return;
     }
+    if (this.dataTable && this.dataTable.length > 0) {
+      if (this.formTraCuu.value.loaiGia == 'LG01' || this.formTraCuu.value.loaiGia == 'LG03') {}
+      this.dataTable.forEach(item => {
+        if (item.vat) {
+          item.giaQdVatTcdtnn = item.giaQdTcdtnn + item.giaQdTcdtnn * item.vat
+        }
+      })
+    }
     let body = this.formData.value;
     body.fileDinhKemReq = this.fileDinhKem;
     body.type = this.type;
+    body.pagChiTiets = this.dataTable
     let res = await this.tongHopPhuongAnGiaService.create(body);
     if (res.msg == MESSAGE.SUCCESS) {
       if (this.idInput > 0) {
@@ -245,35 +256,34 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
   }
 
   async tongHop() {
-    this.spinner.show();
-    this.helperService.markFormGroupTouched(this.formTraCuu);
-    if (this.formTraCuu.invalid) {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR);
+    try {
+      this.spinner.show();
+      this.helperService.markFormGroupTouched(this.formTraCuu);
+      if (this.formTraCuu.invalid) {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR);
+        this.spinner.hide();
+        return;
+      }
+      let body = this.formTraCuu.value;
+      body.type = this.type;
+      body.maDvis = this.listCucSelected
+      let res = await this.tongHopPhuongAnGiaService.tongHop(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.isTongHop = true;
+        this.formData.reset();
+        this.dataTable = [];
+        this.bindingDataTongHop(res.data, body);
+        this.notification.success(MESSAGE.SUCCESS, MESSAGE.TONG_HOP_SUCCESS);
+      } else {
+        this.isTongHop = false;
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
       this.spinner.hide();
-      return;
+    } catch (e) {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      await this.spinner.hide();
     }
-    let body = this.formTraCuu.value;
-    if (body.ngayDx) {
-      body.ngayDxTu = body.ngayDx[0];
-      body.ngayDxDen = body.ngayDx[1];
-    }
-    body.type = this.type;
-    if (!body.maDvis || body.maDvis.length == 0) {
-      body.maDvis = this.listCuc.map(item => item.maDvi);
-    }
-    delete body.ngayDx;
-    let res = await this.tongHopPhuongAnGiaService.tongHop(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.isTongHop = true;
-      this.formData.reset();
-      this.dataTable = [];
-      this.bindingDataTongHop(res.data, body);
-      this.notification.success(MESSAGE.SUCCESS, MESSAGE.TONG_HOP_SUCCESS);
-    } else {
-      this.isTongHop = false;
-      this.notification.error(MESSAGE.ERROR, res.msg);
-    }
-    this.spinner.hide();
   }
 
   bindingDataTongHop(data, reqBody) {
@@ -305,36 +315,33 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
       tenTrangThaiTh: data.tenTrangThaiTh ? data.tenTrangThaiTh : 'Chưa tạo tờ trình',
     })
     this.dataTable = data.pagChiTiets;
-    if (this.dataTable && this.dataTable.length > 0) {
-      this.dataTable.sort((a, b) => a.giaDn - b.giaDn);
-      this.buildTreePagCt();
-    }
+    this.buildTreePagCt();
   }
 
   buildTreePagCt() {
     if (this.dataTable && this.dataTable.length > 0) {
       this.dataTableView = chain(this.dataTable)
-        .groupBy("tenVungMien")
+        .groupBy("maDvi")
         .map((value, key) => {
-          let rs = chain(value)
-            .groupBy("tenDvi")
-            .map((v, k) => {
-                return {
-                  idVirtual: uuidv4(),
-                  tenDvi: k,
-                  children: v
-                }
-              }
-            ).value();
           return {
             idVirtual: uuidv4(),
-            tenVungMien: key,
-            children: rs
+            tenVungMien: value && value[0] && value[0].tenVungMien ? value[0].tenVungMien : null,
+            tenDvi: value && value[0] && value[0].tenDvi ? value[0].tenDvi : null,
+            soDx : value && value[0] && value[0].soDx ? value[0].soDx : null,
+            children: value
           };
         }).value();
     }
     this.expandAll()
   }
+  onExpandChange(id: number, checked: boolean): void {
+    if (checked) {
+      this.expandSet.add(id);
+    } else {
+      this.expandSet.delete(id);
+    }
+  }
+
 
   expandAll() {
     if (this.dataTableView && this.dataTableView.length > 0) {
@@ -360,6 +367,15 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
   closeDxPaModal() {
     this.idSelected = null;
     this.isViewModal = false;
+  }
+
+  changeListDsCuc(event: any) {
+    if (event && event.length > 0) {
+      if (event.includes("all")) {
+        this.listCucSelected = this.listCuc.map(item => item.maDvi)
+        this.listCucSelected.splice(0, 1);
+      }
+    }
   }
 }
 
