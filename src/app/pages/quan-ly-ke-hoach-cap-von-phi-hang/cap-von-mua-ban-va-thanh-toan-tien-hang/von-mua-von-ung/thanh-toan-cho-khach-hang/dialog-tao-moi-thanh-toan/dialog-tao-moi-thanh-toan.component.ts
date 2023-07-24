@@ -19,6 +19,7 @@ import { Tab } from '../../von-mua-von-ung.constant';
 
 export class DialogTaoMoiThanhToanComponent implements OnInit {
     @Input() request: any;
+    Cvmb = Cvmb;
 
     userInfo: any;
     response: Report = new Report();
@@ -45,6 +46,7 @@ export class DialogTaoMoiThanhToanComponent implements OnInit {
             this.canCuGias = Cvmb.CAN_CU_GIA.filter(e => e.id == Cvmb.HOP_DONG);
             this.loaiDns = Cvmb.LOAI_DE_NGHI.filter(e => e.id == Cvmb.VTU);
         } else {
+            this.canCuGias = Cvmb.CAN_CU_GIA;
             this.loaiDns = Cvmb.LOAI_DE_NGHI.filter(e => e.id != Cvmb.VTU);
         }
         this.lstNam = Utils.getListYear(5, 10);
@@ -59,10 +61,13 @@ export class DialogTaoMoiThanhToanComponent implements OnInit {
                 this.loaiDns = Cvmb.LOAI_DE_NGHI.filter(e => e.id == Cvmb.GAO || e.id == Cvmb.MUOI);
             }
         }
+        if (this.response.canCuVeGia == Cvmb.HOP_DONG) {
+            this.response.quyetDinh = null;
+        }
     }
 
     async checkReport() {
-        if (!this.response.namDnghi || !this.response.canCuVeGia) {
+        if (!this.response.namDnghi || !this.response.canCuVeGia || (this.response.canCuVeGia == Cvmb.DON_GIA && !this.response.quyetDinh)) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
             return;
         }
@@ -230,7 +235,7 @@ export class DialogTaoMoiThanhToanComponent implements OnInit {
     }
 
     handleOk() {
-        if (!this.response.namDnghi || !this.response.canCuVeGia || !this.response.loaiDnghi) {
+        if (!this.response.namDnghi || !this.response.canCuVeGia || (this.response.canCuVeGia == Cvmb.DON_GIA && !this.response.quyetDinh) || !this.response.loaiDnghi) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
             return;
         }

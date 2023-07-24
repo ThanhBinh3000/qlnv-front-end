@@ -63,7 +63,7 @@ export class VonBanTheoDonGiaMuaComponent implements OnInit {
     constructor(
         private capVonMuaBanTtthService: CapVonMuaBanTtthService,
         private spinner: NgxSpinnerService,
-        private userService: UserService,
+        public userService: UserService,
         private notification: NzNotificationService,
         private modal: NzModalService,
         public globals: Globals,
@@ -178,6 +178,7 @@ export class VonBanTheoDonGiaMuaComponent implements OnInit {
             async (data) => {
                 if (data.statusCode == 0) {
                     this.baoCao = data.data;
+                    this.lstCtiets = [];
                     data.data.lstCtiets.forEach(item => {
                         this.lstCtiets.push(new ThanhToan(item));
                     })

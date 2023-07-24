@@ -165,6 +165,7 @@ export class ThanhToanTheoDonGiaComponent implements OnInit {
             async (data) => {
                 if (data.statusCode == 0) {
                     this.baoCao = data.data;
+                    this.lstCtiets = [];
                     data.data.lstCtiets.forEach(item => {
                         this.lstCtiets.push(new ThanhToan(item));
                     })
