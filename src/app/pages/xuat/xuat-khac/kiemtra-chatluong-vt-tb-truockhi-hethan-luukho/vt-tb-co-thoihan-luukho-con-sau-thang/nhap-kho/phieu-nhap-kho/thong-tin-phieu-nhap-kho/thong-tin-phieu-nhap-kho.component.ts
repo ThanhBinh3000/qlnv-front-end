@@ -33,6 +33,7 @@ import {
 export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnInit {
 
   @Input() soBcKqkdMau: string;
+  @Input() nganLoKho: string;
   @Input() idInput: number;
   @Input() isView: boolean;
   @Output()
@@ -74,7 +75,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
         taiKhoanCo: [],
         idCanCu: [],
         soCanCu: [],
-        maDiaDiem: [],
+        maDiaDiem: [null, [Validators.required]],
         ngayQdGiaoNvXh: [],
         maNhaKho: [],
         maNganKho: [],
@@ -110,7 +111,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
         tenCloaiVthh: [],
         tenDiemKho: ['', [Validators.required]],
         tenNhaKho: ['', [Validators.required]],
-        tenNganKho: ['', [Validators.required]],
+        tenNganKho: [''],
         tenLoKho: [],
         fileDinhKems: [new Array<FileDinhKem>()],
         loaiPhieu: ['NHAP', [Validators.required]],
@@ -171,9 +172,9 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
         ngayXuatKho: dayjs().format('YYYY-MM-DD'),
       });
       if (this.soBcKqkdMau) {
-        let dataQdGiaoNvXh = this.listSoBcKqkdMau.find(item => item.soQuyetDinh == this.soBcKqkdMau);
-        if (dataQdGiaoNvXh) {
-          this.bindingDataQd(dataQdGiaoNvXh);
+        let dataBcKqKdm = this.listSoBcKqkdMau.find(item => item.soBaoCao == this.soBcKqkdMau);
+        if (dataBcKqKdm) {
+          this.bindingDataQd(dataBcKqKdm, this.nganLoKho);
         }
       }
     }
@@ -192,7 +193,6 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
     }
     let res = await this.bckqKiemDinhMauService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
-      console.log(res.data, 'res.datares.datares.data');
       let data = res.data;
       this.listSoBcKqkdMau = data.content;
     } else {
@@ -221,7 +221,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
     });
   };
 
-  async bindingDataQd(data) {
+  async bindingDataQd(data, maDiaDiem?) {
     try {
       await this.spinner.show();
       if (data) {
@@ -237,6 +237,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
         this.formData.patchValue({
           soCanCu: data.soBaoCao,
           idCanCu: data.id,
+          maDiaDiem: maDiaDiem ? maDiaDiem : null
         });
       }
     } catch (e) {
@@ -265,78 +266,6 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
         })
       }
     }
-  }
-
-  openDialogDdiemNhapHang() {
-    const modalQD = this.modal.create({
-      nzTitle: 'Danh sách địa điểm xuất hàng',
-      nzContent: DialogTableSelectionComponent,
-      nzMaskClosable: false,
-      nzClosable: false,
-      nzWidth: '900px',
-      nzFooter: null,
-      nzComponentParams: {
-        dataTable: this.listDiaDiemNhap,
-        dataHeader: ['Điểm kho', 'Nhà kho', 'Ngăn kho', 'Lô kho'],
-        dataColumn: ['tenDiemKho', 'tenNhaKho', 'tenNganKho', 'tenLoKho']
-      },
-    });
-    modalQD.afterClose.subscribe(async (data) => {
-      // this.bindingDataDdNhap(data);
-    });
-  }
-
-  // async bindingDataDdNhap(data) {
-  //   if (data) {
-  //     this.formData.patchValue({
-  //       maDiemKho: data.maDiemKho,
-  //       tenDiemKho: data.tenDiemKho,
-  //       maNhaKho: data.maNhaKho,
-  //       tenNhaKho: data.tenNhaKho,
-  //       maNganKho: data.maNganKho,
-  //       tenNganKho: data.tenNganKho,
-  //       maLoKho: data.maLoKho,
-  //       tenLoKho: data.tenLoKho,
-  //     })
-  //     let body = {
-  //       trangThai: STATUS.DA_DUYET_LDC,
-  //       loaiVthh: this.loaiVthh
-  //     }
-  //     let res = await this.phieuKiemNghiemChatLuongService.search(body)
-  //     const list = res.data.content;
-  //     this.listPhieuKtraCl = list.filter(item => (item.maDiemKho == data.maDiemKho));
-  //   }
-  // }
-
-  openDialogPhieuKnCl() {
-    const modalQD = this.modal.create({
-      nzTitle: 'Danh sách phiếu kiểm nghiệm chất lượng',
-      nzContent: DialogTableSelectionComponent,
-      nzMaskClosable: false,
-      nzClosable: false,
-      nzWidth: '900px',
-      nzFooter: null,
-      nzComponentParams: {
-        dataTable: this.listPhieuKtraCl,
-        dataHeader: ['Số phiếu', 'Ngày giám định'],
-        dataColumn: ['soPhieu', 'ngayKnMau']
-      },
-    });
-    modalQD.afterClose.subscribe(async (data) => {
-      if (data) {
-        this.formData.patchValue({
-          idPhieuKnCl: data.id,
-          soPhieuKnCl: data.soPhieu,
-          ktvBaoQuan: data.nguoiKn,
-          ngayKn: data.ngayKnMau,
-          loaiVthh: data.loaiVthh,
-          cloaiVthh: data.cloaiVthh,
-          tenLoaiVthh: data.tenLoaiVthh,
-          tenCloaiVthh: data.tenCloaiVthh,
-          moTaHangHoa: data.moTaHangHoa,
-        });
-      }
-    });
   }
 
   async save() {

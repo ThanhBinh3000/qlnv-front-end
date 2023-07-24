@@ -65,6 +65,7 @@ export class PhieuNhapKhoComponent extends Base2Component implements OnInit {
   userdetail: any = {};
   selectedId: number = 0;
   soBaoCaoKqkdMau: string;
+  nganLoKho: string;
   isVatTu: boolean = false;
   isView = false;
   children: any = [];
@@ -142,6 +143,7 @@ export class PhieuNhapKhoComponent extends Base2Component implements OnInit {
                     return {
                       idVirtual: uuid.v4(),
                       tenCloaiVthh: k1 != "null" ? k1 : '',
+                      maDiaDiem: childOfChild ? childOfChild.maDiaDiem : null,
                       tenLoKho: childOfChild ? childOfChild.tenLoKho : null,
                       tenNganKho: childOfChild ? childOfChild.tenNganKho : null,
                       childData: v1
@@ -183,11 +185,12 @@ export class PhieuNhapKhoComponent extends Base2Component implements OnInit {
   }
 
 
-  redirectDetail(id, b: boolean, soBaoCaoKqkdMau?) {
+  redirectDetail(id, b: boolean, soBaoCaoKqkdMau?, nganLoKho?) {
     this.selectedId = id;
     this.isDetail = true;
     this.isView = b;
     this.soBaoCaoKqkdMau = soBaoCaoKqkdMau;
+    this.nganLoKho = nganLoKho;
     // this.isViewDetail = isView ?? false;
   }
 
