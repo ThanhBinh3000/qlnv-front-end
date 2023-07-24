@@ -55,7 +55,7 @@
         </div>
       </nz-card>
       <div class="group-button">
-        <h3 class="text-uppercase">Danh sách biên bản nghiệm thu bảo quản lần đầu nhập hàng dự trữ quốc gia</h3>
+        <h3 class="text-uppercase">Danh sách biên bản nhập đầy kho</h3>
         <div class="buttons">
           <button type="button" class="btn btn-do" (click)="deleteMulti()"
             *ngIf="userService.isAccessPermisson('DCNB_QUYETDINHDC_XOA') && isTongCuc()">
@@ -83,7 +83,7 @@
               <th></th>
               <th class="text-center">Số QĐ giao nhiệm vụ</th>
               <th class="text-center">Năm KH</th>
-              <th class="text-center">Thời hạn NH</th>
+              <th class="text-center">Thời hạn ĐC</th>
               <th class="text-center">Điểm kho</th>
               <th class="text-center">Lô kho</th>
               <th class="text-center">Số BB NĐK</th>
@@ -154,7 +154,7 @@
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td class="bold">{{ row3.tenLoKho || ""}} {{ row3.tenNganKho || ""}} {{ row3.tenNhaKho||""}}
+                        <td class="bold">{{ row3.tenLoKho || ""}} - {{ row3.tenNganKho || ""}} - {{ row3.tenNhaKho||""}}
                         </td>
                         <td class="bold">{{row3.soBbNhapDayKho || ""}}</td>
                         <td class="bold">{{row3.ngayBatDauNhap|date: "dd/MM/yyyy"}}</td>

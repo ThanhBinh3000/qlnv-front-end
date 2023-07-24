@@ -15,9 +15,9 @@ import { CHUC_NANG, STATUS } from 'src/app/constants/status';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { Subject } from 'rxjs';
 import { QuyetDinhDieuChuyenTCService } from 'src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-tc.service';
-import { BienBanGiaoNhanService } from 'src/app/services/dieu-chuyen-noi-bo/nhap-dieu-chuyen/bien-ban-giao-nhan';
 import * as uuidv4 from "uuid";
 import { ThongTinQuyetDinhDieuChuyenCucComponent } from 'src/app/pages/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/cuc/thong-tin-quyet-dinh-dieu-chuyen-cuc/thong-tin-quyet-dinh-dieu-chuyen-cuc.component';
+import { BBGiaoNhanService } from 'src/app/services/qlnv-hang/nhap-hang/nhap-khac/BBGiaoNhan';
 @Component({
   selector: 'app-bien-ban-giao-nhan',
   templateUrl: './bien-ban-giao-nhan.component.html',
@@ -28,36 +28,14 @@ export class BienBanGiaoNhanComponent extends Base2Component implements OnInit {
   isVisibleChangeTab$ = new Subject();
   visibleTab: boolean = true;
   tabSelected: number = 0;
-  @Input() loaiDc: string;
 
   @Input()
   loaiVthh: string;
-  @Input()
-  loaiVthhCache: string;
 
-  CHUC_NANG = CHUC_NANG;
-  listLoaiDieuChuyen: any[] = [
-    { ma: "ALL", ten: "Tất cả" },
-    { ma: "CHI_CUC", ten: "Giữa 2 chi cục trong cùng 1 cục" },
-    { ma: "CUC", ten: "Giữa 2 cục DTNN KV" },
-  ];
-  listLoaiDCFilterTable: any[] = [
-    { ma: "CHI_CUC", ten: "Giữa 2 chi cục trong cùng 1 cục" },
-    { ma: "CUC", ten: "Giữa 2 cục DTNN KV" },
-  ];
   dataTableView: any[] = [];
-  listLoaiHangHoa: any[] = [];
-  listHangHoaAll: any[] = [];
-  listChungLoaiHangHoa: any[] = [];
-  listTrangThai: any[] = [
-    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
-    { ma: this.STATUS.CHO_DUYET_TP, giaTri: 'Chờ duyệt - TP' },
-    { ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối - TP' },
-    { ma: this.STATUS.CHO_DUYET_LDC, giaTri: 'Chờ duyệt - LĐ Cục' },
-    { ma: this.STATUS.TU_CHOI_LDC, giaTri: 'Từ chối - LĐ Cục' },
-    { ma: this.STATUS.DA_DUYET_LDC, giaTri: 'Đã duyệt - LĐ Cục' },
-    { ma: this.STATUS.DA_TAO_CBV, giaTri: 'Đã tạo - CB Vụ' },
-  ];
+  data: any
+  selectedId: number = 0;
+  isView = false;
 
   constructor(
     httpClient: HttpClient,
@@ -67,68 +45,22 @@ export class BienBanGiaoNhanComponent extends Base2Component implements OnInit {
     modal: NzModalService,
     private donviService: DonviService,
     private danhMucService: DanhMucService,
-    private bienBanGiaoNhanService: BienBanGiaoNhanService,
+    private bienBanGiaoNhanService: BBGiaoNhanService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, bienBanGiaoNhanService);
     this.formData = this.fb.group({
-      nam: null,
-      soQdinh: null,
-      ngayDuyetTc: null,
-      ngayHieuLuc: null,
-      trichYeu: null,
-      type: ["01"],
-      loaiDc: ["DCNB"]
+      nam: [],
+      soQdPdNk: [],
+      soBb: [],
+      tuNgayKtnk: [],
+      denNgayKtnk: [],
+      tuNgayThoiHanNhap: [],
+      denNgayThoiHanNhap: [],
+      // isVatTu: [true]
     })
-    this.filterTable = {
-      nam: '',
-      soQdinh: '',
-      ngayKyQdinh: '',
-      loaiDc: '',
-      trichYeu: '',
-      maDxuat: '',
-      maThop: '',
-      soQdinhXuatCuc: '',
-      soQdinhNhapCuc: '',
-      tenTrangThai: '',
-    };
   }
 
 
-  dsDonvi: any[] = [];
-  userInfo: UserLogin;
-  data: any = {};
-  selectedId: number = 0;
-  isVatTu: boolean = false;
-  isView = false;
-
-  // disabledStartNgayLapKh = (startValue: Date): boolean => {
-  //   if (startValue && this.formData.value.ngayLapKhDen) {
-  //     return startValue.getTime() > this.formData.value.ngayLapKhDen.getTime();
-  //   } else {
-  //     return false;
-  //   }
-  // };
-
-  // disabledEndNgayLapKh = (endValue: Date): boolean => {
-  //   if (!endValue || !this.formData.value.ngayLapKhTu) {
-  //     return false;
-  //   }
-  //   return endValue.getTime() <= this.formData.value.ngayLapKhDen.getTime();
-  // };
-
-  // disabledStartNgayDuyetLdc = (startValue: Date): boolean => {
-  //   if (startValue && this.formData.value.ngayDuyetLdcDen) {
-  //     return startValue.getTime() > this.formData.value.ngayDuyetLdcDen.getTime();
-  //   }
-  //   return false;
-  // };
-
-  // disabledEndNgayDuyetLdc = (endValue: Date): boolean => {
-  //   if (!endValue || !this.formData.value.ngayDuyetLdcTu) {
-  //     return false;
-  //   }
-  //   return endValue.getTime() <= this.formData.value.ngayDuyetLdcDen.getTime();
-  // };
 
   async ngOnInit() {
     this.isVisibleChangeTab$.subscribe((value: boolean) => {
@@ -190,17 +122,39 @@ export class BienBanGiaoNhanComponent extends Base2Component implements OnInit {
     return children
   }
 
+  disabledStartNgayKtnk = (startValue: Date): boolean => {
+    if (startValue && this.formData.value.denNgayKtnk) {
+      return startValue.getTime() > this.formData.value.denNgayKtnk.getTime();
+    } else {
+      return false;
+    }
+  };
+
+  disabledEndNgayKtnk = (endValue: Date): boolean => {
+    if (endValue && this.formData.value.tuNgayKtnk) {
+      return endValue.getTime() < this.formData.value.tuNgayKtnk.getTime();
+    } else {
+      return false;
+    }
+  };
+
+  disabledStartNgayTHN = (startValue: Date): boolean => {
+    if (startValue && this.formData.value.denNgayThoiHanNhap) {
+      return startValue.getTime() > this.formData.value.denNgayThoiHanNhap.getTime();
+    } else {
+      return false;
+    }
+  };
+
+  disabledEndNgayTHN = (endValue: Date): boolean => {
+    if (endValue && this.formData.value.tuNgayThoiHanNhap) {
+      return endValue.getTime() < this.formData.value.tuNgayThoiHanNhap.getTime();
+    } else {
+      return false;
+    }
+  };
+
   async timKiem() {
-    // if (this.formData.value.ngayDuyetTc) {
-    //   this.formData.value.ngayDuyetTcTu = dayjs(this.formData.value.ngayDuyetTc[0]).format('YYYY-MM-DD')
-    //   this.formData.value.ngayDuyetTcDen = dayjs(this.formData.value.ngayDuyetTc[1]).format('YYYY-MM-DD')
-    // }
-    // if (this.formData.value.ngayHieuLuc) {
-    //   this.formData.value.ngayHieuLucTu = dayjs(this.formData.value.ngayHieuLuc[0]).format('YYYY-MM-DD')
-    //   this.formData.value.ngayHieuLucDen = dayjs(this.formData.value.ngayHieuLuc[1]).format('YYYY-MM-DD')
-    // }
-    // console.log('DSQuyetDinhDieuChuyenComponent/this.formData.value=>', this.formData.value)
-    // await this.search();
     let body = this.formData.value
     body.paggingReq = {
       limit: this.pageSize,
@@ -225,7 +179,7 @@ export class BienBanGiaoNhanComponent extends Base2Component implements OnInit {
 
   buildTableView(data: any[] = []) {
     let dataView = chain(data)
-      .groupBy("soQdinh")
+      .groupBy("soQdPdNk")
       ?.map((value1, key1) => {
         let children1 = chain(value1)
           .groupBy("maDiemKho")
@@ -242,7 +196,7 @@ export class BienBanGiaoNhanComponent extends Base2Component implements OnInit {
           ).value();
 
 
-        let row1 = value1?.find(s => s.soQdinh === key1);
+        let row1 = value1?.find(s => s.soQdPdNk === key1);
         return {
           ...row1,
           idVirtual: row1 ? row1.idVirtual ? row1.idVirtual : uuidv4.v4() : uuidv4.v4(),
@@ -273,6 +227,7 @@ export class BienBanGiaoNhanComponent extends Base2Component implements OnInit {
 
   add(data: any) {
     this.data = data;
+    this.selectedId = 0
     this.isDetail = true;
     this.isView = false;
   }
@@ -322,7 +277,7 @@ export class BienBanGiaoNhanComponent extends Base2Component implements OnInit {
         this.bienBanGiaoNhanService
           .export(body)
           .subscribe((blob) =>
-            saveAs(blob, 'quyet-dinh-dieu-chuyen-tc.xlsx'),
+            saveAs(blob, 'nhap-khac-bien-ban-giao-nhan.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {
@@ -336,10 +291,10 @@ export class BienBanGiaoNhanComponent extends Base2Component implements OnInit {
   }
 
   redirectDetail(id, b: boolean) {
+    this.data = null
     this.selectedId = id;
     this.isDetail = true;
     this.isView = b;
-    // this.isViewDetail = isView ?? false;
   }
 
   quayLai() {

@@ -12,8 +12,6 @@ import {KeHoachBanDauGiaComponent} from './ke-hoach-ban-dau-gia/ke-hoach-ban-dau
 import {KeHoachBanDauGiaModule} from "./ke-hoach-ban-dau-gia/ke-hoach-ban-dau-gia.module";
 import {ToChucTrienKhaiComponent} from './to-chuc-trien-khai/to-chuc-trien-khai.component';
 import {ToChucTrienKhaiModule} from "./to-chuc-trien-khai/to-chuc-trien-khai.module";
-import {DieuchinhKhbdgComponent} from './dieuchinh-khbdg/dieuchinh-khbdg.component';
-import {DieuchinhKhbdgModule} from "./dieuchinh-khbdg/dieuchinh-khbdg.module";
 import {XuatKhoModule} from './xuat-kho/xuat-kho.module';
 import {KiemTraChatLuongComponent} from "./kiem-tra-chat-luong/kiem-tra-chat-luong.component";
 import {ChucNangKiemTraComponent} from "./kiem-tra-chat-luong/main/chuc-nang-kiem-tra.component";
@@ -55,14 +53,13 @@ import {
 import {
   ChiTietBienBanKiemTraComponent
 } from "src/app/pages/xuat/dau-gia/kiem-tra-chat-luong/ho-so-ky-thuat/chi-tiet-ho-so-ky-thuat/chi-tiet-bien-ban-kiem-tra/chi-tiet-bien-ban-kiem-tra.component";
+import {QuyetDinhPheDuyetKetQuaModule} from "./quyet-dinh-phe-duyet-ket-qua/quyet-dinh-phe-duyet-ket-qua.module";
 
 @NgModule({
   declarations: [
     DauGiaComponent,
     KeHoachBanDauGiaComponent,
     ToChucTrienKhaiComponent,
-    DieuchinhKhbdgComponent,
-
     KiemTraChatLuongComponent,
     ChucNangKiemTraComponent,
     TableBienBanLayMauComponent,
@@ -73,7 +70,6 @@ import {
     ChiTietBienBanKiemTraComponent,
     QuanLyPhieuKiemNghiemChatLuongComponent,
     ThemMoiPhieuKiemNghiemChatLuongComponent,
-
     MainXuatKhoComponent,
     PhieuXuatKhoComponent,
     ThemMoiPhieuXuatKhoComponent,
@@ -83,14 +79,12 @@ import {
     ThemMoiBienBanTinhKhoComponent,
     BienBanHaoDoiComponent,
     ThemMoiBienBanHaoDoiComponent,
-    XuatKhoComponent
+    XuatKhoComponent,
   ],
   exports: [
     DauGiaComponent,
     KeHoachBanDauGiaComponent,
     ToChucTrienKhaiComponent,
-    DieuchinhKhbdgComponent,
-
     KiemTraChatLuongComponent,
     ChucNangKiemTraComponent,
     TableBienBanLayMauComponent,
@@ -101,7 +95,6 @@ import {
     ChiTietBienBanKiemTraComponent,
     QuanLyPhieuKiemNghiemChatLuongComponent,
     ThemMoiPhieuKiemNghiemChatLuongComponent,
-
     MainXuatKhoComponent,
     PhieuXuatKhoComponent,
     ThemMoiPhieuXuatKhoComponent,
@@ -124,12 +117,10 @@ import {
     TrienkhaiLuachonNhathauModule,
     KeHoachBanDauGiaModule,
     ToChucTrienKhaiModule,
-    DieuchinhKhbdgModule,
     XuatKhoModule,
     XuatCapModule,
     CuuTroVienTroModule,
-
-
+    QuyetDinhPheDuyetKetQuaModule,
   ]
 })
 export class DauGiaModule {

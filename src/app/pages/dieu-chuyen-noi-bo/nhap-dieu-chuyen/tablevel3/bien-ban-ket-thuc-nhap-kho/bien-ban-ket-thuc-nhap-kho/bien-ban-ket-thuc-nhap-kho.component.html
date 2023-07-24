@@ -50,7 +50,7 @@
         </div>
       </nz-card>
       <div class="group-button">
-        <h3 class="text-uppercase">Danh sách biên bản nghiệm thu bảo quản lần đầu nhập hàng dự trữ quốc gia</h3>
+        <h3 class="text-uppercase">Danh sách biên bản kết thúc nhập kho</h3>
         <div class="buttons">
           <button type="button" class="btn btn-do" (click)="deleteMulti()"
             *ngIf="userService.isAccessPermisson('DCNB_QUYETDINHDC_XOA') && isTongCuc()">
@@ -78,7 +78,7 @@
               <th></th>
               <th class="text-center">Số QĐ giao nhiệm vụ</th>
               <th class="text-center">Năm KH</th>
-              <th class="text-center">Thời hạn NH</th>
+              <th class="text-center">Thời hạn ĐC</th>
               <th class="text-center">Điểm kho</th>
               <th class="text-center">Lô kho</th>
               <th class="text-center">Số BB kết thúc NH </th>
@@ -130,9 +130,7 @@
                     <td></td>
                     <td></td>
                     <td>
-                      <a (click)="add(row2)">
-                        <i class="icon htvbdh_dau-cong"></i>
-                      </a>
+
                     </td>
                   </tr>
                   <ng-container>
@@ -144,7 +142,7 @@
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td class="bold">{{ row3.tenLoKho || ""}} {{ row3.tenNganKho || ""}} {{ row3.tenNhaKho||""}}
+                        <td class="bold">{{ row3.tenLoKho || ""}} - {{ row3.tenNganKho || ""}} - {{ row3.tenNhaKho||""}}
                         </td>
                         <td class="bold">{{row3.soBBKtNH || ""}}</td>
                         <td>{{ row3.ngayKetThucNhapHang|date: "dd/MM/yyyy" }}</td>
@@ -154,7 +152,11 @@
                         <td></td>
                         <td class="bold">{{row3.tenTrangThai || ""}}</td>
                         <td>
-                          <a *ngIf="row3.trangThai !== STATUS.DU_THAO" (click)="redirectDetail(row3.id, true)">
+                          <a *ngIf="!row3.soBBKtNH" (click)="add(row3)">
+                            <i class="icon htvbdh_dau-cong"></i>
+                          </a>
+                          <a *ngIf="row3.soBBKtNH && row3.trangThai !== STATUS.DU_THAO"
+                            (click)="redirectDetail(row3.id, true)">
                             <i class="fa fa-eye" title="Xem chi tiết"></i>
                           </a>
                           <a *ngIf="row3.trangThai == STATUS.DU_THAO" (click)="redirectDetail(row3.id, false)">

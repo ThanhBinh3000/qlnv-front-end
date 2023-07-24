@@ -188,7 +188,7 @@
                                             <td>{{LIST_TRANG_THAI[lv2.trangThai]}}</td>
                                             <td class="text-left">
                                                 <a (click)="redirectDetail(lv2.id, false, lv2)"
-                                                    *ngIf="checkRoleAdd(lv2)">
+                                                    *ngIf="checkRoleAdd(lv2) && lv2.phieuXuatKhoId">
                                                     <i class="fa fa-plus"></i>
                                                 </a>
                                                 <a *ngIf="checkRoleView(lv2)" (click)="redirectDetail(lv2.id, true)">

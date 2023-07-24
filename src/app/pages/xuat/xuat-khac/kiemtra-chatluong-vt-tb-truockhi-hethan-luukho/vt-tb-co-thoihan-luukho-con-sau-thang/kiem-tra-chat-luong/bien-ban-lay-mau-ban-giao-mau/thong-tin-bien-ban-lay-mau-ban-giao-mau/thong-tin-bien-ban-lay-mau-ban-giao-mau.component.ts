@@ -56,8 +56,6 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
   fileDinhKems: any[] = [];
   listFiles: any = [];
   listPhieuXuatKho: any = [];
-  ppLayMauOptions: any = [];
-  chiTieuClOptions: any = [];
 
   constructor(
     httpClient: HttpClient,
@@ -156,16 +154,21 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
               soPhieuXuatKho: data.soPhieuXuatKho,
               tenDiaDiem: data.tenLoKho ? data.tenLoKho + ' - ' + data.tenNganKho : data.tenNganKho,
             })
+            if (data.fileDinhKems) {
+              this.fileDinhKems = data.fileDinhKems.filter(item => item.fileType === FILETYPE.FILE_DINH_KEM);
+              this.canCu = data.fileDinhKems.filter(item => item.fileType === FILETYPE.CAN_CU_PHAP_LY);
+              this.fileNiemPhong = data.fileDinhKems.filter(item => item.fileType === FILETYPE.ANH_DINH_KEM);
+            }
             //Xử lý pp lấy mẫu và chỉ tiêu kiểm tra chất lượng
             if (data.ppLayMau) {
-              let ppLayMauOptions = data.ppLayMau.indexOf(",") > 0 ? data.ppLayMau.split(",") : Array.from(data.ppLayMau);
+              let ppLayMauOptions = data.ppLayMau.indexOf(",") > 0 ? data.ppLayMau.split(",") : [data.ppLayMau];
               ppLayMauOptions = ppLayMauOptions.map((str, index) => ({label: str, value: index + 1, checked: true}));
               this.formData.patchValue({
                 ppLayMauList: ppLayMauOptions,
               });
             }
             if (data.chiTieuKiemTra) {
-              let chiTieuOptions = data.chiTieuKiemTra.indexOf(",") > 0 ? data.chiTieuKiemTra.split(",") : Array.from(data.chiTieuKiemTra);
+              let chiTieuOptions = data.chiTieuKiemTra.indexOf(",") > 0 ? data.chiTieuKiemTra.split(",") : [data.chiTieuKiemTra];
               chiTieuOptions = chiTieuOptions.map((str, index) => ({label: str, value: index + 1, checked: true}));
               this.formData.patchValue({
                 chiTieuKiemTraList: chiTieuOptions,

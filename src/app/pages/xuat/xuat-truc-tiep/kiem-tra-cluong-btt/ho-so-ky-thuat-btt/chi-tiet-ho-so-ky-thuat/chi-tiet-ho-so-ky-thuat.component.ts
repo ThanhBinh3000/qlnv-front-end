@@ -155,6 +155,9 @@ export class ChiTietHoSoKyThuatComponent extends Base2Component implements OnIni
       tenNganKho: [],
       tenLoKho: [],
       canBoTaoHoSo: [],
+      soBbKtNgoaiQuan: [],
+      soBbKtVanHanh: [],
+      soBbKtHskt: [],
       xhHoSoKyThuatDtl: []
     });
   }

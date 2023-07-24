@@ -109,7 +109,6 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
         maNganKho: [],
         maLoKho: [],
         soLuongMau: [],
-        pplayMau: [],
         ketQuaNiemPhong: [],
         trangThai: [STATUS.DU_THAO],
         lyDoTuChoi: [],
@@ -146,6 +145,11 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
     // this.setTitle();
   }
   numberFomater = (value) => (value || value == "0") ? formatNumber(value, 'vi_VN', '1.0-1') : '';
+  booleanParse = (str: string): boolean => {
+    console.log("str", str)
+    if (str === "true") return true;
+    return false;
+  }
   async ngOnInit() {
     if (this.isViewOnModal) {
       this.isView = true
@@ -160,10 +164,8 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
       // if (!this.idInput) {
       //   this.formData.patchValue({ ...this.passData });
       // }
-      this.spinner.hide();
     } catch (e) {
       this.notification.error(MESSAGE.ERROR, 'Có lỗi xảy ra.');
-      this.spinner.hide();
       console.log("error", e)
     } finally {
       this.spinner.hide();
@@ -182,7 +184,7 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
             this.bienBanLayMauDinhKem = cloneDeep(data.bienBanLayMauDinhKem);
             this.canCu = data.canCu;
             this.fileDinhKemChupMauNiemPhong = cloneDeep(data.fileDinhKemChupMauNiemPhong);
-            this.phuongPhapLayMaus = Array.isArray(data?.pplayMau?.split("-*")) ? data.pplayMau.split("-*").map(f => ({ id: f.split("-")[0], giaTri: f.split("-")[1], checked: true })) : [];
+            this.phuongPhapLayMaus = Array.isArray(data?.pplayMau?.split("-*")) ? data.pplayMau.split("-*").map(f => ({ id: f.split("-")[0], giaTri: f.split("-")[1], checked: this.booleanParse(f.split("-")[2]) })) : [];
             this.chiTieuKiemTra = Array.isArray(data?.chiTieuKiemTra?.split("-*")) ? data.chiTieuKiemTra.split("-*").map(f => ({ id: f.split("-")[0], giaTri: f.split("-")[1], checked: true })) : [];
             const obj = Array.isArray(data.dcnbBienBanLayMauDtl) ? data.dcnbBienBanLayMauDtl.reduce((obj, cur) => {
               if (cur.loaiDaiDien == "00") {
@@ -202,7 +204,6 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         });
     } else {
-      console.log("data", this.passData)
       this.formData.patchValue({
         maDvi: this.userInfo.MA_DVI,
         tenDvi: this.userInfo.TEN_DVI,
@@ -214,11 +215,10 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
       });
       if (this.passData.cloaiVthh) {
         const [chiTietHangHoa, dataChiTieu] = await Promise.all([this.danhMucService.loadDanhMucHangChiTiet(this.passData.cloaiVthh), this.getTieuChiCanKiemTra(this.passData.loaiVthh)]);
-        this.phuongPhapLayMaus = Array.isArray(chiTietHangHoa?.data?.ppLayMau) ? chiTietHangHoa?.data?.ppLayMau.map(f => ({ ...f, checked: true })) : [];
+        this.phuongPhapLayMaus = Array.isArray(chiTietHangHoa?.data?.ppLayMau) ? chiTietHangHoa?.data?.ppLayMau.map(f => ({ ...f, checked: false })) : [];
         if (dataChiTieu?.msg === MESSAGE.SUCCESS) {
-          this.getChiTietTieuChiCanKiemTra(dataChiTieu.data?.content[0]?.id, this.passData.cloaiVthh)
+          await this.getChiTietTieuChiCanKiemTra(dataChiTieu.data?.content[0]?.id, this.passData.cloaiVthh)
         }
-        this.formData.patchValue({ pplayMau: this.phuongPhapLayMaus.map(f => `${f.id}-${f.giaTri}`).join("-*") });
       }
     }
 
@@ -440,8 +440,7 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
     }
     if (data.cloaiVthh) {
       const [chiTietHangHoa, dataChiTieu] = await Promise.all([this.danhMucService.loadDanhMucHangChiTiet(data.cloaiVthh), this.getTieuChiCanKiemTra(data.loaiVthh)]);
-      this.phuongPhapLayMaus = Array.isArray(chiTietHangHoa?.data?.ppLayMau) ? chiTietHangHoa?.data?.ppLayMau.map(f => ({ ...f, checked: true })) : [];
-      this.formData.patchValue({ pplayMau: this.phuongPhapLayMaus.map(f => `${f.id}-${f.giaTri}`).join("-*") });
+      this.phuongPhapLayMaus = Array.isArray(chiTietHangHoa?.data?.ppLayMau) ? chiTietHangHoa?.data?.ppLayMau.map(f => ({ ...f, checked: false })) : [];
       if (dataChiTieu?.msg === MESSAGE.SUCCESS) {
         this.getChiTietTieuChiCanKiemTra(dataChiTieu.data?.content[0]?.id, data.cloaiVthh)
       }
@@ -460,6 +459,7 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
     body.canCu = this.canCu;
     body.fileDinhKemChupMauNiemPhong = this.fileDinhKemChupMauNiemPhong;
     body.chiTieuKiemTra = this.chiTieuKiemTra.map(f => `${f.id}-${f.giaTri}`)?.join("-*");
+    body.pplayMau = this.phuongPhapLayMaus.map(f => `${f.id}-${f.giaTri}-${f.checked}`).join("-*");
     body.dcnbBienBanLayMauDtl = this.listDaiDienCuc.map(f => ({ ...f, loaiDaiDien: '00', tenDaiDien: f.daiDien })).concat(this.listDaiDienChiCuc.map(f => ({ ...f, loaiDaiDien: '01', tenDaiDien: f.daiDien })))
     let data = await this.createUpdate(body);
     if (!data) return;
@@ -532,7 +532,7 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
       this.formData.controls['dviKiemNghiem'].setValidators([Validators.required]);
       this.formData.controls['diaDiemLayMau'].setValidators([Validators.required]);
       this.formData.controls['soLuongMau'].setValidators([Validators.required]);
-      this.formData.controls['pplayMau'].setValidators([Validators.required]);
+      // this.formData.controls['pplayMau'].setValidators([Validators.required]);
       // this.formData.controls['chiTieuKiemTra'].setValidators([Validators.required]);
       this.formData.controls['ngayLayMau'].setValidators([Validators.required]);
     } else {
@@ -541,7 +541,7 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
       this.formData.controls['dviKiemNghiem'].clearValidators();
       this.formData.controls['diaDiemLayMau'].clearValidators();
       this.formData.controls['soLuongMau'].clearValidators();
-      this.formData.controls['pplayMau'].clearValidators();
+      // this.formData.controls['pplayMau'].clearValidators();
       // this.formData.controls['chiTieuKiemTra'].clearValidators();
       this.formData.controls['ngayLayMau'].clearValidators();
     }

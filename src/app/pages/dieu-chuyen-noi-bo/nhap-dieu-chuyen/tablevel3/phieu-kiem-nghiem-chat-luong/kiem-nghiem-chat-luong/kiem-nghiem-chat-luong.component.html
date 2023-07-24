@@ -53,7 +53,7 @@
         </div>
       </nz-card>
       <div class="group-button">
-        <h3 class="text-uppercase">Danh sách biên bản nghiệm thu bảo quản lần đầu nhập hàng dự trữ quốc gia</h3>
+        <h3 class="text-uppercase">Danh sách phiếu kiểm nghiệm chất lượng</h3>
         <div class="buttons">
           <button type="button" class="btn btn-do" (click)="deleteMulti()"
             *ngIf="userService.isAccessPermisson('DCNB_QUYETDINHDC_XOA') && isTongCuc()">
@@ -123,7 +123,7 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td class="bold">{{ row2.thoiHanDieuChuyen || ""}}</td>
+                    <td class="bold">{{ row2.thoiHanDieuChuyen | date: "dd/MM/yyyy"}}</td>
                     <td class="bold">{{ row2.tenDiemKho || ""}}</td>
 
                     <td></td>
@@ -145,7 +145,7 @@
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td class="bold">{{ row3.tenLoKho || ""}} {{ row3.tenNganKho || ""}} {{ row3.tenNhaKho
+                        <td class="bold">{{ row3.tenLoKho || ""}} - {{ row3.tenNganKho || ""}} - {{ row3.tenNhaKho
                           ||
                           ""}}
                         </td>
@@ -157,7 +157,11 @@
                         <td>{{(row3.ngayXuatDocKho || "")}}</td>
                         <td>{{(row3.tenTrangThai || "")}}</td>
                         <td>
-                          <a *ngIf="row3.trangThai !== STATUS.DU_THAO" (click)="redirectDetail(row3.id, true)">
+                          <a *ngIf="!row3.soPhieuKnChatLuong" (click)="add(row3)">
+                            <i class="icon htvbdh_dau-cong"></i>
+                          </a>
+                          <a *ngIf="row3.soPhieuKnChatLuong && row3.trangThai !== STATUS.DU_THAO"
+                            (click)="redirectDetail(row3.id, true)">
                             <i class="fa fa-eye" title="Xem chi tiết"></i>
                           </a>
                           <a *ngIf="row3.trangThai == STATUS.DU_THAO" (click)="redirectDetail(row3.id, false)">
@@ -201,7 +205,7 @@
   </div>
 
   <div class="chi-tiet" *ngIf="isDetail">
-    <app-thong-tin-kiem-nghiem-chat-luong [loaiDc]="loaiDc" [isView]="isView" [idInput]="selectedId"
+    <app-thong-tin-kiem-nghiem-chat-luong [loaiDc]="loaiDc" [isView]="isView" [idInput]="selectedId" [data]="data"
       (showListEvent)="quayLai()"></app-thong-tin-kiem-nghiem-chat-luong>
   </div>
 

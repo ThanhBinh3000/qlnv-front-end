@@ -65,7 +65,9 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
         soDviTsanThanhCong: [],
         soDviTsanKhongThanh: [],
         loaiHinhNx: [''],
+        tenLoaiHinhNx: [''],
         kieuNx: [''],
+        tenKieuNx: [''],
         trangThai: [],
         tenTrangThai: [],
       }
@@ -118,8 +120,10 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
                 slDviTsan: dataDtl.slDviTsan,
                 soDviTsanThanhCong: dataDtl.soDviTsanThanhCong,
                 soDviTsanKhongThanh: dataDtl.soDviTsanKhongThanh,
-                loaiHinhNx: dataHdr.loaiHinhNx != null ? 'Xuất bán đấu giá' : null,
-                kieuNx: dataHdr.kieuNx != null ? 'Xuất bán' : null,
+                loaiHinhNx: dataHdr.loaiHinhNx,
+                tenLoaiHinhNx: dataHdr.tenLoaiHinhNx,
+                kieuNx: dataHdr.kieuNx,
+                tenKieuNx : dataHdr.tenKieuNx,
               })
             }
           }

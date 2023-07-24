@@ -11,7 +11,7 @@
               </nz-select>
             </div>
             <div nz-col nzSpan="3">
-              <label class="search__label">Số QĐ giao nhiệm vụ NH</label>
+              <label class="search__label">Số QĐ ĐC của cục</label>
               <nz-select formControlName="soQdinhDcc">
                 <nz-option *ngFor="let p of dsQuyetDinh" [nzValue]="p.soQdinh" [nzLabel]="p.soQdinh"></nz-option>
               </nz-select>
@@ -51,7 +51,7 @@
         </div>
       </nz-card>
       <div class="group-button">
-        <h3 class="text-uppercase">Danh sách biên bản nghiệm thu bảo quản lần đầu nhập hàng dự trữ quốc gia</h3>
+        <h3 class="text-uppercase">Danh sách phiếu kiểm tra chất lượng</h3>
         <div class="buttons">
           <button type="button" class="btn btn-do" (click)="deleteMulti()"
             *ngIf="userService.isAccessPermisson('DCNB_QUYETDINHDC_XOA') && isTongCuc()">
@@ -80,8 +80,8 @@
               <th rowspan="2">Số QĐ ĐC của Cục</th>
               <th rowspan="2">Năm kế hoạch</th>
               <th rowspan="2">Thời hạn ĐC</th>
-              <th colspan="2" class="text-center">Thông tin kho xuất</th>
-              <th colspan="3" class="text-center">Thông tin kho nhập</th>
+              <th colspan="2" class="text-center">Thông tin kho xuất ĐC</th>
+              <th colspan="3" class="text-center">Thông tin kho nhập ĐC</th>
               <th rowspan="2" style="max-width: 90px; min-width: 90px;  white-space: break-spaces;" class="text-center">
                 Số BB NT kê lót,
                 BQLĐ</th>
@@ -132,11 +132,10 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td class="bold">{{ row2.thoiGianDieuChuyen || ""}}</td>
-                    <td class="bold">{{ row2.tenLoKhoXuat || ""}} {{ row2.tenNganKhoXuat || ""}} {{ row2.tenNhaKhoXuat
-                      || ""}} {{ row2.tenDiemKhoXuat
-                      ||
-                      ""}}
+                    <td class="bold">{{ row2.thoiGianDieuChuyen | date: "dd/MM/yyyy"}}</td>
+                    <td class="bold">{{ row2.tenLoKhoXuat || ""}} - {{ row2.tenNganKhoXuat || ""}} - {{
+                      row2.tenNhaKhoXuat
+                      || ""}} - {{ row2.tenDiemKhoXuat||""}}
                     </td>
                     <td class="bold">{{ row2.tenTrangThai || ""}}</td>
                     <td></td>
@@ -183,7 +182,7 @@
                           <td></td>
                           <td></td>
                           <td></td>
-                          <td class="bold">{{ row4.tenLoKhoNhan || ""}} {{ row4.tenNganKhoNhan || ""}} {{
+                          <td class="bold">{{ row4.tenLoKhoNhan || ""}} - {{ row4.tenNganKhoNhan || ""}} - {{
                             row4.tenNhaKhoNhan || ""}}
                           </td>
                           <td class="bold">{{ row4.tenTrangThai || ""}}</td>
@@ -218,12 +217,12 @@
                             <td>{{(row5.ketQuaDanhGia || "")}}</td>
                             <td>{{(row5.soPhieuNhapKho || "")}}</td>
                             <td>{{(row5.ngayNhapKho || "")}}</td>
-                            <td>{{(row5.trangThai || "")}}</td>
+                            <td>{{(row5.tenTrangThai || "")}}</td>
                             <td>
                               <a *ngIf="row5.trangThai !== STATUS.DU_THAO" (click)="redirectDetail(row5.id, true)">
                                 <i class="fa fa-eye" title="Xem chi tiết"></i>
                               </a>
-                              <a *ngIf="row5.trangThai == STATUS.DU_THAO" (click)="redirectDetail(row5.id, false)">
+                              <a *ngIf="isSua(row5)" (click)="redirectDetail(row5.id, false)">
                                 <i class="fa fa-pencil" title="Sửa"></i>
                               </a>
                               <a *ngIf="row5.trangThai == STATUS.DU_THAO" (click)="xoa(row5)">

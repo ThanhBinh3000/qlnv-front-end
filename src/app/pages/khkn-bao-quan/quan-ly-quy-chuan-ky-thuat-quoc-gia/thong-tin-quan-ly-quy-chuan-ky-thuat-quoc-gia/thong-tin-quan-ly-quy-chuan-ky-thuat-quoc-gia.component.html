@@ -1,37 +1,6 @@
-<nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="btn-affix">
-  <div class="btn-group">
-    <button type="button" class="btn btn-sub" (click)="quayLai()">
-      <i class="fa fa-arrow-left"></i>
-      <span>Quay lại</span>
-    </button>
-    <button
-      *ngIf="userService.isAccessPermisson('KHCNBQ_QCKTTCCS_DUYET') && formData.value.trangThai == STATUS.CHO_DUYET_LDV"
-      type="button" class="btn btn-sub do" (click)="tuChoi()">
-      <i class="icon htvbdh_tcdt_tuchoi "></i>
-      <span>Từ chối</span>
-    </button>
-    <button
-      *ngIf="userService.isAccessPermisson('KHCNBQ_QCKTTCCS_DUYET') && formData.value.trangThai == STATUS.CHO_DUYET_LDV"
-      type="button" class="btn btn-sub xanh-nhat" (click)="guiDuyet()">
-      <i class="icon htvbdh_tcdt_pheduyet"></i>
-      <span>Duyệt</span>
-    </button>
-    <button
-      *ngIf="userService.isAccessPermisson('KHCNBQ_QCKTTCCS_THEM') && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV )"
-      type="button" class="btn btn-sub xanh-nhat" (click)="save(true)">
-      <i class="icon htvbdh_tcdt_guiduyet"></i>
-      <span>Lưu và gửi duyệt</span>
-    </button>
-    <button *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV )"
-            type="button" class="btn btn-main" (click)="save()">
-      <i class="icon htvbdh_tcdt_save"></i>
-      <span>Lưu</span>
-    </button>
-  </div>
-</nz-affix>
 <div class="bg-trang">
   <nz-card class="mt16 flex-card p-lr16">
-    <div class="header">
+    <div class="header header-green-background">
       <div class="header-text">
         <div class="title-chi-tieu">
           <span [ngClass]="formData.value.trangThai == STATUS.BAN_HANH?  'status-xanh' : 'status-do'">
@@ -39,6 +8,35 @@
           </span>
           <span class="title-form">{{userInfo.MA_DVI.startsWith("01") ? 'Quy chuẩn, tiêu chuẩn quốc gia đối với hàng DTQG tại TCDT' : 'Quy chuẩn, tiêu chuẩn quốc gia đối với hàng DTQG tại Bộ/Ngành' }}</span>
         </div>
+      </div>
+      <div class="btn-group">
+        <button type="button" class="btn btn-sub" (click)="quayLai()">
+          <i class="fa fa-arrow-left"></i>
+          <span>Quay lại</span>
+        </button>
+        <button
+          *ngIf="userService.isAccessPermisson('KHCNBQ_QCKTTCCS_DUYET') && formData.value.trangThai == STATUS.CHO_DUYET_LDV"
+          type="button" class="btn btn-sub do" (click)="tuChoi()">
+          <i class="icon htvbdh_tcdt_tuchoi "></i>
+          <span>Từ chối</span>
+        </button>
+        <button
+          *ngIf="userService.isAccessPermisson('KHCNBQ_QCKTTCCS_DUYET') && formData.value.trangThai == STATUS.CHO_DUYET_LDV"
+          type="button" class="btn btn-sub xanh-nhat" (click)="guiDuyet()">
+          <i class="icon htvbdh_tcdt_pheduyet"></i>
+          <span>Duyệt</span>
+        </button>
+        <button
+          *ngIf="userService.isAccessPermisson('KHCNBQ_QCKTTCCS_THEM') && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV )"
+          type="button" class="btn btn-sub xanh-nhat" (click)="save(true)">
+          <i class="icon htvbdh_tcdt_guiduyet"></i>
+          <span>Lưu và gửi duyệt</span>
+        </button>
+        <button *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV )"
+                type="button" class="btn btn-main" (click)="save()">
+          <i class="icon htvbdh_tcdt_save"></i>
+          <span>Lưu</span>
+        </button>
       </div>
     </div>
     <nz-alert class="mg-t-10" *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDV " nzShowIcon nzType="error"

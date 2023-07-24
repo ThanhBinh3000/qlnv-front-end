@@ -111,7 +111,7 @@
 
           <div nz-col [nzSpan]="4">
             <nz-form-item>
-              <nz-form-label [nzNoColon]="true">Số QĐ điều chuyển của cục</nz-form-label>
+              <nz-form-label [nzNoColon]="true">Số QĐ điều chuyển của Cục</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogQD()">
                   <input [readonly]="true" nz-input formControlName="soQdinhDcc" readonly="true" />
@@ -122,7 +122,7 @@
 
           <div nz-col [nzSpan]="4">
             <nz-form-item>
-              <nz-form-label [nzNoColon]="true">Ngày hiệu lực của QĐ</nz-form-label>
+              <nz-form-label [nzNoColon]="true">Ngày ký QĐ điều chuyển</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-date-picker [nzDisabled]="true" formControlName="ngayKyQdDcc" nzFormat="dd/MM/yyyy">
                 </nz-date-picker>
@@ -215,7 +215,7 @@
 
           <div nz-col nzSpan="4">
             <nz-form-item>
-              <nz-form-label nzRequired [nzNoColon]="true">Họ tên người giao hàng
+              <nz-form-label [nzNoColon]="true">Họ tên người giao hàng
               </nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
                 <input nz-input formControlName="tenNguoiGiaoHang" [readonly]="true" />
@@ -225,7 +225,7 @@
 
           <div nz-col nzSpan="4">
             <nz-form-item>
-              <nz-form-label nzRequired [nzNoColon]="true">Số CMT/CCCD
+              <nz-form-label [nzNoColon]="true">Số CMT/CCCD
               </nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
                 <input nz-input formControlName="cccd" [readonly]="true" />
@@ -273,7 +273,7 @@
 
           <div nz-col nzSpan="4">
             <nz-form-item>
-              <nz-form-label nzRequired [nzNoColon]="true">Loại hàng hoá
+              <nz-form-label [nzNoColon]="true">Loại hàng
               </nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
                 <input nz-input formControlName="tenLoaiVthh" [readonly]="true" />
@@ -283,7 +283,7 @@
 
           <div nz-col nzSpan="4">
             <nz-form-item>
-              <nz-form-label nzRequired [nzNoColon]="true">Chủng loại hàng hoá
+              <nz-form-label [nzNoColon]="true">Chủng loại hàng
               </nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
                 <input nz-input formControlName="tenCloaiVthh" [readonly]="true" />

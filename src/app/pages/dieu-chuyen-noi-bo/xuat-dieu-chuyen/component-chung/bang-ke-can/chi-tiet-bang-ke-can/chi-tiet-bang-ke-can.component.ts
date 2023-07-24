@@ -495,7 +495,7 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
 
   async addRow() {
     if (Object.keys(this.dcnbBangKeCanHangDtlCreate).length !== 0) {
-      this.formData.value.dcnbBangKeCanHangDtl = [...this.formData.value.dcnbBangKeCanHangDtl, this.dcnbBangKeCanHangDtlCreate];
+      this.formData.patchValue({ dcnbBangKeCanHangDtl: [...this.formData.value.dcnbBangKeCanHangDtl, this.dcnbBangKeCanHangDtlCreate] });
       this.clearRow();
       this.tinhTong();
       this.formData.patchValue({ tongTrongLuongBaoBi: '' })

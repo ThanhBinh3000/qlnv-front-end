@@ -131,7 +131,7 @@
             </nz-form-item>
           </div>
 
-          <div nz-col nzSpan="4">
+          <div nz-col nzSpan="8">
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true">Lô kho
               </nz-form-label>
@@ -174,7 +174,7 @@
 
           <div nz-col nzSpan="4">
             <nz-form-item>
-              <nz-form-label nzRequired [nzNoColon]="true">Loại hàng hoá
+              <nz-form-label [nzNoColon]="true">Loại hàng
               </nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
                 <input nz-input formControlName="tenLoaiVthh" [readonly]="true" />
@@ -184,7 +184,7 @@
 
           <div nz-col nzSpan="4">
             <nz-form-item>
-              <nz-form-label nzRequired [nzNoColon]="true">Chủng loại hàng hoá
+              <nz-form-label [nzNoColon]="true">Chủng loại hàng
               </nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
                 <input nz-input formControlName="tenCloaiVthh" [readonly]="true" />
@@ -194,7 +194,7 @@
 
           <div nz-col nzSpan="4">
             <nz-form-item>
-              <nz-form-label nzRequired [nzNoColon]="true">Đơn vị tính
+              <nz-form-label [nzNoColon]="true">Đơn vị tính
               </nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
                 <input nz-input formControlName="donViTinh" [readonly]="true" />
@@ -295,8 +295,8 @@
                   Tổng số lượng điều chuyển theo QĐ
                 </nz-form-label>
                 <nz-form-control>
-                  <span
-                    class="text-blue">{{formData.value.tongSlTheoQd}}</span><span>({{formData.value.donViTinh}})</span>
+                  <span class="text-blue">{{formData.value.tongSlTheoQd|number:'1.0-1':'vi_VN'}}</span><span>
+                    ({{formData.value.donViTinh}})</span>
                 </nz-form-control>
               </nz-form-item>
             </div>

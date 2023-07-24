@@ -355,7 +355,7 @@
                                     </nz-select> -->
                                     <div class="label-wrapper">
                                         <label [ngModelOptions]="{standalone: true}" [(ngModel)]="item.checked"
-                                            [nzDisabled]="true" nz-checkbox *ngFor="let item of phuongPhapLayMaus"
+                                            [nzDisabled]="isView" nz-checkbox *ngFor="let item of phuongPhapLayMaus"
                                             class="text-bold">
                                             {{item.giaTri}}
                                         </label>

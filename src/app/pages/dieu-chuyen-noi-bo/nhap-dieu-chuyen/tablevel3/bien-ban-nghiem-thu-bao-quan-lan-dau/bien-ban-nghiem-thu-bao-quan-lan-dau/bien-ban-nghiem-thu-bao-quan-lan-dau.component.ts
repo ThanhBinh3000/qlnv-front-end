@@ -117,14 +117,16 @@ export class BienBanNghiemThuBaoQuanLanDauComponent extends Base2Component imple
   }
 
   async timKiem() {
-    // if (this.formData.value.ngayDuyetTc) {
-    //   this.formData.value.ngayDuyetTcTu = dayjs(this.formData.value.ngayDuyetTc[0]).format('YYYY-MM-DD')
-    //   this.formData.value.ngayDuyetTcDen = dayjs(this.formData.value.ngayDuyetTc[1]).format('YYYY-MM-DD')
-    // }
-    // if (this.formData.value.ngayHieuLuc) {
-    //   this.formData.value.ngayHieuLucTu = dayjs(this.formData.value.ngayHieuLuc[0]).format('YYYY-MM-DD')
-    //   this.formData.value.ngayHieuLucDen = dayjs(this.formData.value.ngayHieuLuc[1]).format('YYYY-MM-DD')
-    // }
+    if (this.formData.value.ngayLap) {
+      this.formData.value.ngayLapTu = dayjs(this.formData.value.ngayLap[0]).format('YYYY-MM-DD')
+      this.formData.value.ngayLapDen = dayjs(this.formData.value.ngayLap[1]).format('YYYY-MM-DD')
+      this.formData.value.ngayLap = undefined
+    }
+    if (this.formData.value.ngayKetThucNt) {
+      this.formData.value.ngayKetThucNtTu = dayjs(this.formData.value.ngayKetThucNt[0]).format('YYYY-MM-DD')
+      this.formData.value.ngayKetThucNtDen = dayjs(this.formData.value.ngayKetThucNt[1]).format('YYYY-MM-DD')
+      this.formData.value.ngayKetThucNt = undefined
+    }
     let body = this.formData.value
     body.paggingReq = {
       limit: this.pageSize,
@@ -250,6 +252,7 @@ export class BienBanNghiemThuBaoQuanLanDauComponent extends Base2Component imple
 
   add(data: any) {
     this.data = data;
+    this.selectedId = 0
     this.isDetail = true;
     this.isView = false;
   }
@@ -283,6 +286,7 @@ export class BienBanNghiemThuBaoQuanLanDauComponent extends Base2Component imple
   }
 
   redirectDetail(id, b: boolean) {
+    this.data = null
     this.selectedId = id;
     this.isDetail = true;
     this.isView = b;

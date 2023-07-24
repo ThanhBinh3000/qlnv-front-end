@@ -1,17 +1,17 @@
-import { Component, Input, OnInit } from '@angular/core';
-import dayjs from "dayjs";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { MESSAGE } from "../../../../../../constants/message";
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
-import { cloneDeep } from 'lodash';
+import {Component, Input, OnInit} from '@angular/core';
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {MESSAGE} from "../../../../../../constants/message";
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from 'src/app/services/storage.service';
+import {cloneDeep} from 'lodash';
 import {
   QuyetDinhPdKhBdgService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/quyetDinhPdKhBdg.service';
-import { saveAs } from 'file-saver';
+import {saveAs} from 'file-saver';
+
 @Component({
   selector: 'app-thong-tin-dau-gia',
   templateUrl: './thong-tin-dau-gia.component.html',

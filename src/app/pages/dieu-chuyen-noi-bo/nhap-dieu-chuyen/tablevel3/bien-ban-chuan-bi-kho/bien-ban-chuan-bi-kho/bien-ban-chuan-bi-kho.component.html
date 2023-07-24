@@ -50,7 +50,7 @@
         </div>
       </nz-card>
       <div class="group-button">
-        <h3 class="text-uppercase">Danh sách biên bản nghiệm thu bảo quản lần đầu nhập hàng dự trữ quốc gia</h3>
+        <h3 class="text-uppercase">Danh sách biên bản chuẩn bị kho</h3>
         <div class="buttons">
           <button type="button" class="btn btn-do" (click)="deleteMulti()"
             *ngIf="userService.isAccessPermisson('DCNB_QUYETDINHDC_XOA') && isTongCuc()">
@@ -131,9 +131,7 @@
                     <td></td>
                     <td></td>
                     <td>
-                      <a (click)="add(row2)">
-                        <i class="icon htvbdh_dau-cong"></i>
-                      </a>
+
                     </td>
                   </tr>
                   <ng-container>
@@ -145,17 +143,21 @@
                         <td></td>
                         <td></td>
                         <td class="bold">{{row3.thoiHanDieuChuyen|date: "dd/MM/yyyy"}}</td>
-                        <td class="bold">{{ row3.tenLoKho || ""}} {{ row3.tenNganKho || ""}} {{ row3.tenNhaKho||""}}
+                        <td class="bold">{{ row3.tenLoKho || ""}} - {{ row3.tenNganKho || ""}} - {{ row3.tenNhaKho||""}}
                         </td>
                         <td class="bold">{{row3.soBbChuanBiKho || ""}}</td>
                         <td class="bold">{{row3.ngayBbChuanBiKho|date: "dd/MM/yyyy"}}</td>
                         <td class="bold">{{row3.soPhieuNhapKho || ""}}</td>
                         <td class="bold">{{row3.soBbKetThucNK || ""}}</td>
-                        <td class="bold">{{row3.soBbChuanBiKho || ""}}</td>
+                        <td class="bold">{{row3.soBbGiaoNhan || ""}}</td>
                         <td class="bold">{{row3.ngayKtNhapKho|date: "dd/MM/yyyy"}}</td>
                         <td>{{row3.tenTrangThai}}</td>
                         <td>
-                          <a *ngIf="row3.trangThai !== STATUS.DU_THAO" (click)="redirectDetail(row3.id, true)">
+                          <a *ngIf="!row3.soBbChuanBiKho" (click)="add(row2)">
+                            <i class="icon htvbdh_dau-cong"></i>
+                          </a>
+                          <a *ngIf="row3.soBbChuanBiKho && row3.trangThai !== STATUS.DU_THAO"
+                            (click)="redirectDetail(row3.id, true)">
                             <i class="fa fa-eye" title="Xem chi tiết"></i>
                           </a>
                           <a *ngIf="row3.trangThai == STATUS.DU_THAO" (click)="redirectDetail(row3.id, false)">
@@ -199,7 +201,7 @@
   </div>
 
   <div class="chi-tiet" *ngIf="isDetail">
-    <app-thong-tin-bien-ban-chuan-bi-kho [isView]="isView" [idInput]="selectedId"
+    <app-thong-tin-bien-ban-chuan-bi-kho [isView]="isView" [idInput]="selectedId" [data]="data"
       (showListEvent)="quayLai()"></app-thong-tin-bien-ban-chuan-bi-kho>
   </div>
 

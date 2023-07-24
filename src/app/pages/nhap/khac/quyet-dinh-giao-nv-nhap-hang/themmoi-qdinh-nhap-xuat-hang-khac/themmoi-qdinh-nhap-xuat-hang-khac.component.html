@@ -4,7 +4,7 @@
       <i class="icon htvbdh_arrow-left2"></i>
       <span>Quay lại</span>
     </button>
-    <ng-container *ngIf="userService.isCuc()">
+    <ng-container>
       <button type="button" class="btn btn-sub xanh-nhat"
         *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC ) && !isDetail()"
         (click)="save(true)">
@@ -12,14 +12,14 @@
         <span>Lưu và gửi duyệt</span>
       </button>
       <button type="button" class="btn btn-sub do"
-        *ngIf="((formData.value.trangThai == STATUS.CHO_DUYET_TP && userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_DUYET_TP'))
-        || (formData.value.trangThai == STATUS.CHO_DUYET_LDC && userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_DUYET_LDCUC'))) " (click)="tuChoi()">
+        *ngIf="((formData.value.trangThai == STATUS.CHO_DUYET_TP)
+        || (formData.value.trangThai == STATUS.CHO_DUYET_LDC)) " (click)="tuChoi()">
         <i class="icon htvbdh_tcdt_tuchoi"></i>
         <span>Từ chối</span>
       </button>
       <button type="button" class="btn btn-sub xanh-nhat"
-        *ngIf="((formData.value.trangThai == STATUS.CHO_DUYET_TP && userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_DUYET_TP'))
-      || (formData.value.trangThai == STATUS.CHO_DUYET_LDC && userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_DUYET_LDCUC'))) " (click)="save(true)">
+        *ngIf="((formData.value.trangThai == STATUS.CHO_DUYET_TP )
+      || (formData.value.trangThai == STATUS.CHO_DUYET_LDC )) " (click)="save(true)">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span>Duyệt</span>
       </button>
@@ -32,7 +32,7 @@
       </button>
     </ng-container>
     <ng-container
-      *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_PHANBO') && formData.value.trangThaiChiCuc != STATUS.HOAN_THANH_CAP_NHAT">
+      *ngIf="formData.value.trangThaiChiCuc != STATUS.HOAN_THANH_CAP_NHAT">
       <button *ngIf="(formData.value.trangThai == STATUS.BAN_HANH)" type="button" class="btn btn-sub xanh-nhat"
         (click)="saveDdiemNhap(STATUS.HOAN_THANH_CAP_NHAT)">
         <i class="icon htvbdh_duyet"></i>

@@ -28,6 +28,7 @@ import {
 } from "src/app/components/dialog/dialog-table-selection/dialog-table-selection.component";
 import { convertTienTobangChu } from 'src/app/shared/commonFunction';
 import { PassDataXuatBangKeXuatVatTu } from '../bang-ke-xuat-vat-tu.component';
+import { BangKeXuatVatTuDieuChuyenService } from '../../services/dcnb-bang-ke-xuat-vat-tu.service';
 
 
 @Component({
@@ -111,10 +112,10 @@ export class ChiTietBangKeXuatVatTuDieuChuyenComponent extends Base2Component im
         private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
         private dmTieuChuanService: DanhMucTieuChuanService,
         private quyetDinhDieuChuyenCucService: QuyetDinhDieuChuyenCucService,
-        private bangKeCanHangDieuChuyenService: BangKeCanHangDieuChuyenService,
+        private bangKeXuatVatTuDieuChuyenService: BangKeXuatVatTuDieuChuyenService,
         private phieuXuatKhoDieuChuyenService: PhieuXuatKhoDieuChuyenService,
     ) {
-        super(httpClient, storageService, notification, spinner, modal, bangKeCanHangDieuChuyenService);
+        super(httpClient, storageService, notification, spinner, modal, bangKeXuatVatTuDieuChuyenService);
         for (let i = -3; i < 23; i++) {
             this.listNam.push({
                 value: dayjs().get('year') - i,
@@ -264,10 +265,10 @@ export class ChiTietBangKeXuatVatTuDieuChuyenComponent extends Base2Component im
 
     async loadDetail(idInput: number) {
         if (idInput > 0) {
-            await this.bangKeCanHangDieuChuyenService.getDetail(idInput)
+            await this.bangKeXuatVatTuDieuChuyenService.getDetail(idInput)
                 .then((res) => {
                     if (res.msg === MESSAGE.SUCCESS) {
-                        this.formData.patchValue({ ...res.data, soBangKe: res.data.soBangKe ? res.data.soBangKe : this.genSoBangKe(res.data.id), tenNganLoKho: res.data.tenLoKho ? `${res.data.tenLoKho} - ${res.data.tenNganKho}` : res.data.tenNganKho });
+                        this.formData.patchValue({ ...res.data, tenDonViTinh: res.data.tenDonViTinh ? res.data.tenDonViTinh : res.data.donViTinh, soBangKe: res.data.soBangKe ? res.data.soBangKe : this.genSoBangKe(res.data.id), tenNganLoKho: res.data.tenLoKho ? `${res.data.tenLoKho} - ${res.data.tenNganKho}` : res.data.tenNganKho });
                     }
                 })
                 .catch((e) => {
@@ -283,6 +284,7 @@ export class ChiTietBangKeXuatVatTuDieuChuyenComponent extends Base2Component im
                 thuKhoId: null,
                 tenThuKho: this.userInfo.TEN_DAY_DU,
                 ...this.passData,
+                tenDonViTinh: this.passData?.tenDonViTinh ? this.passData.tenDonViTinh : this.passData.donViTinh,
                 tenNganLoKho: this.passData.tenLoKho ? `${this.passData.tenLoKho} - ${this.passData.tenNganKho}` : this.passData.tenNganKho
             });
             this.chiTietDiemKho(this.passData.maDiemKho);
@@ -426,9 +428,9 @@ export class ChiTietBangKeXuatVatTuDieuChuyenComponent extends Base2Component im
             body.type = this.type;
             let res;
             if (body.id && body.id > 0) {
-                res = await this.bangKeCanHangDieuChuyenService.update(body);
+                res = await this.bangKeXuatVatTuDieuChuyenService.update(body);
             } else {
-                res = await this.bangKeCanHangDieuChuyenService.create(body);
+                res = await this.bangKeXuatVatTuDieuChuyenService.create(body);
             }
             if (res.msg === MESSAGE.SUCCESS) {
                 if (this.formData.get('id').value) {
@@ -508,7 +510,7 @@ export class ChiTietBangKeXuatVatTuDieuChuyenComponent extends Base2Component im
 
     async addRow() {
         if (Object.keys(this.dcnbBangKeXuatVTDtlCreate).length !== 0) {
-            this.formData.value.dcnbBangKeXuatVTDtl = [...this.formData.value.dcnbBangKeXuatVTDtl, this.dcnbBangKeXuatVTDtlCreate];
+            this.formData.patchValue({ dcnbBangKeXuatVTDtl: [...this.formData.value.dcnbBangKeXuatVTDtl, this.dcnbBangKeXuatVTDtlCreate] });
             this.clearRow();
         }
         this.tinhTongSl()
@@ -668,7 +670,7 @@ export class ChiTietBangKeXuatVatTuDieuChuyenComponent extends Base2Component im
                 tenLoaiVthh: dataRes.data.tenLoaiVthh,
                 tenCloaiVthh: dataRes.data.tenCloaiVthh,
                 donViTinh: dataRes.data.donViTinh,
-                tenDonViTinh: dataRes.data.tenDonViTinh,
+                tenDonViTinh: dataRes.data.tenDonViTinh ? dataRes.data.tenDonViTinh : dataRes.data.donViTinh,
                 thoiGianGiaoNhan: dataRes.data.thoiGianGiaoNhan,
 
                 maLoKho: dataRes.data.maLoKho,

@@ -47,7 +47,8 @@ export class BienBanKetThucNhapKhoComponent extends Base2Component implements On
       ngayLap: null,
       ngayKetThucNt: null,
       type: ["01"],
-      loaiDc: ["DCNB"]
+      loaiDc: ["DCNB"],
+      isVatTu: [true]
     })
   }
 
@@ -60,7 +61,9 @@ export class BienBanKetThucNhapKhoComponent extends Base2Component implements On
     this.isVisibleChangeTab$.subscribe((value: boolean) => {
       this.visibleTab = value;
     });
-
+    this.formData.patchValue({
+      loaiDc: this.loaiDc
+    })
 
     try {
       this.initData()
@@ -124,6 +127,7 @@ export class BienBanKetThucNhapKhoComponent extends Base2Component implements On
     //   this.formData.value.ngayHieuLucDen = dayjs(this.formData.value.ngayHieuLuc[1]).format('YYYY-MM-DD')
     // }
     let body = this.formData.value
+    if (body.soQdinh) body.soQdinh = `${body.soQdinh}\DCNB`
     body.paggingReq = {
       limit: this.pageSize,
       page: this.page - 1
@@ -260,6 +264,7 @@ export class BienBanKetThucNhapKhoComponent extends Base2Component implements On
 
   add(data: any) {
     this.data = data;
+    this.selectedId = 0
     this.isDetail = true;
     this.isView = false;
   }
@@ -293,6 +298,7 @@ export class BienBanKetThucNhapKhoComponent extends Base2Component implements On
   }
 
   redirectDetail(id, b: boolean) {
+    this.data = null
     this.selectedId = id;
     this.isDetail = true;
     this.isView = b;

@@ -116,9 +116,10 @@
             <td></td>
             <td></td>
             <td class="text-left">
-              <a (click)="redirectDetail(item.id, false,item.soQdGiaoNvXh)">
-                <i class="icon htvbdh_dau-cong" title="Thêm mới"></i>
-              </a>
+              <button type="button" class="btn btn-outline-info"
+                      *ngIf="userService.isCuc()">
+                <span>Tạo BCKQ kiểm định mẫu</span>
+              </button>
             </td>
           </tr>
           <ng-container *ngIf="expandSetString.has(item.idVirtual)">
@@ -152,11 +153,11 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td></td>
-                    <td></td>
                     <td>{{lv2.tenLoKho ? lv2.tenNganKho + ' - ' + lv2.tenLoKho : lv2.tenNganKho}}</td>
                     <td>{{lv2.tenCloaiVthh }}</td>
-                    <td class="bold">{{lv2.soBienBan}}</td>
+                    <td>{{lv2.soPhieu}}</td>
+                    <td>{{lv2.ngayKiemDinh | date: 'dd/MM/YYYY' }}</td>
+                    <td class="bold">{{lv2.soBbLayMau }}</td>
                     <td>{{lv2.ngayLayMau | date: 'dd/MM/YYYY' }}</td>
                     <td>{{lv2.tenTrangThai}}</td>
                     <td class="text-left">
@@ -205,7 +206,7 @@
 </div>
 <div class="chi-tiet" *ngIf="isDetail">
   <app-thong-tin-phieu-kiem-nghiem-chat-luong [idInput]="selectedId" [isView]="isView"
-                                               [soQdGiaoNvXh]="soQdGiaoNvXhSelected"
-                                               (showListEvent)="showList()">
+                                              [soQdGiaoNvXh]="soQdGiaoNvXhSelected"
+                                              (showListEvent)="showList()">
   </app-thong-tin-phieu-kiem-nghiem-chat-luong>
 </div>

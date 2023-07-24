@@ -66,6 +66,9 @@ export class HoSoKyThuatComponent extends Base2Component implements OnInit {
       tenTrangThai: [],
       tenDvi: [],
       ngayTao: [],
+      soBbKtNgoaiQuan: [],
+      soBbKtVanHanh: [],
+      soBbKtHskt: [],
       type: []
     })
   }
@@ -73,7 +76,7 @@ export class HoSoKyThuatComponent extends Base2Component implements OnInit {
   async ngOnInit() {
     await this.spinner.show();
     this.formData.patchValue({
-      type:'CTVT'
+      type: 'CTVT'
     });
     try {
       await Promise.all([
@@ -82,8 +85,7 @@ export class HoSoKyThuatComponent extends Base2Component implements OnInit {
     } catch (e) {
       console.log('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    }
-    finally {
+    } finally {
       await this.spinner.hide();
     }
   }

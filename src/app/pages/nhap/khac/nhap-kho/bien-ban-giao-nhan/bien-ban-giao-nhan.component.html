@@ -11,25 +11,46 @@
               </nz-select>
             </div>
             <div nz-col nzSpan="3">
-              <label class="search__label">Số QĐ điều chuyển</label>
-              <nz-input-group nzAddOnAfter="/DCNB">
+              <label class="search__label">Số QĐ giao NV nhập hàng</label>
+              <input nz-input formControlName="soQdPdNk" />
+              <!-- <nz-input-group nzAddOnAfter="/DCNB">
                 <nz-input-number class="search__input" formControlName="soQdinh" [nzMin]="1" [nzMax]="9" [nzStep]="1"
                   [nzSize]="'small'" [nzDisabled]="isView">
                 </nz-input-number>
-              </nz-input-group>
+              </nz-input-group> -->
             </div>
             <div nz-col nzSpan="3">
-              <label class="search__label">Số BB NT kê lót</label>
-              <input nz-input formControlName="trichYeu" />
+              <label class="search__label">Số BB giao nhận</label>
+              <input nz-input formControlName="soBb" />
             </div>
 
             <div nz-col nzSpan="4">
-              <label class="search__label">Ngày lập biên bản</label>
-              <nz-range-picker formControlName="ngayDuyetTc" nzFormat="dd/MM/yyyy"></nz-range-picker>
+              <label class="search__label">Ngày kết thúc nhập kho</label>
+              <div nz-row>
+                <div nz-col nzSpan="12" class="cus-start-date">
+                  <nz-date-picker [nzDisabledDate]="disabledStartNgayKtnk" nzFormat="dd/MM/yyyy"
+                    formControlName="tuNgayKtnk" nzPlaceHolder="Ngày bắt đầu">
+                  </nz-date-picker>
+                </div>
+                <div nz-col nzSpan="12" class="cus-end-date">
+                  <nz-date-picker [nzDisabledDate]="disabledEndNgayKtnk" nzFormat="dd/MM/yyyy"
+                    formControlName="denNgayKtnk" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+                </div>
+              </div>
             </div>
             <div nz-col nzSpan="4">
-              <label class="search__label">Ngày kết thúc NT kê lót, BQLĐ</label>
-              <nz-range-picker formControlName="ngayHieuLuc" nzFormat="dd/MM/yyyy"></nz-range-picker>
+              <label class="search__label">Thời hạn nhập hàng trước ngày</label>
+              <div nz-row>
+                <div nz-col nzSpan="12" class="cus-start-date">
+                  <nz-date-picker [nzDisabledDate]="disabledStartNgayTHN" nzFormat="dd/MM/yyyy"
+                    formControlName="tuNgayThoiHanNhap" nzPlaceHolder="Ngày bắt đầu">
+                  </nz-date-picker>
+                </div>
+                <div nz-col nzSpan="12" class="cus-end-date">
+                  <nz-date-picker [nzDisabledDate]="disabledEndNgayTHN" nzFormat="dd/MM/yyyy"
+                    formControlName="denNgayThoiHanNhap" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+                </div>
+              </div>
             </div>
 
 
@@ -76,16 +97,18 @@
             <tr>
               <th width="60px" class="text-center">STT</th>
               <th></th>
-              <th class="text-center">Số QĐ điều chuyển</th>
+              <th class="text-center">Số QĐ giao NV NH</th>
               <th class="text-center">Năm KH</th>
-              <th class="text-center">Thời hạn điều chuyển</th>
+              <th class="text-center">Thời hạn NH</th>
               <th class="text-center">Điểm kho</th>
               <th class="text-center">Lô kho</th>
-              <th class="text-center">Số HSKT</th>
               <th class="text-center">Số BB giao nhận</th>
+              <th class="text-center">Ngày lập BBGN</th>
               <th class="text-center">Số BB kết thúc NK</th>
               <th class="text-center">Ngày kết thúc NK</th>
               <th class="text-center">Số BBLM/BGM</th>
+              <th class="text-center">Số phiếu NK</th>
+              <th class="text-center">Ngày NK</th>
               <th class="text-center">Trạng thái</th>
               <th class="text-center">Hành động</th>
             </tr>
@@ -97,8 +120,10 @@
                 <td [nzExpand]="row1.expand"
                   (nzExpandChange)="row1.expand=!row1.expand; row1.children=setExpand(row1.expand, row1.children)">
                 </td>
-                <td class="bold text-blue" (click)="openDialogQD(row1)">{{ row1.soQdinh || "" }}</td>
+                <td class="bold text-blue" (click)="openDialogQD(row1)">{{ row1.soQdPdNk || "" }}</td>
                 <td class="bold">{{ row1.namKh || "" }}</td>
+                <td></td>
+                <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -117,9 +142,10 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td class="bold">{{ row2.thoiHanDieuChuyen || ""}}</td>
+                    <td class="bold">{{ (row2.thoiHanDieuChuyen || "") | date: "dd/MM/yyyy"}}</td>
                     <td class="bold">{{ row2.tenDiemKho || ""}}</td>
-
+                    <td></td>
+                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -138,18 +164,24 @@
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td class="bold">{{ row3.tenLoKho || ""}} {{ row3.tenNganKho || ""}} {{ row3.tenNhaKho
+                        <td class="bold">{{ row3.tenLoKho || ""}} - {{ row3.tenNganKho || ""}} - {{ row3.tenNhaKho
                           ||
                           ""}}
                         </td>
-                        <td>{{(row3.soHoSoKt || "")}}</td>
                         <td>{{(row3.soBienBanGiaoNhan || "")}}</td>
+                        <td>{{(row3.ngayKetThucNk || "")}}</td>
                         <td>{{(row3.soBienBanKetThucNk || "")}}</td>
                         <td>{{(row3.ngayKetThucNk || "")}}</td>
                         <td>{{(row3.soBienBanLayMau || "")}}</td>
+                        <td>{{(row3.soBienBanLayMau || "")}}</td>
+                        <td>{{(row3.ngayKetThucNk || "")}}</td>
                         <td>{{(row3.tenTrangThai || "")}}</td>
                         <td>
-                          <a *ngIf="row3.trangThai !== STATUS.DU_THAO" (click)="redirectDetail(row3.id, true)">
+                          <a *ngIf="!row3.soBienBanGiaoNhan" (click)="add(row3)">
+                            <i class="icon htvbdh_dau-cong"></i>
+                          </a>
+                          <a *ngIf="row3.soBienBanGiaoNhan && row3.trangThai !== STATUS.DU_THAO"
+                            (click)="redirectDetail(row3.id, true)">
                             <i class="fa fa-eye" title="Xem chi tiết"></i>
                           </a>
                           <a *ngIf="row3.trangThai == STATUS.DU_THAO" (click)="redirectDetail(row3.id, false)">

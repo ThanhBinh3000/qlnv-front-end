@@ -42,7 +42,7 @@
       </div>
     </div>
   </div>
-  <nz-alert class="mb-2" *ngIf="formData.value.trangThai == STATUS.TU_CHOI_BAN_HANH_QD" nzShowIcon nzType="error"
+  <nz-alert class="mb-2" *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDCC" nzShowIcon nzType="error"
     nzMessage="Lý do từ chối" nzDescription="{{formData.value.lyDoTuChoi}}">
   </nz-alert>
   <nz-card class="mt16 flex-card p-lr16">
@@ -90,7 +90,7 @@
         </div>
         <div nz-col [nzSpan]="3">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true" nzRequired> Ngày nhập</nz-form-label>
+            <nz-form-label [nzNoColon]="true" nzRequired> Ngày lập báo cáo</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-date-picker class="search__input" formControlName="ngayNhap" [nzDisabled]="isView"
                 nzFormat="dd/MM/yyyy">
@@ -163,7 +163,7 @@
             <nz-form-label [nzNoColon]="true"> Nhà kho</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
-                <input [readonly]="isView" nz-input formControlName="tenNhaKho" readonly />
+                <input [readonly]="true" nz-input formControlName="tenNhaKho" />
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
