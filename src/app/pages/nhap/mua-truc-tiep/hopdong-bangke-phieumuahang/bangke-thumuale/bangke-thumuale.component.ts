@@ -92,6 +92,7 @@ export class BangkeThumualeComponent extends Base2Component implements OnInit {
       if (!data) {
         return;
       }
+      this.search()
       if (index >= 0) {
         this.dataTable[index] = data;
       } else {
