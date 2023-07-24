@@ -10,7 +10,7 @@ import { UserService } from 'src/app/services/user.service';
 import { divNumber, mulNumber, sortByIndex, sumNumber } from 'src/app/Utility/func';
 import { CAN_CU_GIA, LOAI_DE_NGHI, Utils } from 'src/app/Utility/utils';
 import * as uuid from "uuid";
-import { BaoCao, ItemContract, ItemRequest } from '../../../de-nghi-cap-von.constant';
+import { BaoCao, ItemContract, TABS } from '../../../de-nghi-cap-von.constant';
 import { DatePipe } from '@angular/common';
 
 @Component({
@@ -52,6 +52,8 @@ export class DialogTaoDeNghiCapVonComponent implements OnInit {
   isFirstRecord = true;
   idCallChitiet!: string;
   idCallChitietCapVon!: string;
+  selectedIndex = 0;
+  tabs: any[] = TABS;
 
   constructor(
     private _modalRef: NzModalRef,
@@ -72,9 +74,8 @@ export class DialogTaoDeNghiCapVonComponent implements OnInit {
     if (!this.userService.isTongCuc()) {
       this.loaiDns = this.loaiDns.filter(e => e.id != Utils.MUA_VTU);
     }
-    this.response.dnghiCapvonCtiets = [];
     this.response.lstCtiets = [];
-    this.response.lstCtietsDnghiCapVon = [];
+    // this.response.lstCtietsDnghiCapVon = [];
   }
 
   changeDnghi() {
@@ -170,26 +171,6 @@ export class DialogTaoDeNghiCapVonComponent implements OnInit {
                   this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
                 },
               );
-              await this.capVonNguonChiService.ctietDeNghi(this.idCallChitietCapVon).toPromise().then(
-                async (data) => {
-                  if (data.statusCode == 0) {
-                    const dataRequest = data.data.lstCtiets;
-                    for (const item of dataRequest) {
-                      this.response.lstCtiets.push({
-                        ...item,
-                        id: uuid.v4() + 'FE',
-                        maDvi: this.userInfo?.MA_DVI,
-                        tenDvi: this.userInfo?.TEN_DVI,
-                      });
-                    }
-                  } else {
-                    this.notification.error(MESSAGE.ERROR, data?.msg);
-                  }
-                },
-                (err) => {
-                  this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-                },
-              );
             }
           } else {
             await this.callSynthetic();
@@ -207,16 +188,7 @@ export class DialogTaoDeNghiCapVonComponent implements OnInit {
               if (data.statusCode == 0) {
                 if (data.data.content?.length > 0) {
                   if (data.data.content[0].trangThai == Utils.TT_BC_7) {
-                    const object = data.data.content[0].dnghiCapvonCtiets[0];
-                    const { id, ...rest } = object;
-                    this.response.dnghiCapvonCtiets = [];
-                    this.response.dnghiCapvonCtiets.push({
-                      ...rest,
-                      id: uuid.v4() + 'FE',
-                      maDvi: this.userInfo?.MA_DVI,
-                      tenDvi: this.userInfo?.TEN_DVI,
-                      dnghiCapvonLuyKes: [],
-                    })
+                    this.idCallChitietCapVon = data.data.content[0].id
                   }
                 }
               } else {
@@ -229,6 +201,23 @@ export class DialogTaoDeNghiCapVonComponent implements OnInit {
               this.response.loaiDnghi = null;
             }
           );
+          await this.capVonNguonChiService.ctietDeNghi(this.idCallChitietCapVon).toPromise().then(
+            (data) => {
+              if (data.statusCode == 0) {
+                if (data.data.trangThai == Utils.TT_BC_7) {
+                  const object = data.data.lstCtiets[0];
+                  const { id, ...rest } = object;
+                  this.response.lstCtiets = [];
+                  this.response.lstCtiets.push({
+                    ...rest,
+                    id: uuid.v4() + 'FE',
+                    maDvi: this.userInfo?.MA_DVI,
+                    tenDvi: this.userInfo?.TEN_DVI,
+                    dnghiCapvonLuyKes: [],
+                  })
+                }
+              }
+            })
         } else {
           await this.checkRequest();
         }
@@ -277,10 +266,10 @@ export class DialogTaoDeNghiCapVonComponent implements OnInit {
         if (res.statusCode == 0) {
           res.data.forEach(item => {
             const temp = item;
-            const id = this.response.dnghiCapvonCtiets.find(e => e.maDvi == temp.maDvi)?.id;
+            const id = this.response.lstCtiets.find(e => e.maDvi == temp.maDvi)?.id;
             temp.id = id ? id : uuid.v4() + 'FE';
-            this.response.dnghiCapvonCtiets = this.response.dnghiCapvonCtiets.filter(e => e.maDvi != temp.maDvi);
-            this.response.dnghiCapvonCtiets.push(temp);
+            this.response.lstCtiets = this.response.lstCtiets.filter(e => e.maDvi != temp.maDvi);
+            this.response.lstCtiets.push(temp);
           })
         } else {
           this.notification.error(MESSAGE.ERROR, res?.msg);
@@ -302,8 +291,8 @@ export class DialogTaoDeNghiCapVonComponent implements OnInit {
       (data) => {
         if (data.statusCode == 0) {
           data.data.forEach(item => {
-            const temp: ItemRequest = {
-              ... new ItemRequest(),
+            const temp: ItemContract = {
+              ... new ItemContract(),
               id: uuid.v4() + 'FE',
               tenKhachHang: item.tenNhaThau,
               isParent: false,
@@ -314,23 +303,23 @@ export class DialogTaoDeNghiCapVonComponent implements OnInit {
               gtHopDong: mulNumber(item.soLuong, item.donGia),
               dnghiCapvonLuyKes: [],
             }
-            this.response.dnghiCapvonCtiets.push(temp);
-            const index = this.response.dnghiCapvonCtiets.findIndex(e => e.tenKhachHang == temp.tenKhachHang && e.isParent);
+            this.response.lstCtiets.push(temp);
+            const index = this.response.lstCtiets.findIndex(e => e.tenKhachHang == temp.tenKhachHang && e.isParent);
             if (index == -1) {
-              this.response.dnghiCapvonCtiets.push({
+              this.response.lstCtiets.push({
                 ...temp,
                 id: uuid.v4() + 'FE',
                 isParent: true,
                 qdPheDuyetKqNhaThau: item.soQdPdKhlcnt,
               })
             } else {
-              if (this.response.dnghiCapvonCtiets[index].qdPheDuyetKqNhaThau.indexOf(item.soQdPdKhlcnt) == -1) {
-                this.response.dnghiCapvonCtiets[index].qdPheDuyetKqNhaThau += ', ' + item.soQdPdKhlcnt;
+              if (this.response.lstCtiets[index].qdPheDuyetKqNhaThau.indexOf(item.soQdPdKhlcnt) == -1) {
+                this.response.lstCtiets[index].qdPheDuyetKqNhaThau += ', ' + item.soQdPdKhlcnt;
               }
-              this.response.dnghiCapvonCtiets[index].slHopDong = sumNumber([this.response.dnghiCapvonCtiets[index].slHopDong, temp.slHopDong]);
-              this.response.dnghiCapvonCtiets[index].slKeHoach = sumNumber([this.response.dnghiCapvonCtiets[index].slKeHoach, temp.slKeHoach]);
-              this.response.dnghiCapvonCtiets[index].gtHopDong = sumNumber([this.response.dnghiCapvonCtiets[index].gtHopDong, temp.gtHopDong]);
-              this.response.dnghiCapvonCtiets[index].donGia = divNumber(this.response.dnghiCapvonCtiets[index].gtHopDong, this.response.dnghiCapvonCtiets[index].slHopDong);
+              this.response.lstCtiets[index].slHopDong = sumNumber([this.response.lstCtiets[index].slHopDong, temp.slHopDong]);
+              this.response.lstCtiets[index].slKeHoach = sumNumber([this.response.lstCtiets[index].slKeHoach, temp.slKeHoach]);
+              this.response.lstCtiets[index].gtHopDong = sumNumber([this.response.lstCtiets[index].gtHopDong, temp.gtHopDong]);
+              this.response.lstCtiets[index].donGia = divNumber(this.response.lstCtiets[index].gtHopDong, this.response.lstCtiets[index].slHopDong);
             }
           })
         } else {
@@ -353,8 +342,8 @@ export class DialogTaoDeNghiCapVonComponent implements OnInit {
       (res) => {
         if (res.statusCode == 0) {
           res.data.forEach(item => {
-            this.response.dnghiCapvonCtiets.push({
-              ...new ItemRequest(),
+            this.response.lstCtiets.push({
+              ...new ItemContract(),
               id: uuid.v4() + 'FE',
               slKeHoach: item.slKeHoach,
               slHopDong: item.slHopDong,
@@ -409,7 +398,7 @@ export class DialogTaoDeNghiCapVonComponent implements OnInit {
             if (this.isFirstRecord) {
               this.firstRecord = item;
               this.isFirstRecord = false;
-              this.response.dnghiCapvonCtiets = this.firstRecord.dnghiCapvonCtiets;
+              this.response.lstCtiets = this.firstRecord.lstCtiets;
             }
           })
         } else {
@@ -454,34 +443,6 @@ export class DialogTaoDeNghiCapVonComponent implements OnInit {
         this.response.loaiDnghi = null;
       }
     );
-
-    const requestData = {
-      maDvi: this.userInfo?.MA_DVI,
-      namHdong: this.response.namBcao,
-      loaiDnghi: this.response.loaiDnghi,
-      maDviTien: '1',
-      maLoai: '0',
-      paggingReq: {
-        limit: 10,
-        page: 1,
-      },
-      trangThai: Utils.TT_BC_7,
-    }
-    this.spinner.show();
-    await this.capVonNguonChiService.timKiemDeNghi(requestData).toPromise().then(
-      (data) => {
-        if (data.statusCode == 0) {
-          this.idCallChitietCapVon = data.data.content[0].id;
-          this.isContractExist = true;
-        } else {
-          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-        }
-      },
-      (err) => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      }
-    );
-    this.spinner.hide();
   }
 
   handleOk() {

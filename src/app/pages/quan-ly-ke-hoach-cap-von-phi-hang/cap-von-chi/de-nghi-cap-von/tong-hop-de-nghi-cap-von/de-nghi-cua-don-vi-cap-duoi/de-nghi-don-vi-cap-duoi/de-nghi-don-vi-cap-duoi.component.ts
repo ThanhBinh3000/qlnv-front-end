@@ -174,6 +174,7 @@ export class DeNghiDonViCapDuoiComponent implements OnInit {
   }
 
   async initialization() {
+    debugger
     //lay id cua de nghi
     this.userInfo = this.userService.getUserLogin();
     if (this.data?.id) {
@@ -205,6 +206,7 @@ export class DeNghiDonViCapDuoiComponent implements OnInit {
   }
 
   back() {
+    debugger
     const obj = {
       tabSelected: 'ds-denghi-donvi-capduoi',
     }
