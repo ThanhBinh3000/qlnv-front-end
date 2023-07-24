@@ -219,34 +219,34 @@ export class BangKeCanHangComponent extends Base2Component implements OnInit {
               .groupBy("maloNganKho")
               ?.map((value3, key3) => {
 
-                const children3 = chain(value3).groupBy("maloNganKho")
-                  ?.map((m, im) => {
+                // const children3 = chain(value3).groupBy("maloNganKho")
+                //   ?.map((m, im) => {
 
-                    const maChiCucNhan = m.find(f => f.maloNganKho == im);
-                    // const hasMaDiemKhoNhan = vs.some(f => f.maDiemKhoNhan);
-                    // if (!hasMaDiemKhoNhan) return {
-                    //   ...maChiCucNhan
-                    // }
+                //     const maChiCucNhan = m.find(f => f.maloNganKho == im);
+                //     // const hasMaDiemKhoNhan = vs.some(f => f.maDiemKhoNhan);
+                //     // if (!hasMaDiemKhoNhan) return {
+                //     //   ...maChiCucNhan
+                //     // }
 
-                    // const rssx = chain(m).groupBy("maDiemKhoNhan")?.map((n, inx) => {
+                //     // const rssx = chain(m).groupBy("maDiemKhoNhan")?.map((n, inx) => {
 
-                    //   const maDiemKhoNhan = n.find(f => f.maDiemKhoNhan == inx);
-                    //   return {
-                    //     ...maDiemKhoNhan,
-                    //     children: n
-                    //   }
-                    // }).value()
-                    return {
-                      ...maChiCucNhan,
-                      children: m
-                    }
-                  }).value()
+                //     //   const maDiemKhoNhan = n.find(f => f.maDiemKhoNhan == inx);
+                //     //   return {
+                //     //     ...maDiemKhoNhan,
+                //     //     children: n
+                //     //   }
+                //     // }).value()
+                //     return {
+                //       ...maChiCucNhan,
+                //       children: m
+                //     }
+                //   }).value()
 
                 const row3 = value3.find(s => s?.maloNganKho == key3);
                 return {
                   ...row3,
                   idVirtual: row3 ? row3.idVirtual ? row3.idVirtual : uuidv4.v4() : uuidv4.v4(),
-                  children: children3,
+                  children: value3,
                 }
               }
               ).value();

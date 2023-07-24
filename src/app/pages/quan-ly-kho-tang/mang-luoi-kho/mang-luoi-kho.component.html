@@ -1631,7 +1631,7 @@
             <nz-form-item>
               <nz-form-label> Tình trạng lô kho</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <nz-select formControlName="tinhtrangId" [nzDisabled]="true">
+                <nz-select formControlName="tinhtrangId" [nzDisabled]="isEditData">
                   <nz-option *ngFor="let item of listTinhTrang" [nzValue]="item.ma" [nzLabel]="item.giaTri">
                   </nz-option>
                 </nz-select>

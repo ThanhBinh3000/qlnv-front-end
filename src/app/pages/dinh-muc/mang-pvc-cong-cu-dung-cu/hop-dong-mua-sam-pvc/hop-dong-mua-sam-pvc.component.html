@@ -40,16 +40,16 @@
     <div class="group-button">
       <h3>DANH SÁCH HỢP ĐỒNG MUA</h3>
       <div class="buttons">
-        <button type="button" class="btn btn-do" (click)="deleteMulti()" *ngIf="!userService.isChiCuc() && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_HDMUASAM_XOA')">
+        <button type="button" class="btn btn-do" (click)="deleteMulti()" *ngIf="!userService.isChiCuc() && userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_HDMUASAM_XOA')">
           <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
           <span>Xóa</span>
         </button>
-        <button type="button" class="btn btn-sub" (click)="exportData()" *ngIf="userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_HDMUASAM_EXP')">
+        <button type="button" class="btn btn-sub" (click)="exportData()" *ngIf="userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_HDMUASAM_EXP')">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
         <button type="button" class="btn btn-sub xanh" (click)="redirectToChiTiet(false, 0)"
-                *ngIf="!userService.isChiCuc() && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_HDMUASAM_THEM')">
+                *ngIf="!userService.isChiCuc() && userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_HDMUASAM_THEM')">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm hợp đồng</span>
         </button>
@@ -151,14 +151,15 @@
           <td>{{ data.giaTri | number : '1.0-1' : 'vi_VN'}}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-left">
-            <a (click)="redirectToChiTiet(true, data.id)" *ngIf="(data.trangThai == STATUS.DA_KY || data.capDvi != userInfo.CAP_DVI) && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_HDMUASAM_XEM')">
+            <a (click)="redirectToChiTiet(true, data.id)" *ngIf=" userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_HDMUASAM_XEM') &&
+                 !((data.trangThai == STATUS.DU_THAO) && data.maDvi == userInfo.MA_DVI)">
               <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
             <a
-              (click)="redirectToChiTiet(false, data.id)" *ngIf="(data.trangThai == STATUS.DU_THAO && data.capDvi == userInfo.CAP_DVI) && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_HDMUASAM_SUA')">
+              (click)="redirectToChiTiet(false, data.id)" *ngIf="(data.trangThai == STATUS.DU_THAO) && userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_HDMUASAM_THEM')">
               <i class="fa fa-pencil" title="Sửa"></i>
             </a>
-            <a *ngIf="(data.trangThai == STATUS.DU_THAO && data.capDvi == userInfo.CAP_DVI) && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_HDMUASAM_XOA')" (click)="delete(data)">
+            <a *ngIf="(data.trangThai == STATUS.DU_THAO && data.capDvi == userInfo.CAP_DVI) && userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_HDMUASAM_XOA')" (click)="delete(data)">
               <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>

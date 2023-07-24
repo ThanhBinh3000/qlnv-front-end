@@ -187,7 +187,7 @@ export class BangKeCanXuatDieuChuyenComponent extends Base2Component implements 
               return {
                 ...rowLv3,
                 idVirtual: uuidv4(),
-                childData: rowLv3?.phieuXuatKhoId ? x : []
+                childData: x.filter(f => !!f.phieuXuatKhoId)
               }
             }).value();
             return {

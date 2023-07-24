@@ -178,21 +178,21 @@ export class BienBanNghiemThuBaoQuanLanDauComponent extends Base2Component imple
               .groupBy("maDiemKhoNhan")
               ?.map((value3, key3) => {
 
-                const children3 = chain(value3).groupBy("maloNganKhoNhan")
-                  ?.map((m, im) => {
+                // const children3 = chain(value3).groupBy("maloNganKhoNhan")
+                //   ?.map((m, im) => {
 
-                    const maChiCucNhan = m.find(f => f.maloNganKhoNhan == im);
-                    return {
-                      ...maChiCucNhan,
-                      children: m
-                    }
-                  }).value()
+                //     const maChiCucNhan = m.find(f => f.maloNganKhoNhan == im);
+                //     return {
+                //       ...maChiCucNhan,
+                //       children: m
+                //     }
+                //   }).value()
 
                 const row3 = value3.find(s => s?.maDiemKhoNhan == key3);
                 return {
                   ...row3,
                   idVirtual: row3 ? row3.idVirtual ? row3.idVirtual : uuidv4.v4() : uuidv4.v4(),
-                  children: children3,
+                  children: value3,
                 }
               }
               ).value();

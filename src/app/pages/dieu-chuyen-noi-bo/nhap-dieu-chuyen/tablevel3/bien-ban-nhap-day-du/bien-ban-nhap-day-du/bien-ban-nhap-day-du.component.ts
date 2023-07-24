@@ -286,7 +286,7 @@ export class BienBanNhapDayDuComponent extends Base2Component implements OnInit 
                 return {
                   ...row3,
                   idVirtual: row3 ? row3.idVirtual ? row3.idVirtual : uuidv4.v4() : uuidv4.v4(),
-                  children: children3,
+                  children: value3,
                 }
               }
               ).value();

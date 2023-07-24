@@ -498,7 +498,7 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
       this.formData.patchValue({ dcnbBangKeCanHangDtl: [...this.formData.value.dcnbBangKeCanHangDtl, this.dcnbBangKeCanHangDtlCreate] });
       this.clearRow();
       this.tinhTong();
-      this.formData.patchValue({ tongTrongLuongBaoBi: '' })
+      this.formData.patchValue({ tongTrongLuongBaoBi: 0, tongTrongLuongTruBi: this.formData.value.tongTrongLuongCabaoBi, tongTrongLuongTruBiText: convertTienTobangChu(this.formData.value.tongTrongLuongCabaoBi) })
     }
   }
 
@@ -515,13 +515,13 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
   async deleteRow(i: number) {
     this.formData.value.dcnbBangKeCanHangDtl.splice(i, 1);
     this.tinhTong();
-    this.formData.patchValue({ tongTrongLuongBaoBi: '' })
+    this.formData.patchValue({ tongTrongLuongBaoBi: 0, tongTrongLuongTruBi: this.formData.value.tongTrongLuongCabaoBi, tongTrongLuongTruBiText: convertTienTobangChu(this.formData.value.tongTrongLuongCabaoBi) })
   }
 
   async saveRow(i: number) {
     this.formData.value.dcnbBangKeCanHangDtl[i].isEdit = false;
     this.tinhTong();
-    this.formData.patchValue({ tongTrongLuongBaoBi: '' })
+    this.formData.patchValue({ tongTrongLuongBaoBi: 0, tongTrongLuongTruBi: this.formData.value.tongTrongLuongCabaoBi, tongTrongLuongTruBiText: convertTienTobangChu(this.formData.value.tongTrongLuongCabaoBi) })
   }
 
   async cancelRow(i: number) {
@@ -578,7 +578,8 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
             tongTrongLuongCabaoBi: 0,
             tongTrongLuongBaoBi: 0,
             tongTrongLuongTruBi: 0,
-            tongTrongLuongTruBiText: ''
+            tongTrongLuongTruBiText: '',
+            dcnbBangKeCanHangDtl: []
           });
         } catch (error) {
           console.log("e", error);
@@ -599,17 +600,18 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
         //   limit: this.globals.prop.MAX_INTERGER,
         //   page: 0
         // }
+        qdinhDccId: id,
         loaiDc: this.loaiDc,
         isVatTu: this.isVatTu,
         thayDoiThuKho: this.thayDoiThuKho,
         type: this.type
 
       }
-      let dataRes = await this.phieuXuatKhoDieuChuyenService.search(body);
+      let dataRes = await this.phieuXuatKhoDieuChuyenService.danhSach(body);
       if (dataRes.msg === MESSAGE.SUCCESS) {
         this.dsPhieuXuatKho = [];
-        if (Array.isArray(dataRes.data?.content)) {
-          this.dsPhieuXuatKho = dataRes.data?.content.filter(f => f.id);
+        if (Array.isArray(dataRes.data)) {
+          this.dsPhieuXuatKho = dataRes.data.filter(f => f.id);
         }
       } else {
         this.notification.error(MESSAGE.ERROR, dataRes.msg)
@@ -627,7 +629,9 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
   }
 
   async openDialogPhieuXuatKho() {
-    await this.loadDsPhieuXuatKho(this.formData.value.qdinhDccId)
+    if (this.formData.value.qdinhDccId) {
+      await this.loadDsPhieuXuatKho(this.formData.value.qdinhDccId)
+    }
     const modalQD = this.modal.create({
       nzTitle: 'Danh sách phiếu xuất kho',
       nzContent: DialogTableSelectionComponent,
@@ -674,7 +678,13 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
         tenNhaKho: dataRes.data.tenNhaKho,
         maDiemKho: dataRes.data.maDiemKho,
         tenDiemKho: dataRes.data.tenDiemKho,
-        tenNganLoKho: dataRes.data.tenLoKho ? `${dataRes.data.tenLoKho} - ${dataRes.data.tenNganKho}` : dataRes.data.tenNganKho
+        tenNganLoKho: dataRes.data.tenLoKho ? `${dataRes.data.tenLoKho} - ${dataRes.data.tenNganKho}` : dataRes.data.tenNganKho,
+
+        tongTrongLuongCabaoBi: 0,
+        tongTrongLuongBaoBi: 0,
+        tongTrongLuongTruBi: 0,
+        tongTrongLuongTruBiText: '',
+        dcnbBangKeCanHangDtl: []
       });
       this.chiTietDiemKho(dataRes.data.maDiemKho);
     }

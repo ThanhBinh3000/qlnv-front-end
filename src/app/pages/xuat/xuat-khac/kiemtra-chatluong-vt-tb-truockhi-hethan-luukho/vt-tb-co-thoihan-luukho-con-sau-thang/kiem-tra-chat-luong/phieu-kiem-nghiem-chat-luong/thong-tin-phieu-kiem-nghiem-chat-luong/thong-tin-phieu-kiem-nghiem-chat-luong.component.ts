@@ -11,8 +11,8 @@ import {
   QuyetDinhGiaoNvXuatHangService
 } from "../../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/QuyetDinhGiaoNvXuatHang.service";
 import {
-  PhieuXuatKhoService
-} from "../../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/PhieuXuatKho.service";
+  PhieuXuatNhapKhoService
+} from "../../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/PhieuXuatNhapKho.service";
 import {KhCnQuyChuanKyThuat} from "../../../../../../../../services/kh-cn-bao-quan/KhCnQuyChuanKyThuat";
 import {
   BienBanLayMauVtKtclService
@@ -77,7 +77,7 @@ export class ThongTinPhieuKiemNghiemChatLuongComponent extends Base2Component im
     private dataService: DataService,
     private danhMucService: DanhMucService,
     private quyetDinhGiaoNvXuatHangService: QuyetDinhGiaoNvXuatHangService,
-    private phieuXuatKhoService: PhieuXuatKhoService,
+    private phieuXuatKhoService: PhieuXuatNhapKhoService,
     private khCnQuyChuanKyThuat: KhCnQuyChuanKyThuat,
     private bienBanLayMauVtKtclService: BienBanLayMauVtKtclService,
     private phieuKdclVtKtclService: PhieuKdclVtKtclService,
@@ -346,7 +346,6 @@ export class ThongTinPhieuKiemNghiemChatLuongComponent extends Base2Component im
       body.fileDinhKems = this.fileDinhKems
     }
     body.xhXkVtPhieuKdclDtl = this.dataTableChiTieu;
-    console.log(body, 'bodybodybody');
     let data = await this.createUpdate(body);
     if (data) {
       if (isGuiDuyet) {
