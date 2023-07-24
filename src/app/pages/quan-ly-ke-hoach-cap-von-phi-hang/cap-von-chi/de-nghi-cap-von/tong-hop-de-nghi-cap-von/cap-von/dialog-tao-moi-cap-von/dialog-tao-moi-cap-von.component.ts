@@ -29,9 +29,9 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
   isContractExist: boolean;
   idRequest!: string;
   total: ItemContract = new ItemContract();
-  responeHopDong: ItemContract = new ItemContract()
-  a: BaoCao;
   idCallChitiet!: string;
+  idRequestCallCtiet!: string;
+  demSoLan: number;
 
   constructor(
     private _modalRef: NzModalRef,
@@ -146,11 +146,6 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
                       thanhLyHdongSl: dataRequest.thanhLyHdongSl,
                       thanhLyHdongTt: dataRequest.thanhLyHdongTt,
                     })
-                    // this.baoCao = data.data;
-                    // this.listFile = [];
-                    // this.getStatusButton();
-                    // this.getTotal();
-                    // this.updateEditCache()
                   } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
                   }
@@ -175,14 +170,7 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
             tenDvi: this.userInfo?.TEN_DVI,
             dnghiCapvonLuyKes: [],
           })
-        } else if (this.userService.isTongCuc()) {
-          this.response.lstCtiets.push({
-            ... new ItemContract(),
-            id: uuid.v4() + 'FE',
-            maDvi: this.userInfo?.MA_DVI,
-            tenDvi: this.userInfo?.TEN_DVI,
-            dnghiCapvonLuyKes: [],
-          })
+          this.response.soLan = this.demSoLan + 1;
         } else {
           await this.callSynthetic();
         }
@@ -418,6 +406,7 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
               this.isRequestExist = 2;
             }
           }
+          this.demSoLan = data.data.content.length;
         } else {
           this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
           this.response.loaiDnghi = null;
@@ -488,6 +477,68 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
 
   handleCancel() {
     this._modalRef.close();
+  }
+
+  async callAddNewReport() {
+    this.isRequestExist = 0;
+    const request = {
+      maDvi: this.userInfo?.MA_DVI,
+      namBcao: this.response.namBcao,
+      loaiDnghi: this.response.loaiDnghi,
+      canCuVeGia: this.response.canCuVeGia,
+      maLoai: '2',
+      paggingReq: {
+        limit: 10,
+        page: 1,
+      },
+    }
+    await this.capVonNguonChiService.timKiemDeNghi(request).toPromise().then(
+      (data) => {
+        if (data.statusCode == 0) {
+          if (data.data.content.length > 0) {
+            if (data.data.content[0].trangThai == Utils.TT_BC_7) {
+              this.isRequestExist = 1;
+              this.idRequestCallCtiet = data.data.content[0].id;
+            } else {
+              this.isRequestExist = 2;
+            }
+          }
+        } else {
+          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+          this.response.loaiDnghi = null;
+        }
+      },
+      (err) => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        this.response.loaiDnghi = null;
+      }
+    );
+    await this.capVonNguonChiService.ctietDeNghi(this.idRequestCallCtiet).toPromise().then(
+      (data) => {
+        if (data.statusCode == 0) {
+          const dataRequest = data.data.lstCtiets[0];
+          this.response.lstCtiets.push({
+            ... new ItemContract,
+            id: uuid.v4() + 'FE',
+            maDvi: this.userInfo?.MA_DVI,
+            tenDvi: this.userInfo?.TEN_DVI,
+            slKeHoach: dataRequest.slKeHoach,
+            slHopDong: dataRequest.slHopDong,
+            gtHopDong: dataRequest.gtHopDong,
+            viPhamHopDong: dataRequest.viPhamHopDong,
+            thanhLyHdongSl: dataRequest.thanhLyHdongSl,
+            thanhLyHdongTt: dataRequest.thanhLyHdongTt,
+          })
+        } else {
+          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+        }
+      },
+      (err) => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    );
+
+    this.spinner.hide();
   }
 }
 

@@ -52,6 +52,7 @@ export class DialogTaoDeNghiCapVonComponent implements OnInit {
   isFirstRecord = true;
   idCallChitiet!: string;
   idCallChitietCapVon!: string;
+  idCallChitietDnghiCapVon!: string;
   selectedIndex = 0;
   tabs: any[] = TABS;
 
@@ -75,7 +76,6 @@ export class DialogTaoDeNghiCapVonComponent implements OnInit {
       this.loaiDns = this.loaiDns.filter(e => e.id != Utils.MUA_VTU);
     }
     this.response.lstCtiets = [];
-    // this.response.lstCtietsDnghiCapVon = [];
   }
 
   changeDnghi() {
@@ -394,13 +394,9 @@ export class DialogTaoDeNghiCapVonComponent implements OnInit {
     await this.capVonNguonChiService.timKiemDeNghi(request).toPromise().then(
       (res) => {
         if (res.statusCode == 0) {
-          res.data.content.forEach((item, index) => {
-            if (this.isFirstRecord) {
-              this.firstRecord = item;
-              this.isFirstRecord = false;
-              this.response.lstCtiets = this.firstRecord.lstCtiets;
-            }
-          })
+          if (res.data.content[0].trangThai == Utils.TT_BC_7) {
+            this.idCallChitietDnghiCapVon = res.data.content[0].id;
+          }
         } else {
           this.notification.error(MESSAGE.ERROR, res?.msg);
         }
@@ -408,7 +404,28 @@ export class DialogTaoDeNghiCapVonComponent implements OnInit {
       (err) => {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       },
-    )
+    );
+    await this.capVonNguonChiService.ctietDeNghi(this.idCallChitietDnghiCapVon).toPromise().then(
+      async (data) => {
+        if (data.statusCode == 0) {
+          if (data.data.trangThai == Utils.TT_BC_7) {
+            const arrData = data.data.lstCtiets;
+            for (let i = 0; i < arrData.length; i++) {
+              arrData[i].id = uuid.v4() + 'FE';
+            }
+            this.response.lstCtiets = [];
+            this.response.lstCtiets.push(
+              ...arrData,
+            )
+          }
+        } else {
+          this.notification.error(MESSAGE.ERROR, data?.msg);
+        }
+      },
+      (err) => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      },
+    );
     this.spinner.hide();
   }
 

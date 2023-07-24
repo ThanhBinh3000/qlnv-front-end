@@ -78,7 +78,7 @@ export const TRANG_THAI_DE_NGHI_CAP_DUOI = [
         tenDm: "Chưa được tổng hợp",
     },
     {
-        id: Utils,
+        id: Utils.TT_BC_1,
         tenDm: "Đã được tổng hợp",
     },
     {
