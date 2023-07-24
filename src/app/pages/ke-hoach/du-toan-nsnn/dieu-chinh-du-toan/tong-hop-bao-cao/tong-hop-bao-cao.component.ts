@@ -47,6 +47,7 @@ export class TongHopBaoCaoComponent implements OnInit {
         private quanLyVonPhiService: QuanLyVonPhiService,
         private modal: NzModalService,
         private datePipe: DatePipe,
+        private danhMuc: DanhMucHDVService,
         private dieuChinhService: DieuChinhService,
     ) { }
 
@@ -56,11 +57,7 @@ export class TongHopBaoCaoComponent implements OnInit {
         this.maDviTao = this.userInfo.MA_DVI;
         // console.log(this.userInfo)
         this.statusNewReport = this.userService.isAccessPermisson(Roles.DCDT.SYNTHETIC_REPORT);
-        const request = {
-            maDviCha: this.userInfo.maDvi,
-            trangThai: '01',
-        }
-        await this.quanLyVonPhiService.dmDviCon(request).toPromise().then(
+        await this.danhMuc.dMDviCon().toPromise().then(
             data => {
                 if (data.statusCode == 0) {
                     this.donVis = data.data;
@@ -88,17 +85,16 @@ export class TongHopBaoCaoComponent implements OnInit {
 
         const requestReport = {
             loaiTimKiem: "1",
-            maBcao: "",
+            maBcao: null,
             maDvi: this.maDviTao,
-            maLoaiBcao: "",
+            maLoaiBcao: null,
             namBcao: this.namHienTai,
-            ngayTaoDen: "",
-            ngayTaoTu: "",
+            ngayTaoDen: null,
+            ngayTaoTu: null,
             paggingReq: {
                 limit: this.pages.size,
                 page: this.pages.page,
             },
-            str: "",
             trangThais: trangThais,
         };
 
@@ -129,6 +125,7 @@ export class TongHopBaoCaoComponent implements OnInit {
     clearFilter() {
         this.namHienTai = null;
         this.trangThai = null;
+        this.maDviTao = null;
         this.search();
     }
 
@@ -147,7 +144,7 @@ export class TongHopBaoCaoComponent implements OnInit {
         modalTuChoi.afterClose.toPromise().then(async (res) => {
             if (res) {
                 const obj = {
-                    ...res,
+                    baoCao: res,
                     id: null,
                     tabSelected: Dcdt.BAO_CAO_01,
                     isSynthetic: true,

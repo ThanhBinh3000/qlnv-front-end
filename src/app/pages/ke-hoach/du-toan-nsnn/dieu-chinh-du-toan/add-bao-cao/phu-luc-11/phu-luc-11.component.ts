@@ -23,14 +23,14 @@ export class ItemData {
     maNoiDung: string;
     doiTuong: string;
     thoiGianHoc: string;
-    sLuongTrongNuoc: number;
-    sLuongNgoaiNuoc: number;
-    sLuongTongSo: number;
-    KinhPhiHoTro: number;
-    TongNCDtoanKp: number;
-    dToanNamTruoc: number;
-    dToanDaGiao: number;
-    dToanTongSo: number;
+    sluongTrongNuoc: number;
+    sluongNgoaiNuoc: number;
+    sluongTongSo: number;
+    kinhPhiHoTro: number;
+    tongNCDtoanKp: number;
+    dtoanNamTruoc: number;
+    dtoanDaGiao: number;
+    dtoanTongSo: number;
     dtoanDnghiDchinh: number;
     dtoanVuTvqtDnghi: number;
     chenhLech: number;
@@ -66,21 +66,21 @@ export class PhuLuc11Component implements OnInit {
     namBcao: number;
     tongDieuChinhTang: number;
     tongDieuChinhGiam: number;
-    dToanVuTang: number;
-    dToanVuGiam: number;
+    dtoanVuTang: number;
+    dtoanVuGiam: number;
 
     //danh muc
     noiDungs: any[] = DANH_MUC;
     lstCtietBcao: ItemData[] = [];
     keys = [
-        "sLuongTrongNuoc",
-        "sLuongNgoaiNuoc",
-        "sLuongTongSo",
-        "KinhPhiHoTro",
-        "TongNCDtoanKp",
-        "dToanNamTruoc",
-        "dToanDaGiao",
-        "dToanTongSo",
+        "sluongTrongNuoc",
+        "sluongNgoaiNuoc",
+        "sluongTongSo",
+        "kinhPhiHoTro",
+        "tongNCDtoanKp",
+        "dtoanNamTruoc",
+        "dtoanDaGiao",
+        "dtoanTongSo",
         "dtoanDnghiDchinh",
         "dtoanVuTvqtDnghi",
         "chenhLech",
@@ -438,10 +438,10 @@ export class PhuLuc11Component implements OnInit {
 
 
     changeModel(id: string): void {
-        this.editCache[id].data.sLuongTongSo = Operator.sum([this.editCache[id].data.sLuongTrongNuoc, this.editCache[id].data.sLuongNgoaiNuoc]);
-        this.editCache[id].data.TongNCDtoanKp = Operator.mul(this.editCache[id].data.sLuongTongSo, this.editCache[id].data.KinhPhiHoTro);
-        this.editCache[id].data.dToanTongSo = Operator.sum([this.editCache[id].data.dToanNamTruoc, this.editCache[id].data.dToanDaGiao]);
-        this.editCache[id].data.dtoanDnghiDchinh = Operator.sum([this.editCache[id].data.TongNCDtoanKp, - this.editCache[id].data.dToanTongSo]);
+        this.editCache[id].data.sluongTongSo = Operator.sum([this.editCache[id].data.sluongTrongNuoc, this.editCache[id].data.sluongNgoaiNuoc]);
+        this.editCache[id].data.tongNCDtoanKp = Operator.mul(this.editCache[id].data.sluongTongSo, this.editCache[id].data.kinhPhiHoTro);
+        this.editCache[id].data.dtoanTongSo = Operator.sum([this.editCache[id].data.dtoanNamTruoc, this.editCache[id].data.dtoanDaGiao]);
+        this.editCache[id].data.dtoanDnghiDchinh = Operator.sum([this.editCache[id].data.tongNCDtoanKp, - this.editCache[id].data.dtoanTongSo]);
     };
 
     getLowStatus(str: string) {
@@ -509,8 +509,8 @@ export class PhuLuc11Component implements OnInit {
     tinhTong() {
         this.tongDieuChinhGiam = 0;
         this.tongDieuChinhTang = 0;
-        this.dToanVuTang = 0;
-        this.dToanVuGiam = 0;
+        this.dtoanVuTang = 0;
+        this.dtoanVuGiam = 0;
         this.lstCtietBcao.forEach(item => {
             const str = item.stt
             if (!(this.lstCtietBcao.findIndex(e => this.getHead(e.stt) == str) != -1)) {
@@ -521,9 +521,9 @@ export class PhuLuc11Component implements OnInit {
                 }
 
                 if (item.dtoanVuTvqtDnghi < 0) {
-                    Number(this.dToanVuGiam += Number(item?.dtoanVuTvqtDnghi));
+                    Number(this.dtoanVuGiam += Number(item?.dtoanVuTvqtDnghi));
                 } else {
-                    Number(this.dToanVuTang += Number(item?.dtoanVuTvqtDnghi));
+                    Number(this.dtoanVuTang += Number(item?.dtoanVuTvqtDnghi));
                 }
             }
         })
@@ -591,14 +591,14 @@ export class PhuLuc11Component implements OnInit {
             'tenNoiDung',
             'doiTuong',
             'thoiGianHoc',
-            'sLuongTrongNuoc',
-            'sLuongNgoaiNuoc',
-            'sLuongTongSo',
-            'KinhPhiHoTro',
-            'TongNCDtoanKp',
-            'dToanNamTruoc',
-            'dToanDaGiao',
-            'dToanTongSo',
+            'sluongTrongNuoc',
+            'sluongNgoaiNuoc',
+            'sluongTongSo',
+            'kinhPhiHoTro',
+            'tongNCDtoanKp',
+            'dtoanNamTruoc',
+            'dtoanDaGiao',
+            'dtoanTongSo',
             'dtoanDnghiDchinh',
             'dtoanVuTvqtDnghi',
             'chenhLech',
