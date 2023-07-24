@@ -138,6 +138,8 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
       // kieuNX: [""],
       soBangKeCh: [''],
       bangKeChId: [''],
+      soBangKeVt: [''],
+      bangKeVtId: [''],
       soLuongCanDc: [''],
 
       // thanhTien: [],

@@ -15,4 +15,8 @@ export class PhieuXuatKhoDieuChuyenService extends BaseService {
         const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/danh-sach-thong-tin-chung`;
         return this._httpClient.post<OldResponseData>(url, body).toPromise();
     }
+    danhSach(body): Promise<OldResponseData> {
+        const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/danh-sach`;
+        return this._httpClient.post<OldResponseData>(url, body).toPromise();
+    }
 }
