@@ -36,11 +36,11 @@
                     <nz-table nzBordered class="table__body" [nzScroll]="{x: scrollX}">
                         <thead>
                             <tr>
-                                <th rowspan="2" *ngIf="status.general" class="text-center" nzWidth="50px" nzLeft>
+                                <!-- <th rowspan="2" *ngIf="status.general" class="text-center" nzWidth="50px" nzLeft>
                                     <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
                                         style="margin-right: 0;">
                                     </label>
-                                </th>
+                                </th> -->
                                 <th rowspan="2" nzWidth="50px" nzLeft>STT</th>
                                 <th rowspan="2" nzWidth="500px" nzLeft>Nội dung</th>
                                 <th rowspan="2">ĐVT</th>
@@ -112,7 +112,7 @@
                                 <td *ngIf="status.general || status.editAppVal"></td>
                             </tr>
                             <tr>
-                                <td *ngIf="status.general" nzLeft></td>
+                                <!-- <td *ngIf="status.general" nzLeft></td> -->
                                 <td nzLeft></td>
                                 <td nzLeft>Phát sinh điều chỉnh tăng</td>
                                 <td></td>
@@ -134,7 +134,7 @@
                                 <td *ngIf="status.general || status.editAppVal"></td>
                             </tr>
                             <tr>
-                                <td *ngIf="status.general" nzLeft></td>
+                                <!-- <td *ngIf="status.general" nzLeft></td> -->
                                 <td nzLeft></td>
                                 <td nzLeft>Phát sinh điều chỉnh giảm</td>
                                 <td></td>
@@ -157,10 +157,10 @@
                             </tr>
                             <tr *ngFor="let data of lstCtietBcao; let i = index">
                                 <ng-container *ngIf="!editCache[data.id].edit; else editTemplate ">
-                                    <td *ngIf="status.general " class="text-center" nzLeft>
+                                    <!-- <td *ngIf="status.general " class="text-center" nzLeft>
                                         <label *ngIf="checkDelete(data.stt)" nz-checkbox [nzValue]="data.id"
                                             [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"></label>
-                                    </td>
+                                    </td> -->
                                     <td class="text-center" nzLeft>
                                         {{getChiMuc(data.stt)}}
                                     </td>
@@ -202,10 +202,10 @@
 
                                 </ng-container>
                                 <ng-template #editTemplate>
-                                    <td *ngIf="status.general" class="text-center" nzLeft>
+                                    <!-- <td *ngIf="status.general" class="text-center" nzLeft>
                                         <label *ngIf="checkDelete(data.stt)" nz-checkbox [nzValue]="data.id"
                                             [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"></label>
-                                    </td>
+                                    </td> -->
                                     <td class="text-center" nzLeft>
                                         {{getChiMuc(editCache[data.id].data.stt)}}
                                     </td>

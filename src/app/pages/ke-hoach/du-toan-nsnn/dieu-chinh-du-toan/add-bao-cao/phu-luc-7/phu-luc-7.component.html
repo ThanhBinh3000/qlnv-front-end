@@ -39,8 +39,8 @@
 										style="margin-right: 0;">
 									</label>
 								</th> -->
-								<th rowSpan="2" nzWidth="50px">STT</th>
-								<th rowSpan="2">
+								<th rowSpan="2" nzWidth="50px" nzLeft>STT</th>
+								<th rowSpan="2" nzLeft>
 									Danh mục hàng
 								</th>
 								<th rowSpan="2">Đơn vị tính</th>
@@ -114,8 +114,8 @@
 						<tbody>
 							<tr>
 								<!-- <td *ngIf="status.general"></td> -->
-								<td></td>
-								<td>Tổng cộng</td>
+								<td nzLeft></td>
+								<td nzLeft>Tổng cộng</td>
 								<td></td>
 								<td></td>
 								<td></td>
@@ -145,8 +145,8 @@
 							</tr>
 							<tr>
 								<!-- <td *ngIf="status.general"></td> -->
-								<td></td>
-								<td>Phát sinh điều chỉnh tăng</td>
+								<td nzLeft></td>
+								<td nzLeft>Phát sinh điều chỉnh tăng</td>
 								<td></td>
 								<td></td>
 								<td></td>
@@ -176,8 +176,8 @@
 							</tr>
 							<tr>
 								<!-- <td *ngIf="status.general"></td> -->
-								<td></td>
-								<td>Phát sinh điều chỉnh giảm</td>
+								<td nzLeft></td>
+								<td nzLeft>Phát sinh điều chỉnh giảm</td>
 								<td></td>
 								<td></td>
 								<td></td>
@@ -211,10 +211,10 @@
 										<label nz-checkbox *ngIf="checkDelete(data.stt)" [nzValue]="data.id"
 											[(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"></label>
 									</td> -->
-									<td class="text-center">
+									<td class="text-center" nzLeft>
 										{{getChiMuc(data.stt)}}
 									</td>
-									<td>
+									<td nzLeft>
 										{{data.tenHang}}
 									</td>
 									<td>
@@ -266,10 +266,10 @@
 										<label *ngIf="checkDelete(data.stt)" nz-checkbox [nzValue]="data.id"
 											[(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"></label>
 									</td> -->
-									<td class="text-center">
+									<td class="text-center" nzLeft>
 										{{getChiMuc(editCache[data.id].data.stt)}}
 									</td>
-									<td>
+									<td nzLeft>
 										{{editCache[data.id].data.tenHang}}
 									</td>
 									<td>

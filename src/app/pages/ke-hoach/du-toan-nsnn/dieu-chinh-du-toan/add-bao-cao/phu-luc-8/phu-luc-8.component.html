@@ -43,8 +43,8 @@
 										style="margin-right: 0;">
 									</label>
 								</th> -->
-								<th rowSpan="2" nzWidth="50px">STT</th>
-								<th nzWidth="300px" rowSpan="2">Mặt hàng</th>
+								<th rowSpan="2" nzWidth="50px" nzLeft>STT</th>
+								<th nzWidth="300px" rowSpan="2" nzLeft>Mặt hàng</th>
 								<th rowSpan="2">ĐVT</th>
 								<th rowSpan="2">Số lượng bảo quản theo KH được giao</th>
 								<th colSpan="3">Lượng hàng thực hiện</th>
@@ -73,8 +73,8 @@
 							</tr>
 							<tr>
 								<!-- <th *ngIf="status.general"></th> -->
-								<th>A</th>
-								<th>B</th>
+								<th nzLeft>A</th>
+								<th nzLeft>B</th>
 								<th>C</th>
 								<th>1</th>
 								<th>2</th>
@@ -98,8 +98,8 @@
 						<tbody>
 							<tr>
 								<!-- <td *ngIf="status.general"></td> -->
-								<td></td>
-								<td>Tổng cộng</td>
+								<td nzLeft></td>
+								<td nzLeft>Tổng cộng</td>
 								<td></td>
 								<td></td>
 								<td></td>
@@ -121,8 +121,8 @@
 							</tr>
 							<tr>
 								<!-- <td *ngIf="status.general"></td> -->
-								<td></td>
-								<td>Phát sinh điều chỉnh tăng</td>
+								<td nzLeft></td>
+								<td nzLeft>Phát sinh điều chỉnh tăng</td>
 								<td></td>
 								<td></td>
 								<td></td>
@@ -144,8 +144,8 @@
 							</tr>
 							<tr>
 								<!-- <td *ngIf="status.general"></td> -->
-								<td></td>
-								<td>Phát sinh điều chỉnh giảm</td>
+								<td nzLeft></td>
+								<td nzLeft>Phát sinh điều chỉnh giảm</td>
 								<td></td>
 								<td></td>
 								<td></td>
@@ -171,10 +171,10 @@
 										<label *ngIf="checkDelete(data.stt)" nz-checkbox [nzValue]="data.id"
 											[(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"></label>
 									</td> -->
-									<td class="text-center">
+									<td class="text-center" nzLeft>
 										{{getChiMuc(data.stt)}}
 									</td>
-									<td>
+									<td nzLeft>
 										{{data.matHang}}
 									</td>
 									<td>{{data.maDviTinh}}</td>
@@ -218,10 +218,10 @@
 										<label *ngIf="checkDelete(data.stt)" nz-checkbox [nzValue]="data.id"
 											[(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"></label>
 									</td> -->
-									<td class="text-center">
+									<td class="text-center" nzLeft>
 										{{getChiMuc(editCache[data.id].data.stt)}}
 									</td>
-									<td>
+									<td nzLeft>
 										{{editCache[data.id].data.matHang}}
 									</td>
 									<td>
