@@ -138,7 +138,7 @@
                                                 Lý do: {{data.lyDoTuChoi}}
                                             </ng-container>
                                         </td>
-                                        <td>
+                                        <!-- <td>
                                             <ng-container
                                                 *ngIf="userInfo?.sub == baoCao.nguoiTao && !status && data?.id?.length==38 ;else templateNguoiBcao ">
                                                 <nz-select nzShowSearch nzAllowClear
@@ -156,17 +156,38 @@
                                                     </div>
                                                 </div>
                                             </ng-template>
+                                        </td> -->
+
+
+                                        <td>
+                                            <ng-container
+                                                *ngIf="userInfo?.sub == baoCao.nguoiTao && status.general && data?.id?.length==38 ;else templateNguoiBcao ">
+                                                <nz-select nzShowSearch nzAllowClear
+                                                    nzPlaceHolder="Chọn cán bộ thực hiện" [(ngModel)]="data.nguoiBcao"
+                                                    [class]="data.nguoiBcao ?'' : 'input-error-validate'">
+                                                    <nz-option *ngFor="let item of canBos" [nzValue]="item.username"
+                                                        [nzLabel]="item.username">
+                                                    </nz-option>
+                                                </nz-select>
+                                            </ng-container>
+                                            <ng-template #templateNguoiBcao>
+                                                {{data.nguoiBcao}}
+                                            </ng-template>
                                         </td>
+
                                         <td>
                                             <ng-container *ngIf="baoCao.id">
-                                                <a *ngIf="!status && (userInfo?.sub == data.nguoiBcao)">
-                                                    <i class="fa fa-pencil" (click)="viewAppendix(data)"></i>
+                                                <a *ngIf="status.general && (userInfo?.sub == data.nguoiBcao)">
+                                                    <i class="fa fa-pencil" (click)="viewAppendix(data.id)"></i>
                                                 </a>
                                                 <a
-                                                    *ngIf="(status || userInfo?.sub != data.nguoiBcao) && data.nguoiBcao">
-                                                    <i class="fa fa-eye" (click)="viewAppendix(data)"></i>
+                                                    *ngIf="(!status.general || userInfo?.sub != data.nguoiBcao) && data.nguoiBcao">
+                                                    <i class="fa fa-eye" (click)="viewAppendix(data.id)"></i>
                                                 </a>
                                             </ng-container>
+                                            <a *ngIf="status.general && (userInfo?.sub == baoCao.nguoiTao)">
+                                                <i class="fa fa-trash-o do" (click)="deleteAppendix(data.id)"></i>
+                                            </a>
                                         </td>
                                         <!-- <td>
                                             <i class="fa fa-pencil" (click)="viewAppendix(data)"></i>
@@ -189,8 +210,8 @@
                         </nz-table>
                     </nz-tab>
                     <ng-template #extraTemplate>
-                        <button *ngIf="!status && userInfo?.sub == baoCao.nguoiTao" type="button" class="btn btn-main"
-                            (click)="addAppendix()">
+                        <button *ngIf="status.general && userInfo?.sub == baoCao.nguoiTao" type="button"
+                            class="btn btn-main" (click)="addAppendix()">
                             <i class="icon htvbdh_dau-cong"></i>
                             <span>Thêm</span>
                         </button>
