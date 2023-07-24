@@ -61,13 +61,13 @@ export class BaoCao {
     maDviCha: string; // chưa dùng	
     maGiao: string;
     soQd: ItemCongVan;
-    maLoaiDan: string;
-    maPhanGiao: string;
+    // maLoaiDan: string;
+    // maPhanGiao: string;
     maPaCha: string;
     ngayQd: any;
     namDtoan: number;
     noiQd: string;
-    nam: number;
+    namBcao: number;
     maDviTien: string;
     thuyetMinh: string;
     ngayTao: any;
@@ -246,12 +246,12 @@ export class AddBaoCaoComponent implements OnInit {
         if (this.baoCao.id) {
             await this.getDetailReport();
         } else {
-            this.baoCao.nam = this.data.namDtoan;
+            this.baoCao.namBcao = this.data.namPa;
             this.baoCao.maPa = this.data?.maPa;
             this.baoCao.maPaCha = this.data?.maPaCha;
             this.baoCao.maDvi = this.data?.maDvi ? this.data?.maDvi : this.userInfo?.MA_DVI;
-            this.baoCao.maLoaiDan = this.data?.maLoaiDan
-            this.baoCao.maPhanGiao = "3"
+            // this.baoCao.maLoaiDan = this.data?.maLoaiDan
+            // this.baoCao.maPhanGiao = "3"
             this.baoCao.maBcao = this.data?.maBcao
             this.baoCao.soQd = this.data?.soQd
             if (this.data.preTab == "tongHopBaoCaoCapDuoi") {
@@ -429,26 +429,26 @@ export class AddBaoCaoComponent implements OnInit {
             })
     };
 
-    viewAppendix(formDetail: ItemData) {
+    viewAppendix(id: string) {
         const isSynthetic = this.baoCao.lstGiaoDtoanTrucThuocs && this.baoCao.lstGiaoDtoanTrucThuocs.length != 0;
+        const bieuMau = this.baoCao.lstCtiets.find(e => e.id == id);
         const dataInfo = {
-            data: formDetail,
+            // data: formDetail,
             extraData: null,
             maDvi: this.baoCao.maDvi,
-            nam: this.baoCao.nam,
+            namBcao: this.baoCao.namBcao,
             statusBtnOk: this.okStatus,
             statusBtnFinish: this.finishStatus,
             statusBtnPrint: this.printStatus,
             acceptStatus: this.acceptStatus,
-            status: this.status || !(this.userInfo?.sub == formDetail.nguoiBcao),
+            status: new BtnStatus(),
             isSynthetic: isSynthetic
         };
+        Object.assign(dataInfo.status, this.status);
+        dataInfo.status.general = dataInfo.status.general && (this.userInfo?.sub == bieuMau.nguoiBcao);
 
-
-
-        dataInfo.data.maDviTien = '1';
         let nzContent: ComponentType<any>;
-        switch (formDetail.maBieuMau) {
+        switch (bieuMau.maBieuMau) {
             case 'pl01N':
                 nzContent = PhuLuc01NhapComponent;
                 break;
@@ -866,7 +866,7 @@ export class AddBaoCaoComponent implements OnInit {
                 break;
         }
         const modalAppendix = this.modal.create({
-            nzTitle: formDetail.tenDm,
+            nzTitle: bieuMau.tenDm,
             nzContent: nzContent,
             nzBodyStyle: { overflowY: 'auto', maxHeight: 'calc(100vh - 200px)' },
             nzMaskClosable: false,
@@ -882,8 +882,8 @@ export class AddBaoCaoComponent implements OnInit {
                 //gan lai thong tin sau khi bieu mau duoc luu
                 const index = this.baoCao.lstCtiets.findIndex(e => e.maBieuMau == res.formDetail.maBieuMau);
                 this.baoCao.lstCtiets[index] = res.formDetail;
-                this.baoCao.lstCtiets[index].tenPl = formDetail.tenPl;
-                this.baoCao.lstCtiets[index].tenDm = formDetail.tenDm;
+                this.baoCao.lstCtiets[index].tenPl = bieuMau.tenPl;
+                this.baoCao.lstCtiets[index].tenDm = bieuMau.tenDm;
             }
         });
     }
@@ -1304,7 +1304,7 @@ export class AddBaoCaoComponent implements OnInit {
         const request = JSON.parse(JSON.stringify(
             {
                 id: null,
-                namDtoan: this.baoCao.nam,
+                namDtoan: this.baoCao.namBcao,
                 maPa: this.baoCao.maBcao,
                 soQd: this.baoCao.soQd,
                 maGiao: this.baoCao.maGiao,

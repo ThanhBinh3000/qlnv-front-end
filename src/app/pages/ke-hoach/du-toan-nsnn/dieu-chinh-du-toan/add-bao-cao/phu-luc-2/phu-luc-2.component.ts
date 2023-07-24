@@ -32,7 +32,7 @@ export class ItemData {
     dtoanKpNamTruoc: number;
     dtoanKpDaGiao: number;
     dtoanKpCong: number;
-    dtoanDieuChinh: number;
+    dtoanKpDieuChinh: number;
     dtoanVuDnghi: number;
     thuyetMinh: string;
     chenhLech: number;
@@ -186,7 +186,7 @@ export class PhuLuc2Component implements OnInit {
             this.total.dtoanKpNamTruoc = Operator.sum([this.total.dtoanKpNamTruoc, item.dtoanKpNamTruoc]);
             this.total.dtoanKpDaGiao = Operator.sum([this.total.dtoanKpDaGiao, item.dtoanKpDaGiao]);
             this.total.dtoanKpCong = Operator.sum([this.total.dtoanKpCong, item.dtoanKpCong]);
-            this.total.dtoanDieuChinh = Operator.sum([this.total.dtoanDieuChinh, item.dtoanDieuChinh]);
+            this.total.dtoanKpDieuChinh = Operator.sum([this.total.dtoanKpDieuChinh, item.dtoanKpDieuChinh]);
             this.total.dtoanVuDnghi = Operator.sum([this.total.dtoanVuDnghi, item.dtoanVuDnghi]);
         })
     };
@@ -222,7 +222,7 @@ export class PhuLuc2Component implements OnInit {
 
         if (this.status.general) {
             lstCtietBcaoTemp?.forEach(item => {
-                item.dtoanVuDnghi = item.dtoanDieuChinh;
+                item.dtoanVuDnghi = item.dtoanKpDieuChinh;
             })
         }
 
@@ -345,10 +345,10 @@ export class PhuLuc2Component implements OnInit {
         this.dtoanVuTang = 0;
         this.dtoanVuGiam = 0;
         this.lstCtietBcao.forEach(item => {
-            if (item.dtoanDieuChinh < 0) {
-                this.tongDieuChinhGiam += Number(item.dtoanDieuChinh);
+            if (item.dtoanKpDieuChinh < 0) {
+                this.tongDieuChinhGiam += Number(item.dtoanKpDieuChinh);
             } else {
-                this.tongDieuChinhTang += Number(item.dtoanDieuChinh);
+                this.tongDieuChinhTang += Number(item.dtoanKpDieuChinh);
             }
 
             if (item.dtoanVuDnghi < 0) {
@@ -363,7 +363,7 @@ export class PhuLuc2Component implements OnInit {
         this.editCache[id].data.sluongTsCong = Operator.sum([this.editCache[id].data.sluongTsDenTd, this.editCache[id].data.sluongTsDaNhan, this.editCache[id].data.sluongTsDaPd]);
         this.editCache[id].data.dtoanDnghiThanhTien = Operator.mul(this.editCache[id].data.dtoanDnghiSl, this.editCache[id].data.dtoanDnghiMucGia);
         this.editCache[id].data.dtoanKpCong = Operator.sum([this.editCache[id].data.dtoanKpNamTruoc, this.editCache[id].data.dtoanKpDaGiao]);
-        this.editCache[id].data.dtoanDieuChinh = Operator.sum([this.editCache[id].data.dtoanDnghiThanhTien, -this.editCache[id].data.dtoanKpCong]);
+        this.editCache[id].data.dtoanKpDieuChinh = Operator.sum([this.editCache[id].data.dtoanDnghiThanhTien, - this.editCache[id].data.dtoanKpCong]);
 
     };
 
@@ -401,7 +401,7 @@ export class PhuLuc2Component implements OnInit {
             dtoanKpNamTruoc: 0,
             dtoanKpDaGiao: 0,
             dtoanKpCong: 0,
-            dtoanDieuChinh: 0,
+            dtoanKpDieuChinh: 0,
             dtoanVuDnghi: 0,
             thuyetMinh: "",
             ghiChu: "",
@@ -483,7 +483,7 @@ export class PhuLuc2Component implements OnInit {
             'dtoanKpNamTruoc',
             'dtoanKpDaGiao',
             'dtoanKpCong',
-            'dtoanDieuChinh',
+            'dtoanKpDieuChinh',
             'dtoanVuDnghi',
             'thuyetMinh',
             'ghiChu'
