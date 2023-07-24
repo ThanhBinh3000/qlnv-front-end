@@ -17,11 +17,11 @@
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span>Duyệt</span>
       </button>
-      <button (click)="approve(idSelected,STATUS.BAN_HANH,'Bạn có muốn duyệt quyết định này')"
-              *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_DUYET_LDCUC') && (formData.value.trangThai===STATUS.CHO_DUYET_LDC)"
+      <button (click)="approve(idSelected,STATUS.BAN_HANH,'Bạn có muốn ban hành quyết định này')"
+              *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_DUYET_LDCUC') && (formData.value.trangThai===STATUS.DA_DUYET_LDC)"
               class="btn btn-sub" type="button">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
-        <span>Duyệt</span>
+        <span>Ban hành</span>
       </button>
       <button (click)="reject(idSelected,STATUS.TU_CHOI_TP)"
               *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_DUYET_TP') && (formData.value.trangThai===STATUS.CHO_DUYET_TP)"
