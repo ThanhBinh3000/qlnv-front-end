@@ -49,7 +49,7 @@
             </app-cap-von>
         </ng-container>
         <ng-container *ngIf="tabSelected == 'ds-tonghop-denghi-donvi-capduoi'">
-            <app-danh-sach-tong-hop-tu-don-vi-cap-duoi [data]=data (dataChange)="changeTab($event)">
+            <app-danh-sach-tong-hop-tu-don-vi-cap-duoi (dataChange)="changeTab($event)">
             </app-danh-sach-tong-hop-tu-don-vi-cap-duoi>
         </ng-container>
         <ng-container *ngIf="tabSelected == 'tonghop-denghi-donvi-capduoi'">
@@ -57,12 +57,16 @@
             </app-tong-hop-de-nghi-cap-duoi>
         </ng-container>
         <ng-container *ngIf="tabSelected == 'ds-denghi-donvi-capduoi'">
-            <app-danh-sach-de-nghi-tu-don-vi-cap-duoi [data]=data (dataChange)="changeTab($event)">
+            <app-danh-sach-de-nghi-tu-don-vi-cap-duoi (dataChange)="changeTab($event)">
             </app-danh-sach-de-nghi-tu-don-vi-cap-duoi>
         </ng-container>
         <ng-container *ngIf="tabSelected == 'denghi-donvi-capduoi'">
             <app-de-nghi-don-vi-cap-duoi [data]=data (dataChange)="changeTab($event)">
             </app-de-nghi-don-vi-cap-duoi>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 'denghi-donvi-capduoi-theo-hopdong'">
+            <app-de-nghi-cua-don-vi-cap-duoi-theo-hop-dong [data]=data (dataChange)="changeTab($event)">
+            </app-de-nghi-cua-don-vi-cap-duoi-theo-hop-dong>
         </ng-container>
         <ng-container *ngIf="tabSelected == 'denghi-hopdong-capvon'">
             <app-hop-dong-cap-von [data]=data (dataChange)="changeTab($event)">

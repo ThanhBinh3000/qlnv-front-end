@@ -211,7 +211,7 @@ export class DanhSachDeNghiTuDonViCapDuoiComponent implements OnInit {
   viewDetail(data: any) {
     const obj = {
       id: data.id,
-      tabSelected: data.canCuVeGia == Utils.HD_TRUNG_THAU ? (data.loaiDnghi == Utils.MUA_VTU ? 'dn-vattu' : 'dn-hopdong') : 'denghi-donvi-capduoi',
+      tabSelected: data.canCuVeGia == Utils.HD_TRUNG_THAU ? (data.loaiDnghi == Utils.MUA_VTU ? 'dn-vattu' : 'denghi-donvi-capduoi-theo-hopdong') : 'denghi-donvi-capduoi',
     }
     this.dataChange.emit(obj);
   }

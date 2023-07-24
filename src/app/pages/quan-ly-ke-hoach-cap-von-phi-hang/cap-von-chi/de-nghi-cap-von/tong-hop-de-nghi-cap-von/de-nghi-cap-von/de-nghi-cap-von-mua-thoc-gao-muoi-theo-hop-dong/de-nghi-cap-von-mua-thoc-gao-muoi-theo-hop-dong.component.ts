@@ -15,10 +15,11 @@ import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { displayNumber, sumNumber } from 'src/app/Utility/func';
 import { AMOUNT, BOX_NUMBER_WIDTH, CAN_CU_GIA, CVNC, DON_VI_TIEN, LOAI_DE_NGHI, Operator, QUATITY, Status, Utils } from 'src/app/Utility/utils';
-import { BaoCao, ItemContract, ItemRequest, Times, TRANG_THAI } from '../../../de-nghi-cap-von.constant';
+import { BaoCao, ItemContract, ItemRequest, TABS, Times, TRANG_THAI } from '../../../de-nghi-cap-von.constant';
 import { DialogChonThemBieuMauComponent } from 'src/app/components/dialog/dialog-chon-them-bieu-mau/dialog-chon-them-bieu-mau.component';
 import { BtnStatus } from '../../../de-nghi-cap-von.class';
 import { Ltd } from 'src/app/pages/ke-hoach/du-toan-nsnn/lap-ke-hoach-va-tham-dinh-du-toan/lap-ke-hoach-va-tham-dinh-du-toan.constant';
+import * as uuid from "uuid";
 
 @Component({
 	selector: 'app-de-nghi-cap-von-mua-thoc-gao-muoi-theo-hop-dong',
@@ -67,6 +68,9 @@ export class DeNghiCapVonMuaThocGaoMuoiTheoHopDongComponent implements OnInit {
 	Status = Status;
 	status: BtnStatus = new BtnStatus();
 	canBos: any[];
+	idCallChitiet!: string;
+	idCallChitietCapVon!: string;
+	response: BaoCao = new BaoCao();
 	// before uploaf file
 	beforeUpload = (file: NzUploadFile): boolean => {
 		this.fileList = this.fileList.concat(file);
@@ -108,6 +112,7 @@ export class DeNghiCapVonMuaThocGaoMuoiTheoHopDongComponent implements OnInit {
 
 	async ngOnInit() {
 		this.action('init');
+		this.response.lstCtiets = [];
 	}
 
 	async action(code: string) {
@@ -502,6 +507,74 @@ export class DeNghiCapVonMuaThocGaoMuoiTheoHopDongComponent implements OnInit {
 				this.total.thanhLyHdongTt = Operator.sum([this.total.thanhLyHdongTt, item.thanhLyHdongTt]);
 			}
 		})
+	}
+
+	async selectab() {
+		switch (this.selectedIndex) {
+			case 0:
+				// danhMuc = this.listAppendix.filter(e => e.id.startsWith('hopdong'));
+				// danhSach = danhMuc.filter(item => this.baoCao.lstCtiets.findIndex(e => e.maBieuMau == item.id) == -1);
+				// title = 'Danh sách hơp đồng';
+				break;
+			case 1:
+				const requestData = {
+					maDvi: this.userInfo?.MA_DVI,
+					namHdong: this.response.namBcao,
+					loaiDnghi: this.response.loaiDnghi,
+					maDviTien: '1',
+					maLoai: '0',
+					paggingReq: {
+						limit: 10,
+						page: 1,
+					},
+					trangThai: Utils.TT_BC_7,
+					loaiTimKiem: '',
+				}
+				if (this.userService.isTongCuc()) {
+					requestData.loaiTimKiem = '1';
+				}
+				this.spinner.show();
+				await this.capVonNguonChiService.timKiemDeNghi(requestData).toPromise().then(
+					(data) => {
+						if (data.statusCode == 0) {
+							this.idCallChitietCapVon = data.data.content[0].id;
+						} else {
+							this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+						}
+					},
+					(err) => {
+						this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+					}
+				);
+				await this.capVonNguonChiService.ctietDeNghi(this.idCallChitietCapVon).toPromise().then(
+					async (data) => {
+						if (data.statusCode == 0) {
+							const dataRequest = data.data.lstCtiets;
+							if (this.response.lstCtiets.length == 0) {
+								dataRequest.forEach(item => {
+									this.response.lstCtiets.push({
+										...item,
+										id: uuid.v4() + 'FE',
+										maDvi: this.userInfo?.MA_DVI,
+										tenDvi: this.userInfo?.TEN_DVI,
+									});
+								})
+							} else {
+								return this.response
+							}
+						} else {
+							this.notification.error(MESSAGE.ERROR, data?.msg);
+						}
+					},
+					(err) => {
+						this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+					},
+				);
+				this.spinner.hide();
+				break;
+			default:
+				break;
+		}
 	}
 
 	// sum() {
