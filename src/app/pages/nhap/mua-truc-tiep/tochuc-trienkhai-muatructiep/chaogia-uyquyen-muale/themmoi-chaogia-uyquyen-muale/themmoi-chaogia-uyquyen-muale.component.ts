@@ -103,7 +103,7 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
         .then(async (res) => {
           const dataDtl = res.data;
           console.log(dataDtl)
-          this.danhSachCtiet = dataDtl.children
+          this.danhSachCtiet = dataDtl.children.length > 0 ? dataDtl.children : dataDtl.children2
           this.formData.patchValue({
             idQdDtl: id,
             soQd: dataDtl.hhQdPheduyetKhMttHdr.soQd,
@@ -132,15 +132,21 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
     }
   }
 
-  calcTong() {
-    if (this.danhSachCtiet) {
-      const sum = this.danhSachCtiet.reduce((prev, cur) => {
-        prev += cur.soLuong;
-        return prev;
-      }, 0);
-      return sum;
-    }
-  }
+  // calcTong(): number {
+  //   let totalSum = 0;
+  //   if (this.danhSachCtiet) {
+  //     this.danhSachCtiet.forEach(data => {
+  //       const sum = data.children.reduce((prev, cur) => {
+  //         prev += Number.parseInt(cur.soLuong);
+  //         return prev;
+  //       }, 0);
+  //       totalSum += sum;
+  //     });
+  //   }
+  //   console.log(totalSum)
+  //   return totalSum;
+  // }
+
   idRowSelect: number;
   async showDetail($event, data: any) {
     await this.spinner.show();

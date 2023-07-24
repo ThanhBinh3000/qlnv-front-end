@@ -182,7 +182,7 @@
             <tr [ngClass]="{'bg-selected': i == 0 && this.selected}" (click)="showDetail($event,item)">
               <td [nzExpand]="true"></td>
               <td colspan="2">{{item.tenDvi}}</td>
-              <td class="text-bold">{{ calcTong() | number : '1.0-1' : 'vi_VN' }}</td>
+              <td class="text-bold">{{ item.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
               <td></td>
               <td></td>
               <td></td>

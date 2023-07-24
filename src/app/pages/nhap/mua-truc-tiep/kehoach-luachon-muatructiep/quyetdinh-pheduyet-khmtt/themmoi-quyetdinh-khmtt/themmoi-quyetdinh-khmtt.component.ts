@@ -19,6 +19,8 @@ import { StorageService } from 'src/app/services/storage.service';
 import { DanhSachMuaTrucTiepService } from 'src/app/services/danh-sach-mua-truc-tiep.service';
 import { QuyetDinhPheDuyetKeHoachMTTService } from 'src/app/services/quyet-dinh-phe-duyet-ke-hoach-mtt.service';
 import { TongHopDeXuatKHMTTService } from 'src/app/services/tong-hop-de-xuat-khmtt.service';
+import {DatePipe} from "@angular/common";
+import {ChiTieuKeHoachNamCapTongCucService} from "../../../../../../services/chiTieuKeHoachNamCapTongCuc.service";
 
 @Component({
   selector: 'app-themmoi-quyetdinh-khmtt',
@@ -46,6 +48,8 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
   dataInputCache: any;
   selected: boolean;
   isTongHop: boolean
+  dataChiTieu: any;
+  idSoQdCc: any;
 
   constructor(
     httpClient: HttpClient,
@@ -55,6 +59,7 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
     modal: NzModalService,
     private danhSachMuaTrucTiepService: DanhSachMuaTrucTiepService,
     private quyetDinhPheDuyetKeHoachMTTService: QuyetDinhPheDuyetKeHoachMTTService,
+    private chiTieuKeHoachNamCapTongCucService: ChiTieuKeHoachNamCapTongCucService,
     private tongHopDeXuatKHMTTService: TongHopDeXuatKHMTTService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, quyetDinhPheDuyetKeHoachMTTService);
@@ -78,6 +83,7 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
       tenTrangThai: ['Dự thảo'],
       phanLoai: ['TH', [Validators.required]],
       soQdCc: [''],
+      idSoQdCc: [''],
     })
   }
 
@@ -198,6 +204,7 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
       this.formData.patchValue({
         soQd: data.soQd?.split('/')[0]
       })
+      this.idSoQdCc = data.idSoQdCc
       this.danhsachDx = data.children;
       this.fileDinhKem = data.fileDinhKems;
     }
@@ -256,10 +263,12 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
           tenLoaiVthh: data.tenLoaiVthh,
           tchuanCluong: data.tchuanCluong,
           soQdCc: data.soQd,
+          idSoQdCc: data.idSoQdCc,
           idThHdr: event,
           idTrHdr: null,
           soTrHdr: null,
         })
+        this.idSoQdCc = data.idSoQdCc
         for (let item of data.children) {
           await this.danhSachMuaTrucTiepService.getDetail(item.idDxHdr).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
@@ -338,6 +347,7 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
           tchuanCluong: data.tchuanCluong,
           moTaHangHoa: data.moTaHangHoa,
           soQdCc: data.soQdCc,
+          idSoQdCc: data.idSoQdCc,
           trichYeu: dataRes.trichYeu,
           tenDvi: data.tenDvi,
           maDvi: data.maDvi,
@@ -345,6 +355,7 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
           soTrHdr: dataRes.soDxuat,
           idTrHdr: dataRes.id,
         })
+        this.idSoQdCc = data.idSoQdCc
         this.dataInput = null;
         this.dataInputCache = null;
       } else {
@@ -365,13 +376,20 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
       this.selected = true
     }
     this.isTongHop = this.formData.value.phanLoai == 'TH';
+    await this.getDataChiTieu(this.idSoQdCc);
     if (data) {
       this.dataInput = data;
       let res = await this.danhSachMuaTrucTiepService.getDetail(data.idDxHdr);
       this.dataInputCache = res.data;
-      console.log(this.dataInputCache)
     }
     await this.spinner.hide();
+  }
+
+  async getDataChiTieu(id: any) {
+    let res2 = await this.chiTieuKeHoachNamCapTongCucService.loadThongTinChiTieuKeHoachNam(id);
+    if (res2.msg == MESSAGE.SUCCESS) {
+      this.dataChiTieu = res2.data;
+    }
   }
 
   isDisabled() {
@@ -380,5 +398,13 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
     } else {
       return true;
     }
+  }
+
+  setNewData($event) {
+    let pipe = new DatePipe('en-US');
+    this.danhsachDx[0].tgianMkho = pipe.transform($event.tgianMkho, 'yyyy-MM-dd')
+    this.danhsachDx[0].tgianKthuc = pipe.transform($event.tgianKthuc, 'yyyy-MM-dd')
+    // this.formData.get('tgianMkho').setValue(pipe.transform($event.tgianMkho, 'yyyy-MM-dd'));
+    // this.formData.get('tgianKthuc').setValue(pipe.transform($event.tgianKthuc, 'yyyy-MM-dd'));
   }
 }
