@@ -20,7 +20,7 @@
           <div nz-col nzSpan="4">
             <nz-form-item class="form-item">
               <nz-form-label>Số phiếu xuất kho</nz-form-label>
-              <input placeholder="" nz-input formControlName="soPhieuXuatKho"/>
+              <input placeholder="" nz-input formControlName="soPhieu"/>
             </nz-form-item>
           </div>
           <div nz-col nzSpan="4">
@@ -29,12 +29,12 @@
               <div nz-row>
                 <div nz-col nzSpan="12" class="cus-start-date">
                   <nz-date-picker [nzDisabledDate]="disabledStartNgayXk" nzFormat="dd/MM/yyyy"
-                                  formControlName="ngayXuatKhoTu" nzPlaceHolder="Ngày bắt đầu">
+                                  formControlName="ngayXuatNhapTu" nzPlaceHolder="Ngày bắt đầu">
                   </nz-date-picker>
                 </div>
                 <div nz-col nzSpan="12" class="cus-end-date">
                   <nz-date-picker [nzDisabledDate]="disabledEndNgayXk" nzFormat="dd/MM/yyyy"
-                                  formControlName="ngayXuatKhoDen" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+                                  formControlName="ngayXuatNhapDen" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
                 </div>
               </div>
             </nz-form-item>
@@ -171,7 +171,7 @@
                         <td></td>
                         <td></td>
                         <td class="bold">{{lv3.soPhieu}}</td>
-                        <td>{{lv3.ngayXuat | date: 'dd/MM/YYYY' }}</td>
+                        <td>{{lv3.ngayXuatNhap | date: 'dd/MM/YYYY' }}</td>
                         <td>{{lv3.tenLoai}}</td>
                         <td><a *ngIf="lv3.soPhieuKncl" nzType="link"
                                (click)="openPhieuKnClModal(lv3.idPhieuKncl)">{{lv3.soPhieuKncl}}</a></td>

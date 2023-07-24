@@ -21,8 +21,8 @@ import {
 import dayjs from "dayjs";
 import {Validators} from "@angular/forms";
 import {
-  PhieuXuatKhoService
-} from "../../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/PhieuXuatKho.service";
+  PhieuXuatNhapKhoService
+} from "../../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/PhieuXuatNhapKho.service";
 import {isArray} from "rxjs/internal-compatibility";
 import {
   PhieuKdclVtKtclService
@@ -69,7 +69,7 @@ export class ThongTinBaoCaoKetQuaKiemDinhComponent extends Base2Component implem
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private phieuXuatKhoService: PhieuXuatKhoService,
+    private phieuXuatKhoService: PhieuXuatNhapKhoService,
     private phieuKdclVtKtclService: PhieuKdclVtKtclService,
     private quyetDinhGiaoNvXuatHangService: QuyetDinhGiaoNvXuatHangService,
     private bckqKiemDinhMauService: BckqKiemDinhMauService,
@@ -201,6 +201,7 @@ export class ThongTinBaoCaoKetQuaKiemDinhComponent extends Base2Component implem
         namKeHoach: this.formData.get("nam").value,
         dvql: this.userInfo.MA_DVI,
         loai: "XUAT_MAU",
+        loaiPhieu: 'XUAT',
       }).then((res) => {
         if (res.msg == MESSAGE.SUCCESS) {
           this.listPhieuXuatKho = res.data.content;

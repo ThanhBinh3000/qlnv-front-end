@@ -13,28 +13,28 @@
           </div>
           <div nz-col nzSpan="4">
             <nz-form-item class="form-item">
-              <nz-form-label>Số QĐ giao nhiệm vụ xuất hàng</nz-form-label>
-              <input placeholder="" nz-input formControlName="soQdGiaoNvXh"/>
+              <nz-form-label>Số báo cáo KQKĐ mẫu</nz-form-label>
+              <input placeholder="" nz-input formControlName="soBckqKdm"/>
             </nz-form-item>
           </div>
           <div nz-col nzSpan="4">
             <nz-form-item class="form-item">
-              <nz-form-label>Số phiếu xuất kho</nz-form-label>
-              <input placeholder="" nz-input formControlName="soPhieuXuatKho"/>
+              <nz-form-label>Số phiếu nhập kho</nz-form-label>
+              <input placeholder="" nz-input formControlName="soPhieu"/>
             </nz-form-item>
           </div>
           <div nz-col nzSpan="4">
             <nz-form-item class="form-item">
-              <nz-form-label>Ngày xuất kho</nz-form-label>
+              <nz-form-label>Ngày nhập kho</nz-form-label>
               <div nz-row>
                 <div nz-col nzSpan="12" class="cus-start-date">
                   <nz-date-picker [nzDisabledDate]="disabledStartNgayXk" nzFormat="dd/MM/yyyy"
-                                  formControlName="ngayXuatKhoTu" nzPlaceHolder="Ngày bắt đầu">
+                                  formControlName="ngayXuatNhapTu" nzPlaceHolder="Ngày bắt đầu">
                   </nz-date-picker>
                 </div>
                 <div nz-col nzSpan="12" class="cus-end-date">
                   <nz-date-picker [nzDisabledDate]="disabledEndNgayXk" nzFormat="dd/MM/yyyy"
-                                  formControlName="ngayXuatKhoDen" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+                                  formControlName="ngayXuatNhapDen" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
                 </div>
               </div>
             </nz-form-item>
@@ -55,7 +55,7 @@
       </div>
     </nz-card>
     <div class="group-button">
-      <h3 class="text-uppercase">Danh sách phiếu xuất kho</h3>
+      <h3 class="text-uppercase">Danh sách phiếu nhập kho</h3>
       <div class="buttons">
         <button type="button" class="btn btn-sub" (click)="exportData()">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
@@ -77,17 +77,16 @@
         <tr>
           <th width="60px" class="text-center">STT</th>
           <th></th>
-          <th width="">Số QĐ giao nhiệm vụ XH</th>
-          <th width="">Năm KH</th>
-          <th width="">Thời hạn XH trước ngày</th>
+          <th width="">Số báo cáo KQKĐ mẫu</th>
+          <th width="">Năm báo cáo</th>
           <th width="">Điểm Kho</th>
-          <th width="">Lô kho</th>
-          <th width="">Chủng loại hàng</th>
-          <th width="">Số phiếu xuất kho</th>
-          <th width="">Ngày xuất kho</th>
-          <th width="">Loại hình nhập xuất</th>
+          <th width="">Ngăn/Lô kho</th>
+          <th width="">Chủng loại hàng DTQD</th>
+          <th width="">Số phiếu nhập kho</th>
+          <th width="">Ngày nhập kho</th>
           <th width="">Số phiếu KNCL</th>
-          <th width="">Ngày giám định</th>
+          <th width="">Ngày kiểm định</th>
+          <th width="">Số BB KTNK</th>
           <th width="">Trạng thái</th>
           <th width="90px">Hành động</th>
         </tr>
@@ -101,7 +100,7 @@
                 [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true" style="width: 35px"></td>
             <td class="bold">{{ item.soCanCu }}</td>
             <td class="bold">{{ item.namKeHoach }}</td>
-            <td class="bold">{{ item.ngayQdGiaoNvXh | date: 'dd/MM/YYYY' }}</td>
+            <td class="bold"></td>
             <td></td>
             <td></td>
             <td></td>
@@ -224,19 +223,19 @@
   </div>
 </div>
 <div class="chi-tiet" *ngIf="isDetail">
-  <app-thong-tin-phieu-xuat-kho [idInput]="selectedId" [isView]="isView" [soQdGiaoNvXh]="soQdGiaoNvXhSelected"
+  <app-thong-tin-phieu-nhap-kho [idInput]="selectedId" [isView]="isView" [soBcKqkdMau]="soBaoCaoKqkdMau"
                                 (showListEvent)="showList()">
-  </app-thong-tin-phieu-xuat-kho>
+  </app-thong-tin-phieu-nhap-kho>
 </div>
-<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openPhieuKnCl" (nzOnCancel)="closePhieuKnClModal()">
-  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-    <app-thong-tin-phieu-kiem-nghiem-chat-luong [idInput]="idPhieuKnCl" [isView]="true">
-    </app-thong-tin-phieu-kiem-nghiem-chat-luong>
-  </ng-container>
-  <div *nzModalFooter>
-    <button nz-button (click)="closePhieuKnClModal()" class="modal__button--cancel">
-      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
-      Đóng
-    </button>
-  </div>
-</nz-modal>
+<!--<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openPhieuKnCl" (nzOnCancel)="closePhieuKnClModal()">-->
+<!--  <ng-container *nzModalContent class="modal__content custom-scroll-modal">-->
+<!--    <app-thong-tin-phieu-kiem-nghiem-chat-luong [idInput]="idPhieuKnCl" [isView]="true">-->
+<!--    </app-thong-tin-phieu-kiem-nghiem-chat-luong>-->
+<!--  </ng-container>-->
+<!--  <div *nzModalFooter>-->
+<!--    <button nz-button (click)="closePhieuKnClModal()" class="modal__button&#45;&#45;cancel">-->
+<!--      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>-->
+<!--      Đóng-->
+<!--    </button>-->
+<!--  </div>-->
+<!--</nz-modal>-->

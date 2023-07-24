@@ -19,8 +19,8 @@ import {
   QuyetDinhGiaoNvXuatHangService
 } from "../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/QuyetDinhGiaoNvXuatHang.service";
 import {
-  PhieuXuatKhoService
-} from "../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/PhieuXuatKho.service";
+  PhieuXuatNhapKhoService
+} from "../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/PhieuXuatNhapKho.service";
 
 @Component({
   selector: 'app-thong-tin-phieu-xuat-kho',
@@ -52,7 +52,7 @@ export class ThongTinPhieuXuatKhoComponent extends Base2Component implements OnI
     modal: NzModalService,
     private danhMucService: DanhMucService,
     private quyetDinhGiaoNvXuatHangService: QuyetDinhGiaoNvXuatHangService,
-    private phieuXuatKhoService: PhieuXuatKhoService,
+    private phieuXuatKhoService: PhieuXuatNhapKhoService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, phieuXuatKhoService);
 
@@ -64,7 +64,7 @@ export class ThongTinPhieuXuatKhoComponent extends Base2Component implements OnI
         loai: ['XUAT_MAU', [Validators.required]],
         maQhns: [],
         soPhieu: [],
-        ngayXuat: ['', [Validators.required]],
+        ngayXuatNhap: ['', [Validators.required]],
         taiKhoanNo: [],
         taiKhoanCo: [],
         idCanCu: [],
@@ -92,7 +92,7 @@ export class ThongTinPhieuXuatKhoComponent extends Base2Component implements OnI
         maSo: [],
         donViTinh: [],
         slLayMau: [],
-        slThucXuat: [],
+        slThucTe: [],
         ghiChu: ['', [Validators.required]],
         trangThai: [STATUS.DU_THAO],
         tenDvi: [],
@@ -106,7 +106,7 @@ export class ThongTinPhieuXuatKhoComponent extends Base2Component implements OnI
         tenNganKho: ['', [Validators.required]],
         tenLoKho: [],
         fileDinhKems: [new Array<FileDinhKem>()],
-
+        loaiPhieu: ['XUAT', [Validators.required]],
       }
     );
     this.maPhieu = 'PXK-' + this.userInfo.DON_VI.tenVietTat;
