@@ -283,42 +283,44 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
   }
 
   async onChangeLoaiVthh(event) {
-    if (event.startsWith("01")) {
-      this.listCtieuKeHoach = this.dataChiTieu && this.dataChiTieu.khLuongThuc && this.dataChiTieu.khLuongThuc.length > 0 ? this.dataChiTieu.khLuongThuc : [];
-    }
-    if (event.startsWith("04")) {
-      this.listCtieuKeHoach = this.dataChiTieu && this.dataChiTieu.khMuoiDuTru && this.dataChiTieu.khMuoiDuTru.length > 0 ? this.dataChiTieu.khMuoiDuTru : [];
-    }
-    if (this.listCtieuKeHoach && this.listCtieuKeHoach.length > 0) {
-      if (this.pagTtChungs && this.pagTtChungs.length > 0) {
-        this.pagTtChungs.forEach(pagTtChung => {
-          pagTtChung.soLuongCtieu = '';
-          let ctieuChiCuc = this.listCtieuKeHoach.filter(ctieu => ctieu.maDonVi == pagTtChung.maChiCuc);
-          if (ctieuChiCuc && ctieuChiCuc.length > 0) {
-            if (event.startsWith("0101")) {
-              pagTtChung.soLuongCtieu = ctieuChiCuc[0]?.ntnThoc
-            }
-            if (event.startsWith("0102")) {
-              pagTtChung.soLuongCtieu = ctieuChiCuc[0]?.ntnGao
-            }
-            if (event.startsWith("04")) {
-              pagTtChung.soLuongCtieu = ctieuChiCuc[0]?.nhapTrongNam
-            }
-          }
-        })
+    if (event) {
+      if (event.startsWith("01")) {
+        this.listCtieuKeHoach = this.dataChiTieu && this.dataChiTieu.khLuongThuc && this.dataChiTieu.khLuongThuc.length > 0 ? this.dataChiTieu.khLuongThuc : [];
       }
-    }
-    let body = {
-      "str": event
-    };
-    let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha(body);
-    this.listCloaiVthh = [];
-    if (res.msg == MESSAGE.SUCCESS) {
-      if (res.data) {
-        this.listCloaiVthh = res.data;
+      if (event.startsWith("04")) {
+        this.listCtieuKeHoach = this.dataChiTieu && this.dataChiTieu.khMuoiDuTru && this.dataChiTieu.khMuoiDuTru.length > 0 ? this.dataChiTieu.khMuoiDuTru : [];
       }
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
+      if (this.listCtieuKeHoach && this.listCtieuKeHoach.length > 0) {
+        if (this.pagTtChungs && this.pagTtChungs.length > 0) {
+          this.pagTtChungs.forEach(pagTtChung => {
+            pagTtChung.soLuongCtieu = '';
+            let ctieuChiCuc = this.listCtieuKeHoach.filter(ctieu => ctieu.maDonVi == pagTtChung.maChiCuc);
+            if (ctieuChiCuc && ctieuChiCuc.length > 0) {
+              if (event.startsWith("0101")) {
+                pagTtChung.soLuongCtieu = ctieuChiCuc[0]?.ntnThoc
+              }
+              if (event.startsWith("0102")) {
+                pagTtChung.soLuongCtieu = ctieuChiCuc[0]?.ntnGao
+              }
+              if (event.startsWith("04")) {
+                pagTtChung.soLuongCtieu = ctieuChiCuc[0]?.nhapTrongNam
+              }
+            }
+          })
+        }
+      }
+      let body = {
+        "str": event
+      };
+      let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha(body);
+      this.listCloaiVthh = [];
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (res.data) {
+          this.listCloaiVthh = res.data;
+        }
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
     }
   }
 

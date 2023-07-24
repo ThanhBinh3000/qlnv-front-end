@@ -1,11 +1,11 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import dayjs from 'dayjs';
-import { NzModalService } from 'ng-zorro-antd/modal';
+import {chain} from "lodash";
+import {v4 as uuidv4} from "uuid";import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
-import { TYPE_PAG } from 'src/app/constants/config';
+import {TYPE_PAG} from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { STATUS } from 'src/app/constants/status';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
@@ -29,10 +29,11 @@ export class ThemMoiToTrinhPagComponent implements OnInit {
 
   STATUS = STATUS;
   TYPE_PAG: any;
-
+  expandSet = new Set<number>();
   formData: FormGroup;
   maSuffix: string = '/TCDT-KH';
   dataTable: any[] = [];
+  dataTableView: any[] = [];
   dsLoaiGia: any[] = [];
 
   constructor(
@@ -82,7 +83,6 @@ export class ThemMoiToTrinhPagComponent implements OnInit {
   async ngOnInit() {
     await Promise.all([
       this.loadDsLoaiGia(),
-
       this.getDataDetail(this.idInput),
     ])
   }
@@ -108,9 +108,6 @@ export class ThemMoiToTrinhPagComponent implements OnInit {
     if (id > 0) {
       let res = await this.tongHopPhuongAnGiaService.getDetail(id);
       const data = res.data;
-
-      console.log(data);
-
       this.bindingDataTongHop(data)
     }
   }
@@ -127,7 +124,6 @@ export class ThemMoiToTrinhPagComponent implements OnInit {
       qdGtdttBtc: data.qdGtdttBtc,
       ttNgayKy: data.ttNgayKy,
       trichYeu: data.trichYeu,
-
       namTongHop: data.namTongHop,
       id: data.id,
       tenLoaiVthh: data.tenLoaiVthh,
@@ -149,6 +145,11 @@ export class ThemMoiToTrinhPagComponent implements OnInit {
 
     })
     this.dataTable = data.pagChiTiets;
+    this.dataTable.forEach(item => {
+      item.giaQdTcdtnn = item.giaCucDn;
+      item.giaQdVatTcdtnn = item.giaCucDnVat;
+    })
+    this.buildTreePagCt();
   }
 
   async save(isGuiDuyet?) {
@@ -271,4 +272,37 @@ export class ThemMoiToTrinhPagComponent implements OnInit {
     this.onClose.emit();
   }
 
+  buildTreePagCt() {
+    if (this.dataTable && this.dataTable.length > 0) {
+      this.dataTableView = chain(this.dataTable)
+        .groupBy("maDvi")
+        .map((value, key) => {
+          return {
+            idVirtual: uuidv4(),
+            tenVungMien: value && value[0] && value[0].tenVungMien ? value[0].tenVungMien : null,
+            tenDvi: value && value[0] && value[0].tenDvi ? value[0].tenDvi : null,
+            soDx : value && value[0] && value[0].soDx ? value[0].soDx : null,
+            children: value
+          };
+        }).value();
+    }
+    console.log(this.dataTableView, 123123)
+    this.expandAll()
+  }
+  onExpandChange(id: number, checked: boolean): void {
+    if (checked) {
+      this.expandSet.add(id);
+    } else {
+      this.expandSet.delete(id);
+    }
+  }
+
+
+  expandAll() {
+    if (this.dataTableView && this.dataTableView.length > 0) {
+      this.dataTableView.forEach(s => {
+        this.expandSet.add(s.idVirtual);
+      });
+    }
+  }
 }
