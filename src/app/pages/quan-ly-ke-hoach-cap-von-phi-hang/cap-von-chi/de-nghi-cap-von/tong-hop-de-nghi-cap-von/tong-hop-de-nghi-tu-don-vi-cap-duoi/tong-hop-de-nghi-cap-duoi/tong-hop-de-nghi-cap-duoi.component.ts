@@ -15,7 +15,7 @@ import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { displayNumber, mulNumber, sumNumber } from 'src/app/Utility/func';
 import { AMOUNT, BOX_NUMBER_WIDTH, CAN_CU_GIA, CVNC, DON_VI_TIEN, LOAI_DE_NGHI, Operator, QUATITY, Table, Utils } from 'src/app/Utility/utils';
-import { BaoCao, ItemRequest, Times, TRANG_THAI } from '../../../de-nghi-cap-von.constant';
+import { BaoCao, ItemContract, Times, TRANG_THAI } from '../../../de-nghi-cap-von.constant';
 import * as XLSX from 'xlsx';
 import { BtnStatus } from '../../../de-nghi-cap-von.class';
 
@@ -33,7 +33,7 @@ export class TongHopDeNghiCapDuoiComponent implements OnInit {
   userInfo: any;
   //thong tin chung bao cao
   baoCao: BaoCao = new BaoCao();
-  total: ItemRequest = new ItemRequest();
+  total: ItemContract = new ItemContract();
   //danh muc
   donVis: any[] = [];
   trangThais: any[] = TRANG_THAI;
@@ -54,7 +54,7 @@ export class TongHopDeNghiCapDuoiComponent implements OnInit {
   approveStatus = true;
   copyStatus = true;
   isDataAvailable = false;
-  editCache: { [key: string]: { edit: boolean; data: ItemRequest } } = {};
+  editCache: { [key: string]: { edit: boolean; data: ItemContract } } = {};
   //file
   listFile: File[] = [];
   fileList: NzUploadFile[] = [];
@@ -362,7 +362,7 @@ export class TongHopDeNghiCapDuoiComponent implements OnInit {
       return;
     }
     const baoCaoTemp = JSON.parse(JSON.stringify(this.baoCao));
-    baoCaoTemp.maLoai = '1';
+    baoCaoTemp.maLoai = '2';
 
     if (!baoCaoTemp.fileDinhKems) {
       baoCaoTemp.fileDinhKems = [];
@@ -387,7 +387,7 @@ export class TongHopDeNghiCapDuoiComponent implements OnInit {
     }
 
     // replace nhung ban ghi dc them moi id thanh null
-    baoCaoTemp.dnghiCapvonCtiets.forEach(item => {
+    baoCaoTemp.lstCtiets.forEach(item => {
       if (item.id?.length == 38) {
         item.id = null;
       }
@@ -433,7 +433,7 @@ export class TongHopDeNghiCapDuoiComponent implements OnInit {
   }
 
   updateEditCache(): void {
-    this.baoCao.dnghiCapvonCtiets.forEach(item => {
+    this.baoCao.lstCtiets.forEach(item => {
       this.editCache[item.id] = {
         edit: false,
         data: { ...item }
@@ -447,18 +447,18 @@ export class TongHopDeNghiCapDuoiComponent implements OnInit {
 
   // huy thay doi
   cancelEdit(id: string): void {
-    const index = this.baoCao.dnghiCapvonCtiets.findIndex(item => item.id === id);
+    const index = this.baoCao.lstCtiets.findIndex(item => item.id === id);
     // lay vi tri hang minh sua
     this.editCache[id] = {
-      data: { ...this.baoCao.dnghiCapvonCtiets[index] },
+      data: { ...this.baoCao.lstCtiets[index] },
       edit: false
     };
   }
 
   // luu thay doi
   saveEdit(id: string): void {
-    const index = this.baoCao.dnghiCapvonCtiets.findIndex(item => item.id === id); // lay vi tri hang minh sua
-    Object.assign(this.baoCao.dnghiCapvonCtiets[index], this.editCache[id].data); // set lai data cua lstCtietBcao[index] = this.editCache[id].data
+    const index = this.baoCao.lstCtiets.findIndex(item => item.id === id); // lay vi tri hang minh sua
+    Object.assign(this.baoCao.lstCtiets[index], this.editCache[id].data); // set lai data cua lstCtietBcao[index] = this.editCache[id].data
     this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
     this.getTotal();
   }
@@ -471,8 +471,8 @@ export class TongHopDeNghiCapDuoiComponent implements OnInit {
   }
 
   getTotal() {
-    this.total = new ItemRequest();
-    this.baoCao.dnghiCapvonCtiets.forEach(item => {
+    this.total = new ItemContract();
+    this.baoCao.lstCtiets.forEach(item => {
       this.total.slKeHoach = Operator.sum([this.total.slKeHoach, item.slKeHoach]);
       this.total.slThucHien = Operator.sum([this.total.slThucHien, item.slThucHien]);
       this.total.donGia = Operator.sum([this.total.donGia, item.donGia]);
@@ -511,7 +511,7 @@ export class TongHopDeNghiCapDuoiComponent implements OnInit {
     ]
     const fieldOrder = ['stt', 'tenDvi', 'slKeHoach', 'slThucHien', 'donGia', 'gtriThucHien', 'duToanDaGiao', 'luyKeTongCapUng', 'luyKeTongCapVon', 'luyKeTongCong',
       'tongVonVaDtDaCap', 'vonDnghiCapLanNay']
-    const filterData = this.baoCao.dnghiCapvonCtiets.map(item => {
+    const filterData = this.baoCao.lstCtiets.map(item => {
       const row: any = {};
       fieldOrder.forEach(field => {
         row[field] = item[field]
@@ -580,7 +580,7 @@ export class TongHopDeNghiCapDuoiComponent implements OnInit {
     //     id: null,
     //     fileDinhKems: [],
     //     listIdDeleteFiles: [],
-    //     dnghiCapvonCtiets: lstCtietBcaoTemp,
+    //     lstCtiets: lstCtietBcaoTemp,
     //     congVan: null,
     //     maDvi: this.maDviTao,
     //     maDnghi: maDeNghiNew,

@@ -173,7 +173,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let data of baoCao.dnghiCapvonCtiets; let i = index">
+              <tr *ngFor="let data of baoCao.lstCtiets; let i = index">
                 <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
                   <td nzLeft>
                     {{ i+1 }}
