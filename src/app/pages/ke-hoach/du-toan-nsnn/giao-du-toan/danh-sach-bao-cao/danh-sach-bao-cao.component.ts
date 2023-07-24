@@ -106,13 +106,14 @@ export class DanhSachBaoCaoComponent implements OnInit {
         let requestReport
         if (this.userInfo.CAP_DVI == "3") {
             requestReport = {
-                loaiTimKiem: "3",
-                maPhanGiao: "3",
-                maLoai: "2",
-                maLoaiDan: [3],
+                // loaiTimKiem: "3",
+                // maPhanGiao: "3",
+                // maLoai: "2",
+                // maLoaiDan: [3],
+                maPa: null,
                 maBcao: this.searchFilter.maBaoCao,
-                donViTao: this.searchFilter.donViTao,
-                namPa: this.searchFilter.nam,
+                maDvi: this.searchFilter.donViTao,
+                namBcao: this.searchFilter.nam,
                 ngayTaoDen: this.datePipe.transform(this.searchFilter.denNgay, Utils.FORMAT_DATE_STR),
                 ngayTaoTu: this.datePipe.transform(this.searchFilter.tuNgay, Utils.FORMAT_DATE_STR),
                 paggingReq: {
