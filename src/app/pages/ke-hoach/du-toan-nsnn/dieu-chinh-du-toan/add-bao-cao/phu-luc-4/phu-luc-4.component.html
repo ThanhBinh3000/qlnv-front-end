@@ -33,13 +33,13 @@
                     <nz-table nzBordered class="table__body" [nzScroll]="{x: scrollX}">
                         <thead>
                             <tr>
-                                <th rowspan="2" *ngIf="status.general" class="text-center" nzWidth="50px">
+                                <!-- <th rowspan="2" *ngIf="status.general" class="text-center" nzWidth="50px">
                                     <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
                                         style="margin-right: 0;">
                                     </label>
-                                </th>
-                                <th nzWidth="50px">STT</th>
-                                <th nzWidth="300px">Nội dung</th>
+                                </th> -->
+                                <th nzWidth="50px" nzLeft>STT</th>
+                                <th nzWidth="300px" nzLeft>Nội dung</th>
                                 <th>Kế hoạch vốn năm {{namBcao}}</th>
                                 <th>Dự toán đã giao lũy kế (đến 31/05/{{namBcao}})</th>
                                 <th>Quyết toán, giá trị dự toán hoặc tổng mức đầu tư</th>
@@ -56,8 +56,8 @@
                                 <th *ngIf="status.general|| status.editAppVal"></th>
                             </tr>
                             <tr>
-                                <th>A</th>
-                                <th>B</th>
+                                <th nzLeft>A</th>
+                                <th nzLeft>B</th>
                                 <th>1</th>
                                 <th>2</th>
                                 <th>3</th>
@@ -75,9 +75,9 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td *ngIf="status.general"></td>
-                                <td></td>
-                                <td>Tổng cộng A + B</td>
+                                <!-- <td *ngIf="status.general"></td> -->
+                                <td nzLeft></td>
+                                <td nzLeft>Tổng cộng A + B</td>
                                 <td>{{Op.fmtVal(total.keHoachVon)}}</td>
                                 <td>{{Op.fmtVal(total.dtoanDaGiaoLke)}}</td>
                                 <td>{{Op.fmtVal(total.qtoanGtriDtoan)}}</td>
@@ -93,9 +93,9 @@
                                 <td *ngIf="status.general|| status.editAppVal"></td>
                             </tr>
                             <tr>
-                                <td *ngIf="status.general"></td>
-                                <td></td>
-                                <td>Phát sinh điều chỉnh tăng</td>
+                                <!-- <td *ngIf="status.general"></td> -->
+                                <td nzLeft></td>
+                                <td nzLeft>Phát sinh điều chỉnh tăng</td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
@@ -111,9 +111,9 @@
                                 <td *ngIf="status.general|| status.editAppVal"></td>
                             </tr>
                             <tr>
-                                <td *ngIf="status.general"></td>
-                                <td></td>
-                                <td>Phát sinh điều chỉnh giảm</td>
+                                <!-- <td *ngIf="status.general"></td> -->
+                                <td nzLeft></td>
+                                <td nzLeft>Phát sinh điều chỉnh giảm</td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
@@ -130,14 +130,14 @@
                             </tr>
                             <tr *ngFor="let data of lstCtietBcao; let i = index">
                                 <ng-container *ngIf="!editCache[data.id].edit; else editTemplate ">
-                                    <td *ngIf="status.general" class="text-center">
+                                    <!-- <td *ngIf="status.general" class="text-center">
                                         <label *ngIf="checkDelete(data.stt)" nz-checkbox [nzValue]="data.id"
                                             [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"></label>
-                                    </td>
-                                    <td class="text-center">
+                                    </td> -->
+                                    <td class="text-center" nzLeft>
                                         {{getIndex(data.stt)}}
                                     </td>
-                                    <td>
+                                    <td nzLeft>
                                         {{data.noiDung}}
                                     </td>
                                     <td>{{Op.fmtVal(data.keHoachVon)}}</td>
@@ -166,14 +166,14 @@
                                     </td>
                                 </ng-container>
                                 <ng-template #editTemplate>
-                                    <td *ngIf="status.general" class="text-center">
+                                    <!-- <td *ngIf="status.general" class="text-center">
                                         <label *ngIf="checkDelete(data.stt)" nz-checkbox [nzValue]="data.id"
                                             [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"></label>
-                                    </td>
-                                    <td class="text-center">
+                                    </td> -->
+                                    <td class="text-center" nzLeft>
                                         {{getIndex(editCache[data.id].data.stt)}}
                                     </td>
-                                    <td>
+                                    <td nzLeft>
                                         {{editCache[data.id].data.noiDung}}
                                     </td>
                                     <ng-container *ngIf="!status.viewAppVal else viewAppVal">

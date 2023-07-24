@@ -38,8 +38,9 @@
                     <nz-table nzBordered class="table__body" [nzScroll]="{x: scrollX}">
                         <thead>
                             <tr>
-                                <th rowSpan="2" class="text-center" nzWidth="50px">STT</th>
-                                <th rowSpan="2" nzWidth="300px">Tên tài sản <br> (theo danh mục được phê duyệt tại <br>
+                                <th rowSpan="2" class="text-center" nzWidth="50px" nzLeft>STT</th>
+                                <th rowSpan="2" nzWidth="300px" nzLeft>Tên tài sản <br> (theo danh mục được phê duyệt
+                                    tại <br>
                                     Quyết
                                     định số
                                     149/QĐ-TCDT)
@@ -75,8 +76,8 @@
                                 <th>Cộng</th>
                             </tr>
                             <tr>
-                                <th>A</th>
-                                <th>B</th>
+                                <th nzLeft>A</th>
+                                <th nzLeft>B</th>
                                 <th>C</th>
                                 <th>1</th>
                                 <th>2</th>
@@ -101,8 +102,8 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td></td>
-                                <td>Tổng cộng</td>
+                                <td nzLeft></td>
+                                <td nzLeft>Tổng cộng</td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
@@ -125,8 +126,8 @@
                                 <td *ngIf="status.general || status.editAppVal"></td>
                             </tr>
                             <tr>
-                                <td></td>
-                                <td>Phát sinh điều chỉnh tăng</td>
+                                <td nzLeft></td>
+                                <td nzLeft>Phát sinh điều chỉnh tăng</td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
@@ -149,8 +150,8 @@
                                 <td *ngIf="status.general || status.editAppVal"></td>
                             </tr>
                             <tr>
-                                <td></td>
-                                <td>Phát sinh điều chỉnh tăng</td>
+                                <td nzLeft></td>
+                                <td nzLeft>Phát sinh điều chỉnh tăng</td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
@@ -174,10 +175,10 @@
                             </tr>
                             <tr *ngFor="let data of lstCtietBcao; let i = index">
                                 <ng-container *ngIf="!editCache[data.id].edit; else editTemplate ">
-                                    <td class="text-center">
+                                    <td class="text-center" nzLeft>
                                         {{getChiMuc(data.stt)}}
                                     </td>
-                                    <td>
+                                    <td nzLeft>
                                         {{data.tenTaiSan}}
                                     </td>
                                     <td>{{data.dvTinh}}</td>
@@ -209,10 +210,10 @@
                                     </td>
                                 </ng-container>
                                 <ng-template #editTemplate>
-                                    <td class="text-center">
+                                    <td class="text-center" nzLeft>
                                         {{getChiMuc(data.stt)}}
                                     </td>
-                                    <td>
+                                    <td nzLeft>
                                         {{ editCache[data.id].data.tenTaiSan }}
                                     </td>
                                     <td>
