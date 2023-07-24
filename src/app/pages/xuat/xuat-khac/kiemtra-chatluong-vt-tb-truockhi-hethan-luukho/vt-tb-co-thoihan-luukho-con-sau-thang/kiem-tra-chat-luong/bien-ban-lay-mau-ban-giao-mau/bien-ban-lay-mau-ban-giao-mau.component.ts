@@ -8,8 +8,8 @@ import {NzModalService} from "ng-zorro-antd/modal";
 import {chain} from 'lodash';
 import * as uuid from "uuid";
 import {
-  PhieuXuatKhoService
-} from "../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/PhieuXuatKho.service";
+  PhieuXuatNhapKhoService
+} from "../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/PhieuXuatNhapKho.service";
 import {UserLogin} from "../../../../../../../models/userlogin";
 import {MESSAGE} from "../../../../../../../constants/message";
 import dayjs from "dayjs";

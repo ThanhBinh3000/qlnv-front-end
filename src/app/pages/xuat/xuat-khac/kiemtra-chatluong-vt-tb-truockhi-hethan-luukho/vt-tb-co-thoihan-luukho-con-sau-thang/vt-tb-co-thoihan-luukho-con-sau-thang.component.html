@@ -18,6 +18,9 @@
     <li [nzSelected]="tabSelected==5" *ngIf="userService.isChiCuc()" nz-menu-item (click)="selectTab(5)">
       Xuất kho
     </li>
+    <li [nzSelected]="tabSelected==6" *ngIf="userService.isChiCuc()" nz-menu-item (click)="selectTab(6)">
+      Nhập kho
+    </li>
   </ul>
 </nz-affix>
 <div class="contentBor chi-tieu__body giao-ke-hoach">
@@ -39,6 +42,9 @@
     </ng-container>
     <ng-container *ngIf="tabSelected == 5">
       <app-xuat-kho></app-xuat-kho>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 6">
+      <app-nhap-kho></app-nhap-kho>
     </ng-container>
   </div>
 </div>

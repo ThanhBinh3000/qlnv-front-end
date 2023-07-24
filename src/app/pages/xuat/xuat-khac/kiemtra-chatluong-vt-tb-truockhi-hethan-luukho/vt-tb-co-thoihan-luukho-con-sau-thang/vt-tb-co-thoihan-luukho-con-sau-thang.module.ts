@@ -27,6 +27,10 @@ import { ThongTinBienBanLayMauBanGiaoMauComponent } from './kiem-tra-chat-luong/
 import { ThongTinPhieuKiemNghiemChatLuongComponent } from './kiem-tra-chat-luong/phieu-kiem-nghiem-chat-luong/thong-tin-phieu-kiem-nghiem-chat-luong/thong-tin-phieu-kiem-nghiem-chat-luong.component';
 import { ThongTinBaoCaoKetQuaKiemDinhComponent } from './kiem-tra-chat-luong/bao-cao-ket-qua-kiem-dinh/thong-tin-bao-cao-ket-qua-kiem-dinh/thong-tin-bao-cao-ket-qua-kiem-dinh.component';
 import {CuuTroVienTroModule} from "../../../xuat-cuu-tro-vien-tro/xuat-cuu-tro/cuu-tro-vien-tro.module";
+import { PhieuNhapKhoComponent } from './nhap-kho/phieu-nhap-kho/phieu-nhap-kho.component';
+import { ThongTinPhieuNhapKhoComponent } from './nhap-kho/phieu-nhap-kho/thong-tin-phieu-nhap-kho/thong-tin-phieu-nhap-kho.component';
+import { BienBanKetThucNhapKhoComponent } from './nhap-kho/bien-ban-ket-thuc-nhap-kho/bien-ban-ket-thuc-nhap-kho.component';
+import { ThongTinBienBanKetThucNhapKhoComponent } from './nhap-kho/bien-ban-ket-thuc-nhap-kho/thong-tin-bien-ban-ket-thuc-nhap-kho/thong-tin-bien-ban-ket-thuc-nhap-kho.component';
 
 
 
@@ -48,15 +52,20 @@ import {CuuTroVienTroModule} from "../../../xuat-cuu-tro-vien-tro/xuat-cuu-tro/c
     ThongTinBienBanLayMauBanGiaoMauComponent,
     ThongTinPhieuKiemNghiemChatLuongComponent,
     ThongTinBaoCaoKetQuaKiemDinhComponent,
+    PhieuNhapKhoComponent,
+    ThongTinPhieuNhapKhoComponent,
+    BienBanKetThucNhapKhoComponent,
+    ThongTinBienBanKetThucNhapKhoComponent,
   ],
-  exports: [
-    ToanBoDanhSachVt6ThComponent,
-    TongHopDanhSachVt6thComponent,
-    QuyetDinhXuatGiamVatTuComponent,
-    QuyetDinhGiaoNhiemVuXuatHangComponent,
-    KiemTraChatLuongComponent,
-    XuatKhoComponent
-  ],
+    exports: [
+        ToanBoDanhSachVt6ThComponent,
+        TongHopDanhSachVt6thComponent,
+        QuyetDinhXuatGiamVatTuComponent,
+        QuyetDinhGiaoNhiemVuXuatHangComponent,
+        KiemTraChatLuongComponent,
+        XuatKhoComponent,
+        NhapKhoComponent
+    ],
   imports: [
     CommonModule,
     DirectivesModule,
