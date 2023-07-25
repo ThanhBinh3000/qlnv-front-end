@@ -21,6 +21,7 @@ import {
 import {
   PhieuXuatNhapKhoService
 } from "../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/PhieuXuatNhapKho.service";
+import {now} from "moment/moment";
 
 @Component({
   selector: 'app-thong-tin-phieu-xuat-kho',
@@ -64,7 +65,7 @@ export class ThongTinPhieuXuatKhoComponent extends Base2Component implements OnI
         loai: ['XUAT_MAU', [Validators.required]],
         maQhns: [],
         soPhieu: [],
-        ngayXuatNhap: ['', [Validators.required]],
+        ngayXuatNhap: [dayjs().format("YYYY-MM-DD"), [Validators.required]],
         taiKhoanNo: [],
         taiKhoanCo: [],
         idCanCu: [],

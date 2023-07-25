@@ -600,6 +600,7 @@ export class ThongTinComponent implements OnInit, OnChanges {
           donGia: data.donGiaNhaThau,
           donViTinh: data.dviTinh,
           tenCloaiVthh: data.tenCloaiVthh,
+          cloaiVthh: data.cloaiVthh,
         })
       }
     }

@@ -24,6 +24,7 @@ import {convertTienTobangChu} from "../../../../../../../../shared/commonFunctio
 import {
   BckqKiemDinhMauService
 } from "../../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/BckqKiemDinhMau.service";
+import {now} from "moment/moment";
 
 @Component({
   selector: 'app-thong-tin-phieu-nhap-kho',
@@ -70,7 +71,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
         loai: ['NHAP_MAU', [Validators.required]],
         maQhns: [],
         soPhieu: [],
-        ngayXuatNhap: ['', [Validators.required]],
+        ngayXuatNhap: [dayjs().format("YYYY-MM-DD"), [Validators.required]],
         taiKhoanNo: [],
         taiKhoanCo: [],
         idCanCu: [],
