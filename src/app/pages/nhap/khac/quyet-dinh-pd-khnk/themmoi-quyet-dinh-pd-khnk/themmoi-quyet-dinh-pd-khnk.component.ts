@@ -147,6 +147,7 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
       tenKieuNx: [null],
       tenLoaiHinhNx: [null],
       kieuNx: [null],
+      dvt: [null],
       loaiHinhNx: [null]
     })
   }
@@ -617,6 +618,7 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
     await this.spinner.show()
     if (event) {
       const data = event;
+      console.log(data)
       this.formData.patchValue({
         loaiVthh: data.dxHdr[0].loaiVthh,
         tenLoaiVthh: data.dxHdr[0].tenLoaiVthh,
@@ -628,6 +630,7 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
         maTh: data.maTh,
         idDx: null,
         soTrHdr: null,
+        dvt: data.dvt
       })
       this.danhsachDx = data.dxHdr;
       this.danhsachDxCache = cloneDeep(this.danhsachDx);

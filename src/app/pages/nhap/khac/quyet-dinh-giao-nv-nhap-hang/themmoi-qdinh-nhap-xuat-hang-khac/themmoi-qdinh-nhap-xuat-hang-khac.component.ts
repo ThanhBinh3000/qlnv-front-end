@@ -227,7 +227,7 @@ export class ThemmoiQdinhNhapXuatHangKhacComponent implements OnInit {
             trichYeu: data.trichYeu
           })
           console.log(this.formData)
-          if (data.loaiVthh.startsWith('02')) {
+          // if (data.loaiVthh.startsWith('02')) {
             // let dataUserLogin = data.details.filter(item => item.maDvi == this.userInfo.MA_DVI);
             this.dataTable = data.details;
             // this.dataTable.forEach(x => {
@@ -239,7 +239,7 @@ export class ThemmoiQdinhNhapXuatHangKhacComponent implements OnInit {
             //     y.soLuong = null;
             //   })
             // });
-          } else {
+          // } else {
             this.dataTable = data.details;
             // this.dataTable.forEach(x => {
             //   x.soLuong = null;
@@ -248,7 +248,7 @@ export class ThemmoiQdinhNhapXuatHangKhacComponent implements OnInit {
             //     y.soLuong = null;
             //   })
             // });
-          }
+          // }
           this.convertListDataLuongThuc();
         } else {
           this.notification.error(MESSAGE.ERROR, res.msg)
@@ -280,7 +280,7 @@ export class ThemmoiQdinhNhapXuatHangKhacComponent implements OnInit {
     let listOfData: any;
     let slNhap = 0;
     this.helperService.setIndexArray(this.dataTable);
-    listOfData = this.dataTable.filter(x => x.maCuc == this.userInfo.MA_DVI)
+    listOfData = this.dataTable.filter(x => x.maCuc.includes(this.userInfo.MA_DVI))
     this.listDataGroup = chain(listOfData).groupBy("maCuc").map((value, key) => (
       {
         tenCuc: this.listDonVi[DANH_MUC_LEVEL.CUC].find(i => i.maDvi == key)?.tenDvi,

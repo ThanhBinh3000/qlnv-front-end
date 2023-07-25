@@ -21,6 +21,7 @@ import { Globals } from 'src/app/shared/globals';
 import { STATUS } from "../../../../../../constants/status";
 import { cloneDeep } from "lodash";
 import { filter } from 'rxjs/operators';
+import {ChiTieuKeHoachNamCapTongCucService} from "../../../../../../services/chiTieuKeHoachNamCapTongCuc.service";
 
 
 @Component({
@@ -39,6 +40,8 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
   soLuongDiaDiemList: any;
   dataOnChanges: any[] = [];
   dataChildOnChanges: any[] = [];
+  selected: boolean;
+  dataChiTieu: any
 
   constructor(
     private router: Router,
@@ -47,6 +50,7 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
     public userService: UserService,
     private quyetDinhPheDuyetKeHoachMTTService: QuyetDinhPheDuyetKeHoachMTTService,
     private dieuChinhQuyetDinhPdKhmttService: DieuChinhQuyetDinhPdKhmttService,
+    private chiTieuKeHoachNamCapTongCucService: ChiTieuKeHoachNamCapTongCucService,
     public globals: Globals,
     private danhMucService: DanhMucService,
     private fb: FormBuilder,
@@ -214,6 +218,7 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
         });
         this.danhsachDxMtt = data.hhDcQdPduyetKhmttDxList;
         this.danhsachDxMttCache = cloneDeep(this.danhsachDxMtt)
+        await this.showFirstRow(event, this.danhsachDxMtt[0]);
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
@@ -228,7 +233,7 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
     let body = {
       trangThai: STATUS.BAN_HANH,
       maDvi: null,
-      lastest: 0
+      lastest: null
     };
     let res = await this.quyetDinhPheDuyetKeHoachMTTService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -284,13 +289,16 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
           cloaiVthh: data.cloaiVthh,
           tenCloaiVthh: data.tenCloaiVthh,
           moTaHangHoa: data.mthh,
+          namKh: data.namKh
+
         })
+        await this.getDataChiTieu(data.idSoQdCc);
         this.danhsachDxMtt = data.children;
         this.danhsachDxMttCache = cloneDeep(this.danhsachDxMtt)
         for (let item of this.danhsachDxMtt) {
           item.id = null;
         }
-
+        this.showFirstRow(event, this.danhsachDxMtt[0]);
       }
 
       else {
@@ -299,14 +307,27 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
     }
     this.spinner.hide();
   }
+
+  async showFirstRow($event, dataGoiThau: any) {
+    await this.showDetail($event, dataGoiThau);
+  }
+
   index = 0;
-  async showDetail(event, index) {
+  async showDetail($event, data) {
+    console.log("1")
     await this.spinner.show();
-    event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
-    event.target.parentElement.classList.add('selectedRow');
-    this.dataInput = this.danhsachDxMtt[index];
-    this.dataInputCache = this.danhsachDxMttCache[index];
-    this.index = index;
+    if ($event != undefined && $event.type == 'click') {
+      this.selected = false
+      $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
+      $event.target.parentElement.classList.add('selectedRow')
+    } else {
+      this.selected = true
+    }
+    if (data) {
+      this.dataInput = data;
+      let res = await this.quyetDinhPheDuyetKeHoachMTTService.getDetail(data?.idQdHdr);
+      this.dataInputCache = res.data.children[0]
+    }
     await this.spinner.hide();
   }
   setNewSoLuong($event) {
@@ -441,11 +462,20 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
     });
   }
   public onChangesData(_event) {
+    console.log("change")
     this.dataOnChanges.splice(0, 1, _event);
 
   }
   public onChangesDataChild(_event) {
     this.dataChildOnChanges = _event;
+  }
+
+  async getDataChiTieu(id: any) {
+    let res2 = await this.chiTieuKeHoachNamCapTongCucService.loadThongTinChiTieuKeHoachNam(id);
+    console.log("123", res2)
+    if (res2.msg == MESSAGE.SUCCESS) {
+      this.dataChiTieu = res2.data;
+    }
   }
 
 }

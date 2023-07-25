@@ -220,7 +220,9 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let data of danhsachDxMtt ;let i = index" (click)="showDetail($event,i)">
+                        <tr *ngFor="let data of danhsachDxMtt ;let i = index" (click)="showDetail($event,data)"
+                            [ngClass]="{'bg-selected': i == 0 && this.selected}"
+                        >
                             <td style="width: 35px">{{i + 1}}</td>
                             <td>{{ data.tenDvi }}</td>
                             <td>{{ data.diaChiDvi }}</td>
@@ -249,7 +251,7 @@
                     <nz-card class="mg-t-10 flex-card p-lr16 ">
                         <app-thongtin-dieuchinh [title]="'Nội dung Quyết định điều chỉnh'" [dataInput]="dataInput"
                             [isCache]="false" [isView]="formData.value.trangThai != STATUS.DU_THAO"
-                            (data)="onChangesData($event)" (dataChild)="onChangesDataChild($event)">
+                            (data)="onChangesData($event)" (dataChild)="onChangesDataChild($event)" [dataChiTieu]="this.dataChiTieu">
                         </app-thongtin-dieuchinh>
                     </nz-card>
                 </div>

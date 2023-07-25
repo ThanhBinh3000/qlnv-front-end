@@ -3,7 +3,7 @@
       <li nz-menu-item nzSelected (click)="selectTab(0)">
         Chào giá/Ủy quyền/Mua lẻ
       </li>
-      <li nz-menu-item nzSelected (click)="selectTab(1)">
+      <li nz-menu-item (click)="selectTab(1)">
         Quyết định phê duyệt kết quả chào giá
       </li>
     </ul>
@@ -14,4 +14,3 @@
   <ng-container *ngIf="tabSelected == 1">
     <app-quyetdinh-pheduyet-kqcg></app-quyetdinh-pheduyet-kqcg>
   </ng-container>
-  
