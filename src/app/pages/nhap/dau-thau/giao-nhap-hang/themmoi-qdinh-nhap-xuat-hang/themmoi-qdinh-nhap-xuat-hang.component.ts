@@ -216,13 +216,8 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
             let dataUserLogin = data.details.filter(item => item.maDvi == this.userInfo.MA_DVI);
             this.dataTable = dataUserLogin[0].children;
             this.dataTable.forEach(x => {
-              x.soLuong = null;
-              x.children.forEach(y => {
-                y.maDiemKho = y.maDvi;
-                y.soLuongDiemKho = y.soLuong;
-                y.tenDiemKho = y.tenDvi
-                y.soLuong = null;
-              })
+              x.trangThai = STATUS.CHUA_THUC_HIEN;
+              x.tenTrangThai = "Chưa thực hiện";
             });
           } else {
             this.dataTable = data.details[0].children;
@@ -440,6 +435,9 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
           }
           if (this.userService.isChiCuc()) {
             this.dataTable = data.dtlList.filter(x => x.maDvi == this.userInfo.MA_DVI);
+            this.formData.patchValue({
+                  trangThaiChiCuc: this.dataTable[0].trangThai
+            });
             // this.dataTable.forEach(x => {
             //   let objListDiemKho = x.children.map(x => x.maDiemKho);
             //   if (objListDiemKho.length > 0) {
@@ -612,10 +610,20 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
   }
 
   themDiaDiemNhap(indexTable?) {
-    // if (this.validatorDdiemNhap(indexTable) && this.validateButtonThem('ddiemNhap')) {
-      this.dataTable[indexTable].children = [...this.dataTable[indexTable].children, this.rowItem]
-      this.rowItem = new ThongTinDiaDiemNhap();
-    // }
+    if (this.rowItem.soLuong <= 0) {
+      this.notification.error(MESSAGE.ERROR, "Số lượng phân bổ không được để trống.")
+      return false;
+    }
+    let soLuong = 0;
+    this.dataTable[indexTable].children.forEach(item => {
+      soLuong += item.soLuong
+    })
+    if (soLuong + this.rowItem.soLuong > this.dataTable[indexTable].soLuong ) {
+      this.notification.error(MESSAGE.ERROR, "Số lượng đã vượt quá chỉ tiêu.")
+      return false;
+    }
+    this.dataTable[indexTable].children = [...this.dataTable[indexTable].children, this.rowItem]
+    this.rowItem = new ThongTinDiaDiemNhap();
   }
 
   themChiCuc() {
@@ -680,10 +688,30 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
    })
    this.dataTable[i].children[y].edit = true;
    this.rowItemEdit = cloneDeep(this.dataTable[i].children[y])
-   this.changeDiemKho(true)
+   let diemKho = this.listDiemKho.filter(x => x.key == this.rowItemEdit.maDiemKho);
+   if (diemKho && diemKho.length > 0) {
+     this.listNhaKhoEdit = diemKho[0].children;
+   }
+   let nhaKho = this.listNhaKhoEdit.filter(x => x.key == this.rowItemEdit.maNhaKho);
+   if (nhaKho && nhaKho.length > 0) {
+     this.listNganKhoEdit = nhaKho[0].children;
+   }
+   let nganKho = this.listNganKhoEdit.filter(x => x.key == this.rowItemEdit.maNganKho);
+   if (nganKho && nganKho.length > 0) {
+     this.listNganLoEdit = nganKho[0].children;
+   }
  }
 
   saveEdit (i, y){
+    let soLuong = 0;
+    let data = cloneDeep(this.dataTable[i].children).splice(y, 1)
+    data.forEach(i => {
+      soLuong += i.soLuong;
+    })
+    if (soLuong + this.rowItemEdit.soLuong  > this.dataTable[i].soLuong) {
+      this.notification.error(MESSAGE.ERROR, "Số lượng đã vượt quá chỉ tiêu.")
+      return false;
+    }
     this.dataTable[i].children[y] = cloneDeep(this.rowItemEdit);
     this.dataTable[i].children[y].edit = false;
   }
@@ -753,14 +781,9 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
       this.listNhaKhoEdit = [];
       this.listNganKhoEdit = [];
       this.listNganLoEdit = [];
-      this.rowItemEdit.maNhaKho = null;
-      this.rowItemEdit.maNganKho = null;
-      this.rowItemEdit.maLoKho = null;
       let diemKho = this.listDiemKho.filter(x => x.key == this.rowItemEdit.maDiemKho);
       if (diemKho && diemKho.length > 0) {
         this.listNhaKhoEdit = diemKho[0].children;
-        // this.rowItemEdit.tenDiemKho = diemKho[0].tenDvi;
-        // this.rowItemEdit.soLuongDiemKho = diemKho[0].soLuongDiemKho;
       }
     } else {
       this.listNhaKho = [];

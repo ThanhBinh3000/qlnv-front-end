@@ -153,7 +153,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="3">
+        <div nz-col [nzSpan]="3" *ngIf="!loaiVthh.startsWith('02')">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Tên hàng hóa</nz-form-label>
             <nz-form-control>
@@ -266,13 +266,13 @@
           <td [nzExpand]="true" (nzExpandChange)="onExpandChange(i, $event)"></td>
           <td>{{ item.tenDvi }}</td>
           <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
           <td>{{ item.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
           <td></td>
           <td *ngIf="userService.isChiCuc()">{{ item.tenTrangThai }}</td>
           <td *ngIf="!userService.isChiCuc()"></td>
@@ -322,7 +322,7 @@
           <td *ngIf="!userService.isChiCuc()"></td>
           <td style="text-align: center;"
               *ngIf="userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_PHANBO')">
-            <a (click)="themDiaDiemNhap(i)" [ngClass]="{'isDisabled': !validateButtonThem('ddiemNhap')}">
+            <a (click)="themDiaDiemNhap(i)">
               <i class="fa fa-plus"></i>
             </a>
             <a>
@@ -400,10 +400,10 @@
             <td style="text-align: center;"
                 *ngIf="userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_PHANBO')">
               <a (click)="saveEdit(i, y)">
-                <i class="fa fa-plus"></i>
+                <i class="fa fa-save"></i>
               </a>
               <a>
-                <i (click)="cancelEdit(i, y)" class="icon htvbdh_nhap-lai1"></i>
+                <i (click)="cancelEdit(i, y)" class="fa fa-times do"></i>
               </a>
             </td>
           </ng-template>
