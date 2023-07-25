@@ -6,41 +6,43 @@
     </button>
     <ng-container>
       <button
-        *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_TP
-        || formData.value.trangThai == STATUS.CHO_DUYET_LDC
-        || formData.value.trangThai == STATUS.DA_DUYET_LDC"
+        *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_TP && userService.isAccessPermisson('NHDTQG_NK_KHNK_DUYETTP')
+        || formData.value.trangThai == STATUS.CHO_DUYET_LDC && userService.isAccessPermisson('NHDTQG_NK_KHNK_DUYETLDC')
+        || formData.value.trangThai == STATUS.DA_DUYET_LDC && userService.isAccessPermisson('NHDTQG_NK_KHNK_DUYETCBV')"
         type="button" class="btn btn-sub do" (click)="tuChoi()">
         <i class="icon htvbdh_tcdt_tuchoi"></i>
         <span>Từ chối</span>
       </button>
       <button
-        *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_TP
-        || formData.value.trangThai == STATUS.CHO_DUYET_LDC
-        || formData.value.trangThai == STATUS.DA_DUYET_LDC"
+        *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_TP && userService.isAccessPermisson('NHDTQG_NK_KHNK_DUYETTP')
+        || formData.value.trangThai == STATUS.CHO_DUYET_LDC && userService.isAccessPermisson('NHDTQG_NK_KHNK_DUYETLDC')
+        || formData.value.trangThai == STATUS.DA_DUYET_LDC && userService.isAccessPermisson('NHDTQG_NK_KHNK_DUYETCBV')"
         type="button" class="btn btn-sub xanh-nhat" (click)="guiDuyet()">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span>Duyệt</span>
       </button>
       <button
-        *ngIf="formData.value.trangThai == STATUS.DU_THAO
+        *ngIf="(formData.value.trangThai == STATUS.DU_THAO
         || formData.value.trangThai == STATUS.TU_CHOI_TP
         || formData.value.trangThai == STATUS.TU_CHOI_LDC
-        || formData.value.trangThai == STATUS.TU_CHOI_CBV"
+        || formData.value.trangThai == STATUS.TU_CHOI_CBV)
+        && userService.isAccessPermisson('NHDTQG_NK_KHNK_THEM')"
         type="button" class="btn btn-sub xanh-nhat" (click)="save(true)">
         <i class="icon htvbdh_tcdt_guiduyet"></i>
         <span>Lưu và gửi duyệt</span>
       </button>
       <button
-        *ngIf="formData.value.trangThai == STATUS.DU_THAO"
+        *ngIf="formData.value.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('NHDTQG_NK_KHNK_DUYETCBV')"
         type="button" class="btn btn-sub xanh-nhat" (click)="hoanThanh()">
         <i class="icon htvbdh_tcdt_tuchoi"></i>
         <span>Hoàn thành</span>
       </button>
       <button
-        *ngIf="formData.value.trangThai == STATUS.DU_THAO
+        *ngIf="(formData.value.trangThai == STATUS.DU_THAO
         || formData.value.trangThai == STATUS.TU_CHOI_TP
         || formData.value.trangThai == STATUS.TU_CHOI_LDC
-        || formData.value.trangThai == STATUS.TU_CHOI_CBV"
+        || formData.value.trangThai == STATUS.TU_CHOI_CBV)
+        && userService.isAccessPermisson('NHDTQG_NK_KHNK_THEM')"
         type="button" class="btn btn-main" (click)="save()">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
@@ -115,7 +117,7 @@
         </div>
         <div nz-col [nzSpan]="3">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Số công văn/đề xuất</nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true"> Số công văn/tờ trình</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
               <nz-input-group nzAddOnAfter="{{maTrinh}}">
                 <input nz-input formControlName="soDxuat" [readonly]="isView" />
@@ -125,7 +127,7 @@
         </div>
         <div nz-col [nzSpan]="9">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> Trích yếu</nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true"> Trích yếu</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24">
               <input placeholder="" nz-input formControlName="trichYeu"
                      [readonly]="isView" />
@@ -134,7 +136,7 @@
         </div>
         <div nz-col [nzSpan]="6">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng hóa</nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng DTQG</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-select formControlName="loaiVthh" nzShowSearch nzAllowClear
                          (ngModelChange)="changeHangHoa($event)">

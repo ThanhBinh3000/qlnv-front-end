@@ -141,7 +141,6 @@ export class QdPdHsMoiThauComponent implements OnInit {
     if (this.userService.isCuc()) {
       body.maDvi = this.userInfo.MA_DVI
     }
-    debugger
     let res = await this.quyetDinhPheDuyetHsmtService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
@@ -337,9 +336,9 @@ export class QdPdHsMoiThauComponent implements OnInit {
       this.isDetailVt = true;
     }
     else {
-      if (!this.userService.isAccessPermisson("NHDTQG_PTDT_TCKHLCNT_LT_HSMT_SUA")) {
-        return;
-      }
+      // if (!this.userService.isAccessPermisson("NHDTQG_PTDT_TCKHLCNT_LT_HSMT_SUA")) {
+      //   return;
+      // }
       this.isDetail = true;
     }
     this.selectedId = null;

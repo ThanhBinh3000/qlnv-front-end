@@ -65,17 +65,17 @@
     <div class="group-button">
       <h3>DANH SÁCH TỔNG HỢP ĐỀ XUẤT KẾ HOẠCH NHẬP KHÁC</h3>
       <div class="buttons">
-        <ng-container>
+        <ng-container *ngIf="userService.isAccessPermisson('NHDTQG_NK_THKHNK_XOA')">
           <button type="button" class="btn btn-do" (click)="deleteSelect()">
             <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             <span>Xóa</span>
           </button>
         </ng-container>
-        <button type="button" class="btn btn-sub" (click)="exportData()">
+        <button type="button" class="btn btn-sub" (click)="exportData()" *ngIf="userService.isAccessPermisson('NHDTQG_NK_THKHNK_EXP')">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <ng-container>
+        <ng-container *ngIf="userService.isAccessPermisson('NHDTQG_NK_THKHNK_THEM')">
           <button type="button" class="btn btn-main" (click)="tongHop()">
             <i class="icon htvbdh_dau-cong"></i>
             <span>Tổng hợp đề xuất kế hoạch nhập khác</span>
@@ -191,14 +191,18 @@
           <td>{{ data.noiDungTh}}</td>
           <td>{{ data.tenTrangThai}}</td>
           <td class="text-left">
-            <a
+            <a *ngIf="userService.isAccessPermisson('NHDTQG_NK_THKHNK_XEM')"
               (click)="detail(data, true)">
               <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
-            <a (click)="taoQdinh(data)">
+            <a *ngIf="userService.isAccessPermisson('NHDTQG_NK_QDNH_THEM')
+            && data.trangThai == STATUS.CHUA_TAO_QD"
+              (click)="taoQdinh(data)">
               <i class="icon htvbdh_tcdt_tao-qd"></i>
             </a>
-            <a (click)="xoaItem(data)">
+            <a *ngIf="userService.isAccessPermisson('NHDTQG_NK_THKHNK_XOA')
+            && data.trangThai == STATUS.CHUA_TAO_QD"
+               (click)="xoaItem(data)">
               <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>
