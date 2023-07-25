@@ -147,41 +147,11 @@ export class DanhSachVonBanNopDvctComponent implements OnInit {
 
     //xem chi tiet bao cao
     async viewDetail(data: any) {
-        // const obj = {
-        //     id: data.id,
-        //     tabSelected: '',
-        // }
-        // switch (this.searchFilter.maLoai) {
-        //     case 2:
-        //         obj.tabSelected = 'gnv-cv';
-        //         break;
-        //     case 3:
-        //         obj.tabSelected = 'gnv-cv';
-        //         break;
-        //     case 5:
-        //         if (data.loaiDnghi == Utils.MUA_VTU) {
-        //             obj.tabSelected = 'tt-vattu';
-        //         } else {
-        //             if (data.canCuVeGia == Utils.HD_TRUNG_THAU) {
-        //                 obj.tabSelected = 'tt-hopdong';
-        //             } else {
-        //                 obj.tabSelected = 'tt-dongia';
-        //             }
-        //         }
-        //         break;
-        //     case 6:
-        //         obj.tabSelected = 'tienthua';
-        //         break;
-        //     default:
-        //         break;
-        // }
-        // // if (data.maLoai == 2 && data.ttNhan.trangThai == Utils.TT_BC_1) {
-        // //     await this.checkExistTienThua(data.namDnghi);
-        // //     if (!this.isExistTienThua) {
-        // //         await this.addVonBanGuiDvct(data.namDnghi);
-        // //     }
-        // // }
-        // this.dataChange.emit(obj);
+        const obj = {
+            id: data.id,
+            tabSelected: data.canCuVeGia == Cvmb.DON_GIA ? Tab.VB_DON_GIA : Tab.VB_HOP_DONG,
+        }
+        this.dataChange.emit(obj);
     }
 
     updateAllChecked(): void {

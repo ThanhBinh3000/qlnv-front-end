@@ -13,15 +13,11 @@
                 <i class="icon htvbdh_tcdt_guiduyet"></i>
                 <span>Trình duyệt</span>
             </button>
-            <button *ngIf="status.pass" type="button" class="btn btn-do" (click)="action('nonpass')">
-                <i class="icon htvbdh_tcdt_tuchoi"></i>
-                <span>Từ chối</span>
-            </button>
             <button *ngIf="status.pass" type="button" class="btn btn-sub" (click)="action('pass')">
                 <i class="icon htvbdh_tcdt_pheduyet"></i>
                 <span>Duyệt</span>
             </button>
-            <button *ngIf="status.approve" type="button" class="btn btn-do" (click)="action('nonapprove')">
+            <button *ngIf="status.pass" type="button" class="btn btn-do" (click)="action('nonpass')">
                 <i class="icon htvbdh_tcdt_tuchoi"></i>
                 <span>Từ chối</span>
             </button>
@@ -29,13 +25,17 @@
                 <i class="icon htvbdh_tcdt_pheduyet"></i>
                 <span>Phê duyệt</span>
             </button>
-            <button *ngIf="status.accept" type="button" class="btn btn-do" (click)="action('nonaccept')">
+            <button *ngIf="status.approve" type="button" class="btn btn-do" (click)="action('nonapprove')">
                 <i class="icon htvbdh_tcdt_tuchoi"></i>
                 <span>Từ chối</span>
             </button>
             <button *ngIf="status.accept" type="button" class="btn btn-sub" (click)="action('accept')">
                 <i class="icon htvbdh_tcdt_pheduyet"></i>
-                <span>Phê duyệt</span>
+                <span>Tiếp nhận</span>
+            </button>
+            <button *ngIf="status.accept" type="button" class="btn btn-do" (click)="action('nonaccept')">
+                <i class="icon htvbdh_tcdt_tuchoi"></i>
+                <span>Từ chối</span>
             </button>
         </div>
     </nz-affix>
@@ -66,6 +66,7 @@
                             <th>Ngày trình duyệt</th>
                             <th>Ngày duyệt</th>
                             <th>Ngày phê duyệt</th>
+                            <th>Ngày trả kết quả</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -97,8 +98,11 @@
                             <td>
                                 {{ Utils.fmtDate(baoCao.ngayDuyet) }}
                             </td>
-                            <td>{{ Utils.fmtDate(baoCao.ngayPheDuyet) }}
-
+                            <td>
+                                {{ Utils.fmtDate(baoCao.ngayPheDuyet) }}
+                            </td>
+                            <td>
+                                {{ Utils.fmtDate(baoCao.ngayTraKq) }}
                             </td>
                         </tr>
                     </tbody>
@@ -161,6 +165,9 @@
                             <th rowspan="2" class="text-col">
                                 Ghi chú
                             </th>
+                            <th rowspan="2" *ngIf="!userService.isChiCuc()">
+                                Đợt
+                            </th>
                             <th *ngIf="status.save" rowSpan="2" style="width: 60px;" nzRight></th>
                         </tr>
                         <tr>
@@ -215,7 +222,7 @@
                     <tbody>
                         <tr *ngFor="let data of lstCtiets; let i = index">
                             <td nzLeft>
-                                {{ (i + 1) }}
+                                {{ getIndex(data) }}
                             </td>
                             <td nzLeft>
                                 {{ data.tenDvi }}
@@ -267,8 +274,11 @@
                                 <td>
                                     {{ data.ghiChu }}
                                 </td>
+                                <td *ngIf="!userService.isChiCuc()">
+                                    <a class="save" (click)="viewDetail(data.idCapDuoi)">{{data.dot}}</a>
+                                </td>
                                 <td *ngIf="status.save" nzRight>
-                                    <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
+                                    <i *ngIf="data.level == 0" class="fa fa-pencil" (click)="startEdit(data.id)"></i>
                                 </td>
                             </ng-container>
                             <ng-template #editTemplate>
@@ -276,17 +286,17 @@
                                     <td>
                                         <input class="money-input" currencyMask [options]="Op.amount"
                                             [(ngModel)]="editCache[data.id].data.slKeHoach"
-                                            (ngModelChange)="changeModel(data)" />
+                                            (ngModelChange)="changeTien(data.id)" />
                                     </td>
                                     <td>
                                         <input class="money-input" currencyMask [options]="Op.amount"
                                             [(ngModel)]="editCache[data.id].data.slThucHien"
-                                            (ngModelChange)="changeModel(data)" />
+                                            (ngModelChange)="changeTien(data.id)" />
                                     </td>
                                     <td>
                                         <input class="money-input" currencyMask [options]="Op.amount"
                                             [(ngModel)]="editCache[data.id].data.donGia"
-                                            (ngModelChange)="changeModel(data)" />
+                                            (ngModelChange)="changeTien(data.id)" />
                                     </td>
                                 </ng-container>
                                 <ng-template #capTren>
@@ -322,11 +332,13 @@
                                 </td>
                                 <td>
                                     <input class="money-input" currencyMask [options]="Op.amount"
-                                        [(ngModel)]="editCache[data.id].data.ung" (ngModelChange)="changeModel(data)" />
+                                        [(ngModel)]="editCache[data.id].data.ung"
+                                        (ngModelChange)="changeVon(data.id)" />
                                 </td>
                                 <td>
                                     <input class="money-input" currencyMask [options]="Op.amount"
-                                        [(ngModel)]="editCache[data.id].data.cap" (ngModelChange)="changeModel(data)" />
+                                        [(ngModel)]="editCache[data.id].data.cap"
+                                        (ngModelChange)="changeVon(data.id)" />
                                 </td>
                                 <td>
                                     {{ Op.fmtVal(editCache[data.id].data.cong) }}
@@ -339,6 +351,9 @@
                                 </td>
                                 <td>
                                     <input nz-input [(ngModel)]="editCache[data.id].data.ghiChu" />
+                                </td>
+                                <td *ngIf="!userService.isChiCuc()">
+                                    <a class="save" (click)="viewDetail(data.idCapDuoi)">{{data.dot}}</a>
                                 </td>
                                 <td *ngIf="status.save" nzRight>
                                     <a (click)="saveEdit(data.id)" class="save">Lưu</a>

@@ -7,14 +7,18 @@ import { DanhSachVonBanNopDvctComponent } from './danh-sach-von-ban-nop-dvct/dan
 import { DialogTaoMoiComponent } from './dialog-tao-moi/dialog-tao-moi.component';
 import { VonBanTheoHopDongTrungThauComponent } from './von-ban-theo-hop-dong-trung-thau/von-ban-theo-hop-dong-trung-thau.component';
 import { VonBanTheoDonGiaMuaComponent } from './von-ban-theo-don-gia-mua/von-ban-theo-don-gia-mua.component';
+import { DanhSachVonBanTuDvcdComponent } from './danh-sach-von-ban-tu-dvcd/danh-sach-von-ban-tu-dvcd.component';
+import { DialogTongHopComponent } from './dialog-tong-hop/dialog-tong-hop.component';
 
 @NgModule({
     declarations: [
         VonBanComponent,
         DanhSachVonBanNopDvctComponent,
         DialogTaoMoiComponent,
+        DialogTongHopComponent,
         VonBanTheoHopDongTrungThauComponent,
         VonBanTheoDonGiaMuaComponent,
+        DanhSachVonBanTuDvcdComponent,
     ],
     imports: [
         CommonModule,

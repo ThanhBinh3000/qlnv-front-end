@@ -12,17 +12,21 @@
                     [(ngModel)]="searchFilter.namDnghi"></nz-input-number>
             </div>
             <div nz-col nzSpan="3">
+                <label class="search__label">Đợt</label>
+                <nz-input-number [nzSize]="'small'" [nzMin]="1" [(ngModel)]="searchFilter.dot"></nz-input-number>
+            </div>
+            <div nz-col nzSpan="3">
                 <label class="search__label">Loại</label>
                 <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại" [(ngModel)]="searchFilter.loaiDnghi">
-                    <nz-option *ngFor="let item of Const.LOAI_DE_NGHI" [nzValue]="item.id" [nzLabel]="item.tenDm">
+                    <nz-option *ngFor="let item of Cvmb.LOAI_DE_NGHI" [nzValue]="item.id" [nzLabel]="item.tenDm">
                     </nz-option>
                 </nz-select>
             </div>
-            <div *ngIf="searchFilter.maLoai == 5" nz-col nzSpan="3">
+            <div nz-col nzSpan="3">
                 <label class="search__label">Căn cứ về giá</label>
                 <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn căn cứ giá"
                     [(ngModel)]="searchFilter.canCuVeGia">
-                    <nz-option *ngFor="let item of Const.CAN_CU_GIA" [nzValue]="item.id" [nzLabel]="item.tenDm">
+                    <nz-option *ngFor="let item of Cvmb.CAN_CU_GIA" [nzValue]="item.id" [nzLabel]="item.tenDm">
                     </nz-option>
                 </nz-select>
             </div>
@@ -30,7 +34,7 @@
                 <label class="search__label">Trạng thái</label>
                 <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái"
                     [(ngModel)]="searchFilter.trangThai">
-                    <nz-option *ngFor="let item of trangThais" [nzValue]="item.id" [nzLabel]="item.tenDm">
+                    <nz-option *ngFor="let item of Status.TRANG_THAI_DVCT" [nzValue]="item.id" [nzLabel]="item.tenDm">
                     </nz-option>
                 </nz-select>
             </div>
@@ -43,6 +47,16 @@
                 <label class="search__label">Đến ngày</label>
                 <nz-date-picker class="search__input" [(ngModel)]="searchFilter.ngayTaoDen" nzFormat="dd/MM/yyyy">
                 </nz-date-picker>
+            </div>
+        </div>
+        <div nz-row [nzGutter]="24">
+            <div nz-col nzSpan="6">
+                <label class="search__label">Đơn vị</label>
+                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDvi"
+                    (ngModelChange)="changeModel()">
+                    <nz-option *ngFor="let item of donVis" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
+                    </nz-option>
+                </nz-select>
             </div>
         </div>
         <div nz-col class="cangiua group-button-search">
@@ -59,17 +73,11 @@
         </div>
     </nz-card>
     <div class="group-button">
-        <h3 class="text-uppercase">{{ title }}</h3>
-        <div class="buttons">
-            <button *ngIf="statusDelete" type="button" class="btn btn-do" (click)="deleteReport('')">
-                <i class="fa fa-trash-o do"></i>
-                <span>Xóa</span>
-            </button>
-            <button *ngIf="statusNewReport" type="button" class="btn btn-main" (click)="addNewReport()">
-                <i class="icon htvbdh_tcdt_tao-qd"></i>
-                <span>Thêm</span>
-            </button>
-        </div>
+        <h3 class="text-uppercase">Vốn bán từ đơn vị cấp dưới</h3>
+        <button *ngIf="synthStatus" type="button" class="btn btn-main" (click)="addNewReport()">
+            <i class="icon htvbdh_tcdt_tao-qd"></i>
+            <span>Tổng hợp</span>
+        </button>
     </div>
 
     <nz-card class="mt-2px flex-card data-table card-border-content table-card">
@@ -77,34 +85,28 @@
             [nzShowPagination]="false" nzBordered>
             <thead>
                 <tr>
-                    <th *ngIf="statusDelete" width="45px">
-                        <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"></label>
-                    </th>
                     <th width="60px" class="text-center">STT</th>
-                    <th *ngIf="searchFilter.loaiTimKiem == '1'">Đơn vị</th>
+                    <th>Đơn vị</th>
                     <th>Mã cấp ứng</th>
                     <th>Năm</th>
                     <th>Loại</th>
-                    <th *ngIf="searchFilter.maLoai == 5">Căn cứ về giá</th>
-                    <th>Ngày tạo</th>
+                    <th>Căn cứ về giá</th>
+                    <th>Quyết định</th>
+                    <th>Đợt</th>
                     <th>Ngày trình duyệt</th>
-                    <th>Ngày duyệt</th>
-                    <th>Ngày phê duyệt</th>
+                    <th>Ngày trả kết quả</th>
                     <th>Trạng thái</th>
-                    <th width="90px">Hành động</th>
+                    <th>Trạng thái tổng hợp</th>
+                    <th>Hành động</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let data of basicTable.data; let i = index">
-                    <td width="45px" *ngIf="statusDelete">
-                        <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
-                            [nzDisabled]="!data.isDelete"></label>
-                    </td>
                     <td class="text-center">
                         {{ (i + 1) + (searchFilter.paggingReq.page - 1)*searchFilter.paggingReq.limit }}
                     </td>
-                    <td *ngIf="searchFilter.loaiTimKiem == '1'">
-                        {{ data.tenDvi }}
+                    <td>
+                        {{ getUnitName(data.maDvi) }}
                     </td>
                     <td>
                         {{ data.maCapUng}}
@@ -113,41 +115,36 @@
                         {{ data.namDnghi }}
                     </td>
                     <td>
-                        {{ Const.suggestionName(data.loaiDnghi)}}
+                        {{ Cvmb.suggestionName(data.loaiDnghi)}}
                     </td>
                     <td>
-                        {{ Const.priceBasisName(data.canCuVeGia) }}
+                        {{ Cvmb.priceBasisName(data.canCuVeGia) }}
                     </td>
                     <td>
-                        {{ Utils.fmtDate(data.ngayTao) }}
+                        {{ data.quyetDinh }}
                     </td>
                     <td>
-                        {{ Utils.fmtDate(data.ngayTrinh) }}
-                    </td>
-                    <td>
-                        {{ Utils.fmtDate(data.ngayDuyet) }}
+                        {{ data.dot }}
                     </td>
                     <td>
                         {{ Utils.fmtDate(data.ngayPheDuyet) }}
                     </td>
                     <td>
-                        {{Status.reportStatusName(data.trangThai, isParent)}}
+                        {{ Utils.fmtDate(data.traKq) }}
+                    </td>
+                    <td>
+                        {{Status.reportStatusName(data.trangThai, true)}}
                         <ng-container *ngIf="Status.check('reject', data.trangThai)">
                             <br>Lý do: {{data.lyDoTuChoi}}
                         </ng-container>
                     </td>
+                    <td>
+                        {{ Status.synthStatusName(data.trangThaiThop) }}
+                    </td>
                     <td class="text-left">
-                        <!-- <a (click)="viewDetail(data)">
-                            <ng-container *ngIf="data.isEdit; else view">
-                                <i class="fa fa-pencil"></i>
-                            </ng-container>
-                            <ng-template #view>
-                                <i class="fa fa-eye"></i>
-                            </ng-template>
+                        <a (click)="viewDetail(data)">
+                            <i class="fa fa-eye"></i>
                         </a>
-                        <a *ngIf="data.isDelete" (click)="deleteReport(data.id)">
-                            <i class="fa fa-trash-o do"></i>
-                        </a> -->
                     </td>
                 </tr>
             </tbody>

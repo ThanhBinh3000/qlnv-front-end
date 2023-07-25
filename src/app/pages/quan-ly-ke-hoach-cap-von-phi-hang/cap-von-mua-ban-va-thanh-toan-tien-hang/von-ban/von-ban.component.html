@@ -14,6 +14,10 @@
             <app-danh-sach-von-ban-nop-dvct [dataInfo]="data" (dataChange)="changeTab($event)">
             </app-danh-sach-von-ban-nop-dvct>
         </ng-container>
+        <ng-container *ngIf="tabSelected == Tab.DS_VON_BAN_TU_DVCD">
+            <app-danh-sach-von-ban-tu-dvcd [dataInfo]="data" (dataChange)="changeTab($event)">
+            </app-danh-sach-von-ban-tu-dvcd>
+        </ng-container>
         <ng-container *ngIf="tabSelected == Tab.VB_HOP_DONG">
             <app-von-ban-theo-hop-dong-trung-thau [dataInfo]="data" (dataChange)="changeTab($event)">
             </app-von-ban-theo-hop-dong-trung-thau>
