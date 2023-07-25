@@ -156,6 +156,9 @@ export class DialogThemMoiBangKeThuMuaLeComponent extends Base2Component impleme
       thanhTien:
         +this.formData.get('soLuongMtt').value *
         +this.formData.get('donGia').value,
+      soLuongConLai:
+        +this.formData.get('soLuongQd').value -
+        +this.formData.get('soLuongMtt').value
     });
   }
 
@@ -226,6 +229,7 @@ export class DialogThemMoiBangKeThuMuaLeComponent extends Base2Component impleme
     await this.spinner.show();
     let dataRes = await this.quyetDinhGiaoNvNhapHangService.getDetail(id)
     const data = dataRes.data;
+    console.log(data)
     this.formData.patchValue({
       soQdGiaoNvNh: data.soQd,
       idQdGiaoNvNh: data.id,
@@ -236,7 +240,7 @@ export class DialogThemMoiBangKeThuMuaLeComponent extends Base2Component impleme
       tenLoaiVthh: data.tenLoaiVthh,
       tenCloaiVthh: data.tenCloaiVthh,
       moTaHangHoa: data.moTaHangHoa,
-      soLuongQd: data.soLuong,
+      soLuongQd: data.hhQdGiaoNvNhangDtlList?.find(x => x.maDvi == this.userInfo.MA_DVI).soLuong,
     });
     await this.spinner.hide();
   }

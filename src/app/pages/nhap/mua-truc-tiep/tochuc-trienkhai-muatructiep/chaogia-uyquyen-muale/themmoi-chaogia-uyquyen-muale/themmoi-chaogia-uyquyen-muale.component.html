@@ -5,7 +5,7 @@
             <span>Quay lại</span>
         </button>
         <button
-            *ngIf="radioValue == '01' && (this.userService.isCuc() && formData.value.trangThai == STATUS.DANG_CAP_NHAT)"
+            *ngIf="radioValue == '01' && (this.userService.isCuc() && formData.value.trangThai != STATUS.HOAN_THANH_CAP_NHAT)"
             type="button" class="btn btn-sub xanh-nhat" (click)="hoanThanhCapNhat()">
             <i class="icon htvbdh_tcdt_guiduyet"></i>
             <span>Hoàn thành cập nhập</span>
@@ -39,7 +39,7 @@
                                 <nz-form-label [nzNoColon]="true">
                                 </nz-form-label>
                                 <nz-form-control>
-                                    <nz-radio-group [(ngModel)]="radioValue" nzName="radiogroup"
+                                    <nz-radio-group [nzDisabled]="isDisable()" [(ngModel)]="radioValue" nzName="radiogroup"
                                         [ngModelOptions]="{standalone: true}">
                                         <label nz-radio nzValue="01"> Chào giá </label>
                                         <label nz-radio nzValue="02"> Ủy quyền </label>
@@ -182,7 +182,7 @@
             <tr [ngClass]="{'bg-selected': i == 0 && this.selected}" (click)="showDetail($event,item)">
               <td [nzExpand]="true"></td>
               <td colspan="2">{{item.tenDvi}}</td>
-              <td class="text-bold">{{ calcTong() | number : '1.0-1' : 'vi_VN' }}</td>
+              <td class="text-bold">{{ item.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
               <td></td>
               <td></td>
               <td></td>

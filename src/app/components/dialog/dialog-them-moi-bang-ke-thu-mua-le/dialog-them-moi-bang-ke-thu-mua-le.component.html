@@ -104,7 +104,7 @@
                 <nz-form-item>
                     <nz-form-label [nzNoColon]="true"> Số lượng mua trực tiếp(kg)</nz-form-label>
                     <nz-form-control [nzErrorTip]="error">
-                        <nz-input-number class="text-right" nz-input formControlName="soLuongMtt"
+                        <nz-input-number class="text-right" nz-input (change)="calculatorThanhTien()" formControlName="soLuongMtt"
                             (input)="calculatorThanhTien()" [nzMin]="1" [nzStep]="1" [nzSize]="'small'"
                             [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
                         </nz-input-number>

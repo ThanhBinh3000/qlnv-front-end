@@ -215,10 +215,11 @@
       <thead>
       <tr>
         <th style="width: 2%;">STT</th>
+        <th>Cục DTNN KV</th>
         <th>Chi cục DTNN KV</th>
         <th>Điểm kho</th>
         <th>Ngăn/Lô kho</th>
-        <th>Chủng loại hàng hóa</th>
+        <th>Chủng loại hàng hóa DTQG</th>
         <th>Tồn kho</th>
         <th>SL nhập</th>
         <th>Số BB nhập đầy kho/kết thúc nhập kho</th>
@@ -228,9 +229,22 @@
       <tbody>
       <ng-container>
         <ng-container *ngFor="let item of listDataGroup , let i = index">
+          <tr>
+            <td [nzExpand]="true" (nzExpandChange)="onExpandChange(i, $event)"></td>
+            <td>{{item.tenCuc}}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
           <ng-container *ngFor="let chiCuc of item.children, let y = index">
             <tr>
-              <td [nzExpand]="true" (nzExpandChange)="onExpandChange(i, $event)"></td>
+              <td></td>
+              <td></td>
               <td>{{chiCuc.tenChiCuc}}</td>
               <td></td>
               <td></td>
@@ -244,6 +258,7 @@
               <tr>
                 <td></td>
                 <td></td>
+                <td></td>
                 <td>{{diemKho.tenDiemKho}}</td>
                 <td></td>
                 <td></td>
@@ -254,6 +269,7 @@
               </tr>
               <ng-container *ngFor="let nganLo of diemKho.children, let z = index">
                 <tr>
+                  <td></td>
                   <td></td>
                   <td></td>
                   <td></td>
