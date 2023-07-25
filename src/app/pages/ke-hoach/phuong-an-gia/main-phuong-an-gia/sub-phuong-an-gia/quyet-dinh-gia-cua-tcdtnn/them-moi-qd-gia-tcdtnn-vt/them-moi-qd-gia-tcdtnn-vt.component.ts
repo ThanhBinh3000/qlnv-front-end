@@ -264,16 +264,16 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
   }
 
   async loadToTrinhDeXuat() {
-    this.dsToTrinhDeXuat = [];
-    let body = {
-      "type": this.type,
-      "pagType": this.pagType,
-      "dsTrangThai": [STATUS.DA_DUYET_LDV]
-    }
-    let res = await this.tongHopPhuongAnGiaService.loadToTrinhDeXuat(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.dsToTrinhDeXuat = res.data;
-    }
+    // this.dsToTrinhDeXuat = [];
+    // let body = {
+    //   "type": this.type,
+    //   "pagType": this.pagType,
+    //   "dsTrangThai": [STATUS.DA_DUYET_LDV]
+    // }
+    // let res = await this.tongHopPhuongAnGiaService.loadToTrinhDeXuat(body);
+    // if (res.msg == MESSAGE.SUCCESS) {
+    //   this.dsToTrinhDeXuat = res.data;
+    // }
   }
 
   async onChangeSoToTrinh(event) {
