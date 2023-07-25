@@ -92,7 +92,8 @@
                           <nz-form-label nzRequired [nzNoColon]="true"> Số tài khoản</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
-                              <input nz-input formControlName="taiKhoanToChuc" [readonly]="isDisabled() || isDisable()"/>
+                              <input nz-input formControlName="taiKhoanToChuc"
+                                     [readonly]="isDisabled() || isDisable()"/>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -254,7 +255,8 @@
                       <div nz-col [nzSpan]="3">
                         <nz-form-item>
                           <nz-form-label nzRequired [nzNoColon]="true">% Khoảng tiền đặt trước</nz-form-label>
-                          <nz-input-number [nzDisabled]="isDisable()" formControlName="khoanTienDatTruoc" (ngModelChange)="calculatorTable()" [nzMin]="1"
+                          <nz-input-number [nzDisabled]="isDisable()" formControlName="khoanTienDatTruoc"
+                                           (ngModelChange)="calculatorTable()" [nzMin]="1"
                                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
                                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
                           </nz-input-number>
@@ -463,46 +465,52 @@
                 <nz-collapse nzAccordion>
                   <nz-collapse-panel [nzHeader]="'THÔNG TIN KHÁC'" [nzActive]="true">
                     <div nz-row [nzGutter]="24">
-                        <div nz-col [nzSpan]="4">
-                          <nz-form-item>
-                            <nz-form-label nzRequired [nzNoColon]="true"> THời hạn thanh toán </nz-form-label>
-                            <nz-form-control [nzErrorTip]="error">
-                              <nz-date-picker formControlName="thoiHanThanhToan" nzFormat="dd/MM/yyyy" [nzDisabled]="isDisabled()">
-                              </nz-date-picker>
-                            </nz-form-control>
-                          </nz-form-item>
-                        </div>
-                        <div nz-col [nzSpan]="8">
-                          <nz-form-item>
-                            <nz-form-label nzRequired [nzNoColon]="true"> Phương thức thanh toán </nz-form-label>
-                            <nz-form-control [nzErrorTip]="error">
-                              <nz-select formControlName="pthucThanhtoanKhac" [nzDisabled]="isDisable()">
-                                <nz-option *ngFor="let p of listPhuongThucThanhToan" [nzValue]="p.ma" [nzLabel]="p.giaTri">
-                                </nz-option>
-                              </nz-select>
-                            </nz-form-control>
-                          </nz-form-item>
-                        </div>
-                        <div nz-col [nzSpan]="4">
-                          <nz-form-item>
-                            <nz-form-label nzRequired [nzNoColon]="true"> Thời hạn giao nhận hàng </nz-form-label>
-                            <nz-form-control [nzErrorTip]="error">
-                              <nz-date-picker formControlName="thoiHanGiaoNhan" nzFormat="dd/MM/yyyy" [nzDisabled]="isDisabled()">
-                              </nz-date-picker>
-                            </nz-form-control>
-                          </nz-form-item>
-                        </div>
-                        <div nz-col [nzSpan]="8">
-                          <nz-form-item>
-                            <nz-form-label nzRequired [nzNoColon]="true"> Phương thức giao nhận </nz-form-label>
-                            <nz-form-control [nzErrorTip]="error">
-                              <nz-select formControlName="pthucGnhan" [nzDisabled]="isDisable()">
-                                <nz-option *ngFor="let p of listPhuongThucGiaoNhanBDG" [nzValue]="p.ma" [nzLabel]="p.giaTri">
-                                </nz-option>
-                              </nz-select>
-                            </nz-form-control>
-                          </nz-form-item>
-                        </div>
+                      <div nz-col [nzSpan]="4">
+                        <nz-form-item>
+                          <nz-form-label nzRequired [nzNoColon]="true"> Thời hạn thanh toán</nz-form-label>
+                          <nz-form-control nz-col [nzErrorTip]="error">
+                            <nz-input-number formControlName="thoiHanThanhToan" nz-input [nzMin]="0"
+                                             [nzMax]="globals.prop.MAX_INPUT"
+                                             [nzStep]="1" [nzSize]="'small'" [nzDisabled]="isDisable()">
+                            </nz-input-number>
+                          </nz-form-control>
+                        </nz-form-item>
+                      </div>
+                      <div nz-col [nzSpan]="8">
+                        <nz-form-item>
+                          <nz-form-label nzRequired [nzNoColon]="true"> Phương thức thanh toán</nz-form-label>
+                          <nz-form-control [nzErrorTip]="error">
+                            <nz-select formControlName="pthucThanhtoanKhac" [nzDisabled]="isDisable()">
+                              <nz-option *ngFor="let p of listPhuongThucThanhToan" [nzValue]="p.ma"
+                                         [nzLabel]="p.giaTri">
+                              </nz-option>
+                            </nz-select>
+                          </nz-form-control>
+                        </nz-form-item>
+                      </div>
+                      <div nz-col [nzSpan]="4">
+                        <nz-form-item>
+                          <nz-form-label nzRequired [nzNoColon]="true"> Thời hạn giao nhận hàng</nz-form-label>
+                          <nz-form-control nz-col [nzErrorTip]="error">
+                            <nz-input-number formControlName="thoiHanGiaoNhan" nz-input [nzMin]="0"
+                                             [nzMax]="globals.prop.MAX_INPUT"
+                                             [nzStep]="1" [nzSize]="'small'" [nzDisabled]="isDisable()">
+                            </nz-input-number>
+                          </nz-form-control>
+                        </nz-form-item>
+                      </div>
+                      <div nz-col [nzSpan]="8">
+                        <nz-form-item>
+                          <nz-form-label nzRequired [nzNoColon]="true"> Phương thức giao nhận</nz-form-label>
+                          <nz-form-control [nzErrorTip]="error">
+                            <nz-select formControlName="pthucGnhan" [nzDisabled]="isDisable()">
+                              <nz-option *ngFor="let p of listPhuongThucGiaoNhanBDG" [nzValue]="p.ma"
+                                         [nzLabel]="p.giaTri">
+                              </nz-option>
+                            </nz-select>
+                          </nz-form-control>
+                        </nz-form-item>
+                      </div>
                     </div>
                   </nz-collapse-panel>
                 </nz-collapse>
@@ -806,7 +814,9 @@
                             <td></td>
                             <td>{{lv1.tenDiemKho}} </td>
                             <td>{{ (lv1.tenLoKho ? lv1.tenLoKho + ' - ' : '') + lv1.tenNganKho }}</td>
-                            <td><input  nz-input [(ngModel)]="lv1.maDviTsan"/></td>
+                            <td>
+                              <input nz-input [(ngModel)]="lv1.maDviTsan" [readonly]="isDisabled() || isDisable()"/>
+                            </td>
                             <td>{{lv1.slDauGia | number : '1.0-1' : 'vi_VN'}} </td>
                             <td>{{lv1.donViTinh}} </td>
                             <td>{{lv1.giaTlKhongVat | number : '1.0-1'
@@ -833,7 +843,7 @@
                               <nz-select [nzDisabled]="isDisabled() || isDisable() || formData.value.ketQua == 0"
                                          [(ngModel)]="lv1.toChucCaNhan" (ngModelChange)="changeNTG(i, i1)">
                                 <nz-option *ngFor="let data of findTableName('NTG')?.dataChild"
-                                           [nzValue]="data.hoVaTen" [nzLabel]="data.hoVaTen" ></nz-option>
+                                           [nzValue]="data.hoVaTen" [nzLabel]="data.hoVaTen"></nz-option>
                               </nz-select>
                             </td>
                           </tr>
@@ -882,7 +892,7 @@
                             <td>{{lv1.tenDiemKho}} </td>
                             <td>{{ (lv1.tenLoKho ? lv1.tenLoKho + ' - ' : '') + lv1.tenNganKho }}</td>
                             <td>{{lv1.tenCloaiVthh}}</td>
-                            <td><input  nz-input [(ngModel)]="lv1.maDviTsan"/></td>
+                            <td><input nz-input [(ngModel)]="lv1.maDviTsan"/></td>
                             <td>{{lv1.slDauGia | number : '1.0-1' : 'vi_VN'}} </td>
                             <td>{{lv1.donViTinh}} </td>
                             <td>{{lv1.giaTlKhongVat | number : '1.0-1'
