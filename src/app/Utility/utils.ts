@@ -231,6 +231,23 @@ export class Status {
 	static statusDvctName(id: string) {
 		return Status.TRANG_THAI_PD_DVCT.find(e => e.id == id)?.tenDm;
 	}
+
+	static readonly DA_TONG_HOP = '1';
+	static readonly CHUA_TONG_HOP = '0';
+	static readonly TRANG_THAI_TONG_HOP = [
+		{
+			id: Status.CHUA_TONG_HOP,
+			tenDm: 'Chưa được tổng hợp',
+		},
+		{
+			id: Status.DA_TONG_HOP,
+			tenDm: 'Đã được tổng hợp',
+		},
+	]
+
+	static synthStatusName(id: string) {
+		return Status.TRANG_THAI_TONG_HOP.find(e => e.id == id)?.tenDm;
+	}
 }
 
 export class Table {

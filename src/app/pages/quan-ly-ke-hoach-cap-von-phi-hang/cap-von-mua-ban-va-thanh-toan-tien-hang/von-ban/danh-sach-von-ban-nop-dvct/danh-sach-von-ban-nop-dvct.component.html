@@ -85,6 +85,8 @@
                     <th>Năm</th>
                     <th>Loại</th>
                     <th>Căn cứ về giá</th>
+                    <th>Quyết định</th>
+                    <th>Đợt</th>
                     <th>Ngày tạo</th>
                     <th>Ngày trình duyệt</th>
                     <th>Ngày duyệt</th>
@@ -116,6 +118,12 @@
                         {{ Cvmb.priceBasisName(data.canCuVeGia) }}
                     </td>
                     <td>
+                        {{ data.quyetDinh }}
+                    </td>
+                    <td>
+                        {{ data.dot }}
+                    </td>
+                    <td>
                         {{ Utils.fmtDate(data.ngayTao) }}
                     </td>
                     <td>
@@ -127,9 +135,9 @@
                     <td>
                         {{ Utils.fmtDate(data.ngayPheDuyet) }}
                     </td>
-                    <th>
+                    <td>
                         {{ Utils.fmtDate(data.ngayTraKq) }}
-                    </th>
+                    </td>
                     <td>
                         {{Status.reportStatusName(data.trangThai)}}
                         <ng-container *ngIf="Status.check('reject', data.trangThai)">
@@ -137,7 +145,7 @@
                         </ng-container>
                     </td>
                     <td class="text-left">
-                        <!-- <a (click)="viewDetail(data)">
+                        <a (click)="viewDetail(data)">
                             <ng-container *ngIf="data.isEdit; else view">
                                 <i class="fa fa-pencil"></i>
                             </ng-container>
@@ -147,7 +155,7 @@
                         </a>
                         <a *ngIf="data.isDelete" (click)="deleteReport(data.id)">
                             <i class="fa fa-trash-o do"></i>
-                        </a> -->
+                        </a>
                     </td>
                 </tr>
             </tbody>

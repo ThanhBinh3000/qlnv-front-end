@@ -155,11 +155,12 @@ export class VonBanTheoHopDongTrungThauComponent implements OnInit {
     //check role cho các nut trinh duyet
     getStatusButton() {
         const isChild = this.baoCao.maDvi == this.userInfo?.MA_DVI;
+        this.isParent = this.baoCao.maDviCha == this.userInfo?.MA_DVI;
         this.status.save = Status.check('saveWHist', this.baoCao.trangThai) && isChild;
         this.status.submit = Status.check('submit', this.baoCao.trangThai) && isChild && !(!this.baoCao.id);
         this.status.pass = Status.check('pass', this.baoCao.trangThai) && isChild;
         this.status.approve = Status.check('approve', this.baoCao.trangThai) && isChild;
-        this.status.accept = Status.check('accept', this.baoCao.trangThai) && isChild;
+        this.status.accept = Status.check('accept', this.baoCao.trangThai) && this.isParent;
 
         this.status.save = this.status.save && this.userService.isAccessPermisson(Roles.CVMB.EDIT_VB);
         this.status.submit = this.status.submit && this.userService.isAccessPermisson(Roles.CVMB.SUBMIT_VB);

@@ -13,15 +13,11 @@
                 <i class="icon htvbdh_tcdt_guiduyet"></i>
                 <span>Trình duyệt</span>
             </button>
-            <button *ngIf="status.pass" type="button" class="btn btn-do" (click)="action('nonpass')">
-                <i class="icon htvbdh_tcdt_tuchoi"></i>
-                <span>Từ chối</span>
-            </button>
             <button *ngIf="status.pass" type="button" class="btn btn-sub" (click)="action('pass')">
                 <i class="icon htvbdh_tcdt_pheduyet"></i>
                 <span>Duyệt</span>
             </button>
-            <button *ngIf="status.approve" type="button" class="btn btn-do" (click)="action('nonapprove')">
+            <button *ngIf="status.pass" type="button" class="btn btn-do" (click)="action('nonpass')">
                 <i class="icon htvbdh_tcdt_tuchoi"></i>
                 <span>Từ chối</span>
             </button>
@@ -29,14 +25,19 @@
                 <i class="icon htvbdh_tcdt_pheduyet"></i>
                 <span>Phê duyệt</span>
             </button>
-            <button *ngIf="status.accept" type="button" class="btn btn-do" (click)="action('nonaccept')">
+            <button *ngIf="status.approve" type="button" class="btn btn-do" (click)="action('nonapprove')">
                 <i class="icon htvbdh_tcdt_tuchoi"></i>
                 <span>Từ chối</span>
             </button>
             <button *ngIf="status.accept" type="button" class="btn btn-sub" (click)="action('accept')">
                 <i class="icon htvbdh_tcdt_pheduyet"></i>
-                <span>Phê duyệt</span>
+                <span>Tiếp nhận</span>
             </button>
+            <button *ngIf="status.accept" type="button" class="btn btn-do" (click)="action('nonaccept')">
+                <i class="icon htvbdh_tcdt_tuchoi"></i>
+                <span>Từ chối</span>
+            </button>
+
         </div>
     </nz-affix>
 
@@ -262,7 +263,7 @@
                                                     [(ngModel)]="editCache[data.id].data.tlThanhTien" />
                                             </td>
                                             <td>
-                                                {{ editCache[data.id].data.congVan }}
+                                                <input nz-input [(ngModel)]="editCache[data.id].data.congVan" />
                                             </td>
                                             <td *ngIf="status.save" nzRight>
                                                 <a (click)="saveEdit(data.id)" class="save">Lưu</a>

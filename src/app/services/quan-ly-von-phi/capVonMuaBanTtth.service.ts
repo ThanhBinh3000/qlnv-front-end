@@ -14,7 +14,7 @@ export class CapVonMuaBanTtthService extends BaseService {
 	}
 
 	urlTest = 'http://localhost:9150';
-	urlDefault = environment.SERVICE_API + '/qlnv-khoachphi';
+	urlDefault = environment.SERVICE_API + '/qlnv-khoachphi-dev';
 
 	//danh sach op dong
 	dsachHopDong(request: any): Observable<any> {
@@ -77,5 +77,11 @@ export class CapVonMuaBanTtthService extends BaseService {
 		return this.httpClient.get(
 			this.urlDefault + '/cap-von-ghi-nhan/chi-tiet-thu-chi/' + nam.toString()
 		);
+	}
+
+	tongHopVonBan(request: any): Observable<any> {
+		return this.httpClient.post(
+			this.urlDefault + '/cap-von-ghi-nhan/tong-hop',
+			request);
 	}
 }

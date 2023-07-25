@@ -12,12 +12,12 @@ import { Cvmb, Report, ThanhToan } from '../../cap-von-mua-ban-va-thanh-toan-tie
 import { Tab } from '../von-ban.constant';
 
 @Component({
-    selector: 'dialog-tao-moi',
-    templateUrl: './dialog-tao-moi.component.html',
+    selector: 'dialog-tong-hop',
+    templateUrl: './dialog-tong-hop.component.html',
     styleUrls: ['../von-ban.component.scss'],
 })
 
-export class DialogTaoMoiComponent implements OnInit {
+export class DialogTongHopComponent implements OnInit {
     @Input() request: any;
     Cvmb = Cvmb;
 
@@ -39,18 +39,23 @@ export class DialogTaoMoiComponent implements OnInit {
     async ngOnInit() {
         this.userInfo = this.userService.getUserLogin();
         this.response.maLoai = this.request.maLoai;
-        if (this.userService.isChiCuc()) {
+        if (this.userService.isCuc()) {
             this.canCuGias = Cvmb.CAN_CU_GIA.filter(e => e.id == Cvmb.DON_GIA);
             this.loaiDns = Cvmb.LOAI_DE_NGHI.filter(e => e.id == Cvmb.THOC);
         } else if (this.userService.isTongCuc()) {
-            this.canCuGias = Cvmb.CAN_CU_GIA.filter(e => e.id == Cvmb.HOP_DONG);
-            this.loaiDns = Cvmb.LOAI_DE_NGHI.filter(e => e.id == Cvmb.VTU);
-        } else {
-            this.canCuGias = Cvmb.CAN_CU_GIA.filter(e => e.id == Cvmb.HOP_DONG);
-            this.loaiDns = Cvmb.LOAI_DE_NGHI.filter(e => e.id == Cvmb.GAO || e.id == Cvmb.MUOI);
+            this.canCuGias = Cvmb.CAN_CU_GIA;
+            this.loaiDns = Cvmb.LOAI_DE_NGHI.filter(e => e.id != Cvmb.VTU);
         }
-
         this.lstNam = Utils.getListYear(5, 10);
+    }
+
+    changeModel() {
+        if (this.response.canCuVeGia == Cvmb.DON_GIA) {
+            this.loaiDns = Cvmb.LOAI_DE_NGHI.filter(e => e.id == Cvmb.THOC);
+        } else {
+            this.loaiDns = Cvmb.LOAI_DE_NGHI.filter(e => e.id == Cvmb.GAO || e.id == Cvmb.MUOI);
+            this.response.quyetDinh = null;
+        }
     }
 
     async checkReport() {
@@ -58,6 +63,8 @@ export class DialogTaoMoiComponent implements OnInit {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
             return;
         }
+        this.request.loaiTimKiem = '0';
+        this.request.maDvi = this.userInfo.MA_DVI;
         this.request.namDnghi = this.response.namDnghi;
         this.request.canCuVeGia = this.response.canCuVeGia;
         this.request.loaiDnghi = this.response.loaiDnghi;
@@ -69,7 +76,7 @@ export class DialogTaoMoiComponent implements OnInit {
                     if (data.data.content?.length > 0) {
                         lstBcao = data.data.content;
                         lstBcao.sort((a, b) => b.dot - a.dot);
-                        if ([Status.TT_02, Status.TT_04, Status.TT_07, Status.TT_01].includes(lstBcao[0].trangThai)) {
+                        if ([Status.TT_02, Status.TT_04, Status.TT_01].includes(lstBcao[0].trangThai)) {
                             this.notification.warning(MESSAGE.WARNING, 'Trạng thái của đợt trước không cho phép tạo mới!')
                             this.response.loaiDnghi = null;
                             return;
@@ -102,35 +109,20 @@ export class DialogTaoMoiComponent implements OnInit {
         this.response.trangThai = Status.TT_01;
         this.response.nguoiTao = this.userInfo.sub;
         await this.getMaDnghi();
-        if (!id) {
-            if (this.response.canCuVeGia == Cvmb.DON_GIA) {
-                this.response.lstCtiets.push(new ThanhToan({
-                    id: uuid.v4() + 'FE',
-                    stt: '0.1',
-                    maDvi: this.userInfo.MA_DVI,
-                    tenDvi: this.userInfo?.TEN_DVI,
-                }))
-            } else {
-                this.getContractData();
-            }
-        } else {
+        this.callSynthetic();
+        if (id) {
             await this.capVonMuaBanTtthService.ctietVonMuaBan(id).toPromise().then(
                 async (data) => {
                     if (data.statusCode == 0) {
-                        this.response.lstCtiets = [];
-                        data.data.lstCtiets?.forEach(item => {
-                            this.response.lstCtiets.push(new ThanhToan({
-                                ...item,
-                                id: uuid.v4() + 'FE',
-                                lkUng: Operator.sum([item.lkUng, item.ung]),
-                                lkCap: Operator.sum([item.lkCap, item.cap]),
-                                lkCong: Operator.sum([item.lkCong, item.cong]),
-                                uncNgay: null,
-                                ung: null,
-                                cap: null,
-                                cong: null,
-                            }))
-                        })
+                        const temp = data.data.lstCtiets.find(e => e.stt == '0.1');
+                        const index = this.response.lstCtiets.find(e => e.stt == '0.1');
+                        this.response.lstCtiets[index].lkUng = Operator.sum([temp.lkUng, temp.ung]);
+                        this.response.lstCtiets[index].lkCap = Operator.sum([temp.lkCap, temp.cap]);
+                        this.response.lstCtiets[index].lkCong = Operator.sum([temp.lkCong, temp.cong]);
+                        this.response.lstCtiets[index].uncNgay = null;
+                        this.response.lstCtiets[index].ung = null;
+                        this.response.lstCtiets[index].cap = null;
+                        this.response.lstCtiets[index].cong = null;
                     } else {
                         this.notification.error(MESSAGE.ERROR, data?.msg);
                         this.response.loaiDnghi = null;
@@ -161,69 +153,40 @@ export class DialogTaoMoiComponent implements OnInit {
         this.spinner.hide();
     }
 
-    async getContractData() {
+    async callSynthetic() {
         const request = {
-            namKHoach: this.response.namDnghi,
+            namDnghi: this.response.namDnghi,
+            maLoai: this.response.maLoai,
             maDvi: this.userInfo.MA_DVI,
-            loaiVthh: null,
+            loaiDnghi: this.response.loaiDnghi,
+            canCuVeGia: this.response.canCuVeGia,
         }
-        switch (this.response.loaiDnghi) {
-            case Cvmb.THOC:
-                request.loaiVthh = "0101"
-                break;
-            case Cvmb.GAO:
-                request.loaiVthh = "0102"
-                break;
-            case Cvmb.MUOI:
-                request.loaiVthh = "04"
-                break;
-            case Cvmb.VTU:
-                request.loaiVthh = "02"
-                break;
-        }
-        await this.capVonMuaBanTtthService.dsachHopDong(request).toPromise().then(
-            (data) => {
-                if (data.statusCode == 0) {
-                    let unitId = uuid.v4() + 'FE';
+        await this.capVonMuaBanTtthService.tongHopVonBan(request).toPromise().then(
+            (res) => {
+                if (res.statusCode == 0) {
                     this.response.lstCtiets.push(new ThanhToan({
-                        id: unitId,
+                        id: uuid.v4() + 'FE',
                         stt: '0.1',
                         maDvi: this.userInfo.MA_DVI,
                         tenDvi: this.userInfo?.TEN_DVI,
                     }))
-                    data.data.forEach(item => {
-                        if (this.response.lstCtiets.findIndex(e => e.qdPheDuyet == item.soQdPdKhlcnt) == -1) {
-                            const temp: ThanhToan = new ThanhToan({
-                                id: uuid.v4() + 'FE',
-                                maDvi: this.userInfo.MA_DVI,
-                                tenDvi: this.userInfo?.TEN_DVI,
-                                tenKhachHang: item.tenNhaThau,
-                                qdPheDuyet: item.soQdPdKhlcnt,
-                            })
-                            this.response.lstCtiets = Table.addChild(unitId, temp, this.response.lstCtiets);
-                        }
-                        const temp: ThanhToan = new ThanhToan({
+                    res.data.forEach(item => {
+                        this.response.lstCtiets.push(new ThanhToan({
+                            ...item,
                             id: uuid.v4() + 'FE',
-                            qdPheDuyet: item.tenGoiThau + '/' + item.soHd,
-                            slKeHoach: item.soLuongKehoach,
-                            slHopDong: item.soLuong,
-                            donGia: item.donGia,
-                            gtHopDong: Operator.mul(item.soLuong, item.donGia),
-                        })
-                        const index = this.response.lstCtiets.findIndex(e => e.qdPheDuyet == item.soQdPdKhlcnt);
-                        this.response.lstCtiets = Table.addChild(this.response.lstCtiets[index].id, temp, this.response.lstCtiets);
-                        this.response.lstCtiets[index].slKeHoach = Operator.sum([this.response.lstCtiets[index].slKeHoach, temp.slKeHoach]);
-                        this.response.lstCtiets[index].slHopDong = Operator.sum([this.response.lstCtiets[index].slHopDong, temp.slHopDong]);
-                        this.response.lstCtiets[index].gtHopDong = Operator.sum([this.response.lstCtiets[index].gtHopDong, temp.gtHopDong]);
+                        }))
                     })
                 } else {
-                    this.notification.warning(MESSAGE.WARNING, data?.msg);
+                    this.notification.error(MESSAGE.ERROR, res?.msg);
+                    this.response.loaiDnghi = null;
                 }
             },
             (err) => {
-                this.notification.warning(MESSAGE.WARNING, MESSAGE.SYSTEM_ERROR);
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+                this.response.loaiDnghi = null;
             },
         );
+        this.spinner.hide();
     }
 
     handleOk() {
