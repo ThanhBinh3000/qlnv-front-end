@@ -8,16 +8,16 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { CapVonMuaBanTtthService } from 'src/app/services/quan-ly-von-phi/capVonMuaBanTtth.service';
 import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
-import { Cvmb, Report, ThanhToan } from '../../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
-import { Tab } from '../../von-mua-von-ung.constant';
+import { Cvmb, Report, ThanhToan } from '../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
+import { Tab } from '../von-ban.constant';
 
 @Component({
-    selector: 'dialog-tao-moi-thanh-toan',
-    templateUrl: './dialog-tao-moi-thanh-toan.component.html',
-    styleUrls: ['../../von-mua-von-ung.component.scss'],
+    selector: 'dialog-tao-moi',
+    templateUrl: './dialog-tao-moi.component.html',
+    styleUrls: ['../von-ban.component.scss'],
 })
 
-export class DialogTaoMoiThanhToanComponent implements OnInit {
+export class DialogTaoMoiComponent implements OnInit {
     @Input() request: any;
     Cvmb = Cvmb;
 
@@ -196,6 +196,13 @@ export class DialogTaoMoiThanhToanComponent implements OnInit {
         await this.capVonMuaBanTtthService.dsachHopDong(request).toPromise().then(
             (data) => {
                 if (data.statusCode == 0) {
+                    let unitId = uuid.v4() + 'FE';
+                    this.response.lstCtiets.push(new ThanhToan({
+                        id: unitId,
+                        stt: '0.1',
+                        maDvi: this.userInfo.MA_DVI,
+                        tenDvi: this.userInfo?.TEN_DVI,
+                    }))
                     data.data.forEach(item => {
                         if (this.response.lstCtiets.findIndex(e => e.qdPheDuyet == item.soQdPdKhlcnt) == -1) {
                             const temp: ThanhToan = new ThanhToan({
@@ -203,12 +210,7 @@ export class DialogTaoMoiThanhToanComponent implements OnInit {
                                 tenKhachHang: item.tenNhaThau,
                                 qdPheDuyet: item.soQdPdKhlcnt,
                             })
-                            if (this.response.lstCtiets.length == 0) {
-                                this.response.lstCtiets = Table.addHead(temp, this.response.lstCtiets)
-                            } else {
-                                const index = this.response.lstCtiets.lastIndexOf(e => e.stt.split('.').length == 2);
-                                this.response.lstCtiets = Table.addParent(this.response.lstCtiets[index].id, temp, this.response.lstCtiets);
-                            }
+                            this.response.lstCtiets = Table.addChild(unitId, temp, this.response.lstCtiets);
                         }
                         const temp: ThanhToan = new ThanhToan({
                             id: uuid.v4() + 'FE',
@@ -243,7 +245,7 @@ export class DialogTaoMoiThanhToanComponent implements OnInit {
         this._modalRef.close({
             baoCao: this.response,
             id: null,
-            tabSelected: this.response.canCuVeGia == Cvmb.DON_GIA ? Tab.THANH_TOAN_DON_GIA : Tab.THANH_TOAN_HOP_DONG,
+            tabSelected: this.response.canCuVeGia == Cvmb.DON_GIA ? Tab.VB_DON_GIA : Tab.VB_HOP_DONG,
         });
     }
 

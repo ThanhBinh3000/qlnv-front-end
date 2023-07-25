@@ -245,7 +245,6 @@ export class PhuLucIComponent implements OnInit {
                     }
                 )
             }
-            await this.getFormData();
             this.scrollX = Table.tableWidth(350, 42, 0, 170);
             if (this.lstCtietBcao.length == 0) {
                 if (this.luyKes?.length > 0) {
@@ -282,6 +281,10 @@ export class PhuLucIComponent implements OnInit {
             } else {
                 this.lstCtietBcao = Table.sortByIndex(this.lstCtietBcao);
             }
+        }
+
+        if (this.status.save) {
+            await this.getFormData();
         }
 
         this.getTotal();
