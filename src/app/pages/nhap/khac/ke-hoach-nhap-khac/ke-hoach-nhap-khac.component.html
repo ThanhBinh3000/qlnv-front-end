@@ -74,20 +74,20 @@
       <div class="buttons">
 
         <ng-container
-          *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_VT_DEXUAT_XOA') || userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_LT_DEXUAT_XOA')">
+          *ngIf="userService.isAccessPermisson('NHDTQG_NK_KHNK_XOA')">
           <button type="button" class="btn btn-do" (click)="deleteSelect()">
             <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             <span>Xóa</span>
           </button>
         </ng-container>
 
-        <button type="button" class="btn btn-sub" (click)="exportData()">
+        <button type="button" class="btn btn-sub" (click)="exportData()" *ngIf="userService.isAccessPermisson('NHDTQG_NK_KHNK_EXP')">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
 
         <ng-container
-          *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_VT_DEXUAT_THEM') || userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_LT_DEXUAT_THEM')">
+          *ngIf="userService.isAccessPermisson('NHDTQG_NK_KHNK_THEM')">
           <button type="button" class="btn btn-main" (click)="themMoi()">
             <i class="icon htvbdh_dau-cong"></i>
             <span>Thêm</span>
@@ -106,11 +106,11 @@
           </th>
           <th class="text-center" nzWidth="5%">STT</th>
           <th class="text-center" nzWidth="5%">Năm kế hoạch</th>
-          <th class="text-center" nzWidth="15%">Số công văn/đề xuất</th>
+          <th class="text-center" nzWidth="15%">Số công văn/tờ trình</th>
           <th class="text-center" nzWidth="15%" *ngIf="userService.isTongCuc()">Đơn vị đề xuất</th>
           <th class="text-center" nzWidth="10%">Ngày đề xuất</th>
           <th class="text-center" nzWidth="10%">Ngày duyệt đề xuất</th>
-          <th class="text-center" nzWidth="10%">Loại hàng hóa</th>
+          <th class="text-center" nzWidth="10%">Loại hàng DTQG</th>
           <th class="text-center" nzWidth="10%">Tổng SL đề xuất</th>
           <th class="text-center" nzWidth="5%">ĐVT</th>
           <th class="text-center" nzWidth="15%">Trích yếu</th>
@@ -219,17 +219,23 @@
           <td *ngIf="userService.isTongCuc()">{{ data.tenTrangThaiTh}}</td>
           <td *ngIf="userService.isTongCuc()">{{ data.maTh}}</td>
           <td class="text-left">
-            <a
+            <a *ngIf="hienThiXem(data)"
               (click)="detail(data, true)">
               <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
-            <a (click)="detail(data, false)">
+            <a *ngIf="userService.isAccessPermisson('NHDTQG_NK_KHNK_THEM')
+            && (data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_TP
+            || data.trangThai == STATUS.TU_CHOI_LDC || data.trangThai == STATUS.TU_CHOI_CBV)"
+              (click)="detail(data, false)">
               <i class="fa fa-pencil" title="Sửa"></i>
             </a>
-            <a (click)="detail(data, true)">
+            <a  *ngIf="hienThiPheDuyet(data)"
+              (click)="detail(data, true)">
               <i class="icon htvbdh_tcdt_pheduyet"></i>
             </a>
-            <a (click)="xoaItem(data)">
+            <a *ngIf="userService.isAccessPermisson('NHDTQG_NK_KHNK_XOA')
+            && data.trangThai == STATUS.DU_THAO"
+              (click)="xoaItem(data)">
               <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>

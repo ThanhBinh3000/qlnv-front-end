@@ -1,21 +1,20 @@
-import { Component, EventEmitter, Input, OnInit, Output, AfterViewInit } from '@angular/core';
-import { Globals } from 'src/app/shared/globals';
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { STATUS } from "../../../../../../constants/status";
-import { HelperService } from "../../../../../../services/helper.service";
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Globals} from 'src/app/shared/globals';
+import {FormBuilder, FormGroup} from "@angular/forms";
+import {STATUS} from "../../../../../../constants/status";
+import {HelperService} from "../../../../../../services/helper.service";
 import {
   ThongTinHopDongService
 } from "../../../../../../services/qlnv-hang/nhap-hang/dau-thau/hop-dong/thongTinHopDong.service";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NgxSpinnerService } from "ngx-spinner";
-import { BaseComponent } from "../../../../../../components/base/base.component";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
 import {
   QuyetDinhPheDuyetKetQuaLCNTService
 } from "../../../../../../services/qlnv-hang/nhap-hang/dau-thau/tochuc-trienkhai/quyetDinhPheDuyetKetQuaLCNT.service";
-import { MESSAGE } from "../../../../../../constants/message";
-import { UserLogin } from "../../../../../../models/userlogin";
-import { UserService } from "../../../../../../services/user.service";
-import { NzModalService } from 'ng-zorro-antd/modal';
+import {MESSAGE} from "../../../../../../constants/message";
+import {UserLogin} from "../../../../../../models/userlogin";
+import {UserService} from "../../../../../../services/user.service";
+import {NzModalService} from 'ng-zorro-antd/modal';
 
 @Component({
   selector: 'app-quanly-hopdong',
@@ -141,26 +140,29 @@ export class QuanlyHopdongComponent implements OnInit {
       tenNguonVon: data.hhQdKhlcntHdr?.tenNguonVon,
       tenLoaiVthh: data.hhQdKhlcntHdr?.tenLoaiVthh,
       tenCloaiVthh: data.hhQdKhlcntHdr?.tenCloaiVthh,
-      soGthau: data.hhQdKhlcntHdr?.soGthau == null ? 0 : data.hhQdKhlcntHdr?.soGthau,
       soGthauTrung: data.hhQdKhlcntHdr?.soGthauTrung == null ? 0 : data.hhQdKhlcntHdr?.soGthauTrung,
       soGthauTruot: data.hhQdKhlcntHdr?.soGthauTruot == null ? 0 : data.hhQdKhlcntHdr?.soGthauTruot,
-      tenDuAn: data.hhQdKhlcntHdr?.children[0]?.dxuatKhLcntHdr?.tenDuAn,
+      tenDuAn: data.hhQdKhlcntHdr?.tenDuAn,
+      tongMucDt: data.hhQdKhlcntHdr?.tongMucDt,
       vat: 5,
       tenTrangThaiHd: data.tenTrangThaiHd,
       trangThaiHd: data.trangThaiHd,
       tenDvi: data.hhQdKhlcntHdr?.tenDvi,
     });
-    this.dataTable = data.hhQdKhlcntHdr.children.filter(item => item.trangThai == STATUS.THANH_CONG);
+    this.dataTable = data.hhQdKhlcntHdr.dchinhDxKhLcntHdr.dsGthau.filter(item => item.trangThaiDt == STATUS.THANH_CONG);
     if (data.listHopDong) {
       let soLuong = 0
       let tongMucDtGoiTrung = 0;
       let soHdDaKy = 0
+      let soGthauTrung = 0;
       this.dataTable.forEach(item => {
-        let hopDong = data.listHopDong.filter(x => x.idGoiThau == item.id)[0];
-        item.hopDong = hopDong
+        item.hopDong = data.listHopDong.filter(x => x.idGoiThau == item.id)[0]
         if (item.hopDong) {
           soLuong += item.hopDong.soLuong;
-          tongMucDtGoiTrung += item.hopDong.soLuong * item.hopDong.donGia * 1000;
+          tongMucDtGoiTrung += item.hopDong.soLuong * item.hopDong.donGia;
+        }
+        if (item.trangThaiDt == this.STATUS.THANH_CONG) {
+          soGthauTrung += 1;
         }
       })
       data.listHopDong.forEach(i => {
@@ -171,7 +173,9 @@ export class QuanlyHopdongComponent implements OnInit {
       this.formData.patchValue({
         soHdDaKy: soHdDaKy,
         soLuongNhapKh: soLuong,
-        tongMucDtGoiTrung: tongMucDtGoiTrung
+        tongMucDtGoiTrung: tongMucDtGoiTrung,
+        soGthau: this.dataTable.length,
+        soGthauTrung: soGthauTrung
       })
     };
     if (this.dataTable.length > 0 && this.dataTable[0].hopDong != undefined) {

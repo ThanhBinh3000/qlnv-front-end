@@ -231,7 +231,6 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
         if (res.msg == MESSAGE.SUCCESS) {
           this.dataTable = [];
           const data = res.data;
-          debugger
           this.formData.patchValue({
             soHd: data.soHd,
             tenHd: data.tenHd,

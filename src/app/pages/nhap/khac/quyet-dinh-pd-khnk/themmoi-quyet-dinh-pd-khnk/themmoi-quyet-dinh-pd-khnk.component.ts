@@ -590,7 +590,6 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
   // }
 
   openDialogTh() {
-    debugger
     if (this.formData.get('phanLoai').value != 'TH') {
       return;
     }

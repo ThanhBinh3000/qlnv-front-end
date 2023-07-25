@@ -58,9 +58,7 @@
             </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
               <nz-input-group nzAddOnAfter="{{maQd}}">
-                <nz-input-number [ngClass]="'number-input'" formControlName="soQd" [nzMin]="1" [nzMax]="9999999"
-                  [nzStep]="1" [nzSize]="'small'" [nzDisabled]="disableForm()">
-                </nz-input-number>
+                <input nz-input  formControlName="soQd"  [readonly]="disableForm()"/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>

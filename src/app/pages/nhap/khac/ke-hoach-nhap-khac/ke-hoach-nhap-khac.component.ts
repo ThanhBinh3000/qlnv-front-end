@@ -353,4 +353,24 @@ export class KeHoachNhapKhacComponent implements OnInit {
     this.isDetail = false;
     this.search()
   }
+
+  hienThiPheDuyet(data) {
+    return (this.userService.isAccessPermisson('NHDTQG_NK_KHNK_DUYETTP') && data.trangThai == STATUS.CHO_DUYET_TP)
+      || (this.userService.isAccessPermisson('NHDTQG_NK_KHNK_DUYETLDC') && data.trangThai == STATUS.CHO_DUYET_LDC)
+      || (this.userService.isAccessPermisson('NHDTQG_NK_KHNK_DUYETCBV') && data.trangThai == STATUS.DA_DUYET_LDC);
+  }
+
+  hienThiXem(data){
+    if (this.userService.isAccessPermisson('NHDTQG_NK_KHNK_XEM')) {
+      if(this.userService.isAccessPermisson('NHDTQG_NK_KHNK_THEM') && (data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_TP || data.trangThai == STATUS.TU_CHOI_LDC || data.trangThai == STATUS.TU_CHOI_CBV)) {
+        return false;
+      } else if (this.userService.isAccessPermisson('NHDTQG_NK_KHNK_DUYETTP') && data.trangThai == STATUS.CHO_DUYET_TP
+        || (this.userService.isAccessPermisson('NHDTQG_NK_KHNK_DUYETLDC') && data.trangThai == STATUS.CHO_DUYET_LDC)
+      || (this.userService.isAccessPermisson('NHDTQG_NK_KHNK_DUYETCBV') && data.trangThai == STATUS.DA_DUYET_LDC) ) {
+        return false;
+      }
+      return true;
+    }
+    return false;
+  }
 }
