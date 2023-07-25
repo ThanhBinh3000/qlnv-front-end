@@ -130,7 +130,12 @@ export class BienBanKetThucNhapKhoComponent extends Base2Component implements On
                     return {
                       idVirtual: uuid.v4(),
                       tenCloaiVthh: k1 != "null" ? k1 : '',
+                      soBbKtNhapKho: childOfChild ? childOfChild.soBbKtNhapKho : null,
+                      ngayKtNhapKho: childOfChild ? childOfChild.ngayKtNhapKho : null,
+                      tenTrangThaiKtNk: childOfChild ? childOfChild.tenTrangThaiKtNk : null,
+                      trangThaiKtNk: childOfChild ? childOfChild.trangThaiKtNk : null,
                       tenLoKho: childOfChild ? childOfChild.tenLoKho : null,
+                      idBbKtNhapKho: childOfChild ? childOfChild.idBbKtNhapKho : null,
                       tenNganKho: childOfChild ? childOfChild.tenNganKho : null,
                       childData: v1
                     }
@@ -162,6 +167,38 @@ export class BienBanKetThucNhapKhoComponent extends Base2Component implements On
     })
   }
 
+  delete(item: any, roles?) {
+    if (!this.checkPermission(roles)) {
+      return
+    }
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: () => {
+        this.spinner.show();
+        try {
+          let body = {
+            id: item.idBbKtNhapKho
+          };
+          this.bienBanKetThucNhapKhoService.delete(body).then(async () => {
+            await this.search();
+            this.spinner.hide();
+          });
+        } catch (e) {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      },
+    });
+  }
+
+
   onExpandStringChange(id: string, checked: boolean): void {
     if (checked) {
       this.expandSetString.add(id);
@@ -176,6 +213,7 @@ export class BienBanKetThucNhapKhoComponent extends Base2Component implements On
     this.isDetail = true;
     this.isView = b;
     this.soBaoCaoKqkdMau = soBaoCaoKqkdMau;
+    console.log(id, 'idididid')
     // this.isViewDetail = isView ?? false;
   }
 
