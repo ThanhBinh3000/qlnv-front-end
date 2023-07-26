@@ -13,6 +13,7 @@ import { PAGE_SIZE_DEFAULT } from "../../../../../constants/config";
 import { UserLogin } from "../../../../../models/userlogin";
 import dayjs from "dayjs";
 import { MESSAGE } from "../../../../../constants/message";
+import {DanhMucService} from "../../../../../services/danhmuc.service";
 
 @Component({
   selector: 'app-qd-pd-hs-moi-thau',
@@ -78,6 +79,7 @@ export class QdPdHsMoiThauComponent implements OnInit {
     private notification: NzNotificationService,
     private modal: NzModalService,
     public userService: UserService,
+    private danhMucService: DanhMucService,
   ) { }
 
   async ngOnInit() {
@@ -89,6 +91,11 @@ export class QdPdHsMoiThauComponent implements OnInit {
           value: dayjs().get('year') - i,
           text: dayjs().get('year') - i,
         });
+      }
+      this.listLoaiVthh = [];
+      let res = await this.danhMucService.getDanhMucHangDvqlAsyn({});
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.listLoaiVthh = res.data?.filter((x) => (x.ma.length == 4 && x.ma.startsWith('02')));
       }
       this.searchFilter.loaiVthh = this.loaiVthh;
       await this.search();
@@ -141,7 +148,6 @@ export class QdPdHsMoiThauComponent implements OnInit {
     if (this.userService.isCuc()) {
       body.maDvi = this.userInfo.MA_DVI
     }
-    debugger
     let res = await this.quyetDinhPheDuyetHsmtService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
@@ -337,9 +343,9 @@ export class QdPdHsMoiThauComponent implements OnInit {
       this.isDetailVt = true;
     }
     else {
-      if (!this.userService.isAccessPermisson("NHDTQG_PTDT_TCKHLCNT_LT_HSMT_SUA")) {
-        return;
-      }
+      // if (!this.userService.isAccessPermisson("NHDTQG_PTDT_TCKHLCNT_LT_HSMT_SUA")) {
+      //   return;
+      // }
       this.isDetail = true;
     }
     this.selectedId = null;

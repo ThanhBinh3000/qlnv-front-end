@@ -238,7 +238,6 @@ import {
 } from './dialog/dialog-chi-tiet-giao-dich-hang-trong-kho/dialog-chi-tiet-giao-dich-hang-trong-kho.component';
 import {DialogDdiemDeHangComponent} from './dialog/dialog-ddiem-de-hang/dialog-ddiem-de-hang.component';
 import {DialogTongHopGiaoComponent} from './dialog/dialog-tong-hop-giao/dialog-tong-hop-giao.component';
-import {DialogSoToTrinhPagComponent} from './dialog/dialog-so-to-trinh-pag/dialog-so-to-trinh-pag.component';
 import {
   DialogCanCuQdPheDuyetKqdgComponent
 } from './dialog/dialog-can-cu-qd-phe-duyet-kqdg/dialog-can-cu-qd-phe-duyet-kqdg.component';
@@ -298,7 +297,7 @@ import {MatSelectModule} from "@angular/material/select";
 import {DialogSuaXuatGiamComponent} from './dialog/dialog-sua-xuat-giam/dialog-sua-xuat-giam.component';
 import {Base3Component} from './base3/base3.component';
 import {DialogTableCheckBoxComponent} from './dialog/dialog-table-check-box/dialog-table-check-box.component';
-
+import { DialogPhanBoHdVtComponent } from './dialog/dialog-phan-bo-hd-vt/dialog-phan-bo-hd-vt.component';
 @NgModule({
   declarations: [
     //components
@@ -392,7 +391,6 @@ import {DialogTableCheckBoxComponent} from './dialog/dialog-table-check-box/dial
     DialogThemQuyenComponent,
     DialogChiTietGiaoDichHangTrongKhoComponent,
     DialogDdiemDeHangComponent,
-    DialogSoToTrinhPagComponent,
     DialogDdiemDeHangComponent,
     DialogTongHopGiaoComponent,
     DialogCanCuQdPheDuyetKqdgComponent,
@@ -424,6 +422,7 @@ import {DialogTableCheckBoxComponent} from './dialog/dialog-table-check-box/dial
     DialogQdPdKhlcntComponent,
     DialogQdPdKqlcntComponent,
     DialogSuaXuatGiamComponent,
+    DialogPhanBoHdVtComponent,
   ],
   imports: [
     CommonModule,

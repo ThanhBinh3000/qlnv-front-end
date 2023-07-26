@@ -39,7 +39,7 @@
             <nz-form-label [nzNoColon]="true" nzFor="nam-qd">Năm kế hoạch
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-select formControlName="namKeHoach" (ngModelChange)="onChangeNamQd($event)" [nzDisabled]="noEdit"
+              <nz-select formControlName="namKeHoach" (ngModelChange)="onChangeNamQd($event)" [nzDisabled]="isView"
                 nzAllowClear="true">
                 <nz-option *ngFor="let p of dsNam" [nzValue]="p.value" [nzLabel]="p.text">
                 </nz-option>
@@ -53,7 +53,7 @@
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfter="{{maQd}}" id="so-qd">
-                <nz-input-number type="text" nz-input formControlName="soQd" [nzMin]="1" [nzDisabled]="noEdit"
+                <nz-input-number type="text" nz-input formControlName="soQd" [nzMin]="1" [nzDisabled]="isView"
                   [nzMax]="9999999" [nzStep]="1" [nzSize]="'small'">
                 </nz-input-number>
               </nz-input-group>
@@ -65,7 +65,7 @@
             <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="ngay-ky">Ngày ký
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-date-picker formControlName="ngayKy" nzFormat="dd/MM/yyyy" id="ngay-ky" [nzDisabled]="noEdit"
+              <nz-date-picker formControlName="ngayKy" nzFormat="dd/MM/yyyy" id="ngay-ky" [nzDisabled]="isView"
                 class="search__input">
               </nz-date-picker>
             </nz-form-control>
@@ -77,7 +77,7 @@
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-date-picker formControlName="ngayHieuLuc" nzFormat="dd/MM/yyyy" id="ngay-hieu-luc"
-                [nzDisabled]="noEdit" class="search__input">
+                [nzDisabled]="isView" class="search__input">
               </nz-date-picker>
             </nz-form-control>
           </nz-form-item>
@@ -122,7 +122,7 @@
             </nz-form-label>
             <nz-form-control>
               <textarea id="trichYeu" formControlName="trichYeu" rows="3" class="search__input" nz-input
-                [readonly]="noEdit"></textarea>
+                [readonly]="isView"></textarea>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -174,7 +174,7 @@
                     <nz-input-group>
                       <nz-input-number nz-input [ngModelOptions]="{standalone: true}"
                         [(ngModel)]="arrThongTinGia[idx].giaQd" [nzMin]="0" [nzFormatter]="globals.formatter"
-                        [nzParser]="globals.parser" [nzDisabled]="noEdit" (nzBlur)="calculateVAT(idx,0)">
+                        [nzParser]="globals.parser" [nzDisabled]="isView" (nzBlur)="calculateVAT(idx,0)">
                       </nz-input-number>
                     </nz-input-group>
                   </td>
@@ -182,7 +182,7 @@
                     <nz-input-group>
                       <nz-input-number nz-input [ngModelOptions]="{standalone: true}"
                         [(ngModel)]="arrThongTinGia[idx].giaQdVat" [nzMin]="0" [nzFormatter]="globals.formatter"
-                        [nzParser]="globals.parser" [nzDisabled]="noEdit">
+                        [nzParser]="globals.parser" [nzDisabled]="isView">
                       </nz-input-number>
                     </nz-input-group>
                   </td>
@@ -201,7 +201,7 @@
           Ghi chú
         </nz-form-label>
         <nz-form-control>
-          <textarea [readonly]="noEdit" nz-input [rows]="3" formControlName="ghiChu"></textarea>
+          <textarea [readonly]="isView" nz-input [rows]="3" formControlName="ghiChu"></textarea>
         </nz-form-control>
       </nz-form-item>
     </div>

@@ -202,6 +202,10 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
           item.checked = false;
+          if (this.userSerVice.isChiCuc() && this.userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_PHANBO')){
+            let chiCuc = item.dtlList.find(x => x.maDvi == this.userInfo.MA_DVI);
+            item.hoanThanhCapNhat = chiCuc.trangThai != this.STATUS.HOAN_THANH_CAP_NHAT;
+          }
         });
       }
       this.dataTableAll = cloneDeep(this.dataTable);

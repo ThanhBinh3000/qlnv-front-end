@@ -123,7 +123,6 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
     await this.spinner.show();
     try {
       this.maQd = this.userInfo.MA_QD;
-      debugger
       if (this.idInput) {
         await this.loadChiTiet(this.idInput)
       } else {
@@ -388,6 +387,7 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
   async getDataChiTieu(id: any) {
     let res2 = await this.chiTieuKeHoachNamCapTongCucService.loadThongTinChiTieuKeHoachNam(id);
     if (res2.msg == MESSAGE.SUCCESS) {
+      console.log("dataChiTieu ", res2.data)
       this.dataChiTieu = res2.data;
     }
   }

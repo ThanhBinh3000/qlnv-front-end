@@ -144,12 +144,6 @@ export class ThemMoiToTrinhPagComponent implements OnInit {
 
     })
     this.dataTable = data.pagChiTiets;
-    if (data.trangThaiTh == STATUS.CHUA_TAO_TT) {
-      this.dataTable.forEach(item => {
-        item.giaQdTcdtnn = item.giaCucDn;
-        item.giaQdVatTcdtnn = item.giaCucDnVat;
-      })
-    }
     this.buildTreePagCt();
   }
 

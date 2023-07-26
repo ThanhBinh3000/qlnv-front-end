@@ -107,7 +107,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
         loaiGia: ['', [Validators.required]],
         trichYeu: [null],
         soCanCu: [null],
-        loaiDeXuat: [1, [Validators.required]],
+        lanDeXuat: [1, [Validators.required]],
         qdCtKhNam: [null],
         trangThai: ['00'],
         tenTrangThai: ['Dự Thảo'],
@@ -181,7 +181,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
         namKeHoach: data.namKeHoach,
         soDeXuat: data.soDeXuat ? data.soDeXuat.split('/')[0] : '',
         soDeXuatDc: data.soDeXuatDc,
-        loaiDeXuat: data.loaiDeXuat,
+        lanDeXuat: data.lanDeXuat,
         loaiVthh: data.loaiVthh,
         ngayKy: data.ngayKy,
         loaiGia: data.loaiGia,
@@ -684,7 +684,6 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
 
   async loadDsDxCanSua() {
     this.spinner.show();
-
     let body = {
       namKh: this.formData.value.namKeHoach,
       type: this.type,
@@ -755,7 +754,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
       soCanCu: data.soCanCu,
       qdCtKhNam: data.qdCtKhNam,
       type: data.type,
-      loaiDeXuat: data.loaiDeXuat > 0 ? data.loaiDeXuat + 1 : 1
+      lanDeXuat: data.lanDeXuat > 0 ? data.lanDeXuat + 1 : 1
     })
     this.dataTableCanCuXdg = data.canCuPhapLy;
     this.dataTableCanCuXdg.forEach(item => {

@@ -152,8 +152,8 @@
           </th>
           <th>
             <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenLoaiDeXuat"
-                     (input)="filterInTable('tenLoaiDeXuat',filterTable.tenLoaiDeXuat)" size="small"/>
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenLanDeXuat"
+                     (input)="filterInTable('tenLanDeXuat',filterTable.tenLanDeXuat)" size="small"/>
             </nz-input-group>
           </th>
           <th>
@@ -214,7 +214,7 @@
           <td class="text-center">{{(page - 1) * pageSize + idx + 1}}</td>
           <td>{{ data.namKeHoach }}</td>
           <td>{{ data.soDeXuat }}</td>
-          <td>{{ data.tenLoaiDeXuat }}</td>
+          <td>{{ data.tenLanDeXuat }}</td>
           <td>{{ data.ngayKy | date: 'dd/MM/yyyy' }}</td>
           <td>{{ data.trichYeu }}</td>
           <td>{{ data.tenLoaiVthh }}</td>

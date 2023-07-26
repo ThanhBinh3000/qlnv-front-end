@@ -170,14 +170,15 @@
           <td>{{ data.soQuyetDinh }}</td>
           <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
           <td>{{ data.tenLoai }}</td>
-          <td>{{ data.soCanCu }}</td>
-          <td></td>
+          <td>{{ data.loai == 'XUAT_MAU' ? data.soCanCu : ''}}</td>
+          <td>{{ data.loai == 'XUAT_HUY' ? data.soCanCu : ''}}</td>
           <td>{{ data.thoiHanXuatHang | date: 'dd/MM/YYYY' }}</td>
           <td>{{ data.trichYeu }}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td>{{ data.tenTrangThaiXh }}</td>
           <td class="text-left">
-            <a *ngIf="data.trangThai==STATUS.DA_DUYET_LDC || data.trangThai==STATUS.CHO_DUYET_LDC" (click)="themMoi(data.id, true)">
+            <a *ngIf="data.trangThai==STATUS.DA_DUYET_LDC || data.trangThai==STATUS.CHO_DUYET_LDC"
+               (click)="themMoi(data.id, true)">
               <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
             <a *ngIf="data.trangThai==STATUS.DU_THAO || data.trangThai==STATUS.TU_CHOI_LDC"

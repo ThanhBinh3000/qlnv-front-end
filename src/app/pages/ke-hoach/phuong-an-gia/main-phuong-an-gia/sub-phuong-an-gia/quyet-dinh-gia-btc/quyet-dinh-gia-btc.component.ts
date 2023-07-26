@@ -26,7 +26,6 @@ export class QuyetDinhGiaBtcComponent implements OnInit {
   @Output()
   getCount = new EventEmitter<any>();
   isAddNew = false;
-  noEdit = false;
   formData: FormGroup;
   toDay = new Date();
   allChecked = false;
@@ -226,13 +225,11 @@ export class QuyetDinhGiaBtcComponent implements OnInit {
     this.idSelected = 0;
     this.isViewDetail = false;
     this.isAddNew = true;
-    this.noEdit = false;
   }
 
-  async onClose() {
+   async onClose() {
     this.isAddNew = false;
-    await this.search();
-
+     await this.search();
   }
 
   onAllChecked(checked) {
@@ -295,13 +292,6 @@ export class QuyetDinhGiaBtcComponent implements OnInit {
     this.idSelected = id;
     this.isViewDetail = isViewDetail;
     this.isAddNew = true;
-    if (trangThai == STATUS.BAN_HANH) {
-      this.noEdit = true;
-    } else if (trangThai == STATUS.DU_THAO && isViewDetail) {
-      this.noEdit = true;
-    } else if (trangThai == STATUS.DU_THAO && !isViewDetail) {
-      this.noEdit = false;
-    }
   }
 
   deleteItem(item: any) {
