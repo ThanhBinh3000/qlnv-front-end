@@ -208,11 +208,11 @@
 </ng-container>
 <ng-template #LtView>
   <app-them-quyet-dinh-gia-btc-lt *ngIf="pagType === 'LT';else VtView"  [type]="type" [isView]="isViewDetail" [pagType]="pagType"
-    [noEdit]="noEdit" [idInput]="idSelected" (onClose)="onClose()">
+     [idInput]="idSelected" (onClose)="onClose()">
   </app-them-quyet-dinh-gia-btc-lt>
 </ng-template>
 <ng-template #VtView>
-  <app-them-quyet-dinh-gia-btc-vt [isView]="isViewDetail" [pagType]="pagType" [type]="type" [noEdit]="noEdit" [idInput]="idSelected"
+  <app-them-quyet-dinh-gia-btc-vt [isView]="isViewDetail" [pagType]="pagType" [type]="type" [idInput]="idSelected"
     (onClose)="onClose()">
   </app-them-quyet-dinh-gia-btc-vt>
 </ng-template>

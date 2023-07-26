@@ -7,7 +7,7 @@
             <nz-form-item class="form-item">
               <nz-form-label nzFor="nam-qd">Năm kế hoạch</nz-form-label>
               <nz-form-control>
-                <nz-select formControlName="namKeHoach" id="nam-kh">
+                <nz-select formControlName="namKeHoach" >
                   <nz-option nzValue="{{item}}" nzLabel="{{item}}" *ngFor="let item of dsNam">
                   </nz-option>
                 </nz-select>
@@ -18,7 +18,7 @@
             <nz-form-item class="form-item">
               <nz-form-label nzFor="loai-hh">Loại hàng hóa</nz-form-label>
               <nz-form-control>
-                <nz-select formControlName="loaiVthh" id="loai-hh">
+                <nz-select formControlName="loaiVthh">
                   <nz-option *ngFor="let p of listVthh" [nzValue]="p.ma" [nzLabel]="p.giaTri">
                   </nz-option>
                   <nz-option>

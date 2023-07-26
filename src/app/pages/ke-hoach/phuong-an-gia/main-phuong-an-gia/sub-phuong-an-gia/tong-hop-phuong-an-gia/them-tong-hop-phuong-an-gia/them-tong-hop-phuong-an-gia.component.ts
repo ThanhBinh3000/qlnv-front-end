@@ -83,6 +83,7 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
         kqTdVat: [],
         kqTd: [],
         giaDng: [],
+        tchuanCluong: [],
         giaDngVat: [],
         trangThaiTh: [],
         trangThaiTt: [],
@@ -100,6 +101,7 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
         maDvis: [[]],
         ngayDxTu: [null],
         ngayDxDen: [null],
+        loai: ['00'],
       }
     );
   }
@@ -240,13 +242,15 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
   }
 
   async onChangeCloaiVthh(event) {
-    let res = await this.danhMucTieuChuanService.getDetailByMaHh(event);
-    if (res.statusCode == API_STATUS_CODE.SUCCESS) {
+    let resp = await this.danhMucService.getDetail(this.formData.value.cloaiVthh);
+    if (resp.msg == MESSAGE.SUCCESS) {
       this.formData.patchValue({
-        tchuanCluong: res.data ? res.data.tenQchuan : null
+        tchuanCluong: resp.data && resp.data.tieuChuanCl ? resp.data.tieuChuanCl : ""
       })
     }
   }
+
+
 
   async tongHop() {
     try {

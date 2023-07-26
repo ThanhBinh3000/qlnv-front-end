@@ -238,7 +238,6 @@ import {
 } from './dialog/dialog-chi-tiet-giao-dich-hang-trong-kho/dialog-chi-tiet-giao-dich-hang-trong-kho.component';
 import {DialogDdiemDeHangComponent} from './dialog/dialog-ddiem-de-hang/dialog-ddiem-de-hang.component';
 import {DialogTongHopGiaoComponent} from './dialog/dialog-tong-hop-giao/dialog-tong-hop-giao.component';
-import {DialogSoToTrinhPagComponent} from './dialog/dialog-so-to-trinh-pag/dialog-so-to-trinh-pag.component';
 import {
   DialogCanCuQdPheDuyetKqdgComponent
 } from './dialog/dialog-can-cu-qd-phe-duyet-kqdg/dialog-can-cu-qd-phe-duyet-kqdg.component';
@@ -392,7 +391,6 @@ import { DialogPhanBoHdVtComponent } from './dialog/dialog-phan-bo-hd-vt/dialog-
     DialogThemQuyenComponent,
     DialogChiTietGiaoDichHangTrongKhoComponent,
     DialogDdiemDeHangComponent,
-    DialogSoToTrinhPagComponent,
     DialogDdiemDeHangComponent,
     DialogTongHopGiaoComponent,
     DialogCanCuQdPheDuyetKqdgComponent,

@@ -26,7 +26,6 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
   @Input("type") type: string;
   @Input("pagType") pagType: string;
   @Input("isView") isView: boolean;
-  @Input("noEdit") noEdit: boolean;
   @Input() idInput: number;
   @Output("onClose") onClose = new EventEmitter<any>();
   formData: FormGroup;
@@ -422,7 +421,7 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
 
   openDialogToTrinh() {
     let radioValue = this.radioValue;
-    if (!this.noEdit) {
+    if (!this.isView) {
       let modalQD = this.modal.create({
         nzTitle: 'TỜ TRÌNH PHƯƠNG ÁN GIÁ CỦA VỤ KẾ HOẠCH',
         nzContent: DialogPagQdBtcComponent,

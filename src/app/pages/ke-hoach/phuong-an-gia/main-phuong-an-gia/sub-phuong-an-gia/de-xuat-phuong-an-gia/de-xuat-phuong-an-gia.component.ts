@@ -84,7 +84,7 @@ export class DeXuatPhuongAnGiaComponent implements OnInit {
   filterTable: any = {
     soDeXuat: '',
     soDeXuatDc: '',
-    tenLoaiDeXuat: '',
+    tenLanDeXuat: '',
     ngayKy: '',
     trichYeu: '',
     soCanCu: '',
