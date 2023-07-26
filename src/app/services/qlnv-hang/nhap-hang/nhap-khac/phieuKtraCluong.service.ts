@@ -3,7 +3,7 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { OldResponseData } from 'src/app/interfaces/response';
 import { environment } from 'src/environments/environment';
-import {BaseLocalService} from "../../../base-local.service";
+
 @Injectable({
   providedIn: 'root',
 })
