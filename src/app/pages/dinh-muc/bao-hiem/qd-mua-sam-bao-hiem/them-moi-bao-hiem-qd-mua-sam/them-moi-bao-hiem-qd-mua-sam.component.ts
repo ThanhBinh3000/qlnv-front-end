@@ -97,7 +97,7 @@ export class ThemMoiBaoHiemQdMuaSamComponent extends Base2Component implements O
         this.listTongHop = data.content;
         if (this.listTongHop) {
           this.listTongHop =  this.listTongHop.filter(
-            (item) => (item.trangThai == this.STATUS.DA_DUYET_LDV && item.qdMuaSamBhId == null )
+            (item) => (item.trangThai == this.STATUS.DA_DUYET_LDTC && item.qdMuaSamBhId == null )
           )
         }
       } else {

@@ -32,7 +32,7 @@
       <div nz-row [nzGutter]="20">
         <div nz-col [nzSpan]="3">
           <nz-form-item class="form-item">
-            <nz-form-label [nzNoColon]="true">Năm kế hoạch
+            <nz-form-label nzRequired [nzNoColon]="true">Năm kế hoạch
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-select formControlName="namKeHoach" [nzDisabled]="isView"
@@ -99,7 +99,7 @@
         </div>
         <div nz-col [nzSpan]="24">
           <nz-form-item class="form-item">
-            <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="trichYeu">Trích yếu
+            <nz-form-label [nzNoColon]="true" [nzNoColon]="true" nzFor="trichYeu">Trích yếu
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <textarea id="trichYeu" formControlName="trichYeu" rows="3" class="search__input" nz-input
@@ -119,28 +119,28 @@
         </div>
         <div nz-col [nzSpan]="4">
           <nz-form-item class="form-item">
-            <nz-form-label [nzNoColon]="true">Loại hàng hóa
+            <nz-form-label nzRequired [nzNoColon]="true">Loại hàng hóa
             </nz-form-label>
-            <nz-form-control>
+            <nz-form-control  [nzErrorTip]="error">
               <input nz-input readonly formControlName="tenLoaiVthh"/>
             </nz-form-control>
           </nz-form-item>
         </div>
         <div nz-col [nzSpan]="4">
           <nz-form-item class="form-item">
-            <nz-form-label [nzNoColon]="true">Chủng loại hàng
+            <nz-form-label nzRequired [nzNoColon]="true">Chủng loại hàng
               hóa
             </nz-form-label>
-            <nz-form-control [nzErrorTip]="error">
+            <nz-form-control  [nzErrorTip]="error">
               <input nz-input readonly formControlName="tenCloaiVthh"/>
             </nz-form-control>
           </nz-form-item>
         </div>
         <div nz-col [nzSpan]="4">
           <nz-form-item class="form-item">
-            <nz-form-label [nzNoColon]="true" nzFor="loai-gia">Loại giá
+            <nz-form-label nzRequired [nzNoColon]="true" nzFor="loai-gia">Loại giá
             </nz-form-label>
-            <nz-form-control>
+            <nz-form-control [nzErrorTip]="error">
               <input nz-input readonly formControlName="tenLoaiGia"/>
             </nz-form-control>
           </nz-form-item>
@@ -166,6 +166,9 @@
       </div>
     </div>
   </div>
+  <span class="text-right">
+      <h2 style="font-size: 100%; margin-top: 0.5%;font-style: italic;color: red">Đơn vị : Đồng/kg</h2>
+    </span>
   <nz-table #rowSelectionTable class="nowrap" nzBordered [nzData]="dataTableView" [nzFrontPagination]="false"
             [nzShowPagination]="false">
     <thead>
@@ -174,11 +177,13 @@
       <th class="text-center" rowSpan="2">Cục DTNN KV</th>
       <th class="text-center" rowSpan="2">Vùng miền</th>
       <th class="text-center" rowSpan="2">Chi cục DTNN</th>
-      <th class="text-center" rowSpan="2">Số lượng</th>
+      <th class="text-center" rowSpan="2">Số lượng(tấn)</th>
       <th class="text-center" colSpan="2">Giá khảo sát</th>
       <th class="text-center" colSpan="2">Giá Cục đề nghị</th>
       <th class="text-center" colSpan="2">Giá TC đề xuất</th>
-      <th class="text-center" colSpan="2">Giá QĐ của BTC</th>
+      <th class="text-center"
+          colSpan="2"> {{formData.value.loaiDeXuat == '00' ? 'Giá QĐ của BTC' : 'Giá trước điều chỉnh của BTC' }}</th>
+      <th class="text-center" colSpan="2" *ngIf="!(formData.value.loaiDeXuat == '00')">Giá sau điều chỉnh của BTC</th>
     </tr>
     <tr>
       <th class="text-center">Giá chưa VAT</th>
@@ -189,6 +194,8 @@
       <th class="text-center">Giá có VAT</th>
       <th class="text-center">Giá chưa VAT</th>
       <th class="text-center">Giá có VAT</th>
+      <th class="text-center" *ngIf="!(formData.value.loaiDeXuat == '00')">Giá chưa VAT</th>
+      <th class="text-center" *ngIf="!(formData.value.loaiDeXuat == '00')">Giá có VAT</th>
     </tr>
     </thead>
     <tbody>
@@ -208,6 +215,8 @@
         <td></td>
         <td></td>
         <td></td>
+        <td *ngIf="!(formData.value.loaiDeXuat == '00')"></td>
+        <td *ngIf="!(formData.value.loaiDeXuat == '00')"></td>
       </tr>
       <ng-container *ngIf="expandSet.has(data.idVirtual)">
         <ng-container *ngFor="let item of data.children, let y = index">
@@ -232,19 +241,39 @@
               {{item.giaQdTcdtnn | number : '1.0-1' : 'vi_VN' }}
             </td>
             <td class="text-right" *ngIf="(formData.value.loaiGia == 'LG01' || formData.value.loaiGia == 'LG03')">
-              {{ item.vat ? (item.giaQdTcdtnn * item.vat + item.giaQdTcdtnn | number : '1.0-1' : 'vi_VN') : ''}}
+              {{ item.giaQdVatTcdtnn | number : '1.0-1' : 'vi_VN'}}
             </td>
             <td class="text-right"
                 *ngIf="!(formData.value.loaiGia == 'LG01' || formData.value.loaiGia == 'LG03')"></td>
-            <td class="text-right">
+            <td class="text-right" *ngIf="(formData.value.loaiDeXuat == '00')">
               <nz-input-number [nzDisabled]="isView" [nzSize]="'small'" [(ngModel)]="item.giaQdBtc"
+                               [nzMin]="formData.value.loaiGia == 'LG02' ? item. giaQdTcdtnn : 0"
+                               [nzMax]="formData.value.loaiGia == 'LG01' ? item. giaQdTcdtnn : 9999999999"
+                               [nzFormatter]="globals.formatter"
+                               [nzParser]="globals.parser">
+              </nz-input-number>
+            </td>
+            <td class="text-right"
+                *ngIf="!(formData.value.loaiDeXuat == '00')">{{item.giaQdBtc | number : '1.0-1' : 'vi_VN'}}</td>
+            <td class="text-right"
+                *ngIf="(formData.value.loaiGia == 'LG01' || formData.value.loaiGia == 'LG03')">
+              {{ item.vat ? (item.giaQdBtc * item.vat + item.giaQdBtc | number : '1.0-1' : 'vi_VN') : ''}}
+
+            </td>
+            <td class="text-right"
+                *ngIf="!(formData.value.loaiGia == 'LG01' || formData.value.loaiGia == 'LG03') && (formData.value.loaiDeXuat == '00')"></td>
+            <td class="text-right" *ngIf="!(formData.value.loaiDeXuat == '00')">
+              <nz-input-number [nzDisabled]="isView" [nzSize]="'small'" [(ngModel)]="item.giaQdDcBtc" [nzMin]="0"
                                [nzFormatter]="globals.formatter"
                                [nzParser]="globals.parser">
               </nz-input-number>
             <td class="text-right"
-                *ngIf="(formData.value.loaiGia == 'LG01' || formData.value.loaiGia == 'LG03')">{{ item.giaQdBtcVat | number : '1.0-1' : 'vi_VN'}}</td>
+                *ngIf="(formData.value.loaiGia == 'LG01' || formData.value.loaiGia == 'LG03') && !(formData.value.loaiDeXuat == '00')">
+              {{ item.vat ? (item.giaQdDcBtc * item.vat + item.giaQdDcBtc | number : '1.0-1' : 'vi_VN') : ''}}
+
+            </td>
             <td class="text-right"
-                *ngIf="!(formData.value.loaiGia == 'LG01' || formData.value.loaiGia == 'LG03')"></td>
+                *ngIf="!(formData.value.loaiGia == 'LG01' || formData.value.loaiGia == 'LG03') && !(formData.value.loaiDeXuat == '00')"></td>
           </tr>
         </ng-container>
       </ng-container>

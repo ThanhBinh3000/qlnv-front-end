@@ -55,10 +55,10 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
     this.formData = this.fb.group(
       {
         id: [],
-        namKeHoach: [dayjs().get("year"), [Validators.required]],
-        soQd: [null, [Validators.required]],
-        ngayKy: [null, [Validators.required]],
-        ngayHieuLuc: [null, [Validators.required]],
+        namKeHoach: [dayjs().get("year")],
+        soQd: [null],
+        ngayKy: [null],
+        ngayHieuLuc: [null],
         soQdCanDc: [null],
         tenLoaiGia: [null],
         soToTrinh: [null],
@@ -68,28 +68,25 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
         tenCloaiVthh: [null],
         loaiGia: [null],
         tieuChuanCl: [null],
-        trichYeu: [null, [Validators.required]],
+        trichYeu: [null],
         trangThai: ["00"],
         ghiChu: [null],
-        loaiDeXuat: [null],
+        loaiDeXuat: ['00'],
         thongTinGia: [null]
       }
     );
   }
 
   setValidator(isGuiDuyet) {
+    this.formData.controls["namKeHoach"].setValidators([Validators.required]);
+    this.formData.controls["soQd"].setValidators([Validators.required]);
+    this.formData.controls["soToTrinh"].setValidators([Validators.required]);
+    this.formData.controls["tenLoaiVthh"].setValidators([Validators.required]);
+    this.formData.controls["tenCloaiVthh"].setValidators([Validators.required]);
+    this.formData.controls["tenLoaiGia"].setValidators([Validators.required]);
     if (isGuiDuyet) {
-      this.formData.controls["namKeHoach"].setValidators([Validators.required]);
-      this.formData.controls["soQd"].setValidators([Validators.required]);
       this.formData.controls["ngayKy"].setValidators([Validators.required]);
       this.formData.controls["ngayHieuLuc"].setValidators([Validators.required]);
-      this.formData.controls["trichYeu"].setValidators([Validators.required]);
-    } else {
-      this.formData.controls["namKeHoach"].clearValidators();
-      this.formData.controls["soQd"].clearValidators();
-      this.formData.controls["ngayKy"].clearValidators();
-      this.formData.controls["ngayHieuLuc"].clearValidators();
-      this.formData.controls["trichYeu"].clearValidators();
     }
   }
 
@@ -127,7 +124,8 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
         trichYeu: data.trichYeu,
         trangThai: data.trangThai,
         ghiChu: data.ghiChu,
-        soToTrinh: data.soToTrinh
+        soToTrinh: data.soToTrinh,
+        loaiDeXuat: data.loaiDeXuat,
       });
       this.fileDinhKem = data.fileDinhKems;
       this.dataTable = data.thongTinGia;
@@ -186,6 +184,7 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
 
   async save(isBanHanh?) {
     this.spinner.show();
+    this.helperService.removeValidators(this.formData);
     this.setValidator(isBanHanh);
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
@@ -193,6 +192,15 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
       return;
     }
     this.convertTreeToList();
+    if (this.dataTable && this.dataTable.length > 0) {
+      if (this.formData.value.loaiGia == 'LG01' || this.formData.value.loaiGia == 'LG03') {
+        this.dataTable.forEach(item => {
+          if (item.vat) {
+            item.giaQdBtcVat = item.giaQdBtc + item.giaQdBtc * item.vat
+          }
+        })
+      }
+    }
     let body = this.formData.value;
     body.soQd = body.soQd + this.maQd;
     body.maDvi = this.userInfo.MA_DVI;
@@ -244,11 +252,11 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
       });
       modalQD.afterClose.subscribe((data) => {
         if (data) {
-          if (data.formData && data.formData.loaiDeXuat == '00') {
-            let chiTietToTrinh = data.data;
+          let chiTietToTrinh = data.data;
+          if (data.formData && data.formData.loaiQd == '00') {
             if (chiTietToTrinh) {
               this.formData.patchValue({
-                loaiDeXuat: chiTietToTrinh.loaiDeXuat ? chiTietToTrinh.loaiDeXuat : null,
+                loaiDeXuat: chiTietToTrinh.formData && chiTietToTrinh.formData.loaiQd ? chiTietToTrinh.formData.loaiQd : null,
                 loaiVthh: chiTietToTrinh.loaiVthh ? chiTietToTrinh.loaiVthh : null,
                 cloaiVthh: chiTietToTrinh.cloaiVthh ? chiTietToTrinh.cloaiVthh : null,
                 tenLoaiVthh: chiTietToTrinh.tenLoaiVthh ? chiTietToTrinh.tenLoaiVthh : null,

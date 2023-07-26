@@ -227,9 +227,9 @@ export class QuyetDinhGiaBtcComponent implements OnInit {
     this.isAddNew = true;
   }
 
-   onClose() {
+   async onClose() {
     this.isAddNew = false;
-     this.search();
+     await this.search();
   }
 
   onAllChecked(checked) {
