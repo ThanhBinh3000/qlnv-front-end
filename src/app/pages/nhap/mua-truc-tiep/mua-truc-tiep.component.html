@@ -7,6 +7,9 @@
         <li nz-menu-item (click)="selectTab('tccmtt')" *ngIf="!userService.isChiCuc()">
             Tổ chức triển khai KH mua trực tiếp
         </li>
+      <li *ngIf="userService.isChiCuc()" nz-menu-item (click)="selectTab('qdkhuqml')">
+        QĐ KH mua trực tiếp được Ủy quyền/Mua lẻ
+      </li>
         <li nz-menu-item (click)="selectTab('hdbkpmh')">
             Hợp đồng/Bảng kê,phiếu mua hàng
         </li>
@@ -29,6 +32,9 @@
         <ng-container *ngIf="tabSelected == 'tccmtt'">
             <app-tochuc-trienkhai-muatructiep></app-tochuc-trienkhai-muatructiep>
         </ng-container>
+      <ng-container *ngIf="tabSelected == 'qdkhuqml' && userService.isChiCuc()">
+        <app-qd-kh-uy-quyen-mua-le></app-qd-kh-uy-quyen-mua-le>
+      </ng-container>
         <ng-container *ngIf="tabSelected == 'hdbkpmh'">
             <app-hopdong-bangke-phieumuahang></app-hopdong-bangke-phieumuahang>
         </ng-container>
