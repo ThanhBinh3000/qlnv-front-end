@@ -25,6 +25,9 @@ import {
 } from "../../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
 import {DonviService} from "../../../../../../../services/donvi.service";
 import {AMOUNT} from "../../../../../../../Utility/utils";
+import {
+  TongHopPhuongAnGiaService
+} from "../../../../../../../services/ke-hoach/phuong-an-gia/tong-hop-phuong-an-gia.service";
 
 
 @Component({
@@ -90,6 +93,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
     public donViService: DonviService,
     private helperService: HelperService,
     private deXuatPAGService: DeXuatPAGService,
+    private tongHopPagService: TongHopPhuongAnGiaService,
     private notification: NzNotificationService,
     private danhMucService: DanhMucService,
     private danhMucTieuChuanService: DanhMucTieuChuanService,
@@ -684,25 +688,23 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
 
   async loadDsDxCanSua() {
     this.spinner.show();
-    let body = {
-      namKh: this.formData.value.namKeHoach,
-      type: this.type,
-      pagType: this.pagType,
-      maDvi: this.userInfo.MA_DVI,
-      paggingReq: {
-        limit: 99999,
-        page: 0,
+    this.listDxCanSua = [];
+    try {
+      let body = {
+        namKh: this.formData.value.namKeHoach,
+        type: this.type,
+        loaiDeXuat: "02",
+        maDvi: this.userInfo.MA_DVI
       }
-    }
-    let res = await this.deXuatPAGService.search(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      let data = res.data;
-      this.listDxCanSua = data.content;
-      if (this.listDxCanSua && this.listDxCanSua.length > 0) {
-        this.listDxCanSua = this.listDxCanSua.filter(item => item.trangThai == STATUS.DA_DUYET_CBV);
+      let res = await this.tongHopPagService.loadToTrinhDeXuat(body);
+      if (res.msg = MESSAGE.SUCCESS) {
+        this.listDxCanSua = res.data;
       }
+    } catch (e) {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      this.spinner.hide();
     }
-    this.spinner.hide();
   }
 
   openModalSoDx() {
@@ -716,8 +718,8 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
         nzFooter: null,
         nzComponentParams: {
           dataTable: this.listDxCanSua,
-          dataHeader: ['Số công văn', 'Ngày ký', 'Loại hàng hoa'],
-          dataColumn: ['soDeXuat', 'ngayKy', 'tenLoaiVthh'],
+          dataHeader: ['Số công văn', 'Ngày ký', 'Loại hàng hóa', 'Chủng loại hàng hóa'],
+          dataColumn: ['soDeXuat', 'ngayKy', 'tenLoaiVthh', 'tenCloaiVthh'],
         },
       })
       modalQD.afterClose.subscribe(async (data) => {

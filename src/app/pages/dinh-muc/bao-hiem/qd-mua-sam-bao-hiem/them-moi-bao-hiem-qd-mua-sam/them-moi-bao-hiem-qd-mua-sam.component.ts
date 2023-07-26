@@ -4,7 +4,7 @@ import {StorageService} from "../../../../../services/storage.service";
 import {NzNotificationService} from "ng-zorro-antd/notification";
 import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
-import { Validators} from "@angular/forms";
+import {Validators} from "@angular/forms";
 import {Base2Component} from "../../../../../components/base2/base2.component";
 import {chain} from 'lodash';
 import * as uuid from "uuid";
@@ -30,10 +30,11 @@ export class ThemMoiBaoHiemQdMuaSamComponent extends Base2Component implements O
   tableHangDtqg: any[] = [];
   maQd: string
   expandSet = new Set<number>();
-  typeQd : string
+  typeQd: string
   tableGiaTriBh: any[] = [];
-  dataHang : any[] = [];
-  checkNhomTiLe : boolean = false;
+  dataHang: any[] = [];
+  checkNhomTiLe: boolean = false;
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -60,7 +61,7 @@ export class ThemMoiBaoHiemQdMuaSamComponent extends Base2Component implements O
       fileDinhKems: [null],
       lyDoTuChoi: [null],
       listQlDinhMucQdMuaSamDtlReq: [null],
-      loai : ['00']
+      loai: ['00']
     });
   }
 
@@ -97,8 +98,8 @@ export class ThemMoiBaoHiemQdMuaSamComponent extends Base2Component implements O
         let data = res.data;
         this.listTongHop = data.content;
         if (this.listTongHop) {
-          this.listTongHop =  this.listTongHop.filter(
-            (item) => (item.trangThai == this.STATUS.DA_DUYET_LDTC && item.qdMuaSamBhId == null )
+          this.listTongHop = this.listTongHop.filter(
+            (item) => (item.trangThai == this.STATUS.DA_DUYET_LDTC && item.qdMuaSamBhId == null)
           )
         }
       } else {
@@ -129,8 +130,8 @@ export class ThemMoiBaoHiemQdMuaSamComponent extends Base2Component implements O
         let data = res.data;
         this.listDxCuc = data.content;
         if (this.listDxCuc) {
-          this.listDxCuc =  this.listDxCuc.filter(
-            (item) => (item.trangThai == this.STATUS.DA_DUYET_CBV && item.trangThaiTh == STATUS.CHUA_TONG_HOP && item.qdMuaSamBhId == null )
+          this.listDxCuc = this.listDxCuc.filter(
+            (item) => (item.trangThai == this.STATUS.DA_DUYET_CBV && item.trangThaiTh == STATUS.CHUA_TONG_HOP && item.qdMuaSamBhId == null)
           )
         }
       } else {
@@ -148,12 +149,12 @@ export class ThemMoiBaoHiemQdMuaSamComponent extends Base2Component implements O
 
   async save(isOther: boolean) {
     this.helperService.markFormGroupTouched(this.formData);
-    if (this.formData.invalid ) {
+    if (this.formData.invalid) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR)
       this.spinner.hide();
       return;
     }
-    if (!this.formData.value.maTh && ! this.formData.value.maDx) {
+    if (!this.formData.value.maTh && !this.formData.value.maDx) {
       this.notification.error(MESSAGE.ERROR, 'Chọn số tổng hợp hoặc số đề xuất!')
       this.spinner.hide();
       return;
@@ -164,7 +165,7 @@ export class ThemMoiBaoHiemQdMuaSamComponent extends Base2Component implements O
     }
     this.formData.value.listQlDinhMucQdMuaSamBhHdtqg = this.tableHangDtqg;
     this.formData.value.listQlDinhMucQdMuaSamBhKho = this.dataTable;
-    this.formData.value.tongGiaTri = (this.tableGiaTriBh[0].gtThamGiaBh  * this.tableGiaTriBh[0].tiLePhiCoBan + this.tableGiaTriBh[2].tiLePhiCoBan * this.tableGiaTriBh[2].gtThamGiaBh + this.tableGiaTriBh[4].tiLePhiCoBan * this.tableGiaTriBh[4].gtThamGiaBh + this.tableGiaTriBh[5].tiLePhiCoBan * this.tableGiaTriBh[5].gtThamGiaBh) * 11/10
+    this.formData.value.tongGiaTri = (this.tableGiaTriBh[0].gtThamGiaBh * this.tableGiaTriBh[0].tiLePhiCoBan + this.tableGiaTriBh[2].tiLePhiCoBan * this.tableGiaTriBh[2].gtThamGiaBh + this.tableGiaTriBh[4].tiLePhiCoBan * this.tableGiaTriBh[4].gtThamGiaBh + this.tableGiaTriBh[5].tiLePhiCoBan * this.tableGiaTriBh[5].gtThamGiaBh) * 11 / 10
     this.formData.value.maDvi = this.userInfo.MA_DVI;
     let body = this.formData.value;
     body.soQd = body.soQd + this.maQd
@@ -215,10 +216,10 @@ export class ThemMoiBaoHiemQdMuaSamComponent extends Base2Component implements O
           const data = res.data;
           this.helperService.bidingDataInFormGroup(this.formData, data);
           this.formData.patchValue({
-            soQd : this.formData.value.soQd ? this.formData.value.soQd.split('/')[0] : null
+            soQd: this.formData.value.soQd ? this.formData.value.soQd.split('/')[0] : null
           })
           if (this.formData.value.maTh) {
-            this.typeQd ='TH'
+            this.typeQd = 'TH'
           } else {
             this.typeQd = 'DX'
           }
@@ -387,24 +388,25 @@ export class ThemMoiBaoHiemQdMuaSamComponent extends Base2Component implements O
   }
 
 
-  async changSoTh(event, type? : string) {
-      let result;
+  async changSoTh(event, type?: string) {
+    let result;
+    this.checkNhomTiLe = false;
     if (type == 'DX') {
-      result =this.listDxCuc.filter(item => item.id = event)
+      result = this.listDxCuc.filter(item => item.id = event)
     } else {
       result = this.listTongHop.filter(item => item.id = event)
     }
-      if (result && result.length > 0) {
-        let detailTh = result[0]
-        let res = await this.deXuatBaoHiemSv.getDetail(detailTh.id);
-        if (res.msg == MESSAGE.SUCCESS) {
-          if (res.data) {
-            this.convertList(res.data)
-          }
-        } else {
-          this.notification.error(MESSAGE.ERROR, res.msg)
+    if (result && result.length > 0) {
+      let detailTh = result[0]
+      let res = await this.deXuatBaoHiemSv.getDetail(detailTh.id);
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (res.data) {
+          this.convertList(res.data)
         }
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg)
       }
+    }
   }
 
   chonMaTongHop() {
@@ -412,49 +414,50 @@ export class ThemMoiBaoHiemQdMuaSamComponent extends Base2Component implements O
       this.formData.controls["maDx"].clearValidators();
       this.formData.controls["maTh"].setValidators([Validators.required])
       let modalQD = this.modal.create({
-        nzTitle:'DANH SÁCH TỔNG HỢP ĐỀ XUẤT NHU CẦU BẢO HIỂM CỦA CÁC CỤC',
+        nzTitle: 'DANH SÁCH TỔNG HỢP ĐỀ XUẤT NHU CẦU BẢO HIỂM CỦA CÁC CỤC',
         nzContent: DialogMmMuaSamComponent,
         nzMaskClosable: false,
         nzClosable: false,
         nzWidth: '700px',
         nzFooter: null,
         nzComponentParams: {
-          listTh:  this.listTongHop ,
-          type :this.formData.value.loai
+          listTh: this.listTongHop,
+          type: this.formData.value.loai
         },
       });
       modalQD.afterClose.subscribe(async (data) => {
         if (data) {
           this.formData.patchValue({
-            maTh :  data.id,
-            maDx :  null,
+            maTh: data.id,
+            maDx: null,
           })
           await this.changSoTh(data.id, 'TH');
         }
       })
     }
   }
+
   chonSoDxCuc() {
     if (!this.isView && this.typeQd == 'DX') {
-        this.formData.controls["maTh"].clearValidators();
-        this.formData.controls["maDx"].setValidators([Validators.required]);
+      this.formData.controls["maTh"].clearValidators();
+      this.formData.controls["maDx"].setValidators([Validators.required]);
       let modalQD = this.modal.create({
-        nzTitle:'DANH SÁCH ĐỀ XUẤT BẢO HIỂM CỦA CỤC',
+        nzTitle: 'DANH SÁCH ĐỀ XUẤT BẢO HIỂM CỦA CỤC',
         nzContent: DialogMmMuaSamComponent,
         nzMaskClosable: false,
         nzClosable: false,
         nzWidth: '700px',
         nzFooter: null,
         nzComponentParams: {
-          listTh:  this.listDxCuc ,
-          type : "02"
+          listTh: this.listDxCuc,
+          type: "02"
         },
       });
       modalQD.afterClose.subscribe(async (data) => {
         if (data) {
           this.formData.patchValue({
-            maDx :  data.soCv,
-            maTh :  null,
+            maDx: data.soCv,
+            maTh: null,
           })
           await this.changSoTh(data.id, 'DX');
         }

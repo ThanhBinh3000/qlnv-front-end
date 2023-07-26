@@ -142,7 +142,7 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
     }
   }
 
-  quayLai() {
+   quayLai() {
     this.onClose.emit();
   }
 
@@ -228,8 +228,8 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
         } else {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
         }
+        this.quayLai();
       }
-      this.quayLai();
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
@@ -256,7 +256,7 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
           if (data.formData && data.formData.loaiQd == '00') {
             if (chiTietToTrinh) {
               this.formData.patchValue({
-                loaiDeXuat: chiTietToTrinh.formData && chiTietToTrinh.formData.loaiQd ? chiTietToTrinh.formData.loaiQd : null,
+                loaiDeXuat: data.formData.loaiQd,
                 loaiVthh: chiTietToTrinh.loaiVthh ? chiTietToTrinh.loaiVthh : null,
                 cloaiVthh: chiTietToTrinh.cloaiVthh ? chiTietToTrinh.cloaiVthh : null,
                 tenLoaiVthh: chiTietToTrinh.tenLoaiVthh ? chiTietToTrinh.tenLoaiVthh : null,
@@ -264,7 +264,7 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
                 loaiGia: chiTietToTrinh.loaiGia ? chiTietToTrinh.loaiGia : null,
                 tenLoaiGia: chiTietToTrinh.tenLoaiGia ? chiTietToTrinh.tenLoaiGia : null,
                 soToTrinh: chiTietToTrinh.soToTrinh ? chiTietToTrinh.soToTrinh : null,
-                tchuanCluong: chiTietToTrinh.tchuanCluong ? chiTietToTrinh.tchuanCluong : null,
+                tieuChuanCl: chiTietToTrinh.tchuanCluong ? chiTietToTrinh.tchuanCluong : null,
               })
               this.dataTable = chiTietToTrinh && chiTietToTrinh.pagChiTiets ? chiTietToTrinh.pagChiTiets : [];
             }
@@ -273,11 +273,11 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
             let thRes = data.listDx;
             let body = {
               namTongHop: this.formData.value.namKeHoach,
-              loaiVthh:  data.formData.loaiVthh ? data.formData.loaiVthh : null,
+              loaiVthh: data.formData.loaiVthh ? data.formData.loaiVthh : null,
               cloaiVthh: data.formData.cloaiVthh ? data.formData.cloaiVthh : null,
               loaiGia: data.formData.loaiGia ? data.formData.loaiGia : null,
-              listIdPag : thRes && thRes.length > 0 ? thRes.map(item => item.id) : [],
-              loai : "01"
+              listIdPag: thRes && thRes.length > 0 ? thRes.map(item => item.id) : [],
+              loai: "01"
             }
             this.tongHopData(body);
           }

@@ -50,6 +50,18 @@ export class TongHopPhuongAnGiaComponent implements OnInit {
   isViewDetail: boolean = false;
   idSelected: number = 0;
   typeConst = TYPE_PAG
+
+  listTrangThaiTt = [
+    {ma: this.STATUS.DU_THAO, giaTri: "Dự thảo"},
+    {ma: this.STATUS.CHO_DUYET_LDV, giaTri: "Chờ duyệt - LĐ Vụ"},
+    {ma: this.STATUS.TU_CHOI_LDV, giaTri: "Từ chối - LĐ Vụ"},
+    {ma: this.STATUS.DA_DUYET_LDV, giaTri: "Đã duyệt - LĐ Vụ"},
+    {ma: this.STATUS.DA_BAN_HANH_QD, giaTri: "Đã ban hành QĐ"},
+  ];
+  listTrangThaiTh = [
+    {ma: this.STATUS.DA_TAO_TT, giaTri: "Đã tạo tờ trình"},
+    {ma: this.STATUS.CHUA_TAO_TT, giaTri: "Chưa tạo tờ trình"}
+  ];
   constructor(private readonly fb: FormBuilder,
     private spinner: NgxSpinnerService,
     private danhMucService: DanhMucService,
@@ -336,20 +348,37 @@ export class TongHopPhuongAnGiaComponent implements OnInit {
     });
   }
 
-  filterInTable(key: string, value: string) {
+  filterInTable(key: string, value: string, type?: string) {
     if (value && value != '') {
       this.dataTable = [];
       let temp = [];
       if (this.dataTableAll && this.dataTableAll.length > 0) {
         this.dataTableAll.forEach((item) => {
-          if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
-            temp.push(item)
+          if ([ 'ngayTongHop'].includes(key)) {
+            if (item[key] && dayjs(item[key]).format('DD/MM/YYYY').indexOf(value.toString()) != -1) {
+              temp.push(item)
+            }
+          } else {
+            if (type) {
+              if ('eq' == type) {
+                if (item[key] && item[key].toString().toLowerCase() == value.toString().toLowerCase()) {
+                  temp.push(item)
+                }
+              } else {
+                if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
+                  temp.push(item)
+                }
+              }
+            } else {
+              if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
+                temp.push(item)
+              }
+            }
           }
         });
       }
       this.dataTable = [...this.dataTable, ...temp];
-    }
-    else {
+    } else {
       this.dataTable = cloneDeep(this.dataTableAll);
     }
   }
@@ -398,6 +427,14 @@ export class TongHopPhuongAnGiaComponent implements OnInit {
     } else {
       this.indeterminate = true;
     }
+  }
+
+  convertDateToString(event: any): string {
+    let result = '';
+    if (event) {
+      result = dayjs(event).format('DD/MM/YYYY').toString()
+    }
+    return result;
   }
 
 }
