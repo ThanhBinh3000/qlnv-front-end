@@ -42,7 +42,7 @@ export class ItemData {
 
 	changeModel() {
 		this.khDtoanNamTtien = Operator.mul(this.khDtoanNamSluong, this.khDtoanNamDgia);
-		this.gtriTdinhTtien = Operator.mul(this.gtriTdinhSluong, this.gtriTdinhTtien);
+		this.gtriTdinhTtien = Operator.mul(this.gtriTdinhSluong, this.gtriTdinhDgia);
 		this.chenhLech = Operator.sum([this.gtriTdinhTtien, -this.khDtoanNamTtien]);
 	}
 

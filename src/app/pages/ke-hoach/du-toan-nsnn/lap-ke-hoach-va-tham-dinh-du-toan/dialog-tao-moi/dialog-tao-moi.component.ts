@@ -188,6 +188,7 @@ export class DialogTaoMoiComponent implements OnInit {
                         const pl = this.listAppendix.find(e => e.id == item.maBieuMau);
                         item.tenPl = pl.tenPl;
                         item.tenDm = pl.tenDm;
+                        item.nguoiBcao = this.userInfo?.sub;
                     })
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);

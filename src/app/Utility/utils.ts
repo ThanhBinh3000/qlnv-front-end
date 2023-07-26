@@ -1,14 +1,13 @@
+import { DatePipe } from '@angular/common';
+import { Injectable } from '@angular/core';
+import * as dayjs from 'dayjs';
 import * as fileSaver from 'file-saver';
 import { NzNotificationService } from "ng-zorro-antd/notification";
 import { CurrencyMaskInputMode } from "ngx-currency";
+import * as uuid from "uuid";
+import * as XLSX from 'xlsx';
 import { MESSAGE } from "../constants/message";
 import { QuanLyVonPhiService } from "../services/quanLyVonPhi.service";
-import { DatePipe, DecimalPipe } from '@angular/common';
-import * as uuid from "uuid";
-import { Injectable } from '@angular/core';
-import * as XLSX from 'xlsx'
-import * as dayjs from 'dayjs';
-import { displayNumber } from './func';
 
 export class Status {
 	//cac ma trang thai cua bao cao
