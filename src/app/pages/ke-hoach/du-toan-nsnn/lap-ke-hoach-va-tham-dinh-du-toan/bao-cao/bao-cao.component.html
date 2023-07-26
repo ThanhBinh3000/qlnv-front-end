@@ -377,17 +377,17 @@
                         <nz-table #basicTable class="nowrap">
                             <thead>
                                 <tr>
-                                    <th nzWidth="5%">STT</th>
-                                    <th nzWidth="30%">Đơn vị lập</th>
-                                    <th nzWidth="12%">Mã báo cáo</th>
-                                    <th nzWidth="12%">Năm báo cáo</th>
-                                    <th nzWidth="12%">Ngày trình duyệt <br /> (Ngày đơn vị cấp dưới
-                                        gửi báo cáo)</th>
-                                    <th nzWidth="12%">Ngày duyệt <br />(Ngày đơn vị cấp trên duyệt báo
-                                        cáo)
+                                    <th>STT</th>
+                                    <th>Đơn vị lập</th>
+                                    <th>Mã báo cáo</th>
+                                    <th>Năm báo cáo</th>
+                                    <th>Lần báo cáo</th>
+                                    <th>Ngày trình duyệt <br /> (Ngày đơn vị cấp dưới gửi báo cáo)
                                     </th>
-                                    <th nzWidth="12%">Trạng thái</th>
-                                    <th nzWidth="5%"></th>
+                                    <th>Ngày duyệt <br />(Ngày đơn vị cấp trên duyệt báo cáo)
+                                    </th>
+                                    <th>Trạng thái</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -398,6 +398,7 @@
                                         {{ data.maBcao }}
                                     </td>
                                     <td>{{ data.namBcao }}</td>
+                                    <td>{{ data.lan }}</td>
                                     <td>{{ Utils.fmtDate(data.ngayDuyet) }}</td>
                                     <td>{{ Utils.fmtDate(data.ngayPheDuyet) }}</td>
                                     <td>{{ Status.reportStatusName(data.trangThai) }}</td>

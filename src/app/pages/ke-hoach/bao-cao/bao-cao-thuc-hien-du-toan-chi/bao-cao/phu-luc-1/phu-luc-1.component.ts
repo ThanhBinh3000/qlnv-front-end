@@ -349,18 +349,20 @@ export class PhuLucIComponent implements OnInit {
 
     changeData(maNdung: string) {
         const data = this.extraData.find(e => e.maNdung == maNdung);
-        const index = this.lstCtietBcao.findIndex(e => e.maNdung == maNdung);
-        const keys = ['dtoanGiaoDtoan', 'dtoanGiaoNguonKhac', 'dtoanGiaoNguonQuy', 'giaiNganThangBcaoDtoan', 'giaiNganThangBcaoNguonKhac',
-            'giaiNganThangBcaoNguonQuy', 'luyKeGiaiNganDtoan', 'luyKeGiaiNganNguonKhac', 'luyKeGiaiNganNguonQuy'];
-        keys.forEach(key => {
-            if (data[key]) {
-                this.lstCtietBcao[index][key] = data[key];
-            }
-        })
-        this.lstCtietBcao[index].sum();
-        this.lstCtietBcao[index].luyKe(this.luyKes?.find(e => e.maNdung == maNdung));
-        this.lstCtietBcao[index].tyLe();
-        this.sum(this.lstCtietBcao[index].stt)
+        if (data) {
+            const index = this.lstCtietBcao.findIndex(e => e.maNdung == maNdung);
+            const keys = ['dtoanGiaoDtoan', 'dtoanGiaoNguonKhac', 'dtoanGiaoNguonQuy', 'giaiNganThangBcaoDtoan', 'giaiNganThangBcaoNguonKhac',
+                'giaiNganThangBcaoNguonQuy', 'luyKeGiaiNganDtoan', 'luyKeGiaiNganNguonKhac', 'luyKeGiaiNganNguonQuy'];
+            keys.forEach(key => {
+                if (data[key]) {
+                    this.lstCtietBcao[index][key] = data[key];
+                }
+            })
+            this.lstCtietBcao[index].sum();
+            this.lstCtietBcao[index].luyKe(this.luyKes?.find(e => e.maNdung == maNdung));
+            this.lstCtietBcao[index].tyLe();
+            this.sum(this.lstCtietBcao[index].stt)
+        }
     }
 
     // luu

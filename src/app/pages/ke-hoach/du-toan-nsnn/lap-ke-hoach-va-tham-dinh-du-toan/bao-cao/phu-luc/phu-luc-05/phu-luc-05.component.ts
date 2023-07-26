@@ -260,6 +260,7 @@ export class PhuLuc05Component implements OnInit {
 		if (this.status.general) {
 			lstCtietBcaoTemp?.forEach(item => {
 				item.keHoachVonTd = item.keHoachVon;
+				item.chenhLech = 0;
 			})
 		}
 
