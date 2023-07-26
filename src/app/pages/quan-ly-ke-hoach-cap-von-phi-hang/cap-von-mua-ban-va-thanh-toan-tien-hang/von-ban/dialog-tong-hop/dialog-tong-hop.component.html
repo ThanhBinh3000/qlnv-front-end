@@ -11,7 +11,7 @@
         <div nz-col nzSpan="6">
             <label class="search__label">Căn cứ về giá</label>
             <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn căn cứ về giá" [(ngModel)]="response.canCuVeGia"
-                [class]="response.canCuVeGia ?'' : 'input-error-validate'">
+                [class]="response.canCuVeGia ?'' : 'input-error-validate'" (ngModelChange)="changeModel()">
                 <nz-option *ngFor="let item of canCuGias" [nzValue]="item.id" [nzLabel]="item.tenDm">
                 </nz-option>
             </nz-select>

@@ -308,7 +308,7 @@ export class Pagging {
 export class Search {
     loaiTimKiem: string = '0';
     maLoai: string;
-    dot: number = 1;
+    dot: number;
     maCapUng: string;
     maDvi: string;
     loaiDnghi: string;
@@ -318,6 +318,7 @@ export class Search {
     ngayTaoTu: any;
     paggingReq: Pagging = new Pagging();
     trangThai: string = Status.TT_01;
+    trangThaiDvct: string;
 
     request() {
         return {
@@ -333,6 +334,7 @@ export class Search {
             ngayTaoDen: this.ngayTaoDen ? Utils.fmtDate(this.ngayTaoDen) : null,
             paggingReq: this.paggingReq,
             trangThai: this.trangThai,
+            trangThaiDvct: this.trangThaiDvct,
         }
     }
 
@@ -345,5 +347,6 @@ export class Search {
         this.ngayTaoTu = null;
         this.ngayTaoDen = null;
         this.trangThai = null;
+        this.trangThaiDvct = null;
     }
 }

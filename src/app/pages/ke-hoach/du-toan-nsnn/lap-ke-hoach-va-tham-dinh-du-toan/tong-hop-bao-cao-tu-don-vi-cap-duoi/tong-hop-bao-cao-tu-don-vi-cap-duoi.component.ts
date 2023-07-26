@@ -57,7 +57,7 @@ export class TongHopBaoCaoTuDonViCapDuoiComponent implements OnInit {
         this.statusNewReport = this.userService.isAccessPermisson(Roles.LTD.SYNTH_REPORT);
         //lay danh sach ca don vi truc thuoc
         const request = {
-            maDviCha: this.userInfo.maDvi,
+            maDviCha: this.userInfo.MA_DVI,
             trangThai: '01',
         }
         await this.quanLyVonPhiService.dmDviCon(request).toPromise().then(
