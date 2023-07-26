@@ -304,6 +304,9 @@ export class ThemmoiThongtinDauthauVtComponent extends Base2Component implements
       this.itemRowQd[i] = {}
     }
   }
+  cancelEditRowNt(i) {
+    this.danhsachDx[i].edit = false;
+  }
   async saveEditRowNt(i) {
     this.danhsachDx[i].kqlcntDtl = this.itemRowQd[i];
     this.danhsachDx[i].kqlcntDtl.tenTrangThai = this.dsTrangThai.find(item => item.value == this.itemRowQd[i].trangThai).text;

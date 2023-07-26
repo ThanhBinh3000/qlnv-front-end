@@ -18,6 +18,9 @@ import {UserLogin} from "../../../../../../models/userlogin";
 import {MESSAGE} from "../../../../../../constants/message";
 import dayjs from "dayjs";
 import {CHUC_NANG, STATUS} from "../../../../../../constants/status";
+import {
+  QuyetDinhXuatGiamVattuService
+} from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/QuyetDinhXuatGiamVattu.service";
 
 @Component({
   selector: 'app-quyet-dinh-xuat-giam-vat-tu',
@@ -35,17 +38,17 @@ export class QuyetDinhXuatGiamVatTuComponent extends Base2Component implements O
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private bckqKiemDinhMauService: BckqKiemDinhMauService,
+    private quyetDinhXuatGiamVattuService: QuyetDinhXuatGiamVattuService,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, bckqKiemDinhMauService);
+    super(httpClient, storageService, notification, spinner, modal, quyetDinhXuatGiamVattuService);
     this.formData = this.fb.group({
       tenDvi: [],
       maDvi: [],
-      nam: [],
-      tenBaoCao: [],
-      soQdGiaoNvXh: [],
-      ngayBaoCaoTu: [],
-      ngayBaoCaoDen: [],
+      namKeHoach: [],
+      trichYeu: [],
+      soQuyetDinh: [],
+      ngayQuyetDinhTu: [],
+      ngayQuyetDinhDen: [],
     })
   }
 

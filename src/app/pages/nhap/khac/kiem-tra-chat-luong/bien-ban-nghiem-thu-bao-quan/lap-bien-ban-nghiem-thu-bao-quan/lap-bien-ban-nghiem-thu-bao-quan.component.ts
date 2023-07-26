@@ -209,7 +209,6 @@ export class LapBienBanNghiemThuBaoQuanComponent extends Base2Component implemen
 
   async loadSoQuyetDinh() {
     let body = {
-      denNgayQd: null,
       maDvi: this.userInfo.MA_DVI,
       loaiVthh: this.typeVthh,
       paggingReq: {
@@ -218,10 +217,9 @@ export class LapBienBanNghiemThuBaoQuanComponent extends Base2Component implemen
       },
       trangThai: this.globals.prop.NHAP_BAN_HANH,
     }
-    let res = await this.quyetDinhGiaoNhapHangKhacService.search(body);
+    let res = await this.bbNghiemThuBaoQuanService.dsQdNvuDuocLapBbNtBqLd(body);
     if (res.msg == MESSAGE.SUCCESS) {
-      let data = res.data;
-      this.listSoQuyetDinh = data.content;
+      this.listSoQuyetDinh = res.data;
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
