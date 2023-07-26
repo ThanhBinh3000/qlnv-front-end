@@ -10,6 +10,7 @@ import { UserService } from 'src/app/services/user.service';
 import { CAN_CU_GIA, CVNC, LOAI_DE_NGHI, Utils } from 'src/app/Utility/utils';
 import { TRANG_THAI } from '../../../de-nghi-cap-von.constant';
 import { DialogTaoDeNghiCapVonComponent } from '../dialog-tao-de-nghi-cap-von/dialog-tao-de-nghi-cap-von.component';
+import { BtnStatus } from '../../../de-nghi-cap-von.class';
 
 @Component({
     selector: 'app-danh-sach-de-nghi-cap-von',
@@ -62,8 +63,9 @@ export class DanhSachDeNghiCapVonComponent implements OnInit {
     totalPages = 0;
     allChecked = false;
     //trang thai
-    statusNewReport = true;
-    statusDelete = false;
+    // statusNewReport = true;
+    // statusDelete = false;
+    status: BtnStatus = new BtnStatus();
 
     constructor(
         private spinner: NgxSpinnerService,
@@ -84,8 +86,8 @@ export class DanhSachDeNghiCapVonComponent implements OnInit {
         this.searchFilter.ngayTaoTu = newDate;
         this.searchFilter.maDvi = this.userInfo?.MA_DVI;
         // trang thai cua nut tao moi
-        this.statusNewReport = this.userService.isAccessPermisson(CVNC.ADD_DN_MLT) || this.userService.isAccessPermisson(CVNC.ADD_DN_MVT);
-        this.statusDelete = this.userService.isAccessPermisson(CVNC.DELETE_DN_MLT) || this.userService.isAccessPermisson(CVNC.DELETE_DN_MVT);
+        this.status.addNewReport = this.userService.isAccessPermisson(CVNC.ADD_DN_MLT) || this.userService.isAccessPermisson(CVNC.ADD_DN_MVT);
+        this.status.deleteReport = this.userService.isAccessPermisson(CVNC.DELETE_DN_MLT) || this.userService.isAccessPermisson(CVNC.DELETE_DN_MVT);
 
         // neu cos quyen phe duyet thi trang thai mac dinh la trinh duyet
         if (this.userService.isAccessPermisson(CVNC.PHE_DUYET_DN_MLT) || this.userService.isAccessPermisson(CVNC.PHE_DUYET_DN_MVT)) {

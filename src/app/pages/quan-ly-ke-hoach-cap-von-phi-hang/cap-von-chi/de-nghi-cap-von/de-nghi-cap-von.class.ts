@@ -15,4 +15,5 @@ export class BtnStatus {
     copy?: boolean = true;                             // copy
     addNewReport?: boolean = true;                     // them moi bao cao
     deleteReport?: boolean = true;                     // xoa bao cao
+    congVan?: boolean = true;                          // cong van
 }
