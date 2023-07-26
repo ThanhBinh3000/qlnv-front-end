@@ -133,6 +133,7 @@ export class NopTienThuaComponent implements OnInit {
             await this.getDetailReport();
         } else {
             this.baoCao = this.dataInfo?.baoCao;
+            this.baoCao.trangThaiDvct = Status.TT_01;
             this.lstCtiets = this.baoCao.lstCtiets;
         }
         this.updateEditCache();
@@ -143,9 +144,9 @@ export class NopTienThuaComponent implements OnInit {
         this.isParent = this.userInfo.MA_DVI == this.baoCao.maDviCha;
         if (this.isParent) {
             this.status.save = false;
-            this.status.submit = Status.check('submit', this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.CVMB.SUBMIT_NTT_GN);
-            this.status.pass = Status.check('pass', this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.CVMB.PASS_NTT_GN);
-            this.status.approve = Status.check('approve', this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.CVMB.APPROVE_NTT_GN);
+            this.status.submit = Status.check('submit', this.baoCao.trangThaiDvct) && this.userService.isAccessPermisson(Roles.CVMB.SUBMIT_NTT_GN);
+            this.status.pass = Status.check('pass', this.baoCao.trangThaiDvct) && this.userService.isAccessPermisson(Roles.CVMB.PASS_NTT_GN);
+            this.status.approve = Status.check('approve', this.baoCao.trangThaiDvct) && this.userService.isAccessPermisson(Roles.CVMB.APPROVE_NTT_GN);
         } else {
             this.status.save = Status.check('saveWHist', this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.CVMB.EDIT_NTT);
             this.status.submit = Status.check('submit', this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.CVMB.SUBMIT_NTT) && !(!this.baoCao.id);
@@ -253,18 +254,6 @@ export class NopTienThuaComponent implements OnInit {
 
     // luu
     async save() {
-        if (this.isParent) {
-            if (!this.baoCao.ngayNhanLenhChuyenCo || !this.baoCao.tkNhan) {
-                this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
-                return;
-            }
-
-            if (!Operator.numOnly(this.baoCao.tkNhan)) {
-                this.notification.warning(MESSAGE.WARNING, 'Trường tài khoản nhận chỉ chứa ký tự số');
-                return;
-            }
-        }
-
         if (this.lstCtiets.some(e => this.editCache[e.id].edit)) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
             return;

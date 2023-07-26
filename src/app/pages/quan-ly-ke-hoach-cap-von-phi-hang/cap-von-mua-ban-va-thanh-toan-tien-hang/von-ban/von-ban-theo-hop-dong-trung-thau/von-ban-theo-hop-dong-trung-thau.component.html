@@ -127,6 +127,9 @@
                         <nz-table class="table__body" nzBordered [nzScroll]="{x: scrollHD}">
                             <thead>
                                 <tr>
+                                    <th *ngIf="userService.isTongCuc()" rowspan="2" nzLeft nzWidth="200px">
+                                        Đơn vị
+                                    </th>
                                     <th rowspan="2" nzWidth="200px" nzLeft>
                                         Tên khách hàng
                                     </th>
@@ -154,7 +157,8 @@
                                     <th rowspan="2" class="text-col">
                                         Công văn
                                     </th>
-                                    <th *ngIf="status.save" rowSpan="2" style="width: 60px;" nzRight></th>
+                                    <th *ngIf="status.save && !userService.isTongCuc()" rowSpan="2" style="width: 60px;"
+                                        nzRight></th>
                                 </tr>
                                 <tr>
                                     <th>
@@ -174,6 +178,7 @@
                                     </th>
                                 </tr>
                                 <tr>
+                                    <th *ngIf="userService.isTongCuc()" nzLeft></th>
                                     <th nzLeft>A</th>
                                     <th nzLeft>B</th>
                                     <th>1</th>
@@ -186,12 +191,15 @@
                                     <th>8</th>
                                     <th>9</th>
                                     <th>10</th>
-                                    <th *ngIf="status.save" nzRight></th>
+                                    <th *ngIf="status.save && !userService.isTongCuc()" nzRight></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr *ngFor="let data of lstCtiets; let i = index">
-                                    <ng-container *ngIf="data.level > 0">
+                                    <ng-container *ngIf="data.level > (userService.isTongCuc() ? 1 : 0)">
+                                        <td *ngIf="userService.isTongCuc()" nzLeft>
+                                            {{ data.tenDvi }}
+                                        </td>
                                         <td nzLeft>
                                             {{ data.tenKhachHang }}
                                         </td>
@@ -230,7 +238,7 @@
                                             <td>
                                                 {{ data.congVan }}
                                             </td>
-                                            <td *ngIf="status.save" nzRight>
+                                            <td *ngIf="status.save && !userService.isTongCuc()" nzRight>
                                                 <i *ngIf="data.level == 2" class="fa fa-pencil"
                                                     (click)="startEdit(data.id)"></i>
                                             </td>
@@ -265,7 +273,7 @@
                                             <td>
                                                 <input nz-input [(ngModel)]="editCache[data.id].data.congVan" />
                                             </td>
-                                            <td *ngIf="status.save" nzRight>
+                                            <td *ngIf="status.save && !userService.isTongCuc()" nzRight>
                                                 <a (click)="saveEdit(data.id)" class="save">Lưu</a>
                                                 <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
                                                     (nzOnConfirm)="cancelEdit(data.id)" class="save">
@@ -333,6 +341,9 @@
                                     <th rowspan="2" class="text-col">
                                         Ghi chú
                                     </th>
+                                    <th rowspan="2" *ngIf="userService.isTongCuc()">
+                                        Đợt
+                                    </th>
                                     <th *ngIf="status.save" rowSpan="2" style="width: 60px;" nzRight></th>
                                 </tr>
                                 <tr>
@@ -376,7 +387,7 @@
                             </thead>
                             <tbody>
                                 <tr *ngFor="let data of lstCtiets; let i = index">
-                                    <ng-container *ngIf="data.level == 0">
+                                    <ng-container *ngIf="data.level < (userService.isTongCuc() ? 2 : 1)">
                                         <td nzLeft>
                                             {{ data.tenDvi }}
                                         </td>
@@ -435,8 +446,12 @@
                                             <td>
                                                 {{ data.ghiChu }}
                                             </td>
+                                            <td *ngIf="userService.isTongCuc()">
+                                                <a class="save" (click)="viewDetail(data.idCapDuoi)">{{data.dot}}</a>
+                                            </td>
                                             <td *ngIf="status.save" nzRight>
-                                                <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
+                                                <i *ngIf="data.level == 0" class="fa fa-pencil"
+                                                    (click)="startEdit(data.id)"></i>
                                             </td>
                                         </ng-container>
                                         <ng-template #editTemplateVb>
@@ -475,6 +490,9 @@
                                             </td>
                                             <td>
                                                 <input nz-input [(ngModel)]="editCache[data.id].data.ghiChu" />
+                                            </td>
+                                            <td *ngIf="userService.isTongCuc()">
+                                                <a class="save" (click)="viewDetail(data.idCapDuoi)">{{data.dot}}</a>
                                             </td>
                                             <td *ngIf="status.save" nzRight>
                                                 <a (click)="saveEdit(data.id)" class="save">Lưu</a>
