@@ -214,14 +214,14 @@
           <ng-container *ngFor="let data of basicTable.data,let i = index">
             <tr [ngClass]="{'bg-selected': data.selected}" (click)="selectRow(data)">
               <td>{{ i + 1}}</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
+              <td class="text-left">{{data.soHd}}</td>
+              <td class="text-left">{{data.tenHd}}</td>
+              <td class="text-left">{{data.ngayHieuLuc | date: 'dd/MM/YYYY' }}</td>
+              <td class="text-left">{{data.soLuong|number:globals.numberFormat:globals.locale}}</td>
+              <td class="text-left">{{data.thanhTien|number:globals.numberFormat:globals.locale}}</td>
+              <td class="text-left">{{data.tenTrangThai}}</td>
+              <td class="text-left"></td>
+              <td class="text-left">{{data.tenTrangThaiXh}}</td>
               <td>
                 <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isCuc()"
                    (click)="redirectHopDong(true,data.id)">
@@ -234,10 +234,27 @@
             </tr>
           </ng-container>
           </tbody>
+          <tfoot *ngIf="dataTable && dataTable.length > 0">
+          <ng-container>
+            <tr>
+              <td colspan="4"></td>
+              <th class="text-left bold text-blue"> {{ calcTong('soLuong')|number:globals.numberFormat:globals.locale}}
+              </th>
+              <td
+                class="text-left bold text-blue"> {{ calcTong('thanhTien')|number:globals.numberFormat:globals.locale}}
+              </td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </ng-container>
+          </tfoot>
         </nz-table>
       </nz-card>
-      <app-thong-tin *ngIf="idHopDong" [id]="idHopDong" [isQuanLy]="true" [isView]="isView">
-      </app-thong-tin>
+      <app-thong-tin-hop-dong-thanh-ly *ngIf="idHopDong" [id]="idHopDong" [idKqTl]="idKqTl" [isQuanLy]="true"
+                                       [isView]="isView">
+      </app-thong-tin-hop-dong-thanh-ly>
     </nz-card>
   </div>
 </ng-container>

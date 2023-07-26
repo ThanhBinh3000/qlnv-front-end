@@ -22,6 +22,10 @@ export class HopDongThanhLyComponent extends Base2Component implements OnInit {
   isQuanLy: boolean;
   isAddNew: boolean;
   dsDonvi: any[] = [];
+  idQdTl: number = 0;
+  isViewQdTl: boolean = false;
+  idQdKq: number = 0;
+  isViewQdKq: boolean = false;
 
   listTrangThaiHd: any[] = [
     {ma: this.STATUS.CHUA_THUC_HIEN, giaTri: 'Chưa thực hiện'},
@@ -121,5 +125,25 @@ export class HopDongThanhLyComponent extends Base2Component implements OnInit {
     this.isDetail = true;
     this.isQuanLy = isQuanLy;
     this.isAddNew = !isQuanLy;
+  }
+
+  openModalQdTl(id: number) {
+    this.idQdTl = id;
+    this.isViewQdTl = true;
+  }
+
+  closeModalQdTl() {
+    this.idQdTl = null;
+    this.isViewQdTl = false;
+  }
+
+  openModalQdKq(id: number) {
+    this.idQdKq = id;
+    this.isViewQdKq = true;
+  }
+
+  closeModalQdKq() {
+    this.idQdKq = null;
+    this.isViewQdKq = false;
   }
 }

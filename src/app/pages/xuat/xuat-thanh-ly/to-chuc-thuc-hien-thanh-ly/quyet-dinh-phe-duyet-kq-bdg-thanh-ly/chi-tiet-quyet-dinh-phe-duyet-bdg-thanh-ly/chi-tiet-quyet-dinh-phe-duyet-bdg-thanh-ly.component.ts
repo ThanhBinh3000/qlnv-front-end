@@ -22,6 +22,7 @@ import {v4 as uuidv4} from "uuid";
 import {
   ToChucThucHienThanhLyService
 } from "src/app/services/qlnv-hang/xuat-hang/xuat-thanh-ly/ToChucThucHienThanhLy.service";
+
 @Component({
   selector: 'app-chi-tiet-quyet-dinh-phe-duyet-bdg-thanh-ly',
   templateUrl: './chi-tiet-quyet-dinh-phe-duyet-bdg-thanh-ly.component.html',
@@ -30,12 +31,14 @@ import {
 export class ChiTietQuyetDinhPheDuyetBdgThanhLyComponent extends Base2Component implements OnInit {
   @Input() isView: boolean;
   @Input() idSelected: number;
+  @Input() isViewOnModal: boolean;
   @Output() showListEvent = new EventEmitter<any>();
   public dsToChucThanhLy: any;
   expandSetString = new Set<string>();
   quyetDinhDtlView: any[] = [];
   maHauTo: any;
   listPhuongThucGiaoNhanBDG: any[] = [];
+
   constructor(
     private httpClient: HttpClient,
     private storageService: StorageService,
@@ -58,23 +61,31 @@ export class ChiTietQuyetDinhPheDuyetBdgThanhLyComponent extends Base2Component 
       ngayKy: [''],
       ngayHieuLuc: [''],
       loaiHinhNhapXuat: [''],
+      tenLoaiHinhNx: [''],
       kieuNhapXuat: [''],
+      tenKieuNx: [''],
       idThongBao: [],
       maThongBao: [''],
       soBienBan: [''],
-      thongBaoKhongThanh : [''],
+      thongBaoKhongThanh: [''],
       loaiVthh: [''],
       tenLoaiVthh: [''],
       cloaiVthh: [''],
       tenCloaiVthh: [''],
       pthucGnhan: [''],
-      thoiHanGiaoNhan : [],
-      thoiHanGiaoNhanGhiChu : [''],
+      thoiHanGiaoNhan: [],
+      thoiHanGiaoNhanGhiChu: [''],
       ghiChu: [''],
-      hthucDgia: [''],
-      pthucDgia: [''],
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự Thảo'],
+      hthucDgia: [''],
+      pthucDgia: [''],
+      idQdTl: [],
+      soQdTl: [''],
+      tongSoDviTsan: [],
+      soDviTsanThanhCong: [],
+      tongSlXuatBan: [],
+      thanhTien: [],
       quyetDinhDtl: [],
       fileDinhKem: [new Array<FileDinhKem>()],
       canCu: [new Array<FileDinhKem>()],
@@ -87,7 +98,7 @@ export class ChiTietQuyetDinhPheDuyetBdgThanhLyComponent extends Base2Component 
       this.maHauTo = '/QĐ-' + this.userInfo.DON_VI.tenVietTat;
       await Promise.all([
         this.loadDsToChucThanhLy(),
-         this.loadDataComboBox(),
+        this.loadDataComboBox(),
       ])
       await this.loadDetail(this.idSelected)
     } catch (e) {
@@ -161,8 +172,8 @@ export class ChiTietQuyetDinhPheDuyetBdgThanhLyComponent extends Base2Component 
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data;
         if (data && data.content && data.content.length > 0) {
-          this.dsToChucThanhLy = data.content.filter(item => item.soQdPdKq == null );
-          this.dsToChucThanhLy = this.dsToChucThanhLy.filter(s=> s.maDvi.substring(0, 6) === this.userInfo.MA_DVI);
+          this.dsToChucThanhLy = data.content.filter(item => item.soQdPdKq == null);
+          this.dsToChucThanhLy = this.dsToChucThanhLy.filter(s => s.maDvi.substring(0, 6) === this.userInfo.MA_DVI);
         }
       } else {
         this.dsToChucThanhLy = [];
@@ -228,10 +239,22 @@ export class ChiTietQuyetDinhPheDuyetBdgThanhLyComponent extends Base2Component 
           thoiHanGiaoNhan: data.thoiHanGiaoNhan,
           hthucDgia: data.hthucDgia,
           pthucDgia: data.pthucDgia,
-          quyetDinhDtl: data.toChucDtl
+          idQdTl: data.idQdTl,
+          soQdTl: data.soQdTl,
+          quyetDinhDtl: data.toChucDtl,
+          tongSlXuatBan: data.toChucDtl.reduce((prev, cur) => prev + cur.slDauGia, 0),
+          thanhTien: data.toChucDtl.reduce((prev, cur) => prev + cur.thanhTien, 0),
         })
         await this.buildTableView();
       }
     });
   };
+
+  isDisabled() {
+    if (this.formData.value.trangThai == STATUS.CHO_DUYET_TP || this.formData.value.trangThai == STATUS.CHO_DUYET_LDC || this.formData.value.trangThai == STATUS.DA_DUYET_LDC || this.formData.value.trangThai == STATUS.BAN_HANH) {
+      return true
+    } else {
+      return false;
+    }
+  }
 }

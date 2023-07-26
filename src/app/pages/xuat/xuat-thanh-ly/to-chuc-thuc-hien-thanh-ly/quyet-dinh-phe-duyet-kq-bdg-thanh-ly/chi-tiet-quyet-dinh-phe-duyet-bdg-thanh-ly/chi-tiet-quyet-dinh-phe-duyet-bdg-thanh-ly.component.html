@@ -1,4 +1,4 @@
-<nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="btn-affix">
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="btn-affix" *ngIf="!isViewOnModal">
   <div class="btn-group">
     <button type="button" class="btn btn-sub" (click)="goBack()">
       <i class="fa fa-arrow-left"></i>
@@ -82,7 +82,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">Năm kế hoạch</nz-form-label>
                 <nz-form-control nz-col [nzErrorTip]="error">
-                  <nz-select formControlName="nam" [nzDisabled]="isView">
+                  <nz-select formControlName="nam" [nzDisabled]="isDisabled()">
                     <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                   </nz-select>
                 </nz-form-control>
@@ -94,7 +94,7 @@
                 <nz-form-control nz-col [nzErrorTip]="error">
                   <nz-input-group nzAddOnAfter="{{maHauTo}}">
                     <nz-input-number formControlName="soQd" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
-                                     [nzSize]="'small'" [nzDisabled]="isView">
+                                     [nzSize]="'small'" [nzDisabled]=" isDisabled()">
                     </nz-input-number>
                   </nz-input-group>
                 </nz-form-control>
@@ -105,7 +105,7 @@
                 <nz-form-label nzRequired [nzNoColon]="true"> Trích yếu</nz-form-label>
                 <nz-form-control nz-col [nzErrorTip]="error">
                   <nz-input-group>
-                    <input nz-input formControlName="trichYeu" [readonly]="isView"/>
+                    <input nz-input formControlName="trichYeu" [readonly]=" isDisabled()"/>
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
@@ -114,7 +114,7 @@
               <nz-form-item>
                 <nz-form-label nz-col [nzNoColon]="true"> Ngày hiệu lực</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-date-picker formControlName="ngayHieuLuc" [nzDisabled]="isView" nzFormat="dd/MM/yyyy">
+                  <nz-date-picker formControlName="ngayHieuLuc" [nzDisabled]=" isDisabled()" nzFormat="dd/MM/yyyy">
                   </nz-date-picker>
                 </nz-form-control>
               </nz-form-item>
@@ -123,7 +123,7 @@
               <nz-form-item>
                 <nz-form-label nz-col [nzNoColon]="true"> Ngày ký</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-date-picker formControlName="ngayKy" [nzDisabled]="isView" nzFormat="dd/MM/yyyy">
+                  <nz-date-picker formControlName="ngayKy" [nzDisabled]=" isDisabled()" nzFormat="dd/MM/yyyy">
                   </nz-date-picker>
                 </nz-form-control>
               </nz-form-item>
@@ -133,7 +133,7 @@
                 <nz-form-label nzRequired [nzNoColon]="true"> Loại hình nhập xuất</nz-form-label>
                 <nz-form-control nz-col [nzErrorTip]="error">
                   <nz-input-group>
-                    <input nz-input formControlName="loaiHinhNhapXuat" [readonly]="true"/>
+                    <input nz-input formControlName="tenLoaiHinhNx" [readonly]="true"/>
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
@@ -143,7 +143,7 @@
                 <nz-form-label nzRequired [nzNoColon]="true"> Kiểu nhập xuất</nz-form-label>
                 <nz-form-control nz-col [nzErrorTip]="error">
                   <nz-input-group>
-                    <input nz-input formControlName="kieuNhapXuat" [readonly]="true"/>
+                    <input nz-input formControlName="tenKieuNx" [readonly]="true"/>
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
@@ -240,7 +240,7 @@
               </nz-form-item>
               <nz-form-item>
                 <div class="list-file" nz-col>
-                  <file-list [isCanCuPL]="true" [data]="formData.value.canCu" [isViewDetail]="isView">
+                  <file-list [isCanCuPL]="true" [data]="formData.value.canCu" [isViewDetail]=" isDisabled()">
                   </file-list>
                 </div>
               </nz-form-item>
@@ -252,7 +252,7 @@
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error" nz-col>
                   <div class="list-file" nz-col>
-                    <file-list [data]="formData.value.fileDinhKem" [isViewDetail]="isView">
+                    <file-list [data]="formData.value.fileDinhKem" [isViewDetail]=" isDisabled()">
                     </file-list>
                   </div>
                 </nz-form-control>
@@ -320,7 +320,7 @@
                   <td>{{lv1.soTienDatTruoc|number:globals.numberFormat:globals.locale}}</td>
                   <td>{{lv1.soLanTraGia|number:globals.numberFormat:globals.locale}}</td>
                   <td>{{lv1.donGiaCaoNhat|number:globals.numberFormat:globals.locale}}</td>
-                  <td>{{lv1.slDauGia * lv1.donGiaCaoNhat|number:globals.numberFormat:globals.locale}}</td>
+                  <td>{{lv1.thanhTien|number:globals.numberFormat:globals.locale}}</td>
                   <td>{{lv1.toChucCaNhan}}</td>
                 </tr>
               </ng-container>
@@ -338,7 +338,7 @@
             Ghi chú
           </nz-form-label>
           <nz-form-control>
-            <textarea [readOnly]="isView" nz-input [rows]="3" formControlName="ghiChu"></textarea>
+            <textarea [readOnly]="isDisabled()" nz-input [rows]="3" formControlName="ghiChu"></textarea>
           </nz-form-control>
         </nz-form-item>
       </div>
