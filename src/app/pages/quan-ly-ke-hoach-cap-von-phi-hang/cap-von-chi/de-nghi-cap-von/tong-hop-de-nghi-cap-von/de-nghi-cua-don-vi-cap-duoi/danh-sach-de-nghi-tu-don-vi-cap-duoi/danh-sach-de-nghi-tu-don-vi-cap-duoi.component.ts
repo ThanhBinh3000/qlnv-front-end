@@ -7,8 +7,9 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { CapVonNguonChiService } from 'src/app/services/quan-ly-von-phi/capVonNguonChi.service';
 import { UserService } from 'src/app/services/user.service';
-import { CAN_CU_GIA, CVNC, LOAI_DE_NGHI, Utils } from 'src/app/Utility/utils';
+import { CAN_CU_GIA, Roles, LOAI_DE_NGHI, Utils } from 'src/app/Utility/utils';
 import { TRANG_THAI, TRANG_THAI_DE_NGHI_CAP_DUOI } from '../../../de-nghi-cap-von.constant';
+import { BtnStatus } from '../../../de-nghi-cap-von.class';
 // import { DialogTaoMoiDeNghiCapVonComponent } from '../dialog-tao-moi-de-nghi-cap-von/dialog-tao-moi-de-nghi-cap-von.component';
 
 @Component({
@@ -64,6 +65,7 @@ export class DanhSachDeNghiTuDonViCapDuoiComponent implements OnInit {
   totalPages = 0;
   allChecked = false;
   //trang thai
+  status: BtnStatus = new BtnStatus();
   statusNewReport = true;
   statusDelete = false;
 
@@ -86,11 +88,11 @@ export class DanhSachDeNghiTuDonViCapDuoiComponent implements OnInit {
     this.searchFilter.ngayTaoTu = newDate;
     this.searchFilter.maDvi = this.userInfo?.MA_DVI;
     // trang thai cua nut tao moi
-    this.statusNewReport = this.userService.isAccessPermisson(CVNC.ADD_DN_MLT) || this.userService.isAccessPermisson(CVNC.ADD_DN_MVT);
-    this.statusDelete = this.userService.isAccessPermisson(CVNC.DELETE_DN_MLT) || this.userService.isAccessPermisson(CVNC.DELETE_DN_MVT);
+    this.status.addNewReport = this.userService.isAccessPermisson(Roles.CVNC.ADD_DN_MLT) || this.userService.isAccessPermisson(Roles.CVNC.ADD_DN_MVT);
+    this.status.deleteReport = this.userService.isAccessPermisson(Roles.CVNC.DELETE_DN_MLT) || this.userService.isAccessPermisson(Roles.CVNC.DELETE_DN_MVT);
 
     // neu cos quyen phe duyet thi trang thai mac dinh la trinh duyet
-    if (this.userService.isAccessPermisson(CVNC.PHE_DUYET_DN_MLT) || this.userService.isAccessPermisson(CVNC.PHE_DUYET_DN_MVT)) {
+    if (this.userService.isAccessPermisson(Roles.CVNC.PHE_DUYET_DN_MLT) || this.userService.isAccessPermisson(Roles.CVNC.PHE_DUYET_DN_MVT)) {
       this.searchFilter.trangThai = Utils.TT_BC_2;
     }
     if (this.userService.isChiCuc()) {
@@ -166,12 +168,12 @@ export class DanhSachDeNghiTuDonViCapDuoiComponent implements OnInit {
 
   checkEditStatus(trangThai: string) {
     return Utils.statusSave.includes(trangThai) &&
-      (this.userService.isAccessPermisson(CVNC.EDIT_DN_MLT) || this.userService.isAccessPermisson(CVNC.EDIT_DN_MVT));
+      (this.userService.isAccessPermisson(Roles.CVNC.EDIT_DN_MLT) || this.userService.isAccessPermisson(Roles.CVNC.EDIT_DN_MVT));
   }
 
   checkDeleteStatus(data: any) {
     return Utils.statusDelete.includes(data.trangThai) && data.soLan == 1 &&
-      (this.userService.isAccessPermisson(CVNC.DELETE_DN_MLT) || this.userService.isAccessPermisson(CVNC.DELETE_DN_MVT));
+      (this.userService.isAccessPermisson(Roles.CVNC.DELETE_DN_MLT) || this.userService.isAccessPermisson(Roles.CVNC.DELETE_DN_MVT));
   }
 
   getStatusName(trangThai: string) {
