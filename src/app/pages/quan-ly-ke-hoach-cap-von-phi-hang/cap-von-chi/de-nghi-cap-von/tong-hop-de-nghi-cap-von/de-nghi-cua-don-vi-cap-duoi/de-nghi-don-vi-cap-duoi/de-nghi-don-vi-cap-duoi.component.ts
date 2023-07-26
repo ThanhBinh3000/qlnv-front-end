@@ -47,15 +47,16 @@ export class DeNghiDonViCapDuoiComponent implements OnInit {
   quatity = QUATITY;
   scrollX: string;
   //trang thai cac nut
-  status = false;
-  statusCv = false;
-  saveStatus = true;
-  submitStatus = true;
-  passStatus = true;
-  approveStatus = true;
-  copyStatus = true;
+  status: BtnStatus = new BtnStatus();
+  // status = false;
+  // statusCv = false;
+  // saveStatus = true;
+  // submitStatus = true;
+  // passStatus = true;
+  // approveStatus = true;
+  // copyStatus = true;
+  // tiepNhan = true;
   isDataAvailable = false;
-  tiepNhan = true;
   editCache: { [key: string]: { edit: boolean; data: ItemContract } } = {};
   //file
   listFile: File[] = [];
@@ -190,14 +191,14 @@ export class DeNghiDonViCapDuoiComponent implements OnInit {
   //check role cho các nut trinh duyet
   getStatusButton() {
     const checkChirld = this.baoCao.maDvi == this.userInfo?.MA_DVI;
-    this.status = Utils.statusSave.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(CVNC.EDIT_DN_MLT) && !this.userService.isTongCuc();
-    this.statusCv = Utils.statusSave.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(CVNC.EDIT_DN_MLT);
-    this.saveStatus = Utils.statusSave.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(CVNC.EDIT_DN_MLT) && checkChirld;
-    this.submitStatus = Utils.statusApprove.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(CVNC.APPROVE_DN_MLT) && checkChirld && !(!this.baoCao.id);
-    this.approveStatus = this.baoCao.trangThai == Utils.TT_BC_2 && this.userService.isAccessPermisson(CVNC.PHE_DUYET_DN_MLT) && checkChirld;
-    this.copyStatus = Utils.statusCopy.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(CVNC.COPY_DN_MLT) && checkChirld;
-    this.tiepNhan = Utils.statusTiepNhan.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.CVNC.ACCEPT_OR_REJECT);
-    if (this.status) {
+    this.status.general = Utils.statusSave.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(CVNC.EDIT_DN_MLT) && !this.userService.isTongCuc();
+    this.status.congVan = Utils.statusSave.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(CVNC.EDIT_DN_MLT);
+    this.status.save = Utils.statusSave.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(CVNC.EDIT_DN_MLT) && checkChirld;
+    this.status.submit = Utils.statusApprove.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(CVNC.APPROVE_DN_MLT) && checkChirld && !(!this.baoCao.id);
+    this.status.approve = this.baoCao.trangThai == Utils.TT_BC_2 && this.userService.isAccessPermisson(CVNC.PHE_DUYET_DN_MLT) && checkChirld;
+    this.status.copy = Utils.statusCopy.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(CVNC.COPY_DN_MLT) && checkChirld;
+    this.status.accept = Utils.statusTiepNhan.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.CVNC.ACCEPT_OR_REJECT);
+    if (this.status.general) {
       this.scrollX = (550 + 12 * BOX_NUMBER_WIDTH).toString() + 'px';
     } else {
       this.scrollX = (500 + 12 * BOX_NUMBER_WIDTH).toString() + 'px';

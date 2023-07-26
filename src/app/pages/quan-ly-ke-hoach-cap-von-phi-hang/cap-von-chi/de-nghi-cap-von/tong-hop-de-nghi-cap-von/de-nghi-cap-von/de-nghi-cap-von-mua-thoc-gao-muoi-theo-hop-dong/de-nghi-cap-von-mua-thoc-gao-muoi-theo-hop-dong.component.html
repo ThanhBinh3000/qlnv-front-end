@@ -5,31 +5,23 @@
 				<i class="fa fa-arrow-left"></i>
 				<span>Quay lại</span>
 			</button>
-			<button *ngIf="saveStatus" type="button" class="btn btn-sub" (click)="action('save')">
+			<button *ngIf="status.save" type="button" class="btn btn-sub" (click)="action('save')">
 				<i class="icon htvbdh_tcdt_save"></i>
 				<span>Lưu</span>
 			</button>
-			<button *ngIf="submitStatus" type="button" class="btn btn-sub" (click)="action('submit')">
+			<button *ngIf="status.submit" type="button" class="btn btn-sub" (click)="action('submit')">
 				<i class="icon htvbdh_tcdt_guiduyet"></i>
 				<span>Trình duyệt</span>
 			</button>
-			<!-- <button *ngIf="passStatus" type="button" class="btn btn-sub" (click)="action('nonpass')">
-                <i class="icon htvbdh_tcdt_tuchoi"></i>
-                <span>Từ chối</span>
-            </button>
-            <button *ngIf="passStatus" type="button" class="btn btn-sub" (click)="action('pass')">
-                <i class="icon htvbdh_tcdt_pheduyet"></i>
-                <span>Duyệt</span>
-            </button> -->
-			<button *ngIf="approveStatus" type="button" class="btn btn-sub" (click)="action('nonapprove')">
+			<button *ngIf="status.approve" type="button" class="btn btn-sub" (click)="action('nonapprove')">
 				<i class="icon htvbdh_tcdt_tuchoi"></i>
 				<span>Từ chối</span>
 			</button>
-			<button *ngIf="approveStatus" type="button" class="btn btn-sub" (click)="action('approve')">
+			<button *ngIf="status.approve" type="button" class="btn btn-sub" (click)="action('approve')">
 				<i class="icon htvbdh_tcdt_pheduyet"></i>
 				<span>Phê duyệt</span>
 			</button>
-			<button *ngIf="copyStatus" type="button" class="btn btn-sub" (click)="showDialogCopy()">
+			<button *ngIf="status.copy" type="button" class="btn btn-sub" (click)="showDialogCopy()">
 				<i nz-icon nzType="copy" nzTheme="outline"></i>
 				<span>Copy</span>
 			</button>
@@ -83,7 +75,7 @@
 								</ng-container>
 							</td>
 							<td>
-								<nz-upload [nzBeforeUpload]="beforeUploadCV" *ngIf="statusCv">
+								<nz-upload [nzBeforeUpload]="beforeUploadCV" *ngIf="status.congVan">
 									<button nz-button>
 										<i nz-icon nzType="upload"></i>
 										Chọn tệp
@@ -138,7 +130,7 @@
 									<th>5</th>
 									<th>6</th>
 									<th>7</th>
-									<th [hidden]="status"></th>
+									<th [hidden]="status.general"></th>
 								</tr>
 								<tr>
 									<th>Tổng cộng</th>
@@ -150,7 +142,7 @@
 									<th>{{Op.fmtVal(total.viPhamHopDong)}}</th>
 									<th>{{Op.fmtVal(total.thanhLyHdongSl)}}</th>
 									<th>{{Op.fmtVal(total.thanhLyHdongTt)}}</th>
-									<th [hidden]="status"></th>
+									<th [hidden]="status.general"></th>
 								</tr>
 							</thead>
 							<tbody>
@@ -290,20 +282,21 @@
 				<div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
 					<div nz-col nzSpan="24">
 						<label class="search__label">Thuyết minh</label>
-						<textarea rows="2" nz-input [(ngModel)]="baoCao.thuyetMinh" [disabled]="status.new"></textarea>
+						<textarea rows="2" nz-input [(ngModel)]="baoCao.thuyetMinh"
+							[disabled]="status.general"></textarea>
 					</div>
 				</div>
 				<div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
 					<div nz-col class="gutter-row" [nzSpan]="3">
 						Danh sách văn bản đính kèm
-						<nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" *ngIf="!status.new">
+						<nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" *ngIf="!status.general">
 							<button nz-button>
 								<i nz-icon nzType="upload"></i>
 								Chọn tệp
 							</button>
 						</nz-upload>
 						<button nz-button [nzType]="'primary'" (click)="handleUpload()"
-							[disabled]="fileList.length === 0" *ngIf="!status.new" style="margin-top: 16px">
+							[disabled]="fileList.length === 0" *ngIf="!status.general" style="margin-top: 16px">
 							Thêm vào danh sách
 						</button>
 					</div>
@@ -326,7 +319,7 @@
 										<a (click)="downloadFile(data.id)">
 											<i class="fa fa-eye"></i>
 										</a>
-										<a *ngIf="status" (click)="deleteFile(data.id)">
+										<a *ngIf="status.general" (click)="deleteFile(data.id)">
 											<i class="fa fa-trash-o do"></i>
 										</a>
 									</td>

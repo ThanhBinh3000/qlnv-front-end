@@ -10,6 +10,7 @@ import { UserService } from 'src/app/services/user.service';
 import { CAN_CU_GIA, Roles, LOAI_DE_NGHI, Utils } from 'src/app/Utility/utils';
 import { TRANG_THAI } from '../../../de-nghi-cap-von.constant';
 import { DialogTaoMoiDeNghiCapVonComponent } from '../../dialog-tao-moi-de-nghi-cap-von/dialog-tao-moi-de-nghi-cap-von.component';
+import { BtnStatus } from '../../../de-nghi-cap-von.class';
 
 @Component({
   selector: 'app-danh-sach-tong-hop-tu-don-vi-cap-duoi',
@@ -63,6 +64,7 @@ export class DanhSachTongHopTuDonViCapDuoiComponent implements OnInit {
   totalPages = 0;
   allChecked = false;
   //trang thai
+  status: BtnStatus = new BtnStatus();
   statusNewReport = true;
   statusDelete = false;
 
@@ -85,8 +87,8 @@ export class DanhSachTongHopTuDonViCapDuoiComponent implements OnInit {
     this.searchFilter.ngayTaoTu = newDate;
     this.searchFilter.maDvi = this.userInfo?.MA_DVI;
     // trang thai cua nut tao moi
-    this.statusNewReport = this.userService.isAccessPermisson(Roles.CVNC.ADD_DN_MLT) || this.userService.isAccessPermisson(Roles.CVNC.ADD_DN_MVT);
-    this.statusDelete = this.userService.isAccessPermisson(Roles.CVNC.DELETE_DN_MLT) || this.userService.isAccessPermisson(Roles.CVNC.DELETE_DN_MVT);
+    this.status.addNewReport = this.userService.isAccessPermisson(Roles.CVNC.ADD_DN_MLT) || this.userService.isAccessPermisson(Roles.CVNC.ADD_DN_MVT);
+    this.status.deleteReport = this.userService.isAccessPermisson(Roles.CVNC.DELETE_DN_MLT) || this.userService.isAccessPermisson(Roles.CVNC.DELETE_DN_MVT);
 
     // neu cos quyen phe duyet thi trang thai mac dinh la trinh duyet
     if (this.userService.isAccessPermisson(Roles.CVNC.PHE_DUYET_DN_MLT) || this.userService.isAccessPermisson(Roles.CVNC.PHE_DUYET_DN_MVT)) {

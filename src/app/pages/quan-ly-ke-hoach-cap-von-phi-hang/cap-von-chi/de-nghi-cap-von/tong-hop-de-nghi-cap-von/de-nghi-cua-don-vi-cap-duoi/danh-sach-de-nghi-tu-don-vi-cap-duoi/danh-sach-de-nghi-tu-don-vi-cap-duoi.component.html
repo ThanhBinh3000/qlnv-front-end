@@ -63,7 +63,7 @@
   <div class="group-button">
     <h3 class="text-uppercase">DANH SÁCH ĐỀ NGHỊ TỪ ĐƠN VỊ CẤP DƯỚI</h3>
     <div class="buttons">
-      <button *ngIf="statusDelete" type="button" class="btn btn-do" (click)="deleteReport('')">
+      <button *ngIf="status.deleteReport" type="button" class="btn btn-do" (click)="deleteReport('')">
         <i class="fa fa-trash-o do"></i>
         <span>Xóa</span>
       </button>
