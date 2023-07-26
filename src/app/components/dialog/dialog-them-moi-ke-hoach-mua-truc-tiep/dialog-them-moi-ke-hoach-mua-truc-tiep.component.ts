@@ -28,6 +28,7 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
   loaiVthh: any;
   dataChiTieu: any;
   dataEdit: any;
+  maDviCuc: any;
   dataAll: any;
   listOfData: any[] = [];
   tableExist: boolean = false;
@@ -47,7 +48,7 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
     private _modalRef: NzModalRef,
     private fb: FormBuilder,
     public globals: Globals,
-    private userService: UserService,
+    public userService: UserService,
     private donViService: DonviService,
     private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
     private helperService: HelperService,
@@ -90,7 +91,7 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
         this.notification.error(MESSAGE.ERROR, "Đơn giá đề xuất không được lớn hơn đơn giá được duyệt bao gồm VAT")
         return;
       }
-      if (this.listOfData.length == 0) {
+      if (this.listOfData.length == 0 && this.userService.isCuc()) {
         this.notification.error(MESSAGE.ERROR, "Danh sách điểm kho không được để trống")
         return;
       }
@@ -130,8 +131,7 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
 
   async loadDonVi() {
     this.listChiCuc = [];
-    debugger
-    if (this.dataAll) {
+    if (this.dataAll && this.userService.isCuc()) {
       this.dataAll?.forEach(item => {
         console.log("item", item)
         let resChiTieu;
@@ -153,7 +153,7 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
     } else {
       let body = {
         trangThai: "01",
-        maDviCha: this.userService.isCuc() ? this.userInfo.MA_DVI : this.dataEdit.maDvi.slice(0, 6),
+        maDviCha: this.userService.isCuc() ? this.userInfo.MA_DVI : this.maDviCuc,
       };
       let res = await this.donViService.getAll(body);
       if (res.msg === MESSAGE.SUCCESS) {

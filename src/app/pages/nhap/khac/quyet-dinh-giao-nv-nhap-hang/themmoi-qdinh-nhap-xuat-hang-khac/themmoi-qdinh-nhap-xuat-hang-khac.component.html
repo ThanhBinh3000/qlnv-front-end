@@ -5,23 +5,29 @@
       <span>Quay lại</span>
     </button>
     <ng-container>
-      <button type="button" class="btn btn-sub xanh-nhat"
-        *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC ) && !isDetail()"
-        (click)="save(true)">
-        <i class="icon htvbdh_tcdt_guiduyet"></i>
-        <span>Lưu và gửi duyệt</span>
-      </button>
-      <button type="button" class="btn btn-sub do"
-        *ngIf="((formData.value.trangThai == STATUS.CHO_DUYET_TP)
-        || (formData.value.trangThai == STATUS.CHO_DUYET_LDC)) " (click)="tuChoi()">
-        <i class="icon htvbdh_tcdt_tuchoi"></i>
-        <span>Từ chối</span>
-      </button>
-      <button type="button" class="btn btn-sub xanh-nhat"
-        *ngIf="((formData.value.trangThai == STATUS.CHO_DUYET_TP )
-      || (formData.value.trangThai == STATUS.CHO_DUYET_LDC )) " (click)="save(true)">
-        <i class="icon htvbdh_tcdt_pheduyet"></i>
-        <span>Duyệt</span>
+<!--      <button type="button" class="btn btn-sub xanh-nhat"-->
+<!--        *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC ) && !isDetail()"-->
+<!--        (click)="save(true)">-->
+<!--        <i class="icon htvbdh_tcdt_guiduyet"></i>-->
+<!--        <span>Lưu và gửi duyệt</span>-->
+<!--      </button>-->
+<!--      <button type="button" class="btn btn-sub do"-->
+<!--        *ngIf="((formData.value.trangThai == STATUS.CHO_DUYET_TP)-->
+<!--        || (formData.value.trangThai == STATUS.CHO_DUYET_LDC)) " (click)="tuChoi()">-->
+<!--        <i class="icon htvbdh_tcdt_tuchoi"></i>-->
+<!--        <span>Từ chối</span>-->
+<!--      </button>-->
+<!--      <button type="button" class="btn btn-sub xanh-nhat"-->
+<!--        *ngIf="((formData.value.trangThai == STATUS.CHO_DUYET_TP )-->
+<!--      || (formData.value.trangThai == STATUS.CHO_DUYET_LDC )) " (click)="save(true)">-->
+<!--        <i class="icon htvbdh_tcdt_pheduyet"></i>-->
+<!--        <span>Duyệt</span>-->
+<!--      </button>-->
+      <button
+        *ngIf="(formData.value.trangThai == STATUS.DU_THAO) && !isDetail()"
+        type="button" class="btn btn-sub xanh-nhat" (click)="save(true)">
+        <i class="icon htvbdh_chuyenvanthu"></i>
+        <span>Ban hành</span>
       </button>
       <button
         *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC ) && !isDetail()"
@@ -31,19 +37,19 @@
         <span>Lưu</span>
       </button>
     </ng-container>
-    <ng-container
-      *ngIf="formData.value.trangThaiChiCuc != STATUS.HOAN_THANH_CAP_NHAT">
-      <button *ngIf="(formData.value.trangThai == STATUS.BAN_HANH)" type="button" class="btn btn-sub xanh-nhat"
-        (click)="saveDdiemNhap(STATUS.HOAN_THANH_CAP_NHAT)">
-        <i class="icon htvbdh_duyet"></i>
-        <span>Hoàn thành</span>
-      </button>
-      <button *ngIf="(formData.value.trangThai == STATUS.BAN_HANH)" type="button" class="btn btn-main"
-        (click)="saveDdiemNhap(STATUS.DANG_CAP_NHAT)">
-        <i class="icon htvbdh_tcdt_save"></i>
-        <span>Lưu</span>
-      </button>
-    </ng-container>
+<!--    <ng-container-->
+<!--      *ngIf="formData.value.trangThaiChiCuc != STATUS.HOAN_THANH_CAP_NHAT">-->
+<!--      <button *ngIf="(formData.value.trangThai == STATUS.BAN_HANH)" type="button" class="btn btn-sub xanh-nhat"-->
+<!--        (click)="saveDdiemNhap(STATUS.HOAN_THANH_CAP_NHAT)">-->
+<!--        <i class="icon htvbdh_duyet"></i>-->
+<!--        <span>Hoàn thành</span>-->
+<!--      </button>-->
+<!--      <button *ngIf="(formData.value.trangThai == STATUS.BAN_HANH)" type="button" class="btn btn-main"-->
+<!--        (click)="saveDdiemNhap(STATUS.DANG_CAP_NHAT)">-->
+<!--        <i class="icon htvbdh_tcdt_save"></i>-->
+<!--        <span>Lưu</span>-->
+<!--      </button>-->
+<!--    </ng-container>-->
   </div>
 </nz-affix>
 <div class="bg-trang">
