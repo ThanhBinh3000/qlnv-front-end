@@ -33,7 +33,7 @@
         <div nz-col nzSpan="4">
           <label class="search__label"> Loại hàng DTQG </label>
           <nz-select [(ngModel)]="searchFilter.loaiVthh">
-            <nz-option *ngFor="let p of listLoaiVthh" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+            <nz-option *ngFor="let p of listLoaiVthh" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
           </nz-select>
         </div>
         <div nz-col nzSpan="6">
@@ -68,9 +68,9 @@
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button type="button" class="btn btn-main" (click)="themMoi()">
-<!--          *ngIf="loaiVthh == '02' ? userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_VT_HSMT_SUA')-->
-<!--                : userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_LT_HSMT_SUA')">-->
+        <button type="button" class="btn btn-main" (click)="themMoi()"
+          *ngIf="loaiVthh == '02' ? userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_VT_HSMT_SUA')
+                : userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_LT_HSMT_SUA')">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
         </button>
@@ -168,19 +168,19 @@
                *ngIf="checkQuyenXem(data)">
               <i class="fa fa-eye"></i>
             </a>
-            <a (click)="detail(data, false)">
-<!--            *ngIf="(data.trangThai == STATUS.DANG_NHAP_DU_LIEU)-->
-<!--              && (loaiVthh === '02' ? userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_VT_HSMT_SUA') : userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_LT_HSMT_SUA'))">-->
+            <a (click)="detail(data, false)"
+            *ngIf="(data.trangThai == STATUS.DANG_NHAP_DU_LIEU)
+              && (loaiVthh === '02' ? userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_VT_HSMT_SUA') : userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_LT_HSMT_SUA'))">
               <i class="fa fa-pencil"></i>
             </a>
-            <a (click)="detail(data, true)">
-<!--               *ngIf="(data.trangThai == STATUS.DANG_NHAP_DU_LIEU)-->
-<!--              && (loaiVthh === '02' ? userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_VT_HSMT_BANHANH') : userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_LT_HSMT_BANHANH'))">-->
+            <a (click)="detail(data, true)"
+               *ngIf="(data.trangThai == STATUS.DANG_NHAP_DU_LIEU)
+              && (loaiVthh === '02' ? userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_VT_HSMT_BANHANH') : userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_LT_HSMT_BANHANH'))">
               <i class="icon htvbdh_tcdt_pheduyet"></i>
             </a>
-            <a (click)="xoaItem(data)">
-<!--               *ngIf="(data.trangThai == STATUS.DANG_NHAP_DU_LIEU)-->
-<!--              && (loaiVthh === '02' ? userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_VT_HSMT_XOA') : userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_LT_HSMT_XOA'))">-->
+            <a (click)="xoaItem(data)"
+               *ngIf="(data.trangThai == STATUS.DANG_NHAP_DU_LIEU)
+              && (loaiVthh === '02' ? userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_VT_HSMT_XOA') : userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_LT_HSMT_XOA'))">
               <i class="fa fa-trash-o do"></i>
             </a>
           </td>
