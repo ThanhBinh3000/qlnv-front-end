@@ -684,7 +684,6 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
 
   async loadDsDxCanSua() {
     this.spinner.show();
-
     let body = {
       namKh: this.formData.value.namKeHoach,
       type: this.type,

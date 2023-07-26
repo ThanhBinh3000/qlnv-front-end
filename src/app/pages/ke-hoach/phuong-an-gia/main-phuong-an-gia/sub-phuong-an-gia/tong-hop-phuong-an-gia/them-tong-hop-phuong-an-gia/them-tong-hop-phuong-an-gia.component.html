@@ -4,7 +4,7 @@
       <div class="header-text">
         <div class="title-chi-tieu">
          <span *ngIf="isTongHop"
-           [ngClass]="formData.value.trangThaiTh == STATUS.DA_TAO_TT ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
+               [ngClass]="formData.value.trangThaiTh == STATUS.DA_TAO_TT ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
                         {{ formData.value.tenTrangThaiTh }}
                     </span>
           <span *ngIf="!isTongHop"></span>
@@ -87,7 +87,8 @@
             <nz-form-item>
               <nz-form-label [nzNoColon]="true"> Cục DTNNKV</nz-form-label>
               <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-                <nz-select [(ngModel)]="listCucSelected" [nzDisabled]="idInput > 0" (ngModelChange)="changeListDsCuc($event)" [ngModelOptions]="{standalone: true}"
+                <nz-select [(ngModel)]="listCucSelected" [nzDisabled]="idInput > 0"
+                           (ngModelChange)="changeListDsCuc($event)" [ngModelOptions]="{standalone: true}"
                            nzMode="multiple">
                   <nz-option *ngFor="let item of listCuc" [nzLabel]="item.tenDvi"
                              [nzValue]="item.maDvi">
@@ -98,19 +99,21 @@
           </div>
           <div nz-col nzSpan="5">
             <nz-form-item>
-            <nz-form-label [nzNoColon]="true" [nzNoColon]="true" nzFor="ngay-qd"> Ngày đề
-              xuất
-            </nz-form-label>
-            <div nz-row>
-              <div nz-col nzSpan="11">
-                <nz-date-picker [nzDisabled]="isView" nzPlaceHolder="Ngày đề xuất từ" formControlName="ngayDxTu" nzFormat="dd/MM/yyyy" class="search__input"></nz-date-picker>
+              <nz-form-label [nzNoColon]="true" [nzNoColon]="true" nzFor="ngay-qd"> Ngày đề
+                xuất
+              </nz-form-label>
+              <div nz-row>
+                <div nz-col nzSpan="11">
+                  <nz-date-picker [nzDisabled]="isView" nzPlaceHolder="Ngày đề xuất từ" formControlName="ngayDxTu"
+                                  nzFormat="dd/MM/yyyy" class="search__input"></nz-date-picker>
+                </div>
+                <div nz-col nzSpan="1">
+                </div>
+                <div nz-col nzSpan="11">
+                  <nz-date-picker [nzDisabled]="isView" nzPlaceHolder="Ngày đề xuất đến" formControlName="ngayDxDen"
+                                  nzFormat="dd/MM/yyyy" class="search__input"></nz-date-picker>
+                </div>
               </div>
-              <div nz-col nzSpan="1">
-              </div>
-              <div nz-col nzSpan="11">
-                <nz-date-picker [nzDisabled]="isView" nzPlaceHolder="Ngày đề xuất đến" formControlName="ngayDxDen" nzFormat="dd/MM/yyyy" class="search__input"></nz-date-picker>
-              </div>
-            </div>
             </nz-form-item>
           </div>
         </div>
@@ -152,7 +155,7 @@
             </div>
             <div nz-col [nzSpan]="14">
               <nz-form-item class="form-item">
-                <nz-form-label  [nzNoColon]="true"> Nội
+                <nz-form-label [nzNoColon]="true"> Nội
                   dung tổng hợp
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
@@ -267,6 +270,9 @@
         </div>
       </div>
       <nz-card class="mt-2px flex-card data-table card-border-content table-card">
+        <span class="text-right">
+      <h2 style="font-size: 100%; margin-top: 0.5%;font-style: italic;color: red">Đơn vị : Đồng/kg</h2>
+    </span>
         <nz-table #rowSelectionTable class="nowrap" nzBordered [nzData]="dataTableView" [nzFrontPagination]="false"
                   [nzShowPagination]="false">
           <thead>
@@ -276,7 +282,7 @@
             <th class="text-center" rowSpan="2">Cục DTNN KV</th>
             <th class="text-center" rowSpan="2">Vùng miền</th>
             <th class="text-center" rowSpan="2">Chi cục DTNN</th>
-            <th class="text-center" rowSpan="2">Số lượng</th>
+            <th class="text-center" rowSpan="2">Số lượng(tấn)</th>
             <th class="text-center" colSpan="2">Giá khảo sát</th>
             <th class="text-center" colSpan="2">Giá Cục đề nghị</th>
             <th class="text-center" colSpan="2">Giá TC đề xuất</th>
@@ -298,7 +304,9 @@
             <tr>
               <td class="text-center">{{idx + 1}}</td>
               <td class="bg-parent1" [nzExpand]="expandSet.has(data.idVirtual)"
-                  (nzExpandChange)="onExpandChange(data.idVirtual, $event)"><a nz-button nzType="link" (click)="openModalDxChinhSua(data.pagId)">{{ data.soDx }}</a></td>
+                  (nzExpandChange)="onExpandChange(data.idVirtual, $event)"><a nz-button nzType="link"
+                                                                               (click)="openModalDxChinhSua(data.pagId)">{{ data.soDx }}</a>
+              </td>
               <td>{{ data.tenDvi}}</td>
               <td>{{ data.tenVungMien}}</td>
               <td></td>
@@ -321,22 +329,31 @@
                   <td></td>
                   <td>{{item.tenChiCuc}}</td>
                   <td class="text-right">{{ item.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                  <td class="text-center">{{item.giaKsTu && item.giaKsDen ? ((item.giaKsTu | number : '1.0-1' : 'vi_VN') + ' - ' + (item.giaKsDen | number : '1.0-1' : 'vi_VN'))  : ''}}</td>
-                  <td class="text-center" *ngIf="formTraCuu.value.loaiGia == 'LG01' || formTraCuu.value.loaiGia == 'LG03'"> {{item.giaKsVatTu && item.giaKsVatDen ? ((item.giaKsVatTu | number : '1.0-1' : 'vi_VN') + ' - ' + (item.giaKsVatDen | number : '1.0-1' : 'vi_VN'))  : ''}}</td>
-                  <td class="text-center" *ngIf="!(formTraCuu.value.loaiGia == 'LG01' || formTraCuu.value.loaiGia == 'LG03')"></td>
+                  <td
+                    class="text-center">{{item.giaKsTu && item.giaKsDen ? ((item.giaKsTu | number : '1.0-1' : 'vi_VN') + ' - ' + (item.giaKsDen | number : '1.0-1' : 'vi_VN')) : ''}}</td>
+                  <td class="text-center"
+                      *ngIf="formTraCuu.value.loaiGia == 'LG01' || formTraCuu.value.loaiGia == 'LG03'"> {{item.giaKsVatTu && item.giaKsVatDen ? ((item.giaKsVatTu | number : '1.0-1' : 'vi_VN') + ' - ' + (item.giaKsVatDen | number : '1.0-1' : 'vi_VN')) : ''}}</td>
+                  <td class="text-center"
+                      *ngIf="!(formTraCuu.value.loaiGia == 'LG01' || formTraCuu.value.loaiGia == 'LG03')"></td>
                   <td class="text-right">{{ item.giaCucDn | number : '1.0-1' : 'vi_VN'}}</td>
-                  <td class="text-right"  *ngIf="formTraCuu.value.loaiGia == 'LG01' || formTraCuu.value.loaiGia == 'LG03'">{{ item.giaCucDnVat | number : '1.0-1' : 'vi_VN'}}</td>
-                  <td class="text-right" *ngIf="!(formTraCuu.value.loaiGia == 'LG01' || formTraCuu.value.loaiGia == 'LG03')"></td>
+                  <td class="text-right"
+                      *ngIf="formTraCuu.value.loaiGia == 'LG01' || formTraCuu.value.loaiGia == 'LG03'">{{ item.giaCucDnVat | number : '1.0-1' : 'vi_VN'}}</td>
+                  <td class="text-right"
+                      *ngIf="!(formTraCuu.value.loaiGia == 'LG01' || formTraCuu.value.loaiGia == 'LG03')"></td>
                   <td class="text-right">
                     {{ item.giaQdTcdtnn | number : '1.0-1' : 'vi_VN'}}
                   </td>
-                  <td class="text-right" *ngIf="(formTraCuu.value.loaiGia == 'LG01' || formTraCuu.value.loaiGia == 'LG03')">
+                  <td class="text-right"
+                      *ngIf="(formTraCuu.value.loaiGia == 'LG01' || formTraCuu.value.loaiGia == 'LG03')">
                     {{ item.giaQdVatTcdtnn | number : '1.0-1' : 'vi_VN'}}
                   </td>
-                  <td class="text-right" *ngIf="!(formTraCuu.value.loaiGia == 'LG01' || formTraCuu.value.loaiGia == 'LG03')"></td>
+                  <td class="text-right"
+                      *ngIf="!(formTraCuu.value.loaiGia == 'LG01' || formTraCuu.value.loaiGia == 'LG03')"></td>
                   <td class="text-right">{{ item.giaQdBtc | number : '1.0-1' : 'vi_VN'}}</td>
-                  <td class="text-right" *ngIf="(formTraCuu.value.loaiGia == 'LG01' || formTraCuu.value.loaiGia == 'LG03')">{{ item.giaQdBtcVat | number : '1.0-1' : 'vi_VN'}}</td>
-                  <td class="text-right" *ngIf="!(formTraCuu.value.loaiGia == 'LG01' || formTraCuu.value.loaiGia == 'LG03')"></td>
+                  <td class="text-right"
+                      *ngIf="(formTraCuu.value.loaiGia == 'LG01' || formTraCuu.value.loaiGia == 'LG03')">{{ item.giaQdBtcVat | number : '1.0-1' : 'vi_VN'}}</td>
+                  <td class="text-right"
+                      *ngIf="!(formTraCuu.value.loaiGia == 'LG01' || formTraCuu.value.loaiGia == 'LG03')"></td>
                 </tr>
               </ng-container>
             </ng-container>
@@ -372,7 +389,7 @@
     <app-them-dx-pag-lt *ngIf="pagType=='LT'" [pagType]="pagType" [type]="type" [isView]="true" [isModal]="true"
                         [idInput]="idSelected">
     </app-them-dx-pag-lt>
-    <app-them-moi-de-xuat-pag *ngIf="pagType=='VT'" [loaiVthh]="pagType" [type]="type" [isView]="true"  [isModal]="true"
+    <app-them-moi-de-xuat-pag *ngIf="pagType=='VT'" [loaiVthh]="pagType" [type]="type" [isView]="true" [isModal]="true"
                               [idInput]="idSelected"></app-them-moi-de-xuat-pag>
   </ng-container>
   <div *nzModalFooter>

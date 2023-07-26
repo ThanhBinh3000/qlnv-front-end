@@ -235,6 +235,9 @@
       </div>
     </div>
   </div>
+  <span class="text-right">
+      <h2 style="font-size: 100%; margin-top: 0.5%;font-style: italic;color: red">Đơn vị : Đồng/kg</h2>
+    </span>
   <nz-table #rowSelectionTable class="nowrap" nzBordered [nzData]="dataTableView" [nzFrontPagination]="false"
             [nzShowPagination]="false">
     <thead>
@@ -244,7 +247,7 @@
       <th class="text-center" rowSpan="2">Cục DTNN KV</th>
       <th class="text-center" rowSpan="2">Vùng miền</th>
       <th class="text-center" rowSpan="2">Chi cục DTNN</th>
-      <th class="text-center" rowSpan="2">Số lượng</th>
+      <th class="text-center" rowSpan="2">Số lượng(tấn)</th>
       <th class="text-center" colSpan="2">Giá khảo sát</th>
       <th class="text-center" colSpan="2">Giá Cục đề nghị</th>
       <th class="text-center" colSpan="2">Giá TC đề xuất</th>
@@ -300,7 +303,7 @@
                 *ngIf="formData.value.loaiGia == 'LG01' || formData.value.loaiGia == 'LG03'">{{ item.giaCucDnVat | number : '1.0-1' : 'vi_VN'}}</td>
             <td class="text-right" *ngIf="!(formData.value.loaiGia == 'LG01' || formData.value.loaiGia == 'LG03')"></td>
             <td class="text-right">
-              <nz-input-number [nzDisabled]="isView" [nzSize]="'small'" [(ngModel)]="item.giaQdTcdtnn"
+              <nz-input-number [nzDisabled]="isView" [nzSize]="'small'" [(ngModel)]="item.giaQdTcdtnn" [nzMin]="0"
                                [nzFormatter]="globals.formatter"
                                [nzParser]="globals.parser">
               </nz-input-number>

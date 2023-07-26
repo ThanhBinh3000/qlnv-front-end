@@ -266,16 +266,15 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
     }
   }
 
-  async pheDuyet() {
+  async tuChoi() {
     let trangThai;
     switch (this.formData.value.trangThai) {
-      case STATUS.DU_THAO :
-      case STATUS.TU_CHOI_LDV : {
+      case STATUS.CHO_DUYET_LDV : {
         trangThai = STATUS.CHO_DUYET_LDV;
         break;
       }
-      case STATUS.CHO_DUYET_LDV : {
-        trangThai = STATUS.DA_DUYET_LDV
+      case STATUS.CHO_DUYET_LDTC : {
+        trangThai = STATUS.CHO_DUYET_LDTC
       }
     }
     await this.approve(this.id, trangThai, 'Bạn có chắc chắn muốn duyệt?')
