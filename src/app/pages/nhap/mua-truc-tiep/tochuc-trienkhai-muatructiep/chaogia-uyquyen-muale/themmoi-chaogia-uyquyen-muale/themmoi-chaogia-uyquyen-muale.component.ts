@@ -157,6 +157,7 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
     } else {
       this.selected = true;
     }
+    this.rowItem.donGia = data.donGia
     this.idRowSelect = data.id;
     this.dataTable = data.listChaoGia
     this.updateEditCache()

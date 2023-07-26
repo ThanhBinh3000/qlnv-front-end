@@ -23,6 +23,7 @@ export class ChaogiaUyquyenMualeComponent extends Base2Component implements OnIn
 
   dsDonvi: any[] = [];
   userdetail: any = {};
+  isView: any;
 
   constructor(
     httpClient: HttpClient,
@@ -97,5 +98,11 @@ export class ChaogiaUyquyenMualeComponent extends Base2Component implements OnIn
       this.formData.value.ngayCgiadDen = dayjs(this.formData.value.ngayTao[1]).format('YYYY-MM-DD')
     }
     await this.search();
+  }
+
+  goDetail(id: number, isView?: any) {
+    this.idSelected = id;
+    this.isDetail = true;
+    this.isView = isView
   }
 }

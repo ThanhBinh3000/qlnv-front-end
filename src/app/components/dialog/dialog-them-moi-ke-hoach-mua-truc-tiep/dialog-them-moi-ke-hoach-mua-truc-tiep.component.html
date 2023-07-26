@@ -63,7 +63,7 @@
                     <nz-form-label nzRequired [nzNoColon]="true"> Tổng số lượng nhập trực tiếp đề xuất (Tấn)
                     </nz-form-label>
                     <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-                        <nz-input-number [nzDisabled]="true" formControlName="tongSoLuong" [nzMin]="1"
+                        <nz-input-number [nzDisabled]="userService.isCuc()" formControlName="tongSoLuong" [nzMin]="1"
                             [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
                             [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
                         </nz-input-number>
@@ -107,7 +107,7 @@
         <br />
     </form>
 
-    <nz-table nzBordered class="pd-10 overflow-auto" [nzData]="listOfData">
+    <nz-table nzBordered class="pd-10 overflow-auto" [nzData]="listOfData" *ngIf="userService.isCuc()">
         <thead>
             <tr>
                 <th nzWidth="150px" class="text-center wrap">Điểm kho</th>

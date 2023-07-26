@@ -10,7 +10,7 @@
             <i class="icon htvbdh_tcdt_guiduyet"></i>
             <span>Hoàn thành cập nhập</span>
         </button>
-        <button *ngIf="formData.value.trangThai != STATUS.HOAN_THANH_CAP_NHAT"
+        <button *ngIf="formData.value.trangThai != STATUS.HOAN_THANH_CAP_NHAT && this.userService.isCuc()"
             class="btn btn-main btn-sm waves-effect waves-light" (click)="save()">
             <i class="icon htvbdh_tcdt_save"></i>
             <span>Lưu</span>
@@ -169,33 +169,55 @@
           <thead>
           <tr>
             <th style="width: 2%;">STT</th>
-            <th>Chi cục</th>
+            <th style="width: 300px;">Chi cục</th>
             <th>Điểm kho</th>
-            <th>Số lượng mua trực tiếp đề xuất</th>
-            <th>ĐVT</th>
-            <th>Đơn giá được duyệt có VAT (đ/kg)</th>
-            <th>Thành tiền (đ)</th>
+            <th>Chỉ tiêu kế hoạch được giao (tấn)</th>
+            <th>Số đã thực hiện (tấn)</th>
+            <th>SL đề xuất mua trực tiếp (tấn)</th>
+            <th>Đơn giá được duyệt có VAT (đ)</th>
+            <th>Thành tiền theo đơn giá đã duyệt (đ)</th>
+            <th>Hành động</th>
           </tr>
           </thead>
           <tbody>
           <ng-container *ngFor="let item of tableData.data , let i = index">
             <tr [ngClass]="{'bg-selected': i == 0 && this.selected}" (click)="showDetail($event,item)">
               <td [nzExpand]="true"></td>
-              <td colspan="2">{{item.tenDvi}}</td>
-              <td class="text-bold">{{ item.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
+              <td>{{item.tenDvi}}</td>
+              <td></td>
+              <td class="text-bold">{{ item.soLuongChiTieu | number : '1.0-1' : 'vi_VN' }}</td>
+              <td class="text-bold">{{ item.soLuongKhDd | number : '1.0-1' : 'vi_VN' }}</td>
+              <td class="text-bold">{{ item.tongSoLuong | number : '1.0-1' : 'vi_VN' }}</td>
               <td></td>
               <td></td>
               <td></td>
+            </tr>
+            <tr *ngIf="formData.value.trangThai != STATUS.HOAN_THANH_CAP_NHAT && item.id == idRowSelect">
+              <td class="text-center"> </td>
+              <td></td>
+              <td><input nz-input [(ngModel)]="rowItem.diaChi" /></td>
+              <td></td>
+              <td></td>
+              <td><input nz-input [(ngModel)]="rowItem.diaChi" /></td>
+              <td></td>
+              <td></td>
+              <td>
+                <a (click)="addRow()" [class.disabled]="!rowItem">
+                  <i class="fa fa-plus"></i>
+                </a>
+              </td>
             </tr>
             <ng-container *ngFor="let diemKho of item.children, let y = index">
               <tr>
                 <td></td>
                 <td></td>
                 <td>{{diemKho.tenDiemKho}}</td>
+                <td></td>
+                <td></td>
                 <td>{{diemKho.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                <td>tấn</td>
-                <td>{{diemKho.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
-                <td>{{diemKho.donGiaVat * diemKho.soLuong * 1000 | number : '1.0-1' : 'vi_VN'}}</td>
+                <td>{{diemKho.donGiaVat ? diemKho.donGiaVat : diemKho.donGia | number : '1.0-1' : 'vi_VN'}}</td>
+                <td>{{(diemKho.donGiaVat ? diemKho.donGiaVat : diemKho.donGia) * diemKho.soLuong * 1000 | number : '1.0-1' : 'vi_VN'}}</td>
+                <td></td>
               </tr>
             </ng-container>
           </ng-container>
@@ -217,7 +239,7 @@
                             <th style="width: 8%;">Địa chỉ</th>
                             <th style="width: 8%;">Số điện thoại</th>
                             <th style="width: 10%;">Ngày chào giá</th>
-                            <th style="width: 5%;">Số lượng (Kg)</th>
+                            <th style="width: 5%;">Số lượng (tấn)</th>
                             <th style="width: 15%;">Đơn giá đã bao gồm thuế (đ)</th>
                             <th style="width: 10%;">Thành tiền (đ)</th>
                             <th style="width: 20%;">File đính kèm</th>
@@ -242,7 +264,7 @@
                                     [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number>
                             </th>
                             <th>
-                                <nz-input-number nz-input [nzSize]="'small'" [(ngModel)]="rowItem.donGia"
+                                <nz-input-number nz-input [nzDisabled]="true" [nzSize]="'small'" [(ngModel)]="rowItem.donGia"
                                     [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number>
                             </th>
                             <th>{{ rowItem.soLuong * rowItem.donGia * 1000 | number : '1.0-1' : 'vi_VN' }}</th>
@@ -285,7 +307,7 @@
                                 <td>{{ data.donGia | number : '1.0-1' : 'vi_VN' }}</td>
                                 <td>{{ data.soLuong * data.donGia * 1000 | number : '1.0-1' : 'vi_VN' }}</td>
                                 <td>{{data.fileDinhKems?.fileName }}</td>
-                                <td> <label nz-checkbox [(ngModel)]="data.luaChon"></label></td>
+                                <td> <label nz-checkbox [nzDisabled]="isView" [(ngModel)]="data.luaChon"></label></td>
                                 <td>
                                     <a (click)="downloadFile(data.fileDinhKems)">
                                         <i class="icon htvbdh_tcdt_import "></i>
