@@ -304,10 +304,9 @@ export class LapPhieuKtraCluongComponent extends Base2Component implements OnIni
       },
       trangThai: this.globals.prop.NHAP_BAN_HANH,
     }
-    let res = await this.quyetDinhGiaoNhapHangKhacService.search(body);
+    let res = await this.phieuKtraCluongService.dsQdNvuDuocLapPhieuKtcl(body);
     if (res.msg == MESSAGE.SUCCESS) {
-      let data = res.data;
-      this.listSoQuyetDinh = data.content;
+      this.listSoQuyetDinh = res.data;
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
