@@ -44,11 +44,17 @@ import {
   ThongTinBienBanLayMauBanGiaoMauVtTbComponent
 } from "./kiem-tra-chat-luong-vt-tb-trong-thoi-gian-bao-hanh/bien-ban-lay-mau-ban-giao-mau-vt-tb/thong-tin-bien-ban-lay-mau-ban-giao-mau-vt-tb/thong-tin-bien-ban-lay-mau-ban-giao-mau-vt-tb.component";
 import {
-  XkVtPhieuKiemNghiemChatLuongComponent
-} from "./kiem-tra-chat-luong-vt-tb-trong-thoi-gian-bao-hanh/phieu-kiem-dinh-chat-luong/phieu-kiem-dinh-chat-luong.component";
+  XkVtPhieuKiemDinhChatLuongVtTbComponent,
+} from "./kiem-tra-chat-luong-vt-tb-trong-thoi-gian-bao-hanh/phieu-kiem-dinh-chat-luong/phieu-kiem-dinh-chat-luong-vt-tb.component";
 import {
-  ThongTinPhieuKiemDinhChatLuongComponent
-} from "./kiem-tra-chat-luong-vt-tb-trong-thoi-gian-bao-hanh/phieu-kiem-dinh-chat-luong/thong-tin-phieu-kiem-dinh-chat-luong/thong-tin-phieu-kiem-dinh-chat-luong.component";
+  ThongTinPhieuKiemDinhChatLuongVtTbComponent
+} from "./kiem-tra-chat-luong-vt-tb-trong-thoi-gian-bao-hanh/phieu-kiem-dinh-chat-luong/thong-tin-phieu-kiem-dinh-chat-luong/thong-tin-phieu-kiem-dinh-chat-luong-vt-tb.component";
+import {
+  BaoCaoKetQuaKiemDinhVtTbComponent
+} from "./kiem-tra-chat-luong-vt-tb-trong-thoi-gian-bao-hanh/bao-cao-ket-qua-kiem-dinh/bao-cao-ket-qua-kiem-dinh-vt-tb.component";
+import {
+  ThongTinBaoCaoKetQuaKiemDinhVtTbComponent
+} from "./kiem-tra-chat-luong-vt-tb-trong-thoi-gian-bao-hanh/bao-cao-ket-qua-kiem-dinh/thong-tin-bao-cao-ket-qua-kiem-dinh/thong-tin-bao-cao-ket-qua-kiem-dinh-vt-tb.component";
 
 
 @NgModule({
@@ -64,8 +70,10 @@ import {
     KiemTraChatLuongVtTbComponent,
     XkBienBanLayMauBanGiaoMauComponent,
     ThongTinBienBanLayMauBanGiaoMauVtTbComponent,
-    XkVtPhieuKiemNghiemChatLuongComponent,
-    ThongTinPhieuKiemDinhChatLuongComponent
+    XkVtPhieuKiemDinhChatLuongVtTbComponent,
+    ThongTinPhieuKiemDinhChatLuongVtTbComponent,
+    BaoCaoKetQuaKiemDinhVtTbComponent,
+    ThongTinBaoCaoKetQuaKiemDinhVtTbComponent,
   ],
   imports: [
     CommonModule,
@@ -90,8 +98,10 @@ import {
     KiemTraChatLuongVtTbComponent,
     XkBienBanLayMauBanGiaoMauComponent,
     ThongTinBienBanLayMauBanGiaoMauVtTbComponent,
-    XkVtPhieuKiemNghiemChatLuongComponent,
-    ThongTinPhieuKiemDinhChatLuongComponent
+    XkVtPhieuKiemDinhChatLuongVtTbComponent,
+    ThongTinPhieuKiemDinhChatLuongVtTbComponent,
+    BaoCaoKetQuaKiemDinhVtTbComponent,
+    ThongTinBaoCaoKetQuaKiemDinhVtTbComponent,
   ],
   providers: [DatePipe]
 })
