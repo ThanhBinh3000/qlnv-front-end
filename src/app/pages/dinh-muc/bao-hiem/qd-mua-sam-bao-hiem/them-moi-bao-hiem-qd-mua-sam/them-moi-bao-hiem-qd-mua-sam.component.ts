@@ -33,6 +33,7 @@ export class ThemMoiBaoHiemQdMuaSamComponent extends Base2Component implements O
   typeQd : string
   tableGiaTriBh: any[] = [];
   dataHang : any[] = [];
+  checkNhomTiLe : boolean = false;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -253,6 +254,15 @@ export class ThemMoiBaoHiemQdMuaSamComponent extends Base2Component implements O
 
   convertList(listHh) {
     if (listHh.listQlDinhMucDxBhHdtqg && listHh.listQlDinhMucDxBhHdtqg.length > 0) {
+      listHh.listQlDinhMucDxBhHdtqg.forEach(item => {
+        if (!item.tenNhomTiLeBaoHiem) {
+          this.checkNhomTiLe = true;
+        }
+      })
+      if (this.checkNhomTiLe == true) {
+        this.notification.error(MESSAGE.ERROR, "Vui lòng thêm nhóm tỉ lệ bảo hiểm của loại hàng hóa!");
+        return;
+      }
       this.dataHang = []
       this.dataHang = listHh.listQlDinhMucDxBhKhoChua
       this.dataHang = chain(this.dataHang).groupBy('tenDonViCha').map((value, key) => ({
