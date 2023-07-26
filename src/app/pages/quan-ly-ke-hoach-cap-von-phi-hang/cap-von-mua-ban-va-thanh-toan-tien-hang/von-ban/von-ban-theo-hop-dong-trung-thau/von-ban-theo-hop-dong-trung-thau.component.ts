@@ -11,6 +11,7 @@ import { CapVonMuaBanTtthService } from 'src/app/services/quan-ly-von-phi/capVon
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { BtnStatus, Cvmb, Report, ThanhToan } from '../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
+import { Tab } from '../von-ban.constant';
 
 @Component({
     selector: 'app-von-ban-theo-hop-dong-trung-thau',
@@ -166,16 +167,26 @@ export class VonBanTheoHopDongTrungThauComponent implements OnInit {
         this.status.submit = this.status.submit && this.userService.isAccessPermisson(Roles.CVMB.SUBMIT_VB);
         this.status.pass = this.status.pass && this.userService.isAccessPermisson(Roles.CVMB.PASS_VB);
         this.status.approve = this.status.approve && this.userService.isAccessPermisson(Roles.CVMB.APPROVE_VB);
-        this.status.accept = this.status.accept && this.userService.isAccessPermisson(Roles.CVMB.ACCEPT_VB)
-        this.scrollHD = this.status.save ? Table.tableWidth(500, 9, 1, 60) : Table.tableWidth(500, 9, 1, 0);
-        this.scrollVB = this.status.save ? Table.tableWidth(300, 16, 1, 60) : Table.tableWidth(500, 16, 1, 0);
+        this.status.accept = this.status.accept && this.userService.isAccessPermisson(Roles.CVMB.ACCEPT_VB);
+        if (this.userService.isTongCuc()) {
+            this.scrollHD = Table.tableWidth(700, 9, 1, 0);
+            this.scrollVB = this.status.save ? Table.tableWidth(300, 18, 1, 60) : Table.tableWidth(500, 18, 1, 0);
+        } else {
+            this.scrollHD = this.status.save ? Table.tableWidth(500, 9, 1, 60) : Table.tableWidth(500, 9, 1, 0);;
+            this.scrollVB = this.status.save ? Table.tableWidth(300, 16, 1, 60) : Table.tableWidth(500, 16, 1, 0);
+        }
+
     }
 
     back() {
-        const obj = {
-            tabSelected: this.dataInfo?.preTab,
+        if (this.dataInfo?.preData) {
+            this.dataChange.emit(this.dataInfo?.preData)
+        } else {
+            const obj = {
+                tabSelected: this.dataInfo?.preTab,
+            }
+            this.dataChange.emit(obj);
         }
-        this.dataChange.emit(obj);
     }
 
     setLevel() {
@@ -397,6 +408,15 @@ export class VonBanTheoHopDongTrungThauComponent implements OnInit {
         this.editCache[id].data.cong = Operator.sum([this.editCache[id].data.ung, this.editCache[id].data.cap]);
         this.editCache[id].data.lkSauLanNay = Operator.sum([this.editCache[id].data.lkCong, this.editCache[id].data.cong]);
         this.editCache[id].data.soConPhaiNop = Operator.sum([this.editCache[id].data.gtThucHien, -this.editCache[id].data.phatViPham, -this.editCache[id].data.lkSauLanNay]);
+    }
+
+    viewDetail(id: string) {
+        const obj = {
+            id: id,
+            preData: this.dataInfo,
+            tabSelected: this.dataInfo.tabSelected == Tab.VB_HOP_DONG ? Tab.VB_HOP_DONG_1 : Tab.VB_HOP_DONG,
+        }
+        this.dataChange.emit(obj);
     }
 
     // xoa file trong bang file

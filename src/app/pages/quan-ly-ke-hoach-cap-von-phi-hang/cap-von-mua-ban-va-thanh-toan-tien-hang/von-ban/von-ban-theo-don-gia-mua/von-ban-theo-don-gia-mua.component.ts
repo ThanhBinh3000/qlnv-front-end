@@ -179,10 +179,14 @@ export class VonBanTheoDonGiaMuaComponent implements OnInit {
     }
 
     back() {
-        const obj = {
-            tabSelected: this.dataInfo?.preTab,
+        if (this.dataInfo?.preData) {
+            this.dataChange.emit(this.dataInfo?.preData)
+        } else {
+            const obj = {
+                tabSelected: this.dataInfo?.preTab,
+            }
+            this.dataChange.emit(obj);
         }
-        this.dataChange.emit(obj);
     }
 
     // call chi tiet bao cao

@@ -81,7 +81,7 @@
                         <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"></label>
                     </th>
                     <th width="60px" class="text-center">STT</th>
-                    <th *ngIf="searchFilter.loaiTimKiem == '1'">Đơn vị</th>
+                    <th *ngIf="dataInfo.tabSelected == Tab.DS_GN_TT">Đơn vị</th>
                     <th>Mã cấp ứng</th>
                     <th>Năm</th>
                     <th>Đợt</th>
@@ -104,8 +104,8 @@
                     <td class="text-center">
                         {{ (i + 1) + (searchFilter.paggingReq.page - 1)*searchFilter.paggingReq.limit }}
                     </td>
-                    <td *ngIf="searchFilter.loaiTimKiem == '1'">
-                        {{ data.tenDvi }}
+                    <td *ngIf="dataInfo.tabSelected == Tab.DS_GN_TT">
+                        {{ getUnitName(data.maDvi) }}
                     </td>
                     <td>
                         {{ data.maCapUng}}
@@ -125,21 +125,40 @@
                     <td>
                         {{ Utils.fmtDate(data.ngayTao) }}
                     </td>
-                    <td>
-                        {{ Utils.fmtDate(data.ngayTrinh) }}
-                    </td>
-                    <td>
-                        {{ Utils.fmtDate(data.ngayDuyet) }}
-                    </td>
-                    <td>
-                        {{ Utils.fmtDate(data.ngayPheDuyet) }}
-                    </td>
-                    <td>
-                        {{Status.reportStatusName(data.trangThai, isParent)}}
-                        <ng-container *ngIf="Status.check('reject', data.trangThai)">
-                            <br>Lý do: {{data.lyDoTuChoi}}
-                        </ng-container>
-                    </td>
+                    <ng-container *ngIf="dataInfo.tabSelected == Tab.DS_GN_TT; else dvcd">
+                        <td>
+                            {{ Utils.fmtDate(data.ngayTrinhDvct) }}
+                        </td>
+                        <td>
+                            {{ Utils.fmtDate(data.ngayDuyetDvct) }}
+                        </td>
+                        <td>
+                            {{ Utils.fmtDate(data.ngayPheDuyetDvct) }}
+                        </td>
+                        <td>
+                            {{Status.reportStatusName(data.Dvct, isParent)}}
+                            <ng-container *ngIf="Status.check('reject', data.trangThaiDvct)">
+                                <br>Lý do: {{data.lyDoTuChoiDvct}}
+                            </ng-container>
+                        </td>
+                    </ng-container>
+                    <ng-template #dvcd>
+                        <td>
+                            {{ Utils.fmtDate(data.ngayTrinh) }}
+                        </td>
+                        <td>
+                            {{ Utils.fmtDate(data.ngayDuyet) }}
+                        </td>
+                        <td>
+                            {{ Utils.fmtDate(data.ngayPheDuyet) }}
+                        </td>
+                        <td>
+                            {{Status.reportStatusName(data.trangThai, isParent)}}
+                            <ng-container *ngIf="Status.check('reject', data.trangThai)">
+                                <br>Lý do: {{data.lyDoTuChoi}}
+                            </ng-container>
+                        </td>
+                    </ng-template>
                     <td class="text-left">
                         <a (click)="viewDetail(data)">
                             <ng-container *ngIf="data.isEdit; else view">
