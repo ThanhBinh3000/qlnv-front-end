@@ -35,7 +35,8 @@ export class ThemMoiToTrinhPagComponent implements OnInit {
   dataTable: any[] = [];
   dataTableView: any[] = [];
   dsLoaiGia: any[] = [];
-
+  idSelected: number;
+  isViewModal: boolean = false;
   constructor(
     private readonly fb: FormBuilder,
     private readonly modal: NzModalService,
@@ -129,6 +130,7 @@ export class ThemMoiToTrinhPagComponent implements OnInit {
       tenLoaiVthh: data.tenLoaiVthh,
       tenCloaiVthh: data.tenCloaiVthh,
       loaiGia: data.loaiGia,
+      tchuanCluong: data.tchuanCluong,
       trangThaiTt: data.trangThaiTt,
       tenTrangThaiTt: data.tenTrangThaiTt ? data.tenTrangThaiTt : 'Dự thảo' ,
       ttLyDoTuChoi: data.ttLyDoTuChoi,
@@ -288,7 +290,8 @@ export class ThemMoiToTrinhPagComponent implements OnInit {
             tenVungMien: value && value[0] && value[0].tenVungMien ? value[0].tenVungMien : null,
             tenDvi: value && value[0] && value[0].tenDvi ? value[0].tenDvi : null,
             soDx : value && value[0] && value[0].soDx ? value[0].soDx : null,
-            children: value
+            children: value,
+            pagId: value && value[0] && value[0].pagId ? value[0].pagId : null,
           };
         }).value();
     }
@@ -323,5 +326,15 @@ export class ThemMoiToTrinhPagComponent implements OnInit {
         }
       })
     }
+  }
+
+  async openModalDxChinhSua(pagId: number) {
+    this.idSelected = pagId
+    this.isViewModal = true;
+  }
+
+  closeDxPaModal() {
+    this.idSelected = null;
+    this.isViewModal = false;
   }
 }

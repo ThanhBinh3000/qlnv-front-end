@@ -246,9 +246,7 @@
             <td class="text-right"
                 *ngIf="!(formData.value.loaiGia == 'LG01' || formData.value.loaiGia == 'LG03')"></td>
             <td class="text-right" *ngIf="(formData.value.loaiDeXuat == '00')">
-              <nz-input-number [nzDisabled]="isView" [nzSize]="'small'" [(ngModel)]="item.giaQdBtc"
-                               [nzMin]="formData.value.loaiGia == 'LG02' ? item. giaQdTcdtnn : 0"
-                               [nzMax]="formData.value.loaiGia == 'LG01' ? item. giaQdTcdtnn : 9999999999"
+              <nz-input-number [nzDisabled]="isView" [nzSize]="'small'" [(ngModel)]="item.giaQdBtc" [nzMin]="0"
                                [nzFormatter]="globals.formatter"
                                [nzParser]="globals.parser">
               </nz-input-number>

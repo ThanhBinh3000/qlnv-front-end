@@ -122,15 +122,6 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="3">
-          <nz-form-item class="form-item">
-            <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="nam-qd">Lần đề xuất
-            </nz-form-label>
-            <nz-form-control [nzErrorTip]="error">
-              <input type="text" nz-input formControlName="lanDeXuat" [readonly]="true">
-            </nz-form-control>
-          </nz-form-item>
-        </div>
         <div nz-col [nzSpan]="4">
           <nz-form-item class="form-item">
             <nz-form-label [nzNoColon]="true" [nzNoColon]="true">Số công văn cần điều chỉnh
@@ -139,6 +130,15 @@
               <nz-input-group nzAddOnAfterIcon="folder-open">
                 <input type="text" nz-input formControlName="soDeXuatDc" [readonly]="true" (click)="openModalSoDx()">
               </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="3">
+          <nz-form-item class="form-item">
+            <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="nam-qd">Lần đề xuất
+            </nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <input type="text" nz-input formControlName="lanDeXuat" [readonly]="true">
             </nz-form-control>
           </nz-form-item>
         </div>
