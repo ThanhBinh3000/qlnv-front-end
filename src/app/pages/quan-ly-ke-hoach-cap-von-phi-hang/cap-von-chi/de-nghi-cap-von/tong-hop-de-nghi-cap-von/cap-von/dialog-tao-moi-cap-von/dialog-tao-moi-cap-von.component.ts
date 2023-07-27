@@ -29,9 +29,10 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
   isContractExist: boolean;
   idRequest!: string;
   total: ItemContract = new ItemContract();
-  responeHopDong: ItemContract = new ItemContract()
-  a: BaoCao;
   idCallChitiet!: string;
+  idRequestCallCtiet!: string;
+  demSoLan: number;
+  tinhLuyKe: any;
 
   constructor(
     private _modalRef: NzModalRef,
@@ -146,11 +147,6 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
                       thanhLyHdongSl: dataRequest.thanhLyHdongSl,
                       thanhLyHdongTt: dataRequest.thanhLyHdongTt,
                     })
-                    // this.baoCao = data.data;
-                    // this.listFile = [];
-                    // this.getStatusButton();
-                    // this.getTotal();
-                    // this.updateEditCache()
                   } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
                   }
@@ -167,33 +163,81 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
       } else {
         //neu la chi cuc thi tao moi de nghi
         if (this.userService.isChiCuc()) {
-          this.response.lstCtiets = [];
-          this.response.lstCtiets.push({
-            ... new ItemContract(),
-            id: uuid.v4() + 'FE',
-            maDvi: this.userInfo?.MA_DVI,
-            tenDvi: this.userInfo?.TEN_DVI,
-            dnghiCapvonLuyKes: [],
-          })
-        } else if (this.userService.isTongCuc()) {
-          this.response.lstCtiets.push({
-            ... new ItemContract(),
-            id: uuid.v4() + 'FE',
-            maDvi: this.userInfo?.MA_DVI,
-            tenDvi: this.userInfo?.TEN_DVI,
-            dnghiCapvonLuyKes: [],
-          })
+          if (this.demSoLan == 0) {
+            this.response.lstCtiets = [];
+            this.response.lstCtiets.push({
+              ... new ItemContract(),
+              id: uuid.v4() + 'FE',
+              maDvi: this.userInfo?.MA_DVI,
+              tenDvi: this.userInfo?.TEN_DVI,
+            });
+          } else {
+            await this.capVonNguonChiService.ctietDeNghi(this.idRequest).toPromise().then(
+              async (data) => {
+                if (data.statusCode == 0) {
+                  const updateItems = data.data.lstCtiets.map(item => ({
+                    ...item,
+                    ... new ItemContract(),
+                    id: uuid.v4() + 'FE',
+                    maDvi: this.userInfo?.MA_DVI,
+                    tenDvi: this.userInfo?.TEN_DVI,
+                    slKeHoach: null,
+                    slThucHien: null,
+                    donGia: null,
+                    gtriThucHien: null,
+                    duToanDaGiao: null,
+                    luyKeTongCapUng: Operator.sum([item.luyKeTongCapUng, item.vonDuyetCapUng]),
+                    luyKeTongCapVon: Operator.sum([item.luyKeTongCapVon, item.vonDuyetCapVon]),
+                    luyKeTongCong: Operator.sum([item.luyKeTongCong, item.vonDuyetCong]),
+                    tongVonVaDtDaCap: null,
+                    vonDnghiCapLanNay: null,
+                    vonDuyetCapUng: null,
+                    vonDuyetCapVon: null,
+                    vonDuyetCong: null,
+                    tongTien: null,
+                    soConDuocCap: null,
+                    ghiChu: null,
+                  }))
+                  this.response.lstCtiets = updateItems;
+                } else {
+                  this.notification.error(MESSAGE.ERROR, data?.msg);
+                }
+              },
+              (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+              },
+            );
+            this.response.soLan = this.demSoLan + 1;
+          }
         } else {
           await this.callSynthetic();
         }
       }
       await this.getMaDnghi();
-    } else {
+    }
+    else {
       //them lan moi cho de nghi
       await this.capVonNguonChiService.ctietDeNghi(this.idRequest).toPromise().then(
         async (data) => {
           if (data.statusCode == 0) {
             this.response = data.data;
+            this.response.lstCtiets.map(item => {
+              item.slKeHoach = null;
+              item.slThucHien = null;
+              item.donGia = null;
+              item.gtriThucHien = null;
+              item.duToanDaGiao = null;
+              item.luyKeTongCapUng = Operator.sum([item.luyKeTongCapUng, item.vonDuyetCapUng]);
+              item.luyKeTongCapVon = Operator.sum([item.luyKeTongCapVon, item.vonDuyetCapVon]);
+              item.luyKeTongCong = Operator.sum([item.luyKeTongCong, item.vonDuyetCong]);
+              item.tongVonVaDtDaCap = null;
+              item.vonDnghiCapLanNay = null;
+              item.vonDuyetCapUng = null;
+              item.vonDuyetCapVon = null;
+              item.vonDuyetCong = null;
+              item.tongTien = null;
+              item.soConDuocCap = null;
+            })
           } else {
             this.notification.error(MESSAGE.ERROR, data?.msg);
           }
@@ -202,41 +246,6 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         },
       );
-      this.response.lstCtiets.forEach(item => {
-        if (item.maDvi == this.userInfo?.MA_DVI || !item.maDvi) {
-          item.dnghiCapvonLuyKes.push({
-            id: uuid.v4() + 'FE',
-            soLan: this.response.soLan,
-            trangThai: this.response.trangThai,
-            vonDuyetCong: item.vonDuyetCong,
-            vonDuyetCapUng: item.vonDuyetCapUng,
-            vonDuyetCapVon: item.vonDuyetCapVon,
-            uyNhchiNgay: item.uyNhchiNgay,
-            uyNhchiMaNguonNs: item.uyNhchiMaNguonNs,
-            uyNhchiNienDoNs: item.uyNhchiNienDoNs,
-            uyNhchiNienSoTien: item.uyNhchiNienSoTien,
-          })
-          item.luyKeCong = sumNumber([item.luyKeCong, item.vonDuyetCong]);
-          item.luyKeCapUng = sumNumber([item.luyKeCapUng, item.vonDuyetCapUng]);
-          item.luyKeCapVon = sumNumber([item.luyKeCapVon, item.vonDuyetCapVon]);
-          item.soTtLuyKe = sumNumber([item.soTtLuyKe, item.uyNhchiNienSoTien]);
-          item.vonDuyetCong = null;
-          item.vonDuyetCapUng = null;
-          item.vonDuyetCapVon = null;
-          item.uyNhchiNgay = null;
-          item.uyNhchiMaNguonNs = null;
-          item.uyNhchiNienDoNs = null;
-          item.uyNhchiNienSoTien = null;
-          if (this.response.canCuVeGia == Utils.QD_DON_GIA) {
-            item.vonDnghiCapLanNay = sumNumber([item.gtTheoKeHoach, -item.luyKeCong]);
-          } else if (this.response.loaiDnghi != Utils.MUA_VTU) {
-            item.tongVonVaDtDaCap = sumNumber([item.duToanDaGiao, item.luyKeCong]);
-            item.vonDnghiCapLanNay = sumNumber([item.gtHopDong, -item.tongVonVaDtDaCap]);
-          } else {
-            item.soConDuocTt = sumNumber([item.gtriThucHien, -item.soTtLuyKe]);
-          }
-        }
-      })
       if (this.response.loaiDnghi != Utils.MUA_VTU) {
         if ((this.response.canCuVeGia == Utils.HD_TRUNG_THAU && this.userService.isTongCuc()) ||
           (this.response.canCuVeGia == Utils.QD_DON_GIA && !this.userService.isChiCuc())) {
@@ -406,18 +415,20 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
         limit: 10,
         page: 1,
       },
+      loaiTimKiem: '0'
     }
     await this.capVonNguonChiService.timKiemDeNghi(request).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
-          if (data.data.length > 0) {
-            if (data.data.trangThai == Utils.TT_BC_7) {
-              this.isRequestExist = 1;
-              this.idRequest = data.data.id;
+          if (data.data.content.length > 0) {
+            if (data.data.content[0].trangThai == Utils.TT_BC_7) {
+              // this.isRequestExist = 1;
+              this.idRequest = data.data.content[0].id;
             } else {
               this.isRequestExist = 2;
             }
           }
+          this.demSoLan = data.data.content.length;
         } else {
           this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
           this.response.loaiDnghi = null;
@@ -488,6 +499,69 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
 
   handleCancel() {
     this._modalRef.close();
+  }
+
+  async callAddNewReport() {
+    this.isRequestExist = 0;
+    const request = {
+      maDvi: this.userInfo?.MA_DVI,
+      namBcao: this.response.namBcao,
+      loaiDnghi: this.response.loaiDnghi,
+      canCuVeGia: this.response.canCuVeGia,
+      maLoai: '2',
+      paggingReq: {
+        limit: 10,
+        page: 1,
+      },
+    }
+    await this.capVonNguonChiService.timKiemDeNghi(request).toPromise().then(
+      (data) => {
+        debugger
+        if (data.statusCode == 0) {
+          if (data.data.content.length > 0) {
+            if (data.data.content[0].trangThai == Utils.TT_BC_7) {
+              this.isRequestExist = 1;
+              this.idRequestCallCtiet = data.data.content[0].id;
+            } else {
+              this.isRequestExist = 2;
+            }
+          }
+        } else {
+          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+          this.response.loaiDnghi = null;
+        }
+      },
+      (err) => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        this.response.loaiDnghi = null;
+      }
+    );
+    await this.capVonNguonChiService.ctietDeNghi(this.idRequestCallCtiet).toPromise().then(
+      (data) => {
+        if (data.statusCode == 0) {
+          const dataRequest = data.data.lstCtiets[0];
+          this.response.lstCtiets.push({
+            ... new ItemContract,
+            id: uuid.v4() + 'FE',
+            maDvi: this.userInfo?.MA_DVI,
+            tenDvi: this.userInfo?.TEN_DVI,
+            slKeHoach: dataRequest.slKeHoach,
+            slHopDong: dataRequest.slHopDong,
+            gtHopDong: dataRequest.gtHopDong,
+            viPhamHopDong: dataRequest.viPhamHopDong,
+            thanhLyHdongSl: dataRequest.thanhLyHdongSl,
+            thanhLyHdongTt: dataRequest.thanhLyHdongTt,
+          })
+        } else {
+          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+        }
+      },
+      (err) => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    );
+
+    this.spinner.hide();
   }
 }
 

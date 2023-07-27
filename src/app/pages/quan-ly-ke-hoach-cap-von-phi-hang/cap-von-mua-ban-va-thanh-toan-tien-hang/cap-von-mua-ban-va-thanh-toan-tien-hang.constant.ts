@@ -127,6 +127,7 @@ export class ThanhToan {
     id: string;
     idCapDuoi: string;
     stt: string;
+    level: number;
     tenKhachHang: string;
     qdPheDuyet: string;
     maDvi: string;
@@ -182,7 +183,7 @@ export class ThanhToan {
 
     clear() {
         Object.keys(this).forEach(key => {
-            if (typeof this[key] === 'number' && key != 'dot') {
+            if (typeof this[key] === 'number' && key != 'dot' && key != 'level') {
                 this[key] = null;
             }
         })
@@ -190,7 +191,7 @@ export class ThanhToan {
 
     sum(data: ThanhToan) {
         Object.keys(data).forEach(key => {
-            if ((key != 'dot') && (typeof this[key] == 'number' || typeof data[key] == 'number')) {
+            if ((key != 'dot' && key != 'level') && (typeof this[key] == 'number' || typeof data[key] == 'number')) {
                 this[key] = Operator.sum([this[key], data[key]]);
             }
         })
@@ -307,7 +308,7 @@ export class Pagging {
 export class Search {
     loaiTimKiem: string = '0';
     maLoai: string;
-    dot: number = 1;
+    dot: number;
     maCapUng: string;
     maDvi: string;
     loaiDnghi: string;
@@ -317,6 +318,7 @@ export class Search {
     ngayTaoTu: any;
     paggingReq: Pagging = new Pagging();
     trangThai: string = Status.TT_01;
+    trangThaiDvct: string;
 
     request() {
         return {
@@ -332,18 +334,19 @@ export class Search {
             ngayTaoDen: this.ngayTaoDen ? Utils.fmtDate(this.ngayTaoDen) : null,
             paggingReq: this.paggingReq,
             trangThai: this.trangThai,
+            trangThaiDvct: this.trangThaiDvct,
         }
     }
 
     clear() {
         this.dot = null;
         this.maCapUng = null;
-        this.maDvi = null;
         this.loaiDnghi = null;
         this.namDnghi = null;
         this.canCuVeGia = null;
         this.ngayTaoTu = null;
         this.ngayTaoDen = null;
         this.trangThai = null;
+        this.trangThaiDvct = null;
     }
 }

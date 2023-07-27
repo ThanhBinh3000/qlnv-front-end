@@ -13,6 +13,7 @@ import { Tab } from '../von-mua-von-ung.constant';
 import { DialogTaoMoiCapUngVonComponent } from '../cap-ung-von/dialog-tao-moi-cap-ung-von/dialog-tao-moi-cap-ung-von.component';
 import { DialogTaoMoiTienThuaComponent } from '../nop-tien-thua/dialog-tao-moi-tien-thua/dialog-tao-moi-tien-thua.component';
 import { DialogTaoMoiThanhToanComponent } from '../thanh-toan-cho-khach-hang/dialog-tao-moi-thanh-toan/dialog-tao-moi-thanh-toan.component';
+import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 
 @Component({
     selector: 'app-danh-sach-von-mua-von-ung',
@@ -26,6 +27,7 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
     Utils = Utils;
     Status = Status;
     Cvmb = Cvmb;
+    Tab = Tab;
     //thong tin user
     userInfo: any;
     //thong tin tim kiem
@@ -52,6 +54,7 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
         private modal: NzModalService,
         public userService: UserService,
         private capVonMuaBanTtthService: CapVonMuaBanTtthService,
+        private quanLyVonPhiService: QuanLyVonPhiService,
     ) { }
 
     async ngOnInit() {
@@ -73,7 +76,7 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
                 this.perm.delete = this.userService.isTongCuc() ? Roles.CVMB.DEL_GNV : 'NO';
                 this.perm.edit = Roles.CVMB.EDIT_GNV;
                 this.perm.pass = Roles.CVMB.PASS_GNV;
-                this.perm.accept = Roles.CVMB.APPROVE_GNV;
+                this.perm.approve = Roles.CVMB.APPROVE_GNV;
                 break;
             case Tab.DS_CV:
                 this.title = 'DANH SÁCH CẤP ỨNG VỐN CHO ĐƠN VỊ CẤP DƯỚI';
@@ -99,6 +102,7 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
                 this.title = 'DANH SÁCH GHI NHẬN TIỀN THỪA NỘP TỪ ĐƠN VỊ CẤP DƯỚI';
                 this.trangThais = Status.TRANG_THAI_DVCT;
                 this.searchFilter.loaiTimKiem = '1';
+                this.getChildUnit();
                 this.searchFilter.maLoai = Cvmb.TIEN_THUA;
                 this.perm.create = 'NO';
                 this.perm.edit = 'NO';
@@ -135,6 +139,9 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
     }
 
     async search() {
+        if (this.searchFilter.loaiTimKiem == '1') {
+            this.searchFilter.trangThaiDvct = this.searchFilter.trangThai;
+        }
         this.spinner.show();
         await this.capVonMuaBanTtthService.timKiemVonMuaBan(this.searchFilter.request()).toPromise().then(
             (data) => {
@@ -241,12 +248,6 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
             default:
                 break;
         }
-        // if (data.maLoai == 2 && data.ttNhan.trangThai == Utils.TT_BC_1) {
-        //     await this.checkExistTienThua(data.namDnghi);
-        //     if (!this.isExistTienThua) {
-        //         await this.addVonBanGuiDvct(data.namDnghi);
-        //     }
-        // }
         this.dataChange.emit(obj);
     }
 
@@ -310,126 +311,27 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
         });
     }
 
-    // async getChildUnit() {
-    //     this.spinner.show();
-    //     const request = {
-    //         maDviCha: this.searchFilter.maDvi,
-    //         trangThai: '01',
-    //     }
-    //     await this.quanLyVonPhiService.dmDviCon(request).toPromise().then(
-    //         data => {
-    //             if (data.statusCode == 0) {
-    //                 if (this.userService.isTongCuc()) {
-    //                     this.donVis = data.data.filter(e => e.tenVietTat && (e.tenVietTat.startsWith('CDT') || e.tenVietTat.startsWith('VP')));
-    //                 } else {
-    //                     this.donVis = data.data.filter(e => e.tenVietTat && (e.tenVietTat.startsWith('CCDT') || e.tenVietTat.startsWith('VP')))
-    //                 }
-    //             } else {
-    //                 this.notification.error(MESSAGE.ERROR, data?.msg);
-    //             }
-    //         },
-    //         (err) => {
-    //             this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-    //         }
-    //     )
-    //     this.spinner.hide();
-    // }
+    async getChildUnit() {
+        const request = {
+            maDviCha: this.userInfo.MA_DVI,
+            trangThai: '01',
+        }
+        await this.quanLyVonPhiService.dmDviCon(request).toPromise().then(
+            data => {
+                if (data.statusCode == 0) {
+                    this.donVis = data.data;
+                } else {
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                }
+            },
+            err => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            }
+        );
+    }
 
-    // async checkExistTienThua(nam: number) {
-    //     this.isExistTienThua = false;
-    //     const request = {
-    //         loaiTimKiem: '0',
-    //         maLoai: 6,
-    //         maDvi: this.userInfo?.MA_DVI,
-    //         namDnghi: nam,
-    //         paggingReq: {
-    //             limit: 10,
-    //             page: 1,
-    //         },
-    //     }
-    //     await this.capVonMuaBanTtthService.timKiemVonMuaBan(request).toPromise().then(
-    //         (data) => {
-    //             if (data.statusCode == 0) {
-    //                 if (data.data.content?.length > 0) {
-    //                     this.isExistTienThua = true;
-    //                 }
-    //             } else {
-    //                 this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-    //             }
-    //         },
-    //         (err) => {
-    //             this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    //         }
-    //     );
-    // }
-
-    // //kiem tra ban ghi nop tien von ban hang len don vi cap tren da ton tai chua, neu chua thi thuc hien them moi
-    // async addVonBanGuiDvct(nam: number) {
-    //     const response: Report = new Report();
-    //     response.namDnghi = nam;
-    //     response.ttGui = new sendInfo();
-    //     response.ttGui.lstCtietBcaos = [];
-    //     response.ttNhan = new receivedInfo();
-    //     response.ttNhan.lstCtietBcaos = [];
-    //     response.maDvi = this.userInfo?.MA_DVI;
-    //     response.ngayTao = new Date();
-    //     response.dot = 1;
-    //     response.maLoai = 6;
-    //     response.ttGui.trangThai = Utils.TT_BC_1;
-    //     response.ttNhan.trangThai = Utils.TT_BC_1;
-    //     response.ttGui.lstFiles = [];
-    //     response.ttNhan.lstFiles = [];
-    //     response.ttGui.lstCtietBcaos.push({
-    //         ...new TienThua(),
-    //         id: null,
-    //         maHang: Utils.MUA_THOC,
-    //         hangDtqg: 'Thóc',
-    //     })
-    //     if (!this.userService.isChiCuc()) {
-    //         response.ttGui.lstCtietBcaos.push({
-    //             ...new TienThua(),
-    //             id: null,
-    //             maHang: Utils.MUA_GAO,
-    //             hangDtqg: 'Gạo',
-    //         })
-    //         response.ttGui.lstCtietBcaos.push({
-    //             ...new TienThua(),
-    //             id: null,
-    //             maHang: Utils.MUA_MUOI,
-    //             hangDtqg: 'Muối',
-    //         })
-    //     }
-    //     if (this.userService.isTongCuc()) {
-    //         response.ttGui.lstCtietBcaos.push({
-    //             ...new TienThua(),
-    //             id: null,
-    //             maHang: Utils.MUA_VTU,
-    //             hangDtqg: 'Vật tư',
-    //         })
-    //     }
-    //     await this.capVonMuaBanTtthService.maCapVonUng().toPromise().then(
-    //         (res) => {
-    //             if (res.statusCode == 0) {
-    //                 response.maCapUng = res.data;
-    //             } else {
-    //                 this.notification.error(MESSAGE.ERROR, res?.msg);
-    //             }
-    //         },
-    //         (err) => {
-    //             this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    //         },
-    //     );
-    //     this.capVonMuaBanTtthService.themMoiVonMuaBan(response).toPromise().then(
-    //         async (data) => {
-    //             if (data.statusCode == 0) {
-    //             } else {
-    //                 this.notification.error(MESSAGE.ERROR, data?.msg);
-    //             }
-    //         },
-    //         (err) => {
-    //             this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    //         },
-    //     );
-    // }
+    getUnitName(maDvi: string) {
+        return this.donVis.find(e => e.maDvi == maDvi)?.tenDvi;
+    }
 
 }

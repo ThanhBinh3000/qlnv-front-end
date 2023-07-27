@@ -10,14 +10,15 @@ import { CapVonMuaBanTtthService } from 'src/app/services/quan-ly-von-phi/capVon
 import { UserService } from 'src/app/services/user.service';
 import { Cvmb, Perm, Search } from '../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
 import { Tab } from '../von-ban.constant';
+import { DialogTaoMoiComponent } from '../dialog-tao-moi/dialog-tao-moi.component';
 // import { DialogTaoMoiCapVonComponent } from '../dialog-tao-moi-cap-von/dialog-tao-moi-cap-von.component';
 
 @Component({
-    selector: 'app-danh-sach-von-mua-von-ung',
-    templateUrl: './danh-sach-von-mua-von-ung.component.html',
-    styleUrls: ['../von-mua-von-ung.component.scss']
+    selector: 'app-danh-sach-von-ban-nop-dvct',
+    templateUrl: './danh-sach-von-ban-nop-dvct.component.html',
+    styleUrls: ['../von-ban.component.scss']
 })
-export class DanhSachVonMuaVonUngComponent implements OnInit {
+export class DanhSachVonBanNopDvctComponent implements OnInit {
     @Input() dataInfo: any;
     @Output() dataChange = new EventEmitter();
     Utils = Utils;
@@ -27,19 +28,14 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
     userInfo: any;
     //thong tin tim kiem
     searchFilter: Search = new Search();
-    title: string;
     // danh sach
     dataTable: any[] = [];
     dataTableAll: any[] = [];
-    trangThais: any[] = Status.TRANG_THAI_DVCD;
     donVis: any[] = [];
     //cac quyn cua nguoi thao tac
-    perm: Perm = new Perm();
-    isParent = false;
     allChecked = false;
     statusNewReport = false;
     statusDelete = false;
-    isExistTienThua: boolean;
     //phan trang
     totalElements = 0;
     totalPages = 0;
@@ -61,71 +57,15 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
         newDate.setMonth(newDate.getMonth() - 1);
         this.searchFilter.ngayTaoTu = newDate;
         this.searchFilter.maDvi = this.userInfo?.MA_DVI;
-        switch (this.dataInfo?.tabSelected) {
-            case Tab.DS_GNV:
-                this.title = 'DANH SÁCH GHI NHẬN CẤP ỨNG VỐN TỪ ĐƠN VỊ CẤP TRÊN';
-                this.searchFilter.loaiTimKiem = '0';
-                this.searchFilter.maLoai = Cvmb.GHI_NHAN_CU_VON;
-                this.perm.create = this.userService.isTongCuc() ? Roles.CVMB.ADD_GNV_TC : 'NO';
-                this.perm.delete = this.userService.isTongCuc() ? Roles.CVMB.DEL_GNV : 'NO';
-                this.perm.edit = Roles.CVMB.EDIT_GNV;
-                this.perm.pass = Roles.CVMB.PASS_GNV;
-                this.perm.accept = Roles.CVMB.APPROVE_GNV;
-                break;
-            case Tab.DS_CV:
-                this.title = 'DANH SÁCH CẤP ỨNG VỐN CHO ĐƠN VỊ CẤP DƯỚI';
-                this.searchFilter.loaiTimKiem = '0';
-                this.searchFilter.maLoai = Cvmb.CU_VON_DVCD;
-                this.perm.create = Roles.CVMB.ADD_CV;
-                this.perm.edit = Roles.CVMB.EDIT_CV;
-                this.perm.delete = Roles.CVMB.DEL_CV;
-                this.perm.pass = Roles.CVMB.PASS_CV;
-                this.perm.approve = Roles.CVMB.APPROVE_CV;
-                break;
-            case Tab.DS_TT:
-                this.title = 'DANH SÁCH TIỀN THỪA NỘP LÊN ĐƠN VỊ CẤP TRÊN';
-                this.searchFilter.loaiTimKiem = '0';
-                this.searchFilter.maLoai = Cvmb.TIEN_THUA;
-                this.perm.create = Roles.CVMB.ADD_NTT;
-                this.perm.edit = Roles.CVMB.EDIT_NTT;
-                this.perm.delete = "NO";
-                this.perm.pass = Roles.CVMB.PASS_NTT;
-                this.perm.approve = Roles.CVMB.APPROVE_NTT;
-                break;
-            case Tab.DS_GN_TT:
-                this.title = 'DANH SÁCH GHI NHẬN TIỀN THỪA NỘP TỪ ĐƠN VỊ CẤP DƯỚI';
-                this.trangThais = Status.TRANG_THAI_DVCT;
-                this.searchFilter.loaiTimKiem = '1';
-                this.searchFilter.maLoai = Cvmb.TIEN_THUA;
-                this.perm.create = 'NO';
-                this.perm.edit = 'NO';
-                this.perm.delete = 'NO';
-                this.perm.pass = 'NO';
-                this.perm.approve = 'NO';
-                this.perm.accept = Roles.CVMB.ACCEPT_NTT,
-                    this.isParent = true;
-                break;
-            case Tab.DS_TTKH:
-                this.title = 'DANH SÁCH THANH TOÁN CHO KHÁCH HÀNG';
-                this.searchFilter.loaiTimKiem = '0';
-                this.searchFilter.maLoai = Cvmb.THANH_TOAN;
-                this.perm.create = Roles.CVMB.ADD_TTKH;
-                this.perm.edit = Roles.CVMB.EDIT_TTKH;
-                this.perm.delete = Roles.CVMB.DEL_TTKH;
-                this.perm.pass = Roles.CVMB.PASS_TTKH;
-                this.perm.approve = Roles.CVMB.APPROVE_TTKH;
-                break;
-            default:
-                break;
-        }
-        this.statusNewReport = this.userService.isAccessPermisson(this.perm.create);
-        this.statusDelete = this.userService.isAccessPermisson(this.perm.delete);
+        this.searchFilter.maLoai = Cvmb.VON_BAN;
+        this.statusNewReport = this.userService.isAccessPermisson(Roles.CVMB.ADD_VB);
+        this.statusDelete = this.userService.isAccessPermisson(Roles.CVMB.DEL_VB);
         //neu co quyen phe duyet thi trang thai mac dinh la trinh duyet
-        if (this.userService.isAccessPermisson(this.perm.pass)) {
+        if (this.userService.isAccessPermisson(Roles.CVMB.PASS_VB)) {
             this.searchFilter.trangThai = Status.TT_02;
-        } else if (this.userService.isAccessPermisson(this.perm.approve)) {
+        } else if (this.userService.isAccessPermisson(Roles.CVMB.APPROVE_VB)) {
             this.searchFilter.trangThai = Status.TT_04;
-        } else if (this.userService.isAccessPermisson(this.perm.accept)) {
+        } else if (this.userService.isAccessPermisson(Roles.CVMB.ACCEPT_VB)) {
             this.searchFilter.trangThai = Status.TT_07;
         }
         this.search();
@@ -179,73 +119,39 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
     }
 
     checkEditStatus(trangThai: string) {
-        return Utils.statusSave.includes(trangThai) && this.userService.isAccessPermisson(this.perm.edit);
+        return Utils.statusSave.includes(trangThai) && this.userService.isAccessPermisson(Roles.CVMB.EDIT_VB);
     }
 
     checkDeleteStatus(trangThai: string) {
-        return Utils.statusDelete.includes(trangThai) && this.userService.isAccessPermisson(this.perm.delete);
+        return Utils.statusDelete.includes(trangThai) && this.userService.isAccessPermisson(Roles.CVMB.DEL_VB);
     }
 
     addNewReport() {
-        // let nzContent: ComponentType<any>;
-        // if (this.searchFilter.maLoai == Cvmb.GHI_NHAN_CU_VON || this.searchFilter.maLoai == Cvmb.CU_VON_DVCD) {
-        //     nzContent = DialogTaoMoiCapVonComponent;
-        // }
-        // const modalTuChoi = this.modal.create({
-        //     nzTitle: 'Thông tin tạo mới',
-        //     nzContent: nzContent,
-        //     nzMaskClosable: false,
-        //     nzClosable: false,
-        //     nzWidth: '900px',
-        //     nzFooter: null,
-        //     nzComponentParams: {
-        //         request: this.searchFilter
-        //     },
-        // });
-        // modalTuChoi.afterClose.toPromise().then(async (res) => {
-        //     if (res) {
-        //         this.dataChange.emit(res);
-        //     }
-        // });
+        const modalTuChoi = this.modal.create({
+            nzTitle: 'Thông tin tạo mới',
+            nzContent: DialogTaoMoiComponent,
+            nzMaskClosable: false,
+            nzClosable: false,
+            nzWidth: '900px',
+            nzFooter: null,
+            nzComponentParams: {
+                request: this.searchFilter
+            },
+        });
+        modalTuChoi.afterClose.toPromise().then(async (res) => {
+            if (res) {
+                this.dataChange.emit(res);
+            }
+        });
     }
 
     //xem chi tiet bao cao
     async viewDetail(data: any) {
-        // const obj = {
-        //     id: data.id,
-        //     tabSelected: '',
-        // }
-        // switch (this.searchFilter.maLoai) {
-        //     case 2:
-        //         obj.tabSelected = 'gnv-cv';
-        //         break;
-        //     case 3:
-        //         obj.tabSelected = 'gnv-cv';
-        //         break;
-        //     case 5:
-        //         if (data.loaiDnghi == Utils.MUA_VTU) {
-        //             obj.tabSelected = 'tt-vattu';
-        //         } else {
-        //             if (data.canCuVeGia == Utils.HD_TRUNG_THAU) {
-        //                 obj.tabSelected = 'tt-hopdong';
-        //             } else {
-        //                 obj.tabSelected = 'tt-dongia';
-        //             }
-        //         }
-        //         break;
-        //     case 6:
-        //         obj.tabSelected = 'tienthua';
-        //         break;
-        //     default:
-        //         break;
-        // }
-        // // if (data.maLoai == 2 && data.ttNhan.trangThai == Utils.TT_BC_1) {
-        // //     await this.checkExistTienThua(data.namDnghi);
-        // //     if (!this.isExistTienThua) {
-        // //         await this.addVonBanGuiDvct(data.namDnghi);
-        // //     }
-        // // }
-        // this.dataChange.emit(obj);
+        const obj = {
+            id: data.id,
+            tabSelected: data.canCuVeGia == Cvmb.DON_GIA ? Tab.VB_DON_GIA : Tab.VB_HOP_DONG,
+        }
+        this.dataChange.emit(obj);
     }
 
     updateAllChecked(): void {

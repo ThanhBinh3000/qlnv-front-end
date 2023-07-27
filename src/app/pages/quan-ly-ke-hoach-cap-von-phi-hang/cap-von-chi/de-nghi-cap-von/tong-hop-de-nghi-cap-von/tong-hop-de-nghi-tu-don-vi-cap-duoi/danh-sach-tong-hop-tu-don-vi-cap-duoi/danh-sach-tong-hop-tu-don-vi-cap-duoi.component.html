@@ -63,11 +63,11 @@
   <div class="group-button">
     <h3 class="text-uppercase">DANH SÁCH TỔNG HỢP TỪ ĐƠN VỊ CẤP DƯỚI</h3>
     <div class="buttons">
-      <button *ngIf="statusDelete" type="button" class="btn btn-do" (click)="deleteReport('')">
+      <button *ngIf="status.deleteReport" type="button" class="btn btn-do" (click)="deleteReport('')">
         <i class="fa fa-trash-o do"></i>
         <span>Xóa</span>
       </button>
-      <button *ngIf="statusNewReport" type="button" class="btn btn-main" (click)="addNewReport()">
+      <button *ngIf="status.addNewReport" type="button" class="btn btn-main" (click)="addNewReport()">
         <i class="icon htvbdh_tcdt_tao-qd"></i>
         <span>Thêm</span>
       </button>
@@ -83,10 +83,14 @@
             <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"></label>
           </th>
           <th width="60px" class="text-center">STT</th>
-          <th>Mã đề nghị</th>
           <th>Năm đề nghị</th>
+          <th>Mã đề nghị</th>
+          <th>Quyết định chỉ tiêu</th>
+          <th>Căn cứ giá</th>
+          <th>Loại đề nghị</th>
           <th>Lần tổng hợp</th>
-          <th>Ngày TBP duyệt</th>
+          <th>Ngày tạo</th>
+          <!-- <th>Ngày TBP duyệt</th> -->
           <th>Ngày lãnh đạo phê duyệt</th>
           <th>Trạng thái</th>
           <th width="90px">Hành động</th>
@@ -125,11 +129,14 @@
             </div>
           </td>
           <td>
-            {{data.ngayTao}}
+            {{data.soLan}}
           </td>
           <td>
-            {{data.ngayTrinh}}
+            {{data.ngayTao}}
           </td>
+          <!-- <td>
+            {{data.ngayTrinh}}
+          </td> -->
           <td>
             {{data.ngayPheDuyet}}
           </td>

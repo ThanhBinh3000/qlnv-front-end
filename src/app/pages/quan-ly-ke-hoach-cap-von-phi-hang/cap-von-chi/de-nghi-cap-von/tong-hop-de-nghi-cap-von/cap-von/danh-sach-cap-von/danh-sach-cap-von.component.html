@@ -63,11 +63,11 @@
   <div class="group-button">
     <h3 class="text-uppercase">DANH SÁCH CẤP VỐN</h3>
     <div class="buttons">
-      <button *ngIf="statusDelete" type="button" class="btn btn-do" (click)="deleteReport('')">
+      <button *ngIf="status.deleteReport" type="button" class="btn btn-do" (click)="deleteReport('')">
         <i class="fa fa-trash-o do"></i>
         <span>Xóa</span>
       </button>
-      <button *ngIf="statusNewReport" type="button" class="btn btn-main" (click)="addNewReport()">
+      <button *ngIf="status.addNewReport" type="button" class="btn btn-main" (click)="addNewReport()">
         <i class="icon htvbdh_tcdt_tao-qd"></i>
         <span>Thêm</span>
       </button>
@@ -91,9 +91,9 @@
           <th>Loại đề nghị</th>
           <th>Ngày lập từ</th>
           <!-- <th>Đến ngày</th> -->
-          <!-- <th>Ngày TBP duyệt</th>
+          <!-- <th>Ngày TBP duyệt</th> -->
           <th>Ngày lãnh đạo phê duyệt</th>
-          <th>Ngày cấp trên trả kết quả</th> -->
+          <!-- <th>Ngày cấp trên trả kết quả</th> -->
           <th>Trạng thái</th>
           <th width="90px">Hành động</th>
         </tr>
@@ -137,11 +137,11 @@
             {{data.ngayTao}}
           </td>
           <!-- <td>
-            {{data.ngayTrinh}}
-          </td>
+            {{data.ngayDuyet}}
+          </td> -->
           <td>
             {{data.ngayPheDuyet}}
-          </td> -->
+          </td>
           <td>
             {{getStatusName(data.trangThai)}}
             <ng-container *ngIf="data.trangThai =='3' || data.trangThai == '5' || data.trangThai == '8'">

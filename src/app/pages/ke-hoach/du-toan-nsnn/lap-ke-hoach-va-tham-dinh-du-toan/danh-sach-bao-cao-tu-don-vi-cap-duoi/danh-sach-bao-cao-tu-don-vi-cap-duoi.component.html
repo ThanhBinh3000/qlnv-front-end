@@ -61,6 +61,7 @@
                     <th>Đơn vị lập</th>
                     <th>Mã báo cáo</th>
                     <th>Năm báo cáo</th>
+                    <th>Lần báo cáo</th>
                     <th>Ngày tạo</th>
                     <th nzWidth="20%">Công văn</th>
                     <th>Ngày trình duyệt <br /> (Ngày đơn vị dưới gửi báo cáo)</th>
@@ -82,6 +83,9 @@
                     </td>
                     <td>
                         {{ data.namBcao }}
+                    </td>
+                    <td>
+                        {{ data.lan }}
                     </td>
                     <td>
                         {{ Utils.fmtDate(data.ngayTao) }}

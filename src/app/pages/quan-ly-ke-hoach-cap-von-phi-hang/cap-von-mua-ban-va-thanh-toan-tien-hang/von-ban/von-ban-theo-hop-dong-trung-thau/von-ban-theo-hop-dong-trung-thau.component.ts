@@ -11,6 +11,7 @@ import { CapVonMuaBanTtthService } from 'src/app/services/quan-ly-von-phi/capVon
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { BtnStatus, Cvmb, Report, ThanhToan } from '../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
+import { Tab } from '../von-ban.constant';
 
 @Component({
     selector: 'app-von-ban-theo-hop-dong-trung-thau',
@@ -31,7 +32,8 @@ export class VonBanTheoHopDongTrungThauComponent implements OnInit {
     lstCtiets: ThanhToan[] = [];
     editCache: { [key: string]: { edit: boolean; data: ThanhToan } } = {};
     maDviTien: string = '1';
-    scrollX: string;
+    scrollHD: string;
+    scrollVB: string;
     //trang thai cac nut
     status: BtnStatus = new BtnStatus();
     isDataAvailable: boolean = false;
@@ -63,7 +65,7 @@ export class VonBanTheoHopDongTrungThauComponent implements OnInit {
     constructor(
         private capVonMuaBanTtthService: CapVonMuaBanTtthService,
         private spinner: NgxSpinnerService,
-        private userService: UserService,
+        public userService: UserService,
         private notification: NzNotificationService,
         private modal: NzModalService,
         public globals: Globals,
@@ -143,6 +145,9 @@ export class VonBanTheoHopDongTrungThauComponent implements OnInit {
         } else {
             this.baoCao = this.dataInfo?.baoCao;
             this.lstCtiets = this.baoCao.lstCtiets;
+            this.lstCtiets = Table.sortByIndex(this.lstCtiets)
+            this.setLevel()
+            this.sum('0.1')
         }
         this.updateEditCache();
         this.getStatusButton();
@@ -151,25 +156,43 @@ export class VonBanTheoHopDongTrungThauComponent implements OnInit {
     //check role cho các nut trinh duyet
     getStatusButton() {
         const isChild = this.baoCao.maDvi == this.userInfo?.MA_DVI;
+        this.isParent = this.baoCao.maDviCha == this.userInfo?.MA_DVI;
         this.status.save = Status.check('saveWHist', this.baoCao.trangThai) && isChild;
         this.status.submit = Status.check('submit', this.baoCao.trangThai) && isChild && !(!this.baoCao.id);
         this.status.pass = Status.check('pass', this.baoCao.trangThai) && isChild;
         this.status.approve = Status.check('approve', this.baoCao.trangThai) && isChild;
-        this.status.accept = Status.check('accept', this.baoCao.trangThai) && isChild;
+        this.status.accept = Status.check('accept', this.baoCao.trangThai) && this.isParent;
 
         this.status.save = this.status.save && this.userService.isAccessPermisson(Roles.CVMB.EDIT_VB);
         this.status.submit = this.status.submit && this.userService.isAccessPermisson(Roles.CVMB.SUBMIT_VB);
         this.status.pass = this.status.pass && this.userService.isAccessPermisson(Roles.CVMB.PASS_VB);
         this.status.approve = this.status.approve && this.userService.isAccessPermisson(Roles.CVMB.APPROVE_VB);
-        this.status.accept = this.status.accept && this.userService.isAccessPermisson(Roles.CVMB.ACCEPT_VB)
-        this.scrollX = this.status.save ? Table.tableWidth(350, 13, 1, 60) : Table.tableWidth(350, 13, 1, 0);
+        this.status.accept = this.status.accept && this.userService.isAccessPermisson(Roles.CVMB.ACCEPT_VB);
+        if (this.userService.isTongCuc()) {
+            this.scrollHD = Table.tableWidth(700, 9, 1, 0);
+            this.scrollVB = this.status.save ? Table.tableWidth(300, 18, 1, 60) : Table.tableWidth(500, 18, 1, 0);
+        } else {
+            this.scrollHD = this.status.save ? Table.tableWidth(500, 9, 1, 60) : Table.tableWidth(500, 9, 1, 0);;
+            this.scrollVB = this.status.save ? Table.tableWidth(300, 16, 1, 60) : Table.tableWidth(500, 16, 1, 0);
+        }
+
     }
 
     back() {
-        const obj = {
-            tabSelected: this.dataInfo?.preTab,
+        if (this.dataInfo?.preData) {
+            this.dataChange.emit(this.dataInfo?.preData)
+        } else {
+            const obj = {
+                tabSelected: this.dataInfo?.preTab,
+            }
+            this.dataChange.emit(obj);
         }
-        this.dataChange.emit(obj);
+    }
+
+    setLevel() {
+        this.lstCtiets.forEach(item => {
+            item.level = item.stt.split('.').length - 2;
+        })
     }
 
     // call chi tiet bao cao
@@ -178,9 +201,12 @@ export class VonBanTheoHopDongTrungThauComponent implements OnInit {
             async (data) => {
                 if (data.statusCode == 0) {
                     this.baoCao = data.data;
+                    this.lstCtiets = [];
                     data.data.lstCtiets.forEach(item => {
                         this.lstCtiets.push(new ThanhToan(item));
                     })
+                    this.lstCtiets = Table.sortByIndex(this.lstCtiets)
+                    this.setLevel()
                     this.listFile = [];
                     this.updateEditCache();
                     this.getStatusButton();
@@ -339,10 +365,58 @@ export class VonBanTheoHopDongTrungThauComponent implements OnInit {
         const index = this.lstCtiets.findIndex(item => item.id === id); // lay vi tri hang minh sua
         Object.assign(this.lstCtiets[index], this.editCache[id].data); // set lai data cua lstCtietBcao[index] = this.editCache[id].data
         this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
+        this.sum(Table.preIndex(this.lstCtiets[index].stt));
+        this.updateEditCache()
     }
 
     changeModel(data: ThanhToan) {
         this.editCache[data.id].data.changeModel(false, data);
+    }
+
+    sum(stt: string) {
+        while (stt != '0') {
+            const index = this.lstCtiets.findIndex(e => e.stt == stt);
+            this.lstCtiets[index].slKeHoach = null;
+            this.lstCtiets[index].slHopDong = null;
+            this.lstCtiets[index].slThucHien = null;
+            this.lstCtiets[index].gtHopDong = null;
+            this.lstCtiets[index].gtThucHien = null;
+            this.lstCtiets[index].phatViPham = null;
+            this.lstCtiets[index].tlSoluong = null;
+            this.lstCtiets[index].tlThanhTien = null;
+            this.lstCtiets.forEach(item => {
+                if (Table.preIndex(item.stt) == stt) {
+                    this.lstCtiets[index].slKeHoach = Operator.sum([this.lstCtiets[index].slKeHoach, item.slKeHoach]);
+                    this.lstCtiets[index].slHopDong = Operator.sum([this.lstCtiets[index].slHopDong, item.slHopDong]);
+                    this.lstCtiets[index].slThucHien = Operator.sum([this.lstCtiets[index].slThucHien, item.slThucHien]);
+                    this.lstCtiets[index].gtHopDong = Operator.sum([this.lstCtiets[index].gtHopDong, item.gtHopDong]);
+                    this.lstCtiets[index].gtThucHien = Operator.sum([this.lstCtiets[index].gtThucHien, item.gtThucHien]);
+                    this.lstCtiets[index].phatViPham = Operator.sum([this.lstCtiets[index].phatViPham, item.phatViPham]);
+                    this.lstCtiets[index].tlSoluong = Operator.sum([this.lstCtiets[index].tlSoluong, item.tlSoluong]);
+                    this.lstCtiets[index].tlThanhTien = Operator.sum([this.lstCtiets[index].tlThanhTien, item.tlThanhTien]);
+                }
+            })
+            stt = Table.preIndex(stt)
+        }
+    }
+
+    changeHd(id: string) {
+        this.editCache[id].data.gtThucHien = Operator.mul(this.editCache[id].data.slThucHien, this.editCache[id].data.donGia);
+    }
+
+    changeVb(id: string) {
+        this.editCache[id].data.cong = Operator.sum([this.editCache[id].data.ung, this.editCache[id].data.cap]);
+        this.editCache[id].data.lkSauLanNay = Operator.sum([this.editCache[id].data.lkCong, this.editCache[id].data.cong]);
+        this.editCache[id].data.soConPhaiNop = Operator.sum([this.editCache[id].data.gtThucHien, -this.editCache[id].data.phatViPham, -this.editCache[id].data.lkSauLanNay]);
+    }
+
+    viewDetail(id: string) {
+        const obj = {
+            id: id,
+            preData: this.dataInfo,
+            tabSelected: this.dataInfo.tabSelected == Tab.VB_HOP_DONG ? Tab.VB_HOP_DONG_1 : Tab.VB_HOP_DONG,
+        }
+        this.dataChange.emit(obj);
     }
 
     // xoa file trong bang file

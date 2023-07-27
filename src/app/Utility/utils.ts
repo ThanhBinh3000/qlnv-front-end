@@ -1,14 +1,13 @@
+import { DatePipe } from '@angular/common';
+import { Injectable } from '@angular/core';
+import * as dayjs from 'dayjs';
 import * as fileSaver from 'file-saver';
 import { NzNotificationService } from "ng-zorro-antd/notification";
 import { CurrencyMaskInputMode } from "ngx-currency";
+import * as uuid from "uuid";
+import * as XLSX from 'xlsx';
 import { MESSAGE } from "../constants/message";
 import { QuanLyVonPhiService } from "../services/quanLyVonPhi.service";
-import { DatePipe, DecimalPipe } from '@angular/common';
-import * as uuid from "uuid";
-import { Injectable } from '@angular/core';
-import * as XLSX from 'xlsx'
-import * as dayjs from 'dayjs';
-import { displayNumber } from './func';
 
 export class Status {
 	//cac ma trang thai cua bao cao
@@ -230,6 +229,23 @@ export class Status {
 
 	static statusDvctName(id: string) {
 		return Status.TRANG_THAI_PD_DVCT.find(e => e.id == id)?.tenDm;
+	}
+
+	static readonly DA_TONG_HOP = '1';
+	static readonly CHUA_TONG_HOP = '0';
+	static readonly TRANG_THAI_TONG_HOP = [
+		{
+			id: Status.CHUA_TONG_HOP,
+			tenDm: 'Chưa được tổng hợp',
+		},
+		{
+			id: Status.DA_TONG_HOP,
+			tenDm: 'Đã được tổng hợp',
+		},
+	]
+
+	static synthStatusName(id: string) {
+		return Status.TRANG_THAI_TONG_HOP.find(e => e.id == id)?.tenDm;
 	}
 }
 
@@ -1178,10 +1194,11 @@ export class Roles {
 		COPY_VB: 'VONPHIHANG_VONMBANTT_COPY_BC_NTV_BH',
 		PASS_VB: 'VONPHIHANG_VONMBANTT_DUYET_TUCHOIDUYET_BC_NTV_BH',
 		APPROVE_VB: 'VONPHIHANG_VONMBANTT_PHEDUYET_TUCHOIPHEDUYET_NTV_BH',
-		ACCEPT_VB: 'VONPHIHANG_VONMBANTT_TIEPNHAN_TUCHOI_NTV_BH',
 		VIEW_VB: 'VONPHIHANG_VONMBANTT_XEM_BC_NTV_BH',
 		PRINT_VB: 'VONPHIHANG_VONMBANTT_IN_BC_NTV_BH',
 		EXPORT_VB: 'VONPHIHANG_VONMBANTT_XUAT_BC_NTV_BH',
+		SYNTH_VB: 'VONPHIHANG_VONMBANTT_TONGHOP_BC_NTV_BH',
+		ACCEPT_VB: 'VONPHIHANG_VONMBANTT_TIEPNHAN_TUCHOI_NTV_BH',
 		//ghi nhan von
 		ADD_GNV: 'VONPHIHANG_VONMBANTT_LAP_BC_GNV',
 		ADD_GNV_TC: 'VONPHIHANG_VONMBANTT_TC_LAP_BC_GNV',
@@ -1194,6 +1211,8 @@ export class Roles {
 		VIEW_GNV: 'VONPHIHANG_VONMBANTT_XEM_BC_GNV',
 		PRINT_GNV: 'VONPHIHANG_VONMBANTT_IN_BC_GNV',
 		EXPORT_GNV: 'VONPHIHANG_VONMBANTT_XUAT_BC_GNV',
+		//hop dong von ban
+
 		//ghi nhan von ban hang
 		// ADD_REPORT_GNV_BH: 'VONPHIHANG_VONMBANTT_LAP_BC_GNV_BH',
 		// APPROVE_REPORT_GNV_BH: 'VONPHIHANG_VONMBANTT_TRINHDUYET_BC_GNV_BH',
@@ -1201,7 +1220,7 @@ export class Roles {
 		// COPY_REPORT_GNV_BH: 'VONPHIHANG_VONMBANTT_COPY_BC_GNV_BH',
 		// DUYET_REPORT_GNV_BH: 'VONPHIHANG_VONMBANTT_DUYET_TUCHOIDUYET_BC_GNV_BH',
 		// PHE_DUYET_REPORT_GNV_BH: 'VONPHIHANG_VONMBANTT_PHEDUYET_TUCHOIPHEDUYET_BC_GNV_BH',
-		// VIEW_REPORT_GNV_BH: 'VONPHIHANG_VONMBANTT_XEM_BC_GNV_BH',
+		VIEW_VB_GN: 'VONPHIHANG_VONMBANTT_XEM_BC_GNV_BH',
 		// PRINT_REPORT_GNV_BH: 'VONPHIHANG_VONMBANTT_IN_BC_GNV_BH',
 		// EXPORT_REPORT_GNV_BH: 'VONPHIHANG_VONMBANTT_XUAT_BC_GNV_BH',
 		//nop tien von thua

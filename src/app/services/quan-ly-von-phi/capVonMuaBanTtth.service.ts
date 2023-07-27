@@ -78,4 +78,10 @@ export class CapVonMuaBanTtthService extends BaseService {
 			this.urlDefault + '/cap-von-ghi-nhan/chi-tiet-thu-chi/' + nam.toString()
 		);
 	}
+
+	tongHopVonBan(request: any): Observable<any> {
+		return this.httpClient.post(
+			this.urlDefault + '/cap-von-ghi-nhan/tong-hop',
+			request);
+	}
 }

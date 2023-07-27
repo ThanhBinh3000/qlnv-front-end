@@ -15,7 +15,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { displayNumber, mulNumber, sumNumber } from 'src/app/Utility/func';
-import { AMOUNT, BOX_NUMBER_WIDTH, CAN_CU_GIA, CVNC, DON_VI_TIEN, LOAI_DE_NGHI, Operator, QUATITY, Table, Utils } from 'src/app/Utility/utils';
+import { AMOUNT, BOX_NUMBER_WIDTH, CAN_CU_GIA, CVNC, DON_VI_TIEN, LOAI_DE_NGHI, Operator, QUATITY, Roles, Table, Utils } from 'src/app/Utility/utils';
 import { BaoCao, ItemContract, Times, TRANG_THAI } from '../../../de-nghi-cap-von.constant';
 import * as XLSX from 'xlsx';
 import { BtnStatus } from '../../../de-nghi-cap-von.class';
@@ -48,13 +48,7 @@ export class CapVonComponent implements OnInit {
   quatity = QUATITY;
   scrollX: string;
   //trang thai cac nut
-  status = false;
-  statusCv = false;
-  saveStatus = true;
-  submitStatus = true;
-  passStatus = true;
-  approveStatus = true;
-  copyStatus = true;
+  status: BtnStatus = new BtnStatus();
   isDataAvailable = false;
   editCache: { [key: string]: { edit: boolean; data: ItemContract } } = {};
   //file
@@ -62,8 +56,6 @@ export class CapVonComponent implements OnInit {
   fileList: NzUploadFile[] = [];
   fileDetail: NzUploadFile;
   tabSelected: any;
-  statusExportExcel: BtnStatus = new BtnStatus();
-  // before uploaf file
   beforeUpload = (file: NzUploadFile): boolean => {
     this.fileList = this.fileList.concat(file);
     return false;
@@ -175,8 +167,6 @@ export class CapVonComponent implements OnInit {
 
     } else {
       this.baoCao = this.data?.baoCao;
-      // this.baoCao.lstCtiets = [];
-      // this.baoCao.trangThai = '1';
     }
     this.getStatusButton();
     this.getTotal();
@@ -186,13 +176,12 @@ export class CapVonComponent implements OnInit {
   //check role cho các nut trinh duyet
   getStatusButton() {
     const checkChirld = this.baoCao.maDvi == this.userInfo?.MA_DVI;
-    this.status = Utils.statusSave.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(CVNC.EDIT_DN_MLT) && !this.userService.isTongCuc();
-    this.statusCv = Utils.statusSave.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(CVNC.EDIT_DN_MLT);
-    this.saveStatus = Utils.statusSave.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(CVNC.EDIT_DN_MLT) && checkChirld;
-    this.submitStatus = Utils.statusApprove.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(CVNC.APPROVE_DN_MLT) && checkChirld && !(!this.baoCao.id);
-    this.approveStatus = this.baoCao.trangThai == Utils.TT_BC_2 && this.userService.isAccessPermisson(CVNC.PHE_DUYET_DN_MLT) && checkChirld;
-    this.copyStatus = Utils.statusCopy.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(CVNC.COPY_DN_MLT) && checkChirld;
-    if (this.status) {
+    this.status.general = Utils.statusSave.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.CVNC.EDIT_DN_MLT);
+    this.status.save = Utils.statusSave.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.CVNC.EDIT_DN_MLT) && checkChirld;
+    this.status.submit = Utils.statusApprove.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.CVNC.APPROVE_DN_MLT) && checkChirld && !(!this.baoCao.id);
+    this.status.approve = this.baoCao.trangThai == Utils.TT_BC_2 && this.userService.isAccessPermisson(Roles.CVNC.PHE_DUYET_DN_MLT) && checkChirld;
+    this.status.copy = Utils.statusCopy.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.CVNC.COPY_DN_MLT) && checkChirld;
+    if (this.status.general) {
       this.scrollX = (550 + 12 * BOX_NUMBER_WIDTH).toString() + 'px';
     } else {
       this.scrollX = (500 + 12 * BOX_NUMBER_WIDTH).toString() + 'px';
@@ -483,7 +472,7 @@ export class CapVonComponent implements OnInit {
   getTotal() {
     this.total = new ItemContract();
     this.baoCao.lstCtiets.forEach((item, index) => {
-      if (index !== 0 && this.userService.isCuc()) {
+      if ((index !== 0 && this.userService.isCuc()) || (index !== 0 && this.userService.isTongCuc())) {
         this.total.slKeHoach = Operator.sum([this.total.slKeHoach, item.slKeHoach]);
         this.total.slThucHien = Operator.sum([this.total.slThucHien, item.slThucHien]);
         this.total.donGia = Operator.sum([this.total.donGia, item.donGia]);
@@ -499,7 +488,7 @@ export class CapVonComponent implements OnInit {
         this.total.vonDuyetCong = Operator.sum([this.total.vonDuyetCong, item.vonDuyetCong]);
         this.total.tongTien = Operator.sum([this.total.tongTien, item.tongTien]);
         this.total.soConDuocCap = Operator.sum([this.total.soConDuocCap, item.soConDuocCap]);
-      } else {
+      } else if (this.userService.isChiCuc()) {
         this.total.slKeHoach = Operator.sum([this.total.slKeHoach, item.slKeHoach]);
         this.total.slThucHien = Operator.sum([this.total.slThucHien, item.slThucHien]);
         this.total.donGia = Operator.sum([this.total.donGia, item.donGia]);

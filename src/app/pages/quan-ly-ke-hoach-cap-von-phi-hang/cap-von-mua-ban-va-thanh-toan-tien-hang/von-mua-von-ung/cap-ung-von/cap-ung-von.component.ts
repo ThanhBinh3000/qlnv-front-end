@@ -241,6 +241,12 @@ export class CapUngVonComponent implements OnInit {
 
     // chuc nang check role
     async onSubmit(mcn: string, lyDoTuChoi: string) {
+        if (this.baoCao.maLoai == Cvmb.GHI_NHAN_CU_VON) {
+            if (!this.baoCao.ngayNhanLenhChuyenCo || !this.baoCao.tkNhan) {
+                this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+                return;
+            }
+        }
         const requestGroupButtons = {
             id: this.baoCao.id,
             maChucNang: mcn,
