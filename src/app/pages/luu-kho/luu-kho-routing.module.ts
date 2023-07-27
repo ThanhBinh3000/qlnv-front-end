@@ -1,6 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LuuKhoComponent } from './luu-kho.component';
+import {QuyetDinhComponent} from "../sua-chua/quyet-dinh/quyet-dinh.component";
+import {ThemMoiQdComponent} from "../sua-chua/quyet-dinh/them-moi-qd/them-moi-qd.component";
+import {TheoDoiBaoQuanComponent} from "./theo-doi-bao-quan/theo-doi-bao-quan.component";
+import {
+  ThemMoiSoTheoDoiBqComponent
+} from "./theo-doi-bao-quan/them-moi-so-theo-doi-bq/them-moi-so-theo-doi-bq.component";
 
 const routes: Routes = [
 	{
@@ -19,13 +25,19 @@ const routes: Routes = [
 						'../luu-kho/quan-ly-so-the-kho/quan-ly-so-the-kho.module'
 					).then((m) => m.QuanLySoTheKhoModule),
 			},
+      // Region Quyết định
       {
-				path: 'theo-doi-bao-quan',
-				loadChildren: () =>
-					import(
-						'../luu-kho/theo-doi-bao-quan/theo-doi-bao-quan.module'
-					).then((m) => m.TheoDoiBaoQuanModule),
-			},
+        path: 'theo-doi-bao-quan',
+        component: TheoDoiBaoQuanComponent
+      },
+      {
+        path: 'theo-doi-bao-quan/them-moi',
+        component: ThemMoiSoTheoDoiBqComponent
+      },
+      {
+        path: 'theo-doi-bao-quan/chi-tiet/:id',
+        component: ThemMoiSoTheoDoiBqComponent
+      },
 		],
 	},
 ];

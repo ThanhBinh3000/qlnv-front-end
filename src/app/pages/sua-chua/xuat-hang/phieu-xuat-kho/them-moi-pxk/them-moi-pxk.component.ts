@@ -65,7 +65,7 @@ export class ThemMoiPxkComponent extends Base3Component implements OnInit {
       tenDiemKho : ['',[Validators.required]],
       tenNhaKho : ['',[Validators.required]],
       tenNganKho : ['',[Validators.required]],
-      tenLoKho : ['',[Validators.required]],
+      tenLoKho : [''],
       loaiVthh : [''],
       tenLoaiVthh : [''],
       cloaiVthh : [''],
