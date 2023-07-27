@@ -23,6 +23,7 @@ export class DialogTaoMoiComponent implements OnInit {
     userInfo: any;
     response: Report = new Report();
     listAppendix: any[] = Dcdt.PHU_LUC;
+    listAppendixTH: any[] = Dcdt.PHU_LUC_TH;
     lstNam: number[] = [];
 
     constructor(
@@ -200,9 +201,18 @@ export class DialogTaoMoiComponent implements OnInit {
                         }
                         item.maDviTien = '1';
                         item.trangThai = Status.NEW;
-                        const pl = this.listAppendix.find(e => e.id == item.maLoai);
-                        item.tenPl = pl.tenPl;
-                        item.tenDm = pl.tenDm;
+                        if (this.userInfo.CAP_DVI == "1") {
+                            const pl = this.listAppendixTH.find(e => e.id == item.maLoai);
+                            item.tenPl = pl.tenPl;
+                            item.tenDm = pl.tenDm;
+                            item.giaoCho = this.userInfo.sub
+                        } else {
+                            const pl = this.listAppendix.find(e => e.id == item.maLoai);
+                            item.tenPl = pl.tenPl;
+                            item.tenDm = pl.tenDm;
+                            item.giaoCho = this.userInfo.sub
+
+                        }
                     })
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
