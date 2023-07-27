@@ -9,7 +9,7 @@
             )">
       Tổng hợp phương án giá
     </li>
-    <li nz-menu-item (click)="selectTab(2)" *ngIf="(userService.isTongCuc() && type == typeConst.GIA_MUA_TOI_DA && loaiVthh == 'LT' && userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_MTDBTT_QD'))
+    <li nz-menu-item (click)="selectTab(2)" *ngIf="(type == typeConst.GIA_MUA_TOI_DA && loaiVthh == 'LT' && userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_MTDBTT_QD'))
           || (userService.isTongCuc() && type == typeConst.GIA_MUA_TOI_DA && loaiVthh == 'VT' && userService.isAccessPermisson('KHVDTNSNN_PAGIA_VT_MTDBTT_QD'))" >
       Quyết định giá/điều chỉnh giá của BTC
     </li>

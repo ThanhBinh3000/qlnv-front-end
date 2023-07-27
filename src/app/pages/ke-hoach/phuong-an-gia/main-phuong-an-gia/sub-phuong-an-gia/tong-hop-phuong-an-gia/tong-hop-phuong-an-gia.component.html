@@ -110,25 +110,26 @@
           <th></th>
           <th>
             <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.namKeHoach"
-                     (input)="filterInTable('namKeHoach',filterTable.namKeHoach)" size="small"/>
+              <nz-select nzAllowClear [(ngModel)]="filterTable.namKeHoach"
+                         (ngModelChange)="filterInTable('namKeHoach',filterTable.namKeHoach)">
+                <nz-option *ngFor="let p of dsNam" [nzValue]="p" [nzLabel]="p"></nz-option>
+              </nz-select>
             </nz-input-group>
           </th>
           <th>
-            <nz-input-group [nzSuffix]="suffixTemplateInfo">
+            <nz-input-group >
               <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soTT"
                      (input)="filterInTable('soTT',filterTable.soTT)" size="small"/>
             </nz-input-group>
           </th>
 
           <th>
-            <nz-input-group [nzSuffix]="suffixTemplateInfo">
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayTongHop"
-                     (input)="filterInTable('ngayTongHop',filterTable.ngayTongHop)" size="small"/>
+            <nz-input-group>
+              <nz-date-picker  nzFormat="dd/MM/yyyy" nzPlaceHolder="Ngày tổng hợp"
+                               [(ngModel)]="filterTable.ngayTongHop"
+                               (ngModelChange)="filterInTable('ngayTongHop', convertDateToString(filterTable.ngayTongHop))"
+              ></nz-date-picker>
             </nz-input-group>
-            <ng-template #suffixTemplateInfo>
-              <i nz-icon nzType="calendar"></i>
-            </ng-template>
           </th>
 
           <th>
@@ -163,8 +164,10 @@
 
           <th>
             <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trangThaiTH"
-                     (input)="filterInTable('trangThaiTH',filterTable.trangThaiTH)" size="small"/>
+              <nz-select nzAllowClear nzPlaceHolder="Tìm kiếm" [(ngModel)]="filterTable.trangThai"
+                         (ngModelChange)="filterInTable('trangThai',filterTable.trangThai)">
+                <nz-option *ngFor="let p of listTrangThaiTh" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
+              </nz-select>
             </nz-input-group>
           </th>
 
@@ -176,8 +179,10 @@
           </th>
           <th>
             <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trangThai"
-                     (input)="filterInTable('trangThai',filterTable.trangThai)" size="small"/>
+              <nz-select nzAllowClear nzPlaceHolder="Tìm kiếm" [(ngModel)]="filterTable.trangThai"
+                         (ngModelChange)="filterInTable('trangThai',filterTable.trangThai)">
+                <nz-option *ngFor="let p of listTrangThaiTt" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
+              </nz-select>
             </nz-input-group>
           </th>
           <th></th>

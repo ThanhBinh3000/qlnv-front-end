@@ -11,20 +11,20 @@
         </div>
       </div>
       <div class="btn-group">
-        <button type="button" class="btn btn-sub" (click)="quayLai()">
+        <button type="button" class="btn btn-sub ml-2" (click)="quayLai()">
           <i class="fa fa-arrow-left"></i>
           <span>Quay lại</span>
         </button>
         <button *ngIf="formData.value.trangThaiTt == STATUS.CHO_DUYET_LDV && (( this.type == this.TYPE_PAG.GIA_MUA_TOI_DA && this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_MTDBTT_TONGHOP_DUYET_HSPAGIA'))
       || ( this.type == this.TYPE_PAG.GIA_CU_THE  && this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_GCT_TONGHOP_DUYET_HSPAGIA'))) "
-                type="button" class="btn btn-sub do"
+                type="button" class="btn btn-sub do ml-2"
                 (click)="tuChoi()">
           <i class="icon htvbdh_tcdt_tuchoi do"></i>
           <span>Từ chối</span>
         </button>
         <button *ngIf="formData.value.trangThaiTt == STATUS.CHO_DUYET_LDV && (( this.type == this.TYPE_PAG.GIA_MUA_TOI_DA && this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_MTDBTT_TONGHOP_DUYET_HSPAGIA'))
       || ( this.type == this.TYPE_PAG.GIA_CU_THE  && this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_GCT_TONGHOP_DUYET_HSPAGIA'))) "
-                type="button" class="btn btn-sub xanh-nhat"
+                type="button" class="btn btn-sub xanh-nhat ml-2"
                 (click)="pheDuyet()">
           <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Duyệt</span>
@@ -32,7 +32,7 @@
         <button *ngIf="(formData.value.trangThaiTt == STATUS.DU_THAO ||formData.value.trangThaiTt == STATUS.TU_CHOI_LDV)
          && (( this.type == this.TYPE_PAG.GIA_MUA_TOI_DA && this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_MTDBTT_TONGHOP_TRINH_HSPAGIA'))
       || ( this.type == this.TYPE_PAG.GIA_CU_THE  && this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_GCT_TONGHOP_TRINH_HSPAGIA')))"
-                type="button" class="btn btn-sub xanh-nhat"
+                type="button" class="btn btn-sub xanh-nhat ml-2"
                 (click)="save(true)">
           <i class="icon htvbdh_tcdt_guiduyet "></i>
           <span>Lưu và gửi duyệt</span>
@@ -40,7 +40,7 @@
         <button *ngIf="(formData.value.trangThaiTt == STATUS.DU_THAO || formData.value.trangThaiTt == STATUS.TU_CHOI_LDV)
          && (( this.type == this.TYPE_PAG.GIA_MUA_TOI_DA && this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_MTDBTT_TONGHOP_TRINH_HSPAGIA'))
       || ( this.type == this.TYPE_PAG.GIA_CU_THE  && this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_GCT_TONGHOP_TRINH_HSPAGIA')))"
-                type="button" class="btn btn-sub xanh" (click)="save()">
+                type="button" class="btn btn-sub xanh ml-2" (click)="save()">
           <i class="icon htvbdh_luu"></i>
           <span>Lưu</span>
         </button>
@@ -269,7 +269,9 @@
       <tr>
         <td class="text-center">{{idx + 1}}</td>
         <td class="bg-parent1" [nzExpand]="expandSet.has(data.idVirtual)"
-            (nzExpandChange)="onExpandChange(data.idVirtual, $event)">{{ data.soDx }}</td>
+            (nzExpandChange)="onExpandChange(data.idVirtual, $event)"><a nz-button nzType="link"
+                                                                         (click)="openModalDxChinhSua(data.pagId)">{{ data.soDx }}</a>
+        </td>
         <td>{{ data.tenDvi}}</td>
         <td>{{ data.tenVungMien}}</td>
         <td></td>
@@ -339,6 +341,23 @@
     </div>
   </form>
 </div>
+
+<nz-modal [nzWidth]="'100%'" [nzBodyStyle]="{ 'overflow-y': 'auto' }"
+          [(nzVisible)]="isViewModal" (nzOnCancel)="closeDxPaModal()">
+  <ng-container *nzModalContent>
+    <app-them-dx-pag-lt *ngIf="pagType=='LT'" [pagType]="pagType" [type]="type" [isView]="true" [isModal]="true"
+                        [idInput]="idSelected">
+    </app-them-dx-pag-lt>
+    <app-them-moi-de-xuat-pag *ngIf="pagType=='VT'" [loaiVthh]="pagType" [type]="type" [isView]="true" [isModal]="true"
+                              [idInput]="idSelected"></app-them-moi-de-xuat-pag>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button (click)="closeDxPaModal()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>
 
 <ng-template #error let-control>
   <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
