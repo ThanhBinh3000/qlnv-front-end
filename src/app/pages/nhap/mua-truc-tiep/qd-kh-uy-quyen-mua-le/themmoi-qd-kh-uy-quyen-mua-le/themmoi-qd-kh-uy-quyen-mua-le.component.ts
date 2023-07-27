@@ -26,7 +26,7 @@ import { DatePipe } from '@angular/common';
 import {STATUS} from "../../../../../constants/status";
 import {QuyetDinhPheDuyetKeHoachMTTService} from "../../../../../services/quyet-dinh-phe-duyet-ke-hoach-mtt.service";
 import {ChaogiaUyquyenMualeService} from "../../../../../services/chaogia-uyquyen-muale.service";
-
+import {convertTienTobangChu} from 'src/app/shared/commonFunction';
 
 @Component({
   selector: 'app-themmoi-qd-kh-uy-quyen-mua-le',
@@ -55,6 +55,7 @@ export class ThemmoiQdKhUyQuyenMuaLeComponent extends Base2Component implements 
   listNguonVon: any[] = [];
 
   canCuKhacList: CanCuXacDinh[] = [];
+  listChiCuc: any[] = [];
   addModelCoSo: any = {
     moTa: '',
     taiLieu: [],
@@ -99,6 +100,17 @@ export class ThemmoiQdKhUyQuyenMuaLeComponent extends Base2Component implements 
       ngayHluc: [],
       ngayPduyet: [],
       trichYeu: [],
+      donGiaVat: [],
+      giaMua: [],
+      tchuanCluong: [],
+      ptMua: [],
+      tongMucDt: [],
+      thueGtgt: [],
+      ghiChu: [],
+      donGia: [],
+      tgianKthuc: [],
+      tgianMkho: [],
+      tenPthucMuaTrucTiep: [],
     });
   }
 
@@ -135,17 +147,32 @@ export class ThemmoiQdKhUyQuyenMuaLeComponent extends Base2Component implements 
             moTaHangHoa: dataDtl.hhQdPheduyetKhMttHdr.moTaHangHoa,
             ngayPduyet: dataDtl.hhQdPheduyetKhMttHdr.ngayPduyet,
             ngayHluc: dataDtl.hhQdPheduyetKhMttHdr.ngayHluc,
-            // (dataDtl.tgianDkienTu && dataDtl.tgianDkienDen) ? [dataDtl.tgianDkienTu, dataDtl.tgianDkienDen] : null,,
             diaDiemChaoGia: dataDtl.diaDiemChaoGia,
             ngayMkho: dataDtl.ngayMkho,
             ngayMua: dataDtl.ngayMua,
             trichYeu: dataDtl.trichYeu,
-            ghiChuChaoGia: dataDtl.ghiChuChaoGia
+            tenDvi: dataDtl.tenDvi,
+            tenDuAn: dataDtl.tenDuAn,
+            tongMucDt: dataDtl.tongMucDt,
+            tenNguonVon: dataDtl.tenNguonVon,
+            tenPthucMuaTrucTiep: dataDtl.tenPthucMuaTrucTiep,
+            pthucMuaTrucTiep: dataDtl.pthucMuaTrucTiep,
+            tchuanCluong: dataDtl.hhQdPheduyetKhMttHdr.tchuanCluong,
+            donGia: dataDtl.children[0].donGia,
+            donGiaVat: dataDtl.children[0].donGia + (dataDtl.children[0].donGia * 5 / 100),
+            tgianMkho: dataDtl.tgianMkho,
+            tgianKthuc: dataDtl.tgianKthuc,
+            thueGtgt: dataDtl.thueGtgt,
+            ghiChu: dataDtl.ghiChu
           })
+          this.canCuKhacList = dataDtl.hhQdPheduyetKhMttHdr.fileDinhKems
+          this.listChiCuc = dataDtl.children.length > 0 ? dataDtl.children : dataDtl.children2;
+          this.dataTable = this.listChiCuc.filter(x => x.maDvi == this.userInfo.MA_DVI)
           // this.radioValue = dataDtl.pthucMuaTrucTiep ? dataDtl.pthucMuaTrucTiep : '01'
           // this.fileDinhKemUyQuyen = dataDtl.fileDinhKemUyQuyen;
           // this.fileDinhKemMuaLe = dataDtl.fileDinhKemMuaLe;
           // this.showDetail(event,this.danhSachCtiet[0]);
+          console.log(this.dataTable)
         })
         .catch((e) => {
           console.log('error: ', e);
@@ -153,6 +180,10 @@ export class ThemmoiQdKhUyQuyenMuaLeComponent extends Base2Component implements 
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         });
     }
+  }
+
+  convertTien(data: any){
+    return convertTienTobangChu(data);
   }
 
 }
