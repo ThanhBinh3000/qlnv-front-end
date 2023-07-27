@@ -9,6 +9,9 @@
     <li nz-menu-item (click)="selectTab(2)">
       Hợp đồng
     </li>
+    <li nz-menu-item (click)="selectTab(3)">
+      Quyết định giao nhiệm vụ xuất hàng
+    </li>
   </ul>
 </nz-affix>
 <ng-container *ngIf="tabSelected == 0">
@@ -19,4 +22,7 @@
 </ng-container>
 <ng-container *ngIf="tabSelected == 2">
   <app-hop-dong-thanh-ly></app-hop-dong-thanh-ly>
+</ng-container>
+<ng-container *ngIf="tabSelected == 3">
+  <app-quyet-dinh-giao-nhiem-vu-thanh-ly></app-quyet-dinh-giao-nhiem-vu-thanh-ly>
 </ng-container>
