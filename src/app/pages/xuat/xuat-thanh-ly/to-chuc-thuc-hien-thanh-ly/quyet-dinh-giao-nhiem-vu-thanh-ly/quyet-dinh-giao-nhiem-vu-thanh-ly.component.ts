@@ -19,7 +19,6 @@ import {
   styleUrls: ['./quyet-dinh-giao-nhiem-vu-thanh-ly.component.scss']
 })
 export class QuyetDinhGiaoNhiemVuThanhLyComponent extends Base2Component implements OnInit {
-  isView = false;
   dsLoaiVthh: any[] = [];
   listTrangThai: any[] = [
     {ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo'},
@@ -76,7 +75,10 @@ export class QuyetDinhGiaoNhiemVuThanhLyComponent extends Base2Component impleme
   async ngOnInit() {
     await this.spinner.show()
     try {
-      await this.loadDsVthh()
+      await Promise.all([
+        this.loadDsVthh(),
+        this.search(),
+      ])
       await this.spinner.hide()
     } catch (e) {
       console.log('error: ', e)

@@ -220,7 +220,11 @@
               <td class="text-left">{{data.soLuong|number:globals.numberFormat:globals.locale}}</td>
               <td class="text-left">{{data.thanhTien|number:globals.numberFormat:globals.locale}}</td>
               <td class="text-left">{{data.tenTrangThai}}</td>
-              <td class="text-left"></td>
+              <td class="text-left">
+                <a *ngIf="data.soQdNv && data.idQdNv" nz-button nzType="link"
+                   (click)="openModalQdNv(data.idQdNv)">{{
+                  data.soQdNv}}</a>
+              </td>
               <td class="text-left">{{data.tenTrangThaiXh}}</td>
               <td>
                 <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isCuc()"
@@ -263,3 +267,17 @@
                                    (sendListAllDviTsan)="outputListAllDviTsan($event)">
   </app-thong-tin-hop-dong-thanh-ly>
 </ng-template>
+
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdNv"
+          (nzOnCancel)="closeModalQdNv()">
+  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+    <app-chi-tiet-quyet-dinh-giao-nhiem-vu-thanh-ly [idSelected]="idQdNv" [isViewOnModal]="true">
+    </app-chi-tiet-quyet-dinh-giao-nhiem-vu-thanh-ly>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button (click)="closeModalQdNv()" class="modal__button&#45;&#45;cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>
