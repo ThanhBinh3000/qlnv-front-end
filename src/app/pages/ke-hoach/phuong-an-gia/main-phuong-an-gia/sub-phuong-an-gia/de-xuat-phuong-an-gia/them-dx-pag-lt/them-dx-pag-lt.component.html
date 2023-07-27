@@ -637,14 +637,14 @@
           </div>
         </form>
         <span class="sub-title mb-10">GIÁ THỊ TRUỜNG</span>
-        <app-thong-tin-ksg  *ngIf="!idInput || dataTableKsGia"
-                           [isTableKetQua]="true"
-                           [(dataTable)]="dataTableKsGia" [isView]="isView">
+        <app-thong-tin-ksg  [dataParent]="formData.value" [isView]="isView" *ngIf="dataTableKsGia || !idInput"
+                            [isTabNdKhac]="false"
+                            [isTableKetQua]="true" [(dataTable)]="dataTableKsGia">
         </app-thong-tin-ksg>
         <span class="sub-title mb-10">GIÁ CỦA SỞ TÀI CHÍNH</span>
-        <app-thong-tin-ksg [isView]="isView"
-                           *ngIf="!idInput || dataTableKqGia" [isTableKetQua]="false"
-                           [(dataTable)]="dataTableKqGia">
+        <app-thong-tin-ksg [dataParent]="formData.value" [isView]="isView" *ngIf="dataTableKsGia || !idInput"
+                           [isTabNdKhac]="false"
+                           [isTableKetQua]="false" [(dataTable)]="dataTableKqGia">
         </app-thong-tin-ksg>
       </nz-card>
     </nz-tab>
