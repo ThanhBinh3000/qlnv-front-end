@@ -260,7 +260,7 @@
                     </thead>
                     <tbody class="table-body">
                         <tr *ngFor="let data of basicTable.data,let i = index" class="table-row"
-                            (click)="getDetailHopDong($event,data.hopDong.id)">
+                            (click)="getDetailHopDong($event,data.hopDong?.id)">
                             <td>{{ i + 1}}</td>
                             <td>{{data.hopDong?.soHd}}</td>
                             <td>{{data.hopDong?.tenHd}}</td>

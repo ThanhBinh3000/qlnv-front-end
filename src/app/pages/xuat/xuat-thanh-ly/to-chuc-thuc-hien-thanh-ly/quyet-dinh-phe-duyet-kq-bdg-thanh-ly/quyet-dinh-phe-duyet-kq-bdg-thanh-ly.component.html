@@ -182,13 +182,13 @@
         <td class="text-center">{{(page - 1) * pageSize + idx + 1}}</td>
         <td>{{ data.nam }}</td>
         <td>{{ data.soQd }}</td>
-        <td>{{ data.ngayPduyet | date: 'dd/MM/YYYY' }}</td>
+        <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
         <td>{{ data.trichYeu }}</td>
         <td></td>
         <td></td>
         <td><a *ngIf="data.maThongBao && data.idThongBao" nz-button nzType="link"
-             (click)="openModalMaThongBao(data.idThongBao)">{{
-            data.maThongBao}}</a></td>
+               (click)="openModalMaThongBao(data.idThongBao)">{{
+          data.maThongBao}}</a></td>
         <td>{{ data.tenHthucDgia }}</td>
         <td>{{ data.tenPthucDgia }}</td>
         <td>{{ data.thongBaoKhongThanh }}</td>

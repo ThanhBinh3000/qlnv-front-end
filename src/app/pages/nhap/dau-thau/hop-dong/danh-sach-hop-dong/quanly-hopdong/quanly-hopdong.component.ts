@@ -130,7 +130,6 @@ export class QuanlyHopdongComponent implements OnInit {
   }
 
   detailVatTu(data) {
-    console.log(data);
     this.formData.patchValue({
       id: data.id,
       namKhoach: data.namKhoach,
@@ -149,7 +148,7 @@ export class QuanlyHopdongComponent implements OnInit {
       trangThaiHd: data.trangThaiHd,
       tenDvi: data.hhQdKhlcntHdr?.tenDvi,
     });
-    this.dataTable = data.hhQdKhlcntHdr.dchinhDxKhLcntHdr.dsGthau.filter(item => item.trangThaiDt == STATUS.THANH_CONG);
+    this.dataTable = data.hhQdKhlcntHdr.dchinhDxKhLcntHdr?  data.hhQdKhlcntHdr.dchinhDxKhLcntHdr.dsGthau.filter(item => item.trangThaiDt == STATUS.THANH_CONG): data.hhQdKhlcntHdr.dsGthau.filter(item => item.trangThaiDt == STATUS.THANH_CONG);
     if (data.listHopDong) {
       let soLuong = 0
       let tongMucDtGoiTrung = 0;

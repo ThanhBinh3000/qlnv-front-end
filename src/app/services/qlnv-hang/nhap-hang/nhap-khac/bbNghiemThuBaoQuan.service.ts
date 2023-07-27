@@ -24,4 +24,8 @@ export class BbNghiemThuBaoQuanService extends BaseService {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/tim-kiem-bbntbqld`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
+  dsQdNvuDuocLapBbNtBqLd(body): Promise<OldResponseData> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/lap-bb-ntbq-ld`;
+    return this._httpClient.post<OldResponseData>(url, body).toPromise();
+  }
 }

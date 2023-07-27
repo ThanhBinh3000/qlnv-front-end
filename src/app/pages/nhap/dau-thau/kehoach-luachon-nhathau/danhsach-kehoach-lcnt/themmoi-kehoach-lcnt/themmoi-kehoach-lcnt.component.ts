@@ -67,6 +67,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
   listPhuongThucDauThau: any[] = [];
   listNguonVon: any[] = [];
   listNam: any[] = [];
+  listThuHoachVu: any[] = [];
   listHinhThucDauThau: any[] = [];
   listLoaiHopDong: any[] = [];
   listOfMapData: VatTu[];
@@ -167,6 +168,11 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       ykienThamGia: [''],
       tongMucDtBangChu: [''],
       tongSlChiTieu: [''],
+      ctietTccl: [''],
+      namSxuat: [''],
+      vu: [''],
+      thuHoachVu: [''],
+      namThuHoach: [''],
     });
   }
 
@@ -237,6 +243,11 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
     let resHd = await this.danhMucService.danhMucChungGetAll('LOAI_HDONG');
     if (resHd.msg == MESSAGE.SUCCESS) {
       this.listLoaiHopDong = resHd.data;
+    }
+    this.listThuHoachVu = [];
+    let resVu = await this.danhMucService.danhMucChungGetAll('VU_THU_HOACH');
+    if (resVu.msg == MESSAGE.SUCCESS) {
+      this.listThuHoachVu = resVu.data;
     }
   }
 
