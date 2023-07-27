@@ -523,7 +523,6 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data) {
         this.listCloaiVthh = res.data;
-        this.loadDsQdPduyetKhlcnt();
       }
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
@@ -689,28 +688,6 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
           this.notification.error(MESSAGE.ERROR, 'Không tìm thấy chỉ tiêu kế hoạch năm ' + dayjs().get('year'))
           return;
         }
-      }
-    }
-  }
-
-  async loadDsQdPduyetKhlcnt() {
-    if (this.type == 'GCT') {
-      let body = {
-        namKhoach: this.formData.value.namKeHoach,
-        namKeHoach: this.formData.value.namKeHoach,
-        maDvi: this.userInfo.MA_DVI,
-        loaiVthh: this.formData.value.loaiVthh,
-        trangThai: STATUS.BAN_HANH
-      };
-      let res = await this.giaDeXuatGiaService.loadQdGiaoKhLcnt(body);
-      if (res.msg == MESSAGE.SUCCESS) {
-        let arr = res.data;
-        if (arr) {
-          this.listQdCtKh = uniqBy(arr, 'id');
-        }
-      } else {
-        this.notification.error(MESSAGE.ERROR, 'Không tồn tại quyết định giao chỉ tiêu kế hoạch năm!')
-        return;
       }
     }
   }

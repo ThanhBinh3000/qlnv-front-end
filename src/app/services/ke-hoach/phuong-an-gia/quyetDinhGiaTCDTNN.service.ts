@@ -12,16 +12,6 @@ export class QuyetDinhGiaTCDTNNService extends BaseService {
     super(httpClient, 'phuong-an-gia/qd-gia-tcdtnn', '/qlnv-khoach');
   }
 
-  loadToTrinhTongHopThongTinGia(id: number) {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/phuong-an-gia/tong-hop/chi-tiet/${id}`;
-    return this.httpClient.get<any>(url).toPromise();
-  }
-
-  dsSoQd(body: any): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/list-qd-tcdtnn`;
-    return this.httpClient.post(url, body).toPromise();
-  }
-
   getPag(body: any): Promise<any> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/thong-tin-gia`;
     return this.httpClient.post(url, body).toPromise();
