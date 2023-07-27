@@ -292,13 +292,13 @@ export class ThongTinChiTietDauGiaThanhLyComponent extends Base2Component implem
         if (this.dataDetail) {
           child.giaKhoiDiem = child.slDauGia * child.giaTlKhongVat
         } else {
-          if(this.dataDauGia.length > 0){
+          if (this.dataDauGia.length > 0) {
             this.formData.value.ketQua == '1' ? child.soTienDatTruoc = null : child.soTienDatTruoc = child.slDauGia * child.giaTlKhongVat * this.formData.value.khoanTienDatTruoc / 100;
-          }else {
+          } else {
             child.slDauGia = child.slDeXuat
+            child.thanhTien = 0;
             child.giaTlKhongVat = child.donGia
             this.formData.value.ketQua == '1' ? child.giaKhoiDiem = child.slDeXuat * child.donGia : child.giaKhoiDiem = null;
-            this.formData.value.ketQua == '1' ? child.thanhTien = child.donGiaCaoNhat * child.slDeXuat : child.thanhTien = null;
             this.formData.value.ketQua == '1' ? child.soTienDatTruoc = null : child.soTienDatTruoc = child.slDeXuat * child.donGia * this.formData.value.khoanTienDatTruoc / 100;
           }
         }
@@ -403,10 +403,8 @@ export class ThongTinChiTietDauGiaThanhLyComponent extends Base2Component implem
     body.trangThai = isHoanThanh ? this.STATUS.DA_HOAN_THANH : this.STATUS.DU_THAO
     if (this.formData.value.ketQua == 1) {
       body.ketQuaSl = soLuongTrung + "/" + soLuongDviTsan;
-      body.soDviTsan = soLuongTrung;
     } else {
       body.ketQuaSl = soLuongTruot + "/" + soLuongDviTsan;
-      body.soDviTsan = soLuongTruot;
     }
     let res = await this.createUpdate(body);
     if (res) {
@@ -562,6 +560,13 @@ export class ThongTinChiTietDauGiaThanhLyComponent extends Base2Component implem
     }
     if (currentRow.toChucCaNhan && (currentRow.soLanTraGia == null || currentRow.soLanTraGia == 0)) {
       currentRow.soLanTraGia = 1
+    }
+  }
+
+  changeThanhTien(index, indexLv2) {
+    let currentRow = this.dataTable[index].childData[indexLv2];
+    if (currentRow.donGiaCaoNhat != 0 && currentRow.donGiaCaoNhat != null) {
+      currentRow.thanhTien = currentRow.slDauGia * currentRow.donGiaCaoNhat;
     }
   }
 

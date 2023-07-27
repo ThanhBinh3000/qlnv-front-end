@@ -71,3 +71,15 @@ export class ChiTietThongTinChaoGia {
   edit: boolean = false;
 }
 
+
+export class AddDiemKho {
+  id: number;
+  maDiemKho: number;
+  idDiaDiem: number;
+  soLuong: number;
+  thanhTien: number;
+  donGia: number;
+  tenDiemKho: string;
+  children: Array<any>;
+  edit: boolean = false;
+}

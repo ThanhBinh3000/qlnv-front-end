@@ -4,7 +4,6 @@ import dayjs from 'dayjs';
 import {NzModalService} from 'ng-zorro-antd/modal';
 import {NzNotificationService} from 'ng-zorro-antd/notification';
 import {NgxSpinnerService} from 'ngx-spinner';
-import {API_STATUS_CODE, PAGE_SIZE_DEFAULT, TYPE_PAG} from 'src/app/constants/config';
 import {MESSAGE} from 'src/app/constants/message';
 import {STATUS} from 'src/app/constants/status';
 import {UserLogin} from 'src/app/models/userlogin';
@@ -17,6 +16,7 @@ import {UserService} from 'src/app/services/user.service';
 import {Globals} from 'src/app/shared/globals';
 import {chain} from "lodash";
 import {v4 as uuidv4} from "uuid";
+import {PAGE_SIZE_DEFAULT, TYPE_PAG} from 'src/app/constants/config';
 
 @Component({
   selector: 'app-them-tong-hop-phuong-an-gia',
@@ -51,6 +51,7 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
   expandSet = new Set<number>();
   idSelected: number;
   isViewModal: boolean = false;
+  tieuChuanCl : string;
 
   constructor(
     private readonly fb: FormBuilder,
@@ -83,7 +84,7 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
         kqTdVat: [],
         kqTd: [],
         giaDng: [],
-        tchuanCluong: [],
+        tchuanCluong: [null],
         giaDngVat: [],
         trangThaiTh: [],
         trangThaiTt: [],
@@ -203,6 +204,7 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
     body.fileDinhKemReq = this.fileDinhKem;
     body.type = this.type;
     body.pagChiTiets = this.dataTable
+    body.tchuanCluong = this.tieuChuanCl
     let res = await this.tongHopPhuongAnGiaService.create(body);
     if (res.msg == MESSAGE.SUCCESS) {
       if (this.idInput > 0) {
@@ -242,11 +244,9 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
   }
 
   async onChangeCloaiVthh(event) {
-    let resp = await this.danhMucService.getDetail(this.formData.value.cloaiVthh);
+    let resp = await this.danhMucService.getDetail(event);
     if (resp.msg == MESSAGE.SUCCESS) {
-      this.formData.patchValue({
-        tchuanCluong: resp.data && resp.data.tieuChuanCl ? resp.data.tieuChuanCl : ""
-      })
+     this.tieuChuanCl = resp.data && resp.data.tieuChuanCl ? resp.data.tieuChuanCl : ""
     }
   }
 
@@ -325,6 +325,7 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
             idVirtual: uuidv4(),
             tenVungMien: value && value[0] && value[0].tenVungMien ? value[0].tenVungMien : null,
             tenDvi: value && value[0] && value[0].tenDvi ? value[0].tenDvi : null,
+            pagId: value && value[0] && value[0].pagId ? value[0].pagId : null,
             soDx : value && value[0] && value[0].soDx ? value[0].soDx : null,
             children: value
           };
