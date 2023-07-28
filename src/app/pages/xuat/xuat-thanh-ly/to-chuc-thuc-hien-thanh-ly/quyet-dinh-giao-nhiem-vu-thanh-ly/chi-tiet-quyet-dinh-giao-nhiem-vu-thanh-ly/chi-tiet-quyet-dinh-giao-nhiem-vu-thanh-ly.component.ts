@@ -80,6 +80,7 @@ export class ChiTietQuyetDinhGiaoNhiemVuThanhLyComponent extends Base2Component 
       trangThai: [''],
       tenTrangThai: [''],
       trangThaiXh: [''],
+      tenTrangThaiXh: [''],
       fileCanCu: [new Array<FileDinhKem>()],
       fileDinhKem: [new Array<FileDinhKem>()],
       quyetDinhDtl: [],
@@ -178,6 +179,7 @@ export class ChiTietQuyetDinhGiaoNhiemVuThanhLyComponent extends Base2Component 
               kieuNx: dataHd.kieuNx,
               tenKieuNx: dataHd.tenKieuNx,
               trangThaiXh: dataHd.trangThaiXh,
+              tenTrangThaiXh: dataHd.tenTrangThaiXh,
               quyetDinhDtl: dataHd.hopDongDtl,
             })
             await this.buildTableView();
