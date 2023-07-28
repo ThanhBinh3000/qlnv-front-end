@@ -45,9 +45,9 @@ export class XuatKhoVtTbTrongThoiGianBaoHanhComponent extends Base2Component imp
       nam: null,
       soQdGiaoNvXh: null,
       soPhieuXuatKho: null,
-      ngayXuatKho: null,
-      ngayXuatKhoTu: null,
-      ngayXuatKhoDen: null,
+      ngayXuatNhap: null,
+      ngayXuatNhapTu: null,
+      ngayXuatNhapDen: null,
       loaiVthh: null,
       type: null
     })
@@ -58,7 +58,7 @@ export class XuatKhoVtTbTrongThoiGianBaoHanhComponent extends Base2Component imp
       tenDiemKho: '',
       tenLoKho: '',
       soPhieuXuatKho: '',
-      ngayXuatKho: '',
+      ngayXuatNhap: '',
       soPhieuKnCl: '',
       ngayKn: '',
       tenTrangThai: '',
@@ -76,17 +76,17 @@ export class XuatKhoVtTbTrongThoiGianBaoHanhComponent extends Base2Component imp
   idPhieuKnCl: number = 0;
   openPhieuKnCl = false;
   disabledStartNgayXk = (startValue: Date): boolean => {
-    if (startValue && this.formData.value.ngayXuatKhoDen) {
-      return startValue.getTime() >= this.formData.value.ngayXuatKhoDen.getTime();
+    if (startValue && this.formData.value.ngayXuatNhapDen) {
+      return startValue.getTime() >= this.formData.value.ngayXuatNhapDen.getTime();
     }
     return false;
   };
 
   disabledEndNgayXk = (endValue: Date): boolean => {
-    if (!endValue || !this.formData.value.ngayXuatKhoTu) {
+    if (!endValue || !this.formData.value.ngayXuatNhapTu) {
       return false;
     }
-    return endValue.getTime() <= this.formData.value.ngayXuatKhoTu.getTime();
+    return endValue.getTime() <= this.formData.value.ngayXuatNhapTu.getTime();
   };
 
   ngOnInit(): void {
@@ -127,9 +127,9 @@ export class XuatKhoVtTbTrongThoiGianBaoHanhComponent extends Base2Component imp
   async timKiem() {
     await this.spinner.show();
     try {
-      if (this.formData.value.ngayXuatKho) {
-        this.formData.value.ngayXuatKhoTu = dayjs(this.formData.value.ngayXuatKho[0]).format('YYYY-MM-DD')
-        this.formData.value.ngayXuatKhoDen = dayjs(this.formData.value.ngayXuatKho[1]).format('YYYY-MM-DD')
+      if (this.formData.value.ngayXuatNhap) {
+        this.formData.value.ngayXuatNhapTu = dayjs(this.formData.value.ngayXuatNhap[0]).format('YYYY-MM-DD')
+        this.formData.value.ngayXuatNhapDen = dayjs(this.formData.value.ngayXuatNhap[1]).format('YYYY-MM-DD')
       }
       await this.search();
     } catch (e) {

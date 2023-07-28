@@ -1,3 +1,4 @@
+import { cloneDeep } from 'lodash';
 import { Component, OnInit } from '@angular/core';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -15,6 +16,7 @@ export class DialogTableCheckBoxComponent implements OnInit {
     dataColumn: any[] = []
     dataTable: any[] = [];
     isView: boolean = false;
+    initialAllChecked: boolean = true;
     allChecked: boolean = true;
     indeterminate: boolean = false;
     actionRefresh: boolean = false;
@@ -57,20 +59,23 @@ export class DialogTableCheckBoxComponent implements OnInit {
             this.dataTable = dataTable.map(f => ({ ...f, checked: true }));
             this.indeterminate = false;
         }
-        else if (this.dataTable.every(item => !item.checked)) {
+        else if (dataTable.every(item => !item.checked)) {
             this.allChecked = false;
             this.indeterminate = false;
-        } else if (this.dataTable.every(item => item.checked)) {
+            this.dataTable = cloneDeep(dataTable)
+        } else if (dataTable.every(item => item.checked)) {
             this.allChecked = true;
             this.indeterminate = false;
+            this.dataTable = cloneDeep(dataTable)
         } else {
             this.allChecked = false;
             this.indeterminate = true;
+            this.dataTable = cloneDeep(dataTable)
         }
     }
     async handleRefreshData(): Promise<void> {
         const data = await this.refreshData();
-        this.allChecked = true;
+        this.allChecked = this.initialAllChecked;
         this.updateCheck(data, this.allChecked);
 
     }

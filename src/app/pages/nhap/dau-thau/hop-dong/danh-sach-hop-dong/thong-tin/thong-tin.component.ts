@@ -156,7 +156,7 @@ export class ThongTinComponent implements OnInit, OnChanges {
                 mst: [null, [Validators.required]],
                 sdt: [null, [Validators.required]],
                 stk: [null, [Validators.required]],
-                fax: [null, [Validators.required]],
+                fax: [null],
                 moTai: [null, [Validators.required]],
                 giayUyQuyen: [null],
                 tenNguoiDdien: [null, [Validators.required]],
@@ -173,7 +173,7 @@ export class ThongTinComponent implements OnInit, OnChanges {
                 chucVuNhaThau: [],
                 sdtNhaThau: [],
                 stkNhaThau: [null, [Validators.required]],
-                faxNhaThau: [null, [Validators.required]],
+                faxNhaThau: [null],
                 moTaiNhaThau: [null, [Validators.required]],
                 giayUyQuyenNhaThau: [],
                 donGia: [],
@@ -346,12 +346,10 @@ export class ThongTinComponent implements OnInit, OnChanges {
             this.formData.controls["mst"].setValidators([Validators.required]);
             this.formData.controls["sdt"].setValidators([Validators.required]);
             this.formData.controls["stk"].setValidators([Validators.required]);
-            this.formData.controls["fax"].setValidators([Validators.required]);
             this.formData.controls["moTai"].setValidators([Validators.required]);
             this.formData.controls["tenNguoiDdien"].setValidators([Validators.required]);
             this.formData.controls["chucVu"].setValidators([Validators.required]);
             this.formData.controls["stkNhaThau"].setValidators([Validators.required]);
-            this.formData.controls["faxNhaThau"].setValidators([Validators.required]);
             this.formData.controls["moTaiNhaThau"].setValidators([Validators.required]);
         } else {
             this.formData.controls["tenGoiThau"].clearValidators();
@@ -368,7 +366,6 @@ export class ThongTinComponent implements OnInit, OnChanges {
             this.formData.controls["tenNguoiDdien"].clearValidators();
             this.formData.controls["chucVu"].clearValidators();
             this.formData.controls["stkNhaThau"].clearValidators();
-            this.formData.controls["faxNhaThau"].clearValidators();
             this.formData.controls["moTaiNhaThau"].clearValidators();
         }
     }

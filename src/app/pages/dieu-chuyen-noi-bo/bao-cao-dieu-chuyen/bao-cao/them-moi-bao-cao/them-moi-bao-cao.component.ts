@@ -42,6 +42,7 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
   };
   danhSachKetQua: any[] = [];
   listBaoCaoChiCuc: any[] = [];
+  initialAllChecked: boolean = true;
   allChecked: boolean = true;
   isTongHop: boolean = false;
   constructor(
@@ -169,13 +170,26 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
       ngayKyQdCuc: data.ngayKyQdinh
     });
     if (this.formData.value.soQdDcCuc) {
-      this.getThongTinhNhaXuatHangHoa(this.formData.value.soQdDcCuc)
+      this.getThongTinhNhapXuatHangHoa(this.formData.value.soQdDcCuc)
     }
   };
-  async getThongTinhNhaXuatHangHoa(soQdinhCuc: string) {
-    const res = await this.bangCaoDieuChuyenService.getThongTinNhapXuat({ soQdinhCuc });
-    if (res.msg === MESSAGE.SUCCESS) {
-      this.danhSachKetQua = cloneDeep(res.data)
+  async getThongTinhNhapXuatHangHoa(soQdinhCuc: string) {
+    try {
+      this.spinner.show()
+      let res;
+      if (this.loaiBc === "CHI_CUC") {
+        res = await this.bangCaoDieuChuyenService.getThongTinNhapXuatChiCuc({ soQdinhCuc });
+      } else if (this.loaiBc === "CUC") {
+        res = await this.bangCaoDieuChuyenService.getThongTinNhapXuatCuc({ soQdinhCuc });
+      }
+      if (res.msg === MESSAGE.SUCCESS) {
+        this.danhSachKetQua = cloneDeep(res.data)
+      }
+    } catch (error) {
+      console.log("e", error)
+    }
+    finally {
+      this.spinner.hide()
     }
   }
 
@@ -211,6 +225,7 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
         // dataColumn: ['soQdinh', 'ngayKyQdinh', 'tenLoaiVthh'],
         dataHeader: ['tenBaoCao', 'Đơn vị gửi'],
         dataColumn: ['ten', 'donViGui'],
+        initialAllChecked: this.initialAllChecked,
         allChecked: this.allChecked,
         actionRefresh: true,
         refreshData: this.loadListBaoCaoChiCuc

@@ -39,6 +39,8 @@ export class QuanLyHopDongThanhLyComponent extends Base2Component implements OnI
   isEditHopDong: boolean
   listAllDviTsan: any[] = [];
   listDviTsanDaKy: any[] = [];
+  idQdNv: number = 0;
+  isViewQdNv: boolean = false;
 
   constructor(
     httpClient: HttpClient,
@@ -217,5 +219,15 @@ export class QuanLyHopDongThanhLyComponent extends Base2Component implements OnI
       }, 0);
       return sum;
     }
+  }
+
+  openModalQdNv(id: number) {
+    this.idQdNv = id;
+    this.isViewQdNv = true;
+  }
+
+  closeModalQdNv() {
+    this.idQdNv = null;
+    this.isViewQdNv = false;
   }
 }

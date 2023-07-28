@@ -20,17 +20,17 @@
           <i class="icon htvbdh_tcdt_guiduyet"></i>
           <span>Lưu và gửi duyệt</span>
         </button>
-        <a class="btn btn-outline-danger btn-sm waves-effect waves-light ml-2" (click)="tuChoi()"
-           *ngIf="(formData.value.trangThai  == STATUS.CHO_DUYET_TP || formData.value.trangThai  == STATUS.CHO_DUYET_LDC)">
+        <button class="btn btn-sub do mr-2" (click)="tuChoi()"
+                *ngIf="(formData.value.trangThai  == STATUS.CHO_DUYET_TP || formData.value.trangThai  == STATUS.CHO_DUYET_LDC)">
           <i class="icon htvbdh_tcdt_tuchoi"></i>
           <span>Từ chối</span>
-        </a>
-        <a class="btn btn-outline-success btn-sm waves-effect waves-light ml-2"
-           *ngIf="(formData.value.trangThai  == STATUS.CHO_DUYET_TP || formData.value.trangThai  == STATUS.CHO_DUYET_LDC)"
-           (click)="pheDuyet()">
+        </button>
+        <button class="btn btn-sub xanh-nhat mr-2"
+                *ngIf="(formData.value.trangThai  == STATUS.CHO_DUYET_TP || formData.value.trangThai  == STATUS.CHO_DUYET_LDC)"
+                (click)="pheDuyet()">
           <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Duyệt</span>
-        </a>
+        </button>
         <button (click)="save(false)"
                 *ngIf="(formData.value.trangThai == STATUS.DU_THAO && !isViewDetail)  "
                 class="btn btn-main btn-sm waves-effect waves-light ml-2">

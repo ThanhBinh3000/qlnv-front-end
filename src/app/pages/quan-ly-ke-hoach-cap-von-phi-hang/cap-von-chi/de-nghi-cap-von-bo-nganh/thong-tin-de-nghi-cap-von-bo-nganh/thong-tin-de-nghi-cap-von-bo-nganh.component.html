@@ -60,7 +60,7 @@
           </nz-input-group> -->
 
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> Số đề nghị</nz-form-label>
+            <nz-form-label [nzNoColon]="true"> Số công văn đề nghị</nz-form-label>
             <nz-input-group nzAddOnAfter="{{titleSoDeNghi}}" nz-col [nzSpan]="24">
               <input nz-input formControlName="soDeNghi" [readonly]="isView"/>
             </nz-input-group>
@@ -87,7 +87,7 @@
 
   <div class="mt-16 flex-card p-lr16">
     <nz-card class="mt-2px flex-card data-table card-border-content table-card">
-      <nz-table #phanBo class="nowrap mt-16 table-chi-tiet" nzBordered [nzData]="chiTietList">
+      <nz-table nzBordered [nzData]="chiTietList">
         <thead>
         <tr>
           <th style="width: 35px">STT</th>
@@ -107,7 +107,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr class="search-table" *ngIf="!isView">
+        <tr *ngIf="!isView">
           <th></th>
           <th>
             <nz-input-group>
@@ -199,7 +199,6 @@
             </a>
           </th>
         </tr>
-
         <tr *ngFor="let item of chiTietList, let idx = index">
           <ng-container *ngIf="!item.edit; else editTemplate">
             <td>{{idx + 1}}</td>

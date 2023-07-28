@@ -860,25 +860,36 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
   }
 
   async saveDdiemNhap(statusSave) {
-    this.spinner.show();
-    this.dataTable.forEach(item => {
-      item.trangThai = statusSave
-      if(item.children.length == 0){
-        this.notification.success(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR);
-      }
-    })
-    let body = {
-      detailList: this.dataTable
-    }
-    let res = await this.quyetDinhGiaoNhapHangService.updateDdiemNhap(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-      this.redirectQdNhapXuat();
-      this.spinner.hide();
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
-      this.spinner.hide();
-    }
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn hoàn thành cập nhật?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: async () => {
+        this.spinner.show();
+        this.dataTable.forEach(item => {
+          item.trangThai = statusSave
+          if(item.children.length == 0){
+            this.notification.success(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR);
+          }
+        })
+        let body = {
+          detailList: this.dataTable
+        }
+        let res = await this.quyetDinhGiaoNhapHangService.updateDdiemNhap(body);
+        if (res.msg == MESSAGE.SUCCESS) {
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+          this.redirectQdNhapXuat();
+          this.spinner.hide();
+        } else {
+          this.notification.error(MESSAGE.ERROR, res.msg);
+          this.spinner.hide();
+        }
+      },
+    });
   }
 
   isDisableForm() {

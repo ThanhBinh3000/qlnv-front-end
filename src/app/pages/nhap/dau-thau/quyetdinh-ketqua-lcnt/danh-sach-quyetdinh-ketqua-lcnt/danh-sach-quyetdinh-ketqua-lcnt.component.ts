@@ -1,29 +1,33 @@
-import { Component, EventEmitter, Input, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import dayjs from 'dayjs';
-import { cloneDeep } from 'lodash';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
-import { MESSAGE } from 'src/app/constants/message';
-import { UserLogin } from 'src/app/models/userlogin';
-import { QuyetDinhPheDuyetKetQuaLCNTService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/tochuc-trienkhai/quyetDinhPheDuyetKetQuaLCNT.service';
-import { TongHopDeXuatKHLCNTService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/tongHopDeXuatKHLCNT.service';
-import { UserService } from 'src/app/services/user.service';
-import { convertTrangThai, convertTrangThaiGt, convertVthhToId } from 'src/app/shared/commonFunction';
+import {Component, EventEmitter, Input, OnInit} from '@angular/core';
+import {Router} from "@angular/router";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {
+  TongHopDeXuatKHLCNTService
+} from "../../../../../services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/tongHopDeXuatKHLCNT.service";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {UserService} from "../../../../../services/user.service";
+import {
+  QuyetDinhPheDuyetKetQuaLCNTService
+} from "../../../../../services/qlnv-hang/nhap-hang/dau-thau/tochuc-trienkhai/quyetDinhPheDuyetKetQuaLCNT.service";
+import {DanhMucService} from "../../../../../services/danhmuc.service";
+import {PAGE_SIZE_DEFAULT} from "../../../../../constants/config";
+import {UserLogin} from "../../../../../models/userlogin";
+import dayjs from "dayjs";
+import {MESSAGE} from "../../../../../constants/message";
+import {convertTrangThai, convertTrangThaiGt} from "../../../../../shared/commonFunction";
+import {
+  DialogDanhSachHangHoaComponent
+} from "../../../../../components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component";
 import { saveAs } from 'file-saver';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { cloneDeep } from 'lodash';
 import { STATUS } from 'src/app/constants/status';
-import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
-
 @Component({
-  selector: 'app-quyetdinh-ketqua-lcnt',
-  templateUrl: './quyetdinh-ketqua-lcnt.component.html',
-  styleUrls: ['./quyetdinh-ketqua-lcnt.component.scss']
+  selector: 'app-danh-sach-quyetdinh-ketqua-lcnt',
+  templateUrl: './danh-sach-quyetdinh-ketqua-lcnt.component.html',
+  styleUrls: ['./danh-sach-quyetdinh-ketqua-lcnt.component.scss']
 })
-export class QuyetdinhKetquaLcntComponent implements OnInit {
-
+export class DanhSachQuyetdinhKetquaLcntComponent implements OnInit {
   @Input() loaiVthh: string
 
   constructor(
@@ -486,5 +490,4 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
     this.idQdKq = null;
     this.openQdKqKhlcnt = false;
   }
-
 }
