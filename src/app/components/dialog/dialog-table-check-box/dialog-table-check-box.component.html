@@ -18,7 +18,7 @@
                     : column.startsWith('ngay') ? (data[column] | date: 'dd/MM/YYYY')
                     : column.startsWith('number') ? (data[column] | number: '1.0-1' :'vi_VN')
                     : data[column])
-                  }}
+                    }}
                 </td>
                 <td *ngIf="!isView" class="text-center">
                     <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
