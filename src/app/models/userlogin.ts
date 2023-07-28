@@ -14,6 +14,7 @@ export class UserLogin {
   TEN_PHONG_BAN: string;
   MA_PHONG_BAN: string;
   POSITION: string;
+  POSITION_NAME: string;
   ID: number;
 
   constructor(initObj: any, dvql: any) {

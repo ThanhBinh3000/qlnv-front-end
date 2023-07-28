@@ -9,6 +9,7 @@ import {
   ThemMoiSoTheoDoiBqComponent
 } from "./theo-doi-bao-quan/them-moi-so-theo-doi-bq/them-moi-so-theo-doi-bq.component";
 import { ThemMoiCtietTdbqComponent } from './theo-doi-bao-quan/them-moi-so-theo-doi-bq/them-moi-ctiet-tdbq/them-moi-ctiet-tdbq.component';
+import { TableCsclComponent } from './theo-doi-bao-quan/them-moi-so-theo-doi-bq/table-cscl/table-cscl.component';
 
 
 @NgModule({
@@ -16,7 +17,8 @@ import { ThemMoiCtietTdbqComponent } from './theo-doi-bao-quan/them-moi-so-theo-
       LuuKhoComponent,
       TheoDoiBaoQuanComponent,
       ThemMoiSoTheoDoiBqComponent,
-      ThemMoiCtietTdbqComponent
+      ThemMoiCtietTdbqComponent,
+      TableCsclComponent
     ],
     imports: [CommonModule, LuuKhoRoutingModule, ComponentsModule, MainModule],
 })
