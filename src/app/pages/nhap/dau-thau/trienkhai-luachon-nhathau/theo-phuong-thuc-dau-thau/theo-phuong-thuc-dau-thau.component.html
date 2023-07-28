@@ -6,9 +6,6 @@
     <li nz-menu-item (click)="selectTab(1)">
       Thông tin đấu thầu
     </li>
-    <li nz-menu-item (click)="selectTab(2)">
-      Quyết định phê duyệt kết quả lựa chọn nhà thầu
-    </li>
   </ul>
 </nz-affix>
 <ng-container *ngIf="tabSelected == 0">
@@ -16,7 +13,4 @@
 </ng-container>
 <ng-container *ngIf="tabSelected == 1">
   <app-thongtin-dauthau [loaiVthh]="typeVthh"></app-thongtin-dauthau>
-</ng-container>
-<ng-container *ngIf="tabSelected == 2">
-  <app-quyetdinh-ketqua-lcnt [loaiVthh]="typeVthh"></app-quyetdinh-ketqua-lcnt>
 </ng-container>

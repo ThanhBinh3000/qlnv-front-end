@@ -181,10 +181,10 @@
                                                 <td>{{lv3.ngayXuatKho | date: 'dd/MM/YYYY' }}</td>
                                                 <td>{{LIST_TRANG_THAI[lv3.trangThai]}}</td>
                                                 <td class="text-left">
-                                                    <a (click)="redirectDetail(lv3, false, null)"
+                                                    <!-- <a (click)="redirectDetail(lv3, false, null)"
                                                         *ngIf="checkRoleAdd(lv3.trangThai)">
                                                         <i class="fa fa-plus"></i>
-                                                    </a>
+                                                    </a> -->
                                                     <a (click)="redirectDetail(lv3, true, lv3.id)"
                                                         *ngIf="checkRoleView(lv3.trangThai)">
                                                         <i class="fa fa-eye" title="Xem chi tiết"></i>

@@ -1,7 +1,14 @@
-<div class="bg-trang">
-    <div class="mt16 flex-card p-lr16">
-        <div class="header header-green-background flex-end">
-            <nz-affix [nzOffsetTop]="46" class="thdc-btn-affix" *ngIf="!isViewOnModal">
+<nz-affix [nzOffsetTop]="46" class="thdc-btn-affix">
+    <div class="header header-green-background">
+        <div class="header-text">
+            <div class="title-chi-tieu">
+                <span
+                    [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDC ? 'status-xanh' : 'status-do' ">{{TRANG_THAI[formData.value.trangThai]}}</span>
+                <span class="title-form">Báo cáo kết quả điều chuyển hàng dự trữ quốc gia</span>
+            </div>
+        </div>
+        <div class="mt16 flex-card p-lr16" *ngIf="!isViewOnModal">
+            <div class="header header-green-background flex-end">
                 <div class="btn-group tong-hop-dc">
                     <button type="button" class="btn btn-sub" (click)="quayLai()">
                         <i class="fa fa-arrow-left"></i>
@@ -24,19 +31,10 @@
                         <span>Lưu</span>
                     </button>
                 </div>
-            </nz-affix>
+            </div>
         </div>
     </div>
-</div>
-<div class="header header-green-background">
-    <div class="header-text">
-        <div class="title-chi-tieu">
-            <span
-                [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDC ? 'status-xanh' : 'status-do' ">{{TRANG_THAI[formData.value.trangThai]}}</span>
-            <span class="title-form">Báo cáo kết quả điều chuyển hàng dự trữ quốc gia</span>
-        </div>
-    </div>
-</div>
+</nz-affix>
 <div class="bg-trang">
     <nz-alert class="mg-t-16" *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDCC " nzShowIcon nzType="error"
         nzMessage="Lý do từ chối" nzDescription="{{formData.value.lyDoTuChoi}}">

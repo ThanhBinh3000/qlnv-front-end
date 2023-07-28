@@ -13,7 +13,6 @@
         <button type="button" class="btn btn-sub mr-2" (click)="goBack()">
           <i class="fa fa-arrow-left"></i>
           <span>Quay lại</span>
-          <span>Quay lại</span>
         </button>
         <button *ngIf="this.userService.isCuc() && !isDisabled() && formData.value.trangThai != STATUS.DA_DUYET_LDC"
                 class="btn btn-sub xanh-nhat mr-2" (click)="save(true)">

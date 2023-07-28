@@ -196,7 +196,11 @@
             <td>{{ data.namKhoach}}</td>
             <td><a style="color: #001CFF;" (click)="openQdPdKhlcntModal(data.idQdPdKhlcnt)">{{ data.soQdPdKhlcnt}}</a>
             </td>
-            <td><a style="color: #001CFF;" (click)="openQdPdKqlcntModal(data.id)">{{ data.soQd}}</a></td>
+            <td>
+<!--              <a style="color: #001CFF;" (click)="openQdPdKqlcntModal(data.id)">-->
+                {{ data.soQd}}
+<!--              </a>-->
+            </td>
             <td class="text-right">{{ data.soGthau}}</td>
             <td class="text-right">{{ data.qdKhlcntDtl?.soGthauTrung}}</td>
             <td class="text-right">{{ data.listHopDong?.length }}</td>
@@ -307,17 +311,17 @@
     </button>
   </div>
 </nz-modal>
-<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openQdPdKqlcnt"
-  (nzOnCancel)="closeQdPdKqlcntModal()">
-  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-    <app-themmoi-quyetdinh-ketqua-lcnt [idInput]="qdPdKqlcntId" [loaiVthh]="loaiVthh" [isViewOnModal]="true"
-      [isViewDetail]="true">
-    </app-themmoi-quyetdinh-ketqua-lcnt>
-  </ng-container>
-  <div *nzModalFooter>
-    <button nz-button (click)="closeQdPdKqlcntModal()" class="modal__button--cancel">
-      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
-      Đóng
-    </button>
-  </div>
-</nz-modal>
+<!--<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openQdPdKqlcnt"-->
+<!--  (nzOnCancel)="closeQdPdKqlcntModal()">-->
+<!--  <ng-container *nzModalContent class="modal__content custom-scroll-modal">-->
+<!--    <app-themmoi-quyetdinh-ketqua-lcnt [idInput]="qdPdKqlcntId" [loaiVthh]="loaiVthh" [isViewOnModal]="true"-->
+<!--      [isViewDetail]="true">-->
+<!--    </app-themmoi-quyetdinh-ketqua-lcnt>-->
+<!--  </ng-container>-->
+<!--  <div *nzModalFooter>-->
+<!--    <button nz-button (click)="closeQdPdKqlcntModal()" class="modal__button&#45;&#45;cancel">-->
+<!--      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>-->
+<!--      Đóng-->
+<!--    </button>-->
+<!--  </div>-->
+<!--</nz-modal>-->

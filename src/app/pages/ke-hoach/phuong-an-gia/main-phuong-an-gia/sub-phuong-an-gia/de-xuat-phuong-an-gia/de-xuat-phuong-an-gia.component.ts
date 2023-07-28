@@ -63,7 +63,8 @@ export class DeXuatPhuongAnGiaComponent implements OnInit {
   ) {
     this.formData = this.fb.group({
       soDeXuat: [null],
-      ngayKy: [[]],
+      ngayKyTu: [],
+      ngayKyDen: [],
       trichYeu: [null],
       namKeHoach: [null],
       loaiHangHoa: [null],
@@ -170,10 +171,6 @@ export class DeXuatPhuongAnGiaComponent implements OnInit {
     this.spinner.show();
 
     let body = this.formData.value;
-    if (body.ngayKy != null) {
-      body.ngayKyTu = body.ngayKy[0];
-      body.ngayKyDen = body.ngayKy[1];
-    }
     body.namKh = body.namKeHoach;
     body.soDx = body.soDeXuat;
     body.loaiHh = body.loaiHangHoa;
@@ -251,8 +248,6 @@ export class DeXuatPhuongAnGiaComponent implements OnInit {
       this.spinner.show();
       try {
         let body = this.formData.value;
-        body.tuNgay = body.ngayKy[0];
-        body.denNgay = body.ngayKy[1];
         body.pagType = this.pagType
         body.type = this.type
         this.deXuatPAGService
@@ -416,16 +411,7 @@ export class DeXuatPhuongAnGiaComponent implements OnInit {
   }
 
   clearFilterTable() {
-    this.filterTable = {
-      soDeXuat: '',
-      ngayKy: '',
-      trichYeu: '',
-      quyetDinhChiTieu: '',
-      namKeHoach: '',
-      tenLoaiVthh: '',
-      tenLoaiGia: '',
-      trangThai: '',
-    }
+    this.formData.reset();
   }
 
 

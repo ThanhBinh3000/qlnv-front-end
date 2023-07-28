@@ -10,7 +10,6 @@ import {NzNotificationService} from "ng-zorro-antd/notification";
 import {DanhMucService} from "../../../../../../../services/danhmuc.service";
 import {HelperService} from "../../../../../../../services/helper.service";
 import {Globals} from "../../../../../../../shared/globals";
-import {TYPE_PAG} from "../../../../../../../constants/config";
 
 @Component({
   selector: 'app-dialog-pag-qd-btc',

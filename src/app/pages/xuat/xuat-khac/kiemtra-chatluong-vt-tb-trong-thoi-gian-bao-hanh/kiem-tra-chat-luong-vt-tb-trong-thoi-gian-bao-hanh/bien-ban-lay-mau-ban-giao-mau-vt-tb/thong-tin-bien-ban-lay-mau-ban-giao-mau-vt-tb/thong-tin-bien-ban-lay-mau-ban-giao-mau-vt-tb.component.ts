@@ -166,13 +166,11 @@ export class ThongTinBienBanLayMauBanGiaoMauVtTbComponent extends Base2Component
 
             //Xử lý pp lấy mẫu và chỉ tiêu kiểm tra chất lượng
             if (data.ppLayMau) {
-              console.log(data.ppLayMau,"pplays mẫu",)
               let ppLayMauOptions = data.ppLayMau.indexOf(",") > 0 ? data.ppLayMau.split(",") : [data.ppLayMau];
               ppLayMauOptions = ppLayMauOptions.map((str, index) => ({label: str, value: index + 1, checked: true}));
               this.formData.patchValue({
                 ppLayMauList: ppLayMauOptions,
               });
-              console.log(this.formData.value.ppLayMauList,"pplays mẫu1")
             }
             if (data.chiTieuKiemTra) {
               let chiTieuOptions = data.chiTieuKiemTra.indexOf(",") > 0 ? data.chiTieuKiemTra.split(",") : [data.chiTieuKiemTra];

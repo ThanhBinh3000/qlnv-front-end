@@ -285,18 +285,21 @@
             <th class="text-center" rowSpan="2">Số lượng(tấn)</th>
             <th class="text-center" colSpan="2">Giá khảo sát</th>
             <th class="text-center" colSpan="2">Giá Cục đề nghị</th>
+            <th class="text-center" colSpan="2" *ngIf="!isMuaToiDa">Giá ban hành của BTC</th>
             <th class="text-center" colSpan="2">Giá TC đề xuất</th>
-            <th class="text-center" colSpan="2">Giá QĐ của BTC</th>
+            <th class="text-center" colSpan="2" *ngIf="isMuaToiDa">Giá QĐ của BTC</th>
           </tr>
           <tr>
             <th class="text-center">Giá chưa VAT</th>
             <th class="text-center">Giá có VAT</th>
             <th class="text-center">Giá chưa VAT</th>
             <th class="text-center">Giá có VAT</th>
+            <th class="text-center" *ngIf="!isMuaToiDa">Giá chưa VAT</th>
+            <th class="text-center"  *ngIf="!isMuaToiDa">Giá có VAT</th>
             <th class="text-center">Giá chưa VAT</th>
             <th class="text-center">Giá có VAT</th>
-            <th class="text-center">Giá chưa VAT</th>
-            <th class="text-center">Giá có VAT</th>
+            <th class="text-center"  *ngIf="isMuaToiDa">Giá chưa VAT</th>
+            <th class="text-center"  *ngIf="isMuaToiDa">Giá có VAT</th>
           </tr>
           </thead>
           <tbody>
@@ -315,10 +318,12 @@
               <td></td>
               <td></td>
               <td></td>
+              <td  *ngIf="!isMuaToiDa"></td>
+              <td  *ngIf="!isMuaToiDa"></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
+              <td  *ngIf="isMuaToiDa"></td>
+              <td  *ngIf="isMuaToiDa"></td>
             </tr>
             <ng-container *ngIf="expandSet.has(data.idVirtual)">
               <ng-container *ngFor="let item of data.children, let y = index">
@@ -338,6 +343,8 @@
                   <td class="text-right">{{ item.giaCucDn | number : '1.0-1' : 'vi_VN'}}</td>
                   <td class="text-right"
                       *ngIf="formTraCuu.value.loaiGia == 'LG01' || formTraCuu.value.loaiGia == 'LG03'">{{ item.giaCucDnVat | number : '1.0-1' : 'vi_VN'}}</td>
+                  <td class="text-right"   *ngIf="!isMuaToiDa">{{ item.giaQdBtc | number : '1.0-1' : 'vi_VN'}}</td>
+                  <td class="text-right"  *ngIf="!isMuaToiDa">{{ item.giaQdBtcVat | number : '1.0-1' : 'vi_VN'}}</td>
                   <td class="text-right"
                       *ngIf="!(formTraCuu.value.loaiGia == 'LG01' || formTraCuu.value.loaiGia == 'LG03')"></td>
                   <td class="text-right">
@@ -349,11 +356,11 @@
                   </td>
                   <td class="text-right"
                       *ngIf="!(formTraCuu.value.loaiGia == 'LG01' || formTraCuu.value.loaiGia == 'LG03')"></td>
-                  <td class="text-right">{{ item.giaQdBtc | number : '1.0-1' : 'vi_VN'}}</td>
+                  <td class="text-right"  *ngIf="isMuaToiDa">{{ item.giaQdBtc | number : '1.0-1' : 'vi_VN'}}</td>
                   <td class="text-right"
-                      *ngIf="(formTraCuu.value.loaiGia == 'LG01' || formTraCuu.value.loaiGia == 'LG03')">{{ item.giaQdBtcVat | number : '1.0-1' : 'vi_VN'}}</td>
+                      *ngIf="(formTraCuu.value.loaiGia == 'LG01' || formTraCuu.value.loaiGia == 'LG03') && isMuaToiDa">{{ item.giaQdBtcVat | number : '1.0-1' : 'vi_VN'}}</td>
                   <td class="text-right"
-                      *ngIf="!(formTraCuu.value.loaiGia == 'LG01' || formTraCuu.value.loaiGia == 'LG03')"></td>
+                      *ngIf="!(formTraCuu.value.loaiGia == 'LG01' || formTraCuu.value.loaiGia == 'LG03') && isMuaToiDa"></td>
                 </tr>
               </ng-container>
             </ng-container>

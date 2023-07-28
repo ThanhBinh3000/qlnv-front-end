@@ -1,5 +1,5 @@
 <div class="bg-trang">
-  <nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
+  <nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="level0">
     <div class="header header-green-background">
       <div class="header-text">
         <div class="title-chi-tieu">
@@ -223,7 +223,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Đơn vị kiểm nghiệm</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <input nz-input formControlName="dviKiemNghiem" [disabled]="isView"/>
+                  <input nz-input formControlName="dviKiemDinh" [disabled]="isView"/>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -269,17 +269,44 @@
   <ng-template #error let-control>
     <app-template-error #error [control]="control"></app-template-error>
   </ng-template>
-  <nz-card nzTitle="" class="mt-16 flex-card p-lr16">
-    <div class="mg-t-16 header header-green-background">
-      <div class="header-text">
-        <div class="title-chi-tieu">
-          <span></span>
-          <span>Kết quả phân tích chất lượng</span>
-        </div>
-      </div>
-    </div>
-    <!--     todo table kết quả-->
-
+  <nz-card class="mt16 mg-t-16 flex-card p-lr16">
+    <nz-collapse nzAccordion>
+      <nz-collapse-panel [nzHeader]="'KẾT QUẢ PHÂN TÍCH CHỈ TIÊU CHẤT LƯỢNG'" [nzActive]="true">
+        <nz-card class="mg-t-16 flex-card p-lr16 table-card">
+          <nz-table class="pd-10" #basicTable class="nowrap" [nzBordered] [nzFrontPagination]="false"
+                    [nzShowPagination]="false"
+                    [nzData]="dataTableChiTieu">
+            <thead>
+            <tr>
+              <th width="30px">STT</th>
+              <th><span class="do">* </span>Chỉ tiêu chất lượng</th>
+              <th width="60px">Chỉ số chất lượng theo QCVN 14:2020/BTC</th>
+              <th width="400px"><span class="do">* </span>Kết quả phân tích</th>
+              <th><span class="do">* </span>Phương pháp kiểm tra chất lượng</th>
+              <th><span class="do">* </span>Đánh giá</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let data of basicTable.data; let i = index">
+              <td>{{i + 1}}</td>
+              <td>{{data.tenChiTieu}}</td>
+              <td>{{data.chiSo}}</td>
+              <td>
+                <input type="text" nz-input class="w-400" [(ngModel)]="data.ketQua" [readOnly]="isView"/>
+              </td>
+              <td>{{data.phuongPhap}}</td>
+              <td>
+                <nz-select [(ngModel)]="data.danhGia" [disabled]="isView">
+                  <nz-option *ngFor="let item of LIST_DANH_GIA" [nzValue]="item.value" [nzLabel]="item.label">
+                  </nz-option>
+                </nz-select>
+              </td>
+            </tr>
+            </tbody>
+          </nz-table>
+        </nz-card>
+      </nz-collapse-panel>
+    </nz-collapse>
     <form nzLayout="vertical" nz-form [formGroup]="formData">
       <div nz-row [nzGutter]="[18, 6]">
         <div nz-col nzSpan="20">

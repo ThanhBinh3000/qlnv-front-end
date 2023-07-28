@@ -184,10 +184,10 @@
         <td class="text-center">{{(page - 1) * pageSize + idx + 1}}</td>
         <td>{{ data.nam }}</td>
         <td>{{ data.soBbQd }}</td>
-        <td>{{ data.ngayKyQd | date: 'dd/MM/YYYY' }}</td>
+        <td>{{ data.ngayKy|date: 'dd/MM/YYYY' }}</td>
         <td>{{ data.soHopDong }}</td>
         <td>{{ data.tenCloaiVthh }}</td>
-        <td>{{ data.thoiGianGiaoNhan | date: 'dd/MM/YYYY' }}</td>
+        <td>{{ data.thoiGianGiaoNhan|date: 'dd/MM/YYYY' }}</td>
         <td>{{ data.trichYeu}}</td>
         <td>{{ data.soBbTinhKho }}</td>
         <td>{{ data.soBbHaoDoi }}</td>
@@ -239,22 +239,8 @@
     </div>
   </nz-card>
 </div>
-<!--<div *ngIf="isDetail" class="chi-tiet">-->
-<!--  <app-chi-tiet-quyet-dinh-phe-duyet-bdg-thanh-ly [idSelected]="idSelected" [isView]="isView"-->
-<!--                                                  (showListEvent)="showList()">-->
-<!--  </app-chi-tiet-quyet-dinh-phe-duyet-bdg-thanh-ly>-->
-<!--</div>-->
-
-<!--<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewThongBao"-->
-<!--          (nzOnCancel)="closeModalMaThongBao()">-->
-<!--  <ng-container *nzModalContent class="modal__content custom-scroll-modal">-->
-<!--        <app-thong-tin-chi-tiet-dau-gia-thanh-ly [idInput]="idThongBao" [isView]="isView">-->
-<!--        </app-thong-tin-chi-tiet-dau-gia-thanh-ly>-->
-<!--  </ng-container>-->
-<!--  <div *nzModalFooter>-->
-<!--    <button nz-button (click)="closeModalMaThongBao()" class="modal__button&#45;&#45;cancel">-->
-<!--      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>-->
-<!--      Đóng-->
-<!--    </button>-->
-<!--  </div>-->
-<!--</nz-modal>-->
+<div *ngIf="isDetail" class="chi-tiet">
+  <app-chi-tiet-quyet-dinh-giao-nhiem-vu-thanh-ly [idSelected]="idSelected"
+                                                  (showListEvent)="showList()">
+  </app-chi-tiet-quyet-dinh-giao-nhiem-vu-thanh-ly>
+</div>

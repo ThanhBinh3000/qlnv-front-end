@@ -52,6 +52,7 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
   idSelected: number;
   isViewModal: boolean = false;
   tieuChuanCl : string;
+  isMuaToiDa : boolean;
 
   constructor(
     private readonly fb: FormBuilder,
@@ -109,6 +110,7 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
 
   async ngOnInit() {
     this.spinner.show();
+    this.isMuaToiDa = this.type == TYPE_PAG.GIA_MUA_TOI_DA ? true : false;
     await Promise.all([
       this.userInfo = this.userService.getUserLogin(),
       this.loadDsNam(),

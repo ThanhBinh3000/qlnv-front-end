@@ -103,22 +103,22 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
     this.formData = this.fb.group(
       {
         id: [],
-        namKeHoach: [dayjs().get('year'), [Validators.required]],
-        soDeXuat: ['', [Validators.required]],
+        namKeHoach: [dayjs().get('year')],
+        soDeXuat: [''],
         soDeXuatDc: [''],
-        loaiVthh: [null, [Validators.required]],
-        ngayKy: [null, [Validators.required]],
-        loaiGia: ['', [Validators.required]],
+        loaiVthh: [null],
+        ngayKy: [null],
+        loaiGia: [''],
         trichYeu: [null],
         soCanCu: [null],
-        lanDeXuat: [1, [Validators.required]],
+        lanDeXuat: [1],
         qdCtKhNam: [null],
         trangThai: ['00'],
         tenTrangThai: ['Dự Thảo'],
         tenCloaiVthh: [null],
         cloaiVthh: [null],
         moTa: [null],
-        apDungTatCa: [false, [Validators.required]],
+        apDungTatCa: [false],
         tchuanCluong: [''],
         giaDeNghi: [null],
         vat: [null],
@@ -127,7 +127,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
         ghiChu: [],
         diaDiemDeHang: [null],
         //Form căn cứ phương pháp xác định giá
-        maPphapXdg: [null, [Validators.required]],
+        maPphapXdg: [null],
         loaiHangXdg: ['XDG_LH01'],
         giaVonNk: [null],
         chiPhiChung: [null],
@@ -138,6 +138,25 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
         tgianNhang: [null]
       }
     );
+
+    this.formData.controls['giaVonNk'].valueChanges.subscribe(value => {
+      const tongChiPhi = this.formData.controls.giaVonNk.value + this.formData.controls.chiPhiChung.value + this.formData.controls.chiPhiPbo.value
+      this.formData.controls['tongChiPhi'].setValue(tongChiPhi);
+    })
+    this.formData.controls['chiPhiChung'].valueChanges.subscribe(value => {
+      if (this.formData.value.loaiHangXdg == 'XDG_LH02') {
+        const tongChiPhi = this.formData.controls.giaVonNk.value + this.formData.controls.chiPhiChung.value - this.formData.controls.chiPhiPbo.value
+        this.formData.controls['tongChiPhi'].setValue(tongChiPhi);
+      } else {
+        const tongChiPhi = this.formData.controls.giaVonNk.value + this.formData.controls.chiPhiChung.value
+        this.formData.controls['tongChiPhi'].setValue(tongChiPhi);
+      }
+
+    })
+    this.formData.controls['chiPhiPbo'].valueChanges.subscribe(value => {
+      const tongChiPhi = this.formData.controls.giaVonNk.value + this.formData.controls.chiPhiChung.value - this.formData.controls.chiPhiPbo.value
+      this.formData.controls['tongChiPhi'].setValue(tongChiPhi);
+    })
   }
 
   async ngOnInit() {
@@ -409,6 +428,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
 
   async save(isGuiDuyet?) {
     this.spinner.show();
+    this.helperService.removeValidators(this.formData);
     this.setValidator(isGuiDuyet)
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
@@ -484,17 +504,12 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
   }
 
   setValidator(isGuiDuyet) {
-    if (isGuiDuyet) {
       this.formData.controls["namKeHoach"].setValidators([Validators.required]);
       this.formData.controls["soDeXuat"].setValidators([Validators.required]);
       this.formData.controls["loaiVthh"].setValidators([Validators.required]);
       this.formData.controls["ngayKy"].setValidators([Validators.required]);
       this.formData.controls["loaiGia"].setValidators([Validators.required]);
       this.formData.controls["maPphapXdg"].setValidators([Validators.required]);
-    } else {
-      this.formData.controls["ngayKy"].clearValidators();
-      this.formData.controls["maPphapXdg"].clearValidators();
-    }
   }
 
   async pheDuyet() {
