@@ -208,6 +208,11 @@ export class AddBaoCaoComponent implements OnInit {
 
             this.baoCao = this.data.baoCao;
         }
+        if (this.userInfo.CAP_DVI == "1") {
+            this.listAppendix = Dcdt.PHU_LUC_TH
+        } else {
+            this.listAppendix = Dcdt.PHU_LUC
+        }
         this.getStatusButton();
         if (this.status.general) {
             await this.getListUser();
