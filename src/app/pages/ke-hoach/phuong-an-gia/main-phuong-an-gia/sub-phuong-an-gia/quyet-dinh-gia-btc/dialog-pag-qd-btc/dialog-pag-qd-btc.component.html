@@ -66,6 +66,7 @@
     <th class=" text-center">Ngày ký tờ trình</th>
     <th class=" text-center">Loại hàng hóa</th>
     <th class=" text-center">Chủng loại hàng hóa</th>
+    <th class=" text-center">Loại giá</th>
     <th nzWidth="45px" class=" text-center">Chọn</th>
   </tr>
   </thead>
@@ -78,6 +79,7 @@
     <td class="text-center">{{data.ngayTongHop | date: 'dd/MM/YYYY'}}</td>
     <td class="text-center">{{data.tenLoaiVthh}}</td>
     <td class="text-center">{{data.tenCloaiVthh}}</td>
+    <td class="text-center">{{data.tenLoaiGia}}</td>
     <td class="text-center">
       <a (click)="handleOk(data)">
         <i class="icon htvbdh_dau-cong"></i>

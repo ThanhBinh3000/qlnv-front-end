@@ -9,7 +9,6 @@ import {QuyetDinhGiaBtcThongTinGia} from 'src/app/models/QuyetDinhBtcThongTinGia
 import {STATUS} from "src/app/constants/status";
 import {UserLogin} from 'src/app/models/userlogin';
 import {DanhMucService} from 'src/app/services/danhmuc.service';
-import {DanhMucTieuChuanService} from 'src/app/services/quantri-danhmuc/danhMucTieuChuan.service';
 import {HelperService} from 'src/app/services/helper.service';
 import {QuyetDinhGiaTCDTNNService} from 'src/app/services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service';
 import {UserService} from 'src/app/services/user.service';
@@ -18,9 +17,9 @@ import {
   TongHopPhuongAnGiaService
 } from "../../../../../../../services/ke-hoach/phuong-an-gia/tong-hop-phuong-an-gia.service";
 import {chain} from "lodash";
-import {v4 as uuidv4} from "uuid";import {DonviService} from "../../../../../../../services/donvi.service";
+import {v4 as uuidv4} from "uuid";
+import {DonviService} from "../../../../../../../services/donvi.service";
 import {DialogPagQdTcdtnnComponent} from "../dialog-pag-qd-tcdtnn/dialog-pag-qd-tcdtnn.component";
-import {DialogPagQdBtcComponent} from "../../quyet-dinh-gia-btc/dialog-pag-qd-btc/dialog-pag-qd-btc.component";
 
 @Component({
   selector: 'app-them-moi-qd-gia-tcdtnn-lt',
@@ -34,7 +33,6 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
   @Input() idInput: number;
   @Output("onClose") onClose = new EventEmitter<any>();
   formData: FormGroup;
-  arrThongTinGia: Array<QuyetDinhGiaBtcThongTinGia> = [];
   dsNam: any[] = [];
   userInfo: UserLogin;
   maQd: string;
@@ -55,8 +53,7 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
     private quyetDinhGiaTCDTNNService: QuyetDinhGiaTCDTNNService,
     private danhMucService: DanhMucService,
     private tongHopPhuongAnGiaService: TongHopPhuongAnGiaService,
-    private notification: NzNotificationService,
-    private danhMucTieuChuanService: DanhMucTieuChuanService
+    private notification: NzNotificationService
   ) {
     this.formData = this.fb.group(
       {
@@ -69,6 +66,7 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
         soQdCanDc: [null],
         loaiVthh: [null],
         tenLoaiVthh: [null],
+        loaiDeXuat: [null],
         cloaiVthh: [null],
         tenCloaiVthh: [null],
         loaiGia: [null],
@@ -100,18 +98,22 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
         namKeHoach: data.namKeHoach,
         soQd: data.soQd ? data.soQd.split("/")[0] : '',
         loaiVthh: data.loaiVthh,
+        tenLoaiVthh: data.loaiVthh,
         cloaiVthh: data.cloaiVthh,
+        tenCloaiVthh: data.cloaiVthh,
         ngayKy: data.ngayKy,
         ngayHieuLuc: data.ngayHieuLuc,
         loaiGia: data.loaiGia,
+        tenLoaiGia: data.loaiGia,
         tchuanCluong: data.tchuanCluong,
         trichYeu: data.trichYeu,
         trangThai: data.trangThai,
         ghiChu: data.noiDung,
-        soToTrinh: data.soToTrinh
+        soToTrinh: data.soToTrinh,
+        loaiDeXuat: data.loaiDeXuat,
       });
-      this.arrThongTinGia = data.thongTinGiaLt
-      this.fileDinhKem = data.fileDinhKems;
+      this.dataTable = data.thongTinGiaLt;
+      this.buildTreePagCt();      this.fileDinhKem = data.fileDinhKems;
     }
   }
 
@@ -188,10 +190,10 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
     }
     this.convertTreeToList();
     if (this.dataTable && this.dataTable.length > 0) {
-      if (this.formData.value.loaiGia == 'LG01' || this.formData.value.loaiGia == 'LG03') {
+      if (this.formData.value.loaiGia == 'LG03') {
         this.dataTable.forEach(item => {
           if (item.vat) {
-            item.giaQdBtcVat = item.giaQdBtc + item.giaQdBtc * item.vat
+            item.giaQdVatTcdtnn = item.giaQdTcdtnn + item.giaQdTcdtnn * item.vat
           }
         })
       }
@@ -199,7 +201,7 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
     let body = this.formData.value;
     body.soQd = body.soQd + this.maQd;
     body.pagType = this.pagType;
-    body.thongTinGiaLt = this.arrThongTinGia;
+    body.thongTinGiaLt = this.dataTable;
     body.fileDinhKemReq = this.fileDinhKem;
     let res;
     if (this.idInput > 0) {
@@ -303,7 +305,7 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
                 loaiGia: chiTietToTrinh.loaiGia ? chiTietToTrinh.loaiGia : null,
                 tenLoaiGia: chiTietToTrinh.tenLoaiGia ? chiTietToTrinh.tenLoaiGia : null,
                 soToTrinh: chiTietToTrinh.soToTrinh ? chiTietToTrinh.soToTrinh : null,
-                tieuChuanCl: chiTietToTrinh.tchuanCluong ? chiTietToTrinh.tchuanCluong : null,
+                tchuanCluong: chiTietToTrinh.tchuanCluong ? chiTietToTrinh.tchuanCluong : null,
               })
               this.dataTable = chiTietToTrinh && chiTietToTrinh.pagChiTiets ? chiTietToTrinh.pagChiTiets : [];
             }
