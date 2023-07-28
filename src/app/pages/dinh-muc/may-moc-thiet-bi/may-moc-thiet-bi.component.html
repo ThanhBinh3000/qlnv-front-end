@@ -5,7 +5,7 @@
       Định mức trang bị
     </li>
     <li nz-menu-item [nzSelected]="tabSelected =='dexuatchicuc'"  (click)="selectTab('dexuatchicuc')" *ngIf="!userService.isTongCuc() && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_DEXUATCC')">
-      Đề xuất nhu cầu của Chi cục 11
+      Đề xuất nhu cầu của Chi cục
     </li>
     <li nz-menu-item (click)="selectTab('dexuatcuc')" *ngIf="(!userService.isChiCuc()) && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_THDEXUATCC')">
       {{userService.isTongCuc() ? 'Đề xuất nhu cầu của các Cục' : 'Tổng hợp nhu cầu của Chi cục và đề xuất lên TC'}}

@@ -358,10 +358,26 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
     }else{
     res = await this.danhSachMuaTrucTiepService.create(body);
     }
-    if (res.data) {
+    // if (res.data) {
+    //   if (isGuiDuyet) {
+    //     await this.guiDuyet();
+    //   }
+    // }
+    if (res.msg == MESSAGE.SUCCESS) {
       if (isGuiDuyet) {
-        await this.guiDuyet();
+        this.idInput = res.data.id;
+        this.guiDuyet();
+      } else {
+        if (this.formData.get('id').value) {
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+        } else {
+          this.formData.get('id').setValue(res.data.id);
+          this.idInput = res.data.id;
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+        }
       }
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
 

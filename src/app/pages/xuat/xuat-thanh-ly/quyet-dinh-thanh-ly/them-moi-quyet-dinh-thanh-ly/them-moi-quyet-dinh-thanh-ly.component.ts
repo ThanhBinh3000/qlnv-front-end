@@ -49,6 +49,7 @@ export class ThemMoiQuyetDinhThanhLyComponent extends Base2Component implements 
   @Input() isView: boolean;
   @Input() idInput: number;
   @Input() loaiVthh: string;
+  @Input() isViewOnModal: boolean;
 
   expandSetString = new Set<string>();
   isVisible = false;
@@ -103,7 +104,6 @@ export class ThemMoiQuyetDinhThanhLyComponent extends Base2Component implements 
 
   async ngOnInit() {
     await this.spinner.show();
-    console.log(this.dataInit,555)
     try {
       this.maHauTo = '/' + this.userInfo.MA_QD;
       await Promise.all([

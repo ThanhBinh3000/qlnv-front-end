@@ -155,11 +155,11 @@
             <td>{{data.tenCloaiVthh}}</td>
             <td>{{data.tenTrangThai}}</td>
             <td class="text-left">
-              <a (click)="goDetail(data.id)">
+              <a *ngIf="data.trangThai == STATUS.HOAN_THANH_CAP_NHAT" (click)="goDetail(data.id, true)">
                 <i class="fa fa-eye" title="Xem chi tiết"></i>
               </a>
               <a *ngIf="data.trangThai != STATUS.HOAN_THANH_CAP_NHAT &&  userService.isCuc()"
-                (click)="goDetail(data.id)">
+                (click)="goDetail(data.id, false)">
                 <i class="icon htvbdh_soanthao"></i>
               </a>
               <!-- <a *ngIf="dataChild.trangThai == STATUS.DANG_CAP_NHAT" (click)="delete(dataChild)">
@@ -190,6 +190,6 @@
   </div>
 </div>
 <div class="chi-tiet" *ngIf="isDetail">
-  <app-themmoi-chaogia-uyquyen-muale [loaiVthh]="loaiVthh" [idInput]="idSelected" (showListEvent)="showList()">
+  <app-themmoi-chaogia-uyquyen-muale [loaiVthh]="loaiVthh" [idInput]="idSelected" [isView]="isView" (showListEvent)="showList()">
   </app-themmoi-chaogia-uyquyen-muale>
 </div>

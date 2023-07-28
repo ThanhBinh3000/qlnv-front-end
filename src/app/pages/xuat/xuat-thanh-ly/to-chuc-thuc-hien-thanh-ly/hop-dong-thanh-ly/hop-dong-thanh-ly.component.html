@@ -192,17 +192,25 @@
         <tr *ngFor="let data of basicTable.data; let i = index">
           <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
           <td>{{ data.nam }}</td>
-          <td>{{data.soQdPd}}</td>
-          <td>{{data.soQdKq}}</td>
-          <td>{{ data.tongDvts }}</td>
-          <td>{{ data.soDvtsDgTc }}</td>
+          <td>
+            <a *ngIf="data.soQdTl && data.idQdTl" nz-button nzType="link"
+               (click)="openModalQdTl(data.idQdTl)">{{
+              data.soQdTl}}</a>
+          </td>
+          <td>
+            <a *ngIf="data.soQd && data.id" nz-button nzType="link"
+               (click)="openModalQdKq(data.id)">{{
+              data.soQd}}</a>
+          </td>
+          <td>{{ data.tongSoDviTsan }}</td>
+          <td>{{ data.soDviTsanThanhCong }}</td>
           <td>{{ data.slHdDaKy }}</td>
-          <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
-          <td>{{ data.tenLoaiVthh }}</td>
+          <td></td>
           <td>{{ data.tenCloaiVthh }}</td>
           <td>{{ data.tenDvi }}</td>
-          <td>{{ data.tongSlXuat| number : '1.0-1' : 'vi_VN' }}</td>
-          <td>{{ data.thanhTien| number : '1.0-1' : 'vi_VN' }}</td>
+          <td></td>
+          <td>{{ data.tongSlXuatBan|number:globals.numberFormat:globals.locale}}</td>
+          <td>{{ data.thanhTien|number:globals.numberFormat:globals.locale }}</td>
           <td>{{ data.tenTrangThaiHd }}</td>
           <td>{{ data.tenTrangThaiXh }}</td>
           <td class="text-left">
@@ -244,3 +252,31 @@
   <app-quan-ly-hop-dong-thanh-ly *ngIf="isQuanLy" [id]="idSelected" (showListEvent)="showList()">
   </app-quan-ly-hop-dong-thanh-ly>
 </ng-container>
+
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdTl"
+          (nzOnCancel)="closeModalQdTl()">
+  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+    <app-them-moi-quyet-dinh-thanh-ly [idInput]="idQdTl" [isViewOnModal]="true">
+    </app-them-moi-quyet-dinh-thanh-ly>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button (click)="closeModalQdTl()" class="modal__button&#45;&#45;cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>
+
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdKq"
+          (nzOnCancel)="closeModalQdKq()">
+  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+    <app-chi-tiet-quyet-dinh-phe-duyet-bdg-thanh-ly [idSelected]="idQdKq" [isViewOnModal]="true">
+    </app-chi-tiet-quyet-dinh-phe-duyet-bdg-thanh-ly>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button (click)="closeModalQdKq()" class="modal__button&#45;&#45;cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>

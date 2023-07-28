@@ -11,6 +11,15 @@ import { DieuChinhQuyetDinhPdKhmttService } from './../../../../../../../service
 import { STATUS } from 'src/app/constants/status';
 import { DanhSachMuaTrucTiepService } from './../../../../../../../services/danh-sach-mua-truc-tiep.service';
 import { ChiTietList } from './../../../../../../../models/QdPheDuyetKHBanDauGia';
+import {
+  DialogThemMoiKeHoachMuaTrucTiepComponent
+} from "../../../../../../../components/dialog/dialog-them-moi-ke-hoach-mua-truc-tiep/dialog-them-moi-ke-hoach-mua-truc-tiep.component";
+import { convertTienTobangChu } from 'src/app/shared/commonFunction';
+import {ChiTieuKeHoachNamCapTongCucService} from "../../../../../../../services/chiTieuKeHoachNamCapTongCuc.service";
+import {
+  QuyetDinhGiaTCDTNNService
+} from "../../../../../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service";
+
 @Component({
   selector: 'app-thongtin-dieuchinh',
   templateUrl: './thongtin-dieuchinh.component.html',
@@ -24,7 +33,9 @@ export class ThongtinDieuchinhComponent implements OnInit, OnChanges {
   @Input('isView') isView: boolean;
   @Output() dataChild = new EventEmitter<any>();
   @Output() data = new EventEmitter<any>();
+  @Output() objectChange = new EventEmitter<number>();
   @Input() isCache: boolean = false;
+  @Input() dataChiTieu;
   formData: FormGroup
   listNguonVon: any[] = [];
   listDataGroup: any[] = [];
@@ -33,13 +44,16 @@ export class ThongtinDieuchinhComponent implements OnInit, OnChanges {
   listOfData: any[] = [];
   listOfDataCache: any[] = [];
   STATUS: STATUS;
-
-
+  tgianMkhoChange: Date | null = null;
+  tgianKthucChange: Date | null = null;
+  dataTable: any[] = [];
   constructor(
     private fb: FormBuilder,
     public globals: Globals,
     private danhMucService: DanhMucService,
     private danhSachMuaTrucTiepService: DanhSachMuaTrucTiepService,
+    private chiTieuKeHoachNamCapTongCucService: ChiTieuKeHoachNamCapTongCucService,
+    private quyetDinhGiaTCDTNNService: QuyetDinhGiaTCDTNNService,
     private dieuChinhQuyetDinhPdKhmttService: DieuChinhQuyetDinhPdKhmttService,
     private spinner: NgxSpinnerService,
     private helperService: HelperService,
@@ -95,30 +109,18 @@ export class ThongtinDieuchinhComponent implements OnInit, OnChanges {
     await this.spinner.show()
     if (changes) {
       if (this.dataInput) {
-        let res;
-        if (this.isCache) {
-          res = await this.danhSachMuaTrucTiepService.getDetail(this.dataInput.idDxHdr);
-          if (res.msg == MESSAGE.SUCCESS) {
-            this.formData.patchValue(res.data)
-            this.formData.patchValue({
-              hhDcQdPduyetKhmttSlddList: res.data.dsSlddDtlList,
-            })
-          }
-        } else {
-          this.updateDonGiaVat()
-          this.formData.patchValue(this.dataInput);
-          this.formData.patchValue({
-            hhDcQdPduyetKhmttSlddList: this.dataInput.children,
-            donGiaVat: this.formData.value.donGia + (this.formData.value.donGia * this.formData.value.thueGtgt / 100)
-          })
-        }
-        // for (let i = 0; i < this.formData.value.hhDcQdPduyetKhmttSlddList.length; i++) {
-        //   this.expandSet.add(i);
-        // }
+        this.helperService.bidingDataInFormGroup(this.formData, this.dataInput);
+        this.tgianMkhoChange = this.dataInput.tgianMkho
+        this.tgianKthucChange = this.dataInput.tgianKthuc
+        await this.getPag(this.dataInput);
+        console.log(this.dataInput)
+        this.dataTable = this.dataInput.children
+        this.calculatorTable();
       } else {
         this.formData.reset();
       }
     }
+    await this.loadDataComboBox();
     await this.spinner.hide()
   }
 
@@ -152,14 +154,6 @@ export class ThongtinDieuchinhComponent implements OnInit, OnChanges {
     }
   }
 
-  expandSet = new Set<number>();
-  onExpandChange(id: number, checked: boolean): void {
-    if (checked) {
-      this.expandSet.add(id);
-    } else {
-      this.expandSet.delete(id);
-    }
-  }
 
   calcTong() {
     let dt = this.formData.value.hhDcQdPduyetKhmttSlddList
@@ -185,4 +179,104 @@ export class ThongtinDieuchinhComponent implements OnInit, OnChanges {
     this.data.emit(this.formData.value)
     this.dataChild.emit(this.formData.value.hhDcQdPduyetKhmttSlddList)
   }
+
+  expandSet = new Set<number>();
+  onExpandChange(id: number, checked: boolean): void {
+    if (checked) {
+      this.expandSet.add(id);
+    } else {
+      this.expandSet.delete(id);
+    }
+  }
+
+  async getPag(data:any){
+    let bodyPag = {
+      namKeHoach: data.namKh,
+      loaiVthh: data.loaiVthh,
+      cloaiVthh: data.cloaiVthh,
+      trangThai: STATUS.BAN_HANH,
+      maDvi: data.maDvi,
+      loaiGia: 'LG03'
+    }
+    let pag = await this.quyetDinhGiaTCDTNNService.getPag(bodyPag)
+    console.log("pag", pag)
+    if (pag.msg == MESSAGE.SUCCESS) {
+      const data = pag.data;
+      this.formData.patchValue({
+        donGiaVat: data.giaQdVat
+      })
+      // if (!data.giaQdVat) {
+      //   this.notification.error(MESSAGE.ERROR, "Chủng loại hàng hóa đang chưa có giá, xin vui lòng thêm phương án giá!")
+      // }
+    }
+  }
+
+
+  themMoiBangPhanLoTaiSan(data?: any, index?: number) {
+    const modalGT = this.modal.create({
+      nzTitle: 'Thêm địa điểm giao nhận hàng',
+      nzContent: DialogThemMoiKeHoachMuaTrucTiepComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '2000px',
+      nzFooter: null,
+      nzComponentParams: {
+        dataEdit: data,
+        dataAll: this.dataTable,
+        dataChiTieu: this.dataChiTieu,
+        donGiaVat: this.formData.get('donGiaVat').value
+      },
+    });
+    modalGT.afterClose.subscribe((data) => {
+      if (!data) {
+        return;
+      }
+      if (index && index >= 0) {
+        this.dataTable[index] = data;
+      }else{
+        for (let i = 0; i < this.dataTable.length; i++) {
+          if(this.dataTable[i].maDvi == data.maDvi){
+            this.dataTable[i] = data
+          }
+        }
+      }
+      this.calculatorTable();
+    });
+  }
+
+  calculatorTable() {
+    let tongMucDt: number = 0;
+    let tongSoLuong: number = 0;
+    this.dataTable.forEach((item) => {
+      let soLuongChiCuc = 0;
+      item.children.forEach(child => {
+        soLuongChiCuc += child.soLuong;
+        tongSoLuong += child.soLuong;
+        tongMucDt += child.soLuong * child.donGia * 1000
+      })
+      item.soLuong = soLuongChiCuc;
+    });
+    this.formData.patchValue({
+      tongSoLuong: tongSoLuong,
+      tongMucDt: tongMucDt,
+    });
+  }
+
+  isDisable() {
+    return false;
+  }
+
+  convertTienTobangChu(tien: number): string {
+    return convertTienTobangChu(tien);
+  }
+
+  onDateChanged(value: any, type: any) {
+    if (type == 'tgianMkho') {
+      this.formData.get('tgianMkho').setValue(value);
+    } else if (type == 'tgianKthuc') {
+      this.formData.get('tgianKthuc').setValue(value);
+    }
+    this.objectChange.emit(this.formData.value)
+  }
+
 }

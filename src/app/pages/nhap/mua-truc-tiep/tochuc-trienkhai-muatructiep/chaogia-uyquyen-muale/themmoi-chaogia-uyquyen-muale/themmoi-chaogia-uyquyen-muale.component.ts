@@ -13,7 +13,8 @@ import { saveAs } from 'file-saver';
 import { STATUS } from 'src/app/constants/status';
 import { QuyetDinhPheDuyetKeHoachMTTService } from 'src/app/services/quyet-dinh-phe-duyet-ke-hoach-mtt.service';
 import { ChaogiaUyquyenMualeService } from 'src/app/services/chaogia-uyquyen-muale.service';
-import { ChiTietThongTinChaoGia } from 'src/app/models/DeXuatKeHoachMuaTrucTiep';
+import {AddDiemKho, ChiTietThongTinChaoGia} from 'src/app/models/DeXuatKeHoachMuaTrucTiep';
+import {DonviService} from "../../../../../../services/donvi.service";
 
 
 @Component({
@@ -34,8 +35,12 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
   fileDinhKemMuaLe: any[] = [];
   @Output()
   dataTableChange = new EventEmitter<any>();
+  @Output()
+  dataTableChangeDk = new EventEmitter<any>();
   danhSachCtiet: any[] = [];
   danhSachCtietDtl: any[] = [];
+  listDiemKho: any[] = [];
+  listChiCuc: any[] = [];
   selected: boolean = false;
   constructor(
     httpClient: HttpClient,
@@ -44,6 +49,7 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private quyetDinhPheDuyetKeHoachMTTService: QuyetDinhPheDuyetKeHoachMTTService,
+    private donViService : DonviService,
     private chaogiaUyquyenMualeService: ChaogiaUyquyenMualeService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, chaogiaUyquyenMualeService);
@@ -71,14 +77,16 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
     );
   }
   rowItem: ChiTietThongTinChaoGia = new ChiTietThongTinChaoGia();
-  updateRowItem: ChiTietThongTinChaoGia = new ChiTietThongTinChaoGia();
+  diemKhoItem: AddDiemKho = new AddDiemKho();
   dataEdit: { [key: string]: { edit: boolean; data: ChiTietThongTinChaoGia } } = {};
+  diemKhoEdit: { [key: string]: { edit: boolean; data: AddDiemKho } } = {};
 
   async ngOnInit() {
     try {
       this.spinner.show();
       await Promise.all([
         this.loadDetail(this.idInput),
+        this.loadDiemKho(),
         this.initForm()
       ])
       this.spinner.hide();
@@ -88,6 +96,7 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
       this.spinner.hide();
     }
     this.emitDataTable()
+    this.emitDataTableDk()
   }
 
   initForm() {
@@ -103,7 +112,7 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
         .then(async (res) => {
           const dataDtl = res.data;
           console.log(dataDtl)
-          this.danhSachCtiet = dataDtl.children
+          this.danhSachCtiet = dataDtl.children.length > 0 ? dataDtl.children : dataDtl.children2
           this.formData.patchValue({
             idQdDtl: id,
             soQd: dataDtl.hhQdPheduyetKhMttHdr.soQd,
@@ -122,6 +131,9 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
           this.radioValue = dataDtl.pthucMuaTrucTiep ? dataDtl.pthucMuaTrucTiep : '01'
           this.fileDinhKemUyQuyen = dataDtl.fileDinhKemUyQuyen;
           this.fileDinhKemMuaLe = dataDtl.fileDinhKemMuaLe;
+          // this.danhSachCtiet.forEach(item =>{
+          //   item.edit = false
+          // })
           this.showDetail(event,this.danhSachCtiet[0]);
         })
         .catch((e) => {
@@ -132,15 +144,21 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
     }
   }
 
-  calcTong() {
-    if (this.danhSachCtiet) {
-      const sum = this.danhSachCtiet.reduce((prev, cur) => {
-        prev += cur.soLuong;
-        return prev;
-      }, 0);
-      return sum;
-    }
-  }
+  // calcTong(): number {
+  //   let totalSum = 0;
+  //   if (this.danhSachCtiet) {
+  //     this.danhSachCtiet.forEach(data => {
+  //       const sum = data.children.reduce((prev, cur) => {
+  //         prev += Number.parseInt(cur.soLuong);
+  //         return prev;
+  //       }, 0);
+  //       totalSum += sum;
+  //     });
+  //   }
+  //   console.log(totalSum)
+  //   return totalSum;
+  // }
+
   idRowSelect: number;
   async showDetail($event, data: any) {
     await this.spinner.show();
@@ -151,10 +169,49 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
     } else {
       this.selected = true;
     }
+    this.rowItem.donGia = data.donGia
+    this.listDiemKho = this.listChiCuc.find(x => x.maDvi == data.maDvi).children.filter(y => y.type == 'MLK').filter(k => k.maDvi.includes(data.children.filter(i => i.maDiemKho == k.maDvi)))
+    console.log(this.listDiemKho)
     this.idRowSelect = data.id;
     this.dataTable = data.listChaoGia
     this.updateEditCache()
+    this.updateEditCacheDk()
     await this.spinner.hide();
+  }
+
+  addDiemKho(index: any, diemKho: any){
+    console.log("diemKho", diemKho)
+    if(this.validateDiemKho(index, diemKho)){
+      return;
+    }
+    this.danhSachCtiet[index].children.push(diemKho)
+    this.diemKhoItem = new AddDiemKho();
+    this.updateListDiemKho(index, diemKho)
+    this.emitDataTableDk();
+    this.updateEditCacheDk()
+  }
+
+  updateListDiemKho(index: any, diemKho: any){
+    this.listDiemKho = this.listChiCuc.find(x => x.maDvi == this.danhSachCtiet[index].maDvi).children.filter(y => y.type == 'MLK').filter(k => k.maDvi.includes(this.danhSachCtiet[index].children.filter(i => i.maDiemKho == k.maDvi)))
+  }
+
+  validateDiemKho(index: any, diemKho: any): boolean {
+    let sum = 0;
+    for (let i = 0; i < this.danhSachCtiet[index].children.length; i++) {
+      sum += Number.parseInt(this.danhSachCtiet[index].children[i].soLuong)
+    }
+    sum += Number.parseInt(diemKho.soLuong)
+    if(sum > Number.parseInt(this.danhSachCtiet[index].tongSoLuong)){
+      this.notification.error(MESSAGE.ERROR, MESSAGE.ADD_DIEM_KHO_ERROR);
+      return true;
+    }
+    return false;
+  }
+
+  handleChangeDiemKho(dataTable: any, diemKho: any){
+    diemKho.idDiaDiem = dataTable.id
+    diemKho.donGia = dataTable.donGia
+    diemKho.tenDiemKho = this.listDiemKho.find(x => x.maDvi == diemKho.maDiemKho).tenDvi
   }
 
   showDsChaoGia(id: any){
@@ -272,6 +329,9 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
   emitDataTable() {
     this.dataTableChange.emit(this.dataTable);
   }
+  emitDataTableDk() {
+    this.dataTableChangeDk.emit(this.danhSachCtiet);
+  }
 
   deleteRow(index: any) {
     this.modal.confirm({
@@ -300,8 +360,49 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
           edit: false,
           data: { ...item },
         };
-        // this.danhSachCtietDtl = [...this.danhSachCtietDtl, item];
       });
+    }
+  }
+
+  updateEditCacheDk(): void {
+    if (this.danhSachCtiet) {
+      this.danhSachCtiet.forEach((item, index) => {
+        this.diemKhoEdit[index] = {
+          edit: false,
+          data: { ...item },
+        };
+      });
+    }
+  }
+
+  startEditDk(index1: number, index2: number) {
+    this.diemKhoEdit[index1].data.children[index2].edit = true
+  }
+
+  cancelEditDk(index1: number, index2: number): void {
+    this.diemKhoEdit[index1].data.children[index2].edit = false
+  }
+
+  saveEditDk(index1: number, index2: number): void {
+    if(this.validateDiemKho(index1, index2)){
+      return;
+    }
+    Object.assign(this.danhSachCtiet[index1], this.diemKhoEdit[index1].data);
+    this.diemKhoEdit[index1].data.children[index2].edit = false
+  }
+
+  clearItemRowDk() {
+    this.diemKhoItem = new AddDiemKho();
+    this.diemKhoItem.id = null;
+  }
+
+  calcTongThanhTien() {
+    if (this.danhSachCtiet) {
+      let sum = 0
+      this.danhSachCtiet.forEach(item => {
+        sum += item.tongSoLuong;
+      })
+      return sum;
     }
   }
 
@@ -399,6 +500,35 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
       return false
     } else {
       return true
+    }
+  }
+
+  async loadDiemKho() {
+    let body = {
+      maDviCha: this.userInfo.MA_DVI,
+      trangThai: '01',
+    }
+    const res = await this.donViService.getTreeAll(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (res.data && res.data.length > 0) {
+        res.data.forEach(element => {
+          if (element && element.capDvi == '3' && element.children) {
+            this.listDiemKho = [
+              ...this.listDiemKho,
+              ...element.children
+            ]
+            this.listDiemKho = this.listDiemKho.filter(i => i.type != "PB");
+          }
+          if (element && element.capDvi == '2' && element.children) {
+            this.listChiCuc = [
+              ...this.listChiCuc,
+              ...element.children
+            ]
+          }
+        });
+      };
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
 }

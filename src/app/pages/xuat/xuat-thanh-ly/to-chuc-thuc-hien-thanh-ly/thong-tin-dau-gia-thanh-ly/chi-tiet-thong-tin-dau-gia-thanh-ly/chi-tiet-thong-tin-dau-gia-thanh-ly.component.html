@@ -207,7 +207,7 @@
           </thead>
           <tbody>
           <tr *ngFor="let data of dataTable; let i = index" [ngClass]="{'bg-selected': i == 0 && this.selected}"
-          >
+              (click)="showDetail($event,data)">
             <td>{{ data.soQdTl }}</td>
             <td>{{ data.lanDauGia }}</td>
             <td>{{ data.maThongBao }}</td>

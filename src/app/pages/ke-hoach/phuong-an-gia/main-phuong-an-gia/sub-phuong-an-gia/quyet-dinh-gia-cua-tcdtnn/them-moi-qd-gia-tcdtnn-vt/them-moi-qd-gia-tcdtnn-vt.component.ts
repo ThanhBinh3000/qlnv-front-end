@@ -1,23 +1,23 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import dayjs from 'dayjs';
-import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from "@angular/forms";
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { MESSAGE } from 'src/app/constants/message';
-import { QuyetDinhGiaBtcThongTinGia } from 'src/app/models/QuyetDinhBtcThongTinGia';
-import { UserLogin } from 'src/app/models/userlogin';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { DanhMucTieuChuanService } from 'src/app/services/quantri-danhmuc/danhMucTieuChuan.service';
-import { HelperService } from 'src/app/services/helper.service';
-import { QuyetDinhGiaTCDTNNService } from 'src/app/services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service';
-import { UserService } from 'src/app/services/user.service';
-import { Globals } from 'src/app/shared/globals';
-import { DialogQuyetDinhGiaCuaTcdtnnComponent } from 'src/app/components/dialog/dialog-ke-hoach-phuong-an-gia/dialog-quyet-dinh-gia-cua-tcdtnn/dialog-quyet-dinh-gia-cua-tcdtnn.component';
-import { STATUS } from "../../../../../../../constants/status";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {MESSAGE} from 'src/app/constants/message';
+import {UserLogin} from 'src/app/models/userlogin';
+import {DanhMucService} from 'src/app/services/danhmuc.service';
+import {DanhMucTieuChuanService} from 'src/app/services/quantri-danhmuc/danhMucTieuChuan.service';
+import {HelperService} from 'src/app/services/helper.service';
+import {QuyetDinhGiaTCDTNNService} from 'src/app/services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service';
+import {UserService} from 'src/app/services/user.service';
+import {Globals} from 'src/app/shared/globals';
+import {STATUS} from "../../../../../../../constants/status";
 import {
   TongHopPhuongAnGiaService
 } from "../../../../../../../services/ke-hoach/phuong-an-gia/tong-hop-phuong-an-gia.service";
+import {DialogPagQdTcdtnnComponent} from "../dialog-pag-qd-tcdtnn/dialog-pag-qd-tcdtnn.component";
+
 @Component({
   selector: 'app-them-moi-qd-gia-tcdtnn-vt',
   templateUrl: './them-moi-qd-gia-tcdtnn-vt.component.html',
@@ -264,16 +264,16 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
   }
 
   async loadToTrinhDeXuat() {
-    this.dsToTrinhDeXuat = [];
-    let body = {
-      "type": this.type,
-      "pagType": this.pagType,
-      "dsTrangThai": [STATUS.DA_DUYET_LDV]
-    }
-    let res = await this.tongHopPhuongAnGiaService.loadToTrinhDeXuat(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.dsToTrinhDeXuat = res.data;
-    }
+    // this.dsToTrinhDeXuat = [];
+    // let body = {
+    //   "type": this.type,
+    //   "pagType": this.pagType,
+    //   "dsTrangThai": [STATUS.DA_DUYET_LDV]
+    // }
+    // let res = await this.tongHopPhuongAnGiaService.loadToTrinhDeXuat(body);
+    // if (res.msg == MESSAGE.SUCCESS) {
+    //   this.dsToTrinhDeXuat = res.data;
+    // }
   }
 
   async onChangeSoToTrinh(event) {
@@ -321,15 +321,12 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
     if (!this.noEdit) {
       let modalQD = this.modal.create({
         nzTitle: 'TỜ TRÌNH PHƯƠNG ÁN GIÁ CỦA VỤ KẾ HOẠCH',
-        nzContent: DialogQuyetDinhGiaCuaTcdtnnComponent,
+        nzContent: DialogPagQdTcdtnnComponent,
         nzMaskClosable: false,
         nzClosable: false,
         nzWidth: '700px',
         nzFooter: null,
         nzComponentParams: {
-          pagtype: this.pagType,
-          type: this.type,
-          radioValue
         },
       });
       modalQD.afterClose.subscribe((data) => {

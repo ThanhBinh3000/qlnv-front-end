@@ -31,6 +31,7 @@ import { PhieuNhapKhoComponent } from './nhap-kho/phieu-nhap-kho/phieu-nhap-kho.
 import { ThongTinPhieuNhapKhoComponent } from './nhap-kho/phieu-nhap-kho/thong-tin-phieu-nhap-kho/thong-tin-phieu-nhap-kho.component';
 import { BienBanKetThucNhapKhoComponent } from './nhap-kho/bien-ban-ket-thuc-nhap-kho/bien-ban-ket-thuc-nhap-kho.component';
 import { ThongTinBienBanKetThucNhapKhoComponent } from './nhap-kho/bien-ban-ket-thuc-nhap-kho/thong-tin-bien-ban-ket-thuc-nhap-kho/thong-tin-bien-ban-ket-thuc-nhap-kho.component';
+import { ThongTinQuyetDinhXuatGiamVatTuComponent } from './quyet-dinh-xuat-giam-vat-tu/thong-tin-quyet-dinh-xuat-giam-vat-tu/thong-tin-quyet-dinh-xuat-giam-vat-tu.component';
 
 
 
@@ -56,6 +57,7 @@ import { ThongTinBienBanKetThucNhapKhoComponent } from './nhap-kho/bien-ban-ket-
     ThongTinPhieuNhapKhoComponent,
     BienBanKetThucNhapKhoComponent,
     ThongTinBienBanKetThucNhapKhoComponent,
+    ThongTinQuyetDinhXuatGiamVatTuComponent,
   ],
     exports: [
         ToanBoDanhSachVt6ThComponent,

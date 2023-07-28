@@ -163,7 +163,7 @@
                                     </nz-form-control>
                                 </nz-form-item>
                             </div>
-                            <div nz-col nzSpan="24">
+                            <div nz-col nzSpan="24" *ngIf="loaiVthh.startsWith('02')">
                                 <nz-form-item>
                                     <nz-form-label [nzNoColon]="true"> Chủng loại hàng hóa </nz-form-label>
                                     <nz-form-control>
@@ -260,7 +260,7 @@
                     </thead>
                     <tbody class="table-body">
                         <tr *ngFor="let data of basicTable.data,let i = index" class="table-row"
-                            (click)="getDetailHopDong($event,data.hopDong.id)">
+                            (click)="getDetailHopDong($event,data.hopDong?.id)">
                             <td>{{ i + 1}}</td>
                             <td>{{data.hopDong?.soHd}}</td>
                             <td>{{data.hopDong?.tenHd}}</td>

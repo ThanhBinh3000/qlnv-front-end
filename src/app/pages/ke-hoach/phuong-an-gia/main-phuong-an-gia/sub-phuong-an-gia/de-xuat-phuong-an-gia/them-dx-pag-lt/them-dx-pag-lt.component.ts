@@ -25,6 +25,9 @@ import {
 } from "../../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
 import {DonviService} from "../../../../../../../services/donvi.service";
 import {AMOUNT} from "../../../../../../../Utility/utils";
+import {
+  TongHopPhuongAnGiaService
+} from "../../../../../../../services/ke-hoach/phuong-an-gia/tong-hop-phuong-an-gia.service";
 
 
 @Component({
@@ -90,6 +93,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
     public donViService: DonviService,
     private helperService: HelperService,
     private deXuatPAGService: DeXuatPAGService,
+    private tongHopPagService: TongHopPhuongAnGiaService,
     private notification: NzNotificationService,
     private danhMucService: DanhMucService,
     private danhMucTieuChuanService: DanhMucTieuChuanService,
@@ -107,7 +111,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
         loaiGia: ['', [Validators.required]],
         trichYeu: [null],
         soCanCu: [null],
-        loaiDeXuat: [1, [Validators.required]],
+        lanDeXuat: [1, [Validators.required]],
         qdCtKhNam: [null],
         trangThai: ['00'],
         tenTrangThai: ['Dự Thảo'],
@@ -181,7 +185,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
         namKeHoach: data.namKeHoach,
         soDeXuat: data.soDeXuat ? data.soDeXuat.split('/')[0] : '',
         soDeXuatDc: data.soDeXuatDc,
-        loaiDeXuat: data.loaiDeXuat,
+        lanDeXuat: data.lanDeXuat,
         loaiVthh: data.loaiVthh,
         ngayKy: data.ngayKy,
         loaiGia: data.loaiGia,
@@ -283,42 +287,44 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
   }
 
   async onChangeLoaiVthh(event) {
-    if (event.startsWith("01")) {
-      this.listCtieuKeHoach = this.dataChiTieu && this.dataChiTieu.khLuongThuc && this.dataChiTieu.khLuongThuc.length > 0 ? this.dataChiTieu.khLuongThuc : [];
-    }
-    if (event.startsWith("04")) {
-      this.listCtieuKeHoach = this.dataChiTieu && this.dataChiTieu.khMuoiDuTru && this.dataChiTieu.khMuoiDuTru.length > 0 ? this.dataChiTieu.khMuoiDuTru : [];
-    }
-    if (this.listCtieuKeHoach && this.listCtieuKeHoach.length > 0) {
-      if (this.pagTtChungs && this.pagTtChungs.length > 0) {
-        this.pagTtChungs.forEach(pagTtChung => {
-          pagTtChung.soLuongCtieu = '';
-          let ctieuChiCuc = this.listCtieuKeHoach.filter(ctieu => ctieu.maDonVi == pagTtChung.maChiCuc);
-          if (ctieuChiCuc && ctieuChiCuc.length > 0) {
-            if (event.startsWith("0101")) {
-              pagTtChung.soLuongCtieu = ctieuChiCuc[0]?.ntnThoc
-            }
-            if (event.startsWith("0102")) {
-              pagTtChung.soLuongCtieu = ctieuChiCuc[0]?.ntnGao
-            }
-            if (event.startsWith("04")) {
-              pagTtChung.soLuongCtieu = ctieuChiCuc[0]?.nhapTrongNam
-            }
-          }
-        })
+    if (event) {
+      if (event.startsWith("01")) {
+        this.listCtieuKeHoach = this.dataChiTieu && this.dataChiTieu.khLuongThuc && this.dataChiTieu.khLuongThuc.length > 0 ? this.dataChiTieu.khLuongThuc : [];
       }
-    }
-    let body = {
-      "str": event
-    };
-    let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha(body);
-    this.listCloaiVthh = [];
-    if (res.msg == MESSAGE.SUCCESS) {
-      if (res.data) {
-        this.listCloaiVthh = res.data;
+      if (event.startsWith("04")) {
+        this.listCtieuKeHoach = this.dataChiTieu && this.dataChiTieu.khMuoiDuTru && this.dataChiTieu.khMuoiDuTru.length > 0 ? this.dataChiTieu.khMuoiDuTru : [];
       }
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
+      if (this.listCtieuKeHoach && this.listCtieuKeHoach.length > 0) {
+        if (this.pagTtChungs && this.pagTtChungs.length > 0) {
+          this.pagTtChungs.forEach(pagTtChung => {
+            pagTtChung.soLuongCtieu = '';
+            let ctieuChiCuc = this.listCtieuKeHoach.filter(ctieu => ctieu.maDonVi == pagTtChung.maChiCuc);
+            if (ctieuChiCuc && ctieuChiCuc.length > 0) {
+              if (event.startsWith("0101")) {
+                pagTtChung.soLuongCtieu = ctieuChiCuc[0]?.ntnThoc
+              }
+              if (event.startsWith("0102")) {
+                pagTtChung.soLuongCtieu = ctieuChiCuc[0]?.ntnGao
+              }
+              if (event.startsWith("04")) {
+                pagTtChung.soLuongCtieu = ctieuChiCuc[0]?.nhapTrongNam
+              }
+            }
+          })
+        }
+      }
+      let body = {
+        "str": event
+      };
+      let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha(body);
+      this.listCloaiVthh = [];
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (res.data) {
+          this.listCloaiVthh = res.data;
+        }
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
     }
   }
 
@@ -682,26 +688,23 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
 
   async loadDsDxCanSua() {
     this.spinner.show();
-
-    let body = {
-      namKh: this.formData.value.namKeHoach,
-      type: this.type,
-      pagType: this.pagType,
-      maDvi: this.userInfo.MA_DVI,
-      paggingReq: {
-        limit: 99999,
-        page: 0,
+    this.listDxCanSua = [];
+    try {
+      let body = {
+        namKh: this.formData.value.namKeHoach,
+        type: this.type,
+        loaiDeXuat: "02",
+        maDvi: this.userInfo.MA_DVI
       }
-    }
-    let res = await this.deXuatPAGService.search(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      let data = res.data;
-      this.listDxCanSua = data.content;
-      if (this.listDxCanSua && this.listDxCanSua.length > 0) {
-        this.listDxCanSua = this.listDxCanSua.filter(item => item.trangThai == STATUS.DA_DUYET_CBV);
+      let res = await this.tongHopPagService.loadToTrinhDeXuat(body);
+      if (res.msg = MESSAGE.SUCCESS) {
+        this.listDxCanSua = res.data;
       }
+    } catch (e) {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      this.spinner.hide();
     }
-    this.spinner.hide();
   }
 
   openModalSoDx() {
@@ -715,8 +718,8 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
         nzFooter: null,
         nzComponentParams: {
           dataTable: this.listDxCanSua,
-          dataHeader: ['Số công văn', 'Ngày ký', 'Loại hàng hoa'],
-          dataColumn: ['soDeXuat', 'ngayKy', 'tenLoaiVthh'],
+          dataHeader: ['Số công văn', 'Ngày ký', 'Loại hàng hóa', 'Chủng loại hàng hóa'],
+          dataColumn: ['soDeXuat', 'ngayKy', 'tenLoaiVthh', 'tenCloaiVthh'],
         },
       })
       modalQD.afterClose.subscribe(async (data) => {
@@ -753,7 +756,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
       soCanCu: data.soCanCu,
       qdCtKhNam: data.qdCtKhNam,
       type: data.type,
-      loaiDeXuat: data.loaiDeXuat > 0 ? data.loaiDeXuat + 1 : 1
+      lanDeXuat: data.lanDeXuat > 0 ? data.lanDeXuat + 1 : 1
     })
     this.dataTableCanCuXdg = data.canCuPhapLy;
     this.dataTableCanCuXdg.forEach(item => {

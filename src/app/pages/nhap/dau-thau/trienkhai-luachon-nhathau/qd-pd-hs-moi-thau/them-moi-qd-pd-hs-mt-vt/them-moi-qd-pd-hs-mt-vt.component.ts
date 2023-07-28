@@ -100,7 +100,7 @@ export class ThemMoiQdPdHsMtVtComponent extends Base2Component implements OnInit
     let resToTrinh = await this.quyetDinhPheDuyetKeHoachLCNTService.getAll(bodyToTrinh);
     let listQdPdKhlcnt = [];
     if (resToTrinh.msg == MESSAGE.SUCCESS) {
-      listQdPdKhlcnt = resToTrinh.data;
+      listQdPdKhlcnt = resToTrinh.data.filter(x => x.qdPdHsmt == null);
     }
     await this.spinner.hide();
     const modalQD = this.modal.create({
@@ -143,7 +143,7 @@ export class ThemMoiQdPdHsMtVtComponent extends Base2Component implements OnInit
     // }
     let body = this.formData.value;
     if (this.formData.value.soQd) {
-      body.soQdDc = this.formData.value.soQdDc + "/" + this.maQd;
+      body.soQd = this.formData.value.soQd + "/" + this.maQd;
     }
     body.listCcPhapLy = this.listCcPhapLy;
     let res = null;
