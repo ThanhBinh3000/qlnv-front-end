@@ -18,7 +18,7 @@
                                 [nzLabel]="p.giaTri"></nz-option>
                         </nz-select>
                     </div>
-                    <div nz-col nzSpan="3" class="mt-16">
+                    <div nz-col nzSpan="4" class="mt-16">
                         <label class="search__label">Ngày báo cáo</label>
                         <!-- <nz-range-picker formControlName="ngayTongHop" nzFormat="dd/MM/yyyy"></nz-range-picker> -->
                         <div nz-row>
@@ -69,7 +69,7 @@
                     <span>Xuất file</span>
                 </button>
                 <button type="button" class="btn btn-main" (click)="redirectDetail(0,false)"
-                    *ngIf="userService.isChiCuc() || userService.isCuc()">
+                    *ngIf="userService.isChiCuc() || (userService.isCuc() && loaiBc==='CUC')">
                     <i class=" icon htvbdh_tcdt_tao-qd"></i>
                     <span>Tạo BCKQ điều chuyển</span>
                 </button>
