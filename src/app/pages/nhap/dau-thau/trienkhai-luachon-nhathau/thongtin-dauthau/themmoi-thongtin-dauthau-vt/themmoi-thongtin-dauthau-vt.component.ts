@@ -12,7 +12,7 @@ import {
   QuyetDinhPheDuyetKeHoachLCNTService
 } from "../../../../../../services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/quyetDinhPheDuyetKeHoachLCNT.service";
 import {MESSAGE} from "../../../../../../constants/message";
-import { cloneDeep } from 'lodash';
+import {cloneDeep} from 'lodash';
 import {formatDate} from "@angular/common";
 
 @Component({
@@ -25,6 +25,7 @@ export class ThemmoiThongtinDauthauVtComponent extends Base2Component implements
   @Input() loaiVthh: String;
   @Output() showListEvent = new EventEmitter<any>();
   @Input() isShowFromKq: boolean;
+  @Input() isKqDaBh: boolean;
   @Input() isView: boolean;
   danhsachDx: any[] = [];
   listNthauNopHs: any[] = [];
@@ -148,7 +149,7 @@ export class ThemmoiThongtinDauthauVtComponent extends Base2Component implements
         tenDuAn: data.tenDuAn,
         tenDvi: data.tenDvi,
         tenNguonVon: data.dxKhlcntHdr?.tenNguonVon,
-        tongMucDt: data.tongMucDt,
+        tongMucDt: data.dchinhDxKhLcntHdr? data.dchinhDxKhLcntHdr.tongMucDtDx * 1000000000 : data.tongMucDtDx * 1000000000,
         tenLoaiHdong: data.tenLoaiHdong,
         tenHthucLcnt: data.tenHthucLcnt,
         tenPthucLcnt: data.tenPthucLcnt,
@@ -335,5 +336,28 @@ export class ThemmoiThongtinDauthauVtComponent extends Base2Component implements
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
     await this.spinner.hide()
+  }
+
+  calcTongSl() {
+    if (this.danhsachDx) {
+      return this.danhsachDx.reduce((prev, cur) => {
+        prev += cur.soLuong;
+        return prev;
+      }, 0);
+    }
+  }
+
+  calcTongThanhTien() {
+    return this.danhsachDx.reduce((prev, cur) => {
+      prev += cur.soLuong * cur.donGiaVat;
+      return prev;
+    }, 0);
+  }
+
+  calcTongThanhTienKq() {
+    return this.danhsachDx.reduce((prev, cur) => {
+      prev += cur.soLuong * cur.donGiaNhaThau;
+      return prev;
+    }, 0);
   }
 }

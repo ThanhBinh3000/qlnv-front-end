@@ -110,7 +110,7 @@ export class ThemMoiTongHopKhnkComponent extends Base2Component implements OnIni
     await this.tongHopDxKhNhapKhacService
       .dsDxDuocTaoQDinhPDuyet(body)
       .then(async (res) => {
-        if (res.msg == MESSAGE.SUCCESS) {
+        if (res.msg == MESSAGE.SUCCESS && res.data && res.data.length > 0) {
           let maTh = await this.userService.getId("HH_THOP_KHNK_SEQ");
           this.formData.patchValue({
             maTh: maTh,
@@ -119,7 +119,7 @@ export class ThemMoiTongHopKhnkComponent extends Base2Component implements OnIni
           this.dataTableDanhSachDX = res.data;
           this.isTongHop = true;
         } else {
-          this.notification.error(MESSAGE.ERROR, res.msg);
+          this.notification.error(MESSAGE.ERROR, "Không tìm thấy dữ liệu để tổng hợp.");
           this.isTongHop = false;
         }
         if (this.dataTableDanhSachDX.length > 0) {
