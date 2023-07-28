@@ -33,7 +33,7 @@ export class ItemData {
     }
 
     changeModel() {
-        this.chenhLech = Operator.sum([this.giaTriThamDinh, -this.namUocThien]);
+        this.chenhLech = Operator.sum([this.giaTriThamDinh, -this.namKh]);
     }
 
     upperBound() {
