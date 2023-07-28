@@ -56,13 +56,22 @@
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col [nzSpan]="5">
-            <nz-form-item class="form-item">
-              <nz-form-label nzFor="ngay-ky">Ngày ký</nz-form-label>
-              <nz-form-control>
-                <nz-range-picker formControlName="ngayKy" nzFormat="dd/MM/yyyy">
-                </nz-range-picker>
-              </nz-form-control>
+          <div nz-col nzSpan="5">
+            <nz-form-item>
+              <nz-form-label [nzNoColon]="true"> Ngày ký
+              </nz-form-label>
+              <div nz-row>
+                <div nz-col nzSpan="11">
+                  <nz-date-picker nzPlaceHolder="Ngày ký từ" formControlName="ngayKyTu"
+                                  nzFormat="dd/MM/yyyy" class="search__input"></nz-date-picker>
+                </div>
+                <div nz-col nzSpan="1">
+                </div>
+                <div nz-col nzSpan="11">
+                  <nz-date-picker nzPlaceHolder="Ngày ký đến" formControlName="ngayKyDen"
+                                  nzFormat="dd/MM/yyyy" class="search__input"></nz-date-picker>
+                </div>
+              </div>
             </nz-form-item>
           </div>
         </div>

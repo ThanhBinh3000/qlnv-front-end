@@ -47,6 +47,10 @@ export class QuyetDinhGiaCuaTcdtnnComponent implements OnInit {
   idSelected: number = 0;
   STATUS = STATUS;
   userInfo : UserLogin
+  listTrangThai = [
+    {ma: this.STATUS.DU_THAO, giaTri: "Dự thảo"},
+    {ma: this.STATUS.BAN_HANH, giaTri: "Ban hành"}
+  ];
   constructor(private readonly fb: FormBuilder,
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
@@ -58,7 +62,8 @@ export class QuyetDinhGiaCuaTcdtnnComponent implements OnInit {
   ) {
     this.formData = this.fb.group({
       soQd: [null],
-      ngayKy: [[]],
+      ngayKyTu: [],
+      ngayKyDen: [],
       trichYeu: [null],
       namKeHoach: [null],
       loaiVthh: [null],
@@ -66,16 +71,10 @@ export class QuyetDinhGiaCuaTcdtnnComponent implements OnInit {
     });
   }
 
-  searchInTable = {
-    namKeHoach: dayjs().get('year'),
-    soQd: '',
-    trichYeu: '',
-    ngayKy: '',
-  };
-
   filterTable: any = {
     soQd: '',
-    ngayKy: '',
+    ngayKyTu: '',
+    ngayKyDen: '',
     trichYeu: '',
     namKeHoach: '',
     tenLoaiGia: '',
@@ -116,12 +115,7 @@ export class QuyetDinhGiaCuaTcdtnnComponent implements OnInit {
     try {
       this.spinner.show();
       let body = this.formData.value;
-      if (body.ngayKy != null) {
-        body.ngayKyTu = body.ngayKy[0];
-        body.ngayKyDen = body.ngayKy[1];
-      }
       body.namKh = body.namKeHoach,
-        //   delete body.ngayKy;
         body.pagType = this.pagType;
       body.paggingReq = {
         limit: this.pageSize,
@@ -201,8 +195,6 @@ export class QuyetDinhGiaCuaTcdtnnComponent implements OnInit {
       this.spinner.show();
       try {
         let body = this.formData.value;
-        body.tuNgay = body.ngayKy[0];
-        body.denNgay = body.ngayKy[1];
         body.pagType = this.pagType;
         this.quyetDinhGiaTCDTNNService
           .export(body)
@@ -327,32 +319,38 @@ export class QuyetDinhGiaCuaTcdtnnComponent implements OnInit {
     });
   }
 
-  filterInTable(key: string, value: string) {
+  filterInTable(key: string, value: string, type?: string) {
     if (value && value != '') {
       this.dataTable = [];
       let temp = [];
       if (this.dataTableAll && this.dataTableAll.length > 0) {
         this.dataTableAll.forEach((item) => {
-          if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
-            temp.push(item)
+          if (['ngayKy'].includes(key)) {
+            if (item[key] && dayjs(item[key]).format('DD/MM/YYYY').indexOf(value.toString()) != -1) {
+              temp.push(item)
+            }
+          } else {
+            if (type) {
+              if ('eq' == type) {
+                if (item[key] && item[key].toString().toLowerCase() == value.toString().toLowerCase()) {
+                  temp.push(item)
+                }
+              } else {
+                if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
+                  temp.push(item)
+                }
+              }
+            } else {
+              if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
+                temp.push(item)
+              }
+            }
           }
         });
       }
       this.dataTable = [...this.dataTable, ...temp];
-    }
-    else {
+    } else {
       this.dataTable = cloneDeep(this.dataTableAll);
-    }
-  }
-  clearFilterTable() {
-    this.filterTable = {
-      soQd: '',
-      ngayKy: '',
-      trichYeu: '',
-      namKeHoach: '',
-      tenLoaiGia: '',
-      tenLoaiVthh: '',
-      tenTrangThai: '',
     }
   }
 
@@ -385,6 +383,14 @@ export class QuyetDinhGiaCuaTcdtnnComponent implements OnInit {
     } else {
       this.indeterminate = true;
     }
+  }
+
+  convertDateToString(event: any): string {
+    let result = '';
+    if (event) {
+      result = dayjs(event).format('DD/MM/YYYY').toString()
+    }
+    return result;
   }
 }
 

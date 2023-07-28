@@ -43,7 +43,7 @@ export class ThongTinKsgComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-    this.isVat = this.dataParent && this.dataParent.loaiGia && (this.dataParent.loaiGia == 'LG01' || this.dataParent.loaiGia == 'LG01') ? true : false
+    this.isVat = this.dataParent && this.dataParent.loaiGia && (this.dataParent.loaiGia == 'LG01' || this.dataParent.loaiGia == 'LG03')
     this.vat = this.dataParent && this.dataParent.vat ? this.dataParent.vat  : 0
     this.userInfo = this.userService.getUserLogin();
     this.loadDsChiCuc();
@@ -55,6 +55,8 @@ export class ThongTinKsgComponent implements OnInit, OnChanges {
     if (this.dataParent) {
       this.rowItem.cloaiVthh = (this.dataParent.tenCloaiVthh ? this.dataParent.tenCloaiVthh  + '; ' : '') + (this.dataParent.moTa ? this.dataParent.moTa + '; ' : '') + (this.dataParent.tchuanCluong ? this.dataParent.tchuanCluong : '' )
       this.isApDung = this.dataParent.apDungTatCa
+      this.isVat = this.dataParent && this.dataParent.loaiGia && (this.dataParent.loaiGia == 'LG01' || this.dataParent.loaiGia == 'LG03');
+      this.vat = this.dataParent && this.dataParent.vat ? this.dataParent.vat  : 0
     }
     this.updateEditCache();
   }
