@@ -144,6 +144,7 @@ export class BaoCao {
 export class ItemContract {
     id: string;
     stt: string;
+    level: number;
     tenKhachHang: string;
     isParent: boolean;
     maDvi: string;

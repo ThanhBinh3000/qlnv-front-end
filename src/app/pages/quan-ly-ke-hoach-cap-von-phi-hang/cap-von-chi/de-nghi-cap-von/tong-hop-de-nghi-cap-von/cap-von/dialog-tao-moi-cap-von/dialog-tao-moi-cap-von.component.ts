@@ -170,6 +170,7 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
               id: uuid.v4() + 'FE',
               maDvi: this.userInfo?.MA_DVI,
               tenDvi: this.userInfo?.TEN_DVI,
+              stt: '0.1'
             });
           } else {
             await this.capVonNguonChiService.ctietDeNghi(this.idRequest).toPromise().then(
@@ -272,6 +273,7 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
             const temp = item;
             const id = this.response.lstCtiets.find(e => e.maDvi == temp.maDvi)?.id;
             temp.id = id ? id : uuid.v4() + 'FE';
+            temp.stt = '0.1.1';
             this.response.lstCtiets = this.response.lstCtiets.filter(e => e.maDvi != temp.maDvi);
             this.total.slKeHoach = Operator.sum([this.total.slKeHoach, item.slKeHoach]);
             this.total.slThucHien = Operator.sum([this.total.slThucHien, item.slThucHien]);
@@ -286,6 +288,7 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
               slThucHien: this.total.slThucHien,
               donGia: this.total.donGia,
               gtriThucHien: this.total.gtriThucHien,
+              stt: '0.1'
             }, temp);
           })
         } else {

@@ -218,35 +218,37 @@ export class DialogTaoDeNghiCapVonComponent implements OnInit {
                 }
               }
             })
-        } else {
-          await this.checkRequest();
         }
+        // else {
+        // await this.checkRequest();
+        // }
       }
       await this.getMaDnghi();
-    } else {
-      //them lan moi cho de nghi
-      await this.capVonNguonChiService.ctietDeNghi(this.idRequest).toPromise().then(
-        async (data) => {
-          if (data.statusCode == 0) {
-            this.response = data.data;
-            this.response.trangThai = Utils.TT_BC_1;
-          } else {
-            this.notification.error(MESSAGE.ERROR, data?.msg);
-          }
-        },
-        (err) => {
-          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        },
-      );
-      if (this.response.loaiDnghi != Utils.MUA_VTU) {
-        if ((this.response.canCuVeGia == Utils.HD_TRUNG_THAU && this.userService.isTongCuc()) ||
-          (this.response.canCuVeGia == Utils.QD_DON_GIA && !this.userService.isChiCuc())) {
-          this.callSynthetic();
-        }
-      }
-      this.response.soLan += 1;
-
     }
+    // else {
+    //them lan moi cho de nghi
+    //   await this.capVonNguonChiService.ctietDeNghi(this.idRequest).toPromise().then(
+    //     async (data) => {
+    //       if (data.statusCode == 0) {
+    //         this.response = data.data;
+    //         this.response.trangThai = Utils.TT_BC_1;
+    //       } else {
+    //         this.notification.error(MESSAGE.ERROR, data?.msg);
+    //       }
+    //     },
+    //     (err) => {
+    //       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    //     },
+    //   );
+    //   if (this.response.loaiDnghi != Utils.MUA_VTU) {
+    //     if ((this.response.canCuVeGia == Utils.HD_TRUNG_THAU && this.userService.isTongCuc()) ||
+    //       (this.response.canCuVeGia == Utils.QD_DON_GIA && !this.userService.isChiCuc())) {
+    //       this.callSynthetic();
+    //     }
+    //   }
+    //   this.response.soLan += 1;
+
+    // }
   }
 
   // tao moi de nghi cap von cuc khu vuc
