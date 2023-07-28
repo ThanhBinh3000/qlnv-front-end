@@ -12,6 +12,7 @@ import { DieuChinhService } from 'src/app/services/quan-ly-von-phi/dieuChinhDuTo
 import * as XLSX from 'xlsx';
 import { BtnStatus, Doc, Form } from '../../dieu-chinh-du-toan.constant';
 import { DANH_MUC_PL_TH } from './phu-luc-tong-hop.constant';
+import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 
 
 export class ItemDvi {
@@ -101,6 +102,7 @@ export class PhuLucTongHopComponent implements OnInit {
     noiDungs: any[] = DANH_MUC_PL_TH;
     lstDvi: any[] = [];
     donVis: any[] = [];
+    // childUnit:any[] = []
     capDvi: any;
     //trang thai cac nut
     status: BtnStatus = new BtnStatus();
@@ -144,6 +146,7 @@ export class PhuLucTongHopComponent implements OnInit {
         private spinner: NgxSpinnerService,
         private dieuChinhDuToanService: DieuChinhService,
         private fileManip: FileManip,
+        private quanLyVonPhiService: QuanLyVonPhiService,
 
     ) { }
 
@@ -156,20 +159,23 @@ export class PhuLucTongHopComponent implements OnInit {
     async initialization() {
         this.spinner.show();
         // lấy danh sách đơn vị
-        await this.danhMuc.dMDonVi().toPromise().then(
-            (data) => {
-                if (data.statusCode === 0) {
-                    this.donVis = data?.data;
-                    this.capDvi = this.donVis.find(e => e.maDvi == this.dataInfo?.maDvi)?.capDvi;
-                } else {
-                    this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE)
-                }
-            }
-        );
+        // await this.danhMuc.dMDonVi().toPromise().then(
+        //     (data) => {
+        //         if (data.statusCode === 0) {
+        //             this.donVis = data?.data;
+        //             this.capDvi = this.donVis.find(e => e.maDvi == this.dataInfo?.maDvi)?.capDvi;
+        //             console.log(this.donVis);
+        //         } else {
+        //             this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE)
+        //         }
+        //     }
+        // );
 
-        this.spinner.show();
+
+        // console.log(this.lstDvi);
         Object.assign(this.status, this.dataInfo.status);
         await this.getFormDetail();
+        await this.getChildUnit();
         this.namBcao = this.dataInfo?.namBcao;
 
         if (this.status.general) {
@@ -189,17 +195,21 @@ export class PhuLucTongHopComponent implements OnInit {
         }
 
         // this.lstCtietBcao = this.dataInfo.data.lstCtietDchinh;
-        if (this.dataInfo?.isSynthetic && this.dataInfo?.isSynthetic == true) {
-            let lstDvi1 = this.donVis.filter(e => e?.maDviCha === this.dataInfo?.maDvi);
-            let lstDvi2 = []
-            this.dataInfo.data?.lstCtietDchinh[0]?.child.forEach(s => {
-                const Dvi2 = lstDvi1.filter(v => v.maDvi === s.maDviBcao)[0]
-                lstDvi2.push(Dvi2)
-            })
-            this.lstDvi = lstDvi2
-        } else {
-            this.lstDvi = this.donVis.filter(e => e?.maDvi === this.dataInfo?.maDvi);
-        }
+
+        // if (this.dataInfo?.isSynthetic && this.dataInfo?.isSynthetic == true) {
+        //     let lstDvi1 = this.donVis.filter(e => e?.maDviCha === this.dataInfo?.maDvi);
+        //     let lstDvi2 = []
+        //     this.dataInfo.data?.lstCtietDchinh[0]?.child.forEach(s => {
+        //         const Dvi2 = lstDvi1.filter(v => v.maDvi === s.maDviBcao)[0]
+        //         lstDvi2.push(Dvi2)
+        //     })
+        //     this.lstDvi = lstDvi2
+        //     console.log("this.lstDvi 1", this.lstDvi);
+
+        // } else {
+        //     this.lstDvi = this.donVis.filter(e => e?.maDvi === this.dataInfo?.maDvi);
+        //     console.log("this.lstDvi 2", this.lstDvi);
+        // }
 
         // if (this.dataInfo.data.trangThai == "3" && this.dataInfo?.extraData && this.dataInfo.extraData.length > 0) {
         //     this.dataInfo.extraData.forEach(item => {
@@ -209,6 +219,12 @@ export class PhuLucTongHopComponent implements OnInit {
         //         }
         //     })
         // }
+        console.log(this.formDetail.lstCtietDchinh[0].child);
+
+        this.formDetail.lstCtietDchinh[0]?.child.forEach(s => {
+            this.lstDvi = this.donVis.filter(v => v.maDvi === s.maDviBcao)
+        })
+        console.log("this.lstDvi", this.lstDvi);
 
         this.lstCtietBcao = Table.sortByIndex(this.lstCtietBcao)
         this.tinhTong();
@@ -217,6 +233,27 @@ export class PhuLucTongHopComponent implements OnInit {
         this.updateEditCache();
         this.spinner.hide();
     };
+
+    async getChildUnit() {
+        const request = {
+            maDviCha: this.dataInfo.maDvi,
+            trangThai: '01',
+        }
+        await this.quanLyVonPhiService.dmDviCon(request).toPromise().then(
+            data => {
+                if (data.statusCode == 0) {
+                    this.donVis = data.data;
+                    console.log("this.donVis", this.donVis);
+
+                } else {
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+            }
+        )
+    }
 
 
     async getFormDetail() {
@@ -229,6 +266,8 @@ export class PhuLucTongHopComponent implements OnInit {
                         this.lstCtietBcao.push(new ItemData(item));
                     })
                     this.formDetail.listIdDeleteFiles = [];
+
+
                     this.listFile = [];
                     this.getStatusButton();
                 } else {
@@ -479,9 +518,8 @@ export class PhuLucTongHopComponent implements OnInit {
             async data => {
                 if (data.statusCode == 0) {
                     this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-                    this.formDetail = data.data;
                     this._modalRef.close({
-                        formDetail: this.formDetail,
+                        trangThai: data.data.trangThai,
                     });
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -499,14 +537,9 @@ export class PhuLucTongHopComponent implements OnInit {
     getTotal() {
         this.total.clear();
         this.lstCtietBcao.forEach(item => {
-            const level = item.stt.split('.').length - 2;
-            if (level == 0) {
-                this.total.tongDchinhGiam = Operator.sum([this.total.tongDchinhGiam, item.tongDchinhGiam]);
-                this.total.tongDchinhTang = Operator.sum([this.total.tongDchinhTang, item.tongDchinhTang]);
-
-            }
+            this.total.sum(item);
         })
-    };
+    }
 
     tuChoi(mcn: string) {
         const modalTuChoi = this.modal.create({

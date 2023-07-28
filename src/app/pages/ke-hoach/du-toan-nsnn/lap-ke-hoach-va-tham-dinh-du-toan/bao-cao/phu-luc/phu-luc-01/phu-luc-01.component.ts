@@ -63,7 +63,7 @@ export class ItemData {
 
 	clear() {
 		Object.keys(this).forEach(key => {
-			if (typeof this[key] === 'number' && key != 'level') {
+			if (typeof this[key] === 'number' && key != 'level' && key != 'dmucNamDtoan') {
 				this[key] = null;
 			}
 		})
@@ -71,7 +71,7 @@ export class ItemData {
 
 	sum(data: ItemData) {
 		Object.keys(data).forEach(key => {
-			if (key != 'level' && (typeof this[key] == 'number' || typeof data[key] == 'number')) {
+			if (key != 'level' && key != 'dmucNamDtoan' && (typeof this[key] == 'number' || typeof data[key] == 'number')) {
 				this[key] = Operator.sum([this[key], data[key]]);
 			}
 		})
@@ -250,6 +250,7 @@ export class PhuLuc01Component implements OnInit {
 			lstCtietBcaoTemp?.forEach(item => {
 				item.sluongTd = item.sluongNamDtoan;
 				item.ttienTd = item.ttienNamDtoan;
+				item.chenhLech = 0;
 			})
 		}
 

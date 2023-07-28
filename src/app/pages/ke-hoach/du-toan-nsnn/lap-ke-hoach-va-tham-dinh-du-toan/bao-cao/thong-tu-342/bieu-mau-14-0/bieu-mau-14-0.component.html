@@ -115,8 +115,8 @@
 									</td>
 									<td *ngIf="status.general" nzRight>
 										<i *ngIf="checkDelete(data.maNdung)" class="fa fa-trash-o do"
-											(click)="deleteLine(data.stt)"></i>
-										<i *ngIf="checkAdd(data)" class="fa fa-plus" (click)="addLine(data.stt)"></i>
+											(click)="deleteLine(data.id)"></i>
+										<i *ngIf="checkAdd(data)" class="fa fa-plus" (click)="addLine(data.id)"></i>
 									</td>
 								</ng-container>
 								<ng-template #editTemplate>
@@ -191,9 +191,9 @@
 										</a>
 									</td>
 									<td *ngIf="status.general" nzRight>
-										<i *ngIf="checkAdd(data)" class="fa fa-plus" (click)="addLine(data.stt)"></i>
+										<i *ngIf="checkAdd(data)" class="fa fa-plus" (click)="addLine(data.id)"></i>
 										<i *ngIf="checkDelete(data.maNdung)" class="fa fa-trash-o do"
-											(click)="deleteLine(data.stt)"></i>
+											(click)="deleteLine(data.id)"></i>
 									</td>
 								</ng-template>
 							</tr>

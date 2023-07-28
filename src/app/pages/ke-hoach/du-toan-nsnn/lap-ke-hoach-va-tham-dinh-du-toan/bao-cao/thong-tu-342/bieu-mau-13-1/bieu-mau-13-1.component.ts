@@ -33,7 +33,7 @@ export class ItemData {
     }
 
     changeModel() {
-        this.chenhLech = Operator.sum([this.giaTriThamDinh, -this.namUocThien]);
+        this.chenhLech = Operator.sum([this.giaTriThamDinh, -this.namKh]);
     }
 
     upperBound() {
@@ -235,6 +235,7 @@ export class BieuMau131Component implements OnInit {
         if (this.status.general) {
             lstCtietBcaoTemp.forEach(item => {
                 item.giaTriThamDinh = item.namKh;
+                item.chenhLech = 0;
             })
         }
 
