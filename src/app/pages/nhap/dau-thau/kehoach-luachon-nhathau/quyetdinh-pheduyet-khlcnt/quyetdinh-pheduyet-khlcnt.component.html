@@ -77,10 +77,10 @@
             <th class="text-center" style="width: 10%;">Ngày quyết định</th>
             <th class="text-center" style="width: 35%;">Trích yếu</th>
             <th>Số KH/tờ trình</th>
-            <th *ngIf="userService.isTongCuc() && loaiVthh != '02'">Mã tổng hợp</th>
+            <th *ngIf="userService.isTongCuc() && !loaiVthh.startsWith('02')">Mã tổng hợp</th>
             <th *ngIf="userService.isCuc() || userService.isTongCuc()" class="text-center" style="width: 12%;">Loại hàng
               hóa</th>
-            <th *ngIf="userService.isCuc() || userService.isTongCuc()" class="text-center" style="width: 12%;">Chủng
+            <th *ngIf="(userService.isCuc() || userService.isTongCuc())  && !loaiVthh.startsWith('02')" class="text-center" style="width: 12%;">Chủng
               loại hàng hóa</th>
             <th class="text-center" style="width: 8%;">Tổng số gói thầu</th>
             <th class="text-center" style="width: 8%;">Số gói thầu đã trúng</th>
@@ -198,15 +198,15 @@
                 (click)="data.idTrHdr ? openDxKhlcntModal(data.idTrHdr) : openDxKhlcntModal(null, data.soTrHdr)">{{
                 data.soTrHdr}}</a>
             </td>
-            <td *ngIf="userService.isTongCuc() && loaiVthh != '02'">
+            <td *ngIf="userService.isTongCuc() && !loaiVthh.startsWith('02')">
               <a style="color: blue; font-weight: bold;" (click)="openTHopKhlcntModal(data.idThHdr)">{{
                 data.idThHdr}}</a>
             </td>
             <td *ngIf="userService.isCuc() || userService.isTongCuc()">{{data.tenLoaiVthh}}</td>
-            <td *ngIf="userService.isCuc() || userService.isTongCuc()">{{data.tenCloaiVthh}}</td>
+            <td *ngIf="(userService.isCuc() || userService.isTongCuc())  && !loaiVthh.startsWith('02')">{{data.tenCloaiVthh}}</td>
             <td>{{data.soGthau}}</td>
             <td>{{data.soGthauTrung}}</td>
-            <td></td>
+            <td>{{data.soHdDaKy}}</td>
             <td *ngIf="loaiVthh != '02'">{{data.tgianNhang}}</td>
 <!--            <td *ngIf="userService.isTongCuc()">{{data.tgianThien }}</td>-->
             <td>{{ data.tenTrangThai }}</td>

@@ -14,7 +14,7 @@ import {MESSAGE} from "../../../../constants/message";
 import {DANH_MUC_LEVEL} from "../../luu-kho.constant";
 import {saveAs} from 'file-saver';
 import {DonviService} from "../../../../services/donvi.service";
-import {TheoDoiBqService} from "../../../../services/theo-doi-bq.service";
+import {TheoDoiBqService} from "../../../../services/luu-kho/theo-doi-bq.service";
 import {DialogTuChoiComponent} from "../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
 import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../services/storage.service";
@@ -31,6 +31,7 @@ import {QuanLySoKhoTheKhoService} from "../../../../services/quan-ly-so-kho-the-
 import {DanhMucService} from "../../../../services/danhmuc.service";
 import {ThemmoiThComponent} from "../../../sua-chua/tong-hop/themmoi-th/themmoi-th.component";
 import {ThemMoiCtietTdbqComponent} from "./them-moi-ctiet-tdbq/them-moi-ctiet-tdbq.component";
+import {TheoDoiBqDtlService} from "../../../../services/luu-kho/theoDoiBqDtl.service";
 
 @Component({
   selector: 'app-them-moi-so-theo-doi-bq',
@@ -55,6 +56,7 @@ export class ThemMoiSoTheoDoiBqComponent extends Base3Component implements OnIni
     route: ActivatedRoute,
     router: Router,
     private theoDoiBqService: TheoDoiBqService,
+    private theoDoiBqDtlService: TheoDoiBqDtlService,
     private quanLySoKhoTheKhoService: QuanLySoKhoTheKhoService,
     private danhMucService : DanhMucService
   ) {
@@ -329,78 +331,101 @@ export class ThemMoiSoTheoDoiBqComponent extends Base3Component implements OnIni
     return this.formData.value.trangThai != STATUS.DU_THAO;
   }
 
+  isShowEditDelete(item) {
+    return item.ngayKtra == dayjs().format('YYYY-MM-DD') && item.idNguoiKtra == this.userInfo.ID;
+  }
+
   showPheDuyetTuChoi() {
     let trangThai = this.formData.value.trangThai;
     return trangThai == STATUS.CHO_DUYET_KT || trangThai == STATUS.CHO_DUYET_LDCC;
   }
 
   addRow() {
-    if (this.validateRow()) {
-      let dataRow = cloneDeep(this.rowItem);
-      this.dataTable.push(dataRow);
-      this.rowItem.slThucTe = 0;
-      this.rowItem.maSo = null;
-      console.log(this.calTongSlThucTe());
-      this.formData.patchValue({
-        tongSoLuong: this.calTongSlThucTe()
+
+  }
+
+  deleteRow(item,i: number): void {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: () => {
+        this.spinner.show();
+        try {
+          let body = {
+            id: item.id
+          };
+          this.theoDoiBqDtlService.delete(body).then(async (res) => {
+            this.spinner.hide();
+            if (res.msg == MESSAGE.SUCCESS) {
+              this.dataTable = this.dataTable.filter((d, index) => index !== i);
+              this.notification.success(MESSAGE.SUCCESS,MESSAGE.DELETE_SUCCESS);
+            }else{
+              this.notification.error(MESSAGE.ERROR,res.msg);
+            }
+          });
+        } catch (e) {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      },
+    });
+  }
+
+  editRow(item){
+    if(item){
+      const modalGT = this.modal.create({
+        nzTitle: 'Thông tin chi tiết',
+        nzContent: ThemMoiCtietTdbqComponent,
+        nzMaskClosable: false,
+        nzClosable: false,
+        nzWidth: '1500px',
+        nzFooter: null,
+        nzComponentParams: {
+          id : item.id,
+          isXacNhan : item.vaiTro == 'LDCHICUC' || item.vaiTro == 'LDCUC',
+          dataTk : item.dataTk,
+          dataKtv : item.dataKtv,
+          dataLdcc : item.dataLdcc
+        },
       })
-    }
-  }
-
-  deleteRow(i: number): void {
-    this.dataTable = this.dataTable.filter((d, index) => index !== i);
-  }
-
-  validateRow(): boolean {
-    if (this.rowItem.soSerial && this.rowItem.soLuong) {
-      if (this.dataTable.filter(i => i.soSerial == this.rowItem.soSerial).length > 0) {
-        this.notification.error(MESSAGE.ERROR, "Số serial đã tồn tại");
-        return false
-      }
-      if (this.rowItem.soLuong <= 0) {
-        this.notification.error(MESSAGE.ERROR, "Số lượng thực tế phải lớn hơn 0");
-        return false
-      }
-    } else {
-      this.notification.error(MESSAGE.ERROR, "Vui lòng điền đủ thông tin");
-      return false;
-    }
-    return true
-  }
-
-  calTongSlThucTe() {
-    if (this.dataTable) {
-      let sum = 0
-      this.dataTable.forEach(item => {
-        sum += this.nvl(item.soLuong);
-      })
-      return sum;
-    }
-  }
-
-  convertTien(tien: number): string {
-    if (tien) {
-      return convertTienTobangChu(tien);
+      modalGT.afterClose.subscribe((data)=>{
+        this.changeMonth(this.monthSelect)
+      });
     }
   }
 
   changeMonth(event) {
     if (event) {
-      // this.dataLich = [];
-      // const date = new Date(event);
-      // const month = date.getMonth();
-      // let data = this.weekOfMonth.filter( item => item.key == month+1);
-      // if(data && data.length > 0){
-      //   const listWeek = data[0].value;
-      //   listWeek.forEach(item => {
-      //     this.timTatCaLichLanhDaoTongCuc(item);
-      //   })
-      // }
+      console.log(event)
+      this.spinner.show();
+      let body = {
+        idHdr : this.id,
+        monthSearch : event
+      }
+      this.theoDoiBqDtlService.search(body).then((res)=>{
+        this.spinner.hide();
+        if(res.msg == MESSAGE.SUCCESS){
+            this.dataTable = res.data;
+          }
+      });
     }
   }
 
-  themMoiCtiet(idDtl : number ,isXacNhan?:boolean){
-    console.log(idDtl,isXacNhan)
+  themMoiCtiet($event,isXacNhan?:boolean){
+    $event.stopPropagation()
+    if(isXacNhan && this.dataTable.length == 0){
+        this.notification.error(MESSAGE.ERROR,"Không thể xác nhận khi chưa có danh sách chi tiết");
+        return;
+    }
+    const dataTk = this.dataTable.filter(item => item.vaiTro == 'CBTHUKHO').sort((a,b)=>a.ngayKtra-b.ngayKtra);
+    const dataKtv = this.dataTable.filter(item => item.vaiTro == 'CBKTVBQ').sort((a,b)=>a.ngayKtra-b.ngayKtra);
+    const dataLdcc = this.dataTable.filter(item => item.vaiTro == 'LDCHICUC').sort((a,b)=>a.ngayKtra-b.ngayKtra);
     const modalGT = this.modal.create({
       nzTitle: 'Thông tin chi tiết',
       nzContent: ThemMoiCtietTdbqComponent,
@@ -409,8 +434,16 @@ export class ThemMoiSoTheoDoiBqComponent extends Base3Component implements OnIni
       nzWidth: '1500px',
       nzFooter: null,
       nzComponentParams: {
-        dataHdr : this.formData.value
+        dataHdr : this.formData.value,
+        isXacNhan : isXacNhan,
+        dataTk : dataTk.length > 0 ? dataTk[0] : null,
+        dataKtv : dataKtv.length > 0 ? dataKtv[0] : null,
+        dataLdcc : dataLdcc.length > 0 ? dataLdcc[0] : null
       },
     });
+    modalGT.afterClose.subscribe((data)=>{
+      console.log('ádasd');
+        this.changeMonth(this.monthSelect)
+    })
   }
 }

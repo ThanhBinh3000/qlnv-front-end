@@ -9,7 +9,6 @@ import { HopDongComponent } from './hop-dong.component';
 import { QuanlyHopdongComponent } from './danh-sach-hop-dong/quanly-hopdong/quanly-hopdong.component';
 import { MainHopDongComponent } from './main-hop-dong/main-hop-dong.component';
 import { KehoachLuachonNhathauModule } from "../kehoach-luachon-nhathau/kehoach-luachon-nhathau.module";
-import { TrienkhaiLuachonNhathauModule } from "../trienkhai-luachon-nhathau/trienkhai-luachon-nhathau.module";
 
 
 @NgModule({
@@ -26,7 +25,6 @@ import { TrienkhaiLuachonNhathauModule } from "../trienkhai-luachon-nhathau/trie
     ComponentsModule,
     DirectivesModule,
     KehoachLuachonNhathauModule,
-    TrienkhaiLuachonNhathauModule
   ],
   exports: [
     HopDongComponent,

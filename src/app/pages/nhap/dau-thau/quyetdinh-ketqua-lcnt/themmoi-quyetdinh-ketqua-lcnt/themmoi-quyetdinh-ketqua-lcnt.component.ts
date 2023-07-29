@@ -1,32 +1,35 @@
 import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import * as dayjs from 'dayjs';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { MESSAGE } from 'src/app/constants/message';
-import { UserLogin } from 'src/app/models/userlogin';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { HelperService } from 'src/app/services/helper.service';
-import { QuyetDinhPheDuyetKetQuaLCNTService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/tochuc-trienkhai/quyetDinhPheDuyetKetQuaLCNT.service';
-import { UploadFileService } from 'src/app/services/uploaFile.service';
-import { UserService } from 'src/app/services/user.service';
-import { Globals } from 'src/app/shared/globals';
-import { STATUS } from "../../../../../../constants/status";
-import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
-import {
-  ThongTinDauThauService
-} from "../../../../../../services/qlnv-hang/nhap-hang/dau-thau/tochuc-trienkhai/thongTinDauThau.service";
-import { isEmpty } from 'lodash'
-import { Base2Component } from "../../../../../../components/base2/base2.component";
-import { StorageService } from "../../../../../../services/storage.service";
-import { HttpClient } from "@angular/common/http";
-import { FileDinhKem } from 'src/app/models/FileDinhKem';
-import { FILETYPE } from 'src/app/constants/fileType';
+import {Base2Component} from "../../../../../components/base2/base2.component";
 import {
   ThemmoiThongtinDauthauVtComponent
-} from "../../thongtin-dauthau/themmoi-thongtin-dauthau-vt/themmoi-thongtin-dauthau-vt.component";
-
+} from "../../trienkhai-luachon-nhathau/thongtin-dauthau/themmoi-thongtin-dauthau-vt/themmoi-thongtin-dauthau-vt.component";
+import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {FileDinhKem} from "../../../../../models/FileDinhKem";
+import {UserLogin} from "../../../../../models/userlogin";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {DanhMucService} from "../../../../../services/danhmuc.service";
+import {NgxSpinnerService} from "ngx-spinner";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../../services/storage.service";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {UploadFileService} from "../../../../../services/uploaFile.service";
+import {Globals} from "../../../../../shared/globals";
+import {UserService} from "../../../../../services/user.service";
+import {HelperService} from "../../../../../services/helper.service";
+import {
+  QuyetDinhPheDuyetKetQuaLCNTService
+} from "../../../../../services/qlnv-hang/nhap-hang/dau-thau/tochuc-trienkhai/quyetDinhPheDuyetKetQuaLCNT.service";
+import {
+  ThongTinDauThauService
+} from "../../../../../services/qlnv-hang/nhap-hang/dau-thau/tochuc-trienkhai/thongTinDauThau.service";
+import * as dayjs from "dayjs";
+import {MESSAGE} from "../../../../../constants/message";
+import {FILETYPE} from "../../../../../constants/fileType";
+import {
+  DialogTableSelectionComponent
+} from "../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
+import { STATUS } from "../../../../../constants/status";
+import { isEmpty } from 'lodash'
 @Component({
   selector: 'app-themmoi-quyetdinh-ketqua-lcnt',
   templateUrl: './themmoi-quyetdinh-ketqua-lcnt.component.html',
@@ -374,5 +377,6 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
         });
     }
   }
+
 
 }

@@ -11,8 +11,12 @@ export class BangCaoDieuChuyenService extends BaseService {
     constructor(public httpClient: HttpClient) {
         super(httpClient, 'dieu-chuyen-noi-bo/bao-cao-ket-qua', '/qlnv-hang');
     }
-    getThongTinNhapXuat(body): Promise<OldResponseData> {
-        const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/nhap-xuat-hang`;
+    getThongTinNhapXuatChiCuc(body): Promise<OldResponseData> {
+        const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/nhap-xuat-hang-chi-cuc`;
+        return this._httpClient.post<OldResponseData>(url, body).toPromise();
+    }
+    getThongTinNhapXuatCuc(body): Promise<OldResponseData> {
+        const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/nhap-xuat-hang-cuc`;
         return this._httpClient.post<OldResponseData>(url, body).toPromise();
     }
 }

@@ -279,15 +279,19 @@
       </nz-collapse-panel>
     </nz-collapse>
     <nz-collapse>
-
       <nz-collapse-panel [nzExtra]="extraTbl" nzActive="true" nzHeader="Chi tiết nhật trình bảo quản, kiểm tra hàng DTQG">
         <ng-template #extraTbl>
           <button type="button"
-                  class="btn btn-sub xanh-nhat ml-2" (click)="themMoiCtiet(null,true)">
+                  class="btn btn-sub xanh-nhat ml-2" >
+            <i class="icon htvbdh_chuyen-xu-ly"></i>
+            <span>Xuất file</span>
+          </button>
+          <button type="button"
+                  class="btn btn-sub xanh-nhat ml-2" *ngIf="this.userService.isCuc() || this.userService.isChiCuc()"   (click)="themMoiCtiet($event,true)">
             <i class="icon htvbdh_tcdt_guiduyet"></i>
             <span>Xác nhận</span>
           </button>
-          <button type="button" class="btn btn-sub" (click)="themMoiCtiet(null,false)">
+          <button type="button" class="btn btn-sub" *ngIf=" this.userService.isChiCuc()" (click)="themMoiCtiet($event,false)">
             <i class="icon htvbdh_dau-cong"></i>
             <span>Thêm</span>
           </button>
@@ -296,7 +300,7 @@
           <div nz-col [nzSpan]="2">
             <nz-form-item>
               <nz-form-control [nzErrorTip]="error">
-                <nz-date-picker nzMode="month" [(ngModel)]="monthSelect"  (ngModelChange)="changeMonth($event)" [nzFormat]="monthFormat"></nz-date-picker>
+                <nz-date-picker nzMode="month" [(ngModel)]="monthSelect" (ngModelChange)="changeMonth($event)" [nzFormat]="monthFormat"></nz-date-picker>
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -308,31 +312,33 @@
             <th nzWidth="30px">STT</th>
             <th>Ngày</th>
             <th>Người kiểm tra</th>
+            <th>Vai trò</th>
+            <th>Diễn biến hàng hóa</th>
+            <th>Nguyễn nhân</th>
+            <th>Biện pháp xử lý</th>
+            <th>Kết quả(số lượng xử lý)</th>
             <th nzWidth="55px">Hành động</th>
           </tr>
           </thead>
           <tbody>
-          <tr *ngIf="!disabled()">
-            <td></td>
-            <td>
-              <input [(ngModel)]="rowItem.soSerial" />
-            </td>
-            <td>
-              <nz-input-number [nzSize]="'small'" [(ngModel)]="rowItem.soLuong" [nzFormatter]="globals.formatter" [nzParser]="globals.parser" ></nz-input-number>
-            </td>
-            <td>
-              <a (click)="addRow()" >
-                <i class="fa fa-plus"></i>
-              </a>
-            </td>
-          </tr>
           <ng-container *ngFor="let item of dataTable , let i = index">
             <tr>
               <td>{{ i+1 }}</td>
-              <td>{{ item.soSerial }}</td>
-              <td>{{ item.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
+              <td>{{ item.ngayKtra | date: 'dd/MM/YYYY' }}</td>
+              <td>{{ item.tenNguoiKtra }}</td>
+              <td>{{ item.tenVaiTro }}</td>
+              <td>{{ item.dienBien }}</td>
+              <td>{{ item.nguyenNhan }}</td>
+              <td>{{ item.tenBienPhapXl }}</td>
+              <td>{{ item.soLuongXl | number : '1.0-1' : 'vi_VN' }}</td>
               <td>
-                <a *ngIf="!disabled()" (click)="deleteRow(i)" >
+                <a (click)="editRow(item)" >
+                  <i class="fa fa-eye" title="Sửa"></i>
+                </a>
+                <a *ngIf="isShowEditDelete(item)" (click)="editRow(item)" >
+                  <i class="fa fa-pencil" title="Sửa"></i>
+                </a>
+                <a *ngIf="isShowEditDelete(item)" (click)="deleteRow(item,i)" >
                   <i class="fa fa-trash-o do"></i>
                 </a>
               </td>

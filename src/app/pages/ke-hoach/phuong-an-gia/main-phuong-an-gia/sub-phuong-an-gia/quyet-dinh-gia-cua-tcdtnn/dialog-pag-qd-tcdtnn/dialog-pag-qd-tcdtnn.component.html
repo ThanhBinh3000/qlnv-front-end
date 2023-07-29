@@ -6,36 +6,48 @@
     </nz-radio-group>
   </div>
   <div nz-row [nzGutter]="24" *ngIf="formData.value.loaiQd == '01'">
-    <div nz-col [nzSpan]="10">
+    <div nz-col [nzSpan]="7">
       <nz-form-item class="form-item">
-        <nz-form-label nzRequired [nzNoColon]="true" nzFor="nam-qd">Loại hàng hóa
+        <nz-form-label nzRequired [nzNoColon]="true" >Loại hàng hóa
         </nz-form-label>
-        <nz-form-control>
-          <nz-select nzAllowClear="true" formControlName="loaiVthh">
+        <nz-form-control [nzErrorTip]="error">
+          <nz-select nzAllowClear="true" formControlName="loaiVthh" (ngModelChange)="onChangeLoaiVthh($event)">
             <nz-option *ngFor="let p of listVthh" [nzValue]="p.ma" [nzLabel]="p.giaTri">
             </nz-option>
           </nz-select>
         </nz-form-control>
       </nz-form-item>
     </div>
-    <div nz-col [nzSpan]="10">
+    <div nz-col [nzSpan]="7">
       <nz-form-item class="form-item">
-        <nz-form-label nzRequired [nzNoColon]="true"nzFor="nam-qd">Chủng loại hàng hóa
+        <nz-form-label nzRequired [nzNoColon]="true">Chủng loại hàng hóa
         </nz-form-label>
-        <nz-form-control>
+        <nz-form-control  [nzErrorTip]="error">
           <nz-select nzAllowClear="true" formControlName="cloaiVthh">
-            <nz-option *ngFor="let p of listCloaiVthh" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+            <nz-option *ngFor="let p of listCloaiVthh" [nzValue]="p.ma" [nzLabel]="p.ten">
             </nz-option>
           </nz-select>
         </nz-form-control>
       </nz-form-item>
     </div>
-    <div nz-col [nzSpan]="4">
+    <div nz-col [nzSpan]="7">
+      <nz-form-item class="form-item">
+        <nz-form-label nzRequired [nzNoColon]="true" >Loại giá
+        </nz-form-label>
+        <nz-form-control [nzErrorTip]="error">
+          <nz-select nzAllowClear="true" formControlName="loaiGia">
+            <nz-option *ngFor="let p of dsLoaiGia" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+            </nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="3">
       <nz-form-item class="form-item">
         <nz-form-label [nzNoColon]="true">
         </nz-form-label>
         <nz-form-control>
-          <button nz-button class="search__button--search text-right">
+          <button nz-button class="search__button--search" (click)="loadDsToTrinh()">
             <i nz-icon nzType="search"></i>
             Tìm kiếm
           </button>
@@ -44,7 +56,7 @@
     </div>
   </div>
 </form>
-<nz-table nzBordered class="mg-t-10" #basicTable [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false" *ngIf="formData.value.loaiQd == '00'">
+<nz-table nzBordered class="mg-t-10" #basicTable [nzData]="dataTableToTrinh" [nzFrontPagination]="false" [nzShowPagination]="false" *ngIf="formData.value.loaiQd == '00'">
   <thead>
   <tr>
     <th class=" text-center" nzWidth="45px">STT</th>
@@ -52,16 +64,20 @@
     <th class=" text-center">Số tờ trình</th>
     <th class=" text-center">Mã tổng hợp</th>
     <th class=" text-center">Ngày ký tờ trình</th>
+    <th class=" text-center">Loại hàng hóa</th>
+    <th class=" text-center">Chủng loại hàng hóa</th>
     <th nzWidth="45px" class=" text-center">Chọn</th>
   </tr>
   </thead>
   <tbody>
   <tr *ngFor="let data of basicTable.data; let i = index">
     <td class="text-center">{{i + 1}}</td>
-    <td class="text-center">{{data.namKeHoach}}</td>
+    <td class="text-center">{{data.namTongHop}}</td>
     <td class="text-center">{{data.soToTrinh}}</td>
-    <td class="text-center">{{data.maTongHop}}</td>
-    <td class="text-center">{{data.ngayKy | date: 'dd/MM/YYYY'}}</td>
+    <td class="text-center">{{data.id}}</td>
+    <td class="text-center">{{data.ngayTongHop | date: 'dd/MM/YYYY'}}</td>
+    <td class="text-center">{{data.tenLoaiVthh}}</td>
+    <td class="text-center">{{data.tenCloaiVthh}}</td>
     <td class="text-center">
       <a (click)="handleOk(data)">
         <i class="icon htvbdh_dau-cong"></i>
@@ -70,7 +86,7 @@
   </tr>
   </tbody>
 </nz-table>
-<nz-table nzBordered #basicTable class="mg-t-10" [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false" *ngIf="formData.value.loaiQd == '01'">
+<nz-table nzBordered #basicTable class="mg-t-10" [nzData]="dataTablleDxCs" [nzFrontPagination]="false" [nzShowPagination]="false" *ngIf="formData.value.loaiQd == '01'">
   <thead>
   <tr>
     <th class=" text-center" nzWidth="45px">STT</th>
@@ -87,15 +103,13 @@
   <tr *ngFor="let data of basicTable.data; let i = index">
     <td class="text-center">{{i + 1}}</td>
     <td class="text-center">{{data.namKeHoach}}</td>
-    <td class="text-center">{{data.soToTrinh}}</td>
-    <td class="text-center">{{data.maTongHop}}</td>
-    <td class="text-center">{{data.maTongHop}}</td>
-    <td class="text-center">{{data.maTongHop}}</td>
-    <td class="text-center">{{data.maTongHop}}</td>
+    <td class="text-center">{{data.soDeXuat}}</td>
+    <td class="text-center">{{data.tenDvi}}</td>
+    <td class="text-center">{{data.ngayKy | date: 'dd/MM/YYYY'}}</td>
+    <td class="text-center">{{data.lanDeXuat}}</td>
+    <td class="text-center">{{data.soDeXuatDc}}</td>
     <td class="text-center">
-      <a (click)="handleOk(data)">
-        <i class="icon htvbdh_dau-cong"></i>
-      </a>
+      <label nz-checkbox (nzCheckedChange)= "updateDataCheckbox(i, data, $event)"></label>
     </td>
   </tr>
   </tbody>
@@ -109,10 +123,15 @@
         <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel ml-2"></i>
         Đóng
       </button>
-      <button nz-button (click)="onCancel()" class="modal__button--save ml-2">
+      <button nz-button (click)="luu()" class="modal__button--save ml-2">
         <i nz-icon nzType="save"></i>
         Lưu
       </button>
     </div>
   </div>
 </div>
+
+<ng-template #error let-control>
+  <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
+  </ng-container>
+</ng-template>

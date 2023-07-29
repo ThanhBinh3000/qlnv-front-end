@@ -13,8 +13,14 @@
           <label class="search__label">Số quyết định</label>
           <input [(ngModel)]="searchFilter.soQd" nz-input nzSize="small" placeholder="Nhập số quyết định" />
         </div>
+        <div nz-col nzSpan="3" *ngIf="loaiVthh.startsWith('02')">
+          <label class="search__label">Loại hàng DTQG </label>
+          <nz-select [(ngModel)]="searchFilter.loaiVthh" (ngModelChange)="onChangeLoaiVthh($event)">
+            <nz-option *ngFor="let p of dsLoaiVthh" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
+          </nz-select>
+        </div>
         <div nz-col nzSpan="3">
-          <label class="search__label">Chủng loại hàng hóa </label>
+          <label class="search__label">Chủng loại hàng DTQG </label>
           <nz-select [(ngModel)]="searchFilter.cloaiVthh">
             <nz-option *ngFor="let p of dsCloaiVthh" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
           </nz-select>
@@ -83,7 +89,8 @@
             <th class="text-center" style="width: 10%;">Số quyết định</th>
             <th class="text-center" style="width: 10%;">Ngày quyết định</th>
             <th class="text-center" style="width: 8%;">Số hợp đồng</th>
-            <th class="text-center" style="width: 11%;">Chủng loại hàng hóa</th>
+            <th class="text-center" style="width: 11%;">Loại hàng DTQG</th>
+            <th class="text-center" style="width: 11%;">Chủng loại hàng DTQG</th>
             <th class="text-center" style="width: 11%;">Thời gian nhập kho muộn nhất</th>
             <th class="text-center" style="width: 40%;">Trích yếu quyết định </th>
             <th class="text-center" style="width: 10%;">Trạng thái QĐ </th>
@@ -117,6 +124,12 @@
               <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soHd"
                   (input)="filterInTable('soHd',filterTable.soHd)" size="small" />
+              </nz-input-group>
+            </th>
+            <th>
+              <nz-input-group>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenLoaiVthh"
+                  (input)="filterInTable('tenLoaiVthh',filterTable.tenLoaiVthh)" size="small" />
               </nz-input-group>
             </th>
             <th>
@@ -174,6 +187,7 @@
               <a style="color: blue; font-weight: bold;" (click)="openHdModal(data.idHd)">{{
                 data.soHd}}</a>
             </td>
+            <td>{{ data.tenLoaiVthh}}</td>
             <td>{{ data.tenCloaiVthh}}</td>
             <td>{{ data.tgianNkho | date: 'dd/MM/YYYY' }}</td>
             <td>{{ data.trichYeu }}</td>

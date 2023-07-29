@@ -37,6 +37,7 @@ export class ThemMoiToTrinhPagComponent implements OnInit {
   dsLoaiGia: any[] = [];
   idSelected: number;
   isViewModal: boolean = false;
+  isMuaToiDa: boolean;
   constructor(
     private readonly fb: FormBuilder,
     private readonly modal: NzModalService,
@@ -82,6 +83,7 @@ export class ThemMoiToTrinhPagComponent implements OnInit {
   }
 
   async ngOnInit() {
+    this.isMuaToiDa = this.type == TYPE_PAG.GIA_MUA_TOI_DA ? true : false;
     await Promise.all([
       this.loadDsLoaiGia(),
       this.getDataDetail(this.idInput),

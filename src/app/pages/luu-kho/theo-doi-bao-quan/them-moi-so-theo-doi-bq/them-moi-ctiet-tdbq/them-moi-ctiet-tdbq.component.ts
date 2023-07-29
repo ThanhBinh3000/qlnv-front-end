@@ -10,6 +10,10 @@ import {Validators} from "@angular/forms";
 import {Base3Component} from "../../../../../components/base3/base3.component";
 import {TongHopScService} from "../../../../../services/sua-chua/tongHopSc.service";
 import {LOAI_HANG_DTQG} from "../../../../../constants/config";
+import {TheoDoiBqService} from "../../../../../services/luu-kho/theo-doi-bq.service";
+import {TheoDoiBqDtlService} from "../../../../../services/luu-kho/theoDoiBqDtl.service";
+import {DanhMucService} from "../../../../../services/danhmuc.service";
+import {MESSAGE} from "../../../../../constants/message";
 
 @Component({
   selector: 'app-them-moi-ctiet-tdbq',
@@ -19,11 +23,13 @@ import {LOAI_HANG_DTQG} from "../../../../../constants/config";
 export class ThemMoiCtietTdbqComponent extends Base3Component implements OnInit {
 
   rowItem : ChiSoChatLuong = new ChiSoChatLuong();
-  tableShow : string;
-  listPhuongThucBaoQuan : any[] = [];
+  listBpxl : any[] = [];
   LOAI_HANG_DTQG = LOAI_HANG_DTQG;
   dataHdr : any;
-
+  isXacNhan : boolean = false;
+  dataTk : any;
+  dataKtv : any;
+  dataLdcc : any;
 
   constructor(
     httpClient: HttpClient,
@@ -33,11 +39,14 @@ export class ThemMoiCtietTdbqComponent extends Base3Component implements OnInit 
     modal: NzModalService,
     route: ActivatedRoute,
     router: Router,
-    private tongHopScService: TongHopScService,
+    private theoDoiBqDtlService: TheoDoiBqDtlService,
+    private danhMucService : DanhMucService,
     private _modalRef: NzModalRef,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, route, router, tongHopScService);
+    super(httpClient, storageService, notification, spinner, modal, route, router, theoDoiBqDtlService);
     this.formData = this.fb.group({
+      id : [null,],
+      idHdr : [null,[Validators.required]],
       tenNguoiKtra : [null,[Validators.required]],
       ngayKtra : [null,[Validators.required]],
       loaiVthh : [null,[Validators.required]],
@@ -46,33 +55,52 @@ export class ThemMoiCtietTdbqComponent extends Base3Component implements OnInit 
       tenCloaiVthh : [null,[Validators.required]],
       dviTinh : [null,[Validators.required]],
       vaiTro : [null,[Validators.required]],
+      tenVaiTro : [null,[Validators.required]],
       nguyenNhan : [null],
       dienBien : [null],
       bienPhapXl : [null],
       soLuongXl : [null],
       moTa : [null],
+      idDataTk : [],
+      idDataKtv : [],
+      idDataLdcc : []
     })
   }
 
 
   ngOnInit(): void {
-    console.log(this.userInfo)
+    this.loadDataCombobox();
+    console.log(this.dataTk,this.dataKtv,this.dataLdcc);
     if(this.id){
       this.detail(this.id).then((res)=>{
-        console.log(res)
-      })
+        this.rowItem = res
+      });
     }else{
       this.formData.patchValue({
-        tenNguoiKtra : this.userInfo.TEN_DVI,
+        tenNguoiKtra : this.userInfo.TEN_DAY_DU,
         ngayKtra : dayjs().format('YYYY-MM-DD'),
         loaiVthh : this.dataHdr.loaiVthh,
         tenLoaiVthh : this.dataHdr.tenLoaiVthh,
         cloaiVthh : this.dataHdr.cloaiVthh,
         tenCloaiVthh : this.dataHdr.tenCloaiVthh,
-        dviTinh : this.dataHdr.dviTinh
+        dviTinh : this.dataHdr.dviTinh,
+        idHdr : this.dataHdr.id,
+        vaiTro : this.userInfo.POSITION,
+        tenVaiTro : this.userInfo.POSITION_NAME,
+        idDataTk : this.dataTk?.id,
+        idDataKtv : this.dataKtv?.id,
+        idDataLdcc : this.dataLdcc?.id,
       })
     }
-    console.log(this.dataHdr)
+  }
+
+  async loadDataCombobox(){
+    this.listBpxl = [];
+    await this.danhMucService.danhMucChungGetAll('BIEN_PHAP_XU_LY').then((res)=>{
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.listBpxl = res.data;
+      }
+    });
   }
 
   handleOk(){
@@ -80,12 +108,11 @@ export class ThemMoiCtietTdbqComponent extends Base3Component implements OnInit 
       ...this.formData.value,
       ...this.rowItem
     };
-    console.log(body)
-    // this.createUpdate(body).then((res)=>{
-    //   if(res){
-    //     this._modalRef.close();
-    //   }
-    // })
+    this.createUpdate(body).then((res)=>{
+      if(res){
+        this._modalRef.close();
+      }
+    })
   }
 
   onCancel() {

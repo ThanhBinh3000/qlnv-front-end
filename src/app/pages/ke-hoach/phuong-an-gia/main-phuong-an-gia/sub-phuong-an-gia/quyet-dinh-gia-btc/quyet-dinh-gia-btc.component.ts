@@ -61,13 +61,12 @@ export class QuyetDinhGiaBtcComponent implements OnInit {
   ) {
     this.formData = this.fb.group({
       soQd: [null],
-      ngayKy: [[]],
+      ngayKyTu: [],
+      ngayKyDen: [],
       trichYeu: [null],
       namKeHoach: [null],
-      loaiVthh: [null],
-      loaiGia: [null],
-      trangThai: [null]
-
+      trangThai: [null],
+      maDvi : [],
     });
   }
 
@@ -117,18 +116,14 @@ export class QuyetDinhGiaBtcComponent implements OnInit {
   clearFilter() {
     this.formData.reset();
     this.search();
-    console.log(this.searchInTable);
   }
 
   async search() {
     this.spinner.show();
     let body = this.formData.value;
     body.pagType = this.pagType;
-    if (body.ngayKy != null) {
-      body.ngayKyTu = body.ngayKy[0];
-      body.ngayKyDen = body.ngayKy[1];
-    }
-    body.loaiHh = body.loaiHangHoa,
+    body.maDvi = this.userService.isTongCuc() ? null : this.userInfo.MA_DVI;
+    body.maDvi
       body.paggingReq = {
         limit: this.pageSize,
         page: this.page - 1

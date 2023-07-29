@@ -192,7 +192,7 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
       }
       let body = this.formTraCuu.value;
       let res = await this.tongHopDeXuatKHLCNTService.deXuatCuc(body);
-      if (res.msg == MESSAGE.SUCCESS) {
+      if (res.msg == MESSAGE.SUCCESS && res.data && res.data.length > 0) {
         const dataDetail = res.data
         let idTh = await this.userService.getId("HH_DX_KHLCNT_THOP_HDR_SEQ");
         this.helperService.bidingDataInFormGroup(this.formData, dataDetail)
@@ -203,7 +203,7 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
         this.dataTableDanhSachDX = dataDetail.hhDxKhLcntThopDtlList;
         this.isTongHop = true;
       } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
+        this.notification.error(MESSAGE.ERROR, "Không tìm thấy dữ liệu để tổng hợp.");
         this.isTongHop = false;
       }
       await this.spinner.hide();

@@ -16,11 +16,11 @@ import {
 } from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvtbaohanh/PhieuKdclVtTbTrongThoiGianBaoHanh.service";
 
 @Component({
-  selector: 'app-phieu-kiem-dinh-chat-luong',
-  templateUrl: './phieu-kiem-dinh-chat-luong.component.html',
-  styleUrls: ['./phieu-kiem-dinh-chat-luong.component.scss']
+  selector: 'app-phieu-kiem-dinh-chat-luong-vt-tb',
+  templateUrl: './phieu-kiem-dinh-chat-luong-vt-tb.component.html',
+  styleUrls: ['./phieu-kiem-dinh-chat-luong-vt-tb.component.scss']
 })
-export class XkVtPhieuKiemNghiemChatLuongComponent extends Base2Component implements OnInit {
+export class XkVtPhieuKiemDinhChatLuongVtTbComponent extends Base2Component implements OnInit {
   CHUC_NANG = CHUC_NANG;
 
   constructor(
