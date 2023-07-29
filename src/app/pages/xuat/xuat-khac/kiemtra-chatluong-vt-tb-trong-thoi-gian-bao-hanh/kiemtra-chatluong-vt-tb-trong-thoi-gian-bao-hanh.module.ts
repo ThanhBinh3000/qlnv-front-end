@@ -21,12 +21,6 @@ import {
 import {
   ChiTietTongHopDsVtTbTrongThoiGianBaoHanhComponent
 } from "./tong-hop-ds-vt-tb-trong-thoi-gian-bao-hanh/chi-tiet-tong-hop-ds-hang-dtqg/chi-tiet-tong-hop-ds-vt-tb-trong-thoi-gian-bao-hanh.component";
-import {
-  QdGiaoNhiemVuXuatHangTrongThoiGianBaoHanhComponent
-} from "./qd-giao-nhiem-vu-xuat-hang-trong-thoi-gian-bao-hanh/qd-giao-nhiem-vu-xuat-hang-trong-thoi-gian-bao-hanh.component";
-import {
-  ThongTinQdGiaoNhiemVuXuatHangTrongThoiGianBaoHanhComponent
-} from "./qd-giao-nhiem-vu-xuat-hang-trong-thoi-gian-bao-hanh/thong-tin-qd-giao-nhiem-vu-xuat-hang-trong-thoi-gian-bao-hanh/thong-tin-qd-giao-nhiem-vu-xuat-hang-trong-thoi-gian-bao-hanh.component";
 import {DieuChuyenNoiBoModule} from "../../../dieu-chuyen-noi-bo/dieu-chuyen-noi-bo.module";
 import {
   XuatKhoVtTbTrongThoiGianBaoHanhComponent
@@ -55,6 +49,21 @@ import {
 import {
   ThongTinBaoCaoKetQuaKiemDinhVtTbComponent
 } from "./kiem-tra-chat-luong-vt-tb-trong-thoi-gian-bao-hanh/bao-cao-ket-qua-kiem-dinh/thong-tin-bao-cao-ket-qua-kiem-dinh/thong-tin-bao-cao-ket-qua-kiem-dinh-vt-tb.component";
+import {
+  QdGiaoNvXuatNhapVtTbTrongThoiGianBaoHanhComponent
+} from "./qd-giao-nv-xuat-nhap-vt-tb-trong-thoi-gian-bao-hanh/qd-giao-nv-xuat-nhap-vt-tb-trong-thoi-gian-bao-hanh.component";
+import {
+  QdGiaoNhiemVuXuatHangComponent
+} from "./qd-giao-nv-xuat-nhap-vt-tb-trong-thoi-gian-bao-hanh/qd-giao-nhiem-vu-xuat-hang/qd-giao-nhiem-vu-xuat-hang.component";
+import {
+  ThongTinQdGiaoNhiemVuXuatHangComponent
+} from "./qd-giao-nv-xuat-nhap-vt-tb-trong-thoi-gian-bao-hanh/qd-giao-nhiem-vu-xuat-hang/thong-tin-qd-giao-nhiem-vu-xuat-hang/thong-tin-qd-giao-nhiem-vu-xuat-hang.component";
+import {
+  QdGiaoNhiemVuNhapHangComponent
+} from "./qd-giao-nv-xuat-nhap-vt-tb-trong-thoi-gian-bao-hanh/qd-giao-nhiem-vu-nhap-hang/qd-giao-nhiem-vu-nhap-hang.component";
+import {
+  ThongTinQdGiaoNhiemVuNhapHangComponent
+} from "./qd-giao-nv-xuat-nhap-vt-tb-trong-thoi-gian-bao-hanh/qd-giao-nhiem-vu-nhap-hang/thong-tin-qd-giao-nhiem-vu-nhap-hang/thong-tin-qd-giao-nhiem-vu-nhap-hang.component";
 
 
 @NgModule({
@@ -63,8 +72,11 @@ import {
     ToanBoDsVtTbTrongThoiGianBaoHanhComponent,
     TongHopDsVtTbTrongThoiGianBaoHanhComponent,
     ChiTietTongHopDsVtTbTrongThoiGianBaoHanhComponent,
-    QdGiaoNhiemVuXuatHangTrongThoiGianBaoHanhComponent,
-    ThongTinQdGiaoNhiemVuXuatHangTrongThoiGianBaoHanhComponent,
+    QdGiaoNvXuatNhapVtTbTrongThoiGianBaoHanhComponent,
+    QdGiaoNhiemVuXuatHangComponent,
+    ThongTinQdGiaoNhiemVuXuatHangComponent,
+    QdGiaoNhiemVuNhapHangComponent,
+    ThongTinQdGiaoNhiemVuNhapHangComponent,
     XuatKhoVtTbTrongThoiGianBaoHanhComponent,
     ThongTinXuatKhoVtTbTrongThoiGianBaoHanhComponent,
     KiemTraChatLuongVtTbComponent,
@@ -91,8 +103,11 @@ import {
     ToanBoDsVtTbTrongThoiGianBaoHanhComponent,
     TongHopDsVtTbTrongThoiGianBaoHanhComponent,
     ChiTietTongHopDsVtTbTrongThoiGianBaoHanhComponent,
-    QdGiaoNhiemVuXuatHangTrongThoiGianBaoHanhComponent,
-    ThongTinQdGiaoNhiemVuXuatHangTrongThoiGianBaoHanhComponent,
+    QdGiaoNvXuatNhapVtTbTrongThoiGianBaoHanhComponent,
+    QdGiaoNhiemVuXuatHangComponent,
+    ThongTinQdGiaoNhiemVuXuatHangComponent,
+    QdGiaoNhiemVuNhapHangComponent,
+    ThongTinQdGiaoNhiemVuNhapHangComponent,
     XuatKhoVtTbTrongThoiGianBaoHanhComponent,
     ThongTinXuatKhoVtTbTrongThoiGianBaoHanhComponent,
     KiemTraChatLuongVtTbComponent,

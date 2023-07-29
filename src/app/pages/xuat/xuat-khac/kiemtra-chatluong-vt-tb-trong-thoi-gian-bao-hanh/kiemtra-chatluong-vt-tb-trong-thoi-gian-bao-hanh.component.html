@@ -10,7 +10,7 @@
       Quyết định xuất giảm vật tư
     </li>
     <li [nzSelected]="tabSelected==3" nz-menu-item (click)="selectTab(3)">
-      Quyết định giao nhiệm vụ xuất hàng
+      Quyết định giao nhiệm vụ nhập xuất hàng
     </li>
     <li [nzSelected]="tabSelected==4" nz-menu-item (click)="selectTab(4)">
       Kiểm tra chất lượng
@@ -37,8 +37,8 @@
         (tabFocus)="receivedTab($event)"></app-tong-hop-ds-vt-tb-trong-thoi-gian-bao-hanh>
     </ng-container>
     <ng-container *ngIf="tabSelected == 3">
-      <app-qd-giao-nhiem-vu-xuat-hang-trong-thoi-gian-bao-hanh>
-      </app-qd-giao-nhiem-vu-xuat-hang-trong-thoi-gian-bao-hanh>
+      <app-qd-giao-nv-xuat-nhap-vt-tb-trong-thoi-gian-bao-hanh>
+      </app-qd-giao-nv-xuat-nhap-vt-tb-trong-thoi-gian-bao-hanh>
     </ng-container>
     <ng-container *ngIf="tabSelected == 4">
       <app-kiem-tra-chat-luong-vt-tb>
