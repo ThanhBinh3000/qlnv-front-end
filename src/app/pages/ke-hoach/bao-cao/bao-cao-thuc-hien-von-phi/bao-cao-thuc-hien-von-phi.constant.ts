@@ -94,7 +94,7 @@ export class Vp {
         {
             id: Vp.BM_05,
             tenPl: '05/BCPBQ',
-            tenDm: 'Báo cáo chi tiết thực hiện phí bảo quản lần đầu hàng DTQG',
+            tenDm: 'Khai thác chi tiết thực hiện phí bảo quản lần đầu hàng DTQG',
             status: false,
         },
     ]

@@ -107,19 +107,27 @@
                                         {{ data.soQd }}
                                     </td>
                                     <td>
-                                        {{ Op.fmtNum(data.khSoLuong) }}
+                                        <ng-container *ngIf="data.level > 0">
+                                            {{ Op.fmtNum(data.khSoLuong) }}
+                                        </ng-container>
                                     </td>
                                     <td>
-                                        {{ Op.fmtVal(data.khGiaMuaTd) }}
+                                        <ng-container *ngIf="data.level > 0">
+                                            {{ Op.fmtVal(data.khGiaMuaTd) }}
+                                        </ng-container>
                                     </td>
                                     <td>
                                         {{ Op.fmtVal(data.khTtien) }}
                                     </td>
                                     <td>
-                                        {{ Op.fmtNum(data.thSoLuong) }}
+                                        <ng-container *ngIf="data.level > 0">
+                                            {{ Op.fmtNum(data.thSoLuong) }}
+                                        </ng-container>
                                     </td>
                                     <td>
-                                        {{ Op.fmtVal(data.thGiaMuaTd) }}
+                                        <ng-container *ngIf="data.level > 0">
+                                            {{ Op.fmtVal(data.thGiaMuaTd) }}
+                                        </ng-container>
                                     </td>
                                     <td>
                                         {{ Op.fmtVal(data.thTtien) }}
