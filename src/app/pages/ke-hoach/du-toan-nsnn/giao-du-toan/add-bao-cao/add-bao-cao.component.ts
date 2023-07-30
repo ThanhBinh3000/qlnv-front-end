@@ -119,7 +119,8 @@ export class AddBaoCaoComponent implements OnInit {
     okStatus = true;                            // trang thai ok/ not ok
     finishStatus = true;                        // trang thai hoan tat nhap lieu
     viewAppraisalValue = true;
-
+    path: string;
+    isOffice: boolean;
     // thong tin chi tiet bao cao
     baoCao: BaoCao = new BaoCao();
     listAppendix: any[] = PHU_LUC;
@@ -235,10 +236,13 @@ export class AddBaoCaoComponent implements OnInit {
 
     async initialization() {
         //lay thong tin chung bao cao
+        console.log(this.data);
+
         this.baoCao.id = this.data?.id;
         this.userInfo = this.userService.getUserLogin();
         this.getListUser();
-
+        this.path = this.baoCao.maDvi + '/' + this.baoCao.maBcao;
+        this.isOffice = this.userInfo.DON_VI.tenVietTat.indexOf('_VP') != -1;
         //lay danh sach danh muc don vi
         await this.getChildUnit();
         await this.getListUser();
@@ -246,7 +250,7 @@ export class AddBaoCaoComponent implements OnInit {
         if (this.baoCao.id) {
             await this.getDetailReport();
         } else {
-            this.baoCao.namBcao = this.data.namPa;
+            this.baoCao.namBcao = this.data.namBcao;
             this.baoCao.maPa = this.data?.maPa;
             this.baoCao.maPaCha = this.data?.maPaCha;
             this.baoCao.maDvi = this.data?.maDvi ? this.data?.maDvi : this.userInfo?.MA_DVI;
@@ -286,29 +290,29 @@ export class AddBaoCaoComponent implements OnInit {
             }
             if (this.baoCao.lstGiaoDtoanTrucThuocs?.length == 0) {
                 this.listAppendix.forEach(item => {
-                    if (item.id == "pl09") {
-                        this.baoCao.lstCtiets.push({
-                            ...new ItemData(),
-                            id: uuid.v4() + 'FE',
-                            maBieuMau: item.id,
-                            tenPl: item.tenPl,
-                            tenDm: item.tenDm + " năm " + this.baoCao.namPa,
-                            trangThai: '3',
-                            lstCtietBcaos: lstCtietsPhuLucPhanBo,
-                            nguoiBcao: this.userInfo?.sub
-                        })
-                    } else {
-                        this.baoCao.lstCtiets.push({
-                            ...new ItemData(),
-                            id: uuid.v4() + 'FE',
-                            maBieuMau: item.id,
-                            tenPl: item.tenPl,
-                            tenDm: item.tenDm + " năm " + this.baoCao.namPa,
-                            trangThai: '3',
-                            lstCtietBcaos: [],
-                            nguoiBcao: this.userInfo?.sub
-                        })
-                    }
+                    // if (item.id == "pl09") {
+                    //     this.baoCao.lstCtiets.push({
+                    //         ...new ItemData(),
+                    //         id: uuid.v4() + 'FE',
+                    //         maBieuMau: item.id,
+                    //         tenPl: item.tenPl,
+                    //         tenDm: item.tenDm + " năm " + this.baoCao.namPa,
+                    //         trangThai: '3',
+                    //         lstCtietBcaos: lstCtietsPhuLucPhanBo,
+                    //         nguoiBcao: this.userInfo?.sub
+                    //     })
+                    // } else {
+                    this.baoCao.lstCtiets.push({
+                        ...new ItemData(),
+                        id: uuid.v4() + 'FE',
+                        maBieuMau: item.id,
+                        tenPl: item.tenPl,
+                        tenDm: item.tenDm + " năm " + this.baoCao.namBcao,
+                        trangThai: '3',
+                        lstCtietBcaos: [],
+                        nguoiBcao: this.userInfo?.sub
+                    })
+                    // }
                 })
             } else {
                 this.baoCao?.lstGiaoDtoanTrucThuocs.forEach(item => {
@@ -325,25 +329,27 @@ export class AddBaoCaoComponent implements OnInit {
                     item.maDviTien = "1"
                     const pl = this.listAppendix.find(e => e.id == item.maBieuMau);
                     item.tenPl = pl.tenPl;
-                    item.tenDm = pl.tenDm + " năm " + this.baoCao.namPa;
+                    item.tenDm = pl.tenDm + " năm " + this.baoCao.namBcao;
                     item.nguoiBcao = this.userInfo?.sub
                     item.maBieuMau = pl.id
 
-                    if (item.maBieuMau == "pl09") {
-                        item.lstCtietBcaos.forEach(s => {
-                            s.id = null
-                            s.lstCtietDvis.forEach(v => {
-                                v.id = null
-                            })
-                        })
-                    } else {
-                        item.lstCtietBcaos.forEach(s => {
-                            s.id = null
-                        })
-                    }
+                    // if (item.maBieuMau == "pl09") {
+                    //     item.lstCtietBcaos.forEach(s => {
+                    //         s.id = null
+                    //         s.lstCtietDvis.forEach(v => {
+                    //             v.id = null
+                    //         })
+                    //     })
+                    // } else {
+                    item.lstCtietBcaos.forEach(s => {
+                        s.id = null
+                    })
+                    // }
                 })
             }
         }
+        console.log(this.baoCao);
+
         this.getStatusButton();
         this.spinner.hide();
     };
@@ -434,15 +440,29 @@ export class AddBaoCaoComponent implements OnInit {
         const bieuMau = this.baoCao.lstCtiets.find(e => e.id == id);
         const dataInfo = {
             // data: formDetail,
-            extraData: null,
+            // id: id,
+            // extraData: null,
+            // maDvi: this.baoCao.maDvi,
+            // namBcao: this.baoCao.namBcao,
+            // statusBtnOk: this.okStatus,
+            // statusBtnFinish: this.finishStatus,
+            // statusBtnPrint: this.printStatus,
+            // acceptStatus: this.acceptStatus,
+            // status: new BtnStatus(),
+            // isSynthetic: isSynthetic
+
+            id: id,
+            maBieuMau: bieuMau.maBieuMau,
+            maBcao: this.baoCao.maBcao,
             maDvi: this.baoCao.maDvi,
+            capDvi: this.userInfo.CAP_DVI,
+            tenDvi: this.userInfo.TEN_DVI,
             namBcao: this.baoCao.namBcao,
-            statusBtnOk: this.okStatus,
-            statusBtnFinish: this.finishStatus,
-            statusBtnPrint: this.printStatus,
-            acceptStatus: this.acceptStatus,
+            path: this.path,
             status: new BtnStatus(),
-            isSynthetic: isSynthetic
+            isSynthetic: isSynthetic,
+            isOffice: this.isOffice,
+
         };
         Object.assign(dataInfo.status, this.status);
         dataInfo.status.general = dataInfo.status.general && (this.userInfo?.sub == bieuMau.nguoiBcao);
@@ -870,7 +890,7 @@ export class AddBaoCaoComponent implements OnInit {
             nzContent: nzContent,
             nzBodyStyle: { overflowY: 'auto', maxHeight: 'calc(100vh - 200px)' },
             nzMaskClosable: false,
-            nzClosable: false,
+            // nzClosable: false,
             nzWidth: '90%',
             nzFooter: null,
             nzComponentParams: {
@@ -880,10 +900,7 @@ export class AddBaoCaoComponent implements OnInit {
         modalAppendix.afterClose.toPromise().then(async (res) => {
             if (res) {
                 //gan lai thong tin sau khi bieu mau duoc luu
-                const index = this.baoCao.lstCtiets.findIndex(e => e.maBieuMau == res.formDetail.maBieuMau);
-                this.baoCao.lstCtiets[index] = res.formDetail;
-                this.baoCao.lstCtiets[index].tenPl = bieuMau.tenPl;
-                this.baoCao.lstCtiets[index].tenDm = bieuMau.tenDm;
+                bieuMau.trangThai = res?.trangThai;
             }
         });
     }
@@ -1122,6 +1139,28 @@ export class AddBaoCaoComponent implements OnInit {
                         })
                     }
                     this.listFile = [];
+                    this.baoCao.lstCtiets.forEach(item => {
+                        // item.trangThai = "3"
+                        // item.maDviTien = "1"
+                        const pl = this.listAppendix.find(e => e.id == item.maBieuMau);
+                        // item.tenPl = pl.tenPl;
+                        item.tenDm = pl.tenDm + " năm " + this.baoCao.namBcao;
+                        // item.nguoiBcao = this.userInfo?.sub
+                        // item.maBieuMau = pl.id
+
+                        // if (item.maBieuMau == "pl09") {
+                        //     item.lstCtietBcaos.forEach(s => {
+                        //         s.id = null
+                        //         s.lstCtietDvis.forEach(v => {
+                        //             v.id = null
+                        //         })
+                        //     })
+                        // } else {
+                        // item.lstCtietBcaos.forEach(s => {
+                        //     s.id = null
+                        // })
+                        // }
+                    })
                     this.getStatusButton();
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);

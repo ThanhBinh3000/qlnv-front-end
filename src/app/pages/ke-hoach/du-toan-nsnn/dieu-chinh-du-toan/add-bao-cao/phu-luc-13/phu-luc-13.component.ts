@@ -35,8 +35,8 @@ export class ItemData {
     }
 
     changeModel() {
-        this.dtoanTongSo = Operator.mul(this.dtoanNamTruoc, this.dtoanDaGiao);
-        this.dtoanDnghiDchinh = Operator.mul(this.tongNCDtoanKp, - this.dtoanTongSo);
+        this.dtoanTongSo = Operator.sum([this.dtoanNamTruoc, this.dtoanDaGiao]);
+        this.dtoanDnghiDchinh = Operator.sum([this.tongNCDtoanKp, - this.dtoanTongSo]);
         this.chenhLech = Operator.sum([this.dtoanVuTvqtDnghi, - this.dtoanDnghiDchinh]);
     }
 
@@ -218,8 +218,8 @@ export class PhuLuc13Component implements OnInit {
         }
 
         this.lstCtietBcao = Table.sortByIndex(this.lstCtietBcao);
-        this.getTotal();
         this.tinhTong();
+        this.getTotal();
         this.updateEditCache();
         this.getStatusButton();
         this.spinner.hide();
@@ -585,6 +585,7 @@ export class PhuLuc13Component implements OnInit {
         this.dtoanVuTang = 0;
         this.dtoanVuGiam = 0;
         this.lstCtietBcao.forEach(item => {
+            item.chenhLech = Operator.sum([item.dtoanVuTvqtDnghi, - item.dtoanDnghiDchinh])
             const str = item.stt
             if (!(this.lstCtietBcao.findIndex(e => Table.preIndex(e.stt) == str) != -1)) {
                 if (item.dtoanDnghiDchinh < 0) {

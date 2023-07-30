@@ -77,10 +77,10 @@
                         {{ data.namBcao }}
                     </td>
                     <td>
-                        {{ data.ngayPheDuyet }}
+                        {{ Utils.fmtDate(data.ngayPheDuyet) }}
                     </td>
                     <td>
-                        {{ data.ngayTraKq }}
+                        {{ Utils.fmtDate(data.ngayTraKq) }}
                     </td>
                     <td>
                         {{Status.checkStatusName(data.trangThai)}}

@@ -5,6 +5,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { AMOUNT, DON_VI_TIEN, LA_MA, MONEY_LIMIT, Operator, QTVP, Utils } from 'src/app/Utility/utils';
 import { DialogCopyQuyetToanVonPhiHangDtqgComponent } from 'src/app/components/dialog/dialog-copy-quyet-toan-von-phi-hang-dtqg/dialog-copy-quyet-toan-von-phi-hang-dtqg.component';
 import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialog-copy.component';
 import { DialogThemKhoanMucComponent } from 'src/app/components/dialog/dialog-them-khoan-muc/dialog-them-khoan-muc.component';
@@ -16,8 +17,6 @@ import { QuyetToanVonPhiService } from 'src/app/services/quan-ly-von-phi/quyetTo
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { displayNumber, exchangeMoney } from 'src/app/Utility/func';
-import { AMOUNT, DON_VI_TIEN, LA_MA, MONEY_LIMIT, QTVP, Utils } from 'src/app/Utility/utils';
 import * as uuid from "uuid";
 import { NOI_DUNG } from './them-bao-cao-quyet-toan.constant';
 export class ItemData {
@@ -49,7 +48,7 @@ export class ThemBaoCaoQuyetToanComponent implements OnInit {
     @Input() idInput;
     @Input() isStatus;
     @Output('close') onClose = new EventEmitter<any>();
-
+    Op = new Operator("1")
     // thong tin dang nhap
     userInfo: any;
     // info report 
@@ -988,11 +987,6 @@ export class ThemBaoCaoQuyetToanComponent implements OnInit {
         if (this.total.thanhTien == 0) {
             this.total.thanhTien = null;
         }
-    };
-
-    displayValue(num: number): string {
-        num = exchangeMoney(num, '1', this.maDviTien);
-        return displayNumber(num);
     };
 
     deleteLine(id: any) {

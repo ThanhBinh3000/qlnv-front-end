@@ -159,9 +159,9 @@
                                     <td>
                                         {{data.maDviTinh}}
                                     </td>
-                                    <td>{{displayNumber(data.soLuong)}}</td>
-                                    <td>{{displayValue(data.donGiaMua)}}</td>
-                                    <td>{{displayValue(data.thanhTien)}}</td>
+                                    <td>{{Op.fmtVal(data.soLuong)}}</td>
+                                    <td>{{Op.fmtVal(data.donGiaMua)}}</td>
+                                    <td>{{Op.fmtVal(data.thanhTien)}}</td>
                                     <td [hidden]="status">
                                         <i *ngIf="checkDelete(data.stt)" class="fa fa-trash-o do"
                                             (click)="deleteLine(data.id)"></i>
@@ -204,7 +204,7 @@
                                             [options]="amount" />
                                     </td>
                                     <td>
-                                        {{displayValue(editCache[data.id].data.thanhTien)}}
+                                        {{Op.fmtVal(editCache[data.id].data.thanhTien)}}
                                     </td>
                                     <td [hidden]="status">
                                         <i *ngIf="checkDelete(data.stt)" class="fa fa-trash-o do"
@@ -228,7 +228,7 @@
                                 <td></td>
                                 <td></td>
                                 <td></td>
-                                <td>{{displayValue(total1.thanhTien)}}</td>
+                                <td>{{Op.fmtVal(total1.thanhTien)}}</td>
                                 <td [hidden]="status"></td>
                                 <td [hidden]="status"></td>
                                 <td [hidden]="status"></td>
@@ -239,7 +239,7 @@
                                 <td></td>
                                 <td></td>
                                 <td></td>
-                                <td>{{displayValue(total.thanhTien)}}</td>
+                                <td>{{Op.fmtVal(total.thanhTien)}}</td>
                                 <td [hidden]="status"></td>
                                 <td [hidden]="status"></td>
                                 <td [hidden]="status"></td>

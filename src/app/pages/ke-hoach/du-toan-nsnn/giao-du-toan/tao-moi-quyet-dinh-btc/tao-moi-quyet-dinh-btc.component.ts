@@ -5,19 +5,18 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { AMOUNT, DON_VI_TIEN, GDT, LA_MA, MONEY_LIMIT, Operator, TRANG_THAI_TIM_KIEM, Table, Utils } from 'src/app/Utility/utils';
 import { MESSAGE } from 'src/app/constants/message';
 import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { Globals } from 'src/app/shared/globals';
-import { AMOUNT, DON_VI_TIEN, GDT, LA_MA, MONEY_LIMIT, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import { NOI_DUNG } from './tao-moi-quyet-dinh-btc.constant';
-// import { DialogThemKhoanMucComponent } from 'src/app/components/dialog/dialog-them-khoan-muc/dialog-them-khoan-muc.component';
 import { DialogCopyGiaoDuToanComponent } from 'src/app/components/dialog/dialog-copy-giao-du-toan/dialog-copy-giao-du-toan.component';
 import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialog-copy.component';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { UserService } from 'src/app/services/user.service';
-import { displayNumber, exchangeMoney, getHead, sortByIndex, sumNumber } from 'src/app/Utility/func';
 import * as uuid from 'uuid';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
 
 export class ItemData {
     id!: any;
@@ -54,7 +53,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
     @Input() data;
     // @Input() isStatus;
     @Output() dataChange = new EventEmitter();
-
+    Op = new Operator("1")
     id: string;
     userInfo: any;
     //thong tin chung bao cao
@@ -74,7 +73,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
     //danh muc
     lstCtietBcao: ItemData[] = [];
     donVis: any[] = [];
-    noiDungs: any[] = NOI_DUNG;
+    noiDungs: any[] = [];
     donViTiens: any[] = DON_VI_TIEN;
     trangThais: any[] = TRANG_THAI_TIM_KIEM;
     soLaMa: any[] = LA_MA;
@@ -158,6 +157,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
         public giaoDuToanChiService: GiaoDuToanChiService,
         public quanLyVonPhiService: QuanLyVonPhiService,
         private userService: UserService,
+        private danhMucService: DanhMucService,
     ) { }
 
     ngOnInit() {
@@ -192,6 +192,10 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
 
     async initialization() {
         this.spinner.show();
+        const category = await this.danhMucService.danhMucChungGetAll('BC_DC_PL1');
+        if (category) {
+            this.noiDungs = category.data;
+        }
         this.id = this.data?.id;
         this.userInfo = this.userService.getUserLogin();
         this.maDonViTao = this.userInfo?.MA_DVI;
@@ -235,7 +239,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
                 item.stt = item.maNdung;
             })
         }
-        this.lstCtietBcao = sortByIndex(this.lstCtietBcao);
+        this.lstCtietBcao = Table.sortByIndex(this.lstCtietBcao);
         if (this.userInfo.CAP_DVI != Utils.TONG_CUC) {
             this.statusBtnSave = true;
             this.statusBtnNew = true;
@@ -346,7 +350,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
                         this.statusBtnPrint = true;
                         this.status = true;
                     }
-                    this.lstCtietBcao = sortByIndex(this.lstCtietBcao)
+                    this.lstCtietBcao = Table.sortByIndex(this.lstCtietBcao)
                     this.getStatusButton();
                     this.updateEditCache();
                 } else {
@@ -765,15 +769,10 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
         return xau;
     };
 
-    // hiển thị số trên màn theo kiểu hiển thị tiền 
-    displayValue(num: number): string {
-        num = exchangeMoney(num, '1', this.maDviTien);
-        return displayNumber(num);
-    };
 
     // hàm tính tổng cộng dồn trong 1 cột 
     sum(stt: string) {
-        stt = getHead(stt);
+        stt = Table.preIndex(stt);
         while (stt != '0') {
             const index = this.lstCtietBcao.findIndex(e => e.stt == stt);
             const data = this.lstCtietBcao[index];
@@ -786,13 +785,13 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
                 level: data.level,
             }
             this.lstCtietBcao.forEach(item => {
-                if (getHead(item.stt) == stt) {
-                    this.lstCtietBcao[index].nguonKhac = sumNumber([this.lstCtietBcao[index].nguonKhac, item.nguonKhac]);
-                    this.lstCtietBcao[index].nguonNsnn = sumNumber([this.lstCtietBcao[index].nguonNsnn, item.nguonNsnn]);
-                    this.lstCtietBcao[index].tongCong = sumNumber([this.lstCtietBcao[index].tongCong, item.tongCong]);
+                if (Table.preIndex(item.stt) == stt) {
+                    this.lstCtietBcao[index].nguonKhac = Operator.sum([this.lstCtietBcao[index].nguonKhac, item.nguonKhac]);
+                    this.lstCtietBcao[index].nguonNsnn = Operator.sum([this.lstCtietBcao[index].nguonNsnn, item.nguonNsnn]);
+                    this.lstCtietBcao[index].tongCong = Operator.sum([this.lstCtietBcao[index].tongCong, item.tongCong]);
                 }
             })
-            stt = getHead(stt);
+            stt = Table.preIndex(stt);
         }
         this.getTotal();
     };
@@ -825,7 +824,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
 
     // check có đối tượng có cấp thấp hơn đối tượng ở vị trí hiện tại không 
     getLowStatus(str: string) {
-        const index: number = this.lstCtietBcao.findIndex(e => getHead(e.stt) == str);
+        const index: number = this.lstCtietBcao.findIndex(e => Table.preIndex(e.stt) == str);
         if (index == -1) {
             return false;
         }

@@ -151,7 +151,7 @@
                             </tr>
                             <tr>
                                 <td nzLeft></td>
-                                <td nzLeft>Phát sinh điều chỉnh tăng</td>
+                                <td nzLeft>Phát sinh điều chỉnh giảm</td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
@@ -309,7 +309,8 @@
                                         <td>
                                             <input class="money-input" currencyMask
                                                 [(ngModel)]="editCache[data.id].data.dtoanVuDnghi"
-                                                [options]="Op.amount" />
+                                                (ngModelChange)="changeModel(editCache[data.id].data.id)"
+                                                [options]=" Op.amount" />
                                         </td>
                                         <td>{{editCache[data.id].data.thuyetMinh}}</td>
                                         <td>{{editCache[data.id].data.ghiChu}}</td>

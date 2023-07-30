@@ -133,7 +133,6 @@ export class PhuLuc12Component implements OnInit {
 				this.scrollX = Table.tableWidth(350, 10, 1, 0);
 			}
 		}
-
 		if (this.lstCtietBcao.length == 0) {
 			this.noiDungs.forEach(e => {
 				this.lstCtietBcao.push({
@@ -153,6 +152,8 @@ export class PhuLuc12Component implements OnInit {
 				item.stt = item.maNoiDung;
 			})
 		}
+		console.log(this.lstCtietBcao);
+
 
 		if (this.lstCtietBcao.length > 0) {
 			if (!this.lstCtietBcao[0]?.stt) {
@@ -166,8 +167,8 @@ export class PhuLuc12Component implements OnInit {
 		// 	item.tenNoiDung = this.noiDungs.find(e => e.ma == item.maNoiDung)?.giaTri;
 		// })
 
-		this.getTotal();
 		this.tinhTong();
+		this.getTotal();
 		this.updateEditCache();
 		this.getStatusButton();
 
@@ -352,6 +353,9 @@ export class PhuLuc12Component implements OnInit {
 			tenNoiDung: "",
 		}
 		this.lstCtietBcao = Table.addChild(data.id, parentItem, this.lstCtietBcao);
+		this.lstCtietBcao.forEach(item => {
+			item.maNoiDung = item.stt
+		})
 		this.updateEditCache();
 	};
 
@@ -371,6 +375,7 @@ export class PhuLuc12Component implements OnInit {
 		const stt = this.lstCtietBcao.find(e => e.id === id)?.stt;
 		this.lstCtietBcao = Table.deleteRow(id, this.lstCtietBcao);
 		this.sum(stt);
+		this.tinhTong();
 		this.updateEditCache();
 	}
 
@@ -403,6 +408,7 @@ export class PhuLuc12Component implements OnInit {
 		this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
 		this.sum(this.lstCtietBcao[index].stt);
 		this.getTotal()
+		this.tinhTong()
 		this.updateEditCache();
 	};
 
@@ -441,8 +447,8 @@ export class PhuLuc12Component implements OnInit {
 		this.dtoanVuTang = 0;
 		this.dtoanVuGiam = 0;
 		this.lstCtietBcao.forEach(item => {
-			const str = item.stt
-			if (!(this.lstCtietBcao.findIndex(e => Table.preIndex(e.stt) == str) != -1)) {
+			item.chenhLech = Operator.sum([item.dtoanVuTvqtDnghi, - item.dtoanDnghiDchinh])
+			if (item.level == 0) {
 				if (item.dtoanDnghiDchinh < 0) {
 					Number(this.tongDieuChinhGiam += Number(item?.dtoanDnghiDchinh));
 				} else {

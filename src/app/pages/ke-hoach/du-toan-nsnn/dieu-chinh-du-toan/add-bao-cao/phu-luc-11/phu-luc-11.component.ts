@@ -168,9 +168,9 @@ export class PhuLuc11Component implements OnInit {
                 })
             })
             this.setLevel();
-            this.lstCtietBcao.forEach(item => {
-                item.tenNoiDung += Utils.getName(item.level, item.maNoiDung);
-            })
+            // this.lstCtietBcao.forEach(item => {
+            //     item.tenNoiDung += Utils.getName(item.level, item.maNoiDung);
+            // })
         } else if (!this.lstCtietBcao[0]?.stt) {
             this.lstCtietBcao.forEach(item => {
                 item.stt = item.maNoiDung;
@@ -189,8 +189,8 @@ export class PhuLuc11Component implements OnInit {
         //     item.tenNoiDung = this.noiDungs.find(e => e.ma == item.maNoiDung)?.giaTri;
         // })
 
-        this.getTotal();
         this.tinhTong();
+        this.getTotal();
         this.updateEditCache();
         this.getStatusButton();
         this.spinner.hide();
@@ -512,8 +512,8 @@ export class PhuLuc11Component implements OnInit {
         this.dtoanVuTang = 0;
         this.dtoanVuGiam = 0;
         this.lstCtietBcao.forEach(item => {
-            const str = item.stt
-            if (!(this.lstCtietBcao.findIndex(e => this.getHead(e.stt) == str) != -1)) {
+            item.chenhLech = Operator.sum([item.dtoanVuTvqtDnghi, - item.dtoanDnghiDchinh])
+            if (item.level == 0) {
                 if (item.dtoanDnghiDchinh < 0) {
                     Number(this.tongDieuChinhGiam += Number(item?.dtoanDnghiDchinh));
                 } else {

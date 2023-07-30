@@ -11,10 +11,11 @@ import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToa
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { displayNumber, exchangeMoney } from 'src/app/Utility/func';
-import { DON_VI_TIEN, GDT, LA_MA, Utils } from 'src/app/Utility/utils';
+// import { displayNumber, exchangeMoney } from 'src/app/Utility/func';
+import { DON_VI_TIEN, GDT, LA_MA, Operator, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import { NOI_DUNG } from '../tao-moi-quyet-dinh-btc/tao-moi-quyet-dinh-btc.constant';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
 // import { GIAO_DU_TOAN, MAIN_ROUTE_DU_TOAN, MAIN_ROUTE_KE_HOACH } from '../../giao-du-toan-chi-nsnn.constant';
 // import { NOI_DUNG } from './nhan-du-toan-chi-NSNN-cho-cac-don-vi.constant';
 
@@ -57,7 +58,7 @@ export const TRANG_THAI_GIAO_DU_TOAN = [
 export class ChiTietDuToanTuCapTrenComponent implements OnInit {
     @Input() data;
     @Output() dataChange = new EventEmitter();
-
+    Op = new Operator('1');
     //thong tin dang nhap
     id!: any;
     userInfo: any;
@@ -81,7 +82,7 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
     lstCtietBcao: ItemData[] = [];
     donVis: any[] = [];
     trangThais: any[] = TRANG_THAI_GIAO_DU_TOAN;
-    noiDungs: any[] = NOI_DUNG;
+    noiDungs: any[] = [];
     soLaMa: any[] = LA_MA;
     //file
     fileDetail: NzUploadFile;
@@ -103,6 +104,7 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
         private danhMucService: DanhMucHDVService,
         private dataSource: DataService,
         public globals: Globals,
+        public danhMucService1: DanhMucService,
     ) { }
 
     ngOnInit() {
@@ -145,6 +147,10 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
 
     async initialization() {
         this.spinner.show();
+        const category = await this.danhMucService1.danhMucChungGetAll('BC_DC_PL1');
+        if (category) {
+            this.noiDungs = category.data;
+        }
         localStorage.setItem("preTab", "dsGiaoTuCapTren")
         this.id = this.data.id;
         this.userInfo = this.userService.getUserLogin();
@@ -508,13 +514,6 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
         localStorage.setItem("idChiTiet", this.id);
         this.dataChange.emit(request1);
     };
-
-
-
-    displayValue(num: number): string {
-        num = exchangeMoney(num, '1', this.maDviTien);
-        return displayNumber(num);
-    }
 
     getMoneyUnit() {
         return this.donViTiens.find(e => e.id == this.maDviTien)?.tenDm;

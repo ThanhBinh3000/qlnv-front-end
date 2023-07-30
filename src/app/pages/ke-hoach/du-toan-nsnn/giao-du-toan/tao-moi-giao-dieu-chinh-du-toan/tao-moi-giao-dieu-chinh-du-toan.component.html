@@ -166,16 +166,16 @@
                                         <div *ngFor="let item of noiDungs">
                                             <div *ngIf="item.ma == data.maNdung">
                                                 <span nzWidth="150px">
-                                                    {{item.tenDm}}
+                                                    {{item.giaTri}}
                                                 </span>
                                             </div>
                                         </div>
                                     </td>
-                                    <td>{{displayValue(data.tongCong)}}</td>
+                                    <td>{{Op.fmtVal(data.tongCong)}}</td>
                                     <td *ngFor="let item of lstDvi">
                                         <div *ngFor="let e of data.lstCtietDvis;">
                                             <div *ngIf="e.maDviNhan == item.maDvi">
-                                                {{displayValue(e.soTranChi)}}
+                                                {{Op.fmtVal(e.soTranChi)}}
                                             </div>
                                         </div>
                                     </td>
@@ -192,12 +192,12 @@
                                     <td nzLeft>
                                         <div *ngFor="let item of noiDungs;">
                                             <div *ngIf="item.ma ==data.maNdung">
-                                                {{item.tenDm}}
+                                                {{item.giaTri}}
                                             </div>
                                         </div>
                                     </td>
                                     <td>
-                                        {{displayValue(editCache[data.id].data.tongCong)}}
+                                        {{Op.fmtVal(editCache[data.id].data.tongCong)}}
                                     </td>
                                     <td *ngFor="let item of lstDvi">
                                         <div *ngFor="let e of editCache[data.id].data.lstCtietDvis">

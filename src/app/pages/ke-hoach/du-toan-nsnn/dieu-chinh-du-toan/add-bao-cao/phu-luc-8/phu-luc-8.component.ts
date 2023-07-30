@@ -473,8 +473,8 @@ export class PhuLuc8Component implements OnInit {
         this.dToanVuTang = 0;
         this.dToanVuGiam = 0;
         this.lstCtietBcao.forEach(item => {
-            const str = item.stt
-            if (!(this.lstCtietBcao.findIndex(e => Table.preIndex(e.stt) == str) != -1)) {
+            item.chenhLech = Operator.sum([item.dtoanVuTvqtDnghi, - item.dtoanDchinhDnghi])
+            if (item.level == 0) {
                 if (item.dtoanDchinhDnghi < 0) {
                     this.tongDieuChinhGiam += Number(item?.dtoanDchinhDnghi);
                 } else {

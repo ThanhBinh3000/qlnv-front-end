@@ -82,7 +82,7 @@
                                 <nz-select nzShowSearch nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
                                     (ngModelChange)="editMoneyUnit=false">
                                     <nz-option *ngFor="let item of donViTiens" [nzValue]="item.id"
-                                        [nzLabel]="item.tenDm">
+                                        [nzLabel]="item.giaTri">
                                     </nz-option>
                                 </nz-select>
                             </ng-template>
@@ -115,13 +115,13 @@
                                     <td>
                                         <div *ngFor="let item of noiDungs">
                                             <div *ngIf="item.ma ==data.maNdung">
-                                                {{item.tenDm}}
+                                                {{item.giaTri}}
                                             </div>
                                         </div>
                                     </td>
-                                    <td>{{displayValue(data.tongCong)}}</td>
-                                    <td>{{displayValue(data.nguonNsnn)}}</td>
-                                    <td>{{displayValue(data.nguonKhac)}}</td>  
+                                    <td>{{Op.fmtVal(data.tongCong)}}</td>
+                                    <td>{{Op.fmtVal(data.nguonNsnn)}}</td>
+                                    <td>{{Op.fmtVal(data.nguonKhac)}}</td>
                                     <td [hidden]="status">
                                         <ng-container *ngIf="!getLowStatus(data.stt)">
                                             <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
@@ -140,7 +140,7 @@
                                         </div>
                                     </td>
                                     <td>
-                                        {{displayValue(editCache[data.id].data.tongCong)}}
+                                        {{Op.fmtVal(editCache[data.id].data.tongCong)}}
                                     </td>
                                     <td>
                                         <input class="money-input" currencyMask

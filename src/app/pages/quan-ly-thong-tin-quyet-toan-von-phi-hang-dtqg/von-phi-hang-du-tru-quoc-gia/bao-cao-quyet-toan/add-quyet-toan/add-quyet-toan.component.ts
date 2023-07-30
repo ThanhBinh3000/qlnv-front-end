@@ -15,8 +15,7 @@ import { QuyetToanVonPhiService } from 'src/app/services/quan-ly-von-phi/quyetTo
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { addChild, displayNumber, exchangeMoney, getHead, getTail, mulNumber, sumNumber } from 'src/app/Utility/func';
-import { AMOUNT, DON_VI_TIEN, LA_MA, MONEY_LIMIT, QTVP, Utils } from 'src/app/Utility/utils';
+import { AMOUNT, DON_VI_TIEN, LA_MA, MONEY_LIMIT, Operator, QTVP, Table, Utils } from 'src/app/Utility/utils';
 import * as uuid from "uuid";
 import { DialogAddVatTuComponent } from '../dialog-add-vat-tu/dialog-add-vat-tu.component';
 import { TEN_HANG } from './add-quyet-toan.constant';
@@ -51,7 +50,7 @@ export class AddQuyetToanComponent implements OnInit {
 	@Input() idInput;
 	@Input() isStatus;
 	@Output('close') onClose = new EventEmitter<any>();
-
+	Op = new Operator("1")
 	// thong tin dang nhap
 	userInfo: any;
 	// info report 
@@ -800,7 +799,7 @@ export class AddQuyetToanComponent implements OnInit {
 		});
 		const lstTemp: ItemData[] = [];
 		this.lstCtietBcao.forEach(item => {
-			const index: number = lstTemp.findIndex(e => e.stt == this.getHead(item.stt));
+			const index: number = lstTemp.findIndex(e => e.stt == Table.preIndex(item.stt));
 			if (index == -1) {
 				lstTemp.splice(0, 0, item);
 			} else {
@@ -977,10 +976,7 @@ export class AddQuyetToanComponent implements OnInit {
 		}
 		return xau;
 	};
-	// lấy phần đầu của số thứ tự, dùng để xác định phần tử cha
-	getHead(str: string): string {
-		return str.substring(0, str.lastIndexOf('.'));
-	};
+
 	// lấy phần đuôi của stt
 	getTail(str: string): number {
 		return parseInt(str.substring(str.lastIndexOf('.') + 1, str.length), 10);
@@ -1003,7 +999,7 @@ export class AddQuyetToanComponent implements OnInit {
 		}
 		//thay doi lai stt cac vi tri vua tim duoc
 		lstIndex.forEach(item => {
-			const str = this.getHead(this.lstCtietBcao[item].stt) + "." + (this.getTail(this.lstCtietBcao[item].stt) + heSo).toString();
+			const str = Table.preIndex(this.lstCtietBcao[item].stt) + "." + (this.getTail(this.lstCtietBcao[item].stt) + heSo).toString();
 			const nho = this.lstCtietBcao[item].stt;
 			this.lstCtietBcao.forEach(item => {
 				item.stt = item.stt.replace(nho, str);
@@ -1023,7 +1019,7 @@ export class AddQuyetToanComponent implements OnInit {
 	};
 
 	sum(stt: string) {
-		stt = this.getHead(stt);
+		stt = Table.preIndex(stt);
 		while (stt != '0') {
 			const index = this.lstCtietBcao.findIndex(e => e.stt == stt);
 			const data = this.lstCtietBcao[index];
@@ -1037,11 +1033,11 @@ export class AddQuyetToanComponent implements OnInit {
 				maDviTinh: data.maDviTinh,
 			}
 			this.lstCtietBcao.forEach(item => {
-				if (this.getHead(item.stt) == stt) {
-					this.lstCtietBcao[index].thanhTien = sumNumber([this.lstCtietBcao[index].thanhTien, item.thanhTien]);
+				if (Table.preIndex(item.stt) == stt) {
+					this.lstCtietBcao[index].thanhTien = Operator.sum([this.lstCtietBcao[index].thanhTien, item.thanhTien]);
 				}
 			})
-			stt = this.getHead(stt);
+			stt = Table.preIndex(stt);
 		}
 		this.getTotal();
 	};
@@ -1053,51 +1049,46 @@ export class AddQuyetToanComponent implements OnInit {
 		let tongLk2
 		this.lstCtietBcao.forEach(item => {
 			if (item.level == 1 && item.stt == "0.1.1") {
-				// this.total.thanhTien = sumNumber([this.total.thanhTien, item.thanhTien]);
+				// this.total.thanhTien = Operator.sum([this.total.thanhTien, item.thanhTien]);
 				return tongLk1 = item.thanhTien
 			}
 			if (item.level == 1 && item.stt == "0.2.1") {
-				// this.total.thanhTien = sumNumber([this.total.thanhTien, item.thanhTien]);
+				// this.total.thanhTien = Operator.sum([this.total.thanhTien, item.thanhTien]);
 				return tongLk2 = item.thanhTien
 			}
 
-			this.total.thanhTien = sumNumber([tongLk1, tongLk2]);
+			this.total.thanhTien = Operator.sum([tongLk1, tongLk2]);
 		})
 
 		let tongPs1
 		let tongPs2
 		this.lstCtietBcao.forEach(item => {
 			if (item.level == 1 && item.stt == "0.1.2") {
-				// this.total.thanhTien = sumNumber([this.total.thanhTien, item.thanhTien]);
+				// this.total.thanhTien = Operator.sum([this.total.thanhTien, item.thanhTien]);
 				return tongPs1 = item.thanhTien
 			}
 			if (item.level == 1 && item.stt == "0.2.2") {
-				// this.total.thanhTien = sumNumber([this.total.thanhTien, item.thanhTien]);
+				// this.total.thanhTien = Operator.sum([this.total.thanhTien, item.thanhTien]);
 				return tongPs2 = item.thanhTien
 			}
 
-			this.total1.thanhTien = sumNumber([tongPs1, tongPs2]);
+			this.total1.thanhTien = Operator.sum([tongPs1, tongPs2]);
 		})
 
 	};
 
 
-	displayValue(num: number): string {
-		num = exchangeMoney(num, '1', this.maDviTien);
-		return displayNumber(num);
-	};
-
 	deleteLine(id: string) {
 		const index: number = this.lstCtietBcao.findIndex(e => e.id === id); // vi tri hien tai
 		const nho: string = this.lstCtietBcao[index].stt;
-		const head: string = this.getHead(this.lstCtietBcao[index].stt); // lay phan dau cua so tt
+		const head: string = Table.preIndex(this.lstCtietBcao[index].stt); // lay phan dau cua so tt
 		const stt: string = this.lstCtietBcao[index].stt;
 		//xóa phần tử và con của nó
 		this.lstCtietBcao = this.lstCtietBcao.filter(e => !e.stt.startsWith(nho));
 		//update lại số thức tự cho các phần tử cần thiết
 		const lstIndex: number[] = [];
 		for (let i = this.lstCtietBcao.length - 1; i >= index; i--) {
-			if (this.getHead(this.lstCtietBcao[i].stt) == head) {
+			if (Table.preIndex(this.lstCtietBcao[i].stt) == head) {
 				lstIndex.push(i);
 			}
 		}
@@ -1159,14 +1150,14 @@ export class AddQuyetToanComponent implements OnInit {
 			}
 		})
 		//thay đổi các phần tử cha cho phù hợp với tháy đổi của phần tử con
-		let index: number = this.lstCtietBcao.findIndex(e => e.stt == this.getHead(data.stt));
+		let index: number = this.lstCtietBcao.findIndex(e => e.stt == Table.preIndex(data.stt));
 		if (index == -1) {
 			this.allChecked = this.checkAllChild('0');
 		} else {
 			let nho: boolean = this.lstCtietBcao[index].checked;
 			while (nho != this.checkAllChild(this.lstCtietBcao[index].stt)) {
 				this.lstCtietBcao[index].checked = !nho;
-				index = this.lstCtietBcao.findIndex(e => e.stt == this.getHead(this.lstCtietBcao[index].stt));
+				index = this.lstCtietBcao.findIndex(e => e.stt == Table.preIndex(this.lstCtietBcao[index].stt));
 				if (index == -1) {
 					this.allChecked = !nho;
 					break;
@@ -1180,7 +1171,7 @@ export class AddQuyetToanComponent implements OnInit {
 	checkAllChild(str: string): boolean {
 		let nho = true;
 		this.lstCtietBcao.forEach(item => {
-			if ((this.getHead(item.stt) == str) && (!item.checked) && (item.stt != str)) {
+			if ((Table.preIndex(item.stt) == str) && (!item.checked) && (item.stt != str)) {
 				nho = item.checked;
 			}
 		})
@@ -1255,7 +1246,7 @@ export class AddQuyetToanComponent implements OnInit {
 		});
 		modalTuChoi.afterClose.subscribe(async (res) => {
 			if (res) {
-				let parentItem: ItemData = this.lstCtietBcao.find(e => e.maLoaiHang == res.ma && getHead(e.stt) == data.stt);
+				let parentItem: ItemData = this.lstCtietBcao.find(e => e.maLoaiHang == res.ma && Table.preIndex(e.stt) == data.stt);
 				//them phan tu cha neu chua co
 				if (!parentItem) {
 					parentItem = {
@@ -1266,9 +1257,9 @@ export class AddQuyetToanComponent implements OnInit {
 						tenHang: res.ten,
 						maDviTinh: res.maDviTinh,
 					}
-					this.lstCtietBcao = addChild(data.id, parentItem, this.lstCtietBcao);
+					this.lstCtietBcao = Table.addChild(data.id, parentItem, this.lstCtietBcao);
 					let luyKes: any[] = [];
-					if (getTail(data.stt) == 1) {
+					if (this.getTail(data.stt) == 1) {
 						luyKes = this.lstDsHangTrongKho.filter(e => e.cloaiVthh == res.ma && e.maLoai == "LK");
 					} else {
 						luyKes = this.lstDsHangTrongKho.filter(e => e.cloaiVthh == res.ma && e.maLoai == "PS");
@@ -1285,8 +1276,8 @@ export class AddQuyetToanComponent implements OnInit {
 								soLuong: luyKe?.soLuongThucNhap,
 								donGiaMua: luyKe?.donGia,
 							}
-							item.thanhTien = mulNumber(item.soLuong, item.donGiaMua);
-							this.lstCtietBcao = addChild(parentItem.id, item, this.lstCtietBcao);
+							item.thanhTien = Operator.mul(item.soLuong, item.donGiaMua);
+							this.lstCtietBcao = Table.addChild(parentItem.id, item, this.lstCtietBcao);
 						})
 					} else {
 						const item: ItemData = {
@@ -1297,7 +1288,7 @@ export class AddQuyetToanComponent implements OnInit {
 							level: parentItem.level + 1,
 							// maDviTinh: res.maDviTinh,
 						}
-						this.lstCtietBcao = addChild(parentItem.id, item, this.lstCtietBcao);
+						this.lstCtietBcao = Table.addChild(parentItem.id, item, this.lstCtietBcao);
 					}
 				} else {
 					const item: ItemData = {
@@ -1308,7 +1299,7 @@ export class AddQuyetToanComponent implements OnInit {
 						level: parentItem.level + 1,
 						// maDviTinh: res.maDviTinh,
 					}
-					this.lstCtietBcao = addChild(parentItem.id, item, this.lstCtietBcao);
+					this.lstCtietBcao = Table.addChild(parentItem.id, item, this.lstCtietBcao);
 				}
 
 				const stt = this.lstCtietBcao.find(e => e.id == parentItem.id).stt;

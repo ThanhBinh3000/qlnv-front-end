@@ -142,14 +142,14 @@
                                     <div *ngFor="let item of noiDungs">
                                         <div *ngIf="item.ma == data.maNdung">
                                             <span>
-                                                {{item.tenDm}}
+                                                {{item.giaTri}}
                                             </span>
                                         </div>
                                     </div>
                                 </td>
-                                <td>{{displayValue(data.tongCong)}}</td>
-                                <td>{{displayValue(data.dviCapDuoiTh)}}</td>
-                                <td>{{displayValue(data.chenhLech)}}</td>
+                                <td>{{Op.fmtVal(data.tongCong)}}</td>
+                                <td>{{Op.fmtVal(data.dviCapDuoiTh)}}</td>
+                                <td>{{Op.fmtVal(data.chenhLech)}}</td>
                             </tr>
                         </tbody>
                     </nz-table>

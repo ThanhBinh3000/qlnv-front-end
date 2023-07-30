@@ -95,7 +95,7 @@
               </a>
             </td> -->
                         <td>{{baoCao.maPa}}</td>
-                        <td>{{baoCao.namPa}}</td>
+                        <td>{{baoCao.namBcao}}</td>
                         <td>{{baoCao.nguoiTao}}</td>
                         <td>{{baoCao.ngayTao}}</td>
                         <td>{{baoCao.ngayTrinh}}</td>
@@ -138,27 +138,6 @@
                                                 Lý do: {{data.lyDoTuChoi}}
                                             </ng-container>
                                         </td>
-                                        <!-- <td>
-                                            <ng-container
-                                                *ngIf="userInfo?.sub == baoCao.nguoiTao && !status && data?.id?.length==38 ;else templateNguoiBcao ">
-                                                <nz-select nzShowSearch nzAllowClear
-                                                    nzPlaceHolder="Chọn cán bộ thực hiện" [(ngModel)]="data.nguoiBcao"
-                                                    [class]="data.nguoiBcao ?'' : 'input-error-validate'">
-                                                    <nz-option *ngFor="let item of canBos" [nzValue]="item.username"
-                                                        [nzLabel]="item.username">
-                                                    </nz-option>
-                                                </nz-select>
-                                            </ng-container>
-                                            <ng-template #templateNguoiBcao>
-                                                <div *ngFor="let item of canBos">
-                                                    <div *ngIf="item.username == data.nguoiBcao">
-                                                        {{item.username}}
-                                                    </div>
-                                                </div>
-                                            </ng-template>
-                                        </td> -->
-
-
                                         <td>
                                             <ng-container
                                                 *ngIf="userInfo?.sub == baoCao.nguoiTao && status.general && data?.id?.length==38 ;else templateNguoiBcao ">
@@ -189,21 +168,6 @@
                                                 <i class="fa fa-trash-o do" (click)="deleteAppendix(data.id)"></i>
                                             </a>
                                         </td>
-                                        <!-- <td>
-                                            <i class="fa fa-pencil" (click)="viewAppendix(data)"></i>
-                                            <ng-container *ngIf="baoCao.id">
-                                                <a *ngIf="!status && (userInfo?.sub == data.nguoiBcao)">
-                                                    <i class="fa fa-pencil" (click)="viewAppendix(data)"></i>
-                                                </a>
-                                                <a
-                                                    *ngIf="(status || userInfo?.sub != data.nguoiBcao) && data.nguoiBcao">
-                                                    <i class="fa fa-eye" (click)="viewAppendix(data)"></i>
-                                                </a>
-                                            </ng-container>
-                                            <a *ngIf="!status && (userInfo?.sub == baoCao.nguoiTao)">
-                                                <i class="fa fa-trash-o do" (click)="deleteAppendix(data.id)"></i>
-                                            </a>
-                                        </td> -->
                                     </ng-container>
                                 </tr>
                             </tbody>

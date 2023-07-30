@@ -214,7 +214,7 @@ export class Form {
     lyDoTuChoi: string;
     thuyetMinh: string;
     giaoCho: string;
-    lstCtietDchinh: any[];
+    lstCtietBcaos: any[];
     checked: boolean;
     lstFiles: Doc[];
     fileDinhKems: any[];
@@ -222,7 +222,7 @@ export class Form {
 
     maBieuMau: string;
     nguoiBcao: string;
-    lstCtietBcaos: any[];
+    // lstCtietBcaos: any[];
     hsBhDuoi: number;
     hsBhTu: number;
 }
