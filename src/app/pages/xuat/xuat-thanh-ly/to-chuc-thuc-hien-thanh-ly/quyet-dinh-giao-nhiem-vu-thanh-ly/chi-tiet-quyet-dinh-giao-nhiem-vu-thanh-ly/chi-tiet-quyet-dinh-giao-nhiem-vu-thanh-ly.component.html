@@ -279,7 +279,7 @@
           <td></td>
           <td></td>
           <td class="bold text-right">{{item.soLuong|number:globals.numberFormat:globals.locale}}</td>
-          <td></td>
+          <td class="text-left">{{this.formData.value.tenTrangThaiXh}}</td>
         </tr>
         <ng-container *ngIf="expandSetString.has(item.idVirtual)">
           <ng-container *ngFor="let lv1 of item.childData,let i1=index">
