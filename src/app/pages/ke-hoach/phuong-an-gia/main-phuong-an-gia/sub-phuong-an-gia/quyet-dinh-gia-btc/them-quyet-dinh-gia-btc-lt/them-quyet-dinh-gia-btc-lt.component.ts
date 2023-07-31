@@ -30,7 +30,6 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
   @Input() idInput: number;
   @Output("onClose") onClose = new EventEmitter<any>();
   formData: FormGroup;
-  arrThongTinGia: Array<QuyetDinhGiaBtcThongTinGia> = [];
   dsNam: any[] = [];
   userInfo: UserLogin;
   maQd: string;
@@ -71,8 +70,7 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
         trichYeu: [null],
         trangThai: ["00"],
         ghiChu: [null],
-        loaiDeXuat: ['00'],
-        thongTinGia: [null]
+        loaiDeXuat: ['00']
       }
     );
   }
@@ -99,15 +97,10 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
     this.spinner.hide();
   }
 
-  async loadDsToTrinhTongHop() {
-
-  }
-
   async getDataDetail(id) {
     if (id > 0) {
       let res = await this.quyetDinhGiaCuaBtcService.getDetail(id);
       const data = res.data;
-      this.arrThongTinGia = data.thongTinGia
       this.formData.patchValue({
         id: data.id,
         namKeHoach: data.namKeHoach,
@@ -128,7 +121,7 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
         loaiDeXuat: data.loaiDeXuat,
       });
       this.fileDinhKem = data.fileDinhKems;
-      this.dataTable = data.thongTinGia;
+      this.dataTable = data.thongTinGiaLt;
       this.buildTreePagCt();
     }
   }
@@ -206,7 +199,7 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
     body.maDvi = this.userInfo.MA_DVI;
     body.capDvi = this.userInfo.CAP_DVI;
     body.pagType = this.pagType;
-    body.thongTinGia = this.dataTable
+    body.thongTinGiaLt = this.dataTable
     body.fileDinhKemReq = this.fileDinhKem;
     let res;
     if (this.idInput > 0) {
@@ -246,6 +239,7 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
         nzWidth: '1200px',
         nzFooter: null,
         nzComponentParams: {
+          pagType : this.pagType,
           type: this.type,
           namKeHoach: this.formData.value.namKeHoach
         },

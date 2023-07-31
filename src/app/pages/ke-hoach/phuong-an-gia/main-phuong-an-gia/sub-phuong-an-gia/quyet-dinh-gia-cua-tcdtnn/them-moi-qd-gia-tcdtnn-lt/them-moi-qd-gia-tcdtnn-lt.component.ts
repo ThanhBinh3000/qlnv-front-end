@@ -288,7 +288,8 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
         nzFooter: null,
         nzComponentParams: {
           type: this.type,
-          namKeHoach: this.formData.value.namKeHoach
+          namKeHoach: this.formData.value.namKeHoach,
+          pagType : this.pagType,
         },
       });
       modalQD.afterClose.subscribe((data) => {

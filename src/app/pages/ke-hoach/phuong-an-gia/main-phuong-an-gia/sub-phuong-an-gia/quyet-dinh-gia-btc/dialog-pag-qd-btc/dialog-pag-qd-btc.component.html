@@ -1,11 +1,11 @@
 <form nzLayout="vertical" nz-form [formGroup]="formData">
   <div>
     <nz-radio-group class="pd-10" formControlName="loaiQd">
-      <label nz-radio [nzValue]="'00'"> Tờ trình hồ sơ phương án giá </label>
-      <label nz-radio [nzValue]="'01'"> Số tờ trình đề xuất điều chỉnh giá </label>
+      <label nz-radio [nzValue]="'00'"> {{pagType == 'LT' ? 'Tờ trình hồ sơ phương án giá ' : 'Đề xuất lần đầu'}}</label>
+      <label nz-radio [nzValue]="'01'"> {{ pagType == 'LT' ? 'Số tờ trình đề xuất điều chỉnh giá' : 'Đề xuất điều chỉnh' }} </label>
     </nz-radio-group>
   </div>
-  <div nz-row [nzGutter]="24" *ngIf="formData.value.loaiQd == '01'">
+  <div nz-row [nzGutter]="24" *ngIf="formData.value.loaiQd == '01' && pagType == 'LT'">
     <div nz-col [nzSpan]="7">
       <nz-form-item class="form-item">
         <nz-form-label nzRequired [nzNoColon]="true" >Loại hàng hóa
@@ -56,7 +56,7 @@
     </div>
   </div>
 </form>
-<nz-table nzBordered class="mg-t-10" #basicTable [nzData]="dataTableToTrinh" [nzFrontPagination]="false" [nzShowPagination]="false" *ngIf="formData.value.loaiQd == '00'">
+<nz-table nzBordered class="mg-t-10" #basicTable [nzData]="dataTableToTrinh" [nzFrontPagination]="false" [nzShowPagination]="false" *ngIf="formData.value.loaiQd == '00' && pagType == 'LT'">
   <thead>
   <tr>
     <th class=" text-center" nzWidth="45px">STT</th>
@@ -88,16 +88,17 @@
   </tr>
   </tbody>
 </nz-table>
-<nz-table nzBordered #basicTable class="mg-t-10" [nzData]="dataTablleDxCs" [nzFrontPagination]="false" [nzShowPagination]="false" *ngIf="formData.value.loaiQd == '01'">
+<nz-table nzBordered #basicTable class="mg-t-10" [nzData]="dataTablleDxCs" [nzFrontPagination]="false" [nzShowPagination]="false" *ngIf="(formData.value.loaiQd == '01' && pagType == 'LT') || (pagType == 'VT') ">
   <thead>
   <tr>
     <th class=" text-center" nzWidth="45px">STT</th>
     <th class=" text-center" nzWidth="75px">Năm KH</th>
     <th class=" text-center">Số công văn/tờ trình</th>
-    <th class=" text-center">Đơn vị trình</th>
+    <th class=" text-center" *ngIf="pagType == 'LT'">Đơn vị trình</th>
     <th class=" text-center">Ngày ký tờ trình</th>
+    <th class=" text-center">Loại hàng DTQG</th>
     <th class=" text-center">Lần đề xuất</th>
-    <th class=" text-center">Số QĐ trước điều chỉnh</th>
+    <th class=" text-center" *ngIf="formData.value.loaiQd == '01'">Số QĐ trước điều chỉnh</th>
     <th nzWidth="45px" class=" text-center">Chọn</th>
   </tr>
   </thead>
@@ -106,10 +107,11 @@
     <td class="text-center">{{i + 1}}</td>
     <td class="text-center">{{data.namKeHoach}}</td>
     <td class="text-center">{{data.soDeXuat}}</td>
-    <td class="text-center">{{data.tenDvi}}</td>
+    <td class="text-center" *ngIf="pagType == 'LT'">{{data.tenDvi}}</td>
     <td class="text-center">{{data.ngayKy | date: 'dd/MM/YYYY'}}</td>
+    <td class="text-center">{{data.tenLoaiVthh}}</td>
     <td class="text-center">{{data.lanDeXuat}}</td>
-    <td class="text-center">{{data.soDeXuatDc}}</td>
+    <td class="text-center" *ngIf="formData.value.loaiQd == '01'">{{data.soDeXuatDc}}</td>
     <td class="text-center">
       <label nz-checkbox (nzCheckedChange)= "updateDataCheckbox(i, data, $event)"></label>
     </td>

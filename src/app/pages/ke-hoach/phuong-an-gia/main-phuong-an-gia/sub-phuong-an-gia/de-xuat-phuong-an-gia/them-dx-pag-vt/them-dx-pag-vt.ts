@@ -10,11 +10,10 @@ import {DeXuatPAGService} from "../../../../../../../services/ke-hoach/phuong-an
 import {NzNotificationService} from "ng-zorro-antd/notification";
 import {DanhMucService} from "../../../../../../../services/danhmuc.service";
 import dayjs from "dayjs";
-import {API_STATUS_CODE, TYPE_PAG} from "../../../../../../../constants/config";
+import {TYPE_PAG} from "../../../../../../../constants/config";
 import {MESSAGE} from "../../../../../../../constants/message";
 import {DanhMucTieuChuanService} from "../../../../../../../services/quantri-danhmuc/danhMucTieuChuan.service";
 import {UploadFileService} from "../../../../../../../services/uploaFile.service";
-import {ChiTieuKeHoachNamCapTongCucService} from "../../../../../../../services/chiTieuKeHoachNamCapTongCuc.service";
 import {saveAs} from 'file-saver';
 import {CanCuXacDinhPag, PhuongPhapXacDinhGia, ThongTinChungPag,} from "../../../../../../../models/DeXuatPhuongAnGia";
 import {FileDinhKem} from "../../../../../../../models/FileDinhKem";
@@ -23,6 +22,9 @@ import {DialogTuChoiComponent} from "../../../../../../../components/dialog/dial
 import {
   DialogTableSelectionComponent
 } from "../../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
+import {
+  QuyetDinhGiaCuaBtcService
+} from "../../../../../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaCuaBtc.service";
 
 @Component({
   selector: 'app-them-moi-de-xuat-pag',
@@ -83,18 +85,18 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     private danhMucService: DanhMucService,
     private danhMucTieuChuanService: DanhMucTieuChuanService,
     private uploadFileService: UploadFileService,
-    private chiTieuKeHoachNamCapTongCucService: ChiTieuKeHoachNamCapTongCucService
+    private quyetDinhGiaCuaBtcService: QuyetDinhGiaCuaBtcService,
   ) {
     this.formData = this.fb.group(
       {
         id: [],
-        namKeHoach: [dayjs().get('year'), [Validators.required]],
-        soDeXuat: [, [Validators.required]],
-        loaiVthh: [null, [Validators.required]],
-        ngayKy: [null, [Validators.required]],
-        nguoiKy: [null, [Validators.required]],
-        loaiGia: [null, [Validators.required]],
-        trichYeu: [null, [Validators.required]],
+        namKeHoach: [dayjs().get('year')],
+        soDeXuat: [],
+        loaiVthh: [null],
+        ngayKy: [null],
+        nguoiKy: [null],
+        loaiGia: [null],
+        trichYeu: [null],
         trangThai: ['00'],
         tenTrangThai: ['Dự Thảo'],
         ghiChu: [],
@@ -104,8 +106,8 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
         lyDoTuChoi: [],
         qdCtKhNam: [null],
         soCanCu: [null],
-        maPphapXdg: [null, [Validators.required]],
-        loaiHangXdg: [],
+        maPphapXdg: [null],
+        loaiHangXdg: ['XDG_LH01'],
         vat: [null]
       }
     );
@@ -133,7 +135,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     this.loadDsLoaiDx();
     this.loadDsDxCanSua();
     this.loadTiLeThue();
-    this.getDataDetail(this.idInput);
+    await this.getDataDetail(this.idInput);
     this.spinner.hide();
   }
 
@@ -398,6 +400,10 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
 
   async themDataTable(page: string) {
     if (page == 'ttc') {
+      if (this.type == 'GCT' && !this.rowItemTtc.giaQdBtc) {
+        this.notification.error(MESSAGE.ERROR, 'Không tìm thấy giá BTC cho loại hàng này')
+        return;
+      }
       if (!this.tenLoaiVthh || (!this.rowItemTtc.cloaiVthh && this.listCloaiVthh.length > 0) || !this.rowItemTtc.soLuong || !this.rowItemTtc.giaDn) {
         this.notification.error(MESSAGE.ERROR, 'Vui lòng nhập đủ thông tin')
         return;
@@ -405,19 +411,17 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
 
       if (this.listCloaiVthh && this.listCloaiVthh.length > 0) {
         let cloaiMap = this.pagTtChungs.map(item => item.cloaiVthh);
-        console.log(cloaiMap,1111)
-        console.log(this.rowItemTtc.cloaiVthh,22222)
         if (cloaiMap && cloaiMap.length > 0 && cloaiMap.includes(this.rowItemTtc.cloaiVthh)) {
           this.notification.error(MESSAGE.ERROR, 'Vui lòng không nhập trùng chủng loại hàng hóa');
           return;
         }
       } else {
-        if (this.pagTtChungs && this.pagTtChungs.length == 1 ) {
+        if (this.pagTtChungs && this.pagTtChungs.length == 1) {
           this.notification.error(MESSAGE.ERROR, 'Không thể thêm mới dữ liệu');
           return;
         }
       }
-
+      this.rowItemTtc.maDvi = this.userInfo.MA_DVI
       this.rowItemTtc.loaiVthh = this.formData.value.loaiVthh
       this.rowItemTtc.tenLoaiVthh = this.tenLoaiVthh;
       if (!this.rowItemTtc.cloaiVthh) {
@@ -430,6 +434,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
       this.pagTtChungs = [...this.pagTtChungs, this.rowItemTtc];
       this.rowItemTtc = new ThongTinChungPag();
       this.updateEditCache(page);
+      console.log(this.pagTtChungs, 11111);
     }
     if (page == 'ccXdg') {
       this.dataTableCanCuXdg = [...this.dataTableCanCuXdg, this.rowItemCcXdg];
@@ -454,6 +459,9 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     if (id > 0) {
       let res = await this.giaDeXuatGiaService.getDetail(id);
       const data = res.data;
+      console.log(data.vat, 111)
+      console.log(this.listVat, 222)
+      this.maDx = data.soDeXuat ? '/' + data.soDeXuat.split('/')[1] : '/TCDT-KH';
       this.formData.patchValue({
         id: data.id,
         namKeHoach: data.namKeHoach,
@@ -470,7 +478,8 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
         noiDung: data.noiDung,
         lyDoTuChoi: data.lyDoTuChoi,
         qdCtKhNam: data.qdCtKhNam,
-        maPphapXdg: data.maPphapXdg
+        maPphapXdg: data.maPphapXdg,
+        vat: data.vat ? data.vat.toString() : '',
       })
       this.tenLoaiVthh = res.data && res.data.tenLoaiVthh ? res.data.tenLoaiVthh : null;
       this.pagTtChungs = data.pagTtChungs;
@@ -571,17 +580,40 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
   }
 
   async onChangeCloaiVthh(event) {
-    this.pagTtChungs.forEach(item => {
-      item.cloaiVthh = event;
-    })
     let list = this.listCloaiVthh.filter(item => item.ma == event)
     this.rowItemTtc.tenCloaiVthh = list && list.length > 0 ? list[0].ten : ''
-    let resp = await this.danhMucService.getDetail(event);
-    if (resp.msg == MESSAGE.SUCCESS) {
-      this.rowItemTtc.tchuanCluong = resp.data && resp.data.tieuChuanCl ? resp.data.tieuChuanCl : "";
-      this.rowItemTtc.donViTinh = resp.data && resp.data.donViTinh ? resp.data.donViTinh : "";
+    if (this.type == 'GCT') {
+      if (!this.formData.value.loaiGia) {
+        this.notification.error(MESSAGE.ERROR, 'Vui lòng chọn loại giá')
+        return;
+      }
+      let body = {
+        namKeHoach: this.formData.value.namKeHoach,
+        loaiGia: this.formData.value.loaiGia == 'LG03' ? 'LG01' : 'LG02',
+        loaiVthh: this.formData.value.loaiVthh,
+        cloaiVthh: event
+      }
+      let res = await this.quyetDinhGiaCuaBtcService.getQdGiaVattu(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        let qdBtc = res.data
+        if (qdBtc) {
+          this.rowItemTtc.giaQdBtc = qdBtc.giaQdBtc;
+          this.rowItemTtc.giaQdBtcVat = qdBtc.giaQdBtcVat;
+          this.rowItemTtc.tchuanCluong = qdBtc.tchuanCluong;
+          this.rowItemTtc.donViTinh = qdBtc.donViTinh;
+          this.rowItemTtc.vat = qdBtc.vat;
+        }
+      } else {
+        this.notification.error(MESSAGE.ERROR, 'Không tìm thấy giá BTC cho loại hàng này')
+        return;
+      }
+    } else {
+      let resp = await this.danhMucService.getDetail(event);
+      if (resp.msg == MESSAGE.SUCCESS) {
+        this.rowItemTtc.tchuanCluong = resp.data && resp.data.tieuChuanCl ? resp.data.tieuChuanCl : "";
+        this.rowItemTtc.donViTinh = resp.data && resp.data.donViTinh ? resp.data.donViTinh : "";
+      }
     }
-    console.log(this.rowItemTtc.cloaiVthh,111111111)
   }
 
   loadDsNam() {
@@ -674,40 +706,27 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     }
   }
 
-  async getDataChiTieu() {
-    if (this.type == 'GMDTBTT' && !this.idInput) {
-      let res2 = await this.chiTieuKeHoachNamCapTongCucService.chiTeuPag(+this.formData.get('namKeHoach').value)
-      if (res2.msg == MESSAGE.SUCCESS) {
-        const dataChiTieu = res2.data;
-        if (dataChiTieu) {
-          this.formData.patchValue({
-            soCanCu: dataChiTieu.soQuyetDinh,
-          });
-        } else {
-          this.notification.error(MESSAGE.ERROR, 'Không tìm thấy chỉ tiêu kế hoạch năm ' + dayjs().get('year'))
-          return;
-        }
-      }
-    }
-  }
-
 
   async save(isGuiDuyet?) {
     this.spinner.show();
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
-      let invalid = [];
-      let controls = this.formData.controls;
-      for (const name in controls) {
-        if (controls[name].invalid) {
-          invalid.push(name);
-        }
-      }
       this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR)
       this.spinner.hide();
       return;
     }
+    this.pagTtChungs.forEach(item => {
+      if (this.type == 'GCT') {
+        item.giaDnVat = item.giaDn + item.giaDn * item.vat;
+      } else  {
+        if (this.formData.value.vat) {
+          item.vat = this.formData.value.vat;
+          item.giaDnVat = item.giaDn + item.giaDn * this.formData.value.vat;
+        }
+      }
+    })
     let body = this.formData.value;
+    body.maDvi = this.userInfo.MA_DVI;
     body.pagTtChungs = this.pagTtChungs;
     body.pagPpXacDinhGias = this.pagPpXacDinhGias;
     body.canCuPhapLy = this.dataTableCanCuXdg;
@@ -765,8 +784,8 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     this.pagPpXacDinhGias = []
   }
 
-  nhapLai(page : string) {
-    if(page == 'ttc') {
+  refresh(page: string) {
+    if (page == 'ttc') {
       this.rowItemTtc = new ThongTinChungPag();
     }
   }

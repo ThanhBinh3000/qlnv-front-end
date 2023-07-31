@@ -135,7 +135,7 @@
           <th class="text-center" nzWidth="120px" >Ngày ký</th>
           <th class="text-center" >Trích yếu</th>
           <th class="text-center" nzWidth="150px" >Loại hàng hóa</th>
-          <th class="text-center" nzWidth="150px" >Chủng loại hàng hóa</th>
+          <th class="text-center" nzWidth="150px" *ngIf="pagType == 'LT'" >Chủng loại hàng hóa</th>
           <th class="text-center" nzWidth="150px" >Loại giá</th>
           <th class="text-center" nzWidth="150px" >Số công văn cần điều chỉnh</th>
           <th class="text-center" nzWidth="120px" >Lần đề xuất</th>
@@ -179,7 +179,7 @@
                      (input)="filterInTable('tenLoaiVthh',filterTable.tenLoaiVthh)" size="small"/>
             </nz-input-group>
           </th>
-          <th>
+          <th *ngIf="pagType == 'LT'">
             <nz-input-group>
               <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenCloaiVthh"
                      (input)="filterInTable('tenCloaiVthh',filterTable.tenCloaiVthh)" size="small"/>
@@ -226,7 +226,7 @@
           <td>{{ data.ngayKy | date: 'dd/MM/yyyy' }}</td>
           <td>{{ data.trichYeu }}</td>
           <td>{{ data.tenLoaiVthh }}</td>
-          <td>{{ data.tenCloaiVthh }}</td>
+          <td *ngIf="pagType == 'LT'">{{ data.tenCloaiVthh }}</td>
           <td>{{ data.tenLoaiGia }}</td>
           <td> <a nz-button nzType="link" (click)="openModalDxChinhSua(data)">{{ data.soDeXuatDc }}</a></td>
           <td>{{ data.tenLanDeXuat }}</td>
