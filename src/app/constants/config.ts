@@ -246,7 +246,8 @@ export const LOAI_HH_XUAT_KHAC = {
   LT_6_THANG: 'LT6',
   VT_12_THANG: 'VT12',
   VT_6_THANG: 'VT6',
-  VT_BH: 'VTBH',
+  VT_BH: 'VTBH', // Vật tư bảo hành
+  VT_BH_BKK: 'VTBH_BKK', // DS Hàng DTQG xuất trong trường hợp bất khả kháng theo qd tại hd bảo hiểm
 };
 
 export const KIEU_NHAP_XUAT = {
