@@ -18,6 +18,7 @@ import {
   ToChucThucHienThanhLyService
 } from "../../../../../../../services/qlnv-hang/xuat-hang/xuat-thanh-ly/ToChucThucHienThanhLy.service";
 import {Validators} from "@angular/forms";
+import {FileDinhKem} from "../../../../../../../models/DeXuatKeHoachuaChonNhaThau";
 
 @Component({
   selector: 'app-thong-tin-chi-tiet-dau-gia-thanh-ly',
@@ -34,8 +35,6 @@ export class ThongTinChiTietDauGiaThanhLyComponent extends Base2Component implem
   soQdTl: string;
   dataDetail: any;
   soLanDauGia: number;
-  fileCanCu: any[] = []
-  fileDinhKemDaKy: any[] = []
   rowItemKhach: any = {};
   rowItemDgv: any = {};
   rowItemToChuc: any = {};
@@ -124,6 +123,9 @@ export class ThongTinChiTietDauGiaThanhLyComponent extends Base2Component implem
       thongBaoKhongThanh: [''],
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['DU Thảo'],
+      fileCanCu: [new Array<FileDinhKem>()],
+      fileDinhKem: [new Array<FileDinhKem>()],
+      fileDinhKemDaKy: [new Array<FileDinhKem>()],
     })
   }
 
@@ -322,9 +324,6 @@ export class ThongTinChiTietDauGiaThanhLyComponent extends Base2Component implem
             })
             this.buildTableView(data.toChucDtl);
             this.dataNguoiTgia = data.toChucNlq
-            this.fileCanCu = data.fileCanCu;
-            this.fileDinhKem = data.fileDinhKem;
-            this.fileDinhKemDaKy = data.fileDinhKemDaKy;
             this.dataNguoiShow = chain(this.dataNguoiTgia).groupBy('loai').map((value, key) => ({
               loai: key,
               dataChild: value
@@ -379,9 +378,6 @@ export class ThongTinChiTietDauGiaThanhLyComponent extends Base2Component implem
       body.tgianDauGiaTu = body.tgianDauGia[0];
       body.tgianDauGiaDen = body.tgianDauGia[1];
     }
-    body.fileCanCu = this.fileCanCu;
-    body.fileDinhKem = this.fileDinhKem;
-    body.fileDinhKemDaKy = this.fileDinhKemDaKy;
     let soLuongDviTsan = 0
     let soLuongTrung = 0
     let soLuongTruot = 0
