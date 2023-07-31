@@ -207,7 +207,7 @@
             <th>Trạng thái HĐ</th>
             <th>Số QĐ giao NV Xh</th>
             <th>Trạng thái Xh</th>
-            <th>Hành động</th>
+            <th *ngIf="isDisabled()">Hành động</th>
           </tr>
           </thead>
           <tbody>
@@ -226,7 +226,7 @@
                   data.soQdNv}}</a>
               </td>
               <td class="text-left">{{data.tenTrangThaiXh}}</td>
-              <td>
+              <td *ngIf="isDisabled()">
                 <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isCuc()"
                    (click)="redirectHopDong(true,data.id)">
                   <i class="fa fa-pencil" title="Sửa"></i>
@@ -250,7 +250,7 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
+              <td *ngIf="isDisabled()"></td>
             </tr>
           </ng-container>
           </tfoot>

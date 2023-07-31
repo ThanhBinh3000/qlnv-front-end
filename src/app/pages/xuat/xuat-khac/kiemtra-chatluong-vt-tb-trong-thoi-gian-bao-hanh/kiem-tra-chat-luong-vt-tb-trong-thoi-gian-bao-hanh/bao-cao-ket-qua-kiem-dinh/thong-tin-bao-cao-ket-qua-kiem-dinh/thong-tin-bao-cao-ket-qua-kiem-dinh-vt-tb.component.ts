@@ -208,7 +208,6 @@ export class ThongTinBaoCaoKetQuaKiemDinhVtTbComponent extends Base2Component im
 
   async save(isGuiDuyet?) {
     let body = this.formData.value;
-    console.log(body,"cmm")
     if (this.fileDinhKems && this.fileDinhKems.length > 0) {
       body.fileDinhKems = this.fileDinhKems;
     }

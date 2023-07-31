@@ -1,14 +1,17 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
-import { MESSAGE } from 'src/app/constants/message';
-import { PhieuXuatKhoBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/xuat-kho-btt/phieu-xuat-kho-btt.service';
+import {Component, Input, OnInit} from '@angular/core';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from 'src/app/services/storage.service';
+import {MESSAGE} from 'src/app/constants/message';
+import {
+  PhieuXuatKhoBttService
+} from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/xuat-kho-btt/phieu-xuat-kho-btt.service';
 import * as uuid from "uuid";
-import { chain } from 'lodash';
+import {chain} from 'lodash';
+
 @Component({
   selector: 'app-phieu-xuat-kho-btt',
   templateUrl: './phieu-xuat-kho-btt.component.html',
@@ -87,11 +90,6 @@ export class PhieuXuatKhoBttComponent extends Base2Component implements OnInit {
     this.buildTableView();
   }
 
-  clearFilter() {
-    this.formData.reset();
-    this.search();
-  }
-
   buildTableView() {
     let dataView = chain(this.dataTable).groupBy("soQdNv").map((value, key) => {
       let quyetDinh = value.find(f => f.soQdNv === key)
@@ -99,25 +97,26 @@ export class PhieuXuatKhoBttComponent extends Base2Component implements OnInit {
           let diaDiem = v.find(s => s.maDiemKho === k)
           return {
             idVirtual: uuid.v4(),
-            maDiemKho: k != "null" ? k : '',
+            maDiemKho: k != null ? k : '',
             tenDiemKho: diaDiem ? diaDiem.tenDiemKho : null,
-            idQdNv:diaDiem ? diaDiem.idQdNv : null,
+            idQdNv: diaDiem ? diaDiem.idQdNv : null,
             childData: v
           }
         }
       ).value();
+      let idQdNv = quyetDinh ? quyetDinh.idQdNv : null;
       let namKh = quyetDinh ? quyetDinh.namKh : null;
       let ngayQdNv = quyetDinh ? quyetDinh.soQdNv : null;
       return {
         idVirtual: uuid.v4(),
-        soQdNv: key != "null" ? key : '',
+        idQdNv: idQdNv,
+        soQdNv: key != null ? key : '',
         namKh: namKh,
         ngayQdNv: ngayQdNv,
         childData: rs
       };
     }).value();
     this.children = dataView
-    console.log(this.children, "this.children ");
     this.expandAll()
   }
 

@@ -6,32 +6,32 @@ import {NzModalService} from "ng-zorro-antd/modal";
 import {v4 as uuidv4} from "uuid";
 import {chain, cloneDeep} from "lodash";
 import {Validators} from "@angular/forms";
-import {Base2Component} from "../../../../../../components/base2/base2.component";
-import {StorageService} from "../../../../../../services/storage.service";
-import {DonviService} from "../../../../../../services/donvi.service";
-import {DanhMucService} from "../../../../../../services/danhmuc.service";
-import {MESSAGE} from "../../../../../../constants/message";
-import {
-  DialogTableSelectionComponent
-} from "../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
-import {LOAI_HH_XUAT_KHAC} from "../../../../../../constants/config";
-import {FILETYPE} from "../../../../../../constants/fileType";
-import {STATUS} from "../../../../../../constants/status";
-import {DialogTuChoiComponent} from "../../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
-import {
-  QdGiaoNvXuatHangTrongThoiGianBaoHanhService
-} from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvtbaohanh/QdGiaoNvXuatHangTrongThoiGianBaoHanh.service";
+import * as dayjs from "dayjs";
+import {Base2Component} from "../../../../../../../components/base2/base2.component";
+import {StorageService} from "../../../../../../../services/storage.service";
+import {DonviService} from "../../../../../../../services/donvi.service";
+import {DanhMucService} from "../../../../../../../services/danhmuc.service";
 import {
   TongHopDanhSachVtTbTrongThoiGIanBaoHanh
-} from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvtbaohanh/TongHopDanhSachVtTbTrongThoiGIanBaoHanh.service";
-import * as dayjs from "dayjs";
+} from "../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvtbaohanh/TongHopDanhSachVtTbTrongThoiGIanBaoHanh.service";
+import {
+  QdGiaoNvXuatHangTrongThoiGianBaoHanhService
+} from "../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvtbaohanh/QdGiaoNvXuatHangTrongThoiGianBaoHanh.service";
+import {STATUS} from "../../../../../../../constants/status";
+import {MESSAGE} from "../../../../../../../constants/message";
+import {
+  DialogTableSelectionComponent
+} from "../../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
+import {LOAI_HH_XUAT_KHAC} from "../../../../../../../constants/config";
+import {FILETYPE} from "../../../../../../../constants/fileType";
+import {DialogTuChoiComponent} from "../../../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
 
 @Component({
-  selector: 'app-thong-tin-qd-giao-nhiem-vu-xuat-hang-trong-thoi-gian-bao-hanh',
-  templateUrl: './thong-tin-qd-giao-nhiem-vu-xuat-hang-trong-thoi-gian-bao-hanh.component.html',
-  styleUrls: ['./thong-tin-qd-giao-nhiem-vu-xuat-hang-trong-thoi-gian-bao-hanh.component.scss']
+  selector: 'app-thong-tin-qd-giao-nhiem-vu-xuat-hang',
+  templateUrl: './thong-tin-qd-giao-nhiem-vu-xuat-hang.component.html',
+  styleUrls: ['./thong-tin-qd-giao-nhiem-vu-xuat-hang.component.scss']
 })
-export class ThongTinQdGiaoNhiemVuXuatHangTrongThoiGianBaoHanhComponent extends Base2Component implements OnInit {
+export class ThongTinQdGiaoNhiemVuXuatHangComponent extends Base2Component implements OnInit {
   @Input('isViewDetail') isViewDetail: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
@@ -77,6 +77,7 @@ export class ThongTinQdGiaoNhiemVuXuatHangTrongThoiGianBaoHanhComponent extends 
       tenTrangThai: ['Dự thảo'],
       qdGiaonvXhDtl: [new Array<ItemXhXkVtQdGiaonvXhDtl>()],
       loaiCanCu: ["TONG_HOP"],
+      loaiXn: ["XUAT"],
     })
   }
 
@@ -417,15 +418,16 @@ export class ThongTinQdGiaoNhiemVuXuatHangTrongThoiGianBaoHanhComponent extends 
       this.buildTableView(this.dataTh);
     }
   }
-  chonLoaiCc(loai){
-    if(loai=="TONG_HOP"){
+
+  chonLoaiCc(loai) {
+    if (loai == "TONG_HOP") {
       this.formData.patchValue({
-        soLanLm:1
+        soLanLm: 1
       });
     }
-    if(loai=="PHIEU_KDCL"){
+    if (loai == "PHIEU_KDCL") {
       this.formData.patchValue({
-        soLanLm:2
+        soLanLm: 2
       });
     }
   }
