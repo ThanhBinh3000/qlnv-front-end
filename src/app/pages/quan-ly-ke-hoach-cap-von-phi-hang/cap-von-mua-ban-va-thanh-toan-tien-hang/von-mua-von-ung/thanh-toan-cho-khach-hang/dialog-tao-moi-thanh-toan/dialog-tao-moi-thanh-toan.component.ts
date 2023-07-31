@@ -78,7 +78,6 @@ export class DialogTaoMoiThanhToanComponent implements OnInit {
         await this.capVonMuaBanTtthService.timKiemVonMuaBan(this.request.request()).toPromise().then(
             (data) => {
                 if (data.statusCode == 0) {
-                    let initItem = new Report();
                     let lstBcao = [];
                     if (data.data.content?.length > 0) {
                         lstBcao = data.data.content;
@@ -90,7 +89,9 @@ export class DialogTaoMoiThanhToanComponent implements OnInit {
                         } else {
                             const index = lstBcao.findIndex(e => !Status.check('reject', e.trangThai));
                             if (index != -1) {
-                                Object.assign(initItem, lstBcao[index].id);
+                                this.initReport(lstBcao?.length + 1, lstBcao[index].id)
+                            } else {
+                                this.initReport(lstBcao?.length + 1);
                             }
                         }
                     } else {
