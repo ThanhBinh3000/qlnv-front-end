@@ -194,7 +194,7 @@
 
           <div nz-col [nzSpan]="4">
             <nz-form-item>
-              <nz-form-label [nzNoColon]="true">Số phiếu kiểm tra chất lượng</nz-form-label>
+              <nz-form-label nzRequired [nzNoColon]="true">Số phiếu kiểm tra chất lượng</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogPKTCL()">
                   <input [readonly]="true" nz-input formControlName="soPhieuKtraCluong" readonly="true" />
@@ -378,7 +378,7 @@
 
           <div nz-col [nzSpan]="4">
             <nz-form-item>
-              <nz-form-label [nzNoColon]="true">
+              <nz-form-label nzRequired [nzNoColon]="true">
                 Số bảng kê cân hàng
               </nz-form-label>
               <nz-form-control>
@@ -393,20 +393,20 @@
     </form>
 
     <div class="mt16 flex-card p-lr16">
-      <div class="header header-green-background mg-t-16">
-        <div class="header-text">
+      <!-- <div class="header header-green-background mg-t-16"> -->
+      <!-- <div class="header-text">
           <div class="title-chi-tieu">
             <span></span>
             <span>Đơn vị chủ động thực hiện</span>
           </div>
-        </div>
-        <!-- <div class="btn-group" *ngIf="!isView && formData.value.trangThai === STATUS.DU_THAO">
+        </div> -->
+      <!-- <div class="btn-group" *ngIf="!isView && formData.value.trangThai === STATUS.DU_THAO">
             <button type="button" class="btn btn-main ml-2" (click)="addTH()">
               <i class="icon htvbdh_dau-cong"></i>
               <span>Thêm</span>
             </button>
           </div> -->
-      </div>
+      <!-- </div> -->
       <nz-card class="mt-2px flex-card data-table card-border-content table-card">
 
         <nz-table #tblDatadsHangTH class="nowrap mt-16 table-chi-tiet" nzBordered [nzData]="dsTH">
@@ -421,8 +421,8 @@
               <th rowspan="2" *ngIf="!isView && formData.value.trangThai === STATUS.DU_THAO">Hành động</th>
             </tr>
             <tr>
-              <th>Dự toán kinh phí theo QĐ (triệu đồng)</th>
-              <th>Kinh phí thực thế</th>
+              <th>Dự toán kinh phí theo QĐ (Triệu đồng)</th>
+              <th>Kinh phí thực tế (Triệu đồng)</th>
             </tr>
             <tr>
               <th></th>
@@ -464,9 +464,9 @@
                 <td>{{item.noiDung}}</td>
                 <td>{{item.maSo}}</td>
                 <td>{{item.dviTinh}}</td>
-                <td>{{item.soLuongNhapDc}}</td>
-                <td>{{item.duToanKinhPhi}}</td>
-                <td>{{item.thucTeKinhPhi}}</td>
+                <td>{{item.soLuongNhapDc|number:'1.0-1':'vi_VN'}}</td>
+                <td>{{item.duToanKinhPhi|number:'1.0-1':'vi_VN'}}</td>
+                <td>{{item.thucTeKinhPhi|number:'1.0-1':'vi_VN'}}</td>
                 <td *ngIf="!(isDisableField() || isView)">
                   <a (click)="editRow(i)">
                     <i class="fa fa-pencil" title="Sửa"></i>

@@ -79,7 +79,7 @@
               </nz-radio-group>
             </nz-form-item>
           </div>
-          <div nz-col nzSpan="3">
+          <div nz-col nzSpan="4">
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true"> Năm kế hoạch
               </nz-form-label>
@@ -90,7 +90,7 @@
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col [nzSpan]="6">
+          <div nz-col [nzSpan]="4">
             <nz-form-item>
               <nz-form-label [nzNoColon]="true"> Đơn vị</nz-form-label>
               <nz-form-control>
@@ -98,7 +98,7 @@
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col [nzSpan]="3">
+          <div nz-col [nzSpan]="4">
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true">Mã quan hệ ngân sách</nz-form-label>
               <nz-form-control>
@@ -106,7 +106,7 @@
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col [nzSpan]="6">
+          <div nz-col [nzSpan]="4">
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true">Số biên bản</nz-form-label>
               <nz-form-control>
@@ -114,7 +114,7 @@
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col [nzSpan]="3">
+          <div nz-col [nzSpan]="4">
             <nz-form-item>
               <nz-form-label [nzNoColon]="true"> Ngày lập biên bản</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
@@ -124,7 +124,7 @@
             </nz-form-item>
           </div>
 
-          <div nz-col [nzSpan]="3">
+          <div nz-col [nzSpan]="4">
             <nz-form-item>
               <nz-form-label [nzNoColon]="true">Số QĐ điều chuyển của cục</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
@@ -135,26 +135,7 @@
             </nz-form-item>
           </div>
 
-          <div nz-col [nzSpan]="4">
-            <nz-form-item>
-              <nz-form-label [nzNoColon]="true">Số BB nhập đầy kho</nz-form-label>
-              <nz-form-control [nzErrorTip]="error">
-                <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogBBNDK()">
-                  <input [readonly]="true" nz-input formControlName="soBbNhapDayKho" readonly="true" />
-                </nz-input-group>
-              </nz-form-control>
-            </nz-form-item>
-          </div>
 
-          <div nz-col [nzSpan]="4">
-            <nz-form-item>
-              <nz-form-label [nzNoColon]="true">Ngày nhập đầy kho</nz-form-label>
-              <nz-form-control [nzErrorTip]="error">
-                <nz-date-picker [nzDisabled]="true" formControlName="ngayBbNhapDayKho" nzFormat="dd/MM/yyyy">
-                </nz-date-picker>
-              </nz-form-control>
-            </nz-form-item>
-          </div>
 
           <div nz-col nzSpan="8">
             <nz-form-item>
@@ -252,6 +233,27 @@
             </nz-form-item>
           </div>
 
+          <div nz-col [nzSpan]="4">
+            <nz-form-item>
+              <nz-form-label [nzNoColon]="true">Số BB tịnh kho</nz-form-label>
+              <nz-form-control [nzErrorTip]="error">
+                <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogBBNDK()">
+                  <input [readonly]="true" nz-input formControlName="soBbNhapDayKho" readonly="true" />
+                </nz-input-group>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <div nz-col [nzSpan]="4">
+            <nz-form-item>
+              <nz-form-label [nzNoColon]="true">Ngày xuất dốc kho</nz-form-label>
+              <nz-form-control [nzErrorTip]="error">
+                <nz-date-picker [nzDisabled]="true" formControlName="ngayBbNhapDayKho" nzFormat="dd/MM/yyyy">
+                </nz-date-picker>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
           <div nz-col [nzSpan]="24">
             <nz-form-item>
               <nz-form-label [nzNoColon]="true">Số biên bản nghiệm thu bảo quản lần đầu
@@ -261,6 +263,7 @@
               </nz-form-control>
             </nz-form-item>
           </div>
+
 
           <div nz-col [nzSpan]="24">
             <nz-form-item>

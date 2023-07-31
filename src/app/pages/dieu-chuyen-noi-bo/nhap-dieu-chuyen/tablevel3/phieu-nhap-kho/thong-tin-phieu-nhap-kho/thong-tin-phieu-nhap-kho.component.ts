@@ -85,8 +85,8 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
       maNhaKho: [],
       tenDiemKho: [],
       maDiemKho: [],
-      soPhieuKtraCluong: [],
-      idPhieuKtraCluong: [],
+      soPhieuKtraCluong: [, [Validators.required]],
+      idPhieuKtraCluong: [, [Validators.required]],
       loaiVthh: [],
       tenLoaiVthh: [],
       cloaiVthh: [],
@@ -107,7 +107,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
       bbNghiemThuBqld: [],
       soLuongQdDcCuc: [],
       dviTinh: [],
-      soBangKeCanHang: [],
+      soBangKeCanHang: [, [Validators.required]],
       tongSLNhapTT: [],
       tongKPDCTT: [],
       duToanKinhPhi: [],
@@ -253,8 +253,8 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
     this.dsTH = cloneDeep(this.dsTH)
     const tongsoLuongNhapDc = this.dsTH.reduce((previous, current) => previous + current.soLuongNhapDc, 0);
     const tongthucTeKinhPhi = this.dsTH.reduce((previous, current) => previous + current.thucTeKinhPhi, 0);
-    const tongSLNhapTT = this.convertTien(tongsoLuongNhapDc)
-    const tongKPDCTT = this.convertTien(tongthucTeKinhPhi)
+    const tongSLNhapTT = this.convertTien(tongsoLuongNhapDc) + this.convertDVT(this.dviTinh)
+    const tongKPDCTT = this.convertTien(tongthucTeKinhPhi) + " triệu đồng"
 
 
     this.formData.patchValue({
@@ -266,7 +266,10 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
     })
   }
 
-
+  convertDVT(dvt: string) {
+    if (dvt === "kg" || dvt === "Kg" || dvt === "Kg") return "ki lô gam"
+    else return dvt
+  }
 
   them(row) {
 
@@ -501,11 +504,9 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
 
     let data = await this.createUpdate(body);
     if (data) {
+      this.idInput = data.id;
       if (isGuiDuyet) {
-        this.idInput = data.id;
         this.guiDuyet();
-      } else {
-        this.quayLai();
       }
     }
     await this.spinner.hide();
