@@ -274,11 +274,11 @@ export class Report {
     ngayDuyet: string;
     ngayPheDuyet: string;
     ngayTraKq: string;
-    trangThai: string;
+    trangThai: string = Status.TT_01;
     ngayTrinhDvct: string;
     ngayDuyetDvct: string;
     ngayPheDuyetDvct: string;
-    trangThaiDvct: string;
+    trangThaiDvct: string = Status.TT_01;
     trangThaiThop: string;
     maDviTien: string;
     lyDoTuChoi: string;

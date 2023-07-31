@@ -77,6 +77,8 @@ export class DialogTaoMoiComponent implements OnInit {
                             const index = lstBcao.findIndex(e => !Status.check('reject', e.trangThai));
                             if (index != -1) {
                                 this.initReport(lstBcao?.length + 1, lstBcao[index].id)
+                            } else {
+                                this.initReport(lstBcao?.length + 1);
                             }
                         }
                     } else {
