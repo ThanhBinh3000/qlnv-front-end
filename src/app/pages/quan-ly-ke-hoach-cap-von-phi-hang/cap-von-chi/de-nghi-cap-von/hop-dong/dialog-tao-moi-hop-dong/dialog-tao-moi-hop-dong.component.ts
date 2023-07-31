@@ -45,7 +45,11 @@ export class DialogTaoMoiHopDongComponent implements OnInit {
         this.loadDsNam();
         this.response.maDvi = this.userInfo?.MA_DVI;
         this.response.trangThai = Utils.TT_BC_1;
-        this.loaiDns = this.loaiDns.filter(e => e.id != Utils.MUA_VTU);
+        if (this.userService.isTongCuc()) {
+            this.loaiDns = this.loaiDns.filter(e => e.id == Utils.MUA_VTU);
+        } else {
+            this.loaiDns = this.loaiDns.filter(e => e.id != Utils.MUA_VTU);
+        }
         this.response.lstCtiets = [];
     }
     //lay ra so quyet dinh chi tieu cho de nghi
@@ -96,6 +100,7 @@ export class DialogTaoMoiHopDongComponent implements OnInit {
             maDvi: this.userInfo?.MA_DVI,
             namHdong: this.response.namBcao,
             loaiDnghi: this.response.loaiDnghi,
+            loaiTimKiem: '0',
             maLoai: '3',
             paggingReq: {
                 limit: 10,
@@ -122,10 +127,10 @@ export class DialogTaoMoiHopDongComponent implements OnInit {
                 this.response.loaiDnghi = null;
             }
         );
-        // if (isExist) {
-        //     this.notification.warning(MESSAGE.WARNING, 'Hợp đồng cấp vốn đã tồn tại');
-        //     return;
-        // }
+        if (isExist) {
+            this.notification.warning(MESSAGE.WARNING, 'Hợp đồng cấp vốn đã tồn tại');
+            return;
+        }
         if (!this.userService.isTongCuc() || this.response.loaiDnghi == Utils.MUA_VTU) {
             this.getContract();
         } else {
@@ -261,6 +266,7 @@ export class DialogTaoMoiHopDongComponent implements OnInit {
             return;
         }
         await this.getMaHd();
+        await this.getSoQdChiTieu();
         this._modalRef.close(this.response);
     }
 

@@ -34,7 +34,9 @@ export class CapVonComponent implements OnInit {
   userInfo: any;
   //thong tin chung bao cao
   baoCao: BaoCao = new BaoCao();
+  lstCtiet: ItemContract[] = [];
   total: ItemContract = new ItemContract();
+
   //danh muc
   donVis: any[] = [];
   trangThais: any[] = TRANG_THAI;
@@ -167,10 +169,17 @@ export class CapVonComponent implements OnInit {
 
     } else {
       this.baoCao = this.data?.baoCao;
+      this.setLevel()
     }
     this.getStatusButton();
     this.getTotal();
     this.updateEditCache();
+  }
+
+  setLevel() {
+    this.baoCao.lstCtiets.forEach(item => {
+      item.level = item.stt.split('.').length - 2;
+    })
   }
 
   //check role cho các nut trinh duyet
@@ -179,8 +188,9 @@ export class CapVonComponent implements OnInit {
     this.status.general = Utils.statusSave.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.CVNC.EDIT_DN_MLT);
     this.status.save = Utils.statusSave.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.CVNC.EDIT_DN_MLT) && checkChirld;
     this.status.submit = Utils.statusApprove.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.CVNC.APPROVE_DN_MLT) && checkChirld && !(!this.baoCao.id);
-    this.status.approve = this.baoCao.trangThai == Utils.TT_BC_2 && this.userService.isAccessPermisson(Roles.CVNC.PHE_DUYET_DN_MLT) && checkChirld;
+    this.status.approve = this.baoCao.trangThai == Utils.TT_BC_4 && this.userService.isAccessPermisson(Roles.CVNC.PHE_DUYET_DN_MLT) && checkChirld;
     this.status.copy = Utils.statusCopy.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.CVNC.COPY_DN_MLT) && checkChirld;
+    this.status.pass = this.baoCao.trangThai == Utils.TT_BC_2 && this.userService.isAccessPermisson(Roles.CVNC.DUYET_OR_TU_CHOI);
     if (this.status.general) {
       this.scrollX = (550 + 12 * BOX_NUMBER_WIDTH).toString() + 'px';
     } else {
@@ -272,7 +282,8 @@ export class CapVonComponent implements OnInit {
           this.listFile = [];
           this.getStatusButton();
           this.getTotal();
-          this.updateEditCache()
+          this.updateEditCache();
+          this.setLevel();
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
@@ -506,6 +517,13 @@ export class CapVonComponent implements OnInit {
         this.total.soConDuocCap = Operator.sum([this.total.soConDuocCap, item.soConDuocCap]);
       }
     })
+  }
+
+  getIndex(data: ItemContract) {
+    if (data.level == 0) {
+      return null;
+    }
+    return Table.subIndex(data.stt);
   }
 
   exportToExcel() {

@@ -13,6 +13,14 @@
         <i class="icon htvbdh_tcdt_guiduyet"></i>
         <span>Trình duyệt</span>
       </button>
+      <button *ngIf="status.pass" type="button" class="btn btn-sub" (click)="action('pass')">
+        <i class="icon htvbdh_tcdt_tuchoi"></i>
+        <span>Duyệt</span>
+      </button>
+      <button *ngIf="status.pass" type="button" class="btn btn-sub" (click)="action('nonpass')">
+        <i class="icon htvbdh_tcdt_tuchoi"></i>
+        <span>Từ chối duyệt</span>
+      </button>
       <button *ngIf="status.approve" type="button" class="btn btn-sub" (click)="action('nonapprove')">
         <i class="icon htvbdh_tcdt_tuchoi"></i>
         <span>Từ chối</span>
@@ -182,7 +190,7 @@
               <tr *ngFor="let data of baoCao.lstCtiets; let i = index">
                 <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
                   <td nzLeft>
-                    {{ i+1 }}
+                    {{ getIndex(data) }}
                   </td>
                   <td nzLeft>
                     {{ data.tenDvi }}
@@ -251,7 +259,7 @@
                 </ng-container>
                 <ng-template #editTemplate>
                   <td nzLeft>
-                    {{ i+1 }}
+                    {{ getIndex(data) }}
                   </td>
                   <td nzLeft>
                     {{ editCache[data.id].data.tenDvi }}

@@ -128,7 +128,7 @@
 								</th>
 								<th rowspan="2">Vốn đề nghị cấp <br />lần này = Giá trị <br /> theo kế hoạch -<br />Lũy
 									kế vốn cấp</th>
-								<th rowspan="2" style="width: 50px;" *ngIf="status.general" nzRight></th>
+								<th rowspan="2" style="width: 50px;" *ngIf="!status.general" nzRight></th>
 							</tr>
 							<tr>
 								<th>Kế hoạch</th>
@@ -150,7 +150,7 @@
 								<th>8=6+7</th>
 								<th>9=5+8</th>
 								<th>10=4-9</th>
-								<th *ngIf="status.general" nzRight></th>
+								<th *ngIf="!status.general" nzRight></th>
 							</tr>
 							<tr>
 								<th nzLeft></th>
@@ -165,14 +165,14 @@
 								<th>{{Op.fmtVal(total.luyKeTongCong)}}</th>
 								<th>{{Op.fmtVal(total.tongVonVaDtDaCap)}}</th>
 								<th>{{Op.fmtVal(total.vonDnghiCapLanNay)}}</th>
-								<th *ngIf="status.general" nzRight></th>
+								<th *ngIf="!status.general" nzRight></th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr *ngFor="let data of baoCao.lstCtiets; let i = index">
-								<ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
+								<ng-container *ngIf="!editCache[data.id].edit">
 									<td nzLeft>
-										{{ i+1 }}
+										{{ getIndex(data) }}
 									</td>
 									<td nzLeft>
 										{{ data.tenDvi }}
@@ -207,46 +207,37 @@
 									<td>
 										{{ Op.fmtVal(data.vonDnghiCapLanNay) }}
 									</td>
-									<ng-container *ngIf="this.userService.isCuc(); else khacChiCuc">
+									<!-- <ng-container *ngIf="this.userService.isCuc(); else khacChiCuc">
 										<td *ngIf="status.general" nzRight></td>
 									</ng-container>
 									<ng-template #khacChiCuc>
-										<td *ngIf="status.general" nzRight>
-											<i *ngIf="data.maDvi == userInfo?.MA_DVI" class="fa fa-pencil"
-												(click)="startEdit(data.id)"></i>
-										</td>
-									</ng-template>
+										<td *ngIf="status.general" nzRight> -->
+									<!-- <i *ngIf="data.maDvi == userInfo?.MA_DVI" class="fa fa-pencil"
+												(click)="startEdit(data.id)"></i> -->
+									<!-- </td>
+									</ng-template> -->
 								</ng-container>
-								<ng-template #editTemplate>
+								<!-- <ng-template #editTemplate>
 									<td nzLeft>
-										{{ i+1 }}
+										{{ getIndex(data) }}
 									</td>
 									<td nzLeft>
 										{{ editCache[data.id].data.tenDvi }}
 									</td>
-									<!-- <ng-container *ngIf="baoCao.soLan != 1; else moi"> -->
 									<td>
-										<input class="money-input" currencyMask [options]="amount"
-											[(ngModel)]="editCache[data.id].data.slKeHoach"
-											(ngModelChange)="changeModel(data.id)" />
+										{{ Op.fmtVal(editCache[data.id].data.slKeHoach) }}
 									</td>
 									<td>
-										<input class="money-input" currencyMask [options]="amount"
-											[(ngModel)]="editCache[data.id].data.slThucHien"
-											(ngModelChange)="changeModel(data.id)" />
+										{{ Op.fmtVal(editCache[data.id].data.slThucHien) }}
 									</td>
 									<td>
-										<input class="money-input" currencyMask [options]="amount"
-											[(ngModel)]="editCache[data.id].data.soConDuocCap"
-											(ngModelChange)="changeModel(data.id)" />
+										{{ Op.fmtVal(editCache[data.id].data.donGia) }}
 									</td>
 									<td>
 										{{ Op.fmtVal(editCache[data.id].data.gtriThucHien) }}
 									</td>
 									<td>
-										<input class="money-input" currencyMask [options]="amount"
-											[(ngModel)]="editCache[data.id].data.duToanDaGiao"
-											(ngModelChange)="changeModel(data.id)" />
+										{{ Op.fmtVal(editCache[data.id].data.duToanDaGiao) }}
 									</td>
 									<td>
 										<input class="money-input" currencyMask [options]="amount"
@@ -274,7 +265,7 @@
 											Hủy
 										</a>
 									</td>
-								</ng-template>
+								</ng-template> -->
 							</tr>
 						</tbody>
 					</nz-table>

@@ -146,10 +146,14 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
                       viPhamHopDong: dataRequest.viPhamHopDong,
                       thanhLyHdongSl: dataRequest.thanhLyHdongSl,
                       thanhLyHdongTt: dataRequest.thanhLyHdongTt,
+                      luyKeCapUng: this.total.luyKeCapUng,
+                      luyKeCapVon: this.total.luyKeCapVon,
+                      luyKeCong: this.total.luyKeCong,
                     })
                   } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
                   }
+                  data.data.lstCtiets.length += 1;
                 },
                 (err) => {
                   this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -170,6 +174,7 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
               id: uuid.v4() + 'FE',
               maDvi: this.userInfo?.MA_DVI,
               tenDvi: this.userInfo?.TEN_DVI,
+              stt: '0.1'
             });
           } else {
             await this.capVonNguonChiService.ctietDeNghi(this.idRequest).toPromise().then(
@@ -272,6 +277,7 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
             const temp = item;
             const id = this.response.lstCtiets.find(e => e.maDvi == temp.maDvi)?.id;
             temp.id = id ? id : uuid.v4() + 'FE';
+            temp.stt = '0.1.1';
             this.response.lstCtiets = this.response.lstCtiets.filter(e => e.maDvi != temp.maDvi);
             this.total.slKeHoach = Operator.sum([this.total.slKeHoach, item.slKeHoach]);
             this.total.slThucHien = Operator.sum([this.total.slThucHien, item.slThucHien]);
@@ -286,6 +292,7 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
               slThucHien: this.total.slThucHien,
               donGia: this.total.donGia,
               gtriThucHien: this.total.gtriThucHien,
+              stt: '0.1'
             }, temp);
           })
         } else {
@@ -439,6 +446,20 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
         this.response.loaiDnghi = null;
       }
     );
+    this.canCuGias = this.canCuGias.filter(e => e.id == Utils.HD_TRUNG_THAU)
+    if (this.canCuGias) {
+      await this.capVonNguonChiService.ctietDeNghi(this.idRequest).toPromise().then(
+        (data) => {
+          if (data.statusCode == 0) {
+            data.data.lstCtiets.map((item) => {
+              this.total.luyKeCapUng = Operator.sum([item.luyKeCapUng, item.capUng]);
+              this.total.luyKeCapVon = Operator.sum([item.luyKeCapVon, item.capVon]);
+              this.total.luyKeCong = Operator.sum([item.luyKeCong, item.cong]);
+            })
+          }
+        }
+      )
+    }
 
     this.spinner.hide();
   }
@@ -451,6 +472,7 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
       loaiDnghi: this.response.loaiDnghi,
       maDviTien: '1',
       maLoai: '3',
+      loaiTimKiem: '0',
       paggingReq: {
         limit: 10,
         page: 1,
