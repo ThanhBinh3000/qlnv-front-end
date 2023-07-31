@@ -221,6 +221,14 @@ export class QuanLyHopDongThanhLyComponent extends Base2Component implements OnI
     }
   }
 
+  isDisabled() {
+    if (this.formData.value.trangThai == STATUS.DA_HOAN_THANH) {
+      return true
+    } else {
+      return false;
+    }
+  }
+
   openModalQdNv(id: number) {
     this.idQdNv = id;
     this.isViewQdNv = true;
