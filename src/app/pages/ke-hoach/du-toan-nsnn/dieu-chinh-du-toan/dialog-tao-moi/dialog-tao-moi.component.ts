@@ -55,7 +55,7 @@ export class DialogTaoMoiComponent implements OnInit {
         this.response = {
             ...new Report(),
             namBcao: this.response.namBcao,
-            dotBcao: this.response.dotBcao,
+            // dotBcao: this.response.dotBcao,
             maDvi: this.userInfo.MA_DVI,
         }
         const requestReport = {
@@ -70,10 +70,10 @@ export class DialogTaoMoiComponent implements OnInit {
             // },
             // trangThais: [],
 
-            loaiTimKiem: "0",
+            loaiTimKiem: "1",
             maBcao: null,
             maDvi: this.response.maDvi,
-            dotBcao: this.response.dotBcao,
+            // dotBcao: this.response.dotBcao,
             namBcao: this.response.namBcao,
             ngayTaoDen: null,
             ngayTaoTu: null,
@@ -81,23 +81,40 @@ export class DialogTaoMoiComponent implements OnInit {
                 limit: 1000,
                 page: 1,
             },
-            trangThais: [],
+            trangThais: ["9"],
         };
         await this.dieuChinhService.timKiemDieuChinh(requestReport).toPromise().then(
             data => {
                 if (data.statusCode == 0) {
-                    if (data.data.content.length == 0) {
-                        this.initNewReport(1);
+                    if (this.tab == Dcdt.DANH_SACH_BAO_CAO) {
+                        if (data.data.content.length == 0) {
+                            this.initNewReport(1);
+                        } else {
+                            let lstBcao = data.data.content;
+                            lstBcao.sort((a, b) => {
+                                if (a.dotBcao < b.dotBcao) {
+                                    return 1;
+                                }
+                                return -1
+                            })
+                            this.initNewReport(lstBcao[0].dotBcao + 1);
+                        }
                     } else {
                         let lstBcao = data.data.content;
                         lstBcao.sort((a, b) => {
-                            if (a.lan < b.lan) {
+                            if (a.dotBcao < b.dotBcao) {
                                 return 1;
                             }
                             return -1
                         })
-                        this.initNewReport(lstBcao[0].lan + 1);
+                        console.log(lstBcao);
+                        if (data.data.content.length != 0) {
+                            this.initNewReport(lstBcao[0].dotBcao);
+                        } else {
+                            this.notification.error(MESSAGE.WARNING, `Chưa có báo trong năm ${this.response.namBcao}`);
+                        }
                     }
+
                 } else {
                     this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
                     this.response.namBcao = null;
@@ -109,8 +126,8 @@ export class DialogTaoMoiComponent implements OnInit {
         )
     }
 
-    async initNewReport(lan: number) {
-        this.response.dotBcao = lan;
+    async initNewReport(dotBcao: number) {
+        this.response.dotBcao = dotBcao;
         this.response.lstDchinh = [];
         this.response.lstDviTrucThuoc = [];
         this.response.trangThai = Status.TT_01;
@@ -134,7 +151,7 @@ export class DialogTaoMoiComponent implements OnInit {
         if (this.tab == Dcdt.DANH_SACH_BAO_CAO) {
             if (this.userInfo.DON_VI.tenVietTat.indexOf('_VP') != -1) {
                 const request = {
-                    dotBcao: lan,
+                    dotBcao: dotBcao,
                     // maDvi: this.userInfo.MA_DVI,
                     namBcao: this.response.namBcao,
                 }
@@ -151,6 +168,7 @@ export class DialogTaoMoiComponent implements OnInit {
                                 const pl = this.listAppendix.find(e => e.id == item.maLoai);
                                 item.tenPl = pl.tenPl;
                                 item.tenDm = pl.tenDm;
+                                item.giaoCho = this.userInfo?.sub
                             })
                         } else {
                             this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -187,7 +205,7 @@ export class DialogTaoMoiComponent implements OnInit {
     async synthetic() {
         this.spinner.show();
         const requestReport = {
-            dotBcao: this.response.dotBcao,
+            dotBcao: 1,
             namBcao: this.response.namBcao,
         };
         await this.dieuChinhService.tongHopDieuChinhDuToan(requestReport).toPromise().then(
@@ -217,11 +235,13 @@ export class DialogTaoMoiComponent implements OnInit {
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
                     this.response.namBcao = null;
+                    this.response.dotBcao = null;
                 }
             },
             (err) => {
                 this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
                 this.response.namBcao = null;
+                this.response.dotBcao = null;
             }
         );
         this.spinner.hide();

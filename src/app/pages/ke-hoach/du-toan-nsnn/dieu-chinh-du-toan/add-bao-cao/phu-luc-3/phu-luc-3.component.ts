@@ -189,6 +189,7 @@ export class PhuLuc3Component implements OnInit {
     getTotal() {
         this.total = new ItemData();
         this.lstCtietBcao.forEach(item => {
+            item.chenhLech = Operator.sum([item.dtoanVuTvqtDnghi, - item.dtoanDchinh])
             if (item.level == 0) {
                 this.keys.forEach(key => {
                     this.total[key] = Operator.sum([this.total[key], item[key]]);
@@ -346,6 +347,7 @@ export class PhuLuc3Component implements OnInit {
             } else {
                 this.dToanVuTang += Number(item.dtoanVuTvqtDnghi);
             }
+
         })
     };
 

@@ -1,11 +1,12 @@
 import { DatePipe, Location } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 import * as fileSaver from 'file-saver';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
+// import { displayNumber, exchangeMoney } from 'src/app/Utility/func';
+import { AMOUNT, DON_VI_TIEN, GDT, LA_MA, MONEY_LIMIT, Operator, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import { DialogCopyGiaoDuToanComponent } from 'src/app/components/dialog/dialog-copy-giao-du-toan/dialog-copy-giao-du-toan.component';
 import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialog-copy.component';
 import { DialogLuaChonThemDonViComponent } from 'src/app/components/dialog/dialog-lua-chon-them-don-vi/dialog-lua-chon-them-don-vi.component';
@@ -15,15 +16,13 @@ import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
-import { DataService } from 'src/app/services/data.service';
 import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { displayNumber, exchangeMoney } from 'src/app/Utility/func';
-import { AMOUNT, DON_VI_TIEN, GDT, LA_MA, MONEY_LIMIT, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import { NOI_DUNG } from './tao-moi-giao-dieu-chinh-du-toan.constant';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
 // khai báo class data request
 export class ItemData {
     id: string;
@@ -59,6 +58,7 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
     @Input() data;
 
     @Output() dataChange = new EventEmitter();
+    Op = new Operator("1")
     // khai báo kiểu dữ liệu các nút
     status = false; // trạng thái ẩn hiện thành phần
     statusBtnSave: boolean; // trạng thái ẩn hiện nút lưu
@@ -105,7 +105,7 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
     lstCtietBcao: ItemData[] = []; // danh sách data trong table
     donViTiens: any[] = DON_VI_TIEN; // danh sách đơn vị tiền
     lstDvi: any[] = []; //danh sach don vi da duoc chon
-    noiDungs: any[] = NOI_DUNG; // danh sách nội dung danh mục
+    noiDungs: any[] = []; // danh sách nội dung danh mục
     lstDviTrucThuoc: any[] = []; // danh sách báo cáo của các đơn vị trực thuộc
     fileList: NzUploadFile[] = []; // danh sách file upload
     lstFiles: any[] = []; //list file show ra màn hình
@@ -154,6 +154,7 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
         private datePipe: DatePipe,
         private modal: NzModalService,
         public globals: Globals,
+        public danhMucService: DanhMucService,
     ) { }
 
     // ===================================================================================
@@ -230,6 +231,10 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
 
     async initialization() {
         this.spinner.show();
+        const category = await this.danhMucService.danhMucChungGetAll('BC_DC_PL1');
+        if (category) {
+            this.noiDungs = category.data;
+        }
         // lấy id bản ghi từ router
         this.id = this.data.id;
 
@@ -1784,11 +1789,6 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
             })
         })
     };
-
-    displayValue(num: number): string {
-        num = exchangeMoney(num, '1', this.maDviTien);
-        return displayNumber(num);
-    }
 
     getMoneyUnit() {
         return this.donViTiens.find(e => e.id == this.maDviTien)?.tenDm;

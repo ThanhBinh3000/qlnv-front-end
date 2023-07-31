@@ -24,12 +24,6 @@
                                 </ng-template>
                             </div>
                         </div>
-                        <div class="canphai">
-                            <button type="button" class="btn btn-main" (click)="addLine(null)" *ngIf="status.general">
-                                <i class="icon htvbdh_dau-cong"></i>
-                                <span>Thêm</span>
-                            </button>
-                        </div>
                     </div>
 
                     <!-- bảng -->
@@ -217,8 +211,15 @@
                                     </td>
                                     <ng-container *ngIf="!status.viewAppVal else viewAppVal">
                                         <td nzLeft>
-                                            <input nz-input class="search__input"
-                                                [(ngModel)]="editCache[data.id].data.tenNoiDung" />
+                                            <!-- <input nz-input class="search__input"
+                                                [(ngModel)]="editCache[data.id].data.tenNoiDung" /> -->
+                                            <ng-container *ngIf="editCache[data.id].data.level == 3 else viewTen">
+                                                <input nz-input class="search__input"
+                                                    [(ngModel)]="editCache[data.id].data.tenNoiDung" />
+                                            </ng-container>
+                                            <ng-template #viewTen>
+                                                {{ editCache[data.id].data.tenNoiDung }}
+                                            </ng-template>
                                         </td>
                                         <td>
                                             <input nz-input class="search__input"
@@ -273,6 +274,7 @@
                                         <td>
                                             <input class="money-input" currencyMask
                                                 [(ngModel)]="editCache[data.id].data.dtoanVuTvqtDnghi"
+                                                (ngModelChange)="changeModel(editCache[data.id].data.id)"
                                                 [options]="Op.amount" />
                                         </td>
                                         <td>

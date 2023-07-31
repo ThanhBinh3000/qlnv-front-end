@@ -597,6 +597,7 @@ export class PhuLuc6Component implements OnInit {
                 this.total.dtoanDchinh = Operator.sum([this.total.dtoanDchinh, item.dtoanDchinh]);
                 this.total.dtoanVuTvqtDnghi = Operator.sum([this.total.dtoanVuTvqtDnghi, item.dtoanVuTvqtDnghi]);
                 this.total.kphiThieu = Operator.sum([this.total.kphiThieu, item.kphiThieu]);
+                this.total.chenhLech = Operator.sum([this.total.chenhLech, item.chenhLech]);
             }
         })
     };
@@ -607,6 +608,7 @@ export class PhuLuc6Component implements OnInit {
         this.dToanVuTang = 0;
         this.dToanVuGiam = 0;
         this.lstCtietBcao.forEach(item => {
+            item.chenhLech = Operator.sum([item.dtoanVuTvqtDnghi, - item.dtoanDchinh]);
             const str = item.stt
             if (!(this.lstCtietBcao.findIndex(e => Table.preIndex(e.stt) == str) != -1)) {
                 if (item.dtoanDchinh < 0) {
@@ -628,6 +630,7 @@ export class PhuLuc6Component implements OnInit {
         this.editCache[id].data.sluongThienCong = Operator.sum([this.editCache[id].data.sluongThienTte, this.editCache[id].data.sluongThienUocThien]);
         this.editCache[id].data.sluongThienTtien = Operator.mul(this.editCache[id].data.sluongThienDmuc, this.editCache[id].data.sluongThienCong);
         this.editCache[id].data.dtoanDchinh = Operator.sum([this.editCache[id].data.sluongThienTtien, - this.editCache[id].data.dtoanGiaoLke]);
+        this.editCache[id].data.chenhLech = Operator.sum([this.editCache[id].data.dtoanVuTvqtDnghi, - this.editCache[id].data.dtoanDchinh]);
     }
 
     //thay thế các stt khi danh sách được cập nhật, heSo=1 tức là tăng stt lên 1, heso=-1 là giảm stt đi 1

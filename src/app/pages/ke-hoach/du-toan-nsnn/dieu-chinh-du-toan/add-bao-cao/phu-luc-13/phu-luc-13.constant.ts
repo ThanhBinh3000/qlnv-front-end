@@ -7,7 +7,7 @@ export const DANH_MUC = [
     {
         id: 1001,
         ma: '0.1.1',
-        giaTri: 'trồng rừng',
+        giaTri: 'Trồng rừng',
     },
     {
         id: 1002,

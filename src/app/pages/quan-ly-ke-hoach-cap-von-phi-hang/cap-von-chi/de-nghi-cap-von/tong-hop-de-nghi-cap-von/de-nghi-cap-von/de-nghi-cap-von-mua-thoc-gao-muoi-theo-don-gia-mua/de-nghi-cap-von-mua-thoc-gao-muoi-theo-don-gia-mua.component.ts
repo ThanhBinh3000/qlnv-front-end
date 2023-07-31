@@ -171,10 +171,20 @@ export class DeNghiCapVonMuaThocGaoMuoiTheoDonGiaMuaComponent implements OnInit 
 			await this.getDetailReport();
 		} else {
 			this.baoCao = this.data?.baoCao;
+			this.setLevel();
+			if (this.baoCao.lstCtiets.length > 1) {
+				this.sum('0.1')
+			}
 		}
 		this.updateEditCache();
 		this.getStatusButton();
 		this.getTotal();
+	}
+
+	setLevel() {
+		this.baoCao.lstCtiets.forEach(item => {
+			item.level = item.stt.split('.').length - 2;
+		})
 	}
 
 	//check role cho các nut trinh duyet
@@ -278,6 +288,7 @@ export class DeNghiCapVonMuaThocGaoMuoiTheoDonGiaMuaComponent implements OnInit 
 					this.updateEditCache();
 					this.getStatusButton();
 					this.getTotal();
+					this.setLevel();
 				} else {
 					this.notification.error(MESSAGE.ERROR, data?.msg);
 				}
@@ -475,7 +486,7 @@ export class DeNghiCapVonMuaThocGaoMuoiTheoDonGiaMuaComponent implements OnInit 
 	getTotal() {
 		this.total = new ItemContract();
 		this.baoCao.lstCtiets.forEach((item, index) => {
-			if (index !== 0 && this.userService.isCuc()) {
+			if (index !== 0 && this.userService.isCuc() || (index !== 0 && this.userService.isTongCuc())) {
 				this.total.slKeHoach = Operator.sum([this.total.slKeHoach, item.slKeHoach]);
 				this.total.slThucHien = Operator.sum([this.total.slThucHien, item.slThucHien]);
 				this.total.donGia = Operator.sum([this.total.donGia, item.donGia]);
@@ -491,7 +502,7 @@ export class DeNghiCapVonMuaThocGaoMuoiTheoDonGiaMuaComponent implements OnInit 
 				this.total.vonDuyetCong = Operator.sum([this.total.vonDuyetCong, item.vonDuyetCong]);
 				this.total.tongTien = Operator.sum([this.total.tongTien, item.tongTien]);
 				this.total.soConDuocCap = Operator.sum([this.total.soConDuocCap, item.soConDuocCap]);
-			} else if (this.userService.isChiCuc() || this.userService.isCuc()) {
+			} else if (this.userService.isChiCuc()) {
 				this.total.slKeHoach = Operator.sum([this.total.slKeHoach, item.slKeHoach]);
 				this.total.slThucHien = Operator.sum([this.total.slThucHien, item.slThucHien]);
 				this.total.donGia = Operator.sum([this.total.donGia, item.donGia]);
@@ -510,6 +521,22 @@ export class DeNghiCapVonMuaThocGaoMuoiTheoDonGiaMuaComponent implements OnInit 
 
 			}
 		})
+	}
+
+	sum(stt: string) {
+		debugger
+		while (stt != '0') {
+			const index = this.baoCao.lstCtiets.findIndex(e => e.stt == stt);
+			this.baoCao.lstCtiets[index].slKeHoach
+		}
+		stt = Table.preIndex(stt);
+	}
+
+	getIndex(data: ItemContract) {
+		if (data.level == 0) {
+			return null;
+		}
+		return Table.subIndex(data.stt);
 	}
 
 	exportToExcel() {

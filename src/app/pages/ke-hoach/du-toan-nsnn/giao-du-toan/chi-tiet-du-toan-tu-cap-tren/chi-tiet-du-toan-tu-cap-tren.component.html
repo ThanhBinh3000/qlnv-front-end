@@ -119,11 +119,11 @@
                                 <td>
                                     <div *ngFor="let e of noiDungs">
                                         <div *ngIf="e.ma == item.maNdung">
-                                            {{e.tenDm}}
+                                            {{e.giaTri}}
                                         </div>
                                     </div>
                                 </td>
-                                <td>{{displayValue(item.soTien)}}</td>
+                                <td>{{Op.fmtVal(item.soTien)}}</td>
                             </tr>
                         </tbody>
                     </nz-table>

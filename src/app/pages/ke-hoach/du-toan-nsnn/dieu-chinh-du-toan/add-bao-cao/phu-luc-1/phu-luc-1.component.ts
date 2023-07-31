@@ -42,6 +42,7 @@ export class ItemData {
     changeModel() {
         this.tong = Operator.sum([this.dtoanKphiNamTruoc, this.dtoanKphiNamNay]);
         this.dtoanDnghiDchinh = Operator.sum([this.tongDtoanTrongNam, - this.tong])
+        this.chenhLech = Operator.sum([this.dtoanVuTvqtDnghi, - this.dtoanDnghiDchinh])
     }
 
     upperBound() {
@@ -399,6 +400,7 @@ export class PhuLuc1Component implements OnInit {
         this.dToanVuTang = 0;
         this.dToanVuGiam = 0;
         this.lstCtietBcao.forEach(item => {
+            item.chenhLech = Operator.sum([item.dtoanVuTvqtDnghi, - item.dtoanDnghiDchinh])
             const str = item.stt
             if (!(this.lstCtietBcao.findIndex(e => Table.preIndex(e.stt) == str) != -1)) {
                 if (item?.dtoanDnghiDchinh) {

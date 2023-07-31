@@ -148,7 +148,7 @@ export class DanhSachBaoCaoComponent implements OnInit {
                 res.data.content.forEach(item => {
                     this.dataTable.push({
                         ...item,
-                        namBcao: item.namPa,
+                        namBcao: item.namBcao,
                         ngayDuyet: this.datePipe.transform(item.ngayDuyet, Utils.FORMAT_DATE_STR),
                         ngayTao: this.datePipe.transform(item.ngayTao, Utils.FORMAT_DATE_STR),
                         ngayTrinh: this.datePipe.transform(item.ngayTrinh, Utils.FORMAT_DATE_STR),

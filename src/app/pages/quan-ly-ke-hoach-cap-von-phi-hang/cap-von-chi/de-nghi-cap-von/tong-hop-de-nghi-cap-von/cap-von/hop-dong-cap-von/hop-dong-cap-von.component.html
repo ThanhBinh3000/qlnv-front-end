@@ -285,12 +285,10 @@
                     {{ Op.fmtVal(editCache[data.id].data.luyKeCong) }}
                   </td>
                   <td>
-                    <input class="money-input" currencyMask [options]="amount"
-                      [(ngModel)]="editCache[data.id].data.luyKeCapUng" (ngModelChange)="changeModel(data.id)" />
+                    {{ Op.fmtVal(editCache[data.id].data.luyKeCapUng) }}
                   </td>
                   <td>
-                    <input class="money-input" currencyMask [options]="amount"
-                      [(ngModel)]="editCache[data.id].data.luyKeCapVon" (ngModelChange)="changeModel(data.id)" />
+                    {{ Op.fmtVal(editCache[data.id].data.luyKeCapVon) }}
                   </td>
                   <td>
                     <input class="money-input" currencyMask [options]="amount"

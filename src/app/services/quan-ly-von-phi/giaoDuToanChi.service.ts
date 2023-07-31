@@ -19,6 +19,14 @@ export class GiaoDuToanChiService extends BaseService {
   //search list bao cao giao du toan chi
   timBaoCaoGiao(request: any): Observable<any> {
     return this.httpClient.post(
+      this.urlDefault + '/bao_cao_du_toan/danh-sach',
+      request,
+    );
+  };
+
+  //search list bao cao giao du toan chi
+  timPhuongAnGiao(request: any): Observable<any> {
+    return this.httpClient.post(
       this.urlDefault + '/giao_du_toan/danh-sach',
       request,
     );
@@ -28,7 +36,7 @@ export class GiaoDuToanChiService extends BaseService {
   timBaoCaoGiao1(request: any): Observable<any> {
     return this.httpClient.post(
       // this.urlDefault + '/giao_du_toan/danh-sach',
-      'http://localhost:9159/giao_du_toan/danh-sach',
+      'http://localhost:9159/bao_cao_du_toan/danh-sach',
       request,
     );
   };
@@ -319,7 +327,7 @@ export class GiaoDuToanChiService extends BaseService {
   // call api nút lưu phụ lục
   updateCTietBcao(request: any): Observable<any> {
     return this.httpClient.put(
-      this.urlDefault + '/bao_cao_du_toan/chi-tiet',
+      this.urlDefault + '/bao_cao_du_toan/chi-tiet/cap-nhat',
       // "http://192.168.1.228:30101/bao_cao_du_toan/chi-tiet",
       request,
     );
@@ -348,5 +356,23 @@ export class GiaoDuToanChiService extends BaseService {
       this.urlDefault + '/bao_cao_du_toan/trang-thai',
       request);
   };
+
+  ctietBieuMau(id: string): Observable<any> {
+    return this.httpClient.get(
+      this.urlDefault + '/bao_cao_du_toan/chi-tiet/bieu-mau/' + id,
+    );
+  };
+
+  addHistory(id: string): Observable<any> {
+    return this.httpClient.get(
+      this.urlDefault + '/bao_cao_du_toan/sao-chep/' + id,
+    );
+  }
+
+  restoreReport(cId: string, rId: string): Observable<any> {
+    return this.httpClient.get(
+      this.urlDefault + '/bao_cao_du_toan/phuc-hoi/currentId=' + cId + '/recoverId=' + rId,
+    );
+  }
 
 }
