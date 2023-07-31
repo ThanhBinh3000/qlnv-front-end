@@ -528,7 +528,6 @@ export class DeNghiCapVonMuaThocGaoMuoiTheoDonGiaMuaComponent implements OnInit 
 		while (stt != '0') {
 			const index = this.baoCao.lstCtiets.findIndex(e => e.stt == stt);
 			this.baoCao.lstCtiets[index].slKeHoach
-			console.log(index)
 		}
 		stt = Table.preIndex(stt);
 	}

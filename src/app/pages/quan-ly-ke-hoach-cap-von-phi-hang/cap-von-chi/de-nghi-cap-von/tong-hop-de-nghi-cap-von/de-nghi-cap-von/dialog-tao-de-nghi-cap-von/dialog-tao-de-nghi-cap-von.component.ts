@@ -291,6 +291,7 @@ export class DialogTaoDeNghiCapVonComponent implements OnInit {
     }
     await this.capVonNguonChiService.dsachHopDong(request).toPromise().then(
       (data) => {
+        debugger
         if (data.statusCode == 0) {
           data.data.forEach(item => {
             const temp: ItemContract = {
@@ -407,27 +408,29 @@ export class DialogTaoDeNghiCapVonComponent implements OnInit {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       },
     );
-    await this.capVonNguonChiService.ctietDeNghi(this.idCallChitietDnghiCapVon).toPromise().then(
-      async (data) => {
-        if (data.statusCode == 0) {
-          if (data.data.trangThai == Utils.TT_BC_7) {
-            const arrData = data.data.lstCtiets;
-            for (let i = 0; i < arrData.length; i++) {
-              arrData[i].id = uuid.v4() + 'FE';
+    if (this.response.canCuVeGia == Utils.QD_DON_GIA) {
+      await this.capVonNguonChiService.ctietDeNghi(this.idCallChitietDnghiCapVon).toPromise().then(
+        async (data) => {
+          if (data.statusCode == 0) {
+            if (data.data.trangThai == Utils.TT_BC_7) {
+              const arrData = data.data.lstCtiets;
+              for (let i = 0; i < arrData.length; i++) {
+                arrData[i].id = uuid.v4() + 'FE';
+              }
+              this.response.lstCtiets = [];
+              this.response.lstCtiets.push(
+                ...arrData,
+              )
             }
-            this.response.lstCtiets = [];
-            this.response.lstCtiets.push(
-              ...arrData,
-            )
+          } else {
+            this.notification.error(MESSAGE.ERROR, data?.msg);
           }
-        } else {
-          this.notification.error(MESSAGE.ERROR, data?.msg);
-        }
-      },
-      (err) => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      },
-    );
+        },
+        (err) => {
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        },
+      );
+    }
     this.spinner.hide();
   }
 
@@ -439,6 +442,7 @@ export class DialogTaoDeNghiCapVonComponent implements OnInit {
       loaiDnghi: this.response.loaiDnghi,
       maDviTien: '1',
       maLoai: '3',
+      loaiTimKiem: '0',
       paggingReq: {
         limit: 10,
         page: 1,

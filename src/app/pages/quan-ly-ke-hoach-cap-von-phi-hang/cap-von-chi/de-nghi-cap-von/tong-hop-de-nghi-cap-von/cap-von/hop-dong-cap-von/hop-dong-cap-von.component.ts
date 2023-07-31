@@ -467,6 +467,7 @@ export class HopDongCapVonComponent implements OnInit {
     this.editCache[id].data.vonDnghiCapLanNay = Operator.sum([this.editCache[id].data.gtHopDong, -this.editCache[id].data.viPhamHopDong, -this.editCache[id].data.tongVonVaDuToanDaCap]);
     this.editCache[id].data.tongTien = Operator.sum([this.editCache[id].data.tongVonVaDuToanDaCap, this.editCache[id].data.capVon]);
     this.editCache[id].data.soConDuocCap = Operator.sum([this.editCache[id].data.gtHopDong, -this.editCache[id].data.tongTien]);
+    this.editCache[id].data.cong = Operator.sum([this.editCache[id].data.capUng, this.editCache[id].data.capVon]);
   }
 
   getTotal() {

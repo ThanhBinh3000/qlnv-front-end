@@ -54,20 +54,24 @@ export const TRANG_THAI = [
         id: Utils.TT_BC_2,
         tenDm: "Trình duyệt",
     },
-    // {
-    //     id: Utils.TT_BC_3,
-    //     tenDm: "Từ chối",
-    // },
-    // {
-    //     id: Utils.TT_BC_4,
-    //     tenDm: "Duyệt",
-    // },
+    {
+        id: Utils.TT_BC_3,
+        tenDm: "Từ chối",
+    },
+    {
+        id: Utils.TT_BC_4,
+        tenDm: "Duyệt",
+    },
     {
         id: Utils.TT_BC_5,
         tenDm: "Từ chối",
     },
     {
         id: Utils.TT_BC_7,
+        tenDm: "Phê duyệt",
+    },
+    {
+        id: Utils.TT_BC_9,
         tenDm: "Phê duyệt",
     },
 ];
@@ -257,4 +261,60 @@ export class Times {
     uyNhchiMaNguonNs: string;
     uyNhchiNienDoNs: string;
     uyNhchiNienSoTien: number;
+}
+
+export class Dncv {
+    static readonly GHI_NHAN_CU_VON = '1';
+    static readonly CU_VON_DVCD = '2';
+    static readonly THANH_TOAN = '3';
+    static readonly TIEN_THUA = '4';
+    static readonly VON_BAN = '5';
+    static readonly HOP_DONG_VON_BAN = '6';
+    static readonly QUAN_LY_THU_CHI = '7';
+
+    static readonly THOC = "0";
+    static readonly GAO = "1";
+    static readonly MUOI = "2";
+    static readonly VTU = "3";
+
+    static readonly HOP_DONG = "0";
+    static readonly DON_GIA = "1";
+
+    static readonly LOAI_DE_NGHI = [
+        {
+            id: Dncv.GAO,
+            tenDm: "Gạo",
+        },
+        {
+            id: Dncv.THOC,
+            tenDm: "Thóc",
+        },
+        {
+            id: Dncv.MUOI,
+            tenDm: "Muối",
+        },
+        {
+            id: Dncv.VTU,
+            tenDm: "Vật tư",
+        },
+    ];
+
+    static suggestionName(id: string) {
+        return Dncv.LOAI_DE_NGHI.find(e => e.id == id).tenDm;
+    }
+
+    static readonly CAN_CU_GIA = [
+        {
+            id: Dncv.HOP_DONG,
+            tenDm: "Hợp đồng trúng thầu",
+        },
+        {
+            id: Dncv.DON_GIA,
+            tenDm: "Quyết định đơn giá",
+        }
+    ]
+
+    static priceBasisName(id: string) {
+        return Dncv.CAN_CU_GIA.find(e => e.id == id).tenDm;
+    }
 }
