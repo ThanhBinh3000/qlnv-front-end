@@ -56,7 +56,7 @@
             <nz-form-control [nzErrorTip]="error">
               <nz-form-label >Nguyên nhân</nz-form-label>
               <nz-form-item>
-                <input nz-input formControlName="nguyenNhan" />
+                <input nz-input formControlName="nguyenNhan" [readonly]="disabled()" />
               </nz-form-item>
             </nz-form-control>
           </div>
@@ -68,7 +68,7 @@
                 <nz-form-control>
                   <nz-form-label [nzNoColon]="true">Diễn biến hàng</nz-form-label>
                   <nz-form-item>
-                    <textarea rows="5" formControlName="dienBien" nz-input></textarea>
+                    <textarea rows="5" formControlName="dienBien" nz-input [readonly]="disabled()"></textarea>
                   </nz-form-item>
                 </nz-form-control>
               </div>
@@ -80,7 +80,7 @@
                 <nz-form-control [nzErrorTip]="error">
                   <nz-form-label nzRequired >Biện pháp xử lý</nz-form-label>
                   <nz-form-item >
-                    <nz-select formControlName="bienPhapXl">
+                    <nz-select formControlName="bienPhapXl" [nzDisabled]="disabled()">
                       <nz-option *ngFor="let p of listBpxl" [nzValue]="p.ma"
                                  [nzLabel]="p.giaTri">
                       </nz-option>
@@ -92,7 +92,10 @@
                 <nz-form-control [nzErrorTip]="error">
                   <nz-form-label >Kết quả (Số lượng xử lý)</nz-form-label>
                   <nz-form-item>
-                    <input nz-input formControlName="soLuongXl" />
+                    <nz-input-number
+                      [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                      [nzParser]="globals.parser" nz-input formControlName="soLuongXl" [nzDisabled]="disabled()">
+                    </nz-input-number>
                   </nz-form-item>
                 </nz-form-control>
               </div>
@@ -100,7 +103,7 @@
                 <nz-form-control>
                   <nz-form-label [nzNoColon]="true">Mô tả chi tiết</nz-form-label>
                   <nz-form-item>
-                    <textarea rows="3" formControlName="moTa" nz-input></textarea>
+                    <textarea rows="3" formControlName="moTa" nz-input [readonly]="disabled()"></textarea>
                   </nz-form-item>
                 </nz-form-control>
               </div>
@@ -414,9 +417,13 @@
         <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
         Đóng
       </button>
-      <button nz-button (click)="handleOk()" class="modal__button--save ml-2">
+      <button *ngIf="!disabled()" nz-button (click)="handleOk(false)" class="modal__button--save ml-2">
         <i nz-icon nzType="save"></i>
         Lưu
+      </button>
+      <button *ngIf="!disabled()" nz-button (click)="handleOk(true)" class="modal__button--save ml-2">
+        <i nz-icon nzType="save"></i>
+        Xác nhận
       </button>
     </div>
   </div>
