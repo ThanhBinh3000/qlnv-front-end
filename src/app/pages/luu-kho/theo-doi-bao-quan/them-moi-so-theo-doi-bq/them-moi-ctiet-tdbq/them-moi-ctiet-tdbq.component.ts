@@ -47,6 +47,7 @@ export class ThemMoiCtietTdbqComponent extends Base3Component implements OnInit 
     this.formData = this.fb.group({
       id : [null,],
       idHdr : [null,[Validators.required]],
+      idNguoiKtra : [null],
       tenNguoiKtra : [null,[Validators.required]],
       ngayKtra : [null,[Validators.required]],
       loaiVthh : [null,[Validators.required]],
@@ -63,14 +64,14 @@ export class ThemMoiCtietTdbqComponent extends Base3Component implements OnInit 
       moTa : [null],
       idDataTk : [],
       idDataKtv : [],
-      idDataLdcc : []
+      idDataLdcc : [],
+      trangThai : []
     })
   }
 
 
   ngOnInit(): void {
     this.loadDataCombobox();
-    console.log(this.dataTk,this.dataKtv,this.dataLdcc);
     if(this.id){
       this.detail(this.id).then((res)=>{
         this.rowItem = res
@@ -103,16 +104,59 @@ export class ThemMoiCtietTdbqComponent extends Base3Component implements OnInit 
     });
   }
 
-  handleOk(){
+  handleOk(isApprove){
     let body = {
       ...this.formData.value,
       ...this.rowItem
     };
     this.createUpdate(body).then((res)=>{
       if(res){
-        this._modalRef.close();
+        if(isApprove){
+          this.formData.patchValue({
+            id : res.id
+          })
+          this.handleApprove();
+        }else{
+          this._modalRef.close();
+        }
       }
     })
+  }
+
+  handleApprove(){
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có muốn xác nhận thông tin ?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 350,
+      nzOnOk: async () => {
+        this.spinner.show();
+        try {
+          let body = {
+            id: this.formData.value.id,
+            trangThai: this.STATUS.DA_HOAN_THANH,
+          }
+          let res = await this.theoDoiBqDtlService.approve(body);
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.NOTIFICATION,  MESSAGE.UPDATE_SUCCESS);
+            this.spinner.hide();
+            this._modalRef.close();
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+            this.spinner.hide();
+          }
+        } catch (e) {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        } finally {
+          this.spinner.hide();
+        }
+      },
+    });
   }
 
   onCancel() {
@@ -120,7 +164,11 @@ export class ThemMoiCtietTdbqComponent extends Base3Component implements OnInit 
   }
 
   disabled():boolean{
-    return false;
+    if(this.formData.value.id){
+      return !(this.formData.value.ngayKtra == dayjs().format('YYYY-MM-DD') &&  this.formData.value.idNguoiKtra == this.userInfo.ID && this.formData.value.trangThai == this.STATUS.DU_THAO) ;
+    }else{
+      return false
+    }
   }
 
 }
