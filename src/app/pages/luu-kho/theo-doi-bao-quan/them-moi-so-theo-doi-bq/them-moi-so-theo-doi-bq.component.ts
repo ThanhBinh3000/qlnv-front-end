@@ -442,7 +442,6 @@ export class ThemMoiSoTheoDoiBqComponent extends Base3Component implements OnIni
       },
     });
     modalGT.afterClose.subscribe((data)=>{
-      console.log('ádasd');
         this.changeMonth(this.monthSelect)
     })
   }

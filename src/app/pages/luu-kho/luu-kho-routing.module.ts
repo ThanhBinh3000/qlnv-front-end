@@ -38,6 +38,13 @@ const routes: Routes = [
         path: 'theo-doi-bao-quan/chi-tiet/:id',
         component: ThemMoiSoTheoDoiBqComponent
       },
+      {
+        path: 'hang-trong-kho',
+        loadChildren: () =>
+          import(
+            '../luu-kho/hang-trong-kho/hang-trong-kho.module'
+            ).then((m) => m.HangTrongKhoModule),
+      },
 		],
 	},
 ];

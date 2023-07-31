@@ -29,6 +29,14 @@ export const LUU_KHO_ROUTE_LIST: Array<ChiTietMenu> = [
   // },
   {
     icon: 'htvbdh_tcdt_theodoibaoquan',
+    title: 'Hàng trong kho DTQG',
+    url: `${LUU_KHO_MAIN_ROUTE}/hang-trong-kho`,
+    dropdown: 'theo-doi-bao-quan',
+    idHover: 'hangtrongkho',
+    hasTab: false,
+  },
+  {
+    icon: 'htvbdh_tcdt_theodoibaoquan',
     title: 'Theo dõi bảo quản',
     url: `${LUU_KHO_MAIN_ROUTE}/theo-doi-bao-quan`,
     dropdown: 'theo-doi-bao-quan',

@@ -1,0 +1,23 @@
+<div class="left-menu">
+  <div nz-row nzGutter="24" class="mt-2" style="border-top: 1px solid gray">
+    <div nz-col nzSpan="4">
+      <ul nz-menu nzMode="inline">
+        <li [nzSelected]="tabSelected==0" nz-menu-item (click)="selectTab(0)">
+          <span class="bold">Quyết định giao NV xuất hàng</span>
+        </li>
+        <li [nzSelected]="tabSelected==1" nz-menu-item (click)="selectTab(1)">
+          <span class="bold">Quyết định giao NV nhập hàng</span>
+        </li>
+      </ul>
+    </div>
+    <div nz-col nzSpan="20">
+      <ng-container *ngIf="tabSelected == 0">
+        <app-qd-giao-nhiem-vu-xuat-hang></app-qd-giao-nhiem-vu-xuat-hang>
+      </ng-container>
+      <ng-container *ngIf="tabSelected == 1">
+        <app-qd-giao-nhiem-vu-nhap-hang></app-qd-giao-nhiem-vu-nhap-hang>
+      </ng-container>
+
+    </div>
+  </div>
+</div>
