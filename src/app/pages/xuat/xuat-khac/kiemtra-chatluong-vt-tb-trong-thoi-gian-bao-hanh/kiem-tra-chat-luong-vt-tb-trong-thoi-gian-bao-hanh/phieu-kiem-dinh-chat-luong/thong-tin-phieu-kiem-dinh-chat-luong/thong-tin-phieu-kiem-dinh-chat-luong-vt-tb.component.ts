@@ -354,15 +354,16 @@ export class ThongTinPhieuKiemDinhChatLuongVtTbComponent extends Base2Component 
   pheDuyet() {
     let trangThai = '';
     let msg = '';
-    switch (this.formData.value.trangThai) {
+    switch (this.formData.get('trangThai').value) {
       case STATUS.TU_CHOI_LDC:
-      case STATUS.CHO_DUYET_TP: {
-        trangThai = STATUS.CHO_DUYET_LDC;
+      case STATUS.TU_CHOI_TP:
+      case STATUS.DU_THAO: {
+        trangThai = STATUS.CHO_DUYET_TP;
         msg = MESSAGE.GUI_DUYET_CONFIRM;
         break;
       }
-      case STATUS.DU_THAO: {
-        trangThai = STATUS.CHO_DUYET_TP;
+      case STATUS.CHO_DUYET_TP: {
+        trangThai = STATUS.CHO_DUYET_LDC;
         msg = MESSAGE.GUI_DUYET_CONFIRM;
         break;
       }
@@ -465,6 +466,8 @@ export class ThongTinPhieuKiemDinhChatLuongVtTbComponent extends Base2Component 
           cloaiVthh: item.cloaiVthh,
           tenCloaiVthh: item.tenCloaiVthh,
           ngayLayMau: item.ngayLayMau,
+          soLuongLm:item.soLuongLm,
+          donViTinh:item.donViTinh,
         });
         await this.loadPhuongPhapLayMau(item.cloaiVthh);
         await this.tenThuKho(item.maDiaDiem);
