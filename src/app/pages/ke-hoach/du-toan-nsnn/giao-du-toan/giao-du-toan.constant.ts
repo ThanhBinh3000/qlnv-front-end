@@ -206,25 +206,17 @@ export class BtnStatus {
 
 export class Form {
     id: string;
-    maLoai: string;
+    maBieuMau: string;
     tenPl: string;
     tenDm: string;
     trangThai: string;
     maDviTien: string;
     lyDoTuChoi: string;
     thuyetMinh: string;
-    giaoCho: string;
-    lstCtietDchinh: any[];
-    checked: boolean;
-    lstFiles: Doc[];
-    fileDinhKems: any[];
-    listIdDeleteFiles: string[];
-
-    maBieuMau: string;
     nguoiBcao: string;
     lstCtietBcaos: any[];
-    hsBhDuoi: number;
-    hsBhTu: number;
+    lstFiles: Doc[];
+    listIdDeleteFiles: string[];
 }
 
 export class Doc {
@@ -232,4 +224,62 @@ export class Doc {
     fileName: string;
     fileSize: number;
     fileUrl: number;
+}
+
+export class Report {
+    id: string;
+    maPa: string;
+    maBcao: string; // Thêm trường maBcao	
+    namPa: number;
+    trangThai: string;
+    maDvi: string;
+    maDviCha: string; // chưa dùng	
+    maGiao: string;
+    soQd: Doc;
+    // maLoaiDan: string;
+    // maPhanGiao: string;
+    maPaCha: string;
+    ngayQd: any;
+    namDtoan: number;
+    noiQd: string;
+    namBcao: number;
+    maDviTien: string;
+    thuyetMinh: string;
+    ngayTao: any;
+    nguoiTao: string;
+    ngayTrinh: any;
+    nguoiTrinh: string;
+    ngayDuyet: any;
+    nguoiDuyet: string;
+    ngayPheDuyet: any;
+    nguoiPheDuyet: string;
+    ngayTraKq: any;
+    nguoiTraKq: string;
+    ngaySua: any;
+    nguoiSua: string;
+    lyDoTuChoi: string;
+    trangThaiGiao: string;
+    tenDvi: string;
+    tongHopTuIds: any[];
+    fileDinhKems: any[];
+    lstFiles: any[];
+    listIdFiles: any[];
+    lstCtiets: Form[];
+    lstGiaoDtoanTrucThuocs: any[];
+    lichSu: History[];
+}
+
+export class History {
+    id: string;
+    maBcao: string;
+    namBcao: number;
+    lan: number;
+    ngayTao: string;
+    nguoiTao: string;
+    ngayTrinh: string;
+    ngayDuyet: string;
+    ngayPheDuyet: string;
+    ngayTraKq: string;
+    lyDoTuChoi: string;
+    trangThai: string;
 }

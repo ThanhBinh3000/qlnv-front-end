@@ -154,8 +154,8 @@ export class PhuLuc4Component implements OnInit {
         this.lstCtietBcao = Table.sortByIndex(this.lstCtietBcao);
 
         // this.sortByIndex();
-        this.getTotal();
         this.tinhTong();
+        this.getTotal();
         this.lstCtietBcao.forEach(item => {
             item.noiDung = this.noiDungs.find(e => e.ma == item.maNoiDung)?.giaTri;
         })
@@ -229,6 +229,7 @@ export class PhuLuc4Component implements OnInit {
     getTotal() {
         this.total = new ItemData();
         this.lstCtietBcao.forEach(item => {
+            item.chenhLech = Operator.sum([item.dtoanVuTvqtDnghi, - item.dtoanDchinhDnghiLanNay])
             if (item.level == 0) {
                 this.total.keHoachVon = Operator.sum([this.total.keHoachVon, item.keHoachVon]);
                 this.total.dtoanDaGiaoLke = Operator.sum([this.total.dtoanDaGiaoLke, item.dtoanDaGiaoLke]);
@@ -237,6 +238,7 @@ export class PhuLuc4Component implements OnInit {
                 this.total.khoachSauDchinh = Operator.sum([this.total.khoachSauDchinh, item.khoachSauDchinh]);
                 this.total.dtoanDchinhDnghiLanNay = Operator.sum([this.total.dtoanDchinhDnghiLanNay, item.dtoanDchinhDnghiLanNay]);
                 this.total.dtoanVuTvqtDnghi = Operator.sum([this.total.dtoanVuTvqtDnghi, item.dtoanVuTvqtDnghi]);
+                this.total.chenhLech = Operator.sum([this.total.chenhLech, item.chenhLech]);
             }
         })
     };

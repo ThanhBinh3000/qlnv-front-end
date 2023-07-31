@@ -127,6 +127,7 @@ export class PhuLuc9Component implements OnInit {
         "dtoanKphiCong",
         "dtoanDnghiDchinh",
         "dtoanVuTvqtDnghi",
+        "chenhLech",
     ]
     lstVatTuFull: any[] = [];
     dsDinhMuc: any[] = [];
@@ -188,14 +189,14 @@ export class PhuLuc9Component implements OnInit {
             // if (category) {
             // 	this.linhVucChis = category.data;
             // }
-            this.scrollX = Table.tableWidth(350, 10, 1, 110);
+            this.scrollX = Table.tableWidth(350, 37, 1, 110);
         } else {
             if (this.status.editAppVal) {
-                this.scrollX = Table.tableWidth(350, 14, 2, 60);
+                this.scrollX = Table.tableWidth(350, 40, 2, 60);
             } else if (this.status.viewAppVal) {
-                this.scrollX = Table.tableWidth(350, 14, 2, 0);
+                this.scrollX = Table.tableWidth(350, 40, 2, 0);
             } else {
-                this.scrollX = Table.tableWidth(350, 10, 1, 0);
+                this.scrollX = Table.tableWidth(350, 37, 1, 0);
             }
         }
 
@@ -218,8 +219,8 @@ export class PhuLuc9Component implements OnInit {
             })
         }
 
-        this.getTotal();
         this.tinhTong();
+        this.getTotal();
         this.updateEditCache();
         this.getStatusButton();
         this.spinner.hide();
@@ -269,6 +270,7 @@ export class PhuLuc9Component implements OnInit {
         this.dToanVuTang = 0;
         this.dToanVuGiam = 0;
         this.lstCtietBcao.forEach(item => {
+            item.chenhLech = Operator.sum([item.dtoanVuTvqtDnghi, - item.dtoanDnghiDchinh])
             if (item.dtoanDnghiDchinh < 0) {
                 this.tongDieuChinhGiam += Number(item?.dtoanDnghiDchinh);
             } else {
@@ -442,6 +444,7 @@ export class PhuLuc9Component implements OnInit {
             this.editCache[id].data.dtoanKphiDaGiao
         ])
         this.editCache[id].data.dtoanDnghiDchinh = Operator.sum([this.editCache[id].data.tongNcauTluong, - this.editCache[id].data.dtoanKphiCong])
+        this.editCache[id].data.chenhLech = Operator.sum([this.editCache[id].data.dtoanVuTvqtDnghi, - this.editCache[id].data.dtoanDnghiDchinh])
     };
 
     saveEdit(id: string): void {

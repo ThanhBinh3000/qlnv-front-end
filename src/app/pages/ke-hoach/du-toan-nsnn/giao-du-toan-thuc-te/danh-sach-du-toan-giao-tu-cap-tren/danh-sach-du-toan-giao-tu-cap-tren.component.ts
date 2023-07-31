@@ -154,7 +154,7 @@ export class DanhSachDuToanGiaoTuCapTrenComponent implements OnInit {
             searchFilterTemp.trangThais = [Utils.TT_BC_1, Utils.TT_BC_2, Utils.TT_BC_3, Utils.TT_BC_4, Utils.TT_BC_5, Utils.TT_BC_6, Utils.TT_BC_7, Utils.TT_BC_8, Utils.TT_BC_9]
         }
         this.spinner.show();
-        await this.giaoDuToanChiService.timBaoCaoGiao(searchFilterTemp).toPromise().then(
+        await this.giaoDuToanChiService.timPhuongAnGiao(searchFilterTemp).toPromise().then(
             (data) => {
                 if (data.statusCode == 0) {
                     this.danhSachBaoCao = [];

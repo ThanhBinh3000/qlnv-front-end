@@ -179,6 +179,7 @@
 										<td>
 											<input class="money-input" currencyMask
 												[(ngModel)]="editCache[data.id].data.dtoanVuTvqtDnghi"
+												(ngModelChange)="editCache[data.id].data.changeModel()"
 												[options]="Op.amount" />
 										</td>
 

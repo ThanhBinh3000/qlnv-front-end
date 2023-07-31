@@ -16,8 +16,7 @@ import { QuyetToanVonPhiService } from 'src/app/services/quan-ly-von-phi/quyetTo
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { displayNumber, exchangeMoney } from 'src/app/Utility/func';
-import { AMOUNT, DON_VI_TIEN, LA_MA, MONEY_LIMIT, QTVP, Utils } from 'src/app/Utility/utils';
+import { AMOUNT, DON_VI_TIEN, LA_MA, MONEY_LIMIT, Operator, QTVP, Utils } from 'src/app/Utility/utils';
 import * as uuid from "uuid";
 import { NOI_DUNG } from './them-bao-cao-dieu-chinh-sau-quyet-toan.constant';
 export class ItemData {
@@ -50,7 +49,7 @@ export class ThemBaoCaoDieuChinhSauQuyetToanComponent implements OnInit {
     @Input() idInput;
     @Input() isStatus;
     @Output('close') onClose = new EventEmitter<any>();
-
+    Op = new Operator("1");
     // thong tin dang nhap
     userInfo: any;
     // info report 
@@ -1054,11 +1053,6 @@ export class ThemBaoCaoDieuChinhSauQuyetToanComponent implements OnInit {
         if (this.total.thanhTien == 0) {
             this.total.thanhTien = null;
         }
-    };
-
-    displayValue(num: number): string {
-        num = exchangeMoney(num, '1', this.maDviTien);
-        return displayNumber(num);
     };
 
     deleteLine(id: any) {

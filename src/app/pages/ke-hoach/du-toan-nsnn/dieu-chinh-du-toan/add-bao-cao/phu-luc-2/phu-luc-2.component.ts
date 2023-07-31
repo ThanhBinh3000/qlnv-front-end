@@ -132,8 +132,8 @@ export class PhuLuc2Component implements OnInit {
             }
         }
         // await this.getListTaiSan();
-        this.getTotal();
         this.tinhTong();
+        this.getTotal();
         this.updateEditCache();
         this.getStatusButton();
         this.spinner.hide();
@@ -188,6 +188,8 @@ export class PhuLuc2Component implements OnInit {
             this.total.dtoanKpCong = Operator.sum([this.total.dtoanKpCong, item.dtoanKpCong]);
             this.total.dtoanKpDieuChinh = Operator.sum([this.total.dtoanKpDieuChinh, item.dtoanKpDieuChinh]);
             this.total.dtoanVuDnghi = Operator.sum([this.total.dtoanVuDnghi, item.dtoanVuDnghi]);
+            this.total.chenhLech = Operator.sum([this.total.chenhLech, item.chenhLech]);
+            item.chenhLech = Operator.sum([item.dtoanVuDnghi, - item.dtoanKpDieuChinh])
         })
     };
 
@@ -364,7 +366,7 @@ export class PhuLuc2Component implements OnInit {
         this.editCache[id].data.dtoanDnghiThanhTien = Operator.mul(this.editCache[id].data.dtoanDnghiSl, this.editCache[id].data.dtoanDnghiMucGia);
         this.editCache[id].data.dtoanKpCong = Operator.sum([this.editCache[id].data.dtoanKpNamTruoc, this.editCache[id].data.dtoanKpDaGiao]);
         this.editCache[id].data.dtoanKpDieuChinh = Operator.sum([this.editCache[id].data.dtoanDnghiThanhTien, - this.editCache[id].data.dtoanKpCong]);
-
+        this.editCache[id].data.chenhLech = Operator.sum([this.editCache[id].data.dtoanVuDnghi, - this.editCache[id].data.dtoanKpDieuChinh]);
     };
 
     deleteAllChecked() {

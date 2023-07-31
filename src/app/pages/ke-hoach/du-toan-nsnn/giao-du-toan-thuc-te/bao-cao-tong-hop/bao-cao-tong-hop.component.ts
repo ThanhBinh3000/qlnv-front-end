@@ -1,6 +1,5 @@
 import { DatePipe, Location } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 import * as fileSaver from 'file-saver';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -12,14 +11,13 @@ import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
-import { DataService } from 'src/app/services/data.service';
 import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { displayNumber, exchangeMoney, sumNumber } from 'src/app/Utility/func';
-import { AMOUNT, DON_VI_TIEN, GDT, LA_MA, MONEY_LIMIT, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { AMOUNT, DON_VI_TIEN, GDT, LA_MA, MONEY_LIMIT, Operator, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import { NOI_DUNG } from './bao-cao-tong-hop.constant';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
 
 // khai báo class data request
 export class ItemData {
@@ -50,6 +48,7 @@ export class BaoCaoTongHopComponent implements OnInit {
     @Input() data;
 
     @Output() dataChange = new EventEmitter();
+    Op = new Operator("1");
     // khai báo kiểu dữ liệu các nút
     status = false; // trạng thái ẩn hiện thành phần
     statusBtnSave: boolean; // trạng thái ẩn hiện nút lưu
@@ -96,7 +95,7 @@ export class BaoCaoTongHopComponent implements OnInit {
     lstCtietBcao: ItemData[] = []; // danh sách data trong table
     donViTiens: any[] = DON_VI_TIEN; // danh sách đơn vị tiền
     lstDvi: any[] = []; //danh sach don vi da duoc chon
-    noiDungs: any[] = NOI_DUNG; // danh sách nội dung danh mục
+    noiDungs: any[] = []; // danh sách nội dung danh mục
     lstDviTrucThuoc: any[] = []; // danh sách báo cáo của các đơn vị trực thuộc
     fileList: NzUploadFile[] = []; // danh sách file upload
     lstFiles: any[] = []; //list file show ra màn hình
@@ -145,6 +144,8 @@ export class BaoCaoTongHopComponent implements OnInit {
         private datePipe: DatePipe,
         private modal: NzModalService,
         public globals: Globals,
+        public danhMucService: DanhMucService,
+
     ) { }
 
     // ===================================================================================
@@ -221,6 +222,11 @@ export class BaoCaoTongHopComponent implements OnInit {
 
     async initialization() {
         this.spinner.show();
+
+        const category = await this.danhMucService.danhMucChungGetAll('BC_DC_PL1');
+        if (category) {
+            this.noiDungs = category.data;
+        }
         // lấy id bản ghi từ router
         this.id = this.data.id;
 
@@ -1243,20 +1249,15 @@ export class BaoCaoTongHopComponent implements OnInit {
                 }
                 this.lstCtietBcao.forEach(item => {
                     if (this.getHead(item.stt) == stt) {
-                        this.lstCtietBcao[index].chenhLech = sumNumber([this.lstCtietBcao[index].chenhLech, item.chenhLech]);
-                        this.lstCtietBcao[index].dviCapDuoiTh = sumNumber([this.lstCtietBcao[index].dviCapDuoiTh, item.dviCapDuoiTh]);
-                        this.lstCtietBcao[index].tongCong = sumNumber([this.lstCtietBcao[index].tongCong, item.tongCong]);
+                        this.lstCtietBcao[index].chenhLech = Operator.sum([this.lstCtietBcao[index].chenhLech, item.chenhLech]);
+                        this.lstCtietBcao[index].dviCapDuoiTh = Operator.sum([this.lstCtietBcao[index].dviCapDuoiTh, item.dviCapDuoiTh]);
+                        this.lstCtietBcao[index].tongCong = Operator.sum([this.lstCtietBcao[index].tongCong, item.tongCong]);
                     }
                 })
                 stt = this.getHead(stt);
             }
         })
 
-    }
-
-    displayValue(num: number): string {
-        num = exchangeMoney(num, '1', this.maDviTien);
-        return displayNumber(num);
     }
 
     getMoneyUnit() {
