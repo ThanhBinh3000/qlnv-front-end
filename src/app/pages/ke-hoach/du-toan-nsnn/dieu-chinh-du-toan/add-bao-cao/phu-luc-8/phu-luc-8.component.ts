@@ -510,7 +510,7 @@ export class PhuLuc8Component implements OnInit {
         this.editCache[id].data.tongNcauDtoan = Operator.mul(this.editCache[id].data.dinhMuc, this.editCache[id].data.luongSlBquanTcong);
         this.editCache[id].data.kphiCong = Operator.sum([this.editCache[id].data.kphiDtoanGiaoTnam, this.editCache[id].data.kphiDtoanNtruoc])
         this.editCache[id].data.dtoanDchinhDnghi = Operator.sum([this.editCache[id].data.tongNcauDtoan, - this.editCache[id].data.kphiCong]);
-        this.editCache[id].data.chenhLech = Operator.sum([this.editCache[id].data.tongNcauDtoan, - this.editCache[id].data.kphiCong]);
+        this.editCache[id].data.chenhLech = Operator.sum([this.editCache[id].data.dtoanVuTvqtDnghi, - this.editCache[id].data.dtoanDchinhDnghi]);
     };
 
     setIndex() {

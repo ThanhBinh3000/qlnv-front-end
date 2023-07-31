@@ -120,8 +120,13 @@
                                 <ng-template #editTemplate>
 
                                     <td nzLeft>
-                                        <input nz-input class="search__input"
-                                            [(ngModel)]="editCache[data.id].data.tenNoiDung" />
+                                        <ng-container *ngIf="editCache[data.id].data.level == 2 ; else editNd ">
+                                            {{editCache[data.id].data.tenNoiDung}}
+                                        </ng-container>
+                                        <ng-template #editNd>
+                                            <input nz-input class="search__input"
+                                                [(ngModel)]="editCache[data.id].data.tenNoiDung" />
+                                        </ng-template>
                                     </td>
                                     <td>
                                         <input nz-input class="search__input"
@@ -144,7 +149,7 @@
                                             (click)="deleteLine(data.id)"></i>
                                     </td>
                                     <td *ngIf="status.general"></td>
-                                    <td>
+                                    <td *ngIf="status.general">
                                         <a class="save" (click)="saveEdit(data.id)" style="margin-right:15px">Lưu</a>
                                         <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
                                             (nzOnConfirm)="cancelEdit(data.id)" class="save">Hủy</a>

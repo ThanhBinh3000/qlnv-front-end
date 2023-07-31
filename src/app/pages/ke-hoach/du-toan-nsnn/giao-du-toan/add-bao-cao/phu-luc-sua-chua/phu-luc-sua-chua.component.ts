@@ -22,7 +22,7 @@ export class ItemData {
     khVon: number;
     dtoanDaGiaoLuyKe: number;
     gtriCongTrinh: number;
-    khdieuChinh: number;
+    khDieuChinh: number;
     dtoanNam: number;
 
     constructor(data: Partial<Pick<ItemData, keyof ItemData>>) {
@@ -30,7 +30,7 @@ export class ItemData {
     }
 
     changeModel() {
-        this.dtoanNam = Operator.sum([this.khVon, this.khdieuChinh])
+        this.dtoanNam = Operator.sum([this.khVon, this.khDieuChinh])
     }
 
     upperBound() {
@@ -344,7 +344,7 @@ export class PhuLucSuaChuaComponent implements OnInit {
             khVon: 0,
             dtoanDaGiaoLuyKe: 0,
             gtriCongTrinh: 0,
-            khdieuChinh: 0,
+            khDieuChinh: 0,
             dtoanNam: 0,
         });
 

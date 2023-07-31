@@ -27,71 +27,72 @@ import { PhuLucTaiSanComponent } from './phu-luc-tai-san/phu-luc-tai-san.compone
 import { PhuLucQuyLuongComponent } from './phu-luc-quy-luong/phu-luc-quy-luong.component';
 import { PhuLucDaoTaoComponent } from './phu-luc-dao-tao/phu-luc-dao-tao.component';
 import { PhuLucKhoaHocCongNgheComponent } from './phu-luc-khoa-hoc-cong-nghe/phu-luc-khoa-hoc-cong-nghe.component';
-import { BtnStatus, Gdt } from '../giao-du-toan.constant';
+import { BtnStatus, Doc, Form, Gdt, Report } from '../giao-du-toan.constant';
 
 
-export class ItemCongVan {
-    fileName: string;
-    fileSize: number;
-    fileUrl: number;
-}
+// export class ItemCongVan {
+//     fileName: string;
+//     fileSize: number;
+//     fileUrl: number;
+// }
 
-export class ItemData {
-    id: string;
-    maBieuMau: string;
-    tenPl: string;
-    tenDm: string;
-    trangThai: string;
-    maDviTien: string;
-    lyDoTuChoi: string;
-    thuyetMinh: string;
-    nguoiBcao: string;
-    lstCtietBcaos: any[];
-    hsBhDuoi: number;
-    hsBhTu: number;
-}
+// export class ItemData {
+//     id: string;
+//     maBieuMau: string;
+//     tenPl: string;
+//     tenDm: string;
+//     trangThai: string;
+//     maDviTien: string;
+//     lyDoTuChoi: string;
+//     thuyetMinh: string;
+//     nguoiBcao: string;
+//     lstCtietBcaos: any[];
+//     hsBhDuoi: number;
+//     hsBhTu: number;
+// }
 
-export class BaoCao {
-    id: string;
-    maPa: string;
-    maBcao: string; // Thêm trường maBcao	
-    namPa: number;
-    trangThai: string;
-    maDvi: string;
-    maDviCha: string; // chưa dùng	
-    maGiao: string;
-    soQd: ItemCongVan;
-    // maLoaiDan: string;
-    // maPhanGiao: string;
-    maPaCha: string;
-    ngayQd: any;
-    namDtoan: number;
-    noiQd: string;
-    namBcao: number;
-    maDviTien: string;
-    thuyetMinh: string;
-    ngayTao: any;
-    nguoiTao: string;
-    ngayTrinh: any;
-    nguoiTrinh: string;
-    ngayDuyet: any;
-    nguoiDuyet: string;
-    ngayPheDuyet: any;
-    nguoiPheDuyet: string;
-    ngayTraKq: any;
-    nguoiTraKq: string;
-    ngaySua: any;
-    nguoiSua: string;
-    lyDoTuChoi: string;
-    trangThaiGiao: string;
-    tenDvi: string;
-    tongHopTuIds: any[];
-    fileDinhKems: any[];
-    lstFiles: any[];
-    listIdFiles: any[];
-    lstCtiets: ItemData[];
-    lstGiaoDtoanTrucThuocs: any[];
-}
+// export class BaoCao {
+//     id: string;
+//     maPa: string;
+//     maBcao: string; // Thêm trường maBcao	
+//     namPa: number;
+//     trangThai: string;
+//     maDvi: string;
+//     maDviCha: string; // chưa dùng	
+//     maGiao: string;
+//     soQd: ItemCongVan;
+//     // maLoaiDan: string;
+//     // maPhanGiao: string;
+//     maPaCha: string;
+//     ngayQd: any;
+//     namDtoan: number;
+//     noiQd: string;
+//     namBcao: number;
+//     maDviTien: string;
+//     thuyetMinh: string;
+//     ngayTao: any;
+//     nguoiTao: string;
+//     ngayTrinh: any;
+//     nguoiTrinh: string;
+//     ngayDuyet: any;
+//     nguoiDuyet: string;
+//     ngayPheDuyet: any;
+//     nguoiPheDuyet: string;
+//     ngayTraKq: any;
+//     nguoiTraKq: string;
+//     ngaySua: any;
+//     nguoiSua: string;
+//     lyDoTuChoi: string;
+//     trangThaiGiao: string;
+//     tenDvi: string;
+//     tongHopTuIds: any[];
+//     fileDinhKems: any[];
+//     lstFiles: any[];
+//     listIdFiles: any[];
+//     lstCtiets: ItemData[];
+//     lstGiaoDtoanTrucThuocs: any[];
+//     lichSu: History[];
+// }
 
 
 
@@ -103,6 +104,8 @@ export class BaoCao {
 export class AddBaoCaoComponent implements OnInit {
     @Input() data
     @Output() dataChange = new EventEmitter();
+    Utils = Utils;
+    Status = Status;
 
     userInfo: any;
     trangThais: any[] = TRANG_THAI_TIM_KIEM;
@@ -122,7 +125,7 @@ export class AddBaoCaoComponent implements OnInit {
     path: string;
     isOffice: boolean;
     // thong tin chi tiet bao cao
-    baoCao: BaoCao = new BaoCao();
+    baoCao: Report = new Report();
     listAppendix: any[] = PHU_LUC;
 
     fileDetail: NzUploadFile;
@@ -140,9 +143,8 @@ export class AddBaoCaoComponent implements OnInit {
     beforeUploadCV = (file: NzUploadFile): boolean => {
         this.fileDetail = file;
         this.baoCao.soQd = {
+            ...new Doc(),
             fileName: file.name,
-            fileSize: null,
-            fileUrl: null,
         };
         return false;
     };
@@ -236,7 +238,7 @@ export class AddBaoCaoComponent implements OnInit {
 
     async initialization() {
         //lay thong tin chung bao cao
-        console.log(this.data);
+        // console.log(this.data);
 
         this.baoCao.id = this.data?.id;
         this.userInfo = this.userService.getUserLogin();
@@ -303,7 +305,7 @@ export class AddBaoCaoComponent implements OnInit {
                     //     })
                     // } else {
                     this.baoCao.lstCtiets.push({
-                        ...new ItemData(),
+                        ...new Form(),
                         id: uuid.v4() + 'FE',
                         maBieuMau: item.id,
                         tenPl: item.tenPl,
@@ -348,7 +350,7 @@ export class AddBaoCaoComponent implements OnInit {
                 })
             }
         }
-        console.log(this.baoCao);
+        // console.log(this.baoCao);
 
         this.getStatusButton();
         this.spinner.hide();
@@ -385,8 +387,8 @@ export class AddBaoCaoComponent implements OnInit {
             if (res) {
                 res.forEach(item => {
                     if (item.status) {
-                        const newItem: ItemData = {
-                            ... new ItemData(),
+                        const newItem: Form = {
+                            ... new Form(),
                             id: uuid.v4() + 'FE',
                             maBieuMau: item.id,
                             tenPl: item.tenPl,
@@ -1289,21 +1291,47 @@ export class AddBaoCaoComponent implements OnInit {
     status: BtnStatus = new BtnStatus();
     //check role cho các nut trinh duyet
     getStatusButton() {
-        const isSynthetic = this.baoCao.lstGiaoDtoanTrucThuocs && this.baoCao.lstCtiets.length != 0;
+        // const isSynthetic = this.baoCao.lstGiaoDtoanTrucThuocs && this.baoCao.lstCtiets.length != 0;
+        // this.isChild = this.userInfo.MA_DVI == this.baoCao.maDvi;
+        // this.isParent = this.userInfo.MA_DVI == this.baoCao.maDviCha;
+        // //kiem tra quyen cua cac user
+        // const checkSave = isSynthetic ? this.userService.isAccessPermisson(Roles.GDT.EDIT_REPORT_TH) : this.userService.isAccessPermisson(Roles.GDT.EDIT_REPORT);
+        // const checkSunmit = isSynthetic ? this.userService.isAccessPermisson(Roles.GDT.SUBMIT_SYNTH_REPORT) : this.userService.isAccessPermisson(Roles.GDT.SUBMIT_REPORT);
+        // const checkPass = isSynthetic ? this.userService.isAccessPermisson(Roles.GDT.PASS_SYNTH_REPORT) : this.userService.isAccessPermisson(Roles.GDT.PASS_REPORT);
+        // const checkApprove = isSynthetic ? this.userService.isAccessPermisson(Roles.GDT.APPROVE_SYNTH_REPORT) : this.userService.isAccessPermisson(Roles.GDT.APPROVE_REPORT);
+        // const checkAccept = this.userService.isAccessPermisson(Roles.GDT.ACCEPT_REPORT);
+        // const checkPrint = isSynthetic ? this.userService.isAccessPermisson(Roles.GDT.PRINT_SYNTH_REPORT) : this.userService.isAccessPermisson(Roles.GDT.PRINT_REPORT);
+        // const checkExport = isSynthetic ? this.userService.isAccessPermisson(Roles.GDT.EXPORT_SYNTH_REPORT) : this.userService.isAccessPermisson(Roles.GDT.EXPORT_REPORT)
+
+        // this.status.general = Status.check('saveWHist', this.baoCao.trangThai) && checkSave;
+        // this.status.new = Status.check('reject', this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.GDT.ADD_REPORT) && this.isChild && this.data.preTab == Gdt.DANH_SACH_BAO_CAO;
+        // this.status.viewAppVal = Status.check('appraisal', this.baoCao.trangThai);
+        // this.status.save = Status.check('saveWHist', this.baoCao.trangThai) && checkSave && this.isChild;
+        // this.status.submit = Status.check('submit', this.baoCao.trangThai) && checkSunmit && this.isChild && !(!this.baoCao.id);
+        // this.status.pass = Status.check('pass', this.baoCao.trangThai) && checkPass && this.isChild;
+        // this.status.approve = Status.check('approve', this.baoCao.trangThai) && checkApprove && this.isChild;
+        // this.status.accept = Status.check('accept', this.baoCao.trangThai) && checkAccept && this.isParent;
+        // // this.status.print = Utils.statusPrint.includes(this.baoCao.trangThai) && checkPrint && this.isChild;
+        // this.status.export = Status.check('export', this.baoCao.trangThai) && checkExport && this.isChild;
+        // this.status.ok = this.status.accept || this.status.approve || this.status.pass
+        // this.status.finish = this.status.general;
+        // this.status.editAppVal = this.status.accept;
+
+        const isSynthetic = this.baoCao.lstGiaoDtoanTrucThuocs && this.baoCao.lstGiaoDtoanTrucThuocs.length != 0;
         this.isChild = this.userInfo.MA_DVI == this.baoCao.maDvi;
         this.isParent = this.userInfo.MA_DVI == this.baoCao.maDviCha;
         //kiem tra quyen cua cac user
-        const checkSave = isSynthetic ? this.userService.isAccessPermisson(Roles.GDT.EDIT_REPORT_TH) : this.userService.isAccessPermisson(Roles.LTD.EDIT_REPORT);
-        const checkSunmit = isSynthetic ? this.userService.isAccessPermisson(Roles.LTD.SUBMIT_SYNTH_REPORT) : this.userService.isAccessPermisson(Roles.LTD.SUBMIT_REPORT);
-        const checkPass = isSynthetic ? this.userService.isAccessPermisson(Roles.LTD.PASS_SYNTH_REPORT) : this.userService.isAccessPermisson(Roles.LTD.PASS_REPORT);
-        const checkApprove = isSynthetic ? this.userService.isAccessPermisson(Roles.LTD.APPROVE_SYNTH_REPORT) : this.userService.isAccessPermisson(Roles.LTD.APPROVE_REPORT);
-        const checkAccept = this.userService.isAccessPermisson(Roles.LTD.ACCEPT_REPORT);
-        const checkPrint = isSynthetic ? this.userService.isAccessPermisson(Roles.LTD.PRINT_SYNTH_REPORT) : this.userService.isAccessPermisson(Roles.LTD.PRINT_REPORT);
-        const checkExport = isSynthetic ? this.userService.isAccessPermisson(Roles.LTD.EXPORT_SYNTH_REPORT) : this.userService.isAccessPermisson(Roles.LTD.EXPORT_REPORT)
+        const checkSave = isSynthetic ? this.userService.isAccessPermisson(Roles.GDT.EDIT_REPORT_TH) : this.userService.isAccessPermisson(Roles.GDT.EDIT_REPORT_PA_PBDT);
+        const checkSunmit = isSynthetic ? this.userService.isAccessPermisson(Roles.GDT.TRINHDUYET_PA_TONGHOP_PBDT) : this.userService.isAccessPermisson(Roles.GDT.APPROVE_REPORT_TH);
+        const checkPass = isSynthetic ? this.userService.isAccessPermisson(Roles.GDT.DUYET_TUCHOI_PA_TH_PBDT) : this.userService.isAccessPermisson(Roles.GDT.DUYET_REPORT_TH);
+        const checkApprove = isSynthetic ? this.userService.isAccessPermisson(Roles.GDT.PHEDUYET_TUCHOI_PA_TH_PBDT) : this.userService.isAccessPermisson(Roles.GDT.PHEDUYET_REPORT_TH);
+        const checkAccept = this.userService.isAccessPermisson(Roles.GDT.TIEP_NHAN_TC_REPORT_TH);
+        const checkPrint = isSynthetic ? this.userService.isAccessPermisson(Roles.GDT.IN_PA_TONGHOP_PBDT) : this.userService.isAccessPermisson(Roles.GDT.PRINT_REPORT);
+        const checkExport = isSynthetic ? this.userService.isAccessPermisson(Roles.GDT.XUAT_PA_TONGHOP_PBDT) : this.userService.isAccessPermisson(Roles.GDT.EXPORT_REPORT)
 
         this.status.general = Status.check('saveWHist', this.baoCao.trangThai) && checkSave;
-        this.status.new = Status.check('reject', this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.LTD.ADD_REPORT) && this.isChild && this.data.preTab == Gdt.DANH_SACH_BAO_CAO;
-        this.status.viewAppVal = Status.check('appraisal', this.baoCao.trangThai);
+        this.status.new = Status.check('reject', this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.GDT.ADD_REPORT_TH) && this.isChild && this.data.preTab == Gdt.DANH_SACH_BAO_CAO;
+        // this.status.viewAppVal = Status.check('appraisal', this.baoCao.trangThai);
         this.status.save = Status.check('saveWHist', this.baoCao.trangThai) && checkSave && this.isChild;
         this.status.submit = Status.check('submit', this.baoCao.trangThai) && checkSunmit && this.isChild && !(!this.baoCao.id);
         this.status.pass = Status.check('pass', this.baoCao.trangThai) && checkPass && this.isChild;
@@ -1313,7 +1341,7 @@ export class AddBaoCaoComponent implements OnInit {
         this.status.export = Status.check('export', this.baoCao.trangThai) && checkExport && this.isChild;
         this.status.ok = this.status.accept || this.status.approve || this.status.pass
         this.status.finish = this.status.general;
-        this.status.editAppVal = this.status.accept;
+        // this.status.editAppVal = this.status.accept;
     }
 
     async getChildUnit() {
@@ -1405,6 +1433,46 @@ export class AddBaoCaoComponent implements OnInit {
         this.baoCao.lstFiles = this.baoCao.lstFiles.filter((a: any) => a.id !== id);
         this.listFile = this.listFile.filter((a: any) => a?.lastModified.toString() !== id);
         this.baoCao.listIdFiles.push(id);
+    }
+
+    async restoreReport(id: string) {
+        await this.giaoDuToanChiService.restoreReport(this.baoCao.id, id).toPromise().then(
+            (data) => {
+                if (data.statusCode == 0) {
+                    Object.assign(this.baoCao, data.data);
+                    this.baoCao.lstCtiets.forEach(item => {
+                        [item.tenPl, item.tenDm] = Gdt.appendixName(item.maBieuMau, this.baoCao.namBcao);
+                    })
+                    this.getStatusButton();
+                    this.notification.success(MESSAGE.SUCCESS, 'Khôi phục thành công.');
+                } else {
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+            }
+        );
+    }
+
+    async newReport() {
+        await this.giaoDuToanChiService.addHistory(this.baoCao.id).toPromise().then(
+            (data) => {
+                if (data.statusCode == 0) {
+                    Object.assign(this.baoCao, data.data);
+                    this.baoCao.lstCtiets.forEach(item => {
+                        [item.tenPl, item.tenDm] = Gdt.appendixName(item.maBieuMau, this.baoCao.namBcao);
+                    })
+                    this.getStatusButton();
+                    this.notification.success(MESSAGE.SUCCESS, 'Tạo mới thành công.');
+                } else {
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+            }
+        );
     }
 
 }

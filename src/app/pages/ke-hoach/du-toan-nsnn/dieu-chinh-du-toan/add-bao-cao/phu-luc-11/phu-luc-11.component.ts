@@ -442,6 +442,7 @@ export class PhuLuc11Component implements OnInit {
         this.editCache[id].data.tongNCDtoanKp = Operator.mul(this.editCache[id].data.sluongTongSo, this.editCache[id].data.kinhPhiHoTro);
         this.editCache[id].data.dtoanTongSo = Operator.sum([this.editCache[id].data.dtoanNamTruoc, this.editCache[id].data.dtoanDaGiao]);
         this.editCache[id].data.dtoanDnghiDchinh = Operator.sum([this.editCache[id].data.tongNCDtoanKp, - this.editCache[id].data.dtoanTongSo]);
+        this.editCache[id].data.chenhLech = Operator.sum([this.editCache[id].data.dtoanVuTvqtDnghi, - this.editCache[id].data.dtoanDnghiDchinh]);
     };
 
     getLowStatus(str: string) {

@@ -426,6 +426,7 @@ export class PhuLuc5Component implements OnInit {
         this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
         this.updateEditCache();
         this.sum(this.lstCtietBcao[index].stt);
+        this.getTotal();
     }
 
     // huy thay doi
@@ -607,6 +608,7 @@ export class PhuLuc5Component implements OnInit {
                 this.total.dtoanDchinh = Operator.sum([this.total.dtoanDchinh, item.dtoanDchinh]);
                 this.total.dtoanVuTvqtDnghi = Operator.sum([this.total.dtoanVuTvqtDnghi, item.dtoanVuTvqtDnghi]);
                 this.total.kphiConThieu = Operator.sum([this.total.kphiConThieu, item.kphiConThieu]);
+                this.total.chenhLech = Operator.sum([this.total.chenhLech, item.chenhLech]);
             }
         })
     };

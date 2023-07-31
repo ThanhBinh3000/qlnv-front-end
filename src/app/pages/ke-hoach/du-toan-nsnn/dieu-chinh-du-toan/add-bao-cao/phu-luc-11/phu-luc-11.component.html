@@ -307,14 +307,14 @@
                                             {{Op.fmtVal(editCache[data.id].data.dtoanDnghiDchinh)}}
                                         </td>
                                         <td>
-                                            {{ editCache[data.id].data.ghiChu }}
+                                            <input nz-input [(ngModel)]="editCache[data.id].data.ghiChu" />
                                         </td>
                                     </ng-container>
                                     <ng-template #viewAppVal>
                                         <td nzLeft>
                                             {{ editCache[data.id].data.tenNoiDung }}
                                         </td>
-                                        <td nzLeft>
+                                        <td>
                                             {{ editCache[data.id].data.doiTuong }}
                                         </td>
                                         <td>

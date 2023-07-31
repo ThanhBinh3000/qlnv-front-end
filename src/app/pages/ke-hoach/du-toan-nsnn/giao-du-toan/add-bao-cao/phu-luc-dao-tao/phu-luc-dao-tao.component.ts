@@ -26,7 +26,7 @@ export class ItemData {
     sluongNgoaiNuoc: number;
     sluongTongSo: number;
     kinhPhiHoTro: number;
-    tongNCDtoanKp: number;
+    tongCauDtoanKp: number;
 
     constructor(data: Partial<Pick<ItemData, keyof ItemData>>) {
         Object.assign(this, data);
@@ -34,7 +34,7 @@ export class ItemData {
 
     changeModel() {
         this.sluongTongSo = Operator.sum([this.sluongTrongNuoc, this.sluongNgoaiNuoc]);
-        this.tongNCDtoanKp = Operator.mul(this.sluongTongSo, this.kinhPhiHoTro);
+        this.tongCauDtoanKp = Operator.mul(this.sluongTongSo, this.kinhPhiHoTro);
     }
 
     index() {
@@ -50,7 +50,7 @@ export class ItemData {
     }
 
     upperBound() {
-        return this.tongNCDtoanKp > Utils.MONEY_LIMIT;
+        return this.tongCauDtoanKp > Utils.MONEY_LIMIT;
     }
 
     clear() {
@@ -417,7 +417,9 @@ export class PhuLucDaoTaoComponent implements OnInit {
     getTotal() {
         this.total.clear();
         this.lstCtietBcaos.forEach(item => {
-            this.total.sum(item);
+            if (item.level == 0) {
+                this.total.sum(item);
+            }
         })
     }
 

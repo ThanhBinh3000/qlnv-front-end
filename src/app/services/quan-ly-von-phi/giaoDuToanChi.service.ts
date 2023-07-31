@@ -361,6 +361,18 @@ export class GiaoDuToanChiService extends BaseService {
     return this.httpClient.get(
       this.urlDefault + '/bao_cao_du_toan/chi-tiet/bieu-mau/' + id,
     );
+  };
+
+  addHistory(id: string): Observable<any> {
+    return this.httpClient.get(
+      this.urlDefault + '/bao_cao_du_toan/sao-chep/' + id,
+    );
+  }
+
+  restoreReport(cId: string, rId: string): Observable<any> {
+    return this.httpClient.get(
+      this.urlDefault + '/bao_cao_du_toan/phuc-hoi/currentId=' + cId + '/recoverId=' + rId,
+    );
   }
 
 }

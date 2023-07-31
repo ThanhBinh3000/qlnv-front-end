@@ -34,7 +34,7 @@
                                 <th rowspan="2">Tổng cộng</th>
 
                                 <th colspan="{{lstDvi.length}}">Danh sách đơn vị</th>
-                                <th rowspan="2" colspan="3" [hidden]="status"></th>
+                                <th rowspan="2" colspan="3" *ngIf="status.general"></th>
                             </tr>
                             <tr>
                                 <th *ngFor="let item of lstDvi">
@@ -48,13 +48,22 @@
                                 <td>Tổng cộng</td>
                                 <td>{{Op.fmtVal(total.dtoanGiao)}}</td>
                                 <td>{{Op.fmtVal(total.tongCong)}}</td>
-                                <td *ngFor="let item of lstDvi">
+                                <!-- <td *ngFor="let item of lstDvi">
                                     <div *ngFor="let data of lstCtietBcaos;">
                                         <div *ngFor="let e of data.lstCtietDvis;">
                                         </div>
                                     </div>
-                                </td>
-                                <td [hidden]="status"></td>
+                                </td> -->
+                                <ng-container *ngFor="let item of total.lstCtietDvis">
+                                    <td>{{Op.fmtVal(item.soTranChi)}}</td>
+                                    <!-- <th></th>
+                                    <th>{{Op.fmtVal(item.gtTrenGtBh)}}</th>
+                                    <th>{{Op.fmtVal(item.gtDuoiGt)}}</th>
+                                    <th></th>
+                                    <th>{{Op.fmtVal(item.gtDuoiGtBh)}}</th>
+                                    <th>{{Op.fmtVal(item.tong)}}</th> -->
+                                </ng-container>
+                                <td *ngIf="status.general"></td>
                             </tr>
                             <tr *ngFor="let data of lstCtietBcaos; let i = index">
                                 <td>
@@ -77,7 +86,7 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td [hidden]="status">
+                                    <td *ngIf="status.general">
                                         <ng-container *ngIf="!getLowStatus(data.stt)">
                                             <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
                                         </ng-container>
@@ -106,10 +115,8 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td>
+                                    <td *ngIf="status.general">
                                         <a (click)="saveEdit(data.id)" class="save">Lưu</a>
-                                    </td>
-                                    <td [hidden]="status">
                                         <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
                                             (nzOnConfirm)="cancelEdit(data.id)" class="save">
                                             Hủy

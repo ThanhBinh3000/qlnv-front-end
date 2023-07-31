@@ -503,6 +503,7 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
             maPa: this.maPa,
             maPaCha: this.maPaCha,
             namPa: this.namDtoan,
+            namBcao: this.namDtoan,
             soQd: this.soQd,
             maPhanGiao: "2",
             maLoaiDan: '3',

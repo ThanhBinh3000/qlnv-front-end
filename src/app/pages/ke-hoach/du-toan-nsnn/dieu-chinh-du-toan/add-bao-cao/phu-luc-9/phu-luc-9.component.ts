@@ -127,6 +127,7 @@ export class PhuLuc9Component implements OnInit {
         "dtoanKphiCong",
         "dtoanDnghiDchinh",
         "dtoanVuTvqtDnghi",
+        "chenhLech",
     ]
     lstVatTuFull: any[] = [];
     dsDinhMuc: any[] = [];
@@ -443,6 +444,7 @@ export class PhuLuc9Component implements OnInit {
             this.editCache[id].data.dtoanKphiDaGiao
         ])
         this.editCache[id].data.dtoanDnghiDchinh = Operator.sum([this.editCache[id].data.tongNcauTluong, - this.editCache[id].data.dtoanKphiCong])
+        this.editCache[id].data.chenhLech = Operator.sum([this.editCache[id].data.dtoanVuTvqtDnghi, - this.editCache[id].data.dtoanDnghiDchinh])
     };
 
     saveEdit(id: string): void {

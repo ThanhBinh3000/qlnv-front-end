@@ -67,7 +67,7 @@
                                 <td>{{Op.fmtVal(total.khVon)}}</td>
                                 <td>{{Op.fmtVal(total.dtoanDaGiaoLuyKe)}}</td>
                                 <td>{{Op.fmtVal(total.gtriCongTrinh)}}</td>
-                                <td>{{Op.fmtVal(total.khdieuChinh)}}</td>
+                                <td>{{Op.fmtVal(total.khDieuChinh)}}</td>
                                 <td>{{Op.fmtVal(total.dtoanNam)}}</td>
                                 <td *ngIf="status.general"></td>
                                 <td *ngIf="status.general"></td>
@@ -83,7 +83,7 @@
                                     <td>{{Op.fmtVal(data.khVon)}}</td>
                                     <td>{{Op.fmtVal(data.dtoanDaGiaoLuyKe)}}</td>
                                     <td>{{Op.fmtVal(data.gtriCongTrinh)}}</td>
-                                    <td>{{Op.fmtVal(data.khdieuChinh)}}</td>
+                                    <td>{{Op.fmtVal(data.khDieuChinh)}}</td>
                                     <td>{{Op.fmtVal(data.dtoanNam)}}</td>
                                     <td *ngIf="status.general">
                                         <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
@@ -118,7 +118,7 @@
                                     </td>
                                     <td>
                                         <input class="money-input" currencyMask
-                                            [(ngModel)]="editCache[data.id].data.khdieuChinh"
+                                            [(ngModel)]="editCache[data.id].data.khDieuChinh"
                                             (ngModelChange)="editCache[data.id].data.changeModel()"
                                             [options]="Op.amount" />
                                     </td>

@@ -93,7 +93,7 @@
                                 <td></td>
                                 <td></td>
                                 <td>{{Op.fmtVal(total.kinhPhiHoTro)}}</td>
-                                <td>{{Op.fmtVal(total.tongNCDtoanKp)}}</td>
+                                <td>{{Op.fmtVal(total.tongCauDtoanKp)}}</td>
                                 <td *ngIf="status.general"></td>
                                 <td *ngIf="status.general"></td>
                                 <td *ngIf="status.general"></td>
@@ -125,7 +125,7 @@
                                         {{Op.fmtVal(data.kinhPhiHoTro)}}
                                     </td>
                                     <td>
-                                        {{Op.fmtVal(data.tongNCDtoanKp)}}
+                                        {{Op.fmtVal(data.tongCauDtoanKp)}}
                                     </td>
                                     <td *ngIf="status.general">
                                         <i *ngIf="checkDelete(data.stt)" class="fa fa-trash-o do"
@@ -141,8 +141,13 @@
                                 </ng-container>
                                 <ng-template #editTemplate>
                                     <td nzLeft>
-                                        <input nz-input class="search__input"
-                                            [(ngModel)]="editCache[data.id].data.tenNoiDung" />
+                                        <ng-container *ngIf="editCache[data.id].data.level == '0' ; else editNd ">
+                                            {{editCache[data.id].data.tenNoiDung}}
+                                        </ng-container>
+                                        <ng-template #editNd>
+                                            <input nz-input class="search__input"
+                                                [(ngModel)]="editCache[data.id].data.tenNoiDung" />
+                                        </ng-template>
                                     </td>
                                     <td>
                                         <input nz-input class="search__input"
@@ -174,7 +179,7 @@
                                             [options]="Op.amount" />
                                     </td>
                                     <td>
-                                        {{Op.fmtVal(editCache[data.id].data.tongNCDtoanKp)}}
+                                        {{Op.fmtVal(editCache[data.id].data.tongCauDtoanKp)}}
                                     </td>
                                     <td *ngIf="status.general">
                                         <i *ngIf="checkDelete(data.stt)" class="fa fa-trash-o do"

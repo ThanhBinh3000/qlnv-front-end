@@ -417,6 +417,7 @@ export class PhuLucKhoaHocCongNgheComponent implements OnInit {
         const index = this.lstCtietBcaos.findIndex(item => item.id === id); // lay vi tri hang minh sua
         Object.assign(this.lstCtietBcaos[index], this.editCache[id].data); // set lai data cua lstCtietBcaos[index] = this.editCache[id].data
         this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
+        this.sum(this.lstCtietBcaos[index].stt);
         this.getTotal()
         this.updateEditCache();
     };
@@ -441,7 +442,9 @@ export class PhuLucKhoaHocCongNgheComponent implements OnInit {
     getTotal() {
         this.total.clear();
         this.lstCtietBcaos.forEach(item => {
-            this.total.sum(item);
+            if (item.level == 0) {
+                this.total.sum(item);
+            }
         })
     }
 

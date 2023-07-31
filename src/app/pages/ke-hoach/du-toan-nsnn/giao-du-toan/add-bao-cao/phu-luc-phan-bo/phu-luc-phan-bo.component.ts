@@ -40,11 +40,13 @@ export class ItemData {
             case 1:
                 return chiSo[n];
             case 2:
-                return chiSo[n - 1].toString() + "." + chiSo[n].toString();
-            case 3:
                 return String.fromCharCode(k + 96);
+            case 3:
+                return "";
             case 4:
                 return "-";
+            default:
+                return " "
         }
     }
 
@@ -218,7 +220,7 @@ export class PhuLucPhanBoComponent implements OnInit {
         //     this.lstDvi = this.donVis.filter(v => v.maDvi === s.maDviNhan)
         // })
 
-        console.log(this.dataInfo?.capDvi);
+        // console.log(this.dataInfo?.capDvi);
 
         if (this.dataInfo?.capDvi == "3") {
             // let lstDvi1 = this.donVis.filter(e => e?.maDviCha === this.dataInfo.maDvi);
@@ -236,7 +238,7 @@ export class PhuLucPhanBoComponent implements OnInit {
                 }
             )
             this.lstDvi = this.donVis;
-            console.log(this.lstDvi);
+            // console.log(this.lstDvi);
 
         } else {
             this.formDetail.lstCtietBcaos[0]?.lstCtietDvis.forEach(s => {
@@ -351,20 +353,21 @@ export class PhuLucPhanBoComponent implements OnInit {
             return;
         }
 
-        this.editCache[id].data.lstCtietDvis.forEach(item => {
-            data.push({
-                id: item.id,
-                maDviNhan: item.maDviNhan,
-                soTranChi: item.soTranChi,
-                trangThai: item.trangThai,
-            })
-        })
-        this.editCache[id].data.lstCtietDvis = data
+        // this.editCache[id].data.lstCtietDvis.forEach(item => {
+        //     data.push({
+        //         id: item.id,
+        //         maDviNhan: item.maDviNhan,
+        //         soTranChi: item.soTranChi,
+        //         trangThai: item.trangThai,
+        //     })
+        // })
+        // // this.editCache[id].data.lstCtietDvis = data
         // this.lstCtietBcaos[index] = {
         //     ...this.editCache[id].data,
         //     lstCtietDvis: data,
         // }
-        this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
+        // this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
+        Object.assign(this.lstCtietBcaos[index], this.editCache[id].data);
         this.sum(this.lstCtietBcaos[index].stt);
         this.getTotal();
         this.updateEditCache();
@@ -438,7 +441,21 @@ export class PhuLucPhanBoComponent implements OnInit {
     getLowStatus(stt: string) {
         const index: number = this.lstCtietBcaos.findIndex(e => this.getHead(e.stt) == stt);
         if (index == -1) {
-            return false;
+            if (
+                stt == "0.1.2.1" ||
+                stt == "0.1.2.2.1" ||
+                stt == "0.1.2.2.2" ||
+                stt == "0.1.2.2.3" ||
+                stt == "0.1.2.2.4" ||
+                stt == "0.1.2.4.1" ||
+                stt == "0.2.1.1" ||
+                stt == "0.3.2.1" ||
+                stt == "0.4.2"
+            ) {
+                return true;
+            } else {
+                return false;
+            }
         }
         return true;
     };
@@ -527,6 +544,31 @@ export class PhuLucPhanBoComponent implements OnInit {
         this.total.clear();
         this.lstCtietBcaos.forEach(item => {
             this.total.sum(item);
+        })
+
+        this.total.lstCtietDvis = [];
+        this.lstDvi.forEach(item => {
+            this.total.lstCtietDvis.push({
+                ...new ItemDvi(),
+                maDviNhan: item.maDvi,
+                // tenDvi: item.tenDvi,
+            })
+        })
+        this.lstCtietBcaos.forEach(item => {
+            if (item.stt.split('.')?.length == 2) {
+                // this.total.gtTrenGt = Operator.sum([this.total.gtTrenGt, item.gtTrenGt]);
+                // this.total.gtTrenGtBh = Operator.sum([this.total.gtTrenGtBh, item.gtTrenGtBh]);
+                // this.total.gtDuoiGt = Operator.sum([this.total.gtDuoiGt, item.gtDuoiGt]);
+                // this.total.gtDuoiGtBh = Operator.sum([this.total.gtDuoiGtBh, item.gtDuoiGtBh]);
+                // this.total.tong = Operator.sum([this.total.tong, item.tong]);
+                for (let i = 0; i < item.lstCtietDvis?.length; i++) {
+                    this.total.lstCtietDvis[i].soTranChi = Operator.sum([this.total.lstCtietDvis[i].soTranChi, item.lstCtietDvis[i].soTranChi]);
+                    // this.total.lstDviCapDuoi[i].gtTrenGtBh = Operator.sum([this.total.lstDviCapDuoi[i].gtTrenGtBh, item.lstDviCapDuoi[i].gtTrenGtBh]);
+                    // this.total.lstDviCapDuoi[i].gtDuoiGt = Operator.sum([this.total.lstDviCapDuoi[i].gtDuoiGt, item.lstDviCapDuoi[i].gtDuoiGt]);
+                    // this.total.lstDviCapDuoi[i].gtDuoiGtBh = Operator.sum([this.total.lstDviCapDuoi[i].gtDuoiGtBh, item.lstDviCapDuoi[i].gtDuoiGtBh]);
+                    // this.total.lstDviCapDuoi[i].tong = Operator.sum([this.total.lstDviCapDuoi[i].tong, item.lstDviCapDuoi[i].tong]);
+                }
+            }
         })
     }
 
