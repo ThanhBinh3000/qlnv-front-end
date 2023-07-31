@@ -177,8 +177,8 @@ export class PhuLuc5Component implements OnInit {
         }
 
         this.lstCtietBcao = Table.sortByIndex(this.lstCtietBcao);
-        this.sum1();
         this.tinhTong();
+        this.sum1();
         this.updateEditCache();
         this.getStatusButton();
 
@@ -426,6 +426,7 @@ export class PhuLuc5Component implements OnInit {
         this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
         this.updateEditCache();
         this.sum(this.lstCtietBcao[index].stt);
+        this.getTotal();
     }
 
     // huy thay doi
@@ -587,6 +588,7 @@ export class PhuLuc5Component implements OnInit {
                         this.lstCtietBcao[index].dtoanDchinh = Operator.sum([this.lstCtietBcao[index].dtoanDchinh, item.dtoanDchinh]);
                         this.lstCtietBcao[index].dtoanVuTvqtDnghi = Operator.sum([this.lstCtietBcao[index].dtoanVuTvqtDnghi, item.dtoanVuTvqtDnghi]);
                         this.lstCtietBcao[index].kphiConThieu = Operator.sum([this.lstCtietBcao[index].kphiConThieu, item.kphiConThieu]);
+                        this.lstCtietBcao[index].chenhLech = Operator.sum([this.lstCtietBcao[index].chenhLech, item.chenhLech]);
                     }
                 })
                 stt = Table.preIndex(stt);
@@ -606,6 +608,7 @@ export class PhuLuc5Component implements OnInit {
                 this.total.dtoanDchinh = Operator.sum([this.total.dtoanDchinh, item.dtoanDchinh]);
                 this.total.dtoanVuTvqtDnghi = Operator.sum([this.total.dtoanVuTvqtDnghi, item.dtoanVuTvqtDnghi]);
                 this.total.kphiConThieu = Operator.sum([this.total.kphiConThieu, item.kphiConThieu]);
+                this.total.chenhLech = Operator.sum([this.total.chenhLech, item.chenhLech]);
             }
         })
     };
@@ -616,6 +619,7 @@ export class PhuLuc5Component implements OnInit {
         this.dToanVuTang = 0;
         this.dToanVuGiam = 0;
         this.lstCtietBcao.forEach(item => {
+            item.chenhLech = Operator.sum([item.dtoanVuTvqtDnghi, - item.dtoanDchinh])
             const str = item.stt
             if (!(this.lstCtietBcao.findIndex(e => Table.preIndex(e.stt) == str) != -1)) {
                 if (item.dtoanDchinh < 0) {

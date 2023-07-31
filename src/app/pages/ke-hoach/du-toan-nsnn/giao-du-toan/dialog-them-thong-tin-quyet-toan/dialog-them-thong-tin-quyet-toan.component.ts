@@ -268,7 +268,8 @@ export class DialogThemThongTinQuyetToanComponent implements OnInit {
             ngayTaoDen: "",
             donViTao: this.maDviTao,
             loai: null,
-            trangThais: ["1",
+            trangThais: [
+                "1",
                 "2",
                 "3",
                 "4",
@@ -276,7 +277,8 @@ export class DialogThemThongTinQuyetToanComponent implements OnInit {
                 "6",
                 "7",
                 "8",
-                "9"],
+                "9"
+            ],
             maPa: this.maPa,
             maLoaiDan: [3],
             soQd: "",
@@ -289,7 +291,7 @@ export class DialogThemThongTinQuyetToanComponent implements OnInit {
             },
         };
         this.spinner.show();
-        await this.GiaoDuToanChiService.timBaoCaoGiao(requestReport).toPromise().then(
+        await this.GiaoDuToanChiService.timPhuongAnGiao(requestReport).toPromise().then(
             (data) => {
                 if (data.statusCode == 0) {
                     phuongAn = data.data.content[0]?.id;

@@ -4,11 +4,11 @@ import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { GDT, Utils } from 'src/app/Utility/utils';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
 import { UserService } from 'src/app/services/user.service';
-import { GDT, Utils } from 'src/app/Utility/utils';
 import { DialogTaoMoiComponent } from '../dialog-tao-moi/dialog-tao-moi.component';
 
 
@@ -107,7 +107,7 @@ export class QuyetDinhBoTaiChinhComponent implements OnInit {
             trangThaiGiaos: ["0", "1", "2"],
         };
         this.spinner.show();
-        await this.giaoDuToanChiService.timBaoCaoGiao(requestReport).toPromise().then(
+        await this.giaoDuToanChiService.timPhuongAnGiao(requestReport).toPromise().then(
             (data) => {
                 if (data.statusCode == 0) {
                     this.dataTable = [];

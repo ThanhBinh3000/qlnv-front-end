@@ -119,7 +119,9 @@
 									<ng-container *ngIf="!status.viewAppVal; else viewAppVal">
 										<td>
 											<input class="money-input" currencyMask
-												[(ngModel)]="editCache[data.id].data.ncauKphi" [options]="Op.amount" />
+												[(ngModel)]="editCache[data.id].data.ncauKphi"
+												(ngModelChange)="changeModel(editCache[data.id].data.id)"
+												[options]="Op.amount" />
 										</td>
 										<td>
 											<input class="money-input" currencyMask
@@ -160,6 +162,7 @@
 										<td>
 											<input class="money-input" currencyMask
 												[(ngModel)]="editCache[data.id].data.dtoanVuTvqtDnghi"
+												(ngModelChange)="changeModel(editCache[data.id].data.id)"
 												[options]="Op.amount" />
 										</td>
 										<td>{{editCache[data.id].data.ghiChu}}</td>

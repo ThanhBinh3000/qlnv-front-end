@@ -42,7 +42,7 @@
                                     </label>
                                 </th> -->
                                 <th rowspan="2" nzWidth="50px" nzLeft>STT</th>
-                                <th rowspan="2" nzWidth="500px" nzLeft>Nội dung</th>
+                                <th rowspan="2" nzWidth="350px" nzLeft>Nội dung</th>
                                 <th rowspan="2">ĐVT</th>
                                 <th rowspan="2">Số lượng theo KH được giao năm {{namBcao}}</th>
                                 <th colspan="5">Số lượng thực hiện năm {{namBcao}}</th>
@@ -270,6 +270,7 @@
                                         <td>
                                             <input class="money-input" currencyMask
                                                 [(ngModel)]="editCache[data.id].data.dtoanVuTvqtDnghi"
+                                                (ngModelChange)="changeModel(editCache[data.id].data.id)"
                                                 [options]="Op.amount" />
                                         </td>
 

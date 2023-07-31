@@ -16,8 +16,7 @@ import { QuyetToanVonPhiService } from 'src/app/services/quan-ly-von-phi/quyetTo
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { displayNumber, exchangeMoney, sumNumber } from 'src/app/Utility/func';
-import { AMOUNT, DON_VI_TIEN, LA_MA, MONEY_LIMIT, QTVP, Utils } from 'src/app/Utility/utils';
+import { AMOUNT, DON_VI_TIEN, LA_MA, MONEY_LIMIT, Operator, QTVP, Utils } from 'src/app/Utility/utils';
 import * as uuid from "uuid";
 import { DialogAddVatTuComponent } from '../dialog-add-vat-tu/dialog-add-vat-tu.component';
 import { NOI_DUNG } from './add-dieu-chinh-quyet-toan.constant';
@@ -53,7 +52,7 @@ export class AddDieuChinhQuyetToanComponent implements OnInit {
     @Input() idInput;
     @Input() isStatus;
     @Output('close') onClose = new EventEmitter<any>();
-
+    Op = new Operator("1");
     // thong tin dang nhap
     userInfo: any;
     // info report 
@@ -1128,7 +1127,7 @@ export class AddDieuChinhQuyetToanComponent implements OnInit {
                 }
                 this.lstCtietBcao.forEach(item => {
                     if (this.getHead(item.stt) == stt) {
-                        this.lstCtietBcao[index].thanhTien = sumNumber([this.lstCtietBcao[index].thanhTien, item.thanhTien]);
+                        this.lstCtietBcao[index].thanhTien = Operator.sum([this.lstCtietBcao[index].thanhTien, item.thanhTien]);
                     }
                 })
                 stt = this.getHead(stt);
@@ -1152,11 +1151,6 @@ export class AddDieuChinhQuyetToanComponent implements OnInit {
         if (this.total.thanhTien == 0) {
             this.total.thanhTien = null;
         }
-    };
-
-    displayValue(num: number): string {
-        num = exchangeMoney(num, '1', this.maDviTien);
-        return displayNumber(num);
     };
 
     deleteLine(id: any) {

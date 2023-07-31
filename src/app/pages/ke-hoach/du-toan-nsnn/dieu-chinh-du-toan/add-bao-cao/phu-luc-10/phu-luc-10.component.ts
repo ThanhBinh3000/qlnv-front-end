@@ -162,24 +162,45 @@ export class PhuLuc10Component implements OnInit {
 			}
 		}
 
-		if (this.lstCtietBcao.length > 0) {
-			if (!this.lstCtietBcao[0]?.stt) {
-				this.lstCtietBcao = Table.sortWithoutIndex(this.lstCtietBcao, 'maCongTrinh');
-			} else {
-				this.lstCtietBcao = Table.sortByIndex(this.lstCtietBcao);
-			}
+		if (!this.lstCtietBcao[0]?.stt) {
+			this.setIndex();
 		}
-		this.getTotal();
-		this.tinhTong();
 
-		this.lstCtietBcao.forEach(item => {
-			item.congTrinh = this.noiDungs.find(e => e.ma == item.maCongTrinh)?.giaTri;
-		})
+		// if (this.lstCtietBcao.length > 0) {
+		// 	if (!this.lstCtietBcao[0]?.stt) {
+		// 		this.lstCtietBcao = Table.sortWithoutIndex(this.lstCtietBcao, 'maCongTrinh');
+		// 	} else {
+		// 	}
+		// }
+		this.lstCtietBcao = Table.sortByIndex(this.lstCtietBcao);
+		// this.lstCtietBcao.forEach(item => {
+		// 	item.congTrinh = this.noiDungs.find(e => e.ma == item.maCongTrinh)?.giaTri;
+		// })
+		this.tinhTong();
+		this.getTotal();
+
 
 		this.updateEditCache();
 		this.getStatusButton();
 		this.spinner.hide();
 	};
+
+	setIndex() {
+		const lstVtuTemp = this.lstCtietBcao.filter(e => !e.maCongTrinh);
+		for (let i = 0; i < lstVtuTemp.length; i++) {
+			const stt = '0.' + (i + 1).toString();
+			const index = this.lstCtietBcao.findIndex(e => e.id == lstVtuTemp[i].id);
+			this.lstCtietBcao[index].stt = stt;
+			const lstDmTemp = this.lstCtietBcao.filter(e => e.maCongTrinh == lstVtuTemp[i].maCongTrinh && !!e.maCongTrinh);
+			for (let j = 0; j < lstDmTemp.length; j++) {
+				const ind = this.lstCtietBcao.findIndex(e => e.id == lstDmTemp[j].id);
+				this.lstCtietBcao[ind].stt = stt + '.' + (j + 1).toString();
+			}
+		}
+		lstVtuTemp.forEach(item => {
+			this.sum(item.stt + '.1');
+		})
+	}
 
 
 	async getFormDetail() {
@@ -400,6 +421,7 @@ export class PhuLuc10Component implements OnInit {
 		this.dToanVuTang = 0;
 		this.dToanVuGiam = 0;
 		this.lstCtietBcao.forEach(item => {
+			item.chenhLech = Operator.sum([item.dtoanVuTvqtDnghi, - item.dtoanDnghiDchinhLnay])
 			const str = item.stt
 			if (!(this.lstCtietBcao.findIndex(e => Table.preIndex(e.stt) == str) != -1)) {
 				if (item.dtoanDnghiDchinhLnay < 0) {

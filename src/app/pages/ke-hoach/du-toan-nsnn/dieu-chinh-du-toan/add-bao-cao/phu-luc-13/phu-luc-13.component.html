@@ -66,7 +66,7 @@
                                     Ý kiến của đơn vị cấp trên
                                 </th>
                                 <th rowSpan="2" *ngIf="status.general"></th>
-                                <th rowSpan="2" *ngIf="status.general "></th>
+                                <!-- <th rowSpan="2" *ngIf="status.general "></th> -->
                                 <th rowSpan="2" *ngIf="status.general || status.editAppVal"></th>
                             </tr>
                             <tr>
@@ -93,7 +93,7 @@
                                     9
                                 </th>
                                 <th *ngIf="status.general"></th>
-                                <th *ngIf="status.general "></th>
+                                <!-- <th *ngIf="status.general "></th> -->
                                 <th *ngIf="status.general || status.editAppVal"></th>
                             </tr>
                         </thead>
@@ -111,7 +111,7 @@
                                 <td *ngIf="status.viewAppVal">{{Op.fmtVal(total.chenhLech)}}</td>
                                 <td *ngIf="status.viewAppVal"></td>
                                 <td *ngIf="status.general"></td>
-                                <td *ngIf="status.general"></td>
+                                <!-- <td *ngIf="status.general"></td> -->
                                 <td *ngIf="status.general || status.editAppVal"></td>
                             </tr>
                             <tr>
@@ -127,7 +127,7 @@
                                 <td *ngIf="status.viewAppVal"></td>
                                 <td *ngIf="status.viewAppVal"></td>
                                 <td *ngIf="status.general"></td>
-                                <td *ngIf="status.general"></td>
+                                <!-- <td *ngIf="status.general"></td> -->
                                 <td *ngIf="status.general || status.editAppVal"></td>
                             </tr>
                             <tr>
@@ -143,7 +143,7 @@
                                 <td *ngIf="status.viewAppVal"></td>
                                 <td *ngIf="status.viewAppVal"></td>
                                 <td *ngIf="status.general"></td>
-                                <td *ngIf="status.general"></td>
+                                <!-- <td *ngIf="status.general"></td> -->
                                 <td *ngIf="status.general || status.editAppVal"></td>
                             </tr>
                             <tr *ngFor="let data of lstCtietBcao; let i = index">
@@ -179,9 +179,9 @@
                                         <i *ngIf="checkDelete(data.stt)" class="fa fa-trash-o do"
                                             (click)="deleteLine(data.id)"></i>
                                     </td>
-                                    <td *ngIf="status.general">
+                                    <!-- <td *ngIf="status.general">
                                         <i *ngIf="checkAdd(data)" class="fa fa-plus" (click)="addLine(data)"></i>
-                                    </td>
+                                    </td> -->
                                     <td *ngIf="status.general || status.editAppVal">
                                         <i *ngIf="checkEdit(data.stt)" class="fa fa-pencil"
                                             (click)="startEdit(data.id)"></i>
@@ -190,8 +190,16 @@
                                 <ng-template #editTemplate>
                                     <ng-container *ngIf="!status.viewAppVal else viewAppVal">
                                         <td nzLeft>
-                                            <input nz-input [(ngModel)]="editCache[data.id].data.tenNoiDung" />
+                                            <!-- <input nz-input [(ngModel)]="editCache[data.id].data.tenNoiDung" /> -->
+                                            <ng-container *ngIf="editCache[data.id].data.level == 2 else viewTen">
+                                                <input nz-input class="search__input"
+                                                    [(ngModel)]="editCache[data.id].data.tenNoiDung" />
+                                            </ng-container>
+                                            <ng-template #viewTen>
+                                                {{ editCache[data.id].data.tenNoiDung }}
+                                            </ng-template>
                                         </td>
+
                                         <td>
                                             <input class="money-input" currencyMask
                                                 [(ngModel)]="editCache[data.id].data.dtoanNamTruoc"
@@ -232,6 +240,7 @@
                                         <td>
                                             <input class="money-input" currencyMask
                                                 [(ngModel)]="editCache[data.id].data.dtoanVuTvqtDnghi"
+                                                (ngModelChange)="editCache[data.id].data.changeModel()"
                                                 [options]="Op.amount" />
                                         </td>
                                         <td>
@@ -248,7 +257,7 @@
                                         <i *ngIf="checkDelete(data.stt)" class="fa fa-trash-o do"
                                             (click)="deleteLine(data.id)"></i>
                                     </td>
-                                    <td *ngIf="status.general"></td>
+                                    <!-- <td *ngIf="status.general"></td> -->
                                     <td>
                                         <a class="save" (click)="saveEdit(data.id)" style="margin-right:15px">Lưu</a>
                                         <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"

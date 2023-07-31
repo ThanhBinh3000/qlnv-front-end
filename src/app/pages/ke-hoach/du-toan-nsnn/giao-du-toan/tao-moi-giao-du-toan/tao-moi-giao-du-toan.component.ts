@@ -5,6 +5,8 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
+// import { displayNumber, exchangeMoney, getHead, sortByIndex, sumNumber } from 'src/app/Utility/func';
+import { AMOUNT, DON_VI_TIEN, GDT, LA_MA, MONEY_LIMIT, Operator, TRANG_THAI_TIM_KIEM, Table, Utils } from 'src/app/Utility/utils';
 import { DialogCopyGiaoDuToanComponent } from 'src/app/components/dialog/dialog-copy-giao-du-toan/dialog-copy-giao-du-toan.component';
 import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialog-copy.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
@@ -14,10 +16,9 @@ import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToa
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { displayNumber, exchangeMoney, getHead, sortByIndex, sumNumber } from 'src/app/Utility/func';
-import { AMOUNT, DON_VI_TIEN, GDT, LA_MA, MONEY_LIMIT, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import { NOI_DUNG } from './tao-moi-giao-du-toan.constant';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
 // khai báo class data request
 export class ItemData {
     id: string;
@@ -54,6 +55,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
     @Input() data;
 
     @Output() dataChange = new EventEmitter();
+    Op = new Operator("1")
     // khai báo kiểu dữ liệu các nút
     status = false; // trạng thái ẩn hiện thành phần
     statusBtnSave: boolean; // trạng thái ẩn hiện nút lưu
@@ -101,7 +103,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
     lstCtietBcao: ItemData[] = []; // danh sách data trong table
     donViTiens: any[] = DON_VI_TIEN; // danh sách đơn vị tiền
     lstDvi: any[] = []; //danh sach don vi da duoc chon
-    noiDungs: any[] = NOI_DUNG; // danh sách nội dung danh mục
+    noiDungs: any[] = []; // danh sách nội dung danh mục
     lstDviTrucThuoc: any[] = []; // danh sách báo cáo của các đơn vị trực thuộc
     fileList: NzUploadFile[] = []; // danh sách file upload
     lstFiles: any[] = []; //list file show ra màn hình
@@ -149,6 +151,8 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
         private datePipe: DatePipe,
         private modal: NzModalService,
         public globals: Globals,
+        public danhMucService: DanhMucService,
+
     ) { }
 
     // ===================================================================================
@@ -236,6 +240,11 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 
         // set năm tạo PA
         this.namPa = this.newDate.getFullYear();
+
+        const category = await this.danhMucService.danhMucChungGetAll('BC_DC_PL1');
+        if (category) {
+            this.noiDungs = category.data;
+        }
 
         await this.giaoDuToanChiService.maPhuongAnGiao('1').toPromise().then(
             (res) => {
@@ -381,7 +390,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
                             item.ngayDuyet = this.datePipe.transform(item.ngayDuyet, Utils.FORMAT_DATE_STR)
                         })
                     }
-                    this.lstCtietBcao = sortByIndex(this.lstCtietBcao);
+                    this.lstCtietBcao = Table.sortByIndex(this.lstCtietBcao);
                     this.updateEditCache();
                     this.getStatusButton();
                 } else {
@@ -907,7 +916,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 
     // kiểm tra cấp quyền sửa nếu phần tử chọn có phần tử con
     getLowStatus(stt: string) {
-        const index: number = this.lstCtietBcao.findIndex(e => getHead(e.stt) == stt);
+        const index: number = this.lstCtietBcao.findIndex(e => Table.preIndex(e.stt) == stt);
         if (index == -1) {
             return false;
         }
@@ -1212,7 +1221,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 
     // tính tổng
     sum(stt: string) {
-        stt = getHead(stt);
+        stt = Table.preIndex(stt);
         while (stt != '0') {
             const index = this.lstCtietBcao.findIndex(e => e.stt == stt);
             const data = this.lstCtietBcao[index];
@@ -1234,21 +1243,16 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
                 checked: false,
             };
             this.lstCtietBcao.forEach(item => {
-                if (getHead(item.stt) == stt) {
+                if (Table.preIndex(item.stt) == stt) {
                     item.lstCtietDvis.forEach(e => {
                         const ind = this.lstCtietBcao[index].lstCtietDvis.findIndex(i => i.maDviNhan == e.maDviNhan);
                         this.lstCtietBcao[index].lstCtietDvis[ind].soTranChi += Number(e.soTranChi);
                     })
-                    this.lstCtietBcao[index].tongCongSoTranChi = sumNumber([this.lstCtietBcao[index].tongCongSoTranChi, item.tongCongSoTranChi])
+                    this.lstCtietBcao[index].tongCongSoTranChi = Operator.sum([this.lstCtietBcao[index].tongCongSoTranChi, item.tongCongSoTranChi])
                 }
             });
-            stt = getHead(stt);
+            stt = Table.preIndex(stt);
         };
-    }
-
-    displayValue(num: number): string {
-        num = exchangeMoney(num, '1', this.maDviTien);
-        return displayNumber(num);
     }
 
     getMoneyUnit() {
