@@ -96,7 +96,7 @@ export class ThongTinKsgComponent implements OnInit, OnChanges {
       msgRequired = "Không được để trống chủng loại hàng hóa";
     } else if (!item.donGia) {
       msgRequired = "Không được để trống đơn giá";
-    } else if (!item.maChiCuc && !this.isApDung) {
+    } else if (!item.maChiCuc && !this.isApDung && !this.isTabNdKhac) {
       msgRequired = "Không được để trống Chi cục"
     }
     return msgRequired;
