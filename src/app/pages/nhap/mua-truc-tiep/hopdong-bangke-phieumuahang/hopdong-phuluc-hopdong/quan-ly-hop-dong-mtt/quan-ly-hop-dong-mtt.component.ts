@@ -134,6 +134,8 @@ export class QuanLyHopDongMttComponent implements OnInit {
           // this.showDetail(event, this.danhSachCtiet[0])
           this.showDetailHd(event, this.dataTable[0])
         });
+      }else {
+        await this.getDetailChiCuc(id)
       }
     }
   }
@@ -154,8 +156,8 @@ export class QuanLyHopDongMttComponent implements OnInit {
             tongSoLuong: res.data.soLuong,
             tenLoaiVthh: res.data.tenLoaiVthh,
             tenCloaiVthh: res.data.tenCloaiVthh,
-            trangThaiHd: res.data.trangThaiHd,
-            tenTrangThaiHd: res.data.tenTrangThaiHd
+            trangThaiHd: res.data.hhQdPheduyetKhMttHdr.trangThaiHd,
+            tenTrangThaiHd: res.data.hhQdPheduyetKhMttHdr.tenTrangThaiHd
 
           })
         this.idQdKh = res.data.idQdPdKh

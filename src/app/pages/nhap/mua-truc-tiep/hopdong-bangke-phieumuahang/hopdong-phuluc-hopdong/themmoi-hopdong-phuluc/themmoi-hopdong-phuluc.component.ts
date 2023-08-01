@@ -205,7 +205,7 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
     })
     this.idKqCgia = data.idKqCgia;
     console.log("formData1", data)
-    this.dataTable = this.userService.isChiCuc() ? data.qdGiaoNvuDtlList.filter(x => x.maDvi == this.userInfo.MA_DVI) : data.children;
+    this.dataTable = data.qdGiaoNvuDtlList.length > 0 ? data.qdGiaoNvuDtlList.filter(x => x.maDvi.includes(this.userInfo.MA_DVI)) : data.children;
     console.log(this.dataTable)
     this.dataTablePhuLuc = data.phuLucDtl;
     this.objHopDongHdr = data;

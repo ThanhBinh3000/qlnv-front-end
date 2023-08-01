@@ -186,6 +186,7 @@
       <th nzWidth="100px" class="text-center wrap">SL theo chỉ tiêu kế hoạch năm</th>
       <th nzWidth="100px" class="text-center wrap">SL theo kế hoạch năm đã được duyệt</th>
       <th nzWidth="100px" class="text-center wrap">SL đề xuất mua trực tiếp (Tấn)</th>
+      <th nzWidth="100px" class="text-center wrap">Đơn giá có VAT</th>
       <th nzWidth="100px" class="text-center wrap">Thành tiền (đông)</th>
       <th nzWidth="50px">Hành động</th>
     </tr>
@@ -199,6 +200,7 @@
         <td class="text-blue">{{item.soLuongChiTieu | number : '1.0-1' : 'vi_VN'}}</td>
         <td class="text-blue">{{item.soLuongKhDd | number : '1.0-1' : 'vi_VN'}}</td>
         <td class="text-blue">{{item.tongSoLuong | number : '1.0-1' : 'vi_VN'}}</td>
+        <td></td>
         <td class="text-blue">{{item.tongSoLuong * item.donGia * 1000 | number : '1.0-1' : 'vi_VN'}}</td>
         <td>
           <a *ngIf="!isView" (click)="themMoiBangPhanLoTaiSan(item,i)">
@@ -214,6 +216,7 @@
           <td class="text-blue"></td>
           <td class="text-blue"></td>
           <td>{{data.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+          <td>{{data.donGia + (data.donGia * 5 / 100) | number : '1.0-1' : 'vi_VN'}}</td>
           <td>{{data.soLuong * data.donGia * 1000 | number : '1.0-1' : 'vi_VN'}}</td>
           <td></td>
         </tr>
