@@ -17,6 +17,7 @@ export class ThongTinKhaoSatGia {
   chiSoCpi : string;
   tenDviThamDinh: string;
   cloaiVthh: string;
+  tieuChuanCl: string;
   tenCloaiVthh: string;
   donGia: number;
   donGiaVat: number;
@@ -27,18 +28,30 @@ export class ThongTinKhaoSatGia {
 
 export class ThongTinChungPag {
   id: number;
+  maDvi : string;
   maChiCuc : string;
   maDiemKho : string;
   tenChiCuc : string;
   tenDiemKho : string;
-  cloaiVthh?: string;
-  tenCloaiVthh?: string;
-  tchuanCluong?: string;
+  loaiVthh: string;
+  tenLoaiVthh: string;
+  cloaiVthh: string;
+  tenCloaiVthh: string;
+  tchuanCluong: string;
   soLuong: number;
   soLuongCtieu: number;
   donViTinh?: string;
   giaDn?: number;
   giaDnVat?: number;
+  giaQdBtc: number;
+  giaQdBtcVat : number;
+  giaQdDcBtc: number;
+  giaQdDcBtcVat : number;
+  giaQdTcdt : number;
+  giaQdTcdtVat : number;
+  giaQdDcTcdt : number;
+  giaQdDcTcdtVat : number;
+  vat : number;
 }
 
 export class PhuongPhapXacDinhGia {

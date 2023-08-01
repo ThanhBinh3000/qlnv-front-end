@@ -73,18 +73,19 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
       maQhns: [],
       soBangKe: [],
       ngayNhap: [dayjs().format('YYYY-MM-DD')],
-      soQdinhDcc: [],
+      soQdinhDcc: [, [Validators.required]],
       ngayKyQdDcc: [],
       qdinhDccId: [],
-      soPhieuNhapKho: [],
+      soPhieuNhapKho: [, [Validators.required]],
       phieuNhapKhoId: [],
-      tenLoKho: [],
+      tenLoNganKho: [, [Validators.required]],
+      tenLoKho: [,],
       maLoKho: [],
       tenNganKho: [],
       maNganKho: [],
-      tenNhaKho: [],
+      tenNhaKho: [, [Validators.required]],
       maNhaKho: [],
-      tenDiemKho: [],
+      tenDiemKho: [, [Validators.required]],
       maDiemKho: [],
       diaDiemKho: [],
       tenLanhDaoChiCuc: [],
@@ -135,25 +136,26 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
         trangThai: STATUS.DU_THAO,
         tenTrangThai: 'Dự thảo',
         soQdinhDcc: this.data.soQdinh,
-        ngayKyQdDcc: this.data.ngayKyQdinh,
+        ngayKyQdDcc: this.data.ngayKyQd,
         qdinhDccId: this.data.qdinhDcId,
-        tenLoKho: this.data.tenLoKho,
-        maLoKho: this.data.maLoKho,
-        tenNganKho: this.data.tenNganKho,
-        maNganKho: this.data.maNganKho,
-        tenNhaKho: this.data.tenNhaKho,
-        maNhaKho: this.data.maNhaKho,
-        tenDiemKho: this.data.tenDiemKho,
-        maDiemKho: this.data.maDiemKho,
-        loaiVthh: this.data.maHangHoa,
-        tenLoaiVthh: this.data.tenHangHoa,
-        cloaiVthh: this.data.maChLoaiHangHoa,
-        tenCloaiVthh: this.data.tenChLoaiHangHoa,
-        tichLuongKhaDung: this.data.tichLuongKd,
-        donViTinh: this.data.tenDonViTinh,
+        // tenLoNganKho: `${this.data.tenLoKho} - ${this.data.tenNganKho}`,
+        // tenLoKho: this.data.tenLoKho,
+        // maLoKho: this.data.maLoKho,
+        // tenNganKho: this.data.tenNganKho,
+        // maNganKho: this.data.maNganKho,
+        // tenNhaKho: this.data.tenNhaKho,
+        // maNhaKho: this.data.maNhaKho,
+        // tenDiemKho: this.data.tenDiemKho,
+        // maDiemKho: this.data.maDiemKho,
+        // loaiVthh: this.data.maHangHoa,
+        // tenLoaiVthh: this.data.tenHangHoa,
+        // cloaiVthh: this.data.maChLoaiHangHoa,
+        // tenCloaiVthh: this.data.tenChLoaiHangHoa,
+        // tichLuongKhaDung: this.data.tichLuongKd,
+        // donViTinh: this.data.tenDonViTinh,
       });
-      await this.loadChiTietQdinh(this.data.qdinhDcId);
-      await this.layDonViCon(this.data.maDiemKho)
+      // await this.loadChiTietQdinh(this.data.qdinhDcId);
+      // await this.layDonViCon(this.data.maDiemKho)
     }
 
   }
@@ -173,7 +175,7 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
     if (id) {
       let data = await this.detail(id);
       this.dsHangTH = data.dcnbBangKeCanHangDtl
-      this.formData.patchValue(data);
+      this.formData.patchValue({ ...data, tenLoNganKho: `${data.tenLoKho} - ${data.tenNganKho}`, });
       this.fileDinhKemReq = data.fileDinhKems
     }
     await this.spinner.hide();
@@ -304,7 +306,7 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
           tichLuongKhaDung: "",
           tenDonViTinh: "",
         });
-        await this.loadChiTietQdinh(data.id);
+        // await this.loadChiTietQdinh(data.id);
       }
     });
   }
@@ -424,12 +426,29 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
       const data = res.data
       if (data) {
         this.formData.patchValue({
+          tenLoNganKho: `${data.tenLoKho} - ${data.tenNganKho}`,
+          tenLoKho: data.tenLoKho,
+          maLoKho: data.maLoKho,
+          tenNganKho: data.tenNganKho,
+          maNganKho: data.maNganKho,
+          tenNhaKho: data.tenNhaKho,
+          maNhaKho: data.maNhaKho,
+          tenDiemKho: data.tenDiemKho,
+          maDiemKho: data.maDiemKho,
+          loaiVthh: data.loaiVthh,
+          tenLoaiVthh: data.tenLoaiVthh,
+          cloaiVthh: data.cloaiVthh,
+          tenCloaiVthh: data.tenCloaiVthh,
+          tichLuongKhaDung: data.tichLuongKd,
+          donViTinh: data.tenDonViTinh,
           tenNguoiGiaoHang: data.hoVaTenNguoiGiao,
           cccd: data.cmndNguoiGiao,
           donViNguoiGiaoHang: data.donViNguoiGiao,
           diaChiDonViNguoiGiaoHang: data.diaChi,
           tgianGiaoNhanHang: data.tgianGiaoNhanHang,
         });
+
+        await this.layDonViCon(data.maDiemKho)
       }
 
     }
@@ -453,11 +472,9 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
     }
     let data = await this.createUpdate(body);
     if (data) {
+      this.idInput = data.id;
       if (isGuiDuyet) {
-        this.idInput = data.id;
         this.guiDuyet();
-      } else {
-        this.quayLai();
       }
     }
     await this.spinner.hide();

@@ -45,7 +45,6 @@ import {
   ChiTietQuyetDinhPheDuyetBdgThanhLyComponent
 } from './to-chuc-thuc-hien-thanh-ly/quyet-dinh-phe-duyet-kq-bdg-thanh-ly/chi-tiet-quyet-dinh-phe-duyet-bdg-thanh-ly/chi-tiet-quyet-dinh-phe-duyet-bdg-thanh-ly.component';
 import {HopDongModule} from "../dau-gia/hop-dong/hop-dong.module";
-import {KeHoachBanDauGiaModule} from "../dau-gia/ke-hoach-ban-dau-gia/ke-hoach-ban-dau-gia.module";
 import {
   QuanLyHopDongThanhLyComponent
 } from './to-chuc-thuc-hien-thanh-ly/hop-dong-thanh-ly/quan-ly-hop-dong-thanh-ly/quan-ly-hop-dong-thanh-ly.component';
@@ -54,6 +53,9 @@ import {
 } from './to-chuc-thuc-hien-thanh-ly/hop-dong-thanh-ly/thong-tin-hop-dong-thanh-ly/thong-tin-hop-dong-thanh-ly.component';
 import { QuyetDinhGiaoNhiemVuThanhLyComponent } from './to-chuc-thuc-hien-thanh-ly/quyet-dinh-giao-nhiem-vu-thanh-ly/quyet-dinh-giao-nhiem-vu-thanh-ly.component';
 import { ChiTietQuyetDinhGiaoNhiemVuThanhLyComponent } from './to-chuc-thuc-hien-thanh-ly/quyet-dinh-giao-nhiem-vu-thanh-ly/chi-tiet-quyet-dinh-giao-nhiem-vu-thanh-ly/chi-tiet-quyet-dinh-giao-nhiem-vu-thanh-ly.component';
+import { XuatKhoThanhLyComponent } from './xuat-kho-thanh-ly/xuat-kho-thanh-ly.component';
+import { PhieuXuatKhoThanhLyComponent } from './xuat-kho-thanh-ly/phieu-xuat-kho-thanh-ly/phieu-xuat-kho-thanh-ly.component';
+import { ChiTietPhieuXuatKhoThanhLyComponent } from './xuat-kho-thanh-ly/phieu-xuat-kho-thanh-ly/chi-tiet-phieu-xuat-kho-thanh-ly/chi-tiet-phieu-xuat-kho-thanh-ly.component';
 
 
 @NgModule({
@@ -83,7 +85,10 @@ import { ChiTietQuyetDinhGiaoNhiemVuThanhLyComponent } from './to-chuc-thuc-hien
     QuanLyHopDongThanhLyComponent,
     ThongTinHopDongThanhLyComponent,
     QuyetDinhGiaoNhiemVuThanhLyComponent,
-    ChiTietQuyetDinhGiaoNhiemVuThanhLyComponent
+    ChiTietQuyetDinhGiaoNhiemVuThanhLyComponent,
+    XuatKhoThanhLyComponent,
+    PhieuXuatKhoThanhLyComponent,
+    ChiTietPhieuXuatKhoThanhLyComponent
   ],
   imports: [
     CommonModule,
@@ -94,7 +99,6 @@ import { ChiTietQuyetDinhGiaoNhiemVuThanhLyComponent } from './to-chuc-thuc-hien
     MainModule,
     ComponentsModule,
     HopDongModule,
-    KeHoachBanDauGiaModule,
   ],
   exports: [
     ThanhLyDanhSachHangComponent
