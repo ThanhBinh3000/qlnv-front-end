@@ -24,8 +24,8 @@ import {
   BienBanLayMauVtTbTrongThoiGianBaoHanhService
 } from "../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvtbaohanh/BienBanLayMauVtTbTrongThoiGianBaoHanh.service";
 import {
-  PhieuXuatKhoVtTbTrongThoiGianBaoHanhService
-} from "../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvtbaohanh/PhieuXuatKhoVtTbTrongThoiGianBaoHanh.service";
+  PhieuXuatNhapKhoVtTbTrongThoiGianBaoHanhService
+} from "../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvtbaohanh/PhieuXuatNhapKhoVtTbTrongThoiGianBaoHanh.service";
 import {
   QdGiaoNvXuatHangTrongThoiGianBaoHanhService
 } from "../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvtbaohanh/QdGiaoNvXuatHangTrongThoiGianBaoHanh.service";
@@ -72,7 +72,7 @@ export class ThongTinPhieuKiemDinhChatLuongVtTbComponent extends Base2Component 
     modal: NzModalService,
     private danhMucService: DanhMucService,
     private qdGiaoNvXuatHangTrongThoiGianBaoHanhService: QdGiaoNvXuatHangTrongThoiGianBaoHanhService,
-    private phieuXuatKhoVtTbTrongThoiGianBaoHanhService: PhieuXuatKhoVtTbTrongThoiGianBaoHanhService,
+    private phieuXuatKhoVtTbTrongThoiGianBaoHanhService: PhieuXuatNhapKhoVtTbTrongThoiGianBaoHanhService,
     private khCnQuyChuanKyThuat: KhCnQuyChuanKyThuat,
     private bienBanLayMauVtTbTrongThoiGianBaoHanhService: BienBanLayMauVtTbTrongThoiGianBaoHanhService,
     private phieuKdclVtTbTrongThoiGianBaoHanhService: PhieuKdclVtTbTrongThoiGianBaoHanhService,
