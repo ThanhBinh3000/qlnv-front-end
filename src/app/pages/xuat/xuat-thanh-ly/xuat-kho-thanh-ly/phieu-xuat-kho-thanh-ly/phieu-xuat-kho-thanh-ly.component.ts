@@ -6,7 +6,7 @@ import {NzNotificationService} from "ng-zorro-antd/notification";
 import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
 import {MESSAGE} from "../../../../../constants/message";
-import { chain } from 'lodash';
+import {chain} from 'lodash';
 import * as uuid from "uuid";
 import {CHUC_NANG} from "../../../../../constants/status";
 import {XuatThanhLyComponent} from "../../xuat-thanh-ly.component";
@@ -22,6 +22,7 @@ import {
 export class PhieuXuatKhoThanhLyComponent extends Base2Component implements OnInit {
   CHUC_NANG = CHUC_NANG;
   public vldTrangThai: XuatThanhLyComponent;
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -57,7 +58,7 @@ export class PhieuXuatKhoThanhLyComponent extends Base2Component implements OnIn
   }
 
   isView = false;
-  idBbQd : number;
+  idBbQd: number;
   children: any = [];
   expandSetString = new Set<string>();
   disabledStartNgayXk = (startValue: Date): boolean => {
@@ -76,7 +77,6 @@ export class PhieuXuatKhoThanhLyComponent extends Base2Component implements OnIn
 
   async ngOnInit() {
     try {
-
       await this.search();
     } catch (e) {
       console.log('error: ', e)
@@ -95,11 +95,11 @@ export class PhieuXuatKhoThanhLyComponent extends Base2Component implements OnIn
   buildTableView() {
     let dataView = chain(this.dataTable).groupBy("soBbQd").map((value, key) => {
       let quyetDinh = value.find(f => f.soBbQd === key)
-      let childData = chain(value).groupBy("maDiemKho").map((v, k) =>{
+      let childData = chain(value).groupBy("maDiaDiem").map((v, k) => {
         let diaDiem = v.find(s => s.maDiaDiem === k)
         return {
           idVirtual: uuid.v4(),
-          maDiemKho: k != null ? k : '',
+          maDiaDiem: k != null ? k : '',
           tenDiemKho: diaDiem ? diaDiem.tenDiemKho : null,
           idBbQd: diaDiem ? diaDiem.idBbQd : null,
           childData: v
