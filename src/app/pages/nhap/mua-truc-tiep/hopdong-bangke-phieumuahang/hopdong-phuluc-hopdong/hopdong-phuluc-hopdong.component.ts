@@ -18,6 +18,9 @@ import {UserService} from "../../../../../services/user.service";
 import {STATUS} from "../../../../../constants/status";
 import {PAGE_SIZE_DEFAULT} from "../../../../../constants/config";
 import { saveAs } from 'file-saver';
+import {
+  MttHopDongPhuLucHdService
+} from "../../../../../services/qlnv-hang/nhap-hang/mua-truc-tiep/MttHopDongPhuLucHdService.service";
 
 
 @Component({
@@ -67,6 +70,7 @@ export class HopdongPhulucHopdongComponent implements OnInit {
     private modal: NzModalService,
     private quyetDinhPheDuyetKetQuaChaoGiaMTTService: QuyetDinhPheDuyetKetQuaChaoGiaMTTService,
     private quyetDinhGiaoNvNhapHangService: QuyetDinhGiaoNvNhapHangService,
+    private thongTinPhuLucHopDongService: MttHopDongPhuLucHdService,
   ) {
     this.formData = this.fb.group({
       namNhap: null,
@@ -110,7 +114,9 @@ export class HopdongPhulucHopdongComponent implements OnInit {
     debugger
     if(!this.userService.isChiCuc()){
       this.formData.patchValue({
-        trangThai: STATUS.DA_DUYET_LDC
+        trangThaiKq: STATUS.DA_DUYET_LDC,
+        trangThaiQd: STATUS.BAN_HANH,
+        loaiQd: '02',
       });
       await this.searchCuc();
     }else{
@@ -170,7 +176,7 @@ export class HopdongPhulucHopdongComponent implements OnInit {
         limit: this.pageSize,
         page: this.page - 1
       }
-      let res = await this.quyetDinhPheDuyetKetQuaChaoGiaMTTService.search(body);
+      let res = await this.thongTinPhuLucHopDongService.searchCuc(body);
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data;
         this.dataTable = data.content;
