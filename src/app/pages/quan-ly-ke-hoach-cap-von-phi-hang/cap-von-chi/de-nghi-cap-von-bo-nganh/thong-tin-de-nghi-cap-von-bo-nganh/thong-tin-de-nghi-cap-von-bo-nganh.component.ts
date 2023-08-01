@@ -56,6 +56,7 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
   tabSelected: string = 'thongTinChung';
   listNam: any[] = [];
   listLoaiHangHoa: any[] = [];
+  listLoaiTien: any[] = [];
   errorInputRequired: string = 'Dữ liệu không được để trống.';
   listPhuongThucThanhToan: any[] = [
     {
@@ -84,11 +85,20 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
   preFixSoDn: string = "KH";
   titleSoDeNghi: string;
   hangHoaAll: any[];
+  listHopDong: any[] = [];
   amount = AMOUNT_TWO_DECIMAL;
   rowItem: IDeNghiCapVon = {
+    maHopDong: null,
+    soHopDong: null,
+    loaiTien: null,
     donViTinh: null,
     dvCungCapHang: null,
     kinhPhiDaCap: null,
+    kinhPhiDaCapNt: null,
+    tyGia: null,
+    duToanDuocGiao: null,
+    tongTien: null,
+    tongTienNt: null,
     maVatTu: null,
     tenVatTu: null,
     maVatTuCha: null,
@@ -100,6 +110,8 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
     donGia: null,
     thanhTien: null,
     ycCapThem: null,
+    // thêm theo thiết kế mới
+    ycCapThemNt: null,
     edit: false
   }
 
@@ -139,6 +151,7 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
     await Promise.all([
       this.initForm(),
       this.getListBoNganh(),
+      this.loadLoaiTienTe(),
     ]);
     await this.loadChiTiet(this.idInput);
     await this.loaiVTHHGetAll(),
@@ -215,6 +228,7 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
         this.listLoaiHangHoa = this.hangHoaAll.filter(element => element.maHangHoa.length == 4)
       }
     }
+    this.loadListHopDong(bnObject.maDvi);
   }
 
   back() {
@@ -288,6 +302,12 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
     }
   }
 
+  async changeMaHopDong() {
+    if (this.rowItem.maHopDong) {
+
+    }
+  }
+
   changeThanhTien() {
     if (this.rowItem.soLuong && this.rowItem.donGia) {
       let thanhTien = this.rowItem.soLuong * this.rowItem.donGia;
@@ -332,9 +352,17 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
 
   clearDonviCungCap() {
     this.rowItem = {
+      maHopDong: null,
+      soHopDong: null,
+      loaiTien: null,
       donViTinh: null,
       dvCungCapHang: null,
       kinhPhiDaCap: null,
+      kinhPhiDaCapNt: null,
+      tyGia: null,
+      duToanDuocGiao: null,
+      tongTien: null,
+      tongTienNt: null,
       maVatTu: null,
       tenVatTu: null,
       maVatTuCha: null,
@@ -346,6 +374,8 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
       donGia: null,
       thanhTien: null,
       ycCapThem: null,
+      // thêm theo thiết kế mới
+      ycCapThemNt: null,
       edit: false
     }
   }
@@ -532,6 +562,26 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
     });
   }
 
+  async loadLoaiTienTe() {
+    this.listLoaiTien = [];
+    let res = await this.danhMucService.danhMucChungGetAll('LOAI_TIEN_TE');
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listLoaiTien = res.data;
+    }
+  }
+
+  async loadListHopDong(maBoNganh) {
+    this.listHopDong = [];
+    let res = await this.deNghiCapVonBoNganhService.dsHopDongTheoBoNganh({
+      "maBoNganh": maBoNganh
+    });
+    if (res) {
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.listHopDong = res.data;
+      }
+    }
+  }
+
   setTitle() {
     let trangThai = this.khBanDauGia.trangThai;
     switch (trangThai) {
@@ -582,9 +632,17 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
 }
 
 interface IDeNghiCapVon {
+  maHopDong: string,
+  soHopDong: string,
+  loaiTien: string,
   donViTinh: string,
   dvCungCapHang: string,
   kinhPhiDaCap: number,
+  kinhPhiDaCapNt: number,
+  tyGia: number,
+  duToanDuocGiao: number,
+  tongTien: number,
+  tongTienNt: number,
   maVatTu: string,
   tenVatTu: string,
   maVatTuCha: string,
@@ -596,5 +654,7 @@ interface IDeNghiCapVon {
   donGia: number,
   thanhTien: number,
   ycCapThem: number,
+  // thêm theo thiết kế mới
+  ycCapThemNt: number,
   edit: boolean
 }

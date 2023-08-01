@@ -33,4 +33,9 @@ export class XuatHangDtqgThBkkComponent implements OnInit {
     this.tabSelected = tab;
   }
 
+  receivedTab(tab) {
+    if (tab >= 0) {
+      this.tabSelected = tab;
+    }
+  }
 }

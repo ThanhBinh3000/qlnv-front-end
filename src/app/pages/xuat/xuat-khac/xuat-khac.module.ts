@@ -19,15 +19,14 @@ import {
 import {
   KiemtraChatluongLtTruockhiHethanLuukhoModule
 } from "./kiemtra-chatluong-lt-truockhi-hethan-luukho/kiemtra-chatluong-lt-truockhi-hethan-luukho.module";
-import {ToanBoDanhSachComponent} from './xuat-hang-dtqg-th-bkk/toan-bo-danh-sach/toan-bo-danh-sach.component';
-import {TongHopDanhSachComponent} from './xuat-hang-dtqg-th-bkk/tong-hop-danh-sach/tong-hop-danh-sach.component';
 import {
   KiemtraChatluongVtTbTrongThbhComponentModule
 } from "./kiemtra-chatluong-vt-tb-trong-thoi-gian-bao-hanh/kiemtra-chatluong-vt-tb-trong-thoi-gian-bao-hanh.module";
+import {XuatHangDtqgThBkkModule} from "./xuat-hang-dtqg-th-bkk/xuat-hang-dtqg-th-bkk.module";
 
 
 @NgModule({
-  declarations: [XuatKhacComponent, KiemtraChatluongVtTbTruockhiHethanLuukhoComponent, XuatHangDtqgThBkkComponent, XuatHangKhoiDanhMucComponent, ToanBoDanhSachComponent, TongHopDanhSachComponent],
+  declarations: [XuatKhacComponent, KiemtraChatluongVtTbTruockhiHethanLuukhoComponent, XuatHangDtqgThBkkComponent, XuatHangKhoiDanhMucComponent],
   imports: [
     CommonModule,
     XuatKhacRoutingModule,
@@ -39,7 +38,8 @@ import {
     KeHoachBanDauGiaModule,
     KiemtraChatluongVtTbTruockhiHethanLuukhoModule,
     KiemtraChatluongLtTruockhiHethanLuukhoModule,
-    KiemtraChatluongVtTbTrongThbhComponentModule
+    KiemtraChatluongVtTbTrongThbhComponentModule,
+    XuatHangDtqgThBkkModule
   ],
   exports: [],
   providers: [DatePipe]
