@@ -17,6 +17,7 @@
                     : column === 'ngayTao' ? (data[column] | date: 'dd/MM/YYYY')
                     : column.startsWith('ngay') ? (data[column] | date: 'dd/MM/YYYY')
                     : column.startsWith('number') ? (data[column] | number: '1.0-1' :'vi_VN')
+                    : column === 'ngayKiemDinh' ? (data[column] | date: 'dd/MM/YYYY')
                     : data[column])
                     }}
                 </td>

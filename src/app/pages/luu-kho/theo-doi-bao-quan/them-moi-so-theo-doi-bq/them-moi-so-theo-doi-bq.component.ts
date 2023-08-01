@@ -195,11 +195,11 @@ export class ThemMoiSoTheoDoiBqComponent extends Base3Component implements OnIni
           ngayLapSoKho: data.ngayTao,
           maDiemKho : data.maDiemKho,
           tenDiemKho : data.tenDiemKho,
-          maNhaKho : data.maDiemKho,
+          maNhaKho : data.maNhaKho,
           tenNhaKho : data.tenNhaKho,
-          maNganKho : data.maDiemKho,
+          maNganKho : data.maNganKho,
           tenNganKho : data.tenNganKho,
-          maLoKho : data.maDiemKho,
+          maLoKho : data.maLoKho,
           tenLoKho : data.tenLoKho,
           loaiVthh : data.loaiVthh,
           tenLoaiVthh : data.tenLoaiVthh,
@@ -332,7 +332,7 @@ export class ThemMoiSoTheoDoiBqComponent extends Base3Component implements OnIni
   }
 
   isShowEditDelete(item) {
-    return item.ngayKtra == dayjs().format('YYYY-MM-DD') && item.idNguoiKtra == this.userInfo.ID;
+    return item.ngayKtra == dayjs().format('YYYY-MM-DD') && item.idNguoiKtra == this.userInfo.ID && item.trangThai == this.STATUS.DU_THAO;
   }
 
   showPheDuyetTuChoi() {
@@ -423,9 +423,15 @@ export class ThemMoiSoTheoDoiBqComponent extends Base3Component implements OnIni
         this.notification.error(MESSAGE.ERROR,"Không thể xác nhận khi chưa có danh sách chi tiết");
         return;
     }
-    const dataTk = this.dataTable.filter(item => item.vaiTro == 'CBTHUKHO').sort((a,b)=>a.ngayKtra-b.ngayKtra);
-    const dataKtv = this.dataTable.filter(item => item.vaiTro == 'CBKTVBQ').sort((a,b)=>a.ngayKtra-b.ngayKtra);
-    const dataLdcc = this.dataTable.filter(item => item.vaiTro == 'LDCHICUC').sort((a,b)=>a.ngayKtra-b.ngayKtra);
+    let dataTk
+    let dataKtv
+    let dataLdcc
+    if(isXacNhan){
+      dataTk = this.dataTable.filter(item => item.vaiTro == 'CBTHUKHO').sort((a,b)=>a.ngayKtra-b.ngayKtra);
+      dataKtv = this.dataTable.filter(item => item.vaiTro == 'CBKTVBQ').sort((a,b)=>a.ngayKtra-b.ngayKtra);
+      dataLdcc = this.dataTable.filter(item => item.vaiTro == 'LDCHICUC').sort((a,b)=>a.ngayKtra-b.ngayKtra);
+    }
+
     const modalGT = this.modal.create({
       nzTitle: 'Thông tin chi tiết',
       nzContent: ThemMoiCtietTdbqComponent,
@@ -436,13 +442,12 @@ export class ThemMoiSoTheoDoiBqComponent extends Base3Component implements OnIni
       nzComponentParams: {
         dataHdr : this.formData.value,
         isXacNhan : isXacNhan,
-        dataTk : dataTk.length > 0 ? dataTk[0] : null,
-        dataKtv : dataKtv.length > 0 ? dataKtv[0] : null,
-        dataLdcc : dataLdcc.length > 0 ? dataLdcc[0] : null
+        dataTk : dataTk?.length > 0 ? dataTk[0] : null,
+        dataKtv : dataKtv?.length > 0 ? dataKtv[0] : null,
+        dataLdcc : dataLdcc?.length > 0 ? dataLdcc[0] : null
       },
     });
     modalGT.afterClose.subscribe((data)=>{
-      console.log('ádasd');
         this.changeMonth(this.monthSelect)
     })
   }

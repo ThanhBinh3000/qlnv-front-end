@@ -3,23 +3,24 @@ import {HttpClient} from "@angular/common/http";
 import {NzNotificationService} from "ng-zorro-antd/notification";
 import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
-import {STATUS} from "../../../../../constants/status";
-import {Base2Component} from "../../../../../components/base2/base2.component";
-import {StorageService} from "../../../../../services/storage.service";
-import {DonviService} from "../../../../../services/donvi.service";
-import {DanhMucService} from "../../../../../services/danhmuc.service";
+import {Base2Component} from "../../../../../../components/base2/base2.component";
+import {StorageService} from "../../../../../../services/storage.service";
+import {DonviService} from "../../../../../../services/donvi.service";
+import {DanhMucService} from "../../../../../../services/danhmuc.service";
 import {
   QdGiaoNvXuatHangTrongThoiGianBaoHanhService
-} from "../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvtbaohanh/QdGiaoNvXuatHangTrongThoiGianBaoHanh.service";
-import {MESSAGE} from "../../../../../constants/message";
+} from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvtbaohanh/QdGiaoNvXuatHangTrongThoiGianBaoHanh.service";
+import {STATUS} from "../../../../../../constants/status";
+import {MESSAGE} from "../../../../../../constants/message";
+
 
 
 @Component({
-  selector: 'app-qd-giao-nhiem-vu-xuat-hang-trong-thoi-gian-bao-hanh',
-  templateUrl: './qd-giao-nhiem-vu-xuat-hang-trong-thoi-gian-bao-hanh.component.html',
-  styleUrls: ['./qd-giao-nhiem-vu-xuat-hang-trong-thoi-gian-bao-hanh.component.scss']
+  selector: 'app-qd-giao-nhiem-vu-xuat-hang',
+  templateUrl: './qd-giao-nhiem-vu-xuat-hang.component.html',
+  styleUrls: ['./qd-giao-nhiem-vu-xuat-hang.component.scss']
 })
-export class QdGiaoNhiemVuXuatHangTrongThoiGianBaoHanhComponent extends Base2Component implements OnInit {
+export class QdGiaoNhiemVuXuatHangComponent extends Base2Component implements OnInit {
 
   STATUS = STATUS;
   isDetail: boolean = false;
@@ -41,6 +42,7 @@ export class QdGiaoNhiemVuXuatHangTrongThoiGianBaoHanhComponent extends Base2Com
       soQuyetDinh: [],
       ngayKyQdTu: [],
       ngayKyQdDen: [],
+      loaiXn: ['XUAT'],
     })
   }
 
