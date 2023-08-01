@@ -1,23 +1,6 @@
-<nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="btn-affix">
-  <div class="btn-group">
-    <button type="button" class="btn btn-sub" (click)="quayLai()">
-      <i class="fa fa-arrow-left"></i>
-      <span>Quay lại</span>
-    </button>
-    <button *ngIf="formData.value.trangThai == '00' && idInput > 0 && this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_VT_GCT_QDTC_BANHANH')" type="button" class="btn btn-sub"
-      (click)="banHanh()">
-      <i class="icon htvbdh_chuyenvanthu"></i>
-      <span>Ban hành</span>
-    </button>
-    <button *ngIf="formData.value.trangThai == '00' && this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_VT_GCT_QDTC_THEM')" type="button" class="btn btn-sub xanh" (click)="save()">
-      <i class="icon htvbdh_luu"></i>
-      <span>Lưu</span>
-    </button>
-  </div>
-</nz-affix>
 <div class="bg-trang">
   <nz-card class="mt16 flex-card p-lr16">
-    <div class="header">
+    <div class="header header-green-background">
       <div class="header-text">
         <div class="title-chi-tieu">
           <span [ngClass]="formData.value.trangThai == '00' ? 'du-thao-va-lanh-dao-duyet' : 'da-ban-hanh'">
@@ -25,6 +8,21 @@
           </span>
           <span>QUYẾT ĐỊNH GIÁ CỦA TCDTNN</span>
         </div>
+      </div>
+      <div class="btn-group">
+        <button type="button" class="btn btn-sub" (click)="quayLai()">
+          <i class="fa fa-arrow-left"></i>
+          <span>Quay lại</span>
+        </button>
+        <button *ngIf="formData.value.trangThai == '00' && idInput > 0 && this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_VT_GCT_QDTC_BANHANH')" type="button" class="btn btn-sub"
+                (click)="banHanh()">
+          <i class="icon htvbdh_chuyenvanthu"></i>
+          <span>Ban hành</span>
+        </button>
+        <button *ngIf="formData.value.trangThai == '00' && this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_VT_GCT_QDTC_THEM')" type="button" class="btn btn-sub xanh" (click)="save()">
+          <i class="icon htvbdh_luu"></i>
+          <span>Lưu</span>
+        </button>
       </div>
     </div>
     <form nzLayout="vertical" nz-form [formGroup]="formData">
@@ -184,7 +182,9 @@
       <td>{{ data.giaQdBtc | number : '1.0-1' : 'vi_VN' }}</td>
       <td>{{ data.giaQdVat | number : '1.0-1' : 'vi_VN' }}</td>
       <td class="text-right" *ngIf="(formData.value.loaiDeXuat == '00')">
-        <nz-input-number [nzDisabled]="isView" [nzSize]="'small'" [(ngModel)]="data.giaQdTcdt" [nzMin]="0"
+        <nz-input-number [nzDisabled]="isView" [nzSize]="'small'" [(ngModel)]="data.giaQdTcdt"
+                         [nzMin]="formData.value.loaiGia == 'LG04' ? (data.giaQdBtc ? data.giaQdBtc : 0) : 0"
+                         [nzMax]="formData.value.loaiGia == 'LG03' ? (data.giaQdBtc ? data.giaQdBtc : 999999999999 ) : 999999999999"
                          [nzFormatter]="globals.formatter"
                          [nzParser]="globals.parser">
         </nz-input-number>

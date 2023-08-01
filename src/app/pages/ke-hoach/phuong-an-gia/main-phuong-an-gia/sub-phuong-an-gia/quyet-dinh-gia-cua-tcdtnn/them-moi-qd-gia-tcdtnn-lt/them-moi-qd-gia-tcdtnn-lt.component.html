@@ -15,13 +15,13 @@
           <span>Quay lại</span>
         </button>
         <button type="button" class="btn btn-sub ml-2"
-                *ngIf="formData.value.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_MTDBTT_QD_BANHANH')"
+                *ngIf="formData.value.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_GCT_QDTC_BANHANH')"
                 (click)="save(true)">
           <i class="icon htvbdh_chuyenvanthu"></i>
           <span>Ban hành</span>
         </button>
         <button *ngIf="formData.value.trangThai == STATUS.DU_THAO &&
-     userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_MTDBTT_QD_THEM')"
+     userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_GCT_QDTC_THEM')"
                 type="button" class="btn btn-sub xanh ml-2" (click)="save(false)">
           <i class="icon htvbdh_luu"></i>
           <span>Lưu</span>
