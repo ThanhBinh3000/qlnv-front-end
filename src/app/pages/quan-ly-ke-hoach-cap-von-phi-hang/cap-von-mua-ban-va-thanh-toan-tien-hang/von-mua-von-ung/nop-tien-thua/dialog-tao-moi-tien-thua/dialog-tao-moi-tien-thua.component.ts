@@ -48,6 +48,7 @@ export class DialogTaoMoiTienThuaComponent implements OnInit {
             return;
         }
         this.request.namDnghi = this.response.namDnghi;
+        this.request.trangThai = null;
         this.spinner.show();
         await this.capVonMuaBanTtthService.timKiemVonMuaBan(this.request).toPromise().then(
             (data) => {

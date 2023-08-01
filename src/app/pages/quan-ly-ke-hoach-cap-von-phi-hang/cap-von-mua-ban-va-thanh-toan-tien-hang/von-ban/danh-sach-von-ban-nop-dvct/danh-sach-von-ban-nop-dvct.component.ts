@@ -58,7 +58,7 @@ export class DanhSachVonBanNopDvctComponent implements OnInit {
         this.searchFilter.ngayTaoTu = newDate;
         this.searchFilter.maDvi = this.userInfo?.MA_DVI;
         this.searchFilter.maLoai = Cvmb.VON_BAN;
-        this.statusNewReport = this.userService.isAccessPermisson(Roles.CVMB.ADD_VB);
+        this.statusNewReport = this.userService.isTongCuc() ? false : this.userService.isAccessPermisson(Roles.CVMB.ADD_VB);
         this.statusDelete = this.userService.isAccessPermisson(Roles.CVMB.DEL_VB);
         //neu co quyen phe duyet thi trang thai mac dinh la trinh duyet
         if (this.userService.isAccessPermisson(Roles.CVMB.PASS_VB)) {
