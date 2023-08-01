@@ -4,22 +4,22 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button type="button" class="btn btn-sub do" *ngIf="  this.userService.isChiCuc() && isDisabled()
-     && userService.isAccessPermisson('XHDTQG_PTDG_XK_LT_PXK_DUYET')"
-            (click)="tuChoi()">
-      <i class="icon htvbdh_tcdt_tuchoi do"></i>
-      <span>Từ chối</span>
-    </button>
-    <button class="btn btn-sub xanh-nhat" *ngIf="  this.userService.isChiCuc() && isDisabled()
-        && userService.isAccessPermisson('XHDTQG_PTDG_XK_LT_PXK_DUYET')" (click)="pheDuyet()">
-      <i class="icon htvbdh_tcdt_pheduyet "></i>
-      <span>Duyệt</span>
-    </button>
     <button class="btn btn-sub xanh-nhat" type="button"
             *ngIf=" this.userService.isChiCuc() && !isDisabled() && formData.value.trangThai != STATUS.DA_DUYET_LDCC  "
             (click)="saveAndSend(formData.value,STATUS.CHO_DUYET_LDCC,'Bạn có muốn lưu và gửi duyệt ?','Bạn đã lưu và gửi duyệt thành công!')">
       <i class="icon htvbdh_tcdt_guiduyet"></i>
       <span>Lưu và gửi duyệt</span>
+    </button>
+    <button type="button" class="btn btn-sub do" *ngIf="  this.userService.isChiCuc() && isDisabled()
+        && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_PXK_DUYET')"
+            (click)="pheDuyet(false)">
+      <i class="icon htvbdh_tcdt_tuchoi do"></i>
+      <span>Từ chối</span>
+    </button>
+    <button class="btn btn-sub xanh-nhat" *ngIf="  this.userService.isChiCuc() && isDisabled()
+        && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_PXK_DUYET')" (click)="pheDuyet(true)">
+      <i class="icon htvbdh_tcdt_pheduyet "></i>
+      <span>Duyệt</span>
     </button>
     <button class="btn btn-sub xanh"
             *ngIf=" this.userService.isChiCuc() && !isDisabled() && formData.value.trangThai != STATUS.DA_DUYET_LDCC "
@@ -40,11 +40,9 @@
       </div>
     </div>
   </div>
-
   <nz-alert class="mg-t-10" *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDCC " nzShowIcon nzType="error"
             nzMessage="Lý do từ chối" nzDescription="{{formData.value.lyDoTuChoi}}">
   </nz-alert>
-
   <nz-card class="mg-t-16 flex-card p-lr16">
     <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
       <div nz-row [nzGutter]="[18, 6]">
@@ -52,7 +50,7 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">Năm kế hoạch</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-select formControlName="nam" [nzDisabled]="isDisabled()">
+              <nz-select formControlName="nam" [nzDisabled]="isView">
                 <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
               </nz-select>
             </nz-form-control>
@@ -145,8 +143,9 @@
               Số QĐ giao NV xuất hàng
             </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogSoQd()" >
-                <input nz-input [readonly]="isView" formControlName="soBbQd" (ngModelChange)="changeSoQd($event)" readonly/>
+              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogSoQd()">
+                <input nz-input [readonly]="isView" formControlName="soBbQd" (ngModelChange)="changeSoQd($event)"
+                       readonly/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -182,7 +181,8 @@
             <nz-form-label [nzNoColon]="true" nzRequired> Điểm kho</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogDdiemNhapHang()">
-                <input [readonly]="isView" nz-input formControlName="tenDiemKho" (ngModelChange)="changeDd($event)" readonly/>
+                <input [readonly]="isView" nz-input formControlName="tenDiemKho" (ngModelChange)="changeDd($event)"
+                       readonly/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -223,7 +223,7 @@
               Số phiếu kiểm nghiệm chất lượng
             </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-              <nz-input-group nzAddOnAfterIcon="folder-open" >
+              <nz-input-group nzAddOnAfterIcon="folder-open">
                 <input nz-input [readonly]="isView" formControlName="soPhieuKnCl" readonly/>
               </nz-input-group>
             </nz-form-control>
@@ -434,9 +434,7 @@
           </tr>
           </thead>
           <tbody>
-
           <tr>
-
             <td>1</td>
             <td>
               {{formData.value.tenCloaiVthh}}
@@ -487,9 +485,7 @@
                 <i class="fa fa-refresh"></i>
               </a>
             </td>
-
           </tr>
-
           </tbody>
         </nz-table>
       </nz-card>
