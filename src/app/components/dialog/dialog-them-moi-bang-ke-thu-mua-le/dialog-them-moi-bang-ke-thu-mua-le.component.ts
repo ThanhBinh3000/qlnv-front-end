@@ -107,6 +107,19 @@ export class DialogThemMoiBangKeThuMuaLeComponent extends Base2Component impleme
     });
     if (this.dataEdit) {
       this.helperService.bidingDataInFormGroup(this.formData, this.dataEdit);
+      this.formData.patchValue({
+        id: null,
+        soQdGiaoNvNh: this.dataEdit.soQd,
+        idQdGiaoNvNh: this.dataEdit.id,
+        ngayQdGiaoNvNh: this.dataEdit.ngayQd,
+        namQd: this.dataEdit.namNhap,
+        loaiVthh: this.dataEdit.loaiVthh,
+        cloaiVthh: this.dataEdit.cloaiVthh,
+        tenLoaiVthh: this.dataEdit.tenLoaiVthh,
+        tenCloaiVthh: this.dataEdit.tenCloaiVthh,
+        moTaHangHoa: this.dataEdit.moTaHangHoa,
+        soLuongQd: this.dataEdit.hhQdGiaoNvNhangDtlList?.find(x => x.maDvi == this.userInfo.MA_DVI).soLuong,
+      })
     }
   }
 
@@ -155,7 +168,7 @@ export class DialogThemMoiBangKeThuMuaLeComponent extends Base2Component impleme
     this.formData.patchValue({
       thanhTien:
         +this.formData.get('soLuongMtt').value *
-        +this.formData.get('donGia').value,
+        +this.formData.get('donGia').value * 1000,
       soLuongConLai:
         +this.formData.get('soLuongQd').value -
         +this.formData.get('soLuongMtt').value
@@ -229,7 +242,6 @@ export class DialogThemMoiBangKeThuMuaLeComponent extends Base2Component impleme
     await this.spinner.show();
     let dataRes = await this.quyetDinhGiaoNvNhapHangService.getDetail(id)
     const data = dataRes.data;
-    console.log(data)
     this.formData.patchValue({
       soQdGiaoNvNh: data.soQd,
       idQdGiaoNvNh: data.id,
@@ -242,6 +254,7 @@ export class DialogThemMoiBangKeThuMuaLeComponent extends Base2Component impleme
       moTaHangHoa: data.moTaHangHoa,
       soLuongQd: data.hhQdGiaoNvNhangDtlList?.find(x => x.maDvi == this.userInfo.MA_DVI).soLuong,
     });
+    console.log("bindingDataQd", this.formData.value)
     await this.spinner.hide();
   }
 
@@ -253,6 +266,7 @@ export class DialogThemMoiBangKeThuMuaLeComponent extends Base2Component impleme
         if (res.data) {
           const data = res.data;
           this.helperService.bidingDataInFormGroup(this.formData, data);
+          console.log("loadChiTiet",this.formData.value)
           await this.bindingDataQd(data.idQdGiaoNvNh);
         }
       }

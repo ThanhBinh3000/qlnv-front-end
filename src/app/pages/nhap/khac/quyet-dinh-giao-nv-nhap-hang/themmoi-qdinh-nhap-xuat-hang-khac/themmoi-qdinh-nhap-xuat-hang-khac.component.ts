@@ -528,19 +528,7 @@ export class ThemmoiQdinhNhapXuatHangKhacComponent implements OnInit {
     let trangThai = ''
     let mesg = ''
     switch (this.formData.get('trangThai').value) {
-      case STATUS.TU_CHOI_LDC:
-      case STATUS.TU_CHOI_TP:
       case STATUS.DU_THAO: {
-        trangThai = STATUS.CHO_DUYET_TP;
-        mesg = 'Bạn có muốn gửi duyệt ?'
-        break;
-      }
-      case STATUS.CHO_DUYET_TP: {
-        trangThai = STATUS.CHO_DUYET_LDC;
-        mesg = 'Bạn có muốn duyệt ?'
-        break;
-      }
-      case STATUS.CHO_DUYET_LDC: {
         trangThai = STATUS.BAN_HANH;
         mesg = 'Bạn có muốn ban hành ?'
         break;
