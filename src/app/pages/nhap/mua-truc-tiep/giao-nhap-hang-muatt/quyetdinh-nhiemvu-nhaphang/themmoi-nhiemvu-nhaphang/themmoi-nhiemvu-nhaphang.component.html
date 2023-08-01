@@ -37,7 +37,7 @@
             </button>
         </ng-container>
         <ng-container *ngIf="userService.isChiCuc()">
-            <button *ngIf="(formData.value.trangThai == STATUS.BAN_HANH)" type="button" class="btn btn-sub xanh-nhat"
+            <button type="button" class="btn btn-sub xanh-nhat"
                 (click)="saveDdiemNhap(STATUS.HOAN_THANH_CAP_NHAT)">
                 <i class="icon htvbdh_duyet"></i>
                 <span>Hoàn thành</span>

@@ -10,6 +10,7 @@ import {QdKhUyQuyenMuaLeComponent} from "./qd-kh-uy-quyen-mua-le.component";
 import {
   ThemmoiQdKhUyQuyenMuaLeComponent
 } from "./themmoi-qd-kh-uy-quyen-mua-le/themmoi-qd-kh-uy-quyen-mua-le.component";
+import {HopdongBangkePhieumuahangModule} from "../hopdong-bangke-phieumuahang/hopdong-bangke-phieumuahang.module";
 @NgModule({
   declarations: [
     QdKhUyQuyenMuaLeComponent,
@@ -25,7 +26,8 @@ import {
         ComponentsModule,
         MainModule,
         KeHoachVonDauNamModule,
-        DieuchinhKehoachMuattModule
+        DieuchinhKehoachMuattModule,
+        HopdongBangkePhieumuahangModule
     ]
 })
 export class QdKhUyQuyenMuaLeModule { }
