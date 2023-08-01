@@ -12,6 +12,10 @@
         </div>
       </div>
       <div class="btn-group">
+        <button type="button" class="btn btn-sub ml-2" (click)="saveDocx()">
+          <i class="fa fa-arrow-left"></i>
+          <span>Xuất ting</span>
+        </button>
         <button type="button" class="btn btn-sub ml-2" (click)="quayLai()">
           <i class="fa fa-arrow-left"></i>
           <span>Quay lại</span>
@@ -273,7 +277,8 @@
         <span class="text-right">
       <h2 style="font-size: 100%; margin-top: 0.5%;font-style: italic;color: red">Đơn vị : Đồng/kg</h2>
     </span>
-        <nz-table #rowSelectionTable class="nowrap" nzBordered [nzData]="dataTableView" [nzFrontPagination]="false"
+      <div id="cuongnv">
+        <nz-table #rowSelectionTable class="nowrap" nzBordered [nzData]="dataTableView" [nzFrontPagination]="false" style="border: 1px solid black; word-wrap: break-word"
                   [nzShowPagination]="false">
           <thead>
           <tr class="header-row">
@@ -310,8 +315,8 @@
                   (nzExpandChange)="onExpandChange(data.idVirtual, $event)"><a nz-button nzType="link"
                                                                                (click)="openModalDxChinhSua(data.pagId)">{{ data.soDx }}</a>
               </td>
-              <td>{{ data.tenDvi}}</td>
-              <td>{{ data.tenVungMien}}</td>
+              <td style="width: 200px">{{ data.tenDvi}}</td>
+              <td style="width: 200px">{{ data.tenVungMien}}</td>
               <td></td>
               <td></td>
               <td></td>
@@ -332,8 +337,8 @@
                   <td></td>
                   <td></td>
                   <td></td>
-                  <td>{{item.tenChiCuc}}</td>
-                  <td class="text-right">{{ item.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+                  <td style="width: 200px">{{item.tenChiCuc}}</td>
+                  <td class="text-right" style="width: 200px">{{ item.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
                   <td
                     class="text-center">{{item.giaKsTu && item.giaKsDen ? ((item.giaKsTu | number : '1.0-1' : 'vi_VN') + ' - ' + (item.giaKsDen | number : '1.0-1' : 'vi_VN')) : ''}}</td>
                   <td class="text-center"
@@ -367,6 +372,7 @@
           </ng-container>
           </tbody>
         </nz-table>
+      </div>
       </nz-card>
       <form nzLayout="vertical" nz-form [formGroup]="formData">
         <div nz-row [nzGutter]="20">
