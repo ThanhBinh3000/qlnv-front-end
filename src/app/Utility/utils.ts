@@ -705,7 +705,11 @@ export class FileManip {
 		if (doc.fileUrl) {
 			await this.quanLyVonPhiService.downloadFile(doc.fileUrl).toPromise().then(
 				(data) => {
-					fileSaver.saveAs(data, doc.fileName);
+					let fileName = doc.fileName;
+					if (fileName.split('.').length == 1) {
+						fileName = doc.fileName + doc.fileUrl.substring(doc.fileUrl.lastIndexOf('.'))
+					}
+					fileSaver.saveAs(data, fileName);
 				},
 				err => {
 					this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -875,6 +879,10 @@ export class Utils {
 			lstNam.push(thisYear + i);
 		}
 		return lstNam
+	}
+
+	static getDocName(soCv: string, ngayCv: string, tenDvi: string) {
+		return 'Kèm theo Công văn số ' + soCv + ' ngày ' + Utils.fmtDate(ngayCv) + ' của ' + tenDvi;
 	}
 
 	public static ROUND = 4;

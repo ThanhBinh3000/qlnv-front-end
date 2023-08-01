@@ -18,6 +18,7 @@ import { BtnStatus, Doc, Dtc, Form, Report } from '../bao-cao-thuc-hien-du-toan-
 import { PhuLucIComponent } from './phu-luc-1/phu-luc-1.component';
 import { PhuLucIIComponent } from './phu-luc-2/phu-luc-2.component';
 import { PhuLucIIIComponent } from './phu-luc-3/phu-luc-3.component';
+import { DialogCongVanComponent } from 'src/app/components/dialog/dialog-cong-van/dialog-cong-van.component';
 
 @Component({
     selector: 'app-bao-cao',
@@ -59,13 +60,60 @@ export class BaoCaoComponent implements OnInit {
         return false;
     };
 
+    // customRequest = (file: NzUploadFile) => {
+    //     // Simulating an asynchronous upload request with a delay (you can replace this with your actual upload logic)
+    //     setTimeout(() => {
+    //         const modalAppendix = this.modal.create({
+    //             nzTitle: 'Thêm mới công văn',
+    //             nzContent: DialogCongVanComponent,
+    //             nzBodyStyle: { overflowY: 'auto', maxHeight: 'calc(100vh - 200px)' },
+    //             nzMaskClosable: false,
+    //             nzWidth: '60%',
+    //             nzFooter: null,
+    //             nzComponentParams: {
+    //             },
+    //         });
+    //         modalAppendix.afterClose.toPromise().then(async (res) => {
+    //             if (res) {
+    //                 this.baoCao.ngayCongVan = res.ngayCongVan;
+    //                 this.baoCao.congVan = {
+    //                     ...new Doc(),
+    //                     fileName: res.soCongVan,
+    //                 };
+    //                 const newFile = new Blob([file], { type: file.type });
+    //                 (newFile as any).lastModifiedDate = new Date();
+    //                 (newFile as any).name = newFileName;
+    //             }
+    //         });
+    //       const newFile: File = new File([file], newFileName, { type: file.type });
+
+    //       // Handle the uploaded file as needed (e.g., send it to the server)
+    //       this.handleUpload(newFile);
+    //     }, 1000);
+    //   };
+
     // before uploaf file
     beforeUploadCV = (file: NzUploadFile): boolean => {
+        const modalAppendix = this.modal.create({
+            nzTitle: 'Thêm mới công văn',
+            nzContent: DialogCongVanComponent,
+            nzBodyStyle: { overflowY: 'auto', maxHeight: 'calc(100vh - 200px)' },
+            nzMaskClosable: false,
+            nzWidth: '60%',
+            nzFooter: null,
+            nzComponentParams: {
+            },
+        });
+        modalAppendix.afterClose.toPromise().then(async (res) => {
+            if (res) {
+                this.baoCao.ngayCongVan = res.ngayCongVan;
+                this.baoCao.congVan = {
+                    ...new Doc(),
+                    fileName: res.soCongVan,
+                };
+            }
+        });
         this.fileDetail = file;
-        this.baoCao.congVan = {
-            ...new Doc(),
-            fileName: file.name,
-        };
         return false;
     };
 
@@ -406,8 +454,12 @@ export class BaoCaoComponent implements OnInit {
                 this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
                 return;
             } else {
-                baoCaoTemp.congVan = await this.fileManip.uploadFile(file, this.path);
+                baoCaoTemp.congVan = {
+                    ...await this.fileManip.uploadFile(file, this.path),
+                    fileName: this.baoCao.congVan.fileName,
+                }
             }
+            this.fileDetail = null;
         }
         if (!baoCaoTemp.congVan) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
@@ -520,6 +572,9 @@ export class BaoCaoComponent implements OnInit {
             namBcao: this.baoCao.namBcao,
             path: this.path,
             status: new BtnStatus(),
+            tieuDe: bieuMau.tieuDe,
+            tenPl: bieuMau.tenPhuLuc,
+            congVan: Utils.getDocName(this.baoCao.congVan.fileName, this.baoCao.ngayCongVan, this.baoCao.tenDvi),
             luyKes: this.luyKes.find(e => e.maLoai == bieuMau.maLoai),
         }
         Object.assign(dataInfo.status, this.status);

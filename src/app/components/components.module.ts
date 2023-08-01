@@ -182,6 +182,7 @@ import { DialogQdPdKqlcntComponent } from "./dialog/ql-kho-tang/dialog-qd-pd-kql
 import { FmInputNumberComponent } from './fm-input-number.component';
 import { TemplateErrorComponent } from './template-error/template-error.component';
 import { DialogChonDanhMucChoBieuMauComponent } from './dialog/dialog-chon-danh-muc-cho-bieu-mau/dialog-chon-danh-muc-cho-bieu-mau.component';
+import { DialogCongVanComponent } from './dialog/dialog-cong-van/dialog-cong-van.component';
 @NgModule({
   declarations: [
     //components
@@ -304,6 +305,7 @@ import { DialogChonDanhMucChoBieuMauComponent } from './dialog/dialog-chon-danh-
     DialogKtGiaoKhoComponent,
     DialogQdPdKhlcntComponent,
     DialogQdPdKqlcntComponent,
+    DialogCongVanComponent,
   ],
   imports: [
     CommonModule,
