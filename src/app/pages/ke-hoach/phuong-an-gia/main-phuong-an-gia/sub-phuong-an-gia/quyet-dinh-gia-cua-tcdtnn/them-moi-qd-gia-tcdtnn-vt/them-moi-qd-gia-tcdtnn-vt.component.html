@@ -192,24 +192,24 @@
       <td class="text-right"
           *ngIf="!(formData.value.loaiDeXuat == '00')">{{data.giaQdTcdt | number : '1.0-1' : 'vi_VN'}}</td>
       <td class="text-right"
-          *ngIf="(formData.value.loaiGia == 'LG01' )">
+          *ngIf="(formData.value.loaiGia == 'LG03' )">
         {{ data.vat ? (data.giaQdTcdt * data.vat + data.giaQdTcdt | number : '1.0-1' : 'vi_VN') : ''}}
 
       </td>
       <td class="text-right"
-          *ngIf="!(formData.value.loaiGia == 'LG01' ) && (formData.value.loaiDeXuat == '00')"></td>
+          *ngIf="!(formData.value.loaiGia == 'LG03' ) && (formData.value.loaiDeXuat == '00')"></td>
       <td class="text-right" *ngIf="!(formData.value.loaiDeXuat == '00')">
         <nz-input-number [nzDisabled]="isView" [nzSize]="'small'" [(ngModel)]="data.giaQdDcTcdt" [nzMin]="0"
                          [nzFormatter]="globals.formatter"
                          [nzParser]="globals.parser">
         </nz-input-number>
       <td class="text-right"
-          *ngIf="(formData.value.loaiGia == 'LG01' ) && !(formData.value.loaiDeXuat == '00')">
+          *ngIf="(formData.value.loaiGia == 'LG03' ) && !(formData.value.loaiDeXuat == '00')">
         {{ data.vat ? (data.giaQdDcTcdt * data.vat + data.giaQdDcTcdt | number : '1.0-1' : 'vi_VN') : ''}}
 
       </td>
       <td class="text-right"
-          *ngIf="!(formData.value.loaiGia == 'LG01' ) && !(formData.value.loaiDeXuat == '00')"></td>
+          *ngIf="!(formData.value.loaiGia == 'LG03' ) && !(formData.value.loaiDeXuat == '00')"></td>
     </tr>
     </tbody>
   </nz-table>  <form nzLayout="vertical" nz-form [formGroup]="formData">
