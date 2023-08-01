@@ -90,7 +90,7 @@
       </div>
     </div>
   </div>
-  <nz-table nzBordered [nzData]="chiTietList">
+  <nz-table nzBordered [nzData]="hopDongList">
     <thead>
     <tr>
       <th width="40px" rowspan="2">STT</th>
@@ -135,7 +135,8 @@
       </th>
       <th>
         <nz-input-group>
-          <nz-select [(ngModel)]="rowItem.loaiTien" [nzDisabled]="rowItem.maHopDong != null">
+          <nz-select [(ngModel)]="rowItem.loaiTien" (ngModelChange)="changeLoaiTien()"
+                     [nzDisabled]="rowItem.maHopDong != null">
             <nz-option *ngFor=" let item of listLoaiTien" [nzValue]="item.ma" [nzLabel]="item.giaTri">
             </nz-option>
           </nz-select>
@@ -158,7 +159,8 @@
       </th>
       <th>
         <nz-input-group>
-          <nz-input-number [nzDisabled]="rowItem.maHopDong != null" [nzMin]="1" [nzMax]="" [nzSize]="'small'"
+          <nz-input-number [nzDisabled]="rowItem.loaiTien == '01'" [nzMin]="1" [nzMax]=""
+                           [nzSize]="'small'"
                            [(ngModel)]="rowItem.tongTienNt"
           >
           </nz-input-number>
@@ -166,7 +168,8 @@
       </th>
       <th>
         <nz-input-group>
-          <nz-input-number [nzDisabled]="rowItem.maHopDong != null" [nzMin]="1" [nzMax]="" [nzSize]="'small'"
+          <nz-input-number [nzDisabled]="rowItem.loaiTien != '01'" [nzMin]="1" [nzMax]=""
+                           [nzSize]="'small'"
                            [(ngModel)]="rowItem.tongTien"
           >
           </nz-input-number>
@@ -181,58 +184,63 @@
       </th>
       <th>
         <nz-input-group>
-          <nz-input-number [nzMin]="1" [nzMax]="" [nzSize]="'small'" [(ngModel)]="rowItem.tyGia"
+          <nz-input-number [nzMin]="1" [nzMax]="" [nzDisabled]="rowItem.loaiTien == '01'" [nzSize]="'small'"
+                           [(ngModel)]="rowItem.tyGia"
           >
           </nz-input-number>
         </nz-input-group>
       </th>
       <th>
         <nz-input-group>
-          <nz-input-number [nzMin]="1" [nzMax]="" [nzSize]="'small'" [(ngModel)]="rowItem.kinhPhiDaCapNt"
+          <nz-input-number [nzMin]="1" [nzDisabled]="rowItem.loaiTien == '01'" [nzMax]="" [nzSize]="'small'"
+                           [(ngModel)]="rowItem.kinhPhiDaCapNt"
           >
           </nz-input-number>
         </nz-input-group>
       </th>
       <th>
         <nz-input-group>
-          <nz-input-number [nzMin]="1" [nzMax]="" [nzSize]="'small'" [(ngModel)]="rowItem.kinhPhiDaCap"
+          <nz-input-number [nzMin]="1" [nzMax]="" [nzDisabled]="rowItem.loaiTien != '01'" [nzSize]="'small'"
+                           [(ngModel)]="rowItem.kinhPhiDaCap"
           >
           </nz-input-number>
         </nz-input-group>
       </th>
       <th>
         <nz-input-group>
-          <nz-input-number [nzMin]="1" [nzMax]="" [nzSize]="'small'" [(ngModel)]="rowItem.kinhPhiDaCapNt"
+          <nz-input-number [nzMin]="1" [nzMax]="" [nzDisabled]="true" [nzSize]="'small'" [(ngModel)]="rowItem.kinhPhiChuaCapNt"
           >
           </nz-input-number>
         </nz-input-group>
       </th>
       <th>
         <nz-input-group>
-          <nz-input-number [nzMin]="1" [nzMax]="" [nzSize]="'small'" [(ngModel)]="rowItem.kinhPhiDaCap"
+          <nz-input-number [nzMin]="1" [nzMax]="" [nzDisabled]="true" [nzSize]="'small'" [(ngModel)]="rowItem.kinhPhiChuaCap"
           >
           </nz-input-number>
         </nz-input-group>
       </th>
       <th>
         <nz-input-group>
-          <nz-input-number [nzMin]="1" [nzMax]="" [nzSize]="'small'" [(ngModel)]="rowItem.ycCapThemNt"
+          <nz-input-number [nzMin]="1" [nzMax]="" [nzDisabled]="rowItem.loaiTien == '01'" [nzSize]="'small'"
+                           [(ngModel)]="rowItem.ycCapThemNt"
           >
           </nz-input-number>
         </nz-input-group>
       </th>
       <th>
         <nz-input-group>
-          <nz-input-number [nzMin]="1" [nzMax]="" [nzSize]="'small'" [(ngModel)]="rowItem.ycCapThem"
+          <nz-input-number [nzMin]="1" [nzMax]="" [nzSize]="'small'" [nzDisabled]="rowItem.loaiTien != '01'"
+                           [(ngModel)]="rowItem.ycCapThem"
           >
           </nz-input-number>
         </nz-input-group>
       </th>
       <th style="text-align: center;">
-        <a (click)="themDonViCungCap()">
+        <a (click)="themHopDong()">
           <i class="table-icon icon htvbdh_dau-cong"></i>
         </a>
-        <a (click)="clearDonviCungCap()">
+        <a (click)="clearHopDong()">
           <i class="table-icon icon  htvbdh_nhap-lai1"></i>
         </a>
       </th>
@@ -333,6 +341,182 @@
       <th>{{ tongCong.tongYeuCauCapThem | number : '1.0-1' : 'vi_VN'}}</th>
       <th></th>
     </tr>
+    </tbody>
+  </nz-table>
+  <div class="header header-green-background mg-t-10">
+    <div class="header-text">
+      <div class="title-chi-tieu">
+        <span class="text-uppercase font-weight-bold">THÔNG TIN CHI TIẾT CÁC LOẠI HÀNG TRONG ĐỀ NGHỊ</span>
+      </div>
+    </div>
+  </div>
+  <nz-table nzBordered [nzData]="hopDongList">
+    <thead>
+    <tr>
+      <th width="40px">STT</th>
+      <th>Loại</th>
+      <th>Chủng loại</th>
+      <th>Tên hàng</th>
+      <th width="200px">Số lượng đề nghị cấp vốn</th>
+      <th>Đơn vị tính</th>
+      <th>Đơn giá</th>
+      <th>Thành tiền (Ngoại tệ)</th>
+      <th>Thành tiền (VNĐ)</th>
+      <th>Hành động</th>
+    </tr>
+    <tr *ngIf="!isView && itemHopDongSelected" class="search-table">
+      <th></th>
+      <th>
+        <nz-input-group>
+          <nz-select [(ngModel)]="rowItemDetailHhh.loaiVthh" (ngModelChange)="changeLoaiHangHoa()">
+            <nz-option *ngFor=" let item of listLoaiHangHoa" [nzValue]="item.maHangHoa" [nzLabel]="item.tenHangHoa">
+            </nz-option>
+          </nz-select>
+        </nz-input-group>
+      </th>
+      <th>
+        <nz-input-group>
+          <nz-select [(ngModel)]="rowItemDetailHhh.cloaiVthh" (ngModelChange)="changeChungLoaiHangHoa()">
+            <nz-option *ngFor=" let item of listChungLoaiHangHoa" [nzValue]="item.maHangHoa"
+                       [nzLabel]="item.tenHangHoa">
+            </nz-option>
+          </nz-select>
+        </nz-input-group>
+      </th>
+      <th>
+        <nz-input-group>
+          <input type="text" nz-input [(ngModel)]="rowItemDetailHhh.tenHang"/>
+        </nz-input-group>
+      </th>
+      <th>
+        <nz-input-group>
+          <nz-input-number [nzMin]="1" [nzMax]="" [nzSize]="'small'" [(ngModel)]="rowItemDetailHhh.slDeNghiCapVon"
+                           (ngModelChange)="changeThanhTien()">
+          </nz-input-number>
+        </nz-input-group>
+      </th>
+      <th>
+        <nz-input-group>
+          <input type="text" nz-input [(ngModel)]="rowItemDetailHhh.donViTinh" readonly/>
+        </nz-input-group>
+      </th>
+      <th>
+        <nz-input-group>
+          <input class="money-input" currencyMask [options]="amount"
+                 [(ngModel)]="rowItemDetailHhh.donGia"
+                 (ngModelChange)="changeThanhTien()"/>
+        </nz-input-group>
+      </th>
+      <th>
+        <nz-input-group>
+          <input class="money-input" currencyMask disabled [options]="amount"
+                 [(ngModel)]="rowItemDetailHhh.thanhTienNt"/>
+        </nz-input-group>
+      </th>
+      <th>
+        <nz-input-group>
+          <input class="money-input" currencyMask disabled [options]="amount"
+                 [(ngModel)]="rowItemDetailHhh.thanhTien"/>
+        </nz-input-group>
+      </th>
+      <th style="text-align: center;">
+        <a (click)="themChiTietHangHoa()">
+          <i class="table-icon icon htvbdh_dau-cong"></i>
+        </a>
+        <a (click)="clearChiTietHangHoa()">
+          <i class="table-icon icon  htvbdh_nhap-lai1"></i>
+        </a>
+      </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let item of hopDongList, let idx = index">
+      <ng-container *ngIf="!item.edit; else editTemplate">
+        <td>{{idx + 1}}</td>
+        <td>{{item.tenLoaiVthh}}</td>
+        <td>{{item.tenCloaiVthh}}</td>
+        <td>{{item.tenHang}}</td>
+        <td>{{item.slDeNghiCapVon}}</td>
+        <td>{{item.donViTinh}}</td>
+        <td>{{item.donGia |number : '1.0-1' : 'vi_VN'}}</td>
+        <td>{{item.thanhTienNt | number : '1.0-1' : 'vi_VN'}}</td>
+        <td>{{item.thanhTien | number : '1.0-1' : 'vi_VN'}}</td>
+        <td class="text-center" *ngIf="!isView">
+          <a (click)="showEditItem(idx, 'show')">
+            <i class="fa fa-pencil" title="Sửa"></i>
+          </a>
+          <a (click)="xoaItem(idx)">
+            <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+          </a>
+        </td>
+      </ng-container>
+      <ng-template #editTemplate>
+        <td>{{idx + 1}}</td>
+        <td><input type="text" nz-input [(ngModel)]="item.dvCungCapHang"/></td>
+        <td><input type="text" nz-input [(ngModel)]="item.soTaiKhoan"/></td>
+        <td><input type="text" nz-input [(ngModel)]="item.nganHang"/></td>
+        <td>
+          <nz-input-group>
+            <nz-select [(ngModel)]="item.maVatTuCha" (ngModelChange)="changeLoaiHangHoa()">
+              <nz-option *ngFor="let it of listLoaiHangHoa" [nzValue]="it.maHangHoa" [nzLabel]="it.tenHangHoa">
+              </nz-option>
+            </nz-select>
+          </nz-input-group>
+        </td>
+        <td>
+          <nz-input-group>
+            <nz-select [(ngModel)]="item.maVatTu" (ngModelChange)="changeChungLoaiHangHoa()">
+              <nz-option *ngFor=" let it of listChungLoaiHangHoa" [nzValue]="it.ma" [nzLabel]="it.ten">
+              </nz-option>
+            </nz-select>
+          </nz-input-group>
+        </td>
+        <td><input type="text" nz-input [(ngModel)]="item.tenHangHoa"/></td>
+        <td>
+          <nz-input-number [nzMin]="1" [nzMax]="" [nzSize]="'small'" [(ngModel)]="item.soLuong"
+                           (ngModelChange)="changeThanhTienEdit(idx)">
+          </nz-input-number>
+          <!--                <input type="text" nz-input [(ngModel)]="item.soLuong" />-->
+        </td>
+        <td><input type="text" nz-input [(ngModel)]="item.donViTinh"/></td>
+        <td>
+          <nz-input-number [nzMin]="1" [nzMax]="" [nzSize]="'small'" [(ngModel)]="item.donGia"
+                           (ngModelChange)="changeThanhTienEdit(idx)">
+          </nz-input-number>
+        </td>
+        <td><input type="text" nz-input [(ngModel)]="item.thanhTien"/></td>
+        <td>
+          <nz-input-number type="text" nz-input [(ngModel)]="item.kinhPhiDaCap" [nzMin]="1"
+                           [nzMax]="item.maxYeuCauCapThem"
+                           (ngModelChange)="changeThanhTienEdit(idx)"></nz-input-number>
+        </td>
+        <td><input type="text" nz-input [(ngModel)]="item.ycCapThem"/></td>
+        <td class="text-center">
+          <a class="save" (click)="showEditItem(idx, 'save')">
+            <i class="fa fa-save"></i>
+          </a>
+          <a (click)="showEditItem(idx, 'huy')">
+            <i class="fa fa-times do"></i>
+          </a>
+        </td>
+      </ng-template>
+    </tr>
+    <!--    <tr>-->
+    <!--      <th></th>-->
+    <!--      <th></th>-->
+    <!--      <th></th>-->
+    <!--      <th></th>-->
+    <!--      <th>Tổng Cộng:</th>-->
+    <!--      <th></th>-->
+    <!--      <th></th>-->
+    <!--      <th></th>-->
+    <!--      <th></th>-->
+    <!--      <th></th>-->
+    <!--      <th>{{ tongCong.tongThanhTien | number : '1.0-1' : 'vi_VN'}}</th>-->
+    <!--      <th>{{ tongCong.tongKinhPhiDaCap | number : '1.0-1' : 'vi_VN'}}</th>-->
+    <!--      <th>{{ tongCong.tongYeuCauCapThem | number : '1.0-1' : 'vi_VN'}}</th>-->
+    <!--      <th></th>-->
+    <!--    </tr>-->
     </tbody>
   </nz-table>
   <form nzLayout="vertical" nz-form [formGroup]="formData">

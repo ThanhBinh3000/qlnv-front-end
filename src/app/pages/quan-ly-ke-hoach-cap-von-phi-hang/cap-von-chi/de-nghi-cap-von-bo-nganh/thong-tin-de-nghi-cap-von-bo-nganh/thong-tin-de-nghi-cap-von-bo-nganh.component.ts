@@ -81,11 +81,13 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
   listLoaiHopDong: any[] = [];
   dsBoNganh: any[] = [];
   maxYeuCauCapThem: number = 2;
+  hopDongList: any[] = [];
   chiTietList: any[] = [];
   preFixSoDn: string = "KH";
   titleSoDeNghi: string;
   hangHoaAll: any[];
   listHopDong: any[] = [];
+  itemHopDongSelected: any;
   amount = AMOUNT_TWO_DECIMAL;
   rowItem: IDeNghiCapVon = {
     maHopDong: null,
@@ -99,6 +101,8 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
     duToanDuocGiao: null,
     tongTien: null,
     tongTienNt: null,
+    kinhPhiChuaCapNt: null,
+    kinhPhiChuaCap: null,
     maVatTu: null,
     tenVatTu: null,
     maVatTuCha: null,
@@ -113,6 +117,19 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
     // thêm theo thiết kế mới
     ycCapThemNt: null,
     edit: false
+  }
+
+  rowItemDetailHhh: ItemDetailHh = {
+    loaiVthh: null,
+    cloaiVthh: null,
+    tenLoaiVthh: null,
+    tenCloaiVthh: null,
+    tenHang: null,
+    donGia: null,
+    thanhTien: null,
+    thanhTienNt: null,
+    slDeNghiCapVon: null,
+    donViTinh: null,
   }
 
   showEdit: boolean = false;
@@ -228,7 +245,7 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
         this.listLoaiHangHoa = this.hangHoaAll.filter(element => element.maHangHoa.length == 4)
       }
     }
-    this.loadListHopDong(bnObject.maDvi);
+    // this.loadListHopDong(bnObject.maDvi);
   }
 
   back() {
@@ -279,26 +296,22 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
       this.rowItem.tenVatTuCha = loaiHangHoa[0].ten;
       this.listChungLoaiHangHoa = loaiHangHoa[0].child;
     }*/
-    this.rowItem.tenVatTu = null;
-    this.rowItem.maVatTu = null;
+    // this.rowItemDetailHhh.ten = null;
+    // this.rowItemDetailHhh.maVatTu = null;
     this.listChungLoaiHangHoa = this.hangHoaAll.filter(element => element.maHangHoa.length > 4 &&
-      element.maHangHoa.substring(0, 4) == this.rowItem.maVatTuCha)
-    this.rowItem.tenVatTuCha = this.listLoaiHangHoa.find(s => s.maHangHoa == this.rowItem.maVatTuCha).tenHangHoa;
-    this.rowItem.donViTinh = this.listLoaiHangHoa.find(s => s.maHangHoa == this.rowItem.maVatTuCha).maDviTinh;
+      element.maHangHoa.substring(0, 4) == this.rowItemDetailHhh.loaiVthh)
+    let hangHoa = this.listLoaiHangHoa.find(s => s.maHangHoa == this.rowItemDetailHhh.loaiVthh);
+    if (hangHoa) {
+      this.rowItemDetailHhh.tenLoaiVthh = hangHoa.tenHangHoa;
+      this.rowItemDetailHhh.donViTinh = hangHoa.maDviTinh;
+    }
   }
 
   changeChungLoaiHangHoa() {
-    /*let chungLoaiHangHoa = this.listChungLoaiHangHoa.filter(x => {
-      return x.ma === this.rowItem.maVatTu;
-    });
-    if (chungLoaiHangHoa && chungLoaiHangHoa.length > 0) {
-      this.rowItem.tenVatTu = chungLoaiHangHoa[0].ten;
-      this.rowItem.donViTinh = chungLoaiHangHoa[0].maDviTinh;
-    }*/
-    let item = this.listChungLoaiHangHoa.find(s => s.maHangHoa == this.rowItem.maVatTu)
+    let item = this.listChungLoaiHangHoa.find(s => s.maHangHoa == this.rowItemDetailHhh.cloaiVthh)
     if (item) {
-      this.rowItem.tenVatTu = item.tenHangHoa;
-      this.rowItem.donViTinh = item.maDviTinh;
+      this.rowItemDetailHhh.tenCloaiVthh = item.tenHangHoa;
+      this.rowItemDetailHhh.donViTinh = item.maDviTinh;
     }
   }
 
@@ -309,17 +322,20 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
   }
 
   changeThanhTien() {
-    if (this.rowItem.soLuong && this.rowItem.donGia) {
-      let thanhTien = this.rowItem.soLuong * this.rowItem.donGia;
+    if (this.rowItemDetailHhh.slDeNghiCapVon && this.rowItemDetailHhh.donGia) {
+      let thanhTien = this.rowItemDetailHhh.slDeNghiCapVon * this.rowItemDetailHhh.donGia;
       this.maxYeuCauCapThem = thanhTien;
-      this.rowItem.thanhTien = thanhTien;
+      this.rowItemDetailHhh.thanhTien = thanhTien;
+      this.rowItemDetailHhh.thanhTienNt = thanhTien;
     }
-    if (this.rowItem.thanhTien) {
-      let yeuCauCapThem = this.rowItem.thanhTien - (this.rowItem.kinhPhiDaCap ? this.rowItem.kinhPhiDaCap : 0);
-      this.rowItem.ycCapThem = yeuCauCapThem;
-    }
+    // if (this.rowItem.thanhTien) {
+    //   let yeuCauCapThem = this.rowItem.thanhTien - (this.rowItem.kinhPhiDaCap ? this.rowItem.kinhPhiDaCap : 0);
+    //   this.rowItem.ycCapThem = yeuCauCapThem;
+    // }
   }
+  changeLoaiTien(){
 
+  }
   changeThanhTienEdit(id) {
     if (this.chiTietList[id].soLuong && this.chiTietList[id].donGia) {
       let thanhTien = this.chiTietList[id].soLuong * this.chiTietList[id].donGia;
@@ -332,25 +348,41 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
     }
   }
 
-
-  themDonViCungCap() {
+  themHopDong() {
     let isValid = true;
     for (let key in this.rowItem) {
-      if (this.rowItem[key] === null && key != 'maVatTu' && key != 'tenHangHoa' && key != 'tenVatTu' && key != 'kinhPhiDaCap') {
+      if (this.rowItem[key] === null &&  key != 'soHopDong' && key != 'loaiTien' && key != 'dvCungCapHang') {
         isValid = false;
       }
     }
     if (isValid) {
       this.chiTietList.push(this.rowItem);
-      this.tinhTong();
-      this.clearDonviCungCap();
+      // this.tinhTong();
+      // this.clearDonviCungCap();
     } else {
       this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
     }
 
   }
 
-  clearDonviCungCap() {
+  themChiTietHangHoa() {
+    let isValid = true;
+    for (let key in this.rowItemDetailHhh) {
+      if (this.rowItemDetailHhh[key] === null && key != 'loaiVthh' && key != 'donGia' && key != 'slDeNghiCapVon') {
+        isValid = false;
+      }
+    }
+    if (isValid) {
+      this.hopDongList.push(this.rowItemDetailHhh);
+      // this.tinhTong();
+      // this.clearDonviCungCap();
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
+    }
+
+  }
+
+  clearHopDong() {
     this.rowItem = {
       maHopDong: null,
       soHopDong: null,
@@ -363,6 +395,8 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
       duToanDuocGiao: null,
       tongTien: null,
       tongTienNt: null,
+      kinhPhiChuaCapNt: null,
+      kinhPhiChuaCap: null,
       maVatTu: null,
       tenVatTu: null,
       maVatTuCha: null,
@@ -377,6 +411,21 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
       // thêm theo thiết kế mới
       ycCapThemNt: null,
       edit: false
+    }
+  }
+
+  clearChiTietHangHoa() {
+    this.rowItemDetailHhh = {
+      loaiVthh: null,
+      cloaiVthh: null,
+      tenLoaiVthh: null,
+      tenCloaiVthh: null,
+      tenHang: null,
+      donGia: null,
+      thanhTien: null,
+      thanhTienNt: null,
+      slDeNghiCapVon: null,
+      donViTinh: null,
     }
   }
 
@@ -643,6 +692,8 @@ interface IDeNghiCapVon {
   duToanDuocGiao: number,
   tongTien: number,
   tongTienNt: number,
+  kinhPhiChuaCapNt: number,
+  kinhPhiChuaCap: number,
   maVatTu: string,
   tenVatTu: string,
   maVatTuCha: string,
@@ -657,4 +708,17 @@ interface IDeNghiCapVon {
   // thêm theo thiết kế mới
   ycCapThemNt: number,
   edit: boolean
+}
+
+export class ItemDetailHh {
+  loaiVthh: string;
+  cloaiVthh: string;
+  tenLoaiVthh: string;
+  tenCloaiVthh: string;
+  tenHang: string;
+  donGia: number;
+  thanhTien: number;
+  thanhTienNt: number;
+  slDeNghiCapVon: number;
+  donViTinh: number;
 }
