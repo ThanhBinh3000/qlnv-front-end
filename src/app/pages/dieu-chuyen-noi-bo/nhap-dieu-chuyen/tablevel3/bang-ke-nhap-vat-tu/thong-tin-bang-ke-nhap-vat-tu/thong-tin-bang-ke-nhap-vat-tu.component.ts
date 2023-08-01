@@ -437,11 +437,9 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
     }
     let data = await this.createUpdate(body);
     if (data) {
+      this.idInput = data.id;
       if (isGuiDuyet) {
-        this.idInput = data.id;
         this.guiDuyet();
-      } else {
-        this.quayLai();
       }
     }
     await this.spinner.hide();

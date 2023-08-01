@@ -16,14 +16,16 @@
         <span>Quay lại</span>
       </button>
 
-      <button *ngIf="!isView && formData.value.trangThai == STATUS.DU_THAO" type="button"
-        class="btn btn-sub xanh-nhat ml-2" (click)="save(true)">
+      <button
+        *ngIf="!isView && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC)"
+        type="button" class="btn btn-sub xanh-nhat ml-2" (click)="save(true)">
         <i class="icon htvbdh_tcdt_guiduyet"></i>
         <span>Lưu và gửi duyệt</span>
       </button>
 
-      <button *ngIf="!isView && formData.value.trangThai == STATUS.DU_THAO" type="button" class="btn btn-main ml-2"
-        (click)="save()">
+      <button
+        *ngIf="!isView && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC)"
+        type="button" class="btn btn-main ml-2" (click)="save()">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
       </button>
@@ -111,7 +113,7 @@
 
           <div nz-col [nzSpan]="4">
             <nz-form-item>
-              <nz-form-label [nzNoColon]="true">Số QĐ điều chuyển của Cục</nz-form-label>
+              <nz-form-label nzRequired [nzNoColon]="true">Số QĐ điều chuyển của Cục</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogQD()">
                   <input [readonly]="true" nz-input formControlName="soQdinhDcc" readonly="true" />
@@ -132,7 +134,7 @@
 
           <div nz-col [nzSpan]="4">
             <nz-form-item>
-              <nz-form-label [nzNoColon]="true">Số phiếu nhập kho</nz-form-label>
+              <nz-form-label nzRequired [nzNoColon]="true">Số phiếu nhập kho</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogPNK()">
                   <input [readonly]="true" nz-input formControlName="soPhieuNhapKho" readonly="true" />
@@ -141,23 +143,23 @@
             </nz-form-item>
           </div>
 
-          <div nz-col nzSpan="4">
+          <!-- <div nz-col nzSpan="4">
             <nz-form-item>
-              <nz-form-label nzRequired [nzNoColon]="true">Lô kho
+              <nz-form-label nzRequired [nzNoColon]="true">Lô/Ngăn kho
               </nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
                 <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogKhoNhap()">
-                  <input [readonly]="true" nz-input formControlName="tenLoKho" readonly="true" />
+                  <input [readonly]="true" nz-input formControlName="tenLoNgănKho" readonly="true" />
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
-          </div>
-          <div nz-col nzSpan="4">
+          </div> -->
+          <div nz-col nzSpan="8">
             <nz-form-item>
-              <nz-form-label nzRequired [nzNoColon]="true">Ngăn kho
+              <nz-form-label nzRequired [nzNoColon]="true">Lô/Ngăn kho
               </nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
-                <input nz-input formControlName="tenNganKho" [readonly]="true" />
+                <input nz-input formControlName="tenLoNganKho" [readonly]="true" />
 
               </nz-form-control>
             </nz-form-item>
@@ -186,7 +188,7 @@
             <nz-form-item>
               <nz-form-label [nzNoColon]="true">Địa đểm kho</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <input [readonly]="true" nz-input formControlName="diaDiemKho" readonly="true" />
+                <input [readonly]="isView" nz-input formControlName="diaDiemKho" />
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -302,7 +304,7 @@
           <div nz-col [nzSpan]="4">
             <nz-form-item>
               <nz-form-label [nzNoColon]="true">
-                Dơn vị tính
+                Đơn vị tính
               </nz-form-label>
               <nz-form-control>
                 <input nz-input formControlName="donViTinh" [readonly]="true" />

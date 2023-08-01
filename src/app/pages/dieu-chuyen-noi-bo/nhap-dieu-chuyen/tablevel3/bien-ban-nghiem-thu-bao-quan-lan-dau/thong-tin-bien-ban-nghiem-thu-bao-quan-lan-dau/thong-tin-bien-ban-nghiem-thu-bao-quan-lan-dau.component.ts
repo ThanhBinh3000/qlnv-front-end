@@ -743,9 +743,6 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
       if (isGuiDuyet) {
         this.guiDuyet();
       }
-      // else {
-      //   this.quayLai();
-      // }
     }
     await this.spinner.hide();
   }

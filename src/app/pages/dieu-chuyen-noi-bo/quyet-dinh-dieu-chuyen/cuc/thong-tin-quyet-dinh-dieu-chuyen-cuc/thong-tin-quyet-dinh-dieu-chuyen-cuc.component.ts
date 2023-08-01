@@ -875,19 +875,31 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
   }
 
   xoaDiemKho(row) {
-    this.danhSachKeHoach = this.danhSachKeHoach.filter(kh => kh.maDiemKho !== row.maDiemKho)
-    this.dataTableView = this.buildTableView(this.danhSachKeHoach, "maChiCucNhan")
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa các bản ghi đã chọn?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: async () => {
+        this.danhSachKeHoach = this.danhSachKeHoach.filter(kh => kh.maDiemKho !== row.maDiemKho)
+        this.dataTableView = this.buildTableView(this.danhSachKeHoach, "maChiCucNhan")
 
-    if (this.idInput) {
-      const qDinh = this.formData.value.danhSachQuyetDinh.find(item => item.keHoachDcHdrId === row.hdrId)
-      const dsKH = qDinh.danhSachKeHoach.filter(item => item.maDiemKho !== row.maDiemKho)
-      qDinh.danhSachKeHoach = dsKH
-      const dsQuyetDinh = this.formData.value.danhSachQuyetDinh.filter(item => item.keHoachDcHdrId !== row.hdrId)
-      dsQuyetDinh.push(qDinh)
-      this.formData.patchValue({
-        danhSachQuyetDinh: dsQuyetDinh
-      })
-    }
+        if (this.idInput) {
+          const qDinh = this.formData.value.danhSachQuyetDinh.find(item => item.keHoachDcHdrId === row.hdrId)
+          const dsKH = qDinh.danhSachKeHoach.filter(item => item.maDiemKho !== row.maDiemKho)
+          qDinh.danhSachKeHoach = dsKH
+          const dsQuyetDinh = this.formData.value.danhSachQuyetDinh.filter(item => item.keHoachDcHdrId !== row.hdrId)
+          dsQuyetDinh.push(qDinh)
+          this.formData.patchValue({
+            danhSachQuyetDinh: dsQuyetDinh
+          })
+        }
+      },
+    });
+
   }
 
   themDiemKho(row) {
@@ -924,26 +936,38 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
   }
 
   xoaLoKho(row) {
-    this.danhSachKeHoach = this.danhSachKeHoach.filter(kh =>
-      !(kh.maChiCucNhan === row.maChiCucNhan &&
-        kh.maDiemKho === row.maDiemKho &&
-        kh.maNhaKho === row.maNhaKho &&
-        kh.maNganKho === row.maNganKho &&
-        (row.maLoKho ? kh.maLoKho === row.maLoKho : true))
-    )
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa các bản ghi đã chọn?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: async () => {
+        this.danhSachKeHoach = this.danhSachKeHoach.filter(kh =>
+          !(kh.maChiCucNhan === row.maChiCucNhan &&
+            kh.maDiemKho === row.maDiemKho &&
+            kh.maNhaKho === row.maNhaKho &&
+            kh.maNganKho === row.maNganKho &&
+            (row.maLoKho ? kh.maLoKho === row.maLoKho : true))
+        )
 
-    this.dataTableView = this.buildTableView(this.danhSachKeHoach, "maChiCucNhan")
+        this.dataTableView = this.buildTableView(this.danhSachKeHoach, "maChiCucNhan")
 
-    if (this.idInput) {
-      const qDinh = this.formData.value.danhSachQuyetDinh.find(item => item.keHoachDcHdrId === row.hdrId)
-      const dsKH = row.maLoKho ? qDinh.danhSachKeHoach.filter(item => item.maLoKho !== row.maLoKho) : qDinh.danhSachKeHoach.filter(item => item.maNganKho !== row.maNganKho)
-      qDinh.danhSachKeHoach = dsKH
-      const dsQuyetDinh = this.formData.value.danhSachQuyetDinh.filter(item => item.keHoachDcHdrId !== row.hdrId)
-      dsQuyetDinh.push(qDinh)
-      this.formData.patchValue({
-        danhSachQuyetDinh: dsQuyetDinh
-      })
-    }
+        if (this.idInput) {
+          const qDinh = this.formData.value.danhSachQuyetDinh.find(item => item.keHoachDcHdrId === row.hdrId)
+          const dsKH = row.maLoKho ? qDinh.danhSachKeHoach.filter(item => item.maLoKho !== row.maLoKho) : qDinh.danhSachKeHoach.filter(item => item.maNganKho !== row.maNganKho)
+          qDinh.danhSachKeHoach = dsKH
+          const dsQuyetDinh = this.formData.value.danhSachQuyetDinh.filter(item => item.keHoachDcHdrId !== row.hdrId)
+          dsQuyetDinh.push(qDinh)
+          this.formData.patchValue({
+            danhSachQuyetDinh: dsQuyetDinh
+          })
+        }
+      },
+    });
+
   }
 
   themDiemKhoNhan(row) {
@@ -1001,69 +1025,81 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
   }
 
   xoaDiemKhoNhanCC(row) {
-    const dsDelete = this.danhSachKeHoach.filter(kh =>
-    (kh.maChiCucNhan === row.maChiCucNhan &&
-      kh.maDiemKho === row.maDiemKho &&
-      kh.maNhaKho === row.maNhaKho &&
-      kh.maNganKho === row.maNganKho &&
-      (row.maLoKho ? kh.maLoKho === row.maLoKho : true) &&
-      kh.maDiemKhoNhan === row.maDiemKhoNhan)
-    )
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa các bản ghi đã chọn?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: async () => {
+        const dsDelete = this.danhSachKeHoach.filter(kh =>
+        (kh.maChiCucNhan === row.maChiCucNhan &&
+          kh.maDiemKho === row.maDiemKho &&
+          kh.maNhaKho === row.maNhaKho &&
+          kh.maNganKho === row.maNganKho &&
+          (row.maLoKho ? kh.maLoKho === row.maLoKho : true) &&
+          kh.maDiemKhoNhan === row.maDiemKhoNhan)
+        )
 
-    this.danhSachKeHoach = this.danhSachKeHoach.filter(kh =>
-      !(kh.maChiCucNhan === row.maChiCucNhan &&
-        kh.maDiemKho === row.maDiemKho &&
-        kh.maNhaKho === row.maNhaKho &&
-        kh.maNganKho === row.maNganKho &&
-        (row.maLoKho ? kh.maLoKho === row.maLoKho : true) &&
-        kh.maDiemKhoNhan === row.maDiemKhoNhan)
-    )
+        this.danhSachKeHoach = this.danhSachKeHoach.filter(kh =>
+          !(kh.maChiCucNhan === row.maChiCucNhan &&
+            kh.maDiemKho === row.maDiemKho &&
+            kh.maNhaKho === row.maNhaKho &&
+            kh.maNganKho === row.maNganKho &&
+            (row.maLoKho ? kh.maLoKho === row.maLoKho : true) &&
+            kh.maDiemKhoNhan === row.maDiemKhoNhan)
+        )
 
-    if (dsDelete.length == 1) {
-      this.danhSachKeHoach.push({
-        ...row,
-        tenDiemKhoNhan: "",
-        maDiemKhoNhan: "",
-        tenNhaKhoNhan: "",
-        maNhaKhoNhan: "",
-        tenNganKhoNhan: "",
-        maNganKhoNhan: "",
-        tenLoKhoNhan: "",
-        maLoKhoNhan: "",
-        tichLuongKd: "",
-        soLuongPhanBo: "",
-      })
-    }
+        if (dsDelete.length == 1) {
+          this.danhSachKeHoach.push({
+            ...row,
+            tenDiemKhoNhan: "",
+            maDiemKhoNhan: "",
+            tenNhaKhoNhan: "",
+            maNhaKhoNhan: "",
+            tenNganKhoNhan: "",
+            maNganKhoNhan: "",
+            tenLoKhoNhan: "",
+            maLoKhoNhan: "",
+            tichLuongKd: "",
+            soLuongPhanBo: "",
+          })
+        }
 
-    this.dataTableView = this.buildTableView(this.danhSachKeHoach, "maDvi")
+        this.dataTableView = this.buildTableView(this.danhSachKeHoach, "maDvi")
 
 
 
-    if (this.idInput) {
-      const qDinh = this.formData.value.danhSachQuyetDinh.find(item => item.keHoachDcHdrId === row.hdrId)
-      const keHoach = qDinh.danhSachKeHoach.find(item => item.maDiemKhoNhan === row.maDiemKhoNhan)
-      let dsKH = qDinh.danhSachKeHoach.filter(item => item.maDiemKhoNhan !== row.maDiemKhoNhan)
-      dsKH.push({
-        ...keHoach,
-        tenDiemKhoNhan: "",
-        maDiemKhoNhan: "",
-        tenNhaKhoNhan: "",
-        maNhaKhoNhan: "",
-        tenNganKhoNhan: "",
-        maNganKhoNhan: "",
-        tenLoKhoNhan: "",
-        maLoKhoNhan: "",
-        tichLuongKd: "",
-        soLuongPhanBo: "",
-      })
-      qDinh.danhSachKeHoach = dsKH
+        if (this.idInput) {
+          const qDinh = this.formData.value.danhSachQuyetDinh.find(item => item.keHoachDcHdrId === row.hdrId)
+          const keHoach = qDinh.danhSachKeHoach.find(item => item.maDiemKhoNhan === row.maDiemKhoNhan)
+          let dsKH = qDinh.danhSachKeHoach.filter(item => item.maDiemKhoNhan !== row.maDiemKhoNhan)
+          dsKH.push({
+            ...keHoach,
+            tenDiemKhoNhan: "",
+            maDiemKhoNhan: "",
+            tenNhaKhoNhan: "",
+            maNhaKhoNhan: "",
+            tenNganKhoNhan: "",
+            maNganKhoNhan: "",
+            tenLoKhoNhan: "",
+            maLoKhoNhan: "",
+            tichLuongKd: "",
+            soLuongPhanBo: "",
+          })
+          qDinh.danhSachKeHoach = dsKH
 
-      const dsQuyetDinh = this.formData.value.danhSachQuyetDinh.filter(item => item.keHoachDcHdrId !== row.hdrId)
-      dsQuyetDinh.push(qDinh)
-      this.formData.patchValue({
-        danhSachQuyetDinh: dsQuyetDinh
-      })
-    }
+          const dsQuyetDinh = this.formData.value.danhSachQuyetDinh.filter(item => item.keHoachDcHdrId !== row.hdrId)
+          dsQuyetDinh.push(qDinh)
+          this.formData.patchValue({
+            danhSachQuyetDinh: dsQuyetDinh
+          })
+        }
+      },
+    });
+
   }
 
   suaDiemKhoNhan(row) {
@@ -1116,104 +1152,126 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
 
 
   xoaLoKhoNhan(row) {
-    this.danhSachKeHoach = this.danhSachKeHoach.filter(kh =>
-      !(kh.maChiCucNhan === row.maChiCucNhan &&
-        kh.maDiemKho === row.maDiemKho &&
-        kh.maNhaKho === row.maNhaKho &&
-        kh.maNganKho === row.maNganKho &&
-        (row.maLoKho ? kh.maLoKho === row.maLoKho : true) &&
-        kh.maDiemKhoNhan === row.maDiemKhoNhan &&
-        kh.maNhaKhoNhan === row.maNhaKhoNhan &&
-        kh.maNganKhoNhan === row.maNganKhoNhan &&
-        (row.maLoKhoNhan ? kh.maLoKhoNhan === row.maLoKhoNhan : true))
-    )
-    if (this.isCuc())
-      this.dataTableView = this.buildTableView(this.danhSachKeHoach, "maChiCucNhan")
-    if (this.isChiCuc())
-      this.dataTableView = this.buildTableView(this.danhSachKeHoach, "maDvi")
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa các bản ghi đã chọn?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: async () => {
+        this.danhSachKeHoach = this.danhSachKeHoach.filter(kh =>
+          !(kh.maChiCucNhan === row.maChiCucNhan &&
+            kh.maDiemKho === row.maDiemKho &&
+            kh.maNhaKho === row.maNhaKho &&
+            kh.maNganKho === row.maNganKho &&
+            (row.maLoKho ? kh.maLoKho === row.maLoKho : true) &&
+            kh.maDiemKhoNhan === row.maDiemKhoNhan &&
+            kh.maNhaKhoNhan === row.maNhaKhoNhan &&
+            kh.maNganKhoNhan === row.maNganKhoNhan &&
+            (row.maLoKhoNhan ? kh.maLoKhoNhan === row.maLoKhoNhan : true))
+        )
+        if (this.isCuc())
+          this.dataTableView = this.buildTableView(this.danhSachKeHoach, "maChiCucNhan")
+        if (this.isChiCuc())
+          this.dataTableView = this.buildTableView(this.danhSachKeHoach, "maDvi")
 
-    if (this.idInput) {
-      const qDinh = this.formData.value.danhSachQuyetDinh.find(item => item.keHoachDcHdrId === row.hdrId)
-      const dsKH = row.maLoKhoNhan ? qDinh.danhSachKeHoach.filter(item => item.maLoKhoNhan !== row.maLoKhoNhan) : qDinh.danhSachKeHoach.filter(item => item.maNganKhoNhan !== row.maNganKhoNhan)
-      qDinh.danhSachKeHoach = dsKH
-      const dsQuyetDinh = this.formData.value.danhSachQuyetDinh.filter(item => item.keHoachDcHdrId !== row.hdrId)
-      dsQuyetDinh.push(qDinh)
-      this.formData.patchValue({
-        danhSachQuyetDinh: dsQuyetDinh
-      })
-    }
+        if (this.idInput) {
+          const qDinh = this.formData.value.danhSachQuyetDinh.find(item => item.keHoachDcHdrId === row.hdrId)
+          const dsKH = row.maLoKhoNhan ? qDinh.danhSachKeHoach.filter(item => item.maLoKhoNhan !== row.maLoKhoNhan) : qDinh.danhSachKeHoach.filter(item => item.maNganKhoNhan !== row.maNganKhoNhan)
+          qDinh.danhSachKeHoach = dsKH
+          const dsQuyetDinh = this.formData.value.danhSachQuyetDinh.filter(item => item.keHoachDcHdrId !== row.hdrId)
+          dsQuyetDinh.push(qDinh)
+          this.formData.patchValue({
+            danhSachQuyetDinh: dsQuyetDinh
+          })
+        }
+      },
+    });
+
 
 
   }
 
   xoaLoKhoNhanCC(row) {
-    const dsDelete = this.danhSachKeHoach.filter(kh =>
-    (kh.maChiCucNhan === row.maChiCucNhan &&
-      kh.maDiemKho === row.maDiemKho &&
-      kh.maNhaKho === row.maNhaKho &&
-      kh.maNganKho === row.maNganKho &&
-      (row.maLoKho ? kh.maLoKho === row.maLoKho : true) &&
-      kh.maDiemKhoNhan === row.maDiemKhoNhan &&
-      kh.maNhaKhoNhan === row.maNhaKhoNhan &&
-      kh.maNganKhoNhan === row.maNganKhoNhan &&
-      (row.maLoKhoNhan ? kh.maLoKhoNhan === row.maLoKhoNhan : true))
-    )
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa các bản ghi đã chọn?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: async () => {
+        const dsDelete = this.danhSachKeHoach.filter(kh =>
+        (kh.maChiCucNhan === row.maChiCucNhan &&
+          kh.maDiemKho === row.maDiemKho &&
+          kh.maNhaKho === row.maNhaKho &&
+          kh.maNganKho === row.maNganKho &&
+          (row.maLoKho ? kh.maLoKho === row.maLoKho : true) &&
+          kh.maDiemKhoNhan === row.maDiemKhoNhan &&
+          kh.maNhaKhoNhan === row.maNhaKhoNhan &&
+          kh.maNganKhoNhan === row.maNganKhoNhan &&
+          (row.maLoKhoNhan ? kh.maLoKhoNhan === row.maLoKhoNhan : true))
+        )
 
-    this.danhSachKeHoach = this.danhSachKeHoach.filter(kh =>
-      !(kh.maChiCucNhan === row.maChiCucNhan &&
-        kh.maDiemKho === row.maDiemKho &&
-        kh.maNhaKho === row.maNhaKho &&
-        kh.maNganKho === row.maNganKho &&
-        (row.maLoKho ? kh.maLoKho === row.maLoKho : true) &&
-        kh.maDiemKhoNhan === row.maDiemKhoNhan &&
-        kh.maNhaKhoNhan === row.maNhaKhoNhan &&
-        kh.maNganKhoNhan === row.maNganKhoNhan &&
-        (row.maLoKhoNhan ? kh.maLoKhoNhan === row.maLoKhoNhan : true))
-    )
+        this.danhSachKeHoach = this.danhSachKeHoach.filter(kh =>
+          !(kh.maChiCucNhan === row.maChiCucNhan &&
+            kh.maDiemKho === row.maDiemKho &&
+            kh.maNhaKho === row.maNhaKho &&
+            kh.maNganKho === row.maNganKho &&
+            (row.maLoKho ? kh.maLoKho === row.maLoKho : true) &&
+            kh.maDiemKhoNhan === row.maDiemKhoNhan &&
+            kh.maNhaKhoNhan === row.maNhaKhoNhan &&
+            kh.maNganKhoNhan === row.maNganKhoNhan &&
+            (row.maLoKhoNhan ? kh.maLoKhoNhan === row.maLoKhoNhan : true))
+        )
 
 
 
-    if (dsDelete.length == 1) {
-      this.danhSachKeHoach.push({
-        ...row,
-        tenNhaKhoNhan: "",
-        maNhaKhoNhan: "",
-        tenNganKhoNhan: "",
-        maNganKhoNhan: "",
-        tenLoKhoNhan: "",
-        maLoKhoNhan: "",
-        tichLuongKd: "",
-        soLuongPhanBo: "",
-      })
-    }
+        if (dsDelete.length == 1) {
+          this.danhSachKeHoach.push({
+            ...row,
+            tenNhaKhoNhan: "",
+            maNhaKhoNhan: "",
+            tenNganKhoNhan: "",
+            maNganKhoNhan: "",
+            tenLoKhoNhan: "",
+            maLoKhoNhan: "",
+            tichLuongKd: "",
+            soLuongPhanBo: "",
+          })
+        }
 
-    this.dataTableView = this.buildTableView(this.danhSachKeHoach, "maDvi")
+        this.dataTableView = this.buildTableView(this.danhSachKeHoach, "maDvi")
 
-    if (this.idInput) {
-      const qDinh = this.formData.value.danhSachQuyetDinh.find(item => item.keHoachDcHdrId === row.hdrId)
-      const keHoach = row.maLoKhoNhan ? qDinh.danhSachKeHoach.find(item => item.maLoKhoNhan === row.maLoKhoNhan) : qDinh.danhSachKeHoach.filter(item => item.maNganKhoNhan === row.maNganKhoNhan)
-      let dsKH = row.maLoKhoNhan ? qDinh.danhSachKeHoach.filter(item => item.maLoKhoNhan !== row.maLoKhoNhan) : qDinh.danhSachKeHoach.filter(item => item.maNganKhoNhan !== row.maNganKhoNhan)
-      dsKH.push({
-        ...keHoach,
-        tenNhaKhoNhan: "",
-        maNhaKhoNhan: "",
-        tenNganKhoNhan: "",
-        maNganKhoNhan: "",
-        tenLoKhoNhan: "",
-        maLoKhoNhan: "",
-        tichLuongKd: "",
-        soLuongPhanBo: "",
-      })
-      qDinh.danhSachKeHoach = dsKH
-      const dsQuyetDinh = this.formData.value.danhSachQuyetDinh.filter(item => item.keHoachDcHdrId !== row.hdrId)
-      dsQuyetDinh.push(qDinh)
-      this.formData.patchValue({
-        danhSachQuyetDinh: dsQuyetDinh
-      })
+        if (this.idInput) {
+          const qDinh = this.formData.value.danhSachQuyetDinh.find(item => item.keHoachDcHdrId === row.hdrId)
+          const keHoach = row.maLoKhoNhan ? qDinh.danhSachKeHoach.find(item => item.maLoKhoNhan === row.maLoKhoNhan) : qDinh.danhSachKeHoach.filter(item => item.maNganKhoNhan === row.maNganKhoNhan)
+          let dsKH = row.maLoKhoNhan ? qDinh.danhSachKeHoach.filter(item => item.maLoKhoNhan !== row.maLoKhoNhan) : qDinh.danhSachKeHoach.filter(item => item.maNganKhoNhan !== row.maNganKhoNhan)
+          dsKH.push({
+            ...keHoach,
+            tenNhaKhoNhan: "",
+            maNhaKhoNhan: "",
+            tenNganKhoNhan: "",
+            maNganKhoNhan: "",
+            tenLoKhoNhan: "",
+            maLoKhoNhan: "",
+            tichLuongKd: "",
+            soLuongPhanBo: "",
+          })
+          qDinh.danhSachKeHoach = dsKH
+          const dsQuyetDinh = this.formData.value.danhSachQuyetDinh.filter(item => item.keHoachDcHdrId !== row.hdrId)
+          dsQuyetDinh.push(qDinh)
+          this.formData.patchValue({
+            danhSachQuyetDinh: dsQuyetDinh
+          })
 
-      console.log('xoaLoKhoNhanCC', dsQuyetDinh)
-    }
-
+          console.log('xoaLoKhoNhanCC', dsQuyetDinh)
+        }
+      },
+    });
 
   }
 
