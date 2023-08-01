@@ -6,7 +6,7 @@ import {BaseServiceLocal} from "../baseLocal.service";
 @Injectable({
   providedIn: 'root'
 })
-export class TheoDoiBqDtlService extends BaseService {
+export class TheoDoiBqDtlService extends BaseServiceLocal {
 
   constructor(public httpClient: HttpClient) {
     super(httpClient, 'theo-doi-bao-quan-chi-tiet', '/qlnv-luukho');
