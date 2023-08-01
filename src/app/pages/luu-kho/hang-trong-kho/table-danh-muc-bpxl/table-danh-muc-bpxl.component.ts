@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Base3Component} from "../../../../components/base3/base3.component";
-import { cloneDeep, chain } from 'lodash';
 import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../services/storage.service";
 import {MESSAGE} from "../../../../constants/message";
@@ -8,10 +7,9 @@ import {NzNotificationService} from "ng-zorro-antd/notification";
 import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
 import {ActivatedRoute, Router} from "@angular/router";
-import {TongHopScService} from "../../../../services/sua-chua/tongHopSc.service";
-import {ThemmoiThComponent} from "../../../sua-chua/tong-hop/themmoi-th/themmoi-th.component";
 import {ChitietThComponent} from "../../../sua-chua/tong-hop/chitiet-th/chitiet-th.component";
-
+import {TheoDoiBqDtlService} from "../../../../services/luu-kho/theoDoiBqDtl.service";
+import { chain } from 'lodash';
 
 @Component({
   selector: 'app-table-danh-muc-bpxl',
@@ -28,78 +26,93 @@ export class TableDanhMucBpxlComponent extends Base3Component implements OnInit 
     modal: NzModalService,
     route: ActivatedRoute,
     router: Router,
-    private tongHopScService: TongHopScService,
+    private theoDoiBqDtlService: TheoDoiBqDtlService,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, route, router, tongHopScService);
+    super(httpClient, storageService, notification, spinner, modal, route, router, theoDoiBqDtlService);
     this.formData = this.fb.group({
       nam: null,
       maSc: null,
       maCc: null,
       ngayTu: null,
       ngayDen: null,
-    })
+      bienPhapXl : null,
+      vaiTro : 'CBTHUKHO',
+      trangThai : this.STATUS.DA_HOAN_THANH
+    });
   }
 
   async ngOnInit() {
     await this.spinner.show();
     await Promise.all([
-      this.search(),
+      this.bindingParam(),
     ])
-    this.buildTableView()
+    await this.buildTableView()
     await this.spinner.hide();
+  }
 
+  async bindingParam(){
+    let typeBpxl = ''
+    switch (this.router.url) {
+      case '/luu-kho/hang-trong-kho/thanh-ly':
+        typeBpxl = '1';
+        break;
+      case '/luu-kho/hang-trong-kho/tieu-huy':
+        typeBpxl = '2';
+        break;
+      case '/luu-kho/hang-trong-kho/hong-hoc-giam-cl':
+        typeBpxl = '3';
+        break;
+      case '/luu-kho/hang-trong-kho/hong-hoc-bao-hanh':
+        typeBpxl = '4';
+        break;
+      case '/luu-kho/hang-trong-kho/hong-hoc-sua-chua':
+        typeBpxl = '5';
+        break;
+      default :
+        break;
+    }
+    this.formData.patchValue({
+      bienPhapXl : typeBpxl
+    })
+    await this.searchList();
   }
 
   async buildTableView() {
-    await this.dataTable.forEach(item => {
-      item.expandSet = true;
-      item.groupChiCuc = chain(item.children).groupBy('scDanhSachHdr.tenChiCuc').map((value, key) => ({
-          tenDonVi: key,
-          children: value,
-        })
-      ).value()
-    })
-    console.log(this.dataTable)
+    this.dataTableAll = chain(this.dataTable).groupBy('tenLoaiVthh').map((value, key) => {
+        let rs =  chain(value).groupBy('tenCloaiVthh').map((v,k)=>{
+          return {
+            tenCloaiVthh: k,
+            expandSet : true,
+            children: v,
+          };
+        }).value();
+        return {
+          tenLoaiVthh: key,
+          expandSet : true,
+          chilren: rs
+        };
+    }).value();
   }
 
-  openDialogDs() {
-    if (this.userService.isAccessPermisson('SCHDTQG_THDSCSC_TONGHOP')) {
-      const modalGT = this.modal.create({
-        nzTitle: 'Tổng hợp danh sách cần sửa chữa',
-        nzContent: ThemmoiThComponent,
-        nzMaskClosable: false,
-        nzClosable: false,
-        nzWidth: '900px',
-        nzFooter: null,
-        nzComponentParams: {
-        },
-      });
+  async searchList(){
+    let body = this.formData.value
+    body.paggingReq = {
+      limit: this.pageSize,
+      page: this.page - 1
+    }
+    let res = await this.theoDoiBqDtlService.search(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.dataTable = res.data;
+      this.buildTableView();
     } else {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.ACCESS_DENIED);
+      this.dataTable = [];
+      this.totalRecord = 0;
+      this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
 
-  showDetail(idTh) {
-    if (idTh) {
-      const modalGT = this.modal.create({
-        nzTitle: 'Tổng hợp danh sách cần sửa chữa',
-        nzContent: ChitietThComponent,
-        nzMaskClosable: false,
-        nzClosable: false,
-        nzWidth: '900px',
-        nzFooter: null,
-        nzComponentParams: {
-          id: idTh
-        },
-      });
-      modalGT.afterClose.subscribe((data) => {
-        if (data) {
-          this.ngOnInit()
-        }
-      });
-    } else {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
-    }
+  showDetail(data) {
+    this.router.navigate(['luu-kho/theo-doi-bao-quan/chi-tiet', data.idHdr]);
   }
 
 }

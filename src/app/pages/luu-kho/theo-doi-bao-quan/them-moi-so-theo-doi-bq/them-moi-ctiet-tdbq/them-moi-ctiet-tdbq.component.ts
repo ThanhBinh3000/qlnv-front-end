@@ -120,7 +120,7 @@ export class ThemMoiCtietTdbqComponent extends Base3Component implements OnInit 
           this._modalRef.close();
         }
       }
-    })
+    });
   }
 
   handleApprove(){

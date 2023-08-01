@@ -59,7 +59,7 @@
           <i class="icon  htvbdh_nhap-lai1"></i>
           Xóa điều kiện
         </button>
-        <button nz-button class="search__button--search" (click)="search()">
+        <button nz-button class="search__button--search" (click)="searchList()">
           <i nz-icon nzType="search"></i>
           Tìm kiếm
         </button>
@@ -68,50 +68,34 @@
   </nz-card>
   <div class="group-button">
     <h3 class="text-uppercase">Tổng hợp danh sách hàng QTQG cần sữa chữa</h3>
-    <div class="buttons">
-      <a (click)="redirectUrl('/sua-chua/danh-sach')" class="link">Xem toàn bộ danh sách</a>
-      <button type="button" class="btn btn-main" (click)="openDialogDs()" *ngIf="userService.isCuc()">
-        <i class="icon htvbdh_dau-cong"></i>
-        <span>Tổng hợp DS hàng cần sửa chữa</span>
-      </button>
-    </div>
   </div>
   <nz-card class="mt-2px flex-card data-table card-border-content table-card">
-    <nz-table class="nowrap" [nzData]="dataTable" nzBordered [nzFrontPagination]="false" [nzShowPagination]="false">
+    <nz-table class="wrap" [nzData]="dataTableAll" nzBordered [nzFrontPagination]="false" [nzShowPagination]="false">
       <thead>
       <tr>
-        <th></th>
-        <th>STT</th>
-        <th>Năm KH</th>
-        <th>Mã danh sách cần SC</th>
-        <th>Chi cục DTNN</th>
-        <th>Loại hàng</th>
-        <th>Chủng loại</th>
-        <th>Điểm kho</th>
-        <th>Nhà/Ngăn/Lô kho</th>
+        <th>Loại hàng DTQG</th>
+        <th>Chủng loại hàng DTQG</th>
+        <th>Ngăn/lô kho</th>
+        <th>Nhà kho</th>
+        <th>Điềm kho</th>
         <th>Ngày nhập kho</th>
-        <th>SL tồn</th>
-        <th>SL hỏng cần</th>
-        <th>SL SC đã duyệt</th>
-        <th>SL còn lại cần SC</th>
+        <th>Tồn kho</th>
+        <th>SL cần thanh lý</th>
+        <th>SL đã thanh lý</th>
         <th>ĐVT</th>
-        <th>Ngày đề xuất</th>
-        <th>Lý do cần SC</th>
-        <th>Thời hạn xuất SC dự kiến</th>
-        <th>Thời hạn nhập SC dự kiến</th>
+        <th>Lý do</th>
         <th>Trạng thái</th>
-        <th>Trạng thái SC</th>
+        <th>Trạng thái chốt DS của Cục</th>
+        <th>Ngày chốt DS của Cục</th>
+        <th>Trạng thái thanh lý</th>
         <th nzWidth="35px">Hành động</th>
       </tr>
       </thead>
       <tbody>
-      <ng-container *ngFor="let item of dataTable , let i = index">
+      <ng-container *ngFor="let loaiVthh of dataTableAll , let i = index">
         <tr>
-          <td nzShowExpand="true" [nzExpand]="item.expandSet"
-              (nzExpandChange)="onExpandChange(item, $event)"></td>
-          <td>{{(page-1)*pageSize+i+1}}</td>
-          <td>{{item.nam}}</td>
-          <td>{{item.maDanhSach}}</td>
+          <td nzShowExpand="true" [nzExpand]="loaiVthh.expandSet"
+              (nzExpandChange)="onExpandChange(loaiVthh, $event)">{{loaiVthh.tenLoaiVthh}}</td>
           <td></td>
           <td></td>
           <td></td>
@@ -125,30 +109,15 @@
           <td></td>
           <td></td>
           <td></td>
-          <td>{{item.thoiHanXuat | date : 'dd/MM/yyyy'}}</td>
-          <td>{{item.thoiHanNhap | date : 'dd/MM/yyyy'}}</td>
-          <td>{{item.tenTrangThai}}</td>
           <td></td>
-          <td>
-            <a (click)="showDetail(item.id)">
-              <span class="icon htvbdh_eye"></span>
-            </a>
-            <a *ngIf="item.trangThai == STATUS.DU_THAO" (click)="delete(item)" >
-              <i class="fa fa-trash-o do"></i>
-            </a>
-          </td>
+          <td> </td>
         </tr>
-        <ng-container *ngIf="item.expandSet">
-          <ng-container *ngFor="let chiCuc of item.groupChiCuc , let i = index">
+        <ng-container *ngIf="loaiVthh.expandSet">
+          <ng-container *ngFor="let cloaiVthh of loaiVthh.chilren , let i = index">
             <tr>
               <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td >{{chiCuc.tenDonVi}}</td>
-              <td></td>
-              <td></td>
-              <td></td>
+              <td nzShowExpand="true" [nzExpand]="cloaiVthh.expandSet"
+                  (nzExpandChange)="onExpandChange(cloaiVthh, $event)">{{cloaiVthh.tenCloaiVthh}}</td>
               <td></td>
               <td></td>
               <td></td>
@@ -164,53 +133,36 @@
               <td></td>
               <td></td>
             </tr>
-            <ng-container *ngFor="let data of chiCuc.children , let i = index">
-              <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td>{{data.scDanhSachHdr.tenLoaiVthh}}</td>
-                <td>{{data.scDanhSachHdr.tenCloaiVthh}}</td>
-                <td>{{data.scDanhSachHdr.tenDiemKho}}</td>
-                <td>{{data.scDanhSachHdr.tenNhaKho}}/{{data.scDanhSachHdr.tenNganKho}}/{{data.scDanhSachHdr.tenLoKho}}</td>
-                <td>{{data.scDanhSachHdr.ngayNhapKho | date : 'dd/MM/yyyy'}}</td>
-                <td>{{data.scDanhSachHdr.slHienTai | number : '1.0-1' : 'vi_VN' }}</td>
-                <td>{{data.scDanhSachHdr.slDeXuat | number : '1.0-1' : 'vi_VN' }}</td>
-                <td></td>
-                <td></td>
-                <td>{{data.scDanhSachHdr.donViTinh }}</td>
-                <td>{{data.scDanhSachHdr.ngayDeXuat | date : 'dd/MM/yyyy'}}</td>
-                <td>{{data.scDanhSachHdr.lyDo}}</td>
-                <td>{{item.thoiHanXuat | date : 'dd/MM/yyyy'}}</td>
-                <td>{{item.thoiHanNhap | date : 'dd/MM/yyyy'}}</td>
-                <td></td>
-                <td></td>
-                <td></td>
-              </tr>
+            <ng-container *ngIf="cloaiVthh.expandSet">
+              <ng-container *ngFor="let data of cloaiVthh.children , let i = index">
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td>{{data.tenNganKho}}/{{data.tenLoKho}}</td>
+                  <td>{{data.tenNhaKho}}</td>
+                  <td>{{data.tenDiemKho}}</td>
+                  <td>{{data.ngayNhapKho | date : 'dd/MM/yyyy'}}</td>
+                  <td>{{data.tongSoLuong | number : '1.0-1' : 'vi_VN' }}</td>
+                  <td>{{data.soLuongXl | number : '1.0-1' : 'vi_VN' }}</td>
+                  <td></td>
+                  <td>{{data.dviTinh }}</td>
+                  <td>{{data.nguyenNhan}}</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td>
+                    <a (click)="showDetail(data)">
+                      <i class="fa fa-pencil" title="Sửa"></i>
+                    </a>
+                  </td>
+                </tr>
+              </ng-container>
             </ng-container>
           </ng-container>
         </ng-container>
       </ng-container>
       </tbody>
     </nz-table>
-    <div class="tab-content tab-menu" id="myTabContent">
-      <div class="tab-pane fade show active justify-content-between">
-        <div class="trai">
-        </div>
-        <div class="canphai">
-          <!-- begin phân trang  -->
-          <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord"
-                         nzShowSizeChanger [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate"
-                         (nzPageIndexChange)="changePageIndex($event)" (nzPageSizeChange)="changePageSize($event)">
-            <ng-template #rangeTemplate let-range="range" let-total>
-              {{ range[0] }}-{{ range[1] }} trên tổng số {{ total }} bản ghi
-            </ng-template>
-          </nz-pagination>
-          <!-- end phân trang -->
-        </div>
-      </div>
-    </div>
   </nz-card>
 </div>
