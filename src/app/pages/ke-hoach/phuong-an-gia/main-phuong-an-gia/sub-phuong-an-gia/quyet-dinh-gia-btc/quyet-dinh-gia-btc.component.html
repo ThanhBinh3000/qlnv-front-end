@@ -99,15 +99,15 @@
               <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
                 [nzIndeterminate]="indeterminate"></label>
             </th>
-            <th class="text-center" style="width: 2%;">STT</th>
-            <th class="text-center" style="width: 9%;">Năm kế hoạch</th>
-            <th class="text-center" style="width: 9%;">Số quyết định</th>
-            <th class="text-center" style="width: 9%;">Ngày ký</th>
-            <th class="text-center" style="width: 25%;">Trích yếu</th>
-            <th class="text-center" style="width: 8%;">Loại giá</th>
-            <th class="text-center" style="width: 8%;">Loại hàng hóa</th>
-            <th class="text-center" style="width: 9%;">Trạng thái</th>
-            <th class="text-center" style="width: 5%;">Hành động</th>
+            <th class="text-center" nzWidth="45px" >STT</th>
+            <th class="text-center" nzWidth="90px" >Năm kế hoạch</th>
+            <th class="text-center" nzWidth="120px" >Số quyết định</th>
+            <th class="text-center" nzWidth="120px" >Ngày ký</th>
+            <th class="text-center" >Trích yếu</th>
+            <th class="text-center" nzWidth="150px" >Loại giá</th>
+            <th class="text-center" nzWidth="150px" >Loại hàng hóa</th>
+            <th class="text-center" nzWidth="120px" >Trạng thái</th>
+            <th class="text-center" nzWidth="100px" >Hành động</th>
           </tr>
           <tr class="header-row search">
             <th></th>
@@ -217,12 +217,12 @@
   </div>
 </ng-container>
 <ng-template #LtView>
-  <app-them-quyet-dinh-gia-btc-lt *ngIf="pagType === 'LT';else VtView"  [type]="type" [isView]="isViewDetail" [pagType]="pagType"
+  <app-them-quyet-dinh-gia-btc-lt *ngIf="pagType == 'LT';else VtView"  [type]="type" [isView]="isViewDetail" [pagType]="pagType"
      [idInput]="idSelected" (onClose)="onClose()">
   </app-them-quyet-dinh-gia-btc-lt>
 </ng-template>
 <ng-template #VtView>
-  <app-them-quyet-dinh-gia-btc-vt [isView]="isViewDetail" [pagType]="pagType" [type]="type" [idInput]="idSelected"
+  <app-them-quyet-dinh-gia-btc-vt  [isView]="isViewDetail" [pagType]="pagType" [type]="type" [idInput]="idSelected"
     (onClose)="onClose()">
   </app-them-quyet-dinh-gia-btc-vt>
 </ng-template>

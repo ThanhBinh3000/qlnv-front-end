@@ -64,7 +64,7 @@
       <div nz-row [nzGutter]="20">
         <div nz-col [nzSpan]="3">
           <nz-form-item class="form-item">
-            <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="nam-qd">Năm kế hoạch
+            <nz-form-label nzRequired [nzNoColon]="true">Năm kế hoạch
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-select formControlName="namKeHoach" [nzDisabled]="isView" nzAllowClear="true">
@@ -76,7 +76,7 @@
         </div>
         <div nz-col [nzSpan]="4">
           <nz-form-item class="form-item">
-            <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true">Số công văn
+            <nz-form-label nzRequired [nzNoColon]="true">Số công văn
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfter="{{maDx}}">
@@ -87,7 +87,7 @@
         </div>
         <div nz-col [nzSpan]="4" *ngIf="isGiaMuaToiDa">
           <nz-form-item class="form-item">
-            <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="nam-qd">Loại hàng hóa
+            <nz-form-label nzRequired [nzNoColon]="true">Loại hàng hóa
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-select formControlName="loaiVthh" [nzDisabled]="isView" nzAllowClear="true"
@@ -100,7 +100,7 @@
         </div>
         <div nz-col [nzSpan]="3">
           <nz-form-item class="form-item">
-            <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="ngay-qd">Ngày ký
+            <nz-form-label nzRequired [nzNoColon]="true">Ngày ký
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-date-picker [nzDisabled]="isView" formControlName="ngayKy" nzFormat="dd/MM/yyyy" id="ngay-qd"
@@ -111,7 +111,7 @@
         </div>
         <div nz-col [nzSpan]="3">
           <nz-form-item class="form-item">
-            <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="nam-qd"> Loại giá
+            <nz-form-label nzRequired [nzNoColon]="true"> Loại giá
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-select formControlName="loaiGia" [nzDisabled]="isView" nzAllowClear="true"
@@ -124,7 +124,7 @@
         </div>
         <div nz-col [nzSpan]="4">
           <nz-form-item class="form-item">
-            <nz-form-label [nzNoColon]="true" [nzNoColon]="true">Số công văn cần điều chỉnh
+            <nz-form-label [nzNoColon]="true">Số công văn cần điều chỉnh
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfterIcon="folder-open">
@@ -135,7 +135,7 @@
         </div>
         <div nz-col [nzSpan]="3">
           <nz-form-item class="form-item">
-            <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="nam-qd">Lần đề xuất
+            <nz-form-label nzRequired [nzNoColon]="true">Lần đề xuất
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <input type="text" nz-input formControlName="lanDeXuat" [readonly]="true">
@@ -147,7 +147,7 @@
         </div>
         <div nz-col [nzSpan]="24">
           <nz-form-item class="form-item">
-            <nz-form-label [nzNoColon]="true" nzFor="ngay-qd">Trích yếu</nz-form-label>
+            <nz-form-label [nzNoColon]="true">Trích yếu</nz-form-label>
             <nz-form-control>
               <textarea [readonly]="isView" formControlName="trichYeu" rows="3" class="search__input"
                         nz-input></textarea>
@@ -179,7 +179,7 @@
         <div nz-row [nzGutter]="24">
           <div nz-col [nzSpan]="4" *ngIf="!isGiaMuaToiDa">
             <nz-form-item class="form-item">
-              <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="nam-qd">Loại hàng hóa
+              <nz-form-label nzRequired [nzNoColon]="true">Loại hàng hóa
               </nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-select formControlName="loaiVthh" [nzDisabled]="isView" nzAllowClear="true"

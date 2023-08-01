@@ -199,6 +199,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
     if (id > 0) {
       let res = await this.deXuatPAGService.getDetail(id);
       const data = res.data;
+      this.maDx = data.soDeXuat ? data.soDeXuat.split('/')[1] : '/' + this.userInfo.DON_VI.tenVietTat + '-KH&QLHDT';
       this.formData.patchValue({
         id: data.id,
         namKeHoach: data.namKeHoach,
@@ -436,28 +437,6 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
       this.spinner.hide();
       return;
     }
-    /*if (this.detailNhaphang) {
-      if (this.detailNhaphang.donGiaVat == 0) {
-        this.notification.error(MESSAGE.ERROR, "Vui lòng nhập đơn giá VAT ở quyết định giao kế hoạch mua bán")
-        this.spinner.hide();
-        return;
-      } else {
-        if (this.formData.value.loaiGia == "LG03") {
-          if (this.formData.value.giaDeNghiVat > this.detailNhaphang.donGiaVat && this.formData.value.loaiGia == 'LG03') {
-            this.notification.error(MESSAGE.ERROR, "Đơn giá VAT không được vượt mức so với quyết định giao kế hoạch mua bán!")
-            this.spinner.hide();
-            return;
-          }
-        }
-        if (this.formData.value.loaiGia == "LG04") {
-          if (this.formData.value.giaDeNghi < this.detailNhaphang.donGiaVat && this.formData.value.loaiGia == 'LG04') {
-            this.notification.error(MESSAGE.ERROR, "Đơn giá VAT không được ít hơn so với quyết định giao kế hoạch mua bán!!!!")
-            this.spinner.hide();
-            return;
-          }
-        }
-      }
-    }*/
     this.updatePagTtChungs();
     let body = this.formData.value;
     if (body.soDeXuat) {
@@ -709,7 +688,8 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
         namKh: this.formData.value.namKeHoach,
         type: this.type,
         loaiDeXuat: "02",
-        maDvi: this.userInfo.MA_DVI
+        maDvi: this.userInfo.MA_DVI,
+        pagType : this.pagType
       }
       let res = await this.tongHopPagService.loadToTrinhDeXuat(body);
       if (res.msg = MESSAGE.SUCCESS) {

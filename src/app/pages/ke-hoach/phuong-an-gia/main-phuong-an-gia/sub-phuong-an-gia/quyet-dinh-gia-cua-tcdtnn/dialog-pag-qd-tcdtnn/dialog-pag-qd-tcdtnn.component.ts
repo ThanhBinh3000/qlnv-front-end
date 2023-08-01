@@ -20,6 +20,8 @@ export class DialogPagQdTcdtnnComponent implements OnInit {
   type: string;
   namKeHoach: any;
   dataTableToTrinh: any[] = [];
+  pagType : string
+  loaiGia : string
   dataTablleDxCs: any[] = [];
   listVthh: any[] = [];
   listCloaiVthh: any[] = [];
@@ -102,7 +104,7 @@ export class DialogPagQdTcdtnnComponent implements OnInit {
   }
 
   luu() {
-    if (this.formData.value.loaiQd == '01') {
+    if ((this.formData.value.loaiQd == '01' && this.pagType == 'LT') || this.pagType == 'VT' ) {
       this.dataResponse = {
         data : null,
         listDx : this.listData,
@@ -121,7 +123,7 @@ export class DialogPagQdTcdtnnComponent implements OnInit {
 
   async loadDsToTrinh() {
     this.spinner.show();
-    if (this.formData.value.loaiQd == '01') {
+    if (this.formData.value.loaiQd == '01' && this.pagType == 'LT') {
       this.helperService.markFormGroupTouched(this.formData);
       if (this.formData.invalid) {
         this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR);
@@ -136,11 +138,12 @@ export class DialogPagQdTcdtnnComponent implements OnInit {
         loaiVthh: this.formData.value.loaiVthh,
         cloaiVthh: this.formData.value.cloaiVthh,
         loaiDeXuat: this.formData.value.loaiQd,
-        loaiGia: this.formData.value.loaiGia,
+        loaiGia: this.pagType == 'LT' ? this.formData.value.loaiGia : this.loaiGia,
+        pagType : this.pagType
       }
       let res = await this.tongHopPhuongAnGiaService.loadToTrinhDeXuat(body);
       if (res.msg = MESSAGE.SUCCESS) {
-        if (this.formData.value.loaiQd == '00') {
+        if (this.formData.value.loaiQd == '00' && this.pagType == 'LT') {
           this.dataTableToTrinh = res.data;
         } else {
           this.dataTablleDxCs = res.data;
