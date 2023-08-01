@@ -1,20 +1,21 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {FormBuilder, FormGroup} from '@angular/forms';
 import dayjs from 'dayjs';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { LIST_VAT_TU_HANG_HOA, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
-import { MESSAGE } from 'src/app/constants/message';
-import { UserService } from 'src/app/services/user.service';
-import { cloneDeep } from 'lodash';
-import { saveAs } from 'file-saver';
-import { QuyetDinhGiaTCDTNNService } from 'src/app/services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {LIST_VAT_TU_HANG_HOA, PAGE_SIZE_DEFAULT} from 'src/app/constants/config';
+import {MESSAGE} from 'src/app/constants/message';
+import {UserService} from 'src/app/services/user.service';
+import {cloneDeep} from 'lodash';
+import {saveAs} from 'file-saver';
+import {QuyetDinhGiaTCDTNNService} from 'src/app/services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service';
 import {ThongTinChungPag} from "../../../../../../models/DeXuatPhuongAnGia";
 import {STATUS} from "../../../../../../constants/status";
 import {Globals} from "../../../../../../shared/globals";
 import {Router} from "@angular/router";
 import {UserLogin} from "../../../../../../models/userlogin";
+
 @Component({
   selector: 'app-quyet-dinh-gia-cua-tcdtnn',
   templateUrl: './quyet-dinh-gia-cua-tcdtnn.component.html',
@@ -46,18 +47,19 @@ export class QuyetDinhGiaCuaTcdtnnComponent implements OnInit {
   isViewDetail: boolean = false;
   idSelected: number = 0;
   STATUS = STATUS;
-  userInfo : UserLogin
+  userInfo: UserLogin
   listTrangThai = [
     {ma: this.STATUS.DU_THAO, giaTri: "Dự thảo"},
     {ma: this.STATUS.BAN_HANH, giaTri: "Ban hành"}
   ];
+
   constructor(private readonly fb: FormBuilder,
-    private spinner: NgxSpinnerService,
-    private notification: NzNotificationService,
-    public userService: UserService,
-    private modal: NzModalService,
-    private router: Router,
-    private quyetDinhGiaTCDTNNService: QuyetDinhGiaTCDTNNService,
+              private spinner: NgxSpinnerService,
+              private notification: NzNotificationService,
+              public userService: UserService,
+              private modal: NzModalService,
+              private router: Router,
+              private quyetDinhGiaTCDTNNService: QuyetDinhGiaTCDTNNService,
               public globals: Globals
   ) {
     this.formData = this.fb.group({
@@ -93,12 +95,6 @@ export class QuyetDinhGiaCuaTcdtnnComponent implements OnInit {
     this.search();
   }
 
-  initForm(): void {
-  }
-
-  initData() {
-  }
-
   loadDsNam() {
     let thisYear = dayjs().get('year');
     for (let i = -3; i < 23; i++) {
@@ -115,8 +111,9 @@ export class QuyetDinhGiaCuaTcdtnnComponent implements OnInit {
     try {
       this.spinner.show();
       let body = this.formData.value;
-      body.namKh = body.namKeHoach,
-        body.pagType = this.pagType;
+      body.namKh = body.namKeHoach;
+      body.pagType = this.pagType;
+      body.maDvi = this.userService.isTongCuc() ? null : this.userInfo.MA_DVI;
       body.paggingReq = {
         limit: this.pageSize,
         page: this.page - 1,
@@ -131,7 +128,7 @@ export class QuyetDinhGiaCuaTcdtnnComponent implements OnInit {
             item.checked = false;
           });
         }
-        if(this.userService.isCuc()) {
+        if (this.userService.isCuc()) {
           this.dataTable = this.dataTable.filter(item => item.trangThai == STATUS.BAN_HANH)
         }
         this.dataTableAll = cloneDeep(this.dataTable);
@@ -167,7 +164,7 @@ export class QuyetDinhGiaCuaTcdtnnComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.quyetDinhGiaTCDTNNService.deleteMuti({ listId: dataDelete });
+            let res = await this.quyetDinhGiaTCDTNNService.deleteMuti({listId: dataDelete});
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();
@@ -184,8 +181,7 @@ export class QuyetDinhGiaCuaTcdtnnComponent implements OnInit {
           }
         },
       });
-    }
-    else {
+    } else {
       this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
     }
   }
@@ -225,7 +221,7 @@ export class QuyetDinhGiaCuaTcdtnnComponent implements OnInit {
   }
 
   onAllChecked(checked) {
-    this.dataTable.forEach(({ id }) => this.updateCheckedSet(id, checked));
+    this.dataTable.forEach(({id}) => this.updateCheckedSet(id, checked));
     this.refreshCheckedStatus();
   }
 
@@ -238,11 +234,11 @@ export class QuyetDinhGiaCuaTcdtnnComponent implements OnInit {
   }
 
   refreshCheckedStatus(): void {
-    this.allChecked = this.dataTable.every(({ id }) =>
+    this.allChecked = this.dataTable.every(({id}) =>
       this.setOfCheckedId.has(id),
     );
     this.indeterminate =
-      this.dataTable.some(({ id }) => this.setOfCheckedId.has(id)) &&
+      this.dataTable.some(({id}) => this.setOfCheckedId.has(id)) &&
       !this.allChecked;
   }
 
@@ -297,7 +293,7 @@ export class QuyetDinhGiaCuaTcdtnnComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.quyetDinhGiaTCDTNNService.delete({ id: item.id }).then((res) => {
+          this.quyetDinhGiaTCDTNNService.delete({id: item.id}).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,

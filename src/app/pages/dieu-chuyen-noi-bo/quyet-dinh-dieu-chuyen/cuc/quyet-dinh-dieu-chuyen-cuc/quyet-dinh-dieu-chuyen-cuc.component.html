@@ -176,6 +176,10 @@
               <td>{{ data.soDxuat }}</td>
               <td>{{ data.tenTrangThai }}</td>
               <td class="text-center">
+                <a *ngIf="data.trangThai === STATUS.CHO_DUYET_LDTC && userService.isAccessPermisson('DCNB_QUYETDINHDC_XEM')"
+                  (click)="redirectDetail(data.id, true)">
+                  <i class="icon htvbdh_tcdt_pheduyet" title="Duyệt"></i>
+                </a>
                 <a *ngIf="isTongCuc() || (data.trangThai !== STATUS.DU_THAO && isCuc()) || (data.trangThai !== STATUS.YC_CHICUC_PHANBO_DC && isChiCuc()) && userService.isAccessPermisson('DCNB_QUYETDINHDC_XEM')"
                   (click)="redirectDetail(data.id, true)">
                   <i class="fa fa-eye" title="Xem chi tiết"></i>

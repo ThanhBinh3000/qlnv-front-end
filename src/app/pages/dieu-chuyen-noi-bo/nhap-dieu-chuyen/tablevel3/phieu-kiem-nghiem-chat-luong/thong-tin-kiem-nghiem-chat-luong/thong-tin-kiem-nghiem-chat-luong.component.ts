@@ -514,11 +514,9 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
     let res = this.idInput ? await this.phieuKiemNghiemChatLuongService.update(body) : await this.phieuKiemNghiemChatLuongService.create(body);
     // let data = await this.createUpdate(body);
     if (res.data) {
+      this.idInput = res.data.id;
       if (isGuiDuyet) {
-        this.idInput = res.data.id;
         this.guiDuyet();
-      } else {
-        this.quayLai();
       }
     }
     await this.spinner.hide();

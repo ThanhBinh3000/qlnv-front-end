@@ -27,6 +27,12 @@ import {STATUS} from "../../../../../constants/status";
 import {QuyetDinhPheDuyetKeHoachMTTService} from "../../../../../services/quyet-dinh-phe-duyet-ke-hoach-mtt.service";
 import {ChaogiaUyquyenMualeService} from "../../../../../services/chaogia-uyquyen-muale.service";
 import {convertTienTobangChu} from 'src/app/shared/commonFunction';
+import {
+  DialogThemMoiBangKeThuMuaLeComponent
+} from "../../../../../components/dialog/dialog-them-moi-bang-ke-thu-mua-le/dialog-them-moi-bang-ke-thu-mua-le.component";
+import {
+  QuyetDinhGiaoNvNhapHangService
+} from "../../../../../services/qlnv-hang/nhap-hang/mua-truc-tiep/qdinh-giao-nvu-nh/quyetDinhGiaoNvNhapHang.service";
 
 @Component({
   selector: 'app-themmoi-qd-kh-uy-quyen-mua-le',
@@ -64,6 +70,9 @@ export class ThemmoiQdKhUyQuyenMuaLeComponent extends Base2Component implements 
   listDataGroup: any[] = [];
   editBaoGiaCache: { [key: string]: { edit: boolean; data: any } } = {};
   editCoSoCache: { [key: string]: { edit: boolean; data: any } } = {};
+  isHopDong: boolean = false;
+  idQdGnvu: any
+
 
   constructor(
     httpClient: HttpClient,
@@ -73,6 +82,7 @@ export class ThemmoiQdKhUyQuyenMuaLeComponent extends Base2Component implements 
     modal: NzModalService,
     private quyetDinhPheDuyetKeHoachMTTService: QuyetDinhPheDuyetKeHoachMTTService,
     private chaogiaUyquyenMualeService: ChaogiaUyquyenMualeService,
+    private quyetDinhGiaoNvNhapHangService: QuyetDinhGiaoNvNhapHangService
   ) {
     super(httpClient, storageService, notification, spinner, modal, chaogiaUyquyenMualeService);
     this.formData = this.fb.group({
@@ -165,6 +175,7 @@ export class ThemmoiQdKhUyQuyenMuaLeComponent extends Base2Component implements 
             thueGtgt: dataDtl.thueGtgt,
             ghiChu: dataDtl.ghiChu
           })
+          this.idQdGnvu = dataDtl.hhQdPheduyetKhMttHdr.idQdGnvu
           this.canCuKhacList = dataDtl.hhQdPheduyetKhMttHdr.fileDinhKems
           this.listChiCuc = dataDtl.children.length > 0 ? dataDtl.children : dataDtl.children2;
           this.dataTable = this.listChiCuc.filter(x => x.maDvi == this.userInfo.MA_DVI)
@@ -185,5 +196,36 @@ export class ThemmoiQdKhUyQuyenMuaLeComponent extends Base2Component implements 
   convertTien(data: any){
     return convertTienTobangChu(data);
   }
+  redirectHopDong(){
+    this.isHopDong = true
+    this.idSelected = this.formData.value.id
+  }
+
+  async themMoiBangKeMuaLe($event, data?: null, index?: number) {
+    let res = await this.quyetDinhGiaoNvNhapHangService.getDetail(this.idQdGnvu);
+    console.log(res.data, 5555);
+    const modalGT = this.modal.create({
+      nzTitle: 'THÊM BẢNG KÊ',
+      nzContent: DialogThemMoiBangKeThuMuaLeComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzStyle: { top: '200px' },
+      nzWidth: '1500px',
+      nzFooter: null,
+      nzComponentParams: {
+        dataEdit: data ? data : res.data,
+      },
+    });
+    modalGT.afterClose.subscribe((data) => {
+      if (!data) {
+        return;
+      }
+      if (index >= 0) {
+        this.dataTable[index] = data;
+      } else {
+        this.dataTable.push(data);
+      }
+    });
+  };
 
 }
