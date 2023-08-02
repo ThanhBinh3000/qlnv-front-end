@@ -480,33 +480,35 @@ export class HangComponent implements OnInit {
 
     exportToExcel() {
         const header = [
-            { t: 0, b: 0 + this.lstCtietBcao.length, l: 0, r: 7, val: null },
-            { t: 0, b: 0, l: 0, r: 0, val: 'STT' },
-            { t: 0, b: 0, l: 1, r: 1, val: 'Tên cục DTNNKV, chi cục DTNN' },
-            { t: 0, b: 0, l: 2, r: 2, val: 'Tên địa điểm, địa chỉ' },
-            { t: 0, b: 0, l: 3, r: 3, val: 'Tên nhà kho' },
-            { t: 0, b: 0, l: 4, r: 4, val: 'Khối tích (m3)' },
-            { t: 0, b: 0, l: 5, r: 5, val: 'Tên hàng DTQG' },
-            { t: 0, b: 0, l: 6, r: 6, val: 'Số lượng' },
-            { t: 0, b: 0, l: 7, r: 7, val: 'Giá trị' },
+            { t: 0, b: 4 + this.lstCtietBcao.length, l: 0, r: 7, val: null },
+            { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
+            { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
+            { t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
+            { t: 4, b: 4, l: 0, r: 0, val: 'STT' },
+            { t: 4, b: 4, l: 1, r: 1, val: 'Tên cục DTNNKV, chi cục DTNN' },
+            { t: 4, b: 4, l: 2, r: 2, val: 'Tên địa điểm, địa chỉ' },
+            { t: 4, b: 4, l: 3, r: 3, val: 'Tên nhà kho' },
+            { t: 4, b: 4, l: 4, r: 4, val: 'Khối tích (m3)' },
+            { t: 4, b: 4, l: 5, r: 5, val: 'Tên hàng DTQG' },
+            { t: 4, b: 4, l: 6, r: 6, val: 'Số lượng' },
+            { t: 4, b: 4, l: 7, r: 7, val: 'Giá trị' },
         ]
-        const headerBot = 0;
-        const ori = header[0];
+        const headerBot = 5;
         this.lstCtietBcao.forEach((item, index) => {
             if (item.unitSpan) {
-                header.push({ t: headerBot + index + 1, b: headerBot + item.unitSpan, l: 0, r: 0, val: this.getIndex(item.stt) })
-                header.push({ t: headerBot + index + 1, b: headerBot + item.unitSpan, l: 1, r: 1, val: item.tenDvi })
+                header.push({ t: headerBot + index, b: headerBot + item.unitSpan, l: 0, r: 0, val: this.getIndex(item.stt) })
+                header.push({ t: headerBot + index, b: headerBot + item.unitSpan, l: 1, r: 1, val: item.tenDvi })
             }
             if (item.locationSpan) {
-                header.push({ t: headerBot + index + 1, b: headerBot + item.locationSpan, l: 2, r: 2, val: item.tenDiaChiKho })
+                header.push({ t: headerBot + index, b: headerBot + item.locationSpan, l: 2, r: 2, val: item.tenDiaChiKho })
             }
             if (item.storehouseSpan) {
-                header.push({ t: headerBot + index + 1, b: headerBot + item.storehouseSpan, l: 3, r: 3, val: item.tenNhaKho })
+                header.push({ t: headerBot + index, b: headerBot + item.storehouseSpan, l: 3, r: 3, val: item.tenNhaKho })
             }
-            header.push({ t: headerBot + index + 1, b: headerBot + index + 1, l: 4, r: 4, val: item.khoiTich?.toString() })
-            header.push({ t: headerBot + index + 1, b: headerBot + index + 1, l: 5, r: 5, val: item.tenHang })
-            header.push({ t: headerBot + index + 1, b: headerBot + index + 1, l: 6, r: 6, val: item.soLuong?.toString() })
-            header.push({ t: headerBot + index + 1, b: headerBot + index + 1, l: 7, r: 7, val: item.giaTri?.toString() })
+            header.push({ t: headerBot + index, b: headerBot + index, l: 4, r: 4, val: item.khoiTich?.toString() })
+            header.push({ t: headerBot + index, b: headerBot + index, l: 5, r: 5, val: item.tenHang })
+            header.push({ t: headerBot + index, b: headerBot + index, l: 6, r: 6, val: item.soLuong?.toString() })
+            header.push({ t: headerBot + index, b: headerBot + index, l: 7, r: 7, val: item.giaTri?.toString() })
         })
         const workbook = XLSX.utils.book_new();
         const worksheet = Table.initExcel(header);

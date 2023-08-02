@@ -512,20 +512,23 @@ export class BaoCao02Component implements OnInit {
 
     exportToExcel() {
         const header = [
-            { t: 0, b: 1, l: 0, r: 10, val: null },
-            { t: 0, b: 1, l: 0, r: 0, val: 'STT' },
-            { t: 0, b: 1, l: 1, r: 1, val: 'Tên vật tư, hàng hóa' },
-            { t: 0, b: 1, l: 2, r: 2, val: 'ĐVT' },
-            { t: 0, b: 0, l: 3, r: 6, val: 'Kế hoạch' },
-            { t: 1, b: 1, l: 3, r: 3, val: 'Quyết định số ... ngày ...' },
-            { t: 1, b: 1, l: 4, r: 4, val: 'Số lượng' },
-            { t: 1, b: 1, l: 5, r: 5, val: 'Giá mua tối đa Tổng cục QĐ' },
-            { t: 1, b: 1, l: 6, r: 6, val: 'Thành tiền (Đã bao gồm thuế GTGT)' },
-            { t: 0, b: 0, l: 7, r: 9, val: 'Thực hiện' },
-            { t: 1, b: 1, l: 7, r: 7, val: 'Số lượng' },
-            { t: 1, b: 1, l: 8, r: 8, val: 'Đơn giá thực tế' },
-            { t: 1, b: 1, l: 9, r: 9, val: 'Thành tiền (Đã bao gồm thuế GTGT)' },
-            { t: 0, b: 1, l: 10, r: 10, val: 'Ghi chú' },
+            { t: 0, b: 5, l: 0, r: 10, val: null },
+            { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
+            { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
+            { t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
+            { t: 4, b: 5, l: 0, r: 0, val: 'STT' },
+            { t: 4, b: 5, l: 1, r: 1, val: 'Tên vật tư, hàng hóa' },
+            { t: 4, b: 5, l: 2, r: 2, val: 'ĐVT' },
+            { t: 4, b: 4, l: 3, r: 6, val: 'Kế hoạch' },
+            { t: 5, b: 5, l: 3, r: 3, val: 'Quyết định số ... ngày ...' },
+            { t: 5, b: 5, l: 4, r: 4, val: 'Số lượng' },
+            { t: 5, b: 5, l: 5, r: 5, val: 'Giá mua tối đa Tổng cục QĐ' },
+            { t: 5, b: 5, l: 6, r: 6, val: 'Thành tiền (Đã bao gồm thuế GTGT)' },
+            { t: 4, b: 4, l: 7, r: 9, val: 'Thực hiện' },
+            { t: 5, b: 5, l: 7, r: 7, val: 'Số lượng' },
+            { t: 5, b: 5, l: 8, r: 8, val: 'Đơn giá thực tế' },
+            { t: 5, b: 5, l: 9, r: 9, val: 'Thành tiền (Đã bao gồm thuế GTGT)' },
+            { t: 4, b: 5, l: 10, r: 10, val: 'Ghi chú' },
         ]
         const fieldOrder = ['stt', 'tenVtu', 'maDviTinh', 'soQd', 'khSoLuong', 'khGiaMuaTd', 'khTtien', 'thSoLuong', 'thGiaMuaTd', 'thTtien', 'ghiChu'];
         const filterData = this.lstCtietBcao.map(item => {

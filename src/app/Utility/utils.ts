@@ -1575,37 +1575,6 @@ export const BOX_NUMBER_WIDTH = 150;
 export const NUM_BOX_WIDTH = 150;
 export const TEXT_BOX_WIDTH = 250;
 
-// loai bao cao quy trinh thuc hien du toan chi
-// export const LBC_QUY_TRINH_THUC_HIEN_DU_TOAN_CHI = [
-// 	{
-// 		id: '526',
-// 		tenDm: 'Báo cáo giải ngân định kỳ tháng'
-// 	},
-// 	// {
-// 	//   id: '527',
-// 	//   tenDm: 'Báo cáo giải ngân cả năm'
-// 	// },
-// 	{
-// 		id: '528',
-// 		tenDm: 'Báo cáo giải ngân cả năm'
-// 	},
-// ]
-
-// // loai bao cao ket qua thuc hien hang du tru quoc gia
-// export const LBC_KET_QUA_THUC_HIEN_HANG_DTQG = [
-// 	{
-// 		id: '1',
-// 		tenDm: 'Đợt'
-// 	},
-// 	{
-// 		id: '2',
-// 		tenDm: 'Năm'
-// 	},
-// ]
-// export const BAO_CAO_DOT = "1";
-// export const BAO_CAO_NAM = "2";
-
-// trang thai ban ghi
 export const TRANG_THAI_TIM_KIEM = [
 	{
 		id: "1",

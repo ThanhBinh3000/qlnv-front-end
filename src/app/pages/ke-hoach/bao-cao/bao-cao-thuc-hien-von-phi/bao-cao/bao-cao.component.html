@@ -67,10 +67,11 @@
                             <th>Người tạo</th>
                             <th>Ngày lập</th>
                             <th>Công văn</th>
+                            <th>Ngày công văn</th>
                             <th>Ngày trình duyệt</th>
                             <th>Ngày duyệt</th>
                             <th>Ngày phê duyệt</th>
-                            <th>Ngày đơn vị cấp trên trả kết quả</th>
+                            <th>Ngày tiếp nhận</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -95,6 +96,7 @@
                                 </div>
 
                             </td>
+                            <td>{{ Utils.fmtDate(baoCao.ngayCongVan) }}</td>
                             <td>{{ Utils.fmtDate(baoCao.ngayTrinh) }}</td>
                             <td>{{ Utils.fmtDate(baoCao.ngayDuyet) }}</td>
                             <td>{{ Utils.fmtDate(baoCao.ngayPheDuyet) }}</td>
