@@ -57,9 +57,11 @@ import {
 import {
   ChiTietQuyetDinhGiaoNhiemVuThanhLyComponent
 } from './to-chuc-thuc-hien-thanh-ly/quyet-dinh-giao-nhiem-vu-thanh-ly/chi-tiet-quyet-dinh-giao-nhiem-vu-thanh-ly/chi-tiet-quyet-dinh-giao-nhiem-vu-thanh-ly.component';
-import {
-  ThucHienXuatThanhLyComponent
-} from "src/app/pages/xuat/xuat-thanh-ly/thuc-hien-xuat-thanh-ly/thuc-hien-xuat-thanh-ly.component";
+import {ThucHienXuatThanhLyComponent} from './thuc-hien-xuat-thanh-ly/thuc-hien-xuat-thanh-ly.component';
+import {KiemTraChatLuongComponent} from './thuc-hien-xuat-thanh-ly/kiem-tra-chat-luong/kiem-tra-chat-luong.component';
+import {XuatKhoComponent} from './thuc-hien-xuat-thanh-ly/xuat-kho/xuat-kho.component';
+import {XuatModule} from "src/app/pages/xuat/xuat.module";
+
 
 @NgModule({
   declarations: [
@@ -90,6 +92,8 @@ import {
     QuyetDinhGiaoNhiemVuThanhLyComponent,
     ChiTietQuyetDinhGiaoNhiemVuThanhLyComponent,
     ThucHienXuatThanhLyComponent,
+    KiemTraChatLuongComponent,
+    XuatKhoComponent,
   ],
   imports: [
     CommonModule,
@@ -100,6 +104,7 @@ import {
     MainModule,
     ComponentsModule,
     HopDongModule,
+    XuatModule,
   ],
   exports: [
     ThanhLyDanhSachHangComponent
@@ -108,3 +113,4 @@ import {
 })
 export class XuatThanhLyModule {
 }
+

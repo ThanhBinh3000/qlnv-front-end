@@ -24,9 +24,6 @@
     <li nz-menu-item (click)="selectTab(7)">
       Báo cáo kết quả bán thanh lý
     </li>
-    <li nz-menu-item (click)="selectTab(8)">
-      Xuất kho
-    </li>
   </ul>
 </nz-affix>
 <div class="contentBor chi-tieu__body giao-ke-hoach">
@@ -54,9 +51,6 @@
     </ng-container>
     <ng-container *ngIf="tabSelected == 7">
       <app-bao-cao-ket-qua-thanh-ly></app-bao-cao-ket-qua-thanh-ly>
-    </ng-container>
-    <ng-container *ngIf="tabSelected == 8">
-      <app-xuat-kho-thanh-ly></app-xuat-kho-thanh-ly>
     </ng-container>
   </div>
 </div>
