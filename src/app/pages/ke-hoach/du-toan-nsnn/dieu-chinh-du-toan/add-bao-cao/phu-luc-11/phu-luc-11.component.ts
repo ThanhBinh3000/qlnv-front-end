@@ -369,7 +369,7 @@ export class PhuLuc11Component implements OnInit {
             stt = Table.preIndex(stt);
         }
         this.getTotal();
-        // this.tinhTong();
+        this.tinhTong();
     };
 
     addLine(data: any) {
@@ -450,8 +450,15 @@ export class PhuLuc11Component implements OnInit {
     };
 
     checkEdit(stt: string) {
-        const lstTemp = this.lstCtietBcao.filter(e => e.stt !== stt);
-        return lstTemp.every(e => !e.stt.startsWith(stt));
+        if (
+            stt == "0.1" ||
+            stt == "0.2" ||
+            stt == "0.3" ||
+            stt == "0.4"
+        ) {
+            return false;
+        }
+        return true;
     }
 
     startEdit(id: string): void {
@@ -514,17 +521,21 @@ export class PhuLuc11Component implements OnInit {
         this.dtoanVuGiam = 0;
         this.lstCtietBcao.forEach(item => {
             item.chenhLech = Operator.sum([item.dtoanVuTvqtDnghi, - item.dtoanDnghiDchinh])
-            if (item.level == 0) {
-                if (item.dtoanDnghiDchinh < 0) {
-                    Number(this.tongDieuChinhGiam += Number(item?.dtoanDnghiDchinh));
-                } else {
-                    Number(this.tongDieuChinhTang += Number(item?.dtoanDnghiDchinh));
+            if (item.level == 1) {
+                if (item.dtoanDnghiDchinh !== null) {
+                    if (item.dtoanDnghiDchinh < 0) {
+                        Number(this.tongDieuChinhGiam += Number(item?.dtoanDnghiDchinh));
+                    } else {
+                        Number(this.tongDieuChinhTang += Number(item?.dtoanDnghiDchinh));
+                    }
                 }
 
-                if (item.dtoanVuTvqtDnghi < 0) {
-                    Number(this.dtoanVuGiam += Number(item?.dtoanVuTvqtDnghi));
-                } else {
-                    Number(this.dtoanVuTang += Number(item?.dtoanVuTvqtDnghi));
+                if (item.dtoanVuTvqtDnghi !== null) {
+                    if (item.dtoanVuTvqtDnghi < 0) {
+                        Number(this.dtoanVuGiam += Number(item?.dtoanVuTvqtDnghi));
+                    } else {
+                        Number(this.dtoanVuTang += Number(item?.dtoanVuTvqtDnghi));
+                    }
                 }
             }
         })

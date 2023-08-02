@@ -156,7 +156,7 @@ export class TongHopBaoCaoComponent implements OnInit {
     viewDetail(data: any) {
         const obj = {
             id: data.id,
-            tabSelected: 'addbaocao',
+            tabSelected: Dcdt.BAO_CAO_01,
         }
         this.dataChange.emit(obj);
     };

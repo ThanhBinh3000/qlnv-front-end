@@ -141,8 +141,11 @@ export class PhuLuc3Component implements OnInit {
                 loaiKhoan: "340-341"
             })
         } else if (!this.lstCtietBcao[0]?.stt) {
+            let sttItem = 1
             this.lstCtietBcao.forEach(item => {
-                item.stt = item.maNoiDung;
+                const stt = "0." + sttItem
+                item.stt = stt;
+                sttItem += sttItem
             })
         }
         this.getTotal();
@@ -336,16 +339,20 @@ export class PhuLuc3Component implements OnInit {
         this.dToanVuTang = 0;
         this.dToanVuGiam = 0;
         this.lstCtietBcao.forEach(item => {
-            if (item.dtoanDchinh < 0) {
-                this.tongDieuChinhGiam += Number(item.dtoanDchinh);
-            } else {
-                this.tongDieuChinhTang += Number(item.dtoanDchinh);
+            if (item.dtoanDchinh !== null) {
+                if (item.dtoanDchinh < 0) {
+                    Number(this.tongDieuChinhGiam += Number(item?.dtoanDchinh));
+                } else {
+                    Number(this.tongDieuChinhTang += Number(item?.dtoanDchinh));
+                }
             }
 
-            if (item.dtoanVuTvqtDnghi < 0) {
-                this.dToanVuGiam += Number(item.dtoanVuTvqtDnghi);
-            } else {
-                this.dToanVuTang += Number(item.dtoanVuTvqtDnghi);
+            if (item.dtoanVuTvqtDnghi !== null) {
+                if (item.dtoanVuTvqtDnghi < 0) {
+                    Number(this.dToanVuGiam += Number(item?.dtoanVuTvqtDnghi));
+                } else {
+                    Number(this.dToanVuTang += Number(item?.dtoanVuTvqtDnghi));
+                }
             }
 
         })
