@@ -219,12 +219,12 @@ export class PhuLucTongHopComponent implements OnInit {
         //         }
         //     })
         // }
-        console.log(this.formDetail.lstCtietDchinh[0].child);
+        // console.log(this.formDetail.lstCtietDchinh[0].child);
 
         this.formDetail.lstCtietDchinh[0]?.child.forEach(s => {
             this.lstDvi = this.donVis.filter(v => v.maDvi === s.maDviBcao)
         })
-        console.log("this.lstDvi", this.lstDvi);
+        // console.log("this.lstDvi", this.lstDvi);
 
         this.lstCtietBcao = Table.sortByIndex(this.lstCtietBcao)
         this.tinhTong();
@@ -570,10 +570,13 @@ export class PhuLucTongHopComponent implements OnInit {
             this.lstCtietBcao[index].tongDchinhGiam = 0
             this.lstCtietBcao[index].tongDchinhTang = 0
             this.lstCtietBcao[index].child.forEach(item => {
-                if (item.dtoanVuTvqtDnghi < 0) {
-                    this.lstCtietBcao[index].tongDchinhGiam += Number(item.dtoanVuTvqtDnghi);
-                } else {
-                    this.lstCtietBcao[index].tongDchinhTang += Number(item.dtoanVuTvqtDnghi);
+
+                if (item.dtoanVuTvqtDnghi !== null) {
+                    if (item.dtoanVuTvqtDnghi < 0) {
+                        this.lstCtietBcao[index].tongDchinhGiam += Number(item.dtoanVuTvqtDnghi);
+                    } else {
+                        this.lstCtietBcao[index].tongDchinhTang += Number(item.dtoanVuTvqtDnghi);
+                    }
                 }
             })
         })

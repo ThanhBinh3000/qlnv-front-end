@@ -213,9 +213,9 @@ export class PhuLuc9Component implements OnInit {
         else if (!this.lstCtietBcao[0]?.stt) {
             let sttItem = 1
             this.lstCtietBcao.forEach(item => {
-                sttItem += sttItem
                 const stt = "0." + sttItem
                 item.stt = stt;
+                sttItem += sttItem
             })
         }
 
@@ -271,16 +271,20 @@ export class PhuLuc9Component implements OnInit {
         this.dToanVuGiam = 0;
         this.lstCtietBcao.forEach(item => {
             item.chenhLech = Operator.sum([item.dtoanVuTvqtDnghi, - item.dtoanDnghiDchinh])
-            if (item.dtoanDnghiDchinh < 0) {
-                this.tongDieuChinhGiam += Number(item?.dtoanDnghiDchinh);
-            } else {
-                this.tongDieuChinhTang += Number(item?.dtoanDnghiDchinh);
+            if (item.dtoanDnghiDchinh !== null) {
+                if (item.dtoanDnghiDchinh < 0) {
+                    Number(this.tongDieuChinhGiam += Number(item?.dtoanDnghiDchinh));
+                } else {
+                    Number(this.tongDieuChinhTang += Number(item?.dtoanDnghiDchinh));
+                }
             }
 
-            if (item.dtoanVuTvqtDnghi < 0) {
-                this.dToanVuGiam += Number(item?.dtoanVuTvqtDnghi);
-            } else {
-                this.dToanVuTang += Number(item?.dtoanVuTvqtDnghi);
+            if (item.dtoanVuTvqtDnghi !== null) {
+                if (item.dtoanVuTvqtDnghi < 0) {
+                    Number(this.dToanVuGiam += Number(item?.dtoanVuTvqtDnghi));
+                } else {
+                    Number(this.dToanVuTang += Number(item?.dtoanVuTvqtDnghi));
+                }
             }
         })
     };

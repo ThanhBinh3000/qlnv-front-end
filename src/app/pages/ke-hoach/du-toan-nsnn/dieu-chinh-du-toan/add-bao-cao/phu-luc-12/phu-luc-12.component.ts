@@ -407,8 +407,8 @@ export class PhuLuc12Component implements OnInit {
 		Object.assign(this.lstCtietBcao[index], this.editCache[id].data); // set lai data cua lstCtietBcao[index] = this.editCache[id].data
 		this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
 		this.sum(this.lstCtietBcao[index].stt);
-		this.getTotal()
 		this.tinhTong()
+		this.getTotal()
 		this.updateEditCache();
 	};
 
@@ -448,17 +448,21 @@ export class PhuLuc12Component implements OnInit {
 		this.dtoanVuGiam = 0;
 		this.lstCtietBcao.forEach(item => {
 			item.chenhLech = Operator.sum([item.dtoanVuTvqtDnghi, - item.dtoanDnghiDchinh])
-			if (item.level == 0) {
-				if (item.dtoanDnghiDchinh < 0) {
-					Number(this.tongDieuChinhGiam += Number(item?.dtoanDnghiDchinh));
-				} else {
-					Number(this.tongDieuChinhTang += Number(item?.dtoanDnghiDchinh));
+			if (item.level == 3) {
+				if (item.dtoanDnghiDchinh !== null) {
+					if (item.dtoanDnghiDchinh < 0) {
+						Number(this.tongDieuChinhGiam += Number(item?.dtoanDnghiDchinh));
+					} else {
+						Number(this.tongDieuChinhTang += Number(item?.dtoanDnghiDchinh));
+					}
 				}
 
-				if (item.dtoanVuTvqtDnghi < 0) {
-					Number(this.dtoanVuGiam += Number(item?.dtoanVuTvqtDnghi));
-				} else {
-					Number(this.dtoanVuTang += Number(item?.dtoanVuTvqtDnghi));
+				if (item.dtoanVuTvqtDnghi !== null) {
+					if (item.dtoanVuTvqtDnghi < 0) {
+						Number(this.dtoanVuGiam += Number(item?.dtoanVuTvqtDnghi));
+					} else {
+						Number(this.dtoanVuTang += Number(item?.dtoanVuTvqtDnghi));
+					}
 				}
 			}
 		})

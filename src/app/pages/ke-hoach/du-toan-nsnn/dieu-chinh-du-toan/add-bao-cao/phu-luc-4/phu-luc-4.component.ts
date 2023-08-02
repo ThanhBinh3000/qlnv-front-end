@@ -432,16 +432,20 @@ export class PhuLuc4Component implements OnInit {
         this.lstCtietBcao.forEach(item => {
             const str = item.stt
             if (!(this.lstCtietBcao.findIndex(e => getHead(e.stt) == str) != -1)) {
-                if (item.dtoanDchinhDnghiLanNay < 0) {
-                    this.tongDieuChinhGiam += Number(item.dtoanDchinhDnghiLanNay);
-                } else {
-                    this.tongDieuChinhTang += Number(item.dtoanDchinhDnghiLanNay);
+                if (item.dtoanDchinhDnghiLanNay !== null) {
+                    if (item.dtoanDchinhDnghiLanNay < 0) {
+                        Number(this.tongDieuChinhGiam += Number(item?.dtoanDchinhDnghiLanNay));
+                    } else {
+                        Number(this.tongDieuChinhTang += Number(item?.dtoanDchinhDnghiLanNay));
+                    }
                 }
 
-                if (item.dtoanVuTvqtDnghi < 0) {
-                    Number(this.dToanVuGiam += Number(item.dtoanVuTvqtDnghi));
-                } else {
-                    Number(this.dToanVuTang += Number(item.dtoanVuTvqtDnghi));
+                if (item.dtoanVuTvqtDnghi !== null) {
+                    if (item.dtoanVuTvqtDnghi < 0) {
+                        Number(this.dToanVuGiam += Number(item?.dtoanVuTvqtDnghi));
+                    } else {
+                        Number(this.dToanVuTang += Number(item?.dtoanVuTvqtDnghi));
+                    }
                 }
             }
         })

@@ -329,7 +329,8 @@ export class PhuLuc8Component implements OnInit {
         this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
         this.updateEditCache();
         this.sum(this.lstCtietBcao[index].stt);
-        this.getTotal()
+        this.getTotal();
+        this.tinhTong();
     };
 
     cancelEdit(id: string): void {
@@ -361,11 +362,14 @@ export class PhuLuc8Component implements OnInit {
     };
 
     checkDelete(stt: string) {
-        const level = stt.split('.').length - 2;
-        if (level == 1) {
-            return true;
-        }
-        return false;
+        // const level = stt.split('.').length - 2;
+        // if (level == 1) {
+        //     return true;
+        // }
+        // return false;
+
+        const lstTemp = this.lstCtietBcao.filter(e => e.stt !== stt);
+        return lstTemp.every(e => !e.stt.startsWith(stt));
     }
 
 
@@ -474,17 +478,21 @@ export class PhuLuc8Component implements OnInit {
         this.dToanVuGiam = 0;
         this.lstCtietBcao.forEach(item => {
             item.chenhLech = Operator.sum([item.dtoanVuTvqtDnghi, - item.dtoanDchinhDnghi])
-            if (item.level == 0) {
-                if (item.dtoanDchinhDnghi < 0) {
-                    this.tongDieuChinhGiam += Number(item?.dtoanDchinhDnghi);
-                } else {
-                    this.tongDieuChinhTang += Number(item?.dtoanDchinhDnghi);
+            if (item.level == 1) {
+                if (item.dtoanDchinhDnghi !== null) {
+                    if (item.dtoanDchinhDnghi < 0) {
+                        Number(this.tongDieuChinhGiam += Number(item?.dtoanDchinhDnghi));
+                    } else {
+                        Number(this.tongDieuChinhTang += Number(item?.dtoanDchinhDnghi));
+                    }
                 }
 
-                if (item.dtoanVuTvqtDnghi < 0) {
-                    this.dToanVuGiam += Number(item?.dtoanVuTvqtDnghi);
-                } else {
-                    this.dToanVuTang += Number(item?.dtoanVuTvqtDnghi);
+                if (item.dtoanVuTvqtDnghi !== null) {
+                    if (item.dtoanVuTvqtDnghi < 0) {
+                        Number(this.dToanVuGiam += Number(item?.dtoanVuTvqtDnghi));
+                    } else {
+                        Number(this.dToanVuTang += Number(item?.dtoanVuTvqtDnghi));
+                    }
                 }
             }
 

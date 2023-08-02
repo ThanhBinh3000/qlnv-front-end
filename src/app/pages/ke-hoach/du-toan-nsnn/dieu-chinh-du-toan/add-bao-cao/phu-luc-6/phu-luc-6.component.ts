@@ -168,8 +168,14 @@ export class PhuLuc6Component implements OnInit {
             this.setIndex();
         }
 
+        this.lstCtietBcao.forEach(item => {
+            item.sluongThienTtien = Operator.mul(item.sluongThienDmuc, item.sluongThienCong);
+            item.dtoanDchinh = item.sluongThienTtien - item.dtoanGiaoLke;
+        })
+
         this.lstCtietBcao = Table.sortByIndex(this.lstCtietBcao);
         this.tinhTong();
+        this.sum1();
         this.getTotal()
         this.updateEditCache();
         this.getStatusButton();
@@ -422,6 +428,7 @@ export class PhuLuc6Component implements OnInit {
         this.updateEditCache();
         this.sum(this.lstCtietBcao[index].stt);
         this.getTotal()
+        this.tinhTong()
     }
 
     // huy thay doi
@@ -611,16 +618,20 @@ export class PhuLuc6Component implements OnInit {
             item.chenhLech = Operator.sum([item.dtoanVuTvqtDnghi, - item.dtoanDchinh]);
             const str = item.stt
             if (!(this.lstCtietBcao.findIndex(e => Table.preIndex(e.stt) == str) != -1)) {
-                if (item.dtoanDchinh < 0) {
-                    this.tongDieuChinhGiam += Number(item?.dtoanDchinh);
-                } else {
-                    this.tongDieuChinhTang += Number(item?.dtoanDchinh);
+                if (item.dtoanDchinh !== null) {
+                    if (item.dtoanDchinh < 0) {
+                        Number(this.tongDieuChinhGiam += Number(item?.dtoanDchinh));
+                    } else {
+                        Number(this.tongDieuChinhTang += Number(item?.dtoanDchinh));
+                    }
                 }
 
-                if (item.dtoanVuTvqtDnghi < 0) {
-                    this.dToanVuGiam += Number(item?.dtoanVuTvqtDnghi);
-                } else {
-                    this.dToanVuTang += Number(item?.dtoanVuTvqtDnghi);
+                if (item.dtoanVuTvqtDnghi !== null) {
+                    if (item.dtoanVuTvqtDnghi < 0) {
+                        Number(this.dToanVuGiam += Number(item?.dtoanVuTvqtDnghi));
+                    } else {
+                        Number(this.dToanVuTang += Number(item?.dtoanVuTvqtDnghi));
+                    }
                 }
             }
         })

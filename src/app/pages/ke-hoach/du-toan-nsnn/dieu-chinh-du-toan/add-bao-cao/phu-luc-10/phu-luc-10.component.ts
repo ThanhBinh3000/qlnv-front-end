@@ -4,7 +4,6 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { CurrencyMaskInputMode } from 'ngx-currency';
 import { NgxSpinnerService } from 'ngx-spinner';
-// import { addChild, addParent, deleteRow, getHead, getName } from 'src/app/Utility/func';
 import { FileManip, Operator, Status, Table, Utils } from 'src/app/Utility/utils';
 import { DialogChonDanhMucComponent } from 'src/app/components/dialog/dialog-chon-danh-muc/dialog-chon-danh-muc.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
@@ -162,24 +161,22 @@ export class PhuLuc10Component implements OnInit {
 			}
 		}
 
-		if (!this.lstCtietBcao[0]?.stt) {
-			this.setIndex();
-		}
-
-		// if (this.lstCtietBcao.length > 0) {
-		// 	if (!this.lstCtietBcao[0]?.stt) {
-		// 		this.lstCtietBcao = Table.sortWithoutIndex(this.lstCtietBcao, 'maCongTrinh');
-		// 	} else {
-		// 	}
+		// if (!this.lstCtietBcao[0]?.stt) {
+		// 	this.setIndex();
 		// }
-		this.lstCtietBcao = Table.sortByIndex(this.lstCtietBcao);
+
+		if (this.lstCtietBcao.length > 0) {
+			if (!this.lstCtietBcao[0]?.stt) {
+				this.lstCtietBcao = Table.sortWithoutIndex(this.lstCtietBcao, 'maCongTrinh');
+			} else {
+				this.lstCtietBcao = Table.sortByIndex(this.lstCtietBcao);
+			}
+		}
 		// this.lstCtietBcao.forEach(item => {
 		// 	item.congTrinh = this.noiDungs.find(e => e.ma == item.maCongTrinh)?.giaTri;
 		// })
 		this.tinhTong();
 		this.getTotal();
-
-
 		this.updateEditCache();
 		this.getStatusButton();
 		this.spinner.hide();
@@ -424,16 +421,20 @@ export class PhuLuc10Component implements OnInit {
 			item.chenhLech = Operator.sum([item.dtoanVuTvqtDnghi, - item.dtoanDnghiDchinhLnay])
 			const str = item.stt
 			if (!(this.lstCtietBcao.findIndex(e => Table.preIndex(e.stt) == str) != -1)) {
-				if (item.dtoanDnghiDchinhLnay < 0) {
-					Number(this.tongDieuChinhGiam += Number(item?.dtoanDnghiDchinhLnay));
-				} else {
-					Number(this.tongDieuChinhTang += Number(item?.dtoanDnghiDchinhLnay));
+				if (item.dtoanDnghiDchinhLnay !== null) {
+					if (item.dtoanDnghiDchinhLnay < 0) {
+						Number(this.tongDieuChinhGiam += Number(item?.dtoanDnghiDchinhLnay));
+					} else {
+						Number(this.tongDieuChinhTang += Number(item?.dtoanDnghiDchinhLnay));
+					}
 				}
 
-				if (item.dtoanVuTvqtDnghi < 0) {
-					Number(this.dToanVuGiam += Number(item?.dtoanVuTvqtDnghi));
-				} else {
-					Number(this.dToanVuTang += Number(item?.dtoanVuTvqtDnghi));
+				if (item.dtoanVuTvqtDnghi !== null) {
+					if (item.dtoanVuTvqtDnghi < 0) {
+						Number(this.dToanVuGiam += Number(item?.dtoanVuTvqtDnghi));
+					} else {
+						Number(this.dToanVuTang += Number(item?.dtoanVuTvqtDnghi));
+					}
 				}
 			}
 		})
