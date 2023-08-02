@@ -8,7 +8,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { CapVonNguonChiService } from 'src/app/services/quan-ly-von-phi/capVonNguonChi.service';
 import { UserService } from 'src/app/services/user.service';
 import { CAN_CU_GIA, Roles, LOAI_DE_NGHI, Utils } from 'src/app/Utility/utils';
-import { TRANG_THAI } from '../../../de-nghi-cap-von.constant';
+import { Dncv, Search, TRANG_THAI } from '../../../de-nghi-cap-von.constant';
 import { DialogTaoMoiCapVonComponent } from '../dialog-tao-moi-cap-von/dialog-tao-moi-cap-von.component';
 import { BtnStatus } from '../../../de-nghi-cap-von.class';
 
@@ -24,22 +24,7 @@ export class DanhSachCapVonComponent implements OnInit {
   //thong tin user
   userInfo: any;
   //thong tin tim kiem
-  searchFilter = {
-    loaiTimKiem: '0',
-    maDvi: null,
-    ngayTaoDen: null,
-    ngayTaoTu: null,
-    soQdChiTieu: null,
-    canCuVeGia: null,
-    loaiDnghi: null,
-    maDnghi: null,
-    namBcao: null,
-    paggingReq: {
-      limit: 10,
-      page: 1,
-    },
-    trangThai: Utils.TT_BC_1,
-  }
+  searchFilter: Search = new Search();
 
   tableFilter = {
     maDn: null,
@@ -87,6 +72,7 @@ export class DanhSachCapVonComponent implements OnInit {
     newDate.setMonth(newDate.getMonth() - 1);
     this.searchFilter.ngayTaoTu = newDate;
     this.searchFilter.maDvi = this.userInfo?.MA_DVI;
+    this.searchFilter.maLoai = Dncv.CAP_VON;
     // trang thai cua nut tao moi
     this.status.addNewReport = this.userService.isAccessPermisson(Roles.CVNC.ADD_DN_MLT) || this.userService.isAccessPermisson(Roles.CVNC.ADD_DN_MVT);
     this.status.deleteReport = this.userService.isAccessPermisson(Roles.CVNC.DELETE_DN_MLT) || this.userService.isAccessPermisson(Roles.CVNC.DELETE_DN_MVT);
@@ -193,17 +179,18 @@ export class DanhSachCapVonComponent implements OnInit {
       nzWidth: '900px',
       nzFooter: null,
       nzComponentParams: {
+        request: this.searchFilter
       },
     });
     modalTuChoi.afterClose.toPromise().then(async (res) => {
       if (res) {
-        const obj = {
-          id: null,
-          baoCao: res,
-          tabSelected: res.canCuVeGia == Utils.HD_TRUNG_THAU ? (res.loaiDnghi == Utils.MUA_VTU ? 'dn-vattu' : 'denghi-hopdong-capvon') : 'dn-capvon',
-          hopDong: res.hopDong,
-        }
-        this.dataChange.emit(obj);
+        // const obj = {
+        //   id: null,
+        //   baoCao: res,
+        //   tabSelected: res.canCuVeGia == Dncv.DON_GIA ? 'dn-cap-von' : 'denghi-hopdong-capvon',
+        //   hopDong: res.hopDong,
+        // }
+        this.dataChange.emit(res);
       }
     });
   }
@@ -212,7 +199,7 @@ export class DanhSachCapVonComponent implements OnInit {
   viewDetail(data: any) {
     const obj = {
       id: data.id,
-      tabSelected: data.canCuVeGia == Utils.HD_TRUNG_THAU ? (data.loaiDnghi == Utils.MUA_VTU ? 'dn-vattu' : 'denghi-hopdong-capvon') : 'dn-capvon',
+      tabSelected: data.canCuVeGia == Dncv.DON_GIA ? 'dn-capvon' : 'denghi-hopdong-capvon'
     }
     this.dataChange.emit(obj);
   }

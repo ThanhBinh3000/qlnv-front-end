@@ -178,77 +178,51 @@ export class DialogTaoDeNghiCapVonComponent implements OnInit {
         }
       } else {
         //neu la chi cuc thi tao moi de nghi
-        if (this.userService.isChiCuc()) {
-          this.searchFilter.maDvi = this.maDonVi;
-          this.searchFilter.maLoai = '0';
-          const request = JSON.parse(JSON.stringify(this.searchFilter));
+        // if (this.userService.isChiCuc()) {
+        //   this.searchFilter.maDvi = this.maDonVi;
+        //   this.searchFilter.maLoai = '0';
+        //   const request = JSON.parse(JSON.stringify(this.searchFilter));
 
-          await this.capVonNguonChiService.timKiemDeNghi(request).toPromise().then(
-            (data) => {
-              if (data.statusCode == 0) {
-                if (data.data.content?.length > 0) {
-                  if (data.data.content[0].trangThai == Utils.TT_BC_7) {
-                    this.idCallChitietCapVon = data.data.content[0].id
-                  }
-                }
-              } else {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-                this.response.loaiDnghi = null;
-              }
-            },
-            (err) => {
-              this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-              this.response.loaiDnghi = null;
-            }
-          );
-          await this.capVonNguonChiService.ctietDeNghi(this.idCallChitietCapVon).toPromise().then(
-            (data) => {
-              if (data.statusCode == 0) {
-                if (data.data.trangThai == Utils.TT_BC_7) {
-                  const object = data.data.lstCtiets[0];
-                  const { id, ...rest } = object;
-                  this.response.lstCtiets = [];
-                  this.response.lstCtiets.push({
-                    ...rest,
-                    id: uuid.v4() + 'FE',
-                    maDvi: this.userInfo?.MA_DVI,
-                    tenDvi: this.userInfo?.TEN_DVI,
-                    dnghiCapvonLuyKes: [],
-                  })
-                }
-              }
-            })
-        }
-        // else {
-        // await this.checkRequest();
+        //   await this.capVonNguonChiService.timKiemDeNghi(request).toPromise().then(
+        //     (data) => {
+        //       if (data.statusCode == 0) {
+        //         if (data.data.content?.length > 0) {
+        //           if (data.data.content[0].trangThai == Utils.TT_BC_7) {
+        //             this.idCallChitietCapVon = data.data.content[0].id
+        //           }
+        //         }
+        //       } else {
+        //         this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+        //         this.response.loaiDnghi = null;
+        //       }
+        //     },
+        //     (err) => {
+        //       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        //       this.response.loaiDnghi = null;
+        //     }
+        //   );
+        //   await this.capVonNguonChiService.ctietDeNghi(this.idCallChitietCapVon).toPromise().then(
+        //     (data) => {
+        //       if (data.statusCode == 0) {
+        //         if (data.data.trangThai == Utils.TT_BC_7) {
+        //           const object = data.data.lstCtiets[0];
+        //           const { id, ...rest } = object;
+        //           this.response.lstCtiets = [];
+        //           this.response.lstCtiets.push({
+        //             ...rest,
+        //             id: uuid.v4() + 'FE',
+        //             maDvi: this.userInfo?.MA_DVI,
+        //             tenDvi: this.userInfo?.TEN_DVI,
+        //             dnghiCapvonLuyKes: [],
+        //           })
+        //         }
+        //       }
+        //     })
         // }
       }
       await this.getMaDnghi();
     }
-    // else {
-    //them lan moi cho de nghi
-    //   await this.capVonNguonChiService.ctietDeNghi(this.idRequest).toPromise().then(
-    //     async (data) => {
-    //       if (data.statusCode == 0) {
-    //         this.response = data.data;
-    //         this.response.trangThai = Utils.TT_BC_1;
-    //       } else {
-    //         this.notification.error(MESSAGE.ERROR, data?.msg);
-    //       }
-    //     },
-    //     (err) => {
-    //       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    //     },
-    //   );
-    //   if (this.response.loaiDnghi != Utils.MUA_VTU) {
-    //     if ((this.response.canCuVeGia == Utils.HD_TRUNG_THAU && this.userService.isTongCuc()) ||
-    //       (this.response.canCuVeGia == Utils.QD_DON_GIA && !this.userService.isChiCuc())) {
-    //       this.callSynthetic();
-    //     }
-    //   }
-    //   this.response.soLan += 1;
 
-    // }
   }
 
   // tao moi de nghi cap von cuc khu vuc
@@ -452,9 +426,11 @@ export class DialogTaoDeNghiCapVonComponent implements OnInit {
     await this.capVonNguonChiService.timKiemDeNghi(request).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
+          this.isContractExist = true;
+          console.log(data.data.content?.length)
           if (data.data.content?.length > 0) {
             this.idCallChitiet = data.data.content[0].id;
-            this.isContractExist = true;
+            console.log(this.idCallChitiet)
           }
         } else {
           this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
