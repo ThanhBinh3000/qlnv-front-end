@@ -34,6 +34,7 @@ export class NopTienThuaComponent implements OnInit {
     title: string;
     maDviTien: string = '1';
     scrollX: string;
+    capDvi: number;
     //trang thai cac nut
     status: BtnStatus = new BtnStatus();
     isParent: boolean = false;
@@ -135,6 +136,13 @@ export class NopTienThuaComponent implements OnInit {
             this.baoCao = this.dataInfo?.baoCao;
             this.baoCao.trangThaiDvct = Status.TT_01;
             this.lstCtiets = this.baoCao.lstCtiets;
+        }
+        this.capDvi = parseInt(this.userInfo.CAP_DVI, 10);
+        if (this.userInfo.MA_DVI == this.baoCao.maDviCha) {
+            this.capDvi += 1;
+        }
+        if (!this.baoCao.trangThaiDvct) {
+            this.baoCao.trangThaiDvct = Status.TT_01;
         }
         this.updateEditCache();
         this.getStatusButton();

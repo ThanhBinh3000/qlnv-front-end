@@ -14,7 +14,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { displayNumber } from 'src/app/Utility/func';
-import { CVNC, DON_VI_TIEN, LOAI_DE_NGHI, Utils } from 'src/app/Utility/utils';
+import { CVNC, DON_VI_TIEN, LOAI_DE_NGHI, Operator, Utils } from 'src/app/Utility/utils';
 import { BaoCao, ItemContract, TRANG_THAI } from '../../de-nghi-cap-von.constant';
 
 @Component({
@@ -27,6 +27,7 @@ import { BaoCao, ItemContract, TRANG_THAI } from '../../de-nghi-cap-von.constant
 export class HopDongMuaVatTuComponent implements OnInit {
     @Input() data;
     @Output() dataChange = new EventEmitter();
+    Op = new Operator('1');
     //thong tin dang nhap
     userInfo: any;
     //thong tin chung bao cao
@@ -364,7 +365,7 @@ export class HopDongMuaVatTuComponent implements OnInit {
         }
 
         // replace nhung ban ghi dc them moi id thanh null
-        baoCaoTemp.dnghiCvHopDongCtiets.forEach(item => {
+        baoCaoTemp.lstCtiets.forEach(item => {
             if (item.id?.length == 38) {
                 item.id = null;
             }
@@ -404,7 +405,7 @@ export class HopDongMuaVatTuComponent implements OnInit {
     }
 
     updateEditCache(): void {
-        this.baoCao.dnghiCvHopDongCtiets.forEach(item => {
+        this.baoCao.lstCtiets.forEach(item => {
             this.editCache[item.id] = {
                 edit: false,
                 data: { ...item }
@@ -418,30 +419,32 @@ export class HopDongMuaVatTuComponent implements OnInit {
 
     // huy thay doi
     cancelEdit(id: string): void {
-        const index = this.baoCao.dnghiCvHopDongCtiets.findIndex(item => item.id === id);
+        const index = this.baoCao.lstCtiets.findIndex(item => item.id === id);
         // lay vi tri hang minh sua
         this.editCache[id] = {
-            data: { ...this.baoCao.dnghiCvHopDongCtiets[index] },
+            data: { ...this.baoCao.lstCtiets[index] },
             edit: false
         };
     }
 
     // luu thay doi
     saveEdit(id: string): void {
-        const index = this.baoCao.dnghiCvHopDongCtiets.findIndex(item => item.id === id); // lay vi tri hang minh sua
-        Object.assign(this.baoCao.dnghiCvHopDongCtiets[index], this.editCache[id].data); // set lai data cua lstCtietBcao[index] = this.editCache[id].data
+        const index = this.baoCao.lstCtiets.findIndex(item => item.id === id); // lay vi tri hang minh sua
+        Object.assign(this.baoCao.lstCtiets[index], this.editCache[id].data); // set lai data cua lstCtietBcao[index] = this.editCache[id].data
         this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
     }
 
     sortReport() {
-        const lstCtietBcao = this.baoCao.dnghiCvHopDongCtiets;
-        const lstParent = this.baoCao.dnghiCvHopDongCtiets.filter(e => e.isParent);
-        this.baoCao.dnghiCvHopDongCtiets = [];
+        const lstCtietBcao = this.baoCao.lstCtiets;
+        const lstParent = this.baoCao.lstCtiets.filter(e => e.isParent);
+        this.baoCao.lstCtiets = [];
         lstParent.forEach(item => {
-            this.baoCao.dnghiCvHopDongCtiets.push(item);
-            this.baoCao.dnghiCvHopDongCtiets = this.baoCao.dnghiCvHopDongCtiets.concat(lstCtietBcao.filter(e => e.tenKhachHang == item.tenKhachHang && !e.isParent));
+            this.baoCao.lstCtiets.push(item);
+            this.baoCao.lstCtiets = this.baoCao.lstCtiets.concat(lstCtietBcao.filter(e => e.tenKhachHang == item.tenKhachHang && !e.isParent));
         })
     }
+
+    changeModel(id: string) { }
 
     showDialogCopy() {
         // const obj = {

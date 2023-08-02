@@ -16,7 +16,7 @@ import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { displayNumber, mulNumber, sumNumber } from 'src/app/Utility/func';
 import { AMOUNT, BOX_NUMBER_WIDTH, CAN_CU_GIA, CVNC, DON_VI_TIEN, LOAI_DE_NGHI, Operator, QUATITY, Roles, Table, Utils } from 'src/app/Utility/utils';
-import { BaoCao, ItemContract, Times, TRANG_THAI } from '../../../de-nghi-cap-von.constant';
+import { BaoCao, ItemContract, Report, Times, TRANG_THAI } from '../../../de-nghi-cap-von.constant';
 import * as XLSX from 'xlsx';
 import { BtnStatus } from '../../../de-nghi-cap-von.class';
 
@@ -33,17 +33,19 @@ export class CapVonComponent implements OnInit {
   //thong tin dang nhap
   userInfo: any;
   //thong tin chung bao cao
-  baoCao: BaoCao = new BaoCao();
+  baoCao: Report = new Report();
+  lstCtiet: ItemContract[] = [];
   total: ItemContract = new ItemContract();
+
   //danh muc
-  donVis: any[] = [];
+  // donVis: any[] = [];
   trangThais: any[] = TRANG_THAI;
   loaiDns: any[] = LOAI_DE_NGHI;
   canCuGias: any[] = CAN_CU_GIA;
-  dviTinhs: any[] = [];
-  vatTus: any[] = [];
-  dviTiens: any[] = DON_VI_TIEN;
-  capVons: ItemContract[] = [];
+  // dviTinhs: any[] = [];
+  // vatTus: any[] = [];
+  // dviTiens: any[] = DON_VI_TIEN;
+  // capVons: ItemContract[] = [];
   amount = AMOUNT;
   quatity = QUATITY;
   scrollX: string;
@@ -167,10 +169,17 @@ export class CapVonComponent implements OnInit {
 
     } else {
       this.baoCao = this.data?.baoCao;
+      this.setLevel()
     }
     this.getStatusButton();
     this.getTotal();
     this.updateEditCache();
+  }
+
+  setLevel() {
+    this.baoCao.lstCtiets.forEach(item => {
+      item.level = item.stt.split('.').length - 2;
+    })
   }
 
   //check role cho các nut trinh duyet
@@ -181,6 +190,7 @@ export class CapVonComponent implements OnInit {
     this.status.submit = Utils.statusApprove.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.CVNC.APPROVE_DN_MLT) && checkChirld && !(!this.baoCao.id);
     this.status.approve = this.baoCao.trangThai == Utils.TT_BC_2 && this.userService.isAccessPermisson(Roles.CVNC.PHE_DUYET_DN_MLT) && checkChirld;
     this.status.copy = Utils.statusCopy.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.CVNC.COPY_DN_MLT) && checkChirld;
+    this.status.pass = this.baoCao.trangThai == Utils.TT_BC_2 && this.userService.isAccessPermisson(Roles.CVNC.DUYET_OR_TU_CHOI);
     if (this.status.general) {
       this.scrollX = (550 + 12 * BOX_NUMBER_WIDTH).toString() + 'px';
     } else {
@@ -272,7 +282,8 @@ export class CapVonComponent implements OnInit {
           this.listFile = [];
           this.getStatusButton();
           this.getTotal();
-          this.updateEditCache()
+          this.updateEditCache();
+          this.setLevel();
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
@@ -360,6 +371,7 @@ export class CapVonComponent implements OnInit {
     }
     const baoCaoTemp = JSON.parse(JSON.stringify(this.baoCao));
     baoCaoTemp.maLoai = '0'
+    baoCaoTemp.maDviTien = "1"
 
     if (!baoCaoTemp.fileDinhKems) {
       baoCaoTemp.fileDinhKems = [];
@@ -506,6 +518,13 @@ export class CapVonComponent implements OnInit {
         this.total.soConDuocCap = Operator.sum([this.total.soConDuocCap, item.soConDuocCap]);
       }
     })
+  }
+
+  getIndex(data: ItemContract) {
+    if (data.level == 0) {
+      return null;
+    }
+    return Table.subIndex(data.stt);
   }
 
   exportToExcel() {

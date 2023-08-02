@@ -356,14 +356,17 @@ export class BieuMau17Component implements OnInit {
 
     exportToExcel() {
         const header = [
-            { t: 0, b: 0, l: 0, r: 6, val: null },
-            { t: 0, b: 0, l: 0, r: 0, val: 'STT' },
-            { t: 0, b: 0, l: 1, r: 1, val: 'Lĩnh vực / Nội dung chi' },
-            { t: 0, b: 0, l: 2, r: 2, val: 'Thực hiện năm hiện hành ' + (this.namBcao - 1).toString() },
-            { t: 0, b: 0, l: 3, r: 3, val: 'Nhu cầu năm dự toán ' + this.namBcao.toString() },
-            { t: 0, b: 0, l: 4, r: 4, val: 'Nhu cầu năm ' + (this.namBcao + 1).toString() },
-            { t: 0, b: 0, l: 5, r: 5, val: 'Nhu cầu năm ' + (this.namBcao + 2).toString() },
-            { t: 0, b: 0, l: 6, r: 6, val: 'Ghi chú' },
+            { t: 0, b: 4, l: 0, r: 6, val: null },
+            { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
+            { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
+            { t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
+            { t: 4, b: 4, l: 0, r: 0, val: 'STT' },
+            { t: 4, b: 4, l: 1, r: 1, val: 'Lĩnh vực / Nội dung chi' },
+            { t: 4, b: 4, l: 2, r: 2, val: 'Thực hiện năm hiện hành ' + (this.namBcao - 1).toString() },
+            { t: 4, b: 4, l: 3, r: 3, val: 'Nhu cầu năm dự toán ' + this.namBcao.toString() },
+            { t: 4, b: 4, l: 4, r: 4, val: 'Nhu cầu năm ' + (this.namBcao + 1).toString() },
+            { t: 4, b: 4, l: 5, r: 5, val: 'Nhu cầu năm ' + (this.namBcao + 2).toString() },
+            { t: 4, b: 4, l: 6, r: 6, val: 'Ghi chú' },
         ]
         const fieldOrder = ['stt', 'tenLvucNdChi', 'thNamHienHanhN1', 'ncauNamDtoanN', 'ncauNamN1', 'ncauNamN2', 'ghiChu']
         const filterData = this.lstCtietBcao.map(item => {

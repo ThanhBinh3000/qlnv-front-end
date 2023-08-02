@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import * as dayjs from 'dayjs';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { BAO_CAO_DOT, Status } from 'src/app/Utility/utils';
+import { Status } from 'src/app/Utility/utils';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { BaoCaoThucHienVonPhiService } from 'src/app/services/quan-ly-von-phi/baoCaoThucHienVonPhi.service';
@@ -48,7 +48,7 @@ export class DialogTaoMoiComponent implements OnInit {
 
     async checkReport() {
         if (!this.response.namBcao || !this.response.maLoaiBcao ||
-            (!this.response.dotBcao && this.response.maLoaiBcao == BAO_CAO_DOT)) {
+            (!this.response.dotBcao && this.response.maLoaiBcao == Vp.BC_DOT)) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
             return;
         }
@@ -188,7 +188,7 @@ export class DialogTaoMoiComponent implements OnInit {
 
     async handleOk() {
         if (!this.response.namBcao || !this.response.maLoaiBcao ||
-            (!this.response.dotBcao && this.response.maLoaiBcao == BAO_CAO_DOT)) {
+            (!this.response.dotBcao && this.response.maLoaiBcao == Vp.BC_DOT)) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
             return;
         }

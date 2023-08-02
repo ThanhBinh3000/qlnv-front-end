@@ -61,6 +61,7 @@ export class DialogTaoMoiComponent implements OnInit {
         this.request.namDnghi = this.response.namDnghi;
         this.request.canCuVeGia = this.response.canCuVeGia;
         this.request.loaiDnghi = this.response.loaiDnghi;
+        this.request.trangThai = null;
         this.spinner.show();
         await this.capVonMuaBanTtthService.timKiemVonMuaBan(this.request.request()).toPromise().then(
             (data) => {
@@ -69,7 +70,8 @@ export class DialogTaoMoiComponent implements OnInit {
                     if (data.data.content?.length > 0) {
                         lstBcao = data.data.content;
                         lstBcao.sort((a, b) => b.dot - a.dot);
-                        if ([Status.TT_02, Status.TT_04, Status.TT_07, Status.TT_01].includes(lstBcao[0].trangThai)) {
+                        if ([Status.TT_02, Status.TT_04, Status.TT_01].includes(lstBcao[0].trangThai) ||
+                            (Status.TT_07 == lstBcao[0].trangThai && !this.userService.isTongCuc())) {
                             this.notification.warning(MESSAGE.WARNING, 'Trạng thái của đợt trước không cho phép tạo mới!')
                             this.response.loaiDnghi = null;
                             return;
@@ -77,6 +79,8 @@ export class DialogTaoMoiComponent implements OnInit {
                             const index = lstBcao.findIndex(e => !Status.check('reject', e.trangThai));
                             if (index != -1) {
                                 this.initReport(lstBcao?.length + 1, lstBcao[index].id)
+                            } else {
+                                this.initReport(lstBcao?.length + 1);
                             }
                         }
                     } else {

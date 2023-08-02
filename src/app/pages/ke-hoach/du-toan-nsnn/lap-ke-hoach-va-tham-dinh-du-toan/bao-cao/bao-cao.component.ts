@@ -38,6 +38,7 @@ import { BieuMau14Component } from './thong-tu-69/bieu-mau-14/bieu-mau-14.compon
 import { BieuMau16Component } from './thong-tu-69/bieu-mau-16/bieu-mau-16.component';
 import { BieuMau17Component } from './thong-tu-69/bieu-mau-17/bieu-mau-17.component';
 import { BieuMau18Component } from './thong-tu-69/bieu-mau-18/bieu-mau-18.component';
+import { DialogCongVanComponent } from 'src/app/components/dialog/dialog-cong-van/dialog-cong-van.component';
 
 @Component({
     selector: 'app-bao-cao',
@@ -78,11 +79,26 @@ export class BaoCaoComponent implements OnInit {
 
     // before uploaf file
     beforeUploadCV = (file: NzUploadFile): boolean => {
+        const modalAppendix = this.modal.create({
+            nzTitle: 'Thêm mới công văn',
+            nzContent: DialogCongVanComponent,
+            nzBodyStyle: { overflowY: 'auto', maxHeight: 'calc(100vh - 200px)' },
+            nzMaskClosable: false,
+            nzWidth: '60%',
+            nzFooter: null,
+            nzComponentParams: {
+            },
+        });
+        modalAppendix.afterClose.toPromise().then(async (res) => {
+            if (res) {
+                this.baoCao.ngayCongVan = res.ngayCongVan;
+                this.baoCao.congVan = {
+                    ...new Doc(),
+                    fileName: res.soCongVan,
+                };
+            }
+        });
         this.fileDetail = file;
-        this.baoCao.congVan = {
-            ...new Doc(),
-            fileName: file.name,
-        };
         return false;
     };
 
@@ -396,11 +412,15 @@ export class BaoCaoComponent implements OnInit {
                 this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
                 return;
             } else {
-                baoCaoTemp.congVan = await this.fileManip.uploadFile(file, this.path);
+                baoCaoTemp.congVan = {
+                    ...await this.fileManip.uploadFile(file, this.path),
+                    fileName: this.baoCao.congVan.fileName,
+                }
             }
+            this.fileDetail = null;
         }
 
-        if (!baoCaoTemp.congVan) {
+        if (!baoCaoTemp.congVan.fileUrl) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
             return;
         }
@@ -554,6 +574,9 @@ export class BaoCaoComponent implements OnInit {
             capDvi: this.userInfo.capDvi,
             tenDvi: this.userInfo.TEN_DVI,
             namBcao: this.baoCao.namBcao,
+            tenPl: bieuMau.tenPl,
+            tieuDe: bieuMau.tenDm,
+            congVan: Utils.getDocName(this.baoCao.congVan.fileName, this.baoCao.ngayCongVan, this.baoCao.tenDvi),
             path: this.path,
             status: new BtnStatus(),
             isSynthetic: isSynthetic,
