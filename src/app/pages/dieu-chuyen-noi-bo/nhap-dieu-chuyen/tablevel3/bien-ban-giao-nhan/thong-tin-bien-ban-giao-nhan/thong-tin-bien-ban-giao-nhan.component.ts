@@ -118,7 +118,7 @@ export class ThongTinBienBanGiaoNhanComponent extends Base2Component implements 
       canBo: [],
       lanhDao: [],
       ghiChu: [],
-
+      lyDoTuChoi: [],
       hoVaTen: [],
       chucVu: [],
       dvi: [],

@@ -95,7 +95,7 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
       tenKeToanTruong: [],
       tenLanhDaoChiCuc: [],
       ghiChu: [],
-
+      lyDoTuChoi: [],
     });
   }
 

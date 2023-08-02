@@ -106,7 +106,8 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
       dcnbPhieuKnChatLuongDtl: [new Array<any>(),],
       nhanXetKetLuan: [],
       type: ["01"],
-      loaiDc: []
+      loaiDc: [],
+      lyDoTuChoi: [],
     }
     );
   }
