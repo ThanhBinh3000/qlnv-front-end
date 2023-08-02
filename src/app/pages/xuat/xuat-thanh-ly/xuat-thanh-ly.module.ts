@@ -57,13 +57,6 @@ import {
 import {
   ChiTietQuyetDinhGiaoNhiemVuThanhLyComponent
 } from './to-chuc-thuc-hien-thanh-ly/quyet-dinh-giao-nhiem-vu-thanh-ly/chi-tiet-quyet-dinh-giao-nhiem-vu-thanh-ly/chi-tiet-quyet-dinh-giao-nhiem-vu-thanh-ly.component';
-import {XuatKhoThanhLyComponent} from './xuat-kho-thanh-ly/xuat-kho-thanh-ly.component';
-import {
-  PhieuXuatKhoThanhLyComponent
-} from './xuat-kho-thanh-ly/phieu-xuat-kho-thanh-ly/phieu-xuat-kho-thanh-ly.component';
-import {
-  ChiTietPhieuXuatKhoThanhLyComponent
-} from './xuat-kho-thanh-ly/phieu-xuat-kho-thanh-ly/chi-tiet-phieu-xuat-kho-thanh-ly/chi-tiet-phieu-xuat-kho-thanh-ly.component';
 
 @NgModule({
   declarations: [
@@ -93,9 +86,6 @@ import {
     ThongTinHopDongThanhLyComponent,
     QuyetDinhGiaoNhiemVuThanhLyComponent,
     ChiTietQuyetDinhGiaoNhiemVuThanhLyComponent,
-    XuatKhoThanhLyComponent,
-    PhieuXuatKhoThanhLyComponent,
-    ChiTietPhieuXuatKhoThanhLyComponent,
   ],
   imports: [
     CommonModule,

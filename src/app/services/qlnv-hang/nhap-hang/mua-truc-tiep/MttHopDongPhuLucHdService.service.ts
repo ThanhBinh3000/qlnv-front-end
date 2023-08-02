@@ -20,4 +20,9 @@ export class MttHopDongPhuLucHdService extends BaseService {
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
 
+  searchCuc(body) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/tra-cuu/hop-dong`;
+    return this._httpClient.post<OldResponseData>(url, body).toPromise();
+  }
+
 }

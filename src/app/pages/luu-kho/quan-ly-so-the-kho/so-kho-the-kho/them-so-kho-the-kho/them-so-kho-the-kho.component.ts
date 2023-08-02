@@ -177,7 +177,6 @@ export class ThemSoKhoTheKhoComponent extends Base2Component implements OnInit {
       this.formData.controls["maNhaKho"].setValidators([Validators.required]);
       this.formData.controls["maNganKho"].setValidators([Validators.required]);
       this.formData.controls["loaiVthh"].setValidators([Validators.required]);
-      this.formData.controls["cloaiVthh"].setValidators([Validators.required]);
       this.formData.controls["ten"].setValidators([Validators.required]);
       this.formData.controls["ngayMo"].setValidators([Validators.required]);
     } else {
@@ -186,7 +185,6 @@ export class ThemSoKhoTheKhoComponent extends Base2Component implements OnInit {
       this.formData.controls["maNhaKho"].setValidators([Validators.required]);
       this.formData.controls["maNganKho"].setValidators([Validators.required]);
       this.formData.controls["loaiVthh"].setValidators([Validators.required]);
-      this.formData.controls["cloaiVthh"].setValidators([Validators.required]);
       this.formData.controls["ten"].setValidators([Validators.required]);
       this.formData.controls["ngayTaoTu"].setValidators([Validators.required]);
       this.formData.controls["ngayTaoDen"].setValidators([Validators.required]);

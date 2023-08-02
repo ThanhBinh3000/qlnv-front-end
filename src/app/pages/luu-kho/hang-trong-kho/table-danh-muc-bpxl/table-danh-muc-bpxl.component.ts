@@ -59,10 +59,10 @@ export class TableDanhMucBpxlComponent extends Base3Component implements OnInit 
       case '/luu-kho/hang-trong-kho/tieu-huy':
         typeBpxl = '2';
         break;
-      case '/luu-kho/hang-trong-kho/hong-hoc-giam-cl':
+      case '/luu-kho/hang-trong-kho/hong-hoc-bao-hanh':
         typeBpxl = '3';
         break;
-      case '/luu-kho/hang-trong-kho/hong-hoc-bao-hanh':
+      case '/luu-kho/hang-trong-kho/hong-hoc-giam-cl':
         typeBpxl = '4';
         break;
       case '/luu-kho/hang-trong-kho/hong-hoc-sua-chua':

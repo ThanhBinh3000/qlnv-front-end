@@ -10,16 +10,16 @@
         </div>
       </div>
       <div class="btn-group">
-        <button type="button" class="btn btn-sub" (click)="quayLai()">
+        <button type="button" class="btn btn-sub ml-2" (click)="quayLai()">
           <i class="fa fa-arrow-left"></i>
           <span>Quay lại</span>
         </button>
-        <button *ngIf="formData.value.trangThai == '00' && idInput > 0 && this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_VT_GCT_QDTC_BANHANH')" type="button" class="btn btn-sub"
+        <button *ngIf="formData.value.trangThai == '00' && this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_VT_GCT_QDTC_BANHANH')" type="button" class="btn btn-sub ml-2"
                 (click)="banHanh()">
           <i class="icon htvbdh_chuyenvanthu"></i>
           <span>Ban hành</span>
         </button>
-        <button *ngIf="formData.value.trangThai == '00' && this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_VT_GCT_QDTC_THEM')" type="button" class="btn btn-sub xanh" (click)="save()">
+        <button *ngIf="formData.value.trangThai == '00' && this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_VT_GCT_QDTC_THEM')" type="button" class="btn btn-sub xanh ml-2" (click)="save()">
           <i class="icon htvbdh_luu"></i>
           <span>Lưu</span>
         </button>
@@ -177,10 +177,10 @@
       <td>{{ data.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
       <td>{{ data.donViTinh }}</td>
       <td>{{ data.vat }}</td>
-      <td>{{ data.giaDn | number : '1.0-1' : 'vi_VN' }}</td>
-      <td>{{ data.giaDnVat | number : '1.0-1' : 'vi_VN' }}</td>
-      <td>{{ data.giaQdBtc | number : '1.0-1' : 'vi_VN' }}</td>
-      <td>{{ data.giaQdVat | number : '1.0-1' : 'vi_VN' }}</td>
+      <td class="text-right">{{ data.giaDn | number : '1.0-1' : 'vi_VN' }}</td>
+      <td class="text-right">{{ data.giaDnVat | number : '1.0-1' : 'vi_VN' }}</td>
+      <td class="text-right">{{ data.giaQdBtc | number : '1.0-1' : 'vi_VN' }}</td>
+      <td class="text-right">{{ data.giaQdBtcVat | number : '1.0-1' : 'vi_VN' }}</td>
       <td class="text-right" *ngIf="(formData.value.loaiDeXuat == '00')">
         <nz-input-number [nzDisabled]="isView" [nzSize]="'small'" [(ngModel)]="data.giaQdTcdt"
                          [nzMin]="formData.value.loaiGia == 'LG04' ? (data.giaQdBtc ? data.giaQdBtc : 0) : 0"
