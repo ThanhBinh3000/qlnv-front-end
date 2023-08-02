@@ -125,7 +125,7 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
       nhanXetKetLuan: [],
       lyDoTuChoi: [],
       type: ["01"],
-      loaiDc: [this.loaiDc]
+      loaiDc: [this.loaiDc],
     }
     );
   }
