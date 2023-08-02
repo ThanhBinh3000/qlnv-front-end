@@ -42,7 +42,7 @@ export class TableHhLkComponent extends Base3Component implements OnInit {
   async ngOnInit() {
     await this.spinner.show();
     await Promise.all([
-      this.search(),
+      // this.search(),
     ])
     this.buildTableView()
     await this.spinner.hide();

@@ -104,7 +104,7 @@ export class ThongTinBienBanNhapDayDuComponent extends Base2Component implements
       ngayBdNhap: [],
       ngayKtNhap: [],
       soLuongQdDcCuc: [],
-
+      lyDoTuChoi: [],
       ghiChu: [],
       ktvBaoQuan: [],
       idKyThuatVien: [],

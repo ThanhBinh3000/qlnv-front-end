@@ -101,7 +101,7 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
       tenCloaiVthh: [],
       donViTinh: [],
       dcnbbangkenhapvtdtl: [new Array<any>(),],
-
+      lyDoTuChoi: [],
       soSerial: [],
       soBaoBi: [],
     });

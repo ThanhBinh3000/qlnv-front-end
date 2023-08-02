@@ -19,8 +19,8 @@ import {
   QdGiaoNvXuatHangTrongThoiGianBaoHanhService
 } from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvtbaohanh/QdGiaoNvXuatHangTrongThoiGianBaoHanh.service";
 import {
-  PhieuXuatKhoVtTbTrongThoiGianBaoHanhService
-} from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvtbaohanh/PhieuXuatKhoVtTbTrongThoiGianBaoHanh.service";
+  PhieuXuatNhapKhoVtTbTrongThoiGianBaoHanhService
+} from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvtbaohanh/PhieuXuatNhapKhoVtTbTrongThoiGianBaoHanh.service";
 
 @Component({
   selector: 'app-thong-tin-xuat-kho-vt-tb-trong-thoi-gian-bao-hanh',
@@ -52,7 +52,7 @@ export class ThongTinXuatKhoVtTbTrongThoiGianBaoHanhComponent extends Base2Compo
     modal: NzModalService,
     private danhMucService: DanhMucService,
     private qdGiaoNvXuatHangTrongThoiGianBaoHanhService: QdGiaoNvXuatHangTrongThoiGianBaoHanhService,
-    private phieuXuatKhoVtTbTrongThoiGianBaoHanhService: PhieuXuatKhoVtTbTrongThoiGianBaoHanhService,
+    private phieuXuatKhoVtTbTrongThoiGianBaoHanhService: PhieuXuatNhapKhoVtTbTrongThoiGianBaoHanhService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, phieuXuatKhoVtTbTrongThoiGianBaoHanhService);
 
@@ -106,7 +106,8 @@ export class ThongTinXuatKhoVtTbTrongThoiGianBaoHanhComponent extends Base2Compo
         tenNganKho: ['', [Validators.required]],
         tenLoKho: [],
         fileDinhKems: [new Array<FileDinhKem>()],
-
+        mauBiHuy: [],
+        loaiPhieu: ['XUAT'],
       }
     );
     this.maPhieu = 'PXK-' + this.userInfo.DON_VI.tenVietTat;
