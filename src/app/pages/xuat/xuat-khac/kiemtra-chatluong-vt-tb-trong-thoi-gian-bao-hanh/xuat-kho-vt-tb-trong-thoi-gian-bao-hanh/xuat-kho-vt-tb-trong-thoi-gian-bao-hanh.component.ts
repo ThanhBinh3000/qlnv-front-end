@@ -12,8 +12,8 @@ import {StorageService} from "../../../../../services/storage.service";
 import {CHUC_NANG} from "../../../../../constants/status";
 import {UserLogin} from "../../../../../models/userlogin";
 import {
-  PhieuXuatKhoVtTbTrongThoiGianBaoHanhService
-} from "../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvtbaohanh/PhieuXuatKhoVtTbTrongThoiGianBaoHanh.service";
+  PhieuXuatNhapKhoVtTbTrongThoiGianBaoHanhService
+} from "../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvtbaohanh/PhieuXuatNhapKhoVtTbTrongThoiGianBaoHanh.service";
 
 
 @Component({
@@ -36,7 +36,7 @@ export class XuatKhoVtTbTrongThoiGianBaoHanhComponent extends Base2Component imp
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private phieuXuatKhoVtTbTrongThoiGianBaoHanhService: PhieuXuatKhoVtTbTrongThoiGianBaoHanhService,
+    private phieuXuatKhoVtTbTrongThoiGianBaoHanhService: PhieuXuatNhapKhoVtTbTrongThoiGianBaoHanhService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, phieuXuatKhoVtTbTrongThoiGianBaoHanhService);
     this.formData = this.fb.group({

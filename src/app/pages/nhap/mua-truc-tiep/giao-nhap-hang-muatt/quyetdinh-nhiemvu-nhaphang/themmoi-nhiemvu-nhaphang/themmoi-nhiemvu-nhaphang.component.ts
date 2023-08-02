@@ -318,7 +318,7 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
           console.log(data, "alo123");
           this.formData.patchValue({
             soQdPdKh: data.soQd,
-            idQdPdKh: data.id,
+            idQdPdKh: data.idQdHdr,
             loaiVthh: data.loaiVthh,
             cloaiVthh: data.cloaiVthh,
             tenLoaiVthh: data.tenLoaiVthh,

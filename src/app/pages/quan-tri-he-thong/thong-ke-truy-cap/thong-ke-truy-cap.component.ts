@@ -15,13 +15,13 @@ import {
 } from "ng-apexcharts";
 import {MESSAGE} from "../../../constants/message";
 
-export type ChartOptions = {
-  series: ApexAxisChartSeries;
-  chart: ApexChart;
-  xaxis: ApexXAxis;
-  title: ApexTitleSubtitle;
-  plotOptions: ApexPlotOptions;
-};
+// export type ChartOptions = {
+//   series: ApexAxisChartSeries;
+//   chart: ApexChart;
+//   xaxis: ApexXAxis;
+//   title: ApexTitleSubtitle;
+//   plotOptions: ApexPlotOptions;
+// };
 
 @Component({
   selector: 'app-thong-ke-truy-cap',
@@ -38,9 +38,9 @@ export class ThongKeTruyCapComponent extends Base2Component implements OnInit {
     "ten": "Quản lý đăng nhập"
   }];
   pageSize: number = 100;
-  @ViewChild("chart") chart: ChartComponent;
-  chartOptions: Partial<ChartOptions>;
-  chartOptionsSystem: Partial<ChartOptions>;
+  // @ViewChild("chart") chart: ChartComponent;
+  // chartOptions: Partial<ChartOptions>;
+  // chartOptionsSystem: Partial<ChartOptions>;
   chartDateData: any[] = [];
   chartSystemData: any[] = [];
 
@@ -62,30 +62,30 @@ export class ThongKeTruyCapComponent extends Base2Component implements OnInit {
       tuNgay: [''],
       denNgay: [''],
     });
-    this.chartOptions = {
-      chart: {
-        height: 350,
-        type: "area"
-      }
-    };
-    this.chartOptionsSystem = {
-      chart: {
-        height: 350,
-        type: "bar"
-      }
-    };
+    // this.chartOptions = {
+    //   chart: {
+    //     height: 350,
+    //     type: "area"
+    //   }
+    // };
+    // this.chartOptionsSystem = {
+    //   chart: {
+    //     height: 350,
+    //     type: "bar"
+    //   }
+    // };
     this.search();
     this.filterTable = {};
   }
 
   async ngOnInit() {
-    this.loadDataChart();
+    // this.loadDataChart();
   }
 
   clearSearch() {
     this.formData.reset();
     this.search();
-    this.loadDataChart();
+    // this.loadDataChart();
   }
 
   filter() {
@@ -94,46 +94,46 @@ export class ThongKeTruyCapComponent extends Base2Component implements OnInit {
       this.formData.value.denNgay = this.formData.value.ngayHd[1];
     }
     this.search();
-    this.loadDataChart();
+    // this.loadDataChart();
   }
 
-  async loadDataChart() {
-    let res = await this.userActivityService.thongKeTruyCap(this.formData.value);
-    if (res.msg == MESSAGE.SUCCESS) {
-      let data = res.data;
-      this.chartOptions = {
-        chart: {
-          height: 350,
-          type: "area"
-        },
-        xaxis: {
-          categories: data.listSumDate.map(item => item.label)
-        }
-      };
-      this.chartOptionsSystem = {
-        chart: {
-          height: 350,
-          type: "bar"
-        },
-        plotOptions: {
-          bar: {
-            horizontal: true
-          }
-        },
-        xaxis: {
-          categories: data.listSumSystem.map(item => this.getTenHeThong(item.label))
-        }
-      };
-      this.chartDateData = [{
-        name: "Tổng số",
-        data: data.listSumDate.map(item => item.total)
-      }]
-      this.chartSystemData = [{
-        name: "Tổng số",
-        data: data.listSumSystem.map(item => item.total)
-      }]
-    }
-  }
+  // async loadDataChart() {
+  //   let res = await this.userActivityService.thongKeTruyCap(this.formData.value);
+  //   if (res.msg == MESSAGE.SUCCESS) {
+  //     let data = res.data;
+  //     this.chartOptions = {
+  //       chart: {
+  //         height: 350,
+  //         type: "area"
+  //       },
+  //       xaxis: {
+  //         categories: data.listSumDate.map(item => item.label)
+  //       }
+  //     };
+  //     this.chartOptionsSystem = {
+  //       chart: {
+  //         height: 350,
+  //         type: "bar"
+  //       },
+  //       plotOptions: {
+  //         bar: {
+  //           horizontal: true
+  //         }
+  //       },
+  //       xaxis: {
+  //         categories: data.listSumSystem.map(item => this.getTenHeThong(item.label))
+  //       }
+  //     };
+  //     this.chartDateData = [{
+  //       name: "Tổng số",
+  //       data: data.listSumDate.map(item => item.total)
+  //     }]
+  //     this.chartSystemData = [{
+  //       name: "Tổng số",
+  //       data: data.listSumSystem.map(item => item.total)
+  //     }]
+  //   }
+  // }
 
   getTenHeThong(system) {
     let heThong = this.listSystem.find(item => item.code == system);

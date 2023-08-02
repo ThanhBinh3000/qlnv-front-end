@@ -5,7 +5,7 @@
                 <i class="fa fa-arrow-left"></i>
                 <span>Quay lại</span>
             </button>
-            <button *ngIf="formData.value.trangThaiHd != STATUS.DA_HOAN_THANH && userService.isCuc() " type="button"
+            <button *ngIf="formData.value.trangThaiHd != STATUS.DA_HOAN_THANH && (userService.isCuc() || userService.isChiCuc()) " type="button"
                 class="btn btn-sub xanh-nhat" (click)="pheDuyet()">
                 <i class="icon htvbdh_checkfile2"></i>
                 <span>Hoàn thành thực hiện</span>
@@ -52,7 +52,7 @@
                                     </nz-form-control>
                                 </nz-form-item>
                             </div>
-                            <div nz-col nzSpan="24">
+                            <div nz-col nzSpan="24" *ngIf="!userService.isChiCuc()">
                                 <nz-form-item>
                                     <nz-form-label [nzNoColon]="true"> Số QĐ phê duyệt KQ mua trực tiếp </nz-form-label>
                                     <nz-form-control>
@@ -134,7 +134,7 @@
                                     </nz-form-control>
                                 </nz-form-item>
                             </div>
-                            <div nz-col nzSpan="24">
+                            <div nz-col nzSpan="24" *ngIf="!userService.isChiCuc()">
                                 <nz-form-item>
                                     <nz-form-label [nzNoColon]="true"> Số đơn vị chào giá được chọn </nz-form-label>
                                     <nz-form-control>
@@ -341,6 +341,6 @@
 </ng-container>
 <ng-template #tempHopDong>
     <app-themmoi-hopdong-phuluc [idKqMtt]="id" [id]="idHopDong" [loaiVthh]="loaiVthh"
-        (showListEvent)="redirectHopDong(false,null)">
+        (showListEvent)="redirectHopDong(false,idHopDong)">
     </app-themmoi-hopdong-phuluc>
 </ng-template>

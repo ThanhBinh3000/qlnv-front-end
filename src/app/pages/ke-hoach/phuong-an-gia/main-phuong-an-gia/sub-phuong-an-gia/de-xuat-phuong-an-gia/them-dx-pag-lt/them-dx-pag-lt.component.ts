@@ -212,6 +212,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
         trichYeu: data.trichYeu,
         trangThai: data.trangThai,
         cloaiVthh: data.cloaiVthh,
+        tenCloaiVthh: data.tenCloaiVthh,
         moTa: data.moTa,
         tchuanCluong: data.tchuanCluong,
         giaDeNghi: data.giaDeNghi,

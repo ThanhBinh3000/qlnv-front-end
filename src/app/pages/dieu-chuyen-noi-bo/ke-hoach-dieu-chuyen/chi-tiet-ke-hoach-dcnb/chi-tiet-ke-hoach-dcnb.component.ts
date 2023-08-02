@@ -769,7 +769,6 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
         let rs = chain(value)
           .groupBy("maDiemKho")
           .map((v, k) => {
-            let rssLoKho = [];
             let rss = chain(v)
               .groupBy("loKhoXuat")
               .map((vs, ks) => {
@@ -789,7 +788,7 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
                       return {
                         ...maLoKho,
                         idVirtual: maLoKho ? maLoKho.idVirtual ? maLoKho.idVirtual : uuid.v4() : uuid.v4(),
-                        childData: (kss != "null" && kss != null && kss != undefined && kss != "undefined"  )  ? rssss: []
+                        childData: (kss != "null" && kss != null && kss != undefined && kss != "undefined"  && kss != "" )  ? rssss: []
                       }
                     }
                   ).value().filter(it => it.maDiemKhoNhan != undefined);
@@ -823,7 +822,7 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
                 ...rowDiemKho,
                 idVirtual: rowDiemKho ? rowDiemKho.idVirtual ? rowDiemKho.idVirtual : uuid.v4() : uuid.v4(),
                 duToanKphi: duToanKphi,
-                childData: [...rss.filter(item => !!!item.coLoKho),...rssLoKho]
+                childData: rss
               }
             }
           ).value();
