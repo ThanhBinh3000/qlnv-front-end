@@ -60,38 +60,6 @@ export class BaoCaoComponent implements OnInit {
         return false;
     };
 
-    // customRequest = (file: NzUploadFile) => {
-    //     // Simulating an asynchronous upload request with a delay (you can replace this with your actual upload logic)
-    //     setTimeout(() => {
-    //         const modalAppendix = this.modal.create({
-    //             nzTitle: 'Thêm mới công văn',
-    //             nzContent: DialogCongVanComponent,
-    //             nzBodyStyle: { overflowY: 'auto', maxHeight: 'calc(100vh - 200px)' },
-    //             nzMaskClosable: false,
-    //             nzWidth: '60%',
-    //             nzFooter: null,
-    //             nzComponentParams: {
-    //             },
-    //         });
-    //         modalAppendix.afterClose.toPromise().then(async (res) => {
-    //             if (res) {
-    //                 this.baoCao.ngayCongVan = res.ngayCongVan;
-    //                 this.baoCao.congVan = {
-    //                     ...new Doc(),
-    //                     fileName: res.soCongVan,
-    //                 };
-    //                 const newFile = new Blob([file], { type: file.type });
-    //                 (newFile as any).lastModifiedDate = new Date();
-    //                 (newFile as any).name = newFileName;
-    //             }
-    //         });
-    //       const newFile: File = new File([file], newFileName, { type: file.type });
-
-    //       // Handle the uploaded file as needed (e.g., send it to the server)
-    //       this.handleUpload(newFile);
-    //     }, 1000);
-    //   };
-
     // before uploaf file
     beforeUploadCV = (file: NzUploadFile): boolean => {
         const modalAppendix = this.modal.create({
@@ -459,7 +427,7 @@ export class BaoCaoComponent implements OnInit {
             }
             this.fileDetail = null;
         }
-        if (!baoCaoTemp.congVan) {
+        if (!baoCaoTemp.congVan.fileUrl) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
             return;
         }

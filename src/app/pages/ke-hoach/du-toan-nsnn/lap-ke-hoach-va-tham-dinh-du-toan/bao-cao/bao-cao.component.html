@@ -66,10 +66,11 @@
                             <th>Ngày tạo</th>
                             <th>Người tạo</th>
                             <th>Số công văn</th>
+                            <th>Ngày công văn</th>
                             <th>Ngày trình duyệt</th>
-                            <th>Ngày duyệt<br>(Ngày trưởng bộ phận duyệt)</th>
-                            <th>Ngày phê duyệt<br>(Lãnh đạo đơn vị cấp dưới phê duyệt)</th>
-                            <th>Ngày đơn vị cấp trên trả kết quả</th>
+                            <th>Ngày duyệt</th>
+                            <th>Ngày phê duyệt</th>
+                            <th>Ngày tiếp nhận</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -90,6 +91,7 @@
                                     <span>{{baoCao.congVan?.fileName}}</span>
                                 </div>
                             </td>
+                            <td>{{ Utils.fmtDate(baoCao.ngayCongVan) }}</td>
                             <td>{{ Utils.fmtDate(baoCao.ngayTrinh) }}</td>
                             <td>{{ Utils.fmtDate(baoCao.ngayDuyet) }}</td>
                             <td>{{ Utils.fmtDate(baoCao.ngayPheDuyet) }}</td>

@@ -479,51 +479,51 @@ export class KhoComponent implements OnInit {
 
     exportToExcel() {
         const header = [
-            { t: 0, b: 2 + this.lstCtietBcao.length, l: 0, r: 15, val: null },
-            { t: 0, b: 2, l: 0, r: 0, val: 'STT' },
-            { t: 0, b: 2, l: 1, r: 1, val: 'Tên cục DTNNKV, chi cục DTNN' },
-            { t: 0, b: 2, l: 2, r: 2, val: 'Tên địa điểm, địa chỉ' },
-            { t: 0, b: 2, l: 3, r: 3, val: 'Tên nhà kho' },
-            { t: 0, b: 0, l: 4, r: 5, val: 'Khối tích kho (m3)' },
-            { t: 1, b: 2, l: 4, r: 4, val: 'Từ ' + this.khoiTich.toString() + ' m3 trở lên' },
-            { t: 1, b: 2, l: 5, r: 5, val: 'Dưới ' + this.khoiTich.toString() + ' m3' },
-            { t: 0, b: 0, l: 6, r: 8, val: 'Số lượng nhà kho' },
-            { t: 1, b: 2, l: 6, r: 6, val: 'Từ ' + this.khoiTich.toString() + ' m3 trở lên' },
-            { t: 1, b: 2, l: 7, r: 7, val: 'Dưới ' + this.khoiTich.toString() + ' m3' },
-            { t: 1, b: 2, l: 8, r: 8, val: 'Tổng' },
-            { t: 0, b: 0, l: 9, r: 15, val: 'Giá trị kho (VNĐ)' },
-            { t: 1, b: 1, l: 9, r: 11, val: 'Từ ' + this.khoiTich.toString() + ' m3' },
-            { t: 2, b: 2, l: 9, r: 9, val: 'Kho lấy theo giá trị còn lại' },
-            { t: 2, b: 2, l: 10, r: 10, val: 'Kho hết khấu hao' },
-            { t: 2, b: 2, l: 11, r: 11, val: 'Tổng giá trị kho từ 5000m3' },
-            { t: 1, b: 1, l: 12, r: 14, val: 'Dưới ' + this.khoiTich.toString() + ' m3' },
-            { t: 2, b: 2, l: 12, r: 12, val: 'Kho lấy theo giá trị còn lại' },
-            { t: 2, b: 2, l: 13, r: 13, val: 'Kho hết khấu hao' },
-            { t: 2, b: 2, l: 14, r: 14, val: 'Tổng giá trị kho dưới 5000m3' },
-            { t: 1, b: 2, l: 15, r: 15, val: 'Tổng' },
+            { t: 0, b: 6 + this.lstCtietBcao.length, l: 0, r: 15, val: null },
+            { t: 4, b: 6, l: 0, r: 0, val: 'STT' },
+            { t: 4, b: 6, l: 1, r: 1, val: 'Tên cục DTNNKV, chi cục DTNN' },
+            { t: 4, b: 6, l: 2, r: 2, val: 'Tên địa điểm, địa chỉ' },
+            { t: 4, b: 6, l: 3, r: 3, val: 'Tên nhà kho' },
+            { t: 4, b: 4, l: 4, r: 5, val: 'Khối tích kho (m3)' },
+            { t: 5, b: 6, l: 4, r: 4, val: 'Từ ' + this.khoiTich.toString() + ' m3 trở lên' },
+            { t: 5, b: 6, l: 5, r: 5, val: 'Dưới ' + this.khoiTich.toString() + ' m3' },
+            { t: 4, b: 4, l: 6, r: 8, val: 'Số lượng nhà kho' },
+            { t: 5, b: 6, l: 6, r: 6, val: 'Từ ' + this.khoiTich.toString() + ' m3 trở lên' },
+            { t: 5, b: 6, l: 7, r: 7, val: 'Dưới ' + this.khoiTich.toString() + ' m3' },
+            { t: 5, b: 6, l: 8, r: 8, val: 'Tổng' },
+            { t: 4, b: 4, l: 9, r: 15, val: 'Giá trị kho (VNĐ)' },
+            { t: 5, b: 5, l: 9, r: 11, val: 'Từ ' + this.khoiTich.toString() + ' m3' },
+            { t: 6, b: 6, l: 9, r: 9, val: 'Kho lấy theo giá trị còn lại' },
+            { t: 6, b: 6, l: 10, r: 10, val: 'Kho hết khấu hao' },
+            { t: 6, b: 6, l: 11, r: 11, val: 'Tổng giá trị kho từ 5000m3' },
+            { t: 5, b: 5, l: 12, r: 14, val: 'Dưới ' + this.khoiTich.toString() + ' m3' },
+            { t: 6, b: 6, l: 12, r: 12, val: 'Kho lấy theo giá trị còn lại' },
+            { t: 6, b: 6, l: 13, r: 13, val: 'Kho hết khấu hao' },
+            { t: 6, b: 6, l: 14, r: 14, val: 'Tổng giá trị kho dưới 5000m3' },
+            { t: 5, b: 6, l: 15, r: 15, val: 'Tổng' },
         ]
-        const headerBot = 2;
+        const headerBot = 7;
         this.lstCtietBcao.forEach((item, index) => {
             if (item.unitSpan) {
-                header.push({ t: headerBot + index + 1, b: headerBot + item.unitSpan, l: 0, r: 0, val: this.getIndex(item.stt) })
-                header.push({ t: headerBot + index + 1, b: headerBot + item.unitSpan, l: 1, r: 1, val: item.tenDvi })
+                header.push({ t: headerBot + index, b: headerBot + item.unitSpan, l: 0, r: 0, val: this.getIndex(item.stt) })
+                header.push({ t: headerBot + index, b: headerBot + item.unitSpan, l: 1, r: 1, val: item.tenDvi })
             }
             if (item.locationSpan) {
-                header.push({ t: headerBot + index + 1, b: headerBot + item.locationSpan, l: 2, r: 2, val: item.tenDiaChiKho })
+                header.push({ t: headerBot + index, b: headerBot + item.locationSpan, l: 2, r: 2, val: item.tenDiaChiKho })
             }
-            header.push({ t: headerBot + index + 1, b: headerBot + index + 1, l: 3, r: 3, val: item.tenNhaKho })
-            header.push({ t: headerBot + index + 1, b: headerBot + index + 1, l: 4, r: 4, val: item.khoiTichTren?.toString() })
-            header.push({ t: headerBot + index + 1, b: headerBot + index + 1, l: 5, r: 5, val: item.khoiTichDuoi?.toString() })
-            header.push({ t: headerBot + index + 1, b: headerBot + index + 1, l: 6, r: 6, val: item.slTren?.toString() })
-            header.push({ t: headerBot + index + 1, b: headerBot + index + 1, l: 7, r: 7, val: item.slDuoi?.toString() })
-            header.push({ t: headerBot + index + 1, b: headerBot + index + 1, l: 8, r: 8, val: item.slTong?.toString() })
-            header.push({ t: headerBot + index + 1, b: headerBot + index + 1, l: 9, r: 9, val: item.gtTrenGtConLai?.toString() })
-            header.push({ t: headerBot + index + 1, b: headerBot + index + 1, l: 10, r: 10, val: item.gtTrenHetKhauHao?.toString() })
-            header.push({ t: headerBot + index + 1, b: headerBot + index + 1, l: 11, r: 11, val: item.gtTrenTong?.toString() })
-            header.push({ t: headerBot + index + 1, b: headerBot + index + 1, l: 12, r: 12, val: item.gtDuoiGtConLai?.toString() })
-            header.push({ t: headerBot + index + 1, b: headerBot + index + 1, l: 13, r: 13, val: item.gtDuoiHetKhauHao?.toString() })
-            header.push({ t: headerBot + index + 1, b: headerBot + index + 1, l: 14, r: 14, val: item.gtDuoiTong?.toString() })
-            header.push({ t: headerBot + index + 1, b: headerBot + index + 1, l: 15, r: 15, val: item.tong?.toString() })
+            header.push({ t: headerBot + index, b: headerBot + index, l: 3, r: 3, val: item.tenNhaKho })
+            header.push({ t: headerBot + index, b: headerBot + index, l: 4, r: 4, val: item.khoiTichTren?.toString() })
+            header.push({ t: headerBot + index, b: headerBot + index, l: 5, r: 5, val: item.khoiTichDuoi?.toString() })
+            header.push({ t: headerBot + index, b: headerBot + index, l: 6, r: 6, val: item.slTren?.toString() })
+            header.push({ t: headerBot + index, b: headerBot + index, l: 7, r: 7, val: item.slDuoi?.toString() })
+            header.push({ t: headerBot + index, b: headerBot + index, l: 8, r: 8, val: item.slTong?.toString() })
+            header.push({ t: headerBot + index, b: headerBot + index, l: 9, r: 9, val: item.gtTrenGtConLai?.toString() })
+            header.push({ t: headerBot + index, b: headerBot + index, l: 10, r: 10, val: item.gtTrenHetKhauHao?.toString() })
+            header.push({ t: headerBot + index, b: headerBot + index, l: 11, r: 11, val: item.gtTrenTong?.toString() })
+            header.push({ t: headerBot + index, b: headerBot + index, l: 12, r: 12, val: item.gtDuoiGtConLai?.toString() })
+            header.push({ t: headerBot + index, b: headerBot + index, l: 13, r: 13, val: item.gtDuoiHetKhauHao?.toString() })
+            header.push({ t: headerBot + index, b: headerBot + index, l: 14, r: 14, val: item.gtDuoiTong?.toString() })
+            header.push({ t: headerBot + index, b: headerBot + index, l: 15, r: 15, val: item.tong?.toString() })
         })
         const workbook = XLSX.utils.book_new();
         const worksheet = Table.initExcel(header);

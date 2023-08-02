@@ -931,21 +931,24 @@ export class BaoCao04aComponent implements OnInit {
     exportToExcel() {
         const num = this.lstCol.length;
         const header = [
-            { t: 0, b: 1 + this.lstCtietBcao.length, l: 0, r: 2 + (num + 1) * 2, val: null },
-            { t: 0, b: 1, l: 0, r: 0, val: 'STT' },
-            { t: 0, b: 1, l: 1, r: 1, val: 'Nội dung chi' },
-            { t: 0, b: 0, l: 2, r: 2 + num, val: 'Chi tiết theo từng mặt hàng trong đợt' },
-            { t: 1, b: 1, l: 2, r: 2, val: 'Tổng cộng' },
-            { t: 0, b: 0, l: 3 + num, r: 3 + 2 * num, val: 'Chi tiết theo từng mặt hàng lũy kế từ đầu năm' },
-            { t: 1, b: 1, l: 3 + num, r: 3 + num, val: 'Tổng cộng' },
-            { t: 0, b: 1, l: 4 + num * 2, r: 4 + num * 2, val: 'Ghi chú' },
+            { t: 0, b: 5 + this.lstCtietBcao.length, l: 0, r: 2 + (num + 1) * 2, val: null },
+            { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
+            { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
+            { t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
+            { t: 4, b: 5, l: 0, r: 0, val: 'STT' },
+            { t: 4, b: 5, l: 1, r: 1, val: 'Nội dung chi' },
+            { t: 4, b: 4, l: 2, r: 2 + num, val: 'Chi tiết theo từng mặt hàng trong đợt' },
+            { t: 5, b: 5, l: 2, r: 2, val: 'Tổng cộng' },
+            { t: 4, b: 4, l: 3 + num, r: 3 + 2 * num, val: 'Chi tiết theo từng mặt hàng lũy kế từ đầu năm' },
+            { t: 5, b: 5, l: 3 + num, r: 3 + num, val: 'Tổng cộng' },
+            { t: 4, b: 5, l: 4 + num * 2, r: 4 + num * 2, val: 'Ghi chú' },
         ]
         this.lstCol.forEach((item, index) => {
-            header.push({ t: 1, b: 1, l: 3 + index, r: 3 + index, val: item.tenVtu });
-            header.push({ t: 1, b: 1, l: 4 + index + num, r: 4 + index + num, val: item.tenVtu })
+            header.push({ t: 5, b: 5, l: 3 + index, r: 3 + index, val: item.tenVtu });
+            header.push({ t: 5, b: 5, l: 4 + index + num, r: 4 + index + num, val: item.tenVtu })
         })
         this.lstCtietBcao.forEach((item, index) => {
-            const row = 2 + index;
+            const row = 6 + index;
             header.push({ t: row, b: row, l: 0, r: 0, val: item.index() })
             header.push({ t: row, b: row, l: 1, r: 1, val: item.tenNdungChi })
             header.push({ t: row, b: row, l: 2, r: 2, val: item.trongDotTcong?.toString() })

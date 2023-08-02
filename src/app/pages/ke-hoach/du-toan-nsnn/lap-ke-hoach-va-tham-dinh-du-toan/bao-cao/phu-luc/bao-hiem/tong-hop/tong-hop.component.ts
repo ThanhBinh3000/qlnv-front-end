@@ -391,44 +391,44 @@ export class TongHopComponent implements OnInit {
 
     exportToExcel() {
         const header = [
-            { t: 0, b: 3 + this.lstCtietBcao.length, l: 0, r: 12 + 10 * this.childUnit.length, val: null },
-            { t: 1, b: 3, l: 0, r: 0, val: 'STT' },
-            { t: 1, b: 3, l: 1, r: 1, val: 'Danh mục hàng DTQG tham gia bảo hiểm' },
-            { t: 1, b: 3, l: 2, r: 2, val: 'Đơn vị tính' },
-            { t: 1, b: 1, l: 3, r: 5, val: 'Tổng số lượng hàng trong kho của các đơn vị cấp dưới' },
-            { t: 2, b: 3, l: 3, r: 3, val: 'Kho từ 5000m3 trở lên' },
-            { t: 2, b: 3, l: 4, r: 4, val: 'Kho dưới 5000m3' },
-            { t: 2, b: 3, l: 5, r: 5, val: 'Tổng SL' },
-            { t: 1, b: 1, l: 6, r: 12, val: 'Tổng giá trị hàng trong kho của các đơn vị cấp dưới' },
-            { t: 2, b: 2, l: 6, r: 8, val: 'Kho từ ' + this.khoiTich.toString() + ' m3 trở lên' },
-            { t: 3, b: 3, l: 6, r: 6, val: 'Giá trị' },
-            { t: 3, b: 3, l: 7, r: 7, val: 'Tỷ lệ bảo hiểm' },
-            { t: 3, b: 3, l: 8, r: 8, val: 'Giá trị bảo hiểm' },
-            { t: 2, b: 2, l: 9, r: 11, val: 'Kho dưới ' + this.khoiTich.toString() + ' m3' },
-            { t: 3, b: 3, l: 9, r: 9, val: 'Giá trị' },
-            { t: 3, b: 3, l: 10, r: 10, val: 'Tỷ lệ bảo hiểm' },
-            { t: 3, b: 3, l: 11, r: 11, val: 'Giá trị bảo hiểm' },
-            { t: 2, b: 3, l: 12, r: 12, val: 'Tổng GT' },
+            { t: 0, b: 7 + this.lstCtietBcao.length, l: 0, r: 12 + 10 * this.childUnit.length, val: null },
+            { t: 5, b: 7, l: 0, r: 0, val: 'STT' },
+            { t: 5, b: 7, l: 1, r: 1, val: 'Danh mục hàng DTQG tham gia bảo hiểm' },
+            { t: 5, b: 7, l: 2, r: 2, val: 'Đơn vị tính' },
+            { t: 5, b: 5, l: 3, r: 5, val: 'Tổng số lượng hàng trong kho của các đơn vị cấp dưới' },
+            { t: 6, b: 7, l: 3, r: 3, val: 'Kho từ 5000m3 trở lên' },
+            { t: 6, b: 7, l: 4, r: 4, val: 'Kho dưới 5000m3' },
+            { t: 6, b: 7, l: 5, r: 5, val: 'Tổng SL' },
+            { t: 5, b: 5, l: 6, r: 12, val: 'Tổng giá trị hàng trong kho của các đơn vị cấp dưới' },
+            { t: 6, b: 6, l: 6, r: 8, val: 'Kho từ ' + this.khoiTich.toString() + ' m3 trở lên' },
+            { t: 7, b: 7, l: 6, r: 6, val: 'Giá trị' },
+            { t: 7, b: 7, l: 7, r: 7, val: 'Tỷ lệ bảo hiểm' },
+            { t: 7, b: 7, l: 8, r: 8, val: 'Giá trị bảo hiểm' },
+            { t: 6, b: 6, l: 9, r: 11, val: 'Kho dưới ' + this.khoiTich.toString() + ' m3' },
+            { t: 7, b: 7, l: 9, r: 9, val: 'Giá trị' },
+            { t: 7, b: 7, l: 10, r: 10, val: 'Tỷ lệ bảo hiểm' },
+            { t: 7, b: 7, l: 11, r: 11, val: 'Giá trị bảo hiểm' },
+            { t: 6, b: 7, l: 12, r: 12, val: 'Tổng GT' },
         ]
         this.childUnit.forEach((item, index) => {
             const left = 12 + index * 10;
-            header.push({ t: 0, b: 0, l: left + 1, r: left + 10, val: item.tenDvi })
-            header.push({ t: 1, b: 1, l: left + 1, r: left + 3, val: 'Tổng số lượng hàng trong kho của các đơn vị cấp dưới' })
-            header.push({ t: 2, b: 3, l: left + 1, r: left + 1, val: 'Kho từ 5000m3 trở lên' })
-            header.push({ t: 2, b: 3, l: left + 2, r: left + 2, val: 'Kho dưới 5000m3' })
-            header.push({ t: 2, b: 3, l: left + 3, r: left + 3, val: 'Tổng SL' })
-            header.push({ t: 1, b: 1, l: left + 4, r: left + 10, val: 'Tổng giá trị hàng trong kho của các đơn vị cấp dưới' })
-            header.push({ t: 2, b: 2, l: left + 4, r: left + 6, val: 'Kho từ ' + this.khoiTich.toString() + ' m3 trở lên' })
-            header.push({ t: 3, b: 3, l: left + 4, r: left + 4, val: 'Giá trị' })
-            header.push({ t: 3, b: 3, l: left + 5, r: left + 5, val: 'Tỷ lệ bảo hiểm' })
-            header.push({ t: 3, b: 3, l: left + 6, r: left + 6, val: 'Giá trị bảo hiểm' })
-            header.push({ t: 2, b: 2, l: left + 7, r: left + 9, val: 'Kho dưới ' + this.khoiTich.toString() + ' m3' })
-            header.push({ t: 3, b: 3, l: left + 7, r: left + 7, val: 'Giá trị' })
-            header.push({ t: 3, b: 3, l: left + 8, r: left + 8, val: 'Tỷ lệ bảo hiểm' })
-            header.push({ t: 3, b: 3, l: left + 9, r: left + 9, val: 'Giá trị bảo hiểm' })
-            header.push({ t: 2, b: 3, l: left + 10, r: left + 10, val: 'Tổng GT' })
+            header.push({ t: 4, b: 4, l: left + 1, r: left + 10, val: item.tenDvi })
+            header.push({ t: 5, b: 5, l: left + 1, r: left + 3, val: 'Tổng số lượng hàng trong kho của các đơn vị cấp dưới' })
+            header.push({ t: 6, b: 7, l: left + 1, r: left + 1, val: 'Kho từ 5000m3 trở lên' })
+            header.push({ t: 6, b: 7, l: left + 2, r: left + 2, val: 'Kho dưới 5000m3' })
+            header.push({ t: 6, b: 7, l: left + 3, r: left + 3, val: 'Tổng SL' })
+            header.push({ t: 5, b: 5, l: left + 4, r: left + 10, val: 'Tổng giá trị hàng trong kho của các đơn vị cấp dưới' })
+            header.push({ t: 6, b: 6, l: left + 4, r: left + 6, val: 'Kho từ ' + this.khoiTich.toString() + ' m3 trở lên' })
+            header.push({ t: 7, b: 7, l: left + 4, r: left + 4, val: 'Giá trị' })
+            header.push({ t: 7, b: 7, l: left + 5, r: left + 5, val: 'Tỷ lệ bảo hiểm' })
+            header.push({ t: 7, b: 7, l: left + 6, r: left + 6, val: 'Giá trị bảo hiểm' })
+            header.push({ t: 6, b: 6, l: left + 7, r: left + 9, val: 'Kho dưới ' + this.khoiTich.toString() + ' m3' })
+            header.push({ t: 7, b: 7, l: left + 7, r: left + 7, val: 'Giá trị' })
+            header.push({ t: 7, b: 7, l: left + 8, r: left + 8, val: 'Tỷ lệ bảo hiểm' })
+            header.push({ t: 7, b: 7, l: left + 9, r: left + 9, val: 'Giá trị bảo hiểm' })
+            header.push({ t: 6, b: 7, l: left + 10, r: left + 10, val: 'Tổng GT' })
         })
-        const headerBot = 3;
+        const headerBot = 7;
         this.lstCtietBcao.forEach((item, index) => {
             const row = headerBot + index + 1;
             header.push({ t: row, b: row, l: 0, r: 0, val: this.getChiMuc(item.stt) })
