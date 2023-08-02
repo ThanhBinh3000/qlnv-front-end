@@ -3,26 +3,9 @@
     <li nz-menu-item nzSelected (click)="selectTab(0)">
       Phiếu xuất kho
     </li>
-    <li nz-menu-item nzSelected (click)="selectTab(1)">
-      Bảng kê cân hàng
-    </li>
-    <li nz-menu-item nzSelected (click)="selectTab(2)">
-      Biên bản tịnh kho
-    </li>
-    <li nz-menu-item nzSelected (click)="selectTab(3)">
-      Biên bản hao dôi
-    </li>
   </ul>
 </nz-affix>
 <ng-container *ngIf="tabSelected == 0">
   <app-phieu-xuat-kho-thanh-ly></app-phieu-xuat-kho-thanh-ly>
 </ng-container>
-<ng-container *ngIf="tabSelected == 1">
-  <app-bang-ke-can-hang-thanh-ly></app-bang-ke-can-hang-thanh-ly>
-</ng-container>
-<ng-container *ngIf="tabSelected == 2">
-  <app-bien-ban-tinh-kho-thanh-ly></app-bien-ban-tinh-kho-thanh-ly>
-</ng-container>
-<ng-container *ngIf="tabSelected == 3">
-  <app-bien-ban-hao-doi-thanh-ly></app-bien-ban-hao-doi-thanh-ly>
-</ng-container>
+
