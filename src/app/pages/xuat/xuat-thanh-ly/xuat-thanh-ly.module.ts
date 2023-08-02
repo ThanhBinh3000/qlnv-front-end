@@ -57,6 +57,9 @@ import {
 import {
   ChiTietQuyetDinhGiaoNhiemVuThanhLyComponent
 } from './to-chuc-thuc-hien-thanh-ly/quyet-dinh-giao-nhiem-vu-thanh-ly/chi-tiet-quyet-dinh-giao-nhiem-vu-thanh-ly/chi-tiet-quyet-dinh-giao-nhiem-vu-thanh-ly.component';
+import {
+  ThucHienXuatThanhLyComponent
+} from "src/app/pages/xuat/xuat-thanh-ly/thuc-hien-xuat-thanh-ly/thuc-hien-xuat-thanh-ly.component";
 
 @NgModule({
   declarations: [
@@ -86,6 +89,7 @@ import {
     ThongTinHopDongThanhLyComponent,
     QuyetDinhGiaoNhiemVuThanhLyComponent,
     ChiTietQuyetDinhGiaoNhiemVuThanhLyComponent,
+    ThucHienXuatThanhLyComponent,
   ],
   imports: [
     CommonModule,
