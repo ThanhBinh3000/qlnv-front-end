@@ -1,10 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { MESSAGE } from 'src/app/constants/message';
-import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { TAB_LIST, Tab } from './von-ban.constant';
+import { Tab } from './von-ban.constant';
 
 @Component({
     selector: 'app-von-ban',
@@ -20,10 +16,7 @@ export class VonBanComponent implements OnInit {
     donVis: any[];
 
     constructor(
-        private spinner: NgxSpinnerService,
         public userService: UserService,
-        private quanLyVonPhiService: QuanLyVonPhiService,
-        private notification: NzNotificationService,
     ) { }
 
     async ngOnInit() {

@@ -276,8 +276,6 @@ export class BaoCaoComponent implements OnInit {
         const checkApprove = isSynth ? this.userService.isAccessPermisson(Roles.DTC.APPROVE_SYNTH_REPORT) : this.userService.isAccessPermisson(Roles.DTC.APPROVE_REPORT);
         const checkAccept = this.userService.isAccessPermisson(Roles.DTC.ACCEPT_REPORT);
         const checkExcel = isSynth ? this.userService.isAccessPermisson(Roles.DTC.EXPORT_SYNTH_REPORT) : this.userService.isAccessPermisson(Roles.DTC.EXPORT_REPORT);
-        const checkCopy = isSynth ? this.userService.isAccessPermisson(Roles.DTC.COPY_SYNTH_REPORT) : this.userService.isAccessPermisson(Roles.DTC.COPY_REPORT);
-        const checkPrint = isSynth ? this.userService.isAccessPermisson(Roles.DTC.PRINT_SYTH_REPORT) : this.userService.isAccessPermisson(Roles.DTC.PRINT_REPORT);
 
         this.status.save = Status.check('saveWOHist', this.baoCao.trangThai) && checkSave && this.isChild;
         this.status.new = Status.check('reject', this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.DTC.ADD_REPORT) && this.isChild && this.data.preTab == Dtc.DANH_SACH_BAO_CAO;
