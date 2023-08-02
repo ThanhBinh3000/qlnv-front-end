@@ -55,8 +55,8 @@ export class ItemData {
 
     changeModel() {
         this.tdiemBcaoChiPhiTaiCuaKho = Operator.mul(this.tdiemBcaoLuong, this.dmucChiPhiTaiCuaKho);
-        this.tdiemBcaoChiPhiTongCong = Operator.sum([this.tdiemBcaoChiPhiTaiCuaKho, this.tdiemBcaoChiPhiNgoaiCuaKho]);
         this.tdiemBcaoChiPhiNgoaiCuaKho = Operator.mul(this.tdiemBcaoLuong, this.binhQuanChiPhiNgoaiCuaKho);
+        this.tdiemBcaoChiPhiTongCong = Operator.sum([this.tdiemBcaoChiPhiTaiCuaKho, this.tdiemBcaoChiPhiNgoaiCuaKho]);
         this.dkienThienChiPhiTaiCuaKho = Operator.mul(this.dmucChiPhiTaiCuaKho, this.dkienThienLuong);
         this.dkienThienChiPhiNgoaiCuaKho = Operator.mul(this.binhQuanChiPhiNgoaiCuaKho, this.dkienThienLuong);
         this.dkienThienChiPhiTongCong = Operator.sum([this.dkienThienChiPhiTaiCuaKho, this.dkienThienChiPhiNgoaiCuaKho]);
@@ -324,8 +324,10 @@ export class PhuLuc7Component implements OnInit {
                 item.dmucChiPhiTaiCuaKho = dinhMuc?.tongDmuc;
                 // item.donViTinh = dinhMuc?.donViTinh;
                 item.dkienThienChiPhiTaiCuaKho = Operator.mul(item.dmucChiPhiTaiCuaKho, item.khoachLuong);
-                item.tdiemBcaoChiPhiTongCong = Operator.sum([item.dkienThienChiPhiTaiCuaKho, item.dkienThienChiPhiNgoaiCuaKho])
+                item.tdiemBcaoChiPhiTongCong = Operator.sum([item.tdiemBcaoChiPhiTaiCuaKho, item.tdiemBcaoChiPhiNgoaiCuaKho])
+                item.dkienThienChiPhiTongCong = Operator.sum([item.dkienThienChiPhiTaiCuaKho, item.dkienThienChiPhiNgoaiCuaKho])
             }
+            this.sum1()
         })
 
 
@@ -334,9 +336,10 @@ export class PhuLuc7Component implements OnInit {
                 const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.dmucHang);
                 item.dmucChiPhiTaiCuaKho = dinhMuc?.tongDmuc;
                 item.dkienThienChiPhiTaiCuaKho = Operator.mul(item.dmucChiPhiTaiCuaKho, item.khoachLuong);
-                item.tdiemBcaoChiPhiTongCong = Operator.sum([item.dkienThienChiPhiTaiCuaKho, item.dkienThienChiPhiNgoaiCuaKho])
+                item.tdiemBcaoChiPhiTongCong = Operator.sum([item.tdiemBcaoChiPhiTaiCuaKho, item.tdiemBcaoChiPhiNgoaiCuaKho])
+                item.dkienThienChiPhiTongCong = Operator.sum([item.dkienThienChiPhiTaiCuaKho, item.dkienThienChiPhiNgoaiCuaKho])
             })
-            // this.sum1()
+            this.sum1()
         }
 
         this.lstCtietBcao = Table.sortByIndex(this.lstCtietBcao);
@@ -640,16 +643,20 @@ export class PhuLuc7Component implements OnInit {
         this.lstCtietBcao.forEach(item => {
             item.chenhLech = Operator.sum([item.dtoanVuTvqtDnghi, - item.dtoanDnghiDchinh])
             if (item.level == 0) {
-                if (item.dtoanDnghiDchinh && item.dtoanDnghiDchinh < 0) {
-                    this.tongDieuChinhGiam += Number(item?.dtoanDnghiDchinh);
-                } else if (item.dtoanDnghiDchinh && item.dtoanDnghiDchinh > 0) {
-                    this.tongDieuChinhTang += Number(item?.dtoanDnghiDchinh);
+                if (item.dtoanDnghiDchinh !== null) {
+                    if (item.dtoanDnghiDchinh < 0) {
+                        Number(this.tongDieuChinhGiam += Number(item?.dtoanDnghiDchinh));
+                    } else {
+                        Number(this.tongDieuChinhTang += Number(item?.dtoanDnghiDchinh));
+                    }
                 }
 
-                if (item.dtoanVuTvqtDnghi && item.dtoanVuTvqtDnghi < 0) {
-                    this.dToanVuGiam += Number(item?.dtoanVuTvqtDnghi);
-                } else if (item.dtoanVuTvqtDnghi && item.dtoanVuTvqtDnghi > 0) {
-                    this.dToanVuTang += Number(item?.dtoanVuTvqtDnghi);
+                if (item.dtoanVuTvqtDnghi !== null) {
+                    if (item.dtoanVuTvqtDnghi < 0) {
+                        Number(this.dToanVuGiam += Number(item?.dtoanVuTvqtDnghi));
+                    } else {
+                        Number(this.dToanVuTang += Number(item?.dtoanVuTvqtDnghi));
+                    }
                 }
             }
         })

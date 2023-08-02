@@ -120,6 +120,7 @@ export class PhuLuc2Component implements OnInit {
         Object.assign(this.status, this.dataInfo.status);
         await this.getFormDetail();
         this.namBcao = this.dataInfo?.namBcao;
+        console.log(this.lstCtietBcao);
         if (this.status.general) {
             this.scrollX = Table.tableWidth(350, 20, 1, 110);
         } else {
@@ -132,12 +133,48 @@ export class PhuLuc2Component implements OnInit {
             }
         }
         // await this.getListTaiSan();
+
+        if (this.lstCtietBcao.length > 0) {
+            if (!this.lstCtietBcao[0]?.stt) {
+                let sttItem = 1
+                this.lstCtietBcao.forEach(item => {
+                    const stt = "0." + sttItem
+                    item.stt = stt;
+                    sttItem++
+                })
+            } else {
+                this.lstCtietBcao = Table.sortByIndex(this.lstCtietBcao);
+            }
+        }
+
+        // else if (!this.lstCtietBcao[0]?.stt) {
+
+        // }
+
+
         this.tinhTong();
         this.getTotal();
         this.updateEditCache();
         this.getStatusButton();
         this.spinner.hide();
     };
+
+    setIndex() {
+        const lstVtuTemp = this.lstCtietBcao.filter(e => !e.maTaiSan);
+        for (let i = 0; i < lstVtuTemp.length; i++) {
+            const stt = '0.' + (i + 1).toString();
+            const index = this.lstCtietBcao.findIndex(e => e.id == lstVtuTemp[i].id);
+            this.lstCtietBcao[index].stt = stt;
+            const lstDmTemp = this.lstCtietBcao.filter(e => e.maTaiSan == lstVtuTemp[i].maTaiSan && !!e.maTaiSan);
+            for (let j = 0; j < lstDmTemp.length; j++) {
+                const ind = this.lstCtietBcao.findIndex(e => e.id == lstDmTemp[j].id);
+                this.lstCtietBcao[ind].stt = stt + '.' + (j + 1).toString();
+            }
+        }
+        // lstVtuTemp.forEach(item => {
+        //     this.sum(item.stt + '.1');
+        // })
+    }
 
 
     async getFormDetail() {
@@ -146,9 +183,9 @@ export class PhuLuc2Component implements OnInit {
                 if (data.statusCode == 0) {
                     this.formDetail = data.data;
                     this.formDetail.maDviTien = '1';
-                    Object.assign(this.lstCtietBcao, this.formDetail.lstCtietDchinh);// this.lstCtietBcao = this.formDetail.lstCtietLapThamDinhs;
-                    this.formDetail.listIdDeleteFiles = [];
+                    this.lstCtietBcao = this.formDetail.lstCtietDchinh;
                     this.listFile = [];
+                    this.formDetail.listIdDeleteFiles = [];
                     this.getStatusButton();
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -347,16 +384,20 @@ export class PhuLuc2Component implements OnInit {
         this.dtoanVuTang = 0;
         this.dtoanVuGiam = 0;
         this.lstCtietBcao.forEach(item => {
-            if (item.dtoanKpDieuChinh < 0) {
-                this.tongDieuChinhGiam += Number(item.dtoanKpDieuChinh);
-            } else {
-                this.tongDieuChinhTang += Number(item.dtoanKpDieuChinh);
+            if (item.dtoanKpDieuChinh !== null) {
+                if (item.dtoanKpDieuChinh < 0) {
+                    Number(this.tongDieuChinhGiam += Number(item?.dtoanKpDieuChinh));
+                } else {
+                    Number(this.tongDieuChinhTang += Number(item?.dtoanKpDieuChinh));
+                }
             }
 
-            if (item.dtoanVuDnghi < 0) {
-                this.dtoanVuGiam += Number(item.dtoanVuDnghi);
-            } else {
-                this.dtoanVuTang += Number(item.dtoanVuDnghi);
+            if (item.dtoanVuDnghi !== null) {
+                if (item.dtoanVuDnghi < 0) {
+                    Number(this.dtoanVuGiam += Number(item?.dtoanVuDnghi));
+                } else {
+                    Number(this.dtoanVuTang += Number(item?.dtoanVuDnghi));
+                }
             }
         })
     };
@@ -541,7 +582,7 @@ export class PhuLuc2Component implements OnInit {
                         ... new ItemData(),
                         id: uuid.v4() + 'FE',
                         stt: stt,
-                        maTaiSan: data.maTaiSan,
+                        maTaiSan: stt,
                         tenTaiSan: data.tenTaiSan,
                         dvTinh: data.dviTinh,
                         level: 0,

@@ -228,24 +228,38 @@
                                         {{editCache[data.id].data.dviTinh}}
                                     </td>
                                     <ng-container *ngIf="!status.viewAppVal; else viewAppVal">
-
-                                        <td>
-                                            <input class="money-input" currencyMask
-                                                [(ngModel)]="editCache[data.id].data.sluongDuocGiao"
-                                                [options]="Op.amount" />
-                                        </td>
-                                        <td>
-                                            <input class="money-input" currencyMask
-                                                [(ngModel)]="editCache[data.id].data.sluongThien"
-                                                (ngModelChange)="changeModel(editCache[data.id].data.id)"
-                                                [options]="Op.amount" />
-                                        </td>
-                                        <td>
-                                            <input class="money-input" currencyMask
-                                                [(ngModel)]="editCache[data.id].data.soluongUocThien"
-                                                (ngModelChange)="changeModel(editCache[data.id].data.id)"
-                                                [options]="Op.amount" />
-                                        </td>
+                                        <ng-container
+                                            *ngIf="userInfo.DON_VI.tenVietTat.indexOf('_VP') != -1; else viewVp">
+                                            <td>
+                                                {{ Op.fmtVal(editCache[data.id].data.sluongDuocGiao )}}
+                                            </td>
+                                            <td>
+                                                {{ Op.fmtVal(editCache[data.id].data.sluongThien )}}
+                                            </td>
+                                            <td>
+                                                {{ Op.fmtVal(editCache[data.id].data.soluongUocThien )}}
+                                            </td>
+                                        </ng-container>
+                                        <ng-template #viewVp>
+                                            <td>
+                                                <input class="money-input" currencyMask
+                                                    [(ngModel)]="editCache[data.id].data.sluongDuocGiao"
+                                                    (ngModelChange)="changeModel(editCache[data.id].data.id)"
+                                                    [options]="Op.amount" />
+                                            </td>
+                                            <td>
+                                                <input class="money-input" currencyMask
+                                                    [(ngModel)]="editCache[data.id].data.sluongThien"
+                                                    (ngModelChange)="changeModel(editCache[data.id].data.id)"
+                                                    [options]="Op.amount" />
+                                            </td>
+                                            <td>
+                                                <input class="money-input" currencyMask
+                                                    [(ngModel)]="editCache[data.id].data.soluongUocThien"
+                                                    (ngModelChange)="changeModel(editCache[data.id].data.id)"
+                                                    [options]="Op.amount" />
+                                            </td>
+                                        </ng-template>
                                         <td>
                                             {{Op.fmtVal(editCache[data.id].data.tongCong)}}
                                         </td>

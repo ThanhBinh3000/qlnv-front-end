@@ -14,6 +14,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import * as uuid from 'uuid';
 import * as XLSX from 'xlsx';
 import { BtnStatus, Doc, Form } from '../../dieu-chinh-du-toan.constant';
+import { UserService } from 'src/app/services/user.service';
 export class ItemData {
     level: any;
     checked: boolean;
@@ -89,7 +90,7 @@ export class PhuLuc5Component implements OnInit {
     fileList: NzUploadFile[] = [];
     listFile: File[] = [];
     listIdDeleteFiles: string[] = [];
-
+    userInfo: any;
     beforeUpload = (file: NzUploadFile): boolean => {
         this.fileList = this.fileList.concat(file);
         return false;
@@ -118,6 +119,7 @@ export class PhuLuc5Component implements OnInit {
         private danhMucService: DanhMucHDVService,
         private quanLyVonPhiService: QuanLyVonPhiService,
         private fileManip: FileManip,
+        private userService: UserService,
     ) {
     }
 
@@ -134,6 +136,7 @@ export class PhuLuc5Component implements OnInit {
         Object.assign(this.status, this.dataInfo.status);
         await this.getFormDetail();
         this.namBcao = this.dataInfo.namBcao;
+        this.userInfo = this.userService.getUserLogin();
         // this.formDetail?.lstCtietDchinh.forEach(item => {
         //     this.lstCtietBcao.push({
         //         ...item,
@@ -427,6 +430,7 @@ export class PhuLuc5Component implements OnInit {
         this.updateEditCache();
         this.sum(this.lstCtietBcao[index].stt);
         this.getTotal();
+        this.tinhTong();
     }
 
     // huy thay doi
@@ -622,16 +626,20 @@ export class PhuLuc5Component implements OnInit {
             item.chenhLech = Operator.sum([item.dtoanVuTvqtDnghi, - item.dtoanDchinh])
             const str = item.stt
             if (!(this.lstCtietBcao.findIndex(e => Table.preIndex(e.stt) == str) != -1)) {
-                if (item.dtoanDchinh < 0) {
-                    this.tongDieuChinhGiam += Number(item?.dtoanDchinh);
-                } else {
-                    this.tongDieuChinhTang += Number(item.dtoanDchinh);
+                if (item.dtoanDchinh !== null) {
+                    if (item.dtoanDchinh < 0) {
+                        Number(this.tongDieuChinhGiam += Number(item?.dtoanDchinh));
+                    } else {
+                        Number(this.tongDieuChinhTang += Number(item?.dtoanDchinh));
+                    }
                 }
 
-                if (item.dtoanVuTvqtDnghi < 0) {
-                    this.dToanVuGiam += Number(item.dtoanVuTvqtDnghi);
-                } else {
-                    this.dToanVuTang += Number(item.dtoanVuTvqtDnghi);
+                if (item.dtoanVuTvqtDnghi !== null) {
+                    if (item.dtoanVuTvqtDnghi < 0) {
+                        Number(this.dToanVuGiam += Number(item?.dtoanVuTvqtDnghi));
+                    } else {
+                        Number(this.dToanVuTang += Number(item?.dtoanVuTvqtDnghi));
+                    }
                 }
             }
         })
