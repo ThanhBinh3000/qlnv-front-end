@@ -60,7 +60,7 @@ export class ThemMoiCtietTdbqComponent extends Base3Component implements OnInit 
       nguyenNhan : [null],
       dienBien : [null],
       bienPhapXl : [null],
-      soLuongXl : [null],
+      soLuongXl : [null,[Validators.required]],
       moTa : [null],
       idDataTk : [],
       idDataKtv : [],
@@ -70,11 +70,43 @@ export class ThemMoiCtietTdbqComponent extends Base3Component implements OnInit 
   }
 
 
-  ngOnInit(): void {
-    this.loadDataCombobox();
+  async ngOnInit() {
     if(this.id){
-      this.detail(this.id).then((res)=>{
-        this.rowItem = res
+      await this.detail(this.id).then((res)=>{
+        for (const property in this.rowItem) {
+          this.rowItem[property] = res[property];
+        }
+        console.log(this.rowItem);
+
+
+        // // this.rowItem = res
+        // this.rowItem.tongSoLuong = res.tongSoLuong;
+        // this.rowItem.anToan = res;
+        // this.rowItem.khongAnToan = res;
+        // this.rowItem.nongDo = res;
+        // this.rowItem.nhietDo = res;
+        // this.rowItem.doAm = res;
+        // this.rowItem.hatVang = res;
+        // this.rowItem.camQuan = ''
+        // this.rowItem.tinhTrangNamMoc = ''
+        // this.rowItem.conTrungSong = res;
+        // // Muoi them
+        // this.rowItem.muiVi = res;
+        // this.rowItem.benNgoaiCoHat = res;
+        // //VT
+        // this.rowItem.baoQuanLanDau = res;
+        // this.rowItem.anToanBqtx = res;
+        // this.rowItem.coBienDongBqtx = res;
+        // this.rowItem.tongCongBqtx = res;
+        // this.rowItem.anToanBqdk = res;
+        // this.rowItem.coBienDongBqdk = res;
+        // this.rowItem.tongCongBqdk = res;
+        // this.rowItem.anToanPktb = res;
+        // this.rowItem.coBienDongPktb = res;
+        // this.rowItem.daKhacPhucHh = res;
+        // this.rowItem.vuotQuyenHanHh = res;
+        // this.rowItem.daKhacPhucTb = res;
+        // this.rowItem.vuotQuyenHanTb = res;
       });
     }else{
       this.formData.patchValue({
@@ -92,14 +124,21 @@ export class ThemMoiCtietTdbqComponent extends Base3Component implements OnInit 
         idDataKtv : this.dataKtv?.id,
         idDataLdcc : this.dataLdcc?.id,
       })
+      this.rowItem.tongSoLuong = this.dataHdr.soLuong;
     }
+    this.loadDataCombobox();
   }
 
   async loadDataCombobox(){
     this.listBpxl = [];
     await this.danhMucService.danhMucChungGetAll('BIEN_PHAP_XU_LY').then((res)=>{
       if (res.msg == MESSAGE.SUCCESS) {
-        this.listBpxl = res.data;
+        console.log(this.formData.value.loaiVthh);
+        if(this.formData.value.loaiVthh?.startsWith('02')){
+          this.listBpxl = res.data.filter(item => item.phanLoai == 'VT');
+        }else{
+          this.listBpxl = res.data.filter(item => item.phanLoai == 'LT');
+        }
       }
     });
   }
