@@ -23,7 +23,8 @@ import { NzModalService } from "ng-zorro-antd/modal";
 import {
   DialogThongBaoThongTinDauThauComponent
 } from "../../../../../../components/dialog/dialog-thong-bao-thong-tin-dau-thau/dialog-thong-bao-thong-tin-dau-thau.component";
-
+import {PREVIEW} from "../../../../../../constants/fileType";
+import { saveAs } from "file-saver";
 @Component({
   selector: 'app-themmoi-thongtin-dauthau',
   templateUrl: './themmoi-thongtin-dauthau.component.html',
@@ -36,7 +37,15 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
   showListEvent = new EventEmitter<any>();
   @Input() isShowFromKq: boolean;
   @Input() isView: boolean;
-
+  reportTemplate: any = {
+    typeFile: "",
+    fileName: "thong_tin_dau_thau_lt.docx",
+    tenBaoCao: "",
+    trangThai: ""
+  };
+  showDlgPreview = false;
+  pdfSrc: any;
+  wordSrc: any;
 
   constructor(
     private modal: NzModalService,
@@ -787,4 +796,26 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
     return Math.abs(value);
   }
 
+  async preview() {
+    let body = {
+      id : this.idInput,
+      reportTemplateRequest : this.reportTemplate
+    }
+    await this.thongTinDauThauService.preview(body).then(async s => {
+      this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
+      this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
+      this.showDlgPreview = true;
+    });
+  }
+  downloadPdf() {
+    saveAs(this.pdfSrc, "thong_tin_dau_thau_lt.pdf");
+  }
+
+  downloadWord() {
+    saveAs(this.wordSrc, "thong_tin_dau_thau_lt.docx");
+  }
+
+  closeDlg() {
+    this.showDlgPreview = false;
+  }
 }
