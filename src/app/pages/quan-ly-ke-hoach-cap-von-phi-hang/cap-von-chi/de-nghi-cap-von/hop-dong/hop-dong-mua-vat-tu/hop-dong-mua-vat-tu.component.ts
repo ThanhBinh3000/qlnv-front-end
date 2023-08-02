@@ -93,7 +93,6 @@ export class HopDongMuaVatTuComponent implements OnInit {
 
     async ngOnInit() {
         this.action('init');
-        console.log(this.baoCao)
     }
 
     async action(code: string) {
