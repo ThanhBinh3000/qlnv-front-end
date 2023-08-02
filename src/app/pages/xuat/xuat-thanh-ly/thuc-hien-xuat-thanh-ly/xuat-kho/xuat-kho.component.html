@@ -1,0 +1,22 @@
+<nz-affix [nzOffsetTop]="98" class="level2">
+  <ul nz-menu nzMode="horizontal">
+    <li nz-menu-item nzSelected (click)="selectTab(0)">
+      Phiếu xuất kho
+    </li>
+    <li nz-menu-item (click)="selectTab(1)">
+      Bảng kê cân hàng
+    </li>
+    <li nz-menu-item (click)="selectTab(2)">
+      Biên bản tịnh kho
+    </li>
+    <li nz-menu-item (click)="selectTab(3)">
+      Biên bản hao dôi
+    </li>
+  </ul>
+</nz-affix>
+<ng-container *ngIf="tabSelected == 0">
+
+</ng-container>
+<ng-container *ngIf="tabSelected == 1">
+
+</ng-container>
