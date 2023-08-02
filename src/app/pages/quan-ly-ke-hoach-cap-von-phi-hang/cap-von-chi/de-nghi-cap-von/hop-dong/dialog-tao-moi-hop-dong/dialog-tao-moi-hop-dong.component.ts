@@ -196,7 +196,7 @@ export class DialogTaoMoiHopDongComponent implements OnInit {
                             qdPheDuyetKqNhaThau: item.soHd,
                             slKeHoach: item.soLuongKehoach,
                             slHopDong: item.soLuong,
-                            // slThucHien: item.soLuongThien,
+                            slThucHien: item.soLuongThien,
                             donGia: item.donGia,
                             gtHopDong: mulNumber(item.soLuong, item.donGia),
                             // gtriThucHien: mulNumber(item.soLuongThien, item.donGia),
