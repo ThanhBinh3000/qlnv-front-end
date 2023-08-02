@@ -1,4 +1,4 @@
-import { CVMB, Roles } from "src/app/Utility/utils";
+import { Roles } from "src/app/Utility/utils";
 
 export class Tab {
     static readonly DS_VON_BAN_NOP_DVCT = 'ds-nop';
@@ -32,20 +32,3 @@ export class Tab {
         },
     ]
 }
-
-export const TAB_LIST = [
-    {
-        name: 'Vốn bán nộp lên đơn vị cấp trên',
-        code: 'nop',
-        status: true,
-        role: CVMB.VIEW_REPORT_NTV_BH,
-        isSelected: false,
-    },
-    {
-        name: 'Vốn bán từ đơn vị cấp dưới',
-        code: 'gn',
-        status: true,
-        role: CVMB.VIEW_REPORT_GNV_BH,
-        isSelected: false,
-    },
-]

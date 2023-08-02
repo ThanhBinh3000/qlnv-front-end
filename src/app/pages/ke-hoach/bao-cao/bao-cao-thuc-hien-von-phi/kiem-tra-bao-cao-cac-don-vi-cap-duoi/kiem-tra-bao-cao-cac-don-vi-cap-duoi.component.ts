@@ -5,13 +5,14 @@ import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { Status, Utils } from 'src/app/Utility/utils';
 import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { BaoCaoThucHienVonPhiService } from 'src/app/services/quan-ly-von-phi/baoCaoThucHienVonPhi.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { LBC_KET_QUA_THUC_HIEN_HANG_DTQG, TRANG_THAI_KIEM_TRA_BAO_CAO, Utils } from 'src/app/Utility/utils';
+import { Vp } from '../bao-cao-thuc-hien-von-phi.constant';
 
 @Component({
     selector: 'app-kiem-tra-bao-cao-cac-don-vi-cap-duoi',
@@ -42,9 +43,9 @@ export class KiemTraBaoCaoCacDonViCapDuoiComponent implements OnInit {
     };
 
     userInfo: any;
-    trangThais: any = TRANG_THAI_KIEM_TRA_BAO_CAO;
+    trangThais: any = Status.TRANG_THAI_DVCT;
     trangThai!: string;
-    baoCaos: any = LBC_KET_QUA_THUC_HIEN_HANG_DTQG;
+    baoCaos: any = Vp.LOAI_BAO_CAO;
     totalElements = 0;
     totalPages = 0;
     dataTable: any[] = [];
