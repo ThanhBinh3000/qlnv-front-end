@@ -58,6 +58,7 @@ export class DialogTaoMoiCapUngVonComponent implements OnInit {
         }
         this.request.namDnghi = this.response.namDnghi;
         this.request.loaiDnghi = this.response.loaiDnghi;
+        this.request.trangThai = null;
         this.spinner.show();
         await this.capVonMuaBanTtthService.timKiemVonMuaBan(this.request.request()).toPromise().then(
             (data) => {
@@ -74,6 +75,8 @@ export class DialogTaoMoiCapUngVonComponent implements OnInit {
                             const index = lstBcao.findIndex(e => !Status.check('reject', e.trangThai));
                             if (index != -1) {
                                 this.initReport(lstBcao?.length + 1, lstBcao[index].id)
+                            } else {
+                                this.initReport(lstBcao?.length + 1);
                             }
                         }
                     } else {

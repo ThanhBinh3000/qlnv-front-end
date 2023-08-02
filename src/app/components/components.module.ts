@@ -4,7 +4,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { DialogCopyGiaoDuToanComponent } from './dialog/dialog-copy-giao-du-toan/dialog-copy-giao-du-toan.component';
 import { DialogCopyQuyetToanVonPhiHangDtqgComponent } from './dialog/dialog-copy-quyet-toan-von-phi-hang-dtqg/dialog-copy-quyet-toan-von-phi-hang-dtqg.component';
-import { DialogDieuChinhCopyComponent } from './dialog/dialog-dieu-chinh-copy/dialog-dieu-chinh-copy.component';
 import { DialogDieuChinhQuyetDinhPheDuyetComponent } from './dialog/dialog-dieu-chinh-quyet-dinh-phe-duyet-mtt/dialog-dieu-chinh-quyet-dinh-phe-duyet-mtt.component';
 import { DialogChonPhuLucDieuChinhComponent } from './dialog/dialog-quan-ly-dieu-chinh-du-toan-chi-nsnn/dialog-chon-phu-luc-dieu-chinh/dialog-chon-phu-luc-dieu-chinh.component';
 import { FileListComponent } from './file-list/file-list.component';
@@ -106,7 +105,6 @@ import { MultipleTagComponent } from './multiple-tag/multiple-tag.component';
 
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzResultModule } from 'ng-zorro-antd/result';
-import { DialogBaoCaoCopyComponent } from './dialog/dialog-bao-cao-copy/dialog-bao-cao-copy.component';
 import { DialogCanCuKQLCNTComponent } from './dialog/dialog-can-cu-kqlcnt/dialog-can-cu-kqlcnt.component';
 import { DialogCanCuQdPheDuyetKqdgComponent } from './dialog/dialog-can-cu-qd-phe-duyet-kqdg/dialog-can-cu-qd-phe-duyet-kqdg.component';
 import { DialogChiTietGiaoDichHangTrongKhoComponent } from './dialog/dialog-chi-tiet-giao-dich-hang-trong-kho/dialog-chi-tiet-giao-dich-hang-trong-kho.component';
@@ -154,7 +152,9 @@ import { NgxCurrencyModule } from 'ngx-currency';
 import { BaseComponent } from './base/base.component';
 import { Base2Component } from './base2/base2.component';
 import { DialogCanCuThongTinChaoGiaComponent } from './dialog/dialog-can-cu-thong-tin-chao-gia/dialog-can-cu-thong-tin-chao-gia.component';
+import { DialogChonDanhMucChoBieuMauComponent } from './dialog/dialog-chon-danh-muc-cho-bieu-mau/dialog-chon-danh-muc-cho-bieu-mau.component';
 import { DialogChonDanhMucComponent } from './dialog/dialog-chon-danh-muc/dialog-chon-danh-muc.component';
+import { DialogCongVanComponent } from './dialog/dialog-cong-van/dialog-cong-van.component';
 import { DialogDanhMucKhoComponent } from './dialog/dialog-danh-muc-kho/dialog-danh-muc-kho.component';
 import { DialogDanhSachVatTuHangHoaComponent } from './dialog/dialog-danh-sach-vat-tu-hang-hoa/dialog-danh-sach-vat-tu-hang-hoa.component';
 import { DialogDiaDiemNhapKhoComponent } from './dialog/dialog-dia-diem-nhap-kho/dialog-dia-diem-nhap-kho.component';
@@ -181,7 +181,6 @@ import {
 import { DialogQdPdKqlcntComponent } from "./dialog/ql-kho-tang/dialog-qd-pd-kqlcnt/dialog-qd-pd-kqlcnt.component";
 import { FmInputNumberComponent } from './fm-input-number.component';
 import { TemplateErrorComponent } from './template-error/template-error.component';
-import { DialogChonDanhMucChoBieuMauComponent } from './dialog/dialog-chon-danh-muc-cho-bieu-mau/dialog-chon-danh-muc-cho-bieu-mau.component';
 @NgModule({
   declarations: [
     //components
@@ -243,9 +242,7 @@ import { DialogChonDanhMucChoBieuMauComponent } from './dialog/dialog-chon-danh-
     DialogChonThemBieuMauComponent,
     DialogThemKhoanMucComponent,
     DialogLuaChonThemDonViComponent,
-    DialogBaoCaoCopyComponent,
     DialogDoCopyComponent,
-    DialogDieuChinhCopyComponent,
     DialogCopyGiaoDuToanComponent,
     DialogCopyQuyetToanVonPhiHangDtqgComponent,
     DialogThemVatTuComponent,
@@ -304,6 +301,7 @@ import { DialogChonDanhMucChoBieuMauComponent } from './dialog/dialog-chon-danh-
     DialogKtGiaoKhoComponent,
     DialogQdPdKhlcntComponent,
     DialogQdPdKqlcntComponent,
+    DialogCongVanComponent,
   ],
   imports: [
     CommonModule,

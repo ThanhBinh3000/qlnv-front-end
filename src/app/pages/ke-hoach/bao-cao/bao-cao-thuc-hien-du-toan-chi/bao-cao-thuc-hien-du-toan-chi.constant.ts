@@ -155,8 +155,10 @@ export class Report {
     ngayTao: any;
     nguoiTao: string;
     maDvi: string;
+    tenDvi: string;
     maDviCha: string;
     congVan: Doc;
+    ngayCongVan: string;
     ngayTrinh: string;
     ngayDuyet: string;
     ngayPheDuyet: string;
