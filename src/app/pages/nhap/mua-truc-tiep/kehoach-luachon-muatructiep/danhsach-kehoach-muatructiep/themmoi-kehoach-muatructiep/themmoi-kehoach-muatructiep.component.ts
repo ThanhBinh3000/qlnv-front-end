@@ -224,6 +224,7 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
           loaiVthh: this.formData.value.loaiVthh,
           cloaiVthh: this.formData.value.cloaiVthh,
           trangThai: STATUS.BAN_HANH,
+          loaiGia: "LG01",
           maDvi: this.formData.value.maDvi
         }
         let pag = await this.quyetDinhGiaTCDTNNService.getPag(bodyPag)
