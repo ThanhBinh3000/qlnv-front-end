@@ -119,6 +119,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
       maSo: [],
       soLuongNhapDc: [],
       thucTeKinhPhi: [],
+      lyDoTuChoi: [],
     });
   }
 

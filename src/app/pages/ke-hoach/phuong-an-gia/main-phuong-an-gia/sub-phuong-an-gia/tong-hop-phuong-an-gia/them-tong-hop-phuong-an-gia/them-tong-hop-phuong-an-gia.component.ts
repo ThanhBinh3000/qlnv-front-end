@@ -17,6 +17,7 @@ import {Globals} from 'src/app/shared/globals';
 import {chain} from "lodash";
 import {v4 as uuidv4} from "uuid";
 import {PAGE_SIZE_DEFAULT, TYPE_PAG} from 'src/app/constants/config';
+import {saveAs} from 'file-saver';
 
 @Component({
   selector: 'app-them-tong-hop-phuong-an-gia',
@@ -53,7 +54,17 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
   isViewModal: boolean = false;
   tieuChuanCl : string;
   isMuaToiDa : boolean;
-
+  reportTemplate: any = {
+    typeFile: "",
+    fileName: "tong_hop_phuong_an_gia.docx",
+    tenBaoCao: "",
+    trangThai: ""
+  };
+  showDlgPreview = false;
+  pdfSrc: any;
+  wordSrc: any;
+  excelBlob: any;
+  pdfBlob: any;
   constructor(
     private readonly fb: FormBuilder,
     private readonly modal: NzModalService,
@@ -381,6 +392,54 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
         this.listCucSelected.splice(0, 1);
       }
     }
+  }
+
+  downloadPdf() {
+    saveAs(this.pdfBlob, "bc_kh_tong_hop_nhap_xuat_hang_dtqg.pdf");
+  }
+
+  async downloadExcel() {
+    try {
+      this.spinner.show();
+      let body = this.formData.value;
+      body.typeFile = "xlsx";
+      body.fileName = "bc_kh_tong_hop_nhap_xuat_hang_dtqg.jrxml";
+      body.tenBaoCao = "Báo cáo kế hoạch tổng hợp nhập, xuất hàng dự trữ quốc gia";
+      body.trangThai = "01";
+      await this.tongHopPhuongAnGiaService.previewPag(body).then(async s => {
+        this.excelBlob = s;
+        saveAs(this.excelBlob, "tong_hop_phuong_an_gia.xls");
+      });
+    } catch (e) {
+      console.log(e);
+    } finally {
+      this.spinner.hide();
+    }
+  }
+
+  async preview() {
+    this.spinner.show();
+    try {
+        this.showDlgPreview = true;
+      // let body = this.formData.value;
+      // body.reportTemplateRequest = this.reportTemplate;
+      // body.fileDinhKemReq = this.fileDinhKem;
+      // await this.tongHopPhuongAnGiaService.preview(body).then(async s => {
+      //   this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
+      //   this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
+      //   this.showDlgPreview = true;
+      //   this
+      // });
+      this.spinner.hide();
+    } catch (e) {
+      console.log('error: ', e);
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  closeDlg() {
+    this.showDlgPreview = false;
   }
 }
 
