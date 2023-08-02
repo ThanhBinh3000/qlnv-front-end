@@ -104,7 +104,8 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
       ketQuaNiemPhong: [],
       type: ["01"],
       loaiDc: [this.loaiDc],
-      isVatTu: [this.isVatTu]
+      isVatTu: [this.isVatTu],
+      lyDoTuChoi: [],
     });
   }
 

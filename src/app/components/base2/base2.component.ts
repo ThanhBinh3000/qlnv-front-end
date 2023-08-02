@@ -50,7 +50,7 @@ export class Base2Component implements OnInit {
 
   @Input() isDetail: boolean = false;
   @Input() dataInit: any = {};
-  idSelected: number = 0;
+  @Input() idSelected: number = 0;
 
   // Service
   modal: NzModalService
@@ -62,6 +62,7 @@ export class Base2Component implements OnInit {
   spinner: NgxSpinnerService
   notification: NzNotificationService
   uploadFileService: UploadFileService
+  service: BaseService;
   ranges = { 'Hôm nay': [new Date(), new Date()], 'Tháng hiện tại': [new Date(), endOfMonth(new Date())] };
 
   constructor(
@@ -70,8 +71,9 @@ export class Base2Component implements OnInit {
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private service: BaseService,
+    private baseService: BaseService,
   ) {
+    this.service = baseService;
     this.notification = notification
     this.spinner = spinner;
     this.modal = modal
@@ -361,6 +363,8 @@ export class Base2Component implements OnInit {
 
   // Save
   async createUpdate(body, roles?: any) {
+    console.log(body,'body')
+    console.log(this.service,'service')
     if (!this.checkPermission(roles)) {
       return
     }

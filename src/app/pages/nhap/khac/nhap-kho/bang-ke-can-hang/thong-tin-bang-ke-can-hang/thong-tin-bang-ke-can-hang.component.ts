@@ -18,7 +18,7 @@ import { BienBanNghiemThuBaoQuanLanDauService } from "src/app/services/dieu-chuy
 import { QuyetDinhDieuChuyenCucService } from "src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-c.service";
 import { StorageService } from "src/app/services/storage.service";
 import { convertTienTobangChu } from "src/app/shared/commonFunction";
-import { v4 as uuidv4 } from 'uuid';
+import * as uuidv4 from "uuid";
 import { QuyetDinhGiaoNhapHangKhacService } from "src/app/services/qlnv-hang/nhap-hang/nhap-khac/quyetDinhGiaoNhapHangKhac.service";
 import { DonviService } from "src/app/services/donvi.service";
 import { PhieuNhapKhoService } from "src/app/services/qlnv-hang/nhap-hang/nhap-khac/phieuNhapKho";
