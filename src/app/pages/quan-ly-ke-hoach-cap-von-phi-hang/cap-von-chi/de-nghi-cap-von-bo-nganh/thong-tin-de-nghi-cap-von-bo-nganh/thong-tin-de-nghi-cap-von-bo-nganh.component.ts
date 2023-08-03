@@ -161,7 +161,7 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     this.userInfo = this.userService.getUserLogin();
-    this.itemDnCapVonBn.trangThai = this.globals.prop.NHAP_DU_THAO;
+    this.itemDnCapVonBn.trangThai = STATUS.DANG_NHAP_DU_LIEU;
     for (let i = -3; i < 23; i++) {
       this.listNam.push({
         value: dayjs().get('year') - i,
@@ -696,8 +696,8 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
   setTitle() {
     let trangThai = this.itemDnCapVonBn.trangThai;
     switch (trangThai) {
-      case STATUS.DU_THAO: {
-        this.titleStatus = 'Dự thảo';
+      case STATUS.DANG_NHAP_DU_LIEU: {
+        this.titleStatus = 'Đang nhập dữ liệu';
         break;
       }
       case STATUS.TU_CHOI_TP: {
