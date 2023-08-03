@@ -36,7 +36,7 @@ export class DanhSachDauThauService extends BaseService {
   }
 
   previewVt(body) {
-    const url = `${environment.SERVICE_API_LOCAL}${this.GATEWAY}/${this.table}/xem-truoc/vt`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/xem-truoc/vt`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
 
