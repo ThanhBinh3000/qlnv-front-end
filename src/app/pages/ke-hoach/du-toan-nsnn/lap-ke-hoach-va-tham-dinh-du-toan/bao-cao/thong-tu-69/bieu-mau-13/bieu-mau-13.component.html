@@ -188,7 +188,14 @@
                                             (ngModelChange)="editCache[data.id].data.changeModel()" />
                                     </td>
                                     <td>
-                                        {{ Op.fmtVal(editCache[data.id].data.ncauChiN) }}
+                                        <ng-container *ngIf="data.stt == '0.1.1.2' || data.stt == '0.1.1.3'; else khac">
+                                            <input class="money-input" currencyMask [options]="Op.amount"
+                                                [(ngModel)]="editCache[data.id].data.ncauChiN"
+                                                (ngModelChange)="editCache[data.id].data.changeModel()" />
+                                        </ng-container>
+                                        <ng-template #khac>
+                                            {{ Op.fmtVal(editCache[data.id].data.ncauChiN) }}
+                                        </ng-template>
                                     </td>
                                     <td>
                                         {{ Op.fmtVal(editCache[data.id].data.clechTranChiVsNcauChiN) }}

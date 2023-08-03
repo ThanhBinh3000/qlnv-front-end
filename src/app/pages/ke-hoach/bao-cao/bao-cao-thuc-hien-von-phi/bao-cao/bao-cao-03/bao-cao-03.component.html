@@ -133,9 +133,9 @@
                                         {{ data.ghiChu }}
                                     </td>
                                     <td *ngIf="status.save" nzRight>
-                                        <i *ngIf="data.level < 1" class="fa fa-plus"
-                                            (click)="selectGoods(data.stt)"></i>
-                                        <i *ngIf="data.level == 2" class="fa fa-pencil"
+                                        <i *ngIf="data.level == 0 || data.level == 2" class="fa fa-plus"
+                                            (click)="addLine(data.id)"></i>
+                                        <i *ngIf="data.level == 3" class="fa fa-pencil"
                                             (click)="startEdit(data.id)"></i>
                                     </td>
                                     <td *ngIf="status.save" nzRight>

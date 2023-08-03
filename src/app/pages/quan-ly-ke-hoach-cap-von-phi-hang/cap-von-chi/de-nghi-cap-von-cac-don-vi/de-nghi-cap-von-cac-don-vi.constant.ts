@@ -157,6 +157,8 @@ export class CapVon {
     ung: number;
     cap: number;
     cong: number;
+    uncNgay: string;
+    uncNienDo: string;
     tongTien: number;
     soConDuocCap: number;
     soLan: number;
