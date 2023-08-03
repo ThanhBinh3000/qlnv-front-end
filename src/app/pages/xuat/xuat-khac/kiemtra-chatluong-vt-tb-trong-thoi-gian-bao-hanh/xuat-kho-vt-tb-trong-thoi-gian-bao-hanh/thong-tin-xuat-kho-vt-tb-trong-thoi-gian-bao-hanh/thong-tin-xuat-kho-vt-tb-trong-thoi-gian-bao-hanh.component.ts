@@ -69,7 +69,7 @@ export class ThongTinXuatKhoVtTbTrongThoiGianBaoHanhComponent extends Base2Compo
         taiKhoanCo: [],
         idCanCu: [],
         soCanCu: [],
-        maDiaDiem: [],
+        maDiaDiem: ['', [Validators.required]],
         ngayQdGiaoNvXh: [],
         maNhaKho: [],
         maNganKho: [],
@@ -101,9 +101,9 @@ export class ThongTinXuatKhoVtTbTrongThoiGianBaoHanhComponent extends Base2Compo
         tenTrangThai: ['Dự Thảo'],
         tenLoaiVthh: [],
         tenCloaiVthh: [],
-        tenDiemKho: ['', [Validators.required]],
-        tenNhaKho: ['', [Validators.required]],
-        tenNganKho: ['', [Validators.required]],
+        tenDiemKho: [],
+        tenNhaKho: [],
+        tenNganKho: [],
         tenLoKho: [],
         fileDinhKems: [new Array<FileDinhKem>()],
         mauBiHuy: [],
@@ -178,6 +178,7 @@ export class ThongTinXuatKhoVtTbTrongThoiGianBaoHanhComponent extends Base2Compo
       trangThai: STATUS.DA_DUYET_LDC,
       dvql: this.userInfo.MA_DVI.substring(0, this.userInfo.MA_DVI.length - 2),
       nam: this.formData.get("namKeHoach").value,
+      loaiXn:"XUAT",
       listTrangThaiXh: [STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN],
     }
     let res = await this.qdGiaoNvXuatHangTrongThoiGianBaoHanhService.search(body);
@@ -242,6 +243,7 @@ export class ThongTinXuatKhoVtTbTrongThoiGianBaoHanhComponent extends Base2Compo
           cloaiVthh: item.cloaiVthh,
           tenCloaiVthh: item.tenCloaiVthh,
           donViTinh: item.donViTinh,
+          slLayMau:item.slLayMau,
         })
       }
     }
