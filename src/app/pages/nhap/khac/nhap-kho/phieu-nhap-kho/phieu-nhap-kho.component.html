@@ -24,9 +24,23 @@
               <input nz-input formControlName="soPhieuNhapKho" />
             </div>
 
-            <div nz-col nzSpan="4">
+            <!-- <div nz-col nzSpan="4">
               <label class="search__label">Ngày nhập kho</label>
               <nz-range-picker formControlName="ngayNhapKho" nzFormat="dd/MM/yyyy"></nz-range-picker>
+            </div> -->
+            <div nz-col nzSpan="4">
+              <label class="search__label">Ngày nhập kho</label>
+              <div nz-row>
+                <div nz-col nzSpan="12" class="cus-start-date">
+                  <nz-date-picker [nzDisabledDate]="disabledStartNgayNK" nzFormat="dd/MM/yyyy"
+                    formControlName="ngayNhapKhoTu" nzPlaceHolder="Ngày bắt đầu">
+                  </nz-date-picker>
+                </div>
+                <div nz-col nzSpan="12" class="cus-end-date">
+                  <nz-date-picker [nzDisabledDate]="disabledEndNgayNK" nzFormat="dd/MM/yyyy"
+                    formControlName="ngayNhapKhoDen" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+                </div>
+              </div>
             </div>
 
 
@@ -115,7 +129,7 @@
                     <td>
                     </td>
                     <td></td>
-                    <td class="bold">{{row2.thoiHanDieuChuyen | date: 'dd/MM/YYYY'}}</td>
+                    <td class="bold">{{row2.thoiHanDieuChuyen}}</td>
                     <td class="bold">{{ row2.tenDiemKho || ""}}</td>
                     <td></td>
                     <td></td>

@@ -56,7 +56,8 @@ export class PhieuNhapKhoComponent extends Base2Component implements OnInit {
       nam: [],
       soQdGiaoNv: [],
       soPhieuNhapKho: [],
-      ngayNhapKho: [],
+      ngayNhapKhoTu: [],
+      ngayNhapKhoDen: [],
       loaiVthh: [this.loaiVthh]
     })
     // this.filterTable = {
@@ -94,6 +95,22 @@ export class PhieuNhapKhoComponent extends Base2Component implements OnInit {
 
 
   }
+
+  disabledStartNgayNK = (startValue: Date): boolean => {
+    if (startValue && this.formData.value.ngayNhapKhoDen) {
+      return startValue.getTime() > this.formData.value.ngayNhapKhoDen.getTime();
+    } else {
+      return false;
+    }
+  };
+
+  disabledEndNgayNK = (endValue: Date): boolean => {
+    if (endValue && this.formData.value.ngayNhapKhoTu) {
+      return endValue.getTime() < this.formData.value.ngayNhapKhoTu.getTime();
+    } else {
+      return false;
+    }
+  };
 
 
 
@@ -136,9 +153,11 @@ export class PhieuNhapKhoComponent extends Base2Component implements OnInit {
   }
 
   async timKiem() {
-    if (this.formData.value.ngayNhapKho) {
-      this.formData.value.ngayNhapKhoTu = dayjs(this.formData.value.ngayNhapKho[0]).format('YYYY-MM-DD')
-      this.formData.value.ngayNhapKhoDen = dayjs(this.formData.value.ngayNhapKho[1]).format('YYYY-MM-DD')
+    if (this.formData.value.ngayNhapKhoTu) {
+      this.formData.value.ngayNhapKhoTu = dayjs(this.formData.value.ngayNhapKhoTu).format('YYYY-MM-DD')
+    }
+    if (this.formData.value.ngayNhapKhoDen) {
+      this.formData.value.ngayNhapKhoDen = dayjs(this.formData.value.ngayNhapKhoDen).format('YYYY-MM-DD')
     }
     let body = this.formData.value
     body.paggingReq = {
