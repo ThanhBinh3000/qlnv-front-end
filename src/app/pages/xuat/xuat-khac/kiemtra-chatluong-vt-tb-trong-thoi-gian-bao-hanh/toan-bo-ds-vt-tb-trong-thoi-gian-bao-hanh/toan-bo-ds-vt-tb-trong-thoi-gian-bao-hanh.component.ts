@@ -68,7 +68,7 @@ export class ToanBoDsVtTbTrongThoiGianBaoHanhComponent extends Base2Component im
       thoiHanLk: [],
       lyDo: [],
       trangThai: [],
-      loai: [],
+      loai: [LOAI_HH_XUAT_KHAC.VT_BH],
       tenLoaiVthh: [],
       tenCloaiVthh: [],
       tenTrangThai: [],
@@ -127,9 +127,6 @@ export class ToanBoDsVtTbTrongThoiGianBaoHanhComponent extends Base2Component im
   };
 
   async timKiem() {
-    this.formData.patchValue({
-      loai: this.loaiHhXuatKhac.VT_BH,
-    });
     await this.search();
     this.dataTable.forEach(s => {
       s.idVirtual = uuidv4();
