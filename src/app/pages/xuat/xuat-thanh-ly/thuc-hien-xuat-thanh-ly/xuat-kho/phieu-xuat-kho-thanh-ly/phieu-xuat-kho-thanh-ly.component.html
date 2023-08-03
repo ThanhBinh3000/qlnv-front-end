@@ -55,7 +55,7 @@
           <span>Xuất file</span>
         </button>
         <button type="button" class="btn btn-main" (click)="redirectDetail(0,false, 0)"
-        >
+                *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_PXK_THEM') && userService.isChiCuc()">
           <i class="icon htvbdh_tcdt_tao-qd"></i>
           <span>Thêm</span>
         </button>
@@ -115,8 +115,8 @@
                 <td></td>
                 <td></td>
                 <td class="text-left">
-                  <a  (click)="redirectDetail(0, false, lv1.idBbQd)"
-                      *ngIf="userService.isChiCuc()">
+                  <a (click)="redirectDetail(0, false, lv1.idBbQd)"
+                     *ngIf="userService.isChiCuc()">
                     <i class="fa fa-plus"></i>
                   </a>
                 </td>
@@ -188,7 +188,8 @@
   </div>
 </div>
 <div class="chi-tiet" *ngIf="isDetail">
-  <app-chi-tiet-phieu-xuat-kho-thanh-ly [idInput]="idSelected" [isView]="isView" [idBbQd]="idBbQd" (showListEvent)="showList()">
+  <app-chi-tiet-phieu-xuat-kho-thanh-ly [idInput]="idSelected" [isView]="isView" [idBbQd]="idBbQd"
+                                        (showListEvent)="showList()">
   </app-chi-tiet-phieu-xuat-kho-thanh-ly>
 </div>
 
