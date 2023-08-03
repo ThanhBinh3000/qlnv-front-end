@@ -1,12 +1,7 @@
-import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../../../../environments/environment';
-import { OldResponseData, ResponseData } from '../../../../../interfaces/response';
-import {
-  ThongTinDeXuatKeHoachLuaChonNhaThau,
-  ThongTinDeXuatKeHoachLuaChonNhaThauInput,
-} from '../../../../../models/DeXuatKeHoachuaChonNhaThau';
+import { OldResponseData } from '../../../../../interfaces/response';
 import { BaseService } from '../../../../base.service';
 
 @Injectable({
@@ -37,6 +32,11 @@ export class DanhSachDauThauService extends BaseService {
 
   preview(body) {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/xem-truoc`;
+    return this._httpClient.post<OldResponseData>(url, body).toPromise();
+  }
+
+  previewVt(body) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/xem-truoc/vt`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
 

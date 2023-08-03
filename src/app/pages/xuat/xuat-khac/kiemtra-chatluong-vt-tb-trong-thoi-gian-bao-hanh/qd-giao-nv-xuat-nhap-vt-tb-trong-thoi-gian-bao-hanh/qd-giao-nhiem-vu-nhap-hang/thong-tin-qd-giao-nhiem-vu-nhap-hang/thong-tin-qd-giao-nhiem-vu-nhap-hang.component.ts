@@ -146,8 +146,10 @@ export class ThongTinQdGiaoNhiemVuNhapHangComponent extends Base2Component imple
     }
     let rs = await this.phieuKdclVtTbTrongThoiGianBaoHanhService.search(body);
     if (rs.msg == MESSAGE.SUCCESS) {
-      this.listPhieuKdcl = rs.data.content;
-      this.listPhieuKdcl.forEach(i=>i.id=null);
+     let data = rs.data.content;
+      console.log(data,"data")
+      this.listPhieuKdcl = data.filter(i => i.mauBiHuy == false);
+      console.log(this.listPhieuKdcl ,"123")
     }
     return this.listPhieuKdcl;
   }
@@ -185,7 +187,8 @@ export class ThongTinQdGiaoNhiemVuNhapHangComponent extends Base2Component imple
     if (body.idCanCu && isArray(body.idCanCu)) {
       body.idCanCu = body.idCanCu.join(",");
     }
-    body.qdGiaonvXhDtl = this.listPhieuKdcl;
+    let dtl=this.listPhieuKdcl.map((item) => ({ ...item, id: null }));
+    body.qdGiaonvXhDtl = dtl;
     let data = await this.createUpdate(body);
     if (data) {
       if (isGuiDuyet) {

@@ -64,6 +64,21 @@ import {
 import {
   ThongTinQdGiaoNhiemVuNhapHangComponent
 } from "./qd-giao-nv-xuat-nhap-vt-tb-trong-thoi-gian-bao-hanh/qd-giao-nhiem-vu-nhap-hang/thong-tin-qd-giao-nhiem-vu-nhap-hang/thong-tin-qd-giao-nhiem-vu-nhap-hang.component";
+import {
+  NhapKhoVtTbTrongThoiGianBaoHanhComponent
+} from "./nhap-kho-vt-tb-trong-thoi-gian-bao-hanh/nhap-kho-vt-tb-trong-thoi-gian-bao-hanh.component";
+import {
+  PhieuNhapKhoVtTbTrongThoiGianBaoHanhComponent
+} from "./nhap-kho-vt-tb-trong-thoi-gian-bao-hanh/phieu-nhap-kho/phieu-nhap-kho-vt-tb-trong-thoi-gian-bao-hanh.component";
+import {
+  ThongTinPhieuNhapKhoVtTbTrongThoiGianBaoHanhComponent
+} from "./nhap-kho-vt-tb-trong-thoi-gian-bao-hanh/phieu-nhap-kho/thong-tin-phieu-nhap-kho/thong-tin-phieu-nhap-kho-vt-tb-trong-thoi-gian-bao-hanh.component";
+import {
+  BienBanKetThucNhapKhoBaoHanhComponent
+} from "./nhap-kho-vt-tb-trong-thoi-gian-bao-hanh/bien-ban-ket-thuc-nhap-kho/bien-ban-ket-thuc-nhap-kho-bao-hanh.component";
+import {
+  ThongTinBienBanKetThucNhapKhoBaoHanhComponent
+} from "./nhap-kho-vt-tb-trong-thoi-gian-bao-hanh/bien-ban-ket-thuc-nhap-kho/thong-tin-bien-ban-ket-thuc-nhap-kho/thong-tin-bien-ban-ket-thuc-nhap-kho-bao-hanh.component";
 
 
 @NgModule({
@@ -86,6 +101,11 @@ import {
     ThongTinPhieuKiemDinhChatLuongVtTbComponent,
     BaoCaoKetQuaKiemDinhVtTbComponent,
     ThongTinBaoCaoKetQuaKiemDinhVtTbComponent,
+    NhapKhoVtTbTrongThoiGianBaoHanhComponent,
+    PhieuNhapKhoVtTbTrongThoiGianBaoHanhComponent,
+    ThongTinPhieuNhapKhoVtTbTrongThoiGianBaoHanhComponent,
+    BienBanKetThucNhapKhoBaoHanhComponent,
+    ThongTinBienBanKetThucNhapKhoBaoHanhComponent,
   ],
   imports: [
     CommonModule,
@@ -117,6 +137,11 @@ import {
     ThongTinPhieuKiemDinhChatLuongVtTbComponent,
     BaoCaoKetQuaKiemDinhVtTbComponent,
     ThongTinBaoCaoKetQuaKiemDinhVtTbComponent,
+    NhapKhoVtTbTrongThoiGianBaoHanhComponent,
+    PhieuNhapKhoVtTbTrongThoiGianBaoHanhComponent,
+    ThongTinPhieuNhapKhoVtTbTrongThoiGianBaoHanhComponent,
+    BienBanKetThucNhapKhoBaoHanhComponent,
+    ThongTinBienBanKetThucNhapKhoBaoHanhComponent,
   ],
   providers: [DatePipe]
 })

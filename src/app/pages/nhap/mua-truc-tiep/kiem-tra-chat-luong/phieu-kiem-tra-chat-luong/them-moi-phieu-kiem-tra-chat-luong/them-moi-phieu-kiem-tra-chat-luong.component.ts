@@ -118,6 +118,7 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
         ldoTuChoi: [''],
         trangThai: [],
         tenTrangThai: [],
+        tenNganLoKho: [],
       }
     );
   }
@@ -272,6 +273,7 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
         maLoKho: data.maLoKho,
         tenLoKho: data.tenLoKho,
         soLuongQdGiaoNvNh: data.soLuong * 1000,
+        tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho,
         soLuongDaNhap: soLuongNhap.data
       })
     }

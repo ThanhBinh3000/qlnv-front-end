@@ -30,6 +30,7 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
   @Input() loaiVthh: string;
   @Input() idKqMtt: number;
   @Input() isQuanLy: boolean;
+  @Input() idQdKh: number;
 
   @Output()
   showListEvent = new EventEmitter<any>();
@@ -66,7 +67,7 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
         ngayKyQdKq: [''],
         ngayMkho: [''],
         soQd: [''],
-        idDviBan: [null, [Validators.required]],
+        idDviBan: [''],
 
 
         soHd: [''],
@@ -125,7 +126,11 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
         dviCungCap: [''],
         tongSoLuongQdKh: [],
         idKqCgia: [''],
-        idQdPdSldd: ['']
+        idQdKh: [''],
+        soQdKh: [''],
+        idQdPdSldd: [''],
+        idQdGiaoNvNh: [''],
+        soQdGiaoNvNh: [''],
       }
     );
   }
@@ -136,6 +141,9 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
     await Promise.all([
       this.loadDataComboBox()
     ]);
+    if (this.idQdKh) {
+      await this.onChangeQdKh(this.idQdKh);
+    }
     if (this.id) {
       await this.loadChiTiet(this.id);
     } else {
@@ -192,11 +200,12 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
       namHd: dayjs().get('year'),
       id: data.id,
       idKqCgia: data.idKqCgia,
+      soQdKh: data?.hhQdPheduyetKhMttHdr?.soQd,
       idQdPdSldd: data.idQdPdSldd
     })
     this.idKqCgia = data.idKqCgia;
-    console.log("formData1", this.formData.value)
-    this.dataTable = data.children;
+    console.log("formData1", data)
+    this.dataTable = data.qdGiaoNvuDtlList.length > 0 ? data.qdGiaoNvuDtlList.filter(x => x.maDvi.includes(this.userInfo.MA_DVI)) : data.children;
     console.log(this.dataTable)
     this.dataTablePhuLuc = data.phuLucDtl;
     this.objHopDongHdr = data;
@@ -231,6 +240,78 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
   showChiTiet() {
     this.isViewPhuLuc = false;
     this.loadChiTiet(this.id);
+  }
+
+  async openDialogQdKh() {
+    this.spinner.show()
+    let listQdKh: any[] = [];
+    let body = {
+      pthucMuaTrucTiep: '02',
+      trangThai: STATUS.HOAN_THANH_CAP_NHAT
+    };
+    let res = await this.chaogiaUyquyenMualeService.search(body)
+    if (res.data) {
+      listQdKh = res.data?.content;
+    }
+    console.log(res.data)
+    this.spinner.hide();
+    const modalQD = this.modal.create({
+      nzTitle: 'Thông tin Kết quả chào giá',
+      nzContent: DialogTableSelectionComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {
+        dataHeader: ['Số QĐ kế hoạch', 'Tên loại hàng hóa', 'Tên chủng loại vật tư hàng háo'],
+        dataColumn: ['soQd', 'tenLoaiVthh', 'tenCloaiVthh'],
+        dataTable: listQdKh
+      },
+    });
+    modalQD.afterClose.subscribe(async (data) => {
+      if (data) {
+        await this.onChangeQdKh(data.id);
+      }
+    });
+  }
+
+  async onChangeQdKh(id) {
+    if (id > 0) {
+      await this.quyetDinhPheDuyetKeHoachMTTService.getDetailDtlCuc(id)
+        .then(async (resKq) => {
+          const dataKq = resKq.data;
+          // let resTtin = await this.quyetDinhPheDuyetKeHoachMTTService.getDetailDtlCuc(dataKq.idPdKhDtl);
+          if (dataKq) {
+            // const dataThongTin = resTtin.data;
+            // this.dataTable = dataKq.danhSachCtiet;
+            this.formData.patchValue({
+              idQdKh: dataKq.idQdHdr,
+              soQdKh: dataKq.soQd,
+              idQdGiaoNvNh: dataKq.hhQdPheduyetKhMttHdr.idQdGnvu,
+              soQdGiaoNvNh: dataKq.hhQdPheduyetKhMttHdr.soQdGnvu,
+              soQd: dataKq.hhQdPheduyetKhMttHdr.soQdGnvu,
+              ngayMkho: dataKq.ngayMkho,
+              ngayKyQdKq: dataKq.ngayKy,
+              loaiVthh: dataKq.loaiVthh,
+              tenLoaiVthh: dataKq.tenLoaiVthh,
+              cloaiVthh: dataKq.cloaiVthh,
+              tenCloaiVthh: dataKq.tenCloaiVthh,
+              moTaHangHoa: dataKq.moTaHangHoa,
+              dviTinh: "kg",
+              // tongSoLuongQdKh: dataThongTin.tongSoLuong * 1000
+            });
+            this.dataTable = dataKq.children.filter(x => x.maDvi == this.userInfo.MA_DVI)
+            console.log("formData2", this.dataTable)
+            // dataKq.danhSachCtiet.forEach((item) => {
+            //   item.listChaoGia.forEach(res => {
+            //     if (res.luaChon == true) {
+            //       this.listDviLquan.push(res)
+            //     }
+            //   })
+            // })
+          }
+        })
+    }
   }
 
   async openDialogKqMTT() {

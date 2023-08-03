@@ -177,12 +177,21 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
     });
   }
 
-  async save() {
+  async save(isBanHanh?) {
     this.spinner.show();
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.spinner.hide();
       return;
+    }
+    if (this.arrThongTinGia && this.arrThongTinGia.length > 0) {
+      if (this.formData.value.loaiGia == 'LG03') {
+        this.dataTable.forEach(item => {
+          if (item.vat) {
+            item.giaQdTcdt = item.giaQdTcdt + item.giaQdTcdt * item.vat
+          }
+        })
+      }
     }
     let body = this.formData.value;
     body.soQd = body.soQd + this.maQd;
@@ -198,18 +207,26 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
       res = await this.quyetDinhGiaTCDTNNService.create(body);
     }
     if (res.msg == MESSAGE.SUCCESS) {
-      if (this.idInput > 0) {
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-      } else {
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+      if (isBanHanh) {
+        this.formData.patchValue({
+          id: res.data.id,
+          trangThai: res.data.trangThai
+        })
+        this.banHanh();
       }
-      this.quayLai();
+      if (!isBanHanh) {
+        if (this.idInput > 0) {
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+        } else {
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+        }
+        this.quayLai();
+      }
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
     this.spinner.hide();
   }
-
   async loadDsLoaiGia() {
     this.dsLoaiGia = [];
     let res = await this.danhMucService.danhMucChungGetAll("LOAI_GIA");

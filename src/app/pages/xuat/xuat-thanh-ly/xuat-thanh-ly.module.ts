@@ -51,11 +51,24 @@ import {
 import {
   ThongTinHopDongThanhLyComponent
 } from './to-chuc-thuc-hien-thanh-ly/hop-dong-thanh-ly/thong-tin-hop-dong-thanh-ly/thong-tin-hop-dong-thanh-ly.component';
-import { QuyetDinhGiaoNhiemVuThanhLyComponent } from './to-chuc-thuc-hien-thanh-ly/quyet-dinh-giao-nhiem-vu-thanh-ly/quyet-dinh-giao-nhiem-vu-thanh-ly.component';
-import { ChiTietQuyetDinhGiaoNhiemVuThanhLyComponent } from './to-chuc-thuc-hien-thanh-ly/quyet-dinh-giao-nhiem-vu-thanh-ly/chi-tiet-quyet-dinh-giao-nhiem-vu-thanh-ly/chi-tiet-quyet-dinh-giao-nhiem-vu-thanh-ly.component';
-import { XuatKhoThanhLyComponent } from './xuat-kho-thanh-ly/xuat-kho-thanh-ly.component';
-import { PhieuXuatKhoThanhLyComponent } from './xuat-kho-thanh-ly/phieu-xuat-kho-thanh-ly/phieu-xuat-kho-thanh-ly.component';
-import { ChiTietPhieuXuatKhoThanhLyComponent } from './xuat-kho-thanh-ly/phieu-xuat-kho-thanh-ly/chi-tiet-phieu-xuat-kho-thanh-ly/chi-tiet-phieu-xuat-kho-thanh-ly.component';
+import {
+  QuyetDinhGiaoNhiemVuThanhLyComponent
+} from './to-chuc-thuc-hien-thanh-ly/quyet-dinh-giao-nhiem-vu-thanh-ly/quyet-dinh-giao-nhiem-vu-thanh-ly.component';
+import {
+  ChiTietQuyetDinhGiaoNhiemVuThanhLyComponent
+} from './to-chuc-thuc-hien-thanh-ly/quyet-dinh-giao-nhiem-vu-thanh-ly/chi-tiet-quyet-dinh-giao-nhiem-vu-thanh-ly/chi-tiet-quyet-dinh-giao-nhiem-vu-thanh-ly.component';
+import {ThucHienXuatThanhLyComponent} from './thuc-hien-xuat-thanh-ly/thuc-hien-xuat-thanh-ly.component';
+import {KiemTraChatLuongComponent} from './thuc-hien-xuat-thanh-ly/kiem-tra-chat-luong/kiem-tra-chat-luong.component';
+import {XuatKhoComponent} from './thuc-hien-xuat-thanh-ly/xuat-kho/xuat-kho.component';
+import {XuatModule} from "src/app/pages/xuat/xuat.module";
+import { PhieuXuatKhoThanhLyComponent } from './thuc-hien-xuat-thanh-ly/xuat-kho/phieu-xuat-kho-thanh-ly/phieu-xuat-kho-thanh-ly.component';
+import { ChiTietPhieuXuatKhoThanhLyComponent } from './thuc-hien-xuat-thanh-ly/xuat-kho/phieu-xuat-kho-thanh-ly/chi-tiet-phieu-xuat-kho-thanh-ly/chi-tiet-phieu-xuat-kho-thanh-ly.component';
+import { BangKeCanThanhLyComponent } from './thuc-hien-xuat-thanh-ly/xuat-kho/bang-ke-can-thanh-ly/bang-ke-can-thanh-ly.component';
+import { ChiTietBangKeCanThanhLyComponent } from './thuc-hien-xuat-thanh-ly/xuat-kho/bang-ke-can-thanh-ly/chi-tiet-bang-ke-can-thanh-ly/chi-tiet-bang-ke-can-thanh-ly.component';
+import { BienBanTinhKhoThanhLyComponent } from './thuc-hien-xuat-thanh-ly/xuat-kho/bien-ban-tinh-kho-thanh-ly/bien-ban-tinh-kho-thanh-ly.component';
+import { ChiTietBbTinhKhoThanhLyComponent } from './thuc-hien-xuat-thanh-ly/xuat-kho/bien-ban-tinh-kho-thanh-ly/chi-tiet-bb-tinh-kho-thanh-ly/chi-tiet-bb-tinh-kho-thanh-ly.component';
+import { BienBanHaoDoiThanhLyComponent } from './thuc-hien-xuat-thanh-ly/xuat-kho/bien-ban-hao-doi-thanh-ly/bien-ban-hao-doi-thanh-ly.component';
+import { ChiTietBbHaoDoiThanhLyComponent } from './thuc-hien-xuat-thanh-ly/xuat-kho/bien-ban-hao-doi-thanh-ly/chi-tiet-bb-hao-doi-thanh-ly/chi-tiet-bb-hao-doi-thanh-ly.component';
 
 
 @NgModule({
@@ -86,9 +99,17 @@ import { ChiTietPhieuXuatKhoThanhLyComponent } from './xuat-kho-thanh-ly/phieu-x
     ThongTinHopDongThanhLyComponent,
     QuyetDinhGiaoNhiemVuThanhLyComponent,
     ChiTietQuyetDinhGiaoNhiemVuThanhLyComponent,
-    XuatKhoThanhLyComponent,
+    ThucHienXuatThanhLyComponent,
+    KiemTraChatLuongComponent,
+    XuatKhoComponent,
     PhieuXuatKhoThanhLyComponent,
-    ChiTietPhieuXuatKhoThanhLyComponent
+    ChiTietPhieuXuatKhoThanhLyComponent,
+    BangKeCanThanhLyComponent,
+    ChiTietBangKeCanThanhLyComponent,
+    BienBanTinhKhoThanhLyComponent,
+    ChiTietBbTinhKhoThanhLyComponent,
+    BienBanHaoDoiThanhLyComponent,
+    ChiTietBbHaoDoiThanhLyComponent,
   ],
   imports: [
     CommonModule,
@@ -99,6 +120,7 @@ import { ChiTietPhieuXuatKhoThanhLyComponent } from './xuat-kho-thanh-ly/phieu-x
     MainModule,
     ComponentsModule,
     HopDongModule,
+    XuatModule,
   ],
   exports: [
     ThanhLyDanhSachHangComponent
@@ -107,3 +129,4 @@ import { ChiTietPhieuXuatKhoThanhLyComponent } from './xuat-kho-thanh-ly/phieu-x
 })
 export class XuatThanhLyModule {
 }
+

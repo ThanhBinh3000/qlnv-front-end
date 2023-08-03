@@ -61,6 +61,7 @@ export class ChiTietQuyetDinhGiaoNhiemVuThanhLyComponent extends Base2Component 
       ngayKyQd: [''],
       idHopDong: [],
       soHopDong: [''],
+      ngayKyHopDong: [''],
       maDviTsan: [''],
       toChucCaNhan: [''],
       loaiVthh: [''],
@@ -164,6 +165,7 @@ export class ChiTietQuyetDinhGiaoNhiemVuThanhLyComponent extends Base2Component 
             this.formData.patchValue({
               idHopDong: dataHd.id,
               soHopDong: dataHd.soHd,
+              ngayKyHopDong: dataHd.ngayHieuLuc,
               maDviTsan: dataHd.maDviTsan,
               toChucCaNhan: dataHd.toChucCaNhan,
               loaiVthh: dataHd.loaiVthh,

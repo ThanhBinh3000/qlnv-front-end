@@ -22,8 +22,8 @@ import {
   BienBanLayMauVtTbTrongThoiGianBaoHanhService
 } from "../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvtbaohanh/BienBanLayMauVtTbTrongThoiGianBaoHanh.service";
 import {
-  PhieuXuatKhoVtTbTrongThoiGianBaoHanhService
-} from "../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvtbaohanh/PhieuXuatKhoVtTbTrongThoiGianBaoHanh.service";
+  PhieuXuatNhapKhoVtTbTrongThoiGianBaoHanhService
+} from "../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvtbaohanh/PhieuXuatNhapKhoVtTbTrongThoiGianBaoHanh.service";
 import {
   QdGiaoNvXuatHangTrongThoiGianBaoHanhService
 } from "../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvtbaohanh/QdGiaoNvXuatHangTrongThoiGianBaoHanh.service";
@@ -69,7 +69,7 @@ export class ThongTinBienBanLayMauBanGiaoMauVtTbComponent extends Base2Component
     modal: NzModalService,
     private danhMucService: DanhMucService,
     private qdGiaoNvXuatHangTrongThoiGianBaoHanhService: QdGiaoNvXuatHangTrongThoiGianBaoHanhService,
-    private phieuXuatKhoVtTbTrongThoiGianBaoHanhService: PhieuXuatKhoVtTbTrongThoiGianBaoHanhService,
+    private phieuXuatKhoVtTbTrongThoiGianBaoHanhService: PhieuXuatNhapKhoVtTbTrongThoiGianBaoHanhService,
     private khCnQuyChuanKyThuat: KhCnQuyChuanKyThuat,
     private bienBanLayMauVtTbTrongThoiGianBaoHanhService: BienBanLayMauVtTbTrongThoiGianBaoHanhService
   ) {
@@ -216,6 +216,7 @@ export class ThongTinBienBanLayMauBanGiaoMauVtTbComponent extends Base2Component
       dvql: this.userInfo.MA_DVI,
       trangThai: STATUS.DA_DUYET_LDC,
       listTrangThaiXh: [STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN],
+      loaiXn:"XUAT"
     }
     let res = await this.qdGiaoNvXuatHangTrongThoiGianBaoHanhService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -228,7 +229,7 @@ export class ThongTinBienBanLayMauBanGiaoMauVtTbComponent extends Base2Component
 
   async openDialogSoQd() {
     const modalQD = this.modal.create({
-      nzTitle: 'Danh sách số quyết định kế hoạch giao nhiệm vụ xuất hàng',
+      nzTitle: 'Danh sách số quyết định giao nhiệm vụ xuất hàng',
       nzContent: DialogTableSelectionComponent,
       nzMaskClosable: false,
       nzClosable: false,

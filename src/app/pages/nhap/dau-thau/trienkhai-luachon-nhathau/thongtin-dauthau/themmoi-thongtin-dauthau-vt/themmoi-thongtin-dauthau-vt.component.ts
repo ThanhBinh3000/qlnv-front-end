@@ -14,7 +14,8 @@ import {
 import {MESSAGE} from "../../../../../../constants/message";
 import {cloneDeep} from 'lodash';
 import {formatDate} from "@angular/common";
-
+import {PREVIEW} from "../../../../../../constants/fileType";
+import { saveAs } from "file-saver";
 @Component({
   selector: 'app-themmoi-thongtin-dauthau-vt',
   templateUrl: './themmoi-thongtin-dauthau-vt.component.html',
@@ -36,6 +37,15 @@ export class ThemmoiThongtinDauthauVtComponent extends Base2Component implements
   itemRowUpdate: any = {};
   idGoiThau: number = 0;
   isDieuChinh: boolean = false;
+  reportTemplate: any = {
+    typeFile: "",
+    fileName: "thong_tin_dau_thau_vt.docx",
+    tenBaoCao: "",
+    trangThai: ""
+  };
+  showDlgPreview = false;
+  pdfSrc: any;
+  wordSrc: any;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -359,5 +369,29 @@ export class ThemmoiThongtinDauthauVtComponent extends Base2Component implements
       prev += cur.soLuong * cur.donGiaNhaThau;
       return prev;
     }, 0);
+  }
+
+  async preview() {
+    let body = {
+      id : this.idInput,
+      reportTemplateRequest : this.reportTemplate,
+      loaiVthh: this.loaiVthh
+    }
+    await this.thongTinDauThauService.preview(body).then(async s => {
+      this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
+      this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
+      this.showDlgPreview = true;
+    });
+  }
+  downloadPdf() {
+    saveAs(this.pdfSrc, "thong_tin_dau_thau_vt.pdf");
+  }
+
+  downloadWord() {
+    saveAs(this.wordSrc, "thong_tin_dau_thau_vt.docx");
+  }
+
+  closeDlg() {
+    this.showDlgPreview = false;
   }
 }

@@ -78,7 +78,7 @@
             <div nz-row [nzGutter]="18" >
               <div nz-col [nzSpan]="16">
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-form-label nzRequired >Biện pháp xử lý</nz-form-label>
+                  <nz-form-label >Biện pháp xử lý</nz-form-label>
                   <nz-form-item >
                     <nz-select formControlName="bienPhapXl" [nzDisabled]="disabled()">
                       <nz-option *ngFor="let p of listBpxl" [nzValue]="p.ma"
@@ -90,7 +90,7 @@
               </div>
               <div nz-col [nzSpan]="8">
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-form-label >Kết quả (Số lượng xử lý)</nz-form-label>
+                  <nz-form-label nzRequired >Kết quả (Số lượng xử lý)</nz-form-label>
                   <nz-form-item>
                     <nz-input-number
                       [nzSize]="'small'" [nzFormatter]="globals.formatter"
@@ -141,7 +141,7 @@
         </thead>
         <tbody>
         <tr>
-          <td>{{rowItem.tongSoLuong}}</td>
+          <td>{{rowItem.tongSoLuong | number : '1.0-1' : 'vi_VN'}}</td>
           <td>
             <nz-input-number
               [nzSize]="'small'" [nzFormatter]="globals.formatter"
@@ -213,7 +213,7 @@
         </thead>
         <tbody>
         <tr>
-          <td>{{rowItem.tongSoLuong}}</td>
+          <td>{{rowItem.tongSoLuong | number : '1.0-1' : 'vi_VN'}}</td>
           <td>
             <nz-input-number
               [nzSize]="'small'" [nzFormatter]="globals.formatter"
@@ -273,7 +273,7 @@
         </thead>
         <tbody>
         <tr>
-          <td>{{rowItem.tongSoLuong}}</td>
+          <td>{{rowItem.tongSoLuong | number : '1.0-1' : 'vi_VN'}}</td>
           <td>
             <nz-input-number
               [nzSize]="'small'" [nzFormatter]="globals.formatter"
@@ -421,7 +421,7 @@
         <i nz-icon nzType="save"></i>
         Lưu
       </button>
-      <button *ngIf="!disabled()" nz-button (click)="handleOk(true)" class="modal__button--save ml-2">
+      <button *ngIf="!disabled() && !isXacNhan" nz-button (click)="handleOk(true)" class="modal__button--save ml-2">
         <i nz-icon nzType="save"></i>
         Xác nhận
       </button>

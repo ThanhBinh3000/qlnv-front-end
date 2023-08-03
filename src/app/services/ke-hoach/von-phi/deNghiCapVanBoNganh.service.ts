@@ -92,4 +92,8 @@ export class DeNghiCapVonBoNganhService extends BaseService {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/de-nghi-cap-von-bo-nganh/ds-thu-huong`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
+  dsHopDongTheoBoNganh(body) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/de-nghi-cap-von-bo-nganh/ds-hop-dong-theo-bo-nganh`;
+    return this._httpClient.post<OldResponseData>(url, body).toPromise();
+  }
 }

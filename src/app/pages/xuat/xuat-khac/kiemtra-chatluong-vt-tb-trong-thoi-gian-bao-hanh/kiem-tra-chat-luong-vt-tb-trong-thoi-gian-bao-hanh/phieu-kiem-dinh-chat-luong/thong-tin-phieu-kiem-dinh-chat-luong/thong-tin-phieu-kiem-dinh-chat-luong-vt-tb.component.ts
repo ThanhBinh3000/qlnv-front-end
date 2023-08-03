@@ -24,8 +24,8 @@ import {
   BienBanLayMauVtTbTrongThoiGianBaoHanhService
 } from "../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvtbaohanh/BienBanLayMauVtTbTrongThoiGianBaoHanh.service";
 import {
-  PhieuXuatKhoVtTbTrongThoiGianBaoHanhService
-} from "../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvtbaohanh/PhieuXuatKhoVtTbTrongThoiGianBaoHanh.service";
+  PhieuXuatNhapKhoVtTbTrongThoiGianBaoHanhService
+} from "../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvtbaohanh/PhieuXuatNhapKhoVtTbTrongThoiGianBaoHanh.service";
 import {
   QdGiaoNvXuatHangTrongThoiGianBaoHanhService
 } from "../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvtbaohanh/QdGiaoNvXuatHangTrongThoiGianBaoHanh.service";
@@ -72,7 +72,7 @@ export class ThongTinPhieuKiemDinhChatLuongVtTbComponent extends Base2Component 
     modal: NzModalService,
     private danhMucService: DanhMucService,
     private qdGiaoNvXuatHangTrongThoiGianBaoHanhService: QdGiaoNvXuatHangTrongThoiGianBaoHanhService,
-    private phieuXuatKhoVtTbTrongThoiGianBaoHanhService: PhieuXuatKhoVtTbTrongThoiGianBaoHanhService,
+    private phieuXuatKhoVtTbTrongThoiGianBaoHanhService: PhieuXuatNhapKhoVtTbTrongThoiGianBaoHanhService,
     private khCnQuyChuanKyThuat: KhCnQuyChuanKyThuat,
     private bienBanLayMauVtTbTrongThoiGianBaoHanhService: BienBanLayMauVtTbTrongThoiGianBaoHanhService,
     private phieuKdclVtTbTrongThoiGianBaoHanhService: PhieuKdclVtTbTrongThoiGianBaoHanhService,
@@ -111,7 +111,7 @@ export class ThongTinPhieuKiemDinhChatLuongVtTbComponent extends Base2Component 
         trangThai: [STATUS.DU_THAO],
         lyDoTuChoi: [null],
         isDat: [null],
-        mauBiHuy: [null],
+        mauBiHuy: [false],
         tenDvi: [''],
         tenLoaiVthh: [''],
         tenCloaiVthh: [''],
@@ -209,6 +209,7 @@ export class ThongTinPhieuKiemDinhChatLuongVtTbComponent extends Base2Component 
       namKeHoach: this.formData.get("nam").value,
       dvql: this.userInfo.MA_DVI,
       trangThai: STATUS.DA_DUYET_LDC,
+      loaiXn:"XUAT",
       listTrangThaiXh: [STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN],
     }
     let res = await this.qdGiaoNvXuatHangTrongThoiGianBaoHanhService.search(body);
@@ -454,6 +455,7 @@ export class ThongTinPhieuKiemDinhChatLuongVtTbComponent extends Base2Component 
   async changeValueBienBanLayMau($event) {
     if ($event) {
       let item = this.listBbLayMau.find(it => it.soBienBan == $event);
+      console.log(item,"cmm")
       if (item) {
         this.formData.patchValue({
           maDiaDiem: item.maDiaDiem,
