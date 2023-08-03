@@ -185,9 +185,7 @@
                     <td></td>
                     <td></td>
                     <td>
-                      <a (click)="add(row2)">
-                        <i class="icon htvbdh_dau-cong"></i>
-                      </a>
+
                     </td>
                   </tr>
                   <ng-container>
@@ -211,7 +209,12 @@
                         <td class="bold">{{row3.tenTrangThai || ""}}</td>
                         <td>
 
-                          <a *ngIf="row3.trangThai !== STATUS.DU_THAO" (click)="redirectDetail(row3.id, true)">
+                          <a *ngIf="!row3.soBbNhapDayKho" (click)="add(row2)">
+                            <i class="icon htvbdh_dau-cong"></i>
+                          </a>
+
+                          <a *ngIf="row3.soBbNhapDayKho && row3.trangThai !== STATUS.DU_THAO"
+                            (click)="redirectDetail(row3.id, true)">
                             <i class="fa fa-eye" title="Xem chi tiết"></i>
                           </a>
                           <a *ngIf="row3.trangThai == STATUS.DU_THAO" (click)="redirectDetail(row3.id, false)">
