@@ -57,12 +57,11 @@ export class ThemmoiKehoachLcntVtComponent extends Base2Component implements OnI
   listQuy: any[] = [];
   dataChiTieu: any;
   listOfData: any[] = [];
-  listDataGroup: any[] = [];
   baoGiaThiTruongList: CanCuXacDinh[] = [];
   canCuKhacList: CanCuXacDinh[] = [];
   reportTemplate: any = {
     typeFile: "",
-    fileName: "test_preview.docx",
+    fileName: "de_xuat_kh_lcnt_vat_tu.docx",
     tenBaoCao: "",
     trangThai: ""
   };
@@ -204,7 +203,6 @@ export class ThemmoiKehoachLcntVtComponent extends Base2Component implements OnI
             if (dataDetail) {
               this.fileDinhKem = dataDetail.fileDinhKems;
               this.listOfData = dataDetail.dsGtDtlList;
-              this.convertListData();
               this.bindingCanCu(dataDetail.ccXdgDtlList);
             }
           }
@@ -230,7 +228,6 @@ export class ThemmoiKehoachLcntVtComponent extends Base2Component implements OnI
             if (dataDetail) {
               this.fileDinhKem = dataDetail.fileDinhKems;
               this.listOfData = dataDetail.dsGtDtlList;
-              this.convertListData();
               this.bindingCanCu(dataDetail.ccXdgDtlList);
             }
           }
@@ -334,15 +331,6 @@ export class ThemmoiKehoachLcntVtComponent extends Base2Component implements OnI
     }
   }
 
-  convertListData() {
-    this.helperService.setIndexArray(this.listOfData);
-    this.listDataGroup = chain(this.listOfData).groupBy("tenDvi").map((value, key) => ({
-      tenDvi: key,
-      dataChild: value
-    }))
-      .value();
-  }
-
   bindingCanCu(data) {
     if (data && data.length > 0) {
       data.forEach((chiTiet) => {
@@ -363,11 +351,11 @@ export class ThemmoiKehoachLcntVtComponent extends Base2Component implements OnI
     let pipe = new DatePipe("en-US");
     let body = this.formData.value;
     body.reportTemplateRequest = this.reportTemplate;
-    body.fileDinhKemReq = this.fileDinhKem;
-    body.tongMucDtBangChu = convertTienTobangChu(this.formData.get("tongMucDt").value);
-    body.tgianDthau = pipe.transform(body.tgianDthau, "yyyy-MM-dd HH:mm");
-    body.tgianMthau = pipe.transform(body.tgianMthau, "yyyy-MM-dd HH:mm");
-    await this.dauThauService.preview(body).then(async s => {
+    // body.fileDinhKemReq = this.fileDinhKem;
+    // body.tongMucDtBangChu = convertTienTobangChu(this.formData.get("tongMucDt").value);
+    // body.tgianDthau = pipe.transform(body.tgianDthau, "yyyy-MM-dd HH:mm");
+    // body.tgianMthau = pipe.transform(body.tgianMthau, "yyyy-MM-dd HH:mm");
+    await this.dauThauService.previewVt(body).then(async s => {
       this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
       this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
       this.showDlgPreview = true;
@@ -575,11 +563,11 @@ export class ThemmoiKehoachLcntVtComponent extends Base2Component implements OnI
   }
 
   downloadPdf() {
-    saveAs(this.pdfSrc, "De-xuat-ke-hoach-lua-chon-nha-thau.pdf");
+    saveAs(this.pdfSrc, "de_xuat_kh_lcnt_vat_tu.pdf");
   }
 
   downloadWord() {
-    saveAs(this.wordSrc, "De-xuat-ke-hoach-lua-chon-nha-thau.docx");
+    saveAs(this.wordSrc, "de_xuat_kh_lcnt_vat_tu.docx");
   }
 
   closeDlg() {
@@ -709,8 +697,6 @@ export class ThemmoiKehoachLcntVtComponent extends Base2Component implements OnI
 
   deleteRow(i: number): void {
     this.listOfData = this.listOfData.filter((d, index) => index !== i);
-    this.helperService.setIndexArray(this.listOfData);
-    this.convertListData();
   }
 
   calcTongSl() {

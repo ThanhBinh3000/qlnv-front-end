@@ -34,7 +34,8 @@ import {
 import { DialogThemMoiGoiThauComponent } from 'src/app/components/dialog/dialog-them-moi-goi-thau/dialog-them-moi-goi-thau.component';
 import { DatePipe } from '@angular/common';
 import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
-
+import { saveAs } from "file-saver";
+import {PREVIEW} from "../../../../../../constants/fileType";
 
 @Component({
   selector: 'app-themmoi-quyetdinh-khlcnt',
@@ -96,7 +97,15 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
   isCheckCreate: boolean = true
   editCache: { [key: string]: { edit: boolean; data: any } } = {};
   maDviSelected: any;
-
+  reportTemplate: any = {
+    typeFile: "",
+    fileName: "qd_pd_kh_lcnt_luong_thuc.docx",
+    tenBaoCao: "",
+    trangThai: ""
+  };
+  showDlgPreview = false;
+  pdfSrc: any;
+  wordSrc: any;
   constructor(
     private router: Router,
     private modal: NzModalService,
@@ -855,4 +864,24 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     }
   }
 
+  async preview() {
+    let body = this.formData.value;
+    body.reportTemplateRequest = this.reportTemplate;
+    await this.quyetDinhPheDuyetKeHoachLCNTService.preview(body).then(async s => {
+      this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
+      this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
+      this.showDlgPreview = true;
+    });
+  }
+  downloadPdf() {
+    saveAs(this.pdfSrc, "qd_pd_kh_lcnt_luong_thuc.pdf");
+  }
+
+  downloadWord() {
+    saveAs(this.wordSrc, "qd_pd_kh_lcnt_luong_thuc.docx");
+  }
+
+  closeDlg() {
+    this.showDlgPreview = false;
+  }
 }

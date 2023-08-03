@@ -34,8 +34,8 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
   dataTable: any[] = [];
   dataTableAll: any[] = [];
   searchFilter = {
-    soQuyetDinhNhap: '',
-    ngayLayMau: '',
+    soQd: '',
+    dviKiemNghiem: '',
     soHopDong: '',
     diemkho: '',
     nhaKho: '',
@@ -60,9 +60,23 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
 
   allChecked = false;
   indeterminate = false;
+  tuNgayLayMau: Date | null = null;
+  denNgayLayMau: Date | null = null;
+  disabledStartDate = (startValue: Date): boolean => {
+    if (!startValue || !this.denNgayLayMau) {
+      return false;
+    }
+    return startValue.getTime() > this.denNgayLayMau.getTime();
+  };
 
+  disabledEndDate = (endValue: Date): boolean => {
+    if (!endValue || !this.tuNgayLayMau) {
+      return false;
+    }
+    return endValue.getTime() <= this.tuNgayLayMau.getTime();
+  };
   filterTable: any = {
-    soQuyetDinhNhap: '',
+    soQd: '',
     soBienBan: '',
     ngayLayMau: '',
     soHopDong: '',
@@ -138,7 +152,12 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
         "page": this.page - 1
       },
       trangThai: STATUS.BAN_HANH,
-      loaiVthh: this.loaiVthh
+      loaiVthh: this.loaiVthh,
+      ngayLayMauDen: this.denNgayLayMau != null ? dayjs(this.denNgayLayMau).format('YYYY-MM-DD') + " 23:59:59" : null,
+      ngayLayMauTu:  this.tuNgayLayMau != null ? dayjs(this.tuNgayLayMau).format('YYYY-MM-DD') + " 00:00:00" : null,
+      soBienBan: this.searchFilter.soBienBan,
+      soQd: this.searchFilter.soQd,
+      dviKiemNghiem: this.searchFilter.dviKiemNghiem,
     };
     let res = await this.quyetDinhGiaoNhapHangService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -212,9 +231,9 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
 
   clearFilter() {
     this.searchFilter = {
-      soQuyetDinhNhap: '',
-      ngayLayMau: '',
+      soQd: '',
       soHopDong: '',
+      dviKiemNghiem: '',
       diemkho: '',
       nhaKho: '',
       nganLoBaoQuan: '',
@@ -274,15 +293,17 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
         let body = {
           "maDvi": this.userInfo.MA_DVI,
           "maVatTuCha": this.isTatCa ? null : this.loaiVthh,
-          "ngayLayMauDen": this.searchFilter.ngayLayMau ? dayjs(this.searchFilter.ngayLayMau[1]).format('YYYY/MM/DD') : null,
-          "ngayLayMauTu": this.searchFilter.ngayLayMau ? dayjs(this.searchFilter.ngayLayMau[0]).format('YYYY/MM/DD') : null,
+          "ngayLayMauDen": this.denNgayLayMau != null ? dayjs(this.denNgayLayMau).format('YYYY-MM-DD') + " 23:59:59" : null,
+          "ngayLayMauTu":  this.tuNgayLayMau != null ? dayjs(this.tuNgayLayMau).format('YYYY-MM-DD') + " 00:00:00" : null,
           "orderBy": null,
           "orderDirection": null,
           "paggingReq": null,
           "soBienBan": this.searchFilter.soBienBan,
-          "soQuyetDinhNhap": this.searchFilter.soQuyetDinhNhap,
+          "soQd": this.searchFilter.soQd,
+          "dviKiemNghiem": this.searchFilter.dviKiemNghiem,
           "str": null,
-          "trangThai": null
+          trangThai: STATUS.BAN_HANH,
+          loaiVthh: this.loaiVthh,
         };
         this.bienBanLayMauService
           .exportList(body)
@@ -425,7 +446,7 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
 
   clearFilterTable() {
     this.filterTable = {
-      soQuyetDinhNhap: '',
+      soQd: '',
       soBienBan: '',
       ngayLayMau: '',
       soHopDong: '',

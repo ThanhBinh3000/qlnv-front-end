@@ -18,7 +18,8 @@ import { HttpClient } from '@angular/common/http';
 import dayjs from 'dayjs';
 import { StorageService } from 'src/app/services/storage.service';
 import {convertIdToLoaiVthh, convertIdToTenLoaiVthh, convertTrangThai} from "../../../../../../shared/commonFunction";
-
+import { saveAs } from "file-saver";
+import {PREVIEW} from "../../../../../../constants/fileType";
 @Component({
   selector: 'app-themmoi-tonghop-khlcnt',
   templateUrl: './themmoi-tonghop-khlcnt.component.html',
@@ -47,7 +48,15 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
   listFileDinhKem: any[] = [];
   listLoaiHinhNx: any[] = [];
   listKieuNx: any[] = [];
-
+  reportTemplate: any = {
+    typeFile: "",
+    fileName: "tong_hop_kh_lcnt.docx",
+    tenBaoCao: "",
+    trangThai: ""
+  };
+  showDlgPreview = false;
+  pdfSrc: any;
+  wordSrc: any;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -300,6 +309,27 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
     } else if (trangThai === '28') {
       return 'da-ban-hanh';
     }
+  }
+
+  async preview() {
+    let body = this.formData.value;
+    body.reportTemplateRequest = this.reportTemplate;
+    await this.tongHopDeXuatKHLCNTService.preview(body).then(async s => {
+      this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
+      this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
+      this.showDlgPreview = true;
+    });
+  }
+  downloadPdf() {
+    saveAs(this.pdfSrc, "qd_pd_kh_lcnt_vat_tu.pdf");
+  }
+
+  downloadWord() {
+    saveAs(this.wordSrc, "qd_pd_kh_lcnt_vat_tu.docx");
+  }
+
+  closeDlg() {
+    this.showDlgPreview = false;
   }
 }
 

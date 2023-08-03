@@ -7,6 +7,7 @@ import {
 } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import * as dayjs from 'dayjs';
+import {v4 as uuidv4} from "uuid";
 import {NzModalService} from 'ng-zorro-antd/modal';
 import {NzNotificationService} from 'ng-zorro-antd/notification';
 import {NgxSpinnerService} from 'ngx-spinner';
@@ -28,7 +29,7 @@ import {UserService} from 'src/app/services/user.service';
 import {thongTinTrangThaiNhap} from 'src/app/shared/commonFunction';
 import {Globals} from 'src/app/shared/globals';
 import {STATUS} from "../../../../../constants/status";
-import {AMOUNT, AMOUNT_TWO_DECIMAL} from "../../../../../Utility/utils";
+import {AMOUNT, AMOUNT_NO_DECIMAL, AMOUNT_TWO_DECIMAL} from "../../../../../Utility/utils";
 
 @Component({
   selector: 'app-thong-tin-de-nghi-cap-von-bo-nganh',
@@ -72,7 +73,7 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
   listFileDinhKem: any[] = [];
   expandSet = new Set<number>();
   bangPhanBoList: Array<any> = [];
-  khBanDauGia: any = {};
+  itemDnCapVonBn: any = {};
   diaDiemGiaoNhan: DiaDiemGiaoNhan = new DiaDiemGiaoNhan();
   diaDiemGiaoNhanList: Array<DiaDiemGiaoNhan> = [];
   phanLoTaiSanList: Array<PhanLoTaiSan> = [];
@@ -88,7 +89,7 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
   hangHoaAll: any[];
   listHopDong: any[] = [];
   itemHopDongSelected: any;
-  amount = AMOUNT_TWO_DECIMAL;
+  amount = AMOUNT_NO_DECIMAL;
   rowItem: IDeNghiCapVon = {
     maHopDong: null,
     soHopDong: null,
@@ -114,9 +115,11 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
     donGia: null,
     thanhTien: null,
     ycCapThem: null,
+    chiTiet: [],
     // thêm theo thiết kế mới
     ycCapThemNt: null,
-    edit: false
+    edit: false,
+    idVirtual: null
   }
 
   rowItemDetailHhh: ItemDetailHh = {
@@ -158,7 +161,7 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     this.userInfo = this.userService.getUserLogin();
-    this.khBanDauGia.trangThai = this.globals.prop.NHAP_DU_THAO;
+    this.itemDnCapVonBn.trangThai = STATUS.DANG_NHAP_DU_LIEU;
     for (let i = -3; i < 23; i++) {
       this.listNam.push({
         value: dayjs().get('year') - i,
@@ -180,13 +183,21 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
       let res = await this.deNghiCapVonBoNganhService.loadChiTiet(id);
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
-          this.khBanDauGia = res.data;
+          this.itemDnCapVonBn = res.data;
           this.initForm();
-          if (this.khBanDauGia.fileDinhKems) {
-            this.listFileDinhKem = this.khBanDauGia.fileDinhKems;
+          if (this.itemDnCapVonBn.fileDinhKems) {
+            this.listFileDinhKem = this.itemDnCapVonBn.fileDinhKems;
           }
-          if (this.khBanDauGia.chiTietList) {
-            this.chiTietList = this.khBanDauGia.chiTietList;
+          if (this.itemDnCapVonBn.chiTietList) {
+            this.chiTietList = this.itemDnCapVonBn.chiTietList;
+            if (this.chiTietList && this.chiTietList.length > 0) {
+              this.chiTietList.forEach(item => {
+                if (item.chiTietHang) {
+                  item.chiTiet = JSON.parse(item.chiTietHang);
+                }
+              })
+              this.selectRow(this.chiTietList[0]);
+            }
           }
           this.tinhTong();
         }
@@ -205,11 +216,11 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
 
   initForm() {
     this.formData = this.fb.group({
-      nam: [this.khBanDauGia ? this.khBanDauGia.nam : null, [Validators.required],],
-      boNganh: [this.khBanDauGia ? this.khBanDauGia.maBoNganh : null, [Validators.required],],
-      soDeNghi: [this.khBanDauGia ? this.khBanDauGia.soDeNghi : null],
-      ngayDeNghi: [this.khBanDauGia ? this.khBanDauGia.ngayDeNghi : null],
-      ghiChu: [this.khBanDauGia ? this.khBanDauGia.ghiChu : null],
+      nam: [this.itemDnCapVonBn ? this.itemDnCapVonBn.nam : null, [Validators.required],],
+      boNganh: [this.itemDnCapVonBn ? this.itemDnCapVonBn.maBoNganh : null, [Validators.required],],
+      soDeNghi: [this.itemDnCapVonBn ? this.itemDnCapVonBn.soDeNghi : null],
+      ngayDeNghi: [this.itemDnCapVonBn ? this.itemDnCapVonBn.ngayDeNghi : null],
+      ghiChu: [this.itemDnCapVonBn ? this.itemDnCapVonBn.ghiChu : null],
     });
     this.setTitle();
   }
@@ -286,18 +297,6 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
   }
 
   async changeLoaiHangHoa() {
-    /*let loaiHangHoa = this.listLoaiHangHoa.filter(x => {
-      return x.ma === this.rowItem.maVatTuCha;
-    });
-    if (loaiHangHoa && loaiHangHoa.length > 0) {
-      if (!this.idInput) {
-        this.formData.patchValue({idChungLoaiHangHoa: null})
-      }
-      this.rowItem.tenVatTuCha = loaiHangHoa[0].ten;
-      this.listChungLoaiHangHoa = loaiHangHoa[0].child;
-    }*/
-    // this.rowItemDetailHhh.ten = null;
-    // this.rowItemDetailHhh.maVatTu = null;
     this.listChungLoaiHangHoa = this.hangHoaAll.filter(element => element.maHangHoa.length > 4 &&
       element.maHangHoa.substring(0, 4) == this.rowItemDetailHhh.loaiVthh)
     let hangHoa = this.listLoaiHangHoa.find(s => s.maHangHoa == this.rowItemDetailHhh.loaiVthh);
@@ -328,54 +327,79 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
       this.rowItemDetailHhh.thanhTien = thanhTien;
       this.rowItemDetailHhh.thanhTienNt = thanhTien;
     }
-    // if (this.rowItem.thanhTien) {
-    //   let yeuCauCapThem = this.rowItem.thanhTien - (this.rowItem.kinhPhiDaCap ? this.rowItem.kinhPhiDaCap : 0);
-    //   this.rowItem.ycCapThem = yeuCauCapThem;
+  }
+
+  changeLoaiTien() {
+    if (this.rowItem.loaiTien && this.rowItem.loaiTien != '01' && this.rowItem.tyGia) {
+      this.rowItem.tongTien = this.rowItem.tongTienNt ? this.rowItem.tongTienNt * this.rowItem.tyGia : 0;
+      this.rowItem.kinhPhiDaCap = this.rowItem.kinhPhiDaCapNt ? this.rowItem.kinhPhiDaCapNt * this.rowItem.tyGia : 0;
+      this.rowItem.ycCapThem = this.rowItem.ycCapThemNt ? this.rowItem.ycCapThemNt * this.rowItem.tyGia : 0;
+    }
+  }
+
+  calCulateKinhPhiChuaCap() {
+    this.rowItem.kinhPhiChuaCap = this.rowItem.tongTien ? (this.rowItem.kinhPhiDaCap ? this.rowItem.tongTien - this.rowItem.kinhPhiDaCap : this.rowItem.tongTien) : this.rowItem.tongTien;
+    this.rowItem.kinhPhiChuaCapNt = this.rowItem.tongTienNt ? (this.rowItem.kinhPhiDaCapNt ? this.rowItem.tongTienNt - this.rowItem.kinhPhiDaCapNt : this.rowItem.tongTienNt) : this.rowItem.tongTienNt;
+    // if (this.rowItem.loaiTien && this.rowItem.loaiTien != '01' && this.rowItem.tyGia) {
+    //   this.rowItem.tongTien = this.rowItem.tongTienNt ? this.rowItem.tongTienNt * this.rowItem.tyGia : 0;
+    //   this.rowItem.kinhPhiDaCap = this.rowItem.kinhPhiDaCapNt ? this.rowItem.kinhPhiDaCapNt * this.rowItem.tyGia : 0;
+    //   this.rowItem.ycCapThem = this.rowItem.ycCapThemNt ? this.rowItem.ycCapThemNt * this.rowItem.tyGia : 0;
     // }
   }
-  changeLoaiTien(){
 
-  }
   changeThanhTienEdit(id) {
-    if (this.chiTietList[id].soLuong && this.chiTietList[id].donGia) {
-      let thanhTien = this.chiTietList[id].soLuong * this.chiTietList[id].donGia;
-      this.maxYeuCauCapThem = thanhTien;
-      this.chiTietList[id].thanhTien = thanhTien;
-    }
-    if (this.chiTietList[id].kinhPhiDaCap && this.chiTietList[id].thanhTien) {
-      let yeuCauCapThem = this.chiTietList[id].thanhTien - this.chiTietList[id].kinhPhiDaCap;
-      this.chiTietList[id].ycCapThem = yeuCauCapThem;
+    if (this.itemHopDongSelected.chiTiet[id].slDeNghiCapVon && this.itemHopDongSelected.chiTiet[id].donGia) {
+      let thanhTien = this.itemHopDongSelected.chiTiet[id].slDeNghiCapVon * this.itemHopDongSelected.chiTiet[id].donGia;
+      this.itemHopDongSelected.chiTiet[id].thanhTien = thanhTien;
     }
   }
 
   themHopDong() {
+    if (!this.formData.get("boNganh").value) {
+      this.notification.warning(MESSAGE.WARNING, "Cần chọn bộ ngành đề nghị trước.");
+      this.clearHopDong();
+      return;
+    }
+    this.calCulateKinhPhiChuaCap();
     let isValid = true;
     for (let key in this.rowItem) {
-      if (this.rowItem[key] === null &&  key != 'soHopDong' && key != 'loaiTien' && key != 'dvCungCapHang') {
+      if (this.rowItem[key] === null && (key === 'soHopDong' || key == 'loaiTien' || key == 'tongTien' || key == 'duToanDuocGiao' || key == 'ycCapThem')) {
         isValid = false;
       }
     }
+    if (this.rowItem.tongTien && this.rowItem.duToanDuocGiao) {
+      if (this.rowItem.tongTien > this.rowItem.duToanDuocGiao) {
+        this.notification.warning(MESSAGE.WARNING, "Tổng tiền hợp đồng lớn hơn dự toán được giao, vui lòng kiểm tra lại.");
+        return;
+      }
+    }
+    if (this.rowItem.ycCapThem > this.rowItem.kinhPhiChuaCap) {
+      this.notification.warning(MESSAGE.WARNING, "Tổng tiền yêu cầu cấp thêm lớn hơn kinh phí chưa cấp, vui lòng kiểm tra lại.");
+      return;
+    }
     if (isValid) {
+      this.rowItem.idVirtual = uuidv4();
+      this.rowItem.chiTiet = [];
       this.chiTietList.push(this.rowItem);
-      // this.tinhTong();
-      // this.clearDonviCungCap();
+      this.selectRow(this.chiTietList[0]);
+      this.tinhTong();
+      this.clearHopDong();
     } else {
       this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
     }
-
   }
 
   themChiTietHangHoa() {
     let isValid = true;
     for (let key in this.rowItemDetailHhh) {
-      if (this.rowItemDetailHhh[key] === null && key != 'loaiVthh' && key != 'donGia' && key != 'slDeNghiCapVon') {
+      if (this.rowItemDetailHhh[key] === null && (key == 'loaiVthh' || key == 'donGia' || key == 'slDeNghiCapVon')) {
         isValid = false;
       }
     }
     if (isValid) {
-      this.hopDongList.push(this.rowItemDetailHhh);
+      this.itemHopDongSelected.chiTiet.push(this.rowItemDetailHhh);
       // this.tinhTong();
-      // this.clearDonviCungCap();
+      this.clearChiTietHangHoa();
     } else {
       this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
     }
@@ -408,10 +432,20 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
       donGia: null,
       thanhTien: null,
       ycCapThem: null,
+      chiTiet: [],
       // thêm theo thiết kế mới
       ycCapThemNt: null,
-      edit: false
+      edit: false,
+      idVirtual: null
     }
+  }
+
+  async selectRow(data) {
+    this.chiTietList.forEach(item => {
+      item.selected = false;
+    })
+    data.selected = true;
+    this.itemHopDongSelected = data;
   }
 
   clearChiTietHangHoa() {
@@ -437,7 +471,20 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
             item.edit = true;
           } else {
             item.edit = false;
-            this.tinhTong();
+          }
+        }
+      })
+    }
+  }
+
+  showEditItemHangHoa(idx: number, type: string) {
+    if (this.itemHopDongSelected.chiTiet.length > 0) {
+      this.itemHopDongSelected.chiTiet.forEach((item, index) => {
+        if (index === idx) {
+          if (type === 'show') {
+            item.edit = true;
+          } else {
+            item.edit = false;
           }
         }
       })
@@ -448,19 +495,27 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
     if (this.chiTietList.length > 0) {
       this.chiTietList.splice(idx, 1);
     }
+    this.tinhTong();
+  }
+
+  xoaItemHangHoa(idx: number) {
+    if (this.itemHopDongSelected.chiTiet.length > 0) {
+      this.itemHopDongSelected.chiTiet.splice(idx, 1);
+    }
   }
 
   tinhTong() {
     this.tongCong = {
-      tongThanhTien: 0,
-      tongKinhPhiDaCap: 0,
-      tongYeuCauCapThem: 0,
+      tongTien: 0,
+      tongDuToanDuocGiao: 0,
+      tongKinhPhiChuaCap: 0,
+      tongYcCapThem: 0,
     }
-
     this.chiTietList.forEach((item) => {
-      this.tongCong.tongThanhTien += item.thanhTien;
-      this.tongCong.tongKinhPhiDaCap += item.kinhPhiDaCap;
-      this.tongCong.tongYeuCauCapThem += item.ycCapThem;
+      this.tongCong.tongTien += item.tongTien;
+      this.tongCong.tongDuToanDuocGiao += item.duToanDuocGiao;
+      this.tongCong.tongKinhPhiChuaCap += item.kinhPhiChuaCap;
+      this.tongCong.tongYcCapThem += item.ycCapThem;
     })
 
   }
@@ -486,6 +541,11 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
     // }
     this.spinner.show();
     try {
+      if (this.chiTietList && this.chiTietList.length > 0) {
+        this.chiTietList.forEach(item => {
+          item.chiTietHang = item.chiTiet && item.chiTiet.length > 0 ? JSON.stringify(item.chiTiet) : JSON.stringify([]);
+        })
+      }
       let body = {
         "chiTietList": this.chiTietList,
         "fileDinhKemReqs": this.listFileDinhKem,
@@ -496,6 +556,8 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
         "soDeNghi": this.formData.value.soDeNghi,
         "id": this.idInput,
       }
+      console.log(body, 'aaaaaaaaaaa');
+      // return;
       if (this.idInput > 0) {
         let res = await this.deNghiCapVonBoNganhService.sua(body);
         if (res.msg == MESSAGE.SUCCESS) {
@@ -585,7 +647,7 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
             lyDo: text,
             trangThaiId: this.globals.prop.NHAP_TU_CHOI_TP,
           };
-          switch (this.khBanDauGia.trangThai) {
+          switch (this.itemDnCapVonBn.trangThai) {
             case this.globals.prop.NHAP_CHO_DUYET_TP:
               body.trangThaiId = this.globals.prop.NHAP_TU_CHOI_TP;
               break;
@@ -632,10 +694,10 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
   }
 
   setTitle() {
-    let trangThai = this.khBanDauGia.trangThai;
+    let trangThai = this.itemDnCapVonBn.trangThai;
     switch (trangThai) {
-      case STATUS.DU_THAO: {
-        this.titleStatus = 'Dự thảo';
+      case STATUS.DANG_NHAP_DU_LIEU: {
+        this.titleStatus = 'Đang nhập dữ liệu';
         break;
       }
       case STATUS.TU_CHOI_TP: {
@@ -707,7 +769,9 @@ interface IDeNghiCapVon {
   ycCapThem: number,
   // thêm theo thiết kế mới
   ycCapThemNt: number,
-  edit: boolean
+  chiTiet: [],
+  edit: boolean,
+  idVirtual: string;
 }
 
 export class ItemDetailHh {
