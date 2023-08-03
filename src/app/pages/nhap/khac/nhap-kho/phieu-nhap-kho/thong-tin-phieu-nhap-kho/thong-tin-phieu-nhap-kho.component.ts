@@ -72,7 +72,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
       tenDvi: [],
       maQhns: [],
       soPhieuNhapKho: [],
-      ngayNhapKho: [dayjs().format('YYYY-MM-DD')],
+      ngayLap: [dayjs().format('YYYY-MM-DD')],
       soNo: [],
       soCo: [],
       soQdGiaoNv: [, [Validators.required]],
@@ -462,10 +462,10 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
           maDiemKho: data.maDiemKho,
           tichLuongKhaDung: data.tichLuongKd,
           soLuongQdDcCuc: data.soLuongPhanBo,
-          donViTinh: data.tenDonViTinh,
-          tenDonViTinh: data.tenDonViTinh,
+          donViTinh: data.dvt,
+          tenDonViTinh: data.dvt,
         });
-        this.dviTinh = data.tenDonViTinh
+        this.dviTinh = data.dvt
         this.donGia = data.donGia
 
         let body = {
@@ -511,6 +511,10 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
 
 
   async save(isGuiDuyet?) {
+    if (this.dsTH.length == 0) {
+      this.notification.error(MESSAGE.ERROR, "Bạn chưa thêm danh sách thông tin hàng");
+      return
+    }
     await this.spinner.show();
     let body = this.formData.value;
     body.chungTuDinhKem = this.chungTuDinhKem;
