@@ -392,7 +392,7 @@
       <th>Đơn giá</th>
       <th>Thành tiền (Ngoại tệ)</th>
       <th>Thành tiền (VNĐ)</th>
-      <th>Hành động</th>
+      <th *ngIf="!isView"> Hành động</th>
     </tr>
     <tr *ngIf="!isView && itemHopDongSelected" class="search-table">
       <th></th>
@@ -450,7 +450,7 @@
                  [(ngModel)]="rowItemDetailHhh.thanhTien"/>
         </nz-input-group>
       </th>
-      <th style="text-align: center;">
+      <th style="text-align: center;" *ngIf="!isView">
         <a (click)="themChiTietHangHoa()">
           <i class="table-icon icon htvbdh_dau-cong"></i>
         </a>
@@ -485,21 +485,9 @@
         <td>{{idx + 1}}</td>
         <td>
           <input type="text" nz-input [readOnly]="true" [(ngModel)]="item.tenLoaiVthh"/>
-          <!--          <nz-input-group>-->
-          <!--            <nz-select [(ngModel)]="item.loaiVthh" (ngModelChange)="changeLoaiHangHoa()">-->
-          <!--              <nz-option *ngFor="let it of listLoaiHangHoa" [nzValue]="it.maHangHoa" [nzLabel]="it.tenHangHoa">-->
-          <!--              </nz-option>-->
-          <!--            </nz-select>-->
-          <!--          </nz-input-group>-->
         </td>
         <td>
           <input type="text" nz-input [readOnly]="true" [(ngModel)]="item.tenCloaiVthh"/>
-          <!--          <nz-input-group>-->
-          <!--            <nz-select [(ngModel)]="item.cloaiVthh" (ngModelChange)="changeChungLoaiHangHoa()">-->
-          <!--              <nz-option *ngFor=" let it of listChungLoaiHangHoa" [nzValue]="it.maHangHoa" [nzLabel]="it.tenHangHoa">-->
-          <!--              </nz-option>-->
-          <!--            </nz-select>-->
-          <!--          </nz-input-group>-->
         </td>
         <td><input type="text" nz-input [(ngModel)]="item.tenHang"/></td>
         <td>
@@ -532,22 +520,18 @@
         </td>
       </ng-template>
     </tr>
-    <!--    <tr>-->
-    <!--      <th></th>-->
-    <!--      <th></th>-->
-    <!--      <th></th>-->
-    <!--      <th></th>-->
-    <!--      <th>Tổng Cộng:</th>-->
-    <!--      <th></th>-->
-    <!--      <th></th>-->
-    <!--      <th></th>-->
-    <!--      <th></th>-->
-    <!--      <th></th>-->
-    <!--      <th>{{ tongCong.tongThanhTien | number : '1.0-1' : 'vi_VN'}}</th>-->
-    <!--      <th>{{ tongCong.tongKinhPhiDaCap | number : '1.0-1' : 'vi_VN'}}</th>-->
-    <!--      <th>{{ tongCong.tongYeuCauCapThem | number : '1.0-1' : 'vi_VN'}}</th>-->
-    <!--      <th></th>-->
-    <!--    </tr>-->
+    <tr>
+      <th></th>
+      <th>Tổng Cộng:</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th>{{ tongCongHangHoa.thanhTienNt | number : '1.0-1' : 'vi_VN'}}</th>
+      <th>{{ tongCongHangHoa.thanhTien | number : '1.0-1' : 'vi_VN'}}</th>
+      <th *ngIf="!isView"></th>
+    </tr>
     </tbody>
   </nz-table>
   <form nzLayout="vertical" nz-form [formGroup]="formData">

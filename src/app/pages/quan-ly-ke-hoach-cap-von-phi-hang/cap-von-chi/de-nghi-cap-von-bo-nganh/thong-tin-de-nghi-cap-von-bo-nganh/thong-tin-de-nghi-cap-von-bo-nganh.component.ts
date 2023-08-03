@@ -141,6 +141,11 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
     tongYeuCauCapThem: 0,
   }
 
+  tongCongHangHoa: any = {
+    thanhTienNt: 0,
+    thanhTien: 0,
+  }
+
   constructor(
     private modal: NzModalService,
     private danhMucService: DanhMucService,
@@ -404,7 +409,7 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
     }
     if (isValid) {
       this.itemHopDongSelected.chiTiet.push(this.rowItemDetailHhh);
-      // this.tinhTong();
+      this.tinhTongChiTietHangHoa();
       this.clearChiTietHangHoa();
     } else {
       this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
@@ -452,6 +457,7 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
     })
     data.selected = true;
     this.itemHopDongSelected = data;
+    this.tinhTongChiTietHangHoa();
   }
 
   clearChiTietHangHoa() {
@@ -495,6 +501,7 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
         }
       })
     }
+    this.tinhTongChiTietHangHoa();
   }
 
   xoaItem(idx: number) {
@@ -508,6 +515,7 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
     if (this.itemHopDongSelected.chiTiet.length > 0) {
       this.itemHopDongSelected.chiTiet.splice(idx, 1);
     }
+    this.tinhTongChiTietHangHoa();
   }
 
   tinhTong() {
@@ -523,7 +531,17 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
       this.tongCong.tongKinhPhiChuaCap += item.kinhPhiChuaCap;
       this.tongCong.tongYcCapThem += item.ycCapThem;
     })
+  }
 
+  tinhTongChiTietHangHoa() {
+    this.tongCongHangHoa = {
+      thanhTienNt: 0,
+      thanhTien: 0,
+    }
+    this.itemHopDongSelected.chiTiet.forEach((item) => {
+      this.tongCongHangHoa.thanhTienNt += item.thanhTienNt;
+      this.tongCongHangHoa.thanhTien += item.thanhTien;
+    })
   }
 
   quayLai() {
