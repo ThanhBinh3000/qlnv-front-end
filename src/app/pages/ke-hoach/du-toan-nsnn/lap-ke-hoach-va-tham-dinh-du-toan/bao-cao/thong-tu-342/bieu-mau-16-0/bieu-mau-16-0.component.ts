@@ -218,6 +218,7 @@ export class BieuMau160Component implements OnInit {
 			lstCtietBcaoTemp?.forEach(item => {
 				item.tdinhSluong = item.namKhSluong;
 				item.tdinhTtien = item.namKhTtien;
+				item.chenhLech = null;
 			})
 		}
 

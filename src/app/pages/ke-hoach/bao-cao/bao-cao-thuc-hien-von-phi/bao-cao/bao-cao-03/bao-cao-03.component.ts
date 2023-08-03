@@ -44,12 +44,18 @@ export class ItemData {
     sum(data: ItemData) {
         // this.soLuongKhoach = Operator.sum([this.soLuongKhoach, data.soLuongKhoach]);
         // this.soLuongTte = Operator.sum([this.soLuongTte, data.soLuongTte]);
+        if (this.level == 2) {
+            this.soLuongKhoach = Operator.sum([this.soLuongKhoach, data.soLuongKhoach]);
+            this.soLuongTte = Operator.sum([this.soLuongTte, data.soLuongTte]);
+        }
         this.ttGiaHtoan = Operator.sum([this.ttGiaHtoan, data.ttGiaHtoan]);
         this.ttGiaBanTte = Operator.sum([this.ttGiaBanTte, data.ttGiaBanTte]);
         this.ttClechGiaTteVaGiaHtoan = Operator.sum([this.ttClechGiaTteVaGiaHtoan, data.ttClechGiaTteVaGiaHtoan]);
     }
 
     clear() {
+        this.soLuongKhoach = null;
+        this.soLuongTte = null;
         this.ttGiaHtoan = null,
             this.ttGiaBanTte = null;
         // Object.keys(this).forEach(key => {
@@ -339,7 +345,8 @@ export class BaoCao03Component implements OnInit {
         });
     }
 
-    selectGoods(index: string) {
+    selectGoods(id: string) {
+        const index = this.lstCtietBcao.find(e => e.id == id)?.stt;
         const modalTuChoi = this.modal.create({
             nzTitle: 'Danh sách hàng hóa',
             nzContent: DialogDanhSachVatTuHangHoaComponent,
@@ -383,12 +390,21 @@ export class BaoCao03Component implements OnInit {
             id: uuid.v4() + 'FE',
             maVtu: data.maVtu,
             maDviTinh: data.maDviTinh,
-            level: 2,
+            level: 3,
         })
         this.lstCtietBcao = Table.addChild(id, item, this.lstCtietBcao);
         const stt = this.lstCtietBcao.find(e => e.id == item.id).stt;
         this.sum(stt);
         this.updateEditCache();
+    }
+
+    addLine(id: string) {
+        const level = this.lstCtietBcao.find(e => e.id == id)?.level;
+        if (level == 0) {
+            this.selectGoods(id);
+        } else {
+            this.addLow(id);
+        }
     }
 
     //xóa dòng

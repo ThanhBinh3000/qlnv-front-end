@@ -373,6 +373,8 @@ export class QuyetDinhDonGiaMuaComponent implements OnInit {
     }
 
     changeModel(id: string) {
+        this.editCache[id].data.gtThucHien = Operator.mul(this.editCache[id].data.slKeHoach, this.editCache[id].data.donGia);
+        this.editCache[id].data.cong = Operator.sum([this.editCache[id].data.ung, this.editCache[id].data.cap]);
 
     }
     // changeTien(id: string) {
