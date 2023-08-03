@@ -799,7 +799,8 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
   async preview() {
     let body = {
       id : this.idInput,
-      reportTemplateRequest : this.reportTemplate
+      reportTemplateRequest : this.reportTemplate,
+      loaiVthh: this.loaiVthh
     }
     await this.thongTinDauThauService.preview(body).then(async s => {
       this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
