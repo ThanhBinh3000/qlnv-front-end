@@ -123,6 +123,7 @@ export class ChiTietPhieuXuatKhoThanhLyComponent extends Base2Component implemen
   async ngOnInit() {
     await this.spinner.show()
     try {
+      this.userInfo = this.userService.getUserLogin();
       this.maPhieu = 'PXK-' + this.userInfo.DON_VI.tenVietTat;
       if (this.idInput) {
         await this.loadDetail(this.idInput);
@@ -309,35 +310,6 @@ export class ChiTietPhieuXuatKhoThanhLyComponent extends Base2Component implemen
       await super.saveAndSend(body, trangThai, msg, msgSuccess);
     } else {
       this.notification.error(MESSAGE.ERROR, "Phiếu xuất kho chưa có bảng kê cân hàng");
-    }
-  }
-
-  pheDuyet(isPheDuyet) {
-    let trangThai = '';
-    let msg = '';
-    if (isPheDuyet) {
-      switch (this.formData.value.trangThai) {
-        case STATUS.TU_CHOI_LDCC:
-        case STATUS.DU_THAO: {
-          trangThai = STATUS.CHO_DUYET_LDCC;
-          msg = MESSAGE.GUI_DUYET_CONFIRM;
-          break;
-        }
-        case STATUS.CHO_DUYET_LDCC: {
-          trangThai = STATUS.DA_DUYET_LDCC;
-          msg = MESSAGE.GUI_DUYET_CONFIRM;
-          break;
-        }
-      }
-      this.approve(this.idInput, trangThai, msg);
-    } else {
-      switch (this.formData.value.trangThai) {
-        case STATUS.CHO_DUYET_LDCC: {
-          trangThai = STATUS.TU_CHOI_LDCC;
-          break;
-        }
-      }
-      this.reject(this.idInput, trangThai)
     }
   }
 
