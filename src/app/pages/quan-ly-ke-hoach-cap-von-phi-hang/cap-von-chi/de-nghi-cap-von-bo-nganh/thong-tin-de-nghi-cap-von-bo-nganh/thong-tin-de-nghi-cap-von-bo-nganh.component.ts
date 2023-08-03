@@ -351,11 +351,6 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
   calCulateKinhPhiChuaCap() {
     this.rowItem.kinhPhiChuaCap = this.rowItem.tongTien ? (this.rowItem.kinhPhiDaCap ? this.rowItem.tongTien - this.rowItem.kinhPhiDaCap : this.rowItem.tongTien) : this.rowItem.tongTien;
     this.rowItem.kinhPhiChuaCapNt = this.rowItem.tongTienNt ? (this.rowItem.kinhPhiDaCapNt ? this.rowItem.tongTienNt - this.rowItem.kinhPhiDaCapNt : this.rowItem.tongTienNt) : this.rowItem.tongTienNt;
-    // if (this.rowItem.loaiTien && this.rowItem.loaiTien != '01' && this.rowItem.tyGia) {
-    //   this.rowItem.tongTien = this.rowItem.tongTienNt ? this.rowItem.tongTienNt * this.rowItem.tyGia : 0;
-    //   this.rowItem.kinhPhiDaCap = this.rowItem.kinhPhiDaCapNt ? this.rowItem.kinhPhiDaCapNt * this.rowItem.tyGia : 0;
-    //   this.rowItem.ycCapThem = this.rowItem.ycCapThemNt ? this.rowItem.ycCapThemNt * this.rowItem.tyGia : 0;
-    // }
   }
 
   changeThanhTienEdit(id) {
@@ -406,6 +401,14 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
       if (this.rowItemDetailHhh[key] === null && (key == 'loaiVthh' || key == 'donGia' || key == 'slDeNghiCapVon')) {
         isValid = false;
       }
+    }
+    let totalTienHang = this.rowItemDetailHhh.thanhTien;
+    this.itemHopDongSelected.chiTiet.forEach((item) => {
+      totalTienHang += item.thanhTien;
+    })
+    if (totalTienHang > this.itemHopDongSelected.ycCapThem) {
+      this.notification.warning(MESSAGE.WARNING, "Tổng tiền các loại hàng trong lần đề nghị này lớn hơn số tiền yêu cầu cấp thêm.");
+      return;
     }
     if (isValid) {
       this.itemHopDongSelected.chiTiet.push(this.rowItemDetailHhh);
