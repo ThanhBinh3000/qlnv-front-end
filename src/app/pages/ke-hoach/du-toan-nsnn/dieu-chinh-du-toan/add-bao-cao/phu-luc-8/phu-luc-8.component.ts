@@ -163,8 +163,8 @@ export class PhuLuc8Component implements OnInit {
                 item.maDviTinh = dinhMuc?.donViTinh;
                 item.luongSlBquanTcong = Operator.sum([item.luongSlBquanTte, item.luongSlBquanUocThien])
                 item.tongNcauDtoan = Operator.mul(item.dinhMuc, item.luongSlBquanTcong);
-                item.dtoanDchinhDnghi = item.tongNcauDtoan - item.kphiCong
-                item.dtoanVuTvqtDnghi = item.tongNcauDtoan - item.kphiCong
+                item.dtoanDchinhDnghi = Operator.sum([item.tongNcauDtoan, - item.kphiCong])
+                item.dtoanVuTvqtDnghi = Operator.sum([item.tongNcauDtoan, - item.kphiCong])
             }
         })
 

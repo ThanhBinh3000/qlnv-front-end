@@ -14,6 +14,7 @@ import * as XLSX from 'xlsx';
 import { BtnStatus, Doc, Form } from '../../giao-du-toan.constant';
 import { NOI_DUNG } from './phu-luc-phan-bo.constant';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { UserService } from 'src/app/services/user.service';
 
 export class ItemData {
     id: string;
@@ -115,7 +116,7 @@ export class PhuLucPhanBoComponent implements OnInit {
     fileList: NzUploadFile[] = [];
     listFile: File[] = [];
     listIdDeleteFiles: string[] = [];
-
+    userInfo: any;
     beforeUpload = (file: NzUploadFile): boolean => {
         this.fileList = this.fileList.concat(file);
         return false;
@@ -144,6 +145,7 @@ export class PhuLucPhanBoComponent implements OnInit {
         private quanLyVonPhiService: QuanLyVonPhiService,
         private fileManip: FileManip,
         private danhMucService: DanhMucService,
+        private userService: UserService,
 
     ) { }
 
@@ -156,6 +158,7 @@ export class PhuLucPhanBoComponent implements OnInit {
     async initialization() {
         this.spinner.show();
         const category = await this.danhMucService.danhMucChungGetAll('BC_DC_PL1');
+        this.userInfo = this.userService.getUserLogin();
         if (category) {
             this.noiDungs = category.data;
         }
@@ -243,10 +246,11 @@ export class PhuLucPhanBoComponent implements OnInit {
         } else {
             this.formDetail.lstCtietBcaos[0]?.lstCtietDvis.forEach(s => {
                 this.lstDvi = this.donVis.filter(v => v.maDvi === s.maDviNhan)
+                console.log(this.lstDvi);
+
             })
         }
 
-        this.lstCtietBcaos = Table.sortByIndex(this.lstCtietBcaos)
 
         this.lstCtietBcaos.forEach(item => {
             if (item.maNdung) {
@@ -259,6 +263,7 @@ export class PhuLucPhanBoComponent implements OnInit {
                 this.sum(this.lstCtietBcaos[index].stt)
             }
         })
+        this.lstCtietBcaos = Table.sortByIndex(this.lstCtietBcaos)
         this.getTotal();
         this.getStatusButton();
         this.updateEditCache();
@@ -267,7 +272,7 @@ export class PhuLucPhanBoComponent implements OnInit {
 
     async getChildUnit() {
         const request = {
-            maDviCha: this.dataInfo.maDvi,
+            maDviCha: this.userInfo.maDvi,
             trangThai: '01',
         }
         await this.quanLyVonPhiService.dmDviCon(request).toPromise().then(

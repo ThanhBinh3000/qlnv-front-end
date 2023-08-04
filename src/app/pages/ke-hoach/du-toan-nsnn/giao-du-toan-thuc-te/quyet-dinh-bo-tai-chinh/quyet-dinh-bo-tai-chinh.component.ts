@@ -105,7 +105,7 @@ export class QuyetDinhBoTaiChinhComponent implements OnInit {
             trangThaiGiaos: ["0", "1", "2"],
         };
         this.spinner.show();
-        await this.giaoDuToanChiService.timBaoCaoGiao(requestReport).toPromise().then(
+        await this.giaoDuToanChiService.timPhuongAnGiao(requestReport).toPromise().then(
             (data) => {
                 if (data.statusCode == 0) {
                     this.dataTable = [];

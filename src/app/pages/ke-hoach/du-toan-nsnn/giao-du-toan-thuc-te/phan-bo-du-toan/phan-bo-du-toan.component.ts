@@ -241,7 +241,7 @@ export class PhanBoDuToanComponent implements OnInit {
         } else {
             searchFilterTemp.trangThaiGiaos = ['0', '1', '2']
         }
-        await this.giaoDuToanChiService.timBaoCaoGiao(searchFilterTemp).toPromise().then(
+        await this.giaoDuToanChiService.timPhuongAnGiao(searchFilterTemp).toPromise().then(
             (data) => {
                 if (data.statusCode == 0) {
                     this.dataTable = [];

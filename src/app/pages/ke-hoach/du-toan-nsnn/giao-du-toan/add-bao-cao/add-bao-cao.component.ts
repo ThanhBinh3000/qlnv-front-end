@@ -450,7 +450,7 @@ export class AddBaoCaoComponent implements OnInit {
             // statusBtnFinish: this.finishStatus,
             // statusBtnPrint: this.printStatus,
             // acceptStatus: this.acceptStatus,
-            // status: new BtnStatus(),
+            // status: new BtnStatus(),userInfo
             // isSynthetic: isSynthetic
 
             id: id,
@@ -1219,7 +1219,7 @@ export class AddBaoCaoComponent implements OnInit {
         if (this.data?.lstDviTrucThuocs && this.data?.lstDviTrucThuocs.length > 0) {
             this.data.lstDviTrucThuocs.forEach(item => {
                 if (item.trangThai == '1') {
-                    check = false;
+                    check = true;
                     return;
                 }
             })
@@ -1321,7 +1321,7 @@ export class AddBaoCaoComponent implements OnInit {
         this.isChild = this.userInfo.MA_DVI == this.baoCao.maDvi;
         this.isParent = this.userInfo.MA_DVI == this.baoCao.maDviCha;
         //kiem tra quyen cua cac user
-        const checkSave = isSynthetic ? this.userService.isAccessPermisson(Roles.GDT.EDIT_REPORT_TH) : this.userService.isAccessPermisson(Roles.GDT.EDIT_REPORT_PA_PBDT);
+        const checkSave = isSynthetic ? this.userService.isAccessPermisson(Roles.GDT.EDIT_REPORT_TH) : this.userService.isAccessPermisson(Roles.GDT.ADD_REPORT_TH);
         const checkSunmit = isSynthetic ? this.userService.isAccessPermisson(Roles.GDT.TRINHDUYET_PA_TONGHOP_PBDT) : this.userService.isAccessPermisson(Roles.GDT.APPROVE_REPORT_TH);
         const checkPass = isSynthetic ? this.userService.isAccessPermisson(Roles.GDT.DUYET_TUCHOI_PA_TH_PBDT) : this.userService.isAccessPermisson(Roles.GDT.DUYET_REPORT_TH);
         const checkApprove = isSynthetic ? this.userService.isAccessPermisson(Roles.GDT.PHEDUYET_TUCHOI_PA_TH_PBDT) : this.userService.isAccessPermisson(Roles.GDT.PHEDUYET_REPORT_TH);

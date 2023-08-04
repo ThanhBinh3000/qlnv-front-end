@@ -171,19 +171,16 @@ export class PhuLucQuyLuongComponent implements OnInit {
             }))
             this.setLevel();
         }
-        // else if (!this.lstCtietBcaos[0]?.stt) {
-        //     this.lstCtietBcaos.forEach(item => {
-        //         item.stt = item.maDvi;
-        //     })
-        // }
-
-        else if (this.lstCtietBcaos.length > 0) {
-            if (!this.lstCtietBcaos[0]?.stt) {
-                this.lstCtietBcaos = Table.sortWithoutIndex(this.lstCtietBcaos, 'maDvi');
-            } else {
-                this.lstCtietBcaos = Table.sortByIndex(this.lstCtietBcaos);
-            }
+        else if (!this.lstCtietBcaos[0]?.stt) {
+            let sttItem = 1
+            this.lstCtietBcaos.forEach(item => {
+                const stt = "0." + sttItem
+                item.stt = stt;
+                sttItem += sttItem
+            })
         }
+        console.log(this.lstCtietBcaos);
+        this.lstCtietBcaos = Table.sortByIndex(this.lstCtietBcaos);
         this.getTotal();
         this.updateEditCache();
         this.getStatusButton();

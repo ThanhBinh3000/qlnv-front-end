@@ -190,7 +190,12 @@ export class PhuLucTaiSanComponent implements OnInit {
 		// 	})
 		// }
 		if (!this.lstCtietBcaos[0]?.stt) {
-			this.setIndex();
+			let sttItem = 1
+			this.lstCtietBcaos.forEach(item => {
+				const stt = "0." + sttItem
+				item.stt = stt;
+				sttItem += sttItem
+			})
 		}
 		this.lstCtietBcaos = Table.sortByIndex(this.lstCtietBcaos);
 		this.tinhTong();
