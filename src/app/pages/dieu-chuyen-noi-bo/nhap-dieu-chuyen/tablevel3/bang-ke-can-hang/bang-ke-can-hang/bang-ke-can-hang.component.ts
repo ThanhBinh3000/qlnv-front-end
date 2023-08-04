@@ -78,7 +78,8 @@ export class BangKeCanHangComponent extends Base2Component implements OnInit {
       ngayHieuLuc: null,
       trichYeu: null,
       type: ["01"],
-      loaiDc: ["DCNB"]
+      loaiDc: ["DCNB"],
+      loaiQdinh: []
     })
     this.filterTable = {
       nam: '',
@@ -110,7 +111,8 @@ export class BangKeCanHangComponent extends Base2Component implements OnInit {
     });
 
     this.formData.patchValue({
-      loaiDc: this.loaiDc
+      loaiDc: this.loaiDc,
+      loaiQdinh: this.loaiDc === "CUC" ? "NHAP" : null
     })
 
     try {

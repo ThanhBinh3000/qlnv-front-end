@@ -61,6 +61,7 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
     this.formData = this.fb.group({
       type: ["01"],
       loaiDc: ["DCNB"],
+      loaiQdinh: [],
       isVatTu: [true],
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự thảo'],
@@ -116,7 +117,8 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
       maQhns: this.userInfo.DON_VI.maQhns,
       tenThuKho: this.userInfo.TEN_DAY_DU,
       soBangKe: `${id}/${this.formData.get('nam').value}/${this.maBb}`,
-      loaiDc: this.loaiDc
+      loaiDc: this.loaiDc,
+      loaiQdinh: this.loaiDc === "CUC" ? "NHAP" : null
     })
 
     if (this.idInput) {
@@ -238,8 +240,8 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
       trangThai: STATUS.BAN_HANH,
       loaiVthh: ['0101', '0102'],
       loaiDc: this.loaiDc,
-      maDvi: this.userInfo.MA_DVI
-
+      maDvi: this.userInfo.MA_DVI,
+      type: this.formData.value.type
     }
     let resSoDX = this.isCuc() ? await this.quyetDinhDieuChuyenCucService.getDsSoQuyetDinhDieuChuyenCuc(body) : await this.quyetDinhDieuChuyenCucService.getDsSoQuyetDinhDieuChuyenChiCuc(body);
     if (resSoDX.msg == MESSAGE.SUCCESS) {

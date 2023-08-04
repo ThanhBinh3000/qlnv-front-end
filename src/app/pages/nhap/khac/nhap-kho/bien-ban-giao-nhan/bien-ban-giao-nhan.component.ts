@@ -155,6 +155,19 @@ export class BienBanGiaoNhanComponent extends Base2Component implements OnInit {
   };
 
   async timKiem() {
+    if (this.formData.value.tuNgayKtnk) {
+      this.formData.value.tuNgayKtnk = dayjs(this.formData.value.tuNgayKtnk).format('YYYY-MM-DD')
+    }
+    if (this.formData.value.denNgayKtnk) {
+      this.formData.value.denNgayKtnk = dayjs(this.formData.value.denNgayKtnk).format('YYYY-MM-DD')
+    }
+    if (this.formData.value.tuNgayThoiHanNhap) {
+      this.formData.value.tuNgayThoiHanNhap = dayjs(this.formData.value.tuNgayThoiHanNhap).format('YYYY-MM-DD')
+    }
+    if (this.formData.value.denNgayThoiHanNhap) {
+      this.formData.value.denNgayThoiHanNhap = dayjs(this.formData.value.denNgayThoiHanNhap).format('YYYY-MM-DD')
+    }
+
     let body = this.formData.value
     body.paggingReq = {
       limit: this.pageSize,
