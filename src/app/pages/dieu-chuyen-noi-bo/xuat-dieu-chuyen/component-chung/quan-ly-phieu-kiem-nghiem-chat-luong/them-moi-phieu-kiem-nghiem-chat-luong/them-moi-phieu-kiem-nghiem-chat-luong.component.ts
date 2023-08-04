@@ -306,6 +306,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
       body.isVatTu = this.isVatTu;
       body.thayDoiThuKho = this.thayDoiThuKho;
       body.type = this.type;
+      body.loaiQding = this.loaiDc === "CUC" ? "XUAT" : undefined;
       let data = await this.createUpdate(body);
       if (!data) return;
       this.formData.patchValue({ id: data.id, trangThai: data.trangThai, soPhieu: data.soPhieu ? data.soPhieu : data.id ? `${data.id}/${data.nam}/${this.maBb}` : '' })

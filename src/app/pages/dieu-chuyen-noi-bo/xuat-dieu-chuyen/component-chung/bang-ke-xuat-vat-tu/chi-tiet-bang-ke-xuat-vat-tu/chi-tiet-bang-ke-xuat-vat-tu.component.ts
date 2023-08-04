@@ -247,6 +247,7 @@ export class ChiTietBangKeXuatVatTuDieuChuyenComponent extends Base2Component im
                 isVatTu: this.isVatTu,
                 loaiDc: this.loaiDc,
                 thayDoiThuKho: this.thayDoiThuKho,
+                type: "00"
             }
             let res = await this.quyetDinhDieuChuyenCucService.getDsSoQuyetDinhDieuChuyenChiCuc(body);
             if (res.msg === MESSAGE.SUCCESS) {
@@ -426,6 +427,7 @@ export class ChiTietBangKeXuatVatTuDieuChuyenComponent extends Base2Component im
             body.isVatTu = this.isVatTu;
             body.thayDoiThuKho = this.thayDoiThuKho;
             body.type = this.type;
+            body.loaiQding = this.loaiDc === "CUC" ? "XUAT" : undefined;
             let res;
             if (body.id && body.id > 0) {
                 res = await this.bangKeXuatVatTuDieuChuyenService.update(body);

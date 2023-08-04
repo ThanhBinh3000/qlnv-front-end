@@ -232,6 +232,7 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
       isVatTu: this.isVatTu,
       loaiDc: this.loaiDc,
       thayDoiThuKho: this.thayDoiThuKho,
+      type: "00",
       trangThai: this.STATUS.BAN_HANH,
       // maDvi: this.userInfo.MA_DVI
     }
@@ -511,10 +512,11 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
       body.thanhTien = this.thanhTien;
       body.thanhTienBc = this.convertTien(body.thanhTien * 1000000, 'VNĐ');
       body.dcnbPhieuXuatKhoDtl = this.dataTable;
-      body.loaiDc = this.loaiDc,
-        body.isVatTu = this.isVatTu,
-        body.thayDoiThuKho = this.thayDoiThuKho,
-        body.type = this.type
+      body.loaiDc = this.loaiDc;
+      body.isVatTu = this.isVatTu;
+      body.thayDoiThuKho = this.thayDoiThuKho;
+      body.type = this.type;
+      body.loaiQdinh = this.loaiDc === "CUC" ? "XUAT" : undefined;
       let data = await this.createUpdate(body);
       if (data) {
         this.formData.patchValue({ id: data.id, soPhieuXuatKho: data.soPhieuXuatKho ? data.soPhieuXuatKho : this.genSoPhieuXuat(data.id), trangThai: data.trangThai });
