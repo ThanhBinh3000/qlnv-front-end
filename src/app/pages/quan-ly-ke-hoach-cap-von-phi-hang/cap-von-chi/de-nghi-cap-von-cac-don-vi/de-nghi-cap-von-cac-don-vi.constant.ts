@@ -120,7 +120,7 @@ export class Report {
     ngayTraKq: string;
     trangThai: string = Status.TT_01;
     trangThaiThop: string;
-    maDviTien: string;
+    maDviTien: string = '1';
     lyDoTuChoi: string;
     thuyetMinh: string;
     lstFiles: any[] = [];
@@ -153,7 +153,7 @@ export class CapVon {
     lkCap: number;
     lkCong: number;
     tongVonVaDtoanDaCap: number;
-    VonDnCapLanNay: number;
+    vonDnCapLanNay: number;
     ung: number;
     cap: number;
     cong: number;
