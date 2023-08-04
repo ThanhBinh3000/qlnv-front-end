@@ -10,6 +10,8 @@ import { UserService } from 'src/app/services/user.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { Cvnc, Perm, Search } from '../de-nghi-cap-von-cac-don-vi.constant';
 import { CapVonNguonChiService } from 'src/app/services/quan-ly-von-phi/capVonNguonChi.service';
+import { DialogTaoMoiCapVonComponent } from '../dialog-tao-moi-cap-von/dialog-tao-moi-cap-von.component';
+import { DialogTaoMoiDeNghiComponent } from '../dialog-tao-moi-de-nghi/dialog-tao-moi-de-nghi.component';
 
 @Component({
     selector: 'app-danh-sach-de-nghi-cap-von',
@@ -140,67 +142,55 @@ export class DanhSachDeNghiCapVonComponent implements OnInit {
     }
 
     checkEditStatus(trangThai: string) {
-        return Utils.statusSave.includes(trangThai) && this.userService.isAccessPermisson('NO');
+        return Utils.statusSave.includes(trangThai) && this.userService.isAccessPermisson(Roles.CVNC.EDIT_CV);
     }
 
     checkDeleteStatus(trangThai: string) {
-        return Utils.statusDelete.includes(trangThai) && this.userService.isAccessPermisson('NO');
+        return Utils.statusDelete.includes(trangThai) && this.userService.isAccessPermisson(Roles.CVNC.DEL_CV);
     }
 
     addNewReport() {
-        // let nzContent: ComponentType<any>;
-        // if (this.searchFilter.maLoai == Cvmb.GHI_NHAN_CU_VON || this.searchFilter.maLoai == Cvmb.CU_VON_DVCD) {
-        //     nzContent = DialogTaoMoiCapUngVonComponent;
-        // } else if (this.searchFilter.maLoai == Cvmb.TIEN_THUA) {
-        //     nzContent = DialogTaoMoiTienThuaComponent;
-        // } else {
-        //     nzContent = DialogTaoMoiThanhToanComponent;
-        // }
-        // const modalTuChoi = this.modal.create({
-        //     nzTitle: 'Thông tin tạo mới',
-        //     nzContent: nzContent,
-        //     nzMaskClosable: false,
-        //     nzClosable: false,
-        //     nzWidth: '900px',
-        //     nzFooter: null,
-        //     nzComponentParams: {
-        //         request: this.searchFilter
-        //     },
-        // });
-        // modalTuChoi.afterClose.toPromise().then(async (res) => {
-        //     if (res) {
-        //         this.dataChange.emit(res);
-        //     }
-        // });
+        let nzContent: ComponentType<any>;
+        if (this.searchFilter.maLoai == Cvnc.CAP_VON) {
+            nzContent = DialogTaoMoiCapVonComponent;
+        } else {
+            nzContent = DialogTaoMoiDeNghiComponent;
+        }
+        const modalTuChoi = this.modal.create({
+            nzTitle: 'Thông tin tạo mới',
+            nzContent: nzContent,
+            nzMaskClosable: false,
+            nzClosable: false,
+            nzWidth: '900px',
+            nzFooter: null,
+            nzComponentParams: {
+                request: this.searchFilter
+            },
+        });
+        modalTuChoi.afterClose.toPromise().then(async (res) => {
+            if (res) {
+                this.dataChange.emit(res);
+            }
+        });
     }
 
     //xem chi tiet bao cao
     async viewDetail(data: any) {
-        // const obj = {
-        //     id: data.id,
-        //     tabSelected: '',
-        // }
-        // switch (this.searchFilter.maLoai) {
-        //     case Cvmb.GHI_NHAN_CU_VON:
-        //         obj.tabSelected = Tab.CUV;
-        //         break;
-        //     case Cvmb.CU_VON_DVCD:
-        //         obj.tabSelected = Tab.CUV;
-        //         break;
-        //     case Cvmb.TIEN_THUA:
-        //         obj.tabSelected = Tab.TIEN_THUA;
-        //         break;
-        //     case Cvmb.THANH_TOAN:
-        //         if (data.canCuVeGia == Cvmb.HOP_DONG) {
-        //             obj.tabSelected = Tab.THANH_TOAN_HOP_DONG;
-        //         } else {
-        //             obj.tabSelected = Tab.THANH_TOAN_DON_GIA;
-        //         }
-        //         break;
-        //     default:
-        //         break;
-        // }
-        // this.dataChange.emit(obj);
+        const obj = {
+            id: data.id,
+            tabSelected: '',
+        }
+        switch (this.searchFilter.maLoai) {
+            case Cvnc.CAP_VON:
+                obj.tabSelected = data.canCuVeGia == Cvnc.DON_GIA ? Cvnc.CV_DON_GIA : Cvnc.CV_HOP_DONG;
+                break;
+            case Cvnc.DE_NGHI:
+                obj.tabSelected = data.canCuVeGia == Cvnc.DON_GIA ? Cvnc.DN_DON_GIA : Cvnc.DN_HOP_DONG;
+                break;
+            default:
+                break;
+        }
+        this.dataChange.emit(obj);
     }
 
     updateAllChecked(): void {
