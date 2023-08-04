@@ -78,9 +78,12 @@ export class BienBanNhapDayKhoComponent extends Base2Component implements OnInit
       nam: null,
       soQdPdNk: null,
       soBb: null,
-      ngayBdNhap: null,
-      ngayKtNhap: null,
-      ngayThoiHanNh: null,
+      tuNgayBdNhap: null,
+      denNgayBdNhap: null,
+      tuNgayKtNhap: null,
+      denNgayKtNhap: null,
+      tuNgayThoiHanNh: null,
+      denNgayThoiHanNh: null,
       loaiVthh: [this.loaiVthh]
     })
     // this.filterTable = {
@@ -105,34 +108,21 @@ export class BienBanNhapDayKhoComponent extends Base2Component implements OnInit
   // isVatTu: boolean = false;
   isView = false;
 
-  // disabledStartNgayLapKh = (startValue: Date): boolean => {
-  //   if (startValue && this.formData.value.ngayLapKhDen) {
-  //     return startValue.getTime() > this.formData.value.ngayLapKhDen.getTime();
-  //   } else {
-  //     return false;
-  //   }
-  // };
+  disabledStartNgayBdNhap = (startValue: Date): boolean => {
+    if (startValue && this.formData.value.denNgayBdNhap) {
+      return startValue.getTime() > this.formData.value.denNgayBdNhap.getTime();
+    } else {
+      return false;
+    }
+  };
 
-  // disabledEndNgayLapKh = (endValue: Date): boolean => {
-  //   if (!endValue || !this.formData.value.ngayLapKhTu) {
-  //     return false;
-  //   }
-  //   return endValue.getTime() <= this.formData.value.ngayLapKhDen.getTime();
-  // };
-
-  // disabledStartNgayDuyetLdc = (startValue: Date): boolean => {
-  //   if (startValue && this.formData.value.ngayDuyetLdcDen) {
-  //     return startValue.getTime() > this.formData.value.ngayDuyetLdcDen.getTime();
-  //   }
-  //   return false;
-  // };
-
-  // disabledEndNgayDuyetLdc = (endValue: Date): boolean => {
-  //   if (!endValue || !this.formData.value.ngayDuyetLdcTu) {
-  //     return false;
-  //   }
-  //   return endValue.getTime() <= this.formData.value.ngayDuyetLdcDen.getTime();
-  // };
+  disabledEndNgayBdNhap = (endValue: Date): boolean => {
+    if (endValue && this.formData.value.tuNgayBdNhap) {
+      return endValue.getTime() < this.formData.value.tuNgayBdNhap.getTime();
+    } else {
+      return false;
+    }
+  };
 
   async ngOnInit() {
     this.isVisibleChangeTab$.subscribe((value: boolean) => {
@@ -220,7 +210,7 @@ export class BienBanNhapDayKhoComponent extends Base2Component implements OnInit
         .map(element => {
           return {
             ...element,
-            maLoNganKho: `${element.maLoKho}${element.maNganKho}`
+            maLoNganKho: `${element.maLoKho}${element.maNganKho}${element.soBbNhapDayKho}`
           }
         });
       this.dataTableView = this.buildTableView(data)
@@ -272,7 +262,7 @@ export class BienBanNhapDayKhoComponent extends Base2Component implements OnInit
           .groupBy("maDiemKho")
           ?.map((value2, key2) => {
             let children2 = chain(value2)
-              .groupBy("soBbNhapDayKho")
+              .groupBy("maLoNganKho")
               ?.map((value3, key3) => {
 
                 // const children3 = chain(value3).groupBy("soBbNhapDayKho")
@@ -298,7 +288,7 @@ export class BienBanNhapDayKhoComponent extends Base2Component implements OnInit
                 //     }
                 //   }).value()
 
-                const row3 = value3.find(s => s?.soBbNhapDayKho == key3);
+                const row3 = value3.find(s => s?.maLoNganKho == key3);
                 return {
                   ...row3,
                   idVirtual: row3 ? row3.idVirtual ? row3.idVirtual : uuidv4.v4() : uuidv4.v4(),

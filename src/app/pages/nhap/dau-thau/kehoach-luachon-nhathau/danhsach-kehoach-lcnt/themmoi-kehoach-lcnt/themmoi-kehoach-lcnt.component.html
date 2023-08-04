@@ -5,11 +5,11 @@
       <span>Quay lại</span>
     </button>
     <ng-container>
-      <button
-        type="button" class="btn btn-sub do" (click)="preview()">
-        <i class="icon htvbdh_tcdt_tuchoi"></i>
-        <span>Xem trước</span>
-      </button>
+<!--      <button-->
+<!--        type="button" class="btn btn-sub do" (click)="preview()">-->
+<!--        <i class="icon htvbdh_tcdt_tuchoi"></i>-->
+<!--        <span>Xem trước</span>-->
+<!--      </button>-->
       <button
         *ngIf="loaiVthhInput === '02' ? userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_VT_DEXUAT_DUYET_LDVU') && formData.value.trangThai == STATUS.CHO_DUYET_LDV :
         ( userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_LT_DEXUAT_DUYET_TP') && formData.value.trangThai == STATUS.CHO_DUYET_TP

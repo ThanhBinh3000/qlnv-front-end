@@ -82,6 +82,7 @@ export class ThongTinBienBanGiaoNhanComponent extends Base2Component implements 
       type: ["01"],
       loaiDc: [this.loaiDc],
       isVatTu: [true],
+      loaiQdinh: [],
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự thảo'],
       nam: [dayjs().get("year"), [Validators.required]],
@@ -135,7 +136,8 @@ export class ThongTinBienBanGiaoNhanComponent extends Base2Component implements 
       maQhns: this.userInfo.DON_VI.maQhns,
       canBo: this.userInfo.TEN_DAY_DU,
       soBb: `${id}/${this.formData.get('nam').value}/${this.maBb}`,
-      loaiDc: this.loaiDc
+      loaiDc: this.loaiDc,
+      loaiQdinh: this.loaiDc === "CUC" ? "NHAP" : null
     })
 
     if (this.idInput) {
@@ -272,7 +274,8 @@ export class ThongTinBienBanGiaoNhanComponent extends Base2Component implements 
       trangThai: STATUS.BAN_HANH,
       loaiVthh: ['0101', '0102'],
       loaiDc: this.loaiDc,
-      maDvi: this.userInfo.MA_DVI
+      maDvi: this.userInfo.MA_DVI,
+      type: this.formData.value.type
     }
     let resSoDX = this.isCuc() ? await this.quyetDinhDieuChuyenCucService.getDsSoQuyetDinhDieuChuyenCuc(body) : await this.quyetDinhDieuChuyenCucService.getDsSoQuyetDinhDieuChuyenChiCuc(body);
     if (resSoDX.msg == MESSAGE.SUCCESS) {

@@ -1,44 +1,46 @@
-<nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="btn-affix">
-  <div class="btn-group">
-    <button type="button" class="btn btn-sub" (click)="goBack()">
-      <i class="fa fa-arrow-left"></i>
-      <span>Quay lại</span>
-    </button>
-    <button class="btn btn-sub xanh-nhat" type="button"
-            *ngIf=" this.userService.isChiCuc() && !isDisabled() && formData.value.trangThai != STATUS.DA_DUYET_LDCC  "
-            (click)="saveAndSend(formData.value,STATUS.CHO_DUYET_LDCC,'Bạn có muốn lưu và gửi duyệt ?','Bạn đã lưu và gửi duyệt thành công!')">
-      <i class="icon htvbdh_tcdt_guiduyet"></i>
-      <span>Lưu và gửi duyệt</span>
-
-    </button>
-    <button type="button" class="btn btn-sub do" *ngIf="  this.userService.isChiCuc() && isDisabled()"
-            (click)="tuChoi()">
-      <i class="icon htvbdh_tcdt_tuchoi do"></i>
-      <span>Từ chối</span>
-    </button>
-    <button class="btn btn-sub xanh-nhat" *ngIf="  this.userService.isChiCuc() && isDisabled()" (click)="pheDuyet()">
-      <i class="icon htvbdh_tcdt_pheduyet "></i>
-      <span>Duyệt</span>
-    </button>
-    <button class="btn btn-sub xanh"
-            *ngIf=" this.userService.isChiCuc() && !isDisabled() && formData.value.trangThai != STATUS.DA_DUYET_LDCC "
-            (click)="save()">
-      <i class="icon  htvbdh_tcdt_save"></i>
-      <span>Lưu</span>
-    </button>
-  </div>
-</nz-affix>
 <div class="bg-trang">
-  <div class="header header-green-background">
-    <div class="header-text">
-      <div class="title-chi-tieu">
+  <nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="level0">
+    <div class="header header-green-background">
+      <div class="header-text">
+        <div class="title-chi-tieu">
                 <span [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDCC ? 'status-xanh' : 'status-do'">
                     {{ formData.value.tenTrangThai }}
                 </span>
-        <span>Phiếu nhập kho</span>
+          <span>Phiếu nhập kho</span>
+        </div>
+      </div>
+      <div class="btn-group">
+        <button type="button" class="btn btn-sub" (click)="goBack()">
+          <i class="fa fa-arrow-left"></i>
+          <span>Quay lại</span>
+        </button>
+        <button class="btn btn-sub xanh-nhat" type="button"
+                *ngIf=" this.userService.isChiCuc() && !isDisabled() && formData.value.trangThai != STATUS.DA_DUYET_LDCC  "
+                (click)="saveAndSend(formData.value,STATUS.CHO_DUYET_LDCC,'Bạn có muốn lưu và gửi duyệt ?','Bạn đã lưu và gửi duyệt thành công!')">
+          <i class="icon htvbdh_tcdt_guiduyet"></i>
+          <span>Lưu và gửi duyệt</span>
+
+        </button>
+        <button type="button" class="btn btn-sub do" *ngIf="  this.userService.isChiCuc() && isDisabled()"
+                (click)="tuChoi()">
+          <i class="icon htvbdh_tcdt_tuchoi do"></i>
+          <span>Từ chối</span>
+        </button>
+        <button class="btn btn-sub xanh-nhat" *ngIf="  this.userService.isChiCuc() && isDisabled()"
+                (click)="pheDuyet()">
+          <i class="icon htvbdh_tcdt_pheduyet "></i>
+          <span>Duyệt</span>
+        </button>
+        <button class="btn btn-sub xanh"
+                *ngIf=" this.userService.isChiCuc() && !isDisabled() && formData.value.trangThai != STATUS.DA_DUYET_LDCC "
+                (click)="save()">
+          <i class="icon  htvbdh_tcdt_save"></i>
+          <span>Lưu</span>
+        </button>
       </div>
     </div>
-  </div>
+  </nz-affix>
+
 
   <nz-alert class="mg-t-10" *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDCC " nzShowIcon nzType="error"
             nzMessage="Lý do từ chối" nzDescription="{{formData.value.lyDoTuChoi}}">

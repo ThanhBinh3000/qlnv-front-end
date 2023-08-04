@@ -354,24 +354,24 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
 
         data.thKeHoachDieuChuyenTongCucDtls.map(async item => {
           listDeXuat.push(item)
-          if (item.thKeHoachDieuChuyenCucHdr.thKeHoachDieuChuyenNoiBoCucDtls.length > 0) {
-            item.thKeHoachDieuChuyenCucHdr.thKeHoachDieuChuyenNoiBoCucDtls.map(itemKH => {
-              listQD.push({
-                keHoachDcHdrId: itemKH.dcKeHoachDcHdrId,
-              })
-            })
+          // if (item.thKeHoachDieuChuyenCucHdr.thKeHoachDieuChuyenNoiBoCucDtls.length > 0) {
+          //   item.thKeHoachDieuChuyenCucHdr.thKeHoachDieuChuyenNoiBoCucDtls.map(itemKH => {
+          //     listQD.push({
+          //       keHoachDcHdrId: itemKH.dcKeHoachDcHdrId,
+          //     })
+          //   })
 
-          }
-          if (item.thKeHoachDieuChuyenCucKhacCucDtl) {
-            if (item.thKeHoachDieuChuyenCucKhacCucDtl.dcnbKeHoachDcHdr.length > 0) {
-              item.thKeHoachDieuChuyenCucKhacCucDtl.dcnbKeHoachDcHdr.map(async (itemKH, i) => {
-                listQD.push({
-                  keHoachDcHdrId: itemKH.dcKeHoachDcHdrId,
-                })
-              })
-            }
+          // }
+          // if (item.thKeHoachDieuChuyenCucKhacCucDtl) {
+          //   if (item.thKeHoachDieuChuyenCucKhacCucDtl.dcnbKeHoachDcHdr.length > 0) {
+          //     item.thKeHoachDieuChuyenCucKhacCucDtl.dcnbKeHoachDcHdr.map(async (itemKH, i) => {
+          //       listQD.push({
+          //         keHoachDcHdrId: itemKH.id,
+          //       })
+          //     })
+          //   }
 
-          }
+          // }
         })
         const item = data.thKeHoachDieuChuyenTongCucDtls[0]
         if (loaiDC === "CHI_CUC") {
@@ -381,6 +381,9 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
             if (item.thKeHoachDieuChuyenCucHdr.thKeHoachDieuChuyenNoiBoCucDtls.length > 0) {
               item.thKeHoachDieuChuyenCucHdr.thKeHoachDieuChuyenNoiBoCucDtls.map(itemKH => {
                 let dcnbKeHoachDcHdr = itemKH.dcnbKeHoachDcHdr
+                listQD.push({
+                  keHoachDcHdrId: dcnbKeHoachDcHdr.id,
+                })
                 if (dcnbKeHoachDcHdr) {
                   dcnbKeHoachDcHdr.danhSachHangHoa.map(async itemHH => {
                     listHangHoa.push({
@@ -407,6 +410,9 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
 
             if (item.thKeHoachDieuChuyenCucKhacCucDtl.dcnbKeHoachDcHdr.length > 0) {
               item.thKeHoachDieuChuyenCucKhacCucDtl.dcnbKeHoachDcHdr.map(async (itemKH, i) => {
+                listQD.push({
+                  keHoachDcHdrId: itemKH.id,
+                })
                 itemKH.danhSachHangHoa.map(async itemHH => {
                   listHangHoa.push({
                     ...itemHH,
@@ -742,7 +748,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
             dcnbKeHoachDcHdr.forEach(element => {
               listDeXuat.push(element)
               listQD.push({
-                keHoachDcHdrId: element.dcKeHoachDcHdrId,
+                keHoachDcHdrId: element.id,
               })
               element.danhSachHangHoa.map(async itemHH => {
                 listHangHoa.push({
@@ -763,7 +769,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
           if (item.dcnbKeHoachDcHdr) {
             listDeXuat.push(item.dcnbKeHoachDcHdr)
             listQD.push({
-              keHoachDcHdrId: item.dcnbKeHoachDcHdr.dcKeHoachDcHdrId,
+              keHoachDcHdrId: item.dcnbKeHoachDcHdr.id,
             })
             let dcnbKeHoachDcHdr = item.dcnbKeHoachDcHdr
             dcnbKeHoachDcHdr.danhSachHangHoa.map(async itemHH => {

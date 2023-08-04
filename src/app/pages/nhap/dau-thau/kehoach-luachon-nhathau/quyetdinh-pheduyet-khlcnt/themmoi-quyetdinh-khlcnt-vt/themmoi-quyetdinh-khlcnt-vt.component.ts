@@ -34,6 +34,7 @@ import { HttpClient } from "@angular/common/http";
 import { StorageService } from "../../../../../../services/storage.service";
 import { ThongtinDexuatVtComponent } from "./thongtin-dexuat-vt/thongtin-dexuat-vt.component";
 import { cloneDeep } from 'lodash';
+import {PREVIEW} from "../../../../../../constants/fileType";
 
 @Component({
   selector: "app-themmoi-quyetdinh-khlcnt-vt",
@@ -84,7 +85,15 @@ export class ThemmoiQuyetdinhKhlcntVtComponent extends Base2Component implements
     moTa: "",
     taiLieu: []
   };
-
+  reportTemplate: any = {
+    typeFile: "",
+    fileName: "qd_pd_kh_lcnt_vat_tu.docx",
+    tenBaoCao: "",
+    trangThai: ""
+  };
+  showDlgPreview = false;
+  pdfSrc: any;
+  wordSrc: any;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -751,4 +760,24 @@ export class ThemmoiQuyetdinhKhlcntVtComponent extends Base2Component implements
     });
   }
 
+  async preview() {
+    let body = this.formData.value;
+    body.reportTemplateRequest = this.reportTemplate;
+    await this.quyetDinhPheDuyetKeHoachLCNTService.preview(body).then(async s => {
+      this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
+      this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
+      this.showDlgPreview = true;
+    });
+  }
+  downloadPdf() {
+    saveAs(this.pdfSrc, "qd_pd_kh_lcnt_vat_tu.pdf");
+  }
+
+  downloadWord() {
+    saveAs(this.wordSrc, "qd_pd_kh_lcnt_vat_tu.docx");
+  }
+
+  closeDlg() {
+    this.showDlgPreview = false;
+  }
 }

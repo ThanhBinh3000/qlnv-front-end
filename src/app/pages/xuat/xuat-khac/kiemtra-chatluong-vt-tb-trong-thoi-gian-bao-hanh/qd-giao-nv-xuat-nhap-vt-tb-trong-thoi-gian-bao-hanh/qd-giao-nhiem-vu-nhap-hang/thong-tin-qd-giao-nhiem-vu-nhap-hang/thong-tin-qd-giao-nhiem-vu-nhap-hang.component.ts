@@ -146,7 +146,10 @@ export class ThongTinQdGiaoNhiemVuNhapHangComponent extends Base2Component imple
     }
     let rs = await this.phieuKdclVtTbTrongThoiGianBaoHanhService.search(body);
     if (rs.msg == MESSAGE.SUCCESS) {
-      this.listPhieuKdcl = rs.data.content;
+     let data = rs.data.content;
+      console.log(data,"data")
+      this.listPhieuKdcl = data.filter(i => i.mauBiHuy == false);
+      console.log(this.listPhieuKdcl ,"123")
     }
     return this.listPhieuKdcl;
   }

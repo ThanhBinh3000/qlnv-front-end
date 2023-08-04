@@ -189,7 +189,7 @@ export class ThongTinBienBanLayMauBanGiaoMauVtTbComponent extends Base2Component
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         });
     } else {
-      let id = await this.userService.getId('XH_XK_VT_PHIEU_XN_KHO_SEQ')
+      let id = await this.userService.getId('XH_XK_VT_BH_BB_LAY_MAU_HDR_SEQ')
       this.formData.patchValue({
         maDvi: this.userInfo.MA_DVI,
         tenDvi: this.userInfo.TEN_DVI,

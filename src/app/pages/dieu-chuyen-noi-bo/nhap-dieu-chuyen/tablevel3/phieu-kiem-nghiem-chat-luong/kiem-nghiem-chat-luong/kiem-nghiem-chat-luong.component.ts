@@ -79,7 +79,8 @@ export class KiemNghiemChatLuongComponent extends Base2Component implements OnIn
       soBbLayMau: null,
       soBbXuatDocKho: null,
       type: ["01"],
-      loaiDc: ["DCNB"]
+      loaiDc: ["DCNB"],
+      loaiQdinh: [],
     })
   }
 
@@ -98,7 +99,8 @@ export class KiemNghiemChatLuongComponent extends Base2Component implements OnIn
       this.visibleTab = value;
     });
     this.formData.patchValue({
-      loaiDc: this.loaiDc
+      loaiDc: this.loaiDc,
+      loaiQdinh: this.loaiDc === "CUC" ? "NHAP" : null
     })
 
     try {
