@@ -68,6 +68,13 @@ export class CapVonNguonChiService extends BaseService {
         );
     }
 
+    //tong ho de nghi cap von
+    tongHopDeNghi(request: any): Observable<any> {
+        return this.httpClient.post(
+            this.urlDefault + '/de-nghi-cap-von/tong-hop',
+            request,
+        );
+    }
 
 
 
@@ -139,13 +146,7 @@ export class CapVonNguonChiService extends BaseService {
 
 
 
-    //tong ho de nghi cap von
-    tongHopDeNghi(request: any): Observable<any> {
-        return this.httpClient.post(
-            this.urlDefault + '/de-nghi-cap-von/tong-hop',
-            request,
-        );
-    }
+
     //danh sach op dong
     dsachHopDong(request: any): Observable<any> {
         return this.httpClient.post(
