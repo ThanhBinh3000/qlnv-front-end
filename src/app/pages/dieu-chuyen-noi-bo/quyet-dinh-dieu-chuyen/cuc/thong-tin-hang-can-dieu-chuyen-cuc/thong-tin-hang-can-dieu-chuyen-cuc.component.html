@@ -132,9 +132,9 @@
               <div nz-col nzSpan="14">
                 <nz-form-item>
                   <nz-form-control>
-                    <nz-input-number [nzDisabled]="this.data && !!this.data.soLuongDc" formControlName="soLuongDc"
-                      [nzMin]="1" [nzMax]="formData.value.tonKho || 99" [nzStep]="1" [nzSize]="'small'"
-                      [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                    <nz-input-number [nzDisabled]="!formData.value.tonKho || (this.data && !!this.data.soLuongDc)"
+                      formControlName="soLuongDc" [nzMin]="1" [nzMax]="formData.value.tonKho || 99" [nzStep]="1"
+                      [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
                       (ngModelChange)="onChangSLDC($event)">
                     </nz-input-number>
                   </nz-form-control>

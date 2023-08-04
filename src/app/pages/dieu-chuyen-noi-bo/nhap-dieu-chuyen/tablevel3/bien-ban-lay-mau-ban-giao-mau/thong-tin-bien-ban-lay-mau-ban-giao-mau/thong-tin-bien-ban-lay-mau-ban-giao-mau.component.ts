@@ -11,6 +11,7 @@ import {
 } from "src/app/components/dialog/dialog-table-selection/dialog-table-selection.component";
 import { MESSAGE } from "src/app/constants/message";
 import { STATUS } from "src/app/constants/status";
+import { BienBanTinhKhoDieuChuyenService } from "src/app/pages/dieu-chuyen-noi-bo/xuat-dieu-chuyen/component-chung/services/dcnb-bien-ban-tinh-kho.service";
 import { DanhMucService } from "src/app/services/danhmuc.service";
 import { BienBanLayMauService } from "src/app/services/dieu-chuyen-noi-bo/nhap-dieu-chuyen/bien-ban-lay-mau";
 import { BienBanNhapDayKhoService } from "src/app/services/dieu-chuyen-noi-bo/nhap-dieu-chuyen/bien-ban-nhap-day-kho";
@@ -63,6 +64,7 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
     private quyetDinhDieuChuyenCucService: QuyetDinhDieuChuyenCucService,
     private khCnQuyChuanKyThuat: KhCnQuyChuanKyThuat,
     private bienBanLayMauService: BienBanLayMauService,
+    private bienBanTinhKhoDieuChuyenService: BienBanTinhKhoDieuChuyenService
   ) {
     super(httpClient, storageService, notification, spinner, modal, bienBanLayMauService);
     this.formData = this.fb.group({
@@ -78,9 +80,9 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
       ngayLayMau: [dayjs().format('YYYY-MM-DD')],
       soQdinhDcc: [],
       qdccId: [],
-      soBbNhapDayKho: [],
-      ngayBbNhapDayKho: [],
-      bbNhapDayKhoId: [],
+      soBbTinhKho: [],
+      ngayXuatDocKho: [],
+      bbTinhKhoId: [],
       tenLoNganKho: [],
       tenLoKho: [],
       maLoKho: [],
@@ -299,20 +301,20 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
     await this.spinner.show();
     // Get data tờ trình
     let body = {
-      trangThai: STATUS.BAN_HANH,
+      // trangThai: STATUS.BAN_HANH,
       // loaiVthh: ['0101', '0102'],
-      loaiDc: "DCNB",
+      loaiDc: this.loaiDc,
       // maDvi: this.userInfo.MA_DVI
       // listTrangThaiXh: [STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN],
     }
-    let res = await this.bienBanNhapDayKhoService.getDanhSach(body)
+    let res = await this.bienBanTinhKhoDieuChuyenService.dsBBTinhKho(body)
     if (res.msg == MESSAGE.SUCCESS) {
       this.listDanhSachQuyetDinh = res.data;
     }
     await this.spinner.hide();
 
     const modalQD = this.modal.create({
-      nzTitle: 'Danh sách quyết định',
+      nzTitle: 'Danh sách biên bản tịnh kho',
       nzContent: DialogTableSelectionComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -320,7 +322,7 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
       nzFooter: null,
       nzComponentParams: {
         dataTable: this.listDanhSachQuyetDinh,
-        dataHeader: ['Số biên bản nhập đầy kho'],
+        dataHeader: ['Số biên bản tịnh kho'],
         dataColumn: ['soBb']
       },
     });
@@ -328,9 +330,9 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
       if (data) {
         console.log('openDialogQD', data)
         this.formData.patchValue({
-          soBbNhapDayKho: data.soBb,
-          ngayBbNhapDayKho: data.ngayPDuyet,
-          bbNhapDayKhoId: data.id,
+          soBbTinhKho: data.soBb,
+          ngayXuatDocKho: data.ngayPDuyet,
+          bbTinhKhoId: data.id,
 
         });
         await this.loadChiTietQdinh(data.id);
