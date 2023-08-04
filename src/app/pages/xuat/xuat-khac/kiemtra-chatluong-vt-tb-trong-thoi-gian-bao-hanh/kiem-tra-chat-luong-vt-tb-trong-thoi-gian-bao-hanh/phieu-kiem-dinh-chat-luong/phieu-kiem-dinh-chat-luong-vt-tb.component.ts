@@ -122,11 +122,23 @@ export class XkVtPhieuKiemDinhChatLuongVtTbComponent extends Base2Component impl
         let rs = chain(value)
           .groupBy("tenDiemKho")
           .map((v, k) => {
+              let rs1 = chain(v)
+                .groupBy("tenLoKho")
+                .map((v1, k1) => {
+                  let tenNganKho = v1.find(s => s.tenLoKho === k1)
+                    return {
+                      idVirtual: uuid.v4(),
+                      tenLoKho: k1 != "null" ? k1 : '',
+                      tenNganKho: tenNganKho ? tenNganKho.tenNganKho : null,
+                      childData: v1,
+                    };
+                  }
+                ).value();
               // let bb = v.find(s => s.tenDiemKho === k)
               return {
                 idVirtual: uuid.v4(),
                 tenDiemKho: k != "null" ? k : '',
-                childData: v,
+                childData: rs1,
               };
             }
           ).value();
@@ -139,6 +151,7 @@ export class XkVtPhieuKiemDinhChatLuongVtTbComponent extends Base2Component impl
         };
       }).value();
     this.children = dataView
+    console.log(this.children,"this")
     this.expandAll()
   }
 
