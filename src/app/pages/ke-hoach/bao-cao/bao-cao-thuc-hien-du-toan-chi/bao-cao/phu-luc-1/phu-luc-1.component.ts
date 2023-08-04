@@ -607,9 +607,10 @@ export class PhuLucIComponent implements OnInit {
                         })
                         if (this.lstCtietBcao.length == 0) {
                             this.lstCtietBcao = Table.addHead(data, this.lstCtietBcao);
-                            id = data.id;
                         } else {
                             if (level == 0) {
+                                const index = this.lstCtietBcao.map(item => item.level).lastIndexOf(0);
+                                id = this.lstCtietBcao[index].id;
                                 this.addSame(id, data);
                             } else {
                                 this.addLow(id, data);
@@ -619,8 +620,8 @@ export class PhuLucIComponent implements OnInit {
                             this.changeData(item.ma)
                         }
                     }
-                    this.updateEditCache();
                 })
+                this.updateEditCache();
             }
         });
     }

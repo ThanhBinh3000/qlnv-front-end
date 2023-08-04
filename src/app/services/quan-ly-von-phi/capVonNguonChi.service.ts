@@ -22,6 +22,59 @@ export class CapVonNguonChiService extends BaseService {
             this.urlDefault + '/de-nghi-cap-von/sinh-ma'
         );
     }
+
+    //danh sach de nghi cap von
+    timKiemDeNghi(request: any): Observable<any> {
+        return this.httpClient.post(
+            this.urlDefault + '/de-nghi-cap-von/danh-sach',
+            request,
+        );
+    }
+
+    //xóa báo cáo nút xóa Báo cáo
+    xoaDeNghi(request: any): Observable<any> {
+        return this.httpClient.post(
+            this.urlDefault + '/de-nghi-cap-von/xoa',
+            request,
+        );
+    }
+
+    //chi tiết đề nghị cấp vốn
+    ctietDeNghi(id: any): Observable<any> {
+        return this.httpClient.get(
+            this.urlDefault + '/de-nghi-cap-von/chi-tiet/' + id
+        );
+    }
+
+    ///thay doi trang thai de nghi cap von
+    trinhDeNghi(request: any): Observable<any> {
+        return this.httpClient.put(
+            this.urlDefault + '/de-nghi-cap-von/trang-thai',
+            request);
+    }
+
+    //tao moi de nghi cap von
+    taoMoiDeNghi(request: any): Observable<any> {
+        return this.httpClient.post(
+            this.urlDefault + '/de-nghi-cap-von/them-moi',
+            request);
+    }
+
+    // cap nhat de nghi cap von
+    updateDeNghi(request: any): Observable<any> {
+        return this.httpClient.put(
+            this.urlDefault + '/de-nghi-cap-von/cap-nhat',
+            request,
+        );
+    }
+
+
+
+
+
+
+
+
     //ma hop dong
     maHopDong(): Observable<any> {
         return this.httpClient.get(
@@ -80,45 +133,12 @@ export class CapVonNguonChiService extends BaseService {
             request,
         );
     }
-    //danh sach de nghi cap von
-    timKiemDeNghi(request: any): Observable<any> {
-        return this.httpClient.post(
-            this.urlDefault + '/de-nghi-cap-von/danh-sach',
-            request,
-        );
-    }
-    //xóa báo cáo nút xóa Báo cáo
-    xoaDeNghi(request: any): Observable<any> {
-        return this.httpClient.post(
-            this.urlDefault + '/de-nghi-cap-von/xoa',
-            request,
-        );
-    }
-    //chi tiết đề nghị cấp vốn
-    ctietDeNghi(id: any): Observable<any> {
-        return this.httpClient.get(
-            this.urlDefault + '/de-nghi-cap-von/chi-tiet/' + id
-        );
-    }
-    ///thay doi trang thai de nghi cap von
-    trinhDeNghi(request: any): Observable<any> {
-        return this.httpClient.put(
-            this.urlDefault + '/de-nghi-cap-von/trang-thai',
-            request);
-    }
-    //tao moi de nghi cap von
-    taoMoiDeNghi(request: any): Observable<any> {
-        return this.httpClient.post(
-            this.urlDefault + '/de-nghi-cap-von/them-moi',
-            request);
-    }
-    // cap nhat de nghi cap von
-    updateDeNghi(request: any): Observable<any> {
-        return this.httpClient.put(
-            this.urlDefault + '/de-nghi-cap-von/cap-nhat',
-            request,
-        );
-    }
+
+
+
+
+
+
     //tong ho de nghi cap von
     tongHopDeNghi(request: any): Observable<any> {
         return this.httpClient.post(
