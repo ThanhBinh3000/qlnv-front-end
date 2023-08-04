@@ -194,6 +194,13 @@ export class GiaoDuToanChiService extends BaseService {
       request
     )
   };
+  xoaBanGhiGiaoBTC2(request: any): Observable<any> {
+    return this.httpClient.post(
+      this.urlDefault + '/giao_du_toan/xoa',
+      request
+    )
+  };
+
   //tim kiem giao danh sách nội dung khoản mục
   xoaBanGhiGiaoBTC1(request: any): Observable<any> {
     return this.httpClient.post(

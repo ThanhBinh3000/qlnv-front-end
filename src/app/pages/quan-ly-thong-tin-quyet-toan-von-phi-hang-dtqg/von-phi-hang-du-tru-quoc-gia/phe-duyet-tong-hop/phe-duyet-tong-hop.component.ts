@@ -260,7 +260,7 @@ export class PheDuyetTongHopComponent implements OnInit {
                 const request = {
                     maPhanBcao: res.maPhanBcao,
                     namQtoan: res.namQtoan,
-                    thangBcao: res.thangBcao,
+                    quyQtoan: res.quyQtoan,
                     isSythen: true,
                 }
                 await this.quyetToanVonPhiService.checkNamTaoMoiQuyetToan(request).toPromise().then(

@@ -153,6 +153,12 @@ export class PhuLuc5Component implements OnInit {
         //         item.thanhTien = Operator.mul(item.dinhMuc, item.tongCong);
         //     }
         // })
+        this.lstCtietBcao.forEach(item => {
+            if (item.dtoanDaGiaoLke == null) {
+                item.dtoanDaGiaoLke = 0
+                item.dtoanDchinh = Operator.sum([item.thanhTien, - item.dtoanDaGiaoLke]);
+            }
+        })
 
         if (this.dataInfo?.isSynthetic && this.formDetail.trangThai == Status.NEW) {
             this.lstCtietBcao.forEach(item => {
@@ -520,8 +526,6 @@ export class PhuLuc5Component implements OnInit {
                             dinhMuc: lstTemp[i - 1].tongDmuc,
                         })
                     }
-                    console.log(this.lstCtietBcao);
-
                     this.updateEditCache();
                 }
             }

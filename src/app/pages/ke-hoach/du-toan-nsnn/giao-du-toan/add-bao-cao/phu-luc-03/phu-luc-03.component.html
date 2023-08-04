@@ -117,12 +117,12 @@
                                     <td>{{Op.fmtVal(data.namDtCphiNgoaiCkhoTt)}}</td>
                                     <td>{{Op.fmtVal(data.namDtTcong)}}</td>
                                     <td *ngIf="status.general">
-                                        <i *ngIf="checkEdit(data.stt)" class="fa fa-pencil"
+                                        <i *ngIf="checkEdit(data.stt) && data.level !== 0" class="fa fa-pencil"
                                             (click)="startEdit(data.id)"></i>
                                     </td>
                                     <td *ngIf="status.general">
                                         <i *ngIf="checkDelete(data.stt)" class="fa fa-trash-o do"
-                                            (click)="deleteLine(data.stt)"></i>
+                                            (click)="deleteLine(data.id)"></i>
                                     </td>
                                 </ng-container>
                                 <ng-template #editTemplate>

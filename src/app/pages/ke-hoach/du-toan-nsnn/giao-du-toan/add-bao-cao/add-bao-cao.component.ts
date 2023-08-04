@@ -8,7 +8,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { GDT, Roles, Status, TRANG_THAI_PHU_LUC, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { FileManip, GDT, Roles, Status, TRANG_THAI_PHU_LUC, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import * as fileSaver from 'file-saver';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { ComponentType } from '@angular/cdk/portal';
@@ -28,6 +28,7 @@ import { PhuLucQuyLuongComponent } from './phu-luc-quy-luong/phu-luc-quy-luong.c
 import { PhuLucDaoTaoComponent } from './phu-luc-dao-tao/phu-luc-dao-tao.component';
 import { PhuLucKhoaHocCongNgheComponent } from './phu-luc-khoa-hoc-cong-nghe/phu-luc-khoa-hoc-cong-nghe.component';
 import { BtnStatus, Doc, Form, Gdt, Report } from '../giao-du-toan.constant';
+import { DialogCongVanComponent } from 'src/app/components/dialog/dialog-cong-van/dialog-cong-van.component';
 
 
 // export class ItemCongVan {
@@ -141,11 +142,26 @@ export class AddBaoCaoComponent implements OnInit {
 
     // before uploaf file
     beforeUploadCV = (file: NzUploadFile): boolean => {
+        const modalAppendix = this.modal.create({
+            nzTitle: 'Thêm mới công văn',
+            nzContent: DialogCongVanComponent,
+            nzBodyStyle: { overflowY: 'auto', maxHeight: 'calc(100vh - 200px)' },
+            nzMaskClosable: false,
+            nzWidth: '60%',
+            nzFooter: null,
+            nzComponentParams: {
+            },
+        });
+        modalAppendix.afterClose.toPromise().then(async (res) => {
+            if (res) {
+                this.baoCao.ngayCongVan = res.ngayCongVan;
+                this.baoCao.soQd = {
+                    ...new Doc(),
+                    fileName: res.soCongVan,
+                };
+            }
+        });
         this.fileDetail = file;
-        this.baoCao.soQd = {
-            ...new Doc(),
-            fileName: file.name,
-        };
         return false;
     };
 
@@ -168,6 +184,7 @@ export class AddBaoCaoComponent implements OnInit {
         private notification: NzNotificationService,
         private quanLyVonPhiService: QuanLyVonPhiService,
         private datePipe: DatePipe,
+        public fileManip: FileManip,
     ) { }
 
     async ngOnInit() {
@@ -259,7 +276,7 @@ export class AddBaoCaoComponent implements OnInit {
             // this.baoCao.maLoaiDan = this.data?.maLoaiDan
             // this.baoCao.maPhanGiao = "3"
             this.baoCao.maBcao = this.data?.maBcao
-            this.baoCao.soQd = this.data?.soQd
+            // this.baoCao.soQd = this.data?.soQd
             if (this.data.preTab == "tongHopBaoCaoCapDuoi") {
                 this.baoCao.lstCtiets = this.data?.lstCtiets ? this.data?.lstCtiets : [];
                 this.baoCao.maPaCha = this.data?.maPaCha;
@@ -995,22 +1012,16 @@ export class AddBaoCaoComponent implements OnInit {
 
     // Lưu
     async save() {
-        //kiem tra cac bao cao da duoc giao xuong chua
         if (!this.baoCao.lstCtiets.every(e => e.nguoiBcao)) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
             return;
         }
-        //kiem tra kich co cua file
-        let checkFile = true;
-        for (const iterator of this.listFile) {
-            if (iterator.size > Utils.FILE_SIZE) {
-                checkFile = false;
-            }
-        }
-        if (!checkFile) {
+
+        if (this.listFile.some(item => item.size > Utils.FILE_SIZE)) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
             return;
         }
+
         const tongHopTuIds = []
         const baoCaoTemp = JSON.parse(JSON.stringify({
             ...this.baoCao,
@@ -1024,7 +1035,7 @@ export class AddBaoCaoComponent implements OnInit {
             baoCaoTemp.fileDinhKems = [];
         }
         for (const iterator of this.listFile) {
-            baoCaoTemp.fileDinhKems.push(await this.uploadFile(iterator));
+            baoCaoTemp.fileDinhKems.push(await this.fileManip.uploadFile(iterator, this.path));
         }
         //get file cong van url
         const file: any = this.fileDetail;
@@ -1033,11 +1044,15 @@ export class AddBaoCaoComponent implements OnInit {
                 this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
                 return;
             } else {
-                baoCaoTemp.soQd = await this.uploadFile(file);
+                baoCaoTemp.congVan = {
+                    ...await this.fileManip.uploadFile(file, this.path),
+                    fileName: this.baoCao.soQd.fileName,
+                }
             }
+            this.fileDetail = null;
         }
 
-        if (!baoCaoTemp.soQd) {
+        if (!baoCaoTemp.congVan.fileUrl) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
             return;
         }
@@ -1045,12 +1060,6 @@ export class AddBaoCaoComponent implements OnInit {
         // replace nhung ban ghi dc them moi id thanh null
         baoCaoTemp.lstCtiets.forEach(item => {
             if (item.id?.length == 38) {
-                item.id = null;
-            }
-        })
-
-        baoCaoTemp.lstCtiets.forEach(item => {
-            if (item.id?.length == 1) {
                 item.id = null;
             }
         })
@@ -1229,24 +1238,16 @@ export class AddBaoCaoComponent implements OnInit {
 
     //download file về máy tính
     async downloadFile(id: string) {
-        //let file!: File;
-        const file: File = this.listFile.find(element => element?.lastModified.toString() == id);
-        if (!file) {
-            const fileAttach = this.baoCao.lstFiles.find(element => element?.id == id);
-            if (fileAttach) {
-                await this.quanLyVonPhiService.downloadFile(fileAttach.fileUrl).toPromise().then(
-                    (data) => {
-                        fileSaver.saveAs(data, fileAttach.fileName);
-                    },
-                    err => {
-                        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-                    },
-                );
-            }
+        let file: any;
+        let doc: any;
+        if (!id) {
+            file = this.fileDetail;
+            doc = this.baoCao.soQd
         } else {
-            const blob = new Blob([file], { type: "application/octet-stream" });
-            fileSaver.saveAs(blob, file.name);
+            file = this.listFile.find(element => element?.lastModified.toString() == id);
+            doc = this.baoCao.lstFiles.find(element => element?.id == id);
         }
+        await this.fileManip.downloadFile(file, doc);
     }
 
 

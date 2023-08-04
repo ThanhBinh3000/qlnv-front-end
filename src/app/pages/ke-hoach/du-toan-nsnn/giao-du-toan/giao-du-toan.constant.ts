@@ -236,6 +236,7 @@ export class Report {
     maDviCha: string; // chưa dùng	
     maGiao: string;
     soQd: Doc;
+    ngayCongVan: string;
     // maLoaiDan: string;
     // maPhanGiao: string;
     maPaCha: string;
