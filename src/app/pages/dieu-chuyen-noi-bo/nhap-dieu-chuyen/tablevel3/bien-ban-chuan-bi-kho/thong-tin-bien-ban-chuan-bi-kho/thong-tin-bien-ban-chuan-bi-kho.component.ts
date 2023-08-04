@@ -124,7 +124,7 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
       type: ["01"],
       loaiDc: ["DCNB"],
       isVatTu: [true],
-      loaiQdinh: ['NHAP'],
+      loaiQdinh: [],
       lyDoTuChoi: [],
       noiDung: [],
       soLuongTrongNam: [],
@@ -143,7 +143,8 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
       maQhns: this.userInfo.DON_VI.maQhns,
       ktvBaoQuan: this.userInfo.TEN_DAY_DU,
       soBban: `${id}/${this.formData.get('nam').value}/${this.maBb}`,
-      loaiDc: this.loaiDc
+      loaiDc: this.loaiDc,
+      loaiQdinh: this.loaiDc === "CUC" ? "NHAP" : null
     })
     await this.getListNhomCcdc()
     if (this.idInput) {

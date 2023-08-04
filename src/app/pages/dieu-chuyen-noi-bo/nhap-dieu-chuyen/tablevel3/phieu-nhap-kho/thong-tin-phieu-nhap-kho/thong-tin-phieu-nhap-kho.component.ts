@@ -116,7 +116,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
       type: ["01"],
       loaiDc: [this.loaiDc],
       isVatTu: [this.isVatTu],
-      loaiQdinh: ['NHAP'],
+      loaiQdinh: [],
       maSo: [],
       soLuongNhapDc: [],
       thucTeKinhPhi: [],
@@ -135,6 +135,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
       soPhieuNhapKho: `${id}/${this.formData.get('nam').value}/${this.maBb}`,
       loaiDc: this.loaiDc,
       isVatTu: this.isVatTu,
+      loaiQdinh: this.loaiDc === "CUC" ? "NHAP" : null
     })
     this.getDataNX()
     if (this.idInput) {

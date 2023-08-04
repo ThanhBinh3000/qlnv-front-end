@@ -105,7 +105,7 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
       type: ["01"],
       loaiDc: [this.loaiDc],
       isVatTu: [this.isVatTu],
-      loaiQdinh: ['NHAP'],
+      loaiQdinh: [],
       lyDoTuChoi: [],
     });
   }
@@ -121,7 +121,8 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
       soBbLayMau: `${id}/${this.formData.get('nam').value}/${this.maBb}`,
       id: id,
       loaiDc: this.loaiDc,
-      isVatTu: this.isVatTu
+      isVatTu: this.isVatTu,
+      loaiQdinh: this.loaiDc === "CUC" ? "NHAP" : null
     })
 
     if (this.idInput) {

@@ -107,7 +107,7 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
       nhanXetKetLuan: [],
       type: ["01"],
       loaiDc: [],
-      loaiQdinh: ['NHAP'],
+      loaiQdinh: [],
       lyDoTuChoi: [],
     }
     );
@@ -123,7 +123,8 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
       ktvBaoQuan: this.userInfo.TEN_DAY_DU,
       soPhieu: `${id}/${this.formData.get('nam').value}/${this.maBb}`,
       id: id,
-      loaiDc: this.loaiDc
+      loaiDc: this.loaiDc,
+      loaiQdinh: this.loaiDc === "CUC" ? "NHAP" : null
     })
 
     if (this.idInput) {

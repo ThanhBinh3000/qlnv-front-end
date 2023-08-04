@@ -80,7 +80,7 @@ export class BienBanNhapDayDuComponent extends Base2Component implements OnInit 
       thoiHanNh: null,
       type: ["01"],
       loaiDc: [this.loaiDc],
-      loaiQdinh: ['NHAP'],
+      loaiQdinh: [],
     })
     // this.filterTable = {
     //   nam: '',
@@ -139,7 +139,8 @@ export class BienBanNhapDayDuComponent extends Base2Component implements OnInit 
     });
 
     this.formData.patchValue({
-      loaiDc: this.loaiDc
+      loaiDc: this.loaiDc,
+      loaiQdinh: this.loaiDc === "CUC" ? "NHAP" : null
     })
 
 

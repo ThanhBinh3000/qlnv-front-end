@@ -79,7 +79,7 @@ export class BienBanGiaoNhanComponent extends Base2Component implements OnInit {
       type: ["01"],
       loaiDc: ["DCNB"],
       isVatTu: [true],
-      loaiQdinh: ['NHAP'],
+      loaiQdinh: [],
     })
     this.filterTable = {
       nam: '',
@@ -108,7 +108,8 @@ export class BienBanGiaoNhanComponent extends Base2Component implements OnInit {
       this.visibleTab = value;
     });
     this.formData.patchValue({
-      loaiDc: this.loaiDc
+      loaiDc: this.loaiDc,
+      loaiQdinh: this.loaiDc === "CUC" ? "NHAP" : null
     })
 
 
