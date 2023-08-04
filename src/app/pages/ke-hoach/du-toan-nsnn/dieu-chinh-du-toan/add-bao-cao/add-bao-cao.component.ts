@@ -200,7 +200,6 @@ export class AddBaoCaoComponent implements OnInit {
         //lay thong tin chung bao cao
         this.baoCao.id = this.data?.id;
         this.userInfo = this.userService.getUserLogin();
-
         if (this.baoCao.id) {
             await this.getDetailReport();
         } else {

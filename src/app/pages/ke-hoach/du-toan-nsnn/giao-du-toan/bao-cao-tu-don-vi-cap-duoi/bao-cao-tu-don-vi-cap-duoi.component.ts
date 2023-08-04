@@ -249,21 +249,21 @@ export class BaoCaoTuDonViCapDuoiComponent implements OnInit {
     }
 
     xemChiTiet(id: string, maLoaiDan: string) {
-        if (maLoaiDan == "3") {
-            const obj = {
-                id: id,
-                tabSelected: 'addBaoCao',
-            }
-            this.dataChange.emit(obj);
-        } else if (maLoaiDan == "3") {
-            const obj = {
-                id: id,
-                tabSelected: 'addBaoCao',
-            }
-            this.dataChange.emit(obj);
-        } else {
-            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+        // if (maLoaiDan == "3") {
+        //     const obj = {
+        //         id: id,
+        //         tabSelected: 'addBaoCao',
+        //     }
+        //     this.dataChange.emit(obj);
+        // } else if (maLoaiDan == "3") {
+        const obj = {
+            id: id,
+            tabSelected: 'addBaoCao',
         }
+        this.dataChange.emit(obj);
+        // } else {
+        //     this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+        // }
     }
 
     getStatusName(trangThai: string) {

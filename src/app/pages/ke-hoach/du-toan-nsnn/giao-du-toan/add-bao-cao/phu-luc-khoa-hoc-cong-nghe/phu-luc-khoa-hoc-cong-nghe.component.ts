@@ -219,26 +219,47 @@ export class PhuLucKhoaHocCongNgheComponent implements OnInit {
                 }))
             })
             this.setLevel();
-        } else if (!this.lstCtietBcaos[0]?.stt) {
+        }
+        else if (!this.lstCtietBcaos[0]?.stt) {
             this.lstCtietBcaos.forEach(item => {
                 item.stt = item.maNoiDung;
             })
         }
 
-        if (this.lstCtietBcaos.length > 0) {
-            if (!this.lstCtietBcaos[0]?.stt) {
-                this.lstCtietBcaos = Table.sortWithoutIndex(this.lstCtietBcaos, 'maNoiDung');
-            } else {
-                this.lstCtietBcaos = Table.sortByIndex(this.lstCtietBcaos);
-            }
-        }
+        // if (this.lstCtietBcaos.length > 0) {
+        //     if (!this.lstCtietBcaos[0]?.stt) {
+        //         this.setIndex();
+        //         // this.lstCtietBcaos = Table.sortWithoutIndex(this.lstCtietBcaos, 'maNoiDung');
+        //     } else {
+        //     }
+        // }
+        console.log(this.lstCtietBcaos);
 
+
+        this.lstCtietBcaos = Table.sortByIndex(this.lstCtietBcaos);
         this.getTotal();
         this.updateEditCache();
         this.getStatusButton();
 
         this.spinner.hide();
     };
+
+    setIndex() {
+        const lstVtuTemp = this.lstCtietBcaos.filter(e => !e.maNoiDung);
+        for (let i = 0; i < lstVtuTemp.length; i++) {
+            const stt = '0.' + (i + 1).toString();
+            const index = this.lstCtietBcaos.findIndex(e => e.id == lstVtuTemp[i].id);
+            this.lstCtietBcaos[index].stt = stt;
+            const lstDmTemp = this.lstCtietBcaos.filter(e => e.maNoiDung == lstVtuTemp[i].maNoiDung && !!e.maNoiDung);
+            for (let j = 0; j < lstDmTemp.length; j++) {
+                const ind = this.lstCtietBcaos.findIndex(e => e.id == lstDmTemp[j].id);
+                this.lstCtietBcaos[ind].stt = stt + '.' + (j + 1).toString();
+            }
+        }
+        // lstVtuTemp.forEach(item => {
+        //     this.sum(item.stt + '.1');
+        // })
+    }
 
     async getFormDetail() {
         await this.giaoDuToanService.ctietBieuMau(this.dataInfo.id).toPromise().then(
@@ -417,6 +438,9 @@ export class PhuLucKhoaHocCongNgheComponent implements OnInit {
         const index = this.lstCtietBcaos.findIndex(item => item.id === id); // lay vi tri hang minh sua
         Object.assign(this.lstCtietBcaos[index], this.editCache[id].data); // set lai data cua lstCtietBcaos[index] = this.editCache[id].data
         this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
+        this.lstCtietBcaos.forEach(e => {
+            e.maNoiDung = e.stt
+        })
         this.sum(this.lstCtietBcaos[index].stt);
         this.getTotal()
         this.updateEditCache();

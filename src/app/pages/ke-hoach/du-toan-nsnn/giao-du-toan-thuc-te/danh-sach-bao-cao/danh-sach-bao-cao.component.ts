@@ -142,7 +142,7 @@ export class DanhSachBaoCaoComponent implements OnInit {
                 trangThais: trangThais,
             };
         }
-        await this.giaoDuToanChiService.timBaoCaoGiao(requestReport).toPromise().then(res => {
+        await this.giaoDuToanChiService.timPhuongAnGiao(requestReport).toPromise().then(res => {
             if (res.statusCode == 0) {
                 this.dataTable = [];
                 res.data.content.forEach(item => {
