@@ -123,7 +123,7 @@
 
           <div nz-col [nzSpan]="3">
             <nz-form-item>
-              <nz-form-label nzRequired [nzNoColon]="true">Số QĐ điều chuyển của cục</nz-form-label>
+              <nz-form-label nzRequired [nzNoColon]="true">Số QĐ điều chuyển của Cục</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogQD()">
                   <input [readonly]="true" nz-input formControlName="soQdDcCuc" readonly="true" />
@@ -437,8 +437,8 @@
               <th rowspan="2">Danh mục/ nhóm hàng</th>
               <th rowspan="2">Mặt hàng</th>
               <th rowspan="2">ĐVT</th>
-              <th colspan="3">Kê lót / bảo quản trong năm</th>
-              <th colspan="2">Khối lượng đã quyết toán trước</th>
+              <th colspan="3">Chi phí thực hiện trong năm</th>
+              <th colspan="2">Khối lượng đã quyết toán năm trước</th>
               <th rowspan="2">Tổng giá trị</th>
               <th rowspan="2" *ngIf="!isView && formData.value.trangThai === STATUS.DU_THAO">Hành động</th>
             </tr>
@@ -566,8 +566,8 @@
               <th rowspan="2">Danh mục/ nhóm hàng</th>
               <th rowspan="2">Mặt hàng</th>
               <th rowspan="2">ĐVT</th>
-              <th colspan="3">Kê lót / bảo quản trong năm</th>
-              <th colspan="2">Khối lượng đã quyết toán trước</th>
+              <th colspan="3">Chi phí thực hiện trong năm</th>
+              <th colspan="2">Khối lượng đã quyết toán năm trước</th>
               <th rowspan="2">Tổng giá trị</th>
               <th rowspan="2" *ngIf="!isView && formData.value.trangThai === STATUS.DU_THAO">Hành động</th>
             </tr>

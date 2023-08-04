@@ -273,7 +273,7 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
     if (!row) this.typeAction = "ADD"
 
     const modalQD = this.modal.create({
-      nzTitle: 'THÔNG TIN HÀNG DTQG CẦN ĐIỀU CHUYỂN',
+      nzTitle: 'MẶT HÀNG SỐ LƯỢNG VÀ GIÁ TRỊ HÀNG DỰ TRỮ QUỐC GIA',
       nzContent: ThongTinHangDtqgComponent,
       nzMaskClosable: false,
       nzClosable: false,
