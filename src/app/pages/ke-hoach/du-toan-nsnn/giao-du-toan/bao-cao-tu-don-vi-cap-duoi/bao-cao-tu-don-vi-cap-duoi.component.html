@@ -128,8 +128,7 @@
                             <i (click)="xemChiTiet(item.id, item.maLoaiDan)" class="fa fa-eye"></i>
                         </ng-container>
                         <ng-template #xem>
-                            <ng-container
-                                *ngIf="(item.trangThai == '7' || item.trangThai == '9') && item.maLoaiDan == '3'; else thongbao">
+                            <ng-container *ngIf="(item.trangThai == '7' || item.trangThai == '9') ; else thongbao">
                                 <i (click)="xemChiTiet(item.id, item.maLoaiDan)" class="fa fa-eye"></i>
                             </ng-container>
                             <ng-template #thongbao>

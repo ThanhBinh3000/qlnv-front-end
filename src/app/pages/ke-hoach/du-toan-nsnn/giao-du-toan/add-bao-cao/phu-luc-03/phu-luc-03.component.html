@@ -108,10 +108,10 @@
                                     <td>{{Op.fmtVal(data.namDtCphiTaiCkhoTt)}}</td>
                                     <td>
                                         <ng-container *ngIf="dataInfo.isSynthetic; else showVal1">
-                                            <span></span>
+                                            {{Op.fmtVal(data.namDtCphiNgoaiCkhoBq)}}
                                         </ng-container>
                                         <ng-template #showVal1>
-                                            {{Op.fmtVal(data.namDtCphiNgoaiCkhoBq)}}
+                                            <span></span>
                                         </ng-template>
                                     </td>
                                     <td>{{Op.fmtVal(data.namDtCphiNgoaiCkhoTt)}}</td>

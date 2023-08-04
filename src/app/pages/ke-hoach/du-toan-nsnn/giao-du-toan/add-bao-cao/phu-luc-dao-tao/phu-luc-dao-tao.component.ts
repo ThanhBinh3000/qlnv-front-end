@@ -389,6 +389,9 @@ export class PhuLucDaoTaoComponent implements OnInit {
         const index = this.lstCtietBcaos.findIndex(item => item.id === id); // lay vi tri hang minh sua
         Object.assign(this.lstCtietBcaos[index], this.editCache[id].data); // set lai data cua lstCtietBcaos[index] = this.editCache[id].data
         this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
+        this.lstCtietBcaos.forEach(e => {
+            e.maNoiDung = e.stt
+        })
         this.sum(this.lstCtietBcaos[index].stt);
         this.getTotal()
         this.updateEditCache();

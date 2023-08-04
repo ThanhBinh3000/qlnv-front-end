@@ -333,7 +333,7 @@ export class DialogThemThongTinQuyetToanComponent implements OnInit {
 
         };
         this.spinner.show();
-        await this.GiaoDuToanChiService.timBaoCaoGiao(requestReport).toPromise().then(
+        await this.GiaoDuToanChiService.timPhuongAnGiao(requestReport).toPromise().then(
             (data) => {
                 if (data.statusCode == 0) {
                     phuongAn = data.data.content[0]?.id;

@@ -58,7 +58,7 @@ export class DialogTongHopComponent implements OnInit {
     async ngOnInit() {
         this.userInfo = this.userService.getUserLogin();
         this.response.maDvi = this.userInfo?.MA_DVI;
-
+        // this.getListPA();
         const thisYear = dayjs().get('year');
         for (let i = -50; i < 30; i++) {
             this.lstNam.push(thisYear + i);
@@ -69,7 +69,7 @@ export class DialogTongHopComponent implements OnInit {
         const request = {
             maPa: this.response.maPa,
             maDvi: this.obj.maDvi,
-            namPa: this.response.namHienTai
+            namBcao: this.response.namHienTai
         }
         this.spinner.show();
         await this.giaoDuToanChiService.tongHopGiaoDuToan(request).toPromise().then(
@@ -109,16 +109,28 @@ export class DialogTongHopComponent implements OnInit {
     async getListPA() {
         this.spinner.show()
         const requestReport = {
-            maDvi: this.obj.maDvi,
-            namPa: this.response.namHienTai
+            // maDvi: this.obj.maDvi,
+            // namPa: this.response.namHienTai
+
+            donViTao: "",
+            loaiTimKiem: "1",
+            maBcao: "",
+            maLoai: "2",
+            maLoaiDan: [3],
+            maPhanGiao: "3",
+            namPa: this.response.namHienTai,
+            ngayTaoDen: null,
+            ngayTaoTu: null,
+            paggingReq: { limit: 10, page: 1 },
+            trangThais: ["9"]
         };
         this.lstPaLoai = []
-        await this.giaoDuToanChiService.dsPaTongHop(requestReport).toPromise().then(res => {
+        await this.giaoDuToanChiService.timBaoCaoGiao(requestReport).toPromise().then(res => {
             if (res.statusCode == 0) {
-                this.lstPa = res.data;
+                this.lstPa = res.data.content;
                 // this.lstPa = this.lstPa.filter(item => item.listTtCtiet.every(e => e.trangThai == '1'));
                 let lstPaTemp = []
-                lstPaTemp = this.lstPa.filter(s => s.maLoaiDan == this.response.loai);
+                lstPaTemp = this.lstPa.filter(s => s.namBcao == this.response.namHienTai);
                 if (this.userInfo.CAP_DVI == "1") {
                     lstPaTemp.forEach(s => {
                         this.lstPaLoai.push(
@@ -213,6 +225,7 @@ export class DialogTongHopComponent implements OnInit {
             maPa: this.response.maPa,
             maPaCha: this.response.maPaCha,
             namPa: this.response.namHienTai,
+            namBcao: this.response.namHienTai,
             // soQd: null,
             maPhanGiao: "2",
             maLoaiDan: '3',

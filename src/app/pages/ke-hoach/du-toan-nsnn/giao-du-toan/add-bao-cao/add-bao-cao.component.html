@@ -82,7 +82,7 @@
                 <tbody>
                     <tr>
                         <td>
-                            <nz-upload [nzBeforeUpload]="beforeUploadCV" [hidden]="status">
+                            <nz-upload [nzBeforeUpload]="beforeUploadCV" *ngIf="status.general">
                                 <button nz-button>
                                     <i nz-icon nzType="upload"></i>
                                     Chọn tệp QĐ

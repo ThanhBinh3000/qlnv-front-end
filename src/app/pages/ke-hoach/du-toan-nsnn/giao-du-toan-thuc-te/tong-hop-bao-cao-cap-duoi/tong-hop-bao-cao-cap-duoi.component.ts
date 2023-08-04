@@ -203,7 +203,7 @@ export class TongHopBaoCaoCapDuoiComponent implements OnInit {
             searchFilterTemp.trangThais = [Utils.TT_BC_7, Utils.TT_BC_8, Utils.TT_BC_9, Utils.TT_BC_KT]
         }
         // searchFilterTemp.trangThaiGiaos = ['0', '1', '2']
-        await this.giaoDuToanChiService.timBaoCaoGiao(searchFilterTemp).toPromise().then(
+        await this.giaoDuToanChiService.timPhuongAnGiao(searchFilterTemp).toPromise().then(
             (data) => {
                 if (data.statusCode == 0) {
                     this.danhSachBaoCao = [];
