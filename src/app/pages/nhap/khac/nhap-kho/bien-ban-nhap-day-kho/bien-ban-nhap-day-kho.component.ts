@@ -210,7 +210,7 @@ export class BienBanNhapDayKhoComponent extends Base2Component implements OnInit
         .map(element => {
           return {
             ...element,
-            maLoNganKho: `${element.maLoKho}${element.maNganKho}`
+            maLoNganKho: `${element.maLoKho}${element.maNganKho}${element.soBbNhapDayKho}`
           }
         });
       this.dataTableView = this.buildTableView(data)
@@ -262,7 +262,7 @@ export class BienBanNhapDayKhoComponent extends Base2Component implements OnInit
           .groupBy("maDiemKho")
           ?.map((value2, key2) => {
             let children2 = chain(value2)
-              .groupBy("soBbNhapDayKho")
+              .groupBy("maLoNganKho")
               ?.map((value3, key3) => {
 
                 // const children3 = chain(value3).groupBy("soBbNhapDayKho")
@@ -288,7 +288,7 @@ export class BienBanNhapDayKhoComponent extends Base2Component implements OnInit
                 //     }
                 //   }).value()
 
-                const row3 = value3.find(s => s?.soBbNhapDayKho == key3);
+                const row3 = value3.find(s => s?.maLoNganKho == key3);
                 return {
                   ...row3,
                   idVirtual: row3 ? row3.idVirtual ? row3.idVirtual : uuidv4.v4() : uuidv4.v4(),

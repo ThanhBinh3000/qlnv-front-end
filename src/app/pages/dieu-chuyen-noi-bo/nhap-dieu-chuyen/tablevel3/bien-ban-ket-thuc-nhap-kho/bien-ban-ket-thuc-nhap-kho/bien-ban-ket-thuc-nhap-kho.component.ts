@@ -48,7 +48,8 @@ export class BienBanKetThucNhapKhoComponent extends Base2Component implements On
       ngayKetThucNt: null,
       type: ["01"],
       loaiDc: ["DCNB"],
-      isVatTu: [true]
+      isVatTu: [true],
+      loaiQdinh: [],
     })
   }
 
@@ -62,7 +63,8 @@ export class BienBanKetThucNhapKhoComponent extends Base2Component implements On
       this.visibleTab = value;
     });
     this.formData.patchValue({
-      loaiDc: this.loaiDc
+      loaiDc: this.loaiDc,
+      loaiQdinh: this.loaiDc === "CUC" ? "NHAP" : null
     })
 
     try {

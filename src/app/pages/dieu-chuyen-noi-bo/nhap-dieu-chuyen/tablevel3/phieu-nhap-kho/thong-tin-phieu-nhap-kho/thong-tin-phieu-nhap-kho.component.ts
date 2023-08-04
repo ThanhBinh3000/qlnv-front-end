@@ -116,6 +116,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
       type: ["01"],
       loaiDc: [this.loaiDc],
       isVatTu: [this.isVatTu],
+      loaiQdinh: [],
       maSo: [],
       soLuongNhapDc: [],
       thucTeKinhPhi: [],
@@ -134,6 +135,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
       soPhieuNhapKho: `${id}/${this.formData.get('nam').value}/${this.maBb}`,
       loaiDc: this.loaiDc,
       isVatTu: this.isVatTu,
+      loaiQdinh: this.loaiDc === "CUC" ? "NHAP" : null
     })
     this.getDataNX()
     if (this.idInput) {
@@ -324,9 +326,9 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
     let body = {
       trangThai: STATUS.BAN_HANH,
       loaiVthh: ['0101', '0102'],
-      loaiDc: "DCNB",
-      maDvi: this.userInfo.MA_DVI
-      // listTrangThaiXh: [STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN],
+      loaiDc: this.loaiDc,
+      maDvi: this.userInfo.MA_DVI,
+      type: this.formData.value.type
     }
     let resSoDX = this.isCuc() ? await this.quyetDinhDieuChuyenCucService.getDsSoQuyetDinhDieuChuyenCuc(body) : await this.quyetDinhDieuChuyenCucService.getDsSoQuyetDinhDieuChuyenChiCuc(body);
     if (resSoDX.msg == MESSAGE.SUCCESS) {
