@@ -108,6 +108,7 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
       dcnbBangKeCanHangDtl: [new Array<any>(),],
       type: ["01"],
       loaiDc: ["DCNB"],
+      loaiQdinh: ['NHAP'],
       lyDoTuChoi: [],
       maCan: [],
       soBaoBi: [],

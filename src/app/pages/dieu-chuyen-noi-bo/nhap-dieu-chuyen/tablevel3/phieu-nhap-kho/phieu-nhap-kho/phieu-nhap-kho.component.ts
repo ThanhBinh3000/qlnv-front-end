@@ -54,7 +54,8 @@ export class PhieuNhapKhoComponent extends Base2Component implements OnInit {
       trichYeu: null,
       type: ["01"],
       loaiDc: [this.loaiDc],
-      isVatTu: [this.isVatTu]
+      isVatTu: [this.isVatTu],
+      loaiQdinh: ['NHAP'],
     })
     this.filterTable = {
       nam: '',

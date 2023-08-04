@@ -52,6 +52,7 @@ export class BangKeNhapVatTuComponent extends Base2Component implements OnInit {
       type: ["01"],
       loaiDc: ["DCNB"],
       isVatTu: [true],
+      loaiQdinh: ['NHAP'],
     })
     this.filterTable = {
       nam: '',

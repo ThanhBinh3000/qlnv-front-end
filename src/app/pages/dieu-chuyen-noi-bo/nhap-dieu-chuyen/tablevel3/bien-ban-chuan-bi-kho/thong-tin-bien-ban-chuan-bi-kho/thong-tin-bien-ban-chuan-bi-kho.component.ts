@@ -124,6 +124,7 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
       type: ["01"],
       loaiDc: ["DCNB"],
       isVatTu: [true],
+      loaiQdinh: ['NHAP'],
       lyDoTuChoi: [],
       noiDung: [],
       soLuongTrongNam: [],

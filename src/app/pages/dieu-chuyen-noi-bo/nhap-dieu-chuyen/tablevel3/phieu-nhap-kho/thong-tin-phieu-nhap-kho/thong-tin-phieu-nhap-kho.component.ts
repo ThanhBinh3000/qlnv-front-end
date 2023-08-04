@@ -116,6 +116,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
       type: ["01"],
       loaiDc: [this.loaiDc],
       isVatTu: [this.isVatTu],
+      loaiQdinh: ['NHAP'],
       maSo: [],
       soLuongNhapDc: [],
       thucTeKinhPhi: [],

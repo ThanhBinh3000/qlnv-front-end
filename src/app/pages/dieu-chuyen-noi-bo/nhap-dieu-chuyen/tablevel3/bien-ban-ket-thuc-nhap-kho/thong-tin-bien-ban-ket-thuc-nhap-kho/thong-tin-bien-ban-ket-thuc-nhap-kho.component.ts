@@ -61,6 +61,7 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
       type: ["01"],
       loaiDc: ["DCNB"],
       isVatTu: [true],
+      loaiQdinh: ['NHAP'],
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự thảo'],
       nam: [dayjs().get("year"), [Validators.required]],

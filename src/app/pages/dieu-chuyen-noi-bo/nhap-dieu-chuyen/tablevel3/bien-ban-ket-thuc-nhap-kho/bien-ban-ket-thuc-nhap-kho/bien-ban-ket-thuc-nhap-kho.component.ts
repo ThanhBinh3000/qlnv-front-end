@@ -48,7 +48,8 @@ export class BienBanKetThucNhapKhoComponent extends Base2Component implements On
       ngayKetThucNt: null,
       type: ["01"],
       loaiDc: ["DCNB"],
-      isVatTu: [true]
+      isVatTu: [true],
+      loaiQdinh: ['NHAP'],
     })
   }
 

@@ -117,6 +117,7 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
       nhanXet: [],
       type: ["01"],
       loaiDc: ["DCNB"],
+      loaiQdinh: ['NHAP'],
       lyDoTuChoi: [],
     });
   }

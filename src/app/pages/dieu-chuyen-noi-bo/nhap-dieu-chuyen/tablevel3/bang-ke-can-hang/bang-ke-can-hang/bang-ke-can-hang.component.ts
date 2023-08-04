@@ -78,7 +78,8 @@ export class BangKeCanHangComponent extends Base2Component implements OnInit {
       ngayHieuLuc: null,
       trichYeu: null,
       type: ["01"],
-      loaiDc: ["DCNB"]
+      loaiDc: ["DCNB"],
+      loaiQdinh: ['NHAP']
     })
     this.filterTable = {
       nam: '',

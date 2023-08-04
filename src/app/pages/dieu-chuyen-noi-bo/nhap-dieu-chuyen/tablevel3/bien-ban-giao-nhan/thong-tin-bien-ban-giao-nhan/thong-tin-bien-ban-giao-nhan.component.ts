@@ -82,6 +82,7 @@ export class ThongTinBienBanGiaoNhanComponent extends Base2Component implements 
       type: ["01"],
       loaiDc: [this.loaiDc],
       isVatTu: [true],
+      loaiQdinh: ['NHAP'],
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự thảo'],
       nam: [dayjs().get("year"), [Validators.required]],

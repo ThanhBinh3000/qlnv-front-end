@@ -79,6 +79,7 @@ export class BienBanGiaoNhanComponent extends Base2Component implements OnInit {
       type: ["01"],
       loaiDc: ["DCNB"],
       isVatTu: [true],
+      loaiQdinh: ['NHAP'],
     })
     this.filterTable = {
       nam: '',

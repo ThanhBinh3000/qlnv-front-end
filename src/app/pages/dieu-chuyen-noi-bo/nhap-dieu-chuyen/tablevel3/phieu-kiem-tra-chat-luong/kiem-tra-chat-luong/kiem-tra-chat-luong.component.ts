@@ -51,7 +51,8 @@ export class KiemTraChatLuongComponent extends Base2Component implements OnInit 
       denNgay: null,
       ketQua: null,
       type: ["01"],
-      loaiDc: ["DCNB"]
+      loaiDc: ["DCNB"],
+      loaiQdinh: ['NHAP'],
     })
   }
 

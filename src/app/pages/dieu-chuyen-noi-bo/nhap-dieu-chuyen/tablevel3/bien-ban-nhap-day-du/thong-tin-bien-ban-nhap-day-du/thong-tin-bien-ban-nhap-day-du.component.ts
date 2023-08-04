@@ -116,7 +116,8 @@ export class ThongTinBienBanNhapDayDuComponent extends Base2Component implements
       lanhDao: [],
       children: [new Array<any>(),],
       type: ["01"],
-      loaiDc: ["DCNB"]
+      loaiDc: ["DCNB"],
+      loaiQdinh: ['NHAP'],
     }
     );
   }

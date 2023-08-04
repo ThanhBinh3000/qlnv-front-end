@@ -51,7 +51,8 @@ export class BienBanChuanBiKhoComponent extends Base2Component implements OnInit
       ngayKetThuc: null,
       type: ["01"],
       isVatTu: [true],
-      loaiDc: ["DCNB"]
+      loaiDc: ["DCNB"],
+      loaiQdinh: ['NHAP'],
     })
   }
 

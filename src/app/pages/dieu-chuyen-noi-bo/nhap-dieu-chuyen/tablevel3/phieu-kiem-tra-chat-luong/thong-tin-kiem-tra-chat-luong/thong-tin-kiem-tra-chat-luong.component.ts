@@ -126,6 +126,7 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
       lyDoTuChoi: [],
       type: ["01"],
       loaiDc: [this.loaiDc],
+      loaiQdinh: ['NHAP'],
     }
     );
   }

@@ -79,7 +79,8 @@ export class KiemNghiemChatLuongComponent extends Base2Component implements OnIn
       soBbLayMau: null,
       soBbXuatDocKho: null,
       type: ["01"],
-      loaiDc: ["DCNB"]
+      loaiDc: ["DCNB"],
+      loaiQdinh: ['NHAP'],
     })
   }
 

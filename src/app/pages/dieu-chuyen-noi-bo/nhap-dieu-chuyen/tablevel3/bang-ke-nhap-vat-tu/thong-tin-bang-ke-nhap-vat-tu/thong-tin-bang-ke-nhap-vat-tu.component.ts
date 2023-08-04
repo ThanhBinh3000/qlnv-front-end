@@ -61,6 +61,7 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
     this.formData = this.fb.group({
       type: ["01"],
       loaiDc: ["DCNB"],
+      loaiQdinh: ['NHAP'],
       isVatTu: [true],
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự thảo'],
