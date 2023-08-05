@@ -52,7 +52,18 @@
               </nz-form-item>
             </nz-form-control>
           </div>
-          <div nz-col [nzSpan]="18">
+          <div nz-col [nzSpan]="6">
+            <nz-form-control [nzErrorTip]="error">
+              <nz-form-label >Thời gian còn lại theo HĐ (ngày)</nz-form-label>
+              <nz-form-item>
+                <nz-input-number
+                  [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                  [nzParser]="globals.parser" nz-input [ngModel]="thoiGianConLaiBh" [ngModelOptions]="{standalone: true}" [nzDisabled]="true">
+                </nz-input-number>
+              </nz-form-item>
+            </nz-form-control>
+          </div>
+          <div nz-col [nzSpan]="12">
             <nz-form-control [nzErrorTip]="error">
               <nz-form-label >Nguyên nhân</nz-form-label>
               <nz-form-item>

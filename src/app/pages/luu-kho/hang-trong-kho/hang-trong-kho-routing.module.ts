@@ -3,9 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 import {HangTrongKhoComponent} from "./hang-trong-kho.component";
 import {TatCaComponent} from "./tat-ca/tat-ca.component";
 import {TableDanhMucBpxlComponent} from "./table-danh-muc-bpxl/table-danh-muc-bpxl.component";
-import {TableSapHhBhComponent} from "./table-sap-hh-bh/table-sap-hh-bh.component";
-import {TableHhLkComponent} from "./table-hh-lk/table-hh-lk.component";
-import {TableDaHhBhComponent} from "./table-da-hh-bh/table-da-hh-bh.component";
 
 const routes: Routes = [
   {
@@ -51,17 +48,17 @@ const routes: Routes = [
       // Sắp hết hạn bảo hành
       {
         path: 'sap-het-han-bao-hanh',
-        component: TableSapHhBhComponent
+        component: TableDanhMucBpxlComponent
       },
       // Sắp hết hạn lưu kho
       {
         path: 'het-han-luu-kho',
-        component: TableHhLkComponent
+        component: TableDanhMucBpxlComponent
       },
       // Đã hết hạn bảo hành, chưa hết hạn lưu kho
       {
         path: 'da-het-han',
-        component: TableDaHhBhComponent
+        component: TableDanhMucBpxlComponent
       },
     ]
   }
