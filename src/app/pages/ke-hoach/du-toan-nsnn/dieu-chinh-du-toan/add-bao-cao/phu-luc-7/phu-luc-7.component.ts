@@ -586,8 +586,8 @@ export class PhuLuc7Component implements OnInit {
         this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
         this.updateEditCache();
         this.sum(this.lstCtietBcao[index].stt);
-        this.getTotal();
         this.tinhTong();
+        this.getTotal();
     };
 
     updateEditCache(): void {
@@ -646,8 +646,9 @@ export class PhuLuc7Component implements OnInit {
         this.dToanVuGiam = 0;
         this.lstCtietBcao.forEach(item => {
             item.chenhLech = Operator.sum([item.dtoanVuTvqtDnghi, - item.dtoanDnghiDchinh])
+            debugger
             if (item.level == 0) {
-                if (item.dtoanDnghiDchinh !== null) {
+                if (item.dtoanDnghiDchinh && item.dtoanDnghiDchinh !== null) {
                     if (item.dtoanDnghiDchinh < 0) {
                         Number(this.tongDieuChinhGiam += Number(item?.dtoanDnghiDchinh));
                     } else {
@@ -655,7 +656,7 @@ export class PhuLuc7Component implements OnInit {
                     }
                 }
 
-                if (item.dtoanVuTvqtDnghi !== null) {
+                if (item.dtoanVuTvqtDnghi && item.dtoanVuTvqtDnghi !== null) {
                     if (item.dtoanVuTvqtDnghi < 0) {
                         Number(this.dToanVuGiam += Number(item?.dtoanVuTvqtDnghi));
                     } else {

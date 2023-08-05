@@ -95,8 +95,8 @@
                     </th>
                     <th>
                         <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                            <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.namPa"
-                                (input)="filterInTable('namPa',filterTable.namPa, false)" size="small" />
+                            <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.namBcao"
+                                (input)="filterInTable('namBcao',filterTable.namBcao, false)" size="small" />
                         </nz-input-group>
                         <ng-template #suffixTemplateInfo>
                             <i nz-icon nzType="search"></i>
@@ -122,7 +122,7 @@
                     <td>{{item.maBcao}}</td>
                     <td>{{item.ngayTao}}</td>
                     <td>
-                        {{item.namPa}}
+                        {{item.namBcao}}
                     </td>
                     <td class="text-center">{{getStatusName(item.trangThai)}}
                         <ng-template

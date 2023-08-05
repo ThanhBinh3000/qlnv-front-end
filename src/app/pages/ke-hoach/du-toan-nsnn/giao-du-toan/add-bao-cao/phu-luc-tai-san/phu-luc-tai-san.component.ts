@@ -121,6 +121,7 @@ export class PhuLucTaiSanComponent implements OnInit {
 	listFile: File[] = [];
 	listIdDeleteFiles: string[] = [];
 	dsDinhMuc: any[] = [];
+	statusCanhBao = true;
 	beforeUpload = (file: NzUploadFile): boolean => {
 		this.fileList = this.fileList.concat(file);
 		return false;
@@ -366,6 +367,18 @@ export class PhuLucTaiSanComponent implements OnInit {
 	// luu thay doi
 	saveEdit(id: string): void {
 		const index = this.lstCtietBcaos.findIndex(item => item.id === id); // lay vi tri hang minh sua
+		if (this.editCache[id].data.sluongDtoan > (this.editCache[id].data.sluongDmuc - this.editCache[id].data.sluongCong)) {
+			this.notification.warning(
+				MESSAGE.WARNING,
+				"Dự toán số lượng đề nghị trang bị không được lớn hơn hiệu của tiêu chuẩn định mức và tổng số lượng tài sản hiện có"
+			).onClose.subscribe(() => {
+				this.statusCanhBao = false
+			})
+			return
+		} else {
+			Object.assign(this.lstCtietBcaos[index], this.editCache[id].data); // set lai data cua lstCtietBcao[index] = this.editCache[id].data
+			this.statusCanhBao = true
+		}
 		Object.assign(this.lstCtietBcaos[index], this.editCache[id].data); // set lai data cua lstCtietBcaos[index] = this.editCache[id].data
 		this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
 		this.updateEditCache();

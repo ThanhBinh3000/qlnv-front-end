@@ -313,13 +313,19 @@
                                     <tr *ngFor="let data of lstFiles; let i = index">
                                         <td>{{ i + 1 }} </td>
                                         <td>{{ data.fileName }}</td>
-                                        <td>
+                                        <!-- <td>
                                             <button class="btn btn-function"
                                                 (click)="downloadFile(data.id)">Xem</button>
                                         </td>
                                         <td [hidden]="status">
                                             <button class="btn btn-function" (click)="deleteFile(data.id)">Xóa</button>
-                                        </td>
+                                        </td> -->
+                                        <a (click)="downloadFile(data.id)">
+                                            <i class="fa fa-eye"></i>
+                                        </a>
+                                        <a *ngIf="!status" (click)="deleteFile(data.id)">
+                                            <i class="fa fa-trash-o do"></i>
+                                        </a>
                                     </tr>
                                 </tbody>
                             </nz-table>

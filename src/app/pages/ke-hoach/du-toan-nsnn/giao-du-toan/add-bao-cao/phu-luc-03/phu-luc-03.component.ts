@@ -206,7 +206,7 @@ export class PhuLuc03Component implements OnInit {
                 item.namDtCphiTaiCkhoTt = Operator.mul(item.namDtCphiTaiCkhoDm, item.namDtCphiTaiCkhoSl);
                 item.namDtTcong = Operator.sum([item.namDtCphiTaiCkhoTt, item.namDtCphiNgoaiCkhoTt])
             })
-            // this.sum1()
+            this.sum1()
         }
 
         this.lstCtietBcaos = Table.sortByIndex(this.lstCtietBcaos);
@@ -239,6 +239,12 @@ export class PhuLuc03Component implements OnInit {
         )
     }
 
+
+    sum1() {
+        this.lstCtietBcaos.forEach(item => {
+            this.sum(item.stt);
+        })
+    }
 
     async getDinhMuc() {
         const request = {
