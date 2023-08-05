@@ -132,13 +132,16 @@
                         <nz-table class="table__body" nzBordered [nzScroll]="{x: scrollHD}">
                             <thead>
                                 <tr>
-                                    <th rowspan="2" nzLeft nzWidth="200px">
+                                    <th *ngIf="baoCao.loaiDnghi != Cvnc.VTU" rowspan="2" nzLeft nzWidth="200px">
                                         Đơn vị
+                                    </th>
+                                    <th *ngIf="baoCao.loaiDnghi == Cvnc.VTU" rowspan="2" nzLeft nzWidth="200px">
+                                        Tên khách hàng
                                     </th>
                                     <th rowspan="2" nzWidth="300px" nzLeft>
                                         Quyết định phê duyệt kết quả lựa chọn nhà thầu / Hợp đồng
                                     </th>
-                                    <th colspan="2">
+                                    <th colspan="{{baoCao.loaiDnghi == Cvnc.VTU ? 3 : 2}}">
                                         Số lượng
                                     </th>
                                     <th rowspan="2">
@@ -146,6 +149,9 @@
                                     </th>
                                     <th rowspan="2">
                                         Giá trị hợp đồng (đã bao gồm VAT)
+                                    </th>
+                                    <th *ngIf="baoCao.loaiDnghi == Cvnc.VTU" rowspan="2">
+                                        Giá trị thực hiện
                                     </th>
                                     <th rowspan="2">
                                         Vi phạm hợp đồng
@@ -156,8 +162,7 @@
                                     <th rowspan="2" class="text-col">
                                         Công văn
                                     </th>
-                                    <th *ngIf="status.save && !userService.isTongCuc()" rowSpan="2" style="width: 60px;"
-                                        nzRight></th>
+                                    <th *ngIf="status.save && !isSynth" rowSpan="2" style="width: 60px;" nzRight></th>
                                 </tr>
                                 <tr>
                                     <th>
@@ -165,6 +170,9 @@
                                     </th>
                                     <th>
                                         Hợp đồng
+                                    </th>
+                                    <th *ngIf="baoCao.loaiDnghi == Cvnc.VTU">
+                                        Thực hiện
                                     </th>
                                     <th>
                                         Số lượng
@@ -176,9 +184,12 @@
                             </thead>
                             <tbody>
                                 <tr *ngFor="let data of lstCtiets; let i = index">
-                                    <ng-container *ngIf="data.level > (userService.isTongCuc() ? 1 : 0)">
-                                        <td nzLeft>
+                                    <ng-container *ngIf="data.level > (isSynth ? 1 : 0)">
+                                        <td *ngIf="baoCao.loaiDnghi != Cvnc.VTU" nzLeft>
                                             {{ data.tenDvi }}
+                                        </td>
+                                        <td *ngIf="baoCao.loaiDnghi == Cvnc.VTU" nzLeft>
+                                            {{ data.tenKhachHang }}
                                         </td>
                                         <td nzLeft>
                                             {{ data.qdPheDuyet }}
@@ -189,13 +200,19 @@
                                         <td>
                                             {{ Op.fmtNum(data.slHopDong) }}
                                         </td>
-                                        <td>
-                                            {{ Op.fmtVal(data.donGia) }}
-                                        </td>
-                                        <td>
-                                            {{ Op.fmtVal(data.gtHopDong) }}
-                                        </td>
                                         <ng-container *ngIf="!editCache[data.id].edit; else editTemplateHd">
+                                            <td *ngIf="baoCao.loaiDnghi == Cvnc.VTU">
+                                                {{ Op.fmtNum(data.slThucHien) }}
+                                            </td>
+                                            <td>
+                                                {{ Op.fmtVal(data.donGia) }}
+                                            </td>
+                                            <td>
+                                                {{ Op.fmtVal(data.gtHopDong) }}
+                                            </td>
+                                            <td *ngIf="baoCao.loaiDnghi == Cvnc.VTU">
+                                                {{ Op.fmtVal(data.gtThucHien) }}
+                                            </td>
                                             <td>
                                                 {{ Op.fmtVal(data.phatViPham) }}
                                             </td>
@@ -208,12 +225,26 @@
                                             <td>
                                                 {{ data.congVan }}
                                             </td>
-                                            <td *ngIf="status.save && !userService.isTongCuc()" nzRight>
+                                            <td *ngIf="status.save && !isSynth" nzRight>
                                                 <i *ngIf="data.level == 2" class="fa fa-pencil"
                                                     (click)="startEdit(data.id)"></i>
                                             </td>
                                         </ng-container>
                                         <ng-template #editTemplateHd>
+                                            <td *ngIf="baoCao.loaiDnghi == Cvnc.VTU">
+                                                <input class="money-input" currencyMask [options]="Op.amount"
+                                                    [(ngModel)]="editCache[data.id].data.slThucHien"
+                                                    (ngModelChange)="changeTien(data.id)" />
+                                            </td>
+                                            <td>
+                                                {{ Op.fmtVal(editCache[data.id].data.donGia) }}
+                                            </td>
+                                            <td>
+                                                {{ Op.fmtVal(editCache[data.id].data.gtHopDong) }}
+                                            </td>
+                                            <td *ngIf="baoCao.loaiDnghi == Cvnc.VTU">
+                                                {{ Op.fmtVal(editCache[data.id].data.gtThucHien) }}
+                                            </td>
                                             <td>
                                                 <input class="money-input" currencyMask [options]="Op.amount"
                                                     [(ngModel)]="editCache[data.id].data.phatViPham" />
@@ -229,7 +260,7 @@
                                             <td>
                                                 <input nz-input [(ngModel)]="editCache[data.id].data.congVan" />
                                             </td>
-                                            <td *ngIf="status.save && !userService.isTongCuc()" nzRight>
+                                            <td *ngIf="status.save && !isSynth" nzRight>
                                                 <a (click)="saveEdit(data.id)" class="save">Lưu</a>
                                                 <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
                                                     (nzOnConfirm)="cancelEdit(data.id)" class="save">
@@ -264,14 +295,17 @@
                         <nz-table class="table__body" nzBordered [nzScroll]="{x: scrollCV}">
                             <thead>
                                 <tr>
-                                    <th rowspan="2" nzWidth="300px" nzLeft>
+                                    <th *ngIf="baoCao.loaiDnghi != Cvnc.VTU" rowspan="2" nzWidth="300px" nzLeft>
                                         Đơn vị
                                     </th>
-                                    <th colspan="2">
+                                    <th colspan="{{baoCao.loaiDnghi == Cvnc.VTU ? 3 : 2}}">
                                         Số lượng
                                     </th>
                                     <th rowspan="2">
                                         Giá trị hợp đồng (đã bao gồm VAT) (đồng)
+                                    </th>
+                                    <th *ngIf="baoCao.loaiDnghi == Cvnc.VTU" rowspan="2">
+                                        Giá trị thực hiện
                                     </th>
                                     <th rowspan="2">
                                         Vi phạm hợp đồng
@@ -303,7 +337,7 @@
                                     <th rowspan="2" class="text-col">
                                         Ghi chú
                                     </th>
-                                    <th *ngIf="userService.isTongCuc()" rowspan="2">
+                                    <th *ngIf="isSynth" rowspan="2">
                                         Lần
                                     </th>
                                     <th *ngIf="status.save" rowSpan="2" style="width: 60px;" nzRight></th>
@@ -314,6 +348,9 @@
                                     </th>
                                     <th>
                                         Hợp đồng
+                                    </th>
+                                    <th *ngIf="baoCao.loaiDnghi == Cvnc.VTU">
+                                        Thực hiện
                                     </th>
                                     <th>
                                         Số lượng
@@ -343,8 +380,8 @@
                             </thead>
                             <tbody>
                                 <tr *ngFor="let data of lstCtiets; let i = index">
-                                    <ng-container *ngIf="data.level < (userService.isTongCuc() ? 2 : 1)">
-                                        <td nzLeft>
+                                    <ng-container *ngIf="data.level < (isSynth ? 2 : 1)">
+                                        <td *ngIf="baoCao.loaiDnghi != Cvnc.VTU" nzLeft>
                                             {{ data.tenDvi }}
                                         </td>
                                         <td>
@@ -353,8 +390,14 @@
                                         <td>
                                             {{ Op.fmtNum(data.slHopDong) }}
                                         </td>
+                                        <td *ngIf="baoCao.loaiDnghi == Cvnc.VTU">
+                                            {{ Op.fmtNum(data.slThucHien) }}
+                                        </td>
                                         <td>
                                             {{ Op.fmtVal(data.gtHopDong) }}
+                                        </td>
+                                        <td *ngIf="baoCao.loaiDnghi == Cvnc.VTU">
+                                            {{ Op.fmtVal(data.gtThucHien) }}
                                         </td>
                                         <td>
                                             {{ Op.fmtVal(data.phatViPham) }}
@@ -402,7 +445,7 @@
                                             <td>
                                                 {{ data.ghiChu }}
                                             </td>
-                                            <td *ngIf="userService.isTongCuc()">
+                                            <td *ngIf="isSynth">
                                                 <a class="save" (click)="viewDetail(data.idCapDuoi)">{{data.soLan}}</a>
                                             </td>
                                             <td *ngIf="status.save" nzRight>
@@ -453,7 +496,7 @@
                                             <td>
                                                 <input nz-input [(ngModel)]="editCache[data.id].data.ghiChu" />
                                             </td>
-                                            <td *ngIf="userService.isTongCuc()">
+                                            <td *ngIf="isSynth">
                                                 <a class="save" (click)="viewDetail(data.idCapDuoi)">{{data.soLan}}</a>
                                             </td>
                                             <td *ngIf="status.save" nzRight>

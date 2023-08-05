@@ -44,6 +44,9 @@ export class DialogTaoMoiDeNghiComponent implements OnInit {
         } else if (this.userService.isCuc()) {
             this.canCuGias = Cvnc.CAN_CU_GIA;
             this.loaiDns = Cvnc.LOAI_DE_NGHI.filter(e => e.id != Cvnc.VTU);
+        } else {
+            this.canCuGias = Cvnc.CAN_CU_GIA;
+            this.loaiDns = Cvnc.LOAI_DE_NGHI;
         }
         this.lstNam = Utils.getListYear(5, 10);
     }
@@ -52,7 +55,11 @@ export class DialogTaoMoiDeNghiComponent implements OnInit {
         if (this.response.canCuVeGia == Cvnc.DON_GIA) {
             this.loaiDns = Cvnc.LOAI_DE_NGHI.filter(e => e.id == Cvnc.THOC);
         } else {
-            this.loaiDns = Cvnc.LOAI_DE_NGHI.filter(e => e.id == Cvnc.GAO || e.id == Cvnc.MUOI);
+            if (this.userService.isCuc()) {
+                this.loaiDns = Cvnc.LOAI_DE_NGHI.filter(e => e.id == Cvnc.GAO || e.id == Cvnc.MUOI);
+            } else {
+                this.loaiDns = Cvnc.LOAI_DE_NGHI.filter(e => e.id != Cvnc.THOC);
+            }
             this.response.soQdChiTieu = null;
         }
     }
@@ -115,13 +122,7 @@ export class DialogTaoMoiDeNghiComponent implements OnInit {
                         const index = lstBcao.findIndex(e => !Status.check('reject', e.trangThai));
                         if (index != -1) {
                             id = lstBcao[index].id;
-                        } else {
-                            this.notification.warning(MESSAGE.WARNING, "Không tìm thấy bản ghi cấp vốn!")
-                            this.response.loaiDnghi = null;
                         }
-                    } else {
-                        this.notification.warning(MESSAGE.WARNING, "Không tìm thấy bản ghi cấp vốn!")
-                        this.response.loaiDnghi = null;
                     }
                 } else {
                     this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
@@ -143,23 +144,30 @@ export class DialogTaoMoiDeNghiComponent implements OnInit {
                     if (data.statusCode == 0) {
                         this.response.soQdChiTieu = data.data.soQdChiTieu;
                         data.data.lstCtiets.forEach(item => {
-                            const temp = new CapVon({
-                                ...item,
-                                id: uuid.v4() + 'FE',
-                                lkUng: Operator.sum([item.lkUng, item.ung]),
-                                lkCap: Operator.sum([item.lkCap, item.cap]),
-                                lkCong: Operator.sum([item.lkCong, item.cong]),
-                                ung: null,
-                                cap: null,
-                                cong: null,
-                            })
-                            temp.tongVonVaDtoanDaCap = Operator.sum([temp.lkCong, temp.dtoanDaGiao]);
-                            if (this.response.canCuVeGia == Cvnc.DON_GIA) {
-                                temp.vonDnCapLanNay = Operator.sum([temp.gtThucHien, -temp.tongVonVaDtoanDaCap]);
+                            if (item.stt == '0.1') {
+                                const temp = new CapVon({
+                                    ...item,
+                                    id: uuid.v4() + 'FE',
+                                    lkUng: Operator.sum([item.lkUng, item.ung]),
+                                    lkCap: Operator.sum([item.lkCap, item.cap]),
+                                    lkCong: Operator.sum([item.lkCong, item.cong]),
+                                    ung: null,
+                                    cap: null,
+                                    cong: null,
+                                })
+                                temp.tongVonVaDtoanDaCap = Operator.sum([temp.lkCong, temp.dtoanDaGiao]);
+                                if (this.response.loaiDnghi == Cvnc.THOC || this.response.loaiDnghi == Cvnc.VTU) {
+                                    temp.vonDnCapLanNay = Operator.sum([temp.gtThucHien, -temp.tongVonVaDtoanDaCap]);
+                                } else {
+                                    temp.vonDnCapLanNay = Operator.sum([temp.gtHopDong, -temp.tongVonVaDtoanDaCap]);
+                                }
+                                this.response.lstCtiets.push(temp);
                             } else {
-                                temp.vonDnCapLanNay = Operator.sum([temp.gtHopDong, -temp.tongVonVaDtoanDaCap]);
+                                this.response.lstCtiets.push(new CapVon({
+                                    ...item,
+                                    id: uuid.v4() + 'FE',
+                                }));
                             }
-                            this.response.lstCtiets.push(temp);
                         })
                     } else {
                         this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);

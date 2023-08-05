@@ -206,45 +206,43 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let data of lstCtiets; let i = index">
-                            <ng-container *ngIf="data.level == 0">
-                                <td nzLeft>
-                                    {{ getIndex(data) }}
-                                </td>
-                                <td nzLeft>
-                                    {{ data.tenDvi }}
-                                </td>
-                                <td>
-                                    {{ Op.fmtNum(data.slKeHoach) }}
-                                </td>
-                                <td>
-                                    {{ Op.fmtNum(data.slThucHien) }}
-                                </td>
-                                <td>
-                                    {{ Op.fmtVal(data.donGia) }}
-                                </td>
-                                <td>
-                                    {{ Op.fmtVal(data.gtThucHien) }}
-                                </td>
-                                <td>
-                                    {{ Op.fmtVal(data.dtoanDaGiao) }}
-                                </td>
+                            <td nzLeft>
+                                {{ getIndex(data) }}
+                            </td>
+                            <td nzLeft>
+                                {{ data.tenDvi }}
+                            </td>
+                            <td>
+                                {{ Op.fmtNum(data.slKeHoach) }}
+                            </td>
+                            <td>
+                                {{ Op.fmtNum(data.slThucHien) }}
+                            </td>
+                            <td>
+                                {{ Op.fmtVal(data.donGia) }}
+                            </td>
+                            <td>
+                                {{ Op.fmtVal(data.gtThucHien) }}
+                            </td>
+                            <td>
+                                {{ Op.fmtVal(data.dtoanDaGiao) }}
+                            </td>
 
-                                <td>
-                                    {{ Op.fmtVal(data.lkUng) }}
-                                </td>
-                                <td>
-                                    {{ Op.fmtVal(data.lkCap) }}
-                                </td>
-                                <td>
-                                    {{ Op.fmtVal(data.lkCong) }}
-                                </td>
-                                <td>
-                                    {{ Op.fmtVal(data.tongVonVaDtoanDaCap) }}
-                                </td>
-                                <td>
-                                    {{ Op.fmtVal(data.vonDnCapLanNay) }}
-                                </td>
-                            </ng-container>
+                            <td>
+                                {{ Op.fmtVal(data.lkUng) }}
+                            </td>
+                            <td>
+                                {{ Op.fmtVal(data.lkCap) }}
+                            </td>
+                            <td>
+                                {{ Op.fmtVal(data.lkCong) }}
+                            </td>
+                            <td>
+                                {{ Op.fmtVal(data.tongVonVaDtoanDaCap) }}
+                            </td>
+                            <td>
+                                {{ Op.fmtVal(data.vonDnCapLanNay) }}
+                            </td>
                         </tr>
                     </tbody>
                 </nz-table>
