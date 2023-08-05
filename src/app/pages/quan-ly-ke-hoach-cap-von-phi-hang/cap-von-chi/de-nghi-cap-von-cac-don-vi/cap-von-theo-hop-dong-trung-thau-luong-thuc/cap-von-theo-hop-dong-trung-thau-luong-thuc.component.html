@@ -48,12 +48,14 @@
                 <nz-table class="nowrap mt-16 table-chi-tiet">
                     <thead>
                         <tr>
-                            <th>Mã cấp ứng</th>
+                            <th>Mã đề nghị</th>
                             <th>Năm</th>
                             <th>Số lần</th>
                             <th>Căn cứ về giá</th>
                             <th>Loại đề nghị</th>
                             <th>Ngày tạo</th>
+                            <th>Số công văn</th>
+                            <th>Ngày công văn</th>
                             <th>Ngày trình duyệt</th>
                             <th>Ngày duyệt</th>
                             <th>Ngày phê duyệt</th>
@@ -62,7 +64,7 @@
                     <tbody>
                         <tr>
                             <td>
-                                {{ baoCao.maCapUng }}
+                                {{ baoCao.maDnghi }}
                             </td>
                             <td>
                                 {{ baoCao.namDnghi }}
@@ -71,14 +73,26 @@
                                 {{ baoCao.soLan }}
                             </td>
                             <td>
-                                {{ Cvmb.priceBasisName(baoCao.canCuVeGia) }}
+                                {{ Cvnc.priceBasisName(baoCao.canCuVeGia) }}
                             </td>
                             <td>
-                                {{ Cvmb.suggestionName(baoCao.loaiDnghi)}}
+                                {{ Cvnc.suggestionName(baoCao.loaiDnghi)}}
                             </td>
                             <td>
                                 {{ Utils.fmtDate(baoCao.ngayTao) }}
                             </td>
+                            <td>
+                                <nz-upload *ngIf="status.save" [nzBeforeUpload]="beforeUploadCV">
+                                    <button nz-button>
+                                        <i nz-icon nzType="upload"></i>
+                                        Chọn
+                                    </button>
+                                </nz-upload>
+                                <div class="tep__sqd" (click)="downloadFile(null)">
+                                    <span>{{baoCao.congVan?.fileName}}</span>
+                                </div>
+                            </td>
+                            <td>{{ Utils.fmtDate(baoCao.ngayCongVan) }}</td>
                             <td>
                                 {{ Utils.fmtDate(baoCao.ngayTrinh) }}
                             </td>
@@ -118,7 +132,7 @@
                         <nz-table class="table__body" nzBordered [nzScroll]="{x: scrollHD}">
                             <thead>
                                 <tr>
-                                    <th *ngIf="userService.isTongCuc()" rowspan="2" nzLeft nzWidth="200px">
+                                    <th rowspan="2" nzLeft nzWidth="200px">
                                         Đơn vị
                                     </th>
                                     <th rowspan="2" nzWidth="300px" nzLeft>
@@ -163,7 +177,7 @@
                             <tbody>
                                 <tr *ngFor="let data of lstCtiets; let i = index">
                                     <ng-container *ngIf="data.level > (userService.isTongCuc() ? 1 : 0)">
-                                        <td *ngIf="userService.isTongCuc()" nzLeft>
+                                        <td nzLeft>
                                             {{ data.tenDvi }}
                                         </td>
                                         <td nzLeft>
@@ -228,7 +242,7 @@
                             </tbody>
                         </nz-table>
                     </nz-tab>
-                    <nz-tab nzTitle="Đề nghị cấp vốn">
+                    <nz-tab nzTitle="Cấp vốn">
                         <div class="cantrai" style="margin-top: 10px;">
                             <div> Đơn vị: </div>
                             <div style="margin-left: 10px;">
@@ -247,7 +261,7 @@
                                 </ng-template>
                             </div>
                         </div>
-                        <nz-table class="table__body" nzBordered [nzScroll]="{x: scrollVB}">
+                        <nz-table class="table__body" nzBordered [nzScroll]="{x: scrollCV}">
                             <thead>
                                 <tr>
                                     <th rowspan="2" nzWidth="300px" nzLeft>
@@ -407,7 +421,9 @@
                                                 {{ Op.fmtVal(editCache[data.id].data.lkCong) }}
                                             </td>
                                             <td>
-                                                {{ Op.fmtVal(editCache[data.id].data.dtoanDaGiao) }}
+                                                <input class="money-input" currencyMask [options]="Op.amount"
+                                                    [(ngModel)]="editCache[data.id].data.dtoanDaGiao"
+                                                    (ngModelChange)="changeModel(data.id)" />
                                             </td>
                                             <td>
                                                 {{ Op.fmtVal(editCache[data.id].data.tongVonVaDtoanDaCap) }}

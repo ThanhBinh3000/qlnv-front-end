@@ -10,7 +10,8 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { CapVonNguonChiService } from 'src/app/services/quan-ly-von-phi/capVonNguonChi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { BtnStatus, CapVon, Cvnc, Report } from '../de-nghi-cap-von-cac-don-vi.constant';
+import { BtnStatus, CapVon, Cvnc, Doc, Report } from '../de-nghi-cap-von-cac-don-vi.constant';
+import { DialogCongVanComponent } from 'src/app/components/dialog/dialog-cong-van/dialog-cong-van.component';
 
 @Component({
     selector: 'app-de-nghi-cap-von-theo-hop-dong-trung-thau',
@@ -38,12 +39,38 @@ export class DeNghiCapVonTheoHopDongTrungThauComponent implements OnInit {
     editMoneyUnit: boolean = false;
     isParent: boolean = false;
     //file
+    fileDetail: NzUploadFile;
     fileList: NzUploadFile[] = [];
     listFile: File[] = [];
     listIdDeleteFiles: string[] = [];
 
     beforeUpload = (file: NzUploadFile): boolean => {
         this.fileList = this.fileList.concat(file);
+        return false;
+    };
+
+    // before uploaf file
+    beforeUploadCV = (file: NzUploadFile): boolean => {
+        const modalAppendix = this.modal.create({
+            nzTitle: 'Thêm mới công văn',
+            nzContent: DialogCongVanComponent,
+            nzBodyStyle: { overflowY: 'auto', maxHeight: 'calc(100vh - 200px)' },
+            nzMaskClosable: false,
+            nzWidth: '60%',
+            nzFooter: null,
+            nzComponentParams: {
+            },
+        });
+        modalAppendix.afterClose.toPromise().then(async (res) => {
+            if (res) {
+                this.baoCao.ngayCongVan = res.ngayCongVan;
+                this.baoCao.congVan = {
+                    ...new Doc(),
+                    fileName: res.soCongVan,
+                };
+            }
+        });
+        this.fileDetail = file;
         return false;
     };
 
@@ -165,16 +192,11 @@ export class DeNghiCapVonTheoHopDongTrungThauComponent implements OnInit {
         this.status.submit = this.status.submit && this.userService.isAccessPermisson(Roles.CVNC.SUBMIT_DN);
         this.status.pass = this.status.pass && this.userService.isAccessPermisson(Roles.CVNC.PASS_DN);
         this.status.approve = this.status.approve && this.userService.isAccessPermisson(Roles.CVNC.APPROVE_DN);
-        this.status.accept = this.status.accept && this.userService.isAccessPermisson(Roles.CVNC.APPROVE_DN);
+        this.status.accept = this.status.accept && this.userService.isAccessPermisson(Roles.CVNC.ACCEPT_DN);
         this.status.export = this.status.export && this.userService.isAccessPermisson(Roles.CVNC.EXPORT_DN);
-        if (this.userService.isTongCuc()) {
-            this.scrollHD = Table.tableWidth(700, 9, 1, 0);
-            this.scrollCV = this.status.save ? Table.tableWidth(300, 18, 1, 60) : Table.tableWidth(500, 18, 1, 0);
-        } else {
-            this.scrollHD = this.status.save ? Table.tableWidth(500, 9, 1, 60) : Table.tableWidth(500, 9, 1, 0);;
-            this.scrollCV = this.status.save ? Table.tableWidth(300, 16, 1, 60) : Table.tableWidth(500, 16, 1, 0);
-        }
 
+        this.scrollHD = this.status.save ? Table.tableWidth(500, 7, 1, 60) : Table.tableWidth(500, 7, 1, 0);;
+        this.scrollCV = this.status.save ? Table.tableWidth(300, 16, 1, 60) : Table.tableWidth(300, 16, 1, 0);
     }
 
     back() {
@@ -297,6 +319,25 @@ export class DeNghiCapVonTheoHopDongTrungThauComponent implements OnInit {
             request.fileDinhKems.push(await this.fileManip.uploadFile(iterator, this.baoCao.maDvi + '/' + this.baoCao.maDnghi));
         }
 
+        //get file cong van url
+        const file: any = this.fileDetail;
+        if (file) {
+            if (file.size > Utils.FILE_SIZE) {
+                this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
+                return;
+            } else {
+                request.congVan = {
+                    ...await this.fileManip.uploadFile(file, this.baoCao.maDvi + '/' + this.baoCao.maDnghi),
+                    fileName: this.baoCao.congVan.fileName,
+                }
+            }
+            this.fileDetail = null;
+        }
+        if (!request.congVan?.fileUrl) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
+            return;
+        }
+
         if (!this.baoCao.id) {
             this.CapVonNguonChiService.taoMoiDeNghi(request).toPromise().then(
                 async (data) => {
@@ -360,7 +401,7 @@ export class DeNghiCapVonTheoHopDongTrungThauComponent implements OnInit {
         const obj = {
             id: id,
             preData: this.dataInfo,
-            // tabSelected: this.dataInfo.tabSelected == Tab.VB_HOP_DONG ? Tab.VB_HOP_DONG_1 : Tab.VB_HOP_DONG,
+            tabSelected: Cvnc.DN_HOP_DONG,
         }
         this.dataChange.emit(obj);
     }
@@ -373,8 +414,15 @@ export class DeNghiCapVonTheoHopDongTrungThauComponent implements OnInit {
     }
 
     async downloadFile(id: string) {
-        let file: any = this.listFile.find(element => element?.lastModified.toString() == id);
-        let doc: any = this.baoCao.lstFiles.find(element => element?.id == id);
+        let file: any;
+        let doc: any;
+        if (!id) {
+            file = this.fileDetail;
+            doc = this.baoCao.congVan
+        } else {
+            file = this.listFile.find(element => element?.lastModified.toString() == id);
+            doc = this.baoCao.lstFiles.find(element => element?.id == id);
+        }
         await this.fileManip.downloadFile(file, doc);
     }
 }
