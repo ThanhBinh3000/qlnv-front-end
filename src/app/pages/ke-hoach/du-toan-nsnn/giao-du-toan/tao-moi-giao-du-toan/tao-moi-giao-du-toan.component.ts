@@ -949,6 +949,10 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
             this.notification.warning(MESSAGE.WARNING, 'Dòng chưa có dữ liệu, vui lòng nhập!')
             return;
         }
+        if (tongTranChi !== this.editCache[id].data.tongCong) {
+            this.notification.warning(MESSAGE.WARNING, 'Tổng số tiền phân bổ phải bằng số tiền được giao!')
+            return;
+        }
 
         this.editCache[id].data.lstCtietDvis.forEach(item => {
             data.push({

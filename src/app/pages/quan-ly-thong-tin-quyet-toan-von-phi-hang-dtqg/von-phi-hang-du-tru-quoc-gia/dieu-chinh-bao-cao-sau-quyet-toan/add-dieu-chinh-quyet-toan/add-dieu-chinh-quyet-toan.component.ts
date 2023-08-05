@@ -73,7 +73,7 @@ export class AddDieuChinhQuyetToanComponent implements OnInit {
     // info data common
     maBcao!: string;
     namQtoan!: number;
-    thangQtoan!: number;
+    quyQtoan!: number;
     congVan: ItemCongVan = new ItemCongVan();
     ngayTao!: string;
     ngayTrinh!: string;
@@ -270,7 +270,7 @@ export class AddDieuChinhQuyetToanComponent implements OnInit {
         const rqKho = {
             maDvi: this.maDviTao,
             nam: Number(this?.namQtoan),
-            thang: this?.thangQtoan,
+            quyQtoan: this?.quyQtoan,
         }
         await this.quyetToanVonPhiService.getHangHoaKho(rqKho).toPromise().then(
             async (data) => {
@@ -290,7 +290,7 @@ export class AddDieuChinhQuyetToanComponent implements OnInit {
             this.spinner.show();
             const res = {
                 namQtoan: this.data.namQtoan,
-                thangQtoan: this.data.thangBcao,
+                quyQtoan: this.data.thangBcao,
             };
             await this.quyetToanVonPhiService.CtietBcaoQuyetToanNam(res).toPromise().then(
                 async (data) => {
@@ -320,7 +320,7 @@ export class AddDieuChinhQuyetToanComponent implements OnInit {
             this.isStatus = '1';
             this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
             this.namQtoan = this.data?.namQtoan;
-            this.thangQtoan = this.data?.thangQtoan;
+            this.quyQtoan = this.data?.quyQtoan;
 
             await this.quyetToanVonPhiService.sinhMaBaoCaoQuyetToan(this.maPhanBcaoCDieuChinh).toPromise().then(
                 (data) => {
@@ -456,7 +456,7 @@ export class AddDieuChinhQuyetToanComponent implements OnInit {
                     this.maBcao = data.data.maBcao;
                     this.isStatus = data.data.trangThai;
                     this.namQtoan = data.data.namQtoan;
-                    this.thangQtoan = data.data.thangQtoan;
+                    this.quyQtoan = data.data.quyQtoan;
                     this.maDviTao = data.data.maDvi;
                     this.thuyetMinh = data.data.thuyetMinh;
                     this.ngayTao = this.datePipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR);
@@ -563,7 +563,7 @@ export class AddDieuChinhQuyetToanComponent implements OnInit {
             congVan: this.congVan,
             maDvi: this.maDviTao,
             namQtoan: this.namQtoan,
-            thangQtoan: this.thangQtoan,
+            quyQtoan: this.quyQtoan,
             maBcao: this.maBcao,
             maPhanBcao: this.maPhanBcao,
             thongBao: this.thongBao,

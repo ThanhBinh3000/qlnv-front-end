@@ -12,7 +12,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 // import { displayNumber, exchangeMoney } from 'src/app/Utility/func';
-import { DON_VI_TIEN, GDT, LA_MA, Operator, Utils } from 'src/app/Utility/utils';
+import { DON_VI_TIEN, FileManip, GDT, LA_MA, Operator, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import { NOI_DUNG } from '../tao-moi-quyet-dinh-btc/tao-moi-quyet-dinh-btc.constant';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
@@ -105,6 +105,7 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
         private dataSource: DataService,
         public globals: Globals,
         public danhMucService1: DanhMucService,
+        public fileManip: FileManip,
     ) { }
 
     ngOnInit() {
@@ -218,6 +219,20 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
             const blob = new Blob([file], { type: "application/octet-stream" });
             fileSaver.saveAs(blob, file.name);
         }
+    }
+
+    async downloadFile(id: string) {
+        let file: any;
+        let doc: any;
+        if (!id) {
+            file = this.fileDetail;
+            doc = this.soQd
+        }
+        // else {
+        //     file = this.listFile.find(element => element?.lastModified.toString() == id);
+        //     doc = this.baoCao.lstFiles.find(element => element?.id == id);
+        // }
+        await this.fileManip.downloadFile(file, doc);
     }
 
     // call chi tiet bao cao
