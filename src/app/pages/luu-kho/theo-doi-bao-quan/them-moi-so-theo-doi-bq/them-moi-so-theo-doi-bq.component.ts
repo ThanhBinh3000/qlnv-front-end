@@ -125,7 +125,7 @@ export class ThemMoiSoTheoDoiBqComponent extends Base3Component implements OnIni
       await this.detail(this.id).then((res) => {
         this.spinner.hide();
         if (res) {
-          this.dataTable = res.children;
+          this.changeMonth(this.monthSelect)
           this.loadDataComboBox();
         }
       })
@@ -240,8 +240,9 @@ export class ThemMoiSoTheoDoiBqComponent extends Base3Component implements OnIni
       if(res.data && res.data.length > 0){
         const data = res.data[0];
         let date = new Date(data.ngayNhapDayKho);
+        let date2 = new Date(data.ngayNhapDayKho);
         const dateHetHanLk = new Date(date.setMonth(date.getMonth()+this.formData.value.thoiHanLk));
-        const dateHetHanBh = new Date(date.setMonth(date.getMonth()+this.formData.value.thoiHanBh));
+        const dateHetHanBh = new Date(date2.setMonth(date2.getMonth()+this.formData.value.thoiHanBh));
         this.formData.patchValue({
           ngayNhapDayKho : data.ngayNhapDayKho,
           ngayNhapTu : data.thoiGianNhapDayTu,
@@ -356,6 +357,11 @@ export class ThemMoiSoTheoDoiBqComponent extends Base3Component implements OnIni
 
   editRow(item){
     if(item){
+      const date1 = new Date();
+      const date2 = new Date(this.formData.value.ngayHetHanBh);
+      // @ts-ignore
+      const timeDiffInMilliseconds = Math.abs(date2 - date1);
+      const daysDiff = Math.ceil(timeDiffInMilliseconds / (1000 * 60 * 60 * 24));
       const modalGT = this.modal.create({
         nzTitle: 'Thông tin chi tiết',
         nzContent: ThemMoiCtietTdbqComponent,
@@ -368,7 +374,8 @@ export class ThemMoiSoTheoDoiBqComponent extends Base3Component implements OnIni
           isXacNhan : item.vaiTro == 'LDCHICUC' || item.vaiTro == 'LDCUC',
           dataTk : item.dataTk,
           dataKtv : item.dataKtv,
-          dataLdcc : item.dataLdcc
+          dataLdcc : item.dataLdcc,
+          thoiGianConLaiBh : daysDiff,
         },
       })
       modalGT.afterClose.subscribe((data)=>{
@@ -383,7 +390,8 @@ export class ThemMoiSoTheoDoiBqComponent extends Base3Component implements OnIni
       this.spinner.show();
       let body = {
         idHdr : this.id,
-        monthSearch : event
+        monthSearch : event,
+        detail : true
       }
       this.theoDoiBqDtlService.search(body).then((res)=>{
         this.spinner.hide();
@@ -408,7 +416,11 @@ export class ThemMoiSoTheoDoiBqComponent extends Base3Component implements OnIni
       dataKtv = this.dataTable.filter(item => item.vaiTro == 'CBKTVBQ').sort((a,b)=>a.ngayKtra-b.ngayKtra);
       dataLdcc = this.dataTable.filter(item => item.vaiTro == 'LDCHICUC').sort((a,b)=>a.ngayKtra-b.ngayKtra);
     }
-
+    const date1 = new Date();
+    const date2 = new Date(this.formData.value.ngayHetHanBh);
+    // @ts-ignore
+    const timeDiffInMilliseconds = Math.abs(date2 - date1);
+    const daysDiff = Math.ceil(timeDiffInMilliseconds / (1000 * 60 * 60 * 24));
     const modalGT = this.modal.create({
       nzTitle: 'Thông tin chi tiết',
       nzContent: ThemMoiCtietTdbqComponent,
@@ -421,7 +433,8 @@ export class ThemMoiSoTheoDoiBqComponent extends Base3Component implements OnIni
         isXacNhan : isXacNhan,
         dataTk : dataTk?.length > 0 ? dataTk[0] : null,
         dataKtv : dataKtv?.length > 0 ? dataKtv[0] : null,
-        dataLdcc : dataLdcc?.length > 0 ? dataLdcc[0] : null
+        dataLdcc : dataLdcc?.length > 0 ? dataLdcc[0] : null,
+        thoiGianConLaiBh : daysDiff
       },
     });
     modalGT.afterClose.subscribe((data)=>{

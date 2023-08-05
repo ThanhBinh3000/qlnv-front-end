@@ -22,5 +22,10 @@ export class QuyetDinhGiaCuaBtcService extends BaseService {
     return this.httpClient.post<any>(url, body).toPromise();
   }
 
+  getQdGiaLastestBtc(body: any) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/phuong-an-gia/qd-gia-btc/gia-btc-lastest`;
+    return this.httpClient.post<any>(url, body).toPromise();
+  }
+
 
 }
