@@ -51,7 +51,8 @@ export class KiemTraChatLuongComponent extends Base2Component implements OnInit 
       denNgay: null,
       ketQua: null,
       type: ["01"],
-      loaiDc: ["DCNB"]
+      loaiDc: ["DCNB"],
+      loaiQdinh: [],
     })
   }
 
@@ -68,7 +69,8 @@ export class KiemTraChatLuongComponent extends Base2Component implements OnInit 
     });
 
     this.formData.patchValue({
-      loaiDc: this.loaiDc
+      loaiDc: this.loaiDc,
+      loaiQdinh: this.loaiDc === "CUC" ? "NHAP" : null
     })
 
     try {

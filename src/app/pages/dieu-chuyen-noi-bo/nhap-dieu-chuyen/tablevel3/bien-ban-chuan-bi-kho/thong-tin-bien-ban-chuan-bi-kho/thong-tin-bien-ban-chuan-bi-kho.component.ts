@@ -124,6 +124,7 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
       type: ["01"],
       loaiDc: ["DCNB"],
       isVatTu: [true],
+      loaiQdinh: [],
       lyDoTuChoi: [],
       noiDung: [],
       soLuongTrongNam: [],
@@ -142,7 +143,8 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
       maQhns: this.userInfo.DON_VI.maQhns,
       ktvBaoQuan: this.userInfo.TEN_DAY_DU,
       soBban: `${id}/${this.formData.get('nam').value}/${this.maBb}`,
-      loaiDc: this.loaiDc
+      loaiDc: this.loaiDc,
+      loaiQdinh: this.loaiDc === "CUC" ? "NHAP" : null
     })
     await this.getListNhomCcdc()
     if (this.idInput) {
@@ -372,9 +374,9 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
     let body = {
       trangThai: STATUS.BAN_HANH,
       loaiVthh: ['0101', '0102'],
-      loaiDc: "DCNB",
-      maDvi: this.userInfo.MA_DVI
-      // listTrangThaiXh: [STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN],
+      loaiDc: this.loaiDc,
+      maDvi: this.userInfo.MA_DVI,
+      type: this.formData.value.type
     }
     let resSoDX = this.isCuc() ? await this.quyetDinhDieuChuyenCucService.getDsSoQuyetDinhDieuChuyenCuc(body) : await this.quyetDinhDieuChuyenCucService.getDsSoQuyetDinhDieuChuyenChiCuc(body);
     if (resSoDX.msg == MESSAGE.SUCCESS) {

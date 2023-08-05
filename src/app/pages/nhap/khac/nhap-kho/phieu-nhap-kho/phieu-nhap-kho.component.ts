@@ -171,7 +171,7 @@ export class PhieuNhapKhoComponent extends Base2Component implements OnInit {
         .map(element => {
           return {
             ...element,
-            maLoNganKho: `${element.maLoKho}${element.maNganKho}`
+            maKho: `${element.maLoKho}${element.maNganKho}${element.maNhaKho}${element.maDiemKho}`
           }
         });
       this.dataTableView = this.buildTableView(data)
@@ -203,27 +203,27 @@ export class PhieuNhapKhoComponent extends Base2Component implements OnInit {
       .groupBy("soQdPdNk")
       ?.map((value1, key1) => {
         let children1 = chain(value1)
-          .groupBy("maDiemKho")
+          .groupBy("maKho")
           ?.map((value2, key2) => {
-            let children2 = chain(value2)
-              .groupBy("maLoNganKho")
-              ?.map((value3, key3) => {
+            // let children2 = chain(value2)
+            //   .groupBy("maLoNganKho")
+            //   ?.map((value3, key3) => {
 
-                const row3 = value3.find(s => s?.maLoNganKho == key3);
-                return {
-                  ...row3,
-                  idVirtual: row3 ? row3.idVirtual ? row3.idVirtual : uuidv4.v4() : uuidv4.v4(),
-                  children: value3,
-                }
-              }
-              ).value();
+            //     const row3 = value3.find(s => s?.maLoNganKho == key3);
+            //     return {
+            //       ...row3,
+            //       idVirtual: row3 ? row3.idVirtual ? row3.idVirtual : uuidv4.v4() : uuidv4.v4(),
+            //       children: value3,
+            //     }
+            //   }
+            //   ).value();
 
-            let row2 = value2?.find(s => s.maDiemKho == key2);
+            let row2 = value2?.find(s => s.maKho == key2);
 
             return {
               ...row2,
               idVirtual: row2 ? row2.idVirtual ? row2.idVirtual : uuidv4.v4() : uuidv4.v4(),
-              children: children2,
+              children: value2,
             }
           }
           ).value();
@@ -309,6 +309,7 @@ export class PhieuNhapKhoComponent extends Base2Component implements OnInit {
     this.selectedId = id;
     this.isDetail = true;
     this.isView = b;
+    this.data = null
   }
 
   quayLai() {

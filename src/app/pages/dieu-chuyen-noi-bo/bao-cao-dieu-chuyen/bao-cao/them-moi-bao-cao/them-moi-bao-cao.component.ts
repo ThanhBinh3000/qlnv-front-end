@@ -183,7 +183,8 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
         res = await this.bangCaoDieuChuyenService.getThongTinNhapXuatCuc({ soQdinhCuc });
       }
       if (res.msg === MESSAGE.SUCCESS) {
-        this.danhSachKetQua = cloneDeep(res.data)
+        this.danhSachKetQua = cloneDeep(res.data);
+        this.buildTableView();
       }
     } catch (error) {
       console.log("e", error)
@@ -261,9 +262,9 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
     }
   }
   buildTableView() {
-    let dataView = Array.isArray(this.dataTable) ?
-      chain(this.dataTable).groupBy("soQdinh").map((rs, i) => {
-        const dataSoQdinh = rs.find(f => f.soQdinh == i);
+    let dataView = Array.isArray(this.danhSachKetQua) ?
+      chain(this.danhSachKetQua.map(f => ({ ...f, keyGroup: `${f.cloaiVthh}${f.maLoKho ? f.maLoKho + f.maNganKho : f.maNganKho}` }))).groupBy("keyGroup").map((rs, i) => {
+        const dataSoQdinh = rs.find(f => f.keyGroup == i);
         return {
           ...dataSoQdinh,
           idVirtual: uuidv4(),
@@ -271,6 +272,7 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
         }
       }).value() : [];
     this.dataView = cloneDeep(dataView);
+    console.log("dataView", dataView)
     this.expandAll()
   }
   async save(isGuiDuyet: boolean): Promise<void> {
