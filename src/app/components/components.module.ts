@@ -120,7 +120,6 @@ import { DialogChonThemKhoanMucQlGiaoDuToanChiNSNNComponent } from './dialog/dia
 import { DialogCopyComponent } from './dialog/dialog-copy/dialog-copy.component';
 import { DialogDdiemDeHangComponent } from './dialog/dialog-ddiem-de-hang/dialog-ddiem-de-hang.component';
 import { DialogDiaDiemKhoComponent } from './dialog/dialog-dia-diem-kho/dialog-dia-diem-kho.component';
-import { DialogDoCopyComponent } from './dialog/dialog-do-copy/dialog-do-copy.component';
 import { DanhSachQuyetDinhPhanBoComponent } from './dialog/dialog-ds-qd-phan-bo/dialog-ds-qd-phan-bo.component';
 import { DialogQuyetDinhGiaCuaTcdtnnComponent } from './dialog/dialog-ke-hoach-phuong-an-gia/dialog-quyet-dinh-gia-cua-tcdtnn/dialog-quyet-dinh-gia-cua-tcdtnn.component';
 import { DialogToTrinhTongHopComponent } from './dialog/dialog-ke-hoach-phuong-an-gia/dialog-to-trinh-tong-hop/dialog-to-trinh-tong-hop.component';
@@ -242,7 +241,6 @@ import { TemplateErrorComponent } from './template-error/template-error.componen
     DialogChonThemBieuMauComponent,
     DialogThemKhoanMucComponent,
     DialogLuaChonThemDonViComponent,
-    DialogDoCopyComponent,
     DialogCopyGiaoDuToanComponent,
     DialogCopyQuyetToanVonPhiHangDtqgComponent,
     DialogThemVatTuComponent,
