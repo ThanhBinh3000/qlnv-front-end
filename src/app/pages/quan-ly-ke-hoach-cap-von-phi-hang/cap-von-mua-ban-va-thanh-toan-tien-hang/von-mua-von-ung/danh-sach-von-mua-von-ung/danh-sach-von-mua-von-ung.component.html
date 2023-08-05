@@ -136,7 +136,7 @@
                             {{ Utils.fmtDate(data.ngayPheDuyetDvct) }}
                         </td>
                         <td>
-                            {{Status.reportStatusName(data.Dvct, isParent)}}
+                            {{Status.reportStatusName(data.trangThaiDvct, isParent)}}
                             <ng-container *ngIf="Status.check('reject', data.trangThaiDvct)">
                                 <br>Lý do: {{data.lyDoTuChoiDvct}}
                             </ng-container>
