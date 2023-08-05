@@ -167,7 +167,7 @@ export class ThemMoiToTrinhPagComponent implements OnInit {
       if (this.formData.value.loaiGia == 'LG01' || this.formData.value.loaiGia == 'LG03') {
         this.dataTable.forEach(item => {
           if (item.vat) {
-            item.giaQdVatTcdtnn = item.giaQdTcdtnn + item.giaQdTcdtnn * item.vat
+            item.giaQdVatTcdt = item.giaQdTcdt + item.giaQdTcdt * item.vat
           }
         })
       }

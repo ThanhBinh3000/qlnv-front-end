@@ -353,11 +353,11 @@
                   <td class="text-right"
                       *ngIf="!(formTraCuu.value.loaiGia == 'LG01' || formTraCuu.value.loaiGia == 'LG03')"></td>
                   <td class="text-right">
-                    {{ item.giaQdTcdtnn | number : '1.0-1' : 'vi_VN'}}
+                    {{ item.giaQdTcdt | number : '1.0-1' : 'vi_VN'}}
                   </td>
                   <td class="text-right"
                       *ngIf="(formTraCuu.value.loaiGia == 'LG01' || formTraCuu.value.loaiGia == 'LG03')">
-                    {{ item.giaQdVatTcdtnn | number : '1.0-1' : 'vi_VN'}}
+                    {{ item.giaQdVatTcdt | number : '1.0-1' : 'vi_VN'}}
                   </td>
                   <td class="text-right"
                       *ngIf="!(formTraCuu.value.loaiGia == 'LG01' || formTraCuu.value.loaiGia == 'LG03')"></td>

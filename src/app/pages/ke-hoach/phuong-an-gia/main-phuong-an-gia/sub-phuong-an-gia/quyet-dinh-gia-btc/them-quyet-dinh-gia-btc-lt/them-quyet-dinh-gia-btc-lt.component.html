@@ -238,10 +238,10 @@
             <td class="text-right"
                 *ngIf="!(formData.value.loaiGia == 'LG01' )"></td>
             <td class="text-right">
-              {{item.giaQdTcdtnn | number : '1.0-1' : 'vi_VN' }}
+              {{item.giaQdTcdt | number : '1.0-1' : 'vi_VN' }}
             </td>
             <td class="text-right" *ngIf="(formData.value.loaiGia == 'LG01' )">
-              {{ item.giaQdVatTcdtnn | number : '1.0-1' : 'vi_VN'}}
+              {{ item.giaQdVatTcdt | number : '1.0-1' : 'vi_VN'}}
             </td>
             <td class="text-right"
                 *ngIf="!(formData.value.loaiGia == 'LG01' )"></td>

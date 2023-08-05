@@ -312,7 +312,7 @@
             <td class="text-right"   *ngIf="!isMuaToiDa">{{ item.giaQdBtc | number : '1.0-1' : 'vi_VN'}}</td>
             <td class="text-right"  *ngIf="!isMuaToiDa">{{ item.giaQdBtcVat | number : '1.0-1' : 'vi_VN'}}</td>
             <td class="text-right">
-              <nz-input-number [nzDisabled]="isView" [nzSize]="'small'" [(ngModel)]="item.giaQdTcdtnn"
+              <nz-input-number [nzDisabled]="isView" [nzSize]="'small'" [(ngModel)]="item.giaQdTcdt"
                                [nzMin]="formData.value.loaiGia == 'LG04' ? (item.giaQdBtc ? item.giaQdBtc : 0) : 0"
                                [nzMax]="formData.value.loaiGia == 'LG03' ? (item.giaQdBtc ? item.giaQdBtc : 999999999999 ) : 999999999999"
                                [nzFormatter]="globals.formatter"
@@ -320,7 +320,7 @@
               </nz-input-number>
             </td>
             <td class="text-right" *ngIf="(formData.value.loaiGia == 'LG01' || formData.value.loaiGia == 'LG03')">
-              {{ item.vat ? (item.giaQdTcdtnn * item.vat + item.giaQdTcdtnn | number : '1.0-1' : 'vi_VN') : ''}}
+              {{ item.vat ? (item.giaQdTcdt * item.vat + item.giaQdTcdt | number : '1.0-1' : 'vi_VN') : ''}}
             </td>
             <td class="text-right" *ngIf="!(formData.value.loaiGia == 'LG01' || formData.value.loaiGia == 'LG03')"></td>
             <td class="text-right" *ngIf="isMuaToiDa">{{ item.giaQdBtc | number : '1.0-1' : 'vi_VN'}}</td>
