@@ -10,6 +10,8 @@ import { DanhSachDeNghiCapVonTuDvcdComponent } from './danh-sach-de-nghi-cap-von
 import { DeNghiCapVonQuyetDinhDonGiaMuaComponent } from './de-nghi-cap-von-quyet-dinh-don-gia-mua/de-nghi-cap-von-quyet-dinh-don-gia-mua.component';
 import { DialogTaoMoiDeNghiComponent } from './dialog-tao-moi-de-nghi/dialog-tao-moi-de-nghi.component';
 import { DialogTongHopCapVonComponent } from './dialog-tong-hop-cap-von/dialog-tong-hop-cap-von.component';
+import { CapVonTheoHopDongTrungThauLuongThucComponent } from './cap-von-theo-hop-dong-trung-thau-luong-thuc/cap-von-theo-hop-dong-trung-thau-luong-thuc.component';
+import { DeNghiCapVonTheoHopDongTrungThauComponent } from './de-nghi-cap-von-theo-hop-dong-trung-thau/de-nghi-cap-von-theo-hop-dong-trung-thau.component';
 
 @NgModule({
     declarations: [
@@ -17,7 +19,9 @@ import { DialogTongHopCapVonComponent } from './dialog-tong-hop-cap-von/dialog-t
         DanhSachDeNghiCapVonComponent,
         DanhSachDeNghiCapVonTuDvcdComponent,
         CapVonQuyetDinhDonGiaMuaComponent,
+        CapVonTheoHopDongTrungThauLuongThucComponent,
         DeNghiCapVonQuyetDinhDonGiaMuaComponent,
+        DeNghiCapVonTheoHopDongTrungThauComponent,
         DialogTaoMoiCapVonComponent,
         DialogTaoMoiDeNghiComponent,
         DialogTongHopCapVonComponent,

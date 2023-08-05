@@ -154,7 +154,11 @@ export class DialogTaoMoiDeNghiComponent implements OnInit {
                                 cong: null,
                             })
                             temp.tongVonVaDtoanDaCap = Operator.sum([temp.lkCong, temp.dtoanDaGiao]);
-                            temp.vonDnCapLanNay = Operator.sum([temp.gtThucHien, -temp.tongVonVaDtoanDaCap]);
+                            if (this.response.canCuVeGia == Cvnc.DON_GIA) {
+                                temp.vonDnCapLanNay = Operator.sum([temp.gtThucHien, -temp.tongVonVaDtoanDaCap]);
+                            } else {
+                                temp.vonDnCapLanNay = Operator.sum([temp.gtHopDong, -temp.tongVonVaDtoanDaCap]);
+                            }
                             this.response.lstCtiets.push(temp);
                         })
                     } else {

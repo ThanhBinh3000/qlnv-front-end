@@ -443,7 +443,7 @@ export class CapVonQuyetDinhDonGiaMuaComponent implements OnInit {
         const obj = {
             id: id,
             preData: this.dataInfo,
-            tabSelected: Cvnc.DE_NGHI,
+            tabSelected: Cvnc.DN_DON_GIA,
         }
         this.dataChange.emit(obj);
     }
