@@ -199,7 +199,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
     if (id > 0) {
       let res = await this.deXuatPAGService.getDetail(id);
       const data = res.data;
-      this.maDx = data.soDeXuat ? data.soDeXuat.split('/')[1] : '/' + this.userInfo.DON_VI.tenVietTat + '-KH&QLHDT';
+      this.maDx = data.soDeXuat ? '/' + data.soDeXuat.split('/')[1] : '/' + this.userInfo.DON_VI.tenVietTat + '-KH&QLHDT';
       this.formData.patchValue({
         id: data.id,
         namKeHoach: data.namKeHoach,
@@ -232,7 +232,8 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
         soCanCu: data.soCanCu,
         qdCtKhNam: data.qdCtKhNam,
         tenTrangThai: data.tenTrangThai,
-        lyDoTuChoi: data.lyDoTuChoi
+        lyDoTuChoi: data.lyDoTuChoi,
+        apDungTatCa: data.apDungTatCa
       })
       this.dataTableCanCuXdg = data.canCuPhapLy;
       this.dsDiaDiemDeHang = data.diaDiemDeHangs;
@@ -786,8 +787,10 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
       this.pagTtChungs.forEach(item => {
         item.giaDn = this.giaDn;
       })
-      this.updateEditCache();
     }
+    this.formData.patchValue({
+      apDungTatCa : event
+    })
   }
 
   async loadDsChiCuc() {
