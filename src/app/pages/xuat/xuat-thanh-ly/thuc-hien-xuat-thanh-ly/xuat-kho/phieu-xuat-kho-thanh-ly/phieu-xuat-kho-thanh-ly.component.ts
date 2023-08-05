@@ -1,19 +1,18 @@
-import {Component, OnInit} from '@angular/core';
-import {Base2Component} from "../../../../../components/base2/base2.component";
+import { Component, OnInit } from '@angular/core';
+import {
+  PhieuXuatKhoThanhLyService
+} from "../../../../../../services/qlnv-hang/xuat-hang/xuat-thanh-ly/PhieuXuatKhoThanhLy.service";
+import {Base2Component} from "../../../../../../components/base2/base2.component";
+import {XuatThanhLyComponent} from "../../../xuat-thanh-ly.component";
 import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../../services/storage.service";
+import {StorageService} from "../../../../../../services/storage.service";
+import {MESSAGE} from "../../../../../../constants/message";
+import {chain} from 'lodash';
+import * as uuid from "uuid";
+import {CHUC_NANG} from "../../../../../../constants/status";
 import {NzNotificationService} from "ng-zorro-antd/notification";
 import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
-import {MESSAGE} from "../../../../../constants/message";
-import {chain} from 'lodash';
-import * as uuid from "uuid";
-import {CHUC_NANG} from "../../../../../constants/status";
-import {XuatThanhLyComponent} from "../../xuat-thanh-ly.component";
-import {
-  PhieuXuatKhoThanhLyService
-} from "../../../../../services/qlnv-hang/xuat-hang/xuat-thanh-ly/PhieuXuatKhoThanhLy.service";
-
 @Component({
   selector: 'app-phieu-xuat-kho-thanh-ly',
   templateUrl: './phieu-xuat-kho-thanh-ly.component.html',
@@ -140,4 +139,5 @@ export class PhieuXuatKhoThanhLyComponent extends Base2Component implements OnIn
     this.idBbQd = idBbQd;
   }
 }
+
 

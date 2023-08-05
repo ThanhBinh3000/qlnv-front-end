@@ -1454,8 +1454,10 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
   }
 
   async addDiemKhoNhan(data: any) {
-    data.idVirtual = undefined;
-    data.id = undefined;
+    if(data.childData.length !== 0){
+      data.idVirtual = undefined;
+      data.id = undefined;
+    }
     this.showModal();
     this.isEditDetail = true;
     if (!data.slDcConLai) {

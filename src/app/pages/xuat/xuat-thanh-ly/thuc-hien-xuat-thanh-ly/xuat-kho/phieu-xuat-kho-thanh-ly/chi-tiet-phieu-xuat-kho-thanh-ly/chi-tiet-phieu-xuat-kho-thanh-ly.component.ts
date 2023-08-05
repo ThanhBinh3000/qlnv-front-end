@@ -1,29 +1,28 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {Base2Component} from "../../../../../../components/base2/base2.component";
+import {Base2Component} from "../../../../../../../components/base2/base2.component";
 import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../../../services/storage.service";
+import {StorageService} from "../../../../../../../services/storage.service";
 import {NzNotificationService} from "ng-zorro-antd/notification";
 import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
-import {DanhMucService} from "../../../../../../services/danhmuc.service";
-import {
-  XhPhieuKnghiemCluongService
-} from "../../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/kiem-tra-chat-luong/xhPhieuKnghiemCluong.service";
-
-import dayjs from "dayjs";
-import {FileDinhKem} from "../../../../../../models/FileDinhKem";
-import {MESSAGE} from "../../../../../../constants/message";
+import {DanhMucService} from "../../../../../../../services/danhmuc.service";
 import {
   QuyetDinhGiaoNhiemVuThanhLyService
-} from "../../../../../../services/qlnv-hang/xuat-hang/xuat-thanh-ly/QuyetDinhGiaoNhiemVuThanhLy.service";
+} from "../../../../../../../services/qlnv-hang/xuat-hang/xuat-thanh-ly/QuyetDinhGiaoNhiemVuThanhLy.service";
+import {
+  XhPhieuKnghiemCluongService
+} from "../../../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/kiem-tra-chat-luong/xhPhieuKnghiemCluong.service";
 import {
   PhieuXuatKhoThanhLyService
-} from "../../../../../../services/qlnv-hang/xuat-hang/xuat-thanh-ly/PhieuXuatKhoThanhLy.service";
-import {STATUS} from "../../../../../../constants/status";
+} from "../../../../../../../services/qlnv-hang/xuat-hang/xuat-thanh-ly/PhieuXuatKhoThanhLy.service";
+import dayjs from "dayjs";
+import {FileDinhKem} from "../../../../../../../models/CuuTro";
+import {MESSAGE} from "../../../../../../../constants/message";
+import {STATUS} from "../../../../../../../constants/status";
 import {
   DialogTableSelectionComponent
-} from "../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
-import {convertTienTobangChu} from "../../../../../../shared/commonFunction";
+} from "../../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
+import {convertTienTobangChu} from "../../../../../../../shared/commonFunction";
 
 @Component({
   selector: 'app-chi-tiet-phieu-xuat-kho-thanh-ly',
@@ -124,6 +123,7 @@ export class ChiTietPhieuXuatKhoThanhLyComponent extends Base2Component implemen
   async ngOnInit() {
     await this.spinner.show()
     try {
+      this.userInfo = this.userService.getUserLogin();
       this.maPhieu = 'PXK-' + this.userInfo.DON_VI.tenVietTat;
       if (this.idInput) {
         await this.loadDetail(this.idInput);
@@ -310,35 +310,6 @@ export class ChiTietPhieuXuatKhoThanhLyComponent extends Base2Component implemen
       await super.saveAndSend(body, trangThai, msg, msgSuccess);
     } else {
       this.notification.error(MESSAGE.ERROR, "Phiếu xuất kho chưa có bảng kê cân hàng");
-    }
-  }
-
-  pheDuyet(isPheDuyet) {
-    let trangThai = '';
-    let msg = '';
-    if (isPheDuyet) {
-      switch (this.formData.value.trangThai) {
-        case STATUS.TU_CHOI_LDCC:
-        case STATUS.DU_THAO: {
-          trangThai = STATUS.CHO_DUYET_LDCC;
-          msg = MESSAGE.GUI_DUYET_CONFIRM;
-          break;
-        }
-        case STATUS.CHO_DUYET_LDCC: {
-          trangThai = STATUS.DA_DUYET_LDCC;
-          msg = MESSAGE.GUI_DUYET_CONFIRM;
-          break;
-        }
-      }
-      this.approve(this.idInput, trangThai, msg);
-    } else {
-      switch (this.formData.value.trangThai) {
-        case STATUS.CHO_DUYET_LDCC: {
-          trangThai = STATUS.TU_CHOI_LDCC;
-          break;
-        }
-      }
-      this.reject(this.idInput, trangThai)
     }
   }
 

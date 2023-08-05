@@ -14,8 +14,8 @@
             <input placeholder="" nz-input formControlName="soBbQd"/>
           </div>
           <div nz-col nzSpan="4">
-            <label>Số phiếu xuất kho </label>
-            <input placeholder="" nz-input formControlName="soPhieuXuatKho"/>
+            <label>Số bảng kê cân hàng</label>
+            <input placeholder="" nz-input formControlName="soBangKe"/>
           </div>
           <div nz-col nzSpan="4">
             <label>Ngày xuất kho</label>
@@ -47,15 +47,15 @@
       </div>
     </nz-card>
     <div class="group-button">
-      <h3 class="text-uppercase"> DANH SÁCH PHIẾU XUẤT KHO </h3>
+      <h3 class="text-uppercase"> DANH SÁCH BẢNG KÊ CÂN HÀNG </h3>
       <div class="buttons">
         <button type="button" class="btn btn-sub" (click)="exportData('danh-sach-phieu-xuat-kho.xlsx')"
-                *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_PXK_EXP')">
+                *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_BKCH_EXP')">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
         <button type="button" class="btn btn-main" (click)="redirectDetail(0,false, 0)"
-               >
+                *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_BKCH_THEM') && userService.isChiCuc()">
           <i class="icon htvbdh_tcdt_tao-qd"></i>
           <span>Thêm</span>
         </button>
@@ -71,12 +71,11 @@
           <th width="">Số QĐ giao NVXH</th>
           <th width="">Năm KH</th>
           <th width="">Thời hạn XH trước ngày</th>
-          <th width="">Điểm Kho</th>
+          <th width="">Điểm kho</th>
           <th width="">Lô kho</th>
-          <th width="">Số phiếu xuất kho</th>
-          <th width="">Ngày xuất kho</th>
-          <th width="">Số phiếu KTCL</th>
-          <th width="">Ngày giám định</th>
+          <th width="">Số bảng kê XLT</th>
+          <th width="">Số phiếu XK</th>
+          <th width="">Ngày XK</th>
           <th width="">Trạng thái</th>
           <th width="90px">Hành động</th>
         </tr>
@@ -90,7 +89,6 @@
             <td class="bold">{{ item.soBbQd }}</td>
             <td class="bold">{{ item.nam }}</td>
             <td class="bold">{{ item.ngayKyBbQd | date: 'dd/MM/YYYY' }}</td>
-            <td></td>
             <td></td>
             <td></td>
             <td></td>
@@ -113,10 +111,9 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td></td>
                 <td class="text-left">
-                  <a  (click)="redirectDetail(0, false, lv1.idBbQd)"
-                      *ngIf="userService.isChiCuc()">
+                  <a (click)="redirectDetail(0, false, lv1.idBbQd)"
+                     *ngIf="userService.isChiCuc()">
                     <i class="fa fa-plus"></i>
                   </a>
                 </td>
@@ -131,30 +128,30 @@
                     <td></td>
                     <td></td>
                     <td>{{ (lv2.tenLoKho ? lv2.tenLoKho + ' - ' : '') + lv2.tenNganKho }}</td>
-                    <td class="bold">{{lv2.soPhieuXuatKho}}</td>
+                    <td class="bold">{{lv2.soBangKe}}</td>
+                    <td>{{lv2.soPhieuXuatKho}}</td>
                     <td>{{lv2.ngayXuatKho | date: 'dd/MM/YYYY' }}</td>
-                    <td>{{lv2.soPhieuKnCl}}</td>
-                    <td>{{lv2.ngayKnCl | date: 'dd/MM/YYYY' }}</td>
                     <td>{{lv2.tenTrangThai}}</td>
                     <td class="text-left">
-                      <a (click)="redirectDetail(lv2.id, true, 0)" *ngIf="vldTrangThai.checkStatusPermission(lv2,CHUC_NANG.XEM) &&
-                      !(vldTrangThai.checkStatusPermission(lv2,CHUC_NANG.SUA)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_PXK_THEM'))&&
-                      !(vldTrangThai.checkStatusPermission(lv2,CHUC_NANG.DUYET_LDCC)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_PXK_DUYET'))&&
-                      userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_PXK_XEM')">
+                      <a (click)="redirectDetail(lv2.id, true, 0)" *ngIf="vldTrangThai.checkStatusPermission(lv2,CHUC_NANG.XEM)
+                      && !(vldTrangThai.checkStatusPermission(lv2,CHUC_NANG.SUA) && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_BKCH_THEM'))
+                      && !(vldTrangThai.checkStatusPermission(lv2,CHUC_NANG.DUYET_LDCC)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_BKCH_DUYET_LDCCUC'))
+                      && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_BKCH_XEM')">
                         <i class="fa fa-eye" title="Xem chi tiết"></i>
                       </a>
                       <a
-                        *ngIf="(vldTrangThai.checkStatusPermission(lv2,CHUC_NANG.SUA)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_PXK_THEM'))"
-                        (click)="redirectDetail(lv2.id, false, 0)">
+                        *ngIf="(vldTrangThai.checkStatusPermission(lv2,CHUC_NANG.SUA)
+                        && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_BKCH_THEM'))"
+                        (click)="redirectDetail(lv2.id, false,0)">
                         <i class="fa fa-pencil" title="Sửa"></i>
                       </a>
                       <a
-                        *ngIf="(vldTrangThai.checkStatusPermission(lv2,CHUC_NANG.DUYET_LDCC)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_PXK_DUYET'))"
-                        (click)="redirectDetail(lv2.id, true, 0)">
+                        *ngIf="(vldTrangThai.checkStatusPermission(lv2,CHUC_NANG.DUYET_LDCC) && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_BKCH_DUYET_LDCCUC'))"
+                        (click)="redirectDetail(lv2.id, true,0)">
                         <i class="icon htvbdh_tcdt_pheduyet"></i>
                       </a>
                       <a
-                        *ngIf="vldTrangThai.checkStatusPermission(lv2,CHUC_NANG.XOA) && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_BBTK_XOA')"
+
                         (click)="delete(lv2)">
                         <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                       </a>
@@ -188,8 +185,9 @@
   </div>
 </div>
 <div class="chi-tiet" *ngIf="isDetail">
-    <app-chi-tiet-phieu-xuat-kho-thanh-ly [idInput]="idSelected" [isView]="isView" [idBbQd]="idBbQd" (showListEvent)="showList()">
-    </app-chi-tiet-phieu-xuat-kho-thanh-ly>
+  <app-chi-tiet-bang-ke-can-thanh-ly [idInput]="idSelected" [isView]="isView" [idBbQd]="idBbQd"
+                                     (showListEvent)="showList()">
+  </app-chi-tiet-bang-ke-can-thanh-ly>
 </div>
 
 

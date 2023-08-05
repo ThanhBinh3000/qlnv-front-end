@@ -126,6 +126,7 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
       lyDoTuChoi: [],
       type: ["01"],
       loaiDc: [this.loaiDc],
+      loaiQdinh: [],
     }
     );
   }
@@ -139,7 +140,8 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
       maQhns: this.userInfo.DON_VI.maQhns,
       ktvBaoQuan: this.userInfo.TEN_DAY_DU,
       soPhieu: `${id}/${this.formData.get('nam').value}/${this.maBb}`,
-      loaiDc: this.loaiDc
+      loaiDc: this.loaiDc,
+      loaiQdinh: this.loaiDc === "CUC" ? "NHAP" : null
     })
     this.getPPKTCL()
 
@@ -279,7 +281,8 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
       trangThai: STATUS.BAN_HANH,
       loaiVthh: ['0101', '0102'],
       loaiDc: this.loaiDc,
-      maDvi: this.userInfo.MA_DVI
+      maDvi: this.userInfo.MA_DVI,
+      type: this.formData.value.type
     }
     let resSoDX = this.isCuc() ? await this.quyetDinhDieuChuyenCucService.getDsSoQuyetDinhDieuChuyenCuc(body) : await this.quyetDinhDieuChuyenCucService.getDsSoQuyetDinhDieuChuyenChiCuc(body);
     if (resSoDX.msg == MESSAGE.SUCCESS) {
