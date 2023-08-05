@@ -201,8 +201,7 @@
                      (input)="filterInTable('tenTrangThaiTh',filterTable.tenTrangThaiTh)" size="small"/>
             </nz-input-group>
           </th>
-          <th>
-          </th>
+          <th></th>
         </tr>
         </thead>
         <tbody>
@@ -311,7 +310,8 @@
 </nz-modal>
 <nz-modal [nzWidth]="'90%'" [(nzVisible)]="isViewThop" (nzOnCancel)="closeModalTh()">
   <ng-container *nzModalContent class="modal__content">
-    <app-them-moi-tong-hop-ke-hoach-ban-dau-gia [id]="idThop" [loaiVthh]="loaiVthh" [isViewOnModal]="true">
+    <app-them-moi-tong-hop-ke-hoach-ban-dau-gia [idInput]="idThop" [isView]="true" [loaiVthh]="loaiVthh"
+                                                [isViewOnModal]="true">
     </app-them-moi-tong-hop-ke-hoach-ban-dau-gia>
   </ng-container>
   <div *nzModalFooter>

@@ -23,14 +23,12 @@ export class DeXuatComponent extends Base2Component implements OnInit {
   CHUC_NANG = CHUC_NANG;
   public vldTrangThai: DauGiaComponent;
   isView = false;
-
   idThop: number = 0;
   isViewThop: boolean = false;
   idChiTieu: number = 0;
   isViewChiTieu: boolean = false;
   idQdPd: number = 0;
   isViewQdPd: boolean = false;
-
 
   listTrangThai: any[] = [
     {ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo'},
