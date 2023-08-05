@@ -287,6 +287,8 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
                 if (data.statusCode == 0) {
                     this.lstDvi = data.data;
                     this.lstDvi = this.lstDvi.filter(e => e.tenVietTat && (e.tenVietTat.includes("CDT") || e.tenVietTat.includes("CNTT") || e.tenVietTat.includes("_VP")))
+                    console.log(this.lstDvi);
+
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
                 }

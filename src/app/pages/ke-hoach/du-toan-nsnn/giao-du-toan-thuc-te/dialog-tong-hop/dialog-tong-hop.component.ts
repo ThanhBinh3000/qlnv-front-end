@@ -103,7 +103,7 @@ export class DialogTongHopComponent implements OnInit {
             maDvi: this.obj.maDvi,
             namPa: this.response.namHienTai
         };
-        await this.giaoDuToanChiService.dsPaTongHop(requestReport).toPromise().then(res => {
+        await this.giaoDuToanChiService.dsPaTongHopGiao(requestReport).toPromise().then(res => {
             if (res.statusCode == 0) {
                 this.lstPa = res.data;
             } else {

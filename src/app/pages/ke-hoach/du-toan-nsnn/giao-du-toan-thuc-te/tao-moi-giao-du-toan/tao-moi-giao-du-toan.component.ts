@@ -300,18 +300,20 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 		await this.getChildUnit();
 
 
-		if ((this.donVis1.find(e => e.maDvi == this.maDvi).tenVietTat.includes("CNTT") || this.donVis1.find(e => e.maDvi == this.maDvi).tenVietTat.includes("_VP")) && this.lstDvi.length == 0) {
-			this.lstDvi.push(
-				{
-					maDvi: this.maDvi,
-					tenDvi: this.donVis1.find(e => e.maDvi == this.maDvi).tenDvi
-				}
-			)
-		}
+		// if ((this.donVis1.find(e => e.maDvi == this.maDvi).tenVietTat.includes("CNTT") || this.donVis1.find(e => e.maDvi == this.maDvi).tenVietTat.includes("_VP")) && this.lstDvi.length == 0) {
+		// 	this.lstDvi.push(
+		// 		{
+		// 			maDvi: this.maDvi,
+		// 			tenDvi: this.donVis1.find(e => e.maDvi == this.maDvi).tenDvi
+		// 		}
+		// 	)
+		// }
+		console.log(this.lstDvi);
 
-		if (this.userInfo.DON_VI.tenVietTat.includes("CDT") || this.userInfo.DON_VI.tenVietTat.includes("CNTT") || this.userInfo.DON_VI.tenVietTat.includes("_VP")) {
-			this.isDvi = false;
-		}
+
+		// if (this.userInfo.DON_VI.tenVietTat.includes("CNTT") || this.userInfo.DON_VI.tenVietTat.includes("_VP")) {
+		// 	this.isDvi = false;
+		// }
 		if (this.status) {
 			this.scrollX = (460 + 250 * (this.lstDvi.length + 1)).toString() + 'px';
 		} else {
@@ -355,17 +357,20 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 		await this.quanLyVonPhiService.dmDviCon(request).toPromise().then(
 			data => {
 				if (data.statusCode == 0) {
+					// this.lstDvi = data.data;
+					// this.lstDvi = this.lstDvi.filter(e => e.tenVietTat && (e.tenVietTat.includes("CDT") || e.tenVietTat.includes("CNTT") || e.tenVietTat.includes("_VP")))
+					// if (this.userInfo.DON_VI.tenVietTat.includes("CNTT") || this.userInfo.DON_VI.tenVietTat.includes("_VP")) {
+					// 	this.lstDvi.push(
+					// 		{
+					// 			tenDvi: this.userInfo.TEN_DVI,
+					// 			maDvi: this.userInfo.MA_DVI
+					// 		}
+					// 	)
+					// }
 					this.lstDvi = data.data;
 					this.lstDvi = this.lstDvi.filter(e => e.tenVietTat && (e.tenVietTat.includes("CDT") || e.tenVietTat.includes("CNTT") || e.tenVietTat.includes("_VP")))
-					if (this.userInfo.DON_VI.tenVietTat.includes("CNTT") || this.userInfo.DON_VI.tenVietTat.includes("_VP")) {
-						this.lstDvi.push(
-							{
-								tenDvi: this.userInfo.TEN_DVI,
-								maDvi: this.userInfo.MA_DVI
-							}
-						)
-					}
-					this.donVis = this.lstDvi
+
+					// this.donVis = this.lstDvi
 				} else {
 					this.notification.error(MESSAGE.ERROR, data?.msg);
 				}
@@ -864,7 +869,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 		this.statusBtnPrint = this.getBtnStatus(Utils.statusPrint, GDT.PRINT_REPORT_PA_PBDT, checkChirld);
 		this.statusBtnDVCT = this.getBtnStatus(Utils.statusTiepNhan, GDT.TIEPNHAN_TUCHOI_PA_PBDT, checkParent);
 
-		if (this.userService.isAccessPermisson(GDT.GIAO_PA_PBDT) && this.soQd && this.trangThaiBanGhi !== "7") {
+		if (this.userService.isAccessPermisson(GDT.GIAO_PA_PBDT) && this.soQd) {
 			this.statusBtnGiao = false;
 		} else {
 			this.statusBtnGiao = true;

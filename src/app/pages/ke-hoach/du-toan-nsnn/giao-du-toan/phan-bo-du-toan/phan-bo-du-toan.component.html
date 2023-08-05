@@ -63,7 +63,7 @@
                 <i class="fa fa-trash-o do"></i>
                 <span>Xóa</span>
             </button>
-            <button *ngIf="statusNewReport" type="button" class="btn btn-main" (click)="addNewReport()">
+            <button *ngIf="statusNewReport  && !checkVP" type="button" class="btn btn-main" (click)="addNewReport()">
                 <i class="icon htvbdh_tcdt_tao-qd"></i>
                 <span>Thêm QĐ/CV</span>
             </button>
@@ -85,7 +85,7 @@
                     <th width="150px">Ngày tạo</th>
                     <th width="150px">Năm phương án</th>
                     <!-- <th width="150px">Loại phương án</th> -->
-                    <th width="150px">Trạng thái giao</th>
+                    <th width="150px" *ngIf="!checkVP">Trạng thái giao</th>
                     <th width="150px" style="text-align: center">Trạng thái</th>
                     <th width="150px">Hành động</th>
                 </tr>
@@ -131,7 +131,7 @@
               </nz-option>
             </nz-select>
           </th> -->
-                    <th>
+                    <th *ngIf="!checkVP">
                         <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Tìm kiếm"
                             [(ngModel)]="filterTable.trangThaiGiao"
                             (ngModelChange)="filterInTable('trangThaiGiao',filterTable.trangThaiGiao, false)">
@@ -179,7 +179,7 @@
               Giao điều chỉnh dự toán
             </ng-template>
           </td> -->
-                    <td>
+                    <td *ngIf="!checkVP">
                         <ng-template [ngIf]="data.trangThaiGiao == '0'"><br>Chưa giao</ng-template>
                         <ng-template [ngIf]="data.trangThaiGiao == '2'"><br>Đang giao</ng-template>
                         <ng-template [ngIf]="data.trangThaiGiao == '1'"><br>Đã giao hết</ng-template>

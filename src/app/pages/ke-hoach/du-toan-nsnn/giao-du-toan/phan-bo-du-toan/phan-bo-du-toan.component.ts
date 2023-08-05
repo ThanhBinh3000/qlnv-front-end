@@ -132,6 +132,8 @@ export class PhanBoDuToanComponent implements OnInit {
     donVis: any[] = [];
     donViTaos: any[] = [];
     listIdDelete: string[] = [];
+
+    checkVP: boolean;
     constructor(
         private datePipe: DatePipe,
         private notification: NzNotificationService,
@@ -165,6 +167,7 @@ export class PhanBoDuToanComponent implements OnInit {
     async initialization() {
         this.userInfo = this.userService.getUserLogin();
         this.searchFilter.donViTao = this.userInfo?.MA_DVI;
+        this.checkVP = this.userInfo.DON_VI.type.indexOf('PB') != -1;
         if (this.userService.isAccessPermisson(GDT.ADD_REPORT_CV_QD_GIAO_PA_PBDT)) {
             this.statusTaoMoi = false;
         }

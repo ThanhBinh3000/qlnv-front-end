@@ -148,6 +148,19 @@ export class DialogTongHopComponent implements OnInit {
                         )
                     })
                 }
+                const lstClone = []
+                this.lstPaLoai.forEach(item => {
+                    lstClone.push(item.maPa)
+                })
+                const set2 = new Set(lstClone);
+                this.lstPaLoai = [];
+                set2.forEach(itm => {
+                    this.lstPaLoai.push(
+                        {
+                            maPa: itm
+                        }
+                    )
+                })
             } else {
                 this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
             }

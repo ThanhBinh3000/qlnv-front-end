@@ -481,7 +481,7 @@ export class AddBaoCaoComponent implements OnInit {
             status: new BtnStatus(),
             isSynthetic: isSynthetic,
             isOffice: this.isOffice,
-
+            listFile: this.listFile
         };
         Object.assign(dataInfo.status, this.status);
         dataInfo.status.general = dataInfo.status.general && (this.userInfo?.sub == bieuMau.nguoiBcao);
