@@ -4,20 +4,16 @@ import * as fileSaver from 'file-saver';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { DON_VI_TIEN, FileManip, GDT, LA_MA, Operator, Utils } from 'src/app/Utility/utils';
 import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { DataService } from 'src/app/services/data.service';
 import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-// import { displayNumber, exchangeMoney } from 'src/app/Utility/func';
-import { DON_VI_TIEN, FileManip, GDT, LA_MA, Operator, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
-import { NOI_DUNG } from '../tao-moi-quyet-dinh-btc/tao-moi-quyet-dinh-btc.constant';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-// import { GIAO_DU_TOAN, MAIN_ROUTE_DU_TOAN, MAIN_ROUTE_KE_HOACH } from '../../giao-du-toan-chi-nsnn.constant';
-// import { NOI_DUNG } from './nhan-du-toan-chi-NSNN-cho-cac-don-vi.constant';
 
 export class ItemData {
     id!: any;

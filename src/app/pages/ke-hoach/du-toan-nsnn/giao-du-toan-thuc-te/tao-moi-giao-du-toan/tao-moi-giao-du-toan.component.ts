@@ -18,7 +18,6 @@ import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { AMOUNT, DON_VI_TIEN, GDT, LA_MA, MONEY_LIMIT, Operator, TRANG_THAI_TIM_KIEM, Table, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
-import { NOI_DUNG } from './tao-moi-giao-du-toan.constant';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 // khai báo class data request
 export class ItemData {
