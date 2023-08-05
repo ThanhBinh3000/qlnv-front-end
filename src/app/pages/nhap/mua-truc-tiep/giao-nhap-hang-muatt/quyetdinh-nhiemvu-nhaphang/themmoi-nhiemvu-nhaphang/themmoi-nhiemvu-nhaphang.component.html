@@ -36,7 +36,7 @@
                 <span>Lưu</span>
             </button>
         </ng-container>
-        <ng-container *ngIf="userService.isChiCuc()">
+        <ng-container *ngIf="userService.isChiCuc() && (formData.value.trangThaiDtl == STATUS.CHUA_CAP_NHAT || formData.value.trangThaiDtl == STATUS.DANG_CAP_NHAT)">
             <button type="button" class="btn btn-sub xanh-nhat"
                 (click)="saveDdiemNhap(STATUS.HOAN_THANH_CAP_NHAT)">
                 <i class="icon htvbdh_duyet"></i>
@@ -316,7 +316,7 @@
           <td></td>
           <td></td>
           <td style="text-align: center;"
-              *ngIf="userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_PTMTT_QDGNVNH_PHANBO')">
+              *ngIf="userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_PTMTT_QDGNVNH_PHANBO') && (formData.value.trangThaiDtl == STATUS.CHUA_CAP_NHAT || formData.value.trangThaiDtl == STATUS.DANG_CAP_NHAT)">
             <a (click)="themDiaDiemNhap(i)" [ngClass]="{'isDisabled': !validateButtonThem('ddiemNhap')}">
               <i class="fa fa-plus"></i>
             </a>
@@ -340,7 +340,7 @@
             <td>{{ ddNhap.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
             <td></td>
             <td></td>
-            <td *ngIf="userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_PTMTT_QDGNVNH_PHANBO')"
+            <td *ngIf="userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_PTMTT_QDGNVNH_PHANBO') && (formData.value.trangThaiDtl == STATUS.CHUA_CAP_NHAT || formData.value.trangThaiDtl == STATUS.DANG_CAP_NHAT)"
                 style="text-align: center;">
               <a>
                 <i (click)="editRow(i, y)" class="fa fa-pencil" title="Sửa"></i>
