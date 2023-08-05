@@ -41,7 +41,7 @@ export class ItemData {
 	}
 
 	changeModel() {
-		this.chenhLech = Operator.sum([this.tdinhTtien, -this.khTtien])
+		this.chenhLech = Operator.sum([this.tdinhTtien, -this.namKhTtien])
 	}
 
 	upperBound() {

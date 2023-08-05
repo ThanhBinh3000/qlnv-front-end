@@ -62,7 +62,7 @@ export class Status {
 	];
 
 	static reportStatusName(status: string, isParent: boolean = false) {
-		if (isParent && (status == Status.TT_06 || status == Status.TT_07)) {
+		if (isParent && (status == Status.TT_01 || status == Status.TT_06 || status == Status.TT_07)) {
 			return 'Mới'
 		}
 		return Status.TRANG_THAI_FULL.find(e => e.id == status)?.tenDm;
