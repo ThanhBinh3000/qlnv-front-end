@@ -260,7 +260,7 @@ export class AddBaoCaoComponent implements OnInit {
         this.baoCao.id = this.data?.id;
         this.userInfo = this.userService.getUserLogin();
         this.getListUser();
-        this.path = this.baoCao.maDvi + '/' + this.baoCao.maBcao;
+
         this.isOffice = this.userInfo.DON_VI.tenVietTat.indexOf('_VP') != -1;
         //lay danh sach danh muc don vi
         await this.getChildUnit();
@@ -276,6 +276,8 @@ export class AddBaoCaoComponent implements OnInit {
             // this.baoCao.maLoaiDan = this.data?.maLoaiDan
             // this.baoCao.maPhanGiao = "3"
             this.baoCao.maBcao = this.data?.maBcao
+
+            this.path = this.data?.maDvi + '/' + this.baoCao.maBcao;
             // this.baoCao.soQd = this.data?.soQd
             if (this.data.preTab == "tongHopBaoCaoCapDuoi") {
                 this.baoCao.lstCtiets = this.data?.lstCtiets ? this.data?.lstCtiets : [];
@@ -1044,7 +1046,7 @@ export class AddBaoCaoComponent implements OnInit {
                 this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
                 return;
             } else {
-                baoCaoTemp.congVan = {
+                baoCaoTemp.soQd = {
                     ...await this.fileManip.uploadFile(file, this.path),
                     fileName: this.baoCao.soQd.fileName,
                 }
@@ -1052,7 +1054,7 @@ export class AddBaoCaoComponent implements OnInit {
             this.fileDetail = null;
         }
 
-        if (!baoCaoTemp.congVan.fileUrl) {
+        if (!baoCaoTemp.soQd.fileUrl) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
             return;
         }
@@ -1149,6 +1151,7 @@ export class AddBaoCaoComponent implements OnInit {
                             item.ngayPheDuyet = this.datePipe.transform(item.ngayPheDuyet, Utils.FORMAT_DATE_STR);
                         })
                     }
+                    this.path = this.baoCao?.maDvi + '/' + this.baoCao.maBcao;
                     this.listFile = [];
                     this.baoCao.lstCtiets.forEach(item => {
                         // item.trangThai = "3"
