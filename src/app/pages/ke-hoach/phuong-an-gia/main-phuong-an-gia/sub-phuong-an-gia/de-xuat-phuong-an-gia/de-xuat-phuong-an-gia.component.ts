@@ -104,15 +104,23 @@ export class DeXuatPhuongAnGiaComponent implements OnInit {
     ) {
       this.router.navigateByUrl('/error/401')
     }
-    this.userInfo = this.userService.getUserLogin();
-    this.loadListTrangThai();
-    this.loadDsNam();
-    this.search();
-    if (this.pagType == 'LT') {
-      this.listVthh = LIST_VAT_TU_HANG_HOA;
-    }
-    if (this.pagType == 'VT') {
-      await this.loadDsVthh();
+    this.spinner.show();
+    try {
+      this.userInfo = this.userService.getUserLogin();
+      this.loadListTrangThai();
+      this.loadDsNam();
+      this.search();
+      if (this.pagType == 'LT') {
+        this.listVthh = LIST_VAT_TU_HANG_HOA;
+      }
+      if (this.pagType == 'VT') {
+        await this.loadDsVthh();
+      }
+      this.spinner.hide();
+    } catch (e) {
+      console.log('error: ', e);
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
 

@@ -18,6 +18,7 @@ import {chain} from "lodash";
 import {v4 as uuidv4} from "uuid";
 import {PAGE_SIZE_DEFAULT, TYPE_PAG} from 'src/app/constants/config';
 import {saveAs} from 'file-saver';
+import {PREVIEW} from "../../../../../../../constants/fileType";
 
 @Component({
   selector: 'app-them-tong-hop-phuong-an-gia',
@@ -56,7 +57,7 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
   isMuaToiDa : boolean;
   reportTemplate: any = {
     typeFile: "",
-    fileName: "tong_hop_phuong_an_gia.docx",
+    fileName: "tong_hop_phuong_an_gia_lt.docx",
     tenBaoCao: "",
     trangThai: ""
   };
@@ -408,7 +409,7 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
       body.trangThai = "01";
       await this.tongHopPhuongAnGiaService.previewPag(body).then(async s => {
         this.excelBlob = s;
-        saveAs(this.excelBlob, "tong_hop_phuong_an_gia.xls");
+        saveAs(this.excelBlob, "tong_hop_phuong_an_gia_lt.xls");
       });
     } catch (e) {
       console.log(e);
@@ -420,16 +421,18 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
   async preview() {
     this.spinner.show();
     try {
+      let body = {
+        reportTemplateRequest : this.reportTemplate,
+        isSave : true,
+        id : this.idInput,
+        type : this.type
+      }
+      await this.tongHopPhuongAnGiaService.preview(body).then(async s => {
+        this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
+        this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
         this.showDlgPreview = true;
-      // let body = this.formData.value;
-      // body.reportTemplateRequest = this.reportTemplate;
-      // body.fileDinhKemReq = this.fileDinhKem;
-      // await this.tongHopPhuongAnGiaService.preview(body).then(async s => {
-      //   this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
-      //   this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
-      //   this.showDlgPreview = true;
-      //   this
-      // });
+        this
+      });
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -440,6 +443,24 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
 
   closeDlg() {
     this.showDlgPreview = false;
+  }
+
+  doPrint() {
+    const WindowPrt = window.open(
+      '',
+      '',
+      'left=0,top=0,width=900,height=900,toolbar=0,scrollbars=0,status=0',
+    );
+    let printContent = '';
+    printContent = printContent + '<div>';
+    printContent =
+      printContent + document.getElementById('tablePrint').innerHTML;
+    printContent = printContent + '</div>';
+    WindowPrt.document.write(printContent);
+    WindowPrt.document.close();
+    WindowPrt.focus();
+    WindowPrt.print();
+    WindowPrt.close();
   }
 }
 

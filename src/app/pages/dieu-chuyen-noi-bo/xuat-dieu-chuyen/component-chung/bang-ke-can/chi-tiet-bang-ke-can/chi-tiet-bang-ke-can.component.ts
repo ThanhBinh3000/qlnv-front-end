@@ -231,6 +231,7 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
         isVatTu: this.isVatTu,
         loaiDc: this.loaiDc,
         thayDoiThuKho: this.thayDoiThuKho,
+        type: "00"
       }
       let res = await this.quyetDinhDieuChuyenCucService.getDsSoQuyetDinhDieuChuyenChiCuc(body);
       if (res.msg === MESSAGE.SUCCESS) {
@@ -409,6 +410,7 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
       body.isVatTu = this.isVatTu;
       body.thayDoiThuKho = this.thayDoiThuKho;
       body.type = this.type;
+      body.loaiQding = this.loaiDc === "CUC" ? "XUAT" : undefined;
       this.helperService.markFormGroupTouched(this.formData);
       if (!this.formData.valid) return;
       let res;

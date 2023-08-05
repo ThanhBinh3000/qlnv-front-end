@@ -57,9 +57,10 @@ export class SoKhoTheKhoComponent extends Base2Component implements OnInit {
   async ngOnInit() {
     await this.spinner.show();
     try {
-      await this.searchPage();
+      if (this.userInfo.POSITION == 'CBTHUKHO') {
+        await this.searchPage();
+      }
       this.loadDsHangHoa();
-      console.log(this.dataTable, 333333)
       await this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
