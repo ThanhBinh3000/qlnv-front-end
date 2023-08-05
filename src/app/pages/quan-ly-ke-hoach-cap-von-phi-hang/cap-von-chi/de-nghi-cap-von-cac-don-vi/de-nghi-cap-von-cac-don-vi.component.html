@@ -27,8 +27,8 @@
             </app-cap-von-quyet-dinh-don-gia-mua>
         </ng-container>
         <ng-container *ngIf="tabSelected == Cvnc.CV_HOP_DONG">
-            <app-cap-von-theo-hop-dong-trung-thau-luong-thuc [dataInfo]="data" (dataChange)="changeTab($event)">
-            </app-cap-von-theo-hop-dong-trung-thau-luong-thuc>
+            <app-cap-von-theo-hop-dong-trung-thau [dataInfo]="data" (dataChange)="changeTab($event)">
+            </app-cap-von-theo-hop-dong-trung-thau>
         </ng-container>
         <ng-container *ngIf="tabSelected == Cvnc.DN_DON_GIA">
             <app-de-nghi-cap-von-quyet-dinh-don-gia-mua [dataInfo]="data" (dataChange)="changeTab($event)">

@@ -38,6 +38,7 @@ export class DeNghiCapVonTheoHopDongTrungThauComponent implements OnInit {
     isDataAvailable: boolean = false;
     editMoneyUnit: boolean = false;
     isParent: boolean = false;
+    isSynth: boolean = false;
     //file
     fileDetail: NzUploadFile;
     fileList: NzUploadFile[] = [];
@@ -194,9 +195,14 @@ export class DeNghiCapVonTheoHopDongTrungThauComponent implements OnInit {
         this.status.approve = this.status.approve && this.userService.isAccessPermisson(Roles.CVNC.APPROVE_DN);
         this.status.accept = this.status.accept && this.userService.isAccessPermisson(Roles.CVNC.ACCEPT_DN);
         this.status.export = this.status.export && this.userService.isAccessPermisson(Roles.CVNC.EXPORT_DN);
-
-        this.scrollHD = this.status.save ? Table.tableWidth(500, 7, 1, 60) : Table.tableWidth(500, 7, 1, 0);;
-        this.scrollCV = this.status.save ? Table.tableWidth(300, 16, 1, 60) : Table.tableWidth(300, 16, 1, 0);
+        this.isSynth = this.userService.isTongCuc() && this.baoCao.loaiDnghi != Cvnc.VTU;
+        if (this.baoCao.loaiDnghi != Cvnc.VTU) {
+            this.scrollHD = Table.tableWidth(500, 7, 1, 0);
+            this.scrollCV = Table.tableWidth(300, 16, 1, 0);
+        } else {
+            this.scrollHD = Table.tableWidth(500, 9, 1, 0);
+            this.scrollCV = Table.tableWidth(0, 18, 1, 0);
+        }
     }
 
     back() {

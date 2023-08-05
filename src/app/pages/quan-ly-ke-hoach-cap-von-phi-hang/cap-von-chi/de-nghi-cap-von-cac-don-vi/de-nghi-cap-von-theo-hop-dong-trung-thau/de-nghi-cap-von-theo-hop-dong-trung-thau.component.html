@@ -144,13 +144,16 @@
                         <nz-table class="table__body" nzBordered [nzScroll]="{x: scrollHD}">
                             <thead>
                                 <tr>
-                                    <th rowspan="2" nzWidth="200px" nzLeft>
+                                    <th *ngIf="baoCao.loaiDnghi != Cvnc.VTU" rowspan="2" nzLeft nzWidth="200px">
                                         Đơn vị
+                                    </th>
+                                    <th *ngIf="baoCao.loaiDnghi == Cvnc.VTU" rowspan="2" nzLeft nzWidth="200px">
+                                        Tên khách hàng
                                     </th>
                                     <th rowspan="2" nzWidth="300px" nzLeft>
                                         Quyết định phê duyệt kết quả lựa chọn nhà thầu / Hợp đồng
                                     </th>
-                                    <th colspan="2">
+                                    <th colspan="{{baoCao.loaiDnghi == Cvnc.VTU ? 3 : 2}}">
                                         Số lượng
                                     </th>
                                     <th rowspan="2">
@@ -158,6 +161,9 @@
                                     </th>
                                     <th rowspan="2">
                                         Giá trị hợp đồng (đã bao gồm VAT)
+                                    </th>
+                                    <th *ngIf="baoCao.loaiDnghi == Cvnc.VTU" rowspan="2">
+                                        Giá trị thực hiện
                                     </th>
                                     <th rowspan="2">
                                         Vi phạm hợp đồng
@@ -173,6 +179,9 @@
                                     <th>
                                         Hợp đồng
                                     </th>
+                                    <th *ngIf="baoCao.loaiDnghi == Cvnc.VTU">
+                                        Thực hiện
+                                    </th>
                                     <th>
                                         Số lượng
                                     </th>
@@ -183,9 +192,12 @@
                             </thead>
                             <tbody>
                                 <tr *ngFor="let data of lstCtiets; let i = index">
-                                    <ng-container *ngIf="data.level > 0">
-                                        <td nzLeft>
+                                    <ng-container *ngIf="data.level > (isSynth ? 1 : 0)">
+                                        <td *ngIf="baoCao.loaiDnghi != Cvnc.VTU" nzLeft>
                                             {{ data.tenDvi }}
+                                        </td>
+                                        <td *ngIf="baoCao.loaiDnghi == Cvnc.VTU" nzLeft>
+                                            {{ data.tenKhachHang }}
                                         </td>
                                         <td nzLeft>
                                             {{ data.qdPheDuyet }}
@@ -196,11 +208,17 @@
                                         <td>
                                             {{ Op.fmtNum(data.slHopDong) }}
                                         </td>
+                                        <td *ngIf="baoCao.loaiDnghi == Cvnc.VTU">
+                                            {{ Op.fmtNum(data.slThucHien) }}
+                                        </td>
                                         <td>
                                             {{ Op.fmtVal(data.donGia) }}
                                         </td>
                                         <td>
                                             {{ Op.fmtVal(data.gtHopDong) }}
+                                        </td>
+                                        <td *ngIf="baoCao.loaiDnghi == Cvnc.VTU">
+                                            {{ Op.fmtVal(data.gtThucHien) }}
                                         </td>
                                         <td>
                                             {{ Op.fmtVal(data.phatViPham) }}
@@ -238,14 +256,17 @@
                         <nz-table class="table__body" nzBordered [nzScroll]="{x: scrollCV}">
                             <thead>
                                 <tr>
-                                    <th rowspan="2" nzWidth="300px" nzLeft>
+                                    <th *ngIf="baoCao.loaiDnghi != Cvnc.VTU" rowspan="2" nzWidth="300px" nzLeft>
                                         Đơn vị
                                     </th>
-                                    <th colspan="2">
+                                    <th colspan="{{baoCao.loaiDnghi == Cvnc.VTU ? 3 : 2}}">
                                         Số lượng
                                     </th>
                                     <th rowspan="2">
                                         Giá trị hợp đồng (đã bao gồm VAT) (đồng)
+                                    </th>
+                                    <th *ngIf="baoCao.loaiDnghi == Cvnc.VTU" rowspan="2">
+                                        Giá trị thực hiện
                                     </th>
                                     <th rowspan="2">
                                         Vi phạm hợp đồng
@@ -273,6 +294,9 @@
                                     <th>
                                         Hợp đồng
                                     </th>
+                                    <th *ngIf="baoCao.loaiDnghi == Cvnc.VTU">
+                                        Thực hiện
+                                    </th>
                                     <th>
                                         Số lượng
                                     </th>
@@ -292,8 +316,8 @@
                             </thead>
                             <tbody>
                                 <tr *ngFor="let data of lstCtiets; let i = index">
-                                    <ng-container *ngIf="data.level == 0">
-                                        <td nzLeft>
+                                    <ng-container *ngIf="data.level < (isSynth ? 2 : 1)">
+                                        <td *ngIf="baoCao.loaiDnghi != Cvnc.VTU" nzLeft>
                                             {{ data.tenDvi }}
                                         </td>
                                         <td>
@@ -302,8 +326,14 @@
                                         <td>
                                             {{ Op.fmtNum(data.slHopDong) }}
                                         </td>
+                                        <td *ngIf="baoCao.loaiDnghi == Cvnc.VTU">
+                                            {{ Op.fmtNum(data.slThucHien) }}
+                                        </td>
                                         <td>
                                             {{ Op.fmtVal(data.gtHopDong) }}
+                                        </td>
+                                        <td *ngIf="baoCao.loaiDnghi == Cvnc.VTU">
+                                            {{ Op.fmtVal(data.gtThucHien) }}
                                         </td>
                                         <td>
                                             {{ Op.fmtVal(data.phatViPham) }}
