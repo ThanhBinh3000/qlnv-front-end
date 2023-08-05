@@ -147,7 +147,7 @@ export class CapVon {
     phatViPham: number;
     tlSoluong: number;
     tlThanhTien: number;
-    congVam: string;
+    congVan: string;
     dtoanDaGiao: number;
     lkUng: number;
     lkCap: number;
