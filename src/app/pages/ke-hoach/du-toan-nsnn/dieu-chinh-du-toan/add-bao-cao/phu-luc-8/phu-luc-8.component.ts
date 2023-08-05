@@ -156,6 +156,13 @@ export class PhuLuc8Component implements OnInit {
         // }
 
         this.lstCtietBcao.forEach(item => {
+            if (item.kphiCong == null) {
+                item.kphiCong = 0
+                item.dtoanDchinhDnghi = Operator.sum([item.tongNcauDtoan, - item.kphiCong]);
+            }
+        })
+
+        this.lstCtietBcao.forEach(item => {
             if (!item.matHang) {
                 const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.matHang && e.loaiBaoQuan == item.maDmuc);
                 item.matHang = dinhMuc?.tenDinhMuc;

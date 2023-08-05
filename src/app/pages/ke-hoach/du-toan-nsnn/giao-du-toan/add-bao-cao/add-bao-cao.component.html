@@ -88,7 +88,7 @@
                                     Chọn tệp QĐ
                                 </button>
                             </nz-upload>
-                            <div class="tep_sqd" (click)="downloadFileCv()">
+                            <div class="tep_sqd" (click)="downloadFile(null)">
                                 <span>{{baoCao.soQd?.fileName}}</span>
                             </div>
                         </td>
@@ -190,14 +190,14 @@
                 <nz-tab [nzTitle]="'Danh sách văn bản đính kèm'">
                     <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
                         <div nz-col class="gutter-row" [nzSpan]="3">
-                            <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" [hidden]="status">
+                            <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" *ngIf="status.general">
                                 <button nz-button>
                                     <i nz-icon nzType="upload"></i>
                                     Select File
                                 </button>
                             </nz-upload>
                             <button nz-button [nzType]="'primary'" (click)="handleUpload()"
-                                [disabled]="fileList.length === 0" [hidden]="status" style="margin-top: 16px">
+                                [disabled]="fileList.length === 0" *ngIf="status.general" style="margin-top: 16px">
                                 Thêm vào danh sách
                             </button>
                         </div>

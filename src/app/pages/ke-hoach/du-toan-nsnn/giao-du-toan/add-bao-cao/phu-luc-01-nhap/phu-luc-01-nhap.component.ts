@@ -673,27 +673,26 @@ export class PhuLuc01NhapComponent implements OnInit {
 
     exportToExcel() {
         const header = [
-            { t: 0, b: 1, l: 0, r: 13, val: null },
+            { t: 0, b: 1, l: 0, r: 5, val: null },
             { t: 0, b: 1, l: 0, r: 0, val: 'STT' },
             { t: 0, b: 1, l: 1, r: 1, val: 'Danh mục' },
             { t: 0, b: 1, l: 2, r: 2, val: 'Đơn vị tính' },
-            { t: 0, b: 1, l: 3, r: 3, val: 'Thực hiện năm trước' },
-            { t: 0, b: 0, l: 4, r: 5, val: 'Năm ' + (this.namBcao - 1).toString() },
-            { t: 1, b: 1, l: 4, r: 4, val: 'Dự toán' },
-            { t: 1, b: 1, l: 5, r: 5, val: 'Ước thực hiện' },
-            { t: 0, b: 0, l: 6, r: 8, val: 'Năm dự toán' },
-            { t: 1, b: 1, l: 6, r: 6, val: 'Số lượng' },
-            { t: 1, b: 1, l: 7, r: 7, val: 'Định mức' },
-            { t: 1, b: 1, l: 8, r: 8, val: 'Thành tiền' },
-            { t: 0, b: 0, l: 9, r: 10, val: 'Thẩm định' },
-            { t: 1, b: 1, l: 9, r: 9, val: 'Số lượng' },
-            { t: 1, b: 1, l: 10, r: 10, val: 'Thành tiền' },
-            { t: 0, b: 1, l: 11, r: 11, val: 'Chênh lệch giữa thẩm định của DVCT và nhu cầu của DVCD' },
-            { t: 0, b: 1, l: 12, r: 12, val: 'Ghi chú' },
-            { t: 0, b: 1, l: 13, r: 13, val: 'Ý kiến của đơn vị cấp trên' },
+            { t: 0, b: 1, l: 3, r: 5, val: 'Năm dự toán' },
+
+            { t: 2, b: 2, l: 3, r: 3, val: 'Số lượng' },
+            { t: 2, b: 2, l: 4, r: 4, val: 'Định mức' },
+            { t: 2, b: 2, l: 5, r: 5, val: 'Thành tiền' },
+
         ]
-        const fieldOrder = ['stt', 'tenDanhMuc', 'dviTinh', 'thienNamTruoc', 'dtoanNamHtai', 'uocNamHtai', 'sluongNamDtoan',
-            'sluongNamDtoan', 'dmucNamDtoan', 'ttienNamDtoan', 'sluongTd', 'ttienTd', 'chenhLech', 'ghiChu', 'ykienDviCtren']
+        const fieldOrder = [
+            "danhMuc",
+            "tenDanhMuc",
+            "maDviTinh",
+            "namDtDmuc",
+            "namDtSluong",
+            "namDtTtien",
+            "stt",
+        ]
 
         const filterData = this.lstCtietBcaos.map(item => {
             const row: any = {};
@@ -711,11 +710,7 @@ export class PhuLuc01NhapComponent implements OnInit {
         })
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
         let excelName = this.dataInfo.maBcao;
-        if (this.dataInfo.maBieuMau == "pl01N") {
-            excelName = excelName + '_Phu_luc_I_nhap.xlsx'
-        } else {
-            excelName = excelName + '_Phu_luc_I_xuat.xlsx'
-        }
+        excelName = excelName + 'GDT_Phu_luc_I_nhap.xlsx'
         XLSX.writeFile(workbook, excelName);
     }
 

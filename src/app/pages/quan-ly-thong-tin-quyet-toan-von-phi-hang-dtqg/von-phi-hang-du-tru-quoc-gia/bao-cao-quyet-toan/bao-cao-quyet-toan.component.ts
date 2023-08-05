@@ -285,8 +285,7 @@ export class BaoCaoQuyetToanComponent implements OnInit {
                 const request = {
                     maPhanBcao: res.maPhanBcao,
                     namQtoan: res.namQtoan,
-                    thangBcao: res.thangBcao,
-
+                    quyQtoan: res.quyQtoan,
                 }
                 await this.quyetToanVonPhiService.checkNamTaoMoiQuyetToan(request).toPromise().then(
                     (data) => {

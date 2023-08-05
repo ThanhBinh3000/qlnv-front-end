@@ -12,11 +12,28 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 
 export class DialogThemBaoCaoQuyetToanComponent implements OnInit {
     @Input() obj: any;
-
+    lstQuy: any[] = [
+        {
+            val: 1,
+            ten: "quý 1"
+        },
+        {
+            val: 2,
+            ten: "quý 2"
+        },
+        {
+            val: 3,
+            ten: "quý 3"
+        },
+        {
+            val: 4,
+            ten: "quý 4"
+        }
+    ]
     response: any = {
         maPhanBcao: '1',
         namQtoan: null,
-        thangBcao: null,
+        quyQtoan: null,
     };
 
 
@@ -26,7 +43,6 @@ export class DialogThemBaoCaoQuyetToanComponent implements OnInit {
     ) { }
 
     async ngOnInit() {
-
     }
 
     async handleOk() {
@@ -34,14 +50,19 @@ export class DialogThemBaoCaoQuyetToanComponent implements OnInit {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
             return;
         }
+        if (!this.response.quyQtoan) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+            return;
+        }
         if (this.response.namnamQtoanBcao >= 3000 || this.response.namQtoan < 1000) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
             return;
         }
-        if (this.response.thangBcao < 1 || this.response.thangBcao > 12) {
-            this.notification.warning(MESSAGE.WARNING, "Vui lòng nhập tháng đúng định dạng số từ 1 đến 12");
-            return;
-        }
+        // if (this.response.quyQtoan < 1 || this.response.quyQtoan > 4) {
+        //     this.notification.warning(MESSAGE.WARNING, "Vui lòng nhập tháng đúng định dạng số từ 1 đến 12");
+        //     return;
+        // }
+
         this._modalRef.close(this.response);
     }
 

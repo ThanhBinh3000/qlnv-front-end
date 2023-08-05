@@ -13,7 +13,7 @@ export class QuyetToanVonPhiService extends BaseService {
     super(httpClient, 'quanLyVonPhi', '');
   }
   urlTest = 'http://localhost:9159';
-  urlDefault = environment.SERVICE_API + '/qlnv-khoachphi';
+  urlDefault = environment.SERVICE_API + '/qlnv-khoachphi-dev';
 
   timBaoCaoQuyetToanVonPhi(request: any): Observable<any> {
     return this.httpClient.post(

@@ -73,7 +73,7 @@ export class AddQuyetToanTongHopComponent implements OnInit {
     // info data common
     maBcao!: string;
     namQtoan!: number;
-    thangBcao: number;
+    quyQtoan: number;
     congVan: ItemCongVan = new ItemCongVan();
     ngayTao!: string;
     ngayTrinh!: string;
@@ -328,7 +328,7 @@ export class AddQuyetToanTongHopComponent implements OnInit {
                 maDvi: this.userInfo?.MA_DVI,
                 maPhanBcao: "1",
                 namQtoan: this.data.namQtoan,
-                thangQtoan: this.data.thangBcao
+                quyQtoan: this.data.quyQtoan
             }
             await this.quyetToanVonPhiService.sinhMaBaoCaoQuyetToan(1).toPromise().then(
                 (data) => {
@@ -357,7 +357,7 @@ export class AddQuyetToanTongHopComponent implements OnInit {
 
                         this.isStatus = "1";
                         this.namQtoan = this.data.namQtoan;
-                        this.thangBcao = this.data.thangBcao;
+                        this.quyQtoan = this.data.quyQtoan;
                         this.maDviTao = this.userInfo?.MA_DVI;
                         this.thuyetMinh = data.data.thuyetMinh;
                         this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
@@ -401,12 +401,12 @@ export class AddQuyetToanTongHopComponent implements OnInit {
             this.isStatus = '1';
             this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
             this.namQtoan = this.data?.namQtoan;
-            this.thangBcao = this.data?.thangBcao;
+            this.quyQtoan = this.data?.quyQtoan;
             this.maDviTao = this.userInfo?.MA_DVI;
             const rqKho = {
                 maDvi: this.maDviTao,
                 nam: Number(this?.namQtoan),
-                thang: this?.thangBcao,
+                quyQtoan: this?.quyQtoan,
             }
             await this.quyetToanVonPhiService.getHangHoaKho(rqKho).toPromise().then(
                 async (data) => {
@@ -654,7 +654,7 @@ export class AddQuyetToanTongHopComponent implements OnInit {
                     this.maBcao = data.data.maBcao;
                     this.isStatus = data.data.trangThai;
                     this.namQtoan = data.data.namQtoan;
-                    this.thangBcao = data.data.thangQtoan;
+                    this.quyQtoan = data.data.quyQtoan;
                     this.maDviTao = data.data.maDvi;
                     this.thuyetMinh = data.data.thuyetMinh;
                     this.ngayTao = this.datePipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR);
@@ -763,7 +763,7 @@ export class AddQuyetToanTongHopComponent implements OnInit {
             congVan: this.congVan,
             maDvi: this.maDviTao,
             namQtoan: this.namQtoan,
-            thangQtoan: this.thangBcao,
+            quyQtoan: this.quyQtoan,
             maBcao: this.maBcao,
             maPhanBcao: this.maPhanBcao,
             tongHopTuIds: tongHopTuIds,

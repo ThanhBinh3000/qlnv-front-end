@@ -191,7 +191,13 @@
                     </td>
                     <td class="text-left">
                         <a (click)="xemChiTiet(data.id, data.maLoaiDan)">
-                            <i class="fa fa-eye"></i>
+                            <!-- <i class="fa fa-pencil"></i> -->
+                            <ng-container *ngIf="data.isEdit; else view">
+                                <i class="fa fa-pencil"></i>
+                            </ng-container>
+                            <ng-template #view>
+                                <i class="fa fa-eye"></i>
+                            </ng-template>
                         </a>
                         <a *ngIf="data.isDelete" (click)="deleteReport(data.id)">
                             <i class="fa fa-trash-o do"></i>

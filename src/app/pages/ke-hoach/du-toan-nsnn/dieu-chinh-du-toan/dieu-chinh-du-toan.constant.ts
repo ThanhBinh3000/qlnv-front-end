@@ -61,6 +61,7 @@ export class Report {
     ngayTraKq: any;
     congVan: Doc;
     lyDoTuChoi: string;
+    ngayCongVan: string;
     // giaoSoTranChiId: string;
     thuyetMinh: string;
     fileDinhKems: any[];

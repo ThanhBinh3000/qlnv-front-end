@@ -1086,6 +1086,11 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
 			return;
 		}
 
+		if (tongTranChi !== this.editCache[id].data.tongCong) {
+			this.notification.warning(MESSAGE.WARNING, 'Tổng số tiền phân bổ phải bằng số tiền được giao!')
+			return;
+		}
+
 		this.editCache[id].data.lstCtietDvis.forEach(item => {
 			data.push({
 				id: item.id,
