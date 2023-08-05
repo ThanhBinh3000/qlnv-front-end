@@ -400,6 +400,7 @@ export class PhuLuc01XuatComponent implements OnInit {
         this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
         this.updateEditCache();
         this.sum(this.lstCtietBcaos[index].stt);
+        this.tinhTong();
     }
 
     // huy thay doi

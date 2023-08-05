@@ -548,7 +548,9 @@ export class PhuLucPhanBoComponent implements OnInit {
     getTotal() {
         this.total.clear();
         this.lstCtietBcaos.forEach(item => {
-            this.total.sum(item);
+            if (item.level == 0) {
+                this.total.sum(item);
+            }
         })
 
         this.total.lstCtietDvis = [];

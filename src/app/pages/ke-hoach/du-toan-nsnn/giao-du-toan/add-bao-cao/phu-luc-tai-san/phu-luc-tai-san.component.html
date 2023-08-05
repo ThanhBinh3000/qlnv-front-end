@@ -105,7 +105,7 @@
                                 <td></td>
                                 <td></td>
                                 <td>
-                                    {{ Op.fmtVal(total.mucGia) }}
+                                    <!-- {{ Op.fmtVal(total.mucGia) }} -->
                                 </td>
                                 <td>
                                     {{ Op.fmtVal(total.ttien) }}
@@ -194,7 +194,8 @@
                                     <td>
                                         <input class="money-input" currencyMask [options]="Op.amount"
                                             [(ngModel)]="editCache[data.id].data.sluongDtoan"
-                                            (ngModelChange)="editCache[data.id].data.changeModel()" />
+                                            (ngModelChange)="editCache[data.id].data.changeModel()"
+                                            [class]="statusCanhBao == true ? '' : 'input-error-validate'" />
                                     </td>
                                     <td>
                                         <!-- {{ Op.fmtVal(editCache[data.id].data.mucGia) }} -->

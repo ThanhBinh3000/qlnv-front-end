@@ -204,6 +204,13 @@ export class BtnStatus {
     editAppVal?: boolean = true;                       // quyen sua tham dinh
 }
 
+export class Doc {
+    id: string;
+    fileName: string;
+    fileSize: number;
+    fileUrl: number;
+}
+
 export class Form {
     id: string;
     maBieuMau: string;
@@ -214,17 +221,12 @@ export class Form {
     lyDoTuChoi: string;
     thuyetMinh: string;
     nguoiBcao: string;
-    lstCtietBcaos: any[];
-    lstFiles: Doc[];
-    listIdDeleteFiles: string[];
+    lstCtietBcaos: any[] = [];
+    lstFiles: Doc[] = [];
+    listIdDeleteFiles: string[] = [];
 }
 
-export class Doc {
-    id: string;
-    fileName: string;
-    fileSize: number;
-    fileUrl: number;
-}
+
 
 export class Report {
     id: string;

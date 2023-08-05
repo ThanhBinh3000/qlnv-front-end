@@ -46,15 +46,24 @@
                                 <td>Tổng cộng</td>
                                 <td>{{Op.fmtVal(total.tongDchinhGiam)}}</td>
                                 <td>{{Op.fmtVal(total.tongDchinhTang)}}</td>
-                                <td *ngFor="let item of lstDvi">
+                                <!-- <td *ngFor="let item of lstDvi">
                                     <div *ngFor="let data of lstCtietBcao">
                                         <div *ngFor="let e of data.child;">
                                             <div *ngIf="e.maDviBcao == item.maDvi">
-                                                <!-- {{Op.fmtVal(e.dtoanVuTvqtDnghi)}} -->
+                                                {{Op.fmtVal(e.dtoanVuTvqtDnghi)}}
                                             </div>
                                         </div>
                                     </div>
-                                </td>
+                                </td> -->
+                                <ng-container *ngFor="let item of total.child">
+                                    <td>{{Op.fmtVal(item.dtoanVuTvqtDnghi)}}</td>
+                                    <!-- <th></th>
+                                    <th>{{Op.fmtVal(item.gtTrenGtBh)}}</th>
+                                    <th>{{Op.fmtVal(item.gtDuoiGt)}}</th>
+                                    <th></th>
+                                    <th>{{Op.fmtVal(item.gtDuoiGtBh)}}</th>
+                                    <th>{{Op.fmtVal(item.tong)}}</th> -->
+                                </ng-container>
                             </tr>
                             <tr *ngFor="let data of lstCtietBcao; let i = index">
                                 <td [nzIndentSize]="data.level! * 8">

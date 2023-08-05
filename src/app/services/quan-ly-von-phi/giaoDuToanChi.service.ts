@@ -287,6 +287,13 @@ export class GiaoDuToanChiService extends BaseService {
     );
   };
 
+  dsPaTongHopGiao(request: any): Observable<any> {
+    return this.httpClient.post(
+      this.urlDefault + '/giao_du_toan/danh-sach/phuong-an-tiep-nhan', request
+      // 'http://192.168.1.228:30101/bao_cao_du_toan/danh-sach/phuong-an-tiep-nhan', request
+    );
+  };
+
   dsPaTongHop1(request: any): Observable<any> {
     return this.httpClient.post(
       'http://localhost:9159/bao_cao_du_toan/danh-sach/phuong-an-tiep-nhan', request

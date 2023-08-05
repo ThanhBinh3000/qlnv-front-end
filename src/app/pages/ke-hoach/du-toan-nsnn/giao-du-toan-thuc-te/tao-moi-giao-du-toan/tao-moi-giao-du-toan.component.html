@@ -70,7 +70,7 @@
                 <div class="header-text">
                     <div class="title-chi-tieu">
                         <span [ngClass]="statusClass()">{{getStatusName()}}</span>
-                        <span>Phương án giao số kiểm tra trần chi (từ đơn vị cấp trên)</span>
+                        <span>Phương án phân bổ dự toán chi NSNN(từ đơn vị cấp trên)</span>
                     </div>
                 </div>
                 <nz-card class="mt-2px flex-card data-table card-border-content table-card">
@@ -227,16 +227,15 @@
                                     <td nzLeft></td>
                                     <td nzLeft></td>
                                     <td></td>
+                                    <td></td>
                                     <td *ngFor="let item of lstDvi">
                                         <div *ngFor="let e of lstCtietBcao[0].lstCtietDvis">
-                                            <div *ngIf="isDvi">
-                                                <div *ngIf="e.maDviNhan == item.maDvi">
-                                                    <ng-container *ngIf="e.trangThai == null">
-                                                        <a (click)="giaoSoTranChi(e.maDviNhan)">
-                                                            Giao
-                                                        </a>
-                                                    </ng-container>
-                                                </div>
+                                            <div *ngIf="e.maDviNhan == item.maDvi">
+                                                <ng-container *ngIf="e.trangThai == null">
+                                                    <a (click)="giaoSoTranChi(e.maDviNhan)">
+                                                        Giao
+                                                    </a>
+                                                </ng-container>
                                             </div>
                                         </div>
                                     </td>
@@ -327,13 +326,20 @@
                                     <tr *ngFor="let data of lstFiles; let i = index">
                                         <td>{{ i + 1 }} </td>
                                         <td>{{ data.fileName }}</td>
-                                        <td>
+                                        <!-- <td>
                                             <button class="btn btn-function"
                                                 (click)="downloadFile(data.id)">Xem</button>
                                         </td>
                                         <td *ngIf="!status">
                                             <button class="btn btn-function" (click)="deleteFile(data.id)">Xóa</button>
-                                        </td>
+                                        </td> -->
+
+                                        <a (click)="downloadFile(data.id)">
+                                            <i class="fa fa-eye"></i>
+                                        </a>
+                                        <a *ngIf="!status" (click)="deleteFile(data.id)">
+                                            <i class="fa fa-trash-o do"></i>
+                                        </a>
                                     </tr>
                                 </tbody>
                             </nz-table>
@@ -346,13 +352,13 @@
             <ng-template #extraTemplate>
                 <div class="buttons">
                     <button type="button" class="btn btn-main" (click)="giaoSoTranChi(null)"
-                        [hidden]="statusGiaoToanBo || isDvi">
+                        [hidden]="statusGiaoToanBo ">
                         <span>Giao toàn bộ</span>
                     </button>
-                    <button type="button" class="btn btn-sub" *ngIf="!status">
+                    <!-- <button type="button" class="btn btn-sub" *ngIf="!status">
                         <i class="icon htvbdh_tcdt_import"></i>
                         <span>Import</span>
-                    </button>
+                    </button> -->
                 </div>
             </ng-template>
         </div>

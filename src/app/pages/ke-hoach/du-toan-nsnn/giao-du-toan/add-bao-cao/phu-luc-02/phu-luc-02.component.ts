@@ -321,6 +321,7 @@ export class PhuLuc02Component implements OnInit {
         Object.assign(this.lstCtietBcaos[index], this.editCache[id].data); // set lai data cua lstCtietBcaos[index] = this.editCache[id].data
         this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
         this.sum(this.lstCtietBcaos[index].stt);
+        this.getTotal();
         this.updateEditCache();
     }
     // huy thay doi
