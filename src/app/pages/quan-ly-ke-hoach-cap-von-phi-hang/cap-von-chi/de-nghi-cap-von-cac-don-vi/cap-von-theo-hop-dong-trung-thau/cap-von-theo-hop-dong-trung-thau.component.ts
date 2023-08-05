@@ -14,11 +14,11 @@ import { BtnStatus, CapVon, Cvnc, Doc, Report } from '../de-nghi-cap-von-cac-don
 import { DialogCongVanComponent } from 'src/app/components/dialog/dialog-cong-van/dialog-cong-van.component';
 
 @Component({
-    selector: 'app-cap-von-theo-hop-dong-trung-thau-luong-thuc',
-    templateUrl: './cap-von-theo-hop-dong-trung-thau-luong-thuc.component.html',
+    selector: 'app-cap-von-theo-hop-dong-trung-thau',
+    templateUrl: './cap-von-theo-hop-dong-trung-thau.component.html',
     styleUrls: ['../de-nghi-cap-von-cac-don-vi.component.scss'],
 })
-export class CapVonTheoHopDongTrungThauLuongThucComponent implements OnInit {
+export class CapVonTheoHopDongTrungThauComponent implements OnInit {
     @Input() dataInfo;
     @Output() dataChange = new EventEmitter();
     Status = Status;
@@ -39,6 +39,7 @@ export class CapVonTheoHopDongTrungThauLuongThucComponent implements OnInit {
     isDataAvailable: boolean = false;
     editMoneyUnit: boolean = false;
     isParent: boolean = false;
+    isSynth: boolean = false;
     //file
     fileDetail: NzUploadFile;
     fileList: NzUploadFile[] = [];
@@ -184,9 +185,15 @@ export class CapVonTheoHopDongTrungThauLuongThucComponent implements OnInit {
         this.status.pass = this.status.pass && this.userService.isAccessPermisson(Roles.CVNC.PASS_CV);
         this.status.approve = this.status.approve && this.userService.isAccessPermisson(Roles.CVNC.APPROVE_CV);
         this.status.export = this.status.export && this.userService.isAccessPermisson(Roles.CVNC.EXPORT_CV);
+        this.isSynth = this.userService.isTongCuc() && this.baoCao.loaiDnghi != Cvnc.VTU;
+        if (this.baoCao.loaiDnghi != Cvnc.VTU) {
+            this.scrollHD = this.status.save ? Table.tableWidth(500, 7, 1, 60) : Table.tableWidth(500, 7, 1, 0);
+            this.scrollCV = this.status.save ? Table.tableWidth(300, 17, 1, 60) : Table.tableWidth(500, 17, 1, 0);
+        } else {
+            this.scrollHD = this.status.save ? Table.tableWidth(500, 9, 1, 60) : Table.tableWidth(500, 9, 1, 0);;
+            this.scrollCV = this.status.save ? Table.tableWidth(0, 19, 1, 60) : Table.tableWidth(0, 19, 1, 0);
+        }
 
-        this.scrollHD = this.status.save ? Table.tableWidth(500, 7, 1, 60) : Table.tableWidth(500, 7, 1, 0);;
-        this.scrollCV = this.status.save ? Table.tableWidth(300, 17, 1, 60) : Table.tableWidth(500, 17, 1, 0);
     }
 
     back() {
@@ -402,12 +409,17 @@ export class CapVonTheoHopDongTrungThauLuongThucComponent implements OnInit {
         this.updateEditCache()
     }
 
+    changeTien(id: string) {
+        this.editCache[id].data.gtThucHien = Operator.mul(this.editCache[id].data.slThucHien, this.editCache[id].data.donGia);
+    }
+
     changeModel(id: string) {
+        const gt = this.baoCao.loaiDnghi == Cvnc.VTU ? this.editCache[id].data.gtThucHien : this.editCache[id].data.gtHopDong;
         this.editCache[id].data.tongVonVaDtoanDaCap = Operator.sum([this.editCache[id].data.lkCong, this.editCache[id].data.dtoanDaGiao]);
-        this.editCache[id].data.vonDnCapLanNay = Operator.sum([this.editCache[id].data.gtHopDong, -this.editCache[id].data.phatViPham, -this.editCache[id].data.tongVonVaDtoanDaCap]);
+        this.editCache[id].data.vonDnCapLanNay = Operator.sum([gt, -this.editCache[id].data.phatViPham, -this.editCache[id].data.tongVonVaDtoanDaCap]);
         this.editCache[id].data.cong = Operator.sum([this.editCache[id].data.ung, this.editCache[id].data.cap]);
         this.editCache[id].data.tongTien = Operator.sum([this.editCache[id].data.tongVonVaDtoanDaCap, this.editCache[id].data.cong]);
-        this.editCache[id].data.soConDuocCap = Operator.sum([this.editCache[id].data.gtHopDong, -this.editCache[id].data.tongTien]);
+        this.editCache[id].data.soConDuocCap = Operator.sum([gt, -this.editCache[id].data.tongTien]);
     }
 
     sum(stt: string) {
@@ -433,6 +445,14 @@ export class CapVonTheoHopDongTrungThauLuongThucComponent implements OnInit {
                     this.lstCtiets[index].tlThanhTien = Operator.sum([this.lstCtiets[index].tlThanhTien, item.tlThanhTien]);
                 }
             })
+            if (stt == '0.1') {
+                const gt = this.baoCao.loaiDnghi == Cvnc.VTU ? this.lstCtiets[index].gtThucHien : this.lstCtiets[index].gtHopDong;
+                this.lstCtiets[index].tongVonVaDtoanDaCap = Operator.sum([this.lstCtiets[index].lkCong, this.lstCtiets[index].dtoanDaGiao]);
+                this.lstCtiets[index].vonDnCapLanNay = Operator.sum([gt, -this.lstCtiets[index].phatViPham, -this.lstCtiets[index].tongVonVaDtoanDaCap]);
+                this.lstCtiets[index].cong = Operator.sum([this.lstCtiets[index].ung, this.lstCtiets[index].cap]);
+                this.lstCtiets[index].tongTien = Operator.sum([this.lstCtiets[index].tongVonVaDtoanDaCap, this.lstCtiets[index].cong]);
+                this.lstCtiets[index].soConDuocCap = Operator.sum([gt, -this.lstCtiets[index].tongTien]);
+            }
             stt = Table.preIndex(stt)
         }
     }

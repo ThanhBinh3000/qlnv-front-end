@@ -43,7 +43,10 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
             this.loaiDns = Cvnc.LOAI_DE_NGHI.filter(e => e.id == Cvnc.THOC);
         } else if (this.userService.isCuc()) {
             this.canCuGias = Cvnc.CAN_CU_GIA.filter(e => e.id == Cvnc.HOP_DONG);
-            this.loaiDns = Cvnc.LOAI_DE_NGHI.filter(e => e.id == Cvnc.GAO || e.id == Cvnc.THOC);
+            this.loaiDns = Cvnc.LOAI_DE_NGHI.filter(e => e.id == Cvnc.GAO || e.id == Cvnc.MUOI);
+        } else {
+            this.canCuGias = Cvnc.CAN_CU_GIA.filter(e => e.id == Cvnc.HOP_DONG);
+            this.loaiDns = Cvnc.LOAI_DE_NGHI.filter(e => e.id == Cvnc.VTU);
         }
         this.lstNam = Utils.getListYear(5, 10);
     }
