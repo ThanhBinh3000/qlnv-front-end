@@ -1,8 +1,7 @@
-import { Globals } from 'src/app/shared/globals';
-import { UserService } from 'src/app/services/user.service';
 import { Component, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
-import { QTVP } from 'src/app/Utility/utils';
+import { UserService } from 'src/app/services/user.service';
+import { Globals } from 'src/app/shared/globals';
 
 @Component({
     selector: 'app-von-phi-hang-du-tru-quoc-gia',

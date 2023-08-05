@@ -17,10 +17,8 @@ import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { AMOUNT, DON_VI_TIEN, LA_MA, MONEY_LIMIT, Operator, QTVP, Table, Utils } from 'src/app/Utility/utils';
 import * as uuid from "uuid";
-// import { addChild, displayNumber, exchangeMoney, Table.preIndex, getTail, Operator.mul, Operator.sum } from 'src/app/Utility/func';
 import { DialogAddVatTuComponent } from '../dialog-add-vat-tu/dialog-add-vat-tu.component';
 import { TEN_HANG } from './add-quyet-toan-tong-hop.constant';
-// import { NOI_DUNG } from './them-bao-cao-quyet-toan.constant';
 export class ItemData {
     id!: any;
     stt!: string;

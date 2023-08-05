@@ -245,7 +245,8 @@ export class PhuLucPhanBoComponent implements OnInit {
 
         } else {
             this.formDetail.lstCtietBcaos[0]?.lstCtietDvis.forEach(s => {
-                this.lstDvi = this.donVis.filter(v => v.maDvi === s.maDviNhan)
+                // this.donVis.filter(v => v.maDvi === s.maDviNhan)[0]
+                this.lstDvi.push(this.donVis.filter(v => v.maDvi === s.maDviNhan)[0])
                 console.log(this.lstDvi);
 
             })
@@ -561,6 +562,23 @@ export class PhuLucPhanBoComponent implements OnInit {
                 // tenDvi: item.tenDvi,
             })
         })
+        // this.lstCtietBcaos.forEach(item => {
+        //     if (item.stt.split('.')?.length == 2) {
+        //         // this.total.gtTrenGt = Operator.sum([this.total.gtTrenGt, item.gtTrenGt]);
+        //         // this.total.gtTrenGtBh = Operator.sum([this.total.gtTrenGtBh, item.gtTrenGtBh]);
+        //         // this.total.gtDuoiGt = Operator.sum([this.total.gtDuoiGt, item.gtDuoiGt]);
+        //         // this.total.gtDuoiGtBh = Operator.sum([this.total.gtDuoiGtBh, item.gtDuoiGtBh]);
+        //         // this.total.tong = Operator.sum([this.total.tong, item.tong]);
+        //         for (let i = 0; i < item.lstCtietDvis?.length; i++) {
+        //             this.total.lstCtietDvis[i].soTranChi = Operator.sum([this.total.lstCtietDvis[i].soTranChi, item.lstCtietDvis[i].soTranChi]);
+        //             // this.total.lstDviCapDuoi[i].gtTrenGtBh = Operator.sum([this.total.lstDviCapDuoi[i].gtTrenGtBh, item.lstDviCapDuoi[i].gtTrenGtBh]);
+        //             // this.total.lstDviCapDuoi[i].gtDuoiGt = Operator.sum([this.total.lstDviCapDuoi[i].gtDuoiGt, item.lstDviCapDuoi[i].gtDuoiGt]);
+        //             // this.total.lstDviCapDuoi[i].gtDuoiGtBh = Operator.sum([this.total.lstDviCapDuoi[i].gtDuoiGtBh, item.lstDviCapDuoi[i].gtDuoiGtBh]);
+        //             // this.total.lstDviCapDuoi[i].tong = Operator.sum([this.total.lstDviCapDuoi[i].tong, item.lstDviCapDuoi[i].tong]);
+        //         }
+        //     }
+        // })
+
         this.lstCtietBcaos.forEach(item => {
             if (item.stt.split('.')?.length == 2) {
                 // this.total.gtTrenGt = Operator.sum([this.total.gtTrenGt, item.gtTrenGt]);

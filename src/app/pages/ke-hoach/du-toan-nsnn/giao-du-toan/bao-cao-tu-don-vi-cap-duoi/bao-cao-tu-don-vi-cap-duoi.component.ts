@@ -1,6 +1,5 @@
 import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { cloneDeep } from 'lodash';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -8,11 +7,9 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
-import { DataService } from 'src/app/services/data.service';
 import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
-import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { GDT, TRANG_THAI_KIEM_TRA_BAO_CAO, Utils } from 'src/app/Utility/utils';
+import { GDT, Status, Utils } from 'src/app/Utility/utils';
 
 export const TRANG_THAI_TIM_KIEM_GIAO = [
     {
@@ -267,8 +264,8 @@ export class BaoCaoTuDonViCapDuoiComponent implements OnInit {
     }
 
     getStatusName(trangThai: string) {
-        const trangThais = TRANG_THAI_KIEM_TRA_BAO_CAO;
-        return trangThais.find(e => e.id == trangThai).ten;
+        const trangThais = Status.TRANG_THAI_DVCT;
+        return trangThais.find(e => e.id == trangThai).tenDm;
     }
 
     getUnitName(maDvi: string) {
