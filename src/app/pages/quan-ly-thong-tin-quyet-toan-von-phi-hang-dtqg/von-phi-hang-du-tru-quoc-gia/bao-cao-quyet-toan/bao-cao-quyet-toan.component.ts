@@ -12,7 +12,7 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { QuyetToanVonPhiService } from 'src/app/services/quan-ly-von-phi/quyetToanVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { QuanLyVonPhiService } from '../../../../services/quanLyVonPhi.service';
-import { QTVP } from './../../../../Utility/utils';
+import { Roles } from './../../../../Utility/utils';
 
 // import { TRANGTHAIBAOCAO } from '../quan-ly-lap-tham-dinh-du-toan-nsnn.constant';
 // trang thai ban ghi
@@ -102,28 +102,28 @@ export class BaoCaoQuyetToanComponent implements OnInit {
         this.newDate.setMonth(this.newDate.getMonth() - 1);
         this.searchFilter.ngayTaoTu = this.newDate;
         this.donViTao = this.userInfo?.MA_DVI;
-        this.statusNewReport = this.userService.isAccessPermisson(QTVP.ADD_REPORT)
-        this.statusDelete = this.userService.isAccessPermisson(QTVP.DELETE_REPORT);
+        this.statusNewReport = this.userService.isAccessPermisson(Roles.QTVP.ADD_REPORT)
+        this.statusDelete = this.userService.isAccessPermisson(Roles.QTVP.DELETE_REPORT);
         //  check va lay gia tri role trong list role
         this.statusBtnXoaDk = false;
-        if (this.userService.isAccessPermisson(QTVP.EDIT_REPORT)) {
+        if (this.userService.isAccessPermisson(Roles.QTVP.EDIT_REPORT)) {
             this.status = false;
-            this.trangThai = Utils.TT_BC_1;
+            this.trangThai = Status.TT_01;
             this.donVis = this.donVis.filter(e => e?.maDviCha == this.donViTao);
-            this.searchFilter.trangThais.push(Status.TRANG_THAI_FULL.find(e => e.id == Utils.TT_BC_1));
+            this.searchFilter.trangThais.push(Status.TRANG_THAI_FULL.find(e => e.id == Status.TT_01));
         }
         else {
-            if (this.userService.isAccessPermisson(QTVP.DUYET_QUYET_TOAN_REPORT)) {
+            if (this.userService.isAccessPermisson(Roles.QTVP.DUYET_QUYET_TOAN_REPORT)) {
                 this.status = true;
-                this.trangThai = Utils.TT_BC_2;
-                this.searchFilter.trangThais.push(Status.TRANG_THAI_FULL.find(e => e.id == Utils.TT_BC_2));
-            } else if (this.userService.isAccessPermisson(QTVP.PHE_DUYET_QUYET_TOAN_REPORT)) {
+                this.trangThai = Status.TT_02;
+                this.searchFilter.trangThais.push(Status.TRANG_THAI_FULL.find(e => e.id == Status.TT_02));
+            } else if (this.userService.isAccessPermisson(Roles.QTVP.PHE_DUYET_QUYET_TOAN_REPORT)) {
                 this.status = true;
-                this.trangThai = Utils.TT_BC_4;
-                this.searchFilter.trangThais.push(Status.TRANG_THAI_FULL.find(e => e.id == Utils.TT_BC_4));
+                this.trangThai = Status.TT_04;
+                this.searchFilter.trangThais.push(Status.TRANG_THAI_FULL.find(e => e.id == Status.TT_04));
             } else {
                 this.trangThai = null;
-                this.searchFilter.trangThais = [Utils.TT_BC_1, Utils.TT_BC_2, Utils.TT_BC_3, Utils.TT_BC_4, Utils.TT_BC_5, Utils.TT_BC_6];
+                this.searchFilter.trangThais = [Status.TT_01, Status.TT_02, Status.TT_03, Status.TT_04, Status.TT_05, Status.TT_06];
             }
         }
         await this.onSubmit();
@@ -149,10 +149,10 @@ export class BaoCaoQuyetToanComponent implements OnInit {
         if (this.trangThai) {
             searchFilterTemp.trangThais.push(this.trangThai)
         } else {
-            searchFilterTemp.trangThais = [Utils.TT_BC_1, Utils.TT_BC_2, Utils.TT_BC_3, Utils.TT_BC_4, Utils.TT_BC_5, Utils.TT_BC_6, Utils.TT_BC_7, Utils.TT_BC_8, Utils.TT_BC_9]
+            searchFilterTemp.trangThais = [Status.TT_01, Status.TT_02, Status.TT_03, Status.TT_04, Status.TT_05, Status.TT_06, Status.TT_07, Status.TT_08, Status.TT_09]
         }
         if (!this.trangThai) {
-            searchFilterTemp.trangThais = [Utils.TT_BC_1, Utils.TT_BC_2, Utils.TT_BC_3, Utils.TT_BC_4, Utils.TT_BC_5, Utils.TT_BC_6, Utils.TT_BC_7, Utils.TT_BC_8, Utils.TT_BC_9]
+            searchFilterTemp.trangThais = [Status.TT_01, Status.TT_02, Status.TT_03, Status.TT_04, Status.TT_05, Status.TT_06, Status.TT_07, Status.TT_08, Status.TT_09]
         } else {
             searchFilterTemp.trangThais = [this.trangThai];
         }
@@ -220,13 +220,13 @@ export class BaoCaoQuyetToanComponent implements OnInit {
     };
 
     checkEditStatus(trangThai: string) {
-        return Utils.statusSave.includes(trangThai) &&
-            (this.userService.isAccessPermisson(QTVP.EDIT_REPORT));
+        return [Status.TT_01].includes(trangThai) &&
+            (this.userService.isAccessPermisson(Roles.QTVP.EDIT_REPORT));
     };
 
     checkDeleteStatus(trangThai: string) {
-        return Utils.statusDelete.includes(trangThai) &&
-            (this.userService.isAccessPermisson(QTVP.DELETE_REPORT));
+        return [Status.TT_01].includes(trangThai) &&
+            (this.userService.isAccessPermisson(Roles.QTVP.DELETE_REPORT));
     };
 
     //them bao cao moi
@@ -382,7 +382,7 @@ export class BaoCaoQuyetToanComponent implements OnInit {
         return check;
     };
     checkViewReport() {
-        return this.userService.isAccessPermisson(QTVP.VIEW_REPORT)
+        return this.userService.isAccessPermisson(Roles.QTVP.VIEW_REPORT)
     };
     updateAllCheck() {
         this.danhSachBaoCao.forEach(item => {
@@ -394,7 +394,7 @@ export class BaoCaoQuyetToanComponent implements OnInit {
     };
 
     checkDeleteReport(trangThai: string) {
-        return Utils.statusDelete.includes(trangThai) && this.userService.isAccessPermisson(QTVP.DELETE_REPORT)
+        return [Status.TT_01].includes(trangThai) && this.userService.isAccessPermisson(Roles.QTVP.DELETE_REPORT)
     };
 
     // Tìm kiếm trong bảng

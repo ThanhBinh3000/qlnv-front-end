@@ -5,7 +5,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { GDT, Operator, Status, Table, Utils } from 'src/app/Utility/utils';
+import { Roles, Operator, Status, Table, Utils } from 'src/app/Utility/utils';
 import { DialogCopyGiaoDuToanComponent } from 'src/app/components/dialog/dialog-copy-giao-du-toan/dialog-copy-giao-du-toan.component';
 import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialog-copy.component';
 import { MESSAGE } from 'src/app/constants/message';
@@ -122,6 +122,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
     editMoneyUnit = false;
     isDataAvailable = false;
     amount = Operator.amount;
+    Status = Status
     // before uploaf file
     beforeUpload = (file: NzUploadFile): boolean => {
         this.fileList = this.fileList.concat(file);
@@ -262,7 +263,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
             })
         }
         this.lstCtietBcao = Table.sortByIndex(this.lstCtietBcao);
-        if (this.userInfo.CAP_DVI != Utils.TONG_CUC) {
+        if (this.userInfo.CAP_DVI != "1") {
             this.statusBtnSave = true;
             this.statusBtnNew = true;
             this.statusBtnCopy = true;
@@ -310,14 +311,14 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
     }
 
     getStatusButton() {
-        if (this.id && this.userService.isAccessPermisson(GDT.ADD_REPORT_PA_PBDT)) {
+        if (this.id && this.userService.isAccessPermisson(Roles.GDT.ADD_REPORT_PA_PBDT)) {
             this.status = true;
         } else {
             this.status = false;
         }
         const checkChirld = this.maDonViTao == this.userInfo?.MA_DVI;
 
-        this.statusBtnSave = !(Utils.statusSave.includes(this.isStatus) && this.userService.isAccessPermisson(GDT.EDIT_REPORT_BTC) && checkChirld);
+        this.statusBtnSave = !([Status.TT_01].includes(this.isStatus) && this.userService.isAccessPermisson(Roles.GDT.EDIT_REPORT_BTC) && checkChirld);
 
         if (this.id) {
             this.statusBtnSave = true;
@@ -336,8 +337,8 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
         }
         // this.statusBtnCopy = utils.getRoleCopy(this.isStatus, checkChirld, this.userInfo?.roles[0]?.code);
 
-        this.statusBtnCopy = !(Utils.statusCopy.includes(this.isStatus) && this.userService.isAccessPermisson(GDT.COPY_REPORT_PA_PBDT) && checkChirld);
-        this.statusBtnPrint = !(Utils.statusPrint.includes(this.isStatus) && this.userService.isAccessPermisson(GDT.PRINT_REPORT_PA_PBDT) && checkChirld);
+        this.statusBtnCopy = !([Status.TT_01, Status.TT_02, Status.TT_03, Status.TT_04, Status.TT_05, Status.TT_06, Status.TT_07, Status.TT_08, Status.TT_09].includes(this.isStatus) && this.userService.isAccessPermisson(Roles.GDT.COPY_REPORT_PA_PBDT) && checkChirld);
+        this.statusBtnPrint = !([Status.TT_01, Status.TT_02, Status.TT_03, Status.TT_04, Status.TT_05, Status.TT_06, Status.TT_07, Status.TT_08, Status.TT_09].includes(this.isStatus) && this.userService.isAccessPermisson(Roles.GDT.PRINT_REPORT_PA_PBDT) && checkChirld);
 
         if (this.userInfo.sub == "lanhdaotc" || this.userInfo.sub == "truongbophantc") {
             this.statusBtnSave = true;
@@ -348,7 +349,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
         }
 
 
-        if (!this.userService.isAccessPermisson(GDT.ADD_REPORT_CV_QD_GIAO_PA_PBDT)) {
+        if (!this.userService.isAccessPermisson(Roles.GDT.ADD_REPORT_CV_QD_GIAO_PA_PBDT)) {
             this.statusBtnNew = true;
         }
     };
@@ -371,7 +372,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
                     this.maPaCha = data.data.maPa;
                     this.lstFiles = data.data.lstFiles;
                     this.listFile = [];
-                    if (this.userService.isAccessPermisson(GDT.VIEW_REPORT_PA_PBDT)) {
+                    if (this.userService.isAccessPermisson(Roles.GDT.VIEW_REPORT_PA_PBDT)) {
                         this.statusBtnSave = true;
                         this.statusBtnNew = true;
                         this.statusBtnCopy = true;
@@ -762,13 +763,13 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
         );
     }
 
-    statusClass() {
-        if (Utils.statusSave.includes(this.isStatus)) {
-            return 'du-thao-va-lanh-dao-duyet';
-        } else {
-            return 'da-ban-hanh';
-        }
-    };
+    // statusClass() {
+    //     if (Utils.statusSave.includes(this.isStatus)) {
+    //         return 'du-thao-va-lanh-dao-duyet';
+    //     } else {
+    //         return 'da-ban-hanh';
+    //     }
+    // };
 
     getStatusName(status: string) {
         return this.trangThais.find(e => e.id == status)?.tenDm;

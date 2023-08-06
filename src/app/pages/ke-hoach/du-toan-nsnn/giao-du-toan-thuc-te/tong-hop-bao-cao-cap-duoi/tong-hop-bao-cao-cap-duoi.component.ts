@@ -13,7 +13,7 @@ import { DataService } from 'src/app/services/data.service';
 import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { GDT, Status, Utils } from 'src/app/Utility/utils';
+import { Roles, Status, Utils } from 'src/app/Utility/utils';
 import { DialogTongHopComponent } from '../dialog-tong-hop/dialog-tong-hop.component';
 
 export const TRANG_THAI_TIM_KIEM_GIAO = [
@@ -138,7 +138,7 @@ export class TongHopBaoCaoCapDuoiComponent implements OnInit {
 
         this.userInfo = this.userService.getUserLogin();
         this.maDviTao = this.userInfo?.MA_DVI;
-        if (this.userService.isAccessPermisson(GDT.TIEPNHAN_TUCHOI_PA_PBDT)) {
+        if (this.userService.isAccessPermisson(Roles.GDT.TIEPNHAN_TUCHOI_PA_PBDT)) {
             this.isCanbotc = true;
         }
 
@@ -156,14 +156,14 @@ export class TongHopBaoCaoCapDuoiComponent implements OnInit {
             }
         );
 
-        if (this.userService.isAccessPermisson(GDT.TIEP_NHAN_TC_REPORT_TH) || this.userService.isAccessPermisson(GDT.VIEW_REPORT_TH)) {
+        if (this.userService.isAccessPermisson(Roles.GDT.TIEP_NHAN_TC_REPORT_TH) || this.userService.isAccessPermisson(Roles.GDT.VIEW_REPORT_TH)) {
             this.trangThai = '9';
             this.status = false;
             this.searchFilter.loaiTimKiem = '1';
-            this.trangThais.push(TRANG_THAI_TIM_KIEM_GIAO.find(e => e.id == Utils.TT_BC_7));
-            this.trangThais.push(TRANG_THAI_TIM_KIEM_GIAO.find(e => e.id == Utils.TT_BC_8));
-            this.trangThais.push(TRANG_THAI_TIM_KIEM_GIAO.find(e => e.id == Utils.TT_BC_9));
-            this.trangThais.push(TRANG_THAI_TIM_KIEM_GIAO.find(e => e.id == Utils.TT_BC_KT));
+            this.trangThais.push(TRANG_THAI_TIM_KIEM_GIAO.find(e => e.id == Status.TT_07));
+            this.trangThais.push(TRANG_THAI_TIM_KIEM_GIAO.find(e => e.id == Status.TT_08));
+            this.trangThais.push(TRANG_THAI_TIM_KIEM_GIAO.find(e => e.id == Status.TT_09));
+            this.trangThais.push(TRANG_THAI_TIM_KIEM_GIAO.find(e => e.id == Status.TT_KT));
         }
         this.onSubmit();
         this.spinner.hide();
@@ -200,7 +200,7 @@ export class TongHopBaoCaoCapDuoiComponent implements OnInit {
         if (this.trangThai) {
             searchFilterTemp.trangThais.push(this.trangThai)
         } else {
-            searchFilterTemp.trangThais = [Utils.TT_BC_7, Utils.TT_BC_8, Utils.TT_BC_9, Utils.TT_BC_KT]
+            searchFilterTemp.trangThais = [Status.TT_07, Status.TT_08, Status.TT_09, Status.TT_KT]
         }
         // searchFilterTemp.trangThaiGiaos = ['0', '1', '2']
         await this.giaoDuToanChiService.timPhuongAnGiao(searchFilterTemp).toPromise().then(

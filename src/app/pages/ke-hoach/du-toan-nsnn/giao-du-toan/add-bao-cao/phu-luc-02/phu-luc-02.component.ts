@@ -10,7 +10,7 @@ import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToa
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
-import { FileManip, Operator, Status, Table, Utils } from 'src/app/Utility/utils';
+import { Operator, Status, Table, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import * as XLSX from 'xlsx';
 import { BtnStatus, Doc, Form } from '../../giao-du-toan.constant';
@@ -142,7 +142,6 @@ export class PhuLuc02Component implements OnInit {
         private modal: NzModalService,
         private quanLyVonPhiService: QuanLyVonPhiService,
         public userService: UserService,
-        private fileManip: FileManip,
     ) {
     }
 

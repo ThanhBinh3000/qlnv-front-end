@@ -3,8 +3,7 @@ import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
-// import { addChild, addHead, addParent, deleteRow, displayNumber, exchangeMoney, getHead, getName, Operator.sum } from 'src/app/Utility/func';
-import { FileManip, MONEY_LIMIT, Operator, Status, Table, Utils } from 'src/app/Utility/utils';
+import { Operator, Status, Table, Utils } from 'src/app/Utility/utils';
 import { DialogChonDanhMucComponent } from 'src/app/components/dialog/dialog-chon-danh-muc/dialog-chon-danh-muc.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
@@ -14,7 +13,6 @@ import { DieuChinhService } from 'src/app/services/quan-ly-von-phi/dieuChinhDuTo
 import { UserService } from 'src/app/services/user.service';
 import * as XLSX from 'xlsx';
 import { BtnStatus, Doc, Form } from '../../dieu-chinh-du-toan.constant';
-import { getHead } from 'src/app/Utility/func';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 
 export class ItemData {
@@ -420,7 +418,7 @@ export class PhuLuc4Component implements OnInit {
         this.dToanVuGiam = 0;
         this.lstCtietBcao.forEach(item => {
             const str = item.stt
-            if (!(this.lstCtietBcao.findIndex(e => getHead(e.stt) == str) != -1)) {
+            if (!(this.lstCtietBcao.findIndex(e => Table.preIndex(e.stt) == str) != -1)) {
                 if (item.dtoanDchinhDnghiLanNay !== null) {
                     if (item.dtoanDchinhDnghiLanNay < 0) {
                         Number(this.tongDieuChinhGiam += Number(item?.dtoanDchinhDnghiLanNay));
