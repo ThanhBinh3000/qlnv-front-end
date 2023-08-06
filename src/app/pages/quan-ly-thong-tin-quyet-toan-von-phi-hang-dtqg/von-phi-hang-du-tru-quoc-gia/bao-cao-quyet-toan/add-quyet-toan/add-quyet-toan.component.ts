@@ -15,7 +15,7 @@ import { QuyetToanVonPhiService } from 'src/app/services/quan-ly-von-phi/quyetTo
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { AMOUNT, DON_VI_TIEN, LA_MA, MONEY_LIMIT, Operator, QTVP, Table, Utils } from 'src/app/Utility/utils';
+import { Operator, QTVP, Table, Utils } from 'src/app/Utility/utils';
 import * as uuid from "uuid";
 import { DialogAddVatTuComponent } from '../dialog-add-vat-tu/dialog-add-vat-tu.component';
 import { TEN_HANG } from './add-quyet-toan.constant';
@@ -85,7 +85,7 @@ export class AddQuyetToanComponent implements OnInit {
 	lstCtietBcao: ItemData[] = [];
 	noiDungs: any[] = TEN_HANG;
 	donViTinhs: any[] = [];
-	maDviTiens: any[] = DON_VI_TIEN;
+	maDviTiens: any[] = Utils.DVI_TIEN;
 	donVis: any = [];
 	lstDsHangTrongKho: any[] = [];
 	lstBcaoDviTrucThuocs: any[] = [];
@@ -104,7 +104,7 @@ export class AddQuyetToanComponent implements OnInit {
 	maDviTao!: string;
 	maDviTien!: string;
 	allChecked = false;                         // check all checkbox
-	soLaMa: any[] = LA_MA;
+	soLaMa: any[] = Utils.LA_MA;
 	PS_ARR: any[] = [];
 	LK_ARR: any[] = [];
 	LST_CHUNG_KHO: any[] = [];
@@ -218,7 +218,7 @@ export class AddQuyetToanComponent implements OnInit {
 		this.fileList = [];
 	}
 
-	amount = AMOUNT;
+	amount = Operator.amount;
 
 	constructor(
 		private quanLyVonPhiService: QuanLyVonPhiService,
@@ -604,7 +604,7 @@ export class AddQuyetToanComponent implements OnInit {
 		const lstCtietBcaoTemp: any = [];
 		let checkMoneyRange = true;
 		this.lstCtietBcao.forEach(item => {
-			if (item.donGiaMua > MONEY_LIMIT || item.thanhTien > MONEY_LIMIT) {
+			if (item.donGiaMua > Utils.MONEY_LIMIT || item.thanhTien > Utils.MONEY_LIMIT) {
 				checkMoneyRange = false;
 				return;
 			}

@@ -5,7 +5,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { AMOUNT, DON_VI_TIEN, GDT, LA_MA, MONEY_LIMIT, Operator, TRANG_THAI_TIM_KIEM, Table, Utils } from 'src/app/Utility/utils';
+import { GDT, Operator, Status, Table, Utils } from 'src/app/Utility/utils';
 import { DialogCopyGiaoDuToanComponent } from 'src/app/components/dialog/dialog-copy-giao-du-toan/dialog-copy-giao-du-toan.component';
 import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialog-copy.component';
 import { MESSAGE } from 'src/app/constants/message';
@@ -75,9 +75,9 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
     lstCtietBcao: ItemData[] = [];
     donVis: any[] = [];
     noiDungs: any[] = [];
-    donViTiens: any[] = DON_VI_TIEN;
-    trangThais: any[] = TRANG_THAI_TIM_KIEM;
-    soLaMa: any[] = LA_MA;
+    donViTiens: any[] = Utils.DVI_TIEN;
+    trangThais: any[] = Status.TRANG_THAI_FULL;
+    soLaMa: any[] = Utils.LA_MA;
     initItem: ItemData = {
         id: null,
         stt: "0",
@@ -121,7 +121,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
     listIdFilesDelete: any = [];                        // id file luc call chi tiet
     editMoneyUnit = false;
     isDataAvailable = false;
-    amount = AMOUNT;
+    amount = Operator.amount;
     // before uploaf file
     beforeUpload = (file: NzUploadFile): boolean => {
         this.fileList = this.fileList.concat(file);
@@ -470,7 +470,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
         let checkMoneyRange = true;
         // gui du lieu trinh duyet len server
         this.lstCtietBcao.forEach(item => {
-            if (item.tongCong > MONEY_LIMIT) {
+            if (item.tongCong > Utils.MONEY_LIMIT) {
                 checkMoneyRange = false;
                 return;
             }

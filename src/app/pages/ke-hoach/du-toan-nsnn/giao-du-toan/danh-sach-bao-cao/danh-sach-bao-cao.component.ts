@@ -4,12 +4,56 @@ import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { GDT, LTD, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { GDT, Utils } from 'src/app/Utility/utils';
 import { MESSAGE } from 'src/app/constants/message';
 import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { DialogTaoMoiComponent } from '../dialog-tao-moi/dialog-tao-moi.component';
+
+
+export const TRANG_THAI_TIM_KIEM = [
+    {
+        id: "1",
+        tenDm: 'Đang soạn'
+    },
+    {
+        id: "2",
+        tenDm: 'Trình duyệt'
+    },
+    {
+        id: "3",
+        tenDm: 'Từ chối duyệt'
+    },
+    {
+        id: "4",
+        tenDm: 'Duyệt'
+    },
+    {
+        id: "5",
+        tenDm: 'Từ chối phê duyệt'
+    },
+    {
+        id: "6",
+        tenDm: 'Phê duyệt',
+    },
+    {
+        id: "7",
+        tenDm: 'Phê duyệt'
+    },
+    {
+        id: "8",
+        tenDm: 'Từ chối tiếp nhận'
+    },
+    {
+        id: "9",
+        tenDm: 'Tiếp nhận'
+    },
+    // {
+    //     id: "10",
+    //     tenDm: 'Lãnh đạo yêu cầu điều chỉnh'
+    // },
+]
 
 @Component({
     selector: 'app-danh-sach-bao-cao',
@@ -81,12 +125,12 @@ export class DanhSachBaoCaoComponent implements OnInit {
         this.searchFilter.tuNgay = newDate;
         this.searchFilter.donViTao = this.userInfo?.MA_DVI;
         //check quyen va cac nut chuc nang
-        this.statusNewReport = this.userService.isAccessPermisson(LTD.ADD_REPORT);
-        this.statusDelete = this.userService.isAccessPermisson(LTD.DELETE_REPORT) || this.userService.isAccessPermisson(LTD.DELETE_SYNTHETIC_REPORT);
-        if (this.userService.isAccessPermisson(LTD.DUYET_REPORT) || this.userService.isAccessPermisson(LTD.DUYET_SYNTHETIC_REPORT)) {
+        this.statusNewReport = this.userService.isAccessPermisson(GDT.ADD_REPORT_PA_PBDT);
+        this.statusDelete = this.userService.isAccessPermisson(GDT.DELETE_REPORT_PA_PBDT) || this.userService.isAccessPermisson(GDT.DELETE_REPORT_PA_PBDT);
+        if (this.userService.isAccessPermisson(GDT.DUYET_REPORT_PA_PBDT) || this.userService.isAccessPermisson(GDT.DUYET_REPORT_TH)) {
             this.searchFilter.trangThai = Utils.TT_BC_2;
         } else {
-            if (this.userService.isAccessPermisson(LTD.PHE_DUYET_REPORT) || this.userService.isAccessPermisson(LTD.PHE_DUYET_SYNTHETIC_REPORT)) {
+            if (this.userService.isAccessPermisson(GDT.PHE_DUYET_REPORT_PA_PBDT) || this.userService.isAccessPermisson(GDT.PHE_DUYET_REPORT_PA_PBDT)) {
                 this.searchFilter.trangThai = Utils.TT_BC_4;
             }
         }

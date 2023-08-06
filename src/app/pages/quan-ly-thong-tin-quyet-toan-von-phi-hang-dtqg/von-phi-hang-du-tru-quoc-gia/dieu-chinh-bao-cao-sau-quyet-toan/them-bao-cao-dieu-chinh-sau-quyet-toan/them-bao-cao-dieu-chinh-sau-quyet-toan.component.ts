@@ -5,7 +5,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { AMOUNT, DON_VI_TIEN, LA_MA, MONEY_LIMIT, Operator, QTVP, Utils } from 'src/app/Utility/utils';
+import { Operator, QTVP, Utils } from 'src/app/Utility/utils';
 import { DialogCopyQuyetToanVonPhiHangDtqgComponent } from 'src/app/components/dialog/dialog-copy-quyet-toan-von-phi-hang-dtqg/dialog-copy-quyet-toan-von-phi-hang-dtqg.component';
 import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialog-copy.component';
 import { DialogThemKhoanMucComponent } from 'src/app/components/dialog/dialog-them-khoan-muc/dialog-them-khoan-muc.component';
@@ -86,7 +86,7 @@ export class ThemBaoCaoDieuChinhSauQuyetToanComponent implements OnInit {
     lstCtietBcao: ItemData[] = [];
     noiDungs: any[] = NOI_DUNG;
     donViTinhs: any[] = [];
-    maDviTiens: any[] = DON_VI_TIEN;
+    maDviTiens: any[] = Utils.DVI_TIEN;
     donVis: any = [];
 
     newDate = new Date();
@@ -104,8 +104,8 @@ export class ThemBaoCaoDieuChinhSauQuyetToanComponent implements OnInit {
     maDviTao!: string;
     maDviTien!: string;
     allChecked = false;                         // check all checkbox
-    soLaMa: any[] = LA_MA;
-    amount = AMOUNT;
+    soLaMa: any[] = Utils.LA_MA;
+    amount = Operator.amount;
     initItem: ItemData = {
         id: null,
         stt: "0",
@@ -484,7 +484,7 @@ export class ThemBaoCaoDieuChinhSauQuyetToanComponent implements OnInit {
         const lstCtietBcaoTemp: any = [];
         let checkMoneyRange = true;
         this.lstCtietBcao.forEach(item => {
-            if (item.donGiaMua > MONEY_LIMIT || item.thanhTien > MONEY_LIMIT) {
+            if (item.donGiaMua > Utils.MONEY_LIMIT || item.thanhTien > Utils.MONEY_LIMIT) {
                 checkMoneyRange = false;
                 return;
             }

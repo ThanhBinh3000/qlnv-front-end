@@ -5,7 +5,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { AMOUNT, DON_VI_TIEN, GDT, LA_MA, MONEY_LIMIT, Operator, TRANG_THAI_TIM_KIEM, Table, Utils } from 'src/app/Utility/utils';
+import { GDT, Operator, Table, Utils } from 'src/app/Utility/utils';
 import { DialogCopyGiaoDuToanComponent } from 'src/app/components/dialog/dialog-copy-giao-du-toan/dialog-copy-giao-du-toan.component';
 import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialog-copy.component';
 import { MESSAGE } from 'src/app/constants/message';
@@ -16,6 +16,50 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import * as uuid from 'uuid';
+
+
+export const TRANG_THAI_TIM_KIEM = [
+    {
+        id: "1",
+        tenDm: 'Đang soạn'
+    },
+    {
+        id: "2",
+        tenDm: 'Trình duyệt'
+    },
+    {
+        id: "3",
+        tenDm: 'Từ chối duyệt'
+    },
+    {
+        id: "4",
+        tenDm: 'Duyệt'
+    },
+    {
+        id: "5",
+        tenDm: 'Từ chối phê duyệt'
+    },
+    {
+        id: "6",
+        tenDm: 'Phê duyệt',
+    },
+    {
+        id: "7",
+        tenDm: 'Phê duyệt'
+    },
+    {
+        id: "8",
+        tenDm: 'Từ chối tiếp nhận'
+    },
+    {
+        id: "9",
+        tenDm: 'Tiếp nhận'
+    },
+    // {
+    //     id: "10",
+    //     tenDm: 'Lãnh đạo yêu cầu điều chỉnh'
+    // },
+]
 
 export class ItemData {
     id!: any;
@@ -73,9 +117,9 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
     lstCtietBcao: ItemData[] = [];
     donVis: any[] = [];
     noiDungs: any[] = [];
-    donViTiens: any[] = DON_VI_TIEN;
+    donViTiens: any[] = Utils.DVI_TIEN;
     trangThais: any[] = TRANG_THAI_TIM_KIEM;
-    soLaMa: any[] = LA_MA;
+    soLaMa: any[] = Utils.LA_MA;
     initItem: ItemData = {
         id: null,
         stt: "0",
@@ -119,7 +163,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
     listIdFilesDelete: any = [];                        // id file luc call chi tiet
     editMoneyUnit = false;
     isDataAvailable = false;
-    amount = AMOUNT;
+    amount = Operator.amount;
     // before uploaf file
     beforeUpload = (file: NzUploadFile): boolean => {
         this.fileList = this.fileList.concat(file);
@@ -406,7 +450,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
         let checkMoneyRange = true;
         // gui du lieu trinh duyet len server
         this.lstCtietBcao.forEach(item => {
-            if (item.tongCong > MONEY_LIMIT) {
+            if (item.tongCong > Utils.MONEY_LIMIT) {
                 checkMoneyRange = false;
                 return;
             }

@@ -4,7 +4,7 @@ import * as fileSaver from 'file-saver';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { DON_VI_TIEN, FileManip, GDT, LA_MA, Operator, Utils } from 'src/app/Utility/utils';
+import { FileManip, GDT, Operator, Utils } from 'src/app/Utility/utils';
 import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
@@ -74,12 +74,12 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
     maLoai = '2';
     //danh muc
     lstDvi: any[] = [];
-    donViTiens: any[] = DON_VI_TIEN;
+    donViTiens: any[] = Utils.DVI_TIEN;
     lstCtietBcao: ItemData[] = [];
     donVis: any[] = [];
     trangThais: any[] = TRANG_THAI_GIAO_DU_TOAN;
     noiDungs: any[] = [];
-    soLaMa: any[] = LA_MA;
+    soLaMa: any[] = Utils.LA_MA;
     //file
     fileDetail: NzUploadFile;
     // khac

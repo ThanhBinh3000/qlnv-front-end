@@ -10,7 +10,7 @@ import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { GDT, Status, Utils } from 'src/app/Utility/utils';
+import { GDT, Utils } from 'src/app/Utility/utils';
 
 export const TRANG_THAI_TIM_KIEM_GIAO = [
     {
