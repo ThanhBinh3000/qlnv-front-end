@@ -328,6 +328,8 @@ export class PhuLuc7Component implements OnInit {
                 item.dkienThienChiPhiNgoaiCuaKho = Operator.mul(item.binhQuanChiPhiNgoaiCuaKho, item.dkienThienLuong);
                 item.tdiemBcaoChiPhiTongCong = Operator.sum([item.tdiemBcaoChiPhiTaiCuaKho, item.tdiemBcaoChiPhiNgoaiCuaKho])
                 item.dkienThienChiPhiTongCong = Operator.sum([item.dkienThienChiPhiTaiCuaKho, item.dkienThienChiPhiNgoaiCuaKho])
+                item.ncauDtoan = Operator.sum([item.tdiemBcaoChiPhiTongCong, item.dkienThienChiPhiTongCong])
+                item.dtoanDnghiDchinh = Operator.sum([item.ncauDtoan, - item.dtoanLkeDaGiao])
             }
             this.sum1()
         })
@@ -341,6 +343,8 @@ export class PhuLuc7Component implements OnInit {
                 item.dkienThienChiPhiNgoaiCuaKho = Operator.mul(item.binhQuanChiPhiNgoaiCuaKho, item.dkienThienLuong);
                 item.tdiemBcaoChiPhiTongCong = Operator.sum([item.tdiemBcaoChiPhiTaiCuaKho, item.tdiemBcaoChiPhiNgoaiCuaKho])
                 item.dkienThienChiPhiTongCong = Operator.sum([item.dkienThienChiPhiTaiCuaKho, item.dkienThienChiPhiNgoaiCuaKho])
+                item.ncauDtoan = Operator.sum([item.tdiemBcaoChiPhiTongCong, item.dkienThienChiPhiTongCong])
+                item.dtoanDnghiDchinh = Operator.sum([item.ncauDtoan, - item.dtoanLkeDaGiao])
             })
             this.sum1()
         }

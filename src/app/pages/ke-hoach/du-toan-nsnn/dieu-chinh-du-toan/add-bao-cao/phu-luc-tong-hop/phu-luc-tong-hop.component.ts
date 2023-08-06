@@ -597,7 +597,7 @@ export class PhuLucTongHopComponent implements OnInit {
             this.lstCtietBcao[index].tongDchinhTang = 0
             this.lstCtietBcao[index].child.forEach(item => {
 
-                if (item.dtoanVuTvqtDnghi !== null) {
+                if (item.dtoanVuTvqtDnghi && item.dtoanVuTvqtDnghi !== null) {
                     if (item.dtoanVuTvqtDnghi < 0) {
                         this.lstCtietBcao[index].tongDchinhGiam += Number(item.dtoanVuTvqtDnghi);
                     } else {
