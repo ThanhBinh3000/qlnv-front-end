@@ -54,15 +54,15 @@ export class ItemData {
     }
 
     clear() {
-        this.soLuongKhoach = null;
-        this.soLuongTte = null;
-        this.ttGiaHtoan = null,
-            this.ttGiaBanTte = null;
-        // Object.keys(this).forEach(key => {
-        //     if (typeof this[key] === 'number' && key != 'level') {
-        //         this[key] = null;
-        //     }
-        // })
+        // this.soLuongKhoach = null;
+        // this.soLuongTte = null;
+        // this.ttGiaHtoan = null;
+        // this.ttGiaBanTte = null;
+        Object.keys(this).forEach(key => {
+            if (typeof this[key] === 'number' && key != 'level') {
+                this[key] = null;
+            }
+        })
     }
 
     upperBound() {

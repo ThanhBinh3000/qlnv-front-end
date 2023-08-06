@@ -103,7 +103,7 @@ export class BaoCaoComponent implements OnInit {
         private notification: NzNotificationService,
         private modal: NzModalService,
         public globals: Globals,
-        private fileManip: FileManip,
+        // private fileManip: FileManip,
     ) { }
 
     async ngOnInit() {
@@ -285,7 +285,7 @@ export class BaoCaoComponent implements OnInit {
             file = this.listFile.find(element => element?.lastModified.toString() == id);
             doc = this.baoCao.lstFiles.find(element => element?.id == id);
         }
-        await this.fileManip.downloadFile(file, doc);
+        await this.quanLyVonPhiService.downFile(file, doc);
     }
 
     // call chi tiet bao cao
@@ -410,7 +410,7 @@ export class BaoCaoComponent implements OnInit {
 
         baoCaoTemp.fileDinhKems = [];
         for (const iterator of this.listFile) {
-            baoCaoTemp.fileDinhKems.push(await this.fileManip.uploadFile(iterator, this.path));
+            baoCaoTemp.fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.path));
         }
 
         //get file cong van url
@@ -421,7 +421,7 @@ export class BaoCaoComponent implements OnInit {
                 return;
             } else {
                 baoCaoTemp.congVan = {
-                    ...await this.fileManip.uploadFile(file, this.path),
+                    ...await this.quanLyVonPhiService.upFile(file, this.path),
                     fileName: this.baoCao.congVan.fileName,
                 }
             }
