@@ -4,7 +4,7 @@ import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { GDT, Utils } from 'src/app/Utility/utils';
+import { Roles, Status, Utils } from 'src/app/Utility/utils';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
@@ -182,14 +182,14 @@ export class PhanBoDuToanComponent implements OnInit {
         this.searchFilter.donViTao = this.userInfo?.MA_DVI;
         this.checkVP = this.userInfo.DON_VI.type.indexOf('PB') != -1;
 
-        if (this.userService.isAccessPermisson(GDT.ADD_REPORT_CV_QD_GIAO_PA_PBDT)) {
+        if (this.userService.isAccessPermisson(Roles.GDT.ADD_REPORT_CV_QD_GIAO_PA_PBDT)) {
             this.statusTaoMoi = false;
         }
-        if (this.userService.isAccessPermisson(GDT.ADD_REPORT_CV_QD_GIAO_PA_PBDT)) {
+        if (this.userService.isAccessPermisson(Roles.GDT.ADD_REPORT_CV_QD_GIAO_PA_PBDT)) {
             this.trangThai = '1';
-        } else if (this.userService.isAccessPermisson(GDT.DUYET_REPORT_PA_PBDT)) {
+        } else if (this.userService.isAccessPermisson(Roles.GDT.DUYET_REPORT_PA_PBDT)) {
             this.trangThai = '2';
-        } else if (this.userService.isAccessPermisson(GDT.PHE_DUYET_REPORT_PA_PBDT)) {
+        } else if (this.userService.isAccessPermisson(Roles.GDT.PHE_DUYET_REPORT_PA_PBDT)) {
             this.trangThai = '4';
         }
         //lay danh sach danh muc
@@ -237,7 +237,7 @@ export class PhanBoDuToanComponent implements OnInit {
         if (this.trangThai) {
             searchFilterTemp.trangThais.push(this.trangThai)
         } else {
-            searchFilterTemp.trangThais = [Utils.TT_BC_1, Utils.TT_BC_2, Utils.TT_BC_3, Utils.TT_BC_4, Utils.TT_BC_5, Utils.TT_BC_6, Utils.TT_BC_7, Utils.TT_BC_8, Utils.TT_BC_9]
+            searchFilterTemp.trangThais = [Status.TT_01, Status.TT_02, Status.TT_03, Status.TT_04, Status.TT_05, Status.TT_06, Status.TT_07, Status.TT_08, Status.TT_09]
         }
         if (this.trangThaiGiao) {
             searchFilterTemp.trangThaiGiaos.push(this.trangThaiGiao)
@@ -285,13 +285,13 @@ export class PhanBoDuToanComponent implements OnInit {
     };
 
     checkEditStatus(trangThai: string) {
-        return Utils.statusSave.includes(trangThai) &&
-            (this.userService.isAccessPermisson(GDT.EDIT_REPORT_PA_PBDT));
+        return [Status.TT_01].includes(trangThai) &&
+            (this.userService.isAccessPermisson(Roles.GDT.EDIT_REPORT_PA_PBDT));
     };
 
     checkDeleteStatus(trangThai: string) {
-        return Utils.statusDelete.includes(trangThai) &&
-            (this.userService.isAccessPermisson(GDT.DELETE_REPORT_PA_PBDT));
+        return [Status.TT_01].includes(trangThai) &&
+            (this.userService.isAccessPermisson(Roles.GDT.DELETE_REPORT_PA_PBDT));
     };
 
     updateSingleChecked(): void {

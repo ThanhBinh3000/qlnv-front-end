@@ -5,7 +5,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { GDT, Operator, Utils } from 'src/app/Utility/utils';
+import { Roles, Operator, Utils, Status } from 'src/app/Utility/utils';
 import { DialogCopyGiaoDuToanComponent } from 'src/app/components/dialog/dialog-copy-giao-du-toan/dialog-copy-giao-du-toan.component';
 import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialog-copy.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
@@ -155,7 +155,7 @@ export class BaoCaoTongHopComponent implements OnInit {
     editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
     newDate = new Date();
     fileDetail: NzUploadFile;
-
+    Status = Status
     // trước khi upload
     beforeUpload = (file: NzUploadFile): boolean => {
         this.fileList = this.fileList.concat(file);
@@ -379,7 +379,7 @@ export class BaoCaoTongHopComponent implements OnInit {
             nzOkDanger: true,
             nzWidth: 500,
             nzOnOk: () => {
-                this.onSubmit(Utils.TT_BC_2, '')
+                this.onSubmit(Status.TT_02, '')
             },
         });
     }
@@ -870,7 +870,7 @@ export class BaoCaoTongHopComponent implements OnInit {
 
     //check role cho các nut trinh duyet
     getStatusButton() {
-        if (Utils.statusSave.includes(this.trangThaiBanGhi) && this.userService.isAccessPermisson(GDT.EDIT_REPORT_PA_PBDT)) {
+        if ([Status.TT_01].includes(this.trangThaiBanGhi) && this.userService.isAccessPermisson(Roles.GDT.EDIT_REPORT_PA_PBDT)) {
             this.status = false;
         } else {
             this.status = true;
@@ -889,21 +889,21 @@ export class BaoCaoTongHopComponent implements OnInit {
         const utils = new Utils();
         const checkChirld = this.maDonViTao == this.userInfo?.MA_DVI;
 
-        this.statusBtnSave = this.getBtnStatus(Utils.statusSave, GDT.EDIT_REPORT_PA_PBDT, checkChirld);
-        this.statusBtnApprove = this.getBtnStatus(Utils.statusApprove, GDT.APPROVE_REPORT_PA_PBDT, checkChirld);
-        this.statusBtnTBP = this.getBtnStatus(Utils.statusDuyet, GDT.DUYET_REPORT_PA_PBDT, checkChirld);
-        this.statusBtnLD = this.getBtnStatus(Utils.statusPheDuyet, GDT.PHE_DUYET_REPORT_PA_PBDT, checkChirld);
-        this.statusBtnCopy = this.getBtnStatus(Utils.statusCopy, GDT.COPY_REPORT_PA_PBDT, checkChirld);
-        this.statusBtnPrint = this.getBtnStatus(Utils.statusPrint, GDT.PRINT_REPORT_PA_PBDT, checkChirld);
-        this.statusBtnDVCT = this.getBtnStatus(Utils.statusTiepNhan, GDT.TIEPNHAN_TUCHOI_PA_PBDT, checkParent);
+        this.statusBtnSave = this.getBtnStatus([Status.TT_01], Roles.GDT.EDIT_REPORT_PA_PBDT, checkChirld);
+        this.statusBtnApprove = this.getBtnStatus([Status.TT_01], Roles.GDT.APPROVE_REPORT_PA_PBDT, checkChirld);
+        this.statusBtnTBP = this.getBtnStatus([Status.TT_02], Roles.GDT.DUYET_REPORT_PA_PBDT, checkChirld);
+        this.statusBtnLD = this.getBtnStatus([Status.TT_04], Roles.GDT.PHE_DUYET_REPORT_PA_PBDT, checkChirld);
+        this.statusBtnCopy = this.getBtnStatus([Status.TT_01, Status.TT_02, Status.TT_03, Status.TT_04, Status.TT_05, Status.TT_06, Status.TT_07, Status.TT_08, Status.TT_09], Roles.GDT.COPY_REPORT_PA_PBDT, checkChirld);
+        this.statusBtnPrint = this.getBtnStatus([Status.TT_01, Status.TT_02, Status.TT_03, Status.TT_04, Status.TT_05, Status.TT_06, Status.TT_07, Status.TT_08, Status.TT_09], Roles.GDT.PRINT_REPORT, checkChirld);
+        this.statusBtnDVCT = this.getBtnStatus([Status.TT_06, Status.TT_07], Roles.GDT.TIEPNHAN_TUCHOI_PA_PBDT, checkParent);
 
-        if (this.userService.isAccessPermisson(GDT.GIAO_PA_PBDT) && this.soQd) {
+        if (this.userService.isAccessPermisson(Roles.GDT.GIAO_PA_PBDT) && this.soQd) {
             this.statusBtnGiao = false;
         } else {
             this.statusBtnGiao = true;
             this.statusGiaoToanBo = true;
         }
-        if (this.userService.isAccessPermisson(GDT.GIAODT_TRINHTONGCUC_PA_PBDT) && this.soQd?.fileName != null && this.trangThaiBanGhi == '6' && this.checkSumUp == false && this.userInfo.CAP_DVI == "2") {
+        if (this.userService.isAccessPermisson(Roles.GDT.GIAODT_TRINHTONGCUC_PA_PBDT) && this.soQd?.fileName != null && this.trangThaiBanGhi == '6' && this.checkSumUp == false && this.userInfo.CAP_DVI == "2") {
             this.statusBtnGuiDVCT = false;
         }
         if (this.trangThaiBanGhi == "7") {
@@ -931,7 +931,7 @@ export class BaoCaoTongHopComponent implements OnInit {
                 if (data.statusCode == 0) {
                     this.trangThaiBanGhi = mcn;
                     this.getStatusButton();
-                    if (mcn == Utils.TT_BC_8 || mcn == Utils.TT_BC_5 || mcn == Utils.TT_BC_3) {
+                    if (mcn == Status.TT_08 || mcn == Status.TT_05 || mcn == Status.TT_03) {
                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.REVERT_SUCCESS);
                     } else {
                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
@@ -996,7 +996,7 @@ export class BaoCaoTongHopComponent implements OnInit {
 
     // lấy thông tin trạng thái PA
     getStatusName() {
-        if (this.trangThaiBanGhi == Utils.TT_BC_6) {
+        if (this.trangThaiBanGhi == Status.TT_06) {
             return "Phê duyệt"
         }
         return this.trangThais.find(e => e.id == this.trangThaiBanGhi)?.tenDm;
@@ -1334,7 +1334,7 @@ export class BaoCaoTongHopComponent implements OnInit {
     }
 
     statusDeleteCv() {
-        if (!this.userService.isAccessPermisson(GDT.EDIT_REPORT_CV_QD_GIAO_PA_PBDT)) {
+        if (!this.userService.isAccessPermisson(Roles.GDT.EDIT_REPORT_CV_QD_GIAO_PA_PBDT)) {
             return false;
         }
         if (!this.soQd?.fileName) {
@@ -1350,13 +1350,13 @@ export class BaoCaoTongHopComponent implements OnInit {
         return check;
     };
 
-    statusClass() {
-        if (Utils.statusSave.includes(this.trangThaiBanGhi)) {
-            return 'du-thao-va-lanh-dao-duyet';
-        } else {
-            return 'da-ban-hanh';
-        }
-    };
+    // statusClass() {
+    //     if (Utils.statusSave.includes(this.trangThaiBanGhi)) {
+    //         return 'du-thao-va-lanh-dao-duyet';
+    //     } else {
+    //         return 'da-ban-hanh';
+    //     }
+    // };
 
 
 }

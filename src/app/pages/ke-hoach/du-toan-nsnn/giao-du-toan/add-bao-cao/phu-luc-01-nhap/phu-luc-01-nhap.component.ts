@@ -3,7 +3,7 @@ import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { DON_VI_TIEN, FileManip, Operator, Status, Table, Utils } from 'src/app/Utility/utils';
+import { Operator, Status, Table, Utils } from 'src/app/Utility/utils';
 import { DialogDanhSachVatTuHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-vat-tu-hang-hoa/dialog-danh-sach-vat-tu-hang-hoa.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
@@ -132,7 +132,7 @@ export class PhuLuc01NhapComponent implements OnInit {
     };
 
 
-    donViTiens: any[] = DON_VI_TIEN;
+    donViTiens: any[] = Utils.DVI_TIEN;
     thuyetMinh: string;
     maDviTao: any;
     namBaoCao: number;
@@ -144,7 +144,6 @@ export class PhuLuc01NhapComponent implements OnInit {
         private notification: NzNotificationService,
         private modal: NzModalService,
         private quanLyVonPhiService: QuanLyVonPhiService,
-        private fileManip: FileManip,
     ) {
     }
 

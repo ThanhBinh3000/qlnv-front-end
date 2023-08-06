@@ -5,7 +5,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { Operator, QTVP, Utils } from 'src/app/Utility/utils';
+import { Operator, Roles, Status, Utils } from 'src/app/Utility/utils';
 import { DialogCopyQuyetToanVonPhiHangDtqgComponent } from 'src/app/components/dialog/dialog-copy-quyet-toan-von-phi-hang-dtqg/dialog-copy-quyet-toan-von-phi-hang-dtqg.component';
 import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialog-copy.component';
 import { DialogThemKhoanMucComponent } from 'src/app/components/dialog/dialog-them-khoan-muc/dialog-them-khoan-muc.component';
@@ -51,6 +51,7 @@ export class AddDieuChinhQuyetToanComponent implements OnInit {
     @Input() idInput;
     @Input() isStatus;
     @Output('close') onClose = new EventEmitter<any>();
+    Status = Status
     Op = new Operator("1");
     // thong tin dang nhap
     userInfo: any;
@@ -154,27 +155,27 @@ export class AddDieuChinhQuyetToanComponent implements OnInit {
 
     trangThais: any[] = [
         {
-            id: Utils.TT_BC_1,
+            id: Status.TT_01,
             tenDm: "Đang soạn",
         },
         {
-            id: Utils.TT_BC_2,
+            id: Status.TT_02,
             tenDm: "Trình duyệt",
         },
         {
-            id: Utils.TT_BC_3,
+            id: Status.TT_03,
             tenDm: "Trưởng BP từ chối",
         },
         {
-            id: Utils.TT_BC_4,
+            id: Status.TT_04,
             tenDm: "Trưởng BP duyệt",
         },
         {
-            id: Utils.TT_BC_5,
+            id: Status.TT_05,
             tenDm: "Lãnh đạo từ chối",
         },
         {
-            id: Utils.TT_BC_6,
+            id: Status.TT_06,
             tenDm: "Lãnh đạo phê duyệt",
         },
     ]
@@ -407,7 +408,7 @@ export class AddDieuChinhQuyetToanComponent implements OnInit {
                             this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
                         }
                     );
-                    if (mcn == Utils.TT_BC_8 || mcn == Utils.TT_BC_5 || mcn == Utils.TT_BC_3) {
+                    if (mcn == Status.TT_08 || mcn == Status.TT_05 || mcn == Status.TT_03) {
                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
                     } else {
                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
@@ -676,7 +677,7 @@ export class AddDieuChinhQuyetToanComponent implements OnInit {
 
     //nhóm các nút chức năng --báo cáo-----
     getStatusButton() {
-        if (Utils.statusSave.includes(this.isStatus) && this.userService.isAccessPermisson(QTVP.EDIT_REPORT)) {
+        if ([Status.TT_01].includes(this.isStatus) && this.userService.isAccessPermisson(Roles.QTVP.EDIT_REPORT)) {
             this.status = false;
         } else {
             this.status = true;
@@ -689,25 +690,24 @@ export class AddDieuChinhQuyetToanComponent implements OnInit {
         // }
         const checkChirld = this.maDviTao == this.userInfo?.MA_DVI;
         // if (checkParent) {
-        //     const index: number = this.trangThais.findIndex(e => e.id == Utils.TT_BC_7);
+        //     const index: number = this.trangThais.findIndex(e => e.id == Status.TT_07);
         //     this.trangThais[index].tenDm = "Mới";
         // }
-        this.saveStatus = this.getBtnStatus(Utils.statusSave, QTVP.ADD_REPORT, checkChirld);
-        this.submitStatus = this.getBtnStatus(Utils.statusApprove, QTVP.APPROVE_REPORT, checkChirld);
-        this.passStatus = this.getBtnStatus(Utils.statusDuyet, QTVP.DUYET_QUYET_TOAN_REPORT, checkChirld);
-        this.approveStatus = this.getBtnStatus(Utils.statusPheDuyet, QTVP.PHE_DUYET_QUYET_TOAN_REPORT, checkChirld);
-        // this.statusBtnDVCT = this.getBtnStatus(Utils.statusTiepNhan, QTVP.EDIT_DIEU_CHINH_REPORT, checkParent);
-        this.copyStatus = this.getBtnStatus(Utils.statusCopy, QTVP.COPY_REPORT, checkChirld);
-        this.printStatus = this.getBtnStatus(Utils.statusPrint, QTVP.PRINT_REPORT, checkChirld);
+        this.saveStatus = this.getBtnStatus([Status.TT_01], Roles.QTVP.ADD_REPORT, checkChirld);
+        this.submitStatus = this.getBtnStatus([Status.TT_01], Roles.QTVP.APPROVE_REPORT, checkChirld);
+        this.passStatus = this.getBtnStatus([Status.TT_02], Roles.QTVP.DUYET_QUYET_TOAN_REPORT, checkChirld);
+        this.approveStatus = this.getBtnStatus([Status.TT_04], Roles.QTVP.PHE_DUYET_QUYET_TOAN_REPORT, checkChirld);
+        this.copyStatus = this.getBtnStatus([Status.TT_01, Status.TT_02, Status.TT_03, Status.TT_04, Status.TT_05, Status.TT_06, Status.TT_07, Status.TT_08, Status.TT_09], Roles.QTVP.COPY_REPORT, checkChirld);
+        this.printStatus = this.getBtnStatus([Status.TT_01, Status.TT_02, Status.TT_03, Status.TT_04, Status.TT_05, Status.TT_06, Status.TT_07, Status.TT_08, Status.TT_09], Roles.QTVP.PRINT_REPORT, checkChirld);
 
         // const checkChirld = this.maDviTao == this.userInfo?.MA_DVI;
 
-        // const checkSave = this.userService.isAccessPermisson(QTVP.EDIT_REPORT);
-        // const checkSubmit = this.userService.isAccessPermisson(QTVP.APPROVE_REPORT);
-        // const checkPass = this.userService.isAccessPermisson(QTVP.DUYET_QUYET_TOAN_REPORT);
-        // const checkApprove = this.userService.isAccessPermisson(QTVP.PHE_DUYET_QUYET_TOAN_REPORT);
-        // const checkCopy = this.userService.isAccessPermisson(QTVP.COPY_REPORT);
-        // const checkPrint = this.userService.isAccessPermisson(QTVP.PRINT_REPORT);
+        // const checkSave = this.userService.isAccessPermisson(Roles.QTVP.EDIT_REPORT);
+        // const checkSubmit = this.userService.isAccessPermisson(Roles.QTVP.APPROVE_REPORT);
+        // const checkPass = this.userService.isAccessPermisson(Roles.QTVP.DUYET_QUYET_TOAN_REPORT);
+        // const checkApprove = this.userService.isAccessPermisson(Roles.QTVP.PHE_DUYET_QUYET_TOAN_REPORT);
+        // const checkCopy = this.userService.isAccessPermisson(Roles.QTVP.COPY_REPORT);
+        // const checkPrint = this.userService.isAccessPermisson(Roles.QTVP.PRINT_REPORT);
 
         // if (Utils.statusSave.includes(this.isStatus) && checkSave) {
         //     this.status = false;
@@ -895,13 +895,13 @@ export class AddDieuChinhQuyetToanComponent implements OnInit {
         return this.maDviTiens.find(e => e.id == this.maDviTien)?.tenDm;
     };
 
-    statusClass() {
-        if (Utils.statusSave.includes(this.isStatus)) {
-            return 'du-thao-va-lanh-dao-duyet';
-        } else {
-            return 'da-ban-hanh';
-        }
-    };
+    // statusClass() {
+    //     if (Utils.statusSave.includes(this.isStatus)) {
+    //         return 'du-thao-va-lanh-dao-duyet';
+    //     } else {
+    //         return 'da-ban-hanh';
+    //     }
+    // };
 
     //download file công văn về máy tính
     async downloadFileCv() {

@@ -3,15 +3,13 @@ import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
-// import { Operator.mul } from 'src/app/Utility/func';
-import { DON_VI_TIEN, FileManip, LA_MA, Operator, Status, Table, Utils } from 'src/app/Utility/utils';
+import { Operator, Status, Table, Utils } from 'src/app/Utility/utils';
 import { DialogDanhSachVatTuHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-vat-tu-hang-hoa/dialog-danh-sach-vat-tu-hang-hoa.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
-import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import * as uuid from 'uuid';
 import * as XLSX from 'xlsx';
@@ -135,7 +133,7 @@ export class PhuLuc01XuatComponent implements OnInit {
         this.fileList = [];
     };
 
-    donViTiens: any[] = DON_VI_TIEN;
+    donViTiens: any[] = Utils.DVI_TIEN;
     // editMoneyUnit = false;
     // maDviTien: string = '1';
     // lstCtietBcaos: ItemData[] = [];
@@ -155,7 +153,7 @@ export class PhuLuc01XuatComponent implements OnInit {
     dsDinhMucX: any[] = [];
     dsDinhMucN: any[] = [];
     maDviTao: any;
-    soLaMa: any[] = LA_MA;
+    soLaMa: any[] = Utils.LA_MA;
     // allChecked = false;
     // namBcao: number;
     tongSo: number;
@@ -171,13 +169,11 @@ export class PhuLuc01XuatComponent implements OnInit {
     constructor(
         private _modalRef: NzModalRef,
         private spinner: NgxSpinnerService,
-        private lapThamDinhService: LapThamDinhService,
         private giaoDuToanService: GiaoDuToanChiService,
         private notification: NzNotificationService,
         private modal: NzModalService,
         private danhMucService: DanhMucHDVService,
         private quanLyVonPhiService: QuanLyVonPhiService,
-        private fileManip: FileManip,
     ) {
     }
 

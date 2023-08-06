@@ -4,7 +4,7 @@ import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { GDT, Status, Utils } from 'src/app/Utility/utils';
+import { Roles, Status, Utils } from 'src/app/Utility/utils';
 import { MESSAGE } from 'src/app/constants/message';
 import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
 import { UserService } from 'src/app/services/user.service';
@@ -25,7 +25,7 @@ export class DanhSachBaoCaoComponent implements OnInit {
         denNgay: null,
         maBaoCao: "",
         donViTao: "",
-        trangThai: Utils.TT_BC_1,
+        trangThai: Status.TT_01,
         loaiDuAn: [1, 2],
         maPhanGiao: "3"
     };
@@ -82,13 +82,13 @@ export class DanhSachBaoCaoComponent implements OnInit {
         this.searchFilter.tuNgay = newDate;
         this.searchFilter.donViTao = this.userInfo?.MA_DVI;
         //check quyen va cac nut chuc nang
-        this.statusNewReport = this.userService.isAccessPermisson(GDT.ADD_REPORT_PA_PBDT);
-        this.statusDelete = this.userService.isAccessPermisson(GDT.DELETE_REPORT_PA_PBDT) || this.userService.isAccessPermisson(GDT.DELETE_REPORT_PA_PBDT);
-        if (this.userService.isAccessPermisson(GDT.DUYET_REPORT_TH) || this.userService.isAccessPermisson(GDT.DUYET_TUCHOI_PA_TH_PBDT)) {
-            this.searchFilter.trangThai = Utils.TT_BC_2;
+        this.statusNewReport = this.userService.isAccessPermisson(Roles.GDT.ADD_REPORT_PA_PBDT);
+        this.statusDelete = this.userService.isAccessPermisson(Roles.GDT.DELETE_REPORT_PA_PBDT) || this.userService.isAccessPermisson(Roles.GDT.DELETE_REPORT_PA_PBDT);
+        if (this.userService.isAccessPermisson(Roles.GDT.DUYET_REPORT_TH) || this.userService.isAccessPermisson(Roles.GDT.DUYET_TUCHOI_PA_TH_PBDT)) {
+            this.searchFilter.trangThai = Status.TT_02;
         } else {
-            if (this.userService.isAccessPermisson(GDT.PHE_DUYET_REPORT_PA_PBDT) || this.userService.isAccessPermisson(GDT.PHE_DUYET_REPORT_PA_PBDT)) {
-                this.searchFilter.trangThai = Utils.TT_BC_4;
+            if (this.userService.isAccessPermisson(Roles.GDT.PHE_DUYET_REPORT_PA_PBDT) || this.userService.isAccessPermisson(Roles.GDT.PHE_DUYET_REPORT_PA_PBDT)) {
+                this.searchFilter.trangThai = Status.TT_04;
             }
         }
         this.search();
@@ -101,7 +101,7 @@ export class DanhSachBaoCaoComponent implements OnInit {
         if (this.searchFilter.trangThai) {
             trangThais = [this.searchFilter.trangThai];
         } else {
-            trangThais = [Utils.TT_BC_1, Utils.TT_BC_2, Utils.TT_BC_3, Utils.TT_BC_4, Utils.TT_BC_5, Utils.TT_BC_6, Utils.TT_BC_7, Utils.TT_BC_8, Utils.TT_BC_9]
+            trangThais = [Status.TT_01, Status.TT_02, Status.TT_03, Status.TT_04, Status.TT_05, Status.TT_06, Status.TT_07, Status.TT_08, Status.TT_09]
         }
         let requestReport
         if (this.userInfo.CAP_DVI == "3") {
@@ -196,14 +196,14 @@ export class DanhSachBaoCaoComponent implements OnInit {
 
     checkEditStatus(item: any) {
         const isSynthetic = item.tongHopTu != "[]";
-        return Utils.statusSave.includes(item.trangThai) &&
-            (isSynthetic ? this.userService.isAccessPermisson(GDT.EDIT_REPORT_TH) : this.userService.isAccessPermisson(GDT.EDIT_REPORT_TH));
+        return [Status.TT_01].includes(item.trangThai) &&
+            (isSynthetic ? this.userService.isAccessPermisson(Roles.GDT.EDIT_REPORT_TH) : this.userService.isAccessPermisson(Roles.GDT.EDIT_REPORT_TH));
     }
 
     checkDeleteStatus(item: any) {
         const isSynthetic = item.tongHopTu != "[]";
-        return Utils.statusDelete.includes(item.trangThai) &&
-            (isSynthetic ? this.userService.isAccessPermisson(GDT.XOA_REPORT_TH) : this.userService.isAccessPermisson(GDT.XOA_REPORT_TH));
+        return [Status.TT_01].includes(item.trangThai) &&
+            (isSynthetic ? this.userService.isAccessPermisson(Roles.GDT.XOA_REPORT_TH) : this.userService.isAccessPermisson(Roles.GDT.XOA_REPORT_TH));
     }
 
     getStatusName(trangThai: string) {

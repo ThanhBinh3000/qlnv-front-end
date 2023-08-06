@@ -5,7 +5,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { FileManip, Roles, Status, Utils } from 'src/app/Utility/utils';
+import { Roles, Status, Utils } from 'src/app/Utility/utils';
 import { DialogChonThemBieuMauComponent } from 'src/app/components/dialog/dialog-chon-them-bieu-mau/dialog-chon-them-bieu-mau.component';
 import { DialogCongVanComponent } from 'src/app/components/dialog/dialog-cong-van/dialog-cong-van.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
@@ -143,7 +143,6 @@ export class AddBaoCaoComponent implements OnInit {
         public globals: Globals,
         private quanLyVonPhiService: QuanLyVonPhiService,
         private dieuChinhDuToanService: DieuChinhService,
-        public fileManip: FileManip,
     ) { }
 
     async ngOnInit() {
@@ -339,7 +338,7 @@ export class AddBaoCaoComponent implements OnInit {
             nzOkDanger: true,
             nzWidth: 500,
             nzOnOk: () => {
-                this.onSubmit(Utils.TT_BC_2, '')
+                this.onSubmit(Status.TT_02, '')
             },
         });
     }
@@ -369,7 +368,7 @@ export class AddBaoCaoComponent implements OnInit {
             baoCaoTemp.fileDinhKems = [];
         }
         for (const iterator of this.listFile) {
-            baoCaoTemp.fileDinhKems.push(await this.fileManip.uploadFile(iterator, this.path));
+            baoCaoTemp.fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.path));
         }
         //get file cong van url
         const file: any = this.fileDetail;
@@ -379,7 +378,7 @@ export class AddBaoCaoComponent implements OnInit {
                 return;
             } else {
                 baoCaoTemp.congVan = {
-                    ...await this.fileManip.uploadFile(file, this.path),
+                    ...await this.quanLyVonPhiService.upFile(file, this.path),
                     fileName: this.baoCao.congVan.fileName,
                 }
             }
@@ -446,7 +445,7 @@ export class AddBaoCaoComponent implements OnInit {
 
     // chuc nang check role
     async onSubmit(mcn: string, lyDoTuChoi: string) {
-        if (mcn == Utils.TT_BC_2) {
+        if (mcn == Status.TT_02) {
             if (!this.baoCao.congVan) {
                 this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
                 return;
@@ -457,7 +456,7 @@ export class AddBaoCaoComponent implements OnInit {
             }
         } else {
             let check = true;
-            if (mcn == Utils.TT_BC_4 || mcn == Utils.TT_BC_7 || mcn == Utils.TT_BC_9) {
+            if (mcn == Status.TT_04 || mcn == Status.TT_07 || mcn == Status.TT_09) {
                 this.baoCao.lstDchinh.forEach(item => {
                     if (item.trangThai == '2') {
                         check = false;
@@ -478,7 +477,7 @@ export class AddBaoCaoComponent implements OnInit {
             if (data.statusCode == 0) {
                 this.baoCao.trangThai = mcn;
                 this.getStatusButton();
-                if (mcn == Utils.TT_BC_8 || mcn == Utils.TT_BC_5 || mcn == Utils.TT_BC_3) {
+                if (mcn == Status.TT_08 || mcn == Status.TT_05 || mcn == Status.TT_03) {
                     this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
                 } else {
                     this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
@@ -521,16 +520,9 @@ export class AddBaoCaoComponent implements OnInit {
         }
     }
 
-    statusClass() {
-        if (Utils.statusSave.includes(this.baoCao.trangThai)) {
-            return 'du-thao-va-lanh-dao-duyet';
-        } else {
-            return 'da-ban-hanh';
-        }
-    };
 
     // getStatusName(status: string) {
-    //   const statusMoi = status == Utils.TT_BC_6 || status == Utils.TT_BC_7;
+    //   const statusMoi = status == Utils.TT_06 || status == Utils.TT_07;
     //   const maDviCha = this.baoCao.maDvi.slice(0, (this.baoCao.maDvi.length - 2));
     //   if (statusMoi && this.userInfo.MA_DVI == maDviCha) {
     //     return "Mới";
@@ -730,7 +722,7 @@ export class AddBaoCaoComponent implements OnInit {
             file = this.listFile.find(element => element?.lastModified.toString() == id);
             doc = this.baoCao.lstFiles.find(element => element?.id == id);
         }
-        await this.fileManip.downloadFile(file, doc);
+        await this.quanLyVonPhiService.downFile(file, doc);
     }
 
     async restoreReport(id: string) {

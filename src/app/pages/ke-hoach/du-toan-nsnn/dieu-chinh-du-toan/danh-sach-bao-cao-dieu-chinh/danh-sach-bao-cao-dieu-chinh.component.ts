@@ -32,7 +32,7 @@ export class DanhSachBaoCaoDieuChinhComponent implements OnInit {
         denNgay: null,
         maBcao: "",
         donViTao: "",
-        trangThai: Utils.TT_BC_1,
+        trangThai: Status.TT_01,
     };
 
     pages = {
