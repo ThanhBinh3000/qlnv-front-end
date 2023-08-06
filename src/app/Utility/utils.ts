@@ -913,11 +913,6 @@ export class Utils {
 	public static NGUNG_HOAT_DONG = "02";
 	public static TAM_KHOA = "03";
 
-	// Loai bao cao
-	public static BCAO_CTXGD03N = "01";
-	public static BCAO_02 = "02";
-	public static BCAO_03 = "03";
-
 	// Trang thái báo cáo
 	public static TT_BC_KT = "-1"; // kiem tra
 	public static TT_BC_0 = "0"; // Đã xóa
@@ -932,32 +927,13 @@ export class Utils {
 	public static TT_BC_9 = "9"; // Đv cấp trên duyệt,
 	public static TT_BC_10 = "10"; // Lãnh đạo điều chỉnh,
 	public static TT_BC_11 = "11"; //Trạng thái của Phương án giao số trần chi (đã giao);
-	// Danh sach quyen
-	public static LANH_DAO = '1';// "Lãnh Đạo";
-	public static TRUONG_BO_PHAN = '2';// "Trưởng Bộ Phận";
-	public static NHAN_VIEN = '3';// "Nhân Viên";
-
 	// Cap don vi
 	public static CHI_CUC = "3";
 	public static CUC_KHU_VUC = "2";
 	public static TONG_CUC = "1";
 
-	//loai de nghi
-	public static MUA_THOC = "0";
-	public static MUA_GAO = "1";
-	public static MUA_MUOI = "2";
-	public static MUA_VTU = "3";
-	public static THOP_TU_CUC_KV = "4";
-	public static THOP_TAI_TC = "5";
-	//can cu gia
-	public static HD_TRUNG_THAU = "0";
-	public static QD_DON_GIA = "1";
-	//loai von
-	public static CAP_VON = "1";
-	public static UNG_VON = "2";
-
 	////////// TRANG THAI BAO CAO DE THUC HIEN THAO TAC /////////////////////////////////
-	//xoa
+	// xoa
 	public static statusDelete = [Utils.TT_BC_1];
 	//luu
 	public static statusSave = [Utils.TT_BC_1];
@@ -1314,39 +1290,6 @@ export class Roles {
 	};
 }
 
-// //////////////////// LAP THAM DINH /////////////////////////////////
-export const LTD = {
-	ADD_REPORT: 'KHVDTNSNN_DTNSNN_LAPTD_LAP_BC',  									//lap bao cao
-	APPROVE_REPORT: 'KHVDTNSNN_DTNSNN_LAPTD_TRINHDUYET_BC',							//trinh duyet bao cao
-	EDIT_REPORT: 'KHVDTNSNN_DTNSNN_LAPTD_SUA_BC',									//sua bao cao
-	DELETE_REPORT: 'KHVDTNSNN_DTNSNN_LAPTD_XOA_BC',									//xoa bao cao
-	COPY_REPORT: 'KHVDTNSNN_DTNSNN_LAPTD_COPY_BC',									//copy bao cao
-	DUYET_REPORT: 'KHVDTNSNN_DTNSNN_LAPTD_DUYET_TUCHOIDUYET_BC',					//duyet bao cao
-	PHE_DUYET_REPORT: 'KHVDTNSNN_DTNSNN_LAPTD_PHEDUYET_TUCHOIPHEDUYET_BC',			//phe duyet bao cao
-	VIEW_REPORT: 'KHVDTNSNN_DTNSNN_LAPTD_XEM_BC',									//xem bao cao
-	PRINT_REPORT: 'KHVDTNSNN_DTNSNN_LAPTD_IN_BC',									//in bao cao
-	EXPORT_REPORT: 'KHVDTNSNN_DTNSNN_LAPTD_XUAT_BC',								//xuat bao cao
-	TIEP_NHAN_REPORT: 'KHVDTNSNN_DTNSNN_LAPTD_TIEPNHAN_TUCHOI_BC',					//tiep nhan bao cao
-	SYNTHETIC_REPORT: 'KHVDTNSNN_DTNSNN_LAPTD_TONGHOP_BC',							//tong hop bao cao
-	APPROVE_SYNTHETIC_REPORT: 'KHVDTNSNN_DTNSNN_LAPTD_TRINHDUYET_BC_TONGHOP',		//trinh duyet bao cao tong hop
-	EDIT_SYNTHETIC_REPORT: 'KHVDTNSNN_DTNSNN_LAPTD_SUA_BC_TONGHOP',					//sua bao cao tong hop
-	DELETE_SYNTHETIC_REPORT: 'KHVDTNSNN_DTNSNN_LAPTD_XOA_BC_TONGHOP',				//xoa bao cao tong hop
-	COPY_SYNTHETIC_REPORT: 'KHVDTNSNN_DTNSNN_LAPTD_COPY_BC_TONGHOP',				//copy bao cao tong hop
-	DUYET_SYNTHETIC_REPORT: 'KHVDTNSNN_DTNSNN_LAPTD_DUYET_TUCHOI_BC_TH',			//duyet bao cao tong hop
-	PHE_DUYET_SYNTHETIC_REPORT: 'KHVDTNSNN_DTNSNN_LAPTD_PHEDUYET_TUCHOI_BC_TH',		//phe duyet bao cao tong hop
-	VIEW_SYNTHETIC_REPORT: 'KHVDTNSNN_DTNSNN_LAPTD_XEM_BC_TONGHOP',					//xem bao cao tong hop
-	PRINT_SYNTHETIC_REPORT: 'KHVDTNSNN_DTNSNN_LAPTD_IN_BC_TONGHOP',					//in bao cao tong hop
-	EXPORT_SYNTHETIC_REPORT: 'KHVDTNSNN_DTNSNN_LAPTD_XUAT_BC_TONGHOP',				//xuat bao cao tong hop
-	ADD_COEFFCIENT_INSURANCE: 'KHVDTNSNN_DTNSNN_HSBH_LAP',
-	APPROVE_COEFFCIENT_INSURANCE: 'KHVDTNSNN_DTNSNN_HSBH_TRINHDUYET',
-	EDIT_COEFFCIENT_INSURANCE: 'KHVDTNSNN_DTNSNN_HSBH_SUA',
-	DELETE_COEFFCIENT_INSURANCE: 'KHVDTNSNN_DTNSNN_HSBH_XOA',
-	COPY_COEFFCIENT_INSURANCE: 'KHVDTNSNN_DTNSNN_HSBH_COPY',
-	VIEW_COEFFCIENT_INSURANCE: 'KHVDTNSNN_DTNSNN_HSBH_XEM',
-	DUYET_COEFFCIENT_INSURANCE: 'KHVDTNSNN_DTNSNN_HSBH_DUYET_TUCHOIDUYET',
-	PHE_DUYET_COEFFCIENT_INSURANCE: 'KHVDTNSNN_DTNSNN_HSBH_PHEDUYET_TUCHOIPHEDUYET',
-};
-
 ///////////////////// GIAO DU TOAN /////////////////////////////////
 export const GDT = {
 	ADD_REPORT_BTC: 'KHVDTNSNN_DTNSNN_GIAODT_NHAP_QUYETDINH_BTC',
@@ -1570,76 +1513,6 @@ export const TRANG_THAI_TIM_KIEM = [
 	// },
 ]
 
-// trang thai chi tiet bao cao
-export const OK = "1";
-export const NOT_OK = "0";
-export const CHUA_DANH_GIA = "2";
-export const MOI = "3";
-export const DANG_NHAP_LIEU = "4";
-export const HOAN_TAT_NHAP_LIEU = "5";
-
-// loai trang thai gui don vi cap tren
-export const TRANG_THAI_GUI_DVCT = [
-	{
-		id: '9',
-		ten: 'Tiếp nhận'
-	},
-	{
-		id: '8',
-		ten: 'Từ chối'
-	},
-	{
-		id: '7',
-		ten: 'Mới'
-	},
-]
-
-// loai trang thai kiem tra
-export const TRANG_THAI_KIEM_TRA_BAO_CAO = [
-	{
-		id: '9',
-		ten: 'Tiếp nhận'
-	},
-	{
-		id: '8',
-		ten: 'Từ chối'
-	},
-	{
-		id: '7',
-		ten: 'Mới'
-	},
-	{
-		id: '-1',
-		ten: 'Chưa gửi đơn vị cấp trên'
-	},
-]
-
-export const TRANG_THAI_PHU_LUC = [
-	{
-		id: 0,
-		ten: 'Không chấp nhận'
-	},
-	{
-		id: 1,
-		ten: 'Chấp nhận'
-	},
-	{
-		id: 2,
-		ten: 'Chưa đánh giá (để trống)'
-	},
-	{
-		id: 3,
-		ten: 'Mới'
-	},
-	{
-		id: 4,
-		ten: 'Đang nhập liệu'
-	},
-	{
-		id: 5,
-		ten: 'Hoàn tất nhập liệu'
-	}
-]
 
 // loai bao cao quy trinh thuc hien du toan chi
 export const DON_VI_TIEN = [
