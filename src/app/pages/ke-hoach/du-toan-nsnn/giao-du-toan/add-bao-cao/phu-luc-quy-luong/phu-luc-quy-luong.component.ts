@@ -176,10 +176,10 @@ export class PhuLucQuyLuongComponent implements OnInit {
             this.lstCtietBcaos.forEach(item => {
                 const stt = "0." + sttItem
                 item.stt = stt;
-                sttItem += sttItem
+                sttItem++
             })
         }
-        console.log(this.lstCtietBcaos);
+        // console.log(this.lstCtietBcaos);
         this.lstCtietBcaos = Table.sortByIndex(this.lstCtietBcaos);
         this.getTotal();
         this.updateEditCache();

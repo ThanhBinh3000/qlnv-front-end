@@ -8,6 +8,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
+import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { GDT, Status, Utils } from 'src/app/Utility/utils';
 
@@ -100,6 +101,8 @@ export class BaoCaoTuDonViCapDuoiComponent implements OnInit {
         private notification: NzNotificationService,
         private spinner: NgxSpinnerService,
         private userService: UserService,
+        private quanLyVonPhiService: QuanLyVonPhiService,
+
     ) {
     }
     ngOnInit() {
@@ -128,6 +131,7 @@ export class BaoCaoTuDonViCapDuoiComponent implements OnInit {
 
         this.userInfo = this.userService.getUserLogin();
         this.maDviTao = this.userInfo?.MA_DVI;
+        await this.getChildUnit()
         if (this.userService.isAccessPermisson(GDT.TIEPNHAN_TUCHOI_PA_PBDT)) {
             this.isCanbotc = true;
         }
@@ -143,21 +147,42 @@ export class BaoCaoTuDonViCapDuoiComponent implements OnInit {
         }
 
         //lay danh sach danh muc
-        await this.danhMuc.dMDonVi().toPromise().then(
-            data => {
-                if (data.statusCode == 0) {
-                    this.donVis = data.data;
-                } else {
-                    this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-                }
-            },
-            err => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-            }
-        );
+        // await this.danhMuc.dMDonVi().toPromise().then(
+        //     data => {
+        //         if (data.statusCode == 0) {
+        //             this.donVis = data.data;
+        //         } else {
+        //             this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+        //         }
+        //     },
+        //     err => {
+        //         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        //     }
+        // );
 
         this.onSubmit();
         this.spinner.hide();
+    }
+
+    async getChildUnit() {
+        const request = {
+            maDviCha: this.userInfo.maDvi,
+            trangThai: '01',
+        }
+        await this.quanLyVonPhiService.dmDviCon(request).toPromise().then(
+            data => {
+                if (data.statusCode == 0) {
+                    this.donVis = data?.data;
+                    // this.capDvi = this.dataInfo?.capDvi;
+
+                } else {
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+            }
+        )
     }
 
 
@@ -264,7 +289,7 @@ export class BaoCaoTuDonViCapDuoiComponent implements OnInit {
     }
 
     getStatusName(trangThai: string) {
-        const trangThais = Status.TRANG_THAI_DVCT;
+        const trangThais = this.trangThais;
         return trangThais.find(e => e.id == trangThai).tenDm;
     }
 

@@ -8,7 +8,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { FileManip, GDT, Roles, Status, TRANG_THAI_PHU_LUC, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { FileManip, GDT, Roles, Status, Utils } from 'src/app/Utility/utils';
 import * as fileSaver from 'file-saver';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { ComponentType } from '@angular/cdk/portal';
@@ -109,7 +109,7 @@ export class AddBaoCaoComponent implements OnInit {
     Status = Status;
 
     userInfo: any;
-    trangThais: any[] = TRANG_THAI_TIM_KIEM;
+    // trangThais: any[] = TRANG_THAI_TIM_KIEM;
     canBos: any[];
     isDataAvailable = false;
     // status = false;                             // trang thai an/ hien cua trang thai
@@ -440,9 +440,9 @@ export class AddBaoCaoComponent implements OnInit {
     };
 
 
-    getStatusAppendixName(id) {
-        return TRANG_THAI_PHU_LUC.find(item => item.id == id)?.ten;
-    };
+    // getStatusAppendixName(id) {
+    //     return TRANG_THAI_PHU_LUC.find(item => item.id == id)?.ten;
+    // };
 
     getListUser() {
         this.quanLyVonPhiService.getListUser().toPromise().then(
@@ -1206,16 +1206,6 @@ export class AddBaoCaoComponent implements OnInit {
             return 'du-thao-va-lanh-dao-duyet';
         } else {
             return 'da-ban-hanh';
-        }
-    }
-
-    getStatusName(status: string) {
-        const statusMoi = status == Utils.TT_BC_6 || status == Utils.TT_BC_7;
-        const maDviCha = this.baoCao.maDvi.slice(0, (this.baoCao.maDvi.length - 2));
-        if (statusMoi && this.userInfo.MA_DVI == this.baoCao.maDviCha) {
-            return 'Mới';
-        } else {
-            return this.trangThais.find(e => e.id == status)?.tenDm;
         }
     }
 

@@ -195,7 +195,7 @@ export class PhuLucTaiSanComponent implements OnInit {
 			this.lstCtietBcaos.forEach(item => {
 				const stt = "0." + sttItem
 				item.stt = stt;
-				sttItem += sttItem
+				sttItem++
 			})
 		}
 		this.lstCtietBcaos = Table.sortByIndex(this.lstCtietBcaos);
