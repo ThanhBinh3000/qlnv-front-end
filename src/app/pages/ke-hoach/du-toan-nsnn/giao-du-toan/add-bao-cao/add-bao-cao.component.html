@@ -48,7 +48,8 @@
         <div class="header mg-t-16">
             <div class="header-text">
                 <div class="title-chi-tieu">
-                    <span [ngClass]="statusClass()">{{Status.reportStatusName(baoCao.trangThai) }}</span>
+                    <span [ngClass]="Status.statusClass(baoCao.trangThai)">{{Status.reportStatusName(baoCao.trangThai)
+                        }}</span>
                     <span>Báo cáo gửi đơn vị cấp trên</span>
                 </div>
             </div>

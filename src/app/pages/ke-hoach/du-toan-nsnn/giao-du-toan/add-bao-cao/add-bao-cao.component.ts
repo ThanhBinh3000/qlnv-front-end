@@ -6,7 +6,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { GDT, Roles, Status, Utils } from 'src/app/Utility/utils';
+import { Roles, Status, Utils } from 'src/app/Utility/utils';
 import { DialogChonThemBieuMauComponent } from 'src/app/components/dialog/dialog-chon-them-bieu-mau/dialog-chon-them-bieu-mau.component';
 import { DialogCongVanComponent } from 'src/app/components/dialog/dialog-cong-van/dialog-cong-van.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
@@ -932,7 +932,7 @@ export class AddBaoCaoComponent implements OnInit {
 
     // chuc nang check role
     async onSubmit(mcn: string, lyDoTuChoi: string) {
-        if (mcn == Utils.TT_BC_2) {
+        if (mcn == Status.TT_02) {
             if (!this.baoCao.soQd) {
                 this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
                 return;
@@ -943,7 +943,7 @@ export class AddBaoCaoComponent implements OnInit {
             }
         } else {
             let check = true;
-            if (mcn == Utils.TT_BC_4 || mcn == Utils.TT_BC_7 || mcn == Utils.TT_BC_9) {
+            if (mcn == Status.TT_04 || mcn == Status.TT_07 || mcn == Status.TT_09) {
                 this.baoCao.lstCtiets.forEach(item => {
                     if (item.trangThai == '2') {
                         check = false;
@@ -964,7 +964,7 @@ export class AddBaoCaoComponent implements OnInit {
             if (data.statusCode == 0) {
                 this.baoCao.trangThai = mcn;
                 this.getStatusButton();
-                if (mcn == Utils.TT_BC_8 || mcn == Utils.TT_BC_5 || mcn == Utils.TT_BC_3) {
+                if (mcn == Status.TT_08 || mcn == Status.TT_05 || mcn == Status.TT_03) {
                     this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
                 } else {
                     this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
@@ -1007,7 +1007,7 @@ export class AddBaoCaoComponent implements OnInit {
             nzOkDanger: true,
             nzWidth: 500,
             nzOnOk: () => {
-                this.onSubmit(Utils.TT_BC_2, '')
+                this.onSubmit(Status.TT_02, '')
             },
         });
     };
@@ -1201,17 +1201,17 @@ export class AddBaoCaoComponent implements OnInit {
         }
     }
 
-    statusClass() {
-        if (Utils.statusSave.includes(this.baoCao.trangThai)) {
-            return 'du-thao-va-lanh-dao-duyet';
-        } else {
-            return 'da-ban-hanh';
-        }
-    }
+    // statusClass() {
+    //     if (Utils.statusSave.includes(this.baoCao.trangThai)) {
+    //         return 'du-thao-va-lanh-dao-duyet';
+    //     } else {
+    //         return 'da-ban-hanh';
+    //     }
+    // }
 
 
     statusDeleteCv() {
-        if (!this.userService.isAccessPermisson(GDT.EDIT_REPORT_TH)) {
+        if (!this.userService.isAccessPermisson(Roles.GDT.EDIT_REPORT_TH)) {
             return false;
         }
         if (!this.baoCao.soQd?.fileName) {

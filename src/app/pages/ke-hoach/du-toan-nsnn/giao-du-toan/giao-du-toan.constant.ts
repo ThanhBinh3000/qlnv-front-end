@@ -1,4 +1,4 @@
-import { GDT } from "src/app/Utility/utils";
+// import { Roles.GDT } from "src/app/Utility/utils";
 
 
 import { Roles, Utils } from "src/app/Utility/utils";
@@ -134,7 +134,7 @@ export const TAB_LIST = [
         name: 'Quyết định từ Bộ Tài Chính',
         code: 'dsquyetDinh',
         status: true,
-        role: [GDT.EDIT_REPORT_BTC],
+        role: [Roles.GDT.EDIT_REPORT_BTC],
         isSelected: false,
     },
     {
@@ -142,10 +142,10 @@ export const TAB_LIST = [
         code: 'dsphanBo',
         status: true,
         role: [
-            GDT.VIEW_REPORT_PA_PBDT,
-            GDT.DELETE_REPORT_PA_PBDT,
-            GDT.EDIT_REPORT_PA_PBDT,
-            GDT.ADD_REPORT_CV_QD_GIAO_PA_PBDT,
+            Roles.GDT.VIEW_REPORT_PA_PBDT,
+            Roles.GDT.DELETE_REPORT_PA_PBDT,
+            Roles.GDT.EDIT_REPORT_PA_PBDT,
+            Roles.GDT.ADD_REPORT_CV_QD_GIAO_PA_PBDT,
         ],
         isSelected: false,
     },
@@ -153,7 +153,7 @@ export const TAB_LIST = [
         name: 'Số trần chi giao từ đơn vị cấp trên',
         code: 'dsGiaoTuCapTren',
         status: true,
-        role: [GDT.NHAN_PA_PBDT],
+        role: [Roles.GDT.NHAN_PA_PBDT],
         isSelected: false,
     },
     {
@@ -161,7 +161,7 @@ export const TAB_LIST = [
         code: 'baoCaoCapDuoi',
         status: true,
         role: [
-            GDT.XEM_PA_TONGHOP_PBDT,
+            Roles.GDT.XEM_PA_TONGHOP_PBDT,
         ],
         isSelected: false,
     },
@@ -170,7 +170,7 @@ export const TAB_LIST = [
         code: 'tongHopBaoCaoCapDuoi',
         status: true,
         role: [
-            GDT.XEM_PA_TONGHOP_PBDT,
+            Roles.GDT.XEM_PA_TONGHOP_PBDT,
         ],
         isSelected: false,
     },
@@ -179,10 +179,10 @@ export const TAB_LIST = [
         code: 'danhSachBaoCao',
         status: true,
         role: [
-            GDT.EDIT_REPORT_TH,
-            GDT.XOA_REPORT_TH,
-            GDT.XEM_PA_TONGHOP_PBDT,
-            GDT.VIEW_REPORT_TH,
+            Roles.GDT.EDIT_REPORT_TH,
+            Roles.GDT.XOA_REPORT_TH,
+            Roles.GDT.XEM_PA_TONGHOP_PBDT,
+            Roles.GDT.VIEW_REPORT_TH,
         ],
         isSelected: false,
     },

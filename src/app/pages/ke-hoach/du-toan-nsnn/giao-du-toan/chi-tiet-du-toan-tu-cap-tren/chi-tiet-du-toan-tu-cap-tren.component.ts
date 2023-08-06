@@ -4,7 +4,7 @@ import * as fileSaver from 'file-saver';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { FileManip, GDT, Operator, Utils } from 'src/app/Utility/utils';
+import { FileManip, Roles, Operator, Utils, Status } from 'src/app/Utility/utils';
 import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
@@ -57,6 +57,7 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
     Op = new Operator('1');
     //thong tin dang nhap
     id!: any;
+    Status = Status;
     userInfo: any;
     //thong tin chung bao cao
     ngayNhap: string;
@@ -66,7 +67,7 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
     maPa: string;
     maPaCha: string;
     maGiao: string;
-    trangThai: string;
+    trangThai: any;
     namDtoan: number;
     maDviTien: any = "1";
     newDate = new Date();
@@ -173,13 +174,13 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
         this.spinner.hide();
     }
 
-    statusClass() {
-        if (Utils.statusSave.includes(this.isStatus)) {
-            return 'du-thao-va-lanh-dao-duyet';
-        } else {
-            return 'da-ban-hanh';
-        }
-    };
+    // statusClass() {
+    //     if (Utils.statusSave.includes(this.isStatus)) {
+    //         return 'du-thao-va-lanh-dao-duyet';
+    //     } else {
+    //         return 'da-ban-hanh';
+    //     }
+    // };
 
 
     //get user info
@@ -374,10 +375,10 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
     };
 
     checkAddReport() {
-        return this.userService.isAccessPermisson(GDT.ADD_REPORT_PA_PBDT);
+        return this.userService.isAccessPermisson(Roles.GDT.ADD_REPORT_PA_PBDT);
     }
     checkTiepNhan() {
-        return this.userService.isAccessPermisson(GDT.NHAN_PA_PBDT)
+        return this.userService.isAccessPermisson(Roles.GDT.NHAN_PA_PBDT)
     }
     // luu
     async save() {

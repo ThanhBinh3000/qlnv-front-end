@@ -4,7 +4,7 @@ import * as fileSaver from 'file-saver';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { GDT, Operator, Utils } from 'src/app/Utility/utils';
+import { Roles, Operator, Utils, Status } from 'src/app/Utility/utils';
 import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { DataService } from 'src/app/services/data.service';
@@ -180,7 +180,7 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
     }
 
     statusClass() {
-        if (Utils.statusSave.includes(this.isStatus)) {
+        if ([Status.TT_01].includes(this.isStatus)) {
             return 'du-thao-va-lanh-dao-duyet';
         } else {
             return 'da-ban-hanh';
@@ -357,10 +357,10 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
     };
 
     checkAddReport() {
-        return this.userService.isAccessPermisson(GDT.ADD_REPORT_PA_PBDT);
+        return this.userService.isAccessPermisson(Roles.GDT.ADD_REPORT_PA_PBDT);
     }
     checkTiepNhan() {
-        return this.userService.isAccessPermisson(GDT.NHAN_PA_PBDT)
+        return this.userService.isAccessPermisson(Roles.GDT.NHAN_PA_PBDT)
     }
     // luu
     async save() {

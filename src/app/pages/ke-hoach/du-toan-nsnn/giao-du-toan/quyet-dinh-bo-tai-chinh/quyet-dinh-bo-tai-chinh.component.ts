@@ -4,7 +4,7 @@ import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { GDT, Utils } from 'src/app/Utility/utils';
+import { Roles, Status, Utils } from 'src/app/Utility/utils';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
@@ -26,7 +26,7 @@ export class QuyetDinhBoTaiChinhComponent implements OnInit {
         ngayTaoTu: null,
         ngayTaoDen: null,
         maPa: "",
-        trangThai: Utils.TT_BC_1,
+        trangThai: Status.TT_01,
         maLoaiDan: [3]
     };
 
@@ -273,12 +273,12 @@ export class QuyetDinhBoTaiChinhComponent implements OnInit {
     };
 
     checkEditStatus(trangThai: string) {
-        return Utils.statusSave.includes(trangThai) &&
-            (this.userInfo.CAP_DVI == '1' && this.userService.isAccessPermisson(GDT.EDIT_REPORT_BTC));
+        return Status.TT_01 == trangThai &&
+            (this.userInfo.CAP_DVI == '1' && this.userService.isAccessPermisson(Roles.GDT.EDIT_REPORT_BTC));
     };
 
     checkDeleteStatus(trangThai: string) {
-        return Utils.statusDelete.includes(trangThai) &&
-            (this.userInfo.CAP_DVI == '1' && this.userService.isAccessPermisson(GDT.DELETE_REPORT_BTC));
+        return Status.TT_01 == trangThai &&
+            (this.userInfo.CAP_DVI == '1' && this.userService.isAccessPermisson(Roles.GDT.DELETE_REPORT_BTC));
     };
 }

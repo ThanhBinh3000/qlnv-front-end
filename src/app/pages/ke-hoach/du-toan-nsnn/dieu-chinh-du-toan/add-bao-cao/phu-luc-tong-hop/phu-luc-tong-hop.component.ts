@@ -3,7 +3,7 @@ import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { FileManip, Operator, Status, Table, Utils } from 'src/app/Utility/utils';
+import { Operator, Status, Table, Utils } from 'src/app/Utility/utils';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
@@ -145,7 +145,6 @@ export class PhuLucTongHopComponent implements OnInit {
         private notification: NzNotificationService,
         private spinner: NgxSpinnerService,
         private dieuChinhDuToanService: DieuChinhService,
-        private fileManip: FileManip,
         private quanLyVonPhiService: QuanLyVonPhiService,
 
     ) { }
