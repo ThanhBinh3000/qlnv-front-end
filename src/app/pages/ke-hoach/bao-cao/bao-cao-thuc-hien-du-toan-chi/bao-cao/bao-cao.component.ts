@@ -103,7 +103,6 @@ export class BaoCaoComponent implements OnInit {
         private notification: NzNotificationService,
         private modal: NzModalService,
         public globals: Globals,
-        // private fileManip: FileManip,
     ) { }
 
     async ngOnInit() {

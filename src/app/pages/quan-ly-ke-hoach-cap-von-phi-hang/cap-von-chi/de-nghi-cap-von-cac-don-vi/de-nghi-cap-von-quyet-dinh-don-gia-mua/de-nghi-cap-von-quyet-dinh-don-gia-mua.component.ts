@@ -3,15 +3,16 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { FileManip, Operator, Roles, Status, Table, Utils } from 'src/app/Utility/utils';
+import { Operator, Roles, Status, Table, Utils } from 'src/app/Utility/utils';
+import { DialogCongVanComponent } from 'src/app/components/dialog/dialog-cong-van/dialog-cong-van.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { CapVonNguonChiService } from 'src/app/services/quan-ly-von-phi/capVonNguonChi.service';
+import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { BtnStatus, CapVon, Cvnc, Doc, Report } from '../de-nghi-cap-von-cac-don-vi.constant';
-import { DialogCongVanComponent } from 'src/app/components/dialog/dialog-cong-van/dialog-cong-van.component';
 
 @Component({
     selector: 'app-de-nghi-cap-von-quyet-dinh-don-gia-mua',
@@ -88,12 +89,12 @@ export class DeNghiCapVonQuyetDinhDonGiaMuaComponent implements OnInit {
 
     constructor(
         private capVonNguonChiService: CapVonNguonChiService,
+        private quanLyVonPhiService: QuanLyVonPhiService,
         private spinner: NgxSpinnerService,
         public userService: UserService,
         private notification: NzNotificationService,
         private modal: NzModalService,
         public globals: Globals,
-        private fileManip: FileManip,
     ) { }
 
     async ngOnInit() {
@@ -313,7 +314,7 @@ export class DeNghiCapVonQuyetDinhDonGiaMuaComponent implements OnInit {
         request.lstCtiets = lstCtietTemp;
         request.fileDinhKems = [];
         for (let iterator of this.listFile) {
-            request.fileDinhKems.push(await this.fileManip.uploadFile(iterator, this.baoCao.maDvi + '/' + this.baoCao.maDnghi));
+            request.fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.baoCao.maDvi + '/' + this.baoCao.maDnghi));
         }
 
         //get file cong van url
@@ -324,7 +325,7 @@ export class DeNghiCapVonQuyetDinhDonGiaMuaComponent implements OnInit {
                 return;
             } else {
                 request.congVan = {
-                    ...await this.fileManip.uploadFile(file, this.baoCao.maDvi + '/' + this.baoCao.maDnghi),
+                    ...await this.quanLyVonPhiService.upFile(file, this.baoCao.maDvi + '/' + this.baoCao.maDnghi),
                     fileName: this.baoCao.congVan.fileName,
                 }
             }
@@ -384,6 +385,6 @@ export class DeNghiCapVonQuyetDinhDonGiaMuaComponent implements OnInit {
             file = this.listFile.find(element => element?.lastModified.toString() == id);
             doc = this.baoCao.lstFiles.find(element => element?.id == id);
         }
-        await this.fileManip.downloadFile(file, doc);
+        await this.quanLyVonPhiService.downFile(file, doc);
     }
 }
