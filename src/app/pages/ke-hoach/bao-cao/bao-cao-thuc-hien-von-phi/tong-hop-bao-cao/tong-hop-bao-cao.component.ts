@@ -51,7 +51,7 @@ export class TongHopBaoCaoComponent implements OnInit {
         this.spinner.show();
         //lay danh sach danh muc
         const request = {
-            maDviCha: this.userInfo.maDvi,
+            maDviCha: this.userInfo.MA_DVI,
             trangThai: '01',
         }
         await this.quanLyVonPhiService.dmDviCon(request).toPromise().then(
