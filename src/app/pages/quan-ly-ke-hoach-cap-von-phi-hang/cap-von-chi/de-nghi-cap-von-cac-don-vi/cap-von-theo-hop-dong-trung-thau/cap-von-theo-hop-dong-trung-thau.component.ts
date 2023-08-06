@@ -339,7 +339,6 @@ export class CapVonTheoHopDongTrungThauComponent implements OnInit {
                     fileName: this.baoCao.congVan.fileName,
                 }
             }
-            this.fileDetail = null;
         }
         if (!request.congVan?.fileUrl) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
