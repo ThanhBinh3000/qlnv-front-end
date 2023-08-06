@@ -419,7 +419,7 @@ export class PhuLuc4Component implements OnInit {
         this.lstCtietBcao.forEach(item => {
             const str = item.stt
             if (!(this.lstCtietBcao.findIndex(e => Table.preIndex(e.stt) == str) != -1)) {
-                if (item.dtoanDchinhDnghiLanNay !== null) {
+                if (item.dtoanDchinhDnghiLanNay && item.dtoanDchinhDnghiLanNay !== null) {
                     if (item.dtoanDchinhDnghiLanNay < 0) {
                         Number(this.tongDieuChinhGiam += Number(item?.dtoanDchinhDnghiLanNay));
                     } else {
@@ -427,7 +427,7 @@ export class PhuLuc4Component implements OnInit {
                     }
                 }
 
-                if (item.dtoanVuTvqtDnghi !== null) {
+                if (item.dtoanVuTvqtDnghi && item.dtoanVuTvqtDnghi !== null) {
                     if (item.dtoanVuTvqtDnghi < 0) {
                         Number(this.dToanVuGiam += Number(item?.dtoanVuTvqtDnghi));
                     } else {

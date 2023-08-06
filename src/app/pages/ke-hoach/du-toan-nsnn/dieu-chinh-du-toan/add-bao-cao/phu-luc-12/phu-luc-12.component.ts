@@ -450,7 +450,7 @@ export class PhuLuc12Component implements OnInit {
 		this.lstCtietBcao.forEach(item => {
 			item.chenhLech = Operator.sum([item.dtoanVuTvqtDnghi, - item.dtoanDnghiDchinh])
 			if (item.level == 3) {
-				if (item.dtoanDnghiDchinh !== null) {
+				if (item.dtoanDnghiDchinh && item.dtoanDnghiDchinh !== null) {
 					if (item.dtoanDnghiDchinh < 0) {
 						Number(this.tongDieuChinhGiam += Number(item?.dtoanDnghiDchinh));
 					} else {
@@ -458,7 +458,7 @@ export class PhuLuc12Component implements OnInit {
 					}
 				}
 
-				if (item.dtoanVuTvqtDnghi !== null) {
+				if (item.dtoanVuTvqtDnghi && item.dtoanVuTvqtDnghi !== null) {
 					if (item.dtoanVuTvqtDnghi < 0) {
 						Number(this.dtoanVuGiam += Number(item?.dtoanVuTvqtDnghi));
 					} else {

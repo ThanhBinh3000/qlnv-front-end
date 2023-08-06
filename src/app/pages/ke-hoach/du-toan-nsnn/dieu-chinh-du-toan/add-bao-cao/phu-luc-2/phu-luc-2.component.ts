@@ -385,7 +385,7 @@ export class PhuLuc2Component implements OnInit {
         this.dtoanVuTang = 0;
         this.dtoanVuGiam = 0;
         this.lstCtietBcao.forEach(item => {
-            if (item.dtoanKpDieuChinh !== null) {
+            if (item.dtoanKpDieuChinh && item.dtoanKpDieuChinh !== null) {
                 if (item.dtoanKpDieuChinh < 0) {
                     Number(this.tongDieuChinhGiam += Number(item?.dtoanKpDieuChinh));
                 } else {
@@ -393,7 +393,7 @@ export class PhuLuc2Component implements OnInit {
                 }
             }
 
-            if (item.dtoanVuDnghi !== null) {
+            if (item.dtoanVuDnghi && item.dtoanVuDnghi !== null) {
                 if (item.dtoanVuDnghi < 0) {
                     Number(this.dtoanVuGiam += Number(item?.dtoanVuDnghi));
                 } else {
