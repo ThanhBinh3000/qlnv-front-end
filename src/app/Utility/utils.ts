@@ -473,6 +473,7 @@ export class Operator {
 	maDviTien: string;
 	precision: number;
 	amount: any;
+	amount1: any;
 
 	constructor(maDviTien: string, precision: number = 4) {
 		this.maDviTien = maDviTien;
@@ -497,6 +498,18 @@ export class Operator {
 	static readonly amount = {
 		allowZero: true,
 		allowNegative: false,
+		precision: 4,
+		prefix: '',
+		thousands: '.',
+		decimal: ',',
+		align: "left",
+		nullable: true,
+		inputMode: CurrencyMaskInputMode.NATURAL,
+	}
+
+	static readonly amount1 = {
+		allowZero: true,
+		allowNegative: true,
 		precision: 4,
 		prefix: '',
 		thousands: '.',

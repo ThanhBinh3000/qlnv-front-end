@@ -1,34 +1,34 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { ComponentType } from '@angular/cdk/portal';
+import { DatePipe } from '@angular/common';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import * as fileSaver from 'file-saver';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { GDT, Roles, Status, Utils } from 'src/app/Utility/utils';
+import { DialogChonThemBieuMauComponent } from 'src/app/components/dialog/dialog-chon-them-bieu-mau/dialog-chon-them-bieu-mau.component';
+import { DialogCongVanComponent } from 'src/app/components/dialog/dialog-cong-van/dialog-cong-van.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
+import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
+import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { FileManip, GDT, Roles, Status, TRANG_THAI_PHU_LUC, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
-import * as fileSaver from 'file-saver';
-import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { ComponentType } from '@angular/cdk/portal';
+import * as uuid from 'uuid';
+import { BtnStatus, Doc, Form, Gdt, Report } from '../giao-du-toan.constant';
+import { PHU_LUC } from './add-bao-cao.constant';
 import { PhuLuc01NhapComponent } from './phu-luc-01-nhap/phu-luc-01-nhap.component';
 import { PhuLuc01XuatComponent } from './phu-luc-01-xuat/phu-luc-01-xuat.component';
 import { PhuLuc02Component } from './phu-luc-02/phu-luc-02.component';
 import { PhuLuc03Component } from './phu-luc-03/phu-luc-03.component';
-import { PhuLucPhanBoComponent } from './phu-luc-phan-bo/phu-luc-phan-bo.component';
-import { DialogChonThemBieuMauComponent } from 'src/app/components/dialog/dialog-chon-them-bieu-mau/dialog-chon-them-bieu-mau.component';
-import { PHU_LUC } from './add-bao-cao.constant';
-import * as uuid from 'uuid';
-import { DatePipe } from '@angular/common';
-import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
-import { PhuLucSuaChuaComponent } from './phu-luc-sua-chua/phu-luc-sua-chua.component';
-import { PhuLucTaiSanComponent } from './phu-luc-tai-san/phu-luc-tai-san.component';
-import { PhuLucQuyLuongComponent } from './phu-luc-quy-luong/phu-luc-quy-luong.component';
 import { PhuLucDaoTaoComponent } from './phu-luc-dao-tao/phu-luc-dao-tao.component';
 import { PhuLucKhoaHocCongNgheComponent } from './phu-luc-khoa-hoc-cong-nghe/phu-luc-khoa-hoc-cong-nghe.component';
-import { BtnStatus, Doc, Form, Gdt, Report } from '../giao-du-toan.constant';
-import { DialogCongVanComponent } from 'src/app/components/dialog/dialog-cong-van/dialog-cong-van.component';
+import { PhuLucPhanBoComponent } from './phu-luc-phan-bo/phu-luc-phan-bo.component';
+import { PhuLucQuyLuongComponent } from './phu-luc-quy-luong/phu-luc-quy-luong.component';
+import { PhuLucSuaChuaComponent } from './phu-luc-sua-chua/phu-luc-sua-chua.component';
+import { PhuLucTaiSanComponent } from './phu-luc-tai-san/phu-luc-tai-san.component';
 
 
 // export class ItemCongVan {
@@ -109,7 +109,7 @@ export class AddBaoCaoComponent implements OnInit {
     Status = Status;
 
     userInfo: any;
-    trangThais: any[] = TRANG_THAI_TIM_KIEM;
+    // trangThais: any[] = TRANG_THAI_TIM_KIEM;
     canBos: any[];
     isDataAvailable = false;
     // status = false;                             // trang thai an/ hien cua trang thai
@@ -184,7 +184,6 @@ export class AddBaoCaoComponent implements OnInit {
         private notification: NzNotificationService,
         private quanLyVonPhiService: QuanLyVonPhiService,
         private datePipe: DatePipe,
-        public fileManip: FileManip,
     ) { }
 
     async ngOnInit() {
@@ -258,6 +257,7 @@ export class AddBaoCaoComponent implements OnInit {
         // console.log(this.data);
 
         this.baoCao.id = this.data?.id;
+        this.baoCao.trangThai = this.data?.trangThai;
         this.userInfo = this.userService.getUserLogin();
         this.getListUser();
 
@@ -440,9 +440,9 @@ export class AddBaoCaoComponent implements OnInit {
     };
 
 
-    getStatusAppendixName(id) {
-        return TRANG_THAI_PHU_LUC.find(item => item.id == id)?.ten;
-    };
+    // getStatusAppendixName(id) {
+    //     return TRANG_THAI_PHU_LUC.find(item => item.id == id)?.ten;
+    // };
 
     getListUser() {
         this.quanLyVonPhiService.getListUser().toPromise().then(
@@ -1037,7 +1037,7 @@ export class AddBaoCaoComponent implements OnInit {
             baoCaoTemp.fileDinhKems = [];
         }
         for (const iterator of this.listFile) {
-            baoCaoTemp.fileDinhKems.push(await this.fileManip.uploadFile(iterator, this.path));
+            baoCaoTemp.fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.path));
         }
         //get file cong van url
         const file: any = this.fileDetail;
@@ -1047,7 +1047,7 @@ export class AddBaoCaoComponent implements OnInit {
                 return;
             } else {
                 baoCaoTemp.soQd = {
-                    ...await this.fileManip.uploadFile(file, this.path),
+                    ...await this.quanLyVonPhiService.upFile(file, this.path),
                     fileName: this.baoCao.soQd.fileName,
                 }
             }
@@ -1209,16 +1209,6 @@ export class AddBaoCaoComponent implements OnInit {
         }
     }
 
-    getStatusName(status: string) {
-        const statusMoi = status == Utils.TT_BC_6 || status == Utils.TT_BC_7;
-        const maDviCha = this.baoCao.maDvi.slice(0, (this.baoCao.maDvi.length - 2));
-        if (statusMoi && this.userInfo.MA_DVI == this.baoCao.maDviCha) {
-            return 'Mới';
-        } else {
-            return this.trangThais.find(e => e.id == status)?.tenDm;
-        }
-    }
-
 
     statusDeleteCv() {
         if (!this.userService.isAccessPermisson(GDT.EDIT_REPORT_TH)) {
@@ -1250,7 +1240,7 @@ export class AddBaoCaoComponent implements OnInit {
             file = this.listFile.find(element => element?.lastModified.toString() == id);
             doc = this.baoCao.lstFiles.find(element => element?.id == id);
         }
-        await this.fileManip.downloadFile(file, doc);
+        await this.quanLyVonPhiService.downFile(file, doc);
     }
 
 

@@ -507,7 +507,7 @@ export class PhuLucTongHopComponent implements OnInit {
 
         request.fileDinhKems = [];
         for (let iterator of this.listFile) {
-            request.fileDinhKems.push(await this.fileManip.uploadFile(iterator, this.dataInfo.path));
+            request.fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.dataInfo.path));
         }
 
         request.lstCtietDchinh = lstCtietBcaoTemp;
@@ -619,7 +619,7 @@ export class PhuLucTongHopComponent implements OnInit {
     async downloadFile(id: string) {
         let file: any = this.listFile.find(element => element?.lastModified.toString() == id);
         let doc: any = this.formDetail.lstFiles.find(element => element?.id == id);
-        await this.fileManip.downloadFile(file, doc);
+        await this.quanLyVonPhiService.downFile(file, doc);
     }
 
     exportToExcel() {

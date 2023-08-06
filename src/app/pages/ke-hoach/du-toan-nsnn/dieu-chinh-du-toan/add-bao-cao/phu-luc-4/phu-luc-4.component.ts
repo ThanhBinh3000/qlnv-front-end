@@ -15,6 +15,7 @@ import { UserService } from 'src/app/services/user.service';
 import * as XLSX from 'xlsx';
 import { BtnStatus, Doc, Form } from '../../dieu-chinh-du-toan.constant';
 import { getHead } from 'src/app/Utility/func';
+import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 
 export class ItemData {
     level: any;
@@ -108,7 +109,8 @@ export class PhuLuc4Component implements OnInit {
         private modal: NzModalService,
         public userService: UserService,
         private danhMucService: DanhMucDungChungService,
-        private FileManip: FileManip,
+        private quanLyVonPhiService: QuanLyVonPhiService,
+
     ) { }
 
     async ngOnInit() {
@@ -249,41 +251,22 @@ export class PhuLuc4Component implements OnInit {
 
     // luu
     async save(trangThai: string, lyDoTuChoi: string) {
-        let checkSaveEdit;
-        //check xem tat ca cac dong du lieu da luu chua?
-        //chua luu thi bao loi, luu roi thi cho di
-        this.lstCtietBcao.forEach(element => {
-            if (this.editCache[element.id].edit === true) {
-                checkSaveEdit = false
-            }
-        });
-        if (checkSaveEdit == false) {
+        if (this.lstCtietBcao.some(e => this.editCache[e.id].edit)) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
             return;
         }
-        //tinh lai don vi tien va kiem tra gioi han cua chung
-        const lstCtietBcaoTemp: ItemData[] = [];
-        let checkMoneyRange = true;
-        this.lstCtietBcao.forEach(item => {
-            if (item.dtoanDchinhDnghiLanNay > MONEY_LIMIT) {
-                checkMoneyRange = false;
-                return;
-            }
-            lstCtietBcaoTemp.push({
-                ...item,
-            })
-        })
 
-        if (!checkMoneyRange) {
-            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
+        if (this.listFile.some(file => file.size > Utils.FILE_SIZE)) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
             return;
         }
 
-        // replace nhung ban ghi dc them moi id thanh null
-        lstCtietBcaoTemp.forEach(item => {
-            if (item.id?.length == 38) {
-                item.id = null;
-            }
+        const lstCtietBcaoTemp: ItemData[] = [];
+        this.lstCtietBcao.forEach(item => {
+            lstCtietBcaoTemp.push({
+                ...item,
+                id: item.id?.length == 38 ? null : item.id,
+            })
         })
 
         if (this.status.general) {
@@ -293,6 +276,12 @@ export class PhuLuc4Component implements OnInit {
         }
 
         const request = JSON.parse(JSON.stringify(this.formDetail));
+
+        request.fileDinhKems = [];
+        for (let iterator of this.listFile) {
+            request.fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.dataInfo.path));
+        }
+
         request.lstCtietDchinh = lstCtietBcaoTemp;
         request.trangThai = trangThai;
 
@@ -611,7 +600,7 @@ export class PhuLuc4Component implements OnInit {
     async downloadFile(id: string) {
         let file: any = this.listFile.find(element => element?.lastModified.toString() == id);
         let doc: any = this.formDetail.lstFiles.find(element => element?.id == id);
-        await this.FileManip.downloadFile(file, doc);
+        await this.quanLyVonPhiService.downFile(file, doc);
     };
 
     exportToExcel() {

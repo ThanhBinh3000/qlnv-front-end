@@ -3,12 +3,12 @@ import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { FileManip, Operator, Status, Table, Utils } from 'src/app/Utility/utils';
+import { Operator, Status, Table, Utils } from 'src/app/Utility/utils';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DieuChinhService } from 'src/app/services/quan-ly-von-phi/dieuChinhDuToan.service';
-import * as uuid from "uuid";
+import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import * as XLSX from 'xlsx';
 import { BtnStatus, Doc, Form } from '../../dieu-chinh-du-toan.constant';
 import { NOI_DUNG } from './phu-luc-1.constant';
@@ -161,7 +161,7 @@ export class PhuLuc1Component implements OnInit {
         private notification: NzNotificationService,
         private spinner: NgxSpinnerService,
         private modal: NzModalService,
-        private fileManip: FileManip,
+        private quanLyVonPhiService: QuanLyVonPhiService,
     ) { }
 
     async ngOnInit() {
@@ -541,7 +541,7 @@ export class PhuLuc1Component implements OnInit {
 
         request.fileDinhKems = [];
         for (let iterator of this.listFile) {
-            request.fileDinhKems.push(await this.fileManip.uploadFile(iterator, this.dataInfo.path));
+            request.fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.dataInfo.path));
         }
 
         request.lstCtietDchinh = lstCtietBcaoTemp;
@@ -605,7 +605,7 @@ export class PhuLuc1Component implements OnInit {
     async downloadFile(id: string) {
         let file: any = this.listFile.find(element => element?.lastModified.toString() == id);
         let doc: any = this.formDetail.lstFiles.find(element => element?.id == id);
-        await this.fileManip.downloadFile(file, doc);
+        await this.quanLyVonPhiService.downFile(file, doc);
     }
 
     exportToExcel() {

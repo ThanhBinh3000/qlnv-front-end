@@ -5,7 +5,7 @@ import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { GDT, TRANG_THAI_KIEM_TRA_BAO_CAO, Utils } from 'src/app/Utility/utils';
+import { GDT, Utils } from 'src/app/Utility/utils';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
@@ -265,8 +265,8 @@ export class TongHopBaoCaoCapDuoiComponent implements OnInit {
     }
 
     getStatusName(trangThai: string) {
-        const trangThais = TRANG_THAI_KIEM_TRA_BAO_CAO;
-        return trangThais.find(e => e.id == trangThai).ten;
+        const trangThais = TRANG_THAI_TIM_KIEM_GIAO;
+        return trangThais.find(e => e.id == trangThai).tenDm;
     }
 
     getUnitName(maDvi: string) {

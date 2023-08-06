@@ -18,7 +18,7 @@ import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToa
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { AMOUNT, DON_VI_TIEN, GDT, LA_MA, MONEY_LIMIT, Operator, TRANG_THAI_TIM_KIEM, Table, Utils } from 'src/app/Utility/utils';
+import { GDT, Operator, Status, Table, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 // import { NOI_DUNG } from './tao-moi-giao-du-toan.constant';
@@ -103,7 +103,7 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
 
 	// khai báo các list
 	lstCtietBcao: ItemData[] = []; // danh sách data trong table
-	donViTiens: any[] = DON_VI_TIEN; // danh sách đơn vị tiền
+	donViTiens: any[] = Utils.DVI_TIEN; // danh sách đơn vị tiền
 	lstDvi: any[] = []; //danh sach don vi da duoc chon
 	noiDungs: any[] = []; // danh sách nội dung danh mục
 	lstDviTrucThuoc: any[] = []; // danh sách báo cáo của các đơn vị trực thuộc
@@ -112,10 +112,10 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
 	listIdFilesDelete: any[] = []; // list id file khi xóa file
 	donVis: any[] = []; // list đơn vị
 	donVis1: any[] = []; // list đơn vị
-	trangThais: any[] = TRANG_THAI_TIM_KIEM; // danh sách trạng thái
+	trangThais: any[] = Status.TRANG_THAI_FULL; // danh sách trạng thái
 	listFile: File[] = []; // list file chua ten va id de hien tai o input
 	lstDviChon: any[] = []; //danh sach don vi chua duoc chon
-	soLaMa: any[] = LA_MA; // danh sách ký tự la mã
+	soLaMa: any[] = Utils.LA_MA; // danh sách ký tự la mã
 
 	// khác
 	editMoneyUnit = false;
@@ -142,7 +142,7 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
 	};
 
 	// ==================================================================================
-	amount = AMOUNT;
+	amount = Operator.amount;
 	// cú pháp khai báo gọn của TypeScript
 	constructor(
 		private location: Location,
@@ -518,7 +518,7 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
 		const lstCtietBcaoTemp: any[] = [];
 		let checkMoneyRange = true;
 		this.lstCtietBcao.forEach(item => {
-			if (item.tongCong > MONEY_LIMIT) {
+			if (item.tongCong > Utils.MONEY_LIMIT) {
 				checkMoneyRange = false;
 				return;
 			}
@@ -634,7 +634,7 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
 
 		// gui du lieu trinh duyet len server
 		this.lstCtietBcao.forEach(item => {
-			if (item.tongCong > MONEY_LIMIT) {
+			if (item.tongCong > Utils.MONEY_LIMIT) {
 				checkMoneyRange = false;
 				return;
 			}

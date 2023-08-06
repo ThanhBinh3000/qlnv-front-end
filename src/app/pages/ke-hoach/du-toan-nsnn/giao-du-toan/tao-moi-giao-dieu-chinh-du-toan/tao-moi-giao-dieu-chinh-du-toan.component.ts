@@ -5,7 +5,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { AMOUNT, DON_VI_TIEN, GDT, LA_MA, MONEY_LIMIT, Operator, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { GDT, Operator, Utils } from 'src/app/Utility/utils';
 import { DialogCopyGiaoDuToanComponent } from 'src/app/components/dialog/dialog-copy-giao-du-toan/dialog-copy-giao-du-toan.component';
 import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialog-copy.component';
 import { DialogLuaChonThemDonViComponent } from 'src/app/components/dialog/dialog-lua-chon-them-don-vi/dialog-lua-chon-them-don-vi.component';
@@ -21,6 +21,50 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import * as uuid from 'uuid';
+
+export const TRANG_THAI_TIM_KIEM = [
+    {
+        id: "1",
+        tenDm: 'Đang soạn'
+    },
+    {
+        id: "2",
+        tenDm: 'Trình duyệt'
+    },
+    {
+        id: "3",
+        tenDm: 'Từ chối duyệt'
+    },
+    {
+        id: "4",
+        tenDm: 'Duyệt'
+    },
+    {
+        id: "5",
+        tenDm: 'Từ chối phê duyệt'
+    },
+    {
+        id: "6",
+        tenDm: 'Phê duyệt',
+    },
+    {
+        id: "7",
+        tenDm: 'Phê duyệt'
+    },
+    {
+        id: "8",
+        tenDm: 'Từ chối tiếp nhận'
+    },
+    {
+        id: "9",
+        tenDm: 'Tiếp nhận'
+    },
+    // {
+    //     id: "10",
+    //     tenDm: 'Lãnh đạo yêu cầu điều chỉnh'
+    // },
+]
+
 // khai báo class data request
 export class ItemData {
     id: string;
@@ -101,7 +145,7 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
 
     // khai báo các list
     lstCtietBcao: ItemData[] = []; // danh sách data trong table
-    donViTiens: any[] = DON_VI_TIEN; // danh sách đơn vị tiền
+    donViTiens: any[] = Utils.DVI_TIEN; // danh sách đơn vị tiền
     lstDvi: any[] = []; //danh sach don vi da duoc chon
     noiDungs: any[] = []; // danh sách nội dung danh mục
     lstDviTrucThuoc: any[] = []; // danh sách báo cáo của các đơn vị trực thuộc
@@ -112,7 +156,7 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
     trangThais: any[] = TRANG_THAI_TIM_KIEM; // danh sách trạng thái
     listFile: File[] = []; // list file chua ten va id de hien tai o input
     lstDviChon: any[] = []; //danh sach don vi chua duoc chon
-    soLaMa: any[] = LA_MA; // danh sách ký tự la mã
+    soLaMa: any[] = Utils.LA_MA; // danh sách ký tự la mã
 
     // khác
     editMoneyUnit = false;
@@ -139,7 +183,7 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
     };
 
     // ==================================================================================
-    amount = AMOUNT;
+    amount = Operator.amount;
     // cú pháp khai báo gọn của TypeScript
     constructor(
         private location: Location,
@@ -481,7 +525,7 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
         const lstCtietBcaoTemp: any[] = [];
         let checkMoneyRange = true;
         this.lstCtietBcao.forEach(item => {
-            if (item.tongCong > MONEY_LIMIT) {
+            if (item.tongCong > Utils.MONEY_LIMIT) {
                 checkMoneyRange = false;
                 return;
             }
@@ -595,7 +639,7 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
 
         // gui du lieu trinh duyet len server
         this.lstCtietBcao.forEach(item => {
-            if (item.tongCong > MONEY_LIMIT) {
+            if (item.tongCong > Utils.MONEY_LIMIT) {
                 checkMoneyRange = false;
                 return;
             }

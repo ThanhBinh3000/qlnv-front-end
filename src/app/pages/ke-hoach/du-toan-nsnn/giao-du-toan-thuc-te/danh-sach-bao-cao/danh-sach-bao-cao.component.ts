@@ -4,7 +4,7 @@ import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { GDT, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { GDT, Status, Utils } from 'src/app/Utility/utils';
 import { MESSAGE } from 'src/app/constants/message';
 import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
 import { UserService } from 'src/app/services/user.service';
@@ -31,7 +31,7 @@ export class DanhSachBaoCaoComponent implements OnInit {
     };
 
     userInfo: any;
-    trangThais: any = TRANG_THAI_TIM_KIEM;
+    trangThais: any = Status.TRANG_THAI_FULL;
     dataTable: any[] = [];
     dataTableAll: any[] = [];
     loaiDuAns: any[] = [

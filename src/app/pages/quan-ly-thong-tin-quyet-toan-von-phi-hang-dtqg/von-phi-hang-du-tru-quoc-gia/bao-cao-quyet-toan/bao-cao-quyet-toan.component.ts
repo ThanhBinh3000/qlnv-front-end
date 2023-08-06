@@ -6,8 +6,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogThemBaoCaoQuyetToanComponent } from './dialog-them-bao-cao-quyet-toan/dialog-them-bao-cao-quyet-toan.component';
-// import { DialogTaoMoiBaoCaoQuyetToanComponent } from 'src/app/components/dialog/dialog-tao-moi-bao-cao-quyet-toan/dialog-tao-moi-bao-cao-quyet-toan.component';
-import { Utils } from 'src/app/Utility/utils';
+import { Status, Utils } from 'src/app/Utility/utils';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { QuyetToanVonPhiService } from 'src/app/services/quan-ly-von-phi/quyetToanVonPhi.service';
@@ -17,44 +16,7 @@ import { QTVP } from './../../../../Utility/utils';
 
 // import { TRANGTHAIBAOCAO } from '../quan-ly-lap-tham-dinh-du-toan-nsnn.constant';
 // trang thai ban ghi
-export const TRANG_THAI_TIM_KIEM = [
-    {
-        id: "1",
-        tenDm: 'Đang soạn'
-    },
-    {
-        id: "2",
-        tenDm: 'Trình duyệt'
-    },
-    {
-        id: "3",
-        tenDm: 'Trưởng BP từ chối'
-    },
-    {
-        id: "4",
-        tenDm: 'Trưởng BP duyệt'
-    },
-    {
-        id: "5",
-        tenDm: 'Lãnh đạo từ chối'
-    },
-    {
-        id: "6",
-        tenDm: 'Lãnh đạo phê duyệt'
-    },
-    {
-        id: "7",
-        tenDm: 'mới'
-    },
-    {
-        id: "8",
-        tenDm: 'Cấp trên từ chối'
-    },
-    {
-        id: "9",
-        tenDm: 'Tiếp nhận'
-    },
-]
+
 @Component({
     selector: 'app-bao-cao-quyet-toan',
     templateUrl: './bao-cao-quyet-toan.component.html',
@@ -96,7 +58,7 @@ export class BaoCaoQuyetToanComponent implements OnInit {
     //danh muc
     danhSachBaoCao: any[] = [];
     danhSachBaoCaoAll: any[] = [];
-    trangThais: any[] = TRANG_THAI_TIM_KIEM;
+    trangThais: any[] = Status.TRANG_THAI_FULL;
     //phan trang
     totalElements = 0;
     totalPages = 0;
@@ -148,17 +110,17 @@ export class BaoCaoQuyetToanComponent implements OnInit {
             this.status = false;
             this.trangThai = Utils.TT_BC_1;
             this.donVis = this.donVis.filter(e => e?.maDviCha == this.donViTao);
-            this.searchFilter.trangThais.push(TRANG_THAI_TIM_KIEM.find(e => e.id == Utils.TT_BC_1));
+            this.searchFilter.trangThais.push(Status.TRANG_THAI_FULL.find(e => e.id == Utils.TT_BC_1));
         }
         else {
             if (this.userService.isAccessPermisson(QTVP.DUYET_QUYET_TOAN_REPORT)) {
                 this.status = true;
                 this.trangThai = Utils.TT_BC_2;
-                this.searchFilter.trangThais.push(TRANG_THAI_TIM_KIEM.find(e => e.id == Utils.TT_BC_2));
+                this.searchFilter.trangThais.push(Status.TRANG_THAI_FULL.find(e => e.id == Utils.TT_BC_2));
             } else if (this.userService.isAccessPermisson(QTVP.PHE_DUYET_QUYET_TOAN_REPORT)) {
                 this.status = true;
                 this.trangThai = Utils.TT_BC_4;
-                this.searchFilter.trangThais.push(TRANG_THAI_TIM_KIEM.find(e => e.id == Utils.TT_BC_4));
+                this.searchFilter.trangThais.push(Status.TRANG_THAI_FULL.find(e => e.id == Utils.TT_BC_4));
             } else {
                 this.trangThai = null;
                 this.searchFilter.trangThais = [Utils.TT_BC_1, Utils.TT_BC_2, Utils.TT_BC_3, Utils.TT_BC_4, Utils.TT_BC_5, Utils.TT_BC_6];

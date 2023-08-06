@@ -48,7 +48,7 @@
         <div class="header mg-t-16">
             <div class="header-text">
                 <div class="title-chi-tieu">
-                    <span [ngClass]="statusClass()">{{getStatusName(baoCao.trangThai)}}</span>
+                    <span [ngClass]="statusClass()">{{Status.reportStatusName(baoCao.trangThai) }}</span>
                     <span>Báo cáo gửi đơn vị cấp trên</span>
                 </div>
             </div>
@@ -136,7 +136,7 @@
                                         <td>{{data.tenPl}}</td>
                                         <td>{{data.tenDm}}</td>
                                         <td>
-                                            {{getStatusAppendixName(data.trangThai)}}
+                                            {{Status.appendixStatusName(data.trangThai)}}
                                             <ng-container *ngIf="data.trangThai == '0'">
                                                 <br>
                                                 Lý do: {{data.lyDoTuChoi}}
@@ -296,7 +296,7 @@
                                 <td>{{data.namBcao}}</td>
                                 <td>{{data.ngayDuyet}}</td>
                                 <td>{{data.ngayPheDuyet}}</td>
-                                <td>{{getStatusName(data.trangThai)}}</td>
+                                <td>{{Status.reportStatusName(data.trangThai) }}</td>
                                 <td>
                                     <a (click)="viewDetail(data.id)">
                                         <i class="fa fa-eye"></i>

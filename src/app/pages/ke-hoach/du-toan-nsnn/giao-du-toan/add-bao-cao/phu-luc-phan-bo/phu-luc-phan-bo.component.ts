@@ -3,18 +3,17 @@ import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { FileManip, Operator, Status, Table, Utils } from 'src/app/Utility/utils';
+import { Operator, Status, Table, Utils } from 'src/app/Utility/utils';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
+import { UserService } from 'src/app/services/user.service';
 import * as XLSX from 'xlsx';
 import { BtnStatus, Doc, Form } from '../../giao-du-toan.constant';
-import { NOI_DUNG } from './phu-luc-phan-bo.constant';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { UserService } from 'src/app/services/user.service';
 
 export class ItemData {
     id: string;
@@ -143,7 +142,6 @@ export class PhuLucPhanBoComponent implements OnInit {
         private spinner: NgxSpinnerService,
         private giaoDuToanService: GiaoDuToanChiService,
         private quanLyVonPhiService: QuanLyVonPhiService,
-        private fileManip: FileManip,
         private danhMucService: DanhMucService,
         private userService: UserService,
 
@@ -518,7 +516,7 @@ export class PhuLucPhanBoComponent implements OnInit {
 
         request.fileDinhKems = [];
         for (let iterator of this.listFile) {
-            request.fileDinhKems.push(await this.fileManip.uploadFile(iterator, this.dataInfo.path));
+            request.fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.dataInfo.path));
         }
 
         request.lstCtietBcaos = lstCtietBcaoTemp;
@@ -628,7 +626,7 @@ export class PhuLucPhanBoComponent implements OnInit {
     async downloadFile(id: string) {
         let file: any = this.listFile.find(element => element?.lastModified.toString() == id);
         let doc: any = this.formDetail.lstFiles.find(element => element?.id == id);
-        await this.fileManip.downloadFile(file, doc);
+        await this.quanLyVonPhiService.downFile(file, doc);
     }
 
     exportToExcel() {
