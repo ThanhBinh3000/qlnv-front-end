@@ -29,7 +29,7 @@ export class DanhSachBaoCaoTuDonViCapDuoiComponent implements OnInit {
         denNgay: null,
         maBaoCao: "",
         donViTao: "",
-        trangThai: Utils.TT_BC_7,
+        trangThai: Status.TT_07,
     };
 
     userInfo: any;

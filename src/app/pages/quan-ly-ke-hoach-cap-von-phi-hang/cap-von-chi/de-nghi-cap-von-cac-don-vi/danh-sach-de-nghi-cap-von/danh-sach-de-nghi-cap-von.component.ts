@@ -142,11 +142,11 @@ export class DanhSachDeNghiCapVonComponent implements OnInit {
     }
 
     checkEditStatus(trangThai: string) {
-        return Utils.statusSave.includes(trangThai) && this.userService.isAccessPermisson(Roles.CVNC.EDIT_CV);
+        return Status.check('saveWHist', trangThai) && this.userService.isAccessPermisson(Roles.CVNC.EDIT_CV);
     }
 
     checkDeleteStatus(trangThai: string) {
-        return Utils.statusDelete.includes(trangThai) && this.userService.isAccessPermisson(Roles.CVNC.DEL_CV);
+        return Status.check('saveWHist', trangThai) && this.userService.isAccessPermisson(Roles.CVNC.DEL_CV);
     }
 
     addNewReport() {

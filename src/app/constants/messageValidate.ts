@@ -1,4 +1,4 @@
-import { MONEY_LIMIT } from "../Utility/utils";
+import { Utils } from "../Utility/utils";
 
 
 export const MESSAGEVALIDATE = {
@@ -10,7 +10,7 @@ export const MESSAGEVALIDATE = {
   NOTEMPTYS: 'Vui lòng nhập đúng giá trị cho các trường bôi đỏ!',
   NOTSAVE: 'Vui lòng lưu các trường dữ liệu trong bảng!',
   WRONG_FORMAT: 'Vui lòng nhập năm đúng định dạng số từ 1000 đến 2999',
-  MONEYRANGE: 'Số tiền quy đổi vượt quá hạn mức ' + MONEY_LIMIT,
+  MONEYRANGE: 'Số tiền quy đổi vượt quá hạn mức ' + Utils.MONEY_LIMIT,
   PERSONREPORT: 'Vui lòng chọn người thực hiện báo cáo',
   SAVEREPORT: 'Vui lòng lưu cáo cáo trước khi lưu phụ lục',
   WARNING_FINISH_INPUT: 'Vui lòng hoàn tất nhập liệu trước khi thực hiện trình duyệt',

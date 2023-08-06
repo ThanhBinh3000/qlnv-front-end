@@ -188,11 +188,11 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
     }
 
     checkEditStatus(trangThai: string) {
-        return Utils.statusSave.includes(trangThai) && this.userService.isAccessPermisson(this.perm.edit);
+        return Status.check('saveWHist', trangThai) && this.userService.isAccessPermisson(this.perm.edit);
     }
 
     checkDeleteStatus(trangThai: string) {
-        return Utils.statusDelete.includes(trangThai) && this.userService.isAccessPermisson(this.perm.delete);
+        return Status.check('saveWHist', trangThai) && this.userService.isAccessPermisson(this.perm.delete);
     }
 
     addNewReport() {

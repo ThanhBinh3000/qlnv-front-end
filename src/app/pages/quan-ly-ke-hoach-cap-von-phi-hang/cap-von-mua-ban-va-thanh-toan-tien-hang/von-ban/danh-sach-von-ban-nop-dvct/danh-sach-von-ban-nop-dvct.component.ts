@@ -119,11 +119,11 @@ export class DanhSachVonBanNopDvctComponent implements OnInit {
     }
 
     checkEditStatus(trangThai: string) {
-        return Utils.statusSave.includes(trangThai) && this.userService.isAccessPermisson(Roles.CVMB.EDIT_VB);
+        return Status.check('saveWHist', trangThai) && this.userService.isAccessPermisson(Roles.CVMB.EDIT_VB);
     }
 
     checkDeleteStatus(trangThai: string) {
-        return Utils.statusDelete.includes(trangThai) && this.userService.isAccessPermisson(Roles.CVMB.DEL_VB);
+        return Status.check('saveWHist', trangThai) && this.userService.isAccessPermisson(Roles.CVMB.DEL_VB);
     }
 
     addNewReport() {
