@@ -3,11 +3,12 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { FileManip, Roles, Operator, Status, Table, Utils } from 'src/app/Utility/utils';
+import { Operator, Roles, Status, Table, Utils } from 'src/app/Utility/utils';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
+import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { BtnStatus, CoeffIns, Insurance } from '../lap-ke-hoach-va-tham-dinh-du-toan.constant';
@@ -57,12 +58,12 @@ export class HeSoBaoHiemComponent implements OnInit {
 
     constructor(
         private lapThamDinhService: LapThamDinhService,
+        private quanLyVonPhiService: QuanLyVonPhiService,
         private spinner: NgxSpinnerService,
         private userService: UserService,
         private notification: NzNotificationService,
         private modal: NzModalService,
         public globals: Globals,
-        public fileManip: FileManip,
     ) { }
 
     async ngOnInit() {
@@ -252,7 +253,7 @@ export class HeSoBaoHiemComponent implements OnInit {
 
         baoCaoTemp.fileDinhKems = [];
         for (const iterator of this.listFile) {
-            baoCaoTemp.fileDinhKems.push(await this.fileManip.uploadFile(iterator, this.baoCao.maDvi + '/' + this.baoCao.maBaoHiem));
+            baoCaoTemp.fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.baoCao.maDvi + '/' + this.baoCao.maBaoHiem));
         }
 
         // replace nhung ban ghi dc them moi id thanh null
@@ -368,6 +369,6 @@ export class HeSoBaoHiemComponent implements OnInit {
     async downloadFile(id: string) {
         let file: any = this.listFile.find(element => element?.lastModified.toString() == id);
         let doc: any = this.baoCao.lstFiles.find(element => element?.id == id);
-        await this.fileManip.downloadFile(file, doc);
+        await this.quanLyVonPhiService.downFile(file, doc);
     }
 }
