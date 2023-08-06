@@ -309,6 +309,10 @@ export class BaoCao04aComponent implements OnInit {
         if (this.formDetail.trangThai == Status.NEW && this.dataInfo?.isOffice) {
             this.tinhDinhMuc(this.lstCtietBcao.find(e => e.maNdungChi == this.para.slQd));
         }
+        // nếu là báo cáo tổng hợp thì cộng lại số lượng (fix tamj cho be)
+        if (this.formDetail.trangThai == Status.NEW && this.dataInfo?.isSynth) {
+            this.sum(this.lstCtietBcao.find(e => e.maNdungChi == this.para.slNamTruoc).stt);
+        }
         this.updateEditCache();
         this.getStatusButton();
         this.spinner.hide();
