@@ -53,7 +53,7 @@ export class DanhSachBaoCaoTuDonViCapDuoiComponent implements OnInit {
         this.searchFilter.loaiTimKiem = '1';
         //lay danh sach ca don vi truc thuoc
         const request = {
-            maDviCha: this.userInfo.maDvi,
+            maDviCha: this.userInfo.MA_DVI,
             trangThai: '01',
         }
         await this.quanLyVonPhiService.dmDviCon(request).toPromise().then(

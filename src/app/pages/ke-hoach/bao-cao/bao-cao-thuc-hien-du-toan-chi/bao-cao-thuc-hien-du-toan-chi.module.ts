@@ -14,7 +14,6 @@ import { TongHopBaoCaoComponent } from './tong-hop-bao-cao/tong-hop-bao-cao.comp
         BaoCaoThucHienDuToanChiComponent,
         DanhSachBaoCaoThucHienDuToanChiComponent,
         DanhSachBaoCaoTuDonViCapDuoiComponent,
-        // KiemTraBaoCaoCacDonViCapDuoiComponent,
         TongHopBaoCaoComponent,
         DialogTaoMoiComponent,
     ],
@@ -28,7 +27,6 @@ import { TongHopBaoCaoComponent } from './tong-hop-bao-cao/tong-hop-bao-cao.comp
         BaoCaoThucHienDuToanChiComponent,
         DanhSachBaoCaoThucHienDuToanChiComponent,
         DanhSachBaoCaoTuDonViCapDuoiComponent,
-        // KiemTraBaoCaoCacDonViCapDuoiComponent,
         TongHopBaoCaoComponent,
         DialogTaoMoiComponent,
     ]

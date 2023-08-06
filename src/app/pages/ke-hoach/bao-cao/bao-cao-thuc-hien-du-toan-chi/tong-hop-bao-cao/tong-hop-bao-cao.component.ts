@@ -56,7 +56,7 @@ export class TongHopBaoCaoComponent implements OnInit {
         this.searchFilter.trangThais = [Status.TT_09];
         //lay danh sach danh muc
         const request = {
-            maDviCha: this.userInfo.maDvi,
+            maDviCha: this.userInfo.MA_DVI,
             trangThai: '01',
         }
         await this.quanLyVonPhiService.dmDviCon(request).toPromise().then(

@@ -24,7 +24,7 @@ import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { NzSizeLDSType } from 'ng-zorro-antd/core/types';
 import { InputBoolean } from 'ng-zorro-antd/core/util';
 import { NzInputNumberComponent } from 'ng-zorro-antd/input-number';
-import { MONEY_LIMIT } from 'src/app/Utility/utils';
+import { Utils } from 'src/app/Utility/utils';
 
 @Component({
   selector: 'fm-input-number',
@@ -98,7 +98,7 @@ export class FmInputNumberComponent extends NzInputNumberComponent {
   @ViewChild('inputElement', { static: true }) inputElement!: ElementRef<HTMLInputElement>;
   @Input() nzSize: NzSizeLDSType = 'small';
   @Input() nzMin = 0;
-  @Input() nzMax = MONEY_LIMIT;
+  @Input() nzMax = Utils.MONEY_LIMIT;
   @Input() nzPrecision = 0;
   @Input() nzPrecisionMode: 'cut' | 'toFixed' | ((value: number | string, precision?: number) => number) = 'toFixed';
   @Input() nzPlaceHolder = '';

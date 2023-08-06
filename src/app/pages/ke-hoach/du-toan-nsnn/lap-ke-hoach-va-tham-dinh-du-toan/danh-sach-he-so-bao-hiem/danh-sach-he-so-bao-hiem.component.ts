@@ -67,10 +67,10 @@ export class DanhSachHeSoBaoHiemComponent implements OnInit {
         this.statusNewReport = this.userService.isAccessPermisson(Roles.LTD.ADD_COEF_INS);
         this.statusDelete = this.userService.isAccessPermisson(Roles.LTD.DEL_COEF_INS);
         if (this.userService.isAccessPermisson(Roles.LTD.PASS_COEF_INS)) {
-            this.searchFilter.trangThai = Utils.TT_BC_2;
+            this.searchFilter.trangThai = Status.TT_02;
         } else {
             if (this.userService.isAccessPermisson(Roles.LTD.APPROVE_COEF_INS)) {
-                this.searchFilter.trangThai = Utils.TT_BC_4;
+                this.searchFilter.trangThai = Status.TT_04;
             }
         }
         this.search();
