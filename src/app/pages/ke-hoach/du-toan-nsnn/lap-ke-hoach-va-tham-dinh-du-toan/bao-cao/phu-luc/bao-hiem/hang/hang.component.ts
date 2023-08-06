@@ -135,14 +135,13 @@ export class HangComponent implements OnInit {
         }
 
         this.sortReport();
-        if (this.formDetail.trangThai == Status.NEW) {
+        if (this.formDetail.trangThai == Status.NEW && this.dataInfo.isSynthetic) {
             this.lstCtietBcao.forEach(item => {
                 if (item.level == 0) {
                     this.sum(item.stt + '.1');
                 }
             })
         }
-        console.log(this.lstCtietBcao)
         this.getTotal();
         this.updateEditCache();
         this.getStatusButton();

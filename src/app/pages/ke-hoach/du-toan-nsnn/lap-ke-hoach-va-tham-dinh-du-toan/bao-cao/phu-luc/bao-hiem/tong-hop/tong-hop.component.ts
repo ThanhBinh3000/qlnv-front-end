@@ -159,7 +159,6 @@ export class TongHopComponent implements OnInit {
         this.lstCtietBcao = Table.sortByIndex(this.lstCtietBcao);
         this.sortUnit();
 
-
         this.changeModel();
         this.getTotal();
         this.getStatusButton();
