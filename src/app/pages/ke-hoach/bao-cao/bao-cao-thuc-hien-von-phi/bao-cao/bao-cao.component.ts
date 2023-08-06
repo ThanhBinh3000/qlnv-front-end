@@ -4,8 +4,9 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { FileManip, Roles, Status, Utils } from 'src/app/Utility/utils';
+import { Roles, Status, Utils } from 'src/app/Utility/utils';
 import { DialogChonThemBieuMauComponent } from 'src/app/components/dialog/dialog-chon-them-bieu-mau/dialog-chon-them-bieu-mau.component';
+import { DialogCongVanComponent } from 'src/app/components/dialog/dialog-cong-van/dialog-cong-van.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
@@ -18,7 +19,6 @@ import { BtnStatus, Doc, Form, Report, Vp } from '../bao-cao-thuc-hien-von-phi.c
 import { BaoCao02Component } from './bao-cao-02/bao-cao-02.component';
 import { BaoCao03Component } from './bao-cao-03/bao-cao-03.component';
 import { BaoCao04aComponent } from './bao-cao-04a/bao-cao-04a.component';
-import { DialogCongVanComponent } from 'src/app/components/dialog/dialog-cong-van/dialog-cong-van.component';
 
 @Component({
     selector: 'app-bao-cao',
@@ -104,7 +104,6 @@ export class BaoCaoComponent implements OnInit {
         private notification: NzNotificationService,
         private modal: NzModalService,
         public globals: Globals,
-        private fileManip: FileManip,
     ) { }
 
     async ngOnInit() {
@@ -276,7 +275,7 @@ export class BaoCaoComponent implements OnInit {
             file = this.listFile.find(element => element?.lastModified.toString() == id);
             doc = this.baoCao.lstFiles.find(element => element?.id == id);
         }
-        await this.fileManip.downloadFile(file, doc);
+        await this.quanLyVonPhiService.downFile(file, doc);
     }
 
     // call chi tiet bao cao
@@ -391,7 +390,7 @@ export class BaoCaoComponent implements OnInit {
 
         baoCaoTemp.fileDinhKems = [];
         for (const iterator of this.listFile) {
-            baoCaoTemp.fileDinhKems.push(await this.fileManip.uploadFile(iterator, this.path));
+            baoCaoTemp.fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.path));
         }
 
         //get file cong van url
@@ -402,7 +401,7 @@ export class BaoCaoComponent implements OnInit {
                 return;
             } else {
                 baoCaoTemp.congVan = {
-                    ...await this.fileManip.uploadFile(file, this.path),
+                    ...await this.quanLyVonPhiService.upFile(file, this.path),
                     fileName: this.baoCao.congVan.fileName,
                 }
             }

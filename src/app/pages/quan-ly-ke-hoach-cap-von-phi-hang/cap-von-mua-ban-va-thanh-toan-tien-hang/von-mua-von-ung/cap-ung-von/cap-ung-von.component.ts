@@ -3,7 +3,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { FileManip, Operator, Roles, Status, Table, Utils } from 'src/app/Utility/utils';
+import { Operator, Roles, Status, Table, Utils } from 'src/app/Utility/utils';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
@@ -72,7 +72,6 @@ export class CapUngVonComponent implements OnInit {
         private notification: NzNotificationService,
         private modal: NzModalService,
         public globals: Globals,
-        private fileManip: FileManip,
     ) { }
 
     async ngOnInit() {
@@ -328,7 +327,7 @@ export class CapUngVonComponent implements OnInit {
         request.lstCtiets = lstCtietTemp;
         request.fileDinhKems = [];
         for (let iterator of this.listFile) {
-            request.fileDinhKems.push(await this.fileManip.uploadFile(iterator, this.baoCao.maDvi + '/' + this.baoCao.maCapUng));
+            request.fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.baoCao.maDvi + '/' + this.baoCao.maCapUng));
         }
 
         if (!this.baoCao.id) {
@@ -408,6 +407,6 @@ export class CapUngVonComponent implements OnInit {
     async downloadFile(id: string) {
         let file: any = this.listFile.find(element => element?.lastModified.toString() == id);
         let doc: any = this.baoCao.lstFiles.find(element => element?.id == id);
-        await this.fileManip.downloadFile(file, doc);
+        await this.quanLyVonPhiService.downFile(file, doc);
     }
 }

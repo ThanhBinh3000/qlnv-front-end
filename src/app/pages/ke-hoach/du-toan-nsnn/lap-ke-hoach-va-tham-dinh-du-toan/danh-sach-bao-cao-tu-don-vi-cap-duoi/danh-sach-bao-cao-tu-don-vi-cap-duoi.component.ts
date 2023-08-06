@@ -168,14 +168,7 @@ export class DanhSachBaoCaoTuDonViCapDuoiComponent implements OnInit {
     }
 
     //download file về máy tính
-    async downloadFileCv(fileUrl, fileName) {
-        await this.quanLyVonPhiService.downloadFile(fileUrl).toPromise().then(
-            (data) => {
-                fileSaver.saveAs(data, fileName);
-            },
-            err => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-            },
-        );
+    async downloadFileCv(doc) {
+        await this.quanLyVonPhiService.downFile(null, doc);
     }
 }
