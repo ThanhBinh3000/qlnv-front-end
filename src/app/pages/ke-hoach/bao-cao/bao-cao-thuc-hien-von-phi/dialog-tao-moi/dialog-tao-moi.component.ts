@@ -43,6 +43,7 @@ export class DialogTaoMoiComponent implements OnInit {
     changeModel() {
         if (this.response.maLoaiBcao == Vp.BC_NAM) {
             this.response.dotBcao = null;
+            this.checkReport();
         }
     }
 
@@ -88,7 +89,7 @@ export class DialogTaoMoiComponent implements OnInit {
         this.response.nguoiTao = this.userInfo.sub;
         this.response.ngayTao = new Date();
         this.response.trangThai = Status.TT_01;
-        // this.response.lstBcaos = [];
+        this.response.lstBcaos = [];
         // this.response.lstBcaoDviTrucThuocs = [];
         // this.response.lstFiles = [];
         // this.response.listIdDeleteFiles = [];

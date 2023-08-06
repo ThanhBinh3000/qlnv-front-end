@@ -43,6 +43,7 @@ export class DialogTaoMoiComponent implements OnInit {
     changeModel() {
         if (this.response.maLoaiBcao == Dtc.BC_CA_NAM) {
             this.response.thangBcao = 1;
+            this.checkReport();
         }
     }
 
