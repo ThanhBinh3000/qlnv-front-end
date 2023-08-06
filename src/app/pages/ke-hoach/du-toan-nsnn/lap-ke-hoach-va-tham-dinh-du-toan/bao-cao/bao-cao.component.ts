@@ -416,7 +416,6 @@ export class BaoCaoComponent implements OnInit {
                     fileName: this.baoCao.congVan.fileName,
                 }
             }
-            this.fileDetail = null;
         }
 
         if (!baoCaoTemp.congVan.fileUrl) {
@@ -706,12 +705,13 @@ export class BaoCaoComponent implements OnInit {
         await this.lapThamDinhService.addHistory(this.baoCao.id).toPromise().then(
             (data) => {
                 if (data.statusCode == 0) {
-                    Object.assign(this.baoCao, data.data);
-                    this.baoCao.lstLapThamDinhs.forEach(item => {
-                        [item.tenPl, item.tenDm] = Ltd.appendixName(item.maBieuMau, this.baoCao.namBcao);
-                    })
-                    this.getStatusButton();
+                    // Object.assign(this.baoCao, data.data);
+                    // this.baoCao.lstLapThamDinhs.forEach(item => {
+                    //     [item.tenPl, item.tenDm] = Ltd.appendixName(item.maBieuMau, this.baoCao.namBcao);
+                    // })
+                    // this.getStatusButton();
                     this.notification.success(MESSAGE.SUCCESS, 'Tạo mới thành công.');
+                    this.back()
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
                 }
