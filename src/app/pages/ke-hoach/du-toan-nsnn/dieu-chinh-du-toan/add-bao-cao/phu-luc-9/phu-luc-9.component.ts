@@ -272,7 +272,7 @@ export class PhuLuc9Component implements OnInit {
         this.dToanVuGiam = 0;
         this.lstCtietBcao.forEach(item => {
             item.chenhLech = Operator.sum([item.dtoanVuTvqtDnghi, - item.dtoanDnghiDchinh])
-            if (item.dtoanDnghiDchinh !== null) {
+            if (item.dtoanDnghiDchinh && item.dtoanDnghiDchinh !== null) {
                 if (item.dtoanDnghiDchinh < 0) {
                     Number(this.tongDieuChinhGiam += Number(item?.dtoanDnghiDchinh));
                 } else {
@@ -280,7 +280,7 @@ export class PhuLuc9Component implements OnInit {
                 }
             }
 
-            if (item.dtoanVuTvqtDnghi !== null) {
+            if (item.dtoanVuTvqtDnghi && item.dtoanVuTvqtDnghi !== null) {
                 if (item.dtoanVuTvqtDnghi < 0) {
                     Number(this.dToanVuGiam += Number(item?.dtoanVuTvqtDnghi));
                 } else {

@@ -422,7 +422,7 @@ export class PhuLuc10Component implements OnInit {
 			item.chenhLech = Operator.sum([item.dtoanVuTvqtDnghi, - item.dtoanDnghiDchinhLnay])
 			const str = item.stt
 			if (!(this.lstCtietBcao.findIndex(e => Table.preIndex(e.stt) == str) != -1)) {
-				if (item.dtoanDnghiDchinhLnay !== null) {
+				if (item.dtoanDnghiDchinhLnay && item.dtoanDnghiDchinhLnay !== null) {
 					if (item.dtoanDnghiDchinhLnay < 0) {
 						Number(this.tongDieuChinhGiam += Number(item?.dtoanDnghiDchinhLnay));
 					} else {
@@ -430,7 +430,7 @@ export class PhuLuc10Component implements OnInit {
 					}
 				}
 
-				if (item.dtoanVuTvqtDnghi !== null) {
+				if (item.dtoanVuTvqtDnghi && item.dtoanVuTvqtDnghi !== null) {
 					if (item.dtoanVuTvqtDnghi < 0) {
 						Number(this.dToanVuGiam += Number(item?.dtoanVuTvqtDnghi));
 					} else {
