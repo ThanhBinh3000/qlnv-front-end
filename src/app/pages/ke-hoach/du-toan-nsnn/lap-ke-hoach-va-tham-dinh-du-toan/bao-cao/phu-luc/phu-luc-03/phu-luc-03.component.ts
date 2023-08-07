@@ -163,6 +163,7 @@ export class PhuLuc03Component implements OnInit {
 		this.namBcao = this.dataInfo.namBcao;
 		if (this.status.general) {
 			this.scrollX = Table.tableWidth(350, 7, 1, 110);
+			await this.getDinhMuc();
 		} else {
 			if (this.status.editAppVal) {
 				this.scrollX = Table.tableWidth(350, 10, 2, 60);
@@ -172,16 +173,18 @@ export class PhuLuc03Component implements OnInit {
 				this.scrollX = Table.tableWidth(350, 7, 1, 0);
 			}
 		}
-		await this.getDinhMuc();
-		this.lstCtietBcao.forEach(item => {
-			if (!item.tenMatHang) {
-				const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.matHang && e.loaiBaoQuan == item.maDmuc);
-				item.tenMatHang = dinhMuc?.tenDinhMuc;
-				item.dmucNamDtoan = dinhMuc?.tongDmuc;
-				item.dvTinh = dinhMuc?.donViTinh;
-				item.ttienNamDtoan = Operator.mul(item.dmucNamDtoan, item.sluongNamDtoan);
-			}
-		})
+		if (this.formDetail.trangThai == Status.NEW) {
+			this.lstCtietBcao.forEach(item => {
+				if (!item.tenMatHang) {
+					const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.matHang && e.loaiBaoQuan == item.maDmuc);
+					item.tenMatHang = dinhMuc?.tenDinhMuc;
+					item.dmucNamDtoan = dinhMuc?.tongDmuc;
+					item.dvTinh = dinhMuc?.donViTinh;
+					item.changeModel();
+					// item.ttienNamDtoan = Operator.mul(item.dmucNamDtoan, item.sluongNamDtoan);
+				}
+			})
+		}
 
 		if (!this.lstCtietBcao[0]?.stt) {
 			this.setIndex();
