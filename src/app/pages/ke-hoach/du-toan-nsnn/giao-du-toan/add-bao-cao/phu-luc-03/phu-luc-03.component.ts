@@ -200,6 +200,7 @@ export class PhuLuc03Component implements OnInit {
         if (this.dataInfo?.isSynthetic) {
             this.lstCtietBcaos.forEach(item => {
                 const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.danhMuc);
+                // item.namDtCphiNgoaiCkhoBq = 0;
                 item.namDtCphiTaiCkhoDm = dinhMuc?.tongDmuc;
                 item.namDtCphiTaiCkhoTt = Operator.mul(item.namDtCphiTaiCkhoDm, item.namDtCphiTaiCkhoSl);
                 item.namDtTcong = Operator.sum([item.namDtCphiTaiCkhoTt, item.namDtCphiNgoaiCkhoTt])
