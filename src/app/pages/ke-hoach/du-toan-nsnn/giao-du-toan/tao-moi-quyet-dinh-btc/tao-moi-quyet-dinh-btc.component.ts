@@ -432,6 +432,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
     // call api lưu  
     async save() {
         let checkSaveEdit;
+        let checkNhap = 0;
         if (!this.maDviTien) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
             return;
@@ -458,7 +459,14 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
                 ...item,
                 listCtietDvi: [],
             })
+
+            checkNhap += item.tongCong
         })
+
+        if (!checkNhap || checkNhap == null || checkNhap == 0) {
+            this.notification.warning(MESSAGE.WARNING, "Không có dữ liệu trong bảng, vui lòng nhập");
+            return;
+        }
 
         if (!checkMoneyRange == true) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
@@ -896,16 +904,16 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
 
     // Lưu dữ liệu từ editCache vào lstCtiteBcao
     saveEdit(id: string): void {
-        if (
-            (!this.editCache[id].data.nguonKhac && this.editCache[id].data.nguonKhac !== 0) ||
-            (!this.editCache[id].data.nguonNsnn && this.editCache[id].data.nguonNsnn !== 0)
-        ) {
-            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS)
-            return;
-        }
+        // if (
+        //     (!this.editCache[id].data.nguonKhac) ||
+        //     (!this.editCache[id].data.nguonNsnn)
+        // ) {
+        //     this.notification.warning(MESSAGE.WARNING, "không được để trống")
+        //     return;
+        // }
         if (this.editCache[id].data.nguonKhac < 0 ||
             this.editCache[id].data.nguonNsnn < 0) {
-            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_NEGATIVE)
+            this.notification.warning(MESSAGE.WARNING, "Giá trị nhập không được âm")
             return;
         }
         this.editCache[id].data.checked = this.lstCtietBcao.find(item => item.id === id).checked; // set checked editCache = checked lstCtietBcao
