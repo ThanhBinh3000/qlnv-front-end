@@ -65,6 +65,7 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
   pdfSrc: any;
   wordSrc: any;
   excelSrc: any;
+  isPrint: boolean = false;
 
   constructor(
     private readonly fb: FormBuilder,
@@ -436,21 +437,23 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
   }
 
   doPrint() {
-    const WindowPrt = window.open(
-      '',
-      '',
-      'left=0,top=0,width=900,height=900,toolbar=0,scrollbars=0,status=0',
-    );
-    let printContent = '';
-    printContent = printContent + '<div>';
-    printContent =
-      printContent + document.getElementById('tablePrint').innerHTML;
-    printContent = printContent + '</div>';
-    WindowPrt.document.write(printContent);
-    WindowPrt.document.close();
-    WindowPrt.focus();
-    WindowPrt.print();
-    WindowPrt.close();
+    // const WindowPrt = window.open(
+    //   '',
+    //   '',
+    //   'left=0,top=0,width=900,height=900,toolbar=0,scrollbars=0,status=0',
+    // );
+    // let printContent = '';
+    // printContent = printContent + '<div>';
+    // printContent =
+    //   printContent + document.getElementById('modal').innerHTML;
+    // printContent = printContent + '</div>';
+    // WindowPrt.document.write(printContent);
+    // WindowPrt.document.close();
+    // WindowPrt.focus();
+    // WindowPrt.print();
+    // WindowPrt.close();
+    this.isPrint = true;
+    window.print()
   }
 }
 
