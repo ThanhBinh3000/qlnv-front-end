@@ -7,7 +7,7 @@ import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
 import {DonviService} from "src/app/services/donvi.service";
 import {MESSAGE} from "src/app/constants/message";
-import {HSKT_LOAI_DOI_TUONG} from "src/app/constants/status";
+import {HSKT_LOAI_DOI_TUONG, LOAI_DOI_TUONG} from "src/app/constants/status";
 import {v4 as uuidv4} from "uuid";
 import {cloneDeep} from 'lodash';
 import {DanhMucService} from "src/app/services/danhmuc.service";
@@ -132,8 +132,8 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
       await this.service.getDetail(this.idSelected)
         .then(async (res) => {
           if (res.msg == MESSAGE.SUCCESS) {
-            if (res.data.soQd) {
-              this.maHauTo = '/' + res.data.soQd?.split("/")[1];
+            if (res.data.soBbQd) {
+              this.maHauTo = '/' + res.data.soBbQd?.split("/")[1];
               res.data.soBbQd = res.data.soBbQd?.split("/")[0];
             }
             this.formData.patchValue(res.data);
@@ -199,7 +199,14 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
 
   async buildTableView() {
     this.viewTableDaiDien = cloneDeep(this.formData.value.xhBienBanLayMauDtl.filter(s => s.type == HSKT_LOAI_DOI_TUONG.NGUOI_LIEN_QUAN));
-    // this.viewTableHoSo = cloneDeep(this.formData.value.xhBienBanLayMauDtl.filter(s => s.type == HSKT_LOAI_DOI_TUONG.HO_SO));
+
+    let ppLayMau = cloneDeep(this.formData.value.xhPhieuKnclDtl.filter(s => s.type == LOAI_DOI_TUONG.PHUONG_PHAP_LAY_MAU));
+    let ppLayMauArr = ppLayMau.map(s => s.ten);
+    this.dsPpLayMau.forEach(s => {
+      if (ppLayMauArr.includes(s.giaTri)) {
+        s.selected = true;
+      }
+    })
   }
 
   async loadDsPpLayMau() {
@@ -371,5 +378,16 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
         })
       }
     }
+  }
+
+  async onChangePpLayMau($event: any) {
+    let xhBienBanLayMauDtl = this.formData.value.xhBienBanLayMauDtl;
+    xhBienBanLayMauDtl = xhBienBanLayMauDtl.filter(s => s.type != LOAI_DOI_TUONG.PHUONG_PHAP_LAY_MAU);
+    let newData = [];
+    $event.forEach(s => {
+      xhBienBanLayMauDtl = [...xhBienBanLayMauDtl, {ten: s, type: LOAI_DOI_TUONG.PHUONG_PHAP_LAY_MAU}];
+    });
+    this.formData.patchValue({xhPhieuKnclDtl: xhBienBanLayMauDtl});
+    await this.buildTableView();
   }
 }
