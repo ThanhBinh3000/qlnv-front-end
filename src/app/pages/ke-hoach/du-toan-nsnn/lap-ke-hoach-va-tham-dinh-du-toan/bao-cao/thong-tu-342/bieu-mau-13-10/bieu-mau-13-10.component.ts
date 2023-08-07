@@ -182,9 +182,6 @@ export class BieuMau1310Component implements OnInit {
 					maNdung: e.ma,
 				}))
 			})
-			// this.lstCtietBcao.forEach(item => {
-			// 	item.tenDmuc += Table.getName(item.level, item.maNdung);
-			// })
 		} else if (!this.lstCtietBcao[0]?.stt) {
 			this.lstCtietBcao.forEach(item => {
 				item.stt = item.maNdung;
