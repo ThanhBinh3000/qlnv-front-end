@@ -573,7 +573,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
   }
 
   async pheDuyet() {
-    let trangThai = this.formData.value.trangThai == STATUS.CHO_DUYET_LDV ? STATUS.CHO_DUYET_LDTC : STATUS.DA_DUYET_LDTC;
+    let trangThai = this.formData.value.trangThai == STATUS.CHO_DUYET_LDV ? STATUS.CHO_DUYET_LDTC : STATUS.BAN_HANH;
     let mesg = 'Bạn muốn phê duyệt văn bản?'
     this.approve(this.idInput, trangThai, mesg);
   }

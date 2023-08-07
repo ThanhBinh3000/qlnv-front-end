@@ -75,7 +75,8 @@ export class KiemNghiemChatLuongComponent extends Base2Component implements OnIn
       nam: null,
       soQdinhDcc: null,
       soPhieu: null,
-      ngay: null,
+      tuNgayLapPhieu: null,
+      denNgayLapPhieu: null,
       soBbLayMau: null,
       soBbXuatDocKho: null,
       type: ["01"],
@@ -119,6 +120,22 @@ export class KiemNghiemChatLuongComponent extends Base2Component implements OnIn
 
   }
 
+  disabledStartNgayKN = (startValue: Date): boolean => {
+    if (startValue && this.formData.value.denNgayLapPhieu) {
+      return startValue.getTime() > this.formData.value.denNgayLapPhieu.getTime();
+    } else {
+      return false;
+    }
+  };
+
+  disabledEndNgayKN = (endValue: Date): boolean => {
+    if (endValue && this.formData.value.tuNgayLapPhieu) {
+      return endValue.getTime() < this.formData.value.tuNgayLapPhieu.getTime();
+    } else {
+      return false;
+    }
+  };
+
   isShowDS() {
     if (this.userService.isAccessPermisson('DCNB_QUYETDINHDC_TONGCUC') && this.userService.isAccessPermisson('DCNB_QUYETDINHDC_XEM'))
       return true
@@ -158,11 +175,12 @@ export class KiemNghiemChatLuongComponent extends Base2Component implements OnIn
   }
 
   async timKiem() {
-    // if (this.formData.value.ngay) {
-    //   this.formData.value.tuNgay = dayjs(this.formData.value.ngay[0]).format('YYYY-MM-DD')
-    //   this.formData.value.denNgay = dayjs(this.formData.value.ngay[1]).format('YYYY-MM-DD')
-    // }
-    // await this.search();
+    if (this.formData.value.tuNgayLapPhieu) {
+      this.formData.value.tuNgayLapPhieu = dayjs(this.formData.value.tuNgayLapPhieu).format('YYYY-MM-DD')
+    }
+    if (this.formData.value.denNgayLapPhieu) {
+      this.formData.value.denNgayLapPhieu = dayjs(this.formData.value.denNgayLapPhieu).format('YYYY-MM-DD')
+    }
     let body = this.formData.value
     body.paggingReq = {
       limit: this.pageSize,

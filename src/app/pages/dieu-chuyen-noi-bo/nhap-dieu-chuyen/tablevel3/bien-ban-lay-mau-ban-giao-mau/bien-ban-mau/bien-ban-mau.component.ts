@@ -72,8 +72,8 @@ export class BienBanMauComponent extends Base2Component implements OnInit {
     this.formData = this.fb.group({
       nam: null,
       soQdinh: null,
-      ngayDuyetTc: null,
-      ngayHieuLuc: null,
+      tuNgayLayMau: null,
+      denNgayLayMau: null,
       trichYeu: null,
       type: ["01"],
       loaiDc: [this.loaiDc],
@@ -102,34 +102,21 @@ export class BienBanMauComponent extends Base2Component implements OnInit {
   selectedId: number = 0;
   isView = false;
 
-  // disabledStartNgayLapKh = (startValue: Date): boolean => {
-  //   if (startValue && this.formData.value.ngayLapKhDen) {
-  //     return startValue.getTime() > this.formData.value.ngayLapKhDen.getTime();
-  //   } else {
-  //     return false;
-  //   }
-  // };
+  disabledStartNgayLM = (startValue: Date): boolean => {
+    if (startValue && this.formData.value.denNgayLayMau) {
+      return startValue.getTime() > this.formData.value.denNgayLayMau.getTime();
+    } else {
+      return false;
+    }
+  };
 
-  // disabledEndNgayLapKh = (endValue: Date): boolean => {
-  //   if (!endValue || !this.formData.value.ngayLapKhTu) {
-  //     return false;
-  //   }
-  //   return endValue.getTime() <= this.formData.value.ngayLapKhDen.getTime();
-  // };
-
-  // disabledStartNgayDuyetLdc = (startValue: Date): boolean => {
-  //   if (startValue && this.formData.value.ngayDuyetLdcDen) {
-  //     return startValue.getTime() > this.formData.value.ngayDuyetLdcDen.getTime();
-  //   }
-  //   return false;
-  // };
-
-  // disabledEndNgayDuyetLdc = (endValue: Date): boolean => {
-  //   if (!endValue || !this.formData.value.ngayDuyetLdcTu) {
-  //     return false;
-  //   }
-  //   return endValue.getTime() <= this.formData.value.ngayDuyetLdcDen.getTime();
-  // };
+  disabledEndNgayLM = (endValue: Date): boolean => {
+    if (endValue && this.formData.value.tuNgayLayMau) {
+      return endValue.getTime() < this.formData.value.tuNgayLayMau.getTime();
+    } else {
+      return false;
+    }
+  };
 
   async ngOnInit() {
     this.isVisibleChangeTab$.subscribe((value: boolean) => {
@@ -214,16 +201,13 @@ export class BienBanMauComponent extends Base2Component implements OnInit {
   }
 
   async timKiem() {
-    // if (this.formData.value.ngayDuyetTc) {
-    //   this.formData.value.ngayDuyetTcTu = dayjs(this.formData.value.ngayDuyetTc[0]).format('YYYY-MM-DD')
-    //   this.formData.value.ngayDuyetTcDen = dayjs(this.formData.value.ngayDuyetTc[1]).format('YYYY-MM-DD')
-    // }
-    // if (this.formData.value.ngayHieuLuc) {
-    //   this.formData.value.ngayHieuLucTu = dayjs(this.formData.value.ngayHieuLuc[0]).format('YYYY-MM-DD')
-    //   this.formData.value.ngayHieuLucDen = dayjs(this.formData.value.ngayHieuLuc[1]).format('YYYY-MM-DD')
-    // }
-    // console.log('DSQuyetDinhDieuChuyenComponent/this.formData.value=>', this.formData.value)
-    // await this.search();
+    if (this.formData.value.tuNgayLayMau) {
+      this.formData.value.tuNgayLayMau = dayjs(this.formData.value.tuNgayLayMau).format('YYYY-MM-DD')
+    }
+    if (this.formData.value.denNgayLayMau) {
+      this.formData.value.denNgayLayMau = dayjs(this.formData.value.denNgayLayMau).format('YYYY-MM-DD')
+    }
+
     let body = this.formData.value
     body.paggingReq = {
       limit: this.pageSize,

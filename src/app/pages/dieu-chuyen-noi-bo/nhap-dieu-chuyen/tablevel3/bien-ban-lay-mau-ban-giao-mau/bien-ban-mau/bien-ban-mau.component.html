@@ -17,9 +17,24 @@
               <input nz-input formControlName="trichYeu" />
             </div>
 
-            <div nz-col nzSpan="6">
+            <!-- <div nz-col nzSpan="6">
               <label class="search__label">Ngày lấy mẫu</label>
               <nz-range-picker formControlName="ngayDuyetTc" nzFormat="dd/MM/yyyy"></nz-range-picker>
+            </div> -->
+
+            <div nz-col nzSpan="6">
+              <label class="search__label">Ngày lấy mẫu</label>
+              <div nz-row>
+                <div nz-col nzSpan="12" class="cus-start-date">
+                  <nz-date-picker [nzDisabledDate]="disabledStartNgayLM" nzFormat="dd/MM/yyyy"
+                    formControlName="tuNgayLayMau" nzPlaceHolder="Ngày bắt đầu">
+                  </nz-date-picker>
+                </div>
+                <div nz-col nzSpan="12" class="cus-end-date">
+                  <nz-date-picker [nzDisabledDate]="disabledEndNgayLM" nzFormat="dd/MM/yyyy"
+                    formControlName="denNgayLayMau" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+                </div>
+              </div>
             </div>
 
 
