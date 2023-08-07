@@ -58,12 +58,12 @@
             <th>Số QĐ giao nhiệm vụ NH</th>
             <th>Năm kế hoạch</th>
             <th>Thời gian NH trước ngày</th>
-            <th>Số phiếu nhập kho</th>
-            <th>Ngày nhập kho</th>
             <th>Điểm kho</th>
             <th>Nhà kho</th>
             <th>Ngăn kho</th>
             <th>Lô kho</th>
+            <th>Số phiếu nhập kho</th>
+            <th>Ngày nhập kho</th>
             <th>Số phiếu KTCL</th>
             <th>Ngày giám định</th>
             <th>Trạng thái</th>
@@ -86,33 +86,53 @@
               </td>
             </tr>
             <ng-container *ngIf="expandSet.has(i)">
-              <tr class="level-2" *ngFor="let dataDdiem of item.hhPhieuNhapKhoHdrList , let y = index">
-                <td></td>
-                <td></td>
-                <td colspan="3"></td>
-                <td class="bold">{{dataDdiem.soPhieuNhapKho}}</td>
-                <td>{{dataDdiem.ngayTao}}</td>
-                <td>{{dataDdiem.tenDiemKho}}</td>
-                <td>{{dataDdiem.tenNhaKho}}</td>
-                <td>{{dataDdiem.tenNganKho}}</td>
-                <td>{{dataDdiem.tenLoKho}}</td>
-                <td class="link bold">{{dataDdiem.soPhieuKtraCluong}}</td>
-                <td>{{dataDdiem.ngayGdinh}}</td>
-                <td>{{dataDdiem.tenTrangThai}}</td>
-                <td>
-                  <a *ngIf="dataDdiem.trangThai == STATUS.DA_DUYET_LDCC "
-                    (click)="redirectToChiTiet(true, dataDdiem.id)">
-                    <i class="fa fa-eye" title="Xem chi tiết"></i>
-                  </a>
-                  <a *ngIf="dataDdiem.trangThai != STATUS.DA_DUYET_LDCC "
-                    (click)="redirectToChiTiet(false, dataDdiem.id)">
-                    <i class="fa fa-pencil" title="Sửa"></i>
-                  </a>
-                  <a *ngIf="dataDdiem.trangThai == STATUS.DU_THAO" (click)="xoaItem(dataDdiem)">
-                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
-                  </a>
-                </td>
-              </tr>
+              <ng-container class="level-2" *ngFor="let dataDdiem of item.detail.children , let y = index">
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td colspan="3"></td>
+                  <td>{{dataDdiem.tenDiemKho}}</td>
+                  <td>{{dataDdiem.tenNhaKho}}</td>
+                  <td>{{dataDdiem.tenNganKho}}</td>
+                  <td>{{dataDdiem.tenLoKho}}</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td>
+                  </td>
+                </tr>
+                <ng-container class="level-2" *ngFor="let bb of dataDdiem.hhPhieuNhapKhoHdr , let k = index">
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td colspan="3"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td class="bold">{{bb.soPhieuNhapKho}}</td>
+                    <td>{{bb.ngayNkho}}</td>
+                    <td class="link bold">{{bb.soPhieuKtraCluong}}</td>
+                    <td>{{bb.ngayGdinh}}</td>
+                    <td>{{bb.tenTrangThai}}</td>
+                    <td>
+                      <a *ngIf="bb.trangThai == STATUS.DA_DUYET_LDCC "
+                         (click)="redirectToChiTiet(true, bb.id)">
+                        <i class="fa fa-eye" title="Xem chi tiết"></i>
+                      </a>
+                      <a *ngIf="bb.trangThai != STATUS.DA_DUYET_LDCC "
+                         (click)="redirectToChiTiet(false, bb.id)">
+                        <i class="fa fa-pencil" title="Sửa"></i>
+                      </a>
+                      <a *ngIf="bb.trangThai == STATUS.DU_THAO" (click)="xoaItem(bb)">
+                        <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+                      </a>
+                    </td>
+                  </tr>
+                </ng-container>
+              </ng-container>
             </ng-container>
           </ng-container>
         </tbody>

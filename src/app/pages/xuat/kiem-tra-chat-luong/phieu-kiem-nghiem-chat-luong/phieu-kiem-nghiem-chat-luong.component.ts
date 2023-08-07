@@ -11,6 +11,7 @@ import dayjs from "dayjs";
 import {chain, cloneDeep} from 'lodash';
 import * as uuid from "uuid";
 import {CHUC_NANG, STATUS} from "src/app/constants/status";
+
 @Component({
   selector: 'app-phieu-kiem-nghiem-chat-luong',
   templateUrl: './phieu-kiem-nghiem-chat-luong.component.html',
@@ -19,6 +20,7 @@ import {CHUC_NANG, STATUS} from "src/app/constants/status";
 export class PhieuKiemNghiemChatLuongComponent extends Base2Component implements OnInit {
   @Input() inputService: any;
   @Input() inputServiceGnv: any;
+  @Input() inputServiceBbLayMau: any;
   inputData: any;
   expandSetString = new Set<string>();
   isView: any = false;
@@ -40,14 +42,16 @@ export class PhieuKiemNghiemChatLuongComponent extends Base2Component implements
     super(httpClient, storageService, notification, spinner, modal, null);
     // this.vldTrangThai = this.cuuTroVienTroComponent;
     this.formData = this.fb.group({
-      soBienBan: null,
+      nam: null,
+      soBbQd: null,
       soQdGiaoNvXh: null,
+      soBbLayMau: null,
       dviKiemNghiem: null,
       tenDvi: null,
       maDvi: null,
-      ngayLayMau: null,
-      ngayLayMauTu: null,
-      ngayLayMauDen: null,
+      ngayKiemNghiem: null,
+      ngayKiemNghiemTu: null,
+      ngayKiemNghiemDen: null,
       type: null,
       loaiVthh: null,
     })
@@ -66,9 +70,9 @@ export class PhieuKiemNghiemChatLuongComponent extends Base2Component implements
   async search() {
     try {
       await this.spinner.show();
-      if (this.formData.value.ngayLayMau) {
-        this.formData.value.ngayLayMauTu = dayjs(this.formData.value.ngayLayMau[0]).format('YYYY-MM-DD')
-        this.formData.value.ngayLayMauDen = dayjs(this.formData.value.ngayLayMau[1]).format('YYYY-MM-DD')
+      if (this.formData.value.ngayKiemNghiem) {
+        this.formData.value.ngayKiemNghiemTu = dayjs(this.formData.value.ngayKiemNghiem[0]).format('YYYY-MM-DD')
+        this.formData.value.ngayKiemNghiemDen = dayjs(this.formData.value.ngayKiemNghiem[1]).format('YYYY-MM-DD')
       }
       await super.search();
       /* this.dataTable =
@@ -271,6 +275,7 @@ export class PhieuKiemNghiemChatLuongComponent extends Base2Component implements
              "nguoiSuaId": 38
            }];*/
       this.dataTable.forEach(s => s.idVirtual = uuid.v4());
+      console.log(this.dataTable,'ádasdas')
       this.buildTableView();
     } catch (e) {
       console.log('error: ', e)
@@ -285,18 +290,6 @@ export class PhieuKiemNghiemChatLuongComponent extends Base2Component implements
     this.tableDataView = chain(this.dataTable)
       .groupBy("soQdGnv")
       .map((value, key) => {
-        let rs = chain(value)
-          .groupBy("tenDiemKho")
-          .map((v, k) => {
-            let r = value.find(s => s.tenDiemKho === k);
-            r.idVirtual = uuid.v4();
-            this.expandSetString.add(r.idVirtual);
-            return {
-              idVirtual: r.idVirtual,
-              tenDiemKho: k,
-              childData: v
-            };
-          }).value();
         let row = value.find(s => s.soQdGnv === key)
         this.expandSetString.add(row.idVirtual);
         return {
@@ -305,7 +298,7 @@ export class PhieuKiemNghiemChatLuongComponent extends Base2Component implements
           nam: row.nam,
           idQdGnv: row.idQdGnv,
           ngayKyQdGnv: row.ngayKyQdGnv,
-          childData: rs
+          childData: value
         };
       }).value();
     console.log(this.tableDataView, 'tableDataView')
@@ -347,18 +340,18 @@ export class PhieuKiemNghiemChatLuongComponent extends Base2Component implements
     this.showQdGnv = false;
   }
 
-  disabledStartNgayLayMau = (startValue: Date): boolean => {
-    if (startValue && this.formData.value.ngayLayMauDen) {
-      return startValue.getTime() > this.formData.value.ngayLayMauDen.getTime();
+  disabledStartNgayKiemNghiem = (startValue: Date): boolean => {
+    if (startValue && this.formData.value.ngayKiemNghiemDen) {
+      return startValue.getTime() > this.formData.value.ngayKiemNghiemDen.getTime();
     }
     return false;
   };
 
-  disabledEndNgayLayMau = (endValue: Date): boolean => {
-    if (!endValue || !this.formData.value.ngayLayMauTu) {
+  disabledEndNgayKiemNghiem = (endValue: Date): boolean => {
+    if (!endValue || !this.formData.value.ngayKiemNghiemTu) {
       return false;
     }
-    return endValue.getTime() <= this.formData.value.ngayLayMauDen.getTime();
+    return endValue.getTime() <= this.formData.value.ngayKiemNghiemDen.getTime();
   };
 
   checkStatusPermission(data: any, action: any) {
