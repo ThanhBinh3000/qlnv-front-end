@@ -79,6 +79,7 @@ export class BienBanMauComponent extends Base2Component implements OnInit {
       loaiDc: [this.loaiDc],
       isVatTu: [this.isVatTu],
       loaiQdinh: [],
+      thayDoiThuKho: []
     })
     this.filterTable = {
       nam: '',
@@ -137,7 +138,8 @@ export class BienBanMauComponent extends Base2Component implements OnInit {
     this.formData.patchValue({
       loaiDc: this.loaiDc,
       isVatTu: this.isVatTu,
-      loaiQdinh: this.loaiDc === "CUC" ? "NHAP" : null
+      loaiQdinh: this.loaiDc === "CUC" ? "NHAP" : null,
+      thayDoiThuKho: this.loaiDc === "DCNB" ? true : false
     })
 
 

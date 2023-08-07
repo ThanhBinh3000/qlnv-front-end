@@ -125,6 +125,7 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
       loaiDc: ["DCNB"],
       isVatTu: [true],
       loaiQdinh: [],
+      thayDoiThuKho: [],
       lyDoTuChoi: [],
       noiDung: [],
       soLuongTrongNam: [],
@@ -144,7 +145,8 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
       ktvBaoQuan: this.userInfo.TEN_DAY_DU,
       soBban: `${id}/${this.formData.get('nam').value}/${this.maBb}`,
       loaiDc: this.loaiDc,
-      loaiQdinh: this.loaiDc === "CUC" ? "NHAP" : null
+      loaiQdinh: this.loaiDc === "CUC" ? "NHAP" : null,
+      thayDoiThuKho: this.loaiDc === "DCNB" ? true : false
     })
     await this.getListNhomCcdc()
     if (this.idInput) {

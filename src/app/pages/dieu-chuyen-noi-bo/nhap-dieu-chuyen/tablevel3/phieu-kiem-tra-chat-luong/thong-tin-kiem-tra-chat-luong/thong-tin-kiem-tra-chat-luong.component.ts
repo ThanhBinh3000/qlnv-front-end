@@ -127,6 +127,7 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
       type: ["01"],
       loaiDc: [this.loaiDc],
       loaiQdinh: [],
+      thayDoiThuKho: []
     }
     );
   }
@@ -141,7 +142,8 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
       ktvBaoQuan: this.userInfo.TEN_DAY_DU,
       soPhieu: `${id}/${this.formData.get('nam').value}/${this.maBb}`,
       loaiDc: this.loaiDc,
-      loaiQdinh: this.loaiDc === "CUC" ? "NHAP" : null
+      loaiQdinh: this.loaiDc === "CUC" ? "NHAP" : null,
+      thayDoiThuKho: this.loaiDc === "DCNB" ? true : false
     })
     this.getPPKTCL()
 
