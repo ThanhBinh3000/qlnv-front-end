@@ -246,6 +246,13 @@ export class PhuLucIComponent implements OnInit {
                     }
                 )
             }
+            await this.getFormData();
+            if (this.extraData.findIndex(e => e.maNdung == Dtc.CNTT) == -1) {
+                this.noiDungs = this.noiDungs.filter(e => e.ma != Dtc.CNTT);
+            }
+            if (this.extraData.findIndex(e => e.maNdung == Dtc.SUA_CHUA) == -1) {
+                this.noiDungs = this.noiDungs.filter(e => e.ma != Dtc.SUA_CHUA);
+            }
             this.scrollX = Table.tableWidth(350, 42, 0, 170);
             if (this.lstCtietBcao.length == 0) {
                 if (this.luyKes?.length > 0) {
@@ -285,7 +292,12 @@ export class PhuLucIComponent implements OnInit {
         }
 
         if (this.status.save) {
-            await this.getFormData();
+            if (this.lstCtietBcao.findIndex(e => e.maNdung == Dtc.CNTT) != -1) {
+                this.changeData(Dtc.CNTT);
+            }
+            if (this.lstCtietBcao.findIndex(e => e.maNdung == Dtc.SUA_CHUA) != -1) {
+                this.changeData(Dtc.SUA_CHUA);
+            }
         }
 
         this.getTotal();
@@ -326,18 +338,6 @@ export class PhuLucIComponent implements OnInit {
             data => {
                 if (data.statusCode == 0) {
                     this.extraData = data.data;
-                    if (this.extraData.findIndex(e => e.maNdung == Dtc.CNTT) == -1) {
-                        this.noiDungs = this.noiDungs.filter(e => e.ma != Dtc.CNTT);
-                    }
-                    if (this.extraData.findIndex(e => e.maNdung == Dtc.SUA_CHUA) == -1) {
-                        this.noiDungs = this.noiDungs.filter(e => e.ma != Dtc.SUA_CHUA);
-                    }
-                    if (this.lstCtietBcao.findIndex(e => e.maNdung == Dtc.CNTT) != -1) {
-                        this.changeData(Dtc.CNTT);
-                    }
-                    if (this.lstCtietBcao.findIndex(e => e.maNdung == Dtc.SUA_CHUA) != -1) {
-                        this.changeData(Dtc.SUA_CHUA);
-                    }
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
                 }
@@ -402,6 +402,7 @@ export class PhuLucIComponent implements OnInit {
                     this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
                     this._modalRef.close({
                         trangThai: data.data.trangThai,
+                        thuyetMinh: data.data.thuyetMinh,
                     });
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -432,6 +433,7 @@ export class PhuLucIComponent implements OnInit {
                 }
                 this._modalRef.close({
                     trangThai: mcn,
+                    lyDoTuChoi: lyDoTuChoi,
                 });
             } else {
                 this.notification.error(MESSAGE.ERROR, data?.msg);

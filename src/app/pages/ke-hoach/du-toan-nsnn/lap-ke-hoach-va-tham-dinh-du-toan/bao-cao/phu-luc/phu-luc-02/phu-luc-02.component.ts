@@ -214,7 +214,8 @@ export class PhuLuc02Component implements OnInit {
 			this.lstCtietBcao.forEach(item => {
 				const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.maDanhMuc);
 				item.dmucTaiKho = dinhMuc?.tongDmuc;
-				item.changeModel();
+				item.ttienTaiKho = Operator.mul(item.sluongTaiKho, item.dmucTaiKho);
+				item.tongCong = Operator.sum([item.ttienTaiKho, item.ttienNgoaiKho]);
 			})
 			this.sum1()
 		}
