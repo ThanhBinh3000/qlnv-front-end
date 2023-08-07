@@ -50,10 +50,9 @@ export class DialogTaoMoiTienThuaComponent implements OnInit {
         this.request.namDnghi = this.response.namDnghi;
         this.request.trangThai = null;
         this.spinner.show();
-        await this.capVonMuaBanTtthService.timKiemVonMuaBan(this.request).toPromise().then(
+        await this.capVonMuaBanTtthService.timKiemVonMuaBan(this.request.request()).toPromise().then(
             (data) => {
                 if (data.statusCode == 0) {
-                    let initItem = new Report();
                     let lstBcao = [];
                     if (data.data.content?.length > 0) {
                         lstBcao = data.data.content;
@@ -100,8 +99,8 @@ export class DialogTaoMoiTienThuaComponent implements OnInit {
                     if (data.statusCode == 0) {
                         this.response.lstCtiets.forEach(item => {
                             const temp = data.data.lstCtiets.find(e => e.maHangDtqg == item.maHangDtqg);
-                            item.daNopVonUng = Operator.sum([item.daNopVonUng, temp.nopVonUng]);
-                            item.daNopVonCap = Operator.sum([item.daNopVonCap, temp.nopVonCap]);
+                            item.daNopVonUng = Operator.sum([temp.daNopVonUng, temp.nopVonUng]);
+                            item.daNopVonCap = Operator.sum([temp.daNopVonCap, temp.nopVonCap]);
                             item.daNopTong = Operator.sum([item.daNopVonUng, item.daNopVonCap]);
                             item.changeModel()
                         })

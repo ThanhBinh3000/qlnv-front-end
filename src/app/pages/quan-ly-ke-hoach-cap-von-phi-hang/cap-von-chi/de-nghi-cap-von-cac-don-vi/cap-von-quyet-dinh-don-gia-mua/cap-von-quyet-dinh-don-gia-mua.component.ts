@@ -328,7 +328,7 @@ export class CapVonQuyetDinhDonGiaMuaComponent implements OnInit {
                 }
             }
         }
-        if (!request.congVan?.fileUrl) {
+        if (!request.congVan.fileUrl) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
             return;
         }

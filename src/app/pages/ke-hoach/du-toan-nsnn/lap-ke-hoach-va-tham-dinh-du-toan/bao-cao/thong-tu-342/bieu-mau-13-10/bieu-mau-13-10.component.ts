@@ -250,7 +250,7 @@ export class BieuMau1310Component implements OnInit {
 				item.gtriTdinhSluong = item.khDtoanNamSluong;
 				item.gtriTdinhDgia = item.khDtoanNamDgia;
 				item.gtriTdinhTtien = item.khDtoanNamTtien;
-				item.chenhLech = null;
+				item.chenhLech = 0;
 			})
 		}
 
@@ -275,6 +275,8 @@ export class BieuMau1310Component implements OnInit {
 					this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
 					this._modalRef.close({
 						trangThai: data.data.trangThai,
+						lyDoTuChoi: data.data.lyDoTuChoi,
+						thuyetMinh: data.data.thuyetMinh,
 					});
 				} else {
 					this.notification.error(MESSAGE.ERROR, data?.msg);

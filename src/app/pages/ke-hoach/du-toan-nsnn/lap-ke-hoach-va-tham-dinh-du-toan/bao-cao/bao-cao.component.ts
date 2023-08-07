@@ -677,6 +677,8 @@ export class BaoCaoComponent implements OnInit {
         modalAppendix.afterClose.toPromise().then(async (res) => {
             if (res) {
                 bieuMau.trangThai = res?.trangThai;
+                bieuMau.lyDoTuChoi = res?.lyDoTuChoi;
+                bieuMau.thuyetMinh = res?.thuyetMinh;
             }
         });
     }
