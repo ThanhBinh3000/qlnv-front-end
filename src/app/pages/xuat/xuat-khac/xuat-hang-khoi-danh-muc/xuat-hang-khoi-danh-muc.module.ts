@@ -7,6 +7,9 @@ import { DanhSachHangDuTruTrongKhoNgoaiDanhMucComponent } from './danh-sach-hang
 import { QuyetDinhXuatHangKhoiDanhMucComponent } from './quyet-dinh-xuat-hang-khoi-danh-muc/quyet-dinh-xuat-hang-khoi-danh-muc.component';
 import { TongHopDanhSachHangDtqgThuocDienXuatKhoiDmComponent } from './tong-hop-danh-sach-hang-dtqg-thuoc-dien-xuat-khoi-dm/tong-hop-danh-sach-hang-dtqg-thuoc-dien-xuat-khoi-dm.component';
 import { BaoCaoKqXuatHangDtqgNgoaiDmComponent } from './bao-cao-kq-xuat-hang-dtqg-ngoai-dm/bao-cao-kq-xuat-hang-dtqg-ngoai-dm.component';
+import {
+  VtTbCoThoihanLuukhoConSauThangModule
+} from "../kiemtra-chatluong-vt-tb-truockhi-hethan-luukho/vt-tb-co-thoihan-luukho-con-sau-thang/vt-tb-co-thoihan-luukho-con-sau-thang.module";
 
 
 @NgModule({
@@ -21,6 +24,7 @@ import { BaoCaoKqXuatHangDtqgNgoaiDmComponent } from './bao-cao-kq-xuat-hang-dtq
     CommonModule,
     NzMenuModule,
     ComponentsModule,
+    VtTbCoThoihanLuukhoConSauThangModule,
   ],
   exports: [
     DanhSachHangDuTruTrongKhoNgoaiDanhMucComponent,
