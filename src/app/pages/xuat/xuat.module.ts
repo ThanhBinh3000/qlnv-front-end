@@ -16,7 +16,8 @@ import { ChiTietPhieuKiemNghiemChatLuongComponent } from './kiem-tra-chat-luong/
   declarations: [XuatComponent, XuatTieuHuyComponent, BienBanLayMauComponent, ChiTietBienBanLayMauComponent, PhieuKiemNghiemChatLuongComponent, ChiTietPhieuKiemNghiemChatLuongComponent],
   imports: [CommonModule, XuatRoutingModule, ComponentsModule, MainModule, XuatTieuHuyModule],
   exports: [
-    BienBanLayMauComponent
+    BienBanLayMauComponent,
+    PhieuKiemNghiemChatLuongComponent,
   ]
 })
 export class XuatModule {}
