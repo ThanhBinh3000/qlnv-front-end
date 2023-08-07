@@ -83,7 +83,7 @@ export class ChiTietTongHopDanhSachHangBkkComponent extends Base2Component imple
       tenDvi: [],
       tenCuc: [],
       capTh: [this.userInfo.CAP_DVI],
-      loai: [LOAI_HH_XUAT_KHAC.VT_6_THANG],
+      loai: [LOAI_HH_XUAT_KHAC.VT_BH_BKK],
       tongHopDtl: [new Array()]
     })
     this.userInfo = this.userService.getUserLogin();

@@ -24,7 +24,7 @@ import {
   templateUrl: './toan-bo-danh-sach-hang-bkk.component.html',
   styleUrls: ['./toan-bo-danh-sach-hang-bkk.component.scss']
 })
-export class ToanBoDanhSachHangBkkComponent extends Base2Component implements OnInit  {
+export class ToanBoDanhSachHangBkkComponent extends Base2Component implements OnInit {
   CHUC_NANG = CHUC_NANG;
   dsDonvi: any[] = [];
   dsLoaiVthh: any[] = [];
@@ -164,11 +164,14 @@ export class ToanBoDanhSachHangBkkComponent extends Base2Component implements On
     this.dataTableView = chain(this.dataTable)
       .groupBy("tenChiCuc")
       .map((value, key) => {
+        let rowItem = value.find(s => s.tenChiCuc === key);
+        console.log(rowItem,'rowItemrowItem');
         let idVirtual = uuidv4();
         this.expandSetString.add(idVirtual);
         return {
           idVirtual: idVirtual,
           tenChiCuc: key,
+          tenCuc: rowItem ? rowItem.tenCuc : null,
           childData: value
         };
       }).value();
