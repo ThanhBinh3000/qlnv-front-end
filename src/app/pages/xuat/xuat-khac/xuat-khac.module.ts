@@ -23,6 +23,7 @@ import {
   KiemtraChatluongVtTbTrongThbhComponentModule
 } from "./kiemtra-chatluong-vt-tb-trong-thoi-gian-bao-hanh/kiemtra-chatluong-vt-tb-trong-thoi-gian-bao-hanh.module";
 import {XuatHangDtqgThBkkModule} from "./xuat-hang-dtqg-th-bkk/xuat-hang-dtqg-th-bkk.module";
+import {XuatHangKhoiDanhMucModule} from "./xuat-hang-khoi-danh-muc/xuat-hang-khoi-danh-muc.module";
 
 
 @NgModule({
@@ -39,7 +40,8 @@ import {XuatHangDtqgThBkkModule} from "./xuat-hang-dtqg-th-bkk/xuat-hang-dtqg-th
     KiemtraChatluongVtTbTruockhiHethanLuukhoModule,
     KiemtraChatluongLtTruockhiHethanLuukhoModule,
     KiemtraChatluongVtTbTrongThbhComponentModule,
-    XuatHangDtqgThBkkModule
+    XuatHangDtqgThBkkModule,
+    XuatHangKhoiDanhMucModule
   ],
   exports: [],
   providers: [DatePipe]
