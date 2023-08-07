@@ -623,22 +623,27 @@ export class PhuLucTongHopComponent implements OnInit {
 
     exportToExcel() {
         const header = [
-            { t: 0, b: 1, l: 0, r: 10, val: null },
+            { t: 0, b: 1 + this.lstCtietBcao.length, l: 0, r: 1 + this.lstDvi.length, val: null },
             { t: 0, b: 1, l: 0, r: 0, val: 'STT' },
-            { t: 0, b: 1, l: 1, r: 1, val: 'Chi tiêu' },
-            { t: 0, b: 1, l: 2, r: 2, val: 'Đơn vị tính' },
-            { t: 0, b: 1, l: 3, r: 3, val: 'Số thực hiện năm ' + (this.namBcao - 2).toString() },
-            { t: 0, b: 0, l: 4, r: 5, val: 'Năm ' + (this.namBcao - 1).toString() },
-            { t: 1, b: 1, l: 4, r: 4, val: 'Dự toán' },
-            { t: 1, b: 1, l: 5, r: 5, val: 'Ước thực hiện' },
-            { t: 0, b: 0, l: 6, r: 7, val: 'Năm kế hoạch ' + this.namBcao.toString() },
-            { t: 1, b: 1, l: 6, r: 6, val: 'Dự kiến' },
-            { t: 1, b: 1, l: 7, r: 7, val: 'Giá trị thẩm định' },
-            { t: 0, b: 1, l: 8, r: 8, val: 'Chênh lệch giữa thẩm định của DVCT và nhu cầu của DVCD' },
-            { t: 0, b: 1, l: 9, r: 9, val: 'Ghi chú' },
-            { t: 0, b: 1, l: 10, r: 10, val: 'Ý kiến của đơn vị cấp trên' },
+            { t: 0, b: 1, l: 1, r: 1, val: 'Nhóm' },
+            { t: 0, b: 1, l: 2, r: 2, val: 'Tổng điều chỉnh giảm' },
+            { t: 0, b: 1, l: 3, r: 3, val: 'Tổng điều chỉnh tăng' },
         ]
-        const fieldOrder = ['stt', 'tenDmuc', 'maDviTinh', 'thienNtruoc', 'namDtoan', 'namUocThien', 'namKh', 'giaTriThamDinh', 'chenhLech', 'ghiChu', 'ykienDviCtren']
+
+        // this.lstDvi.forEach((item, index) => {
+        //     const left = 1 + index ;
+        //     header.push({ t: 4, b: 4, l: left + 1, r: left + 10, val: item.tenDvi })
+        //     header.push({ t: 5, b: 5, l: left + 1, r: left + 3, val: 'Tổng điều chỉnh giảm' })
+        //     header.push({ t: 6, b: 7, l: left + 1, r: left + 1, val: 'Tổng điều chỉnh tăng' })
+        // })
+
+        const fieldOrder = [
+            "maNoiDung",
+            "tongCong",
+            "dtoanGiao",
+            "tongDchinhGiam",
+            "tongDchinhTang",
+        ]
         const filterData = this.lstCtietBcao.map(item => {
             const row: any = {};
             fieldOrder.forEach(field => {
