@@ -107,12 +107,6 @@
                                     <td>{{Op.fmtVal(data.namDtCphiTaiCkhoDm)}}</td>
                                     <td>{{Op.fmtVal(data.namDtCphiTaiCkhoTt)}}</td>
                                     <td>
-                                        <!-- <ng-container *ngIf="dataInfo.isSynthetic; else showVal1">
-                                            {{Op.fmtVal(data.namDtCphiNgoaiCkhoBq)}}
-                                        </ng-container>
-                                        <ng-template #showVal1>
-                                            <span></span>
-                                        </ng-template> -->
                                         {{Op.fmtVal(data.namDtCphiNgoaiCkhoBq)}}
                                     </td>
                                     <td>{{Op.fmtVal(data.namDtCphiNgoaiCkhoTt)}}</td>
@@ -149,17 +143,23 @@
                                     <td>
                                         {{Op.fmtVal(editCache[data.id].data.namDtCphiTaiCkhoTt)}}
                                     </td>
+
+                                    <!-- <ng-container *ngIf="dataInfo?.isSynthetic; else showVal1"> -->
                                     <td>
-                                        <ng-container *ngIf="dataInfo.isSynthetic; else showVal1">
-                                            <span></span>
-                                        </ng-container>
-                                        <ng-template #showVal1>
+                                        <input class="money-input" currencyMask
+                                            [(ngModel)]="editCache[data.id].data.namDtCphiNgoaiCkhoBq"
+                                            (ngModelChange)="editCache[data.id].data.changeModel()"
+                                            [options]="Op.amount" />
+                                    </td>
+                                    <!-- </ng-container> -->
+                                    <!-- <ng-template #showVal1>
+                                        <td>
                                             <input class="money-input" currencyMask
                                                 [(ngModel)]="editCache[data.id].data.namDtCphiNgoaiCkhoBq"
                                                 (ngModelChange)="editCache[data.id].data.changeModel()"
                                                 [options]="Op.amount" />
-                                        </ng-template>
-                                    </td>
+                                        </td>
+                                    </ng-template> -->
                                     <td>
                                         {{Op.fmtVal(editCache[data.id].data.namDtCphiNgoaiCkhoTt)}}
                                     </td>
