@@ -108,6 +108,7 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
       loaiDc: [this.loaiDc],
       isVatTu: [this.isVatTu],
       loaiQdinh: [],
+      thayDoiThuKho: [],
       lyDoTuChoi: [],
     });
   }
@@ -124,7 +125,8 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
       id: id,
       loaiDc: this.loaiDc,
       isVatTu: this.isVatTu,
-      loaiQdinh: this.loaiDc === "CUC" ? "NHAP" : null
+      loaiQdinh: this.loaiDc === "CUC" ? "NHAP" : null,
+      thayDoiThuKho: this.loaiDc === "DCNB" ? true : false
     })
 
     if (this.idInput) {
