@@ -26,7 +26,7 @@ export class XuatKhacComponent implements OnInit {
     });
   }
 
-  tabSelected: number = 2;
+  tabSelected: number = 0;
 
   selectTab(tab: number) {
     this.tabSelected = tab;

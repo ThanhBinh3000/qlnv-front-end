@@ -81,6 +81,7 @@ export class KiemNghiemChatLuongComponent extends Base2Component implements OnIn
       type: ["01"],
       loaiDc: ["DCNB"],
       loaiQdinh: [],
+      thayDoiThuKho: []
     })
   }
 
@@ -100,7 +101,8 @@ export class KiemNghiemChatLuongComponent extends Base2Component implements OnIn
     });
     this.formData.patchValue({
       loaiDc: this.loaiDc,
-      loaiQdinh: this.loaiDc === "CUC" ? "NHAP" : null
+      loaiQdinh: this.loaiDc === "CUC" ? "NHAP" : null,
+      thayDoiThuKho: this.loaiDc === "DCNB" ? true : false
     })
 
     try {

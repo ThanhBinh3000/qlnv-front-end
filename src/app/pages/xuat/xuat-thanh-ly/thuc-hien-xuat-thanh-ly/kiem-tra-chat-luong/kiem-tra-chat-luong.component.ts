@@ -6,6 +6,9 @@ import {
 import {
   QuyetDinhGiaoNhiemVuThanhLyService
 } from "src/app/services/qlnv-hang/xuat-hang/xuat-thanh-ly/QuyetDinhGiaoNhiemVuThanhLy.service";
+import {
+  PhieuKiemNghiemChatLuongService
+} from "src/app/services/qlnv-hang/xuat-hang/chung/kiem-tra-chat-luong/PhieuKiemNghiemChatLuong.service";
 
 @Component({
   selector: 'app-kiem-tra-chat-luong',
@@ -16,7 +19,8 @@ export class KiemTraChatLuongComponent implements OnInit {
 
   constructor(
     public bienBanLayMauService: BienBanLayMauService,
-    public quyetDinhGiaoNhiemVuThanhLyService: QuyetDinhGiaoNhiemVuThanhLyService
+    public phieuKiemNghiemChatLuongService: PhieuKiemNghiemChatLuongService,
+    public quyetDinhGiaoNhiemVuThanhLyService: QuyetDinhGiaoNhiemVuThanhLyService,
   ) {
   }
 

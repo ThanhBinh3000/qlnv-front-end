@@ -1,14 +1,18 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { MESSAGE } from 'src/app/constants/message';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { TongHopDeXuatKeHoachBanDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/tongHopDeXuatKeHoachBanDauGia.service';
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { LOAI_HANG_DTQG } from 'src/app/constants/config';
+import {Component, Input, OnInit} from '@angular/core';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {MESSAGE} from 'src/app/constants/message';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {
+  TongHopDeXuatKeHoachBanDauGiaService
+} from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/tongHopDeXuatKeHoachBanDauGia.service';
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from 'src/app/services/storage.service';
+import {DanhMucService} from 'src/app/services/danhmuc.service';
+import {LOAI_HANG_DTQG} from 'src/app/constants/config';
+import {DauGiaComponent} from "../../dau-gia.component";
+import {CHUC_NANG} from "../../../../../constants/status";
 
 @Component({
   selector: 'app-tong-hop',
@@ -19,16 +23,19 @@ export class TongHopComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
   @Input()
   listVthh: any[] = [];
+  CHUC_NANG = CHUC_NANG;
+  public vldTrangThai: DauGiaComponent;
+  isView = false;
+  listLoaiHangHoa: any[] = [];
+  dataTongHop: any;
   isQuyetDinh: boolean = false;
   idQdPd: number = 0;
   isViewQdPd: boolean = false;
-  listLoaiHangHoa: any[] = [];
-  dataTongHop: any;
 
   listTrangThai: any[] = [
-    { ma: this.STATUS.CHUA_TAO_QD, giaTri: 'Chưa Tạo QĐ' },
-    { ma: this.STATUS.DA_DU_THAO_QD, giaTri: 'Đã Dự Thảo QĐ' },
-    { ma: this.STATUS.DA_BAN_HANH_QD, giaTri: 'Đã Ban Hành QĐ' },
+    {ma: this.STATUS.CHUA_TAO_QD, giaTri: 'Chưa Tạo QĐ'},
+    {ma: this.STATUS.DA_DU_THAO_QD, giaTri: 'Đã Dự Thảo QĐ'},
+    {ma: this.STATUS.DA_BAN_HANH_QD, giaTri: 'Đã Ban Hành QĐ'},
   ];
 
   constructor(
@@ -39,18 +46,16 @@ export class TongHopComponent extends Base2Component implements OnInit {
     modal: NzModalService,
     private danhMucService: DanhMucService,
     private tongHopDeXuatKeHoachBanDauGiaService: TongHopDeXuatKeHoachBanDauGiaService,
+    private dauGiaComponent: DauGiaComponent,
   ) {
     super(httpClient, storageService, notification, spinner, modal, tongHopDeXuatKeHoachBanDauGiaService);
+    this.vldTrangThai = this.dauGiaComponent;
     this.formData = this.fb.group({
       namKh: '',
+      loaiVthh: '',
+      noiDungThop: '',
       ngayThopTu: '',
       ngayThopDen: '',
-      loaiVthh: '',
-      tenLoaiVthh: '',
-      cloaiVthh: '',
-      tenCloaiVthh: '',
-      noiDungThop: '',
-      typeLoaiVthh: ''
     })
   }
 
@@ -70,11 +75,38 @@ export class TongHopComponent extends Base2Component implements OnInit {
       this.timKiem();
       await this.search();
       this.spinner.hide();
-    }
-    catch (e) {
+    } catch (e) {
       console.log('error: ', e)
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  redirectDetail(id, isView: boolean) {
+    this.idSelected = id;
+    this.isDetail = true;
+    this.isView = isView;
+  }
+
+  timKiem() {
+    this.formData.patchValue({
+      loaiVthh: this.loaiVthh,
+    })
+    if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
+      this.loadDsVthh();
+    }
+  }
+
+  clearFilter() {
+    this.formData.reset();
+    this.timKiem();
+    this.search();
+  }
+
+  async loadDsVthh() {
+    let res = await this.danhMucService.getDanhMucHangDvqlAsyn({});
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listLoaiHangHoa = res.data?.filter((x) => x.ma.length == 4);
     }
   }
 
@@ -96,21 +128,6 @@ export class TongHopComponent extends Base2Component implements OnInit {
     setActive.classList.add('ant-menu-item-selected');
     this.isQuyetDinh = false;
     await this.search();
-  }
-
-  timKiem() {
-    this.formData.patchValue({
-      loaiVthh: this.loaiVthh,
-    })
-    if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
-      this.loadDsVthh();
-    }
-  }
-
-  clearFilter() {
-    this.formData.reset();
-    this.timKiem();
-    this.search();
   }
 
   openModalQdPd(id: number) {
@@ -136,11 +153,4 @@ export class TongHopComponent extends Base2Component implements OnInit {
     }
     return endValue.getTime() <= this.formData.value.ngayThopTu.getTime();
   };
-
-  async loadDsVthh() {
-    let res = await this.danhMucService.getDanhMucHangDvqlAsyn({});
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.listLoaiHangHoa = res.data?.filter((x) => x.ma.length == 4);
-    }
-  }
 }

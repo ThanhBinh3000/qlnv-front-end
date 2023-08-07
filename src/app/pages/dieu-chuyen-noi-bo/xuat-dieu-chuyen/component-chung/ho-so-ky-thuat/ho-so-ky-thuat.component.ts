@@ -9,8 +9,10 @@ import {
   PhieuKiemNghiemChatLuongService
 } from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuKiemNghiemChatLuong.service";
 import dayjs from "dayjs";
+import {
+  HoSoKyThuatCtvtService
+} from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/HoSoKyThuatCtvt.service";
 import { MESSAGE } from "src/app/constants/message";
-import { HoSoKyThuatXuatDieuChuyenService } from '../services/dcnb-ho-so-ky-thuat.service';
 
 @Component({
   selector: 'app-ho-so-ky-thuat-xuat-dieu-chuyen',
@@ -19,10 +21,6 @@ import { HoSoKyThuatXuatDieuChuyenService } from '../services/dcnb-ho-so-ky-thua
 })
 export class HoSoKyThuatXuatDieuChuyenComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
-  @Input() thayDoiThuKho: boolean;
-  @Input() loaiDc: string;
-  @Input() isVatTu: boolean = true;
-  @Input() type: string;
   isDetail: boolean = false;
   selectedId: number = 0;
   isViewDetail: boolean;
@@ -37,9 +35,9 @@ export class HoSoKyThuatXuatDieuChuyenComponent extends Base2Component implement
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private phieuKiemNghiemChatLuongService: PhieuKiemNghiemChatLuongService,
-    private hoSoKyThuatXuatDieuChuyenService: HoSoKyThuatXuatDieuChuyenService
+    private hoSoKyThuatCtvtService: HoSoKyThuatCtvtService
   ) {
-    super(httpClient, storageService, notification, spinner, modal, hoSoKyThuatXuatDieuChuyenService);
+    super(httpClient, storageService, notification, spinner, modal, hoSoKyThuatCtvtService);
     this.formData = this.fb.group({
       id: [],
       idQdGiaoNvNh: [],
@@ -68,16 +66,19 @@ export class HoSoKyThuatXuatDieuChuyenComponent extends Base2Component implement
       tenTrangThai: [],
       tenDvi: [],
       ngayTao: [],
+      soBbKtNgoaiQuan: [],
+      soBbKtVanHanh: [],
+      soBbKtHskt: [],
       type: []
     })
   }
 
   async ngOnInit() {
     await this.spinner.show();
-    this.formData.patchValue({
-      type: 'DNCBX'
-    });
     try {
+      this.formData.patchValue({
+        type: 'DCNBX'
+      });
       await Promise.all([
         this.search(),
       ])

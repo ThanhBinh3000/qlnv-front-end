@@ -176,7 +176,7 @@
               <td>{{ data.soDxuat }}</td>
               <td>{{ data.tenTrangThai }}</td>
               <td class="text-center">
-                <a *ngIf="data.trangThai === STATUS.CHO_DUYET_LDTC && userService.isAccessPermisson('DCNB_QUYETDINHDC_XEM')"
+                <a *ngIf="(data.trangThai === STATUS.CHO_DUYET_TP || data.trangThai === STATUS.CHODUYET_TBP_TVQT || data.trangThai === STATUS.CHO_DUYET_LDTC) && userService.isAccessPermisson('DCNB_QUYETDINHDC_XEM')"
                   (click)="redirectDetail(data.id, true)">
                   <i class="icon htvbdh_tcdt_pheduyet" title="Duyệt"></i>
                 </a>
