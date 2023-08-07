@@ -352,38 +352,41 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
         })
 
 
-        data.thKeHoachDieuChuyenTongCucDtls.map(async item => {
+        data.thKeHoachDieuChuyenTongCucDtls.forEach(item => {
           listDeXuat.push(item)
-          // if (item.thKeHoachDieuChuyenCucHdr.thKeHoachDieuChuyenNoiBoCucDtls.length > 0) {
-          //   item.thKeHoachDieuChuyenCucHdr.thKeHoachDieuChuyenNoiBoCucDtls.map(itemKH => {
-          //     listQD.push({
-          //       keHoachDcHdrId: itemKH.dcKeHoachDcHdrId,
-          //     })
-          //   })
 
-          // }
-          // if (item.thKeHoachDieuChuyenCucKhacCucDtl) {
-          //   if (item.thKeHoachDieuChuyenCucKhacCucDtl.dcnbKeHoachDcHdr.length > 0) {
-          //     item.thKeHoachDieuChuyenCucKhacCucDtl.dcnbKeHoachDcHdr.map(async (itemKH, i) => {
-          //       listQD.push({
-          //         keHoachDcHdrId: itemKH.id,
-          //       })
-          //     })
-          //   }
+          if (loaiDC === "CHI_CUC") {
+            if (item.thKeHoachDieuChuyenCucHdr.thKeHoachDieuChuyenNoiBoCucDtls.length > 0) {
+              item.thKeHoachDieuChuyenCucHdr.thKeHoachDieuChuyenNoiBoCucDtls.forEach(itemKH => {
+                listQD.push({
+                  keHoachDcHdrId: itemKH.dcKeHoachDcHdrId,
+                })
+              })
+            }
+          }
 
-          // }
+          if (loaiDC === "CUC") {
+            if (item.thKeHoachDieuChuyenCucKhacCucDtl) {
+              listQD.push({
+                keHoachDcHdrId: item.thKeHoachDieuChuyenCucKhacCucDtl.dcnbKeHoachDcHdrId,
+              })
+            }
+          }
+
+
         })
+
         const item = data.thKeHoachDieuChuyenTongCucDtls[0]
         if (loaiDC === "CHI_CUC") {
 
           if (item.thKeHoachDieuChuyenCucHdr) {
 
             if (item.thKeHoachDieuChuyenCucHdr.thKeHoachDieuChuyenNoiBoCucDtls.length > 0) {
-              item.thKeHoachDieuChuyenCucHdr.thKeHoachDieuChuyenNoiBoCucDtls.map(itemKH => {
+              item.thKeHoachDieuChuyenCucHdr.thKeHoachDieuChuyenNoiBoCucDtls.forEach(itemKH => {
                 let dcnbKeHoachDcHdr = itemKH.dcnbKeHoachDcHdr
-                listQD.push({
-                  keHoachDcHdrId: dcnbKeHoachDcHdr.id,
-                })
+                // listQD.push({
+                //   keHoachDcHdrId: dcnbKeHoachDcHdr.id,
+                // })
                 if (dcnbKeHoachDcHdr) {
                   dcnbKeHoachDcHdr.danhSachHangHoa.map(async itemHH => {
                     listHangHoa.push({
@@ -409,11 +412,11 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
           if (item.thKeHoachDieuChuyenCucKhacCucDtl) {
 
             if (item.thKeHoachDieuChuyenCucKhacCucDtl.dcnbKeHoachDcHdr.length > 0) {
-              item.thKeHoachDieuChuyenCucKhacCucDtl.dcnbKeHoachDcHdr.map(async (itemKH, i) => {
-                listQD.push({
-                  keHoachDcHdrId: itemKH.id,
-                })
-                itemKH.danhSachHangHoa.map(async itemHH => {
+              item.thKeHoachDieuChuyenCucKhacCucDtl.dcnbKeHoachDcHdr.forEach(async (itemKH, i) => {
+                // listQD.push({
+                //   keHoachDcHdrId: itemKH.id,
+                // })
+                itemKH.danhSachHangHoa.forEach(async itemHH => {
                   listHangHoa.push({
                     ...itemHH,
                     maLoNganKho: itemHH.maLoKho ? `${itemHH.maLoKho}${itemHH.maNganKho}` : itemHH.maNganKho,
