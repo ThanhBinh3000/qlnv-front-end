@@ -453,8 +453,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
 
     async save() {
         let checkSaveEdit;
-        let checkNhap;
-        let checkNhap1;
+        let checkNhap = 0;
         if (!this.maDviTien) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
             return;
@@ -481,11 +480,10 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
                 ...item,
                 listCtietDvi: [],
             })
-            checkNhap += item.nguonKhac
-            checkNhap1 += item.nguonNsnn
+            checkNhap += item.tongCong
         })
 
-        if (checkNhap == 0 && checkNhap1 == 0) {
+        if (!checkNhap || checkNhap == null || checkNhap == 0) {
             this.notification.warning(MESSAGE.WARNING, "Không có dữ liệu trong bảng, vui lòng nhập");
             return;
         }
@@ -1187,13 +1185,13 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
     };
 
     saveEdit(id: string): void {
-        if (
-            (!this.editCache[id].data.nguonKhac) ||
-            (!this.editCache[id].data.nguonNsnn)
-        ) {
-            this.notification.warning(MESSAGE.WARNING, "không được để trống")
-            return;
-        }
+        // if (
+        //     (!this.editCache[id].data.nguonKhac) ||
+        //     (!this.editCache[id].data.nguonNsnn)
+        // ) {
+        //     this.notification.warning(MESSAGE.WARNING, "không được để trống")
+        //     return;
+        // }
         if (this.editCache[id].data.nguonKhac < 0 ||
             this.editCache[id].data.nguonNsnn < 0) {
             this.notification.warning(MESSAGE.WARNING, "Giá trị nhập không được âm")
