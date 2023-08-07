@@ -97,6 +97,7 @@ export class ThemMoiPhieuNhapKhoComponent extends Base2Component implements OnIn
       donGiaHd: ['1000'],
       donViTinhHd: ['kg'],
       nguoiPduyet: [],
+      tenNganLoKho: [],
       ngayGdinh: [],
     })
   }
@@ -216,6 +217,7 @@ export class ThemMoiPhieuNhapKhoComponent extends Base2Component implements OnIn
     });
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
+        console.log(data)
         this.dataTable = [];
 
         this.formData.patchValue({
@@ -228,6 +230,7 @@ export class ThemMoiPhieuNhapKhoComponent extends Base2Component implements OnIn
           tenNganKho: data.tenNganKho,
           maLoKho: data.maLoKho,
           tenLoKho: data.tenLoKho,
+          tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho,
         });
         this.listPhieuKtraCl = [];
         this.listPhieuKtraCl = data.listPhieuKtraCl.filter(item => (item.trangThai == STATUS.DA_DUYET_LDCC));
@@ -286,7 +289,8 @@ export class ThemMoiPhieuNhapKhoComponent extends Base2Component implements OnIn
         this.fileDinhKems = data.fileDinhKems
         this.formData.patchValue({
           soBangKeCanHang: data.hhBcanKeHangHdr?.soBangKeCanHang,
-          trangThaiBk: data.hhBcanKeHangHdr?.trangThai
+          trangThaiBk: data.hhBcanKeHangHdr?.trangThai,
+          tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho,
         })
       }
     }
