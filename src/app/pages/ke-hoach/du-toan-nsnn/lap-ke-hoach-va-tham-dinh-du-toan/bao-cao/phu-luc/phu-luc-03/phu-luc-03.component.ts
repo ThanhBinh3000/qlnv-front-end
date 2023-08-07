@@ -271,6 +271,8 @@ export class PhuLuc03Component implements OnInit {
 					this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
 					this._modalRef.close({
 						trangThai: data.data.trangThai,
+						lyDoTuChoi: data.data.lyDoTuChoi,
+						thuyetMinh: data.data.thuyetMinh,
 					});
 				} else {
 					this.notification.error(MESSAGE.ERROR, data?.msg);

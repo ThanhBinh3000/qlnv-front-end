@@ -219,7 +219,7 @@ export class BieuMau160Component implements OnInit {
 			lstCtietBcaoTemp?.forEach(item => {
 				item.tdinhSluong = item.namKhSluong;
 				item.tdinhTtien = item.namKhTtien;
-				item.chenhLech = null;
+				item.chenhLech = 0;
 			})
 		}
 
@@ -244,6 +244,8 @@ export class BieuMau160Component implements OnInit {
 					this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
 					this._modalRef.close({
 						trangThai: data.data.trangThai,
+						lyDoTuChoi: data.data.lyDoTuChoi,
+						thuyetMinh: data.data.thuyetMinh,
 					});
 				} else {
 					this.notification.error(MESSAGE.ERROR, data?.msg);

@@ -247,6 +247,7 @@ export class BieuMau140Component implements OnInit {
 		if (this.status.general) {
 			lstCtietBcaoTemp?.forEach(item => {
 				item.giaTriThamDinh = item.namKh;
+				item.chenhLech = 0;
 			})
 		}
 
@@ -271,6 +272,8 @@ export class BieuMau140Component implements OnInit {
 					this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
 					this._modalRef.close({
 						trangThai: data.data.trangThai,
+						lyDoTuChoi: data.data.lyDoTuChoi,
+						thuyetMinh: data.data.thuyetMinh,
 					});
 				} else {
 					this.notification.error(MESSAGE.ERROR, data?.msg);
