@@ -631,27 +631,21 @@ export class PhuLucPhanBoComponent implements OnInit {
 
     exportToExcel() {
         const header = [
-            { t: 0, b: 1, l: 0, r: 13, val: null },
+            { t: 0, b: 1 + this.lstCtietBcaos.length, l: 0, r: 1 + this.lstDvi.length, val: null },
             { t: 0, b: 1, l: 0, r: 0, val: 'STT' },
-            { t: 0, b: 1, l: 1, r: 1, val: 'Danh mục' },
-            { t: 0, b: 1, l: 2, r: 2, val: 'Đơn vị tính' },
-            { t: 0, b: 1, l: 3, r: 3, val: 'Thực hiện năm trước' },
-            { t: 0, b: 0, l: 4, r: 5, val: 'Năm ' + (this.namBcao - 1).toString() },
-            { t: 1, b: 1, l: 4, r: 4, val: 'Dự toán' },
-            { t: 1, b: 1, l: 5, r: 5, val: 'Ước thực hiện' },
-            { t: 0, b: 0, l: 6, r: 8, val: 'Năm dự toán' },
-            { t: 1, b: 1, l: 6, r: 6, val: 'Số lượng' },
-            { t: 1, b: 1, l: 7, r: 7, val: 'Định mức' },
-            { t: 1, b: 1, l: 8, r: 8, val: 'Thành tiền' },
-            { t: 0, b: 0, l: 9, r: 10, val: 'Thẩm định' },
-            { t: 1, b: 1, l: 9, r: 9, val: 'Số lượng' },
-            { t: 1, b: 1, l: 10, r: 10, val: 'Thành tiền' },
-            { t: 0, b: 1, l: 11, r: 11, val: 'Chênh lệch giữa thẩm định của DVCT và nhu cầu của DVCD' },
-            { t: 0, b: 1, l: 12, r: 12, val: 'Ghi chú' },
-            { t: 0, b: 1, l: 13, r: 13, val: 'Ý kiến của đơn vị cấp trên' },
+            { t: 0, b: 1, l: 1, r: 1, val: 'Nội dung' },
+            { t: 0, b: 1, l: 2, r: 2, val: 'Số tiền' },
         ]
-        const fieldOrder = ['stt', 'tenDanhMuc', 'dviTinh', 'thienNamTruoc', 'dtoanNamHtai', 'uocNamHtai', 'sluongNamDtoan',
-            'sluongNamDtoan', 'dmucNamDtoan', 'ttienNamDtoan', 'sluongTd', 'ttienTd', 'chenhLech', 'ghiChu', 'ykienDviCtren']
+        // this.lstDvi.forEach((item, index) => {
+        //     const left = 1 + index * 2;
+        //     header.push({ t: 4, b: 4, l: left + 1, r: left + 10, val: item.tenDvi })
+        //     header.push({ t: 5, b: 5, l: left + 1, r: left + 3, val: 'Số tiền' })
+        // })
+        const fieldOrder = [
+            "maNdung",
+            "tongCong",
+            "dtoanGiao",
+        ]
 
         const filterData = this.lstCtietBcaos.map(item => {
             const row: any = {};

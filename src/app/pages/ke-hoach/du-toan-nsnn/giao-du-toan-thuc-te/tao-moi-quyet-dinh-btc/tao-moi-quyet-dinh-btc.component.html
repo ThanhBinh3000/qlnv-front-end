@@ -169,9 +169,7 @@
                                     <td>
                                         <input class="money-input" currencyMask
                                             [(ngModel)]="editCache[data.id].data.nguonNsnn"
-                                            (ngModelChange)="changeModel(data.id)"
-                                            [class]="(editCache[data.id].data.nguonNsnn || editCache[data.id].data.nguonNsnn ===0) &&  editCache[data.id].data.nguonNsnn >= 0?'' : 'input-error-validate'"
-                                            [options]="amount" />
+                                            (ngModelChange)="changeModel(data.id)" [options]="amount" />
                                     </td>
                                     <td>
                                         <input class="money-input" currencyMask
