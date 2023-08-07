@@ -27,19 +27,12 @@ export class BaoCaoComponent extends Base2Component implements OnInit {
   totalRecord: number = 0;
   LIST_TRANG_THAI: Array<{ ma: string, giaTri: string }> = [
     { ma: this.STATUS.DU_THAO, giaTri: "Dự thảo" },
-    { ma: this.STATUS.CHO_DUYET_TP, giaTri: "Chờ duyệt - TP" },
-    { ma: this.STATUS.CHO_DUYET_LDC, giaTri: "Chờ duyệt - LĐ Cục" },
-    { ma: this.STATUS.TU_CHOI_TP, giaTri: "Từ chối - TP" },
-    { ma: this.STATUS.DA_DUYET_LDC, giaTri: "Đã duyệt - LĐ Cục" },
-    { ma: this.STATUS.TU_CHOI_LDC, giaTri: "Từ chối - LĐ Cục" },
+    { ma: this.STATUS.DA_HOAN_THANH, giaTri: "Đã hoàn thành" },
+
   ];
   TRANG_THAI: { [key: string]: string } = {
     [this.STATUS.DU_THAO]: "Dự thảo",
-    [this.STATUS.CHO_DUYET_TP]: "Chờ duyệt - TP",
-    [this.STATUS.CHO_DUYET_LDC]: "Chờ duyệt - LĐ Cục",
-    [this.STATUS.TU_CHOI_TP]: "Từ chối - TP",
-    [this.STATUS.DA_DUYET_LDC]: "Đã duyệt - LĐ Cục",
-    [this.STATUS.TU_CHOI_LDC]: "Từ chối - LĐ Cục"
+    [this.STATUS.DA_HOAN_THANH]: "Đã hoàn thành",
   }
   constructor(
     httpClient: HttpClient,
@@ -61,14 +54,13 @@ export class BaoCaoComponent extends Base2Component implements OnInit {
 
     })
     this.filterTable = {
-      namBaoCao: '',
-      soBaoCao: '',
-      tenBaoCao: '',
-      ngayBaoCao: '',
+      nam: '',
+      soBc: '',
+      tenBc: '',
+      ngayBc: '',
+      soBBThuaThieu: '',
       soQdinhCuc: '',
-      ngayKyQdCuc: '',
-      soQdinhTongCuc: '',
-      ngayKyQdTongCuc: '',
+      soQdDcCuc: '',
       trangThai: ''
     };
   }
@@ -162,7 +154,7 @@ export class BaoCaoComponent extends Base2Component implements OnInit {
     }
   }
   redirectDetail(id: number, isView: boolean) {
-    this.idSelected = id;
+    this.selectedId = id;
     this.isDetail = true;
     this.isView = isView;
   }
@@ -170,15 +162,15 @@ export class BaoCaoComponent extends Base2Component implements OnInit {
     return !this.checkRoleEdit(trangThai) && !this.checkRoleApproveDc(trangThai) && !this.checkRoleDelete(trangThai)
   }
   checkRoleAdd(): boolean {
-    return this.userService.isCuc()
+    return (this.loaiBc === "CUC" && this.userService.isCuc()) || (this.loaiBc === "CHI_CUC" && this.userService.isChiCuc())
   }
   checkRoleEdit(trangThai: string): boolean {
-    return this.userService.isCuc() && (trangThai === this.STATUS.DU_THAO || trangThai === this.STATUS.TU_CHOI_TP || trangThai === this.STATUS.TU_CHOI_LDC)
+    return ((this.loaiBc === "CUC" && this.userService.isCuc()) || (this.loaiBc === "CHI_CUC" && this.userService.isChiCuc())) && (trangThai === this.STATUS.DU_THAO || trangThai === this.STATUS.TU_CHOI_TP || trangThai === this.STATUS.TU_CHOI_LDC)
   }
   checkRoleApproveDc(trangThai: string): boolean {
-    return this.userService.isCuc() && (trangThai === this.STATUS.CHO_DUYET_TK || trangThai === this.STATUS.CHO_DUYET_LDC)
+    return ((this.loaiBc === "CUC" && this.userService.isCuc()) || (this.loaiBc === "CHI_CUC" && this.userService.isChiCuc())) && (trangThai === this.STATUS.CHO_DUYET_TK || trangThai === this.STATUS.CHO_DUYET_LDC)
   }
   checkRoleDelete(trangThai: string): boolean {
-    return this.userService.isCuc() && trangThai === this.STATUS.DU_THAO
+    return ((this.loaiBc === "CUC" && this.userService.isCuc()) || (this.loaiBc === "CHI_CUC" && this.userService.isChiCuc())) && trangThai === this.STATUS.DU_THAO
   }
 }

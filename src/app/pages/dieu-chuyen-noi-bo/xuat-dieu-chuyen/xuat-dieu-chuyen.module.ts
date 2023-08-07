@@ -56,8 +56,6 @@ import { ThanhPhanThamGiaComponent } from './component-chung/danh-sach-bien-ban-
 import { PhieuKiemNghiemChatLuongXuatDieuChuyenComponent } from './component-chung/quan-ly-phieu-kiem-nghiem-chat-luong/quan-ly-phieu-kiem-nghiem-chat-luong.component';
 import { ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent } from './component-chung/quan-ly-phieu-kiem-nghiem-chat-luong/them-moi-phieu-kiem-nghiem-chat-luong/them-moi-phieu-kiem-nghiem-chat-luong.component';
 import { QuyetDinhDieuChuyenModule } from '../quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen.module';
-import { HoSoKyThuatXuatDieuChuyenComponent } from './component-chung/ho-so-ky-thuat/ho-so-ky-thuat.component';
-import { ChiTietHoSoKyThuatXuatDieuChuyenComponent } from './component-chung/ho-so-ky-thuat/chi-tiet-ho-so-ky-thuat/chi-tiet-ho-so-ky-thuat.component';
 import { ThemMoiPhieuXuatKhoDCNBComponent } from './component-chung/phieu-xuat-kho/them-moi-phieu-xuat-kho/them-moi-phieu-xuat-kho.component';
 import { PhieuXuatKhoDCNBComponent } from './component-chung/phieu-xuat-kho/phieu-xuat-kho.component';
 import { BangKeCanXuatDieuChuyenComponent } from './component-chung/bang-ke-can/bang-ke-can.component';
@@ -106,6 +104,8 @@ import { DCNBGHCXkvtBangKeXuatVatTuComponent } from './giua-hai-cuc/xuat-kho-vat
 import { DCNBGHCXkvtBienBanTinhKhoComponent } from './giua-hai-cuc/xuat-kho-vat-tu/bien-ban-tinh-kho/dcnb-ghc-xkvt-bien-ban-tinh-kho.component';
 import { DCNBGHCKtclvtHoSoKyThuatComponent } from './giua-hai-cuc/kiem-tra-chat-luong-vat-tu/ho-so-ky-thuat/dcnb-ghc-ktclvt-ho-so-ky-thuat.component';
 import { ChiTietBangKeXuatVatTuDieuChuyenComponent } from './component-chung/bang-ke-xuat-vat-tu/chi-tiet-bang-ke-xuat-vat-tu/chi-tiet-bang-ke-xuat-vat-tu.component';
+import { HoSoKyThuatXuatDieuChuyenComponent } from './component-chung/ho-so-ky-thuat/ho-so-ky-thuat.component';
+import { ChiTietHoSoKyThuatXuatDieuChuyenComponent } from './component-chung/ho-so-ky-thuat/chi-tiet-ho-so-ky-thuat/chi-tiet-ho-so-ky-thuat.component';
 import { ChiTietBienBanKiemTraComponent } from './component-chung/ho-so-ky-thuat/chi-tiet-ho-so-ky-thuat/chi-tiet-bien-ban-kiem-tra/chi-tiet-bien-ban-kiem-tra.component';
 
 @NgModule({
