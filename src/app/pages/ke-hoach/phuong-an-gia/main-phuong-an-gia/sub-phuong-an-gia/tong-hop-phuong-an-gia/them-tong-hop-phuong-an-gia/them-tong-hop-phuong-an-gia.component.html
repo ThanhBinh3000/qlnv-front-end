@@ -357,7 +357,7 @@
                   </td>
                   <td class="text-right"
                       *ngIf="(formTraCuu.value.loaiGia == 'LG01' || formTraCuu.value.loaiGia == 'LG03')">
-                    {{ item.giaQdVatTcdt | number : '1.0-1' : 'vi_VN'}}
+                    {{ item.giaQdTcdtVat | number : '1.0-1' : 'vi_VN'}}
                   </td>
                   <td class="text-right"
                       *ngIf="!(formTraCuu.value.loaiGia == 'LG01' || formTraCuu.value.loaiGia == 'LG03')"></td>
