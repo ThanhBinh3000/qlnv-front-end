@@ -81,7 +81,7 @@ export class ThongTinBaoCaoKetQuaKiemDinhVtTbComponent extends Base2Component im
       soCanCu: [null, [Validators.required]],
       idCanCu: [null, [Validators.required]],
       ngayBaoCao: [null, [Validators.required]],
-      qdGiaonvXhDtl: [new Array()],
+      baoCaoDtl: [new Array()],
     })
   }
 
@@ -113,8 +113,8 @@ export class ThongTinBaoCaoKetQuaKiemDinhVtTbComponent extends Base2Component im
               soBaoCao: res.data.soBaoCao.split("/")[0],
               soCanCu: res.data?.soCanCu ? res.data.soCanCu.split(",") : []
             });
-            console.log(this.formData.value.qdGiaonvXhDtl,152)
-            this.dataTable = this.formData.value.qdGiaonvXhDtl.map(m => {
+            console.log(this.formData.value,152)
+            this.dataTable = this.formData.value.baoCaoDtl.map(m => {
               return m.qdGiaonvXhDtl
                 .filter(i=> i.mauBiHuy==true)
                 .map(dtl => ({ ...dtl, soQuyetDinh: m.soQuyetDinh,soLanLm:m.soLanLm,tenTrangThaiXh:m.tenTrangThaiXh }));
@@ -294,7 +294,7 @@ export class ThongTinBaoCaoKetQuaKiemDinhVtTbComponent extends Base2Component im
     this.formData.patchValue({
       soCanCu: this.listSoQuyetDinh.map(m => m.soQuyetDinh),
       idCanCu: this.listSoQuyetDinh.map(m => m.id),
-      qdGiaonvXhDtl: this.dataTable,
+      baoCaoDtl: this.dataTable,
     });
     console.log(this.formData.value,5555)
     this.buildTableView(this.dataTable);
