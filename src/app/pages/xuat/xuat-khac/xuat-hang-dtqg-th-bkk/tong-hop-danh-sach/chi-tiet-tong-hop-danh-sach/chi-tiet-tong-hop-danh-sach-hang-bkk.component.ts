@@ -211,20 +211,26 @@ export class ChiTietTongHopDanhSachHangBkkComponent extends Base2Component imple
       } else {
         if (this.userInfo.CAP_DVI == "1") {
           await this.tongHopDanhSachVttbService.search({
-            capTh: [2],
+            capTh: 2,
             loai: LOAI_HH_XUAT_KHAC.VT_BH_BKK,
           }).then(async res => {
             if (res.msg == MESSAGE.SUCCESS) {
               if (res.data.numberOfElements == 0) {
-                this.notification.warning(MESSAGE.ALERT, 'Không tìm thấy vật tư thiết bị trong danh sách.');
+                this.notification.warning(MESSAGE.ALERT, 'Không tìm thấy bản tổng hợp nào của Cục');
               } else {
                 res.data.content.forEach(s => {
-                  s.idDsHdr = cloneDeep(s.id);
-                  s.id = null;
+                  s.tongHopDtl.forEach(it => {
+                    it.idDsHdr = cloneDeep(it.id);
+                    it.id = null;
+                  });
                 });
+                let listDtl = [];
+                res.data.content.forEach(item => {
+                  listDtl = [...item.tongHopDtl];
+                })
                 this.formData.patchValue({
                   maDanhSach: this.selectedItem ?? this.maHauTo,
-                  tongHopDtl: res.data.content
+                  tongHopDtl: listDtl
                 });
                 let result = await this.createUpdate(this.formData.value);
                 if (result) {

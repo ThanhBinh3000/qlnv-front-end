@@ -120,7 +120,7 @@
               <tr>
                 <td (nzExpandChange)="onExpandStringChange(item.idVirtual, $event)"
                     [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true" style="width: 35px">
-                  {{item.tenChiCuc}}
+                  <span *ngIf="userService.isTongCuc()">{{item.tenCuc}} - </span>  {{item.tenChiCuc}}
                 </td>
                 <td></td>
                 <td></td>
