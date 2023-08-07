@@ -345,11 +345,11 @@ export class PhuLuc7Component implements OnInit {
                 item.dmucChiPhiTaiCuaKho = dinhMuc?.tongDmuc;
 
                 item.dkienThienChiPhiTaiCuaKho = Operator.mul(item.dmucChiPhiTaiCuaKho, item.dkienThienLuong);
-                item.dkienThienChiPhiNgoaiCuaKho = Operator.mul(item.binhQuanChiPhiNgoaiCuaKho, item.dkienThienLuong);
+                // item.dkienThienChiPhiNgoaiCuaKho = Operator.mul(item.binhQuanChiPhiNgoaiCuaKho, item.dkienThienLuong);
                 item.dkienThienChiPhiTongCong = Operator.sum([item.dkienThienChiPhiTaiCuaKho, item.dkienThienChiPhiNgoaiCuaKho])
 
                 item.tdiemBcaoChiPhiTaiCuaKho = Operator.mul(item.tdiemBcaoLuong, item.dmucChiPhiTaiCuaKho)
-                item.tdiemBcaoChiPhiNgoaiCuaKho = Operator.mul(item.binhQuanChiPhiNgoaiCuaKho, item.tdiemBcaoLuong)
+                // item.tdiemBcaoChiPhiNgoaiCuaKho = Operator.mul(item.binhQuanChiPhiNgoaiCuaKho, item.tdiemBcaoLuong)
                 item.tdiemBcaoChiPhiTongCong = Operator.sum([item.tdiemBcaoChiPhiTaiCuaKho, item.tdiemBcaoChiPhiNgoaiCuaKho])
 
                 item.ncauDtoan = Operator.sum([item.tdiemBcaoChiPhiTongCong, item.dkienThienChiPhiTongCong])
