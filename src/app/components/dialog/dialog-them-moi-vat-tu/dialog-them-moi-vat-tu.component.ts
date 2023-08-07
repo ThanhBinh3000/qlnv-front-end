@@ -15,6 +15,7 @@ import { DxuatKhLcntService } from 'src/app/services/qlnv-hang/nhap-hang/dau-tha
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { formatNumber } from "@angular/common";
 import { DanhMucService } from "../../../services/danhmuc.service";
+import {QuyetDinhGiaCuaBtcService} from "../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaCuaBtc.service";
 
 @Component({
   selector: 'dialog-them-moi-vat-tu',
@@ -60,6 +61,7 @@ export class DialogThemMoiVatTuComponent implements OnInit {
     private dxuatKhLcntService: DxuatKhLcntService,
     private notification: NzNotificationService,
     private dmDonViService: DonviService,
+    private quyetDinhGiaCuaBtcService: QuyetDinhGiaCuaBtcService
   ) {
     this.formData = this.fb.group({
       id: [null],
@@ -178,9 +180,30 @@ export class DialogThemMoiVatTuComponent implements OnInit {
     } else {
       dvi = this.userInfo.MA_DVI
     }
-    let res = await this.dxuatKhLcntService.getGiaBanToiDa(this.cloaiVthh, dvi, this.namKhoach);
+    let body = {
+      loaiGia: "LG01",
+      namKeHoach: this.namKhoach,
+      maDvi: dvi,
+      loaiVthh: this.loaiVthh,
+      cloaiVthh: this.cloaiVthh
+    }
+    let res = await this.quyetDinhGiaCuaBtcService.getQdGiaLastestBtc(body);
     if (res.msg === MESSAGE.SUCCESS) {
-      this.giaToiDa = res.data;
+      if (res.data) {
+        let giaToiDa = 0;
+        res.data.forEach(i => {
+          let giaQdBtc = 0;
+          if(i.giaQdDcBtcVat != null && i.giaQdDcBtcVat >0) {
+            giaQdBtc = i.giaQdDcBtcVat
+          } else {
+            giaQdBtc = i.giaQdBtcVat
+          }
+          if (giaQdBtc > giaToiDa) {
+            giaToiDa = giaQdBtc;
+          }
+        })
+        this.giaToiDa = giaToiDa;
+      }
     }
   }
 
