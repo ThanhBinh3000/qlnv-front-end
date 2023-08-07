@@ -73,6 +73,7 @@ export class ThemMoiTtdComponent extends Base3Component implements OnInit {
             soTtr: ttr
           })
           this.dataTable = chain(res.children).groupBy('scDanhSachHdr.tenChiCuc').map((value, key) => ({
+            expandSet: true,
             tenDonVi: key,
             children: value,
           })
@@ -85,13 +86,14 @@ export class ThemMoiTtdComponent extends Base3Component implements OnInit {
   showSave() {
     let trangThai = this.formData.value.trangThai;
     if (this.userService.isCuc()) {
-      return trangThai == STATUS.DU_THAO;
+      return trangThai == STATUS.DU_THAO || trangThai == STATUS.TU_CHOI_TP || trangThai == STATUS.TU_CHOI_LDV || trangThai == STATUS.TU_CHOI_CBV;
     }
     if (this.userService.isTongCuc()) {
-      return trangThai == STATUS.DA_DUYET_LDC;
+      return trangThai == STATUS.DA_DUYET_LDC || trangThai == STATUS.DANG_DUYET_CB_VU;
     }
     return false
   }
+
   save(isGuiDuyet?) {
     this.spinner.show();
     let body = this.formData.value;
@@ -111,6 +113,9 @@ export class ThemMoiTtdComponent extends Base3Component implements OnInit {
       if (res) {
         if (isGuiDuyet) {
           this.id = res.id;
+          this.formData.patchValue({
+            trangThai: res.trangThai
+          })
           this.pheDuyet();
         } else {
           this.redirectDefault();
@@ -128,9 +133,8 @@ export class ThemMoiTtdComponent extends Base3Component implements OnInit {
       this.spinner.hide();
       if (res.data) {
         res.data?.forEach(item => {
-          item.thoiGianThFr = moment(item.thoiGianTh).format('DD/MM/yyyy HH:mm:ss');
-          item.thoiHanNhapFr = moment(item.thoiHanNhap).format('DD/MM/yyyy');;
-          item.thoiHanXuatFr = moment(item.thoiHanXuat).format('DD/MM/yyyy');
+          item.ngayXuat = item.thoiHanXuat;
+          item.ngayNhap = item.thoiHanNhap;
         })
         const modalQD = this.modal.create({
           nzTitle: 'Danh sách sửa chữa',
@@ -142,7 +146,7 @@ export class ThemMoiTtdComponent extends Base3Component implements OnInit {
           nzComponentParams: {
             dataTable: res.data,
             dataHeader: ['Mã danh sách', 'Tên danh sách', 'Thời gian tổng hợp', 'Thời hạn xuất', 'Thời hạn nhập'],
-            dataColumn: ['maDanhSach', 'tenDanhSach', 'thoiGianThFr', 'thoiHanXuatFr', 'thoiHanNhapFr']
+            dataColumn: ['maDanhSach', 'tenDanhSach', 'thoiGianTh', 'ngayXuat', 'ngayNhap']
           },
         });
         modalQD.afterClose.subscribe(async (data) => {
@@ -161,6 +165,7 @@ export class ThemMoiTtdComponent extends Base3Component implements OnInit {
                   thoiHanXuat: data.thoiHanXuat,
                 })
                 this.dataTable = chain(dataTh.children).groupBy('scDanhSachHdr.tenChiCuc').map((value, key) => ({
+                  expandSet: true,
                   tenDonVi: key,
                   children: value,
                 })
@@ -176,7 +181,7 @@ export class ThemMoiTtdComponent extends Base3Component implements OnInit {
   disabledTrinh() {
     let trangThai = this.formData.value.trangThai;
     return trangThai == STATUS.CHO_DUYET_TP || trangThai == STATUS.CHO_DUYET_LDC || trangThai == STATUS.DA_DUYET_LDC
-      || trangThai == STATUS.CHO_DUYET_LDV || trangThai == STATUS.CHO_DUYET_LDTC || trangThai == STATUS.DA_DUYET_LDTC;
+      || trangThai == STATUS.CHO_DUYET_LDV || trangThai == STATUS.CHO_DUYET_LDTC || trangThai == STATUS.DA_DUYET_LDTC || trangThai == STATUS.DANG_DUYET_CB_VU || trangThai == STATUS.TU_CHOI_LDTC;
   }
 
   disabledThamDinh() {
@@ -194,9 +199,11 @@ export class ThemMoiTtdComponent extends Base3Component implements OnInit {
     }
     return false
   }
+
   pheDuyet() {
     let trangThai
     switch (this.formData.value.trangThai) {
+      // Approve
       case STATUS.DU_THAO:
         trangThai = STATUS.CHO_DUYET_TP;
         break;
@@ -206,7 +213,7 @@ export class ThemMoiTtdComponent extends Base3Component implements OnInit {
       case STATUS.CHO_DUYET_LDC:
         trangThai = STATUS.DA_DUYET_LDC;
         break;
-      case STATUS.DA_DUYET_LDC:
+      case STATUS.DANG_DUYET_CB_VU:
         trangThai = STATUS.CHO_DUYET_LDV;
         break;
       case STATUS.CHO_DUYET_LDV:
@@ -214,6 +221,14 @@ export class ThemMoiTtdComponent extends Base3Component implements OnInit {
         break;
       case STATUS.CHO_DUYET_LDTC:
         trangThai = STATUS.DA_DUYET_LDTC;
+        break;
+      //Reject
+      case STATUS.TU_CHOI_TP:
+      case STATUS.TU_CHOI_LDC:
+      case STATUS.TU_CHOI_LDV:
+      case STATUS.TU_CHOI_LDTC:
+      case STATUS.TU_CHOI_CBV:
+        trangThai = STATUS.DU_THAO;
         break;
     }
     this.approve(this.id, trangThai, 'Bạn có muốn gửi duyệt', null, 'Phê duyệt thành công');
@@ -233,6 +248,10 @@ export class ThemMoiTtdComponent extends Base3Component implements OnInit {
         break;
       case STATUS.CHO_DUYET_LDTC:
         trangThai = STATUS.TU_CHOI_LDTC;
+        break;
+      case STATUS.DA_DUYET_LDC:
+      case STATUS.DANG_DUYET_CB_VU:
+        trangThai = STATUS.TU_CHOI_CBV;
         break;
     }
     this.reject(this.id, trangThai);

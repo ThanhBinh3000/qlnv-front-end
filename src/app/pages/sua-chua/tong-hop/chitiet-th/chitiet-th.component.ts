@@ -58,7 +58,6 @@ export class ChitietThComponent extends Base3Component implements OnInit {
         })
         ).value()
       })
-      console.log(this.dataTable);
     });
   }
 
