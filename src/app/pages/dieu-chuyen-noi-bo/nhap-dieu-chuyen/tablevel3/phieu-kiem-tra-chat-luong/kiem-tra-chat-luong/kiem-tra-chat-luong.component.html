@@ -21,13 +21,42 @@
               <input nz-input formControlName="soPhieu" />
             </div>
 
-            <div nz-col nzSpan="4">
+            <!-- <div nz-col nzSpan="4">
               <label class="search__label">Ngày lập phiếu</label>
               <nz-range-picker formControlName="tuNgay" nzFormat="dd/MM/yyyy"></nz-range-picker>
             </div>
             <div nz-col nzSpan="4">
               <label class="search__label">Ngày giám định</label>
               <nz-range-picker formControlName="denNgay" nzFormat="dd/MM/yyyy"></nz-range-picker>
+            </div> -->
+            <div nz-col nzSpan="4">
+              <label class="search__label">Ngày lập phiếu</label>
+              <div nz-row>
+                <div nz-col nzSpan="12" class="cus-start-date">
+                  <nz-date-picker [nzDisabledDate]="disabledStartNgayLap" nzFormat="dd/MM/yyyy"
+                    formControlName="tuNgayLapPhieu" nzPlaceHolder="Ngày bắt đầu">
+                  </nz-date-picker>
+                </div>
+                <div nz-col nzSpan="12" class="cus-end-date">
+                  <nz-date-picker [nzDisabledDate]="disabledEndNgayLap" nzFormat="dd/MM/yyyy"
+                    formControlName="denNgayLapPhieu" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+                </div>
+              </div>
+            </div>
+
+            <div nz-col nzSpan="4">
+              <label class="search__label">Ngày giám định</label>
+              <div nz-row>
+                <div nz-col nzSpan="12" class="cus-start-date">
+                  <nz-date-picker [nzDisabledDate]="disabledStartNgayGD" nzFormat="dd/MM/yyyy"
+                    formControlName="tuNgayGiamDinh" nzPlaceHolder="Ngày bắt đầu">
+                  </nz-date-picker>
+                </div>
+                <div nz-col nzSpan="12" class="cus-end-date">
+                  <nz-date-picker [nzDisabledDate]="disabledEndNgayGD" nzFormat="dd/MM/yyyy"
+                    formControlName="denNgayGiamDinh" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+                </div>
+              </div>
             </div>
 
             <div nz-col nzSpan="7">

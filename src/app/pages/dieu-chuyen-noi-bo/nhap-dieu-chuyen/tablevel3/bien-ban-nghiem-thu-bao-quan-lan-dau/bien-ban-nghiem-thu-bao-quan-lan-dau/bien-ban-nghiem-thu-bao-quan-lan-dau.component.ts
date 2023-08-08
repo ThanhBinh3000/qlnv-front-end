@@ -44,8 +44,10 @@ export class BienBanNghiemThuBaoQuanLanDauComponent extends Base2Component imple
       nam: null,
       soQdinh: null,
       soBban: null,
-      ngayLap: null,
-      ngayKetThucNt: null,
+      tuNgayLap: [],
+      denNgayLap: [],
+      tuNgayKtnt: [],
+      denNgayKtnt: [],
       type: ["01"],
       loaiDc: ["DCNB"],
       loaiQdinh: [],
@@ -81,6 +83,38 @@ export class BienBanNghiemThuBaoQuanLanDauComponent extends Base2Component imple
 
 
   }
+
+  disabledStartNgayLap = (startValue: Date): boolean => {
+    if (startValue && this.formData.value.denNgayLap) {
+      return startValue.getTime() > this.formData.value.denNgayLap.getTime();
+    } else {
+      return false;
+    }
+  };
+
+  disabledEndNgayLap = (endValue: Date): boolean => {
+    if (endValue && this.formData.value.tuNgayLap) {
+      return endValue.getTime() < this.formData.value.tuNgayLap.getTime();
+    } else {
+      return false;
+    }
+  };
+
+  disabledStartNgayKT = (startValue: Date): boolean => {
+    if (startValue && this.formData.value.denNgayKtnt) {
+      return startValue.getTime() > this.formData.value.denNgayKtnt.getTime();
+    } else {
+      return false;
+    }
+  };
+
+  disabledEndNgayKT = (endValue: Date): boolean => {
+    if (endValue && this.formData.value.tuNgayKtnt) {
+      return endValue.getTime() < this.formData.value.tuNgayKtnt.getTime();
+    } else {
+      return false;
+    }
+  };
 
   isShowDS() {
     if (this.userService.isAccessPermisson('DCNB_QUYETDINHDC_TONGCUC') && this.userService.isAccessPermisson('DCNB_QUYETDINHDC_XEM'))
@@ -121,15 +155,17 @@ export class BienBanNghiemThuBaoQuanLanDauComponent extends Base2Component imple
   }
 
   async timKiem() {
-    if (this.formData.value.ngayLap) {
-      this.formData.value.ngayLapTu = dayjs(this.formData.value.ngayLap[0]).format('YYYY-MM-DD')
-      this.formData.value.ngayLapDen = dayjs(this.formData.value.ngayLap[1]).format('YYYY-MM-DD')
-      this.formData.value.ngayLap = undefined
+    if (this.formData.value.tuNgayLap) {
+      this.formData.value.tuNgayLap = dayjs(this.formData.value.tuNgayLap).format('YYYY-MM-DD')
     }
-    if (this.formData.value.ngayKetThucNt) {
-      this.formData.value.ngayKetThucNtTu = dayjs(this.formData.value.ngayKetThucNt[0]).format('YYYY-MM-DD')
-      this.formData.value.ngayKetThucNtDen = dayjs(this.formData.value.ngayKetThucNt[1]).format('YYYY-MM-DD')
-      this.formData.value.ngayKetThucNt = undefined
+    if (this.formData.value.denNgayLap) {
+      this.formData.value.denNgayLap = dayjs(this.formData.value.denNgayLap).format('YYYY-MM-DD')
+    }
+    if (this.formData.value.tuNgayKtnt) {
+      this.formData.value.tuNgayKtnt = dayjs(this.formData.value.tuNgayKtnt).format('YYYY-MM-DD')
+    }
+    if (this.formData.value.denNgayKtnt) {
+      this.formData.value.denNgayKtnt = dayjs(this.formData.value.denNgayKtnt).format('YYYY-MM-DD')
     }
     let body = this.formData.value
     body.paggingReq = {

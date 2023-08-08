@@ -43,12 +43,12 @@
               <label class="search__label">Ngày kết thúc nhập</label>
               <div nz-row>
                 <div nz-col nzSpan="12" class="cus-start-date">
-                  <nz-date-picker [nzDisabledDate]="disabledStartNgayBdNhap" nzFormat="dd/MM/yyyy"
+                  <nz-date-picker [nzDisabledDate]="disabledStartNgayKTNhap" nzFormat="dd/MM/yyyy"
                     formControlName="tuNgayKtNhap" nzPlaceHolder="Ngày bắt đầu">
                   </nz-date-picker>
                 </div>
                 <div nz-col nzSpan="12" class="cus-end-date">
-                  <nz-date-picker [nzDisabledDate]="disabledEndNgayBdNhap" nzFormat="dd/MM/yyyy"
+                  <nz-date-picker [nzDisabledDate]="disabledEndNgayKTNhap" nzFormat="dd/MM/yyyy"
                     formControlName="denNgayKtNhap" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
                 </div>
               </div>
@@ -58,13 +58,13 @@
               <label class="search__label">Thời hạn nhập hàng</label>
               <div nz-row>
                 <div nz-col nzSpan="12" class="cus-start-date">
-                  <nz-date-picker [nzDisabledDate]="disabledStartNgayBdNhap" nzFormat="dd/MM/yyyy"
-                    formControlName="tuNgayBdNhap" nzPlaceHolder="Ngày bắt đầu">
+                  <nz-date-picker [nzDisabledDate]="disabledStartNgayTHNhap" nzFormat="dd/MM/yyyy"
+                    formControlName="tuNgayThoiHanNh" nzPlaceHolder="Ngày bắt đầu">
                   </nz-date-picker>
                 </div>
                 <div nz-col nzSpan="12" class="cus-end-date">
-                  <nz-date-picker [nzDisabledDate]="disabledEndNgayBdNhap" nzFormat="dd/MM/yyyy"
-                    formControlName="denNgayBdNhap" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+                  <nz-date-picker [nzDisabledDate]="disabledEndNgayTHNhap" nzFormat="dd/MM/yyyy"
+                    formControlName="denNgayThoiHanNh" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
                 </div>
               </div>
             </div>
