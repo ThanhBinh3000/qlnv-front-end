@@ -314,7 +314,7 @@
 										<td>
 											<input class="money-input" currencyMask [options]="Op.amount"
 												[(ngModel)]="editCache[data.id].data.tdinhKhoSluong"
-												(ngModelChange)="editCache[data.id].data.changeModel()" />
+												(ngModelChange)="editCache[data.id].data.changeTd()" />
 										</td>
 										<td>
 											{{ Op.fmtVal(editCache[data.id].data.tdinhKhoTtien) }}
