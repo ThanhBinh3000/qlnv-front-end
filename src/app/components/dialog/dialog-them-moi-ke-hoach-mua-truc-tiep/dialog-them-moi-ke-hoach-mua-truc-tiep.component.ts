@@ -188,7 +188,7 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
         soLuongChiTieu: chiCuc?.soLuongChiTieu ? chiCuc?.soLuongChiTieu : resChiTieu?.ntnThoc,
         soLuongNhap: chiCuc?.soLuongNhap,
         tongSoLuong: chiCuc?.tongSoLuong,
-        donGiaVat: chiCuc?.donGiaVat,
+        // donGiaVat: chiCuc?.donGiaVat,
         tongThanhTien: chiCuc?.tongThanhTien,
         tongThanhTienVat: chiCuc?.tongThanhTienVat,
         donGia: chiCuc?.donGia
