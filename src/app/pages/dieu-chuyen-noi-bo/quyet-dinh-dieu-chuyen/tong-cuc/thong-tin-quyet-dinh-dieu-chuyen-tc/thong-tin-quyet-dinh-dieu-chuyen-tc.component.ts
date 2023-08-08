@@ -261,16 +261,34 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
     let listHangHoa = []
     this.dataTableView = []
     let itemQd = this.formData.value.quyetDinhPdDtl[index]
-    if (itemQd.danhSachHangHoa) {
-      itemQd.danhSachHangHoa.forEach(element => {
-        listHangHoa.push({
-          ...element,
-          maLoNganKho: element.maLoKho ? `${element.maLoKho}${element.maNganKho}` : element.maNganKho,
-          maDvi: itemQd.maDvi,
-          tenDvi: itemQd.tenDvi,
-        })
-      });
-    }
+
+    let dcnbKeHoachDcHdr = itemQd.danhSachQuyetDinhChiTiet
+    if (!dcnbKeHoachDcHdr) return
+    dcnbKeHoachDcHdr.forEach(dq => {
+      if (dq.danhSachKeHoach) {
+        dq.danhSachKeHoach.forEach(element => {
+          listHangHoa.push({
+            ...element,
+            maLoNganKho: element.maLoKho ? `${element.maLoKho}${element.maNganKho}` : element.maNganKho,
+            maDvi: dcnbKeHoachDcHdr.maDvi,
+            tenDvi: dcnbKeHoachDcHdr.tenDvi,
+          })
+        });
+      }
+
+    });
+
+    // if (itemQd.danhSachHangHoa) {
+    //   itemQd.danhSachHangHoa.forEach(element => {
+    //     listHangHoa.push({
+    //       ...element,
+    //       maLoNganKho: element.maLoKho ? `${element.maLoKho}${element.maNganKho}` : element.maNganKho,
+    //       maDvi: itemQd.maDvi,
+    //       tenDvi: itemQd.tenDvi,
+    //     })
+    //   });
+    // }
+
     if (itemQd.thKeHoachDieuChuyenCucHdr) {
       if (itemQd.thKeHoachDieuChuyenCucHdr.thKeHoachDieuChuyenNoiBoCucDtls.length > 0) {
         itemQd.thKeHoachDieuChuyenCucHdr.thKeHoachDieuChuyenNoiBoCucDtls.map(itemKH => {
@@ -530,6 +548,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
         tongtien: tongDuToanChiPhi,
       })
     };
+    console.log('dataView', data, dataView)
     return dataView
   }
 
