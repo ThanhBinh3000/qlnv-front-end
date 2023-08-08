@@ -210,26 +210,28 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
       let listHangHoa = []
       this.dataTableView = []
       if (data.danhSachQuyetDinh.length > 0) {
-        data.danhSachQuyetDinh.map(async (item, i) => {
-          if (item.dcnbKeHoachDcHdr) {
-            listDeXuat.push(item.dcnbKeHoachDcHdr)
-
-          }
+        data.danhSachQuyetDinh.forEach(async (item, i) => {
+          listDeXuat.push(item)
         })
 
-        let dcnbKeHoachDcHdr = data.danhSachQuyetDinh[0].dcnbKeHoachDcHdr
+        let dcnbKeHoachDcHdr = data.danhSachQuyetDinh[0].danhSachQuyetDinhChiTiet
         if (!dcnbKeHoachDcHdr) return
-        dcnbKeHoachDcHdr.danhSachHangHoa.forEach(element => {
-          listHangHoa.push({
-            ...element,
-            maLoNganKho: element.maLoKho ? `${element.maLoKho}${element.maNganKho}` : element.maNganKho,
-            maDvi: dcnbKeHoachDcHdr.maDvi,
-            tenDvi: dcnbKeHoachDcHdr.tenDvi,
-          })
+        dcnbKeHoachDcHdr.forEach(dq => {
+          if (dq.danhSachKeHoach) {
+            dq.danhSachKeHoach.forEach(element => {
+              listHangHoa.push({
+                ...element,
+                maLoNganKho: element.maLoKho ? `${element.maLoKho}${element.maNganKho}` : element.maNganKho,
+                maDvi: dcnbKeHoachDcHdr.maDvi,
+                tenDvi: dcnbKeHoachDcHdr.tenDvi,
+              })
+            });
+          }
+
         });
       }
 
-
+      console.log('listDeXuat', listDeXuat)
       this.formData.patchValue({
         ...data,
         quyetDinhPdDtl: listDeXuat,
@@ -367,9 +369,12 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
 
           if (loaiDC === "CUC") {
             if (item.thKeHoachDieuChuyenCucKhacCucDtl) {
-              listQD.push({
-                keHoachDcHdrId: item.thKeHoachDieuChuyenCucKhacCucDtl.dcnbKeHoachDcHdrId,
-              })
+              item.thKeHoachDieuChuyenCucKhacCucDtl.dcnbKeHoachDcHdr.forEach(element => {
+                listQD.push({
+                  keHoachDcHdrId: element.id,
+                })
+              });
+
             }
           }
 

@@ -23,6 +23,7 @@ export class ThongTinHangCanDieuChuyenChiCucComponent extends Base2Component imp
   formData: FormGroup
   fb: FormBuilder = new FormBuilder();
 
+  danhSachKeHoach: any[] = [];
   dsChiCuc: any[] = [];
   data: any
 
@@ -100,6 +101,7 @@ export class ThongTinHangCanDieuChuyenChiCucComponent extends Base2Component imp
   handleOk(item: any) {
     this._modalRef.close({
       ...item,
+      maLoNganKho: `${item.maLoKho}${item.maNganKho}`,
       isUpdate: !!this.data.maDvi
     });
   }
@@ -110,6 +112,8 @@ export class ThongTinHangCanDieuChuyenChiCucComponent extends Base2Component imp
 
   async handleData() {
     await this.spinner.show()
+
+
     if (this.data.maDvi) await this.getListDiemKho(this.data.maDvi)
     if (this.data.maDiemKho) await this.getListNhaKho(this.data.maDiemKho)
     if (this.data.maNhaKho) await this.getListNganKho(this.data.maNhaKho)
@@ -121,6 +125,7 @@ export class ThongTinHangCanDieuChuyenChiCucComponent extends Base2Component imp
     if (this.data.maNganKhoNhan) await this.getListLoKhoNhan(this.data.maNganKhoNhan)
 
     this.formData.patchValue(this.data)
+
     await this.spinner.hide();
   }
 
@@ -133,6 +138,52 @@ export class ThongTinHangCanDieuChuyenChiCucComponent extends Base2Component imp
         tenDvi: chiCuc.tenDvi
       })
     }
+  }
+
+  checkDisabledLoKhoNhan(value): boolean {
+    const check = this.danhSachKeHoach.find(item =>
+      (item.maChiCucNhan === this.formData.value.maChiCucNhan) &&
+      (item.maDiemKho === this.formData.value.maDiemKho) &&
+      (item.maNhaKho === this.formData.value.maNhaKho) &&
+      (item.maNganKho === this.formData.value.maNganKho) &&
+      (item.maLoKho === this.formData.value.maLoKho) &&
+      (item.maDiemKhoNhan === this.formData.value.maDiemKhoNhan) &&
+      (item.maNhaKhoNhan === this.formData.value.maNhaKhoNhan) &&
+      (item.maNganKhoNhan === this.formData.value.maNganKhoNhan) &&
+      (item.maLoKhoNhan === value)
+    )
+
+    if ((this.formData.value.maDiemKho === this.formData.value.maDiemKhoNhan) &&
+      (this.formData.value.maNhaKho === this.formData.value.maNhaKhoNhan) &&
+      (this.formData.value.maNganKho === this.formData.value.maNganKhoNhan) &&
+      (this.formData.value.maLoKho === value)) {
+      return true
+    }
+
+    return !!check
+  }
+
+  checkDisabledNganKhoNhan(value): boolean {
+    const dsLoKhoNhan = this.dsNganKhoNhan.find(f => f.maDvi === value)?.children;
+    if (dsLoKhoNhan.length == 0) {
+      const check = this.danhSachKeHoach.find(item =>
+        (item.maChiCucNhan === this.formData.value.maChiCucNhan) &&
+        (item.maDiemKho === this.formData.value.maDiemKho) &&
+        (item.maNhaKho === this.formData.value.maNhaKho) &&
+        (item.maNganKho === this.formData.value.maNganKho) &&
+        (item.maLoKho === this.formData.value.maLoKho) &&
+        (item.maDiemKhoNhan === this.formData.value.maDiemKhoNhan) &&
+        (item.maNhaKhoNhan === this.formData.value.maNhaKhoNhan) &&
+        (item.maNganKhoNhan === value)
+      )
+      if ((this.formData.value.maDiemKho === this.formData.value.maDiemKhoNhan) &&
+        (this.formData.value.maNhaKho === this.formData.value.maNhaKhoNhan) &&
+        (this.formData.value.maNganKho === value)) {
+        return true
+      }
+      return !!check
+    }
+    return false
   }
 
   async getListDiemKho(maDvi) {
@@ -365,10 +416,12 @@ export class ThongTinHangCanDieuChuyenChiCucComponent extends Base2Component imp
         const detail = await this.mangLuoiKhoService.getDetailByMa(body);
         if (detail.statusCode == 0) {
           const coLoKho = detail.data.object.coLoKho
-          const tichLuongKd = (this.formData.value.cloaiVthh.startsWith("01") || this.formData.value.cloaiVthh.startsWith("04")) ? detail.data.object.tichLuongKdLt : detail.data.object.tichLuongKdVt
-          this.formData.patchValue({
-            tichLuongKd
-          })
+          if (this.formData.value.cloaiVthh) {
+            const tichLuongKd = (this.formData.value.cloaiVthh.startsWith("01") || this.formData.value.cloaiVthh.startsWith("04")) ? detail.data.object.tichLuongKdLt : detail.data.object.tichLuongKdVt
+            this.formData.patchValue({
+              tichLuongKd
+            })
+          }
           const detailThuKho = detail.data.object.detailThuKho
           if (detailThuKho) {
             this.formData.patchValue({
