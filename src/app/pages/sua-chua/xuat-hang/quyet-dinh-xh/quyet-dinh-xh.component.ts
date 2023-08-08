@@ -33,6 +33,7 @@ export class QuyetDinhXhComponent extends Base3Component implements OnInit {
       trichYeu: null,
       ngayTu: null,
       ngayDen: null,
+      trangThai: this.userService.isChiCuc() ? this.STATUS.BAN_HANH : null
     })
     this.listTrangThai = [
       {
