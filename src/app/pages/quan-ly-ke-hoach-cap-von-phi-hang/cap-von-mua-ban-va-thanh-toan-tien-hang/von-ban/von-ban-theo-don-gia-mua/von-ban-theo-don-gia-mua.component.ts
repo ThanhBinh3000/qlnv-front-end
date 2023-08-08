@@ -13,6 +13,7 @@ import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { BtnStatus, Cvmb, Report, ThanhToan } from '../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
 import { Tab } from '../von-ban.constant';
+import * as XLSX from 'xlsx';
 
 @Component({
     selector: 'app-von-ban-theo-don-gia-mua',
@@ -34,8 +35,10 @@ export class VonBanTheoDonGiaMuaComponent implements OnInit {
     editCache: { [key: string]: { edit: boolean; data: ThanhToan } } = {};
     maDviTien: string = '1';
     scrollX: string;
+    capDvi: number;
     //trang thai cac nut
     status: BtnStatus = new BtnStatus();
+    isReceive: boolean;
     isDataAvailable: boolean = false;
     editMoneyUnit: boolean = false;
     isParent: boolean = false;
@@ -151,6 +154,10 @@ export class VonBanTheoDonGiaMuaComponent implements OnInit {
                 this.sum('0.1')
             }
         }
+        this.capDvi = parseInt(this.userInfo.CAP_DVI, 10);
+        if (this.userInfo.MA_DVI == this.baoCao.maDviCha) {
+            this.capDvi += 1;
+        }
         this.updateEditCache();
         this.getStatusButton();
     }
@@ -170,12 +177,16 @@ export class VonBanTheoDonGiaMuaComponent implements OnInit {
         this.status.pass = Status.check('pass', this.baoCao.trangThai) && isChild;
         this.status.approve = Status.check('approve', this.baoCao.trangThai) && isChild;
         this.status.accept = Status.check('accept', this.baoCao.trangThai) && this.isParent;
+        this.status.export = Status.TT_09 == this.baoCao.trangThai || (Status.TT_07 == this.baoCao.trangThai && this.capDvi == 1);
 
         this.status.save = this.status.save && this.userService.isAccessPermisson(Roles.CVMB.EDIT_VB);
         this.status.submit = this.status.submit && this.userService.isAccessPermisson(Roles.CVMB.SUBMIT_VB);
         this.status.pass = this.status.pass && this.userService.isAccessPermisson(Roles.CVMB.PASS_VB);
         this.status.approve = this.status.approve && this.userService.isAccessPermisson(Roles.CVMB.APPROVE_VB);
-        this.status.accept = this.status.accept && this.userService.isAccessPermisson(Roles.CVMB.ACCEPT_VB)
+        this.status.accept = this.status.accept && this.userService.isAccessPermisson(Roles.CVMB.ACCEPT_VB);
+        this.status.export = this.status.export && this.userService.isAccessPermisson(Roles.CVMB.EXPORT_VB) && (isChild || this.isParent);
+
+        this.isReceive = this.baoCao.trangThai == Status.TT_09 || (this.baoCao.trangThai == Status.TT_07 && this.isParent);
         this.scrollX = this.status.save ? Table.tableWidth(350, 13, 1, 60) : Table.tableWidth(350, 13, 1, 0);
     }
 
@@ -232,10 +243,23 @@ export class VonBanTheoDonGiaMuaComponent implements OnInit {
 
     // chuc nang check role
     async onSubmit(mcn: string, lyDoTuChoi?: string) {
+        if (mcn == Status.TT_09) {
+            if (!this.baoCao.ngayNhanLenhChuyenCo || !this.baoCao.tkNhan) {
+                this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+                return;
+            }
+            //kiem tra ca ky tu trong tai khoan nhan cos phai deu la so ko
+            if (!Operator.numOnly(this.baoCao.tkNhan)) {
+                this.notification.warning(MESSAGE.WARNING, 'Trường tài khoản nhận chỉ chứa ký tự số');
+                return;
+            }
+        }
         const requestGroupButtons = {
             id: this.baoCao.id,
             maChucNang: mcn,
             lyDoTuChoi: lyDoTuChoi,
+            ngayNhanLenhChuyenCo: this.baoCao.ngayNhanLenhChuyenCo,
+            tkNhan: this.baoCao.tkNhan,
         };
         await this.capVonMuaBanTtthService.trinhDuyetVonMuaBan(requestGroupButtons).toPromise().then(async (data) => {
             if (data.statusCode == 0) {
@@ -424,5 +448,93 @@ export class VonBanTheoDonGiaMuaComponent implements OnInit {
         let file: any = this.listFile.find(element => element?.lastModified.toString() == id);
         let doc: any = this.baoCao.lstFiles.find(element => element?.id == id);
         await this.quanLyVonPhiService.downFile(file, doc);
+    }
+
+    exportToExcel() {
+        let header = [];
+        let filterData = [];
+        if (this.capDvi == 1) {
+            header = [
+                { t: 0, b: 5, l: 0, r: 16, val: null },
+                { t: 0, b: 0, l: 0, r: 8, val: "Vốn bán nộp lên đơn vị cấp trên" },
+                { t: 4, b: 5, l: 0, r: 0, val: 'STT' },
+                { t: 4, b: 5, l: 1, r: 1, val: 'Đơn vị' },
+                { t: 4, b: 4, l: 2, r: 3, val: 'Số lượng' },
+                { t: 5, b: 5, l: 2, r: 2, val: 'Kế hoạch' },
+                { t: 5, b: 5, l: 3, r: 3, val: 'Thực hiện (lũy kế đến thời điểm báo cáo)' },
+                { t: 4, b: 5, l: 4, r: 4, val: 'Đơn giá (theo quyết định)' },
+                { t: 4, b: 5, l: 5, r: 5, val: 'Giá trị theo kế hoạch' },
+                { t: 4, b: 5, l: 6, r: 6, val: 'Giá trị thực hiện' },
+                { t: 4, b: 4, l: 7, r: 9, val: 'Số đã nộp đơn vị cấp trên (lũy kế)' },
+                { t: 5, b: 5, l: 7, r: 7, val: 'Vốn ứng' },
+                { t: 5, b: 5, l: 8, r: 8, val: 'Vốn cấp' },
+                { t: 5, b: 5, l: 9, r: 9, val: 'Cộng' },
+                { t: 4, b: 4, l: 10, r: 13, val: 'Nộp lần này' },
+                { t: 5, b: 5, l: 10, r: 10, val: 'Ngày' },
+                { t: 5, b: 5, l: 11, r: 11, val: 'Vốn ứng' },
+                { t: 5, b: 5, l: 12, r: 12, val: 'Vốn cấp' },
+                { t: 5, b: 5, l: 13, r: 13, val: 'Cộng' },
+                { t: 4, b: 5, l: 14, r: 14, val: 'Lũy kế sau lần nộp này' },
+                { t: 4, b: 5, l: 15, r: 15, val: 'Số còn phải nộp' },
+                { t: 4, b: 5, l: 16, r: 16, val: 'Ghi chú' },
+            ]
+            const fieldOrder = ['stt', 'tenDvi', 'slKeHoach', 'slThucHien', 'donGia', 'gtKeHoach', 'gtThucHien', 'lkUng', 'lkCap', 'lkCong', 'uncNgay',
+                'ung', 'cap', 'cong', 'lkSauLanNay', 'soConPhaiNop', 'ghiChu'];
+            filterData = this.lstCtiets.map(item => {
+                const row: any = {};
+                fieldOrder.forEach(field => {
+                    switch (field) {
+                        case 'stt':
+                            row[field] = this.getIndex(item);
+                            break;
+                        case 'uncNgay':
+                            row[field] = Utils.fmtDate(item[field]);
+                            break;
+                        default:
+                            row[field] = item[field];
+                            break;
+                    }
+                })
+                return row;
+            })
+        } else {
+            header = [
+                { t: 0, b: 5, l: 0, r: 15, val: null },
+                { t: 0, b: 0, l: 0, r: 8, val: "Vốn bán nộp lên đơn vị cấp trên" },
+                { t: 4, b: 5, l: 0, r: 0, val: 'STT' },
+                { t: 4, b: 5, l: 1, r: 1, val: 'Đơn vị' },
+                { t: 4, b: 4, l: 2, r: 3, val: 'Số lượng' },
+                { t: 5, b: 5, l: 2, r: 2, val: 'Kế hoạch' },
+                { t: 5, b: 5, l: 3, r: 3, val: 'Thực hiện (lũy kế đến thời điểm báo cáo)' },
+                { t: 4, b: 5, l: 4, r: 4, val: 'Đơn giá (theo quyết định)' },
+                { t: 4, b: 5, l: 5, r: 5, val: 'Giá trị theo kế hoạch' },
+                { t: 4, b: 5, l: 6, r: 6, val: 'Giá trị thực hiện' },
+                { t: 4, b: 4, l: 7, r: 9, val: 'Số đã nộp đơn vị cấp trên (lũy kế)' },
+                { t: 5, b: 5, l: 7, r: 7, val: 'Vốn ứng' },
+                { t: 5, b: 5, l: 8, r: 8, val: 'Vốn cấp' },
+                { t: 5, b: 5, l: 9, r: 9, val: 'Cộng' },
+                { t: 4, b: 4, l: 10, r: 12, val: 'Nộp lần này' },
+                { t: 5, b: 5, l: 10, r: 10, val: 'Vốn ứng' },
+                { t: 5, b: 5, l: 11, r: 11, val: 'Vốn cấp' },
+                { t: 5, b: 5, l: 12, r: 12, val: 'Cộng' },
+                { t: 4, b: 5, l: 13, r: 13, val: 'Lũy kế sau lần nộp này' },
+                { t: 4, b: 5, l: 14, r: 14, val: 'Số còn phải nộp' },
+                { t: 4, b: 5, l: 15, r: 15, val: 'Ghi chú' },
+            ]
+            const fieldOrder = ['stt', 'tenDvi', 'slKeHoach', 'slThucHien', 'donGia', 'gtKeHoach', 'gtThucHien', 'lkUng', 'lkCap', 'lkCong',
+                'ung', 'cap', 'cong', 'lkSauLanNay', 'soConPhaiNop', 'ghiChu'];
+            filterData = this.lstCtiets.map(item => {
+                const row: any = {};
+                fieldOrder.forEach(field => {
+                    row[field] = field == 'stt' ? this.getIndex(item) : item[field];
+                })
+                return row;
+            })
+        }
+        const workbook = XLSX.utils.book_new();
+        const worksheet = Table.initExcel(header);
+        XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
+        XLSX.writeFile(workbook, this.baoCao.maCapUng + '.xlsx');
     }
 }

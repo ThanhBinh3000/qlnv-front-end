@@ -1,13 +1,8 @@
 import { DatePipe } from '@angular/common';
-import { Injectable } from '@angular/core';
 import * as dayjs from 'dayjs';
-import * as fileSaver from 'file-saver';
-import { NzNotificationService } from "ng-zorro-antd/notification";
 import { CurrencyMaskInputMode } from "ngx-currency";
 import * as uuid from "uuid";
 import * as XLSX from 'xlsx';
-import { MESSAGE } from "../constants/message";
-import { QuanLyVonPhiService } from "../services/quanLyVonPhi.service";
 
 export class Status {
 	//cac ma trang thai cua bao cao
@@ -685,55 +680,6 @@ export class Operator {
 	}
 }
 
-@Injectable({
-	providedIn: 'root',
-})
-export class FileManip {
-	constructor(
-		public quanLyVonPhiService: QuanLyVonPhiService,
-		private notification: NzNotificationService,
-	) { }
-
-	async uploadFile(file: File, path: string) {
-		const upfile: FormData = new FormData();
-		upfile.append('file', file);
-		upfile.append('folder', path);
-		const temp = await this.quanLyVonPhiService.uploadFile(upfile).toPromise().then(
-			(data) => {
-				const objfile = {
-					fileName: data.filename,
-					fileSize: data.size,
-					fileUrl: data.url,
-				}
-				return objfile;
-			},
-			err => {
-				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-			}
-		);
-		return temp;
-	}
-
-	async downloadFile(file, doc) {
-		if (doc.fileUrl) {
-			await this.quanLyVonPhiService.downloadFile(doc.fileUrl).toPromise().then(
-				(data) => {
-					let fileName = doc.fileName;
-					if (fileName.split('.').length == 1) {
-						fileName = doc.fileName + doc.fileUrl.substring(doc.fileUrl.lastIndexOf('.'))
-					}
-					fileSaver.saveAs(data, fileName);
-				},
-				err => {
-					this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-				},
-			);
-		} else {
-			const blob = new Blob([file], { type: "application/octet-stream" });
-			fileSaver.saveAs(blob, file.name);
-		}
-	}
-}
 export class Utils {
 	public static FORMAT_DATE_STR = "dd/MM/yyyy";
 	public static FORMAT_DATE_TIME_STR = "dd/MM/yyyy HH:mm:ss";
