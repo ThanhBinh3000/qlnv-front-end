@@ -5,7 +5,7 @@
                 <i class="fa fa-arrow-left"></i>
                 <span>Quay lại</span>
             </button>
-            <button type="button" class="btn btn-sub" (click)="action('save')">
+            <button *ngIf="isStatus == '1'" type="button" class="btn btn-sub" (click)="action('save')">
                 <i class="icon htvbdh_tcdt_save"></i>
                 <span>Tiếp nhận</span>
             </button>
