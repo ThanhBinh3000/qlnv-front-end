@@ -58,11 +58,11 @@ export class DanhSachHangDuTruTheoChiDaoCuaCpComponent extends Base2Component im
   ) {
     super(httpClient, storageService, notification, spinner, modal, danhSachHangDtqgService);
     this.formData = this.fb.group({
-      maDs: [],
-      tenDs: [],
+      maDanhSach: [],
+      tenDanhSach: [],
       ngayCapNhatTu: [],
       ngayCapNhatDen: [],
-      loai: [],
+      loai: [0],
     })
   }
 

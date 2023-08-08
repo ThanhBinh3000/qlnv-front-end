@@ -7,7 +7,7 @@
             <nz-form-item>
               <nz-form-label>Mã danh sách</nz-form-label>
               <nz-form-control>
-                <input nz-input formControlName="maDs" />
+                <input nz-input formControlName="maDanhSach"/>
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -15,7 +15,7 @@
             <nz-form-item>
               <nz-form-label>Tên danh sách</nz-form-label>
               <nz-form-control>
-                <input nz-input formControlName="tenDs" />
+                <input nz-input formControlName="tenDanhSach"/>
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -53,8 +53,7 @@
       </div>
     </nz-card>
     <div class="group-button">
-      <h3 class="text-uppercase">Danh sách vật tư, thiết bị có thời hạn lưu kho còn 6 tháng nhưng chưa có kế hoạch
-        xuất</h3>
+      <h3 class="text-uppercase">Danh sách hàng dự trữ theo chỉ đạo của chính phủ</h3>
       <div>
         <button type="button" class="btn btn-main" (click)="showModal(true)">
           <i class="icon htvbdh_tcdt_tao-qd"></i>
@@ -69,19 +68,16 @@
           <nz-table #tblData [nzData]="dataTableView" class="nowrap table-chi-tiet" nzBordered>
             <thead>
             <tr>
+              <th></th>
               <th>STT</th>
-              <th>Năm KH</th>
               <th>Mã danh sách</th>
-              <th>Chi cục DTNN</th>
-              <th>Loại hàng hóa</th>
-              <th>Chủng loại</th>
-              <th>Điểm kho</th>
-              <th>Ngăn/lô kho</th>
-              <th>Ngày nhập kho</th>
-              <th>SL hết hạn <br />(6 tháng)</th>
-              <th>SL tồn</th>
+              <th>Nhóm hàng DTQG</th>
+              <th>Loại hàng DTQG</th>
+              <th>Chủng loại hàng DTQG</th>
+              <th>Mô tả</th>
               <th>ĐVT</th>
-              <th>Ngày đề xuất</th>
+              <th>Đơn vị quản lý</th>
+              <th>Thời gian cập nhật</th>
               <th>Trạng thái</th>
               <th>Hành động</th>
             </tr>
@@ -93,10 +89,7 @@
                 <td (nzExpandChange)="onExpandStringChange(item.idVirtual, $event)"
                     [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true" style="width: 35px">
                 </td>
-                <td>{{item.nam}}</td>
-                <td>{{item.maDanhSach}}</td>
-                <td></td>
-                <td></td>
+                <td>{{i+1}}</td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -130,9 +123,6 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
                   </tr>
                   <ng-container *ngIf="expandSetString.has(item.idVirtual) && expandSetString.has(lv1.idVirtual)">
                     <ng-container *ngFor="let lv2 of lv1.childData,let i2=index">
@@ -144,9 +134,6 @@
                         <td>{{lv2.tenLoaiVthh}}</td>
                         <td>{{lv2.tenCloaiVthh}}</td>
                         <td>{{lv2.tenDiemKho}}</td>
-                        <td>{{lv2.tenLoKho ? lv2.tenLoKho : lv2.tenNganKho}}</td>
-                        <td>{{lv2.ngayNhapKho|date:globals.dateFormat}}</td>
-                        <td>{{lv2.slHetHan|number:globals.numberFormat}}</td>
                         <td>{{lv2.slTonKho|number:globals.numberFormat}}</td>
                         <td>{{lv2.donViTinh}}</td>
                         <td>{{lv2.ngayDeXuat|date:globals.dateFormat}}</td>
@@ -169,7 +156,8 @@
           <div class="canphai">
             <!-- begin phân trang  -->
             <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger
-                           [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="changePageIndex($event)"
+                           [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate"
+                           (nzPageIndexChange)="changePageIndex($event)"
                            (nzPageSizeChange)="changePageSize($event)">
               <ng-template #rangeTemplate let-range="range" let-total>
                 {{ range[0] }}-{{ range[1] }} of {{ total }} items
@@ -185,12 +173,12 @@
 
 <nz-modal [nzWidth]="modalWidth" [nzVisible]="isVisibleModal" [nzFooter]="modalFooter" (nzOnCancel)="handleCancel()"
           [nzClosable]="false" [nzBodyStyle]="{ 'overflow-y': 'auto' }" nzMaskClosable="true"
-          nzTitle="TỔNG HỢP DS HÀNG DTQG CÒN 6 THÁNG HẾT HẠN LƯU KHO NHƯNG CHƯA CÓ KẾ HOẠCH XUẤT">
+          nzTitle="CẬP NHẬT DANH SÁCH HÀNG DỮ TRỮ THEO CHỈ ĐẠO CỦA CHÍNH PHỦ">
   <ng-container *nzModalContent>
-<!--    <app-chi-tiet-tong-hop-danh-sach-vt6th [selectedItem]="selectedItem" (step)="changeStep($event)" [eventOk]="clickOk"-->
-<!--                                           (changeShow)="changeShowDetail($event)">-->
+        <app-cap-nhat-danh-sach-hang-dtqg-theo-chi-dao-cp [selectedItem]="selectedItem" (step)="changeStep($event)" [eventOk]="clickOk"
+                                               (changeShow)="changeShowDetail($event)">
 
-<!--    </app-chi-tiet-tong-hop-danh-sach-vt6th>-->
+        </app-cap-nhat-danh-sach-hang-dtqg-theo-chi-dao-cp>
   </ng-container>
   <ng-template #modalFooter>
     <ng-container>
