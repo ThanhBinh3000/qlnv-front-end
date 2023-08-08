@@ -59,6 +59,7 @@ export class DialogThemMoiSoDuDauKyComponent implements OnInit {
   }
 
   async ngOnInit() {
+    console.log(this.loaiHang,11)
     this.loadDsNam();
     await this.getAllLoaiVthh();
     await this.getDetail();
@@ -101,6 +102,9 @@ export class DialogThemMoiSoDuDauKyComponent implements OnInit {
 
 
   save(type) {
+    if (this.listCloaiVthh.length > 0) {
+      this.formData.controls["cloaiVthh"].setValidators([Validators.required]);
+    }
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       return;
