@@ -30,10 +30,12 @@ export class BangKeComponent extends Base3Component implements OnInit {
     this.defaultURL = 'sua-chua/xuat-hang/bang-ke'
     this.formData = this.fb.group({
       nam: null,
-      soQd: null,
-      trichYeu: null,
+      soQdXh: null,
+      soBangKe: null,
       ngayTu: null,
+      ngayTuXh: null,
       ngayDen: null,
+      ngayDenXh: null,
     })
   }
 

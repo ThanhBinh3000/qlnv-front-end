@@ -2,7 +2,7 @@
   <nz-card class="mt16 flex-card p-lr16">
     <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
       <div nz-row [nzGutter]="20">
-        <div nz-col nzSpan="4">
+        <div nz-col nzSpan="2">
           <nz-form-control>
             <nz-form-label>Năm xuất</nz-form-label>
             <nz-form-item>
@@ -14,23 +14,42 @@
         </div>
         <div nz-col nzSpan="4">
           <nz-form-control>
-            <nz-form-label>Số quyết định</nz-form-label>
+            <nz-form-label>Số QĐ giao NVXH của Cục </nz-form-label>
             <nz-form-item>
-              <input nz-input formControlName="soQd" />
+              <input nz-input formControlName="soQdXh" />
             </nz-form-item>
           </nz-form-control>
         </div>
         <div nz-col nzSpan="4">
           <nz-form-control>
-            <nz-form-label>Trích yếu</nz-form-label>
+            <nz-form-label>Số bảng kê xuất vật tư</nz-form-label>
             <nz-form-item>
-              <input nz-input formControlName="trichYeu" />
+              <input nz-input formControlName="soBangKe" />
             </nz-form-item>
           </nz-form-control>
         </div>
         <div nz-col nzSpan="6">
           <nz-form-control>
-            <nz-form-label>Ngày tổng hợp</nz-form-label>
+            <nz-form-label>Thời hạn xuất hàng</nz-form-label>
+            <nz-form-item>
+              <div nz-row>
+                <div nz-col nzSpan="12" class="cus-start-date">
+                  <nz-date-picker [nzDisabledDate]="disabledNgayTu" nzFormat="dd/MM/yyyy" formControlName="ngayTuXh"
+                    nzPlaceHolder="Ngày bắt đầu">
+                  </nz-date-picker>
+                </div>
+                <div nz-col nzSpan="12" class="cus-end-date">
+                  <nz-date-picker [nzDisabledDate]="disabledNgayDen" nzFormat="dd/MM/yyyy" formControlName="ngayDenXh"
+                    nzPlaceHolder="Ngày kết thúc">
+                  </nz-date-picker>
+                </div>
+              </div>
+            </nz-form-item>
+          </nz-form-control>
+        </div>
+        <div nz-col nzSpan="6">
+          <nz-form-control>
+            <nz-form-label>Ngày xuất kho</nz-form-label>
             <nz-form-item>
               <div nz-row>
                 <div nz-col nzSpan="12" class="cus-start-date">

@@ -75,7 +75,8 @@ export class ThemMoiBkComponent extends Base3Component implements OnInit {
       dviNguoiGiaoHang: [''],
       diaChi: [''],
       thoiGianGiaoNhan: [''],
-      ngayXuatKho: ['']
+      ngayXuatKho: [''],
+      lyDoTuChoi: []
     })
   }
 
@@ -227,7 +228,7 @@ export class ThemMoiBkComponent extends Base3Component implements OnInit {
 
   showSave() {
     let trangThai = this.formData.value.trangThai;
-    return trangThai == STATUS.DU_THAO;
+    return trangThai == STATUS.DU_THAO || trangThai == STATUS.TU_CHOI_LDCC;
   }
 
   save(isGuiDuyet?) {
@@ -250,6 +251,9 @@ export class ThemMoiBkComponent extends Base3Component implements OnInit {
   pheDuyet() {
     let trangThai
     switch (this.formData.value.trangThai) {
+      case STATUS.TU_CHOI_LDCC:
+        trangThai = STATUS.DU_THAO;
+        break;
       case STATUS.DU_THAO:
         trangThai = STATUS.CHO_DUYET_LDCC;
         break;
@@ -271,7 +275,8 @@ export class ThemMoiBkComponent extends Base3Component implements OnInit {
   }
 
   disabled() {
-    return this.formData.value.trangThai != STATUS.DU_THAO;
+    let trangThai = this.formData.value.trangThai;
+    return !(trangThai == STATUS.DU_THAO || trangThai == STATUS.TU_CHOI_LDCC);
   }
 
   showPheDuyetTuChoi() {
@@ -283,9 +288,8 @@ export class ThemMoiBkComponent extends Base3Component implements OnInit {
     if (this.validateRow()) {
       let dataRow = cloneDeep(this.rowItem);
       this.dataTable.push(dataRow);
-      this.rowItem.slThucTe = 0;
-      this.rowItem.maSo = null;
-      console.log(this.calTongSlThucTe());
+      this.rowItem.soLuong = 0;
+      this.rowItem.soSerial = null;
       this.formData.patchValue({
         tongSoLuong: this.calTongSlThucTe()
       })
