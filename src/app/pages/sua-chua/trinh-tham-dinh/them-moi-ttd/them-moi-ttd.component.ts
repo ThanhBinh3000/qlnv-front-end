@@ -22,7 +22,8 @@ import { STATUS } from "../../../../constants/status";
   styleUrls: ['./them-moi-ttd.component.scss']
 })
 export class ThemMoiTtdComponent extends Base3Component implements OnInit {
-  fileCanCu: any[] = []
+  fileCanCu: any[] = [];
+  symbol: string = '';
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -54,7 +55,8 @@ export class ThemMoiTtdComponent extends Base3Component implements OnInit {
       trichYeu: [null, [Validators.required]],
       ketQua: [null],
       lyDoTuChoi: [null],
-    })
+    });
+    this.symbol = this.userInfo.MA_TR;
   }
 
   async ngOnInit() {
@@ -107,7 +109,7 @@ export class ThemMoiTtdComponent extends Base3Component implements OnInit {
     })
     body.children = children;
     if (this.formData.value.soTtr) {
-      body.soTtr = this.formData.value.soTtr + '/TTr-CDTVP'
+      body.soTtr = this.formData.value.soTtr + '/' + this.symbol
     }
     this.createUpdate(body).then((res) => {
       if (res) {

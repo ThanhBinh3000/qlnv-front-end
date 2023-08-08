@@ -48,7 +48,7 @@
                             <nz-form-item>
                                 <nz-form-label nzRequired [nzNoColon]="true">Số tờ trình </nz-form-label>
                                 <nz-form-control [nzErrorTip]="error">
-                                    <nz-input-group nzAddOnAfter="/TTr-CDTVP">
+                                    <nz-input-group nzAddOnAfter="{{symbol}}">
                                         <nz-input-number [nzSize]="'small'" nz-input formControlName="soTtr"
                                             [nzDisabled]="disabledTrinh()"></nz-input-number>
                                     </nz-input-group>
