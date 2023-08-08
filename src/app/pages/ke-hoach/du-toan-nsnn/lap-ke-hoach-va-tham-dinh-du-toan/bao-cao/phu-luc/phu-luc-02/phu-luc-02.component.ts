@@ -52,6 +52,12 @@ export class ItemData {
 		this.chenhLech = Operator.sum([this.tdinhTcong, -this.tongCong]);
 	}
 
+	changeTd() {
+		this.tdinhKhoTtien = Operator.mul(this.tdinhKhoSluong, this.dmucTaiKho);
+		this.tdinhTcong = Operator.sum([this.tdinhKhoTtien, this.ttienNgoaiKho]);
+		this.chenhLech = Operator.sum([this.tdinhTcong, -this.tongCong]);
+	}
+
 	upperBound() {
 		return this.thNamTruoc > Utils.MONEY_LIMIT || this.namDtoan > Utils.MONEY_LIMIT || this.namUocTh > Utils.MONEY_LIMIT || this.tongCong > Utils.MONEY_LIMIT || this.tdinhTcong > Utils.MONEY_LIMIT;
 	}

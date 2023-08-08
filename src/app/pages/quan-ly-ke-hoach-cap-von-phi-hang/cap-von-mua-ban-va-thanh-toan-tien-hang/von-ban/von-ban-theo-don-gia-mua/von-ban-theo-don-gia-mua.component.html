@@ -66,7 +66,7 @@
                             <th>Ngày trình duyệt</th>
                             <th>Ngày duyệt</th>
                             <th>Ngày phê duyệt</th>
-                            <th>Ngày trả kết quả</th>
+                            <th>Ngày tiếp nhận</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -199,25 +199,27 @@
                                 Tổng vốn
                             </th>
                         </tr>
-                        <!-- <tr>
+                        <tr>
                             <th nzLeft>A</th>
                             <th nzLeft>B</th>
                             <th>1</th>
                             <th>2</th>
-                            <th>3=1x2</th>
-                            <th>4</th>
-                            <th>5</th>
-                            <th>6=4+5</th>
-                            <th>7=3-6</th>
-                            <th>8</th>
+                            <th>3</th>
+                            <th>4=1x3</th>
+                            <th>5=2x3</th>
+                            <th>6</th>
+                            <th>7</th>
+                            <th>8=6+7</th>
+                            <th *ngIf="userService.isTongCuc()"></th>
                             <th>9</th>
                             <th>10</th>
-                            <th>11</th>
-                            <th>12</th>
-                            <th>13=11+12</th>
+                            <th>11=9+10</th>
+                            <th>12=8+11</th>
+                            <th>13=5-12</th>
                             <th>C</th>
+                            <th *ngIf="!userService.isChiCuc()"> </th>
                             <th *ngIf="status.save" nzRight></th>
-                        </tr> -->
+                        </tr>
                     </thead>
                     <tbody>
                         <tr *ngFor="let data of lstCtiets; let i = index">
