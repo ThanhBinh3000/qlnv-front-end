@@ -253,7 +253,9 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
                     id: uuid.v4() + 'FE',
                     stt: e.ma,
                     maNdung: e.ma,
-                    idKm: e.id
+                    idKm: e.id,
+                    nguonKhac: 0,
+                    nguonNsnn: 0,
                 })
             })
             this.setLevel();
@@ -480,13 +482,24 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
                 ...item,
                 listCtietDvi: [],
             })
-            checkNhap += item.tongCong
+            if (item?.tongCong) {
+                checkNhap += Number(item?.tongCong)
+            }
         })
 
-        if (!checkNhap || checkNhap == null || checkNhap == 0) {
+        console.log(this.lstCtietBcao);
+        console.log(checkNhap);
+
+
+
+        if (!checkNhap || checkNhap == 0) {
             this.notification.warning(MESSAGE.WARNING, "Không có dữ liệu trong bảng, vui lòng nhập");
             return;
         }
+
+        // this.lstCtietBcao.forEach(item => {
+        //     checkNhap += item.tongCong
+        // })
 
         if (!checkMoneyRange == true) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);

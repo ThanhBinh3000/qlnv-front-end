@@ -288,7 +288,7 @@ export class DanhSachBaoCaoComponent implements OnInit {
                         })
                     }
                 }
-                this.giaoDuToanChiService.xoaBanGhiGiaoBTC(request).toPromise().then(
+                this.giaoDuToanChiService.xoaBanGhiGiaoBTC2(request).toPromise().then(
                     data => {
                         if (data.statusCode == 0) {
                             this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
