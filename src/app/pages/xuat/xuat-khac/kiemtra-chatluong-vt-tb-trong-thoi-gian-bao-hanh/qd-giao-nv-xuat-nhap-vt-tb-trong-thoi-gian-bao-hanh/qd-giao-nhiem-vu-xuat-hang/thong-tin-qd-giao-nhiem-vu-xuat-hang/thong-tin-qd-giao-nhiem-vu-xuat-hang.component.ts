@@ -25,6 +25,9 @@ import {
 import {LOAI_HH_XUAT_KHAC} from "../../../../../../../constants/config";
 import {FILETYPE} from "../../../../../../../constants/fileType";
 import {DialogTuChoiComponent} from "../../../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
+import {
+  QuyetDinhXuatGiamVtBaoHanhService
+} from "../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvtbaohanh/QuyetDinhXuatGiamVtBaoHanh.service";
 
 @Component({
   selector: 'app-thong-tin-qd-giao-nhiem-vu-xuat-hang',
@@ -40,6 +43,7 @@ export class ThongTinQdGiaoNhiemVuXuatHangComponent extends Base2Component imple
   listCcPhapLy: any[] = [];
   listFileDinhKem: any[] = [];
   listFile: any[] = [];
+  listSoQdXuatGiam: any[] = [];
   maQd: string;
   listMaTongHop: any[] = []
   dataTh: any[] = [];
@@ -57,6 +61,7 @@ export class ThongTinQdGiaoNhiemVuXuatHangComponent extends Base2Component imple
               private donviService: DonviService,
               private danhMucService: DanhMucService,
               private tongHopDanhSachVtTbTrongThoiGIanBaoHanh: TongHopDanhSachVtTbTrongThoiGIanBaoHanh,
+              private quyetDinhXuatGiamVtBaoHanhService: QuyetDinhXuatGiamVtBaoHanhService,
               private qdGiaoNvXuatHangTrongThoiGianBaoHanhService: QdGiaoNvXuatHangTrongThoiGianBaoHanhService) {
     super(httpClient, storageService, notification, spinner, modal, qdGiaoNvXuatHangTrongThoiGianBaoHanhService);
     this.formData = this.fb.group({
@@ -259,11 +264,6 @@ export class ThongTinQdGiaoNhiemVuXuatHangComponent extends Base2Component imple
         mess = 'Bạn có chắc chắn muốn phê duyệt ?'
         break;
       }
-      case STATUS.CHO_DUYET_LDC: {
-        trangThai = STATUS.TU_CHOI_LDC;
-        mess = 'Bạn có chắc chắn muốn từ chối ?'
-        break;
-      }
     }
     this.modal.confirm({
       nzClosable: false,
@@ -432,6 +432,63 @@ export class ThongTinQdGiaoNhiemVuXuatHangComponent extends Base2Component imple
     }
   }
 
+  async loadSoQdXuatGiam() {
+    let body = {
+      namKeHoach: this.formData.get("nam").value,
+      dvql: this.userInfo.MA_DVI,
+      trangThai: STATUS.BAN_HANH,
+    }
+    let res = await this.quyetDinhXuatGiamVtBaoHanhService.search(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      let data = res.data;
+      this.listSoQdXuatGiam = data.content;
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
+
+  async openDialogSoQdXuatGiam() {
+    console.log(123)
+    await this.loadSoQdXuatGiam();
+    const modalQD = this.modal.create({
+      nzTitle: 'Danh sách số quyết định giao nhiệm vụ xuất hàng',
+      nzContent: DialogTableSelectionComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {
+        dataTable: this.listSoQdXuatGiam,
+        dataHeader: ['Năm', 'Số quyết định', 'Ngày ký',],
+        dataColumn: ['namKeHoach', 'soQuyetDinh', 'ngayKy',],
+      },
+    })
+    modalQD.afterClose.subscribe(async (data) => {
+      if (data) {
+        await this.bindingDataQd(data);
+      }
+    });
+  }
+  async bindingDataQd(data) {
+    try {
+      await this.spinner.show();
+      let dataRes = await this.quyetDinhXuatGiamVtBaoHanhService.getDetail(data.id)
+      const responseData = dataRes.data;
+      this.dataTable = responseData.qdXuatGiamVtDtl;
+      this.formData.patchValue({
+        soCanCu: responseData.soQuyetDinh,
+        idCanCu: responseData.id,
+        ngayKy: responseData.ngayKy,
+        qdGiaonvXhDtl:this.dataTable,
+      });
+      console.log(this.formData.value,555)
+      this.buildTableView(this.dataTable)
+    } catch (e) {
+      this.notification.error(MESSAGE.ERROR, e.msg);
+    } finally {
+      await this.spinner.hide();
+    }
+  }
 }
 
 export class ItemXhXkVtQdGiaonvXhDtl {

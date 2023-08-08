@@ -7,14 +7,14 @@
     <li nz-menu-item (click)="selectTab(1)" *ngIf="typeVthh != '02'">
       Phiếu kiểm tra chất lượng
     </li>
+    <li nz-menu-item [nzSelected]="this.typeVthh == '02'" (click)="selectTab(4)" *ngIf="typeVthh == '02'">
+      Biên bản chuẩn bị kho
+    </li>
     <li nz-menu-item (click)="selectTab(2)">
       Biên bản lấy mẫu/bàn giao mẫu
     </li>
     <li nz-menu-item (click)="selectTab(3)" *ngIf="typeVthh != '02'">
       Lập và ký phiếu kiểm nghiệm chất lượng
-    </li>
-    <li nz-menu-item [nzSelected]="this.typeVthh == '02'" (click)="selectTab(4)" *ngIf="typeVthh == '02'">
-      Biên bản chuẩn bị kho
     </li>
     <li nz-menu-item (click)="selectTab(5)" *ngIf="typeVthh == '02'">
       Hồ sơ kỹ thuật

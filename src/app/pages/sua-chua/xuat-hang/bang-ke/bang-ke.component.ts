@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {ActivatedRoute, Router} from "@angular/router";
-import {PhieuXuatKhoScService} from "../../../../services/sua-chua/phieuXuatKhoSc.service";
-import {Base3Component} from "../../../../components/base3/base3.component";
-import {BangKeXuatScService} from "../../../../services/sua-chua/bangKeXuatSc.service";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "../../../../services/storage.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { ActivatedRoute, Router } from "@angular/router";
+import { PhieuXuatKhoScService } from "../../../../services/sua-chua/phieuXuatKhoSc.service";
+import { Base3Component } from "../../../../components/base3/base3.component";
+import { BangKeXuatScService } from "../../../../services/sua-chua/bangKeXuatSc.service";
 
 @Component({
   selector: 'app-bang-ke',
@@ -24,21 +24,28 @@ export class BangKeComponent extends Base3Component implements OnInit {
     modal: NzModalService,
     route: ActivatedRoute,
     router: Router,
-    private bangKeXuatScService : BangKeXuatScService,
+    private bangKeXuatScService: BangKeXuatScService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, route, router, bangKeXuatScService);
     this.defaultURL = 'sua-chua/xuat-hang/bang-ke'
     this.formData = this.fb.group({
       nam: null,
-      soQd: null,
-      trichYeu: null,
+      soQdXh: null,
+      soBangKe: null,
       ngayTu: null,
+      ngayTuXh: null,
       ngayDen: null,
+      ngayDenXh: null,
     })
   }
 
   ngOnInit(): void {
-    this.search();
+    this.searchPage();
+  }
+
+  async searchPage() {
+    await this.search();
+    this.dataTable.forEach(item => item.expandSet = true);
   }
 
 }

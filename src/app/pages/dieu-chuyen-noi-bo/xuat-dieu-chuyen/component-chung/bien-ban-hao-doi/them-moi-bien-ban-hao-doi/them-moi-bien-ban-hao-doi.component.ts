@@ -235,7 +235,7 @@ export class ThemMoiBienBanHaoDoiDieuChuyenComponent extends Base2Component impl
     try {
 
       let body = {
-        loaiDc: this.loaiDc, isVatTu: this.isVatTu, thayDoiThuKho: this.thayDoiThuKho,
+        loaiDc: this.loaiDc, isVatTu: this.isVatTu, thayDoiThuKho: this.thayDoiThuKho, type: "00",
         trangThai: STATUS.BAN_HANH,
       }
       let res = await this.quyetDinhDieuChuyenCucService.getDsSoQuyetDinhDieuChuyenChiCuc(body);
@@ -459,7 +459,6 @@ export class ThemMoiBienBanHaoDoiDieuChuyenComponent extends Base2Component impl
 
       this.formData.patchValue({ soBbTinhKho: res.data.soBbTinhKho, tongSlXuatTheoQd: tongSlXuatTheoQd, tongSlXuatTheoTt: tongSlXuatTheoTt, ngayKtXuat: res.data.ngayKeThucXuat, slHaoTt })
     }
-    console.log('res', res)
   }
   async save(isGuiDuyet?) {
     let body = this.formData.value;
@@ -470,6 +469,7 @@ export class ThemMoiBienBanHaoDoiDieuChuyenComponent extends Base2Component impl
     body.isVatTu = this.isVatTu;
     body.thayDoiThuKho = this.thayDoiThuKho;
     body.type = this.type;
+    body.loaiQding = this.loaiDc === "CUC" ? "XUAT" : undefined;
     let data = await this.createUpdate(body);
     if (data) {
       this.formData.patchValue({ id: data.id, trangThai: data.trangThai, soBienBan: data.soBienBan ? data.soBienBan : this.genSoBBHaoDoi(data.id) })

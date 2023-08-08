@@ -60,7 +60,7 @@ export class TongHopDanhSachHangBkkComponent  extends Base2Component implements 
       maCuc: [],
       maChiCuc: [],
       ngayTao: [],
-      capTh: [],
+      capTh: [this.userInfo.CAP_DVI],
       ngayTaoTu: [],
       ngayTaoDen: [],
       loai: [LOAI_HH_XUAT_KHAC.VT_BH_BKK],

@@ -34,17 +34,16 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
   listSoQuyetDinh: any[] = [];
   TRANG_THAI: { [key: string]: string } = {
     [STATUS.DU_THAO]: "Dự thảo",
-    [STATUS.CHO_DUYET_TP]: "Chờ duyệt - TP",
-    [STATUS.CHO_DUYET_LDC]: "Chờ duyệt - LĐ Cục",
-    [STATUS.TU_CHOI_TP]: "Từ chối - TP",
-    [STATUS.DA_DUYET_LDC]: "Đã duyệt - LĐ Cục",
-    [STATUS.TU_CHOI_LDC]: "Từ chối - LĐ Cục"
+    [STATUS.DA_HOAN_THANH]: "Hoàn thành",
   };
   danhSachKetQua: any[] = [];
   listBaoCaoChiCuc: any[] = [];
   initialAllChecked: boolean = true;
   allChecked: boolean = true;
   isTongHop: boolean = false;
+  tongKinhPhiDcQd: number = 0;
+  tongKinhPhiXuatDcTt: number = 0;
+  tongKinhPhiNhapDcTt: number = 0;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -57,6 +56,7 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
   ) {
     super(httpClient, storageService, notification, spinner, modal, bangCaoDieuChuyenService);
     this.formData = this.fb.group({
+      id: [0],
       nam: [dayjs().get('year'), [Validators.required]],
       tenDvi: [],
       maDviNhan: [],
@@ -66,7 +66,7 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
       ngayBc: [dayjs().format('YYYY-MM-DD'), [Validators.required]],
       soQdDcCuc: [],
       qdDcCucId: [],
-      ngayKyQdCuc: [],
+      ngayKyQd: [],
       trangThai: ['00'],
       noiDung: [],
       fileDinhKems: [new Array()],
@@ -91,7 +91,8 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
       const res = await this.bangCaoDieuChuyenService.getDetail(id);
       if (res.msg === MESSAGE.SUCCESS) {
         this.formData.patchValue({ ...res.data });
-        this.dataTable = res.data.dataTable
+        this.danhSachKetQua = res.data.danhSachKetQua;
+        this.buildTableView();
       }
 
     }
@@ -167,7 +168,7 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
   bindingDataQd(data: any) {
     this.formData.patchValue({
       soQdDcCuc: data.soQdinh,
-      ngayKyQdCuc: data.ngayKyQdinh
+      ngayKyQd: data.ngayKyQdinh
     });
     if (this.formData.value.soQdDcCuc) {
       this.getThongTinhNhapXuatHangHoa(this.formData.value.soQdDcCuc)
@@ -183,7 +184,8 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
         res = await this.bangCaoDieuChuyenService.getThongTinNhapXuatCuc({ soQdinhCuc });
       }
       if (res.msg === MESSAGE.SUCCESS) {
-        this.danhSachKetQua = cloneDeep(res.data)
+        this.danhSachKetQua = cloneDeep(res.data);
+        this.buildTableView();
       }
     } catch (error) {
       console.log("e", error)
@@ -261,9 +263,9 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
     }
   }
   buildTableView() {
-    let dataView = Array.isArray(this.dataTable) ?
-      chain(this.dataTable).groupBy("soQdinh").map((rs, i) => {
-        const dataSoQdinh = rs.find(f => f.soQdinh == i);
+    let dataView = Array.isArray(this.danhSachKetQua) ?
+      chain(this.danhSachKetQua.map(f => ({ ...f, keyGroup: `${f.cloaiVthh}${f.maLoKho ? f.maLoKho + f.maNganKho : f.maNganKho}` }))).groupBy("keyGroup").map((rs, i) => {
+        const dataSoQdinh = rs.find(f => f.keyGroup == i);
         return {
           ...dataSoQdinh,
           idVirtual: uuidv4(),
@@ -271,7 +273,16 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
         }
       }).value() : [];
     this.dataView = cloneDeep(dataView);
-    this.expandAll()
+    this.expandAll();
+    const { tongKinhPhiDcQd, tongKinhPhiXuatDcTt, tongKinhPhiNhapDcTt } = Array.isArray(this.danhSachKetQua) ? this.danhSachKetQua.reduce((obj, cur) => {
+      obj.tongKinhPhiDcQd += Number(cur.kinhPhiTheoQd);
+      obj.tongKinhPhiXuatDcTt += Number(cur.kinhPhiXuatTt);
+      obj.tongKinhPhiNhapDcTt += Number(cur.kinhPhiNhapTt);
+      return obj
+    }, { tongKinhPhiDcQd: 0, tongKinhPhiXuatDcTt: 0, tongKinhPhiNhapDcTt: 0 }) : { tongKinhPhiDcQd: 0, tongKinhPhiXuatDcTt: 0, tongKinhPhiNhapDcTt: 0 };
+    this.tongKinhPhiDcQd = tongKinhPhiDcQd;
+    this.tongKinhPhiXuatDcTt = tongKinhPhiXuatDcTt;
+    this.tongKinhPhiNhapDcTt = tongKinhPhiNhapDcTt;
   }
   async save(isGuiDuyet: boolean): Promise<void> {
     try {
@@ -279,6 +290,7 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
       this.setValidator(isGuiDuyet);
       let body = this.formData.value;
       body.danhSachKetQua = this.danhSachKetQua;
+      body.listTenBaoCaoSelect = undefined;
       let data = await this.createUpdate(body);
       if (!data) return;
       this.formData.patchValue({ id: data.id, trangThai: data.trangThai })
@@ -386,6 +398,40 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
       }
     });
   }
+  hoanThanh() {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: "Bạn có muốn hoàn thành bản ghi này?.",
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: async () => {
+        this.spinner.show();
+        try {
+          let body = {
+            id: this.formData.value.id,
+            trangThai: STATUS.DA_HOAN_THANH
+          };
+          let res =
+            await this.bangCaoDieuChuyenService.hoanThanh(
+              body,
+            );
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.THAO_TAC_SUCCESS);
+            this.back();
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+          this.spinner.hide();
+        } catch (e) {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      },
+    });
+  }
   back() {
     this.showListEvent.emit();
   }
@@ -402,5 +448,17 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
   }
   quayLai() {
     this.showListEvent.emit();
+  }
+  checkLoaiBc(loaiBc: string): boolean {
+    if (this.loaiBc === loaiBc) {
+      return true
+    };
+    return false
+  }
+  checkRoleHoanThanh() {
+    if (!this.isViewOnModal && ((this.loaiBc === "CUC" && this.userService.isCuc()) || (this.loaiBc === "CHI_CUC" && this.userService.isChiCuc())) && this.formData.value.trangThai === STATUS.DU_THAO) {
+      return true
+    }
+    return false
   }
 }

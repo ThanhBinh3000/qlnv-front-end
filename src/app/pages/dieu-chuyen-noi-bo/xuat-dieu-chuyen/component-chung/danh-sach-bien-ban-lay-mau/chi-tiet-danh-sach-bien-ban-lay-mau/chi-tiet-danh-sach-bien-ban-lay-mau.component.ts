@@ -234,6 +234,7 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
       loaiDc: this.loaiDc,
       thayDoiThuKho: this.thayDoiThuKho,
       maDvi: this.userInfo.MA_DVI,
+      type: "00",
       // listTrangThaiXh: [STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN],
     }
     try {
@@ -450,11 +451,11 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
   async save(isGuiDuyet?) {
     this.setValidator(isGuiDuyet)
     let body = this.formData.value;
-    console.log("body", body)
     body.loaiDc = this.loaiDc;
     body.isVatTu = this.isVatTu;
     body.thayDoiThuKho = this.thayDoiThuKho;
     body.type = this.type;
+    body.loaiQding = this.loaiDc === "CUC" ? "XUAT" : undefined;
     body.bienBanLayMauDinhKem = this.bienBanLayMauDinhKem;
     body.canCu = this.canCu;
     body.fileDinhKemChupMauNiemPhong = this.fileDinhKemChupMauNiemPhong;

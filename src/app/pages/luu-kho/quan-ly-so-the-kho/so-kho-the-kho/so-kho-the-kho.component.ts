@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormGroup} from '@angular/forms';
+import {FormGroup, Validators} from '@angular/forms';
 import {NgxSpinnerService} from 'ngx-spinner';
 import {NzNotificationService} from 'ng-zorro-antd/notification';
 import {MESSAGE} from 'src/app/constants/message';
@@ -14,6 +14,7 @@ import {Router} from "@angular/router";
 import {ThemSoKhoTheKhoComponent} from "./them-so-kho-the-kho/them-so-kho-the-kho.component";
 import {chain} from "lodash";
 import {v4 as uuidv4} from 'uuid';
+import {DonviService} from "../../../../services/donvi.service";
 
 @Component({
   selector: 'app-so-kho-the-kho',
@@ -26,9 +27,11 @@ export class SoKhoTheKhoComponent extends Base2Component implements OnInit {
   STATUS = STATUS;
   listLoaiHangHoa: any[] = [];
   listChungLoaiHangHoa: any[] = [];
-  dsDonVi: any = [];
+  dsChiCuc: any = [];
+  dsDiemKho: any = [];
   openPhieuNx = false;
   idPhieuNx: any;
+  isThuKho : boolean;
   constructor(
     private httpClient: HttpClient,
     private storageService: StorageService,
@@ -37,6 +40,7 @@ export class SoKhoTheKhoComponent extends Base2Component implements OnInit {
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private danhMucService: DanhMucService,
+    private donviService: DonviService,
     private quanLySoKhoTheKhoService: QuanLySoKhoTheKhoService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, quanLySoKhoTheKhoService);
@@ -44,12 +48,15 @@ export class SoKhoTheKhoComponent extends Base2Component implements OnInit {
     this.formData = this.fb.group({
       nam: [null],
       maDvi: [null],
-      tenDvi: [null],
-      loaiHang: [null],
-      maChungLoaiHang: [null],
+      maChiCuc: [null],
+      maDiemKho: [null],
+      loaiVthh: [null],
+      cloaiVthh: [null],
       ngayTaoTu: [null],
       ngayTaoDen: [null],
-      idThuKho: [null]
+      idThuKho: [null],
+      tenSoKho: [null],
+      tenTheKho: [null],
     })
     this.filterTable = {};
   }
@@ -57,9 +64,12 @@ export class SoKhoTheKhoComponent extends Base2Component implements OnInit {
   async ngOnInit() {
     await this.spinner.show();
     try {
-      await this.searchPage();
+      this.isThuKho = this.userInfo.POSITION == 'CBTHUKHO';
+      if (this.userInfo.POSITION == 'CBTHUKHO') {
+        await this.searchPage();
+      }
       this.loadDsHangHoa();
-      console.log(this.dataTable, 333333)
+      this.loadDsChiCuc();
       await this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -118,9 +128,20 @@ export class SoKhoTheKhoComponent extends Base2Component implements OnInit {
     });
   }
 
+  setValidator() {
+    if (!this.isThuKho) {
+      this.formData.controls["nam"].setValidators([Validators.required]);
+      this.formData.controls["maDiemKho"].setValidators([Validators.required]);
+      this.formData.controls["maChiCuc"].setValidators([Validators.required]);
+    }
+  }
+
   async searchPage() {
     this.spinner.show();
     try {
+      this.helperService.removeValidators(this.formData);
+      this.setValidator();
+      this.helperService.markFormGroupTouched(this.formData);
       let body = this.formData.value
       body.idThuKho = this.userInfo.POSITION == 'CBTHUKHO' ? this.userInfo.ID : null;
       body.maDvi = this.userInfo.POSITION == 'CBTHUKHO' ? null : this.userInfo.MA_DVI;
@@ -244,5 +265,24 @@ export class SoKhoTheKhoComponent extends Base2Component implements OnInit {
   closeHdModal() {
     this.idPhieuNx = null;
     this.openPhieuNx = false;
+  }
+
+
+  async loadDsChiCuc() {
+    let res = await this.donviService.layTatCaDonViByLevel(3);
+    if (res && res.data) {
+      this.dsChiCuc = res.data
+      this.dsChiCuc = this.dsChiCuc.filter(item => item.type != "PB" && item.maDvi.startsWith(this.userInfo.MA_DVI))
+    }
+  }
+
+  async changeChiCuc(event: any) {
+    if (event) {
+      let res = await this.donviService.layTatCaDonViByLevel(4);
+      if (res && res.data) {
+        this.dsDiemKho = res.data
+        this.dsDiemKho = this.dsDiemKho.filter(item => item.type != "PB" && item.maDvi.startsWith(event))
+      }
+    }
   }
 }

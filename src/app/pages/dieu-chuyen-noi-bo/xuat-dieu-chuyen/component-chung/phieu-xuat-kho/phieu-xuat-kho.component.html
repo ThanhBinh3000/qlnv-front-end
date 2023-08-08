@@ -48,7 +48,7 @@
         </nz-card>
 
         <div class="group-button">
-            <h3>DANH SÁCH BIÊN BẢN LẤY MẪU/BÀN GIAO MẪU</h3>
+            <h3>DANH SÁCH PHIẾU XUẤT KHO</h3>
             <div class="buttons">
                 <button type="button" class="btn btn-sub" (click)="exportData()">
                     <i class="icon htvbdh_chuyen-xu-ly"></i>
@@ -150,7 +150,7 @@
                                             <td></td>
                                             <td class="text-left">
                                                 <a (click)="redirectToChiTiet(lv2, null, null)"
-                                                    *ngIf="userService.isChiCuc()">
+                                                    *ngIf="lv2.phieuKiemNghiemId && userService.isChiCuc()">
                                                     <i class="fa fa-plus"></i>
                                                 </a>
                                             </td>

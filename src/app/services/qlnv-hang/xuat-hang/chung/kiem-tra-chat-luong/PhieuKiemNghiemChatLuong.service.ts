@@ -5,7 +5,7 @@ import {BaseService} from "src/app/services/base.service";
 @Injectable({
   providedIn: 'root',
 })
-export class BienBanLayMauService extends BaseService {
+export class PhieuKiemNghiemChatLuongService extends BaseService {
   GATEWAY = '/qlnv-hang';
 
   constructor(public httpClient: HttpClient) {
