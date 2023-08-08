@@ -1364,6 +1364,9 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
     if (this.isCuc()) {
       return this.formData.value.trangThai == STATUS.CHO_DUYET_TP || this.formData.value.trangThai == STATUS.CHO_DUYET_LDC
     }
+    if (this.isChiCuc()) {
+      return this.formData.value.trangThai == STATUS.CHODUYET_TBP_TVQT || this.formData.value.trangThai == STATUS.CHO_DUYET_LDCC
+    }
     return false
   }
 
