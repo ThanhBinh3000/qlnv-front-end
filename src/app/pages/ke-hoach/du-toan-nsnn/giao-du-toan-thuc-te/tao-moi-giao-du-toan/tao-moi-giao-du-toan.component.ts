@@ -839,7 +839,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 
 	//check role cho các nut trinh duyet
 	getStatusButton() {
-		if ([Status.TT_01].includes(this.trangThaiBanGhi) && this.userService.isAccessPermisson(Roles.GDT.EDIT_REPORT_PA_PBDT)) {
+		if ([Status.TT_01, Status.TT_03, Status.TT_05, Status.TT_08].includes(this.trangThaiBanGhi) && this.userService.isAccessPermisson(Roles.GDT.EDIT_REPORT_PA_PBDT)) {
 			this.status = false;
 		} else {
 			this.status = true;
@@ -860,8 +860,9 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 		}
 		// const isParent = this.userInfo.MA_DVI == this.maDviCha;
 		const checkChirld = this.maDonViTao == this.userInfo?.MA_DVI;
-
-		this.statusBtnSave = this.getBtnStatus([Status.TT_01], Roles.GDT.EDIT_REPORT_PA_PBDT, checkChirld);
+		const checkSave = this.userService.isAccessPermisson(Roles.GDT.EDIT_REPORT_PA_PBDT);
+		// this.statusBtnSave = this.getBtnStatus([Status.TT_01], Roles.GDT.EDIT_REPORT_PA_PBDT, checkChirld);
+		this.statusBtnSave = Status.check('reject', this.trangThaiBanGhi) && checkSave && checkChirld;
 		this.statusBtnApprove = this.getBtnStatus([Status.TT_01], Roles.GDT.APPROVE_REPORT_PA_PBDT, checkChirld);
 		this.statusBtnTBP = this.getBtnStatus([Status.TT_02], Roles.GDT.DUYET_REPORT_PA_PBDT, checkChirld);
 		this.statusBtnLD = this.getBtnStatus([Status.TT_04], Roles.GDT.PHE_DUYET_REPORT_PA_PBDT, checkChirld);
