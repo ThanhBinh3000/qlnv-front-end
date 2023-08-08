@@ -37,6 +37,10 @@
                 <i class="icon htvbdh_tcdt_tuchoi"></i>
                 <span>Từ chối</span>
             </button>
+            <button *ngIf="status.export" type="button" class="btn btn-sub" (click)="exportToExcel()">
+                <span nz-icon nzType="export" nzTheme="outline" style="margin-right: 5px;"></span>
+                <span>Xuất</span>
+            </button>
         </div>
     </nz-affix>
 
@@ -153,7 +157,7 @@
                             <th colspan="3">
                                 Số đã nộp đơn vị cấp trên (lũy kế)
                             </th>
-                            <th colspan="{{userService.isTongCuc() ? 4 : 3}}">
+                            <th colspan="{{capDvi == 1 ? 4 : 3}}">
                                 Nộp lần này
                             </th>
                             <th rowspan="2">
@@ -165,7 +169,7 @@
                             <th rowspan="2" class="text-col">
                                 Ghi chú
                             </th>
-                            <th rowspan="2" *ngIf="!userService.isChiCuc()">
+                            <th rowspan="2" *ngIf="capDvi != 3">
                                 Đợt
                             </th>
                             <th *ngIf="status.save" rowSpan="2" style="width: 60px;" nzRight></th>
@@ -186,7 +190,7 @@
                             <th>
                                 Tổng vốn
                             </th>
-                            <th *ngIf="userService.isTongCuc()">
+                            <th *ngIf="capDvi == 1">
                                 Ủy nhiệm chi ngày
                             </th>
                             <th>
@@ -210,14 +214,14 @@
                             <th>6</th>
                             <th>7</th>
                             <th>8=6+7</th>
-                            <th *ngIf="userService.isTongCuc()"></th>
+                            <th *ngIf="capDvi == 1"></th>
                             <th>9</th>
                             <th>10</th>
                             <th>11=9+10</th>
                             <th>12=8+11</th>
                             <th>13=5-12</th>
                             <th>C</th>
-                            <th *ngIf="!userService.isChiCuc()"> </th>
+                            <th *ngIf="capDvi != 3"> </th>
                             <th *ngIf="status.save" nzRight></th>
                         </tr>
                     </thead>
@@ -255,7 +259,7 @@
                                 <td>
                                     {{ Op.fmtVal(data.lkCong) }}
                                 </td>
-                                <td *ngIf="userService.isTongCuc()">
+                                <td *ngIf="capDvi == 1">
                                     {{ Utils.fmtDate(data.uncNgay) }}
                                 </td>
                                 <td>
@@ -276,7 +280,7 @@
                                 <td>
                                     {{ data.ghiChu }}
                                 </td>
-                                <td *ngIf="!userService.isChiCuc()">
+                                <td *ngIf="capDvi != 3">
                                     <a class="save" (click)="viewDetail(data.idCapDuoi)">{{data.dot}}</a>
                                 </td>
                                 <td *ngIf="status.save" nzRight>
@@ -327,7 +331,7 @@
                                 <td>
                                     {{ Op.fmtVal(editCache[data.id].data.lkCong) }}
                                 </td>
-                                <td *ngIf="userService.isTongCuc()">
+                                <td *ngIf="capDvi == 1">
                                     <nz-date-picker class="search__input" [(ngModel)]="editCache[data.id].data.uncNgay"
                                         nzFormat="dd/MM/yyyy">
                                     </nz-date-picker>
@@ -354,7 +358,7 @@
                                 <td>
                                     <input nz-input [(ngModel)]="editCache[data.id].data.ghiChu" />
                                 </td>
-                                <td *ngIf="!userService.isChiCuc()">
+                                <td *ngIf="capDvi != 3">
                                     <a class="save" (click)="viewDetail(data.idCapDuoi)">{{data.dot}}</a>
                                 </td>
                                 <td *ngIf="status.save" nzRight>
@@ -371,6 +375,33 @@
             </nz-card>
             <nz-card class="mt-2px flex-card data-table card-border-content table-card">
                 <nz-tabset>
+                    <nz-tab *ngIf="isReceive" nzTitle="Thông tin nhận">
+                        <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" class="tb-box">
+                            <ng-container *ngIf="!status.accept; else nhap">
+                                <div nz-col nzSpan="6">
+                                    Ngày nhận lệnh chuyển có: <span>{{ Utils.fmtDate(baoCao.ngayNhanLenhChuyenCo)
+                                        }}</span>
+                                </div>
+                                <div nz-col nzSpan="6">
+                                    Tài khoản nhận: <span>{{ baoCao.tkNhan }}</span>
+                                </div>
+                            </ng-container>
+                            <ng-template #nhap>
+                                <div nz-col nzSpan="6">
+                                    <label class="search__label">Ngày nhận lệnh chuyển có</label>
+                                    <nz-date-picker class="search__input" [(ngModel)]="baoCao.ngayNhanLenhChuyenCo"
+                                        nzFormat="dd/MM/yyyy"
+                                        [class]="baoCao.ngayNhanLenhChuyenCo ?'' : 'input-error-validate' ">
+                                    </nz-date-picker>
+                                </div>
+                                <div nz-col nzSpan="6">
+                                    <label class="search__label">Tài khoản nhận</label>
+                                    <input nz-input [class]="baoCao.tkNhan ?'' : 'input-error-validate' "
+                                        [(ngModel)]="baoCao.tkNhan" />
+                                </div>
+                            </ng-template>
+                        </div>
+                    </nz-tab>
                     <nz-tab nzTitle="Thuyết minh">
                         <textarea nz-input nzAutosize="{minRows: 4, maxRows: 16}" [(ngModel)]="baoCao.thuyetMinh"
                             [disabled]="!status.save" class="tb-box"></textarea>

@@ -4,7 +4,7 @@ import * as fileSaver from 'file-saver';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { FileManip, Roles, Operator, Utils, Status } from 'src/app/Utility/utils';
+import { Operator, Roles, Status, Utils } from 'src/app/Utility/utils';
 import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
@@ -102,7 +102,6 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
         private dataSource: DataService,
         public globals: Globals,
         public danhMucService1: DanhMucService,
-        public fileManip: FileManip,
     ) { }
 
     ngOnInit() {
@@ -229,7 +228,7 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
         //     file = this.listFile.find(element => element?.lastModified.toString() == id);
         //     doc = this.baoCao.lstFiles.find(element => element?.id == id);
         // }
-        await this.fileManip.downloadFile(file, doc);
+        await this.quanLyVonPhiService.downFile(file, doc);
     }
 
     // call chi tiet bao cao

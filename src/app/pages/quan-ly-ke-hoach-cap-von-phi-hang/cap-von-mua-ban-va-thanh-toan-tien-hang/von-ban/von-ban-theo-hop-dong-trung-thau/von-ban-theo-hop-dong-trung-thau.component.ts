@@ -11,6 +11,7 @@ import { CapVonMuaBanTtthService } from 'src/app/services/quan-ly-von-phi/capVon
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
+import * as XLSX from 'xlsx';
 import { BtnStatus, Cvmb, Report, ThanhToan } from '../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
 import { Tab } from '../von-ban.constant';
 
@@ -33,6 +34,7 @@ export class VonBanTheoHopDongTrungThauComponent implements OnInit {
     lstCtiets: ThanhToan[] = [];
     editCache: { [key: string]: { edit: boolean; data: ThanhToan } } = {};
     maDviTien: string = '1';
+    capDvi: number;
     scrollHD: string;
     scrollVB: string;
     //trang thai cac nut
@@ -40,6 +42,7 @@ export class VonBanTheoHopDongTrungThauComponent implements OnInit {
     isDataAvailable: boolean = false;
     editMoneyUnit: boolean = false;
     isParent: boolean = false;
+    isReceive: boolean;
     //file
     fileList: NzUploadFile[] = [];
     listFile: File[] = [];
@@ -150,6 +153,10 @@ export class VonBanTheoHopDongTrungThauComponent implements OnInit {
             this.setLevel()
             this.sum('0.1')
         }
+        this.capDvi = parseInt(this.userInfo.CAP_DVI, 10);
+        if (this.userInfo.MA_DVI == this.baoCao.maDviCha) {
+            this.capDvi += 1;
+        }
         this.updateEditCache();
         this.getStatusButton();
     }
@@ -163,13 +170,16 @@ export class VonBanTheoHopDongTrungThauComponent implements OnInit {
         this.status.pass = Status.check('pass', this.baoCao.trangThai) && isChild;
         this.status.approve = Status.check('approve', this.baoCao.trangThai) && isChild;
         this.status.accept = Status.check('accept', this.baoCao.trangThai) && this.isParent;
+        this.status.export = Status.TT_09 == this.baoCao.trangThai || (Status.TT_07 == this.baoCao.trangThai && this.capDvi == 1);
 
         this.status.save = this.status.save && this.userService.isAccessPermisson(Roles.CVMB.EDIT_VB);
         this.status.submit = this.status.submit && this.userService.isAccessPermisson(Roles.CVMB.SUBMIT_VB);
         this.status.pass = this.status.pass && this.userService.isAccessPermisson(Roles.CVMB.PASS_VB);
         this.status.approve = this.status.approve && this.userService.isAccessPermisson(Roles.CVMB.APPROVE_VB);
         this.status.accept = this.status.accept && this.userService.isAccessPermisson(Roles.CVMB.ACCEPT_VB);
-        if (this.userService.isTongCuc()) {
+        this.status.export = this.status.export && this.userService.isAccessPermisson(Roles.CVMB.EXPORT_VB) && (isChild || this.isParent);
+        this.isReceive = this.baoCao.trangThai == Status.TT_09 || (this.baoCao.trangThai == Status.TT_07 && this.isParent);
+        if (this.capDvi == 1) {
             this.scrollHD = Table.tableWidth(700, 9, 1, 0);
             this.scrollVB = this.status.save ? Table.tableWidth(300, 18, 1, 60) : Table.tableWidth(500, 18, 1, 0);
         } else {
@@ -238,10 +248,23 @@ export class VonBanTheoHopDongTrungThauComponent implements OnInit {
 
     // chuc nang check role
     async onSubmit(mcn: string, lyDoTuChoi?: string) {
+        if (mcn == Status.TT_09) {
+            if (!this.baoCao.ngayNhanLenhChuyenCo || !this.baoCao.tkNhan) {
+                this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+                return;
+            }
+            //kiem tra ca ky tu trong tai khoan nhan cos phai deu la so ko
+            if (!Operator.numOnly(this.baoCao.tkNhan)) {
+                this.notification.warning(MESSAGE.WARNING, 'Trường tài khoản nhận chỉ chứa ký tự số');
+                return;
+            }
+        }
         const requestGroupButtons = {
             id: this.baoCao.id,
             maChucNang: mcn,
             lyDoTuChoi: lyDoTuChoi,
+            ngayNhanLenhChuyenCo: this.baoCao.ngayNhanLenhChuyenCo,
+            tkNhan: this.baoCao.tkNhan,
         };
         await this.capVonMuaBanTtthService.trinhDuyetVonMuaBan(requestGroupButtons).toPromise().then(async (data) => {
             if (data.statusCode == 0) {
@@ -431,5 +454,121 @@ export class VonBanTheoHopDongTrungThauComponent implements OnInit {
         let file: any = this.listFile.find(element => element?.lastModified.toString() == id);
         let doc: any = this.baoCao.lstFiles.find(element => element?.id == id);
         await this.quanLyVonPhiService.downFile(file, doc);
+    }
+
+    exportToExcel() {
+        const head = [
+            { t: 0, b: 5, l: 0, r: 12, val: null },
+            { t: 0, b: 0, l: 0, r: 8, val: "Hợp đồng vốn bán nộp lên đơn vị cấp trên" },
+            { t: 4, b: 5, l: 0, r: 0, val: 'Đơn vị' },
+            { t: 4, b: 5, l: 1, r: 1, val: 'Tên khách hàng' },
+            { t: 4, b: 5, l: 2, r: 2, val: 'Quyết định phê duyệt kết quả lựa chọn nhà thầu / Hợp đồng' },
+            { t: 4, b: 4, l: 3, r: 5, val: 'Số lượng' },
+            { t: 5, b: 5, l: 3, r: 3, val: 'Kế hoạch' },
+            { t: 5, b: 5, l: 4, r: 4, val: 'Hợp đồng' },
+            { t: 5, b: 5, l: 5, r: 5, val: 'Thực hiện' },
+            { t: 4, b: 5, l: 6, r: 6, val: 'Đơn giá (đồng/kg)' },
+            { t: 4, b: 5, l: 7, r: 7, val: 'Giá trị hợp đồng (đã bao gồm VAT (đồng)' },
+            { t: 4, b: 5, l: 8, r: 8, val: 'Giá trị thực hiện (lũy kế)' },
+            { t: 4, b: 5, l: 9, r: 9, val: 'Vi phạm hợp đồng' },
+            { t: 4, b: 4, l: 10, r: 11, val: 'Thanh lý hợp đồng' },
+            { t: 5, b: 5, l: 10, r: 10, val: 'Số lượng' },
+            { t: 5, b: 5, l: 11, r: 11, val: 'Thành tiền' },
+            { t: 4, b: 5, l: 12, r: 12, val: 'Công văn' },
+        ]
+        const fieldHD = ['tenDvi', 'tenKhachHang', 'qdPheDuyet', 'slKeHoach', 'slHopDong', 'slThucHien', 'donGia', 'gtHopDong', 'gtThucHien',
+            'phatViPham', 'tlSoluong', 'tlThanhTien', 'congVan'];
+        const filterHD = this.lstCtiets.filter(e => e.level > (this.capDvi == 1 ? 1 : 0)).map(item => {
+            const row: any = {};
+            fieldHD.forEach(field => {
+                row[field] = item[field];
+            })
+            return row;
+        })
+        const workbook = XLSX.utils.book_new();
+        const worksheetHD = Table.initExcel(head);
+        XLSX.utils.sheet_add_json(worksheetHD, filterHD, { skipHeader: true, origin: Table.coo(head[0].l, head[0].b + 1) })
+        XLSX.utils.book_append_sheet(workbook, worksheetHD, 'Hợp đồng');
+
+        let header = [];
+        let filterData = [];
+        if (this.capDvi == 1) {
+            header = [
+                { t: 0, b: 5, l: 0, r: 18, val: null },
+                { t: 0, b: 0, l: 0, r: 8, val: "Vốn bán nộp lên đơn vị cấp trên" },
+                { t: 4, b: 5, l: 0, r: 0, val: 'Đơn vị' },
+                { t: 4, b: 4, l: 1, r: 3, val: 'Số lượng' },
+                { t: 5, b: 5, l: 1, r: 1, val: 'Kế hoạch' },
+                { t: 5, b: 5, l: 2, r: 2, val: 'Hợp đồng' },
+                { t: 5, b: 5, l: 3, r: 3, val: 'Thực hiện' },
+                { t: 4, b: 5, l: 4, r: 4, val: 'Giá trị hợp đồng (đã bao gồm VAT (đồng)' },
+                { t: 4, b: 5, l: 5, r: 5, val: 'Giá trị thực hiện (lũy kế)' },
+                { t: 4, b: 5, l: 6, r: 6, val: 'Vi phạm hợp đồng' },
+                { t: 4, b: 4, l: 7, r: 8, val: 'Thanh lý hợp đồng' },
+                { t: 5, b: 5, l: 7, r: 7, val: 'Số lượng' },
+                { t: 5, b: 5, l: 8, r: 8, val: 'Thành tiền' },
+                { t: 4, b: 4, l: 9, r: 11, val: 'Số đã nộp lên đơn vị cấp trên (lũy kế)' },
+                { t: 5, b: 5, l: 9, r: 9, val: 'Vốn ứng' },
+                { t: 5, b: 5, l: 10, r: 10, val: 'Vốn cấp' },
+                { t: 5, b: 5, l: 11, r: 11, val: 'Tổng vốn' },
+                { t: 4, b: 4, l: 12, r: 15, val: 'Số nộp lần này' },
+                { t: 5, b: 5, l: 12, r: 12, val: 'Ngày' },
+                { t: 5, b: 5, l: 13, r: 13, val: 'Vốn ứng' },
+                { t: 5, b: 5, l: 14, r: 14, val: 'Vốn cấp' },
+                { t: 5, b: 5, l: 15, r: 15, val: 'Tổng vốn' },
+                { t: 4, b: 5, l: 16, r: 16, val: 'Lũy kế sau lần nộp này' },
+                { t: 4, b: 5, l: 17, r: 17, val: 'Số còn phải nộp' },
+                { t: 4, b: 5, l: 18, r: 18, val: 'Ghi chú' },
+            ]
+            const fieldOrder = ['tenDvi', 'slKeHoach', 'slHopDong', 'slThucHien', 'gtHopDong', 'gtThucHien', 'phatViPham', 'tlSoluong', 'tlThanhTien',
+                'lkUng', 'lkCap', 'lkCong', 'uncNgay', 'ung', 'cap', 'cong', 'lkSauLanNay', 'soConPhaiNop', 'ghiChu'];
+            filterData = this.lstCtiets.filter(e => e.level < 2).map(item => {
+                const row: any = {};
+                fieldOrder.forEach(field => {
+                    row[field] = field == 'uncNgay' ? Utils.fmtDate(item[field]) : item[field];
+                })
+                return row;
+            })
+        } else {
+            header = [
+                { t: 0, b: 5, l: 0, r: 17, val: null },
+                { t: 0, b: 0, l: 0, r: 8, val: "Vốn bán nộp lên đơn vị cấp trên" },
+                { t: 4, b: 5, l: 0, r: 0, val: 'Đơn vị' },
+                { t: 4, b: 4, l: 1, r: 3, val: 'Số lượng' },
+                { t: 5, b: 5, l: 1, r: 1, val: 'Kế hoạch' },
+                { t: 5, b: 5, l: 2, r: 2, val: 'Hợp đồng' },
+                { t: 5, b: 5, l: 3, r: 3, val: 'Thực hiện' },
+                { t: 4, b: 5, l: 4, r: 4, val: 'Giá trị hợp đồng (đã bao gồm VAT (đồng)' },
+                { t: 4, b: 5, l: 5, r: 5, val: 'Giá trị thực hiện (lũy kế)' },
+                { t: 4, b: 5, l: 6, r: 6, val: 'Vi phạm hợp đồng' },
+                { t: 4, b: 4, l: 7, r: 8, val: 'Thanh lý hợp đồng' },
+                { t: 5, b: 5, l: 7, r: 7, val: 'Số lượng' },
+                { t: 5, b: 5, l: 8, r: 8, val: 'Thành tiền' },
+                { t: 4, b: 4, l: 9, r: 11, val: 'Số đã nộp lên đơn vị cấp trên (lũy kế)' },
+                { t: 5, b: 5, l: 9, r: 9, val: 'Vốn ứng' },
+                { t: 5, b: 5, l: 10, r: 10, val: 'Vốn cấp' },
+                { t: 5, b: 5, l: 11, r: 11, val: 'Tổng vốn' },
+                { t: 4, b: 4, l: 12, r: 14, val: 'Số nộp lần này' },
+                { t: 5, b: 5, l: 12, r: 12, val: 'Vốn ứng' },
+                { t: 5, b: 5, l: 13, r: 13, val: 'Vốn cấp' },
+                { t: 5, b: 5, l: 14, r: 14, val: 'Tổng vốn' },
+                { t: 4, b: 5, l: 15, r: 15, val: 'Lũy kế sau lần nộp này' },
+                { t: 4, b: 5, l: 16, r: 16, val: 'Số còn phải nộp' },
+                { t: 4, b: 5, l: 17, r: 17, val: 'Ghi chú' },
+            ]
+            const fieldOrder = ['tenDvi', 'slKeHoach', 'slHopDong', 'slThucHien', 'gtHopDong', 'gtThucHien', 'phatViPham', 'tlSoluong', 'tlThanhTien',
+                'lkUng', 'lkCap', 'lkCong', 'ung', 'cap', 'cong', 'lkSauLanNay', 'soConPhaiNop', 'ghiChu'];
+            filterData = this.lstCtiets.filter(e => e.level < 1).map(item => {
+                const row: any = {};
+                fieldOrder.forEach(field => {
+                    row[field] = item[field];
+                })
+                return row;
+            })
+        }
+        const worksheet = Table.initExcel(header);
+        XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Vốn bán');
+        XLSX.writeFile(workbook, this.baoCao.maCapUng + '.xlsx');
     }
 }
