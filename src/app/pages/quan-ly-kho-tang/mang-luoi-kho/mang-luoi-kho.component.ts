@@ -45,8 +45,8 @@ export class MangLuoiKhoComponent implements OnInit {
 
   loaiHangHoa: any = {
     "type": "",
-    "loaiVthh": "",
-    "cloaiVthh": "",
+    "loaiVthh": null,
+    "cloaiVthh": null,
     "thoc": false,
     "gao": false,
     "muoi": false,
@@ -114,8 +114,8 @@ export class MangLuoiKhoComponent implements OnInit {
       dienTichNganKhoTk: [""],
       loaikhoId: [""],
       nhakhoId: [""],
-      loaiVthh: [""],
-      cloaiVthh: [""],
+      loaiVthh: [null],
+      cloaiVthh: [null],
       trangThai: [true],
       diaDiem: [""],
       type: [true],
@@ -424,8 +424,8 @@ export class MangLuoiKhoComponent implements OnInit {
       this.convertDataChild(dataNode);
       this.loaiHangHoa = {
         "type": "",
-        "loaiVthh": "",
-        "cloaiVthh": "",
+        "loaiVthh": null,
+        "cloaiVthh": null,
         "thoc": false,
         "gao": false,
         "muoi": false,
