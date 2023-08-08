@@ -342,12 +342,14 @@ export class BaoCaoTongHopComponent implements OnInit {
             this.idPaBTC = this.data?.idPaBTC;
             this.namPa = this.data?.namPa;
             this.trangThaiBanGhi = this.data?.trangThai;
+            console.log(this.data);
+
             this.lstDviTrucThuoc = this.data?.lstGiaoDtoanTrucThuocs;
-            // this.lstDviTrucThuoc.forEach(item => {
-            //   item.ngayTrinh = this.datePipe.transform(item.ngayTrinh, Utils.FORMAT_DATE_STR)
-            //   item.ngayDuyet = this.datePipe.transform(item.ngayDuyet, Utils.FORMAT_DATE_STR)
-            // }
-            // )
+            this.lstDviTrucThuoc.forEach(item => {
+                item.ngayTrinh = this.datePipe.transform(item.ngayTrinh, Utils.FORMAT_DATE_STR)
+                item.ngayDuyet = this.datePipe.transform(item.ngayDuyet, Utils.FORMAT_DATE_STR)
+            }
+            )
 
             this.lstDviTrucThuoc.forEach(e => {
                 if (e.ngayDuyet.includes('/')) {
@@ -675,6 +677,7 @@ export class BaoCaoTongHopComponent implements OnInit {
             fileDinhKems: this.lstFiles,
             listIdFiles: this.listIdFilesDelete, // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
             lstCtiets: lstCtietBcaoTemp,
+            lstGiaoDtoanTrucThuocs: this.lstDviTrucThuoc,
             maDvi: this.maDonViTao,
             maDviTien: this.maDviTien,
             maPa: this.maPa,
@@ -695,6 +698,7 @@ export class BaoCaoTongHopComponent implements OnInit {
             fileDinhKems: this.lstFiles,
             listIdDeleteFiles: this.listIdFilesDelete, // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
             lstCtiets: lstCtietBcaoTemp,
+            lstGiaoDtoanTrucThuocs: this.lstDviTrucThuoc,
             maDvi: this.maDonViTao,
             maDviTien: this.maDviTien,
             maPa: this.maPa,
@@ -870,7 +874,7 @@ export class BaoCaoTongHopComponent implements OnInit {
 
     //check role cho các nut trinh duyet
     getStatusButton() {
-        if ([Status.TT_01].includes(this.trangThaiBanGhi) && this.userService.isAccessPermisson(Roles.GDT.EDIT_REPORT_PA_PBDT)) {
+        if ([Status.TT_01, Status.TT_03, Status.TT_05, Status.TT_08].includes(this.trangThaiBanGhi) && this.userService.isAccessPermisson(Roles.GDT.EDIT_REPORT_PA_PBDT)) {
             this.status = false;
         } else {
             this.status = true;
@@ -889,7 +893,9 @@ export class BaoCaoTongHopComponent implements OnInit {
         const utils = new Utils();
         const checkChirld = this.maDonViTao == this.userInfo?.MA_DVI;
 
-        this.statusBtnSave = this.getBtnStatus([Status.TT_01], Roles.GDT.EDIT_REPORT_PA_PBDT, checkChirld);
+        const checkSave = this.userService.isAccessPermisson(Roles.GDT.EDIT_REPORT_PA_PBDT);
+        // this.statusBtnSave = this.getBtnStatus([Status.TT_01], Roles.GDT.EDIT_REPORT_PA_PBDT, checkChirld);
+        this.statusBtnSave = Status.check('saveWOHist', this.trangThaiBanGhi) && checkSave && checkChirld;
         this.statusBtnApprove = this.getBtnStatus([Status.TT_01], Roles.GDT.APPROVE_REPORT_PA_PBDT, checkChirld);
         this.statusBtnTBP = this.getBtnStatus([Status.TT_02], Roles.GDT.DUYET_REPORT_PA_PBDT, checkChirld);
         this.statusBtnLD = this.getBtnStatus([Status.TT_04], Roles.GDT.PHE_DUYET_REPORT_PA_PBDT, checkChirld);
