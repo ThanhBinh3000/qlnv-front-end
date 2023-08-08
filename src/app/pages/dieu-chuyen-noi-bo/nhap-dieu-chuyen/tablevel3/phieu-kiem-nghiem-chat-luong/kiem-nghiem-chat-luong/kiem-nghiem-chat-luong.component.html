@@ -23,10 +23,25 @@
               <input nz-input formControlName="soPhieu" />
             </div>
 
-            <div nz-col nzSpan="4">
+            <!-- <div nz-col nzSpan="4">
               <label class="search__label">Ngày kiểm nghiệm</label>
               <nz-range-picker formControlName="ngay" nzFormat="dd/MM/yyyy"></nz-range-picker>
+            </div> -->
+            <div nz-col nzSpan="4">
+              <label class="search__label">Ngày kiểm nghiệm</label>
+              <div nz-row>
+                <div nz-col nzSpan="12" class="cus-start-date">
+                  <nz-date-picker [nzDisabledDate]="disabledStartNgayKN" nzFormat="dd/MM/yyyy"
+                    formControlName="tuNgayLapPhieu" nzPlaceHolder="Ngày bắt đầu">
+                  </nz-date-picker>
+                </div>
+                <div nz-col nzSpan="12" class="cus-end-date">
+                  <nz-date-picker [nzDisabledDate]="disabledEndNgayKN" nzFormat="dd/MM/yyyy"
+                    formControlName="denNgayLapPhieu" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+                </div>
+              </div>
             </div>
+
             <div nz-col nzSpan="4">
               <label class="search__label">Số biên bản lấy mẫu/bàn giao mẫu</label>
               <input nz-input formControlName="soBbLayMau" />
