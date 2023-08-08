@@ -54,6 +54,8 @@ export class ThemMoiBienBanLayBanGiaoMauComponent extends Base2Component impleme
   phuongPhapLayMaus: Array<PhuongPhapLayMau>;
   listBbNhapDayKho: any[] = [];
   radioValue: any;
+  tenNganLoKho: any;
+  ppLayMau: any;
   checked: boolean = false;
   constructor(
     httpClient: HttpClient,
@@ -384,11 +386,14 @@ export class ThemMoiBienBanLayBanGiaoMauComponent extends Base2Component impleme
 
   async loadBienbanLayMau(id) {
     this.spinner.show()
+    console.log(id)
     let res = await this.bienBanLayMauServive.getDetail(id);
     if (res.msg == MESSAGE.SUCCESS) {
       const data = res.data;
       data.tenDvi = this.userInfo.TEN_DVI;
       this.helperService.bidingDataInFormGroup(this.formData, data);
+      this.formData.value.tenNganLoKho = data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho;
+      this.tenNganLoKho = this.formData.value.tenNganLoKho;
       this.radioValue = data.loaiBienBan;
       this.checked = data.ketQuaNiemPhong;
       this.listDaiDienChiCuc = data.bbanLayMauDtlList.filter(x => x.loaiDaiDien == 'CHI_CUC')
@@ -404,6 +409,7 @@ export class ThemMoiBienBanLayBanGiaoMauComponent extends Base2Component impleme
           }
         })
       }
+      console.log("1", this.formData.value)
       await this.bindingDataQd(data.idQdGiaoNvNh);
     }
     else {
@@ -469,7 +475,6 @@ export class ThemMoiBienBanLayBanGiaoMauComponent extends Base2Component impleme
   async bindingDataQd(id, isSetTc?) {
     await this.spinner.show();
     let dataRes = await this.quyetDinhGiaoNvNhapHangService.getDetail(id)
-    console.log(dataRes)
     const data = dataRes.data;
     this.formData.patchValue({
       soQdGiaoNvNh: data.soQd,
@@ -484,6 +489,7 @@ export class ThemMoiBienBanLayBanGiaoMauComponent extends Base2Component impleme
       // ngayHd: data.hopDong.ngayKyHd,
       // donGiaHd: data.hopDong.donGia
     });
+    console.log("2", this.formData.value)
     let dataChiCuc = data.hhQdGiaoNvNhangDtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0];
     // this.listDiaDiemNhap = dataChiCuc.hhQdGiaoNvNhDdiemList.filter(item => !isEmpty(item.bienBanNhapDayKho) && isEmpty(item.bienBanLayMau));
     if (dataChiCuc) {
@@ -526,8 +532,8 @@ export class ThemMoiBienBanLayBanGiaoMauComponent extends Base2Component impleme
           soBbNhapDayKho: data.bienBanNhapDayKho[0]?.soBbNhapDayKho,
           idBbNhapDayKho: data.bienBanNhapDayKho[0]?.id,
           ngayKetThucNhap: data.bienBanNhapDayKho[0]?.ngayKthucNhap,
-          tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho,
         });
+        this.tenNganLoKho = data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho;
         console.log(data.bienBanNhapDayKho[0]?.ngayKthucNhap, 888888);
         console.log(this.formData.value.ngayKetThucNhap, 6666);
 
@@ -563,9 +569,13 @@ export class ThemMoiBienBanLayBanGiaoMauComponent extends Base2Component impleme
             let option = {
               label: item.giaTri,
               value: item.ma,
-              checked: true
+              checked: false
             }
             ppLayMauOptions.push(option);
+            if(this.formData.value.ppLayMau != null){
+              ppLayMauOptions.find(x => x.value == this.formData.value.ppLayMau).checked = true;
+            }
+            console.log(ppLayMauOptions)
             this.formData.patchValue({
               ppLayMauList: ppLayMauOptions,
             })
@@ -577,6 +587,17 @@ export class ThemMoiBienBanLayBanGiaoMauComponent extends Base2Component impleme
     }).catch(err => {
       this.notification.error(MESSAGE.ERROR, err.msg);
     })
+  }
+
+  handleChange(selectedValues: any): void {
+    if(selectedValues != undefined){
+      console.log('Các giá trị đã chọn:', selectedValues);
+      if(selectedValues.checked == true){
+        this.formData.patchValue({
+          ppLayMau: selectedValues.value
+        })
+      }
+    }
   }
 
   async loadChiTieuCl() {

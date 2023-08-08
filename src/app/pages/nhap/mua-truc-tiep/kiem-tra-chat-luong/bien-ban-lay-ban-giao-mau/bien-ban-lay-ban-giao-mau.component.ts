@@ -187,12 +187,10 @@ export class BienBanLayBanGiaoMauComponent extends Base2Component implements OnI
     });
   }
 
-  goDetail(id?: number, idQdGiaoNvu?: number, roles?: any) {
-    if (!this.checkPermission(roles)) {
-      return
-    }
+  goDetail(id?: number, idQdGiaoNvu?: number, isView?: boolean) {
     this.selectedId = id;
     this.idQdGiaoNvNh = idQdGiaoNvu;
     this.isDetail = true;
+    this.isView = isView;
   }
 }
