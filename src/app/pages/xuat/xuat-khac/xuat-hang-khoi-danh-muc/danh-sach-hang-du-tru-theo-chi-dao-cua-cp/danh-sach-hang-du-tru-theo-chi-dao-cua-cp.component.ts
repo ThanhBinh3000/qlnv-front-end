@@ -20,6 +20,7 @@ import {CHUC_NANG} from "../../../../../constants/status";
 import {
   DanhSachHangDtqgService
 } from "../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuathangkhoidm/DanhSachHangDtqg.service";
+import {TreeNodeInterface} from "../../../../../interfaces/treenode";
 
 @Component({
   selector: 'app-danh-sach-hang-du-tru-theo-chi-dao-cua-cp',
@@ -98,29 +99,8 @@ export class DanhSachHangDuTruTheoChiDaoCuaCpComponent extends Base2Component im
     }
     return false;
   };
-
-
-  flattenTree(tree) {
-    return tree.flatMap((item) => {
-      return item.tongHopDtl ? this.flattenTree(item.tongHopDtl) : item;
-    });
-  }
-
   async timKiem() {
     await this.search();
-    this.flatDataTable = this.dataTable.flatMap(s => {
-      if (s.tongHopDtl && s.tongHopDtl.length > 0) {
-        return s.tongHopDtl.map(s1 => {
-          delete s.tongHopDtl;
-          s.idVirtual = uuidv4();
-          s.header = s.nam + s.maDanhSach + s.tenDanhSach;
-          this.expandSetString.add(s.idVirtual);
-          return Object.assign(s1, s);
-        })
-      } else return s;
-
-    });
-    this.buildTableView();
   }
 
   async loadDsDonVi() {

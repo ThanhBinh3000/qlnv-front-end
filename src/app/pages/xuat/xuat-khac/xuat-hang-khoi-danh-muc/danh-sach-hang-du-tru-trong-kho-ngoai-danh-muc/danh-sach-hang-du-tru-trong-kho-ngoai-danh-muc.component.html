@@ -185,12 +185,12 @@
 
 <nz-modal [nzWidth]="modalWidth" [nzVisible]="isVisibleModal" [nzFooter]="modalFooter" (nzOnCancel)="handleCancel()"
           [nzClosable]="false" [nzBodyStyle]="{ 'overflow-y': 'auto' }" nzMaskClosable="true"
-          nzTitle="TỔNG HỢP DS HÀNG DTQG CÒN 6 THÁNG HẾT HẠN LƯU KHO NHƯNG CHƯA CÓ KẾ HOẠCH XUẤT">
+          nzTitle="CẬP NHẬT DANH SÁCH HÀNG DỰ TRỮ TRONG KHO NGOÀI DANH MỤC">
   <ng-container *nzModalContent>
-    <!--    <app-chi-tiet-tong-hop-danh-sach-vt6th [selectedItem]="selectedItem" (step)="changeStep($event)" [eventOk]="clickOk"-->
-    <!--                                           (changeShow)="changeShowDetail($event)">-->
+        <app-cap-nhap-danh-sach-hang-trong-kho-ngoai-dm [selectedItem]="selectedItem" (step)="changeStep($event)" [eventOk]="clickOk"
+                                               (changeShow)="changeShowDetail($event)">
 
-    <!--    </app-chi-tiet-tong-hop-danh-sach-vt6th>-->
+        </app-cap-nhap-danh-sach-hang-trong-kho-ngoai-dm>
   </ng-container>
   <ng-template #modalFooter>
     <ng-container>

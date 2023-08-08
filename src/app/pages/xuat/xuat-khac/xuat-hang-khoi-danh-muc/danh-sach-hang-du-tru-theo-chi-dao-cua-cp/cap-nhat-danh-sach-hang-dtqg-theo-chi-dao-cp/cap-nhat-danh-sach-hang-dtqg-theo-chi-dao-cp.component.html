@@ -33,7 +33,7 @@
           <nz-form-item>
             <nz-form-label>Số QĐ/NĐ</nz-form-label>
             <nz-form-control>
-              <input nz-input formControlName="soQd" [readonly]="true">
+              <input nz-input formControlName="soQd">
             </nz-form-control>
           </nz-form-item>
           <nz-form-item>
@@ -75,7 +75,7 @@
         <div nz-col nzSpan="8"></div>
         <div nz-col nzSpan="16"><span style="color: blue">
           <a
-            (click)="onClickShowDetail()"><b>Xem toàn bộ danh sách hàng cần kiểm tra chất lượng {{selectedItem.maDanhSach}} </b></a></span>
+            (click)="onClickShowDetail()"><b>Xem toàn bộ danh sách hàng dự trữ theo chỉ đạo của Chính Phủ</b></a></span>
         </div>
       </div>
     </ng-container>
@@ -94,52 +94,50 @@
       </div>
 
       <nz-card class="mg-t-16">
-        <nz-table #tblData [nzData]="selectedItem.childData" class="nowrap table-chi-tiet" nzBordered>
+        <nz-table #tblData [nzData]="dataTable" class="table-chi-tiet" [nzScroll]="{ x: '1700px' }" nzBordered>
           <thead>
           <tr>
-            <th>STT</th>
-            <th>Chi cục DTNN KV</th>
-            <th>Loại hàng hóa</th>
-            <th>Chủng loại</th>
-            <th>Điểm kho</th>
-            <th>Ngăn/lô kho</th>
-            <th>Ngày nhập kho</th>
-            <th>SL hết hạn (12 tháng) <br/> đề xuất xuất bán</th>
-            <th>SL tồn</th>
-            <th>ĐVT</th>
-            <th>Ngày đề xuất</th>
+            <th class="text-center" width="40px">STT</th>
+            <th width="200px">Nhóm hàng DTQG</th>
+            <th width="250px">Loại hàng DTQG</th>
+            <th width="250px">Chủng loại hàng DTQG</th>
+            <th width="250px">Mô tả</th>
+            <th width="100px">ĐVT</th>
+            <th width="200px">Đơn vị quản lý</th>
           </tr>
           </thead>
           <tbody>
-
           <ng-container *ngFor="let item of tblData.data, let i = index;">
             <tr>
-              <td>{{numberToRoman(i + 1)}}</td>
-              <td>{{item.tenChiCuc}}</td>
+              <td>{{numberToRoman(i + 1)!}}</td>
+              <td class="bold">{{item.ten}}</td>
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
+              <td>{{item.maDviTinh}}</td>
+              <td>TCDT</td>
             </tr>
-            <ng-container *ngFor="let lv1 of item.childData,let i1=index">
+            <ng-container *ngFor="let lv1 of item.children,let i2=index">
               <tr>
-                <td style="text-align: right;">{{i1 + 1}}</td>
+                <td style="text-align: right;">{{i2 + 1}}</td>
                 <td></td>
-                <td>{{lv1.tenLoaiVthh}}</td>
-                <td>{{lv1.tenCloaiVthh}}</td>
-                <td>{{lv1.tenDiemKho}}</td>
-                <td>{{lv1.tenLoKho ? lv1.tenLoKho : lv1.tenNganKho}}</td>
-                <td>{{lv1.ngayNhapKho|date:globals.dateFormat}}</td>
-                <td>{{lv1.slHetHan|number:globals.numberFormat}}</td>
-                <td>{{lv1.slTonKho|number:globals.numberFormat}}</td>
-                <td>{{lv1.donViTinh}}</td>
-                <td>{{lv1.ngayDeXuat|date:globals.dateFormat}}</td>
+                <td class="bold">{{lv1.ten}}</td>
+                <td></td>
+                <td></td>
+                <td>{{lv1.maDviTinh}}</td>
+                <td>TCDT</td>
               </tr>
+              <ng-container *ngFor="let lv2 of lv1.children,let i3=index">
+                <tr>
+                  <td style="text-align: right;">{{i3 + 1}}</td>
+                  <td></td>
+                  <td></td>
+                  <td>{{lv2.ten}}</td>
+                  <td></td>
+                  <td>{{lv2.maDviTinh}}</td>
+                  <td>TCDT</td>
+                </tr>
+              </ng-container>
             </ng-container>
           </ng-container>
           </tbody>

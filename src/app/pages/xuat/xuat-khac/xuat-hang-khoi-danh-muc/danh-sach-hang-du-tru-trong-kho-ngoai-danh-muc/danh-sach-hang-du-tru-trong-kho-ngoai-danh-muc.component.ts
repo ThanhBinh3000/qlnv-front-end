@@ -55,11 +55,11 @@ export class DanhSachHangDuTruTrongKhoNgoaiDanhMucComponent extends Base2Compone
   ) {
     super(httpClient, storageService, notification, spinner, modal, danhSachHangDtqgService);
     this.formData = this.fb.group({
-      maDs: [],
-      tenDs: [],
+      tenDanhSach: [],
+      maDanhSach: [],
       ngayCapNhatTu: [],
       ngayCapNhatDen: [],
-      loai: [0],
+      loai: [1],
     })
   }
 
@@ -105,19 +105,6 @@ export class DanhSachHangDuTruTrongKhoNgoaiDanhMucComponent extends Base2Compone
 
   async timKiem() {
     await this.search();
-    this.flatDataTable = this.dataTable.flatMap(s => {
-      if (s.tongHopDtl && s.tongHopDtl.length > 0) {
-        return s.tongHopDtl.map(s1 => {
-          delete s.tongHopDtl;
-          s.idVirtual = uuidv4();
-          s.header = s.nam + s.maDanhSach + s.tenDanhSach;
-          this.expandSetString.add(s.idVirtual);
-          return Object.assign(s1, s);
-        })
-      } else return s;
-
-    });
-    this.buildTableView();
   }
 
   async loadDsDonVi() {

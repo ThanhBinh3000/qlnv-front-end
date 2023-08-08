@@ -13,7 +13,7 @@ import {v4 as uuidv4} from "uuid";
 import {Validators} from "@angular/forms";
 import {LOAI_HH_XUAT_KHAC} from "../../../../../../constants/config";
 import {MESSAGE} from "../../../../../../constants/message";
-import {CHUC_NANG} from "../../../../../../constants/status";
+import {CHUC_NANG, STATUS} from "../../../../../../constants/status";
 import {
   DanhSachHangDtqgService
 } from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuathangkhoidm/DanhSachHangDtqg.service";
@@ -100,11 +100,7 @@ export class CapNhatDanhSachHangDtqgTheoChiDaoCpComponent extends Base2Component
           if (res.msg == MESSAGE.SUCCESS) {
             this.selectedItem = res.data;
             this.formData.patchValue(res.data);
-            this.formData.value.tongHopDtl.forEach(s => {
-              s.idVirtual = uuidv4();
-              this.expandSetString.add(s.idVirtual);
-            });
-            await this.buildTableView(this.formData.value.tongHopDtl);
+            this.dataTable = this.selectedItem.xhXkDsHangDtqgDtl;
           }
         })
         .catch((e) => {
@@ -112,16 +108,20 @@ export class CapNhatDanhSachHangDtqgTheoChiDaoCpComponent extends Base2Component
           this.spinner.hide();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         });
+    } else {
+      if (this.selectedItem && this.selectedItem.xhXkDsHangDtqgDtl) {
+        this.dataTable = this.selectedItem.xhXkDsHangDtqgDtl;
+      }
     }
   }
 
   async timKiem() {
     await this.search();
-    this.dataTable.forEach(s => {
-      s.idVirtual = uuidv4();
-      this.expandSetString.add(s.idVirtual);
-    });
-    await this.buildTableView();
+    // this.dataTable.forEach(s => {
+    //   s.idVirtual = uuidv4();
+    //   this.expandSetString.add(s.idVirtual);
+    // });
+    // await this.buildTableView();
   }
 
   async loadDsDonVi() {
@@ -229,7 +229,7 @@ export class CapNhatDanhSachHangDtqgTheoChiDaoCpComponent extends Base2Component
           this.modal.confirm({
             nzClosable: false,
             nzTitle: 'Xác nhận',
-            nzContent: 'Bạn có chắc muốn gửi duyệt bản tổng hợp này ?',
+            nzContent: 'Bạn có chắc muốn gửi duyệt bản danh sách này ?',
             nzOkText: 'Đồng ý',
             nzCancelText: 'Không',
             nzOkDanger: true,
@@ -237,13 +237,24 @@ export class CapNhatDanhSachHangDtqgTheoChiDaoCpComponent extends Base2Component
             nzOnOk: async () => {
               await this.spinner.show();
               try {
+                let trangThai = this.STATUS.CHO_DUYET_LDV;
+                switch (this.selectedItem.trangThai) {
+                  case STATUS.DU_THAO: {
+                    trangThai = this.STATUS.CHO_DUYET_LDV;
+                    break;
+                  }
+                  case STATUS.CHO_DUYET_LDV: {
+                    trangThai = this.STATUS.DA_DUYET_LDV;
+                    break;
+                  }
+                }
                 let body = {
                   id: this.selectedItem.id,
-                  trangThai: this.STATUS.GUI_DUYET,
+                  trangThai: trangThai,
                 }
                 let res = await this.danhSachHangDtqgService.approve(body);
                 if (res.msg == MESSAGE.SUCCESS) {
-                  this.notification.success(MESSAGE.NOTIFICATION, 'Gửi duyệt tổng hợp thành công.');
+                  this.notification.success(MESSAGE.NOTIFICATION, 'Gửi duyệt danh sách thành công.');
                   this.step.emit({step: 1});
                 } else {
                   this.notification.error(MESSAGE.ERROR, res.msg);
