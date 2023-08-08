@@ -168,16 +168,25 @@ export class BaoCao02Component implements OnInit {
         }
 
         if (this.lstCtietBcao?.length == 0) {
-            Vp.DANH_MUC_02.forEach(item => {
-                this.lstCtietBcao.push(new ItemData({
-                    id: uuid.v4() + 'FE',
-                    maVtu: item.ma,
-                    stt: item.ma,
-                    tenVtu: item.ten,
-                }))
-            })
+            if (!this.dataInfo.dotBcao) {
+                this.dataInfo.luyKes.lstCtietBcaos.forEach(item => {
+                    this.lstCtietBcao.push(new ItemData({
+                        ...item,
+                        id: uuid.v4() + 'FE',
+                    }))
+                })
+            } else {
+                Vp.DANH_MUC_02.forEach(item => {
+                    this.lstCtietBcao.push(new ItemData({
+                        id: uuid.v4() + 'FE',
+                        maVtu: item.ma,
+                        stt: item.ma,
+                        tenVtu: item.ten,
+                    }))
+                })
+            }
         }
-        if (this.dataInfo.isSynth && this.formDetail.trangThai == Status.NEW) {
+        if ((this.dataInfo.isSynth || !this.dataInfo.dotBcao) && this.formDetail.trangThai == Status.NEW) {
             this.setIndex();
         }
         this.lstCtietBcao = Table.sortByIndex(this.lstCtietBcao);
