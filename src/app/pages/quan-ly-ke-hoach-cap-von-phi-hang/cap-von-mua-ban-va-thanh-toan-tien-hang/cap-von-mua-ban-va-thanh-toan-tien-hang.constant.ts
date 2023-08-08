@@ -63,6 +63,7 @@ export class BtnStatus {
     pass?: boolean = true;                             // trang thai cua nut duyet, tu choi duyet
     approve?: boolean = true;                          // trang thai cua nut phe duyet, tu choi phe duyet
     accept?: boolean = true;                           // trang thai cua nut tiep nhan, tu choi tiep nhan
+    export?: boolean = true;
 }
 
 export class CapUng {

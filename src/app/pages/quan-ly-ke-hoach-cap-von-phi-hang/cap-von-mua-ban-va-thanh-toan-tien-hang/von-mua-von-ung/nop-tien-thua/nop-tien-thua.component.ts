@@ -12,6 +12,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { BtnStatus, Report, TienThua } from '../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
+import * as XLSX from 'xlsx';
 
 @Component({
     selector: 'app-nop-tien-thua',
@@ -156,11 +157,13 @@ export class NopTienThuaComponent implements OnInit {
             this.status.submit = Status.check('submit', this.baoCao.trangThaiDvct) && this.userService.isAccessPermisson(Roles.CVMB.SUBMIT_NTT_GN);
             this.status.pass = Status.check('pass', this.baoCao.trangThaiDvct) && this.userService.isAccessPermisson(Roles.CVMB.PASS_NTT_GN);
             this.status.approve = Status.check('approve', this.baoCao.trangThaiDvct) && this.userService.isAccessPermisson(Roles.CVMB.APPROVE_NTT_GN);
+            this.status.export = this.baoCao.trangThaiDvct == Status.TT_07 && this.userService.isAccessPermisson(Roles.CVMB.EXPORT_NTT_GN);
         } else {
             this.status.save = Status.check('saveWHist', this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.CVMB.EDIT_NTT);
             this.status.submit = Status.check('submit', this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.CVMB.SUBMIT_NTT) && !(!this.baoCao.id);
             this.status.pass = Status.check('pass', this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.CVMB.PASS_NTT);
             this.status.approve = Status.check('approve', this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.CVMB.APPROVE_NTT);
+            this.status.export = this.baoCao.trangThai == Status.TT_07 && this.userService.isAccessPermisson(Roles.CVMB.EXPORT_NTT);
         }
         this.scrollX = this.status.save ? Table.tableWidth(200, 21, 1, 60) : Table.tableWidth(200, 21, 1, 0);
     }
@@ -369,5 +372,125 @@ export class NopTienThuaComponent implements OnInit {
 
     statusClass() {
         return this.isParent ? Status.statusClass(this.baoCao.trangThaiDvct) : Status.statusClass(this.baoCao.trangThai);
+    }
+
+    exportToExcel() {
+        let header = [];
+        let filterData = [];
+        if (this.capDvi != 3) {
+            header = [
+                { t: 0, b: 6, l: 0, r: 23, val: null },
+                { t: 0, b: 0, l: 0, r: 8, val: 'Nộp tiền thừa lên đơn vị cấp trên' },
+                { t: 4, b: 6, l: 0, r: 0, val: 'STT' },
+                { t: 4, b: 6, l: 1, r: 1, val: 'Hàng DTQG' },
+                { t: 4, b: 5, l: 2, r: 4, val: 'Nhận' },
+                { t: 6, b: 6, l: 2, r: 2, val: 'Tổng vốn ứng' },
+                { t: 6, b: 6, l: 3, r: 3, val: 'Tổng vốn cấp' },
+                { t: 6, b: 6, l: 4, r: 4, val: 'Tổng vốn' },
+                { t: 4, b: 4, l: 5, r: 13, val: 'Chi' },
+                { t: 5, b: 5, l: 5, r: 7, val: 'Giao cho đơn vị cấp dưới' },
+                { t: 6, b: 6, l: 5, r: 5, val: 'Tổng cấp ứng' },
+                { t: 6, b: 6, l: 6, r: 6, val: 'Tổng cấp vốn' },
+                { t: 6, b: 6, l: 7, r: 7, val: 'Tổng cấp' },
+                { t: 5, b: 5, l: 8, r: 10, val: 'Tổng thanh toán cho khách hàng' },
+                { t: 6, b: 6, l: 8, r: 8, val: 'Tổng vốn ứng' },
+                { t: 6, b: 6, l: 9, r: 9, val: 'Tổng vốn vốn' },
+                { t: 6, b: 6, l: 10, r: 10, val: 'Tổng vốn' },
+                { t: 5, b: 5, l: 11, r: 13, val: 'Số dư' },
+                { t: 6, b: 6, l: 11, r: 11, val: 'Tổng vốn ứng' },
+                { t: 6, b: 6, l: 12, r: 12, val: 'Tổng vốn vốn' },
+                { t: 6, b: 6, l: 13, r: 13, val: 'Tổng vốn' },
+                { t: 4, b: 4, l: 14, r: 22, val: 'Nộp lên đơn vị cấp trên' },
+                { t: 5, b: 5, l: 14, r: 16, val: 'Số đã nộp lên đơn vị cấp trên (lũy kế đến trước lần nộp này)' },
+                { t: 6, b: 6, l: 14, r: 14, val: 'Vốn ứng' },
+                { t: 6, b: 6, l: 15, r: 15, val: 'Vốn cấp' },
+                { t: 6, b: 6, l: 16, r: 16, val: 'Tổng vốn' },
+                { t: 5, b: 5, l: 17, r: 20, val: 'Nộp đợt ' + this.baoCao.dot.toString() },
+                { t: 6, b: 6, l: 17, r: 17, val: 'Ủy nhiệm chi ngày' },
+                { t: 6, b: 6, l: 18, r: 18, val: 'Vốn ứng' },
+                { t: 6, b: 6, l: 19, r: 19, val: 'Vốn cấp' },
+                { t: 6, b: 6, l: 20, r: 20, val: 'Tổng vốn' },
+                { t: 5, b: 6, l: 21, r: 21, val: 'Lũy kế sau lần nộp này' },
+                { t: 5, b: 6, l: 22, r: 22, val: 'Số còn phải nộp' },
+                { t: 4, b: 6, l: 23, r: 23, val: 'Ghi chú' },
+            ]
+            const fieldOrder = ['stt', 'tenHangDtqg', 'nhanVonUng', 'nhanVonCap', 'nhanTong', 'giaoCapUng', 'giaoCapVon', 'giaoTong', 'ttVonUng', 'ttVonCap', 'ttTong',
+                'duVonUng', 'duVonCap', 'duTong', 'daNopVonUng', 'daNopVonCap', 'daNopTong', 'nopUncNgay', 'nopVonUng', 'nopVonCap', 'nopTong', 'lkSauLanNay', 'soConPhaiNop', 'ghiChu'];
+            filterData = this.lstCtiets.map((item, index) => {
+                const row: any = {};
+                fieldOrder.forEach(field => {
+                    switch (field) {
+                        case 'stt':
+                            row[field] = index;
+                            break;
+                        case 'nopUncNgay':
+                            row[field] = Utils.fmtDate(item[field]);
+                            break;
+                        default:
+                            row[field] = item[field];
+                            break;
+                    }
+                })
+                return row;
+            })
+        } else {
+            header = [
+                { t: 0, b: 6, l: 0, r: 23, val: null },
+                { t: 0, b: 0, l: 0, r: 8, val: 'Nộp tiền thừa lên đơn vị cấp trên' },
+                { t: 4, b: 6, l: 0, r: 0, val: 'STT' },
+                { t: 4, b: 6, l: 1, r: 1, val: 'Hàng DTQG' },
+                { t: 4, b: 5, l: 2, r: 4, val: 'Nhận' },
+                { t: 6, b: 6, l: 2, r: 2, val: 'Tổng vốn ứng' },
+                { t: 6, b: 6, l: 3, r: 3, val: 'Tổng vốn cấp' },
+                { t: 6, b: 6, l: 4, r: 4, val: 'Tổng vốn' },
+                { t: 4, b: 4, l: 5, r: 10, val: 'Chi' },
+                { t: 5, b: 5, l: 5, r: 7, val: 'Tổng thanh toán cho khách hàng' },
+                { t: 6, b: 6, l: 5, r: 5, val: 'Tổng vốn ứng' },
+                { t: 6, b: 6, l: 6, r: 6, val: 'Tổng vốn vốn' },
+                { t: 6, b: 6, l: 7, r: 7, val: 'Tổng vốn' },
+                { t: 5, b: 5, l: 8, r: 10, val: 'Số dư' },
+                { t: 6, b: 6, l: 8, r: 8, val: 'Tổng vốn ứng' },
+                { t: 6, b: 6, l: 9, r: 9, val: 'Tổng vốn vốn' },
+                { t: 6, b: 6, l: 10, r: 10, val: 'Tổng vốn' },
+                { t: 4, b: 4, l: 11, r: 19, val: 'Nộp lên đơn vị cấp trên' },
+                { t: 5, b: 5, l: 11, r: 13, val: 'Số đã nộp lên đơn vị cấp trên (lũy kế đến trước lần nộp này)' },
+                { t: 6, b: 6, l: 11, r: 11, val: 'Vốn ứng' },
+                { t: 6, b: 6, l: 12, r: 12, val: 'Vốn cấp' },
+                { t: 6, b: 6, l: 13, r: 13, val: 'Tổng vốn' },
+                { t: 5, b: 5, l: 14, r: 17, val: 'Nộp đợt ' + this.baoCao.dot.toString() },
+                { t: 6, b: 6, l: 14, r: 14, val: 'Ủy nhiệm chi ngày' },
+                { t: 6, b: 6, l: 15, r: 15, val: 'Vốn ứng' },
+                { t: 6, b: 6, l: 16, r: 16, val: 'Vốn cấp' },
+                { t: 6, b: 6, l: 17, r: 17, val: 'Tổng vốn' },
+                { t: 5, b: 6, l: 18, r: 18, val: 'Lũy kế sau lần nộp này' },
+                { t: 5, b: 6, l: 19, r: 19, val: 'Số còn phải nộp' },
+                { t: 4, b: 6, l: 20, r: 20, val: 'Ghi chú' },
+            ]
+            const fieldOrder = ['stt', 'tenHangDtqg', 'nhanVonUng', 'nhanVonCap', 'nhanTong', 'ttVonUng', 'ttVonCap', 'ttTong', 'duVonUng', 'duVonCap', 'duTong',
+                'daNopVonUng', 'daNopVonCap', 'daNopTong', 'nopUncNgay', 'nopVonUng', 'nopVonCap', 'nopTong', 'lkSauLanNay', 'soConPhaiNop', 'ghiChu'];
+            filterData = this.lstCtiets.map((item, index) => {
+                const row: any = {};
+                fieldOrder.forEach(field => {
+                    switch (field) {
+                        case 'stt':
+                            row[field] = index;
+                            break;
+                        case 'nopUncNgay':
+                            row[field] = Utils.fmtDate(item[field]);
+                            break;
+                        default:
+                            row[field] = item[field];
+                            break;
+                    }
+                })
+                return row;
+            })
+        }
+
+        const workbook = XLSX.utils.book_new();
+        const worksheet = Table.initExcel(header);
+        XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
+        XLSX.writeFile(workbook, 'Nop_tien_thua.xlsx');
     }
 }
