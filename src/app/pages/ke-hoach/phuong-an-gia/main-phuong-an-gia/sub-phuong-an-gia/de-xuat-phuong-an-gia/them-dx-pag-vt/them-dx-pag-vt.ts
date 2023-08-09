@@ -102,7 +102,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
         ghiChu: [],
         noiDung: [null],
         soDeXuatDc: [null],
-        lanDeXuat: [1, Validators.required],
+        lanDeXuat: [1],
         lyDoTuChoi: [],
         qdCtKhNam: [null],
         soCanCu: [null],
@@ -707,8 +707,23 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
   }
 
 
+  setValidator() {
+    this.formData.controls["namKeHoach"].setValidators([Validators.required]);
+    this.formData.controls["soDeXuat"].setValidators([Validators.required]);
+    this.formData.controls["loaiVthh"].setValidators([Validators.required]);
+    this.formData.controls["ngayKy"].setValidators([Validators.required]);
+    this.formData.controls["loaiGia"].setValidators([Validators.required]);
+    this.formData.controls["maPphapXdg"].setValidators([Validators.required]);
+    if (this.formData.value.loaiGia == 'LG01' || this.formData.value.loaiGia == 'LG03') {
+      this.formData.controls["vat"].setValidators([Validators.required]);
+    }
+  }
+
+
   async save(isGuiDuyet?) {
     this.spinner.show();
+    this.helperService.removeValidators(this.formData);
+    this.setValidator()
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR)

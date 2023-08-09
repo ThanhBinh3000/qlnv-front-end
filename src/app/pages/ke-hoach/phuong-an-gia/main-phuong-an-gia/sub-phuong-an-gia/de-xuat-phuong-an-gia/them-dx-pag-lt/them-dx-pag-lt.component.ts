@@ -172,7 +172,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
     this.loadDsVthh();
     this.loadDsDxCanSua();
     this.loadDsChiCuc();
-    this.getDataChiTieu();
+    this.getDataChiTieu(this.formData.value.namKeHoach);
     await this.getDataDetail(this.idInput)
     this.spinner.hide();
   }
@@ -285,9 +285,9 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
     }
   }
 
-  async getDataChiTieu() {
+  async getDataChiTieu(namKh) {
     if (!this.idInput) {
-      let res = await this.chiTieuKeHoachNamCapTongCucService.loadThongTinChiTieuKeHoachCucNam(+this.formData.get('namKeHoach').value)
+      let res = await this.chiTieuKeHoachNamCapTongCucService.loadThongTinChiTieuKeHoachCucNam(+namKh)
       if (res.msg == MESSAGE.SUCCESS) {
         const dataChiTieu = res.data;
         if (dataChiTieu) {
@@ -432,7 +432,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
   async save(isGuiDuyet?) {
     this.spinner.show();
     this.helperService.removeValidators(this.formData);
-    this.setValidator(isGuiDuyet)
+    this.setValidator()
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR)
@@ -484,13 +484,16 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
     this.spinner.hide();
   }
 
-  setValidator(isGuiDuyet) {
+  setValidator() {
       this.formData.controls["namKeHoach"].setValidators([Validators.required]);
       this.formData.controls["soDeXuat"].setValidators([Validators.required]);
       this.formData.controls["loaiVthh"].setValidators([Validators.required]);
       this.formData.controls["ngayKy"].setValidators([Validators.required]);
       this.formData.controls["loaiGia"].setValidators([Validators.required]);
       this.formData.controls["maPphapXdg"].setValidators([Validators.required]);
+      if (this.formData.value.loaiGia == 'LG01' || this.formData.value.loaiGia == 'LG03') {
+        this.formData.controls["vat"].setValidators([Validators.required]);
+      }
   }
 
   async pheDuyet() {
@@ -822,6 +825,10 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
         item.giaDnVat = item.giaDn + item.giaDn * this.formData.value.vat
       }
     })
+  }
+
+  changeNamKh($event) {
+    this.getDataChiTieu($event);
   }
 }
 
