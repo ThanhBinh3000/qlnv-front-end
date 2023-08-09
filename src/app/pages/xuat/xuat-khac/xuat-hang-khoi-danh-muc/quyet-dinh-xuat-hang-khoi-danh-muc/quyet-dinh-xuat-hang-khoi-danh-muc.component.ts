@@ -38,12 +38,13 @@ export class QuyetDinhXuatHangKhoiDanhMucComponent extends Base2Component implem
               private quyetDinhXuatHangKhoiDmService: QuyetDinhXuatHangKhoiDmService) {
     super(httpClient, storageService, notification, spinner, modal, quyetDinhXuatHangKhoiDmService);
     this.formData = this.fb.group({
-      namKeHoach: [],
       trichYeu: [],
-      soQuyetDinh: [],
-      ngayKyQdTu: [],
-      ngayKyQdDen: [],
-    })
+      soQd: [],
+      ngayKyTu: [],
+      ngayKyDen: [],
+      ngayHieuLucTu: [],
+      ngayHieuLucDen: [],
+    });
   }
 
   async ngOnInit(): Promise<void> {
