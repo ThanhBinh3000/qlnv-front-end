@@ -13,6 +13,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { BtnStatus, CapVon, Cvnc, Doc, Report } from '../de-nghi-cap-von-cac-don-vi.constant';
+import * as XLSX from 'xlsx';
 
 @Component({
     selector: 'app-de-nghi-cap-von-quyet-dinh-don-gia-mua',
@@ -180,12 +181,17 @@ export class DeNghiCapVonQuyetDinhDonGiaMuaComponent implements OnInit {
     getStatusButton() {
         const isChild = this.baoCao.maDvi == this.userInfo?.MA_DVI;
         this.isParent = this.baoCao.maDviCha == this.userInfo?.MA_DVI;
+
+        this.status.pass = Status.check('pass', this.baoCao.trangThai) && this.userService.isTongCuc();
+        this.status.approve = Status.check('approve', this.baoCao.trangThai) || (this.baoCao.trangThai == Status.TT_02 && !this.userService.isTongCuc());
+
         this.status.save = Status.check('saveWHist', this.baoCao.trangThai) && isChild && this.userService.isAccessPermisson(Roles.CVNC.EDIT_DN);
         this.status.submit = Status.check('submit', this.baoCao.trangThai) && isChild && this.userService.isAccessPermisson(Roles.CVNC.SUBMIT_DN) && !(!this.baoCao.id);
-        this.status.pass = Status.check('pass', this.baoCao.trangThai) && isChild && this.userService.isAccessPermisson(Roles.CVNC.PASS_DN);
-        this.status.approve = Status.check('approve', this.baoCao.trangThai) && isChild && this.userService.isAccessPermisson(Roles.CVNC.APPROVE_DN);
+        this.status.pass = this.status.pass && isChild && this.userService.isAccessPermisson(Roles.CVNC.PASS_DN);
+        this.status.approve = this.status.approve && isChild && this.userService.isAccessPermisson(Roles.CVNC.APPROVE_DN);
         this.status.accept = Status.check('accept', this.baoCao.trangThai) && this.isParent && this.userService.isAccessPermisson(Roles.CVNC.ACCEPT_DN);
-        this.status.export = Status.check('export', this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.CVNC.EXPORT_DN) && (isChild || this.isParent);
+        this.status.export = this.baoCao.trangThai == Status.TT_09 || (this.baoCao.trangThai == Status.TT_07 && isChild && this.userService.isTongCuc());
+        this.status.export = this.status.export && this.userService.isAccessPermisson(Roles.CVNC.EXPORT_DN) && (isChild || this.isParent);
         this.scrollX = Table.tableWidth(350, 10, 0, 0);
     }
 
@@ -330,7 +336,7 @@ export class DeNghiCapVonQuyetDinhDonGiaMuaComponent implements OnInit {
                 }
             }
         }
-        if (!request.congVan.fileUrl) {
+        if (!request.congVan?.fileUrl) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
             return;
         }
@@ -385,5 +391,41 @@ export class DeNghiCapVonQuyetDinhDonGiaMuaComponent implements OnInit {
             doc = this.baoCao.lstFiles.find(element => element?.id == id);
         }
         await this.quanLyVonPhiService.downFile(file, doc);
+    }
+
+    exportToExcel() {
+        const workbook = XLSX.utils.book_new();
+        const header = [
+            { t: 0, b: 5, l: 0, r: 11, val: null },
+            { t: 0, b: 0, l: 0, r: 8, val: "Đề nghị cấp vốn" },
+            { t: 1, b: 1, l: 0, r: 8, val: Utils.getDocName(this.baoCao.congVan.fileName, this.baoCao.ngayCongVan, this.baoCao.tenDvi) },
+            { t: 4, b: 5, l: 0, r: 0, val: 'STT' },
+            { t: 4, b: 5, l: 1, r: 1, val: 'Đơn vị' },
+            { t: 4, b: 4, l: 2, r: 3, val: 'Số lượng' },
+            { t: 5, b: 5, l: 2, r: 2, val: 'Kế hoạch' },
+            { t: 5, b: 5, l: 3, r: 3, val: 'Thực hiện' },
+            { t: 4, b: 5, l: 4, r: 4, val: 'Đơn giá (theo quyết định)' },
+            { t: 4, b: 5, l: 5, r: 5, val: 'Giá trị thực hiện' },
+            { t: 4, b: 5, l: 6, r: 6, val: 'Dự toán đã giao' },
+            { t: 4, b: 4, l: 7, r: 9, val: 'Lũy kế vốn cấp đến thời điểm báo cáo' },
+            { t: 5, b: 5, l: 7, r: 7, val: 'Tổng cấp ứng' },
+            { t: 5, b: 5, l: 8, r: 8, val: 'Tổng cấp vốn' },
+            { t: 5, b: 5, l: 9, r: 9, val: 'Tổng cộng' },
+            { t: 4, b: 5, l: 10, r: 10, val: 'Tổng vốn và dự toán đã cấp' },
+            { t: 4, b: 5, l: 11, r: 11, val: 'Vốn đề nghị cấp lần này = Giá trị theo kế hoạch - Lũy kế vốn cấp' },
+        ]
+        const fieldOrder = ['stt', 'tenDvi', 'slKeHoach', 'slThucHien', 'donGia', 'gtThucHien', 'dtoanDaGiao', 'lkUng', 'lkCap',
+            'lkCong', 'tongVonVaDtoanDaCap', 'vonDnCapLanNay'];
+        const filterData = this.lstCtiets.map(item => {
+            const row: any = {};
+            fieldOrder.forEach(field => {
+                row[field] = field == 'stt' ? this.getIndex(item) : item[field];
+            })
+            return row;
+        })
+        const worksheetHD = Table.initExcel(header);
+        XLSX.utils.sheet_add_json(worksheetHD, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
+        XLSX.utils.book_append_sheet(workbook, worksheetHD, 'Đề nghị cấp vốn');
+        XLSX.writeFile(workbook, this.baoCao.maDnghi + '.xlsx');
     }
 }

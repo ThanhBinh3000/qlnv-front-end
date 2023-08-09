@@ -13,6 +13,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { BtnStatus, CapVon, Cvnc, Doc, Report } from '../de-nghi-cap-von-cac-don-vi.constant';
+import * as XLSX from 'xlsx';
 
 @Component({
     selector: 'app-de-nghi-cap-von-theo-hop-dong-trung-thau',
@@ -183,26 +184,28 @@ export class DeNghiCapVonTheoHopDongTrungThauComponent implements OnInit {
     getStatusButton() {
         const isChild = this.baoCao.maDvi == this.userInfo?.MA_DVI;
         this.isParent = this.baoCao.maDviCha == this.userInfo?.MA_DVI;
+
         this.status.save = Status.check('saveWHist', this.baoCao.trangThai) && isChild;
         this.status.submit = Status.check('submit', this.baoCao.trangThai) && isChild && !(!this.baoCao.id);
-        this.status.pass = Status.check('pass', this.baoCao.trangThai) && isChild;
-        this.status.approve = Status.check('approve', this.baoCao.trangThai) && isChild;
+        this.status.pass = Status.check('pass', this.baoCao.trangThai) && this.userService.isTongCuc() && this.baoCao.loaiDnghi != Cvnc.VTU;
+        this.status.approve = Status.check('approve', this.baoCao.trangThai) || (this.baoCao.trangThai == Status.TT_02 && (!this.userService.isTongCuc() || this.baoCao.loaiDnghi == Cvnc.VTU));
         this.status.accept = Status.check('accept', this.baoCao.trangThai) && this.isParent;
-        this.status.export = Status.check('export', this.baoCao.trangThai) && (this.isParent || isChild);
+        this.status.export = this.baoCao.trangThai == Status.TT_09 || (this.baoCao.trangThai == Status.TT_07 && isChild && this.userService.isTongCuc());
 
         this.status.save = this.status.save && this.userService.isAccessPermisson(Roles.CVNC.EDIT_DN);
         this.status.submit = this.status.submit && this.userService.isAccessPermisson(Roles.CVNC.SUBMIT_DN);
-        this.status.pass = this.status.pass && this.userService.isAccessPermisson(Roles.CVNC.PASS_DN);
-        this.status.approve = this.status.approve && this.userService.isAccessPermisson(Roles.CVNC.APPROVE_DN);
+        this.status.pass = this.status.pass && this.userService.isAccessPermisson(Roles.CVNC.PASS_DN) && isChild;
+        this.status.approve = this.status.approve && this.userService.isAccessPermisson(Roles.CVNC.APPROVE_DN) && isChild;
         this.status.accept = this.status.accept && this.userService.isAccessPermisson(Roles.CVNC.ACCEPT_DN);
-        this.status.export = this.status.export && this.userService.isAccessPermisson(Roles.CVNC.EXPORT_DN);
-        this.isSynth = this.userService.isTongCuc() && this.baoCao.loaiDnghi != Cvnc.VTU;
+        this.status.export = this.status.export && this.userService.isAccessPermisson(Roles.CVNC.EXPORT_DN) && (isChild || this.isParent);
+
+        this.isSynth = isChild && this.userService.isTongCuc() && this.baoCao.loaiDnghi != Cvnc.VTU;
         if (this.baoCao.loaiDnghi != Cvnc.VTU) {
             this.scrollHD = Table.tableWidth(500, 7, 1, 0);
             this.scrollCV = Table.tableWidth(300, 16, 1, 0);
         } else {
             this.scrollHD = Table.tableWidth(500, 9, 1, 0);
-            this.scrollCV = Table.tableWidth(0, 18, 1, 0);
+            this.scrollCV = Table.tableWidth(300, 18, 1, 0);
         }
     }
 
@@ -339,7 +342,7 @@ export class DeNghiCapVonTheoHopDongTrungThauComponent implements OnInit {
                 }
             }
         }
-        if (!request.congVan.fileUrl) {
+        if (!request.congVan?.fileUrl) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
             return;
         }
@@ -430,5 +433,128 @@ export class DeNghiCapVonTheoHopDongTrungThauComponent implements OnInit {
             doc = this.baoCao.lstFiles.find(element => element?.id == id);
         }
         await this.quanLyVonPhiService.downFile(file, doc);
+    }
+
+    exportToExcel() {
+        const workbook = XLSX.utils.book_new();
+        // export sheet hợp đồng
+        let headerHD = [];
+        let fieldHD = []
+        if (this.baoCao.loaiDnghi == Cvnc.VTU) {
+            headerHD = [
+                { t: 0, b: 5, l: 0, r: 10, val: null },
+                { t: 0, b: 0, l: 0, r: 8, val: "Hợp đồng" },
+                { t: 1, b: 1, l: 0, r: 8, val: Utils.getDocName(this.baoCao.congVan.fileName, this.baoCao.ngayCongVan, this.baoCao.tenDvi) },
+                { t: 4, b: 5, l: 0, r: 0, val: 'Tên khách hàng' },
+                { t: 4, b: 5, l: 1, r: 1, val: 'Quyết định phê duyệt kết quả lựa chọn nhà thầu / Hợp đồng' },
+                { t: 4, b: 4, l: 2, r: 4, val: 'Số lượng' },
+                { t: 5, b: 5, l: 2, r: 2, val: 'Kế hoạch' },
+                { t: 5, b: 5, l: 3, r: 3, val: 'Hợp đồng' },
+                { t: 5, b: 5, l: 4, r: 4, val: 'Thực hiện' },
+                { t: 4, b: 5, l: 5, r: 5, val: 'Đơn giá (đồng / kg)' },
+                { t: 4, b: 5, l: 6, r: 6, val: 'Giá trị hợp đồng (đã bao gồm VAT) (đồng)' },
+                { t: 4, b: 5, l: 7, r: 7, val: 'Giá trị thực hiện' },
+                { t: 4, b: 5, l: 8, r: 8, val: 'Vi phạm hợp đồng' },
+                { t: 4, b: 4, l: 9, r: 10, val: 'Thanh lý hợp đồng' },
+                { t: 5, b: 5, l: 9, r: 9, val: 'Số lượng' },
+                { t: 5, b: 5, l: 10, r: 10, val: 'Thành tiền' },
+            ]
+            fieldHD = ['tenKhachHang', 'qdPheDuyet', 'slKeHoach', 'slHopDong', 'slThucHien', 'donGia', 'gtHopDong', 'gtThucHien', 'phatViPham',
+                'tlSoluong', 'tlThanhTien'];
+        } else {
+            headerHD = [
+                { t: 0, b: 5, l: 0, r: 8, val: null },
+                { t: 0, b: 0, l: 0, r: 8, val: "Hợp đồng" },
+                { t: 1, b: 1, l: 0, r: 8, val: Utils.getDocName(this.baoCao.congVan.fileName, this.baoCao.ngayCongVan, this.baoCao.tenDvi) },
+                { t: 4, b: 5, l: 0, r: 0, val: 'Đơn vị' },
+                { t: 4, b: 5, l: 1, r: 1, val: 'Quyết định phê duyệt kết quả lựa chọn nhà thầu / Hợp đồng' },
+                { t: 4, b: 4, l: 2, r: 3, val: 'Số lượng' },
+                { t: 5, b: 5, l: 2, r: 2, val: 'Kế hoạch' },
+                { t: 5, b: 5, l: 3, r: 3, val: 'Hợp đồng' },
+                { t: 4, b: 5, l: 4, r: 4, val: 'Đơn giá (đồng / kg)' },
+                { t: 4, b: 5, l: 5, r: 5, val: 'Giá trị hợp đồng (đã bao gồm VAT) (đồng)' },
+                { t: 4, b: 5, l: 6, r: 6, val: 'Vi phạm hợp đồng' },
+                { t: 4, b: 4, l: 7, r: 8, val: 'Thanh lý hợp đồng' },
+                { t: 5, b: 5, l: 7, r: 7, val: 'Số lượng' },
+                { t: 5, b: 5, l: 8, r: 8, val: 'Thành tiền' },
+            ]
+            fieldHD = ['tenDvi', 'qdPheDuyet', 'slKeHoach', 'slHopDong', 'donGia', 'gtHopDong', 'phatViPham',
+                'tlSoluong', 'tlThanhTien', 'congVan'];
+        }
+        const filterDataHD = this.lstCtiets.filter(e => e.level > (this.isSynth ? 1 : 0)).map(item => {
+            const row: any = {};
+            fieldHD.forEach(field => {
+                row[field] = item[field];
+            })
+            return row;
+        })
+        const worksheetHD = Table.initExcel(headerHD);
+        XLSX.utils.sheet_add_json(worksheetHD, filterDataHD, { skipHeader: true, origin: Table.coo(headerHD[0].l, headerHD[0].b + 1) })
+        XLSX.utils.book_append_sheet(workbook, worksheetHD, 'Hợp đồng');
+        // export sheet cap von
+        let header = [];
+        let fieldOrder = [];
+        if (this.baoCao.loaiDnghi == Cvnc.VTU) {
+            header = [
+                { t: 0, b: 5, l: 0, r: 14, val: null },
+                { t: 0, b: 0, l: 0, r: 8, val: "Đề nghị cấp vốn" },
+                { t: 1, b: 1, l: 0, r: 8, val: Utils.getDocName(this.baoCao.congVan.fileName, this.baoCao.ngayCongVan, this.baoCao.tenDvi) },
+                { t: 4, b: 5, l: 0, r: 0, val: 'Đơn vị' },
+                { t: 4, b: 4, l: 1, r: 3, val: 'Số lượng' },
+                { t: 5, b: 5, l: 1, r: 1, val: 'Kế hoạch' },
+                { t: 5, b: 5, l: 2, r: 2, val: 'Hợp đồng' },
+                { t: 5, b: 5, l: 3, r: 3, val: 'Thực hiện' },
+                { t: 4, b: 5, l: 4, r: 4, val: 'Giá trị hợp đồng (đã bao gồm VAT) (đồng)' },
+                { t: 4, b: 5, l: 5, r: 5, val: 'Giá trị thực hiện' },
+                { t: 4, b: 5, l: 6, r: 6, val: 'Vi phạm hợp đồng' },
+                { t: 4, b: 4, l: 7, r: 8, val: 'Thanh lý hợp đồng' },
+                { t: 5, b: 5, l: 7, r: 7, val: 'Số lượng' },
+                { t: 5, b: 5, l: 8, r: 8, val: 'Thành tiền' },
+                { t: 4, b: 4, l: 9, r: 11, val: 'Lũy kế vốn cấp đến thời điểm báo cáo' },
+                { t: 5, b: 5, l: 9, r: 9, val: 'Vốn ứng' },
+                { t: 5, b: 5, l: 10, r: 10, val: 'Vốn cấp' },
+                { t: 5, b: 5, l: 11, r: 11, val: 'Cộng' },
+                { t: 4, b: 5, l: 12, r: 12, val: 'Dự toán đã giao' },
+                { t: 4, b: 5, l: 13, r: 13, val: 'Tổng vốn và dự toán đã cấp đến thời điểm báo cáo' },
+                { t: 4, b: 5, l: 14, r: 14, val: 'Vốn đề nghị cấp lần này' },
+            ]
+            fieldOrder = ['tenDvi', 'slKeHoach', 'slHopDong', 'slThucHien', 'gtHopDong', 'gtThucHien', 'phatViPham', 'tlSoluong', 'tlThanhTien', 'lkUng', 'lkCap', 'lkCong',
+                'dtoanDaGiao', 'tongVonVaDtoanDaCap', 'vonDnCapLanNay'];
+        } else {
+            header = [
+                { t: 0, b: 5, l: 0, r: 12, val: null },
+                { t: 0, b: 0, l: 0, r: 8, val: "Cấp vốn" },
+                { t: 1, b: 1, l: 0, r: 8, val: Utils.getDocName(this.baoCao.congVan.fileName, this.baoCao.ngayCongVan, this.baoCao.tenDvi) },
+                { t: 4, b: 5, l: 0, r: 0, val: 'Đơn vị' },
+                { t: 4, b: 4, l: 1, r: 2, val: 'Số lượng' },
+                { t: 5, b: 5, l: 1, r: 1, val: 'Kế hoạch' },
+                { t: 5, b: 5, l: 2, r: 2, val: 'Hợp đồng' },
+                { t: 4, b: 5, l: 3, r: 3, val: 'Giá trị hợp đồng (đã bao gồm VAT) (đồng)' },
+                { t: 4, b: 5, l: 4, r: 4, val: 'Vi phạm hợp đồng' },
+                { t: 4, b: 4, l: 5, r: 6, val: 'Thanh lý hợp đồng' },
+                { t: 5, b: 5, l: 5, r: 5, val: 'Số lượng' },
+                { t: 5, b: 5, l: 6, r: 6, val: 'Thành tiền' },
+                { t: 4, b: 4, l: 7, r: 9, val: 'Lũy kế vốn cấp đến thời điểm báo cáo' },
+                { t: 5, b: 5, l: 7, r: 7, val: 'Vốn ứng' },
+                { t: 5, b: 5, l: 8, r: 8, val: 'Vốn cấp' },
+                { t: 5, b: 5, l: 9, r: 9, val: 'Cộng' },
+                { t: 4, b: 5, l: 10, r: 10, val: 'Dự toán đã giao' },
+                { t: 4, b: 5, l: 11, r: 11, val: 'Tổng vốn và dự toán đã cấp đến thời điểm báo cáo' },
+                { t: 4, b: 5, l: 12, r: 12, val: 'Vốn đề nghị cấp lần này' },
+            ]
+            fieldOrder = ['tenDvi', 'slKeHoach', 'slHopDong', 'gtHopDong', 'phatViPham', 'tlSoluong', 'tlThanhTien', 'lkUng', 'lkCap', 'lkCong',
+                'dtoanDaGiao', 'tongVonVaDtoanDaCap', 'vonDnCapLanNay'];
+        }
+        const filterData = this.lstCtiets.filter(e => e.level < (this.isSynth ? 2 : 1)).map(item => {
+            const row: any = {};
+            fieldOrder.forEach(field => {
+                row[field] = item[field];
+            })
+            return row;
+        })
+        const worksheet = Table.initExcel(header);
+        XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Đề nghị cấp vốn');
+        XLSX.writeFile(workbook, this.baoCao.maDnghi + '.xlsx');
     }
 }
