@@ -79,6 +79,7 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
   listDanhSachTongHop: any[] = [];
   dsDxTaoQd: any;
   urlUploadFile: string = `${environment.SERVICE_API}/qlnv-core/file/upload-attachment`;
+  isQuyetDinh: boolean = false;
 
   lastBreadcrumb: string;
   userInfo: UserLogin;
@@ -833,6 +834,26 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
     } else {
       this.expandSet3.delete(id);
     }
+  }
+
+
+  async taoQdinh() {
+    // let elem = document.getElementById('mainTongCuc');
+    // let tabActive = elem.getElementsByClassName('ant-menu-item')[0];
+    // tabActive.classList.remove('ant-menu-item-selected')
+    // let setActive = elem.getElementsByClassName('ant-menu-item')[2];
+    // setActive.classList.add('ant-menu-item-selected');
+    this.isQuyetDinh = true;
+  }
+
+  showTongHop() {
+    this.loadChiTiet(this.idInput)
+    // let elem = document.getElementById('mainTongCuc');
+    // let tabActive = elem.getElementsByClassName('ant-menu-item')[2];
+    // tabActive.classList.remove('ant-menu-item-selected')
+    // let setActive = elem.getElementsByClassName('ant-menu-item')[0];
+    // setActive.classList.add('ant-menu-item-selected');
+    this.isQuyetDinh = false;
   }
 
 }
