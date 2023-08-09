@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Subject} from "rxjs";
 import {UserService} from "../../../../services/user.service";
 import {Globals} from "../../../../shared/globals";
@@ -27,11 +27,12 @@ export class XuatHangKhoiDanhMucComponent implements OnInit {
     });
   }
 
-  tabSelected: number = 0;
+  tabSelected: number = this.userService.isTongCuc() ? 0 : 2;
 
   selectTab(tab: number) {
     this.tabSelected = tab;
   }
+
   //
   // receivedTab(tab) {
   //   if (tab >= 0) {
