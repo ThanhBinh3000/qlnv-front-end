@@ -3,12 +3,11 @@ import { HttpClient } from '@angular/common/http';
 import { BaseService } from '../base.service';
 import { OldResponseData } from "../../interfaces/response";
 import { environment } from "../../../environments/environment";
-import { BaseServiceLocal } from 'src/environments/baseLocal.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class KiemTraChatLuongScService extends BaseServiceLocal {
+export class KiemTraChatLuongScService extends BaseService {
 
   constructor(public httpClient: HttpClient) {
     super(httpClient, 'sua-chua/kt-cl', '/qlnv-hang');
