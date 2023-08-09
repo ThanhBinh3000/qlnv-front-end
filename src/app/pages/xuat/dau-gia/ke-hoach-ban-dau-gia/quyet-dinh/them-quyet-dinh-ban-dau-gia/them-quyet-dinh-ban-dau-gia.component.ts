@@ -26,6 +26,7 @@ import {ChiTieuKeHoachNamCapTongCucService} from 'src/app/services/chiTieuKeHoac
 import {PREVIEW} from "src/app/constants/fileType";
 import {saveAs} from 'file-saver';
 import {QuyetDinhGiaTCDTNNService} from "../../../../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service";
+
 @Component({
   selector: 'app-them-quyet-dinh-ban-dau-gia',
   templateUrl: './them-quyet-dinh-ban-dau-gia.component.html',
@@ -231,17 +232,17 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
           soQdPd: data.soQdPd?.split('/')[0],
           namKh: this.formData.value.nam
         })
-        this.canCuPhapLy = data.canCuPhapLy ;
-        this.fileDinhKem = data.fileDinhKem  ;
+        this.canCuPhapLy = data.canCuPhapLy;
+        this.fileDinhKem = data.fileDinhKem;
       }
       if (this.userService.isCuc()) {
         this.maDviCuc = this.userInfo.MA_DVI
       }
-      if (this.maDviCuc) {
-        this.danhsachDx = data.children.filter(s => s.maDvi == this.maDviCuc)
-      } else {
-        this.danhsachDx = data.children;
-      }
+      // if (this.maDviCuc) {
+      //   this.danhsachDx = data.children.filter(s => s.maDvi == this.maDviCuc)
+      // } else {
+      this.danhsachDx = data.children;
+
       if (this.danhsachDx && this.danhsachDx.length > 0) {
         await this.showFirstRow(event, this.danhsachDx[0]);
       }
