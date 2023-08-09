@@ -319,8 +319,8 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
       if (this.listCtieuKeHoach && this.listCtieuKeHoach.length > 0) {
         if (this.pagTtChungs && this.pagTtChungs.length > 0) {
           this.pagTtChungs.forEach(pagTtChung => {
-            pagTtChung.soLuongCtieu = 0
-            pagTtChung.soLuongCtieu = '';
+            pagTtChung.soLuong = 0
+            pagTtChung.soLuongCtieu = ''
             let ctieuChiCuc = this.listCtieuKeHoach.find(ctieu => ctieu.maDonVi == pagTtChung.maChiCuc);
             if (ctieuChiCuc) {
               if ((this.formData.value.loaiGia && (this.formData.value.loaiGia == 'LG02' || this.formData.value.loaiGia == 'LG04'))) {
