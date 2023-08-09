@@ -99,7 +99,7 @@
                                             <div *ngIf="e.maDviBcao == item.maDvi">
                                                 <input class="money-input" currencyMask [(ngModel)]="e.dtoanVuTvqtDnghi"
                                                     [class]="(e.dtoanVuTvqtDnghi || e.dtoanVuTvqtDnghi === 0) && e.dtoanVuTvqtDnghi >= 0 ?'' : 'input-error-validate'"
-                                                    (ngModelChange)="changeModel(data.id)" [options]="Op.amount" />
+                                                    (ngModelChange)="changeModel(data.id)" [options]="amount1" />
                                             </div>
                                         </div>
                                     </td>

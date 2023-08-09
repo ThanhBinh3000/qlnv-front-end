@@ -39,7 +39,7 @@ export class ItemData {
     ghiChu: string;
 }
 
-export const AMOUNT1 = {
+export const amount1 = {
     allowZero: true,
     allowNegative: true,
     precision: 4,
@@ -69,7 +69,7 @@ export class PhuLuc11Component implements OnInit {
     tongDieuChinhGiam: number;
     dtoanVuTang: number;
     dtoanVuGiam: number;
-
+    amount1 = amount1;
     //danh muc
     noiDungs: any[] = DANH_MUC;
     lstCtietBcao: ItemData[] = [];

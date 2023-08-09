@@ -15,6 +15,7 @@ import * as uuid from 'uuid';
 import * as XLSX from 'xlsx';
 import { BtnStatus, Doc, Form } from '../../dieu-chinh-du-toan.constant';
 import { UserService } from 'src/app/services/user.service';
+import { CurrencyMaskInputMode } from 'ngx-currency';
 export class ItemData {
     level: any;
     checked: boolean;
@@ -38,6 +39,18 @@ export class ItemData {
     chenhLech: number;
     ykienDviCtren: string;
     ghiChu: string;
+}
+
+export const amount1 = {
+    allowZero: true,
+    allowNegative: true,
+    precision: 4,
+    prefix: '',
+    thousands: '.',
+    decimal: ',',
+    align: "left",
+    nullable: true,
+    inputMode: CurrencyMaskInputMode.NATURAL,
 }
 
 @Component({
@@ -73,7 +86,7 @@ export class PhuLuc5Component implements OnInit {
     dsDinhMucN: any[] = [];
     // listVattu: any[] = [];
     scrollX: string;
-
+    amount1 = amount1;
     //trang thai cac nut
     status: BtnStatus = new BtnStatus();
     editMoneyUnit = false;

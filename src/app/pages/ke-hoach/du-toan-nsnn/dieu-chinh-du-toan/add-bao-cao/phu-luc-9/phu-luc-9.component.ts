@@ -13,6 +13,7 @@ import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
 import * as XLSX from 'xlsx';
 import { BtnStatus, Doc, Form } from '../../dieu-chinh-du-toan.constant';
+import { CurrencyMaskInputMode } from 'ngx-currency';
 
 export class ItemData {
     level: any;
@@ -64,6 +65,18 @@ export class ItemData {
     ykienDviCtren: string;
 }
 
+export const amount1 = {
+    allowZero: true,
+    allowNegative: true,
+    precision: 4,
+    prefix: '',
+    thousands: '.',
+    decimal: ',',
+    align: "left",
+    nullable: true,
+    inputMode: CurrencyMaskInputMode.NATURAL,
+}
+
 
 
 
@@ -76,7 +89,7 @@ export class PhuLuc9Component implements OnInit {
     @Input() dataInfo;
     Op = new Operator('1');
     Utils = Utils;
-
+    amount1 = amount1;
 
     tongDieuChinhTang: number;
     tongDieuChinhGiam: number;
