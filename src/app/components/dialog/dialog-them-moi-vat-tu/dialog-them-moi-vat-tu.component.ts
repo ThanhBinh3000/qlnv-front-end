@@ -428,15 +428,18 @@ export class DialogThemMoiVatTuComponent implements OnInit {
   }
 
   calculatorThanhTien() {
-    this.formData.patchValue({
-      thanhTien:
-        +this.formData.get('soLuong').value *
-        +this.formData.get('donGiaVat').value * 1000,
-    });
-    this.formData.patchValue({
-      bangChu: VNnum2words(+this.formData.get('thanhTien').value),
-    });
-    this.formattedThanhTien = this.formData.get('thanhTien') ? formatNumber(this.formData.get('thanhTien').value, 'vi_VN', '1.0-1') : '0';
+    if(this.formData.get('donGiaVat').value != undefined){
+      this.formData.patchValue({
+        thanhTien:
+          +this.formData.get('soLuong').value *
+          +this.formData.get('donGiaVat').value * 1000,
+      });
+
+      this.formData.patchValue({
+        bangChu: VNnum2words(+this.formData.get('thanhTien').value),
+      });
+      this.formattedThanhTien = this.formData.get('thanhTien') ? formatNumber(this.formData.get('thanhTien').value, 'vi_VN', '1.0-1') : '0';
+    }
   }
 
   calculatorThanhTienDx() {
