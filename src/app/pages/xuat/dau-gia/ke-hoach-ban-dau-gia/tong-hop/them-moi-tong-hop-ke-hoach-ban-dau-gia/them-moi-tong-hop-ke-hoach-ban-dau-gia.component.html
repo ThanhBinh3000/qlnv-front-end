@@ -2,16 +2,19 @@
   <div class="btn-group">
     <button type="button" class="btn btn-sub" (click)="goBack()">
       <i class="fa fa-arrow-left"></i>
-      <span>Quay lại</span>
+      <span> Quay lại </span>
     </button>
-    <button *ngIf="formData.value.trangThai == STATUS.CHUA_TAO_QD" type="button"
-            class="btn btn-sub xanh-nhat">
+    <button *ngIf="formData.value.trangThai == STATUS.CHUA_TAO_QD"
+            type="button" class="btn btn-sub xanh-nhat"
+            (click)="taoQdinh()">
       <i class="icon htvbdh_tcdt_tao-qd"></i>
-      <span>Tạo quyết định</span>
+      <span> Tạo quyết định </span>
     </button>
-    <button *ngIf="formData.value.trangThai == STATUS.CHUA_TAO_QD" type="button" class="btn btn-main" (click)="save()">
+    <button *ngIf="formData.value.trangThai == STATUS.CHUA_TAO_QD"
+            type="button" class="btn btn-main"
+            (click)="save()">
       <i class="icon htvbdh_tcdt_save"></i>
-      <span>Lưu</span>
+      <span> Lưu </span>
     </button>
   </div>
 </nz-affix>
@@ -22,7 +25,7 @@
                 <span [ngClass]="formData.value.trangThai == STATUS.DA_BAN_HANH_QD ? 'status-xanh' : 'status-do' ">
                     {{ formData.value.tenTrangThai }}
                 </span>
-        <span>TỔNG HỢP KẾ HOẠCH BÁN ĐẤU GIÁ</span>
+        <span> TỔNG HỢP KẾ HOẠCH BÁN ĐẤU GIÁ </span>
       </div>
     </div>
   </div>
@@ -33,7 +36,7 @@
           <div nz-row [nzGutter]="20">
             <div nz-col [nzSpan]="2">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true">Năm kế hoạch</nz-form-label>
+                <nz-form-label [nzNoColon]="true"> Năm kế hoạch</nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
                   <nz-select formControlName="namKh" [nzDisabled]="isView">
                     <nz-option *ngFor="let p of listNam" [nzValue]="p.value"
@@ -91,7 +94,7 @@
                 <button class="btn btn-main btn-sm waves-effect waves-light"
                         (click)="tongHopDeXuatTuCuc()" *ngIf="!formData.value.id">
                   <i class="icon htvbdh_tcdt_tong-hop-de-xuat-tu-cuc"></i>
-                  <span>Tổng hợp KH bán đấu giá</span>
+                  <span> Tổng hợp KH bán đấu giá </span>
                 </button>
               </div>
             </div>
@@ -148,19 +151,19 @@
                   [nzShowPagination]="false">
           <thead>
           <tr>
-            <th nzWidth="50px" class="text-center wrap">STT</th>
-            <th nzWidth="250px" class="text-left wrap">Cục DTNN KV</th>
-            <th nzWidth="150px" class="text-left wrap">Số kế hoạch/đề xuất</th>
-            <th nzWidth="100px" class="text-left wrap">Ngày ký</th>
-            <th nzWidth="300px" class="text-left wrap">Trích yếu</th>
-            <th nzWidth="100px" class="text-center wrap">SL đơn vị tài sản</th>
-            <th nzWidth="100px" class="text-center wrap">Tổng SL xuất bán đề xuất (Kg)</th>
-            <th nzWidth="150px" class="text-center wrap">Đơn giá Cục đề xuất (đ/kg)</th>
-            <th nzWidth="150px" class="text-center wrap">Thành tiền Cục đề xuất (đ)</th>
-            <th nzWidth="150px" class="text-center wrap">% Khoản tiền đặt trước (đ)</th>
-            <th nzWidth="150px" class="text-center wrap">Khoản tiền đặt trước đề xuất (đ)</th>
-            <th nzWidth="100px" class="text-center wrap">Trạng thái</th>
-            <th>Hành động</th>
+            <th nzWidth="50px" class="text-center wrap"> STT</th>
+            <th nzWidth="250px" class="text-left wrap"> Cục DTNN KV</th>
+            <th nzWidth="150px" class="text-left wrap"> Số kế hoạch/đề xuất</th>
+            <th nzWidth="100px" class="text-left wrap"> Ngày ký</th>
+            <th nzWidth="300px" class="text-left wrap"> Trích yếu</th>
+            <th nzWidth="100px" class="text-center wrap"> SL đơn vị tài sản</th>
+            <th nzWidth="100px" class="text-center wrap"> Tổng SL xuất bán đề xuất (Kg)</th>
+            <th nzWidth="150px" class="text-center wrap"> Đơn giá Cục đề xuất (đ/kg)</th>
+            <th nzWidth="150px" class="text-center wrap"> Thành tiền Cục đề xuất (đ)</th>
+            <th nzWidth="150px" class="text-center wrap"> % Khoản tiền đặt trước (đ)</th>
+            <th nzWidth="150px" class="text-center wrap"> Khoản tiền đặt trước đề xuất (đ)</th>
+            <th nzWidth="100px" class="text-center wrap"> Trạng thái</th>
+            <th> Hành động</th>
           </tr>
           </thead>
           <tbody>
@@ -170,15 +173,15 @@
             <td class="text-center">{{i + 1}} </td>
             <td>{{ data.tenDvi }}</td>
             <td>{{ data.soDxuat }}</td>
-            <td>{{ data.ngayPduyet | date: 'dd/MM/YYYY'}}</td>
-            <td>{{ data.trichYeu}}</td>
-            <td>{{ data.slDviTsan}}</td>
-            <td>{{ data.tongSoLuong|number : '1.0-1' : 'vi_VN'}}</td>
-            <td>{{ data.donGiaDeXuat|number : '1.0-1' : 'vi_VN'}}</td>
-            <td>{{ data.tongTienKhoiDiemDx|number : '1.0-1' : 'vi_VN'}}</td>
-            <td>{{ data.khoanTienDatTruoc|number : '1.0-1' : 'vi_VN'}}</td>
-            <td>{{ data.tongTienDatTruocDx|number : '1.0-1' : 'vi_VN'}}</td>
-            <td>{{ data.tenTrangThai}}</td>
+            <td>{{ data.ngayPduyet|date:'dd/MM/YYYY' }}</td>
+            <td>{{ data.trichYeu }}</td>
+            <td>{{ data.slDviTsan }}</td>
+            <td>{{ data.tongSoLuong|number:globals.numberFormat:globals.locale }}</td>
+            <td>{{ data.donGiaDeXuat|number:globals.numberFormat:globals.locale }}</td>
+            <td>{{ data.tongTienKhoiDiemDx|number:globals.numberFormat:globals.locale }}</td>
+            <td>{{ data.khoanTienDatTruoc|number:globals.numberFormat:globals.locale }}</td>
+            <td>{{ data.tongTienDatTruocDx|number:globals.numberFormat:globals.locale }}</td>
+            <td>{{ data.tenTrangThai }}</td>
             <td>
               <a>
                 <i class="icon htvbdh_tcdt_print"></i>

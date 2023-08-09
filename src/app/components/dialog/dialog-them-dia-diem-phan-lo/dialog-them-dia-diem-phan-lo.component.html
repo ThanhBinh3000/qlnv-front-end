@@ -13,10 +13,9 @@
           </nz-form-control>
         </nz-form-item>
       </div>
-
       <div nz-col [nzSpan]="5">
         <nz-form-item>
-          <nz-form-label nzRequired [nzNoColon]="true">SL xuất theo chỉ tiêu KH giao đầu năm</nz-form-label>
+          <nz-form-label nzRequired [nzNoColon]="true"> SL xuất theo chỉ tiêu KH giao đầu năm</nz-form-label>
           <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
             <nz-input-number [nzDisabled]="true" formControlName="slChiTieu" [nzMin]="1"
                              [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
@@ -27,9 +26,9 @@
       </div>
       <div nz-col [nzSpan]="5">
         <nz-form-item>
-          <nz-form-label nzRequired [nzNoColon]="true">Tổng SL xuất bán theo KH đã được duyệt</nz-form-label>
+          <nz-form-label nzRequired [nzNoColon]="true"> Tổng SL xuất bán theo KH đã được duyệt</nz-form-label>
           <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-            <nz-input-number [nzDisabled]="true" formControlName="slKeHoachDd" [nzMin]="1"
+            <nz-input-number [nzDisabled]="true" formControlName="tongSlKeHoachDd" [nzMin]="1"
                              [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
                              [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
             </nz-input-number>
@@ -40,7 +39,7 @@
         <nz-form-item>
           <nz-form-label nzRequired [nzNoColon]="true"> Tổng SL xuất bán đề xuất</nz-form-label>
           <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-            <nz-input-number [nzDisabled]="true" formControlName="soLuongChiCuc" [nzMin]="1"
+            <nz-input-number [nzDisabled]="true" formControlName="tongSlXuatBanDx" [nzMin]="1"
                              [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
                              [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
             </nz-input-number>
@@ -54,40 +53,39 @@
           <nz-form-label [nzNoColon]="true">
           </nz-form-label>
           <nz-form-control nz-col [nzSpan]="24">
-            <span class="text-green">Đơn vị :{{formData.value.donViTinh}}</span>
+            <span class="text-green"> Đơn vị :{{ formData.value.donViTinh }} </span>
           </nz-form-control>
         </nz-form-item>
       </div>
     </div>
     <br/>
   </form>
-
   <nz-table nzBordered class="pd-10 overflow-auto" [nzData]="listOfData">
     <thead>
     <tr>
-      <th nzWidth="150px" class="text-center wrap">Điểm kho</th>
-      <th nzWidth="150px" class="text-center wrap">Nhà kho</th>
-      <th nzWidth="150px" class="text-center wrap">Ngăn kho</th>
-      <th nzWidth="150px" class="text-center wrap">Lô Kho</th>
-      <th nzWidth="100px" class="text-center wrap">Chủng loại hàng hóa</th>
-      <th nzWidth="150px" class="text-center wrap">Mã đơn vị tài sản</th>
-      <th nzWidth="100px" class="text-center wrap">Tồn kho</th>
-      <th nzWidth="100px" class="text-center wrap">SL xuất bán đề xuất</th>
-      <th nzWidth="100px" class="text-center wrap" *ngIf="!formData.value.loaiVthh?.startsWith('02')">Đơn giá
-        đề xuất (đ/kg)
+      <th nzWidth="150px" class="text-center wrap"> Điểm kho</th>
+      <th nzWidth="150px" class="text-center wrap"> Nhà kho</th>
+      <th nzWidth="150px" class="text-center wrap"> Ngăn kho</th>
+      <th nzWidth="150px" class="text-center wrap"> Lô Kho</th>
+      <th nzWidth="100px" class="text-center wrap"> Chủng loại hàng hóa</th>
+      <th nzWidth="150px" class="text-center wrap"> Mã đơn vị tài sản</th>
+      <th nzWidth="100px" class="text-center wrap"> Tồn kho</th>
+      <th nzWidth="100px" class="text-center wrap"> SL xuất bán đề xuất</th>
+      <th nzWidth="100px" class="text-center wrap" *ngIf="!formData.value.loaiVthh?.startsWith('02')"> Đơn giá đề xuất
+        (đ/kg)
       </th>
-      <th nzWidth="100px" class="text-center wrap" *ngIf="formData.value.loaiVthh?.startsWith('02')">Đơn giá
-        đề xuất (đ)
+      <th nzWidth="100px" class="text-center wrap" *ngIf="formData.value.loaiVthh?.startsWith('02')"> Đơn giá đề xuất
+        (đ)
       </th>
-      <th nzWidth="100px" class="text-center wrap" *ngIf="!formData.value.loaiVthh?.startsWith('02')">Đơn giá
-        được duyệt (đ/kg)
+      <th nzWidth="100px" class="text-center wrap" *ngIf="!formData.value.loaiVthh?.startsWith('02')"> Đơn giá được
+        duyệt (đ/kg)
       </th>
-      <th nzWidth="100px" class="text-center wrap" *ngIf="formData.value.loaiVthh?.startsWith('02')">Đơn giá
-        được duyệt (đ)
+      <th nzWidth="100px" class="text-center wrap" *ngIf="formData.value.loaiVthh?.startsWith('02')"> Đơn giá được duyệt
+        (đ)
       </th>
-      <th nzWidth="100px" class="text-center wrap">Thành tiền đề xuất (đ)</th>
-      <th nzWidth="100px" class="text-center wrap">Thành tiền được duyệt (đ)</th>
-      <th nzWidth="70px" class="text-center">Hành động</th>
+      <th nzWidth="100px" class="text-center wrap"> Thành tiền đề xuất (đ)</th>
+      <th nzWidth="100px" class="text-center wrap"> Thành tiền được duyệt (đ)</th>
+      <th nzWidth="70px" class="text-center"> Hành động</th>
     </tr>
     <tr>
       <th>
@@ -116,25 +114,25 @@
       <th>
         <input nz-input [(ngModel)]="thongtinPhanLo.maDviTsan" class="w-150"/>
       </th>
-      <th>{{thongtinPhanLo.tonKho | number : '1.0-1' : 'vi_VN'}}</th>
+      <th>{{thongtinPhanLo.tonKho|number:globals.numberFormat:globals.locale}}</th>
       <th>
         <nz-input-number placeholder="(1)" class="text-right" nz-input
-                         [(ngModel)]="thongtinPhanLo.soLuongDeXuat" [nzMin]="0" [nzStep]="1" [nzSize]="'small'"
+                         [(ngModel)]="thongtinPhanLo.soLuongDeXuat" (ngModelChange)="onChangeTinh()" [nzMin]="0"
+                         [nzStep]="1" [nzSize]="'small'"
                          [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
         </nz-input-number>
       </th>
       <th>
         <nz-input-number placeholder="(2)" class="text-right" nz-input
-                         [(ngModel)]="thongtinPhanLo.donGiaDeXuat" [nzMin]="0" [nzStep]="1" [nzSize]="'small'"
+                         [(ngModel)]="thongtinPhanLo.donGiaDeXuat" (ngModelChange)="onChangeTinh()" [nzMin]="0"
+                         [nzStep]="1" [nzSize]="'small'"
                          [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
         </nz-input-number>
       </th>
-      <th>{{ thongtinPhanLo.donGiaDuocDuyet | number : '1.0-1' : 'vi_VN' }}</th>
-      <th>{{ thongtinPhanLo.soLuongDeXuat * thongtinPhanLo.donGiaDeXuat | number : '1.0-1' : 'vi_VN' }}</th>
-      <th>{{ thongtinPhanLo.donGiaDuocDuyet == null ? null : thongtinPhanLo.soLuongDeXuat *
-      thongtinPhanLo.donGiaDuocDuyet | number : '1.0-1' : 'vi_VN' }}
+      <th>{{ thongtinPhanLo.donGiaDuocDuyet|number:globals.numberFormat:globals.locale }}</th>
+      <th>{{ thongtinPhanLo.giaKhoiDiemDx|number:globals.numberFormat:globals.locale }}</th>
+      <th>{{ thongtinPhanLo.giaKhoiDiemDd|number:globals.numberFormat:globals.locale }}
       </th>
-
       <th class="text-center">
         <a (click)="addDiemKho()">
           <i class="icon htvbdh_dau-cong xanhla"></i>
@@ -154,13 +152,12 @@
         <td>{{ data.tenLoKho }}</td>
         <td>{{ data.tenCloaiVthh }}</td>
         <td>{{ data.maDviTsan }}</td>
-        <td>{{ data.tonKho | number : '1.0-1' : 'vi_VN'}}</td>
-        <td>{{ data.soLuongDeXuat | number : '1.0-1' : 'vi_VN'}}</td>
-        <td>{{ data.donGiaDeXuat | number : '1.0-1' : 'vi_VN'}}</td>
-        <td>{{ data.donGiaDuocDuyet | number : '1.0-1' : 'vi_VN'}}</td>
-        <td>{{ data.giaKhoiDiemDx | number : '1.0-1' : 'vi_VN' }}</td>
-        <td>{{ data.giaKhoiDiemDd | number :
-          '1.0-1' : 'vi_VN'}}</td>
+        <td>{{ data.tonKho|number:globals.numberFormat:globals.locale }}</td>
+        <td>{{ data.soLuongDeXuat|number:globals.numberFormat:globals.locale }}</td>
+        <td>{{ data.donGiaDeXuat|number:globals.numberFormat:globals.locale }}</td>
+        <td>{{ data.donGiaDuocDuyet|number:globals.numberFormat:globals.locale }}</td>
+        <td>{{ data.giaKhoiDiemDx|number:globals.numberFormat:globals.locale }}</td>
+        <td>{{ data.giaKhoiDiemDd|number:globals.numberFormat:globals.locale }}</td>
         <td class="text-center">
           <a (click)="startEdit(idx)">
             <i class="fa fa-pencil" title="Sửa"></i>
@@ -199,27 +196,24 @@
         <td>
           <input nz-input [(ngModel)]="editCache[idx].data.maDviTsan" class="w-150"/>
         </td>
-        <td>{{editCache[idx].data.tonKho | number : '1.0-1' : 'vi_VN'}}</td>
+        <td>{{editCache[idx].data.tonKho|number:globals.numberFormat:globals.locale}}</td>
         <td>
           <nz-input-number class="text-right" nz-input [(ngModel)]="editCache[idx].data.soLuongDeXuat"
+                           (ngModelChange)="onChangeTinhEdit(idx)"
                            [nzMin]="1" [nzStep]="1" [nzSize]="'small'" [nzFormatter]="globals.formatter"
                            [nzParser]="globals.parser">
           </nz-input-number>
         </td>
         <td>
           <nz-input-number class="text-right" nz-input [(ngModel)]="editCache[idx].data.donGiaDeXuat"
+                           (ngModelChange)="onChangeTinhEdit(idx)"
                            [nzMin]=" 1" [nzStep]="1" [nzSize]="'small'" [nzFormatter]="globals.formatter"
                            [nzParser]="globals.parser">
           </nz-input-number>
         </td>
-        <td>{{editCache[idx].data.donGiaDuocDuyet | number :
-          '1.0-1' : 'vi_VN'}}</td>
-        <td>{{editCache[idx].data.soLuongDeXuat * editCache[idx].data.donGiaDeXuat | number :
-          '1.0-1' : 'vi_VN'}}</td>
-        <td>{{ editCache[idx].data.donGiaDuocDuyet == null ? null : editCache[idx].data.soLuongDeXuat *
-        editCache[idx].data.donGiaDuocDuyet | number :
-          '1.0-1'
-          : 'vi_VN'}}</td>
+        <td>{{ editCache[idx].data.donGiaDuocDuyet|number:globals.numberFormat:globals.locale }}</td>
+        <td>{{ editCache[idx].data.giaKhoiDiemDx|number:globals.numberFormat:globals.locale }}</td>
+        <td>{{ editCache[idx].data.giaKhoiDiemDd|number:globals.numberFormat:globals.locale }}</td>
         <td class="text-center">
           <a (click)="saveEdit(idx)" class="save">
             <i class="icon htvbdh_tcdt_save"></i>
@@ -234,10 +228,11 @@
     <tfoot>
     <tr *ngIf="listOfData.length > 0">
       <th colspan="6" class="first-last-row-table background-last-row text-left">Cộng</th>
-      <th class="background-last-row text-left"> {{ calcTong('tonKho') == 0 ? null : calcTong('tonKho') |
-        number : '1.0-1' : 'vi_VN' }}
+      <th
+        class="background-last-row text-left"> {{ calcTong('tonKho') == 0 ? null : calcTong('tonKho')|number:globals.numberFormat:globals.locale }}
       </th>
-      <th class="background-last-row text-left"> {{ calcTong('soLuongDeXuat') | number : '1.0-1' : 'vi_VN' }}
+      <th
+        class="background-last-row text-left"> {{ calcTong('soLuongDeXuat')|number:globals.numberFormat:globals.locale }}
       </th>
       <th></th>
       <th></th>
