@@ -14,6 +14,7 @@ import * as uuid from "uuid";
 import * as XLSX from 'xlsx';
 import { BtnStatus, Doc, Form } from '../../dieu-chinh-du-toan.constant';
 import { DANH_MUC } from './phu-luc-13.constant';
+import { CurrencyMaskInputMode } from 'ngx-currency';
 
 export class ItemData {
     level: any;
@@ -105,6 +106,18 @@ export class ItemData {
     }
 }
 
+export const amount1 = {
+    allowZero: true,
+    allowNegative: true,
+    precision: 4,
+    prefix: '',
+    thousands: '.',
+    decimal: ',',
+    align: "left",
+    nullable: true,
+    inputMode: CurrencyMaskInputMode.NATURAL,
+}
+
 @Component({
     selector: 'app-phu-luc-13',
     templateUrl: './phu-luc-13.component.html',
@@ -115,7 +128,7 @@ export class PhuLuc13Component implements OnInit {
     @Input() dataInfo;
     Op = new Operator('1');
     Utils = Utils;
-
+    amount1 = amount1;
     //thong tin chi tiet cua bieu mau
     formDetail: Form = new Form();
     total: ItemData = new ItemData({});

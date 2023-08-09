@@ -118,7 +118,7 @@ export class ItemData {
 
 }
 
-export const AMOUNT1 = {
+export const amount1 = {
     allowZero: true,
     allowNegative: true,
     precision: 4,
@@ -190,7 +190,7 @@ export class PhuLuc7Component implements OnInit {
     fileList: NzUploadFile[] = [];
     listFile: File[] = [];
     listIdDeleteFiles: string[] = [];
-
+    amount1 = amount1;
     beforeUpload = (file: NzUploadFile): boolean => {
         this.fileList = this.fileList.concat(file);
         return false;

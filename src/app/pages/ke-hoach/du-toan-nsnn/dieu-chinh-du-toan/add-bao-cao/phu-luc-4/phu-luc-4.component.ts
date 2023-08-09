@@ -14,6 +14,7 @@ import { UserService } from 'src/app/services/user.service';
 import * as XLSX from 'xlsx';
 import { BtnStatus, Doc, Form } from '../../dieu-chinh-du-toan.constant';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
+import { CurrencyMaskInputMode } from 'ngx-currency';
 
 export class ItemData {
     level: any;
@@ -33,6 +34,18 @@ export class ItemData {
     maNoiDung: string;
     chenhLech: number;
     ykienDviCtren: string;
+}
+
+export const amount1 = {
+    allowZero: true,
+    allowNegative: true,
+    precision: 4,
+    prefix: '',
+    thousands: '.',
+    decimal: ',',
+    align: "left",
+    nullable: true,
+    inputMode: CurrencyMaskInputMode.NATURAL,
 }
 
 
@@ -65,7 +78,7 @@ export class PhuLuc4Component implements OnInit {
     editMoneyUnit = false;
     isDataAvailable = false;
     allChecked = false;
-
+    amount1 = amount1;
     //nho dem
     editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
 

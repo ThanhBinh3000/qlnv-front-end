@@ -13,6 +13,7 @@ import * as XLSX from 'xlsx';
 import { BtnStatus, Doc, Form } from '../../dieu-chinh-du-toan.constant';
 import { DANH_MUC_PL_TH } from './phu-luc-tong-hop.constant';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
+import { CurrencyMaskInputMode } from 'ngx-currency';
 
 
 export class ItemDvi {
@@ -81,6 +82,17 @@ export class ItemData {
         return temp;
     }
 }
+export const amount1 = {
+    allowZero: true,
+    allowNegative: true,
+    precision: 4,
+    prefix: '',
+    thousands: '.',
+    decimal: ',',
+    align: "left",
+    nullable: true,
+    inputMode: CurrencyMaskInputMode.NATURAL,
+}
 
 
 @Component({
@@ -115,7 +127,7 @@ export class PhuLucTongHopComponent implements OnInit {
     fileList: NzUploadFile[] = [];
     listFile: File[] = [];
     listIdDeleteFiles: string[] = [];
-
+    amount1 = amount1;
     beforeUpload = (file: NzUploadFile): boolean => {
         this.fileList = this.fileList.concat(file);
         return false;

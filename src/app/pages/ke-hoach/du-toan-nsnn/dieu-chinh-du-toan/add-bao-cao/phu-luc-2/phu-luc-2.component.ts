@@ -14,6 +14,7 @@ import * as uuid from "uuid";
 import * as XLSX from 'xlsx';
 import { DialogSelectTaiSanComponent } from '../../../giao-du-toan/dialogSelectTaiSan/dialogSelectTaiSan.component';
 import { BtnStatus, Doc, Form } from '../../dieu-chinh-du-toan.constant';
+import { CurrencyMaskInputMode } from 'ngx-currency';
 
 export class ItemData {
     id: string;
@@ -40,6 +41,18 @@ export class ItemData {
     ykienDviCtren: string;
     ghiChu: string;
     level: any;
+}
+
+export const amount1 = {
+    allowZero: true,
+    allowNegative: true,
+    precision: 4,
+    prefix: '',
+    thousands: '.',
+    decimal: ',',
+    align: "left",
+    nullable: true,
+    inputMode: CurrencyMaskInputMode.NATURAL,
 }
 
 
@@ -78,7 +91,7 @@ export class PhuLuc2Component implements OnInit {
     fileList: NzUploadFile[] = [];
     listFile: File[] = [];
     listIdDeleteFiles: string[] = [];
-
+    amount1 = amount1;
     beforeUpload = (file: NzUploadFile): boolean => {
         this.fileList = this.fileList.concat(file);
         return false;

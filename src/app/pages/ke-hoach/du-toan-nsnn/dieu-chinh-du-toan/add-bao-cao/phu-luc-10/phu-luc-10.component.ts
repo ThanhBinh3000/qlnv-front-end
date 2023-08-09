@@ -35,7 +35,7 @@ export class ItemData {
 	ykienDviCtren: string;
 }
 
-export const AMOUNT1 = {
+export const amount1 = {
 	allowZero: true,
 	allowNegative: true,
 	precision: 4,
@@ -56,6 +56,7 @@ export class PhuLuc10Component implements OnInit {
 	@Input() dataInfo;
 	Op = new Operator('1');
 	Utils = Utils;
+	amount1 = amount1;
 	//thong tin chi tiet cua bieu mau
 	formDetail: Form = new Form();
 	total: ItemData = new ItemData();
