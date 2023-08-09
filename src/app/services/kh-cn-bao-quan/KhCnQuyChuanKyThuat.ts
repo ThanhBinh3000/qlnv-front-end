@@ -1,10 +1,10 @@
-import {HttpClient} from '@angular/common/http';
-import {Injectable} from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import dayjs from 'dayjs';
-import {Observable} from 'rxjs';
-import {BaseService} from '../base.service';
-import {OldResponseData} from "../../interfaces/response";
-import {environment} from "../../../environments/environment";
+import { Observable } from 'rxjs';
+import { BaseService } from '../base.service';
+import { OldResponseData } from "../../interfaces/response";
+import { environment } from "../../../environments/environment";
 
 @Injectable({
   providedIn: 'root',

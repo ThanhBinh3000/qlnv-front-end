@@ -6,6 +6,7 @@ import { FormsModule } from "@angular/forms";
 import {QuyetDinhPdKhnkComponent} from "./quyet-dinh-pd-khnk.component";
 import {ThemmoiQuyetDinhPdKhnkComponent} from "./themmoi-quyet-dinh-pd-khnk/themmoi-quyet-dinh-pd-khnk.component";
 import {ThongtinDexuatComponent} from "./themmoi-quyet-dinh-pd-khnk/thongtin-dexuat/thongtin-dexuat.component";
+import {QuyetDinhGiaoNvNhapHangModule} from "../quyet-dinh-giao-nv-nhap-hang/quyet-dinh-giao-nv-nhap-hang.module";
 
 
 
@@ -19,11 +20,12 @@ import {ThongtinDexuatComponent} from "./themmoi-quyet-dinh-pd-khnk/thongtin-dex
     QuyetDinhPdKhnkComponent,
     ThemmoiQuyetDinhPdKhnkComponent
   ],
-  imports: [
-    CommonModule,
-    ComponentsModule,
-    MainModule,
-    FormsModule,
-  ]
+    imports: [
+        CommonModule,
+        ComponentsModule,
+        MainModule,
+        FormsModule,
+        QuyetDinhGiaoNvNhapHangModule,
+    ]
 })
 export class QuyetDinhPdKhnkModule { }

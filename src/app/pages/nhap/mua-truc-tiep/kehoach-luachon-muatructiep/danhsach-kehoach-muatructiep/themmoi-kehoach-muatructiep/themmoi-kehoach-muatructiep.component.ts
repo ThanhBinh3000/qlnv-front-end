@@ -224,30 +224,30 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
             this.formData.get('cloaiVthh').value,
           );
           let body = {
-            loaiGia: "LG01",
+            loaiGia: "LG03",
             namKeHoach: this.formData.value.namKh,
             loaiVthh: this.formData.value.loaiVthh,
             cloaiVthh: this.formData.value.cloaiVthh,
             maDvi: this.formData.value.maDvi,
             trangThai: STATUS.BAN_HANH,
           }
-          let pag = await this.quyetDinhGiaCuaBtcService.getQdGiaLastestBtc(body);
+          let pag = await this.quyetDinhGiaTCDTNNService.getPag(body)
           if (pag.msg === MESSAGE.SUCCESS) {
             if (pag.data) {
-              let giaToiDa = 0;
+              let giaCuThe = 0;
               pag.data.forEach(i => {
-                let giaQdBtc = 0;
-                if (i.giaQdDcBtcVat != null && i.giaQdDcBtcVat > 0) {
-                  giaQdBtc = i.giaQdDcBtcVat
+                let giaQdTcdtVat = 0;
+                if (i.giaQdDcTcdtVat != null && i.giaQdDcTcdtVat > 0) {
+                  giaQdTcdtVat = i.giaQdDcTcdtVat
                 } else {
-                  giaQdBtc = i.giaQdBtcVat
+                  giaQdTcdtVat = i.giaQdTcdtVat
                 }
-                if (giaQdBtc > giaToiDa) {
-                  giaToiDa = giaQdBtc;
+                if (giaQdTcdtVat > giaCuThe) {
+                  giaCuThe = giaQdTcdtVat;
                 }
               })
               this.formData.patchValue({
-                donGiaVat: giaToiDa
+                donGiaVat: giaCuThe
               })
             }
           }
@@ -512,8 +512,9 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
   }
 
   isDisable(): boolean {
-    if (this.formData.value.trangThai == STATUS.DU_THAO || this.formData.value.trangThai == STATUS.TU_CHOI_TP ||
-      this.formData.value.trangThai == STATUS.TU_CHOI_LDC || this.formData.value.trangThai == STATUS.TU_CHOI_CBV || !this.isView) {
+    if ((this.formData.value.trangThai == STATUS.DU_THAO || this.formData.value.trangThai == STATUS.TU_CHOI_TP ||
+      this.formData.value.trangThai == STATUS.TU_CHOI_LDC || this.formData.value.trangThai == STATUS.TU_CHOI_CBV || !this.isView)
+      && (this.userService.isAccessPermisson('NHDTQG_PTMTT_KHMTT_LT_DEXUAT_DUYET_LDC') || this.userService.isAccessPermisson('NHDTQG_PTMTT_KHMTT_LT_DEXUAT_DUYET_TP'))) {
       return false
     } else {
       return true

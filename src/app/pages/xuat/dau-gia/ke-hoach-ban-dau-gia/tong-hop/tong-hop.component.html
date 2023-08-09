@@ -10,23 +10,23 @@
             </nz-select>
           </div>
           <div nz-col [nzSpan]="4" *ngIf="!loaiVthh.startsWith('02')">
-            <label class="search__label">Loại hàng hóa</label>
+            <label class="search__label"> Loại hàng hóa </label>
             <nz-select formControlName="loaiVthh">
               <nz-option *ngFor="let p of listVthh" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
             </nz-select>
           </div>
           <div nz-col [nzSpan]="4" *ngIf="loaiVthh.startsWith('02')">
-            <label class="search__label">Loại hàng hóa</label>
+            <label class="search__label"> Loại hàng hóa </label>
             <nz-select formControlName="loaiVthh">
               <nz-option *ngFor="let p of listLoaiHangHoa" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
             </nz-select>
           </div>
           <div nz-col [nzSpan]="10">
-            <label class="search__label">Nội dung tổng hợp</label>
+            <label class="search__label"> Nội dung tổng hợp </label>
             <input class="search__input" placeholder="" nz-input formControlName="noiDungThop"/>
           </div>
           <div nz-col [nzSpan]="5">
-            <label class="search__label">Ngày tổng hợp</label>
+            <label class="search__label"> Ngày tổng hợp </label>
             <div nz-row [nzGutter]="24">
               <div nz-col [nzSpan]="12" class="cus-start-date">
                 <nz-date-picker [nzDisabledDate]="disabledNgayThopTu" nzFormat="dd/MM/yyyy"
@@ -55,20 +55,23 @@
     <div class="group-button">
       <h3> THÔNG TIN TỔNG HỢP KẾ HOẠCH BÁN ĐẤU GIÁ </h3>
       <div class="buttons">
-        <button *ngIf="userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_TONGHOP_XOA')" type="button"
-                class="btn btn-do" (click)="deleteMulti()">
+        <button *ngIf="userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_TONGHOP_XOA')"
+                type="button" class="btn btn-do"
+                (click)="deleteMulti()">
           <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
-          <span>Xóa</span>
+          <span> Xóa </span>
         </button>
-        <button *ngIf="userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_TONGHOP_EXP')" type="button"
-                class="btn btn-sub" (click)="exportData('Danh-sach-tong-hop-ke-hoach-ban-dau-gia.xlsx')">
+        <button *ngIf="userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_TONGHOP_EXP')"
+                type="button" class="btn btn-sub"
+                (click)="exportData('Danh-sach-tong-hop-ke-hoach-ban-dau-gia.xlsx')">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
-          <span>Xuất file</span>
+          <span> Xuất file </span>
         </button>
-        <button *ngIf="userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_TONGHOP_TONGHOP')" type="button"
-                class="btn btn-main" (click)="redirectDetail(0, false)">
+        <button *ngIf="userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_TONGHOP_TONGHOP')"
+                type="button" class="btn btn-main"
+                (click)="redirectDetail(0, false)">
           <i class="icon htvbdh_dau-cong"></i>
-          <span>Tổng hợp</span>
+          <span> Tổng hợp </span>
         </button>
       </div>
     </div>
@@ -81,15 +84,15 @@
             <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
                    [nzIndeterminate]="indeterminate"></label>
           </th>
-          <th width="30px">STT</th>
-          <th>Mã tổng hợp</th>
-          <th>Ngày tổng hợp</th>
-          <th>Nội dung tổng hợp</th>
-          <th>Năm kế hoạch</th>
-          <th>Số QĐ phê duyệt KH BĐG</th>
-          <th>Loại hàng hóa</th>
-          <th>Trạng thái</th>
-          <th width="90px" class="text-right">Hành động</th>
+          <th width="30px"> STT</th>
+          <th> Mã tổng hợp</th>
+          <th> Ngày tổng hợp</th>
+          <th> Nội dung tổng hợp</th>
+          <th> Năm kế hoạch</th>
+          <th> Số QĐ phê duyệt KH BĐG</th>
+          <th> Loại hàng hóa</th>
+          <th> Trạng thái</th>
+          <th width="90px" class="text-right"> Hành động</th>
         </tr>
         <tr class="search-table">
           <th></th>
@@ -160,19 +163,19 @@
           <td>
             <a *ngIf="data.soQdPd && data.idQdPd" nz-button nzType="link"
                (click)="openModalQdPd(data.idQdPd)">{{
-              data.soQdPd}}</a>
+              data.soQdPd }}</a>
           </td>
           <td>{{ data.tenLoaiVthh }}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-left">
-            <a (click)="redirectDetail(data.id, true)"
-               *ngIf="vldTrangThai.checkStatusPermission(data,CHUC_NANG.XEM)&&userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_TONGHOP_XEM') &&
-                !(vldTrangThai.checkStatusPermission(data,CHUC_NANG.SUA)&&userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_TONGHOP_TONGHOP'))">
+            <a *ngIf="vldTrangThai.checkStatusPermission(data,CHUC_NANG.XEM) && userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_TONGHOP_XEM')&&
+                !(vldTrangThai.checkStatusPermission(data,CHUC_NANG.SUA) && userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_TONGHOP_TONGHOP'))"
+               (click)="redirectDetail(data.id,true)">
               <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
             <a
               *ngIf="vldTrangThai.checkStatusPermission(data,CHUC_NANG.SUA)  && userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_TONGHOP_TONGHOP')"
-              (click)="redirectDetail(data.id, false)">
+              (click)="redirectDetail(data.id,false)">
               <i class="fa fa-pencil" title="Sửa"></i>
             </a>
             <a
