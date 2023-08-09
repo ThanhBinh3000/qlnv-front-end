@@ -436,6 +436,6 @@ export class CapUngVonComponent implements OnInit {
         const worksheet = Table.initExcel(header);
         XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
-        XLSX.writeFile(workbook, 'Cap_ung_von.xlsx');
+        XLSX.writeFile(workbook, this.baoCao.maCapUng + '.xlsx');
     }
 }

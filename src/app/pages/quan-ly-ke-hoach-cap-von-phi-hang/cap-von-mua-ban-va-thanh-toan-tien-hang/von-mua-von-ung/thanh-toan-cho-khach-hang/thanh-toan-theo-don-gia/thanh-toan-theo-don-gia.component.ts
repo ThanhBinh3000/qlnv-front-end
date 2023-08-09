@@ -12,6 +12,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { BtnStatus, Cvmb, Report, ThanhToan } from '../../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
+import * as XLSX from 'xlsx';
 
 @Component({
     selector: 'app-thanh-toan-theo-don-gia',
@@ -145,11 +146,13 @@ export class ThanhToanTheoDonGiaComponent implements OnInit {
         this.status.submit = Status.check('submit', this.baoCao.trangThai) && isChild && !(!this.baoCao.id);
         this.status.pass = Status.check('pass', this.baoCao.trangThai) && isChild;
         this.status.approve = Status.check('approve', this.baoCao.trangThai) && isChild;
+        this.status.export = this.baoCao.trangThai == Status.TT_07 && isChild;
 
         this.status.save = this.status.save && this.userService.isAccessPermisson(Roles.CVMB.EDIT_TTKH);
         this.status.submit = this.status.submit && this.userService.isAccessPermisson(Roles.CVMB.SUBMIT_TTKH);
         this.status.pass = this.status.pass && this.userService.isAccessPermisson(Roles.CVMB.PASS_TTKH);
         this.status.approve = this.status.approve && this.userService.isAccessPermisson(Roles.CVMB.APPROVE_TTKH);
+        this.status.export = this.status.export && this.userService.isAccessPermisson(Roles.CVMB.EXPORT_TTKH);
         this.scrollX = this.status.save ? Table.tableWidth(350, 13, 1, 60) : Table.tableWidth(350, 13, 1, 0);
     }
 
@@ -345,5 +348,55 @@ export class ThanhToanTheoDonGiaComponent implements OnInit {
         let file: any = this.listFile.find(element => element?.lastModified.toString() == id);
         let doc: any = this.baoCao.lstFiles.find(element => element?.id == id);
         await this.quanLyVonPhiService.downFile(file, doc);
+    }
+
+    exportToExcel() {
+        const header = [
+            { t: 0, b: 5, l: 0, r: 15, val: null },
+            { t: 0, b: 0, l: 0, r: 8, val: "Thanh toán cho khách hàng theo đơn giá mua" },
+            { t: 4, b: 5, l: 0, r: 0, val: 'STT' },
+            { t: 4, b: 5, l: 1, r: 1, val: 'Đơn vị' },
+            { t: 4, b: 5, l: 2, r: 2, val: 'Số lượng' },
+            { t: 4, b: 5, l: 3, r: 3, val: 'Đơn giá (theo quyết định)' },
+            { t: 4, b: 5, l: 4, r: 4, val: 'Giá trị theo kế hoạch' },
+            { t: 4, b: 4, l: 5, r: 7, val: 'Số thanh toán lũy kế (Bao gồm sô thanh toán lần này)' },
+            { t: 5, b: 5, l: 5, r: 5, val: 'Cấp ứng' },
+            { t: 5, b: 5, l: 6, r: 6, val: 'Cấp vốn' },
+            { t: 5, b: 5, l: 7, r: 7, val: 'Cộng' },
+            { t: 4, b: 5, l: 8, r: 8, val: 'Số còn được thanh toán' },
+            { t: 4, b: 5, l: 9, r: 9, val: 'Số duyệt thanh toán lần này' },
+            { t: 4, b: 4, l: 10, r: 14, val: 'Ủy nhiệm chi (Số thanh toán đợt ' + this.baoCao.dot.toString() + ')' },
+            { t: 5, b: 5, l: 10, r: 10, val: 'Ngày' },
+            { t: 5, b: 5, l: 11, r: 11, val: 'Niên độ NS' },
+            { t: 5, b: 5, l: 12, r: 12, val: 'Cấp ứng' },
+            { t: 5, b: 5, l: 13, r: 13, val: 'Cấp vốn' },
+            { t: 5, b: 5, l: 14, r: 14, val: 'Cộng' },
+            { t: 4, b: 5, l: 15, r: 15, val: 'Ghi chú' },
+        ]
+        const fieldOrder = ['stt', 'tenDvi', 'slKeHoach', 'donGia', 'gtKeHoach', 'lkUng', 'lkCap', 'lkCong', 'soConDcTt', 'soDuyetTt', 'uncNgay',
+            'uncNienDoNs', 'ung', 'cap', 'cong', 'ghiChu'];
+        const filterData = this.lstCtiets.map((item, index) => {
+            const row: any = {};
+            fieldOrder.forEach(field => {
+                switch (field) {
+                    case 'stt':
+                        row[field] = index + 1;
+                        break;
+                    case 'uncNgay':
+                        row[field] = Utils.fmtDate(item[field]);
+                        break;
+                    default:
+                        row[field] = item[field];
+                        break;
+                }
+            })
+            return row;
+        })
+
+        const workbook = XLSX.utils.book_new();
+        const worksheet = Table.initExcel(header);
+        XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
+        XLSX.writeFile(workbook, this.baoCao.maCapUng + '.xlsx');
     }
 }
