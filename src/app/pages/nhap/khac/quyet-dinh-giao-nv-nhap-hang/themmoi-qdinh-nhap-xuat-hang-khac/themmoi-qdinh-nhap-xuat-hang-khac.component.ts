@@ -42,6 +42,7 @@ import { convertTrangThai, convertVthhToId } from 'src/app/shared/commonFunction
 export class ThemmoiQdinhNhapXuatHangKhacComponent implements OnInit {
   @Input() id: number;
   @Input() loaiVthh: string;
+  @Input() idQdPd: number;
   @Output()
   showListEvent = new EventEmitter<any>();
   @Input() isViewDetail: boolean;
@@ -485,17 +486,30 @@ export class ThemmoiQdinhNhapXuatHangKhacComponent implements OnInit {
   }
 
   setValidator(isGuiDuyet) {
+    debugger
     if (isGuiDuyet) {
-      if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDC) {
+      if (this.formData.value.trangThai == STATUS.DU_THAO) {
         this.formData.controls["soQd"].setValidators([Validators.required]);
-        // this.formData.controls["ngayQdinh"].setValidators([Validators.required]);
+        this.formData.controls["trichYeu"].setValidators([Validators.required]);
+        this.formData.controls["ngayQd"].setValidators([Validators.required]);
+        this.formData.controls["tgianNkMnhat"].setValidators([Validators.required]);
+        this.formData.controls["nam"].setValidators([Validators.required]);
+        this.formData.controls["soQdPd"].setValidators([Validators.required]);
       } else {
         this.formData.controls["soQd"].clearValidators();
-        // this.formData.controls["ngayQdinh"].clearValidators();
+        this.formData.controls["trichYeu"].clearValidators();
+        this.formData.controls["ngayQd"].clearValidators();
+        this.formData.controls["tgianNkMnhat"].clearValidators();
+        this.formData.controls["nam"].clearValidators();
+        this.formData.controls["soQdPd"].clearValidators();
       }
     } else {
       this.formData.controls["soQd"].clearValidators();
-      // this.formData.controls["ngayQdinh"].clearValidators();
+      this.formData.controls["trichYeu"].clearValidators();
+      this.formData.controls["ngayQd"].clearValidators();
+      this.formData.controls["tgianNkMnhat"].clearValidators();
+      this.formData.controls["nam"].clearValidators();
+      this.formData.controls["soQdPd"].clearValidators();
     }
   }
 

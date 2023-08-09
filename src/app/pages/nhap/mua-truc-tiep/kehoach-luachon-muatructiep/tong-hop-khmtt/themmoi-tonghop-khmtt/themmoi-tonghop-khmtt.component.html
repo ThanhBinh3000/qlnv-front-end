@@ -4,7 +4,7 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button *ngIf="!isView && formData.value.trangThai == globals.prop.NHAP_CHUA_TAO_QD" type="button"
+    <button *ngIf="!isView && formData.value.trangThai == globals.prop.NHAP_CHUA_TAO_QD || !formData.value.trangThai && isTongHop" type="button"
       class="btn btn-sub xanh-nhat" (click)="taoQdinh()">
       <i class="icon htvbdh_tcdt_tao-qd"></i>
       <span>Tạo quyết định</span>
