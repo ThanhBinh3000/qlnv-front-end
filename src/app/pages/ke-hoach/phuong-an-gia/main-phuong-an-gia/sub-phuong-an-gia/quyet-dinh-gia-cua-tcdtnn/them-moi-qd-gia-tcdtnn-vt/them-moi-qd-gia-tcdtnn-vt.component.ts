@@ -153,7 +153,7 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
         this.spinner.show();
         try {
           let body = {
-            id: this.idInput,
+            id: this.formData.value.id,
             lyDoTuChoi: null,
             trangThai: '29',
           };
@@ -197,7 +197,6 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
     body.soQd = body.soQd + this.maQd;
     body.maDvi = this.userInfo.MA_DVI;
     body.pagType = this.pagType;
-    body.soQd = body.soQd + this.maQd
     body.thongTinGiaVt = this.arrThongTinGia;
     body.fileDinhKemReq = this.fileDinhKem;
     let res;

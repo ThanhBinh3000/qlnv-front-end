@@ -323,6 +323,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
             pagTtChung.soLuongCtieu = ''
             let ctieuChiCuc = this.listCtieuKeHoach.find(ctieu => ctieu.maDonVi == pagTtChung.maChiCuc);
             if (ctieuChiCuc) {
+              console.log(ctieuChiCuc)
               if ((this.formData.value.loaiGia && (this.formData.value.loaiGia == 'LG02' || this.formData.value.loaiGia == 'LG04'))) {
                 if (event.startsWith("0101")) {
                   pagTtChung.soLuongCtieu = ctieuChiCuc.xtnTongSoQuyThoc ?  ctieuChiCuc.xtnTongSoQuyThoc : 0
