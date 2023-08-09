@@ -43,6 +43,7 @@ export class ThemmoiTonghopKhmttComponent extends Base2Component implements OnIn
   listHinhThucDauThau: any[] = [];
   listLoaiHopDong: any[] = [];
   isQuyetDinh: boolean = false;
+  disableField: boolean = false;
   selected: boolean = false;
   listFileDinhKem: any[] = [];
   constructor(
@@ -76,7 +77,7 @@ export class ThemmoiTonghopKhmttComponent extends Base2Component implements OnIn
       tenCloaiVthh: [''],
       namKh: [, [Validators.required]],
       noiDungThop: ['', [Validators.required]],
-      trangThai: [''],
+      trangThai: ['26'],
       ghiChu: ['',],
       tchuanCluong: [''],
       soQd: [''],
@@ -162,6 +163,7 @@ export class ThemmoiTonghopKhmttComponent extends Base2Component implements OnIn
     if (data) {
       if(isTaoQd){
         this.isQuyetDinh = true;
+        this.disableField = true;
       }
     }
   }

@@ -1,28 +1,34 @@
-import { Component, Input, OnInit } from '@angular/core';
-import * as dayjs from 'dayjs';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { MESSAGE } from 'src/app/constants/message';
-import { QuyetDinhPdKhBdgService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/quyetDinhPdKhBdg.service';
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
-
+import {Component, Input, OnInit} from '@angular/core';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {MESSAGE} from 'src/app/constants/message';
+import {
+  QuyetDinhPdKhBdgService
+} from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/quyetDinhPdKhBdg.service';
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from 'src/app/services/storage.service';
+import {CHUC_NANG} from "../../../../../constants/status";
+import {DauGiaComponent} from "../../dau-gia.component";
 @Component({
   selector: 'app-quyet-dinh',
   templateUrl: './quyet-dinh.component.html',
   styleUrls: ['./quyet-dinh.component.scss']
 })
+
 export class QuyetDinhComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
+  CHUC_NANG = CHUC_NANG;
+  public vldTrangThai: DauGiaComponent;
+  isView = false;
   idThop: number = 0;
   isViewThop: boolean = false;
   idDxKh: number = 0;
   isViewDxKh: boolean = false;
   listTrangThai: any[] = [
-    { ma: this.STATUS.DANG_NHAP_DU_LIEU, giaTri: 'Đang nhập dữ liệu' },
-    { ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành' },
+    {ma: this.STATUS.DANG_NHAP_DU_LIEU, giaTri: 'Đang nhập dữ liệu'},
+    {ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành'},
   ];
 
   constructor(
@@ -32,19 +38,21 @@ export class QuyetDinhComponent extends Base2Component implements OnInit {
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private quyetDinhPdKhBdgService: QuyetDinhPdKhBdgService,
+    private dauGiaComponent: DauGiaComponent,
   ) {
     super(httpClient, storageService, notification, spinner, modal, quyetDinhPdKhBdgService);
+    this.vldTrangThai = this.dauGiaComponent;
     this.formData = this.fb.group({
-      namKh: dayjs().get('year'),
+      nam: null,
       soQdPd: null,
       trichYeu: null,
       loaiVthh: null,
       ngayKyQdTu: null,
       ngayKyQdDen: null,
       soTrHdr: null,
-      lastest: 0,
-      trangThai: null,
+      lastest: null,
     })
+
     this.filterTable = {
       namKh: '',
       soQdPd: '',
@@ -63,11 +71,10 @@ export class QuyetDinhComponent extends Base2Component implements OnInit {
   async ngOnInit() {
     await this.spinner.show();
     try {
-      this.timKiem();
+      await this.timKiem()
       await this.search();
       await this.spinner.hide();
-    }
-    catch (e) {
+    } catch (e) {
       console.log('error: ', e)
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -78,7 +85,6 @@ export class QuyetDinhComponent extends Base2Component implements OnInit {
     this.formData.patchValue({
       loaiVthh: this.loaiVthh,
       lastest: 0,
-      trangThai: this.userService.isCuc() ? this.STATUS.BAN_HANH : null
     })
   }
 
@@ -86,6 +92,12 @@ export class QuyetDinhComponent extends Base2Component implements OnInit {
     this.formData.reset();
     this.timKiem();
     this.search();
+  }
+
+  redirectDetail(id, isView: boolean) {
+    this.idSelected = id;
+    this.isDetail = true;
+    this.isView = isView;
   }
 
   openModalDxKh(id: number) {
@@ -122,5 +134,4 @@ export class QuyetDinhComponent extends Base2Component implements OnInit {
     }
     return endValue.getTime() <= this.formData.value.ngayKyQdTu.getTime();
   };
-
 }

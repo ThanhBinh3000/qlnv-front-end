@@ -200,14 +200,24 @@ export class ThongtinDieuchinhComponent implements OnInit, OnChanges {
     }
     let pag = await this.quyetDinhGiaTCDTNNService.getPag(bodyPag)
     console.log("pag", pag)
-    if (pag.msg == MESSAGE.SUCCESS) {
-      const data = pag.data;
-      this.formData.patchValue({
-        donGiaVat: data.giaQdVat
-      })
-      // if (!data.giaQdVat) {
-      //   this.notification.error(MESSAGE.ERROR, "Chủng loại hàng hóa đang chưa có giá, xin vui lòng thêm phương án giá!")
-      // }
+    if (pag.msg === MESSAGE.SUCCESS) {
+      if (pag.data) {
+        let giaCuThe = 0;
+        pag.data.forEach(i => {
+          let giaQdTcdtVat = 0;
+          if (i.giaQdDcTcdtVat != null && i.giaQdDcTcdtVat > 0) {
+            giaQdTcdtVat = i.giaQdDcTcdtVat
+          } else {
+            giaQdTcdtVat = i.giaQdTcdtVat
+          }
+          if (giaQdTcdtVat > giaCuThe) {
+            giaCuThe = giaQdTcdtVat;
+          }
+        })
+        this.formData.patchValue({
+          donGiaVat: giaCuThe
+        })
+      }
     }
   }
 

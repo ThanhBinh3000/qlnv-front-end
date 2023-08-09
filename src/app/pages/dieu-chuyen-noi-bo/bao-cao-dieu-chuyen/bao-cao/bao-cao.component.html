@@ -53,8 +53,7 @@
         <div class="group-button">
             <h3 class="text-uppercase">Danh sách báo cáo kết quả điều chuyển hàng DTQG</h3>
             <div class="buttons">
-                <button type="button" class="btn btn-do" (click)="deleteSelect()"
-                    *ngIf="!isView && userService.isAccessPermisson('DCNB_TONGHOPDC_XOA') && userService.isCuc()">
+                <button type="button" class="btn btn-do" (click)="deleteSelect()" *ngIf="!isView">
                     <i class="fa fa-trash-o do" title="Xóa"></i>
                     <span>Xóa</span>
                 </button>
@@ -69,7 +68,7 @@
                     <span>Xuất file</span>
                 </button>
                 <button type="button" class="btn btn-main" (click)="redirectDetail(0,false)"
-                    *ngIf="userService.isChiCuc() || (userService.isCuc() && loaiBc==='CUC')">
+                    *ngIf="(userService.isChiCuc() && loaiBc==='CHI_CUC') || (userService.isCuc() && loaiBc==='CUC')">
                     <i class=" icon htvbdh_tcdt_tao-qd" title="Tạo BCKQ điều chuyển"></i>
                     <span>Tạo BCKQ điều chuyển</span>
                 </button>
@@ -91,9 +90,9 @@
                         <th>Số báo cáo</th>
                         <th>Tên báo cáo</th>
                         <th>Ngày báo cáo</th>
-                        <th>Số BB ghi nhận thừa/thiếu</th>
-                        <th>Số QĐ xuất/nhập ĐC của Cục</th>
-                        <th>Ngày QĐ của Cục</th>
+                        <th *ngIf="loaiBc==='CHI_CUC'">Số BB ghi nhận thừa/thiếu</th>
+                        <th *ngIf="loaiBc==='CHI_CUC'">Số QĐ xuất/nhập ĐC của Cục</th>
+                        <th *ngIf="loaiBc==='CHI_CUC'">Ngày QĐ của Cục</th>
                         <th>Trạng thái</th>
                         <th width="90px">Hành động</th>
                     </tr>
@@ -132,7 +131,7 @@
                             </nz-input-group>
 
                         </th>
-                        <th>
+                        <th *ngIf="loaiBc==='CHI_CUC'">
                             <nz-input-group>
                                 <input type="text" nz-input placeholder="Tìm kiếm"
                                     [(ngModel)]="filterTable.soBBThuaThieu"
@@ -140,14 +139,14 @@
                             </nz-input-group>
 
                         </th>
-                        <th>
+                        <th *ngIf="loaiBc==='CHI_CUC'">
                             <nz-input-group>
                                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQdDcCuc"
                                     (input)="filterInTable('soQdDcCuc',filterTable.soQdDcCuc)" size="small" />
                             </nz-input-group>
 
                         </th>
-                        <th>
+                        <th *ngIf="loaiBc==='CHI_CUC'">
                             <nz-input-group>
                                 <nz-date-picker nzFormat="dd/MM/yyyy" [(ngModel)]="filterTable.ngayKyQdCuc"
                                     (ngModelChange)="filterInTable('ngayKyQdCuc', convertDateToString(filterTable.ngayKyQdCuc))">
@@ -181,9 +180,9 @@
                         <td>{{data.soBc}}</td>
                         <td>{{data.tenBc}}</td>
                         <td>{{data.ngayBc | date:"dd/MM/yyyy"}}</td>
-                        <td>{{data.soBBThuaThieu}}</td>
-                        <td>{{data.soQdDcCuc}}</td>
-                        <td>{{ data.ngayKyQdCuc|date:"dd/MM/yyyy"}}</td>
+                        <td *ngIf="loaiBc==='CHI_CUC'">{{data.soBBThuaThieu}}</td>
+                        <td *ngIf="loaiBc==='CHI_CUC'">{{data.soQdDcCuc}}</td>
+                        <td *ngIf="loaiBc==='CHI_CUC'">{{ data.ngayKyQdCuc|date:"dd/MM/yyyy"}}</td>
                         <td>{{ TRANG_THAI[data.trangThai]}}</td>
                         <td>
                             <a (click)="redirectDetail(data.id, true)" *ngIf="checkRoleView(data.trangThai)">

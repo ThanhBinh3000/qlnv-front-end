@@ -5,7 +5,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { StorageService } from 'src/app/services/storage.service';
 import { HttpClient } from '@angular/common/http';
-import { BangCaoDieuChuyenService } from './bao-cao.service';
+import { BaoCaoDieuChuyenService } from './bao-cao.service';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
@@ -40,17 +40,18 @@ export class BaoCaoComponent extends Base2Component implements OnInit {
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private bangCaoDieuChuyenService: BangCaoDieuChuyenService
+    private baoCaoDieuChuyenService: BaoCaoDieuChuyenService
     // private donviService: DonviService,
     // private danhMucService: DanhMucService,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, bangCaoDieuChuyenService)
+    super(httpClient, storageService, notification, spinner, modal, baoCaoDieuChuyenService)
     this.formData = this.fb.group({
       soBc: [''],
       soQdinhCuc: [''],
       trangThai: [''],
       tuNgay: [''],
-      denNgay: ['']
+      denNgay: [''],
+      type: ['']
 
     })
     this.filterTable = {
@@ -90,6 +91,7 @@ export class BaoCaoComponent extends Base2Component implements OnInit {
     this.userInfo = this.userService.getUserLogin();
     this.userdetail.maDvi = this.userInfo.MA_DVI;
     this.userdetail.tenDvi = this.userInfo.TEN_DVI;
+    this.formData.patchValue({ type: this.loaiBc })
   }
   async clearForm() {
     this.formData.reset();
@@ -132,7 +134,7 @@ export class BaoCaoComponent extends Base2Component implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.bangCaoDieuChuyenService.deleteMuti({ ids: dataDelete });
+            let res = await this.baoCaoDieuChuyenService.deleteMuti({ ids: dataDelete });
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();

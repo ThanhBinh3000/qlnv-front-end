@@ -167,7 +167,7 @@
             </tr>
           </tbody>
         </nz-table>
-        <app-themmoi-kehoach-muatructiep *ngIf="idRowSelect" [isView]="isView" [idInput]="idRowSelect"
+        <app-themmoi-kehoach-muatructiep *ngIf="idRowSelect" [isView]="true" [idInput]="idRowSelect"
           [showFromTH]="true">
         </app-themmoi-kehoach-muatructiep>
       </nz-collapse-panel>
@@ -181,7 +181,7 @@
   <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}</ng-container>
 </ng-template>
 <div *ngIf="isQuyetDinh" class="chi-tiet">
-  <app-themmoi-quyetdinh-khmtt [id]="idSelected" [dataTongHop]="formData.value" [isView]="isView"
+  <app-themmoi-quyetdinh-khmtt [id]="idSelected" [dataTongHop]="formData.value" [disableField]="disableField" [isView]="isView"
     (showListEvent)="showTongHop()">
   </app-themmoi-quyetdinh-khmtt>
 </div>

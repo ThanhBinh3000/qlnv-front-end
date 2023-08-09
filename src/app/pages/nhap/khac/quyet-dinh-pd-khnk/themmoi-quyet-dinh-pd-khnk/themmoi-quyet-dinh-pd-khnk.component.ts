@@ -149,6 +149,7 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
       tenLoaiHinhNx: [null],
       kieuNx: [null],
       dvt: [null],
+      lastest: [''],
       loaiHinhNx: [null]
     })
   }
@@ -217,6 +218,8 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
   async ngOnInit() {
     await this.spinner.show();
     try {
+      console.log(this.isViewOnModal)
+      console.log(this.isQuyetDinh)
       this.userInfo = this.userService.getUserLogin();
       this.maQd = this.userInfo.MA_QD;
       for (let i = -3; i < 23; i++) {
@@ -535,6 +538,7 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
       this.formData.patchValue({
         soQd: data.soQd?.split("/")[0],
       });
+      console.log(this.formData.value)
       if (!data.idTh) {
         this.danhsachDx.push(data);
         this.danhsachDxCache = cloneDeep(this.danhsachDx);

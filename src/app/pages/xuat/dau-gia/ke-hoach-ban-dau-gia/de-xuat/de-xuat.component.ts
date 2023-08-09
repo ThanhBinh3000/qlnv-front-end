@@ -11,12 +11,12 @@ import {HttpClient} from '@angular/common/http';
 import {StorageService} from 'src/app/services/storage.service';
 import {CHUC_NANG} from "../../../../../constants/status";
 import {DauGiaComponent} from "../../dau-gia.component";
-
 @Component({
   selector: 'app-de-xuat',
   templateUrl: './de-xuat.component.html',
   styleUrls: ['./de-xuat.component.scss']
 })
+
 export class DeXuatComponent extends Base2Component implements OnInit {
   @Input()
   loaiVthh: string;
@@ -29,7 +29,6 @@ export class DeXuatComponent extends Base2Component implements OnInit {
   isViewChiTieu: boolean = false;
   idQdPd: number = 0;
   isViewQdPd: boolean = false;
-
   listTrangThai: any[] = [
     {ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo'},
     {ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối - TP'},
@@ -70,22 +69,25 @@ export class DeXuatComponent extends Base2Component implements OnInit {
       soDxuat: '',
       ngayTao: '',
       ngayPduyet: '',
+      soQdPd: '',
       ngayKyQd: '',
       trichYeu: '',
-      tenLoaiVthh: '',
       tenCloaiVthh: '',
       slDviTsan: '',
       slHdDaKy: '',
       soQdCtieu: '',
-      soQdPd: '',
       tenTrangThai: '',
+      tenTrangThaiTh: '',
+      idThop: '',
     };
   }
 
   async ngOnInit() {
+    await this.spinner.show();
     try {
       await this.timKiem()
       await this.search();
+      await this.spinner.hide();
     } catch (e) {
       console.log('error: ', e)
       this.spinner.hide();

@@ -20,13 +20,15 @@
                 <span>Duyệt</span>
             </button>
             <button
-                *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_CBV)"
+                *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_CBV)
+                && (userService.isAccessPermisson('NHDTQG_PTMTT_KHMTT_LT_DEXUAT_DUYET_LDC') || userService.isAccessPermisson('NHDTQG_PTMTT_KHMTT_LT_DEXUAT_DUYET_TP'))"
                 type="button" class="btn btn-sub xanh-nhat" (click)="save(true)">
                 <i class="icon htvbdh_tcdt_guiduyet"></i>
                 <span>Lưu và gửi duyệt</span>
             </button>
             <button
-                *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_CBV )"
+                *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_CBV )
+                && (userService.isAccessPermisson('NHDTQG_PTMTT_KHMTT_LT_DEXUAT_DUYET_LDC') || userService.isAccessPermisson('NHDTQG_PTMTT_KHMTT_LT_DEXUAT_DUYET_TP'))"
                 type="button" class="btn btn-main" (click)="save()">
                 <i class="icon htvbdh_tcdt_save"></i>
                 <span>Lưu</span>
@@ -113,7 +115,7 @@
                             <nz-form-item>
                                 <nz-form-label [nzNoColon]="true">Năm kế hoạch</nz-form-label>
                                 <nz-form-control nz-col [nzErrorTip]="error">
-                                    <nz-select formControlName="namKh" (ngModelChange)="changeNamKh()">
+                                    <nz-select [nzDisabled]="isDisable()" formControlName="namKh" (ngModelChange)="changeNamKh()">
                                         <nz-option *ngFor="let p of listNam" [nzValue]="p.value"
                                             [nzLabel]="p.text"></nz-option>
                                     </nz-select>
