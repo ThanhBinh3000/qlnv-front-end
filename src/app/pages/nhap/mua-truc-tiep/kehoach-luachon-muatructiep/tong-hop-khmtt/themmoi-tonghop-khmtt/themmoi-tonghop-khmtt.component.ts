@@ -141,6 +141,7 @@ export class ThemmoiTonghopKhmttComponent extends Base2Component implements OnIn
         })
         this.dataTable = dataDetail.children;
         this.isTongHop = true;
+        console.log(this.formData.value)
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
         this.isTongHop = false;
@@ -154,12 +155,14 @@ export class ThemmoiTonghopKhmttComponent extends Base2Component implements OnIn
     }
   }
 
-  async save() {
+  async save(isTaoQd?: boolean) {
     let body = this.formData.value;
     body.fileDinhKems = this.listFileDinhKem;
     let data = await this.createUpdate(body, 'NHDTQG_PTMTT_KHMTT_TONGHOP_TONGHOP')
     if (data) {
-      this.quayLai();
+      if(isTaoQd){
+        this.isQuyetDinh = true;
+      }
     }
   }
 
@@ -205,13 +208,13 @@ export class ThemmoiTonghopKhmttComponent extends Base2Component implements OnIn
     });
   }
 
-  taoQdinh() {
+  async taoQdinh() {
     let elem = document.getElementById('mainTongCuc');
     let tabActive = elem.getElementsByClassName('ant-menu-item')[0];
     tabActive.classList.remove('ant-menu-item-selected')
     let setActive = elem.getElementsByClassName('ant-menu-item')[2];
     setActive.classList.add('ant-menu-item-selected');
-    this.isQuyetDinh = true;
+    await this.save(true)
   }
 
   showTongHop() {

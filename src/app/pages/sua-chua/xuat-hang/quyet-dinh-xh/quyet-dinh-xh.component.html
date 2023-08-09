@@ -181,10 +181,10 @@
             <a (click)="redirectDetail(data.id)">
               <span class="icon htvbdh_eye"></span>
             </a>
-            <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="redirectDetail(data.id)">
+            <a *ngIf="this.userService.isCuc() && data.trangThai == STATUS.DU_THAO" (click)="redirectDetail(data.id)">
               <span class="fa fa-pencil"></span>
             </a>
-            <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="delete(data)">
+            <a *ngIf="this.userService.isCuc() && data.trangThai == STATUS.DU_THAO" (click)="delete(data)">
               <i class="fa fa-trash-o do"></i>
             </a>
           </td>

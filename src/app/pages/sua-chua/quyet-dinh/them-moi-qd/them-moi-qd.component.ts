@@ -94,7 +94,7 @@ export class ThemMoiQdComponent extends Base3Component implements OnInit {
           item.ngayXuat = item.thoiHanXuat
         })
         const modalQD = this.modal.create({
-          nzTitle: 'Danh sách sửa chữa',
+          nzTitle: 'Danh sách số tờ trình',
           nzContent: DialogTableSelectionComponent,
           nzMaskClosable: false,
           nzClosable: false,
