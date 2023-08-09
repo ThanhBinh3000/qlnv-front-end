@@ -102,6 +102,7 @@ export class Doc {
 export class Report {
     id: string;
     maDvi: string;
+    tenDvi: string;
     maDviCha: string;
     maDnghi: string;
     namDnghi: number;
