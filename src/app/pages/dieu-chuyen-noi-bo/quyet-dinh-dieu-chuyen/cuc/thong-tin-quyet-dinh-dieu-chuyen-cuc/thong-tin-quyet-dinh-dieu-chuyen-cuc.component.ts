@@ -797,6 +797,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
     await this.spinner.hide();
     const keHoachDcHdrId = row.hdrId
     const param = {
+      danhSachKeHoach: this.danhSachKeHoach,
       dsChiCuc: [{ key: row.maDvi, title: row.tenDvi }],
       data: row
     }
@@ -810,26 +811,25 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
       nzComponentParams: param,
     });
     modalQD.afterClose.subscribe(async (data) => {
-      this.danhSachKeHoach = this.danhSachKeHoach.filter(item => !!item.maDiemKhoNhan)
-
+      debugger
+      // this.danhSachKeHoach = this.danhSachKeHoach.filter(item => !!item.maDiemKhoNhan)
+      const diemKho = this.danhSachKeHoach.find(item => `${item.maLoKho}${item.maNganKho}${item.maNhaKho}${item.maDiemKho}${item.maDvi}` !== `${row.maLoKho}${row.maNganKho}${row.maNhaKho}${row.maDiemKho}${row.maDvi}`)
+      console.log('danhSachKeHoach', this.danhSachKeHoach)
+      console.log('diemKho', diemKho)
       if (data) {
-        if (data.isUpdate) {
-          if (this.typeKeHoach === "LO_KHO_NHAN")
-            this.danhSachKeHoach = this.danhSachKeHoach.filter(kh => kh.maLoKhoNhan !== data.maLoKhoNhan)
-          if (this.typeKeHoach === "DIEM_KHO_NHAN")
-            this.danhSachKeHoach = this.danhSachKeHoach.filter(kh => kh.maDiemKhoNhan !== data.maDiemKhoNhan)
-          this.danhSachKeHoach.push({
-            ...data,
-            maLoNganKho: data.maLoKho ? `${data.maLoKho}${data.maNganKho}` : data.maNganKho,
-            hdrId: keHoachDcHdrId
-          })
+        if (this.typeKeHoach === "LO_KHO_NHAN")
+          this.danhSachKeHoach = this.danhSachKeHoach.filter(kh => `${kh.maLoKhoNhan}${kh.maNganKhoNhan}` !== `${row.maLoKhoNhan}${row.maNganKhoNhan}`)
+        // if (this.typeKeHoach === "THEM_LO_KHO_NHAN")
+        //   this.danhSachKeHoach = this.danhSachKeHoach.filter(kh => kh.maLoKhoNhan !== data.maLoKhoNhan)
 
-        } else
-          this.danhSachKeHoach.push({
-            ...data,
-            maLoNganKho: data.maLoKho ? `${data.maLoKho}${data.maNganKho}` : data.maNganKho,
-            hdrId: keHoachDcHdrId
-          })
+        // if (this.typeKeHoach === "THEM_DIEM_KHO_NHAN")
+        //   this.danhSachKeHoach = this.danhSachKeHoach.filter(kh => kh.maDiemKhoNhan !== data.maDiemKhoNhan)
+
+        this.danhSachKeHoach.push({
+          ...data,
+          maLoNganKho: `${data.maLoKho}${data.maNganKho}`,
+          hdrId: keHoachDcHdrId
+        })
 
         this.dataTableView = this.buildTableView(this.danhSachKeHoach, "maDvi")
 
@@ -1310,6 +1310,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
       body.id = this.idInput
     }
     console.log('save', body)
+    // return
     let data = await this.createUpdate(body);
     if (data) {
       this.idInput = data.id;

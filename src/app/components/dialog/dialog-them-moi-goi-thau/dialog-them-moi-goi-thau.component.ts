@@ -14,6 +14,7 @@ import { UserLogin } from "../../../models/userlogin";
 import { UserService } from "../../../services/user.service";
 import { STATUS } from "../../../constants/status";
 import { QuyetDinhGiaTCDTNNService } from "../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service";
+import {QuyetDinhGiaCuaBtcService} from "../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaCuaBtc.service";
 
 @Component({
   selector: 'dialog-them-moi-goi-thau',
@@ -74,7 +75,8 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private dxuatKhLcntService: DxuatKhLcntService,
     private userService: UserService,
-    private quyetDinhGiaTCDTNNService: QuyetDinhGiaTCDTNNService
+    private quyetDinhGiaTCDTNNService: QuyetDinhGiaTCDTNNService,
+    private quyetDinhGiaCuaBtcService: QuyetDinhGiaCuaBtcService
   ) {
     this.formGoiThau = this.fb.group({
       goiThau: [null, [Validators.required]],
@@ -118,15 +120,14 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
       namKeHoach: this.namKeHoach,
       loaiVthh: this.loaiVthh,
       cloaiVthh: $event,
-      trangThai: STATUS.BAN_HANH,
-      maDvi: this.userInfo.MA_DVI
+      loaiGia: "LG03"
     }
     let pag = await this.quyetDinhGiaTCDTNNService.getPag(bodyPag)
-    if (pag.msg == MESSAGE.SUCCESS) {
+    if (pag.msg == MESSAGE.SUCCESS && pag.data.length > 0) {
       this.formGoiThau.patchValue({
-        donGiaVat: pag.data.giaQdVat,
-        soQdPdGiaCuThe: pag.data.soQdPdGiaCuThe,
-        ngayKyQdPdGiaCuThe: pag.data.ngayKyQdPdGiaCuThe,
+        donGiaVat: (pag.data[0].giaQdDcTcdtVat && pag.data[0].giaQdDcTcdtVat > 0)? pag.data[0].giaQdDcTcdtVat : pag.data[0].giaQdTcdtVat,
+        soQdPdGiaCuThe: pag.data[0].soQdTcdt,
+        ngayKyQdPdGiaCuThe: pag.data[0].ngayKyTcdt,
       })
     }
     this.formGoiThau.patchValue({
@@ -141,6 +142,7 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
 
   async loadListDonVi() {
     if (this.dataChiTieu) {
+      debugger
       for (let index = 0; index < this.dataChiTieu.khVatTuNhap.length; index++) {
         if (this.formGoiThau.get('cloaiVthh').value == null) {
           // if (this.dataChiTieu.khVatTuNhap[index].maVatTuCha == this.loaiVthh || this.dataChiTieu.khVatTuNhap[index].maVatTu == this.loaiVthh) {
@@ -429,10 +431,34 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
   // }
 
   async getGiaToiDa(ma: string) {
-    let res = await this.dxuatKhLcntService.getGiaBanToiDa(ma, this.userInfo.MA_DVI, this.namKeHoach);
-    if (res.msg === MESSAGE.SUCCESS) {
-      this.giaToiDa = res.data;
+    let body = {
+      namKeHoach: this.namKeHoach,
+      loaiVthh: this.loaiVthh,
+      cloaiVthh: ma,
+      loaiGia: "LG01"
     }
+    let res = await this.quyetDinhGiaCuaBtcService.getQdGiaLastestBtc(body);
+    if (res.msg === MESSAGE.SUCCESS) {
+      if (res.data) {
+        let giaToiDa = 0;
+        res.data.forEach(i => {
+          let giaQdBtc = 0;
+          if(i.giaQdDcBtcVat != null && i.giaQdDcBtcVat >0) {
+            giaQdBtc = i.giaQdDcBtcVat
+          } else {
+            giaQdBtc = i.giaQdBtcVat
+          }
+          if (giaQdBtc > giaToiDa) {
+            giaToiDa = giaQdBtc;
+          }
+        })
+        this.giaToiDa = giaToiDa;
+      }
+    }
+    // let res = await this.dxuatKhLcntService.getGiaBanToiDa(ma, this.userInfo.MA_DVI, this.namKeHoach);
+    // if (res.msg === MESSAGE.SUCCESS) {
+    //   this.giaToiDa = res.data;
+    // }
   }
 
   async changeGoiThau(event?: any) {

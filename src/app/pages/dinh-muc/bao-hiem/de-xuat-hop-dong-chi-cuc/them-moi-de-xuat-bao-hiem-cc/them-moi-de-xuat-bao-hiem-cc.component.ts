@@ -74,10 +74,8 @@ export class ThemMoiDeXuatBaoHiemCcComponent extends Base2Component implements O
     this.spinner.show();
     try {
       this.maCv = '/' + this.userInfo.DON_VI.tenVietTat + '-TCKT'
-      await Promise.all([
-        this.loadAllDsDiemKho(),
-        this.loadDsHangHoa()
-      ]);
+      this.loadAllDsDiemKho()
+      this.loadDsHangHoa()
       if (this.id) {
         this.detail(this.id)
       }
@@ -252,13 +250,11 @@ export class ThemMoiDeXuatBaoHiemCcComponent extends Base2Component implements O
   }
 
   async loadAllDsDiemKho() {
-    let body = {
-      maDviCha: this.userInfo.MA_DVI,
-      trangthai: '01',
-    }
-    const dsTong = await this.donViService.layDonViTheoCapDo(body)
-    this.dsDiemKho = dsTong[DANH_MUC_LEVEL.DIEM_KHO]
-    this.dsDiemKho = this.dsDiemKho.filter(item => item.type != 'PB')
+      let res = await this.donViService.layTatCaDonViByLevel(4);
+      if (res && res.data) {
+        this.dsDiemKho = res.data
+        this.dsDiemKho = this.dsDiemKho.filter(item => item.type != "PB" && item.maDvi.startsWith(this.userInfo.MA_DVI));
+      }
   }
 
   async changDiemKho(event, type?: any) {

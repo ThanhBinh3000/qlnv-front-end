@@ -67,7 +67,7 @@ export class BienBanNghiemThuBaoQuanLanDauComponent extends Base2Component imple
     this.formData.patchValue({
       loaiDc: this.loaiDc,
       loaiQdinh: this.loaiDc === "CUC" ? "NHAP" : null,
-      thayDoiThuKho: this.loaiDc === "DCNB" ? true : false
+      thayDoiThuKho: true
     })
 
     try {

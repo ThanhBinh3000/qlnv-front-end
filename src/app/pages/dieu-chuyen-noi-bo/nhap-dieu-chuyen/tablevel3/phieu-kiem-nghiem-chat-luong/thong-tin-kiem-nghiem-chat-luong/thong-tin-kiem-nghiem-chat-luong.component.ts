@@ -126,7 +126,7 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
       id: id,
       loaiDc: this.loaiDc,
       loaiQdinh: this.loaiDc === "CUC" ? "NHAP" : null,
-      thayDoiThuKho: this.loaiDc === "DCNB" ? true : false
+      thayDoiThuKho: true
     })
 
     if (this.idInput) {

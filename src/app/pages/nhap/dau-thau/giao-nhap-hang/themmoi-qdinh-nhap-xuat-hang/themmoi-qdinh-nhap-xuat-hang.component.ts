@@ -704,7 +704,8 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
 
   saveEdit (i, y){
     let soLuong = 0;
-    let data = cloneDeep(this.dataTable[i].children).splice(y, 1)
+    let data = cloneDeep(this.dataTable[i].children);
+    data.splice(y, 1)
     data.forEach(i => {
       soLuong += i.soLuong;
     })
