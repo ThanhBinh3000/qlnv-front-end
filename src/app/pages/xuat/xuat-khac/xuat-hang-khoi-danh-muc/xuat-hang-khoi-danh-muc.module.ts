@@ -9,6 +9,7 @@ import { TongHopDanhSachHangDtqgThuocDienXuatKhoiDmComponent } from './tong-hop-
 import { BaoCaoKqXuatHangDtqgNgoaiDmComponent } from './bao-cao-kq-xuat-hang-dtqg-ngoai-dm/bao-cao-kq-xuat-hang-dtqg-ngoai-dm.component';
 import { CapNhatDanhSachHangDtqgTheoChiDaoCpComponent } from './danh-sach-hang-du-tru-theo-chi-dao-cua-cp/cap-nhat-danh-sach-hang-dtqg-theo-chi-dao-cp/cap-nhat-danh-sach-hang-dtqg-theo-chi-dao-cp.component';
 import { CapNhapDanhSachHangTrongKhoNgoaiDmComponent } from './danh-sach-hang-du-tru-trong-kho-ngoai-danh-muc/cap-nhap-danh-sach-hang-trong-kho-ngoai-dm/cap-nhap-danh-sach-hang-trong-kho-ngoai-dm.component';
+import { ThongTinQuyetDinhXuatHangKhoiDmComponent } from './quyet-dinh-xuat-hang-khoi-danh-muc/thong-tin-quyet-dinh-xuat-hang-khoi-dm/thong-tin-quyet-dinh-xuat-hang-khoi-dm.component';
 
 
 @NgModule({
@@ -19,7 +20,8 @@ import { CapNhapDanhSachHangTrongKhoNgoaiDmComponent } from './danh-sach-hang-du
     TongHopDanhSachHangDtqgThuocDienXuatKhoiDmComponent,
     BaoCaoKqXuatHangDtqgNgoaiDmComponent,
     CapNhatDanhSachHangDtqgTheoChiDaoCpComponent,
-    CapNhapDanhSachHangTrongKhoNgoaiDmComponent
+    CapNhapDanhSachHangTrongKhoNgoaiDmComponent,
+    ThongTinQuyetDinhXuatHangKhoiDmComponent
   ],
   imports: [
     CommonModule,
