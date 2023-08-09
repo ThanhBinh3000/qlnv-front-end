@@ -73,7 +73,7 @@ export class BienBanLayBanGiaoMauComponent extends Base2Component implements OnI
         loaiVthh: this.loaiVthh
       })
       await this.search();
-      await this.convertDataTable();
+      // await this.convertDataTable();
     }
     catch (e) {
       console.log('error: ', e)
@@ -114,6 +114,7 @@ export class BienBanLayBanGiaoMauComponent extends Base2Component implements OnI
         };
       });
       this.dataTableAll = cloneDeep(this.dataTable);
+      console.log(this.dataTable)
       this.totalRecord = data.totalElements;
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
@@ -124,7 +125,7 @@ export class BienBanLayBanGiaoMauComponent extends Base2Component implements OnI
   async showList() {
     this.isDetail = false;
     await this.search();
-    await this.convertDataTable();
+    // await this.convertDataTable();
   }
   convertDataTable() {
     this.dataTable.forEach(item => {
@@ -171,7 +172,7 @@ export class BienBanLayBanGiaoMauComponent extends Base2Component implements OnI
                 MESSAGE.DELETE_SUCCESS,
               );
               await this.search();
-              await this.convertDataTable();
+              // await this.convertDataTable();
             } else {
               this.notification.error(MESSAGE.ERROR, res.msg);
             }
@@ -184,5 +185,12 @@ export class BienBanLayBanGiaoMauComponent extends Base2Component implements OnI
         }
       },
     });
+  }
+
+  goDetail(id?: number, idQdGiaoNvu?: number, isView?: boolean) {
+    this.selectedId = id;
+    this.idQdGiaoNvNh = idQdGiaoNvu;
+    this.isDetail = true;
+    this.isView = isView;
   }
 }

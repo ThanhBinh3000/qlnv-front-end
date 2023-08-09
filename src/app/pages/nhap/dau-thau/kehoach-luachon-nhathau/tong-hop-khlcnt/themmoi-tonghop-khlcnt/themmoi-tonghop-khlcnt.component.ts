@@ -321,11 +321,11 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
     });
   }
   downloadPdf() {
-    saveAs(this.pdfSrc, "qd_pd_kh_lcnt_vat_tu.pdf");
+    saveAs(this.pdfSrc, "tong_hop_kh_lcnt.pdf");
   }
 
   downloadWord() {
-    saveAs(this.wordSrc, "qd_pd_kh_lcnt_vat_tu.docx");
+    saveAs(this.wordSrc, "tong_hop_kh_lcnt.docx");
   }
 
   closeDlg() {

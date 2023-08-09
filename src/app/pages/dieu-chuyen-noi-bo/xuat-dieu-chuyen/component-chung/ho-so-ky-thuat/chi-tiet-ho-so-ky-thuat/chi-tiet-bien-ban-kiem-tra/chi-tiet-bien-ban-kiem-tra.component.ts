@@ -1,24 +1,27 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { NzDatePickerComponent } from "ng-zorro-antd/date-picker";
-import { Subject } from "rxjs";
-import { UserLogin } from "src/app/models/userlogin";
-import { HttpClient } from "@angular/common/http";
-import { StorageService } from "src/app/services/storage.service";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { BienBanGuiHangService } from "src/app/services/qlnv-hang/nhap-hang/dau-thau/nhap-kho/bienBanGuiHang.service";
-import { MESSAGE } from "src/app/constants/message";
-import { Base2Component } from "src/app/components/base2/base2.component";
-import { HSKT_LOAI_DOI_TUONG, LOAI_BIEN_BAN, STATUS } from 'src/app/constants/status';
-import { FileDinhKem } from "src/app/models/DeXuatKeHoachMuaTrucTiep";
-import { v4 as uuidv4 } from "uuid";
-import { cloneDeep } from 'lodash';
-import { saveAs } from 'file-saver';
-import { HoSoKyThuatXuatDieuChuyenService } from '../../../services/dcnb-ho-so-ky-thuat.service';
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {NzDatePickerComponent} from "ng-zorro-antd/date-picker";
+import {Subject} from "rxjs";
+import {UserLogin} from "src/app/models/userlogin";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "src/app/services/storage.service";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {BienBanGuiHangService} from "src/app/services/qlnv-hang/nhap-hang/dau-thau/nhap-kho/bienBanGuiHang.service";
+import {MESSAGE} from "src/app/constants/message";
+import {Base2Component} from "src/app/components/base2/base2.component";
+import {HSKT_LOAI_DOI_TUONG, LOAI_BIEN_BAN, STATUS} from 'src/app/constants/status';
+import {FileDinhKem} from "src/app/models/DeXuatKeHoachMuaTrucTiep";
+import {v4 as uuidv4} from "uuid";
+import {cloneDeep} from 'lodash';
+import {saveAs} from 'file-saver';
+import {
+  HoSoKyThuatCtvtService
+} from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/HoSoKyThuatCtvt.service";
+import { HoSoKyThuatBdgService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/kiem-tra-chat-luong/HoSoKyThuatBdg.service';
 
 @Component({
-  selector: 'app-chi-tiet-bien-ban-kiem-tra',
+  selector: 'app-chi-tiet-bien-ban-kiem-tra-dau-gia',
   templateUrl: './chi-tiet-bien-ban-kiem-tra.component.html',
   styleUrls: ['./chi-tiet-bien-ban-kiem-tra.component.scss']
 })
@@ -87,9 +90,9 @@ export class ChiTietBienBanKiemTraComponent extends Base2Component implements On
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private bienBanGuiHangService: BienBanGuiHangService,
-    private hoSoKyThuatXuatDieuChuyenService: HoSoKyThuatXuatDieuChuyenService
+    private hoSoKyThuatBdgService: HoSoKyThuatBdgService
   ) {
-    super(httpClient, storageService, notification, spinner, modal, hoSoKyThuatXuatDieuChuyenService);
+    super(httpClient, storageService, notification, spinner, modal, hoSoKyThuatBdgService);
     super.ngOnInit();
     this.formData = this.fb.group({
       id: [],
@@ -205,7 +208,7 @@ export class ChiTietBienBanKiemTraComponent extends Base2Component implements On
 
   async approve() {
     try {
-      this.formData.patchValue({ trangThai: STATUS.DA_KY });
+      this.formData.patchValue({trangThai: STATUS.DA_KY});
       Object.assign(this.dataHdr.xhHoSoKyThuatDtl.find(s => s.idVirtual == this.formData.value.idVirtual), this.formData.value)
       await this.createUpdate(this.dataHdr);
     } catch (e) {
@@ -288,7 +291,7 @@ export class ChiTietBienBanKiemTraComponent extends Base2Component implements On
       this.daiDienRow.type = HSKT_LOAI_DOI_TUONG.NGUOI_LIEN_QUAN;
       this.daiDienRow.idVirtual = uuidv4();
       let newData = [...this.formData.value.xhHoSoKyThuatRow, this.daiDienRow];
-      this.formData.patchValue({ xhHoSoKyThuatRow: newData });
+      this.formData.patchValue({xhHoSoKyThuatRow: newData});
       await this.buildTableView();
       this.daiDienRow = {};
     }
@@ -310,7 +313,7 @@ export class ChiTietBienBanKiemTraComponent extends Base2Component implements On
     let index = newValue.findIndex(s => s.idVirtual == item.idVirtual);
     item.edit = false;
     newValue.splice(index, 1, item);
-    this.formData.patchValue({ xhHoSoKyThuatRow: newValue });
+    this.formData.patchValue({xhHoSoKyThuatRow: newValue});
     await this.buildTableView();
   }
 
@@ -323,7 +326,7 @@ export class ChiTietBienBanKiemTraComponent extends Base2Component implements On
     let newValue = cloneDeep(this.formData.value.xhHoSoKyThuatRow);
     let index = newValue.findIndex(s => s.idVirtual == item.idVirtual);
     newValue.splice(index, 1);
-    this.formData.patchValue({ xhHoSoKyThuatRow: newValue });
+    this.formData.patchValue({xhHoSoKyThuatRow: newValue});
     await this.buildTableView();
   }
 

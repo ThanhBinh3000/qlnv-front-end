@@ -35,6 +35,7 @@ export class BienBanChuanBiKhoComponent extends Base2Component implements OnInit
     soQuyetDinhNhap: '',
     soBienBan: '',
     ngayBienBan: '',
+    namKh: '',
   };
 
   optionsDonVi: any[] = [];
@@ -53,6 +54,7 @@ export class BienBanChuanBiKhoComponent extends Base2Component implements OnInit
   userInfo: UserLogin;
   isDetail: boolean = false;
   selectedId: number = 0;
+  idQdGiaoNvNh: number = 0;
   isView: boolean = false;
   isTatCa: boolean = false;
 
@@ -69,6 +71,21 @@ export class BienBanChuanBiKhoComponent extends Base2Component implements OnInit
     nhaKho: '',
     nganLo: '',
     trangThai: '',
+  };
+  tuNgayTao: Date | null = null;
+  denNgayTao: Date | null = null;
+  disabledStartDate = (startValue: Date): boolean => {
+    if (!startValue || !this.denNgayTao) {
+      return false;
+    }
+    return startValue.getTime() > this.denNgayTao.getTime();
+  };
+
+  disabledEndDate = (endValue: Date): boolean => {
+    if (!endValue || !this.tuNgayTao) {
+      return false;
+    }
+    return endValue.getTime() <= this.tuNgayTao.getTime();
   };
 
   constructor(
@@ -143,7 +160,11 @@ export class BienBanChuanBiKhoComponent extends Base2Component implements OnInit
       },
       loaiVthh: this.loaiVthh,
       trangThai: STATUS.BAN_HANH,
-      bienBan: ['bienBanChuanBiKho']
+      namNhap: this.searchFilter.namKh,
+      soQd: this.searchFilter.soQuyetDinhNhap,
+      soBbCbk: this.searchFilter.soBienBan,
+      tuNgayTao: this.tuNgayTao != null ? dayjs(this.tuNgayTao).format('YYYY-MM-DD') + " 00:00:00" : null,
+      denNgayTao: this.denNgayTao != null ? dayjs(this.denNgayTao).format('YYYY-MM-DD') + " 23:59:59": null,
     };
     let res = await this.quyetDinhGiaoNhapHangService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -201,6 +222,7 @@ export class BienBanChuanBiKhoComponent extends Base2Component implements OnInit
       soQuyetDinhNhap: '',
       soBienBan: '',
       ngayBienBan: '',
+      namKh: '',
     };
     this.search();
   }
@@ -245,6 +267,7 @@ export class BienBanChuanBiKhoComponent extends Base2Component implements OnInit
   redirectToChiTiet(isView: boolean, id: number, idQdGiaoNvNh?: number) {
     this.selectedId = id;
     this.isDetail = true;
+    this.idQdGiaoNvNh = idQdGiaoNvNh;
     this.isView = isView;
   }
 
@@ -379,5 +402,22 @@ export class BienBanChuanBiKhoComponent extends Base2Component implements OnInit
     } else {
       this.expandSet.delete(id);
     }
+  }
+
+  checkQuyenXem (trangThai) {
+    if (trangThai) {
+      if (this.userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBCBK_XEM')) {
+        if (trangThai == STATUS.DU_THAO && this.userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBCBK_THEM')) {
+          return false;
+        } else if (trangThai == STATUS.CHO_DUYET_LDCC && this.userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBCBK_DUYET_LDCCUC')) {
+          return false;
+        } else if (trangThai == STATUS.CHO_DUYET_TK && this.userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBCBK_DUYET_THUKHO')) {
+          return false;
+        }
+        return true;
+      }
+      return false;
+    }
+    return false;
   }
 }

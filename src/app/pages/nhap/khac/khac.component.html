@@ -11,9 +11,9 @@
     </li>
     <li nz-menu-item (click)="selectTab('qdpdkhnk')"
       *ngIf="!userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_PTDT_DCKHLCNT')">
-      Quyết định phê duyệt kế hoạch nhập khác
+      Quyết định nhập hàng
     </li>
-    <li nz-menu-item (click)="selectTab('qdgnvnh')" *ngIf="!userService.isChiCuc()">
+    <li nz-menu-item (click)="selectTab('qdgnvnh')">
       Quyết định giao nhiệm vụ nhập hàng
     </li>
     <li nz-menu-item (click)="selectTab('ktcl')">

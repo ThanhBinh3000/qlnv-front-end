@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {ActivatedRoute, Router} from "@angular/router";
-import {QuyetDinhXhService} from "../../../../services/sua-chua/quyetDinhXh.service";
-import {Base3Component} from "../../../../components/base3/base3.component";
-import {PhieuXuatKhoScService} from "../../../../services/sua-chua/phieuXuatKhoSc.service";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "../../../../services/storage.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { ActivatedRoute, Router } from "@angular/router";
+import { QuyetDinhXhService } from "../../../../services/sua-chua/quyetDinhXh.service";
+import { Base3Component } from "../../../../components/base3/base3.component";
+import { PhieuXuatKhoScService } from "../../../../services/sua-chua/phieuXuatKhoSc.service";
 
 @Component({
   selector: 'app-phieu-xuat-kho',
@@ -29,15 +29,20 @@ export class PhieuXuatKhoComponent extends Base3Component implements OnInit {
     this.defaultURL = 'sua-chua/xuat-hang/phieu-xuat-kho'
     this.formData = this.fb.group({
       nam: null,
-      soQd: null,
-      trichYeu: null,
+      soQdXh: null,
+      soPhieuXuatKho: null,
       ngayTu: null,
       ngayDen: null,
     })
   }
 
   ngOnInit(): void {
-    this.search();
+    this.searchPage();
+  }
+
+  async searchPage() {
+    await this.search();
+    this.dataTable.forEach(item => item.expandSet = true);
   }
 
 }

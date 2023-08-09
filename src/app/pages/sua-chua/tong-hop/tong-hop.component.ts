@@ -58,13 +58,12 @@ export class TongHopComponent extends Base3Component implements OnInit {
       })
       ).value()
     })
-    console.log(this.dataTable)
   }
 
   openDialogDs() {
     if (this.userService.isAccessPermisson('SCHDTQG_THDSCSC_TONGHOP')) {
       const modalGT = this.modal.create({
-        nzTitle: 'Tổng hợp danh sách cần sửa chữa',
+        nzTitle: 'TỔNG HỢP DANH SÁCH CẦN SỬA CHỮA',
         nzContent: ThemmoiThComponent,
         nzMaskClosable: false,
         nzClosable: false,
@@ -72,6 +71,11 @@ export class TongHopComponent extends Base3Component implements OnInit {
         nzFooter: null,
         nzComponentParams: {
         },
+      });
+      modalGT.afterClose.subscribe((data) => {
+        if (data) {
+          this.searchData()
+        }
       });
     } else {
       this.notification.error(MESSAGE.ERROR, MESSAGE.ACCESS_DENIED);
@@ -81,11 +85,11 @@ export class TongHopComponent extends Base3Component implements OnInit {
   showDetail(idTh) {
     if (idTh) {
       const modalGT = this.modal.create({
-        nzTitle: 'Tổng hợp danh sách cần sửa chữa',
+        nzTitle: 'TỔNG HỢP DANH SÁCH CẦN SỬA CHỮA',
         nzContent: ChitietThComponent,
         nzMaskClosable: false,
         nzClosable: false,
-        nzWidth: '900px',
+        nzWidth: '1500px',
         nzFooter: null,
         nzComponentParams: {
           id: idTh
@@ -93,12 +97,17 @@ export class TongHopComponent extends Base3Component implements OnInit {
       });
       modalGT.afterClose.subscribe((data) => {
         if (data) {
-          this.ngOnInit()
+          this.searchData()
         }
       });
     } else {
       this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
     }
+  }
+
+  async searchData() {
+    await this.search();
+    await this.buildTableView()
   }
 
 }

@@ -298,6 +298,7 @@ import {DialogSuaXuatGiamComponent} from './dialog/dialog-sua-xuat-giam/dialog-s
 import {Base3Component} from './base3/base3.component';
 import {DialogTableCheckBoxComponent} from './dialog/dialog-table-check-box/dialog-table-check-box.component';
 import { DialogPhanBoHdVtComponent } from './dialog/dialog-phan-bo-hd-vt/dialog-phan-bo-hd-vt.component';
+import { DialogThemMoiDmNhomHangComponent } from './dialog/dialog-them-moi-dm-nhom-hang/dialog-them-moi-dm-nhom-hang.component';
 @NgModule({
   declarations: [
     //components
@@ -423,6 +424,7 @@ import { DialogPhanBoHdVtComponent } from './dialog/dialog-phan-bo-hd-vt/dialog-
     DialogQdPdKqlcntComponent,
     DialogSuaXuatGiamComponent,
     DialogPhanBoHdVtComponent,
+    DialogThemMoiDmNhomHangComponent,
   ],
   imports: [
     CommonModule,

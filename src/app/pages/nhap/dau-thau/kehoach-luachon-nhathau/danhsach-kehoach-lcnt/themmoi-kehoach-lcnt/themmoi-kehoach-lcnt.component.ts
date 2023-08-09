@@ -445,8 +445,14 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
           let pag = await this.quyetDinhGiaTCDTNNService.getPag(bodyPag)
           if (pag.msg == MESSAGE.SUCCESS) {
             const data = pag.data;
+            let donGiaVatQd = 0;
+            if (data.giaQdDcTcdtVat != null && data.giaQdDcTcdtVat > 0) {
+              donGiaVatQd = data.giaQdDcTcdtVat
+            } else {
+              donGiaVatQd = data.giaQdTcdtVat
+            }
             this.formData.patchValue({
-              donGiaVat: data.giaQdVat
+              donGiaVat: donGiaVatQd
             })
             // if (!data.giaQdVat) {
             //   this.notification.error(MESSAGE.ERROR, "Chủng loại hàng hóa đang chưa có giá, xin vui lòng thêm phương án giá!")
@@ -559,6 +565,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
     if (goiThau && goiThau != '') {
       disabledGoiThau = true;
     }
+    console.log(this.dataChiTieu, 'datachitieu')
     const modalGT = this.modal.create({
       nzTitle: '',
       nzContent: DialogThemMoiVatTuComponent,

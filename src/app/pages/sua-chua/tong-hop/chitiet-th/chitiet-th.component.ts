@@ -1,15 +1,17 @@
-import { Component, OnInit } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalRef, NzModalService} from "ng-zorro-antd/modal";
-import {ActivatedRoute, Router} from "@angular/router";
-import {TongHopScService} from "../../../../services/sua-chua/tongHopSc.service";
-import {Validators} from "@angular/forms";
-import {Base3Component} from "../../../../components/base3/base3.component";
-import {STATUS} from "../../../../constants/status";
-import {MESSAGE} from "../../../../constants/message";
+import { Component, Input, OnInit } from '@angular/core';
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "../../../../services/storage.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalRef, NzModalService } from "ng-zorro-antd/modal";
+import { ActivatedRoute, Router } from "@angular/router";
+import { TongHopScService } from "../../../../services/sua-chua/tongHopSc.service";
+import { Validators } from "@angular/forms";
+import { Base3Component } from "../../../../components/base3/base3.component";
+import { STATUS } from "../../../../constants/status";
+import { MESSAGE } from "../../../../constants/message";
+import { NumberToRoman } from 'src/app/shared/commonFunction';
+import { cloneDeep, chain } from 'lodash';
 
 @Component({
   selector: 'app-chitiet-th',
@@ -17,6 +19,9 @@ import {MESSAGE} from "../../../../constants/message";
   styleUrls: ['./chitiet-th.component.scss']
 })
 export class ChitietThComponent extends Base3Component implements OnInit {
+  numberToRoman = NumberToRoman
+
+  isDetail: boolean = false;
 
   constructor(
     httpClient: HttpClient,
@@ -36,17 +41,31 @@ export class ChitietThComponent extends Base3Component implements OnInit {
       thoiHanXuat: [null, [Validators.required]],
       thoiHanNhap: [null, [Validators.required]],
       thoiGianTh: [null, [Validators.required]],
+      trangThai: [],
+      tenDvi: []
     })
   }
 
   ngOnInit(): void {
+    this.dataTable = []
+    this.detail(this.id).then((res) => {
+      this.dataTable.push(res);
+      this.dataTable.forEach(item => {
+        item.expandSet = true;
+        item.groupChiCuc = chain(item.children).groupBy('scDanhSachHdr.tenChiCuc').map((value, key) => ({
+          tenDonVi: key,
+          children: value,
+        })
+        ).value()
+      })
+    });
   }
 
   onCancel() {
     this._modalRef.close();
   }
 
-  handleOk(){
+  handleOk() {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -80,6 +99,10 @@ export class ChitietThComponent extends Base3Component implements OnInit {
         }
       },
     });
+  }
+
+  showDetail() {
+    this.isDetail = true;
   }
 
 }

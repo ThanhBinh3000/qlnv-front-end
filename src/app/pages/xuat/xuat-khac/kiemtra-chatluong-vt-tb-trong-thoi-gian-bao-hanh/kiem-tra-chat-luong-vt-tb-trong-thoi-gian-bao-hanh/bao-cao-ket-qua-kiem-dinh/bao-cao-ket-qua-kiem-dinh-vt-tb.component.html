@@ -99,7 +99,7 @@
           <td>{{ data.soBaoCao }}</td>
           <td>{{ data.tenBaoCao }}</td>
           <td>{{ data.ngayBaoCao | date: 'dd/MM/YYYY' }}</td>
-          <td>{{ data.soQdGiaoNvXh }}</td>
+          <td>{{ data.soCanCu }}</td>
           <td></td>
           <td></td>
           <td>{{ data.tenTrangThai }}</td>
@@ -146,7 +146,6 @@
 </div>
 <div class="chi-tiet" *ngIf="isDetail">
   <app-thong-tin-bao-cao-ket-qua-kiem-dinh-vt-tb [idInput]="selectedId" [isView]="isView"
-                                                 [soQdGiaoNvXh]="soQdGiaoNvXhSelected"
                                                  (showListEvent)="showList()">
   </app-thong-tin-bao-cao-ket-qua-kiem-dinh-vt-tb>
 </div>

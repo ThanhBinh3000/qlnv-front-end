@@ -33,6 +33,7 @@ import { ItemCongVan } from 'src/app/pages/ke-hoach/bao-cao/bao-cao-thuc-hien-du
 })
 export class ThemMoiBienBanNhapDayKhoComponent extends Base2Component implements OnInit {
   @Input() id: number;
+  @Input() idQdGiaoNvNh: number;
   @Input() isView: boolean;
   @Input() loaiVthh: string;
   @Input() isTatCa: boolean;
@@ -112,6 +113,7 @@ export class ThemMoiBienBanNhapDayKhoComponent extends Base2Component implements
       nguoiPduyet: [''],
       donGiaHd: [10000],
       soPhieuNhapKho: [''],
+      tenNganLoKho: [''],
       soBangKeCanHang: [''],
 
     })
@@ -125,6 +127,9 @@ export class ThemMoiBienBanNhapDayKhoComponent extends Base2Component implements
       this.userInfo = this.userService.getUserLogin();
       await Promise.all([
       ]);
+      if(this.idQdGiaoNvNh > 0){
+        await this.bindingDataQd(this.idQdGiaoNvNh)
+      }
       if (this.id > 0) {
         this.loadPhieuNhapDayKho();
       } else {
@@ -253,6 +258,7 @@ export class ThemMoiBienBanNhapDayKhoComponent extends Base2Component implements
           soPhieuNhapKho: item.phieuNhapKhoHdr.soPhieuNhapKho,
           soBangKeCanHang: item.bcanKeHangHdr.soBangKeCanHang,
           ngayNkho: item.phieuNhapKhoHdr.ngayTao,
+          tenNganLoKho: item.tenLoKho ? `${item.tenLoKho} - ${item.tenNganKho}` : item.tenNganKho,
         })
       })
       let dataFirst = new Date();

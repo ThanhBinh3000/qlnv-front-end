@@ -18,4 +18,9 @@ export class MttBienBanLayMauService extends BaseService {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/chi-tiet/detail-by-so-qd`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
+
+  getQuyChuanTheoCloaiVthh(cloaiVthh): Promise<OldResponseData> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/quy-chuan-theo-loai-hang/${cloaiVthh}`;
+    return this._httpClient.get<OldResponseData>(url).toPromise();
+  }
 }

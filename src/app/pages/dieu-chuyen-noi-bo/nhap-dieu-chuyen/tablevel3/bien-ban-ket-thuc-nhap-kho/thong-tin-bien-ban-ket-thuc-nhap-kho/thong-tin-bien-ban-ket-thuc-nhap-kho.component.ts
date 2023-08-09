@@ -62,6 +62,7 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
       loaiDc: ["DCNB"],
       isVatTu: [true],
       loaiQdinh: [],
+      thayDoiThuKho: [],
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự thảo'],
       nam: [dayjs().get("year"), [Validators.required]],
@@ -110,7 +111,8 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
       tenThuKho: this.userInfo.TEN_DAY_DU,
       soBb: `${id}/${this.formData.get('nam').value}/${this.maBb}`,
       loaiDc: this.loaiDc,
-      loaiQdinh: this.loaiDc === "CUC" ? "NHAP" : null
+      loaiQdinh: this.loaiDc === "CUC" ? "NHAP" : null,
+      thayDoiThuKho: this.loaiDc !== "DCNB" ? true : null
     })
 
     if (this.idInput) {

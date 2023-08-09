@@ -91,6 +91,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
       tenLoaiVthh: [],
       cloaiVthh: [],
       tenCloaiVthh: [],
+      thayDoiThuKho: [],
       thuKho: [],
       idThuKho: [],
       lanhDao: [],
@@ -135,7 +136,8 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
       soPhieuNhapKho: `${id}/${this.formData.get('nam').value}/${this.maBb}`,
       loaiDc: this.loaiDc,
       isVatTu: this.isVatTu,
-      loaiQdinh: this.loaiDc === "CUC" ? "NHAP" : null
+      loaiQdinh: this.loaiDc === "CUC" ? "NHAP" : null,
+      thayDoiThuKho: this.loaiDc !== "DCNB" ? true : null
     })
     this.getDataNX()
     if (this.idInput) {
@@ -382,7 +384,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
     let body = {
       // trangThai: STATUS.BAN_HANH,
       // loaiVthh: ['0101', '0102'],
-      loaiDc: "DCNB",
+      loaiDc: this.loaiDc,
       // maDvi: this.userInfo.MA_DVI,
       soQdinhDcc: this.formData.value.soQdDcCuc
       // listTrangThaiXh: [STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN],
@@ -495,6 +497,10 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
 
 
   async save(isGuiDuyet?) {
+    if (!this.formData.value.thayDoiThuKho) {
+      this.formData.controls["soPhieuKtraCluong"].clearValidators();
+      this.formData.controls["idPhieuKtraCluong"].clearValidators();
+    }
     await this.spinner.show();
     let body = this.formData.value;
     body.chungTuDinhKem = this.chungTuDinhKem;

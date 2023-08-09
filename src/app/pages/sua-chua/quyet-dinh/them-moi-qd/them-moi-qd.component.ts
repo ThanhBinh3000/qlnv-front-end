@@ -7,12 +7,12 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { Base3Component } from 'src/app/components/base3/base3.component';
 import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
 import { StorageService } from 'src/app/services/storage.service';
-import {TrinhThamDinhScService} from "../../../../services/sua-chua/trinhThamDinhSc.service";
+import { TrinhThamDinhScService } from "../../../../services/sua-chua/trinhThamDinhSc.service";
 import * as moment from "moment/moment";
 import { cloneDeep, chain } from 'lodash';
-import {STATUS} from "../../../../constants/status";
-import {QuyetDinhScService} from "../../../../services/sua-chua/quyetDinhSc.service";
-import {Validators} from "@angular/forms";
+import { STATUS } from "../../../../constants/status";
+import { QuyetDinhScService } from "../../../../services/sua-chua/quyetDinhSc.service";
+import { Validators } from "@angular/forms";
 
 @Component({
   selector: 'app-them-moi-qd',
@@ -38,12 +38,12 @@ export class ThemMoiQdComponent extends Base3Component implements OnInit {
     this.defaultURL = 'sua-chua/quyet-dinh'
     this.getId();
     this.formData = this.fb.group({
-      id : [],
-      trangThai: ['00'] ,
+      id: [],
+      trangThai: ['00'],
       tenTrangThai: ['Dự thảo'],
-      soQd : [null, [Validators.required]],
+      soQd: [null, [Validators.required]],
       soTtr: [null, [Validators.required]],
-      idTtr : [null, [Validators.required]],
+      idTtr: [null, [Validators.required]],
       ngayKy: [''],
       ngayDuyetLdtc: [null, [Validators.required]],
       thoiHanXuat: [null, [Validators.required]],
@@ -61,19 +61,20 @@ export class ThemMoiQdComponent extends Base3Component implements OnInit {
     this.spinner.hide();
   }
 
-  async initForm(){
-    if(this.id){
-      await this.detail(this.id).then((res)=>{
-        if(res){
-          console.log(res)
+  async initForm() {
+    if (this.id) {
+      await this.detail(this.id).then((res) => {
+        if (res) {
+          this.fileCanCu = res.fileCanCu;
           let soQd = res.soQd.split('/')[0];
           this.formData.patchValue({
-            soQd : soQd
+            soQd: soQd
           })
           this.dataTable = chain(res.scTrinhThamDinhHdr.children).groupBy('scDanhSachHdr.tenChiCuc').map((value, key) => ({
-              tenDonVi: key,
-              children: value,
-            })
+            expandSet: true,
+            tenDonVi: key,
+            children: value,
+          })
           ).value()
         }
       })
@@ -89,13 +90,11 @@ export class ThemMoiQdComponent extends Base3Component implements OnInit {
       this.spinner.hide();
       if (res.data) {
         res.data?.forEach(item => {
-          item.ngayDuyetLdtcFr = moment(item.ngayDuyetLdtc).format('DD/MM/yyyy');
-          item.thoiHanNhapFr = moment(item.thoiHanNhap).format('DD/MM/yyyy');
-          ;
-          item.thoiHanXuatFr = moment(item.thoiHanXuat).format('DD/MM/yyyy');
+          item.ngayNhap = item.thoiHanNhap
+          item.ngayXuat = item.thoiHanXuat
         })
         const modalQD = this.modal.create({
-          nzTitle: 'Danh sách sửa chữa',
+          nzTitle: 'Danh sách số tờ trình',
           nzContent: DialogTableSelectionComponent,
           nzMaskClosable: false,
           nzClosable: false,
@@ -104,7 +103,7 @@ export class ThemMoiQdComponent extends Base3Component implements OnInit {
           nzComponentParams: {
             dataTable: res.data,
             dataHeader: ['Mã tờ trình', 'Trích yếu', 'Ngày duyệt', 'Thời hạn xuất', 'Thời hạn nhập'],
-            dataColumn: ['soTtr', 'trichYeu', 'ngayDuyetLdtcFr', 'thoiHanXuatFr', 'thoiHanNhapFr']
+            dataColumn: ['soTtr', 'trichYeu', 'ngayDuyetLdtc', 'ngayXuat', 'ngayNhap']
           },
         });
         modalQD.afterClose.subscribe(async (data) => {
@@ -123,9 +122,10 @@ export class ThemMoiQdComponent extends Base3Component implements OnInit {
                   thoiHanXuat: data.thoiHanXuat,
                 })
                 this.dataTable = chain(dataTh.children).groupBy('scDanhSachHdr.tenChiCuc').map((value, key) => ({
-                    tenDonVi: key,
-                    children: value,
-                  })
+                  expandSet: true,
+                  tenDonVi: key,
+                  children: value,
+                })
                 ).value()
               }
             });
@@ -135,36 +135,36 @@ export class ThemMoiQdComponent extends Base3Component implements OnInit {
     })
   }
 
-  showSave(){
+  showSave() {
     let trangThai = this.formData.value.trangThai;
-    return trangThai == STATUS.DU_THAO ;
+    return trangThai == STATUS.DU_THAO;
   }
 
-  save(isGuiDuyet?){
+  save(isGuiDuyet?) {
     this.spinner.show();
     let body = this.formData.value;
     body.fileDinhKemReq = this.fileDinhKem;
     body.fileCanCuReq = this.fileCanCu;
-    if(this.formData.value.soQd){
+    if (this.formData.value.soQd) {
       body.soQd = this.formData.value.soQd + '/QĐ-TCDT'
     }
-    this.createUpdate(body).then((res)=>{
-      if(res){
-        if(isGuiDuyet){
+    this.createUpdate(body).then((res) => {
+      if (res) {
+        if (isGuiDuyet) {
           this.id = res.id;
           this.pheDuyet();
-        }else{
+        } else {
           this.redirectDefault();
         }
       }
     })
   }
 
-  pheDuyet(){
-    this.approve(this.id,STATUS.BAN_HANH,"Bạn có muốn ban hành quyết định");
+  pheDuyet() {
+    this.approve(this.id, STATUS.BAN_HANH, "Bạn có muốn ban hành quyết định");
   }
 
-  disabled(){
+  disabled() {
     return this.formData.value.trangThai != STATUS.DU_THAO;
   }
 

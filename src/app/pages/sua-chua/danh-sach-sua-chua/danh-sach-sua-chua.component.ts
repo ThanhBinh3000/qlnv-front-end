@@ -16,6 +16,7 @@ import { chain, isEmpty } from "lodash";
 import { SuaChuaComponent } from "src/app/pages/sua-chua/sua-chua.component";
 import { Base3Component } from 'src/app/components/base3/base3.component';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ChiTietDanhSachSuaChuaComponent } from './chi-tiet-danh-sach-sua-chua/chi-tiet-danh-sach-sua-chua.component';
 
 @Component({
   selector: 'app-danh-sach-sua-chua',
@@ -125,14 +126,6 @@ export class DanhSachSuaChuaComponent extends Base3Component implements OnInit {
   };
 
   async timKiem() {
-    /*    if (this.formData.value.ngayDx) {
-          this.formData.value.ngayDxTu = dayjs(this.formData.value.ngayDx[0]).format('YYYY-MM-DD')
-          this.formData.value.ngayDxDen = dayjs(this.formData.value.ngayDx[1]).format('YYYY-MM-DD')
-        }
-        if (this.formData.value.ngayKetThuc) {
-          this.formData.value.ngayKetThucTu = dayjs(this.formData.value.ngayKetThuc[0]).format('YYYY-MM-DD')
-          this.formData.value.ngayKetThucDen = dayjs(this.formData.value.ngayKetThuc[1]).format('YYYY-MM-DD')
-        }*/
     await this.search();
     this.dataTable.forEach(s => {
       s.idVirtual = uuidv4();
@@ -208,4 +201,24 @@ export class DanhSachSuaChuaComponent extends Base3Component implements OnInit {
       this.expandSetString.delete(id);
     }
   }
+
+  showDetail(data) {
+    if (data) {
+      const modalGT = this.modal.create({
+        nzTitle: 'Thông tin hàng DTQG cần sửa chữa',
+        nzContent: ChiTietDanhSachSuaChuaComponent,
+        nzMaskClosable: false,
+        nzClosable: false,
+        nzWidth: '900px',
+        nzFooter: null,
+        nzComponentParams: {
+          data: data
+        },
+      });
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.ACCESS_DENIED);
+    }
+  }
+
 }
+

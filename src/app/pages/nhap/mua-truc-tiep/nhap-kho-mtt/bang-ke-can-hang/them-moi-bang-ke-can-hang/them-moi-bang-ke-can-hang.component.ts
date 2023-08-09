@@ -98,6 +98,7 @@ export class ThemMoiBangKeCanHangComponent extends Base2Component implements OnI
       nguoiTao: [''],
       trangThai: [''],
       tenTrangThai: [''],
+      tenNganLoKho: [''],
       lyDoTuChoi: [''],
       soPhieuKtraCluong: [''],
     })
@@ -261,6 +262,7 @@ export class ThemMoiBangKeCanHangComponent extends Base2Component implements OnI
       tenNganKho: data.tenNganKho,
       maLoKho: data.maLoKho,
       tenLoKho: data.tenLoKho,
+      tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho,
     });
     if (isDetail) {
       this.formData.patchValue({
