@@ -30,6 +30,10 @@
   font-weight: bold;
 }
 
+::ng-deep .ant-form-item-label>label {
+  margin-bottom: unset;
+}
+
 .bg-selected td {
   background-color: #ebedff;
 }

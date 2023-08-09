@@ -282,7 +282,7 @@
           <tr>
             <th rowspan="2" style="width: 2%;">STT</th>
             <th rowspan="2">Tên gói thầu</th>
-            <th rowspan="2">Chủng loại hàng dtqg</th>
+            <th rowspan="2">Chủng loại hàng DTQG</th>
             <th rowspan="2">Cục DTNN KV</th>
             <th colspan="4">Kế hoạch đấu thầu</th>
             <th colspan="4">Kết quả đấu thầu</th>
@@ -309,13 +309,13 @@
                 <td>{{item.tenCloaiVthh}}</td>
                 <td></td>
                 <td class="text-right">{{item.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                <td>{{item.dviTinh}}</td>
+                <td class="text-center">{{item.dviTinh}}</td>
                 <td class="text-right">{{item.donGiaVat | number : '1.0-1': 'vi_VN'}}</td>
                 <td class="text-right">{{item.soLuong * item.donGiaVat | number: '1.0-1' : 'vi_VN'}}
                 <td>{{item.tenNhaThau}}</td>
-                <td>{{item.donGiaNhaThau | number: '1.0-1' : 'vi_VN'}}</td>
-                <td>{{item.donGiaNhaThau * item.soLuong | number: '1.0-1' : 'vi_VN'}}</td>
-                <td>{{item.donGiaNhaThau?((item.soLuong * item.donGiaVat) - (item.donGiaNhaThau * item.soLuong) | number: '1.0-1' : 'vi_VN'): ''}}</td>
+                <td class="text-right">{{item.donGiaNhaThau | number: '1.0-1' : 'vi_VN'}}</td>
+                <td class="text-right">{{item.donGiaNhaThau * item.soLuong | number: '1.0-1' : 'vi_VN'}}</td>
+                <td class="text-right">{{item.donGiaNhaThau?((item.soLuong * item.donGiaVat) - (item.donGiaNhaThau * item.soLuong) | number: '1.0-1' : 'vi_VN'): ''}}</td>
                 <td>{{item.tenTrangThaiDt}}</td>
               </tr>
             </ng-container>
@@ -327,13 +327,13 @@
                   <td>{{item.tenCloaiVthh}}</td>
                   <td></td>
                   <td class="text-right">{{item.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                  <td>{{item.dviTinh}}</td>
+                  <td class="text-center">{{item.dviTinh}}</td>
                   <td class="text-right">{{item.donGiaVat | number : '1.0-1': 'vi_VN'}}</td>
                   <td class="text-right">{{item.soLuong * item.donGiaVat | number: '1.0-1' : 'vi_VN'}}
                   <td>{{item.kqlcntDtl?.tenNhaThau}}</td>
-                  <td>{{item.kqlcntDtl?.donGiaVat | number: '1.0-1' : 'vi_VN'}}</td>
-                  <td>{{item.kqlcntDtl?.donGiaVat * item.soLuong | number : '1.0-1': 'vi_VN'}}</td>
-                  <td>{{item.kqlcntDtl?.donGiaVat?((item.soLuong * item.donGiaVat) - (item.kqlcntDtl?.donGiaVat * item.soLuong)  | number : '1.0-1': 'vi_VN'): ''}}</td>
+                  <td class="text-right">{{item.kqlcntDtl?.donGiaVat | number: '1.0-1' : 'vi_VN'}}</td>
+                  <td class="text-right">{{item.kqlcntDtl?.donGiaVat * item.soLuong | number : '1.0-1': 'vi_VN'}}</td>
+                  <td class="text-right">{{item.kqlcntDtl?.donGiaVat?((item.soLuong * item.donGiaVat) - (item.kqlcntDtl?.donGiaVat * item.soLuong)  | number : '1.0-1': 'vi_VN'): ''}}</td>
                   <td>{{item.kqlcntDtl?.tenTrangThai}}</td>
                   <td *ngIf="isShowFromKq && isKqDaBh">
                     <a (click)="startEditRowNt(i)">
@@ -347,7 +347,7 @@
                   <td>{{item.tenCloaiVthh}}</td>
                   <td></td>
                   <td class="text-right">{{item.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                  <td>{{item.dviTinh}}</td>
+                  <td class="text-center">{{item.dviTinh}}</td>
                   <td class="text-right">{{item.donGiaVat | number : '1.0-1': 'vi_VN'}}</td>
                   <td class="text-right">{{item.soLuong * item.donGiaVat | number: '1.0-1' : 'vi_VN'}}
                   <td>
@@ -382,7 +382,7 @@
                 <td></td>
                 <td>{{cuc.tenDvi}}</td>
                 <td class="text-right">{{cuc.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                <td>{{item.dviTinh}}</td>
+                <td class="text-center">{{item.dviTinh}}</td>
                 <td class="text-right">{{item.donGiaVat | number :'1.0-1' : 'vi_VN'}}</td>
                 <td class="text-right">{{cuc.soLuong * item.donGiaVat | number: '1.0-1' : 'vi_VN'}}
                 <td></td>
@@ -394,21 +394,23 @@
               </tr>
             </ng-container>
           </ng-container>
-          </tbody>
           <tr *ngIf="danhsachDx.length > 0">
-            <td colspan="3"></td>
-            <td nzLeft class="first-last-row-table background-last-row text-right blue-text">Tổng</td>
-            <td class="background-last-row text-right blue-text">{{ calcTongSl() | number : '1.0-1' : 'vi_VN' }}</td>
             <td></td>
             <td></td>
-            <td class="background-last-row text-right blue-text">{{ calcTongThanhTien() | number : '1.0-1' :'vi_VN'}}</td>
+            <td></td>
+            <td nzLeft class="blue-text">TỔNG</td>
+            <td class="text-right blue-text">{{ calcTongSl() | number : '1.0-1' : 'vi_VN' }}</td>
             <td></td>
             <td></td>
-            <td class="background-last-row text-right blue-text">{{ calcTongThanhTienKq() | number : '1.0-1' :'vi_VN'}}</td>
+            <td class="text-right blue-text">{{ calcTongThanhTien() | number : '1.0-1' :'vi_VN'}}</td>
+            <td></td>
+            <td></td>
+            <td class="text-right blue-text">{{ calcTongThanhTienKq() | number : '1.0-1' :'vi_VN'}}</td>
             <td></td>
             <td></td>
             <td *ngIf="isShowFromKq && isKqDaBh"></td>
           </tr>
+          </tbody>
         </nz-table>
       </nz-collapse-panel>
     </nz-collapse>
