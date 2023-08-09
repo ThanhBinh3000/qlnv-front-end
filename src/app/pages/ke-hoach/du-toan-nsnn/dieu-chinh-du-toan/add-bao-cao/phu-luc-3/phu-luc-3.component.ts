@@ -14,6 +14,7 @@ import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
 import * as XLSX from 'xlsx';
 import { BtnStatus, Doc, Form } from '../../dieu-chinh-du-toan.constant';
+import { CurrencyMaskInputMode } from 'ngx-currency';
 
 export class ItemData {
     level: any;
@@ -36,6 +37,18 @@ export class ItemData {
     ghiChu: string;
 }
 
+export const amount1 = {
+    allowZero: true,
+    allowNegative: true,
+    precision: 4,
+    prefix: '',
+    thousands: '.',
+    decimal: ',',
+    align: "left",
+    nullable: true,
+    inputMode: CurrencyMaskInputMode.NATURAL,
+}
+
 @Component({
     selector: 'app-phu-luc-3',
     templateUrl: './phu-luc-3.component.html',
@@ -45,7 +58,7 @@ export class PhuLuc3Component implements OnInit {
     @Input() dataInfo;
     Utils = Utils;
     Op = new Operator('1');
-
+    amount1 = amount1;
     status: BtnStatus = new BtnStatus();
     formDetail: Form = new Form();
     maDviTien: string = '1';

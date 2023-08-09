@@ -40,7 +40,7 @@ export class ItemData {
     ykienDviCtren: string;
 }
 
-export const AMOUNT1 = {
+export const amount1 = {
     allowZero: true,
     allowNegative: true,
     precision: 4,
@@ -72,7 +72,7 @@ export class PhuLuc6Component implements OnInit {
     tongDieuChinhGiam: number;
     dToanVuTang: number;
     dToanVuGiam: number;
-
+    amount1 = amount1;
     //danh muc
     lstCtietBcao: ItemData[] = [];
     keys = ['ttienNamDtoan', 'thienNamTruoc', 'dtoanNamHtai', 'uocNamHtai', 'sluongNamDtoan', 'sluongTd', 'ttienTd', 'chenhLech']
