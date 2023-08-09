@@ -177,6 +177,16 @@ export class BienBanChuanBiKhoComponent extends Base2Component implements OnInit
     return children
   }
 
+  async changePageIndex(event) {
+    this.page = event;
+    await this.timKiem();
+  }
+
+  async changePageSize(event) {
+    this.pageSize = event;
+    await this.timKiem();
+  }
+
   async timKiem() {
     if (this.formData.value.tuNgayLapBb) {
       this.formData.value.tuNgayLapBb = dayjs(this.formData.value.tuNgayLapBb).format('YYYY-MM-DD')

@@ -72,27 +72,28 @@ export class BienBanMauComponent extends Base2Component implements OnInit {
     this.formData = this.fb.group({
       nam: null,
       soQdinh: null,
+      soBbLayMau: null,
       tuNgayLayMau: null,
       denNgayLayMau: null,
-      trichYeu: null,
+      dviKiemNghiem: null,
       type: ["01"],
       loaiDc: [this.loaiDc],
       isVatTu: [this.isVatTu],
       loaiQdinh: [],
       thayDoiThuKho: []
     })
-    this.filterTable = {
-      nam: '',
-      soQdinh: '',
-      ngayKyQdinh: '',
-      loaiDc: '',
-      trichYeu: '',
-      maDxuat: '',
-      maThop: '',
-      soQdinhXuatCuc: '',
-      soQdinhNhapCuc: '',
-      tenTrangThai: '',
-    };
+    // this.filterTable = {
+    //   nam: '',
+    //   soQdinh: '',
+    //   ngayKyQdinh: '',
+    //   loaiDc: '',
+    //   trichYeu: '',
+    //   maDxuat: '',
+    //   maThop: '',
+    //   soQdinhXuatCuc: '',
+    //   soQdinhNhapCuc: '',
+    //   tenTrangThai: '',
+    // };
   }
 
 
@@ -200,6 +201,16 @@ export class BienBanMauComponent extends Base2Component implements OnInit {
     });
   }
 
+  async changePageIndex(event) {
+    this.page = event;
+    await this.timKiem();
+  }
+
+  async changePageSize(event) {
+    this.pageSize = event;
+    await this.timKiem();
+  }
+
   async timKiem() {
     if (this.formData.value.tuNgayLayMau) {
       this.formData.value.tuNgayLayMau = dayjs(this.formData.value.tuNgayLayMau).format('YYYY-MM-DD')
@@ -209,6 +220,7 @@ export class BienBanMauComponent extends Base2Component implements OnInit {
     }
 
     let body = this.formData.value
+    if (body.soQdinh) body.soQdinh = `${body.soQdinh}/DCNB`
     body.paggingReq = {
       limit: this.pageSize,
       page: this.page - 1
