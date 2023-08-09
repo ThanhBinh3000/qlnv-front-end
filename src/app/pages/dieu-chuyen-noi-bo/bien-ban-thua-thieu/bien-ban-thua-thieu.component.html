@@ -3,20 +3,19 @@
         <nz-card class="mt16 flex-card p-lr16">
             <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
                 <div nz-row [nzGutter]="20">
-                    <div nz-col nzSpan="4" class="mt-16">
-                        <label class="search__label">Số báo cáo</label>
-                        <input nz-input formControlName="soBc" />
+                    <div nz-col nzSpan="2" class="mt-16">
+                        <label class="search__label"> Năm kế hoạch </label>
+                        <nz-select formControlName="nam">
+                            <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+                        </nz-select>
                     </div>
                     <div nz-col nzSpan="4" class="mt-16">
-                        <label class="search__label">Số quyết định ĐC của Cục</label>
+                        <label class="search__label">Số quyết định xuất/nhập ĐC của Cục</label>
                         <input nz-input formControlName="soQdinhCuc" />
                     </div>
-                    <div nz-col nzSpan="4" class="mt-16">
-                        <label class="search__label"> Trạng thái </label>
-                        <nz-select formControlName="trangThai">
-                            <nz-option *ngFor="let p of LIST_TRANG_THAI" [nzValue]="p.ma"
-                                [nzLabel]="p.giaTri"></nz-option>
-                        </nz-select>
+                    <div nz-col nzSpan="5" class="mt-16">
+                        <label class="search__label">Số báo cáo</label>
+                        <input nz-input formControlName="soBc" />
                     </div>
                     <div nz-col nzSpan="4" class="mt-16">
                         <label class="search__label">Ngày báo cáo</label>
@@ -24,17 +23,36 @@
                         <div nz-row>
                             <div nz-col nzSpan="12" class="cus-start-date">
                                 <nz-date-picker [nzDisabledDate]="disabledTuNgay" nzFormat="dd/MM/yyyy"
-                                    formControlName="tuNgay" nzPlaceHolder="Ngày bắt đầu">
+                                    formControlName="tuNgayBc" nzPlaceHolder="Ngày bắt đầu">
                                 </nz-date-picker>
                             </div>
                             <div nz-col nzSpan="12" class="cus-end-date">
                                 <nz-date-picker [nzDisabledDate]="disabledDenNgay" nzFormat="dd/MM/yyyy"
-                                    formControlName="denNgay" nzPlaceHolder="Ngày kết thúc">
+                                    formControlName="denNgayBc" nzPlaceHolder="Ngày kết thúc">
                                 </nz-date-picker>
                             </div>
                         </div>
                     </div>
-
+                    <div nz-col nzSpan="5" class="mt-16">
+                        <label class="search__label">Số biên bản ghi nhận thừa/thiếu</label>
+                        <input nz-input formControlName="soBc" />
+                    </div>
+                    <div nz-col nzSpan="4" class="mt-16">
+                        <label class="search__label">Ngày lập biên bản ghi nhận thừa/thiếu</label>
+                        <!-- <nz-range-picker formControlName="ngayTongHop" nzFormat="dd/MM/yyyy"></nz-range-picker> -->
+                        <div nz-row>
+                            <div nz-col nzSpan="12" class="cus-start-date">
+                                <nz-date-picker [nzDisabledDate]="disabledTuNgayBbTt" nzFormat="dd/MM/yyyy"
+                                    formControlName="tuNgayBbTt" nzPlaceHolder="Ngày bắt đầu">
+                                </nz-date-picker>
+                            </div>
+                            <div nz-col nzSpan="12" class="cus-end-date">
+                                <nz-date-picker [nzDisabledDate]="disabledDenNgayBbTt" nzFormat="dd/MM/yyyy"
+                                    formControlName="denNgayBbTt" nzPlaceHolder="Ngày kết thúc">
+                                </nz-date-picker>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </form>
             <div nz-col class="cangiua group-button-search">
@@ -51,12 +69,12 @@
             </div>
         </nz-card>
         <div class="group-button">
-            <h3 class="text-uppercase">Danh sách báo cáo kết quả điều chuyển hàng DTQG</h3>
+            <h3 class="text-uppercase">Danh sách biên bản ghi nhận thừa/thiếu</h3>
             <div class="buttons">
-                <button type="button" class="btn btn-do" (click)="deleteSelect()" *ngIf="!isView">
+                <!-- <button type="button" class="btn btn-do" (click)="deleteSelect()" *ngIf="userService.isCuc || userService.isChiCuc">
                     <i class="fa fa-trash-o do" title="Xóa"></i>
                     <span>Xóa</span>
-                </button>
+                </button> -->
                 <!-- <button type="button" class="btn btn-do" (click)="deleteMulti()" *ngIf="!isView">
                     <i class="fa fa-trash-o do"></i>
                     <span>Xóa</span>
@@ -68,9 +86,9 @@
                     <span>Xuất file</span>
                 </button>
                 <button type="button" class="btn btn-main" (click)="redirectDetail(0,false)"
-                    *ngIf="(userService.isChiCuc() && loaiBc==='CHI_CUC') || (userService.isCuc() && loaiBc==='CUC')">
-                    <i class=" icon htvbdh_tcdt_tao-qd" title="Tạo BCKQ điều chuyển"></i>
-                    <span>Tạo BCKQ điều chuyển</span>
+                    *ngIf="userService.isChiCuc()">
+                    <i class=" icon htvbdh_tcdt_tao-qd" title="Thêm mới"></i>
+                    <span>Thêm mới</span>
                 </button>
             </div>
         </div>
@@ -81,22 +99,23 @@
                 [nzShowPagination]="false" nzBordered>
                 <thead>
                     <tr>
-                        <th width="45px" *ngIf="!isView">
+                        <!-- <th width="45px" *ngIf="!isView">
                             <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
                                 [nzIndeterminate]="indeterminate"></label>
-                        </th>
+                        </th> -->
                         <th width="60px" class="text-center">STT</th>
-                        <th>Năm báo cáo</th>
+                        <th>Năm kế hoạch</th>
+                        <th>Số QĐ xuất/nhập ĐC của Cục</th>
+                        <th>Ngày QĐ của Cục</th>
                         <th>Số báo cáo</th>
-                        <th>Tên báo cáo</th>
                         <th>Ngày báo cáo</th>
-                        <th *ngIf="loaiBc==='CHI_CUC'">Số BB ghi nhận thừa/thiếu</th>
-                        <th *ngIf="loaiBc==='CHI_CUC'">Số QĐ xuất/nhập ĐC của Cục</th>
-                        <th *ngIf="loaiBc==='CHI_CUC'">Ngày QĐ của Cục</th>
+                        <th>Tên báo cáo</th>
+                        <th>Số BB ghi nhận thừa/thiếu</th>
+                        <th>Ngày lập biên bản</th>
                         <th>Trạng thái</th>
                         <th width="90px">Hành động</th>
                     </tr>
-                    <tr class="search-table">
+                    <!-- <tr class="search-table">
                         <th></th>
                         <th></th>
                         <th>
@@ -166,23 +185,24 @@
                             </nz-input-group>
                         </th>
                         <th></th>
-                    </tr>
+                    </tr> -->
                 </thead>
                 <tbody>
                     <!-- <tr *ngFor="let data of basicTable.data; let i = index"> -->
                     <tr *ngFor="let data of dataTable; let i = index">
-                        <th width="45px" *ngIf="!isView">
+                        <!-- <th width="45px" *ngIf="!isView">
                             <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
                                 [nzDisabled]="data.trangThai && data.trangThai != STATUS.DU_THAO"></label>
-                        </th>
+                        </th> -->
                         <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
                         <td>{{ data.nam }}</td>
+                        <td>{{data.soQdDcCuc}}</td>
+                        <td>{{ data.ngayKyQdCuc|date:"dd/MM/yyyy"}}</td>
                         <td>{{data.soBc}}</td>
-                        <td>{{data.tenBc}}</td>
                         <td>{{data.ngayBc | date:"dd/MM/yyyy"}}</td>
-                        <td *ngIf="loaiBc==='CHI_CUC'">{{data.soBBThuaThieu}}</td>
-                        <td *ngIf="loaiBc==='CHI_CUC'">{{data.soQdDcCuc}}</td>
-                        <td *ngIf="loaiBc==='CHI_CUC'">{{ data.ngayKyQdCuc|date:"dd/MM/yyyy"}}</td>
+                        <td>{{data.tenBc}}</td>
+                        <td>{{data.soBBThuaThieu}}</td>
+                        <td>{{data.ngayBBThuaThieu}}</td>
                         <td>{{ TRANG_THAI[data.trangThai]}}</td>
                         <td>
                             <a (click)="redirectDetail(data.id, true)" *ngIf="checkRoleView(data.trangThai)">
@@ -222,6 +242,6 @@
     </div>
 </div>
 <ng-template #templateThemmoi>
-    <app-them-moi-bao-cao [idInput]="selectedId" [isView]="isView" (showListEvent)="showList()"
-        [loaiBc]="loaiBc"></app-them-moi-bao-cao>
+    <app-chi-tiet-bien-ban-thua-thieu [idInput]="selectedId"
+        (showListEvent)="showList()"></app-chi-tiet-bien-ban-thua-thieu>
 </ng-template>

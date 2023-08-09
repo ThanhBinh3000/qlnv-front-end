@@ -60,11 +60,20 @@ export const ROUTE_LIST: Array<ChiTietMenu> = [
     // accessPermisson: 'DCNB_KHDC'
   },
   {
-    icon: 'htvbdh_tcdt_chitieukehoachnam',
+    icon: 'htvbdh_tcdt_baocao2',
     title: 'Báo cáo kết quả điều chuyển',
     url: `/bao-cao`,
     dropdown: 'bao-cao',
     idHover: 'bao-cao',
+    hasTab: false,
+    // accessPermisson: 'DCNB_KHDC'
+  },
+  {
+    icon: 'htvbdh_tcdt_chitieukehoachnam',
+    title: 'Biên bản ghi nhận thừa/thiếu',
+    url: `/bien-ban-thua-thieu`,
+    dropdown: 'bien-ban-thua-thieu',
+    idHover: 'bien-ban-thua-thieu',
     hasTab: false,
     // accessPermisson: 'DCNB_KHDC'
   },

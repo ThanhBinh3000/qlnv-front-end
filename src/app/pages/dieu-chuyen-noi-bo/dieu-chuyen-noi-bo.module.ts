@@ -22,6 +22,8 @@ import { QuyetDinhDieuChuyenModule } from './quyet-dinh-dieu-chuyen/quyet-dinh-d
 import { ThemMoiBaoCaoComponent } from './bao-cao-dieu-chuyen/bao-cao/them-moi-bao-cao/them-moi-bao-cao.component';
 import { BaoCaoComponent } from './bao-cao-dieu-chuyen/bao-cao/bao-cao.component';
 import { BaoCaoDieuChuyenComponent } from './bao-cao-dieu-chuyen/bao-cao-dieu-chuyen.component';
+import { BienBanThuaThieuComponent } from './bien-ban-thua-thieu/bien-ban-thua-thieu.component';
+import { ChiTietBienBanThuaThieuComponent } from './bien-ban-thua-thieu/chi-tiet-bien-ban-ban-thua-thieu/chi-tiet-bien-ban-thua-thieu.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +38,9 @@ import { BaoCaoDieuChuyenComponent } from './bao-cao-dieu-chuyen/bao-cao-dieu-ch
     DialogTuChoiTongHopDieuChuyenComponent,
     BaoCaoDieuChuyenComponent,
     BaoCaoComponent,
-    ThemMoiBaoCaoComponent
+    ThemMoiBaoCaoComponent,
+    BienBanThuaThieuComponent,
+    ChiTietBienBanThuaThieuComponent
   ],
   imports: [
     CommonModule,

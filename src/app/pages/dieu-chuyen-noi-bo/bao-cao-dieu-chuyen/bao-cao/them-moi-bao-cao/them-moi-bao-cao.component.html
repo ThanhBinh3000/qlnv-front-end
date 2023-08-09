@@ -14,11 +14,12 @@
                         <i class="fa fa-arrow-left" title="Quay lại"></i>
                         <span>Quay lại</span>
                     </button>
-                    <button *ngIf="checkRoleHoanThanh()" type="button" class="btn btn-sub" (click)="hoanThanh()">
+                    <button *ngIf="checkRoleHoanThanh()" type="button" class="btn btn-sub" (click)="save(true)">
                         <i class="icon  htvbdh_da-xu-ly" title="Hoàn thành"></i>
                         <span>Hoàn thành</span>
                     </button>
-                    <button nz-button type="button" class="modal__button--save" (click)="save(false)">
+                    <button *ngIf="!isView && formData.value.trangThai !== STATUS.DA_HOAN_THANH" nz-button type="button"
+                        class="modal__button--save" (click)="save(false)">
                         <i class="icon htvbdh_tcdt_save" title="Lưu"></i>
                         <span>Lưu</span>
                     </button>
@@ -72,10 +73,10 @@
                 </div>
                 <div nz-col nzSpan="4">
                     <nz-form-item class="form-item">
-                        <nz-form-label [nzNoColon]="true" nzRequired> Số báo cáo</nz-form-label>
+                        <nz-form-label [nzNoColon]="true"> Số báo cáo</nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
-                            <nz-input-group nzAddOnAfter="/BC-CCDTVP">
-                                <input [readonly]="isView" nz-input formControlName="soBc" readonly />
+                            <nz-input-group>
+                                <input nz-input formControlName="soBc" readonly />
                             </nz-input-group>
                         </nz-form-control>
                     </nz-form-item>
@@ -236,8 +237,8 @@
                                 <td *ngIf="i2===0" [rowSpan]="item.childData.length" class="text-right">
                                     {{lv2.slTon}}</td>
 
-                                <td>{{lv2.tenChiCucNhan}}</td>
-                                <td>{{lv2.diemKhoNhan}}</td>
+                                <td>{{lv2.tenDviNhan}}</td>
+                                <td>{{lv2.tenDiemKhoNhan}}</td>
                                 <td>{{lv2.tenLokhoNhan || ""}} {{lv2.tenNganKhoNhan || ""}}
                                     {{lv2.tenNhaKhoNhan || ""}}</td>
 
