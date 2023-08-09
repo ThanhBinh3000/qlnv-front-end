@@ -126,7 +126,7 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
       loaiDc: this.loaiDc,
       isVatTu: this.isVatTu,
       loaiQdinh: this.loaiDc === "CUC" ? "NHAP" : null,
-      thayDoiThuKho: this.loaiDc === "DCNB" ? true : false
+      thayDoiThuKho: true
     })
 
     if (this.idInput) {

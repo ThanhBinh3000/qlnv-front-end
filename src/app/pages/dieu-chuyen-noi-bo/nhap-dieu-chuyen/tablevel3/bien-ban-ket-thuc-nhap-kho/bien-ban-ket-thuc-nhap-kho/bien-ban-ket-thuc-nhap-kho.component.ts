@@ -50,6 +50,7 @@ export class BienBanKetThucNhapKhoComponent extends Base2Component implements On
       loaiDc: ["DCNB"],
       isVatTu: [true],
       loaiQdinh: [],
+      thayDoiThuKho: [],
     })
   }
 
@@ -64,7 +65,8 @@ export class BienBanKetThucNhapKhoComponent extends Base2Component implements On
     });
     this.formData.patchValue({
       loaiDc: this.loaiDc,
-      loaiQdinh: this.loaiDc === "CUC" ? "NHAP" : null
+      loaiQdinh: this.loaiDc === "CUC" ? "NHAP" : null,
+      thayDoiThuKho: this.loaiDc !== "DCNB" ? true : null
     })
 
     try {

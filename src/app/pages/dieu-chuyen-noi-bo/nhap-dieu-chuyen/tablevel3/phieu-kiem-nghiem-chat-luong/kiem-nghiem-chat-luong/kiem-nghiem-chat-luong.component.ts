@@ -103,7 +103,7 @@ export class KiemNghiemChatLuongComponent extends Base2Component implements OnIn
     this.formData.patchValue({
       loaiDc: this.loaiDc,
       loaiQdinh: this.loaiDc === "CUC" ? "NHAP" : null,
-      thayDoiThuKho: this.loaiDc === "DCNB" ? true : false
+      thayDoiThuKho: true
     })
 
     try {

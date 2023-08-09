@@ -126,7 +126,7 @@ export class BienBanMauComponent extends Base2Component implements OnInit {
       loaiDc: this.loaiDc,
       isVatTu: this.isVatTu,
       loaiQdinh: this.loaiDc === "CUC" ? "NHAP" : null,
-      thayDoiThuKho: this.loaiDc === "DCNB" ? true : false
+      thayDoiThuKho: true
     })
 
 

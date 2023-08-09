@@ -73,7 +73,7 @@ export class BienBanChuanBiKhoComponent extends Base2Component implements OnInit
     this.formData.patchValue({
       loaiDc: this.loaiDc,
       loaiQdinh: this.loaiDc === "CUC" ? "NHAP" : null,
-      thayDoiThuKho: this.loaiDc === "DCNB" ? true : false
+      thayDoiThuKho: true
     })
 
     try {
