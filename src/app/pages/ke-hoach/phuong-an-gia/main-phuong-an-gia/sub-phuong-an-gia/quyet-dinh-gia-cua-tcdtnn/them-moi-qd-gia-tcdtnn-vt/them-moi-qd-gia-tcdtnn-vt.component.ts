@@ -262,6 +262,9 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
           let body = {
             listId: thRes && thRes.length > 0 ? thRes.map(item => item.id) : []
           }
+          this.formData.patchValue({
+            soToTrinh : thRes && thRes.length > 0 ? thRes.map(item=> item.soDeXuat).toString() : []
+          })
           this.tongHopData(body);
         }
       });
