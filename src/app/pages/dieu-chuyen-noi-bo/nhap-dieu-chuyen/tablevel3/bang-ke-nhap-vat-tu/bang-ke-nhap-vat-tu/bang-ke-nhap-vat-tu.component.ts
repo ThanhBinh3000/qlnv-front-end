@@ -53,19 +53,20 @@ export class BangKeNhapVatTuComponent extends Base2Component implements OnInit {
       loaiDc: ["DCNB"],
       isVatTu: [true],
       loaiQdinh: [],
+      thayDoiThuKho: []
     })
-    this.filterTable = {
-      nam: '',
-      soQdinh: '',
-      ngayKyQdinh: '',
-      loaiDc: '',
-      trichYeu: '',
-      maDxuat: '',
-      maThop: '',
-      soQdinhXuatCuc: '',
-      soQdinhNhapCuc: '',
-      tenTrangThai: '',
-    };
+    // this.filterTable = {
+    //   nam: '',
+    //   soQdinh: '',
+    //   ngayKyQdinh: '',
+    //   loaiDc: '',
+    //   trichYeu: '',
+    //   maDxuat: '',
+    //   maThop: '',
+    //   soQdinhXuatCuc: '',
+    //   soQdinhNhapCuc: '',
+    //   tenTrangThai: '',
+    // };
   }
 
   data: any = {};
@@ -80,7 +81,8 @@ export class BangKeNhapVatTuComponent extends Base2Component implements OnInit {
 
     this.formData.patchValue({
       loaiDc: this.loaiDc,
-      loaiQdinh: this.loaiDc === "CUC" ? "NHAP" : null
+      loaiQdinh: this.loaiDc === "CUC" ? "NHAP" : null,
+      thayDoiThuKho: this.loaiDc !== "DCNB" ? true : null
     })
 
     try {

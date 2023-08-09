@@ -36,6 +36,10 @@
       <app-tong-hop-ds-vt-tb-trong-thoi-gian-bao-hanh
         (tabFocus)="receivedTab($event)"></app-tong-hop-ds-vt-tb-trong-thoi-gian-bao-hanh>
     </ng-container>
+    <ng-container *ngIf="tabSelected == 2">
+      <app-quyet-dinh-xuat-giam-vat-tu-bao-hanh>
+      </app-quyet-dinh-xuat-giam-vat-tu-bao-hanh>
+    </ng-container>
     <ng-container *ngIf="tabSelected == 3">
       <app-qd-giao-nv-xuat-nhap-vt-tb-trong-thoi-gian-bao-hanh>
       </app-qd-giao-nv-xuat-nhap-vt-tb-trong-thoi-gian-bao-hanh>

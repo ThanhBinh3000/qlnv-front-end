@@ -80,18 +80,6 @@ export class BangKeCanHangComponent extends Base2Component implements OnInit {
       ngayNhapKhoDen: null,
       loaiVthh: [this.loaiVthh]
     })
-    // this.filterTable = {
-    //   nam: '',
-    //   soQdinh: '',
-    //   ngayKyQdinh: '',
-    //   loaiDc: '',
-    //   trichYeu: '',
-    //   maDxuat: '',
-    //   maThop: '',
-    //   soQdinhXuatCuc: '',
-    //   soQdinhNhapCuc: '',
-    //   tenTrangThai: '',
-    // };
   }
 
 

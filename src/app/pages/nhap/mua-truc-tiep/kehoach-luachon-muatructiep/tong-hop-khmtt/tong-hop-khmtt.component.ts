@@ -36,6 +36,7 @@ export class TongHopKhmttComponent extends Base2Component implements OnInit {
   formTraCuu: FormGroup;
   formDataQd: FormGroup;
   idQdPd: number = 0;
+  disableField: boolean = false;
   isViewQdPd: boolean = false;
   listTrangThai: any[] = [
     { ma: this.STATUS.CHUA_TAO_QD, giaTri: 'Chưa Tạo QĐ' },
@@ -222,6 +223,7 @@ export class TongHopKhmttComponent extends Base2Component implements OnInit {
     let setActive = elem.getElementsByClassName('ant-menu-item')[2];
     setActive.classList.add('ant-menu-item-selected');
     this.isQuyetDinh = true;
+    this.disableField = true;
   }
 
 

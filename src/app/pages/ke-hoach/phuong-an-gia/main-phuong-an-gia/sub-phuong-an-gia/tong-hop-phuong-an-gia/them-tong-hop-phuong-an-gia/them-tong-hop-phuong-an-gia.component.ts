@@ -53,19 +53,20 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
   expandSet = new Set<number>();
   idSelected: number;
   isViewModal: boolean = false;
-  tieuChuanCl : string;
-  isMuaToiDa : boolean;
+  tieuChuanCl: string;
+  isMuaToiDa: boolean;
   reportTemplate: any = {
     typeFile: "",
-    fileName: "tong_hop_phuong_an_gia_lt.docx",
+    fileName: "",
     tenBaoCao: "",
     trangThai: ""
   };
   showDlgPreview = false;
   pdfSrc: any;
   wordSrc: any;
-  excelBlob: any;
-  pdfBlob: any;
+  excelSrc: any;
+  isPrint: boolean = false;
+
   constructor(
     private readonly fb: FormBuilder,
     private readonly modal: NzModalService,
@@ -260,10 +261,9 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
   async onChangeCloaiVthh(event) {
     let resp = await this.danhMucService.getDetail(event);
     if (resp.msg == MESSAGE.SUCCESS) {
-     this.tieuChuanCl = resp.data && resp.data.tieuChuanCl ? resp.data.tieuChuanCl : ""
+      this.tieuChuanCl = resp.data && resp.data.tieuChuanCl ? resp.data.tieuChuanCl : ""
     }
   }
-
 
 
   async tongHop() {
@@ -311,8 +311,8 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
       cloaiVthh: data.cloaiVthh ?? reqBody.cloaiVthh,
       loaiGia: data.loaiGia ?? reqBody.loaiGia,
       maDvis: data.maDvis ?? reqBody.maDvis,
-      ngayDxTu: data.ngayDxTu ? data.ngayDxTu : (reqBody && reqBody.ngayDxTu ? reqBody.ngayDxTu  : null ) ,
-      ngayDxDen: data.ngayDxDen ? data.ngayDxDen : (reqBody && reqBody.ngayDxDen ? reqBody.ngayDxDen  : null ) ,
+      ngayDxTu: data.ngayDxTu ? data.ngayDxTu : (reqBody && reqBody.ngayDxTu ? reqBody.ngayDxTu : null),
+      ngayDxDen: data.ngayDxDen ? data.ngayDxDen : (reqBody && reqBody.ngayDxDen ? reqBody.ngayDxDen : null),
       noiDung: data.noiDung,
       ghiChu: data.ghiChu,
       giaKsTt: giaKsTt,
@@ -340,13 +340,14 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
             tenVungMien: value && value[0] && value[0].tenVungMien ? value[0].tenVungMien : null,
             tenDvi: value && value[0] && value[0].tenDvi ? value[0].tenDvi : null,
             pagId: value && value[0] && value[0].pagId ? value[0].pagId : null,
-            soDx : value && value[0] && value[0].soDx ? value[0].soDx : null,
+            soDx: value && value[0] && value[0].soDx ? value[0].soDx : null,
             children: value
           };
         }).value();
     }
     this.expandAll()
   }
+
   onExpandChange(id: number, checked: boolean): void {
     if (checked) {
       this.expandSet.add(id);
@@ -366,7 +367,7 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
 
   taoTtrinh() {
     this.isMain = false;
-    if (this.formData.value.trangThaiTh == STATUS.CHUA_TAO_TT || this.formData.value.trangThaiTt == STATUS.DU_THAO || this.formData.value.trangThaiTt == STATUS.TU_CHOI_LDV ) {
+    if (this.formData.value.trangThaiTh == STATUS.CHUA_TAO_TT || this.formData.value.trangThaiTt == STATUS.DU_THAO || this.formData.value.trangThaiTt == STATUS.TU_CHOI_LDV) {
       this.isView = false;
     }
   }
@@ -396,36 +397,26 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
   }
 
   downloadPdf() {
-    saveAs(this.pdfBlob, "bc_kh_tong_hop_nhap_xuat_hang_dtqg.pdf");
+   if (this.type == 'GCT') {
+     saveAs(this.pdfSrc, "tong_hop_phuong_an_gia_gct.pdf");
+   } else {
+     saveAs(this.pdfSrc, "tong_hop_phuong_an_gia_gmtdbtt.pdf");
+   }
   }
 
   async downloadExcel() {
-    try {
-      this.spinner.show();
-      let body = this.formData.value;
-      body.typeFile = "xlsx";
-      body.fileName = "bc_kh_tong_hop_nhap_xuat_hang_dtqg.jrxml";
-      body.tenBaoCao = "Báo cáo kế hoạch tổng hợp nhập, xuất hàng dự trữ quốc gia";
-      body.trangThai = "01";
-      await this.tongHopPhuongAnGiaService.previewPag(body).then(async s => {
-        this.excelBlob = s;
-        saveAs(this.excelBlob, "tong_hop_phuong_an_gia_lt.xls");
-      });
-    } catch (e) {
-      console.log(e);
-    } finally {
-      this.spinner.hide();
-    }
+    saveAs(this.excelSrc, "tong_hop_phuong_an_gia_lt.xlsx");
   }
 
   async preview() {
     this.spinner.show();
     try {
+      this.reportTemplate.fileName = this.type == 'GCT' ? "tong_hop_phuong_an_gia_gct.docx" : "tong_hop_phuong_an_gia_gmtdbtt.docx";
       let body = {
-        reportTemplateRequest : this.reportTemplate,
-        isSave : true,
-        id : this.idInput,
-        type : this.type
+        reportTemplateRequest: this.reportTemplate,
+        isSave: true,
+        id: this.idInput,
+        type: this.type
       }
       await this.tongHopPhuongAnGiaService.preview(body).then(async s => {
         this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
@@ -454,7 +445,7 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
     let printContent = '';
     printContent = printContent + '<div>';
     printContent =
-      printContent + document.getElementById('tablePrint').innerHTML;
+      printContent + document.getElementById('modal').innerHTML;
     printContent = printContent + '</div>';
     WindowPrt.document.write(printContent);
     WindowPrt.document.close();

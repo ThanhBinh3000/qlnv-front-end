@@ -34,6 +34,7 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
   @Input() dataTongHop: any;
   @Input() isViewOnModal: boolean;
   @Input() isView: boolean = false;
+  @Input() disableField: boolean = false;
   @Output()
   showListEvent = new EventEmitter<any>();
 
@@ -122,6 +123,7 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
   async ngOnInit() {
     await this.spinner.show();
     try {
+      console.log(this.disableField)
       this.maQd = this.userInfo.MA_QD;
       if (this.idInput) {
         await this.loadChiTiet(this.idInput)

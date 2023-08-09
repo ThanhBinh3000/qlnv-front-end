@@ -82,6 +82,7 @@ export class ThongtinDexuatMuattComponent implements OnChanges {
     await this.spinner.show()
     if (changes) {
       if (this.dataInput) {
+        debugger
         this.helperService.bidingDataInFormGroup(this.formData, this.dataInput);
         this.tgianMkhoChange = this.dataInput.tgianMkho
         this.tgianKthucChange = this.dataInput.tgianKthuc
@@ -169,7 +170,7 @@ export class ThongtinDexuatMuattComponent implements OnChanges {
     return false;
   }
 
-  convertTienTobangChu(tien: number): string {
+  convertTienTobangChu(tien: any): string {
     return convertTienTobangChu(tien);
   }
 

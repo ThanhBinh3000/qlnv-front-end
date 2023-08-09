@@ -108,6 +108,7 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
       type: ["01"],
       loaiDc: [],
       loaiQdinh: [],
+      thayDoiThuKho: [],
       lyDoTuChoi: [],
     }
     );
@@ -124,7 +125,8 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
       soPhieu: `${id}/${this.formData.get('nam').value}/${this.maBb}`,
       id: id,
       loaiDc: this.loaiDc,
-      loaiQdinh: this.loaiDc === "CUC" ? "NHAP" : null
+      loaiQdinh: this.loaiDc === "CUC" ? "NHAP" : null,
+      thayDoiThuKho: true
     })
 
     if (this.idInput) {

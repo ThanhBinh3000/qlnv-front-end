@@ -120,6 +120,7 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
       loaiDc: ["DCNB"],
       loaiQdinh: [],
       lyDoTuChoi: [],
+      thayDoiThuKho: []
     });
   }
 
@@ -133,7 +134,8 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
       ktvBaoQuan: this.userInfo.TEN_DAY_DU,
       soBban: `${id}/${this.formData.get('nam').value}/${this.maBb}`,
       loaiDc: this.loaiDc,
-      loaiQdinh: this.loaiDc === "CUC" ? "NHAP" : null
+      loaiQdinh: this.loaiDc === "CUC" ? "NHAP" : null,
+      thayDoiThuKho: true
     })
 
     if (this.idInput) {

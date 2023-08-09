@@ -197,7 +197,7 @@
             </nz-form-item>
           </div>
 
-          <div nz-col [nzSpan]="4">
+          <div nz-col [nzSpan]="4" *ngIf="formData.value.thayDoiThuKho">
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true">Số phiếu kiểm tra chất lượng</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
@@ -364,7 +364,7 @@
               <nz-form-label [nzNoColon]="true">BB nghiệm thu BQLĐ
               </nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
-                <input nz-input formControlName="tenCloaiVthh" [readonly]="true" />
+                <input nz-input formControlName="bbNghiemThuBqld" [readonly]="true" />
               </nz-form-control>
             </nz-form-item>
           </div>

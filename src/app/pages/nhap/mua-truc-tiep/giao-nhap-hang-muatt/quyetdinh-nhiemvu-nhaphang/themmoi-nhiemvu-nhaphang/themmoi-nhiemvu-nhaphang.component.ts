@@ -142,6 +142,7 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
       diaDiemGiaoNhan: [''],
       ngayKyHd: [''],
       loaiQd: [''],
+      trangThaiDtl: [''],
       fileDinhKem: [FileDinhKem],
     })
   }
@@ -528,6 +529,7 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
             tenCloaiVthh: data.tenCloaiVthh,
             cloaiVthh: data.cloaiVthh,
             trangThai: data.trangThai,
+            trangThaiDtl: data.hhQdGiaoNvNhangDtlList[0].trangThai,
             tenTrangThai: data.tenTrangThai,
             lyDoTuChoi: data.ldoTuchoi,
             idHd: data.idHd,

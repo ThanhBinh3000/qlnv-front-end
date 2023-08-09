@@ -3,19 +3,19 @@
     <nz-card class="mt16 flex-card p-lr16">
       <div class="search__body" nz-row [nzGutter]="20">
         <div nz-col nzSpan="6">
-          <label>Số biên bản lấy mẫu/bàn giao mẫu</label>
+          <label class="search__label">Số biên bản lấy mẫu/bàn giao mẫu</label>
           <input nz-input [(ngModel)]="searchFilter.soBienBan" />
         </div>
         <div nz-col nzSpan="6">
-          <label>Số QĐ giao nhiệm vụ nhập hàng</label>
+          <label class="search__label">Số QĐ giao nhiệm vụ nhập hàng</label>
           <input nz-input [(ngModel)]="searchFilter.soQd" />
         </div>
         <div nz-col nzSpan="6">
-          <label>Đơn vị kiểm nghiệm</label>
+          <label class="search__label">Đơn vị kiểm nghiệm</label>
           <input nz-input [(ngModel)]="searchFilter.dviKiemNghiem" />
         </div>
         <div nz-col nzSpan="6">
-          <label>Ngày lấy mẫu</label>
+          <label class="search__label">Ngày lấy mẫu</label>
           <div nz-row [nzGutter]="24">
             <div nz-col nzSpan="12" class="cus-start-date">
               <nz-date-picker [nzDisabledDate]="disabledStartDate" nzFormat="dd/MM/yyyy" [(ngModel)]="tuNgayLayMau"

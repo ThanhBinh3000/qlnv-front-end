@@ -109,6 +109,7 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
       type: ["01"],
       loaiDc: ["DCNB"],
       loaiQdinh: [],
+      thayDoiThuKho: [],
       lyDoTuChoi: [],
       maCan: [],
       soBaoBi: [],
@@ -126,7 +127,8 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
       ktvBaoQuan: this.userInfo.TEN_DAY_DU,
       soBangKe: `${id}/${this.formData.get('nam').value}/${this.maBb}`,
       loaiDc: this.loaiDc,
-      loaiQdinh: this.loaiDc === "CUC" ? "NHAP" : null
+      loaiQdinh: this.loaiDc === "CUC" ? "NHAP" : null,
+      thayDoiThuKho: this.loaiDc !== "DCNB" ? true : null
     })
 
     if (this.idInput) {

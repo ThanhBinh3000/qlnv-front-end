@@ -118,6 +118,7 @@ export class ThongTinBienBanNhapDayDuComponent extends Base2Component implements
       type: ["01"],
       loaiDc: ["DCNB"],
       loaiQdinh: [],
+      thayDoiThuKho: []
     }
     );
   }
@@ -132,7 +133,8 @@ export class ThongTinBienBanNhapDayDuComponent extends Base2Component implements
       ktvBaoQuan: this.userInfo.TEN_DAY_DU,
       soBb: `${id}/${this.formData.get('nam').value}/${this.maBb}`,
       loaiDc: this.loaiDc,
-      loaiQdinh: this.loaiDc === "CUC" ? "NHAP" : null
+      loaiQdinh: this.loaiDc === "CUC" ? "NHAP" : null,
+      thayDoiThuKho: this.loaiDc !== "DCNB" ? true : null
     })
 
     if (this.idInput) {

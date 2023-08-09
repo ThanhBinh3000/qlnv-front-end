@@ -195,7 +195,7 @@
       <span> Phụ lục đề xuất </span>
     </div>
   </div>
-  <div class="buttons" *ngIf="!isCache">
+  <div class="buttons" *ngIf="!isCache && formData.value.trangThai != STATUS.BAN_HANH">
     <button type="button" class="btn btn-main" (click)="themMoiGoiThau()">
       <i class="icon htvbdh_dau-cong"></i>
       <span>Thêm</span>

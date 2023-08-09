@@ -204,7 +204,7 @@
   </app-themmoi-tonghop-khmtt>
 </div>
 <div *ngIf="isQuyetDinh" class="chi-tiet">
-  <app-themmoi-quyetdinh-khmtt [idInput]="qdPdMttId" [loaiVthh]="loaiVthh" [dataTongHop]="formDataQd.value"
+  <app-themmoi-quyetdinh-khmtt [idInput]="qdPdMttId" [disableField]="disableField" [loaiVthh]="loaiVthh" [dataTongHop]="formDataQd.value"
     (showListEvent)="showTongHop()">
   </app-themmoi-quyetdinh-khmtt>
 </div>

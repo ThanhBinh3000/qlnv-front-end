@@ -125,6 +125,7 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
       loaiDc: ["DCNB"],
       isVatTu: [true],
       loaiQdinh: [],
+      thayDoiThuKho: [],
       lyDoTuChoi: [],
       noiDung: [],
       soLuongTrongNam: [],
@@ -144,7 +145,8 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
       ktvBaoQuan: this.userInfo.TEN_DAY_DU,
       soBban: `${id}/${this.formData.get('nam').value}/${this.maBb}`,
       loaiDc: this.loaiDc,
-      loaiQdinh: this.loaiDc === "CUC" ? "NHAP" : null
+      loaiQdinh: this.loaiDc === "CUC" ? "NHAP" : null,
+      thayDoiThuKho: true
     })
     await this.getListNhomCcdc()
     if (this.idInput) {
@@ -364,6 +366,40 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
     this.dviTinh = ""
     this.thanhTienTrongNam = null
     this.tongGiaTri = null
+  }
+
+  cancelEditPD(index: number): void {
+    this.objHangPD = null
+    this.iHangPD = null
+    this.dsHangPD[index].edit = false;
+  }
+
+  saveEditPD(index: number): void {
+    this.objHangPD = null
+    this.iHangPD = null
+    this.dsHangPD[index].edit = false;
+  }
+
+  deleteRowPD(data: any) {
+    this.dsHangPD = this.dsHangPD.filter(x => x.idVirtual != data.idVirtual);
+    // const tongKinhPhiDaTh = this.dsHangPD.reduce((previous, current) => previous + current.tongGiaTri, 0);
+    // const tongKinhPhiDaThBc = this.convertTien(tongKinhPhiDaTh)
+    this.dsHangPD = cloneDeep(this.dsHangPD)
+    this.formData.patchValue({
+      noiDung: "",
+      soLuongTrongNam: "",
+      donGiaTrongNam: "",
+      soLuongNamTruoc: "",
+      thanhTienNamTruoc: "",
+      // tongKinhPhiDaTh,
+      // tongKinhPhiDaThBc
+    })
+  }
+
+  editRowPD(index: number) {
+    this.iHangPD = index
+    this.objHangPD = this.dsHangPD[index]
+    this.dsHangPD[index].edit = true;
   }
 
 
