@@ -29,6 +29,10 @@
                 <i class="icon htvbdh_tcdt_tuchoi"></i>
                 <span>Từ chối</span>
             </button>
+            <button *ngIf="status.export" type="button" class="btn btn-sub" (click)="exportToExcel()">
+                <span nz-icon nzType="export" nzTheme="outline" style="margin-right: 5px;"></span>
+                <span>Xuất</span>
+            </button>
         </div>
     </nz-affix>
 
@@ -435,11 +439,6 @@
                                                 <td>
                                                     {{ Op.fmtVal(editCache[data.id].data.gtThucHien) }}
                                                 </td>
-                                                <td>
-                                                    <input class="money-input" currencyMask [options]="Op.amount"
-                                                        [(ngModel)]="editCache[data.id].data.dtoanDaGiao"
-                                                        (ngModelChange)="changeTien(data.id)" />
-                                                </td>
                                             </ng-container>
                                             <ng-template #capTren>
                                                 <td>
@@ -454,10 +453,12 @@
                                                 <td>
                                                     {{ Op.fmtVal(editCache[data.id].data.gtThucHien) }}
                                                 </td>
-                                                <td>
-                                                    {{ Op.fmtVal(editCache[data.id].data.dtoanDaGiao) }}
-                                                </td>
                                             </ng-template>
+                                            <td>
+                                                <input class="money-input" currencyMask [options]="Op.amount"
+                                                    [(ngModel)]="editCache[data.id].data.dtoanDaGiao"
+                                                    (ngModelChange)="changeVon(data.id)" />
+                                            </td>
                                             <td>
                                                 {{ Op.fmtVal(editCache[data.id].data.lkUng) }}
                                             </td>

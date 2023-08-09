@@ -37,6 +37,10 @@
                 <i class="icon htvbdh_tcdt_tuchoi"></i>
                 <span>Từ chối</span>
             </button>
+            <button *ngIf="status.export" type="button" class="btn btn-sub" (click)="exportToExcel()">
+                <span nz-icon nzType="export" nzTheme="outline" style="margin-right: 5px;"></span>
+                <span>Xuất</span>
+            </button>
         </div>
     </nz-affix>
 
@@ -189,6 +193,20 @@
                                         Thành tiền
                                     </th>
                                 </tr>
+                                <tr>
+                                    <th *ngIf="baoCao.loaiDnghi != Cvnc.VTU" nzLeft> A </th>
+                                    <th *ngIf="baoCao.loaiDnghi == Cvnc.VTU" nzLeft> B </th>
+                                    <th nzLeft> C </th>
+                                    <th> 1 </th>
+                                    <th> 2 </th>
+                                    <th *ngIf="baoCao.loaiDnghi == Cvnc.VTU"> 3 </th>
+                                    <th> 4 </th>
+                                    <th> 5=2x4 </th>
+                                    <th *ngIf="baoCao.loaiDnghi == Cvnc.VTU"> 6=3x4 </th>
+                                    <th> 7 </th>
+                                    <th> 8 </th>
+                                    <th> 9 </th>
+                                </tr>
                             </thead>
                             <tbody>
                                 <tr *ngFor="let data of lstCtiets; let i = index">
@@ -256,7 +274,7 @@
                         <nz-table class="table__body" nzBordered [nzScroll]="{x: scrollCV}">
                             <thead>
                                 <tr>
-                                    <th *ngIf="baoCao.loaiDnghi != Cvnc.VTU" rowspan="2" nzWidth="300px" nzLeft>
+                                    <th rowspan="2" nzWidth="300px" nzLeft>
                                         Đơn vị
                                     </th>
                                     <th colspan="{{baoCao.loaiDnghi == Cvnc.VTU ? 3 : 2}}">
@@ -313,11 +331,28 @@
                                         Tổng vốn
                                     </th>
                                 </tr>
+                                <tr>
+                                    <th nzLeft> A </th>
+                                    <th> 1 </th>
+                                    <th> 2 </th>
+                                    <th *ngIf="baoCao.loaiDnghi == Cvnc.VTU"> 3 </th>
+                                    <th> 4 </th>
+                                    <th *ngIf="baoCao.loaiDnghi == Cvnc.VTU"> 5 </th>
+                                    <th> 6 </th>
+                                    <th> 7 </th>
+                                    <th> 8 </th>
+                                    <th> 9 </th>
+                                    <th> 10 </th>
+                                    <th> 11=9+10 </th>
+                                    <th> 12 </th>
+                                    <th> 13=11+12 </th>
+                                    <th> {{ baoCao.loaiDnghi == Cvnc.VTU ? "14=5-6-13" : "14=4-6-13"}} </th>
+                                </tr>
                             </thead>
                             <tbody>
                                 <tr *ngFor="let data of lstCtiets; let i = index">
                                     <ng-container *ngIf="data.level < (isSynth ? 2 : 1)">
-                                        <td *ngIf="baoCao.loaiDnghi != Cvnc.VTU" nzLeft>
+                                        <td nzLeft>
                                             {{ data.tenDvi }}
                                         </td>
                                         <td>

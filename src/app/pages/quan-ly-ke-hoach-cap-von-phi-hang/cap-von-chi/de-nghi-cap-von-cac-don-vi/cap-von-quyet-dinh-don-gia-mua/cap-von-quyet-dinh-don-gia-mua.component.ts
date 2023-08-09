@@ -13,6 +13,7 @@ import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { BtnStatus, CapVon, Cvnc, Doc, Report } from '../de-nghi-cap-von-cac-don-vi.constant';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
+import * as XLSX from 'xlsx';
 
 @Component({
     selector: 'app-cap-von-quyet-dinh-don-gia-mua',
@@ -186,7 +187,7 @@ export class CapVonQuyetDinhDonGiaMuaComponent implements OnInit {
         this.status.submit = Status.check('submit', this.baoCao.trangThai) && isChild && this.userService.isAccessPermisson(Roles.CVNC.SUBMIT_CV) && !(!this.baoCao.id);
         this.status.pass = Status.check('pass', this.baoCao.trangThai) && isChild && this.userService.isAccessPermisson(Roles.CVNC.PASS_CV);
         this.status.approve = Status.check('approve', this.baoCao.trangThai) && isChild && this.userService.isAccessPermisson(Roles.CVNC.APPROVE_CV);
-        this.status.export = Status.check('export', this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.CVNC.EXPORT_CV) && (isChild || this.isParent);
+        this.status.export = this.baoCao.trangThai == Status.TT_07 && this.userService.isAccessPermisson(Roles.CVNC.EXPORT_CV) && isChild;
         this.scrollDN = Table.tableWidth(350, 11, 0, 0);
         this.scrollCV = this.status.save ? Table.tableWidth(300, 15, 1, 60) : Table.tableWidth(300, 15, 1, 0);
     }
@@ -328,7 +329,7 @@ export class CapVonQuyetDinhDonGiaMuaComponent implements OnInit {
                 }
             }
         }
-        if (!request.congVan.fileUrl) {
+        if (!request.congVan?.fileUrl) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
             return;
         }
@@ -404,13 +405,14 @@ export class CapVonQuyetDinhDonGiaMuaComponent implements OnInit {
 
     changeTien(id: string) {
         this.editCache[id].data.gtThucHien = Operator.mul(this.editCache[id].data.slThucHien, this.editCache[id].data.donGia);
-        this.editCache[id].data.tongVonVaDtoanDaCap = Operator.sum([this.editCache[id].data.dtoanDaGiao, this.editCache[id].data.lkCong]);
         this.editCache[id].data.vonDnCapLanNay = Operator.sum([this.editCache[id].data.gtThucHien, -this.editCache[id].data.tongVonVaDtoanDaCap]);
         this.editCache[id].data.tongTien = Operator.sum([this.editCache[id].data.tongVonVaDtoanDaCap, this.editCache[id].data.cong]);
         this.editCache[id].data.soConDuocCap = Operator.sum([this.editCache[id].data.gtThucHien, -this.editCache[id].data.tongTien]);
     }
 
     changeVon(id: string) {
+        this.editCache[id].data.tongVonVaDtoanDaCap = Operator.sum([this.editCache[id].data.dtoanDaGiao, this.editCache[id].data.lkCong]);
+        this.editCache[id].data.vonDnCapLanNay = Operator.sum([this.editCache[id].data.gtThucHien, -this.editCache[id].data.tongVonVaDtoanDaCap]);
         this.editCache[id].data.cong = Operator.sum([this.editCache[id].data.ung, this.editCache[id].data.cap]);
         this.editCache[id].data.tongTien = Operator.sum([this.editCache[id].data.tongVonVaDtoanDaCap, this.editCache[id].data.cong]);
         this.editCache[id].data.soConDuocCap = Operator.sum([this.editCache[id].data.gtThucHien, -this.editCache[id].data.tongTien]);
@@ -466,5 +468,81 @@ export class CapVonQuyetDinhDonGiaMuaComponent implements OnInit {
             doc = this.baoCao.lstFiles.find(element => element?.id == id);
         }
         await this.quanLyVonPhiService.downFile(file, doc);
+    }
+
+    exportToExcel() {
+        const workbook = XLSX.utils.book_new();
+        if (!this.userService.isChiCuc()) {
+            const head = [
+                { t: 0, b: 5, l: 0, r: 11, val: null },
+                { t: 0, b: 0, l: 0, r: 8, val: "Đề nghị cấp vốn từ đơn vị cấp dưới" },
+                { t: 1, b: 1, l: 0, r: 8, val: Utils.getDocName(this.baoCao.congVan.fileName, this.baoCao.ngayCongVan, this.baoCao.tenDvi) },
+                { t: 4, b: 5, l: 0, r: 0, val: 'STT' },
+                { t: 4, b: 5, l: 1, r: 1, val: 'Đơn vị' },
+                { t: 4, b: 4, l: 2, r: 3, val: 'Số lượng' },
+                { t: 5, b: 5, l: 2, r: 2, val: 'Kế hoạch' },
+                { t: 5, b: 5, l: 3, r: 3, val: 'Thực hiện' },
+                { t: 4, b: 5, l: 4, r: 4, val: 'Đơn giá (theo quyết định)' },
+                { t: 4, b: 5, l: 5, r: 5, val: 'Giá trị thực hiện' },
+                { t: 4, b: 5, l: 6, r: 6, val: 'Dự toán đã giao' },
+                { t: 4, b: 4, l: 7, r: 9, val: 'Lũy kế vốn cấp đến thời điểm báo cáo' },
+                { t: 5, b: 5, l: 7, r: 7, val: 'Tổng cấp ứng' },
+                { t: 5, b: 5, l: 8, r: 8, val: 'Tổng cấp vốn' },
+                { t: 5, b: 5, l: 9, r: 9, val: 'Tổng cộng' },
+                { t: 4, b: 5, l: 10, r: 10, val: 'Tổng vốn và dự toán đã cấp' },
+                { t: 4, b: 5, l: 11, r: 11, val: 'Vốn đề nghị cấp lần này = Giá trị theo kế hoạch - Lũy kế vốn cấp' },
+            ]
+            const fieldHD = ['stt', 'tenDvi', 'slKeHoach', 'slThucHien', 'donGia', 'gtThucHien', 'dtoanDaGiao', 'lkUng', 'lkCap',
+                'lkCong', 'tongVonVaDtoanDaCap', 'vonDnCapLanNay'];
+            const filterHD = this.lstCtiets.filter(e => e.level > 0).map(item => {
+                const row: any = {};
+                fieldHD.forEach(field => {
+                    row[field] = field == 'stt' ? this.getIndex(item) : item[field];
+                })
+                return row;
+            })
+            const worksheetHD = Table.initExcel(head);
+            XLSX.utils.sheet_add_json(worksheetHD, filterHD, { skipHeader: true, origin: Table.coo(head[0].l, head[0].b + 1) })
+            XLSX.utils.book_append_sheet(workbook, worksheetHD, 'Đề nghị cấp vốn từ DVCD');
+        }
+
+        const header = [
+            { t: 0, b: 5, l: 0, r: 16, val: null },
+            { t: 0, b: 0, l: 0, r: 8, val: "Cấp vốn" },
+            { t: 1, b: 1, l: 0, r: 8, val: Utils.getDocName(this.baoCao.congVan.fileName, this.baoCao.ngayCongVan, this.baoCao.tenDvi) },
+            { t: 4, b: 5, l: 0, r: 0, val: 'Đơn vị' },
+            { t: 4, b: 4, l: 1, r: 2, val: 'Số lượng' },
+            { t: 5, b: 5, l: 1, r: 1, val: 'Kế hoạch' },
+            { t: 5, b: 5, l: 2, r: 2, val: 'Thực hiện' },
+            { t: 4, b: 5, l: 3, r: 3, val: 'Đơn giá (theo quyết định)' },
+            { t: 4, b: 5, l: 4, r: 4, val: 'Giá trị thực hiện' },
+            { t: 4, b: 5, l: 5, r: 5, val: 'Dự toán đã giao' },
+            { t: 4, b: 4, l: 6, r: 8, val: 'Lũy kế vốn cấp đến thời điểm báo cáo' },
+            { t: 5, b: 5, l: 6, r: 6, val: 'Tổng cấp ứng' },
+            { t: 5, b: 5, l: 7, r: 7, val: 'Tổng cấp vốn' },
+            { t: 5, b: 5, l: 8, r: 8, val: 'Tổng cộng' },
+            { t: 4, b: 5, l: 9, r: 9, val: 'Tổng vốn và dự toán đã cấp' },
+            { t: 4, b: 5, l: 10, r: 10, val: 'Vốn đề nghị cấp lần này = Giá trị theo kế hoạch - Lũy kế vốn cấp' },
+            { t: 4, b: 4, l: 11, r: 13, val: 'Vốn duyệt cấp lần này' },
+            { t: 5, b: 5, l: 11, r: 11, val: 'Cấp ứng' },
+            { t: 5, b: 5, l: 12, r: 12, val: 'Cấp vốn' },
+            { t: 5, b: 5, l: 13, r: 13, val: 'Cộng' },
+            { t: 4, b: 5, l: 14, r: 14, val: 'Tổng tiền (tổng tiền được cấp sau lần này)' },
+            { t: 4, b: 5, l: 15, r: 15, val: 'Số còn được cấp' },
+            { t: 4, b: 5, l: 16, r: 16, val: 'Ghi chú' },
+        ]
+        const fieldOrder = ['tenDvi', 'slKeHoach', 'slThucHien', 'donGia', 'gtThucHien', 'dtoanDaGiao', 'lkUng', 'lkCap', 'lkCong',
+            'tongVonVaDtoanDaCap', 'vonDnCapLanNay', 'ung', 'cap', 'cong', 'tongTien', 'soConDuocCap', 'ghiChu'];
+        const filterData = this.lstCtiets.filter(e => e.level == 0).map(item => {
+            const row: any = {};
+            fieldOrder.forEach(field => {
+                row[field] = item[field];
+            })
+            return row;
+        })
+        const worksheet = Table.initExcel(header);
+        XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Cấp vốn');
+        XLSX.writeFile(workbook, this.baoCao.maDnghi + '.xlsx');
     }
 }
