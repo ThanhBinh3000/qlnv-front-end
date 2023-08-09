@@ -319,17 +319,38 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
       if (this.listCtieuKeHoach && this.listCtieuKeHoach.length > 0) {
         if (this.pagTtChungs && this.pagTtChungs.length > 0) {
           this.pagTtChungs.forEach(pagTtChung => {
+            pagTtChung.soLuongCtieu = 0
             pagTtChung.soLuongCtieu = '';
-            let ctieuChiCuc = this.listCtieuKeHoach.filter(ctieu => ctieu.maDonVi == pagTtChung.maChiCuc);
-            if (ctieuChiCuc && ctieuChiCuc.length > 0) {
-              if (event.startsWith("0101")) {
-                pagTtChung.soLuongCtieu = ctieuChiCuc[0]?.ntnThoc
+            let ctieuChiCuc = this.listCtieuKeHoach.find(ctieu => ctieu.maDonVi == pagTtChung.maChiCuc);
+            if (ctieuChiCuc) {
+              if ((this.formData.value.loaiGia && (this.formData.value.loaiGia == 'LG02' || this.formData.value.loaiGia == 'LG04'))) {
+                if (event.startsWith("0101")) {
+                  pagTtChung.soLuongCtieu = ctieuChiCuc.xtnTongSoQuyThoc ?  ctieuChiCuc.xtnTongSoQuyThoc : 0
+                }
+                if (event.startsWith("0102")) {
+                  pagTtChung.soLuongCtieu = ctieuChiCuc.xtnTongGao ? ctieuChiCuc.xtnTongGao : 0
+                }
+                if (event.startsWith("04")) {
+                  pagTtChung.soLuongCtieu = ctieuChiCuc.nhapTrongNam ? ctieuChiCuc.nhapTrongNam : 0
+                }
               }
-              if (event.startsWith("0102")) {
-                pagTtChung.soLuongCtieu = ctieuChiCuc[0]?.ntnGao
-              }
-              if (event.startsWith("04")) {
-                pagTtChung.soLuongCtieu = ctieuChiCuc[0]?.nhapTrongNam
+              if ((this.formData.value.loaiGia && (this.formData.value.loaiGia == 'LG01' || this.formData.value.loaiGia == 'LG03'))) {
+                if (event.startsWith("0101")) {
+                  pagTtChung.soLuongCtieu = ctieuChiCuc.ntnThoc ? ctieuChiCuc.ntnThoc : 0
+                }
+                if (event.startsWith("0102")) {
+                  pagTtChung.soLuongCtieu = ctieuChiCuc.ntnGao ? ctieuChiCuc.ntnGao : 0
+                }
+                if (event.startsWith("04")) {
+                  pagTtChung.soLuongCtieu = ctieuChiCuc.xuatTrongNamMuoi ? ctieuChiCuc.xuatTrongNamMuoi  :0
+                }
+
+                if (ctieuChiCuc && ctieuChiCuc.xtnThoc && ctieuChiCuc.xtnThoc.length > 0) {
+                  let xtn = ctieuChiCuc.xtnThoc.filter(xuat => xuat.nam == this.formData.value.namKeHoach);
+                  if (xtn && xtn.length > 0) {
+                    pagTtChung.soLuongCtieu = xtn?.soLuong
+                  }
+                }
               }
             }
           })
@@ -399,6 +420,9 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
     this.formData.patchValue({
       cloaiVthh: null
     })
+    if (this.formData.value.loaiVthh) {
+      this.onChangeLoaiVthh(this.formData.value.loaiVthh);
+    }
   }
 
   loadDsNam() {
@@ -485,15 +509,15 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
   }
 
   setValidator() {
-      this.formData.controls["namKeHoach"].setValidators([Validators.required]);
-      this.formData.controls["soDeXuat"].setValidators([Validators.required]);
-      this.formData.controls["loaiVthh"].setValidators([Validators.required]);
-      this.formData.controls["ngayKy"].setValidators([Validators.required]);
-      this.formData.controls["loaiGia"].setValidators([Validators.required]);
-      this.formData.controls["maPphapXdg"].setValidators([Validators.required]);
-      if (this.formData.value.loaiGia == 'LG01' || this.formData.value.loaiGia == 'LG03') {
-        this.formData.controls["vat"].setValidators([Validators.required]);
-      }
+    this.formData.controls["namKeHoach"].setValidators([Validators.required]);
+    this.formData.controls["soDeXuat"].setValidators([Validators.required]);
+    this.formData.controls["loaiVthh"].setValidators([Validators.required]);
+    this.formData.controls["ngayKy"].setValidators([Validators.required]);
+    this.formData.controls["loaiGia"].setValidators([Validators.required]);
+    this.formData.controls["maPphapXdg"].setValidators([Validators.required]);
+    if (this.formData.value.loaiGia == 'LG01' || this.formData.value.loaiGia == 'LG03') {
+      this.formData.controls["vat"].setValidators([Validators.required]);
+    }
   }
 
   async pheDuyet() {
@@ -675,16 +699,6 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
     }
   }
 
-  async loadDetailNh(event) {
-    let arr = this.listQdCtKh.filter(item => item.soQd == event)
-    if (arr) {
-      this.detailNhaphang = arr[0]
-      this.formData.patchValue({
-        soLuong: this.detailNhaphang && this.detailNhaphang.soLuong ? this.detailNhaphang.soLuong : 0
-      })
-    }
-  }
-
   async loadDsDxCanSua() {
     this.spinner.show();
     this.listDxCanSua = [];
@@ -694,7 +708,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
         type: this.type,
         loaiDeXuat: "02",
         maDvi: this.userInfo.MA_DVI,
-        pagType : this.pagType
+        pagType: this.pagType
       }
       let res = await this.tongHopPagService.loadToTrinhDeXuat(body);
       if (res.msg = MESSAGE.SUCCESS) {
@@ -792,8 +806,9 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
       })
     }
     this.formData.patchValue({
-      apDungTatCa : event
+      apDungTatCa: event
     })
+    console.log(this.formData.value.vat,222)
   }
 
   async loadDsChiCuc() {
