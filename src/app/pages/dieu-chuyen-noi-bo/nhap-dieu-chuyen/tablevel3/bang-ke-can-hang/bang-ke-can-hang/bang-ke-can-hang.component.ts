@@ -74,8 +74,8 @@ export class BangKeCanHangComponent extends Base2Component implements OnInit {
     this.formData = this.fb.group({
       nam: null,
       soQdinh: null,
-      ngayDuyetTc: null,
-      ngayHieuLuc: null,
+      tuNgay: null,
+      denNgay: null,
       trichYeu: null,
       type: ["01"],
       loaiDc: ["DCNB"],
@@ -170,7 +170,7 @@ export class BangKeCanHangComponent extends Base2Component implements OnInit {
 
   async timKiem() {
     let body = this.formData.value
-    if (body.soQdinh) body.soQdinh = `${body.soQdinh}\DCNB`
+    if (body.soQdinh) body.soQdinh = `${body.soQdinh}/DCNB`
     body.paggingReq = {
       limit: this.pageSize,
       page: this.page - 1
