@@ -659,10 +659,10 @@
                 <td>{{item.thanhTienNamTruoc|number:'1.0-1':'vi_VN'}}</td>
                 <td>{{(item.tongGiaTri)|number:'1.0-1':'vi_VN'}}</td>
                 <td *ngIf="!(isDisableField() || isView)">
-                  <a (click)="editRow(i)">
+                  <a (click)="editRowPD(i)">
                     <i class="fa fa-pencil" title="Sửa"></i>
                   </a>
-                  <a (click)="deleteRow(item)">
+                  <a (click)="deleteRowPD(item)">
                     <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                   </a>
                 </td>
@@ -703,10 +703,10 @@
                 </td>
                 <td>{{(item.tongGiaTri)|number:'1.0-1':'vi_VN'}}</td>
                 <td>
-                  <a (click)="saveEdit(i)" class="save">
+                  <a (click)="saveEditPD(i)" class="save">
                     <i class="fa fa-save"></i>
                   </a>
-                  <a (click)="cancelEdit(i)">
+                  <a (click)="cancelEditPD(i)">
                     <i class="fa fa-times do"></i>
                   </a>
                 </td>

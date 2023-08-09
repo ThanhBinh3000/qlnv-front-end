@@ -143,7 +143,7 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
       soPhieu: `${id}/${this.formData.get('nam').value}/${this.maBb}`,
       loaiDc: this.loaiDc,
       loaiQdinh: this.loaiDc === "CUC" ? "NHAP" : null,
-      thayDoiThuKho: this.loaiDc === "DCNB" ? true : false
+      thayDoiThuKho: true
     })
     this.getPPKTCL()
 

@@ -83,6 +83,7 @@ export class ThongTinBienBanGiaoNhanComponent extends Base2Component implements 
       loaiDc: [this.loaiDc],
       isVatTu: [true],
       loaiQdinh: [],
+      thayDoiThuKho: [],
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự thảo'],
       nam: [dayjs().get("year"), [Validators.required]],
@@ -137,7 +138,8 @@ export class ThongTinBienBanGiaoNhanComponent extends Base2Component implements 
       canBo: this.userInfo.TEN_DAY_DU,
       soBb: `${id}/${this.formData.get('nam').value}/${this.maBb}`,
       loaiDc: this.loaiDc,
-      loaiQdinh: this.loaiDc === "CUC" ? "NHAP" : null
+      loaiQdinh: this.loaiDc === "CUC" ? "NHAP" : null,
+      thayDoiThuKho: this.loaiDc !== "DCNB" ? true : null
     })
 
     if (this.idInput) {

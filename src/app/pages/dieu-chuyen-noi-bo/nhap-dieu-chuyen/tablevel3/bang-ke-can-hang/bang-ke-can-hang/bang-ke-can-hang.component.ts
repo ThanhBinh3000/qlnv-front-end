@@ -74,25 +74,26 @@ export class BangKeCanHangComponent extends Base2Component implements OnInit {
     this.formData = this.fb.group({
       nam: null,
       soQdinh: null,
-      tuNgay: null,
-      denNgay: null,
+      ngayNhapKhoTu: null,
+      ngayNhapKhoDen: null,
       trichYeu: null,
       type: ["01"],
       loaiDc: ["DCNB"],
-      loaiQdinh: []
+      loaiQdinh: [],
+      thayDoiThuKho: []
     })
-    this.filterTable = {
-      nam: '',
-      soQdinh: '',
-      ngayKyQdinh: '',
-      loaiDc: '',
-      trichYeu: '',
-      maDxuat: '',
-      maThop: '',
-      soQdinhXuatCuc: '',
-      soQdinhNhapCuc: '',
-      tenTrangThai: '',
-    };
+    // this.filterTable = {
+    //   nam: '',
+    //   soQdinh: '',
+    //   ngayKyQdinh: '',
+    //   loaiDc: '',
+    //   trichYeu: '',
+    //   maDxuat: '',
+    //   maThop: '',
+    //   soQdinhXuatCuc: '',
+    //   soQdinhNhapCuc: '',
+    //   tenTrangThai: '',
+    // };
   }
 
 
@@ -112,7 +113,8 @@ export class BangKeCanHangComponent extends Base2Component implements OnInit {
 
     this.formData.patchValue({
       loaiDc: this.loaiDc,
-      loaiQdinh: this.loaiDc === "CUC" ? "NHAP" : null
+      loaiQdinh: this.loaiDc === "CUC" ? "NHAP" : null,
+      thayDoiThuKho: this.loaiDc !== "DCNB" ? true : null
     })
 
     try {
@@ -129,6 +131,22 @@ export class BangKeCanHangComponent extends Base2Component implements OnInit {
 
 
   }
+
+  disabledStartNgayNK = (startValue: Date): boolean => {
+    if (startValue && this.formData.value.ngayNhapKhoDen) {
+      return startValue.getTime() > this.formData.value.ngayNhapKhoDen.getTime();
+    } else {
+      return false;
+    }
+  };
+
+  disabledEndNgayNK = (endValue: Date): boolean => {
+    if (endValue && this.formData.value.ngayNhapKhoTu) {
+      return endValue.getTime() < this.formData.value.ngayNhapKhoTu.getTime();
+    } else {
+      return false;
+    }
+  };
 
   isShowDS() {
     if (this.userService.isAccessPermisson('DCNB_QUYETDINHDC_TONGCUC') && this.userService.isAccessPermisson('DCNB_QUYETDINHDC_XEM'))
@@ -169,6 +187,12 @@ export class BangKeCanHangComponent extends Base2Component implements OnInit {
   }
 
   async timKiem() {
+    if (this.formData.value.ngayNhapKhoTu) {
+      this.formData.value.ngayNhapKhoTu = dayjs(this.formData.value.ngayNhapKhoTu).format('YYYY-MM-DD')
+    }
+    if (this.formData.value.ngayNhapKhoDen) {
+      this.formData.value.ngayNhapKhoDen = dayjs(this.formData.value.ngayNhapKhoDen).format('YYYY-MM-DD')
+    }
     let body = this.formData.value
     if (body.soQdinh) body.soQdinh = `${body.soQdinh}/DCNB`
     body.paggingReq = {

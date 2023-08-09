@@ -60,18 +60,6 @@ export class PhieuNhapKhoComponent extends Base2Component implements OnInit {
       ngayNhapKhoDen: [],
       loaiVthh: [this.loaiVthh]
     })
-    // this.filterTable = {
-    //   nam: '',
-    //   soQdinh: '',
-    //   ngayKyQdinh: '',
-    //   loaiDc: '',
-    //   trichYeu: '',
-    //   maDxuat: '',
-    //   maThop: '',
-    //   soQdinhXuatCuc: '',
-    //   soQdinhNhapCuc: '',
-    //   tenTrangThai: '',
-    // };
   }
 
   async ngOnInit() {
