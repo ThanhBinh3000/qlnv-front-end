@@ -714,7 +714,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     this.formData.controls["ngayKy"].setValidators([Validators.required]);
     this.formData.controls["loaiGia"].setValidators([Validators.required]);
     this.formData.controls["maPphapXdg"].setValidators([Validators.required]);
-    if (this.formData.value.loaiGia == 'LG01' || this.formData.value.loaiGia == 'LG03') {
+    if ((this.formData.value.loaiGia == 'LG01' || this.formData.value.loaiGia == 'LG03') && this.type == 'GMTDBTT') {
       this.formData.controls["vat"].setValidators([Validators.required]);
     }
   }
