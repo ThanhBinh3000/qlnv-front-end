@@ -143,6 +143,7 @@
         <th width="250px">Mô tả</th>
         <th width="100px">ĐVT</th>
         <th width="200px">Đơn vị quản lý</th>
+        <th width="200px">Loại hình xuất</th>
       </tr>
       </thead>
       <tbody>
@@ -153,8 +154,13 @@
           <td></td>
           <td></td>
           <td></td>
-          <td>{{item.maDviTinh}}</td>
+          <td></td>
           <td>TCDT</td>
+          <td>
+            <nz-select [(ngModel)]="item.loaiHinhXuat">
+              <nz-option *ngFor="let p of loaiHinhXuatOptions" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+            </nz-select>
+          </td>
         </tr>
         <ng-container *ngFor="let lv1 of item.children,let i2=index">
           <tr>
@@ -165,6 +171,8 @@
             <td></td>
             <td>{{lv1.maDviTinh}}</td>
             <td>TCDT</td>
+            <td>
+            </td>
           </tr>
           <ng-container *ngFor="let lv2 of lv1.children,let i3=index">
             <tr>
@@ -175,6 +183,7 @@
               <td></td>
               <td>{{lv2.maDviTinh}}</td>
               <td>TCDT</td>
+              <td></td>
             </tr>
           </ng-container>
         </ng-container>

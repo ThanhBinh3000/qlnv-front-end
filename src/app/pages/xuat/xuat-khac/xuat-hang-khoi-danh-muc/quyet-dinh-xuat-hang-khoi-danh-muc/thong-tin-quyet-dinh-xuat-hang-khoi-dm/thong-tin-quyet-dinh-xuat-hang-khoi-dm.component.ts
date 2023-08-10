@@ -29,6 +29,7 @@ import {
   DanhSachHangDtqgService
 } from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuathangkhoidm/DanhSachHangDtqg.service";
 import {NumberToRoman} from "../../../../../../shared/commonFunction";
+import {Validators} from "@angular/forms";
 
 @Component({
   selector: 'app-thong-tin-quyet-dinh-xuat-hang-khoi-dm',
@@ -45,12 +46,11 @@ export class ThongTinQuyetDinhXuatHangKhoiDmComponent extends Base2Component imp
   listFileDinhKem: any[] = [];
   listFile: any[] = [];
   maQd: string;
-  listMaTongHop: any[] = [];
   listDsHangLoaiKhoiKho: any[] = []
   dataTh: any[] = [];
   dataThEdit: any[] = [];
   dataThTree: any[] = [];
-  dataThTreeXuatHuy: any[] = [];
+  loaiHinhXuatOptions: any[] = [{value: 'TL', text: 'Thanh lý'}, {value: 'TH', text: 'Tiêu hủy'}];
   expandSetString = new Set<string>();
   numberToRoman = NumberToRoman;
 
@@ -66,13 +66,13 @@ export class ThongTinQuyetDinhXuatHangKhoiDmComponent extends Base2Component imp
     super(httpClient, storageService, notification, spinner, modal, quyetDinhXuatHangKhoiDmService);
     this.formData = this.fb.group({
       id: [],
-      soQd: [],
-      ngayKy: [],
-      ngayHieuLuc: [],
-      maCanCu: [],
-      idCanCu: [],
+      soQd: [null, [Validators.required]],
+      ngayKy: [null, [Validators.required]],
+      ngayHieuLuc: [null, [Validators.required]],
+      maCanCu: [null, [Validators.required]],
+      idCanCu: [null, [Validators.required]],
       lyDoTuChoi: [],
-      trichYeu: [],
+      trichYeu: [null, [Validators.required]],
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự thảo'],
       listDtl: []
@@ -169,8 +169,9 @@ export class ThongTinQuyetDinhXuatHangKhoiDmComponent extends Base2Component imp
     if (this.listFile && this.listFile.length > 0) {
       this.formData.value.fileDinhKems = this.listFile;
     }
+    this.convertTreeToList();
     this.formData.value.soQd = this.formData.value.soQd + this.maQd;
-    // this.formData.value.xhXkVtQdGiaonvXhDtl = this.dataTh;
+    this.formData.value.listDtl = this.dataTh;
     let data = await this.createUpdate(this.formData.value);
     if (data) {
       if (!this.idInput) {
@@ -182,6 +183,21 @@ export class ThongTinQuyetDinhXuatHangKhoiDmComponent extends Base2Component imp
       }
     } else {
       this.notification.error(MESSAGE.ERROR, "Có lỗi xảy ra.");
+    }
+  }
+
+
+  convertTreeToList() {
+    if (this.dataTable && this.dataTable.length > 0) {
+      this.dataTh = [];
+      this.dataTable.forEach(item => {
+        this.dataTh.push(item);
+        if (item.children && item.children.length > 0) {
+          item.children.forEach(child => {
+            this.dataTh.push(child);
+          })
+        }
+      })
     }
   }
 
@@ -292,7 +308,7 @@ export class ThongTinQuyetDinhXuatHangKhoiDmComponent extends Base2Component imp
           this.helperService.bidingDataInFormGroup(this.formData, dataDetail);
           if (dataDetail) {
             this.formData.patchValue({
-              soQuyetDinh: dataDetail.soQuyetDinh?.split('/')[0],
+              soQd: dataDetail.soQd?.split('/')[0],
             })
             this.listFile = dataDetail.fileDinhKems;
             if (dataDetail.fileDinhKems && dataDetail.fileDinhKems.length > 0) {
@@ -304,10 +320,7 @@ export class ThongTinQuyetDinhXuatHangKhoiDmComponent extends Base2Component imp
                 }
               })
             }
-            this.dataTh = cloneDeep(dataDetail.xhXkVtQdGiaonvXhDtl);
-            this.dataTh.forEach((item) => {
-              this.dataThEdit[item.id] = {...item};
-            });
+            this.dataTable = cloneDeep(dataDetail.listDtl);
           }
         }
       })
