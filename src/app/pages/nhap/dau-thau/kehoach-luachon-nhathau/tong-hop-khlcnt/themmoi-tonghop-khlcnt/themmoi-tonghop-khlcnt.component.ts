@@ -194,6 +194,7 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
   async tongHopDeXuatTuCuc() {
     await this.spinner.show();
     try {
+      debugger
       this.helperService.markFormGroupTouched(this.formTraCuu);
       if (this.formTraCuu.invalid) {
         await this.spinner.hide();
@@ -201,7 +202,7 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
       }
       let body = this.formTraCuu.value;
       let res = await this.tongHopDeXuatKHLCNTService.deXuatCuc(body);
-      if (res.msg == MESSAGE.SUCCESS && res.data && res.data.length > 0) {
+      if (res.msg == MESSAGE.SUCCESS && res.data && res.data.hhDxKhLcntThopDtlList.length > 0) {
         const dataDetail = res.data
         let idTh = await this.userService.getId("HH_DX_KHLCNT_THOP_HDR_SEQ");
         this.helperService.bidingDataInFormGroup(this.formData, dataDetail)
