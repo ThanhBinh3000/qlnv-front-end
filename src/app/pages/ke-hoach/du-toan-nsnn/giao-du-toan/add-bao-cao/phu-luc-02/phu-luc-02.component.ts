@@ -483,7 +483,7 @@ export class PhuLuc02Component implements OnInit {
 
     exportToExcel() {
         const header = [
-            { t: 0, b: 1, l: 0, r: 5, val: null },
+            { t: 0, b: 2, l: 0, r: 5, val: null },
             { t: 0, b: 1, l: 0, r: 0, val: 'STT' },
             { t: 0, b: 1, l: 1, r: 1, val: 'Danh mục' },
             { t: 0, b: 1, l: 2, r: 2, val: 'Đơn vị tính' },
@@ -494,12 +494,12 @@ export class PhuLuc02Component implements OnInit {
             { t: 2, b: 2, l: 5, r: 5, val: 'Thành tiền' },
         ]
         const fieldOrder = [
+            "stt",
             "tenDanhMuc",
             "maDviTinh",
-            "namDtDmuc",
             "namDtSluong",
+            "namDtDmuc",
             "namDtTtien",
-            "stt",
         ]
 
         const filterData = this.lstCtietBcaos.map(item => {

@@ -373,9 +373,9 @@ export class PhuLuc3Component implements OnInit {
     };
 
     changeModel(id: string): void {
-        this.editCache[id].data.dtoanKphiCong = this.editCache[id].data.dtoanKphiNtruoc + this.editCache[id].data.dtoanKphiDaGiao;
+        this.editCache[id].data.dtoanKphiCong = Operator.sum([this.editCache[id].data.dtoanKphiNtruoc, this.editCache[id].data.dtoanKphiDaGiao]);
         // this.editCache[id].data.dtoanDchinh = this.editCache[id].data.ncauKphi - this.editCache[id].data.dtoanKphiCong;
-        this.editCache[id].data.dtoanDchinh = Operator.sum([this.editCache[id].data.ncauKphi, -this.editCache[id].data.dtoanKphiCong]);
+        this.editCache[id].data.dtoanDchinh = Operator.sum([this.editCache[id].data.ncauKphi, - this.editCache[id].data.dtoanKphiCong]);
         this.editCache[id].data.chenhLech = Operator.sum([this.editCache[id].data.dtoanVuTvqtDnghi, -this.editCache[id].data.dtoanDchinh]);
 
     };

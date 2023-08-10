@@ -240,6 +240,17 @@ export class PhuLucPhanBoComponent implements OnInit {
             )
             this.lstDvi = this.donVis;
             // console.log(this.lstDvi);
+            this.lstCtietBcaos.forEach(item => {
+                if (item.maNdung) {
+                    const index = this.lstCtietBcaos.findIndex(e => e.maNdung == item.maNdung);
+                    let tongCong = 0
+                    this.lstCtietBcaos[index].lstCtietDvis.forEach(itm => {
+                        tongCong += itm.soTranChi
+                    })
+                    // this.lstCtietBcaos[index].dtoanGiao = tongCong;
+                    this.sum(this.lstCtietBcaos[index].stt)
+                }
+            })
 
         } else {
             this.formDetail.lstCtietBcaos[0]?.lstCtietDvis.forEach(s => {
@@ -251,17 +262,7 @@ export class PhuLucPhanBoComponent implements OnInit {
         }
 
 
-        this.lstCtietBcaos.forEach(item => {
-            if (item.maNdung) {
-                const index = this.lstCtietBcaos.findIndex(e => e.maNdung == item.maNdung);
-                let tongCong = 0
-                this.lstCtietBcaos[index].lstCtietDvis.forEach(itm => {
-                    tongCong += itm.soTranChi
-                })
-                // this.lstCtietBcaos[index].dtoanGiao = tongCong;
-                this.sum(this.lstCtietBcaos[index].stt)
-            }
-        })
+
         this.lstCtietBcaos = Table.sortByIndex(this.lstCtietBcaos)
         this.getTotal();
         this.getStatusButton();
@@ -399,6 +400,10 @@ export class PhuLucPhanBoComponent implements OnInit {
                 lstCtietDvis: mm,
                 checked: false,
             });
+
+            console.log(this.lstCtietBcaos);
+
+
             this.lstCtietBcaos.forEach(item => {
                 if (this.getHead(item.stt) == stt) {
                     item.lstCtietDvis.forEach(e => {

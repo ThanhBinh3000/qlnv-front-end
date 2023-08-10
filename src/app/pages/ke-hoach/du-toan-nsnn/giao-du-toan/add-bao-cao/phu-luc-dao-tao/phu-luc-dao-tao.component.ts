@@ -340,6 +340,9 @@ export class PhuLucDaoTaoComponent implements OnInit {
             tenNoiDung: "",
         })
         this.lstCtietBcaos = Table.addChild(data.id, parentItem, this.lstCtietBcaos);
+        this.lstCtietBcaos.forEach(item => {
+            item.maNoiDung = item.stt
+        })
         this.updateEditCache();
     };
 
