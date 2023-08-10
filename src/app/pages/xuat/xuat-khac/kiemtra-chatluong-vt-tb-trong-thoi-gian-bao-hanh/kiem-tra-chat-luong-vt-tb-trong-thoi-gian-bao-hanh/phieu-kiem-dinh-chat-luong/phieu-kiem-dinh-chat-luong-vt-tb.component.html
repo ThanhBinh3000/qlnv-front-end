@@ -87,6 +87,8 @@
           <th width="">Ngày kiểm định</th>
           <th width="">Số BB LM/BGM</th>
           <th width="">Ngày lấy mẫu</th>
+          <th width="">Trạng thái KĐCL</th>
+          <th width="">Lần lấy mẫu</th>
           <th width="">Trạng thái</th>
           <th width="90px">Hành động</th>
         </tr>
@@ -109,11 +111,14 @@
             <td></td>
             <td></td>
             <td></td>
-            <td class="text-left">
-              <a (click)="redirectDetail(item.id, false,item.soQdGiaoNvXh)">
-                <i class="icon htvbdh_dau-cong" title="Thêm mới"></i>
-              </a>
-            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+<!--            <td class="text-left">-->
+<!--              <a (click)="redirectDetail(item.id, false,item.soQdGiaoNvXh)">-->
+<!--                <i class="icon htvbdh_dau-cong" title="Thêm mới"></i>-->
+<!--              </a>-->
+<!--            </td>-->
           </tr>
           <ng-container *ngIf="expandSetString.has(item.idVirtual)">
             <ng-container *ngFor="let lv1 of item.childData,let i1=index">
@@ -131,11 +136,14 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td class="text-left">
-                  <a (click)="redirectDetail(item.id, false,item.soQdGiaoNvXh)">
-                    <i class="icon htvbdh_dau-cong" title="Thêm mới"></i>
-                  </a>
-                </td>
+                <td></td>
+                <td></td>
+                <td></td>
+<!--                <td class="text-left">-->
+<!--                  <a (click)="redirectDetail(item.id, false,item.soQdGiaoNvXh)">-->
+<!--                    <i class="icon htvbdh_dau-cong" title="Thêm mới"></i>-->
+<!--                  </a>-->
+<!--                </td>-->
               </tr>
               <ng-container *ngIf="expandSetString.has(item.idVirtual)">
                 <ng-container *ngFor="let lv2 of lv1.childData,let i2=index">
@@ -147,6 +155,8 @@
                     <td></td>
                     <td></td>
                     <td class="bold">{{lv2.tenLoKho ? lv2.tenNganKho + ' - ' + lv2.tenLoKho : lv2.tenNganKho}}</td>
+                    <td></td>
+                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -170,6 +180,8 @@
                         <td>{{lv3.ngayKiemDinh|date:globals.dateFormat}}</td>
                         <td class="bold">{{lv3.soBbLayMau}}</td>
                         <td>{{lv3.ngayLayMau |date:globals.dateFormat }}</td>
+                        <td>{{lv3.isDat ? "Đạt" : "Không đạt"}}</td>
+                        <td>{{lv3.soLanLm}}</td>
                         <td>{{lv3.tenTrangThai}}</td>
                         <td class="text-left">
                           <a *ngIf="lv3.trangThai ==STATUS.DA_DUYET_LDC" (click)="redirectDetail(lv3.id, true)">

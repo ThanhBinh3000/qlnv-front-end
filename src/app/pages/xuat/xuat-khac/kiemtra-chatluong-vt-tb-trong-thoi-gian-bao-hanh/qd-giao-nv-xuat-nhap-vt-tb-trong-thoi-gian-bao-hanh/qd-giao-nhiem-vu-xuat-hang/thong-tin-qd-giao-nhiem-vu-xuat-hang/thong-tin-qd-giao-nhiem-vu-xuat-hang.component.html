@@ -52,7 +52,7 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Loại hình nhập xuất</nz-form-label>
             <nz-form-control>
-              <nz-radio-group formControlName="loai" [nzDisabled]="isViewDetail" nzName="radiogroup">
+              <nz-radio-group formControlName="loai" (ngModelChange)="changeLoai($event)"  [nzDisabled]="isViewDetail" nzName="radiogroup">
                 <label nz-radio nzValue="XUAT_MAU"> Xuất hàng để lấy mẫu</label>
                 <label nz-radio nzValue="XUAT_HUY"> Xuất mẫu bị hủy khỏi kho</label>
                 <label nz-radio nzValue="XUAT_CA_LO"> Xuất cả lô để bảo hành</label>
@@ -241,10 +241,10 @@
               <td>{{lv1.tenLoKho ? lv1.tenLoKho : lv1.tenNganKho}}</td>
               <td>{{lv1.donViTinh}}</td>
               <td>
-                <input nz-input [readOnly]="isViewDetail" [(ngModel)]="dataThEdit[lv1.id].maDviTsan"/>
+                <input nz-input [readOnly]="isViewDetail" [(ngModel)]="lv1.maDviTsan"/>
               </td>
               <td>
-                <input nz-input [readOnly]="isViewDetail" [(ngModel)]="dataThEdit[lv1.id].slLayMau"/>
+                <input nz-input [readOnly]="isViewDetail" [(ngModel)]="lv1.slLayMau"/>
               </td>
               <td></td>
             </tr>
@@ -371,7 +371,7 @@
         </div>
         <div class="mt-3" nz-row [nzGutter]="24" *ngIf="this.formData.value.loaiCanCu == 'PHIEU_KDCL'">
           <div nz-col [nzSpan]="24">
-            <nz-table #tblData [nzData]="listMaTongHop" class="nowrap table-chi-tiet" nzBordered>
+            <nz-table #tblData [nzData]="listPhieuKdcl" class="nowrap table-chi-tiet" nzBordered>
               <thead>
               <tr>
                 <th>STT</th>
@@ -384,12 +384,16 @@
               <ng-container *ngFor="let item of tblData.data, let i = index;">
                 <tr>
                   <td>{{i + 1}}</td>
-                  <td>{{item.maDanhSach}}</td>
-                  <td>{{item.tenDanhSach}}</td>
-                  <td class="text-center">
-                    <a (click)="handleOk(item)">
-                      <i class="icon htvbdh_dau-cong"></i>
-                    </a>
+                  <td>{{item.soPhieu}}</td>
+                  <td>{{item.isDat?'Đat':'Không đạt'}}</td>
+<!--                  <td class="text-center">-->
+<!--                    <a (click)="handleOk(item)">-->
+<!--                      <i class="icon htvbdh_dau-cong"></i>-->
+<!--                    </a>-->
+<!--                  </td>-->
+                  <td  class="text-center">
+                    <label nz-checkbox [(ngModel)]="item.checked" (ngModelChange)="updateSingleChecked()"
+                           [nzDisabled]="isViewDetail"  [ngModelOptions]="{ standalone: true }"></label>
                   </td>
                 </tr>
               </ng-container>
@@ -401,6 +405,18 @@
     </ng-container>
   </ng-container>
   <ng-template #modalFooter>
+    <div class="modal-footer" *ngIf="this.formData.value.loaiCanCu == 'PHIEU_KDCL'">
+      <div class="nut mr-40px">
+        <div class="cantrai">
+        </div>
+        <div class="canphai">
+          <a class="btn btn-outline-grey btn-sm waves-effect waves-light active" (click)="handleOk(listPhieuKdcl)">
+            <i class="icon htvbdh_luu-thanh-cong mr-1"></i>
+            Chọn
+          </a>
+        </div>
+      </div>
+    </div>
   </ng-template>
 </nz-modal>
 

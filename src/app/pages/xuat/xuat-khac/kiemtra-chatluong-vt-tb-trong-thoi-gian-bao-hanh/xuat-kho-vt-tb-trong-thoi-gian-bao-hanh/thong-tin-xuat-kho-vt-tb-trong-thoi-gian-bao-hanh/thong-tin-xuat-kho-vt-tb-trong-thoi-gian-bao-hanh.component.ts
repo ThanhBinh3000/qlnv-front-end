@@ -33,7 +33,9 @@ export class ThongTinXuatKhoVtTbTrongThoiGianBaoHanhComponent extends Base2Compo
   @Input() isView: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
-  listSoQuyetDinh: any[] = []
+  listSoQuyetDinh: any[] = [];
+  listSoQuyetDinhXh: any[] = [];
+  listSoQuyetDinhXm: any[] = [];
   listDiaDiemNhap: any[] = [];
   listPhieuKtraCl: any[] = [];
   fileDinhKems: any[] = [];
@@ -69,6 +71,7 @@ export class ThongTinXuatKhoVtTbTrongThoiGianBaoHanhComponent extends Base2Compo
         taiKhoanCo: [],
         idCanCu: [],
         soCanCu: [],
+        soLanLm: [],
         maDiaDiem: ['', [Validators.required]],
         ngayQdGiaoNvXh: [],
         maNhaKho: [],
@@ -185,33 +188,52 @@ export class ThongTinXuatKhoVtTbTrongThoiGianBaoHanhComponent extends Base2Compo
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.listSoQuyetDinh = data.content;
+      this.listSoQuyetDinhXh =this.listSoQuyetDinh.filter(i=>i.loai=="XUAT_HUY");
+      this.listSoQuyetDinhXm =this.listSoQuyetDinh.filter(i=>i.loai=="XUAT_MAU");
+      console.log(this.listSoQuyetDinh,1)
+      console.log(this.listSoQuyetDinhXh,2)
+      console.log(this.listSoQuyetDinhXm,2)
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
 
   async openDialogSoQd() {
+    let title;
+    let dataTable;
+
+    if (this.formData.value.loai === "XUAT_MAU") {
+      title = "Danh sách số quyết định kế hoạch giao nhiệm vụ xuất hàng lấy mẫu";
+      dataTable = this.listSoQuyetDinhXm;
+    } else if (this.formData.value.loai === "XUAT_HUY") {
+      title = "Danh sách số quyết định kế hoạch giao nhiệm vụ xuất hàng bị hủy";
+      dataTable = this.listSoQuyetDinhXh;
+    }
+
     const modalQD = this.modal.create({
-      nzTitle: 'Danh sách số quyết định kế hoạch giao nhiệm vụ xuất hàng',
+      nzTitle: title,
       nzContent: DialogTableSelectionComponent,
       nzMaskClosable: false,
       nzClosable: false,
       nzWidth: '900px',
       nzFooter: null,
       nzComponentParams: {
-        dataTable: this.listSoQuyetDinh,
-        dataHeader: [ 'Năm','Số quyết định', 'Ngày quyết định',],
-        dataColumn: ['nam','soQuyetDinh', 'ngayKy', ],
+        dataTable: dataTable,
+        dataHeader: ['Năm', 'Số quyết định', 'Ngày quyết định','Sô lần lấy mẫu'],
+        dataColumn: ['nam', 'soQuyetDinh', 'ngayKy','soLanLm'],
       },
-    })
+    });
+
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
         await this.bindingDataQd(data);
       }
     });
-  };
+  }
+
 
   async bindingDataQd(data) {
+    console.log(data,66)
     try {
       await this.spinner.show();
       this.listNganLoKho = data.qdGiaonvXhDtl;
