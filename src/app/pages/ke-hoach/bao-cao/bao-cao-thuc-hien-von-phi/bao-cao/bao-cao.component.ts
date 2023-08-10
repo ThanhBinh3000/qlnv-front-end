@@ -406,7 +406,7 @@ export class BaoCaoComponent implements OnInit {
                 }
             }
         }
-        if (!baoCaoTemp.congVan.fileUrl) {
+        if (!baoCaoTemp.congVan?.fileUrl) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
             return;
         }

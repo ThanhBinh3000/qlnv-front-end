@@ -112,13 +112,13 @@ export class DanhSachBaoCaoThucHienVonPhiComponent implements OnInit {
     }
 
     checkEditStatus(item: any) {
-        const isSynthetic = item.tongHopTu != "[]";
+        const isSynthetic = item.tongHopTu && item.tongHopTu != "[]";
         return Status.check('saveWOHist', item.trangThai) &&
             (isSynthetic ? this.userService.isAccessPermisson(Roles.VP.EDIT_SYNTH_REPORT) : this.userService.isAccessPermisson(Roles.VP.EDIT_REPORT));
     }
 
     checkDeleteStatus(item: any) {
-        const isSynthetic = item.tongHopTu != "[]";
+        const isSynthetic = item.tongHopTu && item.tongHopTu != "[]";
         return Status.check('saveWOHist', item.trangThai) &&
             (isSynthetic ? this.userService.isAccessPermisson(Roles.VP.DEL_SYNTH_REPORT) : this.userService.isAccessPermisson(Roles.VP.DEL_REPORT));
     }

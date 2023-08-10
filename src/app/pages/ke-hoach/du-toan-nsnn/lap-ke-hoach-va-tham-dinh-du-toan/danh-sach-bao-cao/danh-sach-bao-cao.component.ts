@@ -144,13 +144,13 @@ export class DanhSachBaoCaoComponent implements OnInit {
     }
 
     checkEditStatus(item: any) {
-        const isSynthetic = item.tongHopTu != "[]";
+        const isSynthetic = item.tongHopTu && item.tongHopTu != "[]";
         return Status.check('saveWHist', item.trangThai) &&
             (isSynthetic ? this.userService.isAccessPermisson(Roles.LTD.EDIT_SYNTH_REPORT) : this.userService.isAccessPermisson(Roles.LTD.EDIT_REPORT));
     }
 
     checkDeleteStatus(item: any) {
-        const isSynthetic = item.tongHopTu != "[]";
+        const isSynthetic = item.tongHopTu && item.tongHopTu != "[]";
         return Status.check('saveWHist', item.trangThai) &&
             (isSynthetic ? this.userService.isAccessPermisson(Roles.LTD.DEL_SYNTH_REPORT) : this.userService.isAccessPermisson(Roles.LTD.DEL_REPORT));
     }
