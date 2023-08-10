@@ -46,27 +46,17 @@ export class BangKeNhapVatTuComponent extends Base2Component implements OnInit {
     this.formData = this.fb.group({
       nam: null,
       soQdinh: null,
-      ngayDuyetTc: null,
-      ngayHieuLuc: null,
-      trichYeu: null,
+      tuNgayThoiHan: null,
+      denNgayThoiHan: null,
+      tuNgayNhapKho: null,
+      denNgayNhapKho: null,
+      soBangKe: null,
       type: ["01"],
       loaiDc: ["DCNB"],
       isVatTu: [true],
       loaiQdinh: [],
       thayDoiThuKho: []
     })
-    // this.filterTable = {
-    //   nam: '',
-    //   soQdinh: '',
-    //   ngayKyQdinh: '',
-    //   loaiDc: '',
-    //   trichYeu: '',
-    //   maDxuat: '',
-    //   maThop: '',
-    //   soQdinhXuatCuc: '',
-    //   soQdinhNhapCuc: '',
-    //   tenTrangThai: '',
-    // };
   }
 
   data: any = {};
@@ -99,6 +89,38 @@ export class BangKeNhapVatTuComponent extends Base2Component implements OnInit {
 
   }
 
+  disabledStartNgayNK = (startValue: Date): boolean => {
+    if (startValue && this.formData.value.denNgayNhapKho) {
+      return startValue.getTime() > this.formData.value.denNgayNhapKho.getTime();
+    } else {
+      return false;
+    }
+  };
+
+  disabledEndNgayNK = (endValue: Date): boolean => {
+    if (endValue && this.formData.value.tuNgayNhapKho) {
+      return endValue.getTime() < this.formData.value.tuNgayNhapKho.getTime();
+    } else {
+      return false;
+    }
+  };
+
+  disabledStartNgayNH = (startValue: Date): boolean => {
+    if (startValue && this.formData.value.denNgayThoiHan) {
+      return startValue.getTime() > this.formData.value.denNgayThoiHan.getTime();
+    } else {
+      return false;
+    }
+  };
+
+  disabledEndNgayNH = (endValue: Date): boolean => {
+    if (endValue && this.formData.value.tuNgayThoiHan) {
+      return endValue.getTime() < this.formData.value.tuNgayThoiHan.getTime();
+    } else {
+      return false;
+    }
+  };
+
   isShowDS() {
     if (this.userService.isAccessPermisson('DCNB_QUYETDINHDC_TONGCUC') && this.userService.isAccessPermisson('DCNB_QUYETDINHDC_XEM'))
       return true
@@ -110,7 +132,7 @@ export class BangKeNhapVatTuComponent extends Base2Component implements OnInit {
   }
 
   isCuc() {
-    return false//this.userService.isCuc()
+    return this.userService.isCuc()
   }
 
   // isChiCuc() {
@@ -137,17 +159,32 @@ export class BangKeNhapVatTuComponent extends Base2Component implements OnInit {
     return children
   }
 
+  async changePageIndex(event) {
+    this.page = event;
+    await this.timKiem();
+  }
+
+  async changePageSize(event) {
+    this.pageSize = event;
+    await this.timKiem();
+  }
+
   async timKiem() {
-    // if (this.formData.value.ngayDuyetTc) {
-    //   this.formData.value.ngayDuyetTcTu = dayjs(this.formData.value.ngayDuyetTc[0]).format('YYYY-MM-DD')
-    //   this.formData.value.ngayDuyetTcDen = dayjs(this.formData.value.ngayDuyetTc[1]).format('YYYY-MM-DD')
-    // }
-    // if (this.formData.value.ngayHieuLuc) {
-    //   this.formData.value.ngayHieuLucTu = dayjs(this.formData.value.ngayHieuLuc[0]).format('YYYY-MM-DD')
-    //   this.formData.value.ngayHieuLucDen = dayjs(this.formData.value.ngayHieuLuc[1]).format('YYYY-MM-DD')
-    // }
+    if (this.formData.value.tuNgayKtnk) {
+      this.formData.value.tuNgayKtnk = dayjs(this.formData.value.tuNgayKtnk).format('YYYY-MM-DD')
+    }
+    if (this.formData.value.denNgayKtnk) {
+      this.formData.value.denNgayKtnk = dayjs(this.formData.value.denNgayKtnk).format('YYYY-MM-DD')
+    }
+    if (this.formData.value.tuNgayThoiHanNhap) {
+      this.formData.value.tuNgayThoiHanNhap = dayjs(this.formData.value.tuNgayThoiHanNhap).format('YYYY-MM-DD')
+    }
+    if (this.formData.value.denNgayThoiHanNhap) {
+      this.formData.value.denNgayThoiHanNhap = dayjs(this.formData.value.denNgayThoiHanNhap).format('YYYY-MM-DD')
+    }
+
     let body = this.formData.value
-    if (body.soQdinh) body.soQdinh = `${body.soQdinh}\DCNB`
+    if (body.soQdinh) body.soQdinh = `${body.soQdinh}/DCNB`
     body.paggingReq = {
       limit: this.pageSize,
       page: this.page - 1

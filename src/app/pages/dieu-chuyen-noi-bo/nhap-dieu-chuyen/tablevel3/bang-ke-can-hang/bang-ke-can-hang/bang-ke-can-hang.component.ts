@@ -82,18 +82,6 @@ export class BangKeCanHangComponent extends Base2Component implements OnInit {
       loaiQdinh: [],
       thayDoiThuKho: []
     })
-    // this.filterTable = {
-    //   nam: '',
-    //   soQdinh: '',
-    //   ngayKyQdinh: '',
-    //   loaiDc: '',
-    //   trichYeu: '',
-    //   maDxuat: '',
-    //   maThop: '',
-    //   soQdinhXuatCuc: '',
-    //   soQdinhNhapCuc: '',
-    //   tenTrangThai: '',
-    // };
   }
 
 
@@ -184,6 +172,16 @@ export class BangKeCanHangComponent extends Base2Component implements OnInit {
       return children.map(f => ({ ...f, expand: false }))
     }
     return children
+  }
+
+  async changePageIndex(event) {
+    this.page = event;
+    await this.timKiem();
+  }
+
+  async changePageSize(event) {
+    this.pageSize = event;
+    await this.timKiem();
   }
 
   async timKiem() {

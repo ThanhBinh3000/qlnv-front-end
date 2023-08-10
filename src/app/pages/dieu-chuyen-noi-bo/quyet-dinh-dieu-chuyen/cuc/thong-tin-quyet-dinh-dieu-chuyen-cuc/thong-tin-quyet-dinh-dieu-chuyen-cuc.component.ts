@@ -644,6 +644,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
   }
 
   nzActiveChange(value) {
+    this.nzActive = value
     console.log('nzActiveChange', value, this.nzActive)
   }
 
@@ -673,7 +674,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
       if (data) {
         if (data.isUpdate) {
           if (this.typeKeHoach === "LO_KHO_NHAN")
-            this.danhSachKeHoach = this.danhSachKeHoach.filter(kh => kh.maLoKhoNhan !== data.maLoKhoNhan)
+            this.danhSachKeHoach = this.danhSachKeHoach.filter(kh => `${kh.maLoKhoNhan}${kh.maNganKhoNhan}` !== `${row.maLoKhoNhan}${row.maNganKhoNhan}`)
           // if (this.typeKeHoach === "DIEM_KHO_NHAN")
           //   this.danhSachKeHoach = this.danhSachKeHoach.filter(kh => kh.maDiemKhoNhan !== data.maDiemKhoNhan)
           this.danhSachKeHoach.push({

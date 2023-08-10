@@ -6,21 +6,22 @@
           <div nz-row [nzGutter]="24">
             <div nz-col nzSpan="6">
               <label class="search__label">Số BB lấy mẫu/bàn giao mẫu</label>
-              <input nz-input formControlName="trichYeu" />
-            </div>
-            <div nz-col nzSpan="6">
-              <label class="search__label">Số QĐ điều chuyển</label>
-              <input nz-input formControlName="trichYeu" />
-            </div>
-            <div nz-col nzSpan="6">
-              <label class="search__label">Đơn vị kiểm nghiệm</label>
-              <input nz-input formControlName="trichYeu" />
+              <input nz-input formControlName="soBbLayMau" />
             </div>
 
-            <!-- <div nz-col nzSpan="6">
-              <label class="search__label">Ngày lấy mẫu</label>
-              <nz-range-picker formControlName="ngayDuyetTc" nzFormat="dd/MM/yyyy"></nz-range-picker>
-            </div> -->
+            <div nz-col nzSpan="6">
+              <label class="search__label">Số QĐ điều chuyển</label>
+              <nz-input-group nzAddOnAfter="/DCNB">
+                <nz-input-number class="search__input" formControlName="soQdinh" [nzMin]="1" [nzMax]="999999999"
+                  [nzStep]="1" [nzSize]="'small'" [nzDisabled]="isView">
+                </nz-input-number>
+              </nz-input-group>
+            </div>
+
+            <div nz-col nzSpan="6">
+              <label class="search__label">Đơn vị kiểm nghiệm</label>
+              <input nz-input formControlName="dviKiemNghiem" />
+            </div>
 
             <div nz-col nzSpan="6">
               <label class="search__label">Ngày lấy mẫu</label>

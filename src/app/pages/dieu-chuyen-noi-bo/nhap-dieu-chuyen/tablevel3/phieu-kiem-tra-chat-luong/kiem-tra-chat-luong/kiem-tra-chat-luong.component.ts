@@ -175,6 +175,16 @@ export class KiemTraChatLuongComponent extends Base2Component implements OnInit 
     return children
   }
 
+  async changePageIndex(event) {
+    this.page = event;
+    await this.timKiem();
+  }
+
+  async changePageSize(event) {
+    this.pageSize = event;
+    await this.timKiem();
+  }
+
   async timKiem() {
     await this.spinner.show();
     try {
@@ -192,6 +202,7 @@ export class KiemTraChatLuongComponent extends Base2Component implements OnInit 
       }
 
       let body = this.formData.value
+      if (body.soQdinh) body.soQdinh = `${body.soQdinh}/DCNB`
       body.paggingReq = {
         limit: this.pageSize,
         page: this.page - 1

@@ -13,24 +13,56 @@
             <div nz-col nzSpan="3">
               <label class="search__label">Số QĐ điều chuyển</label>
               <nz-input-group nzAddOnAfter="/DCNB">
-                <nz-input-number class="search__input" formControlName="soQdinh" [nzMin]="1" [nzMax]="9" [nzStep]="1"
-                  [nzSize]="'small'" [nzDisabled]="isView">
+                <nz-input-number class="search__input" formControlName="soQdinh" [nzMin]="1" [nzMax]="999999999"
+                  [nzStep]="1" [nzSize]="'small'" [nzDisabled]="isView">
                 </nz-input-number>
               </nz-input-group>
             </div>
             <div nz-col nzSpan="3">
-              <label class="search__label">Số BB NT kê lót</label>
-              <input nz-input formControlName="trichYeu" />
+              <label class="search__label">Số bảng kê nhập vật tư</label>
+              <input nz-input formControlName="soBangKe" />
             </div>
 
-            <div nz-col nzSpan="4">
+            <!-- <div nz-col nzSpan="4">
               <label class="search__label">Ngày lập biên bản</label>
               <nz-range-picker formControlName="ngayDuyetTc" nzFormat="dd/MM/yyyy"></nz-range-picker>
             </div>
             <div nz-col nzSpan="4">
               <label class="search__label">Ngày kết thúc NT kê lót, BQLĐ</label>
               <nz-range-picker formControlName="ngayHieuLuc" nzFormat="dd/MM/yyyy"></nz-range-picker>
+            </div> -->
+
+            <div nz-col nzSpan="4">
+              <label class="search__label">Thời hạn nhập hàng trước ngày</label>
+              <div nz-row>
+                <div nz-col nzSpan="12" class="cus-start-date">
+                  <nz-date-picker [nzDisabledDate]="disabledStartNgayNH" nzFormat="dd/MM/yyyy"
+                    formControlName="tuNgayThoiHan" nzPlaceHolder="Ngày bắt đầu">
+                  </nz-date-picker>
+                </div>
+                <div nz-col nzSpan="12" class="cus-end-date">
+                  <nz-date-picker [nzDisabledDate]="disabledEndNgayNH" nzFormat="dd/MM/yyyy"
+                    formControlName="denNgayThoiHan" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+                </div>
+              </div>
             </div>
+
+            <div nz-col nzSpan="4">
+              <label class="search__label">Ngày nhập kho</label>
+              <div nz-row>
+                <div nz-col nzSpan="12" class="cus-start-date">
+                  <nz-date-picker [nzDisabledDate]="disabledStartNgayNK" nzFormat="dd/MM/yyyy"
+                    formControlName="tuNgayNhapKho" nzPlaceHolder="Ngày bắt đầu">
+                  </nz-date-picker>
+                </div>
+                <div nz-col nzSpan="12" class="cus-end-date">
+                  <nz-date-picker [nzDisabledDate]="disabledEndNgayNK" nzFormat="dd/MM/yyyy"
+                    formControlName="denNgayNhapKho" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+                </div>
+              </div>
+            </div>
+
+
 
 
 
