@@ -326,13 +326,13 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
               console.log(ctieuChiCuc)
               if ((this.formData.value.loaiGia && (this.formData.value.loaiGia == 'LG02' || this.formData.value.loaiGia == 'LG04'))) {
                 if (event.startsWith("0101")) {
-                  pagTtChung.soLuongCtieu = ctieuChiCuc.xtnTongSoQuyThoc ?  ctieuChiCuc.xtnTongSoQuyThoc : 0
+                  pagTtChung.soLuongCtieu = ctieuChiCuc.xtnTongThoc ?  ctieuChiCuc.xtnTongThoc : 0
                 }
                 if (event.startsWith("0102")) {
                   pagTtChung.soLuongCtieu = ctieuChiCuc.xtnTongGao ? ctieuChiCuc.xtnTongGao : 0
                 }
                 if (event.startsWith("04")) {
-                  pagTtChung.soLuongCtieu = ctieuChiCuc.nhapTrongNam ? ctieuChiCuc.nhapTrongNam : 0
+                  pagTtChung.soLuongCtieu = ctieuChiCuc.xuatTrongNamMuoi ? ctieuChiCuc.xuatTrongNamMuoi  :0
                 }
               }
               if ((this.formData.value.loaiGia && (this.formData.value.loaiGia == 'LG01' || this.formData.value.loaiGia == 'LG03'))) {
@@ -343,7 +343,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
                   pagTtChung.soLuongCtieu = ctieuChiCuc.ntnGao ? ctieuChiCuc.ntnGao : 0
                 }
                 if (event.startsWith("04")) {
-                  pagTtChung.soLuongCtieu = ctieuChiCuc.xuatTrongNamMuoi ? ctieuChiCuc.xuatTrongNamMuoi  :0
+                  pagTtChung.soLuongCtieu = ctieuChiCuc.nhapTrongNam ? ctieuChiCuc.nhapTrongNam : 0
                 }
 
                 if (ctieuChiCuc && ctieuChiCuc.xtnThoc && ctieuChiCuc.xtnThoc.length > 0) {

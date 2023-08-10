@@ -190,6 +190,16 @@ export class BienBanGiaoNhanComponent extends Base2Component implements OnInit {
     return children
   }
 
+  async changePageIndex(event) {
+    this.page = event;
+    await this.timKiem();
+  }
+
+  async changePageSize(event) {
+    this.pageSize = event;
+    await this.timKiem();
+  }
+
   async timKiem() {
     if (this.formData.value.tuNgayKtnk) {
       this.formData.value.tuNgayKtnk = dayjs(this.formData.value.tuNgayKtnk).format('YYYY-MM-DD')
