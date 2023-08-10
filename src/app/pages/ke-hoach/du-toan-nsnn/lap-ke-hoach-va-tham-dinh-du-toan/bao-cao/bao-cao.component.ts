@@ -418,7 +418,7 @@ export class BaoCaoComponent implements OnInit {
             }
         }
 
-        if (!baoCaoTemp.congVan.fileUrl) {
+        if (!baoCaoTemp.congVan?.fileUrl) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
             return;
         }
@@ -687,10 +687,7 @@ export class BaoCaoComponent implements OnInit {
         await this.lapThamDinhService.restoreReport(this.baoCao.id, id).toPromise().then(
             (data) => {
                 if (data.statusCode == 0) {
-                    Object.assign(this.baoCao, data.data);
-                    this.baoCao.lstLapThamDinhs.forEach(item => {
-                        [item.tenPl, item.tenDm] = Ltd.appendixName(item.maBieuMau, this.baoCao.namBcao);
-                    })
+                    this.action('detail')
                     this.getStatusButton();
                     this.notification.success(MESSAGE.SUCCESS, 'Khôi phục thành công.');
                 } else {

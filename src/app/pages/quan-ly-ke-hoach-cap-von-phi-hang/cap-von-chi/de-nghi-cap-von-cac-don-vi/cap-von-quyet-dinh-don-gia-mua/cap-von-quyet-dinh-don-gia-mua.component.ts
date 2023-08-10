@@ -172,7 +172,7 @@ export class CapVonQuyetDinhDonGiaMuaComponent implements OnInit {
         this.updateEditCache();
         this.getStatusButton();
     }
-
+    // set level cho tung hang cua bao cao dua tren stt
     setLevel() {
         this.lstCtiets.forEach(item => {
             item.level = item.stt.split('.').length - 2;
@@ -290,16 +290,17 @@ export class CapVonQuyetDinhDonGiaMuaComponent implements OnInit {
 
     // luu
     async save() {
+        // kiểm tra còn hàng nào đang ở trạng thái edit không
         if (this.lstCtiets.some(e => this.editCache[e.id].edit)) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
             return;
         }
-
+        // kiểm tra giới hạn của các trường trong bảng có vượt mức cho phép không
         if (this.lstCtiets.some(e => e.upperBound())) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
             return;
         }
-
+        // kiểm tra kích cỡ file đính kèm có vượt mức cho phép không
         if (this.listFile.some(file => file.size > Utils.FILE_SIZE)) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
             return;
@@ -311,12 +312,12 @@ export class CapVonQuyetDinhDonGiaMuaComponent implements OnInit {
         })
         const request = JSON.parse(JSON.stringify(this.baoCao));
         request.lstCtiets = lstCtietTemp;
+        // upload file đính kèm
         request.fileDinhKems = [];
         for (let iterator of this.listFile) {
             request.fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.baoCao.maDvi + '/' + this.baoCao.maDnghi));
         }
-
-        //get file cong van url
+        //upload file công văn
         const file: any = this.fileDetail;
         if (file) {
             if (file.size > Utils.FILE_SIZE) {
@@ -329,11 +330,12 @@ export class CapVonQuyetDinhDonGiaMuaComponent implements OnInit {
                 }
             }
         }
+        // kiểm tra file cong văn đã được thêm hoặc upload thành công chưa
         if (!request.congVan?.fileUrl) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
             return;
         }
-
+        // nếu chưa có id thì tạo mới báo cáo, ngược lại update
         if (!this.baoCao.id) {
             this.capVonNguonChiService.taoMoiDeNghi(request).toPromise().then(
                 async (data) => {
@@ -402,14 +404,14 @@ export class CapVonQuyetDinhDonGiaMuaComponent implements OnInit {
         Object.assign(this.lstCtiets[index], this.editCache[id].data); // set lai data cua lstCtietBcao[index] = this.editCache[id].data
         this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
     }
-
+    // tính toán các giá trị khi số lượng thay đối
     changeTien(id: string) {
         this.editCache[id].data.gtThucHien = Operator.mul(this.editCache[id].data.slThucHien, this.editCache[id].data.donGia);
         this.editCache[id].data.vonDnCapLanNay = Operator.sum([this.editCache[id].data.gtThucHien, -this.editCache[id].data.tongVonVaDtoanDaCap]);
         this.editCache[id].data.tongTien = Operator.sum([this.editCache[id].data.tongVonVaDtoanDaCap, this.editCache[id].data.cong]);
         this.editCache[id].data.soConDuocCap = Operator.sum([this.editCache[id].data.gtThucHien, -this.editCache[id].data.tongTien]);
     }
-
+    // tính toán lại các giá trị khi vốn thay đổi
     changeVon(id: string) {
         this.editCache[id].data.tongVonVaDtoanDaCap = Operator.sum([this.editCache[id].data.dtoanDaGiao, this.editCache[id].data.lkCong]);
         this.editCache[id].data.vonDnCapLanNay = Operator.sum([this.editCache[id].data.gtThucHien, -this.editCache[id].data.tongVonVaDtoanDaCap]);
@@ -417,7 +419,7 @@ export class CapVonQuyetDinhDonGiaMuaComponent implements OnInit {
         this.editCache[id].data.tongTien = Operator.sum([this.editCache[id].data.tongVonVaDtoanDaCap, this.editCache[id].data.cong]);
         this.editCache[id].data.soConDuocCap = Operator.sum([this.editCache[id].data.gtThucHien, -this.editCache[id].data.tongTien]);
     }
-
+    // cộng số liệu từ mức con lên mức cha
     sum(stt: string) {
         while (stt != '0') {
             const index = this.lstCtiets.findIndex(e => e.stt == stt);
@@ -440,7 +442,7 @@ export class CapVonQuyetDinhDonGiaMuaComponent implements OnInit {
             stt = Table.preIndex(stt)
         }
     }
-
+    // xem chi tiết đề nghị cấp vốn được tổng hợp
     viewDetail(id: string) {
         const obj = {
             id: id,
@@ -449,14 +451,13 @@ export class CapVonQuyetDinhDonGiaMuaComponent implements OnInit {
         }
         this.dataChange.emit(obj);
     }
-
     // xoa file trong bang file
     deleteFile(id: string): void {
         this.baoCao.lstFiles = this.baoCao.lstFiles.filter((a: any) => a.id !== id);
         this.listFile = this.listFile.filter((a: any) => a?.lastModified.toString() !== id);
         this.baoCao.listIdDeleteFiles.push(id);
     }
-
+    // download file về máy
     async downloadFile(id: string) {
         let file: any;
         let doc: any;
@@ -469,9 +470,10 @@ export class CapVonQuyetDinhDonGiaMuaComponent implements OnInit {
         }
         await this.quanLyVonPhiService.downFile(file, doc);
     }
-
+    // export báo cáo thành excel
     exportToExcel() {
         const workbook = XLSX.utils.book_new();
+        // nếu là bản ghi ở cục hoặc tổng cục thì bổ sung thêm đề nghị cấp vốn từ đơn vị cấp dưới
         if (!this.userService.isChiCuc()) {
             const head = [
                 { t: 0, b: 5, l: 0, r: 11, val: null },
@@ -505,7 +507,7 @@ export class CapVonQuyetDinhDonGiaMuaComponent implements OnInit {
             XLSX.utils.sheet_add_json(worksheetHD, filterHD, { skipHeader: true, origin: Table.coo(head[0].l, head[0].b + 1) })
             XLSX.utils.book_append_sheet(workbook, worksheetHD, 'Đề nghị cấp vốn từ DVCD');
         }
-
+        // tạo sheet cho bản ghi cấp vốn
         const header = [
             { t: 0, b: 5, l: 0, r: 16, val: null },
             { t: 0, b: 0, l: 0, r: 8, val: "Cấp vốn" },
