@@ -534,7 +534,7 @@ export class PhuLuc01XuatComponent implements OnInit {
 
     exportToExcel() {
         const header = [
-            { t: 0, b: 1, l: 0, r: 5, val: null },
+            { t: 0, b: 2, l: 0, r: 5, val: null },
             { t: 0, b: 1, l: 0, r: 0, val: 'STT' },
             { t: 0, b: 1, l: 1, r: 1, val: 'Danh mục' },
             { t: 0, b: 1, l: 2, r: 2, val: 'Đơn vị tính' },
@@ -545,13 +545,12 @@ export class PhuLuc01XuatComponent implements OnInit {
             { t: 2, b: 2, l: 5, r: 5, val: 'Thành tiền' },
         ]
         const fieldOrder = [
-            "danhMuc",
+            "stt",
             "tenDanhMuc",
             "maDviTinh",
-            "namDtDmuc",
             "namDtSluong",
+            "namDtDmuc",
             "namDtTtien",
-            "stt",
         ]
 
         const filterData = this.lstCtietBcaos.map(item => {
@@ -566,13 +565,7 @@ export class PhuLuc01XuatComponent implements OnInit {
         const worksheet = Table.initExcel(header);
         XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
-        let excelName = this.dataInfo.maBcao;
-        if (this.dataInfo.maBieuMau == "pl01N") {
-            excelName = excelName + '_Phu_luc_I_nhap.xlsx'
-        } else {
-            excelName = excelName + '_Phu_luc_I_xuat.xlsx'
-        }
-        XLSX.writeFile(workbook, excelName);
+        XLSX.writeFile(workbook, this.dataInfo.maBcao + '_Phu_luc_I_Xuat.xlsx');
     }
 
 }

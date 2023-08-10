@@ -224,6 +224,7 @@
                                         <td>
                                             <input class="money-input" currencyMask
                                                 [(ngModel)]="editCache[data.id].data.sluongTsDenTd"
+                                                (ngModelChange)="changeModel(editCache[data.id].data.id)"
                                                 [options]="Op.amount" />
                                         </td>
                                         <td>
