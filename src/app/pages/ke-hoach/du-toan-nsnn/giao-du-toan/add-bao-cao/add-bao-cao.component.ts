@@ -1326,7 +1326,7 @@ export class AddBaoCaoComponent implements OnInit {
         const checkApprove = isSynthetic ? this.userService.isAccessPermisson(Roles.GDT.PHEDUYET_TUCHOI_PA_TH_PBDT) : this.userService.isAccessPermisson(Roles.GDT.PHEDUYET_REPORT_TH);
         const checkAccept = this.userService.isAccessPermisson(Roles.GDT.TIEP_NHAN_TC_REPORT_TH);
         const checkPrint = isSynthetic ? this.userService.isAccessPermisson(Roles.GDT.IN_PA_TONGHOP_PBDT) : this.userService.isAccessPermisson(Roles.GDT.PRINT_REPORT);
-        const checkExport = isSynthetic ? this.userService.isAccessPermisson(Roles.GDT.XUAT_PA_TONGHOP_PBDT) : this.userService.isAccessPermisson(Roles.GDT.EXPORT_REPORT)
+        const checkExport = isSynthetic ? this.userService.isAccessPermisson(Roles.GDT.XUAT_PA_TONGHOP_PBDT) : this.userService.isAccessPermisson(Roles.GDT.XUAT_PA_TONGHOP_PBDT)
 
         this.status.general = Status.check('saveWHist', this.baoCao.trangThai) && checkSave;
         this.status.new = Status.check('reject', this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.GDT.ADD_REPORT_TH) && this.isChild && this.data.preTab == Gdt.DANH_SACH_BAO_CAO;
@@ -1338,6 +1338,8 @@ export class AddBaoCaoComponent implements OnInit {
         this.status.accept = Status.check('accept', this.baoCao.trangThai) && checkAccept && this.isParent;
         // this.status.print = Utils.statusPrint.includes(this.baoCao.trangThai) && checkPrint && this.isChild;
         this.status.export = Status.check('export', this.baoCao.trangThai) && checkExport && this.isChild;
+        console.log(this.userService);
+
         this.status.ok = this.status.accept || this.status.approve || this.status.pass
         this.status.finish = this.status.general;
         // this.status.editAppVal = this.status.accept;

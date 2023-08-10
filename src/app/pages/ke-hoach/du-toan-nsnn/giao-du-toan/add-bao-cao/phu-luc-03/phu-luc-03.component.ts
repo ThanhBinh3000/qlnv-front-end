@@ -602,11 +602,12 @@ export class PhuLuc03Component implements OnInit {
 
             { t: 1, b: 1, l: 3, r: 5, val: 'Chi phí tại cửa kho' },
             { t: 1, b: 1, l: 5, r: 6, val: 'Chi phí ngoài cửa kho' },
-            { t: 1, b: 2, l: 7, r: 7, val: 'Tổng cộng' },
+            { t: 1, b: 2, l: 8, r: 8, val: 'Tổng cộng' },
 
             { t: 2, b: 2, l: 3, r: 3, val: 'Số lượng' },
             { t: 2, b: 2, l: 4, r: 4, val: 'Định mức' },
             { t: 2, b: 2, l: 5, r: 5, val: 'Thành tiền' },
+
             { t: 2, b: 2, l: 6, r: 6, val: 'Bình quân(Đồng/tấn)' },
             { t: 2, b: 2, l: 7, r: 7, val: 'Thành tiền' },
         ]

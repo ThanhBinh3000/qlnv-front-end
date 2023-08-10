@@ -161,6 +161,9 @@ export class PhuLuc01NhapComponent implements OnInit {
         console.log("this.dataInfo", this.dataInfo);
 
         Object.assign(this.status, this.dataInfo.status);
+
+        console.log(this.status);
+
         await this.getFormDetail();
         this.namBcao = this.dataInfo?.namBcao;
         this.maDviTao = this.dataInfo?.maDvi;
@@ -669,7 +672,7 @@ export class PhuLuc01NhapComponent implements OnInit {
 
     exportToExcel() {
         const header = [
-            { t: 0, b: 1, l: 0, r: 5, val: null },
+            { t: 0, b: 2, l: 0, r: 5, val: null },
             { t: 0, b: 1, l: 0, r: 0, val: 'STT' },
             { t: 0, b: 1, l: 1, r: 1, val: 'Danh mục' },
             { t: 0, b: 1, l: 2, r: 2, val: 'Đơn vị tính' },
@@ -681,13 +684,13 @@ export class PhuLuc01NhapComponent implements OnInit {
 
         ]
         const fieldOrder = [
-            "danhMuc",
+            // "danhMuc",
+            "stt",
             "tenDanhMuc",
             "maDviTinh",
-            "namDtDmuc",
             "namDtSluong",
+            "namDtDmuc",
             "namDtTtien",
-            "stt",
         ]
 
         const filterData = this.lstCtietBcaos.map(item => {
@@ -700,14 +703,9 @@ export class PhuLuc01NhapComponent implements OnInit {
 
         const workbook = XLSX.utils.book_new();
         const worksheet = Table.initExcel(header);
-        XLSX.utils.sheet_add_json(worksheet, filterData, {
-            skipHeader: true,
-            origin: Table.coo(header[0].l, header[0].b + 1)
-        })
+        XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
-        let excelName = this.dataInfo.maBcao;
-        excelName = excelName + 'GDT_Phu_luc_I_nhap.xlsx'
-        XLSX.writeFile(workbook, excelName);
+        XLSX.writeFile(workbook, this.dataInfo.maBcao + '_Phu_luc_I_Nhap.xlsx');
     }
 
 }
