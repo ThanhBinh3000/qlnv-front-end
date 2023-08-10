@@ -17,6 +17,7 @@ import {
   DeXuatKhBanDauGiaService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/deXuatKhBanDauGia.service';
 import {cloneDeep} from 'lodash';
+
 @Component({
   selector: 'app-dialog-them-dia-diem-phan-lo',
   templateUrl: './dialog-them-dia-diem-phan-lo.component.html',
@@ -101,7 +102,6 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
     this.thongtinPhanLo = new DanhSachPhanLo();
     this.formData.patchValue({
       donViTinh: this.donViTinh,
-      loaiVthh: this.loaiVthh,
     })
     this.loadDonVi();
     if (this.dataEdit) {
@@ -295,7 +295,6 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
         }
         this.editCache[index].data.maLoKho = null;
       }
-      ;
       this.thongtinPhanLo = new DanhSachPhanLo();
     } else {
       let nganKho = this.listNganKho.filter(item => item.maDvi == this.thongtinPhanLo.maNganKho)[0];
@@ -326,7 +325,8 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
   async tonKho(item, index?) {
     let body = {
       'maDvi': item.maDvi,
-      'loaiVthh': this.formData.value.loaiVthh
+      'loaiVthh': this.loaiVthh,
+      'cloaiVthh': this.cloaiVthh
     }
     await this.quanLyHangTrongKhoService.getTrangThaiHt(body).then((res) => {
       if (res.msg == MESSAGE.SUCCESS) {
@@ -338,9 +338,9 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
           } else {
             this.thongtinPhanLo.tonKho = cloneDeep(val)
           }
-        } else {
-          this.thongtinPhanLo.tonKho = null
         }
+      } else {
+        this.thongtinPhanLo.tonKho = null
       }
     });
   }
@@ -379,7 +379,6 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR);
       return false
     }
-
   }
 
   validateSoLuong(isAdd?) {
@@ -426,7 +425,6 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
   startEdit(index: number): void {
     this.editCache[index].edit = true
   }
-
 
   cancelEdit(index: number): void {
     if (this.validateSoLuongEdit(index)) {
