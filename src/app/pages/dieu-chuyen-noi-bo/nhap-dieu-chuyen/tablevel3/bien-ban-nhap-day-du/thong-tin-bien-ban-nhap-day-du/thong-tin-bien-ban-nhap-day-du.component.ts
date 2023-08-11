@@ -84,14 +84,14 @@ export class ThongTinBienBanNhapDayDuComponent extends Base2Component implements
       soQdDcCuc: [],
       ngayQdDcCuc: [],
       qdDcCucId: [],
-      tenLoNganKho: [],
+      tenLoNganKho: [, [Validators.required]],
       tenLoKho: [],
       maLoKho: [],
-      tenNganKho: [],
+      tenNganKho: [, [Validators.required]],
       maNganKho: [],
-      tenNhaKho: [],
+      tenNhaKho: [, [Validators.required]],
       maNhaKho: [],
-      tenDiemKho: [],
+      tenDiemKho: [, [Validators.required]],
       maDiemKho: [],
       idKeHoachDtl: [],
       loaiHinhKho: [],
@@ -367,6 +367,8 @@ export class ThongTinBienBanNhapDayDuComponent extends Base2Component implements
 
 
   async save(isGuiDuyet?) {
+    this.helperService.markFormGroupTouched(this.formData);
+    if (!this.formData.valid) return
     await this.spinner.show();
     let body = this.formData.value;
     body.fileDinhKemReq = this.fileDinhKemReq;

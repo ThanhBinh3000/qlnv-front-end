@@ -45,7 +45,7 @@ export class KiemTraChatLuongComponent extends Base2Component implements OnInit 
     super(httpClient, storageService, notification, spinner, modal, phieuKiemTraChatLuongService);
     this.formData = this.fb.group({
       nam: null,
-      soQdinhDcc: null,
+      soQdinh: null,
       soPhieu: null,
       tuNgayLapPhieu: null,
       denNgayLapPhieu: null,

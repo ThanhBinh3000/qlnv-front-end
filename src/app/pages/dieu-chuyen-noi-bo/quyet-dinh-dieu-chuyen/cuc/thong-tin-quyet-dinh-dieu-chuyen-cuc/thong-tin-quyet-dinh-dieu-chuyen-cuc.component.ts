@@ -636,11 +636,13 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
 
 
                 let duToanKphi = vs?.reduce((prev, cur) => prev + cur.duToanKphi, 0);
+                let soLuongDc = vs?.reduce((prev, cur) => prev + cur.soLuongDc, 0);
                 return {
                   ...maLoKho,
                   idVirtual: maLoKho ? maLoKho.idVirtual ? maLoKho.idVirtual : uuidv4.v4() : uuidv4.v4(),
                   children: rsxx,
-                  duToanKphi
+                  duToanKphi,
+                  soLuongDc
                 }
               }
               ).value();
