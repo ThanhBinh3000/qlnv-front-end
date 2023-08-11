@@ -426,7 +426,25 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
         this.dataTable = [];
         this.tongSoLuong = 0;
         this.thanhTien = 0;
-        await this.loadDSPhieuKNCluong(data);
+        if (this.thayDoiThuKho) {
+          await this.loadDSPhieuKNCluong(data);
+        } else {
+          let dataObj = {
+            // moTaHangHoa: this.loaiVthh?.startsWith('02') ? (this.formData.value.tenCloaiVthh ? this.formData.value.tenCloaiVthh : this.formData.value.tenLoaiVthh) : (this.formData.value.moTaHangHoa ? this.formData.value.moTaHangHoa : this.formData.value.tenCloaiVthh),
+            cloaiVthh: this.formData.value.cloaiVthh,
+            duToanKinhPhiDc: this.formData.value.duToanKinhPhiDc,
+            kinhPhiDc: 0,
+            kinhPhiDcTt: 0,
+            loaiVthh: this.formData.value.loaiVthh,
+            maSo: "",
+            donViTinh: this.formData.value.donViTinh,
+            slDcThucTe: 0,
+            tenCloaiVthh: this.formData.value.tenCloaiVthh,
+            tenLoaiVthh: this.formData.value.tenLoaiVthh
+          };
+          this.dataTable = [];
+          this.dataTable.push(dataObj);
+        }
       }
     });
   }
