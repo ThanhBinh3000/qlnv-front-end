@@ -17,6 +17,8 @@ import { DonviService } from 'src/app/services/donvi.service';
 import { QuyetDinhDieuChuyenCucService } from 'src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-c.service';
 import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
 import { DialogTableCheckBoxComponent } from 'src/app/components/dialog/dialog-table-check-box/dialog-table-check-box.component';
+import { DataService } from 'src/app/services/data.service';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-them-moi-bao-cao',
   templateUrl: './them-moi-bao-cao.component.html',
@@ -52,7 +54,9 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
     modal: NzModalService,
     private baoCaoDieuChuyenService: BaoCaoDieuChuyenService,
     private donviService: DonviService,
-    private quyetDinhDieuChuyenCucService: QuyetDinhDieuChuyenCucService
+    private quyetDinhDieuChuyenCucService: QuyetDinhDieuChuyenCucService,
+    private dataService: DataService,
+    private router: Router
   ) {
     super(httpClient, storageService, notification, spinner, modal, baoCaoDieuChuyenService);
     this.formData = this.fb.group({
@@ -93,7 +97,7 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
       if (res.msg === MESSAGE.SUCCESS) {
         this.formData.patchValue({ ...res.data });
         this.danhSachKetQua = res.data.danhSachKetQua;
-        const idsChiCuc = res.data.idsChiCuc.split(",").map(f => Number(f));
+        const idsChiCuc = res.data.idsChiCuc?.split(",").map(f => Number(f));
         if (this.loaiBc === "CUC") {
           await this.loadListBaoCaoChiCuc();
           this.listBaoCaoChiCuc = this.listBaoCaoChiCuc.map(f => {
@@ -306,23 +310,25 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
     let dataView = Array.isArray(this.danhSachKetQua) ?
       chain(this.danhSachKetQua.map(f => ({ ...f, keyGroup: `${f.cloaiVthh}${f.maLoKho ? f.maLoKho + f.maNganKho : f.maNganKho}` }))).groupBy("keyGroup").map((rs, i) => {
         const dataSoQdinh = rs.find(f => f.keyGroup == i);
+        const sumKinhPhiNhapTt = dataSoQdinh && Array.isArray(rs) ? rs.reduce((sum, cur) => sum += cur.kinhPhiNhapTt, 0) : 0;
         return {
           ...dataSoQdinh,
           idVirtual: uuidv4(),
-          childData: dataSoQdinh ? rs : []
+          childData: dataSoQdinh ? rs : [],
+          sumKinhPhiNhapTt
         }
       }).value() : [];
-    this.dataView = cloneDeep(dataView);
     this.expandAll();
-    const { tongKinhPhiDcQd, tongKinhPhiXuatDcTt, tongKinhPhiNhapDcTt } = Array.isArray(this.danhSachKetQua) ? this.danhSachKetQua.reduce((obj, cur) => {
+    const { tongKinhPhiDcQd, tongKinhPhiXuatDcTt, tongKinhPhiNhapDcTt } = Array.isArray(dataView) ? dataView.reduce((obj, cur) => {
       obj.tongKinhPhiDcQd += Number(cur.kinhPhiTheoQd);
       obj.tongKinhPhiXuatDcTt += Number(cur.kinhPhiXuatTt);
-      obj.tongKinhPhiNhapDcTt += Number(cur.kinhPhiNhapTt);
+      obj.tongKinhPhiNhapDcTt += Number(cur.sumKinhPhiNhapTt);
       return obj
     }, { tongKinhPhiDcQd: 0, tongKinhPhiXuatDcTt: 0, tongKinhPhiNhapDcTt: 0 }) : { tongKinhPhiDcQd: 0, tongKinhPhiXuatDcTt: 0, tongKinhPhiNhapDcTt: 0 };
     this.tongKinhPhiDcQd = tongKinhPhiDcQd;
     this.tongKinhPhiXuatDcTt = tongKinhPhiXuatDcTt;
     this.tongKinhPhiNhapDcTt = tongKinhPhiNhapDcTt;
+    this.dataView = cloneDeep(dataView);
   }
   async save(isGuiDuyet: boolean): Promise<void> {
     try {
@@ -480,6 +486,17 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
   back() {
     this.showListEvent.emit();
   }
+  lapBBThuaThieu() {
+    const obj = {
+      soQdDcCuc: this.formData.value.soQdDcCuc,
+      qdDcCucId: this.formData.value.qdDcCucId,
+      ngayKyQd: this.formData.value.ngayKyQd,
+      soBc: this.formData.value.soBc,
+      ngayBc: this.formData.value.ngayBc
+    };
+    this.dataService.changeData(obj);
+    this.router.navigate(['dieu-chuyen-noi-bo/bien-ban-thua-thieu']);
+  }
   checkRoleReject(): boolean {
     const { trangThai } = this.formData.value;
     return this.userService.isCuc() && [STATUS.CHO_DUYET_TP, STATUS.CHO_DUYET_LDC].includes(trangThai)
@@ -505,5 +522,9 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
       return true
     }
     return false
+  }
+  checkRoleLapBBThuaThieu() {
+    const { trangThai } = this.formData.value;
+    return trangThai === STATUS.DA_HOAN_THANH;
   }
 }

@@ -242,6 +242,6 @@
     </div>
 </div>
 <ng-template #templateThemmoi>
-    <app-chi-tiet-bien-ban-thua-thieu [idInput]="selectedId"
-        (showListEvent)="showList()"></app-chi-tiet-bien-ban-thua-thieu>
+    <app-chi-tiet-bien-ban-thua-thieu [idInput]="selectedId" [passData]="passData"
+        (showListEvent)="goBack()"></app-chi-tiet-bien-ban-thua-thieu>
 </ng-template>
