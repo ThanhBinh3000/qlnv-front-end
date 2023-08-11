@@ -570,7 +570,7 @@ export class BaoCaoComponent implements OnInit {
             maBcao: this.baoCao.maBcao,
             maDvi: this.baoCao.maDvi,
             capDvi: this.userInfo.capDvi,
-            tenDvi: this.userInfo.TEN_DVI,
+            tenDvi: this.baoCao.tenDvi,
             namBcao: this.baoCao.namBcao,
             tenPl: bieuMau.tenPl,
             tieuDe: bieuMau.tenDm,
