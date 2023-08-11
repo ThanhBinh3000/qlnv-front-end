@@ -534,15 +534,20 @@ export class PhuLuc01XuatComponent implements OnInit {
 
     exportToExcel() {
         const header = [
-            { t: 0, b: 2, l: 0, r: 5, val: null },
-            { t: 0, b: 1, l: 0, r: 0, val: 'STT' },
-            { t: 0, b: 1, l: 1, r: 1, val: 'Danh mục' },
-            { t: 0, b: 1, l: 2, r: 2, val: 'Đơn vị tính' },
-            { t: 0, b: 1, l: 3, r: 5, val: 'Năm dự toán' },
+            { t: 0, b: 6, l: 0, r: 5, val: null },
 
-            { t: 2, b: 2, l: 3, r: 3, val: 'Số lượng' },
-            { t: 2, b: 2, l: 4, r: 4, val: 'Định mức' },
-            { t: 2, b: 2, l: 5, r: 5, val: 'Thành tiền' },
+            { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
+            { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
+            { t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
+
+            { t: 4, b: 4, l: 0, r: 0, val: 'STT' },
+            { t: 4, b: 4, l: 1, r: 1, val: 'Danh mục' },
+            { t: 4, b: 4, l: 2, r: 2, val: 'Đơn vị tính' },
+            { t: 4, b: 4, l: 3, r: 5, val: 'Năm dự toán' },
+
+            { t: 6, b: 6, l: 3, r: 3, val: 'Số lượng' },
+            { t: 6, b: 6, l: 4, r: 4, val: 'Định mức' },
+            { t: 6, b: 6, l: 5, r: 5, val: 'Thành tiền' },
         ]
         const fieldOrder = [
             "stt",
@@ -565,7 +570,9 @@ export class PhuLuc01XuatComponent implements OnInit {
         const worksheet = Table.initExcel(header);
         XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
-        XLSX.writeFile(workbook, this.dataInfo.maBcao + '_Phu_luc_I_Xuat.xlsx');
+        let excelName = this.dataInfo.maBcao;
+        excelName = excelName + '_GSTC_PL01_Xuat.xlsx'
+        XLSX.writeFile(workbook, excelName);
     }
 
 }

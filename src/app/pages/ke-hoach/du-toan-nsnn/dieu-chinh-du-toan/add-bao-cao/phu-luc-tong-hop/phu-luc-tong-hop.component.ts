@@ -668,7 +668,9 @@ export class PhuLucTongHopComponent implements OnInit {
         const worksheet = Table.initExcel(header);
         XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
-        XLSX.writeFile(workbook, this.dataInfo.maBcao + '_TT342_13.1.xlsx');
+        let excelName = this.dataInfo.maBcao;
+        excelName = excelName + '_BCDC_PLTH.xlsx'
+        XLSX.writeFile(workbook, excelName);
     }
 
 

@@ -369,17 +369,22 @@ export class PhuLucQuyLuongComponent implements OnInit {
 
     exportToExcel() {
         const header = [
-            { t: 0, b: 1, l: 0, r: 9, val: null },
-            { t: 0, b: 1, l: 0, r: 0, val: 'STT' },
-            { t: 0, b: 1, l: 1, r: 1, val: 'Tên đơn vị (Biên chế thực tế có mặt)' },
-            { t: 0, b: 1, l: 2, r: 2, val: 'Biên chế 2021 được giao' },
-            { t: 0, b: 1, l: 3, r: 3, val: 'Biên chế có mặt' },
-            { t: 0, b: 1, l: 4, r: 4, val: 'Biên chế chưa tuyển' },
-            { t: 0, b: 1, l: 5, r: 5, val: 'Tiền lương biên chế thực tế có mặt' },
-            { t: 0, b: 1, l: 6, r: 6, val: 'Các khoản đóng góp theo lương của biên chế thực tế' },
-            { t: 0, b: 1, l: 7, r: 7, val: 'Lương CBCC chưa tuyển dụng' },
-            { t: 0, b: 1, l: 8, r: 8, val: 'Các khoản lương khác theo chế độ' },
-            { t: 0, b: 1, l: 9, r: 9, val: 'Tổng nhu cầu tiền lương năm N (năm kế hoạch)' + (this.namBcao - 1).toString() },
+            { t: 0, b: 5, l: 0, r: 9, val: null },
+
+            { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
+            { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
+            { t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
+
+            { t: 4, b: 5, l: 0, r: 0, val: 'STT' },
+            { t: 4, b: 5, l: 1, r: 1, val: 'Tên đơn vị (Biên chế thực tế có mặt)' },
+            { t: 4, b: 5, l: 2, r: 2, val: 'Biên chế 2021 được giao' },
+            { t: 4, b: 5, l: 3, r: 3, val: 'Biên chế có mặt' },
+            { t: 4, b: 5, l: 4, r: 4, val: 'Biên chế chưa tuyển' },
+            { t: 4, b: 5, l: 5, r: 5, val: 'Tiền lương biên chế thực tế có mặt' },
+            { t: 4, b: 5, l: 6, r: 6, val: 'Các khoản đóng góp theo lương của biên chế thực tế' },
+            { t: 4, b: 5, l: 7, r: 7, val: 'Lương CBCC chưa tuyển dụng' },
+            { t: 4, b: 5, l: 8, r: 8, val: 'Các khoản lương khác theo chế độ' },
+            { t: 4, b: 5, l: 9, r: 9, val: 'Tổng nhu cầu tiền lương năm N (năm kế hoạch)' + (this.namBcao - 1).toString() },
         ]
         const fieldOrder = [
             "stt",
@@ -407,11 +412,7 @@ export class PhuLucQuyLuongComponent implements OnInit {
         XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
         let excelName = this.dataInfo.maBcao;
-        if (this.dataInfo.maBieuMau == "pl01N") {
-            excelName = excelName + '_Phu_luc_I_nhap.xlsx'
-        } else {
-            excelName = excelName + '_Phu_luc_I_xuat.xlsx'
-        }
+        excelName = excelName + '_GSTC_PL06.xlsx'
         XLSX.writeFile(workbook, excelName);
     }
 

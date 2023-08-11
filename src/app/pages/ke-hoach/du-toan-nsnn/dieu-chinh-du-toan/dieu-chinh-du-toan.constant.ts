@@ -53,6 +53,7 @@ export class Report {
     nguoiTao: string;
     maBcao: string;
     maDvi: string;
+    tenDvi: string;
     maDviCha: string;
     trangThai: string;
     ngayTrinh: any;

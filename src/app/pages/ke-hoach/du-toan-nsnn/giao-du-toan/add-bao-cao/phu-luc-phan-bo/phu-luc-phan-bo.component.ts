@@ -665,11 +665,7 @@ export class PhuLucPhanBoComponent implements OnInit {
         XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
         let excelName = this.dataInfo.maBcao;
-        if (this.dataInfo.maBieuMau == "pl01N") {
-            excelName = excelName + '_Phu_luc_I_nhap.xlsx'
-        } else {
-            excelName = excelName + '_Phu_luc_I_xuat.xlsx'
-        }
+        excelName = excelName + '_GSTC_PLPB.xlsx'
         XLSX.writeFile(workbook, excelName);
     }
 

@@ -444,18 +444,23 @@ export class PhuLucDaoTaoComponent implements OnInit {
 
     exportToExcel() {
         const header = [
-            { t: 0, b: 1, l: 0, r: 8, val: null },
-            { t: 0, b: 1, l: 0, r: 0, val: 'STT' },
-            { t: 0, b: 1, l: 1, r: 1, val: 'Nội dung đào tạo, bồi dưỡng' },
-            { t: 0, b: 1, l: 2, r: 2, val: 'Đối tượng' },
-            { t: 0, b: 1, l: 3, r: 3, val: 'Thời gian học' },
-            { t: 0, b: 0, l: 4, r: 6, val: 'Số lượng' },
-            { t: 0, b: 1, l: 7, r: 7, val: 'Kinh phí hỗ trợ(đồng/người)' },
-            { t: 0, b: 1, l: 8, r: 8, val: 'Tổng nhu cầu dự toán, kinh phí' },
+            { t: 0, b: 5, l: 0, r: 8, val: null },
 
-            { t: 1, b: 1, l: 4, r: 4, val: 'Số lượng' },
-            { t: 1, b: 1, l: 5, r: 5, val: 'Định mức' },
-            { t: 1, b: 1, l: 6, r: 6, val: 'Thành tiền' },
+            { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
+            { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
+            { t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
+
+            { t: 4, b: 5, l: 0, r: 0, val: 'STT' },
+            { t: 4, b: 5, l: 1, r: 1, val: 'Nội dung đào tạo, bồi dưỡng' },
+            { t: 4, b: 5, l: 2, r: 2, val: 'Đối tượng' },
+            { t: 4, b: 5, l: 3, r: 3, val: 'Thời gian học' },
+            { t: 4, b: 4, l: 4, r: 6, val: 'Số lượng' },
+            { t: 4, b: 5, l: 7, r: 7, val: 'Kinh phí hỗ trợ(đồng/người)' },
+            { t: 4, b: 5, l: 8, r: 8, val: 'Tổng nhu cầu dự toán, kinh phí' },
+
+            { t: 5, b: 5, l: 4, r: 4, val: 'Số lượng' },
+            { t: 5, b: 5, l: 5, r: 5, val: 'Định mức' },
+            { t: 5, b: 5, l: 6, r: 6, val: 'Thành tiền' },
 
         ]
         const fieldOrder = [
@@ -483,11 +488,7 @@ export class PhuLucDaoTaoComponent implements OnInit {
         XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
         let excelName = this.dataInfo.maBcao;
-        if (this.dataInfo.maBieuMau == "pl01N") {
-            excelName = excelName + '_Phu_luc_I_nhap.xlsx'
-        } else {
-            excelName = excelName + '_Phu_luc_I_xuat.xlsx'
-        }
+        excelName = excelName + '_GSTC_PL07.xlsx'
         XLSX.writeFile(workbook, excelName);
     }
 
