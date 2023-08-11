@@ -309,7 +309,6 @@ export class PhuLuc1Component implements OnInit {
                     this.formDetail.listIdDeleteFiles = [];
                     this.listFile = [];
                     this.getStatusButton();
-                    console.log(this.lstCtietBcao);
 
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);

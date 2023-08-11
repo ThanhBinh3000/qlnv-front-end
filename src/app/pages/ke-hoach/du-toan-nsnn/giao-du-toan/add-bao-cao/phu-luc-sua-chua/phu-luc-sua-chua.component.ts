@@ -353,11 +353,11 @@ export class PhuLucSuaChuaComponent implements OnInit {
 
         if (this.lstCtietBcaos.length == 0) {
             this.lstCtietBcaos = Table.addHead(item, this.lstCtietBcaos);
-            console.log(this.lstCtietBcaos);
+
 
         } else {
             const lastIndex = this.lstCtietBcaos[this.lstCtietBcaos.length - 1].id
-            console.log(lastIndex);
+
 
             this.addSame(lastIndex, item)
         }

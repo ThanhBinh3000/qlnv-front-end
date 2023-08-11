@@ -305,7 +305,7 @@ export class AddQuyetToanComponent implements OnInit {
 				nam: Number(this?.namQtoan),
 				quyQtoan: this?.quyQtoan,
 			}
-			console.log(rqKho);
+
 
 			await this.quyetToanVonPhiService.getHangHoaKho(rqKho).toPromise().then(
 				async (data) => {

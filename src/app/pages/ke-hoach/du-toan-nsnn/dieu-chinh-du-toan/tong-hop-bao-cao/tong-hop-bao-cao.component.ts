@@ -55,7 +55,6 @@ export class TongHopBaoCaoComponent implements OnInit {
         this.userInfo = this.userService.getUserLogin();
         this.spinner.show();
         this.maDviTao = this.userInfo.MA_DVI;
-        // console.log(this.userInfo)
         this.statusNewReport = this.userService.isAccessPermisson(Roles.DCDT.SYNTHETIC_REPORT);
         await this.danhMuc.dMDviCon().toPromise().then(
             data => {

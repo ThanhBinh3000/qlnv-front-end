@@ -167,7 +167,6 @@ export class PhuLuc12Component implements OnInit {
 				item.stt = item.maNoiDung;
 			})
 		}
-		console.log(this.lstCtietBcao);
 
 
 		if (this.lstCtietBcao.length > 0) {

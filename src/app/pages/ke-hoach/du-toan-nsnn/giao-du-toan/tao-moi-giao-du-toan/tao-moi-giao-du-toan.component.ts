@@ -857,8 +857,8 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
             };
 
             this.lstCtietBcao.forEach(item => {
-                // console.log(item.tongCong);
-                // console.log(item.tongCongSoTranChi);
+                // 
+                // 
 
                 if (item.level == 0) {
                     if (item.tongCongSoTranChi !== item.tongCong) {
@@ -888,7 +888,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 
 
 
-            // console.log("a");
+            // 
 
             // this.spinner.show();
             // await this.giaoDuToanChiService.trinhDuyetPhuongAnGiao(requestGroupButtons).toPromise().then(async (data) => {

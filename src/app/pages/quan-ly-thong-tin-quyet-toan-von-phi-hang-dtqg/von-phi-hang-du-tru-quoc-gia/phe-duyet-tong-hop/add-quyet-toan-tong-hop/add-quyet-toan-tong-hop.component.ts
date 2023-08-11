@@ -494,7 +494,7 @@ export class AddQuyetToanTongHopComponent implements OnInit {
         this.updateEditCache()
         this.getStatusButton();
 
-        console.log(this.lstCtietBcao);
+
 
 
     };

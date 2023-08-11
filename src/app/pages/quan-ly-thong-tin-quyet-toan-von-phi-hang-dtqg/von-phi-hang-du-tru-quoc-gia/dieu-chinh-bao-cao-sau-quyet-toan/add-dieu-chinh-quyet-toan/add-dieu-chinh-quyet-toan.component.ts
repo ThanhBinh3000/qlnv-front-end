@@ -275,7 +275,7 @@ export class AddDieuChinhQuyetToanComponent implements OnInit {
         await this.quyetToanVonPhiService.getHangHoaKho(rqKho).toPromise().then(
             async (data) => {
                 this.lstDsHangTrongKho = data.data;
-                console.log("this.lstDsHangTrongKho:", this.lstDsHangTrongKho);
+
 
             },
             (err) => {
@@ -1410,7 +1410,7 @@ export class AddDieuChinhQuyetToanComponent implements OnInit {
         modalTuChoi.afterClose.subscribe(async (data) => {
 
             if (data) {
-                console.log("hang hoa duoc chon:", data);
+
                 // const dm = this.lstDsHangTrongKho.find(e => e.cloaiVthh == data.ma);
                 const dataLK = this.lstDsHangTrongKho.find(e => e.cloaiVthh == data.ma && e.maLoai == "LK");
                 const dataPS = this.lstDsHangTrongKho.find(e => e.cloaiVthh == data.ma && e.maLoai == "PS");

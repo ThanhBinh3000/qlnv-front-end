@@ -893,8 +893,7 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
 				maLoai: this.maLoai,
 			};
 			this.lstCtietBcao.forEach(item => {
-				// console.log(item.tongCong);
-				// console.log(item.tongCongSoTranChi);
+
 
 				if (item.level == 0) {
 					if (item.tongCongSoTranChi !== item.tongCong) {

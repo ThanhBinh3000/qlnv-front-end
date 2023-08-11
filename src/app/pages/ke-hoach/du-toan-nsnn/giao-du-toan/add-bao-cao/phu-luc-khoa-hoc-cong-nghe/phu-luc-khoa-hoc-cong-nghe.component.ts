@@ -234,7 +234,6 @@ export class PhuLucKhoaHocCongNgheComponent implements OnInit {
         //     } else {
         //     }
         // }
-        console.log(this.lstCtietBcaos);
 
 
         this.lstCtietBcaos = Table.sortByIndex(this.lstCtietBcaos);

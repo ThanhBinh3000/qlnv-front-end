@@ -489,7 +489,6 @@ export class PhuLuc7Component implements OnInit {
         }
         //tinh lai don vi tien va kiem tra gioi han cua chung
         const lstCtietBcaoTemp: ItemData[] = [];
-        console.log(this.lstCtietBcao);
 
         this.lstCtietBcao.forEach(item => {
             lstCtietBcaoTemp.push(item.request())
@@ -772,7 +771,6 @@ export class PhuLuc7Component implements OnInit {
 
                 const stt = this.lstCtietBcao.find(e => e.id == parentItem.id).stt;
 
-                console.log(this.lstCtietBcao);
 
 
                 // await this.getDinhMuc();
