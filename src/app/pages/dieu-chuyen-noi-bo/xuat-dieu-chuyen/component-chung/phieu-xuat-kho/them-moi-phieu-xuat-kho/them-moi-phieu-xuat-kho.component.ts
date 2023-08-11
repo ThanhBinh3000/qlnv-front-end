@@ -636,13 +636,6 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
       this.formData.controls["ctyNguoiGh"].clearValidators();
       this.formData.controls["diaChi"].clearValidators();
       this.formData.controls["thoiGianGiaoNhan"].clearValidators();
-      if (this.isVatTu) {
-        this.formData.controls["bangKeVtId"].setValidators([Validators.required]);
-        this.formData.controls["soBangKeVt"].setValidators([Validators.required]);
-      } else {
-        this.formData.controls["bangKeChId"].setValidators([Validators.required]);
-        this.formData.controls["soBangKeCh"].setValidators([Validators.required]);
-      }
     }
   }
 
