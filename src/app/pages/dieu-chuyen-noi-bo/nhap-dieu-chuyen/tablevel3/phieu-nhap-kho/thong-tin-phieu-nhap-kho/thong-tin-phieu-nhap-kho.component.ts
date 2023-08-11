@@ -76,14 +76,14 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
       soQdDcCuc: [],
       ngayQdDcCuc: [],
       qdDcCucId: [],
-      tenLoNganKho: [],
+      tenLoNganKho: [, [Validators.required]],
       tenLoKho: [],
       maLoKho: [],
-      tenNganKho: [],
+      tenNganKho: [, [Validators.required]],
       maNganKho: [],
-      tenNhaKho: [],
+      tenNhaKho: [, [Validators.required]],
       maNhaKho: [],
-      tenDiemKho: [],
+      tenDiemKho: [, [Validators.required]],
       maDiemKho: [],
       soPhieuKtraCluong: [, [Validators.required]],
       idPhieuKtraCluong: [, [Validators.required]],
@@ -328,7 +328,8 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
     // Get data tờ trình
     let body = {
       trangThai: STATUS.BAN_HANH,
-      loaiVthh: ['0101', '0102'],
+      // loaiVthh: ['0101', '0102'],
+      isVatTu: this.isVatTu,
       loaiDc: this.loaiDc,
       maDvi: this.userInfo.MA_DVI,
       type: this.formData.value.type

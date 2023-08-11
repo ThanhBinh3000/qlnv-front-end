@@ -79,13 +79,14 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
       qdDcId: [],
       ktvBaoQuan: [],
       thuTruong: [],
+      tenLoNganKho: [, [Validators.required]],
       tenLoKho: [],
       maLoKho: [],
-      tenNganKho: [],
+      tenNganKho: [, [Validators.required]],
       maNganKho: [],
-      tenNhaKho: [],
+      tenNhaKho: [, [Validators.required]],
       maNhaKho: [],
-      tenDiemKho: [],
+      tenDiemKho: [, [Validators.required]],
       maDiemKho: [],
       loaiHinhKho: [],
       loaiVthh: [],
@@ -159,6 +160,7 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
         soQdinhDc: this.data.soQdinh,
         ngayQdinhDc: this.data.ngayHieuLucQd,
         qdDcId: this.data.qdinhDccId,
+        tenLoNganKho: `${this.data.tenLoKhoNhan} ${this.data.tenNganKhoNhan}`,
         tenLoKho: this.data.tenLoKhoNhan,
         maLoKho: this.data.maLoKhoNhan,
         tenNganKho: this.data.tenNganKhoNhan,
@@ -358,6 +360,7 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
         this.formData.patchValue({
+          tenLoNganKho: `${data.tenLoKhoNhan} ${data.tenNganKhoNhan}`,
           tenLoKho: data.tenLoKhoNhan,
           maLoKho: data.maLoKhoNhan,
           tenNganKho: data.tenNganKhoNhan,
@@ -408,7 +411,6 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
     if (maDvi) {
       let res = await this.bbNghiemThuBaoQuanService.getDataKho(maDvi);
       this.formData.patchValue({
-        // tichLuong: (res.data.tichLuongTkLt - res.data.tichLuongKdLt) > 0 ? res.data.tichLuongTkLt - res.data.tichLuongKdLt : 0,
         loaiHinhKho: res.data.lhKho
       });
     }
@@ -438,6 +440,8 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
 
 
   async save(isGuiDuyet?) {
+    this.helperService.markFormGroupTouched(this.formData);
+    if (!this.formData.valid) return
     await this.spinner.show();
     let body = this.formData.value;
     body.phieuKTCLDinhKem = this.phieuKTCLDinhKem;

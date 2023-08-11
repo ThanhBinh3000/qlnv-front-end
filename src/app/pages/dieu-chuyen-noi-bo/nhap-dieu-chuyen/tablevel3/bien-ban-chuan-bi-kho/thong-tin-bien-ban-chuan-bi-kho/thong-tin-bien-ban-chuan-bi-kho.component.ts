@@ -409,7 +409,8 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
 
     let body = {
       trangThai: STATUS.BAN_HANH,
-      loaiVthh: ['0101', '0102'],
+      // loaiVthh: ['0101', '0102'],
+      isVatTu: true,
       loaiDc: this.loaiDc,
       maDvi: this.userInfo.MA_DVI,
       type: this.formData.value.type
@@ -538,7 +539,8 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
 
 
   async save(isGuiDuyet?) {
-
+    this.helperService.markFormGroupTouched(this.formData);
+    if (!this.formData.valid) return
     let body = this.formData.value;
     const children = [...this.dsHangTH, ...this.dsHangPD]
     body.fileDinhKemReq = this.fileDinhKemReq
