@@ -393,7 +393,7 @@
             <div nz-col [nzSpan]="5">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
-                  Tổng dự toán kinh phí(triệu đồng)
+                  Tổng dự toán kinh phí (triệu đồng)
                 </nz-form-label>
                 <nz-form-control>
                   <input nz-input currencyMask formControlName="tongDuToanKp" [options]="AMOUNT" [readonly]="true" />
@@ -490,7 +490,7 @@
                 <ng-container *ngFor="let item of quyetDinhPdDtl.data, let i = index;">
                   <tr [ngClass]="{'bg-selected': selected === i}" (click)="selectRow(i)">
                     <td>{{i + 1}}</td>
-                    <td>{{item.tenDviCuc || item.tenCucDxuat || ""}}</td>
+                    <td>{{item.tenDviCuc || item.tenCucDxuat || item.tenCucXuat || ""}}</td>
                     <td>{{item.tenCucNhan || ""}}</td>
                     <td>{{item.soDxuat || ""}}</td>
                     <td>{{item.ngayGduyet || ""}}</td>
@@ -967,9 +967,9 @@
                     <td></td>
                     <td></td>
                     <td></td>
+                    <td></td>
                     <td class="text-right bold">{{item.duToanKphi|number: '1.0-1':
                       'vi_VN'}}</td>
-                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
