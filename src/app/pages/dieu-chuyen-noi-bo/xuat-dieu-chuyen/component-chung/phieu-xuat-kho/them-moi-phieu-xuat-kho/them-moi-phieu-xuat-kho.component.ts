@@ -320,12 +320,25 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
           }
           if (dataChiCuc) {
             this.listDiaDiemNhap = cloneDeep(dataChiCuc);
-            this.formData.patchValue({
-              donViTinh: dataChiCuc[0]?.tenDonViTinh,
-              duToanKinhPhiDc: dataChiCuc[0]?.duToanKphi
-            })
+            // this.formData.patchValue({
+            //   donViTinh: dataChiCuc[0]?.tenDonViTinh,
+            //   duToanKinhPhiDc: dataChiCuc[0]?.duToanKphi
+            // })
           };
           if (isFirst) {
+            const maLoKho = this.formData.value.maLoKho;
+            const maNganKho = this.formData.value.maNganKho;
+            const maNganLoKho = maLoKho ? `${maNganKho}${maLoKho}` : maNganKho;
+            const dataNganLo = this.listDiaDiemNhap.find(f => {
+              const maNganLo = f.maLoKho ? `${f.maNganKho}${f.maLoKho}` : f.maNganKho;
+              return maNganLo === maNganLoKho;
+            });
+            if (dataNganLo) {
+              this.formData.patchValue({
+                donViTinh: dataNganLo.tenDonViTinh,
+                duToanKinhPhiDc: dataNganLo.duToanKphi
+              })
+            }
             this.dataTable = [];
             this.dataTable.push({
               cloaiVthh: this.formData.value.cloaiVthh,
@@ -416,6 +429,7 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
           cloaiVthh: data.cloaiVthh,
           tenLoaiVthh: data.tenLoaiVthh,
           tenCloaiVthh: data.tenCloaiVthh,
+          duToanKinhPhiDc: data.duToanKphi,
 
           soPhieuKnChatLuong: '',
           phieuKnChatLuongHdrId: '',
@@ -477,10 +491,10 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
             phieuKnChatLuongHdrId: dataPhieuKn.id,
             soPhieuKnChatLuong: dataPhieuKn.soPhieu,
             ngayKyPhieuKnChatLuong: dataPhieuKn.ngayDuyetLdCuc,
-            donViTinh: dataPhieu.tenDonViTinh,
+            // donViTinh: dataPhieu.tenDonViTinh,
             ktvBaoQuan: dataPhieuKn.nguoiKt,
             ktvBaoQuanId: dataPhieuKn.nguoiKtId,
-            duToanKinhPhiDc: data.duToanKphi
+            // duToanKinhPhiDc: data.duToanKphi
           });
           let dataObj = {
             // moTaHangHoa: this.loaiVthh?.startsWith('02') ? (this.formData.value.tenCloaiVthh ? this.formData.value.tenCloaiVthh : this.formData.value.tenLoaiVthh) : (this.formData.value.moTaHangHoa ? this.formData.value.moTaHangHoa : this.formData.value.tenCloaiVthh),
