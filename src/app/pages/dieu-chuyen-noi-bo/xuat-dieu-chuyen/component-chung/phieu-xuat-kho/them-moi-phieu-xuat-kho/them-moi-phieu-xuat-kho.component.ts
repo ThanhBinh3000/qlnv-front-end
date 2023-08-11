@@ -622,17 +622,27 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
       this.formData.controls["soCmt"].setValidators([Validators.required]);
       this.formData.controls["ctyNguoiGh"].setValidators([Validators.required]);
       this.formData.controls["diaChi"].setValidators([Validators.required]);
-      this.formData.controls["thoiGianGiaoNhan"].setValidators([Validators.required])
-      this.formData.controls["bangKeChId"].setValidators([Validators.required])
-      this.formData.controls["soBangKeCh"].setValidators([Validators.required])
+      this.formData.controls["thoiGianGiaoNhan"].setValidators([Validators.required]);
+      if (this.isVatTu) {
+        this.formData.controls["bangKeVtId"].setValidators([Validators.required]);
+        this.formData.controls["soBangKeVt"].setValidators([Validators.required]);
+      } else {
+        this.formData.controls["bangKeChId"].setValidators([Validators.required]);
+        this.formData.controls["soBangKeCh"].setValidators([Validators.required]);
+      }
     } else {
       this.formData.controls["nguoiGiaoHang"].clearValidators();
       this.formData.controls["soCmt"].clearValidators();
       this.formData.controls["ctyNguoiGh"].clearValidators();
       this.formData.controls["diaChi"].clearValidators();
       this.formData.controls["thoiGianGiaoNhan"].clearValidators();
-      this.formData.controls["bangKeChId"].clearValidators();
-      this.formData.controls["soBangKeCh"].clearValidators()
+      if (this.isVatTu) {
+        this.formData.controls["bangKeVtId"].setValidators([Validators.required]);
+        this.formData.controls["soBangKeVt"].setValidators([Validators.required]);
+      } else {
+        this.formData.controls["bangKeChId"].setValidators([Validators.required]);
+        this.formData.controls["soBangKeCh"].setValidators([Validators.required]);
+      }
     }
   }
 
