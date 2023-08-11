@@ -183,7 +183,7 @@ export class BienBanNhapDayDuComponent extends Base2Component implements OnInit 
   }
 
   isCuc() {
-    return false//this.userService.isCuc()
+    return this.userService.isCuc()
   }
 
   // isChiCuc() {
@@ -208,6 +208,16 @@ export class BienBanNhapDayDuComponent extends Base2Component implements OnInit 
       return children.map(f => ({ ...f, expand: false }))
     }
     return children
+  }
+
+  async changePageIndex(event) {
+    this.page = event;
+    await this.timKiem();
+  }
+
+  async changePageSize(event) {
+    this.pageSize = event;
+    await this.timKiem();
   }
 
   async timKiem() {

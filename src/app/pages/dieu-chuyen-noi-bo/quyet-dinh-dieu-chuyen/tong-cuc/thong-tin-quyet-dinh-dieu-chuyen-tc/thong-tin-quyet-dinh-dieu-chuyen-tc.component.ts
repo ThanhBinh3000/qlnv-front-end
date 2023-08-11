@@ -217,13 +217,13 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
         let dcnbKeHoachDcHdr = data.danhSachQuyetDinh[0].danhSachQuyetDinhChiTiet
         if (!dcnbKeHoachDcHdr) return
         dcnbKeHoachDcHdr.forEach(dq => {
-          if (dq.danhSachKeHoach) {
-            dq.danhSachKeHoach.forEach(element => {
+          if (dq.dcnbKeHoachDcHdr) {
+            dq.dcnbKeHoachDcHdr.danhSachHangHoa.forEach(element => {
               listHangHoa.push({
                 ...element,
                 maLoNganKho: element.maLoKho ? `${element.maLoKho}${element.maNganKho}` : element.maNganKho,
-                maDvi: dcnbKeHoachDcHdr.maDvi,
-                tenDvi: dcnbKeHoachDcHdr.tenDvi,
+                maDvi: dq.dcnbKeHoachDcHdr.maDvi,
+                tenDvi: dq.dcnbKeHoachDcHdr.tenDvi,
               })
             });
           }
@@ -257,26 +257,43 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
   }
 
   selectRow(index) {
+    // debugger
     this.selected = index
     let listHangHoa = []
     this.dataTableView = []
     let itemQd = this.formData.value.quyetDinhPdDtl[index]
 
     let dcnbKeHoachDcHdr = itemQd.danhSachQuyetDinhChiTiet
-    if (!dcnbKeHoachDcHdr) return
-    dcnbKeHoachDcHdr.forEach(dq => {
-      if (dq.danhSachKeHoach) {
-        dq.danhSachKeHoach.forEach(element => {
-          listHangHoa.push({
-            ...element,
-            maLoNganKho: element.maLoKho ? `${element.maLoKho}${element.maNganKho}` : element.maNganKho,
-            maDvi: dcnbKeHoachDcHdr.maDvi,
-            tenDvi: dcnbKeHoachDcHdr.tenDvi,
-          })
-        });
-      }
+    if (dcnbKeHoachDcHdr && dcnbKeHoachDcHdr.length > 0) {
+      dcnbKeHoachDcHdr.forEach(dq => {
+        // if (dq.danhSachKeHoach) {
+        //   dq.danhSachKeHoach.forEach(element => {
+        //     listHangHoa.push({
+        //       ...element,
+        //       maLoNganKho: element.maLoKho ? `${element.maLoKho}${element.maNganKho}` : element.maNganKho,
+        //       maDvi: dcnbKeHoachDcHdr.maDvi,
+        //       tenDvi: dcnbKeHoachDcHdr.tenDvi,
+        //     })
+        //   });
+        // }
 
-    });
+        if (dq.dcnbKeHoachDcHdr) {
+          dq.dcnbKeHoachDcHdr.danhSachHangHoa.forEach(element => {
+            listHangHoa.push({
+              ...element,
+              maLoNganKho: element.maLoKho ? `${element.maLoKho}${element.maNganKho}` : element.maNganKho,
+              maDvi: dq.dcnbKeHoachDcHdr.maDvi,
+              tenDvi: dq.dcnbKeHoachDcHdr.tenDvi,
+            })
+          });
+        }
+
+      });
+
+
+
+    }
+
 
     // if (itemQd.danhSachHangHoa) {
     //   itemQd.danhSachHangHoa.forEach(element => {
@@ -509,11 +526,14 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
                 }).value()
 
                 let duToanKphi = vs?.reduce((prev, cur) => prev + cur.duToanKphi, 0);
+                let soLuongDc = vs?.reduce((prev, cur) => prev + cur.soLuongDc, 0);
+
                 return {
                   ...maNganKho,
                   idVirtual: maNganKho ? maNganKho.idVirtual ? maNganKho.idVirtual : uuidv4.v4() : uuidv4.v4(),
                   children: rsxx,
-                  duToanKphi
+                  duToanKphi,
+                  soLuongDc
                 }
               }
               ).value();
@@ -571,11 +591,11 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
     let data = await this.createUpdate(body);
     if (data) {
       this.idInput = data.id;
+      this.selected = 0
       if (isGuiDuyet) {
         this.guiDuyet();
       }
       else {
-        // this.quayLai();
         await this.loadChiTiet(this.idInput)
       }
     }
