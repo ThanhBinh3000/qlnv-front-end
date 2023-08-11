@@ -134,7 +134,6 @@ export class PhuLuc2Component implements OnInit {
         Object.assign(this.status, this.dataInfo.status);
         await this.getFormDetail();
         this.namBcao = this.dataInfo?.namBcao;
-        console.log(this.lstCtietBcao);
         if (this.status.general) {
             this.scrollX = Table.tableWidth(350, 20, 1, 110);
         } else {
@@ -224,7 +223,6 @@ export class PhuLuc2Component implements OnInit {
     //                 })
     //             }
     //         )
-    //         console.log("this.lstTaiSans", this.lstTaiSans);
 
     //     }
     // };
@@ -365,7 +363,6 @@ export class PhuLuc2Component implements OnInit {
         this.tinhTong();
         this.getTotal();
         this.updateEditCache();
-        console.log(this.lstCtietBcao);
 
     };
 

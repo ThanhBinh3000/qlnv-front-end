@@ -24,7 +24,7 @@ export class VonPhiHangDuTruQuocGiaComponent implements OnInit {
 
     ngOnInit(): void {
         this.userInfo = this.userService.getUserLogin();
-        console.log(this.userInfo);
+
         this.isVisibleChangeTab$.subscribe((value: boolean) => {
             this.visibleTab = value;
         });

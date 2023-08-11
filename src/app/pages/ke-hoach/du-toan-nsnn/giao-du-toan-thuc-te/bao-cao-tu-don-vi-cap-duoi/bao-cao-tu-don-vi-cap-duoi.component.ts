@@ -244,7 +244,7 @@ export class BaoCaoTuDonViCapDuoiComponent implements OnInit {
     }
 
     xemChiTiet(id: string, maLoaiDan: string) {
-        console.log({ "id": id, "maLoaiDan": maLoaiDan });
+
 
         if (maLoaiDan == "1") {
             const obj = {

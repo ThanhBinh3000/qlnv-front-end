@@ -215,13 +215,13 @@ export class PhuLucPhanBoComponent implements OnInit {
         //     })
         // }
 
-        // console.log(this.donVis);
+        // 
 
         // this.formDetail.lstCtietBcaos[0]?.lstCtietDvis.forEach(s => {
         //     this.lstDvi = this.donVis.filter(v => v.maDvi === s.maDviNhan)
         // })
 
-        // console.log(this.dataInfo?.capDvi);
+        // 
 
         if (this.dataInfo?.capDvi == "3") {
             // let lstDvi1 = this.donVis.filter(e => e?.maDviCha === this.dataInfo.maDvi);
@@ -239,7 +239,7 @@ export class PhuLucPhanBoComponent implements OnInit {
                 }
             )
             this.lstDvi = this.donVis;
-            // console.log(this.lstDvi);
+            // 
             this.lstCtietBcaos.forEach(item => {
                 if (item.maNdung) {
                     const index = this.lstCtietBcaos.findIndex(e => e.maNdung == item.maNdung);
@@ -256,7 +256,7 @@ export class PhuLucPhanBoComponent implements OnInit {
             this.formDetail.lstCtietBcaos[0]?.lstCtietDvis.forEach(s => {
                 // this.donVis.filter(v => v.maDvi === s.maDviNhan)[0]
                 this.lstDvi.push(this.donVis.filter(v => v.maDvi === s.maDviNhan)[0])
-                console.log(this.lstDvi);
+
 
             })
         }
@@ -401,7 +401,7 @@ export class PhuLucPhanBoComponent implements OnInit {
                 checked: false,
             });
 
-            console.log(this.lstCtietBcaos);
+
 
 
             this.lstCtietBcaos.forEach(item => {

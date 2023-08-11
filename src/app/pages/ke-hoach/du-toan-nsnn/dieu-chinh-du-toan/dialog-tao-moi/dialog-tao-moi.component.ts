@@ -107,7 +107,6 @@ export class DialogTaoMoiComponent implements OnInit {
                             }
                             return -1
                         })
-                        console.log(lstBcao);
                         if (data.data.content.length != 0) {
                             this.initNewReport(lstBcao[0].dotBcao);
                         } else {

@@ -292,7 +292,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 			this.idPaBTC = this.data?.idPaBTC;
 			this.namPa = this.data?.namPa;
 			this.trangThaiBanGhi = this.data?.trangThai;
-			console.log(this.trangThaiBanGhi);
+
 
 
 			if (!this.maPa) {
@@ -310,7 +310,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 				}
 			)
 		}
-		console.log(this.lstDvi);
+
 
 
 		// if (this.userInfo.DON_VI.tenVietTat.includes("CNTT") || this.userInfo.DON_VI.tenVietTat.includes("_VP")) {
@@ -865,7 +865,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 		const checkSave = this.userService.isAccessPermisson(Roles.GDT.EDIT_REPORT_PA_PBDT);
 		// this.statusBtnSave = this.getBtnStatus([Status.TT_01], Roles.GDT.EDIT_REPORT_PA_PBDT, checkChirld);
 		this.statusBtnSave = Status.check('saveWOHist', this.trangThaiBanGhi) && checkSave && checkChirld;
-		console.log(this.statusBtnSave);
+
 
 		this.statusBtnApprove = this.getBtnStatus([Status.TT_01], Roles.GDT.APPROVE_REPORT_PA_PBDT, checkChirld);
 		this.statusBtnTBP = this.getBtnStatus([Status.TT_02], Roles.GDT.DUYET_REPORT_PA_PBDT, checkChirld);
@@ -905,8 +905,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 			};
 
 			this.lstCtietBcao.forEach(item => {
-				// console.log(item.tongCong);
-				// console.log(item.tongCongSoTranChi);
+
 
 				if (item.level == 0) {
 					if (item.tongCongSoTranChi !== item.tongCong) {

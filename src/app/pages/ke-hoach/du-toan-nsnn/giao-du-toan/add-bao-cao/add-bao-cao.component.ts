@@ -254,7 +254,7 @@ export class AddBaoCaoComponent implements OnInit {
 
     async initialization() {
         //lay thong tin chung bao cao
-        // console.log(this.data);
+        // 
 
         this.baoCao.id = this.data?.id;
         this.baoCao.trangThai = this.data?.trangThai;
@@ -369,7 +369,7 @@ export class AddBaoCaoComponent implements OnInit {
                 })
             }
         }
-        // console.log(this.baoCao);
+        // 
 
         this.getStatusButton();
         this.spinner.hide();
@@ -1341,7 +1341,7 @@ export class AddBaoCaoComponent implements OnInit {
         this.status.accept = Status.check('accept', this.baoCao.trangThai) && checkAccept && this.isParent;
         // this.status.print = Utils.statusPrint.includes(this.baoCao.trangThai) && checkPrint && this.isChild;
         this.status.export = Status.check('export', this.baoCao.trangThai) && checkExport && this.isChild;
-        console.log(this.userService);
+
 
         this.status.ok = this.status.accept || this.status.approve || this.status.pass
         this.status.finish = this.status.general;

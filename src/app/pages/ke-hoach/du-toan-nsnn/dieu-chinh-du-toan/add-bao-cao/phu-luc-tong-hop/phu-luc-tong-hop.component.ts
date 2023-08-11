@@ -175,7 +175,6 @@ export class PhuLucTongHopComponent implements OnInit {
         //         if (data.statusCode === 0) {
         //             this.donVis = data?.data;
         //             this.capDvi = this.donVis.find(e => e.maDvi == this.dataInfo?.maDvi)?.capDvi;
-        //             console.log(this.donVis);
         //         } else {
         //             this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE)
         //         }
@@ -183,7 +182,6 @@ export class PhuLucTongHopComponent implements OnInit {
         // );
 
 
-        // console.log(this.lstDvi);
         Object.assign(this.status, this.dataInfo.status);
         await this.getFormDetail();
         await this.getChildUnit();
@@ -215,11 +213,11 @@ export class PhuLucTongHopComponent implements OnInit {
         //         lstDvi2.push(Dvi2)
         //     })
         //     this.lstDvi = lstDvi2
-        //     console.log("this.lstDvi 1", this.lstDvi);
+        //     
 
         // } else {
         //     this.lstDvi = this.donVis.filter(e => e?.maDvi === this.dataInfo?.maDvi);
-        //     console.log("this.lstDvi 2", this.lstDvi);
+        //     
         // }
 
         // if (this.dataInfo.data.trangThai == "3" && this.dataInfo?.extraData && this.dataInfo.extraData.length > 0) {
@@ -230,14 +228,13 @@ export class PhuLucTongHopComponent implements OnInit {
         //         }
         //     })
         // }
-        // console.log(this.formDetail.lstCtietDchinh[0].child);
+
 
         this.formDetail.lstCtietDchinh[0]?.child.forEach(s => {
             this.lstDvi.push(this.donVis.filter(v => v.maDvi === s.maDviBcao)[0])
-            console.log(this.lstDvi);
+
 
         })
-        // console.log("this.lstDvi", this.lstDvi);
 
         this.lstCtietBcao = Table.sortByIndex(this.lstCtietBcao)
         this.tinhTong();
@@ -256,7 +253,6 @@ export class PhuLucTongHopComponent implements OnInit {
             data => {
                 if (data.statusCode == 0) {
                     this.donVis = data.data;
-                    console.log("this.donVis", this.donVis);
 
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);

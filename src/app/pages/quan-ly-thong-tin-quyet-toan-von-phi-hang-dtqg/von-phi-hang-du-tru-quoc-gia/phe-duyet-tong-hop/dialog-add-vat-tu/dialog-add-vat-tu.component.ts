@@ -32,7 +32,7 @@ export class DialogAddVatTuComponent implements OnInit {
 
     ngOnInit(): void {
         this.loadDanhMucHang();
-        console.log(this.obj);
+
 
     }
 
@@ -46,7 +46,7 @@ export class DialogAddVatTuComponent implements OnInit {
 
     loadDanhMucHang() {
         this.danhMucService.loadDanhMucHangHoa().subscribe((hangHoa) => {
-            // console.log(hangHoa.data);
+            // 
             if (this.obj.stt.startsWith("0.1")) {
                 hangHoa.data = hangHoa.data.filter(item => item.ma == "01");
             } else {

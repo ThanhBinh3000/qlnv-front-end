@@ -9,19 +9,22 @@
                 <i class="icon htvbdh_tcdt_save"></i>
                 <span>Tiếp nhận</span>
             </button>
-            <ng-template #contentTemplate>
-                <div class="contentTemplate_chonpa">
-                    <a (click)="taoMoiPhuongAn(1)" class="contentTemplate_chonpa__con">1. Phương
-                        án phân bổ giao dự toán chi</a>
-                    <a (click)="taoMoiPhuongAn(2)" class="contentTemplate_chonpa__con">2. Phương
-                        án giao, điều chỉnh dự toán chi</a>
-                </div>
-            </ng-template>
-            <button class="btn btn-main" nz-button nz-popover nzPopoverTitle="Phương án"
-                [nzPopoverContent]="contentTemplate" nzPopoverTrigger="click" [hidden]="statusBtnNew">
-                <i class="icon htvbdh_tcdt_save"></i>
-                <span>Tạo phương án</span>
-            </button>
+
+            <div [hidden]="statusBtnNew">
+                <button class="btn btn-main" nz-button nz-popover nzPopoverTitle="Phương án"
+                    [nzPopoverContent]="contentTemplate" nzPopoverTrigger="click">
+                    <i class="icon htvbdh_tcdt_save"></i>
+                    <span>Tạo phương án</span>
+                </button>
+                <ng-template #contentTemplate>
+                    <div class="contentTemplate_chonpa">
+                        <a (click)="taoMoiPhuongAn(1)" class="contentTemplate_chonpa__con">1. Phương
+                            án phân bổ giao dự toán chi</a>
+                        <a (click)="taoMoiPhuongAn(2)" class="contentTemplate_chonpa__con">2. Phương
+                            án giao, điều chỉnh dự toán chi</a>
+                    </div>
+                </ng-template>
+            </div>
         </div>
     </nz-affix>
 

@@ -180,7 +180,7 @@ export class PhuLucQuyLuongComponent implements OnInit {
                 sttItem++
             })
         }
-        // console.log(this.lstCtietBcaos);
+        // 
         this.lstCtietBcaos = Table.sortByIndex(this.lstCtietBcaos);
         this.getTotal();
         this.updateEditCache();

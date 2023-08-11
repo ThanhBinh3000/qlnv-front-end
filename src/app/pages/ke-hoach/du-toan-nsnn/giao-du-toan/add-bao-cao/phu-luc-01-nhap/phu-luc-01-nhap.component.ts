@@ -157,13 +157,7 @@ export class PhuLuc01NhapComponent implements OnInit {
 
     async initialization() {
         await this.spinner.show();
-
-        console.log("this.dataInfo", this.dataInfo);
-
         Object.assign(this.status, this.dataInfo.status);
-
-        console.log(this.status);
-
         await this.getFormDetail();
         this.namBcao = this.dataInfo?.namBcao;
         this.maDviTao = this.dataInfo?.maDvi;

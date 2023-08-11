@@ -342,7 +342,7 @@ export class BaoCaoTongHopComponent implements OnInit {
             this.idPaBTC = this.data?.idPaBTC;
             this.namPa = this.data?.namPa;
             this.trangThaiBanGhi = this.data?.trangThai;
-            console.log(this.data);
+
 
             this.lstDviTrucThuoc = this.data?.lstGiaoDtoanTrucThuocs;
             this.lstDviTrucThuoc.forEach(item => {
