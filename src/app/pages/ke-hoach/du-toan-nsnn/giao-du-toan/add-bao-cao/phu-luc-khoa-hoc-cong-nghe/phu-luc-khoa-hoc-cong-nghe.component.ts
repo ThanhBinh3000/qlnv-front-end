@@ -487,13 +487,18 @@ export class PhuLucKhoaHocCongNgheComponent implements OnInit {
 
     exportToExcel() {
         const header = [
-            { t: 0, b: 1, l: 0, r: 5, val: null },
-            { t: 0, b: 1, l: 0, r: 0, val: 'STT' },
-            { t: 0, b: 1, l: 1, r: 1, val: 'Chương trình/ Đề tài/ Dự án/ Nhiệm vụ KH&CN' },
-            { t: 0, b: 1, l: 2, r: 2, val: 'Cơ quan chủ trì' },
-            { t: 0, b: 1, l: 3, r: 3, val: 'Thời gian thực hiện' },
-            { t: 0, b: 1, l: 4, r: 4, val: 'Quyết định phê duyệt của cấp có thẩm quyền' },
-            { t: 0, b: 1, l: 5, r: 5, val: 'Tổng nhu cầu dự toán' },
+            { t: 0, b: 5, l: 0, r: 5, val: null },
+
+            { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
+            { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
+            { t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
+
+            { t: 4, b: 5, l: 0, r: 0, val: 'STT' },
+            { t: 4, b: 5, l: 1, r: 1, val: 'Chương trình/ Đề tài/ Dự án/ Nhiệm vụ KH&CN' },
+            { t: 4, b: 5, l: 2, r: 2, val: 'Cơ quan chủ trì' },
+            { t: 4, b: 5, l: 3, r: 3, val: 'Thời gian thực hiện' },
+            { t: 4, b: 5, l: 4, r: 4, val: 'Quyết định phê duyệt của cấp có thẩm quyền' },
+            { t: 4, b: 5, l: 5, r: 5, val: 'Tổng nhu cầu dự toán' },
         ]
         const fieldOrder = [
             "stt",
@@ -517,11 +522,7 @@ export class PhuLucKhoaHocCongNgheComponent implements OnInit {
         XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
         let excelName = this.dataInfo.maBcao;
-        if (this.dataInfo.maBieuMau == "pl01N") {
-            excelName = excelName + '_Phu_luc_I_nhap.xlsx'
-        } else {
-            excelName = excelName + '_Phu_luc_I_xuat.xlsx'
-        }
+        excelName = excelName + '_GSTC_PL08.xlsx'
         XLSX.writeFile(workbook, excelName);
     }
 

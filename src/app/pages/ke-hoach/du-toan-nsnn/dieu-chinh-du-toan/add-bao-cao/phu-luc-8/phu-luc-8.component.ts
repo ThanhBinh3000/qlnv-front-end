@@ -652,28 +652,33 @@ export class PhuLuc8Component implements OnInit {
 
     exportToExcel() {
         const header = [
-            { t: 0, b: 2, l: 0, r: 17, val: null },
-            { t: 0, b: 2, l: 0, r: 0, val: "STT" },
-            { t: 0, b: 2, l: 1, r: 1, val: "Mặt hàng" },
-            { t: 0, b: 2, l: 2, r: 2, val: "ĐVT" },
-            { t: 0, b: 2, l: 3, r: 3, val: "Số lượng bảo quản theo KH được giao" },
-            { t: 0, b: 0, l: 4, r: 6, val: "Lượng hàng thực hiện" },
-            { t: 0, b: 2, l: 7, r: 7, val: "ĐỊNH MỨC" },
-            { t: 0, b: 2, l: 8, r: 8, val: "Tổng nhu cầu dự toán năm" + this.namBcao },
-            { t: 0, b: 0, l: 9, r: 11, val: "Kinh phí được sử dụng năm " + this.namBcao },
-            { t: 0, b: 2, l: 12, r: 12, val: "Dự toán điều chỉnh đề nghị(+ Tăng)(- Giảm)" },
-            { t: 0, b: 2, l: 13, r: 13, val: "Dự toán Vụ TVQT đề nghị (+ tăng) (- giảm)" },
-            { t: 0, b: 2, l: 14, r: 14, val: "Dự toán phí bảo quản thiếu năm 2020" },
-            { t: 0, b: 2, l: 15, r: 15, val: "Dự toán chênh lệch giữa Vụ TVQT điều chỉnh và đơn vị đề nghị" },
-            { t: 0, b: 2, l: 16, r: 16, val: "Ý kiến của đơn vị cấp trên" },
-            { t: 0, b: 2, l: 17, r: 17, val: "Ghi chú" },
+            { t: 0, b: 6, l: 0, r: 17, val: null },
 
-            { t: 1, b: 2, l: 4, r: 4, val: "Số lượng bảo quản thực tế đã thực hiện đến thời điểm báo cáo" },
-            { t: 1, b: 2, l: 5, r: 5, val: "Số lượng bảo quản ước thực hiện từ thời điểm báo cáo đến cuối năm" },
-            { t: 1, b: 2, l: 6, r: 6, val: "Cộng" },
-            { t: 1, b: 2, l: 9, r: 9, val: "Cộng" },
-            { t: 1, b: 2, l: 10, r: 10, val: "Dự toán năm trước chuyển sang được phép sử dụng cho năm nay" },
-            { t: 1, b: 2, l: 11, r: 11, val: "Dự toán đã giao trong năm" },
+            { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
+            { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
+            { t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
+
+            { t: 4, b: 6, l: 0, r: 0, val: "STT" },
+            { t: 4, b: 6, l: 1, r: 1, val: "Mặt hàng" },
+            { t: 4, b: 6, l: 2, r: 2, val: "ĐVT" },
+            { t: 4, b: 6, l: 3, r: 3, val: "Số lượng bảo quản theo KH được giao" },
+            { t: 4, b: 4, l: 4, r: 6, val: "Lượng hàng thực hiện" },
+            { t: 4, b: 6, l: 7, r: 7, val: "ĐỊNH MỨC" },
+            { t: 4, b: 6, l: 8, r: 8, val: "Tổng nhu cầu dự toán năm" + this.namBcao },
+            { t: 4, b: 4, l: 9, r: 11, val: "Kinh phí được sử dụng năm " + this.namBcao },
+            { t: 4, b: 6, l: 12, r: 12, val: "Dự toán điều chỉnh đề nghị(+ Tăng)(- Giảm)" },
+            { t: 4, b: 6, l: 13, r: 13, val: "Dự toán Vụ TVQT đề nghị (+ tăng) (- giảm)" },
+            { t: 4, b: 6, l: 14, r: 14, val: "Dự toán phí bảo quản thiếu năm 2020" },
+            { t: 4, b: 6, l: 15, r: 15, val: "Dự toán chênh lệch giữa Vụ TVQT điều chỉnh và đơn vị đề nghị" },
+            { t: 4, b: 6, l: 16, r: 16, val: "Ý kiến của đơn vị cấp trên" },
+            { t: 4, b: 6, l: 17, r: 17, val: "Ghi chú" },
+
+            { t: 5, b: 6, l: 4, r: 4, val: "Số lượng bảo quản thực tế đã thực hiện đến thời điểm báo cáo" },
+            { t: 5, b: 6, l: 5, r: 5, val: "Số lượng bảo quản ước thực hiện từ thời điểm báo cáo đến cuối năm" },
+            { t: 5, b: 6, l: 6, r: 6, val: "Cộng" },
+            { t: 5, b: 6, l: 9, r: 9, val: "Cộng" },
+            { t: 5, b: 6, l: 10, r: 10, val: "Dự toán năm trước chuyển sang được phép sử dụng cho năm nay" },
+            { t: 5, b: 6, l: 11, r: 11, val: "Dự toán đã giao trong năm" },
 
         ]
         const fieldOrder = [
@@ -716,7 +721,9 @@ export class PhuLuc8Component implements OnInit {
         const worksheet = Table.initExcel(header);
         XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
-        XLSX.writeFile(workbook, this.dataInfo.maBcao + '_Phu_luc_III.xlsx');
+        let excelName = this.dataInfo.maBcao;
+        excelName = excelName + '_BCDC_PL08.xlsx'
+        XLSX.writeFile(workbook, excelName);
     }
 
 }

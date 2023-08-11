@@ -586,6 +586,9 @@ export class AddBaoCaoComponent implements OnInit {
             capDvi: this.userInfo.capDvi,
             tenDvi: this.userInfo.TEN_DVI,
             namBcao: this.baoCao.namBcao,
+            tenPl: bieuMau.tenPl,
+            tieuDe: bieuMau.tenDm,
+            congVan: Utils.getDocName(this.baoCao.congVan.fileName, this.baoCao.ngayCongVan, this.baoCao.tenDvi),
             path: this.path,
             status: new BtnStatus(),
             isSynthetic: isSynthetic

@@ -594,22 +594,27 @@ export class PhuLuc03Component implements OnInit {
 
     exportToExcel() {
         const header = [
-            { t: 0, b: 2, l: 0, r: 8, val: null },
-            { t: 0, b: 0, l: 0, r: 0, val: 'STT' },
-            { t: 0, b: 0, l: 1, r: 1, val: 'Danh mục' },
-            { t: 0, b: 0, l: 2, r: 2, val: 'Đơn vị tính' },
-            { t: 0, b: 0, l: 3, r: 7, val: 'Năm dự toán' + (this.namBcao - 1).toString() },
+            { t: 0, b: 6, l: 0, r: 8, val: null },
 
-            { t: 1, b: 1, l: 3, r: 5, val: 'Chi phí tại cửa kho' },
-            { t: 1, b: 1, l: 5, r: 6, val: 'Chi phí ngoài cửa kho' },
-            { t: 1, b: 2, l: 8, r: 8, val: 'Tổng cộng' },
+            { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
+            { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
+            { t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
 
-            { t: 2, b: 2, l: 3, r: 3, val: 'Số lượng' },
-            { t: 2, b: 2, l: 4, r: 4, val: 'Định mức' },
-            { t: 2, b: 2, l: 5, r: 5, val: 'Thành tiền' },
+            { t: 4, b: 4, l: 0, r: 0, val: 'STT' },
+            { t: 4, b: 4, l: 1, r: 1, val: 'Danh mục' },
+            { t: 4, b: 4, l: 2, r: 2, val: 'Đơn vị tính' },
+            { t: 4, b: 4, l: 3, r: 7, val: 'Năm dự toán' + (this.namBcao - 1).toString() },
 
-            { t: 2, b: 2, l: 6, r: 6, val: 'Bình quân(Đồng/tấn)' },
-            { t: 2, b: 2, l: 7, r: 7, val: 'Thành tiền' },
+            { t: 5, b: 5, l: 3, r: 5, val: 'Chi phí tại cửa kho' },
+            { t: 5, b: 5, l: 5, r: 6, val: 'Chi phí ngoài cửa kho' },
+            { t: 5, b: 6, l: 8, r: 8, val: 'Tổng cộng' },
+
+            { t: 6, b: 6, l: 3, r: 3, val: 'Số lượng' },
+            { t: 6, b: 6, l: 4, r: 4, val: 'Định mức' },
+            { t: 6, b: 6, l: 5, r: 5, val: 'Thành tiền' },
+
+            { t: 6, b: 6, l: 6, r: 6, val: 'Bình quân(Đồng/tấn)' },
+            { t: 6, b: 6, l: 7, r: 7, val: 'Thành tiền' },
         ]
         const fieldOrder = [
             "stt",
@@ -636,11 +641,7 @@ export class PhuLuc03Component implements OnInit {
         XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
         let excelName = this.dataInfo.maBcao;
-        if (this.dataInfo.maBieuMau == "pl01N") {
-            excelName = excelName + '_Phu_luc_I_nhap.xlsx'
-        } else {
-            excelName = excelName + '_Phu_luc_I_xuat.xlsx'
-        }
+        excelName = excelName + '_GSTC_PL03.xlsx'
         XLSX.writeFile(workbook, excelName);
     }
 

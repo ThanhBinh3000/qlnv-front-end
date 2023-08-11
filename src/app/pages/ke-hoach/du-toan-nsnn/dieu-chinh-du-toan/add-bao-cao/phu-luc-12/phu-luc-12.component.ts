@@ -498,38 +498,43 @@ export class PhuLuc12Component implements OnInit {
 
 	exportToExcel() {
 		const header = [
-			{ t: 0, b: 3, l: 0, r: 13, val: null },
-			{ t: 0, b: 2, l: 0, r: 0, val: 'STT' },
-			{ t: 0, b: 2, l: 1, r: 1, val: 'Chương Trình/ Đề tài/ Dự án/ Nhiệm vụ HK&CN' },
-			{ t: 0, b: 2, l: 2, r: 2, val: 'Cơ quan chủ trì' },
-			{ t: 0, b: 2, l: 3, r: 3, val: 'Thời gian thực hiện' },
-			{ t: 0, b: 2, l: 4, r: 4, val: 'Quyết định phê duyệt của cấp có thẩm quyền' },
-			{ t: 0, b: 1, l: 5, r: 7, val: 'Dự toán, kinh phí được sử dụng trong năm' },
-			{ t: 0, b: 2, l: 8, r: 8, val: 'Tổng nhu cầu dự toán' },
-			{ t: 0, b: 2, l: 9, r: 9, val: 'Dự toán đề nghị điều chỉnh (+ tăng )(- giảm)' },
-			{ t: 0, b: 2, l: 10, r: 10, val: 'Dự toán Vụ TVQT đề nghị (+ tăng) (- giảm)' },
-			{ t: 0, b: 2, l: 11, r: 11, val: 'Ghi chú' },
-			{ t: 0, b: 2, l: 12, r: 12, val: 'Dự toán chênh lệch giữa Vụ TVQT điều chỉnh và đơn vị đề nghị (+tăng) (- giảm)' },
-			{ t: 0, b: 2, l: 13, r: 13, val: 'Ý kiến của đơn vị cấp trên' },
+			{ t: 0, b: 7, l: 0, r: 13, val: null },
 
-			{ t: 2, b: 2, l: 5, r: 5, val: 'Dự toán năm trước chuyển sang được phép sử dụng cho năm nay' },
-			{ t: 2, b: 2, l: 6, r: 6, val: 'Dự toán, kinh phí đã giao trong năm' },
-			{ t: 2, b: 2, l: 7, r: 7, val: 'Tổng số' },
+			{ t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
+			{ t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
+			{ t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
 
-			{ t: 3, b: 3, l: 0, r: 0, val: 'A' },
-			{ t: 3, b: 3, l: 1, r: 1, val: 'B' },
-			{ t: 3, b: 3, l: 2, r: 2, val: 'C' },
-			{ t: 3, b: 3, l: 3, r: 3, val: 'D' },
-			{ t: 3, b: 3, l: 4, r: 4, val: 'E' },
-			{ t: 3, b: 3, l: 5, r: 5, val: '1' },
-			{ t: 3, b: 3, l: 6, r: 6, val: '2=1+2' },
-			{ t: 3, b: 3, l: 7, r: 7, val: '3 = 1 + 2' },
-			{ t: 3, b: 3, l: 8, r: 8, val: '4' },
-			{ t: 3, b: 3, l: 9, r: 9, val: '5 = 4 - 3 ' },
-			{ t: 3, b: 3, l: 10, r: 10, val: '6' },
-			{ t: 3, b: 3, l: 11, r: 11, val: '7' },
-			{ t: 3, b: 3, l: 12, r: 12, val: '8 = 6 - 5' },
-			{ t: 3, b: 3, l: 13, r: 13, val: '9' },
+			{ t: 4, b: 6, l: 0, r: 0, val: 'STT' },
+			{ t: 4, b: 6, l: 1, r: 1, val: 'Chương Trình/ Đề tài/ Dự án/ Nhiệm vụ HK&CN' },
+			{ t: 4, b: 6, l: 2, r: 2, val: 'Cơ quan chủ trì' },
+			{ t: 4, b: 6, l: 3, r: 3, val: 'Thời gian thực hiện' },
+			{ t: 4, b: 6, l: 4, r: 4, val: 'Quyết định phê duyệt của cấp có thẩm quyền' },
+			{ t: 4, b: 6, l: 5, r: 7, val: 'Dự toán, kinh phí được sử dụng trong năm' },
+			{ t: 4, b: 6, l: 8, r: 8, val: 'Tổng nhu cầu dự toán' },
+			{ t: 4, b: 6, l: 9, r: 9, val: 'Dự toán đề nghị điều chỉnh (+ tăng )(- giảm)' },
+			{ t: 4, b: 6, l: 10, r: 10, val: 'Dự toán Vụ TVQT đề nghị (+ tăng) (- giảm)' },
+			{ t: 4, b: 6, l: 11, r: 11, val: 'Ghi chú' },
+			{ t: 4, b: 6, l: 12, r: 12, val: 'Dự toán chênh lệch giữa Vụ TVQT điều chỉnh và đơn vị đề nghị (+tăng) (- giảm)' },
+			{ t: 4, b: 6, l: 13, r: 13, val: 'Ý kiến của đơn vị cấp trên' },
+
+			{ t: 6, b: 6, l: 5, r: 5, val: 'Dự toán năm trước chuyển sang được phép sử dụng cho năm nay' },
+			{ t: 6, b: 6, l: 6, r: 6, val: 'Dự toán, kinh phí đã giao trong năm' },
+			{ t: 6, b: 6, l: 7, r: 7, val: 'Tổng số' },
+
+			{ t: 7, b: 7, l: 0, r: 0, val: 'A' },
+			{ t: 7, b: 7, l: 1, r: 1, val: 'B' },
+			{ t: 7, b: 7, l: 2, r: 2, val: 'C' },
+			{ t: 7, b: 7, l: 3, r: 3, val: 'D' },
+			{ t: 7, b: 7, l: 4, r: 4, val: 'E' },
+			{ t: 7, b: 7, l: 5, r: 5, val: '1' },
+			{ t: 7, b: 7, l: 6, r: 6, val: '2=1+2' },
+			{ t: 7, b: 7, l: 7, r: 7, val: '3 = 1 + 2' },
+			{ t: 7, b: 7, l: 8, r: 8, val: '4' },
+			{ t: 7, b: 7, l: 9, r: 9, val: '5 = 4 - 3 ' },
+			{ t: 7, b: 7, l: 10, r: 10, val: '6' },
+			{ t: 7, b: 7, l: 11, r: 11, val: '7' },
+			{ t: 7, b: 7, l: 12, r: 12, val: '8 = 6 - 5' },
+			{ t: 7, b: 7, l: 13, r: 13, val: '9' },
 		]
 		const fieldOrder = [
 			'stt',
@@ -567,7 +572,9 @@ export class PhuLuc12Component implements OnInit {
 		const worksheet = Table.initExcel(header);
 		XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
 		XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
-		XLSX.writeFile(workbook, this.dataInfo.maBcao + '_Phu_luc_II.xlsx');
+		let excelName = this.dataInfo.maBcao;
+		excelName = excelName + '_BCDC_PL12.xlsx'
+		XLSX.writeFile(workbook, excelName);
 	}
 
 

@@ -494,21 +494,26 @@ export class PhuLucTaiSanComponent implements OnInit {
 	exportToExcel() {
 		const header = [
 			{ t: 0, b: 1, l: 0, r: 10, val: null },
-			{ t: 0, b: 1, l: 0, r: 0, val: 'STT' },
-			{ t: 0, b: 1, l: 1, r: 1, val: 'Tên tài sản (theo danh mục được phê duyệt tại Quyết định số 149/QĐ-TCDT)' },
-			{ t: 0, b: 1, l: 2, r: 2, val: 'ĐVT' },
-			{ t: 0, b: 1, l: 3, r: 7, val: 'Số lượng tài sản, máy móc, thiết bị hiện có' },
-			{ t: 0, b: 1, l: 8, r: 10, val: 'Dự toán đề nghị trang bị năm ' + (this.namBcao - 1).toString() },
 
-			{ t: 1, b: 1, l: 3, r: 3, val: 'Số lượng đến thời điểm báo cáo' },
-			{ t: 1, b: 1, l: 4, r: 4, val: 'Số lượng đã nhận chưa có QĐ điều chuyển' },
-			{ t: 1, b: 1, l: 5, r: 5, val: 'Số lượng đã được phê duyệt mua sắm năm (N -1)' },
-			{ t: 1, b: 1, l: 6, r: 6, val: 'Cộng' },
+			{ t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
+			{ t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
+			{ t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
 
-			{ t: 1, b: 1, l: 7, r: 7, val: 'Tiêu chuẩn định mức tối đa được phê duyệt' },
-			{ t: 1, b: 1, l: 8, r: 8, val: 'Số lượng ' },
-			{ t: 1, b: 1, l: 9, r: 9, val: 'Mức giá' },
-			{ t: 1, b: 0, l: 10, r: 10, val: 'Thành tiền (Tổng nhu cầu năm nay)' },
+			{ t: 4, b: 5, l: 0, r: 0, val: 'STT' },
+			{ t: 4, b: 5, l: 1, r: 1, val: 'Tên tài sản (theo danh mục được phê duyệt tại Quyết định số 149/QĐ-TCDT)' },
+			{ t: 4, b: 5, l: 2, r: 2, val: 'ĐVT' },
+			{ t: 4, b: 5, l: 3, r: 7, val: 'Số lượng tài sản, máy móc, thiết bị hiện có' },
+			{ t: 4, b: 5, l: 8, r: 10, val: 'Dự toán đề nghị trang bị năm ' + (this.namBcao - 1).toString() },
+
+			{ t: 5, b: 5, l: 3, r: 3, val: 'Số lượng đến thời điểm báo cáo' },
+			{ t: 5, b: 5, l: 4, r: 4, val: 'Số lượng đã nhận chưa có QĐ điều chuyển' },
+			{ t: 5, b: 5, l: 5, r: 5, val: 'Số lượng đã được phê duyệt mua sắm năm (N -1)' },
+			{ t: 5, b: 5, l: 6, r: 6, val: 'Cộng' },
+
+			{ t: 5, b: 5, l: 7, r: 7, val: 'Tiêu chuẩn định mức tối đa được phê duyệt' },
+			{ t: 5, b: 5, l: 8, r: 8, val: 'Số lượng ' },
+			{ t: 5, b: 5, l: 9, r: 9, val: 'Mức giá' },
+			{ t: 5, b: 5, l: 10, r: 10, val: 'Thành tiền (Tổng nhu cầu năm nay)' },
 		]
 		const fieldOrder = [
 			'tenDanhMuc',
@@ -537,11 +542,7 @@ export class PhuLucTaiSanComponent implements OnInit {
 		XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
 		XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
 		let excelName = this.dataInfo.maBcao;
-		if (this.dataInfo.maBieuMau == "pl01N") {
-			excelName = excelName + '_Phu_luc_I_nhap.xlsx'
-		} else {
-			excelName = excelName + '_Phu_luc_I_xuat.xlsx'
-		}
+		excelName = excelName + '_GSTC_PL05.xlsx'
 		XLSX.writeFile(workbook, excelName);
 	}
 }
