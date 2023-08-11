@@ -11,6 +11,7 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.service';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
+import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
 import * as XLSX from 'xlsx';
 import { BtnStatus, Doc, Form } from '../../../lap-ke-hoach-va-tham-dinh-du-toan.constant';
@@ -117,6 +118,7 @@ export class PhuLuc05Component implements OnInit {
 	//danh muc
 	duAns: any[] = [];
 	lstCtietBcao: ItemData[] = [];
+	donVis: any[] = [];
 	scrollX: string;
 	//trang thai cac nut
 	status: BtnStatus = new BtnStatus();
@@ -151,6 +153,7 @@ export class PhuLuc05Component implements OnInit {
 	constructor(
 		private _modalRef: NzModalRef,
 		private spinner: NgxSpinnerService,
+		private userService: UserService,
 		private lapThamDinhService: LapThamDinhService,
 		private quanLyVonPhiService: QuanLyVonPhiService,
 		private danhMucService: DanhMucDungChungService,
@@ -180,6 +183,7 @@ export class PhuLuc05Component implements OnInit {
 				})
 			}
 			this.scrollX = Table.tableWidth(350, 7, 9, 110);
+			// this.getChildUnit();
 		} else {
 			if (this.status.editAppVal) {
 				this.scrollX = Table.tableWidth(350, 9, 10, 60);
@@ -203,7 +207,16 @@ export class PhuLuc05Component implements OnInit {
 				item.stt = item.maCongTrinh;
 			})
 		}
+
 		this.lstCtietBcao = Table.sortByIndex(this.lstCtietBcao);
+
+		if (this.dataInfo.isSynthetic && this.userService.isCuc() && this.formDetail.trangThai == Status.NEW && !this.dataInfo.isOffice) {
+			this.lstCtietBcao.forEach(item => {
+				if (!item.maCongTrinh) {
+					item.cucKhuVuc = this.dataInfo.tenDvi;
+				}
+			})
+		}
 		this.getTotal();
 		this.updateEditCache();
 		this.getStatusButton();
@@ -234,6 +247,26 @@ export class PhuLuc05Component implements OnInit {
 				this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
 			}
 		)
+	}
+
+	async getChildUnit() {
+		//lay danh sach ca don vi truc thuoc
+		const request = {
+			maDviCha: this.dataInfo.maDvi,
+			trangThai: '01',
+		}
+		await this.quanLyVonPhiService.dmDviCon(request).toPromise().then(
+			data => {
+				if (data.statusCode == 0) {
+					this.donVis = data.data;
+				} else {
+					this.notification.error(MESSAGE.ERROR, data?.msg);
+				}
+			},
+			err => {
+				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+			}
+		);
 	}
 
 	// luu

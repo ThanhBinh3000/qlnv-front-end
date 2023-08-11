@@ -537,13 +537,11 @@
 									</td>
 
 									<td *ngIf="status.general" nzRight>
-										<div style="display: flex; justify-content: space-around; align-items: center;">
-											<a (click)="saveEdit(data.id)" class="save">Lưu</a>
-											<a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
-												(nzOnConfirm)="cancelEdit(data.id)" class="save">
-												Hủy
-											</a>
-										</div>
+										<a (click)="saveEdit(data.id)" class="save">Lưu</a>
+										<a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
+											(nzOnConfirm)="cancelEdit(data.id)" class="save">
+											Hủy
+										</a>
 									</td>
 									<td *ngIf="status.general" nzRight>
 										<i *ngIf="checkAdd(data)" class="fa fa-plus" (click)="addLine(data.id)"></i>
