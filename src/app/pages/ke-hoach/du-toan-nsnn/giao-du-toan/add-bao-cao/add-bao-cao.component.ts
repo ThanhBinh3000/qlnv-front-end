@@ -1440,10 +1440,11 @@ export class AddBaoCaoComponent implements OnInit {
         await this.giaoDuToanChiService.restoreReport(this.baoCao.id, id).toPromise().then(
             (data) => {
                 if (data.statusCode == 0) {
-                    Object.assign(this.baoCao, data.data);
-                    this.baoCao.lstCtiets.forEach(item => {
-                        [item.tenPl, item.tenDm] = Gdt.appendixName(item.maBieuMau, this.baoCao.namBcao);
-                    })
+                    // Object.assign(this.baoCao, data.data);
+                    // this.baoCao.lstCtiets.forEach(item => {
+                    //     [item.tenPl, item.tenDm] = Gdt.appendixName(item.maBieuMau, this.baoCao.namBcao);
+                    // })
+                    this.action('detail')
                     this.getStatusButton();
                     this.notification.success(MESSAGE.SUCCESS, 'Khôi phục thành công.');
                 } else {
@@ -1460,12 +1461,13 @@ export class AddBaoCaoComponent implements OnInit {
         await this.giaoDuToanChiService.addHistory(this.baoCao.id).toPromise().then(
             (data) => {
                 if (data.statusCode == 0) {
-                    Object.assign(this.baoCao, data.data);
-                    this.baoCao.lstCtiets.forEach(item => {
-                        [item.tenPl, item.tenDm] = Gdt.appendixName(item.maBieuMau, this.baoCao.namBcao);
-                    })
-                    this.getStatusButton();
+                    // Object.assign(this.baoCao, data.data);
+                    // this.baoCao.lstCtiets.forEach(item => {
+                    //     [item.tenPl, item.tenDm] = Gdt.appendixName(item.maBieuMau, this.baoCao.namBcao);
+                    // })
+                    // this.getStatusButton();
                     this.notification.success(MESSAGE.SUCCESS, 'Tạo mới thành công.');
+                    this.back()
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
                 }
