@@ -147,7 +147,7 @@ export class KiemNghiemChatLuongComponent extends Base2Component implements OnIn
   }
 
   isCuc() {
-    return false//this.userService.isCuc()
+    return this.userService.isCuc()
   }
 
   // isChiCuc() {
@@ -174,6 +174,16 @@ export class KiemNghiemChatLuongComponent extends Base2Component implements OnIn
     return children
   }
 
+  async changePageIndex(event) {
+    this.page = event;
+    await this.timKiem();
+  }
+
+  async changePageSize(event) {
+    this.pageSize = event;
+    await this.timKiem();
+  }
+
   async timKiem() {
     if (this.formData.value.tuNgayLapPhieu) {
       this.formData.value.tuNgayLapPhieu = dayjs(this.formData.value.tuNgayLapPhieu).format('YYYY-MM-DD')
@@ -182,6 +192,7 @@ export class KiemNghiemChatLuongComponent extends Base2Component implements OnIn
       this.formData.value.denNgayLapPhieu = dayjs(this.formData.value.denNgayLapPhieu).format('YYYY-MM-DD')
     }
     let body = this.formData.value
+    if (body.soQdinh) body.soQdinh = `${body.soQdinh}/DCNB`
     body.paggingReq = {
       limit: this.pageSize,
       page: this.page - 1

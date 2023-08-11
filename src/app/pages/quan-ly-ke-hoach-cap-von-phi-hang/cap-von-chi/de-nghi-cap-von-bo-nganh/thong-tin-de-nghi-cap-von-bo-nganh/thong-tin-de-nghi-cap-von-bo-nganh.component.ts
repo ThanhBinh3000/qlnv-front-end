@@ -187,7 +187,16 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           this.itemDnCapVonBn = res.data;
-          this.initForm();
+          // this.initForm();
+          this.formData = this.fb.group({
+            nam: [this.itemDnCapVonBn ? this.itemDnCapVonBn.nam : null, [Validators.required],],
+            boNganh: [this.itemDnCapVonBn ? this.itemDnCapVonBn.maBoNganh : null, [Validators.required],],
+            soDeNghi: [this.itemDnCapVonBn ? this.itemDnCapVonBn.soDeNghi : null],
+            ngayDeNghi: [this.itemDnCapVonBn ? this.itemDnCapVonBn.ngayDeNghi : null],
+            ghiChu: [this.itemDnCapVonBn ? this.itemDnCapVonBn.ghiChu : null],
+            trangThai: [this.itemDnCapVonBn ? this.itemDnCapVonBn.trangThai : null],
+          });
+          this.setTitle();
           if (this.itemDnCapVonBn.fileDinhKems) {
             this.listFileDinhKem = this.itemDnCapVonBn.fileDinhKems;
           }

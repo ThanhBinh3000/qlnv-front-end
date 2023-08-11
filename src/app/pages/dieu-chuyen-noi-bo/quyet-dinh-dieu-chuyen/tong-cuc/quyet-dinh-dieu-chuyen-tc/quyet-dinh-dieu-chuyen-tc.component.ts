@@ -51,8 +51,10 @@ export class QuyetDinhDieuChuyenTCComponent extends Base2Component implements On
     this.formData = this.fb.group({
       nam: null,
       soQdinh: null,
-      ngayDuyetTc: null,
-      ngayHieuLuc: null,
+      ngayDuyetTcTu: null,
+      ngayDuyetTcDen: null,
+      ngayHieuLucTu: null,
+      ngayHieuLucDen: null,
       loaiDc: null,
       trichYeu: null,
     })
@@ -95,6 +97,38 @@ export class QuyetDinhDieuChuyenTCComponent extends Base2Component implements On
 
   }
 
+  disabledStartNgayQD = (startValue: Date): boolean => {
+    if (startValue && this.formData.value.ngayDuyetTcDen) {
+      return startValue.getTime() > this.formData.value.ngayDuyetTcDen.getTime();
+    } else {
+      return false;
+    }
+  };
+
+  disabledEndNgayQD = (endValue: Date): boolean => {
+    if (endValue && this.formData.value.ngayDuyetTcTu) {
+      return endValue.getTime() < this.formData.value.ngayDuyetTcTu.getTime();
+    } else {
+      return false;
+    }
+  };
+
+  disabledStartNgayHL = (startValue: Date): boolean => {
+    if (startValue && this.formData.value.ngayHieuLucDen) {
+      return startValue.getTime() > this.formData.value.ngayHieuLucDen.getTime();
+    } else {
+      return false;
+    }
+  };
+
+  disabledEndNgayHL = (endValue: Date): boolean => {
+    if (endValue && this.formData.value.ngayHieuLucTu) {
+      return endValue.getTime() < this.formData.value.ngayHieuLucTu.getTime();
+    } else {
+      return false;
+    }
+  };
+
   isShowDS() {
     if (this.userService.isAccessPermisson('DCNB_QUYETDINHDC_TONGCUC') && this.userService.isAccessPermisson('DCNB_QUYETDINHDC_XEM'))
       return true
@@ -115,14 +149,19 @@ export class QuyetDinhDieuChuyenTCComponent extends Base2Component implements On
   }
 
   async timKiem() {
-    if (this.formData.value.ngayDuyetTc) {
-      this.formData.value.ngayDuyetTcTu = dayjs(this.formData.value.ngayDuyetTc[0]).format('YYYY-MM-DD')
-      this.formData.value.ngayDuyetTcDen = dayjs(this.formData.value.ngayDuyetTc[1]).format('YYYY-MM-DD')
+    if (this.formData.value.ngayDuyetTcTu) {
+      this.formData.value.ngayDuyetTcTu = dayjs(this.formData.value.ngayDuyetTcTu).format('YYYY-MM-DD')
     }
-    if (this.formData.value.ngayHieuLuc) {
-      this.formData.value.ngayHieuLucTu = dayjs(this.formData.value.ngayHieuLuc[0]).format('YYYY-MM-DD')
-      this.formData.value.ngayHieuLucDen = dayjs(this.formData.value.ngayHieuLuc[1]).format('YYYY-MM-DD')
+    if (this.formData.value.ngayDuyetTcDen) {
+      this.formData.value.ngayDuyetTcDen = dayjs(this.formData.value.ngayDuyetTcDen).format('YYYY-MM-DD')
     }
+    if (this.formData.value.ngayHieuLucTu) {
+      this.formData.value.ngayHieuLucTu = dayjs(this.formData.value.ngayHieuLucTu).format('YYYY-MM-DD')
+    }
+    if (this.formData.value.ngayHieuLucDen) {
+      this.formData.value.ngayHieuLucDen = dayjs(this.formData.value.ngayHieuLucDen).format('YYYY-MM-DD')
+    }
+    if (this.formData.value.soQdinh) this.formData.value.soQdinh = `${this.formData.value.soQdinh}/DCNB`
     await this.search();
   }
 

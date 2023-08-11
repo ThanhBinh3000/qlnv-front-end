@@ -75,19 +75,6 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
       }
     );
   }
-  setValidator(isGuiDuyet) {
-    if (isGuiDuyet) {
-      this.formData.controls["namKeHoach"].setValidators([Validators.required]);
-      this.formData.controls["soQd"].setValidators([Validators.required]);
-      this.formData.controls["ngayKy"].setValidators([Validators.required]);
-      this.formData.controls["ngayHieuLuc"].setValidators([Validators.required]);
-    } else {
-      this.formData.controls["namKeHoach"].clearValidators();
-      this.formData.controls["soQd"].clearValidators();
-      this.formData.controls["ngayKy"].clearValidators();
-      this.formData.controls["ngayHieuLuc"].clearValidators();
-    }
-  }
 
   async ngOnInit() {
     this.spinner.show();
@@ -178,7 +165,6 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
 
   async save(isBanHanh?) {
     this.spinner.show();
-    this.setValidator(isBanHanh)
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.spinner.hide();
@@ -289,6 +275,9 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
             let body = {
               listId : thRes && thRes.length > 0 ? thRes.map(item=> item.id) : []
             }
+          this.formData.patchValue({
+            soToTrinh : thRes && thRes.length > 0 ? thRes.map(item=> item.soDeXuat).toString() : []
+          })
             this.tongHopData(body);
         }
       });
