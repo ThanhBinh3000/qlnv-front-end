@@ -1052,7 +1052,7 @@
                               </td>
                             </tr>
                             <ng-container *ngFor="let diemKhoNhan of d.children, let y = index">
-                              <tr>
+                              <tr *ngIf="diemKhoNhan.tenDiemKhoNhan">
                                 <td></td>
                                 <td></td>
                                 <td></td>
@@ -1075,7 +1075,7 @@
 
                               </tr>
                               <ng-container *ngFor="let f of diemKhoNhan.children, let y = index">
-                                <tr>
+                                <tr *ngIf="f.tenNganKhoNhan">
                                   <td></td>
                                   <td></td>
                                   <td></td>

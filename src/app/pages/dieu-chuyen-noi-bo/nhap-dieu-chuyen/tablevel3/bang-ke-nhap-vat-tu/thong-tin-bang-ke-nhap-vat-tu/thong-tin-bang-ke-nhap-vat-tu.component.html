@@ -147,18 +147,18 @@
 
 
 
-          <div nz-col nzSpan="4">
+          <div nz-col nzSpan="8">
             <nz-form-item>
-              <nz-form-label nzRequired [nzNoColon]="true">Lô kho
+              <nz-form-label nzRequired [nzNoColon]="true">Lô/Ngăn kho
               </nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
                 <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogKhoNhap()">
-                  <input [readonly]="true" nz-input formControlName="tenLoKho" readonly="true" />
+                  <input [readonly]="true" nz-input formControlName="tenLoNganKho" readonly="true" />
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col nzSpan="4">
+          <!-- <div nz-col nzSpan="4">
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true">Ngăn kho
               </nz-form-label>
@@ -167,7 +167,7 @@
 
               </nz-form-control>
             </nz-form-item>
-          </div>
+          </div> -->
           <div nz-col nzSpan="4">
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true">Nhà kho

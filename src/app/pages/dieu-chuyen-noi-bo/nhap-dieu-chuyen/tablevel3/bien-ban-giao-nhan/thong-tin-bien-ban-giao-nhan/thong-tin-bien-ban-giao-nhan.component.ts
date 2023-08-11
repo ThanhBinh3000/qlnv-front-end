@@ -97,14 +97,14 @@ export class ThongTinBienBanGiaoNhanComponent extends Base2Component implements 
       qdDcCucId: [],
       soBbKtNhapKho: [],
       idBbKtNhapKho: [],
-      tenLoNganKho: [],
+      tenLoNganKho: [, [Validators.required]],
       tenLoKho: [],
       maLoKho: [],
-      tenNganKho: [],
+      tenNganKho: [, [Validators.required]],
       maNganKho: [],
-      tenNhaKho: [],
+      tenNhaKho: [, [Validators.required]],
       maNhaKho: [],
-      tenDiemKho: [],
+      tenDiemKho: [, [Validators.required]],
       maDiemKho: [],
       soHoSoKyThuat: [],
       loaiVthh: [],
@@ -274,7 +274,8 @@ export class ThongTinBienBanGiaoNhanComponent extends Base2Component implements 
     await this.spinner.show();
     let body = {
       trangThai: STATUS.BAN_HANH,
-      loaiVthh: ['0101', '0102'],
+      // loaiVthh: ['0101', '0102'],
+      isVatTu: true,
       loaiDc: this.loaiDc,
       maDvi: this.userInfo.MA_DVI,
       type: this.formData.value.type
@@ -348,7 +349,7 @@ export class ThongTinBienBanGiaoNhanComponent extends Base2Component implements 
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
         this.formData.patchValue({
-          tenLoNganKho: `${this.data.tenLoKhoNhan} ${this.data.maLoKhoNhan}`,
+          tenLoNganKho: `${data.tenLoKhoNhan} ${data.maLoKhoNhan}`,
           tenLoKho: data.tenLoKhoNhan,
           maLoKho: data.maLoKhoNhan,
           tenNganKho: data.tenNganKhoNhan,
@@ -484,6 +485,8 @@ export class ThongTinBienBanGiaoNhanComponent extends Base2Component implements 
 
 
   async save(isGuiDuyet?) {
+    this.helperService.markFormGroupTouched(this.formData);
+    if (!this.formData.valid) return
     await this.spinner.show();
     let body = this.formData.value;
     body.ngayKtNhap = body.ngayLap
