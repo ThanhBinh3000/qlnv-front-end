@@ -63,7 +63,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
   listFileDinhKem: any[] = [];
   expandSet = new Set<number>();
   bangPhanBoList: Array<any> = [];
-  khBanDauGia: any = {};
+  itemThongTri: any = {};
   diaDiemGiaoNhan: DiaDiemGiaoNhan = new DiaDiemGiaoNhan();
   diaDiemGiaoNhanList: Array<DiaDiemGiaoNhan> = [];
   phanLoTaiSanList: Array<PhanLoTaiSan> = [];
@@ -78,6 +78,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
   rowItem: any = {};
   chiTietList: any[] = [];
   STATUS = STATUS;
+
   constructor(
     private modal: NzModalService,
     private danhMucService: DanhMucService,
@@ -105,8 +106,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
         text: dayjs().get('year') - i,
       });
     }
-
-    this.khBanDauGia.nam = dayjs().year();
+    this.itemThongTri.nam = dayjs().year();
     this.initForm();
     await Promise.all([
       this.getListBoNganh(),
@@ -114,7 +114,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
       this.getListTongHop(),
     ]);
     if (this.idInput > 0) {
-      this.loadDeXuatKHBanDauGia(this.idInput);
+      this.loadDeXuatitemThongTri(this.idInput);
     } else {
     }
     this.spinner.hide();
@@ -122,22 +122,22 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
 
   initForm() {
     this.formData = this.fb.group({
-      id: [{value: this.khBanDauGia ? this.khBanDauGia.id : null, disabled: this.isView ? true : false,}, [],],
-      nam: [{value: this.khBanDauGia ? this.khBanDauGia.nam : null}, [Validators.required],],
+      id: [{value: this.itemThongTri ? this.itemThongTri.id : null, disabled: this.isView ? true : false,}, [],],
+      nam: [this.itemThongTri ? this.itemThongTri.nam : null, [Validators.required],],
       soThongTri: [{
-        value: this.khBanDauGia ? this.khBanDauGia.soThongTri : null,
+        value: this.itemThongTri ? this.itemThongTri.soThongTri : null,
         disabled: this.isView ? true : false,
       }, [Validators.required],],
       ngayLap: [{
-        value: this.khBanDauGia ? this.khBanDauGia.ngayLap : null,
+        value: this.itemThongTri ? this.itemThongTri.ngayLap : null,
         disabled: this.isView ? true : false,
       }, [Validators.required],],
       lyDoChi: [{
-        value: this.khBanDauGia ? this.khBanDauGia.lyDoChi : null,
+        value: this.itemThongTri ? this.itemThongTri.lyDoChi : null,
         disabled: this.isView ? true : false,
       }, [Validators.required],],
       soDnCapVon: [{
-        value: this.khBanDauGia ? this.khBanDauGia.soDnCapVon : null,
+        value: this.itemThongTri ? this.itemThongTri.soDnCapVon : null,
         disabled: this.isView ? true : false,
       }, [Validators.required],],
       maDvi: [{
@@ -145,46 +145,48 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
         disabled: this.isView ? true : false,
       }, [Validators.required],],
       loai: [{
-        value: this.khBanDauGia ? this.khBanDauGia.loai : null,
+        value: this.itemThongTri ? this.itemThongTri.loai : null,
         disabled: this.isView ? true : false,
       }, [Validators.required],],
+      loaiTien: [{
+        value: this.itemThongTri ? this.itemThongTri.loaiTien : null,
+        disabled: this.isView ? true : false,
+      },],
+      tenLoaiTien: [{
+        value: this.itemThongTri ? this.itemThongTri.tenLoaiTien : null,
+        disabled: this.isView ? true : false,
+      }],
       khoan: [{
-        value: this.khBanDauGia ? this.khBanDauGia.khoan : null,
+        value: this.itemThongTri ? this.itemThongTri.khoan : null,
         disabled: this.isView ? true : false,
       }, [Validators.required],],
       chuong: [{
-        value: this.khBanDauGia ? this.khBanDauGia.chuong : null,
+        value: this.itemThongTri ? this.itemThongTri.chuong : null,
         disabled: this.isView ? true : false,
       }, [Validators.required],],
+      dviThongTri: [{
+        value: this.itemThongTri ? this.itemThongTri.dviThongTri : null,
+        disabled: this.isView ? true : false,
+      }, [Validators.required]],
       nhanXet: [{
-        value: this.khBanDauGia ? this.khBanDauGia.nhanXet : null,
+        value: this.itemThongTri ? this.itemThongTri.nhanXet : null,
         disabled: this.isView ? true : false,
       }, [Validators.required],],
-      dviThuHuong: [{
-        value: this.khBanDauGia ? +this.khBanDauGia.dviThuHuong : null,
-        disabled: this.isView ? true : false,
-      }],
-      tenDviThuHuong: [{
-        value: this.khBanDauGia ? +this.khBanDauGia.tenDviThuHuong : null,
-        disabled: this.isView ? true : false,
-      }],
+      dviThuHuong: [this.itemThongTri ? this.itemThongTri.dviThuHuong : null],
+      tenDviThuHuong: [this.itemThongTri ? this.itemThongTri.tenDviThuHuong : null],
       dviThuHuongStk: [{
-        value: this.khBanDauGia ? this.khBanDauGia.dviThuHuongStk : null,
+        value: this.itemThongTri ? this.itemThongTri.dviThuHuongStk : null,
         disabled: this.isView ? true : false,
       }],
       dviThuHuongNganHang: [{
-        value: this.khBanDauGia ? this.khBanDauGia.dviThuHuongNganHang : null,
+        value: this.itemThongTri ? this.itemThongTri.dviThuHuongNganHang : null,
         disabled: this.isView ? true : false,
       }],
-      dviThongTri: [{
-        value: this.khBanDauGia ? this.khBanDauGia.dviThongTri : null,
-        disabled: this.isView ? true : false,
-      }, [Validators.required]],
     });
   }
 
   isDisableField() {
-    if (this.khBanDauGia && (this.khBanDauGia.trangThai == STATUS.CHO_DUYET_LDV|| this.khBanDauGia.trangThai == STATUS.DA_DUYET_LDV || this.khBanDauGia.trangThai == STATUS.DA_DUYET_LDTC)) {
+    if (this.itemThongTri && (this.itemThongTri.trangThai == STATUS.CHO_DUYET_LDV || this.itemThongTri.trangThai == STATUS.DA_DUYET_LDV || this.itemThongTri.trangThai == STATUS.DA_DUYET_LDTC)) {
       return true;
     }
   }
@@ -192,6 +194,15 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
   totalTable(data) {
     if (data && data.length > 0) {
       let sum = data.map((item) => item.soTien).reduce((prev, next) => Number(prev) + Number(next));
+      return sum ?? 0;
+    } else {
+      return 0
+    }
+  }
+
+  totalTableNt(data) {
+    if (data && data.length > 0) {
+      let sum = data.map((item) => item.soTienNt).reduce((prev, next) => Number(prev) + Number(next));
       return sum ?? 0;
     } else {
       return 0
@@ -238,22 +249,21 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
     this.showListEvent.emit();
   }
 
-  async loadDeXuatKHBanDauGia(id: number) {
+  async loadDeXuatitemThongTri(id: number) {
     await this.thongTriDuyetYCapVonService
       .loadChiTiet(id)
       .then((res) => {
         if (res.msg == MESSAGE.SUCCESS) {
-          this.khBanDauGia = res.data;
-          if (this.khBanDauGia.chiTietList) {
-            this.chiTietList = this.khBanDauGia.chiTietList;
+          this.itemThongTri = res.data;
+          if (this.itemThongTri.chiTietList) {
+            this.chiTietList = this.itemThongTri.chiTietList;
           }
-          if (this.khBanDauGia.fileDinhKems) {
-            this.listFileDinhKem = this.khBanDauGia.fileDinhKems;
+          if (this.itemThongTri.fileDinhKems) {
+            this.listFileDinhKem = this.itemThongTri.fileDinhKems;
           }
           this.initForm();
           this.changeMaTongHop();
           this.changeDonVi();
-          console.log(this.formData.value, 1111);
         }
       })
       .catch((e) => {
@@ -350,7 +360,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
 
   pheDuyet() {
     let trangThai = STATUS.DA_DUYET_LDV;
-    if (this.khBanDauGia.trangThai == STATUS.DA_DUYET_LDV) {
+    if (this.itemThongTri.trangThai == STATUS.DA_DUYET_LDV) {
       trangThai = STATUS.DA_DUYET_LDTC;
     }
     this.modal.confirm({
@@ -507,7 +517,6 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
           maBoNganh: this.formData.value.dviThongTri,
           maTh: this.formData.value.soDnCapVon
         });
-        console.log(res,'resresres');
         if (res.msg == MESSAGE.SUCCESS && res.data) {
           this.listDviThuHuong = res.data;
         }
@@ -522,6 +531,8 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
         dviThuHuongStk: data.soTaiKhoan,
         dviThuHuongNganHang: data.nganHang,
         tenDviThuHuong: data.dvCungCapHang,
+        loaiTien: data.loaiTien,
+        tenLoaiTien: data.tenLoaiTien,
       })
     }
   }

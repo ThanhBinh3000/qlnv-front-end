@@ -44,10 +44,10 @@ export class ThongTinTongHopTheoDoiCapVonComponent implements OnInit {
   titleButtonDuyet: string = '';
   iconButtonDuyet: string = '';
   styleStatus: string = 'du-thao-va-lanh-dao-duyet';
-
+  listNam: any[] = [];
   userInfo: UserLogin;
   listFileDinhKem: any[] = [];
-  khBanDauGia: any = {};
+  itemThTheoDoi: any = {};
   dsBoNganh: any[] = [];
   dsThongTri: any[] = [];
   chiTietList: any[] = [];
@@ -69,12 +69,18 @@ export class ThongTinTongHopTheoDoiCapVonComponent implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     this.userInfo = this.userService.getUserLogin();
-    this.khBanDauGia.trangThai = this.globals.prop.NHAP_DU_THAO;
-    this.khBanDauGia.tenTrangThai = "Dự thảo";
+    this.itemThTheoDoi.trangThai = this.globals.prop.NHAP_DU_THAO;
+    this.itemThTheoDoi.tenTrangThai = "Dự thảo";
+    for (let i = -3; i < 23; i++) {
+      this.listNam.push({
+        value: dayjs().get('year') - i,
+        text: dayjs().get('year') - i,
+      });
+    }
     await Promise.all([
-      this.initForm(),
       this.getListBoNganh(),
-      this.getListThongTri(),
+      // this.getListThongTri(),
+      this.initForm(),
     ]);
     await this.loadChiTiet(this.idInput);
     this.spinner.hide();
@@ -86,11 +92,11 @@ export class ThongTinTongHopTheoDoiCapVonComponent implements OnInit {
       if (res.msg == MESSAGE.SUCCESS) {
 
         if (res.data) {
-          this.khBanDauGia = res.data;
+          this.itemThTheoDoi = res.data;
           this.initForm();
-          this.formData.patchValue({soThongTri:+this.khBanDauGia.soThongTri})
-          if (this.khBanDauGia.fileDinhKems) {
-            this.listFileDinhKem = this.khBanDauGia.fileDinhKems;
+          this.formData.patchValue({soThongTri: +this.itemThTheoDoi.soThongTri})
+          if (this.itemThTheoDoi.fileDinhKems) {
+            this.listFileDinhKem = this.itemThTheoDoi.fileDinhKems;
           }
         }
       }
@@ -107,20 +113,21 @@ export class ThongTinTongHopTheoDoiCapVonComponent implements OnInit {
 
   initForm() {
     this.formData = this.fb.group({
-      soThongTri: [, [Validators.required]],
-      maDviDuocDuyet: [this.khBanDauGia ? this.khBanDauGia.maDviDuocDuyet : null],
-      soLenhChiTien: [this.khBanDauGia ? this.khBanDauGia.soLenhChiTien : null, [Validators.required]],
-      chuong: [this.khBanDauGia ? this.khBanDauGia.chuong : null],
-      loai: [this.khBanDauGia ? this.khBanDauGia.loai : null],
-      khoan: [this.khBanDauGia ? this.khBanDauGia.khoan : null],
-      lyDoChi: [this.khBanDauGia ? this.khBanDauGia.lyDoChi : null],
-      soTien: [this.khBanDauGia ? this.khBanDauGia.soTien : null],
-      dviThuHuong: [this.khBanDauGia ? this.khBanDauGia.dviThuHuong : null, [Validators.required]],
-      tenDviThuHuong: [this.khBanDauGia ? this.khBanDauGia.tenDviThuHuong : null],
-      taiKhoan: [this.khBanDauGia ? this.khBanDauGia.taiKhoan : null, [Validators.required]],
-      nganHang: [this.khBanDauGia ? this.khBanDauGia.nganHang : null, [Validators.required]],
-      canCu: [this.khBanDauGia ? this.khBanDauGia.canCu : null],
-      dotTToan: [this.khBanDauGia ? this.khBanDauGia.dotTToan : null],
+      soThongTri: [this.itemThTheoDoi ? this.itemThTheoDoi.soThongTri : null, [Validators.required]],
+      dviThongTri: [this.itemThTheoDoi ? this.itemThTheoDoi.dviThongTri : null],
+      soLenhChiTien: [this.itemThTheoDoi ? this.itemThTheoDoi.soLenhChiTien : null, [Validators.required]],
+      chuong: [this.itemThTheoDoi ? this.itemThTheoDoi.chuong : null],
+      loai: [this.itemThTheoDoi ? this.itemThTheoDoi.loai : null],
+      nam: [this.itemThTheoDoi ? this.itemThTheoDoi.nam : null],
+      khoan: [this.itemThTheoDoi ? this.itemThTheoDoi.khoan : null],
+      lyDoChi: [this.itemThTheoDoi ? this.itemThTheoDoi.lyDoChi : null],
+      soTien: [this.itemThTheoDoi ? this.itemThTheoDoi.soTien : null],
+      dviThuHuong: [this.itemThTheoDoi ? this.itemThTheoDoi.dviThuHuong : null, [Validators.required]],
+      tenDviThuHuong: [this.itemThTheoDoi ? this.itemThTheoDoi.tenDviThuHuong : null],
+      dviThuHuongStk: [this.itemThTheoDoi ? this.itemThTheoDoi.dviThuHuongStk : null, [Validators.required]],
+      dviThuHuongNganHang: [this.itemThTheoDoi ? this.itemThTheoDoi.dviThuHuongNganHang : null, [Validators.required]],
+      canCu: [this.itemThTheoDoi ? this.itemThTheoDoi.canCu : null],
+      dotTToan: [this.itemThTheoDoi ? this.itemThTheoDoi.dotTToan : null],
     });
   }
 
@@ -243,8 +250,6 @@ export class ThongTinTongHopTheoDoiCapVonComponent implements OnInit {
       let dataDetail = res.data;
       delete dataDetail.soThongTri;
       dataDetail.maDviDuocDuyet = dataDetail.dviThongTri;
-      // dataDetail.soLenhChiTien = dataDetail.soDnCapVon;
-      // dataDetail.soTien = dataDetail.chiTietList.reduce((pre, cur) => pre = +cur.soTien, 0);
       dataDetail.taiKhoan = dataDetail.dviThuHuongStk;
       dataDetail.nganHang = dataDetail.dviThuHuongNganHang;
       this.formData.patchValue(dataDetail);
