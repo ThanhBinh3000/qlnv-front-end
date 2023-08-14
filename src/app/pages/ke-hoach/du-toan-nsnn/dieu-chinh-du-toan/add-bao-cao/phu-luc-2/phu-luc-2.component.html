@@ -200,7 +200,7 @@
                                     <td>{{data.thuyetMinh}}</td>
                                     <td>{{data.ghiChu}}</td>
                                     <td *ngIf="status.viewAppVal">{{Op.fmtVal(data.chenhLech)}}</td>
-                                    <td *ngIf="status.viewAppVal"></td>
+                                    <td *ngIf="status.viewAppVal">{{data.ykienDviCtren}}</td>
                                     <td *ngIf="status.general">
                                         <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
                                     </td>
