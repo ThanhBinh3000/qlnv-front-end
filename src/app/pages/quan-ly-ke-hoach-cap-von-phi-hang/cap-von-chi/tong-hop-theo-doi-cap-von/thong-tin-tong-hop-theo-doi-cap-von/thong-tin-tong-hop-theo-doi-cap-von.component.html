@@ -115,9 +115,7 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Số lệnh chi tiền</nz-form-label>
             <nz-input-group nz-col [nzSpan]="24">
-              <nz-input-number [nzMin]="1" [nzMax]="" [nzSize]="'small'" formControlName="soLenhChiTien"
-                               [nzDisabled]="isView">
-              </nz-input-number>
+              <input nz-input formControlName="soLenhChiTien" [readonly]="isView"/>
             </nz-input-group>
           </nz-form-item>
         </div>
