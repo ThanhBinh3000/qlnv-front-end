@@ -29,6 +29,8 @@ import { BaoCaoScService } from "../../../../services/sua-chua/baoCaoSc.service"
 })
 export class ThemMoiBcComponent extends Base3Component implements OnInit {
 
+  symbol: string = ''
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -60,7 +62,9 @@ export class ThemMoiBcComponent extends Base3Component implements OnInit {
       soQdTc: ['', [Validators.required]],
       ngayQdTc: [''],
       noiDung: [''],
+      lyDoTuChoi: ['']
     })
+    this.symbol = '/' + this.userInfo.DON_VI.tenVietTat + '-KH&QLHDT';
   }
 
   async ngOnInit() {
@@ -174,14 +178,14 @@ export class ThemMoiBcComponent extends Base3Component implements OnInit {
 
   showSave() {
     let trangThai = this.formData.value.trangThai;
-    return trangThai == STATUS.DU_THAO;
+    return trangThai == STATUS.DU_THAO || trangThai == STATUS.TU_CHOI_TP || trangThai == STATUS.TU_CHOI_LDC;
   }
 
   save(isGuiDuyet?) {
     this.spinner.show();
     let body = this.formData.value;
     if (this.formData.value.soBaoCao) {
-      body.soBaoCao = this.formData.value.soBaoCao + "/CDTVP-KH&QLHDT"
+      body.soBaoCao = this.formData.value.soBaoCao + this.symbol
     }
     body.fileDinhKemReq = this.fileDinhKem;
     body.children = this.dataTable;
@@ -202,6 +206,8 @@ export class ThemMoiBcComponent extends Base3Component implements OnInit {
     let trangThai
     switch (this.formData.value.trangThai) {
       case STATUS.DU_THAO:
+      case STATUS.TU_CHOI_TP:
+      case STATUS.TU_CHOI_LDC:
         trangThai = STATUS.CHO_DUYET_TP;
         break;
       case STATUS.CHO_DUYET_TP:
@@ -228,7 +234,8 @@ export class ThemMoiBcComponent extends Base3Component implements OnInit {
   }
 
   disabled() {
-    return this.formData.value.trangThai != STATUS.DU_THAO;
+    let trangThai = this.formData.value.trangThai;
+    return !(trangThai == STATUS.DU_THAO || trangThai == STATUS.TU_CHOI_TP || trangThai == STATUS.TU_CHOI_LDC);
   }
 
   showPheDuyetTuChoi() {

@@ -83,9 +83,9 @@ export class ThemMoiPxkComponent extends Base3Component implements OnInit {
       soBangKeCanHang: [''],
       ghiChu: [''],
       tongSoLuong: [''],
+      lyDoTuChoi: ['']
     });
     this.symbol = '/PXK-' + this.userInfo.DON_VI.tenVietTat;
-    console.log(this.userInfo.DON_VI);
   }
 
   async ngOnInit() {
@@ -226,7 +226,7 @@ export class ThemMoiPxkComponent extends Base3Component implements OnInit {
 
   showSave() {
     let trangThai = this.formData.value.trangThai;
-    return trangThai == STATUS.DU_THAO;
+    return trangThai == STATUS.DU_THAO || trangThai == STATUS.TU_CHOI_LDCC;
   }
 
   save(isGuiDuyet?) {
@@ -260,6 +260,7 @@ export class ThemMoiPxkComponent extends Base3Component implements OnInit {
   pheDuyet() {
     let trangThai
     switch (this.formData.value.trangThai) {
+      case STATUS.TU_CHOI_LDCC:
       case STATUS.DU_THAO:
         trangThai = STATUS.CHO_DUYET_LDCC;
         break;
@@ -281,7 +282,8 @@ export class ThemMoiPxkComponent extends Base3Component implements OnInit {
   }
 
   disabled() {
-    return this.formData.value.trangThai != STATUS.DU_THAO;
+    let trangThai = this.formData.value.trangThai;
+    return !(trangThai == STATUS.DU_THAO || trangThai == STATUS.TU_CHOI_LDCC);
   }
 
   showPheDuyetTuChoi() {
