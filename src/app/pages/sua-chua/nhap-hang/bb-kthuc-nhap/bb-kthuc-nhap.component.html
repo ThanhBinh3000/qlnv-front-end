@@ -2,7 +2,7 @@
   <nz-card class="mt16 flex-card p-lr16">
     <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
       <div nz-row [nzGutter]="20">
-        <div nz-col nzSpan="4">
+        <div nz-col nzSpan="2">
           <nz-form-control>
             <nz-form-label>Năm nhập</nz-form-label>
             <nz-form-item>
@@ -16,7 +16,7 @@
           <nz-form-control>
             <nz-form-label>Số QĐ nhập hàng của cục</nz-form-label>
             <nz-form-item>
-              <input nz-input formControlName="soQd" />
+              <input nz-input formControlName="soQdNh" />
             </nz-form-item>
           </nz-form-control>
         </div>
@@ -24,7 +24,7 @@
           <nz-form-control>
             <nz-form-label>Số biên bản giao nhận</nz-form-label>
             <nz-form-item>
-              <input nz-input formControlName="trichYeu" />
+              <input nz-input formControlName="soBienBan" />
             </nz-form-item>
           </nz-form-control>
         </div>
@@ -53,12 +53,12 @@
             <nz-form-item>
               <div nz-row>
                 <div nz-col nzSpan="12" class="cus-start-date">
-                  <nz-date-picker [nzDisabledDate]="disabledNgayTu" nzFormat="dd/MM/yyyy" formControlName="ngayTu"
+                  <nz-date-picker [nzDisabledDate]="disabledNgayTu" nzFormat="dd/MM/yyyy" formControlName="ngayNhapTu"
                     nzPlaceHolder="Ngày bắt đầu">
                   </nz-date-picker>
                 </div>
                 <div nz-col nzSpan="12" class="cus-end-date">
-                  <nz-date-picker [nzDisabledDate]="disabledNgayDen" nzFormat="dd/MM/yyyy" formControlName="ngayDen"
+                  <nz-date-picker [nzDisabledDate]="disabledNgayDen" nzFormat="dd/MM/yyyy" formControlName="ngayNhapDen"
                     nzPlaceHolder="Ngày kết thúc">
                   </nz-date-picker>
                 </div>
@@ -74,7 +74,7 @@
           <i class="icon  htvbdh_nhap-lai1"></i>
           Xóa điều kiện
         </button>
-        <button nz-button class="search__button--search" *ngIf="this.userService.isChiCuc()" (click)="search()">
+        <button nz-button class="search__button--search" (click)="searchPage()">
           <i nz-icon nzType="search"></i>
           Tìm kiếm
         </button>

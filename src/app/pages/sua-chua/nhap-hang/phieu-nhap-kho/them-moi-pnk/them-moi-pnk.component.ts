@@ -30,7 +30,7 @@ export class ThemMoiPnkComponent extends Base3Component implements OnInit {
 
   dataTableDiaDiem: any[] = [];
   rowItem: any = {};
-
+  symbol: string = '';
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -87,7 +87,8 @@ export class ThemMoiPnkComponent extends Base3Component implements OnInit {
       tongSoLuong: [''],
       tongKinhPhiThucTe: [''],
       lyDoTuChoi: ['']
-    })
+    });
+    this.symbol = '/PNK-' + this.userInfo.DON_VI.tenVietTat;
   }
 
   async ngOnInit() {
@@ -118,7 +119,7 @@ export class ThemMoiPnkComponent extends Base3Component implements OnInit {
     } else {
       await this.userService.getId("SC_PHIEU_NHAP_KHO_HDR_SEQ").then((res) => {
         this.formData.patchValue({
-          soPhieuNhapKho: res + '/' + this.formData.value.nam + '/PNK-CCDTVP',
+          soPhieuNhapKho: res + '/' + this.formData.value.nam + this.symbol,
           maQhns: this.userInfo.DON_VI.maQhns,
           tenDvi: this.userInfo.TEN_DVI,
           ngayTao: dayjs().format('YYYY-MM-DD'),
