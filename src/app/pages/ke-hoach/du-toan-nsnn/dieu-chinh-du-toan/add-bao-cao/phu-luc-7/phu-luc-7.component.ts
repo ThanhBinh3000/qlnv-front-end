@@ -679,17 +679,9 @@ export class PhuLuc7Component implements OnInit {
         })
     };
 
-    // changeModel(id: string): void {
-    //     this.editCache[id].data.tdiemBcaoChiPhiTaiCuaKho = Operator.mul(this.editCache[id].data.tdiemBcaoLuong, this.editCache[id].data.dmucChiPhiTaiCuaKho);
-    //     this.editCache[id].data.tdiemBcaoChiPhiTongCong = Operator.sum([this.editCache[id].data.tdiemBcaoChiPhiTaiCuaKho, this.editCache[id].data.tdiemBcaoChiPhiNgoaiCuaKho]);
-    //     this.editCache[id].data.dkienThienChiPhiTaiCuaKho = Operator.mul(this.editCache[id].data.dmucChiPhiTaiCuaKho, this.editCache[id].data.dkienThienLuong);
-    //     this.editCache[id].data.dkienThienChiPhiNgoaiCuaKho = Operator.mul(this.editCache[id].data.binhQuanChiPhiNgoaiCuaKho, this.editCache[id].data.dkienThienLuong);
-    //     this.editCache[id].data.dkienThienChiPhiTongCong = Operator.sum([this.editCache[id].data.dkienThienChiPhiTaiCuaKho, this.editCache[id].data.dkienThienChiPhiNgoaiCuaKho]);
-    //     this.editCache[id].data.ncauDtoan = Operator.sum([this.editCache[id].data.tdiemBcaoChiPhiTongCong, this.editCache[id].data.dkienThienChiPhiTongCong]);
-    //     this.editCache[id].data.dtoanDnghiDchinh = Operator.sum([this.editCache[id].data.ncauDtoan, - this.editCache[id].data.dtoanLkeDaGiao]);
-    //     this.editCache[id].data.chenhLech = Operator.sum([this.editCache[id].data.dtoanVuTvqtDnghi, - this.editCache[id].data.dtoanDnghiDchinh]);
-
-    // };
+    changeModel(id: string): void {
+        this.editCache[id].data.chenhLech = Operator.sum([this.editCache[id].data.dtoanVuTvqtDnghi, - this.editCache[id].data.dtoanDnghiDchinh]);
+    };
 
     deleteAllChecked() {
         const lstId: any[] = [];
