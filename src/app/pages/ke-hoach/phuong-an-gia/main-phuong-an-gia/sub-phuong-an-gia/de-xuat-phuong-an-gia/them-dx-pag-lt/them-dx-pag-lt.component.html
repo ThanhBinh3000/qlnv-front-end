@@ -85,6 +85,19 @@
             </nz-form-control>
           </nz-form-item>
         </div>
+        <div nz-col [nzSpan]="3">
+          <nz-form-item class="form-item">
+            <nz-form-label nzRequired [nzNoColon]="true"> Loại giá
+            </nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-select formControlName="loaiGia" [nzDisabled]="isView" nzAllowClear="true"
+                         (ngModelChange)="onChangeLoaiGia($event)">
+                <nz-option *ngFor="let p of dsLoaiGia" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+                </nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
         <div nz-col [nzSpan]="4" *ngIf="isGiaMuaToiDa">
           <nz-form-item class="form-item">
             <nz-form-label nzRequired [nzNoColon]="true">Loại hàng hóa
@@ -106,19 +119,6 @@
               <nz-date-picker [nzDisabled]="isView" formControlName="ngayKy" nzFormat="dd/MM/yyyy" id="ngay-qd"
                               class="search__input">
               </nz-date-picker>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-        <div nz-col [nzSpan]="3">
-          <nz-form-item class="form-item">
-            <nz-form-label nzRequired [nzNoColon]="true"> Loại giá
-            </nz-form-label>
-            <nz-form-control [nzErrorTip]="error">
-              <nz-select formControlName="loaiGia" [nzDisabled]="isView" nzAllowClear="true"
-                         (ngModelChange)="onChangeLoaiGia($event)">
-                <nz-option *ngFor="let p of dsLoaiGia" [nzValue]="p.ma" [nzLabel]="p.giaTri">
-                </nz-option>
-              </nz-select>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -312,7 +312,7 @@
           <td class="text-right">
             <nz-input-number [(ngModel)]="data.soLuong" [nzSize]="'small'" nz-input [nzMin]="0"
                              [nzFormatter]="globals.formatter"
-                             [nzMax]="data.soLuongCtieu > 0 ? data.soLuongCtieu : 9999999999999"
+                             [nzMax]="data.soLuongCtieu > 0 ? data.soLuongCtieu : 0"
                              [nzParser]="globals.parser" [nzDisabled]="isView">
             </nz-input-number>
           </td>

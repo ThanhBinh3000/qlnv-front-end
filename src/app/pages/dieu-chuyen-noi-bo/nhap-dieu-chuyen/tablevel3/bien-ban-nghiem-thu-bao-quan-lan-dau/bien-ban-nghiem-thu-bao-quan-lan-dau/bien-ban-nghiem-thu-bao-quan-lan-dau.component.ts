@@ -154,6 +154,16 @@ export class BienBanNghiemThuBaoQuanLanDauComponent extends Base2Component imple
     return children
   }
 
+  async changePageIndex(event) {
+    this.page = event;
+    await this.timKiem();
+  }
+
+  async changePageSize(event) {
+    this.pageSize = event;
+    await this.timKiem();
+  }
+
   async timKiem() {
     if (this.formData.value.tuNgayLap) {
       this.formData.value.tuNgayLap = dayjs(this.formData.value.tuNgayLap).format('YYYY-MM-DD')
@@ -168,6 +178,7 @@ export class BienBanNghiemThuBaoQuanLanDauComponent extends Base2Component imple
       this.formData.value.denNgayKtnt = dayjs(this.formData.value.denNgayKtnt).format('YYYY-MM-DD')
     }
     let body = this.formData.value
+    if (body.soQdinh) body.soQdinh = `${body.soQdinh}/DCNB`
     body.paggingReq = {
       limit: this.pageSize,
       page: this.page - 1

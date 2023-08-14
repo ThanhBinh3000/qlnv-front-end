@@ -83,14 +83,14 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
       soBbTinhKho: [],
       ngayXuatDocKho: [],
       bbTinhKhoId: [],
-      tenLoNganKho: [],
+      tenLoNganKho: [, [Validators.required]],
       tenLoKho: [],
       maLoKho: [],
-      tenNganKho: [],
+      tenNganKho: [, [Validators.required]],
       maNganKho: [],
-      tenNhaKho: [],
+      tenNhaKho: [, [Validators.required]],
       maNhaKho: [],
-      tenDiemKho: [],
+      tenDiemKho: [, [Validators.required]],
       maDiemKho: [],
       loaiVthh: [],
       tenLoaiVthh: [],
@@ -240,7 +240,8 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
     await this.spinner.show();
     let body = {
       trangThai: STATUS.BAN_HANH,
-      loaiVthh: ['0101', '0102'],
+      // loaiVthh: ['0101', '0102'],
+      isVatTu: this.isVatTu,
       loaiDc: this.loaiDc,
       maDvi: this.userInfo.MA_DVI,
       type: this.formData.value.type
@@ -470,6 +471,8 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
 
 
   async save(isGuiDuyet?) {
+    this.helperService.markFormGroupTouched(this.formData);
+    if (!this.formData.valid) return
     await this.spinner.show();
     let body = this.formData.value;
     body.pplayMau = this.phuongPhapLayMaus.filter(item => item.checked).map(f => `${f.id}-${f.giaTri}`).join(",")

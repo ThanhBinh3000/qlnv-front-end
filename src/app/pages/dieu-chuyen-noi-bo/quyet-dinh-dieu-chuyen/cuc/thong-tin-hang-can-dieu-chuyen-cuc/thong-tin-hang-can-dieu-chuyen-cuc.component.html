@@ -183,8 +183,7 @@
               <div nz-col nzSpan="14">
                 <nz-form-item>
                   <nz-form-control>
-                    <nz-select [nzDisabled]="this.data && !!this.data.maDiemKhoNhan" formControlName="maDiemKhoNhan"
-                      nzAllowClear (ngModelChange)="getListNhaKhoNhan($event)">
+                    <nz-select formControlName="maDiemKhoNhan" nzAllowClear (ngModelChange)="getListNhaKhoNhan($event)">
                       <nz-option *ngFor="let p of dsDiemKhoNhan" [nzValue]="p.key" [nzLabel]="p.title"></nz-option>
                     </nz-select>
                   </nz-form-control>

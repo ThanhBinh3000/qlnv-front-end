@@ -8,6 +8,7 @@ import {
 } from './tong-hop-dieu-chuyen-tai-tong-cuc/tong-hop-dieu-chuyen-tai-tong-cuc.component';
 import { BaoCaoComponent } from './bao-cao-dieu-chuyen/bao-cao/bao-cao.component';
 import { BaoCaoDieuChuyenComponent } from './bao-cao-dieu-chuyen/bao-cao-dieu-chuyen.component';
+import { BienBanThuaThieuComponent } from './bien-ban-thua-thieu/bien-ban-thua-thieu.component';
 
 const routes: Routes = [
   {
@@ -56,6 +57,10 @@ const routes: Routes = [
         path: 'bao-cao',
         component: BaoCaoDieuChuyenComponent
       },
+      {
+        path: 'bien-ban-thua-thieu',
+        component: BienBanThuaThieuComponent
+      }
     ]
   }]
 

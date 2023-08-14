@@ -1,4 +1,4 @@
-import { chain, cloneDeep } from 'lodash';
+import { chain, cloneDeep, includes } from 'lodash';
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { Validators } from '@angular/forms';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -7,7 +7,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { StorageService } from 'src/app/services/storage.service';
 import { HttpClient } from '@angular/common/http';
-import { BangCaoDieuChuyenService } from '../bao-cao.service';
+import { BaoCaoDieuChuyenService } from '../bao-cao.service';
 import { STATUS } from 'src/app/constants/status';
 import { MESSAGE } from 'src/app/constants/message';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
@@ -17,6 +17,8 @@ import { DonviService } from 'src/app/services/donvi.service';
 import { QuyetDinhDieuChuyenCucService } from 'src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-c.service';
 import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
 import { DialogTableCheckBoxComponent } from 'src/app/components/dialog/dialog-table-check-box/dialog-table-check-box.component';
+import { DataService } from 'src/app/services/data.service';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-them-moi-bao-cao',
   templateUrl: './them-moi-bao-cao.component.html',
@@ -50,11 +52,13 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private bangCaoDieuChuyenService: BangCaoDieuChuyenService,
+    private baoCaoDieuChuyenService: BaoCaoDieuChuyenService,
     private donviService: DonviService,
-    private quyetDinhDieuChuyenCucService: QuyetDinhDieuChuyenCucService
+    private quyetDinhDieuChuyenCucService: QuyetDinhDieuChuyenCucService,
+    private dataService: DataService,
+    private router: Router
   ) {
-    super(httpClient, storageService, notification, spinner, modal, bangCaoDieuChuyenService);
+    super(httpClient, storageService, notification, spinner, modal, baoCaoDieuChuyenService);
     this.formData = this.fb.group({
       id: [0],
       nam: [dayjs().get('year'), [Validators.required]],
@@ -62,7 +66,7 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
       maDviNhan: [],
       tenDviNhan: [],
       tenBc: [],
-      soBc: ['', Validators.required],
+      soBc: [''],
       ngayBc: [dayjs().format('YYYY-MM-DD'), [Validators.required]],
       soQdDcCuc: [],
       qdDcCucId: [],
@@ -88,11 +92,34 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
   }
   async loadDetail(id: number): Promise<void> {
     if (id) {
-      const res = await this.bangCaoDieuChuyenService.getDetail(id);
+      this.allChecked = false;
+      const res = await this.baoCaoDieuChuyenService.getDetail(id);
       if (res.msg === MESSAGE.SUCCESS) {
         this.formData.patchValue({ ...res.data });
         this.danhSachKetQua = res.data.danhSachKetQua;
-        this.buildTableView();
+        const idsChiCuc = res.data.idsChiCuc?.split(",").map(f => Number(f));
+        if (this.loaiBc === "CUC") {
+          await this.loadListBaoCaoChiCuc();
+          this.listBaoCaoChiCuc = this.listBaoCaoChiCuc.map(f => {
+            if (idsChiCuc.includes(f.id)) {
+              return {
+                ...f, checked: true
+              }
+            }
+            return { ...f }
+          })
+          // this.danhSachKetQua = Array.isArray(this.listBaoCaoChiCuc) ? this.listBaoCaoChiCuc.reduce((arr, cur) => {
+          //   arr = arr.concat(cur.danhSachKetQua);
+          //   return arr
+          // }, []) : [];
+          if (this.listBaoCaoChiCuc.every(f => !!f.checked)) {
+            this.allChecked = true;
+            this.formData.patchValue({ listTenBaoCaoSelect: ['Tất cả'] })
+          } else {
+            this.formData.patchValue({ listTenBaoCaoSelect: this.listBaoCaoChiCuc.filter(f => f.checked).map(m => m.tenBc) })
+          }
+          this.buildTableView();
+        };
       }
 
     }
@@ -105,6 +132,17 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
         maDviNhan,
         tenDviNhan: data ? data.tenDvi : ''
       })
+      if (this.loaiBc === "CUC") {
+        if (this.allChecked) {
+          await this.loadListBaoCaoChiCuc();
+          this.danhSachKetQua = Array.isArray(this.listBaoCaoChiCuc) ? this.listBaoCaoChiCuc.reduce((arr, cur) => {
+            arr = arr.concat(cur.danhSachKetQua);
+            return arr
+          }, []) : [];
+          this.buildTableView();
+
+        }
+      }
     }
   }
   async getChiTietDonViCha(maDviNhan: string): Promise<any> {
@@ -179,9 +217,9 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
       this.spinner.show()
       let res;
       if (this.loaiBc === "CHI_CUC") {
-        res = await this.bangCaoDieuChuyenService.getThongTinNhapXuatChiCuc({ soQdinhCuc });
+        res = await this.baoCaoDieuChuyenService.getThongTinNhapXuatChiCuc({ soQdinhCuc });
       } else if (this.loaiBc === "CUC") {
-        res = await this.bangCaoDieuChuyenService.getThongTinNhapXuatCuc({ soQdinhCuc });
+        res = await this.baoCaoDieuChuyenService.getThongTinNhapXuatCuc({ soQdinhCuc });
       }
       if (res.msg === MESSAGE.SUCCESS) {
         this.danhSachKetQua = cloneDeep(res.data);
@@ -197,23 +235,24 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
 
   async loadListBaoCaoChiCuc() {
     try {
-
-      this.listBaoCaoChiCuc = [
-        { id: 111, ten: "Báo cáo số 111", donViGui: "Chi cục Việt Trì" },
-        { id: 222, ten: "Báo cáo số 222", donViGui: "Chi cục Vinh Phú" },
-        { id: 333, ten: "Báo cáo số 111", donViGui: "Chi cục phong Châu" },
-      ];
+      const body = {
+        trangThai: STATUS.DA_HOAN_THANH
+      }
+      const res = await this.baoCaoDieuChuyenService.danhSach(body);
+      if (res.msg === MESSAGE.SUCCESS) {
+        this.listBaoCaoChiCuc = Array.isArray(res.data) ? res.data : [];
+      }
       this.isTongHop = true;
       return this.listBaoCaoChiCuc
     } catch (error) {
-
+      console.log("e", error)
     }
   }
   async openDialogTongHopBaoCao() {
     if (!this.isTongHop) {
       await this.loadListBaoCaoChiCuc();
 
-    }
+    };
     const modalQD = this.modal.create({
       nzTitle: 'CHỌN BÁO CÁO TỪ CHI CỤC GỬI LÊN',
       nzContent: DialogTableCheckBoxComponent,
@@ -225,8 +264,8 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
         dataTable: this.listBaoCaoChiCuc,
         // dataHeader: ['Số quyết định', 'Ngày quyết định', 'Loại hàng hóa'],
         // dataColumn: ['soQdinh', 'ngayKyQdinh', 'tenLoaiVthh'],
-        dataHeader: ['tenBaoCao', 'Đơn vị gửi'],
-        dataColumn: ['ten', 'donViGui'],
+        dataHeader: ['Tên báo cáo', 'Đơn vị gửi'],
+        dataColumn: ['tenBc', 'tenDvi'],
         initialAllChecked: this.initialAllChecked,
         allChecked: this.allChecked,
         actionRefresh: true,
@@ -246,8 +285,13 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
       this.formData.patchValue({ listTenBaoCaoSelect: ['Tất cả'] })
     }
     else {
-      this.formData.patchValue({ listTenBaoCaoSelect: this.listBaoCaoChiCuc.filter(f => f.checked).map(m => m.ten) })
-    }
+      this.formData.patchValue({ listTenBaoCaoSelect: this.listBaoCaoChiCuc.filter(f => f.checked).map(m => this.loaiBc === "CUC" ? m.tenBc : m.ten) });
+    };
+    this.danhSachKetQua = Array.isArray(this.listBaoCaoChiCuc) ? this.listBaoCaoChiCuc.filter(f => f.checked).reduce((arr, cur) => {
+      arr = arr.concat(cur.danhSachKetQua);
+      return arr
+    }, []) : [];
+    this.buildTableView();
   }
   expandAll() {
     this.dataView.forEach(s => {
@@ -266,23 +310,25 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
     let dataView = Array.isArray(this.danhSachKetQua) ?
       chain(this.danhSachKetQua.map(f => ({ ...f, keyGroup: `${f.cloaiVthh}${f.maLoKho ? f.maLoKho + f.maNganKho : f.maNganKho}` }))).groupBy("keyGroup").map((rs, i) => {
         const dataSoQdinh = rs.find(f => f.keyGroup == i);
+        const sumKinhPhiNhapTt = dataSoQdinh && Array.isArray(rs) ? rs.reduce((sum, cur) => sum += cur.kinhPhiNhapTt, 0) : 0;
         return {
           ...dataSoQdinh,
           idVirtual: uuidv4(),
-          childData: dataSoQdinh ? rs : []
+          childData: dataSoQdinh ? rs : [],
+          sumKinhPhiNhapTt
         }
       }).value() : [];
-    this.dataView = cloneDeep(dataView);
     this.expandAll();
-    const { tongKinhPhiDcQd, tongKinhPhiXuatDcTt, tongKinhPhiNhapDcTt } = Array.isArray(this.danhSachKetQua) ? this.danhSachKetQua.reduce((obj, cur) => {
+    const { tongKinhPhiDcQd, tongKinhPhiXuatDcTt, tongKinhPhiNhapDcTt } = Array.isArray(dataView) ? dataView.reduce((obj, cur) => {
       obj.tongKinhPhiDcQd += Number(cur.kinhPhiTheoQd);
       obj.tongKinhPhiXuatDcTt += Number(cur.kinhPhiXuatTt);
-      obj.tongKinhPhiNhapDcTt += Number(cur.kinhPhiNhapTt);
+      obj.tongKinhPhiNhapDcTt += Number(cur.sumKinhPhiNhapTt);
       return obj
     }, { tongKinhPhiDcQd: 0, tongKinhPhiXuatDcTt: 0, tongKinhPhiNhapDcTt: 0 }) : { tongKinhPhiDcQd: 0, tongKinhPhiXuatDcTt: 0, tongKinhPhiNhapDcTt: 0 };
     this.tongKinhPhiDcQd = tongKinhPhiDcQd;
     this.tongKinhPhiXuatDcTt = tongKinhPhiXuatDcTt;
     this.tongKinhPhiNhapDcTt = tongKinhPhiNhapDcTt;
+    this.dataView = cloneDeep(dataView);
   }
   async save(isGuiDuyet: boolean): Promise<void> {
     try {
@@ -291,11 +337,16 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
       let body = this.formData.value;
       body.danhSachKetQua = this.danhSachKetQua;
       body.listTenBaoCaoSelect = undefined;
+      body.type = this.loaiBc;
+      if (this.loaiBc === "CUC") {
+        body.idsChiCuc = this.allChecked ? this.listBaoCaoChiCuc.map(f => f.id).join(",") : this.listBaoCaoChiCuc.filter(f => f.checked).map(f => f.id).join(",");
+      }
       let data = await this.createUpdate(body);
       if (!data) return;
       this.formData.patchValue({ id: data.id, trangThai: data.trangThai })
       if (isGuiDuyet) {
-        this.pheDuyet();
+        // this.pheDuyet();
+        this.hoanThanh();
       }
     } catch (error) {
       console.log("error", error)
@@ -342,7 +393,7 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
             trangThai: trangThai
           };
           let res =
-            await this.bangCaoDieuChuyenService.approve(
+            await this.baoCaoDieuChuyenService.approve(
               body,
             );
           if (res.msg == MESSAGE.SUCCESS) {
@@ -380,7 +431,7 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
             trangThai: STATUS.TU_CHOI_LDCC,
           };
           let res =
-            await this.bangCaoDieuChuyenService.approve(
+            await this.baoCaoDieuChuyenService.approve(
               body,
             );
           if (res.msg == MESSAGE.SUCCESS) {
@@ -414,7 +465,7 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
             trangThai: STATUS.DA_HOAN_THANH
           };
           let res =
-            await this.bangCaoDieuChuyenService.hoanThanh(
+            await this.baoCaoDieuChuyenService.hoanThanh(
               body,
             );
           if (res.msg == MESSAGE.SUCCESS) {
@@ -434,6 +485,17 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
   }
   back() {
     this.showListEvent.emit();
+  }
+  lapBBThuaThieu() {
+    const obj = {
+      soQdDcCuc: this.formData.value.soQdDcCuc,
+      qdDcCucId: this.formData.value.qdDcCucId,
+      ngayKyQd: this.formData.value.ngayKyQd,
+      soBc: this.formData.value.soBc,
+      ngayBc: this.formData.value.ngayBc
+    };
+    this.dataService.changeData(obj);
+    this.router.navigate(['dieu-chuyen-noi-bo/bien-ban-thua-thieu']);
   }
   checkRoleReject(): boolean {
     const { trangThai } = this.formData.value;
@@ -460,5 +522,9 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
       return true
     }
     return false
+  }
+  checkRoleLapBBThuaThieu() {
+    const { trangThai } = this.formData.value;
+    return trangThai === STATUS.DA_HOAN_THANH;
   }
 }

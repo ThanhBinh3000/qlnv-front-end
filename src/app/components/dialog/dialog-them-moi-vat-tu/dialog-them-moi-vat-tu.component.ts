@@ -356,18 +356,18 @@ export class DialogThemMoiVatTuComponent implements OnInit {
   validateDataAdd(type, index?): boolean {
     if (type == 'chiCuc') {
       let data = this.listOfData.filter(item => item.maDvi == this.thongTinChiCuc.maDvi);
-      if (data.length > 0) {
-        this.notification.error(MESSAGE.ERROR, "Đơn vị đã tồn tại, xin vui lòng thêm đơn vị khác")
-        return false
-      }
+      // if (data.length > 0) {
+      //   this.notification.error(MESSAGE.ERROR, "Đơn vị đã tồn tại, xin vui lòng thêm đơn vị khác")
+      //   return false
+      // }
       return true;
     }
     if (type == 'diemKho') {
       let data = this.listOfData[index].children.filter(item => item.maDvi == this.listThongTinDiemKho[index].maDvi);
-      if (data.length > 0) {
-        this.notification.error(MESSAGE.ERROR, "Đơn vị đã tồn tại, xin vui lòng thêm đơn vị khác")
-        return false
-      }
+      // if (data.length > 0) {
+      //   this.notification.error(MESSAGE.ERROR, "Đơn vị đã tồn tại, xin vui lòng thêm đơn vị khác")
+      //   return false
+      // }
       return true;
     }
   }
@@ -428,15 +428,18 @@ export class DialogThemMoiVatTuComponent implements OnInit {
   }
 
   calculatorThanhTien() {
-    this.formData.patchValue({
-      thanhTien:
-        +this.formData.get('soLuong').value *
-        +this.formData.get('donGiaVat').value * 1000,
-    });
-    this.formData.patchValue({
-      bangChu: VNnum2words(+this.formData.get('thanhTien').value),
-    });
-    this.formattedThanhTien = this.formData.get('thanhTien') ? formatNumber(this.formData.get('thanhTien').value, 'vi_VN', '1.0-1') : '0';
+    if(this.formData.get('donGiaVat').value != undefined){
+      this.formData.patchValue({
+        thanhTien:
+          +this.formData.get('soLuong').value *
+          +this.formData.get('donGiaVat').value * 1000,
+      });
+
+      this.formData.patchValue({
+        bangChu: VNnum2words(+this.formData.get('thanhTien').value),
+      });
+      this.formattedThanhTien = this.formData.get('thanhTien') ? formatNumber(this.formData.get('thanhTien').value, 'vi_VN', '1.0-1') : '0';
+    }
   }
 
   calculatorThanhTienDx() {

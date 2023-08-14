@@ -294,7 +294,7 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
           maNganKhoNhan: "",
           maLoKhoNhan: "",
           thayDoiThuKho: "",
-          slDcConLai: "",
+          // slDcConLai: "",
           tichLuongKd: "",
           tenNhaKhoNhan: nhaKhoNhan.tenDvi
         })

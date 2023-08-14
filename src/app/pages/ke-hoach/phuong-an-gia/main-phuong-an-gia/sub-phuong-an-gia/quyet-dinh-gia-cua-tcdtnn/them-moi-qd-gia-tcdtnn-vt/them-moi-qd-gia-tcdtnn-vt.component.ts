@@ -153,7 +153,7 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
         this.spinner.show();
         try {
           let body = {
-            id: this.idInput,
+            id: this.formData.value.id,
             lyDoTuChoi: null,
             trangThai: '29',
           };
@@ -188,7 +188,7 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
       if (this.formData.value.loaiGia == 'LG03') {
         this.dataTable.forEach(item => {
           if (item.vat) {
-            item.giaQdTcdt = item.giaQdTcdt + item.giaQdTcdt * item.vat
+            item.giaQdTcdtVat = item.giaQdTcdt + item.giaQdTcdt * item.vat
           }
         })
       }
@@ -197,7 +197,6 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
     body.soQd = body.soQd + this.maQd;
     body.maDvi = this.userInfo.MA_DVI;
     body.pagType = this.pagType;
-    body.soQd = body.soQd + this.maQd
     body.thongTinGiaVt = this.arrThongTinGia;
     body.fileDinhKemReq = this.fileDinhKem;
     let res;
@@ -262,6 +261,9 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
           let body = {
             listId: thRes && thRes.length > 0 ? thRes.map(item => item.id) : []
           }
+          this.formData.patchValue({
+            soToTrinh : thRes && thRes.length > 0 ? thRes.map(item=> item.soDeXuat).toString() : []
+          })
           this.tongHopData(body);
         }
       });
