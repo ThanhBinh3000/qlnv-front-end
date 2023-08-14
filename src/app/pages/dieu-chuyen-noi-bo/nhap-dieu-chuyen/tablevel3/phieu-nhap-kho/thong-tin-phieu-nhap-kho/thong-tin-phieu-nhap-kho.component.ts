@@ -76,14 +76,14 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
       soQdDcCuc: [],
       ngayQdDcCuc: [],
       qdDcCucId: [],
-      tenLoNganKho: [],
+      tenLoNganKho: [, [Validators.required]],
       tenLoKho: [],
       maLoKho: [],
-      tenNganKho: [],
+      tenNganKho: [, [Validators.required]],
       maNganKho: [],
-      tenNhaKho: [],
+      tenNhaKho: [, [Validators.required]],
       maNhaKho: [],
-      tenDiemKho: [],
+      tenDiemKho: [, [Validators.required]],
       maDiemKho: [],
       soPhieuKtraCluong: [, [Validators.required]],
       idPhieuKtraCluong: [, [Validators.required]],
@@ -126,6 +126,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
   }
 
   async ngOnInit() {
+    console.log('this.userInfo.DON_VI', this.userInfo)
     this.maBb = 'PNK-CCDTVP';
     let id = await this.userService.getId('DCNB_BB_NT_BQ_HDR_SEQ')
     this.formData.patchValue({
@@ -241,7 +242,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
   // }
 
   async add(row?: any) {
-    if (!this.formData.value.soQdDcCuc || !this.formData.value.soPhieuKtraCluong || !this.formData.value.maSo || !this.formData.value.soLuongNhapDc || !this.formData.value.thucTeKinhPhi) {
+    if (!this.formData.value.soQdDcCuc || !this.formData.value.maSo || !this.formData.value.soLuongNhapDc || !this.formData.value.thucTeKinhPhi) {
       this.notification.error(MESSAGE.ERROR, "Bạn chưa nhập đủ thông tin");
       return
     }
@@ -327,7 +328,8 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
     // Get data tờ trình
     let body = {
       trangThai: STATUS.BAN_HANH,
-      loaiVthh: ['0101', '0102'],
+      // loaiVthh: ['0101', '0102'],
+      isVatTu: this.isVatTu,
       loaiDc: this.loaiDc,
       maDvi: this.userInfo.MA_DVI,
       type: this.formData.value.type
@@ -424,7 +426,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
     if (res.msg == MESSAGE.SUCCESS) {
 
       const data = res.data
-      this.noiDung = data.tenCloaiVthh
+      // this.noiDung = data.tenCloaiVthh
 
     }
   }
@@ -469,6 +471,8 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
           idKeHoachDtl: data.id
         });
         this.dviTinh = data.tenDonViTinh
+        this.noiDung = data.tenCloaiVthh
+        this.duToanKinhPhi = data.duToanKphi
       }
     });
   }
@@ -478,7 +482,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
     if (res.msg == MESSAGE.SUCCESS) {
 
       const data = res.data
-      this.duToanKinhPhi = data.tongDuToanKp
+      // this.duToanKinhPhi = data.tongDuToanKp
       this.dsKeHoach = []
       if (data.danhSachQuyetDinh.length == 0) return
       data.danhSachQuyetDinh.map(qdinh => {

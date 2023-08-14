@@ -125,6 +125,7 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
         soQdinhDcc: this.data.soQdinh,
         ngayQdDcCuc: this.data.ngayKyQd,
         qdinhDccId: this.data.qdDcCucId,
+        tenLoNganKho: `${this.data.tenLoKho} ${this.data.tenNganKho}`,
         tenLoKho: this.data.tenLoKho,
         maLoKho: this.data.maLoKho,
         tenNganKho: this.data.tenNganKho,
@@ -226,7 +227,8 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
     await this.spinner.show();
     let body = {
       trangThai: STATUS.BAN_HANH,
-      loaiVthh: ['0101', '0102'],
+      // loaiVthh: ['0101', '0102'],
+      isVatTu: true,
       loaiDc: this.loaiDc,
       maDvi: this.userInfo.MA_DVI,
       type: this.formData.value.type
@@ -306,6 +308,7 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
         this.formData.patchValue({
+          tenLoNganKho: `${data.tenLoKhoNhan} ${data.tenNganKhoNhan}`,
           tenLoKho: data.tenLoKhoNhan,
           maLoKho: data.maLoKhoNhan,
           tenNganKho: data.tenNganKhoNhan,

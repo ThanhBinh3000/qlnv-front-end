@@ -1,3 +1,4 @@
+import { DataService } from './../../../services/data.service';
 import { Component, OnInit, Input } from '@angular/core';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -9,6 +10,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { BienBanThuThieuService } from './bien-ban-thua-thieu.service';
+import { Router, ActivatedRoute } from '@angular/router';
 @Component({
     selector: 'app-bien-ban-thua-thieu',
     templateUrl: './bien-ban-thua-thieu.component.html',
@@ -25,6 +27,9 @@ export class BienBanThuaThieuComponent extends Base2Component implements OnInit 
     page: number = 1;
     pageSize: number = PAGE_SIZE_DEFAULT;
     totalRecord: number = 0;
+    passData: { soQdDcCuc: string, qdDcCucId: number, ngayKyQd: string, soBc: string, ngayBc: string } = {
+        soQdDcCuc: '', qdDcCucId: null, ngayKyQd: '', soBc: '', ngayBc: ''
+    };
     LIST_TRANG_THAI: Array<{ ma: string, giaTri: string }> = [
         { ma: this.STATUS.DU_THAO, giaTri: "Dự thảo" },
         { ma: this.STATUS.DA_HOAN_THANH, giaTri: "Đã hoàn thành" },
@@ -40,7 +45,10 @@ export class BienBanThuaThieuComponent extends Base2Component implements OnInit 
         notification: NzNotificationService,
         spinner: NgxSpinnerService,
         modal: NzModalService,
-        private bienBanThuThieuService: BienBanThuThieuService
+        private bienBanThuThieuService: BienBanThuThieuService,
+        private dataService: DataService,
+        private router: Router,
+        private route: ActivatedRoute
         // private donviService: DonviService,
         // private danhMucService: DanhMucService,
     ) {
@@ -75,21 +83,28 @@ export class BienBanThuaThieuComponent extends Base2Component implements OnInit 
 
     async ngOnInit(): Promise<void> {
         try {
-            this.spinner.show()
-            // if (this.userService.isTongCuc()) {
-            //     this.loadDsCuc()
-            // }
-            if (this.viewOnly) {
-                this.isView = true
+            this.spinner.show();
+            await this.dataService.currentData.subscribe(data => {
+                if (data && data.soBc) {
+                    this.passData = { ...data };
+                    this.isDetail = true;
+                }
+            });
+            await this.dataService.removeData();
+            if (!this.isDetail) {
+                if (this.viewOnly) {
+                    this.isView = true
+                }
+                await this.initData()
+                this.timKiem();
+
             }
-            await this.initData()
-            this.timKiem();
         } catch (e) {
             console.log('error: ', e)
             this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
         finally {
-            this.spinner.hide()
+            this.spinner.hide();
         }
     }
 
@@ -192,5 +207,11 @@ export class BienBanThuaThieuComponent extends Base2Component implements OnInit 
     }
     checkRoleDelete(trangThai: string): boolean {
         return this.userService.isChiCuc() && trangThai === this.STATUS.DU_THAO
+    }
+    goBack() {
+        this.showList();
+        this.passData = {
+            soQdDcCuc: '', qdDcCucId: null, ngayKyQd: '', soBc: '', ngayBc: ''
+        };
     }
 }
