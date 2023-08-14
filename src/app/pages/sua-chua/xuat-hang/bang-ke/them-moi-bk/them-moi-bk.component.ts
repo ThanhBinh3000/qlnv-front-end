@@ -28,7 +28,7 @@ import { BangKeXuatScService } from "../../../../../services/sua-chua/bangKeXuat
 export class ThemMoiBkComponent extends Base3Component implements OnInit {
   dataTablePhieuXuatKho: any[] = [];
   rowItem: any = {};
-
+  symbol: string = ''
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -39,7 +39,6 @@ export class ThemMoiBkComponent extends Base3Component implements OnInit {
     router: Router,
     private bangKeXuatScService: BangKeXuatScService,
     private phieuXuatKhoScService: PhieuXuatKhoScService,
-
     private quyetDinhXhService: QuyetDinhXhService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, route, router, bangKeXuatScService);
@@ -77,7 +76,9 @@ export class ThemMoiBkComponent extends Base3Component implements OnInit {
       thoiGianGiaoNhan: [''],
       ngayXuatKho: [''],
       lyDoTuChoi: []
-    })
+    });
+    this.symbol = '/BKCH-' + this.userInfo.DON_VI.tenVietTat;
+
   }
 
   async ngOnInit() {
@@ -103,7 +104,7 @@ export class ThemMoiBkComponent extends Base3Component implements OnInit {
     } else {
       await this.userService.getId("SC_BANG_KE_XUAT_VT_HDR_SEQ").then((res) => {
         this.formData.patchValue({
-          soBangKe: res + '/' + this.formData.value.nam + '/BKCH-CCDTVP',
+          soBangKe: res + '/' + this.formData.value.nam + this.symbol,
           maQhns: this.userInfo.DON_VI.maQhns,
           tenDvi: this.userInfo.TEN_DVI,
           ngayNhap: dayjs().format('YYYY-MM-DD'),
