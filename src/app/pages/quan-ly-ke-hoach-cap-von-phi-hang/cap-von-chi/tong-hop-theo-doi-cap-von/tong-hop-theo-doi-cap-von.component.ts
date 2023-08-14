@@ -1,9 +1,10 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {saveAs} from 'file-saver';
-import {cloneDeep} from 'lodash';
 import {NzModalService} from 'ng-zorro-antd/modal';
 import {NzNotificationService} from 'ng-zorro-antd/notification';
 import {NgxSpinnerService} from 'ngx-spinner';
+import {chain, cloneDeep, isEmpty} from "lodash";
+import {v4 as uuidv4} from "uuid";
 import {PAGE_SIZE_DEFAULT} from 'src/app/constants/config';
 import {MESSAGE} from 'src/app/constants/message';
 import {STATUS} from 'src/app/constants/status';
@@ -13,6 +14,7 @@ import {TongHopTheoDoiCapVonService} from 'src/app/services/ke-hoach/von-phi/ton
 import {UserService} from 'src/app/services/user.service';
 import {Globals} from 'src/app/shared/globals';
 import {DonviService} from "../../../../services/donvi.service";
+import {NumberToRoman} from "../../../../shared/commonFunction";
 
 @Component({
   selector: 'app-tong-hop-theo-doi-cap-von',
@@ -42,19 +44,6 @@ export class TongHopTheoDoiCapVonComponent implements OnInit {
     khoan: null,
     nam: null,
   };
-  //
-  // filterTable: any = {
-  //   soThongTri: '',
-  //   tenDviDuocDuyet: '',
-  //   soLenhChiTien: '',
-  //   chuong: '',
-  //   loai: '',
-  //   khoan: '',
-  //   lyDoChi: '',
-  //   soTien: '',
-  //   dviThuHuong: '',
-  //   tenTrangThai: '',
-  // };
 
   dataTableAll: any[] = [];
   dataTable: any[] = [];
@@ -67,12 +56,14 @@ export class TongHopTheoDoiCapVonComponent implements OnInit {
   userInfo: UserLogin;
   userdetail: any = {};
   dsBoNganh: any[] = [];
+  dataTableTree: any[] = [];
 
   selectedId: number = 0;
   isVatTu: boolean = false;
   allChecked = false;
   indeterminate = false;
   isView = false;
+  expandSetString = new Set<string>();
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -165,7 +156,7 @@ export class TongHopTheoDoiCapVonComponent implements OnInit {
       let data = res.data;
       this.dataTable = data.content;
       this.dataTableAll = cloneDeep(this.dataTable);
-
+      this.buildTableView(this.dataTableAll);
       this.totalRecord = data.totalElements;
     } else {
       this.dataTable = [];
@@ -175,6 +166,30 @@ export class TongHopTheoDoiCapVonComponent implements OnInit {
     this.spinner.hide();
   }
 
+
+  async buildTableView(data?: any) {
+    this.dataTableTree = chain(data)
+      .groupBy("tenDviThongTri")
+      .map((v, k) => {
+          let rowItem = v.find(s => s.tenDviThongTri === k);
+          let idVirtual = uuidv4();
+          this.expandSetString.add(idVirtual);
+          return {
+            idVirtual: idVirtual,
+            tenDviThongTri: k,
+            nam: rowItem?.nam,
+            childData: v
+          }
+        }
+      ).value();
+  }
+  onExpandStringChange(id: string, checked: boolean) {
+    if (checked) {
+      this.expandSetString.add(id);
+    } else {
+      this.expandSetString.delete(id);
+    }
+  }
   async changePageIndex(event) {
     this.spinner.show();
     try {
@@ -370,4 +385,6 @@ export class TongHopTheoDoiCapVonComponent implements OnInit {
       this.dataTable = cloneDeep(this.dataTableAll);
     }
   }
+
+  protected readonly NumberToRoman = NumberToRoman;
 }
