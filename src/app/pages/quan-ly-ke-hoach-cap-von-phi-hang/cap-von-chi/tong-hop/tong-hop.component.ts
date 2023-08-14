@@ -1,10 +1,11 @@
 import {saveAs} from 'file-saver';
 import {Component, Input, OnInit} from '@angular/core';
 import dayjs from 'dayjs';
-import {cloneDeep} from 'lodash';
 import {NzModalService} from 'ng-zorro-antd/modal';
 import {NzNotificationService} from 'ng-zorro-antd/notification';
 import {NgxSpinnerService} from 'ngx-spinner';
+import {chain, cloneDeep, isEmpty} from "lodash";
+import {v4 as uuidv4} from "uuid";
 import {
   PAGE_SIZE_DEFAULT,
 } from 'src/app/constants/config';
@@ -63,18 +64,17 @@ export class TongHopComponent implements OnInit {
 
   allChecked = false;
   indeterminate = false;
-
   isView = false;
   listTrangThai: any[] = [
-    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
-    { ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối - TP' },
-    { ma: this.STATUS.CHO_DUYET_TP, giaTri: 'Chờ duyệt - TP' },
-    { ma: this.STATUS.CHO_DUYET_LDC, giaTri: 'Chờ duyệt - LĐC' },
-    { ma: this.STATUS.DA_DUYET_LDC, giaTri: 'Từ chối - LĐC' },
-    { ma: this.STATUS.TU_CHOI_LDC, giaTri: 'Đã duyệt - LĐC' },
-    { ma: this.STATUS.CHO_DUYET_LDV, giaTri: 'Chờ duyệt - LĐ Vụ' },
-    { ma: this.STATUS.DA_DUYET_LDV, giaTri: 'Đã duyệt - LĐ Vụ' },
-    { ma: this.STATUS.TU_CHOI_LDV, giaTri: 'Từ chối - LĐ Vụ' },
+    {ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo'},
+    {ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối - TP'},
+    {ma: this.STATUS.CHO_DUYET_TP, giaTri: 'Chờ duyệt - TP'},
+    {ma: this.STATUS.CHO_DUYET_LDC, giaTri: 'Chờ duyệt - LĐC'},
+    {ma: this.STATUS.DA_DUYET_LDC, giaTri: 'Từ chối - LĐC'},
+    {ma: this.STATUS.TU_CHOI_LDC, giaTri: 'Đã duyệt - LĐC'},
+    {ma: this.STATUS.CHO_DUYET_LDV, giaTri: 'Chờ duyệt - LĐ Vụ'},
+    {ma: this.STATUS.DA_DUYET_LDV, giaTri: 'Đã duyệt - LĐ Vụ'},
+    {ma: this.STATUS.TU_CHOI_LDV, giaTri: 'Từ chối - LĐ Vụ'},
   ];
 
   constructor(
@@ -164,8 +164,8 @@ export class TongHopComponent implements OnInit {
       pageNumber: this.page,
       pageSize: this.pageSize,
     };
-      body.ngayTongHopTuNgay = this.formData.value.ngayTongHopTuNgay ? dayjs(this.formData.value.ngayTongHopTuNgay).format('YYYY-MM-DD') : null,
-        body.ngayTongHopDenNgay = this.formData.value.ngayTongHopDenNgay ? dayjs(this.formData.value.ngayTongHopDenNgay).format('YYYY-MM-DD') : null
+    body.ngayTongHopTuNgay = this.formData.value.ngayTongHopTuNgay ? dayjs(this.formData.value.ngayTongHopTuNgay).format('YYYY-MM-DD') : null,
+      body.ngayTongHopDenNgay = this.formData.value.ngayTongHopDenNgay ? dayjs(this.formData.value.ngayTongHopDenNgay).format('YYYY-MM-DD') : null
     let res = await this.TongHopDeNghiCapVonService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
@@ -184,6 +184,7 @@ export class TongHopComponent implements OnInit {
     }
     this.spinner.hide();
   }
+
 
   async changePageIndex(event) {
     this.spinner.show();
@@ -315,8 +316,8 @@ export class TongHopComponent implements OnInit {
           pageNumber: this.page,
           pageSize: this.pageSize,
         };
-          body.thisngayTongHopTuNgay = this.formData.value.ngayTongHop ? dayjs(this.formData.value.ngayTongHop[0]).format('YYYY-MM-DD') : null,
-            body.ngayTongHopDenNgay = this.formData.value.ngayTongHop ? dayjs(this.formData.value.ngayTongHop[1]).format('YYYY-MM-DD') : null
+        body.thisngayTongHopTuNgay = this.formData.value.ngayTongHop ? dayjs(this.formData.value.ngayTongHop[0]).format('YYYY-MM-DD') : null,
+          body.ngayTongHopDenNgay = this.formData.value.ngayTongHop ? dayjs(this.formData.value.ngayTongHop[1]).format('YYYY-MM-DD') : null
         this.TongHopDeNghiCapVonService.exportList(body).subscribe((blob) =>
           saveAs(blob, 'tong-hop-de-nghi-cap-von-chi.xlsx'),
         );

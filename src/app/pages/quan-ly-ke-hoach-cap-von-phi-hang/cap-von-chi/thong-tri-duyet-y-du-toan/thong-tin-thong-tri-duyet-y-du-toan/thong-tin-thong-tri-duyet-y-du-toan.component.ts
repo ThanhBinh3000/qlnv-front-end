@@ -140,7 +140,6 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
       dviThuHuongStk: [this.itemThongTri ? this.itemThongTri.dviThuHuongStk : null],
       dviThuHuongNganHang: [this.itemThongTri ? this.itemThongTri.dviThuHuongNganHang : null],
     });
-    console.log(this.formData.value, 'this.formData.valuethis.formData.value')
   }
 
   isDisableField() {
@@ -208,7 +207,6 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
   }
 
   async loadDeXuatitemThongTri(id: number) {
-    console.log(this.listDviThuHuong, 'this.listDviThuHuong');
     await this.thongTriDuyetYCapVonService
       .loadChiTiet(id)
       .then((res) => {
@@ -461,7 +459,6 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
   }
 
   async changeDonVi() {
-    console.log(this.formData.value.dviThongTri, 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
     this.listDviThuHuong = [];
     if (this.formData.value.dviThongTri) {
       if (this.formData.value.dviThongTri == 'BTC') {
@@ -480,7 +477,6 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
           maBoNganh: this.formData.value.dviThongTri,
           maTh: this.formData.value.soDnCapVon
         });
-        console.log(res.data, 'resresresresresresresres')
         if (res.msg == MESSAGE.SUCCESS && res.data) {
           this.listDviThuHuong = res.data;
         }
