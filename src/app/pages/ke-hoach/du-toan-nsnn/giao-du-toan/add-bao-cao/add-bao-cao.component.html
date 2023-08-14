@@ -102,11 +102,11 @@
                         <td>{{baoCao.maPa}}</td>
                         <td>{{baoCao.namBcao}}</td>
                         <td>{{baoCao.nguoiTao}}</td>
-                        <td>{{baoCao.ngayTao}}</td>
-                        <td>{{baoCao.ngayTrinh}}</td>
-                        <td>{{baoCao.ngayDuyet}}</td>
-                        <td>{{baoCao.ngayPheDuyet}}</td>
-                        <td>{{baoCao.ngayTraKq}}</td>
+                        <td>{{Utils.fmtDate(baoCao.ngayTao)}}</td>
+                        <td>{{Utils.fmtDate(baoCao.ngayTrinh)}}</td>
+                        <td>{{Utils.fmtDate(baoCao.ngayDuyet)}}</td>
+                        <td>{{Utils.fmtDate(baoCao.ngayPheDuyet)}}</td>
+                        <td>{{Utils.fmtDate(baoCao.ngayTraKq)}}</td>
                     </tr>
                 </tbody>
             </nz-table>

@@ -292,7 +292,7 @@ export class AddBaoCaoComponent implements OnInit {
                 this.baoCao.lstGiaoDtoanTrucThuocs = this.data?.lstGiaoDtoanTrucThuocs;
                 this.baoCao.trangThai = "1";
                 this.baoCao.nguoiTao = this.userInfo?.sub;
-                this.baoCao.ngayTao = this.datePipe.transform(new Date(), Utils.FORMAT_DATE_STR);
+                this.baoCao.ngayTao = new Date();
                 this.baoCao.namPa = this.data?.namPa;
                 this.baoCao.namDtoan = this.data?.namDtoan;
                 this.baoCao.tongHopTuIds = [];
@@ -302,7 +302,7 @@ export class AddBaoCaoComponent implements OnInit {
                 this.baoCao.lstGiaoDtoanTrucThuocs = this.data?.lstDviTrucThuoc ? this.data?.lstDviTrucThuoc : [];
                 this.baoCao.trangThai = "1";
                 this.baoCao.nguoiTao = this.userInfo?.sub;
-                this.baoCao.ngayTao = this.datePipe.transform(new Date(), Utils.FORMAT_DATE_STR);
+                this.baoCao.ngayTao = new Date();
                 this.baoCao.namPa = this.data?.namPa;
                 this.baoCao.namDtoan = this.data?.namDtoan;
                 this.baoCao.tongHopTuIds = [];
@@ -341,8 +341,8 @@ export class AddBaoCaoComponent implements OnInit {
                         item.ngayDuyet = item.ngayDuyet;
                         item.ngayPheDuyet = item.ngayPheDuyet;
                     } else {
-                        item.ngayDuyet = this.datePipe.transform(item.ngayDuyet, Utils.FORMAT_DATE_STR);
-                        item.ngayPheDuyet = this.datePipe.transform(item.ngayPheDuyet, Utils.FORMAT_DATE_STR);
+                        item.ngayDuyet = item.ngayDuyet;
+                        item.ngayPheDuyet = item.ngayPheDuyet;
                     }
                 })
                 this.baoCao.lstCtiets.forEach(item => {
@@ -1148,15 +1148,15 @@ export class AddBaoCaoComponent implements OnInit {
                         item.tenPl = appendix.tenPl;
                         item.tenDm = appendix.tenDm + " năm " + this.baoCao.namPa;
                     })
-                    this.baoCao.ngayTao = this.datePipe.transform(this.baoCao.ngayTao, Utils.FORMAT_DATE_STR);
-                    this.baoCao.ngayTrinh = this.datePipe.transform(this.baoCao.ngayTrinh, Utils.FORMAT_DATE_STR);
-                    this.baoCao.ngayDuyet = this.datePipe.transform(this.baoCao.ngayDuyet, Utils.FORMAT_DATE_STR);
-                    this.baoCao.ngayPheDuyet = this.datePipe.transform(this.baoCao.ngayPheDuyet, Utils.FORMAT_DATE_STR);
-                    this.baoCao.ngayTraKq = this.datePipe.transform(this.baoCao.ngayTraKq, Utils.FORMAT_DATE_STR);
+                    this.baoCao.ngayTao = this.baoCao.ngayTao;
+                    this.baoCao.ngayTrinh = this.baoCao.ngayTrinh;
+                    this.baoCao.ngayDuyet = this.baoCao.ngayDuyet;
+                    this.baoCao.ngayPheDuyet = this.baoCao.ngayPheDuyet;
+                    this.baoCao.ngayTraKq = this.baoCao.ngayTraKq;
                     if (this.baoCao?.lstGiaoDtoanTrucThuocs) {
                         this.baoCao?.lstGiaoDtoanTrucThuocs.forEach(item => {
-                            item.ngayDuyet = this.datePipe.transform(item.ngayDuyet, Utils.FORMAT_DATE_STR);
-                            item.ngayPheDuyet = this.datePipe.transform(item.ngayPheDuyet, Utils.FORMAT_DATE_STR);
+                            item.ngayDuyet = item.ngayDuyet;
+                            item.ngayPheDuyet = item.ngayPheDuyet;
                         })
                     }
                     this.path = this.baoCao?.maDvi + '/' + this.baoCao.maBcao;
