@@ -119,7 +119,11 @@
 									{{data.index()}}
 								</td>
 								<td nzLeft>
-									{{data.noiDung}}
+									<div *ngFor="let item of noiDungs">
+										<div *ngIf="item.ma ==data.maNoiDung">
+											{{item.giaTri}}
+										</div>
+									</div>
 								</td>
 								<ng-container *ngIf="!editCache[data.id].edit; else editTemplate ">
 									<td>{{ Op.fmtVal(data.dtoanKphiNamTruoc) }}</td>

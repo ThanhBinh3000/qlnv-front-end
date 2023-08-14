@@ -14,6 +14,7 @@ import { BtnStatus, Doc, Form } from '../../dieu-chinh-du-toan.constant';
 import { DANH_MUC_PL_TH } from './phu-luc-tong-hop.constant';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { CurrencyMaskInputMode } from 'ngx-currency';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
 
 
 export class ItemDvi {
@@ -111,7 +112,7 @@ export class PhuLucTongHopComponent implements OnInit {
     namBcao: number;
     //danh muc
     lstCtietBcao: ItemData[] = [];
-    noiDungs: any[] = DANH_MUC_PL_TH;
+    noiDungs: any[] = [];
     lstDvi: any[] = [];
     donVis: any[] = [];
     // childUnit:any[] = []
@@ -158,6 +159,7 @@ export class PhuLucTongHopComponent implements OnInit {
         private spinner: NgxSpinnerService,
         private dieuChinhDuToanService: DieuChinhService,
         private quanLyVonPhiService: QuanLyVonPhiService,
+        private danhMucService: DanhMucService,
 
     ) { }
 
@@ -180,6 +182,12 @@ export class PhuLucTongHopComponent implements OnInit {
         //         }
         //     }
         // );
+
+        const category = await this.danhMucService.danhMucChungGetAll('BC_DC_PL1');
+        // this.userInfo = this.userService.getUserLogin();
+        if (category) {
+            this.noiDungs = category.data;
+        }
 
 
         Object.assign(this.status, this.dataInfo.status);
