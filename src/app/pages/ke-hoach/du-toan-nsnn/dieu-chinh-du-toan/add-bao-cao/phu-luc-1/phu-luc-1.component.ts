@@ -13,6 +13,7 @@ import * as XLSX from 'xlsx';
 import { BtnStatus, Doc, Form } from '../../dieu-chinh-du-toan.constant';
 import { NOI_DUNG } from './phu-luc-1.constant';
 import { CurrencyMaskInputMode } from 'ngx-currency';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
 
 
 
@@ -138,7 +139,7 @@ export class PhuLuc1Component implements OnInit {
     dToanVuGiam: number;
     //danh muc
     lstCtietBcao: ItemData[] = [];
-    noiDungs: any[] = NOI_DUNG;
+    noiDungs: any[] = [];
     //trang thai cac nut
     status: BtnStatus = new BtnStatus();
     editMoneyUnit = false;
@@ -178,6 +179,7 @@ export class PhuLuc1Component implements OnInit {
         private spinner: NgxSpinnerService,
         private modal: NzModalService,
         private quanLyVonPhiService: QuanLyVonPhiService,
+        private danhMucService: DanhMucService,
     ) { }
 
     async ngOnInit() {
@@ -188,6 +190,11 @@ export class PhuLuc1Component implements OnInit {
 
     async initialization() {
         this.spinner.show();
+        const category = await this.danhMucService.danhMucChungGetAll('BC_DC_PL1');
+        // this.userInfo = this.userService.getUserLogin();
+        if (category) {
+            this.noiDungs = category.data;
+        }
         Object.assign(this.status, this.dataInfo.status);
         await this.getFormDetail();
         this.namBcao = this.dataInfo?.namBcao;
