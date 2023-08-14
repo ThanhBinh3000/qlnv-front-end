@@ -904,33 +904,36 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 				maLoai: this.maLoai,
 			};
 
+			let tongGiao = 0;
+			let tongCong = 0;
 			this.lstCtietBcao.forEach(item => {
-
-
 				if (item.level == 0) {
-					if (item.tongCongSoTranChi !== item.tongCong) {
-						return this.notification.warning(MESSAGE.WARNING, "Chưa giao hết số tiền được giao từ đơn vị cấp trên");
-					} else {
-						this.spinner.show();
-						this.giaoDuToanChiService.trinhDuyetPhuongAnGiao(requestGroupButtons).toPromise().then(async (data) => {
-							if (data.statusCode == 0) {
-								this.trangThaiBanGhi = mcn;
-								this.getStatusButton();
-								if (mcn == Status.TT_08 || mcn == Status.TT_05 || mcn == Status.TT_03) {
-									this.notification.success(MESSAGE.SUCCESS, MESSAGE.REVERT_SUCCESS);
-								} else {
-									this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
-								}
-							} else {
-								this.notification.error(MESSAGE.ERROR, data?.msg);
-							}
-						}, err => {
-							this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-						});
-						this.spinner.hide();
-					}
+					tongGiao += item?.tongCongSoTranChi;
+					tongCong += item?.tongCong;
 				}
 			})
+
+			if (tongGiao !== tongCong) {
+				return this.notification.warning(MESSAGE.WARNING, "Chưa giao hết số tiền được giao từ đơn vị cấp trên");
+			} else {
+				this.spinner.show();
+				this.giaoDuToanChiService.trinhDuyetPhuongAnGiao(requestGroupButtons).toPromise().then(async (data) => {
+					if (data.statusCode == 0) {
+						this.trangThaiBanGhi = mcn;
+						this.getStatusButton();
+						if (mcn == Status.TT_08 || mcn == Status.TT_05 || mcn == Status.TT_03) {
+							this.notification.success(MESSAGE.SUCCESS, MESSAGE.REVERT_SUCCESS);
+						} else {
+							this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
+						}
+					} else {
+						this.notification.error(MESSAGE.ERROR, data?.msg);
+					}
+				}, err => {
+					this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+				});
+				this.spinner.hide();
+			}
 
 			// this.spinner.show();
 			// await this.giaoDuToanChiService.trinhDuyetPhuongAnGiao(requestGroupButtons).toPromise().then(async (data) => {
