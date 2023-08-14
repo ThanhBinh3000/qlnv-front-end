@@ -37,10 +37,11 @@ export class DialogTaoMoiComponent implements OnInit {
         this.userInfo = this.userService.getUserLogin();
         this.response.maDvi = this.userInfo.MA_DVI;
 
-        const thisYear = dayjs().get('year');
-        for (let i = -5; i < 10; i++) {
-            this.lstNam.push(thisYear + i);
-        }
+        this.lstNam = Utils.getListYear(5, 5);
+        // const thisYear = dayjs().get('year');
+        // for (let i = -5; i < 10; i++) {
+        //     this.lstNam.push(thisYear + i);
+        // }
     }
 
     async checkReport() {
