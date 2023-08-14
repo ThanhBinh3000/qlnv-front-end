@@ -437,7 +437,7 @@ export class BieuMau151Component implements OnInit {
 		const filterData = this.lstCtietBcao.map(item => {
 			const row: any = {};
 			fieldOrder.forEach(field => {
-				row[field] = item[field]
+				row[field] = ((!item[field] && item[field] !== 0) ? '' : item[field]);
 			})
 			return row;
 		})
