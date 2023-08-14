@@ -67,6 +67,7 @@ export class ThemMoiQdnhComponent extends Base3Component implements OnInit {
       loaiHinhNhapXuat: ['Xuất sửa chữa'],
       kieuNhapXuat: ['Xuất không thu tiền'],
       trichYeu: [null],
+      lyDoTuChoi: []
     });
     this.symbol = '/QĐ-' + this.userInfo.DON_VI.tenVietTat;
   }
@@ -236,7 +237,7 @@ export class ThemMoiQdnhComponent extends Base3Component implements OnInit {
 
   showSave() {
     let trangThai = this.formData.value.trangThai;
-    return trangThai == STATUS.DU_THAO;
+    return trangThai == STATUS.DU_THAO || trangThai == STATUS.TU_CHOI_TP || trangThai == STATUS.TU_CHOI_LDC;
   }
 
   save(isGuiDuyet?) {
@@ -272,6 +273,8 @@ export class ThemMoiQdnhComponent extends Base3Component implements OnInit {
   pheDuyet() {
     let trangThai
     switch (this.formData.value.trangThai) {
+      case STATUS.TU_CHOI_TP:
+      case STATUS.TU_CHOI_LDC:
       case STATUS.DU_THAO:
         trangThai = STATUS.CHO_DUYET_TP;
         break;
@@ -299,7 +302,8 @@ export class ThemMoiQdnhComponent extends Base3Component implements OnInit {
   }
 
   disabled() {
-    return this.formData.value.trangThai != STATUS.DU_THAO;
+    let trangThai = this.formData.value.trangThai;
+    return !(trangThai == STATUS.DU_THAO || trangThai == STATUS.TU_CHOI_TP || trangThai == STATUS.TU_CHOI_LDC);
   }
 
   showPheDuyetTuChoi() {

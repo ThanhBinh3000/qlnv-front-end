@@ -655,5 +655,14 @@ export class Base3Component implements OnInit {
   }
 
 
+  showLyDoTuChoi(): boolean {
+    if (this.formData.controls.hasOwnProperty('trangThai')) {
+      let trangThai = this.formData.value.trangThai;
+      return trangThai == STATUS.TU_CHOI_TP || trangThai == STATUS.TU_CHOI_LDC || trangThai == STATUS.TU_CHOI_LDCC || trangThai == STATUS.TU_CHOI_LDTC
+    }
+    return false;
+  }
+
+
 
 }
