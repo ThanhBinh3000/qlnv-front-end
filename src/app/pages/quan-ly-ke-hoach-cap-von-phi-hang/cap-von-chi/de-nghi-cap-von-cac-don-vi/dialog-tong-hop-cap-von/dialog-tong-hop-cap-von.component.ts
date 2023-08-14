@@ -68,6 +68,7 @@ export class DialogTongHopCapVonComponent implements OnInit {
         this.request.namDnghi = this.response.namDnghi;
         this.request.canCuVeGia = this.response.canCuVeGia;
         this.request.loaiDnghi = this.response.loaiDnghi;
+        this.request.maLoai = Cvnc.CAP_VON;
         this.request.trangThai = null;
         this.spinner.show();
         await this.capVonNguonChiService.timKiemDeNghi(this.request.request()).toPromise().then(
