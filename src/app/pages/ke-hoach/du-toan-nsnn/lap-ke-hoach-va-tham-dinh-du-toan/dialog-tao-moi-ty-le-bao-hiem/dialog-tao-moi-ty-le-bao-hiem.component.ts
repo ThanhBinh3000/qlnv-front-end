@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import * as dayjs from 'dayjs';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { Status } from 'src/app/Utility/utils';
+import { Status, Utils } from 'src/app/Utility/utils';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.service';
@@ -35,10 +35,11 @@ export class DialogTaoMoiTyLeBaoHiemComponent implements OnInit {
         this.userInfo = this.userService.getUserLogin();
         this.response.maDvi = this.userInfo.MA_DVI;
 
-        const thisYear = dayjs().get('year');
-        for (let i = 0; i < 10; i++) {
-            this.lstNam.push(thisYear - i);
-        }
+        this.lstNam = Utils.getListYear(5, 5);
+        // const thisYear = dayjs().get('year');
+        // for (let i = 0; i < 10; i++) {
+        //     this.lstNam.push(thisYear - i);
+        // }
     }
 
     async checkReport() {
