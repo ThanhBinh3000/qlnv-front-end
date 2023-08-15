@@ -29,9 +29,9 @@
     </div>
 </nz-affix>
 <div class="bg-trang">
-    <nz-alert class="mg-t-16" *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDCC " nzShowIcon nzType="error"
+    <!-- <nz-alert class="mg-t-16" *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDCC " nzShowIcon nzType="error"
         nzMessage="Lý do từ chối" nzDescription="{{formData.value.lyDoTuChoi}}">
-    </nz-alert>
+    </nz-alert> -->
     <nz-card class="mt16 flex-card p-lr16">
         <form nzLayout="vertical" nz-form [formGroup]="formData">
             <div nz-row [nzGutter]="[18,12]">
@@ -76,7 +76,7 @@
                         <nz-form-label [nzNoColon]="true"> Số biên bản ghi nhận thừa/thiếu</nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
-                                <input nz-input formControlName="soBBThuaThieu" readonly />
+                                <input nz-input formControlName="soBb" readonly />
                             </nz-input-group>
                         </nz-form-control>
                     </nz-form-item>
@@ -111,7 +111,7 @@
                         <nz-form-label [nzNoColon]="true">
                             Ngày ký quyết định của Cục
                         </nz-form-label>
-                        <nz-date-picker nzFormat="dd/MM/YYYY" formControlName="ngayKyQd" nzDisabled>
+                        <nz-date-picker nzFormat="dd/MM/YYYY" formControlName="ngayKyQdCuc" nzDisabled>
                         </nz-date-picker>
                     </nz-form-item>
                 </div>
@@ -120,7 +120,7 @@
                         <nz-form-label nzRequired [nzNoColon]="true"> Số báo cáo</nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
                             <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogSoBc()">
-                                <input nz-input formControlName="soBc" readonly />
+                                <input nz-input formControlName="soBcKetQuaDc" readonly />
                             </nz-input-group>
                         </nz-form-control>
                     </nz-form-item>
@@ -132,7 +132,7 @@
                         </nz-form-label>
                         <nz-form-control>
                             <nz-input-group>
-                                <nz-date-picker nzFormat="dd/MM/YYYY" formControlName="ngayBc"
+                                <nz-date-picker nzFormat="dd/MM/YYYY" formControlName="ngayLapBcKetQuaDc"
                                     zDisabled></nz-date-picker>
                             </nz-input-group>
                         </nz-form-control>
@@ -160,7 +160,7 @@
                         <th rowspan="3">SL xuất ĐC<br /> theo QĐ</th>
                         <th rowspan="3">SL xuất <br /> thực tế</th>
                         <th rowspan="3">SL nhập ĐC<br /> thực tế</th>
-                        <th rowspan="3">Kinh phí ĐC theo QĐ</th>
+                        <th rowspan="3">Kinh phí ĐC<br /> theo QĐ</th>
                         <th rowspan="3">Kinh phí xuất<br /> ĐC thực tế</th>
                         <th rowspan="3">Kinh phí nhập<br /> ĐC thực tế</th>
                         <th colspan="4">Chênh lệch</th>
@@ -213,6 +213,16 @@
                                 <td *ngIf="i2===0" [rowSpan]="item.childData.length" class="text-right">
                                     {{lv2.kinhPhiXuatTt}}</td>
                                 <td class="text-right">{{lv2.kinhPhiNhapTt}}</td>
+                                <td *ngIf="i2 === 0" [rowSpan]="item.childData.length" class="text-right">
+                                    {{item.slChenhLech >0?
+                                    item.slChenhLech: ""}}</td>
+                                <td *ngIf="i2 === 0" [rowSpan]="item.childData.length" class="text-right">
+                                    {{item.kinhPhiChenhLech >0?
+                                    item.kinhPhiChenhLech: ""}}</td>
+                                <td *ngIf="i2 === 0" [rowSpan]="item.childData.length" class="text-right">
+                                    {{item.slChenhLech <0? item.slChenhLech: "" }}</td>
+                                <td *ngIf="i2 === 0" [rowSpan]="item.childData.length" class="text-right">
+                                    {{item.kinhPhiChenhLech <0? item.kinhPhiChenhLech: "" }}</td>
                             </tr>
                         </ng-container>
                     </ng-container>
@@ -233,9 +243,9 @@
                         <td class="text-right bold">{{tongKinhPhiXuatDcTt}}</td>
                         <td class="text-right bold">{{tongKinhPhiNhapDcTt}}</td>
                         <td></td>
+                        <td class="text-right bold">{{tongKinhPhiChenhLech>0? tongKinhPhiChenhLech: ""}}</td>
                         <td></td>
-                        <td></td>
-                        <td></td>
+                        <td class="text-right bold">{{tongKinhPhiChenhLech<0? tongKinhPhiChenhLech: "" }}</td>
                     </tr>
                 </tbody>
             </nz-table>
@@ -246,7 +256,7 @@
                 <nz-card class="mt16 flex-card p-lr16">
                     <nz-card class="mt-2px flex-card data-table card-border-content table-card">
                         <nz-table #phanBo class="nowrap mt-16 table-chi-tiet" nzBordered
-                            [nzData]="formData.value.dmCanBoThamGia">
+                            [nzData]="formData.value.banKiemKe">
                             <thead>
                                 <tr>
                                     <th nzWidth="5%">STT</th>
@@ -282,8 +292,8 @@
                             </thead>
                             <tbody>
 
-                                <tr *ngFor="let item of formData.value.dmCanBoThamGia, let i = index">
-                                    <ng-container *ngIf="!formData.value.dmCanBoThamGia[i]?.isEdit; else editTemplate">
+                                <tr *ngFor="let item of formData.value.banKiemKe, let i = index">
+                                    <ng-container *ngIf="!formData.value.banKiemKe[i]?.isEdit; else editTemplate">
                                         <td>{{i + 1}}</td>
                                         <td>{{item.ten}}</td>
                                         <td>{{item.chucVu}}</td>
@@ -309,10 +319,10 @@
                                             </nz-select>
                                         </td>
                                         <td>
-                                            <a (click)="saveRow(i)">
+                                            <a (click)="saveRow(i)" *ngIf="!isView">
                                                 <i class="icon htvbdh_tcdt_save"></i>
                                             </a>
-                                            <a (click)="cancelRow(i)">
+                                            <a (click)="cancelRow(i)" *ngIf="!isView">
                                                 <i class="icon htvbdh_arrow-left2"></i>
                                             </a>
                                         </td>
@@ -364,7 +374,7 @@
                                 </nz-form-label>
                                 <nz-form-item>
                                     <div class="list-file" nz-col nzSpan="24">
-                                        <file-list [data]="formData.value.fileDinhKems" [isViewDetail]="isView">
+                                        <file-list [data]="formData.value.fileBienBanHaoDois" [isViewDetail]="isView">
                                         </file-list>
                                     </div>
                                 </nz-form-item>
@@ -377,7 +387,7 @@
                                 </nz-form-label>
                                 <nz-form-item>
                                     <div class="list-file" nz-col nzSpan="24">
-                                        <file-list [data]="formData.value.fileTaiLieus" [isViewDetail]="isView">
+                                        <file-list [data]="formData.value.fileDinhKems" [isViewDetail]="isView">
                                         </file-list>
                                     </div>
                                 </nz-form-item>

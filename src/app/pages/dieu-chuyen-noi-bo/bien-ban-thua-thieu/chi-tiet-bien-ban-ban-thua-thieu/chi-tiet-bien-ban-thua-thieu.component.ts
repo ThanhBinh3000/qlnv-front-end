@@ -28,7 +28,7 @@ export class ChiTietBienBanThuaThieuComponent extends Base2Component implements 
     @Input() isView: boolean;
     @Input() isViewOnModal: boolean;
     @Input() loaiBc: string;
-    @Input() passData: { soQdDcCuc: string, qdDcCucId: number, ngayKyQd: string, soBc: string, ngayBc: string };
+    @Input() passData: { soQdDcCuc: string, qdDcCucId: number, ngayKyQd: string, soBc: string, bcKetQuaDcId: number, ngayBc: string };
     @Output()
     showListEvent = new EventEmitter<any>();
     expandSetString = new Set<string>();
@@ -45,6 +45,7 @@ export class ChiTietBienBanThuaThieuComponent extends Base2Component implements 
     tongKinhPhiDcQd: number = 0;
     tongKinhPhiXuatDcTt: number = 0;
     tongKinhPhiNhapDcTt: number = 0;
+    tongKinhPhiChenhLech: number = 0;
     canBoThamGia: { [key: string]: string } = {};
     canBoThamGiaClone: { [key: string]: string } = {};
     listDaiDien: any[] = [
@@ -71,24 +72,24 @@ export class ChiTietBienBanThuaThieuComponent extends Base2Component implements 
             id: [0],
             nam: [dayjs().get('year'), [Validators.required]],
             tenDvi: [],
-            soBBThuaThieu: [],
+            maDvi: [],
             tenCanBo: [],
             ngayLap: [dayjs().format('YYYY-MM-DD'), [Validators.required]],
             canBoId: [],
-            tenBc: [],
-            soBc: ['', [Validators.required]],
-            bcId: [''],
-            ngayBc: [],
+            soBb: [''],
+            soBcKetQuaDc: ['', [Validators.required]],
+            bcKetQuaDcId: [''],
+            ngayLapBcKetQuaDc: [],
             soQdDcCuc: ['', [Validators.required]],
             qdDcCucId: [],
-            ngayKyQd: [],
+            ngayKyQdCuc: [],
             trangThai: ['00'],
             nguyenNhan: [],
             kienNghi: [],
             ghiChu: [],
             fileDinhKems: [new Array()],
-            fileTaiLieus: [new Array()],
-            dmCanBoThamGia: [new Array()]
+            fileBienBanHaoDois: [new Array()],
+            banKiemKe: [new Array()]
         })
     }
 
@@ -105,73 +106,32 @@ export class ChiTietBienBanThuaThieuComponent extends Base2Component implements 
     }
     async loadDetail(id: number): Promise<void> {
         if (id) {
-            this.allChecked = false;
-            const res = await this.baoCaoDieuChuyenService.getDetail(id);
+            const res = await this.bienBanThuThieuService.getDetail(id);
             if (res.msg === MESSAGE.SUCCESS) {
                 this.formData.patchValue({ ...res.data });
-                this.danhSachKetQua = res.data.danhSachKetQua;
-                const idsChiCuc = res.data.idsChiCuc.split(",").map(f => Number(f));
-                if (this.loaiBc === "CUC") {
-                    await this.loadListBaoCaoChiCuc();
-                    this.listBaoCaoChiCuc = this.listBaoCaoChiCuc.map(f => {
-                        if (idsChiCuc.includes(f.id)) {
-                            return {
-                                ...f, checked: true
-                            }
-                        }
-                        return { ...f }
-                    })
-                    // this.danhSachKetQua = Array.isArray(this.listBaoCaoChiCuc) ? this.listBaoCaoChiCuc.reduce((arr, cur) => {
-                    //   arr = arr.concat(cur.danhSachKetQua);
-                    //   return arr
-                    // }, []) : [];
-                    if (this.listBaoCaoChiCuc.every(f => !!f.checked)) {
-                        this.allChecked = true;
-                        this.formData.patchValue({ listTenBaoCaoSelect: ['Tất cả'] })
-                    } else {
-                        this.formData.patchValue({ listTenBaoCaoSelect: this.listBaoCaoChiCuc.filter(f => f.checked).map(m => m.tenBc) })
-                    }
-                    this.buildTableView();
-                };
+                this.danhSachKetQua = res.data.chiTiet;
             }
 
+            this.buildTableView();
         }
         else {
+            console.log("passData", this.passData)
             this.formData.patchValue({
                 maDvi: this.userInfo.MA_DVI,
                 tenDvi: this.userInfo.TEN_DVI,
                 tenCanBo: this.userInfo.TEN_DAY_DU,
                 canBoId: this.userInfo.ID,
-                soBc: this.passData.soBc,
-                ngayBc: this.passData.ngayBc,
+                soBcKetQuaDc: this.passData.soBc,
+                ngayLapBcKetQuaDc: this.passData.ngayBc,
                 soQdDcCuc: this.passData.soQdDcCuc,
                 qdDcCucId: this.passData.qdDcCucId,
-                ngayKyQd: this.passData.ngayKyQd,
+                ngayKyQdCuc: this.passData.ngayKyQd,
+                bcKetQuaDcId: this.passData.bcKetQuaDcId
 
             })
-            if (this.loaiBc === "CUC") {
-                if (this.allChecked) {
-                    await this.loadListBaoCaoChiCuc();
-                    this.danhSachKetQua = Array.isArray(this.listBaoCaoChiCuc) ? this.listBaoCaoChiCuc.reduce((arr, cur) => {
-                        arr = arr.concat(cur.danhSachKetQua);
-                        return arr
-                    }, []) : [];
-                    this.buildTableView();
-
-                }
+            if (this.passData.bcKetQuaDcId) {
+                this.getChiTietBaoCao(this.passData.bcKetQuaDcId)
             }
-        }
-    }
-    async getChiTietDonViCha(maDviNhan: string): Promise<any> {
-        if (this.userService.isCuc()) {
-            return { tenDvi: "Tổng cục Dự trữ Nhà nước" }
-        }
-        let res = await this.donviService.getDonVi({ str: maDviNhan });
-        if (res.msg == MESSAGE.SUCCESS) {
-            return res.data
-        } else {
-            this.notification.error(MESSAGE.ERROR, res.msg);
-            return;
         }
     }
     async loadSoQuyetDinh() {
@@ -198,6 +158,7 @@ export class ChiTietBienBanThuaThieuComponent extends Base2Component implements 
         }
     }
     async openDialogSoQd() {
+        if (this.isView) return;
         await this.loadSoQuyetDinh();
         const modalQD = this.modal.create({
             nzTitle: 'DANH SÁCH QUYẾT ĐỊNH XUẤT ĐIỀU CHUYỂN HÀNG HÓA',
@@ -223,7 +184,7 @@ export class ChiTietBienBanThuaThieuComponent extends Base2Component implements 
     bindingDataQd(data: any) {
         this.formData.patchValue({
             soQdDcCuc: data.soQdinh,
-            ngayKyQd: data.ngayKyQdinh
+            ngayKyQdCuc: data.ngayKyQdinh
         })
     };
 
@@ -243,6 +204,7 @@ export class ChiTietBienBanThuaThieuComponent extends Base2Component implements 
         }
     }
     async openDialogSoBc() {
+        if (this.isView) return;
         await this.loadListBaoCaoChiCuc();
         const modalQD = this.modal.create({
             nzTitle: 'CHỌN BÁO CÁO TỪ CHI CỤC GỬI LÊN',
@@ -255,8 +217,8 @@ export class ChiTietBienBanThuaThieuComponent extends Base2Component implements 
                 dataTable: this.listBaoCaoChiCuc,
                 // dataHeader: ['Số quyết định', 'Ngày quyết định', 'Loại hàng hóa'],
                 // dataColumn: ['soQdinh', 'ngayKyQdinh', 'tenLoaiVthh'],
-                dataHeader: ['Tên báo cáo', 'Đơn vị gửi'],
-                dataColumn: ['tenBc', 'tenDvi']
+                dataHeader: ['Tên báo cáo', 'Số báo cáo', 'Đơn vị gửi'],
+                dataColumn: ['tenBc', 'soBc', 'tenDvi']
             }
         })
         modalQD.afterClose.subscribe(async (data) => {
@@ -267,12 +229,18 @@ export class ChiTietBienBanThuaThieuComponent extends Base2Component implements 
     };
     bindingDataBaoCao(data: any) {
         this.formData.patchValue({
-            soBc: data.soBc,
-            tenBc: data.tenBc,
-            ngayBc: data.ngayBc,
-            bcId: data.id
+            soBcKetQuaDc: data.soBc,
+            ngayLapBcKetQuaDc: data.ngayBc,
+            bcKetQuaDcId: data.id
         })
-        this.danhSachKetQua = Array.isArray(data.danhSachKetQua) ? cloneDeep(data.danhSachKetQua) : []
+        // this.danhSachKetQua = Array.isArray(data.danhSachKetQua) ? cloneDeep(data.danhSachKetQua) : [];
+        if (data.id) {
+            this.getChiTietBaoCao(data.id)
+        }
+    }
+    async getChiTietBaoCao(id: number) {
+        const data = await this.baoCaoDieuChuyenService.getDetail(id);
+        this.danhSachKetQua = Array.isArray(data?.data?.danhSachKetQua) ? cloneDeep(data.data.danhSachKetQua) : [];
         this.buildTableView();
     }
     expandAll() {
@@ -292,38 +260,45 @@ export class ChiTietBienBanThuaThieuComponent extends Base2Component implements 
         let dataView = Array.isArray(this.danhSachKetQua) ?
             chain(this.danhSachKetQua.map(f => ({ ...f, keyGroup: `${f.cloaiVthh}${f.maLoKho ? f.maLoKho + f.maNganKho : f.maNganKho}` }))).groupBy("keyGroup").map((rs, i) => {
                 const dataSoQdinh = rs.find(f => f.keyGroup == i);
+                const { sumSlNhapTt, sumKinhPhiNhapTt } = dataSoQdinh && Array.isArray(rs) ? rs.reduce((obj, cur) => {
+                    obj.sumSlNhapTt += cur.slNhapTt;
+                    obj.sumKinhPhiNhapTt += cur.kinhPhiNhapTt;
+                    return obj;
+                }, { sumSlNhapTt: 0, sumKinhPhiNhapTt: 0 }) : { sumSlNhapTt: 0, sumKinhPhiNhapTt: 0 };
+                const slChenhLech = dataSoQdinh ? dataSoQdinh.slXuatTt - sumSlNhapTt : 0;
+                const kinhPhiChenhLech = dataSoQdinh ? dataSoQdinh.kinhPhiXuatTt + sumKinhPhiNhapTt - dataSoQdinh.kinhPhiTheoQd : 0;
                 return {
                     ...dataSoQdinh,
                     idVirtual: uuidv4(),
-                    childData: dataSoQdinh ? rs : []
+                    childData: dataSoQdinh ? rs : [],
+                    sumKinhPhiNhapTt,
+                    slChenhLech,
+                    kinhPhiChenhLech
                 }
             }).value() : [];
         this.dataView = cloneDeep(dataView);
         this.expandAll();
-        const { tongKinhPhiDcQd, tongKinhPhiXuatDcTt, tongKinhPhiNhapDcTt } = Array.isArray(this.danhSachKetQua) ? this.danhSachKetQua.reduce((obj, cur) => {
+        const { tongKinhPhiDcQd, tongKinhPhiXuatDcTt, tongKinhPhiNhapDcTt, tongKinhPhiChenhLech } = Array.isArray(this.dataView) ? this.dataView.reduce((obj, cur) => {
             obj.tongKinhPhiDcQd += Number(cur.kinhPhiTheoQd);
             obj.tongKinhPhiXuatDcTt += Number(cur.kinhPhiXuatTt);
-            obj.tongKinhPhiNhapDcTt += Number(cur.kinhPhiNhapTt);
+            obj.tongKinhPhiNhapDcTt += Number(cur.sumKinhPhiNhapTt);
+            obj.tongKinhPhiChenhLech += Number(cur.kinhPhiChenhLech)
             return obj
-        }, { tongKinhPhiDcQd: 0, tongKinhPhiXuatDcTt: 0, tongKinhPhiNhapDcTt: 0 }) : { tongKinhPhiDcQd: 0, tongKinhPhiXuatDcTt: 0, tongKinhPhiNhapDcTt: 0 };
+        }, { tongKinhPhiDcQd: 0, tongKinhPhiXuatDcTt: 0, tongKinhPhiNhapDcTt: 0, tongKinhPhiChenhLech: 0 }) : { tongKinhPhiDcQd: 0, tongKinhPhiXuatDcTt: 0, tongKinhPhiNhapDcTt: 0, tongKinhPhiChenhLech: 0 };
         this.tongKinhPhiDcQd = tongKinhPhiDcQd;
         this.tongKinhPhiXuatDcTt = tongKinhPhiXuatDcTt;
         this.tongKinhPhiNhapDcTt = tongKinhPhiNhapDcTt;
+        this.tongKinhPhiChenhLech = tongKinhPhiChenhLech;
     }
     async save(isGuiDuyet: boolean): Promise<void> {
         try {
             await this.spinner.show();
             this.setValidator(isGuiDuyet);
             let body = this.formData.value;
-            body.danhSachKetQua = this.danhSachKetQua;
-            body.listTenBaoCaoSelect = undefined;
-            body.type = this.loaiBc;
-            if (this.loaiBc === "CUC") {
-                body.idsChiCuc = this.allChecked ? this.listBaoCaoChiCuc.map(f => f.id).join(",") : this.listBaoCaoChiCuc.filter(f => f.checked).map(f => f.id).join(",");
-            }
+            body.chiTiet = this.danhSachKetQua;
             let data = await this.createUpdate(body);
             if (!data) return;
-            this.formData.patchValue({ id: data.id, trangThai: data.trangThai })
+            this.formData.patchValue({ id: data.id, soBb: data.soBb, trangThai: data.trangThai })
             if (isGuiDuyet) {
                 // this.pheDuyet();
                 this.hoanThanh();
@@ -445,7 +420,7 @@ export class ChiTietBienBanThuaThieuComponent extends Base2Component implements 
                         trangThai: STATUS.DA_HOAN_THANH
                     };
                     let res =
-                        await this.baoCaoDieuChuyenService.hoanThanh(
+                        await this.bienBanThuThieuService.hoanThanh(
                             body,
                         );
                     if (res.msg == MESSAGE.SUCCESS) {
@@ -487,7 +462,7 @@ export class ChiTietBienBanThuaThieuComponent extends Base2Component implements 
         return false
     }
     checkRoleHoanThanh() {
-        if (!this.isViewOnModal && ((this.loaiBc === "CUC" && this.userService.isCuc()) || (this.loaiBc === "CHI_CUC" && this.userService.isChiCuc())) && this.formData.value.trangThai === STATUS.DU_THAO) {
+        if (!this.isViewOnModal && this.formData.value.trangThai === STATUS.DU_THAO) {
             return true
         }
         return false
@@ -495,7 +470,7 @@ export class ChiTietBienBanThuaThieuComponent extends Base2Component implements 
     ///
     addRow() {
         if (Object.keys(this.canBoThamGia).length > 0) {
-            this.formData.patchValue({ dmCanBoThamGia: this.formData.value.dmCanBoThamGia.concat(this.canBoThamGia) });
+            this.formData.patchValue({ banKiemKe: this.formData.value.banKiemKe.concat(this.canBoThamGia) });
             this.canBoThamGia = {};
         }
     };
@@ -503,7 +478,7 @@ export class ChiTietBienBanThuaThieuComponent extends Base2Component implements 
         this.canBoThamGia = {}
     };
     editRow(index: number): void {
-        const dmCanBoThamGia = this.formData.value.dmCanBoThamGia.map((f, i) => {
+        const banKiemKe = this.formData.value.banKiemKe.map((f, i) => {
             if (i === index) {
                 return { ...f, isEdit: true }
             } else {
@@ -511,26 +486,26 @@ export class ChiTietBienBanThuaThieuComponent extends Base2Component implements 
             }
         });
         this.formData.patchValue({
-            dmCanBoThamGia
+            banKiemKe
         })
-        Object.assign(this.canBoThamGiaClone, dmCanBoThamGia[index])
+        Object.assign(this.canBoThamGiaClone, banKiemKe[index])
     };
     deleteRow(index: number): void {
-        const dmCanBoThamGia = this.formData.value.dmCanBoThamGia;
-        dmCanBoThamGia.splice(index, 1)
-        this.formData.patchValue({ dmCanBoThamGia })
+        const banKiemKe = this.formData.value.banKiemKe;
+        banKiemKe.splice(index, 1)
+        this.formData.patchValue({ banKiemKe })
     }
     saveRow(index: number): void {
-        const dmCanBoThamGia = this.formData.value.dmCanBoThamGia.map(f => ({ ...f, isEdit: false }));
-        this.formData.patchValue({ dmCanBoThamGia })
+        const banKiemKe = this.formData.value.banKiemKe.map(f => ({ ...f, isEdit: false }));
+        this.formData.patchValue({ banKiemKe })
     }
     cancelRow(index: number): void {
-        const dmCanBoThamGia = this.formData.value.dmCanBoThamGia.map((f, i) => {
+        const banKiemKe = this.formData.value.banKiemKe.map((f, i) => {
             if (i === index) {
                 return { ...this.canBoThamGiaClone, isEdit: false }
             }
             return { ...f, isEdit: false }
         });
-        this.formData.patchValue({ dmCanBoThamGia })
+        this.formData.patchValue({ banKiemKe })
     }
 }
