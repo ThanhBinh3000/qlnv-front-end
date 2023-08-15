@@ -2,8 +2,14 @@
     <div class="search__body" nz-row [nzGutter]="[18, 12]">
         <div nz-col nzSpan="6">
             <label class="search__label">Năm quyết toán</label>
-            <input class="search__input" nz-input [(ngModel)]="response.namQtoan"
-                [class]="response.namQtoan && (response.namQtoan > 999 && response.namQtoan < 3000) ? '' : 'input-error-validate'" />
+            <!-- <input class="search__input" nz-input [(ngModel)]="response.namQtoan"
+                [class]="response.namQtoan && (response.namQtoan > 999 && response.namQtoan < 3000) ? '' : 'input-error-validate'" /> -->
+
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn năm" [(ngModel)]="response.namQtoan"
+                [class]="response.namQtoan ?'' : 'input-error-validate'">
+                <nz-option *ngFor="let item of lstNam" [nzValue]="item" [nzLabel]="item">
+                </nz-option>
+            </nz-select>
         </div>
         <div nz-col nzSpan="6">
             <label class="search__label">Quý</label>

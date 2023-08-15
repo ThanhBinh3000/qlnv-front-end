@@ -220,12 +220,12 @@ export class BaoCaoQuyetToanComponent implements OnInit {
     };
 
     checkEditStatus(trangThai: string) {
-        return [Status.TT_01].includes(trangThai) &&
+        return [Status.TT_01, Status.TT_03, Status.TT_05, Status.TT_08].includes(trangThai) &&
             (this.userService.isAccessPermisson(Roles.QTVP.EDIT_REPORT));
     };
 
     checkDeleteStatus(trangThai: string) {
-        return [Status.TT_01].includes(trangThai) &&
+        return [Status.TT_01, Status.TT_03, Status.TT_05, Status.TT_08].includes(trangThai) &&
             (this.userService.isAccessPermisson(Roles.QTVP.DELETE_REPORT));
     };
 

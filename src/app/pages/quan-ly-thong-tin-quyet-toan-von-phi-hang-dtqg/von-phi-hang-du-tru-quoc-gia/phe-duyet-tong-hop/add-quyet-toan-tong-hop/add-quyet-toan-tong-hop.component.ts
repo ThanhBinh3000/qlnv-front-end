@@ -361,9 +361,10 @@ export class AddQuyetToanTongHopComponent implements OnInit {
                         this.thuyetMinh = data.data.thuyetMinh;
                         this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
                         this.congVan = null;
-                        this.lstFiles = data.data.fileDinhKems;
+                        // this.lstFiles = data.data.fileDinhKems;
 
                         this.listFile = [];
+                        this.lstFiles = [];
                         if (this.lstBcaoDviTrucThuocs.length > 0) {
                             this.lstBcaoDviTrucThuocs.forEach(item => {
                                 if (item.ngayDuyet.includes("/")) {

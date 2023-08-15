@@ -12,6 +12,25 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 
 export class DialogThemDieuChinhComponent implements OnInit {
     @Input() obj: any;
+    lstQuy: any[] = [
+        {
+            val: 1,
+            ten: "quý 1"
+        },
+        {
+            val: 2,
+            ten: "quý 2"
+        },
+        {
+            val: 3,
+            ten: "quý 3"
+        },
+        {
+            val: 4,
+            ten: "quý 4"
+        }
+    ]
+    lstNam: number[] = [];
 
     response: any = {
         maPhanBcao: '2',
