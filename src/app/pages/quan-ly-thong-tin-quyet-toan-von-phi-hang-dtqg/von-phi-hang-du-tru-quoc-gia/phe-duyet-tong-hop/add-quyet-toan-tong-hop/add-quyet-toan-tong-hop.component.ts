@@ -19,6 +19,8 @@ import { Operator, Roles, Status, Table, Utils } from 'src/app/Utility/utils';
 import * as uuid from "uuid";
 import { DialogAddVatTuComponent } from '../dialog-add-vat-tu/dialog-add-vat-tu.component';
 import { TEN_HANG } from './add-quyet-toan-tong-hop.constant';
+import { DialogCongVanComponent } from 'src/app/components/dialog/dialog-cong-van/dialog-cong-van.component';
+import { Doc } from '../../von-phi-hang-du-tru-quoc-gia.constant';
 export class ItemData {
     id!: any;
     stt!: string;
@@ -41,7 +43,7 @@ export class ItemCongVan {
 @Component({
     selector: 'app-add-quyet-toan-tong-hop',
     templateUrl: './add-quyet-toan-tong-hop.component.html',
-    styleUrls: ['./add-quyet-toan-tong-hop.component.css']
+    styleUrls: ['./add-quyet-toan-tong-hop.component.scss']
 })
 
 export class AddQuyetToanTongHopComponent implements OnInit {
@@ -91,7 +93,8 @@ export class AddQuyetToanTongHopComponent implements OnInit {
     lstDsHangTrongKho: any[] = [];
     newDate = new Date();
     thuyetMinh: string;
-
+    path: string;
+    ngayCongVan: string;
     lstFiles: any[] = [];
     listFile: File[] = [];
     fileList: NzUploadFile[] = [];
@@ -157,12 +160,28 @@ export class AddQuyetToanTongHopComponent implements OnInit {
 
     // before uploaf file
     beforeUploadCV = (file: NzUploadFile): boolean => {
+        const modalAppendix = this.modal.create({
+            nzTitle: 'Thêm mới công văn',
+            nzContent: DialogCongVanComponent,
+            nzBodyStyle: { overflowY: 'auto', maxHeight: 'calc(100vh - 200px)' },
+            nzMaskClosable: false,
+            nzWidth: '60%',
+            nzFooter: null,
+            nzComponentParams: {
+            },
+        });
+        modalAppendix.afterClose.toPromise().then(async (res) => {
+            if (res) {
+                this.ngayCongVan = res.ngayCongVan;
+                this.congVan = {
+                    ...new Doc(),
+                    fileName: res.soCongVan,
+                };
+            }
+        });
         this.fileDetail = file;
-        this.congVan = {
-            fileName: file.name,
-            fileSize: null,
-            fileUrl: null,
-        };
+        console.log(this.fileDetail);
+
         return false;
     };
 
@@ -204,6 +223,7 @@ export class AddQuyetToanTongHopComponent implements OnInit {
             tenDm: "Tiếp nhận",
         },
     ]
+
 
 
     // them file vao danh sach
@@ -488,7 +508,7 @@ export class AddQuyetToanTongHopComponent implements OnInit {
             this.updateEditCache()
             this.getStatusButton();
         }
-
+        this.path = this.maDviTao + '/' + this.maPhanBcao
         this.sortByIndex();
         // this.sum1();
         this.getTotal();
@@ -751,7 +771,28 @@ export class AddQuyetToanTongHopComponent implements OnInit {
         for (const iterator of this.listFile) {
             listFile.push(await this.uploadFile(iterator));
         }
-        const tongHopTuIds = []
+        const tongHopTuIds = [];
+
+        //get file cong van url
+        const file: any = this.fileDetail;
+        if (file) {
+            if (file.size > Utils.FILE_SIZE) {
+                this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
+                return;
+            } else {
+                lstCtietBcaoTemp.congVan = {
+                    ...await this.quanLyVonPhiService.upFile(file, this.path),
+                    fileName: this.congVan.fileName,
+                }
+            }
+            this.fileDetail = null;
+        }
+
+        if (!lstCtietBcaoTemp.congVan.fileUrl) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
+            return;
+        }
+
         const request = JSON.parse(JSON.stringify({
             id: this.idInput,
             fileDinhKems: listFile,
@@ -760,7 +801,7 @@ export class AddQuyetToanTongHopComponent implements OnInit {
             maDviTien: this.maDviTien,
             thuyetMinh: this.thuyetMinh,
             trangThai: this.isStatus,
-            congVan: this.congVan,
+            congVan: lstCtietBcaoTemp.congVan,
             maDvi: this.maDviTao,
             namQtoan: this.namQtoan,
             quyQtoan: this.quyQtoan,
@@ -774,22 +815,22 @@ export class AddQuyetToanTongHopComponent implements OnInit {
         })
 
         //get file cong van url
-        const file: any = this.fileDetail;
-        if (file) {
-            if (file.size > Utils.FILE_SIZE) {
-                this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
-                return;
-            } else {
-                request.congVan = await this.uploadFile(file);
-            }
-        }
-        if (file) {
-            request.congVan = await this.uploadFile(file);
-        }
-        if (!request.congVan.fileName) {
-            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
-            return;
-        }
+        // const file: any = this.fileDetail;
+        // if (file) {
+        //     if (file.size > Utils.FILE_SIZE) {
+        //         this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
+        //         return;
+        //     } else {
+        //         request.congVan = await this.uploadFile(file);
+        //     }
+        // }
+        // if (file) {
+        //     request.congVan = await this.uploadFile(file);
+        // }
+        // if (!request.congVan.fileName) {
+        //     this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
+        //     return;
+        // }
 
         //call service them moi
         this.spinner.show();

@@ -377,7 +377,36 @@ export class PhuLuc1Component implements OnInit {
 
     checkEdit(stt: string) {
         const lstTemp = this.lstCtietBcao.filter(e => e.stt !== stt);
-        return lstTemp.every(e => !e.stt.startsWith(stt));
+        return lstTemp.every(e => !e.stt.startsWith(stt))
+
+        // if (this.status.general == true) {
+        //     return lstTemp.every(e => !e.stt.startsWith(stt))
+        // }
+        // if (this.status.editAppVal == true) {
+        //     if (
+        //         (
+        //             stt == "0.1.2.1" ||
+        //             stt == "0.1.2.2.1" ||
+        //             stt == "0.1.2.2.2" ||
+        //             stt == "0.1.2.2.3" ||
+        //             stt == "0.1.2.2.4" ||
+        //             stt == "0.1.2.3" ||
+        //             stt == "0.1.2.4.1" ||
+        //             stt == "0.1.2.1.1" ||
+        //             stt == "0.1.2.1.2" ||
+        //             stt == "0.1.3.2.1" ||
+        //             stt == "0.4.2" ||
+        //             stt == "0.5.2") && lstTemp.every(e => !e.stt.startsWith(stt)
+        //             )
+        //     ) {
+        //         return false;
+        //     } else {
+
+        //         return true
+
+        //     }
+        // }
+        // }
     };
 
     // // xoa tat ca cac dong duoc check
