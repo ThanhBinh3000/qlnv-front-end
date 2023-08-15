@@ -275,7 +275,7 @@ export class AddBaoCaoComponent implements OnInit {
         const checkExport = isSynthetic ? this.userService.isAccessPermisson(Roles.DCDT.EXPORT_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(Roles.DCDT.EXPORT_REPORT)
 
         this.status.general = Status.check('saveWHist', this.baoCao.trangThai) && checkSave;
-        this.status.new = Status.check('reject', this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.DCDT.ADD_REPORT) && this.isChild;
+        this.status.new = Status.check('reject', this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.DCDT.ADD_REPORT) && this.isChild && this.data.preTab == Dcdt.DANH_SACH_BAO_CAO;
         this.status.viewAppVal = Status.check('appraisal', this.baoCao.trangThai) && this.userInfo.CAP_DVI == "1";
         this.status.save = Status.check('saveWHist', this.baoCao.trangThai) && checkSave && this.isChild;
         this.status.submit = Status.check('submit', this.baoCao.trangThai) && checkSunmit && this.isChild && !(!this.baoCao.id);

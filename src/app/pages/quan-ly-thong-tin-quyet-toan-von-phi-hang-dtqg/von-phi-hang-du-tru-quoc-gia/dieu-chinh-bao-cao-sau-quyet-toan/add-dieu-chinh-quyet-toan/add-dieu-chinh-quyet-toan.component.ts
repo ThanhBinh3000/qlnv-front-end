@@ -20,6 +20,8 @@ import { Globals } from 'src/app/shared/globals';
 import * as uuid from "uuid";
 import { DialogAddVatTuComponent } from '../dialog-add-vat-tu/dialog-add-vat-tu.component';
 import { NOI_DUNG } from './add-dieu-chinh-quyet-toan.constant';
+import { DialogCongVanComponent } from 'src/app/components/dialog/dialog-cong-van/dialog-cong-van.component';
+import { Doc } from '../../von-phi-hang-du-tru-quoc-gia.constant';
 export class ItemData {
     id!: any;
     stt!: string;
@@ -43,7 +45,7 @@ export class ItemCongVan {
 @Component({
     selector: 'app-add-dieu-chinh-quyet-toan',
     templateUrl: './add-dieu-chinh-quyet-toan.component.html',
-    styleUrls: ['./add-dieu-chinh-quyet-toan.component.css']
+    styleUrls: ['./add-dieu-chinh-quyet-toan.component.scss']
 })
 
 export class AddDieuChinhQuyetToanComponent implements OnInit {
@@ -105,7 +107,8 @@ export class AddDieuChinhQuyetToanComponent implements OnInit {
 
     editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};     // phuc vu nut chinh
     editMoneyUnit = false;
-
+    path: string;
+    ngayCongVan: string;
     maDviTao!: string;
     maDviTien!: string;
     allChecked = false;                         // check all checkbox
@@ -144,12 +147,28 @@ export class AddDieuChinhQuyetToanComponent implements OnInit {
 
     // before uploaf file
     beforeUploadCV = (file: NzUploadFile): boolean => {
+        const modalAppendix = this.modal.create({
+            nzTitle: 'Thêm mới công văn',
+            nzContent: DialogCongVanComponent,
+            nzBodyStyle: { overflowY: 'auto', maxHeight: 'calc(100vh - 200px)' },
+            nzMaskClosable: false,
+            nzWidth: '60%',
+            nzFooter: null,
+            nzComponentParams: {
+            },
+        });
+        modalAppendix.afterClose.toPromise().then(async (res) => {
+            if (res) {
+                this.ngayCongVan = res.ngayCongVan;
+                this.congVan = {
+                    ...new Doc(),
+                    fileName: res.soCongVan,
+                };
+            }
+        });
         this.fileDetail = file;
-        this.congVan = {
-            fileName: file.name,
-            fileSize: null,
-            fileUrl: null,
-        };
+        console.log(this.fileDetail);
+
         return false;
     };
 
@@ -368,6 +387,7 @@ export class AddDieuChinhQuyetToanComponent implements OnInit {
             this.maDviTao = this.userInfo?.MA_DVI;
             this.maDviTien = '1'
         }
+        this.path = this.maDviTao + '/' + this.maPhanBcao
         this.sortByIndex();
         this.getTotal();
         this.getStatusButton();
@@ -550,6 +570,25 @@ export class AddDieuChinhQuyetToanComponent implements OnInit {
             listFile.push(await this.uploadFile(iterator));
         }
 
+        //get file cong van url
+        const file: any = this.fileDetail;
+        if (file) {
+            if (file.size > Utils.FILE_SIZE) {
+                this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
+                return;
+            } else {
+                lstCtietBcaoTemp.congVan = {
+                    ...await this.quanLyVonPhiService.upFile(file, this.path),
+                    fileName: this.congVan.fileName,
+                }
+            }
+            this.fileDetail = null;
+        }
+
+        if (!lstCtietBcaoTemp.congVan.fileUrl) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
+            return;
+        }
 
 
         const request = JSON.parse(JSON.stringify({
@@ -560,7 +599,7 @@ export class AddDieuChinhQuyetToanComponent implements OnInit {
             maDviTien: this.maDviTien,
             thuyetMinh: this.thuyetMinh,
             trangThai: this.isStatus,
-            congVan: this.congVan,
+            congVan: lstCtietBcaoTemp.congVan,
             maDvi: this.maDviTao,
             namQtoan: this.namQtoan,
             quyQtoan: this.quyQtoan,
@@ -569,23 +608,23 @@ export class AddDieuChinhQuyetToanComponent implements OnInit {
             thongBao: this.thongBao,
             maDchinh: this.maDchinh,
         }));
-        //get file cong van url
-        const file: any = this.fileDetail;
-        if (file) {
-            if (file.size > Utils.FILE_SIZE) {
-                this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
-                return;
-            } else {
-                request.congVan = await this.uploadFile(file);
-            }
-        }
-        if (file) {
-            request.congVan = await this.uploadFile(file);
-        }
-        if (!request.congVan.fileName) {
-            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
-            return;
-        }
+        // //get file cong van url
+        // const file: any = this.fileDetail;
+        // if (file) {
+        //     if (file.size > Utils.FILE_SIZE) {
+        //         this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
+        //         return;
+        //     } else {
+        //         request.congVan = await this.uploadFile(file);
+        //     }
+        // }
+        // if (file) {
+        //     request.congVan = await this.uploadFile(file);
+        // }
+        // if (!request.congVan.fileName) {
+        //     this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
+        //     return;
+        // }
 
         if (listFile.length > 0) {
             this.lstFiles = this.lstFiles.filter(item => item.fileUrl !== undefined)
