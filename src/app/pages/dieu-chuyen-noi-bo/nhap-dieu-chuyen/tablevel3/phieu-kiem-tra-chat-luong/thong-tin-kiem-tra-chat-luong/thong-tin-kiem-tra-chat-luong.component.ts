@@ -219,8 +219,9 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
       if (data) {
         this.dataTableChiTieu = data.dcnbPhieuKtChatLuongDtl
         this.bienBanLayMauDinhKem = data.bienBanLayMauDinhKem
-        this.formData.patchValue(data);
+        this.formData.patchValue({ ...data, tenLoNganKho: `${data.tenLoKho} ${data.tenNganKho}`, });
         await this.loadChiTietQdinh(data.qdDcId);
+        await this.getDataKho(data.maLoKho || data.maNganKho)
       }
 
     }
@@ -469,35 +470,31 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
   }
 
   async guiDuyet() {
-    let trangThai = STATUS.CHO_DUYET_TP;
+    let trangThai = STATUS.CHO_DUYET_LDCC;
     let mesg = 'Bạn muốn gửi duyệt văn bản?'
     this.approve(this.idInput, trangThai, mesg);
   }
 
   isTuChoi() {
-    return this.formData.value.trangThai == STATUS.CHO_DUYET_TP || this.formData.value.trangThai == STATUS.CHO_DUYET_LDC
+    return this.formData.value.trangThai == STATUS.CHO_DUYET_LDCC
   }
 
   async tuChoi() {
     let trangThai = () => {
-      if (this.formData.value.trangThai == STATUS.CHO_DUYET_TP)
-        return STATUS.TU_CHOI_TP
-      if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDC)
-        return STATUS.TU_CHOI_LDC
+      if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDCC)
+        return STATUS.TU_CHOI_LDCC
     };
     this.reject(this.idInput, trangThai());
   }
 
   isPheDuyet() {
-    return this.formData.value.trangThai == STATUS.CHO_DUYET_TP || this.formData.value.trangThai == STATUS.CHO_DUYET_LDC
+    return this.formData.value.trangThai == STATUS.CHO_DUYET_LDCC
   }
 
   async pheDuyet() {
     let trangThai = () => {
-      if (this.formData.value.trangThai == STATUS.CHO_DUYET_TP)
-        return STATUS.CHO_DUYET_LDC
-      if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDC)
-        return STATUS.DA_DUYET_LDC
+      if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDCC)
+        return STATUS.DA_DUYET_LDCC
     };
     let mesg = 'Bạn muốn phê duyệt văn bản?'
     this.approve(this.idInput, trangThai(), mesg);
