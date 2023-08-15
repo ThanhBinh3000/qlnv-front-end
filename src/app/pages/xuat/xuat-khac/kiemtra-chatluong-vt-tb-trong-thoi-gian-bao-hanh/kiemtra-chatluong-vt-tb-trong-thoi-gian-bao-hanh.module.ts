@@ -91,6 +91,12 @@ import {
 import {
   BienBanYeuCauBaoHanhComponent
 } from "./kiem-tra-chat-luong-vt-tb-trong-thoi-gian-bao-hanh/bien-ban-yeu-cau-bao-hanh/bien-ban-yeu-cau-bao-hanh.component";
+import {
+  ThongTinPhieuKiemTraChatLuongVtTbComponent
+} from "./kiem-tra-chat-luong-vt-tb-trong-thoi-gian-bao-hanh/phieu-kiem-tra-chat-luong/thong-tin-phieu-kiem-dinh-chat-luong/thong-tin-phieu-kiem-tra-chat-luong-vt-tb.component";
+import {
+  XkVtPhieuKiemTraChatLuongVtTbComponent
+} from "./kiem-tra-chat-luong-vt-tb-trong-thoi-gian-bao-hanh/phieu-kiem-tra-chat-luong/phieu-kiem-tra-chat-luong-vt-tb.component";
 
 
 @NgModule({
@@ -122,6 +128,8 @@ import {
     ThongTinQuyetDinhXuatGiamVatTuBaoHanhComponent,
     BienBanYeuCauBaoHanhComponent,
     ThongTinBienBanYeuCauBaoHanhComponent,
+    XkVtPhieuKiemTraChatLuongVtTbComponent,
+    ThongTinPhieuKiemTraChatLuongVtTbComponent
   ],
   imports: [
     CommonModule,
@@ -162,6 +170,8 @@ import {
     ThongTinQuyetDinhXuatGiamVatTuBaoHanhComponent,
     BienBanYeuCauBaoHanhComponent,
     ThongTinBienBanYeuCauBaoHanhComponent,
+    XkVtPhieuKiemTraChatLuongVtTbComponent,
+    ThongTinPhieuKiemTraChatLuongVtTbComponent
   ],
   providers: [DatePipe]
 })

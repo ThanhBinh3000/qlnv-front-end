@@ -36,6 +36,7 @@ export class ThongTinXuatKhoVtTbTrongThoiGianBaoHanhComponent extends Base2Compo
   listSoQuyetDinh: any[] = [];
   listSoQuyetDinhXh: any[] = [];
   listSoQuyetDinhXm: any[] = [];
+  listSoQuyetDinhBh: any[] = [];
   listDiaDiemNhap: any[] = [];
   listPhieuKtraCl: any[] = [];
   fileDinhKems: any[] = [];
@@ -190,9 +191,7 @@ export class ThongTinXuatKhoVtTbTrongThoiGianBaoHanhComponent extends Base2Compo
       this.listSoQuyetDinh = data.content;
       this.listSoQuyetDinhXh =this.listSoQuyetDinh.filter(i=>i.loai=="XUAT_HUY");
       this.listSoQuyetDinhXm =this.listSoQuyetDinh.filter(i=>i.loai=="XUAT_MAU");
-      console.log(this.listSoQuyetDinh,1)
-      console.log(this.listSoQuyetDinhXh,2)
-      console.log(this.listSoQuyetDinhXm,2)
+      this.listSoQuyetDinhBh =this.listSoQuyetDinh.filter(i=>i.loai=="XUAT_BH");
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
@@ -203,11 +202,14 @@ export class ThongTinXuatKhoVtTbTrongThoiGianBaoHanhComponent extends Base2Compo
     let dataTable;
 
     if (this.formData.value.loai === "XUAT_MAU") {
-      title = "Danh sách số quyết định kế hoạch giao nhiệm vụ xuất hàng lấy mẫu";
+      title = "Danh sách số quyết định giao nhiệm vụ xuất hàng lấy mẫu";
       dataTable = this.listSoQuyetDinhXm;
     } else if (this.formData.value.loai === "XUAT_HUY") {
-      title = "Danh sách số quyết định kế hoạch giao nhiệm vụ xuất hàng bị hủy";
+      title = "Danh sách số quyết định giao nhiệm vụ xuất hàng bị hủy";
       dataTable = this.listSoQuyetDinhXh;
+    } else {
+      title = "Danh sách số quyết định giao nhiệm vụ xuất để bảo hành";
+      dataTable = this.listSoQuyetDinhBh;
     }
 
     const modalQD = this.modal.create({
@@ -219,8 +221,8 @@ export class ThongTinXuatKhoVtTbTrongThoiGianBaoHanhComponent extends Base2Compo
       nzFooter: null,
       nzComponentParams: {
         dataTable: dataTable,
-        dataHeader: ['Năm', 'Số quyết định', 'Ngày quyết định','Sô lần lấy mẫu'],
-        dataColumn: ['nam', 'soQuyetDinh', 'ngayKy','soLanLm'],
+        dataHeader: ['Năm', 'Số quyết định', 'Ngày quyết định',],
+        dataColumn: ['nam', 'soQuyetDinh', 'ngayKy',],
       },
     });
 
@@ -233,7 +235,6 @@ export class ThongTinXuatKhoVtTbTrongThoiGianBaoHanhComponent extends Base2Compo
 
 
   async bindingDataQd(data) {
-    console.log(data,66)
     try {
       await this.spinner.show();
       this.listNganLoKho = data.qdGiaonvXhDtl;
@@ -241,7 +242,7 @@ export class ThongTinXuatKhoVtTbTrongThoiGianBaoHanhComponent extends Base2Compo
         soCanCu: data.soQuyetDinh,
         idCanCu: data.id,
         ngayXuat: data.thoiHanXuatHang,
-        soLanLm: data.soLanLm,
+        soLanLm: this.formData.value.loai=="XUAT_MAU"?data.soLanLm:null,
       });
     } catch (e) {
       this.notification.error(MESSAGE.ERROR, e.msg);

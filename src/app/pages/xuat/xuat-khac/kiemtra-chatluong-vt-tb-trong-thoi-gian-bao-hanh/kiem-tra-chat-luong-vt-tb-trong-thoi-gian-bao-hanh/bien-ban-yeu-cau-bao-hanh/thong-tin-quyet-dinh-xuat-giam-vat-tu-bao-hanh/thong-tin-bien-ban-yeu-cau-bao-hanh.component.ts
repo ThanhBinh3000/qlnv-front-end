@@ -50,8 +50,9 @@ export class ThongTinBienBanYeuCauBaoHanhComponent extends Base2Component implem
   listFileDinhKem: any[] = [];
   listFile: any[] = [];
   listPhieuXuatKho: any[] = [];
-  listLoaiHinhNhapXuat: any[] = [
-    {value: 'XUAT_GIAM', label: "Xuất mẫu bị hủy khỏi kho"},
+  listTrangThaiBh: any[] = [
+    {value: 'DANG_BH', label: "Đang bảo hành"},
+    {value: 'DA_BH', label: "Đã hoàn thành bảo hành"},
   ]
   matchingLoaiVthh = ['0201', '0202', '0208'];
   dataThTree: any[] = [];
@@ -152,6 +153,7 @@ export class ThongTinBienBanYeuCauBaoHanhComponent extends Base2Component implem
               ...res.data,
               id: res.data.id,
             });
+            await this.loadSoPhieuKdcl(res.data.soCanCu)
             this.listFile = res.data.fileDinhKems;
             if (res.data.fileDinhKems && res.data.fileDinhKems.length > 0) {
               res.data.fileDinhKems.forEach(item => {
@@ -174,12 +176,18 @@ export class ThongTinBienBanYeuCauBaoHanhComponent extends Base2Component implem
         tenDvi: this.userInfo.TEN_DVI,
         canBoLapBb: this.userInfo.TEN_DAY_DU,
         soBienBan: `${id}/${this.formData.get('nam').value}${this.maBb}`,
+        trangThaiBh: 'DANG_BH'
       });
     }
   }
 
 
-  async save(isGuiDuyet?) {
+  async save(update?) {
+    if (update){
+      this.formData.patchValue({
+        trangThaiBh: "DA_BH",
+      })
+    }
     let body = this.formData.value;
     this.listFile = [];
     if (this.listFileDinhKem.length > 0) {
@@ -311,7 +319,7 @@ export class ThongTinBienBanYeuCauBaoHanhComponent extends Base2Component implem
     const res = await this.getDetailMlkByKey(item.maDiaDiem, (item.maDiaDiem.length / 2 - 1));
     console.log(res, "sl");
 
-    const isLoaiVthhMatching =this.matchingLoaiVthh.includes(item.loaiVthh);
+    const isLoaiVthhMatching = this.matchingLoaiVthh.includes(item.loaiVthh);
 
     this.formData.patchValue({
       capLaiCaLo: isLoaiVthhMatching,
@@ -370,4 +378,25 @@ export class ThongTinBienBanYeuCauBaoHanhComponent extends Base2Component implem
   }
 
 
+  async updateTrangThaiBb(update:boolean) {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Đã hoàn thành bảo hành  ',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: async () => {
+        this.spinner.show();
+        try {
+          await this.save(update)
+        } catch (e) {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      },
+    });
+  }
 }

@@ -52,10 +52,11 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Loại hình nhập xuất</nz-form-label>
             <nz-form-control>
-              <nz-radio-group formControlName="loai" (ngModelChange)="changeLoai($event)"  [nzDisabled]="isViewDetail" nzName="radiogroup">
+              <nz-radio-group formControlName="loai" (ngModelChange)="changeLoai($event)" [nzDisabled]="isViewDetail"
+                              nzName="radiogroup">
                 <label nz-radio nzValue="XUAT_MAU"> Xuất hàng để lấy mẫu</label>
                 <label nz-radio nzValue="XUAT_HUY"> Xuất mẫu bị hủy khỏi kho</label>
-                <label nz-radio nzValue="XUAT_CA_LO"> Xuất cả lô để bảo hành</label>
+                <label nz-radio nzValue="XUAT_BH"> Xuất để bảo hành</label>
               </nz-radio-group>
             </nz-form-control>
           </nz-form-item>
@@ -120,6 +121,15 @@
             </nz-form-control>
           </nz-form-item>
         </div>
+        <div nz-col nzSpan="4" *ngIf="this.formData.value.loai == 'XUAT_MAU'">
+          <nz-form-item>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-form-label [nzNoColon]="true" class="label-color-kh"> Số lần lấy mẫu
+              </nz-form-label>
+              <input nz-input formControlName="soLanLm" [readonly]="true"/>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
         <div nz-col nzSpan="8" *ngIf="this.formData.value.loai == 'XUAT_HUY'">
           <nz-form-item>
             <nz-form-control [nzErrorTip]="error">
@@ -136,7 +146,8 @@
         <div nz-col nzSpan="4" *ngIf="this.formData.value.loai == 'XUAT_HUY'">
           <nz-form-item>
             <nz-form-control [nzErrorTip]="error">
-              <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Ngày ký QĐ xuất giảm vật tư</nz-form-label>
+              <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Ngày ký QĐ xuất giảm vật tư
+              </nz-form-label>
               <nz-date-picker [nzDisabled]="isViewDetail" class="search__input" nzFormat="dd/MM/YYYY"
                               nzPlaceHolder="Ngày ký QĐ xuất hàng"
                               formControlName="ngayKy">
@@ -144,12 +155,27 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="4" *ngIf="this.formData.value.loai == 'XUAT_MAU'">
+        <div nz-col nzSpan="8" *ngIf="this.formData.value.loai == 'XUAT_BH'">
           <nz-form-item>
             <nz-form-control [nzErrorTip]="error">
-              <nz-form-label [nzNoColon]="true" class="label-color-kh"> Số lần lấy mẫu
+              <nz-form-label [nzNoColon]="true" class="label-color-kh"> Căn cứ trên BB yêu cầu nhà cung cấp BH
               </nz-form-label>
-              <input nz-input formControlName="soLanLm" [readonly]="true"/>
+              <nz-form-control [nzErrorTip]="error">
+                <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogBbBaoHanh()">
+                  <input nz-input formControlName="soCanCu" [readonly]="isViewDetail"/>
+                </nz-input-group>
+              </nz-form-control>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="4" *ngIf="this.formData.value.loai == 'XUAT_BH'">
+          <nz-form-item>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Ngày ký QĐ xuất hàng</nz-form-label>
+              <nz-date-picker [nzDisabled]="isViewDetail" class="search__input" nzFormat="dd/MM/YYYY"
+                              nzPlaceHolder="Ngày ký QĐ xuất hàng"
+                              formControlName="ngayKy">
+              </nz-date-picker>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -197,7 +223,9 @@
     </form>
   </nz-card>
   <nz-card class="mg-t-16">
-    <nz-table *ngIf="this.formData.value.loai == 'XUAT_MAU'" #tblData [nzData]="dataThTree" class="nowrap table-chi-tiet" nzBordered>
+    <nz-table *ngIf="this.formData.value.loai == 'XUAT_MAU'||this.formData.value.loai == 'XUAT_BH'" #tblData
+              [nzData]="dataThTree"
+              class="nowrap table-chi-tiet" nzBordered>
       <thead>
       <tr>
         <th>STT</th>
@@ -209,7 +237,8 @@
         <th>Ngăn/lô kho</th>
         <th>ĐVT</th>
         <th>Mã đơn vị tài sản</th>
-        <th>Số lượng xuất để lấy mẫu</th>
+        <th *ngIf="this.formData.value.loai == 'XUAT_MAU'">Số lượng xuất để lấy mẫu</th>
+        <th *ngIf="this.formData.value.loai == 'XUAT_BH'">Số lượng xuất để bảo hành</th>
         <th>Trạng thái xuất hàng</th>
       </tr>
       </thead>
@@ -243,7 +272,10 @@
               <td>
                 <input nz-input [readOnly]="isViewDetail" [(ngModel)]="lv1.maDviTsan"/>
               </td>
-              <td>
+              <td *ngIf="this.formData.value.loai == 'XUAT_MAU'">
+                <input nz-input [readOnly]="isViewDetail" [(ngModel)]="lv1.slLayMau"/>
+              </td>
+              <td *ngIf="this.formData.value.loai == 'XUAT_BH'">
                 <input nz-input [readOnly]="isViewDetail" [(ngModel)]="lv1.slLayMau"/>
               </td>
               <td></td>
@@ -253,7 +285,8 @@
       </ng-container>
       </tbody>
     </nz-table>
-    <nz-table *ngIf="this.formData.value.loai == 'XUAT_HUY'" #tblData [nzData]="dataThTree" class="nowrap table-chi-tiet" nzBordered>
+    <nz-table *ngIf="this.formData.value.loai == 'XUAT_HUY'" #tblData
+              [nzData]="dataThTree" class="nowrap table-chi-tiet" nzBordered>
       <thead>
       <tr>
         <th>STT</th>
@@ -385,15 +418,15 @@
                 <tr>
                   <td>{{i + 1}}</td>
                   <td>{{item.soPhieu}}</td>
-                  <td>{{item.isDat?'Đat':'Không đạt'}}</td>
-<!--                  <td class="text-center">-->
-<!--                    <a (click)="handleOk(item)">-->
-<!--                      <i class="icon htvbdh_dau-cong"></i>-->
-<!--                    </a>-->
-<!--                  </td>-->
-                  <td  class="text-center">
+                  <td>{{item.isDat ? 'Đat' : 'Không đạt'}}</td>
+                  <!--                  <td class="text-center">-->
+                  <!--                    <a (click)="handleOk(item)">-->
+                  <!--                      <i class="icon htvbdh_dau-cong"></i>-->
+                  <!--                    </a>-->
+                  <!--                  </td>-->
+                  <td class="text-center">
                     <label nz-checkbox [(ngModel)]="item.checked" (ngModelChange)="updateSingleChecked()"
-                           [nzDisabled]="isViewDetail"  [ngModelOptions]="{ standalone: true }"></label>
+                           [nzDisabled]="isViewDetail" [ngModelOptions]="{ standalone: true }"></label>
                   </td>
                 </tr>
               </ng-container>
