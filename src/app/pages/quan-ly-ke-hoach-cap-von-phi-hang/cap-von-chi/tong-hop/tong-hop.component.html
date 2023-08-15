@@ -156,7 +156,7 @@
               <i class="fa fa-pencil" title="Sửa"></i>
             </a>
             <a
-              *ngIf="data.trangThai== STATUS.DU_THAO && userService.isTongCuc() && userService.isAccessPermisson('VONPHIHANG_VONCHIDTQG_TONGHOP_XOA')"
+              *ngIf="(data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_LDV) && userService.isTongCuc() && userService.isAccessPermisson('VONPHIHANG_VONCHIDTQG_TONGHOP_XOA')"
               (click)="xoaItem(data)">
               <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>

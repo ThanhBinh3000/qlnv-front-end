@@ -4,10 +4,10 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { StorageService } from 'src/app/services/storage.service';
-import {ActivatedRoute, Router} from "@angular/router";
-import {QuyetDinhScService} from "../../../services/sua-chua/quyetDinhSc.service";
-import {Base3Component} from "../../../components/base3/base3.component";
-import {BaoCaoScService} from "../../../services/sua-chua/baoCaoSc.service";
+import { ActivatedRoute, Router } from "@angular/router";
+import { QuyetDinhScService } from "../../../services/sua-chua/quyetDinhSc.service";
+import { Base3Component } from "../../../components/base3/base3.component";
+import { BaoCaoScService } from "../../../services/sua-chua/baoCaoSc.service";
 
 @Component({
   selector: 'app-bao-cao',
@@ -29,12 +29,20 @@ export class BaoCaoComponent extends Base3Component implements OnInit {
     super(httpClient, storageService, notification, spinner, modal, route, router, baoCaoScService);
     this.defaultURL = 'sua-chua/bao-cao'
     this.formData = this.fb.group({
-      nam: null,
-      maSc: null,
-      maCc: null,
+      soBaoCao: null,
+      soQdXh: null,
+      trangThai: null,
       ngayTu: null,
       ngayDen: null,
-    })
+    });
+    this.listTrangThai = [
+      { value: this.STATUS.DU_THAO, text: 'Dự thảo' },
+      { value: this.STATUS.CHO_DUYET_TP, text: 'Chờ duyệt - TP' },
+      { value: this.STATUS.TU_CHOI_TP, text: 'Từ chối - TP' },
+      { value: this.STATUS.CHO_DUYET_LDC, text: 'Chờ duyệt - LĐ Cục' },
+      { value: this.STATUS.TU_CHOI_LDC, text: 'Từ chối - LĐ Cục' },
+      { value: this.STATUS.DA_DUYET_LDC, text: 'Đã duyệt - LĐ Cục' },
+    ]
   }
 
   ngOnInit(): void {

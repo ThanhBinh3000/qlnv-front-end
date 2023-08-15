@@ -14,20 +14,20 @@ export class NhapHangComponent implements OnInit {
 
   routes: any[] = [
     {
-      url : '/giao-nv-nh',
-      name : 'Quyết định giao nhiệm vụ nhập hàng'
+      url: '/giao-nv-nh',
+      name: 'Quyết định giao nhiệm vụ nhập hàng'
     },
     {
-      url : '/phieu-nhap-kho',
-      name : 'Phiếu nhập kho'
+      url: '/phieu-nhap-kho',
+      name: 'Phiếu nhập kho'
     },
     {
-      url : '/bang-ke-nhap',
-      name : 'Bảng kê nhập vật tư'
+      url: '/bang-ke-nhap',
+      name: 'Bảng kê nhập vật tư'
     },
     {
-      url : '/bb-kt-nhap',
-      name : 'Bảng bản giao nhận/kết thúc nhập kho'
+      url: '/bb-kt-nhap',
+      name: 'Biên bản giao nhận/kết thúc nhập kho'
     }
   ]
   constructor(
