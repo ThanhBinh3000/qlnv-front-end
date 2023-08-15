@@ -261,6 +261,7 @@ export class TienThua {
 export class Report {
     id: string;
     maDvi: string;
+    tenDvi: string;
     maDviCha: string;
     maCapUng: string;
     namDnghi: number;
