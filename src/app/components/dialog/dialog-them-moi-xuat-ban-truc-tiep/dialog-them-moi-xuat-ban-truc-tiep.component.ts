@@ -1,20 +1,23 @@
-import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
-import { Globals } from 'src/app/shared/globals';
-import { UserService } from 'src/app/services/user.service';
-import { DonviService } from 'src/app/services/donvi.service';
-import { MESSAGE } from 'src/app/constants/message';
-import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
-import { LOAI_HANG_DTQG } from 'src/app/constants/config';
-import { HelperService } from 'src/app/services/helper.service';
-import { UserLogin } from 'src/app/models/userlogin';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { DanhSachXuatBanTrucTiep } from 'src/app/models/KeHoachBanDauGia';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { QuanLyHangTrongKhoService } from 'src/app/services/quanLyHangTrongKho.service';
-import { DeXuatKhBanTrucTiepService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/de-xuat-kh-ban-truc-tiep.service';
-import { cloneDeep } from 'lodash';
+import {Component, OnInit} from '@angular/core';
+import {FormGroup, FormBuilder, Validators} from '@angular/forms';
+import {NzModalRef, NzModalService} from 'ng-zorro-antd/modal';
+import {Globals} from 'src/app/shared/globals';
+import {UserService} from 'src/app/services/user.service';
+import {DonviService} from 'src/app/services/donvi.service';
+import {MESSAGE} from 'src/app/constants/message';
+import {TinhTrangKhoHienThoiService} from 'src/app/services/tinhTrangKhoHienThoi.service';
+import {LOAI_HANG_DTQG} from 'src/app/constants/config';
+import {HelperService} from 'src/app/services/helper.service';
+import {UserLogin} from 'src/app/models/userlogin';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {DanhSachXuatBanTrucTiep} from 'src/app/models/KeHoachBanDauGia';
+import {DanhMucService} from 'src/app/services/danhmuc.service';
+import {QuanLyHangTrongKhoService} from 'src/app/services/quanLyHangTrongKho.service';
+import {
+  DeXuatKhBanTrucTiepService
+} from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/de-xuat-kh-ban-truc-tiep.service';
+import {cloneDeep} from 'lodash';
+
 @Component({
   selector: 'app-dialog-them-moi-xuat-ban-truc-tiep',
   templateUrl: './dialog-them-moi-xuat-ban-truc-tiep.component.html',
@@ -23,23 +26,19 @@ import { cloneDeep } from 'lodash';
 export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
   formData: FormGroup;
   thongTinXuatBanTrucTiep: DanhSachXuatBanTrucTiep;
-  dataEdit: any;
-  listOfData: any[] = [];
-  tableExist: boolean = false;
-  selectedChiCuc: boolean = false;
-  isValid: boolean = false;
-  userInfo: UserLogin;
-  listDiemKhoEdit: any[] = [];
-
-  dataChiTieu: any;
   loaiVthh: any;
   cloaiVthh: any;
   tenCloaiVthh: string;
-  namKh: number;
+  dataChiTieu: any;
   donViTinh: string;
+  dataEdit: any;
+  listOfData: any[] = [];
+  selectedChiCuc: boolean = false;
+  isValid: boolean = false;
+  userInfo: UserLogin;
+  namKh: any;
   donGiaDuocDuyet: number;
   giaToiDa: any;
-
   listChiCuc: any[] = [];
   listNhaKho: any[] = [];
   listDiemKho: any[] = [];
@@ -62,10 +61,10 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
   ) {
     this.formData = this.fb.group({
       id: [null],
-      soLuongChiCuc: [null],
       maDvi: [null, [Validators.required]],
       tenDvi: [null],
       diaChi: [null],
+      soLuongChiCuc: [null],
       soLuongChiTieu: [null],
       soLuongKhDaDuyet: [null],
       donViTinh: [null],
@@ -101,7 +100,6 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
     this.thongTinXuatBanTrucTiep = new DanhSachXuatBanTrucTiep();
     this.formData.patchValue({
       donViTinh: this.donViTinh,
-      loaiVthh: this.loaiVthh,
     })
     this.loadDonVi();
     if (this.dataEdit) {
@@ -122,7 +120,6 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
             tenDvi: item.tenDonvi,
             soLuongXuat: this.loaiVthh === LOAI_HANG_DTQG.GAO ? item.xtnTongGao : item.xtnTongThoc
           }
-
           this.listChiCuc.push(body)
         });
       }
@@ -138,14 +135,16 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
       }
       if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
         let data = this.dataChiTieu.khVatTuXuat.filter(item => item.maVatTuCha == this.loaiVthh && item.maVatTu == this.cloaiVthh);
-        data.forEach(item => {
-          let body = {
-            maDvi: item.maDvi,
-            tenDvi: item.tenDonVi,
-            soLuongXuat: item.soLuongNhap
-          }
-          this.listChiCuc.push(body);
+        let soLuongXuat: number = 0;
+        data.forEach((item) => {
+          soLuongXuat += item.soLuongXuat
         })
+        let body = {
+          maDvi: data[0].maDvi,
+          tenDvi: data[0].tenDvi,
+          soLuongXuat: soLuongXuat
+        }
+        this.listChiCuc.push(body);
       }
     } else {
       let body = {
@@ -155,7 +154,7 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
       let res = await this.donViService.getAll(body);
       if (res.msg === MESSAGE.SUCCESS) {
         this.listChiCuc = res.data.filter(item => item.type == 'DV');
-        this.listChiCuc.map(v => Object.assign(v, { tenDonVi: v.tenDvi }))
+        this.listChiCuc.map(v => Object.assign(v, {tenDonVi: v.tenDvi}))
       }
     }
   }
@@ -173,7 +172,7 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
     }
     let soLuongDaLenKh = await this.deXuatKhBanTrucTiepService.getSoLuongAdded(body);
     let chiCuc = this.listChiCuc.filter(item => item.maDvi == event)[0];
-    const res = await this.donViService.getDonVi({ str: event })
+    const res = await this.donViService.getDonVi({str: event})
     this.listDiemKho = [];
     if (res.msg == MESSAGE.SUCCESS) {
       if (chiCuc.soLuongXuat) {
@@ -196,9 +195,10 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
       this.listDiemKho = res.data.children.filter(item => item.type == 'MLK');
       this.thongTinXuatBanTrucTiep = new DanhSachXuatBanTrucTiep();
     }
+    this.calcTinh();
   }
 
-  changeDiemKho(index?) {
+  async changeDiemKho(index?) {
     if (index >= 0) {
       let diemKho = this.listDiemKho.filter(item => item.maDvi == this.editCache[index].data.maDiemKho);
       if (diemKho.length > 0) {
@@ -216,17 +216,28 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
         this.editCache[index].data.maNhaKho = null;
         this.editCache[index].data.maNganKho = null;
         this.editCache[index].data.maLoKho = null;
-      };
+      }
     } else {
       let diemKho = this.listDiemKho.filter(item => item.maDvi == this.thongTinXuatBanTrucTiep.maDiemKho)[0];
       this.listNhaKho = diemKho.children;
       this.thongTinXuatBanTrucTiep.tenDiemKho = diemKho.tenDvi;
-      this.formDataPatchValue();
+      await this.formDataPatchValue();
+      await this.getdonGiaDuocDuyet();
     }
   }
 
-  formDataPatchValue() {
-    this.thongTinXuatBanTrucTiep.donGiaDuocDuyet = this.donGiaDuocDuyet
+  async getdonGiaDuocDuyet() {
+    if (this.cloaiVthh && this.namKh) {
+      let res = await this.deXuatKhBanTrucTiepService.getDonGiaDuocDuyet(this.cloaiVthh, this.formData.value.maDvi, this.namKh);
+      if (res.msg === MESSAGE.SUCCESS) {
+        this.thongTinXuatBanTrucTiep.donGiaDuocDuyet = res.data
+      } else {
+        this.thongTinXuatBanTrucTiep.donGiaDuocDuyet = null;
+      }
+    }
+  }
+
+  async formDataPatchValue() {
     this.thongTinXuatBanTrucTiep.loaiVthh = this.loaiVthh;
     this.thongTinXuatBanTrucTiep.cloaiVthh = this.cloaiVthh;
     this.thongTinXuatBanTrucTiep.tenCloaiVthh = this.tenCloaiVthh;
@@ -236,14 +247,12 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
     this.thongTinXuatBanTrucTiep.maLoKho = null;
   }
 
-  changeNhaKho(index?) {
+  async changeNhaKho(index?) {
     if (index >= 0) {
       let nhakho = this.listNhaKho.filter(item => item.value == this.editCache[index].data.maNhaKho);
       if (nhakho.length > 0) {
         this.editCache[index].data.tenNhaKho = nhakho[0].text;
         this.editCache[index].data.maNhaKho = nhakho[0].value;
-        console.log(this.editCache[index].data.tenNhaKho, 111)
-        console.log(this.editCache[index].data.maNhaKho, 222)
       }
       this.listNganKho = [];
       for (let i = 0; i < nhakho[0].listNganKhoEdit?.children.length; i++) {
@@ -255,7 +264,7 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
         this.listNganKho.push(item);
         this.editCache[index].data.maNganKho = null;
         this.editCache[index].data.maLoKho = null;
-      };
+      }
       this.thongTinXuatBanTrucTiep = new DanhSachXuatBanTrucTiep();
     } else {
       let nhakho = this.listNhaKho.filter(item => item.maDvi == this.thongTinXuatBanTrucTiep.maNhaKho)[0];
@@ -266,7 +275,7 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
     }
   }
 
-  changeNganKho(index?) {
+  async changeNganKho(index?) {
     if (index >= 0) {
       let nganKho = this.listNganKho.filter(item => item.value == this.editCache[index].data.maNganKho);
       if (nganKho.length > 0) {
@@ -280,16 +289,16 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
         };
         this.listLoKho.push(item);
         if (this.listLoKho && this.listLoKho.length == 0) {
-          this.tonKho(nganKho, index)
+          await this.tonKho(nganKho, index)
         }
         this.editCache[index].data.maLoKho = null;
-      };
+      }
       this.thongTinXuatBanTrucTiep = new DanhSachXuatBanTrucTiep();
     } else {
       let nganKho = this.listNganKho.filter(item => item.maDvi == this.thongTinXuatBanTrucTiep.maNganKho)[0];
       this.listLoKho = nganKho.children;
       if (this.listLoKho && this.listLoKho.length == 0) {
-        this.tonKho(nganKho)
+        await this.tonKho(nganKho)
       }
       this.thongTinXuatBanTrucTiep.tenNganKho = nganKho.tenDvi;
       this.thongTinXuatBanTrucTiep.maLoKho = null;
@@ -303,10 +312,10 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
         this.editCache[index].data.tenLoKho = loKho[0].text;
         this.editCache[index].data.maLoKho = loKho[0].value
       }
-      this.tonKho(loKho, index)
+      await this.tonKho(loKho, index)
     } else {
       let loKho = this.listLoKho.filter(item => item.maDvi == this.thongTinXuatBanTrucTiep.maLoKho)[0];
-      this.tonKho(loKho)
+      await this.tonKho(loKho)
       this.thongTinXuatBanTrucTiep.tenLoKho = loKho.tenDvi;
     }
   }
@@ -314,7 +323,8 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
   async tonKho(item, index?) {
     let body = {
       'maDvi': item.maDvi,
-      'loaiVthh': this.formData.value.loaiVthh
+      'loaiVthh': this.loaiVthh,
+      'cloaiVthh': this.cloaiVthh
     }
     await this.quanLyHangTrongKhoService.getTrangThaiHt(body).then((res) => {
       if (res.msg == MESSAGE.SUCCESS) {
@@ -326,9 +336,9 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
           } else {
             this.thongTinXuatBanTrucTiep.tonKho = cloneDeep(val)
           }
-        } else {
-          this.thongTinXuatBanTrucTiep.tonKho = null
         }
+      } else {
+        this.thongTinXuatBanTrucTiep.tonKho = null
       }
     });
   }
@@ -479,7 +489,7 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
     this.listOfData.forEach((item, index) => {
       this.editCache[index] = {
         edit: false,
-        data: { ...item }
+        data: {...item}
       };
     });
   }
@@ -500,5 +510,21 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
       }, 0);
       return sum;
     }
+  }
+
+  onChangeTinh() {
+    this.thongTinXuatBanTrucTiep.thanhTienDeXuat = this.thongTinXuatBanTrucTiep.donGiaDeXuat * this.thongTinXuatBanTrucTiep.soLuongDeXuat;
+    this.thongTinXuatBanTrucTiep.thanhTienDuocDuyet = this.thongTinXuatBanTrucTiep.donGiaDuocDuyet != null ? this.thongTinXuatBanTrucTiep.donGiaDuocDuyet * this.thongTinXuatBanTrucTiep.soLuongDeXuat : null;
+  }
+
+  onChangeTinhEdit(index) {
+    this.editCache[index].data.thanhTienDeXuat = this.editCache[index].data.donGiaDeXuat * this.editCache[index].data.soLuongDeXuat;
+    this.editCache[index].data.thanhTienDuocDuyet = this.editCache[index].data.donGiaDuocDuyet != null ? this.editCache[index].data.donGiaDuocDuyet * this.editCache[index].data.soLuongDeXuat : null;
+  }
+
+  calcTinh() {
+    this.listOfData.forEach(item => {
+      item.thanhTienDuocDuyet = item.donGiaDuocDuyet != null ? item.donGiaDuocDuyet * item.soLuongDeXuat : null
+    })
   }
 }

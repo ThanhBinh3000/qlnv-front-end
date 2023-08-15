@@ -1,14 +1,18 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { MESSAGE } from 'src/app/constants/message';
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
-import { DeXuatKhBanTrucTiepService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/de-xuat-kh-ban-truc-tiep.service';
-import { isEmpty } from 'lodash';
-import { DonviService } from 'src/app/services/donvi.service';
+import {Component, Input, OnInit} from '@angular/core';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {MESSAGE} from 'src/app/constants/message';
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from 'src/app/services/storage.service';
+import {
+  DeXuatKhBanTrucTiepService
+} from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/de-xuat-kh-ban-truc-tiep.service';
+import {isEmpty} from 'lodash';
+import {DonviService} from 'src/app/services/donvi.service';
+import {CHUC_NANG} from "../../../../../constants/status";
+import {XuatTrucTiepComponent} from "../../xuat-truc-tiep.component";
 
 @Component({
   selector: 'app-de-xuat-kh-ban-truc-tiep',
@@ -19,30 +23,31 @@ import { DonviService } from 'src/app/services/donvi.service';
 export class DeXuatKhBanTrucTiepComponent extends Base2Component implements OnInit {
   @Input()
   loaiVthh: string;
+  CHUC_NANG = CHUC_NANG;
+  public vldTrangThai: XuatTrucTiepComponent
   dsDonvi: any[] = [];
   userdetail: any = {};
+  isView = false;
   idChiTieu: number = 0;
   isViewChiTieu: boolean = false;
   idQdPd: number = 0;
   isViewQdPd: boolean = false;
   idThop: number = 0;
   isViewThop: boolean = false;
-
   listTrangThai: any[] = [
-    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
-    { ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối - TP' },
-    { ma: this.STATUS.CHO_DUYET_TP, giaTri: 'Chờ duyệt - TP' },
-    { ma: this.STATUS.CHO_DUYET_LDC, giaTri: 'Chờ duyệt - LĐ Cục' },
-    { ma: this.STATUS.TU_CHOI_LDC, giaTri: 'Từ chối - LĐ Cục' },
-    { ma: this.STATUS.DA_DUYET_LDC, giaTri: 'Đã duyệt - LĐ Cục' },
+    {ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo'},
+    {ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối - TP'},
+    {ma: this.STATUS.CHO_DUYET_TP, giaTri: 'Chờ duyệt - TP'},
+    {ma: this.STATUS.CHO_DUYET_LDC, giaTri: 'Chờ duyệt - LĐ Cục'},
+    {ma: this.STATUS.TU_CHOI_LDC, giaTri: 'Từ chối - LĐ Cục'},
+    {ma: this.STATUS.DA_DUYET_LDC, giaTri: 'Đã duyệt - LĐ Cục'},
   ];
-
   listTrangThaiTh: any[] = [
-    { ma: this.STATUS.CHUA_TONG_HOP, giaTri: 'Chưa Tổng Hợp' },
-    { ma: this.STATUS.DA_TONG_HOP, giaTri: 'Đã Tổng Hợp' },
-    { ma: this.STATUS.CHUA_TAO_QD, giaTri: 'Chưa Tạo QĐ' },
-    { ma: this.STATUS.DA_DU_THAO_QD, giaTri: 'Đã Dự Thảo QĐ' },
-    { ma: this.STATUS.DA_BAN_HANH_QD, giaTri: 'Đã Ban Hành QĐ' },
+    {ma: this.STATUS.CHUA_TONG_HOP, giaTri: 'Chưa Tổng Hợp'},
+    {ma: this.STATUS.DA_TONG_HOP, giaTri: 'Đã Tổng Hợp'},
+    {ma: this.STATUS.CHUA_TAO_QD, giaTri: 'Chưa Tạo QĐ'},
+    {ma: this.STATUS.DA_DU_THAO_QD, giaTri: 'Đã Dự Thảo QĐ'},
+    {ma: this.STATUS.DA_BAN_HANH_QD, giaTri: 'Đã Ban Hành QĐ'},
   ];
 
   constructor(
@@ -53,9 +58,10 @@ export class DeXuatKhBanTrucTiepComponent extends Base2Component implements OnIn
     modal: NzModalService,
     private donviService: DonviService,
     private deXuatKhBanTrucTiepService: DeXuatKhBanTrucTiepService,
+    private xuatTrucTiepComponent: XuatTrucTiepComponent,
   ) {
     super(httpClient, storageService, notification, spinner, modal, deXuatKhBanTrucTiepService);
-
+    this.vldTrangThai = this.xuatTrucTiepComponent;
     this.formData = this.fb.group({
       namKh: null,
       soDxuat: null,
@@ -75,17 +81,15 @@ export class DeXuatKhBanTrucTiepComponent extends Base2Component implements OnIn
     this.filterTable = {
       namKh: '',
       soDxuat: '',
-      tenDvi: '',
-      maDvi: '',
       ngayTao: '',
       ngayPduyet: '',
       soQdPd: '',
       ngayKyQd: '',
       trichYeu: '',
-      loaiVthh: '',
       tenLoaiVthh: '',
-      cloaiVthh: '',
       tenCloaiVthh: '',
+      slDviTsan: '',
+      slHdDaKy: '',
       soQdCtieu: '',
       tenTrangThai: '',
       tenTrangThaiTh: '',
@@ -100,8 +104,7 @@ export class DeXuatKhBanTrucTiepComponent extends Base2Component implements OnIn
         this.initData()
       ]);
       await this.spinner.hide();
-    }
-    catch (e) {
+    } catch (e) {
       console.log('error: ', e)
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -125,8 +128,6 @@ export class DeXuatKhBanTrucTiepComponent extends Base2Component implements OnIn
   timKiem() {
     this.formData.patchValue({
       loaiVthh: this.loaiVthh,
-      maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
-      trangThai: this.userService.isTongCuc() ? this.STATUS.DA_DUYET_LDC : null
     })
   }
 
@@ -135,6 +136,43 @@ export class DeXuatKhBanTrucTiepComponent extends Base2Component implements OnIn
     this.timKiem();
     this.search();
   }
+
+  redirectDetail(id, isView: boolean) {
+    this.idSelected = id;
+    this.isDetail = true;
+    this.isView = isView;
+  }
+
+  openModalChiTieu(id: number) {
+    this.idChiTieu = id;
+    this.isViewChiTieu = true;
+  }
+
+  closeModalChiTieu() {
+    this.idChiTieu = null;
+    this.isViewChiTieu = false;
+  }
+
+  openModalQdPd(id: number) {
+    this.idQdPd = id;
+    this.isViewQdPd = true;
+  }
+
+  closeModalQdPd() {
+    this.idQdPd = null;
+    this.isViewQdPd = false;
+  }
+
+  openModalTh(id: number) {
+    this.idThop = id;
+    this.isViewThop = true;
+  }
+
+  closeModalTh() {
+    this.idThop = null;
+    this.isViewThop = false;
+  }
+
 
   disabledNgayTaoTu = (startValue: Date): boolean => {
     if (!startValue || !this.formData.value.ngayTaoDen) {
@@ -177,34 +215,4 @@ export class DeXuatKhBanTrucTiepComponent extends Base2Component implements OnIn
     }
     return endValue.getTime() <= this.formData.value.ngayKyQdTu.getTime();
   };
-
-  openModalChiTieu(id: number) {
-    this.idChiTieu = id;
-    this.isViewChiTieu = true;
-  }
-
-  closeModalChiTieu() {
-    this.idChiTieu = null;
-    this.isViewChiTieu = false;
-  }
-
-  openModalQdPd(id: number) {
-    this.idQdPd = id;
-    this.isViewQdPd = true;
-  }
-
-  closeModalQdPd() {
-    this.idQdPd = null;
-    this.isViewQdPd = false;
-  }
-
-  openModalTh(id: number) {
-    this.idThop = id;
-    this.isViewThop = true;
-  }
-
-  closeModalTh() {
-    this.idThop = null;
-    this.isViewThop = false;
-  }
 }
