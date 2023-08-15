@@ -244,7 +244,7 @@ export class BaoCaoComponent implements OnInit {
         const checkAccept = this.userService.isAccessPermisson(Roles.DTC.ACCEPT_REPORT);
         const checkExcel = isSynth ? this.userService.isAccessPermisson(Roles.DTC.EXPORT_SYNTH_REPORT) : this.userService.isAccessPermisson(Roles.DTC.EXPORT_REPORT);
 
-        this.status.save = Status.check('saveWOHist', this.baoCao.trangThai) && checkSave && this.isChild;
+        this.status.save = Status.check('saveWHist', this.baoCao.trangThai) && checkSave && this.isChild;
         this.status.new = Status.check('reject', this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.DTC.ADD_REPORT) && this.isChild && this.data.preTab == Dtc.DANH_SACH_BAO_CAO;
         this.status.submit = Status.check('submit', this.baoCao.trangThai) && checkSunmit && this.isChild && !(!this.baoCao.id);
         this.status.pass = Status.check('pass', this.baoCao.trangThai) && checkPass && this.isChild;

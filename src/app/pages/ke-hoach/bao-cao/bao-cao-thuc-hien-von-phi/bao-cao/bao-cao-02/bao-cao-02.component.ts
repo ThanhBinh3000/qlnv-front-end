@@ -343,8 +343,9 @@ export class BaoCao02Component implements OnInit {
 
     updateEditCache(): void {
         this.lstCtietBcao.forEach(item => {
+            const check = this.editCache[item.id]?.edit;
             this.editCache[item.id] = {
-                edit: false,
+                edit: !check ? false : check,
                 data: new ItemData(item),
             };
         });
@@ -373,8 +374,12 @@ export class BaoCao02Component implements OnInit {
                     })
                     this.lstCtietBcao = Table.addChild(id, item, this.lstCtietBcao);
                     const stt = this.lstCtietBcao.find(e => e.id == item.id).stt;
-                    this.sum(stt);
-                    this.updateEditCache();
+                    this.editCache[item.id] = {
+                        edit: true,
+                        data: new ItemData(item)
+                    }
+                    // this.sum(stt);
+                    // this.updateEditCache();
                 }
             }
         });
@@ -390,8 +395,12 @@ export class BaoCao02Component implements OnInit {
         })
         this.lstCtietBcao = Table.addChild(id, item, this.lstCtietBcao);
         const stt = this.lstCtietBcao.find(e => e.id == item.id).stt;
-        this.sum(stt);
-        this.updateEditCache();
+        this.editCache[item.id] = {
+            edit: true,
+            data: new ItemData(item)
+        }
+        // this.sum(stt);
+        // this.updateEditCache();
     }
 
     addLine(id: string) {

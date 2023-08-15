@@ -53,6 +53,7 @@
                     <thead>
                         <tr>
                             <th>Mã cấp ứng</th>
+                            <th *ngIf="isParent">Tên đơn vị</th>
                             <th>Năm</th>
                             <th>Đợt</th>
                             <th>Ngày tạo</th>
@@ -64,6 +65,7 @@
                     <tbody>
                         <tr>
                             <td>{{ baoCao.maCapUng }}</td>
+                            <td *ngIf="isParent">{{ baoCao.tenDvi }}</td>
                             <td>{{ baoCao.namDnghi }}</td>
                             <td>{{ baoCao.dot }}</td>
                             <ng-container *ngIf="isParent; else dvcd">

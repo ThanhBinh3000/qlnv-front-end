@@ -187,7 +187,7 @@ export class BaoCao03Component implements OnInit {
                 })
             }
         }
-        if ((this.dataInfo.isSynth || this.dataInfo.dotBcao) && this.formDetail.trangThai == Status.NEW) {
+        if ((this.dataInfo.isSynth || !this.dataInfo.dotBcao) && this.formDetail.trangThai == Status.NEW) {
             this.setIndex();
         }
         this.lstCtietBcao = Table.sortByIndex(this.lstCtietBcao);
