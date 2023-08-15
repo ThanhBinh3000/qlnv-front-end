@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import dayjs from 'dayjs';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from 'src/app/constants/message';
@@ -30,6 +31,7 @@ export class DialogTongHopComponent implements OnInit {
             ten: "quý 4"
         }
     ]
+    lstNam: number[] = [];
     response: any = {
         maPhanBcao: '1',
         namQtoan: null,
@@ -43,7 +45,10 @@ export class DialogTongHopComponent implements OnInit {
     ) { }
 
     async ngOnInit() {
-
+        const thisYear = dayjs().get('year');
+        for (let i = -5; i < 10; i++) {
+            this.lstNam.push(thisYear + i);
+        }
     }
 
     async handleOk() {

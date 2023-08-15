@@ -28,7 +28,7 @@ export class DialogTaoMoiComponent implements OnInit {
     async ngOnInit() {
         this.userInfo = this.userService.getUserLogin();
         const thisYear = dayjs().get('year');
-        for (let i = -50; i < 30; i++) {
+        for (let i = -5; i < 10; i++) {
             this.lstNam.push(thisYear + i);
         }
     };

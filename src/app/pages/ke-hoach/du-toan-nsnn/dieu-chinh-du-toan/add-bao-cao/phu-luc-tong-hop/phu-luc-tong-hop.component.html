@@ -42,7 +42,7 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td class="text-center"></td>
+                                <td></td>
                                 <td>Tổng cộng</td>
                                 <td>{{Op.fmtVal(total.tongDchinhGiam)}}</td>
                                 <td>{{Op.fmtVal(total.tongDchinhTang)}}</td>
@@ -66,7 +66,7 @@
                                 </ng-container>
                             </tr>
                             <tr *ngFor="let data of lstCtietBcao; let i = index">
-                                <td [nzIndentSize]="data.level! * 8">
+                                <td>
                                     {{data.index()}}
                                 </td>
                                 <td>

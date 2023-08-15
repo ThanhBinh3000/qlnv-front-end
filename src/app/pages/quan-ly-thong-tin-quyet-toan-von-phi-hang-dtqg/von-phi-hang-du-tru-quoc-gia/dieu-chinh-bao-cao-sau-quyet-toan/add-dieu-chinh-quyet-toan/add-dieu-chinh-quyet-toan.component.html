@@ -58,7 +58,7 @@
                             <tr>
                                 <th>Mã báo cáo</th>
                                 <th>Quyết toán năm</th>
-                                <th>Tháng báo cáo</th>
+                                <th>Quý báo cáo</th>
                                 <th>Số công văn</th>
                                 <th>Ngày lập</th>
                                 <th>Ngày trình duyệt</th>
@@ -73,14 +73,23 @@
                                 <td>{{namQtoan}}</td>
                                 <td>{{quyQtoan}}</td>
                                 <td>
-                                    <nz-upload [nzBeforeUpload]="beforeUploadCV" [hidden]="status">
+                                    <!-- <nz-upload [nzBeforeUpload]="beforeUploadCV" [hidden]="status">
                                         <button nz-button>
                                             <i nz-icon nzType="upload"></i>
                                             Select File
                                         </button>
                                     </nz-upload>
                                     <div class="tep__sqd" (click)="downloadFileCv()">
-                                        <!-- <i class="icon htvbdh_tcdt_tep"></i> -->
+                                        <span>{{congVan?.fileName}}</span>
+                                    </div> -->
+
+                                    <nz-upload *ngIf="!status" [nzBeforeUpload]="beforeUploadCV">
+                                        <button nz-button>
+                                            <i nz-icon nzType="upload"></i>
+                                            Chọn
+                                        </button>
+                                    </nz-upload>
+                                    <div class="tep__sqd" (click)="downloadFile(null)">
                                         <span>{{congVan?.fileName}}</span>
                                     </div>
                                 </td>

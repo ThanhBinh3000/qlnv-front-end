@@ -1021,6 +1021,9 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
                 this.notification.warning(MESSAGE.WARNING, 'giá trị nhập không được âm')
                 return;
             }
+            if (!itm.soTranChi || itm.soTranChi == null) {
+                itm.soTranChi = 0
+            }
             tongTranChi += itm.soTranChi;
         }
         if (tongTranChi == null) {

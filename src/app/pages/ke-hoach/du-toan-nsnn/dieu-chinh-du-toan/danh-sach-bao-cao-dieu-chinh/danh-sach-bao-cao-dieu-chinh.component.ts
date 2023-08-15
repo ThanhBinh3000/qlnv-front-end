@@ -268,7 +268,7 @@ export class DanhSachBaoCaoDieuChinhComponent implements OnInit {
 
     checkDeleteStatus(item: any) {
         const isSynthetic = item.tongHopTu && item.tongHopTu != "[]";
-        return Status.check('saveWHist', item.trangThai) &&
+        return Status.check('saveWOHist', item.trangThai) &&
             (isSynthetic ? this.userService.isAccessPermisson(Roles.DCDT.DELETE_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(Roles.DCDT.DELETE_REPORT));
     }
 }
