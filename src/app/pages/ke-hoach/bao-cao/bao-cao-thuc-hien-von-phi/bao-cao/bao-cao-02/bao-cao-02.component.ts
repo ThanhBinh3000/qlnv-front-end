@@ -334,8 +334,11 @@ export class BaoCao02Component implements OnInit {
 
     setIndex() {
         Vp.DANH_MUC_02.forEach(data => {
-            this.lstCtietBcao.filter(e => e.stt == data.ma && e.maVtu != data.ma).forEach((item, index) => {
+            this.lstCtietBcao.filter(e => e.stt == data.ma && e.maVtu != data.ma && e.tenVtu).forEach((item, index) => {
                 item.stt = data.ma + '.' + (index + 1).toString();
+                this.lstCtietBcao.filter(e => e.stt == data.ma && e.maVtu == item.maVtu && !e.tenVtu).forEach((ele, index) => {
+                    ele.stt = item.stt + '.' + (index + 1).toString();
+                })
             })
         })
 
