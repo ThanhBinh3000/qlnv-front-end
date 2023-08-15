@@ -33,6 +33,7 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
   radioValue: string = '01';
   fileDinhKemUyQuyen: any[] = [];
   fileDinhKemMuaLe: any[] = [];
+  donGiaRow: any;
   @Output()
   dataTableChange = new EventEmitter<any>();
   @Output()
@@ -134,6 +135,8 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
           // this.danhSachCtiet.forEach(item =>{
           //   item.edit = false
           // })
+          console.log(this.danhSachCtiet)
+          this.calcTong();
           this.showDetail(event,this.danhSachCtiet[0]);
         })
         .catch((e) => {
@@ -144,20 +147,19 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
     }
   }
 
-  // calcTong(): number {
-  //   let totalSum = 0;
-  //   if (this.danhSachCtiet) {
-  //     this.danhSachCtiet.forEach(data => {
-  //       const sum = data.children.reduce((prev, cur) => {
-  //         prev += Number.parseInt(cur.soLuong);
-  //         return prev;
-  //       }, 0);
-  //       totalSum += sum;
-  //     });
-  //   }
-  //   console.log(totalSum)
-  //   return totalSum;
-  // }
+  calcTong(): number {
+    let totalSum = 0;
+    if (this.danhSachCtiet) {
+      this.danhSachCtiet.forEach(data => {
+        const sum = data.children.reduce((prev, cur) => {
+          prev += Number.parseInt(cur.soLuong);
+          return prev;
+        }, 0);
+        totalSum += sum;
+      });
+    }
+    return totalSum;
+  }
 
   idRowSelect: number;
   async showDetail($event, data: any) {
@@ -170,8 +172,10 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
       this.selected = true;
     }
     this.rowItem.donGia = data.donGia
-    this.listDiemKho = this.listChiCuc.find(x => x.maDvi == data.maDvi).children.filter(y => y.type == 'MLK').filter(k => k.maDvi.includes(data.children.filter(i => i.maDiemKho == k.maDvi)))
-    console.log(this.listDiemKho)
+    this.donGiaRow = data.donGia
+    if(this.listChiCuc.length > 0){
+      this.listDiemKho = this.listChiCuc.find(x => x.maDvi == data.maDvi).children.filter(y => y.type == 'MLK').filter(k => k.maDvi.includes(data.children.filter(i => i.maDiemKho == k.maDvi)))
+    }
     this.idRowSelect = data.id;
     this.dataTable = data.listChaoGia
     this.updateEditCache()
@@ -315,6 +319,7 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
       }
     });
     this.rowItem = new ChiTietThongTinChaoGia();
+    this.rowItem.donGia = this.donGiaRow
     this.emitDataTable();
     this.updateEditCache()
   }
@@ -396,12 +401,12 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
     this.diemKhoItem.id = null;
   }
 
-  calcTongThanhTien() {
+  calcTongThanhTien(index: any) {
     if (this.danhSachCtiet) {
       let sum = 0
-      this.danhSachCtiet.forEach(item => {
-        sum += item.tongSoLuong;
-      })
+      for (let i = 0; i < this.danhSachCtiet[index].children.length; i++) {
+        sum += this.danhSachCtiet[index].children[i].soLuong;
+      }
       return sum;
     }
   }
@@ -496,7 +501,7 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
   }
 
   isDisable(): boolean {
-    if (this.formData.value.trangThai == STATUS.CHUA_CAP_NHAT || this.formData.value.trangThai == STATUS.DANG_CAP_NHAT) {
+    if ((this.formData.value.trangThai == STATUS.CHUA_CAP_NHAT || this.formData.value.trangThai == STATUS.DANG_CAP_NHAT) && this.userService.isCuc()) {
       return false
     } else {
       return true

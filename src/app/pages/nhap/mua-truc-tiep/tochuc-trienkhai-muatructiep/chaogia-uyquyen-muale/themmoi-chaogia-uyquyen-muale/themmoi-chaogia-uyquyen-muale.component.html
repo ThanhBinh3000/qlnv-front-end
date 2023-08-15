@@ -31,7 +31,7 @@
   <nz-card class="mt16 flex-card p-lr16">
     <!-- START THÔNG TIN CHUNG -->
     <nz-collapse nzAccordion>
-      <nz-collapse-panel [nzHeader]="'Thông tin chung'" [nzActive]="true">
+      <nz-collapse-panel [nzHeader]="'THÔNG TIN CHUNG'" [nzActive]="true">
         <form nzLayout="vertical" nz-form [formGroup]="formData">
           <div nz-row [nzGutter]="24">
             <div nz-col [nzSpan]="24">
@@ -165,7 +165,7 @@
     </nz-collapse>
 
     <nz-collapse>
-      <nz-collapse-panel nzActive="true" nzHeader="Chi tiết thông tin chào giá">
+      <nz-collapse-panel nzActive="true" nzHeader="CHI TIẾT THÔNG TIN CHÀO GIÁ">
         <nz-table #tableData [nzData]="danhSachCtiet" class="nowrap" nzBordered>
           <thead>
           <tr>
@@ -188,12 +188,14 @@
               <td></td>
               <td class="text-bold">{{ item.soLuongChiTieu | number : '1.0-1' : 'vi_VN' }}</td>
               <td class="text-bold">{{ item.soLuongKhDd | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-bold">{{ item.tongSoLuong | number : '1.0-1' : 'vi_VN' }}</td>
+              <td class="text-bold">{{ calcTongThanhTien(i) | number :
+                '1.0-1' :
+                'vi_VN'}}</td>
               <td></td>
               <td></td>
               <td></td>
             </tr>
-            <tr *ngIf="formData.value.trangThai != STATUS.HOAN_THANH_CAP_NHAT && item.id == idRowSelect">
+            <tr *ngIf="formData.value.trangThai != STATUS.HOAN_THANH_CAP_NHAT && item.id == idRowSelect && userService.isCuc()">
               <td class="text-center"></td>
               <td></td>
               <td>
@@ -232,7 +234,7 @@
                 <td>{{diemKho.donGiaVat ? diemKho.donGiaVat : diemKho.donGia | number : '1.0-1' : 'vi_VN'}}</td>
                 <td>{{(diemKho.donGiaVat ? diemKho.donGiaVat : diemKho.donGia) * diemKho.soLuong * 1000 | number : '1.0-1' : 'vi_VN'}}</td>
                 <td>
-                  <a *ngIf="formData.value.trangThai != STATUS.HOAN_THANH_CAP_NHAT" (click)="startEditDk(i, y)"
+                  <a *ngIf="formData.value.trangThai != STATUS.HOAN_THANH_CAP_NHAT && userService.isCuc()" (click)="startEditDk(i, y)"
                      class="text-center">
                     <i class=" fa fa-pencil"></i>
                   </a>
@@ -278,7 +280,7 @@
             <td colspan="3" class="first-last-row-table background-last-row text-right blue-text">Tổng
             </td>
             <td></td>
-            <td class="blue-text">{{ calcTongThanhTien() | number :
+            <td class="blue-text">{{ calcTong() | number :
               '1.0-1' :
               'vi_VN'}}</td>
             <td></td>
@@ -291,7 +293,7 @@
 
     <!-- Thông tin các lần thực hiện đấu giá -->
     <nz-collapse *ngIf=" radioValue == '01'">
-      <nz-collapse-panel nzActive="true" nzHeader="Danh sách các bảng chào giá">
+      <nz-collapse-panel *ngIf=" radioValue == '01'" nzActive="true" nzHeader="Danh sách các bảng chào giá">
         <nz-table nzBordered [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false"
                   class="nowrap pd-10">
           <thead>

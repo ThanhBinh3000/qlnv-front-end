@@ -150,6 +150,7 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
           tongSlNhap: this.dataInput.tongSlNhap,
           tongThanhTien: this.dataInput.tongThanhTien
         })
+        console.log(this.dataInput, 333)
         this.listOfData = this.dataInput.details;
         // this.convertListData();
         await this.loadDsDonVi();

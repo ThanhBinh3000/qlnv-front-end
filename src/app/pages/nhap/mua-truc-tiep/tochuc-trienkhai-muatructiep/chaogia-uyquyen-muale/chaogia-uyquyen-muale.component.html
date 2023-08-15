@@ -155,7 +155,7 @@
             <td>{{data.tenCloaiVthh}}</td>
             <td>{{data.tenTrangThai}}</td>
             <td class="text-left">
-              <a *ngIf="data.trangThai == STATUS.HOAN_THANH_CAP_NHAT" (click)="goDetail(data.id, true)">
+              <a *ngIf="data.trangThai == STATUS.HOAN_THANH_CAP_NHAT || (data.trangThai == STATUS.DANG_CAP_NHAT && !userService.isCuc())" (click)="goDetail(data.id, true)">
                 <i class="fa fa-eye" title="Xem chi tiết"></i>
               </a>
               <a *ngIf="data.trangThai != STATUS.HOAN_THANH_CAP_NHAT &&  userService.isCuc()"

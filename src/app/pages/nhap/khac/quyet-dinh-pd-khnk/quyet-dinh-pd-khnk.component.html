@@ -12,12 +12,12 @@
           <label class="search__label">Số quyết định</label>
           <input class="search__input" placeholder="Nhập số quyết định" nz-input [(ngModel)]="searchFilter.soQd" />
         </div>
-        <div nz-col nzSpan="3">
-          <label class="search__label"> Trạng thái </label>
-          <nz-select [(ngModel)]="searchFilter.trangThai">
-            <nz-option *ngFor="let p of listTrangThai" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
-          </nz-select>
-        </div>
+<!--        <div nz-col nzSpan="3">-->
+<!--          <label class="search__label"> Trạng thái </label>-->
+<!--          <nz-select [(ngModel)]="searchFilter.trangThai">-->
+<!--            <nz-option *ngFor="let p of listTrangThai" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>-->
+<!--          </nz-select>-->
+<!--        </div>-->
         <div nz-col nzSpan="5">
           <label class="search__label">Ngày ký quyết định</label>
           <div nz-row [nzGutter]="24">
@@ -78,8 +78,8 @@
             <th class="text-center" style="width: 10%;">Số quyết định</th>
             <th class="text-center" style="width: 10%;">Ngày quyết định</th>
             <th>Mã tổng hợp</th>
-            <th>Số công văn/đề xuất</th>
-            <th class="text-center" style="width: 12%;">Loại hàng hóa</th>
+            <th>Số công văn tờ trình</th>
+            <th class="text-center" style="width: 12%;">Loại hàng DTQG</th>
             <th class="text-center" style="width: 8%;">Tổng SL đề xuất</th>
             <th class="text-center" style="width: 8%;">ĐVT</th>
             <th class="text-center" style="width: 8%;">Nội dung tổng hợp</th>

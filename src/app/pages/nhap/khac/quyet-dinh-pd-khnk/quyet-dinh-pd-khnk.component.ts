@@ -46,7 +46,9 @@ export class QuyetDinhPdKhnkComponent extends Base2Component implements OnInit {
 
   listTrangThai: any[] = [
     { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
-    { ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành' }
+    { ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành' },
+    { ma: this.STATUS.CHO_DUYET_LDV, giaTri: 'Chờ duyệt - LĐ Vụ' },
+    { ma: this.STATUS.TU_CHOI_LDV, giaTri: 'Từ chối - LĐ Vụ' },
   ];
   searchFilter = {
     soQd: null,
