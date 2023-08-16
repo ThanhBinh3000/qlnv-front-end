@@ -44,6 +44,7 @@ export class QuanLyHopDongMttComponent implements OnInit {
   userInfo: UserLogin;
   STATUS = STATUS
   isDetail: boolean
+  tongSlChaoGia: number;
 
   constructor(
     private fb: FormBuilder,
@@ -127,9 +128,12 @@ export class QuanLyHopDongMttComponent implements OnInit {
 
           })
           this.danhSachCtiet = res.data.danhSachCtiet;
+          this.tongSlChaoGia = 0;
           this.danhSachCtiet.forEach(item =>{
             this.dataTable.push(...item.listHdong)
+            this.tongSlChaoGia += item.listChaoGia.length
           })
+          this.formData.get('canhanTochuc').setValue(this.tongSlChaoGia);
           console.log(this.danhSachCtiet)
           // this.showDetail(event, this.danhSachCtiet[0])
           this.showDetailHd(event, this.dataTable[0])
@@ -215,56 +219,70 @@ export class QuanLyHopDongMttComponent implements OnInit {
     }
   }
 
-  pheDuyet() {
-    let trangThai = STATUS.DA_HOAN_THANH
-    let mesg = 'Bạn có muốn hoàn thành ?'
-    this.modal.confirm({
-      nzClosable: false,
-      nzTitle: 'Xác nhận',
-      nzContent: mesg,
-      nzOkText: 'Đồng ý',
-      nzCancelText: 'Không',
-      nzOkDanger: true,
-      nzWidth: 310,
-      nzOnOk: async () => {
-        this.spinner.show();
-        try {
-          let res = null
-          if(!this.userService.isChiCuc()){
-            let body = {
-              id: this.id,
-              lyDoTuChoi: null,
-              trangThai: trangThai,
-            };
-            res =
-              await this.quyetDinhPheDuyetKetQuaChaoGiaMTTService.approve(
-                body,
-              );
-          }else{
-            let body = {
-              id: this.idQdKh,
-              lyDoTuChoi: null,
-              trangThai: trangThai,
-            };
-            res =
-              await this.quyetDinhPheDuyetKeHoachMTTService.approve(
-                body,
-              );
-          }
+  validateListHopDong(){
+    console.log(this.dataTable)
+    if(this.dataTable.filter(x => x.trangThai == STATUS.DU_THAO).length > 0){
+      return true
+    }else{
+      return false
+    }
+  }
 
-          if (res.msg == MESSAGE.SUCCESS) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.THAO_TAC_SUCCESS);
-          } else {
-            this.notification.error(MESSAGE.ERROR, res.msg);
+  pheDuyet() {
+    if(this.validateListHopDong()){
+      this.notification.error(MESSAGE.ERROR, 'Vui lòng thêm các hợp đồng cho các đơn vị cung cấp');
+      return;
+    }else{
+      let trangThai = STATUS.DA_HOAN_THANH
+      let mesg = 'Bạn có muốn hoàn thành ?'
+      this.modal.confirm({
+        nzClosable: false,
+        nzTitle: 'Xác nhận',
+        nzContent: mesg,
+        nzOkText: 'Đồng ý',
+        nzCancelText: 'Không',
+        nzOkDanger: true,
+        nzWidth: 310,
+        nzOnOk: async () => {
+          this.spinner.show();
+          try {
+            let res = null
+            if(!this.userService.isChiCuc()){
+              let body = {
+                id: this.id,
+                lyDoTuChoi: null,
+                trangThai: trangThai,
+              };
+              res =
+                await this.quyetDinhPheDuyetKetQuaChaoGiaMTTService.approve(
+                  body,
+                );
+            }else{
+              let body = {
+                id: this.idQdKh,
+                lyDoTuChoi: null,
+                trangThai: trangThai,
+              };
+              res =
+                await this.quyetDinhPheDuyetKeHoachMTTService.approve(
+                  body,
+                );
+            }
+
+            if (res.msg == MESSAGE.SUCCESS) {
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.THAO_TAC_SUCCESS);
+            } else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+            }
+            this.spinner.hide();
+          } catch (e) {
+            console.log('error: ', e);
+            this.spinner.hide();
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
           }
-          this.spinner.hide();
-        } catch (e) {
-          console.log('error: ', e);
-          this.spinner.hide();
-          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        }
-      },
-    });
+        },
+      });
+    }
   }
 
   validateData(): boolean {
