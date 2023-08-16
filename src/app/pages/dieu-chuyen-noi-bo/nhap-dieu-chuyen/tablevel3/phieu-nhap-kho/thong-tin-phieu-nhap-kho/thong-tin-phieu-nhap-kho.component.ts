@@ -47,6 +47,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
   noiDung: string;
   dviTinh: string;
   duToanKinhPhi: string;
+  isKTCL: boolean = false
 
   constructor(
     httpClient: HttpClient,
@@ -70,6 +71,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
       tenDvi: [],
       maQhns: [],
       soPhieuNhapKho: [],
+      ngayLap: [dayjs().format('YYYY-MM-DD')],
       ngayNhapKho: [dayjs().format('YYYY-MM-DD')],
       soNo: [],
       soCo: [],
@@ -147,6 +149,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
 
     if (this.data) {
       console.log('this.data', this.data)
+      this.isKTCL = this.data.thayDoiThuKho
       this.formData.patchValue({
         trangThai: STATUS.DU_THAO,
         tenTrangThai: 'Dự thảo',
@@ -169,6 +172,9 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
         soLuongQdDcCuc: this.data.slDienChuyen,
         dviTinh: this.data.tenDonvitinh,
       });
+      this.dviTinh = this.data.tenDonvitinh
+      this.noiDung = this.data.tenChLoaiHangHoa
+      this.duToanKinhPhi = this.data.duToanKinhPhiDc
       await this.loadChiTietQdinh(this.data.qdDcCucId);
     }
 
@@ -470,6 +476,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
           dviTinh: data.tenDonViTinh,
           idKeHoachDtl: data.id
         });
+        this.isKTCL = data.thayDoiThuKho
         this.dviTinh = data.tenDonViTinh
         this.noiDung = data.tenCloaiVthh
         this.duToanKinhPhi = data.duToanKphi
@@ -504,6 +511,9 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
     if (!this.formData.value.thayDoiThuKho) {
       this.formData.controls["soPhieuKtraCluong"].clearValidators();
       this.formData.controls["idPhieuKtraCluong"].clearValidators();
+    }
+    if (!isGuiDuyet) {
+      this.formData.controls["soBangKeCanHang"].clearValidators();
     }
     await this.spinner.show();
     let body = this.formData.value;
