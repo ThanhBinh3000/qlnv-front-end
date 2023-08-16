@@ -245,6 +245,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 		// await this.getChildUnit();
 		// lấy role người dùng
 		this.userInfo = this.userService.getUserLogin();
+		console.log(this.userInfo);
 
 		await this.danhMuc.dMDonVi().toPromise().then(
 			(data) => {
@@ -920,6 +921,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 				this.giaoDuToanChiService.trinhDuyetPhuongAnGiao(requestGroupButtons).toPromise().then(async (data) => {
 					if (data.statusCode == 0) {
 						this.trangThaiBanGhi = mcn;
+						this.getStatusName();
 						this.getStatusButton();
 						if (mcn == Status.TT_08 || mcn == Status.TT_05 || mcn == Status.TT_03) {
 							this.notification.success(MESSAGE.SUCCESS, MESSAGE.REVERT_SUCCESS);
@@ -1238,7 +1240,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 					soTien: item.lstCtietDvis.find(e => e.maDviNhan == maDviNhan).soTranChi,
 				})
 			});
-			if (this.userInfo.CAP_DVI == "1") {
+			if (this.userInfo.CAP_DVI == "1" && this.userInfo.DON_VI.tenVietTat.includes("CDT")) {
 				lstGiao.push({
 					maGiao: this.maGiao,
 					maPa: this.maPa,
