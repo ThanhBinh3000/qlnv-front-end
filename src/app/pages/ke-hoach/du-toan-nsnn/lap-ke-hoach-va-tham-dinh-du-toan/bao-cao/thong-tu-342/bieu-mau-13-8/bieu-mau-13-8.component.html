@@ -71,7 +71,7 @@
 								<th *ngIf="status.viewAppVal">6=5-4</th>
 								<th>7</th>
 								<th *ngIf="status.viewAppVal">8</th>
-								<th *ngIf="status.general || status.viewAppVal" nzRight></th>
+								<th *ngIf="status.general || status.editAppVal" nzRight></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -107,7 +107,7 @@
 									<td *ngIf="status.viewAppVal">
 										{{ data.ykienDviCtren }}
 									</td>
-									<td *ngIf="status.general || status.viewAppVal" nzRight>
+									<td *ngIf="status.general || status.editAppVal" nzRight>
 										<i *ngIf="checkEdit(data.stt)" class="fa fa-pencil"
 											(click)="startEdit(data.id)"></i>
 									</td>
@@ -169,7 +169,7 @@
 											<input nz-input [(ngModel)]="editCache[data.id].data.ykienDviCtren" />
 										</td>
 									</ng-template>
-									<td *ngIf="status.general || status.viewAppVal" nzRight>
+									<td *ngIf="status.general || status.editAppVal" nzRight>
 										<a (click)="saveEdit(data.id)" class="save">Lưu</a>
 										<a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
 											(nzOnConfirm)="cancelEdit(data.id)" class="save">

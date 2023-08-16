@@ -527,7 +527,7 @@ export class PhuLuc01Component implements OnInit {
 			{ t: 4, b: 5, l: 12, r: 12, val: 'Ghi chú' },
 			{ t: 4, b: 5, l: 13, r: 13, val: 'Ý kiến của đơn vị cấp trên' },
 		]
-		const fieldOrder = ['stt', 'tenDanhMuc', 'dviTinh', 'thienNamTruoc', 'dtoanNamHtai', 'uocNamHtai', 'sluongNamDtoan',
+		const fieldOrder = ['stt', 'tenDanhMuc', 'dviTinh', 'thienNamTruoc', 'dtoanNamHtai', 'uocNamHtai',
 			'sluongNamDtoan', 'dmucNamDtoan', 'ttienNamDtoan', 'sluongTd', 'ttienTd', 'chenhLech', 'ghiChu', 'ykienDviCtren']
 
 		const filterData = this.lstCtietBcao.map(item => {
@@ -537,6 +537,19 @@ export class PhuLuc01Component implements OnInit {
 			})
 			return row;
 		})
+		let row: any = {};
+		fieldOrder.forEach(field => {
+			if (field == 'tenDanhMuc') {
+				row[field] = 'Tổng cộng'
+			} else {
+				if (!['sluongNamDtoan', 'dmucNamDtoan', 'sluongTd'].includes(field)) {
+					row[field] = (!this.total[field] && this.total[field] !== 0) ? '' : this.total[field];
+				} else {
+					row[field] = '';
+				}
+			}
+		})
+		filterData.push(row);
 
 		const workbook = XLSX.utils.book_new();
 		const worksheet = Table.initExcel(header);

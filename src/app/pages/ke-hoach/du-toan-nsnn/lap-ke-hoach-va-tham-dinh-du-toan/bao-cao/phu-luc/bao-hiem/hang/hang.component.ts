@@ -480,7 +480,7 @@ export class HangComponent implements OnInit {
 
     exportToExcel() {
         const header = [
-            { t: 0, b: 4 + this.lstCtietBcao.length, l: 0, r: 7, val: null },
+            { t: 0, b: 5 + this.lstCtietBcao.length, l: 0, r: 7, val: null },
             { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
             { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
             { t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
@@ -492,18 +492,20 @@ export class HangComponent implements OnInit {
             { t: 4, b: 4, l: 5, r: 5, val: 'Tên hàng DTQG' },
             { t: 4, b: 4, l: 6, r: 6, val: 'Số lượng' },
             { t: 4, b: 4, l: 7, r: 7, val: 'Giá trị' },
+            { t: 5, b: 5, l: 1, r: 1, val: 'Tổng cộng' },
+            { t: 5, b: 5, l: 7, r: 7, val: this.total?.giaTri },
         ]
-        const headerBot = 5;
+        const headerBot = 6;
         this.lstCtietBcao.forEach((item, index) => {
             if (item.unitSpan) {
-                header.push({ t: headerBot + index, b: headerBot + item.unitSpan, l: 0, r: 0, val: this.getIndex(item.stt) })
-                header.push({ t: headerBot + index, b: headerBot + item.unitSpan, l: 1, r: 1, val: item.tenDvi })
+                header.push({ t: headerBot + index, b: headerBot + index + item.unitSpan - 1, l: 0, r: 0, val: this.getIndex(item.stt) })
+                header.push({ t: headerBot + index, b: headerBot + index + item.unitSpan - 1, l: 1, r: 1, val: item.tenDvi })
             }
             if (item.locationSpan) {
-                header.push({ t: headerBot + index, b: headerBot + item.locationSpan, l: 2, r: 2, val: item.tenDiaChiKho })
+                header.push({ t: headerBot + index, b: headerBot + index + item.locationSpan - 1, l: 2, r: 2, val: item.tenDiaChiKho })
             }
             if (item.storehouseSpan) {
-                header.push({ t: headerBot + index, b: headerBot + item.storehouseSpan, l: 3, r: 3, val: item.tenNhaKho })
+                header.push({ t: headerBot + index, b: headerBot + index + item.storehouseSpan - 1, l: 3, r: 3, val: item.tenNhaKho })
             }
             header.push({ t: headerBot + index, b: headerBot + index, l: 4, r: 4, val: item.khoiTich?.toString() })
             header.push({ t: headerBot + index, b: headerBot + index, l: 5, r: 5, val: item.tenHang })
