@@ -68,8 +68,8 @@
             *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDV"
             nzShowIcon nzType="error" nzMessage="Lý do từ chối" nzDescription="{{formData.value.lyDoTuChoi}}">
   </nz-alert>
-  <nz-card class="mg-t-16 flex-card p-lr16">
-    <form nzLayout="vertical" nz-form [formGroup]="formData" *ngIf="!showFromTH">
+  <nz-card class="mg-t-16 flex-card p-lr16" *ngIf="!showFromTH">
+    <form nzLayout="vertical" nz-form [formGroup]="formData">
       <div nz-row [nzGutter]="24">
         <div nz-col [nzSpan]="6">
           <nz-form-item>
@@ -245,6 +245,8 @@
         </div>
       </div>
     </form>
+  </nz-card>
+  <nz-card class="mg-t-16 flex-card p-lr16">
     <nz-collapse nzAccordion>
       <nz-collapse-panel [nzHeader]="'THÔNG TIN CHUNG'" [nzActive]="true">
         <form nzLayout="vertical" nz-form [formGroup]="formData">
@@ -349,6 +351,8 @@
         </form>
       </nz-collapse-panel>
     </nz-collapse>
+  </nz-card>
+  <nz-card class="mg-t-16 flex-card p-lr16">
     <nz-collapse nzAccordion>
       <nz-collapse-panel [nzHeader]="'DANH MỤC ĐƠN VỊ TÀI SẢN BÁN TRỰC TIẾP'" [nzActive]="true"
                          [nzExtra]="extraTpl">
@@ -450,6 +454,8 @@
         </nz-table>
       </nz-collapse-panel>
     </nz-collapse>
+  </nz-card>
+  <nz-card class="mg-t-16 flex-card p-lr16" *ngIf="!showFromTH">
     <nz-collapse nzAccordion>
       <nz-collapse-panel [nzHeader]="'ĐỊA ĐIỂM GIAO NHẬN HÀNG'" [nzActive]="true">
         <nz-table #ttChungDDGiaoNhan class="nowrap pd-10" [nzFrontPagination]="false" [nzShowPagination]="false"
@@ -470,7 +476,6 @@
             <td>{{ item.diaChi }}</td>
             <td>{{ item.soLuongChiCuc|number:globals.numberFormat:globals.locale}}</td>
           </tr>
-
           </tbody>
           <tfoot>
           <tr *ngIf="dataTable.length > 0">
@@ -482,19 +487,19 @@
         </nz-table>
       </nz-collapse-panel>
     </nz-collapse>
-    <form nzLayout="vertical" nz-form [formGroup]="formData">
-      <div nz-col [nzSpan]="24">
-        <nz-form-item class="form-item display-block">
-          <nz-form-label [nzNoColon]="true">
-            Ghi chú
-          </nz-form-label>
-          <nz-form-control>
-            <textarea [readonly]="isView" nz-input [rows]="3" formControlName="ghiChu"></textarea>
-          </nz-form-control>
-        </nz-form-item>
-      </div>
-    </form>
   </nz-card>
+  <form nzLayout="vertical" nz-form [formGroup]="formData" *ngIf="!showFromTH">
+    <div nz-col [nzSpan]="24">
+      <nz-form-item class="form-item display-block">
+        <nz-form-label [nzNoColon]="true">
+          Ghi chú
+        </nz-form-label>
+        <nz-form-control>
+          <textarea [readonly]="isView" nz-input [rows]="3" formControlName="ghiChu"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+  </form>
 </div>
 <ng-template #error let-control>
   <app-template-error #error [control]="control"></app-template-error>

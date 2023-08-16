@@ -352,7 +352,8 @@
 </nz-modal>
 <nz-modal [nzWidth]="'90%'" [(nzVisible)]="isViewThop" (nzOnCancel)="closeModalTh()">
   <ng-container *nzModalContent class="modal__content">
-    <app-them-moi-tong-hop-kh-ban-truc-tiep [id]="idThop" [loaiVthh]="loaiVthh" [isViewOnModal]="true">
+    <app-them-moi-tong-hop-kh-ban-truc-tiep [idInput]="idThop" [loaiVthh]="loaiVthh" [isViewOnModal]="true"
+                                            [isView]="true">
     </app-them-moi-tong-hop-kh-ban-truc-tiep>
   </ng-container>
   <div *nzModalFooter>

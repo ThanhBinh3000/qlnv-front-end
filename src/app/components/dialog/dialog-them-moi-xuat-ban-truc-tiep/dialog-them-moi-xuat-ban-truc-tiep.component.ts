@@ -221,7 +221,7 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
       let diemKho = this.listDiemKho.filter(item => item.maDvi == this.thongTinXuatBanTrucTiep.maDiemKho)[0];
       this.listNhaKho = diemKho.children;
       this.thongTinXuatBanTrucTiep.tenDiemKho = diemKho.tenDvi;
-      await this.formDataPatchValue();
+      this.formDataPatchValue();
       await this.getdonGiaDuocDuyet();
     }
   }
@@ -237,7 +237,7 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
     }
   }
 
-  async formDataPatchValue() {
+  formDataPatchValue() {
     this.thongTinXuatBanTrucTiep.loaiVthh = this.loaiVthh;
     this.thongTinXuatBanTrucTiep.cloaiVthh = this.cloaiVthh;
     this.thongTinXuatBanTrucTiep.tenCloaiVthh = this.tenCloaiVthh;

@@ -94,6 +94,8 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
       pthucGnhan: [''],
       thongBaoKh: [''],
       tongSoLuong: [],
+      donGia: [],
+      thanhTien: [],
       ghiChu: [''],
       trangThai: [''],
       tenTrangThai: [''],
@@ -164,7 +166,9 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
         })
         this.dataTable = data.children;
         await this.getGiaToiThieu();
-        this.onChangeLoaiVthh(data.loaiVthh);
+        if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
+          this.onChangeLoaiVthh(data.loaiVthh);
+        }
       }
     }
   }
@@ -359,12 +363,15 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
 
   calculatorTable() {
     this.dataTable.forEach((item) => {
+      item.thanhTienCuc = 0;
       item.children.forEach((child) => {
         child.thanhTienDuocDuyet = child.donGiaDuocDuyet * child.soLuongDeXuat
+        item.thanhTienCuc += child.thanhTienDeXuat
       })
     })
     this.formData.patchValue({
       tongSoLuong: this.dataTable.reduce((prev, cur) => prev + cur.soLuongChiCuc, 0),
+      thanhTien: this.dataTable.reduce((prev, cur) => prev + cur.thanhTienCuc, 0),
     });
   }
 
