@@ -259,13 +259,99 @@
                         </ng-template>
                     </div>
                 </div>
+
+
                 <nz-tabset class="tab__container">
+                    <nz-tab [nzTitle]="'Danh sách văn bản đính kèm'">
+                        <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+                            <div nz-col class="gutter-row" [nzSpan]="3">
+                                Danh sách văn bản đính kèm
+                                <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" [nzMultiple]="true"
+                                    [hidden]="status">
+                                    <button nz-button>
+                                        <i nz-icon nzType="upload"></i>
+                                        Select File
+                                    </button>
+                                </nz-upload>
+                                <button nz-button [nzType]="'primary'" (click)="handleUpload()"
+                                    [disabled]="fileList.length === 0" [hidden]="status" style="margin-top: 16px">
+                                    Thêm vào danh sách
+                                </button>
+                            </div>
+                        </div>
+
+                        <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+                            <div nz-col class="gutter-row" [nzSpan]="12">
+                                <nz-table nzBordered class="table__body">
+                                    <thead>
+                                        <tr>
+                                            <th nzWidth="7%">STT</th>
+                                            <th>Tên file</th>
+                                            <th nzWidth="10%"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let data of lstFiles; let i = index">
+                                            <td>{{ i + 1 }} </td>
+                                            <td>{{ data.fileName }}</td>
+                                            <td>
+                                                <a (click)="downloadFile(data.id)">
+                                                    <i class="fa fa-eye"></i>
+                                                </a>
+                                                <a *ngIf="!status" (click)="deleteFile(data.id)">
+                                                    <i class="fa fa-trash-o do"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </nz-table>
+                            </div>
+                        </div>
+                    </nz-tab>
+                    <nz-tab *ngIf="lichSu && lichSu.length > 0" [nzTitle]="'Lịch sử'">
+                        <div nz-col class="gutter-row" [nzSpan]="24">
+                            <nz-table nzBordered class="table__body">
+                                <thead>
+                                    <tr>
+                                        <th>Mã báo cáo</th>
+                                        <th>Lần</th>
+                                        <th>Ngày tạo</th>
+                                        <th>Ngày trình duyệt</th>
+                                        <th>Ngày duyệt</th>
+                                        <th>Ngày phê duyệt</th>
+                                        <th>Ngày cấp trên trả kết quả</th>
+                                        <th>Trạng thái</th>
+                                        <th>Lý do từ chối</th>
+                                        <th *ngIf="!status">Hành động</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let data of lichSu">
+                                        <td>
+                                            <a class="save" (click)="viewDetail(data.id)">{{ data.maBcao }}</a>
+                                        </td>
+                                        <td>{{ data.lan }}</td>
+                                        <td>{{ Utils.fmtDate(data.ngayTao) }}</td>
+                                        <td>{{ Utils.fmtDate(data.ngayTrinh) }}</td>
+                                        <td>{{ Utils.fmtDate(data.ngayDuyet) }}</td>
+                                        <td>{{ Utils.fmtDate(data.ngayPheDuyet) }}</td>
+                                        <td>{{ Utils.fmtDate(data.ngayTraKq) }}</td>
+                                        <td>{{ Status.reportStatusName(data.trangThai) }}</td>
+                                        <td>{{ data.lyDoTuChoi }}</td>
+                                        <td *ngIf="!status">
+                                            <a class="save" (click)="restoreReport(data.id)">Khôi phục</a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </nz-table>
+                        </div>
+                    </nz-tab>
                     <nz-tab *ngIf="lstBcaoDviTrucThuocs && lstBcaoDviTrucThuocs.length > 0"
                         [nzTitle]="'Danh sách báo cáo từ các đơn vị trực thuộc'">
                         <nz-table #basicTable class="nowrap">
                             <thead>
                                 <tr>
-                                    <th nzWidth="7%">STT</th>
+                                    <th nzWidth="5%">STT</th>
                                     <th nzWidth="30%">Đơn vị lập</th>
                                     <th nzWidth="12%">Mã báo cáo</th>
                                     <th nzWidth="12%">Năm báo cáo</th>
@@ -299,7 +385,7 @@
                         </nz-table>
                     </nz-tab>
                 </nz-tabset>
-                <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+                <!-- <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
                     <div nz-col class="gutter-row" [nzSpan]="3">
                         Danh sách văn bản đính kèm
                         <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" [nzMultiple]="true"
@@ -342,7 +428,7 @@
                             </tbody>
                         </nz-table>
                     </div>
-                </div>
+                </div> -->
 
             </nz-card>
             <ng-template #extraTemplate>
