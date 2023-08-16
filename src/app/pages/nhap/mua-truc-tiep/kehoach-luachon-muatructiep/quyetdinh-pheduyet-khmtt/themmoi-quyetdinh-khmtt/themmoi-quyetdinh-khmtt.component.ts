@@ -368,6 +368,7 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
 
   index = 0;
   async showDetail($event, data) {
+    console.log(data)
     await this.spinner.show();
     if ($event != undefined && $event.type == 'click') {
       this.selected = false
@@ -408,5 +409,24 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
     this.danhsachDx[0].tgianKthuc = pipe.transform($event.tgianKthuc, 'yyyy-MM-dd')
     // this.formData.get('tgianMkho').setValue(pipe.transform($event.tgianMkho, 'yyyy-MM-dd'));
     // this.formData.get('tgianKthuc').setValue(pipe.transform($event.tgianKthuc, 'yyyy-MM-dd'));
+  }
+
+  setNewTableData($event) {
+    debugger
+    this.danhsachDx.forEach(item =>{
+      item.children = $event.filter(x => x.maDvi.includes(item.maDvi));
+      item.tongSoLuong = item.children.reduce((acc, data) => acc + data.tongSoLuong, 0)
+    })
+    console.log(this.danhsachDx)
+  }
+
+  calcTongThanhTien(index: any) {
+    if (this.danhsachDx) {
+      let sum = 0
+      for (let i = 0; i < this.danhsachDx[index].children.length; i++) {
+        sum += this.danhsachDx[index].children[i].soLuong;
+      }
+      return sum;
+    }
   }
 }

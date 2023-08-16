@@ -126,8 +126,8 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
       id: [null],
       namKhoach: [dayjs().get('year'), Validators.required],
       soQd: ['',],
-      ngayQd: ['',],
-      ngayHluc: ['',],
+      ngayKyQd: ['',],
+      ngayHieuLuc: ['',],
       idTh: [''],
       maTh: [''],
       idDx: [''],
@@ -148,7 +148,10 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
       tenKieuNx: [null],
       tenLoaiHinhNx: [null],
       kieuNx: [null],
+      maDvi: [null],
       dvt: [null],
+      ngayPduyet: [null],
+      tongThanhTien: [null],
       lastest: [''],
       loaiHinhNx: [null]
     })
@@ -157,22 +160,22 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
   setValidator(isGuiDuyet?) {
     if (isGuiDuyet) {
       this.formData.controls["soQd"].setValidators([Validators.required]);
-      this.formData.controls["ngayQd"].setValidators([Validators.required]);
-      this.formData.controls["ngayHluc"].setValidators([Validators.required]);
+      this.formData.controls["ngayKyQd"].setValidators([Validators.required]);
+      this.formData.controls["ngayHieuLuc"].setValidators([Validators.required]);
     } else {
       this.formData.controls["soQd"].clearValidators();
-      this.formData.controls["ngayQd"].clearValidators();
-      this.formData.controls["ngayHluc"].clearValidators();
+      this.formData.controls["ngayKyQd"].clearValidators();
+      this.formData.controls["ngayHieuLuc"].clearValidators();
     }
     if (this.formData.get('phanLoai').value == 'TH') {
       this.formData.controls["idTh"].setValidators([Validators.required]);
       this.formData.controls["idDx"].clearValidators();
-      this.formData.controls["soTrHdr"].clearValidators();
+      this.formData.controls["soDxuat"].clearValidators();
     }
     if (this.formData.get('phanLoai').value == 'TTr') {
       this.formData.controls["idTh"].clearValidators();
       this.formData.controls["idDx"].setValidators([Validators.required]);
-      this.formData.controls["soTrHdr"].setValidators([Validators.required]);
+      this.formData.controls["soDxuat"].setValidators([Validators.required]);
     }
   }
 
@@ -329,27 +332,20 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
 
   async save(isGuiDuyet?) {
     await this.spinner.show();
-    // if (!this.isDetailPermission()) {
-    //   return;
-    // }
-    // this.setValidator(isGuiDuyet)
+    if (!this.isDetailPermission()) {
+      return;
+    }
+    this.setValidator(isGuiDuyet)
     this.helperService.markFormGroupTouched(this.formData);
-    // if (this.formData.invalid) {
-    //   await this.spinner.hide();
-    //   return;
-    // }
+    if (this.formData.invalid) {
+      await this.spinner.hide();
+      return;
+    }
     let body = this.formData.value;
     if (this.formData.value.soQd) {
       body.soQd = this.formData.value.soQd + "/" + this.maQd;
     }
     body.lastest = 0;
-    // body.ngayHluc = this.convertDateToString(body.ngayHluc)
-    // body.ngayQd = this.convertDateToString(body.ngayQd)
-    // this.danhsachDx.forEach(dtl =>{
-    //   dtl.children.forEach(item =>{
-    //     item.soDxuat = dtl.soDxuat
-    //   })
-    // })
     body.details = this.danhsachDx;
     if (this.listFileDinhKem.length > 0) {
       this.listFileDinhKem.forEach(item => {
@@ -364,10 +360,6 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
       })
     }
     body.fileDinhKems = this.listFile;
-    // if (await !this.isValidate(body.children)) {
-    //   await this.spinner.hide();
-    //   return;
-    // }
     let res = null;
     if (this.formData.get('id').value) {
       res = await this.quyetDinhPheDuyetKeHoachNhapKhacService.update(body);
@@ -377,7 +369,7 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       if (isGuiDuyet) {
         this.idInput = res.data.id;
-        this.guiDuyet();
+        await this.guiDuyet();
       } else {
         if (this.formData.get('id').value) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
@@ -538,7 +530,6 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
       this.formData.patchValue({
         soQd: data.soQd?.split("/")[0],
       });
-      console.log(this.formData.value)
       if (!data.idTh) {
         this.danhsachDx.push(data);
         this.danhsachDxCache = cloneDeep(this.danhsachDx);
@@ -697,10 +688,13 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
           tenLoaiVthh: data.hdr.tenLoaiVthh,
           trichYeu: data.hdr.trichYeu,
           tgianBdauTchuc: data.hdr.tgianBdauTchuc,
+          ngayPduyet: data.hdr.ngayPduyet,
+          dvt: data.hdr.dvt,
+          tongThanhTien: data.hdr.tongThanhTien,
           tgianMthau: data.hdr.tgianMthau,
           tgianDthau: data.hdr.tgianDthau,
           tgianThien: data.hdr.tgianThien,
-          maDvi: data.hdr.maDvi,
+          maDvi: data.hdr.maDviDxuat,
           idTh: null,
           maTh: null,
           soDxuat: data.hdr.soDxuat,

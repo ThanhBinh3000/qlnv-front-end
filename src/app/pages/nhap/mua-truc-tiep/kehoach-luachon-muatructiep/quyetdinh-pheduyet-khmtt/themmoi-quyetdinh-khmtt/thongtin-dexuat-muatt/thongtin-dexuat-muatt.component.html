@@ -200,27 +200,30 @@
         <td class="text-blue">{{item.soLuongChiTieu | number : '1.0-1' : 'vi_VN'}}</td>
         <td class="text-blue">{{item.soLuongKhDd | number : '1.0-1' : 'vi_VN'}}</td>
         <td class="text-blue">{{item.tongSoLuong | number : '1.0-1' : 'vi_VN'}}</td>
-        <td></td>
-        <td class="text-blue">{{item.tongSoLuong * item.donGia * 1000 | number : '1.0-1' : 'vi_VN'}}</td>
+        <td class="text-blue">{{item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
+        <td class="text-blue">{{item.tongSoLuong * item.donGiaVat * 1000 | number : '1.0-1' : 'vi_VN'}}</td>
         <td>
           <a *ngIf="!isView" (click)="themMoiBangPhanLoTaiSan(item,i)">
             <i class="fa fa-pencil" title="Sửa"></i>
           </a>
+          <a *ngIf="!isView" (click)="deleteRow(i)">
+            <i class="fa fa-trash-o do" title="Xóa"></i>
+          </a>
         </td>
       </tr>
-      <ng-container *ngFor="let data of item.children , let i = index">
-        <tr>
-          <td></td>
-          <td>{{data.tenDiemKho}}</td>
-          <td>{{data.diaDiemNhap}}</td>
-          <td class="text-blue"></td>
-          <td class="text-blue"></td>
-          <td>{{data.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-          <td>{{data.donGia + (data.donGia * 5 / 100) | number : '1.0-1' : 'vi_VN'}}</td>
-          <td>{{data.soLuong * data.donGia * 1000 | number : '1.0-1' : 'vi_VN'}}</td>
-          <td></td>
-        </tr>
-      </ng-container>
+<!--      <ng-container *ngFor="let data of item.children , let i = index">-->
+<!--        <tr>-->
+<!--          <td></td>-->
+<!--          <td>{{data.tenDiemKho}}</td>-->
+<!--          <td>{{data.diaDiemNhap}}</td>-->
+<!--          <td class="text-blue"></td>-->
+<!--          <td class="text-blue"></td>-->
+<!--          <td>{{data.soLuong | number : '1.0-1' : 'vi_VN'}}</td>-->
+<!--          <td>{{data.donGia + (data.donGia * 5 / 100) | number : '1.0-1' : 'vi_VN'}}</td>-->
+<!--          <td>{{data.soLuong * data.donGia * 1000 | number : '1.0-1' : 'vi_VN'}}</td>-->
+<!--          <td></td>-->
+<!--        </tr>-->
+<!--      </ng-container>-->
     </ng-container>
     </tbody>
   </nz-table>

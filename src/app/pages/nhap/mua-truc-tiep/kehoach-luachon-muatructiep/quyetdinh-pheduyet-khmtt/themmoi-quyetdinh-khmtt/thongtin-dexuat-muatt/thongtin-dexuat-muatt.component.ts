@@ -35,6 +35,8 @@ export class ThongtinDexuatMuattComponent implements OnChanges {
   @Input() isCache: boolean = false;
   @Input() isTongHop;
   @Input() dataChiTieu;
+  @Output()
+  dataTableChange = new EventEmitter<any>();
 
   formData: FormGroup
   dataTable: any[] = [];
@@ -144,26 +146,56 @@ export class ThongtinDexuatMuattComponent implements OnChanges {
       } else {
         this.dataTable.push(data);
       }
+      this.emitDataTable();
       this.calculatorTable();
     });
   }
 
+  deleteRow(i: number) {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 400,
+      nzOnOk: async () => {
+        try {
+          this.dataTable = this.dataTable.filter((item, index) => index != i);
+          this.emitDataTable()
+          this.calculatorTable();
+          console.log(this.dataTable)
+        } catch (e) {
+          console.log('error', e);
+        }
+      },
+    });
+  }
+
+  calcTongThanhTien(index: any) {
+    if (this.dataTable) {
+      let sum = 0
+      for (let i = 0; i < this.dataTable[index].children.length; i++) {
+        sum += this.dataTable[index].children[i].soLuong;
+      }
+      return sum;
+    }
+  }
+
   calculatorTable() {
-    let tongMucDt: number = 0;
-    let tongSoLuong: number = 0;
-    this.dataTable.forEach((item) => {
-      let soLuongChiCuc = 0;
-      item.children.forEach(child => {
-        soLuongChiCuc += child.soLuong;
-        tongSoLuong += child.soLuong;
-        tongMucDt += child.soLuong * child.donGia * 1000
-      })
-      item.soLuong = soLuongChiCuc;
-    });
-    this.formData.patchValue({
-      tongSoLuong: tongSoLuong,
-      tongMucDt: tongMucDt,
-    });
+    let sum = 0;
+    this.dataTable.forEach(item =>{
+      sum += Number.parseInt(item.tongSoLuong)
+    })
+  this.formData.patchValue({
+    tongSoLuong: sum
+  })
+    console.log(sum, 123)
+  }
+
+  emitDataTable() {
+    this.dataTableChange.emit(this.dataTable);
   }
 
   isDisable() {
