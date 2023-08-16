@@ -382,14 +382,8 @@ export class PhuLuc8Component implements OnInit {
     };
 
     checkDelete(stt: string) {
-        // const level = stt.split('.').length - 2;
-        // if (level == 1) {
-        //     return true;
-        // }
-        // return false;
-
-        const lstTemp = this.lstCtietBcao.filter(e => e.stt !== stt);
-        return lstTemp.every(e => !e.stt.startsWith(stt));
+        const level = stt.split('.').length - 2;
+        return level == 0;
     }
 
 

@@ -230,6 +230,7 @@ export class PhuLuc01XuatComponent implements OnInit {
 
 
         this.lstCtietBcaos = Table.sortByIndex(this.lstCtietBcaos);
+        this.sum1();
         this.tinhTong();
         this.updateEditCache();
         this.getStatusButton();
@@ -301,6 +302,12 @@ export class PhuLuc01XuatComponent implements OnInit {
             return true;
         }
         return false;
+    }
+
+    sum1() {
+        this.lstCtietBcaos.forEach(item => {
+            this.sum(item.stt);
+        })
     }
 
     // luu
