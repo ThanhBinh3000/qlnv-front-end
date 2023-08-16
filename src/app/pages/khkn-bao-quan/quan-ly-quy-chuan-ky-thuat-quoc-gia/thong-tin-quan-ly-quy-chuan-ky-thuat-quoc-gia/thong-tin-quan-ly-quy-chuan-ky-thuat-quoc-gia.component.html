@@ -49,6 +49,19 @@
           <nz-col nzSpan="4">
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true">
+                Bộ ngành
+              </nz-form-label>
+              <nz-form-control [nzErrorTip]="error">
+                <nz-select [nzDisabled]="isView" nzAllowClear nzShowSearch formControlName="maBn" >
+                  <nz-option nzValue="{{item.key}}" nzLabel="{{item.tenDvi}}" *ngFor="let item of dsBoNganh">
+                  </nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </nz-col>
+          <nz-col nzSpan="3">
+            <nz-form-item>
+              <nz-form-label nzRequired [nzNoColon]="true">
                 Số văn bản
               </nz-form-label>
               <nz-form-control [nzErrorTip]="error">
@@ -68,7 +81,7 @@
               </nz-form-control>
             </nz-form-item>
           </nz-col>
-          <div nz-col nzSpan="5">
+          <div nz-col nzSpan="3">
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true">
                 Ngày ban hành
@@ -80,7 +93,7 @@
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col nzSpan="4">
+          <div nz-col nzSpan="3">
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true">
                 Ngày hiệu lực
@@ -92,7 +105,7 @@
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col nzSpan="4">
+          <div nz-col nzSpan="3">
             <nz-form-item>
               <nz-form-label [nzNoColon]="true">
                 Ngày hết hiệu lực
@@ -104,7 +117,7 @@
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col nzSpan="5">
+          <div nz-col nzSpan="6">
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true">
                 Số hiệu quy chuẩn, tiêu chuẩn chất lượng

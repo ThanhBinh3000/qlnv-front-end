@@ -191,6 +191,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
       this.dsBoNganh = res.data.filter(s => s.tenDvi);
       let boTaiChinh = res.data.find(s => s.code === "BTC");
       Object.assign(this.dsBoNganh, boTaiChinh);
+      console.log(this.dsBoNganh, 'this.dsBoNganh this.dsBoNganh ')
     }
   }
 

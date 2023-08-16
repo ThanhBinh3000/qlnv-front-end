@@ -89,12 +89,12 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
       sdt: [null],
       dviPhoiHop: ['', [Validators.required]],
       dviChuTri: ['', [Validators.required]],
+      dviThucHien: [''],
       nguonVon: ['', [Validators.required]],
       soQdPd: [''],
       suCanThiet: [null],
       mucTieu: [null],
       phamVi: [null],
-
       trangThai: [null, [Validators.required]],
       tenTrangThai: [null,],
       tongChiPhi: [null, [Validators.required]],
