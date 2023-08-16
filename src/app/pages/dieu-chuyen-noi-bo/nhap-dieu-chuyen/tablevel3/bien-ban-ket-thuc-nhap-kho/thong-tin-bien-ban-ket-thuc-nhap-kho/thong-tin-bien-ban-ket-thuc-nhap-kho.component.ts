@@ -125,7 +125,7 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
         soQdinhDcc: this.data.soQdinh,
         ngayQdDcCuc: this.data.ngayKyQd,
         qdinhDccId: this.data.qdDcCucId,
-        tenLoNganKho: `${this.data.tenLoKho} ${this.data.tenNganKho}`,
+        tenLoNganKho: `${this.data.tenLoKho || ""} ${this.data.tenNganKho}`,
         tenLoKho: this.data.tenLoKho,
         maLoKho: this.data.maLoKho,
         tenNganKho: this.data.tenNganKho,
@@ -167,24 +167,42 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
       let data = await this.detail(id);
       if (data) {
         this.danhSach = data.dcnbBBKetThucNKDtl
-        this.formData.patchValue({ ...data, tenLoNganKho: `${data.tenLoKho} ${data.tenNganKho}`, });
+        this.formData.patchValue({ ...data, tenLoNganKho: `${data.tenLoKho || ""} ${data.tenNganKho}`, });
         this.fileDinhKemReq = data.fileDinhKems
+        await this.getDanhSachTT(data.qdinhDccId)
       }
 
     }
     await this.spinner.hide();
   }
 
+  // async getDanhSachTT(qdinhDccId) {
+  //   const body = {
+  //     qdinhDccId
+  //   }
+  //   let res = await this.phieuNhapKhoService.getDanhSachTT(body);
+  //   if (res.msg == MESSAGE.SUCCESS) {
+  //     this.danhSach = res.data.map(element => {
+  //       return {
+  //         ...element,
+  //         checked: false
+  //       }
+  //     });
+  //   }
+  // }
+
   async getDanhSachTT(qdinhDccId) {
     const body = {
       qdinhDccId
     }
+    const children = this.danhSach
     let res = await this.phieuNhapKhoService.getDanhSachTT(body);
     if (res.msg == MESSAGE.SUCCESS) {
       this.danhSach = res.data.map(element => {
+        const check = children.find(item => item.soPhieuNhapKho === element.soPhieuNhapKho)
         return {
           ...element,
-          checked: false
+          checked: !!check || false
         }
       });
     }
@@ -327,7 +345,7 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
         this.formData.patchValue({
-          tenLoNganKho: `${data.tenLoKhoNhan} ${data.tenNganKhoNhan}`,
+          tenLoNganKho: `${data.tenLoKhoNhan || ""} ${data.tenNganKhoNhan}`,
           tenLoKho: data.tenLoKhoNhan,
           maLoKho: data.maLoKhoNhan,
           tenNganKho: data.tenNganKhoNhan,

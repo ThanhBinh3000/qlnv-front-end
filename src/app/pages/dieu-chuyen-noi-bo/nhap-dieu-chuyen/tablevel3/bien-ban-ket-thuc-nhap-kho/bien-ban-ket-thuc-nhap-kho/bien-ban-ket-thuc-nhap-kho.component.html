@@ -174,13 +174,12 @@
                           <a *ngIf="!row3.soBBKtNH" (click)="add(row3)">
                             <i class="icon htvbdh_dau-cong"></i>
                           </a>
-                          <a *ngIf="row3.soBBKtNH && row3.trangThai === STATUS.DA_DUYET_LDCC"
+                          <a *ngIf="row3.soBBKtNH && row3.trangThai !== STATUS.DU_THAO && !isPheDuyet(row3)"
                             (click)="redirectDetail(row3.id, true)">
                             <i class="fa fa-eye" title="Xem chi tiết"></i>
                           </a>
 
-                          <a *ngIf="row3.trangThai === STATUS.CHO_DUYET_KTVBQ || row3.trangThai === STATUS.CHO_DUYET_KT || row3.trangThai === STATUS.CHO_DUYET_LDCC"
-                            (click)="redirectDetail(row3.id, true)">
+                          <a *ngIf="isPheDuyet(row3)" (click)="redirectDetail(row3.id, true)">
                             <i class="icon htvbdh_tcdt_pheduyet" title="Duyệt"></i>
                           </a>
 
