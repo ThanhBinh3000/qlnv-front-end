@@ -87,7 +87,7 @@ export class ItemData {
 
 	sum(data: ItemData) {
 		Object.keys(data).forEach(key => {
-			if (!['level', 'sluongTaiKho', 'dmucTaiKho', 'binhQuanNgoaiKho'].includes(key) && (typeof this[key] == 'number' || typeof data[key] == 'number')) {
+			if (!['level', 'sluongTaiKho', 'dmucTaiKho', 'binhQuanNgoaiKho', 'tdinhKhoSluong'].includes(key) && (typeof this[key] == 'number' || typeof data[key] == 'number')) {
 				this[key] = Operator.sum([this[key], data[key]]);
 			}
 		})
