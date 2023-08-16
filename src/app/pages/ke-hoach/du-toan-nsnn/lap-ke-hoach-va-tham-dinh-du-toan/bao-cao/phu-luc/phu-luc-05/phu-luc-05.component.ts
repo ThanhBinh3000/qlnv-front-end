@@ -124,6 +124,7 @@ export class PhuLuc05Component implements OnInit {
 	status: BtnStatus = new BtnStatus();
 	editMoneyUnit = false;
 	isDataAvailable = false;
+	isOffice: boolean = false;
 	//nho dem
 	editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
 
@@ -172,6 +173,7 @@ export class PhuLuc05Component implements OnInit {
 		Object.assign(this.status, this.dataInfo.status);
 		await this.getFormDetail();
 		this.namBcao = this.dataInfo.namBcao;
+		this.isOffice = this.dataInfo.tenDvi.indexOf('Văn phòng') != -1;
 		if (this.status.general) {
 			const category = await this.danhMucService.danhMucChungGetAll('LTD_PL5');
 			if (category) {
