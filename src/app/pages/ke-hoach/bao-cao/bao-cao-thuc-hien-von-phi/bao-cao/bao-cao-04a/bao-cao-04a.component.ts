@@ -45,6 +45,10 @@ export class ItemData {
                 this.luyKeTcong = Operator.sum([this.luyKeTcong, item.lkGtri]);
             })
         }
+        if (['0.1.1', '0.1.2.1', '0.1.2.2'].includes(this.stt)) {
+            this.trongDotTcong = null;
+            this.luyKeTcong = null;
+        }
     }
 
     total() {
