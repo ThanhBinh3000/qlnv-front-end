@@ -430,7 +430,7 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
             })
         })
 
-        if ((this.userInfo.DON_VI.tenVietTat.includes("CDT") || this.userInfo.DON_VI.tenVietTat.includes("CNTT") || this.userInfo.DON_VI.tenVietTat.includes("_VP")) && this.isStatus == "2") {
+        if ((this.userInfo.DON_VI.tenVietTat.includes("CNTT") || this.userInfo.DON_VI.tenVietTat.includes("_VP")) && this.isStatus == "2") {
             listCtietDvi.push({
                 id: uuid.v4() + 'FE',
                 maDviNhan: this.userInfo.MA_DVI,
