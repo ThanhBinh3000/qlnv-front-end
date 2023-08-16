@@ -265,18 +265,18 @@ export class QuanlyHopdongComponent implements OnInit {
   }
 
   async approve() {
-    this.modal.confirm({
-      nzClosable: false,
-      nzTitle: 'Xác nhận',
-      nzContent: 'Bạn có chắc chắn muốn hoàn thành cập nhật hợp đồng ?',
-      nzOkText: 'Đồng ý',
-      nzCancelText: 'Không',
-      nzOkDanger: true,
-      nzWidth: 350,
-      nzOnOk: async () => {
-        this.spinner.show();
-        try {
-          if (this.validateData()) {
+    if (this.validateData()) {
+      this.modal.confirm({
+        nzClosable: false,
+        nzTitle: 'Xác nhận',
+        nzContent: 'Bạn có chắc chắn muốn hoàn thành cập nhật hợp đồng ?',
+        nzOkText: 'Đồng ý',
+        nzCancelText: 'Không',
+        nzOkDanger: true,
+        nzWidth: 350,
+        nzOnOk: async () => {
+          this.spinner.show();
+          try {
             let body = {
               id: this.id,
               trangThai: STATUS.DA_HOAN_THANH
@@ -288,16 +288,16 @@ export class QuanlyHopdongComponent implements OnInit {
             } else {
               this.notification.error(MESSAGE.ERROR, res.msg);
             }
+          } catch (e) {
+            console.log('error: ', e);
+            this.spinner.hide();
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          } finally {
+            this.spinner.hide();
           }
-        } catch (e) {
-          console.log('error: ', e);
-          this.spinner.hide();
-          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        } finally {
-          this.spinner.hide();
-        }
-      },
-    });
+        },
+      });
+    }
   }
 
   validateData(): boolean {

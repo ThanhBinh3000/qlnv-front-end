@@ -99,24 +99,22 @@ export class DialogThemMoiVatTuComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, "Tên gói thầu không được để trống.")
       return;
     }
+    if (this.formData.get('donGiaTamTinh').value == null) {
+      this.notification.error(MESSAGE.ERROR, "Đơn giá đề xuất không được để trống.")
+      return;
+    }
     if (this.listOfData.length <= 0) {
       this.notification.error(MESSAGE.ERROR, "Địa điểm nhập hàng và số lượng không được để trống.")
       return;
     }
     if (this.validateGiaDeXuat()) {
       this.listOfData.forEach(item => {
-        let dataDiemNhap = '';
-        item.children.forEach(child => {
-          dataDiemNhap += child.tenDvi + "(" + child.soLuong + "), "
-        })
-        item.diaDiemNhap = dataDiemNhap.substring(0, dataDiemNhap.length - 2)
         item.donGiaTamTinh = this.formData.get('donGiaTamTinh').value;
         item.goiThau = this.formData.get('goiThau').value;
         item.donGiaVat = this.formData.get('donGiaVat').value;
       })
       this.formData.patchValue({
         children: this.listOfData,
-        // diaDiemNhap: dataDiemNhap.substring(0, dataDiemNhap.length - 2)
       })
       this._modalRef.close(this.formData);
     }
@@ -242,8 +240,8 @@ export class DialogThemMoiVatTuComponent implements OnInit {
         const listDiemKho = [];
         for (let j = 0; j < res.data[0].children.length; j++) {
           const item = {
-            'value': res.data[0].children[j].maDiemkho,
-            'text': res.data[0].children[j].tenDiemkho,
+            'value': res.data[0].children[j].maDvi,
+            'text': res.data[0].children[j].tenDvi,
             'diaDiemNhap': res.data[0].children[j].diaChi,
           };
           listDiemKho.push(item);
@@ -356,18 +354,18 @@ export class DialogThemMoiVatTuComponent implements OnInit {
   validateDataAdd(type, index?): boolean {
     if (type == 'chiCuc') {
       let data = this.listOfData.filter(item => item.maDvi == this.thongTinChiCuc.maDvi);
-      // if (data.length > 0) {
-      //   this.notification.error(MESSAGE.ERROR, "Đơn vị đã tồn tại, xin vui lòng thêm đơn vị khác")
-      //   return false
-      // }
+      if (data.length > 0) {
+        this.notification.error(MESSAGE.ERROR, "Đơn vị đã tồn tại, xin vui lòng thêm đơn vị khác")
+        return false
+      }
       return true;
     }
     if (type == 'diemKho') {
       let data = this.listOfData[index].children.filter(item => item.maDvi == this.listThongTinDiemKho[index].maDvi);
-      // if (data.length > 0) {
-      //   this.notification.error(MESSAGE.ERROR, "Đơn vị đã tồn tại, xin vui lòng thêm đơn vị khác")
-      //   return false
-      // }
+      if (data.length > 0) {
+        this.notification.error(MESSAGE.ERROR, "Đơn vị đã tồn tại, xin vui lòng thêm đơn vị khác")
+        return false
+      }
       return true;
     }
   }
