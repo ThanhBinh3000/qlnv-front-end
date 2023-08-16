@@ -167,7 +167,7 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
       let data = await this.detail(id);
       if (data) {
         this.danhSach = data.dcnbBBKetThucNKDtl
-        this.formData.patchValue(data);
+        this.formData.patchValue({ ...data, tenLoNganKho: `${data.tenLoKho} ${data.tenNganKho}`, });
         this.fileDinhKemReq = data.fileDinhKems
       }
 
@@ -187,7 +187,6 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
           checked: false
         }
       });
-      console.log('getDanhSachTT', res)
     }
   }
 
@@ -206,6 +205,16 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
         });
       }
     }
+    const pnk = this.danhSach.filter(item => item.checked)[0]
+    if (pnk) {
+      this.formData.patchValue({
+        ngayBatDauNhap: pnk.ngayNhapKho
+      })
+    } else {
+      this.formData.patchValue({
+        ngayBatDauNhap: ""
+      })
+    }
     this.danhSach = cloneDeep(this.danhSach)
   }
 
@@ -218,6 +227,16 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
       this.indeterminateTT = false;
     } else {
       this.indeterminateTT = true;
+    }
+    const pnk = this.danhSach.filter(item => item.checked)[0]
+    if (pnk) {
+      this.formData.patchValue({
+        ngayBatDauNhap: pnk.ngayNhapKho
+      })
+    } else {
+      this.formData.patchValue({
+        ngayBatDauNhap: ""
+      })
     }
     this.danhSach = cloneDeep(this.danhSach)
   }
@@ -331,7 +350,8 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
           tenCloaiVthh: data.tenCloaiVthh,
           tichLuongKhaDung: data.tichLuongKd,
           donViTinh: data.tenDonViTinh,
-          idKeHoachDtl: data.id
+          idKeHoachDtl: data.id,
+          tongSlTheoQd: data.soLuongDc,
         });
       }
     });
@@ -362,7 +382,12 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
   async save(isGuiDuyet?) {
     await this.spinner.show();
     let body = this.formData.value;
-    body.dcnbBBKetThucNKDtl = this.danhSach.filter(item => item.checked)
+    body.dcnbBBKetThucNKDtl = this.danhSach.filter(item => item.checked).map(pnk => {
+      return {
+        ...pnk,
+        id: undefined
+      }
+    })
     body.fileDinhKemReq = this.fileDinhKemReq;
 
     if (this.idInput) {

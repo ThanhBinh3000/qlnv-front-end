@@ -107,10 +107,12 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
       tgianGiaoNhanHang: [],
       tenLoaiHinhNhapXuat: [],
       tenKieuNhapXuat: [],
-      bbNghiemThuBqld: [],
       soLuongQdDcCuc: [],
       dviTinh: [],
-      soBangKeCanHang: [, [Validators.required]],
+      bbNghiemThuBqld: [],
+      bbKtnk: [],
+      soBangKeCh: [, [Validators.required]],
+      soBangKeVt: [, [Validators.required]],
       tongSLNhapTT: [],
       tongKPDCTT: [],
       duToanKinhPhi: [],
@@ -508,13 +510,21 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
 
 
   async save(isGuiDuyet?) {
-    if (!this.formData.value.thayDoiThuKho) {
+    if (this.isVatTu) {
+      this.formData.controls["soBangKeCh"].clearValidators();
+    } else {
+      this.formData.controls["soBangKeVt"].clearValidators();
+    }
+    if (!this.formData.value.thayDoiThuKho || !this.isVatTu) {
       this.formData.controls["soPhieuKtraCluong"].clearValidators();
       this.formData.controls["idPhieuKtraCluong"].clearValidators();
     }
     if (!isGuiDuyet) {
-      this.formData.controls["soBangKeCanHang"].clearValidators();
+      this.formData.controls["soBangKeCh"].clearValidators();
+      this.formData.controls["soBangKeVt"].clearValidators();
     }
+    this.helperService.markFormGroupTouched(this.formData);
+    if (!this.formData.valid) return
     await this.spinner.show();
     let body = this.formData.value;
     body.chungTuDinhKem = this.chungTuDinhKem;
