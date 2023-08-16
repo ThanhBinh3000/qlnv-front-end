@@ -296,6 +296,12 @@ export class PhuLuc1Component implements OnInit {
 
 
         this.lstCtietBcao = Table.sortByIndex(this.lstCtietBcao);
+        console.log(
+            this.status.editAppVal
+        );
+        console.log(
+            this.status.general
+        );
 
         this.tinhTong();
         this.getTotal();
@@ -401,12 +407,10 @@ export class PhuLuc1Component implements OnInit {
         //     ) {
         //         return false;
         //     } else {
-
         //         return true
-
         //     }
         // }
-        // }
+
     };
 
     // // xoa tat ca cac dong duoc check

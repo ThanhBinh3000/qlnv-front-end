@@ -296,8 +296,8 @@
                                     {{ data.maBcao}}
                                 </td>
                                 <td>{{data.namBcao}}</td>
-                                <td>{{data.ngayDuyet}}</td>
-                                <td>{{data.ngayPheDuyet}}</td>
+                                <td>{{Utils.fmtDate(data.ngayDuyet)}}</td>
+                                <td>{{Utils.fmtDate(data.ngayPheDuyet)}}</td>
                                 <td>{{Status.reportStatusName(data.trangThai) }}</td>
                                 <td>
                                     <a (click)="viewDetail(data.id)">

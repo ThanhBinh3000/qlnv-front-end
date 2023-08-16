@@ -60,7 +60,7 @@ export class DialogTongHopComponent implements OnInit {
         this.response.maDvi = this.userInfo?.MA_DVI;
         // this.getListPA();
         const thisYear = dayjs().get('year');
-        for (let i = -50; i < 30; i++) {
+        for (let i = -5; i < 10; i++) {
             this.lstNam.push(thisYear + i);
         }
     }
