@@ -58,8 +58,7 @@ export class ThongTinBienBanLayMauBanGiaoMauVtTbComponent extends Base2Component
   fileDinhKems: any[] = [];
   listFiles: any = [];
   listPhieuXuatKho: any = [];
-  ppLayMauOptions: any = [];
-  chiTieuClOptions: any = [];
+
 
   constructor(
     httpClient: HttpClient,
@@ -179,6 +178,7 @@ export class ThongTinBienBanLayMauBanGiaoMauVtTbComponent extends Base2Component
                 chiTieuKiemTraList: chiTieuOptions,
               });
             }
+            console.log(this.listPhieuXuatKho,"listPhieuXuatKho");
             this.listDaiDienChiCuc = data.bbLayMauDtl.filter(x => x.loaiDaiDien == 'CHI_CUC')
             this.listDaiDienCuc = data.bbLayMauDtl.filter(x => x.loaiDaiDien == 'CUC')
           }
@@ -212,7 +212,7 @@ export class ThongTinBienBanLayMauBanGiaoMauVtTbComponent extends Base2Component
 
   async loadSoQuyetDinhGiaoNvXh() {
     let body = {
-      namKeHoach: this.formData.get("nam").value,
+      nam: this.formData.get("nam").value,
       dvql: this.userInfo.MA_DVI,
       trangThai: STATUS.DA_DUYET_LDC,
       listTrangThaiXh: [STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN],
@@ -237,8 +237,8 @@ export class ThongTinBienBanLayMauBanGiaoMauVtTbComponent extends Base2Component
       nzFooter: null,
       nzComponentParams: {
         dataTable: this.listSoQuyetDinh,
-        dataHeader: ['Năm','Số quyết định', 'Ngày quyết định', ],
-        dataColumn: ['nam','soQuyetDinh', 'ngayKy', ],
+        dataHeader: ['Năm','Số quyết định', 'Ngày quyết định','Số lần lấy mẫu' ],
+        dataColumn: ['nam','soQuyetDinh', 'ngayKy', 'soLanLm'],
       },
     })
     modalQD.afterClose.subscribe(async (data) => {
@@ -277,6 +277,7 @@ export class ThongTinBienBanLayMauBanGiaoMauVtTbComponent extends Base2Component
       if (res.msg == MESSAGE.SUCCESS) {
         this.listPhieuXuatKho = res.data.content;
       }
+      console.log(this.listPhieuXuatKho,"987")
     } catch (e) {
       this.notification.error(MESSAGE.ERROR, e.msg);
     } finally {

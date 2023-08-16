@@ -43,13 +43,13 @@ export class XuatKhoVtTbTrongThoiGianBaoHanhComponent extends Base2Component imp
       tenDvi: null,
       maDvi: null,
       nam: null,
-      soQdGiaoNvXh: null,
-      soPhieuXuatKho: null,
+      soCanCu: null,
+      soPhieu: null,
       ngayXuatNhap: null,
       ngayXuatNhapTu: null,
       ngayXuatNhapDen: null,
       loaiVthh: null,
-      type: null
+      loaiPhieu: 'XUAT'
     })
     this.filterTable = {
       soQdGiaoNvXh: '',
@@ -101,10 +101,6 @@ export class XuatKhoVtTbTrongThoiGianBaoHanhComponent extends Base2Component imp
   }
 
   async search(roles?): Promise<void> {
-    this.formData.patchValue({
-      loaiVthh: this.loaiVthh,
-      type: "XUAT_CTVT"
-    });
     await super.search(roles);
     this.buildTableView();
   }

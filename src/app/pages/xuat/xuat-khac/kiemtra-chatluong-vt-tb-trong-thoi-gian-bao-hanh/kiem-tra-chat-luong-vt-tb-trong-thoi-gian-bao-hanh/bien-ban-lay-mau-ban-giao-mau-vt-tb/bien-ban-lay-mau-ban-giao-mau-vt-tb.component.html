@@ -111,11 +111,12 @@
             <td></td>
             <td></td>
             <td></td>
-            <td class="text-left">
-              <a (click)="redirectDetail(item.id, false,item.soQdGiaoNvXh)">
-                <i class="icon htvbdh_dau-cong" title="Thêm mới"></i>
-              </a>
-            </td>
+            <td></td>
+<!--            <td class="text-left">-->
+<!--              <a (click)="redirectDetail(item.id, false,item.soQdGiaoNvXh)">-->
+<!--                <i class="icon htvbdh_dau-cong" title="Thêm mới"></i>-->
+<!--              </a>-->
+<!--            </td>-->
           </tr>
           <ng-container *ngIf="expandSetString.has(item.idVirtual)">
             <ng-container *ngFor="let lv1 of item.childData,let i1=index">
@@ -126,16 +127,17 @@
                 <td></td>
                 <td></td>
                 <td class="bold">{{lv1.tenDiemKho}}</td>
+                <td>{{lv1.tenLoKho ? lv1.tenNganKho + ' - ' + lv1.tenLoKho : lv1.tenNganKho}}</td>
+                <td>{{lv1.tenCloaiVthh }}</td>
                 <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
-                <td></td>
-                <td class="text-left">
-                  <a (click)="redirectDetail(item.id, false,item.soQdGiaoNvXh)">
-                    <i class="icon htvbdh_dau-cong" title="Thêm mới"></i>
-                  </a>
-                </td>
+<!--                <td class="text-left">-->
+<!--                  <a (click)="redirectDetail(item.id, false,item.soQdGiaoNvXh)">-->
+<!--                    <i class="icon htvbdh_dau-cong" title="Thêm mới"></i>-->
+<!--                  </a>-->
+<!--                </td>-->
               </tr>
               <ng-container *ngIf="expandSetString.has(item.idVirtual)">
                 <ng-container *ngFor="let lv2 of lv1.childData,let i2=index">
@@ -146,8 +148,8 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td>{{lv2.tenLoKho ? lv2.tenNganKho + ' - ' + lv2.tenLoKho : lv2.tenNganKho}}</td>
-                    <td>{{lv2.tenCloaiVthh }}</td>
+                    <td></td>
+                    <td></td>
                     <td class="bold">{{lv2.soBienBan}}</td>
                     <td>{{lv2.ngayLayMau | date: 'dd/MM/YYYY' }}</td>
                     <td>{{lv2.tenTrangThai}}</td>
