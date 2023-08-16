@@ -9,7 +9,7 @@
                     </div>
                     <div nz-col nzSpan="4" class="mt-16">
                         <label class="search__label">Số quyết định ĐC của Cục</label>
-                        <input nz-input formControlName="soQdinhCuc" />
+                        <input nz-input formControlName="soQdDcCuc" />
                     </div>
                     <div nz-col nzSpan="4" class="mt-16">
                         <label class="search__label"> Trạng thái </label>
@@ -133,9 +133,8 @@
                         </th>
                         <th *ngIf="loaiBc==='CHI_CUC'">
                             <nz-input-group>
-                                <input type="text" nz-input placeholder="Tìm kiếm"
-                                    [(ngModel)]="filterTable.soBBThuaThieu"
-                                    (input)="filterInTable('soBBThuaThieu',filterTable.soBBThuaThieu)" size="small" />
+                                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soBb"
+                                    (input)="filterInTable('soBb',filterTable.soBb)" size="small" />
                             </nz-input-group>
 
                         </th>
@@ -148,8 +147,8 @@
                         </th>
                         <th *ngIf="loaiBc==='CHI_CUC'">
                             <nz-input-group>
-                                <nz-date-picker nzFormat="dd/MM/yyyy" [(ngModel)]="filterTable.ngayKyQdCuc"
-                                    (ngModelChange)="filterInTable('ngayKyQdCuc', convertDateToString(filterTable.ngayKyQdCuc))">
+                                <nz-date-picker nzFormat="dd/MM/yyyy" [(ngModel)]="filterTable.ngayKyQd"
+                                    (ngModelChange)="filterInTable('ngayKyQd', convertDateToString(filterTable.ngayKyQd))">
                                 </nz-date-picker>
                             </nz-input-group>
                         </th>
@@ -180,9 +179,9 @@
                         <td>{{data.soBc}}</td>
                         <td>{{data.tenBc}}</td>
                         <td>{{data.ngayBc | date:"dd/MM/yyyy"}}</td>
-                        <td *ngIf="loaiBc==='CHI_CUC'">{{data.soBBThuaThieu}}</td>
+                        <td *ngIf="loaiBc==='CHI_CUC'">{{data.soBb}}</td>
                         <td *ngIf="loaiBc==='CHI_CUC'">{{data.soQdDcCuc}}</td>
-                        <td *ngIf="loaiBc==='CHI_CUC'">{{ data.ngayKyQdCuc|date:"dd/MM/yyyy"}}</td>
+                        <td *ngIf="loaiBc==='CHI_CUC'">{{ data.ngayKyQd|date:"dd/MM/yyyy"}}</td>
                         <td>{{ TRANG_THAI[data.trangThai]}}</td>
                         <td>
                             <a (click)="redirectDetail(data.id, true)" *ngIf="checkRoleView(data.trangThai)">

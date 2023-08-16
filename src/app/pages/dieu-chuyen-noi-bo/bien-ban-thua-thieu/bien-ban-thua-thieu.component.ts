@@ -27,8 +27,8 @@ export class BienBanThuaThieuComponent extends Base2Component implements OnInit 
     page: number = 1;
     pageSize: number = PAGE_SIZE_DEFAULT;
     totalRecord: number = 0;
-    passData: { soQdDcCuc: string, qdDcCucId: number, ngayKyQd: string, soBc: string, ngayBc: string } = {
-        soQdDcCuc: '', qdDcCucId: null, ngayKyQd: '', soBc: '', ngayBc: ''
+    passData: { soQdDcCuc: string, qdDcCucId: number, ngayKyQd: string, soBc: string, bcKetQuaDcId: number, ngayBc: string } = {
+        soQdDcCuc: '', qdDcCucId: null, ngayKyQd: '', soBc: '', bcKetQuaDcId: null, ngayBc: ''
     };
     LIST_TRANG_THAI: Array<{ ma: string, giaTri: string }> = [
         { ma: this.STATUS.DU_THAO, giaTri: "Dự thảo" },
@@ -59,11 +59,10 @@ export class BienBanThuaThieuComponent extends Base2Component implements OnInit 
             soBc: [''],
             tuNgayBc: [''],
             denNgayBc: [''],
-            soBBThuaThieu: [''],
-            tuNgayBbTt: [''],
-            denNgayBbTt: [''],
+            soBcKetQuaDc: [''],
+            tuNgayLap: [''],
+            denNgayLap: [''],
             trangThai: [''],
-            type: ['']
 
         })
         this.filterTable = {
@@ -74,7 +73,7 @@ export class BienBanThuaThieuComponent extends Base2Component implements OnInit 
             soBc: '',
             ngayBc: '',
             tenBc: '',
-            soBBThuaThieu: '',
+            soBcKetQuaDc: '',
             ngayLapBBThuaThieu: '',
             trangThai: ''
         };
@@ -84,19 +83,19 @@ export class BienBanThuaThieuComponent extends Base2Component implements OnInit 
     async ngOnInit(): Promise<void> {
         try {
             this.spinner.show();
-            await this.dataService.currentData.subscribe(data => {
+            this.dataService.currentData.subscribe(data => {
                 if (data && data.soBc) {
                     this.passData = { ...data };
                     this.isDetail = true;
                 }
             });
-            await this.dataService.removeData();
+            this.dataService.removeData();
             if (!this.isDetail) {
                 if (this.viewOnly) {
                     this.isView = true
                 }
                 await this.initData()
-                this.timKiem();
+                await this.timKiem();
 
             }
         } catch (e) {
@@ -134,17 +133,17 @@ export class BienBanThuaThieuComponent extends Base2Component implements OnInit 
         return endValue.getTime() <= this.formData.value.tuNgayBc.getTime();
     };
     disabledTuNgayBbTt = (startValue: Date): boolean => {
-        if (startValue && this.formData.value.denNgayBbTt) {
-            return startValue.getTime() > this.formData.value.denNgayBbTt.getTime();
+        if (startValue && this.formData.value.denNgayLap) {
+            return startValue.getTime() > this.formData.value.denNgayLap.getTime();
         }
         return false;
     };
 
     disabledDenNgayBbTt = (endValue: Date): boolean => {
-        if (!endValue || !this.formData.value.tuNgayBbTt) {
+        if (!endValue || !this.formData.value.tuNgayLap) {
             return false;
         }
-        return endValue.getTime() <= this.formData.value.tuNgayBbTt.getTime();
+        return endValue.getTime() <= this.formData.value.tuNgayLap.getTime();
     };
     deleteSelect() {
         let dataDelete = [];
@@ -211,7 +210,7 @@ export class BienBanThuaThieuComponent extends Base2Component implements OnInit 
     goBack() {
         this.showList();
         this.passData = {
-            soQdDcCuc: '', qdDcCucId: null, ngayKyQd: '', soBc: '', ngayBc: ''
+            soQdDcCuc: '', qdDcCucId: null, ngayKyQd: '', soBc: '', bcKetQuaDcId: null, ngayBc: ''
         };
     }
 }

@@ -47,7 +47,8 @@ export class BaoCaoComponent extends Base2Component implements OnInit {
     super(httpClient, storageService, notification, spinner, modal, baoCaoDieuChuyenService)
     this.formData = this.fb.group({
       soBc: [''],
-      soQdinhCuc: [''],
+      // soQdinhCuc: [''],
+      soQdDcCuc: [''],
       trangThai: [''],
       tuNgay: [''],
       denNgay: [''],
@@ -59,8 +60,9 @@ export class BaoCaoComponent extends Base2Component implements OnInit {
       soBc: '',
       tenBc: '',
       ngayBc: '',
-      soBBThuaThieu: '',
-      soQdinhCuc: '',
+      ngayKyQd: '',
+      soBb: '',
+      // soQdinhCuc: '',
       soQdDcCuc: '',
       trangThai: ''
     };
@@ -77,7 +79,7 @@ export class BaoCaoComponent extends Base2Component implements OnInit {
         this.isView = true
       }
       await this.initData()
-      this.timKiem();
+      await this.timKiem();
     } catch (e) {
       console.log('error: ', e)
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
