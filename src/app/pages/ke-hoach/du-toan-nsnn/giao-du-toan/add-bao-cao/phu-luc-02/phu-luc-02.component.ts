@@ -176,6 +176,7 @@ export class PhuLuc02Component implements OnInit {
         }
 
         this.lstCtietBcaos = Table.sortByIndex(this.lstCtietBcaos);
+        this.sum1()
         this.getTotal();
         this.updateEditCache();
         this.getStatusButton();
@@ -239,6 +240,12 @@ export class PhuLuc02Component implements OnInit {
         }
         lstVtuTemp.forEach(item => {
             this.sum(item.stt + '.1');
+        })
+    }
+
+    sum1() {
+        this.lstCtietBcaos.forEach(item => {
+            this.sum(item.stt);
         })
     }
 

@@ -1240,7 +1240,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 					soTien: item.lstCtietDvis.find(e => e.maDviNhan == maDviNhan).soTranChi,
 				})
 			});
-			if (this.userInfo.CAP_DVI == "1" && this.userInfo.DON_VI.tenVietTat.includes("CDT")) {
+			if (this.userInfo.CAP_DVI == "1") {
 				lstGiao.push({
 					maGiao: this.maGiao,
 					maPa: this.maPa,
