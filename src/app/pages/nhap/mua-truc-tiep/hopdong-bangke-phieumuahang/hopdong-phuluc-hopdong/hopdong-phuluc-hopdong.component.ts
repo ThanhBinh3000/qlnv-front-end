@@ -60,6 +60,8 @@ export class HopdongPhulucHopdongComponent implements OnInit {
   totalRecord: number = 0;
   STATUS=STATUS
   listNam: any[] = [];
+  tuNgayKy: Date | null = null;
+  denNgayKy: Date | null = null;
   constructor(
     private fb: FormBuilder,
     private httpClient: HttpClient,
@@ -140,6 +142,8 @@ export class HopdongPhulucHopdongComponent implements OnInit {
     try {
       let body = this.formData.value
       body.namNhap = dayjs().get('year')
+      body.tuNgayKy = this.tuNgayKy != null ? dayjs(this.tuNgayKy).format('YYYY-MM-DD') + " 00:00:00" : null
+      body.denNgayKy = this.denNgayKy != null ? dayjs(this.denNgayKy).format('YYYY-MM-DD') + " 23:59:59" : null
       body.paggingReq = {
         limit: this.pageSize,
         page: this.page - 1
@@ -172,6 +176,10 @@ export class HopdongPhulucHopdongComponent implements OnInit {
     try {
       let body = this.formData.value
       body.namNhap = dayjs().get('year')
+      body.trangThaiKq = STATUS.DA_DUYET_LDC
+      body.trangThaiQd = STATUS.BAN_HANH
+      body.tuNgayKy = this.tuNgayKy != null ? dayjs(this.tuNgayKy).format('YYYY-MM-DD') + " 00:00:00" : null
+      body.denNgayKy = this.denNgayKy != null ? dayjs(this.denNgayKy).format('YYYY-MM-DD') + " 23:59:59" : null
       body.paggingReq = {
         limit: this.pageSize,
         page: this.page - 1
@@ -288,7 +296,23 @@ export class HopdongPhulucHopdongComponent implements OnInit {
     if (currentSearch) {
       this.formData.patchValue(currentSearch)
     }
+    this.tuNgayKy = null;
+    this.denNgayKy  = null;
     this.timKiem();
   }
+
+  disabledStartDate = (startValue: Date): boolean => {
+    if (!startValue || !this.denNgayKy) {
+      return false;
+    }
+    return startValue.getTime() > this.denNgayKy.getTime();
+  };
+
+  disabledEndDate = (endValue: Date): boolean => {
+    if (!endValue || !this.tuNgayKy) {
+      return false;
+    }
+    return endValue.getTime() <= this.tuNgayKy.getTime();
+  };
 
 }

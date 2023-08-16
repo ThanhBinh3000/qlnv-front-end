@@ -24,9 +24,18 @@
             <input nz-input formControlName="nhaCungCap" placeholder="Nhà cung cấp" />
           </div>
           <div nz-col nzSpan="4">
-            <label>Ngày ký</label>
-            <nz-range-picker formControlName="ngayKy" placeholder="Ngày ký" nzFormat="dd/MM/yyyy">
-            </nz-range-picker>
+            <label>Ngày ký hợp đồng</label>
+            <div nz-row [nzGutter]="24">
+              <div nz-col nzSpan="12" class="cus-start-date">
+                <nz-date-picker [nzDisabledDate]="disabledStartDate" nzFormat="dd/MM/yyyy" [(ngModel)]="tuNgayKy" [ngModelOptions]="{standalone: true}"
+                                nzPlaceHolder="Ngày bắt đầu">
+                </nz-date-picker>
+              </div>
+              <div nz-col nzSpan="12" class="cus-end-date">
+                <nz-date-picker [nzDisabledDate]="disabledEndDate" nzFormat="dd/MM/yyyy" [(ngModel)]="denNgayKy" [ngModelOptions]="{standalone: true}"
+                                nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+              </div>
+            </div>
           </div>
         </div>
       </form>
@@ -52,7 +61,7 @@
         </button>
         <button type="button" class="btn btn-main" (click)="goDetail(null,null,false)" *ngIf="!userService.isTongCuc()">
           <i class="icon htvbdh_dau-cong"></i>
-          <span>Thêm mới</span>
+          <span>Thêm hợp đồng</span>
         </button>
       </div>
     </div>
@@ -72,7 +81,7 @@
             <th width="175px" *ngIf="!userService.isChiCuc">QĐ PD KQ chào giá</th>
             <th width="175px" class="wrap">SL HĐ cần ký</th>
             <th width="175px" class="wrap">SL HĐ đã ký</th>
-            <th width="175px" class="wrap">Thời hạn nhap kho</th>
+            <th width="175px" class="wrap">Thời hạn nhập kho</th>
             <th width="175px" class="wrap">Loại hàng hóa </th>
             <th width="175px">Chủng loại hàng hóa</th>
             <th width="175px">Tổng giá trị hợp đồng</th>

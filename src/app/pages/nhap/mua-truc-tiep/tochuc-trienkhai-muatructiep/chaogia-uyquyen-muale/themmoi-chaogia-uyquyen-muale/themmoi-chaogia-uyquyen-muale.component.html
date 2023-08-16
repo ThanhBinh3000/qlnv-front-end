@@ -6,7 +6,7 @@
     </button>
     <button
       *ngIf="radioValue == '01' && (this.userService.isCuc() && formData.value.trangThai != STATUS.HOAN_THANH_CAP_NHAT)"
-      type="button" class="btn btn-sub xanh-nhat" (click)="hoanThanhCapNhat()">
+      type="button" class="btn btn-sub xanh-nhat" (click)="save(true)">
       <i class="icon htvbdh_tcdt_guiduyet"></i>
       <span>Hoàn thành cập nhập</span>
     </button>
@@ -188,7 +188,7 @@
               <td></td>
               <td class="text-bold">{{ item.soLuongChiTieu | number : '1.0-1' : 'vi_VN' }}</td>
               <td class="text-bold">{{ item.soLuongKhDd | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-bold">{{ calcTongThanhTien(i) | number :
+              <td class="text-bold">{{ item.tongSoLuong | number :
                 '1.0-1' :
                 'vi_VN'}}</td>
               <td></td>
