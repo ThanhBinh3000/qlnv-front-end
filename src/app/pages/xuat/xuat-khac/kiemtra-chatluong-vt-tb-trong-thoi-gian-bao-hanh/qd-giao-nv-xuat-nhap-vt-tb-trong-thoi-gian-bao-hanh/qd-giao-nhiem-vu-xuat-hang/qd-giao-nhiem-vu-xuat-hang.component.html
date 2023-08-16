@@ -91,8 +91,9 @@
           <th class="text-left">Số quyết định</th>
           <th class="text-left">Ngày quyết định</th>
           <th class="text-left">Loại hình nhập xuất</th>
-          <th class="text-left">Mã DS tổng hợp</th>
+          <th class="text-left">Căn cứ trên bản tổng hợp/Phiếu KĐCL</th>
           <th class="text-left">Số QĐ xuất giảm VT của Tổng cục</th>
+          <th class="text-left">Số BB yêu cầu bảo hành</th>
           <th class="text-left">Thời gian xuất hàng</th>
           <th class="text-left">Trích yếu quyết định</th>
           <th class="text-left">Trạng thái QĐ</th>
@@ -124,6 +125,12 @@
             <nz-input-group>
               <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenLoai"
                      (input)="filterInTable('tenLoai',filterTable.tenLoai)" size="small"/>
+            </nz-input-group>
+          </th>
+          <th>
+            <nz-input-group>
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soCanCu"
+                     (input)="filterInTable('soCanCu',filterTable.soCanCu)" size="small"/>
             </nz-input-group>
           </th>
           <th>
@@ -175,14 +182,16 @@
           <td>{{ data.soQuyetDinh }}</td>
           <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
           <td>{{ data.tenLoai }}</td>
-          <td>{{ data.soCanCu }}</td>
-          <td></td>
+          <td>{{ data.loai == "XUAT_MAU"?data.soCanCu:null }}</td>
+          <td>{{ data.loai == "XUAT_HUY" ? data.soCanCu : null}}</td>
+          <td>{{ data.loai == "XUAT_BH" ? data.soCanCu : null}}</td>
           <td>{{ data.thoiHanXuatHang | date: 'dd/MM/YYYY' }}</td>
           <td>{{ data.trichYeu }}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td>{{ data.tenTrangThaiXh }}</td>
           <td class="text-left">
-            <a *ngIf="data.trangThai==STATUS.DA_DUYET_LDC || data.trangThai==STATUS.CHO_DUYET_LDC" (click)="themMoi(data.id, true)">
+            <a *ngIf="data.trangThai==STATUS.DA_DUYET_LDC || data.trangThai==STATUS.CHO_DUYET_LDC"
+               (click)="themMoi(data.id, true)">
               <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
             <a *ngIf="data.trangThai==STATUS.DU_THAO || data.trangThai==STATUS.TU_CHOI_LDC"
@@ -217,7 +226,7 @@
 </div>
 <div class="chi-tiet" *ngIf="isDetail">
   <app-thong-tin-qd-giao-nhiem-vu-xuat-hang [isViewDetail]="isView" (showListEvent)="showList()"
-                                                    [idInput]="selectedId">
+                                            [idInput]="selectedId">
   </app-thong-tin-qd-giao-nhiem-vu-xuat-hang>
 </div>
 

@@ -16,17 +16,18 @@ import { ThemmoiChaogiaUyquyenMualeComponent } from './chaogia-uyquyen-muale/the
     QuyetdinhPheduyetKqcgComponent,
     ThemmoiQuyetdinhKetquaChaogiaComponent,
     ThemmoiChaogiaUyquyenMualeComponent
-   
+
   ],
   imports: [
     CommonModule,
     ComponentsModule,
     MainModule,
   ],
-  exports: [
-    TochucTrienkhaiMuatructiepComponent,
-    ChaogiaUyquyenMualeComponent,
-    TheoPhuongThucMuaTrucTiepComponent,
-  ]
+    exports: [
+        TochucTrienkhaiMuatructiepComponent,
+        ChaogiaUyquyenMualeComponent,
+        TheoPhuongThucMuaTrucTiepComponent,
+        QuyetdinhPheduyetKqcgComponent,
+    ]
 })
 export class TochucTrienkhaiMuatructiepModule { }

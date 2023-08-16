@@ -21,7 +21,6 @@ import { Base2Component } from 'src/app/components/base2/base2.component';
 import { DanhSachMuaTrucTiepService } from 'src/app/services/danh-sach-mua-truc-tiep.service';
 import { CanCuXacDinh, FileDinhKem } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
 import { UploadComponent } from 'src/app/components/dialog/dialog-upload/upload.component';
-import { DialogThemMoiKeHoachMuaTrucTiepComponent } from 'src/app/components/dialog/dialog-them-moi-ke-hoach-mua-truc-tiep/dialog-them-moi-ke-hoach-mua-truc-tiep.component';
 import { DatePipe } from '@angular/common';
 import {STATUS} from "../../../../../constants/status";
 import {QuyetDinhPheDuyetKeHoachMTTService} from "../../../../../services/quyet-dinh-phe-duyet-ke-hoach-mtt.service";

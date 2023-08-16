@@ -105,7 +105,7 @@
             <nz-form-item>
               <nz-form-label [nzNoColon]="true"> Ngày nhập kho (ngày lập phiếu)</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <nz-date-picker [nzDisabled]="isView" formControlName="ngayNhapKho" nzFormat="dd/MM/yyyy">
+                <nz-date-picker [nzDisabled]="isView" formControlName="ngayLap" nzFormat="dd/MM/yyyy">
                 </nz-date-picker>
               </nz-form-control>
             </nz-form-item>
@@ -197,7 +197,7 @@
             </nz-form-item>
           </div>
 
-          <div nz-col [nzSpan]="4" *ngIf="formData.value.thayDoiThuKho">
+          <div nz-col [nzSpan]="4" *ngIf="isKTCL">
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true">Số phiếu kiểm tra chất lượng</nz-form-label>
               <nz-form-control [nzErrorTip]="error">

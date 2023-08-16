@@ -40,7 +40,7 @@
       </div>
     </div>
   </nz-affix>
-  <nz-alert class="mg-t-10" *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDC" nzShowIcon nzType="error"
+  <nz-alert class="mg-t-10" *ngIf="formData.value.trangThai == STATUS.TU_CHOI_TP||formData.value.trangThai == STATUS.TU_CHOI_LDC" nzShowIcon nzType="error"
             nzMessage="Lý do từ chối" nzDescription="{{formData.value.lyDoTuChoi}}">
   </nz-alert>
   <nz-card class="mt16 flex-card p-lr16">
@@ -75,7 +75,7 @@
             <div nz-col nzSpan="3">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
-                  Mã QHNS <br> (Mã quan hệ ngân sách)
+                  Mã QHNS
                 </nz-form-label>
                 <input nz-input readonly formControlName="maQhNs"/>
               </nz-form-item>
@@ -294,7 +294,7 @@
               <td>
                 <input type="text" nz-input class="w-400" [(ngModel)]="data.ketQua" [readOnly]="isView"/>
               </td>
-              <td>{{data.phuongPhap}}</td>
+              <td>{{data.ppKiemTra}}</td>
               <td>
                 <nz-select [(ngModel)]="data.danhGia" [disabled]="isView">
                   <nz-option *ngFor="let item of LIST_DANH_GIA" [nzValue]="item.value" [nzLabel]="item.label">

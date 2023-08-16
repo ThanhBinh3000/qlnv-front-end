@@ -52,6 +52,7 @@ export class ThemMoiQuyetDinhThanhLyComponent extends Base2Component implements 
   @Input() isViewOnModal: boolean;
 
   expandSetString = new Set<string>();
+  quyetDinhDtlView: any[] = [];
   isVisible = false;
   maHauTo: any;
   listHoSo: any[] = [];
@@ -84,7 +85,6 @@ export class ThemMoiQuyetDinhThanhLyComponent extends Base2Component implements 
       thoiGianTlTu: [],
       thoiGianTlDen: [],
       trichYeu: ['', [Validators.required]],
-      trangThai: [STATUS.DU_THAO],
       tongSoLuongTl: [],
       tongSoLuongCon: [],
       tongThanhTien: [],
@@ -94,10 +94,11 @@ export class ThemMoiQuyetDinhThanhLyComponent extends Base2Component implements 
       nguoiGduyetId: [],
       lyDoTuChoi: [],
       tenDvi: [],
-      tenTrangThai: ['Dự thảo'],
+      trangThai: [''],
+      tenTrangThai: [''],
       fileDinhKem: [new Array<FileDinhKem>()],
       canCu: [new Array<FileDinhKem>()],
-      quyetDinhDtl: [new Array<QuyetDinhDtl>()],
+      quyetDinhDtl: [],
     });
 
   }
@@ -106,14 +107,12 @@ export class ThemMoiQuyetDinhThanhLyComponent extends Base2Component implements 
     await this.spinner.show();
     try {
       this.maHauTo = '/' + this.userInfo.MA_QD;
-      await Promise.all([
-        this.loadDsHoSo(),
-      ]);
-      await this.loadChiTiet(this.idInput);
-      // if (Object.keys(this.dataInit).length > 0) {
-      //   this.formData.patchValue({idHoSo: this.dataInit.id})
-      //   await this.changeHoSo(this.dataInit.id);
-      // }
+      if (this.idInput) {
+        await this.loadChiTiet(this.idInput);
+      } else {
+        this.initForm();
+      }
+      await this.loadDsHoSo();
     } catch (e) {
       console.log("error: ", e);
       await this.spinner.hide();
@@ -122,45 +121,16 @@ export class ThemMoiQuyetDinhThanhLyComponent extends Base2Component implements 
     await this.spinner.hide();
   }
 
-
-  async loadChiTiet(idInput: number) {
-    if (idInput) {
-      await this.quyetDinhThanhLyService.getDetail(idInput)
-        .then((res) => {
-          if (res.msg == MESSAGE.SUCCESS) {
-            this.formData.patchValue({
-              ...res.data,
-              soQd: res.data.soQd?.split('/')[0] ?? null,
-              thoiGianTl: (res.data.thoiGianTlTu && res.data.thoiGianTlDen) ? [res.data.thoiGianTlTu, res.data.thoiGianTlDen] : null
-
-            }, {emitEvent: false});
-            this.formData.value.quyetDinhDtl.forEach(s => {
-              s.idVirtual = uuid.v4();
-            });
-            this.buildTableView(this.formData.value.quyetDinhDtl);
-          }
-        })
-        .catch((e) => {
-          console.log("error: ", e);
-          this.spinner.hide();
-          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        });
-    } else {
-      this.formData.patchValue({
-        maDvi: this.userInfo.MA_DVI,
-        tenDvi: this.userInfo.TEN_DVI,
-      });
-    }
-
+  initForm() {
+    this.formData.patchValue({
+      trangThai: STATUS.DU_THAO,
+      tenTrangThai: 'Dự thảo',
+    })
   }
 
   async loadDsHoSo() {
     this.hoSoThanhLyService.search({
       trangThai: STATUS.DADUYET_BTC,
-      paggingReq: {
-        limit: this.globals.prop.MAX_INTERGER,
-        page: this.page - 1,
-      },
     }).then(res => {
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data;
@@ -176,10 +146,30 @@ export class ThemMoiQuyetDinhThanhLyComponent extends Base2Component implements 
     });
   }
 
+  async loadChiTiet(idInput: number) {
+    if (idInput) {
+      await this.quyetDinhThanhLyService.getDetail(idInput)
+        .then(async (res) => {
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.formData.patchValue({
+              ...res.data,
+              soQd: res.data.soQd?.split('/')[0] ?? null,
+              thoiGianTl: (res.data.thoiGianTlTu && res.data.thoiGianTlDen) ? [res.data.thoiGianTlTu, res.data.thoiGianTlDen] : null
+
+            }, {emitEvent: false});
+            await this.buildTableView();
+          }
+        })
+        .catch((e) => {
+          console.log("error: ", e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        });
+    }
+  }
+
   async save() {
-    this.formData.disable({emitEvent: false});
-    let dt = this.dataTable.flatMap((item) => item.childData);
-    this.formData.patchValue({quyetDinhDtl: dt})
+    await this.helperService.ignoreRequiredForm(this.formData);
     let body = {
       ...this.formData.value,
       soQd: this.formData.value.soQd ? this.formData.value.soQd + this.maHauTo : this.maHauTo,
@@ -188,15 +178,19 @@ export class ThemMoiQuyetDinhThanhLyComponent extends Base2Component implements 
       body.thoiGianTlTu = dayjs(this.formData.get('thoiGianTl').value[0]).format('YYYY-MM-DD');
       body.thoiGianTlDen = dayjs(this.formData.get('thoiGianTl').value[1]).format('YYYY-MM-DD')
     }
-    let rs = await this.createUpdate(body);
-    this.formData.enable({emitEvent: false});
-    this.formData.patchValue({id: rs.id})
-    let ct = await this.quyetDinhThanhLyService.getDetail(rs.id);
-    this.buildTableView(ct.data.quyetDinhDtl)
+    await this.createUpdate(body);
+    await this.helperService.restoreRequiredForm(this.formData);
   }
 
-  async saveAndSend(body: any, trangThai: string, msg: string, msgSuccess?: string) {
-    body = {...body, soQd: this.formData.value.soQd + this.maHauTo}
+  async saveAndSend(trangThai: string, msg: string, msgSuccess?: string) {
+    let body = {
+      ...this.formData.value,
+      soQd: this.formData.value.soQd ? this.formData.value.soQd + this.maHauTo : this.maHauTo,
+    };
+    if (this.formData.get('thoiGianTl').value) {
+      body.thoiGianTlTu = dayjs(this.formData.get('thoiGianTl').value[0]).format('YYYY-MM-DD');
+      body.thoiGianTlDen = dayjs(this.formData.get('thoiGianTl').value[1]).format('YYYY-MM-DD')
+    }
     await super.saveAndSend(body, trangThai, msg, msgSuccess);
   }
 
@@ -204,68 +198,65 @@ export class ThemMoiQuyetDinhThanhLyComponent extends Base2Component implements 
     this.showListEvent.emit();
   }
 
-  changeHoSo($event: any) {
+  async changeHoSo($event: any) {
     if ($event) {
       try {
-        this.spinner.show();
-        this.hoSoThanhLyService.getDetail($event).then(res => {
+        await this.spinner.show();
+        this.hoSoThanhLyService.getDetail($event).then(async res => {
           if (res.msg == MESSAGE.SUCCESS) {
-            if (res.data) {
-              this.dataTable = cloneDeep(res.data.hoSoDtl.filter(f => f.type === 'TD'));
-              this.dataTable = this.dataTable.map((item) => {
-                return {
-                  ...item,
-                  id: null,
-                  ketQua: item.ketQuaDanhGia,
-                  slCon: item.slDeXuat - item.slDaDuyet
-                };
-              });
-              this.formData.patchValue({
-                soHoSo: res.data.soHoSo,
-                quyetDinhDtl: this.dataTable,
-                tongSoLuongTl: res.data.hoSoDtl.reduce((prev, cur) => prev + cur.slDaDuyet, 0),
-                tongSoLuongCon: res.data.hoSoDtl.reduce((prev, cur) => prev + (cur.slDeXuat - cur.slDaDuyet), 0),
-                tongThanhTien: res.data.hoSoDtl.reduce((prev, cur) => prev + cur.thanhTien, 0),
-              });
-              this.buildTableView(this.formData.value.quyetDinhDtl)
-            }
+            const dataHs = res.data;
+            this.formData.patchValue({
+              quyetDinhDtl: dataHs.hoSoDtl.filter(s => s.type === 'TD'),
+              soHoSo: dataHs.soHoSo,
+              tongSoLuongTl: dataHs.hoSoDtl.reduce((prev, cur) => prev + cur.slDaDuyet, 0),
+              tongSoLuongCon: dataHs.hoSoDtl.reduce((prev, cur) => prev + (cur.slDeXuat - cur.slDaDuyet), 0),
+              tongThanhTien: dataHs.hoSoDtl.reduce((prev, cur) => prev + cur.thanhTien, 0),
+            })
+            await this.buildTableView();
           }
         })
+        await this.spinner.hide();
       } catch (e) {
-        console.log('error: ', e);
+        console.log("error: ", e);
+        await this.spinner.hide();
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      } finally {
-        this.spinner.hide();
       }
     }
   }
 
-  expandAll() {
-    this.dataTable.forEach(s => {
-      this.expandSetString.add(s.idVirtual);
-    });
+  async buildTableView() {
+    this.quyetDinhDtlView = chain(this.formData.value.quyetDinhDtl)
+      .groupBy("tenCuc")
+      .map((value, key) => {
+          value.forEach((item) => {
+            item.id = null
+            item.slCon = item.slDeXuat - item.slDaDuyet
+            item.ketQua = item.ketQuaDanhGia
+          })
+          return {
+            idVirtual: uuid.v4(),
+            tenCuc: key,
+            childData: value
+          }
+        }
+      ).value();
+    await this.expandAll();
   }
 
-  onExpandStringChange(id: string, checked: boolean) {
+  expandAll() {
+    if (this.quyetDinhDtlView && this.quyetDinhDtlView.length > 0) {
+      this.quyetDinhDtlView.forEach(s => {
+        this.expandSetString.add(s.idVirtual);
+      });
+    }
+  }
+
+  onExpandStringChange(id: string, checked: boolean): void {
     if (checked) {
       this.expandSetString.add(id);
     } else {
       this.expandSetString.delete(id);
     }
-  }
-
-
-  buildTableView(data?: any) {
-    this.dataTable = chain(data)
-      .groupBy("tenCuc")
-      .map((value, key) => {
-        return {
-          idVirtual: uuid.v4(),
-          tenCuc: key,
-          childData: value,
-        };
-      }).value();
-    this.expandAll()
   }
 
   redirectDetail(id, b: boolean) {
