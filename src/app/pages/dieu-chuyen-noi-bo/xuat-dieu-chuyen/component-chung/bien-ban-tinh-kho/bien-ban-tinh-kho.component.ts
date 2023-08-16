@@ -91,16 +91,18 @@ export class BienBanTinhKhoDieuChuyenComponent extends Base2Component implements
   expandSetString = new Set<string>();
   dataView: any[] = [];
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     try {
       this.spinner.show();
       this.initData();
-      this.timKiem();
+      await this.timKiem();
     }
     catch (e) {
       console.log('error: ', e)
-      this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      this.spinner.hide();
+
     }
   }
 
@@ -126,19 +128,29 @@ export class BienBanTinhKhoDieuChuyenComponent extends Base2Component implements
     return this.userInfo.MA_DVI == maDvi;
   }
   async timKiem() {
-    await this.spinner.show();
     try {
+      const data = this.formData.value;
+      const dataTrim = this.trimStringData(data);
+      this.formData.patchValue({ ...dataTrim })
       await this.search();
-    } catch (e) {
-      console.log(e)
+    } catch (error) {
+      console.log("error", error)
     }
-    await this.spinner.hide();
+  };
+  trimStringData(obj: any) {
+    for (const key in obj) {
+      const value = obj[key];
+      if (typeof value === 'string' || value instanceof String) {
+        obj[key] = value.trim();
+      }
+    };
+    return obj
   }
   resetForm() {
     this.formData.reset();
     this.formData.patchValue({ loaiDc: this.loaiDc, isVatTu: this.isVatTu, thayDoiThuKho: this.thayDoiThuKho, type: this.type })
   }
-  clearForm() {
+  clearFilter() {
     this.resetForm();
     this.timKiem()
   }

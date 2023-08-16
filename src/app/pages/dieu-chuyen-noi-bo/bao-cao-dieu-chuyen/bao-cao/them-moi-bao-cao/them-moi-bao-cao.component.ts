@@ -36,6 +36,11 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
   listSoQuyetDinh: any[] = [];
   TRANG_THAI: { [key: string]: string } = {
     [STATUS.DU_THAO]: "Dự thảo",
+    [STATUS.CHO_DUYET_TP]: "Chờ duyệt - TP",
+    [STATUS.CHO_DUYET_LDC]: "Chờ duyệt - LĐ Cục",
+    [STATUS.TU_CHOI_TP]: "Từ chối - TP",
+    [STATUS.TU_CHOI_LDC]: "Từ chối - LĐ Cục",
+    [STATUS.DA_DUYET_LDC]: "Đã duyệt - LĐ Cục",
     [STATUS.DA_HOAN_THANH]: "Hoàn thành",
   };
   danhSachKetQua: any[] = [];
@@ -74,6 +79,7 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
       qdDcCucId: [],
       ngayKyQd: [],
       trangThai: ['00'],
+      lyDoTuChoi: [],
       noiDung: [],
       fileDinhKems: [new Array()],
       listTenBaoCaoSelect: [["Tất cả"]]
@@ -350,10 +356,13 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
       }
       let data = await this.createUpdate(body);
       if (!data) return;
-      this.formData.patchValue({ id: data.id, trangThai: data.trangThai })
+      this.formData.patchValue({ id: data.id, soBc: data.soBc, trangThai: data.trangThai })
       if (isGuiDuyet) {
-        // this.pheDuyet();
-        this.hoanThanh();
+        if (this.loaiBc === 'CUC') {
+          this.pheDuyet();
+        } else {
+          this.hoanThanh();
+        }
       }
     } catch (error) {
       console.log("error", error)
@@ -419,6 +428,17 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
     });
   }
   async tuChoi(): Promise<void> {
+    let trangThai = '';
+    switch (this.formData.get('trangThai').value) {
+      case STATUS.CHO_DUYET_TP: {
+        trangThai = STATUS.TU_CHOI_TP;
+        break;
+      }
+      case STATUS.CHO_DUYET_LDC: {
+        trangThai = STATUS.TU_CHOI_LDC;
+        break;
+      }
+    }
     const modalTuChoi = this.modal.create({
       nzTitle: 'Từ chối',
       nzContent: DialogTuChoiComponent,
@@ -435,7 +455,7 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
           let body = {
             id: this.formData.value.id,
             lyDoTuChoi: text,
-            trangThai: STATUS.TU_CHOI_LDCC,
+            trangThai: trangThai,
           };
           let res =
             await this.baoCaoDieuChuyenService.approve(
@@ -526,13 +546,13 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
     return false
   }
   checkRoleHoanThanh() {
-    if (!this.isViewOnModal && ((this.loaiBc === "CUC" && this.userService.isCuc()) || (this.loaiBc === "CHI_CUC" && this.userService.isChiCuc())) && this.formData.value.trangThai === STATUS.DU_THAO) {
+    if (!this.isViewOnModal && (this.loaiBc === "CHI_CUC" && this.userService.isChiCuc()) && this.formData.value.trangThai === STATUS.DU_THAO) {
       return true
     }
     return false
   }
   checkRoleLapBBThuaThieu() {
     // return this.duocLapBBThuaThieu;
-    return true
+    return (this.loaiBc === "CHI_CUC" && this.userService.isChiCuc() && this.formData.value.trangThai === STATUS.DA_HOAN_THANH)
   }
 }

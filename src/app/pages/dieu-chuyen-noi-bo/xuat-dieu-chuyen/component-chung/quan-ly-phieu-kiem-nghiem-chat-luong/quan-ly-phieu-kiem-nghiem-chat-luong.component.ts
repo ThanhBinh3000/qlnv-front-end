@@ -157,11 +157,23 @@ export class PhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base2Compon
   }
   async timKiem(): Promise<void> {
     try {
+      const data = this.formData.value;
+      const dataTrim = this.trimStringData(data);
+      this.formData.patchValue({ ...dataTrim })
       await this.search();
       this.buildTableView()
     } catch (error) {
       console.log("error", error)
     }
+  };
+  trimStringData(obj: any) {
+    for (const key in obj) {
+      const value = obj[key];
+      if (typeof value === 'string' || value instanceof String) {
+        obj[key] = value.trim();
+      }
+    };
+    return obj
   }
   updateAllChecked(): void {
     this.indeterminate = false;

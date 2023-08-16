@@ -114,10 +114,26 @@ export class BienBanThuaThieuComponent extends Base2Component implements OnInit 
     }
     async clearForm() {
         this.formData.reset();
-        await this.search()
+        await this.timKiem()
     }
     async timKiem() {
-        await this.search();
+        try {
+            const data = this.formData.value;
+            const dataTrim = this.trimStringData(data);
+            this.formData.patchValue({ ...dataTrim })
+            await this.search();
+        } catch (error) {
+            console.log("error", error)
+        }
+    };
+    trimStringData(obj: any) {
+        for (const key in obj) {
+            const value = obj[key];
+            if (typeof value === 'string' || value instanceof String) {
+                obj[key] = value.trim();
+            }
+        };
+        return obj
     }
     disabledTuNgay = (startValue: Date): boolean => {
         if (startValue && this.formData.value.denNgayBc) {
