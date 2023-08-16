@@ -115,7 +115,6 @@ export class ChiTietBienBanThuaThieuComponent extends Base2Component implements 
             this.buildTableView();
         }
         else {
-            console.log("passData", this.passData)
             this.formData.patchValue({
                 maDvi: this.userInfo.MA_DVI,
                 tenDvi: this.userInfo.TEN_DVI,
