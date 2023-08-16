@@ -239,9 +239,9 @@ export class BaoCaoComponent implements OnInit {
         const checkAccept = this.userService.isAccessPermisson(Roles.LTD.ACCEPT_REPORT);
         const checkPrint = isSynthetic ? this.userService.isAccessPermisson(Roles.LTD.PRINT_SYNTH_REPORT) : this.userService.isAccessPermisson(Roles.LTD.PRINT_REPORT);
         const checkExport = isSynthetic ? this.userService.isAccessPermisson(Roles.LTD.EXPORT_SYNTH_REPORT) : this.userService.isAccessPermisson(Roles.LTD.EXPORT_REPORT)
-
+        const checkNew = isSynthetic ? this.userService.isAccessPermisson(Roles.LTD.SYNTH_REPORT) : this.userService.isAccessPermisson(Roles.LTD.ADD_REPORT);
         this.status.general = Status.check('saveWHist', this.baoCao.trangThai) && checkSave;
-        this.status.new = Status.check('reject', this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.LTD.ADD_REPORT) && this.isChild && this.data.preTab == Ltd.DANH_SACH_BAO_CAO;
+        this.status.new = Status.check('reject', this.baoCao.trangThai) && checkNew && this.isChild && this.data.preTab == Ltd.DANH_SACH_BAO_CAO;
         this.status.viewAppVal = Status.check('appraisal', this.baoCao.trangThai);
         this.status.save = Status.check('saveWHist', this.baoCao.trangThai) && checkSave && this.isChild;
         this.status.submit = Status.check('submit', this.baoCao.trangThai) && checkSunmit && this.isChild && !(!this.baoCao.id);
@@ -249,7 +249,7 @@ export class BaoCaoComponent implements OnInit {
         this.status.approve = Status.check('approve', this.baoCao.trangThai) && checkApprove && this.isChild;
         this.status.accept = Status.check('accept', this.baoCao.trangThai) && checkAccept && this.isParent;
         // this.status.print = Utils.statusPrint.includes(this.baoCao.trangThai) && checkPrint && this.isChild;
-        this.status.export = Status.check('export', this.baoCao.trangThai) && checkExport && this.isChild;
+        this.status.export = (this.baoCao.trangThai == Status.TT_09 || (this.baoCao.trangThai == Status.TT_07 && this.userService.isTongCuc() && this.isChild)) && checkExport && (this.isChild || this.isParent);
         this.status.ok = this.status.accept || this.status.approve || this.status.pass
         this.status.finish = this.status.general;
         this.status.editAppVal = this.status.accept;

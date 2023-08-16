@@ -235,15 +235,16 @@ export class BaoCaoComponent implements OnInit {
         const checkApprove = isSynthetic ? this.userService.isAccessPermisson(Roles.VP.APPROVE_SYNTH_REPORT) : this.userService.isAccessPermisson(Roles.VP.APPROVE_REPORT);
         const checkAccept = this.userService.isAccessPermisson(Roles.VP.ACCEPT_REPORT);
         const checkExport = this.userService.isAccessPermisson(Roles.VP.EXPORT_EXCEL_REPORT);
+        const checkNew = isSynthetic ? this.userService.isAccessPermisson(Roles.VP.SYNTH_REPORT) : this.userService.isAccessPermisson(Roles.VP.ADD_REPORT)
 
         this.status.save = Status.check('saveWHist', this.baoCao.trangThai) && checkSave && this.isChild;
-        this.status.new = Status.check('reject', this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.VP.ADD_REPORT) && this.isChild && this.data.preTab == Vp.DANH_SACH_BAO_CAO;
+        this.status.new = Status.check('reject', this.baoCao.trangThai) && checkNew && this.isChild && this.data.preTab == Vp.DANH_SACH_BAO_CAO;
         this.status.submit = Status.check('submit', this.baoCao.trangThai) && checkSunmit && this.isChild && !(!this.baoCao.id);
         this.status.pass = Status.check('pass', this.baoCao.trangThai) && checkPass && this.isChild;
         this.status.approve = Status.check('approve', this.baoCao.trangThai) && checkApprove && this.isChild;
         this.status.accept = Status.check('accept', this.baoCao.trangThai) && checkAccept && this.isParent;
-        this.status.export = Status.check('export', this.baoCao.trangThai) && checkExport && (this.isChild || this.isParent);
-        this.status.ok = this.status.accept || this.status.approve || this.status.pass
+        this.status.export = (this.baoCao.trangThai == Status.TT_09 || (this.baoCao.trangThai == Status.TT_07 && this.userService.isTongCuc() && this.isChild)) && checkExport && (this.isChild || this.isParent);
+        this.status.ok = this.status.accept || this.status.approve || this.status.pass;
         this.status.finish = this.status.save;
     }
 
