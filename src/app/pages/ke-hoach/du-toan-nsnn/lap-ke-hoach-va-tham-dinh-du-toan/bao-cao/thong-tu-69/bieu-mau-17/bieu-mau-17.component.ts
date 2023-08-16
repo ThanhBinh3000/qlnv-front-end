@@ -379,7 +379,22 @@ export class BieuMau17Component implements OnInit {
             })
             return row;
         })
-        console.log(filterData)
+        let row: any = {};
+        fieldOrder.forEach(field => {
+            row[field] = field == 'tenLvucNdChi' ? '          -Chi thường xuyên mới' : ((!this.chiMoi[field] && this.chiMoi[field] !== 0) ? '' : this.chiMoi[field]);
+        })
+        filterData.unshift(row)
+        row = {}
+        fieldOrder.forEach(field => {
+            row[field] = field == 'tenLvucNdChi' ? 'Trong đó: - Chi thường xuyên cơ sở' : ((!this.chiCoSo[field] && this.chiCoSo[field] !== 0) ? '' : this.chiCoSo[field]);
+        })
+        filterData.unshift(row)
+        row = {}
+        fieldOrder.forEach(field => {
+            row[field] = field == 'tenLvucNdChi' ? 'Tổng nhu cầu chi thường xuyên' : ((!this.total[field] && this.total[field] !== 0) ? '' : this.total[field]);
+        })
+
+        filterData.unshift(row)
         const workbook = XLSX.utils.book_new();
         const worksheet = Table.initExcel(header);
         XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })

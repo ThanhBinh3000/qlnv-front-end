@@ -401,6 +401,21 @@ export class BieuMau16Component implements OnInit {
             })
             return row;
         })
+        let row: any = {};
+        fieldOrder.forEach(field => {
+            row[field] = field == 'tenNdung' ? '          -Chi thường xuyên mới' : ((!this.chiMoi[field] && this.chiMoi[field] !== 0) ? '' : this.chiMoi[field]);
+        })
+        filterData.unshift(row)
+        row = {}
+        fieldOrder.forEach(field => {
+            row[field] = field == 'tenNdung' ? 'Trong đó: -Chi thường xuyên cơ sở' : ((!this.chiCoSo[field] && this.chiCoSo[field] !== 0) ? '' : this.chiCoSo[field]);
+        })
+        filterData.unshift(row)
+        row = {}
+        fieldOrder.forEach(field => {
+            row[field] = field == 'tenNdung' ? 'TỔNG NHU CẦU' : ((!this.total[field] && this.total[field] !== 0) ? '' : this.total[field]);
+        })
+        filterData.unshift(row)
 
         const workbook = XLSX.utils.book_new();
         const worksheet = Table.initExcel(header);

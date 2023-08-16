@@ -261,7 +261,7 @@
 												<input nz-input [(ngModel)]="editCache[data.id].data.tenCongTrinh" />
 											</ng-template>
 										</td>
-										<td *ngIf="!dataInfo.isOffice">
+										<td *ngIf="!isOffice">
 											<!-- <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị"
 												[(ngModel)]="editCache[data.id].data.cucKhuVuc">
 												<nz-option *ngFor="let item of donVis" [nzValue]="item.tenDvi"
@@ -329,7 +329,7 @@
 										<td nzLeft>
 											{{ data.tenCongTrinh }}
 										</td>
-										<td *ngIf="!dataInfo.isOffice">
+										<td *ngIf="!isOffice">
 											{{ data.cucKhuVuc }}
 										</td>
 										<td>

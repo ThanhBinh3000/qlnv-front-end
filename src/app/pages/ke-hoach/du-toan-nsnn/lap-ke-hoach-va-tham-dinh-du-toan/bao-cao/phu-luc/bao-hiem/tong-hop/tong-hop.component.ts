@@ -399,7 +399,10 @@ export class TongHopComponent implements OnInit {
 
     exportToExcel() {
         const header = [
-            { t: 0, b: 7 + this.lstCtietBcao.length, l: 0, r: 12 + 10 * this.childUnit.length, val: null },
+            { t: 0, b: 8 + this.lstCtietBcao.length, l: 0, r: 12 + 10 * this.childUnit.length, val: null },
+            { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
+            { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
+            { t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
             { t: 5, b: 7, l: 0, r: 0, val: 'STT' },
             { t: 5, b: 7, l: 1, r: 1, val: 'Danh mục hàng DTQG tham gia bảo hiểm' },
             { t: 5, b: 7, l: 2, r: 2, val: 'Đơn vị tính' },
@@ -417,6 +420,12 @@ export class TongHopComponent implements OnInit {
             { t: 7, b: 7, l: 10, r: 10, val: 'Tỷ lệ bảo hiểm' },
             { t: 7, b: 7, l: 11, r: 11, val: 'Giá trị bảo hiểm' },
             { t: 6, b: 7, l: 12, r: 12, val: 'Tổng GT' },
+            { t: 8, b: 8, l: 1, r: 1, val: 'Tổng cộng' },
+            { t: 8, b: 8, l: 6, r: 6, val: this.total?.gtTrenGt },
+            { t: 8, b: 8, l: 8, r: 8, val: this.total?.gtTrenGtBh },
+            { t: 8, b: 8, l: 9, r: 9, val: this.total?.gtDuoiGt },
+            { t: 8, b: 8, l: 11, r: 11, val: this.total?.gtDuoiGtBh },
+            { t: 8, b: 8, l: 12, r: 12, val: this.total?.tong },
         ]
         this.childUnit.forEach((item, index) => {
             const left = 12 + index * 10;
@@ -435,8 +444,15 @@ export class TongHopComponent implements OnInit {
             header.push({ t: 7, b: 7, l: left + 8, r: left + 8, val: 'Tỷ lệ bảo hiểm' })
             header.push({ t: 7, b: 7, l: left + 9, r: left + 9, val: 'Giá trị bảo hiểm' })
             header.push({ t: 6, b: 7, l: left + 10, r: left + 10, val: 'Tổng GT' })
+            const unit = this.total.lstDviCapDuoi.find(e => e.maDvi == item.maDvi);
+            header.push({ t: 8, b: 8, l: left + 4, r: left + 4, val: unit?.gtTrenGt });
+            header.push({ t: 8, b: 8, l: left + 6, r: left + 6, val: unit?.gtTrenGtBh });
+            header.push({ t: 8, b: 8, l: left + 7, r: left + 7, val: unit?.gtDuoiGt });
+            header.push({ t: 8, b: 8, l: left + 9, r: left + 9, val: unit?.gtDuoiGtBh });
+            header.push({ t: 8, b: 8, l: left + 10, r: left + 10, val: unit?.tong });
+
         })
-        const headerBot = 7;
+        const headerBot = 8;
         this.lstCtietBcao.forEach((item, index) => {
             const row = headerBot + index + 1;
             header.push({ t: row, b: row, l: 0, r: 0, val: this.getChiMuc(item.stt) })
