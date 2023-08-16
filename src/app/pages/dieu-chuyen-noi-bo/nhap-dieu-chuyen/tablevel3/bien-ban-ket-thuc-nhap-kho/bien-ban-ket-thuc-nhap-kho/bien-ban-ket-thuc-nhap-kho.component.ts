@@ -315,6 +315,10 @@ export class BienBanKetThucNhapKhoComponent extends Base2Component implements On
     });
   }
 
+  isPheDuyet(row) {
+    return row.trangThai == STATUS.CHO_DUYET_KTVBQ || row.trangThai == STATUS.CHO_DUYET_KT || row.trangThai == STATUS.CHO_DUYET_LDCC
+  }
+
   add(data: any) {
     this.data = data;
     this.selectedId = 0

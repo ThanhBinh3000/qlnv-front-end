@@ -84,7 +84,8 @@ export class BienBanNhapDayDuComponent extends Base2Component implements OnInit 
       type: ["01"],
       loaiDc: [this.loaiDc],
       loaiQdinh: [],
-      thayDoiThuKho: []
+      thayDoiThuKho: [],
+      isVatTu: false
     })
   }
 
