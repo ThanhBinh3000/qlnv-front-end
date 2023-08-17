@@ -140,7 +140,7 @@
                                             (click)="deleteLine(data.id)"></i>
                                     </td>
                                     <td *ngIf="status.save" nzRight>
-                                        <i *ngIf="data.level > 0" class="fa fa-pencil" (click)="startEdit(data.id)"></i>
+                                        <i *ngIf="data.level > 1" class="fa fa-pencil" (click)="startEdit(data.id)"></i>
                                     </td>
                                     <td *ngIf="status.save" nzRight>
                                         <i *ngIf="data.level < 2" class="fa fa-plus" (click)="addLine(data.id)"></i>
@@ -151,7 +151,36 @@
                                     </td> -->
                                 </ng-container>
                                 <ng-template #editTemplate>
-                                    <ng-container *ngIf="data.level == 1; else child">
+                                    <td>
+                                        <input nz-input [(ngModel)]="editCache[data.id].data.soQd" />
+                                    </td>
+                                    <td>
+                                        <input class="money-input" currencyMask [options]="Op.amount"
+                                            [(ngModel)]="editCache[data.id].data.khSoLuong"
+                                            (ngModelChange)="editCache[data.id].data.changeModel()" />
+                                    </td>
+                                    <td>
+                                        <input class="money-input" currencyMask [options]="Op.amount"
+                                            [(ngModel)]="editCache[data.id].data.khGiaMuaTd"
+                                            (ngModelChange)="editCache[data.id].data.changeModel()" />
+                                    </td>
+                                    <td>
+                                        {{ Op.fmtVal(editCache[data.id].data.khTtien) }}
+                                    </td>
+                                    <td>
+                                        <input class="money-input" currencyMask [options]="Op.amount"
+                                            [(ngModel)]="editCache[data.id].data.thSoLuong"
+                                            (ngModelChange)="editCache[data.id].data.changeModel()" />
+                                    </td>
+                                    <td>
+                                        <input class="money-input" currencyMask [options]="Op.amount"
+                                            [(ngModel)]="editCache[data.id].data.thGiaMuaTd"
+                                            (ngModelChange)="editCache[data.id].data.changeModel()" />
+                                    </td>
+                                    <td>
+                                        {{ Op.fmtVal(editCache[data.id].data.thTtien) }}
+                                    </td>
+                                    <!-- <ng-container *ngIf="data.level == 1; else child">
                                         <td>
                                             <input nz-input [(ngModel)]="editCache[data.id].data.soQd" />
                                         </td>
@@ -196,7 +225,7 @@
                                         <td>
                                             {{ Op.fmtVal(editCache[data.id].data.thTtien) }}
                                         </td>
-                                    </ng-template>
+                                    </ng-template> -->
                                     <td>
                                         <input nz-input [(ngModel)]="editCache[data.id].data.ghiChu" />
                                     </td>

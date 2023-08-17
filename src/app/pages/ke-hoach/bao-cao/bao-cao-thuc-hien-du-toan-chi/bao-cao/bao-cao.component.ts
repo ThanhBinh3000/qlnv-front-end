@@ -298,6 +298,7 @@ export class BaoCaoComponent implements OnInit {
                     this.baoCao?.lstBcaos?.forEach(item => {
                         [item.tenPhuLuc, item.tieuDe] = Dtc.appendixName(item.maLoai);
                     })
+                    this.baoCao.listIdDeleteFiles = [];
                     this.listFile = [];
                     this.getStatusButton();
                 } else {

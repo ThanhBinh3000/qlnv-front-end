@@ -260,10 +260,10 @@ export class Report {
     lyDoTuChoi: string;
     // giaoSoTranChiId: string;
     thuyetMinh: string;
-    fileDinhKems: any[];
-    listIdDeleteFiles: string[];
-    tongHopTuIds: any[];
-    lichSu: History[];
+    fileDinhKems: any[] = [];
+    listIdDeleteFiles: string[] = [];
+    tongHopTuIds: any[] = [];
+    lichSu: History[] = [];
 }
 
 export class BtnStatus {

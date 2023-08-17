@@ -192,6 +192,7 @@ export class CapUngVonComponent implements OnInit {
                     data.data.lstCtiets.forEach(item => {
                         this.lstCtiets.push(new CapUng(item));
                     })
+                    this.baoCao.listIdDeleteFiles = [];
                     this.listFile = [];
                     this.updateEditCache();
                     this.getStatusButton();

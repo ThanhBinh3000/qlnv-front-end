@@ -215,7 +215,8 @@ export class CapVonQuyetDinhDonGiaMuaComponent implements OnInit {
                         this.lstCtiets.push(new CapVon(item));
                     })
                     this.lstCtiets = Table.sortByIndex(this.lstCtiets)
-                    this.setLevel()
+                    this.setLevel();
+                    this.baoCao.listIdDeleteFiles = [];
                     this.listFile = [];
                     this.updateEditCache();
                     this.getStatusButton();

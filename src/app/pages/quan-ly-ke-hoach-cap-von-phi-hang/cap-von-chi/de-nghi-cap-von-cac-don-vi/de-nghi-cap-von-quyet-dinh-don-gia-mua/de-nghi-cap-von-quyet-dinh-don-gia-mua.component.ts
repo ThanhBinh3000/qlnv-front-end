@@ -232,6 +232,7 @@ export class DeNghiCapVonQuyetDinhDonGiaMuaComponent implements OnInit {
                     })
                     this.lstCtiets = Table.sortByIndex(this.lstCtiets)
                     this.setLevel();
+                    this.baoCao.listIdDeleteFiles = [];
                     this.listFile = [];
                     this.getStatusButton();
                 } else {
