@@ -294,6 +294,10 @@ export class ThemMoiToTrinhPagComponent implements OnInit {
             soDx : value && value[0] && value[0].soDx ? value[0].soDx : null,
             children: value,
             pagId: value && value[0] && value[0].pagId ? value[0].pagId : null,
+            apDungTatCa : value && value[0] && value[0].apDungTatCa ? value[0].apDungTatCa : null,
+            vat : value && value[0] && value[0].vat ? value[0].vat : null,
+            giaQdBtc : value && value[0] && value[0].giaQdBtc ? value[0].giaQdBtc : null,
+            giaQdTcdt : value && value[0] && value[0].giaQdTcdt ? value[0].giaQdTcdt : 0,
           };
         }).value();
     }
@@ -322,6 +326,12 @@ export class ThemMoiToTrinhPagComponent implements OnInit {
       this.dataTableView.forEach(item => {
         if (item.children && item.children.length > 0) {
           item.children.forEach(child => {
+              if (child.apDungTatCa) {
+                child.giaQdTcdt = item.giaQdTcdt;
+                if (child.vat) {
+                  child.giaQdTcdtVat = child.giaQdTcdt + child.giaQdTcdt * child.vat
+                }
+              }
             this.dataTable.push(child);
           })
         }

@@ -289,7 +289,10 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
             tenVungMien: value && value[0] && value[0].tenVungMien ? value[0].tenVungMien : null,
             tenDvi: value && value[0] && value[0].tenDvi ? value[0].tenDvi : null,
             soDx: value && value[0] && value[0].soDx ? value[0].soDx : null,
-            children: value
+            children: value,
+            apDungTatCa : value && value[0] && value[0].apDungTatCa ? value[0].apDungTatCa : null,
+            vat : value && value[0] && value[0].vat ? value[0].vat : null,
+            giaQdBtc : value && value[0] && value[0].giaQdBtc ? value[0].giaQdBtc : 0,
           };
         }).value();
     }
@@ -302,6 +305,12 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
       this.dataTableView.forEach(item => {
         if (item.children && item.children.length > 0) {
           item.children.forEach(child => {
+            if (child.apDungTatCa) {
+              child.giaQdBtc = item.giaQdBtc;
+              if (child.vat) {
+                child.giaQdBtcVat = child.giaQdBtc + child.giaQdBtc * child.vat
+              }
+            }
             this.dataTable.push(child);
           })
         }
