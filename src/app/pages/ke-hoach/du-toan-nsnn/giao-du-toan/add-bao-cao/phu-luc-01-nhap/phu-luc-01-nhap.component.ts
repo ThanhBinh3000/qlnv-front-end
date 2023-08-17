@@ -164,9 +164,9 @@ export class PhuLuc01NhapComponent implements OnInit {
 
         if (this.status.general) {
             await this.getDinhMucPL2N();
-            this.scrollX = Table.tableWidth(350, 7, 1, 90);
+            this.scrollX = Table.tableWidth(250, 7, 1, 90);
         } else {
-            this.scrollX = Table.tableWidth(350, 7, 1, 0);
+            this.scrollX = Table.tableWidth(250, 7, 1, 0);
         }
 
         // this.lstCtietBcaos.forEach(item => {
