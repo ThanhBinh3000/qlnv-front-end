@@ -122,7 +122,6 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
   }
 
   ngOnInit() {
-    console.log(this.formThongTinChung);
     if (this.id) {
       this.getDetail(this.id);
     } else {
