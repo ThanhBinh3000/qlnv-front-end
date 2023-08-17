@@ -146,7 +146,8 @@ export class ThanhToanTheoHopDongComponent implements OnInit {
         this.status.submit = Status.check('submit', this.baoCao.trangThai) && isChild && !(!this.baoCao.id);
         this.status.pass = Status.check('pass', this.baoCao.trangThai) && isChild;
         this.status.approve = Status.check('approve', this.baoCao.trangThai) && isChild;
-        this.status.export = this.baoCao.trangThai == Status.TT_07 && isChild;
+        // this.status.export = this.baoCao.trangThai == Status.TT_07 && isChild;
+        this.status.export = isChild;
 
         this.status.save = this.status.save && this.userService.isAccessPermisson(Roles.CVMB.EDIT_TTKH);
         this.status.submit = this.status.submit && this.userService.isAccessPermisson(Roles.CVMB.SUBMIT_TTKH);
@@ -367,6 +368,10 @@ export class ThanhToanTheoHopDongComponent implements OnInit {
     }
 
     exportToExcel() {
+        if (this.lstCtiets.some(e => this.editCache[e.id].edit)) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+            return;
+        }
         const header = [
             { t: 0, b: 5, l: 0, r: 21, val: null },
             { t: 0, b: 0, l: 0, r: 8, val: "Thanh toán cho khách hàng theo hợp đồng trúng thầu" },

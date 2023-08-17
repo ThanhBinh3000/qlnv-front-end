@@ -177,14 +177,14 @@ export class VonBanTheoDonGiaMuaComponent implements OnInit {
         this.status.pass = Status.check('pass', this.baoCao.trangThai) && isChild;
         this.status.approve = Status.check('approve', this.baoCao.trangThai) && isChild;
         this.status.accept = Status.check('accept', this.baoCao.trangThai) && this.isParent;
-        this.status.export = Status.TT_09 == this.baoCao.trangThai || (Status.TT_07 == this.baoCao.trangThai && this.capDvi == 1);
+        // this.status.export = Status.TT_09 == this.baoCao.trangThai || (Status.TT_07 == this.baoCao.trangThai && this.capDvi == 1);
 
         this.status.save = this.status.save && this.userService.isAccessPermisson(Roles.CVMB.EDIT_VB);
         this.status.submit = this.status.submit && this.userService.isAccessPermisson(Roles.CVMB.SUBMIT_VB);
         this.status.pass = this.status.pass && this.userService.isAccessPermisson(Roles.CVMB.PASS_VB);
         this.status.approve = this.status.approve && this.userService.isAccessPermisson(Roles.CVMB.APPROVE_VB);
         this.status.accept = this.status.accept && this.userService.isAccessPermisson(Roles.CVMB.ACCEPT_VB);
-        this.status.export = this.status.export && this.userService.isAccessPermisson(Roles.CVMB.EXPORT_VB) && (isChild || this.isParent);
+        this.status.export = this.userService.isAccessPermisson(Roles.CVMB.EXPORT_VB) && (isChild || this.isParent);
 
         this.isReceive = this.baoCao.trangThai == Status.TT_09 || (this.baoCao.trangThai == Status.TT_07 && this.isParent);
         this.scrollX = this.status.save ? Table.tableWidth(350, 13, 1, 60) : Table.tableWidth(350, 13, 1, 0);
@@ -451,6 +451,10 @@ export class VonBanTheoDonGiaMuaComponent implements OnInit {
     }
 
     exportToExcel() {
+        if (this.lstCtiets.some(e => this.editCache[e.id].edit)) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+            return;
+        }
         let header = [];
         let filterData = [];
         if (this.capDvi == 1) {

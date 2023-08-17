@@ -371,6 +371,10 @@ export class BieuMau131Component implements OnInit {
     }
 
     exportToExcel() {
+        if (this.lstCtietBcao.some(e => this.editCache[e.id].edit)) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+            return;
+        }
         const header = [
             { t: 0, b: 5, l: 0, r: 10, val: null },
             { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },

@@ -251,7 +251,8 @@ export class BaoCaoComponent implements OnInit {
         this.status.pass = Status.check('pass', this.baoCao.trangThai) && checkPass && this.isChild;
         this.status.approve = Status.check('approve', this.baoCao.trangThai) && checkApprove && this.isChild;
         this.status.accept = Status.check('accept', this.baoCao.trangThai) && checkAccept && this.isParent;
-        this.status.export = (this.baoCao.trangThai == Status.TT_09 || (this.baoCao.trangThai == Status.TT_07 && this.userService.isTongCuc() && this.isChild)) && checkExcel && (this.isChild || this.isParent);
+        // this.status.export = (this.baoCao.trangThai == Status.TT_09 || (this.baoCao.trangThai == Status.TT_07 && this.userService.isTongCuc() && this.isChild)) && checkExcel && (this.isChild || this.isParent);
+        this.status.export = checkExcel && (this.isChild || this.isParent);
 
         this.status.ok = this.status.accept || this.status.approve || this.status.pass;
         this.status.finish = this.status.save;

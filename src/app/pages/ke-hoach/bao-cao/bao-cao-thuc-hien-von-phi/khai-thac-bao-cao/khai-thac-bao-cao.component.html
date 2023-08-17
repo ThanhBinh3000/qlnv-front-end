@@ -63,10 +63,11 @@
                     <th>Mã báo cáo</th>
                     <th>Báo cáo năm</th>
                     <th>Báo cáo đợt</th>
-                    <th>Ngày lập/ Ngày tổng hợp</th>
-                    <th>Ngày trình duyệt <br> <span>(Cán bộ vụ TVQT trình duyệt)</span></th>
-                    <th>Ngày duyệt <br> <span>(Trưởng bộ phận KHTC duyệt)</span></th>
-                    <th>Ngày phê duyệt <br> <span>(Lãnh đạo vụ TVQT phê duyệt)</span></th>
+                    <th>Ngày lập</th>
+                    <th>Ngày trình duyệt</th>
+                    <th>Ngày duyệt</th>
+                    <th>Ngày phê duyệt</th>
+                    <th>Ngày tiếp nhận</th>
                     <th class="text-center">Trạng thái</th>
                     <th width="90px">Hành động</th>
                 </tr>
@@ -96,6 +97,9 @@
                     </td>
                     <td>
                         {{ Utils.fmtDate(data.ngayPheDuyet) }}
+                    </td>
+                    <td>
+                        {{ Utils.fmtDate(data.ngayTraKq) }}
                     </td>
                     <td>
                         {{ Status.reportStatusName(data.trangThai) }}

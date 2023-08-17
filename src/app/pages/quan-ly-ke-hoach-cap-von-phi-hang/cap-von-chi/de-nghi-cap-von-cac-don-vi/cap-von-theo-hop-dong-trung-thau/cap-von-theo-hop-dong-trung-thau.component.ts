@@ -179,7 +179,8 @@ export class CapVonTheoHopDongTrungThauComponent implements OnInit {
         this.status.submit = Status.check('submit', this.baoCao.trangThai) && isChild && !(!this.baoCao.id);
         this.status.pass = Status.check('pass', this.baoCao.trangThai) && isChild;
         this.status.approve = Status.check('approve', this.baoCao.trangThai) && isChild;
-        this.status.export = this.baoCao.trangThai == Status.TT_07 && this.userService.isAccessPermisson(Roles.CVNC.EXPORT_CV) && isChild;
+        // this.status.export = this.baoCao.trangThai == Status.TT_07 && this.userService.isAccessPermisson(Roles.CVNC.EXPORT_CV) && isChild;
+        this.status.export = this.userService.isAccessPermisson(Roles.CVNC.EXPORT_CV) && isChild;
 
         this.status.save = this.status.save && this.userService.isAccessPermisson(Roles.CVNC.EDIT_CV);
         this.status.submit = this.status.submit && this.userService.isAccessPermisson(Roles.CVNC.SUBMIT_CV);
@@ -483,6 +484,10 @@ export class CapVonTheoHopDongTrungThauComponent implements OnInit {
     }
     // export báo cáo thành excel
     exportToExcel() {
+        if (this.lstCtiets.some(e => this.editCache[e.id].edit)) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+            return;
+        }
         const workbook = XLSX.utils.book_new();
         // export sheet hợp đồng
         let headerHD = [];

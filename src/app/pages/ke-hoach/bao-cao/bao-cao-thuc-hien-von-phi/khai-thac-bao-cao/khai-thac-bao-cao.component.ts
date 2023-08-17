@@ -38,6 +38,11 @@ export class KhaiThacBaoCaoComponent implements OnInit {
 
     async ngOnInit() {
         this.userInfo = this.userService.getUserLogin();
+        if (this.userService.isTongCuc()) {
+            this.trangThai = Status.TT_07;
+        } else {
+            this.trangThai = Status.TT_09;
+        }
         this.search();
         this.spinner.hide();
     }

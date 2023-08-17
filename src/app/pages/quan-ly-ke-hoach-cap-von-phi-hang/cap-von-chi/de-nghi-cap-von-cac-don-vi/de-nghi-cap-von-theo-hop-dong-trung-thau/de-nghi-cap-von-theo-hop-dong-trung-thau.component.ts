@@ -190,14 +190,14 @@ export class DeNghiCapVonTheoHopDongTrungThauComponent implements OnInit {
         this.status.pass = Status.check('pass', this.baoCao.trangThai) && this.userService.isTongCuc() && this.baoCao.loaiDnghi != Cvnc.VTU;
         this.status.approve = Status.check('approve', this.baoCao.trangThai) || (this.baoCao.trangThai == Status.TT_02 && (!this.userService.isTongCuc() || this.baoCao.loaiDnghi == Cvnc.VTU));
         this.status.accept = Status.check('accept', this.baoCao.trangThai) && this.isParent;
-        this.status.export = this.baoCao.trangThai == Status.TT_09 || (this.baoCao.trangThai == Status.TT_07 && isChild && this.userService.isTongCuc());
+        // this.status.export = this.baoCao.trangThai == Status.TT_09 || (this.baoCao.trangThai == Status.TT_07 && isChild && this.userService.isTongCuc());
 
         this.status.save = this.status.save && this.userService.isAccessPermisson(Roles.CVNC.EDIT_DN);
         this.status.submit = this.status.submit && this.userService.isAccessPermisson(Roles.CVNC.SUBMIT_DN);
         this.status.pass = this.status.pass && this.userService.isAccessPermisson(Roles.CVNC.PASS_DN) && isChild;
         this.status.approve = this.status.approve && this.userService.isAccessPermisson(Roles.CVNC.APPROVE_DN) && isChild;
         this.status.accept = this.status.accept && this.userService.isAccessPermisson(Roles.CVNC.ACCEPT_DN);
-        this.status.export = this.status.export && this.userService.isAccessPermisson(Roles.CVNC.EXPORT_DN) && (isChild || this.isParent);
+        this.status.export = this.userService.isAccessPermisson(Roles.CVNC.EXPORT_DN) && (isChild || this.isParent);
 
         this.isSynth = isChild && this.userService.isTongCuc() && this.baoCao.loaiDnghi != Cvnc.VTU;
         if (this.baoCao.loaiDnghi != Cvnc.VTU) {
