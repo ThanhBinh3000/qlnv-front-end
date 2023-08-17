@@ -4,19 +4,19 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button *ngIf="!isDisabled() && userService.isCuc() " type="button" class="btn btn-sub xanh-nhat"
+    <button *ngIf="!isDisabled() && userService.isCuc() && userService.isAccessPermisson('NHDTQG_PTMTT_TCKHMTT_LT_QDKQCG_THEM')" type="button" class="btn btn-sub xanh-nhat"
       (click)="save(true)">
       <i class="icon htvbdh_tcdt_guiduyet"></i>
       <span>Lưu và gửi duyệt</span>
     </button>
     <button
-      *ngIf=" isDisabled() && userService.isCuc() && formData.value.trangThai != STATUS.DA_DUYET_LDC && formData.value.trangThai != STATUS.BAN_HANH"
+      *ngIf="isDisabled() && userService.isCuc() && ((userService.isAccessPermisson('NHDTQG_PTMTT_TCKHMTT_LT_QDKQCG_DUYET_TP') && formData.value.trangThai == STATUS.CHO_DUYET_TP) || (userService.isAccessPermisson('NHDTQG_PTMTT_TCKHMTT_LT_QDKQCG_DUYET_LDC') && formData.value.trangThai == STATUS.CHO_DUYET_LDC))"
       type="button" class="btn btn-sub do" (click)="tuChoi()">
       <i class="icon htvbdh_tcdt_tuchoi"></i>
       <span>Từ chối</span>
     </button>
     <button
-      *ngIf="isDisabled() && userService.isCuc() && formData.value.trangThai != STATUS.DA_DUYET_LDC && formData.value.trangThai != STATUS.BAN_HANH"
+      *ngIf="isDisabled() && userService.isCuc() && ((userService.isAccessPermisson('NHDTQG_PTMTT_TCKHMTT_LT_QDKQCG_DUYET_TP') && formData.value.trangThai == STATUS.CHO_DUYET_TP) || (userService.isAccessPermisson('NHDTQG_PTMTT_TCKHMTT_LT_QDKQCG_DUYET_LDC') && formData.value.trangThai == STATUS.CHO_DUYET_LDC))"
       type="button" class="btn btn-sub xanh-nhat" (click)="guiDuyet()">
       <i class="icon htvbdh_tcdt_guiduyet"></i>
       <span>Duyệt</span>
@@ -25,7 +25,7 @@
 <!--      <i class="icon htvbdh_chuyenvanthu"></i>-->
 <!--      <span>Ban hành</span>-->
 <!--    </button>-->
-    <button *ngIf="!isDisabled() && userService.isCuc() " type="button" class="btn btn-main" (click)="save()">
+    <button *ngIf="!isDisabled() && userService.isCuc() && userService.isAccessPermisson('NHDTQG_PTMTT_TCKHMTT_LT_QDKQCG_THEM')" type="button" class="btn btn-main" (click)="save()">
       <i class="icon htvbdh_tcdt_save"></i>
       <span>Lưu</span>
     </button>
@@ -218,7 +218,7 @@
           <tr [ngClass]="{'bg-selected': i == 0 && this.selected}" (click)="showDetail($event,item)">
             <td [nzExpand]="true"></td>
             <td colspan="2">{{item.tenDvi}}</td>
-            <td class="text-bold">{{ calcTong() | number : '1.0-1' : 'vi_VN' }}</td>
+            <td class="text-bold">{{ item.tongSoLuong | number : '1.0-1' : 'vi_VN' }}</td>
             <td></td>
             <td></td>
             <td></td>
@@ -270,9 +270,9 @@
                 <td nzLeft>{{data.diaChi}}</td>
                 <td nzLeft>{{data.sdt}}</td>
                 <td nzLeft>{{data.ngayChaoGia | date: 'dd/MM/YYYY'}}</td>
-                <td nzLeft>{{data.soLuong / 1000 | number : '1.0-1' : 'vi_VN'}}</td>
+                <td nzLeft>{{data.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
                 <td nzLeft>{{data.donGia | number : '1.0-1' : 'vi_VN'}}</td>
-                <td nzLeft>{{data.soLuong * data.donGia | number : '1.0-1' : 'vi_VN' }}</td>
+                <td nzLeft>{{data.soLuong * data.donGia * 1000 | number : '1.0-1' : 'vi_VN' }}</td>
                 <td nzLeft class="text-blue">{{data.fileDinhKems?.fileName }}</td>
                 <td> <label nz-checkbox [(ngModel)]="data.luaChon"></label></td>
                 <td class="text-center">

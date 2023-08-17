@@ -118,6 +118,9 @@ export class ThemmoiTonghopKhmttComponent extends Base2Component implements OnIn
       else {
         this.isTongHop = false;
       }
+    }else{
+      this.formTraCuu.get('tenLoaiVthh').setValue("Thóc tẻ")
+      this.formTraCuu.get('loaiVthh').setValue("0101")
     }
   }
 

@@ -33,7 +33,10 @@ export class ThongTinXuatKhoVtTbTrongThoiGianBaoHanhComponent extends Base2Compo
   @Input() isView: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
-  listSoQuyetDinh: any[] = []
+  listSoQuyetDinh: any[] = [];
+  listSoQuyetDinhXh: any[] = [];
+  listSoQuyetDinhXm: any[] = [];
+  listSoQuyetDinhBh: any[] = [];
   listDiaDiemNhap: any[] = [];
   listPhieuKtraCl: any[] = [];
   fileDinhKems: any[] = [];
@@ -69,6 +72,7 @@ export class ThongTinXuatKhoVtTbTrongThoiGianBaoHanhComponent extends Base2Compo
         taiKhoanCo: [],
         idCanCu: [],
         soCanCu: [],
+        soLanLm: [],
         maDiaDiem: ['', [Validators.required]],
         ngayQdGiaoNvXh: [],
         maNhaKho: [],
@@ -185,31 +189,50 @@ export class ThongTinXuatKhoVtTbTrongThoiGianBaoHanhComponent extends Base2Compo
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.listSoQuyetDinh = data.content;
+      this.listSoQuyetDinhXh =this.listSoQuyetDinh.filter(i=>i.loai=="XUAT_HUY");
+      this.listSoQuyetDinhXm =this.listSoQuyetDinh.filter(i=>i.loai=="XUAT_MAU");
+      this.listSoQuyetDinhBh =this.listSoQuyetDinh.filter(i=>i.loai=="XUAT_BH");
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
 
   async openDialogSoQd() {
+    let title;
+    let dataTable;
+
+    if (this.formData.value.loai === "XUAT_MAU") {
+      title = "Danh sách số quyết định giao nhiệm vụ xuất hàng lấy mẫu";
+      dataTable = this.listSoQuyetDinhXm;
+    } else if (this.formData.value.loai === "XUAT_HUY") {
+      title = "Danh sách số quyết định giao nhiệm vụ xuất hàng bị hủy";
+      dataTable = this.listSoQuyetDinhXh;
+    } else {
+      title = "Danh sách số quyết định giao nhiệm vụ xuất để bảo hành";
+      dataTable = this.listSoQuyetDinhBh;
+    }
+
     const modalQD = this.modal.create({
-      nzTitle: 'Danh sách số quyết định kế hoạch giao nhiệm vụ xuất hàng',
+      nzTitle: title,
       nzContent: DialogTableSelectionComponent,
       nzMaskClosable: false,
       nzClosable: false,
       nzWidth: '900px',
       nzFooter: null,
       nzComponentParams: {
-        dataTable: this.listSoQuyetDinh,
-        dataHeader: [ 'Năm','Số quyết định', 'Ngày quyết định',],
-        dataColumn: ['nam','soQuyetDinh', 'ngayKy', ],
+        dataTable: dataTable,
+        dataHeader: ['Năm', 'Số quyết định', 'Ngày quyết định',],
+        dataColumn: ['nam', 'soQuyetDinh', 'ngayKy',],
       },
-    })
+    });
+
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
         await this.bindingDataQd(data);
       }
     });
-  };
+  }
+
 
   async bindingDataQd(data) {
     try {
@@ -219,7 +242,7 @@ export class ThongTinXuatKhoVtTbTrongThoiGianBaoHanhComponent extends Base2Compo
         soCanCu: data.soQuyetDinh,
         idCanCu: data.id,
         ngayXuat: data.thoiHanXuatHang,
-        soLanLm: data.soLanLm,
+        soLanLm: this.formData.value.loai=="XUAT_MAU"?data.soLanLm:null,
       });
     } catch (e) {
       this.notification.error(MESSAGE.ERROR, e.msg);

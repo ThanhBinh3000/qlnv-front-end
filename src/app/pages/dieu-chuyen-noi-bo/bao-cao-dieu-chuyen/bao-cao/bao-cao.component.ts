@@ -25,13 +25,14 @@ export class BaoCaoComponent extends Base2Component implements OnInit {
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
-  LIST_TRANG_THAI: Array<{ ma: string, giaTri: string }> = [
-    { ma: this.STATUS.DU_THAO, giaTri: "Dự thảo" },
-    { ma: this.STATUS.DA_HOAN_THANH, giaTri: "Đã hoàn thành" },
-
-  ];
+  LIST_TRANG_THAI: Array<{ ma: string, giaTri: string }> = [];
   TRANG_THAI: { [key: string]: string } = {
     [this.STATUS.DU_THAO]: "Dự thảo",
+    [this.STATUS.CHO_DUYET_TP]: "Chờ duyệt - TP",
+    [this.STATUS.CHO_DUYET_LDC]: "Chờ duyệt - LĐ Cục",
+    [this.STATUS.TU_CHOI_TP]: "Từ chối - TP",
+    [this.STATUS.TU_CHOI_LDC]: "Từ chối - LĐ Cục",
+    [this.STATUS.DA_DUYET_LDC]: "Đã duyệt - LĐ Cục",
     [this.STATUS.DA_HOAN_THANH]: "Đã hoàn thành",
   }
   constructor(
@@ -48,6 +49,7 @@ export class BaoCaoComponent extends Base2Component implements OnInit {
     this.formData = this.fb.group({
       soBc: [''],
       soQdinhCuc: [''],
+      // soQdDcCuc: [''],
       trangThai: [''],
       tuNgay: [''],
       denNgay: [''],
@@ -59,8 +61,9 @@ export class BaoCaoComponent extends Base2Component implements OnInit {
       soBc: '',
       tenBc: '',
       ngayBc: '',
-      soBBThuaThieu: '',
-      soQdinhCuc: '',
+      ngayKyQd: '',
+      soBb: '',
+      // soQdinhCuc: '',
       soQdDcCuc: '',
       trangThai: ''
     };
@@ -77,7 +80,7 @@ export class BaoCaoComponent extends Base2Component implements OnInit {
         this.isView = true
       }
       await this.initData()
-      this.timKiem();
+      await this.timKiem();
     } catch (e) {
       console.log('error: ', e)
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -91,14 +94,34 @@ export class BaoCaoComponent extends Base2Component implements OnInit {
     this.userInfo = this.userService.getUserLogin();
     this.userdetail.maDvi = this.userInfo.MA_DVI;
     this.userdetail.tenDvi = this.userInfo.TEN_DVI;
+    this.LIST_TRANG_THAI = this.loaiBc === "CHI_CUC" ?
+      [{ ma: this.STATUS.DU_THAO, giaTri: "Dự thảo" }, { ma: this.STATUS.DA_HOAN_THANH, giaTri: "Đã hoàn thành" },] :
+      [{ ma: this.STATUS.DU_THAO, giaTri: "Dự thảo" }, { ma: this.STATUS.CHO_DUYET_TP, giaTri: "Chờ duyệt - TP" }, { ma: this.STATUS.CHO_DUYET_LDC, giaTri: "Chờ duyệt - LĐ Cục" }, { ma: this.STATUS.TU_CHOI_TP, giaTri: "Từ chối - TP" }, { ma: this.STATUS.TU_CHOI_LDC, giaTri: "Từ chối - LĐ Cục" }, { ma: this.STATUS.DA_DUYET_LDC, giaTri: "Đã duyệt - LĐ Cục" }]
     this.formData.patchValue({ type: this.loaiBc })
   }
   async clearForm() {
     this.formData.reset();
-    await this.search()
+    this.formData.patchValue({ type: this.loaiBc })
+    await this.timKiem()
   }
   async timKiem() {
-    await this.search();
+    try {
+      const data = this.formData.value;
+      const dataTrim = this.trimStringData(data);
+      this.formData.patchValue({ ...dataTrim })
+      await this.search();
+    } catch (error) {
+      console.log("error", error)
+    }
+  };
+  trimStringData(obj: any) {
+    for (const key in obj) {
+      const value = obj[key];
+      if (typeof value === 'string' || value instanceof String) {
+        obj[key] = value.trim();
+      }
+    };
+    return obj
   }
   disabledTuNgay = (startValue: Date): boolean => {
     if (startValue && this.formData.value.denNgay) {
@@ -170,7 +193,7 @@ export class BaoCaoComponent extends Base2Component implements OnInit {
     return ((this.loaiBc === "CUC" && this.userService.isCuc()) || (this.loaiBc === "CHI_CUC" && this.userService.isChiCuc())) && (trangThai === this.STATUS.DU_THAO || trangThai === this.STATUS.TU_CHOI_TP || trangThai === this.STATUS.TU_CHOI_LDC)
   }
   checkRoleApproveDc(trangThai: string): boolean {
-    return ((this.loaiBc === "CUC" && this.userService.isCuc()) || (this.loaiBc === "CHI_CUC" && this.userService.isChiCuc())) && (trangThai === this.STATUS.CHO_DUYET_TK || trangThai === this.STATUS.CHO_DUYET_LDC)
+    return (this.loaiBc === "CUC" && this.userService.isCuc()) && (trangThai === this.STATUS.CHO_DUYET_TP || trangThai === this.STATUS.CHO_DUYET_LDC)
   }
   checkRoleDelete(trangThai: string): boolean {
     return ((this.loaiBc === "CUC" && this.userService.isCuc()) || (this.loaiBc === "CHI_CUC" && this.userService.isChiCuc())) && trangThai === this.STATUS.DU_THAO

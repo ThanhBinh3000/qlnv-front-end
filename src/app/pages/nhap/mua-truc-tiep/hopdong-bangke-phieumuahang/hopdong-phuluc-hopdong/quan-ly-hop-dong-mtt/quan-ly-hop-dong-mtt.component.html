@@ -84,7 +84,7 @@
                                 <nz-form-item>
                                     <nz-form-label [nzNoColon]="true"> Tổng mức đầu tư </nz-form-label>
                                     <nz-form-control>
-                                        <input nz-input formControlName="tongMucDt" readonly />
+                                        <input class="blue-text" nz-input formControlName="tongMucDt" readonly />
                                     </nz-form-control>
                                 </nz-form-item>
                             </div>
@@ -114,7 +114,7 @@
                                 <nz-form-item>
                                     <nz-form-label [nzNoColon]="true"> Loại hàng hóa </nz-form-label>
                                     <nz-form-control>
-                                        <input nz-input formControlName="tenLoaiVthh" readonly="true" />
+                                        <input class="blue-text" nz-input formControlName="tenLoaiVthh" readonly="true" />
                                     </nz-form-control>
                                 </nz-form-item>
                             </div>
@@ -122,7 +122,7 @@
                                 <nz-form-item>
                                     <nz-form-label [nzNoColon]="true"> Chủng loại hàng hóa </nz-form-label>
                                     <nz-form-control>
-                                        <input nz-input formControlName="tenCloaiVthh" readonly="true" />
+                                        <input class="blue-text" nz-input formControlName="tenCloaiVthh" readonly="true" />
                                     </nz-form-control>
                                 </nz-form-item>
                             </div>
@@ -130,7 +130,7 @@
                                 <nz-form-item>
                                     <nz-form-label [nzNoColon]="true"> % thuế VAT </nz-form-label>
                                     <nz-form-control>
-                                        <input nz-input formControlName="vat" readonly="true" />
+                                        <input class="blue-text" nz-input formControlName="vat" readonly="true" />
                                     </nz-form-control>
                                 </nz-form-item>
                             </div>
@@ -307,9 +307,9 @@
                 <td nzLeft>{{data.dviCungCap}}</td>
                 <td nzLeft>{{data.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
                 <td nzLeft>{{data.donGiaGomThue | number : '1.0-1' : 'vi_VN'}}</td>
-                <td nzLeft>{{data.soLuong * data.donGiaGomThue | number : '1.0-1' : 'vi_VN' }}</td>
+                <td nzLeft>{{data.soLuong * data.donGiaGomThue * 1000 | number : '1.0-1' : 'vi_VN' }}</td>
                 <td nzLeft>{{data.tenTrangThai}}</td>
-                <td nzLeft>{{data.soQd}}</td> <!-- so qd giao nv nhap hang -->
+                <td nzLeft>{{data.soQdGiaoNvNh}}</td> <!-- so qd giao nv nhap hang -->
                 <td nzLeft>{{data.tenTrangThaiNh}}</td>
                 <td class="text-center">
                   <a *ngIf="data.trangThai != STATUS.DA_KY"

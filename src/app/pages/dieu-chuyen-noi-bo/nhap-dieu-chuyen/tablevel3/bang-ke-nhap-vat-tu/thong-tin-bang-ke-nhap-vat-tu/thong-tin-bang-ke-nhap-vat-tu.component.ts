@@ -134,7 +134,7 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
         soQdinhDcc: this.data.soQdinh,
         ngayKyQdinhDcc: this.data.ngayKyQd,
         qdinhDccId: this.data.qdinhDcId,
-        tenLoNganKho: `${this.data.tenLoKho} ${this.data.tenNganKho}`,
+        tenLoNganKho: `${this.data.tenLoKho || ""} ${this.data.tenNganKho}`,
         tenLoKho: this.data.tenLoKho,
         maLoKho: this.data.maLoKho,
         tenNganKho: this.data.tenNganKho,
@@ -171,7 +171,7 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
     if (id) {
       let data = await this.detail(id);
       this.dsHangTH = data.dcnbBangKeNhapVTDtl
-      this.formData.patchValue(data);
+      this.formData.patchValue({ ...data, tenLoNganKho: `${data.tenLoKho || ""} ${data.tenNganKho}`, });
       this.fileDinhKemReq = data.fileDinhKems
     }
     await this.spinner.hide();
@@ -314,7 +314,7 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
         this.formData.patchValue({
-          tenLoNganKho: `${data.tenLoKho} ${data.tenNganKho}`,
+          tenLoNganKho: `${data.tenLoKho || ""} ${data.tenNganKho}`,
           tenLoKho: data.tenLoKho,
           maLoKho: data.maLoKho,
           tenNganKho: data.tenNganKho,

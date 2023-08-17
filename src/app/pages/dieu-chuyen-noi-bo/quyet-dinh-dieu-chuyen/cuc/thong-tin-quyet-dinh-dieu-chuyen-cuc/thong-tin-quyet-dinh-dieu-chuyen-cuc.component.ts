@@ -511,6 +511,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
       console.log('onChangeCanCuQdTc', detail)
 
       let dsDX = data.danhSachQuyetDinh
+
       dsDX.forEach(element => {
         element.danhSachQuyetDinhChiTiet.forEach(itemQD => {
           this.danhSachQuyetDinh.push({
@@ -519,6 +520,28 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
 
         })
       });
+
+      // if (this.formData.value.loaiDc === "CHI_CUC") {
+      //   dsDX.forEach(element => {
+      //     element.danhSachQuyetDinhChiTiet.forEach(itemQD => {
+      //       this.danhSachQuyetDinh.push({
+      //         danhSachKeHoach: itemQD.danhSachKeHoach
+      //       })
+
+      //     })
+      //   });
+      // }
+
+      // if (this.formData.value.loaiDc === "CUC") {
+      //   dsDX.forEach(element => {
+      //     element.danhSachQuyetDinhChiTiet.forEach(itemQD => {
+      //       this.danhSachQuyetDinh.push({
+      //         danhSachKeHoach: itemQD.danhSachKeHoach
+      //       })
+
+      //     })
+      //   });
+      // }
       const hanghoa = dsDX[0]
       hanghoa.danhSachQuyetDinhChiTiet.forEach(itemHH => {
         const dcnbKeHoachDcHdr = itemHH.dcnbKeHoachDcHdr

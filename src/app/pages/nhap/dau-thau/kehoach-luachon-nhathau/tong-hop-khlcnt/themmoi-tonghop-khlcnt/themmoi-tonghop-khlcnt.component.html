@@ -109,16 +109,6 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="24">
-          <nz-form-item>
-            <nz-form-label [nzNoColon]="true">
-              File đính kèm
-            </nz-form-label>
-            <div class="list-file">
-              <file-list [data]="listFileDinhKem" [isViewDetail]="isView"></file-list>
-            </div>
-          </nz-form-item>
-        </div>
         <div nz-col [nzSpan]="24" *ngIf="!isViewOnModal">
           <div class="tong-hop-button group-button-search mt-16">
             <button [disabled]="isView" class="btn btn-main btn-sm waves-effect waves-light"
@@ -172,7 +162,7 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="3">
+            <div nz-col [nzSpan]="6">
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true"> Năm kế hoạch</nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
@@ -182,17 +172,7 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="4">
-              <nz-form-item>
-                <nz-form-label nzRequired [nzNoColon]="true"> Căn cứ giao chỉ tiêu của TCDTNN</nz-form-label>
-                <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-                  <nz-input-group nzAddOnAfterIcon="folder-open">
-                    <input [readonly]="true" nz-input formControlName="soQdCc" readonly="true"/>
-                  </nz-input-group>
-                </nz-form-control>
-              </nz-form-item>
-            </div>
-            <div nz-col [nzSpan]="5">
+            <div nz-col [nzSpan]="6">
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng DTQG</nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
@@ -208,76 +188,14 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="4">
-              <nz-form-item>
-                <nz-form-label nzRequired [nzNoColon]="true"> Loại hình nhập xuất</nz-form-label>
-                <nz-form-control [nzErrorTip]="error">
-                  <nz-select formControlName="loaiHinhNx"
-                             [nzDisabled]="true">
-                    <nz-option *ngFor="let p of listLoaiHinhNx" [nzValue]="p.ma" [nzLabel]="p.giaTri">
-                    </nz-option>
-                  </nz-select>
-                </nz-form-control>
-              </nz-form-item>
-            </div>
-            <div nz-col [nzSpan]="4">
-              <nz-form-item>
-                <nz-form-label nzRequired [nzNoColon]="true"> Kiểu nhập xuất</nz-form-label>
-                <nz-form-control [nzErrorTip]="error">
-                  <nz-select formControlName="kieuNx" [nzDisabled]="true">
-                    <nz-option *ngFor="let p of listKieuNx" [nzValue]="p.ma" [nzLabel]="p.giaTri">
-                    </nz-option>
-                  </nz-select>
-                </nz-form-control>
-              </nz-form-item>
-            </div>
-            <div nz-col [nzSpan]="4">
+            <div nz-col [nzSpan]="24">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
-                  Hình thức lựa chọn nhà thầu
+                  File đính kèm
                 </nz-form-label>
-                <nz-form-control nz-col [nzSpan]="24">
-                  <nz-select formControlName="hthucLcnt" nzPlaceHolder="Hình thức lựa chọn nhà thầu" nzDisabled="true">
-                    <nz-option *ngFor="let p of listHinhThucDauThau" [nzValue]="p.ma" [nzLabel]="p.giaTri">
-                    </nz-option>
-                  </nz-select>
-                </nz-form-control>
-              </nz-form-item>
-            </div>
-            <div nz-col [nzSpan]="4">
-              <nz-form-item>
-                <nz-form-label [nzNoColon]="true"> Phương thức lựa chọn nhà thầu</nz-form-label>
-                <nz-form-control nz-col [nzSpan]="24">
-                  <nz-select formControlName="pthucLcnt" nzPlaceHolder="Phương thức đấu thầu" nzDisabled="true">
-                    <nz-option *ngFor="let p of listPhuongThucDauThau" [nzValue]="p.ma" [nzLabel]="p.giaTri">
-                    </nz-option>
-                  </nz-select>
-                </nz-form-control>
-              </nz-form-item>
-            </div>
-            <div nz-col [nzSpan]="4">
-              <nz-form-item>
-                <nz-form-label [nzNoColon]="true">
-                  Loại hợp đồng
-                </nz-form-label>
-                <nz-form-control nz-col [nzSpan]="24">
-                  <nz-select formControlName="loaiHdong" nzPlaceHolder="Loại hợp đồng" nzDisabled="true">
-                    <nz-option *ngFor="let p of listLoaiHopDong" [nzValue]="p.ma" [nzLabel]="p.giaTri">
-                    </nz-option>
-                  </nz-select>
-                </nz-form-control>
-              </nz-form-item>
-            </div>
-            <div nz-col [nzSpan]="4">
-              <nz-form-item>
-                <nz-form-label [nzNoColon]="true">
-                  Nguồn vốn
-                </nz-form-label>
-                <nz-form-control nz-col [nzSpan]="24">
-                  <nz-select formControlName="nguonVon" nzPlaceHolder="Nguồn vốn" nzDisabled="true">
-                    <nz-option *ngFor="let p of listNguonVon" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
-                  </nz-select>
-                </nz-form-control>
+                <div class="list-file">
+                  <file-list [data]="listFileDinhKem" [isViewDetail]="isView"></file-list>
+                </div>
               </nz-form-item>
             </div>
           </div>
@@ -319,7 +237,7 @@
             <td>{{ data.trichYeu }}</td>
             <td>{{ data.tenDuAn }}</td>
             <td>{{ data.soLuong | number: '1.0-1' : 'vi_VN' }}</td>
-            <td>{{ data.soLuong * data.donGiaVat | number: '1.0-1' : 'vi_VN' }}</td>
+            <td>{{ data.tongTien | number: '1.0-1' : 'vi_VN' }}</td>
             <td>
               <a (click)="showDetail($event,data.idDxHdr)">
                 <i class="fa fa-eye" title="Xem chi tiết"></i>

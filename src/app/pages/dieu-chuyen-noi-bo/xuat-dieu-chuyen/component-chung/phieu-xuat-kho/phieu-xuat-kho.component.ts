@@ -93,14 +93,34 @@ export class PhieuXuatKhoDCNBComponent extends Base2Component implements OnInit 
         type: this.type,
         // maDvi: this.userService.isChiCuc() ? this.userInfo.MA_DVI : null
       })
-      await this.search();
+      await this.timKiem();
     } catch (e) {
       console.log('e', e)
-      this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      this.spinner.hide();
     }
   }
-
+  async timKiem(): Promise<void> {
+    try {
+      const data = this.formData.value;
+      const dataTrim = this.trimStringData(data);
+      this.formData.patchValue({ ...dataTrim })
+      await this.search();
+      this.buildTableView()
+    } catch (error) {
+      console.log("error", error)
+    }
+  }
+  trimStringData(obj: any) {
+    for (const key in obj) {
+      const value = obj[key];
+      if (typeof value === 'string' || value instanceof String) {
+        obj[key] = value.trim();
+      }
+    };
+    return obj
+  }
   delete(item: any, roles?) {
     if (!this.checkPermission(roles)) {
       return
@@ -120,7 +140,8 @@ export class PhieuXuatKhoDCNBComponent extends Base2Component implements OnInit 
             id: item.id
           };
           this.phieuXuatKhoDieuChuyenService.delete(body).then(async () => {
-            await this.search();
+            // await this.search();
+            await this.timKiem()
             this.spinner.hide();
           });
         } catch (e) {
@@ -133,10 +154,8 @@ export class PhieuXuatKhoDCNBComponent extends Base2Component implements OnInit 
   }
 
   async search(roles?): Promise<void> {
-    await this.spinner.show()
     await super.search(roles);
     this.buildTableView();
-    await this.spinner.hide()
   }
 
   resetForm() {
@@ -145,7 +164,8 @@ export class PhieuXuatKhoDCNBComponent extends Base2Component implements OnInit 
   }
   clearFilter() {
     this.resetForm();
-    this.search();
+    // this.search();
+    this.timKiem();
   }
   buildTableView() {
     const newData = this.dataTable.map(f => ({ ...f, maNganLoKho: f.maLoKho ? `${f.maLoKho}${f.maNganKho}` : f.maNganKho }))

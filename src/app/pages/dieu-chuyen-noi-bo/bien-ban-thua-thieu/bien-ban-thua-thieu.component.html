@@ -15,7 +15,7 @@
                     </div>
                     <div nz-col nzSpan="5" class="mt-16">
                         <label class="search__label">Số báo cáo</label>
-                        <input nz-input formControlName="soBc" />
+                        <input nz-input formControlName="soBcKetQuaDc" />
                     </div>
                     <div nz-col nzSpan="4" class="mt-16">
                         <label class="search__label">Ngày báo cáo</label>
@@ -43,12 +43,12 @@
                         <div nz-row>
                             <div nz-col nzSpan="12" class="cus-start-date">
                                 <nz-date-picker [nzDisabledDate]="disabledTuNgayBbTt" nzFormat="dd/MM/yyyy"
-                                    formControlName="tuNgayBbTt" nzPlaceHolder="Ngày bắt đầu">
+                                    formControlName="tuNgayLap" nzPlaceHolder="Ngày bắt đầu">
                                 </nz-date-picker>
                             </div>
                             <div nz-col nzSpan="12" class="cus-end-date">
                                 <nz-date-picker [nzDisabledDate]="disabledDenNgayBbTt" nzFormat="dd/MM/yyyy"
-                                    formControlName="denNgayBbTt" nzPlaceHolder="Ngày kết thúc">
+                                    formControlName="denNgayLap" nzPlaceHolder="Ngày kết thúc">
                                 </nz-date-picker>
                             </div>
                         </div>
@@ -198,11 +198,11 @@
                         <td>{{ data.nam }}</td>
                         <td>{{data.soQdDcCuc}}</td>
                         <td>{{ data.ngayKyQdCuc|date:"dd/MM/yyyy"}}</td>
-                        <td>{{data.soBc}}</td>
-                        <td>{{data.ngayBc | date:"dd/MM/yyyy"}}</td>
+                        <td>{{data.soBcKetQuaDc}}</td>
+                        <td>{{data.ngayLapBcKetQuaDc | date:"dd/MM/yyyy"}}</td>
                         <td>{{data.tenBc}}</td>
-                        <td>{{data.soBBThuaThieu}}</td>
-                        <td>{{data.ngayBBThuaThieu}}</td>
+                        <td>{{data.soBb}}</td>
+                        <td>{{data.ngayLap | date:"dd/MM/yyyy"}}</td>
                         <td>{{ TRANG_THAI[data.trangThai]}}</td>
                         <td>
                             <a (click)="redirectDetail(data.id, true)" *ngIf="checkRoleView(data.trangThai)">
@@ -211,9 +211,9 @@
                             <a *ngIf="checkRoleEdit(data.trangThai)" (click)="redirectDetail(data.id, false)">
                                 <i class="fa fa-pencil"></i>
                             </a>
-                            <a *ngIf="checkRoleApproveDc(data.trangThai)">
+                            <!-- <a *ngIf="checkRoleApproveDc(data.trangThai)">
                                 <i class="icon htvbdh_tcdt_pheduyet" (click)="redirectDetail(data.id,true)"></i>
-                            </a>
+                            </a> -->
                             <a *ngIf="checkRoleDelete(data.trangThai)" (click)="delete(data)">
                                 <i class="fa fa-trash-o do"></i>
                             </a>

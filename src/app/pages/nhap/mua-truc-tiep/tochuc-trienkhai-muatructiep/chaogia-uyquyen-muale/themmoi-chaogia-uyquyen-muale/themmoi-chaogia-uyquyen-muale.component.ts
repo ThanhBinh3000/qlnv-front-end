@@ -33,6 +33,7 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
   radioValue: string = '01';
   fileDinhKemUyQuyen: any[] = [];
   fileDinhKemMuaLe: any[] = [];
+  donGiaRow: any;
   @Output()
   dataTableChange = new EventEmitter<any>();
   @Output()
@@ -134,6 +135,8 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
           // this.danhSachCtiet.forEach(item =>{
           //   item.edit = false
           // })
+          console.log(this.danhSachCtiet)
+          this.calcTong();
           this.showDetail(event,this.danhSachCtiet[0]);
         })
         .catch((e) => {
@@ -144,20 +147,19 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
     }
   }
 
-  // calcTong(): number {
-  //   let totalSum = 0;
-  //   if (this.danhSachCtiet) {
-  //     this.danhSachCtiet.forEach(data => {
-  //       const sum = data.children.reduce((prev, cur) => {
-  //         prev += Number.parseInt(cur.soLuong);
-  //         return prev;
-  //       }, 0);
-  //       totalSum += sum;
-  //     });
-  //   }
-  //   console.log(totalSum)
-  //   return totalSum;
-  // }
+  calcTong(): number {
+    let totalSum = 0;
+    if (this.danhSachCtiet) {
+      this.danhSachCtiet.forEach(data => {
+        const sum = data.children.reduce((prev, cur) => {
+          prev += Number.parseInt(cur.soLuong);
+          return prev;
+        }, 0);
+        totalSum += sum;
+      });
+    }
+    return totalSum;
+  }
 
   idRowSelect: number;
   async showDetail($event, data: any) {
@@ -169,9 +171,11 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
     } else {
       this.selected = true;
     }
-    this.rowItem.donGia = data.donGia
-    this.listDiemKho = this.listChiCuc.find(x => x.maDvi == data.maDvi).children.filter(y => y.type == 'MLK').filter(k => k.maDvi.includes(data.children.filter(i => i.maDiemKho == k.maDvi)))
-    console.log(this.listDiemKho)
+    this.rowItem.donGia = data.donGiaVat
+    this.donGiaRow = data.donGiaVat
+    if(this.listChiCuc.length > 0){
+      this.listDiemKho = this.listChiCuc.find(x => x.maDvi == data.maDvi).children.filter(y => y.type == 'MLK').filter(k => k.maDvi.includes(data.children.filter(i => i.maDiemKho == k.maDvi)))
+    }
     this.idRowSelect = data.id;
     this.dataTable = data.listChaoGia
     this.updateEditCache()
@@ -229,7 +233,7 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
     }
   }
 
-  hoanThanhCapNhat() {
+  async hoanThanhCapNhat() {
     // if (this.listOfData.length == 0) {
     //   this.notification.error(MESSAGE.ERROR, "Không thể hoàn thành cập nhập, chi tiết thông tin đấu giá không được để trống");
     //   return
@@ -243,7 +247,7 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
       nzOkDanger: true,
       nzWidth: 350,
       nzOnOk: async () => {
-        this.spinner.show();
+        await this.spinner.show();
         try {
           let body = {
             id: this.idInput,
@@ -252,27 +256,27 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
           let res = await this.chaogiaUyquyenMualeService.approve(body);
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.THAO_TAC_SUCCESS);
-            this.spinner.hide();
-            this.loadDetail(this.idInput);
+            await this.spinner.hide();
+            await this.loadDetail(this.idInput);
             this.goBack()
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
-            this.spinner.hide();
+            await this.spinner.hide();
           }
         } catch (e) {
           console.log('error: ', e);
-          this.spinner.hide();
+          await this.spinner.hide();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         } finally {
-          this.spinner.hide();
+          await this.spinner.hide();
         }
       },
     });
   }
 
 
-  async save() {
-    this.spinner.show();
+  async save(isHoanThanh?) {
+    await this.spinner.show();
     try {
       this.helperService.markFormGroupTouched(this.formData);
       if (this.formData.invalid) {
@@ -287,6 +291,9 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
       let res = await this.chaogiaUyquyenMualeService.create(body);
       if (res.msg == MESSAGE.SUCCESS) {
         this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+        if(isHoanThanh){
+          await this.hoanThanhCapNhat()
+        }
         await this.loadDetail(this.idInput)
         this.goBack()
       } else {
@@ -294,9 +301,9 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
       }
     } catch (e) {
       this.notification.error(MESSAGE.ERROR, e);
-      this.spinner.hide();
+      await this.spinner.hide();
     } finally {
-      this.spinner.hide();
+      await this.spinner.hide();
     }
 
   }
@@ -315,6 +322,7 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
       }
     });
     this.rowItem = new ChiTietThongTinChaoGia();
+    this.rowItem.donGia = this.donGiaRow
     this.emitDataTable();
     this.updateEditCache()
   }
@@ -396,12 +404,12 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
     this.diemKhoItem.id = null;
   }
 
-  calcTongThanhTien() {
+  calcTongThanhTien(index: any) {
     if (this.danhSachCtiet) {
       let sum = 0
-      this.danhSachCtiet.forEach(item => {
-        sum += item.tongSoLuong;
-      })
+      for (let i = 0; i < this.danhSachCtiet[index].children.length; i++) {
+        sum += this.danhSachCtiet[index].children[i].soLuong;
+      }
       return sum;
     }
   }
@@ -496,7 +504,7 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
   }
 
   isDisable(): boolean {
-    if (this.formData.value.trangThai == STATUS.CHUA_CAP_NHAT || this.formData.value.trangThai == STATUS.DANG_CAP_NHAT) {
+    if ((this.formData.value.trangThai == STATUS.CHUA_CAP_NHAT || this.formData.value.trangThai == STATUS.DANG_CAP_NHAT) && this.userService.isCuc()) {
       return false
     } else {
       return true

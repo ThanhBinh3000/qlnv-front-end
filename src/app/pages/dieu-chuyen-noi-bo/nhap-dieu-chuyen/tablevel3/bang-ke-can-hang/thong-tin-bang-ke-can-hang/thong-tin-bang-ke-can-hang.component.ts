@@ -87,7 +87,7 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
       maNhaKho: [],
       tenDiemKho: [, [Validators.required]],
       maDiemKho: [],
-      diaDiemKho: [],
+      diaDaDiemKho: [],
       tenLanhDaoChiCuc: [],
       tenThuKho: [],
       thuKhoId: [],
@@ -182,6 +182,7 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
       this.dsHangTH = data.dcnbBangKeCanHangDtl
       this.formData.patchValue({ ...data, tenLoNganKho: `${data.tenLoKho} - ${data.tenNganKho}`, });
       this.fileDinhKemReq = data.fileDinhKems
+      // await this.layDonViCon(data.maDiemKho)
     }
     await this.spinner.hide();
   }
@@ -259,7 +260,8 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
 
     let body = {
       trangThai: STATUS.BAN_HANH,
-      loaiVthh: ['0101', '0102'],
+      // loaiVthh: ['0101', '0102'],
+      isVatTu: false,
       loaiDc: this.loaiDc,
       maDvi: this.userInfo.MA_DVI,
       type: this.formData.value.type
@@ -379,7 +381,7 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
       const dataDiemKho = res.data.find(f => f.maDvi === maDiemKho);
       if (dataDiemKho) {
         this.formData.patchValue({
-          diaDiemKho: dataDiemKho.diaChi
+          diaDaDiemKho: dataDiemKho.diaChi
         })
       }
     }
