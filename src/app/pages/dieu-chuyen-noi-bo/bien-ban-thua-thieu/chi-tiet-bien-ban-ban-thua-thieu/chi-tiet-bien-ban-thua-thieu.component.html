@@ -269,7 +269,7 @@
                                 <tr>
                                     <th></th>
                                     <th>
-                                        <input nz-input [(ngModel)]="canBoThamGia.ten" />
+                                        <input nz-input [(ngModel)]="canBoThamGia.hoVaTen" />
                                     </th>
                                     <th>
                                         <input nz-input [(ngModel)]="canBoThamGia.chucVu" />
@@ -295,7 +295,7 @@
                                 <tr *ngFor="let item of formData.value.banKiemKe, let i = index">
                                     <ng-container *ngIf="!formData.value.banKiemKe[i]?.isEdit; else editTemplate">
                                         <td>{{i + 1}}</td>
-                                        <td>{{item.ten}}</td>
+                                        <td>{{item.hoVaTen}}</td>
                                         <td>{{item.chucVu}}</td>
                                         <td>{{item.daiDien}}</td>
                                         <td>
@@ -310,7 +310,7 @@
                                     </ng-container>
                                     <ng-template #editTemplate>
                                         <td></td>
-                                        <td><input nz-input [(ngModel)]="item.ten" /></td>
+                                        <td><input nz-input [(ngModel)]="item.hoVaTen" /></td>
                                         <td><input nz-input [(ngModel)]="item.chucVu" /></td>
                                         <td>
                                             <nz-select [(ngModel)]="item.daiDien">
