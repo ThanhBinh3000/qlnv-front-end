@@ -68,7 +68,9 @@ export class QuanLyCanBoComponent implements OnInit {
     private router: Router,
     private donViService: DonviService
   ) {
-    this.formData = this.fb.group({});
+    this.formData = this.fb.group({
+      userType: ['ALL']
+    });
   }
 
   async ngOnInit() {
@@ -77,6 +79,7 @@ export class QuanLyCanBoComponent implements OnInit {
       if (this.userInfo) {
         this.qdTCDT = this.userInfo.MA_QD;
       }
+
       await this.search();
     } catch (e) {
       this.spinner.hide();
@@ -142,9 +145,14 @@ export class QuanLyCanBoComponent implements OnInit {
     }
   }
 
-  async search() {
+  async search(userType?) {
     this.spinner.show();
     let body = this.formData.value;
+    if (!userType) {
+      body.userType = 'ALL'
+    } else {
+      body.userType = userType;
+    }
     body.paggingReq = {
       limit: this.pageSize,
       page: this.page - 1,
@@ -303,7 +311,7 @@ export class QuanLyCanBoComponent implements OnInit {
 
   them(data?: any, isView?: boolean) {
     let modal = this.modal.create({
-      nzTitle: data ? 'Thông tin cán bộ' : 'Thêm mới thông tin cán bộ',
+      nzTitle: data ? 'THÔNG TIN CÁN BỘ' : 'THÊM MỚI THÔNG TIN CÁN BỘ',
       nzContent: DialogThongTinCanBoComponent,
       nzMaskClosable: false,
       nzClosable: false,
