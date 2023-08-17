@@ -502,6 +502,13 @@ export class PhuLucTongHopComponent implements OnInit {
     };
 
     async save(trangThai: string, lyDoTuChoi: string) {
+        if (this.dataInfo.trangThai == Status.TT_07) {
+            if (this.dataInfo.isLink == false) {
+                this.notification.warning(MESSAGE.WARNING, "Vui lòng đánh giá các biểu mẫu khác !");
+                return;
+            }
+        }
+
         if (this.lstCtietBcao.some(e => this.editCache[e.id].edit)) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
             return;
@@ -537,6 +544,8 @@ export class PhuLucTongHopComponent implements OnInit {
                     this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
                     this._modalRef.close({
                         trangThai: data.data.trangThai,
+                        lyDoTuChoi: data.data.lyDoTuChoi,
+                        thuyetMinh: data.data.thuyetMinh,
                     });
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);

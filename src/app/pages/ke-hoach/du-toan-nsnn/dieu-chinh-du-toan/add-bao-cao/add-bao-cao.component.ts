@@ -93,7 +93,7 @@ export class AddBaoCaoComponent implements OnInit {
     selectedIndex = 0;
     //truyen du lieu sang tab con
     tabData: any;
-
+    isLink: boolean;
     // before uploaf file
     beforeUpload = (file: NzUploadFile): boolean => {
         this.fileList = this.fileList.concat(file);
@@ -316,7 +316,10 @@ export class AddBaoCaoComponent implements OnInit {
                         }
                     })
                     console.log(this.baoCao.lstDchinh);
+                    const lstLink = this.baoCao.lstDchinh.filter(e => e.maLoai !== "pl01TH")
+                    this.isLink = lstLink.every(e => e.trangThai == "1")
                     this.listFile = [];
+                    this.baoCao.listIdFiles = [];
                     this.getStatusButton();
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -591,7 +594,9 @@ export class AddBaoCaoComponent implements OnInit {
             congVan: Utils.getDocName(this.baoCao.congVan.fileName, this.baoCao.ngayCongVan, this.baoCao.tenDvi),
             path: this.path,
             status: new BtnStatus(),
-            isSynthetic: isSynthetic
+            isSynthetic: isSynthetic,
+            isLinkDuLieu: this.isLink,
+            trangThai: this.baoCao.trangThai,
         }
         Object.assign(dataInfo.status, this.status);
         dataInfo.status.general = dataInfo.status.general && (this.userInfo?.sub == bieuMau.giaoCho);

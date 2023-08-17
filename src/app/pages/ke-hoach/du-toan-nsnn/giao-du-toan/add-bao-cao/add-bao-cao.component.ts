@@ -1161,6 +1161,7 @@ export class AddBaoCaoComponent implements OnInit {
                     }
                     this.path = this.baoCao?.maDvi + '/' + this.baoCao.maBcao;
                     this.listFile = [];
+                    this.baoCao.listIdFiles = [];
                     this.baoCao.lstCtiets.forEach(item => {
                         // item.trangThai = "3"
                         // item.maDviTien = "1"
