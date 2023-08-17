@@ -34,7 +34,9 @@ export class BaoCaoComponent extends Base2Component implements OnInit {
     [this.STATUS.TU_CHOI_LDC]: "Từ chối - LĐ Cục",
     [this.STATUS.DA_DUYET_LDC]: "Đã duyệt - LĐ Cục",
     [this.STATUS.DA_HOAN_THANH]: "Đã hoàn thành",
-  }
+  };
+  bbThuaThieuId: number;
+  isViewBbThuaThieu: boolean;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -182,6 +184,14 @@ export class BaoCaoComponent extends Base2Component implements OnInit {
     this.selectedId = id;
     this.isDetail = true;
     this.isView = isView;
+  }
+  openModalBBTT(id: number) {
+    this.bbThuaThieuId = id;
+    this.isViewBbThuaThieu = true;
+  }
+  closeModalBbThuaThieu() {
+    this.bbThuaThieuId = null;
+    this.isViewBbThuaThieu = false;
   }
   checkRoleView(trangThai: string): boolean {
     return !this.checkRoleEdit(trangThai) && !this.checkRoleApproveDc(trangThai) && !this.checkRoleDelete(trangThai)

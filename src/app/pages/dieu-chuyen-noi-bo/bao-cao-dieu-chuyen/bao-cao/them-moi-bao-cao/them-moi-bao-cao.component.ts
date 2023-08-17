@@ -557,6 +557,6 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
   }
   checkRoleLapBBThuaThieu() {
     // return this.duocLapBBThuaThieu;
-    return (this.loaiBc === "CHI_CUC" && this.userService.isChiCuc() && this.formData.value.trangThai === STATUS.DA_HOAN_THANH)
+    return (this.loaiBc === "CHI_CUC" && this.userService.isChiCuc() && this.formData.value.trangThai === STATUS.DA_HOAN_THANH && this.duocLapBBThuaThieu)
   }
 }
