@@ -214,6 +214,8 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
           this.tinhTong();
         }
       }
+    }else{
+      this.itemDnCapVonBn.tenTrangThai = 'Đang nhập dữ liệu';
     }
   }
 
@@ -234,6 +236,7 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
       ngayDeNghi: [this.itemDnCapVonBn ? this.itemDnCapVonBn.ngayDeNghi : null],
       ghiChu: [this.itemDnCapVonBn ? this.itemDnCapVonBn.ghiChu : null],
       trangThai: [this.itemDnCapVonBn ? this.itemDnCapVonBn.trangThai : null],
+      tenTrangThai: [this.itemDnCapVonBn ? this.itemDnCapVonBn.tenTrangThai : 'Đang nhập dữ liệu'],
     });
     this.setTitle();
   }
