@@ -105,7 +105,6 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
 
   async ngOnInit() {
     this.spinner.show();
-    console.log(this.userService.getUserLogin(), 'aaaaaaaaaaa');
     try {
       await Promise.all([
         this.userInfo = this.userService.getUserLogin(),
@@ -165,7 +164,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
         await this.updateEditCache();
       }
     } else {
-      let id = await this.userService.getId("KHCN_QUY_CHUAN_QG_HDR_SEQ");
+      // let id = await this.userService.getId("KHCN_QUY_CHUAN_QG_HDR_SEQ");
       this.formData.patchValue({
         // soVanBan: id + this.maVb,
         tenDvi: this.userInfo.TEN_DVI,
@@ -185,6 +184,14 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
     }
   }
 
+  isDisableByBoNganh(): boolean {
+    if (this.formData.value.maBn && !this.formData.value.maBn.startsWith("01") && !this.userInfo.MA_DVI.startsWith("01")) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   async getListBoNganh() {
     this.dsBoNganh = [];
     let res = await this.donviService.layTatCaDonViByLevel(0);
@@ -195,6 +202,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
       Object.assign(this.dsBoNganh, boTaiChinh);
     }
   }
+
 
   async initForm() {
     this.formData.patchValue({

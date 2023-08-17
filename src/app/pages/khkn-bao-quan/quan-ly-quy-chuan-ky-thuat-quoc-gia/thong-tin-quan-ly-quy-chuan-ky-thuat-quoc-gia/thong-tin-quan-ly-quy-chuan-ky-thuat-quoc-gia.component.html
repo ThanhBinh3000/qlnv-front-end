@@ -52,7 +52,7 @@
                 Bộ ngành
               </nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <nz-select [nzDisabled]="isView" nzAllowClear nzShowSearch formControlName="maBn" >
+                <nz-select [nzDisabled]="isView || isDisableByBoNganh()" nzAllowClear nzShowSearch formControlName="maBn" >
                   <nz-option nzValue="{{item.key}}" nzLabel="{{item.tenDvi}}" *ngFor="let item of dsBoNganh">
                   </nz-option>
                 </nz-select>
