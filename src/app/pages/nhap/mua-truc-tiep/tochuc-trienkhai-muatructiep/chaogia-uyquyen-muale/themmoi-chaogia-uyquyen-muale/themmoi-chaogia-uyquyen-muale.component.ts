@@ -171,8 +171,8 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
     } else {
       this.selected = true;
     }
-    this.rowItem.donGia = data.donGia
-    this.donGiaRow = data.donGia
+    this.rowItem.donGia = data.donGiaVat
+    this.donGiaRow = data.donGiaVat
     if(this.listChiCuc.length > 0){
       this.listDiemKho = this.listChiCuc.find(x => x.maDvi == data.maDvi).children.filter(y => y.type == 'MLK').filter(k => k.maDvi.includes(data.children.filter(i => i.maDiemKho == k.maDvi)))
     }
@@ -233,7 +233,7 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
     }
   }
 
-  hoanThanhCapNhat() {
+  async hoanThanhCapNhat() {
     // if (this.listOfData.length == 0) {
     //   this.notification.error(MESSAGE.ERROR, "Không thể hoàn thành cập nhập, chi tiết thông tin đấu giá không được để trống");
     //   return
@@ -247,7 +247,7 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
       nzOkDanger: true,
       nzWidth: 350,
       nzOnOk: async () => {
-        this.spinner.show();
+        await this.spinner.show();
         try {
           let body = {
             id: this.idInput,
@@ -256,27 +256,27 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
           let res = await this.chaogiaUyquyenMualeService.approve(body);
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.THAO_TAC_SUCCESS);
-            this.spinner.hide();
-            this.loadDetail(this.idInput);
+            await this.spinner.hide();
+            await this.loadDetail(this.idInput);
             this.goBack()
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
-            this.spinner.hide();
+            await this.spinner.hide();
           }
         } catch (e) {
           console.log('error: ', e);
-          this.spinner.hide();
+          await this.spinner.hide();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         } finally {
-          this.spinner.hide();
+          await this.spinner.hide();
         }
       },
     });
   }
 
 
-  async save() {
-    this.spinner.show();
+  async save(isHoanThanh?) {
+    await this.spinner.show();
     try {
       this.helperService.markFormGroupTouched(this.formData);
       if (this.formData.invalid) {
@@ -291,6 +291,9 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
       let res = await this.chaogiaUyquyenMualeService.create(body);
       if (res.msg == MESSAGE.SUCCESS) {
         this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+        if(isHoanThanh){
+          await this.hoanThanhCapNhat()
+        }
         await this.loadDetail(this.idInput)
         this.goBack()
       } else {
@@ -298,9 +301,9 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
       }
     } catch (e) {
       this.notification.error(MESSAGE.ERROR, e);
-      this.spinner.hide();
+      await this.spinner.hide();
     } finally {
-      this.spinner.hide();
+      await this.spinner.hide();
     }
 
   }

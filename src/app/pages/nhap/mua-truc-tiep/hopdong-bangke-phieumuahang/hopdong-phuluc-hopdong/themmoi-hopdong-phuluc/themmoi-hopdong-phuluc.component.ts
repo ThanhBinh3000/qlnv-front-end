@@ -206,7 +206,7 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
     this.idKqCgia = data.idKqCgia;
     console.log("formData1", data)
     this.dataTable = data.qdGiaoNvuDtlList.length > 0 ? data.qdGiaoNvuDtlList.filter(x => x.maDvi.includes(this.userInfo.MA_DVI)) : data.children;
-    console.log(this.dataTable)
+    console.log("dataTable",this.dataTable)
     this.dataTablePhuLuc = data.phuLucDtl;
     this.objHopDongHdr = data;
     this.fileDinhKem = data.fileDinhKems;
@@ -231,7 +231,7 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
       if (isOther) {
         this.approve(data.id, this.STATUS.DA_KY, "Bạn có muốn ký hợp đồng ?")
       } else {
-        this.goBack()
+        // this.goBack()
       }
     }
   }
@@ -297,8 +297,7 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
               cloaiVthh: dataKq.cloaiVthh,
               tenCloaiVthh: dataKq.tenCloaiVthh,
               moTaHangHoa: dataKq.moTaHangHoa,
-              dviTinh: "kg",
-              // tongSoLuongQdKh: dataThongTin.tongSoLuong * 1000
+              dviTinh: "tấn",
             });
             this.dataTable = dataKq.children.filter(x => x.maDvi == this.userInfo.MA_DVI)
             console.log("formData2", this.dataTable)
@@ -368,17 +367,17 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
               cloaiVthh: dataKq.cloaiVthh,
               tenCloaiVthh: dataKq.tenCloaiVthh,
               moTaHangHoa: dataKq.moTaHangHoa,
-              dviTinh: "kg",
-              tongSoLuongQdKh: dataThongTin.tongSoLuong * 1000
+              dviTinh: "tấn",
+              tongSoLuongQdKh: dataThongTin.tongSoLuong
             });
-            console.log("formData2", dataKq.danhSachCtiet)
             dataKq.danhSachCtiet.forEach((item) => {
               item.listChaoGia.forEach(res =>{
-                if (res.luaChon == true) {
+                if (res.luaChon == true && res.signed != true) {
                   this.listDviLquan.push(res)
                 }
               })
             })
+            console.log("listDviLquan", this.listDviLquan)
             if(this.idKqCgia){
               this.changeDviCungCap(this.idKqCgia)
             }
@@ -502,6 +501,7 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
   changeDviCungCap($event: any) {
     let dViCc = this.listDviLquan.find(s => s.id === $event);
     console.log("dViCc ", dViCc)
+    console.log("dViCc222 ", this.formData.value.tongSoLuongQdKh)
     if (dViCc) {
       this.formData.patchValue({
         // idDviMua: dViCc.id,
@@ -513,7 +513,7 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
         donGia: dViCc.donGia,
         donGiaGomThue: dViCc.donGia + (dViCc.donGia * dViCc.thueGtgt / 100),
         sdtDviBan: dViCc.sdt,
-        thanhTien: dViCc.soLuong * dViCc.donGia,
+        thanhTien: dViCc.soLuong * dViCc.donGia * 1000,
         tongSoLuongQdKhChuakyHd: this.formData.value.tongSoLuongQdKh - dViCc.soLuong
       })
     }

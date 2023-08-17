@@ -125,7 +125,7 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
         soQdinhDcc: this.data.soQdinh,
         ngayQdDcCuc: this.data.ngayKyQd,
         qdinhDccId: this.data.qdDcCucId,
-        tenLoNganKho: `${this.data.tenLoKho} ${this.data.tenNganKho}`,
+        tenLoNganKho: `${this.data.tenLoKho || ""} ${this.data.tenNganKho}`,
         tenLoKho: this.data.tenLoKho,
         maLoKho: this.data.maLoKho,
         tenNganKho: this.data.tenNganKho,
@@ -167,27 +167,44 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
       let data = await this.detail(id);
       if (data) {
         this.danhSach = data.dcnbBBKetThucNKDtl
-        this.formData.patchValue(data);
+        this.formData.patchValue({ ...data, tenLoNganKho: `${data.tenLoKho || ""} ${data.tenNganKho}`, });
         this.fileDinhKemReq = data.fileDinhKems
+        await this.getDanhSachTT(data.qdinhDccId)
       }
 
     }
     await this.spinner.hide();
   }
 
+  // async getDanhSachTT(qdinhDccId) {
+  //   const body = {
+  //     qdinhDccId
+  //   }
+  //   let res = await this.phieuNhapKhoService.getDanhSachTT(body);
+  //   if (res.msg == MESSAGE.SUCCESS) {
+  //     this.danhSach = res.data.map(element => {
+  //       return {
+  //         ...element,
+  //         checked: false
+  //       }
+  //     });
+  //   }
+  // }
+
   async getDanhSachTT(qdinhDccId) {
     const body = {
       qdinhDccId
     }
+    const children = this.danhSach
     let res = await this.phieuNhapKhoService.getDanhSachTT(body);
     if (res.msg == MESSAGE.SUCCESS) {
       this.danhSach = res.data.map(element => {
+        const check = children.find(item => item.soPhieuNhapKho === element.soPhieuNhapKho)
         return {
           ...element,
-          checked: false
+          checked: !!check || false
         }
       });
-      console.log('getDanhSachTT', res)
     }
   }
 
@@ -206,6 +223,16 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
         });
       }
     }
+    const pnk = this.danhSach.filter(item => item.checked)[0]
+    if (pnk) {
+      this.formData.patchValue({
+        ngayBatDauNhap: pnk.ngayNhapKho
+      })
+    } else {
+      this.formData.patchValue({
+        ngayBatDauNhap: ""
+      })
+    }
     this.danhSach = cloneDeep(this.danhSach)
   }
 
@@ -218,6 +245,16 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
       this.indeterminateTT = false;
     } else {
       this.indeterminateTT = true;
+    }
+    const pnk = this.danhSach.filter(item => item.checked)[0]
+    if (pnk) {
+      this.formData.patchValue({
+        ngayBatDauNhap: pnk.ngayNhapKho
+      })
+    } else {
+      this.formData.patchValue({
+        ngayBatDauNhap: ""
+      })
     }
     this.danhSach = cloneDeep(this.danhSach)
   }
@@ -308,7 +345,7 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
         this.formData.patchValue({
-          tenLoNganKho: `${data.tenLoKhoNhan} ${data.tenNganKhoNhan}`,
+          tenLoNganKho: `${data.tenLoKhoNhan || ""} ${data.tenNganKhoNhan}`,
           tenLoKho: data.tenLoKhoNhan,
           maLoKho: data.maLoKhoNhan,
           tenNganKho: data.tenNganKhoNhan,
@@ -331,7 +368,8 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
           tenCloaiVthh: data.tenCloaiVthh,
           tichLuongKhaDung: data.tichLuongKd,
           donViTinh: data.tenDonViTinh,
-          idKeHoachDtl: data.id
+          idKeHoachDtl: data.id,
+          tongSlTheoQd: data.soLuongDc,
         });
       }
     });
@@ -362,7 +400,12 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
   async save(isGuiDuyet?) {
     await this.spinner.show();
     let body = this.formData.value;
-    body.dcnbBBKetThucNKDtl = this.danhSach.filter(item => item.checked)
+    body.dcnbBBKetThucNKDtl = this.danhSach.filter(item => item.checked).map(pnk => {
+      return {
+        ...pnk,
+        id: undefined
+      }
+    })
     body.fileDinhKemReq = this.fileDinhKemReq;
 
     if (this.idInput) {

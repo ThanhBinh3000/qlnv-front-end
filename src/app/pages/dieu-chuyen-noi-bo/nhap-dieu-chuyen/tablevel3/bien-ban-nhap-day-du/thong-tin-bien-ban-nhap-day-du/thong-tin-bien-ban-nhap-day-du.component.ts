@@ -100,7 +100,7 @@ export class ThongTinBienBanNhapDayDuComponent extends Base2Component implements
       cloaiVthh: [],
       tenCloaiVthh: [],
       dviTinh: [],
-
+      isVatTu: false,
       ngayBdNhap: [],
       ngayKtNhap: [],
       soLuongQdDcCuc: [],
@@ -142,7 +142,6 @@ export class ThongTinBienBanNhapDayDuComponent extends Base2Component implements
     }
 
     if (this.data) {
-      console.log('data', this.data)
       this.formData.patchValue({
         soQdDcCuc: this.data.soQdinh,
         ngayQdDcCuc: this.data.ngayKyQd,
@@ -227,6 +226,16 @@ export class ThongTinBienBanNhapDayDuComponent extends Base2Component implements
       }
     }
     this.tongSL = this.danhSach.filter(item => item.checked).reduce((pre, cur) => pre + Number(cur.soLuong), 0)
+    const pnk = this.danhSach.filter(item => item.checked)[0]
+    if (pnk) {
+      this.formData.patchValue({
+        ngayBdNhap: pnk.ngayNhapKho
+      })
+    } else {
+      this.formData.patchValue({
+        ngayBdNhap: ""
+      })
+    }
     this.danhSach = cloneDeep(this.danhSach)
   }
 
@@ -241,6 +250,16 @@ export class ThongTinBienBanNhapDayDuComponent extends Base2Component implements
       this.indeterminateTT = true;
     }
     this.tongSL = this.danhSach.filter(item => item.checked).reduce((pre, cur) => pre + Number(cur.soLuong), 0)
+    const pnk = this.danhSach.filter(item => item.checked)[0]
+    if (pnk) {
+      this.formData.patchValue({
+        ngayBdNhap: pnk.ngayNhapKho
+      })
+    } else {
+      this.formData.patchValue({
+        ngayBdNhap: ""
+      })
+    }
     this.danhSach = cloneDeep(this.danhSach)
   }
 
@@ -249,7 +268,7 @@ export class ThongTinBienBanNhapDayDuComponent extends Base2Component implements
     await this.spinner.show();
     let body = {
       trangThai: STATUS.BAN_HANH,
-      loaiVthh: ['0101', '0102'],
+      // loaiVthh: ['0101', '0102'],
       loaiDc: this.loaiDc,
       maDvi: this.userInfo.MA_DVI,
       type: this.formData.value.type
@@ -373,7 +392,12 @@ export class ThongTinBienBanNhapDayDuComponent extends Base2Component implements
     let body = this.formData.value;
     body.fileDinhKemReq = this.fileDinhKemReq;
     body.ngayKtNhap = body.ngayLap
-    body.children = this.danhSach.filter(item => item.checked)
+    body.children = this.danhSach.filter(item => item.checked).map(pnk => {
+      return {
+        ...pnk,
+        id: undefined
+      }
+    })
     if (this.idInput) {
       body.id = this.idInput
     }

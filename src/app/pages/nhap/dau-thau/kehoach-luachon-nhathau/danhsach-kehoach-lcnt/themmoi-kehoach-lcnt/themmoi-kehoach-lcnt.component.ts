@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import { Validators } from '@angular/forms';
 import { saveAs } from 'file-saver';
 import { chain } from 'lodash';
@@ -40,7 +40,7 @@ import {UserService} from "../../../../../../services/user.service";
   templateUrl: './themmoi-kehoach-lcnt.component.html',
   styleUrls: ['./themmoi-kehoach-lcnt.component.scss'],
 })
-export class ThemmoiKehoachLcntComponent extends Base2Component implements OnInit {
+export class ThemmoiKehoachLcntComponent extends Base2Component implements OnInit, OnChanges {
   @Input()
   loaiVthhInput: string;
   @Input()
@@ -108,6 +108,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
     tenDvi: '',
     soLuong: ''
   }];
+  listQuy: any[] = [];
 
   constructor(
     httpClient: HttpClient,
@@ -154,8 +155,10 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       gtriHdong: [null, [Validators.required]],
       donGiaVat: [],
       vat: ['5'],
-      tongMucDt: [null, [Validators.required]],
+      tongMucDt: [null],
+      tongMucDtLamTron: [null],
       tongMucDtDx: [null, [Validators.required]],
+      tongMucDtDxLamTron: [null, [Validators.required]],
       nguonVon: ['NGV01', [Validators.required]],
       dienGiai: [''],
       tgianNhang: [null, [Validators.required]],
@@ -168,6 +171,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       ykienThamGia: [''],
       tongMucDtBangChu: [''],
       tongSlChiTieu: [''],
+      quy: [""],
       ctietTccl: [''],
       namSxuat: [''],
       vu: [''],
@@ -187,22 +191,32 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       });
     }
     this.formData.get('loaiVthh').setValue(this.loaiVthhInput);
-    if (this.loaiVthhInput.startsWith('02')){
-      this.formData.get('vat').setValue('8');
-    }
     this.loadDanhMucHang();
-    if (this.idInput > 0) {
-      await this.getDetail(this.idInput, null);
-    } else {
-      if (this.soDx) {
-        await this.getDetail(null, this.soDx);
-      }
-      this.initForm();
-    }
     await Promise.all([
       this.loadDataComboBox(),
       this.getDataChiTieu()
     ]);
+    this.initListQuy();
+    await this.spinner.hide();
+  }
+
+  async ngOnChanges(changes: SimpleChanges) {
+    await this.spinner.show();
+    if (changes) {
+      try {
+        if (this.idInput > 0) {
+          await this.getDetail(this.idInput, null);
+        } else {
+          if (this.soDx) {
+            await this.getDetail(null, this.soDx);
+          }
+          this.initForm();
+        }
+      } catch (e) {
+        console.log("error: ", e);
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    }
     await this.spinner.hide();
   }
 
@@ -315,16 +329,14 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
             this.ykienThamGia = this.formData.get("ykienThamGia").value;
             this.ghiChu = this.formData.get("ghiChu").value;
             this.formData.patchValue({
-              soDxuat: dataDetail.soDxuat?.split('/')[0]
+              tgianBdauTchuc: dataDetail.tgianBdauTchuc,
+              soDxuat: dataDetail.soDxuat?.split('/')[0],
+              tongMucDtLamTron: parseFloat((this.formData.get('tongMucDt').value/1000000000).toFixed(2)),
+              tongMucDtDxLamTron: parseFloat((this.formData.get('tongMucDtDx').value/1000000000).toFixed(2)),
             })
             if (dataDetail) {
               this.fileDinhKem = dataDetail.fileDinhKems;
               this.listOfData = dataDetail.dsGtDtlList;
-              if (dataDetail.loaiVthh != '02') {
-                this.convertListDataLuongThuc()
-              } else {
-                this.convertListData();
-              }
               this.bindingCanCu(dataDetail.ccXdgDtlList);
             }
           }
@@ -350,11 +362,6 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
             if (dataDetail) {
               this.fileDinhKem = dataDetail.fileDinhKems;
               this.listOfData = dataDetail.dsGtDtlList;
-              if (dataDetail.loaiVthh != '02') {
-                this.convertListDataLuongThuc()
-              } else {
-                this.convertListData();
-              }
               this.bindingCanCu(dataDetail.ccXdgDtlList);
             }
           }
@@ -473,79 +480,6 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       }
     });
   }
-
-  themMoiGoiThau(data?: DanhSachGoiThau, index?: number) {
-    if (this.userService.isTongCuc()) {
-      this.themMoiTongCuc(data, index);
-    } else {
-      this.themMoiCuc();
-    }
-  }
-
-  themMoiTongCuc(data?: any, index?: number) {
-    if (this.formData.get('loaiVthh').value == null || this.formData.get('cloaiVthh').value == null) {
-      this.notification.error(MESSAGE.NOTIFICATION, "Vui lòng chọn loại hàng hóa");
-      return;
-    }
-    let listGoiThau = [];
-    this.listOfData.forEach(item => {
-      listGoiThau.push(item.goiThau)
-    })
-    let setListGoiThau = new Set(listGoiThau);
-    listGoiThau = [...setListGoiThau]
-    let isReadOnly = false;
-    if (data != null) {
-      isReadOnly = true;
-    }
-    const modal = this.modal.create({
-      nzTitle: 'THÔNG TIN GÓI THẦU',
-      nzContent: DialogThemMoiGoiThauComponent,
-      nzMaskClosable: false,
-      nzClosable: false,
-      nzWidth: '1500px',
-      nzFooter: null,
-      nzClassName: 'dialog-vat-tu',
-      nzComponentParams: {
-        trangThai: this.formData.get('trangThai').value,
-        data: data,
-        dataAll: this.listOfData,
-        listGoiThau: listGoiThau,
-        isReadOnly: isReadOnly,
-        dataChiTieu: this.dataChiTieu,
-        loaiVthh: this.formData.get('loaiVthh').value,
-        dviTinh: this.formData.get('loaiVthh').value.maDviTinh,
-        namKeHoach: this.formData.value.namKhoach,
-      },
-    });
-    modal.afterClose.subscribe((res) => {
-      if (res) {
-        let isUpdate = false;
-        for (let i = 0; index < this.listOfData.length; i++) {
-          if (this.listOfData[i].goiThau == res.goiThau) {
-            this.listOfData[i] = res;
-            isUpdate = true;
-          }
-        }
-        if (!isUpdate) {
-          this.listOfData.push(res);
-        }
-        let tongMucDt: number = 0;
-        let tongMucDtDx: number = 0;
-        let tongSlChiTieu: number = 0;
-        this.listOfData.forEach((item) => {
-          tongMucDt = tongMucDt + (item.soLuong * item.donGiaVat /1000000000);
-          tongMucDtDx = tongMucDtDx + (item.soLuong * item.donGiaTamTinh /1000000000);
-          tongSlChiTieu += item.soLuongTheoChiTieu
-        });
-        this.formData.patchValue({
-          tongMucDt: parseFloat(tongMucDt.toFixed(2)),
-          tongMucDtDx: parseFloat(tongMucDtDx.toFixed(2)),
-          tongSlChiTieu: tongSlChiTieu,
-        });
-      }
-    });
-  }
-
   themMoiCuc(goiThau?: string) {
     if (!this.formData.get('loaiVthh').value) {
       this.notification.error(MESSAGE.ERROR, 'Vui lòng chọn loại hàng hóa');
@@ -565,7 +499,6 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
     if (goiThau && goiThau != '') {
       disabledGoiThau = true;
     }
-    console.log(this.dataChiTieu, 'datachitieu')
     const modalGT = this.modal.create({
       nzTitle: '',
       nzContent: DialogThemMoiVatTuComponent,
@@ -603,56 +536,53 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       if (isReplace == false) {
         this.listOfData = [...this.listOfData, res.value]
       }
-      let tongMucDt: number = 0;
-      let tongMucDtDx: number = 0;
-      let tongSlChiTieu: number = 0;
-      this.listOfData.forEach((item) => {
-        tongMucDt = tongMucDt + (item.soLuong * item.donGiaVat *1000/1000000000);
-        tongMucDtDx = tongMucDtDx + (item.soLuong * item.donGiaTamTinh * 1000/1000000000);
-        tongSlChiTieu += item.soLuongTheoChiTieu
-      });
-      this.formData.patchValue({
-        tongMucDt: parseFloat(tongMucDt.toFixed(2)),
-        tongMucDtDx: parseFloat(tongMucDtDx.toFixed(2)),
-        tongSlChiTieu: tongSlChiTieu,
-      });
-      this.convertListDataLuongThuc();
+      this.tinhTongMucDtDx()
     });
 
   }
-  deleteRowLt(i: number, goiThau: string, z?: number) {
-    for (let index = 0; index < this.listOfData.length; index++) {
-      if (this.listOfData[index].goiThau == goiThau) {
-        if (z) {
-          for (let v = 0; v < this.listOfData[index].children.length; v++) {
-            if (this.listOfData[index].children[v].idx == i) {
-              this.listOfData[index].children[v].children.splice(z, 1)
-              if (this.listOfData[index].children[v].children.length == 0) {
-                this.listOfData[index].children = this.listOfData[index].children.filter((d, index) => d.idx !== i);
-                if (this.listOfData[index].children.length == 0) {
-                  this.listOfData.splice(index, 1)
-                }
-              }
-            }
-          }
-        } else {
-          this.listOfData[index].children = this.listOfData[index].children.filter((d, index) => d.idx !== i);
-          if (this.listOfData[index].children.length == 0) {
-            this.listOfData.splice(index, 1)
-          }
-        }
-        this.helperService.setIndexArray(this.listOfData);
-        this.convertListDataLuongThuc()
-      }
+
+  tinhTongMucDtDx () {
+    let tongMucDt: number = 0;
+    let tongMucDtDx: number = 0;
+    let tongSlChiTieu: number = 0;
+    this.listOfData.forEach((item) => {
+      tongMucDt = tongMucDt + (item.soLuong * item.donGiaVat *1000);
+      tongMucDtDx = tongMucDtDx + (item.soLuong * item.donGiaTamTinh * 1000);
+      tongSlChiTieu += item.soLuongTheoChiTieu
+    });
+    this.formData.patchValue({
+      tongMucDtLamTron: parseFloat((tongMucDt/1000000000).toFixed(2)),
+      tongMucDtDxLamTron: parseFloat((tongMucDtDx/1000000000).toFixed(2)),
+      tongMucDt: tongMucDt,
+      tongMucDtDx: tongMucDtDx,
+      tongSlChiTieu: tongSlChiTieu,
+    });
+  }
+  deleteGoiThau(i:number) {
+    this.listOfData.splice(i, 1)
+    this.tinhTongMucDtDx()
+  }
+
+  deleteDiemKho(i:number, y:number, z:number) {
+    this.listOfData[i].children[y].children.splice(z, 1)
+    if (this.listOfData[i].children[y].children.length > 0) {
+      let soLuong = 0;
+      this.listOfData[i].children[y].children.forEach(item => {
+        soLuong += item.soLuong
+      })
+      this.listOfData[i].children[y].soLuong = soLuong;
+    } else {
+      this.listOfData[i].children.splice(y, 1)
     }
+    if (this.listOfData[i].children.length > 0) {
+      let soLuongGoiThau = 0;
+      this.listOfData[i].children.forEach(chiCuc => {
+        soLuongGoiThau += chiCuc.soLuong
+      })
+      this.listOfData[i].soLuong = soLuongGoiThau
+    }
+    this.tinhTongMucDtDx()
   }
-
-  deleteRow(i: number): void {
-    this.listOfData = this.listOfData.filter((d, index) => index !== i);
-    this.helperService.setIndexArray(this.listOfData);
-    this.convertListData();
-  }
-
   async save(isGuiDuyet?) {
     if (!this.isDetailPermission()) {
       return;
@@ -770,7 +700,6 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
     this.formData.controls["tgianMthau"].setValidators([Validators.required]);
     this.formData.controls["gtriDthau"].setValidators([Validators.required]);
     this.formData.controls["gtriHdong"].setValidators([Validators.required]);
-    this.formData.controls["tongMucDt"].setValidators([Validators.required]);
     this.formData.controls["tongMucDtDx"].setValidators([Validators.required]);
     this.formData.controls["nguonVon"].setValidators([Validators.required]);
     this.formData.controls["tgianNhang"].setValidators([Validators.required]);
@@ -806,16 +735,8 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
   }
 
   async getDataChiTieu() {
-    let res2 = null;
-    if (this.loaiVthhInput.startsWith('02')) {
-      res2 = await this.chiTieuKeHoachNamCapTongCucService.loadThongTinChiTieuKeHoachVtNam(
-        +this.formData.get('namKhoach').value,
-      );
-    } else {
-      res2 = await this.chiTieuKeHoachNamCapTongCucService.loadThongTinChiTieuKeHoachCucNam(
-        +this.formData.get('namKhoach').value,
-      );
-    }
+    let res2 =  await this.chiTieuKeHoachNamCapTongCucService.loadThongTinChiTieuKeHoachCucNam(
+        +this.formData.get('namKhoach').value,)
     if (res2.msg == MESSAGE.SUCCESS) {
       this.dataChiTieu = res2.data;
       this.formData.patchValue({
@@ -830,31 +751,13 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
   }
 
   onChangeNamKh() {
-    this.getDataChiTieu();
-  }
-
-  convertTienTobangChu(tien: number): string {
-    return VNnum2words(tien);
+    // this.getDataChiTieu();
   }
 
   downloadFile(taiLieu: any) {
     this.uploadFileService.downloadFile(taiLieu.fileUrl).subscribe((blob) => {
       saveAs(blob, taiLieu.fileName);
     });
-  }
-
-  deleteTaiLieu(index: number, table: string) {
-    if (table == 'bao-gia-thi-truong') {
-      this.baoGiaThiTruongList = this.baoGiaThiTruongList.filter(
-        (item, i) => i !== index,
-      );
-    }
-    if (table == 'can-cu-khac') {
-      this.canCuKhacList = this.canCuKhacList.filter((item, i) => i !== index);
-    }
-    if (table == 'file-dinhkem') {
-      this.fileDinhKem = this.fileDinhKem.filter((item, i) => i !== index);
-    }
   }
 
   quayLai() {
@@ -1041,64 +944,6 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
         this.checkDataExistCoSo(this.editCoSoCache[id].data);
       }
     }
-  }
-
-  taiLieuDinhKem(type?: string) {
-    const modal = this.modal.create({
-      nzTitle: 'Thêm mới căn cứ xác định giá',
-      nzContent: UploadComponent,
-      nzMaskClosable: false,
-      nzClosable: false,
-      nzWidth: '900px',
-      nzFooter: null,
-      nzComponentParams: {},
-    });
-    modal.afterClose.subscribe((res) => {
-      if (res) {
-        this.uploadFileService
-          .uploadFile(res.file, res.tenTaiLieu)
-          .then((resUpload) => {
-            const fileDinhKem = new FileDinhKem();
-            fileDinhKem.fileName = resUpload.filename;
-            fileDinhKem.fileSize = resUpload.size;
-            fileDinhKem.fileUrl = resUpload.url;
-            switch (type) {
-              case 'tai-lieu-dinh-kem':
-                this.fileDinhKem.push(fileDinhKem);
-                break;
-              case 'bao-gia-thi-truong':
-                const taiLieuBaoGiaThiTruong = new CanCuXacDinh();
-                taiLieuBaoGiaThiTruong.loaiCanCu = '00';
-                taiLieuBaoGiaThiTruong.tenTlieu = res.tenTaiLieu;
-                taiLieuBaoGiaThiTruong.idVirtual = new Date().getTime();
-                taiLieuBaoGiaThiTruong.children = [];
-                taiLieuBaoGiaThiTruong.children = [
-                  ...taiLieuBaoGiaThiTruong.children,
-                  fileDinhKem,
-                ];
-                this.baoGiaThiTruongList = [
-                  ...this.baoGiaThiTruongList,
-                  taiLieuBaoGiaThiTruong,
-                ];
-                break;
-              case 'can-cu-khac':
-                const taiLieuCanCuKhac = new CanCuXacDinh();
-                taiLieuCanCuKhac.loaiCanCu = '01';
-                taiLieuCanCuKhac.tenTlieu = res.tenTaiLieu;
-                taiLieuCanCuKhac.idVirtual = new Date().getTime();
-                taiLieuCanCuKhac.children = [];
-                taiLieuCanCuKhac.children = [
-                  ...taiLieuCanCuKhac.children,
-                  fileDinhKem,
-                ];
-                this.canCuKhacList = [...this.canCuKhacList, taiLieuCanCuKhac];
-                break;
-              default:
-                break;
-            }
-          });
-      }
-    });
   }
 
   openFile(event, id, type) {
@@ -1326,73 +1171,6 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
     this.updatEditCoSoCache();
   }
 
-  downloadFileKeHoach(event) {
-    let body = {
-      dataType: '',
-      dataId: 0,
-    };
-    switch (event) {
-      case 'tai-lieu-dinh-kem':
-        // body.dataType = this.deXuatDieuChinh.fileDinhKems[0].dataType;
-        // body.dataId = this.deXuatDieuChinh.fileDinhKems[0].dataId;
-        // if (this.taiLieuDinhKemList.length > 0) {
-        //   this.chiTieuKeHoachNamService.downloadFileKeHoach(body).subscribe((blob) => {
-        //     saveAs(blob, this.deXuatDieuChinh.fileDinhKems.length > 1 ? 'Tai-lieu-dinh-kem.zip' : this.deXuatDieuChinh.fileDinhKems[0].fileName);
-        //   });
-        // }
-        break;
-      default:
-        break;
-    }
-  }
-
-  openDialogGoiThau(data?: any) {
-    this.modal.create({
-      nzTitle: 'Thông tin gói thầu',
-      nzContent: DialogThemMoiGoiThauComponent,
-      nzMaskClosable: false,
-      nzClosable: false,
-      nzWidth: '800px',
-      nzFooter: null,
-      nzComponentParams: {
-        data: data,
-      },
-    });
-  }
-
-  convertListData() {
-    this.helperService.setIndexArray(this.listOfData);
-    this.listDataGroup = chain(this.listOfData).groupBy('tenDvi').map((value, key) => ({ tenDvi: key, dataChild: value }))
-      .value()
-  }
-
-  convertListDataLuongThuc() {
-    let listChild = [];
-    this.listOfData.forEach(item => {
-      item.children.forEach(i => {
-        listChild.push(i)
-      })
-    })
-    this.helperService.setIndexArray(listChild);
-    this.listDataGroup = chain(listChild).groupBy('tenDvi').map((value, key) => (
-      {
-        tenDvi: key,
-        soLuongTheoChiTieu: value[0].soLuongTheoChiTieu,
-        soLuong: null,
-        soLuongDaMua: value[0].soLuongDaMua,
-        dataChild: value
-      })).value()
-    this.listDataGroup.forEach(item => {
-      let sluong = 0;
-      item.dataChild.forEach(i => {
-        sluong = sluong + i.soLuong
-      })
-      item.soLuong = sluong;
-      this.listDsGthau = this.listDataGroup;
-    })
-    console.log(this.listDsGthau)
-  }
-
   expandSet = new Set<number>();
   onExpandChange(id: number, checked: boolean): void {
     if (checked) {
@@ -1408,15 +1186,6 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       this.expandSet2.add(id);
     } else {
       this.expandSet2.delete(id);
-    }
-  }
-
-  expandSet3 = new Set<number>();
-  onExpandChange3(id: number, checked: boolean): void {
-    if (checked) {
-      this.expandSet3.add(id);
-    } else {
-      this.expandSet3.delete(id);
     }
   }
 
@@ -1474,4 +1243,28 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
     }
   }
 
+  initListQuy() {
+    const currentYear = new Date().getFullYear();
+    const currentMonth = new Date().getMonth();
+    const quarters = [];
+
+    for (let quarter = 1; quarter <= 4; quarter++) {
+      if (this.formData.get('namKhoach').value < currentYear || (this.formData.get('namKhoach').value === currentYear && quarter <= Math.ceil((currentMonth + 1) / 3))) {
+        quarters.push(quarter);
+      }
+    }
+    this.listQuy = [];
+    for (const element of quarters) {
+      this.listQuy.push({ giaTri: "Quý " + element + "/" + this.formData.get("namKhoach").value, ma: element})
+    }
+  }
+  disabledDate = (current: Date): boolean => {
+    const startDate = new Date(this.formData.get("namKhoach").value, (this.formData.get("quy").value - 1) * 3, 1);
+    const endDate = new Date(this.formData.get("namKhoach").value, this.formData.get("quy").value * 3, 0);
+    return current < startDate || current > endDate;
+  };
+
+  onChangeQuy() {
+    this.formData.get("tgianBdauTchuc").setValue(null);
+  }
 }
