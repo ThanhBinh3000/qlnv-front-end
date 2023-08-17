@@ -174,6 +174,7 @@ export class ThanhToanTheoDonGiaComponent implements OnInit {
                     data.data.lstCtiets.forEach(item => {
                         this.lstCtiets.push(new ThanhToan(item));
                     })
+                    this.baoCao.listIdDeleteFiles = [];
                     this.listFile = [];
                     this.updateEditCache();
                     this.getStatusButton();

@@ -237,7 +237,8 @@ export class DeNghiCapVonTheoHopDongTrungThauComponent implements OnInit {
                         this.lstCtiets.push(new CapVon(item));
                     })
                     this.lstCtiets = Table.sortByIndex(this.lstCtiets)
-                    this.setLevel()
+                    this.setLevel();
+                    this.baoCao.listIdDeleteFiles = [];
                     this.listFile = [];
                     this.getStatusButton();
                 } else {

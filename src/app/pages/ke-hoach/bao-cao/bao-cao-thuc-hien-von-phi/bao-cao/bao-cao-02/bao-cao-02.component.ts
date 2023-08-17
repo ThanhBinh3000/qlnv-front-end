@@ -46,12 +46,17 @@ export class ItemData {
     }
 
     sum(data: ItemData) {
-        this.thSoLuong = Operator.sum([this.thSoLuong, data.thSoLuong]);
-        this.thTtien = Operator.sum([this.thTtien, data.thTtien]);
-        if (this.level == 0) {
+        if (this.level == 1) {
             this.khSoLuong = Operator.sum([this.khSoLuong, data.khSoLuong]);
-            this.khTtien = Operator.sum([this.khTtien, data.khTtien])
+            this.thSoLuong = Operator.sum([this.thSoLuong, data.thSoLuong]);
         }
+        this.khTtien = Operator.sum([this.khTtien, data.khTtien])
+        // this.thSoLuong = Operator.sum([this.thSoLuong, data.thSoLuong]);
+        this.thTtien = Operator.sum([this.thTtien, data.thTtien]);
+        // if (this.level == 0) {
+        //     this.khSoLuong = Operator.sum([this.khSoLuong, data.khSoLuong]);
+        //     this.khTtien = Operator.sum([this.khTtien, data.khTtien])
+        // }
     }
 
     clearKeHoach() {
@@ -377,12 +382,12 @@ export class BaoCao02Component implements OnInit {
                     })
                     this.lstCtietBcao = Table.addChild(id, item, this.lstCtietBcao);
                     const stt = this.lstCtietBcao.find(e => e.id == item.id).stt;
-                    this.editCache[item.id] = {
-                        edit: true,
-                        data: new ItemData(item)
-                    }
-                    // this.sum(stt);
-                    // this.updateEditCache();
+                    // this.editCache[item.id] = {
+                    //     edit: true,
+                    //     data: new ItemData(item)
+                    // }
+                    this.sum(stt);
+                    this.updateEditCache();
                 }
             }
         });
@@ -398,12 +403,12 @@ export class BaoCao02Component implements OnInit {
         })
         this.lstCtietBcao = Table.addChild(id, item, this.lstCtietBcao);
         const stt = this.lstCtietBcao.find(e => e.id == item.id).stt;
-        this.editCache[item.id] = {
-            edit: true,
-            data: new ItemData(item)
-        }
-        // this.sum(stt);
-        // this.updateEditCache();
+        // this.editCache[item.id] = {
+        //     edit: true,
+        //     data: new ItemData(item)
+        // }
+        this.sum(stt);
+        this.updateEditCache();
     }
 
     addLine(id: string) {
@@ -509,6 +514,7 @@ export class BaoCao02Component implements OnInit {
         stt = Table.preIndex(stt);
         while (stt != '0') {
             const index = this.lstCtietBcao.findIndex(e => e.stt == stt);
+            this.lstCtietBcao[index].clearKeHoach();
             this.lstCtietBcao[index].clearThucHien();
             if (this.lstCtietBcao[index].level == 0) {
                 this.lstCtietBcao[index].clearKeHoach();
@@ -518,7 +524,7 @@ export class BaoCao02Component implements OnInit {
                     this.lstCtietBcao[index].sum(item);
                 }
             })
-            this.lstCtietBcao[index].average();
+            // this.lstCtietBcao[index].average();
             stt = Table.preIndex(stt);
         }
         this.getTotal();

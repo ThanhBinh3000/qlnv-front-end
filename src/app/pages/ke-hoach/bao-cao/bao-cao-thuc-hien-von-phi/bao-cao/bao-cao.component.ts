@@ -290,6 +290,7 @@ export class BaoCaoComponent implements OnInit {
                     item.tenPhuLuc = app?.tenPl;
                     item.tieuDe = Vp.appendixName(item.maLoai, this.baoCao.maLoaiBcao, this.baoCao.namBcao, this.baoCao.dotBcao);
                 })
+                this.baoCao.listIdDeleteFiles = [];
                 this.listFile = [];
             } else {
                 this.notification.error(MESSAGE.ERROR, data?.msg);

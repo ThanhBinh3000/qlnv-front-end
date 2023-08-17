@@ -184,6 +184,7 @@ export class NopTienThuaComponent implements OnInit {
                     data.data.lstCtiets.forEach(item => {
                         this.lstCtiets.push(new TienThua(item));
                     })
+                    this.baoCao.listIdDeleteFiles = [];
                     this.listFile = [];
                     this.updateEditCache();
                     this.getStatusButton();

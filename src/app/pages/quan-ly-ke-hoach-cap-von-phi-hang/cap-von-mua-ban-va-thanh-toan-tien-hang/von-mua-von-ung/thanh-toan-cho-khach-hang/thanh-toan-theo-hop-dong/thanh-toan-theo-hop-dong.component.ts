@@ -175,6 +175,7 @@ export class ThanhToanTheoHopDongComponent implements OnInit {
                         this.lstCtiets.push(new ThanhToan(item));
                     })
                     this.lstCtiets = Table.sortByIndex(this.lstCtiets);
+                    this.baoCao.listIdDeleteFiles = [];
                     this.listFile = [];
                     this.updateEditCache();
                     this.getStatusButton();
