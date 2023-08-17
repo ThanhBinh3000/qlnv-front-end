@@ -105,8 +105,8 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
 
   async ngOnInit() {
     this.spinner.show();
+    console.log(this.userService.getUserLogin(), 'aaaaaaaaaaa');
     try {
-      this.initForm();
       await Promise.all([
         this.userInfo = this.userService.getUserLogin(),
         this.loadDsNam(),
@@ -115,6 +115,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
       ]);
       this.getListCapDt();
       this.getListVanBan();
+      await this.initForm();
       this.getDetail(this.id),
         this.spinner.hide();
     } catch (e) {
@@ -190,15 +191,16 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
     if (res.msg == MESSAGE.SUCCESS) {
       this.dsBoNganh = res.data.filter(s => s.tenDvi);
       let boTaiChinh = res.data.find(s => s.code === "BTC");
+      boTaiChinh.tenDvi = 'TCDT - Bộ Tài Chính'
       Object.assign(this.dsBoNganh, boTaiChinh);
-      console.log(this.dsBoNganh, 'this.dsBoNganh this.dsBoNganh ')
     }
   }
 
   async initForm() {
     this.formData.patchValue({
       trangThai: "00",
-      tenTrangThai: "Dự Thảo"
+      tenTrangThai: "Dự Thảo",
+      maBn: this.userInfo.MA_DVI.startsWith("01") ? '01' : this.userInfo.MA_DVI
     });
   }
 
