@@ -190,8 +190,8 @@ export class DeNghiCapVonQuyetDinhDonGiaMuaComponent implements OnInit {
         this.status.pass = this.status.pass && isChild && this.userService.isAccessPermisson(Roles.CVNC.PASS_DN);
         this.status.approve = this.status.approve && isChild && this.userService.isAccessPermisson(Roles.CVNC.APPROVE_DN);
         this.status.accept = Status.check('accept', this.baoCao.trangThai) && this.isParent && this.userService.isAccessPermisson(Roles.CVNC.ACCEPT_DN);
-        this.status.export = this.baoCao.trangThai == Status.TT_09 || (this.baoCao.trangThai == Status.TT_07 && isChild && this.userService.isTongCuc());
-        this.status.export = this.status.export && this.userService.isAccessPermisson(Roles.CVNC.EXPORT_DN) && (isChild || this.isParent);
+        // this.status.export = this.baoCao.trangThai == Status.TT_09 || (this.baoCao.trangThai == Status.TT_07 && isChild && this.userService.isTongCuc());
+        this.status.export = this.userService.isAccessPermisson(Roles.CVNC.EXPORT_DN) && (isChild || this.isParent);
         this.scrollX = Table.tableWidth(350, 10, 0, 0);
     }
 
@@ -232,6 +232,7 @@ export class DeNghiCapVonQuyetDinhDonGiaMuaComponent implements OnInit {
                     })
                     this.lstCtiets = Table.sortByIndex(this.lstCtiets)
                     this.setLevel();
+                    this.baoCao.listIdDeleteFiles = [];
                     this.listFile = [];
                     this.getStatusButton();
                 } else {

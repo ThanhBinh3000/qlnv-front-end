@@ -178,13 +178,15 @@ export class PhuLuc01Component implements OnInit {
 
 		if (this.dataInfo?.isSynthetic && this.formDetail.trangThai == Status.NEW) {
 			this.lstCtietBcao.forEach(item => {
-				const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.danhMuc && e.loaiDinhMuc == item.maDmuc);
-				if (!item.tenDanhMuc) {
-					item.tenDanhMuc = dinhMuc?.tenDinhMuc;
+				if (item.maDmuc) {
+					const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.danhMuc && e.loaiDinhMuc == item.maDmuc);
+					if (!item.tenDanhMuc) {
+						item.tenDanhMuc = dinhMuc?.tenDinhMuc;
+					}
+					item.dmucNamDtoan = dinhMuc?.tongDmuc;
+					item.dviTinh = dinhMuc?.donViTinh;
+					item.changeModel();
 				}
-				item.dmucNamDtoan = dinhMuc?.tongDmuc;
-				item.dviTinh = dinhMuc?.donViTinh;
-				item.changeModel();
 			})
 		}
 		if (!this.lstCtietBcao[0]?.stt) {
@@ -504,6 +506,10 @@ export class PhuLuc01Component implements OnInit {
 	}
 
 	exportToExcel() {
+		if (this.lstCtietBcao.some(e => this.editCache[e.id].edit)) {
+			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+			return;
+		}
 		const header = [
 			{ t: 0, b: 5, l: 0, r: 13, val: null },
 			{ t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },

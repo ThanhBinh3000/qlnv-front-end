@@ -249,7 +249,8 @@ export class BaoCaoComponent implements OnInit {
         this.status.approve = Status.check('approve', this.baoCao.trangThai) && checkApprove && this.isChild;
         this.status.accept = Status.check('accept', this.baoCao.trangThai) && checkAccept && this.isParent;
         // this.status.print = Utils.statusPrint.includes(this.baoCao.trangThai) && checkPrint && this.isChild;
-        this.status.export = (this.baoCao.trangThai == Status.TT_09 || (this.baoCao.trangThai == Status.TT_07 && this.userService.isTongCuc() && this.isChild)) && checkExport && (this.isChild || this.isParent);
+        // this.status.export = (this.baoCao.trangThai == Status.TT_09 || (this.baoCao.trangThai == Status.TT_07 && this.userService.isTongCuc() && this.isChild)) && checkExport && (this.isChild || this.isParent);
+        this.status.export = checkExport && (this.isChild || this.isParent);
         this.status.ok = this.status.accept || this.status.approve || this.status.pass
         this.status.finish = this.status.general;
         this.status.editAppVal = this.status.accept;
@@ -295,6 +296,7 @@ export class BaoCaoComponent implements OnInit {
                     this.baoCao.lstLapThamDinhs.forEach(item => {
                         [item.tenPl, item.tenDm] = Ltd.appendixName(item.maBieuMau, this.baoCao.namBcao);
                     })
+                    this.baoCao.listIdDeleteFiles = [];
                     this.listFile = [];
                     this.getStatusButton();
                 } else {

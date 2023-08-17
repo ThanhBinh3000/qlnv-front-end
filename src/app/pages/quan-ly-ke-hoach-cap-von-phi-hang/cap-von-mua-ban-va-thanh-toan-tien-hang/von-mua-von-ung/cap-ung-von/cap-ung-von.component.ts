@@ -156,7 +156,8 @@ export class CapUngVonComponent implements OnInit {
         this.status.submit = Status.check('submit', this.baoCao.trangThai) && isChild && !(!this.baoCao.id);
         this.status.pass = Status.check('pass', this.baoCao.trangThai) && isChild;
         this.status.approve = Status.check('approve', this.baoCao.trangThai) && isChild;
-        this.status.export = this.baoCao.trangThai == Status.TT_07 && isChild;
+        // this.status.export = this.baoCao.trangThai == Status.TT_07 && isChild;
+        this.status.export = isChild;
         if (this.baoCao.maLoai == Cvmb.CU_VON_DVCD) {
             this.status.save = this.status.save && this.userService.isAccessPermisson(Roles.CVMB.EDIT_CV);
             this.status.submit = this.status.submit && this.userService.isAccessPermisson(Roles.CVMB.SUBMIT_CV);
@@ -191,6 +192,7 @@ export class CapUngVonComponent implements OnInit {
                     data.data.lstCtiets.forEach(item => {
                         this.lstCtiets.push(new CapUng(item));
                     })
+                    this.baoCao.listIdDeleteFiles = [];
                     this.listFile = [];
                     this.updateEditCache();
                     this.getStatusButton();
@@ -392,6 +394,10 @@ export class CapUngVonComponent implements OnInit {
     }
 
     exportToExcel() {
+        if (this.lstCtiets.some(e => this.editCache[e.id].edit)) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+            return;
+        }
         const header = [
             { t: 0, b: 5, l: 0, r: 13, val: null },
             { t: 0, b: 0, l: 0, r: 8, val: this.title },

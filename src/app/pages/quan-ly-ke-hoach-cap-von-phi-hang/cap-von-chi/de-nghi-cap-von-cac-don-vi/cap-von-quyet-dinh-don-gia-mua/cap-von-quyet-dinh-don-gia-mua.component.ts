@@ -187,7 +187,8 @@ export class CapVonQuyetDinhDonGiaMuaComponent implements OnInit {
         this.status.submit = Status.check('submit', this.baoCao.trangThai) && isChild && this.userService.isAccessPermisson(Roles.CVNC.SUBMIT_CV) && !(!this.baoCao.id);
         this.status.pass = Status.check('pass', this.baoCao.trangThai) && isChild && this.userService.isAccessPermisson(Roles.CVNC.PASS_CV);
         this.status.approve = Status.check('approve', this.baoCao.trangThai) && isChild && this.userService.isAccessPermisson(Roles.CVNC.APPROVE_CV);
-        this.status.export = this.baoCao.trangThai == Status.TT_07 && this.userService.isAccessPermisson(Roles.CVNC.EXPORT_CV) && isChild;
+        // this.status.export = this.baoCao.trangThai == Status.TT_07 && this.userService.isAccessPermisson(Roles.CVNC.EXPORT_CV) && isChild;
+        this.status.export = this.userService.isAccessPermisson(Roles.CVNC.EXPORT_CV) && isChild;
         this.scrollDN = Table.tableWidth(350, 11, 0, 0);
         this.scrollCV = this.status.save ? Table.tableWidth(300, 15, 1, 60) : Table.tableWidth(300, 15, 1, 0);
     }
@@ -214,7 +215,8 @@ export class CapVonQuyetDinhDonGiaMuaComponent implements OnInit {
                         this.lstCtiets.push(new CapVon(item));
                     })
                     this.lstCtiets = Table.sortByIndex(this.lstCtiets)
-                    this.setLevel()
+                    this.setLevel();
+                    this.baoCao.listIdDeleteFiles = [];
                     this.listFile = [];
                     this.updateEditCache();
                     this.getStatusButton();
@@ -472,6 +474,10 @@ export class CapVonQuyetDinhDonGiaMuaComponent implements OnInit {
     }
     // export báo cáo thành excel
     exportToExcel() {
+        if (this.lstCtiets.some(e => this.editCache[e.id].edit)) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+            return;
+        }
         const workbook = XLSX.utils.book_new();
         // nếu là bản ghi ở cục hoặc tổng cục thì bổ sung thêm đề nghị cấp vốn từ đơn vị cấp dưới
         if (!this.userService.isChiCuc()) {

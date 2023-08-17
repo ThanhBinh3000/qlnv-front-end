@@ -243,7 +243,8 @@ export class BaoCaoComponent implements OnInit {
         this.status.pass = Status.check('pass', this.baoCao.trangThai) && checkPass && this.isChild;
         this.status.approve = Status.check('approve', this.baoCao.trangThai) && checkApprove && this.isChild;
         this.status.accept = Status.check('accept', this.baoCao.trangThai) && checkAccept && this.isParent;
-        this.status.export = (this.baoCao.trangThai == Status.TT_09 || (this.baoCao.trangThai == Status.TT_07 && this.userService.isTongCuc() && this.isChild)) && checkExport && (this.isChild || this.isParent);
+        // this.status.export = (this.baoCao.trangThai == Status.TT_09 || (this.baoCao.trangThai == Status.TT_07 && this.userService.isTongCuc() && this.isChild)) && checkExport && (this.isChild || this.isParent);
+        this.status.export = checkExport && (this.isChild || this.isParent);
         this.status.ok = this.status.accept || this.status.approve || this.status.pass;
         this.status.finish = this.status.save;
     }
@@ -289,6 +290,7 @@ export class BaoCaoComponent implements OnInit {
                     item.tenPhuLuc = app?.tenPl;
                     item.tieuDe = Vp.appendixName(item.maLoai, this.baoCao.maLoaiBcao, this.baoCao.namBcao, this.baoCao.dotBcao);
                 })
+                this.baoCao.listIdDeleteFiles = [];
                 this.listFile = [];
             } else {
                 this.notification.error(MESSAGE.ERROR, data?.msg);

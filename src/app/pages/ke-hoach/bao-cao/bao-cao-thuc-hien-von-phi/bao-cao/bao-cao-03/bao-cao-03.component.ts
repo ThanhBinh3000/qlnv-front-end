@@ -310,8 +310,11 @@ export class BaoCao03Component implements OnInit {
         })
         const temp = Vp.DANH_MUC_03.filter(e => e.loaiVtu);
         temp.forEach(data => {
-            this.lstCtietBcao.filter(e => e.stt == Table.preIndex(data.ma) && e.maVtu.startsWith(data.loaiVtu)).forEach((item, index) => {
+            this.lstCtietBcao.filter(e => e.stt == Table.preIndex(data.ma) && e.maVtu.startsWith(data.loaiVtu) && e.tenVtu).forEach((item, index) => {
                 item.stt = data.ma + '.' + (index + 1).toString();
+                this.lstCtietBcao.filter(e => e.stt == data.ma && e.maVtu == item.maVtu && !e.tenVtu).forEach((ele, index) => {
+                    ele.stt = item.stt + '.' + (index + 1).toString();
+                })
             })
         })
 
@@ -476,6 +479,10 @@ export class BaoCao03Component implements OnInit {
     }
 
     exportToExcel() {
+        if (this.lstCtietBcao.some(e => this.editCache[e.id].edit)) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+            return;
+        }
         const header = [
             { t: 0, b: 5, l: 0, r: 11, val: null },
             { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
