@@ -149,7 +149,6 @@ export class DialogThongTinCanBoComponent implements OnInit {
     if (!value || value.indexOf('@') >= 0) {
       this.options = [];
     } else {
-      console.log(this.formData.get("userType").value, 'this.formData.get("userType").valuethis.formData.get("userType").value');
       if (this.formData.get("userType").value == 'BN') {
         this.options = this.optionsDonVi.filter(
           (x) => x.capDvi == '0' && x.labelDonVi.toLowerCase().indexOf(value.toLowerCase()) != -1,
