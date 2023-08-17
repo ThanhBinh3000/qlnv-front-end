@@ -502,7 +502,7 @@ export class AddDieuChinhQuyetToanComponent implements OnInit {
                     this.maDchinh = data.data.maDchinh;
                     this.congVan = data.data.congVan;
                     this.lstFiles = data.data.fileDinhKems;
-
+                    this.lichSu = data.data.lichSu;
                     this.listFile = [];
                     this.getTotal()
                     this.updateEditCache();
@@ -601,9 +601,11 @@ export class AddDieuChinhQuyetToanComponent implements OnInit {
                 }
             }
             this.fileDetail = null;
+        } else {
+            lstCtietBcaoTemp.congVan = this.congVan;
         }
 
-        if (!lstCtietBcaoTemp.congVan.fileUrl) {
+        if (!lstCtietBcaoTemp.congVan) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
             return;
         }
