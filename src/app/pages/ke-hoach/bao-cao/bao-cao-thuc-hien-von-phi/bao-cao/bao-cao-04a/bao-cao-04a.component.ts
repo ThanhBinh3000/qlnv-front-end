@@ -941,6 +941,10 @@ export class BaoCao04aComponent implements OnInit {
     }
 
     exportToExcel() {
+        if (this.lstCtietBcao.some(e => this.editCache[e.id].edit)) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+            return;
+        }
         const num = this.lstCol.length;
         const header = [
             { t: 0, b: 5 + this.lstCtietBcao.length, l: 0, r: 2 + (num + 1) * 2, val: null },
