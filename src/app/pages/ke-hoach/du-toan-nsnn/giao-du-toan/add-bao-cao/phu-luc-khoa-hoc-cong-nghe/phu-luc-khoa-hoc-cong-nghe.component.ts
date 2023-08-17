@@ -485,6 +485,10 @@ export class PhuLucKhoaHocCongNgheComponent implements OnInit {
     }
 
     exportToExcel() {
+        if (this.lstCtietBcaos.some(e => this.editCache[e.id].edit)) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+            return;
+        }
         const header = [
             { t: 0, b: 5, l: 0, r: 5, val: null },
 

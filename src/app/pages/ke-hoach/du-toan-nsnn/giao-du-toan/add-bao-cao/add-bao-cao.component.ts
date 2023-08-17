@@ -1340,7 +1340,7 @@ export class AddBaoCaoComponent implements OnInit {
         this.status.approve = Status.check('approve', this.baoCao.trangThai) && checkApprove && this.isChild;
         this.status.accept = Status.check('accept', this.baoCao.trangThai) && checkAccept && this.isParent;
         // this.status.print = Utils.statusPrint.includes(this.baoCao.trangThai) && checkPrint && this.isChild;
-        this.status.export = Status.check('export', this.baoCao.trangThai) && checkExport && this.isChild;
+        this.status.export = checkExport && this.isChild && this.isParent;
 
 
         this.status.ok = this.status.accept || this.status.approve || this.status.pass

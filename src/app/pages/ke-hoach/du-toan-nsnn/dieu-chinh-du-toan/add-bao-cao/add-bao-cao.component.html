@@ -222,44 +222,6 @@
                             </div>
                         </div>
                     </nz-tab>
-                    <!-- <nz-tab *ngIf="baoCao.lstDviTrucThuoc && baoCao.lstDviTrucThuoc.length > 0"
-                        [nzTitle]="'Danh sách báo cáo từ các đơn vị trực thuộc'">
-                        <nz-table #basicTable class="nowrap">
-                            <thead>
-                                <tr>
-                                    <th nzWidth="5%">STT</th>
-                                    <th nzWidth="30%">Đơn vị lập</th>
-                                    <th nzWidth="12%">Mã báo cáo</th>
-                                    <th nzWidth="12%">Năm báo cáo</th>
-                                    <th nzWidth="12%">Ngày trình duyệt <br /> (Ngày đơn vị cấp dưới
-                                        gửi báo cáo)</th>
-                                    <th nzWidth="12%">Ngày duyệt <br />(Ngày đơn vị cấp trên duyệt báo
-                                        cáo)
-                                    </th>
-                                    <th nzWidth="12%">Trạng thái</th>
-                                    <th nzWidth="5%"></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let data of baoCao.lstDviTrucThuoc; let i = index">
-                                    <td>{{i+1}}</td>
-                                    <td></td>
-                                    <td>
-                                        {{ data.maBcao }}
-                                    </td>
-                                    <td>{{ data.namBcao }}</td>
-                                    <td>{{ Utils.fmtDate(data.ngayDuyet) }}</td>
-                                    <td>{{ Utils.fmtDate(data.ngayPheDuyet) }}</td>
-                                    <td>{{ Status.appendixStatusName(data.trangThai) }}</td>
-                                    <td>
-                                        <a (click)="viewDetail(data.id)">
-                                            <i class="fa fa-eye"></i>
-                                        </a>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </nz-table>
-                    </nz-tab> -->
                     <nz-tab *ngIf="baoCao.lichSu && baoCao.lichSu.length > 0" [nzTitle]="'Lịch sử'">
                         <div nz-col class="gutter-row" [nzSpan]="24">
                             <nz-table nzBordered class="table__body">

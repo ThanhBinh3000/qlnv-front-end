@@ -41,6 +41,21 @@ export class ItemCongVan {
 	fileUrl: number;
 }
 
+export class History {
+	id: string;
+	maBcao: string;
+	namQtoan: number;
+	lan: number;
+	ngayTao: string;
+	nguoiTao: string;
+	ngayTrinh: string;
+	ngayDuyet: string;
+	ngayPheDuyet: string;
+	ngayTraKq: string;
+	lyDoTuChoi: string;
+	trangThai: string;
+}
+
 @Component({
 	selector: 'app-add-quyet-toan',
 	templateUrl: './add-quyet-toan.component.html',
@@ -52,13 +67,15 @@ export class AddQuyetToanComponent implements OnInit {
 	@Input() idInput;
 	@Input() isStatus;
 	@Output('close') onClose = new EventEmitter<any>();
+	Utils = Utils;
+	lichSu: History[];
+	newStatus = true;
 	Op = new Operator("1")
 	// thong tin dang nhap
 	userInfo: any;
 	// info report 
 	id: string;
 	isDataAvailable = false;
-
 	// status btn 
 	titleStatus!: string;
 	status = false;
@@ -544,7 +561,7 @@ export class AddQuyetToanComponent implements OnInit {
 					this.ngayTao = this.datePipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR);
 					this.congVan = data.data.congVan;
 					this.lstFiles = data.data.fileDinhKems;
-
+					this.lichSu = data.data.lichSu;
 					this.listFile = [];
 					if (this.lstBcaoDviTrucThuocs.length > 0) {
 						this.lstBcaoDviTrucThuocs.forEach(item => {
@@ -685,9 +702,11 @@ export class AddQuyetToanComponent implements OnInit {
 				}
 			}
 			this.fileDetail = null;
+		} else {
+			lstCtietBcaoTemp.congVan = this.congVan;
 		}
 
-		if (!lstCtietBcaoTemp.congVan.fileUrl) {
+		if (!lstCtietBcaoTemp.congVan) {
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
 			return;
 		}
@@ -830,6 +849,7 @@ export class AddQuyetToanComponent implements OnInit {
 		this.approveStatus = this.getBtnStatus([Status.TT_04], Roles.QTVP.PHE_DUYET_QUYET_TOAN_REPORT, checkChirld);
 		this.copyStatus = this.getBtnStatus([Status.TT_01, Status.TT_02, Status.TT_03, Status.TT_04, Status.TT_05, Status.TT_06, Status.TT_07, Status.TT_08, Status.TT_09], Roles.QTVP.COPY_REPORT, checkChirld);
 		this.printStatus = this.getBtnStatus([Status.TT_01, Status.TT_02, Status.TT_03, Status.TT_04, Status.TT_05, Status.TT_06, Status.TT_07, Status.TT_08, Status.TT_09], Roles.QTVP.PRINT_REPORT, checkChirld);
+		this.newStatus = Status.check('reject', this.isStatus) && this.userService.isAccessPermisson(Roles.QTVP.ADD_REPORT) && checkChirld;
 	}
 
 	getBtnStatus(status: string[], role: string, check: boolean) {
@@ -1573,6 +1593,55 @@ export class AddQuyetToanComponent implements OnInit {
 			return true;
 		}
 		return false;
+	};
+
+	async restoreReport(id: string) {
+		await this.quyetToanVonPhiService.restoreReport(this.idInput, id).toPromise().then(
+			(data) => {
+				if (data.statusCode == 0) {
+					// Object.assign(this.baoCao, data.data);
+					// this.baoCao.lstDchinh.forEach(item => {
+					//     const appendix = this.listAppendix.find(e => e.id == item.maLoai);
+					//     item.tenPl = appendix.tenPl;
+					//     item.tenDm = Utils.getName(this.baoCao.namBcao, appendix.tenDm);
+					// })
+					// this.getStatusButton();
+					// this.notification.success(MESSAGE.SUCCESS, 'Khôi phục thành công.');
+					this.action('detail')
+					this.getStatusButton();
+					this.notification.success(MESSAGE.SUCCESS, 'Khôi phục thành công.');
+				} else {
+					this.notification.error(MESSAGE.ERROR, data?.msg);
+				}
+			},
+			(err) => {
+				this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+			}
+		);
+	}
+
+	async newReport() {
+		await this.quyetToanVonPhiService.addHistory(this.idInput).toPromise().then(
+			(data) => {
+				if (data.statusCode == 0) {
+					// Object.assign(this.baoCao, data.data);
+					// this.baoCao.lstDchinh.forEach(item => {
+					//     const appendix = this.listAppendix.find(e => e.id == item.maLoai);
+					//     item.tenPl = appendix.tenPl;
+					//     item.tenDm = Utils.getName(this.baoCao.namBcao, appendix.tenDm);
+					// })
+					// this.getStatusButton();
+					// this.notification.success(MESSAGE.SUCCESS, 'Tạo mới thành công.');
+					this.notification.success(MESSAGE.SUCCESS, 'Tạo mới thành công.');
+					this.back()
+				} else {
+					this.notification.error(MESSAGE.ERROR, data?.msg);
+				}
+			},
+			(err) => {
+				this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+			}
+		);
 	}
 
 };
