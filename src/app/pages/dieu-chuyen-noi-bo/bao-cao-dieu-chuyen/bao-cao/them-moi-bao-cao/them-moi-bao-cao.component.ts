@@ -106,7 +106,7 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
       if (res.msg === MESSAGE.SUCCESS) {
         this.formData.patchValue({ ...res.data });
         this.danhSachKetQua = res.data.danhSachKetQua;
-        this.idsChiCuc = res.data.idsChiCuc?.split(",").map(f => Number(f));
+        this.idsChiCuc = res.data.idsChiCuc && Array.isArray(res.data.idsChiCuc.split(",")) ? res.data.idsChiCuc.split(",").map(f => Number(f)) : []
         if (this.loaiBc === "CUC") {
           await this.loadListBaoCaoChiCuc();
           this.listBaoCaoChiCuc = this.listBaoCaoChiCuc.map(f => {
@@ -359,7 +359,7 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
       let data = await this.createUpdate(body);
       if (!data) return;
       this.formData.patchValue({ id: data.id, soBc: data.soBc, trangThai: data.trangThai });
-      this.idsChiCuc = data.idsChiCuc?.split(",").map(f => Number(f));
+      this.idsChiCuc = data.idsChiCuc && Array.isArray(data.idsChiCuc.split(",")) ? data.idsChiCuc.split(",").map(f => Number(f)) : [];
       if (isGuiDuyet) {
         if (this.loaiBc === 'CUC') {
           this.pheDuyet();
