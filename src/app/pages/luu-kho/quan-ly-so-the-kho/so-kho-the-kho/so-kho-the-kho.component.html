@@ -21,7 +21,7 @@
               </nz-select>
             </nz-form-control>
           </div>
-          <div nz-col nzSpan="5" *ngIf="!userService.isChiCuc()">
+          <div nz-col nzSpan="5" *ngIf="!isThuKho">
             <nz-form-label nzRequired >Điểm kho</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-select formControlName="maDiemKho" nzAllowClear nzShowSearch>
@@ -30,13 +30,13 @@
               </nz-select>
             </nz-form-control>
           </div>
-          <div nz-col nzSpan="4" *ngIf="userService.isChiCuc()">
+          <div nz-col nzSpan="4" *ngIf="isThuKho">
             <nz-form-label class="search__label">Số sổ kho</nz-form-label>
             <nz-form-control>
               <input type="text" nz-input formControlName="tenSoKho"/>
             </nz-form-control>
           </div>
-          <div nz-col nzSpan="5" *ngIf="userService.isChiCuc()">
+          <div nz-col nzSpan="5" *ngIf="isThuKho">
             <nz-form-label class="search__label">Tên thẻ kho</nz-form-label>
             <nz-form-control>
               <input type="text" nz-input formControlName="tenTheKho"/>
@@ -81,7 +81,7 @@
             <i class="icon htvbdh_nhap-lai1"></i>
             Xóa điều kiện
           </button>
-          <button nz-button class="search__button--search" (click)="search()">
+          <button nz-button class="search__button--search" (click)="searchPage()">
             <i nz-icon nzType="search"></i>
             Tìm kiếm
           </button>
@@ -190,7 +190,7 @@
                     <td></td>
                     <td></td>
                     <td class="bg-parent2 font-weight-bold" [nzExpand]="expandSet.has(nhaKho.idVirtual)"
-                        (nzExpandChange)="onExpandChange(nganKho.idVirtual, $event)">{{nganKho.tenNganLo ? nganKho.tenNganLo + ' - ' + nganKho.tenNganKho : nganKho.tenNganKho}}</td>
+                        (nzExpandChange)="onExpandChange(nganKho.idVirtual, $event)">{{nganKho.maLoKho ? nganKho.tenLoKho + ' - ' + nganKho.tenNganKho : nganKho.tenNganKho}}</td>
                     <td class="bg-parent2 font-weight-bold"></td>
                     <td class="bg-parent2 font-weight-bold"></td>
                     <td class="bg-parent2 font-weight-bold"></td>

@@ -18,9 +18,6 @@ import {
 } from './ke-hoach/ke-hoach-sua-chua-hang-nam/ke-hoach-sua-chua-hang-nam.component';
 import {QuyetDinhQuyHoachComponent} from './ke-hoach/quy-hoach-kho/quyet-dinh-quy-hoach/quyet-dinh-quy-hoach.component';
 import {
-  QuyetDinhDieuChinhQuyHoachComponent
-} from './ke-hoach/quy-hoach-kho/quyet-dinh-dieu-chinh-quy-hoach/quyet-dinh-dieu-chinh-quy-hoach.component';
-import {
   DeXuatKeHoachComponent
 } from './ke-hoach/ke-hoach-xay-dung-trung-han/de-xuat-ke-hoach/de-xuat-ke-hoach.component';
 import {
@@ -37,9 +34,6 @@ import {
   QuyetDinhPheDuyetKhxdComponent
 } from './ke-hoach/ke-hoach-xay-dung-hang-nam/quyet-dinh-phe-duyet-khxd/quyet-dinh-phe-duyet-khxd.component';
 import {ThemMoiQdComponent} from "./ke-hoach/quy-hoach-kho/quyet-dinh-quy-hoach/them-moi-qd/them-moi-qd.component";
-import {
-  ThemMoiQdDcComponent
-} from "./ke-hoach/quy-hoach-kho/quyet-dinh-dieu-chinh-quy-hoach/them-moi-qd-dc/them-moi-qd-dc.component";
 import {
   ThemMoiDxkhTrungHanComponent
 } from "./ke-hoach/ke-hoach-xay-dung-trung-han/de-xuat-ke-hoach/them-moi-dxkh-trung-han/them-moi-dxkh-trung-han.component";
@@ -290,6 +284,9 @@ import {
 import {
   ThongTinBienBanSctxComponent
 } from "./tien-do-xay-dung-sua-chua/tien-do-sua-chua-thuong-xuyen/bien-ban-nghiem-thu-sctx/thong-tin-bien-ban-sctx/thong-tin-bien-ban-sctx.component";
+import {
+  PopUpChiTietQuyHoachKhoComponent
+} from "./ke-hoach/quy-hoach-kho/quyet-dinh-quy-hoach/pop-up-chi-tiet-quy-hoach-kho/pop-up-chi-tiet-quy-hoach-kho.component";
 
 @NgModule({
   declarations: [
@@ -301,7 +298,6 @@ import {
     KeHoachXayDungHangNamComponent,
     KeHoachSuaChuaHangNamComponent,
     QuyetDinhQuyHoachComponent,
-    QuyetDinhDieuChinhQuyHoachComponent,
     DeXuatKeHoachComponent,
     TongHopDeXuatKeHoachComponent,
     QuyetDinhPheDuyetKeHoachComponent,
@@ -309,7 +305,6 @@ import {
     TongHopDxNhuCauComponent,
     QuyetDinhPheDuyetKhxdComponent,
     ThemMoiQdComponent,
-    ThemMoiQdDcComponent,
     ThemMoiDxkhTrungHanComponent,
     ThemMoiTongHopKhxdTrungHanComponent,
     ThemMoiQdPheDuyetComponent,
@@ -402,7 +397,8 @@ import {
     TienDoCongViecSctxComponent,
     BienBanNghiemThuSctxComponent,
     ThongTinBienBanSctxComponent,
-    ThongTinTienDoCongViecSctxComponent
+    ThongTinTienDoCongViecSctxComponent,
+    PopUpChiTietQuyHoachKhoComponent
   ],
   imports: [CommonModule, QuanLyKhoTangRoutingModule, ComponentsModule, MainModule],
 })

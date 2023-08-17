@@ -13,7 +13,6 @@ import {STATUS} from "src/app/constants/status";
 import {QuyetDinhGiaCuaBtcService} from "src/app/services/ke-hoach/phuong-an-gia/quyetDinhGiaCuaBtc.service";
 import {DanhMucService} from "src/app/services/danhmuc.service";
 import {TongHopPhuongAnGiaService} from "src/app/services/ke-hoach/phuong-an-gia/tong-hop-phuong-an-gia.service";
-import {QuyetDinhGiaBtcThongTinGia} from "src/app/models/QuyetDinhBtcThongTinGia";
 import {DialogPagQdBtcComponent} from "../dialog-pag-qd-btc/dialog-pag-qd-btc.component";
 import {chain} from "lodash";
 import {v4 as uuidv4} from "uuid";

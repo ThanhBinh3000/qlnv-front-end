@@ -297,7 +297,6 @@ export class ThemMoiToTrinhPagComponent implements OnInit {
           };
         }).value();
     }
-    console.log(this.dataTableView, 123123)
     this.expandAll()
   }
   onExpandChange(id: number, checked: boolean): void {

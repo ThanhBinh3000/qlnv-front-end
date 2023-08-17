@@ -31,7 +31,8 @@ export class SoKhoTheKhoComponent extends Base2Component implements OnInit {
   dsDiemKho: any = [];
   openPhieuNx = false;
   idPhieuNx: any;
-  isThuKho : boolean;
+  isThuKho: boolean;
+
   constructor(
     private httpClient: HttpClient,
     private storageService: StorageService,
@@ -67,6 +68,10 @@ export class SoKhoTheKhoComponent extends Base2Component implements OnInit {
       this.isThuKho = this.userInfo.POSITION == 'CBTHUKHO';
       if (this.userInfo.POSITION == 'CBTHUKHO') {
         await this.searchPage();
+      } else {
+        if (this.userService.isChiCuc()) {
+          this.changeChiCuc(this.userInfo.MA_DVI);
+        }
       }
       this.loadDsHangHoa();
       this.loadDsChiCuc();
@@ -129,10 +134,12 @@ export class SoKhoTheKhoComponent extends Base2Component implements OnInit {
   }
 
   setValidator() {
-    if (!this.isThuKho) {
+    if (!( this.userInfo.POSITION == 'CBTHUKHO')) {
       this.formData.controls["nam"].setValidators([Validators.required]);
       this.formData.controls["maDiemKho"].setValidators([Validators.required]);
-      this.formData.controls["maChiCuc"].setValidators([Validators.required]);
+      if (!this.userService.isChiCuc()) {
+        this.formData.controls["maChiCuc"].setValidators([Validators.required]);
+      }
     }
   }
 
@@ -142,6 +149,11 @@ export class SoKhoTheKhoComponent extends Base2Component implements OnInit {
       this.helperService.removeValidators(this.formData);
       this.setValidator();
       this.helperService.markFormGroupTouched(this.formData);
+      if (this.formData.invalid) {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR)
+        this.spinner.hide();
+        return;
+      }
       let body = this.formData.value
       body.idThuKho = this.userInfo.POSITION == 'CBTHUKHO' ? this.userInfo.ID : null;
       body.maDvi = this.userInfo.POSITION == 'CBTHUKHO' ? null : this.userInfo.MA_DVI;
@@ -169,27 +181,27 @@ export class SoKhoTheKhoComponent extends Base2Component implements OnInit {
           let rs = chain(value)
             .groupBy("tenNhaKho")
             .map((v, k) => {
-              if (v && v.length > 0) {
-                v.idVirtual = uuidv4();
-                v.forEach(nganlo => {
-                  nganlo.idVirtual = uuidv4();
-                  if (nganlo.children && nganlo.children.length > 0) {
-                    nganlo.children.forEach(nam => {
-                      nam.idVirtual = uuidv4();
-                      if (nam.children && nam.children.length > 0) {
-                        nam.children.forEach(soKho => {
-                          soKho.idVirtual = uuidv4();
-                          if (soKho.theKhoList && soKho.theKhoList.length > 0) {
-                            soKho.theKhoList.forEach(theKho => {
-                              theKho.idVirtual = uuidv4();
-                            })
-                          }
-                        })
-                      }
-                    })
-                  }
-                })
-              }
+                if (v && v.length > 0) {
+                  v.idVirtual = uuidv4();
+                  v.forEach(nganlo => {
+                    nganlo.idVirtual = uuidv4();
+                    if (nganlo.children && nganlo.children.length > 0) {
+                      nganlo.children.forEach(nam => {
+                        nam.idVirtual = uuidv4();
+                        if (nam.children && nam.children.length > 0) {
+                          nam.children.forEach(soKho => {
+                            soKho.idVirtual = uuidv4();
+                            if (soKho.theKhoList && soKho.theKhoList.length > 0) {
+                              soKho.theKhoList.forEach(theKho => {
+                                theKho.idVirtual = uuidv4();
+                              })
+                            }
+                          })
+                        }
+                      })
+                    }
+                  })
+                }
                 return {
                   idVirtual: uuidv4(),
                   tenNhaKho: k,
@@ -245,9 +257,11 @@ export class SoKhoTheKhoComponent extends Base2Component implements OnInit {
     }
   }
 
-  async clearForm() {
+   clearForm() {
     this.formData.reset();
-    await this.searchPage();
+    if (this.userInfo.POSITION == 'CBTHUKHO') {
+       this.searchPage();
+    }
   }
 
   async selectRow(item: any, table: any[]) {
