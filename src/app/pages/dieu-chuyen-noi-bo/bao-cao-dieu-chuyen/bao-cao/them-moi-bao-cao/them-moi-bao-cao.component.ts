@@ -519,6 +519,7 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
       qdDcCucId: this.formData.value.qdDcCucId,
       ngayKyQd: this.formData.value.ngayKyQd,
       soBc: this.formData.value.soBc,
+      tenBc: this.formData.value.tenBc,
       ngayBc: this.formData.value.ngayBc,
       bcKetQuaDcId: this.formData.value.id
     };

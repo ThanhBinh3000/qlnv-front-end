@@ -28,7 +28,7 @@ export class ChiTietBienBanThuaThieuComponent extends Base2Component implements 
     @Input() isView: boolean;
     @Input() isViewOnModal: boolean;
     @Input() loaiBc: string;
-    @Input() passData: { soQdDcCuc: string, qdDcCucId: number, ngayKyQd: string, soBc: string, bcKetQuaDcId: number, ngayBc: string };
+    @Input() passData: { soQdDcCuc: string, qdDcCucId: number, ngayKyQd: string, soBc: string, bcKetQuaDcId: number, tenBc: string, ngayBc: string };
     @Output()
     showListEvent = new EventEmitter<any>();
     expandSetString = new Set<string>();
@@ -89,7 +89,8 @@ export class ChiTietBienBanThuaThieuComponent extends Base2Component implements 
             ghiChu: [],
             fileDinhKems: [new Array()],
             fileBienBanHaoDois: [new Array()],
-            banKiemKe: [new Array()]
+            banKiemKe: [new Array()],
+            tenBaoCao: []
         })
     }
 
@@ -125,7 +126,8 @@ export class ChiTietBienBanThuaThieuComponent extends Base2Component implements 
                 soQdDcCuc: this.passData.soQdDcCuc,
                 qdDcCucId: this.passData.qdDcCucId,
                 ngayKyQdCuc: this.passData.ngayKyQd,
-                bcKetQuaDcId: this.passData.bcKetQuaDcId
+                bcKetQuaDcId: this.passData.bcKetQuaDcId,
+                tenBaoCao: this.passData.tenBc,
 
             })
             if (this.passData.bcKetQuaDcId) {
@@ -229,6 +231,7 @@ export class ChiTietBienBanThuaThieuComponent extends Base2Component implements 
     bindingDataBaoCao(data: any) {
         this.formData.patchValue({
             soBcKetQuaDc: data.soBc,
+            tenBaoCao: data.tenBc,
             ngayLapBcKetQuaDc: data.ngayBc,
             bcKetQuaDcId: data.id
         })

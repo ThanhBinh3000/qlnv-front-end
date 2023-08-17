@@ -133,8 +133,9 @@
                         </th>
                         <th *ngIf="loaiBc==='CHI_CUC'">
                             <nz-input-group>
-                                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soBb"
-                                    (input)="filterInTable('soBb',filterTable.soBb)" size="small" />
+                                <input type="text" nz-input placeholder="Tìm kiếm"
+                                    [(ngModel)]="filterTable.soBbThuaThieu"
+                                    (input)="filterInTable('soBbThuaThieu',filterTable.soBbThuaThieu)" size="small" />
                             </nz-input-group>
 
                         </th>
@@ -179,7 +180,7 @@
                         <td>{{data.soBc}}</td>
                         <td>{{data.tenBc}}</td>
                         <td>{{data.ngayBc | date:"dd/MM/yyyy"}}</td>
-                        <td *ngIf="loaiBc==='CHI_CUC'">{{data.soBb}}</td>
+                        <td *ngIf="loaiBc==='CHI_CUC'">{{data.soBbThuaThieu}}</td>
                         <td *ngIf="loaiBc==='CHI_CUC'">{{data.soQdDcCuc}}</td>
                         <td *ngIf="loaiBc==='CHI_CUC'">{{ data.ngayKyQd|date:"dd/MM/yyyy"}}</td>
                         <td>{{ TRANG_THAI[data.trangThai]}}</td>

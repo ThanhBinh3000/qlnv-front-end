@@ -27,8 +27,8 @@ export class BienBanThuaThieuComponent extends Base2Component implements OnInit 
     page: number = 1;
     pageSize: number = PAGE_SIZE_DEFAULT;
     totalRecord: number = 0;
-    passData: { soQdDcCuc: string, qdDcCucId: number, ngayKyQd: string, soBc: string, bcKetQuaDcId: number, ngayBc: string } = {
-        soQdDcCuc: '', qdDcCucId: null, ngayKyQd: '', soBc: '', bcKetQuaDcId: null, ngayBc: ''
+    passData: { soQdDcCuc: string, qdDcCucId: number, ngayKyQd: string, soBc: string, tenBc: string, bcKetQuaDcId: number, ngayBc: string } = {
+        soQdDcCuc: '', qdDcCucId: null, ngayKyQd: '', soBc: '', tenBc: '', bcKetQuaDcId: null, ngayBc: ''
     };
     LIST_TRANG_THAI: Array<{ ma: string, giaTri: string }> = [
         { ma: this.STATUS.DU_THAO, giaTri: "Dự thảo" },
@@ -56,7 +56,7 @@ export class BienBanThuaThieuComponent extends Base2Component implements OnInit 
         this.formData = this.fb.group({
             nam: [''],
             soQdinhCuc: [''],
-            soBc: [''],
+            soBb: [''],
             tuNgayBc: [''],
             denNgayBc: [''],
             soBcKetQuaDc: [''],
@@ -70,11 +70,11 @@ export class BienBanThuaThieuComponent extends Base2Component implements OnInit 
             // soQdinhCuc: '',
             soQdDcCuc: '',
             ngayKyQdCuc: '',
-            soBc: '',
-            ngayBc: '',
-            tenBc: '',
+            soBb: '',
+            ngayLap: '',
+            ngayLapBcKetQuaDc: '',
+            tenBaoCao: '',
             soBcKetQuaDc: '',
-            ngayLapBBThuaThieu: '',
             trangThai: ''
         };
     }
@@ -226,7 +226,7 @@ export class BienBanThuaThieuComponent extends Base2Component implements OnInit 
     goBack() {
         this.showList();
         this.passData = {
-            soQdDcCuc: '', qdDcCucId: null, ngayKyQd: '', soBc: '', bcKetQuaDcId: null, ngayBc: ''
+            soQdDcCuc: '', qdDcCucId: null, ngayKyQd: '', soBc: '', tenBc: '', bcKetQuaDcId: null, ngayBc: ''
         };
     }
 }
