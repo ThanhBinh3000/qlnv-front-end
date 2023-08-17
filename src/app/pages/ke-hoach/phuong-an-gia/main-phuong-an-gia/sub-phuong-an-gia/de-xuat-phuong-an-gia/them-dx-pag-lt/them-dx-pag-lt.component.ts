@@ -837,7 +837,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
 
   updatePagTtChungs() {
     this.pagTtChungs.forEach(item => {
-      if (this.formData.value.vat) {
+      if (this.formData.value.vat && ((this.formData.value.loaiGia == 'LG01' || this.formData.value.loaiGia == 'LG03'))) {
         item.giaDnVat = item.giaDn + item.giaDn * this.formData.value.vat
       }
     })

@@ -105,7 +105,9 @@ export class ThongTinKsgComponent implements OnInit, OnChanges {
       }
     }
     this.rowItem.maDvi = this.userInfo.MA_DVI;
-    this.rowItem.donGiaVat = this.rowItem.donGia * this.vat +  this.rowItem.donGia
+    if (this.dataParent && this.dataParent.loaiGia && (this.dataParent.loaiGia == 'LG01' || this.dataParent.loaiGia == 'LG03')) {
+      this.rowItem.donGiaVat = this.rowItem.donGia * this.vat +  this.rowItem.donGia
+    }
     this.dataTable = [...this.dataTable, this.rowItem];
     this.rowItem = new ThongTinKhaoSatGia();
     this.emitDataTable();

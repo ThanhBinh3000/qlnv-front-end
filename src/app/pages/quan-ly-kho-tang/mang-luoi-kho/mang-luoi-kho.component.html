@@ -37,7 +37,7 @@
         <nz-tab [nzTitle]="'Thông tin kho tàng'" class="bb-lay-mau__container">
           <div class="text-right mg-t-10" *ngIf="levelNode > 3">
             <button
-              [disabled]="(dataTable && dataTable.length > 0 && levelNode < 6) || (levelNode == 6 && detailDonVi.value.coLoKho == true && dataTable && dataTable.length > 0) || (levelNode == 6 && detailDonVi.value.coLoKho == false && detailDonVi.value.slTon != 0) || (levelNode == 7 && detailDonVi.value.slTon != 0)"
+              *ngIf="!((dataTable && dataTable.length > 0 && levelNode < 6) || (levelNode == 6 && detailDonVi.value.coLoKho == true && dataTable && dataTable.length > 0) || (levelNode == 6 && detailDonVi.value.coLoKho == false && detailDonVi.value.slTon != 0) || (levelNode == 7 && detailDonVi.value.slTon != 0))"
               nz-button class="btn btn-sub do ml-2" (click)="delete()">
               <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
               Xóa

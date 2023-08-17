@@ -37,23 +37,16 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
   @Input() idInput: number;
   @Output("onClose") onClose = new EventEmitter<any>();
   formData: FormGroup;
-  dsVthh: any[] = [];
   dsCloaiVthh: any[] = [];
-  dsTieuChuanCl: any[] = [];
   dsHangHoa: any[] = [];
   dsLoaiGia: any[] = [];
-  dsToTrinhDeXuat: any[] = [];
   arrThongTinGia: any[] = [];
   taiLieuDinhKemList: any[] = [];
   dsNam: any[] = [];
   dsBoNganh: any[] = [];
   userInfo: UserLogin;
-  soDeXuat: string;
   maQd: string;
   dataTable: any[] = [];
-  isErrorUnique = false;
-  thueVat: number = 10 / 100;
-  radioValue: string;
   fileDinhKem: any[] = [];
 
   constructor(
@@ -120,7 +113,6 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
         ghiChu: data.ghiChu,
         soDeXuat: data.soToTrinh,
         soToTrinh: data.soToTrinh
-
       });
       this.fileDinhKem = data.fileDinhKems;
       this.arrThongTinGia = data.thongTinGiaVt

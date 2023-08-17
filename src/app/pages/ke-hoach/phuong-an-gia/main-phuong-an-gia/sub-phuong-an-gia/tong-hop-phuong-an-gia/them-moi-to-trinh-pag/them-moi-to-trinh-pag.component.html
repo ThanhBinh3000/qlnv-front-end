@@ -53,7 +53,7 @@
       <div nz-row [nzGutter]="20" class="mb-10">
         <div nz-col [nzSpan]="4">
           <nz-form-item class="form-item">
-            <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="so-qd">Số công văn
+            <nz-form-label nzRequired [nzNoColon]="true"  nzFor="so-qd">Số công văn
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfter="{{maSuffix}}">
@@ -64,7 +64,7 @@
         </div>
         <div nz-col [nzSpan]="4">
           <nz-form-item class="form-item">
-            <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="ngay-qd">Ngày ký
+            <nz-form-label nzRequired [nzNoColon]="true"nzFor="ngay-qd">Ngày ký
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-date-picker formControlName="ttNgayKy" nzFormat="dd/MM/yyyy" id="ngay-qd" [nzDisabled]="isView"
@@ -83,7 +83,7 @@
         </div>
         <div nz-col [nzSpan]="4">
           <nz-form-item class="form-item">
-            <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="nam-qd">Năm kế hoạch
+            <nz-form-label nzRequired [nzNoColon]="true" nzFor="nam-qd">Năm kế hoạch
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <input nz-input formControlName="namTongHop" readonly/>
@@ -92,7 +92,7 @@
         </div>
         <div nz-col [nzSpan]="4">
           <nz-form-item class="form-item">
-            <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="nam-qd">Mã tổng hợp
+            <nz-form-label nzRequired [nzNoColon]="true" nzFor="nam-qd">Mã tổng hợp
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <input nz-input formControlName="id" readonly/>
@@ -101,7 +101,7 @@
         </div>
         <div nz-col [nzSpan]="4">
           <nz-form-item class="form-item">
-            <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="nam-qd">Loại hàng hóa
+            <nz-form-label nzRequired [nzNoColon]="true"  nzFor="nam-qd">Loại hàng hóa
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <input nz-input formControlName="tenLoaiVthh" readonly/>
@@ -110,7 +110,7 @@
         </div>
         <div nz-col [nzSpan]="4">
           <nz-form-item class="form-item">
-            <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="nam-qd">Chủng loại hàng
+            <nz-form-label nzRequired [nzNoColon]="true"  nzFor="nam-qd">Chủng loại hàng
               hóa
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
@@ -285,8 +285,17 @@
         <td></td>
         <td  *ngIf="!isMuaToiDa"></td>
         <td  *ngIf="!isMuaToiDa"></td>
-        <td></td>
-        <td></td>
+        <td>
+          <nz-input-number [nzDisabled]="isView" [nzSize]="'small'" [(ngModel)]="data.giaQdTcdt" *ngIf="data.apDungTatCa"
+                           [nzMin]="formData.value.loaiGia == 'LG04' ? (data.giaQdBtc ? data.giaQdBtc : 0) : 0"
+                           [nzMax]="formData.value.loaiGia == 'LG03' ? (data.giaQdBtc ? data.giaQdBtc : 999999999999 ) : 999999999999"
+                           [nzFormatter]="globals.formatter"
+                           [nzParser]="globals.parser">
+          </nz-input-number>
+        </td>
+        <td class="text-right">
+          {{ data.vat ? (data.giaQdTcdt * data.vat + data.giaQdTcdt | number : '1.0-1' : 'vi_VN') : ''}}
+        </td>
         <td  *ngIf="isMuaToiDa"></td>
         <td  *ngIf="isMuaToiDa"></td>
       </tr>
@@ -312,7 +321,7 @@
             <td class="text-right"   *ngIf="!isMuaToiDa">{{ item.giaQdBtc | number : '1.0-1' : 'vi_VN'}}</td>
             <td class="text-right"  *ngIf="!isMuaToiDa">{{ item.giaQdBtcVat | number : '1.0-1' : 'vi_VN'}}</td>
             <td class="text-right">
-              <nz-input-number [nzDisabled]="isView" [nzSize]="'small'" [(ngModel)]="item.giaQdTcdt"
+              <nz-input-number [nzDisabled]="isView || item.apDungTatCa" [nzSize]="'small'" [(ngModel)]="item.apDungTatCa ? data.giaQdTcdt : item.giaQdTcdt"
                                [nzMin]="formData.value.loaiGia == 'LG04' ? (item.giaQdBtc ? item.giaQdBtc : 0) : 0"
                                [nzMax]="formData.value.loaiGia == 'LG03' ? (item.giaQdBtc ? item.giaQdBtc : 999999999999 ) : 999999999999"
                                [nzFormatter]="globals.formatter"
@@ -320,7 +329,7 @@
               </nz-input-number>
             </td>
             <td class="text-right" *ngIf="(formData.value.loaiGia == 'LG01' || formData.value.loaiGia == 'LG03')">
-              {{ item.vat ? (item.giaQdTcdt * item.vat + item.giaQdTcdt | number : '1.0-1' : 'vi_VN') : ''}}
+              {{ !item.apDungTatCa ? (item.giaQdTcdt * item.vat + item.giaQdTcdt | number : '1.0-1' : 'vi_VN') : (data.giaQdTcdt * item.vat + data.giaQdTcdt | number : '1.0-1' : 'vi_VN') }}
             </td>
             <td class="text-right" *ngIf="!(formData.value.loaiGia == 'LG01' || formData.value.loaiGia == 'LG03')"></td>
             <td class="text-right" *ngIf="isMuaToiDa">{{ item.giaQdBtc | number : '1.0-1' : 'vi_VN'}}</td>
