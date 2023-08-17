@@ -561,7 +561,7 @@ export class AddQuyetToanComponent implements OnInit {
 					this.ngayTao = this.datePipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR);
 					this.congVan = data.data.congVan;
 					this.lstFiles = data.data.fileDinhKems;
-
+					this.lichSu = data.data.lichSu;
 					this.listFile = [];
 					if (this.lstBcaoDviTrucThuocs.length > 0) {
 						this.lstBcaoDviTrucThuocs.forEach(item => {
@@ -702,9 +702,11 @@ export class AddQuyetToanComponent implements OnInit {
 				}
 			}
 			this.fileDetail = null;
+		} else {
+			lstCtietBcaoTemp.congVan = this.congVan;
 		}
 
-		if (!lstCtietBcaoTemp.congVan.fileUrl) {
+		if (!lstCtietBcaoTemp.congVan) {
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
 			return;
 		}

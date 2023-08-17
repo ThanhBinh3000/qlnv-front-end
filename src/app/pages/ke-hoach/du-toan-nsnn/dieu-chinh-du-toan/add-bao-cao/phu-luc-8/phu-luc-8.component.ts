@@ -645,6 +645,10 @@ export class PhuLuc8Component implements OnInit {
     }
 
     exportToExcel() {
+        if (this.lstCtietBcao.some(e => this.editCache[e.id].edit)) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+            return;
+        }
         const header = [
             { t: 0, b: 6, l: 0, r: 17, val: null },
 
