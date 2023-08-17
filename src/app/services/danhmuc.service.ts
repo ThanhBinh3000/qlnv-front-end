@@ -124,8 +124,8 @@ export class DanhMucService extends BaseService {
     return this.httpClient.get<any>(url).toPromise();
   }
 
-  layTatCaHangHoaDviQly(): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.gateway}/dm-hang/danh-sach/all-dvql`;
+  layTatCaHangHoaDviQly(type): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.gateway}/dm-hang/danh-sach/all-dvql/${type}`;
     return this.httpClient.get<any>(url).toPromise();
   }
 

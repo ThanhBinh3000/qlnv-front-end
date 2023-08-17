@@ -1,15 +1,24 @@
 <div class="bg-trang">
   <form [nzLayout]="'vertical'" [formGroup]="formData" nz-form>
     <div nz-row [nzGutter]="24">
-      <div nz-col nzSpan="24">
+      <div nz-col [nzSpan]="type == '00' ? 24 : 12">
         <nz-form-item class="form-item">
           <nz-form-label [nzNoColon]="true" nzRequired> Vùng
           </nz-form-label>
           <nz-form-control [nzErrorTip]="error">
-            <nz-select formControlName="vungMien">
+            <nz-select formControlName="vungMien" (ngModelChange)="changeVungMien($event)">
               <nz-option [nzValue]="item.ma" [nzLabel]="item.giaTri" *ngFor="let item of listVungMien">
               </nz-option>
             </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="12" *ngIf="type == '01'">
+        <nz-form-item class="form-item" >
+          <nz-form-label [nzNoColon]="true" nzRequired> Hình thức đầu tư
+          </nz-form-label>
+          <nz-form-control [nzErrorTip]="error">
+            <input formControlName="hinhThuc" class="search__input" nz-input/>
           </nz-form-control>
         </nz-form-item>
       </div>
@@ -22,7 +31,7 @@
           </nz-form-control>
         </nz-form-item>
       </div>
-      <div nz-col nzSpan="4" >
+      <div nz-col nzSpan="4" *ngIf="type == '00'">
         <nz-form-item class="form-item">
           <nz-form-label class="p-2" [nzNoColon]="true"  nzRequired> Tổng số điểm kho tuyến I
           </nz-form-label>
@@ -34,7 +43,7 @@
           </nz-form-control>
         </nz-form-item>
       </div>
-      <div nz-col nzSpan="4" >
+      <div nz-col nzSpan="4" *ngIf="type == '00'" >
         <nz-form-item class="form-item" >
           <nz-form-label [nzNoColon]="true" class="p-2" nzRequired> Tổng số điểm kho tuyến II
           </nz-form-label>
@@ -46,7 +55,19 @@
           </nz-form-control>
         </nz-form-item>
       </div>
-      <div nz-col nzSpan="4" >
+      <div nz-col nzSpan="6" *ngIf="type == '01'" >
+        <nz-form-item class="form-item" >
+          <nz-form-label [nzNoColon]="true" class="p-2" nzRequired> Tổng số điểm kho
+          </nz-form-label>
+          <nz-form-control [nzErrorTip]="error">
+            <nz-input-number formControlName="slKho" [nzSize]="'small'" nz-input [nzMin]="0"
+                             [nzFormatter]="globals.formatter"
+                             [nzParser]="globals.parser">
+            </nz-input-number>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="type == '00' ? 4 : 6" >
         <nz-form-item class="form-item">
           <nz-form-label [nzNoColon]="true"  class="p-2" nzRequired> Số điểm kho đã duyệt
           </nz-form-label>
@@ -62,18 +83,18 @@
       </div>
       <div nz-col nzSpan="6">
         <nz-form-item class="form-item">
-          <nz-form-label [nzNoColon]="true" nzRequired> Diện tích dự kiến
+          <nz-form-label [nzNoColon]="true" class="p-2" nzRequired> Diện tích dự kiến
           </nz-form-label>
           <nz-form-control [nzErrorTip]="error">
               <input class="money-input" currencyMask [options]="amount" [min]="0"
-                     formControlName="slKhoDaDuyet"
+                     formControlName="dienTichDk"
               />
           </nz-form-control>
         </nz-form-item>
       </div>
       <div nz-col nzSpan="6">
         <nz-form-item class="form-item">
-          <nz-form-label [nzNoColon]="true" nzRequired> Tích lượng
+          <nz-form-label [nzNoColon]="true" class="p-2" nzRequired> Tích lượng
           </nz-form-label>
           <nz-form-control [nzErrorTip]="error">
             <nz-input-group>
@@ -84,9 +105,9 @@
           </nz-form-control>
         </nz-form-item>
       </div>
-      <div nz-col nzSpan="6">
+      <div nz-col nzSpan="6" *ngIf="type == '00'">
         <nz-form-item class="form-item">
-          <nz-form-label [nzNoColon]="true" nzRequired> Diện tích kho tuyến I
+          <nz-form-label [nzNoColon]="true" class="p-2" nzRequired> Diện tích kho tuyến I
           </nz-form-label>
           <nz-form-control [nzErrorTip]="error">
             <nz-input-group>
@@ -97,9 +118,9 @@
           </nz-form-control>
         </nz-form-item>
       </div>
-      <div nz-col nzSpan="6">
+      <div nz-col nzSpan="6" *ngIf="type == '00'">
         <nz-form-item class="form-item">
-          <nz-form-label [nzNoColon]="true" nzRequired> Diện tích kho tuyến II
+          <nz-form-label [nzNoColon]="true" class="p-2" nzRequired> Diện tích kho tuyến II
           </nz-form-label>
           <nz-form-control [nzErrorTip]="error">
             <nz-input-group>
@@ -110,9 +131,22 @@
           </nz-form-control>
         </nz-form-item>
       </div>
+      <div nz-col nzSpan="12" *ngIf="type == '01'">
+        <nz-form-item class="form-item">
+          <nz-form-label [nzNoColon]="true" class="p-2" nzRequired> Diện tích kho
+          </nz-form-label>
+          <nz-form-control [nzErrorTip]="error">
+            <nz-input-group>
+              <input class="money-input" currencyMask [options]="amount" [min]="0"
+                     formControlName="dtKho"
+              />
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
       <div nz-col nzSpan="24">
         <nz-form-item class="form-item">
-          <nz-form-label [nzNoColon]="true" nzRequired> Ghi chú
+          <nz-form-label [nzNoColon]="true" class="p-2" nzRequired> Ghi chú
           </nz-form-label>
           <nz-form-control [nzErrorTip]="error">
             <nz-input-group>
