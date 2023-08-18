@@ -271,6 +271,7 @@ export class QuanLyHopDongMttComponent implements OnInit {
 
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.THAO_TAC_SUCCESS);
+              this.goBack()
             } else {
               this.notification.error(MESSAGE.ERROR, res.msg);
             }

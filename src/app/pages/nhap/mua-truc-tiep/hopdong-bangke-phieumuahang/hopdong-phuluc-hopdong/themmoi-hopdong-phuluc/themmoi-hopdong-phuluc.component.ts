@@ -41,6 +41,8 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
   isViewPhuLuc: boolean = false;
   idPhuLuc: number = 0;
   idKqCgia: number;
+  slChuaKy: number = 0;
+  slDaKy: number = 0;
 
   maHopDongSuffix: string = '';
   objHopDongHdr: any = {};
@@ -118,6 +120,7 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
         ghiChu: [''],
 
         tongSoLuongQdKhChuakyHd: [],
+        tongSoLuongQdKhDakyHd: [],
         donGia: [],
         donGiaGomThue: [],
         trangThai: STATUS.DU_THAO,
@@ -355,7 +358,21 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
           let resTtin = await this.quyetDinhPheDuyetKeHoachMTTService.getDetailDtlCuc(dataKq.idPdKhDtl);
           if (resKq.data) {
             const dataThongTin = resTtin.data;
-            // this.dataTable = dataKq.danhSachCtiet;
+            this.slDaKy = 0;
+            this.slChuaKy = 0;
+            this.listDviLquan = [];
+            dataKq.danhSachCtiet.forEach((item) => {
+              item.listChaoGia.forEach(res =>{
+                if (res.luaChon == true && res.signed != true) {
+                  this.listDviLquan.push(res)
+                  this.slChuaKy += res.soLuong
+                }else if(res.luaChon == true && res.signed == true){
+                  this.slDaKy += res.soLuong
+                }
+              })
+            })
+            console.log("listDviLquan", this.listDviLquan)
+            console.log("slDaKy", this.slDaKy)
             this.formData.patchValue({
               idQdKq: dataKq.id,
               soQdKq: dataKq.soQdKq,
@@ -367,17 +384,11 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
               cloaiVthh: dataKq.cloaiVthh,
               tenCloaiVthh: dataKq.tenCloaiVthh,
               moTaHangHoa: dataKq.moTaHangHoa,
+              tongSoLuongQdKhChuakyHd: this.slChuaKy,
+              tongSoLuongQdKhDakyHd: this.slDaKy,
               dviTinh: "tấn",
               tongSoLuongQdKh: dataThongTin.tongSoLuong
             });
-            dataKq.danhSachCtiet.forEach((item) => {
-              item.listChaoGia.forEach(res =>{
-                if (res.luaChon == true && res.signed != true) {
-                  this.listDviLquan.push(res)
-                }
-              })
-            })
-            console.log("listDviLquan", this.listDviLquan)
             if(this.idKqCgia){
               this.changeDviCungCap(this.idKqCgia)
             }
@@ -514,7 +525,6 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
         donGiaGomThue: dViCc.donGia + (dViCc.donGia * dViCc.thueGtgt / 100),
         sdtDviBan: dViCc.sdt,
         thanhTien: dViCc.soLuong * dViCc.donGia * 1000,
-        tongSoLuongQdKhChuakyHd: this.formData.value.tongSoLuongQdKh - dViCc.soLuong
       })
     }
   }
