@@ -172,13 +172,13 @@
       </th>
       <th>
         <nz-input-group>
-          <input class="money-input" currencyMask [options]="amount"
+          <input class="money-input" [readOnly]="rowItem.maHopDong != null" currencyMask [options]="amount"
                  [(ngModel)]="rowItem.duToanDuocGiao"/>
         </nz-input-group>
       </th>
       <th>
         <nz-input-group>
-          <input class="money-input" [readOnly]="rowItem.maHopDong != null || rowItem.loaiTien =='01'"
+          <input class="money-input" [readOnly]="rowItem.loaiTien =='01'"
                  currencyMask [options]="amount" [autocomplete]="true"
                  [(ngModel)]="rowItem.tyGia"/>
         </nz-input-group>

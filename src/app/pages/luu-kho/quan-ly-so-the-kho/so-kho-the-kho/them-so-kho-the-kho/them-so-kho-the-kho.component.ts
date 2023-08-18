@@ -15,7 +15,6 @@ import {MangLuoiKhoService} from "../../../../../services/qlnv-kho/mangLuoiKho.s
 import {OldResponseData} from "../../../../../interfaces/response";
 import {AMOUNT} from "../../../../../Utility/utils";
 import {Validators} from "@angular/forms";
-import {FILETYPE} from "../../../../../constants/fileType";
 
 @Component({
   selector: 'app-them-so-kho-the-kho',
@@ -87,7 +86,7 @@ export class ThemSoKhoTheKhoComponent extends Base2Component implements OnInit {
 
   async ngOnInit() {
     try {
-      this.loadDiemKho();
+      await this.loadDiemKho();
       if (this.idInput > 0) {
         await this.getDetail(this.idInput)
       } else {
@@ -284,6 +283,12 @@ export class ThemSoKhoTheKhoComponent extends Base2Component implements OnInit {
         if (res.data) {
           const data = res.data;
           this.helperService.bidingDataInFormGroup(this.formData, data);
+          this.formData.patchValue({
+            maDiemKho : data.maDiemKho,
+            maNhaKho : data.maNhaKho,
+            maNganKho : data.maNganKho,
+            maLoKho : data.maLoKho ?  data.maLoKho : null
+          })
         }
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -306,44 +311,48 @@ export class ThemSoKhoTheKhoComponent extends Base2Component implements OnInit {
   }
 
   async loadDiemKho() {
-    const dsTong = await this.donViService.layTatCaDonViByLevel(4);
+    let body = {
+      idThuKho : this.userInfo.ID,
+      maDviCha : null,
+      capDvi : "4"
+    }
+    const dsTong = await this.donViService.getDonViTheoIdThuKho(body);
     this.dsDiemKho = dsTong.data
-    this.dsDiemKho = this.dsDiemKho.filter(item => item.maDvi.startsWith(this.userInfo.MA_DVI) && item.type != 'PB')
   }
 
   async onChangeDiemKho(event) {
-    const dsTong = await this.donViService.layTatCaDonViByLevel(5);
-    this.dsNhaKho = dsTong.data
-    this.dsNhaKho = this.dsNhaKho.filter(item => item.maDvi.startsWith(event))
     if (event) {
-      this.formData.patchValue({
-        maNhaKho: null,
-        maNganKho: null,
-        maLoKho: null
-      })
+      let body = {
+        idThuKho : this.userInfo.ID,
+        maDviCha : event,
+        capDvi : "5"
+      }
+      const dsTong = await this.donViService.getDonViTheoIdThuKho(body);
+      this.dsNhaKho = dsTong.data
     }
   }
 
   async onChangeNhaKho(event) {
-    const dsTong = await this.donViService.layTatCaDonViByLevel(6);
-    this.dsNganKho = dsTong.data
-    this.dsNganKho = this.dsNganKho.filter(item => item.maDvi.startsWith(event))
     if (event) {
-      this.formData.patchValue({
-        maNganKho: null,
-        maLoKho: null
-      })
+      let body = {
+        idThuKho : this.userInfo.ID,
+        maDviCha : event,
+        capDvi : "6"
+      }
+      const dsTong = await this.donViService.getDonViTheoIdThuKho(body);
+      this.dsNganKho = dsTong.data
     }
   }
 
   async onChangeNganKho(event) {
-    const dsTong = await this.donViService.layTatCaDonViByLevel(7);
-    this.dsLoKho = dsTong.data
-    this.dsLoKho = this.dsLoKho.filter(item => item.maDvi.startsWith(event))
     if (event) {
-      this.formData.patchValue({
-        maLoKho: null
-      })
+      let body = {
+        idThuKho : this.userInfo.ID,
+        maDviCha : event,
+        capDvi : "7"
+      }
+      const dsTong = await this.donViService.getDonViTheoIdThuKho(body);
+      this.dsLoKho = dsTong.data;
       if (this.dsLoKho.length == 0) {
         let body = {
           maDvi: event,

@@ -150,7 +150,7 @@
       <th class="text-center" rowSpan="2">Tiêu chuẩn, quy chuẩn</th>
       <th class="text-center" rowSpan="2">Số lượng</th>
       <th class="text-center" rowSpan="2">Đơn vị tính</th>
-      <th class="text-center" rowSpan="2">%Vat</th>
+      <th class="text-center" rowSpan="2">% VAT</th>
       <th class="text-center" colSpan="2">Giá mua cụ thể đề xuất</th>
       <th class="text-center" colSpan="2">Giá đã ban hành của BTC</th>
       <th class="text-center" nzWidth="150px"
@@ -176,7 +176,7 @@
       <td>{{ data.tchuanCluong }}</td>
       <td>{{ data.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
       <td>{{ data.donViTinh }}</td>
-      <td>{{ data.vat }}</td>
+      <td>{{ data.vat ? data.vat * 100 : ''  }}</td>
       <td class="text-right">{{ data.giaDn | number : '1.0-1' : 'vi_VN' }}</td>
       <td class="text-right">{{ data.giaDnVat | number : '1.0-1' : 'vi_VN' }}</td>
       <td class="text-right">{{ data.giaQdBtc | number : '1.0-1' : 'vi_VN' }}</td>

@@ -85,6 +85,18 @@ import {
 import {
   ThongTinQuyetDinhXuatGiamVatTuBaoHanhComponent
 } from "./quyet-dinh-xuat-giam-vat-tu-bao-hanh/thong-tin-quyet-dinh-xuat-giam-vat-tu-bao-hanh/thong-tin-quyet-dinh-xuat-giam-vat-tu-bao-hanh.component";
+import {
+  ThongTinBienBanYeuCauBaoHanhComponent
+} from "./kiem-tra-chat-luong-vt-tb-trong-thoi-gian-bao-hanh/bien-ban-yeu-cau-bao-hanh/thong-tin-quyet-dinh-xuat-giam-vat-tu-bao-hanh/thong-tin-bien-ban-yeu-cau-bao-hanh.component";
+import {
+  BienBanYeuCauBaoHanhComponent
+} from "./kiem-tra-chat-luong-vt-tb-trong-thoi-gian-bao-hanh/bien-ban-yeu-cau-bao-hanh/bien-ban-yeu-cau-bao-hanh.component";
+import {
+  ThongTinPhieuKiemTraChatLuongVtTbComponent
+} from "./kiem-tra-chat-luong-vt-tb-trong-thoi-gian-bao-hanh/phieu-kiem-tra-chat-luong/thong-tin-phieu-kiem-dinh-chat-luong/thong-tin-phieu-kiem-tra-chat-luong-vt-tb.component";
+import {
+  XkVtPhieuKiemTraChatLuongVtTbComponent
+} from "./kiem-tra-chat-luong-vt-tb-trong-thoi-gian-bao-hanh/phieu-kiem-tra-chat-luong/phieu-kiem-tra-chat-luong-vt-tb.component";
 
 
 @NgModule({
@@ -113,7 +125,11 @@ import {
     BienBanKetThucNhapKhoBaoHanhComponent,
     ThongTinBienBanKetThucNhapKhoBaoHanhComponent,
     QuyetDinhXuatGiamVatTuBaoHanhComponent,
-    ThongTinQuyetDinhXuatGiamVatTuBaoHanhComponent
+    ThongTinQuyetDinhXuatGiamVatTuBaoHanhComponent,
+    BienBanYeuCauBaoHanhComponent,
+    ThongTinBienBanYeuCauBaoHanhComponent,
+    XkVtPhieuKiemTraChatLuongVtTbComponent,
+    ThongTinPhieuKiemTraChatLuongVtTbComponent
   ],
   imports: [
     CommonModule,
@@ -151,7 +167,11 @@ import {
     BienBanKetThucNhapKhoBaoHanhComponent,
     ThongTinBienBanKetThucNhapKhoBaoHanhComponent,
     QuyetDinhXuatGiamVatTuBaoHanhComponent,
-    ThongTinQuyetDinhXuatGiamVatTuBaoHanhComponent
+    ThongTinQuyetDinhXuatGiamVatTuBaoHanhComponent,
+    BienBanYeuCauBaoHanhComponent,
+    ThongTinBienBanYeuCauBaoHanhComponent,
+    XkVtPhieuKiemTraChatLuongVtTbComponent,
+    ThongTinPhieuKiemTraChatLuongVtTbComponent
   ],
   providers: [DatePipe]
 })

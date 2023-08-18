@@ -11,11 +11,11 @@
                     </div>
                     <div nz-col nzSpan="4" class="mt-16">
                         <label class="search__label">Số quyết định xuất/nhập ĐC của Cục</label>
-                        <input nz-input formControlName="soQdinhCuc" />
+                        <input nz-input formControlName="soQdDcCuc" />
                     </div>
                     <div nz-col nzSpan="5" class="mt-16">
                         <label class="search__label">Số báo cáo</label>
-                        <input nz-input formControlName="soBc" />
+                        <input nz-input formControlName="soBcKetQuaDc" />
                     </div>
                     <div nz-col nzSpan="4" class="mt-16">
                         <label class="search__label">Ngày báo cáo</label>
@@ -35,7 +35,7 @@
                     </div>
                     <div nz-col nzSpan="5" class="mt-16">
                         <label class="search__label">Số biên bản ghi nhận thừa/thiếu</label>
-                        <input nz-input formControlName="soBc" />
+                        <input nz-input formControlName="soBb" />
                     </div>
                     <div nz-col nzSpan="4" class="mt-16">
                         <label class="search__label">Ngày lập biên bản ghi nhận thừa/thiếu</label>
@@ -43,12 +43,12 @@
                         <div nz-row>
                             <div nz-col nzSpan="12" class="cus-start-date">
                                 <nz-date-picker [nzDisabledDate]="disabledTuNgayBbTt" nzFormat="dd/MM/yyyy"
-                                    formControlName="tuNgayBbTt" nzPlaceHolder="Ngày bắt đầu">
+                                    formControlName="tuNgayLap" nzPlaceHolder="Ngày bắt đầu">
                                 </nz-date-picker>
                             </div>
                             <div nz-col nzSpan="12" class="cus-end-date">
                                 <nz-date-picker [nzDisabledDate]="disabledDenNgayBbTt" nzFormat="dd/MM/yyyy"
-                                    formControlName="denNgayBbTt" nzPlaceHolder="Ngày kết thúc">
+                                    formControlName="denNgayLap" nzPlaceHolder="Ngày kết thúc">
                                 </nz-date-picker>
                             </div>
                         </div>
@@ -115,8 +115,7 @@
                         <th>Trạng thái</th>
                         <th width="90px">Hành động</th>
                     </tr>
-                    <!-- <tr class="search-table">
-                        <th></th>
+                    <tr class="search-table">
                         <th></th>
                         <th>
                             <nz-input-group>
@@ -131,48 +130,56 @@
                         </th>
                         <th>
                             <nz-input-group>
-                                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soBc"
-                                    (input)="filterInTable('soBc',filterTable.soBc)" size="small" />
-                            </nz-input-group>
-                        </th>
-                        <th>
-                            <nz-input-group>
-                                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenBc"
-                                    (input)="filterInTable('tenBc',filterTable.tenBc)" size="small" />
-                            </nz-input-group>
-
-                        </th>
-                        <th>
-                            <nz-input-group>
-                                <nz-date-picker nzFormat="dd/MM/yyyy" [(ngModel)]="filterTable.ngayBc"
-                                    (ngModelChange)="filterInTable('ngayBc', convertDateToString(filterTable.ngayBc))">
-                                </nz-date-picker>
-                            </nz-input-group>
-
-                        </th>
-                        <th *ngIf="loaiBc==='CHI_CUC'">
-                            <nz-input-group>
-                                <input type="text" nz-input placeholder="Tìm kiếm"
-                                    [(ngModel)]="filterTable.soBBThuaThieu"
-                                    (input)="filterInTable('soBBThuaThieu',filterTable.soBBThuaThieu)" size="small" />
-                            </nz-input-group>
-
-                        </th>
-                        <th *ngIf="loaiBc==='CHI_CUC'">
-                            <nz-input-group>
                                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQdDcCuc"
                                     (input)="filterInTable('soQdDcCuc',filterTable.soQdDcCuc)" size="small" />
                             </nz-input-group>
-
                         </th>
-                        <th *ngIf="loaiBc==='CHI_CUC'">
+                        <th>
                             <nz-input-group>
                                 <nz-date-picker nzFormat="dd/MM/yyyy" [(ngModel)]="filterTable.ngayKyQdCuc"
-                                    (ngModelChange)="filterInTable('ngayKyQdCuc', convertDateToString(filterTable.ngayKyQdCuc))">
+                                    (ngModelChange)="filterInTable('ngayKyQdCuc', convertDateToString(filterTable.ngayKyQdCuc), 'date')">
                                 </nz-date-picker>
                             </nz-input-group>
-                        </th>
 
+                        </th>
+                        <th>
+                            <nz-input-group>
+                                <input type="text" nz-input placeholder="Tìm kiếm"
+                                    [(ngModel)]="filterTable.soBcKetQuaDc"
+                                    (input)="filterInTable('soBcKetQuaDc',filterTable.soBcKetQuaDc)" size="small" />
+                            </nz-input-group>
+
+                        </th>
+                        <th>
+                            <nz-input-group>
+                                <nz-date-picker nzFormat="dd/MM/yyyy" [(ngModel)]="filterTable.ngayLapBcKetQuaDc"
+                                    (ngModelChange)="filterInTable('ngayLapBcKetQuaDc', convertDateToString(filterTable.ngayLapBcKetQuaDc), 'date')">
+                                </nz-date-picker>
+                            </nz-input-group>
+
+                        </th>
+                        <th>
+                            <nz-input-group>
+                                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenBaoCao"
+                                    (input)="filterInTable('tenBaoCao',filterTable.tenBaoCao)" size="small" />
+                            </nz-input-group>
+
+                        </th>
+                        <th>
+                            <nz-input-group>
+                                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soBb"
+                                    (input)="filterInTable('soBb',filterTable.soBb)" size="small" />
+                            </nz-input-group>
+
+                        </th>
+                        <th>
+                            <nz-input-group>
+                                <nz-date-picker nzFormat="dd/MM/yyyy" [(ngModel)]="filterTable.ngayLap"
+                                    (ngModelChange)="filterInTable('ngayLap', convertDateToString(filterTable.ngayLap), 'date')">
+                                </nz-date-picker>
+                            </nz-input-group>
+
+                        </th>
                         <th>
                             <nz-input-group>
                                 <nz-input-group>
@@ -185,7 +192,7 @@
                             </nz-input-group>
                         </th>
                         <th></th>
-                    </tr> -->
+                    </tr>
                 </thead>
                 <tbody>
                     <!-- <tr *ngFor="let data of basicTable.data; let i = index"> -->
@@ -198,11 +205,11 @@
                         <td>{{ data.nam }}</td>
                         <td>{{data.soQdDcCuc}}</td>
                         <td>{{ data.ngayKyQdCuc|date:"dd/MM/yyyy"}}</td>
-                        <td>{{data.soBc}}</td>
-                        <td>{{data.ngayBc | date:"dd/MM/yyyy"}}</td>
-                        <td>{{data.tenBc}}</td>
-                        <td>{{data.soBBThuaThieu}}</td>
-                        <td>{{data.ngayBBThuaThieu}}</td>
+                        <td>{{data.soBcKetQuaDc}}</td>
+                        <td>{{data.ngayLapBcKetQuaDc | date:"dd/MM/yyyy"}}</td>
+                        <td>{{data.tenBaoCao}}</td>
+                        <td>{{data.soBb}}</td>
+                        <td>{{data.ngayLap | date:"dd/MM/yyyy"}}</td>
                         <td>{{ TRANG_THAI[data.trangThai]}}</td>
                         <td>
                             <a (click)="redirectDetail(data.id, true)" *ngIf="checkRoleView(data.trangThai)">
@@ -211,9 +218,9 @@
                             <a *ngIf="checkRoleEdit(data.trangThai)" (click)="redirectDetail(data.id, false)">
                                 <i class="fa fa-pencil"></i>
                             </a>
-                            <a *ngIf="checkRoleApproveDc(data.trangThai)">
+                            <!-- <a *ngIf="checkRoleApproveDc(data.trangThai)">
                                 <i class="icon htvbdh_tcdt_pheduyet" (click)="redirectDetail(data.id,true)"></i>
-                            </a>
+                            </a> -->
                             <a *ngIf="checkRoleDelete(data.trangThai)" (click)="delete(data)">
                                 <i class="fa fa-trash-o do"></i>
                             </a>
@@ -242,6 +249,6 @@
     </div>
 </div>
 <ng-template #templateThemmoi>
-    <app-chi-tiet-bien-ban-thua-thieu [idInput]="selectedId" [passData]="passData"
+    <app-chi-tiet-bien-ban-thua-thieu [idInput]="selectedId" [passData]="passData" [isView]="isView"
         (showListEvent)="goBack()"></app-chi-tiet-bien-ban-thua-thieu>
 </ng-template>

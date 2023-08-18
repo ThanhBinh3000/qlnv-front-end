@@ -4,7 +4,9 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button *ngIf="(userService.isAccessPermisson('KHCNBQ_CTNCKHCNBQ_THEM') || userService.isAccessPermisson('KHCNBQ_CTNCKHCNBQ_THEM')) && !isView" class="btn btn-main"
+    <button
+      *ngIf="(userService.isAccessPermisson('KHCNBQ_CTNCKHCNBQ_THEM') || userService.isAccessPermisson('KHCNBQ_CTNCKHCNBQ_THEM')) && !isView"
+      class="btn btn-main"
       (click)="save(true)">
       <i class="icon  htvbdh_tcdt_save"></i>
       <span>Lưu</span>
@@ -18,7 +20,7 @@
         <span [ngClass]="formData.value.trangThai == STATUS.DA_NGHIEM_THU ? 'status-xanh' : 'status-do'">
           {{ formData.value.tenTrangThai }}
         </span>
-        <span>Công trình nghiên cứu</span>
+        <span>Công trình nghiên cứu 11</span>
       </div>
     </div>
   </div>
@@ -39,7 +41,7 @@
               Mã đề tài
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <input nz-input [readonly]="isDisable()" formControlName="maDeTai" />
+              <input nz-input [readonly]="isDisable()" formControlName="maDeTai"/>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -49,7 +51,7 @@
               Tên đề tài
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <input nz-input [readonly]="isDisable()" formControlName="tenDeTai" />
+              <input nz-input [readonly]="isDisable()" formControlName="tenDeTai"/>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -74,8 +76,8 @@
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-range-picker nzMode="month" [nzDisabled]="isDisable()"
-                [nzPlaceHolder]="['thời gian bắt đầu', 'thời gian kết thúc']" formControlName="ngayKy"
-                nzFormat="MM/yyyy">
+                               [nzPlaceHolder]="['thời gian bắt đầu', 'thời gian kết thúc']" formControlName="ngayKy"
+                               nzFormat="MM/yyyy">
               </nz-range-picker>
             </nz-form-control>
           </nz-form-item>
@@ -87,7 +89,7 @@
               Chủ nhiệm đề tài
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <input nz-input [readonly]="isDisable()" formControlName="chuNhiem" />
+              <input nz-input [readonly]="isDisable()" formControlName="chuNhiem"/>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -97,7 +99,7 @@
               Chức vụ
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <input nz-input [readonly]="isDisable()" formControlName="chucVu" />
+              <input nz-input [readonly]="isDisable()" formControlName="chucVu"/>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -107,7 +109,7 @@
               Email
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <input type="email" nz-input [readonly]="isDisable()" formControlName="email" ngModel [email]="true" />
+              <input type="email" nz-input [readonly]="isDisable()" formControlName="email" ngModel [email]="true"/>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -117,33 +119,43 @@
               Số điện thoại
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <input nz-input [readonly]="isDisable()" formControlName="sdt" />
+              <input nz-input [readonly]="isDisable()" formControlName="sdt"/>
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="6">
+        <div nz-col nzSpan="5">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true">
               Đơn vị chủ trì
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <input nz-input [readonly]="isDisable()" formControlName="dviChuTri" />
+              <input nz-input [readonly]="isDisable()" formControlName="dviChuTri"/>
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="6">
+        <div nz-col nzSpan="5">
+          <nz-form-item>
+            <nz-form-label nzRequired [nzNoColon]="true">
+              Đơn vị thực hiện
+            </nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <input nz-input [readonly]="isDisable()" formControlName="dviThucHien"/>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="5">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true">
               Đơn vị phối hợp
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <input nz-input [readonly]="isDisable()" formControlName="dviPhoiHop" />
+              <input nz-input [readonly]="isDisable()" formControlName="dviPhoiHop"/>
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="6">
+        <div nz-col nzSpan="5">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true" nzRequired> Nguồn vốn </nz-form-label>
+            <nz-form-label [nzNoColon]="true" nzRequired> Nguồn vốn</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
               <nz-select [nzDisabled]="isDisable()" formControlName="nguonVon" nzPlaceHolder="">
                 <nz-option *ngFor="let p of listNguonVon" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
@@ -151,13 +163,13 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="6">
+        <div nz-col nzSpan="4">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">
               Số QĐ phê duyệt
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <input nz-input [readonly]="isDisable()" formControlName="sdt" />
+              <input nz-input [readonly]="isDisable()" formControlName="sdt"/>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -258,132 +270,132 @@
     <nz-card class="mt-2px flex-card data-table card-border-content table-card">
       <nz-table class="nowrap" [nzData]="dataTable" nzBordered>
         <thead>
-          <tr>
-            <th rowspan="3">STT</th>
-            <th rowspan="3">Nội dung</th>
-            <th rowspan="3">Sản phẩm</th>
-            <th rowspan="3">Từ ngày</th>
-            <th rowspan="3">Đến ngày</th>
-            <th rowspan="3">Người thực hiện</th>
-            <th rowspan="3">Trạng thái</th>
-            <th rowspan="3" *ngIf="formData.value.trangThai != STATUS.DA_NGHIEM_THU">Hành động
-            </th>
-          </tr>
+        <tr>
+          <th rowspan="3">STT</th>
+          <th rowspan="3">Nội dung</th>
+          <th rowspan="3">Sản phẩm</th>
+          <th rowspan="3">Từ ngày</th>
+          <th rowspan="3">Đến ngày</th>
+          <th rowspan="3">Người thực hiện</th>
+          <th rowspan="3">Trạng thái</th>
+          <th rowspan="3" *ngIf="formData.value.trangThai != STATUS.DA_NGHIEM_THU">Hành động
+          </th>
+        </tr>
 
         </thead>
         <tbody>
-          <tr>
+        <tr>
+          <td></td>
+          <td>
+            <nz-input-group>
+              <input nz-input [(ngModel)]="rowItem.noiDung"/>
+            </nz-input-group>
+          </td>
+          <td>
+            <nz-input-group>
+              <input nz-input [(ngModel)]="rowItem.sanPham"/>
+            </nz-input-group>
+          </td>
+          <td>
+            <nz-input-group>
+              <nz-date-picker nzFormat="dd/MM/yyyy" nz-input [(ngModel)]="rowItem.tuNgay">
+              </nz-date-picker>
+            </nz-input-group>
+          </td>
+          <td>
+            <nz-input-group>
+              <nz-date-picker nzFormat="dd/MM/yyyy" nz-input [(ngModel)]="rowItem.denNgay">
+              </nz-date-picker>
+            </nz-input-group>
+          </td>
+          <td>
+            <nz-input-group>
+              <input nz-input [(ngModel)]="rowItem.nguoiThucHien"/>
+            </nz-input-group>
+          </td>
+          <td>
+            <nz-input-group>
+              <nz-select [(ngModel)]="rowItem.trangThaiTd" (ngModelChange)="onChangeTrangThai($event)"
+                         [nzShowArrow]="false">
+                <nz-option nzValue="{{item.ma}}" nzLabel="{{item.giaTri}}" *ngFor="let item of listTrangThai1">
+                </nz-option>
+              </nz-select>
+            </nz-input-group>
+          </td>
+          <td *ngIf="formData.value.trangThai != STATUS.DA_NGHIEM_THU">
+            <a (click)="themMoiItem()">
+              <i class="icon htvbdh_dau-cong"></i>
+            </a>
+            <a (click)="clearData()">
+              <i class="fa fa-refresh"></i>
+            </a>
+          </td>
+        </tr>
+        <tr *ngFor="let data of dataTable; let idx = index">
+          <ng-container *ngIf="!dataEdit[idx].edit; else editTemplate">
+            <td>{{ idx + 1 }}</td>
+            <td>{{ data.noiDung }}</td>
+            <td>{{ data.sanPham }}</td>
+            <td>{{ data.tuNgay | date : 'dd/MM/yyyy' }}</td>
+            <td>{{ data.denNgay | date : 'dd/MM/yyyy' }}</td>
+            <td>{{ data.nguoiThucHien }}</td>
+            <td>{{ data.tenTrangThaiTd }}</td>
+            <td *ngIf="formData.value.trangThai != STATUS.DA_NGHIEM_THU">
+              <a (click)="editItem(idx)">
+                <i class="fa fa-pencil" title="Sửa"></i>
+              </a>
+              <a (click)="xoaItem(idx)">
+                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+              </a>
+            </td>
+          </ng-container>
+          <ng-template #editTemplate>
             <td></td>
             <td>
               <nz-input-group>
-                <input nz-input [(ngModel)]="rowItem.noiDung" />
+                <input nz-input [(ngModel)]="dataEdit[idx].data.noiDung"/>
               </nz-input-group>
             </td>
             <td>
               <nz-input-group>
-                <input nz-input [(ngModel)]="rowItem.sanPham" />
+                <input nz-input [(ngModel)]="dataEdit[idx].data.sanPham"/>
               </nz-input-group>
             </td>
             <td>
               <nz-input-group>
-                <nz-date-picker nzFormat="dd/MM/yyyy" nz-input [(ngModel)]="rowItem.tuNgay">
+                <nz-date-picker nzFormat="dd/MM/yyyy" nz-input [(ngModel)]="dataEdit[idx].data.tuNgay">
                 </nz-date-picker>
               </nz-input-group>
             </td>
             <td>
               <nz-input-group>
-                <nz-date-picker nzFormat="dd/MM/yyyy" nz-input [(ngModel)]="rowItem.denNgay">
+                <nz-date-picker nzFormat="dd/MM/yyyy" nz-input [(ngModel)]="dataEdit[idx].data.denNgay">
                 </nz-date-picker>
               </nz-input-group>
             </td>
             <td>
               <nz-input-group>
-                <input nz-input [(ngModel)]="rowItem.nguoiThucHien" />
+                <input nz-input [(ngModel)]="dataEdit[idx].data.nguoiThucHien"/>
               </nz-input-group>
             </td>
             <td>
               <nz-input-group>
-                <nz-select [(ngModel)]="rowItem.trangThaiTd" (ngModelChange)="onChangeTrangThai($event)"
-                  [nzShowArrow]="false">
+                <nz-select [nzShowArrow]="false" [(ngModel)]="dataEdit[idx].data.trangThaiTd"
+                           (ngModelChange)="onChangeTrangThai($event,dataEdit[idx].data)">
                   <nz-option nzValue="{{item.ma}}" nzLabel="{{item.giaTri}}" *ngFor="let item of listTrangThai1">
                   </nz-option>
                 </nz-select>
               </nz-input-group>
             </td>
-            <td *ngIf="formData.value.trangThai != STATUS.DA_NGHIEM_THU">
-              <a (click)="themMoiItem()">
-                <i class="icon htvbdh_dau-cong"></i>
+            <td class="text-center">
+              <a (click)="luuEdit(idx)" class="save">
+                <i class="fa fa-save"></i>
               </a>
-              <a (click)="clearData()">
-                <i class="fa fa-refresh"></i>
-              </a>
+              <a (click)="huyEdit(idx)">
+                <i class="fa fa-ban do"></i> </a>
             </td>
-          </tr>
-          <tr *ngFor="let data of dataTable; let idx = index">
-            <ng-container *ngIf="!dataEdit[idx].edit; else editTemplate">
-              <td>{{ idx + 1 }}</td>
-              <td>{{ data.noiDung }}</td>
-              <td>{{ data.sanPham }}</td>
-              <td>{{ data.tuNgay | date : 'dd/MM/yyyy' }}</td>
-              <td>{{ data.denNgay | date : 'dd/MM/yyyy' }}</td>
-              <td>{{ data.nguoiThucHien }}</td>
-              <td>{{ data.tenTrangThaiTd }}</td>
-              <td *ngIf="formData.value.trangThai != STATUS.DA_NGHIEM_THU">
-                <a (click)="editItem(idx)">
-                  <i class="fa fa-pencil" title="Sửa"></i>
-                </a>
-                <a (click)="xoaItem(idx)">
-                  <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
-                </a>
-              </td>
-            </ng-container>
-            <ng-template #editTemplate>
-              <td></td>
-              <td>
-                <nz-input-group>
-                  <input nz-input [(ngModel)]="dataEdit[idx].data.noiDung" />
-                </nz-input-group>
-              </td>
-              <td>
-                <nz-input-group>
-                  <input nz-input [(ngModel)]="dataEdit[idx].data.sanPham" />
-                </nz-input-group>
-              </td>
-              <td>
-                <nz-input-group>
-                  <nz-date-picker nzFormat="dd/MM/yyyy" nz-input [(ngModel)]="dataEdit[idx].data.tuNgay">
-                  </nz-date-picker>
-                </nz-input-group>
-              </td>
-              <td>
-                <nz-input-group>
-                  <nz-date-picker nzFormat="dd/MM/yyyy" nz-input [(ngModel)]="dataEdit[idx].data.denNgay">
-                  </nz-date-picker>
-                </nz-input-group>
-              </td>
-              <td>
-                <nz-input-group>
-                  <input nz-input [(ngModel)]="dataEdit[idx].data.nguoiThucHien" />
-                </nz-input-group>
-              </td>
-              <td>
-                <nz-input-group>
-                  <nz-select [nzShowArrow]="false" [(ngModel)]="dataEdit[idx].data.trangThaiTd"
-                    (ngModelChange)="onChangeTrangThai($event,dataEdit[idx].data)">
-                    <nz-option nzValue="{{item.ma}}" nzLabel="{{item.giaTri}}" *ngFor="let item of listTrangThai1">
-                    </nz-option>
-                  </nz-select>
-                </nz-input-group>
-              </td>
-              <td class="text-center">
-                <a (click)="luuEdit(idx)" class="save">
-                  <i class="fa fa-save"></i>
-                </a>
-                <a (click)="huyEdit(idx)">
-                  <i class="fa fa-ban do"></i> </a>
-              </td>
-            </ng-template>
-          </tr>
+          </ng-template>
+        </tr>
         </tbody>
       </nz-table>
     </nz-card>
@@ -428,7 +440,7 @@
               Địa điểm
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <input nz-input [readonly]="isDisable()" formControlName="diaDiem" />
+              <input nz-input [readonly]="isDisable()" formControlName="diaDiem"/>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -440,74 +452,74 @@
       </div>
       <nz-card class="mt-2px flex-card data-table card-border-content table-card">
         <nz-table #basicTable class="nowrap mt-16 flex-card p-lr16" [nzData]="dataTable1" [nzFrontPagination]="false"
-          [nzShowPagination]="false">
+                  [nzShowPagination]="false">
           <thead>
-            <tr>
-              <th nzWidth="20px">STT</th>
-              <th>Họ tên</th>
-              <th>Đơn vị</th>
-              <th nzWidth="50px">Hành động</th>
-            </tr>
+          <tr>
+            <th nzWidth="20px">STT</th>
+            <th>Họ tên</th>
+            <th>Đơn vị</th>
+            <th nzWidth="50px">Hành động</th>
+          </tr>
           </thead>
           <tbody>
-            <tr>
+          <tr>
+            <td></td>
+            <td>
+              <nz-input-group>
+                <input nz-input [(ngModel)]="rowItem1.hoTen" [ngModelOptions]="{standalone: true}"/>
+              </nz-input-group>
+            </td>
+            <td>
+              <nz-input-group>
+                <input nz-input [(ngModel)]="rowItem1.donVi" [ngModelOptions]="{standalone: true}"/>
+              </nz-input-group>
+            </td>
+            <td>
+              <a [ngClass]="{'disabled': isView}" (click)="themMoiItem1()">
+                <i class="fa fa-plus"></i>
+              </a>
+              <a [ngClass]="{'disabled': isView}" (click)="clearData1()">
+                <i class="fa fa-refresh"></i>
+              </a>
+            </td>
+          </tr>
+          </tbody>
+          <tbody>
+          <tr *ngFor="let data1 of dataTable1; let idx = index">
+            <ng-container *ngIf="!dataEdit1[idx].edit; else editTemplate">
+              <td>{{ idx + 1 }}</td>
+              <td>{{ data1.hoTen }}</td>
+              <td>{{ data1.donVi }}</td>
+              <td>
+                <a (click)="editItem1(idx)">
+                  <i class="fa fa-pencil" title="Sửa"></i>
+                </a>
+                <a (click)="xoaItem1(idx)">
+                  <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+                </a>
+              </td>
+            </ng-container>
+            <ng-template #editTemplate>
               <td></td>
               <td>
                 <nz-input-group>
-                  <input nz-input [(ngModel)]="rowItem1.hoTen" [ngModelOptions]="{standalone: true}" />
+                  <input nz-input [(ngModel)]="dataEdit1[idx].data.hoTen" [ngModelOptions]="{standalone: true}"/>
                 </nz-input-group>
               </td>
               <td>
                 <nz-input-group>
-                  <input nz-input [(ngModel)]="rowItem1.donVi" [ngModelOptions]="{standalone: true}" />
+                  <input nz-input [(ngModel)]="dataEdit1[idx].data.donVi" [ngModelOptions]="{standalone: true}"/>
                 </nz-input-group>
               </td>
-              <td>
-                <a [ngClass]="{'disabled': isView}" (click)="themMoiItem1()">
-                  <i class="fa fa-plus"></i>
+              <td class="text-center">
+                <a (click)="luuEdit1(idx)" class="save">
+                  <i class="fa fa-save"></i>
                 </a>
-                <a [ngClass]="{'disabled': isView}" (click)="clearData1()">
-                  <i class="fa fa-refresh"></i>
-                </a>
+                <a (click)="huyEdit1(idx)">
+                  <i class="fa fa-ban do"></i> </a>
               </td>
-            </tr>
-          </tbody>
-          <tbody>
-            <tr *ngFor="let data1 of dataTable1; let idx = index">
-              <ng-container *ngIf="!dataEdit1[idx].edit; else editTemplate">
-                <td>{{ idx + 1 }}</td>
-                <td>{{ data1.hoTen }}</td>
-                <td>{{ data1.donVi }}</td>
-                <td>
-                  <a (click)="editItem1(idx)">
-                    <i class="fa fa-pencil" title="Sửa"></i>
-                  </a>
-                  <a (click)="xoaItem1(idx)">
-                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
-                  </a>
-                </td>
-              </ng-container>
-              <ng-template #editTemplate>
-                <td></td>
-                <td>
-                  <nz-input-group>
-                    <input nz-input [(ngModel)]="dataEdit1[idx].data.hoTen" [ngModelOptions]="{standalone: true}" />
-                  </nz-input-group>
-                </td>
-                <td>
-                  <nz-input-group>
-                    <input nz-input [(ngModel)]="dataEdit1[idx].data.donVi" [ngModelOptions]="{standalone: true}" />
-                  </nz-input-group>
-                </td>
-                <td class="text-center">
-                  <a (click)="luuEdit1(idx)" class="save">
-                    <i class="fa fa-save"></i>
-                  </a>
-                  <a (click)="huyEdit1(idx)">
-                    <i class="fa fa-ban do"></i> </a>
-                </td>
-              </ng-template>
-            </tr>
+            </ng-template>
+          </tr>
           </tbody>
         </nz-table>
       </nz-card>
@@ -540,8 +552,10 @@
               Tổng điểm
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-input-number [nzDisabled]="isDisable()" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                formControlName="tongDiem" type="number" nz-input [nzSize]="'small'"></nz-input-number>
+              <nz-input-number [nzDisabled]="isDisable()" (change)="calculateXepLoai()"
+                               [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                               formControlName="tongDiem" type="number" [nzMax]="100" [nzMin]="0" nz-input
+                               [nzSize]="'small'"></nz-input-number>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -551,7 +565,11 @@
               Xét loại
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <input nz-input [readonly]="isDisable()" formControlName="xepLoai" />
+              <nz-select formControlName="xepLoai" [nzDisabled]="true"
+                         [nzShowArrow]="false">
+                <nz-option nzValue="{{item.ma}}" nzLabel="{{item.giaTri}}" *ngFor="let item of listXepLoai">
+                </nz-option>
+              </nz-select>
             </nz-form-control>
           </nz-form-item>
         </div>

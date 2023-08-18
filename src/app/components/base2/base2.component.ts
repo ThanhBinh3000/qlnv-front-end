@@ -201,7 +201,7 @@ export class Base2Component implements OnInit {
       let temp = [];
       if (this.dataTableAll && this.dataTableAll.length > 0) {
         this.dataTableAll.forEach((item) => {
-          if (['ngayKy', 'ngayLapKh', 'ngayDuyetLdcc', 'ngayGiaoNhan', 'ngayHieuLuc', 'ngayHetHieuLuc', 'ngayDeXuat', 'ngayTongHop', 'ngayTao', 'ngayQd', 'tgianNhang', 'tgianThien', 'ngayDx', 'ngayPduyet', 'ngayThop', 'thoiGianGiaoNhan', 'ngayKyQd', 'ngayNhanCgia', 'ngayKyDc', 'tgianGnhan', 'ngayDuyet', 'ngayNhapKho', 'ngayKyQdinh', 'ngayMkho'].includes(key)) {
+          if (type == 'date' || ['ngayKy', 'ngayLapKh', 'ngayDuyetLdcc', 'ngayGiaoNhan', 'ngayHieuLuc', 'ngayHetHieuLuc', 'ngayDeXuat', 'ngayTongHop', 'ngayTao', 'ngayQd', 'tgianNhang', 'tgianThien', 'ngayDx', 'ngayPduyet', 'ngayThop', 'thoiGianGiaoNhan', 'ngayKyQd', 'ngayNhanCgia', 'ngayKyDc', 'tgianGnhan', 'ngayDuyet', 'ngayNhapKho', 'ngayKyQdinh', 'ngayMkho'].includes(key)) {
             if (item[key] && dayjs(item[key]).format('DD/MM/YYYY').indexOf(value.toString()) != -1) {
               temp.push(item)
             }
@@ -363,8 +363,8 @@ export class Base2Component implements OnInit {
 
   // Save
   async createUpdate(body, roles?: any) {
-    console.log(body,'body')
-    console.log(this.service,'service')
+    console.log(body, 'body')
+    console.log(this.service, 'service')
     if (!this.checkPermission(roles)) {
       return
     }

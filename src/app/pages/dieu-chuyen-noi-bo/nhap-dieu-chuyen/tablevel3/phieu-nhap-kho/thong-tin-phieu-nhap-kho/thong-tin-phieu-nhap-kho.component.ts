@@ -47,6 +47,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
   noiDung: string;
   dviTinh: string;
   duToanKinhPhi: string;
+  isKTCL: boolean = false
 
   constructor(
     httpClient: HttpClient,
@@ -70,6 +71,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
       tenDvi: [],
       maQhns: [],
       soPhieuNhapKho: [],
+      ngayLap: [dayjs().format('YYYY-MM-DD')],
       ngayNhapKho: [dayjs().format('YYYY-MM-DD')],
       soNo: [],
       soCo: [],
@@ -105,10 +107,12 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
       tgianGiaoNhanHang: [],
       tenLoaiHinhNhapXuat: [],
       tenKieuNhapXuat: [],
-      bbNghiemThuBqld: [],
       soLuongQdDcCuc: [],
       dviTinh: [],
-      soBangKeCanHang: [, [Validators.required]],
+      bbNghiemThuBqld: [],
+      bbKtnk: [],
+      soBangKeCh: [, [Validators.required]],
+      soBangKeVt: [, [Validators.required]],
       tongSLNhapTT: [],
       tongKPDCTT: [],
       duToanKinhPhi: [],
@@ -147,6 +151,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
 
     if (this.data) {
       console.log('this.data', this.data)
+      this.isKTCL = this.data.thayDoiThuKho
       this.formData.patchValue({
         trangThai: STATUS.DU_THAO,
         tenTrangThai: 'Dự thảo',
@@ -169,6 +174,9 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
         soLuongQdDcCuc: this.data.slDienChuyen,
         dviTinh: this.data.tenDonvitinh,
       });
+      this.dviTinh = this.data.tenDonvitinh
+      this.noiDung = this.data.tenChLoaiHangHoa
+      this.duToanKinhPhi = this.data.duToanKinhPhiDc
       await this.loadChiTietQdinh(this.data.qdDcCucId);
     }
 
@@ -470,6 +478,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
           dviTinh: data.tenDonViTinh,
           idKeHoachDtl: data.id
         });
+        this.isKTCL = data.thayDoiThuKho
         this.dviTinh = data.tenDonViTinh
         this.noiDung = data.tenCloaiVthh
         this.duToanKinhPhi = data.duToanKphi
@@ -501,10 +510,21 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
 
 
   async save(isGuiDuyet?) {
-    if (!this.formData.value.thayDoiThuKho) {
+    if (this.isVatTu) {
+      this.formData.controls["soBangKeCh"].clearValidators();
+    } else {
+      this.formData.controls["soBangKeVt"].clearValidators();
+    }
+    if (!this.formData.value.thayDoiThuKho || !this.isVatTu) {
       this.formData.controls["soPhieuKtraCluong"].clearValidators();
       this.formData.controls["idPhieuKtraCluong"].clearValidators();
     }
+    if (!isGuiDuyet) {
+      this.formData.controls["soBangKeCh"].clearValidators();
+      this.formData.controls["soBangKeVt"].clearValidators();
+    }
+    this.helperService.markFormGroupTouched(this.formData);
+    if (!this.formData.valid) return
     await this.spinner.show();
     let body = this.formData.value;
     body.chungTuDinhKem = this.chungTuDinhKem;

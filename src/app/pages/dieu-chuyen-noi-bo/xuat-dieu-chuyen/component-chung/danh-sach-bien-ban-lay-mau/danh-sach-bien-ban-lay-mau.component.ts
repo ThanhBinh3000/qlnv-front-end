@@ -95,18 +95,38 @@ export class DanhSachBienBanLayMau extends Base2Component implements OnInit {
         };
     }
 
-    ngOnInit(): void {
-        this.formData.patchValue({ loaiDc: this.loaiDc, isVatTu: this.isVatTu, thayDoiThuKho: this.thayDoiThuKho, type: this.type });
-        this.timKiem()
+    async ngOnInit(): Promise<void> {
+        try {
+            this.spinner.show();
+            this.formData.patchValue({ loaiDc: this.loaiDc, isVatTu: this.isVatTu, thayDoiThuKho: this.thayDoiThuKho, type: this.type });
+            await this.timKiem()
+        } catch (error) {
+            console.log("e", error);
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        } finally {
+            this.spinner.hide()
+        }
     }
     async timKiem() {
         try {
+            const data = this.formData.value;
+            const dataTrim = this.trimStringData(data);
+            this.formData.patchValue({ ...dataTrim })
             await this.search();
             this.buildTableView();
 
         } catch (error) {
             console.log("error", error)
         }
+    }
+    trimStringData(obj: any) {
+        for (const key in obj) {
+            const value = obj[key];
+            if (typeof value === 'string' || value instanceof String) {
+                obj[key] = value.trim();
+            }
+        };
+        return obj
     }
     resetForm() {
         this.formData.reset();

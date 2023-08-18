@@ -66,10 +66,9 @@
             <i class="icon htvbdh_chuyen-xu-ly"></i>
             <span>Xuất file</span>
           </button>
-          <button *ngIf="userService.isAccessPermisson('DCNB_QUYETDINHDC_SUA') && isCuc()" type="button"
-            class="btn btn-main" (click)="redirectDetail(0,false)">
-            <i class="icon htvbdh_tcdt_tao-qd"></i>
-            <span>Tạo QĐ điều chuyển cấp Cục</span>
+          <button type="button" class="btn btn-main ml-2" (click)="redirectDetail(0,false)">
+            <i class="icon htvbdh_dau-cong"></i>
+            <span>Thêm</span>
           </button>
         </div>
       </div>
@@ -212,9 +211,8 @@
       </nz-card>
     </div>
   </div>
-
-  <!-- <div class="chi-tiet" *ngIf="isDetail">
-    <app-thong-tin-quyet-dinh-dieu-chuyen-cuc [isView]="isView" [idInput]="selectedId"
-      (showListEvent)="quayLai()"></app-thong-tin-quyet-dinh-dieu-chuyen-cuc>
-  </div> -->
+  <!-- [isView]="isView" [idInput]="selectedId" -->
+  <div class="chi-tiet" *ngIf="isDetail">
+    <app-thong-tin-ho-so-ky-thuat (showListEvent)="quayLai()"></app-thong-tin-ho-so-ky-thuat>
+  </div>
 </div>

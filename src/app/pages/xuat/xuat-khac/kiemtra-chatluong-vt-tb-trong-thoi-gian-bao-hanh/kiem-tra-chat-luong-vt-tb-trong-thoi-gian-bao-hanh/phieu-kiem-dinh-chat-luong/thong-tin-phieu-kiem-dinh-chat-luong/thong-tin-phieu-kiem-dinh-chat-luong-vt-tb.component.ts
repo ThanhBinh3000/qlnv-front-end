@@ -110,7 +110,7 @@ export class ThongTinPhieuKiemDinhChatLuongVtTbComponent extends Base2Component 
         nhanXetKetLuan: [null],
         trangThai: [STATUS.DU_THAO],
         lyDoTuChoi: [null],
-        isDat: [null],
+        isDat: [false],
         mauBiHuy: [false],
         tenDvi: [''],
         tenLoaiVthh: [''],
@@ -231,8 +231,8 @@ export class ThongTinPhieuKiemDinhChatLuongVtTbComponent extends Base2Component 
       nzFooter: null,
       nzComponentParams: {
         dataTable: this.listSoQuyetDinh,
-        dataHeader: ['Năm','Số quyết định', 'Ngày quyết định', ],
-        dataColumn: ['nam','soQuyetDinh', 'ngayKy', ],
+        dataHeader: ['Năm','Số quyết định', 'Ngày quyết định','Số lần lấy mẫu' ],
+        dataColumn: ['nam','soQuyetDinh', 'ngayKy', 'soLanLm'],
       },
     })
     modalQD.afterClose.subscribe(async (data) => {
@@ -455,7 +455,6 @@ export class ThongTinPhieuKiemDinhChatLuongVtTbComponent extends Base2Component 
   async changeValueBienBanLayMau($event) {
     if ($event) {
       let item = this.listBbLayMau.find(it => it.soBienBan == $event);
-      console.log(item,"cmm")
       if (item) {
         this.formData.patchValue({
           maDiaDiem: item.maDiaDiem,

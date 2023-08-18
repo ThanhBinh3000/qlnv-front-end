@@ -97,11 +97,15 @@ export class BangKeXuatVatTuDieuChuyenComponent extends Base2Component implement
 
     async ngOnInit() {
         try {
-            this.initData()
+            this.spinner.show();
+            await this.initData()
             await this.timKiem();
         } catch (e) {
             console.log('error: ', e)
             this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+        finally {
+            this.spinner.hide()
         }
     }
 
@@ -133,7 +137,6 @@ export class BangKeXuatVatTuDieuChuyenComponent extends Base2Component implement
     }
 
     async search(roles?): Promise<void> {
-        await this.spinner.show()
         this.formData.patchValue({
             isVatTu: this.isVatTu,
             loaiDc: this.loaiDc,
@@ -142,33 +145,33 @@ export class BangKeXuatVatTuDieuChuyenComponent extends Base2Component implement
         });
         await super.search(roles);
         this.buildTableView();
-        await this.spinner.hide()
     }
     resetForm() {
         this.formData.reset();
         this.formData.patchValue({ loaiDc: this.loaiDc, isVatTu: this.isVatTu, thayDoiThuKho: this.thayDoiThuKho, type: this.type })
     }
-    clearForm(): void {
+    clearFilter(): void {
         this.resetForm();
         this.timKiem()
     }
     async timKiem() {
-        await this.spinner.show();
         try {
-            if (this.formData.value.ngayDx) {
-                this.formData.value.ngayDxTu = dayjs(this.formData.value.ngayDx[0]).format('YYYY-MM-DD')
-                this.formData.value.ngayDxDen = dayjs(this.formData.value.ngayDx[1]).format('YYYY-MM-DD')
-            }
-            if (this.formData.value.ngayKetThuc) {
-                this.formData.value.ngayKetThucTu = dayjs(this.formData.value.ngayKetThuc[0]).format('YYYY-MM-DD')
-                this.formData.value.ngayKetThucDen = dayjs(this.formData.value.ngayKetThuc[1]).format('YYYY-MM-DD')
-            }
+            const data = this.formData.value;
+            const dataTrim = this.trimStringData(data);
+            this.formData.patchValue({ ...dataTrim })
             await this.search();
-        } catch (e) {
-            console.log(e)
-        } finally {
-            await this.spinner.hide();
+        } catch (error) {
+            console.log("error", error)
         }
+    };
+    trimStringData(obj: any) {
+        for (const key in obj) {
+            const value = obj[key];
+            if (typeof value === 'string' || value instanceof String) {
+                obj[key] = value.trim();
+            }
+        };
+        return obj
     }
 
     buildTableView() {

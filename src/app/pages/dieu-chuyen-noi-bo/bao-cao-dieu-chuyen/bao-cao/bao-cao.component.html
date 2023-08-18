@@ -97,7 +97,7 @@
                         <th width="90px">Hành động</th>
                     </tr>
                     <tr class="search-table">
-                        <th></th>
+                        <th *ngIf="!isView"></th>
                         <th></th>
                         <th>
                             <nz-input-group>
@@ -134,8 +134,8 @@
                         <th *ngIf="loaiBc==='CHI_CUC'">
                             <nz-input-group>
                                 <input type="text" nz-input placeholder="Tìm kiếm"
-                                    [(ngModel)]="filterTable.soBBThuaThieu"
-                                    (input)="filterInTable('soBBThuaThieu',filterTable.soBBThuaThieu)" size="small" />
+                                    [(ngModel)]="filterTable.soBbThuaThieu"
+                                    (input)="filterInTable('soBbThuaThieu',filterTable.soBbThuaThieu)" size="small" />
                             </nz-input-group>
 
                         </th>
@@ -148,8 +148,8 @@
                         </th>
                         <th *ngIf="loaiBc==='CHI_CUC'">
                             <nz-input-group>
-                                <nz-date-picker nzFormat="dd/MM/yyyy" [(ngModel)]="filterTable.ngayKyQdCuc"
-                                    (ngModelChange)="filterInTable('ngayKyQdCuc', convertDateToString(filterTable.ngayKyQdCuc))">
+                                <nz-date-picker nzFormat="dd/MM/yyyy" [(ngModel)]="filterTable.ngayKyQd"
+                                    (ngModelChange)="filterInTable('ngayKyQd', convertDateToString(filterTable.ngayKyQd))">
                                 </nz-date-picker>
                             </nz-input-group>
                         </th>
@@ -180,9 +180,12 @@
                         <td>{{data.soBc}}</td>
                         <td>{{data.tenBc}}</td>
                         <td>{{data.ngayBc | date:"dd/MM/yyyy"}}</td>
-                        <td *ngIf="loaiBc==='CHI_CUC'">{{data.soBBThuaThieu}}</td>
+                        <td *ngIf="loaiBc==='CHI_CUC'">
+                            <a *ngIf="data.soBbThuaThieu && data.bbThuaThieuId" nz-button nzType="link"
+                                (click)="openModalBBTT(data.bbThuaThieuId)">{{data.soBbThuaThieu}}</a>
+                        </td>
                         <td *ngIf="loaiBc==='CHI_CUC'">{{data.soQdDcCuc}}</td>
-                        <td *ngIf="loaiBc==='CHI_CUC'">{{ data.ngayKyQdCuc|date:"dd/MM/yyyy"}}</td>
+                        <td *ngIf="loaiBc==='CHI_CUC'">{{ data.ngayKyQd|date:"dd/MM/yyyy"}}</td>
                         <td>{{ TRANG_THAI[data.trangThai]}}</td>
                         <td>
                             <a (click)="redirectDetail(data.id, true)" *ngIf="checkRoleView(data.trangThai)">
@@ -225,3 +228,16 @@
     <app-them-moi-bao-cao [idInput]="selectedId" [isView]="isView" (showListEvent)="showList()"
         [loaiBc]="loaiBc"></app-them-moi-bao-cao>
 </ng-template>
+
+<nz-modal [nzWidth]="'90%'" [(nzVisible)]="isViewBbThuaThieu" (nzOnCancel)="closeModalBbThuaThieu()">
+    <ng-container *nzModalContent class="modal__content">
+        <app-chi-tiet-bien-ban-thua-thieu [idInput]="bbThuaThieuId" [isView]="true"
+            [isViewOnModal]="true"></app-chi-tiet-bien-ban-thua-thieu>
+    </ng-container>
+    <div *nzModalFooter>
+        <button nz-button (click)="closeModalBbThuaThieu()" class="modal__button--cancel">
+            <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+            Đóng
+        </button>
+    </div>
+</nz-modal>
