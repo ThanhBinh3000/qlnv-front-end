@@ -312,7 +312,7 @@ export class BaoCao03Component implements OnInit {
         temp.forEach(data => {
             this.lstCtietBcao.filter(e => e.stt == Table.preIndex(data.ma) && e.maVtu.startsWith(data.loaiVtu) && e.tenVtu).forEach((item, index) => {
                 item.stt = data.ma + '.' + (index + 1).toString();
-                this.lstCtietBcao.filter(e => e.stt == data.ma && e.maVtu == item.maVtu && !e.tenVtu).forEach((ele, index) => {
+                this.lstCtietBcao.filter(e => e.stt == Table.preIndex(data.ma) && e.maVtu == item.maVtu && !e.tenVtu).forEach((ele, index) => {
                     ele.stt = item.stt + '.' + (index + 1).toString();
                 })
             })
