@@ -46,11 +46,11 @@ export class ThemmoiQuyetdinhKetquaChaogiaComponent extends Base2Component imple
       idPdKhDtl: [],
       idPdKhHdr: [],
       namKh: [dayjs().get('year'), [Validators.required]],
-      soQdKq: [, [Validators.required]],
-      ngayHluc: [, [Validators.required]],
-      ngayKy: [, [Validators.required]],
-      soQd: [, [Validators.required]],
-      trichYeu: [, [Validators.required]],
+      soQdKq: [],
+      ngayHluc: [],
+      ngayKy: [],
+      soQd: ['', [Validators.required]],
+      trichYeu: [],
       maDvi: [],
       tenDvi: [],
       diaDiemChaoGia: [],
@@ -108,6 +108,7 @@ export class ThemmoiQuyetdinhKetquaChaogiaComponent extends Base2Component imple
   }
 
   async save(isGuiDuyet?: boolean) {
+    this.setValidator(isGuiDuyet)
     let body = this.formData.value;
     if (this.formData.get('soQdKq').value) {
       body.soQdKq = this.formData.get('soQdKq').value + this.maTrinh;
@@ -131,19 +132,19 @@ export class ThemmoiQuyetdinhKetquaChaogiaComponent extends Base2Component imple
   setValidator(isGuiDuyet) {
     if (isGuiDuyet) {
       if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDC) {
-        this.formData.controls["soQd"].setValidators([Validators.required]);
-        // this.formData.controls["ngayQdinh"].setValidators([Validators.required]);
+        this.formData.controls["soQdKq"].setValidators([Validators.required]);
       } else {
-        this.formData.controls["soQd"].clearValidators();
-        // this.formData.controls["ngayQdinh"].clearValidators();
+        this.formData.controls["soQdKq"].clearValidators();
       }
     } else {
-      this.formData.controls["soQd"].clearValidators();
-      // this.formData.controls["ngayQdinh"].clearValidators();
+      this.formData.controls["soQdKq"].clearValidators();
     }
   }
 
   async guiDuyet() {
+    if (this.formData.invalid) {
+      return;
+    }
     let trangThai = '';
     let msg = '';
     switch (this.formData.get('trangThai').value) {
@@ -211,7 +212,7 @@ export class ThemmoiQuyetdinhKetquaChaogiaComponent extends Base2Component imple
     let listTb = [];
     let res = await this.chaogiaUyquyenMualeService.search(body);
     if (res.data) {
-      listTb = res.data.content;
+      listTb = res.data.content.filter(x => x.soQdKq == null || x.soQdKq == "");
       console.log(listTb)
     }
     const modalQD = this.modal.create({
@@ -223,7 +224,7 @@ export class ThemmoiQuyetdinhKetquaChaogiaComponent extends Base2Component imple
       nzFooter: null,
       nzComponentParams: {
         dataTable: listTb,
-        dataHeader: ['Số quyết định phê duyệt KH BTT', 'Loại hàng hóa', 'Chủng loại hàng hóa'],
+        dataHeader: ['Số quyết định phê duyệt KH MTT', 'Loại hàng hóa', 'Chủng loại hàng hóa'],
         dataColumn: ['soQd', 'tenLoaiVthh', 'tenCloaiVthh']
       },
     });

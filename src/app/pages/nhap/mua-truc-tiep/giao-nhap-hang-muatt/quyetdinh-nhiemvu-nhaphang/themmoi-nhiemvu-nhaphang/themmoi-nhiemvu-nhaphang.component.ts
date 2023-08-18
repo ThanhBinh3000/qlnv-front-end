@@ -537,7 +537,7 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
             donViTinh: data.donViTinh,
             soHd: data.soHd,
             tenHd: data.tenHd,
-            tgianNkho: data.tgianKthuc,
+            tgianNkho: data.tgianNkho,
           });
           console.log(this.isViewDetail);
           this.radioValue = data.loaiQd

@@ -232,7 +232,7 @@ export class ThemMoiBienBanNghiemThuBaoQuanComponent extends Base2Component impl
       soQdGiaoNvNh: data.soQd,
       idQdGiaoNvNh: data.id,
       tgianNkho: data.tgianNkho,
-      slCanNhap: data.soLuong * 1000,
+      slCanNhap: data.soLuong,
       loaiVthh: data.loaiVthh,
       cloaiVthh: data.cloaiVthh,
       tenLoaiVthh: data.tenLoaiVthh,

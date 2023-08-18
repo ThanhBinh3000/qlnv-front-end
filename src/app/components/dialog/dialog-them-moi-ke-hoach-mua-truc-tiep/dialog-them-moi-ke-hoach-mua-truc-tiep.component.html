@@ -40,10 +40,12 @@
                 <nz-form-item>
                     <nz-form-label nzRequired [nzNoColon]="true"> Đơn giá đề xuất (đ) </nz-form-label>
                     <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-                        <nz-input-number formControlName="donGia" [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
-                            [nzStep]="1" [nzSize]="'small'" [nzFormatter]="globals.formatter" (input)="calTongThanhTien()"
-                            [nzParser]="globals.parser">
-                        </nz-input-number>
+                      <nz-input-number
+                        formControlName="donGia"
+                        (input)="calTongThanhTien()"
+                        [nzPrecisionMode]="customPrecisionFn"
+                        nzPlaceHolder="Đơn giá đề xuất"
+                      ></nz-input-number>
                     </nz-form-control>
                 </nz-form-item>
             </div>

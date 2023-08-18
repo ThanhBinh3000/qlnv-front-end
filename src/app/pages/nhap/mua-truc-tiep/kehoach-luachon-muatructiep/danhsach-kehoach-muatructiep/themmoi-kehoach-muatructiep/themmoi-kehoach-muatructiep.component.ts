@@ -292,6 +292,7 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
         if (!this.validateAddDiaDiem(data)) {
           return
         }
+        console.log(data, "popup")
         this.dataTable.push(data);
       }
       this.calculatorTable();
