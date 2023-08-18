@@ -245,6 +245,7 @@ export class PhuLucTongHopComponent implements OnInit {
         })
 
         this.lstCtietBcao = Table.sortByIndex(this.lstCtietBcao)
+        this.sum1()
         this.tinhTong();
         this.getTotal();
         this.getStatusButton();
@@ -271,7 +272,11 @@ export class PhuLucTongHopComponent implements OnInit {
             }
         )
     }
-
+    sum1() {
+        this.lstCtietBcao.forEach(item => {
+            this.sum(item.stt);
+        })
+    }
 
     async getFormDetail() {
         await this.dieuChinhDuToanService.ctietBieuMau(this.dataInfo.id).toPromise().then(
