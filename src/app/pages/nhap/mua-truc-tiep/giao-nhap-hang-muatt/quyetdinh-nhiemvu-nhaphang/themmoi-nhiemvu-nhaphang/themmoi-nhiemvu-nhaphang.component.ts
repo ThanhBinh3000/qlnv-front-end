@@ -937,9 +937,8 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
       nzWidth: 310,
       nzOnOk: async () => {
         try {
-          let body = {
-            hhQdGiaoNvNhangDtlList: this.dataTable
-          }
+          let body = this.formData.value;
+          body.hhQdGiaoNvNhangDtlList = this.dataTable
           let res = await this.quyetDinhGiaoNvNhapHangService.updateDdiemNhap(body);
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
@@ -956,7 +955,7 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
   }
 
   isDisableForm() {
-    if (this.isViewDetail && (this.formData.value.trangThai == STATUS.BAN_HANH || this.formData.value.trangThai == STATUS.CHO_DUYET_LDC || this.formData.value.trangThai == STATUS.CHO_DUYET_TP)) {
+    if ((this.isViewDetail || (!this.isViewDetail && this.userService.isAccessPermisson('NHDTQG_PTMTT_QDGNVNH_DUYET_TP') || !this.isViewDetail && this.userService.isAccessPermisson('NHDTQG_PTMTT_QDGNVNH_DUYET_LDC')) ) && (this.formData.value.trangThai == STATUS.BAN_HANH || this.formData.value.trangThai == STATUS.CHO_DUYET_LDC || this.formData.value.trangThai == STATUS.CHO_DUYET_TP)) {
       return true
     } else {
       return false;
