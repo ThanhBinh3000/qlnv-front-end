@@ -895,7 +895,7 @@ export class BaoCaoTongHopComponent implements OnInit {
 
         const checkSave = this.userService.isAccessPermisson(Roles.GDT.EDIT_REPORT_PA_PBDT);
         // this.statusBtnSave = this.getBtnStatus([Status.TT_01], Roles.GDT.EDIT_REPORT_PA_PBDT, checkChirld);
-        this.statusBtnSave = Status.check('saveWOHist', this.trangThaiBanGhi) && checkSave && checkChirld;
+        this.statusBtnSave = Status.check('saveWHist', this.trangThaiBanGhi) && checkSave && checkChirld;
         this.statusBtnApprove = this.getBtnStatus([Status.TT_01], Roles.GDT.APPROVE_REPORT_PA_PBDT, checkChirld);
         this.statusBtnTBP = this.getBtnStatus([Status.TT_02], Roles.GDT.DUYET_REPORT_PA_PBDT, checkChirld);
         this.statusBtnLD = this.getBtnStatus([Status.TT_04], Roles.GDT.PHE_DUYET_REPORT_PA_PBDT, checkChirld);
