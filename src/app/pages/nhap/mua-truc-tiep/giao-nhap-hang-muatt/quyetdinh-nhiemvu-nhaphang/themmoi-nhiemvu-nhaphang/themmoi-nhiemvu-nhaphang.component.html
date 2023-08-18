@@ -12,22 +12,22 @@
                 <span>Lưu và gửi duyệt</span>
             </button>
             <button type="button" class="btn btn-sub do"
-                *ngIf="( formData.value.trangThai == STATUS.CHO_DUYET_TP || formData.value.trangThai == STATUS.CHO_DUYET_LDC )"
+                *ngIf="(!isViewDetail && (userService.isAccessPermisson('NHDTQG_PTMTT_QDGNVNH_DUYET_TP') && formData.value.trangThai == STATUS.CHO_DUYET_TP) || (userService.isAccessPermisson('NHDTQG_PTMTT_QDGNVNH_DUYET_LDC') && formData.value.trangThai == STATUS.CHO_DUYET_LDC) )"
                 (click)="tuChoi()">
                 <i class="icon htvbdh_tcdt_tuchoi"></i>
                 <span>Từ chối</span>
             </button>
             <button type="button" class="btn btn-sub xanh-nhat"
-                *ngIf="( formData.value.trangThai == STATUS.CHO_DUYET_TP || formData.value.trangThai == STATUS.CHO_DUYET_LDC )"
+                    *ngIf="(!isViewDetail && (userService.isAccessPermisson('NHDTQG_PTMTT_QDGNVNH_DUYET_TP') && formData.value.trangThai == STATUS.CHO_DUYET_TP) || (userService.isAccessPermisson('NHDTQG_PTMTT_QDGNVNH_DUYET_LDC') && formData.value.trangThai == STATUS.CHO_DUYET_LDC) )"
                 (click)="pheDuyet()">
                 <i class="icon htvbdh_tcdt_pheduyet"></i>
                 <span>Duyệt</span>
             </button>
-            <button *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDC ) && !isDetail()" type="button"
-                class="btn btn-sub xanh-nhat" (click)="save(true)">
-                <i class="icon htvbdh_chuyenvanthu"></i>
-                <span>Ban hành</span>
-            </button>
+<!--            <button *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDC ) && !isDetail()" type="button"-->
+<!--                class="btn btn-sub xanh-nhat" (click)="save(true)">-->
+<!--                <i class="icon htvbdh_chuyenvanthu"></i>-->
+<!--                <span>Ban hành</span>-->
+<!--            </button>-->
             <button
                 *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC ) && !isDetail()"
                 type="
@@ -77,7 +77,7 @@
                         <nz-form-label [nzNoColon]="true" nzRequired>
                             Năm nhập
                         </nz-form-label>
-                        <nz-select formControlName="namNhap" (ngModelChange)="getListHopDong()">
+                        <nz-select [nzDisabled]="isDisableForm()" formControlName="namNhap" (ngModelChange)="getListHopDong()">
                             <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                         </nz-select>
                     </nz-form-item>
@@ -91,7 +91,7 @@
                             <nz-input-group [nzAddOnAfter]="maQdSuffix">
                                 <nz-input-number formControlName="soQd" [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
                                     nzPlaceHolder="Nhập số quyết định" [nzStep]="1" [nzSize]="'small'"
-                                    [nzDisabled]="isDetail()">
+                                    [nzDisabled]="isDisableForm()">
                                 </nz-input-number>
                             </nz-input-group>
                         </nz-form-control>
@@ -104,7 +104,7 @@
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
                             <nz-date-picker nzPlaceHolder="Ngày quyết định" formControlName="ngayQd"
-                                nzFormat="dd/MM/yyyy" [nzDisabled]="isDetail()">
+                                nzFormat="dd/MM/yyyy" [nzDisabled]="isDisableForm()">
                             </nz-date-picker>
                         </nz-form-control>
                     </nz-form-item>
@@ -124,7 +124,7 @@
                         <nz-form-label [nzNoColon]="true">
                         </nz-form-label>
                         <nz-form-control>
-                            <nz-radio-group [disabled]="isDetail()" [(ngModel)]="radioValue" nzName="radiogroup"
+                            <nz-radio-group [disabled]="isDisableForm()" [(ngModel)]="radioValue" nzName="radiogroup"
                                 [ngModelOptions]="{standalone: true}">
                                 <label nz-radio nzValue="01"> Căn cứ vào hợp đồng </label>
                                 <label nz-radio nzValue="02"> Căn cứ vào Ủy quyền/Mua lẻ </label>
@@ -138,7 +138,7 @@
                             Chọn 1 hợp đồng đã ký cấp Cục
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
-                            <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isDetail() ? '' : openDialogHopDong()">
+                            <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isDisableForm() ? '' : openDialogHopDong()">
                                 <input [readonly]="true" nz-input formControlName="soHd" readonly="true" />
                             </nz-input-group>
                         </nz-form-control>
@@ -150,7 +150,7 @@
                             Chọn QĐ phê duyệt KH mua trực tiếp (ủy quyền)
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
-                            <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isDetail() ? '' : openDialogCanCuUyQuyen()">
+                            <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isDisableForm() ? '' : openDialogCanCuUyQuyen()">
                                 <input [readonly]="true" nz-input formControlName="soQdPdKh" readonly="true" />
                             </nz-input-group>
                         </nz-form-control>
@@ -209,7 +209,7 @@
                             Trích yếu
                         </nz-form-label>
                         <nz-form-control>
-                            <input nz-input formControlName="trichYeu" [readonly]="isDetail()" />
+                            <input nz-input formControlName="trichYeu" [readonly]="isDisableForm()" />
                         </nz-form-control>
                     </nz-form-item>
                 </div>
@@ -219,7 +219,7 @@
                     File đính kèm QĐ giao nhiệm vụ nhập hàng
                   </nz-form-label>
                 </nz-form-item>
-                <file-list [data]="listFileDinhKem" [isViewDetail]="isViewDetail"></file-list>
+                <file-list [data]="listFileDinhKem" [isViewDetail]="isDisableForm()"></file-list>
               </div>
                 <div nz-col [nzSpan]="24">
                     <nz-form-item class="form-item">
@@ -227,7 +227,7 @@
                             Căn cứ pháp lý
                         </nz-form-label>
                     </nz-form-item>
-                    <file-list [data]="canCuPhapLy" [isViewDetail]="isViewDetail"></file-list>
+                    <file-list [data]="canCuPhapLy" [isViewDetail]="isDisableForm()"></file-list>
                 </div>
             </div>
             <ng-template #error let-control>
