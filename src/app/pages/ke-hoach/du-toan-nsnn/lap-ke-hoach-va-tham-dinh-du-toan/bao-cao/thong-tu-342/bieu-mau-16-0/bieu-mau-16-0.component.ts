@@ -427,34 +427,62 @@ export class BieuMau160Component implements OnInit {
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
 			return;
 		}
-		const header = [
-			{ t: 0, b: 5, l: 0, r: 15, val: null },
-			{ t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
-			{ t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
-			{ t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
-			{ t: 4, b: 5, l: 0, r: 0, val: 'STT' },
-			{ t: 4, b: 5, l: 1, r: 1, val: 'Mặt hàng' },
-			{ t: 4, b: 5, l: 2, r: 2, val: 'Đơn vị tính' },
-			{ t: 4, b: 4, l: 3, r: 4, val: 'Kế hoạch năm ' + (this.namBcao - 1).toString() },
-			{ t: 5, b: 5, l: 3, r: 3, val: 'Số lượng' },
-			{ t: 5, b: 5, l: 4, r: 4, val: 'Thành tiền' },
-			{ t: 4, b: 4, l: 5, r: 6, val: 'Ước thực hiện năm ' + (this.namBcao - 1).toString() },
-			{ t: 5, b: 5, l: 5, r: 5, val: 'Số lượng' },
-			{ t: 5, b: 5, l: 6, r: 6, val: 'Thành tiền' },
-			{ t: 4, b: 5, l: 7, r: 7, val: 'Tồn kho đến 31/12 năm ' + (this.namBcao - 1).toString() },
-			{ t: 4, b: 5, l: 8, r: 8, val: 'Tổng mức dự trữ theo quyết định của cấp có thẩm quyền' },
-			{ t: 4, b: 4, l: 9, r: 10, val: 'Kế hoạch năm ' + (this.namBcao).toString() },
-			{ t: 5, b: 5, l: 9, r: 9, val: 'Số lượng' },
-			{ t: 5, b: 5, l: 10, r: 10, val: 'Thành tiền' },
-			{ t: 4, b: 4, l: 11, r: 12, val: 'Thẩm định kế hoạch năm ' + (this.namBcao).toString() },
-			{ t: 5, b: 5, l: 11, r: 11, val: 'Số lượng' },
-			{ t: 5, b: 5, l: 12, r: 12, val: 'Thành tiền' },
-			{ t: 4, b: 5, l: 13, r: 13, val: 'Chênh lệch giữa thẩm định của DVCT và nhu cầu của DVCD' },
-			{ t: 4, b: 5, l: 14, r: 14, val: 'Ghi chú' },
-			{ t: 4, b: 5, l: 15, r: 15, val: 'Ý kiến của đơn vị cấp trên' },
-		]
-		const fieldOrder = ['stt', 'tenDmuc', 'maDviTinh', 'khSluong', 'khTtien', 'uocThSluong', 'uocThTtien', 'tonKho', 'tongMucDtru', 'namKhSluong', 'namKhTtien', 'tdinhSluong', 'tdinhTtien',
-			'chenhLech', 'ghiChu', 'ykienDviCtren']
+		let header = [];
+		let fieldOrder = [];
+		if (this.status.viewAppVal) {
+			header = [
+				{ t: 0, b: 5, l: 0, r: 15, val: null },
+				{ t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
+				{ t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
+				{ t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
+				{ t: 4, b: 5, l: 0, r: 0, val: 'STT' },
+				{ t: 4, b: 5, l: 1, r: 1, val: 'Mặt hàng' },
+				{ t: 4, b: 5, l: 2, r: 2, val: 'Đơn vị tính' },
+				{ t: 4, b: 4, l: 3, r: 4, val: 'Kế hoạch năm ' + (this.namBcao - 1).toString() },
+				{ t: 5, b: 5, l: 3, r: 3, val: 'Số lượng' },
+				{ t: 5, b: 5, l: 4, r: 4, val: 'Thành tiền' },
+				{ t: 4, b: 4, l: 5, r: 6, val: 'Ước thực hiện năm ' + (this.namBcao - 1).toString() },
+				{ t: 5, b: 5, l: 5, r: 5, val: 'Số lượng' },
+				{ t: 5, b: 5, l: 6, r: 6, val: 'Thành tiền' },
+				{ t: 4, b: 5, l: 7, r: 7, val: 'Tồn kho đến 31/12 năm ' + (this.namBcao - 1).toString() },
+				{ t: 4, b: 5, l: 8, r: 8, val: 'Tổng mức dự trữ theo quyết định của cấp có thẩm quyền' },
+				{ t: 4, b: 4, l: 9, r: 10, val: 'Kế hoạch năm ' + (this.namBcao).toString() },
+				{ t: 5, b: 5, l: 9, r: 9, val: 'Số lượng' },
+				{ t: 5, b: 5, l: 10, r: 10, val: 'Thành tiền' },
+				{ t: 4, b: 4, l: 11, r: 12, val: 'Thẩm định kế hoạch năm ' + (this.namBcao).toString() },
+				{ t: 5, b: 5, l: 11, r: 11, val: 'Số lượng' },
+				{ t: 5, b: 5, l: 12, r: 12, val: 'Thành tiền' },
+				{ t: 4, b: 5, l: 13, r: 13, val: 'Chênh lệch giữa thẩm định của DVCT và nhu cầu của DVCD' },
+				{ t: 4, b: 5, l: 14, r: 14, val: 'Ghi chú' },
+				{ t: 4, b: 5, l: 15, r: 15, val: 'Ý kiến của đơn vị cấp trên' },
+			]
+			fieldOrder = ['stt', 'tenDmuc', 'maDviTinh', 'khSluong', 'khTtien', 'uocThSluong', 'uocThTtien', 'tonKho', 'tongMucDtru', 'namKhSluong', 'namKhTtien', 'tdinhSluong', 'tdinhTtien',
+				'chenhLech', 'ghiChu', 'ykienDviCtren']
+		} else {
+			header = [
+				{ t: 0, b: 5, l: 0, r: 11, val: null },
+				{ t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
+				{ t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
+				{ t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
+				{ t: 4, b: 5, l: 0, r: 0, val: 'STT' },
+				{ t: 4, b: 5, l: 1, r: 1, val: 'Mặt hàng' },
+				{ t: 4, b: 5, l: 2, r: 2, val: 'Đơn vị tính' },
+				{ t: 4, b: 4, l: 3, r: 4, val: 'Kế hoạch năm ' + (this.namBcao - 1).toString() },
+				{ t: 5, b: 5, l: 3, r: 3, val: 'Số lượng' },
+				{ t: 5, b: 5, l: 4, r: 4, val: 'Thành tiền' },
+				{ t: 4, b: 4, l: 5, r: 6, val: 'Ước thực hiện năm ' + (this.namBcao - 1).toString() },
+				{ t: 5, b: 5, l: 5, r: 5, val: 'Số lượng' },
+				{ t: 5, b: 5, l: 6, r: 6, val: 'Thành tiền' },
+				{ t: 4, b: 5, l: 7, r: 7, val: 'Tồn kho đến 31/12 năm ' + (this.namBcao - 1).toString() },
+				{ t: 4, b: 5, l: 8, r: 8, val: 'Tổng mức dự trữ theo quyết định của cấp có thẩm quyền' },
+				{ t: 4, b: 4, l: 9, r: 10, val: 'Kế hoạch năm ' + (this.namBcao).toString() },
+				{ t: 5, b: 5, l: 9, r: 9, val: 'Số lượng' },
+				{ t: 5, b: 5, l: 10, r: 10, val: 'Thành tiền' },
+				{ t: 4, b: 5, l: 11, r: 11, val: 'Ghi chú' },
+			]
+			fieldOrder = ['stt', 'tenDmuc', 'maDviTinh', 'khSluong', 'khTtien', 'uocThSluong', 'uocThTtien', 'tonKho', 'tongMucDtru', 'namKhSluong', 'namKhTtien', 'ghiChu']
+		}
+
 		const filterData = this.lstCtietBcao.map(item => {
 			const row: any = {};
 			fieldOrder.forEach(field => {
