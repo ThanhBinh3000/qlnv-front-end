@@ -1,12 +1,17 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { MESSAGE } from 'src/app/constants/message';
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
-import { QuyetDinhPdKhBanTrucTiepService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/quyet-dinh-pd-kh-ban-truc-tiep.service';
+import {Component, Input, OnInit} from '@angular/core';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {MESSAGE} from 'src/app/constants/message';
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from 'src/app/services/storage.service';
+import {CHUC_NANG} from "../../../../../constants/status";
+import {
+  QuyetDinhPdKhBanTrucTiepService
+} from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/quyet-dinh-pd-kh-ban-truc-tiep.service';
+import {XuatTrucTiepComponent} from "../../xuat-truc-tiep.component";
+
 @Component({
   selector: 'app-quyet-dinh-phe-duyet-kh-ban-truc-tiep',
   templateUrl: './quyet-dinh-phe-duyet-kh-ban-truc-tiep.component.html',
@@ -14,16 +19,17 @@ import { QuyetDinhPdKhBanTrucTiepService } from 'src/app/services/qlnv-hang/xuat
 })
 
 export class QuyetDinhPheDuyetKhBanTrucTiepComponent extends Base2Component implements OnInit {
-
   @Input() loaiVthh: string;
-  idDxKh: number = 0;
-  isViewDxKh: boolean = false;
+  CHUC_NANG = CHUC_NANG;
+  public vldTrangThai: XuatTrucTiepComponent
+  isView = false;
   idThop: number = 0;
   isViewThop: boolean = false;
-
+  idDxKh: number = 0;
+  isViewDxKh: boolean = false;
   listTrangThai: any[] = [
-    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
-    { ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành' },
+    {ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo'},
+    {ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành'},
   ];
 
   constructor(
@@ -33,9 +39,10 @@ export class QuyetDinhPheDuyetKhBanTrucTiepComponent extends Base2Component impl
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private quyetDinhPdKhBanTrucTiepService: QuyetDinhPdKhBanTrucTiepService,
+    private xuatTrucTiepComponent: XuatTrucTiepComponent,
   ) {
     super(httpClient, storageService, notification, spinner, modal, quyetDinhPdKhBanTrucTiepService);
-
+    this.vldTrangThai = this.xuatTrucTiepComponent;
     this.formData = this.fb.group({
       namKh: null,
       soQdPd: null,
@@ -47,7 +54,6 @@ export class QuyetDinhPheDuyetKhBanTrucTiepComponent extends Base2Component impl
       loaiVthh: null,
       lastest: 0
     })
-
     this.filterTable = {
       namKh: '',
       soQdPd: '',
@@ -69,11 +75,10 @@ export class QuyetDinhPheDuyetKhBanTrucTiepComponent extends Base2Component impl
   async ngOnInit() {
     await this.spinner.show();
     try {
-      this.timKiem();
+      await this.timKiem()
       await this.search();
       await this.spinner.hide();
-    }
-    catch (e) {
+    } catch (e) {
       console.log('error: ', e)
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -84,7 +89,6 @@ export class QuyetDinhPheDuyetKhBanTrucTiepComponent extends Base2Component impl
     this.formData.patchValue({
       loaiVthh: this.loaiVthh,
       lastest: 0,
-      trangThai: this.userService.isCuc() ? this.STATUS.BAN_HANH : null
     })
   }
 
@@ -92,6 +96,12 @@ export class QuyetDinhPheDuyetKhBanTrucTiepComponent extends Base2Component impl
     this.formData.reset();
     this.timKiem();
     this.search();
+  }
+
+  redirectDetail(id, isView: boolean) {
+    this.idSelected = id;
+    this.isDetail = true;
+    this.isView = isView;
   }
 
   openModalDxKh(id: number) {
@@ -127,5 +137,4 @@ export class QuyetDinhPheDuyetKhBanTrucTiepComponent extends Base2Component impl
     }
     return endValue.getTime() <= this.formData.value.ngayKyQdTu.getTime();
   };
-
 }

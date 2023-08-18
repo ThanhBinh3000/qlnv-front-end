@@ -1,12 +1,17 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { MESSAGE } from 'src/app/constants/message';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
-import { TongHopKhBanTrucTiepService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/tong-hop-kh-ban-truc-tiep.service';
+import {Component, Input, OnInit} from '@angular/core';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {MESSAGE} from 'src/app/constants/message';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from 'src/app/services/storage.service';
+import {
+  TongHopKhBanTrucTiepService
+} from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/tong-hop-kh-ban-truc-tiep.service';
+import {XuatTrucTiepComponent} from "../../xuat-truc-tiep.component";
+import {CHUC_NANG} from "../../../../../constants/status";
+
 @Component({
   selector: 'app-tong-hop-ke-hoach-ban-truc-tiep',
   templateUrl: './tong-hop-ke-hoach-ban-truc-tiep.component.html',
@@ -14,18 +19,18 @@ import { TongHopKhBanTrucTiepService } from 'src/app/services/qlnv-hang/xuat-han
 })
 
 export class TongHopKeHoachBanTrucTiepComponent extends Base2Component implements OnInit {
-
   @Input() loaiVthh: string;
-  @Input()
-  listVthh: any[] = [];
+  @Input() listVthh: any[] = [];
+  CHUC_NANG = CHUC_NANG;
+  public vldTrangThai: XuatTrucTiepComponent
+  isView = false;
   idQdPd: number = 0;
   isViewQdPd: boolean = false;
   isQuyetDinh: boolean = false;
-
   listTrangThai: any[] = [
-    { ma: this.STATUS.CHUA_TAO_QD, giaTri: 'Chưa Tạo QĐ' },
-    { ma: this.STATUS.DA_DU_THAO_QD, giaTri: 'Đã Dự Thảo QĐ' },
-    { ma: this.STATUS.DA_BAN_HANH_QD, giaTri: 'Đã Ban Hành QĐ' },
+    {ma: this.STATUS.CHUA_TAO_QD, giaTri: 'Chưa Tạo QĐ'},
+    {ma: this.STATUS.DA_DU_THAO_QD, giaTri: 'Đã Dự Thảo QĐ'},
+    {ma: this.STATUS.DA_BAN_HANH_QD, giaTri: 'Đã Ban Hành QĐ'},
   ];
 
   constructor(
@@ -35,18 +40,16 @@ export class TongHopKeHoachBanTrucTiepComponent extends Base2Component implement
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private tongHopKhBanTrucTiepService: TongHopKhBanTrucTiepService,
+    private xuatTrucTiepComponent: XuatTrucTiepComponent,
   ) {
     super(httpClient, storageService, notification, spinner, modal, tongHopKhBanTrucTiepService);
-
+    this.vldTrangThai = this.xuatTrucTiepComponent;
     this.formData = this.fb.group({
       namKh: null,
+      loaiVthh: null,
+      noiDungThop: null,
       ngayThopTu: null,
       ngayThopDen: null,
-      loaiVthh: null,
-      tenLoaiVthh: null,
-      cloaiVthh: null,
-      tenCloaiVthh: null,
-      noiDungThop: null,
     })
   }
 
@@ -56,10 +59,8 @@ export class TongHopKeHoachBanTrucTiepComponent extends Base2Component implement
     ngayTao: '',
     noiDungThop: '',
     soQdPd: '',
-    loaiVthh: '',
     tenLoaiVthh: '',
-    cloaiVthh: '',
-    trangThai: '',
+    tenCloaiVthh: '',
     tenTrangThai: '',
   }
 
@@ -69,12 +70,17 @@ export class TongHopKeHoachBanTrucTiepComponent extends Base2Component implement
       this.timKiem();
       await this.search();
       this.spinner.hide();
-    }
-    catch (e) {
+    } catch (e) {
       console.log('error: ', e)
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
+  }
+
+  redirectDetail(id, isView: boolean) {
+    this.idSelected = id;
+    this.isDetail = true;
+    this.isView = isView;
   }
 
   taoQdinh(id: number) {
