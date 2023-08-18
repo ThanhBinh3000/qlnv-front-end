@@ -55,7 +55,8 @@ export class BienBanThuaThieuComponent extends Base2Component implements OnInit 
         super(httpClient, storageService, notification, spinner, modal, bienBanThuThieuService)
         this.formData = this.fb.group({
             nam: [''],
-            soQdinhCuc: [''],
+            // soQdinhCuc: [''],
+            soQdDcCuc: [''],
             soBb: [''],
             tuNgayBc: [''],
             denNgayBc: [''],
