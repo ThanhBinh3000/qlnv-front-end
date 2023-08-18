@@ -128,6 +128,21 @@ export class ThemmoiQuyetdinhKetquaChaogiaComponent extends Base2Component imple
     }
   }
 
+  setValidator(isGuiDuyet) {
+    if (isGuiDuyet) {
+      if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDC) {
+        this.formData.controls["soQd"].setValidators([Validators.required]);
+        // this.formData.controls["ngayQdinh"].setValidators([Validators.required]);
+      } else {
+        this.formData.controls["soQd"].clearValidators();
+        // this.formData.controls["ngayQdinh"].clearValidators();
+      }
+    } else {
+      this.formData.controls["soQd"].clearValidators();
+      // this.formData.controls["ngayQdinh"].clearValidators();
+    }
+  }
+
   async guiDuyet() {
     let trangThai = '';
     let msg = '';
