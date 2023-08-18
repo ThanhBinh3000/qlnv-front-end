@@ -35,13 +35,14 @@ export class Base3Component implements OnInit {
 
   // Const
   listNam: any[] = [];
+  listTrangThai: any = [];
   fileDinhKem: any[] = []
   STATUS = STATUS
 
   // Form search and dataTable
   formData: FormGroup
   dataTable: any[] = [];
-  dataTableView : any[] = [];
+  dataTableView: any[] = [];
   dataTableAll: any[] = [];
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
@@ -180,7 +181,7 @@ export class Base3Component implements OnInit {
       let temp = [];
       if (this.dataTableAll && this.dataTableAll.length > 0) {
         this.dataTableAll.forEach((item) => {
-          if (['ngayKy', 'ngayLapKh', 'ngayDuyetLdcc', 'ngayGiaoNhan', 'ngayHieuLuc', 'ngayHetHieuLuc', 'ngayDeXuat', 'ngayTongHop', 'ngayTao', 'ngayQd', 'tgianNhang', 'tgianThien', 'ngayDx', 'ngayPduyet', 'ngayThop', 'thoiGianGiaoNhan', 'ngayKyQd', 'ngayNhanCgia', 'ngayKyDc', 'tgianGnhan', 'ngayDuyet', 'ngayNhapKho', 'ngayKyQdinh', 'ngayMkho'].includes(key)) {
+          if (type == 'date') {
             if (item[key] && dayjs(item[key]).format('DD/MM/YYYY').indexOf(value.toString()) != -1) {
               temp.push(item)
             }
@@ -264,9 +265,9 @@ export class Base3Component implements OnInit {
             this.spinner.hide();
             if (res.msg == MESSAGE.SUCCESS) {
               await this.search();
-              this.notification.success(MESSAGE.SUCCESS,MESSAGE.DELETE_SUCCESS);
-            }else{
-              this.notification.error(MESSAGE.ERROR,res.msg);
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+            } else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
             }
           });
         } catch (e) {
@@ -651,6 +652,15 @@ export class Base3Component implements OnInit {
     if (id && +id > 0) {
       this.id = +id
     }
+  }
+
+
+  showLyDoTuChoi(): boolean {
+    if (this.formData.controls.hasOwnProperty('trangThai')) {
+      let trangThai = this.formData.value.trangThai;
+      return trangThai == STATUS.TU_CHOI_TP || trangThai == STATUS.TU_CHOI_LDC || trangThai == STATUS.TU_CHOI_LDCC || trangThai == STATUS.TU_CHOI_LDTC
+    }
+    return false;
   }
 
 

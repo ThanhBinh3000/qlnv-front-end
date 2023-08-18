@@ -108,7 +108,7 @@
         </div>
         <div nz-col [nzSpan]="3">
           <nz-form-item class="form-item">
-            <nz-form-label [nzNoColon]="true" nzRequired> Căn cứ trên QĐ của TCDT </nz-form-label>
+            <nz-form-label [nzNoColon]="true" nzRequired> Căn cứ trên QĐ nhập hàng của TCDT </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isDisableForm() ? '' : openDialogQdPd()">
                 <input class="search__input" [readonly]="true" nz-input formControlName="soQdPd" readonly />
@@ -173,7 +173,7 @@
         </div>
         <div nz-col nzSpan="3">
           <nz-form-item class="form-item">
-            <nz-form-label [nzNoColon]="true">
+            <nz-form-label nzRequired [nzNoColon]="true">
               Thời gian nhập kho muộn nhất
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
@@ -182,9 +182,9 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="24">
+        <div nz-col nzSpan="9">
           <nz-form-item class="form-item">
-            <nz-form-label [nzNoColon]="true">
+            <nz-form-label nzRequired [nzNoColon]="true">
               Trích yếu
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
@@ -216,56 +216,45 @@
       </ng-template>
     </form>
   </nz-card>
-  <ng-container>
-    <nz-table [nzData]="listDataGroup" class="nowrap" nzBordered>
-      <thead>
-      <tr>
-        <th style="width: 2%;">STT</th>
-        <th>Cục DTNN KV</th>
-        <th>Chi cục DTNN KV</th>
-        <th>Điểm kho</th>
-        <th>Ngăn/Lô kho</th>
-        <th>Chủng loại hàng hóa DTQG</th>
-        <th>Tồn kho</th>
-        <th>SL nhập</th>
-        <th>Số BB nhập đầy kho/kết thúc nhập kho</th>
-        <th>Trạng thái NH</th>
-      </tr>
-      </thead>
-      <tbody>
-      <ng-container>
-        <ng-container *ngFor="let item of listDataGroup , let i = index">
+
+  <nz-card class="mg-t-16 flex-card p-lr16">
+    <ng-container>
+      <div class="header header-green-background mg-t-10">
+        <div class="header-text">
+          <div class="title-chi-tieu">
+            <span>
+            </span>
+            <span> CHI TIẾT QUYẾT ĐỊNH GIAO NHIỆM VỤ NHẬP HÀNG </span>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-container>
+      <nz-card class="mg-t-10 flex-card p-lr16 card-table">
+        <nz-table class="pd-10" nzBordered [nzData]="listDataGroup" [nzFrontPagination]="false" [nzShowPagination]="false">
+          <thead>
           <tr>
-            <td [nzExpand]="true" (nzExpandChange)="onExpandChange(i, $event)"></td>
-            <td>{{item.tenCuc}}</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+            <th style="width: 2%;">STT</th>
+            <th>Cục DTNN KV</th>
+            <th>Chi cục DTNN KV</th>
+            <th>Điểm kho</th>
+            <th>Ngăn/Lô kho</th>
+            <th>Chủng loại hàng hóa DTQG</th>
+            <th>Tồn kho</th>
+            <th>SL nhập</th>
+            <th>Số BB nhập đầy kho/kết thúc nhập kho</th>
+            <th>Trạng thái NH</th>
           </tr>
-          <ng-container *ngFor="let chiCuc of item.children, let y = index">
-            <tr>
-              <td></td>
-              <td></td>
-              <td>{{chiCuc.tenChiCuc}}</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <ng-container *ngFor="let diemKho of chiCuc.children, let k = index">
+          </thead>
+          <tbody>
+          <ng-container>
+            <ng-container *ngFor="let item of listDataGroup , let i = index">
               <tr>
+                <td [nzExpand]="true" (nzExpandChange)="onExpandChange(i, $event)"></td>
+                <td>{{item.tenCuc}}</td>
                 <td></td>
                 <td></td>
-                <td></td>
-                <td>{{diemKho.tenDiemKho}}</td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -273,25 +262,132 @@
                 <td></td>
                 <td></td>
               </tr>
-              <ng-container *ngFor="let nganLo of diemKho.children, let z = index">
+              <ng-container *ngFor="let chiCuc of item.children, let y = index">
                 <tr>
                   <td></td>
                   <td></td>
+                  <td>{{chiCuc.tenChiCuc}}</td>
                   <td></td>
                   <td></td>
-                  <td>{{nganLo.tenNganLoKho}}</td>
-                  <td>{{nganLo.tenCloaiVthh}}</td>
-                  <td>{{nganLo.slTonKho | number : '1.0-1' : 'vi_VN'}}</td>
-                  <td>{{nganLo.slDoiThua | number : '1.0-1' : 'vi_VN'}}</td>
-                  <td>{{nganLo.soBbNDayKho}}</td>
-                  <td>{{convertTrangThai(nganLo.trangThai)}}</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
                 </tr>
+                <ng-container *ngFor="let diemKho of chiCuc.children, let k = index">
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>{{diemKho.tenDiemKho}}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <ng-container *ngFor="let nganLo of diemKho.children, let z = index">
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td>{{nganLo.tenNganLoKho}}</td>
+                      <td>{{nganLo.tenCloaiVthh}}</td>
+                      <td>{{nganLo.slTonKho | number : '1.0-1' : 'vi_VN'}}</td>
+                      <td>{{nganLo.slDoiThua | number : '1.0-1' : 'vi_VN'}}</td>
+                      <td>{{nganLo.soBbNDayKho}}</td>
+                      <td>{{convertTrangThai(nganLo.trangThai)}}</td>
+                    </tr>
+                  </ng-container>
+                </ng-container>
               </ng-container>
             </ng-container>
           </ng-container>
-        </ng-container>
-      </ng-container>
-      </tbody>
-    </nz-table>
-  </ng-container>
+          </tbody>
+        </nz-table>
+      </nz-card>
+    </ng-container>
+  </nz-card>
+
+<!--  <ng-container>-->
+<!--    <nz-table [nzData]="listDataGroup" class="nowrap" nzBordered>-->
+<!--      <thead>-->
+<!--      <tr>-->
+<!--        <th style="width: 2%;">STT</th>-->
+<!--        <th>Cục DTNN KV</th>-->
+<!--        <th>Chi cục DTNN KV</th>-->
+<!--        <th>Điểm kho</th>-->
+<!--        <th>Ngăn/Lô kho</th>-->
+<!--        <th>Chủng loại hàng hóa DTQG</th>-->
+<!--        <th>Tồn kho</th>-->
+<!--        <th>SL nhập</th>-->
+<!--        <th>Số BB nhập đầy kho/kết thúc nhập kho</th>-->
+<!--        <th>Trạng thái NH</th>-->
+<!--      </tr>-->
+<!--      </thead>-->
+<!--      <tbody>-->
+<!--      <ng-container>-->
+<!--        <ng-container *ngFor="let item of listDataGroup , let i = index">-->
+<!--          <tr>-->
+<!--            <td [nzExpand]="true" (nzExpandChange)="onExpandChange(i, $event)"></td>-->
+<!--            <td>{{item.tenCuc}}</td>-->
+<!--            <td></td>-->
+<!--            <td></td>-->
+<!--            <td></td>-->
+<!--            <td></td>-->
+<!--            <td></td>-->
+<!--            <td></td>-->
+<!--            <td></td>-->
+<!--            <td></td>-->
+<!--          </tr>-->
+<!--          <ng-container *ngFor="let chiCuc of item.children, let y = index">-->
+<!--            <tr>-->
+<!--              <td></td>-->
+<!--              <td></td>-->
+<!--              <td>{{chiCuc.tenChiCuc}}</td>-->
+<!--              <td></td>-->
+<!--              <td></td>-->
+<!--              <td></td>-->
+<!--              <td></td>-->
+<!--              <td></td>-->
+<!--              <td></td>-->
+<!--              <td></td>-->
+<!--            </tr>-->
+<!--            <ng-container *ngFor="let diemKho of chiCuc.children, let k = index">-->
+<!--              <tr>-->
+<!--                <td></td>-->
+<!--                <td></td>-->
+<!--                <td></td>-->
+<!--                <td>{{diemKho.tenDiemKho}}</td>-->
+<!--                <td></td>-->
+<!--                <td></td>-->
+<!--                <td></td>-->
+<!--                <td></td>-->
+<!--                <td></td>-->
+<!--                <td></td>-->
+<!--              </tr>-->
+<!--              <ng-container *ngFor="let nganLo of diemKho.children, let z = index">-->
+<!--                <tr>-->
+<!--                  <td></td>-->
+<!--                  <td></td>-->
+<!--                  <td></td>-->
+<!--                  <td></td>-->
+<!--                  <td>{{nganLo.tenNganLoKho}}</td>-->
+<!--                  <td>{{nganLo.tenCloaiVthh}}</td>-->
+<!--                  <td>{{nganLo.slTonKho | number : '1.0-1' : 'vi_VN'}}</td>-->
+<!--                  <td>{{nganLo.slDoiThua | number : '1.0-1' : 'vi_VN'}}</td>-->
+<!--                  <td>{{nganLo.soBbNDayKho}}</td>-->
+<!--                  <td>{{convertTrangThai(nganLo.trangThai)}}</td>-->
+<!--                </tr>-->
+<!--              </ng-container>-->
+<!--            </ng-container>-->
+<!--          </ng-container>-->
+<!--        </ng-container>-->
+<!--      </ng-container>-->
+<!--      </tbody>-->
+<!--    </nz-table>-->
+<!--  </ng-container>-->
 </div>

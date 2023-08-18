@@ -48,10 +48,10 @@
         <span>Duyệt</span>
       </button>
 
-      <button *ngIf="isBanHanh()" type="button" class="btn btn-info ml-2" (click)="banHanh()">
+      <!-- <button *ngIf="isBanHanh()" type="button" class="btn btn-info ml-2" (click)="banHanh()">
         <i class="icon htvbdh_chuyenvanthu"></i>
         <span>Ban hành</span>
-      </button>
+      </button> -->
 
     </div>
   </div>
@@ -250,7 +250,7 @@
               <ng-container *ngFor="let item of quyetDinhPdDtl.data, let i = index;">
                 <tr [ngClass]="{'bg-selected': selected === i}" (click)="selectRow(i)">
                   <td>{{i + 1}}</td>
-                  <td>{{item.tenDviCuc || item.tenCucDxuat || ""}}</td>
+                  <td>{{item.tenDviCuc || item.tenCucDxuat || item.tenCucXuat || ""}}</td>
                   <td *ngIf="formData.value.loaiDc == 'CUC'">{{item.tenCucNhan || ""}}</td>
                   <td>{{item.soDxuat || ""}}</td>
                   <td>{{item.ngayGduyet | date: 'dd/MM/YYYY'}}</td>
@@ -566,7 +566,7 @@
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td class="bold">{{c.tenLoKho || ""}} {{c.tenNganKho || ""}}</td>
+                            <td class="bold">{{c.tenLoKho || ""}} - {{c.tenNganKho || ""}} - {{c.tenNhaKho || ""}}</td>
                             <td class="bold">{{c.tenLoaiVthh || ""}}</td>
                             <td class="bold">{{c.tenCloaiVthh || ""}}</td>
                             <td class="bold">{{c.tenDonViTinh || ""}}</td>

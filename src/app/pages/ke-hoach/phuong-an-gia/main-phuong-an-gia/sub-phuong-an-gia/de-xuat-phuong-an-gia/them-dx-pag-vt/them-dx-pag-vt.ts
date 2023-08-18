@@ -102,7 +102,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
         ghiChu: [],
         noiDung: [null],
         soDeXuatDc: [null],
-        lanDeXuat: [1, Validators.required],
+        lanDeXuat: [1],
         lyDoTuChoi: [],
         qdCtKhNam: [null],
         soCanCu: [null],
@@ -580,6 +580,11 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
   }
 
   async onChangeCloaiVthh(event) {
+    this.rowItemTtc.giaQdBtc = null;
+    this.rowItemTtc.giaQdBtcVat = null;
+    this.rowItemTtc.tchuanCluong = null;
+    this.rowItemTtc.donViTinh = null;
+    this.rowItemTtc.vat = null;
     let list = this.listCloaiVthh.filter(item => item.ma == event)
     this.rowItemTtc.tenCloaiVthh = list && list.length > 0 ? list[0].ten : ''
     if (this.type == 'GCT') {
@@ -707,8 +712,23 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
   }
 
 
+  setValidator() {
+    this.formData.controls["namKeHoach"].setValidators([Validators.required]);
+    this.formData.controls["soDeXuat"].setValidators([Validators.required]);
+    this.formData.controls["loaiVthh"].setValidators([Validators.required]);
+    this.formData.controls["ngayKy"].setValidators([Validators.required]);
+    this.formData.controls["loaiGia"].setValidators([Validators.required]);
+    this.formData.controls["maPphapXdg"].setValidators([Validators.required]);
+    if ((this.formData.value.loaiGia == 'LG01' || this.formData.value.loaiGia == 'LG03') && this.type == 'GMTDBTT') {
+      this.formData.controls["vat"].setValidators([Validators.required]);
+    }
+  }
+
+
   async save(isGuiDuyet?) {
     this.spinner.show();
+    this.helperService.removeValidators(this.formData);
+    this.setValidator()
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR)
@@ -719,7 +739,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
       if (this.type == 'GCT') {
         item.giaDnVat = item.giaDn + item.giaDn * item.vat;
       } else  {
-        if (this.formData.value.vat) {
+        if (this.formData.value.vat && ((this.formData.value.loaiGia == 'LG01' || this.formData.value.loaiGia == 'LG03'))) {
           item.vat = this.formData.value.vat;
           item.giaDnVat = item.giaDn + item.giaDn * this.formData.value.vat;
         }

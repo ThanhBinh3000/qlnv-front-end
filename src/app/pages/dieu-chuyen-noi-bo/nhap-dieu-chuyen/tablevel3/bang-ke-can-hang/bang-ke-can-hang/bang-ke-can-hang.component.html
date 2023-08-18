@@ -13,8 +13,8 @@
             <div nz-col nzSpan="6">
               <label class="search__label">Số QĐ ĐC của cục</label>
               <nz-input-group nzAddOnAfter="/DCNB">
-                <nz-input-number class="search__input" formControlName="soQdinh" [nzMin]="1" [nzMax]="9" [nzStep]="1"
-                  [nzSize]="'small'" [nzDisabled]="isView">
+                <nz-input-number class="search__input" formControlName="soQdinh" [nzMin]="1" [nzMax]="999999999"
+                  [nzStep]="1" [nzSize]="'small'" [nzDisabled]="isView">
                 </nz-input-number>
               </nz-input-group>
             </div>
@@ -25,7 +25,17 @@
 
             <div nz-col nzSpan="6">
               <label class="search__label">Ngày nhập kho</label>
-              <nz-range-picker formControlName="ngayDuyetTc" nzFormat="dd/MM/yyyy"></nz-range-picker>
+              <div nz-row>
+                <div nz-col nzSpan="12" class="cus-start-date">
+                  <nz-date-picker [nzDisabledDate]="disabledStartNgayNK" nzFormat="dd/MM/yyyy"
+                    formControlName="ngayNhapKhoTu" nzPlaceHolder="Ngày bắt đầu">
+                  </nz-date-picker>
+                </div>
+                <div nz-col nzSpan="12" class="cus-end-date">
+                  <nz-date-picker [nzDisabledDate]="disabledEndNgayNK" nzFormat="dd/MM/yyyy"
+                    formControlName="ngayNhapKhoDen" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+                </div>
+              </div>
             </div>
 
           </div>
@@ -155,10 +165,13 @@
                           <td class="bold">{{row4.ngayNhapKho || ""}}</td>
                           <td class="bold">{{row4.tenTrangThai || ""}}</td>
                           <td>
-                            <a *ngIf="row4.trangThai !== STATUS.DU_THAO && row4.trangThai !== STATUS.TU_CHOI_LDCC"
-                              (click)="redirectDetail(row4.id, true)">
+                            <a *ngIf="row4.trangThai === STATUS.DA_DUYET_LDCC" (click)="redirectDetail(row4.id, true)">
                               <i class="fa fa-eye" title="Xem chi tiết"></i>
                             </a>
+                            <a *ngIf="row4.trangThai === STATUS.CHO_DUYET_LDCC" (click)="redirectDetail(row4.id, true)">
+                              <i class="icon htvbdh_tcdt_pheduyet" title="Duyệt"></i>
+                            </a>
+
                             <a *ngIf="row4.trangThai == STATUS.DU_THAO || row4.trangThai == STATUS.TU_CHOI_LDCC"
                               (click)="redirectDetail(row4.id, false)">
                               <i class="fa fa-pencil" title="Sửa"></i>

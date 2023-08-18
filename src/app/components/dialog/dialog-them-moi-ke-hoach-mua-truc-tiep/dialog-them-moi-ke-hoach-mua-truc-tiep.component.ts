@@ -65,9 +65,9 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
       diaChi: [null],
       soLuongChiTieu: [null],
       soLuongKhDd: [null],
-      donGia: [null],
+      donGia: [null, [Validators.required]],
       donGiaVat: [null],
-      tongSoLuong: [null],
+      tongSoLuong: [null, [Validators.required]],
       tongThanhTien: [null],
       tongThanhTienVat: [null],
       soLuong: [null],
@@ -106,6 +106,7 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
   }
 
   initForm() {
+    debugger
     this.userInfo = this.userService.getUserLogin();
     this.thongTinMuaTrucTiep = new DanhSachMuaTrucTiep();
     this.loadDonVi();
@@ -119,7 +120,14 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
           donGiaVat: this.donGiaVat,
         })
       }
-      this.changeChiCuc(this.dataEdit.maDvi);
+      let body = {
+        year: this.namKh,
+        loaiVthh: this.loaiVthh,
+        maDvi: this.formData.value.maDvi
+      }
+      let soLuongDaLenKh = this.danhSachMuaTrucTiepService.getSoLuongAdded(body);
+      this.formData.value.soLuongKhDd = soLuongDaLenKh;
+      // this.changeChiCuc(this.dataEdit.maDvi);
       this.listOfData = this.dataEdit.children
     } else {
       this.formData.patchValue({
@@ -188,7 +196,7 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
         soLuongChiTieu: chiCuc?.soLuongChiTieu ? chiCuc?.soLuongChiTieu : resChiTieu?.ntnThoc,
         soLuongNhap: chiCuc?.soLuongNhap,
         tongSoLuong: chiCuc?.tongSoLuong,
-        donGiaVat: chiCuc?.donGiaVat,
+        // donGiaVat: chiCuc?.donGiaVat,
         tongThanhTien: chiCuc?.tongThanhTien,
         tongThanhTienVat: chiCuc?.tongThanhTienVat,
         donGia: chiCuc?.donGia

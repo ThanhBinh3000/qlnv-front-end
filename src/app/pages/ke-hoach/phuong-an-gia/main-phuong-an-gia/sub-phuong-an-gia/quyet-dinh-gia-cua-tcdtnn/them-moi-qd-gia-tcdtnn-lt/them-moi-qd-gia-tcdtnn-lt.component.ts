@@ -5,7 +5,6 @@ import {NzModalService} from 'ng-zorro-antd/modal';
 import {NzNotificationService} from 'ng-zorro-antd/notification';
 import {NgxSpinnerService} from 'ngx-spinner';
 import {MESSAGE} from 'src/app/constants/message';
-import {QuyetDinhGiaBtcThongTinGia} from 'src/app/models/QuyetDinhBtcThongTinGia';
 import {STATUS} from "src/app/constants/status";
 import {UserLogin} from 'src/app/models/userlogin';
 import {DanhMucService} from 'src/app/services/danhmuc.service';
@@ -98,13 +97,13 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
         namKeHoach: data.namKeHoach,
         soQd: data.soQd ? data.soQd.split("/")[0] : '',
         loaiVthh: data.loaiVthh,
-        tenLoaiVthh: data.loaiVthh,
+        tenLoaiVthh: data.tenLoaiVthh,
         cloaiVthh: data.cloaiVthh,
-        tenCloaiVthh: data.cloaiVthh,
+        tenCloaiVthh: data.tenCloaiVthh,
         ngayKy: data.ngayKy,
         ngayHieuLuc: data.ngayHieuLuc,
         loaiGia: data.loaiGia,
-        tenLoaiGia: data.loaiGia,
+        tenLoaiGia: data.tenLoaiGia,
         tchuanCluong: data.tchuanCluong,
         trichYeu: data.trichYeu,
         trangThai: data.trangThai,
@@ -113,7 +112,8 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
         loaiDeXuat: data.loaiDeXuat,
       });
       this.dataTable = data.thongTinGiaLt;
-      this.buildTreePagCt();      this.fileDinhKem = data.fileDinhKems;
+      this.buildTreePagCt();
+      this.fileDinhKem = data.fileDinhKems;
     }
   }
 
@@ -189,15 +189,6 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
       return;
     }
     this.convertTreeToList();
-    if (this.dataTable && this.dataTable.length > 0) {
-      if (this.formData.value.loaiGia == 'LG03') {
-        this.dataTable.forEach(item => {
-          if (item.vat) {
-            item.giaQdVatTcdtnn = item.giaQdTcdtnn + item.giaQdTcdtnn * item.vat
-          }
-        })
-      }
-    }
     let body = this.formData.value;
     body.soQd = body.soQd + this.maQd;
     body.pagType = this.pagType;
@@ -241,7 +232,11 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
             tenVungMien: value && value[0] && value[0].tenVungMien ? value[0].tenVungMien : null,
             tenDvi: value && value[0] && value[0].tenDvi ? value[0].tenDvi : null,
             soDx: value && value[0] && value[0].soDx ? value[0].soDx : null,
-            children: value
+            children: value,
+            apDungTatCa : value && value[0] && value[0].apDungTatCa ? value[0].apDungTatCa : null,
+            vat : value && value[0] && value[0].vat ? value[0].vat : null,
+            giaQdBtc : value && value[0] && value[0].giaQdBtc ? value[0].giaQdBtc : null,
+            giaQdTcdt : value && value[0] && value[0].giaQdTcdt ? value[0].giaQdTcdt : null,
           };
         }).value();
     }
@@ -254,6 +249,12 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
       this.dataTableView.forEach(item => {
         if (item.children && item.children.length > 0) {
           item.children.forEach(child => {
+            if (child.apDungTatCa) {
+              child.giaQdTcdt = item.giaQdTcdt;
+              if (child.vat) {
+                child.giaQdTcdtVat = child.giaQdTcdt + child.giaQdTcdt * child.vat
+              }
+            }
             this.dataTable.push(child);
           })
         }

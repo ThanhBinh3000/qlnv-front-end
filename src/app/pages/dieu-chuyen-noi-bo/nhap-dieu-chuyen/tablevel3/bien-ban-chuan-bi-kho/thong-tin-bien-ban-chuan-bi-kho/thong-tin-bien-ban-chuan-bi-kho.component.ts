@@ -124,6 +124,9 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
       type: ["01"],
       loaiDc: ["DCNB"],
       isVatTu: [true],
+      loaiQdinh: [],
+      thayDoiThuKho: [],
+      lyDoTuChoi: [],
       noiDung: [],
       soLuongTrongNam: [],
       donGiaTrongNam: [],
@@ -141,7 +144,9 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
       maQhns: this.userInfo.DON_VI.maQhns,
       ktvBaoQuan: this.userInfo.TEN_DAY_DU,
       soBban: `${id}/${this.formData.get('nam').value}/${this.maBb}`,
-      loaiDc: this.loaiDc
+      loaiDc: this.loaiDc,
+      loaiQdinh: this.loaiDc === "CUC" ? "NHAP" : null,
+      thayDoiThuKho: true
     })
     await this.getListNhomCcdc()
     if (this.idInput) {
@@ -363,6 +368,40 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
     this.tongGiaTri = null
   }
 
+  cancelEditPD(index: number): void {
+    this.objHangPD = null
+    this.iHangPD = null
+    this.dsHangPD[index].edit = false;
+  }
+
+  saveEditPD(index: number): void {
+    this.objHangPD = null
+    this.iHangPD = null
+    this.dsHangPD[index].edit = false;
+  }
+
+  deleteRowPD(data: any) {
+    this.dsHangPD = this.dsHangPD.filter(x => x.idVirtual != data.idVirtual);
+    // const tongKinhPhiDaTh = this.dsHangPD.reduce((previous, current) => previous + current.tongGiaTri, 0);
+    // const tongKinhPhiDaThBc = this.convertTien(tongKinhPhiDaTh)
+    this.dsHangPD = cloneDeep(this.dsHangPD)
+    this.formData.patchValue({
+      noiDung: "",
+      soLuongTrongNam: "",
+      donGiaTrongNam: "",
+      soLuongNamTruoc: "",
+      thanhTienNamTruoc: "",
+      // tongKinhPhiDaTh,
+      // tongKinhPhiDaThBc
+    })
+  }
+
+  editRowPD(index: number) {
+    this.iHangPD = index
+    this.objHangPD = this.dsHangPD[index]
+    this.dsHangPD[index].edit = true;
+  }
+
 
 
   async openDialogQD() {
@@ -370,10 +409,11 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
 
     let body = {
       trangThai: STATUS.BAN_HANH,
-      loaiVthh: ['0101', '0102'],
-      loaiDc: "DCNB",
-      maDvi: this.userInfo.MA_DVI
-      // listTrangThaiXh: [STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN],
+      // loaiVthh: ['0101', '0102'],
+      isVatTu: true,
+      loaiDc: this.loaiDc,
+      maDvi: this.userInfo.MA_DVI,
+      type: this.formData.value.type
     }
     let resSoDX = this.isCuc() ? await this.quyetDinhDieuChuyenCucService.getDsSoQuyetDinhDieuChuyenCuc(body) : await this.quyetDinhDieuChuyenCucService.getDsSoQuyetDinhDieuChuyenChiCuc(body);
     if (resSoDX.msg == MESSAGE.SUCCESS) {
@@ -499,7 +539,8 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
 
 
   async save(isGuiDuyet?) {
-
+    this.helperService.markFormGroupTouched(this.formData);
+    if (!this.formData.valid) return
     let body = this.formData.value;
     const children = [...this.dsHangTH, ...this.dsHangPD]
     body.fileDinhKemReq = this.fileDinhKemReq

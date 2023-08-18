@@ -152,10 +152,10 @@
       <th class="text-center" nzWidth="45px" rowSpan="2">STT</th>
       <th class="text-center" rowSpan="2">Loại hàng hóa</th>
       <th class="text-center" rowSpan="2">Chủng loại hàng hóa</th>
-      <th class="text-center" rowSpan="2">Tiêu chuẩn chất lượng</th>
+      <th class="text-center" rowSpan="2">Tiêu chuẩn, quy chuẩn</th>
       <th class="text-center" rowSpan="2">Số lượng</th>
       <th class="text-center" rowSpan="2">Đơn vị tính</th>
-      <th class="text-center" rowSpan="2">Vat(%)</th>
+      <th class="text-center" rowSpan="2">%VAT</th>
       <th class="text-center" colSpan="2">Đơn giá đề xuất</th>
       <th class="text-center" nzWidth="150px"
           colSpan="2"> {{formData.value.loaiDeXuat == '00' ? 'Giá QĐ của BTC' : 'Giá trước điều chỉnh của BTC' }}</th>
@@ -178,7 +178,7 @@
       <td>{{ data.tchuanCluong }}</td>
       <td>{{ data.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
       <td>{{ data.donViTinh }}</td>
-      <td>{{ data.vat }}</td>
+      <td>{{ data.vat ? data.vat * 100 : '' }}</td>
       <td>{{ data.giaDn | number : '1.0-1' : 'vi_VN' }}</td>
       <td>{{ data.giaDnVat | number : '1.0-1' : 'vi_VN' }}</td>
       <td class="text-right" *ngIf="(formData.value.loaiDeXuat == '00')">

@@ -79,11 +79,11 @@
               </nz-form-item>
             </div>
             <div nz-col [nzSpan]="8">
-              <nz-radio-group [nzDisabled]="isDisabled()" nzSize="small" class="rdo-input" formControlName="phanLoai">
+              <nz-radio-group [nzDisabled]="disableField || isDisabled()" nzSize="small" class="rdo-input" formControlName="phanLoai">
                 <nz-form-item>
                   <label nz-radio nzValue="TH">Chọn mã tổng hợp</label>
                   <nz-form-control [nzErrorTip]="error">
-                    <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogTh()">
+                    <nz-input-group nzAddOnAfterIcon="folder-open" (click)="disableField || isView ? '' : openDialogTh()">
                       <input [readonly]="true" nz-input formControlName="idThHdr" readonly="true" />
                     </nz-input-group>
                   </nz-form-control>
@@ -91,7 +91,7 @@
                 <nz-form-item>
                   <label nz-radio nzValue="TTr">Chọn số đề xuất/ tờ trình</label>
                   <nz-form-control [nzErrorTip]="error">
-                    <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogTr()">
+                    <nz-input-group nzAddOnAfterIcon="folder-open" (click)="disableField || isView ? '' : openDialogTr()">
                       <input [readonly]="true" nz-input formControlName="soTrHdr" readonly="true" />
                     </nz-input-group>
                   </nz-form-control>
@@ -157,7 +157,7 @@
                 <td>{{ data.trichYeu }}</td>
                 <td>{{ data.tenDuAn }}</td>
                 <td>{{ data.tongSoLuong | number: '1.0-1' }}</td>
-                <td>{{ data.tongMucDt| number: '1.0-1' }}</td>
+                <td>{{ data.tongSoLuong * data.donGiaVat * 1000| number: '1.0-1' }}</td>
               </tr>
             </tbody>
           </nz-table>
@@ -172,7 +172,7 @@
             <div nz-col [nzSpan]="12">
               <nz-card class="mg-t-10 flex-card p-lr16 bg-trang">
                 <app-thongtin-dexuat-muatt [title]="'Quyết định của TCDTNN'" [dataInput]="dataInput"
-                  [isView]="formData.value.trangThai == STATUS.BAN_HANH" [isTongHop]="isTongHop" [dataChiTieu]="this.dataChiTieu" (objectChange)="setNewData($event)">
+                  [isView]="formData.value.trangThai == STATUS.BAN_HANH" [isTongHop]="isTongHop" [dataChiTieu]="this.dataChiTieu" (objectChange)="setNewData($event)" (dataTableChange)="setNewTableData($event)">
                 </app-thongtin-dexuat-muatt>
               </nz-card>
             </div>

@@ -61,7 +61,9 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
     this.formData = this.fb.group({
       type: ["01"],
       loaiDc: ["DCNB"],
+      loaiQdinh: [],
       isVatTu: [true],
+      thayDoiThuKho: [],
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự thảo'],
       nam: [dayjs().get("year"), [Validators.required]],
@@ -77,13 +79,14 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
       soPhieuNhapKho: [],
       phieuNhapKhoId: [],
       ngayNhapKho: [],
+      tenLoNganKho: [, [Validators.required]],
       tenLoKho: [],
       maLoKho: [],
-      tenNganKho: [],
+      tenNganKho: [, [Validators.required]],
       maNganKho: [],
-      tenNhaKho: [],
+      tenNhaKho: [, [Validators.required]],
       maNhaKho: [],
-      tenDiemKho: [],
+      tenDiemKho: [, [Validators.required]],
       maDiemKho: [],
       diaDiemKho: [],
       tenThuKho: [],
@@ -101,7 +104,7 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
       tenCloaiVthh: [],
       donViTinh: [],
       dcnbbangkenhapvtdtl: [new Array<any>(),],
-
+      lyDoTuChoi: [],
       soSerial: [],
       soBaoBi: [],
     });
@@ -116,7 +119,9 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
       maQhns: this.userInfo.DON_VI.maQhns,
       tenThuKho: this.userInfo.TEN_DAY_DU,
       soBangKe: `${id}/${this.formData.get('nam').value}/${this.maBb}`,
-      loaiDc: this.loaiDc
+      loaiDc: this.loaiDc,
+      loaiQdinh: this.loaiDc === "CUC" ? "NHAP" : null,
+      thayDoiThuKho: this.loaiDc !== "DCNB" ? true : null
     })
 
     if (this.idInput) {
@@ -129,7 +134,7 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
         soQdinhDcc: this.data.soQdinh,
         ngayKyQdinhDcc: this.data.ngayKyQd,
         qdinhDccId: this.data.qdinhDcId,
-        tenLoNganKho: `${this.data.tenLoKho} ${this.data.tenNganKho}`,
+        tenLoNganKho: `${this.data.tenLoKho || ""} ${this.data.tenNganKho}`,
         tenLoKho: this.data.tenLoKho,
         maLoKho: this.data.maLoKho,
         tenNganKho: this.data.tenNganKho,
@@ -166,7 +171,7 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
     if (id) {
       let data = await this.detail(id);
       this.dsHangTH = data.dcnbBangKeNhapVTDtl
-      this.formData.patchValue(data);
+      this.formData.patchValue({ ...data, tenLoNganKho: `${data.tenLoKho || ""} ${data.tenNganKho}`, });
       this.fileDinhKemReq = data.fileDinhKems
     }
     await this.spinner.hide();
@@ -236,10 +241,11 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
 
     let body = {
       trangThai: STATUS.BAN_HANH,
-      loaiVthh: ['0101', '0102'],
+      // loaiVthh: ['0101', '0102'],
+      isVatTu: true,
       loaiDc: this.loaiDc,
-      maDvi: this.userInfo.MA_DVI
-
+      maDvi: this.userInfo.MA_DVI,
+      type: this.formData.value.type
     }
     let resSoDX = this.isCuc() ? await this.quyetDinhDieuChuyenCucService.getDsSoQuyetDinhDieuChuyenCuc(body) : await this.quyetDinhDieuChuyenCucService.getDsSoQuyetDinhDieuChuyenChiCuc(body);
     if (resSoDX.msg == MESSAGE.SUCCESS) {
@@ -308,6 +314,7 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
         this.formData.patchValue({
+          tenLoNganKho: `${data.tenLoKho || ""} ${data.tenNganKho}`,
           tenLoKho: data.tenLoKho,
           maLoKho: data.maLoKho,
           tenNganKho: data.tenNganKho,
@@ -428,6 +435,9 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
 
 
   async save(isGuiDuyet?) {
+    this.helperService.markFormGroupTouched(this.formData);
+    if (!this.formData.valid) return
+
     await this.spinner.show();
     let body = this.formData.value;
 

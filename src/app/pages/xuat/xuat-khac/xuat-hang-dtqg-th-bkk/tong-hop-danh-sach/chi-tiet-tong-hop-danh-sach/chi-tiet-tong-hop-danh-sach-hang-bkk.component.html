@@ -30,6 +30,17 @@
               <input nz-input formControlName="ngayTao" [readonly]="true">
             </nz-form-control>
           </nz-form-item>
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true" nzSpan="24">
+              File đính kèm biên bản lấy mẫu/bàn giao đã ký
+            </nz-form-label>
+          </nz-form-item>
+          <nz-form-item>
+            <div class="list-file" nz-col nzSpan="24">
+              <file-list [data]="this.formData.value.fileDinhKems" [isViewDetail]="isView">
+              </file-list>
+            </div>
+          </nz-form-item>
         </form>
       </div>
     </nz-card>
@@ -50,6 +61,10 @@
       <div nz-row nzSpan="24" class="mg-t-16 flex-card p-lr16">
         <div nz-col nzSpan="8"><b>Thời gian tổng hợp</b></div>
         <div nz-col nzSpan="16"><span>{{selectedItem.ngayTao|date:globals.dateFormat}}</span></div>
+      </div>
+      <div nz-row nzSpan="24" class="mg-t-16 flex-card p-lr16">
+        <div nz-col nzSpan="8"><b>File đính kèm biên bản lấy mẫu/bàn giao đã ký</b></div>
+        <div nz-col nzSpan="16"><span>{{selectedItem.fileDinhKems}}</span></div>
       </div>
       <div nz-row nzSpan="24" class="mg-t-16 flex-card p-lr16">
         <div nz-col nzSpan="8"></div>
@@ -84,10 +99,11 @@
             <th>Điểm kho</th>
             <th>Ngăn/lô kho</th>
             <th>Ngày nhập kho</th>
-            <th>SL hết hạn (12 tháng) <br/> đề xuất xuất bán</th>
+            <th>SL cần xuất hàng</th>
             <th>SL tồn</th>
             <th>ĐVT</th>
             <th>Ngày đề xuất</th>
+            <th>Lý do cần xuất hàng</th>
           </tr>
           </thead>
           <tbody>
@@ -96,6 +112,7 @@
             <tr>
               <td>{{numberToRoman(i + 1)}}</td>
               <td>{{item.tenChiCuc}}</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -119,6 +136,7 @@
                 <td>{{lv1.slTonKho|number:globals.numberFormat}}</td>
                 <td>{{lv1.donViTinh}}</td>
                 <td>{{lv1.ngayDeXuat|date:globals.dateFormat}}</td>
+                <td>{{lv1.lyDo}}</td>
               </tr>
             </ng-container>
           </ng-container>

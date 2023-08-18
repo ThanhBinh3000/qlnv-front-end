@@ -10,6 +10,7 @@ import {
 } from "./theo-doi-bao-quan/them-moi-so-theo-doi-bq/them-moi-so-theo-doi-bq.component";
 import { ThemMoiCtietTdbqComponent } from './theo-doi-bao-quan/them-moi-so-theo-doi-bq/them-moi-ctiet-tdbq/them-moi-ctiet-tdbq.component';
 import { TableCsclComponent } from './theo-doi-bao-quan/them-moi-so-theo-doi-bq/table-cscl/table-cscl.component';
+import {NzInputNumberModule} from "ng-zorro-antd/input-number";
 
 
 @NgModule({
@@ -20,6 +21,11 @@ import { TableCsclComponent } from './theo-doi-bao-quan/them-moi-so-theo-doi-bq/
       ThemMoiCtietTdbqComponent,
       TableCsclComponent
     ],
-    imports: [CommonModule, LuuKhoRoutingModule, ComponentsModule, MainModule],
+    imports: [
+      CommonModule,
+      LuuKhoRoutingModule,
+      ComponentsModule,
+      MainModule
+    ],
 })
 export class LuuKhoModule { }

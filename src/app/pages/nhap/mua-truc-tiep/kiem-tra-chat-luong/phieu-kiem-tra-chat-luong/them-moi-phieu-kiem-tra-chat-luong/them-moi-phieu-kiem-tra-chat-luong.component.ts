@@ -89,6 +89,7 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
         tenCloaiVthh: [''],
         moTaHangHoa: [''],
         soHd: [''],
+        soBb: [''],
         ngayHd: [null,],
 
         idDdiemGiaoNvNh: [, [Validators.required]],
@@ -108,9 +109,12 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
         diaChi: ['',],
         bienSoXe: ['',],
         soLuongDeNghiKt: ['',],
+        soLuong: [''],
         soLuongNhapKho: ['',],
         soChungThuGiamDinh: ['',],
         ngayGdinh: ['',],
+        slTtKtra: ['',],
+        slKhKb: ['',],
         tchucGdinh: ['',],
         fileDinhKem: [FileDinhKem],
         ketLuan: [],
@@ -118,6 +122,7 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
         ldoTuChoi: [''],
         trangThai: [],
         tenTrangThai: [],
+        tenNganLoKho: [],
       }
     );
   }
@@ -260,6 +265,7 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
 
   async bindingDataDdNhap(data) {
     if (data) {
+      console.log(data)
       let soLuongNhap = await this.phieuKtraCluongService.getSoLuongNhap({ "idDdiemGiaoNvNh": data.id });
       this.formData.patchValue({
         idDdiemGiaoNvNh: data.id,
@@ -271,7 +277,10 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
         tenNganKho: data.tenNganKho,
         maLoKho: data.maLoKho,
         tenLoKho: data.tenLoKho,
+        soLuong: data.soLuong,
         soLuongQdGiaoNvNh: data.soLuong * 1000,
+        soBb: data.listBienBanNghiemThuBq.find(item => item.id === Math.min(...data.listBienBanNghiemThuBq.map(item => item.id))).soBb,
+        tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho,
         soLuongDaNhap: soLuongNhap.data
       })
     }

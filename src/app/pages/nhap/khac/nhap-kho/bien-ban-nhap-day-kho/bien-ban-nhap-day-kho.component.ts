@@ -35,32 +35,8 @@ export class BienBanNhapDayKhoComponent extends Base2Component implements OnInit
 
   @Input()
   loaiVthh: string;
-  // @Input()
-  // loaiVthhCache: string;
 
-  // CHUC_NANG = CHUC_NANG;
-  // listLoaiDieuChuyen: any[] = [
-  //   { ma: "ALL", ten: "Tất cả" },
-  //   { ma: "CHI_CUC", ten: "Giữa 2 chi cục trong cùng 1 cục" },
-  //   { ma: "CUC", ten: "Giữa 2 cục DTNN KV" },
-  // ];
-  // listLoaiDCFilterTable: any[] = [
-  //   { ma: "CHI_CUC", ten: "Giữa 2 chi cục trong cùng 1 cục" },
-  //   { ma: "CUC", ten: "Giữa 2 cục DTNN KV" },
-  // ];
   dataTableView: any[] = [];
-  // listLoaiHangHoa: any[] = [];
-  // listHangHoaAll: any[] = [];
-  // listChungLoaiHangHoa: any[] = [];
-  // listTrangThai: any[] = [
-  //   { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
-  //   { ma: this.STATUS.CHO_DUYET_TP, giaTri: 'Chờ duyệt - TP' },
-  //   { ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối - TP' },
-  //   { ma: this.STATUS.CHO_DUYET_LDC, giaTri: 'Chờ duyệt - LĐ Cục' },
-  //   { ma: this.STATUS.TU_CHOI_LDC, giaTri: 'Từ chối - LĐ Cục' },
-  //   { ma: this.STATUS.DA_DUYET_LDC, giaTri: 'Đã duyệt - LĐ Cục' },
-  //   { ma: this.STATUS.DA_TAO_CBV, giaTri: 'Đã tạo - CB Vụ' },
-  // ];
 
   constructor(
     httpClient: HttpClient,
@@ -78,61 +54,67 @@ export class BienBanNhapDayKhoComponent extends Base2Component implements OnInit
       nam: null,
       soQdPdNk: null,
       soBb: null,
-      ngayBdNhap: null,
-      ngayKtNhap: null,
-      ngayThoiHanNh: null,
+      tuNgayBdNhap: null,
+      denNgayBdNhap: null,
+      tuNgayKtNhap: null,
+      denNgayKtNhap: null,
+      tuNgayThoiHanNh: null,
+      denNgayThoiHanNh: null,
       loaiVthh: [this.loaiVthh]
     })
-    // this.filterTable = {
-    //   nam: '',
-    //   soQdinh: '',
-    //   ngayKyQdinh: '',
-    //   loaiDc: '',
-    //   trichYeu: '',
-    //   maDxuat: '',
-    //   maThop: '',
-    //   soQdinhXuatCuc: '',
-    //   soQdinhNhapCuc: '',
-    //   tenTrangThai: '',
-    // };
   }
 
-
-  // dsDonvi: any[] = [];
-  // userInfo: UserLogin;
   data: any = {};
   selectedId: number = 0;
-  // isVatTu: boolean = false;
   isView = false;
 
-  // disabledStartNgayLapKh = (startValue: Date): boolean => {
-  //   if (startValue && this.formData.value.ngayLapKhDen) {
-  //     return startValue.getTime() > this.formData.value.ngayLapKhDen.getTime();
-  //   } else {
-  //     return false;
-  //   }
-  // };
+  disabledStartNgayBdNhap = (startValue: Date): boolean => {
+    if (startValue && this.formData.value.denNgayBdNhap) {
+      return startValue.getTime() > this.formData.value.denNgayBdNhap.getTime();
+    } else {
+      return false;
+    }
+  };
 
-  // disabledEndNgayLapKh = (endValue: Date): boolean => {
-  //   if (!endValue || !this.formData.value.ngayLapKhTu) {
-  //     return false;
-  //   }
-  //   return endValue.getTime() <= this.formData.value.ngayLapKhDen.getTime();
-  // };
+  disabledEndNgayBdNhap = (endValue: Date): boolean => {
+    if (endValue && this.formData.value.tuNgayBdNhap) {
+      return endValue.getTime() < this.formData.value.tuNgayBdNhap.getTime();
+    } else {
+      return false;
+    }
+  };
 
-  // disabledStartNgayDuyetLdc = (startValue: Date): boolean => {
-  //   if (startValue && this.formData.value.ngayDuyetLdcDen) {
-  //     return startValue.getTime() > this.formData.value.ngayDuyetLdcDen.getTime();
-  //   }
-  //   return false;
-  // };
+  disabledStartNgayKTNhap = (startValue: Date): boolean => {
+    if (startValue && this.formData.value.denNgayKtNhap) {
+      return startValue.getTime() > this.formData.value.denNgayKtNhap.getTime();
+    } else {
+      return false;
+    }
+  };
 
-  // disabledEndNgayDuyetLdc = (endValue: Date): boolean => {
-  //   if (!endValue || !this.formData.value.ngayDuyetLdcTu) {
-  //     return false;
-  //   }
-  //   return endValue.getTime() <= this.formData.value.ngayDuyetLdcDen.getTime();
-  // };
+  disabledEndNgayKTNhap = (endValue: Date): boolean => {
+    if (endValue && this.formData.value.tuNgayKtNhap) {
+      return endValue.getTime() < this.formData.value.tuNgayKtNhap.getTime();
+    } else {
+      return false;
+    }
+  };
+
+  disabledStartNgayTHNhap = (startValue: Date): boolean => {
+    if (startValue && this.formData.value.denNgayThoiHanNh) {
+      return startValue.getTime() > this.formData.value.denNgayThoiHanNh.getTime();
+    } else {
+      return false;
+    }
+  };
+
+  disabledEndNgayTHNhap = (endValue: Date): boolean => {
+    if (endValue && this.formData.value.tuNgayThoiHanNh) {
+      return endValue.getTime() < this.formData.value.tuNgayThoiHanNh.getTime();
+    } else {
+      return false;
+    }
+  };
 
   async ngOnInit() {
     this.isVisibleChangeTab$.subscribe((value: boolean) => {
@@ -168,7 +150,7 @@ export class BienBanNhapDayKhoComponent extends Base2Component implements OnInit
   }
 
   isCuc() {
-    return false//this.userService.isCuc()
+    return this.userService.isCuc()
   }
 
   // isChiCuc() {
@@ -196,18 +178,27 @@ export class BienBanNhapDayKhoComponent extends Base2Component implements OnInit
   }
 
   async timKiem() {
-    if (this.formData.value.ngayBdNhap) {
-      this.formData.value.tuNgayBdNhap = dayjs(this.formData.value.ngayBdNhap[0]).format('YYYY-MM-DD')
-      this.formData.value.tuNgayBdNhap = dayjs(this.formData.value.ngayBdNhap[1]).format('YYYY-MM-DD')
+    if (this.formData.value.tuNgayBdNhap) {
+      this.formData.value.tuNgayBdNhap = dayjs(this.formData.value.tuNgayBdNhap).format('YYYY-MM-DD')
     }
-    if (this.formData.value.ngayKtNhap) {
-      this.formData.value.tuNgayKtNhap = dayjs(this.formData.value.ngayKtNhap[0]).format('YYYY-MM-DD')
-      this.formData.value.tuNgayKtNhap = dayjs(this.formData.value.ngayKtNhap[1]).format('YYYY-MM-DD')
+    if (this.formData.value.denNgayBdNhap) {
+      this.formData.value.denNgayBdNhap = dayjs(this.formData.value.denNgayBdNhap).format('YYYY-MM-DD')
     }
-    if (this.formData.value.ngayThoiHanNh) {
-      this.formData.value.tuNgayThoiHanNh = dayjs(this.formData.value.ngayThoiHanNh[0]).format('YYYY-MM-DD')
-      this.formData.value.tuNgayThoiHanNh = dayjs(this.formData.value.ngayThoiHanNh[1]).format('YYYY-MM-DD')
+
+    if (this.formData.value.tuNgayKtNhap) {
+      this.formData.value.tuNgayKtNhap = dayjs(this.formData.value.tuNgayKtNhap).format('YYYY-MM-DD')
     }
+    if (this.formData.value.denNgayKtNhap) {
+      this.formData.value.denNgayKtNhap = dayjs(this.formData.value.denNgayKtNhap).format('YYYY-MM-DD')
+    }
+
+    if (this.formData.value.tuNgayThoiHanNh) {
+      this.formData.value.tuNgayThoiHanNh = dayjs(this.formData.value.tuNgayThoiHanNh).format('YYYY-MM-DD')
+    }
+    if (this.formData.value.denNgayThoiHanNh) {
+      this.formData.value.denNgayThoiHanNh = dayjs(this.formData.value.denNgayThoiHanNh).format('YYYY-MM-DD')
+    }
+
     let body = this.formData.value
     body.paggingReq = {
       limit: this.pageSize,
@@ -220,7 +211,7 @@ export class BienBanNhapDayKhoComponent extends Base2Component implements OnInit
         .map(element => {
           return {
             ...element,
-            maLoNganKho: `${element.maLoKho}${element.maNganKho}`
+            maLoNganKho: `${element.maLoKho}${element.maNganKho}${element.soBbNhapDayKho}`
           }
         });
       this.dataTableView = this.buildTableView(data)
@@ -272,7 +263,7 @@ export class BienBanNhapDayKhoComponent extends Base2Component implements OnInit
           .groupBy("maDiemKho")
           ?.map((value2, key2) => {
             let children2 = chain(value2)
-              .groupBy("soBbNhapDayKho")
+              .groupBy("maLoNganKho")
               ?.map((value3, key3) => {
 
                 // const children3 = chain(value3).groupBy("soBbNhapDayKho")
@@ -298,7 +289,7 @@ export class BienBanNhapDayKhoComponent extends Base2Component implements OnInit
                 //     }
                 //   }).value()
 
-                const row3 = value3.find(s => s?.soBbNhapDayKho == key3);
+                const row3 = value3.find(s => s?.maLoNganKho == key3);
                 return {
                   ...row3,
                   idVirtual: row3 ? row3.idVirtual ? row3.idVirtual : uuidv4.v4() : uuidv4.v4(),

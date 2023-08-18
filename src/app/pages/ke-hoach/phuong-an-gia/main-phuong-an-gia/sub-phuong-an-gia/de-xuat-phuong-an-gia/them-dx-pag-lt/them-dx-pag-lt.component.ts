@@ -172,7 +172,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
     this.loadDsVthh();
     this.loadDsDxCanSua();
     this.loadDsChiCuc();
-    this.getDataChiTieu();
+    this.getDataChiTieu(this.formData.value.namKeHoach);
     await this.getDataDetail(this.idInput)
     this.spinner.hide();
   }
@@ -199,7 +199,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
     if (id > 0) {
       let res = await this.deXuatPAGService.getDetail(id);
       const data = res.data;
-      this.maDx = data.soDeXuat ? data.soDeXuat.split('/')[1] : '/' + this.userInfo.DON_VI.tenVietTat + '-KH&QLHDT';
+      this.maDx = data.soDeXuat ? '/' + data.soDeXuat.split('/')[1] : '/' + this.userInfo.DON_VI.tenVietTat + '-KH&QLHDT';
       this.formData.patchValue({
         id: data.id,
         namKeHoach: data.namKeHoach,
@@ -232,7 +232,8 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
         soCanCu: data.soCanCu,
         qdCtKhNam: data.qdCtKhNam,
         tenTrangThai: data.tenTrangThai,
-        lyDoTuChoi: data.lyDoTuChoi
+        lyDoTuChoi: data.lyDoTuChoi,
+        apDungTatCa: data.apDungTatCa
       })
       this.dataTableCanCuXdg = data.canCuPhapLy;
       this.dsDiaDiemDeHang = data.diaDiemDeHangs;
@@ -284,9 +285,9 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
     }
   }
 
-  async getDataChiTieu() {
+  async getDataChiTieu(namKh) {
     if (!this.idInput) {
-      let res = await this.chiTieuKeHoachNamCapTongCucService.loadThongTinChiTieuKeHoachCucNam(+this.formData.get('namKeHoach').value)
+      let res = await this.chiTieuKeHoachNamCapTongCucService.loadThongTinChiTieuKeHoachCucNam(+namKh)
       if (res.msg == MESSAGE.SUCCESS) {
         const dataChiTieu = res.data;
         if (dataChiTieu) {
@@ -318,17 +319,39 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
       if (this.listCtieuKeHoach && this.listCtieuKeHoach.length > 0) {
         if (this.pagTtChungs && this.pagTtChungs.length > 0) {
           this.pagTtChungs.forEach(pagTtChung => {
-            pagTtChung.soLuongCtieu = '';
-            let ctieuChiCuc = this.listCtieuKeHoach.filter(ctieu => ctieu.maDonVi == pagTtChung.maChiCuc);
-            if (ctieuChiCuc && ctieuChiCuc.length > 0) {
-              if (event.startsWith("0101")) {
-                pagTtChung.soLuongCtieu = ctieuChiCuc[0]?.ntnThoc
+            pagTtChung.soLuong = 0
+            pagTtChung.soLuongCtieu = ''
+            let ctieuChiCuc = this.listCtieuKeHoach.find(ctieu => ctieu.maDonVi == pagTtChung.maChiCuc);
+            if (ctieuChiCuc) {
+              console.log(ctieuChiCuc)
+              if ((this.formData.value.loaiGia && (this.formData.value.loaiGia == 'LG02' || this.formData.value.loaiGia == 'LG04'))) {
+                if (event.startsWith("0101")) {
+                  pagTtChung.soLuongCtieu = ctieuChiCuc.xtnTongThoc ?  ctieuChiCuc.xtnTongThoc : 0
+                }
+                if (event.startsWith("0102")) {
+                  pagTtChung.soLuongCtieu = ctieuChiCuc.xtnTongGao ? ctieuChiCuc.xtnTongGao : 0
+                }
+                if (event.startsWith("04")) {
+                  pagTtChung.soLuongCtieu = ctieuChiCuc.xuatTrongNamMuoi ? ctieuChiCuc.xuatTrongNamMuoi  :0
+                }
               }
-              if (event.startsWith("0102")) {
-                pagTtChung.soLuongCtieu = ctieuChiCuc[0]?.ntnGao
-              }
-              if (event.startsWith("04")) {
-                pagTtChung.soLuongCtieu = ctieuChiCuc[0]?.nhapTrongNam
+              if ((this.formData.value.loaiGia && (this.formData.value.loaiGia == 'LG01' || this.formData.value.loaiGia == 'LG03'))) {
+                if (event.startsWith("0101")) {
+                  pagTtChung.soLuongCtieu = ctieuChiCuc.ntnThoc ? ctieuChiCuc.ntnThoc : 0
+                }
+                if (event.startsWith("0102")) {
+                  pagTtChung.soLuongCtieu = ctieuChiCuc.ntnGao ? ctieuChiCuc.ntnGao : 0
+                }
+                if (event.startsWith("04")) {
+                  pagTtChung.soLuongCtieu = ctieuChiCuc.nhapTrongNam ? ctieuChiCuc.nhapTrongNam : 0
+                }
+
+                if (ctieuChiCuc && ctieuChiCuc.xtnThoc && ctieuChiCuc.xtnThoc.length > 0) {
+                  let xtn = ctieuChiCuc.xtnThoc.filter(xuat => xuat.nam == this.formData.value.namKeHoach);
+                  if (xtn && xtn.length > 0) {
+                    pagTtChung.soLuongCtieu = xtn?.soLuong
+                  }
+                }
               }
             }
           })
@@ -398,6 +421,9 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
     this.formData.patchValue({
       cloaiVthh: null
     })
+    if (this.formData.value.loaiVthh) {
+      this.onChangeLoaiVthh(this.formData.value.loaiVthh);
+    }
   }
 
   loadDsNam() {
@@ -431,7 +457,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
   async save(isGuiDuyet?) {
     this.spinner.show();
     this.helperService.removeValidators(this.formData);
-    this.setValidator(isGuiDuyet)
+    this.setValidator()
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR)
@@ -483,13 +509,16 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
     this.spinner.hide();
   }
 
-  setValidator(isGuiDuyet) {
-      this.formData.controls["namKeHoach"].setValidators([Validators.required]);
-      this.formData.controls["soDeXuat"].setValidators([Validators.required]);
-      this.formData.controls["loaiVthh"].setValidators([Validators.required]);
-      this.formData.controls["ngayKy"].setValidators([Validators.required]);
-      this.formData.controls["loaiGia"].setValidators([Validators.required]);
-      this.formData.controls["maPphapXdg"].setValidators([Validators.required]);
+  setValidator() {
+    this.formData.controls["namKeHoach"].setValidators([Validators.required]);
+    this.formData.controls["soDeXuat"].setValidators([Validators.required]);
+    this.formData.controls["loaiVthh"].setValidators([Validators.required]);
+    this.formData.controls["ngayKy"].setValidators([Validators.required]);
+    this.formData.controls["loaiGia"].setValidators([Validators.required]);
+    this.formData.controls["maPphapXdg"].setValidators([Validators.required]);
+    if (this.formData.value.loaiGia == 'LG01' || this.formData.value.loaiGia == 'LG03') {
+      this.formData.controls["vat"].setValidators([Validators.required]);
+    }
   }
 
   async pheDuyet() {
@@ -671,16 +700,6 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
     }
   }
 
-  async loadDetailNh(event) {
-    let arr = this.listQdCtKh.filter(item => item.soQd == event)
-    if (arr) {
-      this.detailNhaphang = arr[0]
-      this.formData.patchValue({
-        soLuong: this.detailNhaphang && this.detailNhaphang.soLuong ? this.detailNhaphang.soLuong : 0
-      })
-    }
-  }
-
   async loadDsDxCanSua() {
     this.spinner.show();
     this.listDxCanSua = [];
@@ -690,7 +709,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
         type: this.type,
         loaiDeXuat: "02",
         maDvi: this.userInfo.MA_DVI,
-        pagType : this.pagType
+        pagType: this.pagType
       }
       let res = await this.tongHopPagService.loadToTrinhDeXuat(body);
       if (res.msg = MESSAGE.SUCCESS) {
@@ -786,8 +805,11 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
       this.pagTtChungs.forEach(item => {
         item.giaDn = this.giaDn;
       })
-      this.updateEditCache();
     }
+    this.formData.patchValue({
+      apDungTatCa: event
+    })
+    console.log(this.formData.value.vat,222)
   }
 
   async loadDsChiCuc() {
@@ -815,10 +837,15 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
 
   updatePagTtChungs() {
     this.pagTtChungs.forEach(item => {
-      if (this.formData.value.vat) {
+      if (this.formData.value.vat && ((this.formData.value.loaiGia == 'LG01' || this.formData.value.loaiGia == 'LG03'))) {
         item.giaDnVat = item.giaDn + item.giaDn * this.formData.value.vat
       }
     })
+  }
+
+  async changeNamKh($event) {
+    await this.getDataChiTieu($event);
+    await this.onChangeLoaiVthh(this.formData.value.loaiVthh);
   }
 }
 

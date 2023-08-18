@@ -196,10 +196,10 @@
             <th class="text-center" nzWidth="45px">STT</th>
             <th class="text-center" >Loại hàng hóa</th>
             <th class="text-center" >Chủng loại hàng DTQG</th>
-            <th class="text-center">Tiêu chuẩn chất lượng</th>
+            <th class="text-center">Tiêu chuẩn, quy chuẩn</th>
             <th class="text-center" >Số lượng</th>
             <th class="text-center" >Đơn vị tính</th>
-            <th class="text-center" nzWidth="100px" *ngIf="type=='GCT' && (formData.value.loaiGia == 'LG03')">Vat</th>
+            <th class="text-center" nzWidth="100px" *ngIf="type=='GCT' && (formData.value.loaiGia == 'LG03')">VAT</th>
             <th class="text-center"  *ngIf="type=='GCT'">{{formData.value.loaiGia == 'LG03' ? 'Đơn giá tối đa của BTC chưa VAT (đồng)' : 'Đơn giá tối thiểu của BTC chưa VAT (đồng)'}}</th>
             <th class="text-center"
                 *ngIf="type=='GCT' && (formData.value.loaiGia == 'LG03')">Đơn giá

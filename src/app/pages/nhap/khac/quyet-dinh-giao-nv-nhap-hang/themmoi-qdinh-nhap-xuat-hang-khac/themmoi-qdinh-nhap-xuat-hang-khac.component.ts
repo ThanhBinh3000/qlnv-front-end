@@ -42,6 +42,7 @@ import { convertTrangThai, convertVthhToId } from 'src/app/shared/commonFunction
 export class ThemmoiQdinhNhapXuatHangKhacComponent implements OnInit {
   @Input() id: number;
   @Input() loaiVthh: string;
+  @Input() idQdPd: number;
   @Output()
   showListEvent = new EventEmitter<any>();
   @Input() isViewDetail: boolean;
@@ -121,7 +122,7 @@ export class ThemmoiQdinhNhapXuatHangKhacComponent implements OnInit {
       tenDvi: [''],
       maDvi: [''],
       trangThai: ['00'],
-      tenTrangThai: [''],
+      tenTrangThai: ['Dự thảo'],
       loaiVthh: [''],
       tenLoaiVthh: [''],
       cloaiVthh: [''],
@@ -153,6 +154,9 @@ export class ThemmoiQdinhNhapXuatHangKhacComponent implements OnInit {
       await this.loadDiemKho(),
       await this.loadDsDonVi()
     ])
+    if(this.idQdPd > 0){
+      await this.bindingDataQd(this.idQdPd);
+    }
     if (this.id > 0) {
       await this.loadThongTinQdNhapXuatHang(this.id);
     } else {
@@ -204,59 +208,63 @@ export class ThemmoiQdinhNhapXuatHangKhacComponent implements OnInit {
     });
     modalQD.afterClose.subscribe(async (dataSelect) => {
       if (dataSelect) {
-        this.spinner.show();
-        let res = await this.quyetDinhPheDuyetKeHoachNhapKhacService.getDetail(dataSelect.id);
-        if (res.msg == MESSAGE.SUCCESS) {
-          this.dataTable = [];
-          console.log(res)
-          const data = res.data;
-          this.formData.patchValue({
-            idDx: data.idDx,
-            soQdPd: data.soQd,
-            idQdPdNk: data.id,
-            idTh: data.idTh,
-            loaiVthh: data.loaiVthh,
-            cloaiVthh: data.cloaiVthh,
-            tenLoaiVthh: data.tenLoaiVthh,
-            dvt: data.dvt,
-            tongSlNhap: data.tongSlNhap,
-            tenLoaiHinhNx: data.tenLoaiHinhNx,
-            loaiHinhNx: data.loaiHinhNx,
-            kieuNx: data.kieuNx,
-            tenKieuNx: data.tenKieuNx,
-            trichYeu: data.trichYeu
-          })
-          console.log(this.formData)
-          // if (data.loaiVthh.startsWith('02')) {
-            // let dataUserLogin = data.details.filter(item => item.maDvi == this.userInfo.MA_DVI);
-            this.dataTable = data.details;
-            // this.dataTable.forEach(x => {
-            //   x.soLuong = null;
-            //   x.children.forEach(y => {
-            //     y.maDiemKho = y.maDvi;
-            //     y.soLuongDiemKho = y.soLuong;
-            //     y.tenDiemKho = y.tenDvi
-            //     y.soLuong = null;
-            //   })
-            // });
-          // } else {
-            this.dataTable = data.details;
-            // this.dataTable.forEach(x => {
-            //   x.soLuong = null;
-            //   x.children.forEach(y => {
-            //     y.soLuongDiemKho = y.soLuong;
-            //     y.soLuong = null;
-            //   })
-            // });
-          // }
-          this.convertListDataLuongThuc();
-        } else {
-          this.notification.error(MESSAGE.ERROR, res.msg)
-        }
-        this.spinner.hide();
+        await this.bindingDataQd(dataSelect.id);
       }
     });
 
+  }
+
+  async bindingDataQd(id: any){
+    this.spinner.show();
+    let res = await this.quyetDinhPheDuyetKeHoachNhapKhacService.getDetail(id);
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.dataTable = [];
+      console.log(res)
+      const data = res.data;
+      this.formData.patchValue({
+        idDx: data.idDx,
+        soQdPd: data.soQd,
+        idQdPdNk: data.id,
+        idTh: data.idTh,
+        loaiVthh: data.loaiVthh,
+        cloaiVthh: data.cloaiVthh,
+        tenLoaiVthh: data.tenLoaiVthh,
+        dvt: data.dvt,
+        tongSlNhap: data.tongSlNhap,
+        tenLoaiHinhNx: data.tenLoaiHinhNx,
+        loaiHinhNx: data.loaiHinhNx,
+        kieuNx: data.kieuNx,
+        tenKieuNx: data.tenKieuNx,
+        trichYeu: data.trichYeu
+      })
+      console.log(this.formData)
+      // if (data.loaiVthh.startsWith('02')) {
+      // let dataUserLogin = data.details.filter(item => item.maDvi == this.userInfo.MA_DVI);
+      this.dataTable = data.details;
+      // this.dataTable.forEach(x => {
+      //   x.soLuong = null;
+      //   x.children.forEach(y => {
+      //     y.maDiemKho = y.maDvi;
+      //     y.soLuongDiemKho = y.soLuong;
+      //     y.tenDiemKho = y.tenDvi
+      //     y.soLuong = null;
+      //   })
+      // });
+      // } else {
+      this.dataTable = data.details;
+      // this.dataTable.forEach(x => {
+      //   x.soLuong = null;
+      //   x.children.forEach(y => {
+      //     y.soLuongDiemKho = y.soLuong;
+      //     y.soLuong = null;
+      //   })
+      // });
+      // }
+      this.convertListDataLuongThuc();
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg)
+    }
+    this.spinner.hide();
   }
 
   async loadDsDonVi() {
@@ -485,17 +493,30 @@ export class ThemmoiQdinhNhapXuatHangKhacComponent implements OnInit {
   }
 
   setValidator(isGuiDuyet) {
+    debugger
     if (isGuiDuyet) {
-      if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDC) {
+      if (this.formData.value.trangThai == STATUS.DU_THAO) {
         this.formData.controls["soQd"].setValidators([Validators.required]);
-        // this.formData.controls["ngayQdinh"].setValidators([Validators.required]);
+        this.formData.controls["trichYeu"].setValidators([Validators.required]);
+        this.formData.controls["ngayQd"].setValidators([Validators.required]);
+        this.formData.controls["tgianNkMnhat"].setValidators([Validators.required]);
+        this.formData.controls["nam"].setValidators([Validators.required]);
+        this.formData.controls["soQdPd"].setValidators([Validators.required]);
       } else {
         this.formData.controls["soQd"].clearValidators();
-        // this.formData.controls["ngayQdinh"].clearValidators();
+        this.formData.controls["trichYeu"].clearValidators();
+        this.formData.controls["ngayQd"].clearValidators();
+        this.formData.controls["tgianNkMnhat"].clearValidators();
+        this.formData.controls["nam"].clearValidators();
+        this.formData.controls["soQdPd"].clearValidators();
       }
     } else {
       this.formData.controls["soQd"].clearValidators();
-      // this.formData.controls["ngayQdinh"].clearValidators();
+      this.formData.controls["trichYeu"].clearValidators();
+      this.formData.controls["ngayQd"].clearValidators();
+      this.formData.controls["tgianNkMnhat"].clearValidators();
+      this.formData.controls["nam"].clearValidators();
+      this.formData.controls["soQdPd"].clearValidators();
     }
   }
 

@@ -47,11 +47,15 @@ export class BienBanChuanBiKhoComponent extends Base2Component implements OnInit
       nam: null,
       soQdinh: null,
       soBban: null,
-      ngayLap: null,
-      ngayKetThuc: null,
+      tuNgayLapBb: null,
+      denNgayLapBb: null,
+      tuNgayKtnk: null,
+      denNgayKtnk: null,
       type: ["01"],
       isVatTu: [true],
-      loaiDc: ["DCNB"]
+      loaiDc: ["DCNB"],
+      loaiQdinh: [],
+      thayDoiThuKho: []
     })
   }
 
@@ -67,7 +71,9 @@ export class BienBanChuanBiKhoComponent extends Base2Component implements OnInit
       this.visibleTab = value;
     });
     this.formData.patchValue({
-      loaiDc: this.loaiDc
+      loaiDc: this.loaiDc,
+      loaiQdinh: this.loaiDc === "CUC" ? "NHAP" : null,
+      thayDoiThuKho: true
     })
 
     try {
@@ -84,6 +90,38 @@ export class BienBanChuanBiKhoComponent extends Base2Component implements OnInit
 
   }
 
+  disabledStartNgayLap = (startValue: Date): boolean => {
+    if (startValue && this.formData.value.denNgayLapBb) {
+      return startValue.getTime() > this.formData.value.denNgayLapBb.getTime();
+    } else {
+      return false;
+    }
+  };
+
+  disabledEndNgayLap = (endValue: Date): boolean => {
+    if (endValue && this.formData.value.tuNgayLapBb) {
+      return endValue.getTime() < this.formData.value.tuNgayLapBb.getTime();
+    } else {
+      return false;
+    }
+  };
+
+  disabledStartNgayKT = (startValue: Date): boolean => {
+    if (startValue && this.formData.value.denNgayKtnk) {
+      return startValue.getTime() > this.formData.value.denNgayKtnk.getTime();
+    } else {
+      return false;
+    }
+  };
+
+  disabledEndNgayKT = (endValue: Date): boolean => {
+    if (endValue && this.formData.value.tuNgayKtnk) {
+      return endValue.getTime() < this.formData.value.tuNgayKtnk.getTime();
+    } else {
+      return false;
+    }
+  };
+
   isShowDS() {
     if (this.userService.isAccessPermisson('DCNB_QUYETDINHDC_TONGCUC') && this.userService.isAccessPermisson('DCNB_QUYETDINHDC_XEM'))
       return true
@@ -95,7 +133,7 @@ export class BienBanChuanBiKhoComponent extends Base2Component implements OnInit
   }
 
   isCuc() {
-    return false//this.userService.isCuc()
+    return this.userService.isCuc()
   }
 
   // isChiCuc() {
@@ -139,19 +177,32 @@ export class BienBanChuanBiKhoComponent extends Base2Component implements OnInit
     return children
   }
 
+  async changePageIndex(event) {
+    this.page = event;
+    await this.timKiem();
+  }
+
+  async changePageSize(event) {
+    this.pageSize = event;
+    await this.timKiem();
+  }
+
   async timKiem() {
-    // if (this.formData.value.ngayDuyetTc) {
-    //   this.formData.value.ngayDuyetTcTu = dayjs(this.formData.value.ngayDuyetTc[0]).format('YYYY-MM-DD')
-    //   this.formData.value.ngayDuyetTcDen = dayjs(this.formData.value.ngayDuyetTc[1]).format('YYYY-MM-DD')
-    // }
-    // if (this.formData.value.ngayHieuLuc) {
-    //   this.formData.value.ngayHieuLucTu = dayjs(this.formData.value.ngayHieuLuc[0]).format('YYYY-MM-DD')
-    //   this.formData.value.ngayHieuLucDen = dayjs(this.formData.value.ngayHieuLuc[1]).format('YYYY-MM-DD')
-    // }
-    // console.log('DSQuyetDinhDieuChuyenComponent/this.formData.value=>', this.formData.value)
-    // await this.search();
+    if (this.formData.value.tuNgayLapBb) {
+      this.formData.value.tuNgayLapBb = dayjs(this.formData.value.tuNgayLapBb).format('YYYY-MM-DD')
+    }
+    if (this.formData.value.denNgayLapBb) {
+      this.formData.value.denNgayLapBb = dayjs(this.formData.value.denNgayLapBb).format('YYYY-MM-DD')
+    }
+    if (this.formData.value.tuNgayKtnk) {
+      this.formData.value.tuNgayKtnk = dayjs(this.formData.value.tuNgayKtnk).format('YYYY-MM-DD')
+    }
+    if (this.formData.value.denNgayKtnk) {
+      this.formData.value.denNgayKtnk = dayjs(this.formData.value.denNgayKtnk).format('YYYY-MM-DD')
+    }
+
     let body = this.formData.value
-    if (body.soQdinh) body.soQdinh = `${body.soQdinh}\DCNB`
+    if (body.soQdinh) body.soQdinh = `${body.soQdinh}/DCNB`
     body.paggingReq = {
       limit: this.pageSize,
       page: this.page - 1

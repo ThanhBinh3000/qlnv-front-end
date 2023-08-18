@@ -30,7 +30,7 @@ export class ThemMoiCtietTdbqComponent extends Base3Component implements OnInit 
   dataTk : any;
   dataKtv : any;
   dataLdcc : any;
-
+  thoiGianConLaiBh : any;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -60,21 +60,22 @@ export class ThemMoiCtietTdbqComponent extends Base3Component implements OnInit 
       nguyenNhan : [null],
       dienBien : [null],
       bienPhapXl : [null],
-      soLuongXl : [null],
+      soLuongXl : [null,[Validators.required]],
       moTa : [null],
       idDataTk : [],
       idDataKtv : [],
       idDataLdcc : [],
-      trangThai : []
+      trangThai : [],
     })
   }
 
 
-  ngOnInit(): void {
-    this.loadDataCombobox();
+  async ngOnInit() {
     if(this.id){
-      this.detail(this.id).then((res)=>{
-        this.rowItem = res
+      await this.detail(this.id).then((res)=>{
+        for (const property in this.rowItem) {
+          this.rowItem[property] = res[property];
+        }
       });
     }else{
       this.formData.patchValue({
@@ -92,14 +93,21 @@ export class ThemMoiCtietTdbqComponent extends Base3Component implements OnInit 
         idDataKtv : this.dataKtv?.id,
         idDataLdcc : this.dataLdcc?.id,
       })
+      this.rowItem.tongSoLuong = this.dataHdr.soLuong;
     }
+    this.loadDataCombobox();
   }
 
   async loadDataCombobox(){
     this.listBpxl = [];
     await this.danhMucService.danhMucChungGetAll('BIEN_PHAP_XU_LY').then((res)=>{
       if (res.msg == MESSAGE.SUCCESS) {
-        this.listBpxl = res.data;
+        console.log(this.formData.value.loaiVthh);
+        if(this.formData.value.loaiVthh?.startsWith('02')){
+          this.listBpxl = res.data.filter(item => item.phanLoai == 'VT');
+        }else{
+          this.listBpxl = res.data.filter(item => item.phanLoai == 'LT');
+        }
       }
     });
   }

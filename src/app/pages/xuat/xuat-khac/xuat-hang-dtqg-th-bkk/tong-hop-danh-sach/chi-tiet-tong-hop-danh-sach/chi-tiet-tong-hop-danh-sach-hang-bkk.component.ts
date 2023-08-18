@@ -27,7 +27,7 @@ import {CHUC_NANG} from "../../../../../../constants/status";
   templateUrl: './chi-tiet-tong-hop-danh-sach-hang-bkk.component.html',
   styleUrls: ['./chi-tiet-tong-hop-danh-sach-hang-bkk.component.scss']
 })
-export class ChiTietTongHopDanhSachHangBkkComponent extends Base2Component implements OnInit{
+export class ChiTietTongHopDanhSachHangBkkComponent extends Base2Component implements OnInit {
   @Input() loaiVthhInput: string;
   @Input() idInput: number;
   @Input() selectedItem: any = {};
@@ -83,7 +83,7 @@ export class ChiTietTongHopDanhSachHangBkkComponent extends Base2Component imple
       tenDvi: [],
       tenCuc: [],
       capTh: [this.userInfo.CAP_DVI],
-      loai: [LOAI_HH_XUAT_KHAC.VT_6_THANG],
+      loai: [LOAI_HH_XUAT_KHAC.VT_BH_BKK],
       tongHopDtl: [new Array()]
     })
     this.userInfo = this.userService.getUserLogin();
@@ -209,33 +209,69 @@ export class ChiTietTongHopDanhSachHangBkkComponent extends Base2Component imple
         this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đủ thông tin.');
         return;
       } else {
-        await this.danhSachVttbTruocHethanLuuKhoService.search({
-          type: 'TH',
-          loai: LOAI_HH_XUAT_KHAC.VT_6_THANG,
-        }).then(async res => {
-          if (res.msg == MESSAGE.SUCCESS) {
-            if (res.data.numberOfElements == 0) {
-              this.notification.warning(MESSAGE.ALERT, 'Không tìm thấy vật tư thiết bị trong danh sách.');
-            } else {
-              res.data.content.forEach(s => {
-                s.idDsHdr = cloneDeep(s.id);
-                s.id = null;
-              });
-              this.formData.patchValue({
-                maDanhSach: this.selectedItem ?? this.maHauTo,
-                tongHopDtl: res.data.content
-              });
-              let result = await this.createUpdate(this.formData.value);
-              if (result) {
-                this.selectedItem = cloneDeep(result);
-                await this.buildTableView(result.tongHopDtl);
-                this.step.emit({step: 2, item: this.selectedItem});
+        if (this.userInfo.CAP_DVI == "1") {
+          await this.tongHopDanhSachVttbService.search({
+            capTh: 2,
+            loai: LOAI_HH_XUAT_KHAC.VT_BH_BKK,
+          }).then(async res => {
+            if (res.msg == MESSAGE.SUCCESS) {
+              if (res.data.numberOfElements == 0) {
+                this.notification.warning(MESSAGE.ALERT, 'Không tìm thấy bản tổng hợp nào của Cục');
+              } else {
+                res.data.content.forEach(s => {
+                  s.tongHopDtl.forEach(it => {
+                    it.idDsHdr = cloneDeep(it.id);
+                    it.id = null;
+                  });
+                });
+                let listDtl = [];
+                res.data.content.forEach(item => {
+                  listDtl = [...item.tongHopDtl];
+                })
+                this.formData.patchValue({
+                  maDanhSach: this.selectedItem ?? this.maHauTo,
+                  tongHopDtl: listDtl
+                });
+                let result = await this.createUpdate(this.formData.value);
+                if (result) {
+                  this.selectedItem = cloneDeep(result);
+                  await this.buildTableView(result.tongHopDtl);
+                  this.step.emit({step: 2, item: this.selectedItem});
+                }
               }
+            } else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
             }
-          } else {
-            this.notification.error(MESSAGE.ERROR, res.msg);
-          }
-        })
+          })
+        } else {
+          await this.danhSachVttbTruocHethanLuuKhoService.search({
+            type: 'TH',
+            loai: LOAI_HH_XUAT_KHAC.VT_BH_BKK,
+          }).then(async res => {
+            if (res.msg == MESSAGE.SUCCESS) {
+              if (res.data.numberOfElements == 0) {
+                this.notification.warning(MESSAGE.ALERT, 'Không tìm thấy vật tư thiết bị trong danh sách.');
+              } else {
+                res.data.content.forEach(s => {
+                  s.idDsHdr = cloneDeep(s.id);
+                  s.id = null;
+                });
+                this.formData.patchValue({
+                  maDanhSach: this.selectedItem ?? this.maHauTo,
+                  tongHopDtl: res.data.content
+                });
+                let result = await this.createUpdate(this.formData.value);
+                if (result) {
+                  this.selectedItem = cloneDeep(result);
+                  await this.buildTableView(result.tongHopDtl);
+                  this.step.emit({step: 2, item: this.selectedItem});
+                }
+              }
+            } else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+            }
+          })
+        }
       }
     } catch (e) {
       this.notification.error(MESSAGE.ERROR, 'Có lỗi xảy ra.');

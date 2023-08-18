@@ -81,6 +81,7 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
       thuKho: [],
       keToan: [],
       ldChiCuc: [],
+      tenLoNganKho: [],
       tenLoKho: [],
       maLoKho: [],
       tenNganKho: [],
@@ -116,7 +117,10 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
       dcnbBBNTBQDtl: [new Array<any>(),],
       nhanXet: [],
       type: ["01"],
-      loaiDc: ["DCNB"]
+      loaiDc: ["DCNB"],
+      loaiQdinh: [],
+      lyDoTuChoi: [],
+      thayDoiThuKho: []
     });
   }
 
@@ -129,7 +133,9 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
       maQhns: this.userInfo.DON_VI.maQhns,
       ktvBaoQuan: this.userInfo.TEN_DAY_DU,
       soBban: `${id}/${this.formData.get('nam').value}/${this.maBb}`,
-      loaiDc: this.loaiDc
+      loaiDc: this.loaiDc,
+      loaiQdinh: this.loaiDc === "CUC" ? "NHAP" : null,
+      thayDoiThuKho: true
     })
 
     if (this.idInput) {
@@ -141,6 +147,7 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
         soQdDcCuc: this.data.soQdinh,
         ngayQdDcCuc: this.data.ngayHieuLuc,
         qdDcCucId: this.data.qdinhDccId,
+        tenLoNganKho: `${this.data.tenLoKhoNhan || ""} ${this.data.tenNganKhoNhan}`,
         tenLoKho: this.data.tenLoKhoNhan,
         maLoKho: this.data.maLoKhoNhan,
         tenNganKho: this.data.tenNganKhoNhan,
@@ -204,7 +211,7 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
     if (id) {
       let data = await this.detail(id);
       await this.loadDataBaoQuan(data.cloaiVthh)
-      this.formData.patchValue(data);
+      this.formData.patchValue({ ...data, tenLoNganKho: `${data.tenLoKho || ""} ${data.tenNganKho}`, });
       this.dsHangTH = data.dcnbBBNTBQDtl.filter(item => item.type === "TH")
       this.dsHangPD = data.dcnbBBNTBQDtl.filter(item => item.type === "PD")
       this.fileDinhKemReq = data.fileDinhKems
@@ -268,7 +275,7 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
     if (!row) this.typeAction = "ADD"
 
     const modalQD = this.modal.create({
-      nzTitle: 'THÔNG TIN HÀNG DTQG CẦN ĐIỀU CHUYỂN',
+      nzTitle: 'MẶT HÀNG SỐ LƯỢNG VÀ GIÁ TRỊ HÀNG DỰ TRỮ QUỐC GIA',
       nzContent: ThongTinHangDtqgComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -570,10 +577,10 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
     // Get data tờ trình
     let body = {
       trangThai: STATUS.BAN_HANH,
-      loaiVthh: ['0101', '0102'],
-      loaiDc: "DCNB",
-      maDvi: this.userInfo.MA_DVI
-      // listTrangThaiXh: [STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN],
+      // loaiVthh: ['0101', '0102'],
+      loaiDc: this.loaiDc,
+      maDvi: this.userInfo.MA_DVI,
+      type: this.formData.value.type
     }
     let resSoDX = this.isCuc() ? await this.quyetDinhDieuChuyenCucService.getDsSoQuyetDinhDieuChuyenCuc(body) : await this.quyetDinhDieuChuyenCucService.getDsSoQuyetDinhDieuChuyenChiCuc(body);
     if (resSoDX.msg == MESSAGE.SUCCESS) {
@@ -651,6 +658,7 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
         this.formData.patchValue({
+          tenLoNganKho: `${data.tenLoKhoNhan || ""} ${data.tenNganKhoNhan}`,
           tenLoKho: data.tenLoKhoNhan,
           maLoKho: data.maLoKhoNhan,
           tenNganKho: data.tenNganKhoNhan,

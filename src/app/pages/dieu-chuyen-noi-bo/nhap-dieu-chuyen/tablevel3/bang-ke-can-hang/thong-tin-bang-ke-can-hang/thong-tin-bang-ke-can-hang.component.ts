@@ -87,7 +87,7 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
       maNhaKho: [],
       tenDiemKho: [, [Validators.required]],
       maDiemKho: [],
-      diaDiemKho: [],
+      diaDaDiemKho: [],
       tenLanhDaoChiCuc: [],
       tenThuKho: [],
       thuKhoId: [],
@@ -108,6 +108,9 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
       dcnbBangKeCanHangDtl: [new Array<any>(),],
       type: ["01"],
       loaiDc: ["DCNB"],
+      loaiQdinh: [],
+      thayDoiThuKho: [],
+      lyDoTuChoi: [],
       maCan: [],
       soBaoBi: [],
       trongLuongCaBaoBi: [],
@@ -123,7 +126,9 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
       maQhns: this.userInfo.DON_VI.maQhns,
       ktvBaoQuan: this.userInfo.TEN_DAY_DU,
       soBangKe: `${id}/${this.formData.get('nam').value}/${this.maBb}`,
-      loaiDc: this.loaiDc
+      loaiDc: this.loaiDc,
+      loaiQdinh: this.loaiDc === "CUC" ? "NHAP" : null,
+      thayDoiThuKho: this.loaiDc !== "DCNB" ? true : null
     })
 
     if (this.idInput) {
@@ -177,6 +182,7 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
       this.dsHangTH = data.dcnbBangKeCanHangDtl
       this.formData.patchValue({ ...data, tenLoNganKho: `${data.tenLoKho} - ${data.tenNganKho}`, });
       this.fileDinhKemReq = data.fileDinhKems
+      // await this.layDonViCon(data.maDiemKho)
     }
     await this.spinner.hide();
   }
@@ -254,9 +260,11 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
 
     let body = {
       trangThai: STATUS.BAN_HANH,
-      loaiVthh: ['0101', '0102'],
+      // loaiVthh: ['0101', '0102'],
+      isVatTu: false,
       loaiDc: this.loaiDc,
-      maDvi: this.userInfo.MA_DVI
+      maDvi: this.userInfo.MA_DVI,
+      type: this.formData.value.type
     }
     let resSoDX = this.isCuc() ? await this.quyetDinhDieuChuyenCucService.getDsSoQuyetDinhDieuChuyenCuc(body) : await this.quyetDinhDieuChuyenCucService.getDsSoQuyetDinhDieuChuyenChiCuc(body);
     if (resSoDX.msg == MESSAGE.SUCCESS) {
@@ -373,7 +381,7 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
       const dataDiemKho = res.data.find(f => f.maDvi === maDiemKho);
       if (dataDiemKho) {
         this.formData.patchValue({
-          diaDiemKho: dataDiemKho.diaChi
+          diaDaDiemKho: dataDiemKho.diaChi
         })
       }
     }

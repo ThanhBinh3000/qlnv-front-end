@@ -405,7 +405,7 @@
                         </td>
                         <td *ngIf="isNhanDieuChuyen">
                           <a>
-                            <i class="fa fa-plus" *ngIf="!isView" (click)="addDiemKhoNhan(lv2)"></i>
+                            <i class="fa fa-plus" *ngIf="!isView" (click)="addDiemKhoNhan(lv2) && userService.isAccessPermisson('DCNB_KHDC_PHANBODC')"></i>
                           </a>
                         </td>
                       </tr>

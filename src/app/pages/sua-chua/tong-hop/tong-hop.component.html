@@ -59,7 +59,7 @@
                     <i class="icon  htvbdh_nhap-lai1"></i>
                     Xóa điều kiện
                 </button>
-                <button nz-button class="search__button--search" (click)="search()">
+                <button nz-button class="search__button--search" (click)="searchData()">
                     <i nz-icon nzType="search"></i>
                     Tìm kiếm
                 </button>
@@ -91,7 +91,7 @@
                     <th>Nhà/Ngăn/Lô kho</th>
                     <th>Ngày nhập kho</th>
                     <th>SL tồn</th>
-                    <th>SL hỏng cần</th>
+                    <th>SL hỏng cần SC</th>
                     <th>SL SC đã duyệt</th>
                     <th>SL còn lại cần SC</th>
                     <th>ĐVT</th>
@@ -107,65 +107,65 @@
             <tbody>
                 <ng-container *ngFor="let item of dataTable , let i = index">
                     <tr>
-                      <td nzShowExpand="true" [nzExpand]="item.expandSet"
-                          (nzExpandChange)="onExpandChange(item, $event)"></td>
-                      <td>{{(page-1)*pageSize+i+1}}</td>
-                      <td>{{item.nam}}</td>
-                      <td>{{item.maDanhSach}}</td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td>{{item.thoiHanXuat | date : 'dd/MM/yyyy'}}</td>
-                      <td>{{item.thoiHanNhap | date : 'dd/MM/yyyy'}}</td>
-                      <td>{{item.tenTrangThai}}</td>
-                      <td></td>
-                      <td>
-                        <a (click)="showDetail(item.id)">
-                          <span class="icon htvbdh_eye"></span>
-                        </a>
-                        <a *ngIf="item.trangThai == STATUS.DU_THAO" (click)="delete(item)" >
-                          <i class="fa fa-trash-o do"></i>
-                        </a>
-                      </td>
+                        <td nzShowExpand="true" [nzExpand]="item.expandSet"
+                            (nzExpandChange)="onExpandChange(item, $event)"></td>
+                        <td>{{(page-1)*pageSize+i+1}}</td>
+                        <td>{{item.nam}}</td>
+                        <td>{{item.maDanhSach}}</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>{{item.thoiHanXuat | date : 'dd/MM/yyyy'}}</td>
+                        <td>{{item.thoiHanNhap | date : 'dd/MM/yyyy'}}</td>
+                        <td>{{item.tenTrangThai}}</td>
+                        <td></td>
+                        <td>
+                            <a (click)="showDetail(item.id)">
+                                <span class="icon htvbdh_eye"></span>
+                            </a>
+                            <a *ngIf="item.trangThai == STATUS.DU_THAO" (click)="delete(item)">
+                                <i class="fa fa-trash-o do"></i>
+                            </a>
+                        </td>
                     </tr>
                     <ng-container *ngIf="item.expandSet">
                         <ng-container *ngFor="let chiCuc of item.groupChiCuc , let i = index">
                             <tr>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td >{{chiCuc.tenDonVi}}</td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>{{chiCuc.tenDonVi}}</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
                             </tr>
-                              <ng-container *ngFor="let data of chiCuc.children , let i = index">
-                                  <tr>
+                            <ng-container *ngFor="let data of chiCuc.children , let i = index">
+                                <tr>
                                     <td></td>
                                     <td></td>
                                     <td></td>
@@ -174,12 +174,14 @@
                                     <td>{{data.scDanhSachHdr.tenLoaiVthh}}</td>
                                     <td>{{data.scDanhSachHdr.tenCloaiVthh}}</td>
                                     <td>{{data.scDanhSachHdr.tenDiemKho}}</td>
-                                    <td>{{data.scDanhSachHdr.tenNhaKho}}/{{data.scDanhSachHdr.tenNganKho}}/{{data.scDanhSachHdr.tenLoKho}}</td>
+                                    <td>{{data.scDanhSachHdr.tenNhaKho}}/{{data.scDanhSachHdr.tenNganKho}}/{{data.scDanhSachHdr.tenLoKho}}
+                                    </td>
                                     <td>{{data.scDanhSachHdr.ngayNhapKho | date : 'dd/MM/yyyy'}}</td>
                                     <td>{{data.scDanhSachHdr.slHienTai | number : '1.0-1' : 'vi_VN' }}</td>
                                     <td>{{data.scDanhSachHdr.slDeXuat | number : '1.0-1' : 'vi_VN' }}</td>
-                                    <td></td>
-                                    <td></td>
+                                    <td>{{data.scDanhSachHdr.slDaDuyet | number : '1.0-1' : 'vi_VN' }}</td>
+                                    <td>{{data.scDanhSachHdr.slDeXuat - data.scDanhSachHdr.slDaDuyet | number : '1.0-1'
+                                        : 'vi_VN' }}</td>
                                     <td>{{data.scDanhSachHdr.donViTinh }}</td>
                                     <td>{{data.scDanhSachHdr.ngayDeXuat | date : 'dd/MM/yyyy'}}</td>
                                     <td>{{data.scDanhSachHdr.lyDo}}</td>
@@ -188,8 +190,8 @@
                                     <td></td>
                                     <td></td>
                                     <td></td>
-                                  </tr>
-                              </ng-container>
+                                </tr>
+                            </ng-container>
                         </ng-container>
                     </ng-container>
                 </ng-container>

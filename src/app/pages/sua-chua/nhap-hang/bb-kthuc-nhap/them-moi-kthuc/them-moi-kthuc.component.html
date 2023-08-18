@@ -2,10 +2,9 @@
   <div class="header header-green-background">
     <div class="header-text">
       <div class="title-chi-tieu">
-                <span
-                  [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDCC ? 'status-xanh' : 'status-do'">
-                    {{ formData.value.tenTrangThai }}
-                </span>
+        <span [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDCC ? 'status-xanh' : 'status-do'">
+          {{ formData.value.tenTrangThai }}
+        </span>
         <span>Biên bản giao nhận/kết thúc nhập kho</span>
       </div>
     </div>
@@ -14,13 +13,11 @@
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
-      <button *ngIf="showSave()" type="button"
-              class="btn btn-sub xanh-nhat ml-2" (click)="save(true)">
+      <button *ngIf="showSave()" type="button" class="btn btn-sub xanh-nhat ml-2" (click)="save(true)">
         <i class="icon htvbdh_tcdt_guiduyet"></i>
         <span>Lưu và gửi duyệt</span>
       </button>
-      <button *ngIf="showSave()" type="button" class="btn btn-main ml-2"
-              (click)="save()">
+      <button *ngIf="showSave()" type="button" class="btn btn-main ml-2" (click)="save()">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
       </button>
@@ -35,6 +32,11 @@
     </div>
   </div>
 
+  <nz-alert class="mg-t-10"
+    *ngIf="formData.value.trangThai == STATUS.TU_CHOI_KTVBQ || formData.value.trangThai == STATUS.TU_CHOI_KT || formData.value.trangThai == STATUS.TU_CHOI_LDCC "
+    nzShowIcon nzType="error" nzMessage="Lý do từ chối" nzDescription="{{formData.value.lyDoTuChoi}}">
+  </nz-alert>
+
   <nz-card class="mg-t-16 flex-card p-lr16">
     <nz-collapse>
       <nz-collapse-panel nzActive="true" nzHeader="THÔNG TIN CHUNG">
@@ -45,7 +47,7 @@
                 <nz-form-label nzRequired [nzNoColon]="true">Năm nhập</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-select formControlName="nam" [nzDisabled]="disabled()">
-                    <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text" nzDisabled ></nz-option>
+                    <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text" nzDisabled></nz-option>
                   </nz-select>
                 </nz-form-control>
               </nz-form-item>
@@ -78,7 +80,7 @@
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true">Ngày lập biên bản</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-date-picker formControlName="ngayLap" nzFormat="dd/MM/yyyy" [nzDisabled]="disabled()" >
+                  <nz-date-picker formControlName="ngayLap" nzFormat="dd/MM/yyyy" [nzDisabled]="disabled()">
                   </nz-date-picker>
                 </nz-form-control>
               </nz-form-item>
@@ -172,12 +174,12 @@
     <nz-collapse>
       <nz-collapse-panel nzActive="true" nzHeader="Thông tin bảng kê cân hàng và phiếu nhập kho">
         <nz-table class="pd-10 nowrap" nzBordered [nzData]="dataTable" [nzFrontPagination]="false"
-                  [nzShowPagination]="false">
+          [nzShowPagination]="false">
           <thead>
             <tr>
               <th nzWidth="30px">STT</th>
-              <th >Phiếu nhập kho</th>
-              <th >Bảng kê nhập vật tư</th>
+              <th>Phiếu nhập kho</th>
+              <th>Bảng kê nhập vật tư</th>
               <th nzWidth="100px">Ngày nhập</th>
               <th nzWidth="100px">Số lượng nhập</th>
             </tr>
@@ -196,7 +198,7 @@
           <tfoot>
             <tr>
               <td colspan="4">Tổng SL nhập</td>
-              <td >{{calTongSoLuong() | number : '1.0-1' : 'vi_VN'}}</td>
+              <td>{{calTongSoLuong() | number : '1.0-1' : 'vi_VN'}}</td>
             </tr>
           </tfoot>
         </nz-table>
@@ -206,8 +208,8 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">Ngày bắt đầu nhập</nz-form-label>
                 <nz-form-control>
-                    <nz-date-picker formControlName="ngayBatDau" nzFormat="dd/MM/yyyy" nzDisabled >
-                    </nz-date-picker>
+                  <nz-date-picker formControlName="ngayBatDau" nzFormat="dd/MM/yyyy" nzDisabled>
+                  </nz-date-picker>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -215,7 +217,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">Ngày kết thúc nhập</nz-form-label>
                 <nz-form-control>
-                  <nz-date-picker formControlName="ngayKetThuc" nzFormat="dd/MM/yyyy" nzDisabled >
+                  <nz-date-picker formControlName="ngayKetThuc" nzFormat="dd/MM/yyyy" nzDisabled>
                   </nz-date-picker>
                 </nz-form-control>
               </nz-form-item>
@@ -237,7 +239,7 @@
     <nz-collapse>
       <nz-collapse-panel nzActive="true" nzHeader="Thông tin người đại diện">
         <nz-table class="pd-10 nowrap" nzBordered [nzData]="dataTableAll" [nzFrontPagination]="false"
-                  [nzShowPagination]="false">
+          [nzShowPagination]="false">
           <thead>
             <tr>
               <th class="text-center" nzWidth="50px">STT</th>
@@ -247,7 +249,7 @@
             </tr>
             <tr *ngIf="!disabled()">
               <th></th>
-              <th><input nz-input [(ngModel)]="rowItem.hoVaTen"/></th>
+              <th><input nz-input [(ngModel)]="rowItem.hoVaTen" /></th>
               <th>
                 <nz-select [(ngModel)]="rowItem.chucVu">
                   <nz-option *ngFor="let p of dropdownLoaiDaiDien" [nzValue]="p.giaTri" [nzLabel]="p.giaTri">
@@ -260,20 +262,19 @@
                 </a>
               </th>
             </tr>
-            </thead>
+          </thead>
           <tbody>
-          <tr *ngFor="let data of dataTableAll ;let i = index">
-            <td class="text-center">{{i + 1}}</td>
-            <td>{{data.hoVaTen}}</td>
-            <td>{{data.chucVu}}</td>
-            <td>
-              <a *ngIf="!disabled()">
-                <i class="fa fa-trash-o do" nz-popconfirm nz-button
-                   nzPopconfirmTitle="Bạn có chắc muốn xóa ?"
-                   (nzOnConfirm)="deleteRow(i)"></i>
-              </a>
-            </td>
-          </tr>
+            <tr *ngFor="let data of dataTableAll ;let i = index">
+              <td class="text-center">{{i + 1}}</td>
+              <td>{{data.hoVaTen}}</td>
+              <td>{{data.chucVu}}</td>
+              <td>
+                <a *ngIf="!disabled()">
+                  <i class="fa fa-trash-o do" nz-popconfirm nz-button nzPopconfirmTitle="Bạn có chắc muốn xóa ?"
+                    (nzOnConfirm)="deleteRow(i)"></i>
+                </a>
+              </td>
+            </tr>
           </tbody>
         </nz-table>
       </nz-collapse-panel>
@@ -285,7 +286,7 @@
             <div nz-col [nzSpan]="24">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">Ghi chú</nz-form-label>
-                <nz-form-control >
+                <nz-form-control>
                   <textarea rows="3" formControlName="ghiChu" nz-input [readonly]="disabled()"></textarea>
                 </nz-form-control>
               </nz-form-item>

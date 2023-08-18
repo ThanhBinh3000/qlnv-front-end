@@ -84,14 +84,14 @@ export class ThongTinBienBanNhapDayDuComponent extends Base2Component implements
       soQdDcCuc: [],
       ngayQdDcCuc: [],
       qdDcCucId: [],
-      tenLoNganKho: [],
+      tenLoNganKho: [, [Validators.required]],
       tenLoKho: [],
       maLoKho: [],
-      tenNganKho: [],
+      tenNganKho: [, [Validators.required]],
       maNganKho: [],
-      tenNhaKho: [],
+      tenNhaKho: [, [Validators.required]],
       maNhaKho: [],
-      tenDiemKho: [],
+      tenDiemKho: [, [Validators.required]],
       maDiemKho: [],
       idKeHoachDtl: [],
       loaiHinhKho: [],
@@ -100,11 +100,11 @@ export class ThongTinBienBanNhapDayDuComponent extends Base2Component implements
       cloaiVthh: [],
       tenCloaiVthh: [],
       dviTinh: [],
-
+      isVatTu: false,
       ngayBdNhap: [],
       ngayKtNhap: [],
       soLuongQdDcCuc: [],
-
+      lyDoTuChoi: [],
       ghiChu: [],
       ktvBaoQuan: [],
       idKyThuatVien: [],
@@ -116,7 +116,9 @@ export class ThongTinBienBanNhapDayDuComponent extends Base2Component implements
       lanhDao: [],
       children: [new Array<any>(),],
       type: ["01"],
-      loaiDc: ["DCNB"]
+      loaiDc: ["DCNB"],
+      loaiQdinh: [],
+      thayDoiThuKho: []
     }
     );
   }
@@ -130,7 +132,9 @@ export class ThongTinBienBanNhapDayDuComponent extends Base2Component implements
       maQhns: this.userInfo.DON_VI.maQhns,
       ktvBaoQuan: this.userInfo.TEN_DAY_DU,
       soBb: `${id}/${this.formData.get('nam').value}/${this.maBb}`,
-      loaiDc: this.loaiDc
+      loaiDc: this.loaiDc,
+      loaiQdinh: this.loaiDc === "CUC" ? "NHAP" : null,
+      thayDoiThuKho: this.loaiDc !== "DCNB" ? true : null
     })
 
     if (this.idInput) {
@@ -138,7 +142,6 @@ export class ThongTinBienBanNhapDayDuComponent extends Base2Component implements
     }
 
     if (this.data) {
-      console.log('data', this.data)
       this.formData.patchValue({
         soQdDcCuc: this.data.soQdinh,
         ngayQdDcCuc: this.data.ngayKyQd,
@@ -223,6 +226,16 @@ export class ThongTinBienBanNhapDayDuComponent extends Base2Component implements
       }
     }
     this.tongSL = this.danhSach.filter(item => item.checked).reduce((pre, cur) => pre + Number(cur.soLuong), 0)
+    const pnk = this.danhSach.filter(item => item.checked)[0]
+    if (pnk) {
+      this.formData.patchValue({
+        ngayBdNhap: pnk.ngayNhapKho
+      })
+    } else {
+      this.formData.patchValue({
+        ngayBdNhap: ""
+      })
+    }
     this.danhSach = cloneDeep(this.danhSach)
   }
 
@@ -237,6 +250,16 @@ export class ThongTinBienBanNhapDayDuComponent extends Base2Component implements
       this.indeterminateTT = true;
     }
     this.tongSL = this.danhSach.filter(item => item.checked).reduce((pre, cur) => pre + Number(cur.soLuong), 0)
+    const pnk = this.danhSach.filter(item => item.checked)[0]
+    if (pnk) {
+      this.formData.patchValue({
+        ngayBdNhap: pnk.ngayNhapKho
+      })
+    } else {
+      this.formData.patchValue({
+        ngayBdNhap: ""
+      })
+    }
     this.danhSach = cloneDeep(this.danhSach)
   }
 
@@ -245,9 +268,10 @@ export class ThongTinBienBanNhapDayDuComponent extends Base2Component implements
     await this.spinner.show();
     let body = {
       trangThai: STATUS.BAN_HANH,
-      loaiVthh: ['0101', '0102'],
+      // loaiVthh: ['0101', '0102'],
       loaiDc: this.loaiDc,
-      maDvi: this.userInfo.MA_DVI
+      maDvi: this.userInfo.MA_DVI,
+      type: this.formData.value.type
     }
     let resSoDX = this.isCuc() ? await this.quyetDinhDieuChuyenCucService.getDsSoQuyetDinhDieuChuyenCuc(body) : await this.quyetDinhDieuChuyenCucService.getDsSoQuyetDinhDieuChuyenChiCuc(body);
     if (resSoDX.msg == MESSAGE.SUCCESS) {
@@ -362,11 +386,18 @@ export class ThongTinBienBanNhapDayDuComponent extends Base2Component implements
 
 
   async save(isGuiDuyet?) {
+    this.helperService.markFormGroupTouched(this.formData);
+    if (!this.formData.valid) return
     await this.spinner.show();
     let body = this.formData.value;
     body.fileDinhKemReq = this.fileDinhKemReq;
     body.ngayKtNhap = body.ngayLap
-    body.children = this.danhSach.filter(item => item.checked)
+    body.children = this.danhSach.filter(item => item.checked).map(pnk => {
+      return {
+        ...pnk,
+        id: undefined
+      }
+    })
     if (this.idInput) {
       body.id = this.idInput
     }

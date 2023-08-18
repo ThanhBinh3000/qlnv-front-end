@@ -11,6 +11,7 @@ import {
 } from "src/app/components/dialog/dialog-table-selection/dialog-table-selection.component";
 import { MESSAGE } from "src/app/constants/message";
 import { STATUS } from "src/app/constants/status";
+import { BienBanTinhKhoDieuChuyenService } from "src/app/pages/dieu-chuyen-noi-bo/xuat-dieu-chuyen/component-chung/services/dcnb-bien-ban-tinh-kho.service";
 import { DanhMucService } from "src/app/services/danhmuc.service";
 import { BienBanLayMauService } from "src/app/services/dieu-chuyen-noi-bo/nhap-dieu-chuyen/bien-ban-lay-mau";
 import { BienBanNhapDayKhoService } from "src/app/services/dieu-chuyen-noi-bo/nhap-dieu-chuyen/bien-ban-nhap-day-kho";
@@ -63,6 +64,7 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
     private quyetDinhDieuChuyenCucService: QuyetDinhDieuChuyenCucService,
     private khCnQuyChuanKyThuat: KhCnQuyChuanKyThuat,
     private bienBanLayMauService: BienBanLayMauService,
+    private bienBanTinhKhoDieuChuyenService: BienBanTinhKhoDieuChuyenService
   ) {
     super(httpClient, storageService, notification, spinner, modal, bienBanLayMauService);
     this.formData = this.fb.group({
@@ -78,17 +80,17 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
       ngayLayMau: [dayjs().format('YYYY-MM-DD')],
       soQdinhDcc: [],
       qdccId: [],
-      soBbNhapDayKho: [],
-      ngayBbNhapDayKho: [],
-      bbNhapDayKhoId: [],
-      tenLoNganKho: [],
+      soBbTinhKho: [],
+      ngayXuatDocKho: [],
+      bbTinhKhoId: [],
+      tenLoNganKho: [, [Validators.required]],
       tenLoKho: [],
       maLoKho: [],
-      tenNganKho: [],
+      tenNganKho: [, [Validators.required]],
       maNganKho: [],
-      tenNhaKho: [],
+      tenNhaKho: [, [Validators.required]],
       maNhaKho: [],
-      tenDiemKho: [],
+      tenDiemKho: [, [Validators.required]],
       maDiemKho: [],
       loaiVthh: [],
       tenLoaiVthh: [],
@@ -104,7 +106,10 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
       ketQuaNiemPhong: [],
       type: ["01"],
       loaiDc: [this.loaiDc],
-      isVatTu: [this.isVatTu]
+      isVatTu: [this.isVatTu],
+      loaiQdinh: [],
+      thayDoiThuKho: [],
+      lyDoTuChoi: [],
     });
   }
 
@@ -119,7 +124,9 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
       soBbLayMau: `${id}/${this.formData.get('nam').value}/${this.maBb}`,
       id: id,
       loaiDc: this.loaiDc,
-      isVatTu: this.isVatTu
+      isVatTu: this.isVatTu,
+      loaiQdinh: this.loaiDc === "CUC" ? "NHAP" : null,
+      thayDoiThuKho: true
     })
 
     if (this.idInput) {
@@ -233,10 +240,11 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
     await this.spinner.show();
     let body = {
       trangThai: STATUS.BAN_HANH,
-      loaiVthh: ['0101', '0102'],
-      loaiDc: "DCNB",
-      maDvi: this.userInfo.MA_DVI
-      // listTrangThaiXh: [STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN],
+      // loaiVthh: ['0101', '0102'],
+      isVatTu: this.isVatTu,
+      loaiDc: this.loaiDc,
+      maDvi: this.userInfo.MA_DVI,
+      type: this.formData.value.type
     }
     let resSoDX = this.isCuc() ? await this.quyetDinhDieuChuyenCucService.getDsSoQuyetDinhDieuChuyenCuc(body) : await this.quyetDinhDieuChuyenCucService.getDsSoQuyetDinhDieuChuyenChiCuc(body);
     if (resSoDX.msg == MESSAGE.SUCCESS) {
@@ -296,20 +304,20 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
     await this.spinner.show();
     // Get data tờ trình
     let body = {
-      trangThai: STATUS.BAN_HANH,
+      // trangThai: STATUS.BAN_HANH,
       // loaiVthh: ['0101', '0102'],
-      loaiDc: "DCNB",
+      loaiDc: this.loaiDc,
       // maDvi: this.userInfo.MA_DVI
       // listTrangThaiXh: [STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN],
     }
-    let res = await this.bienBanNhapDayKhoService.getDanhSach(body)
+    let res = await this.bienBanTinhKhoDieuChuyenService.dsBBTinhKho(body)
     if (res.msg == MESSAGE.SUCCESS) {
       this.listDanhSachQuyetDinh = res.data;
     }
     await this.spinner.hide();
 
     const modalQD = this.modal.create({
-      nzTitle: 'Danh sách quyết định',
+      nzTitle: 'Danh sách biên bản tịnh kho',
       nzContent: DialogTableSelectionComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -317,7 +325,7 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
       nzFooter: null,
       nzComponentParams: {
         dataTable: this.listDanhSachQuyetDinh,
-        dataHeader: ['Số biên bản nhập đầy kho'],
+        dataHeader: ['Số biên bản tịnh kho'],
         dataColumn: ['soBb']
       },
     });
@@ -325,9 +333,9 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
       if (data) {
         console.log('openDialogQD', data)
         this.formData.patchValue({
-          soBbNhapDayKho: data.soBb,
-          ngayBbNhapDayKho: data.ngayPDuyet,
-          bbNhapDayKhoId: data.id,
+          soBbTinhKho: data.soBb,
+          ngayXuatDocKho: data.ngayPDuyet,
+          bbTinhKhoId: data.id,
 
         });
         await this.loadChiTietQdinh(data.id);
@@ -463,6 +471,8 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
 
 
   async save(isGuiDuyet?) {
+    this.helperService.markFormGroupTouched(this.formData);
+    if (!this.formData.valid) return
     await this.spinner.show();
     let body = this.formData.value;
     body.pplayMau = this.phuongPhapLayMaus.filter(item => item.checked).map(f => `${f.id}-${f.giaTri}`).join(",")

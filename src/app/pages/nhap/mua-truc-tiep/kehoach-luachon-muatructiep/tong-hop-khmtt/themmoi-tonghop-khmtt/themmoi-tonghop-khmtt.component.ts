@@ -43,6 +43,7 @@ export class ThemmoiTonghopKhmttComponent extends Base2Component implements OnIn
   listHinhThucDauThau: any[] = [];
   listLoaiHopDong: any[] = [];
   isQuyetDinh: boolean = false;
+  disableField: boolean = false;
   selected: boolean = false;
   listFileDinhKem: any[] = [];
   constructor(
@@ -76,7 +77,7 @@ export class ThemmoiTonghopKhmttComponent extends Base2Component implements OnIn
       tenCloaiVthh: [''],
       namKh: [, [Validators.required]],
       noiDungThop: ['', [Validators.required]],
-      trangThai: [''],
+      trangThai: ['26'],
       ghiChu: ['',],
       tchuanCluong: [''],
       soQd: [''],
@@ -117,6 +118,9 @@ export class ThemmoiTonghopKhmttComponent extends Base2Component implements OnIn
       else {
         this.isTongHop = false;
       }
+    }else{
+      this.formTraCuu.get('tenLoaiVthh').setValue("Thóc tẻ")
+      this.formTraCuu.get('loaiVthh').setValue("0101")
     }
   }
 
@@ -141,6 +145,7 @@ export class ThemmoiTonghopKhmttComponent extends Base2Component implements OnIn
         })
         this.dataTable = dataDetail.children;
         this.isTongHop = true;
+        console.log(this.formData.value)
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
         this.isTongHop = false;
@@ -154,12 +159,15 @@ export class ThemmoiTonghopKhmttComponent extends Base2Component implements OnIn
     }
   }
 
-  async save() {
+  async save(isTaoQd?: boolean) {
     let body = this.formData.value;
     body.fileDinhKems = this.listFileDinhKem;
     let data = await this.createUpdate(body, 'NHDTQG_PTMTT_KHMTT_TONGHOP_TONGHOP')
     if (data) {
-      this.quayLai();
+      if(isTaoQd){
+        this.isQuyetDinh = true;
+        this.disableField = true;
+      }
     }
   }
 
@@ -205,13 +213,13 @@ export class ThemmoiTonghopKhmttComponent extends Base2Component implements OnIn
     });
   }
 
-  taoQdinh() {
+  async taoQdinh() {
     let elem = document.getElementById('mainTongCuc');
     let tabActive = elem.getElementsByClassName('ant-menu-item')[0];
     tabActive.classList.remove('ant-menu-item-selected')
     let setActive = elem.getElementsByClassName('ant-menu-item')[2];
     setActive.classList.add('ant-menu-item-selected');
-    this.isQuyetDinh = true;
+    await this.save(true)
   }
 
   showTongHop() {

@@ -3,7 +3,7 @@
     <nz-card class="mt16 flex-card p-lr16">
       <div class="search__body" nz-row [nzGutter]="20">
         <div nz-col nzSpan="2">
-          <label class="search__label">Năm nhập</label>
+          <label class="search__label">Năm kế hoạch</label>
           <nz-select [(ngModel)]="searchFilter.namNhap" nzAllowClear>
             <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text">
             </nz-option>
@@ -14,7 +14,7 @@
           <input [(ngModel)]="searchFilter.soQd" nz-input nzSize="small" placeholder="Nhập số quyết định" />
         </div>
         <div nz-col nzSpan="3">
-          <label class="search__label">Loại hàng hóa </label>
+          <label class="search__label">Loại hàng DTQG </label>
           <nz-select [(ngModel)]="searchFilter.loaiVthh">
             <nz-option *ngFor="let p of dsLoaiVthh" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
           </nz-select>
@@ -77,10 +77,10 @@
                    [nzIndeterminate]="indeterminate"></label>
           </th>
           <th class="text-center" style="width: 2%;">STT</th>
-          <th class="text-center" style="width: 8%;">Năm KH</th>
+          <th class="text-center" style="width: 8%;">Năm kế hoạch</th>
           <th class="text-center" style="width: 10%;">Số quyết định</th>
           <th class="text-center" style="width: 10%;">Ngày ký quyết định</th>
-          <th class="text-center" style="width: 8%;">Loại hàng hóa</th>
+          <th class="text-center" style="width: 8%;">Loại hàng DTQG</th>
           <th class="text-center" style="width: 11%;">Tổng SL nhập</th>
           <th class="text-center" style="width: 11%;">ĐVT</th>
           <th class="text-center" style="width: 40%;">Thời gian nhập kho muộn nhất</th>
@@ -191,7 +191,7 @@
           <td>{{ data.tenTrangThai }}</td>
           <td>{{ data.tenTrangThaiNh }}</td>
           <td>
-            <a *ngIf="userService.isAccessPermisson('NHDTQG_NK_QDGNVNH_XEM')"
+            <a *ngIf="data.trangThai != STATUS.DU_THAO && userService.isAccessPermisson('NHDTQG_NK_QDGNVNH_XEM')"
                (click)="redirectToThongTin(data.id, true)">
               <span class="icon htvbdh_eye"></span>
             </a>
@@ -199,7 +199,7 @@
               && userService.isAccessPermisson('NHDTQG_NK_QDGNVNH_THEM') ">
               <i class=" fa fa-pencil"></i>
             </a>
-            <a (click)="xoaItem(data)">
+            <a (click)="xoaItem(data)" *ngIf="(data.trangThai == STATUS.DU_THAO ) && userService.isAccessPermisson('NHDTQG_NK_QDGNVNH_XOA') ">
               <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>

@@ -1,18 +1,18 @@
-import { Component, Input, OnInit, Output, EventEmitter, ViewChild, OnChanges, SimpleChanges } from '@angular/core';
-import {  Validators } from '@angular/forms';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { MESSAGE } from 'src/app/constants/message';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { KhCnCongTrinhNghienCuu } from 'src/app/services/kh-cn-bao-quan/khCnCongTrinhNghienCuu';
+import {Component, Input, OnInit, Output, EventEmitter, ViewChild, OnChanges, SimpleChanges} from '@angular/core';
+import {Validators} from '@angular/forms';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {MESSAGE} from 'src/app/constants/message';
+import {DanhMucService} from 'src/app/services/danhmuc.service';
+import {KhCnCongTrinhNghienCuu} from 'src/app/services/kh-cn-bao-quan/khCnCongTrinhNghienCuu';
 import * as dayjs from 'dayjs';
-import { NghiemThuThanhLy, TienDoThucHien } from 'src/app/models/KhoaHocCongNgheBaoQuan';
-import { cloneDeep } from 'lodash';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { Base2Component } from './../../../../components/base2/base2.component';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { CurrencyMaskInputMode } from 'ngx-currency';
+import {NghiemThuThanhLy, TienDoThucHien} from 'src/app/models/KhoaHocCongNgheBaoQuan';
+import {cloneDeep} from 'lodash';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from 'src/app/services/storage.service';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {Base2Component} from './../../../../components/base2/base2.component';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {CurrencyMaskInputMode} from 'ngx-currency';
 
 @Component({
   selector: 'app-thong-tin-quan-ly-cong-trinh-nghien-cuu-bao-quan',
@@ -32,6 +32,7 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
   tabSelected: number = 0;
   dataTable1: any[] = []
   listCapDt: any[] = []
+  listXepLoai: any[] = []
   listNguonVon: any[] = [];
   fileDinhKem: any[] = [];
   fileTienDoTh: any[] = [];
@@ -49,9 +50,9 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
   }
 
   listTrangThai1: any[] = [
-    { ma: this.STATUS.CHUA_THUC_HIEN, giaTri: 'Chưa thực hiện' },
-    { ma: this.STATUS.DANG_THUC_HIEN, giaTri: 'Đang thực hiện' },
-    { ma: this.STATUS.DA_HOAN_THANH, giaTri: 'Đã hoàn thành' },
+    {ma: this.STATUS.CHUA_THUC_HIEN, giaTri: 'Chưa thực hiện'},
+    {ma: this.STATUS.DANG_THUC_HIEN, giaTri: 'Đang thực hiện'},
+    {ma: this.STATUS.DA_HOAN_THANH, giaTri: 'Đã hoàn thành'},
   ];
   trangThaiSave: string = this.STATUS.DU_THAO;
   hasError: boolean = false;
@@ -88,12 +89,12 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
       sdt: [null],
       dviPhoiHop: ['', [Validators.required]],
       dviChuTri: ['', [Validators.required]],
+      dviThucHien: [''],
       nguonVon: ['', [Validators.required]],
       soQdPd: [''],
       suCanThiet: [null],
       mucTieu: [null],
       phamVi: [null],
-
       trangThai: [null, [Validators.required]],
       tenTrangThai: [null,],
       tongChiPhi: [null, [Validators.required]],
@@ -108,10 +109,10 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
   }
 
   listTrangThai: any[] = [
-    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    {ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo'},
     // { ma: this.STATUS.DA_DUYET, giaTri: 'Đã duyệt' },
-    { ma: this.STATUS.DANG_THUC_HIEN, giaTri: 'Đang thực hiện' },
-    { ma: this.STATUS.DA_NGHIEM_THU, giaTri: 'Đã nghiệm thu' }
+    {ma: this.STATUS.DANG_THUC_HIEN, giaTri: 'Đang thực hiện'},
+    {ma: this.STATUS.DA_NGHIEM_THU, giaTri: 'Đã nghiệm thu'}
   ];
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -121,13 +122,13 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
   }
 
   ngOnInit() {
-    console.log(this.formThongTinChung);
     if (this.id) {
       this.getDetail(this.id);
     } else {
       this.initForm()
     }
     this.getListCapDt();
+    this.getListXepLoai();
   }
 
   async getDetail(id) {
@@ -152,14 +153,14 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
       this.dataTable.forEach((item, index) => {
         this.dataEdit[index] = {
           edit: false,
-          data: { ...item },
+          data: {...item},
         };
       });
       this.dataTable1 = data.children;
       this.dataTable1.forEach((item, index) => {
         this.dataEdit1[index] = {
           edit: false,
-          data: { ...item },
+          data: {...item},
         };
       });
     }
@@ -190,6 +191,42 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
     let resNv = await this.danhMucService.danhMucChungGetAll('NGUON_VON');
     if (resNv.msg == MESSAGE.SUCCESS) {
       this.listNguonVon = resNv.data;
+    }
+  }
+
+  async getListXepLoai() {
+    this.listXepLoai = [];
+    let res = await this.danhMucService.danhMucChungGetAll('XEP_LOAI');
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listXepLoai = res.data;
+      console.log(this.listXepLoai);
+    }
+  }
+
+  calculateXepLoai() {
+    if (this.formData.value.tongDiem) {
+      let tongDiem = this.formData.value.tongDiem
+      if (tongDiem < 60) {
+        this.formData.patchValue({
+          xepLoai: "0"
+        })
+      } else if (tongDiem >= 60 && tongDiem <= 69) {
+        this.formData.patchValue({
+          xepLoai: "1"
+        })
+      } else if (tongDiem >= 70 && tongDiem <= 79) {
+        this.formData.patchValue({
+          xepLoai: "2"
+        })
+      } else if (tongDiem >= 80 && tongDiem <= 89) {
+        this.formData.patchValue({
+          xepLoai: "3"
+        })
+      } else if (tongDiem >= 90 && tongDiem <= 100) {
+        this.formData.patchValue({
+          xepLoai: "4"
+        })
+      }
     }
   }
 
@@ -236,7 +273,7 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
       } else {
         this.idInput = res.data.id;
         this.formData.patchValue({
-          id : res.data.id
+          id: res.data.id
         })
         this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
       }
@@ -320,7 +357,7 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
       this.dataTable.forEach((item, index) => {
         this.dataEdit[index] = {
           edit: false,
-          data: { ...item },
+          data: {...item},
         };
       });
     }
@@ -329,7 +366,7 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
   huyEdit(id: number): void {
     const index = this.dataTable.findIndex((item) => item.idVirtual == id);
     this.dataEdit[id] = {
-      data: { ...this.dataTable[index] },
+      data: {...this.dataTable[index]},
       edit: false,
     };
   }
@@ -395,10 +432,12 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
       this.notification.error(MESSAGE.ERROR, "Vui lòng điền đầy đủ thông tin")
     }
   }
+
   clearData1() {
     this.rowItem1 = new NghiemThuThanhLy();
     this.dataTable1 = []
   }
+
   sortTableId1() {
     this.dataTable1.forEach((lt, i) => {
       lt.stt = i + 1;
@@ -414,7 +453,7 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
       this.dataTable1.forEach((item, index) => {
         this.dataEdit1[index] = {
           edit: false,
-          data: { ...item },
+          data: {...item},
         };
       });
     }
@@ -423,7 +462,7 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
   huyEdit1(id: number): void {
     const index = this.dataTable1.findIndex((item) => item.idVirtual == id);
     this.dataEdit1[id] = {
-      data: { ...this.dataTable1[index] },
+      data: {...this.dataTable1[index]},
       edit: false,
     };
   }

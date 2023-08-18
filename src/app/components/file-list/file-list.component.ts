@@ -1,12 +1,12 @@
-import { saveAs } from 'file-saver';
-import { FileDinhKem } from 'src/app/models/FileDinhKem';
-import { Component, Input, OnInit } from '@angular/core';
-import { UserService } from 'src/app/services/user.service';
-import { Globals } from 'src/app/shared/globals';
-import { UploadFileService } from 'src/app/services/uploaFile.service';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { MESSAGE } from 'src/app/constants/message';
-import { NzModalService } from "ng-zorro-antd/modal";
+import {saveAs} from 'file-saver';
+import {FileDinhKem} from 'src/app/models/FileDinhKem';
+import {Component, Input, OnInit} from '@angular/core';
+import {UserService} from 'src/app/services/user.service';
+import {Globals} from 'src/app/shared/globals';
+import {UploadFileService} from 'src/app/services/uploaFile.service';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {MESSAGE} from 'src/app/constants/message';
+import {NzModalService} from "ng-zorro-antd/modal";
 
 @Component({
   selector: 'file-list',
@@ -53,9 +53,10 @@ export class FileListComponent implements OnInit {
       const itemFile = {
         name: fileList[0].name,
         file: event.target.files[0] as File,
+        time: new Date().getTime()
       };
       this.uploadFileService
-        .uploadFile(itemFile.file, itemFile.name)
+        .uploadFile(itemFile.file, itemFile.name,itemFile.time)
         .then((resUpload) => {
           if (item) {
             item.fileName = resUpload.filename;

@@ -210,26 +210,28 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
       let listHangHoa = []
       this.dataTableView = []
       if (data.danhSachQuyetDinh.length > 0) {
-        data.danhSachQuyetDinh.map(async (item, i) => {
-          if (item.dcnbKeHoachDcHdr) {
-            listDeXuat.push(item.dcnbKeHoachDcHdr)
-
-          }
+        data.danhSachQuyetDinh.forEach(async (item, i) => {
+          listDeXuat.push(item)
         })
 
-        let dcnbKeHoachDcHdr = data.danhSachQuyetDinh[0].dcnbKeHoachDcHdr
+        let dcnbKeHoachDcHdr = data.danhSachQuyetDinh[0].danhSachQuyetDinhChiTiet
         if (!dcnbKeHoachDcHdr) return
-        dcnbKeHoachDcHdr.danhSachHangHoa.forEach(element => {
-          listHangHoa.push({
-            ...element,
-            maLoNganKho: element.maLoKho ? `${element.maLoKho}${element.maNganKho}` : element.maNganKho,
-            maDvi: dcnbKeHoachDcHdr.maDvi,
-            tenDvi: dcnbKeHoachDcHdr.tenDvi,
-          })
+        dcnbKeHoachDcHdr.forEach(dq => {
+          if (dq.dcnbKeHoachDcHdr) {
+            dq.dcnbKeHoachDcHdr.danhSachHangHoa.forEach(element => {
+              listHangHoa.push({
+                ...element,
+                maLoNganKho: element.maLoKho ? `${element.maLoKho}${element.maNganKho}` : element.maNganKho,
+                maDvi: dq.dcnbKeHoachDcHdr.maDvi,
+                tenDvi: dq.dcnbKeHoachDcHdr.tenDvi,
+              })
+            });
+          }
+
         });
       }
 
-
+      console.log('listDeXuat', listDeXuat)
       this.formData.patchValue({
         ...data,
         quyetDinhPdDtl: listDeXuat,
@@ -255,20 +257,55 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
   }
 
   selectRow(index) {
+    // debugger
     this.selected = index
     let listHangHoa = []
     this.dataTableView = []
     let itemQd = this.formData.value.quyetDinhPdDtl[index]
-    if (itemQd.danhSachHangHoa) {
-      itemQd.danhSachHangHoa.forEach(element => {
-        listHangHoa.push({
-          ...element,
-          maLoNganKho: element.maLoKho ? `${element.maLoKho}${element.maNganKho}` : element.maNganKho,
-          maDvi: itemQd.maDvi,
-          tenDvi: itemQd.tenDvi,
-        })
+
+    let dcnbKeHoachDcHdr = itemQd.danhSachQuyetDinhChiTiet
+    if (dcnbKeHoachDcHdr && dcnbKeHoachDcHdr.length > 0) {
+      dcnbKeHoachDcHdr.forEach(dq => {
+        // if (dq.danhSachKeHoach) {
+        //   dq.danhSachKeHoach.forEach(element => {
+        //     listHangHoa.push({
+        //       ...element,
+        //       maLoNganKho: element.maLoKho ? `${element.maLoKho}${element.maNganKho}` : element.maNganKho,
+        //       maDvi: dcnbKeHoachDcHdr.maDvi,
+        //       tenDvi: dcnbKeHoachDcHdr.tenDvi,
+        //     })
+        //   });
+        // }
+
+        if (dq.dcnbKeHoachDcHdr) {
+          dq.dcnbKeHoachDcHdr.danhSachHangHoa.forEach(element => {
+            listHangHoa.push({
+              ...element,
+              maLoNganKho: element.maLoKho ? `${element.maLoKho}${element.maNganKho}` : element.maNganKho,
+              maDvi: dq.dcnbKeHoachDcHdr.maDvi,
+              tenDvi: dq.dcnbKeHoachDcHdr.tenDvi,
+            })
+          });
+        }
+
       });
+
+
+
     }
+
+
+    // if (itemQd.danhSachHangHoa) {
+    //   itemQd.danhSachHangHoa.forEach(element => {
+    //     listHangHoa.push({
+    //       ...element,
+    //       maLoNganKho: element.maLoKho ? `${element.maLoKho}${element.maNganKho}` : element.maNganKho,
+    //       maDvi: itemQd.maDvi,
+    //       tenDvi: itemQd.tenDvi,
+    //     })
+    //   });
+    // }
+
     if (itemQd.thKeHoachDieuChuyenCucHdr) {
       if (itemQd.thKeHoachDieuChuyenCucHdr.thKeHoachDieuChuyenNoiBoCucDtls.length > 0) {
         itemQd.thKeHoachDieuChuyenCucHdr.thKeHoachDieuChuyenNoiBoCucDtls.map(itemKH => {
@@ -352,35 +389,44 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
         })
 
 
-        data.thKeHoachDieuChuyenTongCucDtls.map(async item => {
+        data.thKeHoachDieuChuyenTongCucDtls.forEach(item => {
           listDeXuat.push(item)
-          if (item.thKeHoachDieuChuyenCucHdr.thKeHoachDieuChuyenNoiBoCucDtls.length > 0) {
-            item.thKeHoachDieuChuyenCucHdr.thKeHoachDieuChuyenNoiBoCucDtls.map(itemKH => {
-              listQD.push({
-                keHoachDcHdrId: itemKH.dcKeHoachDcHdrId,
-              })
-            })
 
-          }
-          if (item.thKeHoachDieuChuyenCucKhacCucDtl) {
-            if (item.thKeHoachDieuChuyenCucKhacCucDtl.dcnbKeHoachDcHdr.length > 0) {
-              item.thKeHoachDieuChuyenCucKhacCucDtl.dcnbKeHoachDcHdr.map(async (itemKH, i) => {
+          if (loaiDC === "CHI_CUC") {
+            if (item.thKeHoachDieuChuyenCucHdr.thKeHoachDieuChuyenNoiBoCucDtls.length > 0) {
+              item.thKeHoachDieuChuyenCucHdr.thKeHoachDieuChuyenNoiBoCucDtls.forEach(itemKH => {
                 listQD.push({
                   keHoachDcHdrId: itemKH.dcKeHoachDcHdrId,
                 })
               })
             }
-
           }
+
+          if (loaiDC === "CUC") {
+            if (item.thKeHoachDieuChuyenCucKhacCucDtl) {
+              item.thKeHoachDieuChuyenCucKhacCucDtl.dcnbKeHoachDcHdr.forEach(element => {
+                listQD.push({
+                  keHoachDcHdrId: element.id,
+                })
+              });
+
+            }
+          }
+
+
         })
+
         const item = data.thKeHoachDieuChuyenTongCucDtls[0]
         if (loaiDC === "CHI_CUC") {
 
           if (item.thKeHoachDieuChuyenCucHdr) {
 
             if (item.thKeHoachDieuChuyenCucHdr.thKeHoachDieuChuyenNoiBoCucDtls.length > 0) {
-              item.thKeHoachDieuChuyenCucHdr.thKeHoachDieuChuyenNoiBoCucDtls.map(itemKH => {
+              item.thKeHoachDieuChuyenCucHdr.thKeHoachDieuChuyenNoiBoCucDtls.forEach(itemKH => {
                 let dcnbKeHoachDcHdr = itemKH.dcnbKeHoachDcHdr
+                // listQD.push({
+                //   keHoachDcHdrId: dcnbKeHoachDcHdr.id,
+                // })
                 if (dcnbKeHoachDcHdr) {
                   dcnbKeHoachDcHdr.danhSachHangHoa.map(async itemHH => {
                     listHangHoa.push({
@@ -406,8 +452,11 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
           if (item.thKeHoachDieuChuyenCucKhacCucDtl) {
 
             if (item.thKeHoachDieuChuyenCucKhacCucDtl.dcnbKeHoachDcHdr.length > 0) {
-              item.thKeHoachDieuChuyenCucKhacCucDtl.dcnbKeHoachDcHdr.map(async (itemKH, i) => {
-                itemKH.danhSachHangHoa.map(async itemHH => {
+              item.thKeHoachDieuChuyenCucKhacCucDtl.dcnbKeHoachDcHdr.forEach(async (itemKH, i) => {
+                // listQD.push({
+                //   keHoachDcHdrId: itemKH.id,
+                // })
+                itemKH.danhSachHangHoa.forEach(async itemHH => {
                   listHangHoa.push({
                     ...itemHH,
                     maLoNganKho: itemHH.maLoKho ? `${itemHH.maLoKho}${itemHH.maNganKho}` : itemHH.maNganKho,
@@ -477,11 +526,14 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
                 }).value()
 
                 let duToanKphi = vs?.reduce((prev, cur) => prev + cur.duToanKphi, 0);
+                let soLuongDc = vs?.reduce((prev, cur) => prev + cur.soLuongDc, 0);
+
                 return {
                   ...maNganKho,
                   idVirtual: maNganKho ? maNganKho.idVirtual ? maNganKho.idVirtual : uuidv4.v4() : uuidv4.v4(),
                   children: rsxx,
-                  duToanKphi
+                  duToanKphi,
+                  soLuongDc
                 }
               }
               ).value();
@@ -516,6 +568,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
         tongtien: tongDuToanChiPhi,
       })
     };
+    console.log('dataView', data, dataView)
     return dataView
   }
 
@@ -538,11 +591,11 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
     let data = await this.createUpdate(body);
     if (data) {
       this.idInput = data.id;
+      this.selected = 0
       if (isGuiDuyet) {
         this.guiDuyet();
       }
       else {
-        // this.quayLai();
         await this.loadChiTiet(this.idInput)
       }
     }
@@ -567,7 +620,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
   }
 
   async pheDuyet() {
-    let trangThai = this.formData.value.trangThai == STATUS.CHO_DUYET_LDV ? STATUS.CHO_DUYET_LDTC : STATUS.DA_DUYET_LDTC;
+    let trangThai = this.formData.value.trangThai == STATUS.CHO_DUYET_LDV ? STATUS.CHO_DUYET_LDTC : STATUS.BAN_HANH;
     let mesg = 'Bạn muốn phê duyệt văn bản?'
     this.approve(this.idInput, trangThai, mesg);
   }
@@ -742,7 +795,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
             dcnbKeHoachDcHdr.forEach(element => {
               listDeXuat.push(element)
               listQD.push({
-                keHoachDcHdrId: element.dcKeHoachDcHdrId,
+                keHoachDcHdrId: element.id,
               })
               element.danhSachHangHoa.map(async itemHH => {
                 listHangHoa.push({
@@ -763,7 +816,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
           if (item.dcnbKeHoachDcHdr) {
             listDeXuat.push(item.dcnbKeHoachDcHdr)
             listQD.push({
-              keHoachDcHdrId: item.dcnbKeHoachDcHdr.dcKeHoachDcHdrId,
+              keHoachDcHdrId: item.dcnbKeHoachDcHdr.id,
             })
             let dcnbKeHoachDcHdr = item.dcnbKeHoachDcHdr
             dcnbKeHoachDcHdr.danhSachHangHoa.map(async itemHH => {

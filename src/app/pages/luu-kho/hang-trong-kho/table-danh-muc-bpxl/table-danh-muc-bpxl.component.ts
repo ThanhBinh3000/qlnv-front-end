@@ -41,6 +41,8 @@ export class TableDanhMucBpxlComponent extends Base3Component implements OnInit 
     });
   }
 
+  title : string = ''
+
   async ngOnInit() {
     await this.spinner.show();
     await Promise.all([
@@ -51,28 +53,55 @@ export class TableDanhMucBpxlComponent extends Base3Component implements OnInit 
   }
 
   async bindingParam(){
+    let trangThai = ''
     let typeBpxl = ''
+    let vaiTro = 'CBTHUKHO'
     switch (this.router.url) {
       case '/luu-kho/hang-trong-kho/thanh-ly':
         typeBpxl = '1';
+        this.title = 'thanh lý';
         break;
       case '/luu-kho/hang-trong-kho/tieu-huy':
         typeBpxl = '2';
-        break;
-      case '/luu-kho/hang-trong-kho/hong-hoc-giam-cl':
-        typeBpxl = '3';
+        this.title = 'tiêu hủy';
         break;
       case '/luu-kho/hang-trong-kho/hong-hoc-bao-hanh':
+        typeBpxl = '3';
+        this.title = 'bảo hành';
+        break;
+      case '/luu-kho/hang-trong-kho/hong-hoc-giam-cl':
         typeBpxl = '4';
+        this.title = 'bảo hành';
         break;
       case '/luu-kho/hang-trong-kho/hong-hoc-sua-chua':
         typeBpxl = '5';
+        this.title = 'sửa chữa'
+        break;
+      case '/luu-kho/hang-trong-kho/sap-het-han-bao-hanh':
+        typeBpxl = '6';
+        this.title = 'sắp hết hạn bảo hành';
+        vaiTro = null;
+        trangThai = null;
+        break;
+      case '/luu-kho/hang-trong-kho/het-han-luu-kho':
+        typeBpxl = '7';
+        this.title = 'sửa chữa'
+        vaiTro = null;
+        trangThai = null;
+        break;
+      case '/luu-kho/hang-trong-kho/da-het-han':
+        typeBpxl = '8';
+        this.title = 'sửa chữa'
+        vaiTro = null;
+        trangThai = null;
         break;
       default :
         break;
     }
     this.formData.patchValue({
-      bienPhapXl : typeBpxl
+      bienPhapXl : typeBpxl,
+      trangThai : trangThai,
+      vaiTro : vaiTro
     })
     await this.searchList();
   }

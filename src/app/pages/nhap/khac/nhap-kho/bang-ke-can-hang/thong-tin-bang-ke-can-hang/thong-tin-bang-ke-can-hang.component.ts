@@ -18,7 +18,7 @@ import { BienBanNghiemThuBaoQuanLanDauService } from "src/app/services/dieu-chuy
 import { QuyetDinhDieuChuyenCucService } from "src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-c.service";
 import { StorageService } from "src/app/services/storage.service";
 import { convertTienTobangChu } from "src/app/shared/commonFunction";
-import { v4 as uuidv4 } from 'uuid';
+import * as uuidv4 from "uuid";
 import { QuyetDinhGiaoNhapHangKhacService } from "src/app/services/qlnv-hang/nhap-hang/nhap-khac/quyetDinhGiaoNhapHangKhac.service";
 import { DonviService } from "src/app/services/donvi.service";
 import { PhieuNhapKhoService } from "src/app/services/qlnv-hang/nhap-hang/nhap-khac/phieuNhapKho";
@@ -124,38 +124,32 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
       await this.loadChiTiet(this.idInput)
     }
 
-    // if (this.data) {
-    //   this.formData.patchValue({
-    //     soQdDcCuc: this.data.soQdinh,
-    //     ngayQdDcCuc: this.data.thoiHanDieuChuyen,
-    //     qdDcCucId: this.data.qdinhDccId,
-    //     tenLoKho: this.data.tenloKhoNhan,
-    //     maLoKho: this.data.maloKhoNhan,
-    //     tenNganKho: this.data.tenNganKhoNhan,
-    //     maNganKho: this.data.maNganKhoNhan,
-    //     tenNhaKho: this.data.tenNhaKhoNhan,
-    //     maNhaKho: this.data.maNhaKhoNhan,
-    //     tenDiemKho: this.data.tenDiemKhoNhan,
-    //     maDiemKho: this.data.maDiemKhoNhan,
-    //     tenLoKhoXuat: this.data.tenloKhoXuat,
-    //     maLoKhoXuat: this.data.maloKhoXuat,
-    //     tenNganKhoXuat: this.data.tenNganKhoXuat,
-    //     maNganKhoXuat: this.data.maNganKhoXuat,
-    //     tenNhaKhoXuat: this.data.tenNhaKhoXuat,
-    //     maNhaKhoXuat: this.data.maNhaKhoXuat,
-    //     tenDiemKhoXuat: this.data.tenDiemKhoXuat,
-    //     maDiemKhoXuat: this.data.maDiemKhoXuat,
-    //     loaiVthh: this.data.loaiVthh,
-    //     tenLoaiVthh: this.data.tenLoaiVthh,
-    //     cloaiVthh: this.data.cloaiVthh,
-    //     tenCloaiVthh: this.data.tenCloaiVthh,
-    //     tichLuongKhaDung: this.data.tichLuongKd,
-    //     tenDonViTinh: this.data.tenDonViTinh,
-    //     idKeHoachDtl: this.data.qdinhDccId
-    //   });
-    //   await this.loadChiTietQdinh(this.data.qdinhDccId);
-    //   await this.loadDataBaoQuan(this.data.cloaiVthh || "010101")
-    // }
+    if (this.data) {
+      console.log('data', this.data)
+      this.formData.patchValue({
+        soQdPdNk: this.data.soQdPdNk,
+        ngayKyQdinh: "2023-31-07",//ngayKyQdinh
+        idQdPdNk: this.data.idQdPdNk,
+        tenLoNganKho: `${this.data.tenLoKho} ${this.data.tenNganKho}`,
+        tenLoKho: this.data.tenLoKho,
+        maLoKho: this.data.maLoKho,
+        tenNganKho: this.data.tenNganKho,
+        maNganKho: this.data.maNganKho,
+        tenNhaKho: this.data.tenNhaKho,
+        maNhaKho: this.data.maNhaKho,
+        tenDiemKho: this.data.tenDiemKho,
+        maDiemKho: this.data.maDiemKho,
+        loaiVthh: this.data.loaiVthh,
+        tenLoaiVthh: this.data.tenLoaiVthh,
+        cloaiVthh: this.data.cloaiVthh,
+        tenCloaiVthh: this.data.tenCloaiVthh,
+        tenDonViTinh: this.data.donViTinh,
+        soPhieuKtraCluong: this.data.soPhieuKiemTraCl,
+        idPhieuKtraCluong: this.data.phieuKiemTraClId,
+      });
+      await this.loadChiTietQdinh(this.data.idQdPdNk);
+      await this.layDonViCon(this.data.maDiemKho)
+    }
 
   }
 

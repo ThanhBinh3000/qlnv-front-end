@@ -49,25 +49,27 @@ export class PhieuNhapKhoComponent extends Base2Component implements OnInit {
     this.formData = this.fb.group({
       nam: null,
       soQdinh: null,
-      ngayDuyetTc: null,
-      ngayHieuLuc: null,
+      tuNgayLap: null,
+      denNgayLap: null,
       trichYeu: null,
       type: ["01"],
       loaiDc: [this.loaiDc],
-      isVatTu: [this.isVatTu]
+      isVatTu: [this.isVatTu],
+      loaiQdinh: [],
+      thayDoiThuKho: [],
     })
-    this.filterTable = {
-      nam: '',
-      soQdinh: '',
-      ngayKyQdinh: '',
-      loaiDc: '',
-      trichYeu: '',
-      maDxuat: '',
-      maThop: '',
-      soQdinhXuatCuc: '',
-      soQdinhNhapCuc: '',
-      tenTrangThai: '',
-    };
+    // this.filterTable = {
+    //   nam: '',
+    //   soQdinh: '',
+    //   ngayKyQdinh: '',
+    //   loaiDc: '',
+    //   trichYeu: '',
+    //   maDxuat: '',
+    //   maThop: '',
+    //   soQdinhXuatCuc: '',
+    //   soQdinhNhapCuc: '',
+    //   tenTrangThai: '',
+    // };
   }
 
 
@@ -82,7 +84,9 @@ export class PhieuNhapKhoComponent extends Base2Component implements OnInit {
 
     this.formData.patchValue({
       loaiDc: this.loaiDc,
-      isVatTu: this.isVatTu
+      isVatTu: this.isVatTu,
+      loaiQdinh: this.loaiDc === "CUC" ? "NHAP" : null,
+      thayDoiThuKho: this.loaiDc !== "DCNB" ? true : null
     })
 
 
@@ -100,6 +104,22 @@ export class PhieuNhapKhoComponent extends Base2Component implements OnInit {
 
   }
 
+  disabledStartNgayLap = (startValue: Date): boolean => {
+    if (startValue && this.formData.value.denNgayLap) {
+      return startValue.getTime() > this.formData.value.denNgayLap.getTime();
+    } else {
+      return false;
+    }
+  };
+
+  disabledEndNgayLap = (endValue: Date): boolean => {
+    if (endValue && this.formData.value.tuNgayLap) {
+      return endValue.getTime() < this.formData.value.tuNgayLap.getTime();
+    } else {
+      return false;
+    }
+  };
+
   isShowDS() {
     if (this.userService.isAccessPermisson('DCNB_QUYETDINHDC_TONGCUC') && this.userService.isAccessPermisson('DCNB_QUYETDINHDC_XEM'))
       return true
@@ -111,7 +131,7 @@ export class PhieuNhapKhoComponent extends Base2Component implements OnInit {
   }
 
   isCuc() {
-    return false//this.userService.isCuc()
+    return this.userService.isCuc()
   }
 
   // isChiCuc() {
@@ -138,9 +158,26 @@ export class PhieuNhapKhoComponent extends Base2Component implements OnInit {
     return children
   }
 
+  async changePageIndex(event) {
+    this.page = event;
+    await this.timKiem();
+  }
+
+  async changePageSize(event) {
+    this.pageSize = event;
+    await this.timKiem();
+  }
+
   async timKiem() {
+    if (this.formData.value.tuNgayLap) {
+      this.formData.value.tuNgayLap = dayjs(this.formData.value.tuNgayLap).format('YYYY-MM-DD')
+    }
+    if (this.formData.value.denNgayLap) {
+      this.formData.value.denNgayLap = dayjs(this.formData.value.denNgayLap).format('YYYY-MM-DD')
+    }
+
     let body = this.formData.value
-    if (body.soQdinh) body.soQdinh = `${body.soQdinh}\DCNB`
+    if (body.soQdinh) body.soQdinh = `${body.soQdinh}/DCNB`
     body.paggingReq = {
       limit: this.pageSize,
       page: this.page - 1

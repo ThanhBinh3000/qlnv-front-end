@@ -67,10 +67,10 @@
     </div>
   </nz-card>
   <div class="group-button">
-    <h3 class="text-uppercase">Tổng hợp danh sách hàng QTQG cần sữa chữa</h3>
+    <h3 class="text-uppercase">Hàng thuộc diện {{title}} </h3>
   </div>
   <nz-card class="mt-2px flex-card data-table card-border-content table-card">
-    <nz-table class="wrap" [nzData]="dataTableAll" nzBordered [nzFrontPagination]="false" [nzShowPagination]="false">
+    <nz-table class="nowrap" [nzData]="dataTableAll" nzBordered [nzFrontPagination]="false" [nzShowPagination]="false">
       <thead>
       <tr>
         <th>Loại hàng DTQG</th>
@@ -80,14 +80,14 @@
         <th>Điềm kho</th>
         <th>Ngày nhập kho</th>
         <th>Tồn kho</th>
-        <th>SL cần thanh lý</th>
-        <th>SL đã thanh lý</th>
+        <th>SL cần {{title}}</th>
+        <th>SL đã {{title}}</th>
         <th>ĐVT</th>
         <th>Lý do</th>
         <th>Trạng thái</th>
         <th>Trạng thái chốt DS của Cục</th>
         <th>Ngày chốt DS của Cục</th>
-        <th>Trạng thái thanh lý</th>
+        <th>Trạng thái {{title}}</th>
         <th nzWidth="35px">Hành động</th>
       </tr>
       </thead>
@@ -138,10 +138,10 @@
                 <tr>
                   <td></td>
                   <td></td>
-                  <td>{{data.tenNganKho}}/{{data.tenLoKho}}</td>
+                  <td>{{data.tenNganKho}} , {{data.tenLoKho}}</td>
                   <td>{{data.tenNhaKho}}</td>
                   <td>{{data.tenDiemKho}}</td>
-                  <td>{{data.ngayNhapKho | date : 'dd/MM/yyyy'}}</td>
+                  <td>{{data.ngayNhapDayKho | date : 'dd/MM/yyyy'}}</td>
                   <td>{{data.tongSoLuong | number : '1.0-1' : 'vi_VN' }}</td>
                   <td>{{data.soLuongXl | number : '1.0-1' : 'vi_VN' }}</td>
                   <td></td>

@@ -218,6 +218,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
       this.quyetDinh = data.quyetDinh;
 
       if (data.loaiDc !== "DCNB") this.loadDsQuyetDinh(data.loaiDc, data.loaiQdinh)
+
       if (data.danhSachQuyetDinh.length == 0) return
       let dsDX = []
       if (data.loaiDc === "CUC") {
@@ -238,6 +239,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
               maLoNganKho: element.maLoKho ? `${element.maLoKho}${element.maNganKho}` : element.maNganKho,
               maDvi: dcnbKeHoachDcHdr.maDvi,
               tenDvi: dcnbKeHoachDcHdr.tenDvi,
+              soDxuat: dcnbKeHoachDcHdr.soDxuat
             })
           });
         }
@@ -253,6 +255,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
                 maLoNganKho: element.maLoKho ? `${element.maLoKho}${element.maNganKho}` : element.maNganKho,
                 maDvi: dcnbKeHoachDcHdr.maDvi,
                 tenDvi: dcnbKeHoachDcHdr.tenDvi,
+                soDxuat: dcnbKeHoachDcHdr.soDxuat
               })
             });
           }
@@ -302,14 +305,37 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
     this.dataTableView = []
     let itemQd = this.formData.value.quyetDinhPdDtl[index]
     this.danhSachKeHoach = []
-    itemQd.danhSachHangHoa.forEach(element => {
-      this.danhSachKeHoach.push({
-        ...element,
-        maLoNganKho: element.maLoKho ? `${element.maLoKho}${element.maNganKho}` : element.maNganKho,
-        maDvi: itemQd.maDvi,
-        tenDvi: itemQd.tenDvi,
+
+    if (itemQd.danhSachQuyetDinhChiTiet) {
+      itemQd.danhSachQuyetDinhChiTiet.forEach(itemHH => {
+        const dcnbKeHoachDcHdr = itemHH.dcnbKeHoachDcHdr
+        if (dcnbKeHoachDcHdr) {
+          dcnbKeHoachDcHdr.danhSachHangHoa.forEach(element => {
+            this.danhSachKeHoach.push({
+              ...element,
+              maLoNganKho: itemHH.maLoKho ? `${element.maLoKho}${element.maNganKho}` : element.maNganKho,
+              maDvi: dcnbKeHoachDcHdr.maDvi,
+              tenDvi: dcnbKeHoachDcHdr.tenDvi,
+              soDxuat: dcnbKeHoachDcHdr.soDxuat
+            })
+          });
+        }
+
       })
-    });
+    }
+
+    if (itemQd.danhSachHangHoa) {
+      itemQd.danhSachHangHoa.forEach(element => {
+        this.danhSachKeHoach.push({
+          ...element,
+          maLoNganKho: element.maLoKho ? `${element.maLoKho}${element.maNganKho}` : element.maNganKho,
+          maDvi: itemQd.maDvi,
+          tenDvi: itemQd.tenDvi,
+          soDxuat: itemQd.soDxuat
+        })
+      });
+    }
+
 
 
     this.dataTableView = this.buildTableView(this.danhSachKeHoach, "maDvi")
@@ -460,71 +486,121 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
     });
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
+        const soDxuat = data.danhSachQuyetDinh[0].soDxuat
+        this.formData.patchValue({
+          soCanCuQdTc: data.soQdinh,
+          canCuQdTc: data.id,
+          soDxuat,
+          ngayTrinhDuyetTc: data.ngayPduyet
+        })
         this.onChangeCanCuQdTc(data.id)
       }
     });
   }
 
-  async onChangeCanCuQdTc(value) {
-    if (value) {
-      const qdTC = this.listQuyetDinh.find(item => item.id == value)
+  async onChangeCanCuQdTc(id) {
+    if (id) {
 
-      if (qdTC) {
-        this.formData.patchValue({
-          soCanCuQdTc: qdTC.soQdinh,
-          canCuQdTc: qdTC.id,
-          soDxuat: qdTC.maDxuat,
-          ngayTrinhDuyetTc: qdTC.ngayPduyet
-        })
-      }
       let tong = 0
       this.danhSachKeHoach = []
       this.danhSachQuyetDinh = []
       let dsHH = []
-      let dsDX = []
-      const detail = await this.quyetDinhDieuChuyenTCService.getDetail(value)
-      if (detail.data.danhSachQuyetDinh.length == 0) return
-      detail.data.danhSachQuyetDinh.map((qd) => {
-        if (qd.dcnbKeHoachDcHdr) {
-          const item = qd.dcnbKeHoachDcHdr
-          dsDX.push(item)
+      const detail = await this.quyetDinhDieuChuyenTCService.getDetail(id)
+      const data = detail.data
+      if (!data) return
+      console.log('onChangeCanCuQdTc', detail)
+
+      let dsDX = data.danhSachQuyetDinh
+
+      dsDX.forEach(element => {
+        element.danhSachQuyetDinhChiTiet.forEach(itemQD => {
           this.danhSachQuyetDinh.push({
-            danhSachKeHoach: item.danhSachHangHoa
+            danhSachKeHoach: itemQD.danhSachKeHoach
           })
-          if (this.formData.value.loaiDc !== "CUC") {
-            item.danhSachHangHoa.map(itemHH => {
-              dsHH.push({
-                ...itemHH,
-                maLoNganKho: itemHH.maLoKho ? `${itemHH.maLoKho}${itemHH.maNganKho}` : itemHH.maNganKho,
-                maDvi: item.maDvi,
-                tenDvi: item.tenDvi,
-                soDxuat: item.soDxuat
-              })
-              tong = tong + itemHH.duToanKphi
+
+        })
+      });
+
+      // if (this.formData.value.loaiDc === "CHI_CUC") {
+      //   dsDX.forEach(element => {
+      //     element.danhSachQuyetDinhChiTiet.forEach(itemQD => {
+      //       this.danhSachQuyetDinh.push({
+      //         danhSachKeHoach: itemQD.danhSachKeHoach
+      //       })
+
+      //     })
+      //   });
+      // }
+
+      // if (this.formData.value.loaiDc === "CUC") {
+      //   dsDX.forEach(element => {
+      //     element.danhSachQuyetDinhChiTiet.forEach(itemQD => {
+      //       this.danhSachQuyetDinh.push({
+      //         danhSachKeHoach: itemQD.danhSachKeHoach
+      //       })
+
+      //     })
+      //   });
+      // }
+      const hanghoa = dsDX[0]
+      hanghoa.danhSachQuyetDinhChiTiet.forEach(itemHH => {
+        const dcnbKeHoachDcHdr = itemHH.dcnbKeHoachDcHdr
+        if (dcnbKeHoachDcHdr) {
+          dcnbKeHoachDcHdr.danhSachHangHoa.forEach(element => {
+            dsHH.push({
+              ...element,
+              maLoNganKho: itemHH.maLoKho ? `${element.maLoKho}${element.maNganKho}` : element.maNganKho,
+              maDvi: dcnbKeHoachDcHdr.maDvi,
+              tenDvi: dcnbKeHoachDcHdr.tenDvi,
+              soDxuat: dcnbKeHoachDcHdr.soDxuat
             })
-          }
+          });
         }
 
       })
 
-      if (this.formData.value.loaiDc === "CUC") {
-        const item = detail.data.danhSachQuyetDinh[0].dcnbKeHoachDcHdr
-        item.danhSachHangHoa.map(itemHH => {
-          dsHH.push({
-            ...itemHH,
-            maLoNganKho: itemHH.maLoKho ? `${itemHH.maLoKho}${itemHH.maNganKho}` : itemHH.maNganKho,
-            maDvi: item.maDvi,
-            tenDvi: item.tenDvi,
-            soDxuat: item.soDxuat
-          })
-          tong = tong + itemHH.duToanKphi
-        })
-      }
+      // detail.data.danhSachQuyetDinh.map((qd) => {
+      //   if (qd.dcnbKeHoachDcHdr) {
+      //     const item = qd.dcnbKeHoachDcHdr
+      //     // dsDX.push(item)
+      //     this.danhSachQuyetDinh.push({
+      //       danhSachKeHoach: item.danhSachHangHoa
+      //     })
+      //     if (this.formData.value.loaiDc !== "CUC") {
+      //       item.danhSachHangHoa.map(itemHH => {
+      //         dsHH.push({
+      //           ...itemHH,
+      //           maLoNganKho: itemHH.maLoKho ? `${itemHH.maLoKho}${itemHH.maNganKho}` : itemHH.maNganKho,
+      //           maDvi: item.maDvi,
+      //           tenDvi: item.tenDvi,
+      //           soDxuat: item.soDxuat
+      //         })
+      //         tong = tong + itemHH.duToanKphi
+      //       })
+      //     }
+      //   }
+
+      // })
+
+      // if (this.formData.value.loaiDc === "CUC") {
+      //   const item = detail.data.danhSachQuyetDinh[0].dcnbKeHoachDcHdr
+      //   item.danhSachHangHoa.map(itemHH => {
+      //     dsHH.push({
+      //       ...itemHH,
+      //       maLoNganKho: itemHH.maLoKho ? `${itemHH.maLoKho}${itemHH.maNganKho}` : itemHH.maNganKho,
+      //       maDvi: item.maDvi,
+      //       tenDvi: item.tenDvi,
+      //       soDxuat: item.soDxuat
+      //     })
+      //     tong = tong + itemHH.duToanKphi
+      //   })
+      // }
 
       this.dataTableView = this.buildTableView(dsHH, "maDvi")
+      let tongDuToanKp = dsDX?.reduce((prev, cur) => prev + cur.tongDuToanKp, 0);
 
       this.formData.patchValue({
-        tongDuToanKp: tong,
+        tongDuToanKp,
         quyetDinhPdDtl: dsDX,
         danhSachQuyetDinh: this.danhSachQuyetDinh
       })
@@ -583,11 +659,13 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
 
 
                 let duToanKphi = vs?.reduce((prev, cur) => prev + cur.duToanKphi, 0);
+                let soLuongDc = vs?.reduce((prev, cur) => prev + cur.soLuongDc, 0);
                 return {
                   ...maLoKho,
                   idVirtual: maLoKho ? maLoKho.idVirtual ? maLoKho.idVirtual : uuidv4.v4() : uuidv4.v4(),
                   children: rsxx,
-                  duToanKphi
+                  duToanKphi,
+                  soLuongDc
                 }
               }
               ).value();
@@ -617,12 +695,13 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
       }).value();
 
 
-    if (data?.length !== 0) {
-      const tongDuToanChiPhi = data.reduce((prev, cur) => prev + cur.duToanKphi, 0);
-      this.formData.patchValue({
-        tongDuToanKp: tongDuToanChiPhi,
-      })
-    };
+    // if (data?.length !== 0) {
+    //   const tongDuToanChiPhi = data.reduce((prev, cur) => prev + cur.duToanKphi, 0);
+    //   this.formData.patchValue({
+    //     tongDuToanKp: tongDuToanChiPhi,
+    //   })
+    // };
+    console.log('dataView', dataView)
     return dataView
   }
 
@@ -644,6 +723,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
   }
 
   nzActiveChange(value) {
+    this.nzActive = value
     console.log('nzActiveChange', value, this.nzActive)
   }
 
@@ -673,7 +753,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
       if (data) {
         if (data.isUpdate) {
           if (this.typeKeHoach === "LO_KHO_NHAN")
-            this.danhSachKeHoach = this.danhSachKeHoach.filter(kh => kh.maLoKhoNhan !== data.maLoKhoNhan)
+            this.danhSachKeHoach = this.danhSachKeHoach.filter(kh => `${kh.maLoKhoNhan}${kh.maNganKhoNhan}` !== `${row.maLoKhoNhan}${row.maNganKhoNhan}`)
           // if (this.typeKeHoach === "DIEM_KHO_NHAN")
           //   this.danhSachKeHoach = this.danhSachKeHoach.filter(kh => kh.maDiemKhoNhan !== data.maDiemKhoNhan)
           this.danhSachKeHoach.push({
@@ -797,6 +877,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
     await this.spinner.hide();
     const keHoachDcHdrId = row.hdrId
     const param = {
+      danhSachKeHoach: this.danhSachKeHoach,
       dsChiCuc: [{ key: row.maDvi, title: row.tenDvi }],
       data: row
     }
@@ -810,26 +891,25 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
       nzComponentParams: param,
     });
     modalQD.afterClose.subscribe(async (data) => {
-      this.danhSachKeHoach = this.danhSachKeHoach.filter(item => !!item.maDiemKhoNhan)
-
+      debugger
+      // this.danhSachKeHoach = this.danhSachKeHoach.filter(item => !!item.maDiemKhoNhan)
+      const diemKho = this.danhSachKeHoach.find(item => `${item.maLoKho}${item.maNganKho}${item.maNhaKho}${item.maDiemKho}${item.maDvi}` !== `${row.maLoKho}${row.maNganKho}${row.maNhaKho}${row.maDiemKho}${row.maDvi}`)
+      console.log('danhSachKeHoach', this.danhSachKeHoach)
+      console.log('diemKho', diemKho)
       if (data) {
-        if (data.isUpdate) {
-          if (this.typeKeHoach === "LO_KHO_NHAN")
-            this.danhSachKeHoach = this.danhSachKeHoach.filter(kh => kh.maLoKhoNhan !== data.maLoKhoNhan)
-          if (this.typeKeHoach === "DIEM_KHO_NHAN")
-            this.danhSachKeHoach = this.danhSachKeHoach.filter(kh => kh.maDiemKhoNhan !== data.maDiemKhoNhan)
-          this.danhSachKeHoach.push({
-            ...data,
-            maLoNganKho: data.maLoKho ? `${data.maLoKho}${data.maNganKho}` : data.maNganKho,
-            hdrId: keHoachDcHdrId
-          })
+        if (this.typeKeHoach === "LO_KHO_NHAN")
+          this.danhSachKeHoach = this.danhSachKeHoach.filter(kh => `${kh.maLoKhoNhan}${kh.maNganKhoNhan}` !== `${row.maLoKhoNhan}${row.maNganKhoNhan}`)
+        // if (this.typeKeHoach === "THEM_LO_KHO_NHAN")
+        //   this.danhSachKeHoach = this.danhSachKeHoach.filter(kh => kh.maLoKhoNhan !== data.maLoKhoNhan)
 
-        } else
-          this.danhSachKeHoach.push({
-            ...data,
-            maLoNganKho: data.maLoKho ? `${data.maLoKho}${data.maNganKho}` : data.maNganKho,
-            hdrId: keHoachDcHdrId
-          })
+        // if (this.typeKeHoach === "THEM_DIEM_KHO_NHAN")
+        //   this.danhSachKeHoach = this.danhSachKeHoach.filter(kh => kh.maDiemKhoNhan !== data.maDiemKhoNhan)
+
+        this.danhSachKeHoach.push({
+          ...data,
+          maLoNganKho: `${data.maLoKho}${data.maNganKho}`,
+          hdrId: keHoachDcHdrId
+        })
 
         this.dataTableView = this.buildTableView(this.danhSachKeHoach, "maDvi")
 
@@ -1310,6 +1390,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
       body.id = this.idInput
     }
     console.log('save', body)
+    // return
     let data = await this.createUpdate(body);
     if (data) {
       this.idInput = data.id;
@@ -1363,6 +1444,9 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
   isTuChoi() {
     if (this.isCuc()) {
       return this.formData.value.trangThai == STATUS.CHO_DUYET_TP || this.formData.value.trangThai == STATUS.CHO_DUYET_LDC
+    }
+    if (this.isChiCuc()) {
+      return this.formData.value.trangThai == STATUS.CHODUYET_TBP_TVQT || this.formData.value.trangThai == STATUS.CHO_DUYET_LDCC
     }
     return false
   }

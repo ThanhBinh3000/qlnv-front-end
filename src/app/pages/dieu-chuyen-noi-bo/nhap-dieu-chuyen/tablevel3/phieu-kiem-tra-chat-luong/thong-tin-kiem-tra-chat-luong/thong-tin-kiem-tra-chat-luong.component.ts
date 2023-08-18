@@ -79,13 +79,14 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
       qdDcId: [],
       ktvBaoQuan: [],
       thuTruong: [],
+      tenLoNganKho: [, [Validators.required]],
       tenLoKho: [],
       maLoKho: [],
-      tenNganKho: [],
+      tenNganKho: [, [Validators.required]],
       maNganKho: [],
-      tenNhaKho: [],
+      tenNhaKho: [, [Validators.required]],
       maNhaKho: [],
-      tenDiemKho: [],
+      tenDiemKho: [, [Validators.required]],
       maDiemKho: [],
       loaiHinhKho: [],
       loaiVthh: [],
@@ -125,7 +126,9 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
       nhanXetKetLuan: [],
       lyDoTuChoi: [],
       type: ["01"],
-      loaiDc: [this.loaiDc]
+      loaiDc: [this.loaiDc],
+      loaiQdinh: [],
+      thayDoiThuKho: []
     }
     );
   }
@@ -139,7 +142,9 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
       maQhns: this.userInfo.DON_VI.maQhns,
       ktvBaoQuan: this.userInfo.TEN_DAY_DU,
       soPhieu: `${id}/${this.formData.get('nam').value}/${this.maBb}`,
-      loaiDc: this.loaiDc
+      loaiDc: this.loaiDc,
+      loaiQdinh: this.loaiDc === "CUC" ? "NHAP" : null,
+      thayDoiThuKho: true
     })
     this.getPPKTCL()
 
@@ -155,6 +160,7 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
         soQdinhDc: this.data.soQdinh,
         ngayQdinhDc: this.data.ngayHieuLucQd,
         qdDcId: this.data.qdinhDccId,
+        tenLoNganKho: `${this.data.tenLoKhoNhan} ${this.data.tenNganKhoNhan}`,
         tenLoKho: this.data.tenLoKhoNhan,
         maLoKho: this.data.maLoKhoNhan,
         tenNganKho: this.data.tenNganKhoNhan,
@@ -213,8 +219,9 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
       if (data) {
         this.dataTableChiTieu = data.dcnbPhieuKtChatLuongDtl
         this.bienBanLayMauDinhKem = data.bienBanLayMauDinhKem
-        this.formData.patchValue(data);
+        this.formData.patchValue({ ...data, tenLoNganKho: `${data.tenLoKho} ${data.tenNganKho}`, });
         await this.loadChiTietQdinh(data.qdDcId);
+        await this.getDataKho(data.maLoKho || data.maNganKho)
       }
 
     }
@@ -277,9 +284,10 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
     await this.spinner.show();
     let body = {
       trangThai: STATUS.BAN_HANH,
-      loaiVthh: ['0101', '0102'],
+      // loaiVthh: ['0101', '0102'],
       loaiDc: this.loaiDc,
-      maDvi: this.userInfo.MA_DVI
+      maDvi: this.userInfo.MA_DVI,
+      type: this.formData.value.type
     }
     let resSoDX = this.isCuc() ? await this.quyetDinhDieuChuyenCucService.getDsSoQuyetDinhDieuChuyenCuc(body) : await this.quyetDinhDieuChuyenCucService.getDsSoQuyetDinhDieuChuyenChiCuc(body);
     if (resSoDX.msg == MESSAGE.SUCCESS) {
@@ -353,6 +361,7 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
         this.formData.patchValue({
+          tenLoNganKho: `${data.tenLoKhoNhan} ${data.tenNganKhoNhan}`,
           tenLoKho: data.tenLoKhoNhan,
           maLoKho: data.maLoKhoNhan,
           tenNganKho: data.tenNganKhoNhan,
@@ -403,7 +412,6 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
     if (maDvi) {
       let res = await this.bbNghiemThuBaoQuanService.getDataKho(maDvi);
       this.formData.patchValue({
-        // tichLuong: (res.data.tichLuongTkLt - res.data.tichLuongKdLt) > 0 ? res.data.tichLuongTkLt - res.data.tichLuongKdLt : 0,
         loaiHinhKho: res.data.lhKho
       });
     }
@@ -433,6 +441,8 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
 
 
   async save(isGuiDuyet?) {
+    this.helperService.markFormGroupTouched(this.formData);
+    if (!this.formData.valid) return
     await this.spinner.show();
     let body = this.formData.value;
     body.phieuKTCLDinhKem = this.phieuKTCLDinhKem;
@@ -460,35 +470,31 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
   }
 
   async guiDuyet() {
-    let trangThai = STATUS.CHO_DUYET_TP;
+    let trangThai = STATUS.CHO_DUYET_LDCC;
     let mesg = 'Bạn muốn gửi duyệt văn bản?'
     this.approve(this.idInput, trangThai, mesg);
   }
 
   isTuChoi() {
-    return this.formData.value.trangThai == STATUS.CHO_DUYET_TP || this.formData.value.trangThai == STATUS.CHO_DUYET_LDC
+    return this.formData.value.trangThai == STATUS.CHO_DUYET_LDCC
   }
 
   async tuChoi() {
     let trangThai = () => {
-      if (this.formData.value.trangThai == STATUS.CHO_DUYET_TP)
-        return STATUS.TU_CHOI_TP
-      if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDC)
-        return STATUS.TU_CHOI_LDC
+      if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDCC)
+        return STATUS.TU_CHOI_LDCC
     };
     this.reject(this.idInput, trangThai());
   }
 
   isPheDuyet() {
-    return this.formData.value.trangThai == STATUS.CHO_DUYET_TP || this.formData.value.trangThai == STATUS.CHO_DUYET_LDC
+    return this.formData.value.trangThai == STATUS.CHO_DUYET_LDCC
   }
 
   async pheDuyet() {
     let trangThai = () => {
-      if (this.formData.value.trangThai == STATUS.CHO_DUYET_TP)
-        return STATUS.CHO_DUYET_LDC
-      if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDC)
-        return STATUS.DA_DUYET_LDC
+      if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDCC)
+        return STATUS.DA_DUYET_LDCC
     };
     let mesg = 'Bạn muốn phê duyệt văn bản?'
     this.approve(this.idInput, trangThai(), mesg);

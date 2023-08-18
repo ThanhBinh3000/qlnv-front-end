@@ -18,7 +18,8 @@ import { HttpClient } from '@angular/common/http';
 import dayjs from 'dayjs';
 import { StorageService } from 'src/app/services/storage.service';
 import {convertIdToLoaiVthh, convertIdToTenLoaiVthh, convertTrangThai} from "../../../../../../shared/commonFunction";
-
+import { saveAs } from "file-saver";
+import {PREVIEW} from "../../../../../../constants/fileType";
 @Component({
   selector: 'app-themmoi-tonghop-khlcnt',
   templateUrl: './themmoi-tonghop-khlcnt.component.html',
@@ -47,7 +48,15 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
   listFileDinhKem: any[] = [];
   listLoaiHinhNx: any[] = [];
   listKieuNx: any[] = [];
-
+  reportTemplate: any = {
+    typeFile: "",
+    fileName: "tong_hop_kh_lcnt.docx",
+    tenBaoCao: "",
+    trangThai: ""
+  };
+  showDlgPreview = false;
+  pdfSrc: any;
+  wordSrc: any;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -78,10 +87,10 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
       namKhoach: [, [Validators.required]],
       ngayTao: [, [Validators.required]],
       noiDung: ['', [Validators.required]],
-      hthucLcnt: ['', [Validators.required]],
-      pthucLcnt: ['', [Validators.required]],
-      loaiHdong: ['', [Validators.required]],
-      nguonVon: ['', [Validators.required]],
+      // hthucLcnt: ['', [Validators.required]],
+      // pthucLcnt: ['', [Validators.required]],
+      // loaiHdong: ['', [Validators.required]],
+      // nguonVon: ['', [Validators.required]],
       ghiChu: ['',],
       trangThai: [''],
       tenLoaiVthh: [''],
@@ -185,6 +194,7 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
   async tongHopDeXuatTuCuc() {
     await this.spinner.show();
     try {
+      debugger
       this.helperService.markFormGroupTouched(this.formTraCuu);
       if (this.formTraCuu.invalid) {
         await this.spinner.hide();
@@ -192,7 +202,7 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
       }
       let body = this.formTraCuu.value;
       let res = await this.tongHopDeXuatKHLCNTService.deXuatCuc(body);
-      if (res.msg == MESSAGE.SUCCESS && res.data && res.data.length > 0) {
+      if (res.msg == MESSAGE.SUCCESS && res.data && res.data.hhDxKhLcntThopDtlList.length > 0) {
         const dataDetail = res.data
         let idTh = await this.userService.getId("HH_DX_KHLCNT_THOP_HDR_SEQ");
         this.helperService.bidingDataInFormGroup(this.formData, dataDetail)
@@ -300,6 +310,27 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
     } else if (trangThai === '28') {
       return 'da-ban-hanh';
     }
+  }
+
+  async preview() {
+    let body = this.formData.value;
+    body.reportTemplateRequest = this.reportTemplate;
+    await this.tongHopDeXuatKHLCNTService.preview(body).then(async s => {
+      this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
+      this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
+      this.showDlgPreview = true;
+    });
+  }
+  downloadPdf() {
+    saveAs(this.pdfSrc, "tong_hop_kh_lcnt.pdf");
+  }
+
+  downloadWord() {
+    saveAs(this.wordSrc, "tong_hop_kh_lcnt.docx");
+  }
+
+  closeDlg() {
+    this.showDlgPreview = false;
   }
 }
 

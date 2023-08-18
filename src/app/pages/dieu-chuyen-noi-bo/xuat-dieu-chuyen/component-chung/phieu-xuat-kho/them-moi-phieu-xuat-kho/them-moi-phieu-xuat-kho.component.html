@@ -189,7 +189,7 @@
                         </nz-form-control>
                     </nz-form-item>
                 </div> -->
-                <div nz-col [nzSpan]="4">
+                <div nz-col [nzSpan]="8">
                     <nz-form-item>
                         <nz-form-label [nzNoColon]="true" nzRequired> Lô Kho/ Ngăn kho</nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
@@ -281,7 +281,7 @@
                 </div>
                 <div nz-col [nzSpan]="4">
                     <nz-form-item>
-                        <nz-form-label [nzNoColon]="true"> Kết toán trưởng </nz-form-label>
+                        <nz-form-label [nzNoColon]="true"> Kế toán trưởng </nz-form-label>
                         <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
                             <input placeholder="" nz-input formControlName="keToanTruong" [readonly]="isDisabled()" />
                         </nz-form-control>
@@ -305,7 +305,7 @@
                 </div>
                 <div nz-col [nzSpan]="4">
                     <nz-form-item>
-                        <nz-form-label nzRequired [nzNoColon]="true"> Đơn vị/Công ty(của người giao hàng)
+                        <nz-form-label nzRequired [nzNoColon]="true"> Đơn vị/Công ty (của người giao hàng)
                         </nz-form-label>
                         <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
                             <input placeholder="" nz-input formControlName="ctyNguoiGh" [readonly]="isDisabled()" />
@@ -435,15 +435,17 @@
                         <td>{{i + 1}}</td>
                         <td>{{item.tenCloaiVthh}}</td>
                         <td>
-                            <input nz-input [(ngModel)]="item.maSo" />
+                            <input nz-input [(ngModel)]="item.maSo" [readOnly]="isView" />
                         </td>
                         <td>{{item.donViTinh}}</td>
                         <td>
                             <nz-input-number [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nz-input
-                                [nzSize]="'small'" [(ngModel)]="item.slDcThucTe"></nz-input-number>
+                                [nzSize]="'small'" [(ngModel)]="item.slDcThucTe"
+                                [nzDisabled]="isView"></nz-input-number>
                         </td>
                         <td>
-                            <input class="money-input" currencyMask [options]="amount" [(ngModel)]="item.kinhPhiDcTt" />
+                            <input class="money-input" currencyMask [options]="amount" [(ngModel)]="item.kinhPhiDcTt"
+                                [readOnly]="isView" />
                         </td>
                         <td *ngIf="!isDisabled()">
                             <a *ngIf="i==dataTable.length-1" (click)="addItemRow()">

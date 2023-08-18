@@ -30,34 +30,34 @@ export class BienBanGiaoNhanComponent extends Base2Component implements OnInit {
   tabSelected: number = 0;
   @Input() loaiDc: string;
 
-  @Input()
-  loaiVthh: string;
-  @Input()
-  loaiVthhCache: string;
+  // @Input()
+  // loaiVthh: string;
+  // @Input()
+  // loaiVthhCache: string;
 
-  CHUC_NANG = CHUC_NANG;
-  listLoaiDieuChuyen: any[] = [
-    { ma: "ALL", ten: "Tất cả" },
-    { ma: "CHI_CUC", ten: "Giữa 2 chi cục trong cùng 1 cục" },
-    { ma: "CUC", ten: "Giữa 2 cục DTNN KV" },
-  ];
-  listLoaiDCFilterTable: any[] = [
-    { ma: "CHI_CUC", ten: "Giữa 2 chi cục trong cùng 1 cục" },
-    { ma: "CUC", ten: "Giữa 2 cục DTNN KV" },
-  ];
+  // CHUC_NANG = CHUC_NANG;
+  // listLoaiDieuChuyen: any[] = [
+  //   { ma: "ALL", ten: "Tất cả" },
+  //   { ma: "CHI_CUC", ten: "Giữa 2 chi cục trong cùng 1 cục" },
+  //   { ma: "CUC", ten: "Giữa 2 cục DTNN KV" },
+  // ];
+  // listLoaiDCFilterTable: any[] = [
+  //   { ma: "CHI_CUC", ten: "Giữa 2 chi cục trong cùng 1 cục" },
+  //   { ma: "CUC", ten: "Giữa 2 cục DTNN KV" },
+  // ];
   dataTableView: any[] = [];
-  listLoaiHangHoa: any[] = [];
-  listHangHoaAll: any[] = [];
-  listChungLoaiHangHoa: any[] = [];
-  listTrangThai: any[] = [
-    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
-    { ma: this.STATUS.CHO_DUYET_TP, giaTri: 'Chờ duyệt - TP' },
-    { ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối - TP' },
-    { ma: this.STATUS.CHO_DUYET_LDC, giaTri: 'Chờ duyệt - LĐ Cục' },
-    { ma: this.STATUS.TU_CHOI_LDC, giaTri: 'Từ chối - LĐ Cục' },
-    { ma: this.STATUS.DA_DUYET_LDC, giaTri: 'Đã duyệt - LĐ Cục' },
-    { ma: this.STATUS.DA_TAO_CBV, giaTri: 'Đã tạo - CB Vụ' },
-  ];
+  // listLoaiHangHoa: any[] = [];
+  // listHangHoaAll: any[] = [];
+  // listChungLoaiHangHoa: any[] = [];
+  // listTrangThai: any[] = [
+  //   { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+  //   { ma: this.STATUS.CHO_DUYET_TP, giaTri: 'Chờ duyệt - TP' },
+  //   { ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối - TP' },
+  //   { ma: this.STATUS.CHO_DUYET_LDC, giaTri: 'Chờ duyệt - LĐ Cục' },
+  //   { ma: this.STATUS.TU_CHOI_LDC, giaTri: 'Từ chối - LĐ Cục' },
+  //   { ma: this.STATUS.DA_DUYET_LDC, giaTri: 'Đã duyệt - LĐ Cục' },
+  //   { ma: this.STATUS.DA_TAO_CBV, giaTri: 'Đã tạo - CB Vụ' },
+  // ];
 
   constructor(
     httpClient: HttpClient,
@@ -73,25 +73,17 @@ export class BienBanGiaoNhanComponent extends Base2Component implements OnInit {
     this.formData = this.fb.group({
       nam: null,
       soQdinh: null,
-      ngayDuyetTc: null,
-      ngayHieuLuc: null,
-      trichYeu: null,
+      soBb: [],
+      tuNgayKtnk: [],
+      denNgayKtnk: [],
+      tuNgayThoiHanNhap: [],
+      denNgayThoiHanNhap: [],
       type: ["01"],
       loaiDc: ["DCNB"],
       isVatTu: [true],
+      loaiQdinh: [],
+      thayDoiThuKho: [],
     })
-    this.filterTable = {
-      nam: '',
-      soQdinh: '',
-      ngayKyQdinh: '',
-      loaiDc: '',
-      trichYeu: '',
-      maDxuat: '',
-      maThop: '',
-      soQdinhXuatCuc: '',
-      soQdinhNhapCuc: '',
-      tenTrangThai: '',
-    };
   }
 
 
@@ -107,7 +99,9 @@ export class BienBanGiaoNhanComponent extends Base2Component implements OnInit {
       this.visibleTab = value;
     });
     this.formData.patchValue({
-      loaiDc: this.loaiDc
+      loaiDc: this.loaiDc,
+      loaiQdinh: this.loaiDc === "CUC" ? "NHAP" : null,
+      thayDoiThuKho: this.loaiDc !== "DCNB" ? true : null
     })
 
 
@@ -125,6 +119,38 @@ export class BienBanGiaoNhanComponent extends Base2Component implements OnInit {
 
 
   }
+
+  disabledStartNgayKtnk = (startValue: Date): boolean => {
+    if (startValue && this.formData.value.denNgayKtnk) {
+      return startValue.getTime() > this.formData.value.denNgayKtnk.getTime();
+    } else {
+      return false;
+    }
+  };
+
+  disabledEndNgayKtnk = (endValue: Date): boolean => {
+    if (endValue && this.formData.value.tuNgayKtnk) {
+      return endValue.getTime() < this.formData.value.tuNgayKtnk.getTime();
+    } else {
+      return false;
+    }
+  };
+
+  disabledStartNgayTHN = (startValue: Date): boolean => {
+    if (startValue && this.formData.value.denNgayThoiHanNhap) {
+      return startValue.getTime() > this.formData.value.denNgayThoiHanNhap.getTime();
+    } else {
+      return false;
+    }
+  };
+
+  disabledEndNgayTHN = (endValue: Date): boolean => {
+    if (endValue && this.formData.value.tuNgayThoiHanNhap) {
+      return endValue.getTime() < this.formData.value.tuNgayThoiHanNhap.getTime();
+    } else {
+      return false;
+    }
+  };
 
   isShowDS() {
     if (this.userService.isAccessPermisson('DCNB_QUYETDINHDC_TONGCUC') && this.userService.isAccessPermisson('DCNB_QUYETDINHDC_XEM'))
@@ -164,19 +190,31 @@ export class BienBanGiaoNhanComponent extends Base2Component implements OnInit {
     return children
   }
 
+  async changePageIndex(event) {
+    this.page = event;
+    await this.timKiem();
+  }
+
+  async changePageSize(event) {
+    this.pageSize = event;
+    await this.timKiem();
+  }
+
   async timKiem() {
-    // if (this.formData.value.ngayDuyetTc) {
-    //   this.formData.value.ngayDuyetTcTu = dayjs(this.formData.value.ngayDuyetTc[0]).format('YYYY-MM-DD')
-    //   this.formData.value.ngayDuyetTcDen = dayjs(this.formData.value.ngayDuyetTc[1]).format('YYYY-MM-DD')
-    // }
-    // if (this.formData.value.ngayHieuLuc) {
-    //   this.formData.value.ngayHieuLucTu = dayjs(this.formData.value.ngayHieuLuc[0]).format('YYYY-MM-DD')
-    //   this.formData.value.ngayHieuLucDen = dayjs(this.formData.value.ngayHieuLuc[1]).format('YYYY-MM-DD')
-    // }
-    // console.log('DSQuyetDinhDieuChuyenComponent/this.formData.value=>', this.formData.value)
-    // await this.search();
+    if (this.formData.value.tuNgayKtnk) {
+      this.formData.value.tuNgayKtnk = dayjs(this.formData.value.tuNgayKtnk).format('YYYY-MM-DD')
+    }
+    if (this.formData.value.denNgayKtnk) {
+      this.formData.value.denNgayKtnk = dayjs(this.formData.value.denNgayKtnk).format('YYYY-MM-DD')
+    }
+    if (this.formData.value.tuNgayThoiHanNhap) {
+      this.formData.value.tuNgayThoiHanNhap = dayjs(this.formData.value.tuNgayThoiHanNhap).format('YYYY-MM-DD')
+    }
+    if (this.formData.value.denNgayThoiHanNhap) {
+      this.formData.value.denNgayThoiHanNhap = dayjs(this.formData.value.denNgayThoiHanNhap).format('YYYY-MM-DD')
+    }
     let body = this.formData.value
-    if (body.soQdinh) body.soQdinh = `${body.soQdinh}\DCNB`
+    if (body.soQdinh) body.soQdinh = `${body.soQdinh}/DCNB`
     body.paggingReq = {
       limit: this.pageSize,
       page: this.page - 1

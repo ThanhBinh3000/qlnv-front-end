@@ -3,7 +3,7 @@
     <div class="header header-green-background">
       <div class="header-text">
         <div class="title-chi-tieu">
-          <span [ngClass]="thongTinTrangThai(khBanDauGia.trangThai)">{{titleStatus}}</span>
+          <span [ngClass]="thongTinTrangThai(itemDnCapVonBn.trangThai)">{{itemDnCapVonBn.tenTrangThai}}</span>
           <span>Đề nghị cấp vốn chi dự trữ quốc gia của Bộ/Ngành</span>
         </div>
       </div>
@@ -13,12 +13,12 @@
           <span>Quay lại</span>
         </button>
         <button
-          *ngIf="(!khBanDauGia.trangThai || khBanDauGia.trangThai == STATUS.DU_THAO) && !isView"
+          *ngIf="(!itemDnCapVonBn.trangThai || itemDnCapVonBn.trangThai == STATUS.DANG_NHAP_DU_LIEU) && !isView"
           type="button" class="btn btn-sub  ml-2" (click)="save(true)" [disabled]="!formData.valid">
           <i class="icon htvbdh_tcdt_guiduyet"></i>
           <span>Hoàn thành</span>
         </button>
-        <button *ngIf="(!khBanDauGia.trangThai || khBanDauGia.trangThai == STATUS.DU_THAO) && !isView"
+        <button *ngIf="(!itemDnCapVonBn.trangThai || itemDnCapVonBn.trangThai == STATUS.DANG_NHAP_DU_LIEU) && !isView"
                 type="button" class="btn btn-main  ml-2" (click)="save(false)" [disabled]="!formData.valid">
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
@@ -90,33 +90,33 @@
       </div>
     </div>
   </div>
-  <nz-table nzBordered [nzData]="hopDongList">
+  <nz-table nzBordered [nzData]="hopDongList" [nzScroll]="{ x: '1700px' }">
     <thead>
     <tr>
       <th width="40px" rowspan="2">STT</th>
-      <th rowspan="2">Mã hợp đồng</th>
-      <th rowspan="2">Số hợp đồng</th>
-      <th rowspan="2">Loại tiền</th>
+      <th rowspan="2" width="200px">Mã hợp đồng</th>
+      <th rowspan="2" width="100px">Số hợp đồng</th>
+      <th rowspan="2" width="100px">Loại tiền</th>
       <th width="200px" rowspan="2">Đơn vị cung cấp hàng</th>
-      <th rowspan="2">Số tài khoản</th>
-      <th rowspan="2">Ngân hàng</th>
-      <th colspan="2">Tổng tiền</th>
-      <th rowspan="2">Dự toán được giao</th>
-      <th rowspan="2">Tỷ giá hiện tại</th>
-      <th colspan="2">Kinh phí đã cấp</th>
-      <th colspan="2">Kinh phí chưa cấp</th>
-      <th colspan="2">Kinh phí đề nghị cấp lần này</th>
-      <th *ngIf="!isView" rowspan="2">Hành động</th>
+      <th rowspan="2" width="100px">Số tài khoản</th>
+      <th rowspan="2" width="150px">Ngân hàng</th>
+      <th colspan="2" width="300px">Tổng tiền</th>
+      <th rowspan="2" width="150px">Dự toán được giao</th>
+      <th rowspan="2" width="120px">Tỷ giá hiện tại</th>
+      <th colspan="2" width="300px">Kinh phí đã cấp</th>
+      <th colspan="2" width="300px">Kinh phí chưa cấp</th>
+      <th colspan="2" width="300px">Kinh phí đề nghị cấp lần này</th>
+      <th *ngIf="!isView" rowspan="2" width="100px">Hành động</th>
     </tr>
     <tr>
-      <th class="text-center">Ngoại tệ</th>
-      <th class="text-center">VNĐ</th>
-      <th class="text-center">Ngoại tệ</th>
-      <th class="text-center">VNĐ</th>
-      <th class="text-center">Ngoại tệ</th>
-      <th class="text-center">VNĐ</th>
-      <th class="text-center">Ngoại tệ</th>
-      <th class="text-center">VNĐ</th>
+      <th class="text-center" width="150px">Ngoại tệ</th>
+      <th class="text-center" width="150px">VNĐ</th>
+      <th class="text-center" width="150px">Ngoại tệ</th>
+      <th class="text-center" width="150px">VNĐ</th>
+      <th class="text-center" width="150px">Ngoại tệ</th>
+      <th class="text-center" width="150px">VNĐ</th>
+      <th class="text-center" width="150px">Ngoại tệ</th>
+      <th class="text-center" width="150px">VNĐ</th>
     </tr>
     <tr *ngIf="!isView" class="search-table">
       <th></th>
@@ -135,7 +135,7 @@
       </th>
       <th>
         <nz-input-group>
-          <nz-select [(ngModel)]="rowItem.loaiTien" (ngModelChange)="changeLoaiTien()"
+          <nz-select [(ngModel)]="rowItem.loaiTien"
                      [nzDisabled]="rowItem.maHopDong != null">
             <nz-option *ngFor=" let item of listLoaiTien" [nzValue]="item.ma" [nzLabel]="item.giaTri">
             </nz-option>
@@ -159,81 +159,66 @@
       </th>
       <th>
         <nz-input-group>
-          <nz-input-number [nzDisabled]="rowItem.loaiTien == '01'" [nzMin]="1" [nzMax]=""
-                           [nzSize]="'small'"
-                           [(ngModel)]="rowItem.tongTienNt"
-          >
-          </nz-input-number>
+          <input class="money-input" [readOnly]="rowItem.loaiTien == '01' || rowItem.maHopDong != null"
+                 currencyMask [options]="amount"
+                 [(ngModel)]="rowItem.tongTienNt"/>
         </nz-input-group>
       </th>
       <th>
         <nz-input-group>
-          <nz-input-number [nzDisabled]="rowItem.loaiTien != '01'" [nzMin]="1" [nzMax]=""
-                           [nzSize]="'small'"
-                           [(ngModel)]="rowItem.tongTien"
-          >
-          </nz-input-number>
+          <input class="money-input" currencyMask [options]="amount" [readOnly]="rowItem.maHopDong != null"
+                 [(ngModel)]="rowItem.tongTien"/>
         </nz-input-group>
       </th>
       <th>
         <nz-input-group>
-          <nz-input-number [nzMin]="1" [nzMax]="" [nzSize]="'small'" [(ngModel)]="rowItem.duToanDuocGiao"
-          >
-          </nz-input-number>
+          <input class="money-input" [readOnly]="rowItem.maHopDong != null" currencyMask [options]="amount"
+                 [(ngModel)]="rowItem.duToanDuocGiao"/>
         </nz-input-group>
       </th>
       <th>
         <nz-input-group>
-          <nz-input-number [nzMin]="1" [nzMax]="" [nzDisabled]="rowItem.loaiTien == '01'" [nzSize]="'small'"
-                           [(ngModel)]="rowItem.tyGia"
-          >
-          </nz-input-number>
+          <input class="money-input" [readOnly]="rowItem.loaiTien =='01'"
+                 currencyMask [options]="amount" [autocomplete]="true"
+                 [(ngModel)]="rowItem.tyGia"/>
         </nz-input-group>
       </th>
       <th>
         <nz-input-group>
-          <nz-input-number [nzMin]="1" [nzDisabled]="rowItem.loaiTien == '01'" [nzMax]="" [nzSize]="'small'"
-                           [(ngModel)]="rowItem.kinhPhiDaCapNt"
-          >
-          </nz-input-number>
+          <input class="money-input" [readOnly]="rowItem.loaiTien == '01'"
+                 currencyMask [options]="amount"
+                 [(ngModel)]="rowItem.kinhPhiDaCapNt"/>
         </nz-input-group>
       </th>
       <th>
         <nz-input-group>
-          <nz-input-number [nzMin]="1" [nzMax]="" [nzDisabled]="rowItem.loaiTien != '01'" [nzSize]="'small'"
-                           [(ngModel)]="rowItem.kinhPhiDaCap"
-          >
-          </nz-input-number>
+          <input class="money-input" currencyMask [options]="amount"
+                 [(ngModel)]="rowItem.kinhPhiDaCap"/>
         </nz-input-group>
       </th>
       <th>
         <nz-input-group>
-          <nz-input-number [nzMin]="1" [nzMax]="" [nzDisabled]="true" [nzSize]="'small'" [(ngModel)]="rowItem.kinhPhiChuaCapNt"
-          >
-          </nz-input-number>
+          <input class="money-input" [readOnly]="true" currencyMask [options]="amount"
+                 [(ngModel)]="rowItem.kinhPhiChuaCapNt"/>
         </nz-input-group>
       </th>
       <th>
         <nz-input-group>
-          <nz-input-number [nzMin]="1" [nzMax]="" [nzDisabled]="true" [nzSize]="'small'" [(ngModel)]="rowItem.kinhPhiChuaCap"
-          >
-          </nz-input-number>
+          <input class="money-input" [readOnly]="true" currencyMask [options]="amount"
+                 [(ngModel)]="rowItem.kinhPhiChuaCap"/>
         </nz-input-group>
       </th>
       <th>
         <nz-input-group>
-          <nz-input-number [nzMin]="1" [nzMax]="" [nzDisabled]="rowItem.loaiTien == '01'" [nzSize]="'small'"
-                           [(ngModel)]="rowItem.ycCapThemNt"
-          >
-          </nz-input-number>
+          <input class="money-input" [readOnly]="rowItem.loaiTien == '01'"
+                 currencyMask [options]="amount"
+                 [(ngModel)]="rowItem.ycCapThemNt"/>
         </nz-input-group>
       </th>
       <th>
         <nz-input-group>
-          <nz-input-number [nzMin]="1" [nzMax]="" [nzSize]="'small'" [nzDisabled]="rowItem.loaiTien != '01'"
-                           [(ngModel)]="rowItem.ycCapThem"
-          >
-          </nz-input-number>
+          <input class="money-input" currencyMask [options]="amount"
+                 [(ngModel)]="rowItem.ycCapThem"/>
         </nz-input-group>
       </th>
       <th style="text-align: center;">
@@ -247,23 +232,26 @@
     </tr>
     </thead>
     <tbody>
-    <tr *ngFor="let item of chiTietList, let idx = index">
+    <tr *ngFor="let item of chiTietList, let idx = index" style="cursor: pointer"
+        [ngClass]="{'bg-selected': item.selected}"
+        (click)="selectRow(item)">
       <ng-container *ngIf="!item.edit; else editTemplate">
         <td>{{idx + 1}}</td>
-        <td>{{item.dvCungCapHang}}</td>
-        <td>{{item.dvCungCapHang}}</td>
-        <td>{{item.dvCungCapHang}}</td>
+        <td>{{item.maHopDong}}</td>
+        <td>{{item.soHopDong}}</td>
+        <td>{{getLabelLoaiTien(item.loaiTien)}}</td>
         <td>{{item.dvCungCapHang}}</td>
         <td>{{item.soTaiKhoan}}</td>
         <td>{{item.nganHang}}</td>
-        <td>{{item.tenVatTuCha}}</td>
-        <td>{{item.tenVatTu}}</td>
-        <td>{{item.tenHangHoa}}</td>
-        <td>{{item.soLuong}}</td>
-        <td>{{item.donViTinh}}</td>
-        <td>{{item.donGia |number : '1.0-1' : 'vi_VN'}}</td>
-        <td>{{item.thanhTien | number : '1.0-1' : 'vi_VN'}}</td>
+        <td>{{item.tongTienNt |number : '1.0-1' : 'vi_VN'}}</td>
+        <td>{{item.tongTien |number : '1.0-1' : 'vi_VN'}}</td>
+        <td>{{item.duToanDuocGiao |number : '1.0-1' : 'vi_VN'}}</td>
+        <td>{{item.tyGia | number : '1.0-1' : 'vi_VN'}}</td>
+        <td>{{item.kinhPhiDaCapNt |number : '1.0-1' : 'vi_VN'}}</td>
         <td>{{item.kinhPhiDaCap |number : '1.0-1' : 'vi_VN'}}</td>
+        <td>{{item.kinhPhiChuaCapNt | number : '1.0-1' : 'vi_VN'}}</td>
+        <td>{{item.kinhPhiChuaCap |number : '1.0-1' : 'vi_VN'}}</td>
+        <td>{{item.ycCapThemNt |number : '1.0-1' : 'vi_VN'}}</td>
         <td>{{item.ycCapThem |number : '1.0-1' : 'vi_VN'}}</td>
         <td class="text-center" *ngIf="!isView">
           <a (click)="showEditItem(idx, 'show')">
@@ -276,45 +264,83 @@
       </ng-container>
       <ng-template #editTemplate>
         <td>{{idx + 1}}</td>
-        <td><input type="text" nz-input [(ngModel)]="item.dvCungCapHang"/></td>
-        <td><input type="text" nz-input [(ngModel)]="item.soTaiKhoan"/></td>
-        <td><input type="text" nz-input [(ngModel)]="item.nganHang"/></td>
+        <td><input type="text" nz-input [readOnly]="true" [(ngModel)]="item.maHopDong"/></td>
+        <td><input type="text" nz-input [readOnly]="true" [(ngModel)]="item.soHopDong"/></td>
+        <td>
+          {{getLabelLoaiTien(item.loaiTien)}}
+        <td>
+          <input type="text" nz-input [readOnly]="true" [(ngModel)]="item.dvCungCapHang"/>
+        </td>
+        <td>
+          <input type="text" nz-input [readOnly]="true" [(ngModel)]="item.soTaiKhoan"/>
+        </td>
+        <td>
+          <input type="text" nz-input [readOnly]="true" [(ngModel)]="item.nganHang"/>
+        </td>
         <td>
           <nz-input-group>
-            <nz-select [(ngModel)]="item.maVatTuCha" (ngModelChange)="changeLoaiHangHoa()">
-              <nz-option *ngFor="let it of listLoaiHangHoa" [nzValue]="it.maHangHoa" [nzLabel]="it.tenHangHoa">
-              </nz-option>
-            </nz-select>
+            <input class="money-input"
+                   currencyMask [options]="amount"
+                   [(ngModel)]="item.tongTienNt"/>
           </nz-input-group>
         </td>
         <td>
           <nz-input-group>
-            <nz-select [(ngModel)]="item.maVatTu" (ngModelChange)="changeChungLoaiHangHoa()">
-              <nz-option *ngFor=" let it of listChungLoaiHangHoa" [nzValue]="it.ma" [nzLabel]="it.ten">
-              </nz-option>
-            </nz-select>
+            <input class="money-input" currencyMask [options]="amount"
+                   [(ngModel)]="item.tongTien"/>
           </nz-input-group>
         </td>
-        <td><input type="text" nz-input [(ngModel)]="item.tenHangHoa"/></td>
         <td>
-          <nz-input-number [nzMin]="1" [nzMax]="" [nzSize]="'small'" [(ngModel)]="item.soLuong"
-                           (ngModelChange)="changeThanhTienEdit(idx)">
-          </nz-input-number>
-          <!--                <input type="text" nz-input [(ngModel)]="item.soLuong" />-->
+          <nz-input-group>
+            <input class="money-input" currencyMask [options]="amount"
+                   [(ngModel)]="item.duToanDuocGiao"/>
+          </nz-input-group>
         </td>
-        <td><input type="text" nz-input [(ngModel)]="item.donViTinh"/></td>
         <td>
-          <nz-input-number [nzMin]="1" [nzMax]="" [nzSize]="'small'" [(ngModel)]="item.donGia"
-                           (ngModelChange)="changeThanhTienEdit(idx)">
-          </nz-input-number>
+          <nz-input-group>
+            <input class="money-input"
+                   currencyMask [options]="amount" [autocomplete]="true"
+                   [(ngModel)]="item.tyGia"/>
+          </nz-input-group>
         </td>
-        <td><input type="text" nz-input [(ngModel)]="item.thanhTien"/></td>
         <td>
-          <nz-input-number type="text" nz-input [(ngModel)]="item.kinhPhiDaCap" [nzMin]="1"
-                           [nzMax]="item.maxYeuCauCapThem"
-                           (ngModelChange)="changeThanhTienEdit(idx)"></nz-input-number>
+          <nz-input-group>
+            <input class="money-input"
+                   currencyMask [options]="amount"
+                   [(ngModel)]="item.kinhPhiDaCapNt"/>
+          </nz-input-group>
         </td>
-        <td><input type="text" nz-input [(ngModel)]="item.ycCapThem"/></td>
+        <td>
+          <nz-input-group>
+            <input class="money-input" currencyMask [options]="amount"
+                   [(ngModel)]="item.kinhPhiDaCap"/>
+          </nz-input-group>
+        </td>
+        <td>
+          <nz-input-group>
+            <input class="money-input" [readOnly]="true" currencyMask [options]="amount"
+                   [(ngModel)]="item.kinhPhiChuaCapNt"/>
+          </nz-input-group>
+        </td>
+        <td>
+          <nz-input-group>
+            <input class="money-input" [readOnly]="true" currencyMask [options]="amount"
+                   [(ngModel)]="item.kinhPhiChuaCap"/>
+          </nz-input-group>
+        </td>
+        <td>
+          <nz-input-group>
+            <input class="money-input"
+                   currencyMask [options]="amount"
+                   [(ngModel)]="item.ycCapThemNt"/>
+          </nz-input-group>
+        </td>
+        <td>
+          <nz-input-group>
+            <input class="money-input" currencyMask [options]="amount"
+                   [(ngModel)]="item.ycCapThem"/>
+          </nz-input-group>
+        </td>
         <td class="text-center">
           <a class="save" (click)="showEditItem(idx, 'save')">
             <i class="fa fa-save"></i>
@@ -330,15 +356,19 @@
       <th></th>
       <th></th>
       <th></th>
-      <th>Tổng Cộng:</th>
       <th></th>
       <th></th>
       <th></th>
       <th></th>
+      <th>{{ tongCong.tongTien | number : '1.0-1' : 'vi_VN'}}</th>
+      <th>{{ tongCong.tongDuToanDuocGiao | number : '1.0-1' : 'vi_VN'}}</th>
       <th></th>
-      <th>{{ tongCong.tongThanhTien | number : '1.0-1' : 'vi_VN'}}</th>
-      <th>{{ tongCong.tongKinhPhiDaCap | number : '1.0-1' : 'vi_VN'}}</th>
-      <th>{{ tongCong.tongYeuCauCapThem | number : '1.0-1' : 'vi_VN'}}</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th>{{ tongCong.tongKinhPhiChuaCap | number : '1.0-1' : 'vi_VN'}}</th>
+      <th></th>
+      <th>{{ tongCong.tongYcCapThem | number : '1.0-1' : 'vi_VN'}}</th>
       <th></th>
     </tr>
     </tbody>
@@ -350,7 +380,7 @@
       </div>
     </div>
   </div>
-  <nz-table nzBordered [nzData]="hopDongList">
+  <nz-table [nzScroll]="{ x: '1700px' }" nzBordered [nzData]="itemHopDongSelected ? itemHopDongSelected.chiTiet : []">
     <thead>
     <tr>
       <th width="40px">STT</th>
@@ -362,7 +392,7 @@
       <th>Đơn giá</th>
       <th>Thành tiền (Ngoại tệ)</th>
       <th>Thành tiền (VNĐ)</th>
-      <th>Hành động</th>
+      <th *ngIf="!isView"> Hành động</th>
     </tr>
     <tr *ngIf="!isView && itemHopDongSelected" class="search-table">
       <th></th>
@@ -376,7 +406,8 @@
       </th>
       <th>
         <nz-input-group>
-          <nz-select [(ngModel)]="rowItemDetailHhh.cloaiVthh" (ngModelChange)="changeChungLoaiHangHoa()">
+          <nz-select [(ngModel)]="rowItemDetailHhh.cloaiVthh"
+                     (ngModelChange)="changeChungLoaiHangHoa()">
             <nz-option *ngFor=" let item of listChungLoaiHangHoa" [nzValue]="item.maHangHoa"
                        [nzLabel]="item.tenHangHoa">
             </nz-option>
@@ -419,7 +450,7 @@
                  [(ngModel)]="rowItemDetailHhh.thanhTien"/>
         </nz-input-group>
       </th>
-      <th style="text-align: center;">
+      <th style="text-align: center;" *ngIf="!isView">
         <a (click)="themChiTietHangHoa()">
           <i class="table-icon icon htvbdh_dau-cong"></i>
         </a>
@@ -430,7 +461,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr *ngFor="let item of hopDongList, let idx = index">
+    <tr *ngFor="let item of (itemHopDongSelected ? itemHopDongSelected.chiTiet : []), let idx = index">
       <ng-container *ngIf="!item.edit; else editTemplate">
         <td>{{idx + 1}}</td>
         <td>{{item.tenLoaiVthh}}</td>
@@ -442,81 +473,65 @@
         <td>{{item.thanhTienNt | number : '1.0-1' : 'vi_VN'}}</td>
         <td>{{item.thanhTien | number : '1.0-1' : 'vi_VN'}}</td>
         <td class="text-center" *ngIf="!isView">
-          <a (click)="showEditItem(idx, 'show')">
+          <a (click)="showEditItemHangHoa(idx, 'show')">
             <i class="fa fa-pencil" title="Sửa"></i>
           </a>
-          <a (click)="xoaItem(idx)">
+          <a (click)="xoaItemHangHoa(idx)">
             <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
           </a>
         </td>
       </ng-container>
       <ng-template #editTemplate>
         <td>{{idx + 1}}</td>
-        <td><input type="text" nz-input [(ngModel)]="item.dvCungCapHang"/></td>
-        <td><input type="text" nz-input [(ngModel)]="item.soTaiKhoan"/></td>
-        <td><input type="text" nz-input [(ngModel)]="item.nganHang"/></td>
         <td>
-          <nz-input-group>
-            <nz-select [(ngModel)]="item.maVatTuCha" (ngModelChange)="changeLoaiHangHoa()">
-              <nz-option *ngFor="let it of listLoaiHangHoa" [nzValue]="it.maHangHoa" [nzLabel]="it.tenHangHoa">
-              </nz-option>
-            </nz-select>
-          </nz-input-group>
+          <input type="text" nz-input [readOnly]="true" [(ngModel)]="item.tenLoaiVthh"/>
         </td>
         <td>
-          <nz-input-group>
-            <nz-select [(ngModel)]="item.maVatTu" (ngModelChange)="changeChungLoaiHangHoa()">
-              <nz-option *ngFor=" let it of listChungLoaiHangHoa" [nzValue]="it.ma" [nzLabel]="it.ten">
-              </nz-option>
-            </nz-select>
-          </nz-input-group>
+          <input type="text" nz-input [readOnly]="true" [(ngModel)]="item.tenCloaiVthh"/>
         </td>
-        <td><input type="text" nz-input [(ngModel)]="item.tenHangHoa"/></td>
+        <td><input type="text" nz-input [(ngModel)]="item.tenHang"/></td>
         <td>
-          <nz-input-number [nzMin]="1" [nzMax]="" [nzSize]="'small'" [(ngModel)]="item.soLuong"
-                           (ngModelChange)="changeThanhTienEdit(idx)">
-          </nz-input-number>
+          <input class="money-input" currencyMask [options]="amount"
+                 [(ngModel)]="item.slDeNghiCapVon"
+                 (ngModelChange)="changeThanhTienEdit(idx)"/>
           <!--                <input type="text" nz-input [(ngModel)]="item.soLuong" />-->
         </td>
         <td><input type="text" nz-input [(ngModel)]="item.donViTinh"/></td>
         <td>
-          <nz-input-number [nzMin]="1" [nzMax]="" [nzSize]="'small'" [(ngModel)]="item.donGia"
-                           (ngModelChange)="changeThanhTienEdit(idx)">
-          </nz-input-number>
+          <input class="money-input" currencyMask [options]="amount"
+                 [(ngModel)]="item.donGia"
+                 (ngModelChange)="changeThanhTienEdit(idx)"/>
         </td>
-        <td><input type="text" nz-input [(ngModel)]="item.thanhTien"/></td>
         <td>
-          <nz-input-number type="text" nz-input [(ngModel)]="item.kinhPhiDaCap" [nzMin]="1"
-                           [nzMax]="item.maxYeuCauCapThem"
-                           (ngModelChange)="changeThanhTienEdit(idx)"></nz-input-number>
+          <input class="money-input" currencyMask [options]="amount"
+                 [(ngModel)]="item.thanhTienNt"/>
         </td>
-        <td><input type="text" nz-input [(ngModel)]="item.ycCapThem"/></td>
+        <td>
+          <input class="money-input" currencyMask [options]="amount"
+                 [(ngModel)]="item.thanhTien"/>
+        </td>
         <td class="text-center">
-          <a class="save" (click)="showEditItem(idx, 'save')">
+          <a class="save" (click)="showEditItemHangHoa(idx, 'save')">
             <i class="fa fa-save"></i>
           </a>
-          <a (click)="showEditItem(idx, 'huy')">
+          <a (click)="showEditItemHangHoa(idx, 'huy')">
             <i class="fa fa-times do"></i>
           </a>
         </td>
       </ng-template>
     </tr>
-    <!--    <tr>-->
-    <!--      <th></th>-->
-    <!--      <th></th>-->
-    <!--      <th></th>-->
-    <!--      <th></th>-->
-    <!--      <th>Tổng Cộng:</th>-->
-    <!--      <th></th>-->
-    <!--      <th></th>-->
-    <!--      <th></th>-->
-    <!--      <th></th>-->
-    <!--      <th></th>-->
-    <!--      <th>{{ tongCong.tongThanhTien | number : '1.0-1' : 'vi_VN'}}</th>-->
-    <!--      <th>{{ tongCong.tongKinhPhiDaCap | number : '1.0-1' : 'vi_VN'}}</th>-->
-    <!--      <th>{{ tongCong.tongYeuCauCapThem | number : '1.0-1' : 'vi_VN'}}</th>-->
-    <!--      <th></th>-->
-    <!--    </tr>-->
+    <tr>
+      <th></th>
+      <th>Tổng Cộng:</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th>{{ tongCongHangHoa.thanhTienNt | number : '1.0-1' : 'vi_VN'}}</th>
+      <th>{{ tongCongHangHoa.thanhTien | number : '1.0-1' : 'vi_VN'}}</th>
+      <th *ngIf="!isView"></th>
+    </tr>
     </tbody>
   </nz-table>
   <form nzLayout="vertical" nz-form [formGroup]="formData">

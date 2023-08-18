@@ -17,6 +17,8 @@ import {Globals} from 'src/app/shared/globals';
 import {chain} from "lodash";
 import {v4 as uuidv4} from "uuid";
 import {PAGE_SIZE_DEFAULT, TYPE_PAG} from 'src/app/constants/config';
+import {saveAs} from 'file-saver';
+import {PREVIEW} from "../../../../../../../constants/fileType";
 
 @Component({
   selector: 'app-them-tong-hop-phuong-an-gia',
@@ -51,8 +53,19 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
   expandSet = new Set<number>();
   idSelected: number;
   isViewModal: boolean = false;
-  tieuChuanCl : string;
-  isMuaToiDa : boolean;
+  tieuChuanCl: string;
+  isMuaToiDa: boolean;
+  reportTemplate: any = {
+    typeFile: "",
+    fileName: "",
+    tenBaoCao: "",
+    trangThai: ""
+  };
+  showDlgPreview = false;
+  pdfSrc: any;
+  wordSrc: any;
+  excelSrc: any;
+  isPrint: boolean = false;
 
   constructor(
     private readonly fb: FormBuilder,
@@ -248,10 +261,9 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
   async onChangeCloaiVthh(event) {
     let resp = await this.danhMucService.getDetail(event);
     if (resp.msg == MESSAGE.SUCCESS) {
-     this.tieuChuanCl = resp.data && resp.data.tieuChuanCl ? resp.data.tieuChuanCl : ""
+      this.tieuChuanCl = resp.data && resp.data.tieuChuanCl ? resp.data.tieuChuanCl : ""
     }
   }
-
 
 
   async tongHop() {
@@ -299,8 +311,8 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
       cloaiVthh: data.cloaiVthh ?? reqBody.cloaiVthh,
       loaiGia: data.loaiGia ?? reqBody.loaiGia,
       maDvis: data.maDvis ?? reqBody.maDvis,
-      ngayDxTu: data.ngayDxTu ? data.ngayDxTu : (reqBody && reqBody.ngayDxTu ? reqBody.ngayDxTu  : null ) ,
-      ngayDxDen: data.ngayDxDen ? data.ngayDxDen : (reqBody && reqBody.ngayDxDen ? reqBody.ngayDxDen  : null ) ,
+      ngayDxTu: data.ngayDxTu ? data.ngayDxTu : (reqBody && reqBody.ngayDxTu ? reqBody.ngayDxTu : null),
+      ngayDxDen: data.ngayDxDen ? data.ngayDxDen : (reqBody && reqBody.ngayDxDen ? reqBody.ngayDxDen : null),
       noiDung: data.noiDung,
       ghiChu: data.ghiChu,
       giaKsTt: giaKsTt,
@@ -328,13 +340,14 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
             tenVungMien: value && value[0] && value[0].tenVungMien ? value[0].tenVungMien : null,
             tenDvi: value && value[0] && value[0].tenDvi ? value[0].tenDvi : null,
             pagId: value && value[0] && value[0].pagId ? value[0].pagId : null,
-            soDx : value && value[0] && value[0].soDx ? value[0].soDx : null,
+            soDx: value && value[0] && value[0].soDx ? value[0].soDx : null,
             children: value
           };
         }).value();
     }
     this.expandAll()
   }
+
   onExpandChange(id: number, checked: boolean): void {
     if (checked) {
       this.expandSet.add(id);
@@ -354,7 +367,7 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
 
   taoTtrinh() {
     this.isMain = false;
-    if (this.formData.value.trangThaiTh == STATUS.CHUA_TAO_TT || this.formData.value.trangThaiTt == STATUS.DU_THAO || this.formData.value.trangThaiTt == STATUS.TU_CHOI_LDV ) {
+    if (this.formData.value.trangThaiTh == STATUS.CHUA_TAO_TT || this.formData.value.trangThaiTt == STATUS.DU_THAO || this.formData.value.trangThaiTt == STATUS.TU_CHOI_LDV) {
       this.isView = false;
     }
   }
@@ -381,6 +394,64 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
         this.listCucSelected.splice(0, 1);
       }
     }
+  }
+
+  downloadPdf() {
+   if (this.type == 'GCT') {
+     saveAs(this.pdfSrc, "tong_hop_phuong_an_gia_gct.pdf");
+   } else {
+     saveAs(this.pdfSrc, "tong_hop_phuong_an_gia_gmtdbtt.pdf");
+   }
+  }
+
+  async downloadExcel() {
+    saveAs(this.excelSrc, "tong_hop_phuong_an_gia_lt.xlsx");
+  }
+
+  async preview() {
+    this.spinner.show();
+    try {
+      this.reportTemplate.fileName = this.type == 'GCT' ? "tong_hop_phuong_an_gia_gct.docx" : "tong_hop_phuong_an_gia_gmtdbtt.docx";
+      let body = {
+        reportTemplateRequest: this.reportTemplate,
+        isSave: true,
+        id: this.idInput,
+        type: this.type
+      }
+      await this.tongHopPhuongAnGiaService.preview(body).then(async s => {
+        this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
+        this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
+        this.showDlgPreview = true;
+        this
+      });
+      this.spinner.hide();
+    } catch (e) {
+      console.log('error: ', e);
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  closeDlg() {
+    this.showDlgPreview = false;
+  }
+
+  doPrint() {
+    const WindowPrt = window.open(
+      '',
+      '',
+      'left=0,top=0,width=900,height=900,toolbar=0,scrollbars=0,status=0',
+    );
+    let printContent = '';
+    printContent = printContent + '<div>';
+    printContent =
+      printContent + document.getElementById('modal').innerHTML;
+    printContent = printContent + '</div>';
+    WindowPrt.document.write(printContent);
+    WindowPrt.document.close();
+    WindowPrt.focus();
+    WindowPrt.print();
+    WindowPrt.close();
   }
 }
 

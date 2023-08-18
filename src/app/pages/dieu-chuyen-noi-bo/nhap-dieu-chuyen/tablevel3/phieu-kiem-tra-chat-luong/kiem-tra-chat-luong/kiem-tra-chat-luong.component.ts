@@ -45,13 +45,17 @@ export class KiemTraChatLuongComponent extends Base2Component implements OnInit 
     super(httpClient, storageService, notification, spinner, modal, phieuKiemTraChatLuongService);
     this.formData = this.fb.group({
       nam: null,
-      soQdinhDcc: null,
+      soQdinh: null,
       soPhieu: null,
-      tuNgay: null,
-      denNgay: null,
+      tuNgayLapPhieu: null,
+      denNgayLapPhieu: null,
+      tuNgayGiamDinh: null,
+      denNgayGiamDinh: null,
       ketQua: null,
       type: ["01"],
-      loaiDc: ["DCNB"]
+      loaiDc: ["DCNB"],
+      loaiQdinh: [],
+      thayDoiThuKho: []
     })
   }
 
@@ -68,7 +72,9 @@ export class KiemTraChatLuongComponent extends Base2Component implements OnInit 
     });
 
     this.formData.patchValue({
-      loaiDc: this.loaiDc
+      loaiDc: this.loaiDc,
+      loaiQdinh: this.loaiDc === "CUC" ? "NHAP" : null,
+      thayDoiThuKho: true
     })
 
     try {
@@ -84,6 +90,38 @@ export class KiemTraChatLuongComponent extends Base2Component implements OnInit 
 
 
   }
+
+  disabledStartNgayLap = (startValue: Date): boolean => {
+    if (startValue && this.formData.value.denNgayLapPhieu) {
+      return startValue.getTime() > this.formData.value.denNgayLapPhieu.getTime();
+    } else {
+      return false;
+    }
+  };
+
+  disabledEndNgayLap = (endValue: Date): boolean => {
+    if (endValue && this.formData.value.tuNgayLapPhieu) {
+      return endValue.getTime() < this.formData.value.tuNgayLapPhieu.getTime();
+    } else {
+      return false;
+    }
+  };
+
+  disabledStartNgayGD = (startValue: Date): boolean => {
+    if (startValue && this.formData.value.denNgayGiamDinh) {
+      return startValue.getTime() > this.formData.value.denNgayGiamDinh.getTime();
+    } else {
+      return false;
+    }
+  };
+
+  disabledEndNgayGD = (endValue: Date): boolean => {
+    if (endValue && this.formData.value.tuNgayGiamDinh) {
+      return endValue.getTime() < this.formData.value.tuNgayGiamDinh.getTime();
+    } else {
+      return false;
+    }
+  };
 
   isShowDS() {
     if (this.userService.isAccessPermisson('DCNB_QUYETDINHDC_TONGCUC') && this.userService.isAccessPermisson('DCNB_QUYETDINHDC_XEM'))
@@ -137,10 +175,34 @@ export class KiemTraChatLuongComponent extends Base2Component implements OnInit 
     return children
   }
 
+  async changePageIndex(event) {
+    this.page = event;
+    await this.timKiem();
+  }
+
+  async changePageSize(event) {
+    this.pageSize = event;
+    await this.timKiem();
+  }
+
   async timKiem() {
     await this.spinner.show();
     try {
+      if (this.formData.value.tuNgayLapPhieu) {
+        this.formData.value.tuNgayLapPhieu = dayjs(this.formData.value.tuNgayLapPhieu).format('YYYY-MM-DD')
+      }
+      if (this.formData.value.denNgayLapPhieu) {
+        this.formData.value.denNgayLapPhieu = dayjs(this.formData.value.denNgayLapPhieu).format('YYYY-MM-DD')
+      }
+      if (this.formData.value.tuNgayGiamDinh) {
+        this.formData.value.tuNgayGiamDinh = dayjs(this.formData.value.tuNgayGiamDinh).format('YYYY-MM-DD')
+      }
+      if (this.formData.value.denNgayGiamDinh) {
+        this.formData.value.denNgayGiamDinh = dayjs(this.formData.value.denNgayGiamDinh).format('YYYY-MM-DD')
+      }
+
       let body = this.formData.value
+      if (body.soQdinh) body.soQdinh = `${body.soQdinh}/DCNB`
       body.paggingReq = {
         limit: this.pageSize,
         page: this.page - 1

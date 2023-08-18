@@ -5,7 +5,7 @@
         <div nz-row [nzGutter]="20">
           <div nz-col nzSpan="6">
             <nz-form-control>
-              <nz-form-label>Đơn vị đề xuất</nz-form-label>
+              <nz-form-label>Chi cục DTNN KV</nz-form-label>
               <nz-form-item>
                 <nz-select formControlName="maDvi" nzShowSearch nzAllowClear>
                   <nz-option *ngFor="let p of dsDonvi" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi"></nz-option>
@@ -15,7 +15,7 @@
           </div>
           <div nz-col nzSpan="5">
             <nz-form-control>
-              <nz-form-label>Loại hàng hóa</nz-form-label>
+              <nz-form-label>Loại hàng </nz-form-label>
               <nz-form-item>
                 <nz-select formControlName="loaiVthh" nzShowSearch nzAllowClear (ngModelChange)="changeHangHoa($event)">
                   <nz-option *ngFor="let p of dsLoaiVthh" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
@@ -28,7 +28,7 @@
           <div nz-col nzSpan="5">
             <nz-form-control>
               <nz-form-label>
-                Chủng loại hàng hóa
+                Chủng loại hàng
               </nz-form-label>
               <nz-form-item>
                 <nz-select formControlName="cloaiVthh" nzShowSearch nzAllowClear>
@@ -106,24 +106,22 @@
           <nz-table #tblData [nzData]="dataTableView" class="nowrap table-chi-tiet" nzBordered>
             <thead>
               <tr>
-                <th style="min-width: 340px">Cục DTNN KV</th>
-                <th>Loại hàng hóa</th>
+                <th style="min-width: 340px">Chi cục DTNN KV</th>
+                <th>Loại hàng </th>
                 <th>Chủng loại</th>
                 <th>Điểm kho</th>
-                <th>Nhà kho</th>
-                <th>Ngăn kho</th>
-                <th>Lô kho</th>
+                <th>Nhà kho / Ngăn kho / Lô kho</th>
                 <th>SL tồn</th>
                 <th>Ngày nhập kho</th>
-                <th>SL cần thanh lý</th>
-                <th>SL cần thanh lý đã duyệt</th>
-                <th>SL còn lại cần thanh lý</th>
+                <th>SL hỏng cần sửa chữa</th>
+                <th>SL SC đã duyệt</th>
+                <th>SL còn lại cần SC</th>
                 <th>ĐVT</th>
                 <th>Ngày đề xuất</th>
                 <th>Ngày tổng hợp (chốt DS)</th>
                 <th>Trạng thái</th>
-                <th>Mã danh sách</th>
-                <th>Lý do cần thanh lý</th>
+                <th>Mã danh sách cần SC</th>
+                <th>Lý do cần SC</th>
                 <th>Hành động</th>
               </tr>
             </thead>
@@ -135,8 +133,6 @@
                     [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true" style="width: 35px">
                     {{item.tenCuc}}
                   </td>
-                  <td></td>
-                  <td></td>
                   <td></td>
                   <td></td>
                   <td></td>
@@ -178,8 +174,6 @@
                       <td></td>
                       <td></td>
                       <td></td>
-                      <td></td>
-                      <td></td>
                     </tr>
                     <ng-container *ngIf="expandSetString.has(item.idVirtual) && expandSetString.has(lv1.idVirtual)">
                       <ng-container *ngFor="let lv2 of lv1.childData,let i2=index">
@@ -188,9 +182,7 @@
                           <td>{{lv2.tenLoaiVthh}}</td>
                           <td>{{lv2.tenCloaiVthh}}</td>
                           <td>{{lv2.tenDiemKho}}</td>
-                          <td>{{lv2.tenNhaKho}}</td>
-                          <td>{{lv2.tenNganKho}}</td>
-                          <td>{{lv2.tenLoKho}}</td>
+                          <td>{{lv2.tenNhaKho}} / {{lv2.tenNganKho}} / {{lv2.tenLoKho}}</td>
                           <td>{{lv2.slHienTai|number:globals.numberFormat}}</td>
                           <td>{{lv2.ngayNhapKho|date:globals.dateFormat}}</td>
                           <td>{{lv2.slDeXuat|number:globals.numberFormat}}</td>
@@ -203,9 +195,9 @@
                           <td>{{lv2.maTongHop}}</td>
                           <td>{{lv2.lyDo}}</td>
                           <td class="text-left">
-                            <!--<a *ngIf="data.trangThaiId !== STATUS.DU_THAO" (click)="detail(data, true)">
-                            <i class="fa fa-eye" title="Xem chi tiết"></i>
-                          </a>-->
+                            <a (click)="showDetail(lv2)">
+                              <i class="fa fa-eye" title="Xem chi tiết"></i>
+                            </a>
                           </td>
                         </tr>
                       </ng-container>

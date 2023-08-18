@@ -26,7 +26,17 @@
 
             <div nz-col nzSpan="4">
               <label class="search__label">Ngày nhập kho</label>
-              <nz-range-picker formControlName="ngayNhapKho" nzFormat="dd/MM/yyyy"></nz-range-picker>
+              <div nz-row>
+                <div nz-col nzSpan="12" class="cus-start-date">
+                  <nz-date-picker [nzDisabledDate]="disabledStartNgayNK" nzFormat="dd/MM/yyyy"
+                    formControlName="ngayNhapKhoTu" nzPlaceHolder="Ngày bắt đầu">
+                  </nz-date-picker>
+                </div>
+                <div nz-col nzSpan="12" class="cus-end-date">
+                  <nz-date-picker [nzDisabledDate]="disabledEndNgayNK" nzFormat="dd/MM/yyyy"
+                    formControlName="ngayNhapKhoDen" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+                </div>
+              </div>
             </div>
 
 
@@ -78,11 +88,11 @@
               <th class="text-center">Thời hạn NH</th>
               <th class="text-center">Điểm kho</th>
               <th class="text-center">Lô kho</th>
-              <!-- <th class="text-center">BB NTBQLĐ</th> -->
+              <th class="text-center">BB NTBQLĐ</th>
               <th class="text-center">Số phiếu nhập kho</th>
               <th class="text-center">Ngày nhập kho</th>
               <th class="text-center">Số phiếu KTCL</th>
-              <!-- <th class="text-center">Ngày giám định</th> -->
+              <th class="text-center">Ngày giám định</th>
               <th class="text-center">Trạng thái</th>
               <th class="text-center">Hành động</th>
             </tr>
@@ -96,6 +106,7 @@
                 </td>
                 <td class="bold text-blue" (click)="openDialogQD(row1)">{{ row1.soQdPdNk || "" }}</td>
                 <td class="bold">{{ row1.namKh || "" }}</td>
+                <td class="bold">{{row1.thoiHanDieuChuyen}}</td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -104,8 +115,7 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <!-- <td></td>
-                <td></td> -->
+                <td></td>
               </tr>
               <ng-container *ngIf="row1.expand">
                 <ng-container *ngFor="let row2 of row1.children, let y = index">
@@ -115,39 +125,51 @@
                     <td>
                     </td>
                     <td></td>
-                    <td class="bold">{{row2.thoiHanDieuChuyen | date: 'dd/MM/YYYY'}}</td>
+                    <td></td>
                     <td class="bold">{{ row2.tenDiemKho || ""}}</td>
+                    <td class="bold">{{ row2.tenloKho || ""}} - {{ row2.tenNganKho || ""}} - {{ row2.tenNhaKho||""}}
+                    </td>
+                    <td class="bold">{{row2.soPhieuNhapKho || ""}}</td>
                     <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td></td>
-                    <!-- <td></td>
-                    <td></td> -->
+                    <td>
+                      <a (click)="add(row2)">
+                        <i class="icon htvbdh_dau-cong"></i>
+                      </a>
+                    </td>
                   </tr>
                   <ng-container>
                     <ng-container *ngFor="let row3 of row2.children, let y = index">
-                      <tr>
+                      <tr *ngIf="row3.soPhieuNhapKho">
                         <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td class="bold">{{ row3.tenloKho || ""}} - {{ row3.tenNganKho || ""}} - {{ row3.tenNhaKho||""}}
-                        </td>
                         <td></td>
                         <td></td>
-                        <td></td>
-                        <td></td>
+                        <td class="bold">{{row3.soPhieuNhapKho || ""}}</td>
+                        <td class="bold">{{row3.ngayNhapKho|date: "dd/MM/yyyy"}}</td>
+                        <td class="bold">{{row3.soPhieuKiemTraCl || ""}}</td>
+                        <td class="bold">{{row3.ngayGiamDinh|date: "dd/MM/yyyy"}}</td>
+                        <td class="bold">{{row3.tenTrangThai || ""}}</td>
                         <td>
-                          <a (click)="add(row3)">
-                            <i class="icon htvbdh_dau-cong"></i>
+                          <a *ngIf="row3.trangThai !== STATUS.DU_THAO" (click)="redirectDetail(row3.id, true)">
+                            <i class="fa fa-eye" title="Xem chi tiết"></i>
+                          </a>
+                          <a *ngIf="row3.trangThai == STATUS.DU_THAO" (click)="redirectDetail(row3.id, false)">
+                            <i class="fa fa-pencil" title="Sửa"></i>
+                          </a>
+                          <a *ngIf="row3.trangThai == STATUS.DU_THAO" (click)="xoa(row3)">
+                            <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                           </a>
                         </td>
                       </tr>
-                      <ng-container *ngFor="let row4 of row3.children, let y = index">
+                      <!-- <ng-container *ngFor="let row4 of row3.children, let y = index">
                         <tr *ngIf="row4.soPhieuNhapKho">
                           <td></td>
                           <td></td>
@@ -157,8 +179,8 @@
                           <td></td>
                           <td></td>
                           <td class="bold">{{row4.soPhieuNhapKho || ""}}</td>
-                          <!-- <td></td>
-                          <td></td> -->
+                          <td></td>
+                          <td></td>
                           <td class="bold">{{row4.ngayNhapKho|date: "dd/MM/yyyy"}}</td>
                           <td class="bold">{{row4.soPhieuKiemTraCl || ""}}</td>
                           <td class="bold">{{row4.tenTrangThai || ""}}</td>
@@ -174,7 +196,7 @@
                             </a>
                           </td>
                         </tr>
-                      </ng-container>
+                      </ng-container> -->
                     </ng-container>
                   </ng-container>
                 </ng-container>
@@ -207,7 +229,7 @@
   </div>
 
   <div class="chi-tiet" *ngIf="isDetail">
-    <app-thong-tin-phieu-nhap-kho [isView]="isView" [idInput]="selectedId" [loaiVthh]="loaiVthh"
+    <app-thong-tin-phieu-nhap-kho [isView]="isView" [idInput]="selectedId" [loaiVthh]="loaiVthh" [data]="data"
       (showListEvent)="quayLai()"></app-thong-tin-phieu-nhap-kho>
   </div>
 

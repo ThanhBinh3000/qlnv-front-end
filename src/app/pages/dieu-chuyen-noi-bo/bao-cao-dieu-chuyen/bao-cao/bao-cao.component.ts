@@ -5,7 +5,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { StorageService } from 'src/app/services/storage.service';
 import { HttpClient } from '@angular/common/http';
-import { BangCaoDieuChuyenService } from './bao-cao.service';
+import { BaoCaoDieuChuyenService } from './bao-cao.service';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
@@ -25,50 +25,48 @@ export class BaoCaoComponent extends Base2Component implements OnInit {
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
-  LIST_TRANG_THAI: Array<{ ma: string, giaTri: string }> = [
-    { ma: this.STATUS.DU_THAO, giaTri: "Dự thảo" },
-    { ma: this.STATUS.CHO_DUYET_TP, giaTri: "Chờ duyệt - TP" },
-    { ma: this.STATUS.CHO_DUYET_LDC, giaTri: "Chờ duyệt - LĐ Cục" },
-    { ma: this.STATUS.TU_CHOI_TP, giaTri: "Từ chối - TP" },
-    { ma: this.STATUS.DA_DUYET_LDC, giaTri: "Đã duyệt - LĐ Cục" },
-    { ma: this.STATUS.TU_CHOI_LDC, giaTri: "Từ chối - LĐ Cục" },
-  ];
+  LIST_TRANG_THAI: Array<{ ma: string, giaTri: string }> = [];
   TRANG_THAI: { [key: string]: string } = {
     [this.STATUS.DU_THAO]: "Dự thảo",
     [this.STATUS.CHO_DUYET_TP]: "Chờ duyệt - TP",
     [this.STATUS.CHO_DUYET_LDC]: "Chờ duyệt - LĐ Cục",
     [this.STATUS.TU_CHOI_TP]: "Từ chối - TP",
+    [this.STATUS.TU_CHOI_LDC]: "Từ chối - LĐ Cục",
     [this.STATUS.DA_DUYET_LDC]: "Đã duyệt - LĐ Cục",
-    [this.STATUS.TU_CHOI_LDC]: "Từ chối - LĐ Cục"
-  }
+    [this.STATUS.DA_HOAN_THANH]: "Đã hoàn thành",
+  };
+  bbThuaThieuId: number;
+  isViewBbThuaThieu: boolean;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private bangCaoDieuChuyenService: BangCaoDieuChuyenService
+    private baoCaoDieuChuyenService: BaoCaoDieuChuyenService
     // private donviService: DonviService,
     // private danhMucService: DanhMucService,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, bangCaoDieuChuyenService)
+    super(httpClient, storageService, notification, spinner, modal, baoCaoDieuChuyenService)
     this.formData = this.fb.group({
       soBc: [''],
       soQdinhCuc: [''],
+      // soQdDcCuc: [''],
       trangThai: [''],
       tuNgay: [''],
-      denNgay: ['']
+      denNgay: [''],
+      type: ['']
 
     })
     this.filterTable = {
-      namBaoCao: '',
-      soBaoCao: '',
-      tenBaoCao: '',
-      ngayBaoCao: '',
-      soQdinhCuc: '',
-      ngayKyQdCuc: '',
-      soQdinhTongCuc: '',
-      ngayKyQdTongCuc: '',
+      nam: '',
+      soBc: '',
+      tenBc: '',
+      ngayBc: '',
+      ngayKyQd: '',
+      soBb: '',
+      // soQdinhCuc: '',
+      soQdDcCuc: '',
       trangThai: ''
     };
   }
@@ -84,7 +82,7 @@ export class BaoCaoComponent extends Base2Component implements OnInit {
         this.isView = true
       }
       await this.initData()
-      this.timKiem();
+      await this.timKiem();
     } catch (e) {
       console.log('error: ', e)
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -98,13 +96,34 @@ export class BaoCaoComponent extends Base2Component implements OnInit {
     this.userInfo = this.userService.getUserLogin();
     this.userdetail.maDvi = this.userInfo.MA_DVI;
     this.userdetail.tenDvi = this.userInfo.TEN_DVI;
+    this.LIST_TRANG_THAI = this.loaiBc === "CHI_CUC" ?
+      [{ ma: this.STATUS.DU_THAO, giaTri: "Dự thảo" }, { ma: this.STATUS.DA_HOAN_THANH, giaTri: "Đã hoàn thành" },] :
+      [{ ma: this.STATUS.DU_THAO, giaTri: "Dự thảo" }, { ma: this.STATUS.CHO_DUYET_TP, giaTri: "Chờ duyệt - TP" }, { ma: this.STATUS.CHO_DUYET_LDC, giaTri: "Chờ duyệt - LĐ Cục" }, { ma: this.STATUS.TU_CHOI_TP, giaTri: "Từ chối - TP" }, { ma: this.STATUS.TU_CHOI_LDC, giaTri: "Từ chối - LĐ Cục" }, { ma: this.STATUS.DA_DUYET_LDC, giaTri: "Đã duyệt - LĐ Cục" }]
+    this.formData.patchValue({ type: this.loaiBc })
   }
   async clearForm() {
     this.formData.reset();
-    await this.search()
+    this.formData.patchValue({ type: this.loaiBc })
+    await this.timKiem()
   }
   async timKiem() {
-    await this.search();
+    try {
+      const data = this.formData.value;
+      const dataTrim = this.trimStringData(data);
+      this.formData.patchValue({ ...dataTrim })
+      await this.search();
+    } catch (error) {
+      console.log("error", error)
+    }
+  };
+  trimStringData(obj: any) {
+    for (const key in obj) {
+      const value = obj[key];
+      if (typeof value === 'string' || value instanceof String) {
+        obj[key] = value.trim();
+      }
+    };
+    return obj
   }
   disabledTuNgay = (startValue: Date): boolean => {
     if (startValue && this.formData.value.denNgay) {
@@ -140,7 +159,7 @@ export class BaoCaoComponent extends Base2Component implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.bangCaoDieuChuyenService.deleteMuti({ ids: dataDelete });
+            let res = await this.baoCaoDieuChuyenService.deleteMuti({ ids: dataDelete });
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();
@@ -162,23 +181,31 @@ export class BaoCaoComponent extends Base2Component implements OnInit {
     }
   }
   redirectDetail(id: number, isView: boolean) {
-    this.idSelected = id;
+    this.selectedId = id;
     this.isDetail = true;
     this.isView = isView;
+  }
+  openModalBBTT(id: number) {
+    this.bbThuaThieuId = id;
+    this.isViewBbThuaThieu = true;
+  }
+  closeModalBbThuaThieu() {
+    this.bbThuaThieuId = null;
+    this.isViewBbThuaThieu = false;
   }
   checkRoleView(trangThai: string): boolean {
     return !this.checkRoleEdit(trangThai) && !this.checkRoleApproveDc(trangThai) && !this.checkRoleDelete(trangThai)
   }
   checkRoleAdd(): boolean {
-    return this.userService.isCuc()
+    return (this.loaiBc === "CUC" && this.userService.isCuc()) || (this.loaiBc === "CHI_CUC" && this.userService.isChiCuc())
   }
   checkRoleEdit(trangThai: string): boolean {
-    return this.userService.isCuc() && (trangThai === this.STATUS.DU_THAO || trangThai === this.STATUS.TU_CHOI_TP || trangThai === this.STATUS.TU_CHOI_LDC)
+    return ((this.loaiBc === "CUC" && this.userService.isCuc()) || (this.loaiBc === "CHI_CUC" && this.userService.isChiCuc())) && (trangThai === this.STATUS.DU_THAO || trangThai === this.STATUS.TU_CHOI_TP || trangThai === this.STATUS.TU_CHOI_LDC)
   }
   checkRoleApproveDc(trangThai: string): boolean {
-    return this.userService.isCuc() && (trangThai === this.STATUS.CHO_DUYET_TK || trangThai === this.STATUS.CHO_DUYET_LDC)
+    return (this.loaiBc === "CUC" && this.userService.isCuc()) && (trangThai === this.STATUS.CHO_DUYET_TP || trangThai === this.STATUS.CHO_DUYET_LDC)
   }
   checkRoleDelete(trangThai: string): boolean {
-    return this.userService.isCuc() && trangThai === this.STATUS.DU_THAO
+    return ((this.loaiBc === "CUC" && this.userService.isCuc()) || (this.loaiBc === "CHI_CUC" && this.userService.isChiCuc())) && trangThai === this.STATUS.DU_THAO
   }
 }

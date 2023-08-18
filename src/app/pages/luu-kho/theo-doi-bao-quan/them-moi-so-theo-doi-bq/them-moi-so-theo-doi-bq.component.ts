@@ -32,6 +32,7 @@ import {DanhMucService} from "../../../../services/danhmuc.service";
 import {ThemmoiThComponent} from "../../../sua-chua/tong-hop/themmoi-th/themmoi-th.component";
 import {ThemMoiCtietTdbqComponent} from "./them-moi-ctiet-tdbq/them-moi-ctiet-tdbq.component";
 import {TheoDoiBqDtlService} from "../../../../services/luu-kho/theoDoiBqDtl.service";
+import {QuanLyHangTrongKhoService} from "../../../../services/quanLyHangTrongKho.service";
 
 @Component({
   selector: 'app-them-moi-so-theo-doi-bq',
@@ -58,7 +59,8 @@ export class ThemMoiSoTheoDoiBqComponent extends Base3Component implements OnIni
     private theoDoiBqService: TheoDoiBqService,
     private theoDoiBqDtlService: TheoDoiBqDtlService,
     private quanLySoKhoTheKhoService: QuanLySoKhoTheKhoService,
-    private danhMucService : DanhMucService
+    private danhMucService : DanhMucService,
+    private quanLyHangTrongKhoService : QuanLyHangTrongKhoService
   ) {
     super(httpClient, storageService, notification, spinner, modal, route, router, theoDoiBqService);
     this.defaultURL = 'luu-kho/theo-doi-bao-quan'
@@ -95,16 +97,17 @@ export class ThemMoiSoTheoDoiBqComponent extends Base3Component implements OnIni
       ngayNhapTu: [''],
       ngayNhapDen: [''],
       quyCach: [''],
-      thoiHanLuuKho: [''],
-      thoiHanBaoHanh: [''],
+      thoiHanLk: [''],
+      thoiHanBh: [''],
+      ngayHetHanLk: [''],
+      ngayHetHanBh: [''],
       pthucBquan: [''],
       hthucBquan: [''],
       lyDoTuChoi: ['']
     });
-
-    this.formData.controls.cloaiVthh.valueChanges.subscribe(value => {
-        this.loadDataComboBox();
-    });
+    // this.formData.controls.cloaiVthh.valueChanges.subscribe(value => {
+    //     this.loadDataComboBox();
+    // });
   };
 
   async ngOnInit() {
@@ -122,10 +125,8 @@ export class ThemMoiSoTheoDoiBqComponent extends Base3Component implements OnIni
       await this.detail(this.id).then((res) => {
         this.spinner.hide();
         if (res) {
-          this.dataTable = res.children;
+          this.changeMonth(this.monthSelect)
           this.loadDataComboBox();
-          // this.bindingDataQdXuatHang(res.idQdNh);
-          // this.bindingDataPhieuXuatKho(res.idPhieuNhapKho);
         }
       })
     } else {
@@ -145,9 +146,26 @@ export class ThemMoiSoTheoDoiBqComponent extends Base3Component implements OnIni
       if (res.msg == MESSAGE.SUCCESS) {
         this.listPhuongThucBaoQuan = res.data?.phuongPhapBq
         this.listHinhThucBaoQuan = res.data?.hinhThucBq
+        this.formData.patchValue({
+          thoiHanLk : res.data.thoiHanLk,
+          thoiHanBh : res.data.thoiHanBh
+        })
+      }
+    }else{
+      if (this.formData.value.loaiVthh) {
+        let res = await this.danhMucService.getDetail(this.formData.value.loaiVthh);
+        if (res.msg == MESSAGE.SUCCESS) {
+          this.listPhuongThucBaoQuan = res.data?.phuongPhapBq
+          this.listHinhThucBaoQuan = res.data?.hinhThucBq
+        }
+        this.formData.patchValue({
+          thoiHanLk : res.data.thoiHanLk,
+          thoiHanBh : res.data.thoiHanBh
+        })
       }
     }
   }
+
 
   openDialogDanhSach() {
     if (this.disabled()) {
@@ -183,97 +201,57 @@ export class ThemMoiSoTheoDoiBqComponent extends Base3Component implements OnIni
     })
   }
 
-  bindingDataSoKho(id) {
+  async bindingDataSoKho(id) {
     this.spinner.show();
-    this.quanLySoKhoTheKhoService.getDetail(id).then((res) => {
+    await this.quanLySoKhoTheKhoService.getDetail(id).then(async (res) => {
       if (res.data) {
         const data = res.data
-        console.log(data)
         this.formData.patchValue({
           soKho: data.ten,
           idSoKho: data.id,
           ngayLapSoKho: data.ngayTao,
-          maDiemKho : data.maDiemKho,
-          tenDiemKho : data.tenDiemKho,
-          maNhaKho : data.maNhaKho,
-          tenNhaKho : data.tenNhaKho,
-          maNganKho : data.maNganKho,
-          tenNganKho : data.tenNganKho,
-          maLoKho : data.maLoKho,
-          tenLoKho : data.tenLoKho,
-          loaiVthh : data.loaiVthh,
-          tenLoaiVthh : data.tenLoaiVthh,
-          cloaiVthh : data.cloaiVthh,
-          tenCloaiVthh : data.tenCloaiVthh,
-          tenHangHoa : data.tenHangHoa,
-          soLuong : data.soLuong,
-          dviTinh : data.donViTinh
+          maDiemKho: data.maDiemKho,
+          tenDiemKho: data.tenDiemKho,
+          maNhaKho: data.maNhaKho,
+          tenNhaKho: data.tenNhaKho,
+          maNganKho: data.maNganKho,
+          tenNganKho: data.tenNganKho,
+          maLoKho: data.maLoKho,
+          tenLoKho: data.tenLoKho,
+          loaiVthh: data.loaiVthh,
+          tenLoaiVthh: data.tenLoaiVthh,
+          cloaiVthh: data.cloaiVthh,
+          tenCloaiVthh: data.tenCloaiVthh,
+          tenHangHoa: data.tenHangHoa,
+          soLuong: data.slTon,
+          dviTinh: data.donViTinh
         })
+        await this.loadDataComboBox();
+        this.loadThongTinKho(data.maLoKho ? data.maLoKho : data.maNganKho);
       }
-      this.loadDataComboBox();
       this.spinner.hide();
     });
   }
 
-  openDialogPhieuXuatKho() {
-    if (!this.formData.value.idQdNh) {
-      this.notification.error(MESSAGE.ERROR, "Vui lòng chọn số quyết định giao nhiệm vụ nhập hàng");
-      return;
-    }
-    if (this.disabled()) {
-      return;
-    }
-    this.spinner.show();
-    // this.phieuNhapKhoScService.getDanhSachTaoBangKe({idQdNh: this.formData.value.idQdNh}).then((res) => {
-    //   this.spinner.hide();
-    //   if (res.data) {
-    //     const modalQD = this.modal.create({
-    //       nzTitle: 'Danh sách phiếu nhập kho',
-    //       nzContent: DialogTableSelectionComponent,
-    //       nzMaskClosable: false,
-    //       nzClosable: false,
-    //       nzWidth: '900px',
-    //       nzFooter: null,
-    //       nzComponentParams: {
-    //         dataTable: res.data,
-    //         dataHeader: ['Số phiếu nhập kho', 'Ghi chú'],
-    //         dataColumn: ['soPhieuNhapKho', 'ghiChu']
-    //       },
-    //     });
-    //     modalQD.afterClose.subscribe(async (data) => {
-    //       if (data) {
-    //         this.bindingDataPhieuXuatKho(data.id)
-    //       }
-    //     });
-    //   }
-    // })
-  }
 
-  bindingDataPhieuXuatKho(idPhieuNhapKho) {
-    this.spinner.show();
-    // this.phieuNhapKhoScService.getDetail(idPhieuNhapKho).then((res) => {
-    //   const data = res.data;
-    //   this.formData.patchValue({
-    //     soPhieuNhapKho: data.soPhieuNhapKho,
-    //     idPhieuNhapKho: data.id,
-    //     ngayNhapKho: data.ngayNhapKho,
-    //     tenDiemKho: data.tenDiemKho,
-    //     tenNhaKho: data.tenNhaKho,
-    //     tenNganKho: data.tenNganKho,
-    //     tenLoKho: data.tenLoKho,
-    //     diaDiemKho: data.diaDiemKho,
-    //     tenLoaiVthh: data.tenLoaiVthh,
-    //     tenCloaiVthh: data.tenCloaiVthh,
-    //     nguoiGiaoHang: data.nguoiGiaoHang,
-    //     soCmt: data.soCmt,
-    //     dviNguoiGiaoHang: data.dviNguoiGiaoHang,
-    //     diaChi: data.diaChi,
-    //     thoiGianGiaoNhan: data.thoiGianGiaoNhan,
-    //     donViTinh: data.donViTinh,
-    //     ngayXuatKho: data.ngayXuatKho
-    //   })
-    //   this.spinner.hide();
-    // });
+  async loadThongTinKho(maDiaDiem){
+    this.quanLyHangTrongKhoService.getTrangThaiHt({maDvi : maDiaDiem}).then((res)=>{
+      console.log(res)
+      if(res.data && res.data.length > 0){
+        const data = res.data[0];
+        let date = new Date(data.ngayNhapDayKho);
+        let date2 = new Date(data.ngayNhapDayKho);
+        const dateHetHanLk = new Date(date.setMonth(date.getMonth()+this.formData.value.thoiHanLk));
+        const dateHetHanBh = new Date(date2.setMonth(date2.getMonth()+this.formData.value.thoiHanBh));
+        this.formData.patchValue({
+          ngayNhapDayKho : data.ngayNhapDayKho,
+          ngayNhapTu : data.thoiGianNhapDayTu,
+          ngayNhapDen : data.thoiGianNhapDayDen,
+          ngayHetHanLk : dateHetHanLk,
+          ngayHetHanBh : dateHetHanBh
+        })
+      }
+    })
   }
 
   showSave() {
@@ -379,6 +357,11 @@ export class ThemMoiSoTheoDoiBqComponent extends Base3Component implements OnIni
 
   editRow(item){
     if(item){
+      const date1 = new Date();
+      const date2 = new Date(this.formData.value.ngayHetHanBh);
+      // @ts-ignore
+      const timeDiffInMilliseconds = Math.abs(date2 - date1);
+      const daysDiff = Math.ceil(timeDiffInMilliseconds / (1000 * 60 * 60 * 24));
       const modalGT = this.modal.create({
         nzTitle: 'Thông tin chi tiết',
         nzContent: ThemMoiCtietTdbqComponent,
@@ -391,7 +374,8 @@ export class ThemMoiSoTheoDoiBqComponent extends Base3Component implements OnIni
           isXacNhan : item.vaiTro == 'LDCHICUC' || item.vaiTro == 'LDCUC',
           dataTk : item.dataTk,
           dataKtv : item.dataKtv,
-          dataLdcc : item.dataLdcc
+          dataLdcc : item.dataLdcc,
+          thoiGianConLaiBh : daysDiff,
         },
       })
       modalGT.afterClose.subscribe((data)=>{
@@ -406,7 +390,8 @@ export class ThemMoiSoTheoDoiBqComponent extends Base3Component implements OnIni
       this.spinner.show();
       let body = {
         idHdr : this.id,
-        monthSearch : event
+        monthSearch : event,
+        detail : true
       }
       this.theoDoiBqDtlService.search(body).then((res)=>{
         this.spinner.hide();
@@ -431,7 +416,11 @@ export class ThemMoiSoTheoDoiBqComponent extends Base3Component implements OnIni
       dataKtv = this.dataTable.filter(item => item.vaiTro == 'CBKTVBQ').sort((a,b)=>a.ngayKtra-b.ngayKtra);
       dataLdcc = this.dataTable.filter(item => item.vaiTro == 'LDCHICUC').sort((a,b)=>a.ngayKtra-b.ngayKtra);
     }
-
+    const date1 = new Date();
+    const date2 = new Date(this.formData.value.ngayHetHanBh);
+    // @ts-ignore
+    const timeDiffInMilliseconds = Math.abs(date2 - date1);
+    const daysDiff = Math.ceil(timeDiffInMilliseconds / (1000 * 60 * 60 * 24));
     const modalGT = this.modal.create({
       nzTitle: 'Thông tin chi tiết',
       nzContent: ThemMoiCtietTdbqComponent,
@@ -444,7 +433,8 @@ export class ThemMoiSoTheoDoiBqComponent extends Base3Component implements OnIni
         isXacNhan : isXacNhan,
         dataTk : dataTk?.length > 0 ? dataTk[0] : null,
         dataKtv : dataKtv?.length > 0 ? dataKtv[0] : null,
-        dataLdcc : dataLdcc?.length > 0 ? dataLdcc[0] : null
+        dataLdcc : dataLdcc?.length > 0 ? dataLdcc[0] : null,
+        thoiGianConLaiBh : daysDiff
       },
     });
     modalGT.afterClose.subscribe((data)=>{

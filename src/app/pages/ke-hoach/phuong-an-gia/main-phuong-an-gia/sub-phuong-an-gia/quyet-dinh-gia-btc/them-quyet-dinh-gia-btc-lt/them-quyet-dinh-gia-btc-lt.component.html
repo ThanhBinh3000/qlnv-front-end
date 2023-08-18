@@ -213,8 +213,15 @@
         <td></td>
         <td></td>
         <td></td>
-        <td></td>
-        <td></td>
+        <td>
+          <nz-input-number [nzDisabled]="isView" [nzSize]="'small'" [(ngModel)]="data.giaQdBtc" *ngIf="data.apDungTatCa"
+                           [nzFormatter]="globals.formatter"
+                           [nzParser]="globals.parser">
+          </nz-input-number>
+        </td>
+        <td class="text-right">
+          {{ data.vat ? (data.giaQdBtc * data.vat + data.giaQdBtc | number : '1.0-1' : 'vi_VN') : ''}}
+        </td>
         <td *ngIf="!(formData.value.loaiDeXuat == '00')"></td>
         <td *ngIf="!(formData.value.loaiDeXuat == '00')"></td>
       </tr>
@@ -238,15 +245,16 @@
             <td class="text-right"
                 *ngIf="!(formData.value.loaiGia == 'LG01' )"></td>
             <td class="text-right">
-              {{item.giaQdTcdtnn | number : '1.0-1' : 'vi_VN' }}
+              {{item.giaQdTcdt | number : '1.0-1' : 'vi_VN' }}
             </td>
             <td class="text-right" *ngIf="(formData.value.loaiGia == 'LG01' )">
-              {{ item.giaQdVatTcdtnn | number : '1.0-1' : 'vi_VN'}}
+              {{ item.giaQdTcdtVat | number : '1.0-1' : 'vi_VN'}}
             </td>
             <td class="text-right"
                 *ngIf="!(formData.value.loaiGia == 'LG01' )"></td>
             <td class="text-right" *ngIf="(formData.value.loaiDeXuat == '00')">
-              <nz-input-number [nzDisabled]="isView" [nzSize]="'small'" [(ngModel)]="item.giaQdBtc" [nzMin]="0"
+              <nz-input-number [nzDisabled]="isView || item.apDungTatCa" [nzSize]="'small'" [(ngModel)]="item.apDungTatCa ? data.giaQdBtc : item.giaQdBtc"
+                               [nzMin]="0"
                                [nzFormatter]="globals.formatter"
                                [nzParser]="globals.parser">
               </nz-input-number>
@@ -255,8 +263,7 @@
                 *ngIf="!(formData.value.loaiDeXuat == '00')">{{item.giaQdBtc | number : '1.0-1' : 'vi_VN'}}</td>
             <td class="text-right"
                 *ngIf="(formData.value.loaiGia == 'LG01' )">
-              {{ item.vat ? (item.giaQdBtc * item.vat + item.giaQdBtc | number : '1.0-1' : 'vi_VN') : ''}}
-
+              {{ !item.apDungTatCa ? (item.giaQdBtc * item.vat + item.giaQdBtc | number : '1.0-1' : 'vi_VN') : (data.giaQdBtc * item.vat + data.giaQdBtc | number : '1.0-1' : 'vi_VN') }}
             </td>
             <td class="text-right"
                 *ngIf="!(formData.value.loaiGia == 'LG01' ) && (formData.value.loaiDeXuat == '00')"></td>

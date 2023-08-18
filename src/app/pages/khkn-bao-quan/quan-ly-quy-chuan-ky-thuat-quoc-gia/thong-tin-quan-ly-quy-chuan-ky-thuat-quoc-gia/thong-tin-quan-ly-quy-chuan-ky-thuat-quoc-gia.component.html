@@ -6,7 +6,8 @@
           <span [ngClass]="formData.value.trangThai == STATUS.BAN_HANH?  'status-xanh' : 'status-do'">
             {{ formData.value.tenTrangThai }}
           </span>
-          <span class="title-form">{{userInfo.MA_DVI.startsWith("01") ? 'Quy chuẩn, tiêu chuẩn quốc gia đối với hàng DTQG tại TCDT' : 'Quy chuẩn, tiêu chuẩn quốc gia đối với hàng DTQG tại Bộ/Ngành' }}</span>
+          <span
+            class="title-form">{{userInfo.MA_DVI.startsWith("01") ? 'Quy chuẩn, tiêu chuẩn quốc gia đối với hàng DTQG tại TCDT' : 'Quy chuẩn, tiêu chuẩn quốc gia đối với hàng DTQG tại Bộ/Ngành' }}</span>
         </div>
       </div>
       <div class="btn-group">
@@ -45,7 +46,20 @@
     <form nzLayout="vertical" nz-form [formGroup]="formData" class="mt-16">
       <nz-card class="flex-card p-lr16">
         <div nz-row [nzGutter]="24">
-          <nz-col nzSpan="6">
+          <nz-col nzSpan="4">
+            <nz-form-item>
+              <nz-form-label nzRequired [nzNoColon]="true">
+                Bộ ngành
+              </nz-form-label>
+              <nz-form-control [nzErrorTip]="error">
+                <nz-select [nzDisabled]="isView || isDisableByBoNganh()" nzAllowClear nzShowSearch formControlName="maBn" >
+                  <nz-option nzValue="{{item.key}}" nzLabel="{{item.tenDvi}}" *ngFor="let item of dsBoNganh">
+                  </nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </nz-col>
+          <nz-col nzSpan="3">
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true">
                 Số văn bản
@@ -57,7 +71,17 @@
               </nz-form-control>
             </nz-form-item>
           </nz-col>
-          <div nz-col nzSpan="5">
+          <nz-col nzSpan="2">
+            <nz-form-item>
+              <nz-form-label [nzNoColon]="true">
+                Là tài liệu mật
+              </nz-form-label>
+              <nz-form-control class="mt-2px">
+                <input type="checkbox" formControlName="isMat" [disabled]="isView">
+              </nz-form-control>
+            </nz-form-item>
+          </nz-col>
+          <div nz-col nzSpan="3">
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true">
                 Ngày ban hành
@@ -69,8 +93,7 @@
               </nz-form-control>
             </nz-form-item>
           </div>
-
-          <div nz-col nzSpan="4">
+          <div nz-col nzSpan="3">
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true">
                 Ngày hiệu lực
@@ -82,7 +105,7 @@
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col nzSpan="4">
+          <div nz-col nzSpan="3">
             <nz-form-item>
               <nz-form-label [nzNoColon]="true">
                 Ngày hết hiệu lực
@@ -94,18 +117,16 @@
               </nz-form-control>
             </nz-form-item>
           </div>
-
-          <div nz-col nzSpan="5">
+          <div nz-col nzSpan="6">
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true">
                 Số hiệu quy chuẩn, tiêu chuẩn chất lượng
               </nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <input nz-input [readonly]="isView" placeholder="Số hiệu quy chuẩn" formControlName="soHieuQuyChuan" />
+                <input nz-input [readonly]="isView" placeholder="Số hiệu quy chuẩn" formControlName="soHieuQuyChuan"/>
               </nz-form-control>
             </nz-form-item>
           </div>
-
           <div nz-col nzSpan="24">
             <nz-form-item>
               <nz-form-label [nzNoColon]="true">
@@ -118,9 +139,6 @@
               </nz-select>
             </nz-form-item>
           </div>
-
-          <div nz-col nzSpan="20"></div>
-
           <div nz-col nzSpan="24">
             <nz-form-item>
               <nz-form-label [nzNoColon]="true">
@@ -142,7 +160,7 @@
                 Trích yếu
               </nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <input nz-input [readonly]="isView" formControlName="trichYeu" placeholder="Trích yếu" />
+                <input nz-input [readonly]="isView" formControlName="trichYeu" placeholder="Trích yếu"/>
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -153,7 +171,7 @@
                 Thời gian lưu kho tối đa (tháng)
               </nz-form-label>
               <input nz-input [readonly]="isView" formControlName="thoiGianLuuKhoToiDa"
-                     placeholder="Thời gian lưu kho tối đa" />
+                     placeholder="Thời gian lưu kho tối đa"/>
             </nz-form-item>
           </div>
           <div nz-col nzSpan="5">
@@ -197,12 +215,12 @@
             </nz-radio-group>
           </div>
         </form>
-        <nz-table #basicTable class="nowrap mt-16 flex-card p-lr16" [nzData]="dataTable" [nzFrontPagination]="false"
+        <nz-table #basicTable class="mt-16 flex-card p-lr16" [nzData]="dataTable" [nzFrontPagination]="false"
                   [nzShowPagination]="false">
           <thead>
           <tr>
             <th nzWidth="20px">STT</th>
-            <th>Tên tiêu chuẩn</th>
+            <th>Chỉ tiêu chất lượng</th>
             <th *ngIf="formData.value.apDungCloaiVthh == false">Chủng loại hàng hóa</th>
             <th>TT hiển thị</th>
             <th>Mức yêu cầu nhập</th>
@@ -212,25 +230,26 @@
             <th>Mức yêu cầu xuất tối thiểu</th>
             <th>Mức yêu cầu xuất tối đa</th>
             <th>Phương pháp xác định</th>
+            <th>Ghi chú</th>
             <th nzWidth="50px"
                 *ngIf="formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV">
               Hành động
             </th>
           </tr>
-
           </thead>
           <tbody>
           <tr>
             <td></td>
             <td>
               <nz-input-group>
-                <input nz-input [(ngModel)]="rowItem.tenChiTieu" [ngModelOptions]="{standalone: true}" />
+                <input nz-input [(ngModel)]="rowItem.tenChiTieu" [ngModelOptions]="{standalone: true}"/>
               </nz-input-group>
             </td>
             <td *ngIf="formData.value.apDungCloaiVthh == false">
               <nz-input-group>
                 <nz-select nzShowSearch nzAllowClear [(ngModel)]="rowItem.cloaiVthh"
-                           (ngModelChange)="changeListOfTagOptions($event, false)" [ngModelOptions]="{standalone: true}">
+                           (ngModelChange)="changeListOfTagOptions($event, false)"
+                           [ngModelOptions]="{standalone: true}">
                   <nz-option *ngFor="let option of listCloaiVthh" [nzLabel]="option.title" [nzValue]="option.key">
                   </nz-option>
                 </nz-select>
@@ -244,37 +263,42 @@
             </td>
             <td>
               <nz-input-group>
-                <input nz-input [(ngModel)]="rowItem.mucYeuCauNhap" [ngModelOptions]="{standalone: true}" />
+                <input nz-input [(ngModel)]="rowItem.mucYeuCauNhap" [ngModelOptions]="{standalone: true}"/>
               </nz-input-group>
             </td>
             <td>
               <nz-input-group>
-                <input nz-input [(ngModel)]="rowItem.mucYeuCauNhapToiThieu" [ngModelOptions]="{standalone: true}" />
+                <input nz-input [(ngModel)]="rowItem.mucYeuCauNhapToiThieu" [ngModelOptions]="{standalone: true}"/>
               </nz-input-group>
             </td>
             <td>
               <nz-input-group>
-                <input nz-input [(ngModel)]="rowItem.mucYeuCauNhapToiDa" [ngModelOptions]="{standalone: true}" />
+                <input nz-input [(ngModel)]="rowItem.mucYeuCauNhapToiDa" [ngModelOptions]="{standalone: true}"/>
               </nz-input-group>
             </td>
             <td>
               <nz-input-group>
-                <input nz-input [(ngModel)]="rowItem.mucYeuCauXuat" [ngModelOptions]="{standalone: true}" />
+                <input nz-input [(ngModel)]="rowItem.mucYeuCauXuat" [ngModelOptions]="{standalone: true}"/>
               </nz-input-group>
             </td>
             <td>
               <nz-input-group>
-                <input nz-input [(ngModel)]="rowItem.mucYeuCauXuatToiThieu" [ngModelOptions]="{standalone: true}" />
+                <input nz-input [(ngModel)]="rowItem.mucYeuCauXuatToiThieu" [ngModelOptions]="{standalone: true}"/>
               </nz-input-group>
             </td>
             <td>
               <nz-input-group>
-                <input nz-input [(ngModel)]="rowItem.mucYeuCauXuatToiDa" [ngModelOptions]="{standalone: true}" />
+                <input nz-input [(ngModel)]="rowItem.mucYeuCauXuatToiDa" [ngModelOptions]="{standalone: true}"/>
               </nz-input-group>
             </td>
             <td>
               <nz-input-group>
-                <input nz-input [(ngModel)]="rowItem.phuongPhapXd" [ngModelOptions]="{standalone: true}" />
+                <input nz-input [(ngModel)]="rowItem.phuongPhapXd" [ngModelOptions]="{standalone: true}"/>
+              </nz-input-group>
+            </td>
+            <td>
+              <nz-input-group>
+                <input nz-input [(ngModel)]="rowItem.ghiChu" [ngModelOptions]="{standalone: true}"/>
               </nz-input-group>
             </td>
             <td *ngIf="formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV">
@@ -307,6 +331,7 @@
               <td>{{ data.mucYeuCauXuatToiThieu }}</td>
               <td>{{ data.mucYeuCauXuatToiDa }}</td>
               <td>{{ data.phuongPhapXd }}</td>
+              <td>{{ data.ghiChu }}</td>
               <td
                 *ngIf="formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV">
                 <a [ngClass]="{'disabled': isView}" (click)="editItem(idx)">
@@ -321,7 +346,7 @@
               <td></td>
               <td>
                 <nz-input-group>
-                  <input nz-input [(ngModel)]="dataEdit[idx].data.tenChiTieu" [ngModelOptions]="{standalone: true}" />
+                  <input nz-input [(ngModel)]="dataEdit[idx].data.tenChiTieu" [ngModelOptions]="{standalone: true}"/>
                 </nz-input-group>
               </td>
               <!-- <td style="text-align:center">
@@ -348,43 +373,49 @@
               <td>
                 <nz-input-group>
                   <input nz-input [(ngModel)]="dataEdit[idx].data.mucYeuCauNhap"
-                         [ngModelOptions]="{standalone: true}" />
+                         [ngModelOptions]="{standalone: true}"/>
                 </nz-input-group>
               </td>
               <td>
                 <nz-input-group>
                   <input nz-input [(ngModel)]="dataEdit[idx].data.mucYeuCauNhapToiThieu"
-                         [ngModelOptions]="{standalone: true}" />
+                         [ngModelOptions]="{standalone: true}"/>
                 </nz-input-group>
               </td>
               <td>
                 <nz-input-group>
                   <input nz-input [(ngModel)]="dataEdit[idx].data.mucYeuCauNhapToiDa"
-                         [ngModelOptions]="{standalone: true}" />
+                         [ngModelOptions]="{standalone: true}"/>
                 </nz-input-group>
               </td>
               <td>
                 <nz-input-group>
                   <input nz-input [(ngModel)]="dataEdit[idx].data.mucYeuCauXuat"
-                         [ngModelOptions]="{standalone: true}" />
+                         [ngModelOptions]="{standalone: true}"/>
                 </nz-input-group>
               </td>
               <td>
                 <nz-input-group>
                   <input nz-input [(ngModel)]="dataEdit[idx].data.mucYeuCauXuatToiThieu"
-                         [ngModelOptions]="{standalone: true}" />
+                         [ngModelOptions]="{standalone: true}"/>
                 </nz-input-group>
               </td>
               <td>
                 <nz-input-group>
                   <input nz-input [(ngModel)]="dataEdit[idx].data.mucYeuCauXuatToiDa"
-                         [ngModelOptions]="{standalone: true}" />
+                         [ngModelOptions]="{standalone: true}"/>
                 </nz-input-group>
               </td>
               <td>
                 <nz-input-group>
                   <input nz-input [(ngModel)]="dataEdit[idx].data.phuongPhapXd"
-                         [ngModelOptions]="{standalone: true}" />
+                         [ngModelOptions]="{standalone: true}"/>
+                </nz-input-group>
+              </td>
+              <td>
+                <nz-input-group>
+                  <input nz-input [(ngModel)]="dataEdit[idx].data.ghiChu"
+                         [ngModelOptions]="{standalone: true}"/>
                 </nz-input-group>
               </td>
               <td class="text-center">

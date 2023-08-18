@@ -5,11 +5,11 @@
       <span>Quay lại</span>
     </button>
     <ng-container>
-      <button
-        type="button" class="btn btn-sub do" (click)="preview()">
-        <i class="icon htvbdh_tcdt_tuchoi"></i>
-        <span>Xem trước</span>
-      </button>
+<!--      <button-->
+<!--        type="button" class="btn btn-sub do" (click)="preview()">-->
+<!--        <i class="icon htvbdh_tcdt_tuchoi"></i>-->
+<!--        <span>Xem trước</span>-->
+<!--      </button>-->
       <button
         *ngIf="loaiVthhInput === '02' ? userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_VT_DEXUAT_DUYET_LDVU') && formData.value.trangThai == STATUS.CHO_DUYET_LDV :
         ( userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_LT_DEXUAT_DUYET_TP') && formData.value.trangThai == STATUS.CHO_DUYET_TP
@@ -347,11 +347,26 @@
         </div>
         <div nz-col [nzSpan]="6">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Thời gian bắt đầu tổ chức LCNT (Thời gian phát hành E-HSMT) </nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true"> Thời gian bắt đầu tổ chức LCNT (Thời gian bắt đầu phát
+              hành
+              E-HSMT)
+            </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-date-picker formControlName="tgianBdauTchuc" nzFormat="dd/MM/yyyy"
-                [nzDisabled]="(formData.value.trangThai !== globals.prop.NHAP_DU_THAO && formData.value.trangThai !== globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai !== '') || isView">
-              </nz-date-picker>
+              <div nz-row [nzGutter]="24">
+                <div nz-col nzSpan="12">
+                  <nz-select formControlName="quy" nzAllowClear (ngModelChange)="onChangeQuy()"
+                             [nzDisabled]="(formData.value.trangThai != globals.prop.NHAP_DU_THAO && formData.value.trangThai != globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai != '') || isView">
+                    <nz-option *ngFor="let p of listQuy" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+                    </nz-option>
+                  </nz-select>
+                </div>
+                <div nz-col nzSpan="12">
+                  <nz-date-picker formControlName="tgianBdauTchuc" nzFormat="dd/MM/yyyy"
+                                  [nzDisabledDate]="disabledDate" nzAllowClear
+                                  [nzDisabled]="(formData.value.trangThai != globals.prop.NHAP_DU_THAO && formData.value.trangThai != globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai != '') || isView">
+                  </nz-date-picker>
+                </div>
+              </div>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -411,7 +426,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="6">
+        <div nz-col [nzSpan]="3">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> % bảo lãnh dự thầu </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
@@ -419,6 +434,28 @@
                 <nz-input-number formControlName="gtriDthau" nz-input [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
                   [nzStep]="1" [nzSize]="'small'"
                   [nzDisabled]="(formData.value.trangThai !== globals.prop.NHAP_DU_THAO && formData.value.trangThai !== globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai !== '') || isView">
+                </nz-input-number>
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="1">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"> </nz-form-label>
+            <nz-form-control class="text-center">
+              <i class="icon htvbdh_tcdt_lien-ket icon-lien-ket"></i>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="2">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"></nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-input-group nzAddOnAfter="đ">
+                <nz-input-number [ngModel]="formData.value.tongMucDtDx * (formData.value.gtriDthau / 100) "
+                                 [ngModelOptions]="{standalone: true}" nz-input [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
+                                 [nzStep]="1" [nzSize]="'small'" nzDisabled [nzFormatter]="globals.formatter"
+                                 [nzParser]="globals.parser">
                 </nz-input-number>
               </nz-input-group>
             </nz-form-control>
@@ -451,7 +488,7 @@
             <nz-form-label [nzNoColon]="true"></nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfter="đ">
-                <nz-input-number [ngModel]="formData.value.tongMucDtDx * formData.value.gtriHdong / 100 "
+                <nz-input-number [ngModel]="formData.value.tongMucDtDx * (formData.value.gtriHdong / 100) "
                   [ngModelOptions]="{standalone: true}" nz-input [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
                   [nzStep]="1" [nzSize]="'small'" nzDisabled [nzFormatter]="globals.formatter"
                   [nzParser]="globals.parser">
@@ -467,7 +504,7 @@
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfter="đ">
                 <nz-input-number
-                  [ngModel]="((formData.value.tongMucDtDx * formData.value.gtriHdong / 100) +(formData.value.tongMucDtDx * formData.value.gtriDthau/ 100)) * 1000000000  "
+                  [ngModel]="((formData.value.tongMucDtDx * formData.value.gtriHdong / 100) +(formData.value.tongMucDtDx * formData.value.gtriDthau/ 100)) "
                   [ngModelOptions]="{standalone: true}" nz-input [nzSize]="'small'" nzDisabled
                   [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
                 </nz-input-number>
@@ -503,7 +540,7 @@
             <nz-form-label nzRequired [nzNoColon]="true"> Tổng mức đầu tư theo đơn giá đã duyệt (tỷ đồng)
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <span class="blue-text">{{formData.value.tongMucDt | number : '1.0-9999' : 'vi_VN'}}</span>
+              <span class="blue-text">{{formData.value.tongMucDtLamTron | number : '1.0-9999' : 'vi_VN'}}</span>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -511,14 +548,8 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Tổng mức đầu tư đề xuất (tỷ đồng) </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <span class="blue-text">{{formData.value.tongMucDtDx | number : '1.0-9999' : 'vi_VN'}}</span>
+              <span class="blue-text">{{formData.value.tongMucDtDxLamTron | number : '1.0-9999' : 'vi_VN'}}</span>
             </nz-form-control>
-          </nz-form-item>
-        </div>
-        <div nz-col [nzSpan]="24" *ngIf="userService.isTongCuc()">
-          <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> Địa điểm quy mô dự án </nz-form-label>
-            <textarea [readonly]="isView" rows="3" nz-input formControlName="dienGiai"></textarea>
           </nz-form-item>
         </div>
       </div>
@@ -536,20 +567,19 @@
         </div>
       </div>
       <div class="buttons" *ngIf="!isView">
-        <button type="button" class="btn btn-main" *ngIf="!isDisbleForm()" (click)="themMoiGoiThau()">
+        <button type="button" class="btn btn-main" *ngIf="!isDisbleForm()" (click)="themMoiCuc()">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
         </button>
       </div>
     </div>
     <!-- START TABLE LƯƠNG THỰC -->
-    <nz-table *ngIf="!formData.value.loaiVthh?.startsWith('02')" [nzData]="listDataGroup" class="nowrap pd-10"
-      nzBordered>
+    <nz-table class="nowrap pd-10" nzBordered>
       <thead>
         <tr>
           <th style="width: 2%;">STT</th>
-          <th>Chi cục</th>
           <th>Tên gói thầu</th>
+          <th>Chi cục</th>
           <th>Điểm kho</th>
           <th>Địa điểm nhập kho</th>
           <th>Chỉ tiêu kế hoạch đuợc giao<br/>(Tấn)</th>
@@ -559,231 +589,97 @@
           <th>Thành tiền tạm tính theo giá đề xuất (đ)</th>
           <th>Đơn giá được duyệt có VAT (đ/kg)</th>
           <th>Thành tiền theo đơn giá được duyệt có VAT (đ)</th>
-          <th>Tiền bảo lãnh dự thầu (đ)</th>
           <th style="width: 5%;" *ngIf="userService.isCuc() && !isView">Hành động</th>
         </tr>
       </thead>
       <tbody>
-        <ng-container *ngFor="let item of listDataGroup , let i = index">
-          <tr>
-            <td [nzExpand]="true" (nzExpandChange)="onExpandChange(i, $event)"></td>
-            <td colspan="4">{{item.tenDvi}}</td>
-            <td class="text-right red-text">{{item.soLuongTheoChiTieu| number : '1.0-1' : 'vi_VN'}}</td>
-            <td class="text-right red-text">{{item.soLuongDaMua| number : '1.0-1' : 'vi_VN'}}</td>
-            <td class="text-right blue-text bold-700">{{ item.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
-            <td></td>
-            <td class="text-right bold-700">{{ item.soLuong * item.dataChild[0].donGiaTamTinh *1000| number :
-              '1.0-1' : 'vi_VN' }}</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td *ngIf="userService.isCuc() && !isView"></td>
-          </tr>
-          <ng-container *ngFor="let dtGoiThau of item.dataChild, let y = index">
-            <tr>
-              <td></td>
-              <td></td>
-              <td>{{dtGoiThau.goiThau}}</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td class="text-right" *ngIf="userService.isCuc() && !isView">
-                <a *ngIf="!isDisbleForm()" (click)="themMoiCuc(dtGoiThau.goiThau)">
-                  <i class="fa fa-pencil" title="Sửa"></i>
-                </a>
-                <a *ngIf="!isDisbleForm()" (click)="deleteRowLt(dtGoiThau.idx, dtGoiThau.goiThau)">
-                  <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
-                </a>
-              </td>
-            </tr>
-            <ng-container *ngFor="let diemKho of item.dataChild[y].children, let z = index">
-              <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td>{{diemKho.tenDvi}}</td>
-                <td>{{diemKho.diaDiemNhap}}</td>
-                <td></td>
-                <td></td>
-                <td class="text-right blue-text">{{diemKho.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                <td class="text-right">{{dtGoiThau.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>
-                <td class="text-right">{{diemKho.soLuong * dtGoiThau.donGiaTamTinh * 1000 | number : '1.0-1' : 'vi_VN'}}</td>
-                <td class="text-right">{{dtGoiThau.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
-                <td class="text-right">{{diemKho.soLuong * dtGoiThau.donGiaVat * 1000 | number: '1.0-1' : 'vi_VN'}}</td>
-                <td class="text-right">{{diemKho.soLuong * dtGoiThau.donGiaTamTinh *1000 * formData.value.gtriDthau / 100 | number: '1.0-1' : 'vi_VN'}}</td>
-                <td class="text-right" *ngIf="userService.isCuc() && !isView">
-                  <a *ngIf="!isDisbleForm()" (click)="themMoiCuc(dtGoiThau.goiThau)">
-                    <i class="fa fa-pencil" title="Sửa"></i>
-                  </a>
-                  <a *ngIf="!isDisbleForm()" (click)="deleteRowLt(dtGoiThau.idx, dtGoiThau.goiThau, z)">
-                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
-                  </a>
-                </td>
-              </tr>
-            </ng-container>
-          </ng-container>
-        </ng-container>
-      </tbody>
-      <tr *ngIf="listDataGroup.length > 0">
-        <td></td>
-        <td></td>
-        <td></td>
-        <td class="first-last-row-table background-last-row text-right blue-text">TỔNG</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td class="background-last-row text-right blue-text">{{ calcTongSl() | number : '1.0-1' : 'vi_VN' }}</td>
-        <td></td>
-        <td class="background-last-row text-right blue-text">{{ calcTongThanhTien() | number : '1.0-1' : 'vi_VN' }}</td>
-        <td></td>
-        <td>
-        <td class="background-last-row text-right blue-text">{{ calcTongThanhTienBaoLanh() | number : '1.0-1' : 'vi_VN'
-          }}</td>
-      </tr>
-    </nz-table>
-    <!-- END TABLE LƯƠNG THỰC  -->
-
-    <!-- START TABLE VẬT TƯ  -->
-    <nz-table *ngIf="formData.value.loaiVthh?.startsWith('02')" [nzData]="listOfData" class="nowrap pd-10" nzBordered>
-      <thead>
-        <tr>
-          <th style="width: 2%;"></th>
-          <th>Tên gói thầu</th>
-          <th>Chủng loại hàng DTQG</th>
-          <th>Cục DTNN KV</th>
-          <th>Chi cục DTNN KV</th>
-          <th>Điểm kho</th>
-          <th>Chỉ tiêu kế hoạch được giao</th>
-          <th>Số đã thực hiện</th>
-          <th>Số đề xuất</th>
-          <th>Đơn vị tính</th>
-          <th>Đơn giá đề xuất có VAT (đ)</th>
-          <th>Thành tiền tạm tính theo giá đề xuất (đ)</th>
-          <th>Đơn giá được duyệt có VAT (đ)</th>
-          <th>Thành tiền theo đơn giá được duyệt có VAT (đ)</th>
-          <th>Tiền bảo lãnh dự thầu (đ)</th>
-          <th style="width: 5%;" *ngIf="!isView">Hành động</th>
-        </tr>
-      </thead>
-      <tbody>
-        <ng-container *ngFor="let item of listOfData , let i = index">
+        <ng-container *ngFor="let dtGoiThau of listOfData , let i = index">
           <tr>
             <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
-            <td>{{item.goiThau}}</td>
-            <td>{{item.tenCloaiVthh}}</td>
+            <td>{{dtGoiThau.goiThau}}</td>
             <td></td>
             <td></td>
             <td></td>
             <td></td>
             <td></td>
-            <td class="text-right blue-text bold-700">{{item.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-            <td class="text-left"></td>
-            <td class="text-right">{{item.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>
-            <td class="text-right bold-700">{{item.soLuong * item.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>
-            <td class="text-right">{{item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
-            <td class="text-right bold-700">{{item.soLuong * item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
+            <td class="text-right blue-text bold-700">{{ dtGoiThau.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
+            <td class="text-right">{{dtGoiThau.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>
+            <td class="text-right bold-700">{{ dtGoiThau.soLuong * dtGoiThau.donGiaTamTinh *1000| number :'1.0-1' : 'vi_VN' }}</td>
             <td></td>
-            <td *ngIf="!isView">
-              <a (click)="themMoiGoiThau(item,i)">
+            <td></td>
+            <td class="text-right" *ngIf="userService.isCuc() && !isView">
+              <a *ngIf="!isDisbleForm()" (click)="themMoiCuc(dtGoiThau.goiThau)">
                 <i class="fa fa-pencil" title="Sửa"></i>
               </a>
-              <a (click)="deleteRow(i)">
+              <a *ngIf="!isDisbleForm()" (click)="deleteGoiThau(i)">
                 <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
               </a>
             </td>
           </tr>
           <ng-container *ngIf="expandSet.has(i)">
-            <ng-container *ngFor="let cuc of item.children, let y = index">
+            <ng-container *ngFor="let chiCuc of dtGoiThau.children, let y = index">
               <tr>
                 <td></td>
-                <td></td>
-                <td class="text-right" [nzExpand]="expandSet2.has(y)" (nzExpandChange)="onExpandChange2(y, $event)">
-                </td>
-                <td>{{cuc.tenDvi}}</td>
+                <td [nzExpand]="expandSet2.has(y)" (nzExpandChange)="onExpandChange2(y, $event)"></td>
+                <td>{{chiCuc.tenDvi}}</td>
                 <td></td>
                 <td></td>
-                <td class="text-right red-text">{{cuc.soLuongTheoChiTieu | number : '1.0-1' : 'vi_VN'}}</td>
-                <td class="text-right red-text">{{cuc.soLuongDaMua | number : '1.0-1' : 'vi_VN'}}</td>
-                <td class="text-right blue-text">{{cuc.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                <td class="text-left"></td>
-                <td class="text-right">{{item.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>
-                <td class="text-right">{{cuc.soLuong * item.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>
-                <td class="text-right">{{item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
-                <td class="text-right">{{cuc.soLuong * item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
-                <td class="text-right"></td>
-                <td class="text-right" *ngIf="!isView"></td>
+                <td class="text-right red-text">{{chiCuc.soLuongTheoChiTieu| number : '1.0-1' : 'vi_VN'}}</td>
+                <td class="text-right red-text">{{chiCuc.soLuongDaMua| number : '1.0-1' : 'vi_VN'}}</td>
+                <td class="text-right blue-text bold-700">{{ chiCuc.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
+                <td class="text-right">{{dtGoiThau.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>
+                <td class="text-right bold-700">{{ chiCuc.soLuong * dtGoiThau.donGiaTamTinh *1000| number :'1.0-1' : 'vi_VN' }}</td>
+                <td></td>
+                <td></td>
+                <td *ngIf="userService.isCuc() && !isView"></td>
               </tr>
               <ng-container *ngIf="expandSet2.has(y)">
-                <ng-container *ngFor="let chiCuc of cuc.children, let z = index">
+                <ng-container *ngFor="let diemKho of chiCuc.children, let z = index">
                   <tr>
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td class="text-right" [nzExpand]="expandSet3.has(z)" (nzExpandChange)="onExpandChange3(z, $event)">
+                    <td>{{diemKho.tenDvi}}</td>
+                    <td>{{diemKho.diaDiemNhap}}</td>
+                    <td></td>
+                    <td></td>
+                    <td class="text-right blue-text">{{diemKho.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+                    <td class="text-right">{{dtGoiThau.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>
+                    <td class="text-right">{{diemKho.soLuong * dtGoiThau.donGiaTamTinh * 1000 | number : '1.0-1' : 'vi_VN'}}</td>
+                    <td class="text-right">{{dtGoiThau.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
+                    <td class="text-right">{{diemKho.soLuong * dtGoiThau.donGiaVat * 1000 | number: '1.0-1' : 'vi_VN'}}</td>
+                    <td class="text-right" *ngIf="userService.isCuc() && !isView">
+                      <a *ngIf="!isDisbleForm()" (click)="themMoiCuc(dtGoiThau.goiThau)">
+                        <i class="fa fa-pencil" title="Sửa"></i>
+                      </a>
+                      <a *ngIf="!isDisbleForm()" (click)="deleteDiemKho(i, y, z)">
+                        <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+                      </a>
                     </td>
-                    <td>{{chiCuc.tenDvi}}</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td class="text-right blue-text">{{chiCuc.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                    <td></td>
-                    <td class="text-right">{{item.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>
-                    <td class="text-right">{{chiCuc.soLuong * item.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>
-                    <td class="text-right">{{item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
-                    <td class="text-right">{{chiCuc.soLuong * item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
-                    <td class="text-right"></td>
-                    <td class="text-right" *ngIf="!isView"></td>
                   </tr>
-                  <ng-container *ngIf="expandSet3.has(z)">
-                    <tr *ngFor="let diemKho of chiCuc.children">
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td>{{diemKho.tenDvi}}</td>
-                      <td></td>
-                      <td></td>
-                      <td class="text-right blue-text">{{diemKho.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                      <td>{{item.dviTinh}}</td>
-                      <td class="text-right">{{item.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>
-                      <td class="text-right">{{diemKho.soLuong * item.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>
-                      <td class="text-right">{{item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
-                      <td class="text-right">{{diemKho.soLuong * item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
-                      <td class="text-right">{{diemKho.soLuong * item.donGiaTamTinh * formData.value.gtriDthau / 100 | number: '1.0-1' : 'vi_VN'}}</td>
-                      <td class="text-right" *ngIf="!isView">
-                      </td>
-                    </tr>
-                  </ng-container>
                 </ng-container>
               </ng-container>
             </ng-container>
           </ng-container>
         </ng-container>
+        <tr *ngIf="listOfData.length > 0">
+          <td></td>
+          <td></td>
+          <td></td>
+          <td class="text-right blue-text bold-700">TỔNG</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td class="text-right blue-text bold-700">{{ calcTongSl() | number : '1.0-1' : 'vi_VN' }}</td>
+          <td></td>
+          <td class="text-right blue-text bold-700">{{ calcTongThanhTien() | number : '1.0-1' : 'vi_VN' }}</td>
+          <td></td>
+          <td></td>
+          <td *ngIf="userService.isCuc() && !isView">
+        </tr>
       </tbody>
-      <tr *ngIf="listOfData.length > 0">
-        <td></td>
-        <td></td>
-        <td colspan="4" class="first-last-row-table background-last-row text-right blue-text">Tổng</td>
-        <td></td>
-        <td></td>
-        <td class="background-last-row text-right blue-text">{{ calcTongSl() | number : '1.0-1' : 'vi_VN' }}</td>
-        <td></td>
-        <td></td>
-        <td class="background-last-row text-right blue-text">{{ calcTongThanhTien() | number : '1.0-1' :
-          'vi_VN'}}</td>
-        <td></td>
-        <td></td>
-      </tr>
     </nz-table>
-    <!-- END TABLE VẬT TƯ  -->
+    <!-- END TABLE LƯƠNG THỰC  -->
   </nz-card>
   <!-- END PHỤ LỤC   -->
 

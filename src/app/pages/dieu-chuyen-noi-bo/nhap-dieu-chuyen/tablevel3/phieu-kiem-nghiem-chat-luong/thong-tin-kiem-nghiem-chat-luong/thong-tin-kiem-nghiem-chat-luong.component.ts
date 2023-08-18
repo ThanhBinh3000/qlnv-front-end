@@ -78,13 +78,14 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
       nguoiKN: [],
       tpNguoiKt: [],
       tpNguoiKtId: [],
+      tenLoNganKho: [, [Validators.required]],
       tenLoKho: [],
       maLoKho: [],
-      tenNganKho: [],
+      tenNganKho: [, [Validators.required]],
       maNganKho: [],
-      tenNhaKho: [],
+      tenNhaKho: [, [Validators.required]],
       maNhaKho: [],
-      tenDiemKho: [],
+      tenDiemKho: [, [Validators.required]],
       maDiemKho: [],
       tenThuKho: [],
       thuKhoId: [],
@@ -106,7 +107,10 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
       dcnbPhieuKnChatLuongDtl: [new Array<any>(),],
       nhanXetKetLuan: [],
       type: ["01"],
-      loaiDc: []
+      loaiDc: [],
+      loaiQdinh: [],
+      thayDoiThuKho: [],
+      lyDoTuChoi: [],
     }
     );
   }
@@ -121,7 +125,9 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
       ktvBaoQuan: this.userInfo.TEN_DAY_DU,
       soPhieu: `${id}/${this.formData.get('nam').value}/${this.maBb}`,
       id: id,
-      loaiDc: this.loaiDc
+      loaiDc: this.loaiDc,
+      loaiQdinh: this.loaiDc === "CUC" ? "NHAP" : null,
+      thayDoiThuKho: true
     })
 
     if (this.idInput) {
@@ -136,6 +142,7 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
         soQdinhDc: this.data.soQdinh,
         ngayQdinhDc: this.data.ngayKyQdinh,
         qdDcId: this.data.qdinhDccId,
+        tenLoNganKho: `${this.data.tenLoKho} ${this.data.tenNganKho}`,
         tenLoKho: this.data.tenLoKho,
         maLoKho: this.data.maLoKho,
         tenNganKho: this.data.tenNganKho,
@@ -272,10 +279,10 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
     await this.spinner.show();
     let body = {
       trangThai: STATUS.BAN_HANH,
-      loaiVthh: ['0101', '0102'],
+      // loaiVthh: ['0101', '0102'],
       loaiDc: this.loaiDc,
-      maDvi: this.userInfo.MA_DVI
-      // listTrangThaiXh: [STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN],
+      maDvi: this.userInfo.MA_DVI,
+      type: this.formData.value.type
     }
     let resSoDX = this.isCuc() ? await this.quyetDinhDieuChuyenCucService.getDsSoQuyetDinhDieuChuyenCuc(body) : await this.quyetDinhDieuChuyenCucService.getDsSoQuyetDinhDieuChuyenChiCuc(body);
     if (resSoDX.msg == MESSAGE.SUCCESS) {
@@ -428,6 +435,7 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
         this.formData.patchValue({
+          tenLoNganKho: `${data.tenLoKhoNhan} ${data.tenNganKhoNhan}`,
           tenLoKho: data.tenLoKhoNhan,
           maLoKho: data.maLoKhoNhan,
           tenNganKho: data.tenNganKhoNhan,
@@ -496,6 +504,8 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
 
 
   async save(isGuiDuyet?) {
+    this.helperService.markFormGroupTouched(this.formData);
+    if (!this.formData.valid) return
     await this.spinner.show();
     let body = this.formData.value;
     body.phieuKNCLDinhKem = this.phieuKNCLDinhKem;

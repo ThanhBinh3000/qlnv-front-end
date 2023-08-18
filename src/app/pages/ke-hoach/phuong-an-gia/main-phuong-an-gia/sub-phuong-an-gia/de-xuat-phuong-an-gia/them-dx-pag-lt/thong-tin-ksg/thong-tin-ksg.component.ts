@@ -11,6 +11,8 @@ import {NgxSpinnerService} from "ngx-spinner";
 import {DonviService} from "../../../../../../../../services/donvi.service";
 import {UserLogin} from "../../../../../../../../models/userlogin";
 import {UserService} from "../../../../../../../../services/user.service";
+import {chain} from "lodash";
+import {v4 as uuidv4} from "uuid";
 
 @Component({
   selector: 'app-thong-tin-ksg',
@@ -24,13 +26,16 @@ export class ThongTinKsgComponent implements OnInit, OnChanges {
   @Output() dataTableChange = new EventEmitter<any>();
   @Input() isView: boolean;
   @Input() dataParent : any;
+  dataTableView : any[] = [];
   isVat: boolean;
   vat: any;
   dsChiCuc : any[] = []
+  listTenDvi : any[] = []
   userInfo  : UserLogin
-  isApDung: boolean;
+  isApDung: boolean = false;
   rowItem: ThongTinKhaoSatGia = new ThongTinKhaoSatGia();
   dataEdit: { [key: string]: { edit: boolean; data: ThongTinKhaoSatGia }} = {};
+  expandSet = new Set<number>();
   constructor(
     private uploadFileService: UploadFileService,
     private userService: UserService,
@@ -45,7 +50,11 @@ export class ThongTinKsgComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.isVat = this.dataParent && this.dataParent.loaiGia && (this.dataParent.loaiGia == 'LG01' || this.dataParent.loaiGia == 'LG03')
     this.vat = this.dataParent && this.dataParent.vat ? this.dataParent.vat  : 0
+    this.isApDung = this.dataParent && this.dataParent.apDungTatCa ? this.dataParent.apDungTatCa  : false
     this.userInfo = this.userService.getUserLogin();
+    if (!this.isApDung && !this.isTabNdKhac) {
+      this.buildTree(this.isTableKetQua ? 'tenDviBaoGia' : 'tenDviThamDinh');
+    }
     this.loadDsChiCuc();
     this.emitDataTable();
     this.updateEditCache();
@@ -81,12 +90,46 @@ export class ThongTinKsgComponent implements OnInit, OnChanges {
       this.spinner.hide();
       return;
     }
+    if (!this.isTabNdKhac && this.isTableKetQua && !this.isApDung) {
+      let itemKq = this.dataTable.find(item =>item.tenDviBaoGia  == this.rowItem.tenDviBaoGia && item.maChiCuc == this.rowItem.maChiCuc);
+      if (itemKq) {
+        this.notification.error(MESSAGE.ERROR, "Không được chọn trùng chi cục cho 1 đơn vị");
+        return;
+      }
+    }
+    if (!this.isTabNdKhac && !this.isTableKetQua && !this.isApDung) {
+      let itemKq = this.dataTable.find(item =>item.tenDviThamDinh  == this.rowItem.tenDviThamDinh && item.maChiCuc == this.rowItem.maChiCuc);
+      if (itemKq) {
+        this.notification.error(MESSAGE.ERROR, "Không được chọn trùng chi cục cho 1 đơn vị");
+        return;
+      }
+    }
     this.rowItem.maDvi = this.userInfo.MA_DVI;
-    this.rowItem.donGiaVat = this.rowItem.donGia * this.vat +  this.rowItem.donGia
+    if (this.dataParent && this.dataParent.loaiGia && (this.dataParent.loaiGia == 'LG01' || this.dataParent.loaiGia == 'LG03')) {
+      this.rowItem.donGiaVat = this.rowItem.donGia * this.vat +  this.rowItem.donGia
+    }
     this.dataTable = [...this.dataTable, this.rowItem];
     this.rowItem = new ThongTinKhaoSatGia();
     this.emitDataTable();
-    this.updateEditCache()
+    this.updateEditCache();
+    if (!this.isTabNdKhac) {
+      this.buildTree(this.isTableKetQua ? 'tenDviBaoGia' : 'tenDviThamDinh');
+      if (this.isTableKetQua) {
+        const thingsWithDuplicates   = this.dataTable.filter(
+          (thing, i, arr) => arr.findIndex(t => t.tenDviBaoGia === thing.tenDviBaoGia) === i
+        );
+        if (thingsWithDuplicates  && thingsWithDuplicates.length > 0) {
+          this.listTenDvi = thingsWithDuplicates.map(item => item.tenDviBaoGia)
+        }
+      } else {
+        const thingsWithDuplicates = this.dataTable.filter(
+          (thing, i, arr) => arr.findIndex(t => t.tenDviThamDinh === thing.tenDviThamDinh) === i
+        );
+        if (thingsWithDuplicates  && thingsWithDuplicates.length > 0) {
+          this.listTenDvi = thingsWithDuplicates.map(item => item.tenDviThamDinh)
+        }
+      }
+    }
   }
 
   required(item: ThongTinKhaoSatGia) {
@@ -98,6 +141,8 @@ export class ThongTinKsgComponent implements OnInit, OnChanges {
       msgRequired = "Không được để trống đơn giá";
     } else if (!item.maChiCuc && !this.isApDung && !this.isTabNdKhac) {
       msgRequired = "Không được để trống Chi cục"
+    } else if ((!item.tenDviBaoGia && this.isTableKetQua && !this.isTabNdKhac) || !item.tenDviThamDinh && !this.isTableKetQua && !this.isTabNdKhac) {
+      msgRequired = "Không được để trống đơn vị"
     }
     return msgRequired;
   }
@@ -151,7 +196,7 @@ export class ThongTinKsgComponent implements OnInit, OnChanges {
     });
   }
 
-  deleteItem(index: any) {
+  deleteItem(index: any, data?: any) {
       this.modal.confirm({
         nzClosable: false,
         nzTitle: 'Xác nhận',
@@ -162,8 +207,21 @@ export class ThongTinKsgComponent implements OnInit, OnChanges {
         nzWidth: 400,
         nzOnOk: async () => {
           try {
-            this.dataTable.splice(index, 1);
-            this.updateEditCache();
+            if (data) {
+              if (this.isTableKetQua) {
+                this.dataTable.forEach((item, idx) => {
+                  if(item.maChiCuc == data.maChiCuc && item.tenDviBaoGia == data.tenDviBaoGia ) this.dataTable.splice(idx,1);
+                });
+              } else {
+                this.dataTable.forEach( (item, idx) => {
+                  if(item.maChiCuc == data.maChiCuc && item.tenDviThamDinh == data.tenDviThamDinh ) this.dataTable.splice(idx,1);
+                });
+              }
+              this.buildTree(this.isTableKetQua ? 'tenDviBaoGia' : 'tenDviThamDinh');
+            } else {
+              this.dataTable.splice(index, 1);
+              this.updateEditCache();
+            }
           } catch (e) {
             console.log('error', e);
           }
@@ -210,5 +268,41 @@ export class ThongTinKsgComponent implements OnInit, OnChanges {
     if(list && list.length > 0) {
       this.rowItem.tenChiCuc = list[0]?.tenDvi
     }
+  }
+
+  buildTree(type : string) {
+    if (this.dataTable && this.dataTable.length > 0) {
+      this.dataTableView = chain(this.dataTable)
+        .groupBy(type)
+        .map((value, key) => {
+          return {
+            tenDviBaoGia : this.isTableKetQua ? key : null,
+            tenDviThamDinh : !this.isTableKetQua ? key : null,
+            cloaiVthh : this.dataTable && this.dataTable.length > 0 ? this.dataTable[0].cloaiVthh : null,
+            idVirtual: uuidv4(),
+            children: value
+          };
+        }).value();
+    } else {
+      this.dataTableView = [];
+    }
+    this.expandAll();
+  }
+
+  expandAll() {
+    this.dataTableView.forEach(s => {
+      this.expandSet.add(s.idVirtual);
+    })
+  }
+  onExpandChange(id: number, checked: boolean): void {
+    if (checked) {
+      this.expandSet.add(id);
+    } else {
+      this.expandSet.delete(id);
+    }
+  }
+
+  nhapLai() {
+    this.rowItem = new ThongTinKhaoSatGia();
   }
 }

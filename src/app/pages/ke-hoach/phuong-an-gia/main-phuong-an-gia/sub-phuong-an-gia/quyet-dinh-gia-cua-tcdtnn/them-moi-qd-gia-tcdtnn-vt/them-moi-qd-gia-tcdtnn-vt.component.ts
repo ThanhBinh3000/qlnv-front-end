@@ -37,23 +37,16 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
   @Input() idInput: number;
   @Output("onClose") onClose = new EventEmitter<any>();
   formData: FormGroup;
-  dsVthh: any[] = [];
   dsCloaiVthh: any[] = [];
-  dsTieuChuanCl: any[] = [];
   dsHangHoa: any[] = [];
   dsLoaiGia: any[] = [];
-  dsToTrinhDeXuat: any[] = [];
   arrThongTinGia: any[] = [];
   taiLieuDinhKemList: any[] = [];
   dsNam: any[] = [];
   dsBoNganh: any[] = [];
   userInfo: UserLogin;
-  soDeXuat: string;
   maQd: string;
   dataTable: any[] = [];
-  isErrorUnique = false;
-  thueVat: number = 10 / 100;
-  radioValue: string;
   fileDinhKem: any[] = [];
 
   constructor(
@@ -120,7 +113,6 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
         ghiChu: data.ghiChu,
         soDeXuat: data.soToTrinh,
         soToTrinh: data.soToTrinh
-
       });
       this.fileDinhKem = data.fileDinhKems;
       this.arrThongTinGia = data.thongTinGiaVt
@@ -153,7 +145,7 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
         this.spinner.show();
         try {
           let body = {
-            id: this.idInput,
+            id: this.formData.value.id,
             lyDoTuChoi: null,
             trangThai: '29',
           };
@@ -188,7 +180,7 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
       if (this.formData.value.loaiGia == 'LG03') {
         this.dataTable.forEach(item => {
           if (item.vat) {
-            item.giaQdTcdt = item.giaQdTcdt + item.giaQdTcdt * item.vat
+            item.giaQdTcdtVat = item.giaQdTcdt + item.giaQdTcdt * item.vat
           }
         })
       }
@@ -197,7 +189,6 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
     body.soQd = body.soQd + this.maQd;
     body.maDvi = this.userInfo.MA_DVI;
     body.pagType = this.pagType;
-    body.soQd = body.soQd + this.maQd
     body.thongTinGiaVt = this.arrThongTinGia;
     body.fileDinhKemReq = this.fileDinhKem;
     let res;
@@ -262,6 +253,9 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
           let body = {
             listId: thRes && thRes.length > 0 ? thRes.map(item => item.id) : []
           }
+          this.formData.patchValue({
+            soToTrinh : thRes && thRes.length > 0 ? thRes.map(item=> item.soDeXuat).toString() : []
+          })
           this.tongHopData(body);
         }
       });

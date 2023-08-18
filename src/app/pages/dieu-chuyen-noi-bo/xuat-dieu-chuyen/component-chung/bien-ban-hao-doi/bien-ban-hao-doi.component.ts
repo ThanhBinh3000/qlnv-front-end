@@ -95,15 +95,18 @@ export class BienBanHaoDoiDieuChuyenComponent extends Base2Component implements 
   expandSetString = new Set<string>();
 
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     try {
+      this.spinner.show()
       this.initData()
-      this.timKiem();
+      await this.timKiem();
     }
     catch (e) {
       console.log('error: ', e)
-      this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+    finally {
+      this.spinner.hide();
     }
   }
 
@@ -132,23 +135,31 @@ export class BienBanHaoDoiDieuChuyenComponent extends Base2Component implements 
     this.formData.reset();
     this.formData.patchValue({ loaiDc: this.loaiDc, isVatTu: this.isVatTu, thayDoiThuKho: this.thayDoiThuKho, type: this.type })
   }
-  clearForm(): void {
+  clearFilter(): void {
     this.resetForm();
     this.timKiem();
   }
   async timKiem() {
-    await this.spinner.show();
     try {
+      const data = this.formData.value;
+      const dataTrim = this.trimStringData(data);
+      this.formData.patchValue({ ...dataTrim })
       await this.search();
-    } catch (e) {
-      console.log(e)
+    } catch (error) {
+      console.log("error", error)
     }
-    await this.spinner.hide();
+  };
+  trimStringData(obj: any) {
+    for (const key in obj) {
+      const value = obj[key];
+      if (typeof value === 'string' || value instanceof String) {
+        obj[key] = value.trim();
+      }
+    };
+    return obj
   }
 
-
   buildTableView() {
-    console.log("dataTable", this.dataTable)
     const newData = this.dataTable.map(f => ({ ...f, maNganLoKho: f.maLoKho ? `${f.maLoKho}${f.maNganKho}` : f.maNganKho }))
     let dataView = chain(newData)
       .groupBy("soQdinh")
@@ -187,7 +198,6 @@ export class BienBanHaoDoiDieuChuyenComponent extends Base2Component implements 
           childData: rs
         };
       }).value();
-    console.log("dataView", dataView)
     this.dataView = cloneDeep(dataView);
     this.expandAll()
 

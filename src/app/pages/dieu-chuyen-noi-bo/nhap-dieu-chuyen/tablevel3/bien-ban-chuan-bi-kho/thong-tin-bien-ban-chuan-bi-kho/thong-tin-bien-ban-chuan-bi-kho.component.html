@@ -2,7 +2,8 @@
   <div class="header header-green-background">
     <div class="header-text">
       <div class="title-chi-tieu">
-        <span [ngClass]="'da-ban-hanh'">
+        <span
+          [ngClass]="formData.value.trangThai === STATUS.DA_DUYET_LDCC ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
           {{ formData.value.tenTrangThai }}
         </span>
         <span> BIÊN BẢN CHUẨN BỊ KHO</span>
@@ -50,6 +51,11 @@
 
     </div>
   </div>
+
+  <nz-alert class="mg-t-16"
+    *ngIf="formData.value.trangThai == STATUS.TU_CHOI_TK || formData.value.trangThai == STATUS.TU_CHOI_LDCC" nzShowIcon
+    nzType="error" nzMessage="Lý do từ chối" nzDescription="{{formData.value.lyDoTuChoi}}">
+  </nz-alert>
 
   <nz-collapse nzAccordion>
     <div class="mt16 flex-card p-lr16">
@@ -653,10 +659,10 @@
                 <td>{{item.thanhTienNamTruoc|number:'1.0-1':'vi_VN'}}</td>
                 <td>{{(item.tongGiaTri)|number:'1.0-1':'vi_VN'}}</td>
                 <td *ngIf="!(isDisableField() || isView)">
-                  <a (click)="editRow(i)">
+                  <a (click)="editRowPD(i)">
                     <i class="fa fa-pencil" title="Sửa"></i>
                   </a>
-                  <a (click)="deleteRow(item)">
+                  <a (click)="deleteRowPD(item)">
                     <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                   </a>
                 </td>
@@ -697,10 +703,10 @@
                 </td>
                 <td>{{(item.tongGiaTri)|number:'1.0-1':'vi_VN'}}</td>
                 <td>
-                  <a (click)="saveEdit(i)" class="save">
+                  <a (click)="saveEditPD(i)" class="save">
                     <i class="fa fa-save"></i>
                   </a>
-                  <a (click)="cancelEdit(i)">
+                  <a (click)="cancelEditPD(i)">
                     <i class="fa fa-times do"></i>
                   </a>
                 </td>
