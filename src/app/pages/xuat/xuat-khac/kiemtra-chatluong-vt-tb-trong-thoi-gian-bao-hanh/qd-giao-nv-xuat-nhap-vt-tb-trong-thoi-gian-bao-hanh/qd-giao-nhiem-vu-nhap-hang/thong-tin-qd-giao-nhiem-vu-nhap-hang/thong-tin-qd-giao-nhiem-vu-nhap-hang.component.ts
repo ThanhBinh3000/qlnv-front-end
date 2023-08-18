@@ -24,8 +24,11 @@ import {
 import {
   DialogTableCheckBoxComponent
 } from "../../../../../../../components/dialog/dialog-table-check-box/dialog-table-check-box.component";
-import { chain, cloneDeep } from 'lodash';
+import {chain, cloneDeep} from 'lodash';
 import {isArray} from "rxjs/internal-compatibility";
+import {
+  PhieuKtclVtTbTrongThoiGianBaoHanhService
+} from "../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvtbaohanh/PhieuKtclVtTbTrongThoiGianBaoHanh.service";
 
 @Component({
   selector: 'app-thong-tin-qd-giao-nhiem-vu-nhap-hang',
@@ -42,7 +45,9 @@ export class ThongTinQdGiaoNhiemVuNhapHangComponent extends Base2Component imple
   listFileDinhKem: any[] = [];
   listFile: any[] = [];
   listPhieuKdcl: any[] = [];
-  allChecked:boolean;
+  listPhieuKtcl: any[] = [];
+  listDtl: any[] = [];
+  allChecked: boolean;
   maQd: string;
   expandSetString = new Set<string>();
 
@@ -55,12 +60,13 @@ export class ThongTinQdGiaoNhiemVuNhapHangComponent extends Base2Component imple
               private donviService: DonviService,
               private danhMucService: DanhMucService,
               private phieuKdclVtTbTrongThoiGianBaoHanhService: PhieuKdclVtTbTrongThoiGianBaoHanhService,
+              private phieuKtclVtTbTrongThoiGianBaoHanhService: PhieuKtclVtTbTrongThoiGianBaoHanhService,
               private qdGiaoNvNhapHangTrongThoiGianBaoHanhService: QdGiaoNvNhapHangTrongThoiGianBaoHanhService) {
     super(httpClient, storageService, notification, spinner, modal, qdGiaoNvNhapHangTrongThoiGianBaoHanhService);
     this.formData = this.fb.group({
       id: [],
       maDvi: [this.userInfo.MA_DVI],
-      loai: ["NHAP_SAU_BH", [Validators.required]],
+      loai: ["NHAP_MAU", [Validators.required]],
       nam: [dayjs().get("year"), [Validators.required]],
       soQuyetDinh: [],
       ngayKy: [],
@@ -90,7 +96,7 @@ export class ThongTinQdGiaoNhiemVuNhapHangComponent extends Base2Component imple
     try {
       this.maQd = "/" + this.userInfo.MA_QD
       await Promise.all([
-        this.loadDanhSachPhieuKdcl(),
+        // this.loadDanhSachPhieuKdcl(),
       ]);
       if (this.idInput) {
         this.getDetail(this.idInput)
@@ -134,25 +140,6 @@ export class ThongTinQdGiaoNhiemVuNhapHangComponent extends Base2Component imple
     }
   }
 
-  async loadDanhSachPhieuKdcl() {
-    let body = {
-      loai: LOAI_HH_XUAT_KHAC.VT_BH,
-      nam: this.formData.value.nam,
-      trangThai: STATUS.DA_DUYET_LDC,
-      paggingReq: {
-        limit: 1000,
-        page: this.page - 1
-      }
-    }
-    let rs = await this.phieuKdclVtTbTrongThoiGianBaoHanhService.search(body);
-    if (rs.msg == MESSAGE.SUCCESS) {
-     let data = rs.data.content;
-      console.log(data,"data")
-      this.listPhieuKdcl = data.filter(i => i.mauBiHuy == false);
-      console.log(this.listPhieuKdcl ,"123")
-    }
-    return this.listPhieuKdcl;
-  }
 
   onExpandStringChange(id: string, checked: boolean) {
     if (checked) {
@@ -187,8 +174,13 @@ export class ThongTinQdGiaoNhiemVuNhapHangComponent extends Base2Component imple
     if (body.idCanCu && isArray(body.idCanCu)) {
       body.idCanCu = body.idCanCu.join(",");
     }
-    let dtl=this.listPhieuKdcl.map((item) => ({ ...item, id: null }));
-    body.qdGiaonvXhDtl = dtl;
+    if (body.loai=="NHAP_SAU_BH"){
+      this.listDtl = this.listPhieuKtcl.map((item) => ({...item, id: null}));
+    }else {
+      this.listDtl = this.listPhieuKdcl.map((item) => ({...item, id: null}));
+    }
+
+    body.qdGiaonvXhDtl = this.listDtl;
     let data = await this.createUpdate(body);
     if (data) {
       if (isGuiDuyet) {
@@ -197,11 +189,13 @@ export class ThongTinQdGiaoNhiemVuNhapHangComponent extends Base2Component imple
       }
     }
   }
+
   async flattenTree(tree) {
     return tree.flatMap((item) => {
       return item.childData ? this.flattenTree(item.childData) : item;
     });
   }
+
   pheDuyet(id?) {
     let trangThai = ''
     let mess = ''
@@ -312,7 +306,7 @@ export class ThongTinQdGiaoNhiemVuNhapHangComponent extends Base2Component imple
               soQuyetDinh: dataDetail.soQuyetDinh?.split('/')[0],
             })
             this.listFile = dataDetail.fileDinhKems;
-            this.dataTable= dataDetail.qdGiaonvXhDtl;
+            this.dataTable = dataDetail.qdGiaonvXhDtl;
             this.buildTableView(this.dataTable)
             if (dataDetail.fileDinhKems && dataDetail.fileDinhKems.length > 0) {
               dataDetail.fileDinhKems.forEach(item => {
@@ -333,9 +327,26 @@ export class ThongTinQdGiaoNhiemVuNhapHangComponent extends Base2Component imple
       });
   }
 
+  async loadDanhSachPhieuKdcl() {
+    let body = {
+      loai: LOAI_HH_XUAT_KHAC.VT_BH,
+      nam: this.formData.value.nam,
+      trangThai: STATUS.DA_DUYET_LDC,
+      paggingReq: {
+        limit: 1000,
+        page: this.page - 1
+      }
+    }
+    let rs = await this.phieuKdclVtTbTrongThoiGianBaoHanhService.search(body);
+    if (rs.msg == MESSAGE.SUCCESS) {
+      let data = rs.data.content;
+      this.listPhieuKdcl = data.filter(i => i.mauBiHuy == false);
+    }
+    return this.listPhieuKdcl;
+  }
 
-  openDialogPhieuKdcl() {
-
+  async openDialogPhieuKdcl() {
+    await this.loadDanhSachPhieuKdcl();
     const modalQD = this.modal.create({
       nzTitle: 'CĂN CỨ BÁO CÁO KẾT QUẢ KIỂM ĐỊNH MẪU',
       nzContent: DialogTableCheckBoxComponent,
@@ -345,8 +356,8 @@ export class ThongTinQdGiaoNhiemVuNhapHangComponent extends Base2Component imple
       nzFooter: null,
       nzComponentParams: {
         dataTable: this.listPhieuKdcl,
-        dataHeader: ['Năm', 'Số phiếu KĐCL','Ngày Kiểm định'],
-        dataColumn: ['nam', 'soPhieu','ngayKiemDinh'],
+        dataHeader: ['Năm', 'Số phiếu KĐCL', 'Ngày Kiểm định'],
+        dataColumn: ['nam', 'soPhieu', 'ngayKiemDinh'],
         allChecked: this.allChecked,
         actionRefresh: false,
       },
@@ -366,14 +377,70 @@ export class ThongTinQdGiaoNhiemVuNhapHangComponent extends Base2Component imple
         soCanCu: this.listPhieuKdcl.filter(f => f.checked).map(m => m.soPhieu),
         idCanCu: this.listPhieuKdcl.filter(f => f.checked).map(m => m.id)
       })
-    }
-    else {
+    } else {
       this.formData.patchValue({
-        soCanCu: this.listPhieuKdcl.filter(f => f.checked).map(m => m.soPhieu) ,
+        soCanCu: this.listPhieuKdcl.filter(f => f.checked).map(m => m.soPhieu),
         idCanCu: this.listPhieuKdcl.filter(f => f.checked).map(m => m.id)
       })
     }
     this.buildTableView(this.listPhieuKdcl);
+  }
+
+  async loadDanhSachPhieuKtcl() {
+    let body = {
+      nam: this.formData.value.nam,
+      trangThai: STATUS.DA_HOAN_THANH,
+
+    }
+    let rs = await this.phieuKtclVtTbTrongThoiGianBaoHanhService.search(body);
+    if (rs.msg == MESSAGE.SUCCESS) {
+      let data = rs.data.content;
+      this.listPhieuKtcl = data.filter(i => i.mauBiHuy == false);
+      this.listPhieuKtcl = this.listPhieuKtcl.map((item) => ({...item, slLayMau: item.slBaoHanh}));
+      console.log(this.listPhieuKtcl ,'this.listPhieuKtcl ')
+    }
+    return this.listPhieuKtcl;
+  }
+
+  async openDialogPhieuKtcl() {
+    await this.loadDanhSachPhieuKtcl();
+    const modalQD = this.modal.create({
+      nzTitle: 'CĂN CỨ BÁO CÁO KẾT QUẢ KIỂM ĐỊNH MẪU',
+      nzContent: DialogTableCheckBoxComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {
+        dataTable: this.listPhieuKtcl,
+        dataHeader: ['Năm', 'Số phiếu KTCL', 'Ngày Kiểm tra'],
+        dataColumn: ['nam', 'soPhieu', 'ngayKiemTra'],
+        allChecked: this.allChecked,
+        actionRefresh: false,
+      },
+    })
+    modalQD.afterClose.subscribe(async (data) => {
+      if (data) {
+        this.bindingDataKtcl(data)
+      }
+    });
+  }
+
+  bindingDataKtcl(data: any) {
+    this.listPhieuKtcl = cloneDeep(data.data);
+    this.allChecked = data.allChecked;
+    if (this.allChecked) {
+      this.formData.patchValue({
+        soCanCu: this.listPhieuKtcl.filter(f => f.checked).map(m => m.soPhieu),
+        idCanCu: this.listPhieuKtcl.filter(f => f.checked).map(m => m.id)
+      })
+    } else {
+      this.formData.patchValue({
+        soCanCu: this.listPhieuKtcl.filter(f => f.checked).map(m => m.soPhieu),
+        idCanCu: this.listPhieuKtcl.filter(f => f.checked).map(m => m.id)
+      })
+    }
+    this.buildTableView(this.listPhieuKtcl);
   }
 }
 

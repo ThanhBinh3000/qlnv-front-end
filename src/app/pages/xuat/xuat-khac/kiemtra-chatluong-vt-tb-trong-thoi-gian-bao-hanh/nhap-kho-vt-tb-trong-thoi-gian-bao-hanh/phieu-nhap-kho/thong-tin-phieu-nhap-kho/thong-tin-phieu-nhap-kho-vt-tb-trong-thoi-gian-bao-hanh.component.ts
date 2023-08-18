@@ -27,6 +27,9 @@ import {
 import {
   PhieuXuatNhapKhoVtTbTrongThoiGianBaoHanhService
 } from "../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvtbaohanh/PhieuXuatNhapKhoVtTbTrongThoiGianBaoHanh.service";
+import {
+  PhieuKtclVtTbTrongThoiGianBaoHanhService
+} from "../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvtbaohanh/PhieuKtclVtTbTrongThoiGianBaoHanh.service";
 
 
 @Component({
@@ -45,6 +48,7 @@ export class ThongTinPhieuNhapKhoVtTbTrongThoiGianBaoHanhComponent extends Base2
   listSoQuyetDinh: any[] = []
   listDiaDiemNhap: any[] = [];
   listPhieuKdcl: any[] = [];
+  listPhieuKtcl: any[] = [];
   fileDinhKems: any[] = [];
   listDiemKho: any[] = [];
   listBbLayMau: any[] = [];
@@ -63,6 +67,7 @@ export class ThongTinPhieuNhapKhoVtTbTrongThoiGianBaoHanhComponent extends Base2
     private quyetDinhGiaoNvXuatHangService: QuyetDinhGiaoNvXuatHangService,
     private qdGiaoNvNhapHangTrongThoiGianBaoHanhService: QdGiaoNvNhapHangTrongThoiGianBaoHanhService,
     private phieuKdclVtTbTrongThoiGianBaoHanhService: PhieuKdclVtTbTrongThoiGianBaoHanhService,
+    private phieuKtclVtTbTrongThoiGianBaoHanhService: PhieuKtclVtTbTrongThoiGianBaoHanhService,
     private phieuXuatNhapKhoVtTbTrongThoiGianBaoHanhService: PhieuXuatNhapKhoVtTbTrongThoiGianBaoHanhService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, phieuXuatNhapKhoVtTbTrongThoiGianBaoHanhService);
@@ -72,7 +77,7 @@ export class ThongTinPhieuNhapKhoVtTbTrongThoiGianBaoHanhComponent extends Base2
         id: [0],
         namKeHoach: [dayjs().get("year")],
         maDvi: [],
-        loai: ['NHAP_MAU_BH', [Validators.required]],
+        loai: ['NHAP_MAU', [Validators.required]],
         maQhns: [],
         soPhieu: [],
         ngayXuatNhap: [dayjs().format("YYYY-MM-DD"), [Validators.required]],
@@ -214,23 +219,36 @@ export class ThongTinPhieuNhapKhoVtTbTrongThoiGianBaoHanhComponent extends Base2
   }
 
   async openDialogSoQd() {
+    let title;
+    let dataTable;
+
+    if (this.formData.value.loai === "NHAP_MAU") {
+      title = "Danh sách số quyết định giao nhiệm vụ nhập mẫu không bị hủy";
+      dataTable = this.listSoQuyetDinh.filter(i=>i.loai=="NHAP_MAU");
+    }  else {
+      title = "Danh sách số quyết định giao nhiệm vụ nhập sau bảo hành";
+      dataTable = this.listSoQuyetDinh.filter(i=>i.loai=="NHAP_SAU_BH");
+    }
+
     const modalQD = this.modal.create({
-      nzTitle: 'Danh sách số quyết định giao nhiệm vụ nhập hàng',
+      nzTitle: title,
       nzContent: DialogTableSelectionComponent,
       nzMaskClosable: false,
       nzClosable: false,
       nzWidth: '900px',
       nzFooter: null,
       nzComponentParams: {
-        dataTable: this.listSoQuyetDinh,
+        dataTable: dataTable,
         dataHeader: ['Năm', 'Số quyết định', 'Ngày quyết định',],
         dataColumn: ['nam', 'soQuyetDinh', 'ngayKy',],
       },
-    })
+    });
+
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
         await this.bindingDataQd(data.id);
-        await this.phieuKiemDinhCl(data);
+        await this.phieuKdcl(data);
+        await this.phieuKtcl(data);
       }
     });
   };
@@ -268,6 +286,7 @@ export class ThongTinPhieuNhapKhoVtTbTrongThoiGianBaoHanhComponent extends Base2
     modalQD.afterClose.subscribe(async (data) => {
       this.bindingDataDdNhap(data);
       this.bindingSoPhieuKdcl(data);
+      this.bindingSoPhieuKtcl(data);
     });
   }
 
@@ -294,27 +313,7 @@ export class ThongTinPhieuNhapKhoVtTbTrongThoiGianBaoHanhComponent extends Base2
     }
   }
 
-  async bindingSoPhieuKdcl(data) {
-    if (data) {
-      let soPhieu=this.listPhieuKdcl.find(
-        item=>item.maDiaDiem==data.maDiaDiem
-      )
-      if (soPhieu) {
-        console.log(soPhieu,1)
-
-        this.formData.patchValue({
-          soPhieuKdcl: soPhieu.soPhieu,
-          idPhieuKdcl: soPhieu.id,
-          ngayKdcl: soPhieu.ngayKiemDinh,
-          idBbLayMau : soPhieu.idBbLayMau,
-          soBbLayMau: soPhieu.soBbLayMau,
-        })
-        console.log(this.formData.value,2)
-      }
-    }
-  }
-
-  async phieuKiemDinhCl(item) {
+  async phieuKdcl(item) {
     await this.spinner.show();
     let body = {
       soQdGiaoNvNh: item.soQuyetDinh,
@@ -327,6 +326,55 @@ export class ThongTinPhieuNhapKhoVtTbTrongThoiGianBaoHanhComponent extends Base2
     const data = dataRes.data.content;
     this.listPhieuKdcl = data;
     await this.spinner.hide();
+  }
+  async bindingSoPhieuKdcl(data) {
+    if (data) {
+      let soPhieu=this.listPhieuKdcl.find(
+        item=>item.maDiaDiem==data.maDiaDiem
+      )
+      if (soPhieu) {
+        this.formData.patchValue({
+          soPhieuKdcl: soPhieu.soPhieu,
+          idPhieuKdcl: soPhieu.id,
+          ngayKdcl: soPhieu.ngayKiemDinh,
+          idBbLayMau : soPhieu.idBbLayMau,
+          soBbLayMau: soPhieu.soBbLayMau,
+        })
+      }
+    }
+  }
+
+
+  async phieuKtcl(item) {
+    await this.spinner.show();
+    let body = {
+      soQdGiaoNvNh: item.soQuyetDinh,
+      paggingReq: {
+        "limit": this.globals.prop.MAX_INTERGER,
+        "page": 0
+      },
+    }
+    let dataRes = await this.phieuKtclVtTbTrongThoiGianBaoHanhService.search(body);
+    const data = dataRes.data.content;
+    this.listPhieuKtcl = data;
+    await this.spinner.hide();
+  }
+
+  async bindingSoPhieuKtcl(data) {
+    if (data) {
+      let soPhieu=this.listPhieuKtcl.find(
+        item=>item.maDiaDiem==data.maDiaDiem
+      )
+      if (soPhieu) {
+        this.formData.patchValue({
+          soPhieuKdcl: soPhieu.soPhieu,
+          idPhieuKdcl: soPhieu.id,
+          ngayKdcl: soPhieu.ngayKiemDinh,
+          idBbLayMau : soPhieu.idBbLayMau,
+          soBbLayMau: soPhieu.soBbLayMau,
+        })
+      }
+    }
   }
 
   async save() {
