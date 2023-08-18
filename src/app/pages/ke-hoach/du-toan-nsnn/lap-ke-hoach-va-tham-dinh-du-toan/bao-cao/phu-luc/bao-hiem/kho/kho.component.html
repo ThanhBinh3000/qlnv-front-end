@@ -271,7 +271,7 @@
                                         <a (click)="downloadFile(data.id)">
                                             <i class="fa fa-eye"></i>
                                         </a>
-                                        <a (click)="deleteFile(data.id)">
+                                        <a *ngIf="status.general" (click)="deleteFile(data.id)">
                                             <i class="fa fa-trash-o do"></i>
                                         </a>
                                     </td>
