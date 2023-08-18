@@ -237,7 +237,9 @@
         (click)="selectRow(item)">
       <ng-container *ngIf="!item.edit; else editTemplate">
         <td>{{idx + 1}}</td>
-        <td>{{item.maHopDong}}</td>
+        <td>
+          <a nz-button nzType="link" (click)="showModal(item.maHopDong,true)">{{item.maHopDong}}</a>
+        </td>
         <td>{{item.soHopDong}}</td>
         <td>{{getLabelLoaiTien(item.loaiTien)}}</td>
         <td>{{item.dvCungCapHang}}</td>
@@ -364,7 +366,7 @@
       <th>{{ tongCong.tongDuToanDuocGiao | number : '1.0-1' : 'vi_VN'}}</th>
       <th></th>
       <th></th>
-      <th></th>
+      <th>{{ tongCong.tongKinhPhiDaCap | number : '1.0-1' : 'vi_VN'}}</th>
       <th></th>
       <th>{{ tongCong.tongKinhPhiChuaCap | number : '1.0-1' : 'vi_VN'}}</th>
       <th></th>
@@ -560,4 +562,115 @@
   </form>
 </div>
 
-
+<nz-modal [nzWidth]="1200" [nzVisible]="isVisibleModal" [nzFooter]="modalFooter" (nzOnCancel)="handleCancel()"
+          [nzClosable]="false" [nzBodyStyle]="{ 'overflow-y': 'auto' }" nzMaskClosable="true"
+          nzTitle="CHI TIẾT HỢP ĐỒNG">
+  <ng-container *nzModalContent>
+    <div nz-row [nzGutter]="[24]">
+      <div nz-col [nzSpan]="6">
+        <nz-form-item>
+          <nz-form-label nzRequired [nzNoColon]="true"> Số hợp đồng</nz-form-label>
+          <input nz-input [value]="detailHopDong.soHopDong" [readonly]="true"/>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="6">
+        <nz-form-item>
+          <nz-form-label nzRequired [nzNoColon]="true"> Mã hợp đồng</nz-form-label>
+          <input nz-input [value]="detailHopDong.maHopDong" [readonly]="true"/>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="6">
+        <nz-form-item>
+          <nz-form-label nzRequired [nzNoColon]="true"> Loại tiền</nz-form-label>
+          <input nz-input [value]="detailHopDong.tenLoaiTien" [readonly]="true"/>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="6">
+        <nz-form-item>
+          <nz-form-label nzRequired [nzNoColon]="true"> Đơn vị cung cấp hàng</nz-form-label>
+          <input nz-input [value]="detailHopDong.dviCungCapHang" [readonly]="true"/>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="12">
+        <nz-form-item>
+          <nz-form-label nzRequired [nzNoColon]="true"> Số tài khoản</nz-form-label>
+          <input nz-input [value]="detailHopDong.soTaiKhoan" [readonly]="true"/>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="12">
+        <nz-form-item>
+          <nz-form-label nzRequired [nzNoColon]="true"> Ngân hàng</nz-form-label>
+          <input nz-input [value]="detailHopDong.nganHang" [readonly]="true"/>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="6">
+        <nz-form-item>
+          <nz-form-label nzRequired [nzNoColon]="true"> Tổng tiền(Ngoại tệ)</nz-form-label>
+          <input nz-input [value]="detailHopDong.tongTienNt" [readonly]="true"/>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="6">
+        <nz-form-item>
+          <nz-form-label nzRequired [nzNoColon]="true"> Tỷ giá</nz-form-label>
+          <input nz-input [value]="detailHopDong.tyGia" [readonly]="true"/>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="6">
+        <nz-form-item>
+          <nz-form-label nzRequired [nzNoColon]="true"> Tổng tiền(VNĐ)</nz-form-label>
+          <input nz-input [value]="detailHopDong.tongTien" [readonly]="true"/>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="6">
+        <nz-form-item>
+          <nz-form-label nzRequired [nzNoColon]="true"> Dự toán được giao</nz-form-label>
+          <input nz-input [value]="detailHopDong.duToanDuocGiao" [readonly]="true"/>
+        </nz-form-item>
+      </div>
+    </div>
+    <div class="header header-green-background mg-t-10">
+      <div class="header-text">
+        <div class="title-chi-tieu">
+          <span class="text-uppercase font-weight-bold">danh sách các lần cấp vốn</span>
+        </div>
+      </div>
+    </div>
+    <nz-table nzBordered
+              [nzData]="detailHopDong ? detailHopDong.listHopDongTheoDeNghi : []">
+      <thead>
+      <tr>
+        <th width="40px">STT</th>
+        <th>Số đề nghị</th>
+        <th>Ngày đề nghị</th>
+        <th>Kinh phí đã cấp<br/>(Ngoại tệ)</th>
+        <th>Kinh phí đã cấp<br/>(VNĐ)</th>
+        <th>Kinh phí chưa cấp<br/>(Ngoại tệ)</th>
+        <th>Kinh phí chưa cấp<br/>(VNĐ)</th>
+        <th>Kinh phí đề nghị cấp<br/>(Ngoại tệ)</th>
+        <th>Kinh phí đề nghị cấp<br/>(VNĐ)</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let item of (detailHopDong ? detailHopDong.listHopDongTheoDeNghi : []), let idx = index">
+        <td>{{idx + 1}}</td>
+        <td>{{item.soDeNghi}}</td>
+        <td>{{item.ngayDeNghi}}</td>
+        <td>{{item.kinhPhiDaCapNt |number : '1.0-1' : 'vi_VN'}}</td>
+        <td>{{item.kinhPhiDaCap |number : '1.0-1' : 'vi_VN'}}</td>
+        <td>{{item.kinhPhiChuaCapNt |number : '1.0-1' : 'vi_VN'}}</td>
+        <td>{{item.kinhPhiChuaCap |number : '1.0-1' : 'vi_VN'}}</td>
+        <td>{{item.yeuCauCapThemNt | number : '1.0-1' : 'vi_VN'}}</td>
+        <td>{{item.yeuCauCapThem | number : '1.0-1' : 'vi_VN'}}</td>
+      </tr>
+      </tbody>
+    </nz-table>
+  </ng-container>
+  <ng-template #modalFooter>
+    <ng-container>
+      <button nz-button class="btn btn-sub" (click)="handleCancel()">
+        <i class="icon htvbdh_dongtat"></i>
+        <span>Đóng</span>
+      </button>
+    </ng-container>
+  </ng-template>
+</nz-modal>
