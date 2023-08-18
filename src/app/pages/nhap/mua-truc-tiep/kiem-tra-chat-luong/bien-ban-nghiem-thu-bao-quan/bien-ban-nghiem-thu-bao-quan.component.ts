@@ -247,6 +247,7 @@ export class BienBanNghiemThuBaoQuanComponent implements OnInit {
           item.detail = {
             children: item.detail.children.filter(x => x.maDiemKho.includes(this.userInfo.MA_DVI))
           }
+          item.expand = true;
         } else {
           let data = [];
           item.hhQdGiaoNvNhangDtlList.forEach(res => {
@@ -255,7 +256,7 @@ export class BienBanNghiemThuBaoQuanComponent implements OnInit {
           item.detail = {
             children: data
           }
-
+          item.expand = true;
         };
       });
       console.log(this.dataTable)
@@ -264,6 +265,13 @@ export class BienBanNghiemThuBaoQuanComponent implements OnInit {
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
+  }
+
+  setExpand(parantExpand: boolean = false, children: any = []): void {
+    if (parantExpand) {
+      return children.map(f => ({ ...f, expand: false }))
+    }
+    return children
   }
 
   async changePageIndex(event) {
