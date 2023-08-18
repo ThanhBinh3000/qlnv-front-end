@@ -54,6 +54,7 @@ export class ThongTinBienBanKetThucNhapKhoBaoHanhComponent extends Base2Componen
   listFileDinhKem: any = [];
   listNganLoKho: any = [];
   dataPhieuNhapKho: any = [];
+  listPhieuNhapKho: any = [];
 
   constructor(
     httpClient: HttpClient,
@@ -142,7 +143,7 @@ export class ThongTinBienBanKetThucNhapKhoBaoHanhComponent extends Base2Componen
             // if (itemBcKqKdMau) {
             //   this.bindingDataQd(itemBcKqKdMau, data.maDiaDiem);
             // }
-            this.dataPhieuNhapKho = data.listPhieuNhapKho;
+            this.listPhieuNhapKho = data.listPhieuNhapKho;
             this.formData.patchValue(data);
           }
         })
@@ -209,7 +210,7 @@ export class ThongTinBienBanKetThucNhapKhoBaoHanhComponent extends Base2Componen
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
         await this.bindingDataQd(data);
-        await this.bindingDataPhieuNhapKho(data);
+        await this.loadPhieuNhapKho(data);
       }
     });
   };
@@ -226,6 +227,7 @@ export class ThongTinBienBanKetThucNhapKhoBaoHanhComponent extends Base2Componen
       item.maDiaDiem.substring(0, 8) == this.userInfo.MA_DVI
     );
     this.listDiaDiemNhap = diaDiem
+
     await this.spinner.hide();
   }
 
@@ -250,15 +252,13 @@ export class ThongTinBienBanKetThucNhapKhoBaoHanhComponent extends Base2Componen
 
   async bindingDataDdNhap(data) {
     if (data) {
+      console.log(1)
+      this.listPhieuNhapKho = this.dataPhieuNhapKho.filter(f=>f.maDiaDiem==data.maDiaDiem);
       this.formData.patchValue({
         maDiaDiem: data.maDiaDiem,
-        maDiemKho: data.maDiemKho,
         tenDiemKho: data.tenDiemKho,
-        maNhaKho: data.maNhaKho,
         tenNhaKho: data.tenNhaKho,
-        maNganKho: data.maNganKho,
         tenNganKho: data.tenNganKho,
-        maLoKho: data.maLoKho,
         tenLoKho: data.tenLoKho,
         loaiVthh: data.loaiVthh,
         tenLoaiVthh: data.tenLoaiVthh,
@@ -267,12 +267,16 @@ export class ThongTinBienBanKetThucNhapKhoBaoHanhComponent extends Base2Componen
         donViTinh: data.donViTinh,
         slTonKho: data.slTonKho,
         slLayMau: data.slLayMau,
+
+        listPhieuNhapKho: this.listPhieuNhapKho,
+        ngayBatDauNhap: this.listPhieuNhapKho[0].ngayXuatNhap,
+        ngayKetThucNhap: this.formData.get("ngayLapBienBan").value
       })
     }
   }
 
 
-  async bindingDataPhieuNhapKho(data, maDiaDiem?) {
+  async loadPhieuNhapKho(data, maDiaDiem?) {
     try {
       await this.spinner.show();
       if (data) {
@@ -281,15 +285,9 @@ export class ThongTinBienBanKetThucNhapKhoBaoHanhComponent extends Base2Componen
           soCanCu: data.soQuyetDinh,
           namKeHoach: this.formData.get("namKeHoach").value,
           loaiPhieu: 'NHAP',
-          loai: 'NHAP_MAU',
         });
         if (res.msg == MESSAGE.SUCCESS) {
           this.dataPhieuNhapKho = res.data.content;
-          this.formData.patchValue({
-            listPhieuNhapKho: res.data.content,
-            ngayBatDauNhap: this.dataPhieuNhapKho[0].ngayXuatNhap,
-            ngayKetThucNhap: this.formData.get("ngayLapBienBan").value
-          })
         }
       }
     } catch (e) {
@@ -317,12 +315,20 @@ export class ThongTinBienBanKetThucNhapKhoBaoHanhComponent extends Base2Componen
     let trangThai = '';
     let msg = '';
     switch (this.formData.value.trangThai) {
-      case STATUS.DU_THAO: {
+      case STATUS.DU_THAO:
+      case STATUS.TU_CHOI_KT:
+      case STATUS.TU_CHOI_KTVBQ:
+      case STATUS.TU_CHOI_LDCC: {
         trangThai = STATUS.CHO_DUYET_KTVBQ;
         msg = MESSAGE.GUI_DUYET_CONFIRM;
         break;
       }
       case STATUS.CHO_DUYET_KTVBQ: {
+        trangThai = STATUS.CHO_DUYET_KT;
+        msg = MESSAGE.GUI_DUYET_CONFIRM;
+        break;
+      }
+      case STATUS.CHO_DUYET_KT: {
         trangThai = STATUS.CHO_DUYET_LDCC;
         msg = MESSAGE.GUI_DUYET_CONFIRM;
         break;
@@ -341,6 +347,10 @@ export class ThongTinBienBanKetThucNhapKhoBaoHanhComponent extends Base2Componen
     switch (this.formData.value.trangThai) {
       case STATUS.CHO_DUYET_LDCC: {
         trangThai = STATUS.TU_CHOI_LDCC;
+        break;
+      }
+      case STATUS.CHO_DUYET_KT: {
+        trangThai = STATUS.TU_CHOI_KT;
         break;
       }
       case STATUS.CHO_DUYET_KTVBQ: {
