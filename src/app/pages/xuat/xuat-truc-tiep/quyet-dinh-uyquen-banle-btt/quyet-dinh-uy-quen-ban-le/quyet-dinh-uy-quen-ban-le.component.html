@@ -72,19 +72,19 @@
           <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
                  [nzIndeterminate]="indeterminate"></label>
         </th>
-        <th class="text-center" style="width: 2%;">STT</th>
-        <th class="text-center">Số quyết định</th>
-        <th class="text-center">Số kế hoạch</th>
-        <th class="text-center">Năm kế hoạch</th>
-        <th class="text-center">Ngày duyệt</th>
-        <th class="text-center">Ngày ủy quyền</th>
-        <th class="text-center">Trích yếu</th>
-        <th class="text-center">Loại hàng hóa</th>
-        <th class="text-center">Chủng loại hàng hóa</th>
-        <th class="text-center">Số lượng</th>
-        <th class="text-center">Phương thức bán trực tiếp</th>
-        <th class="text-center">Trạng thái</th>
-        <th class="text-center">Hành Động</th>
+        <th class="text-center" style="width: 2%;"> STT</th>
+        <th class="text-center"> Số quyết định</th>
+        <th class="text-center"> Số kế hoạch</th>
+        <th class="text-center"> Năm kế hoạch</th>
+        <th class="text-center"> Ngày duyệt</th>
+        <th class="text-center"> Ngày ủy quyền</th>
+        <th class="text-center"> Trích yếu</th>
+        <th class="text-center"> Loại hàng hóa</th>
+        <th class="text-center"> Chủng loại hàng hóa</th>
+        <th class="text-center"> Số lượng</th>
+        <th class="text-center"> Phương thức bán trực tiếp</th>
+        <th class="text-center"> Trạng thái</th>
+        <th class="text-center"> Hành Động</th>
       </tr>
       <tr class="header-row search">
         <th></th>
@@ -179,16 +179,16 @@
         <td>{{ data.soQdPd }}</td>
         <td>
           <a *ngIf="data.soDxuat && data.idDxHdr" nz-button nzType="link"
-             (click)="openModalDxKh(data.idDxHdr)">{{
-            data.soDxuat}}</a>
+             (click)="openModalDxKh(data.idDxHdr)">
+            {{ data.soDxuat}}</a>
         </td>
-        <td>{{ data.xhQdPdKhBttHdr.namKh }}</td>
-        <td>{{ data.xhQdPdKhBttHdr.ngayPduyet | date: 'dd/MM/YYYY' }}</td>
-        <td>{{ data.ngayPduyet | date: 'dd/MM/YYYY'}}</td>
+        <td>{{ data.namKh }}</td>
+        <td>{{ data.ngayPduyet|date: 'dd/MM/YYYY' }}</td>
+        <td>{{ data.ngayPduyet|date: 'dd/MM/YYYY'}}</td>
         <td>{{ data.trichYeu }}</td>
-        <td>{{ data.xhQdPdKhBttHdr.tenLoaiVthh}}</td>
-        <td>{{ data.xhQdPdKhBttHdr.tenCloaiVthh}}</td>
-        <td>{{ data.tongSoLuong | number : '1.0-1' : 'vi_VN'}}</td>
+        <td>{{ data.tenLoaiVthh}}</td>
+        <td>{{ data.tenCloaiVthh}}</td>
+        <td>{{ data.tongSoLuong|number:globals.numberFormat:globals.locale}}</td>
         <td>{{ data.pthucBanTrucTiep == '02' ? 'Ủy quyền' : 'Bán lẻ'}}</td>
         <td>{{ data.xhQdPdKhBttHdr.tenTrangThai}}</td>
         <td class="text-left">
@@ -223,7 +223,8 @@
 
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewDxKh" (nzOnCancel)="closeModalDxKh()">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-    <app-them-moi-de-xuat-kh-ban-truc-tiep [idInput]="idDxKh" [loaiVthh]="loaiVthh" [isViewOnModal]="true">
+    <app-them-moi-de-xuat-kh-ban-truc-tiep [idInput]="idDxKh" [loaiVthh]="loaiVthh" [isViewOnModal]="true"
+                                           [isView]="true">
     </app-them-moi-de-xuat-kh-ban-truc-tiep>
   </ng-container>
   <div *nzModalFooter>
