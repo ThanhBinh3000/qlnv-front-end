@@ -330,8 +330,8 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
             soLuong: data.tongSoLuong,
 
           })
-          if (data.children) {
-            this.dataTable = data.children
+          if (data.children.length > 0 || data.children2.length > 0) {
+            this.dataTable = data.children.length > 0 ? data.children : data.children2
           }
         }
         else {
@@ -537,7 +537,7 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
             donViTinh: data.donViTinh,
             soHd: data.soHd,
             tenHd: data.tenHd,
-            tgianNkho: data.tgianKthuc,
+            tgianNkho: data.tgianNkho,
           });
           console.log(this.isViewDetail);
           this.radioValue = data.loaiQd

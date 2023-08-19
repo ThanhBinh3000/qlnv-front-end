@@ -9,7 +9,7 @@ import {CuuTroVienTroModule} from "./xuat-cuu-tro/cuu-tro-vien-tro.module";
 
 @NgModule({
   declarations: [
-    XuatCuuTroVienTroComponent
+    XuatCuuTroVienTroComponent,
   ],
   imports: [
     CommonModule,

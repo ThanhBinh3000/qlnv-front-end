@@ -173,7 +173,14 @@ export class ThemMoiTongHopKhnkComponent extends Base2Component implements OnIni
   }
 
   clearFilter() {
-
+    this.formTraCuu.patchValue(
+      {
+        loaiVthh: null,
+        tenLoaiVthh: null,
+        namKhoach: dayjs().get("year"),
+        loaiHinhNx: null
+      }
+    );
   }
 
 

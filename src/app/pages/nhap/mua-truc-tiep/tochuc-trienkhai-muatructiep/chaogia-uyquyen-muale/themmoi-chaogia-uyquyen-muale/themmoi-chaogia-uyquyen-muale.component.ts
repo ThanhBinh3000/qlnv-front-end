@@ -151,11 +151,7 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
     let totalSum = 0;
     if (this.danhSachCtiet) {
       this.danhSachCtiet.forEach(data => {
-        const sum = data.children.reduce((prev, cur) => {
-          prev += Number.parseInt(cur.soLuong);
-          return prev;
-        }, 0);
-        totalSum += sum;
+        totalSum += Number.parseInt(data.tongSoLuong);
       });
     }
     return totalSum;

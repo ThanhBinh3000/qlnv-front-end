@@ -217,12 +217,12 @@
             </td>
             <td>{{ (data.hhQdPduyetKqlcntHdr?.ngayKy) | date: 'dd/MM/YYYY'}}</td>
             <td>{{ data.soGthau }}</td>
-            <td>{{ data.soGthauTrung ? data.soGthauTrung : data.soGthauTrung }}</td>
-            <td>{{ data.soGthauTruot ? data.soGthauTruot : null }}</td>
+            <td>{{ data.soGthauTrung}}</td>
+            <td>{{ data.soGthauTruot}}</td>
             <td *ngIf="!loaiVthh.startsWith('02')">{{ (data.dxuatKhLcntHdr ? data.dxuatKhLcntHdr.tgianNhang : null)
               | date: 'dd/MM/YYYY' }}</td>
             <td *ngIf="loaiVthh.startsWith('02')">{{ data.tgianThien }}</td>
-            <td>{{ data.hhQdKhlcntHdr?.tenPthucLcnt ? data.hhQdKhlcntHdr?.tenPthucLcnt : data.tenPthucLcnt }}</td>
+            <td>{{ data.dxuatKhLcntHdr?.tenPthucLcnt}}</td>
             <td *ngIf="loaiVthh.startsWith('02')">{{ data.hhQdKhlcntHdr?.tenLoaiVthh ? data.hhQdKhlcntHdr?.tenLoaiVthh : data.tenLoaiVthh }}</td>
             <td *ngIf="!loaiVthh.startsWith('02')">{{ data.hhQdKhlcntHdr?.tenCloaiVthh ? data.hhQdKhlcntHdr?.tenCloaiVthh : data.tenCloaiVthh}}</td>
             <td>{{ loaiVthh.startsWith('02') ? data.tenTrangThaiDt : data.tenTrangThai }}</td>

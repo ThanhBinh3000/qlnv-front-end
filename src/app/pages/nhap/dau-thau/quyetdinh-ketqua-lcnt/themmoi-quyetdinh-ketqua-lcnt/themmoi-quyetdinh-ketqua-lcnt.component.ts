@@ -30,6 +30,9 @@ import {
 } from "../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
 import { STATUS } from "../../../../../constants/status";
 import { isEmpty } from 'lodash'
+import {
+  ThemmoiThongtinDauthauComponent
+} from "../../trienkhai-luachon-nhathau/thongtin-dauthau/themmoi-thongtin-dauthau/themmoi-thongtin-dauthau.component";
 @Component({
   selector: 'app-themmoi-quyetdinh-ketqua-lcnt',
   templateUrl: './themmoi-quyetdinh-ketqua-lcnt.component.html',
@@ -46,6 +49,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
 
   @Input() isView: boolean;
   @ViewChild('thongtindtvt') thongTinDauThauVt: ThemmoiThongtinDauthauVtComponent;
+  @ViewChild('thongtindt') thongTinDauThau: ThemmoiThongtinDauthauComponent;
 
   formData: FormGroup;
 
@@ -199,6 +203,18 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
         })
       }
       body.fileDinhKems = this.listFile;
+      let detail = [];
+      this.thongTinDauThau.listOfData.forEach(item => {
+        let dtl = {
+          idGoiThau: item.id,
+          idNhaThau: item.kqlcntDtl?.idNhaThau,
+          donGiaVat: item.kqlcntDtl?.donGiaVat,
+          trangThai: item.kqlcntDtl?.trangThai,
+          tenNhaThau: item.kqlcntDtl?.tenNhaThau
+        }
+        detail.push(dtl)
+      })
+      body.detailList = detail;
     }
 
     let res;

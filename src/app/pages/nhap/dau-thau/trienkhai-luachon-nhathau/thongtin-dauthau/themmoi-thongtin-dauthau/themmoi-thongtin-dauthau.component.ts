@@ -37,6 +37,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
   showListEvent = new EventEmitter<any>();
   @Input() isShowFromKq: boolean;
   @Input() isView: boolean;
+  @Input() isKqDaBh: boolean;
   reportTemplate: any = {
     typeFile: "",
     fileName: "thong_tin_dau_thau_lt.docx",
@@ -47,6 +48,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
   pdfSrc: any;
   wordSrc: any;
   fileDinhKems: any[] = [];
+  itemRowQd: any[] = [];
 
   constructor(
     private modal: NzModalService,
@@ -134,7 +136,18 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
   listDataDiemKho: any[] = [];
   donGiaVatObject: any;
   selected: boolean = false;
-
+  dsTrangThai: any[] = [
+    {
+      value: this.STATUS.THANH_CONG,
+      text: 'Thành công'
+    }, {
+      value: this.STATUS.THAT_BAI,
+      text: 'Thất bại'
+    }, {
+      value: this.STATUS.HUY_THAU,
+      text: 'Hủy thầu'
+    }
+  ];
 
   userInfo: UserLogin;
   datePickerConfig = DATEPICKER_CONFIG;
@@ -392,30 +405,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
   pipe = new DatePipe('en-US');
   async save() {
     await this.spinner.show();
-    if (this.loaiVthh.startsWith("02")) {
-      let filter = this.danhsachDx.filter(item => item.trangThai == STATUS.CHUA_CAP_NHAT);
-      if (filter.length > 0) {
-        this.notification.error(MESSAGE.ERROR, "Vui lòng cập nhật thông tin các gói thầu");
-        await this.spinner.hide();
-        return
-      }
-    } else {
-      let filter = this.listOfData.filter(item => item.trangThai == STATUS.CHUA_CAP_NHAT);
-      if (filter.length > 0) {
-        this.notification.error(MESSAGE.ERROR, "Vui lòng cập nhật thông tin các gói thầu");
-        await this.spinner.hide();
-        return
-      }
-    }
     this.pheDuyet()
-    // let res = await this.thongTinDauThauService.approve(body);
-    // if (res.msg == MESSAGE.SUCCESS) {
-    //   this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-    //   await this.spinner.hide()
-    //   this.quayLai();
-    // } else {
-    //   this.notification.error(MESSAGE.ERROR, res.msg);
-    // }
     await this.spinner.hide()
   }
 
@@ -768,5 +758,33 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
       })
       return sum * 1000;
     }
+  }
+
+  async startEditRowNt(i) {
+    let res = await this.thongTinDauThauService.getDetailThongTin(this.listOfData[i].id, this.loaiVthh);
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listNthauNopHs = res.data;
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+    this.listOfData.forEach(item => {
+      item.edit = false;
+    })
+    this.listOfData[i].edit = true;
+    if (this.listOfData[i].kqlcntDtl) {
+      this.itemRowQd[i] = cloneDeep(this.listOfData[i].kqlcntDtl);
+    } else {
+      this.itemRowQd[i] = {}
+    }
+  }
+
+  cancelEditRowNt(i) {
+    this.listOfData[i].edit = false;
+  }
+  async saveEditRowNt(i) {
+    this.listOfData[i].kqlcntDtl = this.itemRowQd[i];
+    this.listOfData[i].kqlcntDtl.tenTrangThai = this.dsTrangThai.find(item => item.value == this.itemRowQd[i].trangThai).text;
+    this.listOfData[i].kqlcntDtl.tenNhaThau = this.listNthauNopHs.find(item => item.id == this.itemRowQd[i].idNhaThau)?.tenNhaThau;
+    this.listOfData[i].edit = false;
   }
 }

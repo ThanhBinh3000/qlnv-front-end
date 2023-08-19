@@ -212,7 +212,7 @@ export class QuanlyHopdongComponent implements OnInit {
         tongMucDt: tongMucDt
       })
     }
-    this.dataTable = data.qdKhlcntDtl?.children.filter(item => item.trangThai == STATUS.THANH_CONG);
+    this.dataTable = data.qdKhlcntDtl?.children.filter(item => item.trangThaiDt == STATUS.THANH_CONG);
     if (data.listHopDong) {
       let soLuong = 0
       let tongMucDtGoiTrung = 0;

@@ -80,6 +80,7 @@ export class ThongTinComponent implements OnInit, OnChanges {
 
     listLoaiHopDong: any[] = [];
     listGoiThau: any[] = [];
+    listNguoiDaiDien: any[] = [];
     dataTable: any[] = [];
     listDviLquan: any[] = [];
     isViewPhuLuc: boolean = false;
@@ -212,7 +213,8 @@ export class ThongTinComponent implements OnInit, OnChanges {
         }
         await Promise.all([
             this.loadDataComboBox(),
-            this.onChangeNam()
+            this.onChangeNam(),
+            this.loadListNguoiDaiDien(),
         ]);
         if (this.id) {
             // Đã có onchange
@@ -230,6 +232,22 @@ export class ThongTinComponent implements OnInit, OnChanges {
             this.listLoaiHopDong = resHd.data;
         }
     }
+
+  async loadListNguoiDaiDien() {
+    let body = {
+      maDvi: '0101',
+      paggingReq: {
+        limit: this.globals.prop.MAX_INTERGER,
+        page: 0
+      }
+    }
+    await this.userService.search(body).then((res) => {
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.listNguoiDaiDien = res.data?.content
+        console.log
+      }
+    })
+  }
 
     async initForm() {
         this.userInfo = this.userService.getUserLogin();
@@ -491,19 +509,21 @@ export class ThongTinComponent implements OnInit, OnChanges {
 
     bindingDataKqLcntLuongThuc(data) {
         const dataDtl = data.qdKhlcntDtl
-        this.listGoiThau = dataDtl.children.filter(item => item.trangThai == STATUS.THANH_CONG && (data.listHopDong.map(e => e.idGoiThau).indexOf(item.id) < 0));
+        this.listGoiThau = dataDtl.children.filter(item => item.trangThaiDt == STATUS.THANH_CONG && (data.listHopDong.map(e => e.idGoiThau).indexOf(item.id) < 0));
         this.formData.patchValue({
             soQdKqLcnt: data.soQd,
             idQdKqLcnt: data.id,
             ngayQdKqLcnt: data.ngayTao,
             soQdPdKhlcnt: data.soQdPdKhlcnt,
-            loaiHdong: dataDtl.hhQdKhlcntHdr?.loaiHdong,
+            loaiHdong: dataDtl.dxuatKhLcntHdr?.loaiHdong,
             cloaiVthh: dataDtl.hhQdKhlcntHdr?.cloaiVthh,
             tenLoaiVthh: dataDtl.hhQdKhlcntHdr?.tenLoaiVthh,
             loaiVthh: dataDtl.hhQdKhlcntHdr?.loaiVthh,
             tenCloaiVthh: dataDtl.hhQdKhlcntHdr?.tenCloaiVthh,
             moTaHangHoa: dataDtl.dxuatKhLcntHdr?.moTaHangHoa,
-            tgianNkho: dataDtl.dxuatKhLcntHdr?.tgianNhang
+            tgianNkho: dataDtl.dxuatKhLcntHdr?.tgianNhang,
+          soNgayThien: dataDtl.dxuatKhLcntHdr?.tgianThien,
+          soNgayThienHd: dataDtl.dxuatKhLcntHdr?.tgianThienHd,
         })
     }
 
@@ -547,7 +567,7 @@ export class ThongTinComponent implements OnInit, OnChanges {
               } else {
                 let res = await this.thongTinDauThauService.getDetailThongTin(data.id, this.loaiVthh);
                 if (res.msg == MESSAGE.SUCCESS) {
-                  let nhaThauTrung = res.data.filter(item => item.trangThai == STATUS.TRUNG_THAU)[0];
+                  let nhaThauTrung = res.data.find(item => item.id == data.idNhaThau);
                   if (this.userService.isTongCuc()) {
                     this.dataTable = data.children;
                     this.dataTable.forEach(item => {
@@ -759,7 +779,7 @@ export class ThongTinComponent implements OnInit, OnChanges {
         if (this.dataTable) {
             let sum = 0
             this.dataTable.forEach(item => {
-                sum += item.soLuong * item.donGiaVat;
+                sum += item.soLuong * item.donGiaNhaThau;
             })
             return sum;
         }

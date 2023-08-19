@@ -257,3 +257,11 @@ export const KIEU_NHAP_XUAT = {
   '04': 'Xuất không thu tiền',
   '05': 'Khác'
 };
+
+export const LOAI_HINH_NHAP_XUAT = {
+  NHAP_KHAC: 141,
+  NHAP_TANG_SO_LUONG_SAU_KK: 150,
+  NHAP_DO_BOI_THUONG: 151,
+  NHAP_DO_TAI_NHAP: 152,
+  DOI_THUA: 83,
+}
