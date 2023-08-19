@@ -64,6 +64,14 @@ import {ChiTietBangKeCanComponent} from "./xuat-kho/bang-ke-can/chi-tiet-bang-ke
 import {
   ChiTietBienBanKiemTraComponent
 } from './kiem-tra-chat-luong/ho-so-ky-thuat/chi-tiet-ho-so-ky-thuat/chi-tiet-bien-ban-kiem-tra/chi-tiet-bien-ban-kiem-tra.component';
+import { DeXuatComponent } from './de-xuat/de-xuat.component';
+import { ChiTietDeXuatComponent } from './de-xuat/chi-tiet-de-xuat/chi-tiet-de-xuat.component';
+import { TongHopComponent } from './tong-hop/tong-hop.component';
+import { ChiTietTongHopComponent } from './tong-hop/chi-tiet-tong-hop/chi-tiet-tong-hop.component';
+import { QuyetDinhPdComponent } from './quyet-dinh-pd/quyet-dinh-pd.component';
+import { QuyetDinhGnvComponent } from './quyet-dinh-gnv/quyet-dinh-gnv.component';
+import { ChiTietQuyetDinhPdComponent } from './quyet-dinh-pd/chi-tiet-quyet-dinh-pd/chi-tiet-quyet-dinh-pd.component';
+import { ChiTietQuyetDinhGnvComponent } from './quyet-dinh-gnv/chi-tiet-quyet-dinh-gnv/chi-tiet-quyet-dinh-gnv.component';
 
 @NgModule({
   declarations: [
@@ -101,7 +109,15 @@ import {
     XuatKhoComponent,
 
     ChiTietBangKeCanComponent,
-    ChiTietBienBanKiemTraComponent
+    ChiTietBienBanKiemTraComponent,
+    DeXuatComponent,
+    ChiTietDeXuatComponent,
+    TongHopComponent,
+    ChiTietTongHopComponent,
+    QuyetDinhPdComponent,
+    QuyetDinhGnvComponent,
+    ChiTietQuyetDinhPdComponent,
+    ChiTietQuyetDinhGnvComponent
   ],
   imports: [
     CommonModule,
