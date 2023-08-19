@@ -115,8 +115,8 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
   ) {
     this.formData = this.fb.group({
       id: [''],
-      soQd: ['', [Validators.required]],
-      ngayQd: ['', [Validators.required]],
+      soQd: [''],
+      ngayQd: [''],
       tenHd: [''],
       idHd: [''],
       soHd: [''],
@@ -203,7 +203,7 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
     let body = {
       "trangThai": STATUS.DA_KY,
     }
-    let res = await this.hopdongPhulucHopdongService.search(body);
+    let res = await this.hopdongPhulucHopdongService.dsTaoQd(body);
     if (res.msg == MESSAGE.SUCCESS) {
       this.listHopDong = res.data.content;
     } else {
@@ -241,6 +241,8 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
             tenLoaiVthh: data.tenLoaiVthh,
             tenCloaiVthh: data.tenCloaiVthh,
             donViTinh: data.dviTinh,
+            idQdPdKq: data.idQdKq,
+            soQdPdKq: data.soQd,
             soLuong: data.soLuong,
             tgianNkho: data.tgianKthuc,
             ngayKyHd: data.ngayKy,
@@ -328,8 +330,8 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
             soLuong: data.tongSoLuong,
 
           })
-          if (data.children) {
-            this.dataTable = data.children
+          if (data.children.length > 0 || data.children2.length > 0) {
+            this.dataTable = data.children.length > 0 ? data.children : data.children2
           }
         }
         else {
@@ -438,11 +440,9 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
   }
 
   async save(isGuiDuyet?) {
+    this.setValidator(isGuiDuyet)
     this.helperService.markFormGroupTouched(this.formData);
-    if (!this.formData.valid) {
-      return;
-    }
-    this.spinner.show();
+    await this.spinner.show();
     let body = this.formData.value;
     console.log(body, "body");
     body.soQd = this.formData.get('soQd').value + this.maQdSuffix;
@@ -469,7 +469,7 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
     }
     if (res.msg == MESSAGE.SUCCESS) {
       if (isGuiDuyet) {
-        this.spinner.hide();
+        await this.spinner.hide();
         this.id = res.data.id;
         this.pheDuyet();
       } else {
@@ -480,25 +480,25 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
           this.redirectQdNhapXuat();
         }
-        this.spinner.hide();
+        await this.spinner.hide();
       }
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
-      this.spinner.hide();
+      await this.spinner.hide();
     }
   }
   setValidator(isGuiDuyet) {
     if (isGuiDuyet) {
-      if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDC) {
+      if (this.formData.value.trangThai == STATUS.DU_THAO) {
         this.formData.controls["soQd"].setValidators([Validators.required]);
-        this.formData.controls["ngayQdinh"].setValidators([Validators.required]);
+        this.formData.controls["ngayQd"].setValidators([Validators.required]);
       } else {
         this.formData.controls["soQd"].clearValidators();
-        this.formData.controls["ngayQdinh"].clearValidators();
+        this.formData.controls["ngayQd"].clearValidators();
       }
     } else {
       this.formData.controls["soQd"].clearValidators();
-      this.formData.controls["ngayQdinh"].clearValidators();
+      this.formData.controls["ngayQd"].clearValidators();
     }
   }
 
@@ -537,7 +537,7 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
             donViTinh: data.donViTinh,
             soHd: data.soHd,
             tenHd: data.tenHd,
-            tgianNkho: data.tgianKthuc,
+            tgianNkho: data.tgianNkho,
           });
           console.log(this.isViewDetail);
           this.radioValue = data.loaiQd
@@ -563,6 +563,11 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
   }
 
   pheDuyet() {
+    if (this.formData.invalid) {
+      this.spinner.hide()
+      this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR)
+      return;
+    }
     let trangThai = ''
     let mesg = ''
     switch (this.formData.get('trangThai').value) {
@@ -907,26 +912,50 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
     }
   }
 
-  async saveDdiemNhap(statusSave) {
-    this.spinner.show();
+  async saveDdiemNhap(statusSave, hoanThanh?) {
+    let checkTable = false;
     this.dataTable.forEach(item => {
       item.trangThai = statusSave
+      item.children.forEach(x =>{
+        if(x.maLoKho == null){
+          checkTable = true
+        }
+      })
     })
-    let body = {
-      hhQdGiaoNvNhangDtlList: this.dataTable
+    if(checkTable){
+      this.notification.error(MESSAGE.ERROR, 'Bạn phải hoàn thành cập nhật lô kho');
+      return;
     }
-    let res = await this.quyetDinhGiaoNvNhapHangService.updateDdiemNhap(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-      this.redirectQdNhapXuat();
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
-      this.spinner.hide();
-    }
+
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có muốn hoàn thành cập nhật',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: async () => {
+        try {
+          let body = this.formData.value;
+          body.hhQdGiaoNvNhangDtlList = this.dataTable
+          let res = await this.quyetDinhGiaoNvNhapHangService.updateDdiemNhap(body);
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+            this.redirectQdNhapXuat();
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+        } catch (e) {
+          console.log('error: ', e);
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      },
+    });
   }
 
   isDisableForm() {
-    if (this.formData.value.trangThai == STATUS.BAN_HANH) {
+    if ((this.isViewDetail || (!this.isViewDetail && this.userService.isAccessPermisson('NHDTQG_PTMTT_QDGNVNH_DUYET_TP') || !this.isViewDetail && this.userService.isAccessPermisson('NHDTQG_PTMTT_QDGNVNH_DUYET_LDC')) ) && (this.formData.value.trangThai == STATUS.BAN_HANH || this.formData.value.trangThai == STATUS.CHO_DUYET_LDC || this.formData.value.trangThai == STATUS.CHO_DUYET_TP)) {
       return true
     } else {
       return false;

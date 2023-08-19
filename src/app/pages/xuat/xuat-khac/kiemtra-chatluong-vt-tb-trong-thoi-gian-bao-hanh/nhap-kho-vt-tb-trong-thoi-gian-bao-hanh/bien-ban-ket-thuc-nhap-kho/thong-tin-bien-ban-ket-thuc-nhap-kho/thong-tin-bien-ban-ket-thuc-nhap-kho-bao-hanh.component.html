@@ -126,12 +126,12 @@ formData.value.trangThai == STATUS.CHO_DUYET_LDCC"
         <div nz-col [nzSpan]="3">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Ngăn/Lô kho</nz-form-label>
-            <nz-form-control>
+            <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogDdiemNhapHang()">
                 <input nz-input [value]="
                         (formData.value.tenLoKho ? formData.value.tenLoKho + '/ ' : '') +
                         (formData.value.tenNganKho ? formData.value.tenNganKho + '/ ' : '')
-                      " readonly="isView"/>
+                      " [readonly]="isView"/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -140,8 +140,8 @@ formData.value.trangThai == STATUS.CHO_DUYET_LDCC"
           <nz-form-item>
             <nz-form-label [nzNoColon]="true" nzRequired> Nhà kho</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-input-group>
-                <input [readonly]="isView" nz-input formControlName="tenNhaKho" readonly/>
+              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogDdiemNhapHang()">
+                <input [readonly]="isView" nz-input formControlName="tenNhaKho" [readonly]="isView"/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -150,8 +150,8 @@ formData.value.trangThai == STATUS.CHO_DUYET_LDCC"
           <nz-form-item>
             <nz-form-label [nzNoColon]="true" nzRequired> Điểm kho</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-input-group>
-                <input [readonly]="isView" nz-input formControlName="tenDiemKho" readonly/>
+              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogDdiemNhapHang()">
+                <input [readonly]="isView" nz-input formControlName="tenDiemKho" [readonly]="isView"/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -184,18 +184,19 @@ formData.value.trangThai == STATUS.CHO_DUYET_LDCC"
       </div>
     </form>
     <h3 class="mt-3">Thông tin bảng kê cân hàng và phiếu nhập kho</h3>
-    <nz-table nzBordered class="pd-10" [nzData]="dataPhieuNhapKho" class="nowrap" [nzFrontPagination]="false"
+    <nz-table #basicTable nzBordered class="pd-10" [nzData]="listPhieuNhapKho" class="nowrap"
+              [nzFrontPagination]="false"
               [nzShowPagination]="false">
       <thead>
       <tr>
-        <th width="30px">STT</th>
+        <th>STT</th>
         <th>Phiếu nhập kho</th>
-        <th width="200px">Ngày nhập</th>
-        <th width="200px">Số lượng nhập</th>
+        <th>Ngày nhập</th>
+        <th>Số lượng nhập</th>
       </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let data of dataPhieuNhapKho; let i = index">
+      <tr *ngFor="let data of  basicTable.data; let i = index">
         <td>{{i + 1}}</td>
         <td>
           {{data.soPhieu}}

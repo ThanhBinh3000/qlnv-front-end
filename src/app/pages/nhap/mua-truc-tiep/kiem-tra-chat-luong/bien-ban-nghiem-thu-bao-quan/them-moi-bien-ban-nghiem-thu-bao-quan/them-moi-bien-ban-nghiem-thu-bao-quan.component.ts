@@ -232,7 +232,7 @@ export class ThemMoiBienBanNghiemThuBaoQuanComponent extends Base2Component impl
       soQdGiaoNvNh: data.soQd,
       idQdGiaoNvNh: data.id,
       tgianNkho: data.tgianNkho,
-      slCanNhap: data.soLuong * 1000,
+      slCanNhap: data.soLuong,
       loaiVthh: data.loaiVthh,
       cloaiVthh: data.cloaiVthh,
       tenLoaiVthh: data.tenLoaiVthh,
@@ -269,7 +269,7 @@ export class ThemMoiBienBanNghiemThuBaoQuanComponent extends Base2Component impl
 
   async bindingDataDdNhap(data) {
     if (data) {
-      console.log(data)
+      console.log(data, "kho kho kho")
       if (data.listPhieuNhapKho) {
         this.listSoPhieuNhapKho = data.listPhieuNhapKho.filter(item => item.trangThai == STATUS.DA_DUYET_LDCC);
         this.listSoPhieuNhapKho.forEach(item => {
@@ -290,7 +290,7 @@ export class ThemMoiBienBanNghiemThuBaoQuanComponent extends Base2Component impl
         tenLoKho: data.tenLoKho,
         tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho,
       })
-      this.loadLoaiKho()
+      // this.loadLoaiKho()
     }
   }
 

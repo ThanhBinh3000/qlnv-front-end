@@ -48,6 +48,7 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
   initialAllChecked: boolean = true;
   allChecked: boolean = true;
   isTongHop: boolean = false;
+  idsChiCuc: number[];
   tongKinhPhiDcQd: number = 0;
   tongKinhPhiXuatDcTt: number = 0;
   tongKinhPhiNhapDcTt: number = 0;
@@ -105,11 +106,11 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
       if (res.msg === MESSAGE.SUCCESS) {
         this.formData.patchValue({ ...res.data });
         this.danhSachKetQua = res.data.danhSachKetQua;
-        const idsChiCuc = res.data.idsChiCuc?.split(",").map(f => Number(f));
+        this.idsChiCuc = res.data.idsChiCuc && Array.isArray(res.data.idsChiCuc.split(",")) ? res.data.idsChiCuc.split(",").map(f => Number(f)) : []
         if (this.loaiBc === "CUC") {
           await this.loadListBaoCaoChiCuc();
           this.listBaoCaoChiCuc = this.listBaoCaoChiCuc.map(f => {
-            if (idsChiCuc.includes(f.id)) {
+            if (this.idsChiCuc.includes(f.id)) {
               return {
                 ...f, checked: true
               }
@@ -297,7 +298,8 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
       this.formData.patchValue({ listTenBaoCaoSelect: this.listBaoCaoChiCuc.filter(f => f.checked).map(m => this.loaiBc === "CUC" ? m.tenBc : m.ten) });
     };
     this.danhSachKetQua = Array.isArray(this.listBaoCaoChiCuc) ? this.listBaoCaoChiCuc.filter(f => f.checked).reduce((arr, cur) => {
-      arr = arr.concat(cur.danhSachKetQua);
+      const hasId = this.idsChiCuc.includes(cur.id);
+      arr = arr.concat(cur.danhSachKetQua.map(f => ({ ...f, id: hasId ? f.id : undefined, hdrId: hasId ? f.hdrId : undefined })));
       return arr
     }, []) : [];
     this.buildTableView();
@@ -356,7 +358,8 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
       }
       let data = await this.createUpdate(body);
       if (!data) return;
-      this.formData.patchValue({ id: data.id, soBc: data.soBc, trangThai: data.trangThai })
+      this.formData.patchValue({ id: data.id, soBc: data.soBc, trangThai: data.trangThai });
+      this.idsChiCuc = data.idsChiCuc && Array.isArray(data.idsChiCuc.split(",")) ? data.idsChiCuc.split(",").map(f => Number(f)) : [];
       if (isGuiDuyet) {
         if (this.loaiBc === 'CUC') {
           this.pheDuyet();
@@ -554,6 +557,6 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
   }
   checkRoleLapBBThuaThieu() {
     // return this.duocLapBBThuaThieu;
-    return (this.loaiBc === "CHI_CUC" && this.userService.isChiCuc() && this.formData.value.trangThai === STATUS.DA_HOAN_THANH)
+    return (this.loaiBc === "CHI_CUC" && this.userService.isChiCuc() && this.formData.value.trangThai === STATUS.DA_HOAN_THANH && this.duocLapBBThuaThieu)
   }
 }

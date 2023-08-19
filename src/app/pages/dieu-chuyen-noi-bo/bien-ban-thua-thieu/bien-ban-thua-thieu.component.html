@@ -11,7 +11,7 @@
                     </div>
                     <div nz-col nzSpan="4" class="mt-16">
                         <label class="search__label">Số quyết định xuất/nhập ĐC của Cục</label>
-                        <input nz-input formControlName="soQdinhCuc" />
+                        <input nz-input formControlName="soQdDcCuc" />
                     </div>
                     <div nz-col nzSpan="5" class="mt-16">
                         <label class="search__label">Số báo cáo</label>
@@ -35,7 +35,7 @@
                     </div>
                     <div nz-col nzSpan="5" class="mt-16">
                         <label class="search__label">Số biên bản ghi nhận thừa/thiếu</label>
-                        <input nz-input formControlName="soBc" />
+                        <input nz-input formControlName="soBb" />
                     </div>
                     <div nz-col nzSpan="4" class="mt-16">
                         <label class="search__label">Ngày lập biên bản ghi nhận thừa/thiếu</label>
@@ -249,6 +249,6 @@
     </div>
 </div>
 <ng-template #templateThemmoi>
-    <app-chi-tiet-bien-ban-thua-thieu [idInput]="selectedId" [passData]="passData"
+    <app-chi-tiet-bien-ban-thua-thieu [idInput]="selectedId" [passData]="passData" [isView]="isView"
         (showListEvent)="goBack()"></app-chi-tiet-bien-ban-thua-thieu>
 </ng-template>

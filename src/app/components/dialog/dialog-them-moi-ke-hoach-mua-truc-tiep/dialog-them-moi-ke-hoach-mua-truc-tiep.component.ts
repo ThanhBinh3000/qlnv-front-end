@@ -15,6 +15,7 @@ import { DeXuatKhBanTrucTiepService } from 'src/app/services/qlnv-hang/xuat-hang
 import { DanhSachMuaTrucTiep } from 'src/app/models/DeXuatKeHoachMuaTrucTiep';
 import { DanhSachMuaTrucTiepService } from 'src/app/services/danh-sach-mua-truc-tiep.service';
 import { cloneDeep } from 'lodash';
+import {AMOUNT_TWO_DECIMAL} from "../../../Utility/utils";
 
 
 @Component({
@@ -42,7 +43,9 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
   listChiCuc: any[] = [];
 
   listDiemKho: any[] = [];
-
+  customPrecisionFn(value: string | number, precision?: number): number {
+    return +Number(value).toFixed(precision! + 1);
+  }
 
   constructor(
     private _modalRef: NzModalRef,
@@ -96,6 +99,9 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
         return;
       }
       let data = this.formData.value;
+      this.listOfData.forEach(item =>{
+        item.donGia = data.donGia
+      })
       data.children = this.listOfData;
       this._modalRef.close(data);
     }

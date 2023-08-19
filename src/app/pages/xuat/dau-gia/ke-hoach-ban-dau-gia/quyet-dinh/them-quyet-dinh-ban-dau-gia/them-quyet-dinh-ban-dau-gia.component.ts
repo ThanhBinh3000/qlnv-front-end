@@ -306,8 +306,6 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
                 tenCloaiVthh: dataTh.tenCloaiVthh,
                 loaiVthh: dataTh.loaiVthh,
                 tenLoaiVthh: dataTh.tenLoaiVthh,
-                tchuanCluong: dataTh.tchuanCluong,
-                soQdCc: dataTh.soQdPd,
                 slDviTsan: soLuongDviTsan,
                 namKh: this.formData.value.nam,
                 idThHdr: dataTh.id,
@@ -353,7 +351,7 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
     );
     if (res2.msg == MESSAGE.SUCCESS) {
       this.formData.patchValue({
-        soQdCc: res2.data.soQuyetDinh,
+        soQdCc: res2.data != null ? res2.data.soQuyetDinh : null,
       });
     } else {
       this.formData.patchValue({
@@ -426,10 +424,7 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
               pthucGnhan: dataDx.pthucGnhan,
               thongBaoKh: dataDx.thongBaoKh,
               trichYeu: dataDx.trichYeu,
-              tenDvi: dataDx.tenDvi,
-              diaChi: dataDx.diaChi,
               slDviTsan: dataDx.slDviTsan,
-              maDvi: dataDx.maDvi,
               loaiHinhNx: dataDx.loaiHinhNx,
               tenLoaiHinhNx: dataDx.tenLoaiHinhNx,
               kieuNx: dataDx.kieuNx,
@@ -478,7 +473,6 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
       this.dataInput = this.danhsachDx[0];
       if (this.dataInput) {
         let res = await this.deXuatKhBanDauGiaService.getDetail(this.dataInput.idDxHdr);
-        console.log(res.data, 999)
         this.dataInputCache = res.data;
       }
       this.index = 0;

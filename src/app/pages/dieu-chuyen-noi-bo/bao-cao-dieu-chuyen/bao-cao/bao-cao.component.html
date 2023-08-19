@@ -180,7 +180,10 @@
                         <td>{{data.soBc}}</td>
                         <td>{{data.tenBc}}</td>
                         <td>{{data.ngayBc | date:"dd/MM/yyyy"}}</td>
-                        <td *ngIf="loaiBc==='CHI_CUC'">{{data.soBbThuaThieu}}</td>
+                        <td *ngIf="loaiBc==='CHI_CUC'">
+                            <a *ngIf="data.soBbThuaThieu && data.bbThuaThieuId" nz-button nzType="link"
+                                (click)="openModalBBTT(data.bbThuaThieuId)">{{data.soBbThuaThieu}}</a>
+                        </td>
                         <td *ngIf="loaiBc==='CHI_CUC'">{{data.soQdDcCuc}}</td>
                         <td *ngIf="loaiBc==='CHI_CUC'">{{ data.ngayKyQd|date:"dd/MM/yyyy"}}</td>
                         <td>{{ TRANG_THAI[data.trangThai]}}</td>
@@ -225,3 +228,16 @@
     <app-them-moi-bao-cao [idInput]="selectedId" [isView]="isView" (showListEvent)="showList()"
         [loaiBc]="loaiBc"></app-them-moi-bao-cao>
 </ng-template>
+
+<nz-modal [nzWidth]="'90%'" [(nzVisible)]="isViewBbThuaThieu" (nzOnCancel)="closeModalBbThuaThieu()">
+    <ng-container *nzModalContent class="modal__content">
+        <app-chi-tiet-bien-ban-thua-thieu [idInput]="bbThuaThieuId" [isView]="true"
+            [isViewOnModal]="true"></app-chi-tiet-bien-ban-thua-thieu>
+    </ng-container>
+    <div *nzModalFooter>
+        <button nz-button (click)="closeModalBbThuaThieu()" class="modal__button--cancel">
+            <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+            Đóng
+        </button>
+    </div>
+</nz-modal>
