@@ -636,18 +636,18 @@
                     </ng-container>
                   </ng-container>
                 </ng-container>
-                </tbody>
                 <tr *ngIf="dataTable.length > 0">
                   <td></td>
-                  <td colspan="3" class="first-last-row-table background-last-row text-right blue-text">Tổng
+                  <td colspan="3" class="text-right blue-text">Tổng
                   </td>
-                  <td class="background-last-row text-right blue-text">{{ calcTongSl() | number : '1.0-1' :
+                  <td class="text-right blue-text">{{ calcTongSl() | number : '1.0-1' :
                     'vi_VN' }}</td>
-                  <td class="background-last-row text-right blue-text">{{ calcTongThanhTien() | number :
+                  <td class="text-right blue-text">{{ calcTongThanhTien() | number :
                     '1.0-1' :
                     'vi_VN'}}</td>
                   <td></td>
                 </tr>
+                </tbody>
               </nz-table>
 
             </ng-template>

@@ -35,7 +35,7 @@ export class TongHopKhnkComponent implements OnInit {
   searchFilter = {
     namKhoach: "",
     maTh: "",
-    trangThai: "",
+    // trangThai: "",
 
   };
   dataTable: any[] = [];
@@ -128,7 +128,7 @@ export class TongHopKhnkComponent implements OnInit {
   clearFilter() {
     this.searchFilter.namKhoach = null;
     this.searchFilter.maTh = null;
-    this.searchFilter.trangThai = null;
+    // this.searchFilter.trangThai = null;
     this.tuNgayKy = null;
     this.denNgayKy = null;
     this.tuNgayTh = null;
@@ -145,7 +145,7 @@ export class TongHopKhnkComponent implements OnInit {
       denNgayTh: this.denNgayTh != null ? dayjs(this.denNgayTh).format("YYYY-MM-DD") + " 23:59:59" : null,
       namKhoach: this.searchFilter.namKhoach,
       maTh: this.searchFilter.maTh,
-      trangThai: this.searchFilter.trangThai,
+      // trangThai: this.searchFilter.trangThai,
       paggingReq: {
         limit: this.pageSize,
         page: this.page - 1
@@ -226,7 +226,7 @@ export class TongHopKhnkComponent implements OnInit {
           denNgayTh: this.denNgayTh != null ? dayjs(this.denNgayTh).format("YYYY-MM-DD") + " 23:59:59" : null,
           namKhoach: this.searchFilter.namKhoach,
           maTh: this.searchFilter.maTh,
-          trangThai: this.searchFilter.trangThai,
+          // trangThai: this.searchFilter.trangThai,
         };
         this.tongHopDxKhNhapKhacService
           .export(body)
