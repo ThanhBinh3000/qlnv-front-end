@@ -527,6 +527,7 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
         }
       })
     }
+    this.tinhTong();
   }
 
   showEditItemHangHoa(idx: number, type: string) {
@@ -853,7 +854,7 @@ export class DetailHopDong {
   soHopDong: string;
   maHopDong: string;
   loaiTien: string;
-  dviCungCapHang: string;
+  dvCungCapHang: string;
   soTaiKhoan: string;
   nganHang: string;
   tenLoaiTien: string;
