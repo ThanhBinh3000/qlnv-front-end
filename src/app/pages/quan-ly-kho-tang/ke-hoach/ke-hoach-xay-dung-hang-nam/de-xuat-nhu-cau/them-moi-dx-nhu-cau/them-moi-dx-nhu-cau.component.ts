@@ -46,6 +46,8 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
   listFileDinhKem: any[] = [];
   listKhoi: any[] = [];
   listLoaiDuAn: any[] = [];
+  STATUS = STATUS;
+
 
   constructor(
     private httpClient: HttpClient,

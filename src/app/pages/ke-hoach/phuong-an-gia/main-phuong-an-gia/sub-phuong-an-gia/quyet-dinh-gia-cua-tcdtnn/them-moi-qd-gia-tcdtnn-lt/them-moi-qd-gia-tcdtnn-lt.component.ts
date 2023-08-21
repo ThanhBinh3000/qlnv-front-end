@@ -251,7 +251,7 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
           item.children.forEach(child => {
             if (child.apDungTatCa) {
               child.giaQdTcdt = item.giaQdTcdt;
-              if (child.vat) {
+              if (child.vat && (this.formData.value.loaiGia == 'LG01' || this.formData.value.loaiGia == 'LG03')) {
                 child.giaQdTcdtVat = child.giaQdTcdt + child.giaQdTcdt * child.vat
               }
             }

@@ -12,7 +12,7 @@
     <tbody>
     <tr *ngFor="let data of basicTable.data; let i = index">
       <td class="text-center">{{i+1}}</td>
-      <td *ngIf="type == 'QDTX'"  >{{ data.soToTrinh}}</td>
+      <td *ngIf="type == 'QDTX'"  >{{ data.soQuyetDinh}}</td>
       <td *ngIf="type == 'QDTH'"  >{{ data.soQuyetDinh}}</td>
       <td *ngIf="type == 'DXNC'"  >{{ data.soQuyetDinh}}</td>
       <td  class="text-center">

@@ -146,7 +146,7 @@
           <td>{{ data.tenTrangThai }}</td>
           <td>
             <a (click)="redirectToChiTiet(data.id, true)" *ngIf="(userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_BBGN_XEM') &&
-                 !((data.trangThai == STATUS.DU_THAO) && data.maDvi == userInfo.MA_DVI))">
+                 !((data.trangThai == STATUS.DU_THAO) && data.nguoiTaoId == userInfo.ID))">
               <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
             <a *ngIf="((data.trangThai == STATUS.DU_THAO && userService.isChiCuc()) && userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_BBGN_SUA'))"
