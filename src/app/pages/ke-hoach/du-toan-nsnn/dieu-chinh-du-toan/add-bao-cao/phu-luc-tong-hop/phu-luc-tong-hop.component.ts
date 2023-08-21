@@ -245,7 +245,7 @@ export class PhuLucTongHopComponent implements OnInit {
         })
 
         this.lstCtietBcao = Table.sortByIndex(this.lstCtietBcao)
-        // this.sum1()
+        this.sum1()
         this.tinhTong();
         this.getTotal();
         this.getStatusButton();
@@ -272,11 +272,11 @@ export class PhuLucTongHopComponent implements OnInit {
             }
         )
     }
-    // sum1() {
-    //     this.lstCtietBcao.forEach(item => {
-    //         this.sum(item.stt);
-    //     })
-    // }
+    sum1() {
+        this.lstCtietBcao.forEach(item => {
+            this.sum(item.stt);
+        })
+    }
 
     async getFormDetail() {
         await this.dieuChinhDuToanService.ctietBieuMau(this.dataInfo.id).toPromise().then(
@@ -576,19 +576,23 @@ export class PhuLucTongHopComponent implements OnInit {
             this.total.child.push({
                 ...new ItemDvi(),
                 maDviBcao: item.maDvi,
-                dtoanVuTvqtDnghi: 0
                 // tenDvi: item.tenDvi,
             })
         })
         this.lstCtietBcao.forEach(item => {
             if (item.stt.split('.')?.length == 2) {
-                item.child.forEach(ele => {
-                    this.total.child.find(e => e.maDviBcao == ele.maDviBcao).dtoanVuTvqtDnghi += ele.dtoanVuTvqtDnghi;
-                })
-                // console.log(item);
-                // for (let i = 0; i < item.child?.length; i++) {
-                //     this.total.child[i].dtoanVuTvqtDnghi += item.child[i]?.dtoanVuTvqtDnghi;
-                // }
+                // this.total.gtTrenGt = Operator.sum([this.total.gtTrenGt, item.gtTrenGt]);
+                // this.total.gtTrenGtBh = Operator.sum([this.total.gtTrenGtBh, item.gtTrenGtBh]);
+                // this.total.gtDuoiGt = Operator.sum([this.total.gtDuoiGt, item.gtDuoiGt]);
+                // this.total.gtDuoiGtBh = Operator.sum([this.total.gtDuoiGtBh, item.gtDuoiGtBh]);
+                // this.total.tong = Operator.sum([this.total.tong, item.tong]);
+                for (let i = 0; i < item.child?.length; i++) {
+                    this.total.child[i].dtoanVuTvqtDnghi = Operator.sum([this.total.child[i].dtoanVuTvqtDnghi, item.child[i].dtoanVuTvqtDnghi]);
+                    // this.total.lstDviCapDuoi[i].gtTrenGtBh = Operator.sum([this.total.lstDviCapDuoi[i].gtTrenGtBh, item.lstDviCapDuoi[i].gtTrenGtBh]);
+                    // this.total.lstDviCapDuoi[i].gtDuoiGt = Operator.sum([this.total.lstDviCapDuoi[i].gtDuoiGt, item.lstDviCapDuoi[i].gtDuoiGt]);
+                    // this.total.lstDviCapDuoi[i].gtDuoiGtBh = Operator.sum([this.total.lstDviCapDuoi[i].gtDuoiGtBh, item.lstDviCapDuoi[i].gtDuoiGtBh]);
+                    // this.total.lstDviCapDuoi[i].tong = Operator.sum([this.total.lstDviCapDuoi[i].tong, item.lstDviCapDuoi[i].tong]);
+                }
             }
         })
     }

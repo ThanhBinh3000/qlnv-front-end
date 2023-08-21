@@ -4,7 +4,7 @@ export const QUAN_LY_KHO_TANG_MAIN_ROUTE = 'quan-ly-kho-tang';
 export const QUAN_LY_KHO_TANG_ROUTE_LIST: Array<ChiTietMenu> = [
   {
     icon: 'htvbdh_tcdt_chitieukehoachnam',
-    title: 'Mạng lưới kho tàng',
+    title: 'Mạng lưới kho ',
     url: `/mang-luoi-kho`,
     dropdown: 'mang-luoi-kho',
     idHover: 'mang-luoi-kho',
@@ -12,7 +12,7 @@ export const QUAN_LY_KHO_TANG_ROUTE_LIST: Array<ChiTietMenu> = [
   },
   {
     icon: 'htvbdh_tcdt_chitieukehoachnam',
-    title: 'Quy hoạch & kế hoạch kho tàng',
+    title: 'Quy hoạch & kế hoạch kho ',
     url: `/ke-hoach`,
     dropdown: 'ke-hoach',
     idHover: 'ke-hoach',
@@ -20,20 +20,20 @@ export const QUAN_LY_KHO_TANG_ROUTE_LIST: Array<ChiTietMenu> = [
   },
   {
     icon: 'htvbdh_tcdt_chitieukehoachnam',
-    title: 'Tiến độ xây dựng, sửa chữa kho tàng',
+    title: 'Tiến độ xây dựng, sửa chữa kho ',
     url: `/tien-do-xay-dung-sua-chua`,
     dropdown: 'tien-do',
     idHover: 'tien-do',
     hasTab: false,
   },
-  {
-    icon: 'htvbdh_tcdt_tochucthuchien',
-    title: 'Thực hiện',
-    url: '',
-    dropdown: 'dau-thau',
-    idHover: 'dauthau',
-    hasTab: false,
-  },
+  // {
+  //   icon: 'htvbdh_tcdt_tochucthuchien',
+  //   title: 'Thực hiện',
+  //   url: '',
+  //   dropdown: 'dau-thau',
+  //   idHover: 'dauthau',
+  //   hasTab: false,
+  // },
   // {
   //   icon: 'htvbdh_tcdt_baocao2',
   //   title: 'Báo cáo',

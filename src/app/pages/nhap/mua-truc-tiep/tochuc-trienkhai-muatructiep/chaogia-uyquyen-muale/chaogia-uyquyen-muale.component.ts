@@ -23,6 +23,7 @@ export class ChaogiaUyquyenMualeComponent extends Base2Component implements OnIn
 
   dsDonvi: any[] = [];
   userdetail: any = {};
+  isView: any;
 
   constructor(
     httpClient: HttpClient,
@@ -41,7 +42,7 @@ export class ChaogiaUyquyenMualeComponent extends Base2Component implements OnIn
       maDvi: null,
       tenDvi: null,
       loaiVthh: null,
-      lastest: 1
+      lastest: null
     })
 
     this.filterTable = {
@@ -64,7 +65,7 @@ export class ChaogiaUyquyenMualeComponent extends Base2Component implements OnIn
     try {
       this.formData.patchValue({
         loaiVthh: this.loaiVthh,
-        lastest: 1,
+        lastest: null,
         maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
       })
       await this.timKiem();
@@ -97,5 +98,11 @@ export class ChaogiaUyquyenMualeComponent extends Base2Component implements OnIn
       this.formData.value.ngayCgiadDen = dayjs(this.formData.value.ngayTao[1]).format('YYYY-MM-DD')
     }
     await this.search();
+  }
+
+  goDetail(id: number, isView?: any) {
+    this.idSelected = id;
+    this.isDetail = true;
+    this.isView = isView
   }
 }

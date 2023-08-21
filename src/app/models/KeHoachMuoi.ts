@@ -2,8 +2,6 @@ import { ItemDetail } from './itemDetail';
 
 export class KeHoachMuoi {
   stt: number;
-  cucId: number;
-  cucDTNNKhuVuc: string;
   tenDonvi: string;
   tenDonVi: string;
   maDonVi: string;
@@ -12,22 +10,16 @@ export class KeHoachMuoi {
   donViId: number;
   id: number;
   isEdit: boolean;
-
   //Hoaot updated
   tonKhoDauNam: number;
   nhapTrongNam: number;
   xuatTrongNamMuoi: number;
   tonKhoCuoiNam: number;
-
-
   tkdnTongSoMuoi: number;
   tkdnMuoi: Array<ItemDetail>;
-
   tdcNtnTongSoMuoi: number;
   ntnTongSoMuoi: number;
   dcNtnTongSoMuoi: number;
-  sdcNtnTongSoMuoi: number;
-
   tdcXtnTongSoMuoi: number;
   xtnTongSoMuoi: number;
   xtnMuoi: Array<ItemDetail>;

@@ -1,0 +1,38 @@
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="level2-border">
+  <ul nz-menu nzMode="horizontal">
+    <li nz-menu-item [nzSelected]="tabSelected==0" (click)="selectTab(0)">
+      Toàn bộ danh sách VT, TB hết hạn lưu kho nhưng chưa có kế hoạch xuất
+    </li>
+    <li [nzSelected]="tabSelected==1" *ngIf="!userService.isChiCuc()" nz-menu-item (click)="selectTab(1)">
+      Tổng hợp danh sách VT, TB hết hạn lưu kho nhưng chưa có kế hoạch xuất
+    </li>
+    <li [nzSelected]="tabSelected==2" *ngIf="!userService.isChiCuc()" nz-menu-item (click)="selectTab(2)">
+      Kế hoạch xuất hàng của cục
+    </li>
+    <li [nzSelected]="tabSelected==3" nz-menu-item *ngIf="userService.isTongCuc()" (click)="selectTab(3)">
+      Tổng hợp kế hoạch xuất hàng
+    </li>
+    <li [nzSelected]="tabSelected==4" *ngIf="!userService.isChiCuc()" nz-menu-item (click)="selectTab(4)">
+      Kế hoạch xuất hàng của toàn Tổng cục
+    </li>
+  </ul>
+</nz-affix>
+<div class="contentBor chi-tieu__body giao-ke-hoach">
+  <div class="contentDetail">
+    <ng-container *ngIf="tabSelected == 0">
+      <app-toan-bo-danh-sach-vt12th (tabFocus)="receivedTab($event)"></app-toan-bo-danh-sach-vt12th>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 1">
+      <app-tong-hop-danh-sach-vt12th (tabFocus)="receivedTab($event)"></app-tong-hop-danh-sach-vt12th>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 2">
+      <app-ke-hoach-xuat-hang-cua-cuc></app-ke-hoach-xuat-hang-cua-cuc>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 3">
+      <app-tong-hop-ke-hoach-xuat-hang (tabFocus)="receivedTab($event)"></app-tong-hop-ke-hoach-xuat-hang>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 4">
+      <app-ke-hoach-xuat-hang-cua-tong-cuc (tabFocus)="receivedTab($event)"></app-ke-hoach-xuat-hang-cua-tong-cuc>
+    </ng-container>
+  </div>
+</div>

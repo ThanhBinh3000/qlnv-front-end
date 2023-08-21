@@ -7,8 +7,10 @@
         <li nz-menu-item (click)="selectTab('tctkkhlcnt')" *ngIf="!userService.isChiCuc()  && userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT')">
             Tổ chức triển khai KH lựa chọn nhà thầu
         </li>
-        <li nz-menu-item (click)="selectTab('dckhlcnt')" *ngIf="!userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_PTDT_DCKHLCNT')">
-            Điều chỉnh KH lựa chọn nhà thầu
+        <li nz-menu-item (click)="selectTab('qdpdkqlcnt')" *ngIf="!userService.isChiCuc()
+        && (userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_LT_QDKQLCNT')
+        || (userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_VT_QDKQLCNT')))">
+            Quyết định phê duyệt kết quả lựa chọn nhà thầu
         </li>
         <li nz-menu-item (click)="selectTab('hopdong')" *ngIf="!userService.isChiCuc()">
             Hợp đồng
@@ -32,8 +34,8 @@
         <ng-container *ngIf="tabSelected == 'tctkkhlcnt'">
             <app-trienkhai-luachon-nhathau></app-trienkhai-luachon-nhathau>
         </ng-container>
-        <ng-container *ngIf="tabSelected == 'dckhlcnt'">
-            <app-dieu-chinh></app-dieu-chinh>
+        <ng-container *ngIf="tabSelected == 'qdpdkqlcnt'">
+            <app-quyetdinh-ketqua-lcnt></app-quyetdinh-ketqua-lcnt>
         </ng-container>
         <ng-container *ngIf="tabSelected == 'hopdong'">
             <app-hop-dong></app-hop-dong>

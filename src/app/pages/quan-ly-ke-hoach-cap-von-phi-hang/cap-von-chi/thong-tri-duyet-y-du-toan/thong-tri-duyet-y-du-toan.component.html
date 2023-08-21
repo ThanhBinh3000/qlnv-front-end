@@ -50,7 +50,7 @@
       <div class="buttons">
         <button type="button" class="btn btn-do" (click)="deleteSelect()"
                 *ngIf="userService.isTongCuc() && userService.isAccessPermisson('VONPHIHANG_VONCHIDTQG_THONGTRI_XOA')">
-          <i class="fa fa-trash-o do"></i>
+          <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
           <span>Xóa</span>
         </button>
         <button type="button" class="btn btn-sub" (click)="exportData()"
@@ -80,9 +80,9 @@
           <th width="">Số thông tri</th>
           <th width="">Năm</th>
           <th width="">Ngày lập</th>
-          <th width="">Đơn vị</th>
           <th width="">Lý do chi</th>
           <th width="">Mã tổng hợp</th>
+          <th width="">Đơn vị</th>
           <th width="">Trạng thái</th>
           <th width="90px">Hành động</th>
         </tr>
@@ -105,16 +105,10 @@
           </th>
           <th>
             <nz-input-group>
-              <nz-date-picker nzFormat="dd/MM/yyyy" nzPlaceHolder="Ngày ký"
+              <nz-date-picker nzFormat="dd/MM/yyyy" nzPlaceHolder="Ngày lập"
                               [(ngModel)]="filterTable.ngayLap"
                               (ngModelChange)="filterInTable('ngayLap', convertDateToString(filterTable.ngayLap))"
               ></nz-date-picker>
-            </nz-input-group>
-          </th>
-          <th>
-            <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenDviThongTri"
-                     (input)="filterInTable('tenDviThongTri',filterTable.tenDviThongTri)" size="small"/>
             </nz-input-group>
           </th>
           <th>
@@ -127,6 +121,12 @@
             <nz-input-group>
               <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soDnCapVon"
                      (input)="filterInTable('soDnCapVon',filterTable.soDnCapVon)" size="small"/>
+            </nz-input-group>
+          </th>
+          <th>
+            <nz-input-group>
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenDviThongTri"
+                     (input)="filterInTable('tenDviThongTri',filterTable.tenDviThongTri)" size="small"/>
             </nz-input-group>
           </th>
           <th>
@@ -150,31 +150,24 @@
           <td>{{ data.soThongTri }}</td>
           <td class="text-center">{{ data.nam }}</td>
           <td>{{ data.ngayLap | date: 'dd/MM/YYYY' }}</td>
-          <td>{{ data.tenDviThongTri }}</td>
           <td>{{ data.lyDoChi }}</td>
           <td>{{ data.soDnCapVon }}</td>
+          <td>{{ data.tenDviThongTri }}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-left">
             <a *ngIf="data.trangThai != STATUS.DU_THAO && data.trangThai != STATUS.TU_CHOI_LDV"
                (click)="detail(data, true)">
-              <i class="fa fa-eye"></i>
+              <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
-            <!-- <a *ngIf="(data.trangThai== STATUS.DU_THAO  || data.trangThai== STATUS.TU_CHOI_LDV) && userService.isTongCuc() && userService.isAccessPermisson('VONPHIHANG_VONCHIDTQG_THONGTRI_SUA')"
-               (click)="detail(data, false)">
-               <i class="fa fa-pencil"></i>
-             </a>
-             <a *ngIf="(data.trangThai== STATUS.DU_THAO  || data.trangThai== STATUS.TU_CHOI_LDV) && userService.isTongCuc() && userService.isAccessPermisson('VONPHIHANG_VONCHIDTQG_THONGTRI_XOA')" (click)="xoaItem(data)">
-               <i class="fa fa-trash-o do"></i>
-             </a>-->
             <a
               *ngIf="(data.trangThai== STATUS.DU_THAO  || data.trangThai== STATUS.TU_CHOI_LDV) && userService.isTongCuc()"
               (click)="detail(data, false)">
-              <i class="fa fa-pencil"></i>
+              <i class="fa fa-pencil" title="Sửa"></i>
             </a>
             <a
               *ngIf="data.trangThai == STATUS.DU_THAO && userService.isTongCuc()"
               (click)="xoaItem(data)">
-              <i class="fa fa-trash-o do"></i>
+              <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>
         </tr>

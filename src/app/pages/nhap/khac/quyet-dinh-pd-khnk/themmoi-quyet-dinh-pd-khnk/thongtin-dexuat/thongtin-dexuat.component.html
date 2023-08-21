@@ -36,7 +36,7 @@
     <div class="title-chi-tieu">
       <span>
       </span>
-      <span> Nhập dôi thừa </span>
+      <span> {{formData.value.tenLoaiHinhNx}} </span>
     </div>
   </div>
 </div>
@@ -55,88 +55,271 @@
         <th>SL dôi thừa</th>
         <th>Đơn giá</th>
         <th>Thành tiền (đ)</th>
-        <th *ngIf="!isView"></th>
+        <th *ngIf="!isView">Hành động</th>
       </tr>
     </thead>
     <tbody>
+    <ng-container *ngIf="this.isTongCuc;else templateCuc">
       <ng-container *ngFor="let item of listDataGroup , let i = index">
         <tr>
           <td [nzExpand]="true" (nzExpandChange)="onExpandChange(i, $event)"></td>
-          <td colspan="3">{{item.tenDvi}}</td>
+          <td colspan="3">{{item.tenCuc}}</td>
           <td></td>
           <td class="text-right red-text"></td>
           <td class="text-right red-text"></td>
           <td class="text-right bold-700"></td>
           <td></td>
           <td class="text-right bold-700"></td>
-          <td></td>
           <td></td>
           <td *ngIf="!isView"></td>
         </tr>
-<!--        <ng-container *ngFor="let dtGoiThau of item.dataChild, let y = index">-->
-<!--          <tr>-->
-<!--            <td></td>-->
-<!--            <td></td>-->
-<!--            <td>{{dtGoiThau.goiThau}}</td>-->
-<!--            <td></td>-->
-<!--            <td></td>-->
-<!--            <td></td>-->
-<!--            <td></td>-->
-<!--            <td></td>-->
-<!--            <td></td>-->
-<!--            <td></td>-->
-<!--            <td></td>-->
-<!--            <td></td>-->
-<!--            <td></td>-->
-<!--          </tr>-->
-<!--          <ng-container>-->
-<!--            <tr *ngFor="let res of dtGoiThau.children, let k = index">-->
-<!--              <td></td>-->
-<!--              <td></td>-->
-<!--              <td></td>-->
-<!--              <td>{{res.tenDvi}}</td>-->
-<!--              <td>{{dtGoiThau.diaDiemNhap}}</td>-->
-<!--              <td></td>-->
-<!--              <td></td>-->
-<!--              <td class="text-right" [contentEditable]="isEditing" (input)="onInput($event.target['textContent'])"-->
-<!--                (blur)="onBlur(res)" [class.editing]="isEditing">-->
-<!--                {{res.soLuong | number : '1.0-1' : 'vi_VN'}}</td>-->
-<!--              <td>{{dtGoiThau.donGia ? dtGoiThau.donGia : dtGoiThau.donGiaTamTinh}}</td>-->
-<!--              <td class="text-right">{{(dtGoiThau.donGiaTamTinh != null ?-->
-<!--                dtGoiThau.donGiaTamTinh * res.soLuong : (dtGoiThau.donGiaVat != null ? dtGoiThau.donGiaVat *-->
-<!--                res.soLuong : (dtGoiThau.donGia != null ? dtGoiThau.donGia * res.soLuong : 0)))-->
-<!--                | number: '1.0-1' : 'vi_VN'}}</td>-->
-<!--              <td>{{isCache ? dtGoiThau.donGiaVat : giaVat}}</td>-->
-<!--              <td class="text-right">{{(isCache ? res.soLuong * dtGoiThau.donGiaVat : res.soLuong * giaVat) | number:-->
-<!--                '1.0-1' : 'vi_VN'}}</td>-->
-<!--              <td *ngIf="!isView">-->
-<!--                <a (click)="editRow(res)">-->
-<!--                  <i class="fa fa-pencil"></i>-->
-<!--                </a>-->
-<!--              </td>-->
-<!--            </tr>-->
-<!--          </ng-container>-->
-<!--        </ng-container>-->
+        <ng-container *ngFor="let chiCuc of item.children, let y = index">
+          <tr>
+            <td></td>
+            <td></td>
+            <td>{{chiCuc.tenChiCuc}}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td *ngIf="!isView"></td>
+          </tr>
+          <ng-container *ngFor="let diemKho of chiCuc.children, let k = index">
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>{{diemKho.tenDiemKho}}</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td *ngIf="!isView"></td>
+            </tr>
+            <ng-container *ngFor="let nganLo of diemKho.children, let z = index">
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>{{nganLo.tenNganLoKho}}</td>
+                <td>{{nganLo.tenCloaiVthh}}</td>
+                <td>{{nganLo.slTonKho | number : '1.0-1' : 'vi_VN'}}</td>
+                <td>{{nganLo.slHaoDoiDinhMuc | number : '1.0-1' : 'vi_VN'}}</td>
+                <td>{{nganLo.slDoiThua | number : '1.0-1' : 'vi_VN'}}</td>
+                <td>{{nganLo.donGia | number : '1.0-1' : 'vi_VN'}}</td>
+                <td>{{nganLo.slDoiThua * nganLo.donGia | number : '1.0-1' : 'vi_VN'}}</td>
+                <td *ngIf="!isView">
+                  <a (click)="themMoi(nganLo)">
+                    <i class="fa fa-pencil" title="Sửa"></i>
+                  </a>
+                  <a (click)="deleteRow('nhaKho', item)">
+                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+                  </a>
+                </td>
+              </tr>
+            </ng-container>
+          </ng-container>
+        </ng-container>
       </ng-container>
+    </ng-container>
+      <ng-template #templateCuc>
+        <ng-container *ngFor="let item of listOfData , let i = index">
+          <tr>
+            <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
+            <td>{{item.tenChiCuc}}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td *ngIf="!isView">
+              <a (click)="deleteRow('chiCuc', item)">
+                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+              </a>
+            </td>
+          </tr>
+          <ng-container>
+            <ng-container *ngFor="let diemKho of item.children, let y = index">
+              <tr>
+                <td class="text-right" [nzExpand]="true"></td>
+                <td></td>
+                <td>{{diemKho.tenDiemKho}}</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td *ngIf="!isView">
+                  <a (click)="deleteRow('diemKho', item)">
+                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+                  </a>
+                </td>
+              </tr>
+              <ng-container>
+                <ng-container *ngFor="let nganLo of diemKho.children, let z = index">
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>{{nganLo.tenNganLoKho}}</td>
+                    <td>{{nganLo.tenCloaiVthh}}</td>
+                    <td>{{nganLo.slTonKho | number : '1.0-1' : 'vi_VN'}}</td>
+                    <td>{{nganLo.slHaoDoiDinhMuc | number : '1.0-1' : 'vi_VN'}}</td>
+                    <td>{{nganLo.slDoiThua | number : '1.0-1' : 'vi_VN'}}</td>
+                    <td>{{nganLo.donGia | number : '1.0-1' : 'vi_VN'}}</td>
+                    <td>{{nganLo.slDoiThua * nganLo.donGia | number : '1.0-1' : 'vi_VN'}}</td>
+                    <td *ngIf="!isView">
+                      <a (click)="themMoi(nganLo)">
+                        <i class="fa fa-pencil" title="Sửa"></i>
+                      </a>
+                      <a (click)="deleteRow('nhaKho', item)">
+                        <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+                      </a>
+                    </td>
+                  </tr>
+                </ng-container>
+              </ng-container>
+            </ng-container>
+          </ng-container>
+        </ng-container>
+      </ng-template>
     </tbody>
-<!--    <tr *ngIf="listDataGroup.length > 0">-->
-<!--      <td></td>-->
-<!--      <td></td>-->
-<!--      <td></td>-->
-<!--      <td class="first-last-row-table background-last-row text-right blue-text">TỔNG</td>-->
-<!--      <td></td>-->
-<!--      <td></td>-->
-<!--      <td></td>-->
-<!--      <td class="background-last-row text-right blue-text">{{ (isCache ? calcTongSl() : tongSLuongNhap) | number :-->
-<!--        '1.0-1' : 'vi_VN' }}</td>-->
-<!--      <td></td>-->
-<!--      <td class="background-last-row text-right blue-text">{{ (isCache ? calcTongThanhTien() : tongTienTamTinh) | number-->
-<!--        : '1.0-1' : 'vi_VN' }}</td>-->
-<!--      <td></td>-->
-<!--    </tr>-->
   </nz-table>
 </nz-card>
 <!--END TABLE-->
 <ng-template #error let-control>
   <app-template-error #error [control]="control"></app-template-error>
 </ng-template>
+<nz-modal [nzWidth]="'50%'" [(nzVisible)]="isVisible" [nzFooter]="modalFooter" [nzClosable]="false"
+          nzTitle="{{rowThemMoi.title}}">
+  <ng-container *nzModalContent>
+    <div class="modal-card">
+      <nz-form-item *ngIf="this.isTongCuc">
+        <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Cục DTNN</nz-form-label>
+        <nz-form-control>
+          <nz-select nzAllowClear [(ngModel)]="rowThemMoi.maCuc" (ngModelChange)="changeCuc($event)"
+                     nzPlaceHolder="Chọn đơn vị" nzShowSearch [nzDisabled]="isEditRowThemMoi">
+            <nz-option *ngFor="let p of listCuc" [nzLabel]="p.tenDvi" [nzValue]="p.maDvi"></nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Chi cục DTNN</nz-form-label>
+        <nz-form-control>
+          <nz-select nzAllowClear [(ngModel)]="rowThemMoi.maChiCuc" (ngModelChange)="changeChiCuc($event)"
+                     nzPlaceHolder="Chọn đơn vị" nzShowSearch [nzDisabled]="isEditRowThemMoi">
+            <nz-option *ngFor="let p of listChiCuc" [nzLabel]="p.tenDvi" [nzValue]="p.maDvi"></nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Điểm kho</nz-form-label>
+        <nz-form-control>
+          <nz-select nzAllowClear [(ngModel)]="rowThemMoi.maDiemKho" (ngModelChange)="changeDiemKho($event)"
+                     nzPlaceHolder="Chọn đơn vị" nzShowSearch [nzDisabled]="isEditRowThemMoi">
+            <nz-option *ngFor="let p of listDiemKho" [nzLabel]="p.tenDvi" [nzValue]="p.maDvi"></nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Nhà kho</nz-form-label>
+        <nz-form-control>
+          <nz-select nzAllowClear [(ngModel)]="rowThemMoi.maNhaKho" (ngModelChange)="changeNhaKho($event)"
+                     nzPlaceHolder="Chọn đơn vị" nzShowSearch [nzDisabled]="isEditRowThemMoi">
+            <nz-option *ngFor="let p of listNhaKho" [nzLabel]="p.tenDvi" [nzValue]="p.maDvi"></nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Ngăn kho</nz-form-label>
+        <nz-form-control>
+          <nz-select nzAllowClear [(ngModel)]="rowThemMoi.maNganKho" (ngModelChange)="changeNganKho($event)"
+                     nzPlaceHolder="Chọn đơn vị" nzShowSearch [nzDisabled]="isEditRowThemMoi">
+            <nz-option *ngFor="let p of listNganKho" [nzLabel]="p.tenDvi" [nzValue]="p.maDvi"></nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Lô kho</nz-form-label>
+        <nz-form-control>
+          <nz-select nzAllowClear [(ngModel)]="rowThemMoi.maLoKho" (ngModelChange)="changeLoKho($event)"
+                     nzPlaceHolder="Chọn đơn vị" nzShowSearch [nzDisabled]="isEditRowThemMoi">
+            <nz-option *ngFor="let p of listLoKho" [nzLabel]="p.tenDvi" [nzValue]="p.maDvi"></nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Loại hàng hóa</nz-form-label>
+        <nz-form-control>
+          <span>{{rowThemMoi.tenLoaiVthh}}</span>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Chủng loại hàng hóa</nz-form-label>
+        <nz-form-control>
+          <span>{{rowThemMoi.tenCloaiVthh}}</span>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Đơn vị tính</nz-form-label>
+        <nz-form-control>
+          <span>{{rowThemMoi.dvt}}</span>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Tồn kho</nz-form-label>
+        <nz-form-control>
+          <span class="text-blue">{{rowThemMoi.slTonKho | number : '1.0-1' : 'vi_VN'}}</span>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Số lượng hao dôi theo định mức</nz-form-label>
+        <nz-form-control>
+          <nz-input-number [(ngModel)]="rowThemMoi.slHaoDoiDinhMuc" [nzMin]="1" [nzStep]="0.1"
+                           [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+          </nz-input-number>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Số lượng dôi thừa</nz-form-label>
+        <nz-form-control>
+          <nz-input-number [(ngModel)]="rowThemMoi.slDoiThua" [nzMin]="1" [nzStep]="0.1"
+                           [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+          </nz-input-number>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Đơn giá</nz-form-label>
+        <nz-form-control>
+          <nz-input-number [(ngModel)]="rowThemMoi.donGia" [nzMin]="1" [nzStep]="0.1"
+                           [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+          </nz-input-number>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Thành tiền (đ)</nz-form-label>
+        <nz-form-control>
+          <span class="text-blue">{{rowThemMoi.donGia * rowThemMoi.slDoiThua | number: '1.0-1' : 'vi_VN'}}</span>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+  </ng-container>
+  <ng-template #modalFooter>
+    <button nz-button (click)="handleCancel()">Đóng</button>
+    <button nz-button class="btn btn-main" (click)="handleOk()">Lưu</button>
+  </ng-template>
+</nz-modal>

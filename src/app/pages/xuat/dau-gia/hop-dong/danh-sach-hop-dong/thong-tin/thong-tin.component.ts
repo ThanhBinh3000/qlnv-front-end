@@ -21,13 +21,14 @@ import {
 import {
   ThongTinDauGiaService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/thongTinDauGia.service';
-import {chain, cloneDeep} from 'lodash';
+import {chain, cloneDeep,isEmpty} from 'lodash';
 import {DanhMucService} from 'src/app/services/danhmuc.service';
 import {convertTienTobangChu} from 'src/app/shared/commonFunction';
 import * as uuid from "uuid";
 import {STATUS} from 'src/app/constants/status';
 import {DonviService} from "../../../../../../services/donvi.service";
 import moment from "moment";
+
 
 @Component({
   selector: 'app-thong-tin',
@@ -66,7 +67,7 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
   listKieuNx: any[] = [];
   tongSoLuong: number;
   tongThanhTien: number;
-
+  dsDonvi: any[] = [];
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -151,6 +152,7 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
     await Promise.all([
       this.loadDataComboBox(),
       this.loadDsVthh(),
+      this.loadDsDonVi()
 
     ]);
     if (this.idKqBdg) {
@@ -193,14 +195,25 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
     let data = await this.detail(id);
     this.formData.patchValue({
       soHd: data?.soHd?.split('/')[0],
+      soLuong:data?.soLuong,
+      tongTien:data?.tongTien,
     });
     this.maDviTsan(data.toChucTrungDg, data.trangThai);
-    this.dataTable = data?.children || [];
+    this.dataTable = cloneDeep(data?.children || []);
     this.dataTable.forEach(e => e.tenChiCuc = e.tenDvi);
+    console.log(data,'this.data')
+    console.log(this.dataTable,'this.dataTable')
     this.dataTablePhuLuc = data?.phuLuc || [];
     this.objHopDongHdr = data || {};
+
   }
 
+  async loadDsDonVi() {
+    const dsTong = await this.donViService.layDonViCon();
+    if (!isEmpty(dsTong)) {
+      this.dsDonvi = dsTong.data.filter(s => s.type === 'DV');
+    }
+  }
 
   async saveAndSend(status: string, message: string, sucessMessage: string) {
     this.helperService.markFormGroupTouched(this.formData);
@@ -223,7 +236,7 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     } else {
-      let data = await this.createUpdate(this.formData.value);
+      let data = await this.createUpdate(body);
       if (data) {
         await this.approve(data.id, status, message, null, sucessMessage);
       } else {
@@ -245,7 +258,7 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
         return;
       }
       this.formData.enable();
-      let body = cloneDeep(this.formData.value);
+      let body = this.formData.value;
       if (body.listMaDviTsan) {
         body.maDviTsan = body.listMaDviTsan.join(',');
       }
@@ -253,25 +266,9 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
         body.soHd = this.formData.value.soHd + this.maHopDongSuffix;
       }
       body.children = this.dataTable;
-      let res;
-      if (body.id && body.id > 0) {
-        res = await this.hopDongXuatHangService.update(body);
-      } else {
-        res = await this.hopDongXuatHangService.create(body);
-      }
-
-      if (res.msg == MESSAGE.SUCCESS) {
-        if (this.formData.get('id').value) {
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-        } else {
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-        }
-        this.formData.disable();
-        await this.loadChiTiet(res.data.id)
-        this.formData.enable();
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
-      }
+      this.formData.disable();
+      let rs = await this.createUpdate(body);
+      this.formData.enable();
     } catch (e) {
     } finally {
       this.formData.enable();
@@ -472,48 +469,10 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
     }
   }
 
-  // taiLieuDinhKem(type?: string) {
-  //   const modal = this.modal.create({
-  //     nzTitle: 'Tài liệu đính kèm',
-  //     nzContent: UploadComponent,
-  //     nzMaskClosable: false,
-  //     nzClosable: false,
-  //     nzWidth: '900px',
-  //     nzFooter: null,
-  //     nzComponentParams: {},
-  //   });
-  //   modal.afterClose.subscribe((res) => {
-  //     if (res) {
-  //       this.uploadFileService
-  //         .uploadFile(res.file, res.tenTaiLieu)
-  //         .then((resUpload) => {
-  //           const fileDinhKem = new FileDinhKem();
-  //           fileDinhKem.fileName = resUpload.filename;
-  //           fileDinhKem.fileSize = resUpload.size;
-  //           fileDinhKem.fileUrl = resUpload.url;
-  //           this.fileDinhKem.push(fileDinhKem);
-  //         });
-  //     }
-  //   });
-  // }
-  //
-  // downloadFile(taiLieu: any) {
-  //   this.uploadFileService.downloadFile(taiLieu.fileUrl).subscribe((blob) => {
-  //     saveAs(blob, taiLieu.fileName);
-  //   });
-  // }
-  //
-  // deleteTaiLieu(index: number) {
-  //   this.fileDinhKem = this.fileDinhKem.filter((item, i) => i !== index)
-  // }
-
   isDisabled() {
     return false;
   }
 
-  // getNameFile($event) {
-  //
-  // }
 
   async selectMaDviTsan(event) {
     let selectDviTsan = this.formData.value.listMaDviTsan;
@@ -550,29 +509,42 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
       .groupBy("tenChiCuc")
       .map(async (value, key) => {
         let tenChiCuc = value.find(f => f.tenChiCuc === key);
-        let tongSl = value.reduce((prev, cur) => prev + cur.soLuong, 0);
+        let tongSl = value.reduce((prev, cur) => prev + cur.soLuongDeXuat, 0);
+        let tongDg = value.reduce((prev, cur) => prev + cur.donGiaVat, 0);
         let thanhTien = value.reduce((prev, cur) => {
-          const curThanhTien = cur.soLuong * cur.donGiaVat;
+          const curThanhTien = cur.soLuongDeXuat * cur.donGiaVat;
           return prev + curThanhTien;
         }, 0);
         return {
           idVirtual: uuid.v4(),
           tenChiCuc: key,
-          maDvi: tenChiCuc.maChiCuc,
+          maDvi: tenChiCuc?.maChiCuc,
           children: value,
           soLuong: tongSl,
           thanhTien: thanhTien,
+          donGiaVat: tongDg,
         };
       }).value();
     dataView = await Promise.all(dataView);
     this.dataTable = dataView;
+
+    this.dataTable.forEach(e => {
+      e.children.forEach(f => {
+        f.soLuong = f.soLuongDeXuat;
+        f.diaChi = this.dsDonvi.find(g=>g.maDvi=f.maDiemKho).diaChi
+      });
+    });
+
+   await this.sum(this.dataTable);
+    this.expandAll();
+  }
+  async sum(dataTable){
     this.tongSoLuong = this.dataTable.reduce((prev, cur) => prev + cur.soLuong, 0);
     this.tongThanhTien = this.dataTable.reduce((prev, cur) => prev + cur.thanhTien, 0);
     this.formData.patchValue({
       soLuong: this.tongSoLuong,
       tongTien: this.tongThanhTien,
     })
-    this.expandAll();
   }
 
   async changeDiemKho(maDiemKho) {
@@ -595,12 +567,12 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    /*console.log(changes)
-    console.log(changes.id.isFirstChange())
+    // console.log(changes)
+    // console.log(changes.id.isFirstChange())
     if(!changes.id.isFirstChange()) {
       this.ngOnInit()
-    }*/
-    this.ngOnInit();
+    }
+    // this.ngOnInit();
   }
 }
 

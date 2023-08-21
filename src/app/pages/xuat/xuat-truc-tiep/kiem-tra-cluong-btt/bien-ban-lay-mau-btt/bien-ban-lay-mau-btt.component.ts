@@ -1,14 +1,17 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
-import { MESSAGE } from 'src/app/constants/message';
-import { BienBanLayMauBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/ktra-cluong-btt/bien-ban-lay-mau-btt.service';
-import { chain } from 'lodash';
-import { v4 as uuidv4 } from 'uuid';
+import {Component, Input, OnInit} from '@angular/core';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from 'src/app/services/storage.service';
+import {MESSAGE} from 'src/app/constants/message';
+import {
+  BienBanLayMauBttService
+} from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/ktra-cluong-btt/bien-ban-lay-mau-btt.service';
+import * as uuid from "uuid";
+import {chain} from 'lodash';
+
 @Component({
   selector: 'app-bien-ban-lay-mau-btt',
   templateUrl: './bien-ban-lay-mau-btt.component.html',
@@ -19,11 +22,9 @@ export class BienBanLayMauBttComponent extends Base2Component implements OnInit 
   idQdNv: number = 0;
   isViewQdNv: boolean = false;
   selectedId: number = 0;
-  isView: boolean = false;
-  idQdGiaoNvXh: number = 0;
   children: any = [];
   expandSetString = new Set<string>();
-  dataView: any = [];
+  trangThaiBienBan: string;
 
   constructor(
     httpClient: HttpClient,
@@ -64,7 +65,6 @@ export class BienBanLayMauBttComponent extends Base2Component implements OnInit 
   async ngOnInit() {
     await this.spinner.show();
     try {
-      this.timKiem();
       await this.search();
     } catch (e) {
       console.log('error: ', e)
@@ -74,72 +74,51 @@ export class BienBanLayMauBttComponent extends Base2Component implements OnInit 
   }
 
   async search(roles?): Promise<void> {
-    await this.spinner.show()
-    await super.search(roles);
-    this.buildTableView();
-    await this.spinner.hide()
-  }
-
-  timKiem() {
     this.formData.patchValue({
       loaiVthh: this.loaiVthh,
       maDvi: this.userService.isChiCuc() ? this.userInfo.MA_DVI : null,
       trangThai: this.userService.isChiCuc() ? null : this.STATUS.DA_DUYET_LDCC
     })
+    await super.search(roles);
+    this.buildTableView();
   }
 
   clearFilter() {
     this.formData.reset();
-    this.timKiem();
     this.search();
   }
 
   buildTableView() {
-    let dataView = chain(this.dataTable)
-      .groupBy("soQdNv")
-      .map((value, key) => {
-        let rs = chain(value)
-          .groupBy("maDiemKho")
-          .map((v, k) => {
-            let rowLv2 = v.find(s => s.maDiemKho === k);
-            return {
-              id: rowLv2.id,
-              idVirtual: uuidv4(),
-              maLoKho: rowLv2.maLoKho,
-              tenDiemKho: rowLv2.tenDiemKho,
-              maNhaKho: rowLv2.maNhaKho,
-              tenNhaKho: rowLv2.tenNhaKho,
-              maNganKho: rowLv2.maNganKho,
-              tenNganKho: rowLv2.tenNganKho,
-              maDiemKho: k,
-              tenLoKho: rowLv2.tenLoKho,
-              soBienBan: rowLv2.soBienBan,
-              ngayLayMau: rowLv2.ngayLayMau,
-              soBbTinhKho: rowLv2.soBbTinhKho,
-              ngayXuatDocKho: rowLv2.ngayXuatDocKho,
-              soBbHaoDoi: rowLv2.rowLv2,
-              trangThai: rowLv2.trangThai,
-              tenTrangThai: rowLv2.tenTrangThai,
-              childData: v
-            }
-          }
-          ).value();
-        let rowLv1 = value.find(s => s.soQdNv === key);
+    let dataView = chain(this.dataTable).groupBy("soQdNv").map((value, key) => {
+      let quyetDinh = value.find(f => f.soQdNv === key)
+      let rs = chain(value).groupBy("maDiemKho").map((v, k) => {
+        let diaDiem = v.find(s => s.maDiemKho === k)
         return {
-          idVirtual: uuidv4(),
-          soQdNv: key,
-          namKh: rowLv1.namKh,
-          ngayQd: rowLv1.ngayQd,
-          idQdNv: rowLv1.idQdNv,
-          childData: rs
-        };
+          idVirtual: uuid.v4(),
+          idQdNv: diaDiem ? diaDiem.idQdNv : null,
+          maDiemKho: k != null ? k : '',
+          tenDiemKho: diaDiem ? diaDiem.tenDiemKho : null,
+          childData: v
+        }
       }).value();
-    this.dataView = dataView
+      let idQdNv = quyetDinh ? quyetDinh.idQdNv : null;
+      let namKh = quyetDinh ? quyetDinh.namKh : null;
+      let ngayQdNv = quyetDinh ? quyetDinh.ngayQdNv : null;
+      return {
+        idVirtual: uuid.v4(),
+        idQdNv: idQdNv,
+        soQdNv: key != null ? key : '',
+        namKh: namKh,
+        ngayQdNv: ngayQdNv,
+        childData: rs
+      }
+    }).value();
+    this.children = dataView
     this.expandAll()
   }
 
   expandAll() {
-    this.dataView.forEach(s => {
+    this.children.forEach(s => {
       this.expandSetString.add(s.idVirtual);
     })
   }
@@ -152,11 +131,11 @@ export class BienBanLayMauBttComponent extends Base2Component implements OnInit 
     }
   }
 
-  redirectToChiTiet(lv2: any, isView: boolean, idQdGiaoNvXh?: number) {
+  redirectToChiTiet(lv2: any, trangThaiBienBan: any, idQdNv?: number) {
     this.selectedId = lv2.id;
     this.isDetail = true;
-    this.isView = isView;
-    this.idQdGiaoNvXh = idQdGiaoNvXh;
+    this.trangThaiBienBan = trangThaiBienBan;
+    this.idQdNv = idQdNv;
   }
 
   disabledNgayLayMauTu = (startValue: Date): boolean => {

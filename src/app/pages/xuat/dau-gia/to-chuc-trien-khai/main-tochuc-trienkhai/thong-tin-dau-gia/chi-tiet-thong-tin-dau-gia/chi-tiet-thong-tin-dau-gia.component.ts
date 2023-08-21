@@ -18,12 +18,12 @@ import { cloneDeep } from 'lodash';
   styleUrls: ['./chi-tiet-thong-tin-dau-gia.component.scss']
 })
 export class ChiTietThongTinDauGiaComponent extends Base2Component implements OnInit {
-
   @Input() loaiVthhInput: string;
   @Input() idInput: number;
   @Input() isView: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
+
   fileDinhKem: any[] = [];
   dataDetail: any;
   selected: boolean = false;
@@ -65,40 +65,44 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
         soDviTsanThanhCong: [],
         soDviTsanKhongThanh: [],
         loaiHinhNx: [''],
+        tenLoaiHinhNx: [''],
         kieuNx: [''],
+        tenKieuNx: [''],
         trangThai: [],
         tenTrangThai: [],
-
       }
     );
   }
 
   async ngOnInit() {
     try {
-      this.spinner.show();
+      await this.spinner.show();
       await Promise.all([
         this.loadDetail(this.idInput),
       ])
-      this.spinner.hide();
+      await this.spinner.hide();
     } catch (e) {
-      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, 'Có lỗi xảy ra.');
+      await this.spinner.hide();
     } finally {
-      this.spinner.hide();
+      await this.spinner.hide();
     }
   }
 
   async loadDetail(id: number) {
+    await this.spinner.show();
     if (id > 0) {
       await this.quyetDinhPdKhBdgService.getDtlDetail(id)
         .then(async (res) => {
-          const dataDtl = res.data;
-          this.dataTable = cloneDeep(dataDtl.listTtinDg);
-          if (this.dataTable && this.dataTable.length > 0) {
-            await this.showFirstRow(event, this.dataTable[0]);
-          }
-          if (dataDtl) {
-            await this.quyetDinhPdKhBdgService.getDetail(dataDtl.idQdHdr).then(async (hdr) => {
-              const dataHdr = hdr.data;
+          if (res.msg == MESSAGE.SUCCESS) {
+            const dataDtl = res.data;
+            this.dataTable = cloneDeep(dataDtl.listTtinDg);
+            if (this.dataTable && this.dataTable.length > 0) {
+              await this.showFirstRow(event, this.dataTable[0]);
+            }
+            let dataQd = await this.quyetDinhPdKhBdgService.getDetail(dataDtl.idQdHdr);
+            if(dataQd.data){
+              const dataHdr = dataQd.data;
               this.formData.patchValue({
                 nam: dataHdr.nam,
                 soQdPd: dataHdr.soQdPd,
@@ -106,7 +110,7 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
                 tenDvi: dataDtl.tenDvi,
                 tgianDauGia: ['Từ' + ' ' + dayjs(dataDtl.tgianDkienTu).format('DD/MM/YYYY') + ' ' + 'Đến' + ' ' + dayjs(dataDtl.tgianDkienDen).format('DD/MM/YYYY')],
                 tgianTtoan: dataDtl.tgianTtoan,
-                pthucTtoan: dataDtl.pthucTtoan,
+                pthucTtoan: dataDtl.pthucTtoan == '1' ? 'Tiền mặt' : 'Chuyển khoản',
                 tgianGnhan: dataDtl.tgianGnhan,
                 pthucGnhan: dataDtl.pthucGnhan,
                 trangThai: dataDtl.trangThai,
@@ -114,22 +118,22 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
                 tenCloaiVthh: dataHdr.tenCloaiVthh,
                 tenLoaiVthh: dataHdr.tenLoaiVthh,
                 slDviTsan: dataDtl.slDviTsan,
-                loaiHinhNx: dataHdr.loaiHinhNx != null ? 'Xuất bán đấu giá' : null,
-                kieuNx: dataHdr.kieuNx != null ? 'Xuất bán' : null,
+                soDviTsanThanhCong: dataDtl.soDviTsanThanhCong,
+                soDviTsanKhongThanh: dataDtl.soDviTsanKhongThanh,
+                loaiHinhNx: dataHdr.loaiHinhNx,
+                tenLoaiHinhNx: dataHdr.tenLoaiHinhNx,
+                kieuNx: dataHdr.kieuNx,
+                tenKieuNx : dataHdr.tenKieuNx,
               })
-            })
+            }
           }
-        })
-        .catch((e) => {
+        }).catch((e) => {
           console.log('error: ', e);
           this.spinner.hide();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         });
     }
-  }
-
-  quayLai() {
-    this.showListEvent.emit();
+    await this.spinner.hide();
   }
 
   hoanThanhCapNhat() {
@@ -178,7 +182,6 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
     });
   }
 
-
   async showFirstRow($event, data: any) {
     await this.showDetail($event, data);
   }
@@ -199,26 +202,33 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
 
   async loadDataThongTin(data) {
     if (data.id) {
-      let dataTtin = await this.thongTinDauGiaService.getDetail(data.id)
-      if (dataTtin) {
-        const dataThongTin = dataTtin.data;
-        let tongTienGiaKhoiDiem: number = 0
-        let tongTienDatTruoc: number = 0
-        let tongSoLuong: number = 0
-        dataTtin.data.children.forEach((item) => {
-          item.children.forEach((child) => {
-            tongTienGiaKhoiDiem += child.soLuongDeXuat * child.donGiaDeXuat
-          })
-          tongTienDatTruoc += item.soTienDatTruocChiCuc
-          tongSoLuong += item.soLuongChiCuc
-        })
-        this.formData.patchValue({
-          tongTienGiaKhoiDiem: tongTienGiaKhoiDiem,
-          tongTienDatTruoc: tongTienDatTruoc,
-          khoanTienDatTruoc: dataThongTin.khoanTienDatTruoc,
-          tongSoLuong: tongSoLuong
-        })
-      }
+      await this.thongTinDauGiaService.getDetail(data.id)
+         .then((res) =>{
+           if (res.msg == MESSAGE.SUCCESS) {
+             const dataThongTin = res.data;
+             let tongTienGiaKhoiDiem: number = 0
+             let tongTienDatTruoc: number = 0
+             let tongSoLuong: number = 0
+             dataThongTin.children.forEach((item) => {
+               item.children.forEach((child) => {
+                 tongTienGiaKhoiDiem += child.soLuongDeXuat * child.donGiaDeXuat
+               })
+               tongTienDatTruoc += item.soTienDatTruocChiCuc
+               tongSoLuong += item.soLuongChiCuc
+             })
+             this.formData.patchValue({
+               tongTienGiaKhoiDiem: tongTienGiaKhoiDiem,
+               tongTienDatTruoc: tongTienDatTruoc,
+               khoanTienDatTruoc: dataThongTin.khoanTienDatTruoc + '%',
+               tongSoLuong: tongSoLuong
+             })
+           }
+         })
+        .catch((e) => {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        });
     }
   }
 
@@ -233,17 +243,19 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
         return;
       }
     } const modalQD = this.modal.create({
-      nzTitle: 'CẬP NHẬP THÔNG TIN ĐẤU GIÁ',
+      nzTitle: '',
       nzContent: ThongtinDaugiaComponent,
       nzMaskClosable: false,
       nzClosable: false,
-      nzWidth: '1800px',
+      nzWidth: '2000px',
       nzFooter: null,
+      nzBodyStyle: { 'overflow-y': 'auto' },
       nzComponentParams: {
         isModal: true,
         idDtl: this.idInput,
         soQdPd: this.formData.value.soQdPd,
-        dataDetail: data
+        dataDetail: data,
+        soLanDauGia: this.dataTable.length
       },
     });
     modalQD.afterClose.subscribe((data) => {

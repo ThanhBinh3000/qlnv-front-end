@@ -12,6 +12,8 @@ import {saveAs} from "file-saver";
 import {QuyetDinhGiaCuaBtcService} from "src/app/services/ke-hoach/phuong-an-gia/quyetDinhGiaCuaBtc.service";
 import {STATUS} from "../../../../../../constants/status";
 import {Globals} from "../../../../../../shared/globals";
+import {Router} from "@angular/router";
+import {UserLogin} from "../../../../../../models/userlogin";
 
 @Component({
   selector: "app-quyet-dinh-gia-btc",
@@ -24,13 +26,12 @@ export class QuyetDinhGiaBtcComponent implements OnInit {
   @Output()
   getCount = new EventEmitter<any>();
   isAddNew = false;
-  noEdit = false;
   formData: FormGroup;
   toDay = new Date();
   allChecked = false;
   listVthh: any[] = [];
   dsNam: string[] = [];
-
+  userInfo : UserLogin
   dataTable: any[] = [];
   page: number = 1;
   dataTableAll: any[] = [];
@@ -38,31 +39,34 @@ export class QuyetDinhGiaBtcComponent implements OnInit {
   setOfCheckedId = new Set<number>();
   pageSize: number = PAGE_SIZE_DEFAULT;
   indeterminate = false;
-
+  STATUS = STATUS;
   last30Day = new Date(
     new Date().setTime(this.toDay.getTime() - 30 * 24 * 60 * 60 * 1000)
   );
 
   isViewDetail: boolean = false;
   idSelected: number = 0;
-
+  listTrangThai = [
+    {ma: this.STATUS.DU_THAO, giaTri: "Dự thảo"},
+    {ma: this.STATUS.BAN_HANH, giaTri: "Ban hành"}
+  ];
   constructor(private readonly fb: FormBuilder,
               private spinner: NgxSpinnerService,
               private notification: NzNotificationService,
               public userService: UserService,
               private modal: NzModalService,
+              private router: Router,
               private quyetDinhGiaCuaBtcService: QuyetDinhGiaCuaBtcService,
               public globals : Globals
   ) {
     this.formData = this.fb.group({
       soQd: [null],
-      ngayKy: [[]],
+      ngayKyTu: [],
+      ngayKyDen: [],
       trichYeu: [null],
       namKeHoach: [null],
-      loaiVthh: [null],
-      loaiGia: [null],
-      trangThai: [null]
-
+      trangThai: [null],
+      maDvi : [],
     });
   }
 
@@ -86,6 +90,11 @@ export class QuyetDinhGiaBtcComponent implements OnInit {
   };
 
   async ngOnInit() {
+    if ((this.pagType == 'LT' && !this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_MTDBTT_QD'))
+      || (this.pagType == 'VT' && !this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_VT_MTDBTT_QD'))) {
+      this.router.navigateByUrl('/error/401')
+    }
+    this.userInfo = this.userService.getUserLogin();
     this.loadDsNam();
     this.search();
     this.listVthh = LIST_VAT_TU_HANG_HOA;
@@ -107,18 +116,14 @@ export class QuyetDinhGiaBtcComponent implements OnInit {
   clearFilter() {
     this.formData.reset();
     this.search();
-    console.log(this.searchInTable);
   }
 
   async search() {
     this.spinner.show();
     let body = this.formData.value;
     body.pagType = this.pagType;
-    if (body.ngayKy != null) {
-      body.ngayKyTu = body.ngayKy[0];
-      body.ngayKyDen = body.ngayKy[1];
-    }
-    body.loaiHh = body.loaiHangHoa,
+    body.maDvi = this.userService.isTongCuc() ? null : this.userInfo.MA_DVI;
+    body.maDvi
       body.paggingReq = {
         limit: this.pageSize,
         page: this.page - 1
@@ -218,13 +223,11 @@ export class QuyetDinhGiaBtcComponent implements OnInit {
     this.idSelected = 0;
     this.isViewDetail = false;
     this.isAddNew = true;
-    this.noEdit = false;
   }
 
-  async onClose() {
+   async onClose() {
     this.isAddNew = false;
-    await this.search();
-
+     await this.search();
   }
 
   onAllChecked(checked) {
@@ -287,13 +290,6 @@ export class QuyetDinhGiaBtcComponent implements OnInit {
     this.idSelected = id;
     this.isViewDetail = isViewDetail;
     this.isAddNew = true;
-    if (trangThai == STATUS.BAN_HANH) {
-      this.noEdit = true;
-    } else if (trangThai == STATUS.DU_THAO && isViewDetail) {
-      this.noEdit = true;
-    } else if (trangThai == STATUS.DU_THAO && !isViewDetail) {
-      this.noEdit = false;
-    }
   }
 
   deleteItem(item: any) {
@@ -330,14 +326,32 @@ export class QuyetDinhGiaBtcComponent implements OnInit {
     });
   }
 
-  filterInTable(key: string, value: string) {
-    if (value && value != "") {
+  filterInTable(key: string, value: string, type?: string) {
+    if (value && value != '') {
       this.dataTable = [];
       let temp = [];
       if (this.dataTableAll && this.dataTableAll.length > 0) {
         this.dataTableAll.forEach((item) => {
-          if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
-            temp.push(item);
+          if ([ 'ngayKy'].includes(key)) {
+            if (item[key] && dayjs(item[key]).format('DD/MM/YYYY').indexOf(value.toString()) != -1) {
+              temp.push(item)
+            }
+          } else {
+            if (type) {
+              if ('eq' == type) {
+                if (item[key] && item[key].toString().toLowerCase() == value.toString().toLowerCase()) {
+                  temp.push(item)
+                }
+              } else {
+                if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
+                  temp.push(item)
+                }
+              }
+            } else {
+              if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
+                temp.push(item)
+              }
+            }
           }
         });
       }
@@ -346,6 +360,7 @@ export class QuyetDinhGiaBtcComponent implements OnInit {
       this.dataTable = cloneDeep(this.dataTableAll);
     }
   }
+
 
   clearFilterTable() {
     this.filterTable = {
@@ -390,6 +405,14 @@ export class QuyetDinhGiaBtcComponent implements OnInit {
     } else {
       this.indeterminate = true;
     }
+  }
+
+  convertDateToString(event: any): string {
+    let result = '';
+    if (event) {
+      result = dayjs(event).format('DD/MM/YYYY').toString()
+    }
+    return result;
   }
 
 }

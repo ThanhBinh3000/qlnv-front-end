@@ -1,6 +1,6 @@
 export class ItemDetail {
   nam: number;
-  soLuong: number;
+  public soLuong: number;
   vatTuId: number;
   id: number;
   constructor(soLuong?: number) {

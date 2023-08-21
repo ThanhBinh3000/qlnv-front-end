@@ -35,6 +35,7 @@ export class TienDoCongViecComponent extends Base2Component implements OnInit {
   AMOUNT = AMOUNT_NO_DECIMAL;
   STATUS = STATUS;
   rowItemCha: TienDoXayDungCt = new TienDoXayDungCt();
+  itemHopDong : any;
   listTrangThai: any[] = [
     {ma: 'Quý I', giaTri: 'Quý I'},
     {ma: 'Quý II', giaTri: 'Quý II'},
@@ -96,6 +97,7 @@ export class TienDoCongViecComponent extends Base2Component implements OnInit {
 
   async selectRow(data) {
     if (data) {
+      this.itemHopDong = data;
       this.listHopDong.forEach(item => item.selected = false);
       data.selected = true;
       this.loadCtCvHopDong(data.hopDong?.id);

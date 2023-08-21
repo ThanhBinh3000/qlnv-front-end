@@ -1,13 +1,13 @@
-import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {environment} from '../../environments/environment';
-import {StorageService} from './storage.service';
-import {STORAGE_KEY} from '../constants/config';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
+import { StorageService } from './storage.service';
+import { STORAGE_KEY } from '../constants/config';
 import jwt_decode from "jwt-decode";
-import {UserLogin} from '../models/userlogin';
-import {ResponseData} from '../interfaces/response';
-import {MESSAGE} from '../constants/message';
-import {BaseService} from './base.service';
+import { UserLogin } from '../models/userlogin';
+import { ResponseData } from '../interfaces/response';
+import { MESSAGE } from '../constants/message';
+import { BaseService } from './base.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +18,7 @@ export class UserService extends BaseService {
   constructor(
     public httpClient: HttpClient,
     private storageService: StorageService) {
-    super(httpClient, 'giao-chi-tieu-von-dau-nam/quyet-dinh/ttcp', '/qlnv-khoach');
+    super(httpClient, 'user', '/qlnv-system');
   }
 
 
@@ -77,7 +77,7 @@ export class UserService extends BaseService {
 
   isCuc() {
     let user = this.getUserLogin();
-    return user.CAP_DVI == "2" ;
+    return user.CAP_DVI == "2";
   }
 
   isChiCuc() {
@@ -153,7 +153,7 @@ export class UserService extends BaseService {
   }
 
   haveAnyCap(caps: any) {
-    if(!caps){
+    if (!caps) {
       return true;
     }
     let user = this.getUserLogin();
@@ -171,7 +171,7 @@ export class UserService extends BaseService {
     if (jsonPermission && jsonPermission.length > 0) {
       listPermission = JSON.parse(jsonPermission);
     }
-    for(let p of params){
+    for (let p of params) {
       if (listPermission && listPermission.length > 0) {
         let checkPermission = listPermission.find(x => x === p);
         if (checkPermission && checkPermission.length > 0) {

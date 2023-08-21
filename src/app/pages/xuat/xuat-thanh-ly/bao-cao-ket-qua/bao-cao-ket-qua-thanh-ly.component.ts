@@ -34,8 +34,8 @@ export class BaoCaoKetQuaThanhLyComponent extends Base2Component implements OnIn
     {ma: this.STATUS.TU_CHOI_LDC, giaTri: 'Từ chối - LĐ TC'},
     {ma: this.STATUS.DA_DUYET_LDC, giaTri: 'Ban hành'},
   ];
-  idHoSo: number = 0;
-  openHoSo = false;
+  idQd: number = 0;
+  openQd = false;
 
   constructor(httpClient: HttpClient,
               storageService: StorageService,
@@ -52,11 +52,11 @@ export class BaoCaoKetQuaThanhLyComponent extends Base2Component implements OnIn
     this.formData = this.fb.group({
       nam: [''],
       soQd: [''],
-      soHoSo: [''],
+      soBaoCao: [''],
       maDvi: [''],
-      ngayKy: [''],
-      ngayKyTu: [''],
-      ngayKyDen: [''],
+      ngayBaoCao: [''],
+      ngayBaoCaoTu: [''],
+      ngayBaoCaoDen: [''],
       loaiVthh: [''],
       trichYeu: [''],
       trangThai: [''],
@@ -64,25 +64,25 @@ export class BaoCaoKetQuaThanhLyComponent extends Base2Component implements OnIn
     this.filterTable = {
       soQd: '',
       trichYeu: '',
-      ngayKy: '',
+      ngayBaoCao: '',
       soHoSo: '',
       tenTrangThai: '',
       tenTrangThaiXh: '',
 
     };
   }
-  disabledStartNgayKy = (startValue: Date): boolean => {
-    if (startValue && this.formData.value.ngayKyDen) {
-      return startValue.getTime() > this.formData.value.ngayKyDen.getTime();
+  disabledStartngayBaoCao = (startValue: Date): boolean => {
+    if (startValue && this.formData.value.ngayBaoCaoDen) {
+      return startValue.getTime() > this.formData.value.ngayBaoCaoDen.getTime();
     }
     return false;
   };
 
-  disabledEndNgayKy = (endValue: Date): boolean => {
-    if (!endValue || !this.formData.value.ngayKyTu) {
+  disabledEndngayBaoCao = (endValue: Date): boolean => {
+    if (!endValue || !this.formData.value.ngayBaoCaoTu) {
       return false;
     }
-    return endValue.getTime() <= this.formData.value.ngayKyTu.getTime();
+    return endValue.getTime() <= this.formData.value.ngayBaoCaoTu.getTime();
   };
   async ngOnInit() {
     await this.spinner.show();
@@ -91,7 +91,7 @@ export class BaoCaoKetQuaThanhLyComponent extends Base2Component implements OnIn
         this.timKiem(),
         this.loadDsVthh(),
       ])
-      this.spinner.hide();
+      await this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
       await this.spinner.hide();
@@ -116,9 +116,9 @@ export class BaoCaoKetQuaThanhLyComponent extends Base2Component implements OnIn
   async timKiem() {
     await this.spinner.show();
     try {
-      if (this.formData.value.ngayKy) {
-        this.formData.value.ngayKyTu = dayjs(this.formData.value.ngayKy[0]).format('YYYY-MM-DD')
-        this.formData.value.ngayKyDen = dayjs(this.formData.value.ngayKy[1]).format('YYYY-MM-DD')
+      if (this.formData.value.ngayBaoCao) {
+        this.formData.value.ngayBaoCaoTu = dayjs(this.formData.value.ngayBaoCao[0]).format('YYYY-MM-DD')
+        this.formData.value.ngayBaoCaoDen = dayjs(this.formData.value.ngayBaoCao[1]).format('YYYY-MM-DD')
       }
       await this.search();
     } catch (e) {
@@ -129,13 +129,13 @@ export class BaoCaoKetQuaThanhLyComponent extends Base2Component implements OnIn
 
 
 
-  openHoSoModal(id: any) {
-    this.idHoSo = id;
-    this.openHoSo = true;
+  openQdModal(id: any) {
+    this.idQd = id;
+    this.openQd = true;
   }
 
-  closeHoSoModal() {
-    this.idHoSo = null;
-    this.openHoSo = false;
+  closeQdModal() {
+    this.idQd = null;
+    this.openQd = false;
   }
 }

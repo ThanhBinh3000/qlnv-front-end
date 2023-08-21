@@ -54,14 +54,14 @@ export const ROUTE_LIST_KE_HOACH: Array<any> = [
     hasTab: false,
     code: 'KHVDTNSNN_PAGIA'
   },
-  {
-    icon: 'htvbdh_tcdt_baocao2',
-    title: 'Báo cáo',
-    url: `/${MAIN_ROUTE_KE_HOACH}/bao-cao`,
-    dropdown: 'bao-cao',
-    idHover: 'giao-chi-tieu',
-    hasTab: false,
-    code: '',
-    children: []
-  },
+  // {
+  //   icon: 'htvbdh_tcdt_baocao2',
+  //   title: 'Báo cáo',
+  //   url: `/${MAIN_ROUTE_KE_HOACH}/bao-cao`,
+  //   dropdown: 'bao-cao',
+  //   idHover: 'giao-chi-tieu',
+  //   hasTab: false,
+  //   code: '',
+  //   children: []
+  // },
 ];

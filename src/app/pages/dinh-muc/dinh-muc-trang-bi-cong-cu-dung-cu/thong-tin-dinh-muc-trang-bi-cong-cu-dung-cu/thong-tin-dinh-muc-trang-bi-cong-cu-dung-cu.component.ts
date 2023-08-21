@@ -310,6 +310,7 @@ export class ThongTinDinhMucTrangBiCongCuDungCuComponent extends Base2Component 
     await this.changeCanCu();
     this.isVisible = true;
   }
+
   getStrTenDonVi(strMaDonVi) {
     let str = "";
     if (strMaDonVi) {
@@ -324,6 +325,7 @@ export class ThongTinDinhMucTrangBiCongCuDungCuComponent extends Base2Component 
     }
     return str.slice(0, -1);
   }
+
   deleteItem(index: any) {
     this.modal.confirm({
       nzClosable: false,

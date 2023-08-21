@@ -50,13 +50,13 @@
     <h3 class="label_dm text-uppercase">DANH SÁCH danh mục công cụ, dụng cụ</h3>
     <div class="buttons">
       <!--      <button type="button" class="btn btn-sub btn-xoa" (click)="deleteMulti()">-->
-      <!--        <i class="fa fa-trash-o do"></i>-->
+      <!--        <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>-->
       <!--        <span>Xóa</span>-->
       <!--      </button>-->
-      <!--      <button type="button" class="btn btn-sub" (click)="exportData()">-->
-      <!--        <i class="icon htvbdh_chuyen-xu-ly"></i>-->
-      <!--        <span>Xuất file</span>-->
-      <!--      </button>-->
+            <button type="button" class="btn btn-sub" (click)="exportData()">
+              <i class="icon htvbdh_chuyen-xu-ly"></i>
+              <span>Xuất file</span>
+            </button>
     </div>
   </div>
   <nz-card class="mt-2px flex-card data-table card-border-content table-card">
@@ -170,7 +170,7 @@
               <nz-form-control>
                 <nz-input-group>
                   <input [ngModelOptions]="{standalone: true}"
-                         type="text" nz-input [(ngModel)]=dataEdit[i].data.maCcdc/>
+                         type="text" nz-input [(ngModel)]=dataEdit[i].data.maCcdc>
                 </nz-input-group>
               </nz-form-control>
             </th>
@@ -178,7 +178,7 @@
               <nz-form-control>
                 <nz-input-group>
                   <input [ngModelOptions]="{standalone: true}"
-                         type="text" nz-input [(ngModel)]=dataEdit[i].data.tenCcdc/>
+                         type="text" nz-input [(ngModel)]=dataEdit[i].data.tenCcdc>
                 </nz-input-group>
               </nz-form-control>
             </th>
@@ -186,7 +186,7 @@
               <nz-form-control>
                 <nz-input-group>
                   <input [ngModelOptions]="{standalone: true}"
-                         type="text" nz-input [(ngModel)]=dataEdit[i].data.moTa/>
+                         type="text" nz-input [(ngModel)]=dataEdit[i].data.moTa>
                 </nz-input-group>
               </nz-form-control>
             </th>
@@ -194,7 +194,7 @@
               <nz-form-control>
                 <nz-input-group nzAddOnAfterIcon="folder-open" (click)="inputYcKyThuatEdit(dataEdit[i].data)">
                   <input [ngModelOptions]="{standalone: true}"
-                         type="text" [readonly]="true" nz-input [(ngModel)]=dataEdit[i].data.yeuCauKt/>
+                         type="text" [readonly]="true" nz-input [(ngModel)]=dataEdit[i].data.yeuCauKt>
                 </nz-input-group>
                 <!--                <nz-input-group  nzAddOnAfterIcon="folder-open"  (click)="inputYcKyThuat()" >-->
                 <!--                  <input type="text" [ngModelOptions]="{standalone: true}" class="search__input" nz-input  [readonly]="true" formControlName="yeuCauKt"/>-->
@@ -205,7 +205,7 @@
               <nz-form-control>
                 <nz-input-group>
                   <input [ngModelOptions]="{standalone: true}"
-                         type="text" nz-input [(ngModel)]=dataEdit[i].data.donViTinh/>
+                         type="text" nz-input [(ngModel)]=dataEdit[i].data.donViTinh>
                 </nz-input-group>
               </nz-form-control>
             </th>

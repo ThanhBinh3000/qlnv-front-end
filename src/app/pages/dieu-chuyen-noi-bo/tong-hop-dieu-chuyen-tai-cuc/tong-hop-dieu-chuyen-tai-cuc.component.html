@@ -66,11 +66,11 @@
             <div class="buttons">
                 <button type="button" class="btn btn-do" (click)="deleteSelect()"
                     *ngIf="!viewOnly && userService.isAccessPermisson('DCNB_TONGHOPDC_XOA') && userService.isCuc()">
-                    <i class="fa fa-trash-o do"></i>
+                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                     <span>Xóa</span>
                 </button>
                 <!-- <button type="button" class="btn btn-do" (click)="deleteMulti()" *ngIf="!viewOnly">
-                    <i class="fa fa-trash-o do"></i>
+                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                     <span>Xóa</span>
                 </button> -->
                 <button type="button" class="btn btn-sub"
@@ -101,6 +101,7 @@
                         <th>Năm KH</th>
                         <th *ngIf="userService.isTongCuc()">Cục DTNN KV</th>
                         <th>Mã tổng hợp</th>
+                        <th>Số Công văn/đề xuất</th>
                         <th>Loại điều chuyển</th>
                         <th>Ngày tổng hợp</th>
                         <th>Nội dung tổng hợp</th>
@@ -131,6 +132,13 @@
                             <nz-input-group>
                                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.id"
                                     (input)="filterInTable('id',filterTable.id)" size="small" />
+                            </nz-input-group>
+
+                        </th>
+                        <th>
+                            <nz-input-group>
+                                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soDeXuat"
+                                    (input)="filterInTable('soDeXuat',filterTable.soDeXuat)" size="small" />
                             </nz-input-group>
 
                         </th>
@@ -181,26 +189,25 @@
                         <td>{{ data.namKeHoach }}</td>
                         <td *ngIf="userService.isTongCuc()">{{data.tenDvi}}</td>
                         <td>{{ data.id }}</td>
+                        <td>{{data.soDeXuat}}</td>
                         <td>{{ LIST_DIEU_CHUYEN[data.loaiDieuChuyen]}}</td>
                         <td>{{ data.ngayTongHop|date:"dd/MM/yyyy"}}</td>
                         <td>{{ data.trichYeu }}</td>
                         <td>{{ LIST_TRANG_THAI[data.trangThai]}}</td>
                         <td>
                             <a (click)="viewDetail(data.id, true)"
-                                *ngIf="viewOnly || (!viewOnly && userService.isAccessPermisson('DCNB_TONGHOPDC_XEM') && checkRoleView(data.trangThai))">
-                                <i class="fa fa-eye"></i>
+                                *ngIf="(!viewOnly && checkRoleView(data.trangThai, data.loaiDieuChuyen) && userService.isAccessPermisson('DCNB_TONGHOPDC_XEM')) ||  (viewOnly && userService.isAccessPermisson('DCNB_TONGHOPDC_XEM') )">
+                                <i class="fa fa-eye" title="Xem chi tiết"></i>
                             </a>
-                            <a *ngIf="!viewOnly && userService.isAccessPermisson('DCNB_TONGHOPDC_SUA') && checkRoleEdit(data.trangThai)"
+                            <a *ngIf="checkRoleEdit(data.trangThai, data.loaiDieuChuyen)"
                                 (click)="viewDetail(data.id, false)">
-                                <i class="fa fa-pencil"></i>
+                                <i class="fa fa-pencil" title="Sửa"></i>
                             </a>
-                            <a
-                                *ngIf="!viewOnly && checkPermissonApprove(data.trangThai) && checkRoleApproveDc(data.trangThai)">
+                            <a *ngIf="checkRoleApproveDc(data.trangThai)">
                                 <i class="icon htvbdh_tcdt_pheduyet" (click)="viewDetail(data.id,false)"></i>
                             </a>
-                            <a *ngIf="!viewOnly && userService.isAccessPermisson('DCNB_TONGHOPDC_XOA') && checkRoleDelete(data.trangThai)"
-                                (click)="xoaItem(data)">
-                                <i class="fa fa-trash-o do"></i>
+                            <a *ngIf="checkRoleDelete(data.trangThai)" (click)="xoaItem(data)">
+                                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                             </a>
                         </td>
                     </tr>

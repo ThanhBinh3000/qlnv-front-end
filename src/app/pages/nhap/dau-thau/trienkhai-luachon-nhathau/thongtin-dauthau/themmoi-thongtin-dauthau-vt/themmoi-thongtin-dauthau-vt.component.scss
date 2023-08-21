@@ -1,0 +1,44 @@
+.label-50 {
+  .ant-form-item-label.ant-col {
+    text-align: left;
+    width: 50%;
+  }
+
+  .ant-picker,
+  input {
+    border: none;
+    background: transparent;
+    font-weight: 700;
+  }
+
+  .ant-input-number {
+    width: 100% !important;
+    border: none;
+    background: transparent;
+    color: #444444;
+    font-weight: 700;
+  }
+}
+
+.border-right {
+  border-right: solid 1px #e2e2e2;
+
+}
+
+::ng-deep .ant-input-number-input {
+  color: #001CFF !important;
+  font-weight: bold;
+}
+
+::ng-deep .ant-form-item-label>label {
+  margin-bottom: unset;
+}
+
+.bg-selected td {
+  background-color: #ebedff;
+}
+.blue-text {
+  color: #001CFF;
+  font-weight: 500;
+  font-size: 12px;
+}

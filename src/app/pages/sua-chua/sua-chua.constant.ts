@@ -1,52 +1,80 @@
 import { ChiTietMenu } from "src/app/models/ChiTietMenu";
 
-export const SUA_CHUA_ROUTE_LIST: Array<ChiTietMenu> = [
+export const ROUTE_LIST: Array<ChiTietMenu> = [
   {
     icon: 'htvbdh_tcdt_chitieukehoachnam',
-    title: 'Danh sách hàng DTQG bị hỏng cần sửa chữa',
-    url: `/danh-sach-hang`,
-    dropdown: 'danh-sach-hang',
-    idHover: 'danh-sach-hang',
+    title: 'Toàn bộ danh sách hàng DTQG cần sửa chữa ',
+    url: `/danh-sach`,
+    dropdown: 'danh-sach',
+    idHover: 'danh-sach',
+    caps: [1],
     hasTab: false,
+    accessPermisson: 'SCHDTQG_DSCSC'
   },
   {
     icon: 'htvbdh_tcdt_chitieukehoachnam',
-    title: 'Thẩm định và ban hành QĐ sửa chữa hàng DTQG',
-    url: `/tong-hop-danh-sach-hang`,
-    dropdown: 'tong-hop-danh-sach-hang',
-    idHover: 'tong-hop-danh-sach-hang',
+    title: 'Tổng hợp danh sách hàng DTQG cần sửa chữa',
+    url: `/tong-hop`,
+    dropdown: 'tong-hop',
+    idHover: 'tong-hop',
     hasTab: false,
+    caps: [1],
+    accessPermisson: 'SCHDTQG_THDSCSC'
   },
   {
-    icon: 'htvbdh_tcdt_dieu_chuyen',
-    title: 'Xuất hàng DTQG',
-    url: '/xuat-hang-dtqg',
-    dropdown:'xuat-hang-dtqg',
-    idHover:'xuat-hang-dtqg',
+    icon: 'htvbdh_tcdt_chitieukehoachnam',
+    title: 'Trình và thẩm định hàng DTQG cần sữa chữa',
+    url: `/trinh-tham-dinh`,
+    dropdown: 'trinh-tham-dinh',
+    idHover: 'trinh-tham-dinh',
     hasTab: false,
+    caps: [1],
+    accessPermisson: 'SCHDTQG_HSSC'
   },
   {
-    icon: 'htvbdh_tcdt_baocao2',
-    title: 'Phiếu kiểm định chất lượng hàng DTQG',
-    url: '/phieu-kiem-dinh-chat-luong',
-    dropdown: 'phieu-kiem-dinh-chat-luong',
-    idHover: 'phieu-kiem-dinh-chat-luong',
+    icon: 'htvbdh_tcdt_chitieukehoachnam',
+    title: 'Quyết định sửa chữa hàng DTQG',
+    url: `/quyet-dinh`,
+    dropdown: 'quyet-dinh',
+    idHover: 'quyet-dinh',
     hasTab: false,
+    accessPermisson: 'SCHDTQG_QDSC'
   },
   {
-    icon: 'htvbdh_tcdt_baocao2',
-    title: 'Nhập hàng DTQG',
-    url: '/nhap-hang-dtqg',
-    dropdown: 'nhap-hang-dtqg',
-    idHover: 'nhap-hang-dtqg',
+    icon: 'htvbdh_tcdt_chitieukehoachnam',
+    title: 'Xuất hàng',
+    url: `/xuat-hang`,
+    dropdown: 'xuat-hang',
+    idHover: 'xuat-hang',
     hasTab: false,
+    caps: [1, 2, 3],
+    accessPermisson: 'SCHDTQG_XH'
   },
-  // {
-  //   icon: 'htvbdh_tcdt_baocao2',
-  //   title: 'Báo cáo kết quả sửa chữa hàng DTQG',
-  //   url:  '/bao-cao-ket-qua',
-  //   dropdown:  'bao-cao-ket-qua',
-  //   idHover:  'bao-cao-ket-qua',
-  //   hasTab: false,
-  // }
+  {
+    icon: 'htvbdh_tcdt_chitieukehoachnam',
+    title: 'Kiểm tra chất lượng sau SC',
+    url: `/kiem-tra-cl`,
+    dropdown: 'kiem-tra-cl',
+    idHover: 'kiem-tra-cl',
+    hasTab: false,
+    accessPermisson: 'SCHDTQG_KTCL'
+  },
+  {
+    icon: 'htvbdh_tcdt_chitieukehoachnam',
+    title: 'Nhập hàng',
+    url: `/nhap-hang`,
+    dropdown: 'nhap-hang',
+    idHover: 'nhap-hang',
+    hasTab: false,
+    accessPermisson: 'SCHDTQG_NH'
+  },
+  {
+    icon: 'htvbdh_tcdt_chitieukehoachnam',
+    title: 'Báo cáo kết quả sữa chữa hàng DTQG',
+    url: `/bao-cao`,
+    dropdown: 'bao-cao',
+    idHover: 'bao-cao',
+    hasTab: false,
+    accessPermisson: 'SCHDTQG_NH'
+  },
 ];

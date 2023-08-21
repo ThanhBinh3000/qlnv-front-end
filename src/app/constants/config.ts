@@ -235,3 +235,25 @@ export const DM_SC_TYPE = {
   SC_THUONG_XUYEN: '01',
   SC_LON: '00',
 };
+//Loại qd giao chỉ tiêu kế hoạch năm
+export const LOAI_QD_CTKH = {
+  QD: '00',
+  QD_DC: '01',
+  PA: '02'
+};
+//Loại hàng hóa xuât khác
+export const LOAI_HH_XUAT_KHAC = {
+  LT_6_THANG: 'LT6',
+  VT_12_THANG: 'VT12',
+  VT_6_THANG: 'VT6',
+  VT_BH: 'VTBH', // Vật tư bảo hành
+  VT_BH_BKK: 'VTBH_BKK', // DS Hàng DTQG xuất trong trường hợp bất khả kháng theo qd tại hd bảo hiểm
+};
+
+export const KIEU_NHAP_XUAT = {
+  '01': 'Nhập mua',
+  '02': 'Nhập không chi tiền',
+  '03': 'Xuất bán',
+  '04': 'Xuất không thu tiền',
+  '05': 'Khác'
+};

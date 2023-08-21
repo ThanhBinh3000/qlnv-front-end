@@ -1,4 +1,4 @@
-<div *ngIf="!isDetail">
+<div *ngIf="!isDetail && !isDetailVt">
   <div class="bg-trang">
     <nz-card class="mt16 flex-card p-lr16">
       <div nz-row [nzGutter]="[20]">
@@ -18,7 +18,17 @@
         </div>
         <div nz-col nzSpan="5">
           <label class="search__label">Ngày quyết định</label>
-          <nz-range-picker [(ngModel)]="searchFilter.ngayQd" nzFormat="dd/MM/yyyy"></nz-range-picker>
+          <div nz-row [nzGutter]="24">
+            <div nz-col nzSpan="12" class="cus-start-date">
+              <nz-date-picker [nzDisabledDate]="disabledTuNgayQd" nzFormat="dd/MM/yyyy" [(ngModel)]="tuNgayKy"
+                              nzPlaceHolder="Ngày bắt đầu">
+              </nz-date-picker>
+            </div>
+            <div nz-col nzSpan="12" class="cus-end-date">
+              <nz-date-picker [nzDisabledDate]="disabledDenNgayQd" nzFormat="dd/MM/yyyy" [(ngModel)]="denNgayKy"
+                              nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+            </div>
+          </div>
         </div>
       </div>
       <div class="cangiua group-button-search">
@@ -37,7 +47,7 @@
       <div class="buttons">
         <button type="button" class="btn btn-do" (click)="deleteSelect()"
           *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_XOA')">
-          <i class="fa fa-trash-o do"></i>
+          <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
           <span>Xóa</span>
         </button>
         <button type="button" class="btn btn-sub" (click)="exportData()"
@@ -67,16 +77,16 @@
             <th class="text-center" style="width: 10%;">Ngày quyết định</th>
             <th class="text-center" style="width: 35%;">Trích yếu</th>
             <th>Số KH/tờ trình</th>
-            <th *ngIf="userService.isTongCuc() && loaiVthh != '02'">Mã tổng hợp</th>
+            <th *ngIf="userService.isTongCuc() && !loaiVthh.startsWith('02')">Mã tổng hợp</th>
             <th *ngIf="userService.isCuc() || userService.isTongCuc()" class="text-center" style="width: 12%;">Loại hàng
               hóa</th>
-            <th *ngIf="userService.isCuc() || userService.isTongCuc()" class="text-center" style="width: 12%;">Chủng
+            <th *ngIf="(userService.isCuc() || userService.isTongCuc())  && !loaiVthh.startsWith('02')" class="text-center" style="width: 12%;">Chủng
               loại hàng hóa</th>
             <th class="text-center" style="width: 8%;">Tổng số gói thầu</th>
             <th class="text-center" style="width: 8%;">Số gói thầu đã trúng</th>
             <th class="text-center" style="width: 8%;">SL HĐ đã ký</th>
             <th *ngIf="loaiVthh != '02'" class="text-center" style="width: 8%;">Thời hạn nhập kho</th>
-            <th *ngIf="userService.isTongCuc()" class="text-center" style="width: 9%;">Thời gian thực hiện dự án</th>
+<!--            <th *ngIf="userService.isTongCuc()" class="text-center" style="width: 9%;">Thời gian thực hiện dự án</th>-->
             <th>Trạng thái</th>
             <th width="90px">Hành động</th>
           </tr>
@@ -155,12 +165,12 @@
                 (ngModelChange)="filterInTable('tgianNhang',filterTable.tgianNhang)">
               </nz-date-picker>
             </th>
-            <th *ngIf="userService.isTongCuc()">
-              <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tgianThien"
-                  (input)="filterInTable('tgianThien',filterTable.tgianThien)" size="small" />
-              </nz-input-group>
-            </th>
+<!--            <th *ngIf="userService.isTongCuc()">-->
+<!--              <nz-input-group>-->
+<!--                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tgianThien"-->
+<!--                  (input)="filterInTable('tgianThien',filterTable.tgianThien)" size="small" />-->
+<!--              </nz-input-group>-->
+<!--            </th>-->
             <th>
               <nz-input-group>
                 <nz-select nzAllowClear nzPlaceHolder="Tìm kiếm" [(ngModel)]="filterTable.trangThai"
@@ -188,32 +198,32 @@
                 (click)="data.idTrHdr ? openDxKhlcntModal(data.idTrHdr) : openDxKhlcntModal(null, data.soTrHdr)">{{
                 data.soTrHdr}}</a>
             </td>
-            <td *ngIf="userService.isTongCuc() && loaiVthh != '02'">
+            <td *ngIf="userService.isTongCuc() && !loaiVthh.startsWith('02')">
               <a style="color: blue; font-weight: bold;" (click)="openTHopKhlcntModal(data.idThHdr)">{{
                 data.idThHdr}}</a>
             </td>
             <td *ngIf="userService.isCuc() || userService.isTongCuc()">{{data.tenLoaiVthh}}</td>
-            <td *ngIf="userService.isCuc() || userService.isTongCuc()">{{data.tenCloaiVthh}}</td>
+            <td *ngIf="(userService.isCuc() || userService.isTongCuc())  && !loaiVthh.startsWith('02')">{{data.tenCloaiVthh}}</td>
             <td>{{data.soGthau}}</td>
             <td>{{data.soGthauTrung}}</td>
-            <td></td>
+            <td>{{data.soHdDaKy}}</td>
             <td *ngIf="loaiVthh != '02'">{{data.tgianNhang}}</td>
-            <td *ngIf="userService.isTongCuc()">{{data.tgianThien }}</td>
+<!--            <td *ngIf="userService.isTongCuc()">{{data.tgianThien }}</td>-->
             <td>{{ data.tenTrangThai }}</td>
             <td class="text-left">
               <a (click)="goDetail(data.id, 'NHDTQG_PTDT_KHLCNT_QDLCNT_XEM')"
-                *ngIf="data.trangThai == STATUS.BAN_HANH || (userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_XEM') && !userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_THEM') && (data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.BAN_HANH))">
-                <i class="fa fa-eye"></i>
+                *ngIf="data.trangThai == STATUS.BAN_HANH || (userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_XEM') && !userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_THEM') && (data.trangThai == STATUS.DANG_NHAP_DU_LIEU || data.trangThai == STATUS.BAN_HANH))">
+                <i class="fa fa-eye" title="Xem chi tiết"></i>
               </a>
-              <a *ngIf="(data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.DA_DUYET_LDV || data.trangThai == STATUS.TU_CHOI_LDV || data.trangThai == STATUS.CHO_DUYET_LDV )
+              <a *ngIf="(data.trangThai == STATUS.DANG_NHAP_DU_LIEU || data.trangThai == STATUS.DA_DUYET_LDV || data.trangThai == STATUS.TU_CHOI_LDV || data.trangThai == STATUS.CHO_DUYET_LDV )
                 && (userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_THEM')) && userService.isTongCuc()"
                 (click)="goDetail(data.id, 'NHDTQG_PTDT_KHLCNT_QDLCNT_THEM')">
-                <i class="fa fa-pencil"></i>
+                <i class="fa fa-pencil" title="Sửa"></i>
               </a>
-              <a *ngIf="data.trangThai == STATUS.DU_THAO
+              <a *ngIf="data.trangThai == STATUS.DANG_NHAP_DU_LIEU
                 && (userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_XOA')) && userService.isTongCuc()"
                 (click)="delete(data)">
-                <i class="fa fa-trash-o do"></i>
+                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
               </a>
             </td>
           </tr>
@@ -243,6 +253,11 @@
   <app-themmoi-quyetdinh-khlcnt [isView]="isView" [idInput]="selectedId" [loaiVthh]="loaiVthh"
     (showListEvent)="showList()">
   </app-themmoi-quyetdinh-khlcnt>
+</div>
+<div *ngIf="isDetailVt" class="chi-tiet">
+  <app-themmoi-quyetdinh-khlcnt-vt [isView]="isView" [idInput]="selectedId" [loaiVthh]="loaiVthh"
+                                (showListEvent)="showList()">
+  </app-themmoi-quyetdinh-khlcnt-vt>
 </div>
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openTHopKhlcnt"
   (nzOnCancel)="closeTHopKhlcntModal()">

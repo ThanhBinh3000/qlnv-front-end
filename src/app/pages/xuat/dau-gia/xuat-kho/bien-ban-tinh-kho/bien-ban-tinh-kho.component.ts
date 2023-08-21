@@ -28,6 +28,7 @@ export class BienBanTinhKhoComponent extends Base2Component implements OnInit {
   loaiVthhCache: string;
   public vldTrangThai: DauGiaComponent;
   public CHUC_NANG = CHUC_NANG;
+  idQdNv: number =0;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -166,19 +167,16 @@ export class BienBanTinhKhoComponent extends Base2Component implements OnInit {
   }
 
   buildTableView() {
-    console.log(this.dataTable, " key ? key : null,")
-    let dataView = chain(this.dataTable)
-      .groupBy("soQdGiaoNvXh")
-      .map((value, key) => {
-        let quyetDinh = value.find(f => f.soQdGiaoNvXh === key)
-        let rs = chain(value)
-          .groupBy("soBbTinhKho")
-          .map((v, k) => {
+    let dataView = chain(this.dataTable).groupBy("soQdGiaoNvXh").map((value, key) => {
+      let quyetDinh = value.find(f => f.soQdGiaoNvXh === key)
+        let rs = chain(value).groupBy("soBbTinhKho").map((v, k) => {
               let soBb = v.find(s => s.soBbTinhKho === k)
               return {
                 idVirtual: uuid.v4(),
                 soBbTinhKho: k != "null" ? k : '',
+                maDiemKho: soBb ? soBb.maDiemKho : null,
                 tenDiemKho: soBb ? soBb.tenDiemKho : null,
+                maLoKho: soBb ? soBb.maLoKho : null,
                 tenLoKho: soBb ? soBb.tenLoKho : null,
                 ngayBatDauXuat: soBb ? soBb.ngayBatDauXuat : null,
                 ngayKetThucXuat: soBb ? soBb.ngayKetThucXuat : null,
@@ -192,11 +190,13 @@ export class BienBanTinhKhoComponent extends Base2Component implements OnInit {
           ).value();
         let nam = quyetDinh ? quyetDinh.nam : null;
         let ngayQdGiaoNvXh = quyetDinh ? quyetDinh.ngayQdGiaoNvXh : null;
+        let idQdGiaoNvXh = quyetDinh ? quyetDinh.idQdGiaoNvXh : null;
         return {
           idVirtual: uuid.v4(),
           soQdGiaoNvXh: key != "null" ? key : '',
           nam: nam,
           ngayQdGiaoNvXh: ngayQdGiaoNvXh,
+          idQdGiaoNvXh : idQdGiaoNvXh,
           childData: rs
         };
       }).value();
@@ -220,11 +220,11 @@ export class BienBanTinhKhoComponent extends Base2Component implements OnInit {
   }
 
 
-  redirectDetail(id, b: boolean) {
+  redirectDetail(id, b: boolean, idQdNv? : number) {
     this.selectedId = id;
     this.isDetail = true;
     this.isView = b;
-    // this.isViewDetail = isView ?? false;
+    this.idQdNv = idQdNv
   }
 
   openPhieuXkModal(id: number) {

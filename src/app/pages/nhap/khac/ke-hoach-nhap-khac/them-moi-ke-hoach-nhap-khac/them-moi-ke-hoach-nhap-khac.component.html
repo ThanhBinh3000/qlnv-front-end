@@ -1,4 +1,4 @@
-<nz-affix [nzOffsetTop]="135" class="btn-affix">
+<nz-affix [nzOffsetTop]="135" class="btn-affix" *ngIf="!showFromTH">
   <div class="btn-group">
     <button type="button" class="btn btn-sub" (click)="quayLai()">
       <i class="fa fa-arrow-left"></i>
@@ -6,35 +6,43 @@
     </button>
     <ng-container>
       <button
-        *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_TP
-        || formData.value.trangThai == STATUS.CHO_DUYET_LDC
-        || formData.value.trangThai == STATUS.DA_DUYET_LDC"
+        *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_TP && userService.isAccessPermisson('NHDTQG_NK_KHNK_DUYETTP')
+        || formData.value.trangThai == STATUS.CHO_DUYET_LDC && userService.isAccessPermisson('NHDTQG_NK_KHNK_DUYETLDC')
+        || formData.value.trangThai == STATUS.DA_DUYET_LDC && userService.isAccessPermisson('NHDTQG_NK_KHNK_DUYETCBV')"
         type="button" class="btn btn-sub do" (click)="tuChoi()">
         <i class="icon htvbdh_tcdt_tuchoi"></i>
         <span>Từ chối</span>
       </button>
       <button
-        *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_TP
-        || formData.value.trangThai == STATUS.CHO_DUYET_LDC
-        || formData.value.trangThai == STATUS.DA_DUYET_LDC"
+        *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_TP && userService.isAccessPermisson('NHDTQG_NK_KHNK_DUYETTP')
+        || formData.value.trangThai == STATUS.CHO_DUYET_LDC && userService.isAccessPermisson('NHDTQG_NK_KHNK_DUYETLDC')
+        || formData.value.trangThai == STATUS.DA_DUYET_LDC && userService.isAccessPermisson('NHDTQG_NK_KHNK_DUYETCBV')"
         type="button" class="btn btn-sub xanh-nhat" (click)="guiDuyet()">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span>Duyệt</span>
       </button>
       <button
-        *ngIf="formData.value.trangThai == STATUS.DU_THAO
+        *ngIf="(formData.value.trangThai == STATUS.DU_THAO
         || formData.value.trangThai == STATUS.TU_CHOI_TP
         || formData.value.trangThai == STATUS.TU_CHOI_LDC
-        || formData.value.trangThai == STATUS.TU_CHOI_CBV"
+        || formData.value.trangThai == STATUS.TU_CHOI_CBV)
+        && userService.isAccessPermisson('NHDTQG_NK_KHNK_THEM')"
         type="button" class="btn btn-sub xanh-nhat" (click)="save(true)">
         <i class="icon htvbdh_tcdt_guiduyet"></i>
         <span>Lưu và gửi duyệt</span>
       </button>
       <button
-        *ngIf="formData.value.trangThai == STATUS.DU_THAO
+        *ngIf="formData.value.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('NHDTQG_NK_KHNK_DUYETCBV')"
+        type="button" class="btn btn-sub xanh-nhat" (click)="hoanThanh()">
+        <i class="icon htvbdh_tcdt_tuchoi"></i>
+        <span>Hoàn thành</span>
+      </button>
+      <button
+        *ngIf="(formData.value.trangThai == STATUS.DU_THAO
         || formData.value.trangThai == STATUS.TU_CHOI_TP
         || formData.value.trangThai == STATUS.TU_CHOI_LDC
-        || formData.value.trangThai == STATUS.TU_CHOI_CBV"
+        || formData.value.trangThai == STATUS.TU_CHOI_CBV)
+        && userService.isAccessPermisson('NHDTQG_NK_KHNK_THEM')"
         type="button" class="btn btn-main" (click)="save()">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
@@ -43,7 +51,7 @@
   </div>
 </nz-affix>
 <div class="bg-trang">
-  <div class="header header-green-background">
+  <div class="header header-green-background" *ngIf="!showFromTH">
     <div class="header-text">
       <div class="title-chi-tieu">
         <span
@@ -61,12 +69,12 @@
             *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_CBV "
             nzShowIcon nzType="error" nzMessage="Lý do từ chối" nzDescription="{{formData.value.lyDoTuChoi}}">
   </nz-alert>
-  <nz-card class="mg-t-16 flex-card p-lr16">
+  <nz-card class="mg-t-16 flex-card p-lr16" *ngIf="!showFromTH">
     <form nzLayout="vertical" nz-form [formGroup]="formData">
       <div nz-row [nzGutter]="16">
         <div nz-col [nzSpan]="3">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true">Năm kế hoạch</nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true">Năm kế hoạch</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
               <nz-select formControlName="namKhoach">
                 <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
@@ -109,7 +117,7 @@
         </div>
         <div nz-col [nzSpan]="3">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Số công văn/đề xuất</nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true"> Số công văn/tờ trình</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
               <nz-input-group nzAddOnAfter="{{maTrinh}}">
                 <input nz-input formControlName="soDxuat" [readonly]="isView" />
@@ -119,7 +127,7 @@
         </div>
         <div nz-col [nzSpan]="9">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> Trích yếu</nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true"> Trích yếu</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24">
               <input placeholder="" nz-input formControlName="trichYeu"
                      [readonly]="isView" />
@@ -128,7 +136,7 @@
         </div>
         <div nz-col [nzSpan]="6">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng hóa</nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng DTQG</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-select formControlName="loaiVthh" nzShowSearch nzAllowClear
                          (ngModelChange)="changeHangHoa($event)">
@@ -231,7 +239,7 @@
                 <td></td>
                 <td *ngIf="!isView">
                   <a (click)="deleteRow('cuc', item)">
-                    <i class="fa fa-trash-o do"></i>
+                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                   </a>
                 </td>
               </tr>
@@ -251,7 +259,7 @@
                     <td></td>
                     <td *ngIf="!isView">
                       <a (click)="deleteRow('chiCuc', item)">
-                        <i class="fa fa-trash-o do"></i>
+                        <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                       </a>
                     </td>
                   </tr>
@@ -271,7 +279,7 @@
                         <td></td>
                         <td *ngIf="!isView">
                           <a (click)="deleteRow('diemKho', item)">
-                            <i class="fa fa-trash-o do"></i>
+                            <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                           </a>
                         </td>
                       </tr>
@@ -290,11 +298,11 @@
                             <td>{{nganLo.donGia | number : '1.0-1' : 'vi_VN'}}</td>
                             <td>{{nganLo.slDoiThua * nganLo.donGia | number : '1.0-1' : 'vi_VN'}}</td>
                             <td *ngIf="!isView">
-                              <a (click)="themMoi(nganLo)">
-                                <i class="fa fa-pencil"></i>
+                              <a (click)="themMoi($event, nganLo)">
+                                <i class="fa fa-pencil" title="Sửa"></i>
                               </a>
                               <a (click)="deleteRow('nhaKho', item)">
-                                <i class="fa fa-trash-o do"></i>
+                                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                               </a>
                             </td>
                           </tr>
@@ -307,7 +315,7 @@
             </ng-container>
           </ng-container>
           <ng-template #templateCuc>
-            <ng-container *ngFor="let item of listOfData , let i = index">
+            <ng-container *ngFor="let item of listDataGroup , let i = index">
               <tr>
                 <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
                 <td>{{item.tenChiCuc}}</td>
@@ -321,14 +329,14 @@
                 <td></td>
                 <td *ngIf="!isView">
                   <a (click)="deleteRow('chiCuc', item)">
-                    <i class="fa fa-trash-o do"></i>
+                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                   </a>
                 </td>
               </tr>
-              <ng-container *ngIf="expandSet2.has(i)">
+              <ng-container *ngIf="expandSet.has(i)">
                 <ng-container *ngFor="let diemKho of item.children, let y = index">
                   <tr>
-                    <td class="text-right" [nzExpand]="expandSet3.has(y)" (nzExpandChange)="onExpandChange3(y, $event)"></td>
+                    <td class="text-right" [nzExpand]="expandSet2.has(y)" (nzExpandChange)="onExpandChange2(y, $event)"></td>
                     <td></td>
                     <td>{{diemKho.tenDiemKho}}</td>
                     <td></td>
@@ -340,14 +348,13 @@
                     <td></td>
                     <td *ngIf="!isView">
                       <a (click)="deleteRow('diemKho', item)">
-                        <i class="fa fa-trash-o do"></i>
+                        <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                       </a>
                     </td>
                   </tr>
-                  <ng-container *ngIf="expandSet3.has(y)">
+                  <ng-container *ngIf="expandSet2.has(y)">
                     <ng-container *ngFor="let nganLo of diemKho.children, let z = index">
                       <tr>
-                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -359,11 +366,11 @@
                         <td>{{nganLo.donGia | number : '1.0-1' : 'vi_VN'}}</td>
                         <td>{{nganLo.slDoiThua * nganLo.donGia | number : '1.0-1' : 'vi_VN'}}</td>
                         <td *ngIf="!isView">
-                          <a (click)="themMoi(nganLo)">
-                            <i class="fa fa-pencil"></i>
+                          <a (click)="themMoi($event, nganLo)">
+                            <i class="fa fa-pencil" title="Sửa"></i>
                           </a>
                           <a (click)="deleteRow('nhaKho', item)">
-                            <i class="fa fa-trash-o do"></i>
+                            <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                           </a>
                         </td>
                       </tr>
@@ -375,7 +382,7 @@
           </ng-template>
           </tbody>
           <tr *ngIf="listOfData.length > 0">
-            <td></td>
+            <td *ngIf="userService.isTongCuc()"></td>
             <td colspan="5" class="first-last-row-table background-last-row text-right text-blue">Tổng</td>
             <td
               class="background-last-row text-right blue-text">{{ calcTongSlTonKho() | number : '1.0-1' : 'vi_VN' }}</td>
@@ -516,7 +523,7 @@
   </ng-template>
 </nz-modal>
 <ng-template #extraTpl>
-  <button type="button" class="btn btn-sub xanh" *ngIf="!isView" (click)="themMoi()">
+  <button type="button" class="btn btn-sub xanh" *ngIf="!isView" (click)="themMoi($event)">
     <i class="icon htvbdh_dau-cong"></i>
     <span>Thêm</span>
   </button>

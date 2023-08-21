@@ -7,8 +7,8 @@ import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
 import { MESSAGE } from 'src/app/constants/message';
 import { chain } from 'lodash';
+import * as uuid from "uuid";
 import { BienBanLayMauXhService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/kiem-tra-chat-luong/bienBanLayMauXh.service';
-import { v4 as uuidv4 } from 'uuid';
 @Component({
   selector: 'app-table-bien-ban-lay-mau',
   templateUrl: './table-bien-ban-lay-mau.component.html',
@@ -21,9 +21,10 @@ export class TableBienBanLayMauComponent extends Base2Component implements OnIni
   idQdGiaoNvXh: number = 0;
   children: any = [];
   expandSetString = new Set<string>();
-  dataView: any = [];
   idQdNv: number = 0;
   isViewQdNv: boolean = false;
+  idBbTinhKho : number = 0;
+  isViewBbTinhKho: boolean = false;
 
   constructor(
     httpClient: HttpClient,
@@ -42,6 +43,7 @@ export class TableBienBanLayMauComponent extends Base2Component implements OnIni
       ngayLayMauDen: null,
       maDvi: null,
       loaiVthh: null,
+      maDviCuc: null,
     })
 
     this.filterTable = {
@@ -63,7 +65,6 @@ export class TableBienBanLayMauComponent extends Base2Component implements OnIni
   async ngOnInit() {
     await this.spinner.show();
     try {
-      this.timKiem();
       await this.search();
     } catch (e) {
       console.log('error: ', e)
@@ -74,70 +75,48 @@ export class TableBienBanLayMauComponent extends Base2Component implements OnIni
 
   async search(roles?): Promise<void> {
     await this.spinner.show()
+    this.formData.patchValue({
+      loaiVthh: this.loaiVthh,
+      maDvi: this.userService.isChiCuc() ? this.userInfo.MA_DVI : null,
+      trangThai: this.userService.isChiCuc() ? null : this.STATUS.DA_DUYET_LDCC,
+      maDviCuc : this.userService.isCuc() ? this.userInfo.MA_DVI : null,
+    })
     await super.search(roles);
     this.buildTableView();
     await this.spinner.hide()
   }
 
-  timKiem() {
-    this.formData.patchValue({
-      loaiVthh: this.loaiVthh,
-      maDvi: this.userService.isChiCuc() ? this.userInfo.MA_DVI : null,
-      trangThai: this.userService.isChiCuc() ? null : this.STATUS.DA_DUYET_LDCC
-    })
-  }
-
-  clearFilter() {
-    this.formData.reset();
-    this.timKiem();
-    this.search();
-  }
-
   buildTableView() {
-    let dataView = chain(this.dataTable)
-      .groupBy("soQd")
-      .map((value, key) => {
-        let rs = chain(value).groupBy("maDiemKho").map((v, k) => {
-          let rowLv2 = v.find(s => s.maDiemKho === k);
-          return {
-            id: rowLv2.id,
-            idVirtual: uuidv4(),
-            maDiemKho: k,
-            tenDiemKho: rowLv2.tenDiemKho,
-            maNhaKho: rowLv2.maNhaKho,
-            tenNhaKho: rowLv2.tenNhaKho,
-            maNganKho: rowLv2.maNganKho,
-            tenNganKho: rowLv2.tenNganKho,
-            tenLoKho: rowLv2.tenLoKho,
-            maLoKho: rowLv2.maLoKho,
-            soPhieu: rowLv2.soPhieu,
-            soBienBan: rowLv2.soBienBan,
-            ngayLayMau: rowLv2.ngayLayMau,
-            soBbTinhKho: rowLv2.soBbTinhKho,
-            ngayXuatDocKho: rowLv2.ngayXuatDocKho,
-            soBbHaoDoi: rowLv2.soBbHaoDoi,
-            trangThai: rowLv2.trangThai,
-            tenTrangThai: rowLv2.tenTrangThai,
-            childData: v
-          }
-        }
-        ).value();
-        let rowLv1 = value.find(s => s.soQd === key);
+    let dataView = chain(this.dataTable).groupBy("soQd").map((value, key) => {
+      let quyetDinh = value.find(f => f.soQd === key)
+      let rs = chain(value).groupBy("maDiemKho").map((v, k) => {
+        let diaDiem = v.find(s => s.maDiemKho === k)
         return {
-          idVirtual: uuidv4(),
-          soQd: key,
-          nam: rowLv1.nam,
-          ngayQd: rowLv1.ngayQd,
-          idQd: rowLv1.idQd,
-          childData: rs
-        };
+          idVirtual: uuid.v4(),
+          maDiemKho: k != null ? k : '',
+          tenDiemKho: diaDiem ? diaDiem.tenDiemKho : null,
+          idQd: diaDiem ? diaDiem.idQd : null,
+          childData: v
+        }
       }).value();
-    this.dataView = dataView
+      let nam = quyetDinh ? quyetDinh.nam : null;
+      let ngayQd = quyetDinh ? quyetDinh.ngayQd : null;
+      let idQd = quyetDinh ? quyetDinh.idQd : null;
+      return {
+        idVirtual: uuid.v4(),
+        soQd: key != null ? key : '',
+        nam: nam,
+        ngayQd: ngayQd,
+        idQd : idQd,
+        childData: rs
+      };
+    }).value();
+    this.children = dataView
     this.expandAll()
   }
 
   expandAll() {
-    this.dataView.forEach(s => {
+    this.children.forEach(s => {
       this.expandSetString.add(s.idVirtual);
     })
   }
@@ -179,5 +158,15 @@ export class TableBienBanLayMauComponent extends Base2Component implements OnIni
   closeModalQdNv() {
     this.idQdNv = null;
     this.isViewQdNv = false;
+  }
+
+  openModalBbTinhKho(id: number) {
+    this.idBbTinhKho = id;
+    this.isViewBbTinhKho = true;
+  }
+
+  closeModalBbTinhKho() {
+    this.idBbTinhKho = null;
+    this.isViewBbTinhKho = false;
   }
 }

@@ -2,6 +2,7 @@ import {KeHoachVatTu, KeHoachVatTuCustom} from './KeHoachVatTu';
 import { KeHoachMuoi } from './KeHoachMuoi';
 import { KeHoachLuongThuc } from './KeHoachLuongThuc';
 import { FileDinhKem } from './FileDinhKem';
+import {STATUS} from "../constants/status";
 export class ThongTinChiTieuKeHoachNam {
   id: number;
   namKeHoach: number;
@@ -9,8 +10,9 @@ export class ThongTinChiTieuKeHoachNam {
   ngayKy: string;
   soQuyetDinh: string;
   tenTrangThai: string;
-  trangThai: string = '00';
+  trangThai: string = STATUS.DANG_NHAP_DU_LIEU;
   trichYeu: string;
+  loai:string;
   khLuongThuc: Array<KeHoachLuongThuc> = [];
   khMuoiDuTru: Array<KeHoachMuoi> = [];
   khVatTu: Array<KeHoachVatTu> = [];
@@ -18,7 +20,10 @@ export class ThongTinChiTieuKeHoachNam {
   khVatTuXuat: Array<any> = [];
   ghiChu: string;
   khMuoi: Array<KeHoachMuoi> = [];
+  loaiCanCu:string;
   canCu: string;
+  idCanCu: number;
+  capDvi:string;
   fileDinhKemReqs: Array<FileDinhKem>;
   qdGocId: number;
   soQdGoc: string;

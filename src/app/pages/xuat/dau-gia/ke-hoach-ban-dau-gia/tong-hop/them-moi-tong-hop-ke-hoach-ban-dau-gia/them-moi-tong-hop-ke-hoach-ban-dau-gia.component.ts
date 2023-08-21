@@ -1,24 +1,23 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-} from '@angular/core';
-import { FormGroup, Validators } from '@angular/forms';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { MESSAGE } from 'src/app/constants/message';
+import {Component, EventEmitter, Input, OnInit, Output,} from '@angular/core';
+import {FormGroup, Validators} from '@angular/forms';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {MESSAGE} from 'src/app/constants/message';
 import * as dayjs from 'dayjs';
-import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
-import { TongHopDeXuatKeHoachBanDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/tongHopDeXuatKeHoachBanDauGia.service';
-import { DatePipe } from '@angular/common';
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { STATUS } from 'src/app/constants/status';
+import {
+  DialogDanhSachHangHoaComponent
+} from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
+import {
+  TongHopDeXuatKeHoachBanDauGiaService
+} from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/tongHopDeXuatKeHoachBanDauGia.service';
+import {DatePipe} from '@angular/common';
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from 'src/app/services/storage.service';
+import {DanhMucService} from 'src/app/services/danhmuc.service';
+import {STATUS} from 'src/app/constants/status';
+import {LOAI_HANG_DTQG} from "../../../../../../constants/config";
 
 @Component({
   selector: 'app-them-moi-tong-hop-ke-hoach-ban-dau-gia',
@@ -28,11 +27,11 @@ import { STATUS } from 'src/app/constants/status';
 
 export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string
-  @Input() id: number;
+  @Input() idInput: number;
+  @Input() isView: boolean;
   @Input() isViewOnModal: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
-
   formTraCuu: FormGroup;
   isDetailDxCuc: boolean = false;
   isTongHop: boolean = false;
@@ -73,18 +72,21 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
       noiDungThop: ['', [Validators.required]],
       tenLoaiVthh: [''],
       tenCloaiVthh: [''],
-      trangThai: [STATUS.CHUA_TAO_QD],
-      tenTrangThai: ['Chưa Tạo QĐ'],
+      trangThai: [''],
+      tenTrangThai: [''],
+      children: [],
     })
   }
 
   async ngOnInit() {
     await this.spinner.show();
     try {
-      await Promise.all([
-        this.loadChiTiet(),
-      ]);
-      this.loadDanhMucHang()
+      if (this.idInput > 0) {
+        await this.loadChiTiet()
+      } else {
+        await this.initForm();
+      }
+      await this.loadDsVthh()
       await this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -93,32 +95,30 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
     }
   }
 
+  initForm() {
+    this.formData.patchValue({
+      trangThai: STATUS.CHUA_TAO_QD,
+      tenTrangThai: 'Chưa Tạo QĐ ',
+    })
+  }
+
   async loadChiTiet() {
-    if (this.id > 0) {
-      const data = await this.detail(this.id);
+    if (this.idInput > 0) {
+      const data = await this.detail(this.idInput);
       if (data) {
         this.isTongHop = true;
         this.helperService.bidingDataInFormGroup(this.formTraCuu, data)
-        this.formTraCuu.patchValue({
-          ngayPduyet: [data.ngayDuyetTu, data.ngayDuyetDen],
-        });
         this.formData.patchValue({
           idTh: data.id
-        })
-        this.dataTable = data.children;
-        if (this.dataTable && this.dataTable.length > 0) {
-          this.showFirstRow(event, this.dataTable[0].idDxHdr);
+        });
+        if (data.children && data.children.length > 0) {
+          this.showFirstRow(event, data.children[0].idDxHdr);
         }
-      }
-      else {
+      } else {
         this.isTongHop = false;
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     }
-  }
-
-  async showFirstRow($event, data: any) {
-    await this.showDetail($event, data);
   }
 
   async tongHopDeXuatTuCuc() {
@@ -128,29 +128,30 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
       this.helperService.markFormGroupTouched(this.formTraCuu);
       if (this.formTraCuu.invalid) {
         await this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đủ thông tin.');
         return;
       }
       let body = this.formTraCuu.value;
-      delete body.ngayDx;
-      let res = await this.tongHopDeXuatKeHoachBanDauGiaService.tonghop(body);
-      if (res.msg == MESSAGE.SUCCESS) {
-        const dataDetail = res.data
-        let idTh = await this.userService.getId("XH_THOP_DX_KH_BDG_SEQ");
-        this.helperService.bidingDataInFormGroup(this.formData, body)
-        this.formData.patchValue({
-          idTh: idTh,
-          ngayThop: dayjs().format("YYYY-MM-DD"),
-        })
-        this.dataTable = dataDetail.children;
-
-        if (this.dataTable && this.dataTable.length > 0) {
-          this.showFirstRow(event, this.dataTable[0].idDxHdr);
+      await this.tongHopDeXuatKeHoachBanDauGiaService.tonghop(body).then(async res => {
+        if (res.msg == MESSAGE.SUCCESS) {
+          const data = res.data
+          let idTh = await this.userService.getId("XH_THOP_DX_KH_BDG_SEQ");
+          this.helperService.bidingDataInFormGroup(this.formData, body)
+          this.formData.patchValue({
+            idTh: idTh,
+            ngayThop: dayjs().format("YYYY-MM-DD"),
+            children: data.children,
+          })
+          if (this.formData.value.children && this.formData.value.children.length > 0) {
+            this.showFirstRow(event, this.formData.value.children[0].idDxHdr);
+          }
+          this.isTongHop = true;
+        } else {
+          this.notification.error(MESSAGE.ERROR, res.msg);
+          this.isTongHop = false;
         }
-        this.isTongHop = true;
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
-        this.isTongHop = false;
-      }
+        await this.spinner.hide();
+      });
       await this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -160,6 +161,16 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
     }
   }
 
+  async save() {
+    await this.helperService.ignoreRequiredForm(this.formData);
+    let body = this.formData.value;
+    await this.createUpdate(body);
+    await this.helperService.restoreRequiredForm(this.formData);
+  }
+
+  async showFirstRow($event, data: any) {
+    await this.showDetail($event, data);
+  }
 
   disabledNgayDuyetTu = (startValue: Date): boolean => {
     if (!startValue || !this.formTraCuu.value.ngayDuyetDen) {
@@ -182,27 +193,6 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
     } else {
       this.formTraCuu.controls["ngayDuyetTu"].setValidators([Validators.required])
       this.formTraCuu.controls["ngayDuyetDen"].clearValidators();
-    }
-  }
-
-  async save(isTaoQd?) {
-    let body = this.formData.value;
-    let data = await this.createUpdate(body, 'XHDTQG_PTDG_KHBDG_TONGHOP_TONGHOP')
-    if (data) {
-      if (isTaoQd) {
-        this.taoQdinh();
-      } else {
-        this.goBack();
-      }
-    }
-  }
-
-  isDisable(): boolean {
-    if (this.formData.value.id) {
-      return true;
-    }
-    else {
-      return false;
     }
   }
 
@@ -235,17 +225,20 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
     });
   }
 
-  async loadDanhMucHang() {
-    let res = await this.danhMucService.loaiVatTuHangHoaGetAll();
+  async loadDsVthh() {
+    let res = await this.danhMucService.loadDanhMucHangHoa().toPromise();
     if (res.msg == MESSAGE.SUCCESS) {
-      if (res.data && res.data.length > 0) {
-        res.data.forEach((element) => {
-          if (element.ma == this.loaiVthh) {
-            this.formTraCuu.patchValue({
-              tenLoaiVthh: element.giaTri,
-            })
-          }
-        });
+      if (this.loaiVthh === LOAI_HANG_DTQG.GAO || this.loaiVthh === LOAI_HANG_DTQG.THOC) {
+        res.data.forEach((item) => {
+          this.formTraCuu.patchValue({
+            tenLoaiVthh: item.children?.find(s => s.ma == this.loaiVthh)?.ten,
+          })
+        })
+      }
+      if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.MUOI)) {
+        this.formTraCuu.patchValue({
+          tenLoaiVthh: res.data?.find(s => s.ma == this.loaiVthh)?.ten,
+        })
       }
     }
   }
@@ -270,6 +263,7 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
   }
 
   idRowSelect: number;
+
   async showDetail($event, id: number) {
     if ($event.type == 'click') {
       this.selected = false

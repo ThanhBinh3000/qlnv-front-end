@@ -1,25 +1,30 @@
-<div>
-  <nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level1">
-    <ul nz-menu nzMode="horizontal">
-      <li nz-menu-item nzSelected (click)="selectTab(0)">
-        TRONG NỘI BỘ KHU VỰC
-      </li>
-      <li nz-menu-item (click)="selectTab(1)">
-        GIỮA 2 CHI CỤC TRONG CÙNG MỘT CỤC
-      </li>
-      <li nz-menu-item (click)="selectTab(2)">
-        GIỮA 2 CUC DTNN KV
-      </li>
-    </ul>
-  </nz-affix>
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
+  <ul nz-menu nzMode="horizontal">
+    <li nz-menu-item nzSelected (click)="selectTab(0)">
+      TRONG NỘI BỘ CHI CỤC
+    </li>
+    <li nz-menu-item (click)="selectTab(1)">
+      GIỮA 2 CHI CỤC TRONG CÙNG MỘT CỤC
+    </li>
+    <li nz-menu-item (click)="selectTab(2)">
+      GIỮA 2 CUC DTNN KV
+    </li>
+  </ul>
+</nz-affix>
 
-  <div>
+<div class="contentBor chi-tieu__body giao-ke-hoach">
+  <div class="contentDetail">
+    <ng-container *ngIf="tabSelected == 0">
+      <app-noi-bo-chi-cuc></app-noi-bo-chi-cuc>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 1">
+      <app-giua-hai-chi-cuc></app-giua-hai-chi-cuc>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 2">
+      <app-giua-hai-cuc></app-giua-hai-cuc>
+    </ng-container>
 
-    <app-noi-bo-chi-cuc *ngIf="tabSelected == 0"></app-noi-bo-chi-cuc>
-    <app-giua-hai-chi-cuc *ngIf="tabSelected == 1"></app-giua-hai-chi-cuc>
-    <app-giua-hai-cuc *ngIf="tabSelected == 2"></app-giua-hai-cuc>
+
 
   </div>
-
-
 </div>

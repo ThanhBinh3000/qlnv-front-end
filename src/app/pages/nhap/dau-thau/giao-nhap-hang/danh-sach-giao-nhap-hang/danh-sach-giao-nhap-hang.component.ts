@@ -51,7 +51,7 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
     ngayQuyetDinh: null,
     namNhap: null,
     trichYeu: '',
-    loaiVthh: '',
+    loaiVthh: null,
     cloaiVthh: ''
   };
 
@@ -85,6 +85,7 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
   isViewDetail: boolean;
   STATUS = STATUS;
   dsCloaiVthh: any[] = [];
+  dsLoaiVthh: any[] = [];
   tuNgayQuyetDinh: Date | null = null;
   denNgayQuyetDinh: Date | null = null;
   disabledStartDate = (startValue: Date): boolean => {
@@ -135,12 +136,20 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
 
   async loadDsCloaiVthh(ma: string) {
     let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({ "str": ma });
-    this.dsCloaiVthh = [];
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data) {
-        this.dsCloaiVthh = res.data;
+        if(this.loaiVthh.startsWith('02')) {
+          this.dsLoaiVthh = res.data;
+        } else {
+          this.dsCloaiVthh = res.data;
+        }
       }
     }
+  }
+
+  onChangeLoaiVthh(event){
+    this.searchFilter.cloaiVthh = ''
+    this.dsCloaiVthh = cloneDeep(this.dsLoaiVthh).find(x => x.ma == event).children
   }
 
   onInput(e: Event): void {
@@ -184,7 +193,7 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
     let body = {
       "tuNgayQd": this.tuNgayQuyetDinh != null ? dayjs(this.tuNgayQuyetDinh).format('YYYY-MM-DD') + " 00:00:00" : null,
       "denNgayQd": this.denNgayQuyetDinh != null ? dayjs(this.denNgayQuyetDinh).format('YYYY-MM-DD') + " 23:59:59" : null,
-      "loaiVthh": this.loaiVthh,
+      "loaiVthh": this.searchFilter.loaiVthh? this.searchFilter.loaiVthh : this.loaiVthh,
       "cloaiVthh": this.searchFilter.cloaiVthh,
       "namNhap": this.searchFilter.namNhap ? this.searchFilter.namNhap : null,
       "paggingReq": {
@@ -202,6 +211,10 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
           item.checked = false;
+          if (this.userSerVice.isChiCuc() && this.userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_PHANBO')){
+            let chiCuc = item.dtlList.find(x => x.maDvi == this.userInfo.MA_DVI);
+            item.hoanThanhCapNhat = chiCuc.trangThai != this.STATUS.HOAN_THANH_CAP_NHAT;
+          }
         });
       }
       this.dataTableAll = cloneDeep(this.dataTable);

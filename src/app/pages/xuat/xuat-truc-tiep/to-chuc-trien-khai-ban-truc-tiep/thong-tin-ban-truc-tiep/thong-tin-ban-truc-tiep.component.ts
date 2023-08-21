@@ -70,7 +70,7 @@ export class ThongTinBanTrucTiepComponent extends Base2Component implements OnIn
 
   async ngOnInit() {
     try {
-      this.thimKiem();
+      this.timKiem();
       await Promise.all([
         this.search(),
         this.initData()
@@ -96,7 +96,7 @@ export class ThongTinBanTrucTiepComponent extends Base2Component implements OnIn
     await this.loadDsTong();
   }
 
-  thimKiem() {
+  timKiem() {
     this.formData.patchValue({
       loaiVthh: this.loaiVthh,
       maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
@@ -106,7 +106,7 @@ export class ThongTinBanTrucTiepComponent extends Base2Component implements OnIn
   }
   clearFilter() {
     this.formData.reset();
-    this.thimKiem();
+    this.timKiem();
     this.search();
   }
 

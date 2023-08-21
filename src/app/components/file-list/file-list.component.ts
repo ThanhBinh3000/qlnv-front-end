@@ -53,9 +53,10 @@ export class FileListComponent implements OnInit {
       const itemFile = {
         name: fileList[0].name,
         file: event.target.files[0] as File,
+        time: new Date().getTime()
       };
       this.uploadFileService
-        .uploadFile(itemFile.file, itemFile.name)
+        .uploadFile(itemFile.file, itemFile.name,itemFile.time)
         .then((resUpload) => {
           if (item) {
             item.fileName = resUpload.filename;

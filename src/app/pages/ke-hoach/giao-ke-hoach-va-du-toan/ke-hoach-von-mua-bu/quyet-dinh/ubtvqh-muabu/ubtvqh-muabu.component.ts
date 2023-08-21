@@ -1,17 +1,18 @@
-import { Component, EventEmitter, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import {Component, EventEmitter, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup} from '@angular/forms';
 import * as dayjs from 'dayjs';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
-import { MESSAGE } from 'src/app/constants/message';
-import { UserService } from 'src/app/services/user.service';
-import { cloneDeep } from 'lodash';
-import { QuyetDinhTtcpService } from 'src/app/services/quyetDinhTtcp.service';
-import { saveAs } from 'file-saver';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { QuyetDinhUbtvqhMuaBuBoSungService } from "../../../../../../services/quyet-dinh-ubtvqh-mua-bu-bo-sung.service";
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {PAGE_SIZE_DEFAULT} from 'src/app/constants/config';
+import {MESSAGE} from 'src/app/constants/message';
+import {UserService} from 'src/app/services/user.service';
+import {cloneDeep} from 'lodash';
+import {QuyetDinhTtcpService} from 'src/app/services/quyetDinhTtcp.service';
+import {saveAs} from 'file-saver';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {QuyetDinhUbtvqhMuaBuBoSungService} from "../../../../../../services/quyet-dinh-ubtvqh-mua-bu-bo-sung.service";
 import {Globals} from "../../../../../../shared/globals";
+import {STATUS} from "../../../../../../constants/status";
 
 
 @Component({
@@ -52,8 +53,9 @@ export class UbtvqhMuabuComponent implements OnInit {
   setOfCheckedId = new Set<number>();
   dataTable: any[] = [];
   dataTableAll: any[] = [];
-   listBoNganh: any[] = [];
-   namDataSelect: number;
+  listBoNganh: any[] = [];
+  namDataSelect: number;
+  STATUS = STATUS;
 
   constructor(
     private readonly fb: FormBuilder,
@@ -127,7 +129,8 @@ export class UbtvqhMuabuComponent implements OnInit {
         this.dataTable.forEach((item) => {
           item.checked = false;
         });
-        this.getDetailRow(this.dataTable[0].id)      }
+        this.getDetailRow(this.dataTable[0].id)
+      }
       this.dataTableAll = cloneDeep(this.dataTable);
 
     } else {
@@ -160,7 +163,7 @@ export class UbtvqhMuabuComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.quyetDinhUbtvqhMuBuBoSung.deleteMuti({ idList: dataDelete });
+            let res = await this.quyetDinhUbtvqhMuBuBoSung.deleteMuti({idList: dataDelete});
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();
@@ -177,11 +180,11 @@ export class UbtvqhMuabuComponent implements OnInit {
           }
         },
       });
-    }
-    else {
+    } else {
       this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
     }
   }
+
   exportData() {
     if (this.totalRecord > 0) {
       this.spinner.show();
@@ -237,11 +240,11 @@ export class UbtvqhMuabuComponent implements OnInit {
   }
 
   refreshCheckedStatus(): void {
-    this.allChecked = this.dataTable.every(({ id }) =>
+    this.allChecked = this.dataTable.every(({id}) =>
       this.setOfCheckedId.has(id),
     );
     this.indeterminate =
-      this.dataTable.some(({ id }) => this.setOfCheckedId.has(id)) &&
+      this.dataTable.some(({id}) => this.setOfCheckedId.has(id)) &&
       !this.allChecked;
   }
 
@@ -296,7 +299,7 @@ export class UbtvqhMuabuComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.quyetDinhUbtvqhMuBuBoSung.delete({ id: item.id }).then((res) => {
+          this.quyetDinhUbtvqhMuBuBoSung.delete({id: item.id}).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,

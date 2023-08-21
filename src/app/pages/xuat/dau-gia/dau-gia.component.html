@@ -2,18 +2,16 @@
   <!-- (nzChange)="onChange($event)" -->
   <ul nz-menu nzMode="horizontal">
     <li nz-menu-item nzSelected (click)="selectTab(0)"
-      *ngIf="!userService.isChiCuc() && userService.isAccessPermisson('XHDTQG_PTDG_KHBDG')">
+        *ngIf="!userService.isChiCuc() && userService.isAccessPermisson('XHDTQG_PTDG_KHBDG')">
       Kế hoạch bán đấu giá
     </li>
-    <!--<li nz-menu-item nzSelected (click)="selectTab(0)">
-      Kế hoạch bán đấu giá
-    </li>-->
     <li nz-menu-item (click)="selectTab(1)"
-      *ngIf="!userService.isChiCuc() && userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG')">
+        *ngIf="!userService.isChiCuc() && userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG')">
       Tổ chức triển khai KH bán đấu giá
     </li>
-    <li nz-menu-item (click)="selectTab(2)" *ngIf="!userService.isChiCuc()">
-      Điều chỉnh KH bán đấu giá
+    <li nz-menu-item (click)="selectTab(2)"
+        *ngIf="!userService.isChiCuc() && userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG_QDKQDG')">
+      Quyết định phê duyệt kết quả bán đấu giá
     </li>
     <li nz-menu-item (click)="selectTab(3)" *ngIf="!userService.isChiCuc()">
       Hợp đồng
@@ -31,20 +29,15 @@
 </nz-affix>
 <div class="contentBor chi-tieu__body giao-ke-hoach">
   <div class="contentDetail">
-    <!--     <ng-container *ngIf="tabSelected == 0">-->
-    <!--      <app-kehoach-luachon-nhathau></app-kehoach-luachon-nhathau>-->
-    <!--    </ng-container>-->
+
     <ng-container *ngIf="tabSelected == 0">
       <app-ke-hoach-ban-dau-gia></app-ke-hoach-ban-dau-gia>
     </ng-container>
-    <!--<ng-container *ngIf="tabSelected == 1">
-      <app-trienkhai-luachon-nhathau></app-trienkhai-luachon-nhathau>
-    </ng-container>-->
     <ng-container *ngIf="tabSelected == 1">
       <app-to-chuc-trien-khai></app-to-chuc-trien-khai>
     </ng-container>
     <ng-container *ngIf="tabSelected == 2">
-      <app-dieuchinh-khbdg></app-dieuchinh-khbdg>
+      <app-quyet-dinh-phe-duyet-ket-qua></app-quyet-dinh-phe-duyet-ket-qua>
     </ng-container>
     <ng-container *ngIf="tabSelected == 3">
       <app-hop-dong></app-hop-dong>

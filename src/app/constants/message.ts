@@ -62,4 +62,7 @@ export const MESSAGE = {
   BAN_HANH_SUCCESS: 'Ban hành thành công',
   TONG_HOP_SUCCESS: 'Tổng hợp thành công',
   TAO_BAO_CAO_SUCCESS: 'Tạo báo cáo thành công',
+  UNAUTHORIZED_ERROR: 'Phiên đăng nhập hết hạn hoặc lỗi xác thực.',
+  ADD_DIEM_KHO_ERROR: 'Số lượng không được lớn hơn số lượng đề xuất.',
+  NOT_FOUND_ERR: 'Không tồn tại bản ghi"',
 };

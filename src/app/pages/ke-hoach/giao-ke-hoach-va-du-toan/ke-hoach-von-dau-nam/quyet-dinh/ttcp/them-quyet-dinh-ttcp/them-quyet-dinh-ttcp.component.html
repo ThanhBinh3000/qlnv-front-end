@@ -4,13 +4,14 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button *ngIf="(formData.value.trangThai == globals.prop.NHAP_DU_THAO && !isView) &&
+    <button *ngIf="(formData.value.trangThai ==  STATUS.DANG_NHAP_DU_LIEU && !isView) &&
             userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_QD_TTCP_BANHANH')" type="button" class="btn btn-sub"
             (click)="save(true)">
       <i class="icon htvbdh_chuyenvanthu"></i>
       <span>Ban hành</span>
     </button>
-    <button *ngIf="formData.value.trangThai == globals.prop.DU_THAO && !isView" type="button" class="btn btn-sub xanh"
+    <button *ngIf="formData.value.trangThai ==  STATUS.DANG_NHAP_DU_LIEU && !isView" type="button"
+            class="btn btn-sub xanh"
             (click)="save()">
       <i class="icon htvbdh_luu"></i>
       <span>Lưu</span>
@@ -23,8 +24,8 @@
       <div class="header-text">
         <div class="title-chi-tieu">
           <span
-            [ngClass]="formData.value.trangThai == globals.prop.DU_THAO ? 'du-thao-va-lanh-dao-duyet' : 'da-ban-hanh'">
-            {{ formData.value.trangThai == globals.prop.DU_THAO ? 'Dự Thảo' : 'Ban Hành' }}
+            [ngClass]="formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU ? 'du-thao-va-lanh-dao-duyet' : 'da-ban-hanh'">
+            {{ formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU ? 'Đang nhập dữ liệu' : 'Ban Hành' }}
           </span>
           <span>Quyết định thủ tướng chính phủ</span>
         </div>
@@ -107,7 +108,7 @@
   </nz-card>
 
   <nz-collapse>
-    <nz-collapse-panel [nzActive]="true" nzHeader="KẾ HOẠCH NSNN CHI TĂNG DTQG TOÀN BỘ/NGÀNH"
+    <nz-collapse-panel [nzActive]="true" nzHeader="KẾ HOẠCH NSNN CHI DTQG TẤT CẢ BỘ/NGÀNH"
                        class="mg-t-10">
       <nz-card class="mt-2px flex-card data-table card-border-content table-card">
         <div>
@@ -120,7 +121,7 @@
           <thead>
           <tr>
             <th class="text-center" style="width: 5%;">STT</th>
-            <th class="text-center" style="width: 75%;">Bộ</th>
+            <th class="text-center" style="width: 75%;">Bộ/Ngành</th>
             <th class="text-center" style="width: 15%;">Kế hoạch năm {{formData.value.namQd}}</th>
           </tr>
           </thead>
@@ -131,7 +132,7 @@
             <td class="text-right bold" style="">{{totalBnKh | number : '1.0-1' : 'vi_VN'}}</td>
           </tr>
           <tr *ngFor="let data of dataTableAllBn; let idx = index">
-            <td class="text-center">{{ data.stt }}</td>
+            <td class="text-center">{{ !data.maCha ? data.stt : ''}}</td>
             <td *ngIf="data.maCha">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - {{ data.tenBn }}</td>
             <td *ngIf="!data.maCha"> {{ data.tenBn }}</td>
             <td *ngIf="!data.isSum" class="text-right">
@@ -147,10 +148,11 @@
     </nz-collapse-panel>
   </nz-collapse>
   <nz-collapse>
-    <nz-collapse-panel #collapseExpand [nzActive]="true" nzHeader="KẾ HOẠCH DTQG GIAO TỪNG BỘ/NGÀNH"
+    <nz-collapse-panel #collapseExpand [nzActive]="true" nzHeader="CHI TIẾT KẾ HOẠCH DTQG GIAO TỪNG BỘ/NGÀNH"
                        class="mg-t-10" [nzExtra]="extraTpl">
-      <ng-template #extraTpl >
-        <button type="button" *ngIf="formData.value.trangThai == globals.prop.DU_THAO" class="btn btn-sub xanh" (click)="themKeHoach()">
+      <ng-template #extraTpl>
+        <button type="button" *ngIf="formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU" class="btn btn-sub xanh"
+                (click)="themKeHoach()">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
         </button>
@@ -177,13 +179,13 @@
             <td class="text-right">{{ data.tongTien |number: '1.0-1': 'vi_VN'}}</td>
             <td tyle="text-align: left; white-space: nowrap;">
               <a *ngIf="isView" (click)="themKeHoach(data, idx,true)">
-                <i class="fa fa-eye"></i>
+                <i class="fa fa-eye" title="Xem chi tiết"></i>
               </a>
               <a *ngIf="!isView" (click)="themKeHoach(data, idx,false)">
-                <i class="fa fa-pencil"></i>
+                <i class="fa fa-pencil" title="Sửa"></i>
               </a>
               <a *ngIf="!isView" (click)="xoaKeHoach(idx)">
-                <i class="fa fa-trash-o do"></i>
+                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
               </a>
             </td>
           </tr>

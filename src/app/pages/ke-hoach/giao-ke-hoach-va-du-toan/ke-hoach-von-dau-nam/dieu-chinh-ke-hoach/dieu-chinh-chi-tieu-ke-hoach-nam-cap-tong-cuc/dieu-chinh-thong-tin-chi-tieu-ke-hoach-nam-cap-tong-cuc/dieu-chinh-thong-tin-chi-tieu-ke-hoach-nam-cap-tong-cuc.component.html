@@ -14,6 +14,11 @@
           <i class="icon htvbdh_tcdt_tuchoi"></i>
           <span>Không ban hành</span>
         </button>
+        <button class="btn btn-outline-danger btn-sm waves-effect waves-light" (click)="khongBanHanh()"
+                *ngIf="(dieuChinhThongTinChiTieuKHNam.trangThai == STATUS.TU_CHOI_LDC) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC_CUC_BANHANH')  && userService.isCuc()">
+          <i class="icon htvbdh_tcdt_tuchoi"></i>
+          <span>Không ban hành</span>
+        </button>
         <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="save(true)"
                 [disabled]="!formData.valid"
                 *ngIf="(dieuChinhThongTinChiTieuKHNam.trangThai == STATUS.DU_THAO || dieuChinhThongTinChiTieuKHNam.trangThai ==  STATUS.TU_CHOI_TP || dieuChinhThongTinChiTieuKHNam.trangThai == STATUS.TU_CHOI_LDC || dieuChinhThongTinChiTieuKHNam.trangThai == STATUS.TU_CHOI_LDV) && !isView">
@@ -30,13 +35,28 @@
           <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Phê duyệt</span>
         </button>
+        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="pheDuyet()"
+                *ngIf="(dieuChinhThongTinChiTieuKHNam.trangThai == STATUS.CHO_DUYET_LDC ||dieuChinhThongTinChiTieuKHNam.trangThai == STATUS.CHO_DUYET_TP ) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC_CUC_DUYET') && userService.isCuc()">
+          <i class="icon htvbdh_tcdt_pheduyet"></i>
+          <span>Phê duyệt</span>
+        </button>
         <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="tuChoi()"
            *ngIf="dieuChinhThongTinChiTieuKHNam.trangThai == STATUS.CHO_DUYET_LDV && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC_TC_DUYET') && userService.isTongCuc()">
           <i class="icon htvbdh_tcdt_tuchoi"></i>
           <span>Từ chối</span>
         </a>
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="tuChoi()"
+           *ngIf="(dieuChinhThongTinChiTieuKHNam.trangThai == STATUS.CHO_DUYET_LDC  ||dieuChinhThongTinChiTieuKHNam.trangThai == STATUS.CHO_DUYET_TP ) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC_CUC_DUYET') && userService.isCuc()">
+          <i class="icon htvbdh_tcdt_tuchoi"></i>
+          <span>Từ chối</span>
+        </a>
         <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="banHanh()"
                 *ngIf="(dieuChinhThongTinChiTieuKHNam.trangThai == STATUS.DA_DUYET_LDV) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC_TC_BANHANH')  && userService.isTongCuc()">
+          <i class="icon htvbdh_tcdt_pheduyet"></i>
+          <span>Ban hành</span>
+        </button>
+        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="banHanh()"
+                *ngIf="(dieuChinhThongTinChiTieuKHNam.trangThai == STATUS.DA_DUYET_LDC) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC_CUC_BANHANH')  && userService.isCuc()">
           <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Ban hành</span>
         </button>
@@ -57,8 +77,10 @@
           <span [ngClass]="thongTinTrangThai(dieuChinhThongTinChiTieuKHNam.trangThai)">{{trangThai}} </span>
           <span>Quyết định điều chỉnh chỉ tiêu kế hoạch năm {{lastBreadcrumb}} giao</span>
         </div>
-        <div class="text-right align-content-end" *ngIf="dieuChinhThongTinChiTieuKHNam.trangThai == STATUS.KHONG_BAN_HANH">
-          <span class="text-xem-vanban-khongbanhanh" (click)="viewVbKhongBanHanh()">Xem văn bản không đồng ý điều chỉnh</span>
+        <div class="text-right align-content-end"
+             *ngIf="dieuChinhThongTinChiTieuKHNam.trangThai == STATUS.KHONG_BAN_HANH">
+          <span class="text-xem-vanban-khongbanhanh"
+                (click)="viewVbKhongBanHanh()">Xem văn bản không đồng ý điều chỉnh</span>
         </div>
         <nz-alert class="mg-t-16 mb-2" *ngIf="dieuChinhThongTinChiTieuKHNam.trangThai == STATUS.TU_CHOI_LDV " nzShowIcon
                   nzType="error"
@@ -88,7 +110,7 @@
             <div nz-col [nzSpan]="3">
               <nz-form-label [nzNoColon]="true" class="label-color-kh"> Ngày ký
               </nz-form-label>
-              <nz-date-picker class="search__input"  nzFormat="dd/MM/yyyy"
+              <nz-date-picker class="search__input" nzFormat="dd/MM/yyyy"
                               formControlName="ngayKy" nzPlaceHolder="Ngày ký"
                               (nzOnOpenChange)="handleEndOpenChange($event)"
                               [nzDisabled]="checkTrangThaiRecord() || isView">
@@ -97,7 +119,7 @@
             <div nz-col [nzSpan]="3">
               <nz-form-label [nzNoColon]="true" class="label-color-kh"> Ngày hiệu lực
               </nz-form-label>
-              <nz-date-picker class="search__input"  nzFormat="dd/MM/yyyy"
+              <nz-date-picker class="search__input" nzFormat="dd/MM/yyyy"
                               formControlName="ngayHieuLuc" nzPlaceHolder="Ngày hiệu lực"
                               (nzOnOpenChange)="handleEndOpenChange($event)"
                               [nzDisabled]="checkTrangThaiRecord() || isView">
@@ -378,7 +400,7 @@
                     <i class="icon htvbdh_dau-cong"></i>
                   </a>
                   <a (click)="loadDefaultLuongThucNew()" [ngClass]="{'isDisabled': !isAddLuongThuc}">
-                    <i class="fa fa-trash-o do"></i>
+                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                   </a>
                 </td>
               </tr>
@@ -442,10 +464,10 @@
                     *ngIf="(dieuChinhThongTinChiTieuKHNam.trangThai=== STATUS.DU_THAO || id===0 || dieuChinhThongTinChiTieuKHNam.trangThai===STATUS.TU_CHOI_TP || dieuChinhThongTinChiTieuKHNam.trangThai===STATUS.TU_CHOI_LDV ||dieuChinhThongTinChiTieuKHNam.trangThai===STATUS.TU_CHOI_LDC) && !isView"
                     nzRight>
                     <a (click)="editRowLuongThuc(data.donViId)">
-                      <i class="fa fa-pencil"></i>
+                      <i class="fa fa-pencil" title="Sửa"></i>
                     </a>
                     <a (click)="deleteRowLuongThuc(data)">
-                      <i class="fa fa-trash-o do"></i>
+                      <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                     </a>
                   </td>
                 </ng-container>
@@ -729,7 +751,7 @@
                     <i class="icon htvbdh_dau-cong"></i>
                   </a>
                   <a (click)="loadDefaultMuoiNew()" [ngClass]="{'isDisabled': !isAddMuoi}">
-                    <i class="fa fa-trash-o do"></i>
+                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                   </a>
                 </td>
               </tr>
@@ -741,17 +763,17 @@
                   <td class="text-right">{{dataMuoi.nhapTrongNam ?? 0 | number: '1.0-1' }}</td>
                   <td class="text-right">{{dataMuoi.xuatTrongNamMuoi ?? 0 | number: '1.0-1' }}</td>
                   <td class="text-right">
-<!--                    {{(dataMuoi.tonKhoCuoiNam ? dataMuoi.tonKhoCuoiNam : 0) | number: '1.0-1' }}-->
-                    {{(dataMuoi.tonKhoDauNam + dataMuoi.nhapTrongNam - dataMuoi.xuatTrongNamMuoi ) | number: '1.0-1' }}
+                    <!--                    {{(dataMuoi.tonKhoCuoiNam ? dataMuoi.tonKhoCuoiNam : 0) | number: '1.0-1' }}-->
+                    {{(dataMuoi.tonKhoDauNam + dataMuoi.nhapTrongNam - dataMuoi.xuatTrongNamMuoi) | number: '1.0-1' }}
                   </td>
                   <td
                     *ngIf="(dieuChinhThongTinChiTieuKHNam.trangThai=== STATUS.DU_THAO || id===0 || dieuChinhThongTinChiTieuKHNam.trangThai===STATUS.TU_CHOI_TP || dieuChinhThongTinChiTieuKHNam.trangThai===STATUS.TU_CHOI_LDV ||dieuChinhThongTinChiTieuKHNam.trangThai===STATUS.TU_CHOI_LDC) && !isView"
                     class="text-center" nzRight>
                     <a (click)="editRowMuoi(dataMuoi.donViId)">
-                      <i class="fa fa-pencil"></i>
+                      <i class="fa fa-pencil" title="Sửa"></i>
                     </a>
                     <a (click)="deleteRowMuoi(dataMuoi)">
-                      <i class="fa fa-trash-o do"></i>
+                      <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                     </a>
                   </td>
                 </ng-container>
@@ -777,8 +799,8 @@
                     </nz-input-number>
                   </td>
                   <td class="text-right">
-                    {{(editMuoiCache[dataMuoi.donViId].data.tonKhoDauNam + editMuoiCache[dataMuoi.donViId].data.nhapTrongNam - editMuoiCache[dataMuoi.donViId].data.xuatTrongNamMuoi ) | number: '1.0-1' }}
-<!--                    {{(editMuoiCache[dataMuoi.donViId].data.tonKhoCuoiNam ? editMuoiCache[dataMuoi.donViId].data.tonKhoDauNam : 0) | number: '1.0-1'}}-->
+                    {{(editMuoiCache[dataMuoi.donViId].data.tonKhoDauNam + editMuoiCache[dataMuoi.donViId].data.nhapTrongNam - editMuoiCache[dataMuoi.donViId].data.xuatTrongNamMuoi) | number: '1.0-1' }}
+                    <!--                    {{(editMuoiCache[dataMuoi.donViId].data.tonKhoCuoiNam ? editMuoiCache[dataMuoi.donViId].data.tonKhoDauNam : 0) | number: '1.0-1'}}-->
                   </td>
                   <td class="text-center" nzRight>
                     <a (click)="saveEditMuoi(dataMuoi.donViId)" class="save">
@@ -970,10 +992,10 @@
                             <td
                               *ngIf="(dieuChinhThongTinChiTieuKHNam.trangThai=== STATUS.DU_THAO || id===0 || dieuChinhThongTinChiTieuKHNam.trangThai===STATUS.TU_CHOI_TP || dieuChinhThongTinChiTieuKHNam.trangThai===STATUS.TU_CHOI_LDV ||dieuChinhThongTinChiTieuKHNam.trangThai===STATUS.TU_CHOI_LDC) && !isView">
                               <a (click)="suaVatTu(i,i1,'nhap')">
-                                <i class="fa fa-pencil"></i>
+                                <i class="fa fa-pencil" title="Sửa"></i>
                               </a>
                               <a (click)="xoaVatTu(i,i1,'nhap')">
-                                <i class="fa fa-trash-o do"></i>
+                                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                               </a>
                             </td>
                           </ng-container>
@@ -1165,11 +1187,11 @@
                           <i class="fa fa-plus"></i>
                         </a>
                         <!--<a (click)="suaPhuongAn(i)" *ngIf="!isView">
-                          <i class="fa fa-pencil"></i>
+                          <i class="fa fa-pencil" title="Sửa"></i>
                         </a>
                         &lt;!&ndash;              <a (click)="deletePhanLo(item.idVirtual)">&ndash;&gt;
                         <a (click)="xoaPhuongAn(i)" *ngIf="!isView">
-                          <i class="fa fa-trash-o do"></i>
+                          <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                         </a>-->
                       </td>
                     </tr>
@@ -1199,10 +1221,10 @@
                             <td
                               *ngIf="(dieuChinhThongTinChiTieuKHNam.trangThai=== STATUS.DU_THAO || id===0 || dieuChinhThongTinChiTieuKHNam.trangThai===STATUS.TU_CHOI_TP || dieuChinhThongTinChiTieuKHNam.trangThai===STATUS.TU_CHOI_LDV ||dieuChinhThongTinChiTieuKHNam.trangThai===STATUS.TU_CHOI_LDC) && !isView">
                               <a (click)="suaVatTu(i,i1,'xuat')">
-                                <i class="fa fa-pencil"></i>
+                                <i class="fa fa-pencil" title="Sửa"></i>
                               </a>
                               <a (click)="xoaVatTu(i,i1,'xuat')">
-                                <i class="fa fa-trash-o do"></i>
+                                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                               </a>
                             </td>
                           </ng-container>

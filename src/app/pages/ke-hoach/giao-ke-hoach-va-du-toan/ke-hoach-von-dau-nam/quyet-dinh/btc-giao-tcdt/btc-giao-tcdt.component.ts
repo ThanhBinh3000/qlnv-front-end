@@ -10,6 +10,8 @@ import {MESSAGE} from 'src/app/constants/message';
 import {cloneDeep} from 'lodash';
 import {saveAs} from 'file-saver';
 import {NzModalService} from 'ng-zorro-antd/modal';
+import {STATUS} from "../../../../../../constants/status";
+import printJS from "print-js";
 
 @Component({
   selector: 'app-btc-giao-tcdt',
@@ -63,6 +65,7 @@ export class BtcGiaoTcdtComponent implements OnInit {
     tongTien: 0,
   }
   rowSelected: number = 0;
+  STATUS = STATUS;
 
   constructor(private readonly fb: FormBuilder,
               private quyetDinhBtcTcdtService: QuyetDinhBtcTcdtService,
@@ -435,7 +438,47 @@ export class BtcGiaoTcdtComponent implements OnInit {
       // }
     }
   }
-
+  print() {
+    let dataPrint = this.dataTable.map((item, index) => {
+      return {
+        ...item,
+        'stt': index + 1
+      };
+    });
+    printJS({
+      printable: dataPrint,
+      gridHeaderStyle: 'border: 2px solid #3971A5; ',
+      gridStyle: 'border: 2px solid #3971A5;text-align:center;with:fit-content',
+      properties: [
+        {
+          field: 'stt',
+          displayName: 'STT',
+          columnSize: '40px'
+        },
+        {
+          field: 'soQd',
+          displayName: 'Số quyết định',
+          columnSize: '100px'
+        },
+        {
+          field: 'ngayQd',
+          displayName: 'Ngày ký quyết định',
+          columnSize: '100px'
+        },
+        {
+          field: 'trichYeu',
+          displayName: 'Trích yếu',
+          columnSize: 'calc(100% - calc( 40px + 300px)) px'
+        }, {
+          field: 'tenTrangThai',
+          displayName: 'Trạng thái',
+          columnSize: '100px'
+        }
+      ],
+      type: 'json',
+      header: 'Danh sách quyết định của bộ tài chính giao tổng cục dự trữ'
+    })
+  }
 
 }
 

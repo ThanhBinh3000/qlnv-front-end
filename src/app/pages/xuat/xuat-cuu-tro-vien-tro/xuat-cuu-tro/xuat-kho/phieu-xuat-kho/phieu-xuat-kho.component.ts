@@ -93,7 +93,6 @@ export class PhieuXuatKhoComponent extends Base2Component implements OnInit {
     try {
       this.initData()
       this.timKiem();
-      console.log(this.loaiVthh, 55555);
     } catch (e) {
       console.log('error: ', e)
       this.spinner.hide();
@@ -194,7 +193,6 @@ export class PhieuXuatKhoComponent extends Base2Component implements OnInit {
   }
 
   openPhieuKnClModal(id: number) {
-    console.log(id, 'id');
     this.idPhieuKnCl = id;
     this.openPhieuKnCl = true;
   }

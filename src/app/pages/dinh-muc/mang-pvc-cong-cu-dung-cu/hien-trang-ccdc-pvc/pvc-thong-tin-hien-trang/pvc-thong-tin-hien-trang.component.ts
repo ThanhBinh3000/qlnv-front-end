@@ -283,8 +283,6 @@ export class PvcThongTinHienTrangComponent extends Base2Component implements OnI
   }
 
   changDvi(even, loai : string, type?  :any) {
-    console.log(this.dsChiCuc)
-    console.log(even)
     let list = this.dsChiCuc.filter(item => item.maDvi == even);
     if (list && list.length > 0) {
       if (type) {

@@ -18,7 +18,8 @@ import { HttpClient } from '@angular/common/http';
 import dayjs from 'dayjs';
 import { StorageService } from 'src/app/services/storage.service';
 import {convertIdToLoaiVthh, convertIdToTenLoaiVthh, convertTrangThai} from "../../../../../../shared/commonFunction";
-
+import { saveAs } from "file-saver";
+import {PREVIEW} from "../../../../../../constants/fileType";
 @Component({
   selector: 'app-themmoi-tonghop-khlcnt',
   templateUrl: './themmoi-tonghop-khlcnt.component.html',
@@ -44,7 +45,18 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
   isQuyetDinh: boolean = false;
   selected: boolean = false;
   disableTh: boolean = false
-
+  listFileDinhKem: any[] = [];
+  listLoaiHinhNx: any[] = [];
+  listKieuNx: any[] = [];
+  reportTemplate: any = {
+    typeFile: "",
+    fileName: "tong_hop_kh_lcnt.docx",
+    tenBaoCao: "",
+    trangThai: ""
+  };
+  showDlgPreview = false;
+  pdfSrc: any;
+  wordSrc: any;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -62,10 +74,10 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
         cloaiVthh: [null, [Validators.required]],
         tenCloaiVthh: [null, [Validators.required]],
         namKhoach: [dayjs().get('year'), [Validators.required]],
-        hthucLcnt: ['', [Validators.required]],
-        pthucLcnt: ['', [Validators.required]],
-        loaiHdong: ['', [Validators.required]],
-        nguonVon: ['', [Validators.required]],
+        hthucLcnt: [''],
+        pthucLcnt: [''],
+        loaiHdong: [''],
+        nguonVon: [''],
       }
     );
     this.formData = this.fb.group({
@@ -75,16 +87,18 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
       namKhoach: [, [Validators.required]],
       ngayTao: [, [Validators.required]],
       noiDung: ['', [Validators.required]],
-      hthucLcnt: ['', [Validators.required]],
-      pthucLcnt: ['', [Validators.required]],
-      loaiHdong: ['', [Validators.required]],
-      nguonVon: ['', [Validators.required]],
+      // hthucLcnt: ['', [Validators.required]],
+      // pthucLcnt: ['', [Validators.required]],
+      // loaiHdong: ['', [Validators.required]],
+      // nguonVon: ['', [Validators.required]],
       ghiChu: ['',],
       trangThai: [''],
       tenLoaiVthh: [''],
       tenCloaiVthh: [''],
       tchuanCluong: [''],
       soQdCc: [''],
+      kieuNx: [''],
+      loaiHinhNx: [''],
     })
 
   }
@@ -119,6 +133,7 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
       let res = await this.tongHopDeXuatKHLCNTService.getDetail(this.id);
       if (res.msg == MESSAGE.SUCCESS) {
         const dataDetail = res.data;
+        this.listFileDinhKem = dataDetail.fileDinhKems;
         this.dataTableDanhSachDX = dataDetail.hhDxKhLcntThopDtlList;
         this.helperService.bidingDataInFormGroup(this.formTraCuu, dataDetail)
         this.helperService.bidingDataInFormGroup(this.formData, dataDetail);
@@ -161,11 +176,25 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
     if (resHd.msg == MESSAGE.SUCCESS) {
       this.listLoaiHopDong = resHd.data;
     }
+    // loại hình nhập xuất
+    this.listLoaiHinhNx = [];
+    let resNx = await this.danhMucService.danhMucChungGetAll("LOAI_HINH_NHAP_XUAT");
+    if (resNx.msg == MESSAGE.SUCCESS) {
+      this.listLoaiHinhNx = resNx.data.filter(item => item.apDung == "NHAP_DT");
+      this.formData.get("loaiHinhNx").setValue(this.listLoaiHinhNx[0].ma);
+    }
+    // kiểu nhập xuất
+    this.listKieuNx = [];
+    let resKieuNx = await this.danhMucService.danhMucChungGetAll("KIEU_NHAP_XUAT");
+    if (resKieuNx.msg == MESSAGE.SUCCESS) {
+      this.listKieuNx = resKieuNx.data;
+    }
   }
 
   async tongHopDeXuatTuCuc() {
     await this.spinner.show();
     try {
+      debugger
       this.helperService.markFormGroupTouched(this.formTraCuu);
       if (this.formTraCuu.invalid) {
         await this.spinner.hide();
@@ -173,7 +202,7 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
       }
       let body = this.formTraCuu.value;
       let res = await this.tongHopDeXuatKHLCNTService.deXuatCuc(body);
-      if (res.msg == MESSAGE.SUCCESS) {
+      if (res.msg == MESSAGE.SUCCESS && res.data && res.data.hhDxKhLcntThopDtlList.length > 0) {
         const dataDetail = res.data
         let idTh = await this.userService.getId("HH_DX_KHLCNT_THOP_HDR_SEQ");
         this.helperService.bidingDataInFormGroup(this.formData, dataDetail)
@@ -184,7 +213,7 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
         this.dataTableDanhSachDX = dataDetail.hhDxKhLcntThopDtlList;
         this.isTongHop = true;
       } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
+        this.notification.error(MESSAGE.ERROR, "Không tìm thấy dữ liệu để tổng hợp.");
         this.isTongHop = false;
       }
       await this.spinner.hide();
@@ -199,6 +228,7 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
 
   async save() {
     let body = this.formData.value;
+    body.fileDinhKems = this.listFileDinhKem;
     let data = await this.createUpdate(body, 'NHDTQG_PTDT_KHLCNT_TONGHOP_TONGHOP');
     if (data) {
       this.id = data.id;
@@ -280,6 +310,27 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
     } else if (trangThai === '28') {
       return 'da-ban-hanh';
     }
+  }
+
+  async preview() {
+    let body = this.formData.value;
+    body.reportTemplateRequest = this.reportTemplate;
+    await this.tongHopDeXuatKHLCNTService.preview(body).then(async s => {
+      this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
+      this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
+      this.showDlgPreview = true;
+    });
+  }
+  downloadPdf() {
+    saveAs(this.pdfSrc, "tong_hop_kh_lcnt.pdf");
+  }
+
+  downloadWord() {
+    saveAs(this.wordSrc, "tong_hop_kh_lcnt.docx");
+  }
+
+  closeDlg() {
+    this.showDlgPreview = false;
   }
 }
 

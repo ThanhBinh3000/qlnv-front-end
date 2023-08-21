@@ -12,6 +12,7 @@ import {saveAs} from 'file-saver';
 import {NzModalService} from 'ng-zorro-antd/modal';
 import {UserLogin} from './../../../../../../models/userlogin';
 import {STATUS} from 'src/app/constants/status';
+import printJS from "print-js";
 
 
 @Component({
@@ -399,6 +400,7 @@ export class TtcpComponent implements OnInit {
   async getDetailRow(id) {
     if (id) {
       let res = await this.quyetDinhTtcpService.getDetail(id);
+      console.log(res, 'aaaaaaaaaaaaaaaaaaa')
       if (res.msg == MESSAGE.SUCCESS) {
         this.listBoNganh = res.data.listBoNganh ? res.data.listBoNganh : [];
         this.namDataSelect = res.data.namQd
@@ -415,5 +417,58 @@ export class TtcpComponent implements OnInit {
       }, 0);
       return sum;
     }
+  }
+
+  print() {
+    let dataPrint = this.dataTable.map((item, index) => {
+      return {
+        ...item,
+        'stt': index + 1
+      };
+    });
+    printJS({
+      printable: dataPrint,
+      gridHeaderStyle: 'border: 2px solid #3971A5; ',
+      gridStyle: 'border: 2px solid #3971A5;text-align:center;with:fit-content',
+      properties: [
+        {
+          field: 'stt',
+          displayName: 'STT',
+          columnSize: '40px'
+        },
+        {
+          field: 'soQd',
+          displayName: 'Số quyết định',
+          columnSize: '100px'
+        }
+        ,
+        {
+          field: 'namQd',
+          displayName: 'Năm kế hoạch',
+          columnSize: '100px'
+        },
+        {
+          field: 'ngayQd',
+          displayName: 'Ngày ký quyết định',
+          columnSize: '100px'
+        },
+        {
+          field: 'ngayQd',
+          displayName: 'Ngày ký quyết định',
+          columnSize: '100px'
+        },
+        {
+          field: 'trichYeu',
+          displayName: 'Trích yếu',
+          columnSize: 'calc(100% - calc( 40px + 400px)) px'
+        }, {
+          field: 'tenTrangThai',
+          displayName: 'Trạng thái',
+          columnSize: '100px'
+        }
+      ],
+      type: 'json',
+      header: 'Danh sách quyết định của thủ tướng chính phủ'
+    })
   }
 }

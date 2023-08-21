@@ -92,7 +92,7 @@
       <div class="buttons">
         <button type="button" *ngIf="userService.isAccessPermisson('KHCNBQ_QCKTTCCS_XOA') " class="btn btn-do"
           (click)="deleteMulti()">
-          <i class="fa fa-trash-o do"></i>
+          <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
           <span>Xóa</span>
         </button>
         <button *ngIf="userService.isAccessPermisson('KHCNBQ_QCKTTCCS_EXP')" type="button" class="btn btn-sub"
@@ -108,7 +108,7 @@
       </div>
     </div>
     <nz-card class="mt-16 flex-card">
-      <nz-table #basicTable class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false">
+      <nz-table #basicTable nzBordered [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false">
         <thead>
           <tr>
             <th width="45px">
@@ -119,6 +119,7 @@
             <!-- <th></th> -->
             <th>Số văn bản</th>
             <th>Số hiệu quy chuẩn</th>
+            <th>Văn bản thay thế</th>
             <th>Loại hàng hóa</th>
             <th>Ngày ban hành</th>
             <th>Ngày hiệu lực</th>
@@ -141,6 +142,12 @@
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soHieuQuyChuan"
                   (input)="filterInTable('soHieuQuyChuan',filterTable.soHieuQuyChuan)" />
               </nz-input-group>
+            </th>
+            <th>
+<!--              <nz-input-group [nzSuffix]="suffixIconSearch">-->
+<!--                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soHieuQuyChuan"-->
+<!--                       (input)="filterInTable('soHieuQuyChuan',filterTable.soHieuQuyChuan)" />-->
+<!--              </nz-input-group>-->
             </th>
             <th>
               <nz-input-group [nzSuffix]="suffixIconSearch">
@@ -202,6 +209,7 @@
               <!-- <td [nzExpand]="expandSet.has(data.id)" (nzExpandChange)="onExpandChange(data.id, $event)"></td> -->
               <td>{{ data.soVanBan }}</td>
               <td>{{ data.soHieuQuyChuan}}</td>
+              <td>{{ data.soVanBanThayThe}}</td>
               <td>{{ data.listTenLoaiVthh }}</td>
               <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
               <td>{{ data.ngayHieuLuc | date: 'dd/MM/YYYY' }}</td>
@@ -215,12 +223,12 @@
                 ||(userService.isAccessPermisson('KHCNBQ_QCKTTCCS_DUYET') && data.trangThai == STATUS.DU_THAO)
                 ||(userService.isAccessPermisson('KHCNBQ_QCKTTCCS_DUYET') &&  data.trangThai == STATUS.TU_CHOI_LDV)"
                   (click)="redirectToChiTiet(true,data.id)">
-                  <i class="fa fa-eye"></i>
+                  <i class="fa fa-eye" title="Xem chi tiết"></i>
                 </a>
                 <a *ngIf="((userService.isAccessPermisson('KHCNBQ_QCKTTCCS_THEM') && data.trangThai == STATUS.TU_CHOI_LDV)
                 ||(userService.isAccessPermisson('KHCNBQ_QCKTTCCS_THEM') && data.trangThai == STATUS.DU_THAO)) "
                   (click)="redirectToChiTiet(false,data.id)">
-                  <i class="fa fa-pencil"></i>
+                  <i class="fa fa-pencil" title="Sửa"></i>
                 </a>
                 <a *ngIf="((userService.isAccessPermisson('KHCNBQ_QCKTTCCS_DUYET') && data.trangThai == STATUS.CHO_DUYET_LDV)
                 ||(userService.isAccessPermisson('KHCNBQ_QCKTTCCS_DUYET') && data.trangThai == STATUS.DA_DUYET_LDV))"
@@ -229,7 +237,7 @@
                 </a>
                 <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('KHCNBQ_QCKTTCCS_XOA') "
                   (click)="delete(data)">
-                  <i class="fa fa-trash-o do"></i>
+                  <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                 </a>
               </td>
             </tr>

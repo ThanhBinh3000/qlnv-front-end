@@ -82,17 +82,15 @@ export class DialogChiTietKeHoachGiaoBoNganhUbtvqhMuaBuBoSungComponent implement
             }
           });
         } else {
-          this.dsHangHoa = hangHoa.data.filter(item => item.cap == 1);
+          this.dsHangHoa = hangHoa.data.filter(item => item.cap == 2);
         }
       }
     })
   }
 
   async getListBoNganh() {
-
     this.dsBoNganh = [];
     let res = await this.donviService.layTatCaDonViByLevel(0);
-    //let res = await this.danhMucService.danhMucChungGetAll('BO_NGANH');
     if (res.msg == MESSAGE.SUCCESS) {
       //fix theo giao dien moi
       this.dsBoNganh = res.data;
@@ -100,12 +98,11 @@ export class DialogChiTietKeHoachGiaoBoNganhUbtvqhMuaBuBoSungComponent implement
   }
 
   async loadDanhMucHang() {
-    await this.danhMucService.loadDanhMucHangHoa().subscribe((hangHoa) => {
-      if (hangHoa.msg == MESSAGE.SUCCESS) {
-        const dataVatTu = hangHoa.data.filter(item => item.ma == "02");
-        this.dsHangHoa = dataVatTu[0].child;
-      }
-    })
+    if (this.dataEdit) {
+      this.onChangeBoNganh(this.dataEdit.maBoNganh);
+    } else {
+      this.dsHangHoa = [];
+    }
   }
 
   luu() {

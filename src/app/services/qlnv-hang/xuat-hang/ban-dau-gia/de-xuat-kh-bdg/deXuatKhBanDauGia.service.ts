@@ -1,10 +1,9 @@
-
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { PATH } from 'src/app/constants/path';
-import { environment } from 'src/environments/environment';
-import { OldResponseData } from '../../../../../interfaces/response';
-import { BaseService } from '../../../../base.service';
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {PATH} from 'src/app/constants/path';
+import {environment} from 'src/environments/environment';
+import {OldResponseData} from '../../../../../interfaces/response';
+import {BaseService} from '../../../../base.service';
 
 
 @Injectable({
@@ -25,4 +24,8 @@ export class DeXuatKhBanDauGiaService extends BaseService {
     return this.httpClient.get<any>(url).toPromise();
   }
 
+  getDonGiaDuocDuyet(cloaiVthh: string, maDvi: string, nam: string) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/don-gia-duoc-duyet/${cloaiVthh}/${maDvi}/${nam}`;
+    return this.httpClient.get<any>(url).toPromise();
+  }
 }

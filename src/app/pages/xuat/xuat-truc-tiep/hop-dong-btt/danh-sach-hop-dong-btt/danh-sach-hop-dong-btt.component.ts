@@ -17,6 +17,12 @@ export class DanhSachHopDongBttComponent extends Base2Component implements OnIni
   @Input() loaiVthh: string;
   isQuanLy: boolean;
   isAddNew: boolean;
+
+  listTrangThai: any[] = [
+    { ma: this.STATUS.CHUA_THUC_HIEN, giaTri: 'Chưa thực hiện' },
+    { ma: this.STATUS.DANG_THUC_HIEN, giaTri: 'Đang thực hiện' },
+    { ma: this.STATUS.DA_HOAN_THANH, giaTri: 'Đã hoàn thành' },
+  ];
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,

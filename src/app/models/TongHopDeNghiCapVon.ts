@@ -31,4 +31,10 @@ export class Ct1sTonghop {
   soDeNghi: string;
   ngayDeNghi: string;
   nam: number;
+  loaiTien: string;
+  tyGia: number;
+  tcCapThemNt:number;
+  tongTienNt: number;
+  kinhPhiDaCapNt: number;
+  ycCapThemNt: number;
 }

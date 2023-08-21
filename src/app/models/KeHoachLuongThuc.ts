@@ -3,8 +3,6 @@ import { ItemDetail } from './itemDetail';
 export class KeHoachLuongThuc {
   id: number;
   stt: number;
-  cucId: number;
-  cucDTNNKhuVuc: string;
   tenDonvi: string;
   maDonVi: string;
   maDvi: string;
@@ -13,17 +11,14 @@ export class KeHoachLuongThuc {
   khGaoId: number;
   khThocId: number;
   isEdit: boolean;
-
   tkdnTongSoQuyThoc: number;
   tkdnTongThoc: number;
   tkdnTongGao: number;
   tkdnThoc: Array<ItemDetail>;
   tkdnGao: Array<ItemDetail>;
-
   tkcnTongSoQuyThoc: number;
   tkcnTongThoc: number;
   tkcnTongGao: number;
-
   tdcNtnTongSoQuyThoc: number;
   tdcNtnThoc: number;
   tdcNtnGao: number;
@@ -32,10 +27,6 @@ export class KeHoachLuongThuc {
   ntnGao: number;
   dcNtnGao: number;
   dcNtnThoc: number;
-  sdcNtnTongSoQuyThoc: number;
-  sdcNtnThoc: number;
-  sdcNtnGao: number;
-
   tdcXtnTongSoQuyThoc: number;
   tdcXtnTongThoc: number;
   tdcXtnTongGao: number;
@@ -48,9 +39,6 @@ export class KeHoachLuongThuc {
   xtnGao: Array<ItemDetail>;
   dcXtnThoc: Array<ItemDetail>;
   dcXtnGao: Array<ItemDetail>;
-  sdcXtnTongSoQuyThoc: number;
-  sdcXtnTongThoc: number;
-  sdcXtnTongGao: number;
   sdcXtnThoc: Array<ItemDetail>;
   sdcXtnGao: Array<ItemDetail>;
 

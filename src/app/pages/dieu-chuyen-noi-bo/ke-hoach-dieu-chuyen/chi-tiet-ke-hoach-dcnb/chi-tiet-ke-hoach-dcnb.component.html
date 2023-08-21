@@ -295,7 +295,7 @@
               <th>Loại hàng hóa</th>
               <th>Chủng loại HH</th>
               <th>ĐVT</th>
-              <th>Tồn kho</th>
+              <th></th>
               <th>SL điều chuyển</th>
               <th>Dự toán kinh phí (triệu đồng)</th>
               <th>Điểm kho</th>
@@ -381,7 +381,7 @@
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td>{{lv2.tenLoKho ? lv2.tenLoKho + "/": ""}}{{lv2.tenNganKho}}/{{lv2.tenNhaKho}}</td>
+                        <td>{{lv2.tenLoKho ? lv2.tenLoKho + "-": ""}}{{lv2.tenNganKho}}-{{lv2.tenNhaKho}}</td>
                         <td>{{lv2.tenLoaiVthh}}</td>
                         <td>{{lv2.tenCloaiVthh}}</td>
                         <td>{{lv2.tenDonViTinh}}</td>
@@ -405,7 +405,7 @@
                         </td>
                         <td *ngIf="isNhanDieuChuyen">
                           <a>
-                            <i class="fa fa-plus" *ngIf="!isView" (click)="addDiemKhoNhan(lv2)"></i>
+                            <i class="fa fa-plus" *ngIf="!isView" (click)="addDiemKhoNhan(lv2) && userService.isAccessPermisson('DCNB_KHDC_PHANBODC')"></i>
                           </a>
                         </td>
                       </tr>
@@ -460,7 +460,7 @@
                                 <td></td>
 <!--                                <td>{{lv4.tenNhaKhoNhan}}</td>-->
 <!--                                <td>{{lv4.tenNganKhoNhan}}</td>-->
-                                <td>{{lv4.tenLoKhoNhan ? lv4.tenLoKhoNhan + "/": ""}}{{lv4.tenNganKhoNhan}}/{{lv4.tenNhaKhoNhan}}</td>
+                                <td>{{lv4.tenLoKhoNhan ? lv4.tenLoKhoNhan + "-": ""}}{{lv4.tenNganKhoNhan}}-{{lv4.tenNhaKhoNhan}}</td>
                                 <td>{{lv4.tichLuongKd}}</td>
                                 <td>{{lv4.soLuongPhanBo}}</td>
                                 <td *ngIf="!isNhanDieuChuyen"></td>
@@ -672,13 +672,13 @@
             <span>{{formDataChiTiet.value.tenCloaiVthh}}</span>
           </nz-form-item>
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true" nz-col [nzSpan]="7" class="dcnb-label">Tồn kho</nz-form-label>
+            <nz-form-label [nzNoColon]="true" nz-col [nzSpan]="7" class="dcnb-label">Tồn kho </nz-form-label>
             <span><span style="color: #001CFF">{{formDataChiTiet.value.tonKho |number : '1.0-1' :
               'vi_VN'}}</span><span>({{formDataChiTiet.value.tenDonViTinh}})</span></span>
           </nz-form-item>
 
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true" nz-col [nzSpan]="7" nzRequired class="dcnb-label">Sl điều chuyển
+            <nz-form-label [nzNoColon]="true" nz-col [nzSpan]="7" nzRequired class="dcnb-label">SL điều chuyển
             </nz-form-label>
             <nz-form-control>
               <nz-input-number [nzDisabled]="isView" formControlName="soLuongDc" [nzMin]="1" [nzStep]="0.1"
@@ -689,7 +689,7 @@
             </nz-form-control>
           </nz-form-item>
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true" nz-col [nzSpan]="7" nzRequired class="dcnb-label">Dự toán chi phí (triệu
+            <nz-form-label [nzNoColon]="true" nz-col [nzSpan]="7" nzRequired class="dcnb-label">Dự toán kinh phí (triệu
               đồng)
             </nz-form-label>
             <nz-form-control>
@@ -802,13 +802,13 @@
                 <span>{{formDataChiTiet.value.tenCloaiVthh}}</span>
               </nz-form-item>
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true" nz-col [nzSpan]="8" class="dcnb-label">Tồn kho</nz-form-label>
+                <nz-form-label [nzNoColon]="true" nz-col [nzSpan]="8" class="dcnb-label">Tồn kho </nz-form-label>
                 <span><span style="color: #001CFF">{{formDataChiTiet.value.tonKho |number : '1.0-1' :
                   'vi_VN'}}</span><span>({{formDataChiTiet.value.tenDonViTinh}})</span></span>
               </nz-form-item>
 
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true" nz-col [nzSpan]="8" nzRequired class="dcnb-label">Sl điều chuyển
+                <nz-form-label [nzNoColon]="true" nz-col [nzSpan]="8" nzRequired class="dcnb-label">SL điều chuyển
                 </nz-form-label>
                 <nz-form-control>
                   <nz-input-number [nzDisabled]="isView || isNhanDieuChuyen" formControlName="soLuongDc" [nzMin]="1"
@@ -819,7 +819,7 @@
                 </nz-form-control>
               </nz-form-item>
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true" nz-col [nzSpan]="8" nzRequired class="dcnb-label">Dự toán chi phí
+                <nz-form-label [nzNoColon]="true" nz-col [nzSpan]="8" nzRequired class="dcnb-label">Dự toán kinh phí
                   (triệu
                   đồng)
                 </nz-form-label>
@@ -883,10 +883,10 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true" nz-col [nzSpan]="8" class="dcnb-label">Tích lượng khả dụng
                 </nz-form-label>
-                <span>{{formDataChiTiet.value.tichLuongKd}}</span>
+                <span>{{formDataChiTiet.value.tichLuongKd}} (kg)</span>
               </nz-form-item>
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true" nz-col [nzSpan]="8" nzRequired class="dcnb-label">Sl nhập ĐC
+                <nz-form-label [nzNoColon]="true" nz-col [nzSpan]="8" nzRequired class="dcnb-label">SL nhập ĐC
                 </nz-form-label>
                 <nz-form-control>
                   <nz-input-number formControlName="soLuongPhanBo" [nzMin]="1" [nzStep]="0.1" [nzSize]="'small'"
@@ -897,7 +897,7 @@
                 </nz-form-control>
               </nz-form-item>
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true" nz-col [nzSpan]="8" class="dcnb-label">Số lượng điều chuyển còn lại
+                <nz-form-label [nzNoColon]="true" nz-col [nzSpan]="8" class="dcnb-label">Số lượng điều chuyển còn lại (kg)
                 </nz-form-label>
                 <span>{{formDataChiTiet.value.slDcConLai}}</span>
               </nz-form-item>

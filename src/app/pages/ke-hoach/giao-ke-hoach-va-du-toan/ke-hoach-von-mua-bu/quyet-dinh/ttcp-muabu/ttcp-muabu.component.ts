@@ -12,6 +12,7 @@ import { saveAs } from 'file-saver';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { QuyetDinhUbtvqhMuaBuBoSungService } from "../../../../../../services/quyet-dinh-ubtvqh-mua-bu-bo-sung.service";
 import { MuaBuBoSungTtcpServiceService } from "../../../../../../services/mua-bu-bo-sung-ttcp-service.service";
+import {STATUS} from "../../../../../../constants/status";
 @Component({
   selector: 'app-ttcp-muabu',
   templateUrl: './ttcp-muabu.component.html',
@@ -53,6 +54,7 @@ export class TtcpMuabuComponent implements OnInit {
   dataTableAll: any[] = [];
   namDataSelect: number;
   listBoNganh: any[]= [];
+  STATUS= STATUS;
 
   constructor(
     private readonly fb: FormBuilder,

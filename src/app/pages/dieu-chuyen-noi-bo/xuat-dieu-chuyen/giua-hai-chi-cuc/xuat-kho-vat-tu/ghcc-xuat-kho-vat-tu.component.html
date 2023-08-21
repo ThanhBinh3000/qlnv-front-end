@@ -1,10 +1,10 @@
-<nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="level1">
+<nz-affix [nzOffsetTop]="100" class="level1">
   <ul nz-menu nzMode="horizontal">
     <li nz-menu-item [nzSelected]="tabSelected==0" (click)="selectTab(0)">
       Phiếu xuất kho
     </li>
     <li [nzSelected]="tabSelected==1" nz-menu-item (click)="selectTab(1)">
-      Bảng kê nhập vật tư
+      Bảng kê xuất vật tư
     </li>
     <li [nzSelected]="tabSelected==2" nz-menu-item (click)="selectTab(2)">
       Biên bản tịnh kho
@@ -14,10 +14,13 @@
 <div class="contentBor chi-tieu__body giao-ke-hoach">
   <div class="contentDetail">
     <ng-container *ngIf="tabSelected == 0">
+      <app-ghcc-xkvt-phieu-xuat-kho></app-ghcc-xkvt-phieu-xuat-kho>
     </ng-container>
     <ng-container *ngIf="tabSelected == 1">
+      <app-ghcc-xkvt-bang-ke-xuat-vat-tu></app-ghcc-xkvt-bang-ke-xuat-vat-tu>
     </ng-container>
     <ng-container *ngIf="tabSelected == 2">
+      <app-ghcc-xkvt-bien-ban-tinh-kho-vat-tu></app-ghcc-xkvt-bien-ban-tinh-kho-vat-tu>
     </ng-container>
   </div>
 </div>

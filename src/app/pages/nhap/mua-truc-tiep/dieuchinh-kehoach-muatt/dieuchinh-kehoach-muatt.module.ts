@@ -23,9 +23,10 @@ import { NzStatisticModule } from 'ng-zorro-antd/statistic';
     MainModule,
 
   ],
-  exports: [
-    DieuchinhKehoachMuattComponent,
-    NzStatisticModule
-  ]
+    exports: [
+        DieuchinhKehoachMuattComponent,
+        NzStatisticModule,
+        DieuchinhLuachonMuattComponent
+    ]
 })
 export class DieuchinhKehoachMuattModule { }

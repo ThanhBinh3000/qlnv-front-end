@@ -65,8 +65,13 @@
       <div class="buttons">
         <button *ngIf="userService.isTongCuc() && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_QD_BTCTCDT_XOA')"
                 type="button" class="btn btn-sub btn-xoa" (click)="xoa()">
-          <i class="fa fa-trash-o do"></i>
+          <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
           <span>Xóa</span>
+        </button>
+        <button
+          type="button" *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_QD_BTCTCDT_EXP')" class="btn btn-sub" (click)="print()">
+          <i class="icon htvbdh_tcdt_print"></i>
+          <span>In</span>
         </button>
         <button *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_QD_BTCTCDT_EXP')" type="button"
                 class="btn btn-sub" (click)="exportData()">
@@ -100,7 +105,7 @@
             <div class="container">
               <div nz-row [nzGutter]="24">
                 <div nz-col [nzSpan]="12" class="text-right mt-1">
-                  <h3>Bộ</h3>
+                  <h3>Nội dung</h3>
                 </div>
                 <div nz-col [nzSpan]="12" class="text-left mt-1">
                   <h3>Dự toán (Triệu đồng)</h3>
@@ -207,19 +212,19 @@
           <td [ngClass]="(rowSelected==data.id)?'bg-selected':''">{{ data.tenTrangThai }}</td>
           <td [ngClass]="(rowSelected==data.id)?'bg-selected':''">
             <a
-              *ngIf="	(data.trangThai !== '00') && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_QD_BTCTCDT_XEM')"
+              *ngIf="	(data.trangThai !== STATUS.DANG_NHAP_DU_LIEU) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_QD_BTCTCDT_XEM')"
               (click)="viewDetail(data.id, false)">
-              <i class="fa fa-eye"></i>
+              <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
             <a
-              *ngIf="(data.trangThai == '00'&& userService.isTongCuc()) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_QD_BTCTCDT_THEM')"
+              *ngIf="(data.trangThai == STATUS.DANG_NHAP_DU_LIEU && userService.isTongCuc()) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_QD_BTCTCDT_THEM')"
               (click)="viewDetail(data.id, true)">
-              <i class="fa fa-pencil"></i>
+              <i class="fa fa-pencil" title="Sửa"></i>
             </a>
             <a
-              *ngIf="(data.trangThai == '00'&& userService.isTongCuc()) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_QD_BTCTCDT_XOA')"
+              *ngIf="(data.trangThai == STATUS.DANG_NHAP_DU_LIEU && userService.isTongCuc()) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_QD_BTCTCDT_XOA')"
               (click)="xoaItem(data)">
-              <i class="fa fa-trash-o do"></i>
+              <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>
         </tr>

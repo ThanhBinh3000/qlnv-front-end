@@ -50,18 +50,18 @@
     <div class="group-button">
       <h3> DANH SÁCH THÔNG BÁO KẾT QUẢ TRÌNH HỒ SƠ THANH LÝ HÀNG DTQG</h3>
       <div class="buttons">
-        <button *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_XOA')" type="button"
+        <button *ngIf="userService.isAccessPermisson('XHDTQG_XTL_TBKQ_XOA')" type="button"
                 class="btn btn-sub btn-xoa" (click)="deleteMulti()">
-          <i class="fa fa-trash-o do"></i>
+          <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
           <span>Xóa</span>
         </button>
-        <button *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_EXP')" type="button"
+        <button *ngIf="userService.isAccessPermisson('XHDTQG_XTL_TBKQ_EXP')" type="button"
                 class="btn btn-sub" (click)="exportData()">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
         <button type="button" class="btn btn-main" (click)="redirectDetail(null, false)"
-                *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_THEM') && userService.isTongCuc()">
+                *ngIf="userService.isAccessPermisson('XHDTQG_XTL_TBKQ_THEM') && userService.isTongCuc()">
           <i class="icon htvbdh_soanthao"></i>
           <span>Thêm</span>
         </button>
@@ -72,17 +72,17 @@
                 [nzShowPagination]="false" nzBordered>
         <thead>
         <tr>
-          <th nzWidth="40px" >
+          <th nzWidth="10px">
             <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
                    [nzIndeterminate]="indeterminate"></label>
           </th>
-          <th class="text-center">STT</th>
-          <th class="text-center">Số thông báo KQ trình hồ sơ</th>
-          <th class="text-center">Trích yếu</th>
-          <th class="text-center">Ngày ký</th>
-          <th class="text-center">Hồ sơ đề nghị thanh lý</th>
-          <th class="text-center">Trạng thái</th>
-          <th nzWidth="90px">Hành động</th>
+          <th class="text-center" nzWidth="10px">STT</th>
+          <th>Số thông báo KQ trình hồ sơ</th>
+          <th>Trích yếu</th>
+          <th>Ngày ký</th>
+          <th>Hồ sơ đề nghị thanh lý</th>
+          <th>Trạng thái</th>
+          <th nzWidth="40px">Hành động</th>
         </tr>
         <tr class="search-table">
           <th></th>
@@ -127,7 +127,7 @@
         </thead>
         <tbody>
         <tr *ngFor="let data of basicTable.data; let i = index">
-          <td width="45px">
+          <td>
             <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
                    [nzDisabled]="data.trangThai != STATUS.DU_THAO"></label>
           </td>
@@ -135,24 +135,25 @@
           <td>{{ data.soThongBao }}</td>
           <td>{{ data.noiDung }}</td>
           <td>{{ data.ngayPduyet | date: 'dd/MM/YYYY' }}</td>
-          <td><a nz-button nzType="link" *ngIf="data.soHoSo" (click)="openHoSoModal(data.idHoSo)">{{ data.soHoSo }}</a></td>
+          <td><a nz-button nzType="link" *ngIf="data.idHoSo" (click)="openHoSoModal(data.idHoSo)">{{ data.soHoSo }}</a>
+          </td>
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-left">
             <a (click)="redirectDetail(data.id, true)"
                *ngIf="vldTrangThai.checkStatusPermission(data,CHUC_NANG.XEM) &&
-                !(vldTrangThai.checkStatusPermission(data,CHUC_NANG.SUA) && userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_QDXC_TAOQDXC'))&&
-                userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_QDXC_XEM')">
-              <i class="fa fa-eye"></i>
+                !(vldTrangThai.checkStatusPermission(data,CHUC_NANG.SUA) && userService.isAccessPermisson('XHDTQG_XTL_TBKQ_THEM'))&&
+                userService.isAccessPermisson('XHDTQG_XTL_TBKQ_XEM')">
+              <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
             <a
-              *ngIf="vldTrangThai.checkStatusPermission(data,CHUC_NANG.SUA)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_QDXC_TAOQDXC')"
+              *ngIf="vldTrangThai.checkStatusPermission(data,CHUC_NANG.SUA)  && userService.isAccessPermisson('XHDTQG_XTL_TBKQ_THEM')"
               (click)="redirectDetail(data.id, false)">
-              <i class="fa fa-pencil"></i>
+              <i class="fa fa-pencil" title="Sửa"></i>
             </a>
             <a
-              *ngIf="vldTrangThai.checkStatusPermission(data,CHUC_NANG.XOA) && userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_QDXC_XOA')"
+              *ngIf="vldTrangThai.checkStatusPermission(data,CHUC_NANG.XOA) && userService.isAccessPermisson('XHDTQG_XTL_TBKQ_XOA')"
               (click)="delete(data)">
-              <i class="fa fa-trash-o do"></i>
+              <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>
         </tr>
@@ -182,23 +183,24 @@
 <ng-template #templateThemmoi>
   <div class="chi-tiet">
     <app-them-moi-thong-bao-ket-qua [idInput]="selectedId" [isView]="isView" [dataInit]="dataInit"
-                                      (showListEvent)="showList()">
+                                    (showListEvent)="showList()">
     </app-them-moi-thong-bao-ket-qua>
   </div>
 </ng-template>
 
-<!--<nz-modal [nzWidth]="'100%'" [nzBodyStyle]="{ 'overflow-y': 'auto' }"-->
-<!--          nzMaskClosable="true" [(nzVisible)]="openQdPd" (nzOnCancel)="closeHoSoModal()">-->
-<!--  <ng-container *nzModalContent class="modal__content custom-scroll-modal">-->
-<!--    <app-thong-tin-quyet-dinh-phe-duyet-phuong-an class="modal-content-detail" [idSelected]="idQdPd" [loaiVthh]="loaiVthh" [isView]="true">-->
-<!--    </app-thong-tin-quyet-dinh-phe-duyet-phuong-an>-->
-<!--  </ng-container>-->
-<!--  <div *nzModalFooter>-->
-<!--    <button nz-button (click)="closeHoSoModal()" class="modal__button&#45;&#45;cancel">-->
-<!--      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>-->
-<!--      Đóng-->
-<!--    </button>-->
-<!--  </div>-->
-<!--</nz-modal>-->
+<nz-modal [nzWidth]="'100%'" [nzBodyStyle]="{ 'overflow-y': 'auto' }"
+          nzMaskClosable="true" [(nzVisible)]="openHoSo" (nzOnCancel)="closeHoSoModal()">
+  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+    <app-chi-tiet-ho-so-thanh-ly class="modal-content-detail" [idInput]="idHoSo" [loaiVthh]="loaiVthh" [isView]="true">
+    </app-chi-tiet-ho-so-thanh-ly>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button (click)="closeHoSoModal()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>
+
 
 

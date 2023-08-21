@@ -14,6 +14,11 @@
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
+      <button type="button" class="btn btn-sub btn-xoa"
+              (click)="xoa()" *ngIf="idInput > 0 && formData.value.trangThai == STATUS.DU_THAO">
+        <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+        <span>Xóa</span>
+      </button>
       <button class="btn btn-sub xanh-nhat ml-2" (click)="save(true)"
               *ngIf="formData.value.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_QDPDKHLCNT_THEM') ">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
@@ -193,7 +198,7 @@
             <div nz-col nzSpan="5">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true" class="label-color-kh"> Phần công việc không áp dụng được <br/> một
-                  trong các hình thức lựa chọn nh thầu (đ)
+                  trong các hình thức lựa chọn nhà thầu (đ)
                 </nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24">
                   <span class="text-green" nzDisabled>{{formData.value.tienCvKad | number: '1.0-1'}}</span>
@@ -285,10 +290,10 @@
               <td>{{data.vanBanPd }}</td>
               <td class="text-center">
                 <a *ngIf="!isViewDetail" (click)="editDataCongViecDaTh(i)">
-                  <i class="fa fa-pencil"></i>
+                  <i class="fa fa-pencil" title="Sửa"></i>
                 </a>
                 <a *ngIf="!isViewDetail" (click)="deleteCongViecDaTh(i)">
-                  <i class="fa fa-trash-o do"></i>
+                  <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                 </a>
               </td>
             </ng-container>
@@ -379,10 +384,10 @@
               <td class="text-right">{{data.giaTri  | number}}</td>
               <td class="text-center">
                 <a *ngIf="!isViewDetail" (click)="editDataCongViecKad(i)">
-                  <i class="fa fa-pencil"></i>
+                  <i class="fa fa-pencil" title="Sửa"></i>
                 </a>
                 <a *ngIf="!isViewDetail" (click)="deleteCongViecKad(i)">
-                  <i class="fa fa-trash-o do"></i>
+                  <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                 </a>
               </td>
             </ng-container>
@@ -531,10 +536,10 @@
               <td>{{data.thoiGianThHd}}</td>
               <td class="text-center">
                 <a *ngIf="!isViewDetail" (click)="editDataCongViecKh(i)">
-                  <i class="fa fa-pencil"></i>
+                  <i class="fa fa-pencil" title="Sửa"></i>
                 </a>
                 <a *ngIf="!isViewDetail" (click)="deleteCongViecKh(i)">
-                  <i class="fa fa-trash-o do"></i>
+                  <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                 </a>
               </td>
             </ng-container>

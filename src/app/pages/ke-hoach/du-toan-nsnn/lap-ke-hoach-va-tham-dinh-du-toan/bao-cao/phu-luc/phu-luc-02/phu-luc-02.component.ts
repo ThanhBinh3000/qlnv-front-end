@@ -545,68 +545,38 @@ export class PhuLuc02Component implements OnInit {
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
 			return;
 		}
-		let header = [];
-		let fieldOrder = [];
-		if (this.status.viewAppVal) {
-			header = [
-				{ t: 0, b: 6, l: 0, r: 17, val: null },
-				{ t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
-				{ t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
-				{ t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
-				{ t: 4, b: 6, l: 0, r: 0, val: 'STT' },
-				{ t: 4, b: 6, l: 1, r: 1, val: 'Danh mục' },
-				{ t: 4, b: 6, l: 2, r: 2, val: 'Đơn vị tính' },
-				{ t: 4, b: 6, l: 3, r: 3, val: 'Thực hiện năm trước' },
-				{ t: 4, b: 4, l: 4, r: 5, val: 'Năm ' + (this.namBcao - 1).toString() },
-				{ t: 5, b: 6, l: 4, r: 4, val: 'Dự toán' },
-				{ t: 5, b: 6, l: 5, r: 5, val: 'Ước thực hiện' },
-				{ t: 4, b: 4, l: 6, r: 11, val: 'Năm dự toán' },
-				{ t: 5, b: 5, l: 6, r: 8, val: 'Chi phí tại cửa kho' },
-				{ t: 6, b: 6, l: 6, r: 6, val: 'Số lượng' },
-				{ t: 6, b: 6, l: 7, r: 7, val: 'Định mức' },
-				{ t: 6, b: 6, l: 8, r: 8, val: 'Thành tiền' },
-				{ t: 5, b: 5, l: 9, r: 10, val: 'Chí phí ngoài cửa kho' },
-				{ t: 6, b: 6, l: 9, r: 9, val: 'Bình quân' },
-				{ t: 6, b: 6, l: 10, r: 10, val: 'Thành tiền' },
-				{ t: 5, b: 6, l: 11, r: 11, val: 'Tổng cộng' },
-				{ t: 4, b: 4, l: 12, r: 14, val: 'Thẩm định' },
-				{ t: 5, b: 5, l: 12, r: 13, val: 'Chi phí tại cửa kho' },
-				{ t: 6, b: 6, l: 12, r: 12, val: 'Số lượng' },
-				{ t: 6, b: 6, l: 13, r: 13, val: 'Thành tiền' },
-				{ t: 5, b: 6, l: 14, r: 14, val: 'Tổng cộng' },
-				{ t: 4, b: 6, l: 15, r: 15, val: 'Chênh lệch giữa thẩm định của DVCT và nhu cầu của DVCD' },
-				{ t: 4, b: 6, l: 16, r: 16, val: 'Ghi chú' },
-				{ t: 4, b: 6, l: 17, r: 17, val: 'Ý kiến của đơn vị cấp trên' },
-			]
-			fieldOrder = ['stt', 'tenDanhMuc', 'dviTinh', 'thNamTruoc', 'namDtoan', 'namUocTh', 'sluongTaiKho', 'dmucTaiKho', 'ttienTaiKho',
-				'binhQuanNgoaiKho', 'ttienNgoaiKho', 'tongCong', 'tdinhKhoSluong', 'tdinhKhoTtien', 'tdinhTcong', 'chenhLech', 'ghiChu', 'ykienDviCtren']
-		} else {
-			header = [
-				{ t: 0, b: 6, l: 0, r: 17, val: null },
-				{ t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
-				{ t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
-				{ t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
-				{ t: 4, b: 6, l: 0, r: 0, val: 'STT' },
-				{ t: 4, b: 6, l: 1, r: 1, val: 'Danh mục' },
-				{ t: 4, b: 6, l: 2, r: 2, val: 'Đơn vị tính' },
-				{ t: 4, b: 6, l: 3, r: 3, val: 'Thực hiện năm trước' },
-				{ t: 4, b: 4, l: 4, r: 5, val: 'Năm ' + (this.namBcao - 1).toString() },
-				{ t: 5, b: 6, l: 4, r: 4, val: 'Dự toán' },
-				{ t: 5, b: 6, l: 5, r: 5, val: 'Ước thực hiện' },
-				{ t: 4, b: 4, l: 6, r: 11, val: 'Năm dự toán' },
-				{ t: 5, b: 5, l: 6, r: 8, val: 'Chi phí tại cửa kho' },
-				{ t: 6, b: 6, l: 6, r: 6, val: 'Số lượng' },
-				{ t: 6, b: 6, l: 7, r: 7, val: 'Định mức' },
-				{ t: 6, b: 6, l: 8, r: 8, val: 'Thành tiền' },
-				{ t: 5, b: 5, l: 9, r: 10, val: 'Chí phí ngoài cửa kho' },
-				{ t: 6, b: 6, l: 9, r: 9, val: 'Bình quân' },
-				{ t: 6, b: 6, l: 10, r: 10, val: 'Thành tiền' },
-				{ t: 5, b: 6, l: 11, r: 11, val: 'Tổng cộng' },
-				{ t: 4, b: 6, l: 12, r: 12, val: 'Ghi chú' },
-			]
-			fieldOrder = ['stt', 'tenDanhMuc', 'dviTinh', 'thNamTruoc', 'namDtoan', 'namUocTh', 'sluongTaiKho', 'dmucTaiKho', 'ttienTaiKho',
-				'binhQuanNgoaiKho', 'ttienNgoaiKho', 'tongCong', 'ghiChu']
-		}
+		const header = [
+			{ t: 0, b: 6, l: 0, r: 17, val: null },
+			{ t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
+			{ t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
+			{ t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
+			{ t: 4, b: 6, l: 0, r: 0, val: 'STT' },
+			{ t: 4, b: 6, l: 1, r: 1, val: 'Danh mục' },
+			{ t: 4, b: 6, l: 2, r: 2, val: 'Đơn vị tính' },
+			{ t: 4, b: 6, l: 3, r: 3, val: 'Thực hiện năm trước' },
+			{ t: 4, b: 4, l: 4, r: 5, val: 'Năm ' + (this.namBcao - 1).toString() },
+			{ t: 5, b: 6, l: 4, r: 4, val: 'Dự toán' },
+			{ t: 5, b: 6, l: 5, r: 5, val: 'Ước thực hiện' },
+			{ t: 4, b: 4, l: 6, r: 11, val: 'Năm dự toán' },
+			{ t: 5, b: 5, l: 6, r: 8, val: 'Chi phí tại cửa kho' },
+			{ t: 6, b: 6, l: 6, r: 6, val: 'Số lượng' },
+			{ t: 6, b: 6, l: 7, r: 7, val: 'Định mức' },
+			{ t: 6, b: 6, l: 8, r: 8, val: 'Thành tiền' },
+			{ t: 5, b: 5, l: 9, r: 10, val: 'Chí phí ngoài cửa kho' },
+			{ t: 6, b: 6, l: 9, r: 9, val: 'Bình quân' },
+			{ t: 6, b: 6, l: 10, r: 10, val: 'Thành tiền' },
+			{ t: 5, b: 6, l: 11, r: 11, val: 'Tổng cộng' },
+			{ t: 4, b: 4, l: 12, r: 14, val: 'Thẩm định' },
+			{ t: 5, b: 5, l: 12, r: 13, val: 'Chi phí tại cửa kho' },
+			{ t: 6, b: 6, l: 12, r: 12, val: 'Số lượng' },
+			{ t: 6, b: 6, l: 13, r: 13, val: 'Thành tiền' },
+			{ t: 5, b: 6, l: 14, r: 14, val: 'Tổng cộng' },
+			{ t: 4, b: 6, l: 15, r: 15, val: 'Chênh lệch giữa thẩm định của DVCT và nhu cầu của DVCD' },
+			{ t: 4, b: 6, l: 16, r: 16, val: 'Ghi chú' },
+			{ t: 4, b: 6, l: 17, r: 17, val: 'Ý kiến của đơn vị cấp trên' },
+		]
+		const fieldOrder = ['stt', 'tenDanhMuc', 'dviTinh', 'thNamTruoc', 'namDtoan', 'namUocTh', 'sluongTaiKho', 'dmucTaiKho', 'ttienTaiKho',
+			'binhQuanNgoaiKho', 'ttienNgoaiKho', 'tongCong', 'tdinhKhoSluong', 'tdinhKhoTtien', 'tdinhTcong', 'chenhLech', 'ghiChu', 'ykienDviCtren']
 
 		const filterData = this.lstCtietBcao.map(item => {
 			const row: any = {};

@@ -1,39 +1,45 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { MESSAGE } from 'src/app/constants/message';
-import { DeXuatKhBanDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/deXuatKhBanDauGia.service';
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
+import {Component, Input, OnInit} from '@angular/core';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {MESSAGE} from 'src/app/constants/message';
+import {
+  DeXuatKhBanDauGiaService
+} from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/deXuatKhBanDauGia.service';
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from 'src/app/services/storage.service';
+import {CHUC_NANG} from "../../../../../constants/status";
+import {DauGiaComponent} from "../../dau-gia.component";
 @Component({
   selector: 'app-de-xuat',
   templateUrl: './de-xuat.component.html',
   styleUrls: ['./de-xuat.component.scss']
 })
+
 export class DeXuatComponent extends Base2Component implements OnInit {
   @Input()
   loaiVthh: string;
+  CHUC_NANG = CHUC_NANG;
+  public vldTrangThai: DauGiaComponent;
+  isView = false;
   idThop: number = 0;
   isViewThop: boolean = false;
   idChiTieu: number = 0;
   isViewChiTieu: boolean = false;
   idQdPd: number = 0;
   isViewQdPd: boolean = false;
-  maDviCuc: string;
-  dviCapCuc: any;
-
   listTrangThai: any[] = [
-    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
-    { ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối - TP' },
-    { ma: this.STATUS.CHO_DUYET_TP, giaTri: 'Đã Chờ duyệt - TP' },
-    { ma: this.STATUS.CHO_DUYET_LDC, giaTri: 'Chờ duyệt - LĐ Cục' },
-    { ma: this.STATUS.TU_CHOI_LDC, giaTri: 'Từ chối - LĐ Cục' },
-    { ma: this.STATUS.DA_DUYET_LDC, giaTri: 'Đã duyệt - LĐ Cục' },
-    { ma: this.STATUS.TU_CHOI_CBV, giaTri: 'Từ chối - CB Vụ' },
-    { ma: this.STATUS.DA_DUYET_CBV, giaTri: 'Đã duyệt - CB Vụ' },
+    {ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo'},
+    {ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối - TP'},
+    {ma: this.STATUS.CHO_DUYET_TP, giaTri: 'Đã Chờ duyệt - TP'},
+    {ma: this.STATUS.CHO_DUYET_LDC, giaTri: 'Chờ duyệt - LĐ Cục'},
+    {ma: this.STATUS.TU_CHOI_LDC, giaTri: 'Từ chối - LĐ Cục'},
+    {ma: this.STATUS.DA_DUYET_LDC, giaTri: 'Đã duyệt - LĐ Cục'},
+    {ma: this.STATUS.TU_CHOI_CBV, giaTri: 'Từ chối - CB Vụ'},
+    {ma: this.STATUS.DA_DUYET_CBV, giaTri: 'Đã duyệt - CB Vụ'},
   ];
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -41,8 +47,10 @@ export class DeXuatComponent extends Base2Component implements OnInit {
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private deXuatKhBanDauGiaService: DeXuatKhBanDauGiaService,
+    private dauGiaComponent: DauGiaComponent,
   ) {
     super(httpClient, storageService, notification, spinner, modal, deXuatKhBanDauGiaService);
+    this.vldTrangThai = this.dauGiaComponent;
     this.formData = this.fb.group({
       namKh: null,
       soDxuat: null,
@@ -61,42 +69,49 @@ export class DeXuatComponent extends Base2Component implements OnInit {
       soDxuat: '',
       ngayTao: '',
       ngayPduyet: '',
+      soQdPd: '',
       ngayKyQd: '',
       trichYeu: '',
-      tenLoaiVthh: '',
       tenCloaiVthh: '',
       slDviTsan: '',
       slHdDaKy: '',
       soQdCtieu: '',
-      soQdPd: '',
       tenTrangThai: '',
+      tenTrangThaiTh: '',
+      idThop: '',
     };
   }
 
   async ngOnInit() {
+    await this.spinner.show();
     try {
-      this.timKiem()
+      await this.timKiem()
       await this.search();
-    }
-    catch (e) {
+      await this.spinner.hide();
+    } catch (e) {
       console.log('error: ', e)
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
 
-  clearFilter() {
-    this.formData.reset();
-    this.timKiem()
-    this.search();
-  }
-
-  timKiem() {
+  async timKiem() {
     this.formData.patchValue({
       loaiVthh: this.loaiVthh,
-      maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
       trangThaiList: this.userService.isTongCuc() ? [this.STATUS.DA_DUYET_LDC, this.STATUS.DA_DUYET_CBV, this.STATUS.TU_CHOI_CBV] : null
     })
+  }
+
+  async clearFilter() {
+    this.formData.reset();
+    await this.timKiem()
+    await this.search();
+  }
+
+  redirectDetail(id, isView: boolean) {
+    this.idSelected = id;
+    this.isDetail = true;
+    this.isView = isView;
   }
 
   openModalTh(id: number) {
@@ -122,8 +137,6 @@ export class DeXuatComponent extends Base2Component implements OnInit {
   openModalQdPd(id: number) {
     this.idQdPd = id;
     this.isViewQdPd = true;
-    this.maDviCuc = this.userInfo.MA_DVI;
-    this.dviCapCuc = this.userService.isCuc()
   }
 
   closeModalQdPd() {

@@ -7,9 +7,17 @@ import { ComponentsModule } from 'src/app/components/components.module';
 import { MainModule } from 'src/app/layout/main/main.module';
 import { XuatTieuHuyComponent } from './xuat-tieu-huy/xuat-tieu-huy.component';
 import {XuatTieuHuyModule} from "./xuat-tieu-huy/xuat-tieu-huy.module";
+import { BienBanLayMauComponent } from './kiem-tra-chat-luong/bien-ban-lay-mau/bien-ban-lay-mau.component';
+import { ChiTietBienBanLayMauComponent } from './kiem-tra-chat-luong/bien-ban-lay-mau/chi-tiet-bien-ban-lay-mau/chi-tiet-bien-ban-lay-mau.component';
+import { PhieuKiemNghiemChatLuongComponent } from './kiem-tra-chat-luong/phieu-kiem-nghiem-chat-luong/phieu-kiem-nghiem-chat-luong.component';
+import { ChiTietPhieuKiemNghiemChatLuongComponent } from './kiem-tra-chat-luong/phieu-kiem-nghiem-chat-luong/chi-tiet-phieu-kiem-nghiem-chat-luong/chi-tiet-phieu-kiem-nghiem-chat-luong.component';
 
 @NgModule({
-  declarations: [XuatComponent, XuatTieuHuyComponent],
+  declarations: [XuatComponent, XuatTieuHuyComponent, BienBanLayMauComponent, ChiTietBienBanLayMauComponent, PhieuKiemNghiemChatLuongComponent, ChiTietPhieuKiemNghiemChatLuongComponent],
   imports: [CommonModule, XuatRoutingModule, ComponentsModule, MainModule, XuatTieuHuyModule],
+  exports: [
+    BienBanLayMauComponent,
+    PhieuKiemNghiemChatLuongComponent,
+  ]
 })
 export class XuatModule {}

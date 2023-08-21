@@ -30,11 +30,11 @@ import { KeHoachVonDauNamModule } from "../../../ke-hoach/giao-ke-hoach-va-du-to
     ThemMoiQdPheDuyetKhBanTrucTiepComponent,
     ThemMoiDeXuatKhBanTrucTiepComponent,
   ],
-  imports: [
-    CommonModule,
-    ComponentsModule,
-    MainModule,
-    KeHoachVonDauNamModule
-  ]
+    imports: [
+        CommonModule,
+        ComponentsModule,
+        MainModule,
+        KeHoachVonDauNamModule,
+    ]
 })
 export class KeHoachBanTrucTiepModule { }

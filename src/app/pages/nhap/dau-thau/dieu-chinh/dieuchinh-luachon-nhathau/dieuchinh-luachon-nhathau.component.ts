@@ -12,6 +12,7 @@ import { Base2Component } from 'src/app/components/base2/base2.component';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { NzModalService } from 'ng-zorro-antd/modal';
+import { cloneDeep } from 'lodash';
 @Component({
   selector: 'app-dieuchinh-luachon-nhathau',
   templateUrl: './dieuchinh-luachon-nhathau.component.html',
@@ -23,6 +24,12 @@ export class DieuchinhLuachonNhathauComponent extends Base2Component implements 
   isDetail: boolean = false;
   selectedId: number = 0;
   isViewDetail: boolean;
+  tuNgayQd: Date | null = null;
+  denNgayQd: Date | null = null;
+  listTrangThai: any[] = [
+    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành' }
+  ];
 
   constructor(
     private httpClient: HttpClient,
@@ -38,7 +45,9 @@ export class DieuchinhLuachonNhathauComponent extends Base2Component implements 
       nam: [''],
       soQdDc: [''],
       trichYeu: [''],
-      loaiVthh: ['']
+      loaiVthh: [''],
+      tuNgayQd: [''],
+      denNgayQd: ['']
     });
     this.filterTable = {
       soQd: '',
@@ -77,5 +86,81 @@ export class DieuchinhLuachonNhathauComponent extends Base2Component implements 
     this.isDetail = false;
     await this.search();
   }
+  async search() {
+    await this.spinner.show();
+    try {
+      let body = this.formData.value
+      body.tuNgayQd = this.tuNgayQd != null ? dayjs(this.tuNgayQd).format('YYYY-MM-DD') + " 00:00:00" : null
+      body.denNgayQd = this.denNgayQd != null ? dayjs(this.denNgayQd).format('YYYY-MM-DD') + " 23:59:59" : null
+      body.paggingReq = {
+        limit: this.pageSize,
+        page: this.page - 1
+      }
+      console.log(body)
+      let res = await this.dieuChinhQuyetDinhPdKhlcntService.search(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        let data = res.data;
+        this.dataTable = data.content;
+        this.totalRecord = data.totalElements;
+        if (this.dataTable && this.dataTable.length > 0) {
+          this.dataTable.forEach((item) => {
+            item.checked = false;
+          });
+        }
+        this.dataTableAll = cloneDeep(this.dataTable);
+      } else {
+        this.dataTable = [];
+        this.totalRecord = 0;
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+    } catch (e) {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      await this.spinner.hide();
+    }
+  }
+
+  clearFilter() {
+    this.formData.patchValue({
+      nam: null,
+      soQdDc: null,
+      trichYeu: null
+    })
+    this.tuNgayQd = null;
+    this.denNgayQd = null;
+    this.search();
+  }
+
+  filterInTable(key: string, value: string | Date) {
+    if (value instanceof Date) {
+      value = dayjs(value).format('YYYY-MM-DD');
+    }
+    console.log(key, value);
+
+    if (value && value != '') {
+      this.dataTable = this.dataTableAll.filter((item) =>
+        item[key]
+          ?.toString()
+          .toLowerCase()
+          .includes(value.toString().toLowerCase()),
+      );
+    } else {
+      this.dataTable = cloneDeep(this.dataTableAll);
+    }
+  }
+
+  disabledTuNgayQd = (startValue: Date): boolean => {
+    if (!startValue || !this.denNgayQd) {
+      return false;
+    }
+    return startValue.getTime() > this.denNgayQd.getTime();
+  };
+
+  disabledDenNgayQd = (endValue: Date): boolean => {
+    if (!endValue || !this.tuNgayQd) {
+      return false;
+    }
+    return endValue.getTime() <= this.tuNgayQd.getTime();
+  };
 
 }

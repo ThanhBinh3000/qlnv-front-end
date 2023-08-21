@@ -85,7 +85,7 @@ export class ThemSuaMuaTangComponent implements OnInit {
       tenCloaiVthh: [null],
       dviTinh: [null],
       soLuong: [null],
-      donGia: [null, Validators.required],
+      donGia: [null],
       tongTien: [null, Validators.required],
       soLuongDuToan: [null],
     });
@@ -143,7 +143,6 @@ export class ThemSuaMuaTangComponent implements OnInit {
   }
 
   handleOk() {
-    debugger;
     if (this.actionType == 'them') {
       this.formItem.controls['cloaiVthh'].setValidators([Validators.required]);
       this.formItem.controls['tenCloaiVthh'].setValidators([Validators.required])
@@ -160,12 +159,9 @@ export class ThemSuaMuaTangComponent implements OnInit {
     if (this.formItem.invalid) {
       return;
     }
-    console.log(this.formItem.value.soLuongDuToan,'this.formItem.value.soLuongDuToan')
     let toatlSlDuToan = (this.dataTable.reduce((accumulator, object) => {
       return accumulator + object.soLuongDuToan ? object.soLuongDuToan : 0;
     }, 0));
-    console.log(toatlSlDuToan,'toatlSlDuToantoatlSlDuToantoatlSlDuToantoatlSlDuToan');
-    console.log(this.soLuong,'this.soLuongthis.soLuongthis.soLuong')
     if (toatlSlDuToan > this.soLuong) {
       this.notification.error(MESSAGE.ERROR, "Tổng số lượng dự toán cho loại hàng hóa này vượt quá số lượng TTCP giao");
       return;

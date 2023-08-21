@@ -1,27 +1,28 @@
 <nz-card class="mt16 flex-card p-lr16 mb16 table-card scroll-modal">
   <nz-table nzBordered #basicTable [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false">
     <thead>
-    <tr>
-      <th [width]="35">STT</th>
-      <th *ngFor="let data of dataHeader">{{data}}</th>
-      <th [width]="35" class=" text-center">Chọn</th>
-    </tr>
+      <tr>
+        <th [width]="35">STT</th>
+        <th *ngFor="let data of dataHeader">{{data}}</th>
+        <th *ngIf="!isView" [width]="35" class=" text-center">Chọn</th>
+      </tr>
     </thead>
     <tbody>
-    <tr *ngFor="let data of basicTable.data; let i = index">
-      <td class="text-center">{{i + 1}}</td>
-      <td *ngFor="let column of dataColumn;">
-        {{ (column === 'donGiaNhaThau' ? (data[column] | number: '1.0-1' :'vi_VN')
-        : column === 'ngayKy' ? (data[column] | date: 'dd/MM/YYYY')
-          : column === 'ngayTao' ? (data[column] | date: 'dd/MM/YYYY')
-            : data[column]) }}
-      </td>
-      <td class="text-center">
-        <a (click)="handleOk(data)">
-          <i class="icon htvbdh_dau-cong"></i>
-        </a>
-      </td>
-    </tr>
+      <tr *ngFor="let data of basicTable.data; let i = index">
+        <td class="text-center">{{i + 1}}</td>
+        <td *ngFor="let column of dataColumn;">
+          {{
+          (
+            column === 'donGiaNhaThau' || column.startsWith('number') ? ((data.hdr ? data.hdr[column] : data[column]) | number: '1.0-1' :'vi_VN') :
+            column === 'ngayKy' || column === 'ngayTao' || column.startsWith('ngay') ? ((data.hdr ? data.hdr[column] : data[column]) | date: 'dd/MM/YYYY') :
+              data.hdr ? data.hdr[column] : data[column]) }}
+        </td>
+        <td *ngIf="!isView" class="text-center">
+          <a (click)="handleOk(data)">
+            <i class="icon htvbdh_dau-cong"></i>
+          </a>
+        </td>
+      </tr>
     </tbody>
   </nz-table>
 </nz-card>

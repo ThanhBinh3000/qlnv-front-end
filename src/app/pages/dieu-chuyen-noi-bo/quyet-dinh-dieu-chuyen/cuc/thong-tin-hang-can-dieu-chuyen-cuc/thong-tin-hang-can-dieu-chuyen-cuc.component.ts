@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { NzModalRef, NzModalService } from "ng-zorro-antd/modal";
 import { NzCardModule, NzCardComponent } from "ng-zorro-antd/card";
-import { FormBuilder, FormGroup } from "@angular/forms";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { MangLuoiKhoService } from "src/app/services/qlnv-kho/mangLuoiKho.service";
 import { QuanLyHangTrongKhoService } from "src/app/services/quanLyHangTrongKho.service";
 import { DonviService } from "src/app/services/donvi.service";
@@ -52,50 +52,52 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
   ) {
     super(httpClient, storageService, notification, spinner, modal, quanLyHangTrongKhoService);
     this.formData = this.fb.group({
-      maChiCucNhan: [],
-      tenChiCucNhan: [],
-      maDiemKho: [],
-      tenDiemKho: [],
-      maNhaKho: [],
-      tenNhaKho: [],
-      maNganKho: [],
-      tenNganKho: [],
-      maLoKho: [],
-      tenLoKho: [],
-      thuKho: [],
-      loaiVthh: [],
-      tenLoaiVthh: [],
-      cloaiVthh: [],
-      tenCloaiVthh: [],
-      tonKho: [],
-      tenDonViTinh: [],
-      soLuongDc: [],
+      maChiCucNhan: [, [Validators.required]],
+      tenChiCucNhan: [, [Validators.required]],
+      maDiemKho: [, [Validators.required]],
+      tenDiemKho: [, [Validators.required]],
+      maNhaKho: [, [Validators.required]],
+      tenNhaKho: [, [Validators.required]],
+      maNganKho: [, [Validators.required]],
+      tenNganKho: [, [Validators.required]],
+      maLoKho: [, [Validators.required]],
+      tenLoKho: [, [Validators.required]],
+      maThuKho: [, [Validators.required]],
+      thuKho: [, [Validators.required]],
+      loaiVthh: [, [Validators.required]],
+      tenLoaiVthh: [, [Validators.required]],
+      cloaiVthh: [, [Validators.required]],
+      tenCloaiVthh: [, [Validators.required]],
+      tonKho: [, [Validators.required]],
+      tenDonViTinh: [, [Validators.required]],
+      soLuongDc: [, [Validators.required]],
       duToanKphi: [],
-      thoiGianDkDc: [],
-      maDiemKhoNhan: [],
-      tenDiemKhoNhan: [],
-      maNhaKhoNhan: [],
-      tenNhaKhoNhan: [],
-      maNganKhoNhan: [],
-      tenNganKhoNhan: [],
-      maLoKhoNhan: [],
-      tenLoKhoNhan: [],
-      thuKhoNhan: [],
-      thayDoiThuKho: [],
-      slDcConLai: [],
-      tichLuongKd: [],
-      soLuongPhanBo: [],
+      thoiGianDkDc: [, [Validators.required]],
+      maDiemKhoNhan: [, [Validators.required]],
+      tenDiemKhoNhan: [, [Validators.required]],
+      maNhaKhoNhan: [, [Validators.required]],
+      tenNhaKhoNhan: [, [Validators.required]],
+      maNganKhoNhan: [, [Validators.required]],
+      tenNganKhoNhan: [, [Validators.required]],
+      maLoKhoNhan: [, [Validators.required]],
+      tenLoKhoNhan: [, [Validators.required]],
+      maThuKhoNhan: [, [Validators.required]],
+      thuKhoNhan: [, [Validators.required]],
+      thayDoiThuKho: [, [Validators.required]],
+      slDcConLai: [, [Validators.required]],
+      tichLuongKd: [, [Validators.required]],
+      soLuongPhanBo: [, [Validators.required]],
     }
     );
   }
 
   ngOnInit(): void {
-    const dis = this.danhSachKeHoach.find(item => item.maChiCucNhan === this.data.maChiCucNhan)
-    console.log('dis', !!dis, this.danhSachKeHoach, this.data)
     this.handleData()
   }
 
   handleOk(item: any) {
+    this.helperService.markFormGroupTouched(this.formData);
+    if (!this.formData.valid) return
     this._modalRef.close({
       ...item,
       isUpdate: !!this.data
@@ -171,6 +173,11 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
         (item.maNhaKhoNhan === this.formData.value.maNhaKhoNhan) &&
         (item.maNganKhoNhan === value)
       )
+      if ((this.formData.value.maDiemKho === this.formData.value.maDiemKhoNhan) &&
+        (this.formData.value.maNhaKho === this.formData.value.maNhaKhoNhan) &&
+        (this.formData.value.maNganKho === value)) {
+        return true
+      }
       return !!check
     }
     return false
@@ -188,6 +195,13 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
       (item.maNganKhoNhan === this.formData.value.maNganKhoNhan) &&
       (item.maLoKhoNhan === value)
     )
+
+    if ((this.formData.value.maDiemKho === this.formData.value.maDiemKhoNhan) &&
+      (this.formData.value.maNhaKho === this.formData.value.maNhaKhoNhan) &&
+      (this.formData.value.maNganKho === this.formData.value.maNganKhoNhan) &&
+      (this.formData.value.maLoKho === value)) {
+      return true
+    }
 
     return !!check
   }
@@ -280,7 +294,7 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
           maNganKhoNhan: "",
           maLoKhoNhan: "",
           thayDoiThuKho: "",
-          slDcConLai: "",
+          // slDcConLai: "",
           tichLuongKd: "",
           tenNhaKhoNhan: nhaKhoNhan.tenDvi
         })
@@ -308,13 +322,15 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
           const detailThuKho = detail.data.object.detailThuKho
           if (detailThuKho) {
             this.formData.patchValue({
-              maThuKho: detailThuKho.maThuKho,
-              thuKho: detailThuKho.hoTen
+              maThuKho: detailThuKho.id,
+              thuKho: detailThuKho.fullName
             })
           }
           if (coLoKho)
             this.dsLoKho = this.dsNganKho.find(f => f.maDvi === value)?.children;
           else {
+            this.formData.controls["maLoKho"].clearValidators();
+            this.formData.controls["tenLoKho"].clearValidators();
             this.dsLoKho = []
             const body = {
               maDvi: value,
@@ -322,7 +338,7 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
             }
             const res = await this.quanLyHangTrongKhoService.getTrangThaiHt(body);
             if (res.statusCode == 0) {
-              if (res.data.length > 0) {
+              if (res.data.length === 1) {
                 this.formData.patchValue({
                   loaiVthh: res.data[0].loaiVthh,
                   tenLoaiVthh: res.data[0].tenLoaiVthh,
@@ -331,6 +347,8 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
                   tonKho: res.data[0].slHienThoi,
                   tenDonViTinh: res.data[0].tenDonViTinh,
                 })
+              } else {
+                this.notification.error(MESSAGE.ERROR, "Tìm thấy nhiều hơn 1 lô kho!" + body.tenLoKho);
               }
             }
           }
@@ -353,15 +371,19 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
           tenLoKho: loKho.tenDvi
         }
         const res = await this.quanLyHangTrongKhoService.getTrangThaiHt(body);
-        if (res.statusCode == 0 && res.data.length > 0) {
-          this.formData.patchValue({
-            loaiVthh: res.data[0].loaiVthh,
-            tenLoaiVthh: res.data[0].tenLoaiVthh,
-            cloaiVthh: res.data[0].cloaiVthh,
-            tenCloaiVthh: res.data[0].tenCloaiVthh,
-            tonKho: res.data[0].slHienThoi,
-            tenDonViTinh: res.data[0].tenDonViTinh,
-          })
+        if (res.statusCode == 0) {
+          if (res.data.length === 1) {
+            this.formData.patchValue({
+              loaiVthh: res.data[0].loaiVthh,
+              tenLoaiVthh: res.data[0].tenLoaiVthh,
+              cloaiVthh: res.data[0].cloaiVthh,
+              tenCloaiVthh: res.data[0].tenCloaiVthh,
+              tonKho: res.data[0].slHienThoi,
+              tenDonViTinh: res.data[0].tenDonViTinh,
+            })
+          } else {
+            this.notification.error(MESSAGE.ERROR, "Tìm thấy nhiều hơn 1 lô kho!" + body.tenLoKho);
+          }
         } else {
           this.formData.patchValue({
             loaiVthh: "",
@@ -395,30 +417,38 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
         const detail = await this.mangLuoiKhoService.getDetailByMa(body);
         if (detail.statusCode == 0) {
           const coLoKho = detail.data.object.coLoKho
-          const tichLuongKdVt = detail.data.object.tichLuongKdVt
-          this.formData.patchValue({
-            tichLuongKd: tichLuongKdVt
-          })
+          if (this.formData.value.cloaiVthh) {
+            const tichLuongKd = (this.formData.value.cloaiVthh.startsWith("01") || this.formData.value.cloaiVthh.startsWith("04")) ? detail.data.object.tichLuongKdLt : detail.data.object.tichLuongKdVt
+            this.formData.patchValue({
+              tichLuongKd
+            })
+          }
+
           const detailThuKho = detail.data.object.detailThuKho
           if (detailThuKho) {
             this.formData.patchValue({
-              maThuKhoNhan: detailThuKho.maThuKho,
-              thuKhoNhan: detailThuKho.hoTen
+              maThuKhoNhan: detailThuKho.id,
+              thuKhoNhan: detailThuKho.fullName
             })
           }
           if (coLoKho) {
             this.dsLoKhoNhan = this.dsNganKhoNhan.find(f => f.maDvi === value)?.children;
           } else {
+            this.formData.controls["maLoKhoNhan"].clearValidators();
+            this.formData.controls["tenLoKhoNhan"].clearValidators();
             this.dsLoKhoNhan = []
-            if (this.formData.value.maDiemKho === this.formData.value.maDiemKhoNhan &&
-              this.formData.value.maNhaKho === this.formData.value.maNhaKhoNhan &&
-              this.formData.value.maNganKho === this.formData.value.maNganKhoNhan) {
+            if (
+              // this.formData.value.maDiemKho === this.formData.value.maDiemKhoNhan &&
+              // this.formData.value.maNhaKho === this.formData.value.maNhaKhoNhan &&
+              // this.formData.value.maNganKho === this.formData.value.maNganKhoNhan
+              this.formData.value.maThuKho === this.formData.value.maThuKhoNhan
+            ) {
               this.formData.patchValue({
-                thayDoiThuKho: "Không"
+                thayDoiThuKho: false
               })
             } else {
               this.formData.patchValue({
-                thayDoiThuKho: "Có"
+                thayDoiThuKho: true
               })
             }
           }
@@ -437,22 +467,32 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
         this.formData.patchValue({
           tenLoKhoNhan: loKhoNhan.tenDvi
         })
-        if (this.formData.value.maDiemKho === this.formData.value.maDiemKhoNhan &&
-          this.formData.value.maNhaKho === this.formData.value.maNhaKhoNhan &&
-          this.formData.value.maNganKho === this.formData.value.maNganKhoNhan &&
-          this.formData.value.maLoKho === this.formData.value.maLoKhoNhan) {
+        if (
+          // this.formData.value.maDiemKho === this.formData.value.maDiemKhoNhan &&
+          // this.formData.value.maNhaKho === this.formData.value.maNhaKhoNhan &&
+          // this.formData.value.maNganKho === this.formData.value.maNganKhoNhan &&
+          // this.formData.value.maLoKho === this.formData.value.maLoKhoNhan
+          this.formData.value.maThuKho === this.formData.value.maThuKhoNhan
+        ) {
           this.formData.patchValue({
-            thayDoiThuKho: "Không"
+            thayDoiThuKho: false
           })
         } else {
           this.formData.patchValue({
-            thayDoiThuKho: "Có"
+            thayDoiThuKho: true
           })
         }
       }
     }
 
 
+  }
+
+  onChangSLDC(value) {
+    this.formData.patchValue({
+      soLuongPhanBo: "",
+      slDcConLai: ""
+    })
   }
 
   onChangeSLNhapDc(value) {

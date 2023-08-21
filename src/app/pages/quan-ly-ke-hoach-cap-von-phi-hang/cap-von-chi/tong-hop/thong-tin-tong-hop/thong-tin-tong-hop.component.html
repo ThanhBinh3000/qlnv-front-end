@@ -22,8 +22,10 @@
         <i class="icon htvbdh_tcdt_guiduyet"></i>
         <span>Lưu và gửi duyệt</span>
       </button>
-      <button *ngIf="detail.trangThai == globals.prop.NHAP_DU_THAO || detail.trangThai == STATUS.TU_CHOI_TP || detail.trangThai == STATUS.TU_CHOI_LDC|| detail.trangThai == STATUS.TU_CHOI_LDV " type="button" class="btn btn-main"
-              (click)="save(false)" [disabled]="!formData.valid">
+      <button
+        *ngIf="detail.trangThai == globals.prop.NHAP_DU_THAO || detail.trangThai == STATUS.TU_CHOI_TP || detail.trangThai == STATUS.TU_CHOI_LDC|| detail.trangThai == STATUS.TU_CHOI_LDV "
+        type="button" class="btn btn-main"
+        (click)="save(false)" [disabled]="!formData.valid">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
       </button>
@@ -155,53 +157,49 @@
                 [nzFrontPagination]="false" [nzShowPagination]="false" nzBordered>
         <thead>
         <tr>
-          <th style="width: 35px">STT</th>
-          <th>Nguồn dữ liệu tổng hợp</th>
-          <th>Số đề nghị</th>
-          <th>Năm</th>
-          <th>Ngày đề nghị</th>
-          <th>Tổng tiền</th>
-          <th>Kinh phí đã cấp</th>
-          <th>Yêu cầu cấp thêm</th>
-          <th>Hành động</th>
+          <!--          <th style="width: 35px" rowSpan="2">STT</th>-->
+          <th rowSpan="2">Nguồn dữ liệu tổng hợp</th>
+          <th rowSpan="2">Số đề nghị</th>
+          <th rowSpan="2">Năm</th>
+          <th rowSpan="2">Ngày đề nghị</th>
+          <th rowSpan="2">Loại tiền</th>
+          <th colSpan="2">Tổng tiền</th>
+          <th colSpan="2">Kinh phí đã cấp</th>
+          <th colSpan="2">Kinh phí đề nghị cấp lần này</th>
+          <th rowSpan="2">Hành động</th>
+        </tr>
+        <tr>
+          <th>Ngoại tệ</th>
+          <th>VNĐ</th>
+          <th>Ngoại tệ</th>
+          <th>VNĐ</th>
+          <th>Ngoại tệ</th>
+          <th>VNĐ</th>
         </tr>
         </thead>
         <tbody>
         <tr *ngFor="let data of basicTable.data; let i = index">
-          <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
+          <!--          <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>-->
           <td *ngIf="data.parentName">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ data.tenBoNganh }}</td>
           <td *ngIf="!data.parentName"> {{ data.tenBoNganh }}</td>
           <td>{{ data.soDeNghi }}</td>
-          <td>{{ data.nam }}</td>
+          <td>{{ data.nam}} </td>
           <td>{{ data.ngayDeNghi | date: 'dd/MM/yyyy' }}</td>
+          <td>{{ data.tenLoaiTien }}</td>
+          <td>{{ data.tongTienNt | number : '1.0-1' : 'vi_VN'}}</td>
           <td>{{ data.tongTien | number : '1.0-1' : 'vi_VN' }}</td>
-          <td>{{ data.kinhPhiDaCap | number : '1.0-1' : 'vi_VN'}}</td>
+          <td>{{ data.kinhPhiDaCapNt  | number : '1.0-1' : 'vi_VN' }}</td>
+          <td>{{ data.kinhPhiDaCap | number : '1.0-1' : 'vi_VN' }}</td>
+          <td>{{ data.ycCapThemNt | number : '1.0-1' : 'vi_VN'}}</td>
           <td>{{ data.ycCapThem | number : '1.0-1' : 'vi_VN' }}</td>
           <td class="text-left">
-            <a *ngIf="!data.isSum" (click)="goToDetail(data, true)">
-              <i class="fa fa-eye"></i>
+            <a *ngIf="!data.isSum && data.maBn != 'BTC'" (click)="goToDetail(data, true)">
+              <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
           </td>
         </tr>
         </tbody>
       </nz-table>
-      <!--      <div class="tab-content tab-menu" id="myTabContent">-->
-      <!--        <div class="tab-pane fade show active justify-content-between">-->
-      <!--          <div class="trai">-->
-      <!--          </div>-->
-      <!--          <div class="canphai">-->
-      <!--            &lt;!&ndash; begin phân trang  &ndash;&gt;-->
-      <!--            <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger-->
-      <!--              [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="changePageIndex($event)"-->
-      <!--              (nzPageSizeChange)="changePageSize($event)">-->
-      <!--              <ng-template #rangeTemplate let-range="range" let-total>-->
-      <!--                {{ range[0] }}-{{ range[1] }} trên tổng số {{ total }} bản ghi-->
-      <!--              </ng-template>-->
-      <!--            </nz-pagination>-->
-      <!--            &lt;!&ndash; end phân trang  &ndash;&gt;-->
-      <!--          </div>-->
-      <!--        </div>-->
-      <!--      </div>-->
     </nz-card>
     <!-- cái này nhập tay  -->
     <div *ngIf="isTonghop" class="title-form-chi-tiet pd-10">Phương án của tổng cục</div>
@@ -213,84 +211,70 @@
                     [nzData]="detail?.tCThem">
             <thead>
             <tr>
-              <th width="60px">STT</th>
-              <th>Nguồn dữ liệu tổng hợp</th>
-              <th> Số đề nghị</th>
-              <th>Năm</th>
-              <th> Ngày đề nghị</th>
-              <th>Tổng tiền</th>
-              <th>Kinh phí đã cấp</th>
-              <th>Tổng cục cấp thêm</th>
-              <th *ngIf="!(isDisableField() || isView)">Hành động</th>
+              <th rowSpan="2">Nguồn dữ liệu tổng hợp</th>
+              <th rowSpan="2">Số đề nghị</th>
+              <th rowSpan="2">Năm</th>
+              <th rowSpan="2">Ngày đề nghị</th>
+              <th rowSpan="2">Loại tiền</th>
+              <th colSpan="2">Tổng tiền</th>
+              <th colSpan="2">Kinh phí đã cấp</th>
+              <th colSpan="2">Kinh phí đề nghị cấp lần này</th>
+              <th *ngIf="!(isDisableField() || isView)" rowSpan="2">Hành động</th>
+            </tr>
+            <tr>
+              <th>Ngoại tệ</th>
+              <th>VNĐ</th>
+              <th>Ngoại tệ</th>
+              <th>VNĐ</th>
+              <th>Ngoại tệ</th>
+              <th>VNĐ</th>
             </tr>
             </thead>
             <tbody>
-            <!--              <tr>-->
-            <!--                <td></td>-->
-            <!--                <td> {{create.tenBoNganh}} </td>-->
-            <!--                <td>-->
-            <!--                  <nz-select [nzDisabled]="isView" [(ngModel)]="create.soDeNghi" class="w-300"-->
-            <!--                    (ngModelChange)="changeSoDeNghi(create)">-->
-            <!--                    <nz-option *ngFor="let item of listNguonTongHop" [nzValue]="item.soDeNghi"-->
-            <!--                      [nzLabel]="item.soDeNghi">-->
-            <!--                    </nz-option>-->
-            <!--                  </nz-select>-->
-            <!--                </td>-->
-            <!--                <td> {{create.nam}} </td>-->
-            <!--                <td> {{create.ngayDeNghi | date: 'dd/MM/yyyy'}} </td>-->
-            <!--                <td> {{create.tongTien}} </td>-->
-            <!--                <td> {{create.kinhPhiDaCap}} </td>-->
-            <!--                <td>-->
-            <!--                  <nz-input-number [disabled]="isView" nz-input class="w-300" nzSize="small"-->
-            <!--                    [(ngModel)]="create.tcCapThem"></nz-input-number>-->
-            <!--                </td>-->
-            <!--                <td>-->
-            <!--                  <a (click)="addRow()" [class.disabled]="!create.soDeNghi || create.soDeNghi == ''">-->
-            <!--                    <i class="fa fa-plus"></i>-->
-            <!--                  </a>-->
-            <!--                  <a (click)="clearItemRow()">-->
-            <!--                    <i class="fa fa-trash-o do"></i>-->
-            <!--                  </a>-->
-            <!--                </td>-->
-            <!--              </tr>-->
             <tr *ngFor="let data of basicTable.data; let i = index">
               <ng-container *ngIf="!editDataCache[data.stt]?.edit; else editTemplate">
-                <td class="text-center">{{i + 1}}</td>
+                <!--                <td class="text-center">{{i + 1}}</td>-->
                 <td *ngIf="data.parentName">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ data.tenBoNganh }}</td>
                 <td *ngIf="!data.parentName"> {{ data.tenBoNganh }}</td>
-                <td>{{data.soDeNghi}}</td>
-                <td>{{data.nam}}</td>
-                <td>{{data.ngayDeNghi | date: 'dd/MM/yyyy'}}</td>
-                <td>{{data.tongTien | number : '1.0-1' : 'vi_VN'}}</td>
-                <td>{{data.kinhPhiDaCap | number : '1.0-1' : 'vi_VN'}}</td>
-                <td>{{data.tcCapThem | number : '1.0-1' : 'vi_VN'}}</td>
-                <td >
+                <td>{{ data.soDeNghi }}</td>
+                <td>{{ data.nam}} </td>
+                <td>{{ data.ngayDeNghi | date: 'dd/MM/yyyy' }}</td>
+                <td>{{ data.tenLoaiTien }}</td>
+                <td>{{ data.tongTienNt | number : '1.0-1' : 'vi_VN'}}</td>
+                <td>{{ data.tongTien | number : '1.0-1' : 'vi_VN' }}</td>
+                <td>{{ data.kinhPhiDaCapNt  | number : '1.0-1' : 'vi_VN' }}</td>
+                <td>{{ data.kinhPhiDaCap | number : '1.0-1' : 'vi_VN' }}</td>
+                <td>{{ data.tcCapThemNt | number : '1.0-1' : 'vi_VN'}}</td>
+                <td>{{ data.tcCapThem | number : '1.0-1' : 'vi_VN' }}</td>
+                <td>
                   <a (click)="editRow(data.stt)" *ngIf="!data.isSum  &&  !(isDisableField() || isView)">
-                    <i class="fa fa-pencil"></i>
+                    <i class="fa fa-pencil" title="Sửa"></i>
                   </a>
-                  <!--                    <a (click)="deleteRow(data)">-->
-                  <!--                      <i class="fa fa-trash-o do"></i>-->
-                  <!--                    </a>-->
                 </td>
               </ng-container>
               <ng-template #editTemplate>
-                <td></td>
                 <td>{{editDataCache[data.stt]?.data.tenBoNganh}}</td>
                 <td>
                   {{editDataCache[data.stt]?.data.soDeNghi}}
-                  <!--                    <nz-select [(ngModel)]="editDataCache[data.stt]?.data.soDeNghi" class="w-300"-->
-                  <!--                      (ngModelChange)="changeSoDeNghi(editDataCache[data.stt]?.data)">-->
-                  <!--                      <nz-option *ngFor="let item of listNguonTongHop" [nzValue]="item.soDeNghi"-->
-                  <!--                        [nzLabel]="item.soDeNghi">-->
-                  <!--                      </nz-option>-->
-                  <!--                    </nz-select>-->
                 </td>
                 <td>{{editDataCache[data.stt]?.data.nam}}</td>
                 <td>{{editDataCache[data.stt]?.data.ngayDeNghi | date: 'dd/MM/yyyy'}}</td>
+                <td>{{editDataCache[data.stt]?.data.tenLoaiTien}}</td>
+                <td>{{editDataCache[data.stt]?.data.tongTienNt}}</td>
                 <td>{{editDataCache[data.stt]?.data.tongTien}}</td>
+                <td>{{editDataCache[data.stt]?.data.kinhPhiDaCapNt}}</td>
                 <td>{{editDataCache[data.stt]?.data.kinhPhiDaCap}}</td>
                 <td>
-                  <nz-input-number type="text" nz-input [nzSize]="'small'" [(ngModel)]="editDataCache[data.stt]?.data.tcCapThem" [nzMin]="0"
+                  <span *ngIf="editDataCache[data.stt]?.data.loaiTien == '01'">{{editDataCache[data.stt]?.data.tcCapThemNt}}</span>
+                  <nz-input-number type="text" nz-input *ngIf="editDataCache[data.stt]?.data.loaiTien !== '01'" [nzSize]="'small'"
+                                   [(ngModel)]="editDataCache[data.stt]?.data.tcCapThemNt" [nzMin]="0"
+                                   [nzMax]="globals.prop.MAX_INPUT" [nzFormatter]="globals.formatter"
+                                   [nzParser]="globals.parser">
+                  </nz-input-number>
+                </td>
+                <td>
+                  <nz-input-number type="text" nz-input [nzSize]="'small'"
+                                   [(ngModel)]="editDataCache[data.stt]?.data.tcCapThem" [nzMin]="0"
                                    [nzMax]="globals.prop.MAX_INPUT" [nzFormatter]="globals.formatter"
                                    [nzParser]="globals.parser">
                   </nz-input-number>

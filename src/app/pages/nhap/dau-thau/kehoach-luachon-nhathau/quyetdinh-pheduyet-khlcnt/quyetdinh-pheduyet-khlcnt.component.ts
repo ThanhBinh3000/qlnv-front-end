@@ -43,7 +43,7 @@ export class QuyetdinhPheduyetKhlcntComponent extends Base2Component implements 
   denNgayKy: Date | null = null;
 
   listTrangThai: any[] = [
-    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: this.STATUS.DANG_NHAP_DU_LIEU, giaTri: 'Đang nhập dữ liệu' },
     { ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành' }
   ];
   searchFilter = {
@@ -76,6 +76,7 @@ export class QuyetdinhPheduyetKhlcntComponent extends Base2Component implements 
   STATUS = STATUS
   dataTableAll: any[] = [];
   isDetail: boolean = false;
+  isDetailVt: boolean = false;
   selectedId: number = 0;
   listVthh: any;
   listNam: any[] = [];
@@ -146,13 +147,21 @@ export class QuyetdinhPheduyetKhlcntComponent extends Base2Component implements 
     if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT_THEM")) {
       return;
     }
-    this.isDetail = true;
+    if (this.loaiVthh.startsWith('02')) {
+      this.isDetailVt = true;
+    } else {
+      this.isDetail = true;
+    }
     this.selectedId = null;
     this.isView = false;
   }
 
   async detail(data?) {
-    this.isDetail = true;
+    if (this.loaiVthh.startsWith('02')) {
+      this.isDetailVt = true;
+    } else {
+      this.isDetail = true;
+    }
     this.selectedId = data.id;
   }
 
@@ -162,12 +171,20 @@ export class QuyetdinhPheduyetKhlcntComponent extends Base2Component implements 
         return
       }
       this.selectedId = id;
-      this.isDetail = true;
+      if (this.loaiVthh.startsWith('02')) {
+        this.isDetailVt = true;
+      } else {
+        this.isDetail = true;
+      }
       this.isView = false
     } else {
       // await this.detail(id, roles);
       this.selectedId = id;
-      this.isDetail = true;
+      if (this.loaiVthh.startsWith('02')) {
+        this.isDetailVt = true;
+      } else {
+        this.isDetail = true;
+      }
       this.isView = true
     }
   }
@@ -290,6 +307,7 @@ export class QuyetdinhPheduyetKhlcntComponent extends Base2Component implements 
 
   showList() {
     this.isDetail = false;
+    this.isDetailVt = false;
     this.search();
   }
 
@@ -466,14 +484,14 @@ export class QuyetdinhPheduyetKhlcntComponent extends Base2Component implements 
     this.openDxKhlcnt = false;
   }
 
-  disabledTuNgayKy = (startValue: Date): boolean => {
+  disabledTuNgayQd = (startValue: Date): boolean => {
     if (!startValue || !this.denNgayKy) {
       return false;
     }
     return startValue.getTime() > this.denNgayKy.getTime();
   };
 
-  disabledDenNgayKy = (endValue: Date): boolean => {
+  disabledDenNgayQd = (endValue: Date): boolean => {
     if (!endValue || !this.tuNgayKy) {
       return false;
     }

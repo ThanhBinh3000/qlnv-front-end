@@ -5,12 +5,12 @@
       <span>Quay lại</span>
     </button>
     <button
-      *ngIf="(formData.value.trangThai == '00' && !isView) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_THEM')"
+      *ngIf="(formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU && !isView) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_THEM')"
       type="button" class="btn btn-sub" (click)="save(true)">
       <i class="icon htvbdh_chuyenvanthu"></i>
       <span>Ban hành</span>
     </button>
-    <button *ngIf="formData.value.trangThai == '00' && !isView" type="button" class="btn btn-sub xanh" (click)="save()">
+    <button *ngIf="formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU && !isView" type="button" class="btn btn-sub xanh" (click)="save()">
       <i class="icon htvbdh_luu"></i>
       <span>Lưu</span>
     </button>
@@ -21,8 +21,8 @@
     <div class="header">
       <div class="header-text">
         <div class="title-chi-tieu">
-          <span [ngClass]="formData.value.trangThai == '00' ? 'du-thao-va-lanh-dao-duyet' : 'da-ban-hanh'">
-            {{ formData.value.trangThai == '00' ? 'Dự Thảo' : 'Ban Hành' }}
+          <span [ngClass]="formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU ? 'du-thao-va-lanh-dao-duyet' : 'da-ban-hanh'">
+            {{ formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU ? 'Đang nhập dữ liệu' : 'Ban Hành' }}
           </span>
           <span>QUYẾT ĐỊNH CỦA BỘ TÀI CHÍNH</span>
         </div>
@@ -131,19 +131,18 @@
         <tr *ngFor="let data of dataTable; let idx = index">
           <td class="text-center">{{ idx + 1 }}</td>
           <td>{{ data.tenBoNganh }}</td>
-          <td>{{ data.tongTien }}</td>
-          <td>{{data.ttMuaBu}}</td>
-          <td>{{data.ttMuaBsung}}</td>
-          <td></td>
+          <td>{{ data.tongTien | number: '1.0-3': 'vi_VN' }}</td>
+          <td>{{data.ttMuaBu | number: '1.0-3': 'vi_VN' }}</td>
+          <td>{{data.ttMuaBsung | number: '1.0-3': 'vi_VN' }}</td>
           <td style="text-align: left; white-space: nowrap;">
-            <a (click)="themKeHoach(data, idx,true)">
-              <i class="fa fa-eye"></i>
+            <a  *ngIf="formData.value.trangThai != STATUS.DANG_NHAP_DU_LIEU" (click)="themKeHoach(data, idx,true)">
+              <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
-            <a *ngIf="formData.value.trangThai == '00' && !isView" (click)="themKeHoach(data, idx,false)">
-              <i class="fa fa-pencil"></i>
+            <a *ngIf="formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU && !isView" (click)="themKeHoach(data, idx,false)">
+              <i class="fa fa-pencil" title="Sửa"></i>
             </a>
-            <a *ngIf="formData.value.trangThai == '00' && !isView" (click)="xoaItem(idx)">
-              <i class="fa fa-trash-o do"></i>
+            <a *ngIf="formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU && !isView" (click)="xoaItem(idx)">
+              <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>
         </tr>

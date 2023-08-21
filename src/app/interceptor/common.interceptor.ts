@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {
   HttpRequest,
   HttpHandler,
@@ -7,20 +7,22 @@ import {
   HttpHeaders,
   HttpResponse,
 } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { AuthService } from '../services/auth.service';
-import { tap } from 'rxjs/operators';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { OldResponseData } from '../interfaces/response';
-import { ERROR_CODE, STATUS_CODE } from '../constants/config';
-import { MESSAGE } from '../constants/message';
+import {Observable} from 'rxjs';
+import {AuthService} from '../services/auth.service';
+import {tap} from 'rxjs/operators';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {OldResponseData} from '../interfaces/response';
+import {ERROR_CODE, STATUS_CODE} from '../constants/config';
+import {MESSAGE} from '../constants/message';
 
 @Injectable()
 export class CommonInterceptor implements HttpInterceptor {
   constructor(
     private authService: AuthService,
     private notification: NzNotificationService,
-  ) { }
+  ) {
+  }
+
   intercept(
     request: HttpRequest<unknown>,
     next: HttpHandler,
@@ -59,9 +61,11 @@ export class CommonInterceptor implements HttpInterceptor {
         },
         (err: any) => {
           if (err.status === STATUS_CODE.UNAUTHORIZED) {
+            this.notification.warning(MESSAGE.ALERT, MESSAGE.UNAUTHORIZED_ERROR);
             this.authService.logout();
+          } else {
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
           }
-          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         },
       ),
     );

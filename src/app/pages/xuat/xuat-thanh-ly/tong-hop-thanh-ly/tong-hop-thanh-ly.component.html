@@ -88,7 +88,7 @@
       </div>
     </nz-card>
     <div class="group-button">
-      <h3 class="text-uppercase">Danh sách phương án xuất cứu trợ, viện trợ</h3>
+      <h3 class="text-uppercase">Tổng hợp danh sách hàng DTQG cần thanh lý</h3>
       <button type="button" class="btn btn-main" (click)="showModal(true)">
         <i class="icon htvbdh_tcdt_tao-qd"></i>
         <span>Tổng hợp danh sách hàng cần thanh lý</span>
@@ -147,14 +147,14 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td>{{item.tenTrangThai}}</td>
+                <td>{{item.trangThai == '25' ? 'Gửi duyệt' : item.tenTrangThai}}</td>
                 <td></td>
                 <td class="text-left">
                   <a (click)="showModal(true, item)">
-                    <i class="fa fa-eye"></i>
+                    <i class="fa fa-eye" title="Xem chi tiết"></i>
                   </a>
                   <a *ngIf="item.trangThai==STATUS.DU_THAO" (click)="delete(item)">
-                    <i class="fa fa-trash-o do"></i>
+                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                   </a>
                 </td>
               </tr>

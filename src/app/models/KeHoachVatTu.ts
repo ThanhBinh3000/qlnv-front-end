@@ -1,5 +1,26 @@
 import {ItemDetail} from './itemDetail';
 
+export class KhVatTu {
+  id: number;
+  donViId: number;
+  maDvi: string;
+  tenDvi: string;
+  donViTinh: string;
+  kyHieu: string;
+  sttDonVi: number;
+  vatTuId: number;
+  vatTuChaId: number;
+  maVatTu: string;
+  maVatTuCha: string;
+  tenVatTu: string;
+  tenVatTuCha: string;
+  maHang: string;
+  soLuongNhap: number;
+  soLuongXuat: number;
+  namNhap: number;
+  soLuongChuyenSang: number;
+}
+
 export class KeHoachVatTu {
   id: number;
   donViId: number;
@@ -13,18 +34,14 @@ export class KeHoachVatTu {
   kyHieu: string;
   tenHang: string;
   chungLoaiHang: string;
-  tongChiTieuNhapTrongNam: number;
   tongChiTieuCacnamTruoc: number;
   chiTieuNhapCacNamTruoc: Array<ItemDetail>;
-  keHoachNamHienTai: number;
   isEdit: boolean;
-  keHoachNamHienTaiDc: number;
   maDonVi: string;
 
   constructor(vatTuThietBi: Array<VatTuThietBi> = [], detail: Array<ItemDetail> = []) {
     this.vatTuThietBi = vatTuThietBi;
     this.vatTuThietBi[0] = new VatTuThietBi();
-
     this.chiTieuNhapCacNamTruoc = detail;
   }
 }
@@ -118,6 +135,8 @@ export class VatTuCustom {
   vatTuChaId: number;
   vatTuId: number;
   isEdit: boolean = false;
+  sttDonVi: number;
+  donViId: number;
 
   constructor() {
   }

@@ -14,6 +14,11 @@
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
+      <button type="button" class="btn btn-sub btn-xoa"
+              (click)="xoa()" *ngIf="idInput > 0 && formData.value.trangThai == STATUS.DU_THAO">
+        <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+        <span>Xóa</span>
+      </button>
       <button class="btn btn-sub xanh-nhat ml-2" (click)="save(true)"
               *ngIf="(formData.value.trangThai == STATUS.DU_THAO) && userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_QDPDTKTCTDT_THEM')">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
@@ -325,10 +330,10 @@
                     <i class="icon htvbdh_dau-cong"></i>
                   </a>
                   <a *ngIf="!isViewDetail" (click)="editRow(item)">
-                    <i class="fa fa-pencil"></i>
+                    <i class="fa fa-pencil" title="Sửa"></i>
                   </a>
                   <a *ngIf="!isViewDetail" (click)="deleteItem(item)">
-                    <i class="fa fa-trash-o do"></i>
+                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                   </a>
                 </td>
               </tr>

@@ -1,22 +1,25 @@
 <nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
   <!-- (nzChange)="onChange($event)" -->
   <ul nz-menu nzMode="horizontal">
-    <li nz-menu-item nzSelected (click)="selectTab('khnk')" *ngIf="!userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT')">
+    <li nz-menu-item nzSelected (click)="selectTab('khnk')"
+      *ngIf="!userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT')">
       Kế hoạch nhập khác
     </li>
-    <li nz-menu-item (click)="selectTab('thkhnk')" *ngIf="!userService.isChiCuc()  && userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT')">
+    <li nz-menu-item (click)="selectTab('thkhnk')"
+      *ngIf="!userService.isChiCuc()  && userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT')">
       Tổng hợp kế hoạch nhập khác
     </li>
-    <li nz-menu-item (click)="selectTab('qdpdkhnk')" *ngIf="!userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_PTDT_DCKHLCNT')">
-      Quyết định phê duyệt kế hoạch nhập khác
+    <li nz-menu-item (click)="selectTab('qdpdkhnk')"
+      *ngIf="!userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_PTDT_DCKHLCNT')">
+      Quyết định nhập hàng
     </li>
-    <li nz-menu-item (click)="selectTab('qdgnvnh')" *ngIf="!userService.isChiCuc()">
+    <li nz-menu-item (click)="selectTab('qdgnvnh')">
       Quyết định giao nhiệm vụ nhập hàng
     </li>
-    <li nz-menu-item (click)="selectTab('ktcl')" >
+    <li nz-menu-item (click)="selectTab('ktcl')">
       Kiểm tra chất lượng
     </li>
-    <li nz-menu-item (click)="selectTab('nhapkho')" >
+    <li nz-menu-item (click)="selectTab('nhapkho')">
       Nhập kho
     </li>
   </ul>
@@ -39,7 +42,7 @@
       <app-kiem-tra-chat-luong></app-kiem-tra-chat-luong>
     </ng-container>
     <ng-container *ngIf="tabSelected == 'nhapkho'">
-      <app-kiem-tra-chat-luong></app-kiem-tra-chat-luong>
+      <app-nhap-kho></app-nhap-kho>
     </ng-container>
   </div>
 </div>

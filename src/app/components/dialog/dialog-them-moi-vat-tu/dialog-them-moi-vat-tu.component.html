@@ -1,7 +1,7 @@
 <div class="header header-green-background mg-t-16">
   <div class="header-text">
     <div class="title-chi-tieu title-them-moi-vat-tu">
-      <span>THÊM ĐỊA ĐIỂM NHẬP KHO</span>
+      <span>THÔNG TIN GÓI THẦU</span>
     </div>
   </div>
 </div>
@@ -23,7 +23,7 @@
     </div>
     <div nz-col [nzSpan]="5">
       <nz-form-item>
-        <nz-form-label [nzNoColon]="true"> Tên chủng loại hàng hóa</nz-form-label>
+        <nz-form-label [nzNoColon]="true"> Chủng loại hàng DTQG</nz-form-label>
         <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
           <span class="blue-text">{{formData.value.tenCloaiVthh}}</span>
         </nz-form-control>
@@ -39,7 +39,7 @@
     </div>
     <div nz-col [nzSpan]="5">
       <nz-form-item>
-        <nz-form-label [nzNoColon]="true"> Đơn giá mua tối đa gồm VAT (đã được duyệt)</nz-form-label>
+        <nz-form-label [nzNoColon]="true"> Đơn giá mua tối đa được duyệt có VAT (đ/kg)</nz-form-label>
         <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
           <span class="blue-text">{{giaToiDa}}</span>
           <span class="blue-text" *ngIf="giaToiDa != null"> (đ)</span>
@@ -50,15 +50,14 @@
   <div nz-row nzXs="24" nzSm="24" nzMd="24" nzLg="24" nzGutter="24">
     <div nz-col [nzSpan]="4">
       <nz-form-item>
-        <nz-form-label [nzNoColon]="true"> Đơn giá tạm tính</nz-form-label>
-        <nz-input-number formControlName="donGiaTamTinh" [nzSize]="'small'" (input)="calculatorThanhTienDx()"
-          [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+        <nz-form-label nzRequired [nzNoColon]="true"> Đơn giá đề xuất có VAT (đ/kg)</nz-form-label>
+        <nz-input-number formControlName="donGiaTamTinh" [nzSize]="'small'" (input)="calculatorThanhTienDx()" [nzStep]="0.1">
         </nz-input-number>
       </nz-form-item>
     </div>
     <div nz-col [nzSpan]="5">
       <nz-form-item>
-        <nz-form-label [nzNoColon]="true"> Đơn giá đã duyệt gồm thuế VAT</nz-form-label>
+        <nz-form-label [nzNoColon]="true"> Đơn giá được duyệt có VAT (đ/kg)</nz-form-label>
         <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
           <span class="blue-text">{{formattedDonGiaVat}} (đ)</span>
         </nz-form-control>
@@ -68,19 +67,19 @@
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Tổng số lượng nhập</nz-form-label>
         <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-          <span class="blue-text">{{formattedSoLuong}} (kg)</span>
+          <span class="blue-text">{{formattedSoLuong}} (Tấn)</span>
         </nz-form-control>
       </nz-form-item>
     </div>
     <div nz-col [nzSpan]="5">
       <nz-form-item>
-        <nz-form-label [nzNoColon]="true"> Tổng thành tiền tạm tính (đ)</nz-form-label>
+        <nz-form-label [nzNoColon]="true"> Tổng thành tiền tạm tính theo giá đề xuất (đ)</nz-form-label>
         <span class="blue-text">{{formattedThanhTienDx}} (đ)</span>
       </nz-form-item>
     </div>
     <div nz-col [nzSpan]="5">
       <nz-form-item>
-        <nz-form-label [nzNoColon]="true"> Tổng thành tiền theo đơn giá đã duyệt (đ)</nz-form-label>
+        <nz-form-label [nzNoColon]="true"> Tổng thành tiền theo đơn giá được duyệt có VAT (đ)</nz-form-label>
         <span class="blue-text">{{formattedThanhTien}} (đ)</span>
       </nz-form-item>
     </div>
@@ -96,11 +95,11 @@
         <th nzWidth="240px" class="text-center">Chi cục DTNN</th>
         <th nzWidth="170px" class="text-center">Điểm kho</th>
         <th nzWidth="190px" class="text-center">Địa điểm kho</th>
-        <th nzWidth="100px" class="text-center wrap-text">SL theo chỉ tiêu KH năm</th>
-        <th nzWidth="130px" class="text-center wrap-text">SL theo KH năm đã được duyệt</th>
-        <th nzWidth="100px" class="text-center">Số lượng nhập</th>
-        <th nzWidth="165px" class="text-center wrap-text">Thành tiền tạm tính (đ)</th>
-        <th nzWidth="150px" class="text-center wrap-text">Thành tiền theo đơn giá đã duyệt (đ)</th>
+        <th nzWidth="100px" class="text-center wrap-text">Chỉ tiêu kế hoạch được giao (Tấn)</th>
+        <th nzWidth="130px" class="text-center wrap-text">Số đã thực hiện (Tấn)</th>
+        <th nzWidth="100px" class="text-center">Số đề xuất (Tấn)</th>
+        <th nzWidth="165px" class="text-center wrap-text">Thành tiền tạm tính theo giá đề xuất (đ)</th>
+        <th nzWidth="150px" class="text-center wrap-text">Thành tiền theo đơn giá được duyệt có VAT (đ)</th>
         <th nzWidth="90px" [nzRight]="true" class="text-center">Hành động</th>
       </tr>
     </thead>
@@ -137,11 +136,11 @@
           <td>{{ dataChiCuc.soLuongTheoChiTieu | number : '1.0-1' : 'vi_VN' }}</td>
           <td>{{ dataChiCuc.soLuongDaMua | number : '1.0-1' : 'vi_VN' }}</td>
           <td>{{ dataChiCuc.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
-          <td>{{ dataChiCuc.soLuong * formData.value.donGiaTamTinh | number : '1.0-1' : 'vi_VN' }}</td>
-          <td>{{ dataChiCuc.soLuong * formData.value.donGiaVat | number : '1.0-1' : 'vi_VN' }}</td>
+          <td>{{ dataChiCuc.soLuong * formData.value.donGiaTamTinh * 1000 | number : '1.0-1' : 'vi_VN' }}</td>
+          <td>{{ dataChiCuc.soLuong * formData.value.donGiaVat * 1000 | number : '1.0-1' : 'vi_VN' }}</td>
           <td *ngIf="!isReadOnly" class="text-left" [nzRight]="true">
             <a (click)="deleteRow(i,-1,-1)">
-              <i class="fa fa-trash-o do"></i>
+              <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>
         </tr>
@@ -182,11 +181,11 @@
             <td></td>
             <td></td>
             <td>{{itemChild.soLuong}}</td>
-            <td>{{ itemChild.soLuong * formData.value.donGiaTamTinh | number : '1.0-1' : 'vi_VN' }}</td>
-            <td>{{ itemChild.soLuong * formData.value.donGiaVat | number : '1.0-1' : 'vi_VN' }}</td>
+            <td>{{ itemChild.soLuong * formData.value.donGiaTamTinh * 1000 | number : '1.0-1' : 'vi_VN' }}</td>
+            <td>{{ itemChild.soLuong * formData.value.donGiaVat * 1000 | number : '1.0-1' : 'vi_VN' }}</td>
             <td [nzRight]="true">
               <a (click)="deleteRow(i,y)">
-                <i class="fa fa-trash-o do"></i>
+                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
               </a>
             </td>
           </tr>

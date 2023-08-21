@@ -1,1 +1,20 @@
-<p>xuat-hang-dtqg-th-bkk works!</p>
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="level1">
+  <ul nz-menu nzMode="horizontal">
+    <li nz-menu-item [nzSelected]="tabSelected==0" (click)="selectTab(0)">
+      Toàn bộ danh sách xuất hàng DTQG trong trường hợp bất khả kháng theo quy định tại HĐ bảo hiểm
+    </li>
+    <li [nzSelected]="tabSelected==1" nz-menu-item (click)="selectTab(1)">
+      Tổng hợp danh sách VT, TB hỏng hóc, giảm chất lượng do nguyên nhân bất khả kháng
+    </li>
+  </ul>
+</nz-affix>
+<div class="contentBor chi-tieu__body giao-ke-hoach">
+  <div class="contentDetail">
+    <ng-container *ngIf="tabSelected == 0">
+      <app-toan-bo-danh-sach-hang-bkk (tabFocus)="receivedTab($event)"></app-toan-bo-danh-sach-hang-bkk>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 1">
+      <app-tong-hop-danh-sach-hang-bkk (tabFocus)="receivedTab($event)"></app-tong-hop-danh-sach-hang-bkk>
+    </ng-container>
+  </div>
+</div>

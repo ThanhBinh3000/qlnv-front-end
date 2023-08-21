@@ -4,6 +4,11 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
+    <button *ngIf="!formData.value.idXc" type="button"
+            class="btn btn-sub xanh-nhat" >
+      <i class="icon htvbdh_tcdt_tao-qd"></i>
+      <span>Tạo QĐ xuất cấp</span>
+    </button>
     <button
       *ngIf="(formData.value.trangThai == STATUS.DU_THAO) && userService.isTongCuc() && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDPDPA_BANHANH')"
       type="button" class="btn btn-sub xanh-nhat" (click)="saveAndSend(STATUS.BAN_HANH,'Bạn có muốn ban hành ?','Bạn đã ban hành thành công!')">
@@ -51,7 +56,7 @@
               <nz-form-label nzRequired [nzNoColon]="true"> Năm kế hoạch
               </nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
-                <nz-select formControlName="nam" nzAllowClear [nzDisabled]="true">
+                <nz-select formControlName="nam" nzAllowClear >
                   <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                 </nz-select>
               </nz-form-control>
@@ -155,7 +160,7 @@
                 Căn cứ pháp lý
               </nz-form-label>
               <div class="list-file">
-                <file-list [disabled]="isDisabled()" [data]="canCu"></file-list>
+                <file-list [isCanCuPL]="true" [isViewDetail]="isView"  [data]="canCu"></file-list>
               </div>
             </nz-form-item>
           </div>
@@ -165,7 +170,7 @@
                 File đính kèm QĐ đã ban hành
               </nz-form-label>
               <div class="list-file">
-                <file-list [disabled]="isDisabled()" [data]="fileDinhKem"></file-list>
+                <file-list [isViewDetail]="isView" [data]="fileDinhKem"></file-list>
               </div>
             </nz-form-item>
           </div>
