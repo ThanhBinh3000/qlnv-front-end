@@ -15,6 +15,7 @@ import {HttpClient} from "@angular/common/http";
 import {StorageService} from "src/app/services/storage.service";
 import {DonviService} from "src/app/services/donvi.service";
 import {Base2Component} from "./../../../../components/base2/base2.component";
+import {TimKiemVanBanComponent} from "./tim-kiem-van-ban/tim-kiem-van-ban.component";
 
 
 @Component({
@@ -676,5 +677,23 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
         });
       }
     }
+  }
+
+  openDialogDsVanBanQuyChuanKyThuat() {
+    this.dataTable = [];
+    const modalQD = this.modal.create({
+      nzTitle: 'Tìm kiếm văn bản thay thế',
+      nzContent: TimKiemVanBanComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {},
+    });
+    modalQD.afterClose.subscribe((data) => {
+      if (data) {
+        console.log(data, 'aaaaaaaaaaaaaaa');
+      }
+    });
   }
 }
