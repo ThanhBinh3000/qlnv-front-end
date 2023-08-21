@@ -267,6 +267,7 @@ export class DialogThongTinCanBoComponent implements OnInit {
         department: pb ? pb.maDvi + ' - ' + pb.tenDvi : '',
         ghiChu: dataDt.ghiChu,
       });
+      // this.changeDvql();
       // let res = await this.qlNSDService.getDetail(dataDt.id);
       // const dataEdit = res.data;
       // if (dataEdit) {
@@ -294,7 +295,7 @@ export class DialogThongTinCanBoComponent implements OnInit {
       department: '',
     });
     this.suggestPhongBan = [];
-    this.optionsPhongBanFilter = this.optionsPhongBan.filter(s => s.maDviCha == this.formData.get('dvql').value.includes('-') ? this.formData.get('dvql').value.split('-')[0].trim() : this.formData.get('dvql').value);
+    this.optionsPhongBanFilter = this.optionsPhongBan.filter(s => s.maDviCha == (this.formData.get('dvql').value.includes('-') ? this.formData.get('dvql').value.split('-')[0].trim() : this.formData.get('dvql').value));
     this.suggestPhongBan = this.optionsPhongBanFilter;
   }
 }
