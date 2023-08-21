@@ -15,6 +15,7 @@ import {NewHangHoaComponent} from "./new-hang-hoa/new-hang-hoa.component";
 import {DanhMucService} from "../../../services/danhmuc.service";
 import {UserService} from "../../../services/user.service";
 import {DanhMucTieuChuanService} from "../../../services/quantri-danhmuc/danhMucTieuChuan.service";
+import {TYPE_PAG} from "../../../constants/config";
 
 
 @Component({
@@ -49,6 +50,8 @@ export class DanhMucHangHoaComponent implements OnInit {
   listOfOption: Array<{ maDvi: string; tenDvi: string }> = [];
   listOfTagOption: any[] = [];
   listDvqlReq: any[] = [];
+
+  dviQly : string = 'tat-ca';
 
   constructor(
     private router: Router,
@@ -100,7 +103,7 @@ export class DanhMucHangHoaComponent implements OnInit {
    */
 
   async layTatCaDonViTheoTree(id?) {
-    await this.dmHangService.layTatCaHangHoaDviQly().then((res: OldResponseData) => {
+    await this.dmHangService.layTatCaHangHoaDviQly(this.dviQly).then((res: OldResponseData) => {
       if (res.msg == MESSAGE.SUCCESS) {
         this.nodes = res.data;
         if (id) {
@@ -397,5 +400,10 @@ export class DanhMucHangHoaComponent implements OnInit {
         this.ngOnInit()
       }
     });
+  }
+
+  async changeDviQly(loai) {
+    this.dviQly = loai;
+    await this.layTatCaDonViTheoTree();
   }
 }

@@ -26,7 +26,8 @@ export class ThemmoiQuyetdinhKetquaChaogiaComponent extends Base2Component imple
   @Input() idInput: number;
 
   maTrinh: String;
-
+  selected: boolean = false;
+  danhSachCtiet: any[] = [];
   showFromTT: boolean;
 
   constructor(
@@ -45,11 +46,11 @@ export class ThemmoiQuyetdinhKetquaChaogiaComponent extends Base2Component imple
       idPdKhDtl: [],
       idPdKhHdr: [],
       namKh: [dayjs().get('year'), [Validators.required]],
-      soQdKq: [, [Validators.required]],
-      ngayHluc: [, [Validators.required]],
-      ngayKy: [, [Validators.required]],
-      soQd: [, [Validators.required]],
-      trichYeu: [, [Validators.required]],
+      soQdKq: [],
+      ngayHluc: [],
+      ngayKy: [],
+      soQd: ['', [Validators.required]],
+      trichYeu: [],
       maDvi: [],
       tenDvi: [],
       diaDiemChaoGia: [],
@@ -65,6 +66,7 @@ export class ThemmoiQuyetdinhKetquaChaogiaComponent extends Base2Component imple
       tenTrangThai: ['Dự thảo'],
       lyDoTuChoi: [null],
       fileName: [],
+      pthucMuaTrucTiep: ['']
     });
   }
 
@@ -88,26 +90,34 @@ export class ThemmoiQuyetdinhKetquaChaogiaComponent extends Base2Component imple
   async getDetail(idInput) {
     if (idInput) {
       let res = await this.detail(idInput);
-      console.log(res, 999);
+      console.log("1", res);
 
       if (res) {
         this.formData.patchValue({
           soQdKq: res.soQdKq?.split('/')[0],
         })
         this.fileDinhKem = res.fileDinhKems;
-        this.dataTable = res.children;
-        await this.onChangeTtin(res.idPdKhDtl);
+        if(res.danhSachCtiet){
+          this.danhSachCtiet = res.danhSachCtiet;
+          this.showDetail(event, this.danhSachCtiet[0])
+        }else{
+          await this.onChangeTtin(res.idPdKhDtl);
+        }
       }
     }
   }
 
   async save(isGuiDuyet?: boolean) {
+    this.setValidator(isGuiDuyet)
     let body = this.formData.value;
     if (this.formData.get('soQdKq').value) {
       body.soQdKq = this.formData.get('soQdKq').value + this.maTrinh;
     }
+    body.ngayHluc = body.ngayHluc != null ? dayjs(body.ngayHluc).format('YYYY-MM-DD') : null;
+    body.ngayKy = body.ngayKy != null ? dayjs(body.ngayKy).format('YYYY-MM-DD') : null;
     body.fileDinhKems = this.fileDinhKem;
-    // body.children = this.dataTable;
+    body.danhSachCtiet = this.danhSachCtiet;
+    console.log(body)
     let res = await this.createUpdate(body);
     if (res) {
       if (isGuiDuyet) {
@@ -119,7 +129,22 @@ export class ThemmoiQuyetdinhKetquaChaogiaComponent extends Base2Component imple
     }
   }
 
+  setValidator(isGuiDuyet) {
+    if (isGuiDuyet) {
+      if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDC) {
+        this.formData.controls["soQdKq"].setValidators([Validators.required]);
+      } else {
+        this.formData.controls["soQdKq"].clearValidators();
+      }
+    } else {
+      this.formData.controls["soQdKq"].clearValidators();
+    }
+  }
+
   async guiDuyet() {
+    if (this.formData.invalid) {
+      return;
+    }
     let trangThai = '';
     let msg = '';
     switch (this.formData.get('trangThai').value) {
@@ -140,11 +165,11 @@ export class ThemmoiQuyetdinhKetquaChaogiaComponent extends Base2Component imple
         msg = MESSAGE.PHE_DUYET_CONFIRM
         break;
       }
-      case STATUS.DA_DUYET_LDC: {
-        trangThai = STATUS.BAN_HANH;
-        msg = MESSAGE.PHE_DUYET_CONFIRM
-        break;
-      }
+      // case STATUS.DA_DUYET_LDC: {
+      //   trangThai = STATUS.BAN_HANH;
+      //   msg = MESSAGE.PHE_DUYET_CONFIRM
+      //   break;
+      // }
     }
     this.approve(this.idInput, trangThai, msg);
   }
@@ -177,6 +202,7 @@ export class ThemmoiQuyetdinhKetquaChaogiaComponent extends Base2Component imple
       namKh: this.formData.value.namKh,
       loaiVthh: this.loaiVthh,
       trangThai: STATUS.HOAN_THANH_CAP_NHAT,
+      pthucMuaTrucTiep: '01',
       maDvi: this.userInfo.MA_DVI,
       paggingReq: {
         limit: this.globals.prop.MAX_INTERGER,
@@ -186,7 +212,8 @@ export class ThemmoiQuyetdinhKetquaChaogiaComponent extends Base2Component imple
     let listTb = [];
     let res = await this.chaogiaUyquyenMualeService.search(body);
     if (res.data) {
-      listTb = res.data.content;
+      listTb = res.data.content.filter(x => x.soQdKq == null || x.soQdKq == "");
+      console.log(listTb)
     }
     const modalQD = this.modal.create({
       nzTitle: 'Danh sách thông tin chào giá',
@@ -197,7 +224,7 @@ export class ThemmoiQuyetdinhKetquaChaogiaComponent extends Base2Component imple
       nzFooter: null,
       nzComponentParams: {
         dataTable: listTb,
-        dataHeader: ['Số quyết định phê duyệt KH BTT', 'Loại hàng hóa', 'Chủng loại hàng hóa'],
+        dataHeader: ['Số quyết định phê duyệt KH MTT', 'Loại hàng hóa', 'Chủng loại hàng hóa'],
         dataColumn: ['soQd', 'tenLoaiVthh', 'tenCloaiVthh']
       },
     });
@@ -225,7 +252,8 @@ export class ThemmoiQuyetdinhKetquaChaogiaComponent extends Base2Component imple
         idPdKhDtl: data.id,
         idPdKhHdr: data.hhQdPheduyetKhMttHdr.id
       })
-      this.dataTable = data.listChaoGia;
+      this.danhSachCtiet = data.children.length > 0 ? data.children : data.children2;
+      this.showDetail(event, this.danhSachCtiet[0])
       // if (this.dataTable) {
       //   this.dataTable.forEach((item) => {
       //     item.fileDinhKems.id = null;
@@ -234,6 +262,30 @@ export class ThemmoiQuyetdinhKetquaChaogiaComponent extends Base2Component imple
       //   })
       // }
     }
+  }
+
+  calcTong() {
+    if (this.danhSachCtiet) {
+      const sum = this.danhSachCtiet.reduce((prev, cur) => {
+        prev += cur.soLuong;
+        return prev;
+      }, 0);
+      return sum;
+    }
+  }
+  idRowSelect: number;
+  async showDetail($event, data: any) {
+    await this.spinner.show();
+    if ($event.type == "click") {
+      this.selected = false;
+      $event.target.parentElement.parentElement.querySelector(".selectedRow")?.classList.remove("selectedRow");
+      $event.target.parentElement.classList.add("selectedRow");
+    } else {
+      this.selected = true;
+    }
+    this.idRowSelect = data.id;
+    this.dataTable = data.listChaoGia
+    await this.spinner.hide();
   }
 
   dataEdit: { [key: string]: { edit: boolean; data: ChiTietThongTinBanTrucTiepChaoGia } } = {};

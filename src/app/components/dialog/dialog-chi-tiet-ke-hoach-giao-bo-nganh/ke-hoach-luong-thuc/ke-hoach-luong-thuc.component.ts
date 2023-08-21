@@ -33,13 +33,21 @@ export class KeHoachLuongThucComponent implements OnInit, OnChanges {
   ltThocMuaChange = new EventEmitter<number>();
 
   @Input()
+  ltThocTon: number = 0;
+  @Output()
+  ltThocTonChange = new EventEmitter<number>();
+
+  @Input()
+  ltGaoTon: number = 0;
+  @Output()
+  ltGaoTonChange = new EventEmitter<number>();
+
+  @Input()
   isView: boolean = false;
 
   dataTable = [];
   @Input() namHienTai: number;
   @Input() maBoNganh: string;
-  ltThocTon: number = 0;
-  ltGaoTon: number = 0;
   ltThocDuTru: number = 0;
   ltGaoDuTru: number = 0;
   amount = AMOUNT_ONE_DECIMAL;
@@ -53,24 +61,24 @@ export class KeHoachLuongThucComponent implements OnInit, OnChanges {
   }
 
   initData() {
-    this.quanLyHangTrongKhoService.getTrangThaiHt({
-      nam: this.namHienTai,
-      // maDvi: this.maBoNganh,
-      listLoaiVthh: ['0101', '0102']
-    }).then(res => {
-      if (res.msg == MESSAGE.SUCCESS) {
-        for (let item in res.data) {
-          let dataItem = res.data[item];
-          if (dataItem.loaiVthh === '0101') {
-            this.ltThocTon = dataItem.duDau;
-            this.ltThocDuTru = dataItem.slHienThoi;
-          } else if (dataItem.loaiVthh === '0102') {
-            this.ltGaoTon = dataItem.duDau;
-            this.ltGaoDuTru = dataItem.slHienThoi;
-          }
-        }
-      }
-    })
+    // this.quanLyHangTrongKhoService.getTrangThaiHt({
+    //   nam: this.namHienTai,
+    //   // maDvi: this.maBoNganh,
+    //   listLoaiVthh: ['0101', '0102']
+    // }).then(res => {
+    //   if (res.msg == MESSAGE.SUCCESS) {
+    //     for (let item in res.data) {
+    //       let dataItem = res.data[item];
+    //       if (dataItem.loaiVthh === '0101') {
+    //         this.ltThocTon = dataItem.duDau;
+    //         this.ltThocDuTru = dataItem.slHienThoi;
+    //       } else if (dataItem.loaiVthh === '0102') {
+    //         this.ltGaoTon = dataItem.duDau;
+    //         this.ltGaoDuTru = dataItem.slHienThoi;
+    //       }
+    //     }
+    //   }
+    // })
   }
 
   onChangeInput() {
@@ -78,12 +86,14 @@ export class KeHoachLuongThucComponent implements OnInit, OnChanges {
     this.ltThocXuatChange.emit(this.ltThocXuat);
     this.ltGaoXuatChange.emit(this.ltGaoXuat);
     this.ltGaoMuaChange.emit(this.ltGaoMua);
+    this.ltGaoTonChange.emit(this.ltGaoTon);
+    this.ltThocTonChange.emit(this.ltThocTon);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     /*if (!changes.maBoNganh.isFirstChange() || this.maBoNganh == '01') {
       this.initData();
     }*/
-    this.initData();
+    // this.initData();
   }
 }

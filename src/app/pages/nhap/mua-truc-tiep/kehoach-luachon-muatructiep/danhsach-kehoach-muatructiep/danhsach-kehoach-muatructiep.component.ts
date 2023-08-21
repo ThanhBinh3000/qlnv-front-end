@@ -102,8 +102,7 @@ export class DanhsachKehoachMuatructiepComponent extends Base2Component implemen
         this.initData()
       ]);
       await this.spinner.hide();
-    }
-    catch (e) {
+    } catch (e) {
       console.log('error: ', e)
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -211,5 +210,49 @@ export class DanhsachKehoachMuatructiepComponent extends Base2Component implemen
     this.isViewChiTiet = isView;
     this.idSelected = id;
     this.isDetail = true;
+  }
+
+  goDetail(id: number, roles?: any) {
+    if (!this.checkPermission(roles)) {
+      return
+    }
+    this.idSelected = id;
+    this.isViewChiTiet = false;
+    this.isDetail = true;
+  }
+
+  checkQuyenXem(trangThai: string) {
+    if (this.userService.isAccessPermisson('NHDTQG_PTMTT_KHMTT_LT_DEXUAT_XEM')) {
+      if (this.userService.isAccessPermisson('NHDTQG_PTMTT_KHMTT_LT_DEXUAT_THEM')) {
+        switch (trangThai) {
+          case this.STATUS.DU_THAO:
+          case this.STATUS.TU_CHOI_TP:
+          case this.STATUS.TU_CHOI_LDC:
+          case this.STATUS.TU_CHOI_CBV:
+            return false;
+          case this.STATUS.CHO_DUYET_TP:
+          case this.STATUS.CHO_DUYET_LDC:
+          case this.STATUS.DA_DUYET_LDC:
+          case this.STATUS.DA_DUYET_CBV:
+            return true;
+        }
+      } else {
+        switch (trangThai) {
+          case this.STATUS.DU_THAO:
+          case this.STATUS.TU_CHOI_TP:
+          case this.STATUS.TU_CHOI_LDC:
+          case this.STATUS.TU_CHOI_CBV:
+          case this.STATUS.DA_DUYET_CBV:
+            return true;
+          case this.STATUS.CHO_DUYET_TP:
+            return !this.userService.isAccessPermisson("NHDTQG_PTMTT_KHMTT_LT_DEXUAT_DUYET_TP");
+          case this.STATUS.CHO_DUYET_LDC:
+            return !this.userService.isAccessPermisson("NHDTQG_PTMTT_KHMTT_LT_DEXUAT_DUYET_LDC");
+          case this.STATUS.DA_DUYET_LDC:
+            return !this.userService.isAccessPermisson("NHDTQG_PTMTT_KHMTT_LT_DEXUAT_DUYET_CANBOVU");
+        }
+      }
+    }
+    return false;
   }
 }

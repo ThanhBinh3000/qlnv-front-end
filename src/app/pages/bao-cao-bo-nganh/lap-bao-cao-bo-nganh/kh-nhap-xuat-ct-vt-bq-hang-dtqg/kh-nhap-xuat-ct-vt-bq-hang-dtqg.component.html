@@ -98,7 +98,7 @@
             <td>{{ data.tenTrangThai }}</td>
             <td class="text-left">
               <a (click)="goDetail(data.id, true)">
-                <i class="fa fa-eye"></i>
+                <i class="fa fa-eye" title="Xem chi tiết"></i>
               </a>
               <a *ngIf="data.trangThai == STATUS.BAN_HANH" (click)="download(data.id, 'pdf')">
                 <i class="icon htvbdh_file-pdf"></i>
@@ -107,10 +107,10 @@
                 <i class="icon htvbdh_file-excel"></i>
               </a>
               <a *ngIf="data.trangThai != STATUS.BAN_HANH" (click)="goDetail(data.id, false)">
-                <i class="fa fa-pencil"></i>
+                <i class="fa fa-pencil" title="Sửa"></i>
               </a>
               <a *ngIf="data.trangThai != STATUS.BAN_HANH" (click)="xoaItem(data)">
-                <i class="fa fa-trash-o do"></i>
+                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
               </a>
             </td>
           </tr>

@@ -445,10 +445,10 @@
                           <td class="text-center" nzRight
                               *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC)">
                             <a (click)="themMoiItem(item, 'sua', y, dataTable[idx])">
-                              <i class="fa fa-pencil"></i>
+                              <i class="fa fa-pencil" title="Sửa"></i>
                             </a>
                             <a (click)="deleteRow(item)">
-                              <i class="fa fa-trash-o do"></i>
+                              <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                             </a>
                           </td>
                         </tr>

@@ -26,8 +26,9 @@ import { PhuLucMttComponent } from './hopdong-phuluc-hopdong/phu-luc-mtt/phu-luc
     ComponentsModule,
     MainModule,
   ],
-  exports: [
-    HopdongBangkePhieumuahangComponent
-  ]
+    exports: [
+        HopdongBangkePhieumuahangComponent,
+        ThemmoiHopdongPhulucComponent
+    ]
 })
 export class HopdongBangkePhieumuahangModule { }

@@ -45,7 +45,7 @@
             <h3> Danh sách bảng kê thu mua lẻ </h3>
             <div class="buttons">
                 <button type="button" class="btn btn-do" (click)="deleteMulti(['NHDTQG_PTDT_KHLCNT_TONGHOP_XOA'])">
-                    <i class="fa fa-trash-o do"></i>
+                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                     <span>Xóa</span>
                 </button>
                 <button *ngIf="userService.isAccessPermisson('NHDTQG_PTMTT_HDBKPM_LT_BKTML_EXP')" type="button"
@@ -179,11 +179,11 @@
                         <td class="text-left">
                             <a *ngIf="userService.isAccessPermisson('NHDTQG_PTMTT_HDBKPM_LT_BKTML_XEM')"
                                 (click)="themMoiBangKeMuaLe($event,data,i)">
-                                <i class="fa fa-eye"></i>
+                                <i class="fa fa-eye" title="Xem chi tiết"></i>
                             </a>
                             <a *ngIf="userService.isAccessPermisson('NHDTQG_PTMTT_HDBKPM_LT_BKTML_XOA')"
                                 (click)="delete(data)">
-                                <i class="fa fa-trash-o do"></i>
+                                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                             </a>
                         </td>
                     </tr>

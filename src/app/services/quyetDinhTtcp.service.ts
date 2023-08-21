@@ -18,4 +18,9 @@ export class QuyetDinhTtcpService extends BaseService {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/giao-chi-tieu-von-dau-nam/quyet-dinh/ttcp/chi-tiet-nam/${nam}`;
     return this.httpClient.get(url).toPromise();
   }
+
+  chiTietTheoSoQd(soQd: any): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/giao-chi-tieu-von-dau-nam/quyet-dinh/ttcp/chi-tiet-so-qd/${soQd}`;
+    return this.httpClient.get(url).toPromise();
+  }
 }

@@ -3,7 +3,7 @@ import { ChiTietMenu } from "src/app/models/ChiTietMenu";
 export const XUAT_MAIN_ROUTE = 'xuat';
 export const XUAT_ROUTE_LIST: Array<ChiTietMenu> = [
   {
-    icon: 'htvbdh_tcdt_nhaptheokehoach',
+    icon: 'htvbdh_tcdt_vien_tro',
     title: 'Xuất cứu trợ, viện trợ - xuất cấp',
     url: `/cuu-tro-vien-tro`,
     dropdown: '/cuu-tro-vien-tro',

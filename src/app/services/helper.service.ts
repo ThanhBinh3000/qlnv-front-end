@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import * as moment from 'moment';
 import Cleave from 'cleave.js';
 import * as XLSX from 'xlsx';
@@ -117,6 +117,24 @@ export class HelperService {
   public removeValidators(form: FormGroup) {
     for (const key in form.controls) {
       form.get(key).clearValidators();
+    }
+  }
+
+  async ignoreRequiredForm(formGroup: FormGroup) {
+    for (let controlsKey in formGroup.controls) {
+      const control = formGroup.controls[controlsKey];
+      if (control.validator) {
+        control.setValidators(Validators.nullValidator);
+      }
+    }
+  }
+
+  async restoreRequiredForm(formGroup: FormGroup) {
+    for (let controlsKey in formGroup.controls) {
+      const control = formGroup.controls[controlsKey];
+      if (control.validator) {
+        control.setValidators(Validators.required);
+      }
     }
   }
 }

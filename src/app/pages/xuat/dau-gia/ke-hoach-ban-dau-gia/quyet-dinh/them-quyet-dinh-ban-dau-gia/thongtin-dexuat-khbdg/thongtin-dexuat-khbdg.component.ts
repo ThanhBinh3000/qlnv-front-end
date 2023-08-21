@@ -1,14 +1,17 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
-import { FormBuilder, FormGroup } from "@angular/forms";
-import { Globals } from "../../../../../../../shared/globals";
-import { MESSAGE } from "../../../../../../../constants/message";
-import { DanhMucService } from "../../../../../../../services/danhmuc.service";
-import { NgxSpinnerService } from 'ngx-spinner';
-import { HelperService } from 'src/app/services/helper.service';
-import { NzModalService } from "ng-zorro-antd/modal";
-import { DeXuatKhBanDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/deXuatKhBanDauGia.service';
-import { DialogThemDiaDiemPhanLoComponent } from 'src/app/components/dialog/dialog-them-dia-diem-phan-lo/dialog-them-dia-diem-phan-lo.component';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
+import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
+import {FormBuilder, FormGroup} from "@angular/forms";
+import {Globals} from "../../../../../../../shared/globals";
+import {DanhMucService} from "../../../../../../../services/danhmuc.service";
+import {NgxSpinnerService} from 'ngx-spinner';
+import {HelperService} from 'src/app/services/helper.service';
+import {NzModalService} from "ng-zorro-antd/modal";
+import {
+  DeXuatKhBanDauGiaService
+} from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/deXuatKhBanDauGia.service';
+import {
+  DialogThemDiaDiemPhanLoComponent
+} from 'src/app/components/dialog/dialog-them-dia-diem-phan-lo/dialog-them-dia-diem-phan-lo.component';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
 import dayjs from 'dayjs';
 
 @Component({
@@ -20,7 +23,6 @@ import dayjs from 'dayjs';
 export class ThongtinDexuatKhbdgComponent implements OnChanges {
   @Input() title;
   @Input() dataInput;
-  @Output() soLuongChange = new EventEmitter<number>();
   @Input() isView;
   @Input() isCache: boolean = false;
   @Input() isTongHop;
@@ -51,14 +53,15 @@ export class ThongtinDexuatKhbdgComponent implements OnChanges {
       tgianTtoan: [null,],
       tgianTtoanGhiChu: [null,],
       pthucTtoan: [null,],
+      tenPthucTtoan: [null,],
       tgianGnhan: [null,],
       tgianGnhanGhiChu: [null,],
       pthucGnhan: [null,],
-      thongBaoKh: [null,],
+      thongBao: [null,],
       khoanTienDatTruoc: [null,],
-      tongSoLuong: [null,],
+      tongSoLuong: [null],
       donViTinh: [null,],
-      tongTienGiaKdTheoDgiaDd: [null,],
+      tongTienGiaKdTheoDgiaDd: [null],
       tongKhoanTienDtTheoDgiaDd: [null],
       diaChi: [],
       namKh: [dayjs().get('year'),],
@@ -76,7 +79,6 @@ export class ThongtinDexuatKhbdgComponent implements OnChanges {
           thoiGianDuKien: (this.dataInput.tgianDkienTu && this.dataInput.tgianDkienDen) ? [this.dataInput.tgianDkienTu, this.dataInput.tgianDkienDen] : null
         })
         this.dataTable = this.dataInput.children
-        await this.ptThanhToan(this.dataInput)
         this.calculatorTable();
       } else {
         this.formData.reset();
@@ -86,6 +88,7 @@ export class ThongtinDexuatKhbdgComponent implements OnChanges {
   }
 
   expandSet = new Set<number>();
+
   onExpandChange(id: number, checked: boolean): void {
     if (checked) {
       this.expandSet.add(id);
@@ -118,46 +121,24 @@ export class ThongtinDexuatKhbdgComponent implements OnChanges {
   }
 
   calculatorTable() {
-    let tongSoLuong: number = 0;
-    let tongTienGiaKdTheoDgiaDd: number = 0;
-    let tongKhoanTienDtTheoDgiaDd: number = 0;
     this.dataTable.forEach((item) => {
+      item.tongGiaKdiemDd = 0;
+      item.tongTienDtruocDd = 0;
       item.children.forEach((child) => {
-        item.soTienDtruocDx += child.soLuongDeXuat * child.donGiaDeXuat * this.formData.value.khoanTienDatTruoc / 100;
-        item.soTienDtruocDd += child.soLuongDeXuat * child.donGiaDuocDuyet * this.formData.value.khoanTienDatTruoc / 100;
-        tongSoLuong += child.soLuongDeXuat;
-        tongTienGiaKdTheoDgiaDd += child.soLuongDeXuat * child.donGiaDuocDuyet;
+        child.giaKhoiDiemDd = child.soLuongDeXuat * child.donGiaDuocDuyet;
+        child.soTienDtruocDd = child.soLuongDeXuat * child.donGiaDuocDuyet * this.formData.value.khoanTienDatTruoc / 100;
+        item.tongGiaKdiemDd += child.giaKhoiDiemDd;
+        item.tongTienDtruocDd += child.soTienDtruocDd;
       })
-      tongKhoanTienDtTheoDgiaDd += item.soTienDtruocDd
-    });
+    })
     this.formData.patchValue({
-      tongSoLuong: tongSoLuong,
-      tongTienGiaKdTheoDgiaDd: tongTienGiaKdTheoDgiaDd,
-      tongKhoanTienDtTheoDgiaDd: tongKhoanTienDtTheoDgiaDd,
+      tongSoLuong: this.dataTable.reduce((prev, cur) => prev + cur.tongSlXuatBanDx, 0),
+      tongTienGiaKdTheoDgiaDd: this.dataTable.reduce((prev, cur) => prev + cur.tongGiaKdiemDd, 0),
+      tongKhoanTienDtTheoDgiaDd: this.dataTable.reduce((prev, cur) => prev + cur.tongTienDtruocDd, 0),
     });
   }
-
 
   isDisable() {
     return false;
   }
-
-  async ptThanhToan(data) {
-    if (data.pthucTtoan == '1') {
-      this.listPhuongThucThanhToan = [
-        {
-          ma: '1',
-          giaTri: 'Tiền mặt',
-        },
-      ];
-    } else {
-      this.listPhuongThucThanhToan = [
-        {
-          ma: '2',
-          giaTri: 'Chuyển khoản',
-        },
-      ];
-    }
-  }
-
 }

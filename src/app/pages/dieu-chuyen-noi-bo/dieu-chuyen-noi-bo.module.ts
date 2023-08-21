@@ -18,6 +18,12 @@ import { TongHopDieuChuyenTaiTongCuc } from './tong-hop-dieu-chuyen-tai-tong-cuc
 import { TongHopDieuChuyenCapTongCuc } from './tong-hop-dieu-chuyen-tai-tong-cuc/tong-hop-dieu-chuyen-cap-tong-cuc/tong-hop-dieu-chuyen-cap-tong-cuc.component';
 import { ChiTietTongHopDieuChuyenCapTongCuc } from './tong-hop-dieu-chuyen-tai-tong-cuc/tong-hop-dieu-chuyen-cap-tong-cuc/chi-tiet-tong-hop-dieu-chuyen-cap-tong-cuc/chi-tiet-tong-hop-dieu-chuyen-cap-tong-cuc.component';
 import { DialogTuChoiTongHopDieuChuyenComponent } from './tong-hop-dieu-chuyen-tai-cuc/components/dialog-tu-choi/dialog-tu-choi.component';
+import { QuyetDinhDieuChuyenModule } from './quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen.module';
+import { ThemMoiBaoCaoComponent } from './bao-cao-dieu-chuyen/bao-cao/them-moi-bao-cao/them-moi-bao-cao.component';
+import { BaoCaoComponent } from './bao-cao-dieu-chuyen/bao-cao/bao-cao.component';
+import { BaoCaoDieuChuyenComponent } from './bao-cao-dieu-chuyen/bao-cao-dieu-chuyen.component';
+import { BienBanThuaThieuComponent } from './bien-ban-thua-thieu/bien-ban-thua-thieu.component';
+import { ChiTietBienBanThuaThieuComponent } from './bien-ban-thua-thieu/chi-tiet-bien-ban-ban-thua-thieu/chi-tiet-bien-ban-thua-thieu.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +35,12 @@ import { DialogTuChoiTongHopDieuChuyenComponent } from './tong-hop-dieu-chuyen-t
     TongHopDieuChuyenTaiTongCuc,
     TongHopDieuChuyenCapTongCuc,
     ChiTietTongHopDieuChuyenCapTongCuc,
-    DialogTuChoiTongHopDieuChuyenComponent
+    DialogTuChoiTongHopDieuChuyenComponent,
+    BaoCaoDieuChuyenComponent,
+    BaoCaoComponent,
+    ThemMoiBaoCaoComponent,
+    BienBanThuaThieuComponent,
+    ChiTietBienBanThuaThieuComponent
   ],
   imports: [
     CommonModule,
@@ -39,6 +50,7 @@ import { DialogTuChoiTongHopDieuChuyenComponent } from './tong-hop-dieu-chuyen-t
     NzPipesModule,
     MainModule,
     ComponentsModule,
+    QuyetDinhDieuChuyenModule
   ],
   exports: [
     KeHoachDieuChuyenComponent,

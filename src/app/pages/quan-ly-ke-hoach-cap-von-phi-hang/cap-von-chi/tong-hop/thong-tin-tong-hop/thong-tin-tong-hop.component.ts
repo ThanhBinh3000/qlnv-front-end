@@ -198,6 +198,12 @@ export class ThongTinTonghopComponent implements OnInit {
         phuongAn.tenBoNganh = pa.tenBoNganh;
         phuongAn.soDeNghi = pa.soDeNghi;
         phuongAn.ngayDeNghi = pa.ngayDeNghi;
+        phuongAn.loaiTien = pa.loaiTien;
+        phuongAn.tyGia = pa.tyGia;
+        phuongAn.tcCapThemNt = pa.tcCapThemNt;
+        phuongAn.tongTienNt = pa.tongTienNt;
+        phuongAn.kinhPhiDaCapNt = pa.kinhPhiDaCapNt;
+        phuongAn.ycCapThemNt = pa.ycCapThemNt;
         phuongAnList = [...phuongAnList, phuongAn];
       }
     });
@@ -510,6 +516,7 @@ export class ThongTinTonghopComponent implements OnInit {
     if (this.detail.tCThem && this.detail.tCThem.length > 0) {
       this.detail.tCThem.forEach(item => {
         item.tcCapThem = item.ycCapThem;
+        item.tcCapThemNt = item.ycCapThemNt;
       })
     }
     this.updateEditCache();
@@ -559,8 +566,6 @@ export class ThongTinTonghopComponent implements OnInit {
   }
 
   async loadThongTinChiTiet(nguonTongHopId: string) {
-    console.log(nguonTongHopId, 'nguonTongHopId');
-
     this.spinner.show();
     if (nguonTongHopId == 'TCDT') {
       let body = {
@@ -583,29 +588,23 @@ export class ThongTinTonghopComponent implements OnInit {
       }
     } else {
       let body = {
-        soDeNghi: null,
-        maBoNganh: null,
         nam: this.formData.get('nam').value,
         trangThai: STATUS.DA_HOAN_THANH,
         type: 'TH',
         loaiTh: nguonTongHopId,
         trangThaiTh: STATUS.CHUA_TONG_HOP,
-        ngayDeNghiTuNgay: null,
-        ngayDeNghiDenNgay: null,
-        pageNumber: this.page,
-        pageSize: 100000,
       };
-      let res = await this.deNghiCapVonBoNganhService.timKiem(body);
+      let res = await this.deNghiCapVonBoNganhService.tongHopDeNghiCapVon(body);
       if (res.msg == MESSAGE.SUCCESS) {
-        if (res.data && res.data.content.length > 0) {
+        if (res.data && res.data.length > 0) {
           let data = res.data;
-          this.listThongTinChiTiet = data.content;
-          this.khDnCapVonIds = data.content.map(item => item.id)
+          this.listThongTinChiTiet = data;
+          this.khDnCapVonIds = data.map(item => item.id).filter(function (el) {
+            return el != null;
+          });
           this.formData.patchValue({khDnCapVonIds: this.khDnCapVonIds})
-          this.totalRecord = data.totalElements;
-          // this.detail.tCThem = data.content;
           this.isTonghop = true;
-          this.loadPhuongAnTongCuc(data.content);
+          this.loadPhuongAnTongCuc(data);
         } else {
           this.notification.error(MESSAGE.ERROR, "Không tìm thấy dữ liệu để tổng hợp.");
           this.spinner.hide();

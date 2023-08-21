@@ -6,6 +6,9 @@ import { TongHopDieuChuyenTaiCuc } from './tong-hop-dieu-chuyen-tai-cuc/tong-hop
 import {
   TongHopDieuChuyenTaiTongCuc
 } from './tong-hop-dieu-chuyen-tai-tong-cuc/tong-hop-dieu-chuyen-tai-tong-cuc.component';
+import { BaoCaoComponent } from './bao-cao-dieu-chuyen/bao-cao/bao-cao.component';
+import { BaoCaoDieuChuyenComponent } from './bao-cao-dieu-chuyen/bao-cao-dieu-chuyen.component';
+import { BienBanThuaThieuComponent } from './bien-ban-thua-thieu/bien-ban-thua-thieu.component';
 
 const routes: Routes = [
   {
@@ -50,6 +53,14 @@ const routes: Routes = [
             '../dieu-chuyen-noi-bo/nhap-dieu-chuyen/nhap-dieu-chuyen.module'
           ).then((m) => m.NhapDieuChuyenModule),
       },
+      {
+        path: 'bao-cao',
+        component: BaoCaoDieuChuyenComponent
+      },
+      {
+        path: 'bien-ban-thua-thieu',
+        component: BienBanThuaThieuComponent
+      }
     ]
   }]
 

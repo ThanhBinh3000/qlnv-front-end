@@ -64,7 +64,7 @@
       <h3> DANH SÁCH TỔNG HỢP KẾ HOẠCH MUA TRỰC TIẾP </h3>
       <div class="buttons">
         <button type="button" class="btn btn-do" (click)="deleteMulti(['NHDTQG_PTMTT_KHMTT_TONGHOP_XOA'])">
-          <i class="fa fa-trash-o do"></i>
+          <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
           <span>Xóa</span>
         </button>
         <button type="button" class="btn btn-sub"
@@ -75,7 +75,7 @@
         <button type="button" class="btn btn-main" (click)="goDetail(null,'NHDTQG_PTMTT_KHMTT_TONGHOP_TONGHOP')"
           *ngIf="loaiVthh != '02'">
           <i class="icon htvbdh_dau-cong"></i>
-          <span>Tổng hợp</span>
+          <span>Tổng hợp KH mua trực tiếp</span>
         </button>
       </div>
     </div>
@@ -162,19 +162,19 @@
             <td>{{ data.namKh }}</td>
             <td>{{ data.tenCloaiVthh }}</td>
             <td>{{ data.tenTrangThai }}</td>
-            <td class="text-blue">{{ data.soQdPduyet }}</td>
+            <td class="text-blue" (click)="openModalQdPd(data.idQdPduyet)">{{ data.soQdPduyet }}</td>
             <td class="text-left">
               <a (click)="goDetail(data.id, 'NHDTQG_PTMTT_KHMTT_TONGHOP_XEM')"
                 *ngIf=" (data.trangThai == STATUS.CHUA_TAO_QD ||data.trangThai==STATUS.DA_BAN_HANH_QD || data.trangThai == STATUS.DA_DU_THAO_QD ) && userService.isAccessPermisson('NHDTQG_PTMTT_KHMTT_TONGHOP_XEM')">
-                <i class="fa fa-eye"></i>
+                <i class="fa fa-eye" title="Xem chi tiết"></i>
               </a>
               <a *ngIf=" ( data.trangThai == STATUS.CHUA_TAO_QD || data.trangThai == STATUS.DA_DU_THAO_QD || data.trangThai==STATUS.DA_BAN_HANH_QD ) && userService.isAccessPermisson('NHDTQG_PTMTT_KHMTT_TONGHOP_TONGHOP')"
                 (click)="taoQdinh(data)">
                 <i class="icon htvbdh_tcdt_tao-qd"></i>
               </a>
-              <a *ngIf="( data.trangThai== STATUS.CHUA_TAO_QD || data.trangThai == STATUS.DA_DU_THAO_QD ) && (userService.isAccessPermisson('NHDTQG_PTMTT_KHMTT_TONGHOP_XOA'))"
+              <a *ngIf="data.trangThai== STATUS.CHUA_TAO_QD && userService.isAccessPermisson('NHDTQG_PTMTT_KHMTT_TONGHOP_XOA')"
                 (click)="delete(data)">
-                <i class="fa fa-trash-o do"></i>
+                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
               </a>
             </td>
           </tr>
@@ -204,7 +204,19 @@
   </app-themmoi-tonghop-khmtt>
 </div>
 <div *ngIf="isQuyetDinh" class="chi-tiet">
-  <app-themmoi-quyetdinh-khmtt [idInput]="qdPdMttId" [loaiVthh]="loaiVthh" [dataTongHop]="formDataQd.value"
+  <app-themmoi-quyetdinh-khmtt [idInput]="qdPdMttId" [disableField]="disableField" [loaiVthh]="loaiVthh" [dataTongHop]="formDataQd.value"
     (showListEvent)="showTongHop()">
   </app-themmoi-quyetdinh-khmtt>
 </div>
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdPd" (nzOnCancel)="closeModalQdPd()">
+  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+    <app-themmoi-quyetdinh-khmtt [idInput]="idQdPd" [loaiVthh]="loaiVthh" [isViewOnModal]="true">
+    </app-themmoi-quyetdinh-khmtt>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button (click)="closeModalQdPd()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>

@@ -18,7 +18,7 @@ import { DonviService } from "src/app/services/donvi.service";
 import {
   TongHopPhuongAnCuuTroService
 } from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/TongHopPhuongAnCuuTro.service";
-import { v4 as uuidv4 } from 'uuid';
+import * as uuidv4 from "uuid";
 import { chain, cloneDeep, sortBy } from 'lodash';
 import { STATUS } from "src/app/constants/status";
 import { ThongTinHangCanDieuChuyenCucComponent } from "../thong-tin-hang-can-dieu-chuyen-cuc/thong-tin-hang-can-dieu-chuyen-cuc.component";
@@ -26,6 +26,8 @@ import { QuyetDinhDieuChuyenTCService } from "src/app/services/dieu-chuyen-noi-b
 import { QuyetDinhDieuChuyenCucService } from "src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-c.service";
 import { AMOUNT_NO_DECIMAL } from "src/app/Utility/utils";
 import { ThongTinHangCanDieuChuyenChiCucComponent } from "../thong-tin-hang-can-dieu-chuyen-chi-cuc/thong-tin-hang-can-dieu-chuyen-chi-cuc.component";
+import { DialogTableSelectionComponent } from "src/app/components/dialog/dialog-table-selection/dialog-table-selection.component";
+import { DanhMucDungChungService } from "src/app/services/danh-muc-dung-chung.service";
 
 export class QuyetDinhPdDtl {
   idVirtual: number;
@@ -50,7 +52,7 @@ export class QuyetDinhPdDtl {
   styleUrls: ['./thong-tin-quyet-dinh-dieu-chuyen-cuc.component.scss']
 })
 export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component implements OnInit {
-
+  @Input() isViewOnModal: boolean;
   @Input() idInput: number;
   @Input() isView: boolean;
   @Output()
@@ -90,12 +92,34 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
     }
   ];
 
+  kieuNhapXuat: any[] = [
+    {
+      value: "01",
+      text: "Nhập mua"
+    },
+    {
+      value: "02",
+      text: "Nhập không chi tiền"
+    },
+    {
+      value: "03",
+      text: "Xuất bán"
+    },
+    {
+      value: "04",
+      text: "Xuất không thu tiền"
+    },
+    {
+      value: "05",
+      text: "Khác"
+    }
+  ];
+  nzActive: boolean = true
+  selected: number = 0
   danhSachKeHoach: any[] = []
   typeKeHoach: string = "ADD"
   danhSachQuyetDinh: any[] = []
-  dataTableView: any[] = [
-    // { "maChiCucNhan": "01010202", "tenChiCucNhan": "Chi cục Dự trữ Nhà nước Phong Châu", "maDiemKho": "0101020201", "tenDiemKho": "Điểm kho Dục Mỹ", "maNhaKho": "010102020101", "tenNhaKho": "Nhà kho C1", "maNganKho": "01010202010101", "tenNganKho": "Ngăn kho C1/1", "maLoKho": "0101020201010111", "tenLoKho": "Lô kho test cũ", "thuKho": null, "loaiVthh": null, "cloaiVthh": null, "tonKho": null, "soLuongDc": "111", "duToanKphi": "00222", "thoiGianDkDc": "2023-05-15T04:48:26.266Z", "maDiemKhoNhan": "0101020201", "tenDiemKhoNhan": "Điểm kho Dục Mỹ", "maNhaKhoNhan": "010102020105", "tenNhaKhoNhan": "Nhà kho Q.a", "maNganKhoNhan": "01010202010501", "tenNganKhoNhan": "Ngăn kho test", "maLoKhoNhan": "0101020201050107", "tenLoKhoNhan": "lô kho 6", "thuKhoNhan": null, "thayDoiThuDo": null, "slDcConLai": null, "tichLuongKd": null, "slNhapDc": "333", "idVirtual": "7cc45619-d7a4-4d05-8c41-1510e80fa301", "children": [{ "maChiCucNhan": "01010202", "tenChiCucNhan": "Chi cục Dự trữ Nhà nước Phong Châu", "maDiemKho": "0101020201", "tenDiemKho": "Điểm kho Dục Mỹ", "maNhaKho": "010102020101", "tenNhaKho": "Nhà kho C1", "maNganKho": "01010202010101", "tenNganKho": "Ngăn kho C1/1", "maLoKho": "0101020201010111", "tenLoKho": "Lô kho test cũ", "thuKho": null, "loaiVthh": null, "cloaiVthh": null, "tonKho": null, "soLuongDc": "111", "duToanKphi": "0222", "thoiGianDkDc": "2023-05-15T04:48:26.266Z", "maDiemKhoNhan": "0101020201", "tenDiemKhoNhan": "Điểm kho Dục Mỹ", "maNhaKhoNhan": "010102020105", "tenNhaKhoNhan": "Nhà kho Q.a", "maNganKhoNhan": "01010202010501", "tenNganKhoNhan": "Ngăn kho test", "maLoKhoNhan": "0101020201050107", "tenLoKhoNhan": "lô kho 6", "thuKhoNhan": null, "thayDoiThuDo": null, "slDcConLai": null, "tichLuongKd": null, "slNhapDc": "333", "idVirtual": "561c3c8a-40eb-40d3-b474-2b4125f862f4", "children": [{ "maChiCucNhan": "01010202", "tenChiCucNhan": "Chi cục Dự trữ Nhà nước Phong Châu", "maDiemKho": "0101020201", "tenDiemKho": "Điểm kho Dục Mỹ", "maNhaKho": "010102020101", "tenNhaKho": "Nhà kho C1", "maNganKho": "01010202010101", "tenNganKho": "Ngăn kho C1/1", "maLoKho": "0101020201010111", "tenLoKho": "Lô kho test cũ", "thuKho": null, "loaiVthh": null, "cloaiVthh": null, "tonKho": null, "soLuongDc": "111", "duToanKphi": "0222", "thoiGianDkDc": "2023-05-15T04:48:26.266Z", "maDiemKhoNhan": "0101020201", "tenDiemKhoNhan": "Điểm kho Dục Mỹ", "maNhaKhoNhan": "010102020105", "tenNhaKhoNhan": "Nhà kho Q.a", "maNganKhoNhan": "01010202010501", "tenNganKhoNhan": "Ngăn kho test", "maLoKhoNhan": "0101020201050107", "tenLoKhoNhan": "lô kho 6", "thuKhoNhan": null, "thayDoiThuDo": null, "slDcConLai": null, "tichLuongKd": null, "slNhapDc": "333", "idVirtual": "a0ab431c-0b28-4db4-8ca9-e14f5d515e4b", "children": [{ "maChiCucNhan": "01010202", "tenChiCucNhan": "Chi cục Dự trữ Nhà nước Phong Châu", "maDiemKho": "0101020201", "tenDiemKho": "Điểm kho Dục Mỹ", "maNhaKho": "010102020101", "tenNhaKho": "Nhà kho C1", "maNganKho": "01010202010101", "tenNganKho": "Ngăn kho C1/1", "maLoKho": "0101020201010111", "tenLoKho": "Lô kho test cũ", "thuKho": null, "loaiVthh": null, "cloaiVthh": null, "tonKho": null, "soLuongDc": "111", "duToanKphi": "222", "thoiGianDkDc": "2023-05-15T04:48:26.266Z", "maDiemKhoNhan": "0101020201", "tenDiemKhoNhan": "Điểm kho Dục Mỹ", "maNhaKhoNhan": "010102020105", "tenNhaKhoNhan": "Nhà kho Q.a", "maNganKhoNhan": "01010202010501", "tenNganKhoNhan": "Ngăn kho test", "maLoKhoNhan": "0101020201050107", "tenLoKhoNhan": "lô kho 6", "thuKhoNhan": null, "thayDoiThuDo": null, "slDcConLai": null, "tichLuongKd": null, "slNhapDc": "333", "children": [{ "maChiCucNhan": "01010202", "tenChiCucNhan": "Chi cục Dự trữ Nhà nước Phong Châu", "maDiemKho": "0101020201", "tenDiemKho": "Điểm kho Dục Mỹ", "maNhaKho": "010102020101", "tenNhaKho": "Nhà kho C1", "maNganKho": "01010202010101", "tenNganKho": "Ngăn kho C1/1", "maLoKho": "0101020201010111", "tenLoKho": "Lô kho test cũ", "thuKho": null, "loaiVthh": null, "cloaiVthh": null, "tonKho": null, "soLuongDc": "111", "duToanKphi": "222", "thoiGianDkDc": "2023-05-15T04:48:26.266Z", "maDiemKhoNhan": "0101020201", "tenDiemKhoNhan": "Điểm kho Dục Mỹ", "maNhaKhoNhan": "010102020105", "tenNhaKhoNhan": "Nhà kho Q.a", "maNganKhoNhan": "01010202010501", "tenNganKhoNhan": "Ngăn kho test", "maLoKhoNhan": "0101020201050107", "tenLoKhoNhan": "lô kho 6", "thuKhoNhan": null, "thayDoiThuDo": null, "slDcConLai": null, "tichLuongKd": null, "slNhapDc": "333" }] }] }], "expand": true }], "expand": true }
-  ]
+  dataTableView: any[] = []
   AMOUNT = AMOUNT_NO_DECIMAL;
 
   constructor(
@@ -104,6 +128,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
+    private dmService: DanhMucDungChungService,
     private donViService: DonviService,
     private quyetDinhDieuChuyenTCService: QuyetDinhDieuChuyenTCService,
     private quyetDinhDieuChuyenCucService: QuyetDinhDieuChuyenCucService,
@@ -114,19 +139,22 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
       tenLoaiDc: ['Trong nội bộ Chi cục'],
       nam: [dayjs().get("year"), [Validators.required]],
       soQdinh: [, [Validators.required]],
-      loaiQdinh: [],
+      loaiQdinh: [, [Validators.required]],
       tenLoaiQdinh: [],
-      ngayKyQdinh: [],
-      ngayPduyet: [],
+      ngayKyQdinh: [, [Validators.required]],
+      ngayPduyet: [, [Validators.required]],
       trichYeu: [],
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự thảo'],
+      lyDoTuChoi: [],
+      soCanCuQdTc: [, [Validators.required]],
       canCuQdTc: [],
-      soCanCuQdTc: [],
+      soDxuat: [],
       ngayTrinhDuyetTc: [],
       tongDuToanKp: [],
-      loaiHinhNX: ["Nhập ĐC nội bộ Chi cục"],
-      kieuNX: ["Nhập không chi tiền"],
+      tenLoaiHinhNhapXuat: [],
+      tenKieuNhapXuat: [],
+      quyetDinhPdDtl: [new Array<any>(),],
       danhSachQuyetDinh: [new Array<any>(),],
     }
     );
@@ -136,7 +164,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
     await this.spinner.show();
 
     this.loadDsChiCuc()
-
+    this.getDataNX(this.formData.value.loaiDc)
     try {
       this.maQd = 'DCNB'//this.userInfo.MA_QD;
       if (this.idInput) {
@@ -168,50 +196,149 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
     return this.userService.isChiCuc()
   }
 
+  getTitle() {
+    if (this.formData.value.loaiDc === "DCNB")
+      return "QUYẾT ĐỊNH ĐIỀU CHUYỂN NỘI BỘ HÀNG TRONG CÙNG 1 CHI CỤC DTNN"
+    if (this.formData.value.loaiDc === "CHI_CUC")
+      return "QUYẾT ĐỊNH ĐIỀU CHUYỂN NỘI BỘ GIỮA CÁC CHI CỤC DTNN TRONG CÙNG 1 CỤC DTNN KV"
+    if (this.formData.value.loaiDc === "CUC")
+      return "QUYẾT ĐỊNH ĐIỀU CHUYỂN NỘI BỘ GIỮA 2 CỤC DTNN KV"
+  }
+
   async loadChiTiet(id: number) {
     await this.spinner.show()
     if (id) {
       let data = await this.detail(id);
       this.danhSachKeHoach = []
-      this.formData.patchValue(data);
+      this.formData.patchValue({
+        ...data,
+        soQdinh: data.soQdinh.split('/')[0]
+      });
+      this.canCu = data.canCu;
+      this.quyetDinh = data.quyetDinh;
 
-      data.danhSachQuyetDinh.map(async (item, i) => {
-        if (item.dcnbKeHoachDcHdr) {
-          let dcnbKeHoachDcHdr = item.dcnbKeHoachDcHdr
+      if (data.loaiDc !== "DCNB") this.loadDsQuyetDinh(data.loaiDc, data.loaiQdinh)
 
+      if (data.danhSachQuyetDinh.length == 0) return
+      let dsDX = []
+      if (data.loaiDc === "CUC") {
+        data.danhSachQuyetDinh.map(async (item, i) => {
+          if (item.dcnbKeHoachDcHdr) {
+            let dcnbKeHoachDcHdr = item.dcnbKeHoachDcHdr
+            dsDX.push(dcnbKeHoachDcHdr)
+          }
+        })
+        this.formData.patchValue({
+          quyetDinhPdDtl: dsDX,
+        })
+        let dcnbKeHoachDcHdr = data.danhSachQuyetDinh[0].dcnbKeHoachDcHdr
+        if (dcnbKeHoachDcHdr) {
           dcnbKeHoachDcHdr.danhSachHangHoa.forEach(element => {
             this.danhSachKeHoach.push({
               ...element,
               maLoNganKho: element.maLoKho ? `${element.maLoKho}${element.maNganKho}` : element.maNganKho,
               maDvi: dcnbKeHoachDcHdr.maDvi,
               tenDvi: dcnbKeHoachDcHdr.tenDvi,
+              soDxuat: dcnbKeHoachDcHdr.soDxuat
             })
           });
         }
-      })
 
-      this.canCu = data.canCu;
-      this.quyetDinh = data.quyetDinh;
+      } else {
+        data.danhSachQuyetDinh.map(async (item, i) => {
+          if (item.dcnbKeHoachDcHdr) {
+            let dcnbKeHoachDcHdr = item.dcnbKeHoachDcHdr
 
-      if (data.loaiDc !== "DCNB") this.loadDsQuyetDinh(data.loaiDc, data.loaiQdinh)
+            dcnbKeHoachDcHdr.danhSachHangHoa.forEach(element => {
+              this.danhSachKeHoach.push({
+                ...element,
+                maLoNganKho: element.maLoKho ? `${element.maLoKho}${element.maNganKho}` : element.maNganKho,
+                maDvi: dcnbKeHoachDcHdr.maDvi,
+                tenDvi: dcnbKeHoachDcHdr.tenDvi,
+                soDxuat: dcnbKeHoachDcHdr.soDxuat
+              })
+            });
+          }
+        })
+      }
+
+
 
       if (data.loaiDc === "DCNB") {
-        this.dataTableView = this.buildTableViewChiCUC(this.danhSachKeHoach, "maChiCucNhan")
+        this.dataTableView = this.buildTableView(this.danhSachKeHoach, "maChiCucNhan")
+      } else {
+        this.dataTableView = this.buildTableView(this.danhSachKeHoach, "maDvi")
       }
-      if (data.loaiDc === "CHI_CUC") {
-        this.dataTableView = this.buildTableViewChiCUC(this.danhSachKeHoach, "maDvi")
-      }
-      if (data.loaiDc === "CUC" && !(this.isChiCuc() && data.loaiQdinh == '01')) {
-        this.dataTableView = this.buildTableViewChiCUC(this.danhSachKeHoach, "maDvi")
-      }
-      if (data.loaiDc === "CUC" && this.isChiCuc() && data.loaiQdinh == '01') {
-        this.dataTableView = this.buildTableViewChiCUC(this.danhSachKeHoach, "maDvi")
 
+    }
+    await this.spinner.hide();
+  }
+
+  async getDataNX(loaiDC) {
+    await this.spinner.show()
+    let ma = () => {
+      if (loaiDC == "CUC")
+        return '144'
+      if (loaiDC == "CHI_CUC")
+        return '94'
+      return '90';
+    }
+    const body = { loai: 'LOAI_HINH_NHAP_XUAT', ma: ma() }
+    let res = await this.dmService.search(body);
+    if (res.statusCode == 0) {
+      const data = res.data.content
+      if (data && data.length > 0) {
+        const content = data[0]
+        const knx = this.kieuNhapXuat.find(item => item.value === content.ghiChu)
+        this.formData.patchValue({
+          tenLoaiHinhNhapXuat: content.giaTri,
+          tenKieuNhapXuat: !!knx ? knx?.text : ''
+        });
       }
     }
-    console.log('loadChiTietdanhSachKeHoach', this.danhSachKeHoach)
-    console.log('loadChiTietdataTableView', JSON.stringify(this.dataTableView))
+
     await this.spinner.hide();
+  }
+
+  selectRow(index) {
+    this.selected = index
+    this.dataTableView = []
+    let itemQd = this.formData.value.quyetDinhPdDtl[index]
+    this.danhSachKeHoach = []
+
+    if (itemQd.danhSachQuyetDinhChiTiet) {
+      itemQd.danhSachQuyetDinhChiTiet.forEach(itemHH => {
+        const dcnbKeHoachDcHdr = itemHH.dcnbKeHoachDcHdr
+        if (dcnbKeHoachDcHdr) {
+          dcnbKeHoachDcHdr.danhSachHangHoa.forEach(element => {
+            this.danhSachKeHoach.push({
+              ...element,
+              maLoNganKho: itemHH.maLoKho ? `${element.maLoKho}${element.maNganKho}` : element.maNganKho,
+              maDvi: dcnbKeHoachDcHdr.maDvi,
+              tenDvi: dcnbKeHoachDcHdr.tenDvi,
+              soDxuat: dcnbKeHoachDcHdr.soDxuat
+            })
+          });
+        }
+
+      })
+    }
+
+    if (itemQd.danhSachHangHoa) {
+      itemQd.danhSachHangHoa.forEach(element => {
+        this.danhSachKeHoach.push({
+          ...element,
+          maLoNganKho: element.maLoKho ? `${element.maLoKho}${element.maNganKho}` : element.maNganKho,
+          maDvi: itemQd.maDvi,
+          tenDvi: itemQd.tenDvi,
+          soDxuat: itemQd.soDxuat
+        })
+      });
+    }
+
+
+
+    this.dataTableView = this.buildTableView(this.danhSachKeHoach, "maDvi")
   }
 
   collapse(array: any[], data: any, $event: boolean): void {
@@ -257,7 +384,8 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
   async loadDsQuyetDinh(loaiDc, loaiQdinh?) {
     let body = {
       loaiDc,
-      loaiQdinh
+      loaiQdinh,
+      qDinhCucId: this.idInput
     };
     let res = await this.quyetDinhDieuChuyenTCService.dsQuyetDinh(body);
 
@@ -295,11 +423,13 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
       this.formData.patchValue({
         canCuQdTc: "",
         soCanCuQdTc: "",
+        soDxuat: "",
         ngayTrinhDuyetTc: "",
-        tongDuToanKp: ""
+        tongDuToanKp: "",
       })
 
       if (loaiDC) {
+        this.getDataNX(loaiDC.value)
         this.formData.patchValue({
           tenLoaiDc: loaiDC.text,
         })
@@ -314,7 +444,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
   async onChangeLoaiQdinh(value) {
     if (value) {
       const loaiQD = this.listLoaiQD.find(item => item.value == value)
-      this.loadDsQuyetDinh(this.formData.value.loaiDC, value)
+      this.loadDsQuyetDinh(this.formData.value.loaiDc, value)
       if (loaiQD) {
         this.formData.patchValue({
           tenLoaiQdinh: loaiQD.text,
@@ -324,46 +454,154 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
     }
   }
 
-  async onChangeCanCuQdTc(value) {
-    if (value) {
-      const qdTC = this.listQuyetDinh.find(item => item.id == value)
+  async openDialogQD() {
+    if (this.isView) return
+    await this.spinner.show();
+    // Get data tờ trình
+    // let body = {
+    //   trangThai: STATUS.BAN_HANH,
+    //   loaiVthh: ['0101', '0102'],
+    //   loaiDc: "DCNB",
+    //   maDvi: this.userInfo.MA_DVI
+    //   // listTrangThaiXh: [STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN],
+    // }
+    // let resSoDX = this.isCuc() ? await this.quyetDinhDieuChuyenCucService.getDsSoQuyetDinhDieuChuyenCuc(body) : await this.quyetDinhDieuChuyenCucService.getDsSoQuyetDinhDieuChuyenChiCuc(body);
+    // if (resSoDX.msg == MESSAGE.SUCCESS) {
+    //   this.listDanhSachQuyetDinh = resSoDX.data;
+    // }
+    await this.spinner.hide();
 
-      if (qdTC) {
+    const modalQD = this.modal.create({
+      nzTitle: 'Danh sách quyết định',
+      nzContent: DialogTableSelectionComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {
+        dataTable: this.listQuyetDinh,
+        dataHeader: ['Số quyết định'],
+        dataColumn: ['soQdinh']
+      },
+    });
+    modalQD.afterClose.subscribe(async (data) => {
+      if (data) {
+        const soDxuat = data.danhSachQuyetDinh[0].soDxuat
         this.formData.patchValue({
-          soCanCuQdTc: qdTC.soQdinh,
-          ngayTrinhDuyetTc: qdTC.ngayPduyet
+          soCanCuQdTc: data.soQdinh,
+          canCuQdTc: data.id,
+          soDxuat,
+          ngayTrinhDuyetTc: data.ngayPduyet
         })
+        this.onChangeCanCuQdTc(data.id)
       }
+    });
+  }
+
+  async onChangeCanCuQdTc(id) {
+    if (id) {
+
       let tong = 0
       this.danhSachKeHoach = []
       this.danhSachQuyetDinh = []
       let dsHH = []
-      const detail = await this.quyetDinhDieuChuyenTCService.getDetail(value)
+      const detail = await this.quyetDinhDieuChuyenTCService.getDetail(id)
+      const data = detail.data
+      if (!data) return
+      console.log('onChangeCanCuQdTc', detail)
 
-      detail.data.danhSachQuyetDinh.map((qd) => {
-        if (qd.dcnbKeHoachDcHdr) {
-          const item = qd.dcnbKeHoachDcHdr
+      let dsDX = data.danhSachQuyetDinh
 
+      dsDX.forEach(element => {
+        element.danhSachQuyetDinhChiTiet.forEach(itemQD => {
           this.danhSachQuyetDinh.push({
-            danhSachKeHoach: item.danhSachHangHoa
+            danhSachKeHoach: itemQD.danhSachKeHoach
           })
-          item.danhSachHangHoa.map(itemHH => {
+
+        })
+      });
+
+      // if (this.formData.value.loaiDc === "CHI_CUC") {
+      //   dsDX.forEach(element => {
+      //     element.danhSachQuyetDinhChiTiet.forEach(itemQD => {
+      //       this.danhSachQuyetDinh.push({
+      //         danhSachKeHoach: itemQD.danhSachKeHoach
+      //       })
+
+      //     })
+      //   });
+      // }
+
+      // if (this.formData.value.loaiDc === "CUC") {
+      //   dsDX.forEach(element => {
+      //     element.danhSachQuyetDinhChiTiet.forEach(itemQD => {
+      //       this.danhSachQuyetDinh.push({
+      //         danhSachKeHoach: itemQD.danhSachKeHoach
+      //       })
+
+      //     })
+      //   });
+      // }
+      const hanghoa = dsDX[0]
+      hanghoa.danhSachQuyetDinhChiTiet.forEach(itemHH => {
+        const dcnbKeHoachDcHdr = itemHH.dcnbKeHoachDcHdr
+        if (dcnbKeHoachDcHdr) {
+          dcnbKeHoachDcHdr.danhSachHangHoa.forEach(element => {
             dsHH.push({
-              ...itemHH,
-              maLoNganKho: itemHH.maLoKho ? `${itemHH.maLoKho}${itemHH.maNganKho}` : itemHH.maNganKho,
-              maDvi: item.maDvi,
-              tenDvi: item.tenDvi
+              ...element,
+              maLoNganKho: itemHH.maLoKho ? `${element.maLoKho}${element.maNganKho}` : element.maNganKho,
+              maDvi: dcnbKeHoachDcHdr.maDvi,
+              tenDvi: dcnbKeHoachDcHdr.tenDvi,
+              soDxuat: dcnbKeHoachDcHdr.soDxuat
             })
-            tong = tong + itemHH.duToanKphi
-          })
+          });
         }
 
       })
 
-      this.dataTableView = this.formData.value.loaiDc === "CHI_CUC" ? this.buildTableViewChiCUC(dsHH, "maDvi") : this.buildTableViewChiCUC(dsHH, "maDvi")
+      // detail.data.danhSachQuyetDinh.map((qd) => {
+      //   if (qd.dcnbKeHoachDcHdr) {
+      //     const item = qd.dcnbKeHoachDcHdr
+      //     // dsDX.push(item)
+      //     this.danhSachQuyetDinh.push({
+      //       danhSachKeHoach: item.danhSachHangHoa
+      //     })
+      //     if (this.formData.value.loaiDc !== "CUC") {
+      //       item.danhSachHangHoa.map(itemHH => {
+      //         dsHH.push({
+      //           ...itemHH,
+      //           maLoNganKho: itemHH.maLoKho ? `${itemHH.maLoKho}${itemHH.maNganKho}` : itemHH.maNganKho,
+      //           maDvi: item.maDvi,
+      //           tenDvi: item.tenDvi,
+      //           soDxuat: item.soDxuat
+      //         })
+      //         tong = tong + itemHH.duToanKphi
+      //       })
+      //     }
+      //   }
+
+      // })
+
+      // if (this.formData.value.loaiDc === "CUC") {
+      //   const item = detail.data.danhSachQuyetDinh[0].dcnbKeHoachDcHdr
+      //   item.danhSachHangHoa.map(itemHH => {
+      //     dsHH.push({
+      //       ...itemHH,
+      //       maLoNganKho: itemHH.maLoKho ? `${itemHH.maLoKho}${itemHH.maNganKho}` : itemHH.maNganKho,
+      //       maDvi: item.maDvi,
+      //       tenDvi: item.tenDvi,
+      //       soDxuat: item.soDxuat
+      //     })
+      //     tong = tong + itemHH.duToanKphi
+      //   })
+      // }
+
+      this.dataTableView = this.buildTableView(dsHH, "maDvi")
+      let tongDuToanKp = dsDX?.reduce((prev, cur) => prev + cur.tongDuToanKp, 0);
 
       this.formData.patchValue({
-        tongDuToanKp: tong,
+        tongDuToanKp,
+        quyetDinhPdDtl: dsDX,
         danhSachQuyetDinh: this.danhSachQuyetDinh
       })
 
@@ -371,74 +609,9 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
     }
   }
 
-  // buildTableViewNB(data: any[] = [], groupBy: string = "maDvi") {
-  //   let dataView = chain(data)
-  //     .groupBy(groupBy)
-  //     ?.map((value, key) => {
-  //       console.log('maDvi', key, value)
-  //       let rs = chain(value)
-  //         .groupBy("maDiemKho")
-  //         ?.map((v, k) => {
-  //           console.log('maDiemKho', k, v)
-  //           let rss = chain(v)
-  //             .groupBy("maLoKho")
-  //             ?.map((vs, ks) => {
-  //               console.log('maLoKho', ks, vs)
-  //               const maLoKho = vs.find(s => s?.maLoKho == ks);
-
-  //               const rssx = chain(vs).groupBy("maDiemKhoNhan")?.map((n, inx) => {
-  //                 console.log('maDiemKhoNhan', inx, n)
-  //                 const maDiemKhoNhan = n.find(f => f.maDiemKhoNhan == inx);
-  //                 return {
-  //                   ...maDiemKhoNhan,
-  //                   children: n
-  //                 }
-  //               }).value()
-  //               let duToanKphi = vs?.reduce((prev, cur) => prev + cur.duToanKphi, 0);
-  //               return {
-  //                 ...maLoKho,
-  //                 idVirtual: maLoKho ? maLoKho.idVirtual ? maLoKho.idVirtual : uuidv4.v4() : uuidv4.v4(),
-  //                 children: rssx,
-  //                 duToanKphi
-  //               }
-  //             }
-  //             ).value();
-
-  //           let duToanKphi = v?.reduce((prev, cur) => prev + cur.duToanKphi, 0);
-  //           let rowDiemKho = v?.find(s => s.maDiemKho === k);
-
-  //           return {
-  //             ...rowDiemKho,
-  //             idVirtual: rowDiemKho ? rowDiemKho.idVirtual ? rowDiemKho.idVirtual : uuidv4.v4() : uuidv4.v4(),
-  //             duToanKphi: duToanKphi,
-  //             children: rss,
-  //             expand: true
-  //           }
-  //         }
-  //         ).value();
-
-  //       let duToanKphi = rs?.reduce((prev, cur) => prev + cur.duToanKphi, 0);
-  //       let rowChiCuc = value?.find(s => s[`${groupBy}`] === key);
-  //       return {
-  //         ...rowChiCuc,
-  //         idVirtual: rowChiCuc ? rowChiCuc.idVirtual ? rowChiCuc.idVirtual : uuidv4.v4() : uuidv4.v4(),
-  //         duToanKphi: duToanKphi,
-  //         children: rs,
-  //         expand: true
-  //       };
-  //     }).value();
 
 
-  //   if (data?.length !== 0) {
-  //     const tongDuToanChiPhi = data.reduce((prev, cur) => prev + cur.duToanKphi, 0);
-  //     this.formData.patchValue({
-  //       tongDuToanKp: tongDuToanChiPhi,
-  //     })
-  //   };
-  //   return dataView
-  // }
-
-  buildTableViewChiCUC(data: any[] = [], groupBy: string = "maDvi") {
+  buildTableView(data: any[] = [], groupBy: string = "maDvi") {
     let dataView = chain(data)
       .groupBy(groupBy)
       ?.map((value, key) => {
@@ -452,16 +625,6 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
               ?.map((vs, ks) => {
 
                 const maLoKho = vs.find(s => s?.maLoNganKho == ks);
-                // const rsss = chain(vs).groupBy("id").map((x, ix) => {
-                //   console.log('id', ix, x)
-                //   const ids = x.find(f => f.id == ix);
-
-                //   const hasmaChiCucNhan = x.some(f => f.maChiCucNhan);
-                //   if (!hasmaChiCucNhan) return {
-                //     ...ids
-                //   }
-
-                // }).value()
 
 
                 const rsxx = (groupBy === "maChiCucNhan") ? chain(vs).groupBy("maDiemKhoNhan")?.map((n, inx) => {
@@ -474,10 +637,10 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
                 }).value() : chain(vs).groupBy("maChiCucNhan")?.map((m, im) => {
 
                   const maChiCucNhan = m.find(f => f.maChiCucNhan == im);
-                  const hasMaDiemKhoNhan = m.some(f => f.maDiemKhoNhan);
-                  if (!hasMaDiemKhoNhan) return {
-                    ...maChiCucNhan
-                  }
+                  // const hasMaDiemKhoNhan = m.some(f => f.maDiemKhoNhan);
+                  // if (!hasMaDiemKhoNhan) return {
+                  //   ...maChiCucNhan
+                  // }
 
                   const rssx = chain(m).groupBy("maDiemKhoNhan")?.map((n, inx) => {
 
@@ -495,17 +658,14 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
 
 
 
-
-                // return {
-                //   ...maLoKho,
-                //   children: rsxx
-                // }
                 let duToanKphi = vs?.reduce((prev, cur) => prev + cur.duToanKphi, 0);
+                let soLuongDc = vs?.reduce((prev, cur) => prev + cur.soLuongDc, 0);
                 return {
                   ...maLoKho,
                   idVirtual: maLoKho ? maLoKho.idVirtual ? maLoKho.idVirtual : uuidv4.v4() : uuidv4.v4(),
                   children: rsxx,
-                  duToanKphi
+                  duToanKphi,
+                  soLuongDc
                 }
               }
               ).value();
@@ -535,73 +695,17 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
       }).value();
 
 
-    if (data?.length !== 0) {
-      const tongDuToanChiPhi = data.reduce((prev, cur) => prev + cur.duToanKphi, 0);
-      this.formData.patchValue({
-        tongDuToanKp: tongDuToanChiPhi,
-      })
-    };
+    // if (data?.length !== 0) {
+    //   const tongDuToanChiPhi = data.reduce((prev, cur) => prev + cur.duToanKphi, 0);
+    //   this.formData.patchValue({
+    //     tongDuToanKp: tongDuToanChiPhi,
+    //   })
+    // };
+    console.log('dataView', dataView)
     return dataView
   }
 
-  // buildTableViewCUC(data: any[] = [], groupBy: string = "maDvi") {
-  //   let dataView = chain(data)
-  //     .groupBy(groupBy)
-  //     ?.map((value, key) => {
-  //       console.log('maDvi', key, value)
-  //       let rs = chain(value)
-  //         .groupBy("maDiemKho")
-  //         ?.map((v, k) => {
-  //           console.log('maDiemKho', k, v)
-  //           let rss = chain(v)
-  //             .groupBy("maLoKho")
-  //             ?.map((vs, ks) => {
-  //               console.log('maLoKho', ks, vs)
-  //               const maLoKho = vs.find(s => s?.maLoKho == ks);
 
-  //               let duToanKphi = vs?.reduce((prev, cur) => prev + cur.duToanKphi, 0);
-  //               return {
-  //                 ...maLoKho,
-  //                 idVirtual: maLoKho ? maLoKho.idVirtual ? maLoKho.idVirtual : uuidv4.v4() : uuidv4.v4(),
-  //                 children: vs,
-  //                 duToanKphi
-  //               }
-  //             }
-  //             ).value();
-
-  //           let duToanKphi = v?.reduce((prev, cur) => prev + cur.duToanKphi, 0);
-  //           let rowDiemKho = v?.find(s => s.maDiemKho === k);
-
-  //           return {
-  //             ...rowDiemKho,
-  //             idVirtual: rowDiemKho ? rowDiemKho.idVirtual ? rowDiemKho.idVirtual : uuidv4.v4() : uuidv4.v4(),
-  //             duToanKphi: duToanKphi,
-  //             children: rss,
-  //             expand: true
-  //           }
-  //         }
-  //         ).value();
-
-  //       let duToanKphi = rs?.reduce((prev, cur) => prev + cur.duToanKphi, 0);
-  //       let rowChiCuc = value?.find(s => s.maDvi === key);
-  //       return {
-  //         ...rowChiCuc,
-  //         idVirtual: rowChiCuc ? rowChiCuc.idVirtual ? rowChiCuc.idVirtual : uuidv4.v4() : uuidv4.v4(),
-  //         duToanKphi: duToanKphi,
-  //         children: rs,
-  //         expand: true
-  //       };
-  //     }).value();
-
-
-  //   if (data?.length !== 0) {
-  //     const tongDuToanChiPhi = data.reduce((prev, cur) => prev + cur.duToanKphi, 0);
-  //     this.formData.patchValue({
-  //       tongDuToanKp: tongDuToanChiPhi,
-  //     })
-  //   };
-  //   return dataView
-  // }
 
   setExpand(parantExpand: boolean = false, children: any = []): void {
     if (parantExpand) {
@@ -618,6 +722,10 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
     }, {});
   }
 
+  nzActiveChange(value) {
+    this.nzActive = value
+    console.log('nzActiveChange', value, this.nzActive)
+  }
 
   async add(row?: any) {
     await this.spinner.show();
@@ -641,10 +749,11 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
       },
     });
     modalQD.afterClose.subscribe(async (data) => {
+      this.nzActive = true
       if (data) {
         if (data.isUpdate) {
           if (this.typeKeHoach === "LO_KHO_NHAN")
-            this.danhSachKeHoach = this.danhSachKeHoach.filter(kh => kh.maLoKhoNhan !== data.maLoKhoNhan)
+            this.danhSachKeHoach = this.danhSachKeHoach.filter(kh => `${kh.maLoKhoNhan}${kh.maNganKhoNhan}` !== `${row.maLoKhoNhan}${row.maNganKhoNhan}`)
           // if (this.typeKeHoach === "DIEM_KHO_NHAN")
           //   this.danhSachKeHoach = this.danhSachKeHoach.filter(kh => kh.maDiemKhoNhan !== data.maDiemKhoNhan)
           this.danhSachKeHoach.push({
@@ -659,7 +768,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
           maLoNganKho: data.maLoKho ? `${data.maLoKho}${data.maNganKho}` : data.maNganKho,
         })
 
-        this.dataTableView = this.buildTableViewChiCUC(this.danhSachKeHoach, "maChiCucNhan")
+        this.dataTableView = this.buildTableView(this.danhSachKeHoach, "maChiCucNhan")
 
         if (this.idInput) {
           if (keHoachDcHdrId) {
@@ -764,10 +873,11 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
 
   async addCC(row?: any) {
     await this.spinner.show();
-
+    console.log('addCC', row)
     await this.spinner.hide();
     const keHoachDcHdrId = row.hdrId
     const param = {
+      danhSachKeHoach: this.danhSachKeHoach,
       dsChiCuc: [{ key: row.maDvi, title: row.tenDvi }],
       data: row
     }
@@ -781,31 +891,30 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
       nzComponentParams: param,
     });
     modalQD.afterClose.subscribe(async (data) => {
-      this.danhSachKeHoach = this.danhSachKeHoach.filter(item => !!item.maDiemKhoNhan)
-
+      debugger
+      // this.danhSachKeHoach = this.danhSachKeHoach.filter(item => !!item.maDiemKhoNhan)
+      const diemKho = this.danhSachKeHoach.find(item => `${item.maLoKho}${item.maNganKho}${item.maNhaKho}${item.maDiemKho}${item.maDvi}` !== `${row.maLoKho}${row.maNganKho}${row.maNhaKho}${row.maDiemKho}${row.maDvi}`)
+      console.log('danhSachKeHoach', this.danhSachKeHoach)
+      console.log('diemKho', diemKho)
       if (data) {
-        if (data.isUpdate) {
-          if (this.typeKeHoach === "LO_KHO_NHAN")
-            this.danhSachKeHoach = this.danhSachKeHoach.filter(kh => kh.maLoKhoNhan !== data.maLoKhoNhan)
-          if (this.typeKeHoach === "DIEM_KHO_NHAN")
-            this.danhSachKeHoach = this.danhSachKeHoach.filter(kh => kh.maDiemKhoNhan !== data.maDiemKhoNhan)
-          this.danhSachKeHoach.push({
-            ...data,
-            maLoNganKho: data.maLoKho ? `${data.maLoKho}${data.maNganKho}` : data.maNganKho,
-            hdrId: keHoachDcHdrId
-          })
+        if (this.typeKeHoach === "LO_KHO_NHAN")
+          this.danhSachKeHoach = this.danhSachKeHoach.filter(kh => `${kh.maLoKhoNhan}${kh.maNganKhoNhan}` !== `${row.maLoKhoNhan}${row.maNganKhoNhan}`)
+        // if (this.typeKeHoach === "THEM_LO_KHO_NHAN")
+        //   this.danhSachKeHoach = this.danhSachKeHoach.filter(kh => kh.maLoKhoNhan !== data.maLoKhoNhan)
 
-        } else
-          this.danhSachKeHoach.push({
-            ...data,
-            maLoNganKho: data.maLoKho ? `${data.maLoKho}${data.maNganKho}` : data.maNganKho,
-            hdrId: keHoachDcHdrId
-          })
+        // if (this.typeKeHoach === "THEM_DIEM_KHO_NHAN")
+        //   this.danhSachKeHoach = this.danhSachKeHoach.filter(kh => kh.maDiemKhoNhan !== data.maDiemKhoNhan)
 
-        this.dataTableView = this.buildTableViewChiCUC(this.danhSachKeHoach, "maDvi")
+        this.danhSachKeHoach.push({
+          ...data,
+          maLoNganKho: `${data.maLoKho}${data.maNganKho}`,
+          hdrId: keHoachDcHdrId
+        })
+
+        this.dataTableView = this.buildTableView(this.danhSachKeHoach, "maDvi")
 
         const qdinh = this.formData.value.danhSachQuyetDinh.find(item => item.keHoachDcHdrId == keHoachDcHdrId)
-        console.log('row', row)
+
         if (qdinh) {
           const dsHH = qdinh.danhSachKeHoach.filter(item => !!item.maDiemKhoNhan)
           dsHH.push({
@@ -832,7 +941,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
 
   xoaChiCuc(row) {
     this.danhSachKeHoach = this.danhSachKeHoach.filter(kh => kh.maChiCucNhan !== row.maChiCucNhan)
-    this.dataTableView = this.buildTableViewChiCUC(this.danhSachKeHoach, "maChiCucNhan")
+    this.dataTableView = this.buildTableView(this.danhSachKeHoach, "maChiCucNhan")
     if (this.idInput) {
       const qDinh = this.formData.value.danhSachQuyetDinh.find(item => item.keHoachDcHdrId === row.hdrId)
       const dsKH = qDinh.danhSachKeHoach.filter(item => item.maChiCucNhan !== row.maChiCucNhan)
@@ -846,19 +955,31 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
   }
 
   xoaDiemKho(row) {
-    this.danhSachKeHoach = this.danhSachKeHoach.filter(kh => kh.maDiemKho !== row.maDiemKho)
-    this.dataTableView = this.buildTableViewChiCUC(this.danhSachKeHoach, "maChiCucNhan")
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa các bản ghi đã chọn?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: async () => {
+        this.danhSachKeHoach = this.danhSachKeHoach.filter(kh => kh.maDiemKho !== row.maDiemKho)
+        this.dataTableView = this.buildTableView(this.danhSachKeHoach, "maChiCucNhan")
 
-    if (this.idInput) {
-      const qDinh = this.formData.value.danhSachQuyetDinh.find(item => item.keHoachDcHdrId === row.hdrId)
-      const dsKH = qDinh.danhSachKeHoach.filter(item => item.maDiemKho !== row.maDiemKho)
-      qDinh.danhSachKeHoach = dsKH
-      const dsQuyetDinh = this.formData.value.danhSachQuyetDinh.filter(item => item.keHoachDcHdrId !== row.hdrId)
-      dsQuyetDinh.push(qDinh)
-      this.formData.patchValue({
-        danhSachQuyetDinh: dsQuyetDinh
-      })
-    }
+        if (this.idInput) {
+          const qDinh = this.formData.value.danhSachQuyetDinh.find(item => item.keHoachDcHdrId === row.hdrId)
+          const dsKH = qDinh.danhSachKeHoach.filter(item => item.maDiemKho !== row.maDiemKho)
+          qDinh.danhSachKeHoach = dsKH
+          const dsQuyetDinh = this.formData.value.danhSachQuyetDinh.filter(item => item.keHoachDcHdrId !== row.hdrId)
+          dsQuyetDinh.push(qDinh)
+          this.formData.patchValue({
+            danhSachQuyetDinh: dsQuyetDinh
+          })
+        }
+      },
+    });
+
   }
 
   themDiemKho(row) {
@@ -880,6 +1001,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
   themLoKho(row) {
     this.typeKeHoach = "THEM_LO_KHO"
     const data = {
+      // ...row,
       hdrId: row ? row.hdrId : '',
       maDvi: row ? row.maDvi : '',
       tenDvi: row ? row.tenDvi : '',
@@ -894,31 +1016,43 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
   }
 
   xoaLoKho(row) {
-    this.danhSachKeHoach = this.danhSachKeHoach.filter(kh =>
-      !(kh.maChiCucNhan === row.maChiCucNhan &&
-        kh.maDiemKho === row.maDiemKho &&
-        kh.maNhaKho === row.maNhaKho &&
-        kh.maNganKho === row.maNganKho &&
-        (row.maLoKho ? kh.maLoKho === row.maLoKho : true))
-    )
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa các bản ghi đã chọn?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: async () => {
+        this.danhSachKeHoach = this.danhSachKeHoach.filter(kh =>
+          !(kh.maChiCucNhan === row.maChiCucNhan &&
+            kh.maDiemKho === row.maDiemKho &&
+            kh.maNhaKho === row.maNhaKho &&
+            kh.maNganKho === row.maNganKho &&
+            (row.maLoKho ? kh.maLoKho === row.maLoKho : true))
+        )
 
-    this.dataTableView = this.buildTableViewChiCUC(this.danhSachKeHoach, "maChiCucNhan")
+        this.dataTableView = this.buildTableView(this.danhSachKeHoach, "maChiCucNhan")
 
-    if (this.idInput) {
-      const qDinh = this.formData.value.danhSachQuyetDinh.find(item => item.keHoachDcHdrId === row.hdrId)
-      const dsKH = row.maLoKho ? qDinh.danhSachKeHoach.filter(item => item.maLoKho !== row.maLoKho) : qDinh.danhSachKeHoach.filter(item => item.maNganKho !== row.maNganKho)
-      qDinh.danhSachKeHoach = dsKH
-      const dsQuyetDinh = this.formData.value.danhSachQuyetDinh.filter(item => item.keHoachDcHdrId !== row.hdrId)
-      dsQuyetDinh.push(qDinh)
-      this.formData.patchValue({
-        danhSachQuyetDinh: dsQuyetDinh
-      })
-    }
+        if (this.idInput) {
+          const qDinh = this.formData.value.danhSachQuyetDinh.find(item => item.keHoachDcHdrId === row.hdrId)
+          const dsKH = row.maLoKho ? qDinh.danhSachKeHoach.filter(item => item.maLoKho !== row.maLoKho) : qDinh.danhSachKeHoach.filter(item => item.maNganKho !== row.maNganKho)
+          qDinh.danhSachKeHoach = dsKH
+          const dsQuyetDinh = this.formData.value.danhSachQuyetDinh.filter(item => item.keHoachDcHdrId !== row.hdrId)
+          dsQuyetDinh.push(qDinh)
+          this.formData.patchValue({
+            danhSachQuyetDinh: dsQuyetDinh
+          })
+        }
+      },
+    });
+
   }
 
   themDiemKhoNhan(row) {
     this.typeKeHoach = "THEM_DIEM_KHO_NHAN"
-    console.log('themLoKho', row)
+
     const data = {
       ...row,
       maDiemKhoNhan: "",
@@ -951,11 +1085,11 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
         kh.maDiemKhoNhan === row.maDiemKhoNhan)
     )
     if (this.isCuc()) {
-      this.dataTableView = this.buildTableViewChiCUC(this.danhSachKeHoach, "maChiCucNhan")
+      this.dataTableView = this.buildTableView(this.danhSachKeHoach, "maChiCucNhan")
     }
 
     if (this.isChiCuc()) {
-      this.dataTableView = this.buildTableViewChiCUC(this.danhSachKeHoach, "maDvi")
+      this.dataTableView = this.buildTableView(this.danhSachKeHoach, "maDvi")
     }
 
     if (this.idInput) {
@@ -968,6 +1102,84 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
         danhSachQuyetDinh: dsQuyetDinh
       })
     }
+  }
+
+  xoaDiemKhoNhanCC(row) {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa các bản ghi đã chọn?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: async () => {
+        const dsDelete = this.danhSachKeHoach.filter(kh =>
+        (kh.maChiCucNhan === row.maChiCucNhan &&
+          kh.maDiemKho === row.maDiemKho &&
+          kh.maNhaKho === row.maNhaKho &&
+          kh.maNganKho === row.maNganKho &&
+          (row.maLoKho ? kh.maLoKho === row.maLoKho : true) &&
+          kh.maDiemKhoNhan === row.maDiemKhoNhan)
+        )
+
+        this.danhSachKeHoach = this.danhSachKeHoach.filter(kh =>
+          !(kh.maChiCucNhan === row.maChiCucNhan &&
+            kh.maDiemKho === row.maDiemKho &&
+            kh.maNhaKho === row.maNhaKho &&
+            kh.maNganKho === row.maNganKho &&
+            (row.maLoKho ? kh.maLoKho === row.maLoKho : true) &&
+            kh.maDiemKhoNhan === row.maDiemKhoNhan)
+        )
+
+        if (dsDelete.length == 1) {
+          this.danhSachKeHoach.push({
+            ...row,
+            tenDiemKhoNhan: "",
+            maDiemKhoNhan: "",
+            tenNhaKhoNhan: "",
+            maNhaKhoNhan: "",
+            tenNganKhoNhan: "",
+            maNganKhoNhan: "",
+            tenLoKhoNhan: "",
+            maLoKhoNhan: "",
+            tichLuongKd: "",
+            soLuongPhanBo: "",
+          })
+        }
+
+        this.dataTableView = this.buildTableView(this.danhSachKeHoach, "maDvi")
+
+
+
+        if (this.idInput) {
+          const qDinh = this.formData.value.danhSachQuyetDinh.find(item => item.keHoachDcHdrId === row.hdrId)
+          const keHoach = qDinh.danhSachKeHoach.find(item => item.maDiemKhoNhan === row.maDiemKhoNhan)
+          let dsKH = qDinh.danhSachKeHoach.filter(item => item.maDiemKhoNhan !== row.maDiemKhoNhan)
+          dsKH.push({
+            ...keHoach,
+            tenDiemKhoNhan: "",
+            maDiemKhoNhan: "",
+            tenNhaKhoNhan: "",
+            maNhaKhoNhan: "",
+            tenNganKhoNhan: "",
+            maNganKhoNhan: "",
+            tenLoKhoNhan: "",
+            maLoKhoNhan: "",
+            tichLuongKd: "",
+            soLuongPhanBo: "",
+          })
+          qDinh.danhSachKeHoach = dsKH
+
+          const dsQuyetDinh = this.formData.value.danhSachQuyetDinh.filter(item => item.keHoachDcHdrId !== row.hdrId)
+          dsQuyetDinh.push(qDinh)
+          this.formData.patchValue({
+            danhSachQuyetDinh: dsQuyetDinh
+          })
+        }
+      },
+    });
+
   }
 
   suaDiemKhoNhan(row) {
@@ -997,11 +1209,9 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
 
   themLoKhoNhan(row) {
     this.typeKeHoach = "THEM_LO_KHO_NHAN"
-    console.log('themLoKho', row)
+
     const data = {
       ...row,
-      // maDiemKhoNhan: "",
-      // tenDiemKhoNhan: "",
       maNhaKhoNhan: "",
       tenNhaKhoNhan: "",
       maNganKhoNhan: "",
@@ -1022,33 +1232,126 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
 
 
   xoaLoKhoNhan(row) {
-    this.danhSachKeHoach = this.danhSachKeHoach.filter(kh =>
-      !(kh.maChiCucNhan === row.maChiCucNhan &&
-        kh.maDiemKho === row.maDiemKho &&
-        kh.maNhaKho === row.maNhaKho &&
-        kh.maNganKho === row.maNganKho &&
-        (row.maLoKho ? kh.maLoKho === row.maLoKho : true) &&
-        kh.maDiemKhoNhan === row.maDiemKhoNhan &&
-        kh.maNhaKhoNhan === row.maNhaKhoNhan &&
-        kh.maNganKhoNhan === row.maNganKhoNhan &&
-        (row.maLoKhoNhan ? kh.maLoKhoNhan === row.maLoKhoNhan : true))
-    )
-    if (this.isCuc())
-      this.dataTableView = this.buildTableViewChiCUC(this.danhSachKeHoach, "maChiCucNhan")
-    if (this.isChiCuc())
-      this.dataTableView = this.buildTableViewChiCUC(this.danhSachKeHoach, "maDvi")
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa các bản ghi đã chọn?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: async () => {
+        this.danhSachKeHoach = this.danhSachKeHoach.filter(kh =>
+          !(kh.maChiCucNhan === row.maChiCucNhan &&
+            kh.maDiemKho === row.maDiemKho &&
+            kh.maNhaKho === row.maNhaKho &&
+            kh.maNganKho === row.maNganKho &&
+            (row.maLoKho ? kh.maLoKho === row.maLoKho : true) &&
+            kh.maDiemKhoNhan === row.maDiemKhoNhan &&
+            kh.maNhaKhoNhan === row.maNhaKhoNhan &&
+            kh.maNganKhoNhan === row.maNganKhoNhan &&
+            (row.maLoKhoNhan ? kh.maLoKhoNhan === row.maLoKhoNhan : true))
+        )
+        if (this.isCuc())
+          this.dataTableView = this.buildTableView(this.danhSachKeHoach, "maChiCucNhan")
+        if (this.isChiCuc())
+          this.dataTableView = this.buildTableView(this.danhSachKeHoach, "maDvi")
 
-    if (this.idInput) {
-      const qDinh = this.formData.value.danhSachQuyetDinh.find(item => item.keHoachDcHdrId === row.hdrId)
-      const dsKH = row.maLoKhoNhan ? qDinh.danhSachKeHoach.filter(item => item.maLoKhoNhan !== row.maLoKhoNhan) : qDinh.danhSachKeHoach.filter(item => item.maNganKhoNhan !== row.maNganKhoNhan)
-      qDinh.danhSachKeHoach = dsKH
-      const dsQuyetDinh = this.formData.value.danhSachQuyetDinh.filter(item => item.keHoachDcHdrId !== row.hdrId)
-      dsQuyetDinh.push(qDinh)
-      this.formData.patchValue({
-        danhSachQuyetDinh: dsQuyetDinh
-      })
-    }
+        if (this.idInput) {
+          const qDinh = this.formData.value.danhSachQuyetDinh.find(item => item.keHoachDcHdrId === row.hdrId)
+          const dsKH = row.maLoKhoNhan ? qDinh.danhSachKeHoach.filter(item => item.maLoKhoNhan !== row.maLoKhoNhan) : qDinh.danhSachKeHoach.filter(item => item.maNganKhoNhan !== row.maNganKhoNhan)
+          qDinh.danhSachKeHoach = dsKH
+          const dsQuyetDinh = this.formData.value.danhSachQuyetDinh.filter(item => item.keHoachDcHdrId !== row.hdrId)
+          dsQuyetDinh.push(qDinh)
+          this.formData.patchValue({
+            danhSachQuyetDinh: dsQuyetDinh
+          })
+        }
+      },
+    });
 
+
+
+  }
+
+  xoaLoKhoNhanCC(row) {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa các bản ghi đã chọn?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: async () => {
+        const dsDelete = this.danhSachKeHoach.filter(kh =>
+        (kh.maChiCucNhan === row.maChiCucNhan &&
+          kh.maDiemKho === row.maDiemKho &&
+          kh.maNhaKho === row.maNhaKho &&
+          kh.maNganKho === row.maNganKho &&
+          (row.maLoKho ? kh.maLoKho === row.maLoKho : true) &&
+          kh.maDiemKhoNhan === row.maDiemKhoNhan &&
+          kh.maNhaKhoNhan === row.maNhaKhoNhan &&
+          kh.maNganKhoNhan === row.maNganKhoNhan &&
+          (row.maLoKhoNhan ? kh.maLoKhoNhan === row.maLoKhoNhan : true))
+        )
+
+        this.danhSachKeHoach = this.danhSachKeHoach.filter(kh =>
+          !(kh.maChiCucNhan === row.maChiCucNhan &&
+            kh.maDiemKho === row.maDiemKho &&
+            kh.maNhaKho === row.maNhaKho &&
+            kh.maNganKho === row.maNganKho &&
+            (row.maLoKho ? kh.maLoKho === row.maLoKho : true) &&
+            kh.maDiemKhoNhan === row.maDiemKhoNhan &&
+            kh.maNhaKhoNhan === row.maNhaKhoNhan &&
+            kh.maNganKhoNhan === row.maNganKhoNhan &&
+            (row.maLoKhoNhan ? kh.maLoKhoNhan === row.maLoKhoNhan : true))
+        )
+
+
+
+        if (dsDelete.length == 1) {
+          this.danhSachKeHoach.push({
+            ...row,
+            tenNhaKhoNhan: "",
+            maNhaKhoNhan: "",
+            tenNganKhoNhan: "",
+            maNganKhoNhan: "",
+            tenLoKhoNhan: "",
+            maLoKhoNhan: "",
+            tichLuongKd: "",
+            soLuongPhanBo: "",
+          })
+        }
+
+        this.dataTableView = this.buildTableView(this.danhSachKeHoach, "maDvi")
+
+        if (this.idInput) {
+          const qDinh = this.formData.value.danhSachQuyetDinh.find(item => item.keHoachDcHdrId === row.hdrId)
+          const keHoach = row.maLoKhoNhan ? qDinh.danhSachKeHoach.find(item => item.maLoKhoNhan === row.maLoKhoNhan) : qDinh.danhSachKeHoach.filter(item => item.maNganKhoNhan === row.maNganKhoNhan)
+          let dsKH = row.maLoKhoNhan ? qDinh.danhSachKeHoach.filter(item => item.maLoKhoNhan !== row.maLoKhoNhan) : qDinh.danhSachKeHoach.filter(item => item.maNganKhoNhan !== row.maNganKhoNhan)
+          dsKH.push({
+            ...keHoach,
+            tenNhaKhoNhan: "",
+            maNhaKhoNhan: "",
+            tenNganKhoNhan: "",
+            maNganKhoNhan: "",
+            tenLoKhoNhan: "",
+            maLoKhoNhan: "",
+            tichLuongKd: "",
+            soLuongPhanBo: "",
+          })
+          qDinh.danhSachKeHoach = dsKH
+          const dsQuyetDinh = this.formData.value.danhSachQuyetDinh.filter(item => item.keHoachDcHdrId !== row.hdrId)
+          dsQuyetDinh.push(qDinh)
+          this.formData.patchValue({
+            danhSachQuyetDinh: dsQuyetDinh
+          })
+
+          console.log('xoaLoKhoNhanCC', dsQuyetDinh)
+        }
+      },
+    });
 
   }
 
@@ -1061,30 +1364,49 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
   }
 
   isLuuVaGD() {
-    return !this.isYCXDDiemNhap() && (!this.isView && this.formData.value.trangThai == STATUS.DU_THAO && this.isCuc()) || (this.isChiCuc() && this.formData.value.loaiQdinh == '01')
+    return !this.isYCXDDiemNhap() && (!this.isView && this.formData.value.trangThai == STATUS.DU_THAO && this.isCuc()) || (this.isChiCuc() && this.formData.value.loaiQdinh == '00' && this.formData.value.trangThai == STATUS.YC_CHICUC_PHANBO_DC)
+  }
+
+  setValidator() {
+    if (this.formData.value.loaiDc === "DCNB") {
+      this.formData.controls["loaiQdinh"].clearValidators();
+      this.formData.controls["soCanCuQdTc"].clearValidators();
+    }
+    if (this.formData.value.loaiDc === "CHI_CUC") {
+      this.formData.controls["loaiQdinh"].clearValidators();
+    }
   }
 
   async save(isGuiDuyet?) {
+    this.setValidator()
+    this.helperService.markFormGroupTouched(this.formData);
+    if (!this.formData.valid) return
     await this.spinner.show();
     let body = this.formData.value;
     body.canCu = this.canCu;
     body.quyetDinh = this.quyetDinh;
-    if (this.idInput) body.id = this.idInput
-
+    body.soQdinh = `${this.formData.value.soQdinh.toString().split("/")[0]}/${this.maQd}`
+    if (this.idInput) {
+      body.id = this.idInput
+    }
+    console.log('save', body)
+    // return
     let data = await this.createUpdate(body);
     if (data) {
+      this.idInput = data.id;
       if (isGuiDuyet) {
-        this.idInput = data.id;
         this.guiDuyet();
-      } else {
-        this.quayLai();
+      }
+      else {
+        // this.quayLai();
+        await this.loadChiTiet(this.idInput)
       }
     }
     await this.spinner.hide();
   }
 
   isYCXDDiemNhap() {
-    return this.formData.value.trangThai == STATUS.DU_THAO && this.formData.value.loaiQdinh == '01'
+    return this.formData.value.trangThai == STATUS.DU_THAO && this.formData.value.loaiQdinh == '00' && !this.isTongCuc()
   }
 
   async ycXDDiemNhap() {
@@ -1092,6 +1414,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
     let body = this.formData.value;
     body.canCu = this.canCu;
     body.quyetDinh = this.quyetDinh;
+    body.soQdinh = `${this.formData.value.soQdinh.toString().split("/")[0]}/${this.maQd}`
     if (this.idInput) body.id = this.idInput
 
     let data = await this.createUpdate(body);
@@ -1120,7 +1443,10 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
 
   isTuChoi() {
     if (this.isCuc()) {
-      return this.formData.value.trangThai == STATUS.CHO_DUYET_TP || this.formData.value.trangThai == STATUS.TU_CHOI_TP || this.formData.value.trangThai == STATUS.CHO_DUYET_LDC || this.formData.value.trangThai == STATUS.TU_CHOI_LDC
+      return this.formData.value.trangThai == STATUS.CHO_DUYET_TP || this.formData.value.trangThai == STATUS.CHO_DUYET_LDC
+    }
+    if (this.isChiCuc()) {
+      return this.formData.value.trangThai == STATUS.CHODUYET_TBP_TVQT || this.formData.value.trangThai == STATUS.CHO_DUYET_LDCC
     }
     return false
   }
@@ -1150,7 +1476,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
 
   isPheDuyet() {
     if (this.isCuc()) {
-      return this.formData.value.trangThai == STATUS.CHO_DUYET_TP
+      return (this.formData.value.trangThai == STATUS.CHO_DUYET_TP || this.formData.value.trangThai == STATUS.CHO_DUYET_LDC) //&& userService.isAccessPermisson('DCNB_QUYETDINHDC_DUYET_LDVU')
     }
     if (this.isChiCuc()) {
       return this.formData.value.trangThai == STATUS.CHODUYET_TBP_TVQT || this.formData.value.trangThai == STATUS.CHO_DUYET_LDCC

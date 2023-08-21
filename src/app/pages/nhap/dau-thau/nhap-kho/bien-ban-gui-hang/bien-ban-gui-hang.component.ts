@@ -143,6 +143,7 @@ export class BienBanGuiHangComponent extends BaseComponent implements OnInit {
     await this.spinner.show();
     let body = {
       namNhap: this.searchFilter.namKh,
+      soQd: this.searchFilter.soQuyetDinh,
       trangThai: this.STATUS.BAN_HANH,
       paggingReq: {
         "limit": this.pageSize,

@@ -9,6 +9,7 @@ import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
 import { QuyetDinhGiaoNvNhapHangService } from './../../../../../services/qlnv-hang/nhap-hang/mua-truc-tiep/qdinh-giao-nvu-nh/quyetDinhGiaoNvNhapHang.service';
 import { async } from '@angular/core/testing';
+import { cloneDeep } from 'lodash';
 import { MttPhieuKiemNghiemChatLuongService } from './../../../../../services/qlnv-hang/nhap-hang/mua-truc-tiep/MttPhieuKiemNghiemChatLuongService.service';
 @Component({
   selector: 'app-phieu-kiem-nghiem-chat-luong',
@@ -23,6 +24,7 @@ export class PhieuKiemNghiemChatLuongComponent extends Base2Component implements
   selectedId: number = 0;
   isView: boolean = false;
   idQdGiaoNvNh: number
+  idDiemKho: number
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -50,7 +52,6 @@ export class PhieuKiemNghiemChatLuongComponent extends Base2Component implements
         loaiVthh: this.loaiVthh
       })
       await this.search();
-      await this.convertDataTable();
     }
     catch (e) {
       console.log('error: ', e)
@@ -59,36 +60,69 @@ export class PhieuKiemNghiemChatLuongComponent extends Base2Component implements
     }
   }
 
+  async search(roles?) {
+    if (!this.checkPermission(roles)) {
+      return
+    }
+    await this.spinner.show();
+    try {
+      let body = this.formData.value
+      body.paggingReq = {
+        limit: this.pageSize,
+        page: this.page - 1
+      }
+      let res = await this.service.search(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        let data = res.data;
+        this.dataTable = data.content;
+        this.totalRecord = data.totalElements;
+        if (this.dataTable && this.dataTable.length > 0) {
+          this.dataTable.forEach((item) => {
+            item.checked = false;
+          });
+        }
+        this.dataTable.forEach(item => {
+          if (this.userService.isChiCuc()) {
+            item.detail = item.hhQdGiaoNvNhangDtlList.filter(y => y.maDvi == this.userInfo.MA_DVI)[0]
+            item.detail = {
+              children: item.detail.children.filter(x => x.maDiemKho.includes(this.userInfo.MA_DVI))
+            }
+          } else {
+            let data = [];
+            item.hhQdGiaoNvNhangDtlList.forEach(res => {
+              data = [...data, ...res.children.filter(x => x.idDtl == res.id)];
+            })
+            item.detail = {
+              children: data
+            }
+          };
+        });
+        console.log(this.dataTable)
+        this.dataTableAll = cloneDeep(this.dataTable);
+      } else {
+        this.dataTable = [];
+        this.totalRecord = 0;
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+    } catch (e) {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      await this.spinner.hide();
+    }
+  }
+
   async showList() {
     this.isDetail = false;
     await this.search();
-    await this.convertDataTable();
-  }
-  convertDataTable() {
-    this.dataTable.forEach(item => {
-      if (this.userService.isChiCuc()) {
-        item.detail = item.hhQdGiaoNvNhangDtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0]
-        if (item.detail) {
-          item.detail.children = item.detail.listPhieuKiemNghiemCl
-        }
-      } else {
-        let data = [];
-        item.hhQdGiaoNvNhangDtlList.forEach(item => {
-          data = [...data, ...item.listPhieuKiemNghiemCl];
-        })
-        item.detail = {
-          children: data
-        }
-
-      };
-    });
   }
 
-  redirectToChiTiet(isView: boolean, id: number, idQdGiaoNvNh?: number) {
+
+  redirectToChiTiet(isView: boolean, id: number, idQdGiaoNvNh?: number, idDiemKho?: number) {
     this.selectedId = id;
     this.isDetail = true;
     this.isView = isView;
     this.idQdGiaoNvNh = idQdGiaoNvNh
+    this.idDiemKho = idDiemKho
   }
 
   async xoaItem(item: any) {
@@ -110,7 +144,6 @@ export class PhieuKiemNghiemChatLuongComponent extends Base2Component implements
                 MESSAGE.DELETE_SUCCESS,
               );
               await this.search();
-              await this.convertDataTable();
             } else {
               this.notification.error(MESSAGE.ERROR, res.msg);
             }

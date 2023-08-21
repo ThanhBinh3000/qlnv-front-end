@@ -1,20 +1,20 @@
-import { cloneDeep, includes } from "lodash";
-import { Component, EventEmitter, Input, OnInit, Output, OnChanges, ViewChild, SimpleChanges } from "@angular/core";
+import {cloneDeep, includes} from "lodash";
+import {Component, EventEmitter, Input, OnInit, Output, OnChanges, ViewChild, SimpleChanges} from "@angular/core";
 import dayjs from "dayjs";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NgxSpinnerService } from "ngx-spinner";
-import { DialogTuChoiComponent } from "src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component";
-import { MESSAGE } from "src/app/constants/message";
-import { Validators } from "@angular/forms";
-import { KhCnQuyChuanKyThuat } from "./../../../../services/kh-cn-bao-quan/KhCnQuyChuanKyThuat";
-import { DanhMucService } from "src/app/services/danhmuc.service";
-import { STATUS, TRANG_THAI_QUY_CHUAN_TIEU_CHUAN } from "src/app/constants/status";
-import { QuyChunKyThuatQuocGia } from "src/app/models/KhoaHocCongNgheBaoQuan";
-import { HttpClient } from "@angular/common/http";
-import { StorageService } from "src/app/services/storage.service";
-import { DonviService } from "src/app/services/donvi.service";
-import { Base2Component } from "./../../../../components/base2/base2.component";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {DialogTuChoiComponent} from "src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component";
+import {MESSAGE} from "src/app/constants/message";
+import {Validators} from "@angular/forms";
+import {KhCnQuyChuanKyThuat} from "./../../../../services/kh-cn-bao-quan/KhCnQuyChuanKyThuat";
+import {DanhMucService} from "src/app/services/danhmuc.service";
+import {STATUS, TRANG_THAI_QUY_CHUAN_TIEU_CHUAN} from "src/app/constants/status";
+import {QuyChunKyThuatQuocGia} from "src/app/models/KhoaHocCongNgheBaoQuan";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "src/app/services/storage.service";
+import {DonviService} from "src/app/services/donvi.service";
+import {Base2Component} from "./../../../../components/base2/base2.component";
 
 
 @Component({
@@ -54,8 +54,8 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
   dsBoNganh: any[] = [];
   listAll: any[] = [];
   listMaSo: any[] = [
-    { maVb: "/" + dayjs().get("year") + "/TT-BTC" },
-    { maVb: "/" + dayjs().get("year") + "/QĐ-BTC" }
+    {maVb: "/" + dayjs().get("year") + "/TT-BTC"},
+    {maVb: "/" + dayjs().get("year") + "/QĐ-BTC"}
   ];
 
   constructor(
@@ -92,6 +92,8 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
       apDungCloaiVthh: [true],
       listTenLoaiVthh: [""],
       type: [""],
+      isMat: [],
+      maBn: [],
       maVb: this.listMaSo[0].maVb
     });
   }
@@ -104,7 +106,6 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
   async ngOnInit() {
     this.spinner.show();
     try {
-      this.initForm();
       await Promise.all([
         this.userInfo = this.userService.getUserLogin(),
         this.loadDsNam(),
@@ -113,6 +114,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
       ]);
       this.getListCapDt();
       this.getListVanBan();
+      await this.initForm();
       this.getDetail(this.id),
         this.spinner.hide();
     } catch (e) {
@@ -120,8 +122,6 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
-
-
   }
 
   loadDsNam() {
@@ -132,6 +132,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
       });
     }
   }
+
 
   async getDetail(id) {
     if (id > 0) {
@@ -156,14 +157,14 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
           if (a.thuTuHt !== b.thuTuHt) {
             return a.thuTuHt - b.thuTuHt;
           } else {
-            return a.cloaiVthh && b.cloaiVthh ?  a.cloaiVthh.localeCompare(b.cloaiVthh) : this.dataTable;
+            return a.cloaiVthh && b.cloaiVthh ? a.cloaiVthh.localeCompare(b.cloaiVthh) : this.dataTable;
           }
         });
         this.taiLieuDinhKemList = data.fileDinhKems;
         await this.updateEditCache();
       }
     } else {
-      let id = await this.userService.getId("KHCN_QUY_CHUAN_QG_HDR_SEQ");
+      // let id = await this.userService.getId("KHCN_QUY_CHUAN_QG_HDR_SEQ");
       this.formData.patchValue({
         // soVanBan: id + this.maVb,
         tenDvi: this.userInfo.TEN_DVI,
@@ -183,20 +184,31 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
     }
   }
 
+  isDisableByBoNganh(): boolean {
+    if (this.formData.value.maBn && !this.formData.value.maBn.startsWith("01") && !this.userInfo.MA_DVI.startsWith("01")) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   async getListBoNganh() {
     this.dsBoNganh = [];
     let res = await this.donviService.layTatCaDonViByLevel(0);
     if (res.msg == MESSAGE.SUCCESS) {
       this.dsBoNganh = res.data.filter(s => s.tenDvi);
       let boTaiChinh = res.data.find(s => s.code === "BTC");
+      boTaiChinh.tenDvi = 'TCDT - Bộ Tài Chính'
       Object.assign(this.dsBoNganh, boTaiChinh);
     }
   }
 
+
   async initForm() {
     this.formData.patchValue({
       trangThai: "00",
-      tenTrangThai: "Dự Thảo"
+      tenTrangThai: "Dự Thảo",
+      maBn: this.userInfo.MA_DVI.startsWith("01") ? '01' : this.userInfo.MA_DVI
     });
   }
 
@@ -241,14 +253,14 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
     let arr = [];
     if (this.listAllCloaiVthh && this.listAllCloaiVthh.length > 0) {
       this.listAllCloaiVthh.forEach(item => {
-          if (this.dataTable && this.dataTable.length > 0) {
-            this.dataTable.forEach(itemQc => {
-              this.itemQuyChuan = cloneDeep(itemQc);
-              this.itemQuyChuan.cloaiVthh = item.cap == 3 ? item.ma : null
-              this.itemQuyChuan.loaiVthh = item.cap == 3  ? item.ma.substring(0, item.ma.length - 2) : item.ma;
-              arr.push(this.itemQuyChuan);
-              this.itemQuyChuan = new QuyChunKyThuatQuocGia();
-            });
+        if (this.dataTable && this.dataTable.length > 0) {
+          this.dataTable.forEach(itemQc => {
+            this.itemQuyChuan = cloneDeep(itemQc);
+            this.itemQuyChuan.cloaiVthh = item.cap == 3 ? item.ma : null
+            this.itemQuyChuan.loaiVthh = item.cap == 3 ? item.ma.substring(0, item.ma.length - 2) : item.ma;
+            arr.push(this.itemQuyChuan);
+            this.itemQuyChuan = new QuyChunKyThuatQuocGia();
+          });
         }
       });
     }
@@ -444,7 +456,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
     }
   }
 
-  async changeListOfTagOptions(cloaiVtt, showPopup : boolean, typeData?) {
+  async changeListOfTagOptions(cloaiVtt, showPopup: boolean, typeData?) {
     let lss = [];
     let ls = [];
     if (this.listAll.some(s1 => cloaiVtt.includes(s1.loaiVthh)) && showPopup && !typeData) {
@@ -586,7 +598,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
       this.dataTable.forEach((item, index) => {
         this.dataEdit[index] = {
           edit: false,
-          data: { ...item }
+          data: {...item}
         };
       });
     }
@@ -595,7 +607,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
   huyEdit(id: number): void {
     const index = this.dataTable.findIndex((item) => item.idVirtual == id);
     this.dataEdit[id] = {
-      data: { ...this.dataTable[index] },
+      data: {...this.dataTable[index]},
       edit: false
     };
   }
@@ -659,7 +671,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
         this.dataTable.forEach((item, index) => {
           this.dataEdit[index] = {
             edit: false,
-            data: { ...item }
+            data: {...item}
           };
         });
       }

@@ -14,6 +14,7 @@ import {
 import {
   PvcDxChiCucCtiet
 } from "../../../de-xuat-nc-chi-cuc-pvc/them-moi-dx-chi-cuc-pvc/them-moi-dx-chi-cuc-pvc.component";
+import {AMOUNT} from "../../../../../../Utility/utils";
 
 @Component({
   selector: 'app-thong-tin-phan-bo-ct-pvc',
@@ -27,6 +28,7 @@ export class ThongTinPhanBoCtPvcComponent  implements OnInit {
   item: PvcDxChiCucCtiet = new PvcDxChiCucCtiet();
   listChiCuc: any[] = []
   userInfo: UserLogin
+  amount = AMOUNT
 
   constructor(
     private dmDviService: DonviService,
@@ -115,4 +117,6 @@ export class ThongTinPhanBoCtPvcComponent  implements OnInit {
       this.item.tenDvi = loaiHangHoa[0].tenDvi
     }
   }
+
+  protected readonly AMOUNT = AMOUNT;
 }

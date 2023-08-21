@@ -33,9 +33,10 @@ export class ThemMoiUbtvqhComponent implements OnInit {
 
   taiLieuDinhKemList: any[] = [];
   dsNam: any[] = [];
-  maQd: string
+  // maQd: string
   userInfo: UserLogin;
   dataTable: any[] = [];
+  STATUS = STATUS;
 
   constructor(
     private readonly fb: FormBuilder,
@@ -54,7 +55,7 @@ export class ThemMoiUbtvqhComponent implements OnInit {
         ngayQd: [null, [Validators.required]],
         namQd: [dayjs().get('year'), [Validators.required]],
         trichYeu: [null],
-        trangThai: ['00'],
+        trangThai: [STATUS.DANG_NHAP_DU_LIEU],
         listBoNganh: []
       }
     );
@@ -65,7 +66,7 @@ export class ThemMoiUbtvqhComponent implements OnInit {
     await Promise.all([
       this.userInfo = this.userService.getUserLogin(),
       this.loadDsNam(),
-      this.maQd = "/NQ-UBTVQH14",
+      // this.maQd = "/NQ-UBTVQH14",
       this.getDataDetail(this.idInput),
     ])
     this.spinner.hide();
@@ -79,7 +80,7 @@ export class ThemMoiUbtvqhComponent implements OnInit {
         id: data.id,
         namQd: data.namQd,
         ngayQd: data.ngayQd,
-        soQd: data.soQd.split('/')[0],
+        soQd: data.soQd,
         trangThai: data.trangThai,
         trichYeu: data.trichYeu
       })
@@ -179,7 +180,7 @@ export class ThemMoiUbtvqhComponent implements OnInit {
       return;
     }
     let body = this.formData.value;
-    body.soQd = body.soQd + this.maQd;
+    body.soQd = body.soQd;
     body.listBoNganh = this.dataTable;
     body.fileDinhKems = this.taiLieuDinhKemList;
     let res

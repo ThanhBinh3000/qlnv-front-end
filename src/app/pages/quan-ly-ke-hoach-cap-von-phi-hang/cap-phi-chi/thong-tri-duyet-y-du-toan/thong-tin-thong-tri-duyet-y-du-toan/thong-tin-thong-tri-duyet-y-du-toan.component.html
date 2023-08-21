@@ -10,11 +10,12 @@
       <span>Lưu và gửi duyệt</span>
     </button>
     <button class="btn btn-sub btn-sm waves-effect waves-light"
-            *ngIf="khBanDauGia.trangThai == globals.prop.NHAP_CHO_DUYET_LD_VU" (click)="pheDuyet()">
+            *ngIf="khBanDauGia.trangThai == STATUS.CHO_DUYET_LDV ||
+             khBanDauGia.trangThai == STATUS.DA_DUYET_LDV" (click)="pheDuyet()">
       <i class="icon htvbdh_tcdt_pheduyet"></i>
       <span>Duyệt</span>
     </button>
-    <button type="button" class="btn btn-sub" *ngIf="khBanDauGia.trangThai == globals.prop.NHAP_CHO_DUYET_LD_VU"
+    <button type="button" class="btn btn-sub" *ngIf="khBanDauGia.trangThai ==  STATUS.CHO_DUYET_LDV"
             (click)="tuChoi()">
       <i class="icon htvbdh_tcdt_tuchoi do"></i>
       <span>Từ chối</span>
@@ -75,7 +76,8 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true">Mã tổng hợp</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-              <nz-select formControlName="soDnCapPhi" nzAllowClear [nzDisabled]="isView" (ngModelChange)="changeMaTongHop()"
+              <nz-select formControlName="soDnCapPhi" nzAllowClear [nzDisabled]="isView"
+                         (ngModelChange)="changeMaTongHop()"
                          nzAllowClear>
                 <nz-option *ngFor="let p of listTongHop" [nzValue]="p.id" [nzLabel]="p.maTongHop"></nz-option>
               </nz-select>
@@ -86,7 +88,8 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Đơn vị</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-              <nz-select formControlName="dviThongTri" nzAllowClear [nzDisabled]="isView" (ngModelChange)="changeDonVi()">
+              <nz-select formControlName="dviThongTri" nzAllowClear [nzDisabled]="isView"
+                         (ngModelChange)="changeDonVi()">
                 <nz-option *ngFor="let p of dsBoNganh" [nzValue]="p.code" [nzLabel]="p.tenDvi">
                 </nz-option>
               </nz-select>
@@ -179,7 +182,9 @@
           </th>
           <th>
             <nz-input-group>
-              <nz-input-number [nzMin]="1" [nzMax]="" [nzSize]="'small'" [(ngModel)]="rowItem.soTien">
+              <nz-input-number [nzMin]="1" [nzMax]="" [nzSize]="'small'" [(ngModel)]="rowItem.soTien"
+                               [nzFormatter]="globals.formatter"
+                               [nzParser]="globals.parser">
               </nz-input-number>
             </nz-input-group>
           </th>
@@ -204,14 +209,14 @@
             <td>{{idx + 1}}</td>
             <td>{{item.muc}}</td>
             <td>{{item.tieuMuc}}</td>
-            <td>{{item.soTien}}</td>
+            <td class="text-right">{{item.soTien | number : '1.0-1'}}</td>
             <td>{{item.chuThich}}</td>
             <td>
               <a (click)="showEditItem(idx, 'show')">
-                <i class="fa fa-pencil"></i>
+                <i class="fa fa-pencil" title="Sửa"></i>
               </a>
               <a (click)="xoaItem(idx)">
-                <i class="fa fa-trash-o do"></i>
+                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
               </a>
             </td>
           </ng-container>

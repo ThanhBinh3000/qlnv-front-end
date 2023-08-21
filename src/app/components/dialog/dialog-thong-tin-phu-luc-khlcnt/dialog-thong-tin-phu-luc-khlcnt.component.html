@@ -60,7 +60,7 @@
                   <i class="fa fa-plus"></i>
                 </a>
                 <a (click)="clearItemRow()">
-                  <i class="fa fa-trash-o do"></i>
+                  <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                 </a>
               </td>
             </tr>
@@ -74,10 +74,10 @@
                 <td>{{ data.thanhTien | number: '1.0-1' }}</td>
                 <td>
                   <a (click)="editRow(data.stt)">
-                    <i class="fa fa-pencil"></i>
+                    <i class="fa fa-pencil" title="Sửa"></i>
                   </a>
                   <a (click)="deleteRow(data)">
-                    <i class="fa fa-trash-o do"></i>
+                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                   </a>
                 </td>
               </ng-container>

@@ -16,6 +16,12 @@ import { NzModalService } from "ng-zorro-antd/modal";
 import dayjs from 'dayjs';
 import { QuyetDinhPheDuyetKeHoachLCNTService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/quyetDinhPheDuyetKeHoachLCNT.service';
 import { DatePipe } from '@angular/common';
+import {STATUS} from "../../../../../../../constants/status";
+import {
+  DialogThemMoiGoiThauComponent
+} from "../../../../../../../components/dialog/dialog-them-moi-goi-thau/dialog-them-moi-goi-thau.component";
+import {UserService} from "../../../../../../../services/user.service";
+import {NzNotificationService} from "ng-zorro-antd/notification";
 
 
 @Component({
@@ -29,40 +35,38 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
   @Output() soLuongChange = new EventEmitter<number>();
   @Output() donGiaTamTinhOut = new EventEmitter<number>();
   @Output() objectChange = new EventEmitter<number>();
+  @Output() dsDxChange = new EventEmitter<any>();
   @Input() isView;
   @Input() isCache: boolean = false;
   @Input() isTongHop;
+  @Input() dataChiTieu;
+  @Input() maDvi;
+  @Input() trangThaiQd;
 
   formData: FormGroup
   listNguonVon: any[] = [];
+  listThuHoachVu: any[] = [];
   listDataGroup: any[] = [];
   listOfData: any[] = [];
   isEditing: boolean = false;
   editingSoLuong: any;
   listDataDetail: any[] = [];
-  listDataCuc: any[] = [];
-  listDataChiCuc: any[] = [];
   listData: any[] = [];
-  tgianBdauTchucChange: Date | null = null;
-  tgianNhangChange: Date | null = null;
-  tgianDthauChange: Date | null = null;
-  tgianMthauChange: Date | null = null;
   tenDuAn: any;
-  giaVat: any;
-  tienBaoLanh: any;
-  tienDamBaoThHd: any;
   tenHangHoa: any;
-  tChuanCLuong: any;
   tongTienTamTinh: any;
   tongSLuongNhap: any;
   sumDataSoLuong: any[] = [];
   sumThanhTienTamTinh: any[] = [];
-
+  STATUS = STATUS;
+  listQuy: any[] = [];
   constructor(
     private fb: FormBuilder,
     public globals: Globals,
     private danhMucService: DanhMucService,
     private dxKhLcntService: DanhSachDauThauService,
+    private userService: UserService,
+    private notification: NzNotificationService,
     private quyetDinhPheDuyetKeHoachLCNTService: QuyetDinhPheDuyetKeHoachLCNTService,
     private spinner: NgxSpinnerService,
     private helperService: HelperService,
@@ -100,12 +104,21 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
       soLuong: [],
       donGiaVat: [''],
       vat: [5],
-      tongMucDt: [null,],
-      tongMucDtDx: [null,],
+      tongMucDt: [null],
+      tongMucDtLamTron: [null],
+      tongMucDtDx: [null, [Validators.required]],
+      tongMucDtDxLamTron: [null, [Validators.required]],
       nguonVon: [null,],
       tgianNhang: [null,],
       ghiChu: [null],
       ldoTuchoi: [],
+      trangThai: [],
+      quy: [''],
+      ctietTccl: [''],
+      namSxuat: [''],
+      vu: [''],
+      thuHoachVu: [''],
+      namThuHoach: [''],
     });
   }
 
@@ -117,7 +130,6 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
       if (this.dataInput) {
         if (!this.isCache && this.dataInput.idQdHdr != undefined) {
           data = await this.quyetDinhPheDuyetKeHoachLCNTService.getDetail(this.dataInput.idQdHdr);
-          console.log("hihi ", data)
           if (this.dataInput.soLuong) {
             this.formData.patchValue({
               soLuong: this.dataInput.soLuong,
@@ -126,7 +138,6 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
           }
         } else {
           res = await this.dxKhLcntService.getDetail(this.dataInput.idDxHdr);
-          console.log("haha ", res)
         }
         if (this.isTongHop) {
           this.listOfData = this.dataInput.children;
@@ -137,45 +148,33 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
           this.listOfData = this.dataInput.children;
         }
         if (data != null && data.msg == MESSAGE.SUCCESS) {
-          this.tgianBdauTchucChange = data.data.tgianBdauTchuc
-          this.tgianDthauChange = data.data.tgianDthau
-          this.tgianMthauChange = data.data.tgianMthau
-          this.tgianNhangChange = data.data.tgianNhang
-          this.tenDuAn = data.data.children[0].tenDuAn
-          this.giaVat = data.data.children[0].donGiaVat
-          this.formData.patchValue({
-            tgianDthau: data.data.tgianDthau,
-            tgianMthau: data.data.tgianMthau,
-            tgianNhang: data.data.tgianNhang,
-            tgianBdauTchuc: data.data.tgianBdauTchuc
-          });
-          this.formData.get('tchuanCluong').setValue(data.data.children[0].dxuatKhLcntHdr.tchuanCluong)
-          this.tienDamBaoThHd = data.data.children[0].dxuatKhLcntHdr.tongMucDtDx * data.data.children[0].dxuatKhLcntHdr.gtriHdong / 100;
-          this.tienBaoLanh = data.data.children[0].dxuatKhLcntHdr.tongMucDtDx + (data.data.children[0].dxuatKhLcntHdr.tongMucDtDx * data.data.children[0].dxuatKhLcntHdr.gtriHdong / 100) + (data.data.children[0].dxuatKhLcntHdr.tongMucDtDx * data.data.children[0].dxuatKhLcntHdr.gtriDthau / 100)
-          this.formData.get('tongMucDt').setValue(data.data.children[0].dxuatKhLcntHdr.tongMucDt)
           this.helperService.bidingDataInFormGroup(this.formData, data.data);
-
-        } else if (res != null && res.msg == MESSAGE.SUCCESS) {
-          this.tgianBdauTchucChange = res.data.tgianBdauTchuc
-          this.tgianDthauChange = res.data.tgianDthau
-          this.tgianMthauChange = res.data.tgianMthau
-          this.tgianNhangChange = res.data.tgianNhang
-          this.tChuanCLuong = res.data.tchuanCluong
-          this.tenHangHoa = res.data.moTaHangHoa
-          this.helperService.bidingDataInFormGroup(this.formData, res.data);
-          let soLuong = res.data.tongMucDt / res.data.donGiaVat;
           this.formData.patchValue({
-            soLuong: soLuong,
-            tongMucDt: soLuong * res.data.donGiaVat,
-            tgianDthau: res.data.tgianDthau,
-            tgianMthau: res.data.tgianMthau,
-            tgianNhang: res.data.tgianNhang,
-            tgianBdauTchuc: res.data.tgianBdauTchuc
+            tgianDthau: this.dataInput.tgianDthau,
+            tgianMthau: this.dataInput.tgianMthau,
+            tgianNhang: this.dataInput.tgianNhang,
+            tgianBdauTchuc: this.dataInput.tgianBdauTchuc,
+            gtriDthau: this.dataInput.dxuatKhLcntHdr.gtriDthau,
+            gtriHdong: this.dataInput.dxuatKhLcntHdr.gtriHdong,
+            tchuanCluong: this.dataInput.dxuatKhLcntHdr.tchuanCluong,
+            tongMucDt: this.dataInput.dxuatKhLcntHdr.tongMucDt,
+            tenDuAn: this.dataInput.dxuatKhLcntHdr.tenDuAn,
+            tenDvi: this.dataInput.dxuatKhLcntHdr.tenDvi,
+            ctietTccl: this.dataInput.dxuatKhLcntHdr.ctietTccl,
+            namSxuat: this.dataInput.dxuatKhLcntHdr.namSxuat,
+            vu: this.dataInput.dxuatKhLcntHdr.vu,
+            thuHoachVu: this.dataInput.dxuatKhLcntHdr.thuHoachVu,
+            namThuHoach: this.dataInput.dxuatKhLcntHdr.namThuHoach,
+            quy: this.dataInput.dxuatKhLcntHdr.quy,
           });
+          this.initListQuy();
+          this.tinhTongMucDtDx();
+        } else if (res != null && res.msg == MESSAGE.SUCCESS) {
+          this.helperService.bidingDataInFormGroup(this.formData, res.data);
+          this.initListQuy();
+          this.tinhTongMucDtDx();
         }
-        this.helperService.setIndexArray(this.listOfData);
-        // this.convertListData();
-        this.convertListDataLuongThuc()
+        this.objectChange.emit(this.formData.value)
       } else {
         this.formData.reset();
         this.formData.patchValue({
@@ -185,72 +184,26 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
     }
     await this.spinner.hide()
   }
-
-  convertListData() {
-    this.helperService.setIndexArray(this.listOfData);
-    this.listDataGroup = chain(this.listOfData).groupBy('tenDvi').map((value, key) => ({ tenDvi: key, dataChild: value }))
-      .value()
-  }
-
-  onDateChanged(value: any, type: any) {
-    if (type == 'tgianBdauTchuc') {
-      this.formData.get('tgianBdauTchuc').setValue(value);
-    } else if (type == 'tgianMthau') {
-      this.formData.get('tgianMthau').setValue(value);
-    } else if (type == 'tgianDthau') {
-      this.formData.get('tgianDthau').setValue(value);
-    } else if (type == 'tgianNhang') {
-      this.formData.get('tgianNhang').setValue(value);
-    }
-    this.objectChange.emit(this.formData.value)
-  }
-
-  convertDateToString(event: any): string {
-    let result = '';
-    if (event) {
-      result = dayjs(event).format('DD/MM/YYYY').toString()
-    }
-    return result;
-  }
-
-  convertListDataLuongThuc() {
-    let listChild = [];
-    this.listOfData.forEach(item => {
-      item.children.forEach(i => {
-        i.goiThau = item.goiThau
-        listChild.push(i)
-      })
-    })
-    this.helperService.setIndexArray(listChild);
-    this.listDataGroup = chain(listChild).groupBy('tenDvi').map((value, key) => (
-      {
-        tenDvi: key,
-        soLuongTheoChiTieu: value[0].soLuongTheoChiTieu,
-        soLuong: null,
-        sumThanhTienTamTinh: null,
-        soLuongDaMua: value[0].soLuongDaMua,
-        dataChild: value
-      })).value()
-    this.listDataGroup.forEach(item => {
-      let sluong = 0;
-      let sumThanhTienTamTinh = 0;
-      item.dataChild.forEach(i => {
-        sluong = sluong + i.soLuong
-        sumThanhTienTamTinh = sumThanhTienTamTinh + i.soLuong * (i.donGiaTamTinh ? i.donGiaTamTinh : i.donGia)
-      })
-      item.soLuong = sluong;
-      item.sumThanhTienTamTinh = sumThanhTienTamTinh;
-    })
-    console.log(this.listDataGroup)
-    this.sumThanhTien()
-  }
-
   async ngOnInit() {
     await this.spinner.show()
     await this.loadDataComboBox();
     await this.spinner.hide()
   }
+  initListQuy() {
+    const currentYear = new Date().getFullYear();
+    const currentMonth = new Date().getMonth();
+    const quarters = [];
 
+    for (let quarter = 1; quarter <= 4; quarter++) {
+      if (this.formData.get('namKhoach').value < currentYear || (this.formData.get('namKhoach').value === currentYear && quarter <= Math.ceil((currentMonth + 1) / 3))) {
+        quarters.push(quarter);
+      }
+    }
+    this.listQuy = [];
+    for (const element of quarters) {
+      this.listQuy.push({ giaTri: "Quý " + element + "/" + this.formData.get("namKhoach").value, ma: element})
+    }
+  }
   async loadDataComboBox() {
     // List nguồn vốn
     this.listNguonVon = [];
@@ -258,7 +211,11 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
     if (resNv.msg == MESSAGE.SUCCESS) {
       this.listNguonVon = resNv.data;
     }
-
+    this.listThuHoachVu = [];
+    let resVu = await this.danhMucService.danhMucChungGetAll('VU_THU_HOACH');
+    if (resVu.msg == MESSAGE.SUCCESS) {
+      this.listThuHoachVu = resVu.data;
+    }
   }
 
   expandSet = new Set<number>();
@@ -269,61 +226,13 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
       this.expandSet.delete(id);
     }
   }
-
-  themMoiGoiThau(data?: any, index?: number) {
-    const modalGT = this.modal.create({
-      nzTitle: 'Thêm địa điểm nhập kho',
-      nzContent: DialogThemMoiVatTuComponent,
-      nzMaskClosable: false,
-      nzClosable: false,
-      nzWidth: '1200px',
-      nzFooter: null,
-      nzComponentParams: {
-        dataEdit: data,
-        loaiVthh: this.formData.get('loaiVthh').value,
-      },
-    });
-    modalGT.afterClose.subscribe((res) => {
-      if (!res) {
-        return;
-      }
-      if (index >= 0) {
-        this.listOfData[index] = res.value;
-      } else {
-        this.listOfData = [...this.listOfData, res.value];
-      }
-      let tongMucDt: number = 0;
-      let soLuong: number = 0;
-      this.listOfData.forEach((item) => {
-        tongMucDt = tongMucDt + item.soLuong * item.donGia;
-        soLuong = soLuong + item.soLuong;
-      });
-      this.formData.patchValue({
-        tongMucDt: tongMucDt,
-        soLuong: soLuong
-      });
-      this.soLuongChange.emit(soLuong);
-      this.helperService.setIndexArray(this.listOfData);
-      this.convertListData();
-    });
-  };
-
-  onInput(event: any) {
-    var value: any;
-    value = event;
-    this.editingSoLuong = parseInt(value.replaceAll('.', ''));
-  }
-
-  editRow(res: any) {
-    this.isEditing = true;
-    this.editingSoLuong = res.soLuong;
-  }
-
-
-  onBlur(res: any) {
-    res.soLuong = this.editingSoLuong;
-    this.isEditing = false;
-    this.sumThanhTien();
+  expandSet2 = new Set<number>();
+  onExpandChange2(id: number, checked: boolean): void {
+    if (checked) {
+      this.expandSet2.add(id);
+    } else {
+      this.expandSet2.delete(id);
+    }
   }
 
   sumThanhTien() {
@@ -339,13 +248,13 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
       item.dataChild.forEach(res => {
         res.children.forEach(data => {
           sum += (res.donGiaTamTinh != null ?
-            res.donGiaTamTinh * data.soLuong : (res.donGiaVat != null ? res.donGiaVat *
-              data.soLuong : (res.donGia != null ? res.donGia * data.soLuong : 0)));
+            res.donGiaTamTinh * data.soLuong * 1000 : (res.donGiaVat != null ? res.donGiaVat *
+              data.soLuong * 1000 : (res.donGia != null ? res.donGia * data.soLuong * 1000 : 0)));
           sumSl += data.soLuong;
           sumDataSoLuong += data.soLuong;
           sumThanhTienTamTinh += (res.donGiaTamTinh != null ?
-            res.donGiaTamTinh * data.soLuong : (res.donGiaVat != null ? res.donGiaVat *
-              data.soLuong : (res.donGia != null ? res.donGia * data.soLuong : 0)));
+            res.donGiaTamTinh * data.soLuong * 1000 : (res.donGiaVat != null ? res.donGiaVat *
+              data.soLuong * 1000 : (res.donGia != null ? res.donGia * data.soLuong * 1000 : 0)));
         })
       })
       this.sumDataSoLuong.push(sumDataSoLuong)
@@ -383,23 +292,131 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
         }, 0);
         sum += sumChild;
       })
-      return sum;
+      return sum * 1000;
     }
   }
 
-  calcTongThanhTienBaoLanh() {
-    if (this.listOfData) {
-      let sum = 0
-      this.listOfData.forEach(item => {
-        const sumChild = item.children.reduce((prev, cur) => {
-          prev += cur.soLuong * item.donGiaTamTinh;
-          return prev;
-        }, 0);
-        sum += sumChild;
+  isDisbleForm(): boolean {
+    if (this.trangThaiQd == STATUS.DANG_NHAP_DU_LIEU || this.trangThaiQd == STATUS.TU_CHOI_TP || this.trangThaiQd == STATUS.TU_CHOI_LDC) {
+      return false
+    } else {
+      return true
+    }
+  }
+
+  themMoiCuc(goiThau?: string) {
+    if (!this.formData.get('loaiVthh').value) {
+      this.notification.error(MESSAGE.ERROR, 'Vui lòng chọn loại hàng hóa');
+      return;
+    }
+    let data = [];
+    let listGoiThau = [];
+    this.listOfData.forEach(item => {
+      listGoiThau.push(item.goiThau)
+      if (goiThau && goiThau != '' && item.goiThau == goiThau) {
+        data.push(item)
+      }
+    })
+    let setListGoiThau = new Set(listGoiThau);
+    listGoiThau = [...setListGoiThau]
+    let disabledGoiThau = false;
+    if (goiThau && goiThau != '') {
+      disabledGoiThau = true;
+    }
+    const modalGT = this.modal.create({
+      nzTitle: '',
+      nzContent: DialogThemMoiVatTuComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '1500px',
+      nzFooter: null,
+      nzClassName: 'dialog-luong-thuc',
+      nzComponentParams: {
+        maDvi: this.maDvi,
+        disabledGoiThau: disabledGoiThau,
+        dataAll: this.listOfData,
+        listGoiThau: listGoiThau,
+        dataEdit: data,
+        dataChiTieu: this.dataChiTieu,
+        loaiVthh: this.formData.get('loaiVthh').value,
+        cloaiVthh: this.formData.get('cloaiVthh').value,
+        tenCloaiVthh: this.formData.get('tenCloaiVthh').value,
+        namKhoach: this.formData.get('namKhoach').value,
+        donGiaVat: this.formData.get('donGiaVat').value
+      },
+    });
+    modalGT.afterClose.subscribe((res) => {
+      if (!res) {
+        return;
+      }
+      let isReplace = false;
+      if (res.value.goiThau && res.value.goiThau != '') {
+        for (let i = 0; i < this.listOfData.length; i++) {
+          if (this.listOfData[i].goiThau == res.value.goiThau) {
+            this.listOfData.splice(i, 1, res.value)
+            isReplace = true;
+          }
+        }
+      }
+      if (isReplace == false) {
+        this.listOfData = [...this.listOfData, res.value]
+      }
+      this.tinhTongMucDtDx()
+      // this.convertListDataLuongThuc();
+      this.dataInput.children = this.listOfData;
+      if (!this.isTongHop && this.dataInput.dsGtDtlList) {
+        this.dataInput.dsGtDtlList = this.dataInput.children;
+      }
+      this.dsDxChange.emit(this.dataInput);
+    });
+  }
+  deleteGoiThau(i:number) {
+    this.listOfData.splice(i, 1)
+    this.tinhTongMucDtDx()
+  }
+
+  deleteDiemKho(i:number, y:number, z:number) {
+    this.listOfData[i].children[y].children.splice(z, 1)
+    if (this.listOfData[i].children[y].children.length > 0) {
+      let soLuong = 0;
+      this.listOfData[i].children[y].children.forEach(item => {
+        soLuong += item.soLuong
       })
-      return sum * (100 + this.formData.get('gtriDthau').value) / 100;
+      this.listOfData[i].children[y].soLuong = soLuong;
+    } else {
+      this.listOfData[i].children.splice(y, 1)
     }
+    if (this.listOfData[i].children.length > 0) {
+      let soLuongGoiThau = 0;
+      this.listOfData[i].children.forEach(chiCuc => {
+        soLuongGoiThau += chiCuc.soLuong
+      })
+      this.listOfData[i].soLuong = soLuongGoiThau
+    }
+    this.tinhTongMucDtDx()
   }
 
+  tinhTongMucDtDx () {
+    let tongMucDt: number = 0;
+    let tongMucDtDx: number = 0;
+    let tongSl: number = 0;
+    this.listOfData.forEach((item) => {
+      tongMucDt = tongMucDt + (item.soLuong * item.donGiaVat *1000);
+      tongMucDtDx = tongMucDtDx + (item.soLuong * item.donGiaTamTinh * 1000);
+      tongSl += item.soLuong
+    });
+    this.formData.patchValue({
+      tongMucDtLamTron: parseFloat((tongMucDt/1000000000).toFixed(2)),
+      tongMucDtDxLamTron: parseFloat((tongMucDtDx/1000000000).toFixed(2)),
+      tongMucDt: tongMucDt,
+      tongMucDtDx: tongMucDtDx,
+      soLuong: tongSl,
+    });
+  }
 
+  disabledDate = (current: Date): boolean => {
+    const startDate = new Date(this.formData.get("namKhoach").value, (this.formData.get("quy").value - 1) * 3, 1);
+    const endDate = new Date(this.formData.get("namKhoach").value, this.formData.get("quy").value * 3, 0);
+    return current < startDate || current > endDate;
+  };
 }

@@ -1,10 +1,10 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { MuabuBosungComponent } from "../dialog-qd-muabubosung-ttcp/muabu-bosung/muabu-bosung.component";
-import { NzModalRef } from "ng-zorro-antd/modal";
-import { DanhMucService } from "../../../services/danhmuc.service";
-import { Globals } from "../../../shared/globals";
-import { MESSAGE } from "../../../constants/message";
-import { MuaBuBoSungComponent } from "./mua-bu-bo-sung/mua-bu-bo-sung.component";
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {MuabuBosungComponent} from "../dialog-qd-muabubosung-ttcp/muabu-bosung/muabu-bosung.component";
+import {NzModalRef} from "ng-zorro-antd/modal";
+import {DanhMucService} from "../../../services/danhmuc.service";
+import {Globals} from "../../../shared/globals";
+import {MESSAGE} from "../../../constants/message";
+import {MuaBuBoSungComponent} from "./mua-bu-bo-sung/mua-bu-bo-sung.component";
 import {DonviService} from "../../../services/donvi.service";
 
 @Component({
@@ -15,7 +15,7 @@ import {DonviService} from "../../../services/donvi.service";
 export class DialogMuabuBosungBtcComponent implements OnInit {
 
   @ViewChild('keHoachMuaBu') kehoachmuaBuBoSung: MuaBuBoSungComponent
-    ;
+  ;
 
   isView: boolean = false;
   errorBn: boolean = false;
@@ -33,12 +33,14 @@ export class DialogMuabuBosungBtcComponent implements OnInit {
   dsBoNganh: any[];
   dsHangHoa: any[];
   dataEdit: any;
+
   constructor(
     private readonly _modalRef: NzModalRef,
     private danhMucService: DanhMucService,
     private donviService: DonviService,
     public globals: Globals
-  ) { }
+  ) {
+  }
 
   async ngOnInit() {
     this.bindingData(this.dataEdit)
@@ -78,7 +80,7 @@ export class DialogMuabuBosungBtcComponent implements OnInit {
             }
           });
         } else {
-          this.dsHangHoa = hangHoa.data.filter(item => item.cap == 1);
+          this.dsHangHoa = hangHoa.data.filter(item => item.cap == 2);
         }
       }
     })
@@ -95,12 +97,9 @@ export class DialogMuabuBosungBtcComponent implements OnInit {
   }
 
   async loadDanhMucHang() {
-    await this.danhMucService.loadDanhMucHangHoa().subscribe((hangHoa) => {
-      if (hangHoa.msg == MESSAGE.SUCCESS) {
-        const dataVatTu = hangHoa.data.filter(item => item.ma == "02");
-        this.dsHangHoa = dataVatTu[0].child;
-      }
-    })
+    if (this.dataEdit) {
+      this.onChangeBoNganh(this.dataEdit.maBoNganh);
+    }
   }
 
   luu() {

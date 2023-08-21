@@ -28,7 +28,7 @@
           <h3>Thông tin chi tiết đơn vị</h3>
           <div class="buttons">
             <button nz-button class="btn btn-sub do" (click)="delete(detailDonVi.value.id)">
-              <i class="fa fa-trash-o do"></i>
+              <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
               Xóa
             </button>
             <button nz-button class="btn btn-sub xanh-nhat" (click)="showEdit(true)" *ngIf="!isEditData">
@@ -122,20 +122,17 @@
               </nz-form-item>
             </div>
             <div nz-col nzSpan="16"></div>
-            <div nz-col [nzSpan]="24" *ngIf="detailDonVi.value.capDvi == 2">
+            <div nz-col nzSpan="8" *ngIf="detailDonVi.value.capDvi == 2">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true"> Vùng miền
-                </nz-form-label>
+                <nz-form-label [nzNoColon]="true"> Vùng miền</nz-form-label>
                 <nz-form-control>
-                  <nz-radio-group formControlName="vungMien" [nzDisabled]="!isEditData">
-                    <label nz-radio nzValue="Miền Bắc"> Miền Bắc </label>
-                    <label nz-radio nzValue="Miền Trung"> Miền Trung </label>
-                    <label nz-radio nzValue="Miền Nam"> Miền Nam </label>
-                  </nz-radio-group>
+                  <nz-select  formControlName="vungMien" [nzDisabled]="!isEditData">
+                    <nz-option *ngFor="let item of listVungMien" [nzValue]="item.ma" [nzLabel]="item.giaTri"></nz-option>
+                  </nz-select>
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col nzSpan="24"  *ngIf="detailDonVi.value.capDvi == 2">
+            <div nz-col nzSpan="16"  *ngIf="detailDonVi.value.capDvi == 2">
               <nz-form-item>
                 <nz-form-label>Quản lý các hoạt động DTNN trên các địa bàn tỉnh</nz-form-label>
                 <nz-form-control>

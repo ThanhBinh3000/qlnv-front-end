@@ -27,6 +27,9 @@ export class ThemMoiKhoComponent implements OnInit {
 
   data: any;
   loaiHangHoa: any = {
+    "type": "LT",
+    "loaiVthh": "",
+    "cloaiVthh": "",
     "thoc": false,
     "gao": false,
     "muoi": false,
@@ -135,7 +138,7 @@ export class ThemMoiKhoComponent implements OnInit {
       soLoKho: [''],
       tenThuKho: [''],
       isKhoiTao: [false],
-      loaiHangHoa : []
+      loaiHangHoa: []
     })
     this.formKho.controls['maCha'].valueChanges.subscribe(value => {
       let node = this.treeSelect.getTreeNodeByKey(value);
@@ -151,26 +154,6 @@ export class ThemMoiKhoComponent implements OnInit {
         })
       }
     });
-  }
-
-
-  async loaiVTHHGetAll() {
-    try {
-      await this.danhMucService.loadDanhMucHangHoa().subscribe((hangHoa) => {
-        if (hangHoa.msg == MESSAGE.SUCCESS) {
-          hangHoa.data.forEach((item) => {
-            if (item.cap === "1" && item.ma != '01') {
-              this.dsLoaiHangHoa = [...this.dsLoaiHangHoa, item];
-            } else {
-              this.dsLoaiHangHoa = [...this.dsLoaiHangHoa, ...item.child];
-            }
-          })
-        }
-      })
-    } catch (error) {
-      this.spinner.hide();
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    }
   }
 
   async loadTinhTrangLoKho() {
@@ -200,14 +183,12 @@ export class ThemMoiKhoComponent implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     try {
-      await Promise.all([
-        this.userInfo = this.userService.getUserLogin(),
-        this.loaiVTHHGetAll(),
-        this.loadDsDvi(),
-        this.loadTinhTrangLoKho(),
-        this.loadChatLuongKho(),
-        this.loadListLoaiKho(),
-      ]);
+      this.userInfo = this.userService.getUserLogin();
+      this.loadDsDvi();
+      this.loadTinhTrangLoKho();
+      this.loadChatLuongKho();
+      this.loadListLoaiKho();
+      this.loadDsVthh();
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e)
@@ -253,7 +234,7 @@ export class ThemMoiKhoComponent implements OnInit {
       await this.donviService.getLastMadvi(maDvi).then((res: OldResponseData) => {
         if (res.msg == MESSAGE.SUCCESS) {
           let charLast = "00";
-          let lastDvi = dataNode.origin.key ;
+          let lastDvi = dataNode.origin.key;
           if (res.data) {
             charLast = res.data.slice(-2);
             lastDvi = res.data;
@@ -263,38 +244,58 @@ export class ThemMoiKhoComponent implements OnInit {
           switch (this.levelNode) {
             case 4: {
               this.formKho.patchValue({
-                maNganlo : maDviMoi
+                maNganlo: maDviMoi
               })
               break;
             }
             case 3 : {
               this.formKho.patchValue({
-                maNgankho : maDviMoi
+                maNgankho: maDviMoi
               })
               break;
             }
             case 2 : {
               this.formKho.patchValue({
-                maNhakho : maDviMoi
+                maNhakho: maDviMoi
               })
               break;
             }
             case 1 : {
               this.formKho.patchValue({
-                maDiemkho : maDviMoi
+                maDiemkho: maDviMoi
               })
               break;
             }
           }
         }
-      })    }
+      })
+    }
   }
 
-  onChangeLoaiVthh(event) {
+  async loadDsVthh() {
+    let res = await this.danhMucService.getAllVthhByCap("2");
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (res.data) {
+        this.dsLoaiHangHoa = res.data
+        if (this.dsLoaiHangHoa && this.dsLoaiHangHoa.length > 0) {
+          this.dsLoaiHangHoa = this.dsLoaiHangHoa.filter(item => item.ma.startsWith('02') || item.ma.startsWith('03') )
+        }
+      }
+    }
+  }
+
+  async onChangeLoaiVthh(event) {
+    let body = {
+      "str": event
+    };
+    let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha(body);
     this.dsChungLoaiHangHoa = [];
-    const loaiVthh = this.dsLoaiHangHoa.filter(item => item.id == event);
-    if (loaiVthh.length > 0) {
-      this.dsChungLoaiHangHoa = loaiVthh[0].child;
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (res.data) {
+        this.dsChungLoaiHangHoa = res.data;
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
 
@@ -320,14 +321,15 @@ export class ThemMoiKhoComponent implements OnInit {
   }
 
   saveNganLo() {
-    this.spinner.show()
-    this.helperService.markFormGroupTouched(this.formKho);
-    if (this.formKho.invalid) {
+    this.spinner.show();
+    let msg = this.validateLoaiHh();
+    if (msg) {
+      this.notification.error(MESSAGE.ERROR, msg);
       this.spinner.hide()
       return;
     }
-    if (!this.loaiHangHoa.gao && !this.loaiHangHoa.thoc && !this.loaiHangHoa.muoi && !this.loaiHangHoa.vattu) {
-      this.notification.error(MESSAGE.ERROR, 'Bạn chưa nhập loại hàng hóa')
+    this.helperService.markFormGroupTouched(this.formKho);
+    if (this.formKho.invalid) {
       this.spinner.hide()
       return;
     }
@@ -339,6 +341,7 @@ export class ThemMoiKhoComponent implements OnInit {
       bodyDvi.diaChi = this.formKho.value.diaChi;
       let body = this.formKho.value;
       body.loaiHangHoa = this.setLoaiHangHoa();
+      body.kieuHang = this.loaiHangHoa.type;
       body.ngankhoId = this.idReq;
       body.maNganlo = this.formKho.value.maNganlo;
       body.fileDinhkems = this.listFileDinhKem;
@@ -362,13 +365,14 @@ export class ThemMoiKhoComponent implements OnInit {
 
   saveNganKho() {
     this.spinner.show()
-    this.helperService.markFormGroupTouched(this.formKho);
-    if (this.formKho.invalid) {
+    let msg = this.validateLoaiHh();
+    if (msg && !this.formKho.value.coLoKho) {
+      this.notification.error(MESSAGE.ERROR, msg);
       this.spinner.hide()
       return;
     }
-    if (!this.formKho.value.coLoKho && (!this.loaiHangHoa.gao && !this.loaiHangHoa.thoc && !this.loaiHangHoa.muoi && !this.loaiHangHoa.vattu) ) {
-      this.notification.error(MESSAGE.ERROR, 'Bạn chưa nhập loại hàng hóa')
+    this.helperService.markFormGroupTouched(this.formKho);
+    if (this.formKho.invalid) {
       this.spinner.hide()
       return;
     }
@@ -381,6 +385,7 @@ export class ThemMoiKhoComponent implements OnInit {
       let body = this.formKho.value;
       body.dviReq = bodyDvi
       body.loaiHangHoa = this.setLoaiHangHoa();
+      body.kieuHang = this.loaiHangHoa.type;
       body.maNgankho = this.formKho.value.maNgankho;
       body.tichLuongKdLt = body.tichLuongTkLt;
       body.tichLuongKdVt = body.tichLuongTkVt;
@@ -524,24 +529,46 @@ export class ThemMoiKhoComponent implements OnInit {
     }
   }
 
-  setLoaiHangHoa() : string {
+  setLoaiHangHoa(): string {
     let arr = [];
-    if (this.loaiHangHoa.gao) {
-      arr.push("0102")
-    }
-    if (this.loaiHangHoa.thoc) {
-      arr.push("0101")
-    }
-    if (this.loaiHangHoa.vattu) {
-      arr.push("02")
-    }
-    if (this.loaiHangHoa.muoi) {
-      arr.push("04")
+    if (this.loaiHangHoa.type == 'LT') {
+      if (this.loaiHangHoa.gao) {
+        arr.push("0102")
+      }
+      if (this.loaiHangHoa.thoc) {
+        arr.push("0101")
+      }
+      if (this.loaiHangHoa.muoi) {
+        arr.push("04")
+      }
+    } else {
+      if (this.loaiHangHoa.loaiVthh) {
+        arr.push(this.loaiHangHoa.loaiVthh)
+      }
+      if (this.loaiHangHoa.cloaiVthh) {
+        arr.push(this.loaiHangHoa.cloaiVthh)
+      }
     }
     let string = ''
     if (arr && arr.length > 0) {
       string = arr.toString()
     }
     return string;
+  }
+
+  validateLoaiHh() : string {
+    let msg;
+    if (!this.loaiHangHoa.type) {
+      msg = 'Vui lòng chọn loại hàng hóa ngăn/lô kho có thể chứa'
+    } else if (this.loaiHangHoa.type == 'LT') {
+      if (!this.loaiHangHoa.thoc && !this.loaiHangHoa.gao && !this.loaiHangHoa.muoi) {
+        msg = 'Vui lòng chọn loại hàng hóa ngăn/lô kho có thể chứa'
+      }
+    } else if (this.loaiHangHoa.type == 'VT') {
+      if (!this.loaiHangHoa.loaiVthh) {
+        msg = 'Vui lòng chọn loại hàng hóa ngăn/lô kho có thể chứa'
+      }
+    }
+    return msg;
   }
 }

@@ -1,4 +1,4 @@
-<div *ngIf="!isDetail" class="luong-thuc__danh-sach">
+<div *ngIf="!isDetail && !isDetailVt" class="luong-thuc__danh-sach">
   <div class="bg-trang">
     <nz-card class="mt16 flex-card p-lr16">
       <div nz-row [nzGutter]="24">
@@ -9,7 +9,7 @@
           </nz-select>
         </div>
         <div nz-col nzSpan="3">
-          <label class="search__label">Số kế hoạch/tờ trình</label>
+          <label class="search__label">Số công văn/tờ trình</label>
           <input class="search__input" placeholder="" nz-input [(ngModel)]="searchFilter.soDx" />
         </div>
         <div nz-col nzSpan="4">
@@ -66,7 +66,7 @@
           *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_VT_DEXUAT_XOA') || userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_LT_DEXUAT_XOA')">
           <button type="button" class="btn btn-do" (click)="deleteSelect()"
             *ngIf="loaiVthh == null || (userService.isTongCuc() && loaiVthh == '02') || (userService.isCuc() && loaiVthh != '02')">
-            <i class="fa fa-trash-o do"></i>
+            <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             <span>Xóa</span>
           </button>
         </ng-container>
@@ -100,22 +100,21 @@
                 [nzDisabled]="loaiVthh == '02' ? !userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_VT_DEXUAT_THEM') : !userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_LT_DEXUAT_THEM')"></label>
             </th>
             <th class="text-center" style="width: 2%;">STT</th>
-            <th class="text-center" style="width: 7%;">Số kế hoạch/tờ trình</th>
-            <th class="text-center" style="width: 7%;">Năm kế hoạch</th>
+            <th class="text-center" style="width: 7%;">Số công văn/tờ trình</th>
+            <th class="text-center" style="width: 7%;">Năm KH</th>
             <th class="text-center" style="width: 7%;">Ngày lập KH</th>
             <th class="text-center" style="width: 7%;">Ngày duyệt KH</th>
             <th class="text-center" style="width: 9%;">Số QĐ giao chỉ tiêu</th>
-            <th class="text-center" style="width: 10%;">Loại hàng hóa</th>
+            <th class="text-center" style="width: 10%;">Loại hàng DTQG</th>
             <th *ngIf="loaiVthh != '02'" class="text-center" style="width: 12%;">Chủng loại
-              hàng hóa</th>
+              hàng DTQG</th>
             <th class="text-center" style="width: 5%;">Tổng số gói thầu</th>
             <th class="text-center" style="width: 5%;">Số gói thầu đã trúng</th>
             <th class="text-center" style="width: 5%;">SL HĐ đã ký</th>
-            <th class="text-center" style="width: 5%;">Số QĐ duyệt KHLCNT</th>
+            <th class="text-center" style="width: 5%;">Số QĐ PD KHLCNT</th>
             <th *ngIf="loaiVthh != '02'" class="text-center" style="width: 7%;">Thời hạn nhập kho</th>
             <th *ngIf="loaiVthh == '02'" class="text-center" style="width: 7%;">Thời hạn thực hiện dự án</th>
-            <th class="text-center" style="width: 7%;">{{ userService.isTongCuc() ? 'Trạng thái đề xuất' : 'Trạng
-              thái'}} </th>
+            <th class="text-center" style="width: 7%;">{{ loaiVthh == '02' ? 'Trạng thái đề xuất' : 'Trạng thái'}} </th>
             <th *ngIf="userService.isTongCuc() && loaiVthh != '02'" class="text-center" style="width: 7%;">Mã tổng hợp
             </th>
             <th width="90px">Hành động</th>
@@ -259,21 +258,21 @@
             <td class="text-left">
               <a (click)="detail(data, true)"
                 *ngIf="loaiVthh != '02' && userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_LT_DEXUAT_XEM')
-              && (userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_LT_DEXUAT_THEM') ? (data.trangThai != STATUS.DU_THAO && data.trangThai != STATUS.TU_CHOI_TP && data.trangThai != STATUS.TU_CHOI_LDC) 
+              && (userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_LT_DEXUAT_THEM') ? (data.trangThai != STATUS.DU_THAO && data.trangThai != STATUS.TU_CHOI_TP && data.trangThai != STATUS.TU_CHOI_LDC)
               :  (userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_LT_DEXUAT_DUYET_TP') ? data.trangThai != STATUS.CHO_DUYET_TP
               :  (userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_LT_DEXUAT_DUYET_LDCUC') ? data.trangThai != STATUS.CHO_DUYET_LDC : true)))">
-                <i class="fa fa-eye"></i>
+                <i class="fa fa-eye" title="Xem chi tiết"></i>
               </a>
               <a (click)="detail(data, true)"
-                *ngIf="loaiVthh === '02' && userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_VT_DEXUAT_XEM') 
+                *ngIf="loaiVthh === '02' && userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_VT_DEXUAT_XEM')
                 && (userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_VT_DEXUAT_THEM') ? (data.trangThai != STATUS.DU_THAO && data.trangThai != STATUS.TU_CHOI_LDV)
                 :  (userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_VT_DEXUAT_DUYET_LDVU') ? data.trangThai != STATUS.CHO_DUYET_LDV : true))">
-                <i class="fa fa-eye"></i>
+                <i class="fa fa-eye" title="Xem chi tiết"></i>
               </a>
               <a *ngIf="(data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_TP || data.trangThai == STATUS.TU_CHOI_LDV || data.trangThai == STATUS.TU_CHOI_LDC  )
               && (loaiVthh === '02' ? userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_VT_DEXUAT_THEM') : userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_LT_DEXUAT_THEM'))"
                 (click)="detail(data, false)">
-                <i class="fa fa-pencil"></i>
+                <i class="fa fa-pencil" title="Sửa"></i>
               </a>
               <a *ngIf="loaiVthh === '02' ? (userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_VT_DEXUAT_DUYET_LDVU') && data.trangThai == STATUS.CHO_DUYET_LDV) :
               ( (userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_LT_DEXUAT_DUYET_TP') && data.trangThai == STATUS.CHO_DUYET_TP)
@@ -284,7 +283,7 @@
               <a *ngIf="data.trangThai == STATUS.DU_THAO
               && (loaiVthh === '02' ? userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_VT_DEXUAT_XOA') : userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_LT_DEXUAT_XOA'))"
                 (click)="xoaItem(data)">
-                <i class="fa fa-trash-o do"></i>
+                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
               </a>
             </td>
           </tr>
@@ -314,6 +313,11 @@
   <app-themmoi-kehoach-lcnt [idInput]="selectedId" [loaiVthhInput]="loaiVthh" [isView]="isView"
     (showListEvent)="showList()">
   </app-themmoi-kehoach-lcnt>
+</div>
+<div class="chi-tiet" *ngIf="isDetailVt">
+  <app-themmoi-kehoach-lcnt-vt [idInput]="selectedId" [loaiVthhInput]="loaiVthh" [isView]="isView"
+                            (showListEvent)="showList()">
+  </app-themmoi-kehoach-lcnt-vt>
 </div>
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openQdPdKhlcnt"
   (nzOnCancel)="closeQdPdKhlcntModal()">

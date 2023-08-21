@@ -2,7 +2,7 @@
   <div class="header header-green-background">
     <div class="header-text">
       <div class="title-chi-tieu">
-        <span [ngClass]="formData.value.trangThai == STATUS.BAN_HANH ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
+        <span [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDV ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
           {{ formData.value.tenTrangThai }}
         </span>
         <span class="text-uppercase">Vốn, phí hàng của Bộ/Ngành</span>
@@ -239,10 +239,10 @@
             <td class="text-right">{{data.soTuNamSau | number}}</td>
             <td class="text-center">
               <a *ngIf="!isView" (click)="editQtNsChiTw(i)">
-                <i class="fa fa-pencil"></i>
+                <i class="fa fa-pencil" title="Sửa"></i>
               </a>
               <a *ngIf="!isView" (click)="deleteQtNsChiTw(i)">
-                <i class="fa fa-trash-o do"></i>
+                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
               </a>
             </td>
           </ng-container>
@@ -539,10 +539,10 @@
             <td class="text-right">{{data.soTuNamSau | number}}</td>
             <td class="text-center">
               <a *ngIf="!isView" (click)="editQtNsKpChiNvDtqg(i)">
-                <i class="fa fa-pencil"></i>
+                <i class="fa fa-pencil" title="Sửa"></i>
               </a>
               <a *ngIf="!isView" (click)="deleteQtNsKpChiNvDtqg(i)">
-                <i class="fa fa-trash-o do"></i>
+                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
               </a>
             </td>
           </ng-container>

@@ -33,6 +33,8 @@ export function convertTrangThai(status: string): string {
     return 'Đã Dự Thảo QĐ';
   } else if (status == '28') {
     return 'Đã Ban Hành QĐ';
+  } else if (status == '33') {
+    return 'Chưa cập nhật';
   }
 }
 
@@ -145,7 +147,7 @@ export function thongTinTrangThaiNhap(trangThai: string, statusDaDuyet?: string)
   if (statusDaDuyet && trangThai === statusDaDuyet) {
     return 'da-ban-hanh';
   }
-  else if (trangThai === STATUS_DA_DUYET || trangThai === STATUS_DA_HOAN_THANH || trangThai == STATUS.DA_DUYET_LDTC) {
+  else if (trangThai === STATUS_DA_DUYET || trangThai === STATUS.DA_HOAN_THANH || trangThai == STATUS.DA_DUYET_LDTC) {
     return 'da-ban-hanh';
   } else {
     return 'du-thao-va-lanh-dao-duyet';

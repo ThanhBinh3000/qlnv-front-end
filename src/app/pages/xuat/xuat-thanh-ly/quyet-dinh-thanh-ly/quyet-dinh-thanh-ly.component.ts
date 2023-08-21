@@ -70,7 +70,6 @@ export class QuyetDinhThanhLyComponent extends Base2Component implements OnInit 
       soHoSo: '',
       tenTrangThai: '',
       tenTrangThaiXh: '',
-
     };
   }
   disabledStartNgayKy = (startValue: Date): boolean => {
@@ -93,7 +92,7 @@ export class QuyetDinhThanhLyComponent extends Base2Component implements OnInit 
         this.timKiem(),
         this.loadDsVthh(),
       ])
-      this.spinner.hide();
+      await this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
       await this.spinner.hide();
@@ -128,8 +127,6 @@ export class QuyetDinhThanhLyComponent extends Base2Component implements OnInit 
     }
     await this.spinner.hide();
   }
-
-
 
   openHoSoModal(id: any) {
     this.idHoSo = id;

@@ -106,11 +106,11 @@
                 </a>
                 <a *ngIf="item.trangThai != STATUS.DA_DUYET_LDCC && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKTCL_THEM')"
                   (click)="redirectToChiTiet(false, item.id)">
-                  <i class="fa fa-pencil"></i>
+                  <i class="fa fa-pencil" title="Sửa"></i>
                 </a>
                 <!-- <a *ngIf="item.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKTCL_XOA')"
                   (click)="xoaItem(item)">
-                  <i class="fa fa-trash-o do"></i>
+                  <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                 </a> -->
               </td>
             </tr>
@@ -170,15 +170,15 @@
                       <td nzRight>
                         <a *ngIf="phieuKtraCl.trangThai == STATUS.DA_DUYET_LDCC && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKTCL_XEM')"
                           (click)="redirectToChiTiet(true, phieuKtraCl.id)">
-                          <i class="fa fa-eye"></i>
+                          <i class="fa fa-eye" title="Xem chi tiết"></i>
                         </a>
                         <a *ngIf="phieuKtraCl.trangThai != STATUS.DA_DUYET_LDCC && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKTCL_THEM')"
                           (click)="redirectToChiTiet(false, phieuKtraCl.id)">
-                          <i class="fa fa-pencil"></i>
+                          <i class="fa fa-pencil" title="Sửa"></i>
                         </a>
                         <a *ngIf="phieuKtraCl.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKTCL_XOA')"
                           (click)="xoaItem(phieuKtraCl)">
-                          <i class="fa fa-trash-o do"></i>
+                          <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                         </a>
                       </td>
                     </tr>

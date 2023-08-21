@@ -48,7 +48,7 @@
             <h3>Danh sách hàng thuộc diện tiêu huỷ</h3>
             <div class="buttons">
                 <button type="button" class="btn btn-sub btn-xoa" (click)="xoa()">
-          <i class="fa fa-trash-o do"></i>
+          <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
           <span>Xóa</span>
         </button>
                 <button type="button" class="btn btn-sub" (click)="exportData()">
@@ -112,13 +112,13 @@
                         <td>{{ data.trangThaiXuLy }}</td>
                         <td style="text-align: left; white-space: nowrap;">
                             <a (click)="viewDetail(data.id, true)">
-                                <i class="fa fa-eye"></i>
+                                <i class="fa fa-eye" title="Xem chi tiết"></i>
                             </a>
                             <a (click)="viewDetail(data.id, false)">
-                                <i class="fa fa-pencil"></i>
+                                <i class="fa fa-pencil" title="Sửa"></i>
                             </a>
                             <a (click)="xoaItem(data.id)">
-                                <i class="fa fa-trash-o do"></i>
+                                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                             </a>
                         </td>
                     </tr>

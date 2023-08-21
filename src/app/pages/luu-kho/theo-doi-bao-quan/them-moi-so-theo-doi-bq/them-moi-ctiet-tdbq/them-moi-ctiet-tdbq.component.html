@@ -1,0 +1,444 @@
+<nz-card class="mg-t-16 flex-card p-lr16 scroll-modal" >
+  <nz-collapse>
+    <nz-collapse-panel nzActive="true" nzHeader="THÔNG TIN CHUNG">
+      <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
+        <div nz-row [nzGutter]="18">
+          <div nz-col [nzSpan]="9">
+            <nz-form-control [nzErrorTip]="error">
+              <nz-form-label nzRequired >Người kiểm tra</nz-form-label>
+              <nz-form-item>
+                <input nz-input formControlName="tenNguoiKtra" readonly />
+              </nz-form-item>
+            </nz-form-control>
+          </div>
+          <div nz-col [nzSpan]="3">
+            <nz-form-control [nzErrorTip]="error">
+              <nz-form-label nzRequired >Thời kiểm tra</nz-form-label>
+              <nz-form-item >
+                <nz-date-picker nzFormat="dd/MM/yyyy" formControlName="ngayKtra" nzDisabled >
+                </nz-date-picker>
+              </nz-form-item>
+            </nz-form-control>
+          </div>
+          <div nz-col [nzSpan]="5">
+            <nz-form-control [nzErrorTip]="error">
+              <nz-form-label >Loại hàng DTQG</nz-form-label>
+              <nz-form-item>
+                <input nz-input formControlName="tenLoaiVthh" readonly />
+              </nz-form-item>
+            </nz-form-control>
+          </div>
+          <div nz-col [nzSpan]="5">
+            <nz-form-control [nzErrorTip]="error">
+              <nz-form-label >Chủng loại hàng DTQG</nz-form-label>
+              <nz-form-item>
+                <input nz-input formControlName="tenCloaiVthh" readonly />
+              </nz-form-item>
+            </nz-form-control>
+          </div>
+          <div nz-col [nzSpan]="2">
+            <nz-form-control [nzErrorTip]="error">
+              <nz-form-label >Đơn vị tính</nz-form-label>
+              <nz-form-item>
+                <input nz-input formControlName="dviTinh" readonly />
+              </nz-form-item>
+            </nz-form-control>
+          </div>
+          <div nz-col [nzSpan]="6">
+            <nz-form-control [nzErrorTip]="error">
+              <nz-form-label >Vai trò</nz-form-label>
+              <nz-form-item>
+                <input nz-input formControlName="tenVaiTro" readonly />
+              </nz-form-item>
+            </nz-form-control>
+          </div>
+          <div nz-col [nzSpan]="6">
+            <nz-form-control [nzErrorTip]="error">
+              <nz-form-label >Thời gian còn lại theo HĐ (ngày)</nz-form-label>
+              <nz-form-item>
+                <nz-input-number
+                  [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                  [nzParser]="globals.parser" nz-input [ngModel]="thoiGianConLaiBh" [ngModelOptions]="{standalone: true}" [nzDisabled]="true">
+                </nz-input-number>
+              </nz-form-item>
+            </nz-form-control>
+          </div>
+          <div nz-col [nzSpan]="12">
+            <nz-form-control [nzErrorTip]="error">
+              <nz-form-label >Nguyên nhân</nz-form-label>
+              <nz-form-item>
+                <input nz-input formControlName="nguyenNhan" [readonly]="disabled()" />
+              </nz-form-item>
+            </nz-form-control>
+          </div>
+        </div>
+        <div nz-row >
+          <div nz-col [nzSpan]="12">
+            <div nz-row [nzGutter]="18" >
+              <div nz-col [nzSpan]="24">
+                <nz-form-control>
+                  <nz-form-label [nzNoColon]="true">Diễn biến hàng</nz-form-label>
+                  <nz-form-item>
+                    <textarea rows="5" formControlName="dienBien" nz-input [readonly]="disabled()"></textarea>
+                  </nz-form-item>
+                </nz-form-control>
+              </div>
+            </div>
+          </div>
+          <div nz-col [nzSpan]="12">
+            <div nz-row [nzGutter]="18" >
+              <div nz-col [nzSpan]="16">
+                <nz-form-control [nzErrorTip]="error">
+                  <nz-form-label >Biện pháp xử lý</nz-form-label>
+                  <nz-form-item >
+                    <nz-select formControlName="bienPhapXl" [nzDisabled]="disabled()">
+                      <nz-option *ngFor="let p of listBpxl" [nzValue]="p.ma"
+                                 [nzLabel]="p.giaTri">
+                      </nz-option>
+                    </nz-select>
+                  </nz-form-item>
+                </nz-form-control>
+              </div>
+              <div nz-col [nzSpan]="8">
+                <nz-form-control [nzErrorTip]="error">
+                  <nz-form-label nzRequired >Kết quả (Số lượng xử lý)</nz-form-label>
+                  <nz-form-item>
+                    <nz-input-number
+                      [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                      [nzParser]="globals.parser" nz-input formControlName="soLuongXl" [nzDisabled]="disabled()">
+                    </nz-input-number>
+                  </nz-form-item>
+                </nz-form-control>
+              </div>
+              <div nz-col [nzSpan]="24">
+                <nz-form-control>
+                  <nz-form-label [nzNoColon]="true">Mô tả chi tiết</nz-form-label>
+                  <nz-form-item>
+                    <textarea rows="3" formControlName="moTa" nz-input [readonly]="disabled()"></textarea>
+                  </nz-form-item>
+                </nz-form-control>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </nz-collapse-panel>
+  </nz-collapse>
+  <app-table-cscl *ngIf="isXacNhan" [loaiVthh]="formData.value.loaiVthh" [dataTk]="dataTk" [dataKtv]="dataKtv" [dataLdcc]="dataLdcc" ></app-table-cscl>
+  <nz-collapse>
+    <nz-collapse-panel nzActive="true" nzHeader="{{this.userService.isCuc() ? 'Xác nhận Lãnh đạo Cục' : this.isXacNhan ? 'Xác nhận Lãnh đạo Chi cục' : 'Chỉ số chất lượng'}}">
+      <nz-table *ngIf="formData.value.loaiVthh == LOAI_HANG_DTQG.THOC"  class="pd-10 nowrap" nzBordered [nzData]="dataTable" [nzFrontPagination]="false"
+                [nzShowPagination]="false">
+        <thead>
+        <tr>
+          <th colSpan="3">Tổng lượng bảo quản</th>
+          <th colSpan="7">Chi số của lô thóc</th>
+        </tr>
+        <tr>
+          <th rowSpan="2">Tổng</th>
+          <th rowSpan="2">An toàn</th>
+          <th rowSpan="2">Không an toàn</th>
+          <th rowSpan="2"> Nồng độ khí N2 (%) </th>
+          <th rowSpan="2"> Nhiệt độ khối hạt (%) </th>
+          <th rowSpan="2"> Độ ẩm (%) </th>
+          <th rowSpan="2"> Hạt vàng (%) </th>
+          <th colSpan="2"> Cảm quan </th>
+          <th rowSpan="2"> Côn trùng sống (con/kg) </th>
+        </tr>
+        <tr>
+          <th>Màu sắc,mùi vị,tình trạng</th>
+          <th>Tình trạng nấm mốc</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td>{{rowItem.tongSoLuong | number : '1.0-1' : 'vi_VN'}}</td>
+          <td>
+            <nz-input-number
+              [nzSize]="'small'" [nzFormatter]="globals.formatter"
+              [nzParser]="globals.parser" nz-input [(ngModel)]="rowItem.anToan" [nzDisabled]="disabled()">
+            </nz-input-number>
+          </td>
+          <td>
+            <nz-input-number
+              [nzSize]="'small'" [nzFormatter]="globals.formatter"
+              [nzParser]="globals.parser" nz-input [(ngModel)]="rowItem.khongAnToan" [nzDisabled]="disabled()">
+            </nz-input-number>
+          </td>
+          <td>
+            <nz-input-number
+              [nzSize]="'small'" [nzFormatter]="globals.formatter"
+              [nzParser]="globals.parser" nz-input [(ngModel)]="rowItem.nongDo" [nzDisabled]="disabled()">
+            </nz-input-number>
+          </td>
+          <td>
+            <nz-input-number
+              [nzSize]="'small'" [nzFormatter]="globals.formatter"
+              [nzParser]="globals.parser" nz-input [(ngModel)]="rowItem.nhietDo" [nzDisabled]="disabled()">
+            </nz-input-number>
+          </td>
+          <td>
+            <nz-input-number
+              [nzSize]="'small'" [nzFormatter]="globals.formatter"
+              [nzParser]="globals.parser" nz-input [(ngModel)]="rowItem.doAm" [nzDisabled]="disabled()">
+            </nz-input-number>
+          </td>
+          <td>
+            <nz-input-number
+              [nzSize]="'small'" [nzFormatter]="globals.formatter"
+              [nzParser]="globals.parser" nz-input [(ngModel)]="rowItem.hatVang" [nzDisabled]="disabled()">
+            </nz-input-number>
+          </td>
+          <td><input [(ngModel)]="rowItem.camQuan" [readonly]="disabled()"></td>
+          <td><input [(ngModel)]="rowItem.tinhTrangNamMoc" [readonly]="disabled()"></td>
+          <td>
+            <nz-input-number
+              [nzSize]="'small'" [nzFormatter]="globals.formatter"
+              [nzParser]="globals.parser" nz-input [(ngModel)]="rowItem.conTrungSong" [nzDisabled]="disabled()">
+            </nz-input-number>
+          </td>
+        </tr>
+        </tbody>
+      </nz-table>
+      <nz-table *ngIf="formData.value.loaiVthh == LOAI_HANG_DTQG.GAO" class="pd-10 nowrap" nzBordered [nzData]="dataTable" [nzFrontPagination]="false"
+                [nzShowPagination]="false">
+        <thead>
+        <tr>
+          <th colSpan="3">Tổng lượng bảo quản</th>
+          <th colSpan="6">Chi số của lô gạo</th>
+        </tr>
+        <tr>
+          <th rowSpan="2">Tổng</th>
+          <th rowSpan="2">An toàn</th>
+          <th rowSpan="2">Không an toàn</th>
+          <th rowSpan="2"> Nồng độ khí N2 (%) </th>
+          <th rowSpan="2"> Độ ẩm (%) </th>
+          <th rowSpan="2"> Hạt vàng (%) </th>
+          <th colSpan="3"> Cảm quan </th>
+        </tr>
+        <tr>
+          <th>Màu sắc,mùi vị,tình trạng </th>
+          <th>Tình trạng nấm mốc</th>
+          <th>Con trùng sống (con/kg)</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td>{{rowItem.tongSoLuong | number : '1.0-1' : 'vi_VN'}}</td>
+          <td>
+            <nz-input-number
+              [nzSize]="'small'" [nzFormatter]="globals.formatter"
+              [nzParser]="globals.parser" nz-input [(ngModel)]="rowItem.anToan" [nzDisabled]="disabled()">
+            </nz-input-number>
+          </td>
+          <td>
+            <nz-input-number
+              [nzSize]="'small'" [nzFormatter]="globals.formatter"
+              [nzParser]="globals.parser" nz-input [(ngModel)]="rowItem.khongAnToan" [nzDisabled]="disabled()">
+            </nz-input-number>
+          </td>
+          <td>
+            <nz-input-number
+              [nzSize]="'small'" [nzFormatter]="globals.formatter"
+              [nzParser]="globals.parser" nz-input [(ngModel)]="rowItem.nongDo" [nzDisabled]="disabled()">
+            </nz-input-number>
+          </td>
+          <td>
+            <nz-input-number
+              [nzSize]="'small'" [nzFormatter]="globals.formatter"
+              [nzParser]="globals.parser" nz-input [(ngModel)]="rowItem.doAm" [nzDisabled]="disabled()">
+            </nz-input-number>
+          </td>
+          <td>
+            <nz-input-number
+              [nzSize]="'small'" [nzFormatter]="globals.formatter"
+              [nzParser]="globals.parser" nz-input [(ngModel)]="rowItem.hatVang" [nzDisabled]="disabled()">
+            </nz-input-number>
+          </td>
+          <td><input [(ngModel)]="rowItem.camQuan" [readonly]="disabled()"></td>
+          <td><input [(ngModel)]="rowItem.tinhTrangNamMoc" [readonly]="disabled()"></td>
+          <td>
+            <nz-input-number
+              [nzSize]="'small'" [nzFormatter]="globals.formatter"
+              [nzParser]="globals.parser" nz-input [(ngModel)]="rowItem.conTrungSong" [nzDisabled]="disabled()">
+            </nz-input-number>
+          </td>
+        </tr>
+        </tbody>
+      </nz-table>
+      <nz-table *ngIf="formData.value.loaiVthh == LOAI_HANG_DTQG.MUOI" class="pd-10 nowrap" nzBordered [nzData]="dataTable" [nzFrontPagination]="false"
+                [nzShowPagination]="false">
+        <thead>
+        <tr>
+          <th colSpan="3">Tổng lượng bảo quản</th>
+          <th colSpan="3">Chi số của lô muối</th>
+        </tr>
+        <tr>
+          <th >Tổng</th>
+          <th >An toàn</th>
+          <th >Không an toàn</th>
+          <th > Màu sắc </th>
+          <th > Mùi vị </th>
+          <th > Dạng bên ngoài và cỡ hạt </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td>{{rowItem.tongSoLuong | number : '1.0-1' : 'vi_VN'}}</td>
+          <td>
+            <nz-input-number
+              [nzSize]="'small'" [nzFormatter]="globals.formatter"
+              [nzParser]="globals.parser" nz-input [(ngModel)]="rowItem.anToan" [nzDisabled]="disabled()">
+            </nz-input-number>
+          </td>
+          <td>
+            <nz-input-number
+              [nzSize]="'small'" [nzFormatter]="globals.formatter"
+              [nzParser]="globals.parser" nz-input [(ngModel)]="rowItem.khongAnToan" [nzDisabled]="disabled()">
+            </nz-input-number>
+          </td>
+          <td><input [(ngModel)]="rowItem.camQuan" [readonly]="disabled()"></td>
+          <td><input [(ngModel)]="rowItem.muiVi" [readonly]="disabled()"></td>
+          <td><input [(ngModel)]="rowItem.benNgoaiCoHat" [readonly]="disabled()"></td>
+        </tr>
+        </tbody>
+      </nz-table>
+      <nz-table *ngIf="formData.value.loaiVthh?.startsWith(LOAI_HANG_DTQG.VAT_TU)" class="pd-10 nowrap" nzBordered [nzData]="dataTable" [nzFrontPagination]="false"
+                [nzShowPagination]="false">
+        <thead>
+        <tr>
+          <th colSpan="9">Số lượng, chất lượng bảo quản</th>
+          <th colSpan="4">Xử lý biến động</th>
+        </tr>
+        <tr>
+          <th rowSpan="2">Bảo quản lần đầu</th>
+          <th colSpan="3">Bảo quản thường xuyên</th>
+          <th colSpan="3">Bảo quản định kỳ</th>
+          <th colSpan="2">Phụ kiện, thiết bị</th>
+          <th colSpan="2">Hàng hóa</th>
+          <th colSpan="2">Phụ kiện, thiết bị</th>
+        </tr>
+        <tr>
+          <th>An toàn </th>
+          <th>Có biến đổi </th>
+          <th>Tổng cộng </th>
+          <th>An toàn </th>
+          <th>Có biến đổi </th>
+          <th>Tổng cộng </th>
+          <th>An toàn </th>
+          <th>Có biến đổi </th>
+          <th>Đã khắc phục</th>
+          <th>Vượt qua quyền hạn</th>
+          <th>Đã khắc phục</th>
+          <th>Vượt qua quyền hạn</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td>
+            <nz-input-number
+              [nzSize]="'small'" [nzFormatter]="globals.formatter"
+              [nzParser]="globals.parser" nz-input [(ngModel)]="rowItem.baoQuanLanDau" [nzDisabled]="disabled()">
+            </nz-input-number>
+          </td>
+          <td>
+            <nz-input-number
+              [nzSize]="'small'" [nzFormatter]="globals.formatter"
+              [nzParser]="globals.parser" nz-input [(ngModel)]="rowItem.anToanBqtx" [nzDisabled]="disabled()">
+            </nz-input-number>
+          </td>
+          <td>
+            <nz-input-number
+              [nzSize]="'small'" [nzFormatter]="globals.formatter"
+              [nzParser]="globals.parser" nz-input [(ngModel)]="rowItem.coBienDongBqtx" [nzDisabled]="disabled()">
+            </nz-input-number>
+          </td>
+          <td>
+            <nz-input-number
+              [nzSize]="'small'" [nzFormatter]="globals.formatter"
+              [nzParser]="globals.parser" nz-input [(ngModel)]="rowItem.tongCongBqtx" [nzDisabled]="disabled()">
+            </nz-input-number>
+          </td>
+          <td>
+            <nz-input-number
+              [nzSize]="'small'" [nzFormatter]="globals.formatter"
+              [nzParser]="globals.parser" nz-input [(ngModel)]="rowItem.anToanBqdk" [nzDisabled]="disabled()">
+            </nz-input-number>
+          </td>
+          <td>
+            <nz-input-number
+              [nzSize]="'small'" [nzFormatter]="globals.formatter"
+              [nzParser]="globals.parser" nz-input [(ngModel)]="rowItem.coBienDongBqdk" [nzDisabled]="disabled()">
+            </nz-input-number>
+          </td>
+          <td>
+            <nz-input-number
+              [nzSize]="'small'" [nzFormatter]="globals.formatter"
+              [nzParser]="globals.parser" nz-input [(ngModel)]="rowItem.tongCongBqdk" [nzDisabled]="disabled()">
+            </nz-input-number>
+          </td>
+          <td>
+            <nz-input-number
+              [nzSize]="'small'" [nzFormatter]="globals.formatter"
+              [nzParser]="globals.parser" nz-input [(ngModel)]="rowItem.anToanPktb" [nzDisabled]="disabled()">
+            </nz-input-number>
+          </td>
+          <td>
+            <nz-input-number
+              [nzSize]="'small'" [nzFormatter]="globals.formatter"
+              [nzParser]="globals.parser" nz-input [(ngModel)]="rowItem.coBienDongPktb" [nzDisabled]="disabled()">
+            </nz-input-number>
+          </td>
+          <td>
+            <nz-input-number
+              [nzSize]="'small'" [nzFormatter]="globals.formatter"
+              [nzParser]="globals.parser" nz-input [(ngModel)]="rowItem.daKhacPhucHh" [nzDisabled]="disabled()">
+            </nz-input-number>
+          </td>
+          <td>
+            <nz-input-number
+              [nzSize]="'small'" [nzFormatter]="globals.formatter"
+              [nzParser]="globals.parser" nz-input [(ngModel)]="rowItem.vuotQuyenHanHh" [nzDisabled]="disabled()">
+            </nz-input-number>
+          </td>
+          <td>
+            <nz-input-number
+              [nzSize]="'small'" [nzFormatter]="globals.formatter"
+              [nzParser]="globals.parser" nz-input [(ngModel)]="rowItem.daKhacPhucTb" [nzDisabled]="disabled()">
+            </nz-input-number>
+          </td>
+          <td>
+            <nz-input-number
+              [nzSize]="'small'" [nzFormatter]="globals.formatter"
+              [nzParser]="globals.parser" nz-input [(ngModel)]="rowItem.vuotQuyenHanTb" [nzDisabled]="disabled()">
+            </nz-input-number>
+          </td>
+        </tr>
+        </tbody>
+      </nz-table>
+    </nz-collapse-panel>
+  </nz-collapse>
+</nz-card>
+<div class="modal-footer">
+  <div class="nut">
+    <div class="cantrai">
+    </div>
+    <div class="canphai">
+      <button nz-button (click)="onCancel()" class="modal__button--cancel ml-2">
+        <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+        Đóng
+      </button>
+      <button *ngIf="!disabled()" nz-button (click)="handleOk(false)" class="modal__button--save ml-2">
+        <i nz-icon nzType="save"></i>
+        Lưu
+      </button>
+      <button *ngIf="!disabled() && !isXacNhan" nz-button (click)="handleOk(true)" class="modal__button--save ml-2">
+        <i nz-icon nzType="save"></i>
+        Xác nhận
+      </button>
+    </div>
+  </div>
+</div>
+<ng-template #error let-control>
+  <app-template-error #error [control]="control"></app-template-error>
+</ng-template>

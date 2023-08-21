@@ -1,21 +1,20 @@
-import { Component, EventEmitter, Input, OnInit, Output, AfterViewInit } from '@angular/core';
-import { Globals } from 'src/app/shared/globals';
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { STATUS } from "../../../../../../constants/status";
-import { HelperService } from "../../../../../../services/helper.service";
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Globals} from 'src/app/shared/globals';
+import {FormBuilder, FormGroup} from "@angular/forms";
+import {STATUS} from "../../../../../../constants/status";
+import {HelperService} from "../../../../../../services/helper.service";
 import {
   ThongTinHopDongService
 } from "../../../../../../services/qlnv-hang/nhap-hang/dau-thau/hop-dong/thongTinHopDong.service";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NgxSpinnerService } from "ngx-spinner";
-import { BaseComponent } from "../../../../../../components/base/base.component";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
 import {
   QuyetDinhPheDuyetKetQuaLCNTService
 } from "../../../../../../services/qlnv-hang/nhap-hang/dau-thau/tochuc-trienkhai/quyetDinhPheDuyetKetQuaLCNT.service";
-import { MESSAGE } from "../../../../../../constants/message";
-import { UserLogin } from "../../../../../../models/userlogin";
-import { UserService } from "../../../../../../services/user.service";
-import { NzModalService } from 'ng-zorro-antd/modal';
+import {MESSAGE} from "../../../../../../constants/message";
+import {UserLogin} from "../../../../../../models/userlogin";
+import {UserService} from "../../../../../../services/user.service";
+import {NzModalService} from 'ng-zorro-antd/modal';
 
 @Component({
   selector: 'app-quanly-hopdong',
@@ -90,6 +89,7 @@ export class QuanlyHopdongComponent implements OnInit {
       soLuongNhapKh: [''],
       tenTrangThaiHd: [''],
       trangThaiHd: [''],
+      soHdDaKy: []
     });
   }
 
@@ -130,34 +130,51 @@ export class QuanlyHopdongComponent implements OnInit {
   }
 
   detailVatTu(data) {
-    console.log(data);
     this.formData.patchValue({
       id: data.id,
       namKhoach: data.namKhoach,
-      soQdPdKhlcnt: data.hhQdKhlcntHdr.soQd,
-      tenLoaiHdong: data.hhQdKhlcntHdr.tenLoaiHdong,
-      tenNguonVon: data.hhQdKhlcntHdr.tenNguonVon,
-      tenLoaiVthh: data.hhQdKhlcntHdr.tenLoaiVthh,
-      tenCloaiVthh: data.hhQdKhlcntHdr.tenCloaiVthh,
+      soQdPdKqLcnt: data.soQd,
+      soQdPdKhlcnt: data.soQdPdKhlcnt,
+      tenLoaiHdong: data.hhQdKhlcntHdr?.tenLoaiHdong,
+      tenNguonVon: data.hhQdKhlcntHdr?.tenNguonVon,
+      tenLoaiVthh: data.hhQdKhlcntHdr?.tenLoaiVthh,
+      tenCloaiVthh: data.hhQdKhlcntHdr?.tenCloaiVthh,
+      soGthauTrung: data.hhQdKhlcntHdr?.soGthauTrung == null ? 0 : data.hhQdKhlcntHdr?.soGthauTrung,
+      soGthauTruot: data.hhQdKhlcntHdr?.soGthauTruot == null ? 0 : data.hhQdKhlcntHdr?.soGthauTruot,
+      tenDuAn: data.hhQdKhlcntHdr?.tenDuAn,
+      tongMucDt: data.hhQdKhlcntHdr?.tongMucDt,
       vat: 5,
       tenTrangThaiHd: data.tenTrangThaiHd,
       trangThaiHd: data.trangThaiHd,
+      tenDvi: data.hhQdKhlcntHdr?.tenDvi,
     });
-    this.dataTable = data.hhQdKhlcntHdr.children.filter(item => item.trangThai == STATUS.THANH_CONG);
+    this.dataTable = data.hhQdKhlcntHdr.dchinhDxKhLcntHdr?  data.hhQdKhlcntHdr.dchinhDxKhLcntHdr.dsGthau.filter(item => item.trangThaiDt == STATUS.THANH_CONG): data.hhQdKhlcntHdr.dsGthau.filter(item => item.trangThaiDt == STATUS.THANH_CONG);
     if (data.listHopDong) {
       let soLuong = 0
       let tongMucDtGoiTrung = 0;
+      let soHdDaKy = 0
+      let soGthauTrung = 0;
       this.dataTable.forEach(item => {
-        let hopDong = data.listHopDong.filter(x => x.idGoiThau == item.id)[0];
-        item.hopDong = hopDong
+        item.hopDong = data.listHopDong.filter(x => x.idGoiThau == item.id)[0]
         if (item.hopDong) {
           soLuong += item.hopDong.soLuong;
-          tongMucDtGoiTrung += item.hopDong.soLuong * item.hopDong.donGia * 1000;
+          tongMucDtGoiTrung += item.hopDong.soLuong * item.hopDong.donGia;
+        }
+        if (item.trangThaiDt == this.STATUS.THANH_CONG) {
+          soGthauTrung += 1;
+        }
+      })
+      data.listHopDong.forEach(i => {
+        if (i.trangThai == STATUS.DA_KY) {
+          soHdDaKy += 1;
         }
       })
       this.formData.patchValue({
-        soLuongNhap: soLuong,
-        tongMucDtGoiTrung: tongMucDtGoiTrung
+        soHdDaKy: soHdDaKy,
+        soLuongNhapKh: soLuong,
+        tongMucDtGoiTrung: tongMucDtGoiTrung,
+        soGthau: this.dataTable.length,
+        soGthauTrung: soGthauTrung
       })
     };
     if (this.dataTable.length > 0 && this.dataTable[0].hopDong != undefined) {
@@ -185,12 +202,21 @@ export class QuanlyHopdongComponent implements OnInit {
       soGthauTruot: data.qdKhlcntDtl?.soGthauTruot,
       tenTrangThaiHd: data.tenTrangThaiHd,
       trangThaiHd: data.trangThaiHd,
-      tongMucDt: data.qdKhlcntDtl?.soLuong * data.qdKhlcntDtl?.donGiaVat * 1000
     });
+    if(data.qdKhlcntDtl?.children) {
+      let tongMucDt = 0;
+      data.qdKhlcntDtl?.children.forEach(i => {
+         tongMucDt += i.donGiaNhaThau * i.soLuong * 1000
+      })
+      this.formData.patchValue({
+        tongMucDt: tongMucDt
+      })
+    }
     this.dataTable = data.qdKhlcntDtl?.children.filter(item => item.trangThai == STATUS.THANH_CONG);
     if (data.listHopDong) {
       let soLuong = 0
       let tongMucDtGoiTrung = 0;
+      let soHdDaKy = 0
       this.dataTable.forEach(item => {
         let hopDong = data.listHopDong.filter(x => x.idGoiThau == item.id)[0];
         item.hopDong = hopDong
@@ -199,8 +225,14 @@ export class QuanlyHopdongComponent implements OnInit {
           tongMucDtGoiTrung += item.hopDong.soLuong * item.hopDong.donGia * 1000;
         }
       })
+      data.listHopDong.forEach(i => {
+        if (i.trangThai == STATUS.DA_KY) {
+          soHdDaKy += 1;
+        }
+      })
       this.formData.patchValue({
-        soLuongNhap: soLuong,
+        soHdDaKy: soHdDaKy,
+        soLuongNhapKh: soLuong,
         tongMucDtGoiTrung: tongMucDtGoiTrung
       })
     };
@@ -233,21 +265,39 @@ export class QuanlyHopdongComponent implements OnInit {
   }
 
   async approve() {
-    await this.spinner.show()
     if (this.validateData()) {
-      let body = {
-        id: this.id,
-        trangThai: STATUS.DA_HOAN_THANH
-      }
-      let res = await this.kqLcnt.approve(body);
-      if (res.msg == MESSAGE.SUCCESS) {
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.THAO_TAC_SUCCESS);
-        this.back();
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
-      }
+      this.modal.confirm({
+        nzClosable: false,
+        nzTitle: 'Xác nhận',
+        nzContent: 'Bạn có chắc chắn muốn hoàn thành cập nhật hợp đồng ?',
+        nzOkText: 'Đồng ý',
+        nzCancelText: 'Không',
+        nzOkDanger: true,
+        nzWidth: 350,
+        nzOnOk: async () => {
+          this.spinner.show();
+          try {
+            let body = {
+              id: this.id,
+              trangThai: STATUS.DA_HOAN_THANH
+            }
+            let res = await this.kqLcnt.approve(body);
+            if (res.msg == MESSAGE.SUCCESS) {
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.THAO_TAC_SUCCESS);
+              this.back();
+            } else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+            }
+          } catch (e) {
+            console.log('error: ', e);
+            this.spinner.hide();
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          } finally {
+            this.spinner.hide();
+          }
+        },
+      });
     }
-    await this.spinner.hide()
   }
 
   validateData(): boolean {

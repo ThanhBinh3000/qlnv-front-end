@@ -170,8 +170,9 @@ export class ThemMoiHopDongComponent extends Base2Component implements OnInit {
       if (dataQdPdKqlcnt.listKtTdxdQuyetDinhPdKqlcntDsgt && dataQdPdKqlcnt.listKtTdxdQuyetDinhPdKqlcntDsgt.length) {
         goiThau = dataQdPdKqlcnt.listKtTdxdQuyetDinhPdKqlcntDsgt.find(it => it.idGoiThau == this.itemGoiThau.id);
       }
+      console.log(this.itemGoiThau, 'this.itemGoiThau this.itemGoiThau ')
       this.formData.patchValue({
-        namKeHoach : this.itemQdPdKhlcnt.namKeHoach,
+        namKeHoach: this.itemQdPdKhlcnt.namKeHoach,
         idQdPdKqlcnt: this.itemGoiThau.idQdPdKqlcnt,
         soQdPdKhlcnt: this.itemQdPdKhlcnt.soQd,
         idQdPdKhlcnt: this.itemQdPdKhlcnt.id,
@@ -183,8 +184,8 @@ export class ThemMoiHopDongComponent extends Base2Component implements OnInit {
         ngayKyKqlcnt: dataQdPdKqlcnt ? dataQdPdKqlcnt.ngayKy : null,
         loaiHopDong: this.itemGoiThau.loaiHopDong,
         tenLoaiHopDong: this.itemGoiThau.tenLoaiHopDong,
-        cdtTen: this.itemGoiThau.ktTdxdQuyetDinhPdKqlcnt.chuDauTu,
-        cdtDiaChi: this.itemGoiThau.ktTdxdQuyetDinhPdKqlcnt.diaChi,
+        cdtTen: this.itemGoiThau.ktTdxdQuyetDinhPdKqlcnt?.chuDauTu,
+        cdtDiaChi: this.itemGoiThau.ktTdxdQuyetDinhPdKqlcnt?.diaChi,
         dvccTen: goiThau?.ktTdxdQuyetDinhPdKhlcntDsnt?.tenNhaThau,
         dvccDiaChi: goiThau?.ktTdxdQuyetDinhPdKhlcntDsnt?.diaChi,
         dvccMst: goiThau?.ktTdxdQuyetDinhPdKhlcntDsnt?.maSoThue,

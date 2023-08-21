@@ -49,5 +49,8 @@
   "NHAP_DA_TAO_TO_TRINH": "32",
   "MENU_LV0": 42,
   "MENU_LV1": 69,
-  "MENU_LV2": 98
+  "MENU_LV2": 98,
+  "MENU_LV3": 120,
+  "MENU_LV4": 150,
+  "MENU_LV5": 180
 }

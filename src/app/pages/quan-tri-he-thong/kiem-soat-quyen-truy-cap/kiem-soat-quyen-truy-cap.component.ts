@@ -22,7 +22,10 @@ export class KiemSoatQuyenTruyCapComponent extends Base2Component implements OnI
   listSystem: any[] = [{"code": "hang", "ten": "Quản lý hàng"}, {
     "code": "khoach",
     "ten": "Quản lý kế hoạch"
-  }, {"code": "kho", "ten": "Quản lý kho"}, {"code": "security", "ten": "Quản lý đăng nhập"}];
+  }, {"code": "kho", "ten": "Quản lý kho"}, {"code": "luukho", "ten": "Quản lý lưu kho"}, {
+    "code": "security",
+    "ten": "Quản lý đăng nhập"
+  }];
   pageSize: number = 100;
 
   constructor(
@@ -59,6 +62,7 @@ export class KiemSoatQuyenTruyCapComponent extends Base2Component implements OnI
     }
     this.search();
   }
+
   exportData() {
     if (this.totalRecord > 0) {
       this.spinner.show();

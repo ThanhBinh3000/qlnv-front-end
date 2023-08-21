@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {Base2Component} from "../../../../../components/base2/base2.component";
 import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../../services/storage.service";
@@ -11,9 +11,10 @@ import {chain, isEmpty} from "lodash";
 import {MESSAGE} from "../../../../../constants/message";
 import {CHUC_NANG} from "../../../../../constants/status";
 import {v4 as uuidv4} from "uuid";
+import {LOAI_HH_XUAT_KHAC} from "../../../../../constants/config";
 import {
   DanhSachHangDTQGCon6ThangService
-} from "../../../../../services/qlnv-hang/xuat-hang/xuatkhac/DanhSachHangDTQGCon6Thang.service";
+} from "../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatlt/DanhSachHangDTQGCon6Thang.service";
 
 @Component({
   selector: 'app-toan-bo-ds-hang-dtqg-hethan-luukho-chua-co-kh-xuat',
@@ -26,8 +27,15 @@ export class ToanBoDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Comp
   dsLoaiVthh: any[] = [];
   dsCloaiVthh: any[] = [];
   dataTableView: any = [];
+  tongHop=false;
   expandSetString = new Set<string>();
-
+  loaiHhXuatKhac = LOAI_HH_XUAT_KHAC;
+  isVisibleModal = false;
+  selectedItem: any;
+  modalWidth: any;
+  idDs: number = 0;
+  openDs = false;
+  @Output() tabFocus = new EventEmitter<object>();
   constructor(httpClient: HttpClient,
               storageService: StorageService,
               notification: NzNotificationService,
@@ -45,11 +53,10 @@ export class ToanBoDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Comp
       maDiaDiem: [],
       loaiVthh: [],
       cloaiVthh: [],
+      moTaHangHoa: [],
       donViTinh: [],
-      slHienTai: [],
-      slDeXuat: [],
-      slDaDuyet: [],
-      thanhTien: [],
+      slTonKho: [],
+      slHetHan: [],
       ngayNhapKho: [],
       ngayDeXuat: [],
       ngayDeXuatTu: [],
@@ -57,9 +64,10 @@ export class ToanBoDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Comp
       ngayTongHop: [],
       ngayTongHopTu: [],
       ngayTongHopDen: [],
+      thoiHanLk:[],
       lyDo: [],
       trangThai: [],
-      type: [],
+      loai: [],
       tenLoaiVthh: [],
       tenCloaiVthh: [],
       tenTrangThai: [],
@@ -118,6 +126,9 @@ export class ToanBoDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Comp
   };
 
   async timKiem() {
+    this.formData.patchValue({
+      loai: this.loaiHhXuatKhac.LT_6_THANG,
+    });
     await this.search();
     this.dataTable.forEach(s => {
       s.idVirtual = uuidv4();
@@ -136,7 +147,7 @@ export class ToanBoDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Comp
   async loadDsVthh() {
     let res = await this.danhMucService.getDanhMucHangDvqlAsyn({});
     if (res.msg == MESSAGE.SUCCESS) {
-      this.dsLoaiVthh = res.data?.filter((x) => (x.ma.length == 2 && !x.ma.match("^01.*")) || (x.ma.length == 4 && x.ma.match("^01.*")));
+      this.dsLoaiVthh = res.data?.filter((x) => (x.key.length == 4 && x.key.match("^01.*")));
     }
   }
 
@@ -156,30 +167,14 @@ export class ToanBoDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Comp
 
   buildTableView() {
     this.dataTableView = chain(this.dataTable)
-      .groupBy("tenCuc")
+      .groupBy("tenChiCuc")
       .map((value, key) => {
-        let rs = chain(value)
-          .groupBy("tenChiCuc")
-          .map((v, k) => {
-              let rowItem = v.find(s => s.tenChiCuc === k);
-              let idVirtual = uuidv4();
-              this.expandSetString.add(idVirtual);
-              return {
-                idVirtual: idVirtual,
-                tenChiCuc: k,
-                maDiaDiem: rowItem.maDiaDiem,
-                tenCloaiVthh: rowItem.tenCloaiVthh,
-                childData: v
-              }
-            }
-          ).value();
-        let rowItem = value.find(s => s.tenCuc === key);
         let idVirtual = uuidv4();
         this.expandSetString.add(idVirtual);
         return {
           idVirtual: idVirtual,
-          tenCuc: key,
-          childData: rs
+          tenChiCuc: key,
+          childData: value
         };
       }).value();
   }
@@ -190,6 +185,23 @@ export class ToanBoDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Comp
     } else {
       this.expandSetString.delete(id);
     }
+  }
+  emitTab(tab) {
+    this.tabFocus.emit(tab);
+  }
+
+  openTongHop(){
+   this.tongHop= !this.tongHop;
+   this.emitTab(1);
+ }
+  openDsModal(id: number) {
+    this.idDs = id;
+    this.openDs= true;
+  }
+
+  closeDsModal() {
+    this.idDs = null;
+    this.openDs = false;
   }
 
 }

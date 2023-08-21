@@ -11,6 +11,10 @@
     <li nz-menu-item (click)="selectTab(2)" *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT')">
       Quyết định phê duyệt kế hoạch lựa chọn nhà thầu
     </li>
+    <li nz-menu-item (click)="selectTab(3)"
+        *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_DCKHLCNT')">
+      Điều chỉnh KH lựa chọn nhà thầu
+    </li>
   </ul>
 </nz-affix>
 <ng-container *ngIf="tabSelected == 0">
@@ -21,4 +25,7 @@
 </ng-container>
 <ng-container *ngIf="tabSelected == 2">
   <app-quyetdinh-pheduyet-khlcnt [loaiVthh]="inputLoaiVthh"></app-quyetdinh-pheduyet-khlcnt>
+</ng-container>
+<ng-container *ngIf="tabSelected == 3">
+  <app-dieuchinh-luachon-nhathau [loaiVthh]="inputLoaiVthh"></app-dieuchinh-luachon-nhathau>
 </ng-container>

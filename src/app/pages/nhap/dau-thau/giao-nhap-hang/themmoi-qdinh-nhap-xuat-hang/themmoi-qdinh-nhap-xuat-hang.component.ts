@@ -76,12 +76,16 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
   dataTable: any[] = [];
 
   rowItem: ThongTinDiaDiemNhap = new ThongTinDiaDiemNhap();
+  rowItemEdit: ThongTinDiaDiemNhap = new ThongTinDiaDiemNhap();
 
   listChiCuc: any[] = [];
   listDiemKho: any[] = [];
   listNhaKho: any[] = [];
   listNganKho: any[] = [];
   listNganLo: any[] = [];
+  listNhaKhoEdit: any[] = [];
+  listNganKhoEdit: any[] = [];
+  listNganLoEdit: any[] = [];
   listCanCu: any[] = [];
 
   constructor(
@@ -212,20 +216,19 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
             let dataUserLogin = data.details.filter(item => item.maDvi == this.userInfo.MA_DVI);
             this.dataTable = dataUserLogin[0].children;
             this.dataTable.forEach(x => {
-              x.soLuong = null;
-              x.children.forEach(y => {
-                y.maDiemKho = y.maDvi;
-                y.soLuongDiemKho = y.soLuong;
-                y.tenDiemKho = y.tenDvi
-                y.soLuong = null;
-              })
+              x.trangThai = STATUS.CHUA_THUC_HIEN;
+              x.tenTrangThai = "Chưa thực hiện";
             });
           } else {
-            this.dataTable = data.details;
+            this.dataTable = data.details[0].children;
             this.dataTable.forEach(x => {
-              x.soLuong = null;
+              x.trangThai = STATUS.CHUA_THUC_HIEN;
+              x.tenTrangThai = "Chưa thực hiện";
               x.children.forEach(y => {
+                y.maChiCuc = x.maDvi
                 y.soLuongDiemKho = y.soLuong;
+                y.tenDiemKho = y.tenDvi;
+                y.maDiemKho = y.maDvi;
                 y.soLuong = null;
               })
             });
@@ -431,28 +434,31 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
             this.dataTable = data.dtlList
           }
           if (this.userService.isChiCuc()) {
-            console.log(this.dataTable)
             this.dataTable = data.dtlList.filter(x => x.maDvi == this.userInfo.MA_DVI);
-            this.dataTable.forEach(x => {
-              let objListDiemKho = x.children.map(x => x.maDiemKho);
-              if (objListDiemKho.length > 0) {
-                this.listDiemKho = this.listDiemKho.filter(item => item.key.indexOf(objListDiemKho) >= 0);
-              }
-              this.listDiemKho.forEach(item => {
-                let ttDk = x.children.filter(x => x.maDiemKho == item.key)[0];
-                item.soLuongDiemKho = ttDk.soLuongDiemKho;
-              })
-              console.log(this.listDiemKho)
-              this.formData.patchValue({
-                trangThaiChiCuc: x.trangThai
-              });
-              if (x.trangThai == STATUS.CHUA_CAP_NHAT) {
-                x.children = [];
-              }
+            this.formData.patchValue({
+                  trangThaiChiCuc: this.dataTable[0].trangThai
             });
+            // this.dataTable.forEach(x => {
+            //   let objListDiemKho = x.children.map(x => x.maDiemKho);
+            //   if (objListDiemKho.length > 0) {
+            //     this.listDiemKho = this.listDiemKho.filter(item => item.key.indexOf(objListDiemKho) >= 0);
+            //   }
+            //   this.listDiemKho.forEach(item => {
+            //     let ttDk = x.children.filter(x => x.maDiemKho == item.key)[0];
+            //     item.soLuongDiemKho = ttDk.soLuongDiemKho;
+            //   })
+            //   console.log(this.listDiemKho)
+            //   this.formData.patchValue({
+            //     trangThaiChiCuc: x.trangThai
+            //   });
+            //   if (x.trangThai == STATUS.CHUA_CAP_NHAT) {
+            //     x.children = [];
+            //   }
+            // });
           }
           this.listFileDinhKem = data.fileDinhKems;
           this.listCanCu = data.fileCanCu;
+          console.log(this.dataTable)
         } else {
           this.notification.error(MESSAGE.ERROR, res.msg);
         }
@@ -604,10 +610,20 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
   }
 
   themDiaDiemNhap(indexTable?) {
-    if (this.validatorDdiemNhap(indexTable) && this.validateButtonThem('ddiemNhap')) {
-      this.dataTable[indexTable].children = [...this.dataTable[indexTable].children, this.rowItem]
-      this.rowItem = new ThongTinDiaDiemNhap();
+    if (this.rowItem.soLuong <= 0) {
+      this.notification.error(MESSAGE.ERROR, "Số lượng phân bổ không được để trống.")
+      return false;
     }
+    let soLuong = 0;
+    this.dataTable[indexTable].children.forEach(item => {
+      soLuong += item.soLuong
+    })
+    if (soLuong + this.rowItem.soLuong > this.dataTable[indexTable].soLuong ) {
+      this.notification.error(MESSAGE.ERROR, "Số lượng đã vượt quá chỉ tiêu.")
+      return false;
+    }
+    this.dataTable[indexTable].children = [...this.dataTable[indexTable].children, this.rowItem]
+    this.rowItem = new ThongTinDiaDiemNhap();
   }
 
   themChiCuc() {
@@ -623,7 +639,6 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
         soLuong += item.soLuong;
       }
     });
-    console.log(soLuong, diemKho.soLuongDiemKho);
     soLuong += this.rowItem.soLuong
     if (soLuong > +diemKho.soLuongDiemKho) {
       this.notification.error(MESSAGE.ERROR, "Số lượng thêm mới không được vượt quá số lượng của chi cục")
@@ -635,14 +650,12 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
 
   calcTong(index?) {
     if (this.dataTable && index != null) {
-      debugger
       const sum = this.dataTable[index].children.reduce((prev, cur) => {
         prev += cur.soLuong;
         return prev;
       }, 0);
       return sum;
     } else if (this.dataTable) {
-      debugger
       const sum = this.dataTable.reduce((prev, cur) => {
         cur.children.forEach(res => {
           prev += res.soLuong;
@@ -669,7 +682,45 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
     }
 
   }
+ editRow (i, y){
+   this.dataTable[i].children.forEach(i => {
+     i.edit = false;
+   })
+   this.dataTable[i].children[y].edit = true;
+   this.rowItemEdit = cloneDeep(this.dataTable[i].children[y])
+   let diemKho = this.listDiemKho.filter(x => x.key == this.rowItemEdit.maDiemKho);
+   if (diemKho && diemKho.length > 0) {
+     this.listNhaKhoEdit = diemKho[0].children;
+   }
+   let nhaKho = this.listNhaKhoEdit.filter(x => x.key == this.rowItemEdit.maNhaKho);
+   if (nhaKho && nhaKho.length > 0) {
+     this.listNganKhoEdit = nhaKho[0].children;
+   }
+   let nganKho = this.listNganKhoEdit.filter(x => x.key == this.rowItemEdit.maNganKho);
+   if (nganKho && nganKho.length > 0) {
+     this.listNganLoEdit = nganKho[0].children;
+   }
+ }
 
+  saveEdit (i, y){
+    let soLuong = 0;
+    let data = cloneDeep(this.dataTable[i].children);
+    data.splice(y, 1)
+    data.forEach(i => {
+      soLuong += i.soLuong;
+    })
+    if (soLuong + this.rowItemEdit.soLuong  > this.dataTable[i].soLuong) {
+      this.notification.error(MESSAGE.ERROR, "Số lượng đã vượt quá chỉ tiêu.")
+      return false;
+    }
+    this.dataTable[i].children[y] = cloneDeep(this.rowItemEdit);
+    this.dataTable[i].children[y].edit = false;
+  }
+
+  cancelEdit (i, y){
+    this.dataTable[i].children[y].edit = false;
+    this.rowItemEdit = new ThongTinDiaDiemNhap();
+  }
   xoaDiaDiemNhap(indexTable, indexRow?) {
     this.modal.confirm({
       nzClosable: false,
@@ -711,6 +762,7 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
               ...this.listDiemKho,
               ...element.children
             ]
+            this.listDiemKho = this.listDiemKho.filter(i => i.type != "PB");
           }
           if (element && element.capDvi == '2' && element.children) {
             this.listChiCuc = [
@@ -725,70 +777,120 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
     }
   }
 
-  changeDiemKho() {
-    this.listNhaKho = [];
-    this.listNganKho = [];
-    this.listNganLo = [];
-    this.rowItem.maNhaKho = null;
-    this.rowItem.maNganKho = null;
-    this.rowItem.maLoKho = null;
-    let diemKho = this.listDiemKho.filter(x => x.key == this.rowItem.maDiemKho);
-    if (diemKho && diemKho.length > 0) {
-      this.listNhaKho = diemKho[0].children;
-      this.rowItem.tenDiemKho = diemKho[0].tenDvi;
-      this.rowItem.soLuongDiemKho = diemKho[0].soLuongDiemKho;
+  changeDiemKho(isEdit?) {
+    if (isEdit) {
+      this.listNhaKhoEdit = [];
+      this.listNganKhoEdit = [];
+      this.listNganLoEdit = [];
+      let diemKho = this.listDiemKho.filter(x => x.key == this.rowItemEdit.maDiemKho);
+      if (diemKho && diemKho.length > 0) {
+        this.listNhaKhoEdit = diemKho[0].children;
+      }
+    } else {
+      this.listNhaKho = [];
+      this.listNganKho = [];
+      this.listNganLo = [];
+      this.rowItem.maNhaKho = null;
+      this.rowItem.maNganKho = null;
+      this.rowItem.maLoKho = null;
+      let diemKho = this.listDiemKho.filter(x => x.key == this.rowItem.maDiemKho);
+      if (diemKho && diemKho.length > 0) {
+        this.listNhaKho = diemKho[0].children;
+        this.rowItem.tenDiemKho = diemKho[0].tenDvi;
+        this.rowItem.soLuongDiemKho = diemKho[0].soLuongDiemKho;
+      }
     }
   }
 
-  changeNhaKho() {
-    this.listNganKho = [];
-    this.listNganLo = [];
-    this.rowItem.maNganKho = null;
-    this.rowItem.maLoKho = null;
-    let nhaKho = this.listNhaKho.filter(x => x.key == this.rowItem.maNhaKho);
-    if (nhaKho && nhaKho.length > 0) {
-      this.listNganKho = nhaKho[0].children;
-      this.rowItem.tenNhaKho = nhaKho[0].tenDvi
+  changeNhaKho(isEdit?) {
+    if (isEdit) {
+      this.listNganKhoEdit = [];
+      this.listNganLoEdit = [];
+      this.rowItemEdit.maNganKho = null;
+      this.rowItemEdit.maLoKho = null;
+      let nhaKho = this.listNhaKhoEdit.filter(x => x.key == this.rowItemEdit.maNhaKho);
+      if (nhaKho && nhaKho.length > 0) {
+        this.listNganKhoEdit = nhaKho[0].children;
+        this.rowItemEdit.tenNhaKho = nhaKho[0].tenDvi
+      }
+    } else {
+      this.listNganKho = [];
+      this.listNganLo = [];
+      this.rowItem.maNganKho = null;
+      this.rowItem.maLoKho = null;
+      let nhaKho = this.listNhaKho.filter(x => x.key == this.rowItem.maNhaKho);
+      if (nhaKho && nhaKho.length > 0) {
+        this.listNganKho = nhaKho[0].children;
+        this.rowItem.tenNhaKho = nhaKho[0].tenDvi
+      }
     }
   }
 
-  changeNganKho() {
-    this.listNganLo = [];
-    this.rowItem.maLoKho = null;
-    let nganKho = this.listNganKho.filter(x => x.key == this.rowItem.maNganKho);
-    if (nganKho && nganKho.length > 0) {
-      this.listNganLo = nganKho[0].children;
-      this.rowItem.tenNganKho = nganKho[0].tenDvi
+  changeNganKho(isEdit?) {
+    if (isEdit) {
+      this.listNganLoEdit = [];
+      this.rowItemEdit.maLoKho = null;
+      let nganKho = this.listNganKhoEdit.filter(x => x.key == this.rowItemEdit.maNganKho);
+      if (nganKho && nganKho.length > 0) {
+        this.listNganLoEdit = nganKho[0].children;
+        this.rowItemEdit.tenNganKho = nganKho[0].tenDvi
+      }
+    } else {
+      this.listNganLo = [];
+      this.rowItem.maLoKho = null;
+      let nganKho = this.listNganKho.filter(x => x.key == this.rowItem.maNganKho);
+      if (nganKho && nganKho.length > 0) {
+        this.listNganLo = nganKho[0].children;
+        this.rowItem.tenNganKho = nganKho[0].tenDvi
+      }
     }
   }
 
-  changeLoKho() {
-    let loKho = this.listNganLo.filter(x => x.key == this.rowItem.maLoKho);
-    if (loKho && loKho.length > 0) {
-      this.rowItem.tenLoKho = loKho[0].tenDvi
+  changeLoKho(isEdit?) {
+    if (isEdit) {
+      let loKho = this.listNganLoEdit.filter(x => x.key == this.rowItemEdit.maLoKho);
+      if (loKho && loKho.length > 0) {
+        this.rowItemEdit.tenLoKho = loKho[0].tenDvi
+      }
+    } else {
+      let loKho = this.listNganLo.filter(x => x.key == this.rowItem.maLoKho);
+      if (loKho && loKho.length > 0) {
+        this.rowItem.tenLoKho = loKho[0].tenDvi
+      }
     }
   }
 
   async saveDdiemNhap(statusSave) {
-    this.spinner.show();
-    this.dataTable.forEach(item => {
-      item.trangThai = statusSave
-      if(item.children.length == 0){
-        this.notification.success(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR);
-      }
-    })
-    let body = {
-      detailList: this.dataTable
-    }
-    let res = await this.quyetDinhGiaoNhapHangService.updateDdiemNhap(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-      // this.redirectQdNhapXuat();
-      this.spinner.hide();
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
-      this.spinner.hide();
-    }
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn hoàn thành cập nhật?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: async () => {
+        this.spinner.show();
+        this.dataTable.forEach(item => {
+          item.trangThai = statusSave
+          if(item.children.length == 0){
+            this.notification.success(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR);
+          }
+        })
+        let body = {
+          detailList: this.dataTable
+        }
+        let res = await this.quyetDinhGiaoNhapHangService.updateDdiemNhap(body);
+        if (res.msg == MESSAGE.SUCCESS) {
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+          this.redirectQdNhapXuat();
+          this.spinner.hide();
+        } else {
+          this.notification.error(MESSAGE.ERROR, res.msg);
+          this.spinner.hide();
+        }
+      },
+    });
   }
 
   isDisableForm() {

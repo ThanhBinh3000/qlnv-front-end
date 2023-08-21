@@ -93,11 +93,12 @@ export class ThemMoiBangKeCanHangComponent extends Base2Component implements OnI
       cloaiVthh: [''],
       tenCloaiVthh: [''],
       moTaHangHoa: [''],
-      donViTinh: [''],
+      donViTinh: ['kg'],
       nguoiPduyet: [''],
       nguoiTao: [''],
       trangThai: [''],
       tenTrangThai: [''],
+      tenNganLoKho: [''],
       lyDoTuChoi: [''],
       soPhieuKtraCluong: [''],
     })
@@ -111,6 +112,9 @@ export class ThemMoiBangKeCanHangComponent extends Base2Component implements OnI
       await Promise.all([
         // this.loadSoQuyetDinh(),
       ]);
+      if(this.idQdGiaoNvNh){
+        await this.bindingDataQd(this.idQdGiaoNvNh)
+      }
       if (this.id) {
         await this.loadChiTiet(this.id);
       } else {
@@ -217,17 +221,15 @@ export class ThemMoiBangKeCanHangComponent extends Base2Component implements OnI
       moTaHangHoa: data.moTaHangHoa,
       soHdong: data.soHd,
       ngayKiHdong: data.ngayKyHd,
-      donViTinh: data.dviTinh
     });
     let dataChiCuc = data.hhQdGiaoNvNhangDtlList.filter(item => item.maDvi == this.userInfo.MA_DVI);
     if (dataChiCuc.length > 0) {
-      this.listDiaDiemNhap = dataChiCuc[0].hhQdGiaoNvNhDdiemList;
+      this.listDiaDiemNhap = dataChiCuc[0].children;
     }
     await this.spinner.hide();
   }
 
   openDialogDdiemNhapHang() {
-    console.log(this.listDiaDiemNhap, 7777)
     const modalQD = this.modal.create({
       nzTitle: 'Danh sách địa điểm nhập hàng',
       nzContent: DialogTableSelectionComponent,
@@ -260,6 +262,7 @@ export class ThemMoiBangKeCanHangComponent extends Base2Component implements OnI
       tenNganKho: data.tenNganKho,
       maLoKho: data.maLoKho,
       tenLoKho: data.tenLoKho,
+      tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho,
     });
     if (isDetail) {
       this.formData.patchValue({

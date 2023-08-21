@@ -120,10 +120,10 @@
         <td>{{ data.tenTrangThaiBtc }}</td>
         <td class="text-center">
           <a (click)="viewDetail(data.id, true)">
-            <i class="fa fa-eye"></i>
+            <i class="fa fa-eye" title="Xem chi tiết"></i>
           </a>
           <a *ngIf="data.trangThaiBtc == STATUS.CHODUYET_BTC" (click)="viewDetail(data.id, false)">
-            <i class="fa fa-pencil"></i>
+            <i class="fa fa-pencil" title="Sửa"></i>
           </a>
         </td>
       </tr>

@@ -19,4 +19,9 @@ export class TongHopScThuongXuyenService extends BaseService {
   //   const url = `${environment.SERVICE_API}${this.GATEWAY}/kt-kh-sc-lon/tra-cuu-dx-cuc`;
   //   return this._httpClient.post<OldResponseData>(url, body).toPromise();
   // }
+
+  getDanhSachDmDuAn(body) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/kt-kh-sc-thuong-xuyen/danh-sach-dm-du-an`;
+    return this._httpClient.post<OldResponseData>(url, body).toPromise();
+  }
 }

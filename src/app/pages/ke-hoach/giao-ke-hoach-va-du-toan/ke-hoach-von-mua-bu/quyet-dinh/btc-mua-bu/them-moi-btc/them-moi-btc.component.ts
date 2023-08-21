@@ -50,7 +50,7 @@ export class ThemMoiBtcComponent implements OnInit {
   userInfo: UserLogin;
   dataTable: any[] = [];
   listTtcp: any[] = [];
-
+  STATUS = STATUS;
   constructor(
     private readonly fb: FormBuilder,
     private readonly modal: NzModalService,
@@ -70,7 +70,7 @@ export class ThemMoiBtcComponent implements OnInit {
         soQdTtcp: [, [Validators.required]],
         ngayQd: [null, [Validators.required]],
         trichYeu: [null],
-        trangThai: ['00'],
+        trangThai: [STATUS.DANG_NHAP_DU_LIEU],
         listBoNganh: []
       }
     );

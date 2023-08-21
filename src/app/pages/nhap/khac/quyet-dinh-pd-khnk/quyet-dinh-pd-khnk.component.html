@@ -12,12 +12,12 @@
           <label class="search__label">Số quyết định</label>
           <input class="search__input" placeholder="Nhập số quyết định" nz-input [(ngModel)]="searchFilter.soQd" />
         </div>
-        <div nz-col nzSpan="3">
-          <label class="search__label"> Trạng thái </label>
-          <nz-select [(ngModel)]="searchFilter.trangThai">
-            <nz-option *ngFor="let p of listTrangThai" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
-          </nz-select>
-        </div>
+<!--        <div nz-col nzSpan="3">-->
+<!--          <label class="search__label"> Trạng thái </label>-->
+<!--          <nz-select [(ngModel)]="searchFilter.trangThai">-->
+<!--            <nz-option *ngFor="let p of listTrangThai" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>-->
+<!--          </nz-select>-->
+<!--        </div>-->
         <div nz-col nzSpan="5">
           <label class="search__label">Ngày ký quyết định</label>
           <div nz-row [nzGutter]="24">
@@ -45,11 +45,11 @@
       </div>
     </nz-card>
     <div class="group-button">
-      <h3> DANH SÁCH QUYẾT ĐỊNH PHÊ DUYỆT KẾ HOẠCH LỰA CHỌN NHÀ THẦU </h3>
+      <h3> DANH SÁCH QUYẾT ĐỊNH PHÊ DUYỆT KẾ HOẠCH NHẬP KHÁC </h3>
       <div class="buttons">
         <button type="button" class="btn btn-do" (click)="deleteSelect()"
           *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_XOA')">
-          <i class="fa fa-trash-o do"></i>
+          <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
           <span>Xóa</span>
         </button>
         <button type="button" class="btn btn-sub" (click)="exportData()"
@@ -78,8 +78,8 @@
             <th class="text-center" style="width: 10%;">Số quyết định</th>
             <th class="text-center" style="width: 10%;">Ngày quyết định</th>
             <th>Mã tổng hợp</th>
-            <th>Số công văn/đề xuất</th>
-            <th class="text-center" style="width: 12%;">Loại hàng hóa</th>
+            <th>Số công văn tờ trình</th>
+            <th class="text-center" style="width: 12%;">Loại hàng DTQG</th>
             <th class="text-center" style="width: 8%;">Tổng SL đề xuất</th>
             <th class="text-center" style="width: 8%;">ĐVT</th>
             <th class="text-center" style="width: 8%;">Nội dung tổng hợp</th>
@@ -168,7 +168,7 @@
             <td>
               <a style="color: blue; font-weight: bold;"
                  (click)="openDxKhlcntModal(null, data.idTh)">{{
-                data.idTh}}</a>
+                data.maTh}}</a>
             </td>
             <td>
               <a style="color: blue; font-weight: bold;"
@@ -183,17 +183,17 @@
             <td class="text-left">
               <a (click)="goDetail(data.id, 'NHDTQG_PTDT_KHLCNT_QDLCNT_XEM')"
                 *ngIf="data.trangThai == STATUS.BAN_HANH || (userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_XEM') && !userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_THEM') && (data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.BAN_HANH))">
-                <i class="fa fa-eye"></i>
+                <i class="fa fa-eye" title="Xem chi tiết"></i>
               </a>
               <a *ngIf="(data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.DA_DUYET_LDV || data.trangThai == STATUS.TU_CHOI_LDV || data.trangThai == STATUS.CHO_DUYET_LDV )
                 && (userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_THEM')) && userService.isTongCuc()"
                 (click)="goDetail(data.id, 'NHDTQG_PTDT_KHLCNT_QDLCNT_THEM')">
-                <i class="fa fa-pencil"></i>
+                <i class="fa fa-pencil" title="Sửa"></i>
               </a>
               <a *ngIf="data.trangThai == STATUS.DU_THAO
                 && (userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_XOA')) && userService.isTongCuc()"
                 (click)="delete(data)">
-                <i class="fa fa-trash-o do"></i>
+                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
               </a>
             </td>
           </tr>

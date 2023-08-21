@@ -1,4 +1,4 @@
-<nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="btn-affix level1">
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="btn-affix level1">
   <div class="btn-group">
     <button type="button" class="btn btn-sub" (click)="quayLai()">
       <i class="fa fa-arrow-left"></i>
@@ -6,39 +6,40 @@
     </button>
     <button
       *ngIf="(formData.value.trangThai == STATUS.DU_THAO ||
-       formData.value.trangThai == STATUS.TU_CHOI_LDV)&& userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_QDXC_TAOQDXC')"
+       formData.value.trangThai == STATUS.TU_CHOI_TP ||
+       formData.value.trangThai == STATUS.TU_CHOI_LDC)
+       && userService.isAccessPermisson('XHDTQG_XTL_TBKQ_THEM')"
       type="button" class="btn btn-sub"
-      (click)="saveAndSend(formData.value, STATUS.CHO_DUYET_LDV, 'Bạn có muốn gửi duyệt ?')">
+      (click)="saveAndSend(formData.value, STATUS.CHO_DUYET_TP, 'Bạn có muốn gửi duyệt ?')">
       <i class="icon htvbdh_tcdt_guiduyet"></i>
       <span>Lưu và gửi duyệt</span>
     </button>
-
-    <button (click)="reject(idInput,STATUS.TU_CHOI_LDTC)"
-            *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_QDXC_DUYET_LDTC') && (formData.value.trangThai===STATUS.CHO_DUYET_LDTC)"
+    <button (click)="reject(idInput,STATUS.TU_CHOI_TP)"
+            *ngIf="userService.isAccessPermisson('XHDTQG_XTL_TBKQ_THEM') && (formData.value.trangThai===STATUS.CHO_DUYET_TP)"
             class="btn btn-sub" type="button">
       <i class="icon htvbdh_tcdt_tuchoi do"></i>
       <span>Từ chối</span>
     </button>
-    <button (click)="reject(idInput,STATUS.TU_CHOI_LDV)"
-            *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_QDXC_DUYET_LDVU') && (formData.value.trangThai===STATUS.CHO_DUYET_LDV)"
+    <button (click)="reject(idInput,STATUS.TU_CHOI_LDC)"
+            *ngIf="userService.isAccessPermisson('XHDTQG_XTL_TBKQ_THEM') && (formData.value.trangThai===STATUS.CHO_DUYET_LDC)"
             class="btn btn-sub" type="button">
       <i class="icon htvbdh_tcdt_tuchoi do"></i>
       <span>Từ chối</span>
     </button>
-    <button (click)="approve(idInput,STATUS.BAN_HANH,'Bạn có muốn duyệt quyết định này')"
-            *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_QDXC_DUYET_LDTC') && (formData.value.trangThai===STATUS.CHO_DUYET_LDTC)"
+    <button (click)="approve(idInput,STATUS.CHO_DUYET_LDC,'Bạn có muốn duyệt quyết định này')"
+            *ngIf="userService.isAccessPermisson('XHDTQG_XTL_TBKQ_THEM') && (formData.value.trangThai===STATUS.CHO_DUYET_TP)"
             class="btn btn-sub" type="button">
       <i class="icon htvbdh_tcdt_pheduyet"></i>
       <span>Duyệt</span>
     </button>
-    <button (click)="approve(idInput,STATUS.CHO_DUYET_LDTC,'Bạn có muốn duyệt quyết định này')"
-            *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_QDXC_DUYET_LDVU') && (formData.value.trangThai===STATUS.CHO_DUYET_LDV)"
+    <button (click)="approve(idInput,STATUS.DA_DUYET_LDC,'Bạn có muốn duyệt quyết định này')"
+            *ngIf="userService.isAccessPermisson('XHDTQG_XTL_TBKQ_THEM') && (formData.value.trangThai===STATUS.CHO_DUYET_LDC)"
             class="btn btn-sub" type="button">
       <i class="icon htvbdh_tcdt_pheduyet"></i>
       <span>Duyệt</span>
     </button>
     <button
-      *ngIf=" !isView && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV || formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_TP)"
+      *ngIf=" !isView && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC )"
       type="button" class="btn btn-main" (click)="save()">
       <i class="icon htvbdh_tcdt_save"></i>
       <span>Lưu</span>
@@ -50,14 +51,15 @@
   <div class="header header-green-background">
     <div class="header-text">
       <div class="title-chi-tieu">
-        <span [ngClass]="formData.value.trangThai == STATUS.BAN_HANH ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
+        <span [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDC ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
           {{ formData.value.tenTrangThai }}
         </span>
-        <span> BÁO CÁO KÊT QUẢ BÁN THANH LÝ HÀNG DTQG </span>
+        <span> BÁO CÁO KẾT QUẢ BÁN THANH LÝ HÀNG DTQG </span>
       </div>
     </div>
   </div>
-  <nz-alert *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDV " nzShowIcon nzType="error" nzMessage="Lý do từ chối"
+  <nz-alert *ngIf="formData.value.trangThai == STATUS.TU_CHOI_TP && formData.value.trangThai == STATUS.TU_CHOI_LDC "
+            nzShowIcon nzType="error" nzMessage="Lý do từ chối"
             nzDescription="{{formData.value.lyDoTuChoi}}">
   </nz-alert>
   <nz-card class="mg-t-16 flex-card p-lr16">
@@ -74,7 +76,15 @@
       </div>
       <form nz-form nzLayout="vertical" [formGroup]="formData">
         <div nz-row [nzGutter]="24">
-          <div nz-col [nzSpan]="6">
+          <div nz-col nzSpan="2">
+            <nz-form-item>
+              <nz-form-label [nzNoColon]="true"> Năm </nz-form-label>
+              <nz-select formControlName="nam">
+                <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+              </nz-select>
+            </nz-form-item>
+          </div>
+          <div nz-col [nzSpan]="4">
             <nz-form-item>
               <nz-form-label [nzNoColon]="true"> Đơn vị báo cáo</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
@@ -118,7 +128,7 @@
             </nz-form-item>
           </div>
 
-          <div nz-col [nzSpan]="8">
+          <div nz-col [nzSpan]="24">
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true">
                 Nội dung báo cáo
@@ -185,7 +195,7 @@
             <td (nzExpandChange)="onExpandStringChange(item.idVirtual, $event)"
                 [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true" style="width: 35px"></td>
             <td>{{i + 1}}</td>
-            <td class="bold">{{ item.tenCuc }}</td>
+            <td class="bold">{{ item.tenChiCuc }}</td>
             <td></td>
             <td></td>
             <td></td>
@@ -217,15 +227,15 @@
                 <td>{{lv1.tenNhaKho}}</td>
                 <td>{{lv1.tenLoKho == null ? lv1.tenNganKho : lv1.tenLoKho}}</td>
                 <td>{{lv1.ngayNhapKho| date: 'dd/MM/YYYY'}}</td>
-                <td class="text-blue">{{lv1.slHienTai |number : '1.0-1' : 'vi_VN'}}</td>
-                <td class="text-blue">{{lv1.slDaDuyet |number : '1.0-1' : 'vi_VN'}}</td>
-                <td class="text-blue">{{lv1.slCon |number : '1.0-1' : 'vi_VN'}}</td>
-                <td class="text-blue">{{lv1.donViTinh}}</td>
-                <td class="text-blue">{{lv1.thanhTien |number : '1.0-1' : 'vi_VN'}}</td>
-                <td class="text-blue">{{lv1.lyDo}}</td>
-                <td class="text-blue">{{lv1.ketQua}}</td>
-                <td class="text-blue">{{lv1.ketQuaTl}}</td>
-                <td class="text-blue">{{lv1.tienThuDuoc |number : '1.0-1' : 'vi_VN'}}</td>
+                <td>{{lv1.slHienTai |number : '1.0-1' : 'vi_VN'}}</td>
+                <td>{{lv1.slDaDuyet |number : '1.0-1' : 'vi_VN'}}</td>
+                <td>{{lv1.slCon |number : '1.0-1' : 'vi_VN'}}</td>
+                <td>{{lv1.donViTinh}}</td>
+                <td>{{lv1.thanhTien |number : '1.0-1' : 'vi_VN'}}</td>
+                <td>{{lv1.lyDo}}</td>
+                <td>{{lv1.ketQua}}</td>
+                <td>{{lv1.ketQuaTl}}</td>
+                <td>{{lv1.tienThuDuoc |number : '1.0-1' : 'vi_VN'}}</td>
               </tr>
             </ng-container>
           </ng-container>
@@ -238,3 +248,5 @@
     <app-template-error #error [control]="control"></app-template-error>
   </ng-template>
 </div>
+
+

@@ -47,7 +47,7 @@
             <div class="buttons">
                 <button type="button" class="btn btn-do" (click)="deleteSelect()"
                     *ngIf="userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_PTMTT_NK_LT_BBNDK_XOA')">
-                    <i class="fa fa-trash-o do"></i>
+                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                     <span>Xóa</span>
                 </button>
                 <button *ngIf="userService.isAccessPermisson('NHDTQG_PTMTT_NK_LT_BBNDK_EXP')" type="button"
@@ -124,15 +124,15 @@
                                     <td>
                                         <a *ngIf="bbNhapDayKho.trangThai == STATUS.DA_DUYET_LDCC"
                                             (click)="redirectToChiTiet(false, bbNhapDayKho.id)">
-                                            <i class="fa fa-eye"></i>
+                                            <i class="fa fa-eye" title="Xem chi tiết"></i>
                                         </a>
                                         <a *ngIf="bbNhapDayKho.trangThai != STATUS.DA_DUYET_LDCC"
                                             (click)="redirectToChiTiet(false, bbNhapDayKho.id)">
-                                            <i class="fa fa-pencil"></i>
+                                            <i class="fa fa-pencil" title="Sửa"></i>
                                         </a>
                                         <a *ngIf="bbNhapDayKho.trangThai == STATUS.DU_THAO"
                                             (click)="xoaItem(bbNhapDayKho)">
-                                            <i class="fa fa-trash-o do"></i>
+                                            <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                                         </a>
                                     </td>
                                 </tr>
@@ -175,7 +175,7 @@
     </div>
 </ng-container>
 <ng-container *ngIf="isDetail">
-    <app-them-moi-bien-ban-nhap-day-kho [id]="selectedId" (showListEvent)="showList()" [isView]="isView"
+    <app-them-moi-bien-ban-nhap-day-kho [id]="selectedId" [idQdGiaoNvNh]="idQdGiaoNvNh" (showListEvent)="showList()" [isView]="isView"
         [loaiVthh]="loaiVthh">
     </app-them-moi-bien-ban-nhap-day-kho>
 </ng-container>

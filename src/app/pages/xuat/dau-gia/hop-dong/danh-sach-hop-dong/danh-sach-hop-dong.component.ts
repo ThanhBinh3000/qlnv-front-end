@@ -17,6 +17,10 @@ export class DanhSachHopDongComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
   isQuanLy: boolean;
   isAddNew: boolean;
+  idQdPd: number = 0;
+  isViewQdPd: boolean = false;
+  idQdPdKq: number = 0;
+  isViewQdPdKq: boolean = false;
   listTrangThaiHd: any[] = [
     { ma: this.STATUS.CHUA_THUC_HIEN, giaTri: 'Chưa thực hiện' },
     { ma: this.STATUS.DANG_THUC_HIEN, giaTri: 'Đang thực hiện' },
@@ -48,7 +52,7 @@ export class DanhSachHopDongComponent extends Base2Component implements OnInit {
       nam: '',
       tenDviThucHien: '',
       tenDviMua: '',
-      maDvi:''
+      maDvi: ''
     });
     this.filterTable = {
       nam: '',
@@ -82,7 +86,7 @@ export class DanhSachHopDongComponent extends Base2Component implements OnInit {
   };
   async ngOnInit() {
     await this.spinner.show();
-    console.log(this.userInfo.MA_DVI,"MA_DVI")
+    console.log(this.userInfo.MA_DVI, "MA_DVI")
     try {
       this.formData.patchValue({
         loaiVthh: this.loaiVthh,
@@ -125,5 +129,23 @@ export class DanhSachHopDongComponent extends Base2Component implements OnInit {
     }
   }
 
+  openModalQdPd(id: number) {
+    this.idQdPd = id;
+    this.isViewQdPd = true;
+  }
 
+  closeModalQdPd() {
+    this.idQdPd = null;
+    this.isViewQdPd = false;
+  }
+
+  openModalQdPdKq(id: number) {
+    this.idQdPdKq = id;
+    this.isViewQdPdKq = true;
+  }
+
+  closeModalQdPdKq() {
+    this.idQdPdKq = null;
+    this.isViewQdPdKq = false;
+  }
 }

@@ -217,7 +217,7 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
       tenLoaiVthh: data.tenLoaiVthh,
 
     });
-    let dataChiCuc = data.noiDungCuuTro.find(item =>
+    let dataChiCuc = data.noiDungCuuTro.filter(item =>
       item.maDviChiCuc == this.userInfo.MA_DVI
     );
     if (dataChiCuc) {

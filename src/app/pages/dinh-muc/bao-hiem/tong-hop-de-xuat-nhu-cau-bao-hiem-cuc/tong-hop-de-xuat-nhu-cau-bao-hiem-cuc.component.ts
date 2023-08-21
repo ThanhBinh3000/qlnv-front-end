@@ -8,6 +8,7 @@ import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../services/storage.service";
 import { saveAs } from 'file-saver';
 import {DeXuatNhuCauBaoHiemService} from "../../../../services/dinhmuc-maymoc-baohiem/de-xuat-nhu-cau-bao-hiem.service";
+import {STATUS} from "../../../../constants/status";
 
 @Component({
   selector: 'app-tong-hop-de-xuat-nhu-cau-bao-hiem-cuc',
@@ -120,5 +121,4 @@ export class TongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Component imple
       this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
     }
   }
-
 }

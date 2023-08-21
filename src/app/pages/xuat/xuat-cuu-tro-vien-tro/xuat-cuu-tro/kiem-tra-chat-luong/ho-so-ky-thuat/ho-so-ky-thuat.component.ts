@@ -1,21 +1,21 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Base2Component} from "../../../../../../components/base2/base2.component";
+import {Base2Component} from "src/app/components/base2/base2.component";
 import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../../../services/storage.service";
+import {StorageService} from "src/app/services/storage.service";
 import {NzNotificationService} from "ng-zorro-antd/notification";
 import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
 import {
   PhieuKiemNghiemChatLuongService
-} from "../../../../../../services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuKiemNghiemChatLuong.service";
+} from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuKiemNghiemChatLuong.service";
 import dayjs from "dayjs";
 import {
   HoSoKyThuatCtvtService
-} from "../../../../../../services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/HoSoKyThuatCtvt.service";
-import {MESSAGE} from "../../../../../../constants/message";
+} from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/HoSoKyThuatCtvt.service";
+import {MESSAGE} from "src/app/constants/message";
 
 @Component({
-  selector: 'app-ho-so-ky-thuat',
+  selector: 'app-ho-so-ky-thuat-cuu-tro',
   templateUrl: './ho-so-ky-thuat.component.html',
   styleUrls: ['./ho-so-ky-thuat.component.scss']
 })
@@ -27,6 +27,7 @@ export class HoSoKyThuatComponent extends Base2Component implements OnInit {
 
   listHangHoaAll: any[] = [];
   listLoaiHangHoa: any[] = [];
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -38,15 +39,14 @@ export class HoSoKyThuatComponent extends Base2Component implements OnInit {
   ) {
     super(httpClient, storageService, notification, spinner, modal, hoSoKyThuatCtvtService);
     this.formData = this.fb.group({
-      id: [0],
-      nam: [],
+      id: [],
       idQdGiaoNvNh: [],
       soQdGiaoNvNh: [],
       soBbLayMau: [],
       soHd: [],
       maDvi: [],
-      tenDvi: [],
       soHoSoKyThuat: [],
+      nam: [],
       idBbLayMauXuat: [],
       kqKiemTra: [],
       loaiNhap: [],
@@ -54,22 +54,39 @@ export class HoSoKyThuatComponent extends Base2Component implements OnInit {
       maNhaKho: [],
       maNganKho: [],
       maLoKho: [],
-      ngayTao: []
+      tenDiemKho: [],
+      tenNhaKho: [],
+      tenNganKho: [],
+      tenLoKho: [],
+      loaiVthh: [],
+      cloaiVthh: [],
+      tenLoaiVthh: [],
+      tenCloaiVthh: [],
+      trangThai: [],
+      tenTrangThai: [],
+      tenDvi: [],
+      ngayTao: [],
+      soBbKtNgoaiQuan: [],
+      soBbKtVanHanh: [],
+      soBbKtHskt: [],
+      type: []
     })
   }
 
   async ngOnInit() {
     await this.spinner.show();
+    this.formData.patchValue({
+      type: 'CTVT'
+    });
     try {
       await Promise.all([
         this.search(),
-        // this.loadDsVthh(),
       ])
-      this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
-      await this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      await this.spinner.hide();
     }
   }
 

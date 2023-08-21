@@ -32,7 +32,8 @@
     <nz-tab *ngIf="radioValue=='BTC'" [nzTitle]="'Nhập - Xuất tồn kho lương thực'">
       <app-ke-hoach-luong-thuc #keHoachLuongThuc [(ltGaoMua)]="keHoach.ltGaoMua" [isView]="isView" [namHienTai]="nam"
                                [(ltGaoXuat)]="keHoach.ltGaoXuat" [(ltThocMua)]="keHoach.ltThocMua"
-                               [(ltThocXuat)]="keHoach.ltThocXuat"
+                               [(ltThocXuat)]="keHoach.ltThocXuat" [(ltGaoTon)]="keHoach.ltGaoTon"
+                               [(ltThocTon)]="keHoach.ltThocTon"
                                [maBoNganh]="keHoach.maBoNganh">
       </app-ke-hoach-luong-thuc>
     </nz-tab>

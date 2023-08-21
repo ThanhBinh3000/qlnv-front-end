@@ -1,17 +1,22 @@
-<nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="btn-affix">
-  <div class="btn-group" *ngIf="!isViewOnModal">
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" *ngIf="!isViewOnModal && !isQuyetDinh" class="btn-affix">
+  <div class="btn-group">
     <button type="button" class="btn btn-sub" (click)="quayLai()">
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button
-      *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV ) &&  userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_THEM') &&  !userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_BANHANH') && !isView"
-      type="button" class="btn btn-sub xanh-nhat" (click)="save(true)">
-      <i class="icon htvbdh_tcdt_guiduyet"></i>
-      <span>Lưu và gửi duyệt</span>
+<!--    <button-->
+<!--      *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV ) &&  userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_THEM') &&  !userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_BANHANH') && !isView"-->
+<!--      type="button" class="btn btn-sub xanh-nhat" (click)="save(true)">-->
+<!--      <i class="icon htvbdh_tcdt_guiduyet"></i>-->
+<!--      <span>Lưu và gửi duyệt</span>-->
+<!--    </button>-->
+    <button *ngIf="formData.value.trangThai == STATUS.BAN_HANH && formData.value.lastest == false" type="button"
+            class="btn btn-sub xanh-nhat" (click)="taoQdinh()">
+      <i class="icon htvbdh_tcdt_tao-qd"></i>
+      <span>Tạo quyết định giao NV nhập hàng</span>
     </button>
     <button
-      *ngIf="(formData.value.trangThai == STATUS.DU_THAO) &&  userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_THEM') &&  userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_BANHANH') && !isView"
+      *ngIf="(formData.value.trangThai == STATUS.DA_DUYET_LDV) &&  userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_THEM') &&  userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_BANHANH') && !isView"
       type="button" class="btn btn-sub xanh-nhat" (click)="save(true)">
       <i class="icon htvbdh_chuyenvanthu"></i>
       <span>Ban hành</span>
@@ -22,10 +27,10 @@
       <span>Từ chối</span>
     </button>
     <button
-      *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.DA_DUYET_LDV) && userService.isTongCuc() && !isView"
-      type="button" class="btn btn-sub xanh-nhat" (click)="guiDuyet()">
+      *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV ) && userService.isTongCuc() && !isView"
+      type="button" class="btn btn-sub xanh-nhat" (click)="save(true)">
       <i class="icon htvbdh_tcdt_pheduyet"></i>
-      <span> {{ formData.value.trangThai == STATUS.CHO_DUYET_LDV ? 'Duyệt' : 'Ban hành'}} </span>
+      <span> {{ formData.value.trangThai == STATUS.CHO_DUYET_LDV ? 'Duyệt' : 'Lưu và gửi duyệt'}} </span>
     </button>
     <button
       *ngIf="(this.isCheckCreate && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV ))  && isDetailPermission() && !isView"
@@ -35,7 +40,7 @@
     </button>
   </div>
 </nz-affix>
-<div class="bg-trang">
+<div *ngIf="!isViewOnModal && !isQuyetDinh" class="bg-trang">
   <!--  Start Thông tin quyết định phê duyệt-->
   <div class="header header-green-background">
     <div class="header-text">
@@ -82,7 +87,7 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Ngày ký quyết định </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-date-picker formControlName="ngayQd" nzFormat="dd/MM/yyyy"
+              <nz-date-picker formControlName="ngayKyQd" nzFormat="dd/MM/yyyy"
                 [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== '' || isView">
               </nz-date-picker>
             </nz-form-control>
@@ -92,7 +97,7 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Ngày hiệu lực </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-date-picker formControlName="ngayHluc" nzFormat="dd/MM/yyyy"
+              <nz-date-picker formControlName="ngayHieuLuc" nzFormat="dd/MM/yyyy"
                 [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== '' || isView">
               </nz-date-picker>
             </nz-form-control>
@@ -105,16 +110,16 @@
             <nz-form-item *ngIf="loaiVthh != '02' && this.idInput == 0">
               <label nz-radio nzValue="TH">Chọn mã tổng hợp</label>
               <nz-form-control [nzErrorTip]="error">
-                <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogTh()">
-                  <input [readonly]="true" nz-input formControlName="idThHdr" readonly="true" />
+                <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isView ? '' : openDialogTh()">
+                  <input [readonly]="true" nz-input formControlName="maTh" readonly="true" />
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
             <nz-form-item *ngIf="this.idInput == 0">
-              <label nz-radio nzValue="TTr">Chọn số đề xuất/ tờ trình</label>
+              <label nz-radio nzValue="TTr">Chọn số công văn/tờ trình</label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isView ? '' : openDialogTr()">
-                  <input [readonly]="true" nz-input formControlName="soDx" readonly="true" />
+                  <input [readonly]="true" nz-input formControlName="soDxuat" readonly="true" />
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
@@ -124,7 +129,7 @@
               <label nz-radio nzValue="TH">Chọn mã tổng hợp</label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group nzAddOnAfterIcon="folder-open">
-                  <input [readonly]="true" nz-input formControlName="idTh" readonly="true" />
+                  <input [readonly]="true" nz-input formControlName="maTh" readonly="true" />
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
@@ -132,7 +137,7 @@
               <label nz-radio nzValue="TTr">Chọn số đề xuất/ tờ trình</label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isView ? '' : openDialogTr()">
-                  <input [readonly]="true" nz-input formControlName="soDx" readonly="true" />
+                  <input [readonly]="true" nz-input formControlName="soDxuat" readonly="true" />
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
@@ -143,7 +148,7 @@
             <nz-form-label [nzNoColon]="true"> Loại hình nhập xuất
             </nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
-              <input [readonly]="true" nz-input formControlName="tenLoaiNx" readonly="true" />
+              <input [readonly]="true" nz-input formControlName="tenLoaiHinhNx" readonly="true" />
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -235,11 +240,11 @@
               [ngClass]="{'bg-selected': i == 0 && this.selected}">
               <td class="text-center">{{i + 1}} </td>
               <td>{{ data.tenDvi }}</td>
-              <td>{{ data.soDx }}</td>
-              <td>{{ data.ngayKyQd | date: 'dd/MM/YYYY' }}</td>
-              <td>{{ data.tongSlDx }}</td>
+              <td>{{ data.soDxuat }}</td>
+              <td>{{ data.ngayPduyet | date: 'dd/MM/YYYY' }}</td>
+              <td>{{ data.tongSlNhap }}</td>
               <td>{{ data.dvt }}</td>
-              <td>{{ data.tongTtienDx }}</td>
+              <td>{{ data.tongThanhTien }}</td>
               <td>{{ data.trichYeu }}</td>
             </tr>
           </tbody>
@@ -270,3 +275,8 @@
 <ng-template #error let-control>
   <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}</ng-container>
 </ng-template>
+<div *ngIf="isQuyetDinh" class="chi-tiet">
+  <app-themmoi-qdinh-nhap-xuat-hang-khac [idQdPd]="idInput" [loaiVthh]="loaiVthh"
+                                  (showListEvent)="showTongHop()">
+  </app-themmoi-qdinh-nhap-xuat-hang-khac>
+</div>

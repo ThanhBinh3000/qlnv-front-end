@@ -63,6 +63,7 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
   listLoKho: any[] = [];
   expandSetString = new Set<string>();
   noiDungCuuTroView = [];
+  ndCtKhac = [];
   noiDungRow: any = {};
   isVisible = false;
   listNoiDung: any;
@@ -153,6 +154,7 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
             if(res.data.loaiVthh){
               this.selectHangHoa(res.data.loaiVthh);
             }
+            this.ndCtKhac= this.formData.value.noiDungCuuTro.filter(s => s.maDviChiCuc !== this.userInfo.MA_DVI);
             this.buildTableView();
           }
         })
@@ -172,15 +174,15 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
 
   buildTableView() {
     let data = cloneDeep(this.formData.value.noiDungCuuTro);
-    console.log(data, "data");
-    console.log(this.userInfo.MA_DVI, "this.userInfo.MA_DVI");
+
+
     if (this.userService.isCuc()) {
-      data = data.filter(s => s.maDviChiCuc.substring(0, 6) === this.userInfo.MA_DVI);
+      this.dataTable = data.filter(s => s.maDviChiCuc.substring(0, 6) === this.userInfo.MA_DVI);
     }
     if (this.userService.isChiCuc()) {
-      data = data.filter(s => s.maDviChiCuc === this.userInfo.MA_DVI);
+      this.dataTable = data.filter(s => s.maDviChiCuc === this.userInfo.MA_DVI);
     }
-    let dataView = chain(data)
+    let dataView = chain(this.dataTable)
       .groupBy("noiDung")
       .map((value, key) => {
         let rs = chain(value)
@@ -441,10 +443,8 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
     this.noiDungRow.loaiVthh = currentRowLv2.loaiVthh;
     this.noiDungRow.donViTinh = currentRowLv2.donViTinh;
     this.noiDungRow.edit = false;
-    console.log(this.noiDungRow.edit, 123);
     let index = this.formData.value.noiDungCuuTro.findIndex(s => s.idVirtual === this.noiDungRow.idVirtual);
     let table = this.formData.value.noiDungCuuTro;
-    console.log(1234);
     if (index != -1) {
       table.splice(index, 1, this.noiDungRow);
     } else {
@@ -497,7 +497,7 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
 
   async saveDdiemNhap(statusSave?) {
     this.spinner.show();
-    let body = this.formData.value;
+    let body = {...this.formData.value, soQd: this.formData.value.soQd ? this.formData.value.soQd + this.maHauTo : null}
     if (body.noiDungCuuTro.some(s => s.maDiemKho == null)) {
       this.notification.error(MESSAGE.ERROR, "Chưa phân bổ đến kho");
       this.spinner.hide();
@@ -506,6 +506,7 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
     body.noiDungCuuTro.forEach(item => {
       item.trangThai = statusSave;
     });
+    body.noiDungCuuTro = body.noiDungCuuTro.concat(this.ndCtKhac);
     body.trangThaiXh = statusSave;
     let res = await this.quyetDinhGiaoNvCuuTroService.updateDdiemNhap(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -541,6 +542,7 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
   }
 
   handleOk() {
+    debugger
     if (this.userService.isChiCuc() && (!this.noiDungRow.maDiemKho || !this.noiDungRow.maNhaKho || !this.noiDungRow.maNganKho)) {
       this.statusForm = 'error';
       this.notification.error(MESSAGE.ERROR, 'Bạn cần điền đầy đủ thông tin');
@@ -563,13 +565,10 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
 
 
     if (index != -1) {
-      console.log(1)
       table.splice(index, 1, this.noiDungRow);
     } else if (!table[0].maDiemKho) {
-      console.log(2)
       table.splice(0, table.length, this.noiDungRow);
     } else {
-      console.log(3)
       table = [...table, this.noiDungRow]
     }
     // table = table.filter(s => s.maDiemKho);
@@ -584,7 +583,6 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
   }
 
   showModal(item: any): void {
-    console.log(item);
     this.isVisible = true;
     this.noiDungRow.noiDung = item.noiDung;
     this.noiDungRow.cloaiVthh = item.cloaiVthh;

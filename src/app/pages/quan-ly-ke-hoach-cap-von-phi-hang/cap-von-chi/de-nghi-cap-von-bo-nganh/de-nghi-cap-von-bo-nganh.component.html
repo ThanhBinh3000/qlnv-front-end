@@ -3,7 +3,7 @@
     <nz-card class="mt16 flex-card p-lr16">
       <div nz-row [nzGutter]="24">
         <div nz-col nzSpan="4">
-          <label class="search__label"> Số đề nghị </label>
+          <label class="search__label"> Số công văn đề nghị </label>
           <input class="search__input" placeholder="" nz-input [(ngModel)]="searchFilter.soKeHoach"/>
         </div>
         <div nz-col nzSpan="4">
@@ -50,7 +50,7 @@
       <div class="buttons">
         <button type="button" class="btn btn-do" (click)="deleteSelect()"
                 *ngIf="userService.isTongCuc() && userService.isAccessPermisson('VONPHIHANG_VONCHIDTQG_DENGHIBN_XOA')">
-          <i class="fa fa-trash-o do"></i>
+          <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
           <span>Xóa</span>
         </button>
         <button type="button" class="btn btn-sub" (click)="exportData()"
@@ -77,14 +77,14 @@
                    [nzIndeterminate]="indeterminate"></label>
           </th>
           <th width="60px" class="text-center">STT</th>
-          <th width="">Số đề nghị</th>
-          <th width="">Bộ/Ngành</th>
-          <th width="">Ngày đề nghị</th>
-          <th width="">Năm</th>
-          <th width="">Tổng tiền</th>
-          <th width="">Kinh phí đã cấp</th>
-          <th width="">Yêu cầu cấp thêm</th>
-          <th width="">Trạng thái</th>
+          <th>Số công văn đề nghị</th>
+          <th>Bộ/Ngành</th>
+          <th>Ngày đề nghị</th>
+          <th>Năm</th>
+          <th>Tổng tiền(đ)</th>
+          <th>Kinh phí đã cấp(đ)</th>
+          <th>Yêu cầu cấp thêm(đ)</th>
+          <th>Trạng thái</th>
           <th width="90px">Hành động</th>
         </tr>
         <tr class="search-table">
@@ -148,10 +148,10 @@
         </thead>
         <tbody>
         <tr *ngFor="let data of basicTable.data; let i = index">
-          <th width="45px">
+          <td width="45px">
             <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
-                   [nzDisabled]="data.trangThaiId != globals.prop.NHAP_DU_THAO"></label>
-          </th>
+                   [nzDisabled]="data.trangThaiId != globals.prop.NHAP_DANG_NHAP_DU_LIEU"></label>
+          </td>
           <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
           <td>{{ data.soDeNghi }}</td>
           <td>{{ data.tenBoNganh }}</td>
@@ -162,18 +162,18 @@
           <td class="text-right">{{ data.ycCapThem  | number : '1.0-1' : 'vi_VN'}}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-left">
-            <a *ngIf="data.trangThaiId !== STATUS.DU_THAO" (click)="detail(data, true)">
-              <i class="fa fa-eye"></i>
+            <a *ngIf="data.trangThaiId !== STATUS.DANG_NHAP_DU_LIEU" (click)="detail(data, true)">
+              <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
             <a
-              *ngIf="(data.trangThaiId==STATUS.DU_THAO) && userService.isTongCuc() && userService.isAccessPermisson('VONPHIHANG_VONCHIDTQG_DENGHIBN_THEM')"
+              *ngIf="(data.trangThaiId==STATUS.DANG_NHAP_DU_LIEU) && userService.isTongCuc() && userService.isAccessPermisson('VONPHIHANG_VONCHIDTQG_DENGHIBN_THEM')"
               (click)="detail(data, false)">
-              <i class="fa fa-pencil"></i>
+              <i class="fa fa-pencil" title="Sửa"></i>
             </a>
             <a
-              *ngIf="data.trangThaiId==STATUS.DU_THAO && userService.isTongCuc() && userService.isAccessPermisson('VONPHIHANG_VONCHIDTQG_DENGHIBN_XOA')"
+              *ngIf="data.trangThaiId==STATUS.DANG_NHAP_DU_LIEU && userService.isTongCuc() && userService.isAccessPermisson('VONPHIHANG_VONCHIDTQG_DENGHIBN_XOA')"
               (click)="xoaItem(data.id)">
-              <i class="fa fa-trash-o do"></i>
+              <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>
         </tr>

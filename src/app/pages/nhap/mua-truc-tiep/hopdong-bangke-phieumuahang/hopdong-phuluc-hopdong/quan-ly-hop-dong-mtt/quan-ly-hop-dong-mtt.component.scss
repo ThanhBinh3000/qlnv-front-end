@@ -24,7 +24,13 @@
     border-right: solid 1px #e2e2e2;
 
 }
-
+.bg-selected td {
+  background-color: #ebedff;
+}
+.text-bold {
+  color: #444444;
+  font-weight: 700;
+}
 
 ::ng-deep {
     .bg-xam .ant-card-body {
@@ -42,4 +48,9 @@
     .ant-input-affix-wrapper {
         padding: 0px 11px !important;
     }
+}
+.blue-text {
+  color: #001CFF;
+  font-weight: 500;
+  font-size: 12px;
 }

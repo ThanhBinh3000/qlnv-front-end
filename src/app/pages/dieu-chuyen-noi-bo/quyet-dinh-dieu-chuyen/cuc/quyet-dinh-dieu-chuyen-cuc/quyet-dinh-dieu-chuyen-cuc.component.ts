@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import dayjs from 'dayjs';
 import { saveAs } from 'file-saver';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -17,6 +17,8 @@ import { StorageService } from 'src/app/services/storage.service';
   styleUrls: ['./quyet-dinh-dieu-chuyen-cuc.component.scss']
 })
 export class QuyetDinhDieuChuyenCucComponent extends Base2Component implements OnInit {
+  @Input() isViewOnModal: boolean;
+
   isVisibleChangeTab$ = new Subject();
   visibleTab: boolean = true;
   tabSelected: number = 0;
@@ -43,8 +45,10 @@ export class QuyetDinhDieuChuyenCucComponent extends Base2Component implements O
     this.formData = this.fb.group({
       nam: null,
       soQdinh: null,
-      ngayDuyetTc: null,
-      ngayHieuLuc: null,
+      ngayDuyetTcTu: null,
+      ngayDuyetTcDen: null,
+      ngayHieuLucTu: null,
+      ngayHieuLucDen: null,
       loaiDc: null,
       trichYeu: null,
     })
@@ -52,8 +56,8 @@ export class QuyetDinhDieuChuyenCucComponent extends Base2Component implements O
       nam: '',
       soQdinh: '',
       ngayKyQdinh: '',
-      loaiDc: '',
-      maThop: '',
+      tenLoaiDc: '',
+      tenLoaiQdinh: '',
       trichYeu: '',
       soDxuat: '',
       tenTrangThai: '',
@@ -83,6 +87,38 @@ export class QuyetDinhDieuChuyenCucComponent extends Base2Component implements O
     this.userInfo = this.userService.getUserLogin();
   }
 
+  disabledStartNgayQD = (startValue: Date): boolean => {
+    if (startValue && this.formData.value.ngayDuyetTcDen) {
+      return startValue.getTime() > this.formData.value.ngayDuyetTcDen.getTime();
+    } else {
+      return false;
+    }
+  };
+
+  disabledEndNgayQD = (endValue: Date): boolean => {
+    if (endValue && this.formData.value.ngayDuyetTcTu) {
+      return endValue.getTime() < this.formData.value.ngayDuyetTcTu.getTime();
+    } else {
+      return false;
+    }
+  };
+
+  disabledStartNgayHL = (startValue: Date): boolean => {
+    if (startValue && this.formData.value.ngayHieuLucDen) {
+      return startValue.getTime() > this.formData.value.ngayHieuLucDen.getTime();
+    } else {
+      return false;
+    }
+  };
+
+  disabledEndNgayHL = (endValue: Date): boolean => {
+    if (endValue && this.formData.value.ngayHieuLucTu) {
+      return endValue.getTime() < this.formData.value.ngayHieuLucTu.getTime();
+    } else {
+      return false;
+    }
+  };
+
   isShowDS() {
     if (this.isChiCuc()) return true
     else if (this.userService.isAccessPermisson('DCNB_QUYETDINHDC_CUC') && this.userService.isAccessPermisson('DCNB_QUYETDINHDC_XEM'))
@@ -103,14 +139,19 @@ export class QuyetDinhDieuChuyenCucComponent extends Base2Component implements O
   }
 
   async timKiem() {
-    if (this.formData.value.ngayDuyetTc) {
-      this.formData.value.ngayDuyetTcTu = dayjs(this.formData.value.ngayDuyetTc[0]).format('YYYY-MM-DD')
-      this.formData.value.ngayDuyetTcDen = dayjs(this.formData.value.ngayDuyetTc[1]).format('YYYY-MM-DD')
+    if (this.formData.value.ngayDuyetTcTu) {
+      this.formData.value.ngayDuyetTcTu = dayjs(this.formData.value.ngayDuyetTcTu).format('YYYY-MM-DD')
     }
-    if (this.formData.value.ngayHieuLuc) {
-      this.formData.value.ngayHieuLucTu = dayjs(this.formData.value.ngayHieuLuc[0]).format('YYYY-MM-DD')
-      this.formData.value.ngayHieuLucDen = dayjs(this.formData.value.ngayHieuLuc[1]).format('YYYY-MM-DD')
+    if (this.formData.value.ngayDuyetTcDen) {
+      this.formData.value.ngayDuyetTcDen = dayjs(this.formData.value.ngayDuyetTcDen).format('YYYY-MM-DD')
     }
+    if (this.formData.value.ngayHieuLucTu) {
+      this.formData.value.ngayHieuLucTu = dayjs(this.formData.value.ngayHieuLucTu).format('YYYY-MM-DD')
+    }
+    if (this.formData.value.ngayHieuLucDen) {
+      this.formData.value.ngayHieuLucDen = dayjs(this.formData.value.ngayHieuLucDen).format('YYYY-MM-DD')
+    }
+    if (this.formData.value.soQdinh) this.formData.value.soQdinh = `${this.formData.value.soQdinh}/DCNB`
     await this.search();
   }
 

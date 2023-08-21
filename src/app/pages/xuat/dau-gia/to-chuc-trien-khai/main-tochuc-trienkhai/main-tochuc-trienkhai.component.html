@@ -3,14 +3,8 @@
     <li nz-menu-item nzSelected (click)="selectTab(0)">
       Thông tin đấu giá
     </li>
-    <li nz-menu-item (click)="selectTab(1)">
-      Quyết định phê duyệt kết quả bán đấu giá
-    </li>
   </ul>
 </nz-affix>
 <ng-container *ngIf="tabSelected == 0">
   <app-thong-tin-dau-gia [loaiVthh]="inputLoaiVthh"></app-thong-tin-dau-gia>
-</ng-container>
-<ng-container *ngIf="tabSelected == 1">
-  <app-qd-pd-ket-qua-bdg [loaiVthh]="inputLoaiVthh" [typeLoaiVthh]="listVthh"></app-qd-pd-ket-qua-bdg>
 </ng-container>

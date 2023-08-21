@@ -59,13 +59,13 @@
           <span>Thêm</span>
         </button>
         <!--            <button type="button" (click)="deleteMulti()" class="btn btn-sub btn-xoa">-->
-        <!--              <i class="fa fa-trash-o do"></i>-->
+        <!--              <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>-->
         <!--              <span>Xóa</span>-->
         <!--            </button>-->
       </div>
     </div>
     <nz-card class="mt-2px flex-card data-table card-border-content table-card">
-      <nz-table #basicTable class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false"
+      <nz-table #basicTable  [nzData]="dataTable" [nzFrontPagination]="false"
                 [nzShowPagination]="false" nzBordered>
         <thead>
         <tr>
@@ -143,10 +143,10 @@
               <i class=" icon htvbdh_eye"></i>
             </a>
             <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="redirectToChiTiet(data.id)" >
-              <i class="fa fa-pencil"></i>
+              <i class="fa fa-pencil" title="Sửa"></i>
             </a>
             <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="delete(data)">
-              <i class="fa fa-trash-o do"></i>
+              <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>
         </tr>

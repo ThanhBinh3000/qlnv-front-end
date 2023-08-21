@@ -5,12 +5,12 @@
       <span>Quay lại</span>
     </button>
     <button
-      *ngIf="(formData.value.trangThai == '00' && !isView && userService.isTongCuc()) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VMBBS_QD_BTC_BANHANH')"
+      *ngIf="(formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU && !isView && userService.isTongCuc()) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VMBBS_QD_BTC_BANHANH')"
       type="button" class="btn btn-sub" (click)="save(true)">
       <i class="icon htvbdh_chuyenvanthu"></i>
       <span>Ban hành</span>
     </button>
-    <button *ngIf="formData.value.trangThai == '00'  && !isView && userService.isTongCuc()" type="button"
+    <button *ngIf="formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU   && !isView && userService.isTongCuc()" type="button"
       class="btn btn-sub xanh" (click)="save()">
       <i class="icon htvbdh_luu"></i>
       <span>Lưu</span>
@@ -23,8 +23,8 @@
     <div class="header">
       <div class="header-text">
         <div class="title-chi-tieu">
-          <span [ngClass]="formData.value.trangThai == '00' ? 'du-thao-va-lanh-dao-duyet' : 'da-ban-hanh'">
-            {{ formData.value.trangThai == '00' ? 'Dự Thảo' : 'Ban Hành' }}
+          <span [ngClass]="formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU  ? 'du-thao-va-lanh-dao-duyet' : 'da-ban-hanh'">
+            {{ formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU  ? 'Đang nhập dữ liệu' : 'Ban Hành' }}
           </span>
           <span>QUYẾT ĐỊNH CỦA THỦ TƯỚNG CHÍNH PHỦ</span>
         </div>
@@ -50,7 +50,7 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true" nzFor="so-qd" nzRequired>Số Quyết Định</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-input-group nzAddOnAfter="{{maQd}}" id="so-qd">
+              <nz-input-group  id="so-qd">
                 <nz-input-number [nzSize]="'small'" [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT" nz-input
                   formControlName="soQd" [nzDisabled]="isView"></nz-input-number>
               </nz-input-group>
@@ -132,19 +132,18 @@
         <tr *ngFor="let data of dataTable; let idx = index">
           <td class="text-center">{{ idx + 1 }}</td>
           <td>{{ data.tenBoNganh }}</td>
-          <td>{{ data.tongTien }}</td>
-          <td>{{data.ttMuaBu}}</td>
-          <td>{{data.ttMuaBsung}}</td>
-          <td></td>
+          <td>{{ data.tongTien | number: '1.0-3': 'vi_VN'  }}</td>
+          <td>{{data.ttMuaBu | number: '1.0-3': 'vi_VN'}}</td>
+          <td>{{data.ttMuaBsung | number: '1.0-3': 'vi_VN'}}</td>
           <td style="text-align: left; white-space: nowrap;">
-            <a (click)="themKeHoach(data, idx,true)">
-              <i class="fa fa-eye"></i>
+            <a *ngIf="formData.value.trangThai != STATUS.DANG_NHAP_DU_LIEU" (click)="themKeHoach(data, idx,true)">
+              <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
-            <a *ngIf="formData.value.trangThai == '00' && !isView" (click)="themKeHoach(data, idx,false)">
-              <i class="fa fa-pencil"></i>
+            <a *ngIf="formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU  && !isView" (click)="themKeHoach(data, idx,false)">
+              <i class="fa fa-pencil" title="Sửa"></i>
             </a>
-            <a *ngIf="formData.value.trangThai == '00' && !isView" (click)="xoaItem(idx)">
-              <i class="fa fa-trash-o do"></i>
+            <a *ngIf="formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU  && !isView" (click)="xoaItem(idx)">
+              <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>
         </tr>

@@ -1,11 +1,11 @@
-import {HttpClient} from '@angular/common/http';
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {Base2Component} from 'src/app/components/base2/base2.component';
-import {MESSAGE} from 'src/app/constants/message';
-import {STATUS} from 'src/app/constants/status';
+import { HttpClient } from '@angular/common/http';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { Base2Component } from 'src/app/components/base2/base2.component';
+import { MESSAGE } from 'src/app/constants/message';
+import { STATUS } from 'src/app/constants/status';
 import {
   HopDongXuatHangService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/hop-dong/hopDongXuatHang.service';
@@ -15,8 +15,8 @@ import {
 import {
   ThongTinDauGiaService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/thongTinDauGia.service';
-import {StorageService} from 'src/app/services/storage.service';
-import {cloneDeep} from 'lodash';
+import { StorageService } from 'src/app/services/storage.service';
+import { cloneDeep } from 'lodash';
 
 @Component({
   selector: 'app-quanly-hopdong',
@@ -54,13 +54,17 @@ export class QuanlyHopdongComponent extends Base2Component implements OnInit {
       soLuongDviTsan: [],
       soLuongDviTsanTrung: [],
       soLuongDviTsanTruot: [],
-      vat: ['5'],
+      vat: ['5%'],
       tenLoaiVthh: [],
       loaiHdong: [],
       tenCloaiVthh: [],
       soLuongXuatBan: [],
       donGiaTrungThau: [],
       tongTien: [''],
+      loaiHinhNx: [''],
+      tenLoaiHinhNx: [''],
+      kieuNx: [''],
+      tenKieuNx: [''],
       trangThaiHd: [''],
       tenTrangThaiHd: [''],
     });
@@ -90,17 +94,24 @@ export class QuanlyHopdongComponent extends Base2Component implements OnInit {
             tenLoaiVthh: dataTtin.data?.tenLoaiVthh,
             tenCloaiVthh: dataTtin.data?.tenCloaiVthh,
             trangThaiHd: data.trangThaiHd,
-            tenTrangThaiHd: data.tenTrangThaiHd
+            tenTrangThaiHd: data.tenTrangThaiHd,
+            soLuongDviTsan: data.tongDvts,
+            soLuongXuatBan: data.tongSlXuat,
+            tongTien: data.thanhTien,
+            loaiHinhNx: data.loaiHinhNx,
+            tenLoaiHinhNx: data.tenLoaiHinhNx,
+            kieuNx: data.kieuNx,
+            tenKieuNx : data.tenKieuNx,
+            soLuongDviTsanTrung: data.soDvtsDgTc,
+            soLuongDviTsanTruot: data.tongDvts - data.soDvtsDgTc,
           })
-          this.listAllDviTsan= dataTtin.data.children;
-          this.listAllDviTsan=this.listAllDviTsan.flatMap(item => item.children).filter((item) =>{
-            return item.toChucCaNhan !== null && item.soLanTraGia>0
+          this.listAllDviTsan = dataTtin.data.children;
+          this.listAllDviTsan = this.listAllDviTsan.flatMap(item => item.children).filter((item) => {
+            return item.toChucCaNhan !== null && item.soLanTraGia > 0
           }).map(item => item.maDviTsan);
-
           this.dataTable = data.listHopDong;
-          this.listDviTsanDaKy=this.dataTable.filter(item => item.trangThai==STATUS.DA_KY);
-          this.listDviTsanDaKy=this.listDviTsanDaKy.map(item => item.maDviTsan.split(",")).flat();
-
+          this.listDviTsanDaKy = this.dataTable.filter(item => item.trangThai == STATUS.DA_KY);
+          this.listDviTsanDaKy = this.listDviTsanDaKy.map(item => item.maDviTsan.split(",")).flat();
         });
       }
     }
@@ -135,7 +146,7 @@ export class QuanlyHopdongComponent extends Base2Component implements OnInit {
   async pheDuyet() {
     await this.spinner.show()
     if (this.validateData()) {
-      if (this.listAllDviTsan.length == this.listDviTsanDaKy.length){
+      if (this.listAllDviTsan.length == this.listDviTsanDaKy.length) {
         this.approve(this.id, STATUS.DA_HOAN_THANH, "Bạn có muốn hoàn thành thực hiện hợp đồng ?")
       }
       else {
@@ -194,8 +205,6 @@ export class QuanlyHopdongComponent extends Base2Component implements OnInit {
   }
 
   outputListAllDviTsan($event) {
-    console.log(123)
-    this.listAllDviTsan=$event;
+    this.listAllDviTsan = $event;
   }
-
 }

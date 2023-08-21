@@ -58,7 +58,7 @@
             <h3> DANH SÁCH QUYẾT ĐỊNH GIAO NHIỆM VỤ NHẬP HÀNG </h3>
             <div class="buttons">
                 <button type="button" class="btn btn-do" (click)="deleteSelect()" *ngIf="userService.isCuc()">
-                    <i class="fa fa-trash-o do"></i>
+                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                     <span>Xóa</span>
                 </button>
                 <button type="button" class="btn btn-sub" (click)="export()">
@@ -178,11 +178,11 @@
                                 <span class="icon htvbdh_eye"></span>
                             </a>
                             <a (click)="redirectToThongTin(data.id, false)"
-                                *ngIf="userService.isCuc() && ( data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_TP || data.trangThai == STATUS.TU_CHOI_LDC ) ">
-                                <i class="fa fa-pencil"></i>
+                                *ngIf="!userService.isTongCuc() && ( ((data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_TP || data.trangThai == STATUS.TU_CHOI_LDC) && userService.isAccessPermisson('NHDTQG_PTMTT_QDGNVNH_THEM')) || (data.trangThai == STATUS.CHO_DUYET_TP && userService.isAccessPermisson('NHDTQG_PTMTT_QDGNVNH_DUYET_TP')) || (data.trangThai == STATUS.CHO_DUYET_LDC && userService.isAccessPermisson('NHDTQG_PTMTT_QDGNVNH_DUYET_LDC')) ) ">
+                                <i class="fa fa-pencil" title="Sửa"></i>
                             </a>
-                            <a (click)="xoaItem(data)" *ngIf="userService.isCuc() && data.trangThai == STATUS.DU_THAO">
-                                <i class="fa fa-trash-o do"></i>
+                            <a (click)="xoaItem(data)" *ngIf="userService.isCuc() && data.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('NHDTQG_PTMTT_QDGNVNH_XOA')">
+                                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                             </a>
                         </td>
                     </tr>

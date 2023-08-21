@@ -13,7 +13,7 @@
       <div nz-col [nzSpan]="12">
         <nz-form-item>
           <nz-form-label >Tên lô kho</nz-form-label>
-          <nz-form-control>
+          <nz-form-control [nzErrorTip]="error">
             <nz-input-group>
               <input nz-input formControlName="tenDvi" [readonly]="true"/>
             </nz-input-group>
@@ -23,7 +23,7 @@
       <div nz-col [nzSpan]="12">
         <nz-form-item>
           <nz-form-label nzRequired>Tích lượng đã sử dụng - LT</nz-form-label>
-          <nz-form-control>
+          <nz-form-control [nzErrorTip]="error">
             <nz-input-group [nzAddOnAfter]="dvi">
               <nz-input-number [nzMax]="detail.tichLuongTkLt ? detail.tichLuongTkLt : 9999999 "  formControlName="tichLuongSdLt" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"  [nzSize]="'small'" nz-input [nzMin]="0"></nz-input-number>
             </nz-input-group>
@@ -33,7 +33,7 @@
       <div nz-col [nzSpan]="12">
         <nz-form-item>
           <nz-form-label nzRequired>Tích lượng đã sử dụng - VT</nz-form-label>
-          <nz-form-control>
+          <nz-form-control [nzErrorTip]="error">
             <nz-input-group [nzAddOnAfter]="dvi">
               <nz-input-number [nzMax]="detail.tichLuongTkVt ? detail.tichLuongTkVt : 9999999 " [nzFormatter]="globals.formatter" [nzParser]="globals.parser"  formControlName="tichLuongSdVt" [nzSize]="'small'" nz-input [nzMin]="0"></nz-input-number>
             </nz-input-group>
@@ -43,7 +43,7 @@
       <div nz-col [nzSpan]="12">
         <nz-form-item>
           <nz-form-label nzRequired>Thể tích đã sử dụng - LT</nz-form-label>
-          <nz-form-control>
+          <nz-form-control [nzErrorTip]="error">
             <nz-input-group [nzAddOnAfter]="m3">
               <nz-input-number [nzMax]="detail.theTichTkLt ? detail.theTichTkLt : 9999999 " [nzFormatter]="globals.formatter" [nzParser]="globals.parser"  formControlName="theTichSdLt" [nzSize]="'small'" nz-input [nzMin]="0"></nz-input-number>
             </nz-input-group>
@@ -53,7 +53,7 @@
       <div nz-col [nzSpan]="12">
         <nz-form-item>
           <nz-form-label nzRequired>Thể tích đã sử dụng - VT</nz-form-label>
-          <nz-form-control>
+          <nz-form-control [nzErrorTip]="error">
             <nz-input-group  [nzAddOnAfter]="m3">
               <nz-input-number  [nzMax]="detail.theTichTkVt ? detail.theTichTkVt : 9999999 " [nzFormatter]="globals.formatter" [nzParser]="globals.parser"  formControlName="theTichSdVt" [nzSize]="'small'" nz-input [nzMin]="0"></nz-input-number>
             </nz-input-group>
@@ -63,18 +63,18 @@
       <div nz-col [nzSpan]="6">
         <nz-form-item>
           <nz-form-label nzRequired>Loại hàng hóa</nz-form-label>
-          <nz-form-control>
-            <nz-select formControlName="loaiVthh" (ngModelChange)="onChangeLoaiVthh($event)">
-              <nz-option *ngFor="let item of listVthh" [nzLabel]="item.giaTri" [nzValue]="item.ma"></nz-option>
+          <nz-form-control [nzErrorTip]="error">
+            <nz-select formControlName="loaiVthh" (ngModelChange)="onChangeLoaiVthh($event)" [nzDisabled]="loaiHang.type == 'VT' && loaiHang.loaiVthh ">
+              <nz-option *ngFor="let item of listVthh" [nzLabel]="item.ten" [nzValue]="item.ma"></nz-option>
             </nz-select>
           </nz-form-control>
         </nz-form-item>
       </div>
       <div nz-col [nzSpan]="6">
         <nz-form-item>
-          <nz-form-label nzRequired>Chủng loại hàng hóa</nz-form-label>
-          <nz-form-control>
-            <nz-select formControlName="cloaiVthh" (ngModelChange)="onChangCloaiVthh($event)">
+          <nz-form-label>Chủng loại hàng hóa</nz-form-label>
+          <nz-form-control [nzErrorTip]="error">
+            <nz-select formControlName="cloaiVthh" (ngModelChange)="onChangCloaiVthh($event)" [nzDisabled]="loaiHang.type == 'VT' && loaiHang.cloaiVthh">
               <nz-option *ngFor="let item of listCloaiVthh" [nzLabel]="item.ten" [nzValue]="item.ma" ></nz-option>
             </nz-select>
           </nz-form-control>
@@ -83,7 +83,7 @@
       <div nz-col [nzSpan]="6">
         <nz-form-item>
           <nz-form-label nzRequired>Số lượng (tồn kho)</nz-form-label>
-          <nz-form-control>
+          <nz-form-control [nzErrorTip]="error">
             <nz-input-group>
               <nz-input-number formControlName="slTon" [nzMin]="1"
                                [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
@@ -105,7 +105,7 @@
     <div nz-col [nzSpan]="6">
       <nz-form-item>
         <nz-form-label >Thời điểm nhập kho (năm)</nz-form-label>
-        <nz-form-control>
+        <nz-form-control [nzErrorTip]="error">
           <nz-select formControlName="namNhap">
             <nz-option *ngFor="let item of dsNam" [nzLabel]="item" [nzValue]="item"></nz-option>
           </nz-select>

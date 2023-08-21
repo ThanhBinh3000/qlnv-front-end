@@ -1,0 +1,16 @@
+::ng-deep {
+    .wrapper-mr-0>label.ant-checkbox-wrapper {
+        margin-right: 0 !important;
+    }
+
+    .modal-footer>.nut.mr-40px {
+        margin-right: 40px !important;
+    }
+
+    .modal-footer {
+        .btn-refresh {
+            background-color: transparent;
+            border: 1px solid grey;
+        }
+    }
+}
