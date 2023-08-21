@@ -1,15 +1,19 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { NzModalService } from "ng-zorro-antd/modal";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
-import { MESSAGE } from 'src/app/constants/message';
-import { QuyetDinhPdKhBanTrucTiepService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/quyet-dinh-pd-kh-ban-truc-tiep.service';
-import { STATUS } from 'src/app/constants/status';
-import { DonviService } from 'src/app/services/donvi.service';
-import { DialogThemMoiBangKeBanLeComponent } from 'src/app/components/dialog/dialog-them-moi-bang-ke-ban-le/dialog-them-moi-bang-ke-ban-le.component';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {NzModalService} from "ng-zorro-antd/modal";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from 'src/app/services/storage.service';
+import {MESSAGE} from 'src/app/constants/message';
+import {STATUS} from 'src/app/constants/status';
+import {DonviService} from 'src/app/services/donvi.service';
+import {
+  DialogThemMoiBangKeBanLeComponent
+} from 'src/app/components/dialog/dialog-them-moi-bang-ke-ban-le/dialog-them-moi-bang-ke-ban-le.component';
+import {
+  ChaoGiaMuaLeUyQuyenService
+} from "../../../../../../services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/chao-gia-mua-le-uy-quyen.service";
 
 @Component({
   selector: 'app-thong-tin-quyet-dinh-uy-quyen-ban-le',
@@ -21,8 +25,8 @@ export class ThongTinQuyetDinhUyQuyenBanLeComponent extends Base2Component imple
   @Input() idInput: number;
   maQd: string = null;
   listOfData: any[] = [];
-  fileDinhKemUyQuyen: any[] = [];
-  fileDinhKemMuaLe: any[] = [];
+  fileUyQuyen: any[] = [];
+  fileBanLe: any[] = [];
   listPthucBanTt: any[] = [];
 
   @Output()
@@ -35,9 +39,9 @@ export class ThongTinQuyetDinhUyQuyenBanLeComponent extends Base2Component imple
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private donViService: DonviService,
-    private quyetDinhPdKhBanTrucTiepService: QuyetDinhPdKhBanTrucTiepService
+    private chaoGiaMuaLeUyQuyenService: ChaoGiaMuaLeUyQuyenService,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, quyetDinhPdKhBanTrucTiepService);
+    super(httpClient, storageService, notification, spinner, modal, chaoGiaMuaLeUyQuyenService);
 
     this.formData = this.fb.group(
       {
@@ -56,11 +60,9 @@ export class ThongTinQuyetDinhUyQuyenBanLeComponent extends Base2Component imple
         donGiaThiTruong: [''],
         trangThai: [STATUS.BAN_HANH],
         tenTrangThai: ['Ban Hành'],
-
       }
     );
   }
-
 
   async ngOnInit() {
     await this.spinner.show();
@@ -93,13 +95,12 @@ export class ThongTinQuyetDinhUyQuyenBanLeComponent extends Base2Component imple
     ];
   }
 
-
   async loadDetail(id: number) {
     if (id > 0) {
-      await this.quyetDinhPdKhBanTrucTiepService.getDtlDetail(id)
+      await this.chaoGiaMuaLeUyQuyenService.getDetail(id)
         .then(async (res) => {
-          const dataDtl = res.data
-          this.dataTable = dataDtl.children.filter(s => s.maDvi == this.userInfo.MA_DVI);
+          const data = res.data
+          this.dataTable = data.children.filter(s => s.maDvi == this.userInfo.MA_DVI);
           this.dataTable.forEach((item) => {
             item.children.forEach((child) => {
               this.listOfData.push(child)
@@ -108,19 +109,19 @@ export class ThongTinQuyetDinhUyQuyenBanLeComponent extends Base2Component imple
 
           })
           this.formData.patchValue({
-            namKh: dataDtl.xhQdPdKhBttHdr.namKh,
-            soQdPd: dataDtl.xhQdPdKhBttHdr.soQdPd,
-            ngayKyQd: dataDtl.xhQdPdKhBttHdr.ngayKyQd,
-            ngayHluc: dataDtl.xhQdPdKhBttHdr.ngayHluc,
-            loaiVthh: dataDtl.xhQdPdKhBttHdr.loaiVthh,
-            tenLoaiVthh: dataDtl.xhQdPdKhBttHdr.tenLoaiVthh,
-            pthucBanTrucTiep: dataDtl.pthucBanTrucTiep,
-            trichYeu: dataDtl.trichYeu,
-            thoiGianDeXuatBtt: (dataDtl.tgianDkienTu && dataDtl.tgianDkienDen) ? [dataDtl.tgianDkienTu, dataDtl.tgianDkienDen] : null,
-            thoiGianPdBtt: (dataDtl.ngayMkho && dataDtl.ngayKthuc) ? [dataDtl.ngayMkho, dataDtl.ngayKthuc] : null
+            namKh: data.namKh,
+            soQdPd: data.soQdPd,
+            ngayKyQd: data.xhQdPdKhBttHdr.ngayKyQd,
+            ngayHluc: data.xhQdPdKhBttHdr.ngayHluc,
+            loaiVthh: data.xhQdPdKhBttHdr.loaiVthh,
+            tenLoaiVthh: data.tenLoaiVthh,
+            pthucBanTrucTiep: data.pthucBanTrucTiep,
+            trichYeu: data.xhQdPdKhBttHdr.trichYeu,
+            thoiGianDeXuatBtt: (data.tgianDkienTu && data.tgianDkienDen) ? [data.tgianDkienTu, data.tgianDkienDen] : null,
+            thoiGianPdBtt: (data.ngayMkho && data.ngayKthuc) ? [data.ngayMkho, data.ngayKthuc] : null
           })
-          this.fileDinhKemUyQuyen = dataDtl.fileDinhKemUyQuyen;
-          this.fileDinhKemMuaLe = dataDtl.fileDinhKemMuaLe;
+          this.fileUyQuyen = data.fileUyQuyen;
+          this.fileBanLe = data.fileBanLe;
         })
         .catch((e) => {
           console.log('error: ', e);
@@ -159,7 +160,7 @@ export class ThongTinQuyetDinhUyQuyenBanLeComponent extends Base2Component imple
       nzContent: DialogThemMoiBangKeBanLeComponent,
       nzMaskClosable: false,
       nzClosable: false,
-      nzStyle: { top: '200px' },
+      nzStyle: {top: '200px'},
       nzWidth: '1500px',
       nzFooter: null,
       nzComponentParams: {
@@ -178,5 +179,4 @@ export class ThongTinQuyetDinhUyQuyenBanLeComponent extends Base2Component imple
       }
     });
   };
-
 }

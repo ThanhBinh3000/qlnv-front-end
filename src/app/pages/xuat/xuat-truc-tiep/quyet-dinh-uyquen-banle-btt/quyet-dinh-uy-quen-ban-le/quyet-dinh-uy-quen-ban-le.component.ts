@@ -1,14 +1,16 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { MESSAGE } from 'src/app/constants/message';
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { StorageService } from 'src/app/services/storage.service';
-import { DonviService } from 'src/app/services/donvi.service';
-import { ChaoGiaMuaLeUyQuyenService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/chao-gia-mua-le-uy-quyen.service';
-import { STATUS } from 'src/app/constants/status';
+import {Component, Input, OnInit} from '@angular/core';
+import {HttpClient} from "@angular/common/http";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {MESSAGE} from 'src/app/constants/message';
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {StorageService} from 'src/app/services/storage.service';
+import {DonviService} from 'src/app/services/donvi.service';
+import {
+  ChaoGiaMuaLeUyQuyenService
+} from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/chao-gia-mua-le-uy-quyen.service';
+import {STATUS} from 'src/app/constants/status';
 
 @Component({
   selector: 'app-quyet-dinh-uy-quen-ban-le',
@@ -22,14 +24,12 @@ export class QuyetDinhUyQuenBanLeComponent extends Base2Component implements OnI
   isViewDxKh: boolean = false;
   pthucBanTrucTiep: string;
   selectedId: number = 0;
-
   listTrangThai: any[] = [
-    { ma: this.STATUS.BAN_HANH, giaTri: 'Ban Hành' },
+    {ma: this.STATUS.BAN_HANH, giaTri: 'Ban Hành'},
   ];
-
   listPtBanTt: any[] = [
-    { ma: '02', giaTri: 'Ủy Quyền' },
-    { ma: '03', giaTri: 'Bán lẻ' },
+    {ma: '02', giaTri: 'Ủy Quyền'},
+    {ma: '03', giaTri: 'Bán lẻ'},
   ]
 
   constructor(
@@ -144,5 +144,4 @@ export class QuyetDinhUyQuenBanLeComponent extends Base2Component implements OnI
     this.idDxKh = null;
     this.isViewDxKh = false;
   }
-
 }

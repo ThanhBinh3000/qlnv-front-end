@@ -47,7 +47,7 @@
 
   <nz-card class="mt16 flex-card p-lr16">
     <nz-collapse nzAccordion>
-      <nz-collapse-panel [nzHeader]="'Thông tin chung'" [nzActive]="true">
+      <nz-collapse-panel [nzHeader]="'THÔNG TIN CHUNG'" [nzActive]="true">
         <form [nzLayout]="'vertical'" [formGroup]="formData" nz-form>
           <div nz-row [nzGutter]="20">
             <div nz-col nzSpan="3">
@@ -106,7 +106,7 @@
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group>
-                    <nz-date-picker nzDisabled nzFormat="dd/MM/yyyy" formControlName="ngayTao">
+                    <nz-date-picker [nzDisabled]="isView" nzFormat="dd/MM/yyyy" formControlName="ngayTao">
                     </nz-date-picker>
                   </nz-input-group>
                 </nz-form-control>
@@ -187,7 +187,7 @@
             <div nz-col nzSpan="3">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
-                  Ngày quyết định
+                  Ngày hợp đồng
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group>
@@ -464,7 +464,7 @@
     </nz-collapse>
     <nz-collapse nzAccordion>
       <nz-collapse-panel
-        [nzHeader]="'Kết quả đánh giá cảm quan: (Về màu sắc, mùi, vị, tạp chất, đánh bóng, sinh vật hại)'"
+        [nzHeader]="'KẾT QUẢ ĐÁNH GIÁ CẢM QUAN: (Về màu sắc, mùi, vị, tạp chất, đánh bóng, sinh vật hại)'"
         [nzActive]="true">
         <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
           <div nz-row [nzGutter]="[18, 6]">
@@ -485,7 +485,7 @@
       </nz-collapse-panel>
     </nz-collapse>
     <nz-collapse nzAccordion>
-      <nz-collapse-panel [nzHeader]="'Kết quả phân tích chỉ tiêu chất lượng'" [nzActive]="true">
+      <nz-collapse-panel [nzHeader]="'KẾT QUẢ PHÂN TÍCH CHỈ TIÊU CHẤT LƯỢNG'" [nzActive]="true">
         <nz-card class="mg-t-16 flex-card p-lr16 table-card">
           <nz-table class="pd-10" #basicTable class="nowrap" [nzFrontPagination]="false"
                     [nzShowPagination]="false" [nzData]="dataTableChiTieu">
@@ -542,7 +542,7 @@
       </nz-collapse-panel>
     </nz-collapse>
     <nz-collapse nzAccordion>
-      <nz-collapse-panel [nzHeader]="'Nhận xét kết luận'" [nzActive]="true">
+      <nz-collapse-panel [nzHeader]="'NHẬN XÉT KẾT LUẬN'" [nzActive]="true">
         <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
           <div nz-row [nzGutter]="[20]">
             <div nz-col nzSpan="24">
