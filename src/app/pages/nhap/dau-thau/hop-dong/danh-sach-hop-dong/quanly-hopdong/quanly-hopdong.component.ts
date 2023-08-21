@@ -136,7 +136,7 @@ export class QuanlyHopdongComponent implements OnInit {
       soQdPdKqLcnt: data.soQd,
       soQdPdKhlcnt: data.soQdPdKhlcnt,
       tenLoaiHdong: data.hhQdKhlcntHdr?.tenLoaiHdong,
-      tenNguonVon: data.hhQdKhlcntHdr?.tenNguonVon,
+      tenNguonVon: data.hhQdKhlcntHdr?.dxKhlcntHdr?.tenNguonVon,
       tenLoaiVthh: data.hhQdKhlcntHdr?.tenLoaiVthh,
       tenCloaiVthh: data.hhQdKhlcntHdr?.tenCloaiVthh,
       soGthauTrung: data.hhQdKhlcntHdr?.soGthauTrung == null ? 0 : data.hhQdKhlcntHdr?.soGthauTrung,
