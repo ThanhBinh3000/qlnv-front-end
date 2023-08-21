@@ -13,7 +13,10 @@ import { PhuLuc7Component } from './phu-luc-7/phu-luc-7.component';
 import { PhuLuc8Component } from './phu-luc-8/phu-luc-8.component';
 import { PhuLuc9Component } from './phu-luc-9/phu-luc-9.component';
 import { PhuLuc10Component } from './phu-luc-10/phu-luc-10.component';
+import { PhuLuc11Component } from './phu-luc-11/phu-luc-11.component';
 import { PhuLucTongHopComponent } from './phu-luc-tong-hop/phu-luc-tong-hop.component';
+import { PhuLuc12Component } from './phu-luc-12/phu-luc-12.component';
+import { PhuLuc13Component } from './phu-luc-13/phu-luc-13.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +31,9 @@ import { PhuLucTongHopComponent } from './phu-luc-tong-hop/phu-luc-tong-hop.comp
     PhuLuc8Component,
     PhuLuc9Component,
     PhuLuc10Component,
+    PhuLuc11Component,
+    PhuLuc12Component,
+    PhuLuc13Component,
     PhuLucTongHopComponent,
   ],
   imports: [

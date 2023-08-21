@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { StorageService } from 'src/app/services/storage.service';
 import { UserService } from 'src/app/services/user.service';
-import { TAB_LIST } from './bao-cao-thuc-hien-du-toan-chi.constant';
+import { Dtc } from './bao-cao-thuc-hien-du-toan-chi.constant';
 
 @Component({
     selector: 'app-bao-cao-thuc-hien-du-toan-chi',
@@ -10,19 +8,13 @@ import { TAB_LIST } from './bao-cao-thuc-hien-du-toan-chi.constant';
     styleUrls: ['./bao-cao-thuc-hien-du-toan-chi.component.scss']
 })
 export class BaoCaoThucHienDuToanChiComponent implements OnInit {
-
+    Dtc = Dtc;
     tabSelected!: string;
     data: any;
-    tabList: any[] = TAB_LIST;
-    isList = false;
-    isAccept = false;
-    isCheck = false;
-    isSynthetic = false;
+    tabList: any[] = Dtc.TAB_LIST;
 
     constructor(
-        private spinner: NgxSpinnerService,
         public userService: UserService,
-        private storageService: StorageService
     ) { }
 
     async ngOnInit() {

@@ -11,27 +11,27 @@ import { DieuChinhDuToanComponent } from './dieu-chinh-du-toan.component';
 import { TongHopBaoCaoComponent } from './tong-hop-bao-cao/tong-hop-bao-cao.component';
 
 @NgModule({
-  imports: [
-    AddBaoCaoModule,
-    CommonModule,
-    ComponentsModule,
-    DirectivesModule,
-  ],
-  declarations: [
-    DieuChinhDuToanComponent,
-    TongHopBaoCaoComponent,
-    DanhSachBaoCaoDieuChinhComponent,
-    DanhSachBaoCaoTuDonViCapDuoiComponent,
-    DialogTaoMoiComponent,
-    DialogThemKhoanMucComponent
-  ],
-  exports: [
-    DieuChinhDuToanComponent,
-    TongHopBaoCaoComponent,
-    DanhSachBaoCaoDieuChinhComponent,
-    DanhSachBaoCaoTuDonViCapDuoiComponent,
-    DialogTaoMoiComponent,
-    DialogThemKhoanMucComponent
-  ],
+    imports: [
+        AddBaoCaoModule,
+        CommonModule,
+        ComponentsModule,
+        DirectivesModule,
+    ],
+    declarations: [
+        DieuChinhDuToanComponent,
+        TongHopBaoCaoComponent,
+        DanhSachBaoCaoDieuChinhComponent,
+        DanhSachBaoCaoTuDonViCapDuoiComponent,
+        DialogTaoMoiComponent,
+        DialogThemKhoanMucComponent
+    ],
+    exports: [
+        DieuChinhDuToanComponent,
+        TongHopBaoCaoComponent,
+        DanhSachBaoCaoDieuChinhComponent,
+        DanhSachBaoCaoTuDonViCapDuoiComponent,
+        DialogTaoMoiComponent,
+        DialogThemKhoanMucComponent
+    ],
 })
 export class DieuChinhDuToanModule { }

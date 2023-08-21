@@ -1,151 +1,223 @@
-export const DANH_MUC_PL10 = [
+export const NOI_DUNG = [
     {
         id: 1000,
-        ma: "0.1",
-        giaTri: "HOẠT ĐỘNG DỰ TRỮ QUỐC GIA (Khoản 331)"
+        tenDm: "HOẠT ĐỘNG DỰ TRỮ QUỐC GIA (Khoản 331)",
+        idCha: 0,
+        level: 0,
+        ma: '0.1',
     },
-
     {
-        id: 1001,
-        ma: "0.1.1",
-        giaTri: "Kinh phí không thực hiện tự chủ"
+        id: 1100,
+        tenDm: "Kinh phí thực hiện tự chủ",
+        idCha: 1000,
+        level: 1,
+        ma: '0.1.1',
     },
-
     {
-        id: 1002,
-        ma: "0.1.1.1",
-        giaTri: "Chi sửa chữa kho tàng và các công trình phụ trợ"
+        id: 1200,
+        tenDm: "Kinh phí không thực hiện tự chủ",
+        idCha: 1000,
+        level: 1,
+        ma: '0.1.2',
     },
-
+    // {
+    //     id: 12001,
+    //     tenDm: "Chi ứng dụng công nghệ thông tin",
+    //     idCha: 1200,
+    //     level: 2,
+    //     ma: '0.1.2.1',
+    // },
     {
-        id: 1003,
-        ma: "0.1.1.2",
-        giaTri: "Chi bảo quản hàng dự trữ, phí nhập xuất hàng, phí xuất hàng cứu trợ, viện trợ,hỗ trợ chính sách"
+        id: 12002,
+        tenDm: "Chi sửa chữa kho tàng và các công trình phụ trợ",
+        idCha: 1200,
+        level: 2,
+        ma: '0.1.2.1',
     },
-
     {
-        id: 1004,
-        ma: "0.1.1.2.1",
-        giaTri: "Phí bảo quản"
+        id: 12003,
+        tenDm: "Chi bảo quản hàng dự trữ, phí nhập xuất hàng, phí xuất hàng cứu trợ, viện trợ, hỗ trợ chính sách",
+        idCha: 1200,
+        level: 2,
+        ma: '0.1.2.2',
     },
-
     {
-        id: 1005,
-        ma: "0.1.1.2.2",
-        giaTri: "Phí nhập"
+        id: 1200301,
+        tenDm: "Phí bảo quản",
+        idCha: 12003,
+        level: 3,
+        ma: '0.1.2.2.1',
     },
-
     {
-        id: 1006,
-        ma: "0.1.1.2.3",
-        giaTri: "Phí xuất"
+        id: 1200302,
+        tenDm: "Phí nhập",
+        idCha: 12003,
+        level: 3,
+        ma: '0.1.2.2.2',
     },
-
     {
-        id: 1007,
-        ma: "0.1.1.2.4",
-        giaTri: "Phí cứu trợ, viện trợ"
+        id: 1200303,
+        tenDm: "Phí xuất",
+        idCha: 12003,
+        level: 3,
+        ma: '0.1.2.2.3',
     },
-
     {
-        id: 1008,
-        ma: "0.1.1.3",
-        giaTri: "Chi CNTT"
+        id: 1200304,
+        tenDm: "Phí viện trợ, cứu trợ",
+        idCha: 12003,
+        level: 3,
+        ma: '0.1.2.2.4',
     },
-
     {
-        id: 1009,
-        ma: "0.1.1.4",
-        giaTri: "Chi khác"
+        id: 12004,
+        tenDm: "Chi CNTT",
+        idCha: 1200,
+        level: 2,
+        ma: '0.1.2.3',
     },
-
     {
-        id: 1010,
-        ma: "0.1.1.4.1",
-        giaTri: "Mua sắm tài sản (theo 149)"
+        id: 12005,
+        tenDm: "Chi khác",
+        idCha: 1200,
+        level: 2,
+        ma: '0.1.2.4',
     },
-
     {
-        id: 1011,
-        ma: "0.1.1.4.2",
-        giaTri: "Mua BHHH (Bảo hiểm hàng hóa)"
+        id: 1200501,
+        tenDm: "Mua sắm tài sản(theo 149)",
+        idCha: 12005,
+        level: 3,
+        ma: '0.1.2.4.1',
     },
-
     {
-        id: 1012,
-        ma: "0.1.1.4.3",
-        giaTri: "Phòng chống bão lụt"
+        id: 1200502,
+        tenDm: "Mua BHHH (Bảo hiểm hàng hóa)",
+        idCha: 12005,
+        level: 3,
+        ma: '0.1.2.4.2',
     },
-
     {
-        id: 1013,
-        ma: "0.1.1.4.4",
-        giaTri: "Khác"
+        id: 1200503,
+        tenDm: "Phòng chống bão lụt",
+        idCha: 12005,
+        level: 3,
+        ma: '0.1.2.4.3',
     },
-
     {
-        id: 1014,
-        ma: "0.2",
-        giaTri: "QUẢN LÝ HÀNH CHÍNH (Khoản 341)"
+        id: 1200504,
+        tenDm: "Khác",
+        idCha: 12005,
+        level: 3,
+        ma: '0.1.2.4.4',
     },
-
+    //============
     {
-        id: 1015,
-        ma: "0.2.1",
-        giaTri: "Kinh phí thực hiện tự chủ"
+        id: 2000,
+        tenDm: "QUẢN LÝ HÀNH CHÍNH (Khoản 341)",
+        idCha: 0,
+        level: 0,
+        ma: '0.2',
     },
-
     {
-        id: 1016,
-        ma: "0.2.1.1",
-        giaTri: "Quỹ lương"
+        id: 2100,
+        tenDm: "Kinh phí thực hiện tự chủ",
+        idCha: 2000,
+        level: 1,
+        ma: '0.2.1',
     },
-
     {
-        id: 1017,
-        ma: "0.2.1.2",
-        giaTri: "Chi quản lý hành chính theo định mức"
+        id: 21001,
+        tenDm: "Quỹ lương",
+        idCha: 2100,
+        level: 2,
+        ma: '0.2.1.1',
     },
-
     {
-        id: 1018,
-        ma: "0.3",
-        giaTri: "SỰ NGHIỆP GIÁO DỤC ĐÀO TẠO (Khoản 085)"
+        id: 21002,
+        tenDm: "Chi quản lý hành chính theo định mức",
+        idCha: 2100,
+        level: 2,
+        ma: '0.2.1.2',
     },
-
     {
-        id: 1019,
-        ma: "0.3.1",
-        giaTri: "Kinh phí không thực hiện tự chủ"
+        id: 2200,
+        tenDm: "Kinh phí không thực hiện tự chủ",
+        idCha: 2000,
+        level: 1,
+        ma: '0.2.2',
     },
-
+    //=============
     {
-        id: 1020,
-        ma: "0.3.1.1",
-        giaTri: "Chi đào tạo, bồi dưỡng cán bộ, công chức nhà nước"
+        id: 3000,
+        tenDm: "SỰ NGHIỆP KHOA HỌC CÔNG NGHỆ (Khoản 102)",
+        idCha: 0,
+        level: 0,
+        ma: '0.3',
     },
-
     {
-        id: 1021,
-        ma: "0.4",
-        giaTri: "SỰ NGHIỆP KHOA HỌC CÔNG NGHỆ (Khoản 102)"
+        id: 3100,
+        tenDm: "Kinh phí thực hiện tự chủ",
+        idCha: 3000,
+        level: 1,
+        ma: '0.3.1',
     },
-
     {
-        id: 1022,
-        ma: "0.4.1",
-        giaTri: "Kinh phí không thực hiện tự chủ"
+        id: 31001,
+        tenDm: "Kinh phí không thực hiện tự chủ",
+        idCha: 3000,
+        level: 1,
+        ma: '0.3.2',
     },
-
+    //=============
     {
-        id: 1023,
-        ma: "0.5",
-        giaTri: "HOẠT ĐỘNG ĐẢM BẢO XÃ HỘI (Khoản 398)"
+        id: 4000,
+        tenDm: "SỰ NGHIỆP GIÁO DỤC ĐÀO TẠO (Khoản 085)",
+        idCha: 0,
+        level: 0,
+        ma: '0.4',
     },
-
     {
-        id: 1024,
-        ma: "0.5.1",
-        giaTri: "Kinh phí không thực hiện tự chủ"
+        id: 4100,
+        tenDm: "Kinh phí thực hiện tự chủ",
+        idCha: 4000,
+        level: 1,
+        ma: '0.4.1',
+    },
+    {
+        id: 4200,
+        tenDm: "Kinh phí không thực hiện tự chủ",
+        idCha: 4000,
+        level: 1,
+        ma: '0.4.2',
+    },
+    {
+        id: 41001,
+        tenDm: "Chi đào tạo, bồi dưỡng cán bộ, công chức nhà nước",
+        idCha: 4200,
+        level: 2,
+        ma: '0.4.2.1',
+    },
+    //=============
+    {
+        id: 5000,
+        tenDm: "HOẠT ĐỘNG ĐẢM BẢO XÃ HỘI (Khoản 398)",
+        idCha: 0,
+        level: 0,
+        ma: '0.5',
+    },
+    {
+        id: 5100,
+        tenDm: "Kinh phí thực hiện tự chủ",
+        idCha: 5000,
+        level: 1,
+        ma: '0.5.1',
+    },
+    {
+        id: 5200,
+        tenDm: "Kinh phí không thực hiện tự chủ",
+        idCha: 5000,
+        level: 1,
+        ma: '0.5.2',
     },
 ]

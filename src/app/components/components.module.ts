@@ -348,24 +348,18 @@ import { DialogThemMoiDmNhomHangComponent } from './dialog/dialog-them-moi-dm-nh
     MultipleTagComponent,
     DialogDiaDiemKhoComponent,
     DialogChonPhuLucDieuChinhComponent,
+    DialogChonDanhMucChoBieuMauComponent,
     //pipes
     FilterPipe,
 
     DialogChonKeHoachPhanBoGiaoDuToanChoChiCucVanPhongCucComponent,
 
-
-    //
-    DialogLuaChonThemPhuLucComponent,
-    DialogChonThemBieuMauBaoCaoComponent,
     DialogChonThemKhoanMucQlGiaoDuToanChiNSNNComponent,
     //
     DialogCopyComponent,
     DialogChonThemBieuMauComponent,
     DialogThemKhoanMucComponent,
     DialogLuaChonThemDonViComponent,
-    DialogBaoCaoCopyComponent,
-    DialogDoCopyComponent,
-    DialogDieuChinhCopyComponent,
     DialogCopyGiaoDuToanComponent,
     DialogCopyQuyetToanVonPhiHangDtqgComponent,
     DialogThemVatTuComponent,
@@ -425,6 +419,7 @@ import { DialogThemMoiDmNhomHangComponent } from './dialog/dialog-them-moi-dm-nh
     DialogSuaXuatGiamComponent,
     DialogPhanBoHdVtComponent,
     DialogThemMoiDmNhomHangComponent,
+    DialogCongVanComponent
   ],
   imports: [
     CommonModule,

@@ -28,7 +28,7 @@
             <div nz-col nzSpan="3">
                 <label class="search__label">Trạng thái</label>
                 <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái" [(ngModel)]="trangThai" nzDisabled>
-                    <nz-option *ngFor="let item of trangThais" [nzValue]="item.id" [nzLabel]="item.tenDm">
+                    <nz-option *ngFor="let item of Status.TRANG_THAI_FULL" [nzValue]="item.id" [nzLabel]="item.tenDm">
                     </nz-option>
                 </nz-select>
             </div>
@@ -36,7 +36,7 @@
                 <label class="search__label">Loại báo cáo</label>
                 <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại báo cáo"
                     [(ngModel)]="searchFilter.maLoaiBcao">
-                    <nz-option *ngFor="let bc of baoCaos" [nzValue]="bc.id" [nzLabel]="bc.tenDm"></nz-option>
+                    <nz-option *ngFor="let bc of Vp.LOAI_BAO_CAO" [nzValue]="bc.id" [nzLabel]="bc.tenDm"></nz-option>
                 </nz-select>
             </div>
         </div>
@@ -63,73 +63,14 @@
                     <th>Mã báo cáo</th>
                     <th>Báo cáo năm</th>
                     <th>Báo cáo đợt</th>
-                    <th>Ngày lập/ Ngày tổng hợp</th>
-                    <th>Ngày trình duyệt <br> <span>(Cán bộ vụ TVQT trình duyệt)</span></th>
-                    <th>Ngày duyệt <br> <span>(Trưởng bộ phận KHTC duyệt)</span></th>
-                    <th>Ngày phê duyệt <br> <span>(Lãnh đạo vụ TVQT phê duyệt)</span></th>
+                    <th>Ngày lập</th>
+                    <th>Ngày trình duyệt</th>
+                    <th>Ngày duyệt</th>
+                    <th>Ngày phê duyệt</th>
+                    <th>Ngày tiếp nhận</th>
                     <th class="text-center">Trạng thái</th>
                     <th width="90px">Hành động</th>
                 </tr>
-                <!-- <tr class="search-table">
-                    <th></th>
-                    <th></th>
-                    <th>
-                        <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                            <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="tableFilter.maDn"
-                                (input)="filterInTable('maDnghi',tableFilter.maDn, false)" size="small" />
-                        </nz-input-group>
-                        <ng-template #suffixTemplateInfo>
-                            <i nz-icon nzType="search"></i>
-                        </ng-template>
-                    </th>
-                    <th>
-                        <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                            <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="tableFilter.qdChiTieu"
-                                (input)="filterInTable('soQdChiTieu',tableFilter.qdChiTieu, false)" size="small" />
-                        </nz-input-group>
-                        <ng-template #suffixTemplateInfo>
-                            <i nz-icon nzType="search"></i>
-                        </ng-template>
-                    </th>
-                    <th>
-                        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Tìm kiếm" [(ngModel)]="tableFilter.canCuGia"
-                            (ngModelChange)="filterInTable('canCuVeGia',tableFilter.canCuGia, false)">
-                            <nz-option *ngFor="let item of canCuGias" [nzValue]="item.id" [nzLabel]="item.tenDm">
-                            </nz-option>
-                        </nz-select>
-                    </th>
-                    <th>
-                        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Tìm kiếm" [(ngModel)]="tableFilter.loaiDn"
-                            (ngModelChange)="filterInTable('loaiDnghi',tableFilter.loaiDn, false)">
-                            <nz-option *ngFor="let item of loaiDns" [nzValue]="item.id" [nzLabel]="item.tenDm">
-                            </nz-option>
-                        </nz-select>
-                    </th>
-                    <th>
-                        <nz-date-picker nzFormat="dd/MM/yyyy" [(ngModel)]="tableFilter.ngayTao"
-                            (ngModelChange)="filterInTable('ngayTao',tableFilter.ngayTao, true)">
-                        </nz-date-picker>
-                    </th>
-                    <th>
-                        <nz-date-picker nzFormat="dd/MM/yyyy" [(ngModel)]="tableFilter.ngayTrinh"
-                            (ngModelChange)="filterInTable('ngayTrinh',tableFilter.ngayTrinh, true)">
-                        </nz-date-picker>
-                    </th>
-                    <th>
-                        <nz-date-picker nzFormat="dd/MM/yyyy" [(ngModel)]="tableFilter.ngayPheDuyet"
-                            (ngModelChange)="filterInTable('ngayPheDuyet',tableFilter.ngayPheDuyet, true)">
-                        </nz-date-picker>
-                    </th>
-                    <th>
-                        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Tìm kiếm"
-                            [(ngModel)]="tableFilter.trangThai"
-                            (ngModelChange)="filterInTable('trangThai',tableFilter.trangThai, false)">
-                            <nz-option *ngFor="let item of trangThais" [nzValue]="item.id" [nzLabel]="item.tenDm">
-                            </nz-option>
-                        </nz-select>
-                    </th>
-                    <th></th>
-                </tr> -->
             </thead>
             <tbody>
                 <tr *ngFor="let data of basicTable.data; let i = index">
@@ -146,19 +87,22 @@
                         {{ data.dotBcao }}
                     </td>
                     <td>
-                        {{ data.ngayTao }}
+                        {{ Utils.fmtDate(data.ngayTao) }}
                     </td>
                     <td>
-                        {{ data.ngayTrinh }}
+                        {{ Utils.fmtDate(data.ngayTrinh) }}
                     </td>
                     <td>
-                        {{ data.ngayDuyet }}
+                        {{ Utils.fmtDate(data.ngayDuyet) }}
                     </td>
                     <td>
-                        {{ data.ngayPheDuyet }}
+                        {{ Utils.fmtDate(data.ngayPheDuyet) }}
                     </td>
                     <td>
-                        {{getStatusName(data.trangThai)}}
+                        {{ Utils.fmtDate(data.ngayTraKq) }}
+                    </td>
+                    <td>
+                        {{ Status.reportStatusName(data.trangThai) }}
                     </td>
                     <td class="text-left">
                         <a (click)="viewDetail(data)">
@@ -178,7 +122,7 @@
                         [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="onPageIndexChange($event)"
                         (nzPageSizeChange)="onPageSizeChange($event)">
                         <ng-template #rangeTemplate let-range="range" let-total>
-                            {{ range[0] }}-{{ range[1] }} of {{totalElements}} items
+                            {{ range[0] }}-{{ range[1] }} trong {{totalElements}} bản ghi
                         </ng-template>
                     </nz-pagination>
                 </div>
