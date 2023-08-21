@@ -287,6 +287,9 @@ import {
 import {
   PopUpChiTietQuyHoachKhoComponent
 } from "./ke-hoach/quy-hoach-kho/quyet-dinh-quy-hoach/pop-up-chi-tiet-quy-hoach-kho/pop-up-chi-tiet-quy-hoach-kho.component";
+import {
+    DeXuatPhuongAnGiaModule
+} from "../ke-hoach/phuong-an-gia/main-phuong-an-gia/sub-phuong-an-gia/de-xuat-phuong-an-gia/de-xuat-phuong-an-gia.module";
 
 @NgModule({
   declarations: [
@@ -400,7 +403,7 @@ import {
     ThongTinTienDoCongViecSctxComponent,
     PopUpChiTietQuyHoachKhoComponent
   ],
-  imports: [CommonModule, QuanLyKhoTangRoutingModule, ComponentsModule, MainModule],
+    imports: [CommonModule, QuanLyKhoTangRoutingModule, ComponentsModule, MainModule, DeXuatPhuongAnGiaModule],
 })
 export class QuanLyKhoTangModule {
 }

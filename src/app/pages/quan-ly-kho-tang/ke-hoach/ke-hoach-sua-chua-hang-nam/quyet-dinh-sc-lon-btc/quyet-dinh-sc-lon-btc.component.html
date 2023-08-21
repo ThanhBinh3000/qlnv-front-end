@@ -54,7 +54,7 @@
     <div class="group-button">
       <h3> DANH SÁCH QUYẾT ĐỊNH KẾ HOẠCH SỬA CHỮA LỚN CỦA BTC</h3>
       <div class="buttons">
-        <button *ngIf="userService.isTongCuc() && userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_QDBTC_XOA')" type="button" class="btn btn-sub btn-xoa">
+        <button *ngIf="userService.isTongCuc() && userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_QDBTC_XOA')" type="button" class="btn btn-sub btn-xoa" (click)="deleteMulti()">
           <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
           <span>Xóa</span>
         </button>
