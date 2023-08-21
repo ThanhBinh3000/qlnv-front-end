@@ -184,6 +184,48 @@
                     </nz-form-item>
                 </div>
             </div>
+
+<!--          <div nz-col nzSpan="5">-->
+<!--            <nz-form-item class="form-item">-->
+<!--              <nz-form-label [nzNoColon]="true"> Căn cứ giao chỉ tiêu của TCDTNN </nz-form-label>-->
+<!--              <nz-form-control>-->
+<!--                <input-->
+<!--                  [readonly]="true"-->
+<!--                  nz-input formControlName="trichYeu" readonly="true" />-->
+<!--              </nz-form-control>-->
+<!--            </nz-form-item>-->
+<!--          </div>-->
+<!--          <div nz-col nzSpan="5">-->
+<!--            <nz-form-item class="form-item">-->
+<!--              <nz-form-label [nzNoColon]="true"> Trích yếu </nz-form-label>-->
+<!--              <nz-form-control>-->
+<!--                <input-->
+<!--                  [readonly]="formData.value.trangThai !==STATUS.DU_THAO && formData.value.trangThai !==STATUS.CHO_DUYET_LDC"-->
+<!--                  nz-input formControlName="trichYeu" readonly="true" />-->
+<!--              </nz-form-control>-->
+<!--            </nz-form-item>-->
+<!--          </div>-->
+<!--          <div nz-col nzSpan="5">-->
+<!--            <nz-form-item class="form-item">-->
+<!--              <nz-form-label [nzNoColon]="true"> Trích yếu </nz-form-label>-->
+<!--              <nz-form-control>-->
+<!--                <input-->
+<!--                  [readonly]="formData.value.trangThai !==STATUS.DU_THAO && formData.value.trangThai !==STATUS.CHO_DUYET_LDC"-->
+<!--                  nz-input formControlName="trichYeu" readonly="true" />-->
+<!--              </nz-form-control>-->
+<!--            </nz-form-item>-->
+<!--          </div>-->
+<!--          <div nz-col nzSpan="5">-->
+<!--            <nz-form-item class="form-item">-->
+<!--              <nz-form-label [nzNoColon]="true"> Trích yếu </nz-form-label>-->
+<!--              <nz-form-control>-->
+<!--                <input-->
+<!--                  [readonly]="formData.value.trangThai !==STATUS.DU_THAO && formData.value.trangThai !==STATUS.CHO_DUYET_LDC"-->
+<!--                  nz-input formControlName="trichYeu" readonly="true" />-->
+<!--              </nz-form-control>-->
+<!--            </nz-form-item>-->
+<!--          </div>-->
+
         </form>
     </nz-card>
 
@@ -198,11 +240,11 @@
                     <th>Ngày ký</th>
                     <th>Số lượng (Tấn)</th>
                     <th>Tổng tiền gồm thuế (đồng)</th>
-                    <th [width]="30">Hành động</th>
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let data of danhsachDx; let i = index" class="editable-row">
+            <tr *ngFor="let data of danhsachDx ;let i = index" (click)="showDetail($event,i)"
+                [ngClass]="{'bg-selected': i == 0 && this.selected}">
                     <td class="text-center">{{i + 1}} </td>
                     <td>{{ data.tenDvi }}</td>
                     <td>{{ data.soGthau }}</td>
@@ -210,11 +252,6 @@
                     <td>{{ data.ngayDxuat | date: 'dd/MM/YYYY' }}</td>
                     <td>{{ data.soLuong | number: '1.0-1' }}</td>
                     <td>{{ data.tongTien | number: '1.0-1' }}</td>
-                    <td class="text-center">
-                        <a (click)="showDetailCuc($event,data)">
-                            <i class="fa fa-pencil"></i>
-                        </a>
-                    </td>
                 </tr>
             </tbody>
         </nz-table>
@@ -233,9 +270,9 @@
             </div>
             <div nz-col [nzSpan]="12">
                 <nz-card class="mg-t-10 flex-card p-lr16 ">
-                    <app-thongtin-dieuchinh #thongTinDc [title]="'Quyết định điều chỉnh'" [dataInput]="dataInput"
+                    <app-thongtin-dieuchinh #thongTinDc [isView]="isViewDetail" [title]="'Quyết định điều chỉnh'" [dataInput]="dataInput"
                         [listLoaiHopDong]="listLoaiHopDong" [listHinhThucDauThau]="listHinhThucDauThau"
-                        [listPhuongThucDauThau]="listPhuongThucDauThau" [listNguonVon]="listNguonVon">
+                        [listPhuongThucDauThau]="listPhuongThucDauThau" [listNguonVon]="listNguonVon" (objectChange)="setNewData($event)">
                     </app-thongtin-dieuchinh>
                 </nz-card>
             </div>
@@ -412,10 +449,10 @@
                         <td>{{ data.tongTien | number: '1.0-1' }}</td>
                         <td class="text-center">
                             <a (click)="openDialogDeXuat(i)">
-                                <i class="fa fa-pencil"></i>
+                                <i class="fa fa-pencil" title="Sửa"></i>
                             </a>
                             <a (click)="deleteItem(i)">
-                                <i class="fa fa-trash-o do"></i>
+                                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                             </a>
                         </td>
                     </tr>
@@ -455,11 +492,11 @@
                         <td class="text-left">
                             <a *ngIf="formData.value.trangThai ==STATUS.DU_THAO || formData.value.trangThai ==STATUS.CHO_DUYET_LDC"
                                 (click)="openDialogGoiThau(data,i)">
-                                <i class="fa fa-pencil"></i>
+                                <i class="fa fa-pencil" title="Sửa"></i>
                             </a>
                             <a *ngIf="formData.value.trangThai ==STATUS.DU_THAO || formData.value.trangThai ==STATUS.CHO_DUYET_LDC"
                                 (click)="deleteItem(i)">
-                                <i class="fa fa-trash-o do"></i>
+                                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                             </a>
                         </td>
                     </tr>

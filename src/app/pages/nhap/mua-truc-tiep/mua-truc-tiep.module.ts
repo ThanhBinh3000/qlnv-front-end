@@ -16,6 +16,7 @@ import { KiemTraChatLuongComponent } from './kiem-tra-chat-luong/kiem-tra-chat-l
 import { KiemTraChatLuongModule } from './kiem-tra-chat-luong/kiem-tra-chat-luong.module';
 import { NhapKhoMttComponent } from './nhap-kho-mtt/nhap-kho-mtt.component';
 import { NhapKhoMttModule } from './nhap-kho-mtt/nhap-kho-mtt.module';
+import {QdKhUyQuyenMuaLeModule} from "./qd-kh-uy-quyen-mua-le/qd-kh-uy-quyen-mua-le.module";
 
 
 @NgModule({
@@ -40,6 +41,7 @@ import { NhapKhoMttModule } from './nhap-kho-mtt/nhap-kho-mtt.module';
     GiaoNhapHangMuattModule,
     KiemTraChatLuongModule,
     NhapKhoMttModule,
+    QdKhUyQuyenMuaLeModule
   ],
 })
 export class MuaTrucTiepModule { }

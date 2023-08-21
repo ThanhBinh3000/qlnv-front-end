@@ -14,13 +14,13 @@ export class DialogTableSelectionComponent implements OnInit {
   dataHeader: any[] = [];
   dataColumn: any[] = []
   dataTable: any[] = [];
+  isView: boolean = false;
   code: string;
   constructor(
     private _modalRef: NzModalRef,
   ) { }
 
   ngOnInit(): void {
-    console.log(this.dataTable);
   }
 
 

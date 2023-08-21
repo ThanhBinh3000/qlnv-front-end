@@ -145,44 +145,34 @@
                     </nz-form-item>
                 </div>
                 <div nz-col [nzSpan]="6">
-                    <nz-form-item>
-                        <nz-form-label [nzNoColon]="true" nzRequired> Điểm kho</nz-form-label>
-                        <nz-form-control [nzErrorTip]="error">
-                            <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogDdiemNhapHang()">
-                                <input [readonly]="true" nz-input formControlName="tenDiemKho" readonly />
-                            </nz-input-group>
-                        </nz-form-control>
-                    </nz-form-item>
+                  <nz-form-item>
+                    <nz-form-label [nzNoColon]="true" nzRequired> Lô kho/Ngăn kho</nz-form-label>
+                    <nz-form-control [nzErrorTip]="error">
+                      <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isView ? '' : openDialogDdiemNhapHang()">
+                        <input [readonly]="true" nz-input formControlName="tenNganLoKho"/>
+                      </nz-input-group>
+                    </nz-form-control>
+                  </nz-form-item>
                 </div>
-                <div nz-col [nzSpan]="6">
-                    <nz-form-item>
-                        <nz-form-label [nzNoColon]="true" nzRequired> Nhà kho</nz-form-label>
-                        <nz-form-control [nzErrorTip]="error">
-                            <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogDdiemNhapHang()">
-                                <input [readonly]="true" nz-input formControlName="tenNhaKho" readonly />
-                            </nz-input-group>
-                        </nz-form-control>
-                    </nz-form-item>
+                <div nz-col [nzSpan]="3">
+                  <nz-form-item>
+                    <nz-form-label [nzNoColon]="true"> Điểm kho</nz-form-label>
+                    <nz-form-control [nzErrorTip]="error">
+                      <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isView ? '' : openDialogDdiemNhapHang()">
+                        <input [readonly]="true" nz-input formControlName="tenDiemKho" readonly/>
+                      </nz-input-group>
+                    </nz-form-control>
+                  </nz-form-item>
                 </div>
-                <div nz-col [nzSpan]="6">
-                    <nz-form-item>
-                        <nz-form-label [nzNoColon]="true" nzRequired> Ngăn kho</nz-form-label>
-                        <nz-form-control [nzErrorTip]="error">
-                            <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogDdiemNhapHang()">
-                                <input [readonly]="true" nz-input formControlName="tenNganKho" readonly />
-                            </nz-input-group>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-                <div nz-col [nzSpan]="6">
-                    <nz-form-item>
-                        <nz-form-label [nzNoColon]="true"> Lô kho</nz-form-label>
-                        <nz-form-control>
-                            <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogDdiemNhapHang()">
-                                <input [readonly]="true" nz-input formControlName="tenLoKho" readonly />
-                            </nz-input-group>
-                        </nz-form-control>
-                    </nz-form-item>
+                <div nz-col [nzSpan]="3">
+                  <nz-form-item>
+                    <nz-form-label [nzNoColon]="true"> Nhà kho</nz-form-label>
+                    <nz-form-control [nzErrorTip]="error">
+                      <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isView ? '' : openDialogDdiemNhapHang()">
+                        <input [readonly]="true" nz-input formControlName="tenNhaKho" readonly/>
+                      </nz-input-group>
+                    </nz-form-control>
+                  </nz-form-item>
                 </div>
                 <!-- <div nz-col [nzSpan]="2">
                     <nz-form-item>
@@ -232,7 +222,7 @@
                 </tbody>
                 <tfoot>
                     <tr>
-                        <td colspan="5" class="text-right">TỔNG</td>
+                        <td colspan="6" class="text-right">TỔNG</td>
                         <td>{{ calcTong() | number : '1.0-1' : 'vi_VN' }} </td>
                     </tr>
                 </tfoot>
@@ -339,24 +329,16 @@
                         </nz-form-control>
                     </nz-form-item>
                 </div>
-                <div nz-col [nzSpan]="24">
-                    <nz-form-item>
-                        <nz-form-label [nzNoColon]="true"> File đính kèm quyết định đã ký </nz-form-label>
-                        <nz-form-control [nzErrorTip]="error">
-                            <div class="list-file">
-                                <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                                    <input type="text" nz-input />
-                                </nz-input-group>
-                                <ng-template #suffixTemplateInfo>
-                                    <div class="icon-file-dinh-kem">
-                                        <i class="icon htvbdh_tcdt_tep"></i>
-                                        <input class="input-file" (change)="getNameFile($event)" type="file" />
-                                    </div>
-                                </ng-template>
-                            </div>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
+              <div nz-col nzSpan="24">
+                <nz-form-item>
+                  <nz-form-label required [nzNoColon]="true">
+                    File đính kèm biên bản đã ký
+                  </nz-form-label>
+                  <div class="list-file">
+                    <file-list [data]="fileDinhKems"></file-list>
+                  </div>
+                </nz-form-item>
+              </div>
             </div>
         </form>
     </nz-card>

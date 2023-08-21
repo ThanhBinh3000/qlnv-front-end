@@ -4,6 +4,7 @@ import { BaseService } from 'src/app/services/base.service';
 import { OldResponseData } from 'src/app/interfaces/response';
 import { environment } from 'src/environments/environment';
 import { PATH } from 'src/app/constants/path';
+import { Observable } from 'rxjs';
 
 @Injectable({
     providedIn: 'root',
@@ -22,6 +23,16 @@ export class QuyetDinhPdKhBdgService extends BaseService {
     approveDtl(body): Promise<OldResponseData> {
         const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/dtl-chi-tiet/phe-duyet`;
         return this._httpClient.post<OldResponseData>(url, body).toPromise();
+    }
+
+    searchDtl(body): Promise<OldResponseData> {
+        const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/dtl-chi-tiet/tra-cuu`;
+        return this._httpClient.post<OldResponseData>(url, body).toPromise();
+    }
+
+    exportDtl(body: any): Observable<Blob> {
+        const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/dtl-chi-tiet/ket-xuat`;
+        return this._httpClient.post(url, body, { responseType: 'blob' });
     }
 
 

@@ -1,16 +1,16 @@
 <nz-affix [nzOffsetTop]="98" class="level2">
   <ul nz-menu nzMode="horizontal">
     <li nz-menu-item nzSelected (click)="selectTab(0)">
-      Thông tin đấu thầu
+      Quyết định phê duyệt hồ sơ mời thầu
     </li>
     <li nz-menu-item (click)="selectTab(1)">
-      Quyết định phê duyệt kết quả lựa chọn nhà thầu
+      Thông tin đấu thầu
     </li>
   </ul>
 </nz-affix>
 <ng-container *ngIf="tabSelected == 0">
-  <app-thongtin-dauthau [loaiVthh]="typeVthh"></app-thongtin-dauthau>
+  <app-qd-pd-hs-moi-thau [loaiVthh]="typeVthh"></app-qd-pd-hs-moi-thau>
 </ng-container>
 <ng-container *ngIf="tabSelected == 1">
-  <app-quyetdinh-ketqua-lcnt [loaiVthh]="typeVthh"></app-quyetdinh-ketqua-lcnt>
+  <app-thongtin-dauthau [loaiVthh]="typeVthh"></app-thongtin-dauthau>
 </ng-container>

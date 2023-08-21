@@ -52,7 +52,7 @@
       <div class="buttons">
         <button *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_XOA')" type="button"
                 class="btn btn-sub btn-xoa" (click)="deleteMulti()">
-          <i class="fa fa-trash-o do"></i>
+          <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
           <span>Xóa</span>
         </button>
         <button *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_EXP')" type="button"
@@ -72,17 +72,17 @@
                 [nzShowPagination]="false" nzBordered>
         <thead>
         <tr>
-          <th nzWidth="40px" >
+          <th nzWidth="10px" >
             <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
                    [nzIndeterminate]="indeterminate"></label>
           </th>
-          <th class="text-center">STT</th>
-          <th class="text-center">Số quyết định</th>
-          <th class="text-center">Trích yếu</th>
-          <th class="text-center">Ngày ký</th>
-          <th class="text-center">Hồ sơ đề nghị thanh lý</th>
-          <th class="text-center">Trạng thái</th>
-          <th nzWidth="90px">Hành động</th>
+          <th class="text-center" nzWidth="10px">STT</th>
+          <th>Số quyết định</th>
+          <th>Trích yếu</th>
+          <th>Ngày ký</th>
+          <th>Hồ sơ đề nghị thanh lý</th>
+          <th>Trạng thái</th>
+          <th nzWidth="40px">Hành động</th>
         </tr>
         <tr class="search-table">
           <th></th>
@@ -127,7 +127,7 @@
         </thead>
         <tbody>
         <tr *ngFor="let data of basicTable.data; let i = index">
-          <td width="45px">
+          <td>
             <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
                    [nzDisabled]="data.trangThai != STATUS.DU_THAO"></label>
           </td>
@@ -140,27 +140,27 @@
           <td class="text-left">
             <a (click)="redirectDetail(data.id, true)"
                *ngIf="vldTrangThai.checkStatusPermission(data,CHUC_NANG.XEM) &&
-                !(vldTrangThai.checkStatusPermission(data,CHUC_NANG.SUA) && userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_QDXC_TAOQDXC'))&&
-                !(vldTrangThai.checkStatusPermission(data,CHUC_NANG.DUYET_LDV)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_QDXC_DUYET_LDVU'))&&
-                !(vldTrangThai.checkStatusPermission(data,CHUC_NANG.DUYET_LDTC)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_QDXC_DUYET_LDTC'))&&
-                userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_QDXC_XEM')">
-              <i class="fa fa-eye"></i>
+                !(vldTrangThai.checkStatusPermission(data,CHUC_NANG.SUA) && userService.isAccessPermisson('XHDTQG_XTH_QDTH_THEM'))&&
+                !(vldTrangThai.checkStatusPermission(data,CHUC_NANG.DUYET_LDV)  && userService.isAccessPermisson('XHDTQG_XTH_QDTH_DUYETLDV'))&&
+                !(vldTrangThai.checkStatusPermission(data,CHUC_NANG.DUYET_LDTC)  && userService.isAccessPermisson('XHDTQG_XTH_QDTH_DUYETLDTC'))&&
+                userService.isAccessPermisson('XHDTQG_XTH_QDTH_XEM')">
+              <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
             <a
-              *ngIf="vldTrangThai.checkStatusPermission(data,CHUC_NANG.SUA)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_QDXC_TAOQDXC')"
+              *ngIf="vldTrangThai.checkStatusPermission(data,CHUC_NANG.SUA)  && userService.isAccessPermisson('XHDTQG_XTH_QDTH_THEM')"
               (click)="redirectDetail(data.id, false)">
-              <i class="fa fa-pencil"></i>
+              <i class="fa fa-pencil" title="Sửa"></i>
             </a>
             <a
-              *ngIf="(vldTrangThai.checkStatusPermission(data,CHUC_NANG.DUYET_LDV)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_QDXC_DUYET_LDVU')) ||
-                    (vldTrangThai.checkStatusPermission(data,CHUC_NANG.DUYET_LDTC)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_QDXC_DUYET_LDTC'))"
+              *ngIf="(vldTrangThai.checkStatusPermission(data,CHUC_NANG.DUYET_LDV)  && userService.isAccessPermisson('XHDTQG_XTH_QDTH_DUYETLDV')) ||
+                    (vldTrangThai.checkStatusPermission(data,CHUC_NANG.DUYET_LDTC)  && userService.isAccessPermisson('XHDTQG_XTH_QDTH_DUYETLDTC'))"
               (click)="redirectDetail(data.id, true)">
               <i class="icon htvbdh_tcdt_pheduyet"></i>
             </a>
             <a
-              *ngIf="vldTrangThai.checkStatusPermission(data,CHUC_NANG.XOA) && userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_QDXC_XOA')"
+              *ngIf="vldTrangThai.checkStatusPermission(data,CHUC_NANG.XOA) && userService.isAccessPermisson('XHDTQG_XTH_QDTH_XOA')"
               (click)="delete(data)">
-              <i class="fa fa-trash-o do"></i>
+              <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>
         </tr>

@@ -1,8 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormGroup, Validators} from "@angular/forms";
-import {
-  TongMucDauTu
-} from "../../quyet-dinh-phe-duyet-du-an-dtxd/thong-tin-quyet-dinh-phe-duyet-du-an-dtxd/thong-tin-quyet-dinh-phe-duyet-du-an-dtxd.component";
 import {Base2Component} from "../../../../../../components/base2/base2.component";
 import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../../../services/storage.service";
@@ -13,10 +10,8 @@ import * as uuid from "uuid";
 import {
   QuyetdinhpheduyetduandtxdService
 } from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetduandtxd.service";
-import {KtQdXdHangNamService} from "../../../../../../services/kt-qd-xd-hang-nam.service";
 import {MESSAGE} from "../../../../../../constants/message";
 import {STATUS} from "../../../../../../constants/status";
-import dayjs from "dayjs";
 import {
   QuyetdinhpheduyetTktcTdtService
 } from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetTktcTdt.service";
@@ -518,6 +513,36 @@ export class ThongTinQuyetDinhPheDuyetTktcTdtComponent extends Base2Component im
     }
     this.isVisiblePopDuToanXayDung = false;
   }
+
+  xoa() {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa các bản ghi đã chọn?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: async () => {
+        this.spinner.show();
+        try {
+          let res = await this.quyetdinhpheduyetTktcTdtService.delete({id: this.idInput});
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+            this.showListEvent.emit();
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+        } catch (e) {
+          console.log('error: ', e);
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        } finally {
+          this.spinner.hide();
+        }
+      },
+    });
+  }
+
 }
 
 

@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import dayjs from 'dayjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -20,6 +19,9 @@ export class BangKeBanHangComponent extends Base2Component implements OnInit {
   loaiVthh: string;
   dataEdit: any;
 
+  idQdNv: number = 0;
+  isViewQdNv: boolean = false;
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -33,26 +35,24 @@ export class BangKeBanHangComponent extends Base2Component implements OnInit {
     this.formData = this.fb.group({
       namKh: [],
       soBangKe: [],
-      soQd: [],
+      soQdNv: [],
       tenNguoiMua: [],
-      ngayBanHang: [],
+      ngayBanHangTu: [],
+      ngayBanHangDen: [],
       maDvi: [],
       loaiVthh: [],
-      ngayBanHangTu: [],
-      ngayBanHangDen: []
-
     });
 
     this.filterTable = {
       namKh: '',
       soBangKe: '',
-      soQd: '',
+      soQdNv: '',
       tenNguoiMua: '',
       diaChi: '',
       cmt: '',
       tenLoaiVthh: '',
       tenCloaiVthh: '',
-      soLuong: '',
+      soLuongBanLe: '',
       donGia: '',
       thanhTien: '',
     };
@@ -60,11 +60,10 @@ export class BangKeBanHangComponent extends Base2Component implements OnInit {
 
   async ngOnInit() {
     try {
-      this.formData.patchValue({
-        loaiVthh: this.loaiVthh,
-        maDvi: this.userService.isChiCuc() ? this.userInfo.MA_DVI : null,
-      })
-      await this.timKiem();
+      this.timKiem();
+      await Promise.all([
+        this.search(),
+      ]);
       await this.spinner.hide();
     }
     catch (e) {
@@ -75,11 +74,16 @@ export class BangKeBanHangComponent extends Base2Component implements OnInit {
   }
 
   async timKiem() {
-    if (this.formData.value.ngayBanHang) {
-      this.formData.value.ngayBanHangTu = dayjs(this.formData.value.ngayBanHang[0]).format('YYYY-MM-DD')
-      this.formData.value.ngayBanHangDen = dayjs(this.formData.value.ngayBanHang[1]).format('YYYY-MM-DD')
-    }
-    await this.search();
+    this.formData.patchValue({
+      loaiVthh: this.loaiVthh,
+      maDvi: this.userService.isChiCuc() ? this.userInfo.MA_DVI : null,
+    })
+  }
+
+  clearFilter() {
+    this.formData.reset();
+    this.timKiem();
+    this.search();
   }
 
   themMoiBangKeBanLe($event, data?: null, index?: number) {
@@ -96,6 +100,7 @@ export class BangKeBanHangComponent extends Base2Component implements OnInit {
       },
     });
     modalGT.afterClose.subscribe((data) => {
+      this.search();
       if (!data) {
         return;
       }
@@ -105,6 +110,30 @@ export class BangKeBanHangComponent extends Base2Component implements OnInit {
         this.dataTable.push(data);
       }
     });
+  };
+
+  openModalQdNv(id: number) {
+    this.idQdNv = id;
+    this.isViewQdNv = true;
+  }
+
+  closeModalQdNv() {
+    this.idQdNv = null;
+    this.isViewQdNv = false;
+  }
+
+  disabledNgayBanHangTu = (startValue: Date): boolean => {
+    if (!startValue || !this.formData.value.ngayBanHangDen) {
+      return false;
+    }
+    return startValue.getTime() > this.formData.value.ngayBanHangDen.getTime();
+  };
+
+  disabledNgayBanHangDen = (endValue: Date): boolean => {
+    if (!endValue || !this.formData.value.ngayBanHangTu) {
+      return false;
+    }
+    return endValue.getTime() <= this.formData.value.ngayBanHangTu.getTime();
   };
 
 }

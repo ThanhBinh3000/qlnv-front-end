@@ -118,7 +118,8 @@ export class ThongTinTongHopPhuongAnComponent extends Base2Component implements 
     this.formData = this.fb.group(
       {
         id: [0],
-        nam: [dayjs().get("year")],
+        // nam: [dayjs().get("year")],
+        nam: [''],
         maDvi: [''],
         maTongHop: [''],
         ngayThop: [''],

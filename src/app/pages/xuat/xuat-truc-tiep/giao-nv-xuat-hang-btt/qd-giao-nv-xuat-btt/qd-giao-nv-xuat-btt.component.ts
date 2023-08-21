@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MESSAGE } from "../../../../../constants/message";
-import * as dayjs from "dayjs";
 import { NgxSpinnerService } from "ngx-spinner";
 import { NzNotificationService } from "ng-zorro-antd/notification";
 import { NzModalService } from "ng-zorro-antd/modal";
@@ -8,6 +7,7 @@ import { Base2Component } from 'src/app/components/base2/base2.component';
 import { StorageService } from 'src/app/services/storage.service';
 import { HttpClient } from '@angular/common/http';
 import { QuyetDinhNvXuatBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/quyet-dinh-nv-xuat-btt/quyet-dinh-nv-xuat-btt.service';
+import { STATUS } from 'src/app/constants/status';
 
 @Component({
   selector: 'app-qd-giao-nv-xuat-btt',
@@ -49,22 +49,24 @@ export class QdGiaoNvXuatBttComponent extends Base2Component implements OnInit {
     super(httpClient, storageService, notification, spinner, modal, quyetDinhNvXuatBttService);
     this.formData = this.fb.group({
       namKh: null,
-      maDvi: null,
-      maChiCuc: null,
-      soQd: null,
+      soQdNv: null,
       loaiVthh: null,
       trichYeu: null,
+      maDvi: null,
+      maChiCuc: null,
       ngayTaoTu: null,
       ngayTaoDen: null,
       trangThai: null,
     })
 
     this.filterTable = {
-      nam: '',
-      soQd: '',
+      namKh: '',
+      soQdNv: '',
       ngayTao: '',
       soHd: '',
+      loaiVthh: '',
       tenLoaiVthh: '',
+      cloaiVthh: '',
       tenCloaiVthh: '',
       tgianGnhan: '',
       trichYeu: '',
@@ -93,7 +95,7 @@ export class QdGiaoNvXuatBttComponent extends Base2Component implements OnInit {
       loaiVthh: this.loaiVthh,
       maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
       maChiCuc: this.userService.isChiCuc() ? this.userInfo.MA_DVI : null,
-      trangThai: this.userService.isChiCuc() ? this.STATUS.BAN_HANH : null
+      trangThai: this.userService.isChiCuc() ? STATUS.BAN_HANH : null,
     })
   }
 

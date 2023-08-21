@@ -137,14 +137,14 @@
                     <td>{{data.tenTrangThai}}</td>
                     <td>
                       <a (click)="redirectToChiTiet(true, data.id)">
-                        <i class="fa fa-eye"></i>
+                        <i class="fa fa-eye" title="Xem chi tiết"></i>
                       </a>
                       <a *ngIf="(data.trangThai=='00' || data.trangThai=='03') && userService.isChiCuc()"
                         (click)="redirectToChiTiet(false, data.id)">
-                        <i class="fa fa-pencil"></i>
+                        <i class="fa fa-pencil" title="Sửa"></i>
                       </a>
                       <a *ngIf="data.trangThai=='00' && userService.isChiCuc()" (click)="xoaItem(data)">
-                        <i class="fa fa-trash-o do"></i>
+                        <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                       </a>
                     </td>
                   </tr>
@@ -170,7 +170,7 @@
           </nz-tabset>
           <div class="action-giao-chi-tieu">
             <button type="button" class="btn btn-do" (click)="deleteSelect()" *ngIf="userService.isChiCuc()">
-              <i class="fa fa-trash-o do"></i>
+              <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
               <span>Xóa</span>
             </button>
             <button type="button" class="btn btn-sub" (click)="export()">

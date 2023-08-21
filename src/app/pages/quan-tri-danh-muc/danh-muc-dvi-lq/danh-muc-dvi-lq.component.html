@@ -60,7 +60,7 @@
       <h3> DANH SÁCH DANH MỤC ĐƠN VỊ LIÊN QUAN</h3>
       <div class="buttons">
         <button (click)="delete('multi')" type="button" class="btn btn-sub btn-xoa">
-          <i class="fa fa-trash-o do"></i>
+          <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
           <span>Xóa</span>
         </button>
         <button type="button" class="btn btn-sub" (click)="exportData()">
@@ -120,10 +120,10 @@
           <td class="text-center">{{data.tenTrangThai}}</td>
           <td class="text-left" nzRight>
             <a (click)="themMoi(data.id)">
-              <i class="fa fa-pencil"></i>
+              <i class="fa fa-pencil" title="Sửa"></i>
             </a>
             <a (click)="delete('single', data)">
-              <i class="fa fa-trash-o do"></i>
+              <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>
         </tr>

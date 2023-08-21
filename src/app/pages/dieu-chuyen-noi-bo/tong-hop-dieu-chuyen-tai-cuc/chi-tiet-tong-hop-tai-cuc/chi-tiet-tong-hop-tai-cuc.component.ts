@@ -1,3 +1,4 @@
+import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.service';
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormGroup, Validators } from "@angular/forms";
 import { UserLogin } from "../../../../models/userlogin";
@@ -51,7 +52,7 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
 
   formData: FormGroup;
   cacheData: any[] = [];
-  fileDinhKem: any[] = [];
+  canCu: any[] = [];
   userLogin: UserLogin;
   titleStatus: string = '';
   titleButtonDuyet: string = '';
@@ -101,12 +102,26 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
   };
   deXuatPheDuyet: { [key: string]: boolean } = {};
   dcnbKeHoachDcHdrId: number[] = [];
+  LOAI_HINH_NHAP_XUAT_CHI_CUC: { [key: string]: string } = {
+    loaiHinhNhapXuat: '94', tenLoaiHinhNhapXuat: "Xuất Điều chuyển nội bộ Chi cục", kieuNhapXuat: '04', tenKieuNhapXuat: "Xuất không thu tiền"
+  };
+  LOAI_HINH_NHAP_XUAT_CUC: { [key: string]: string } = {
+    loaiHinhNhapXuat: '144', tenLoaiHinhNhapXuat: "Xuất điều chuyển nội bộ Cục", kieuNhapXuat: '04', tenKieuNhapXuat: "Xuất không thu tiền"
+  };
+  TEN_KIEU_NHAP_XUAT: { [key: number]: any } = {
+    1: "Nhập mua",
+    2: "Nhập không chi tiền",
+    3: "Xuất bán",
+    4: "Xuất không thu tiền",
+    5: "Khác"
+  };
   constructor(httpClient: HttpClient,
     storageService: StorageService,
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private danhMucService: DanhMucService,
+    private danhMucDungChungService: DanhMucDungChungService,
     private deXuatKeHoachBanDauGiaService: DeXuatKeHoachBanDauGiaService,
     private donViService: DonviService,
     private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
@@ -134,7 +149,11 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
 
         namKeHoach: [dayjs().get('year'), Validators.required],
         loaiDieuChuyen: ['CHI_CUC', Validators.required],
-        thoiGianTongHop: ['']
+        thoiGianTongHop: [''],
+        loaiHinhNhapXuat: [''],
+        tenLoaiHinhNhapXuat: [''],
+        kieuNhapXuat: [''],
+        tenKieuNhapXuat: ['']
       }
     );
     this.userInfo = this.userService.getUserLogin();
@@ -144,18 +163,22 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
   async ngOnInit() {
 
     this.spinner.show();
-    await this.initData();
     try {
       // await this.loadDetail(this.idInput)
-      if (this.formData.value.id) {
+      if (this.idInput) {
         // await this.getDsChiCucBiTuChoi(this.formData.value.id);
-        const data = await this.detail(this.formData.value.id);
-        this.helperService.bidingDataInFormGroup(this.formData, data);
+        const data = await this.detail(this.idInput);
+        if (data) {
+          this.canCu = data.canCu
+        }
         this.formData.patchValue({
           soDeXuat: this.formData.value.soDeXuat ? this.formData.value.soDeXuat.split('/')[0] : null
         })
         this.daXdinhDiemNhap = data?.daXdinhDiemNhap
         this.convertTongHop(data, this.isAddNew);
+      } else {
+        this.initData();
+
       }
       // await Promise.all([this.loaiVTHHGetAll(), this.loaiHopDongGetAll()]);
     } catch (e) {
@@ -169,7 +192,11 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
     }
   };
   async initData() {
-    this.formData.controls["id"].setValue(this.idInput)
+    if (this.formData.value.loaiDieuChuyen === "CHI_CUC") {
+      this.getLoaiHinhNhapXuat({ loai: 'LOAI_HINH_NHAP_XUAT', ma: '94' });
+    } else if (this.formData.value.loaiDieuChuyen === "CUC") {
+      this.getLoaiHinhNhapXuat({ loai: 'LOAI_HINH_NHAP_XUAT', ma: '144' });
+    }
   };
   // async getDsChiCucBiTuChoi(id) {
   //     try {
@@ -179,32 +206,21 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
   //         console.log("error", error)
   //     }
   // }
-  async detail(id, roles?: any) {
-    if (!this.checkPermission(roles)) {
-      return
-    }
-    this.spinner.show();
-    try {
-      let res = await this.tongHopDieuChuyenService.getDetail(id);
-      if (res.msg == MESSAGE.SUCCESS) {
-        if (res.data) {
-          const data = res.data;
-          this.helperService.bidingDataInFormGroup(this.formData, data);
-          this.fileDinhKem = data.fileDinhKem
-          return data;
-        }
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
-        this.spinner.hide();
-        return null;
-      }
-    } catch (e) {
-      this.notification.error(MESSAGE.ERROR, e);
-      this.spinner.hide();
-    } finally {
-      this.spinner.hide();
-    }
 
+  async getLoaiHinhNhapXuat(params) {
+    try {
+      const res = await this.danhMucDungChungService.search(params);
+      if (res.msg === MESSAGE.SUCCESS) {
+        const loaiHinhNhapXuat = res.data.content[0] ? { ...res.data.content[0] } : {};
+        this.formData.patchValue({ loaiHinhNhapXuat: loaiHinhNhapXuat.ma, tenLoaiHinhNhapXuat: loaiHinhNhapXuat.giaTri, kieuNhapXuat: loaiHinhNhapXuat.ghiChu, tenKieuNhapXuat: this.TEN_KIEU_NHAP_XUAT[Number(loaiHinhNhapXuat.ghiChu)] })
+      } else {
+        this.notification.error(MESSAGE.ERROR, "Có lỗi xảy ra.")
+      }
+
+    } catch (error) {
+      console.log("e", error);
+      this.notification.error(MESSAGE.ERROR, "Có lỗi xảy ra.")
+    }
   }
 
   setExpand(parantExpand: boolean = false, children: any = []): void {
@@ -224,7 +240,13 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
   }
   handleChangeLoaiDC = () => {
     this.isTongHop = false;
-    this.formData.patchValue({ thoiGianTongHop: '' })
+    this.formData.patchValue({ thoiGianTongHop: '' });
+    if (this.isViewDetail || this.formData.value.trangThai || this.idInput) return;
+    if (this.formData.value.loaiDieuChuyen === "CHI_CUC") {
+      this.getLoaiHinhNhapXuat({ loai: 'LOAI_HINH_NHAP_XUAT', ma: '94' });
+    } else if (this.formData.value.loaiDieuChuyen === "CUC") {
+      this.getLoaiHinhNhapXuat({ loai: 'LOAI_HINH_NHAP_XUAT', ma: '144' });
+    }
   }
   yeuCauXacDinhDiemNhap = async ($event) => {
     $event.stopPropagation();
@@ -387,6 +409,7 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
     try {
 
       let body = { ...this.formData.value, soDeXuat: this.formData.value.soDeXuat ? this.formData.value.soDeXuat + '/DCNB' : undefined };
+      body.canCu = this.canCu;
       let res;
       await this.spinner.show();
       this.setValidator(false)
@@ -402,7 +425,7 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
       } else {
         res = await this.tongHopDieuChuyenService.themTHCuc({ ...body, id: undefined });
         if (res.msg == MESSAGE.SUCCESS) {
-          if (!isGuiDuyet && isGuiYeuCau) {
+          if (!isGuiDuyet && !isGuiYeuCau) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
           }
           this.isAddNew = false;
@@ -446,7 +469,13 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
       if (this.formData.valid) {
         this.isTongHop = true;
         const thoiGianTongHop = dayjs().format("YYYY-MM-DDTHH:mm:ss");
-        this.formData.patchValue({ thoiGianTongHop: thoiGianTongHop })
+        // if (this.formData.value.loaiDieuChuyen === "CHI_CUC") {
+        //   this.formData.patchValue({ thoiGianTongHop, ...this.LOAI_HINH_NHAP_XUAT_CHI_CUC })
+        // } else if (this.formData.value.loaiDieuChuyen === "CUC") {
+        //   this.formData.patchValue({ thoiGianTongHop, ...this.LOAI_HINH_NHAP_XUAT_CUC })
+
+        // }
+        this.formData.patchValue({ thoiGianTongHop })
         // call api tổng hợp dữ liệu;
         const body = {
           namKeHoach: this.formData.value.namKeHoach,
@@ -490,7 +519,7 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
               const newItem = cloneDeep(item);
               delete newItem.dcnbKeHoachDcDtls;
               item?.dcnbKeHoachDcDtls.forEach(element => {
-                flatArray.push({ ...newItem, ...element })
+                flatArray.push({ ...newItem, ...element, maLoNganKho: element.maLoKho ? `${element.maLoKho}${element.maNganKho}` : element.maNganKho, })
               });
             }
           })
@@ -520,7 +549,7 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
             Array.isArray(item?.dcnbKeHoachDcHdr?.danhSachHangHoa) && item?.dcnbKeHoachDcHdr?.danhSachHangHoa.forEach(element => {
               const newItem = cloneDeep(item);
               delete newItem.dcnbKeHoachDcHdr.danhSachHangHoa;
-              flatArray.push({ ...newItem, ...newItem.dcnbKeHoachDcHdr, ...element });
+              flatArray.push({ ...newItem, ...newItem.dcnbKeHoachDcHdr, ...element, maLoNganKho: element.maLoKho ? `${element.maLoKho}${element.maNganKho}` : element.maNganKho });
               if (!arrCCucNhan.find(f => f.value == element.maChiCucNhan)?.value) {
                 arrCCucNhan.push({ label: element.tenChiCucNhan, value: element.maChiCucNhan, checked: false })
               }
@@ -566,9 +595,9 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
           .groupBy("maDiemKho")
           ?.map((v, k) => {
             let rss = chain(v)
-              .groupBy("maLoKho")
+              .groupBy("maLoNganKho")
               ?.map((vs, ks) => {
-                const maLoKho = vs.find(s => s?.maLoKho == ks);
+                const maLoNganKho = vs.find(s => s?.maLoNganKho == ks);
                 const rsss = chain(vs).groupBy("id").map((x, ix) => {
                   const ids = x.find(f => f.id == ix);
 
@@ -610,8 +639,8 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
                   soLuongDc += (element.soLuongDc || 0)
                 });
                 return {
-                  ...maLoKho,
-                  idVirtual: maLoKho ? maLoKho.idVirtual ? maLoKho.idVirtual : uuid.v4() : uuid.v4(),
+                  ...maLoNganKho,
+                  idVirtual: maLoNganKho ? maLoNganKho.idVirtual ? maLoNganKho.idVirtual : uuid.v4() : uuid.v4(),
                   children: rsss,
                   duToanKphi,
                   soLuongDc
@@ -740,4 +769,13 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
   roleCheckXuatDuyet(id: number, trangThai: string) {
     return this.userService.isCuc() && ((this.userService.isAccessPermisson('DCNB_TONGHOPDC_DUYET_TP') && (trangThai == STATUS.CHO_DUYET_TP || trangThai == STATUS.TU_CHOI_LDC)) || (this.userService.isAccessPermisson('DCNB_TONGHOPDC_DUYET_LDCUC') && trangThai == STATUS.CHO_DUYET_LDC))
   }
+  checkDisabledSoDxcv() {
+    return this.isViewDetail || (this.formData.value.loaiDieuChuyen == "CHI_CUC" && this.formData.value.trangThai == STATUS.DA_DUYET_LDC) || (this.formData.value.loaiDieuChuyen == "CUC" && this.formData.value.trangThai && this.formData.value.trangThai !== STATUS.DU_THAO)
+  }
+  disabledNgayTongHop = (value: Date): boolean => {
+    if (value && this.formData.value.thoiGianTongHop) {
+      return dayjs(value).endOf("days").isBefore(dayjs(this.formData.value.thoiGianTongHop, 'YYYY-MM-DDTHH:mm:ss'));
+    }
+    return false;
+  };
 }

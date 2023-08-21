@@ -46,7 +46,9 @@ export class QuyetDinhPdKhnkComponent extends Base2Component implements OnInit {
 
   listTrangThai: any[] = [
     { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
-    { ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành' }
+    { ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành' },
+    { ma: this.STATUS.CHO_DUYET_LDV, giaTri: 'Chờ duyệt - LĐ Vụ' },
+    { ma: this.STATUS.TU_CHOI_LDV, giaTri: 'Từ chối - LĐ Vụ' },
   ];
   searchFilter = {
     soQd: null,
@@ -238,7 +240,7 @@ export class QuyetDinhPdKhnkComponent extends Base2Component implements OnInit {
       soQd: this.searchFilter.soQd,
       tongTien: this.searchFilter.tongTien,
       soGthau: this.searchFilter.soGthau,
-      lastest: 0,
+      // lastest: 0,
       paggingReq: {
         limit: this.pageSize,
         page: this.page - 1,
@@ -248,7 +250,6 @@ export class QuyetDinhPdKhnkComponent extends Base2Component implements OnInit {
     let res = await this.quyetDinhPheDuyetKeHoachNhapKhacService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
-      console.log(data)
       this.dataTable = data.content;
       if (data && data.content && data.content.length > 0) {
         this.dataTable = data.content;
@@ -319,11 +320,11 @@ export class QuyetDinhPdKhnkComponent extends Base2Component implements OnInit {
           lastest: 0,
           maDvi: this.userService.isTongCuc() ? '' : this.userInfo.MA_DVI
         };
-        // this.quyetDinhPheDuyetKeHoachNhapKhacService
-          // .exportList(body)
-          // .subscribe((blob) =>
-          //   saveAs(blob, 'danh-sach-quyet-dinh-phe-duyet-ke-hoach-lua-chon-nha-thau.xlsx')
-          // );
+        this.quyetDinhPheDuyetKeHoachNhapKhacService
+          .export(body)
+          .subscribe((blob) =>
+            saveAs(blob, 'danh-sach-quyet-dinh-phe-duyet-ke-hoach-nhap-khac.xlsx')
+          );
         this.spinner.hide();
       } catch (e) {
         console.log('error: ', e);
@@ -384,7 +385,6 @@ export class QuyetDinhPdKhnkComponent extends Base2Component implements OnInit {
     if (value instanceof Date) {
       value = dayjs(value).format('YYYY-MM-DD');
     }
-    console.log(key, value);
 
     if (value && value != '') {
       this.dataTable = this.dataTableAll.filter((item) =>

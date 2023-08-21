@@ -43,8 +43,9 @@ export class ThemmoiTonghopKhmttComponent extends Base2Component implements OnIn
   listHinhThucDauThau: any[] = [];
   listLoaiHopDong: any[] = [];
   isQuyetDinh: boolean = false;
+  disableField: boolean = false;
   selected: boolean = false;
-
+  listFileDinhKem: any[] = [];
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -76,7 +77,7 @@ export class ThemmoiTonghopKhmttComponent extends Base2Component implements OnIn
       tenCloaiVthh: [''],
       namKh: [, [Validators.required]],
       noiDungThop: ['', [Validators.required]],
-      trangThai: [''],
+      trangThai: ['26'],
       ghiChu: ['',],
       tchuanCluong: [''],
       soQd: [''],
@@ -84,7 +85,6 @@ export class ThemmoiTonghopKhmttComponent extends Base2Component implements OnIn
   }
 
   async ngOnInit() {
-    console.log(this.isView)
     await this.spinner.show();
     try {
       await Promise.all([
@@ -103,7 +103,6 @@ export class ThemmoiTonghopKhmttComponent extends Base2Component implements OnIn
   }
 
   async loadChiTiet() {
-    debugger
     if (this.id > 0) {
       const data = await this.detail(this.id);
       if (data) {
@@ -113,12 +112,15 @@ export class ThemmoiTonghopKhmttComponent extends Base2Component implements OnIn
           idTh: data.id
         })
         this.dataTable = data.children;
-        console.log(this.dataTable)
+        this.listFileDinhKem = data.fileDinhKems;
         await this.showDetail(event, data.children[0].idDxHdr)
       }
       else {
         this.isTongHop = false;
       }
+    }else{
+      this.formTraCuu.get('tenLoaiVthh').setValue("Thóc tẻ")
+      this.formTraCuu.get('loaiVthh').setValue("0101")
     }
   }
 
@@ -143,6 +145,7 @@ export class ThemmoiTonghopKhmttComponent extends Base2Component implements OnIn
         })
         this.dataTable = dataDetail.children;
         this.isTongHop = true;
+        console.log(this.formData.value)
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
         this.isTongHop = false;
@@ -156,11 +159,15 @@ export class ThemmoiTonghopKhmttComponent extends Base2Component implements OnIn
     }
   }
 
-  async save() {
+  async save(isTaoQd?: boolean) {
     let body = this.formData.value;
+    body.fileDinhKems = this.listFileDinhKem;
     let data = await this.createUpdate(body, 'NHDTQG_PTMTT_KHMTT_TONGHOP_TONGHOP')
     if (data) {
-      this.quayLai();
+      if(isTaoQd){
+        this.isQuyetDinh = true;
+        this.disableField = true;
+      }
     }
   }
 
@@ -206,13 +213,13 @@ export class ThemmoiTonghopKhmttComponent extends Base2Component implements OnIn
     });
   }
 
-  taoQdinh() {
+  async taoQdinh() {
     let elem = document.getElementById('mainTongCuc');
     let tabActive = elem.getElementsByClassName('ant-menu-item')[0];
     tabActive.classList.remove('ant-menu-item-selected')
     let setActive = elem.getElementsByClassName('ant-menu-item')[2];
     setActive.classList.add('ant-menu-item-selected');
-    this.isQuyetDinh = true;
+    await this.save(true)
   }
 
   showTongHop() {

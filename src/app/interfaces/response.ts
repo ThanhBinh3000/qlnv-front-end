@@ -6,7 +6,8 @@ export interface OldResponseData {
   message?: string;
   msg?: string;
   totalRecord?: number;
-  statusCode? : number;
+  statusCode?: number;
+  included?: any;
 }
 export type ResponseData<T> = {
   included?: boolean;

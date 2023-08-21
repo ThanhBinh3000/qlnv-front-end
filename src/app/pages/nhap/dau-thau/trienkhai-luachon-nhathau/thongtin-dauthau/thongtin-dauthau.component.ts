@@ -93,6 +93,7 @@ export class ThongtinDauthauComponent extends Base2Component implements OnInit {
   userInfo: UserLogin;
   datePickerConfig = DATEPICKER_CONFIG;
   isDetail: boolean = false;
+  isDetailVt: boolean = false;
   selectedId: number = 0;
   isViewDetail: boolean;
   idDx: number = 0;
@@ -148,22 +149,42 @@ export class ThongtinDauthauComponent extends Base2Component implements OnInit {
 
   async search() {
     this.dataTable = [];
-    let body = {
-      tuNgayQd: this.tuNgayQd != null ? dayjs(this.tuNgayQd).format('YYYY-MM-DD') + " 00:00:00" : null,
-      denNgayQd: this.denNgayQd != null ? dayjs(this.denNgayQd).format('YYYY-MM-DD') + " 23:59:59" : null,
-      loaiVthh: this.loaiVthh,
-      soQdPdKhlcnt: this.searchFilter.soQdPdKhlcnt,
-      soQdPdKqlcnt: this.searchFilter.soQdPdKqlcnt,
-      namKhoach: this.searchFilter.namKhoach,
-      trichYeu: this.searchFilter.trichYeu,
-      soQd: this.searchFilter.soQd,
-      lastest: 1,
-      paggingReq: {
-        limit: this.pageSize,
-        page: this.page - 1,
-      },
-      maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null
-    };
+    let body = {};
+    if (this.loaiVthh.startsWith('02')) {
+      body = {
+        // tuNgayQd: this.tuNgayKy != null ? dayjs(this.tuNgayKy).format('YYYY-MM-DD') + " 00:00:00" : null,
+        // denNgayQd: this.denNgayKy != null ? dayjs(this.denNgayKy).format('YYYY-MM-DD') + " 23:59:59" : null,
+        loaiVthh: this.loaiVthh,
+        // namKhoach: this.searchFilter.namKhoach,
+        // trichYeu: this.searchFilter.trichYeu,
+        // soQd: this.searchFilter.soQd,
+        // tongTien: this.searchFilter.tongTien,
+        trangThai: this.STATUS.BAN_HANH,
+        lastest: 0,
+        paggingReq: {
+          limit: this.pageSize,
+          page: this.page - 1,
+        },
+        maDvi: this.userService.isTongCuc() ? '' : this.userInfo.MA_DVI
+      };
+    } else {
+      body = {
+        tuNgayQd: this.tuNgayQd != null ? dayjs(this.tuNgayQd).format('YYYY-MM-DD') + " 00:00:00" : null,
+        denNgayQd: this.denNgayQd != null ? dayjs(this.denNgayQd).format('YYYY-MM-DD') + " 23:59:59" : null,
+        loaiVthh: this.loaiVthh,
+        soQdPdKhlcnt: this.searchFilter.soQdPdKhlcnt,
+        soQdPdKqlcnt: this.searchFilter.soQdPdKqlcnt,
+        namKhoach: this.searchFilter.namKhoach,
+        trichYeu: this.searchFilter.trichYeu,
+        soQd: this.searchFilter.soQd,
+        lastest: 1,
+        paggingReq: {
+          limit: this.pageSize,
+          page: this.page - 1,
+        },
+        maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null
+      };
+    }
     let res = await this.thongTinDauThauService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
@@ -219,17 +240,22 @@ export class ThongtinDauthauComponent extends Base2Component implements OnInit {
     // } else {
     //   this.selectedId = data.id;
     // }
-    if (roles == 'NHDTQG_PTDT_TCKHLCNT_LT_TTDT_XEM') {
+    if (roles == 'NHDTQG_PTDT_TCKHLCNT_LT_TTDT_XEM' || roles == 'NHDTQG_PTDT_TCKHLCNT_VT_TTDT_XEM') {
       this.isView = true;
     } else {
       this.isView = false
     }
     this.selectedId = data.id;
-    this.isDetail = true;
+    if (this.loaiVthh.startsWith('02')) {
+      this.isDetailVt = true;
+    } else {
+      this.isDetail = true;
+    }
   }
 
   async showList() {
     this.isDetail = false;
+    this.isDetailVt = false;
     await this.search()
   }
 
@@ -295,13 +321,18 @@ export class ThongtinDauthauComponent extends Base2Component implements OnInit {
         let body = {
           tuNgayQd: this.tuNgayQd != null ? dayjs(this.tuNgayQd).format('YYYY-MM-DD') + " 00:00:00" : null,
           denNgayQd: this.denNgayQd != null ? dayjs(this.denNgayQd).format('YYYY-MM-DD') + " 23:59:59" : null,
-          loaiVthh: this.searchFilter.loaiVthh,
-          namKhoach: this.searchFilter.namKhoach,
-          trichYeu: this.searchFilter.trichYeu,
+          loaiVthh: this.loaiVthh,
           soQdPdKhlcnt: this.searchFilter.soQdPdKhlcnt,
           soQdPdKqlcnt: this.searchFilter.soQdPdKqlcnt,
+          namKhoach: this.searchFilter.namKhoach,
+          trichYeu: this.searchFilter.trichYeu,
           soQd: this.searchFilter.soQd,
-          maDvi: this.userInfo.MA_DVI,
+          lastest: 1,
+          paggingReq: {
+            limit: this.pageSize,
+            page: this.page - 1,
+          },
+          maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null
         }
         this.thongTinDauThauService
           .export(body)

@@ -1,0 +1,168 @@
+<div class="bg-trang">
+  <nz-card class="mt16 flex-card p-lr16">
+    <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
+      <div nz-row [nzGutter]="20">
+        <div nz-col nzSpan="3">
+          <nz-form-control>
+            <nz-form-label>Năm kế hoạch</nz-form-label>
+            <nz-form-item>
+              <nz-select formControlName="nam">
+                <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+              </nz-select>
+            </nz-form-item>
+          </nz-form-control>
+        </div>
+        <div nz-col nzSpan="5">
+          <nz-form-control>
+            <nz-form-label>Mã danh sách cần SC</nz-form-label>
+            <nz-form-item>
+              <input nz-input formControlName="maSc" />
+            </nz-form-item>
+          </nz-form-control>
+        </div>
+        <div nz-col nzSpan="5">
+          <nz-form-control>
+            <nz-form-label>
+              Chi cục DTNN
+            </nz-form-label>
+            <nz-form-item>
+              <nz-select formControlName="maCc" nzShowSearch nzAllowClear>
+                <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+              </nz-select>
+            </nz-form-item>
+          </nz-form-control>
+        </div>
+        <div nz-col nzSpan="6">
+          <nz-form-control>
+            <nz-form-label>Ngày tổng hợp</nz-form-label>
+            <nz-form-item>
+              <div nz-row>
+                <div nz-col nzSpan="12" class="cus-start-date">
+                  <nz-date-picker [nzDisabledDate]="disabledNgayTu" nzFormat="dd/MM/yyyy"
+                                  formControlName="ngayTu" nzPlaceHolder="Ngày bắt đầu">
+                  </nz-date-picker>
+                </div>
+                <div nz-col nzSpan="12" class="cus-end-date">
+                  <nz-date-picker [nzDisabledDate]="disabledNgayDen" nzFormat="dd/MM/yyyy"
+                                  formControlName="ngayDen" nzPlaceHolder="Ngày kết thúc">
+                  </nz-date-picker>
+                </div>
+              </div>
+            </nz-form-item>
+          </nz-form-control>
+        </div>
+      </div>
+    </form>
+    <div nz-col class="cangiua group-button-search pt-16">
+      <div>
+        <button nz-button class="search__button--clear" (click)="clearForm()">
+          <i class="icon  htvbdh_nhap-lai1"></i>
+          Xóa điều kiện
+        </button>
+        <button nz-button class="search__button--search" (click)="searchList()">
+          <i nz-icon nzType="search"></i>
+          Tìm kiếm
+        </button>
+      </div>
+    </div>
+  </nz-card>
+  <div class="group-button">
+    <h3 class="text-uppercase">Hàng thuộc diện {{title}} </h3>
+  </div>
+  <nz-card class="mt-2px flex-card data-table card-border-content table-card">
+    <nz-table class="nowrap" [nzData]="dataTableAll" nzBordered [nzFrontPagination]="false" [nzShowPagination]="false">
+      <thead>
+      <tr>
+        <th>Loại hàng DTQG</th>
+        <th>Chủng loại hàng DTQG</th>
+        <th>Ngăn/lô kho</th>
+        <th>Nhà kho</th>
+        <th>Điềm kho</th>
+        <th>Ngày nhập kho</th>
+        <th>Tồn kho</th>
+        <th>SL cần {{title}}</th>
+        <th>SL đã {{title}}</th>
+        <th>ĐVT</th>
+        <th>Lý do</th>
+        <th>Trạng thái</th>
+        <th>Trạng thái chốt DS của Cục</th>
+        <th>Ngày chốt DS của Cục</th>
+        <th>Trạng thái {{title}}</th>
+        <th nzWidth="35px">Hành động</th>
+      </tr>
+      </thead>
+      <tbody>
+      <ng-container *ngFor="let loaiVthh of dataTableAll , let i = index">
+        <tr>
+          <td nzShowExpand="true" [nzExpand]="loaiVthh.expandSet"
+              (nzExpandChange)="onExpandChange(loaiVthh, $event)">{{loaiVthh.tenLoaiVthh}}</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td> </td>
+        </tr>
+        <ng-container *ngIf="loaiVthh.expandSet">
+          <ng-container *ngFor="let cloaiVthh of loaiVthh.chilren , let i = index">
+            <tr>
+              <td></td>
+              <td nzShowExpand="true" [nzExpand]="cloaiVthh.expandSet"
+                  (nzExpandChange)="onExpandChange(cloaiVthh, $event)">{{cloaiVthh.tenCloaiVthh}}</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <ng-container *ngIf="cloaiVthh.expandSet">
+              <ng-container *ngFor="let data of cloaiVthh.children , let i = index">
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td>{{data.tenNganKho}} , {{data.tenLoKho}}</td>
+                  <td>{{data.tenNhaKho}}</td>
+                  <td>{{data.tenDiemKho}}</td>
+                  <td>{{data.ngayNhapDayKho | date : 'dd/MM/yyyy'}}</td>
+                  <td>{{data.tongSoLuong | number : '1.0-1' : 'vi_VN' }}</td>
+                  <td>{{data.soLuongXl | number : '1.0-1' : 'vi_VN' }}</td>
+                  <td></td>
+                  <td>{{data.dviTinh }}</td>
+                  <td>{{data.nguyenNhan}}</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td>
+                    <a (click)="showDetail(data)">
+                      <i class="fa fa-pencil" title="Sửa"></i>
+                    </a>
+                  </td>
+                </tr>
+              </ng-container>
+            </ng-container>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+      </tbody>
+    </nz-table>
+  </nz-card>
+</div>

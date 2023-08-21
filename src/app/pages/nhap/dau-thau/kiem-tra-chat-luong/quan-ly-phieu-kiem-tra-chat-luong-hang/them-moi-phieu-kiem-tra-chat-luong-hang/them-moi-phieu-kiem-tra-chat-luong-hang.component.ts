@@ -50,6 +50,7 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent extends Base2Component im
   dataTableChiTieu: any[] = [];
   listDiaDiemNhap: any[] = [];
   listFileDinhKem: any[] = [];
+  listFileDinhKemKTCL: any[] = [];
 
   constructor(
     httpClient: HttpClient,
@@ -90,9 +91,10 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent extends Base2Component im
         maNhaKho: ['', [Validators.required]],
         tenNhaKho: ['', [Validators.required]],
         maNganKho: ['', [Validators.required]],
-        tenNganKho: ['', [Validators.required]],
+        tenNganKho: [''],
         maLoKho: [''],
         tenLoKho: [''],
+        tenNganLoKho: [''],
 
         soLuongQdGiaoNvNh: [''],
         soLuongDaNhap: [''],
@@ -102,16 +104,21 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent extends Base2Component im
         donViGiaoHang: ['', [Validators.required]],
         diaChi: ['', [Validators.required]],
         bienSoXe: ['', [Validators.required]],
-        soLuongDeNghiKt: ['', [Validators.required]],
-        soLuongNhapKho: ['', [Validators.required]],
         soChungThuGiamDinh: ['', [Validators.required]],
         ngayGdinh: ['', [Validators.required]],
         tchucGdinh: ['', [Validators.required]],
         ketLuan: [],
+        ketLuanCuoi: [],
         kqDanhGia: [],
         lyDoTuChoi: [''],
         trangThai: [],
         tenTrangThai: [],
+        soBbNtbq: [],
+        tenThuKho: [],
+        tenKtvBq: [],
+        tenLdcc: [],
+        slKhKb: [],
+        slTtKtra: [],
       }
     );
   }
@@ -267,7 +274,9 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent extends Base2Component im
         maLoKho: data.maLoKho,
         tenLoKho: data.tenLoKho,
         soLuongQdGiaoNvNh: data.soLuong * 1000,
-        soLuongDaNhap: soLuongNhap.data
+        soLuongDaNhap: soLuongNhap.data,
+        // soBbNtbq: data.listBienBanNghiemThuBq.find(item => item.id === Math.min(...data.listBienBanNghiemThuBq.map(item => item.id))).soBb,
+        tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho,
       })
     }
   }
@@ -313,6 +322,8 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent extends Base2Component im
         if (res.data) {
           const data = res.data;
           this.dataTableChiTieu = data.ketQuaKiemTra;
+          this.listFileDinhKem = data.fileDinhKems;
+          this.listFileDinhKemKTCL = data.fileDinhKemsKtcl;
           this.helperService.bidingDataInFormGroup(this.formData, data);
           await this.bindingDataQd(data.idQdGiaoNvNh);
           let dataDdiem = this.listDiaDiemNhap.filter(item => item.id == data.idDdiemGiaoNvNh)[0];
@@ -334,6 +345,7 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent extends Base2Component im
       }
       let body = this.formData.value;
       body.fileDinhKems = this.listFileDinhKem;
+      body.fileDinhKemsKtcl = this.listFileDinhKemKTCL;
       body.ketQuaKiemTra = this.dataTableChiTieu;
       let res;
       if (this.formData.get('id').value > 0) {

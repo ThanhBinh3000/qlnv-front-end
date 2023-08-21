@@ -1,33 +1,22 @@
 import { cloneDeep } from 'lodash';
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Subject } from 'rxjs';
-import { DialogThemBienbanNghiemThuKeLotComponent } from 'src/app/components/dialog/dialog-them-bien-ban-nghiem-thu-ke-lot/dialog-them-bien-ban-nghiem-thu-ke-lot.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { DanhSachDauThauService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/danhSachDauThau.service';
 import { DonviService } from 'src/app/services/donvi.service';
-import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
-import { UserService } from 'src/app/services/user.service';
-import { Globals } from 'src/app/shared/globals';
-import VNnum2words from 'vn-num2words';
 import { convertTienTobangChu, thongTinTrangThaiNhap } from 'src/app/shared/commonFunction';
 import { QuanLyNghiemThuKeLotService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/quanLyNghiemThuKeLot.service';
 import * as dayjs from 'dayjs';
 import { QuyetDinhGiaoNhapHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service';
-import { ThongTinHopDongService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/hop-dong/thongTinHopDong.service';
 import { STATUS } from "../../../../../../constants/status";
-import { BaseComponent } from 'src/app/components/base/base.component';
 import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
-import { FormBuilder, Validators } from '@angular/forms';
-import { filter } from 'rxjs/operators';
-import { HelperService } from 'src/app/services/helper.service';
+import { Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
@@ -35,7 +24,10 @@ import { convertDviTinh } from 'src/app/shared/commonFunction';
 import { DanhMucCongCuDungCuService } from 'src/app/services/danh-muc-cong-cu-dung-cu.service';
 import { convertMaCcdc } from 'src/app/shared/commonFunction';
 import { FileDinhKem } from 'src/app/models/FileDinhKem';
-
+import {
+  DialogThemMoiDmNhomHangComponent
+} from "../../../../../../components/dialog/dialog-them-moi-dm-nhom-hang/dialog-them-moi-dm-nhom-hang.component";
+import * as uuidv4 from "uuid";
 @Component({
   selector: 'app-thong-tin-bien-ban-nghiem-thu-bao-quan',
   templateUrl: './thong-tin-bien-ban-nghiem-thu-bao-quan.component.html',
@@ -74,7 +66,11 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
 
   create: any = {};
   editDataCache: { [key: string]: { edit: boolean; data: any } } = {};
-
+  danhSach: any[] = []
+  dsHangTH = []
+  dsHangPD = []
+  typeData: string;
+  typeAction: string;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -129,9 +125,9 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
 
         idPhieuNhapKho: [],
         soPhieuNhapKho: [],
-        soLuongPhieuNhapKho: [],
-        hthucBquan: ['', [Validators.required]],
-        pthucBquan: ['', [Validators.required]],
+        slThucNhap: [],
+        hthucBquan: [''],
+        pthucBquan: [''],
         dinhMucGiao: [''],
         dinhMucThucTe: [''],
         ketLuan: [''],
@@ -139,6 +135,9 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
         lyDoTuChoi: [''],
         trangThai: [],
         tenTrangThai: [],
+        tongKinhPhiDaTh: [],
+        tongKinhPhiDaThBc: [],
+        tenNganLoKho: [],
       }
     );
 
@@ -150,7 +149,6 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
 
   async ngOnInit() {
     this.spinner.show();
-    super.ngOnInit();
     try {
       this.userInfo = this.userService.getUserLogin();
       await Promise.all([
@@ -191,18 +189,11 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
   async loadDataComboBox() {
     if (this.formData.value.cloaiVthh) {
       let res = await this.danhMucService.getDetail(this.formData.value.cloaiVthh);
-      console.log(res);
       if (res.msg == MESSAGE.SUCCESS) {
         this.listPhuongThucBaoQuan = res.data?.phuongPhapBq
         this.listHinhThucBaoQuan = res.data?.hinhThucBq
       }
     }
-    // // List phương thức bảo quản
-    // this.listPhuongThucBaoQuan = [];
-    // let resPtBq = await this.danhMucService.danhMucChungGetAll('PT_BAO_QUAN');
-    // if (resPtBq.msg == MESSAGE.SUCCESS) {
-    //   this.listPhuongThucBaoQuan = resPtBq.data;
-    // }
   }
 
   isDisableField() {
@@ -248,6 +239,7 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
       tenLoaiVthh: data.tenLoaiVthh,
       tenCloaiVthh: data.tenCloaiVthh,
       moTaHangHoa: data.moTaHangHoa,
+      slThucNhap: data.soLuong,
     });
     let dataChiCuc = data.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI);
     if (dataChiCuc.length > 0) {
@@ -294,6 +286,7 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
         tenNganKho: data.tenNganKho,
         maLoKho: data.maLoKho,
         tenLoKho: data.tenLoKho,
+        tenNganLoKho: data.tenLoKho ? data.tenLoKho + " - " + data.tenNganKho : data.tenNganKho,
       })
     }
   }
@@ -319,8 +312,7 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
 
   async bindingDataSoPhieuNk(data) {
     this.formData.patchValue({
-      soPhieuNhapKho: data.soPhieuNhapKho,
-      soLuongPhieuNhapKho: data.soLuongThucNhap
+      soPhieuNhapKho: data.soPhieuNhapKho
     })
   }
 
@@ -362,17 +354,9 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
       let res = await this.quanLyNghiemThuKeLotService.getDetail(id);
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
-          this.listDviChuDongTh = res.data.children;
-          if (this.listDviChuDongTh) {
-            if (this.listDviChuDongTh && this.listDviChuDongTh.length > 0) {
-              for (let i = 0; i < this.listDviChuDongTh.length; i++) {
-                this.listDviChuDongTh[i].stt = i + 1;
-              }
-            }
-          }
-          else {
-            this.listDviChuDongTh[0] = { id: null, stt: 0 };
-          }
+          this.danhSach = res.data.children;
+          this.dsHangTH = res.data.children.filter(item => item.type === "TH")
+          this.dsHangPD = res.data.children.filter(item => item.type === "PD")
           this.helperService.bidingDataInFormGroup(this.formData, res.data);
           await this.bindingDataQd(res.data?.idQdGiaoNvNh);
           let dataDdNhap = this.listDiaDiemNhap.filter(item => item.id == res.data.idDdiemGiaoNvNh)[0];
@@ -382,8 +366,8 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
               this.danhSachFileDinhKem.push(item)
             })
           }
-
           this.bindingDataDdNhap(dataDdNhap);
+          this.viewTableTH()
         }
       }
     }
@@ -418,7 +402,6 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
 
 
   addRow() {
-    console.log(this.create)
     this.listDviChuDongTh = [
       ...this.listDviChuDongTh,
       this.create
@@ -750,8 +733,7 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
           return;
         }
         let body = this.formData.value;
-        body.detail = this.listDviChuDongTh;
-        // body.detailDm = this.detail;
+        body.detail = this.danhSach;
         if (this.danhSachFileDinhKem.length > 0) {
           this.danhSachFileDinhKem.forEach(item => {
             this.listFile.push(item)
@@ -833,7 +815,6 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
-    console.log(this.listCcdc)
   };
 
   convertMaCcdc(maCcdc: string) {
@@ -848,7 +829,321 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
         tichLuong: (res.data.tichLuongTkLt - res.data.tichLuongKdLt) > 0 ? res.data.tichLuongTkLt - res.data.tichLuongKdLt : 0,
         loaiHinhKho: res.data.lhKho
       });
-      console.log(this.formData.get('tichLuong').value)
     }
+  }
+
+  async addTH(row?: any) {
+    this.typeData = "TH"
+    this.typeAction = "ADD"
+    await this.add(row)
+  }
+
+  async updateTH(row) {
+    this.typeData = "TH"
+    this.typeAction = "UPDATE"
+    await this.add(row)
+  }
+
+  async addRowTH(row?: any) {
+    this.typeData = "TH"
+    this.typeAction = "ADD"
+    await this.add(row, true)
+  }
+
+  async addPD(row?: any) {
+    this.typeData = "PD"
+    this.typeAction = "ADD"
+    await this.add(row)
+  }
+
+  async updatePD(row) {
+    this.typeData = "PD"
+    this.typeAction = "UPDATE"
+    await this.add(row)
+  }
+
+  async addRowPD(row?: any) {
+    this.typeData = "PD"
+    this.typeAction = "ADD"
+    await this.add(row, true)
+  }
+
+  async add(row?: any, isChildren?) {
+    if (!row) this.typeAction = "ADD"
+
+    const modalQD = this.modal.create({
+      nzTitle: 'MẶT HÀNG SỐ LƯỢNG VÀ GIÁ TRỊ HÀNG DỰ TRỮ QUỐC GIA',
+      nzContent: DialogThemMoiDmNhomHangComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '1200px',
+      nzFooter: null,
+      nzComponentParams: {
+        data: row,
+        typeData: this.typeData,
+        typeAction: this.typeAction,
+        isChildren: isChildren
+      },
+    });
+    modalQD.afterClose.subscribe(async (data) => {
+      if (data) {
+        if (this.typeData === "TH") {
+          if (this.typeAction === "ADD") {
+            if (isChildren) {
+              this.addDataTH({
+                ...row,
+                ...data
+              })
+            } else this.addDataTH(data)
+          } else
+            this.updateDataTH({
+              ...row,
+              ...data
+            })
+        }
+        if (this.typeData === "PD") {
+          if (this.typeAction === "ADD") {
+            if (isChildren) {
+              this.addDataPD({
+                ...row,
+                ...data
+              })
+            } else this.addDataPD(data)
+          } else
+            this.updateDataPD({
+              ...row,
+              ...data
+            })
+        }
+        this.updateDataTable()
+      }
+    });
+  }
+
+  addDataTH(data) {
+    if (data.isChildren) {
+      this.dsHangTH.push({
+        ...data,
+        danhMuc: "",
+        nhomHang: "",
+        donViTinh: "",
+        idVirtual: uuidv4.v4(),
+        edit: false,
+        isParent: false,
+        type: this.typeData
+      })
+      const hangTH = this.dsHangTH.find(item => item.idParent === data.idParent)
+      const index = this.dsHangTH.findIndex(item => item.idParent === data.idParent)
+      const tongGiaTri = Number(hangTH.tongGiaTri) + Number(data.tongGiaTri)
+      this.dsHangTH[index].tongGiaTri = tongGiaTri;
+
+      this.viewTableTH()
+
+      return
+    }
+    if (data.isMatHang) {
+      const parent = {
+        ...data,
+        idVirtual: uuidv4.v4(),
+        type: this.typeData
+      }
+      this.dsHangTH.push({
+        danhMuc: parent.danhMuc,
+        nhomHang: parent.nhomHang,
+        donViTinh: parent.donViTinh,
+        tongGiaTri: parent.tongGiaTri,
+        idVirtual: parent.idVirtual,
+        idParent: parent.idVirtual,
+        isParent: true,
+        edit: false,
+        type: this.typeData
+      })
+      this.dsHangTH.push({
+        ...data,
+        danhMuc: "",
+        nhomHang: "",
+        donViTinh: "",
+        idParent: parent.idVirtual,
+        idVirtual: uuidv4.v4(),
+        edit: false,
+        type: this.typeData
+      })
+    } else {
+      const uuid = uuidv4.v4()
+      this.dsHangTH.push({
+        ...data,
+        tongGiaTri: data.thanhTienTrongNam,
+        isParent: true,
+        idVirtual: uuid,
+        idParent: uuid,
+        edit: false,
+        type: this.typeData
+      })
+    }
+
+
+    this.viewTableTH()
+  }
+
+  updateDataTH(data) {
+    const index = this.dsHangTH.findIndex(item => data.id ? item.id == data.id : item.idVirtual === data.idVirtual)
+    this.dsHangTH[index] = data
+
+    const iParent = this.dsHangTH.findIndex(item => (item.idParent === data.idParent) && item.isParent)
+    const tongGiaTri = this.dsHangTH.filter(item => (item.idParent === data.idParent) && !item.isParent).reduce((prev, cur) => prev + cur.tongGiaTri, 0);
+    this.dsHangTH[iParent].tongGiaTri = tongGiaTri;
+
+    this.viewTableTH()
+
+  }
+
+  viewTableTH() {
+    let tableTHs = []
+    this.dsHangTH.forEach(element => {
+      if (element.isParent) {
+        const dsChildren = this.dsHangTH.filter(item => item.idParent === element.idParent)
+        tableTHs = tableTHs.concat(dsChildren)
+      }
+    });
+    let tongKinhPhiDaTh = this.dsHangTH.filter(item => item.isParent).reduce((prev, cur) => prev + cur.tongGiaTri, 0);
+    let dinhMucThucTe = (tongKinhPhiDaTh / this.formData.get("slThucNhap").value).toFixed(2)
+    let tongKinhPhiDaThBc = this.convertTien(tongKinhPhiDaTh) + ' đồng'
+    this.formData.patchValue({
+      tongKinhPhiDaTh,
+      tongKinhPhiDaThBc,
+      dinhMucThucTe
+    })
+    this.dsHangTH = cloneDeep(tableTHs)
+  }
+
+  addDataPD(data) {
+    if (data.isChildren) {
+      this.dsHangPD.push({
+        ...data,
+        danhMuc: "",
+        nhomHang: "",
+        donViTinh: "",
+        idVirtual: uuidv4.v4(),
+        edit: false,
+        isParent: false,
+        type: this.typeData
+      })
+      const hangPD = this.dsHangPD.find(item => item.idParent === data.idParent)
+      const index = this.dsHangPD.findIndex(item => item.idParent === data.idParent)
+      const tongGiaTri = Number(hangPD.tongGiaTri) + Number(data.tongGiaTri)
+      this.dsHangPD[index].tongGiaTri = tongGiaTri;
+
+      this.viewTablePD()
+
+      return
+    }
+    if (data.isMatHang) {
+      const parent = {
+        ...data,
+        idVirtual: uuidv4.v4(),
+        type: this.typeData
+      }
+      this.dsHangPD.push({
+        danhMuc: parent.danhMuc,
+        nhomHang: parent.nhomHang,
+        donViTinh: parent.donViTinh,
+        tongGiaTri: parent.tongGiaTri,
+        idVirtual: parent.idVirtual,
+        idParent: parent.idVirtual,
+        isParent: true,
+        edit: false,
+        type: this.typeData
+      })
+      this.dsHangPD.push({
+        ...data,
+        danhMuc: "",
+        nhomHang: "",
+        donViTinh: "",
+        idParent: parent.idVirtual,
+        idVirtual: uuidv4.v4(),
+        edit: false,
+        type: this.typeData
+      })
+    } else {
+      const uuid = uuidv4.v4()
+      this.dsHangPD.push({
+        ...data,
+        tongGiaTri: data.thanhTienTrongNam,
+        isParent: true,
+        idVirtual: uuid,
+        idParent: uuid,
+        edit: false,
+        type: this.typeData
+      })
+    }
+    this.viewTablePD()
+  }
+
+  updateDataPD(data) {
+    const index = this.dsHangPD.findIndex(item => data.id ? item.id == data.id : item.idVirtual === data.idVirtual)
+    this.dsHangPD[index] = data
+
+    const iParent = this.dsHangPD.findIndex(item => (item.idParent === data.idParent) && item.isParent)
+    const tongGiaTri = this.dsHangPD.filter(item => (item.idParent === data.idParent) && !item.isParent).reduce((prev, cur) => prev + cur.tongGiaTri, 0);
+    this.dsHangPD[iParent].tongGiaTri = tongGiaTri;
+
+    this.viewTablePD()
+  }
+
+  viewTablePD() {
+    let tablePDs = []
+    this.dsHangPD.forEach(element => {
+      if (element.isParent) {
+        const dsChildren = this.dsHangPD.filter(item => item.idParent === element.idParent)
+        tablePDs = tablePDs.concat(dsChildren)
+      }
+    });
+    this.dsHangPD = cloneDeep(tablePDs)
+  }
+
+  updateDataTable() {
+    this.danhSach = []
+    this.danhSach = this.danhSach.concat(this.dsHangTH)
+    this.danhSach = this.danhSach.concat(this.dsHangPD)
+  }
+
+  xoa(row, type) {
+    if (type === "TH") {
+      if (row.id)
+        this.dsHangTH = this.dsHangTH.filter(item => item.id !== row.id)
+      else
+        this.dsHangTH = this.dsHangTH.filter(item => item.idVirtual !== row.idVirtual)
+      if (row.isParent)
+        this.dsHangTH = this.dsHangTH.filter(item => item.idParent !== row.idParent)
+
+      let tongKinhPhiDaTh = this.dsHangTH.reduce((prev, cur) => prev + cur.tongGiaTri, 0);
+      if (tongKinhPhiDaTh > 0) {
+        let tongKinhPhiDaThBc = this.convertTien(tongKinhPhiDaTh) + ' đồng'
+        this.formData.patchValue({
+          tongKinhPhiDaTh,
+          tongKinhPhiDaThBc
+        })
+      } else {
+        this.formData.patchValue({
+          tongKinhPhiDaTh: "",
+          tongKinhPhiDaThBc: ""
+        })
+      }
+
+      this.dsHangTH = cloneDeep(this.dsHangTH)
+    }
+    if (type === "PD") {
+      if (row.id)
+        this.dsHangPD = this.dsHangPD.filter(item => item.id !== row.id)
+      else
+        this.dsHangPD = this.dsHangPD.filter(item => item.idVirtual !== row.idVirtual)
+
+
+      if (row.isParent)
+        this.dsHangPD = this.dsHangPD.filter(item => item.idParent !== row.idParent)
+
+      this.dsHangPD = cloneDeep(this.dsHangPD)
+    }
+    this.updateDataTable()
   }
 }

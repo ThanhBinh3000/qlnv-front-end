@@ -13,6 +13,7 @@ import dayjs from "dayjs";
 import {STATUS} from "../../../../../constants/status";
 import {DxChiCucPvcService} from "../../../../../services/dinh-muc-nhap-xuat-bao-quan/pvc/dx-chi-cuc-pvc.service";
 import {PvcDxChiCucCtiet} from "../../de-xuat-nc-chi-cuc-pvc/them-moi-dx-chi-cuc-pvc/them-moi-dx-chi-cuc-pvc.component";
+import {AMOUNT_ONE_DECIMAL} from "../../../../../Utility/utils";
 
 @Component({
   selector: 'app-them-moi-tong-hop-dx-cuc-pvc',
@@ -28,6 +29,7 @@ export class ThemMoiTongHopDxCucPvcComponent extends Base2Component implements O
   dataEdit: { [key: string]: { edit: boolean; data: PvcDxChiCucCtiet } } = {};
   formDataTongHop: FormGroup
   expandSet = new Set<number>();
+  amount = AMOUNT_ONE_DECIMAL;
 
   constructor(
     httpClient: HttpClient,
@@ -50,6 +52,7 @@ export class ThemMoiTongHopDxCucPvcComponent extends Base2Component implements O
       fileDinhKems: [null],
       ghiChu: [null],
       lyDoTuChoi: [null],
+      soQdGiaoCtieu: [null],
       listQlDinhMucPvcDxCcdcDtl: [null],
     });
     this.formDataTongHop = this.fb.group({
@@ -186,8 +189,7 @@ export class ThemMoiTongHopDxCucPvcComponent extends Base2Component implements O
     let res = await this.createUpdate(this.formData.value)
     if (res) {
       this.goBack()
-    }
-    else {
+    } else {
       this.convertListData()
     }
   }
@@ -202,7 +204,7 @@ export class ThemMoiTongHopDxCucPvcComponent extends Base2Component implements O
           const data = res.data;
           this.helperService.bidingDataInFormGroup(this.formData, data);
           this.formData.patchValue({
-            soCv : this.formData.value.soCv  ? this.formData.value.soCv.split('/')[0] : null
+            soCv: this.formData.value.soCv ? this.formData.value.soCv.split('/')[0] : null
           })
           this.fileDinhKem = data.listFileDinhKems;
           this.dataTable = data.listQlDinhMucPvcDxCcdcDtl;
@@ -224,16 +226,26 @@ export class ThemMoiTongHopDxCucPvcComponent extends Base2Component implements O
   async pheDuyet() {
     let trangThai;
     switch (this.formData.value.trangThai) {
-      case STATUS.DU_THAO :
-      case STATUS.TU_CHOI_LDV : {
-        trangThai = STATUS.CHO_DUYET_LDV;
+      case STATUS.CHO_DUYET_LDTC : {
+        trangThai = STATUS.DA_DUYET_LDTC;
         break;
       }
-      case STATUS.CHO_DUYET_LDV : {
-        trangThai = STATUS.DA_DUYET_LDV
+      case STATUS.DU_THAO : {
+        trangThai = STATUS.CHO_DUYET_LDTC;
+        break;
       }
     }
     await this.approve(this.id, trangThai, 'Bạn có chắc chắn muốn duyệt?')
+  }
+
+  async tuChoi() {
+    let trangThai;
+    switch (this.formData.value.trangThai) {
+      case STATUS.CHO_DUYET_LDTC : {
+        trangThai = STATUS.TU_CHOI_LDTC
+      }
+    }
+    await this.reject(this.id, trangThai, 'Bạn có chắc chắn muốn từ chối?')
   }
 
   convertListData() {
@@ -257,7 +269,7 @@ export class ThemMoiTongHopDxCucPvcComponent extends Base2Component implements O
     this.dataTable = arr
   }
 
-  sumSoLuong(column: string, tenCcdc : string, type?) {
+  sumSoLuong(column: string, tenCcdc: string, type?) {
     let sl = 0;
     let arr = [];
     this.dataTable.forEach(item => {
@@ -268,7 +280,7 @@ export class ThemMoiTongHopDxCucPvcComponent extends Base2Component implements O
       }
     })
     arr = arr.filter(item => item.tenCcdc == tenCcdc)
-    if (arr && arr.length> 0) {
+    if (arr && arr.length > 0) {
       if (!type) {
         const sum = arr.reduce((prev, cur) => {
           prev += cur[column]
@@ -315,4 +327,6 @@ export class ThemMoiTongHopDxCucPvcComponent extends Base2Component implements O
       this.expandSet.delete(id);
     }
   }
+
+  protected readonly AMOUNT_ONE_DECIMAL = AMOUNT_ONE_DECIMAL;
 }

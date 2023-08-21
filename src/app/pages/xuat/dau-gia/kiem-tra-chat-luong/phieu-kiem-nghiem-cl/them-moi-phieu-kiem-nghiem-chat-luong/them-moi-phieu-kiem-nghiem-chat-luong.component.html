@@ -1,30 +1,30 @@
 <nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="btn-affix">
-  <div class="btn-group">
+  <div class="btn-group" *ngIf="!isViewOnModal">
     <button class="btn btn-sub" (click)="goBack()">
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
     <button
-      *ngIf=" userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_KNCL_DUYET_TP') && (formData.value.trangThai===STATUS.CHO_DUYET_TP) 
+      *ngIf=" userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_KNCL_DUYET_TP') && (formData.value.trangThai===STATUS.CHO_DUYET_TP)
     ||userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_KNCL_DUYET_LDCUC') && (formData.value.trangThai===STATUS.CHO_DUYET_LDC)"
       type="button" class="btn btn-sub do" (click)="pheDuyet(false)">
       <i class="icon htvbdh_tcdt_tuchoi"></i>
       <span>Từ chối</span>
     </button>
     <button
-      *ngIf="userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_KNCL_DUYET_TP') && (formData.value.trangThai===STATUS.CHO_DUYET_TP) 
+      *ngIf="userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_KNCL_DUYET_TP') && (formData.value.trangThai===STATUS.CHO_DUYET_TP)
     ||userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_KNCL_DUYET_LDCUC') && (formData.value.trangThai===STATUS.CHO_DUYET_LDC)"
       type="button" class="btn btn-sub xanh-nhat" (click)="pheDuyet(true)">
       <i class="icon htvbdh_tcdt_pheduyet"></i>
       <span>Duyệt</span>
     </button>
-    <button *ngIf="  userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_KNCL_THEM') && ((formData.value.trangThai===STATUS.DU_THAO) 
+    <button *ngIf="  userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_KNCL_THEM') && ((formData.value.trangThai===STATUS.DU_THAO)
     || (formData.value.trangThai===STATUS.TU_CHOI_TP) || (formData.value.trangThai===STATUS.TU_CHOI_LDC))"
       type="button" class="btn btn-sub xanh-nhat" (click)="save(true)">
       <i class="icon htvbdh_tcdt_guiduyet"></i>
       <span>Lưu và gửi duyệt</span>
     </button>
-    <button *ngIf=" userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_KNCL_THEM') && ((formData.value.trangThai===STATUS.DU_THAO) 
+    <button *ngIf=" userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_KNCL_THEM') && ((formData.value.trangThai===STATUS.DU_THAO)
     || (formData.value.trangThai===STATUS.TU_CHOI_TP) || (formData.value.trangThai===STATUS.TU_CHOI_LDC))"
       type="button" class="btn btn-main" (click)="save()">
       <i class="icon htvbdh_tcdt_save"></i>
@@ -55,12 +55,10 @@
         <form nzLayout="vertical" nz-form [formGroup]="formData">
           <div nz-row [nzGutter]="[24]">
             <div nz-col nzSpan="2">
-              <nz-form-item class="form-item">
-                <nz-form-label [nzNoColon]="true">
-                  Năm kế hoạch
-                </nz-form-label>
-                <nz-form-control [nzErrorTip]="error">
-                  <nz-select formControlName="nam" nzDisabled>
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">Năm kế hoạch</nz-form-label>
+                <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
+                  <nz-select formControlName="nam" [nzDisabled]="isDisabled()">
                     <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                   </nz-select>
                 </nz-form-control>
@@ -86,7 +84,7 @@
             </div>
             <div nz-col nzSpan="3">
               <nz-form-item class="form-item">
-                <nz-form-label [nzNoColon]="true"> Số
+                <nz-form-label nzRequired [nzNoColon]="true"> Số
                   BB lấy mẫu/bàn giao mẫu</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isDisabledBb() ? null :openDialogBbLm()">
@@ -236,7 +234,7 @@
             </div>
             <div nz-col [nzSpan]="3">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true"> Ngày kiểm nghiệm mẫu </nz-form-label>
+                <nz-form-label nzRequired [nzNoColon]="true"> Ngày kiểm nghiệm mẫu </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-date-picker formControlName="ngayKnghiem" nzFormat="dd/MM/yyyy" [nzDisabled]="isDisabled()">
                   </nz-date-picker>
@@ -258,16 +256,16 @@
       </nz-collapse-panel>
     </nz-collapse>
     <nz-collapse>
-      <nz-collapse-panel nzActive="true"
-        nzHeader="KẾT QUẢ ĐÁNH GIÁ CẢM QUAN: (Về màu sắc, mùi, vị, tạp chất, đánh bóng, sinh vật hại)">
+      <nz-collapse-panel nzActive="true" nzHeader="KẾT QUẢ ĐÁNH GIÁ CẢM QUAN: (Về màu sắc, mùi, vị, tạp chất, đánh bóng, sinh vật hại)">
         <form nzLayout="vertical" nz-form [formGroup]="formData">
-          <div nz-col [nzSpan]="24">
-            <div nz-col>
+          <br>
+          <div nz-row [nzGutter]="[24]">
+            <div nz-col [nzSpan]="24">
               <nz-form-item>
-                <!-- <nz-form-label></nz-form-label> -->
+<!--                <nz-form-label [nzNoColon]="true"></nz-form-label>-->
                 <nz-form-control [nzErrorTip]="error">
                   <textarea rows="3" nz-input placeholder="Nhập nội dung" [readonly]="isDisabled()"
-                    [ngClass]="isDisabled() ? 'disable' : ''" formControlName="ketQua"></textarea>
+                            [ngClass]="isDisabled() ? 'disable' : ''" formControlName="ketQua"></textarea>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -310,10 +308,10 @@
                   </td>
                   <td *ngIf="!isDisabled() ">
                     <!-- <a (click)="editRow(i)">
-                      <i class="fa fa-pencil"></i>
+                      <i class="fa fa-pencil" title="Sửa"></i>
                     </a> -->
                     <a (click)="deleteRow(i)">
-                      <i class="fa fa-trash-o do"></i>
+                      <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                     </a>
                   </td>
                 </ng-container>

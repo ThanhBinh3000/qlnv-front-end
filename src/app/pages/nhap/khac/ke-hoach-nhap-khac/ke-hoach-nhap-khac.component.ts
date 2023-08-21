@@ -141,14 +141,12 @@ export class KeHoachNhapKhacComponent implements OnInit {
     const dsTong = await this.dviService.layDonViTheoCapDo(body);
     this.danhSachCuc = dsTong[DANH_MUC_LEVEL.CUC];
     this.danhSachCuc = this.danhSachCuc.filter(item => item.type != "PB");
-    if (this.userService.isCuc()) {
-      this.searchFilter.maDviDxuat = this.userInfo.MA_DVI;
-    }
+    let vuQlh = dsTong[DANH_MUC_LEVEL.CUC].filter(item => item.maDvi == "010124" );
+    this.danhSachCuc = [...this.danhSachCuc, vuQlh[0]]
   }
   clearFilter() {
     this.searchFilter.namKhoach = null;
     this.searchFilter.soDxuat = null;
-    this.searchFilter.maDviDxuat = null;
     this.searchFilter.trangThai = null;
     this.tuNgayDxuat = null;
     this.denNgayDxuat = null;
@@ -191,7 +189,33 @@ export class KeHoachNhapKhacComponent implements OnInit {
     this.spinner.hide();
   };
   deleteSelect(){};
-  exportData(){};
+  exportData(){
+    if (this.totalRecord > 0) {
+      this.spinner.show();
+      try {
+        let body = {
+          tuNgayDxuat: this.tuNgayDxuat != null ? dayjs(this.tuNgayDxuat).format('YYYY-MM-DD') + " 00:00:00" : null,
+          denNgayDxuat: this.denNgayDxuat != null ? dayjs(this.denNgayDxuat).format('YYYY-MM-DD') + " 23:59:59" : null,
+          tuNgayDuyet: this.tuNgayDuyet != null ? dayjs(this.tuNgayDuyet).format('YYYY-MM-DD') + " 00:00:00" : null,
+          denNgayDuyet: this.denNgayDuyet != null ? dayjs(this.denNgayDuyet).format('YYYY-MM-DD') + " 23:59:59" : null,
+          namKhoach:  this.searchFilter.namKhoach,
+          soDxuat: this.searchFilter.soDxuat,
+          maDviDxuat: this.searchFilter.maDviDxuat,
+          trangThai: this.searchFilter.trangThai,
+
+        };
+        this.dxKhNhapKhacService.export(body).subscribe(
+          blob => saveAs(blob, 'danh-sach-ke-hoach-nhap_khac.xlsx')
+        );
+        this.spinner.hide();
+      }
+      catch (e) {
+        console.log('error: ', e)
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    }
+  };
   themMoi(){
     this.isDetail = true;
     this.selectedId = null;
@@ -328,5 +352,25 @@ export class KeHoachNhapKhacComponent implements OnInit {
   showList() {
     this.isDetail = false;
     this.search()
+  }
+
+  hienThiPheDuyet(data) {
+    return (this.userService.isAccessPermisson('NHDTQG_NK_KHNK_DUYETTP') && data.trangThai == STATUS.CHO_DUYET_TP)
+      || (this.userService.isAccessPermisson('NHDTQG_NK_KHNK_DUYETLDC') && data.trangThai == STATUS.CHO_DUYET_LDC)
+      || (this.userService.isAccessPermisson('NHDTQG_NK_KHNK_DUYETCBV') && data.trangThai == STATUS.DA_DUYET_LDC);
+  }
+
+  hienThiXem(data){
+    if (this.userService.isAccessPermisson('NHDTQG_NK_KHNK_XEM')) {
+      if(this.userService.isAccessPermisson('NHDTQG_NK_KHNK_THEM') && (data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_TP || data.trangThai == STATUS.TU_CHOI_LDC || data.trangThai == STATUS.TU_CHOI_CBV)) {
+        return false;
+      } else if (this.userService.isAccessPermisson('NHDTQG_NK_KHNK_DUYETTP') && data.trangThai == STATUS.CHO_DUYET_TP
+        || (this.userService.isAccessPermisson('NHDTQG_NK_KHNK_DUYETLDC') && data.trangThai == STATUS.CHO_DUYET_LDC)
+      || (this.userService.isAccessPermisson('NHDTQG_NK_KHNK_DUYETCBV') && data.trangThai == STATUS.DA_DUYET_LDC) ) {
+        return false;
+      }
+      return true;
+    }
+    return false;
   }
 }

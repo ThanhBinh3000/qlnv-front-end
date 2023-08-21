@@ -13,8 +13,14 @@
           <label class="search__label">Số quyết định</label>
           <input [(ngModel)]="searchFilter.soQd" nz-input nzSize="small" placeholder="Nhập số quyết định" />
         </div>
+        <div nz-col nzSpan="3" *ngIf="loaiVthh.startsWith('02')">
+          <label class="search__label">Loại hàng DTQG </label>
+          <nz-select [(ngModel)]="searchFilter.loaiVthh" (ngModelChange)="onChangeLoaiVthh($event)">
+            <nz-option *ngFor="let p of dsLoaiVthh" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
+          </nz-select>
+        </div>
         <div nz-col nzSpan="3">
-          <label class="search__label">Chủng loại hàng hóa </label>
+          <label class="search__label">Chủng loại hàng DTQG </label>
           <nz-select [(ngModel)]="searchFilter.cloaiVthh">
             <nz-option *ngFor="let p of dsCloaiVthh" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
           </nz-select>
@@ -54,7 +60,7 @@
       <div class="buttons">
         <button type="button" class="btn btn-do" (click)="deleteSelect()" *ngIf="userService.isCuc()
         && userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_XOA')">
-          <i class="fa fa-trash-o do"></i>
+          <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
           <span>Xóa</span>
         </button>
         <button *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_EXP')" type="button" class="btn btn-sub"
@@ -83,7 +89,8 @@
             <th class="text-center" style="width: 10%;">Số quyết định</th>
             <th class="text-center" style="width: 10%;">Ngày quyết định</th>
             <th class="text-center" style="width: 8%;">Số hợp đồng</th>
-            <th class="text-center" style="width: 11%;">Chủng loại hàng hóa</th>
+            <th class="text-center" style="width: 11%;">Loại hàng DTQG</th>
+            <th class="text-center" style="width: 11%;">Chủng loại hàng DTQG</th>
             <th class="text-center" style="width: 11%;">Thời gian nhập kho muộn nhất</th>
             <th class="text-center" style="width: 40%;">Trích yếu quyết định </th>
             <th class="text-center" style="width: 10%;">Trạng thái QĐ </th>
@@ -117,6 +124,12 @@
               <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soHd"
                   (input)="filterInTable('soHd',filterTable.soHd)" size="small" />
+              </nz-input-group>
+            </th>
+            <th>
+              <nz-input-group>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenLoaiVthh"
+                  (input)="filterInTable('tenLoaiVthh',filterTable.tenLoaiVthh)" size="small" />
               </nz-input-group>
             </th>
             <th>
@@ -174,11 +187,12 @@
               <a style="color: blue; font-weight: bold;" (click)="openHdModal(data.idHd)">{{
                 data.soHd}}</a>
             </td>
+            <td>{{ data.tenLoaiVthh}}</td>
             <td>{{ data.tenCloaiVthh}}</td>
             <td>{{ data.tgianNkho | date: 'dd/MM/YYYY' }}</td>
             <td>{{ data.trichYeu }}</td>
             <td>{{ data.tenTrangThai }}</td>
-            <td>{{ data.dtlList[0]?.tenTrangThai }}</td>
+            <td></td>
             <td>
               <a *ngIf="(userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_XEM') ||
               ((data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_TP || data.trangThai == STATUS.TU_CHOI_LDC) && userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_PHANBO')))
@@ -191,6 +205,10 @@
               && userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_THEM') ">
                 <i class=" fa fa-pencil"></i>
               </a>
+              <a (click)="redirectToThongTin(data.id, true)" *ngIf="(data.trangThai == STATUS.BAN_HANH )
+              && data.hoanThanhCapNhat ">
+                <i class=" fa fa-pencil"></i>
+              </a>
               <a *ngIf="(userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_DUYET_TP') && data.trangThai == STATUS.CHO_DUYET_TP)
               || (userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_DUYET_LDCUC') && data.trangThai == STATUS.CHO_DUYET_LDC) "
                 (click)="redirectToThongTin(data.id, true)">
@@ -198,7 +216,7 @@
               </a>
               <a (click)="xoaItem(data)" *ngIf="userService.isCuc() && data.trangThai == STATUS.DU_THAO
               && userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_XOA')">
-                <i class="fa fa-trash-o do"></i>
+                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
               </a>
             </td>
           </tr>

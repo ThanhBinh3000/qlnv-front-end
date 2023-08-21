@@ -1,0 +1,27 @@
+::ng-deep {
+    .flex-end {
+        display: flex;
+        justify-content: flex-end !important;
+    }
+
+    .hide-select-search.ant-select-multiple {
+        .ant-select-selection-search {
+            width: 0 !important;
+        }
+
+        .ant-select-selection-item {
+            line-height: 1.4;
+        }
+
+    }
+
+    .table-bao-cao-dcnb-chi-tiet {
+        thead {
+            tr {
+                th {
+                    text-align: center !important;
+                }
+            }
+        }
+    }
+}

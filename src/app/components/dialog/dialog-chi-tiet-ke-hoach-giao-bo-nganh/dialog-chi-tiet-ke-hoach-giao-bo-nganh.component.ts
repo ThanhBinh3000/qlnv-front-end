@@ -17,10 +17,10 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
   @ViewChild('keHoachLuongThuc') keHoachLuongThucComponent: KeHoachLuongThucComponent;
   isView: boolean = false;
   errorBn: boolean = false;
-  errorTt: boolean = false;
   nam: any;
   keHoach: any = {
     id: null,
+    sapXep: null,
     maBoNganh: null,
     tenBoNganh: null,
     tongTien: null,
@@ -31,6 +31,8 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
     ttMuaTang: null,
     ttXuatBan: null,
     ttXuatGiam: null,
+    ltGaoTon: null,
+    ltThocTon: null,
     muaTangList: [],
     xuatGiamList: [],
     xuatBanList: [],
@@ -84,6 +86,7 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
       if (boNganh) {
         this.keHoach.tenBoNganh = boNganh.tenDvi;
         this.keHoach.maBoNganh = boNganh.maDvi;
+        this.keHoach.sapXep = boNganh.sapXep;
         this.keHoach.tongTien = 0;
       }
       //fix btc = tcdt
@@ -100,7 +103,7 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
               this.dsHangHoa = [...this.dsHangHoa, ...item.child]
             });
           } else {
-            this.dsHangHoa = hangHoa.data.filter(item => item.cap == 1);
+            this.dsHangHoa = hangHoa.data.filter(item => item.cap == 2);
           }
         }
       })
@@ -120,19 +123,22 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
       //fix theo giao dien moi
       this.dsBoNganh = res.data.filter(s => s.code != 'BTC');
     }
-
   }
 
   async loadDanhMucHang() {
-    await this.danhMucService.loadDanhMucHangHoa().subscribe((hangHoa) => {
-      if (hangHoa.msg == MESSAGE.SUCCESS) {
-        const dataVatTu = hangHoa.data.filter(item => (item.ma == "02" || item.ma == "04"));
-        dataVatTu.forEach(item => {
-          this.dsHangHoa = [...this.dsHangHoa, ...item.child]
-        })
-        // this.dsHangHoa = dataVatTu.child;
-      }
-    })
+    if (this.dataEdit) {
+      this.onChangeBoNganh(this.dataEdit.maBoNganh);
+    } else {
+      this.dsHangHoa = [];
+      await this.danhMucService.loadDanhMucHangHoa().subscribe((hangHoa) => {
+        if (hangHoa.msg == MESSAGE.SUCCESS) {
+          const dataVatTu = hangHoa.data.filter(item => (item.ma == "02" || item.ma == "04"));
+          dataVatTu.forEach(item => {
+            this.dsHangHoa = [...this.dsHangHoa, ...item.child]
+          })
+        }
+      })
+    }
   }
 
   luu() {

@@ -464,73 +464,38 @@ export class PhuLuc05Component implements OnInit {
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
 			return;
 		}
-		let header = [];
-		let fieldOrder = [];
-		if (this.status.viewAppVal) {
-			header = [
-				{ t: 0, b: 5, l: 0, r: 20, val: null },
-				{ t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
-				{ t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
-				{ t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
-				{ t: 4, b: 5, l: 0, r: 0, val: 'STT' },
-				{ t: 4, b: 5, l: 1, r: 1, val: 'Tên công trình' },
-				{ t: 4, b: 5, l: 2, r: 2, val: 'Đơn vị cấp dưới' },
-				{ t: 4, b: 5, l: 3, r: 3, val: 'Địa điểm xây dựng' },
-				{ t: 4, b: 5, l: 4, r: 4, val: 'Lý do sửa chữa' },
-				{ t: 4, b: 5, l: 5, r: 5, val: 'Mục tiêu sửa chữa' },
-				{ t: 4, b: 5, l: 6, r: 6, val: 'Khối lượng sửa chữa' },
-				{ t: 4, b: 5, l: 7, r: 7, val: 'Thời gian thực hiện' },
-				{ t: 4, b: 5, l: 8, r: 8, val: 'Giá trị công trình (=Tổng mức đầu tư TMDT)' },
-				{ t: 4, b: 4, l: 9, r: 10, val: 'Quyết định phê duyệt Báo cáo Kinh tế kỹ thuật hoặc Khái toán Tổng mức đầu tư' },
-				{ t: 5, b: 5, l: 9, r: 9, val: 'Số ngày, tháng, năm ban hành' },
-				{ t: 5, b: 5, l: 10, r: 10, val: 'Giá trị dự toán hoặc khái toán Tổng mức đầu tư' },
-				{ t: 4, b: 4, l: 11, r: 12, val: 'Quyết định phê duyệt quyết toán công trình hoàn thành' },
-				{ t: 5, b: 5, l: 11, r: 11, val: 'Số ngày, tháng, năm ban hành' },
-				{ t: 5, b: 5, l: 12, r: 12, val: 'Giá trị quyết toán' },
-				{ t: 4, b: 5, l: 13, r: 13, val: 'Lũy kế cấp vốn đến ' + (this.namBcao - 1).toString() },
-				{ t: 4, b: 5, l: 14, r: 14, val: 'Kế hoạch vốn năm ' + this.namBcao.toString() },
-				{ t: 4, b: 5, l: 15, r: 15, val: 'Thẩm định' },
-				{ t: 4, b: 5, l: 16, r: 16, val: 'Chênh lệch giữa thẩm định của DVCT và nhu cầu của DVCD' },
-				{ t: 4, b: 5, l: 17, r: 17, val: 'Kế hoạch năm ' + (this.namBcao + 1).toString() },
-				{ t: 4, b: 5, l: 18, r: 18, val: 'Kế hoạch năm ' + (this.namBcao + 2).toString() },
-				{ t: 4, b: 5, l: 19, r: 19, val: 'Ghi chú' },
-				{ t: 4, b: 5, l: 20, r: 20, val: 'Ý kiến của DVCT' },
-			]
-			fieldOrder = ['stt', 'tenCongTrinh', 'cucKhuVuc', 'diaDiemXd', 'lyDo', 'mucTieu', 'khoiLuong', 'thoiGianThucHien', 'giaTriCongTrinh',
-				'qdPdBcaoTgianBanHanh', 'qdPdBcaoGtriDtoanKtoanTmdt', 'qdPdQtoanTgianBanHanh', 'qdPdQtoanGtriQtoan', 'luyKeVapVon', 'keHoachVon', 'keHoachVonTd',
-				'chenhLech', 'keHoachNamDtN1', 'keHoachNamDtN2', 'ghiChu', 'ykienDviCtren']
-		} else {
-			header = [
-				{ t: 0, b: 5, l: 0, r: 17, val: null },
-				{ t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
-				{ t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
-				{ t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
-				{ t: 4, b: 5, l: 0, r: 0, val: 'STT' },
-				{ t: 4, b: 5, l: 1, r: 1, val: 'Tên công trình' },
-				{ t: 4, b: 5, l: 2, r: 2, val: 'Đơn vị cấp dưới' },
-				{ t: 4, b: 5, l: 3, r: 3, val: 'Địa điểm xây dựng' },
-				{ t: 4, b: 5, l: 4, r: 4, val: 'Lý do sửa chữa' },
-				{ t: 4, b: 5, l: 5, r: 5, val: 'Mục tiêu sửa chữa' },
-				{ t: 4, b: 5, l: 6, r: 6, val: 'Khối lượng sửa chữa' },
-				{ t: 4, b: 5, l: 7, r: 7, val: 'Thời gian thực hiện' },
-				{ t: 4, b: 5, l: 8, r: 8, val: 'Giá trị công trình (=Tổng mức đầu tư TMDT)' },
-				{ t: 4, b: 4, l: 9, r: 10, val: 'Quyết định phê duyệt Báo cáo Kinh tế kỹ thuật hoặc Khái toán Tổng mức đầu tư' },
-				{ t: 5, b: 5, l: 9, r: 9, val: 'Số ngày, tháng, năm ban hành' },
-				{ t: 5, b: 5, l: 10, r: 10, val: 'Giá trị dự toán hoặc khái toán Tổng mức đầu tư' },
-				{ t: 4, b: 4, l: 11, r: 12, val: 'Quyết định phê duyệt quyết toán công trình hoàn thành' },
-				{ t: 5, b: 5, l: 11, r: 11, val: 'Số ngày, tháng, năm ban hành' },
-				{ t: 5, b: 5, l: 12, r: 12, val: 'Giá trị quyết toán' },
-				{ t: 4, b: 5, l: 13, r: 13, val: 'Lũy kế cấp vốn đến ' + (this.namBcao - 1).toString() },
-				{ t: 4, b: 5, l: 14, r: 14, val: 'Kế hoạch vốn năm ' + this.namBcao.toString() },
-				{ t: 4, b: 5, l: 15, r: 15, val: 'Kế hoạch năm ' + (this.namBcao + 1).toString() },
-				{ t: 4, b: 5, l: 16, r: 16, val: 'Kế hoạch năm ' + (this.namBcao + 2).toString() },
-				{ t: 4, b: 5, l: 17, r: 17, val: 'Ghi chú' },
-			]
-			fieldOrder = ['stt', 'tenCongTrinh', 'cucKhuVuc', 'diaDiemXd', 'lyDo', 'mucTieu', 'khoiLuong', 'thoiGianThucHien', 'giaTriCongTrinh',
-				'qdPdBcaoTgianBanHanh', 'qdPdBcaoGtriDtoanKtoanTmdt', 'qdPdQtoanTgianBanHanh', 'qdPdQtoanGtriQtoan', 'luyKeVapVon', 'keHoachVon', 'keHoachNamDtN1',
-				'keHoachNamDtN2', 'ghiChu']
-		}
-
+		const header = [
+			{ t: 0, b: 5, l: 0, r: 20, val: null },
+			{ t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
+			{ t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
+			{ t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
+			{ t: 4, b: 5, l: 0, r: 0, val: 'STT' },
+			{ t: 4, b: 5, l: 1, r: 1, val: 'Tên công trình' },
+			{ t: 4, b: 5, l: 2, r: 2, val: 'Đơn vị cấp dưới' },
+			{ t: 4, b: 5, l: 3, r: 3, val: 'Địa điểm xây dựng' },
+			{ t: 4, b: 5, l: 4, r: 4, val: 'Lý do sửa chữa' },
+			{ t: 4, b: 5, l: 5, r: 5, val: 'Mục tiêu sửa chữa' },
+			{ t: 4, b: 5, l: 6, r: 6, val: 'Khối lượng sửa chữa' },
+			{ t: 4, b: 5, l: 7, r: 7, val: 'Thời gian thực hiện' },
+			{ t: 4, b: 5, l: 8, r: 8, val: 'Giá trị công trình (=Tổng mức đầu tư TMDT)' },
+			{ t: 4, b: 4, l: 9, r: 10, val: 'Quyết định phê duyệt Báo cáo Kinh tế kỹ thuật hoặc Khái toán Tổng mức đầu tư' },
+			{ t: 5, b: 5, l: 9, r: 9, val: 'Số ngày, tháng, năm ban hành' },
+			{ t: 5, b: 5, l: 10, r: 10, val: 'Giá trị dự toán hoặc khái toán Tổng mức đầu tư' },
+			{ t: 4, b: 4, l: 11, r: 12, val: 'Quyết định phê duyệt quyết toán công trình hoàn thành' },
+			{ t: 5, b: 5, l: 11, r: 11, val: 'Số ngày, tháng, năm ban hành' },
+			{ t: 5, b: 5, l: 12, r: 12, val: 'Giá trị quyết toán' },
+			{ t: 4, b: 5, l: 13, r: 13, val: 'Lũy kế cấp vốn đến ' + (this.namBcao - 1).toString() },
+			{ t: 4, b: 5, l: 14, r: 14, val: 'Kế hoạch vốn năm ' + this.namBcao.toString() },
+			{ t: 4, b: 5, l: 15, r: 15, val: 'Thẩm định' },
+			{ t: 4, b: 5, l: 16, r: 16, val: 'Chênh lệch giữa thẩm định của DVCT và nhu cầu của DVCD' },
+			{ t: 4, b: 5, l: 17, r: 17, val: 'Kế hoạch năm ' + (this.namBcao + 1).toString() },
+			{ t: 4, b: 5, l: 18, r: 18, val: 'Kế hoạch năm ' + (this.namBcao + 2).toString() },
+			{ t: 4, b: 5, l: 19, r: 19, val: 'Ghi chú' },
+			{ t: 4, b: 5, l: 20, r: 20, val: 'Ý kiến của DVCT' },
+		]
+		const fieldOrder = ['stt', 'tenCongTrinh', 'cucKhuVuc', 'soLuongTd', 'diaDiemXd', 'lyDo', 'mucTieu', 'khoiLuong', 'thoiGianThucHien', 'giaTriCongTrinh',
+			'qdPdBcaoTgianBanHanh', 'qdPdBcaoGtriDtoanKtoanTmdt', 'qdPdQtoanTgianBanHanh', 'qdPdQtoanGtriQtoan', 'luyKeVapVon', 'keHoachVon', 'keHoachVonTd',
+			'chenhLech', 'keHoachNamDtN1', 'keHoachNamDtN2', 'ghiChu', 'ykienDviCtren']
 
 		const filterData = this.lstCtietBcao.map(item => {
 			const row: any = {};

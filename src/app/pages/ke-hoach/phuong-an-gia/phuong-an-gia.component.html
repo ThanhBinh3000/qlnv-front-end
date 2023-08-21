@@ -1,9 +1,9 @@
 <nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
     <ul nz-menu nzMode="horizontal">
-        <li nz-menu-item nzSelected (click)="selectTab(0)">
+        <li nz-menu-item nzSelected  (click)="selectTab(0)" *ngIf="userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT')" >
             Thóc, Gạo, Muối
         </li>
-        <li nz-menu-item (click)="selectTab(1)" *ngIf="userService.isTongCuc()">
+        <li nz-menu-item  (click)="selectTab(1)" *ngIf="userService.isTongCuc() && userService.isAccessPermisson('KHVDTNSNN_PAGIA_VT') " >
             Vật tư, thiết bị
         </li>
         <!-- <li nz-menu-item (click)="selectTab(2)" *ngIf="userService.isTongCuc()">

@@ -1,10 +1,10 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { MuaBuComponent } from "../dialog-chi-tiet-ke-hoach-giao-bo-nganh-ubtvqh-mua-bu-bo-sung/mua-bu/mua-bu.component";
-import { NzModalRef } from "ng-zorro-antd/modal";
-import { DanhMucService } from "../../../services/danhmuc.service";
-import { Globals } from "../../../shared/globals";
-import { MESSAGE } from "../../../constants/message";
-import { MuabuBosungComponent } from "./muabu-bosung/muabu-bosung.component";
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {MuaBuComponent} from "../dialog-chi-tiet-ke-hoach-giao-bo-nganh-ubtvqh-mua-bu-bo-sung/mua-bu/mua-bu.component";
+import {NzModalRef} from "ng-zorro-antd/modal";
+import {DanhMucService} from "../../../services/danhmuc.service";
+import {Globals} from "../../../shared/globals";
+import {MESSAGE} from "../../../constants/message";
+import {MuabuBosungComponent} from "./muabu-bosung/muabu-bosung.component";
 import {DonviService} from "../../../services/donvi.service";
 
 @Component({
@@ -31,12 +31,14 @@ export class DialogQdMuabubosungTtcpComponent implements OnInit {
   dsBoNganh: any[];
   dsHangHoa: any[];
   dataEdit: any;
+
   constructor(
     private readonly _modalRef: NzModalRef,
     private danhMucService: DanhMucService,
     private donviService: DonviService,
     public globals: Globals
-  ) { }
+  ) {
+  }
 
   async ngOnInit() {
     this.bindingData(this.dataEdit)
@@ -76,7 +78,7 @@ export class DialogQdMuabubosungTtcpComponent implements OnInit {
             }
           });
         } else {
-          this.dsHangHoa = hangHoa.data.filter(item => item.cap == 1);
+          this.dsHangHoa = hangHoa.data.filter(item => item.cap == 2);
         }
       }
     })
@@ -93,12 +95,9 @@ export class DialogQdMuabubosungTtcpComponent implements OnInit {
   }
 
   async loadDanhMucHang() {
-    await this.danhMucService.loadDanhMucHangHoa().subscribe((hangHoa) => {
-      if (hangHoa.msg == MESSAGE.SUCCESS) {
-        const dataVatTu = hangHoa.data.filter(item => item.ma == "02");
-        this.dsHangHoa = dataVatTu[0].child;
-      }
-    })
+    if (this.dataEdit) {
+      this.onChangeBoNganh(this.dataEdit.maBoNganh);
+    }
   }
 
   luu() {

@@ -32,7 +32,7 @@ export class DieuchinhLuachonMuattComponent implements OnInit {
 
   searchFilter = {
     soQdDc: '',
-    namKh: dayjs().get('year'),
+    namKh: '',
     ngayKyDc: '',
     trichYeu: '',
   };
@@ -199,7 +199,7 @@ export class DieuchinhLuachonMuattComponent implements OnInit {
   clearFilter() {
     this.searchFilter = {
       soQdDc: '',
-      namKh: dayjs().get('year'),
+      namKh: '',
       ngayKyDc: '',
       trichYeu: '',
     };

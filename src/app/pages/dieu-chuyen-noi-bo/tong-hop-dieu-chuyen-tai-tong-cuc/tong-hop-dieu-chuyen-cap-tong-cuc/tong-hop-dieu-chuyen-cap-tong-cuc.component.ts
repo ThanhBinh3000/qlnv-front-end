@@ -36,14 +36,16 @@ export class TongHopDieuChuyenCapTongCuc extends Base2Component implements OnIni
     // listHangHoaAll: any[] = [];
     // listChungLoaiHangHoa: any[] = [];
     listTrangThai: any[] = [
-        { ma: this.STATUS.CHUA_TAO_QD, giaTri: 'Chưa tạo QĐ' },
-        { ma: this.STATUS.DA_DU_THAO_QD, giaTri: 'Đã dự thảo QĐ' },
-        { ma: this.STATUS.DA_BAN_HANH_QD, giaTri: 'Đã ban hành QĐ' }
+        { ma: STATUS.CHUA_TAO_QD, giaTri: 'Chưa tạo QĐ' },
+        { ma: STATUS.DA_DU_THAO_QD, giaTri: 'Đã dự thảo QĐ' },
+        { ma: STATUS.DA_BAN_HANH_QD, giaTri: 'Đã ban hành QĐ' },
+        { ma: STATUS.TU_CHOI_BAN_HANH_QD, giaTri: 'Từ chối ban hành QĐ' }
     ];
     LIST_TRANG_THAI: { [key: string]: string } = {
-        '26': 'Chưa tạo QĐ',
-        '27': 'Đã dự thảo QĐ',
-        '28': 'Đã ban hành QĐ',
+        [STATUS.CHUA_TAO_QD]: 'Chưa tạo QĐ',
+        [STATUS.DA_DU_THAO_QD]: 'Đã dự thảo QĐ',
+        [STATUS.DA_BAN_HANH_QD]: 'Đã ban hành QĐ',
+        [STATUS.TU_CHOI_BAN_HANH_QD]: 'Từ chối ban hành QĐ'
     }
     listLoaiDieuChuyen: any[] = [
         { value: "CHI_CUC", giaTri: "Giữa 2 chi cục trong cùng 1 cục" },
@@ -58,7 +60,10 @@ export class TongHopDieuChuyenCapTongCuc extends Base2Component implements OnIni
     isAddNew: boolean = false;
     isEdit: boolean = false;
 
-    dataTable: any[] = []
+    dataTable: any[] = [];
+
+    isViewModalQdDc: boolean = false;
+    idQdDcSelect: number;
 
     constructor(
         httpClient: HttpClient,
@@ -100,6 +105,8 @@ export class TongHopDieuChuyenCapTongCuc extends Base2Component implements OnIni
     selectedId: number = 0;
     isVatTu: boolean = false;
     isView = false;
+    selectQdDcId: number;
+
 
     async ngOnInit() {
         try {
@@ -145,10 +152,6 @@ export class TongHopDieuChuyenCapTongCuc extends Base2Component implements OnIni
         await this.search()
     }
     async timKiem() {
-        if (this.formData.value.ngayTongHop) {
-            this.formData.value.thTuNgay = dayjs(this.formData.value.ngayTongHop[0]).format('YYYY-MM-DD')
-            this.formData.value.thDenNgay = dayjs(this.formData.value.ngayTongHop[1]).format('YYYY-MM-DD')
-        }
         await this.search();
     }
 
@@ -184,9 +187,11 @@ export class TongHopDieuChuyenCapTongCuc extends Base2Component implements OnIni
             }
         }
     }
-    taoQuyetDinhDc(id: number) {
-        if (id) {
+    taoQuyetDinhDc(id: number, qdDcId: number) {
+        if (!qdDcId) {
             this.router.navigate(['dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen', { id }]);
+        } else {
+            this.router.navigate(['dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen', { qdDcId }]);
         }
     }
     checkRoleView(trangThai: string): boolean {
@@ -199,12 +204,13 @@ export class TongHopDieuChuyenCapTongCuc extends Base2Component implements OnIni
     checkRoleDelete(trangThai: string): boolean {
         return this.userService.isTongCuc() && trangThai == STATUS.CHUA_TAO_QD
     }
-    viewDetail(id: number, isViewDetail: boolean) {
+    viewDetail(id: number, isViewDetail: boolean, qdDcId: number) {
         this.selectedId = id;
         this.isDetail = true;
         this.isViewDetail = isViewDetail;
         this.isEdit = !isViewDetail;
         this.isAddNew = false;
+        this.selectQdDcId = qdDcId;
     };
     xoaItem(item: any) {
         this.delete(item)
@@ -263,6 +269,18 @@ export class TongHopDieuChuyenCapTongCuc extends Base2Component implements OnIni
         else {
             this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
         }
+    }
+    openModalQdDc(event, id: number) {
+        event.preventDefault();
+        event.stopPropagation();
+        if (id) {
+            this.idQdDcSelect = id;
+            this.isViewModalQdDc = true
+        }
+    };
+    closeModalQdDc() {
+        this.idQdDcSelect = null;
+        this.isViewModalQdDc = false
     }
 
 }

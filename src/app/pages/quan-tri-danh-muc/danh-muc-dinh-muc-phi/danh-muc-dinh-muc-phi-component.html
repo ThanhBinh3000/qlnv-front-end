@@ -81,7 +81,7 @@
     <h3 class="label_dm">DANH SÁCH ĐỊNH MỨC PHÍ NHẬP, XUẤT, BẢO QUẢN</h3>
     <div class="buttons">
       <button type="button" class="btn btn-sub btn-xoa" (click)="xoa()">
-        <i class="fa fa-trash-o do"></i>
+        <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
         <span>Xóa</span>
       </button>
       <button type="button" class="btn btn-sub" (click)="export()">
@@ -132,10 +132,6 @@
           </th>
           <th>
             <nz-form-control nz-col [nzSpan]="24">
-              <!--              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa('save')">-->
-              <!--                <input class="search__input" formControlName="tenVthh" [readonly]="true" nz-input-->
-              <!--                       readonly="true"/>-->
-              <!--              </nz-input-group>-->
               <nz-select nzAllowClear formControlName="loaiVthh"
                          (ngModelChange)="selectLoaiHangHoa($event)"
                          nzPlaceHolder="Chọn loại hàng hóa" nzShowSearch>
@@ -144,10 +140,6 @@
             </nz-form-control>
           </th>
           <th>
-            <!--            <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa('save')">-->
-            <!--              <input class="search__input" formControlName="tenCloaiVthh" [readonly]="true" nz-input-->
-            <!--                     readonly="true"/>-->
-            <!--            </nz-input-group>-->
             <nz-select nzAllowClear formControlName="cloaiVthh"
                        nzPlaceHolder="Chọn chủng loại hàng hóa" nzShowSearch>
               <nz-option *ngFor="let p of listChungLoaiVthh" [nzLabel]="p.ten" [nzValue]="p.ma"></nz-option>
@@ -257,12 +249,6 @@
               </nz-input-group>
             </th>
             <th>
-              <!--              <nz-form-control nz-col [nzSpan]="24">-->
-              <!--                <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa('edit' , i)">-->
-              <!--                  <input [ngModelOptions]="{standalone: true}" class="search__input"-->
-              <!--                         [(ngModel)]=dataEdit[i].data.tenLoaiVthh [readonly]="true" nz-input-->
-              <!--                         readonly="true"/>-->
-              <!--                </nz-input-group>-->
               <nz-select [ngModelOptions]="{standalone: true}" nzAllowClear [(ngModel)]="dataEdit[i].data.loaiVthh"
                          (ngModelChange)="selectLoaiHangHoa($event)"
                          nzPlaceHolder="Chọn loại hàng hóa " nzShowSearch>
@@ -271,11 +257,6 @@
               <!--              </nz-form-control>-->
             </th>
             <th>
-              <!--              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa('edit' , i)">-->
-              <!--                <input [ngModelOptions]="{standalone: true}" class="search__input"-->
-              <!--                       [(ngModel)]=dataEdit[i].data.tencLoaiVthh [readonly]="true" nz-input-->
-              <!--                       readonly="true"/>-->
-              <!--              </nz-input-group>-->
               <nz-select [ngModelOptions]="{standalone: true}" nzAllowClear [(ngModel)]="dataEdit[i].data.cloaiVthh"
                          nzPlaceHolder="Chọn chủng loại hàng hóa" nzShowSearch>
                 <nz-option *ngFor="let p of listChungLoaiVthh" [nzLabel]="p.ten" [nzValue]="p.ma"></nz-option>

@@ -14,6 +14,7 @@ import { UserLogin } from "../../../models/userlogin";
 import { UserService } from "../../../services/user.service";
 import { STATUS } from "../../../constants/status";
 import { QuyetDinhGiaTCDTNNService } from "../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service";
+import {QuyetDinhGiaCuaBtcService} from "../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaCuaBtc.service";
 
 @Component({
   selector: 'dialog-them-moi-goi-thau',
@@ -35,7 +36,7 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
   thongTinCuc: DanhSachGoiThau = new DanhSachGoiThau();
   thongTinChiCuc: any[] = [];
   thongTinDiemKho: any[] = [];
-
+  thongTinCucEdit: any[] = [];
   listChiCucMap = {};
   listDiemKhoMap = {};
 
@@ -43,7 +44,6 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
   listPhuongThucDauThau: any[] = [];
   listLoaiHopDong: any[] = [];
   listHinhThucDauThau: any[] = [];
-  donGiaVat: number = 0;
   giaToiDa: any;
   userInfo: UserLogin;
   namKeHoach: any;
@@ -75,7 +75,8 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private dxuatKhLcntService: DxuatKhLcntService,
     private userService: UserService,
-    private quyetDinhGiaTCDTNNService: QuyetDinhGiaTCDTNNService
+    private quyetDinhGiaTCDTNNService: QuyetDinhGiaTCDTNNService,
+    private quyetDinhGiaCuaBtcService: QuyetDinhGiaCuaBtcService
   ) {
     this.formGoiThau = this.fb.group({
       goiThau: [null, [Validators.required]],
@@ -86,9 +87,9 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
       dviTinh: [this.dviTinh],
       soLuong: [null],
       donGiaVat: [null],
-      donGiaTamTinh: [null],
-      maDvi: ['']
-
+      maDvi: [''],
+      soQdPdGiaCuThe: [''],
+      ngayKyQdPdGiaCuThe: [''],
     });
   }
 
@@ -119,15 +120,19 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
       namKeHoach: this.namKeHoach,
       loaiVthh: this.loaiVthh,
       cloaiVthh: $event,
-      trangThai: STATUS.BAN_HANH,
-      maDvi: this.userInfo.MA_DVI
+      loaiGia: "LG03"
     }
     let pag = await this.quyetDinhGiaTCDTNNService.getPag(bodyPag)
-    if (pag.msg == MESSAGE.SUCCESS) {
-      this.donGiaVat = pag.data.giaQdVat
+    if (pag.msg == MESSAGE.SUCCESS && pag.data.length > 0) {
+      this.formGoiThau.patchValue({
+        donGiaVat: (pag.data[0].giaQdDcTcdtVat && pag.data[0].giaQdDcTcdtVat > 0)? pag.data[0].giaQdDcTcdtVat : pag.data[0].giaQdTcdtVat,
+        soQdPdGiaCuThe: pag.data[0].soQdTcdt,
+        ngayKyQdPdGiaCuThe: pag.data[0].ngayKyTcdt,
+      })
     }
     this.formGoiThau.patchValue({
-      tenCloaiVthh: cloaiSelected[0].ten
+      tenCloaiVthh: cloaiSelected[0].ten,
+      soLuong: 0
     })
     this.listCuc = [];
     this.loadListDonVi();
@@ -137,11 +142,12 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
 
   async loadListDonVi() {
     if (this.dataChiTieu) {
+      debugger
       for (let index = 0; index < this.dataChiTieu.khVatTuNhap.length; index++) {
         if (this.formGoiThau.get('cloaiVthh').value == null) {
-          if (this.dataChiTieu.khVatTuNhap[index].maVatTuCha == this.loaiVthh || this.dataChiTieu.khVatTuNhap[index].maVatTu == this.loaiVthh) {
-            this.loadThongTinCuc(index);
-          }
+          // if (this.dataChiTieu.khVatTuNhap[index].maVatTuCha == this.loaiVthh || this.dataChiTieu.khVatTuNhap[index].maVatTu == this.loaiVthh) {
+          //   this.loadThongTinCuc(index);
+          // }
         } else {
           if (this.dataChiTieu.khVatTuNhap[index].maVatTu == this.formGoiThau.get('cloaiVthh').value
             || (this.dataChiTieu.khVatTuNhap[index].maVatTuCha == this.loaiVthh && this.dataChiTieu.khVatTuNhap[index].maVatTu == null)) {
@@ -163,8 +169,13 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
 
   loadThongTinCuc(index) {
     this.ttCuc.maDvi = this.dataChiTieu.khVatTuNhap[index].maDvi;
-    this.ttCuc.tenDvi = this.dataChiTieu.khVatTuNhap[index].tenDonVi;
-    this.ttCuc.soLuongTheoChiTieu = this.dataChiTieu.khVatTuNhap[index].soLuongNhap;
+    this.ttCuc.tenDvi = this.dataChiTieu.khVatTuNhap[index].tenDvi;
+    if (this.dataChiTieu.khVatTuNhap[index].soLuongChuyenSang == null) {
+      this.ttCuc.soLuongTheoChiTieu = this.nvl(this.dataChiTieu.khVatTuNhap[index].soLuongNhap)
+    } else {
+      this.ttCuc.soLuongTheoChiTieu = this.nvl(this.dataChiTieu.khVatTuNhap[index].soLuongNhap) + this.nvl(parseFloat(this.dataChiTieu.khVatTuNhap[index].soLuongChuyenSang));
+    }
+
     this.listCuc.push(this.ttCuc);
     this.ttCuc = {
       maDvi: null,
@@ -181,7 +192,7 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
     };
     let res = await this.donviService.getTreeAll(body);
     if (res.msg == MESSAGE.SUCCESS) {
-      this.listChiCucMap[$event] = res.data[0].children;
+      this.listChiCucMap[$event] = res.data[0].children.filter(item => item.type != 'PB');
     }
     let cuc = this.listCuc.filter(item => item.maDvi == $event);
     this.thongTinCuc.soLuongTheoChiTieu = cuc[0].soLuongTheoChiTieu;
@@ -189,14 +200,8 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
   }
 
   onChangeChiCuc($event, maCuc) {
-    let chiCuc = this.listChiCucMap[maCuc].filter(item => item.maDvi == $event)[0];
-    this.listDiemKhoMap[$event] = chiCuc.children;
-  }
-
-  validateRangPrice() {
-    let value = +this.formGoiThau.get('donGiaTamTinh').value
-    let priceMax = this.giaToiDa;
-    return value <= priceMax;
+    let chiCuc = this.listChiCucMap[maCuc].find(item => item.maDvi == $event);
+    this.listDiemKhoMap[$event] = chiCuc.children.filter(item => item.type != 'PB');
   }
 
   async initForm(dataDetail) {
@@ -206,10 +211,8 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
         cloaiVthh: dataDetail.cloaiVthh,
         diaDiemNhap: dataDetail.diaDiemNhap,
         donGia: dataDetail.donGia,
-        donGiaTamTinh: dataDetail.donGiaTamTinh,
         dviTinh: dataDetail.dviTinh,
         donGiaVat: dataDetail.donGiaVat,
-        soLuong: dataDetail.soLuong,
         tenDvi: dataDetail.tenDvi,
         maDvi: dataDetail.maDvi,
         thanhTien: dataDetail.thanhTien,
@@ -220,19 +223,13 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
       } else if (dataDetail.loaiVthh) {
         await this.onChangeCloaiVthh(dataDetail.loaiVthh)
       }
+      this.formGoiThau.patchValue({
+        soLuong: dataDetail.soLuong,
+      })
       if (this.trangThai != STATUS.DU_THAO) {
         this.formGoiThau.get('donGiaVat').setValue(dataDetail.donGiaVat)
       }
       this.dataTable = dataDetail.children;
-      for (let i = 0; i < dataDetail.children.length; i++) {
-        await this.onChangeCuc(dataDetail.children[i].maDvi);
-        this.thongTinChiCuc[dataDetail.children[i].maDvi] = new DanhSachGoiThau();
-        this.thongTinCuc = new DanhSachGoiThau();
-        for (let y = 0; y < dataDetail.children[i].children.length; y++) {
-          this.onChangeChiCuc(dataDetail.children[i].children[y].maDvi, dataDetail.children[i].maDvi)
-          this.thongTinDiemKho[dataDetail.children[i].children[y].maDvi] = new DanhSachGoiThau();
-        }
-      }
     }
   }
 
@@ -244,14 +241,6 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
     }
     if (this.dataTable.length == 0) {
       this.notification.error(MESSAGE.ERROR, 'Danh sách địa điểm nhập không được để trống');
-      return;
-    }
-    if (this.giaToiDa == null) {
-      this.notification.error(MESSAGE.ERROR, 'Bạn cần lập và trình duyệt phương án giá mua tối đa, giá bán tối thiểu trước. Chỉ sau khi có giá mua tối đa bạn mới thêm được địa điểm nhập kho vì giá mua đề xuất ở đây nhập vào phải <= giá mua tối đa.');
-      return;
-    }
-    if (!this.validateRangPrice()) {
-      this.notification.error(MESSAGE.ERROR, 'Giá tạm tính phải nhỏ hơn giá mua tối đa (' + this.giaToiDa + ')');
       return;
     }
     const body = this.formGoiThau.value;
@@ -424,28 +413,52 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
     this.thongTinDiemKho[y].soLuong = null;
   }
 
-  expandSet = new Set<number>();
-  onExpandChange(id: number, checked: boolean): void {
-    if (checked) {
-      this.expandSet.add(id);
-    } else {
-      this.expandSet.delete(id);
-    }
-  }
-  expandSet2 = new Set<number>();
-  onExpandChange2(id: number, checked: boolean): void {
-    if (checked) {
-      this.expandSet2.add(id);
-    } else {
-      this.expandSet2.delete(id);
-    }
-  }
+  // expandSet = new Set<number>();
+  // onExpandChange(id: number, checked: boolean): void {
+  //   if (checked) {
+  //     this.expandSet.add(id);
+  //   } else {
+  //     this.expandSet.delete(id);
+  //   }
+  // }
+  // expandSet2 = new Set<number>();
+  // onExpandChange2(id: number, checked: boolean): void {
+  //   if (checked) {
+  //     this.expandSet2.add(id);
+  //   } else {
+  //     this.expandSet2.delete(id);
+  //   }
+  // }
 
   async getGiaToiDa(ma: string) {
-    let res = await this.dxuatKhLcntService.getGiaBanToiDa(ma, this.userInfo.MA_DVI, this.namKeHoach);
-    if (res.msg === MESSAGE.SUCCESS) {
-      this.giaToiDa = res.data;
+    let body = {
+      namKeHoach: this.namKeHoach,
+      loaiVthh: this.loaiVthh,
+      cloaiVthh: ma,
+      loaiGia: "LG01"
     }
+    let res = await this.quyetDinhGiaCuaBtcService.getQdGiaLastestBtc(body);
+    if (res.msg === MESSAGE.SUCCESS) {
+      if (res.data) {
+        let giaToiDa = 0;
+        res.data.forEach(i => {
+          let giaQdBtc = 0;
+          if(i.giaQdDcBtcVat != null && i.giaQdDcBtcVat >0) {
+            giaQdBtc = i.giaQdDcBtcVat
+          } else {
+            giaQdBtc = i.giaQdBtcVat
+          }
+          if (giaQdBtc > giaToiDa) {
+            giaToiDa = giaQdBtc;
+          }
+        })
+        this.giaToiDa = giaToiDa;
+      }
+    }
+    // let res = await this.dxuatKhLcntService.getGiaBanToiDa(ma, this.userInfo.MA_DVI, this.namKeHoach);
+    // if (res.msg === MESSAGE.SUCCESS) {
+    //   this.giaToiDa = res.data;
+    // }
   }
 
   async changeGoiThau(event?: any) {
@@ -455,5 +468,35 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
       }
     })
     await this.initForm(this.data)
+  }
+
+  nvl(item: number) {
+    if (item == undefined || item == null) {
+      return 0;
+    }
+    return item;
+  }
+
+  editRowCuc(i: number) {
+    this.thongTinCucEdit[i] =  this.dataTable[i].soLuong
+    this.dataTable[i].edit = true;
+  }
+  saveEditCuc(i: number) {
+    if (this.thongTinCucEdit[i] > (this.dataTable[i].soLuongTheoChiTieu - this.dataTable[i].soLuongDaMua)) {
+      this.notification.error(MESSAGE.ERROR, "Số lượng đã vượt quá chỉ tiêu")
+      return false;
+    }
+    this.dataTable[i].soLuong = this.thongTinCucEdit[i]
+    this.dataTable[i].edit = false;
+    let soLuong: number = 0;
+    this.dataTable.forEach(item => {
+      soLuong = soLuong + item.soLuong
+    });
+    this.formGoiThau.patchValue({
+      soLuong: soLuong
+    });
+  }
+  cancelEditCuc(i: number) {
+    this.dataTable[i].edit = false;
   }
 }

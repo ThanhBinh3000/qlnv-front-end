@@ -1,17 +1,19 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {FormBuilder, FormGroup} from '@angular/forms';
 import dayjs from 'dayjs';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { LIST_VAT_TU_HANG_HOA, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
-import { MESSAGE } from 'src/app/constants/message';
-import { UserService } from 'src/app/services/user.service';
-import { cloneDeep } from 'lodash';
-import { saveAs } from 'file-saver';
-import { TongHopPhuongAnGiaService } from 'src/app/services/ke-hoach/phuong-an-gia/tong-hop-phuong-an-gia.service';
-import { STATUS } from 'src/app/constants/status';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {PAGE_SIZE_DEFAULT, TYPE_PAG} from 'src/app/constants/config';
+import {MESSAGE} from 'src/app/constants/message';
+import {UserService} from 'src/app/services/user.service';
+import {cloneDeep} from 'lodash';
+import {saveAs} from 'file-saver';
+import {TongHopPhuongAnGiaService} from 'src/app/services/ke-hoach/phuong-an-gia/tong-hop-phuong-an-gia.service';
+import {STATUS} from 'src/app/constants/status';
 import {DanhMucService} from "../../../../../../services/danhmuc.service";
+import {Router} from "@angular/router";
+
 @Component({
   selector: 'app-tong-hop-phuong-an-gia',
   templateUrl: './tong-hop-phuong-an-gia.component.html',
@@ -19,6 +21,7 @@ import {DanhMucService} from "../../../../../../services/danhmuc.service";
 })
 export class TongHopPhuongAnGiaComponent implements OnInit {
   @Input() type: string;
+  @Input() pagType: string;
   @Output()
   getCount = new EventEmitter<any>();
   isAddNew = false;
@@ -28,7 +31,7 @@ export class TongHopPhuongAnGiaComponent implements OnInit {
   toDay = new Date();
   allChecked = false;
   listVthh: any[] = [];
-  STATUS: any;
+  STATUS = STATUS;
 
   dsNam: string[] = [];
 
@@ -46,12 +49,26 @@ export class TongHopPhuongAnGiaComponent implements OnInit {
 
   isViewDetail: boolean = false;
   idSelected: number = 0;
+  typeConst = TYPE_PAG
+
+  listTrangThaiTt = [
+    {ma: this.STATUS.DU_THAO, giaTri: "Dự thảo"},
+    {ma: this.STATUS.CHO_DUYET_LDV, giaTri: "Chờ duyệt - LĐ Vụ"},
+    {ma: this.STATUS.TU_CHOI_LDV, giaTri: "Từ chối - LĐ Vụ"},
+    {ma: this.STATUS.DA_DUYET_LDV, giaTri: "Đã duyệt - LĐ Vụ"},
+    {ma: this.STATUS.DA_BAN_HANH_QD, giaTri: "Đã ban hành QĐ"},
+  ];
+  listTrangThaiTh = [
+    {ma: this.STATUS.DA_TAO_TT, giaTri: "Đã tạo tờ trình"},
+    {ma: this.STATUS.CHUA_TAO_TT, giaTri: "Chưa tạo tờ trình"}
+  ];
   constructor(private readonly fb: FormBuilder,
     private spinner: NgxSpinnerService,
     private danhMucService: DanhMucService,
     private notification: NzNotificationService,
     public userService: UserService,
     private modal: NzModalService,
+    private router: Router,
     private tongHopPhuongAnGiaService: TongHopPhuongAnGiaService,
   ) {
     this.formData = this.fb.group({
@@ -60,7 +77,6 @@ export class TongHopPhuongAnGiaComponent implements OnInit {
       namKeHoach: [null],
       loaiVthh: [null],
     });
-    this.STATUS = STATUS
   }
   searchInTable = {
     namKeHoach: dayjs().get('year'),
@@ -86,6 +102,11 @@ export class TongHopPhuongAnGiaComponent implements OnInit {
   };
 
   async ngOnInit() {
+    if (( this.type == this.typeConst.GIA_MUA_TOI_DA && !this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_MTDBTT_TONGHOP'))
+      || ( this.type == this.typeConst.GIA_CU_THE  && !this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_GCT_TONGHOP'))
+    ) {
+      this.router.navigateByUrl('/error/401')
+    }
     this.loadDsNam();
     this.loadDsVthh();
     this.search();
@@ -327,20 +348,37 @@ export class TongHopPhuongAnGiaComponent implements OnInit {
     });
   }
 
-  filterInTable(key: string, value: string) {
+  filterInTable(key: string, value: string, type?: string) {
     if (value && value != '') {
       this.dataTable = [];
       let temp = [];
       if (this.dataTableAll && this.dataTableAll.length > 0) {
         this.dataTableAll.forEach((item) => {
-          if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
-            temp.push(item)
+          if ([ 'ngayTongHop'].includes(key)) {
+            if (item[key] && dayjs(item[key]).format('DD/MM/YYYY').indexOf(value.toString()) != -1) {
+              temp.push(item)
+            }
+          } else {
+            if (type) {
+              if ('eq' == type) {
+                if (item[key] && item[key].toString().toLowerCase() == value.toString().toLowerCase()) {
+                  temp.push(item)
+                }
+              } else {
+                if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
+                  temp.push(item)
+                }
+              }
+            } else {
+              if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
+                temp.push(item)
+              }
+            }
           }
         });
       }
       this.dataTable = [...this.dataTable, ...temp];
-    }
-    else {
+    } else {
       this.dataTable = cloneDeep(this.dataTableAll);
     }
   }
@@ -389,6 +427,14 @@ export class TongHopPhuongAnGiaComponent implements OnInit {
     } else {
       this.indeterminate = true;
     }
+  }
+
+  convertDateToString(event: any): string {
+    let result = '';
+    if (event) {
+      result = dayjs(event).format('DD/MM/YYYY').toString()
+    }
+    return result;
   }
 
 }

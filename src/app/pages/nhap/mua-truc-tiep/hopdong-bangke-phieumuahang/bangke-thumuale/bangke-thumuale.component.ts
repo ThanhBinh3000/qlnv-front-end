@@ -74,7 +74,7 @@ export class BangkeThumualeComponent extends Base2Component implements OnInit {
     this.search()
   }
 
-  themMoiBangKeMuaLe($event, data?: null, index?: number) {
+  themMoiBangKeMuaLe($event, data?: any, index?: number) {
     console.log(data, 5555);
     const modalGT = this.modal.create({
       nzTitle: 'THÊM BẢNG KÊ',
@@ -86,12 +86,14 @@ export class BangkeThumualeComponent extends Base2Component implements OnInit {
       nzFooter: null,
       nzComponentParams: {
         dataEdit: data,
+        id: data ? data.id : 0
       },
     });
     modalGT.afterClose.subscribe((data) => {
       if (!data) {
         return;
       }
+      this.search()
       if (index >= 0) {
         this.dataTable[index] = data;
       } else {

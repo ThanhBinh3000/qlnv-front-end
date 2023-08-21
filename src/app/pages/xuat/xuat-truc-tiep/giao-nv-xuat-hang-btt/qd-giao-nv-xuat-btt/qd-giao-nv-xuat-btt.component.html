@@ -11,7 +11,7 @@
                     </div>
                     <div nz-col [nzSpan]="4">
                         <label> Số quyết định </label>
-                        <input placeholder="Nhập số quyết định" nz-input formControlName="soQd" />
+                        <input placeholder="Nhập số quyết định" nz-input formControlName="soQdNv" />
                     </div>
                     <div nz-col [nzSpan]="4">
                         <label> Loại hành hóa </label>
@@ -55,7 +55,7 @@
             <div class="buttons">
                 <button type="button" class="btn btn-do" (click)="deleteMulti()"
                     *ngIf="userService.isAccessPermisson('XHDTQG_PTTT_QDGNVXH_XOA')">
-                    <i class="fa fa-trash-o do"></i>
+                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                     <span>Xóa</span>
                 </button>
                 <button type="button" class="btn btn-sub"
@@ -221,13 +221,13 @@
                              ||(userService.isAccessPermisson('XHDTQG_PTTT_QDGNVXH_DUYET_LDCUC') && data.trangThai == STATUS.TU_CHOI_TP)
                              ||(userService.isAccessPermisson('XHDTQG_PTTT_QDGNVXH_DUYET_LDCUC') && data.trangThai == STATUS.TU_CHOI_LDC)"
                                 (click)="redirectHopDong(data.id, data.idQdPdDtl)">
-                                <i class="fa fa-eye"></i>
+                                <i class="fa fa-eye" title="Xem chi tiết"></i>
                             </a>
                             <a *ngIf="(userService.isAccessPermisson('XHDTQG_PTTT_QDGNVXH_THEM') && data.trangThai == STATUS.DU_THAO)
                              ||(userService.isAccessPermisson('XHDTQG_PTTT_QDGNVXH_THEM') && data.trangThai == STATUS.TU_CHOI_TP)
                              ||(userService.isAccessPermisson('XHDTQG_PTTT_QDGNVXH_THEM') && data.trangThai == STATUS.TU_CHOI_LDC)"
                                 (click)="redirectHopDong(data.id, data.idQdPdDtl)">
-                                <i class="fa fa-pencil"></i>
+                                <i class="fa fa-pencil" title="Sửa"></i>
                             </a>
                             <a *ngIf="(userService.isAccessPermisson('XHDTQG_PTTT_QDGNVXH_DUYET_TP') && data.trangThai == STATUS.CHO_DUYET_TP)
                              ||(userService.isAccessPermisson('XHDTQG_PTTT_QDGNVXH_DUYET_LDCUC') && data.trangThai == STATUS.CHO_DUYET_LDC)"
@@ -236,7 +236,7 @@
                             </a>
                             <a *ngIf="(data.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('XHDTQG_PTTT_QDGNVXH_XOA')) "
                                 (click)="delete(data)">
-                                <i class="fa fa-trash-o do"></i>
+                                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                             </a>
                         </td>
                     </tr>

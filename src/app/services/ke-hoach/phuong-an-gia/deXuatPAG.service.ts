@@ -13,16 +13,4 @@ export class DeXuatPAGService extends BaseService {
     super(httpClient, 'phuong-an-gia/dx-pag', '/qlnv-khoach')
 
   }
-
-
-  loadQdGiaoKhLcnt(body) {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/phuong-an-gia/ds-qd-khlcnt`
-    return this._httpClient.post<OldResponseData>(url, body).toPromise();
-  }
-
-  loadQdGiaoKhBdg(body) {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/phuong-an-gia/ds-qd-khbdg`
-    return this._httpClient.post<OldResponseData>(url, body).toPromise();
-  }
-
 }

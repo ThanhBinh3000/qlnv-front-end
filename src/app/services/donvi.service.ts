@@ -79,6 +79,17 @@ export class DonviService extends BaseService {
     return this.httpClient.post<any>(url, body).toPromise();
   }
 
+  updateThuKho(body): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/dmuc-donvi/update-thu-kho`;
+    return this.httpClient.post<any>(url, body).toPromise();
+  }
+
+  getDonViTheoIdThuKho(body): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/dmuc-donvi/tat-ca/thu-kho`;
+    return this.httpClient.post<any>(url, body).toPromise();
+  }
+
+
   async layDonViTheoCapDo(
     body: any,
     capDv?: number | string,

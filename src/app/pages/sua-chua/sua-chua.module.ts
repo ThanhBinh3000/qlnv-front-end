@@ -2,53 +2,59 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { SuaChuaRoutingModule } from './sua-chua-routing.module';
-import { SuaChuaComponent } from './sua-chua.component';
-import {MainModule} from "../../layout/main/main.module";
-import {NzAffixModule} from "ng-zorro-antd/affix";
-import {NzMenuModule} from "ng-zorro-antd/menu";
-import {NzPopoverModule} from "ng-zorro-antd/popover";
-import { DanhSachHangDtqgComponent } from './danh-sach-hang-dtqg/danh-sach-hang-dtqg.component';
-import { TongHopDanhSachComponent } from './tong-hop-danh-sach/tong-hop-danh-sach.component';
-import { QuyetDinhSuaChuaComponent } from './quyet-dinh-sua-chua/quyet-dinh-sua-chua.component';
-import { XuatHangDtqgComponent } from './xuat-hang-dtqg/xuat-hang-dtqg.component';
-import { PhieuKiemDinhClComponent } from './phieu-kiem-dinh-cl/phieu-kiem-dinh-cl.component';
-import { NhapHangDtqgComponent } from './nhap-hang-dtqg/nhap-hang-dtqg.component';
-import { BaoCaoKqComponent } from './bao-cao-kq/bao-cao-kq.component';
-import {ComponentsModule} from "../../components/components.module";
-import {NzTreeViewModule} from "ng-zorro-antd/tree-view";
-import {ThemMoiTongHopComponent} from "./tong-hop-danh-sach/tham-dinh-hang-dtqg/them-moi-tong-hop/them-moi-tong-hop.component";
-import {ThemMoiQdSuaChuaComponent} from "./tong-hop-danh-sach/qd-sua-chua-dtqg/them-moi-qd-sua-chua/them-moi-qd-sua-chua.component";
-import { ThemMoiBaoCaoKqComponent } from './bao-cao-kq/them-moi-bao-cao-kq/them-moi-bao-cao-kq.component';
 import {
-    ThongTinHangSuaChuaComponent
-} from "./danh-sach-hang-dtqg/thong-tin-hang-sua-chua/thong-tin-hang-sua-chua.component";
-import {ThamDinhHangDtqgComponent} from "./tong-hop-danh-sach/tham-dinh-hang-dtqg/tham-dinh-hang-dtqg.component";
-import {QdSuaChuaDtqgComponent} from "./tong-hop-danh-sach/qd-sua-chua-dtqg/qd-sua-chua-dtqg.component";
+  ChiTietDanhSachSuaChuaComponent
+} from './danh-sach-sua-chua/chi-tiet-danh-sach-sua-chua/chi-tiet-danh-sach-sua-chua.component';
+import { DanhSachSuaChuaComponent } from "src/app/pages/sua-chua/danh-sach-sua-chua/danh-sach-sua-chua.component";
+import { DirectivesModule } from "src/app/directives/directives.module";
+import { NzStatisticModule } from "ng-zorro-antd/statistic";
+import { NzPipesModule } from "ng-zorro-antd/pipes";
+import { MainModule } from "src/app/layout/main/main.module";
+import { ComponentsModule } from "src/app/components/components.module";
+import { SuaChuaComponent } from "src/app/pages/sua-chua/sua-chua.component";
+import { TongHopComponent } from './tong-hop/tong-hop.component';
+import { TrinhThamDinhComponent } from './trinh-tham-dinh/trinh-tham-dinh.component';
+import { QuyetDinhComponent } from './quyet-dinh/quyet-dinh.component';
+import { KiemTraClComponent } from './kiem-tra-cl/kiem-tra-cl.component';
+import { BaoCaoComponent } from './bao-cao/bao-cao.component';
+import { ThemMoiTtdComponent } from './trinh-tham-dinh/them-moi-ttd/them-moi-ttd.component';
+import { ThemMoiQdComponent } from './quyet-dinh/them-moi-qd/them-moi-qd.component';
+import { ThemMoiKtraclComponent } from './kiem-tra-cl/them-moi-ktracl/them-moi-ktracl.component';
+import { ThemMoiBcComponent } from './bao-cao/them-moi-bc/them-moi-bc.component';
+import { XuatHangModule } from './xuat-hang/xuat-hang.module';
+import { ThemmoiThComponent } from './tong-hop/themmoi-th/themmoi-th.component';
+import { ChitietThComponent } from './tong-hop/chitiet-th/chitiet-th.component';
 
 
 @NgModule({
   declarations: [
     SuaChuaComponent,
-    DanhSachHangDtqgComponent,
-    TongHopDanhSachComponent,
-    QuyetDinhSuaChuaComponent,
-    XuatHangDtqgComponent,
-    PhieuKiemDinhClComponent,
-    NhapHangDtqgComponent,
-    BaoCaoKqComponent,
-    ThemMoiTongHopComponent,
-    ThemMoiQdSuaChuaComponent,
-    ThemMoiBaoCaoKqComponent,
-    ThongTinHangSuaChuaComponent,
-    ThamDinhHangDtqgComponent,
-    QdSuaChuaDtqgComponent
+    DanhSachSuaChuaComponent,
+    ChiTietDanhSachSuaChuaComponent,
+    TongHopComponent,
+    TrinhThamDinhComponent,
+    QuyetDinhComponent,
+    KiemTraClComponent,
+    BaoCaoComponent,
+    ThemMoiTtdComponent,
+    ThemMoiQdComponent,
+    ThemMoiKtraclComponent,
+    ThemMoiBcComponent,
+    ThemmoiThComponent,
+    ChitietThComponent,
   ],
   imports: [
     CommonModule,
     SuaChuaRoutingModule,
+    DirectivesModule,
+    NzStatisticModule,
+    NzPipesModule,
     MainModule,
     ComponentsModule,
-    NzTreeViewModule
+    XuatHangModule
+  ],
+  exports: [
   ]
 })
-export class SuaChuaModule { }
+export class SuaChuaModule {
+}

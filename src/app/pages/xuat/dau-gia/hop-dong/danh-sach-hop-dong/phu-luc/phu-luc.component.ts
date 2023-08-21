@@ -85,10 +85,12 @@ export class PhuLucComponent extends Base2Component implements OnInit {
 
   async loadChiTiet(id) {
     let data = await this.detail(id);
+    var ngayHlucDen = new Date(this.objHopDongHdr.ngayHluc);
     this.formData.patchValue({
       soPhuLuc: data.soPhuLuc.split('/')[0],
       thoiGianDuKienSauDc: (data.ngayHlucSauDcTu && data.ngayHlucSauDcDen) ? [data.ngayHlucSauDcTu, data.ngayHlucSauDcDen] : null,
-      thoiGianDuKien: (data.tgianGnhanTu && data.tgianGnhanDen) ? [data.tgianGnhanTu, data.tgianGnhanDen] : null
+      thoiGianDuKien: (this.objHopDongHdr.ngayHluc && ngayHlucDen.setUTCDate(ngayHlucDen.getUTCDate() + this.objHopDongHdr.tgianThienHd))?
+        [this.objHopDongHdr.ngayHluc,ngayHlucDen.setUTCDate(ngayHlucDen.getUTCDate() + this.objHopDongHdr.tgianThienHd)] : null,
     })
     this.dataTable = data.phuLucDtl;
     this.fileDinhKem = data.fileDinhKems;
@@ -117,12 +119,14 @@ export class PhuLucComponent extends Base2Component implements OnInit {
 
   async loadDsHopDong() {
     if (this.objHopDongHdr) {
+      var ngayHlucDen = new Date(this.objHopDongHdr.ngayHluc);
       this.formData.patchValue({
         idHd: this.objHopDongHdr.id ?? null,
         soHd: this.objHopDongHdr.soHd ?? null,
         tenHd: this.objHopDongHdr.tenHd ?? null,
         ngayHluc: this.objHopDongHdr.ngayHluc ?? null,
-        thoiGianDuKien: (this.objHopDongHdr.tgianGnhanTu && this.objHopDongHdr.tgianGnhanDen) ? [this.objHopDongHdr.tgianGnhanTu, this.objHopDongHdr.tgianGnhanDen] : null,
+        thoiGianDuKien: (this.objHopDongHdr.ngayHluc && ngayHlucDen.setUTCDate(ngayHlucDen.getUTCDate() + this.objHopDongHdr.tgianThienHd))?
+          [this.objHopDongHdr.ngayHluc,ngayHlucDen.setUTCDate(ngayHlucDen.getUTCDate() + this.objHopDongHdr.tgianThienHd)] : null,
         tgianThienHd: this.objHopDongHdr.tgianThienHd ?? null,
       });
       this.dataTable = [...this.dataTable, ...this.objHopDongHdr.children]

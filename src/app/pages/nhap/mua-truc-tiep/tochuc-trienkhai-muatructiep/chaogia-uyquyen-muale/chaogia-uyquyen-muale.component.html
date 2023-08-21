@@ -97,8 +97,8 @@
             </th>
             <th>
               <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.pthucMuaTrucTiep"
-                  (input)="filterInTable('pthucMuaTrucTiep',filterTable.pthucMuaTrucTiep)" size="small" />
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenPthucMuaTrucTiep"
+                  (input)="filterInTable('tenPthucMuaTrucTiep',filterTable.tenPthucMuaTrucTiep)" size="small" />
               </nz-input-group>
             </th>
             <th>
@@ -148,22 +148,22 @@
             <td class="text-blue">{{data.hhQdPheduyetKhMttHdr.soQd }}</td>
             <td>{{ data.tenDvi }}</td>
             <td>{{ data.hhQdPheduyetKhMttHdr.namKh }}</td>
-            <td>{{data.pthucMuaTrucTiep }}</td>
+            <td>{{data.tenPthucMuaTrucTiep }}</td>
             <td>{{data.ngayNhanCgia | date: 'dd/MM/YYYY'}}</td>
             <td>{{data.soQdKq}}</td>
             <td>{{data.tenLoaiVthh}}</td>
             <td>{{data.tenCloaiVthh}}</td>
             <td>{{data.tenTrangThai}}</td>
             <td class="text-left">
-              <a (click)="goDetail(data.id)">
-                <i class="fa fa-eye"></i>
+              <a *ngIf="data.trangThai == STATUS.HOAN_THANH_CAP_NHAT || (data.trangThai == STATUS.DANG_CAP_NHAT && !userService.isCuc())" (click)="goDetail(data.id, true)">
+                <i class="fa fa-eye" title="Xem chi tiết"></i>
               </a>
               <a *ngIf="data.trangThai != STATUS.HOAN_THANH_CAP_NHAT &&  userService.isCuc()"
-                (click)="goDetail(data.id)">
+                (click)="goDetail(data.id, false)">
                 <i class="icon htvbdh_soanthao"></i>
               </a>
               <!-- <a *ngIf="dataChild.trangThai == STATUS.DANG_CAP_NHAT" (click)="delete(dataChild)">
-                              <i class="fa fa-trash-o do"></i>
+                              <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                             </a> -->
             </td>
           </tr>
@@ -190,6 +190,6 @@
   </div>
 </div>
 <div class="chi-tiet" *ngIf="isDetail">
-  <app-themmoi-chaogia-uyquyen-muale [loaiVthh]="loaiVthh" [idInput]="idSelected" (showListEvent)="showList()">
+  <app-themmoi-chaogia-uyquyen-muale [loaiVthh]="loaiVthh" [idInput]="idSelected" [isView]="isView" (showListEvent)="showList()">
   </app-themmoi-chaogia-uyquyen-muale>
 </div>

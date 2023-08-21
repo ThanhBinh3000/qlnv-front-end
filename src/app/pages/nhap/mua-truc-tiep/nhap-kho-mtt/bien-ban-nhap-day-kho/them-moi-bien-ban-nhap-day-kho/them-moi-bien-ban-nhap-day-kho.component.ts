@@ -32,6 +32,7 @@ import { BienBanDayKhoMuaTrucTiepService } from 'src/app/services/bien-ban-day-k
 })
 export class ThemMoiBienBanNhapDayKhoComponent extends Base2Component implements OnInit {
   @Input() id: number;
+  @Input() idQdGiaoNvNh: number;
   @Input() isView: boolean;
   @Input() loaiVthh: string;
   @Input() isTatCa: boolean;
@@ -48,6 +49,7 @@ export class ThemMoiBienBanNhapDayKhoComponent extends Base2Component implements
   listDiaDiemNhap: any[] = [];
   dataTable: any[] = [];
   listNghiemThuBaoQuan: any[] = [];
+  fileDinhKems: FileDinhKem[] = [];
 
   create: any = {};
   editDataCache: { [key: string]: { edit: boolean; data: any } } = {};
@@ -110,6 +112,7 @@ export class ThemMoiBienBanNhapDayKhoComponent extends Base2Component implements
       nguoiPduyet: [''],
       donGiaHd: [10000],
       soPhieuNhapKho: [''],
+      tenNganLoKho: [''],
       soBangKeCanHang: [''],
 
     })
@@ -123,6 +126,9 @@ export class ThemMoiBienBanNhapDayKhoComponent extends Base2Component implements
       this.userInfo = this.userService.getUserLogin();
       await Promise.all([
       ]);
+      if(this.idQdGiaoNvNh > 0){
+        await this.bindingDataQd(this.idQdGiaoNvNh)
+      }
       if (this.id > 0) {
         this.loadPhieuNhapDayKho();
       } else {
@@ -204,7 +210,7 @@ export class ThemMoiBienBanNhapDayKhoComponent extends Base2Component implements
     });
     let dataChiCuc = data.hhQdGiaoNvNhangDtlList.filter(item => item.maDvi == this.userInfo.MA_DVI);
     if (dataChiCuc.length > 0) {
-      this.listDiaDiemNhap = dataChiCuc[0].hhQdGiaoNvNhDdiemList;
+      this.listDiaDiemNhap = dataChiCuc[0].children;
     }
     await this.spinner.hide();
   }
@@ -251,6 +257,7 @@ export class ThemMoiBienBanNhapDayKhoComponent extends Base2Component implements
           soPhieuNhapKho: item.phieuNhapKhoHdr.soPhieuNhapKho,
           soBangKeCanHang: item.bcanKeHangHdr.soBangKeCanHang,
           ngayNkho: item.phieuNhapKhoHdr.ngayTao,
+          tenNganLoKho: item.tenLoKho ? `${item.tenLoKho} - ${item.tenNganKho}` : item.tenNganKho,
         })
       })
       let dataFirst = new Date();
@@ -303,6 +310,7 @@ export class ThemMoiBienBanNhapDayKhoComponent extends Base2Component implements
           return;
         }
         let body = this.formData.value;
+        body.fileDinhKems = this.fileDinhKems;
         body.hhBienBanDayKhoDtlReqList = this.dataTable;
         let res;
         if (this.formData.get('id').value > 0) {
@@ -452,6 +460,7 @@ export class ThemMoiBienBanNhapDayKhoComponent extends Base2Component implements
           const data = res.data;
           this.helperService.bidingDataInFormGroup(this.formData, data);
           this.dataTable = data.hhBienBanDayKhoDtlList;
+          this.fileDinhKems = data.fileDinhKems
           await this.bindingDataQd(data.idQdGiaoNvNh);
           let dataDdnhap = this.listDiaDiemNhap.filter(item => item.id == data.idDdiemGiaoNvNh)[0];
           await this.bindingDataDdNhap(dataDdnhap, true);

@@ -4,12 +4,12 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button *ngIf="!isView && formData.value.trangThai == globals.prop.NHAP_CHUA_TAO_QD" type="button"
+    <button *ngIf="!isView && formData.value.trangThai == STATUS.CHUA_TAO_QD && formData.value.trangThai != null && isTongHop" type="button"
       class="btn btn-sub xanh-nhat" (click)="taoQdinh()">
       <i class="icon htvbdh_tcdt_tao-qd"></i>
       <span>Tạo quyết định</span>
     </button>
-    <button *ngIf="(!formData.value.trangThai && isTongHop)" type="button" class="btn btn-main" (click)="save()">
+    <button *ngIf="(!isView && formData.value.trangThai == STATUS.CHUA_TAO_QD && formData.value.trangThai != null && isTongHop)" type="button" class="btn btn-main" (click)="save()">
       <i class="icon htvbdh_tcdt_save"></i>
       <span>Lưu</span>
     </button>
@@ -122,6 +122,16 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
+            <div nz-col [nzSpan]="24">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  File đính kèm
+                </nz-form-label>
+                <div class="list-file">
+                  <file-list [data]="listFileDinhKem" [isViewDetail]="isDisable()"></file-list>
+                </div>
+              </nz-form-item>
+            </div>
           </div>
         </form>
       </nz-collapse-panel>
@@ -135,13 +145,12 @@
             <tr>
               <th [width]="30">STT</th>
               <th>Cục DTNN KV</th>
-              <th>Số KH/tờ trình</th>
+              <th>Số tờ trình</th>
               <th>Ngày Ký</th>
               <th>Trích yếu</th>
               <th>Tên dự án</th>
-              <th>Số lượng (Kg)</th>
+              <th>Số lượng (tấn)</th>
               <th>Tổng tiền đã bao gồm thuế (đồng)</th>
-              <th>Trạng thái</th>
             </tr>
           </thead>
           <tbody>
@@ -153,13 +162,12 @@
               <td>{{ data.ngayPduyet | date: 'dd/MM/YYYY'}}</td>
               <td>{{ data.trichYeu }}</td>
               <td>{{ data.tenDuAn }}</td>
-              <td>{{ data.tongSoLuong }}</td>
-              <td>{{ data.tongTienGomThue| number: '1.0-1' : 'vi_VN' }}</td>
-              <td>{{ data.tenTrangThai }}</td>
+              <td class="text-right">{{ data.tongSoLuong | number: '1.0-1' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.tongMucDt | number: '1.0-1' : 'vi_VN' }}</td>
             </tr>
           </tbody>
         </nz-table>
-        <app-themmoi-kehoach-muatructiep *ngIf="idRowSelect" [isView]="isView" [idInput]="idRowSelect"
+        <app-themmoi-kehoach-muatructiep *ngIf="idRowSelect" [isView]="true" [idInput]="idRowSelect"
           [showFromTH]="true">
         </app-themmoi-kehoach-muatructiep>
       </nz-collapse-panel>
@@ -173,7 +181,7 @@
   <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}</ng-container>
 </ng-template>
 <div *ngIf="isQuyetDinh" class="chi-tiet">
-  <app-themmoi-quyetdinh-khmtt [id]="idSelected" [dataTongHop]="formData.value" [isView]="isView"
+  <app-themmoi-quyetdinh-khmtt [id]="idSelected" [dataTongHop]="formData.value" [disableField]="disableField" [isView]="isView"
     (showListEvent)="showTongHop()">
   </app-themmoi-quyetdinh-khmtt>
 </div>

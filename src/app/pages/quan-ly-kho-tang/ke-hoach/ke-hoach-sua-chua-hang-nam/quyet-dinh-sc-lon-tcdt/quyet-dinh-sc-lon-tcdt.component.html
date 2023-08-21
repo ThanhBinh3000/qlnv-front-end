@@ -57,7 +57,7 @@
       <h3>DANH SÁCH TỔNG HỢP PHƯƠNG ÁN SỬA CHỮA LỚN HÀNG NĂM</h3>
       <div class="buttons">
         <button type="button" class="btn btn-do" (click)="deleteMulti()" *ngIf="userService.isTongCuc() && userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_TH_XOA')">
-          <i class="fa fa-trash-o do"></i>
+          <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
           <span>Xóa</span>
         </button>
         <button type="button" class="btn btn-sub" (click)="exportData()" *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_TH_EXP')">
@@ -170,14 +170,14 @@
           <td>{{ data.tenTrangThai }}</td>
           <td>
             <a (click)="redirectToChiTiet(true, data.id)" *ngIf="(data.trangThai == STATUS.DA_DUYET_LDV || data.trangThai == STATUS.CHO_DUYET_LDV || data.trangThai == STATUS.CHO_DUYET_LDTC || data.trangThai == STATUS.DA_DUYET_LDTC) && userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_TH_XEM')">
-              <i class="fa fa-eye"></i>
+              <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
             <a *ngIf="((data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_LDV) && userService.isTongCuc()) && userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_TH_THEM')"
                (click)="redirectToChiTiet(false, data.id)">
-              <i class="fa fa-pencil"></i>
+              <i class="fa fa-pencil" title="Sửa"></i>
             </a>
             <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isTongCuc() && userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_TH_XOA')" (click)="delete(data)">
-              <i class="fa fa-trash-o do"></i>
+              <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>
         </tr>

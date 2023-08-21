@@ -35,6 +35,7 @@ export class Base2Component implements OnInit {
   // Const
   listNam: any[] = [];
   fileDinhKem: any[] = []
+  canCuPhapLy: any[] = []
   STATUS = STATUS
 
   // Form search and dataTable
@@ -49,7 +50,7 @@ export class Base2Component implements OnInit {
 
   @Input() isDetail: boolean = false;
   @Input() dataInit: any = {};
-  idSelected: number = 0;
+  @Input() idSelected: number = 0;
 
   // Service
   modal: NzModalService
@@ -61,6 +62,7 @@ export class Base2Component implements OnInit {
   spinner: NgxSpinnerService
   notification: NzNotificationService
   uploadFileService: UploadFileService
+  service: BaseService;
   ranges = { 'Hôm nay': [new Date(), new Date()], 'Tháng hiện tại': [new Date(), endOfMonth(new Date())] };
 
   constructor(
@@ -69,8 +71,9 @@ export class Base2Component implements OnInit {
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private service: BaseService,
+    private baseService: BaseService,
   ) {
+    this.service = baseService;
     this.notification = notification
     this.spinner = spinner;
     this.modal = modal
@@ -198,7 +201,7 @@ export class Base2Component implements OnInit {
       let temp = [];
       if (this.dataTableAll && this.dataTableAll.length > 0) {
         this.dataTableAll.forEach((item) => {
-          if (['ngayKy', 'ngayLapKh', 'ngayDuyetLdcc', 'ngayGiaoNhan', 'ngayHieuLuc', 'ngayHetHieuLuc', 'ngayDeXuat', 'ngayTongHop', 'ngayTao', 'ngayQd', 'tgianNhang', 'tgianThien', 'ngayDx', 'ngayPduyet', 'ngayThop', 'thoiGianGiaoNhan', 'ngayKyQd', 'ngayNhanCgia', 'ngayKyDc', 'tgianGnhan', 'ngayDuyet','ngayNhapKho'].includes(key)) {
+          if (type == 'date' || ['ngayKy', 'ngayLapKh', 'ngayDuyetLdcc', 'ngayGiaoNhan', 'ngayHieuLuc', 'ngayHetHieuLuc', 'ngayDeXuat', 'ngayTongHop', 'ngayTao', 'ngayQd', 'tgianNhang', 'tgianThien', 'ngayDx', 'ngayPduyet', 'ngayThop', 'thoiGianGiaoNhan', 'ngayKyQd', 'ngayNhanCgia', 'ngayKyDc', 'tgianGnhan', 'ngayDuyet', 'ngayNhapKho', 'ngayKyQdinh', 'ngayMkho'].includes(key)) {
             if (item[key] && dayjs(item[key]).format('DD/MM/YYYY').indexOf(value.toString()) != -1) {
               temp.push(item)
             }
@@ -360,6 +363,8 @@ export class Base2Component implements OnInit {
 
   // Save
   async createUpdate(body, roles?: any) {
+    console.log(body, 'body')
+    console.log(this.service, 'service')
     if (!this.checkPermission(roles)) {
       return
     }
@@ -380,10 +385,10 @@ export class Base2Component implements OnInit {
           this.notification.success(MESSAGE.NOTIFICATION, MESSAGE.UPDATE_SUCCESS);
           return res.data;
         } else {
+          this.formData.patchValue({ id: res.data.id });
           this.notification.success(MESSAGE.NOTIFICATION, MESSAGE.ADD_SUCCESS);
           return res.data;
         }
-        this.formData.patchValue({id:res.data.id});
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
         return null;
@@ -623,4 +628,17 @@ export class Base2Component implements OnInit {
     return romanNumber;
   }
 
+  disabledNgayTu = (startValue: Date): boolean => {
+    if (startValue && this.formData.value.ngayTu) {
+      return startValue.getTime() > this.formData.value.ngayTu.getTime();
+    }
+    return false;
+  };
+
+  disabledNgayDen = (endValue: Date): boolean => {
+    if (!endValue || !this.formData.value.ngayDen) {
+      return false;
+    }
+    return endValue.getTime() <= this.formData.value.ngayDen.getTime();
+  };
 }

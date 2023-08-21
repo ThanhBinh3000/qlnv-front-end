@@ -7,7 +7,6 @@ import { DeXuatPhuongAnGiaModule } from './de-xuat-phuong-an-gia/de-xuat-phuong-
 import { QuyetDinhGiaBtcModule } from './quyet-dinh-gia-btc/quyet-dinh-gia-btc.module';
 import { TongHopPhuongAnGiaModule } from './tong-hop-phuong-an-gia/tong-hop-phuong-an-gia.module';
 import { QuyetDinhGiaCuaTcdtnnModule } from './quyet-dinh-gia-cua-tcdtnn/quyet-dinh-gia-cua-tcdtnn.module';
-import { QuyetDinhDieuChinhGiaCuaTcdtnnModule } from './quyet-dinh-dieu-chinh-gia-cua-tcdtnn/quyet-dinh-dieu-chinh-gia-cua-tcdtnn.module';
 
 @NgModule({
   declarations: [SubPhuongAnGiaComponent,],
@@ -16,8 +15,7 @@ import { QuyetDinhDieuChinhGiaCuaTcdtnnModule } from './quyet-dinh-dieu-chinh-gi
     DeXuatPhuongAnGiaModule,
     QuyetDinhGiaBtcModule,
     TongHopPhuongAnGiaModule,
-    QuyetDinhGiaCuaTcdtnnModule,
-    QuyetDinhDieuChinhGiaCuaTcdtnnModule
+    QuyetDinhGiaCuaTcdtnnModule
   ],
   exports: [SubPhuongAnGiaComponent],
 })

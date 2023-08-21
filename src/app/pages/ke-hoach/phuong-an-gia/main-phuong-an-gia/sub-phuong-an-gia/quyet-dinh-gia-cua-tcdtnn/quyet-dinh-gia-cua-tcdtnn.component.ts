@@ -1,18 +1,21 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {FormBuilder, FormGroup} from '@angular/forms';
 import dayjs from 'dayjs';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { LIST_VAT_TU_HANG_HOA, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
-import { MESSAGE } from 'src/app/constants/message';
-import { UserService } from 'src/app/services/user.service';
-import { cloneDeep } from 'lodash';
-import { saveAs } from 'file-saver';
-import { QuyetDinhGiaTCDTNNService } from 'src/app/services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {LIST_VAT_TU_HANG_HOA, PAGE_SIZE_DEFAULT} from 'src/app/constants/config';
+import {MESSAGE} from 'src/app/constants/message';
+import {UserService} from 'src/app/services/user.service';
+import {cloneDeep} from 'lodash';
+import {saveAs} from 'file-saver';
+import {QuyetDinhGiaTCDTNNService} from 'src/app/services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service';
 import {ThongTinChungPag} from "../../../../../../models/DeXuatPhuongAnGia";
 import {STATUS} from "../../../../../../constants/status";
 import {Globals} from "../../../../../../shared/globals";
+import {Router} from "@angular/router";
+import {UserLogin} from "../../../../../../models/userlogin";
+
 @Component({
   selector: 'app-quyet-dinh-gia-cua-tcdtnn',
   templateUrl: './quyet-dinh-gia-cua-tcdtnn.component.html',
@@ -43,17 +46,26 @@ export class QuyetDinhGiaCuaTcdtnnComponent implements OnInit {
   );
   isViewDetail: boolean = false;
   idSelected: number = 0;
+  STATUS = STATUS;
+  userInfo: UserLogin
+  listTrangThai = [
+    {ma: this.STATUS.DU_THAO, giaTri: "Dự thảo"},
+    {ma: this.STATUS.BAN_HANH, giaTri: "Ban hành"}
+  ];
+
   constructor(private readonly fb: FormBuilder,
-    private spinner: NgxSpinnerService,
-    private notification: NzNotificationService,
-    public userService: UserService,
-    private modal: NzModalService,
-    private quyetDinhGiaTCDTNNService: QuyetDinhGiaTCDTNNService,
+              private spinner: NgxSpinnerService,
+              private notification: NzNotificationService,
+              public userService: UserService,
+              private modal: NzModalService,
+              private router: Router,
+              private quyetDinhGiaTCDTNNService: QuyetDinhGiaTCDTNNService,
               public globals: Globals
   ) {
     this.formData = this.fb.group({
       soQd: [null],
-      ngayKy: [[]],
+      ngayKyTu: [],
+      ngayKyDen: [],
       trichYeu: [null],
       namKeHoach: [null],
       loaiVthh: [null],
@@ -61,16 +73,10 @@ export class QuyetDinhGiaCuaTcdtnnComponent implements OnInit {
     });
   }
 
-  searchInTable = {
-    namKeHoach: dayjs().get('year'),
-    soQd: '',
-    trichYeu: '',
-    ngayKy: '',
-  };
-
   filterTable: any = {
     soQd: '',
-    ngayKy: '',
+    ngayKyTu: '',
+    ngayKyDen: '',
     trichYeu: '',
     namKeHoach: '',
     tenLoaiGia: '',
@@ -80,14 +86,13 @@ export class QuyetDinhGiaCuaTcdtnnComponent implements OnInit {
   };
 
   async ngOnInit() {
+    if ((this.pagType == 'LT' && !this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_GCT_QDTC'))
+      || (this.pagType == 'VT' && !this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_VT_GCT_QDTC'))) {
+      this.router.navigateByUrl('/error/401')
+    }
+    this.userInfo = this.userService.getUserLogin();
     this.loadDsNam();
     this.search();
-  }
-
-  initForm(): void {
-  }
-
-  initData() {
   }
 
   loadDsNam() {
@@ -106,13 +111,9 @@ export class QuyetDinhGiaCuaTcdtnnComponent implements OnInit {
     try {
       this.spinner.show();
       let body = this.formData.value;
-      if (body.ngayKy != null) {
-        body.ngayKyTu = body.ngayKy[0];
-        body.ngayKyDen = body.ngayKy[1];
-      }
-      body.namKh = body.namKeHoach,
-        //   delete body.ngayKy;
-        body.pagType = this.pagType;
+      body.namKh = body.namKeHoach;
+      body.pagType = this.pagType;
+      body.maDvi = this.userService.isTongCuc() ? null : this.userInfo.MA_DVI;
       body.paggingReq = {
         limit: this.pageSize,
         page: this.page - 1,
@@ -127,7 +128,7 @@ export class QuyetDinhGiaCuaTcdtnnComponent implements OnInit {
             item.checked = false;
           });
         }
-        if(this.userService.isCuc()) {
+        if (this.userService.isCuc()) {
           this.dataTable = this.dataTable.filter(item => item.trangThai == STATUS.BAN_HANH)
         }
         this.dataTableAll = cloneDeep(this.dataTable);
@@ -163,7 +164,7 @@ export class QuyetDinhGiaCuaTcdtnnComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.quyetDinhGiaTCDTNNService.deleteMuti({ listId: dataDelete });
+            let res = await this.quyetDinhGiaTCDTNNService.deleteMuti({listId: dataDelete});
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();
@@ -180,8 +181,7 @@ export class QuyetDinhGiaCuaTcdtnnComponent implements OnInit {
           }
         },
       });
-    }
-    else {
+    } else {
       this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
     }
   }
@@ -191,8 +191,6 @@ export class QuyetDinhGiaCuaTcdtnnComponent implements OnInit {
       this.spinner.show();
       try {
         let body = this.formData.value;
-        body.tuNgay = body.ngayKy[0];
-        body.denNgay = body.ngayKy[1];
         body.pagType = this.pagType;
         this.quyetDinhGiaTCDTNNService
           .export(body)
@@ -223,7 +221,7 @@ export class QuyetDinhGiaCuaTcdtnnComponent implements OnInit {
   }
 
   onAllChecked(checked) {
-    this.dataTable.forEach(({ id }) => this.updateCheckedSet(id, checked));
+    this.dataTable.forEach(({id}) => this.updateCheckedSet(id, checked));
     this.refreshCheckedStatus();
   }
 
@@ -236,11 +234,11 @@ export class QuyetDinhGiaCuaTcdtnnComponent implements OnInit {
   }
 
   refreshCheckedStatus(): void {
-    this.allChecked = this.dataTable.every(({ id }) =>
+    this.allChecked = this.dataTable.every(({id}) =>
       this.setOfCheckedId.has(id),
     );
     this.indeterminate =
-      this.dataTable.some(({ id }) => this.setOfCheckedId.has(id)) &&
+      this.dataTable.some(({id}) => this.setOfCheckedId.has(id)) &&
       !this.allChecked;
   }
 
@@ -295,7 +293,7 @@ export class QuyetDinhGiaCuaTcdtnnComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.quyetDinhGiaTCDTNNService.delete({ id: item.id }).then((res) => {
+          this.quyetDinhGiaTCDTNNService.delete({id: item.id}).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
@@ -317,32 +315,38 @@ export class QuyetDinhGiaCuaTcdtnnComponent implements OnInit {
     });
   }
 
-  filterInTable(key: string, value: string) {
+  filterInTable(key: string, value: string, type?: string) {
     if (value && value != '') {
       this.dataTable = [];
       let temp = [];
       if (this.dataTableAll && this.dataTableAll.length > 0) {
         this.dataTableAll.forEach((item) => {
-          if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
-            temp.push(item)
+          if (['ngayKy'].includes(key)) {
+            if (item[key] && dayjs(item[key]).format('DD/MM/YYYY').indexOf(value.toString()) != -1) {
+              temp.push(item)
+            }
+          } else {
+            if (type) {
+              if ('eq' == type) {
+                if (item[key] && item[key].toString().toLowerCase() == value.toString().toLowerCase()) {
+                  temp.push(item)
+                }
+              } else {
+                if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
+                  temp.push(item)
+                }
+              }
+            } else {
+              if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
+                temp.push(item)
+              }
+            }
           }
         });
       }
       this.dataTable = [...this.dataTable, ...temp];
-    }
-    else {
+    } else {
       this.dataTable = cloneDeep(this.dataTableAll);
-    }
-  }
-  clearFilterTable() {
-    this.filterTable = {
-      soQd: '',
-      ngayKy: '',
-      trichYeu: '',
-      namKeHoach: '',
-      tenLoaiGia: '',
-      tenLoaiVthh: '',
-      tenTrangThai: '',
     }
   }
 
@@ -375,6 +379,14 @@ export class QuyetDinhGiaCuaTcdtnnComponent implements OnInit {
     } else {
       this.indeterminate = true;
     }
+  }
+
+  convertDateToString(event: any): string {
+    let result = '';
+    if (event) {
+      result = dayjs(event).format('DD/MM/YYYY').toString()
+    }
+    return result;
   }
 }
 

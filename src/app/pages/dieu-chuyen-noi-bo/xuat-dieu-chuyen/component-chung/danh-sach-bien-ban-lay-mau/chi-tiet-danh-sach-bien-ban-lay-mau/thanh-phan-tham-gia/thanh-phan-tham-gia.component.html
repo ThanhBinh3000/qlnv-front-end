@@ -1,22 +1,33 @@
-<div class="header-file" *ngIf="isView==false">
-    <input type="text" nz-input placeholder="Tên đại diện" [(ngModel)]="itemRow.daiDien" />
-    <div class="icon-plus" (click)="addDaiDien()">
+<div class="header-file">
+    <input type="text" nz-input placeholder="Tên đại diện" [(ngModel)]="itemRow.daiDien" [readOnly]="isView" />
+    <div class="icon-plus" (click)="addDaiDien()" [hidden]="isView">
         <i class="icon htvbdh_dau-cong "></i>
     </div>
-    <div class="icon-empty">
+    <div class="icon-empty" (click)="clearDaiDien()" [hidden]="isView">
         <i class="icon htvbdh_nhap-lai1 "></i>
     </div>
 </div>
 <div class="body-file" *ngFor="let item of dataTable;let i = index">
-    <ng-container *ngIf="!item.isEdit">
+    <ng-container *ngIf="!item.isEdit; else editTemplate">
         <div class="content-data d-flex align-items-center">
             <div class="nd-text" disabled="isView">{{item.daiDien}}</div>
         </div>
-        <div class="icon-edit" *ngIf="isView==false">
-            <i class="fa fa-pencil " [hidden]="isView"></i>
+        <div class="icon-edit" (click)="editRow(i)" [hidden]="isView">
+            <i class="fa fa-pencil "></i>
         </div>
-        <div class="icon-xoa" *ngIf="isView==false">
-            <i class="fa fa-trash-o do " [hidden]="isView"></i>
+        <div class="icon-xoa" (click)="deleteRow(i)" [hidden]="isView">
+            <i class="fa fa-trash-o do "></i>
         </div>
     </ng-container>
+    <ng-template #editTemplate>
+        <div class="content-data d-flex align-items-center">
+            <input type="text" nz-input placeholder="Tên đại diện" [(ngModel)]="item.daiDien" [readOnly]="isView" />
+        </div>
+        <div class="icon-edit" (click)="saveEdit(i)" [hidden]="isView">
+            <i class="fa fa-save"></i>
+        </div>
+        <div class="icon-xoa" (click)="cancelEdit(i)" [hidden]="isView">
+            <i class="fa fa-times do"></i>
+        </div>
+    </ng-template>
 </div>

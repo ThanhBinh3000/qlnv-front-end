@@ -80,7 +80,7 @@
       <h3>DANH SÁCH DANH MỤC SỬA CHỮA LỚN</h3>
       <div class="buttons">
         <button *ngIf="userService.isCuc() && userService.isAccessPermisson('QLKT_QHKHKT_DM_CONGTRINHSCL_XOA')" (click)="deleteMulti()" type="button" class="btn btn-sub btn-xoa">
-          <i class="fa fa-trash-o do"></i>
+          <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
           <span>Xóa</span>
         </button>
         <button type="button" class="btn btn-sub ml-2" (click)="exportData()" *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_DM_CONGTRINHSCL_EXP')">
@@ -249,14 +249,14 @@
           <td >{{ data.tenTrangThai }}</td>
           <td nzRight>
             <a  (click)="openDialog(data, true)" *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_DM_CONGTRINHSCL_XEM')">
-              <i class="fa fa-eye"></i>
+              <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
             <a *ngIf="userService.isCuc() && userService.isAccessPermisson('QLKT_QHKHKT_DM_CONGTRINHSCL_THEM')"
               (click)="openDialog(data, false)">
-              <i class="fa fa-pencil"></i>
+              <i class="fa fa-pencil" title="Sửa"></i>
             </a>
             <a (click)="delete(data)" *ngIf="data.trangThai == STATUS.CHUA_THUC_HIEN && userService.isCuc() && userService.isAccessPermisson('QLKT_QHKHKT_DM_CONGTRINHSCL_XOA')">
-              <i class="fa fa-trash-o do"></i>
+              <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>
         </tr>

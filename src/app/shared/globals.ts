@@ -9,5 +9,7 @@ export class Globals {
   parser = value => value.replaceAll('.', '');
   parserInput = value => value.replaceAll(',', '.');
   dateFormat = 'dd/MM/yyyy';
+  dateTimeFormat = 'HH:mm:ss dd/MM/yyyy';
   numberFormat: string = '1.0-1';
+  locale: string = 'vi_VN';
 }

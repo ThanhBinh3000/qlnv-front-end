@@ -74,7 +74,7 @@ export class ThBcSoLuongClCcdcComponent extends Base2Component implements OnInit
   }
 
   downloadPdf() {
-    saveAs(this.pdfBlob, "th_bc_sl_cl_ccdc.pdf");
+    saveAs(this.pdfBlob, "bc_so_luong_chat_luong_ccdc.pdf");
   }
 
   async downloadExcel() {
@@ -88,7 +88,7 @@ export class ThBcSoLuongClCcdcComponent extends Base2Component implements OnInit
       await this.bcCLuongHangDTQGService.baoCaoSLuongCLuongCcdc(body).then(async s => {
         this.excelBlob = s;
         this.excelSrc = await new Response(s).arrayBuffer();
-        saveAs(this.excelBlob, "th_bc_sl_cl_ccdc.xlsx");
+        saveAs(this.excelBlob, "bc_so_luong_chat_luong_ccdc.xlsx");
       });
       this.showDlgPreview = true;
     } catch (e) {
