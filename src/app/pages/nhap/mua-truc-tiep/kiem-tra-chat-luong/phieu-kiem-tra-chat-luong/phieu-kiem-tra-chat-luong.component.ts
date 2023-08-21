@@ -51,7 +51,10 @@ export class PhieuKiemTraChatLuongComponent implements OnInit {
 
   allChecked = false;
   indeterminate = false;
-
+  tuLapPhieu: Date | null = null;
+  denLapPhieu: Date | null = null;
+  tuNgayGiamDinh: Date | null = null;
+  denNgayGiamDinh: Date | null = null;
   STATUS = STATUS;
 
   searchFilter = {
@@ -59,7 +62,7 @@ export class PhieuKiemTraChatLuongComponent implements OnInit {
     ngayTongHop: '',
     ketLuan: '',
     soQuyetDinh: '',
-    namKh: dayjs().get('year'),
+    namKh: '',
   };
   filterTable: any = {
     soPhieu: '',
@@ -153,6 +156,10 @@ export class PhieuKiemTraChatLuongComponent implements OnInit {
         "limit": this.pageSize,
         "page": this.page - 1
       },
+      tuNgayGiamDinh: this.tuNgayGiamDinh != null ? dayjs(this.tuNgayGiamDinh).format('YYYY-MM-DD') + " 00:00:00" : null,
+      denNgayGiamDinh: this.denNgayGiamDinh != null ? dayjs(this.denNgayGiamDinh).format('YYYY-MM-DD') + " 23:59:59" : null,
+      tuLapPhieu: this.tuLapPhieu != null ? dayjs(this.tuLapPhieu).format('YYYY-MM-DD') + " 00:00:00" : null,
+      denNgayTao: this.denLapPhieu != null ? dayjs(this.denLapPhieu).format('YYYY-MM-DD') + " 23:59:59": null,
       trangThai: STATUS.BAN_HANH
     };
     let res = await this.quyetDinhGiaoNvNhapHangService.search(body);
@@ -165,6 +172,7 @@ export class PhieuKiemTraChatLuongComponent implements OnInit {
           item.detail = {
             children: item.detail.children.filter(x => x.maDiemKho.includes(this.userInfo.MA_DVI))
           }
+          item.expand = true;
         } else {
           let data = [];
           item.hhQdGiaoNvNhangDtlList.forEach(res => {
@@ -173,6 +181,7 @@ export class PhieuKiemTraChatLuongComponent implements OnInit {
           item.detail = {
             hhQdGiaoNvNhDdiemList: data,
           }
+          item.expand = true;
         };
       });
       this.dataTableAll = cloneDeep(this.dataTable);
@@ -181,6 +190,13 @@ export class PhieuKiemTraChatLuongComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
     await this.spinner.hide();
+  }
+
+  setExpand(parantExpand: boolean = false, children: any = []): void {
+    if (parantExpand) {
+      return children.map(f => ({ ...f, expand: false }))
+    }
+    return children
   }
 
   async changePageIndex(event) {
@@ -217,6 +233,10 @@ export class PhieuKiemTraChatLuongComponent implements OnInit {
       soQuyetDinh: '',
       namKh: null,
     };
+    this.tuLapPhieu = null;
+    this.denLapPhieu = null;
+    this.tuNgayGiamDinh = null;
+    this.denNgayGiamDinh = null;
     this.search();
   }
 
@@ -278,6 +298,10 @@ export class PhieuKiemTraChatLuongComponent implements OnInit {
           "maDonVi": this.userInfo.MA_DVI,
           "maHangHoa": this.typeVthh,
           "maNganKho": null,
+          tuNgayGiamDinh: this.tuNgayGiamDinh != null ? dayjs(this.tuNgayGiamDinh).format('YYYY-MM-DD') + " 00:00:00" : null,
+          denNgayGiamDinh: this.denNgayGiamDinh != null ? dayjs(this.denNgayGiamDinh).format('YYYY-MM-DD') + " 23:59:59" : null,
+          tuLapPhieu: this.tuLapPhieu != null ? dayjs(this.tuLapPhieu).format('YYYY-MM-DD') + " 00:00:00" : null,
+          denLapPhieu: this.denLapPhieu != null ? dayjs(this.denLapPhieu).format('YYYY-MM-DD') + " 23:59:59": null,
           "ngayKiemTraDenNgay": this.searchFilter.ngayTongHop && this.searchFilter.ngayTongHop.length > 1
             ? dayjs(this.searchFilter.ngayTongHop[1]).format('YYYY-MM-DD')
             : null,
@@ -405,4 +429,32 @@ export class PhieuKiemTraChatLuongComponent implements OnInit {
       this.expandSet2.delete(id);
     }
   }
+
+  disabledStartDate = (startValue: Date): boolean => {
+    if (!startValue || !this.denLapPhieu) {
+      return false;
+    }
+    return startValue.getTime() > this.denLapPhieu.getTime();
+  };
+
+  disabledEndDate = (endValue: Date): boolean => {
+    if (!endValue || !this.tuLapPhieu) {
+      return false;
+    }
+    return endValue.getTime() <= this.tuLapPhieu.getTime();
+  };
+
+  disabledTuNgayGiaoDinh = (startValue: Date): boolean => {
+    if (!startValue || !this.denNgayGiamDinh) {
+      return false;
+    }
+    return startValue.getTime() > this.denNgayGiamDinh.getTime();
+  };
+
+  disabledDenNgayGiamDinh = (endValue: Date): boolean => {
+    if (!endValue || !this.tuNgayGiamDinh) {
+      return false;
+    }
+    return endValue.getTime() <= this.tuNgayGiamDinh.getTime();
+  };
 }
