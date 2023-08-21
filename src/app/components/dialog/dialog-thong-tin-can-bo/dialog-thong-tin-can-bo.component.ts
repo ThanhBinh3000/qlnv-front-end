@@ -295,7 +295,9 @@ export class DialogThongTinCanBoComponent implements OnInit {
       department: '',
     });
     this.suggestPhongBan = [];
-    this.optionsPhongBanFilter = this.optionsPhongBan.filter(s => s.maDviCha == (this.formData.get('dvql').value.includes('-') ? this.formData.get('dvql').value.split('-')[0].trim() : this.formData.get('dvql').value));
+    if (this.formData.get('dvql').value) {
+      this.optionsPhongBanFilter = this.optionsPhongBan.filter(s => s.maDviCha == (this.formData.get('dvql').value.includes('-') ? this.formData.get('dvql').value.split('-')[0].trim() : this.formData.get('dvql').value));
+    }
     this.suggestPhongBan = this.optionsPhongBanFilter;
   }
 }
