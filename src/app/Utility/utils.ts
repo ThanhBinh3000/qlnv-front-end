@@ -1,7 +1,6 @@
-import {CurrencyMaskInputMode} from "ngx-currency";
+import { CurrencyMaskInputMode } from "ngx-currency";
 import { DatePipe } from '@angular/common';
 import * as dayjs from 'dayjs';
-import { CurrencyMaskInputMode } from "ngx-currency";
 import * as uuid from "uuid";
 import * as XLSX from 'xlsx';
 
@@ -831,7 +830,6 @@ export class Utils {
   }
 
   static readonly MONEY_LIMIT = 9000000000000000;
-  static readonly FILE_SIZE = 2097152;
 
   static getListYear(start: number, end: number) {
     const thisYear = dayjs().get('year');
@@ -840,10 +838,6 @@ export class Utils {
       lstNam.push(thisYear + i);
     }
     return lstNam
-  }
-
-  static getDocName(soCv: string, ngayCv: string, tenDvi: string) {
-    return 'Kèm theo Công văn số ' + soCv + ' ngày ' + Utils.fmtDate(ngayCv) + ' của ' + tenDvi;
   }
 
   static getDocName(soCv: string, ngayCv: string, tenDvi: string) {
@@ -1274,81 +1268,81 @@ export class Roles {
 
 // chuan hoa cho nhap so lieu tien
 export const AMOUNT = {
-	allowZero: true,
-	allowNegative: false,
-	precision: 4,
-	prefix: '',
-	thousands: '.',
-	decimal: ',',
-	align: "left",
-	nullable: true,
-	inputMode: CurrencyMaskInputMode.NATURAL,
+  allowZero: true,
+  allowNegative: false,
+  precision: 4,
+  prefix: '',
+  thousands: '.',
+  decimal: ',',
+  align: "left",
+  nullable: true,
+  inputMode: CurrencyMaskInputMode.NATURAL,
 }
 
 export const QUATITY = {
-	allowZero: true,
-	allowNegative: false,
-	precision: 0,
-	prefix: '',
-	thousands: '.',
-	decimal: ',',
-	align: "left",
-	nullable: true,
-	inputMode: CurrencyMaskInputMode.NATURAL,
+  allowZero: true,
+  allowNegative: false,
+  precision: 0,
+  prefix: '',
+  thousands: '.',
+  decimal: ',',
+  align: "left",
+  nullable: true,
+  inputMode: CurrencyMaskInputMode.NATURAL,
 }
 
 export const AMOUNT_NO_DECIMAL = {
-	allowZero: true,
-	allowNegative: false,
-	precision: 0,
-	prefix: '',
-	thousands: '.',
-	decimal: ',',
-	align: "right",
-	nullable: true,
-	min: 0,
-	max: 1000000000000,
-	inputMode: CurrencyMaskInputMode.NATURAL,
+  allowZero: true,
+  allowNegative: false,
+  precision: 0,
+  prefix: '',
+  thousands: '.',
+  decimal: ',',
+  align: "right",
+  nullable: true,
+  min: 0,
+  max: 1000000000000,
+  inputMode: CurrencyMaskInputMode.NATURAL,
 }
 
 export const AMOUNT_ONE_DECIMAL = {
-	allowZero: true,
-	allowNegative: false,
-	precision: 1,
-	prefix: '',
-	thousands: '.',
-	decimal: ',',
-	align: "right",
-	nullable: true,
-	min: 0,
-	max: 1000000000000,
-	inputMode: CurrencyMaskInputMode.NATURAL,
+  allowZero: true,
+  allowNegative: false,
+  precision: 1,
+  prefix: '',
+  thousands: '.',
+  decimal: ',',
+  align: "right",
+  nullable: true,
+  min: 0,
+  max: 1000000000000,
+  inputMode: CurrencyMaskInputMode.NATURAL,
 }
 
 export const AMOUNT_TWO_DECIMAL = {
-	allowZero: true,
-	allowNegative: false,
-	precision: 2,
-	prefix: '',
-	thousands: '.',
-	decimal: ',',
-	align: "right",
-	nullable: true,
-	min: 0,
-	max: 1000000000000,
-	inputMode: CurrencyMaskInputMode.NATURAL,
+  allowZero: true,
+  allowNegative: false,
+  precision: 2,
+  prefix: '',
+  thousands: '.',
+  decimal: ',',
+  align: "right",
+  nullable: true,
+  min: 0,
+  max: 1000000000000,
+  inputMode: CurrencyMaskInputMode.NATURAL,
 }
 
 export const AMOUNT_THREE_DECIMAL = {
-	allowZero: true,
-	allowNegative: false,
-	precision: 3,
-	prefix: '',
-	thousands: '.',
-	decimal: ',',
-	align: "right",
-	nullable: true,
-	min: 0,
-	max: 1000000000000,
-	inputMode: CurrencyMaskInputMode.NATURAL,
+  allowZero: true,
+  allowNegative: false,
+  precision: 3,
+  prefix: '',
+  thousands: '.',
+  decimal: ',',
+  align: "right",
+  nullable: true,
+  min: 0,
+  max: 1000000000000,
+  inputMode: CurrencyMaskInputMode.NATURAL,
 }
