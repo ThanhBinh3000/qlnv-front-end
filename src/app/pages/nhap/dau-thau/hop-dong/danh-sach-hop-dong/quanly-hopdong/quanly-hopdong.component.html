@@ -156,16 +156,16 @@
                         <div nz-row [nzGutter]="24" class="label-50 mg-t-10 ">
                             <div nz-col nzSpan="24">
                                 <nz-form-item>
-                                    <nz-form-label [nzNoColon]="true"> Loại hàng hóa </nz-form-label>
+                                    <nz-form-label [nzNoColon]="true"> Loại hàng DTQG </nz-form-label>
                                     <nz-form-control>
                                         <input nz-input formControlName="tenLoaiVthh" readonly="true"
                                             class="blue-text" />
                                     </nz-form-control>
                                 </nz-form-item>
                             </div>
-                            <div nz-col nzSpan="24" *ngIf="loaiVthh.startsWith('02')">
+                            <div nz-col nzSpan="24" *ngIf="!loaiVthh.startsWith('02')">
                                 <nz-form-item>
-                                    <nz-form-label [nzNoColon]="true"> Chủng loại hàng hóa </nz-form-label>
+                                    <nz-form-label [nzNoColon]="true"> Chủng loại hàng DTQG </nz-form-label>
                                     <nz-form-control>
                                         <input nz-input formControlName="tenCloaiVthh" readonly="true"
                                             class="blue-text" />
@@ -299,7 +299,8 @@
                     </tr>
                 </nz-table>
             </nz-card>
-            <app-thong-tin [loaiVthh]="loaiVthh" *ngIf="idHopDong" [id]="idHopDong" [isView]="true" [isQuanLy]="true" (showListEvent)="redirectHopDong(false,null)">
+            <app-thong-tin [loaiVthh]="loaiVthh" *ngIf="idHopDong" [id]="idHopDong" [isView]="true" [isQuanLy]="true" (showListEvent)="redirectHopDong(false,idHopDong)"
+                           [dataBinding]="formData.value">
             </app-thong-tin>
         </nz-card>
     </div>
