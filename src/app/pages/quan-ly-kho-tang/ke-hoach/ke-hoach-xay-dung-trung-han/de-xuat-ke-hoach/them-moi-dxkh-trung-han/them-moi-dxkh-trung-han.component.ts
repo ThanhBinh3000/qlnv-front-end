@@ -382,6 +382,7 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
       this.maQd = data.soCongVan ? "/" + data.soCongVan.split("/")[1] : "",
         this.formData.patchValue({
           id: data.id,
+          maDvi: data.maDvi,
           tenDvi: data.tenDvi,
           trangThai: data.trangThai,
           trichYeu: data.trichYeu,

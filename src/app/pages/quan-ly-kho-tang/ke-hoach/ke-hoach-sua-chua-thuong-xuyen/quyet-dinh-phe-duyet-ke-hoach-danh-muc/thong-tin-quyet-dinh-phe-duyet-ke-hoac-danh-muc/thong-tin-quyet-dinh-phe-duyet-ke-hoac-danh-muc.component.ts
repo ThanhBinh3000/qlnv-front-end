@@ -118,6 +118,7 @@ export class ThongTinQuyetDinhPheDuyetKeHoacDanhMucComponent implements OnInit {
         tenTrangThai: data.tenTrangThai
       });
       this.fileDinhKems = data.fileDinhKems;
+      this.canCuPhapLys = data.canCuPhapLys;
       this.listDx = data.listDx;
         this.dataTableReq = data.listKtKhThkhScThuongXuyenDtl
         if (this.listDx && this.listDx.length > 0) {

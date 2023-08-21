@@ -38,7 +38,6 @@ export class ThongTinDeXuatKeHoachSuaChuaThuongXuyenComponent extends Base2Compo
   showListEvent = new EventEmitter<any>();
   @Input()
   idInput: number;
-  suffixCv: string = "/" + this.userInfo.MA_TCKT;
   listCcPhapLy: any[] = [];
   listFileDinhKem: any[] = [];
   rowItem: KeHoachDmChiTiet = new KeHoachDmChiTiet();
@@ -47,7 +46,7 @@ export class ThongTinDeXuatKeHoachSuaChuaThuongXuyenComponent extends Base2Compo
   listDmSuaChua: any[] = [];
   dataTableRes: any[] = [];
   listFile: any[] = []
-
+  suffixCv : string
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -56,8 +55,7 @@ export class ThongTinDeXuatKeHoachSuaChuaThuongXuyenComponent extends Base2Compo
     modal: NzModalService,
     private deXuatScThuongXuyenService: DeXuatScThuongXuyenService,
     private danhMucService: DanhMucService,
-    private danhMucSuaChuaService: DanhMucSuaChuaService,
-    private donviService: DonviService,
+    private danhMucSuaChuaService: DanhMucSuaChuaService
   ) {
     super(httpClient, storageService, notification, spinner, modal, deXuatScThuongXuyenService)
     super.ngOnInit()
@@ -81,6 +79,8 @@ export class ThongTinDeXuatKeHoachSuaChuaThuongXuyenComponent extends Base2Compo
 
 
   async ngOnInit() {
+    console.log(this.userInfo,1211)
+    this.suffixCv = "/" + this.userInfo.MA_TCKT;
     await this.spinner.show();
     try {
       this.getDsKhoi();
