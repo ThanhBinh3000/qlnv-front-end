@@ -94,7 +94,7 @@ export class ThemMoiPhieuNhapKhoComponent extends Base2Component implements OnIn
       trangThai: [],
       tenTrangThai: [],
       lyDoTuChoi: [],
-      donGiaHd: ['1000'],
+      donGiaHd: [''],
       donViTinhHd: ['kg'],
       nguoiPduyet: [],
       tenNganLoKho: [],
@@ -193,6 +193,7 @@ export class ThemMoiPhieuNhapKhoComponent extends Base2Component implements OnIn
       tenLoaiVthh: data.tenLoaiVthh,
       tenCloaiVthh: data.tenCloaiVthh,
       moTaHangHoa: data.moTaHangHoa,
+      donGiaHd: data.hopDongMttHdrs[0]?.donGiaGomThue
     });
     let dataChiCuc = data.hhQdGiaoNvNhangDtlList.filter(item => item.maDvi == this.userInfo.MA_DVI);
     if (dataChiCuc.length > 0) {
@@ -271,7 +272,7 @@ export class ThemMoiPhieuNhapKhoComponent extends Base2Component implements OnIn
           ktvBaoQuan: data.ktvBaoQuan,
           ngayGdinh: data.ngayGdinh,
         });
-        console.log()
+        console.log(this.dataTable, 123)
         this.dataTable[0].soLuongThucNhap = data.soLuongNhapKho;
         this.dataTable[0].soLuongChungTu = data.soLuongDeNghiKt;
       }
