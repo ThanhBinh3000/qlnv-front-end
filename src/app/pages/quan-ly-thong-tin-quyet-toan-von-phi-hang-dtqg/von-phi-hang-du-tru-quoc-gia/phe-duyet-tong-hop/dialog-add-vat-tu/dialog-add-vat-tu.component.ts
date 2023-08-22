@@ -1,14 +1,13 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { NzModalRef } from 'ng-zorro-antd/modal';
-import { startWith } from 'rxjs/operators';
 import { VatTu } from 'src/app/components/dialog/dialog-them-thong-tin-vat-tu-trong-nam/danh-sach-vat-tu-hang-hoa.type';
 import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 
 @Component({
-  selector: 'app-dialog-add-vat-tu',
-  templateUrl: './dialog-add-vat-tu.component.html',
-  styleUrls: ['./dialog-add-vat-tu.component.scss']
+    selector: 'app-dialog-add-vat-tu',
+    templateUrl: './dialog-add-vat-tu.component.html',
+    styleUrls: ['./dialog-add-vat-tu.component.scss']
 })
 export class DialogAddVatTuComponent implements OnInit {
     @Input() obj: any;
@@ -33,8 +32,8 @@ export class DialogAddVatTuComponent implements OnInit {
 
     ngOnInit(): void {
         this.loadDanhMucHang();
-        console.log(this.obj);
-        
+
+
     }
 
     handleOk() {
@@ -47,13 +46,13 @@ export class DialogAddVatTuComponent implements OnInit {
 
     loadDanhMucHang() {
         this.danhMucService.loadDanhMucHangHoa().subscribe((hangHoa) => {
-            // console.log(hangHoa.data);
-            if(this.obj.stt.startsWith("0.1")){
+            // 
+            if (this.obj.stt.startsWith("0.1")) {
                 hangHoa.data = hangHoa.data.filter(item => item.ma == "01");
-            }else{
+            } else {
                 hangHoa.data = hangHoa.data.filter(item => item.ma !== "01");
             }
-            
+
             if (hangHoa.msg == MESSAGE.SUCCESS) {
                 if (this.data) {
                     this.listOfMapData = hangHoa.data.filter(item => item.ma == this.data.slice(0, 2));

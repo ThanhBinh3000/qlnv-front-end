@@ -1,0 +1,306 @@
+<ng-container *ngIf="isDataAvailable">
+    <div class="modal__content">
+        <nz-tabset>
+            <nz-tab nzTitle="Dữ liệu">
+                <div id="tablePrint">
+                    <div class="nut" style="margin-top: 10px;">
+                        <div class="cantrai">
+                            <div>Đơn vị:</div>
+                            <div style="margin-left: 10px;">
+                                <ng-container *ngIf="status.general || !editMoneyUnit; else editMoney">
+                                    <span (click)="editMoneyUnit=true">
+                                        {{ Utils.moneyUnitName(maDviTien) }}
+                                    </span>
+                                </ng-container>
+                                <ng-template #editMoney>
+                                    <nz-select nzShowSearch nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
+                                        (ngModelChange)="editMoneyUnit=false; Op.setMoneyUnit(maDviTien)">
+                                        <nz-option *ngFor="let item of Utils.DVI_TIEN" [nzValue]="item.id"
+                                            [nzLabel]="item.tenDm">
+                                        </nz-option>
+                                    </nz-select>
+                                </ng-template>
+                            </div>
+                        </div>
+                        <div class="canphai">
+                            <ng-container>
+                                <button type="button" class="btn btn-sub" (click)="selectGoods()"
+                                    *ngIf="status.general">
+                                    <i class="icon htvbdh_dau-cong"></i>
+                                    <span>Thêm</span>
+                                </button>
+                            </ng-container>
+                        </div>
+                    </div>
+                    <nz-table nzBordered class="table__body" [nzScroll]="{x: scrollX}">
+                        <thead>
+                            <tr>
+                                <th rowspan="2" nzWidth="50px" nzLeft>
+                                    STT
+                                </th>
+                                <th rowspan="2" nzWidth="300px" nzLeft>
+                                    Tên tài sản <br> (theo danh mục được phê duyệt tại <br> Quyết định số 149/QĐ-TCDT)
+                                </th>
+                                <th rowspan="2">
+                                    ĐVT
+                                </th>
+                                <th colSpan="5">
+                                    Số lượng tài sản, máy móc, thiết bị hiện có
+                                </th>
+                                <th colspan="3">
+                                    Dự toán đề nghị <br> trang bị năm {{namBcao}}
+                                </th>
+                                <th style="width: 50px;" rowspan="2" *ngIf="status.general" nzRight></th>
+                                <th style="width: 60px;" rowspan="2" *ngIf="status.general" nzRight></th>
+                            </tr>
+                            <tr>
+                                <th>
+                                    Số lượng đến <br> thời điểm báo cáo
+                                </th>
+                                <th>
+                                    Số lượng đã nhận <br> chưa có QĐ <br> điều chuyển
+                                </th>
+                                <th>
+                                    Số lượng đã được <br> phê duyệt mua sắm <br> năm {{namBcao - 1}}
+                                </th>
+                                <th>Cộng</th>
+                                <th>Tiêu chuẩn định <br> mức tối đa <br> được phê duyệt</th>
+                                <th>
+                                    Số lượng
+                                </th>
+                                <th>
+                                    Mức giá
+                                </th>
+                                <th>
+                                    Thành tiền <br> (Tổng nhu cầu <br> năm nay)
+                                </th>
+                            </tr>
+                            <tr>
+                                <th nzLeft>A</th>
+                                <th nzLeft>B</th>
+                                <th>C</th>
+                                <th>1</th>
+                                <th>2</th>
+                                <th>3</th>
+                                <th>4 = 1 + 2 + 3</th>
+                                <th>5</th>
+                                <th>6</th>
+                                <th>7</th>
+                                <th>8=6x7</th>
+                                <th *ngIf="status.general" nzRight></th>
+                                <th *ngIf="status.general" nzRight></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td nzLeft></td>
+                                <td nzLeft>
+                                    Tổng Cộng
+                                </td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>
+                                    <!-- {{ Op.fmtVal(total.mucGia) }} -->
+                                </td>
+                                <td>
+                                    {{ Op.fmtVal(total.ttien) }}
+                                </td>
+                                <td *ngIf="status.general" nzRight></td>
+                                <td *ngIf="status.general" nzRight></td>
+                            </tr>
+                            <tr *ngFor="let data of lstCtietBcaos; let i = index">
+                                <td nzLeft>
+                                    {{ data.index() }}
+                                </td>
+                                <ng-container *ngIf="!editCache[data.id].edit; else editTemplate ">
+                                    <td nzLeft>
+                                        {{ data.tenDanhMuc }}
+                                    </td>
+                                    <td>
+                                        {{ data.dviTinh }}
+                                    </td>
+                                    <td>
+                                        {{ Op.fmtVal(data.sluongTdiemBc) }}
+                                    </td>
+                                    <td>
+                                        {{ Op.fmtVal(data.sluongDaNhan) }}
+                                    </td>
+                                    <td>
+                                        {{ Op.fmtVal(data.sluongDaPd) }}
+                                    </td>
+                                    <td>
+                                        {{ Op.fmtVal(data.sluongCong) }}
+                                    </td>
+                                    <td>
+                                        {{ Op.fmtVal(data.sluongDmuc) }}
+                                    </td>
+                                    <td>
+                                        {{ Op.fmtVal(data.sluongDtoan) }}
+                                    </td>
+                                    <td>
+                                        {{ Op.fmtVal(data.mucGia) }}
+                                    </td>
+                                    <td>
+                                        {{ Op.fmtVal(data.ttien) }}
+                                    </td>
+                                    <td *ngIf="status.general" nzRight>
+                                        <i *ngIf="checkDelete(data.stt)" class="fa fa-trash-o do"
+                                            (click)="deleteLine(data.id)"></i>
+                                    </td>
+                                    <td *ngIf="status.general" nzRight>
+                                        <i *ngIf="checkEdit(data.stt)" class="fa fa-pencil"
+                                            (click)="startEdit(data.id)"></i>
+                                    </td>
+                                </ng-container>
+                                <ng-template #editTemplate>
+                                    <td nzLeft>
+                                        {{ editCache[data.id].data.tenDanhMuc }}
+                                    </td>
+                                    <td>
+                                        {{ editCache[data.id].data.dviTinh }}
+                                    </td>
+                                    <td>
+                                        <input class="money-input" currencyMask [options]="Op.amount"
+                                            [(ngModel)]="editCache[data.id].data.sluongTdiemBc"
+                                            (ngModelChange)="editCache[data.id].data.changeModel()" />
+                                    </td>
+                                    <td>
+                                        <input class="money-input" currencyMask [options]="Op.amount"
+                                            [(ngModel)]="editCache[data.id].data.sluongDaNhan"
+                                            (ngModelChange)="editCache[data.id].data.changeModel()" />
+                                    </td>
+                                    <td>
+                                        <input class="money-input" currencyMask [options]="Op.amount"
+                                            [(ngModel)]="editCache[data.id].data.sluongDaPd"
+                                            (ngModelChange)="editCache[data.id].data.changeModel()" />
+                                    </td>
+                                    <td>
+                                        <!-- <input class="money-input" currencyMask [options]="Op.amount"
+                                            [(ngModel)]=""
+                                            (ngModelChange)="editCache[data.id].data.changeModel()" /> -->
+                                        {{Op.fmtVal(editCache[data.id].data.sluongCong)}}
+                                    </td>
+                                    <td>
+                                        <!-- {{ Op.fmtVal(editCache[data.id].data.sluongDmuc) }} -->
+                                        <input class="money-input" currencyMask [options]="Op.amount"
+                                            [(ngModel)]="editCache[data.id].data.sluongDmuc"
+                                            (ngModelChange)="editCache[data.id].data.changeModel()" />
+                                    </td>
+                                    <td>
+                                        <input class="money-input" currencyMask [options]="Op.amount"
+                                            [(ngModel)]="editCache[data.id].data.sluongDtoan"
+                                            (ngModelChange)="editCache[data.id].data.changeModel()"
+                                            [class]="statusCanhBao == true ? '' : 'input-error-validate'" />
+                                    </td>
+                                    <td>
+                                        <!-- {{ Op.fmtVal(editCache[data.id].data.mucGia) }} -->
+                                        <input class="money-input" currencyMask [options]="Op.amount"
+                                            [(ngModel)]="editCache[data.id].data.mucGia"
+                                            (ngModelChange)="editCache[data.id].data.changeModel()" />
+                                    </td>
+                                    <td>
+                                        {{ Op.fmtVal(editCache[data.id].data.ttien) }}
+                                    </td>
+                                    <td *ngIf="status.general" nzRight>
+                                        <i *ngIf="checkDelete(data.stt)" class="fa fa-trash-o do"
+                                            (click)="deleteLine(data.id)"></i>
+                                    </td>
+                                    <td *ngIf="status.general" nzRight>
+                                        <a class="save" (click)="saveEdit(data.id)" style="margin-right:15px">
+                                            Lưu
+                                        </a>
+                                        <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
+                                            (nzOnConfirm)="cancelEdit(data.id)" class="save">
+                                            Hủy
+                                        </a>
+                                    </td>
+                                </ng-template>
+                            </tr>
+
+                        </tbody>
+                    </nz-table>
+                </div>
+            </nz-tab>
+            <nz-tab nzTitle="Thuyết minh">
+                <textarea nz-input nzAutosize="{minRows: 4, maxRows: 16}" [(ngModel)]="formDetail.thuyetMinh"
+                    [disabled]="!status.general"></textarea>
+            </nz-tab>
+            <nz-tab nzTitle="Tài liệu đính kèm">
+                <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+                    <div nz-col class="gutter-row" [nzSpan]="3">
+                        <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" *ngIf="status.general">
+                            <button nz-button>
+                                <i nz-icon nzType="upload"></i>
+                                Chọn tài liệu đính kèm
+                            </button>
+                        </nz-upload>
+                        <button nz-button [nzType]="'primary'" (click)="handleUpload()"
+                            [disabled]="fileList.length === 0" *ngIf="status.general" style="margin-top: 16px">
+                            Thêm vào danh sách
+                        </button>
+                    </div>
+                </div>
+                <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+                    <div nz-col class="gutter-row" [nzSpan]="13">
+                        <nz-table nzBordered class="table__body">
+                            <thead>
+                                <tr>
+                                    <th nzWidth="7%">STT</th>
+                                    <th>Tên file</th>
+                                    <th nzWidth="15%"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let data of formDetail.lstFiles; let i = index">
+                                    <td>{{ i + 1 }} </td>
+                                    <td>{{ data.fileName }}</td>
+                                    <td>
+                                        <a (click)="downloadFile(data.id)">
+                                            <i class="fa fa-eye"></i>
+                                        </a>
+                                        <a (click)="deleteFile(data.id)">
+                                            <i class="fa fa-trash-o do"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </nz-table>
+                    </div>
+                </div>
+            </nz-tab>
+        </nz-tabset>
+    </div>
+    <div class="modal-footer">
+        <div class="nut">
+            <div class="cantrai">
+                <button type="button" class="btn btn-main" *ngIf="status.export" (click)="exportToExcel()">
+                    <span nz-icon nzType="export" nzTheme="outline" style="margin-right: 5px;"></span>
+                    <span>Xuất</span>
+                </button>
+                <button type="button" class="btn btn-sub" (click)="save('5', null)" *ngIf="status.finish">
+                    <i nz-icon nzType="check" nzTheme="outline"></i>
+                    <span>Hoàn tất nhập liệu</span>
+                </button>
+                <button type="button" class="btn btn-sub" (click)="save('4', null)" *ngIf="status.finish">
+                    <i class="icon htvbdh_tcdt_save"></i>
+                    <span>Lưu</span>
+                </button>
+                <button type="button" class="btn btn-sub" (click)="save('1', null)" *ngIf="status.ok">
+                    <i nz-icon nzType="check" nzTheme="outline"></i>
+                    <span>Chấp nhận</span>
+                </button>
+            </div>
+            <div class="canphai">
+                <button type="button" class="btn btn-do" (click)="tuChoi('0')" *ngIf="status.ok">
+                    <i nz-icon nzType="close" nzTheme="outline"></i>
+                    <span>Không chấp nhận</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</ng-container>

@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { AppComponent } from 'src/app/app.component';
 import { ComponentsModule } from 'src/app/components/components.module';
 import { DirectivesModule } from 'src/app/directives/directives.module';
 import { AddBaoCaoModule } from './add-bao-cao/add-bao-cao.module';
@@ -11,6 +12,7 @@ import { DialogTaoMoiComponent } from './dialog-tao-moi/dialog-tao-moi.component
 import { DialogThemKhoanMucComponent } from './dialog-them-khoan-muc/dialog-them-khoan-muc.component';
 import { DialogThemThongTinQuyetToanComponent } from './dialog-them-thong-tin-quyet-toan/dialog-them-thong-tin-quyet-toan.component';
 import { DialogTongHopComponent } from './dialog-tong-hop/dialog-tong-hop.component';
+import { DialogSelectTaiSanComponent } from './dialogSelectTaiSan/dialogSelectTaiSan.component';
 import { GiaoDuToanComponent } from './giao-du-toan.component';
 import { PhanBoDuToanComponent } from './phan-bo-du-toan/phan-bo-du-toan.component';
 import { QuyetDinhBoTaiChinhComponent } from './quyet-dinh-bo-tai-chinh/quyet-dinh-bo-tai-chinh.component';
@@ -35,6 +37,8 @@ import { TongHopBaoCaoCapDuoiComponent } from './tong-hop-bao-cao-cap-duoi/tong-
     DialogTongHopComponent,
     DanhSachBaoCaoComponent,
     DialogThemKhoanMucComponent,
+    DialogSelectTaiSanComponent,
+
   ],
   imports: [
     CommonModule,
@@ -57,7 +61,9 @@ import { TongHopBaoCaoCapDuoiComponent } from './tong-hop-bao-cao-cap-duoi/tong-
     ChiTietDuToanTuCapTrenComponent,
     DialogTongHopComponent,
     DanhSachBaoCaoComponent,
-    DialogThemKhoanMucComponent
+    DialogThemKhoanMucComponent,
+    DialogSelectTaiSanComponent,
   ],
+  bootstrap: [AppComponent],
 })
 export class GiaoDuToanModule { }
