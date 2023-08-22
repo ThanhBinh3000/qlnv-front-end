@@ -221,13 +221,14 @@
           <th class="text-center" nzWidth="40px" nzLeft></th>
           <th class="text-center multi-line" nzWidth="100px"  nzLeft>Tên gói thầu</th>
           <th class="text-center multi-line" nzWidth="100px"  nzLeft>Chủng loại hàng DTQG</th>
+          <th class="text-center multi-line" nzWidth="100px"  >Đơn vị tính</th>
           <th class="text-center multi-line" nzWidth="100px"  nzLeft>Cục DTNN KV</th>
           <th class="text-center multi-line" nzWidth="100px"  >Chỉ tiêu kế hoạch<br/>được giao</th>
           <th class="text-center multi-line" nzWidth="100px"  >Số đã thực hiện</th>
-          <th class="text-center multi-line" nzWidth="100px"  >Số đề xuất</th>
-          <th class="text-center multi-line" nzWidth="100px"  >Đơn vị tính</th>
+          <th class="text-center multi-line" nzWidth="100px"  >Số lượng<br/>trình phê duyệt</th>
           <th class="text-center multi-line" nzWidth="130px"  >Đơn giá cụ thể<br/> có VAT được duyệt (đ)</th>
           <th class="text-center multi-line" nzWidth="180px"  >Thành tiền theo đơn giá cụ thể<br/> có VAT được duyệt (đ)</th>
+          <th class="text-center multi-line" nzWidth="100px"  >Số còn lại chưa thực hiện</th>
           <th class="text-center multi-line" nzWidth="100px"  *ngIf="!isView">Hành động</th>
         </tr>
         </thead>
@@ -238,13 +239,14 @@
               <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)" nzLeft></td>
               <td nzLeft class="multi-line">{{item.goiThau}}</td>
               <td nzLeft class="multi-line">{{item.tenCloaiVthh}}</td>
+              <td class="text-center">{{item.dviTinh}}</td>
               <td nzLeft></td>
               <td></td>
               <td></td>
               <td class="text-right blue-text bold-700">{{item.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-              <td class="text-left">{{item.dviTinh}}</td>
               <td class="text-right">{{item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
               <td class="text-right bold-700">{{item.soLuong * item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
+              <td></td>
               <td *ngIf="!isView">
                 <a (click)="themMoiGoiThau($event, item,i)">
                   <i class="fa fa-pencil" title="Sửa"></i>
@@ -260,13 +262,14 @@
                   <td nzLeft></td>
                   <td nzLeft></td>
                   <td nzLeft></td>
+                  <td class="text-center">{{item.dviTinh}}</td>
                   <td nzLeft class="multi-line">{{cuc.tenDvi}}</td>
                   <td class="text-right red-text">{{cuc.soLuongTheoChiTieu | number : '1.0-1' : 'vi_VN'}}</td>
                   <td class="text-right red-text">{{cuc.soLuongDaMua | number : '1.0-1' : 'vi_VN'}}</td>
                   <td class="text-right blue-text">{{cuc.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                  <td class="text-left">{{item.dviTinh}}</td>
                   <td class="text-right">{{item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
                   <td class="text-right">{{cuc.soLuong * item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
+                  <td class="text-right">{{cuc.soLuongTheoChiTieu - cuc.soLuongDaMua | number : '1.0-1' : 'vi_VN'}}</td>
                   <td class="text-right" *ngIf="!isView"></td>
                 </tr>
               </ng-container>
@@ -279,13 +282,14 @@
               <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)" nzLeft></td>
               <td nzLeft class="multi-line">{{item.goiThau}}</td>
               <td nzLeft class="multi-line">{{item.tenCloaiVthh}}</td>
+              <td class="text-center">{{item.dviTinh}}</td>
               <td nzLeft></td>
               <td></td>
               <td></td>
               <td class="text-right blue-text bold-700">{{item.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-              <td class="text-left">{{item.dviTinh}}</td>
               <td class="text-right">{{item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
               <td class="text-right bold-700">{{item.soLuong * item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
+              <td></td>
               <td *ngIf="!isView">
                 <a (click)="themMoiGoiThau($event, item,i)">
                   <i class="fa fa-pencil" title="Sửa"></i>
@@ -301,34 +305,36 @@
                   <td nzLeft></td>
                   <td nzLeft></td>
                   <td nzLeft></td>
+                  <td class="text-center">{{item.dviTinh}}</td>
                   <td nzLeft class="multi-line">{{cuc.tenDvi}}</td>
                   <td class="text-right red-text">{{cuc.soLuongTheoChiTieu | number : '1.0-1' : 'vi_VN'}}</td>
                   <td class="text-right red-text">{{cuc.soLuongDaMua | number : '1.0-1' : 'vi_VN'}}</td>
                   <td class="text-right blue-text">{{cuc.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                  <td class="text-left">{{item.dviTinh}}</td>
                   <td class="text-right">{{item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
                   <td class="text-right">{{cuc.soLuong * item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
+                  <td class="text-right">{{cuc.soLuongTheoChiTieu - cuc.soLuongDaMua | number : '1.0-1' : 'vi_VN'}}</td>
                   <td class="text-right" *ngIf="!isView"></td>
                 </tr>
               </ng-container>
             </ng-container>
           </ng-container>
         </ng-template>
-        </tbody>
         <tr *ngIf="listOfData.length > 0">
           <td nzLeft></td>
           <td nzLeft></td>
           <td nzLeft></td>
+          <td></td>
           <td nzLeft class="first-last-row-table background-last-row text-right blue-text">Tổng</td>
           <td></td>
           <td></td>
           <td class="background-last-row text-right blue-text">{{ calcTongSl() | number : '1.0-1' : 'vi_VN' }}</td>
           <td></td>
-          <td></td>
           <td class="background-last-row text-right blue-text">{{ calcTongThanhTien() | number : '1.0-1' :
             'vi_VN'}}</td>
+          <td></td>
           <td *ngIf="!isView"></td>
         </tr>
+        </tbody>
       </nz-table>
     </nz-collapse-panel>
   </nz-collapse>
