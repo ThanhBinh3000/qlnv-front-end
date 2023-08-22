@@ -38,6 +38,8 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
   isQuyetDinh: boolean = false;
   datePipe = new DatePipe('en-US');
   selected: boolean = false;
+  listVatTuCha: any[] = [];
+  listVatTu: any[] = [];
 
   constructor(
     httpClient: HttpClient,
@@ -51,10 +53,10 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
     super(httpClient, storageService, notification, spinner, modal, tongHopDeXuatKeHoachBanDauGiaService);
     this.formTraCuu = this.fb.group(
       {
-        loaiVthh: ['', [Validators.required]],
-        tenLoaiVthh: ['', [Validators.required]],
-        cloaiVthh: ['', [Validators.required]],
-        tenCloaiVthh: ['', [Validators.required]],
+        loaiVthh: [''],
+        tenLoaiVthh: [''],
+        cloaiVthh: [''],
+        tenCloaiVthh: [''],
         namKh: [dayjs().get('year'), [Validators.required]],
         ngayDuyetTu: [null],
         ngayDuyetDen: [null],
@@ -81,12 +83,15 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
   async ngOnInit() {
     await this.spinner.show();
     try {
+      await Promise.all([
+        this.loadDsTenVthh(),
+        this.loadDsVthh()
+      ]);
       if (this.idInput > 0) {
         await this.loadChiTiet()
       } else {
         await this.initForm();
       }
-      await this.loadDsVthh()
       await this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -113,6 +118,9 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
         });
         if (data.children && data.children.length > 0) {
           this.showFirstRow(event, data.children[0].idDxHdr);
+        }
+        if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
+          await this.onChangeCLoaiVthh(data.loaiVthh)
         }
       } else {
         this.isTongHop = false;
@@ -186,16 +194,6 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
     return endValue.getTime() <= this.formTraCuu.value.ngayDuyetTu.getTime();
   };
 
-  setValidator() {
-    if (this.formTraCuu.value.ngayDuyetTu == null) {
-      this.formTraCuu.controls["ngayDuyetDen"].setValidators([Validators.required])
-      this.formTraCuu.controls["ngayDuyetTu"].clearValidators();
-    } else {
-      this.formTraCuu.controls["ngayDuyetTu"].setValidators([Validators.required])
-      this.formTraCuu.controls["ngayDuyetDen"].clearValidators();
-    }
-  }
-
   showList() {
     this.isDetailDxCuc = false;
   }
@@ -228,6 +226,29 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
   async loadDsVthh() {
     let res = await this.danhMucService.loadDanhMucHangHoa().toPromise();
     if (res.msg == MESSAGE.SUCCESS) {
+      const data = res.data.filter(s => s.ma === this.loaiVthh);
+      data.forEach((item) => {
+        this.listVatTuCha = item.children
+      })
+    }
+  }
+
+  async onChangeCLoaiVthh(event, isCloai?) {
+    // if (isCloai) {
+    //   this.formTraCuu.patchValue({
+    //     cloaiVthh: null,
+    //     tenCloaiVthh: null,
+    //   })
+    // }
+    const data = this.listVatTuCha.filter(s => s.ma === event)
+    data.forEach((item) => {
+      this.listVatTu = item.children
+    })
+  }
+
+  async loadDsTenVthh() {
+    let res = await this.danhMucService.loadDanhMucHangHoa().toPromise();
+    if (res.msg == MESSAGE.SUCCESS) {
       if (this.loaiVthh === LOAI_HANG_DTQG.GAO || this.loaiVthh === LOAI_HANG_DTQG.THOC) {
         res.data.forEach((item) => {
           this.formTraCuu.patchValue({
@@ -240,6 +261,20 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
           tenLoaiVthh: res.data?.find(s => s.ma == this.loaiVthh)?.ten,
         })
       }
+    }
+  }
+
+  setValidator() {
+    if (!this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
+      this.formTraCuu.controls["loaiVthh"].setValidators([Validators.required])
+      this.formTraCuu.controls["tenLoaiVthh"].setValidators([Validators.required])
+      this.formTraCuu.controls["cloaiVthh"].setValidators([Validators.required])
+      this.formTraCuu.controls["tenCloaiVthh"].setValidators([Validators.required])
+    } else {
+      this.formTraCuu.controls["loaiVthh"].setValidators([Validators.required])
+      this.formTraCuu.controls["tenLoaiVthh"].clearValidators();
+      this.formTraCuu.controls["cloaiVthh"].clearValidators();
+      this.formTraCuu.controls["tenCloaiVthh"].clearValidators();
     }
   }
 

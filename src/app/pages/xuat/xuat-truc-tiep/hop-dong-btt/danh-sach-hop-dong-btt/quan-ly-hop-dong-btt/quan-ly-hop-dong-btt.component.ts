@@ -105,21 +105,21 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
     await this.spinner.show();
     if (id > 0) {
       if (this.userService.isChiCuc()) {
-        await this.quyetDinhPdKhBanTrucTiepService.getDtlDetail(id)
+        await this.chaoGiaMuaLeUyQuyenService.getDetail(id)
           .then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               const data = res.data
               this.formData.patchValue({
                 trangThaiHd: data.trangThaiHd,
                 tenTrangThaiHd: data.tenTrangThaiHd,
-                namKh: data.xhQdPdKhBttHdr.namKh,
-                soQdPd: data.xhQdPdKhBttHdr.soQdPd,
-                loaiVthh: data.xhQdPdKhBttHdr.loaiVthh,
-                tenLoaiVthh: data.xhQdPdKhBttHdr.tenLoaiVthh,
-                cloaiVthh: data.xhQdPdKhBttHdr.cloaiVthh,
-                tenCloaiVthh: data.xhQdPdKhBttHdr.tenCloaiVthh,
-                loaiHinhNx: data.xhQdPdKhBttHdr.loaiHinhNx != null ? 'Xuất bán đấu giá' : null,
-                kieuNx: data.xhQdPdKhBttHdr.kieuNx != null ? 'Xuất bán' : null,
+                namKh: data.namKh,
+                soQdPd: data.soQdPd,
+                loaiVthh: data.loaiVthh,
+                tenLoaiVthh: data.tenLoaiVthh,
+                cloaiVthh: data.cloaiVthh,
+                tenCloaiVthh: data.tenCloaiVthh,
+                loaiHinhNx: data.loaiHinhNx != null ? 'Xuất bán đấu giá' : null,
+                kieuNx: data.kieuNx != null ? 'Xuất bán' : null,
                 vat: '5 %',
               })
               this.dataTable = data.listHopDongBtt;
@@ -231,7 +231,7 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
               id: this.id,
               trangThai: STATUS.DA_HOAN_THANH,
             };
-            let res = await this.quyetDinhPdKhBanTrucTiepService.approve(body);
+            let res = await this.qdPdKetQuaBttService.approve(body);
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,

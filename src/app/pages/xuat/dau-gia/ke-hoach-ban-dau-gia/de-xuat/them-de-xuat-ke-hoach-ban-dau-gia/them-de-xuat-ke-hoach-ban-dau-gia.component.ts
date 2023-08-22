@@ -28,6 +28,7 @@ import {DatePipe} from '@angular/common';
 import {PREVIEW} from "../../../../../../constants/fileType";
 import {saveAs} from 'file-saver';
 import {FileDinhKem} from "../../../../../../models/CuuTro";
+import {QuyetDinhGiaCuaBtcService} from "../../../../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaCuaBtc.service";
 
 @Component({
   selector: 'app-them-de-xuat-ke-hoach-ban-dau-gia',
@@ -54,6 +55,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
   pdfBlob: any;
   pdfSrc: any;
   wordSrc: any;
+  dataDonGiaDuocDuyet: any;
 
   constructor(
     httpClient: HttpClient,
@@ -66,6 +68,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
     private chiTieuKeHoachNamCapTongCucService: ChiTieuKeHoachNamCapTongCucService,
     private dmTieuChuanService: DanhMucTieuChuanService,
     private quyetDinhGiaTCDTNNService: QuyetDinhGiaTCDTNNService,
+    private quyetDinhGiaCuaBtcService: QuyetDinhGiaCuaBtcService
   ) {
     super(httpClient, storageService, notification, spinner, modal, deXuatKhBanDauGiaService);
     this.formData = this.fb.group({
@@ -173,8 +176,12 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
           thoiGianDuKien: (data.tgianDkienTu && data.tgianDkienDen) ? [data.tgianDkienTu, data.tgianDkienDen] : null
         })
         this.dataTable = data.children;
-        this.getGiaToiThieu();
-        this.onChangeLoaiVthh(data.loaiVthh);
+        await this.getDataChiTieu()
+        if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
+          await this.onChangeLoaiVthh(data.loaiVthh, );
+        }
+        await this.getGiaToiThieu();
+        await this.donGiaDuocDuyet();
       }
     }
   }
@@ -259,6 +266,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
           });
         }
         await this.getGiaToiThieu();
+        await this.donGiaDuocDuyet();
       }
     });
   }
@@ -276,28 +284,74 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
     })
       .filter((value, index, self) => index === self.findIndex(item => item.maVatTu === value.maVatTu && item.maVatTu != null));
     let vatTu = this.dataChiTieu?.khVatTuXuat.find(s => s.maVatTuCha === event)
-    this.formData.patchValue({
-      donViTinh: vatTu.donViTinh,
-      tenCloaiVthh: vatTu.tenVatTu
-    })
+    if (isCloai) {
+      this.formData.patchValue({
+        donViTinh: vatTu?.donViTinh,
+        tenCloaiVthh: vatTu?.tenVatTu
+      })
+    }
   }
 
-  async getGiaToiThieu() {
-    if (this.formData.value.cloaiVthh && this.formData.value.namKh) {
-      let res = await this.deXuatKhBanDauGiaService.getGiaBanToiThieu(this.formData.get('cloaiVthh').value, this.userInfo.MA_DVI, this.formData.get('namKh').value);
-      if (res.msg === MESSAGE.SUCCESS) {
-        this.giaToiDa = res.data;
-      }
-      let resTC = await this.dmTieuChuanService.getDetailByMaHh(
-        this.formData.get('cloaiVthh').value,
-      );
-      if (resTC.statusCode == API_STATUS_CODE.SUCCESS) {
-        this.formData.patchValue({
-          tchuanCluong: resTC.data ? resTC.data.tenQchuan : null,
-        });
-      }
-      await this.calculatorTable();
+  async onChangeCloaiVthh(event) {
+    await this.getGiaToiThieu(event);
+    await this.donGiaDuocDuyet();
+  }
+
+  async getGiaToiThieu(event?) {
+    let body = {
+      namKeHoach: this.formData.get('namKh').value,
+      loaiVthh: this.formData.get('loaiVthh').value,
+      cloaiVthh: this.formData.get('cloaiVthh').value,
+      loaiGia: "LG02",
+      maDvi: this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? '0101' : this.userInfo.MA_DVI,
+      trangThai: STATUS.BAN_HANH
     }
+    let res = await this.quyetDinhGiaCuaBtcService.getQdGiaLastestBtc(body);
+    if (res.msg === MESSAGE.SUCCESS) {
+      if (res.data) {
+        let giaToiDa = 0;
+        res.data.forEach((item) => {
+          let giaQdBtc = 0;
+          if (item.giaQdBtc != null && item.giaQdBtc > 0) {
+            giaQdBtc = item.giaQdBtc
+          } else {
+            giaQdBtc = item.giaQdDcBtc
+          }
+          if (giaQdBtc > giaToiDa) {
+            giaToiDa = giaQdBtc;
+          }
+        })
+        this.giaToiDa = giaToiDa;
+      }
+    }
+    let resTC = await this.dmTieuChuanService.getDetailByMaHh(
+      this.formData.get('cloaiVthh').value,
+    );
+    if (resTC.statusCode == API_STATUS_CODE.SUCCESS) {
+      this.formData.patchValue({
+        tchuanCluong: resTC.data ? resTC.data.tenQchuan : null,
+      });
+    }
+  }
+
+  async donGiaDuocDuyet() {
+    let bodyPag = {
+      namKeHoach: this.formData.get('namKh').value,
+      loaiVthh: this.formData.get('loaiVthh').value,
+      cloaiVthh: this.formData.get('cloaiVthh').value,
+      trangThai: STATUS.BAN_HANH,
+      maDvi: this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? '' :this.userInfo.MA_DVI,
+      loaiGia: 'LG04'
+    }
+    let pag = await this.quyetDinhGiaTCDTNNService.getPag(bodyPag)
+    if (pag.msg == MESSAGE.SUCCESS) {
+      if (pag.data) {
+        this.dataDonGiaDuocDuyet = pag.data;
+      } else {
+        this.dataDonGiaDuocDuyet = null;
+      }
+    }
+    await this.calculatorTable();
   }
 
   themMoiBangPhanLoTaiSan($event, data?: DanhSachPhanLo, index?: number) {
@@ -328,6 +382,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
         nzComponentParams: {
           dataEdit: data,
           dataChiTieu: this.dataChiTieu,
+          dataDonGiaDuocDuyet: this.dataDonGiaDuocDuyet,
           loaiVthh: this.formData.get('loaiVthh').value,
           cloaiVthh: this.formData.get('cloaiVthh').value,
           tenCloaiVthh: this.formData.get('tenCloaiVthh').value,
@@ -379,6 +434,13 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
       item.tongGiaKdiemDd = 0;
       item.tongTienDtruocDd = 0;
       item.children.forEach((child) => {
+        if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
+          this.dataDonGiaDuocDuyet?.forEach(s => {
+            child.donGiaDuocDuyet = s.giaQdTcdt
+          })
+        } else {
+          child.donGiaDuocDuyet = this.dataDonGiaDuocDuyet?.find(s => s.maChiCuc === item.maDvi).giaQdTcdt;
+        }
         child.giaKhoiDiemDd = child.soLuongDeXuat * child.donGiaDuocDuyet;
         child.soTienDtruocDd = child.soLuongDeXuat * child.donGiaDuocDuyet * this.formData.value.khoanTienDatTruoc / 100;
         item.tongGiaKdiemDx += child.giaKhoiDiemDx;

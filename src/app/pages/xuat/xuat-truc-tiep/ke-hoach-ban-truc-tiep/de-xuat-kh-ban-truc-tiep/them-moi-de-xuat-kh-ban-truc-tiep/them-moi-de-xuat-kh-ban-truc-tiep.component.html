@@ -219,8 +219,8 @@
         <div nz-col [nzSpan]="6" *ngIf="loaiVthh.startsWith('02')">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng hóa</nz-form-label>
-            <nz-form-control nz-col>
-              <nz-select formControlName="cloaiVthh" [nzDisabled]="isView">
+            <nz-form-control [nzErrorTip]="error">
+              <nz-select formControlName="cloaiVthh" (ngModelChange)="onChangeCloaiVthh($event)" [nzDisabled]="isView">
                 <nz-option *ngFor="let item of listVatTu" [nzValue]="item.maVatTu" [nzLabel]="item.tenVatTu">
                 </nz-option>
               </nz-select>
