@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { NgxSpinnerService } from 'ngx-spinner';
 import { UserService } from 'src/app/services/user.service';
-import { TAB_LIST } from './dieu-chinh-du-toan.constant';
+import { Dcdt } from './dieu-chinh-du-toan.constant';
 
 @Component({
     selector: 'app-dieu-chinh-du-toan',
@@ -9,10 +8,10 @@ import { TAB_LIST } from './dieu-chinh-du-toan.constant';
     styleUrls: ['./dieu-chinh-du-toan.component.scss']
 })
 export class DieuChinhDuToanComponent implements OnInit {
-
+    Dctd = Dcdt;
     tabSelected!: string;
     data: any;
-    tabList: any[] = TAB_LIST;
+    tabList: any[] = Dcdt.TAB_LIST;
 
     constructor(
         public userService: UserService,

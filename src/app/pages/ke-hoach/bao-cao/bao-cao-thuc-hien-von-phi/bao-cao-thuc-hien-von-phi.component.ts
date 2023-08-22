@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { UserService } from 'src/app/services/user.service';
-import { TAB_LIST } from './bao-cao-thuc-hien-von-phi.constant';
+import { Vp } from './bao-cao-thuc-hien-von-phi.constant';
 
 @Component({
     selector: 'app-bao-cao-thuc-hien-von-phi',
@@ -9,10 +9,10 @@ import { TAB_LIST } from './bao-cao-thuc-hien-von-phi.constant';
     styleUrls: ['./bao-cao-thuc-hien-von-phi.component.scss']
 })
 export class BaoCaoThucHienVonPhiComponent implements OnInit {
-
+    Vp = Vp;
     tabSelected!: string;
     data: any;
-    tabList: any[] = TAB_LIST;
+    tabList: any[] = Vp.TAB_LIST;
 
     constructor(
         private spinner: NgxSpinnerService,

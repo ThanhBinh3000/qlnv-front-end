@@ -60,7 +60,7 @@
             <div class="header mg-t-16">
                 <div class="header-text">
                     <div class="title-chi-tieu">
-                        <span [ngClass]="statusClass()">{{getStatusName()}}</span>
+                        <span [ngClass]="Status.statusClass(trangThaiBanGhi)">{{getStatusName()}}</span>
                         <span>Phương án giao số kiểm tra trần chi (từ đơn vị cấp trên)</span>
                     </div>
                 </div>
@@ -166,16 +166,16 @@
                                         <div *ngFor="let item of noiDungs">
                                             <div *ngIf="item.ma == data.maNdung">
                                                 <span nzWidth="150px">
-                                                    {{item.tenDm}}
+                                                    {{item.giaTri}}
                                                 </span>
                                             </div>
                                         </div>
                                     </td>
-                                    <td>{{displayValue(data.tongCong)}}</td>
+                                    <td>{{Op.fmtVal(data.tongCong)}}</td>
                                     <td *ngFor="let item of lstDvi">
                                         <div *ngFor="let e of data.lstCtietDvis;">
                                             <div *ngIf="e.maDviNhan == item.maDvi">
-                                                {{displayValue(e.soTranChi)}}
+                                                {{Op.fmtVal(e.soTranChi)}}
                                             </div>
                                         </div>
                                     </td>
@@ -192,12 +192,12 @@
                                     <td nzLeft>
                                         <div *ngFor="let item of noiDungs;">
                                             <div *ngIf="item.ma ==data.maNdung">
-                                                {{item.tenDm}}
+                                                {{item.giaTri}}
                                             </div>
                                         </div>
                                     </td>
                                     <td>
-                                        {{displayValue(editCache[data.id].data.tongCong)}}
+                                        {{Op.fmtVal(editCache[data.id].data.tongCong)}}
                                     </td>
                                     <td *ngFor="let item of lstDvi">
                                         <div *ngFor="let e of editCache[data.id].data.lstCtietDvis">
@@ -292,7 +292,8 @@
                     <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
                         <div nz-col class="gutter-row" [nzSpan]="3">
                             Danh sách văn bản đính kèm
-                            <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" [hidden]="status">
+                            <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" [nzMultiple]="true"
+                                [hidden]="status">
                                 <button nz-button>
                                     <i nz-icon nzType="upload"></i>
                                     Select File

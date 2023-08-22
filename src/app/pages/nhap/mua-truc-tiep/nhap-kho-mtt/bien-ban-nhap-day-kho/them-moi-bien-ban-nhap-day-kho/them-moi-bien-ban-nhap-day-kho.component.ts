@@ -24,7 +24,6 @@ import { StorageService } from 'src/app/services/storage.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { QuyetDinhGiaoNvNhapHangService } from 'src/app/services/qlnv-hang/nhap-hang/mua-truc-tiep/qdinh-giao-nvu-nh/quyetDinhGiaoNvNhapHang.service';
 import { BienBanDayKhoMuaTrucTiepService } from 'src/app/services/bien-ban-day-kho-mua-truc-tiep.service';
-import { ItemCongVan } from 'src/app/pages/ke-hoach/bao-cao/bao-cao-thuc-hien-du-toan-chi/bao-cao/bao-cao.component';
 
 @Component({
   selector: 'app-them-moi-bien-ban-nhap-day-kho',
