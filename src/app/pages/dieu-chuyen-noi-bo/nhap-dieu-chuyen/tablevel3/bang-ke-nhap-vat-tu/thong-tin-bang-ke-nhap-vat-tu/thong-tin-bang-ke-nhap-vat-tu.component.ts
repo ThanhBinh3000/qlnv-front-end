@@ -370,7 +370,7 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
     await this.spinner.show();
 
     let body = {
-      // trangThai: STATUS.BAN_HANH,
+      // trangThai: STATUS.DA_DUYET_LDCC,
       // loaiVthh: ['0101', '0102'],
       soQdinhDcc: this.formData.value.soQdinhDcc,
       loaiDc: this.loaiDc,

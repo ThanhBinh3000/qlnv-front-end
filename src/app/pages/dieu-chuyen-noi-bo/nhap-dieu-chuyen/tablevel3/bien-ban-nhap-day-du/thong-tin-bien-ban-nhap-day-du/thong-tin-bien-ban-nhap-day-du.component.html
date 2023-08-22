@@ -104,7 +104,7 @@
 
           <div nz-col [nzSpan]="4">
             <nz-form-item>
-              <nz-form-label nzRequired [nzNoColon]="true">Số biên bản</nz-form-label>
+              <nz-form-label nzRequired [nzNoColon]="true">Số biên bản nhập đầy kho</nz-form-label>
               <nz-form-control>
                 <input nz-input formControlName="soBb" [readonly]="true" />
               </nz-form-control>
@@ -224,14 +224,14 @@
     </form>
 
     <div class="mt16 flex-card p-lr16">
-      <div class="header header-green-background mg-t-16">
-        <div class="header-text">
-          <div class="title-chi-tieu">
-            <span></span>
-            <span>Đơn vị chủ động thực hiện</span>
-          </div>
-        </div>
-      </div>
+      <!-- <div class="header header-green-background mg-t-16">
+        <div class="header-text"> -->
+      <!-- <div class="title-chi-tieu"> -->
+      <span></span>
+      <span>Thông tin bảng kê cân hàng và phiếu nhập kho</span>
+      <!-- </div> -->
+      <!-- </div>
+      </div> -->
       <nz-card class="mt-2px flex-card data-table card-border-content table-card">
         <nz-table #tblDatadsHangTH class="nowrap mt-16 table-chi-tiet" nzBordered [nzData]="danhSach">
           <thead>

@@ -138,7 +138,7 @@ export class KiemTraChatLuongComponent extends Base2Component implements OnInit 
   }
 
   isSua(row) {
-    return row.trangThai == STATUS.DU_THAO || row.trangThai == STATUS.TU_CHOI_LDC
+    return row.trangThai == STATUS.DU_THAO || row.trangThai == STATUS.TU_CHOI_LDCC
   }
 
   selectTab(tab: number) {
