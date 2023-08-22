@@ -61,14 +61,14 @@
                                 <th colspan="2">Thành tiền</th>
                                 <th rowspan="2">Chênh lệch giữa giá bán thực tế và giá hạch toán</th>
                                 <th rowspan="2" class="text-col">Ghi chú</th>
-                                <th style="width: 60px;" rowspan="2" *ngIf="status" nzRight></th>
-                                <th style="width: 60px;" rowspan="2" *ngIf="status" nzRight></th>
-                                <!-- <th style="width: 60px;" rowspan="2" *ngIf="status" nzRight></th> -->
+                                <th style="width: 60px;" rowspan="2" *ngIf="status.save" nzRight></th>
+                                <th style="width: 60px;" rowspan="2" *ngIf="status.save" nzRight></th>
+                                <th style="width: 60px;" rowspan="2" *ngIf="status.save" nzRight></th>
                                 <!-- <th style="width: 40px;" rowspan="2" *ngIf="status" nzRight> -->
                                 <!-- </th> -->
                             </tr>
                             <tr>
-                                <th>Giá kế hoạch</th>
+                                <th>Giá hạch toán</th>
                                 <th>Giá bán tối thiểu tổng cục</th>
                                 <th>Giá bán thực tế</th>
                                 <th>Giá hạch toán</th>
@@ -87,9 +87,9 @@
                                 <th>7=2*5</th>
                                 <th>8=7-6</th>
                                 <th>D</th>
-                                <th *ngIf="status" nzRight></th>
-                                <th *ngIf="status" nzRight></th>
-                                <!-- <th *ngIf="status" nzRight></th> -->
+                                <th *ngIf="status.save" nzRight></th>
+                                <th *ngIf="status.save" nzRight></th>
+                                <th *ngIf="status.save" nzRight></th>
                                 <!-- <th *ngIf="status" nzRight></th> -->
                             </tr>
                         </thead>
@@ -133,33 +133,56 @@
                                         {{ data.ghiChu }}
                                     </td>
                                     <td *ngIf="status.save" nzRight>
-                                        <i *ngIf="data.level == 0 || data.level == 2" class="fa fa-plus"
-                                            (click)="addLine(data.id)"></i>
-                                        <i *ngIf="data.level == 3" class="fa fa-pencil"
-                                            (click)="startEdit(data.id)"></i>
-                                    </td>
-                                    <td *ngIf="status.save" nzRight>
                                         <i *ngIf="data.level > 1" class="fa fa-trash-o do"
                                             (click)="deleteLine(data.id)"></i>
                                     </td>
-                                    <!-- <td *ngIf="status.save" nzRight>
-
-                                    </td> -->
-                                    <!-- <td *ngIf="status.save" nzRight>
-                                        <label *ngIf="data.level > 0" nz-checkbox [nzValue]="data.id"
-                                            [(ngModel)]="data.checked" (ngModelChange)="updateChecked(data.id)"></label>
-                                    </td> -->
+                                    <td *ngIf="status.save" nzRight>
+                                        <i *ngIf="isEdit(data.level)" class="fa fa-pencil"
+                                            (click)="startEdit(data.id)"></i>
+                                    </td>
+                                    <td *ngIf="status.save" nzRight>
+                                        <i *ngIf="data.level == 0 || data.level == 2" class="fa fa-plus"
+                                            (click)="addLine(data.id)"></i>
+                                    </td>
                                 </ng-container>
                                 <ng-template #editTemplate>
-                                    <td>
+                                    <ng-container *ngIf="data.level == 2; else child">
+                                        <td>
+                                            <input class="money-input" currencyMask [options]="Op.amount"
+                                                [(ngModel)]="editCache[data.id].data.soLuongKhoach" />
+                                        </td>
+                                        <td> </td>
+                                        <td> </td>
+                                        <td>
+                                            <input class="money-input" currencyMask [options]="Op.amount"
+                                                [(ngModel)]="editCache[data.id].data.dgGiaBanTthieu" />
+                                        </td>
+                                        <td> </td>
+                                    </ng-container>
+                                    <ng-template #child>
+                                        <td> </td>
+                                        <td>
+                                            <input class="money-input" currencyMask [options]="Op.amount"
+                                                [(ngModel)]="editCache[data.id].data.soLuongTte"
+                                                (ngModelChange)="editCache[data.id].data.changeModel()" />
+                                        </td>
+                                        <td>
+                                            <input class="money-input" currencyMask [options]="Op.amount"
+                                                [(ngModel)]="editCache[data.id].data.dgGiaKhoach"
+                                                (ngModelChange)="editCache[data.id].data.changeModel()" />
+                                        </td>
+                                        <td> </td>
+                                        <td>
+                                            <input class="money-input" currencyMask [options]="Op.amount"
+                                                [(ngModel)]="editCache[data.id].data.dgGiaBanTte"
+                                                (ngModelChange)="editCache[data.id].data.changeModel()" />
+                                        </td>
+                                    </ng-template>
+                                    <!-- <td>
                                         <input class="money-input" currencyMask [options]="Op.amount"
                                             [(ngModel)]="editCache[data.id].data.soLuongKhoach" />
                                     </td>
-                                    <td>
-                                        <input class="money-input" currencyMask [options]="Op.amount"
-                                            [(ngModel)]="editCache[data.id].data.soLuongTte"
-                                            (ngModelChange)="editCache[data.id].data.changeModel()" />
-                                    </td>
+                                    
                                     <td>
                                         <input class="money-input" currencyMask [options]="Op.amount"
                                             [(ngModel)]="editCache[data.id].data.dgGiaKhoach"
@@ -173,7 +196,7 @@
                                         <input class="money-input" currencyMask [options]="Op.amount"
                                             [(ngModel)]="editCache[data.id].data.dgGiaBanTte"
                                             (ngModelChange)="editCache[data.id].data.changeModel()" />
-                                    </td>
+                                    </td> -->
                                     <td>
                                         {{ Op.fmtVal(editCache[data.id].data.ttGiaHtoan) }}
                                     </td>
@@ -187,13 +210,12 @@
                                         <input nz-input [(ngModel)]="editCache[data.id].data.ghiChu" />
                                     </td>
                                     <td *ngIf="status.save" nzRight>
-                                        <a (click)="saveEdit(data.id)" class="save">Lưu</a>
-                                        <!-- <i *ngIf="data.level > 1" class="fa fa-trash-o do"
-                                            (click)="deleteLine(data.id)"></i> -->
+                                        <i *ngIf="data.level > 1" class="fa fa-trash-o do"
+                                            (click)="deleteLine(data.id)"></i>
                                     </td>
-                                    <!-- <td nzRight>
-                                        
-                                    </td> -->
+                                    <td *ngIf="status.save" nzRight>
+                                        <a (click)="saveEdit(data.id)" class="save">Lưu</a>
+                                    </td>
                                     <td *ngIf="status.save" nzRight>
                                         <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
                                             (nzOnConfirm)="cancelEdit(data.id)" class="save">
