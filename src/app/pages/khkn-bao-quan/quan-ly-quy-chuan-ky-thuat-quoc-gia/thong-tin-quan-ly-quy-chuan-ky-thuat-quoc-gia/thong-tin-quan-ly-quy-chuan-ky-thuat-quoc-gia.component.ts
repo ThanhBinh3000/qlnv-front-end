@@ -36,6 +36,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
   tabSelected: number = 0;
   dataTableKyThuat: any[] = [];
   dataTable: any[] = [];
+  dataTableView: any[] = [];
   listCapDt: any[] = [];
   listOfOption: any = [];
   listOfTagOptions: any = [];
@@ -55,8 +56,8 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
   dsBoNganh: any[] = [];
   listAll: any[] = [];
   listMaSo: any[] = [
-    { maVb: '/' + dayjs().get('year') + '/TT-BTC' },
-    { maVb: '/' + dayjs().get('year') + '/QĐ-BTC' },
+    {maVb: '/' + dayjs().get('year') + '/TT-BTC'},
+    {maVb: '/' + dayjs().get('year') + '/QĐ-BTC'},
   ];
 
   constructor(
@@ -97,6 +98,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
       maBn: [],
       maVb: this.listMaSo[0].maVb,
     });
+    this.filterTable = {}
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -162,7 +164,8 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
           }
         });
         this.taiLieuDinhKemList = data.fileDinhKems;
-        await this.updateEditCache();
+        this.dataTableView = cloneDeep(this.dataTable)
+        this.updateEditCache();
       }
     } else {
       // let id = await this.userService.getId("KHCN_QUY_CHUAN_QG_HDR_SEQ");
@@ -555,7 +558,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
             ...this.dataTable,
             item,
           ];
-
+          this.dataTableView = cloneDeep(this.dataTable)
           this.rowItem = new QuyChunKyThuatQuocGia();
           this.updateEditCache();
         } else {
@@ -565,7 +568,6 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
         if (this.rowItem.tenChiTieu && this.rowItem.cloaiVthh != null) {
           this.sortTableId();
           let item = cloneDeep(this.rowItem);
-          console.log(item, 3333333);
           // item.stt = this.dataTable.length + 1;
           item.loaiVthh = item.cloaiVthh ? item.cloaiVthh.substring(0, item.cloaiVthh.length - 2) : null;
           item.edit = false;
@@ -590,24 +592,24 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
     });
   }
 
-  editItem(index: number): void {
-    this.dataEdit[index].edit = true;
+  editItem(idx : number): void {
+    this.dataEdit[idx].edit = true;
   }
 
   updateEditCache(): void {
-    if (this.dataTable) {
-      this.dataTable.forEach((item, index) => {
+    if (this.dataTableView) {
+      this.dataTableView.forEach((item, index) => {
         this.dataEdit[index] = {
           edit: false,
-          data: { ...item },
+          data: {...item},
         };
       });
     }
   }
 
-  huyEdit(id: number): void {
-    const index = this.dataTable.findIndex((item) => item.idVirtual == id);
-    this.dataEdit[id] = {
+  huyEdit(idx: number): void {
+    const index = this.dataTable.findIndex(item => item.tenChiTieu == this.dataTableView[idx].tenChiTieu)
+    this.dataEdit[idx] = {
       data: { ...this.dataTable[index] },
       edit: false,
     };
@@ -615,12 +617,14 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
 
   luuEdit(index: number): void {
     this.hasError = (false);
-    Object.assign(this.dataTable[index], this.dataEdit[index].data);
+    const idx = this.dataTable.findIndex(item => item.tenChiTieu == this.dataTableView[index].tenChiTieu)
+    Object.assign(this.dataTable[idx], this.dataEdit[index].data);
+    this.dataTableView = cloneDeep(this.dataTable);
     this.dataEdit[index].edit = false;
   }
 
 
-  xoaItem(index: number) {
+  xoaItem(idx) {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -631,7 +635,9 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
       nzWidth: 400,
       nzOnOk: async () => {
         try {
+          const index = this.dataTable.findIndex(item => item.tenChiTieu == this.dataTableView[idx].tenChiTieu)
           this.dataTable.splice(index, 1);
+          this.dataTableView = cloneDeep(this.dataTable);
           this.updateEditCache();
           this.dataTable;
         } catch (e) {
@@ -669,12 +675,8 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
           this.listLoaiVthh = data.listTenLoaiVthh.split(',');
         }
         this.dataTable = data.tieuChuanKyThuat;
-        this.dataTable.forEach((item, index) => {
-          this.dataEdit[index] = {
-            edit: false,
-            data: { ...item },
-          };
-        });
+        this.dataTableView = cloneDeep(this.dataTable);
+        this.updateEditCache();
       }
     }
   }
@@ -708,13 +710,29 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
           }
           this.dataTable = [...this.dataTable, ...dt.tieuChuanKyThuat];
         });
-        this.dataTable.forEach((item, index) => {
-          this.dataEdit[index] = {
-            edit: false,
-            data: { ...item },
-          };
-        });
+        this.dataTableView = cloneDeep(this.dataTable);
+        this.updateEditCache();
       }
     });
+
+  }
+
+  searchInTable(key: string, value: string) {
+    if (value !=null && value != '') {
+      this.dataTableView = [];
+      let temp = [];
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1 || item[key] == value) {
+            temp.push(item)
+          }
+        });
+      }
+      this.dataTableView = [...this.dataTableView, ...temp];
+    }
+    else {
+      this.dataTableView = cloneDeep(this.dataTable);
+    }
+    this.updateEditCache();
   }
 }

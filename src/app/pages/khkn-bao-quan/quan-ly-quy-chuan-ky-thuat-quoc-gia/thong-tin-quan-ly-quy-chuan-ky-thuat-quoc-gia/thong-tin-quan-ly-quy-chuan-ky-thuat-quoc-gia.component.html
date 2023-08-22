@@ -11,30 +11,30 @@
         </div>
       </div>
       <div class='btn-group'>
-        <button type='button' class='btn btn-sub' (click)='quayLai()'>
+        <button type='button' class='btn btn-sub ml-2' (click)='quayLai()'>
           <i class='fa fa-arrow-left'></i>
           <span>Quay lại</span>
         </button>
         <button
           *ngIf="userService.isAccessPermisson('KHCNBQ_QCKTTCCS_DUYET') && formData.value.trangThai == STATUS.CHO_DUYET_LDV"
-          type='button' class='btn btn-sub do' (click)='tuChoi()'>
+          type='button' class='btn btn-sub do ml-2' (click)='tuChoi()'>
           <i class='icon htvbdh_tcdt_tuchoi '></i>
           <span>Từ chối</span>
         </button>
         <button
           *ngIf="userService.isAccessPermisson('KHCNBQ_QCKTTCCS_DUYET') && formData.value.trangThai == STATUS.CHO_DUYET_LDV"
-          type='button' class='btn btn-sub xanh-nhat' (click)='guiDuyet()'>
+          type='button' class='btn btn-sub xanh-nhat ml-2' (click)='guiDuyet()'>
           <i class='icon htvbdh_tcdt_pheduyet'></i>
           <span>Duyệt</span>
         </button>
         <button
           *ngIf="userService.isAccessPermisson('KHCNBQ_QCKTTCCS_THEM') && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV )"
-          type='button' class='btn btn-sub xanh-nhat' (click)='save(true)'>
+          type='button' class='btn btn-sub xanh-nhat ml-2' (click)='save(true)'>
           <i class='icon htvbdh_tcdt_guiduyet'></i>
           <span>Lưu và gửi duyệt</span>
         </button>
         <button *ngIf='(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV )'
-                type='button' class='btn btn-main' (click)='save()'>
+                type='button' class='btn btn-main ml-2' (click)='save()'>
           <i class='icon htvbdh_tcdt_save'></i>
           <span>Lưu</span>
         </button>
@@ -160,7 +160,7 @@
               <nz-form-label [nzNoColon]='true'>
                 Loại vật tư hàng hóa
               </nz-form-label>
-              <nz-select [nzDisabled]='listVanBanId > 0 || isView || dataTable.length > 0' nzMode='tags'
+              <nz-select [nzDisabled]='listVanBanId > 0 || isView || dataTable.length > 0 || id > 0' nzMode='tags'
                          nzPlaceHolder=''
                          [(ngModel)]='listOfTagOptions' (ngModelChange)='changeListOfTagOptions($event, true)'
                          [ngModelOptions]='{standalone: true}'>
@@ -223,14 +223,14 @@
         <form nzLayout='vertical' nz-form [formGroup]='formData' class='mg-t-10'>
           <div>
             <span class=' font-weight-bold'>Áp dụng cho toàn bộ chủng loại</span>
-            <nz-radio-group class='pd-10' [nzDisabled]=' this.dataTable.length > 0 || isView'
+            <nz-radio-group class='pd-10' [nzDisabled]='this.dataTable.length > 0 || isView || id > 0'
                             formControlName='apDungCloaiVthh' (ngModelChange)='onChangeLoaiVthh()'>
               <label nz-radio [nzValue]='true'> Có </label>
               <label nz-radio [nzValue]='false'> Không </label>
             </nz-radio-group>
           </div>
         </form>
-        <nz-table #basicTable class='mt-16 flex-card p-lr16' nzBordered [nzData]='dataTable' [nzFrontPagination]='false'
+        <nz-table  class='mt-16 flex-card p-lr16' nzBordered  [nzFrontPagination]='false'
                   [nzShowPagination]='false'>
           <thead>
           <tr>
@@ -246,33 +246,84 @@
             <th>Mức yêu cầu xuất tối đa</th>
             <th>Phương pháp xác định</th>
             <th>Ghi chú</th>
-            <th nzWidth='50px'
+            <th nzWidth='90px'
                 *ngIf='formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV'>
               Hành động
             </th>
           </tr>
+          <tr>
+            <th></th>
+            <th>
+              <nz-input-group>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenChiTieu"   [ngModelOptions]='{standalone: true}'
+                       (input)="searchInTable('tenChiTieu',filterTable.tenChiTieu)" size="small"/>
+              </nz-input-group>
+            </th>
+            <th *ngIf='formData.value.apDungCloaiVthh == false'>
+              <nz-input-group>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenCloaiVthh"   [ngModelOptions]='{standalone: true}'
+                       (input)="searchInTable('tenCloaiVthh',filterTable.tenCloaiVthh)" size="small"/>
+              </nz-input-group>
+            </th>
+            <th>
+              <nz-input-group>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.thuTuHt"   [ngModelOptions]='{standalone: true}'
+                       (input)="searchInTable('thuTuHt',filterTable.thuTuHt)" size="small"/>
+              </nz-input-group>
+            </th>
+            <th>
+              <nz-input-group>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.mucYeuCauNhap"   [ngModelOptions]='{standalone: true}'
+                       (input)="searchInTable('mucYeuCauNhap',filterTable.mucYeuCauNhap)" size="small"/>
+              </nz-input-group>
+            </th>
+            <th>
+              <nz-input-group>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.mucYeuCauNhapToiThieu"   [ngModelOptions]='{standalone: true}'
+                       (input)="searchInTable('mucYeuCauNhapToiThieu',filterTable.mucYeuCauNhapToiThieu)" size="small"/>
+              </nz-input-group>
+            </th>
+            <th>
+              <nz-input-group>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.mucYeuCauNhapToiDa"   [ngModelOptions]='{standalone: true}'
+                       (input)="searchInTable('mucYeuCauNhapToiDa',filterTable.mucYeuCauNhapToiDa)" size="small"/>
+              </nz-input-group>
+            </th>
+            <th>
+              <nz-input-group>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.mucYeuCauXuat"   [ngModelOptions]='{standalone: true}'
+                       (input)="searchInTable('mucYeuCauXuat',filterTable.mucYeuCauXuat)" size="small"/>
+              </nz-input-group>
+            </th>
+            <th>
+              <nz-input-group>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.mucYeuCauXuatToiThieu"   [ngModelOptions]='{standalone: true}'
+                       (input)="searchInTable('mucYeuCauXuatToiThieu',filterTable.mucYeuCauXuatToiThieu)" size="small"/>
+              </nz-input-group>
+            </th>
+            <th>
+              <nz-input-group>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.mucYeuCauXuatToiDa"   [ngModelOptions]='{standalone: true}'
+                       (input)="searchInTable('mucYeuCauXuatToiDa',filterTable.mucYeuCauXuatToiDa)" size="small"/>
+              </nz-input-group>
+            </th>
+            <th>
+              <nz-input-group>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.phuongPhapXd"   [ngModelOptions]='{standalone: true}'
+                       (input)="searchInTable('phuongPhapXd',filterTable.phuongPhapXd)" size="small"/>
+              </nz-input-group>
+            </th>
+            <th>
+              <nz-input-group>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ghiChu"   [ngModelOptions]='{standalone: true}'
+                       (input)="searchInTable('ghiChu',filterTable.ghiChu)" size="small"/>
+              </nz-input-group>
+            </th>
+            <th></th>
+          </tr>
           </thead>
           <tbody>
-          <tr *ngIf='dataTable && dataTable.length > 0'>
-            <td></td>
-            <td>
-
-            </td>
-            <td *ngIf='formData.value.apDungCloaiVthh == false'>
-
-            </td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-          <tr *ngIf='isView'>
+          <tr *ngIf='!isView'>
             <td></td>
             <td>
               <nz-input-group>
@@ -346,7 +397,7 @@
           </tr>
           </tbody>
           <tbody>
-          <tr *ngFor='let data of dataTable; let idx = index'>
+          <tr *ngFor='let data of dataTableView; let idx = index'>
             <ng-container *ngIf='!dataEdit[idx].edit; else editTemplate'>
               <td>{{ idx + 1 }}</td>
               <td>{{ data.tenChiTieu }}</td>
