@@ -1,12 +1,12 @@
-import {saveAs} from 'file-saver';
-import {FileDinhKem} from 'src/app/models/FileDinhKem';
-import {Component, Input, OnInit} from '@angular/core';
-import {UserService} from 'src/app/services/user.service';
-import {Globals} from 'src/app/shared/globals';
-import {UploadFileService} from 'src/app/services/uploaFile.service';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {MESSAGE} from 'src/app/constants/message';
-import {NzModalService} from "ng-zorro-antd/modal";
+import { saveAs } from 'file-saver';
+import { FileDinhKem } from 'src/app/models/FileDinhKem';
+import { Component, Input, OnInit } from '@angular/core';
+import { UserService } from 'src/app/services/user.service';
+import { Globals } from 'src/app/shared/globals';
+import { UploadFileService } from 'src/app/services/uploaFile.service';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { MESSAGE } from 'src/app/constants/message';
+import { NzModalService } from "ng-zorro-antd/modal";
 
 @Component({
   selector: 'file-list',

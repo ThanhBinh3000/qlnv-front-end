@@ -11,18 +11,18 @@
                     [class]="(searchFilter.namDnghi >= 1000 &&  searchFilter.namDnghi <= 2999) || !searchFilter.namDnghi && this.searchFilter.namDnghi !== 0 ?'' : 'input-error-validate'"
                     [(ngModel)]="searchFilter.namDnghi"></nz-input-number>
             </div>
-            <div nz-col nzSpan="3">
+            <div *ngIf="searchFilter.maLoai != Cvmb.TIEN_THUA" nz-col nzSpan="3">
                 <label class="search__label">Loại</label>
                 <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại" [(ngModel)]="searchFilter.loaiDnghi">
-                    <nz-option *ngFor="let item of loaiDns" [nzValue]="item.id" [nzLabel]="item.tenDm">
+                    <nz-option *ngFor="let item of Cvmb.LOAI_DE_NGHI" [nzValue]="item.id" [nzLabel]="item.tenDm">
                     </nz-option>
                 </nz-select>
             </div>
-            <div *ngIf="searchFilter.maLoai == 5" nz-col nzSpan="3">
+            <div *ngIf="searchFilter.maLoai == Cvmb.THANH_TOAN" nz-col nzSpan="3">
                 <label class="search__label">Căn cứ về giá</label>
                 <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn căn cứ giá"
                     [(ngModel)]="searchFilter.canCuVeGia">
-                    <nz-option *ngFor="let item of canCuGias" [nzValue]="item.id" [nzLabel]="item.tenDm">
+                    <nz-option *ngFor="let item of Cvmb.CAN_CU_GIA" [nzValue]="item.id" [nzLabel]="item.tenDm">
                     </nz-option>
                 </nz-select>
             </div>
@@ -81,11 +81,12 @@
                         <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"></label>
                     </th>
                     <th width="60px" class="text-center">STT</th>
-                    <th *ngIf="searchFilter.loaiTimKiem == '1'">Đơn vị</th>
+                    <th *ngIf="dataInfo.tabSelected == Tab.DS_GN_TT">Đơn vị</th>
                     <th>Mã cấp ứng</th>
                     <th>Năm</th>
-                    <th>Loại</th>
-                    <th *ngIf="searchFilter.maLoai == 5">Căn cứ về giá</th>
+                    <th>Đợt</th>
+                    <th *ngIf="searchFilter.maLoai != Cvmb.TIEN_THUA">Loại</th>
+                    <th *ngIf="searchFilter.maLoai == Cvmb.THANH_TOAN">Căn cứ về giá</th>
                     <th>Ngày tạo</th>
                     <th>Ngày trình duyệt</th>
                     <th>Ngày duyệt</th>
@@ -103,12 +104,8 @@
                     <td class="text-center">
                         {{ (i + 1) + (searchFilter.paggingReq.page - 1)*searchFilter.paggingReq.limit }}
                     </td>
-                    <td *ngIf="searchFilter.loaiTimKiem == '1'">
-                        <div *ngFor="let e of donVis">
-                            <div *ngIf="e.maDvi == data.maDvi">
-                                {{e.tenDvi}}
-                            </div>
-                        </div>
+                    <td *ngIf="dataInfo.tabSelected == Tab.DS_GN_TT">
+                        {{ getUnitName(data.maDvi) }}
                     </td>
                     <td>
                         {{ data.maCapUng}}
@@ -117,37 +114,51 @@
                         {{ data.namDnghi }}
                     </td>
                     <td>
-                        <div *ngFor="let e of loaiDns">
-                            <div *ngIf="e.id == data.loaiDnghi">
-                                {{e.tenDm}}
-                            </div>
-                        </div>
+                        {{ data.dot }}
                     </td>
-                    <td *ngIf="searchFilter.maLoai == 5">
-                        <div *ngFor="let e of canCuGias">
-                            <div *ngIf="e.id == data.canCuVeGia">
-                                {{e.tenDm}}
-                            </div>
-                        </div>
+                    <td *ngIf="searchFilter.maLoai != Cvmb.TIEN_THUA">
+                        {{ Cvmb.suggestionName(data.loaiDnghi)}}
+                    </td>
+                    <td *ngIf="searchFilter.maLoai == Cvmb.THANH_TOAN">
+                        {{ Cvmb.priceBasisName(data.canCuVeGia) }}
                     </td>
                     <td>
-                        {{ getDate(data.ngayTao) }}
+                        {{ Utils.fmtDate(data.ngayTao) }}
                     </td>
-                    <td>
-                        {{ getDate(data.ngayTrinh) }}
-                    </td>
-                    <td>
-                        {{ getDate(data.ngayDuyet) }}
-                    </td>
-                    <td>
-                        {{ getDate(data.ngayPheDuyet) }}
-                    </td>
-                    <td>
-                        {{getStatusName(data.trangThai)}}
-                        <ng-container *ngIf="data.trangThai == '3' || data.trangThai == '5'">
-                            <br>Lý do: {{data.lyDoTuChoi}}
-                        </ng-container>
-                    </td>
+                    <ng-container *ngIf="dataInfo.tabSelected == Tab.DS_GN_TT; else dvcd">
+                        <td>
+                            {{ Utils.fmtDate(data.ngayTrinhDvct) }}
+                        </td>
+                        <td>
+                            {{ Utils.fmtDate(data.ngayDuyetDvct) }}
+                        </td>
+                        <td>
+                            {{ Utils.fmtDate(data.ngayPheDuyetDvct) }}
+                        </td>
+                        <td>
+                            {{Status.reportStatusName(data.trangThaiDvct, isParent)}}
+                            <ng-container *ngIf="Status.check('reject', data.trangThaiDvct)">
+                                <br>Lý do: {{data.lyDoTuChoiDvct}}
+                            </ng-container>
+                        </td>
+                    </ng-container>
+                    <ng-template #dvcd>
+                        <td>
+                            {{ Utils.fmtDate(data.ngayTrinh) }}
+                        </td>
+                        <td>
+                            {{ Utils.fmtDate(data.ngayDuyet) }}
+                        </td>
+                        <td>
+                            {{ Utils.fmtDate(data.ngayPheDuyet) }}
+                        </td>
+                        <td>
+                            {{Status.reportStatusName(data.trangThai, isParent)}}
+                            <ng-container *ngIf="Status.check('reject', data.trangThai)">
+                                <br>Lý do: {{data.lyDoTuChoi}}
+                            </ng-container>
+                        </td>
+                    </ng-template>
                     <td class="text-left">
                         <a (click)="viewDetail(data)">
                             <ng-container *ngIf="data.isEdit; else view">
@@ -174,7 +185,7 @@
                         [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="onPageIndexChange($event)"
                         (nzPageSizeChange)="onPageSizeChange($event)">
                         <ng-template #rangeTemplate let-range="range" let-total>
-                            {{ range[0] }}-{{ range[1] }} of {{totalElements}} items
+                            {{ range[0] }}-{{ range[1] }} trong {{totalElements}} bản ghi
                         </ng-template>
                     </nz-pagination>
                 </div>

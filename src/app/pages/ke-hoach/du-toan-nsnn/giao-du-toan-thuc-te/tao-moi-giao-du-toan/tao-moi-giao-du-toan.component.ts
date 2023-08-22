@@ -1,6 +1,5 @@
 import { DatePipe, Location } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 import * as fileSaver from 'file-saver';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -13,15 +12,13 @@ import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
-import { DataService } from 'src/app/services/data.service';
 import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { displayNumber, exchangeMoney, getHead, sortByIndex, sumNumber } from 'src/app/Utility/func';
-import { AMOUNT, DON_VI_TIEN, GDT, LA_MA, MONEY_LIMIT, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { Roles, Operator, Status, Table, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
-import { NOI_DUNG } from './tao-moi-giao-du-toan.constant';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
 // khai báo class data request
 export class ItemData {
 	id: string;
@@ -58,6 +55,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 	@Input() data;
 
 	@Output() dataChange = new EventEmitter();
+	Op = new Operator("1")
 	// khai báo kiểu dữ liệu các nút
 	status = false; // trạng thái ẩn hiện thành phần
 	statusBtnSave: boolean; // trạng thái ẩn hiện nút lưu
@@ -74,6 +72,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 	statusBtnPrint: boolean; // trạng thái nút in
 	statusBtnTongHop = true; // trạng thái nút tổng hợp
 	isDataAvailable = false;
+	Status = Status;
 	//===================================================================================
 
 	// khai báo các thành phần
@@ -103,19 +102,19 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 
 	// khai báo các list
 	lstCtietBcao: ItemData[] = []; // danh sách data trong table
-	donViTiens: any[] = DON_VI_TIEN; // danh sách đơn vị tiền
+	donViTiens: any[] = Utils.DVI_TIEN; // danh sách đơn vị tiền
 	lstDvi: any[] = []; //danh sach don vi da duoc chon
-	noiDungs: any[] = NOI_DUNG; // danh sách nội dung danh mục
+	noiDungs: any[] = []; // danh sách nội dung danh mục
 	lstDviTrucThuoc: any[] = []; // danh sách báo cáo của các đơn vị trực thuộc
 	fileList: NzUploadFile[] = []; // danh sách file upload
 	lstFiles: any[] = []; //list file show ra màn hình
 	listIdFilesDelete: any[] = []; // list id file khi xóa file
 	donVis: any[] = []; // list đơn vị
 	donVis1: any[] = []; // list đơn vị
-	trangThais: any[] = TRANG_THAI_TIM_KIEM; // danh sách trạng thái
+	trangThais: any[] = Status.TRANG_THAI_FULL; // danh sách trạng thái
 	listFile: File[] = []; // list file chua ten va id de hien tai o input
 	lstDviChon: any[] = []; //danh sach don vi chua duoc chon
-	soLaMa: any[] = LA_MA; // danh sách ký tự la mã
+	soLaMa: any[] = Utils.LA_MA; // danh sách ký tự la mã
 	isDvi = true;
 	// khác
 	editMoneyUnit = false;
@@ -142,7 +141,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 	};
 
 	// ==================================================================================
-	amount = AMOUNT;
+	amount = Operator.amount;
 	// cú pháp khai báo gọn của TypeScript
 	constructor(
 		private location: Location,
@@ -155,6 +154,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 		private datePipe: DatePipe,
 		private modal: NzModalService,
 		public globals: Globals,
+		public danhMucService: DanhMucService,
 	) { }
 
 	// ===================================================================================
@@ -232,7 +232,10 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 	async initialization() {
 
 		this.spinner.show();
-
+		const category = await this.danhMucService.danhMucChungGetAll('BC_DC_PL1');
+		if (category) {
+			this.noiDungs = category.data;
+		}
 
 		// lấy id bản ghi từ router
 		this.id = this.data.id;
@@ -242,6 +245,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 		// await this.getChildUnit();
 		// lấy role người dùng
 		this.userInfo = this.userService.getUserLogin();
+		console.log(this.userInfo);
 
 		await this.danhMuc.dMDonVi().toPromise().then(
 			(data) => {
@@ -290,6 +294,8 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 			this.namPa = this.data?.namPa;
 			this.trangThaiBanGhi = this.data?.trangThai;
 
+
+
 			if (!this.maPa) {
 				this.location.back();
 			}
@@ -306,9 +312,11 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 			)
 		}
 
-		if (this.userInfo.DON_VI.tenVietTat.includes("CDT") || this.userInfo.DON_VI.tenVietTat.includes("CNTT") || this.userInfo.DON_VI.tenVietTat.includes("_VP")) {
-			this.isDvi = false;
-		}
+
+
+		// if (this.userInfo.DON_VI.tenVietTat.includes("CNTT") || this.userInfo.DON_VI.tenVietTat.includes("_VP")) {
+		// 	this.isDvi = false;
+		// }
 		if (this.status) {
 			this.scrollX = (460 + 250 * (this.lstDvi.length + 1)).toString() + 'px';
 		} else {
@@ -329,7 +337,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 			nzOkDanger: true,
 			nzWidth: 500,
 			nzOnOk: () => {
-				this.onSubmit(Utils.TT_BC_2, '')
+				this.onSubmit(Status.TT_02, '')
 			},
 		});
 	}
@@ -352,17 +360,20 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 		await this.quanLyVonPhiService.dmDviCon(request).toPromise().then(
 			data => {
 				if (data.statusCode == 0) {
+					// this.lstDvi = data.data;
+					// this.lstDvi = this.lstDvi.filter(e => e.tenVietTat && (e.tenVietTat.includes("CDT") || e.tenVietTat.includes("CNTT") || e.tenVietTat.includes("_VP")))
+					// if (this.userInfo.DON_VI.tenVietTat.includes("CNTT") || this.userInfo.DON_VI.tenVietTat.includes("_VP")) {
+					// 	this.lstDvi.push(
+					// 		{
+					// 			tenDvi: this.userInfo.TEN_DVI,
+					// 			maDvi: this.userInfo.MA_DVI
+					// 		}
+					// 	)
+					// }
 					this.lstDvi = data.data;
 					this.lstDvi = this.lstDvi.filter(e => e.tenVietTat && (e.tenVietTat.includes("CDT") || e.tenVietTat.includes("CNTT") || e.tenVietTat.includes("_VP")))
-					if (this.userInfo.DON_VI.tenVietTat.includes("CNTT") || this.userInfo.DON_VI.tenVietTat.includes("_VP")) {
-						this.lstDvi.push(
-							{
-								tenDvi: this.userInfo.TEN_DVI,
-								maDvi: this.userInfo.MA_DVI
-							}
-						)
-					}
-					this.donVis = this.lstDvi
+
+					// this.donVis = this.lstDvi
 				} else {
 					this.notification.error(MESSAGE.ERROR, data?.msg);
 				}
@@ -453,7 +464,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 					//     })
 					//   }
 					// })
-					this.lstCtietBcao = sortByIndex(this.lstCtietBcao);
+					this.lstCtietBcao = Table.sortByIndex(this.lstCtietBcao);
 					this.updateEditCache();
 					this.getStatusButton();
 				} else {
@@ -518,7 +529,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 		const lstCtietBcaoTemp: any[] = [];
 		let checkMoneyRange = true;
 		this.lstCtietBcao.forEach(item => {
-			if (item.tongCong > MONEY_LIMIT) {
+			if (item.tongCong > Utils.MONEY_LIMIT) {
 				checkMoneyRange = false;
 				return;
 			}
@@ -633,7 +644,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 
 		// gui du lieu trinh duyet len server
 		this.lstCtietBcao.forEach(item => {
-			if (item.tongCong > MONEY_LIMIT) {
+			if (item.tongCong > Utils.MONEY_LIMIT) {
 				checkMoneyRange = false;
 				return;
 			}
@@ -831,7 +842,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 
 	//check role cho các nut trinh duyet
 	getStatusButton() {
-		if (Utils.statusSave.includes(this.trangThaiBanGhi) && this.userService.isAccessPermisson(GDT.EDIT_REPORT_PA_PBDT)) {
+		if ([Status.TT_01, Status.TT_03, Status.TT_05, Status.TT_08].includes(this.trangThaiBanGhi) && this.userService.isAccessPermisson(Roles.GDT.EDIT_REPORT_PA_PBDT)) {
 			this.status = false;
 		} else {
 			this.status = true;
@@ -852,22 +863,25 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 		}
 		// const isParent = this.userInfo.MA_DVI == this.maDviCha;
 		const checkChirld = this.maDonViTao == this.userInfo?.MA_DVI;
+		const checkSave = this.userService.isAccessPermisson(Roles.GDT.EDIT_REPORT_PA_PBDT);
+		// this.statusBtnSave = this.getBtnStatus([Status.TT_01], Roles.GDT.EDIT_REPORT_PA_PBDT, checkChirld);
+		this.statusBtnSave = Status.check('saveWOHist', this.trangThaiBanGhi) && checkSave && checkChirld;
 
-		this.statusBtnSave = this.getBtnStatus(Utils.statusSave, GDT.EDIT_REPORT_PA_PBDT, checkChirld);
-		this.statusBtnApprove = this.getBtnStatus(Utils.statusApprove, GDT.APPROVE_REPORT_PA_PBDT, checkChirld);
-		this.statusBtnTBP = this.getBtnStatus(Utils.statusDuyet, GDT.DUYET_REPORT_PA_PBDT, checkChirld);
-		this.statusBtnLD = this.getBtnStatus(Utils.statusPheDuyet, GDT.PHE_DUYET_REPORT_PA_PBDT, checkChirld);
-		this.statusBtnCopy = this.getBtnStatus(Utils.statusCopy, GDT.COPY_REPORT_PA_PBDT, checkChirld);
-		this.statusBtnPrint = this.getBtnStatus(Utils.statusPrint, GDT.PRINT_REPORT_PA_PBDT, checkChirld);
-		this.statusBtnDVCT = this.getBtnStatus(Utils.statusTiepNhan, GDT.TIEPNHAN_TUCHOI_PA_PBDT, checkParent);
 
-		if (this.userService.isAccessPermisson(GDT.GIAO_PA_PBDT) && this.soQd && this.trangThaiBanGhi !== "7") {
+		this.statusBtnApprove = this.getBtnStatus([Status.TT_01], Roles.GDT.APPROVE_REPORT_PA_PBDT, checkChirld);
+		this.statusBtnTBP = this.getBtnStatus([Status.TT_02], Roles.GDT.DUYET_REPORT_PA_PBDT, checkChirld);
+		this.statusBtnLD = this.getBtnStatus([Status.TT_04], Roles.GDT.PHE_DUYET_REPORT_PA_PBDT, checkChirld);
+		this.statusBtnCopy = this.getBtnStatus([Status.TT_01, Status.TT_02, Status.TT_03, Status.TT_04, Status.TT_05, Status.TT_06, Status.TT_07, Status.TT_08, Status.TT_09], Roles.GDT.COPY_REPORT_PA_PBDT, checkChirld);
+		this.statusBtnPrint = this.getBtnStatus([Status.TT_01, Status.TT_02, Status.TT_03, Status.TT_04, Status.TT_05, Status.TT_06, Status.TT_07, Status.TT_08, Status.TT_09], Roles.GDT.PRINT_REPORT, checkChirld);
+		this.statusBtnDVCT = this.getBtnStatus([Status.TT_06, Status.TT_07], Roles.GDT.TIEPNHAN_TUCHOI_PA_PBDT, checkParent);
+
+		if (this.userService.isAccessPermisson(Roles.GDT.GIAO_PA_PBDT) && this.soQd) {
 			this.statusBtnGiao = false;
 		} else {
 			this.statusBtnGiao = true;
 			this.statusGiaoToanBo = true;
 		}
-		if (this.userService.isAccessPermisson(GDT.GIAODT_TRINHTONGCUC_PA_PBDT) && this.soQd?.fileName != null && this.trangThaiBanGhi == '6' && this.userInfo.CAP_DVI == "2") {
+		if (this.userService.isAccessPermisson(Roles.GDT.GIAODT_TRINHTONGCUC_PA_PBDT) && this.soQd?.fileName != null && this.trangThaiBanGhi == '6' && this.userInfo.CAP_DVI == "2") {
 			this.statusBtnGuiDVCT = false;
 		}
 		if (this.trangThaiBanGhi == "7") {
@@ -890,26 +904,59 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 				lyDoTuChoi: lyDoTuChoi,
 				maLoai: this.maLoai,
 			};
-			this.spinner.show();
-			await this.giaoDuToanChiService.trinhDuyetPhuongAnGiao(requestGroupButtons).toPromise().then(async (data) => {
-				if (data.statusCode == 0) {
-					this.trangThaiBanGhi = mcn;
-					this.getStatusButton();
-					if (mcn == Utils.TT_BC_8 || mcn == Utils.TT_BC_5 || mcn == Utils.TT_BC_3) {
-						this.notification.success(MESSAGE.SUCCESS, MESSAGE.REVERT_SUCCESS);
-					} else {
-						this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
-					}
-					// if (this.userInfo?.roles[0]?.code == 'C_KH_VP_LD' && this.soQd) {
-					//   this.statusBtnGuiDVCT = false;
-					// }
-				} else {
-					this.notification.error(MESSAGE.ERROR, data?.msg);
+
+			let tongGiao = 0;
+			let tongCong = 0;
+			this.lstCtietBcao.forEach(item => {
+				if (item.level == 0) {
+					tongGiao += item?.tongCongSoTranChi;
+					tongCong += item?.tongCong;
 				}
-			}, err => {
-				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-			});
-			this.spinner.hide();
+			})
+
+			if (tongGiao !== tongCong) {
+				return this.notification.warning(MESSAGE.WARNING, "Chưa giao hết số tiền được giao từ đơn vị cấp trên");
+			} else {
+				this.spinner.show();
+				this.giaoDuToanChiService.trinhDuyetPhuongAnGiao(requestGroupButtons).toPromise().then(async (data) => {
+					if (data.statusCode == 0) {
+						this.trangThaiBanGhi = mcn;
+						this.getStatusName();
+						this.getStatusButton();
+						if (mcn == Status.TT_08 || mcn == Status.TT_05 || mcn == Status.TT_03) {
+							this.notification.success(MESSAGE.SUCCESS, MESSAGE.REVERT_SUCCESS);
+						} else {
+							this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
+						}
+					} else {
+						this.notification.error(MESSAGE.ERROR, data?.msg);
+					}
+				}, err => {
+					this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+				});
+				this.spinner.hide();
+			}
+
+			// this.spinner.show();
+			// await this.giaoDuToanChiService.trinhDuyetPhuongAnGiao(requestGroupButtons).toPromise().then(async (data) => {
+			// 	if (data.statusCode == 0) {
+			// 		this.trangThaiBanGhi = mcn;
+			// 		this.getStatusButton();
+			// 		if (mcn == Status.TT_08 || mcn == Status.TT_05 || mcn == Status.TT_03) {
+			// 			this.notification.success(MESSAGE.SUCCESS, MESSAGE.REVERT_SUCCESS);
+			// 		} else {
+			// 			this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
+			// 		}
+			// 		// if (this.userInfo?.roles[0]?.code == 'C_KH_VP_LD' && this.soQd) {
+			// 		//   this.statusBtnGuiDVCT = false;
+			// 		// }
+			// 	} else {
+			// 		this.notification.error(MESSAGE.ERROR, data?.msg);
+			// 	}
+			// }, err => {
+			// 	this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+			// });
+			// this.spinner.hide();
 		} else {
 			this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING)
 		}
@@ -985,7 +1032,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 
 	// lấy thông tin trạng thái PA
 	getStatusName() {
-		if (this.trangThaiBanGhi == Utils.TT_BC_6) {
+		if (this.trangThaiBanGhi == Status.TT_06) {
 			return "Phê duyệt"
 		}
 		return this.trangThais.find(e => e.id == this.trangThaiBanGhi)?.tenDm;
@@ -1042,7 +1089,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 	replaceIndex(lstIndex: number[], heSo: number) {
 		//thay doi lai stt cac vi tri vua tim duoc
 		lstIndex.forEach(item => {
-			const str = getHead(this.lstCtietBcao[item].stt) + "." + (this.getTail(this.lstCtietBcao[item].stt) + heSo).toString();
+			const str = Table.preIndex(this.lstCtietBcao[item].stt) + "." + (this.getTail(this.lstCtietBcao[item].stt) + heSo).toString();
 			const nho = this.lstCtietBcao[item].stt;
 			this.lstCtietBcao.forEach(item => {
 				item.stt = item.stt.replace(nho, str);
@@ -1052,7 +1099,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 
 	// kiểm tra cấp quyền sửa nếu phần tử chọn có phần tử con
 	getLowStatus(stt: string) {
-		const index: number = this.lstCtietBcao.findIndex(e => getHead(e.stt) == stt);
+		const index: number = this.lstCtietBcao.findIndex(e => Table.preIndex(e.stt) == stt);
 		if (index == -1) {
 			return false;
 		}
@@ -1079,10 +1126,17 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 				this.notification.warning(MESSAGE.WARNING, 'giá trị nhập không được âm')
 				return;
 			}
+			if (!itm.soTranChi || itm.soTranChi == null) {
+				itm.soTranChi = 0
+			}
 			tongTranChi += itm.soTranChi;
 		}
 		if (tongTranChi == null) {
 			this.notification.warning(MESSAGE.WARNING, 'Dòng chưa có dữ liệu, vui lòng nhập!')
+			return;
+		}
+		if (tongTranChi !== this.editCache[id].data.tongCong) {
+			this.notification.warning(MESSAGE.WARNING, 'Tổng số tiền phân bổ phải bằng số tiền được giao!')
 			return;
 		}
 
@@ -1131,7 +1185,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 	checkAllChild(str: string): boolean {
 		let nho = true;
 		this.lstCtietBcao.forEach(item => {
-			if ((getHead(item.stt) == str) && (!item.checked) && (item.stt != str)) {
+			if ((Table.preIndex(item.stt) == str) && (!item.checked) && (item.stt != str)) {
 				nho = item.checked;
 			}
 		})
@@ -1148,14 +1202,14 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 			}
 		})
 		//thay đổi các phần tử cha cho phù hợp với tháy đổi của phần tử con
-		let index: number = this.lstCtietBcao.findIndex(e => e.stt == getHead(data.stt));
+		let index: number = this.lstCtietBcao.findIndex(e => e.stt == Table.preIndex(data.stt));
 		if (index == -1) {
 			this.allChecked = this.checkAllChild('0');
 		} else {
 			let nho: boolean = this.lstCtietBcao[index].checked;
 			while (nho != this.checkAllChild(this.lstCtietBcao[index].stt)) {
 				this.lstCtietBcao[index].checked = !nho;
-				index = this.lstCtietBcao.findIndex(e => e.stt == getHead(this.lstCtietBcao[index].stt));
+				index = this.lstCtietBcao.findIndex(e => e.stt == Table.preIndex(this.lstCtietBcao[index].stt));
 				if (index == -1) {
 					this.allChecked = !nho;
 					break;
@@ -1449,7 +1503,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 
 	// tính tổng
 	sum(stt: string) {
-		stt = getHead(stt);
+		stt = Table.preIndex(stt);
 		while (stt != '0') {
 			const index = this.lstCtietBcao.findIndex(e => e.stt == stt);
 			const data = this.lstCtietBcao[index];
@@ -1471,21 +1525,21 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 				checked: false,
 			};
 			this.lstCtietBcao.forEach(item => {
-				if (getHead(item.stt) == stt) {
+				if (Table.preIndex(item.stt) == stt) {
 					item.lstCtietDvis.forEach(e => {
 						const ind = this.lstCtietBcao[index].lstCtietDvis.findIndex(i => i.maDviNhan == e.maDviNhan);
 						this.lstCtietBcao[index].lstCtietDvis[ind].soTranChi += Number(e.soTranChi);
 					})
-					this.lstCtietBcao[index].tongCongSoTranChi = sumNumber([this.lstCtietBcao[index].tongCongSoTranChi, item.tongCongSoTranChi])
+					this.lstCtietBcao[index].tongCongSoTranChi = Operator.sum([this.lstCtietBcao[index].tongCongSoTranChi, item.tongCongSoTranChi])
 				}
 			});
-			stt = getHead(stt);
+			stt = Table.preIndex(stt);
 		};
 	};
 
 	// sum1() {
 	//   this.lstCtietBcao.forEach(itm => {
-	//     let stt = getHead(itm.stt);
+	//     let stt = Table.preIndex(itm.stt);
 	//     while (stt != '0') {
 	//       const index = this.lstCtietBcao.findIndex(e => e.stt == stt);
 	//       const data = this.lstCtietBcao[index];
@@ -1506,7 +1560,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 	//         checked: false,
 	//       };
 	//       this.lstCtietBcao.forEach(item => {
-	//         if (getHead(item.stt) == stt) {
+	//         if (Table.preIndex(item.stt) == stt) {
 	//           item.lstCtietDvis.forEach(e => {
 	//             const ind = this.lstCtietBcao[index].lstCtietDvis.findIndex(i => i.maDviNhan == e.maDviNhan);
 	//             if (e.soTranChi) {
@@ -1518,7 +1572,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 	//       this.lstCtietBcao[index].lstCtietDvis.forEach(item => {
 	//         this.lstCtietBcao[index].tongCong += Number(item.soTranChi);
 	//       })
-	//       stt = getHead(stt);
+	//       stt = Table.preIndex(stt);
 	//     };
 	//   })
 	// };
@@ -1534,11 +1588,6 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 	//     })
 	//   })
 	// };
-
-	displayValue(num: number): string {
-		num = exchangeMoney(num, '1', this.maDviTien);
-		return displayNumber(num);
-	}
 
 	getMoneyUnit() {
 		return this.donViTiens.find(e => e.id == this.maDviTien)?.tenDm;
@@ -1571,7 +1620,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 	}
 
 	statusDeleteCv() {
-		if (!this.userService.isAccessPermisson(GDT.EDIT_REPORT_CV_QD_GIAO_PA_PBDT)) {
+		if (!this.userService.isAccessPermisson(Roles.GDT.EDIT_REPORT_CV_QD_GIAO_PA_PBDT)) {
 			return false;
 		}
 		if (!this.soQd?.fileName) {
@@ -1587,13 +1636,6 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 		return check;
 	};
 
-	statusClass() {
-		if (Utils.statusSave.includes(this.trangThaiBanGhi)) {
-			return 'du-thao-va-lanh-dao-duyet';
-		} else {
-			return 'da-ban-hanh';
-		}
-	};
 
 
 }

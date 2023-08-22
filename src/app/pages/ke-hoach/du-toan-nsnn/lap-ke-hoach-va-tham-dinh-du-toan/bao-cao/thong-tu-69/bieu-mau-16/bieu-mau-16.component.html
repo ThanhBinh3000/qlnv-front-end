@@ -1,226 +1,400 @@
 <ng-container *ngIf="isDataAvailable">
 	<div class="modal__content">
-		<div id="tablePrint">
-			<div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
-				<div nz-col [nzSpan]="2">
-					Đơn vị:
+		<nz-tabset>
+			<nz-tab nzTitle="Dữ liệu">
+				<div id="tablePrint">
+					<div class="nut" style="margin-top: 10px;">
+						<div class="cantrai">
+							<div> Đơn vị: </div>
+							<div style="margin-left: 10px;">
+								<ng-container *ngIf="status || !editMoneyUnit; else editMoney">
+									<span (click)="editMoneyUnit=true">
+										{{ Utils.moneyUnitName(maDviTien) }}
+									</span>
+								</ng-container>
+								<ng-template #editMoney>
+									<nz-select nzShowSearch nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
+										(ngModelChange)="editMoneyUnit=false; Op.setMoneyUnit(maDviTien)">
+										<nz-option *ngFor="let item of Utils.DVI_TIEN" [nzValue]="item.id"
+											[nzLabel]="item.tenDm">
+										</nz-option>
+									</nz-select>
+								</ng-template>
+							</div>
+						</div>
+					</div>
+					<nz-table nzBordered class="table__body" [nzScroll]="{x: scrollX}">
+						<thead>
+							<tr>
+								<th rowspan="2" nzWidth="50px" nzLeft>
+									STT
+								</th>
+								<th rowspan="2" nzWidth="300px" nzLeft>
+									Nội Dung
+								</th>
+								<th rowspan="2">
+									Thực hiện năm hiện hành {{namBcao - 1}}
+								</th>
+								<th colspan="3">
+									Dự toán năm {{namBcao}}
+								</th>
+								<th colspan="3">
+									Năm {{namBcao + 1}}
+								</th>
+								<th colspan="3">
+									Năm {{namBcao + 2}}
+								</th>
+								<th rowspan="2" class="text-col">
+									Ghi Chú
+								</th>
+								<th rowspan="2" style="width: 60px;" *ngIf="status.general" nzRight></th>
+							</tr>
+							<tr>
+								<th>
+									Trần chi được thông báo
+								</th>
+								<th>
+									Nhu cầu của đơn vị
+								</th>
+								<th>
+									Chênh lệch trần chi - nhu cầu
+								</th>
+								<th>
+									Trần chi được thông báo
+								</th>
+								<th>
+									Nhu cầu của đơn vị
+								</th>
+								<th>
+									Chênh lệch trần chi - nhu cầu
+								</th>
+								<th>
+									Trần chi được thông báo
+								</th>
+								<th>
+									Nhu cầu của đơn vị
+								</th>
+								<th>
+									Chênh lệch trần chi - nhu cầu
+								</th>
+							</tr>
+							<tr>
+								<th nzLeft></th>
+								<th nzLeft></th>
+								<th>1</th>
+								<th>2</th>
+								<th>3</th>
+								<th>4=2-3</th>
+								<th>5</th>
+								<th>6</th>
+								<th>7=5-6</th>
+								<th>8</th>
+								<th>9</th>
+								<th>10=8-9</th>
+								<th>11</th>
+								<th *ngIf="status.general" nzRight></th>
+							</tr>
+							<tr>
+								<th nzLeft></th>
+								<th nzLeft>
+									TỔNG NHU CẦU
+								</th>
+								<th>
+									{{ Op.fmtVal(total.thNamHienHanhN1) }}
+								</th>
+								<th>
+									{{ Op.fmtVal(total.tranChiN) }}
+								</th>
+								<th>
+									{{ Op.fmtVal(total.ncauChiN) }}
+								</th>
+								<th>
+									{{ Op.fmtVal(total.clechTranChiVsNcauChiN) }}
+								</th>
+								<th>
+									{{ Op.fmtVal(total.tranChiN1) }}
+								</th>
+								<th>
+									{{ Op.fmtVal(total.ncauChiN1) }}
+								</th>
+								<th>
+									{{ Op.fmtVal(total.clechTranChiVsNcauChiN1) }}
+								</th>
+								<th>
+									{{ Op.fmtVal(total.tranChiN2) }}
+								</th>
+								<th>
+									{{ Op.fmtVal(total.ncauChiN2) }}
+								</th>
+								<th>
+									{{ Op.fmtVal(total.clechTranChiVsNcauChiN2) }}
+								</th>
+								<th></th>
+								<th *ngIf="status.general" nzRight></th>
+							</tr>
+							<tr>
+								<th nzLeft></th>
+								<th nzLeft>
+									Trong đó - Chi thường xuyên cơ sở
+								</th>
+								<th>
+									{{ Op.fmtVal(chiCoSo.thNamHienHanhN1) }}
+								</th>
+								<th>
+									{{ Op.fmtVal(chiCoSo.tranChiN) }}
+								</th>
+								<th>
+									{{ Op.fmtVal(chiCoSo.ncauChiN) }}
+								</th>
+								<th>
+									{{ Op.fmtVal(chiCoSo.clechTranChiVsNcauChiN) }}
+								</th>
+								<th>
+									{{ Op.fmtVal(chiCoSo.tranChiN1) }}
+								</th>
+								<th>
+									{{ Op.fmtVal(chiCoSo.ncauChiN1) }}
+								</th>
+								<th>
+									{{ Op.fmtVal(chiCoSo.clechTranChiVsNcauChiN1) }}
+								</th>
+								<th>
+									{{ Op.fmtVal(chiCoSo.tranChiN2) }}
+								</th>
+								<th>
+									{{ Op.fmtVal(chiCoSo.ncauChiN2) }}
+								</th>
+								<th>
+									{{ Op.fmtVal(chiCoSo.clechTranChiVsNcauChiN2) }}
+								</th>
+								<th></th>
+								<th *ngIf="status.general" nzRight></th>
+							</tr>
+							<tr>
+								<th nzLeft></th>
+								<th nzLeft>
+									&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; - Chi thường xuyên mới
+								</th>
+								<th>
+									{{ Op.fmtVal(chiMoi.thNamHienHanhN1) }}
+								</th>
+								<th>
+									{{ Op.fmtVal(chiMoi.tranChiN) }}
+								</th>
+								<th>
+									{{ Op.fmtVal(chiMoi.ncauChiN) }}
+								</th>
+								<th>
+									{{ Op.fmtVal(chiMoi.clechTranChiVsNcauChiN) }}
+								</th>
+								<th>
+									{{ Op.fmtVal(chiMoi.tranChiN1) }}
+								</th>
+								<th>
+									{{ Op.fmtVal(chiMoi.ncauChiN1) }}
+								</th>
+								<th>
+									{{ Op.fmtVal(chiMoi.clechTranChiVsNcauChiN1) }}
+								</th>
+								<th>
+									{{ Op.fmtVal(chiMoi.tranChiN2) }}
+								</th>
+								<th>
+									{{ Op.fmtVal(chiMoi.ncauChiN2) }}
+								</th>
+								<th>
+									{{ Op.fmtVal(chiMoi.clechTranChiVsNcauChiN2) }}
+								</th>
+								<th> </th>
+								<th *ngIf="status.general" nzRight></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr *ngFor="let data of lstCtietBcao; let i = index">
+								<td nzLeft>
+									{{ data.index() }}
+								</td>
+								<td nzLeft>
+									{{ data.tenNdung }}
+								</td>
+								<ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
+
+									<td>
+										{{ Op.fmtVal(data.thNamHienHanhN1) }}
+									</td>
+									<td>
+										{{ Op.fmtVal(data.tranChiN) }}
+									</td>
+									<td>
+										{{ Op.fmtVal(data.ncauChiN) }}
+									</td>
+									<td>
+										{{ Op.fmtVal(data.clechTranChiVsNcauChiN) }}
+									</td>
+									<td>
+										{{ Op.fmtVal(data.tranChiN1) }}
+									</td>
+									<td>
+										{{ Op.fmtVal(data.ncauChiN1) }}
+									</td>
+									<td>
+										{{ Op.fmtVal(data.clechTranChiVsNcauChiN1) }}
+									</td>
+									<td>
+										{{ Op.fmtVal(data.tranChiN2) }}
+									</td>
+									<td>
+										{{ Op.fmtVal(data.ncauChiN2) }}
+									</td>
+									<td>
+										{{ Op.fmtVal(data.clechTranChiVsNcauChiN2) }}
+									</td>
+									<td>
+										{{ data.ghiChu }}
+									</td>
+									<td *ngIf="status.general" nzRight>
+										<i *ngIf="checkEdit(data.stt)" class="fa fa-pencil"
+											(click)="startEdit(data.id)"></i>
+									</td>
+								</ng-container>
+								<ng-template #editTemplate>
+									<td>
+										<input class="money-input" currencyMask [options]="Op.amount"
+											[(ngModel)]="editCache[data.id].data.thNamHienHanhN1" />
+									</td>
+									<td>
+										<input class="money-input" currencyMask [options]="Op.amount"
+											[(ngModel)]="editCache[data.id].data.tranChiN"
+											(ngModelChange)="editCache[data.id].data.changeModel()" />
+									</td>
+									<td>
+										<input class="money-input" currencyMask [options]="Op.amount"
+											[(ngModel)]="editCache[data.id].data.ncauChiN"
+											(ngModelChange)="editCache[data.id].data.changeModel()" />
+									</td>
+									<td>
+										{{ Op.fmtVal(editCache[data.id].data.clechTranChiVsNcauChiN) }}
+									</td>
+									<td>
+										<input class="money-input" currencyMask [options]="Op.amount"
+											[(ngModel)]="editCache[data.id].data.tranChiN1"
+											(ngModelChange)="editCache[data.id].data.changeModel()" />
+									</td>
+									<td>
+										<input class="money-input" currencyMask [options]="Op.amount"
+											[(ngModel)]="editCache[data.id].data.ncauChiN1"
+											(ngModelChange)="editCache[data.id].data.changeModel()" />
+									</td>
+									<td>
+										{{ Op.fmtVal(editCache[data.id].data.clechTranChiVsNcauChiN1) }}
+									</td>
+									<td>
+										<input class="money-input" currencyMask [options]="Op.amount"
+											[(ngModel)]="editCache[data.id].data.tranChiN2"
+											(ngModelChange)="editCache[data.id].data.changeModel()" />
+									</td>
+									<td>
+										<input class="money-input" currencyMask [options]="Op.amount"
+											[(ngModel)]="editCache[data.id].data.ncauChiN2"
+											(ngModelChange)="editCache[data.id].data.changeModel()" />
+									</td>
+									<td>
+										{{ Op.fmtVal(editCache[data.id].data.clechTranChiVsNcauChiN2) }}
+									</td>
+									<td>
+										<input nz-input [(ngModel)]="editCache[data.id].data.ghiChu" />
+									</td>
+									<td *ngIf="status.general" nzRight>
+										<a (click)="saveEdit(data.id)" class="save">Lưu</a>
+										<a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
+											(nzOnConfirm)="cancelEdit(data.id)" class="save">
+											Hủy
+										</a>
+									</td>
+								</ng-template>
+							</tr>
+						</tbody>
+					</nz-table>
 				</div>
-				<div nz-col [nzSpan]="2">
-					<ng-container *ngIf="status || !editMoneyUnit; else editMoney">
-						<span (click)="editMoneyUnit=true">{{getMoneyUnit()}}</span>
-					</ng-container>
-					<ng-template #editMoney>
-						<nz-select nzShowSearch nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
-							(ngModelChange)="editMoneyUnit=false">
-							<nz-option *ngFor="let item of donViTiens" [nzValue]="item.id" [nzLabel]="item.tenDm">
-							</nz-option>
-						</nz-select>
-					</ng-template>
+			</nz-tab>
+			<nz-tab nzTitle="Thuyết minh">
+				<textarea nz-input nzAutosize="{minRows: 4, maxRows: 16}" [(ngModel)]="formDetail.thuyetMinh"
+					[disabled]="!status.general"></textarea>
+			</nz-tab>
+			<nz-tab nzTitle="Tài liệu đính kèm">
+				<div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+					<div nz-col class="gutter-row" [nzSpan]="3">
+						<nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" [nzMultiple]="true"
+							*ngIf="status.general">
+							<button nz-button>
+								<i nz-icon nzType="upload"></i>
+								Chọn tài liệu đính kèm
+							</button>
+						</nz-upload>
+						<button nz-button [nzType]="'primary'" (click)="handleUpload()"
+							[disabled]="fileList.length === 0" *ngIf="status.general" style="margin-top: 16px">
+							Thêm vào danh sách
+						</button>
+					</div>
 				</div>
-			</div>
-			<nz-table nzBordered class="table__body" [nzScroll]="{x: scrollX}">
-				<thead>
-					<tr>
-						<th rowspan="2" nzWidth="50px" nzLeft>STT</th>
-						<th rowspan="2" nzWidth="300px" nzLeft>Nội Dung</th>
-						<th rowspan="2">Thực hiện năm <br /> hiện hành {{namBcao - 1}}</th>
-						<th colspan="3">Dự toán năm {{namBcao}}</th>
-						<th colspan="3">Năm {{namBcao + 1}}</th>
-						<th colspan="3">Năm {{namBcao + 2}}</th>
-						<th rowspan="2" style="width: 60px;" *ngIf="status" nzRight></th>
-					</tr>
-					<tr>
-						<th>Trần chi được <br /> thông báo</th>
-						<th>Nhu cầu <br /> của đơn vị</th>
-						<th>Chênh lệch trần <br /> chi - nhu cầu</th>
-						<th>Trần chi được <br /> thông báo</th>
-						<th>Nhu cầu <br /> của đơn vị</th>
-						<th>Chênh lệch trần <br /> chi - nhu cầu</th>
-						<th>Trần chi được <br /> thông báo</th>
-						<th>Nhu cầu <br /> của đơn vị</th>
-						<th>Chênh lệch trần <br /> chi - nhu cầu</th>
-					</tr>
-					<tr>
-						<th nzLeft></th>
-						<th nzLeft></th>
-						<th>1</th>
-						<th>2</th>
-						<th>3</th>
-						<th>4=2-3</th>
-						<th>5</th>
-						<th>6</th>
-						<th>7=5-6</th>
-						<th>8</th>
-						<th>9</th>
-						<th>10=8-9</th>
-						<th *ngIf="status" nzRight></th>
-					</tr>
-					<tr>
-						<th nzLeft></th>
-						<th nzLeft>TỔNG NHU CẦU</th>
-						<th>{{displayValue(total.thNamHienHanhN1)}}</th>
-						<th>{{displayValue(total.tranChiN)}}</th>
-						<th>{{displayValue(total.ncauChiN)}}</th>
-						<th>{{displayValue(total.clechTranChiVsNcauChiN)}}</th>
-						<th>{{displayValue(total.tranChiN1)}}</th>
-						<th>{{displayValue(total.ncauChiN1)}}</th>
-						<th>{{displayValue(total.clechTranChiVsNcauChiN1)}}</th>
-						<th>{{displayValue(total.tranChiN2)}}</th>
-						<th>{{displayValue(total.ncauChiN2)}}</th>
-						<th>{{displayValue(total.clechTranChiVsNcauChiN2)}}</th>
-						<th *ngIf="status" nzRight></th>
-					</tr>
-					<tr>
-						<th nzLeft></th>
-						<th nzLeft>Trong đó - Chi thường xuyên cơ sở</th>
-						<th>{{displayValue(chiCoSo.thNamHienHanhN1)}}</th>
-						<th>{{displayValue(chiCoSo.tranChiN)}}</th>
-						<th>{{displayValue(chiCoSo.ncauChiN)}}</th>
-						<th>{{displayValue(chiCoSo.clechTranChiVsNcauChiN)}}</th>
-						<th>{{displayValue(chiCoSo.tranChiN1)}}</th>
-						<th>{{displayValue(chiCoSo.ncauChiN1)}}</th>
-						<th>{{displayValue(chiCoSo.clechTranChiVsNcauChiN1)}}</th>
-						<th>{{displayValue(chiCoSo.tranChiN2)}}</th>
-						<th>{{displayValue(chiCoSo.ncauChiN2)}}</th>
-						<th>{{displayValue(chiCoSo.clechTranChiVsNcauChiN2)}}</th>
-						<th *ngIf="status" nzRight></th>
-					</tr>
-					<tr>
-						<th nzLeft></th>
-						<th nzLeft>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; - Chi thường xuyên mới</th>
-						<th>{{displayValue(chiMoi.thNamHienHanhN1)}}</th>
-						<th>{{displayValue(chiMoi.tranChiN)}}</th>
-						<th>{{displayValue(chiMoi.ncauChiN)}}</th>
-						<th>{{displayValue(chiMoi.clechTranChiVsNcauChiN)}}</th>
-						<th>{{displayValue(chiMoi.tranChiN1)}}</th>
-						<th>{{displayValue(chiMoi.ncauChiN1)}}</th>
-						<th>{{displayValue(chiMoi.clechTranChiVsNcauChiN1)}}</th>
-						<th>{{displayValue(chiMoi.tranChiN2)}}</th>
-						<th>{{displayValue(chiMoi.ncauChiN2)}}</th>
-						<th>{{displayValue(chiMoi.clechTranChiVsNcauChiN2)}}</th>
-						<th *ngIf="status" nzRight></th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr *ngFor="let data of lstCtietBcao; let i = index">
-						<ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
-							<td nzLeft>
-								{{getChiMuc(data.stt)}}
-							</td>
-							<td nzLeft>
-								{{data.tenNdung}}
-							</td>
-							<td>{{displayValue(data.thNamHienHanhN1)}}</td>
-							<td>{{displayValue(data.tranChiN)}}</td>
-							<td>{{displayValue(data.ncauChiN)}}</td>
-							<td>{{displayValue(data.clechTranChiVsNcauChiN)}}</td>
-							<td>{{displayValue(data.tranChiN1)}}</td>
-							<td>{{displayValue(data.ncauChiN1)}}</td>
-							<td>{{displayValue(data.clechTranChiVsNcauChiN1)}}</td>
-							<td>{{displayValue(data.tranChiN2)}}</td>
-							<td>{{displayValue(data.ncauChiN2)}}</td>
-							<td>{{displayValue(data.clechTranChiVsNcauChiN2)}}</td>
-							<td *ngIf="status" nzRight>
-								<i *ngIf="checkEdit(data.stt)" class="fa fa-pencil" (click)="startEdit(data.id)"></i>
-							</td>
-						</ng-container>
-						<ng-template #editTemplate>
-							<td nzLeft>
-								{{getChiMuc(editCache[data.id].data.stt)}}
-							</td>
-							<td nzLeft>
-								{{editCache[data.id].data.tenNdung}}
-							</td>
-							<td>
-								<input class="money-input" currencyMask [options]="amount"
-									[(ngModel)]="editCache[data.id].data.thNamHienHanhN1" />
-							</td>
-							<td>
-								<input class="money-input" currencyMask [options]="amount"
-									[(ngModel)]="editCache[data.id].data.tranChiN"
-									(ngModelChange)="changeModel(data.id)" />
-							</td>
-							<td>
-								<input class="money-input" currencyMask [options]="amount"
-									[(ngModel)]="editCache[data.id].data.ncauChiN"
-									(ngModelChange)="changeModel(data.id)" />
-							</td>
-							<td>
-								{{displayValue(editCache[data.id].data.clechTranChiVsNcauChiN)}}
-							</td>
-							<td>
-								<input class="money-input" currencyMask [options]="amount"
-									[(ngModel)]="editCache[data.id].data.tranChiN1"
-									(ngModelChange)="changeModel(data.id)" />
-							</td>
-							<td>
-								<input class="money-input" currencyMask [options]="amount"
-									[(ngModel)]="editCache[data.id].data.ncauChiN1"
-									(ngModelChange)="changeModel(data.id)" />
-							</td>
-							<td>
-								{{displayValue(editCache[data.id].data.clechTranChiVsNcauChiN1)}}
-							</td>
-							<td>
-								<input class="money-input" currencyMask [options]="amount"
-									[(ngModel)]="editCache[data.id].data.tranChiN2"
-									(ngModelChange)="changeModel(data.id)" />
-							</td>
-							<td>
-								<input class="money-input" currencyMask [options]="amount"
-									[(ngModel)]="editCache[data.id].data.ncauChiN2"
-									(ngModelChange)="changeModel(data.id)" />
-							</td>
-							<td>
-								{{displayValue(editCache[data.id].data.clechTranChiVsNcauChiN2)}}
-							</td>
-							<td *ngIf="status" nzRight>
-								<a (click)="saveEdit(data.id)" class="save">Lưu</a>
-								<a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
-									(nzOnConfirm)="cancelEdit(data.id)" class="save">
-									Hủy
-								</a>
-							</td>
-						</ng-template>
-					</tr>
-				</tbody>
-			</nz-table>
-		</div>
-		<div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
-			<div nz-col nzSpan="24">
-				<label class="search__label">Thuyết minh</label>
-				<textarea rows="2" nz-input [(ngModel)]="thuyetMinh" [disabled]="!status"></textarea>
-			</div>
-		</div>
+				<div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+					<div nz-col class="gutter-row" [nzSpan]="13">
+						<nz-table nzBordered class="table__body">
+							<thead>
+								<tr>
+									<th nzWidth="7%">STT</th>
+									<th>Tên file</th>
+									<th nzWidth="15%"></th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr *ngFor="let data of formDetail.lstFiles; let i = index">
+									<td>{{ i + 1 }} </td>
+									<td>{{ data.fileName }}</td>
+									<td>
+										<a (click)="downloadFile(data.id)">
+											<i class="fa fa-eye"></i>
+										</a>
+										<a *ngIf="status.general" (click)="deleteFile(data.id)">
+											<i class="fa fa-trash-o do"></i>
+										</a>
+									</td>
+								</tr>
+							</tbody>
+						</nz-table>
+					</div>
+				</div>
+			</nz-tab>
+		</nz-tabset>
 	</div>
 	<div class="modal-footer">
 		<div class="nut">
 			<div class="cantrai">
-				<button type="button" class="btn btn-main" [hidden]="!statusPrint" (click)="doPrint()">
+				<!-- <button type="button" class="btn btn-main" *ngIf="status.print" (click)="genFunc.doPrint()">
 					<i nz-icon nzType="printer" nzTheme="outline"></i>
 					<span>In</span>
+				</button> -->
+				<button type="button" class="btn btn-main" *ngIf="status.export" (click)="exportToExcel()">
+					<span nz-icon nzType="export" nzTheme="outline" style="margin-right: 5px;"></span>
+					<span>Xuất</span>
 				</button>
-				<button type="button" class="btn btn-main" (click)="save('5', null)" [hidden]="statusBtnFinish">
+				<button type="button" class="btn btn-sub" (click)="save('5', null)" *ngIf="status.finish">
 					<i nz-icon nzType="check" nzTheme="outline"></i>
 					<span>Hoàn tất nhập liệu</span>
 				</button>
-				<button type="button" class="btn btn-main" (click)="save('4', null)" [hidden]="statusBtnFinish">
+				<button type="button" class="btn btn-sub" (click)="save('4', null)" *ngIf="status.finish">
 					<i class="icon htvbdh_tcdt_save"></i>
 					<span>Lưu</span>
 				</button>
-				<button type="button" class="btn btn-main" (click)="save('1', null)" [hidden]="statusBtnOk">
+				<button type="button" class="btn btn-sub" (click)="save('1', null)" *ngIf="status.ok">
 					<i nz-icon nzType="check" nzTheme="outline"></i>
-					<span>OK</span>
-				</button>
-				<button type="button" class="btn btn-main" (click)="tuChoi('0')" [hidden]="statusBtnOk">
-					<i nz-icon nzType="close" nzTheme="outline"></i>
-					<span>Not OK</span>
+					<span>Chấp nhận</span>
 				</button>
 			</div>
 			<div class="canphai">
-				<button nz-button (click)="handleCancel()" class="modal__button--cancel">
-					<i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
-					Đóng
+				<button type="button" class="btn btn-do" (click)="tuChoi('0')" *ngIf="status.ok">
+					<i nz-icon nzType="close" nzTheme="outline"></i>
+					<span>Không chấp nhận</span>
 				</button>
 			</div>
 		</div>

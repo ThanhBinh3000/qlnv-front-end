@@ -187,6 +187,7 @@ export class ThongTinComponent implements OnInit, OnChanges {
               tgianGiaoDuHang: [],
               soNgayThienHd: [],
               donViTinh: [],
+              idNguoiDdien: [],
             }
         );
         this.formData.controls['donGiaVat'].valueChanges.subscribe(value => {
@@ -244,7 +245,6 @@ export class ThongTinComponent implements OnInit, OnChanges {
     await this.userService.search(body).then((res) => {
       if (res.msg == MESSAGE.SUCCESS) {
         this.listNguoiDaiDien = res.data?.content
-        console.log
       }
     })
   }
@@ -353,7 +353,11 @@ export class ThongTinComponent implements OnInit, OnChanges {
     setValidator(isKy) {
         if (isKy) {
             this.formData.controls["maHdong"].setValidators([Validators.required]);
-            this.formData.controls["soQdKqLcnt"].setValidators([Validators.required]);
+            this.formData.controls["tenHd"].setValidators([Validators.required]);
+            if (this.loaiVthh.startsWith("02")) {
+              this.formData.controls["noiDung"].setValidators([Validators.required]);
+              this.formData.controls["dieuKien"].setValidators([Validators.required]);
+            }
             this.formData.controls["idQdKqLcnt"].setValidators([Validators.required]);
             this.formData.controls["tenGoiThau"].setValidators([Validators.required]);
             this.formData.controls["tenHd"].setValidators([Validators.required]);
@@ -369,22 +373,14 @@ export class ThongTinComponent implements OnInit, OnChanges {
             this.formData.controls["chucVu"].setValidators([Validators.required]);
             this.formData.controls["stkNhaThau"].setValidators([Validators.required]);
             this.formData.controls["moTaiNhaThau"].setValidators([Validators.required]);
+            this.formData.controls["ghiChu"].setValidators([Validators.required]);
         } else {
-            this.formData.controls["tenGoiThau"].clearValidators();
-            this.formData.controls["tenHd"].clearValidators();
-            this.formData.controls["soNgayThien"].clearValidators();
-            this.formData.controls["maDvi"].clearValidators();
-            this.formData.controls["tenDvi"].clearValidators();
-            this.formData.controls["diaChi"].clearValidators();
-            this.formData.controls["mst"].clearValidators();
-            this.formData.controls["sdt"].clearValidators();
-            this.formData.controls["stk"].clearValidators();
-            this.formData.controls["fax"].clearValidators();
-            this.formData.controls["moTai"].clearValidators();
-            this.formData.controls["tenNguoiDdien"].clearValidators();
-            this.formData.controls["chucVu"].clearValidators();
-            this.formData.controls["stkNhaThau"].clearValidators();
-            this.formData.controls["moTaiNhaThau"].clearValidators();
+          Object.keys(this.formData.controls).forEach(key => {
+            const control = this.formData.controls[key];
+            control.clearValidators();
+            control.updateValueAndValidity();
+          });
+          this.formData.updateValueAndValidity();
         }
     }
 
@@ -819,4 +815,16 @@ export class ThongTinComponent implements OnInit, OnChanges {
       }
     })
   }
+
+  onChangeNguoiDaiDien(event) {
+      if (event) {
+        let ngDaiDien =  this.listNguoiDaiDien.find(i => i.id == event)
+        this.formData.patchValue({
+          tenNguoiDdien: ngDaiDien.fullName,
+          chucVu: ngDaiDien.positionName,
+          sdt: ngDaiDien.phoneNo,
+        })
+      }
+  }
+
 }

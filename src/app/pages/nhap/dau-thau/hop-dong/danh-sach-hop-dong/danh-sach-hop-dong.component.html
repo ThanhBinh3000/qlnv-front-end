@@ -201,8 +201,8 @@
                 {{ data.soQd}}
 <!--              </a>-->
             </td>
-            <td class="text-right">{{ data.soGthau}}</td>
-            <td class="text-right">{{ data.qdKhlcntDtl?.soGthauTrung}}</td>
+            <td class="text-right">{{ data.hhQdKhlcntHdr?.soGthau}}</td>
+            <td class="text-right">{{ data.hhQdKhlcntHdr?.soGthauTrung == null ? 0 : data.hhQdKhlcntHdr?.soGthauTrung}}</td>
             <td class="text-right">{{ data.listHopDong?.length }}</td>
             <td>{{ data.qdKhlcntDtl?.dxuatKhLcntHdr?.tgianNhang | date: 'dd/MM/YYYY' }}</td>
             <td>{{ data.qdKhlcntDtl?.hhQdKhlcntHdr?.tenCloaiVthh }}</td>
