@@ -37,21 +37,33 @@ export class ItemData {
     }
 
     changeModel() {
-        this.ttGiaHtoan = Operator.mul(this.soLuongTte, this.dgGiaKhoach);
-        this.ttGiaBanTte = Operator.mul(this.soLuongTte, this.dgGiaBanTte);
-        this.ttClechGiaTteVaGiaHtoan = Operator.sum([this.ttGiaBanTte, -this.ttGiaHtoan]);
+        if (this.level == 3) {
+            this.ttGiaHtoan = Operator.mul(this.soLuongTte, this.dgGiaKhoach);
+            this.ttGiaBanTte = Operator.mul(this.soLuongTte, this.dgGiaBanTte);
+            this.ttClechGiaTteVaGiaHtoan = Operator.sum([this.ttGiaBanTte, -this.ttGiaHtoan]);
+        }
     }
 
     sum(data: ItemData) {
         // this.soLuongKhoach = Operator.sum([this.soLuongKhoach, data.soLuongKhoach]);
         // this.soLuongTte = Operator.sum([this.soLuongTte, data.soLuongTte]);
         if (this.level == 2) {
-            this.soLuongKhoach = Operator.sum([this.soLuongKhoach, data.soLuongKhoach]);
+            // this.soLuongKhoach = Operator.sum([this.soLuongKhoach, data.soLuongKhoach]);
             this.soLuongTte = Operator.sum([this.soLuongTte, data.soLuongTte]);
         }
         this.ttGiaHtoan = Operator.sum([this.ttGiaHtoan, data.ttGiaHtoan]);
         this.ttGiaBanTte = Operator.sum([this.ttGiaBanTte, data.ttGiaBanTte]);
-        this.ttClechGiaTteVaGiaHtoan = Operator.sum([this.ttClechGiaTteVaGiaHtoan, data.ttClechGiaTteVaGiaHtoan]);
+        this.ttClechGiaTteVaGiaHtoan = Operator.sum([this.ttGiaBanTte, -this.ttGiaHtoan]);
+    }
+
+    clearKeHoach() {
+        this.soLuongKhoach = null;
+    }
+
+    clearThucHien() {
+        this.soLuongTte = null;
+        this.ttGiaHtoan = null;
+        this.ttGiaBanTte = null;
     }
 
     clear() {
@@ -163,7 +175,7 @@ export class BaoCao03Component implements OnInit {
         Object.assign(this.status, this.dataInfo.status);
         await this.getFormDetail();
         if (this.status.save) {
-            this.scrollX = Table.tableWidth(350, 9, 1, 120);
+            this.scrollX = Table.tableWidth(350, 9, 1, 180);
         } else {
             this.scrollX = Table.tableWidth(350, 9, 1, 0);
         }
@@ -458,7 +470,7 @@ export class BaoCao03Component implements OnInit {
         stt = Table.preIndex(stt);
         while (stt != '0') {
             const index = this.lstCtietBcao.findIndex(e => e.stt == stt);
-            this.lstCtietBcao[index].clear();
+            this.lstCtietBcao[index].clearThucHien();
             this.lstCtietBcao.forEach(item => {
                 if (Table.preIndex(item.stt) == stt) {
                     this.lstCtietBcao[index].sum(item);
@@ -476,6 +488,10 @@ export class BaoCao03Component implements OnInit {
                 this.total.sum(item);
             }
         })
+    }
+
+    isEdit(level: number) {
+        return level == 3 || (level == 2 && this.dataInfo.dotBcao)
     }
 
     exportToExcel() {

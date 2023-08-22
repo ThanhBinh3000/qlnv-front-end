@@ -42,12 +42,6 @@
                                 </ng-template>
                             </div>
                         </div>
-                        <!-- <div class="canphai">
-                            <button *ngIf="status.save" type="button" class="btn btn-do" (click)="deleteAllChecked()">
-                                <i class="fa fa-trash-o"></i>
-                                <span>Xóa</span>
-                            </button>
-                        </div> -->
                     </div>
                     <nz-table nzBordered class="table__body" [nzScroll]="{ x: scrollX}">
                         <thead>
@@ -61,8 +55,6 @@
                                 <th style="width: 50px;" rowspan="2" *ngIf="status.save" nzRight></th>
                                 <th style="width: 55px;" rowspan="2" *ngIf="status.save" nzRight></th>
                                 <th style="width: 55px;" rowspan="2" *ngIf="status.save" nzRight></th>
-                                <!-- <th style="width: 40px;" rowspan="2" *ngIf="status.save" nzRight>
-                                </th> -->
                             </tr>
                             <tr>
                                 <th>QĐ số... Ngày...</th>
@@ -88,7 +80,6 @@
                                 <th *ngIf="status.save" nzRight></th>
                                 <th *ngIf="status.save" nzRight></th>
                                 <th *ngIf="status.save" nzRight></th>
-                                <!-- <th *ngIf="status.save" nzRight></th> -->
                             </tr>
                         </thead>
                         <tbody>
@@ -140,18 +131,15 @@
                                             (click)="deleteLine(data.id)"></i>
                                     </td>
                                     <td *ngIf="status.save" nzRight>
-                                        <i *ngIf="data.level > 1" class="fa fa-pencil" (click)="startEdit(data.id)"></i>
+                                        <i *ngIf="isEdit(data.level)" class="fa fa-pencil"
+                                            (click)="startEdit(data.id)"></i>
                                     </td>
                                     <td *ngIf="status.save" nzRight>
                                         <i *ngIf="data.level < 2" class="fa fa-plus" (click)="addLine(data.id)"></i>
                                     </td>
-                                    <!-- <td *ngIf="status.save" nzRight>
-                                        <label *ngIf="data.level > 0" nz-checkbox [nzValue]="data.id"
-                                            [(ngModel)]="data.checked" (ngModelChange)="updateChecked(data.id)"></label>
-                                    </td> -->
                                 </ng-container>
                                 <ng-template #editTemplate>
-                                    <td>
+                                    <!-- <td>
                                         <input nz-input [(ngModel)]="editCache[data.id].data.soQd" />
                                     </td>
                                     <td>
@@ -179,8 +167,8 @@
                                     </td>
                                     <td>
                                         {{ Op.fmtVal(editCache[data.id].data.thTtien) }}
-                                    </td>
-                                    <!-- <ng-container *ngIf="data.level == 1; else child">
+                                    </td> -->
+                                    <ng-container *ngIf="data.level == 1; else child">
                                         <td>
                                             <input nz-input [(ngModel)]="editCache[data.id].data.soQd" />
                                         </td>
@@ -225,7 +213,7 @@
                                         <td>
                                             {{ Op.fmtVal(editCache[data.id].data.thTtien) }}
                                         </td>
-                                    </ng-template> -->
+                                    </ng-template>
                                     <td>
                                         <input nz-input [(ngModel)]="editCache[data.id].data.ghiChu" />
                                     </td>
@@ -242,10 +230,6 @@
                                             Hủy
                                         </a>
                                     </td>
-                                    <!-- <td *ngIf="status.save" nzRight>
-                                        <label *ngIf="data.level > 0" nz-checkbox [nzValue]="data.id"
-                                            [(ngModel)]="data.checked" (ngModelChange)="updateChecked(data.id)"></label>
-                                    </td> -->
                                 </ng-template>
                             </tr>
                             <tr>
@@ -263,7 +247,6 @@
                                 <td *ngIf="status.save" nzRight></td>
                                 <td *ngIf="status.save" nzRight></td>
                                 <td *ngIf="status.save" nzRight></td>
-                                <!-- <td *ngIf="status.save" nzRight></td> -->
                             </tr>
                         </tbody>
                     </nz-table>
