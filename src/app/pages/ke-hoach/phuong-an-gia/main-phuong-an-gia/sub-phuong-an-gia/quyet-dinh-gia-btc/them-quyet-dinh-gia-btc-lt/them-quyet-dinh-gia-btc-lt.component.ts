@@ -307,7 +307,7 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
           item.children.forEach(child => {
             if (child.apDungTatCa) {
               child.giaQdBtc = item.giaQdBtc;
-              if (child.vat) {
+              if (child.vat && (this.formData.value.loaiGia == 'LG01' || this.formData.value.loaiGia == 'LG03')) {
                 child.giaQdBtcVat = child.giaQdBtc + child.giaQdBtc * child.vat
               }
             }

@@ -1,37 +1,39 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
-import { MESSAGE } from 'src/app/constants/message';
-import { ChaoGiaMuaLeUyQuyenService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/chao-gia-mua-le-uy-quyen.service';
-import { isEmpty } from 'lodash';
-import { DonviService } from 'src/app/services/donvi.service';
+import {Component, Input, OnInit} from '@angular/core';
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from 'src/app/services/storage.service';
+import {MESSAGE} from 'src/app/constants/message';
+import {
+  ChaoGiaMuaLeUyQuyenService
+} from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/chao-gia-mua-le-uy-quyen.service';
+import {isEmpty} from 'lodash';
+import {DonviService} from 'src/app/services/donvi.service';
+import {XuatTrucTiepComponent} from "../../xuat-truc-tiep.component";
+import {CHUC_NANG} from "../../../../../constants/status";
+
 @Component({
   selector: 'app-thong-tin-ban-truc-tiep',
   templateUrl: './thong-tin-ban-truc-tiep.component.html',
   styleUrls: ['./thong-tin-ban-truc-tiep.component.scss']
 })
 export class ThongTinBanTrucTiepComponent extends Base2Component implements OnInit {
-
-  @Input()
-  loaiVthh: string;
-  isView: boolean = false;
+  @Input() loaiVthh: string;
+  CHUC_NANG = CHUC_NANG;
+  public vldTrangThai: XuatTrucTiepComponent
   dsDonvi: any[] = [];
   userdetail: any = {};
-  pthucBanTrucTiep: string;
-  selectedId: number = 0;
+  isView: boolean = false;
   idQdPdKh: number = 0;
   isViewQdPdKh: boolean = false;
   idQdPdKq: number = 0;
   isViewQdPdKq: boolean = false;
-
   listTrangThai: any[] = [
-    { ma: this.STATUS.CHUA_CAP_NHAT, giaTri: 'Chưa cập nhật' },
-    { ma: this.STATUS.DANG_CAP_NHAT, giaTri: 'Đang cập nhật' },
-    { ma: this.STATUS.HOAN_THANH_CAP_NHAT, giaTri: 'Hoàn thành cập nhật' },
+    {ma: this.STATUS.CHUA_CAP_NHAT, giaTri: 'Chưa cập nhật'},
+    {ma: this.STATUS.DANG_CAP_NHAT, giaTri: 'Đang cập nhật'},
+    {ma: this.STATUS.HOAN_THANH_CAP_NHAT, giaTri: 'Hoàn thành cập nhật'},
   ];
 
   constructor(
@@ -42,19 +44,17 @@ export class ThongTinBanTrucTiepComponent extends Base2Component implements OnIn
     modal: NzModalService,
     private donviService: DonviService,
     private chaoGiaMuaLeUyQuyenService: ChaoGiaMuaLeUyQuyenService,
+    private xuatTrucTiepComponent: XuatTrucTiepComponent,
   ) {
     super(httpClient, storageService, notification, spinner, modal, chaoGiaMuaLeUyQuyenService);
+    this.vldTrangThai = this.xuatTrucTiepComponent;
     this.formData = this.fb.group({
       namKh: null,
       ngayCgiaTu: null,
       ngayCgiaDen: null,
       tochucCanhan: null,
-      maDvi: null,
       maDviChiCuc: null,
-      tenDvi: null,
       loaiVthh: null,
-      trangThai: null,
-      lastest: 1
     })
 
     this.filterTable = {
@@ -82,13 +82,6 @@ export class ThongTinBanTrucTiepComponent extends Base2Component implements OnIn
     }
   }
 
-  async loadDsTong() {
-    const dsTong = await this.donviService.layDonViCon();
-    if (!isEmpty(dsTong)) {
-      this.dsDonvi = dsTong.data;
-    }
-  }
-
   async initData() {
     this.userInfo = this.userService.getUserLogin();
     this.userdetail.maDvi = this.userInfo.MA_DVI;
@@ -96,22 +89,27 @@ export class ThongTinBanTrucTiepComponent extends Base2Component implements OnIn
     await this.loadDsTong();
   }
 
+  async loadDsTong() {
+    const dsTong = await this.donviService.layDonViCon();
+    if (!isEmpty(dsTong)) {
+      this.dsDonvi = dsTong.data;
+    }
+  }
+
   timKiem() {
     this.formData.patchValue({
       loaiVthh: this.loaiVthh,
-      maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
-      trangThai: this.userService.isTongCuc() ? this.STATUS.HOAN_THANH_CAP_NHAT : null,
-      lastest: 1
     })
   }
+
   clearFilter() {
     this.formData.reset();
     this.timKiem();
     this.search();
   }
 
-  redirectToChiTiet(isView: boolean, id: number) {
-    this.selectedId = id;
+  redirectDetail(id, isView: boolean) {
+    this.idSelected = id;
     this.isDetail = true;
     this.isView = isView;
   }
