@@ -1,16 +1,16 @@
 
-import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { Roles, Status, Utils } from 'src/app/Utility/utils';
 import { MESSAGE } from 'src/app/constants/message';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { BCVP, LTD, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import { DialogTaoMoiComponent } from '../dialog-tao-moi/dialog-tao-moi.component';
+import { Ltd } from '../lap-ke-hoach-va-tham-dinh-du-toan.constant';
 
 @Component({
     selector: 'app-danh-sach-bao-cao',
@@ -18,18 +18,21 @@ import { DialogTaoMoiComponent } from '../dialog-tao-moi/dialog-tao-moi.componen
 })
 export class DanhSachBaoCaoComponent implements OnInit {
     @Output() dataChange = new EventEmitter();
+    Utils = Utils;
+    Status = Status;
 
     searchFilter = {
         nam: null,
+        lan: null,
         tuNgay: null,
         denNgay: null,
         maBaoCao: "",
         donViTao: "",
-        trangThai: Utils.TT_BC_1,
+        trangThai: Status.TT_01,
     };
 
     userInfo: any;
-    trangThais: any = TRANG_THAI_TIM_KIEM;
+    // trangThais: any = Status.TRANG_THAI_FULL;
     dataTable: any[] = [];
     dataTableAll: any[] = [];
 
@@ -44,20 +47,12 @@ export class DanhSachBaoCaoComponent implements OnInit {
     statusDelete = true;
     allChecked = false;
 
-    filterTable: any = {
-        soQd: '',
-        ngayKy: '',
-        namKeHoach: '',
-        trichYeu: '',
-        tenTrangThai: '',
-    };
     constructor(
         private spinner: NgxSpinnerService,
         private lapThamDinhService: LapThamDinhService,
         private notification: NzNotificationService,
         private modal: NzModalService,
         public userService: UserService,
-        private datePipe: DatePipe,
         public globals: Globals,
     ) { }
 
@@ -71,13 +66,13 @@ export class DanhSachBaoCaoComponent implements OnInit {
         this.searchFilter.tuNgay = newDate;
         this.searchFilter.donViTao = this.userInfo?.MA_DVI;
         //check quyen va cac nut chuc nang
-        this.statusNewReport = this.userService.isAccessPermisson(LTD.ADD_REPORT);
-        this.statusDelete = this.userService.isAccessPermisson(LTD.DELETE_REPORT) || this.userService.isAccessPermisson(LTD.DELETE_SYNTHETIC_REPORT);
-        if (this.userService.isAccessPermisson(LTD.DUYET_REPORT) || this.userService.isAccessPermisson(LTD.DUYET_SYNTHETIC_REPORT)) {
-            this.searchFilter.trangThai = Utils.TT_BC_2;
+        this.statusNewReport = this.userService.isAccessPermisson(Roles.LTD.ADD_REPORT);
+        this.statusDelete = this.userService.isAccessPermisson(Roles.LTD.DEL_REPORT) || this.userService.isAccessPermisson(Roles.LTD.DEL_SYNTH_REPORT);
+        if (this.userService.isAccessPermisson(Roles.LTD.PASS_REPORT) || this.userService.isAccessPermisson(Roles.LTD.PASS_SYNTH_REPORT)) {
+            this.searchFilter.trangThai = Status.TT_02;
         } else {
-            if (this.userService.isAccessPermisson(LTD.PHE_DUYET_REPORT) || this.userService.isAccessPermisson(LTD.PHE_DUYET_SYNTHETIC_REPORT)) {
-                this.searchFilter.trangThai = Utils.TT_BC_4;
+            if (this.userService.isAccessPermisson(Roles.LTD.APPROVE_REPORT) || this.userService.isAccessPermisson(Roles.LTD.APPROVE_SYNTH_REPORT)) {
+                this.searchFilter.trangThai = Status.TT_04;
             }
         }
         this.search();
@@ -95,8 +90,8 @@ export class DanhSachBaoCaoComponent implements OnInit {
             maBcaos: !this.searchFilter.maBaoCao ? [] : [this.searchFilter.maBaoCao],
             maDvi: this.searchFilter.donViTao,
             namBcao: this.searchFilter.nam,
-            ngayTaoDen: this.datePipe.transform(this.searchFilter.denNgay, Utils.FORMAT_DATE_STR),
-            ngayTaoTu: this.datePipe.transform(this.searchFilter.tuNgay, Utils.FORMAT_DATE_STR),
+            ngayTaoDen: Utils.fmtDate(this.searchFilter.denNgay),
+            ngayTaoTu: Utils.fmtDate(this.searchFilter.tuNgay),
             paggingReq: {
                 limit: this.pages.size,
                 page: this.pages.page,
@@ -109,11 +104,6 @@ export class DanhSachBaoCaoComponent implements OnInit {
                 res.data.content.forEach(item => {
                     this.dataTable.push({
                         ...item,
-                        ngayDuyet: this.datePipe.transform(item.ngayDuyet, Utils.FORMAT_DATE_STR),
-                        ngayTao: this.datePipe.transform(item.ngayTao, Utils.FORMAT_DATE_STR),
-                        ngayTrinh: this.datePipe.transform(item.ngayTrinh, Utils.FORMAT_DATE_STR),
-                        ngayPheDuyet: this.datePipe.transform(item.ngayPheDuyet, Utils.FORMAT_DATE_STR),
-                        ngayTraKq: this.datePipe.transform(item.ngayTraKq, Utils.FORMAT_DATE_STR),
                         isEdit: this.checkEditStatus(item),
                         isDelete: this.checkDeleteStatus(item),
                         checked: false,
@@ -154,20 +144,20 @@ export class DanhSachBaoCaoComponent implements OnInit {
     }
 
     checkEditStatus(item: any) {
-        const isSynthetic = item.tongHopTu != "[]";
-        return Utils.statusSave.includes(item.trangThai) &&
-            (isSynthetic ? this.userService.isAccessPermisson(LTD.EDIT_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(LTD.EDIT_REPORT));
+        const isSynthetic = item.tongHopTu && item.tongHopTu != "[]";
+        return Status.check('saveWHist', item.trangThai) &&
+            (isSynthetic ? this.userService.isAccessPermisson(Roles.LTD.EDIT_SYNTH_REPORT) : this.userService.isAccessPermisson(Roles.LTD.EDIT_REPORT));
     }
 
     checkDeleteStatus(item: any) {
-        const isSynthetic = item.tongHopTu != "[]";
-        return Utils.statusDelete.includes(item.trangThai) &&
-            (isSynthetic ? this.userService.isAccessPermisson(LTD.DELETE_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(LTD.DELETE_REPORT));
+        const isSynthetic = item.tongHopTu && item.tongHopTu != "[]";
+        return Status.check('saveWHist', item.trangThai) &&
+            (isSynthetic ? this.userService.isAccessPermisson(Roles.LTD.DEL_SYNTH_REPORT) : this.userService.isAccessPermisson(Roles.LTD.DEL_REPORT));
     }
 
-    getStatusName(trangThai: string) {
-        return this.trangThais.find(e => e.id == trangThai)?.tenDm;
-    }
+    // getStatusName(trangThai: string) {
+    //     return this.trangThais.find(e => e.id == trangThai)?.tenDm;
+    // }
 
     //them moi bao cao
     addNewReport() {
@@ -185,46 +175,10 @@ export class DanhSachBaoCaoComponent implements OnInit {
         modalTuChoi.afterClose.toPromise().then(async (res) => {
             if (res) {
                 const obj = {
-                    ...res,
-                    id: null,
-                    tabSelected: 'baocao',
+                    baoCao: res,
+                    tabSelected: Ltd.BAO_CAO_01,
                     isSynthetic: false,
                 }
-
-                //check bao cao nam da ton tai hay chua
-                let checkExist = false;
-                let checkError = false;
-                const request = {
-                    loaiTimKiem: '0',
-                    maBcaos: [],
-                    maDvi: this.searchFilter.donViTao,
-                    namBcao: obj?.namHienTai,
-                    paggingReq: {
-                        limit: 10,
-                        page: 1,
-                    },
-                    trangThais: [],
-                }
-                await this.lapThamDinhService.timBaoCaoLapThamDinh(request).toPromise().then(res => {
-                    if (res.statusCode == 0) {
-                        if (res.data.content?.length > 0) {
-                            checkExist = true;
-                        }
-                    } else {
-                        checkError = true;
-                    }
-                }, err => {
-                    checkError = true;
-                })
-                if (checkExist) {
-                    this.notification.warning(MESSAGE.WARNING, "Báo cáo năm " + request.namBcao + " đã tồn tại!");
-                    return;
-                }
-                if (checkError) {
-                    this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-                    return;
-                }
-
                 this.dataChange.emit(obj);
             }
         });
@@ -234,7 +188,7 @@ export class DanhSachBaoCaoComponent implements OnInit {
     viewDetail(data: any) {
         const obj = {
             id: data.id,
-            tabSelected: 'baocao',
+            tabSelected: Ltd.BAO_CAO_01,
         }
         this.dataChange.emit(obj);
     }
@@ -301,24 +255,4 @@ export class DanhSachBaoCaoComponent implements OnInit {
         });
     }
 
-    // Tìm kiếm trong bảng
-    filterInTable(key: string, value: string, isDate: boolean) {
-        if (value && value != '') {
-            this.dataTable = [];
-            let temp = [];
-            if (this.dataTableAll && this.dataTableAll.length > 0) {
-                if (isDate) {
-                    value = this.datePipe.transform(value, Utils.FORMAT_DATE_STR);
-                }
-                this.dataTableAll.forEach((item) => {
-                    if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
-                        temp.push(item)
-                    }
-                });
-            }
-            this.dataTable = [...this.dataTable, ...temp];
-        } else {
-            this.dataTable = cloneDeep(this.dataTableAll);
-        }
-    }
 }

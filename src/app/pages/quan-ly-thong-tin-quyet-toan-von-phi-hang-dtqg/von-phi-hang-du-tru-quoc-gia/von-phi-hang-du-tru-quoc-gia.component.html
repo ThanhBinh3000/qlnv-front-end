@@ -1,44 +1,44 @@
 <nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
-  <!-- (nzChange)="onChange($event)" -->
-  <ul nz-menu nzMode="horizontal">
-    <ng-container *ngIf="viewBaoCaoQuyetToan">
-      <li nz-menu-item nzSelected (click)="selectTab('baoCaoQuyetToan')">
-        Báo cáo quyết toán
-      </li>
-    </ng-container>
-    <ng-container *ngIf="viewDieuChinhSauQuyetToan">
-      <li nz-menu-item (click)="selectTab('baoCaoDieuChinhQuyetToan')">
-        Điều chỉnh số liệu sau quyết toán
-      </li>
-    </ng-container>
-    <ng-container *ngIf="viewTongHopPheDuyet && userInfo.CAP_DVI !== '3'">
-      <li nz-menu-item (click)="selectTab('baoCaoTongHopPheDuyet')">
-        Phê duyệt và tổng hợp quyết toán
-      </li>
-    </ng-container>
-    <!-- <ng-container *ngIf="viewPheDuyet">
+    <!-- (nzChange)="onChange($event)" -->
+    <ul nz-menu nzMode="horizontal">
+        <ng-container *ngIf="viewBaoCaoQuyetToan">
+            <li nz-menu-item nzSelected (click)="selectTab('baoCaoQuyetToan')">
+                Báo cáo quyết toán
+            </li>
+        </ng-container>
+        <ng-container *ngIf="viewDieuChinhSauQuyetToan">
+            <li nz-menu-item (click)="selectTab('baoCaoDieuChinhQuyetToan')">
+                Điều chỉnh số liệu sau quyết toán
+            </li>
+        </ng-container>
+        <ng-container *ngIf="viewTongHopPheDuyet && userInfo.CAP_DVI !== '3'">
+            <li nz-menu-item (click)="selectTab('baoCaoTongHopPheDuyet')">
+                Phê duyệt và tổng hợp quyết toán
+            </li>
+        </ng-container>
+        <!-- <ng-container *ngIf="viewPheDuyet">
       <li nz-menu-item (click)="selectTab(2)">
         Phê duyệt báo cáo
       </li>
     </ng-container> -->
-  </ul>
+    </ul>
 </nz-affix>
 <div class="contentBor chi-tieu__body giao-ke-hoach">`
-  <div class="contentDetail">
-    <ng-container *ngIf="tabSelected == 'baoCaoQuyetToan'">
-      <app-bao-cao-quyet-toan (dataChange)="changeTab($event)"></app-bao-cao-quyet-toan>
-    </ng-container>
-    <ng-container *ngIf="tabSelected == 'baoCaoDieuChinhQuyetToan'">
-      <app-dieu-chinh-bao-cao-sau-quyet-toan (dataChange)="changeTab($event)">
-      </app-dieu-chinh-bao-cao-sau-quyet-toan>
-    </ng-container>
-    <ng-container *ngIf="tabSelected == 'baoCaoTongHopPheDuyet'">
-      <app-phe-duyet-tong-hop (dataChange)="changeTab($event)">
-      </app-phe-duyet-tong-hop>
-    </ng-container>
-    <!-- <ng-container *ngIf="tabSelected == 2">
+    <div class="contentDetail">
+        <ng-container *ngIf="tabSelected == 'baoCaoQuyetToan'">
+            <app-bao-cao-quyet-toan (dataChange)="changeTab($event)"></app-bao-cao-quyet-toan>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 'baoCaoDieuChinhQuyetToan'">
+            <app-dieu-chinh-bao-cao-sau-quyet-toan (dataChange)="changeTab($event)">
+            </app-dieu-chinh-bao-cao-sau-quyet-toan>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 'baoCaoTongHopPheDuyet'">
+            <app-phe-duyet-tong-hop (dataChange)="changeTab($event)">
+            </app-phe-duyet-tong-hop>
+        </ng-container>
+        <!-- <ng-container *ngIf="tabSelected == 2">
       <app-duyet-phe-duyet-bao-cao>
       </app-duyet-phe-duyet-bao-cao>
     </ng-container> -->
-  </div>
+    </div>
 </div>

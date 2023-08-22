@@ -164,11 +164,12 @@
           <td> <a nz-button nzType="link" (click)="openModalCttongHop(data)">{{ data.soQdTrunghan }}</a></td>
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-left">
-            <a (click)="redirectToChiTiet(data.id,true)" *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDHANGNAM_DX_XEM')">
+            <a (click)="redirectToChiTiet(data.id,true)" *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDHANGNAM_DX_XEM')
+&& !((data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_CBV || data.trangThai == STATUS.TU_CHOI_TP || data.trangThai == STATUS.TU_CHOI_LDC) && data.nguoiTaoId == userInfo.ID)">
               <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
             <a
-              (click)="redirectToChiTiet(data.id,false)"  *ngIf="( data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_LDC || data.trangThai == STATUS.TU_CHOI_TP || data.trangThai == STATUS.TU_CHOI_LDV) && userService.isCuc() && userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDHANGNAM_DX_THEM')  ">
+              (click)="redirectToChiTiet(data.id,false)"  *ngIf="( data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_LDC || data.trangThai == STATUS.TU_CHOI_TP || data.trangThai == STATUS.TU_CHOI_CBV) && userService.isCuc() && userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDHANGNAM_DX_THEM')">
               <i class="fa fa-pencil" title="Sửa"></i>
             </a>
             <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isCuc() && userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDHANGNAM_DX_XOA') " (click)="delete(data)">

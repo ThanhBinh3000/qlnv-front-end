@@ -147,20 +147,6 @@ export const NOI_DUNG = [
         level: 1,
         ma: '0.2.2',
     },
-    {
-        id: 22001,
-        tenDm: "Chi hỗ trợ đảm bảo một phần chi thường xuyên của đơn vị sự nghiệp",
-        idCha: 2200,
-        level: 2,
-        ma: '0.2.2.1',
-    },
-    {
-        id: 22002,
-        tenDm: "Chi thực hiện chính sách tinh giảm biên chế",
-        idCha: 2200,
-        level: 2,
-        ma: '0.2.2.2',
-    },
     //=============
     {
         id: 3000,
@@ -171,17 +157,17 @@ export const NOI_DUNG = [
     },
     {
         id: 3100,
-        tenDm: "Nhiệm vụ khoa học công nghệ",
+        tenDm: "Kinh phí thực hiện tự chủ",
         idCha: 3000,
         level: 1,
         ma: '0.3.1',
     },
     {
         id: 31001,
-        tenDm: "Chi thực hiện nhiệm vụ khoa học công nghệ cấp cơ sở",
-        idCha: 3100,
-        level: 2,
-        ma: '0.3.1.1',
+        tenDm: "Kinh phí không thực hiện tự chủ",
+        idCha: 3000,
+        level: 1,
+        ma: '0.3.2',
     },
     //=============
     {

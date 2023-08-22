@@ -1,7 +1,7 @@
 <nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
   <!-- (nzChange)="onChange($event)" -->
   <ul nz-menu nzMode="horizontal">
-    <li *ngIf="viewDeNghi" nz-menu-item (click)="selectTab(0)">
+    <li nz-menu-item *ngIf="userService.isAccessPermisson('VONPHIHANG_VONCHIDTQG')" (click)="selectTab(0)">
       Đề nghị cấp vốn các đơn vị
     </li>
     <li nz-menu-item *ngIf="userService.isAccessPermisson('VONPHIHANG_VONCHIDTQG_DENGHIBN')" (click)="selectTab(2)">
@@ -21,7 +21,7 @@
 <div class="contentBor chi-tieu__body giao-ke-hoach">
   <div class="contentDetail">
     <ng-container *ngIf="tabSelected == 0">
-      <app-de-nghi-cap-von></app-de-nghi-cap-von>
+      <app-de-nghi-cap-von-cac-don-vi></app-de-nghi-cap-von-cac-don-vi>
     </ng-container>
     <ng-container *ngIf="tabSelected == 2">
       <app-de-nghi-cap-von-bo-nganh></app-de-nghi-cap-von-bo-nganh>

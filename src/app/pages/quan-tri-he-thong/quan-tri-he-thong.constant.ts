@@ -79,5 +79,14 @@ export const NHAP_ROUTE_LIST = [
       }
     ],
     isSelected: false
+  },
+  {
+    id: 5,
+    icon: 'htvbdh_tcdt_icon-common',
+    title: 'Thống kê truy cập',
+    url: `/${NHAP_MAIN_ROUTE}/thong-ke-truy-cap`,
+    dropdown: 'thong-ke-truy-cap',
+    idHover: 'thong-ke-truy-cap',
+    isSelected: false
   }
 ];

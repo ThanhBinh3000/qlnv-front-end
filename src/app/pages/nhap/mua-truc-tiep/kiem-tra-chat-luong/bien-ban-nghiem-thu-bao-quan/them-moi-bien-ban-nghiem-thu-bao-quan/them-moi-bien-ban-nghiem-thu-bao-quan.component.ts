@@ -108,9 +108,9 @@ export class ThemMoiBienBanNghiemThuBaoQuanComponent extends Base2Component impl
         ngayNghiemThu: [''],
         slCanNhap: [''],
         nguoiTao: [''],
-        tenThuKho: [''],
-        tenKeToan: [''],
-        tenNguoiPduyet: [''],
+        thuKho: [''],
+        keToan: [''],
+        nguoiPduyet: [''],
         tenNganLoKho: [''],
 
         loaiVthh: ['',],
@@ -361,6 +361,7 @@ export class ThemMoiBienBanNghiemThuBaoQuanComponent extends Base2Component impl
       if (res.msg == MESSAGE.SUCCESS) {
         const data = res.data;
         this.helperService.bidingDataInFormGroup(this.formData, data);
+        console.log(this.formData.value)
         await this.bindingDataQd(res.data?.idQdGiaoNvNh);
         let dataDdNhap = this.listDiaDiemNhap.filter(item => item.id == res.data.idDdiemGiaoNvNh)[0];
         this.bindingDataDdNhap(dataDdNhap);

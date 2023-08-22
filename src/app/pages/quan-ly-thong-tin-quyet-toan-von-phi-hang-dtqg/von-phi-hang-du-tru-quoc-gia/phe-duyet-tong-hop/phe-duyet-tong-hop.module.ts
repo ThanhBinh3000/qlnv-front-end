@@ -11,7 +11,12 @@ import { DialogTongHopComponent } from './dialog-tong-hop/dialog-tong-hop.compon
     CommonModule,
     ComponentsModule
   ],
-  declarations: [PheDuyetTongHopComponent, AddQuyetToanTongHopComponent, DialogAddVatTuComponent, DialogTongHopComponent],
+  declarations: [
+    PheDuyetTongHopComponent,
+    AddQuyetToanTongHopComponent,
+    DialogAddVatTuComponent,
+    DialogTongHopComponent
+  ],
   exports: [PheDuyetTongHopComponent],
 })
 export class PheDuyetTongHopModule { }

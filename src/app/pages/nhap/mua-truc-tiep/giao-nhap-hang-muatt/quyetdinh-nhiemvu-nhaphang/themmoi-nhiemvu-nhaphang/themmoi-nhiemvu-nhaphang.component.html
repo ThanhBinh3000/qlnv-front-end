@@ -265,7 +265,7 @@
           <td [nzExpand]="true" (nzExpandChange)="onExpandChange(i, $event)"></td>
           <td>{{ item.tenDvi }}</td>
           <td></td>
-          <td>{{ item.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
+          <td>{{ calcTong(i) | number : '1.0-1' : 'vi_VN' }}</td>
           <td></td>
           <td></td>
           <td></td>
@@ -405,7 +405,7 @@
           <td style="text-align: right; font-weight: 700; color: blue" colspan="8">Tổng số</td>
           <td></td>
           <td></td>
-          <td class="text-blue">{{ calcTong(i) | number : '1.0-1' : 'vi_VN' }}</td>
+          <td class="text-blue">{{ calcTongChil() | number : '1.0-1' : 'vi_VN' }}</td>
           <td></td>
           <td></td>
           <td *ngIf="userService.isAccessPermisson('NHDTQG_PTMTT_QDGNVNH_PHANBO')"></td>
@@ -418,7 +418,7 @@
         <td></td>
         <td></td>
         <td></td>
-        <td class="text-blue">{{ calcTong() | number : '1.0-1' : 'vi_VN' }}</td>
+        <td class="text-blue">{{ calcTongChil() | number : '1.0-1' : 'vi_VN' }}</td>
         <td></td>
       </tr>
       </tfoot>

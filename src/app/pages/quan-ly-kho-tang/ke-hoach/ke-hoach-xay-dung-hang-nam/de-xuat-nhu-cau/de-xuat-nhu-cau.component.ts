@@ -15,6 +15,7 @@ import { DANH_MUC_LEVEL } from "../../../../luu-kho/luu-kho.constant";
 import { DonviService } from "../../../../../services/donvi.service";
 import { QuyetDinhKhTrungHanService } from "../../../../../services/quyet-dinh-kh-trung-han.service";
 import { Router } from "@angular/router";
+import {STATUS} from "../../../../../constants/status";
 
 @Component({
   selector: "app-de-xuat-nhu-cau",
@@ -28,6 +29,7 @@ export class DeXuatNhuCauComponent extends Base2Component implements OnInit {
 
   idTongHop: number = 0;
   isViewTh: boolean;
+  STATUS = STATUS;
 
   listTrangThai = [{ "ma": "00", "giaTri": "Dự thảo" },
     { "ma": "01", "giaTri": "Chờ duyệt TP" },
@@ -135,7 +137,5 @@ export class DeXuatNhuCauComponent extends Base2Component implements OnInit {
     this.idTongHop = null;
     this.isViewTh = false;
   }
-
-
 }
 

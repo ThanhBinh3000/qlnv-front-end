@@ -5,6 +5,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { Operator, Roles, Status, Utils } from 'src/app/Utility/utils';
 import { DialogCopyQuyetToanVonPhiHangDtqgComponent } from 'src/app/components/dialog/dialog-copy-quyet-toan-von-phi-hang-dtqg/dialog-copy-quyet-toan-von-phi-hang-dtqg.component';
 import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialog-copy.component';
 import { DialogThemKhoanMucComponent } from 'src/app/components/dialog/dialog-them-khoan-muc/dialog-them-khoan-muc.component';
@@ -16,8 +17,6 @@ import { QuyetToanVonPhiService } from 'src/app/services/quan-ly-von-phi/quyetTo
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { displayNumber, exchangeMoney } from 'src/app/Utility/func';
-import { AMOUNT, DON_VI_TIEN, LA_MA, MONEY_LIMIT, QTVP, Utils } from 'src/app/Utility/utils';
 import * as uuid from "uuid";
 import { NOI_DUNG } from './them-bao-cao-quyet-toan.constant';
 export class ItemData {
@@ -49,13 +48,13 @@ export class ThemBaoCaoQuyetToanComponent implements OnInit {
     @Input() idInput;
     @Input() isStatus;
     @Output('close') onClose = new EventEmitter<any>();
-
+    Op = new Operator("1")
     // thong tin dang nhap
     userInfo: any;
     // info report 
     id: string;
     isDataAvailable = false;
-
+    Status = Status
     // status btn 
     titleStatus!: string;
     status = false;
@@ -83,7 +82,7 @@ export class ThemBaoCaoQuyetToanComponent implements OnInit {
     lstCtietBcao: ItemData[] = [];
     noiDungs: any[] = NOI_DUNG;
     donViTinhs: any[] = [];
-    maDviTiens: any[] = DON_VI_TIEN;
+    maDviTiens: any[] = Utils.DVI_TIEN;
     donVis: any = [];
 
     newDate = new Date();
@@ -101,8 +100,8 @@ export class ThemBaoCaoQuyetToanComponent implements OnInit {
     maDviTao!: string;
     maDviTien!: string;
     allChecked = false;                         // check all checkbox
-    soLaMa: any[] = LA_MA;
-    amount = AMOUNT;
+    soLaMa: any[] = Utils.LA_MA;
+    amount = Operator.amount;
     initItem: ItemData = {
         id: null,
         stt: "0",
@@ -145,27 +144,27 @@ export class ThemBaoCaoQuyetToanComponent implements OnInit {
 
     trangThais: any[] = [
         {
-            id: Utils.TT_BC_1,
+            id: Status.TT_01,
             tenDm: "Đang soạn",
         },
         {
-            id: Utils.TT_BC_2,
+            id: Status.TT_02,
             tenDm: "Trình duyệt",
         },
         {
-            id: Utils.TT_BC_3,
+            id: Status.TT_03,
             tenDm: "Trưởng BP từ chối",
         },
         {
-            id: Utils.TT_BC_4,
+            id: Status.TT_04,
             tenDm: "Trưởng BP duyệt",
         },
         {
-            id: Utils.TT_BC_5,
+            id: Status.TT_05,
             tenDm: "Lãnh đạo từ chối",
         },
         {
-            id: Utils.TT_BC_6,
+            id: Status.TT_06,
             tenDm: "Lãnh đạo phê duyệt",
         },
     ]
@@ -351,7 +350,7 @@ export class ThemBaoCaoQuyetToanComponent implements OnInit {
                             this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
                         }
                     );
-                    if (mcn == Utils.TT_BC_8 || mcn == Utils.TT_BC_5 || mcn == Utils.TT_BC_3) {
+                    if (mcn == Status.TT_08 || mcn == Status.TT_05 || mcn == Status.TT_03) {
                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
                     } else {
                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
@@ -378,7 +377,7 @@ export class ThemBaoCaoQuyetToanComponent implements OnInit {
             nzOkDanger: true,
             nzWidth: 500,
             nzOnOk: () => {
-                this.onSubmit(Utils.TT_BC_2, '')
+                this.onSubmit(Status.TT_02, '')
             },
         });
     }
@@ -465,7 +464,7 @@ export class ThemBaoCaoQuyetToanComponent implements OnInit {
         const lstCtietBcaoTemp: any = [];
         let checkMoneyRange = true;
         this.lstCtietBcao.forEach(item => {
-            if (item.donGiaMua > MONEY_LIMIT || item.thanhTien > MONEY_LIMIT) {
+            if (item.donGiaMua > Utils.MONEY_LIMIT || item.thanhTien > Utils.MONEY_LIMIT) {
                 checkMoneyRange = false;
                 return;
             }
@@ -616,18 +615,18 @@ export class ThemBaoCaoQuyetToanComponent implements OnInit {
 
     //nhóm các nút chức năng --báo cáo-----
     getStatusButton() {
-        if (Utils.statusSave.includes(this.isStatus) && this.userService.isAccessPermisson(QTVP.EDIT_REPORT)) {
+        if (Status.TT_01 == this.isStatus && this.userService.isAccessPermisson(Roles.QTVP.EDIT_REPORT)) {
             this.status = false;
         } else {
             this.status = true;
         }
         const checkChirld = this.maDviTao == this.userInfo?.MA_DVI;
-        this.saveStatus = this.getBtnStatus(Utils.statusSave, QTVP.ADD_REPORT, checkChirld);
-        this.submitStatus = this.getBtnStatus(Utils.statusApprove, QTVP.APPROVE_REPORT, checkChirld);
-        this.passStatus = this.getBtnStatus(Utils.statusDuyet, QTVP.DUYET_QUYET_TOAN_REPORT, checkChirld);
-        this.approveStatus = this.getBtnStatus(Utils.statusPheDuyet, QTVP.PHE_DUYET_QUYET_TOAN_REPORT, checkChirld);
-        this.copyStatus = this.getBtnStatus(Utils.statusCopy, QTVP.COPY_REPORT, checkChirld);
-        this.printStatus = this.getBtnStatus(Utils.statusPrint, QTVP.PRINT_REPORT, checkChirld);
+        this.saveStatus = this.getBtnStatus([Status.TT_01], Roles.QTVP.ADD_REPORT, checkChirld);
+        this.submitStatus = this.getBtnStatus([Status.TT_01], Roles.QTVP.APPROVE_REPORT, checkChirld);
+        this.passStatus = this.getBtnStatus([Status.TT_02], Roles.QTVP.DUYET_QUYET_TOAN_REPORT, checkChirld);
+        this.approveStatus = this.getBtnStatus([Status.TT_04], Roles.QTVP.PHE_DUYET_QUYET_TOAN_REPORT, checkChirld);
+        this.copyStatus = this.getBtnStatus([Status.TT_01, Status.TT_02, Status.TT_03, Status.TT_04, Status.TT_05, Status.TT_06, Status.TT_07, Status.TT_08, Status.TT_09], Roles.QTVP.COPY_REPORT, checkChirld);
+        this.printStatus = this.getBtnStatus([Status.TT_01, Status.TT_02, Status.TT_03, Status.TT_04, Status.TT_05, Status.TT_06, Status.TT_07, Status.TT_08, Status.TT_09], Roles.QTVP.PRINT_REPORT, checkChirld);
     }
     getBtnStatus(status: string[], role: string, check: boolean) {
         return !(status.includes(this.isStatus) && this.userService.isAccessPermisson(role) && check);
@@ -764,13 +763,13 @@ export class ThemBaoCaoQuyetToanComponent implements OnInit {
         return this.maDviTiens.find(e => e.id == this.maDviTien)?.tenDm;
     };
 
-    statusClass() {
-        if (Utils.statusSave.includes(this.isStatus)) {
-            return 'du-thao-va-lanh-dao-duyet';
-        } else {
-            return 'da-ban-hanh';
-        }
-    };
+    // statusClass() {
+    //     if (Utils.statusSave.includes(this.isStatus)) {
+    //         return 'du-thao-va-lanh-dao-duyet';
+    //     } else {
+    //         return 'da-ban-hanh';
+    //     }
+    // };
 
     //download file công văn về máy tính
     async downloadFileCv() {
@@ -988,11 +987,6 @@ export class ThemBaoCaoQuyetToanComponent implements OnInit {
         if (this.total.thanhTien == 0) {
             this.total.thanhTien = null;
         }
-    };
-
-    displayValue(num: number): string {
-        num = exchangeMoney(num, '1', this.maDviTien);
-        return displayNumber(num);
     };
 
     deleteLine(id: any) {

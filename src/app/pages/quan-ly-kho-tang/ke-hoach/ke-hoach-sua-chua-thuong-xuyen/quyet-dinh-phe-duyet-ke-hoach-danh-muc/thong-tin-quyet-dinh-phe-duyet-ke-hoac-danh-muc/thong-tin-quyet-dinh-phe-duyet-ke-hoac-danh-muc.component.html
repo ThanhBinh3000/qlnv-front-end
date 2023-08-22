@@ -6,7 +6,7 @@
           [ngClass]="formData.value.trangThai == globals.prop.NHAP_BAN_HANH ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
         {{ formData.value.tenTrangThai }}
       </span>
-        <span>QUYẾT ĐỊNH PHÊ DUYỆT KẾ HOẠCH ĐẦU TƯ XÂY DỰNG TRUNG HẠN (5 NĂM) CỦA BTC</span>
+        <span>QUYẾT ĐỊNH PHÊ DUYỆT KẾ HOẠCH, DANH MỤC SỬA CHỮA HÀNG NĂM</span>
       </div>
     </div>
     <div class="btn-group">
@@ -132,10 +132,10 @@
             <tr [ngClass]="{'bg-selected': item.selected}" (click)="selectRow(item)">
               <td>{{i + 1}}</td>
               <td>{{item.tenDvi}}</td>
-              <td>{{item.soCongVan}}</td>
-              <td>{{item.ngayDuyet|date:globals.dateFormat}}</td>
-              <td class="text-right">{{item.tmdt | number : '1.0-1' : 'vi-VN'}}</td>
-              <td>{{item.tmdt}}</td>
+              <td>{{item.soCv}}</td>
+              <td>{{item.ngayDuyet| date: 'dd/MM/YYYY'}}</td>
+              <td class="text-right">{{item.tongGiaTriDn | number : '1.0-1' : 'vi-VN'}}</td>
+              <td class="text-right">{{item.tongGiaTriDuocDuyet | number : '1.0-1' : 'vi-VN'}}</td>
               <td>{{item.trichYeu}}</td>
             </tr>
           </ng-container>
