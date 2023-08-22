@@ -1,41 +1,13 @@
 <div class="modal__content">
     <div class="search__body" nz-row [nzGutter]="[18, 12]">
-        <div nz-col nzSpan="12" *ngIf="tab == 'tonghop'">
-            <label class="search__label">Loại tổng hợp</label>
-            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại tổng hợp" [(ngModel)]="response.loai"
-                [class]="response.loai ?'' : 'input-error-validate'" (ngModelChange)="changeModel()">
-                <nz-option *ngFor="let item of syntheticType" [nzValue]="item.id" [nzLabel]="item.tenDm">
-                </nz-option>
-            </nz-select>
-        </div>
-        <div nz-col nzSpan="6" *ngIf="tab == 'danhsach' || (tab == 'tonghop' && response.loai == 2)">
+        <div nz-col nzSpan="6">
             <label class="search__label">Năm báo cáo</label>
-            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn năm báo cáo" [(ngModel)]="response.namHienTai"
-                [class]="response.namHienTai ?'' : 'input-error-validate'">
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn năm báo cáo" [(ngModel)]="response.namBcao"
+                [class]="response.namBcao ?'' : 'input-error-validate'" (ngModelChange)="checkReport()">
                 <nz-option *ngFor="let item of lstNam" [nzValue]="item" [nzLabel]="item">
                 </nz-option>
             </nz-select>
-            <!-- <nz-input-number nzSize="small" [(ngModel)]="response.namHienTai"
-                [class]="response.namHienTai && (response.namHienTai > 999 && response.namHienTai < 3000) ? '' : 'input-error-validate'">
-            </nz-input-number> -->
         </div>
-        <div nz-col nzSpan="6" *ngIf="tab == 'tonghop' && response.loai == 1">
-            <label class="search__label">Mã phương án</label>
-            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn mã phương án" [(ngModel)]="response.maPa"
-                [class]="response.maPa ?'' : 'input-error-validate'">
-                <nz-option *ngFor="let item of lstPa" [nzValue]="item.maPa" [nzLabel]="item.maPa">
-                </nz-option>
-            </nz-select>
-            <!-- <nz-input-number nzSize="small" [(ngModel)]="response.namHienTai"
-                [class]="response.namHienTai && (response.namHienTai > 999 && response.namHienTai < 3000) ? '' : 'input-error-validate'">
-            </nz-input-number> -->
-        </div>
-        <div nz-col nzSpan="6" *ngIf="tab == 'ds-skt-btc'">
-            <label class="search__label">Mã báo cáo</label>
-            <input class="search__input" nz-input [(ngModel)]="response.maBcao"
-                [class]="response.maBcao ?'' : 'input-error-validate'" />
-        </div>
-    </div>
 </div>
 <div class="modal-footer">
     <div class="nut">

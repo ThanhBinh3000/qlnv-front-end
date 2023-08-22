@@ -57,6 +57,10 @@ export class BienBanNghiemThuBaoQuanComponent implements OnInit {
   allChecked = false;
   indeterminate = false;
   listNam: any[] = [];
+  tuNgayTao: Date | null = null;
+  denNgayTao: Date | null = null;
+  tuNgayKetThuc: Date | null = null;
+  denNgayKetThuc: Date | null = null;
   searchFilter = {
     namKh: dayjs().get('year'),
     soQd: '',
@@ -227,7 +231,11 @@ export class BienBanNghiemThuBaoQuanComponent implements OnInit {
         "limit": this.pageSize,
         "page": this.page - 1
       },
-      trangThai: STATUS.BAN_HANH
+      trangThai: STATUS.BAN_HANH,
+      tuNgayKetThuc: this.tuNgayKetThuc != null ? dayjs(this.tuNgayKetThuc).format('YYYY-MM-DD') + " 00:00:00" : null,
+      denNgayKetThuc: this.denNgayKetThuc != null ? dayjs(this.denNgayKetThuc).format('YYYY-MM-DD') + " 23:59:59" : null,
+      tuNgayTao: this.tuNgayTao != null ? dayjs(this.tuNgayTao).format('YYYY-MM-DD') + " 00:00:00" : null,
+      denNgayTao: this.denNgayTao != null ? dayjs(this.denNgayTao).format('YYYY-MM-DD') + " 23:59:59": null,
     };
     let res = await this.quyetDinhGiaoNvNhapHangService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -239,6 +247,7 @@ export class BienBanNghiemThuBaoQuanComponent implements OnInit {
           item.detail = {
             children: item.detail.children.filter(x => x.maDiemKho.includes(this.userInfo.MA_DVI))
           }
+          item.expand = true;
         } else {
           let data = [];
           item.hhQdGiaoNvNhangDtlList.forEach(res => {
@@ -247,7 +256,7 @@ export class BienBanNghiemThuBaoQuanComponent implements OnInit {
           item.detail = {
             children: data
           }
-
+          item.expand = true;
         };
       });
       console.log(this.dataTable)
@@ -256,6 +265,13 @@ export class BienBanNghiemThuBaoQuanComponent implements OnInit {
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
+  }
+
+  setExpand(parantExpand: boolean = false, children: any = []): void {
+    if (parantExpand) {
+      return children.map(f => ({ ...f, expand: false }))
+    }
+    return children
   }
 
   async changePageIndex(event) {
@@ -369,7 +385,11 @@ export class BienBanNghiemThuBaoQuanComponent implements OnInit {
           "paggingReq": null,
           "str": null,
           "tenNguoiGiao": null,
-          "trangThai": null
+          "trangThai": null,
+          tuNgayKetThuc: this.tuNgayKetThuc != null ? dayjs(this.tuNgayKetThuc).format('YYYY-MM-DD') + " 00:00:00" : null,
+          denNgayKetThuc: this.denNgayKetThuc != null ? dayjs(this.denNgayKetThuc).format('YYYY-MM-DD') + " 23:59:59" : null,
+          tuNgayTao: this.tuNgayTao != null ? dayjs(this.tuNgayTao).format('YYYY-MM-DD') + " 00:00:00" : null,
+          denNgayTao: this.denNgayTao != null ? dayjs(this.denNgayTao).format('YYYY-MM-DD') + " 23:59:59": null,
         };
         this.bienBanNghiemThuBaoQuan
           .export(body)
@@ -489,4 +509,33 @@ export class BienBanNghiemThuBaoQuanComponent implements OnInit {
       this.expandSet2.delete(id);
     }
   }
+
+  disabledStartDate = (startValue: Date): boolean => {
+    if (!startValue || !this.denNgayTao) {
+      return false;
+    }
+    return startValue.getTime() > this.denNgayTao.getTime();
+  };
+
+  disabledEndDate = (endValue: Date): boolean => {
+    if (!endValue || !this.tuNgayTao) {
+      return false;
+    }
+    return endValue.getTime() <= this.tuNgayTao.getTime();
+  };
+
+
+  disabledTuNgayKetThuc = (startValue: Date): boolean => {
+    if (!startValue || !this.denNgayKetThuc) {
+      return false;
+    }
+    return startValue.getTime() > this.denNgayKetThuc.getTime();
+  };
+
+  disabledDenNgayKetThuc = (endValue: Date): boolean => {
+    if (!endValue || !this.tuNgayKetThuc) {
+      return false;
+    }
+    return endValue.getTime() <= this.tuNgayKetThuc.getTime();
+  };
 }

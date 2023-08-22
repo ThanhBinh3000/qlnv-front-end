@@ -72,7 +72,7 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
       diaChi: [''],
       namKh: [],
       soDxuat: [''],
-      trichYeu: [''],
+      trichYeu: ['',],
       ngayTao: [''],
       ngayPduyet: [''],
       idSoQdCtieu: [],
@@ -92,8 +92,10 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
       tgianGnhan: [],
       tgianGnhanGhiChu: [],
       pthucGnhan: [''],
-      thongBaoKh: [''],
+      thongBao: [''],
       tongSoLuong: [],
+      donGia: [],
+      thanhTien: [],
       ghiChu: [''],
       trangThai: [''],
       tenTrangThai: [''],
@@ -164,7 +166,9 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
         })
         this.dataTable = data.children;
         await this.getGiaToiThieu();
-        this.onChangeLoaiVthh(data.loaiVthh);
+        if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
+          this.onChangeLoaiVthh(data.loaiVthh);
+        }
       }
     }
   }
@@ -359,12 +363,15 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
 
   calculatorTable() {
     this.dataTable.forEach((item) => {
+      item.thanhTienCuc = 0;
       item.children.forEach((child) => {
         child.thanhTienDuocDuyet = child.donGiaDuocDuyet * child.soLuongDeXuat
+        item.thanhTienCuc += child.thanhTienDeXuat
       })
     })
     this.formData.patchValue({
       tongSoLuong: this.dataTable.reduce((prev, cur) => prev + cur.soLuongChiCuc, 0),
+      thanhTien: this.dataTable.reduce((prev, cur) => prev + cur.thanhTienCuc, 0),
     });
   }
 
@@ -405,7 +412,7 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
   }
 
   async saveAndSend(trangThai: string, msg: string, msgSuccess?: string) {
-    this.setValidator(true);
+    this.setValidForm();
     if (this.dataTable.length == 0) {
       this.notification.error(
         MESSAGE.ERROR,
@@ -505,41 +512,25 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
     }
   }
 
-  setValidator(isGuiDuyet) {
-    if (isGuiDuyet) {
-      this.formData.controls["tenDvi"].setValidators([Validators.required]);
-      this.formData.controls["maDvi"].setValidators([Validators.required]);
-      this.formData.controls["loaiHinhNx"].setValidators([Validators.required]);
-      this.formData.controls["diaChi"].setValidators([Validators.required]);
-      this.formData.controls["namKh"].setValidators([Validators.required]);
-      this.formData.controls["soDxuat"].setValidators([Validators.required]);
-      this.formData.controls["trichYeu"].setValidators([Validators.required]);
-      this.formData.controls["ngayTao"].setValidators([Validators.required]);
-      this.formData.controls["soQdCtieu"].setValidators([Validators.required]);
-      this.formData.controls["cloaiVthh"].setValidators([Validators.required]);
-      this.formData.controls["tenCloaiVthh"].setValidators([Validators.required]);
-      this.formData.controls["thoiGianDuKien"].setValidators([Validators.required]);
-      this.formData.controls["tgianTtoan"].setValidators([Validators.required]);
-      this.formData.controls["pthucTtoan"].setValidators([Validators.required]);
-      this.formData.controls["tgianGnhan"].setValidators([Validators.required]);
-      this.formData.controls["pthucGnhan"].setValidators([Validators.required]);
-    } else {
-      this.formData.controls["tenDvi"].clearValidators();
-      this.formData.controls["maDvi"].clearValidators();
-      this.formData.controls["loaiHinhNx"].clearValidators();
-      this.formData.controls["diaChi"].clearValidators();
-      this.formData.controls["namKh"].clearValidators();
-      this.formData.controls["soDxuat"].clearValidators();
-      this.formData.controls["trichYeu"].clearValidators();
-      this.formData.controls["ngayTao"].clearValidators();
-      this.formData.controls["soQdCtieu"].clearValidators();
-      this.formData.controls["cloaiVthh"].clearValidators();
-      this.formData.controls["tenCloaiVthh"].clearValidators();
-      this.formData.controls["thoiGianDuKien"].clearValidators();
-      this.formData.controls["tgianTtoan"].clearValidators();
-      this.formData.controls["pthucTtoan"].clearValidators();
-      this.formData.controls["tgianGnhan"].clearValidators();
-      this.formData.controls["pthucGnhan"].clearValidators();
-    }
+  setValidForm() {
+    this.formData.controls["tenDvi"].setValidators([Validators.required]);
+    this.formData.controls["loaiHinhNx"].setValidators([Validators.required]);
+    this.formData.controls["diaChi"].setValidators([Validators.required]);
+    this.formData.controls["namKh"].setValidators([Validators.required]);
+    this.formData.controls["soDxuat"].setValidators([Validators.required]);
+    this.formData.controls["trichYeu"].setValidators([Validators.required]);
+    this.formData.controls["ngayTao"].setValidators([Validators.required]);
+    this.formData.controls["ngayPduyet"].setValidators([Validators.required]);
+    this.formData.controls["soQdCtieu"].setValidators([Validators.required]);
+    this.formData.controls["moTaHangHoa"].setValidators([Validators.required]);
+    this.formData.controls["tchuanCluong"].setValidators([Validators.required]);
+    this.formData.controls["thoiGianDuKien"].setValidators([Validators.required]);
+    this.formData.controls["tgianTtoan"].setValidators([Validators.required]);
+    this.formData.controls["pthucTtoan"].setValidators([Validators.required]);
+    this.formData.controls["tgianGnhan"].setValidators([Validators.required]);
+    this.formData.controls["pthucGnhan"].setValidators([Validators.required]);
+    this.formData.controls["thongBao"].setValidators([Validators.required]);
+    this.formData.controls["tenLoaiVthh"].setValidators([Validators.required]);
+    this.formData.controls["tenCloaiVthh"].setValidators([Validators.required]);
   }
 }

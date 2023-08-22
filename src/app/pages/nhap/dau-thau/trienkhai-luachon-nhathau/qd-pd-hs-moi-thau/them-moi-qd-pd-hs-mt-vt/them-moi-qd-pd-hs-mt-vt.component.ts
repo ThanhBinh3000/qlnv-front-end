@@ -255,4 +255,9 @@ export class ThemMoiQdPdHsMtVtComponent extends Base2Component implements OnInit
       this.listCcPhapLy = data.listCcPhapLy;
     }
   }
+
+  async onChangeNamKh() {
+    this.initListQuy();
+  }
+
 }

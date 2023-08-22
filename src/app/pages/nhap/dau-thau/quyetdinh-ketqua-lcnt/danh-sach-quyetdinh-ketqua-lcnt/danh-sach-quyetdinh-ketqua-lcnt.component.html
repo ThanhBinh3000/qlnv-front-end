@@ -204,7 +204,7 @@
           <!-- <td *ngIf="loaiVthh.startsWith('02')">{{ data?.hhQdKhlcntHdr?.tenCloaiVthh }}</td> -->
           <td *ngIf="!loaiVthh.startsWith('02')">{{ data.qdKhlcntDtl?.hhQdKhlcntHdr?.tenCloaiVthh }}</td>
           <td>{{ data.soGthau ? data.soGthau : data.hhQdKhlcntHdr.soGthau }}</td>
-          <td>{{ data.qdKhlcntDtl ? data.qdKhlcntDtl.soGthauTrung : data.hhQdKhlcntHdr.soGthauTrung }}
+          <td>{{ data.soGthauTrung ? data.soGthauTrung : data.hhQdKhlcntHdr.soGthauTrung }}
           </td>
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-left">

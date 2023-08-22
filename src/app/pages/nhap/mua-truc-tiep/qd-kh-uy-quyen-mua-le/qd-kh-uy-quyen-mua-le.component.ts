@@ -233,9 +233,9 @@ export class QdKhUyQuyenMuaLeComponent extends Base2Component implements OnInit 
   };
 
   xemChiTiet(id: number, isView: boolean, roles?: any) {
-    if (!this.checkPermission(roles)) {
-      return
-    }
+    // if (!this.checkPermission(roles)) {
+    //   return
+    // }
     this.isViewChiTiet = isView;
     this.idSelected = id;
     this.isDetail = true;

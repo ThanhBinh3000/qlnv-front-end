@@ -66,33 +66,28 @@ export class DeXuatKhBanTrucTiepComponent extends Base2Component implements OnIn
       namKh: null,
       soDxuat: null,
       maDvi: null,
-      tenDvi: null,
-      trichYeu: null,
       ngayTaoTu: null,
       ngayTaoDen: null,
       ngayDuyetTu: null,
       ngayDuyetDen: null,
+      trichYeu: null,
       ngayKyQdTu: null,
       ngayKyQdDen: null,
+      soTrHdr: null,
       loaiVthh: null,
-      trangThai: null,
     });
-
     this.filterTable = {
       namKh: '',
-      soDxuat: '',
-      ngayTao: '',
-      ngayPduyet: '',
       soQdPd: '',
       ngayKyQd: '',
       trichYeu: '',
+      soTrHdr: '',
+      idThHdr: '',
       tenLoaiVthh: '',
       tenCloaiVthh: '',
       slDviTsan: '',
-      slHdDaKy: '',
-      soQdCtieu: '',
+      soHdongDaKy: '',
       tenTrangThai: '',
-      tenTrangThaiTh: '',
     };
   }
 

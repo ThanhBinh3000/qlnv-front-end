@@ -11,15 +11,12 @@
       <span>Lưu và gửi duyệt</span>
     </button>
     <button type="button" class="btn btn-sub do"
-            *ngIf=" !(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC || formData.value.trangThai == STATUS.TU_CHOI_KT || formData.value.trangThai == STATUS.TU_CHOI_TK )"
+            *ngIf="!isView && !(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC || formData.value.trangThai == STATUS.TU_CHOI_KT || formData.value.trangThai == STATUS.TU_CHOI_TK )"
             (click)="tuChoi()">
       <i class="icon htvbdh_tcdt_tuchoi do"></i>
       <span>Từ chối</span>
     </button>
-    <button class="btn btn-sub xanh-nhat" *ngIf=" !(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC || formData.value.trangThai == STATUS.TU_CHOI_KT || formData.value.trangThai == STATUS.TU_CHOI_TK )
-            && userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBNTBQLD_DUYET_TK')
-            && userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBNTBQLD_DUYET_KT')
-            && userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBNTBQLD_DUYET_LDCC')" (click)="pheDuyet()">
+    <button class="btn btn-sub xanh-nhat" *ngIf=" !isView && (formData.value.trangThai == STATUS.TU_CHOI_LDCC || formData.value.trangThai == STATUS.TU_CHOI_KT || formData.value.trangThai == STATUS.TU_CHOI_TK || formData.value.trangThai == STATUS.CHO_DUYET_TK && userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBNTBQLD_DUYET_TK') || formData.value.trangThai == STATUS.CHO_DUYET_KT && userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBNTBQLD_DUYET_KT') || formData.value.trangThai == STATUS.CHO_DUYET_LDCC && userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBNTBQLD_DUYET_LDCC'))" (click)="pheDuyet()">
       <i class="icon htvbdh_tcdt_pheduyet "></i>
       <span>Duyệt</span>
     </button>
@@ -114,7 +111,7 @@
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
-                <nz-date-picker nzDisabled nzFormat="dd/MM/YYYY" formControlName="ngayTao">
+                <nz-date-picker [nzDisabled]="isView" nzFormat="dd/MM/YYYY" formControlName="ngayTao">
                 </nz-date-picker>
               </nz-input-group>
             </nz-form-control>
@@ -168,7 +165,7 @@
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
-                <nz-date-picker nzFormat="dd/MM/YYYY" formControlName="ngayNghiemThu">
+                <nz-date-picker [nzDisabled]="isView" nzFormat="dd/MM/YYYY" formControlName="ngayNghiemThu">
                 </nz-date-picker>
               </nz-input-group>
             </nz-form-control>
@@ -193,7 +190,7 @@
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
-                <input nz-input formControlName="tenThuKho" readonly/>
+                <input nz-input formControlName="thuKho" readonly/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -205,7 +202,7 @@
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
-                <input nz-input formControlName="tenKeToan" readonly/>
+                <input nz-input formControlName="keToan" readonly/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -217,7 +214,7 @@
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
-                <input nz-input formControlName="tenNguoiPduyet" readonly/>
+                <input nz-input formControlName="nguoiPduyet" readonly/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -317,7 +314,7 @@
             <nz-form-label [nzNoColon]="true"> Hình thức kê lót/bảo quản</nz-form-label>
             <nz-form-control>
               <nz-select formControlName="hthucBquan">
-                <nz-option *ngFor="let p of listHinhThucBaoQuan" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+                <nz-option [nzDisabled]="isView" *ngFor="let p of listHinhThucBaoQuan" [nzValue]="p.ma" [nzLabel]="p.giaTri">
                 </nz-option>
               </nz-select>
             </nz-form-control>
@@ -328,7 +325,7 @@
             <nz-form-label [nzNoColon]="true"> Phương thức bảo quản</nz-form-label>
             <nz-form-control>
               <nz-select formControlName="pthucBquan">
-                <nz-option *ngFor="let p of listPhuongThucBaoQuan" [nzValue]="p.ma"
+                <nz-option [nzDisabled]="isView" *ngFor="let p of listPhuongThucBaoQuan" [nzValue]="p.ma"
                            [nzLabel]="p.giaTri">
                 </nz-option>
               </nz-select>

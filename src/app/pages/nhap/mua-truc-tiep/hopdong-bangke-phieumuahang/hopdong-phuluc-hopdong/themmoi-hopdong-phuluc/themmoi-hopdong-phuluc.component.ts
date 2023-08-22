@@ -19,6 +19,9 @@ import { MttHopDongPhuLucHdService } from 'src/app/services/qlnv-hang/nhap-hang/
 import { QuyetDinhPheDuyetKetQuaChaoGiaMTTService } from 'src/app/services/quyet-dinh-phe-duyet-ket-qua-chao-gia-mtt.service';
 import { ChaogiaUyquyenMualeService } from 'src/app/services/chaogia-uyquyen-muale.service';
 import { QuyetDinhPheDuyetKeHoachMTTService } from 'src/app/services/quyet-dinh-phe-duyet-ke-hoach-mtt.service';
+import {
+  QuyetDinhGiaoNvNhapHangService
+} from "../../../../../../services/qlnv-hang/nhap-hang/mua-truc-tiep/qdinh-giao-nvu-nh/quyetDinhGiaoNvNhapHang.service";
 @Component({
   selector: 'app-themmoi-hopdong-phuluc',
   templateUrl: './themmoi-hopdong-phuluc.component.html',
@@ -43,6 +46,7 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
   idKqCgia: number;
   slChuaKy: number = 0;
   slDaKy: number = 0;
+  loaiHd: any;
 
   maHopDongSuffix: string = '';
   objHopDongHdr: any = {};
@@ -55,6 +59,7 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
     modal: NzModalService,
     private thongTinPhuLucHopDongService: MttHopDongPhuLucHdService,
     private quyetDinhPheDuyetKetQuaChaoGiaMTTService: QuyetDinhPheDuyetKetQuaChaoGiaMTTService,
+    private quyetDinhGiaoNvNhapHangService: QuyetDinhGiaoNvNhapHangService,
     private chaogiaUyquyenMualeService: ChaogiaUyquyenMualeService,
     private quyetDinhPheDuyetKeHoachMTTService: QuyetDinhPheDuyetKeHoachMTTService,
     private danhMucService: DanhMucService
@@ -217,6 +222,13 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
 
   async save(isOther: boolean) {
     this.helperService.markFormGroupTouched(this.formData);
+    if(this.loaiHd == '02'){
+      let dataQd = await this.quyetDinhGiaoNvNhapHangService.getDetail(this.formData.value.idQdGiaoNvNh)
+      if(dataQd.data.trangThai != STATUS.BAN_HANH){
+        this.notification.error(MESSAGE.ERROR, 'Quyết định giao nhiệm vụ nhập hàng chưa được ban hành!');
+        return;
+      }
+    }
     if (this.formData.invalid) {
       this.spinner.hide();
       return;
@@ -302,6 +314,7 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
               moTaHangHoa: dataKq.moTaHangHoa,
               dviTinh: "tấn",
             });
+            this.loaiHd = '02'
             this.dataTable = dataKq.children.filter(x => x.maDvi == this.userInfo.MA_DVI)
             console.log("formData2", this.dataTable)
             // dataKq.danhSachCtiet.forEach((item) => {

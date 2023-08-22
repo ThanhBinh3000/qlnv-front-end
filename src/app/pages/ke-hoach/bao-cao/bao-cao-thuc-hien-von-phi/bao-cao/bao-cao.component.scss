@@ -31,6 +31,11 @@
     }
 }
 
+.table__body {
+    margin: 12px 0px 0px 0px !important;
+    overflow: scroll !important;
+}
+
 ::ng-deep {
     .chi-tieu__body {
         .flex-card.ant-card {
@@ -44,7 +49,7 @@
 
         .table__body {
             margin: 12px 0px 0px 0px !important;
-            overflow: scroll;
+            overflow: scroll !important;
         }
 
         .tab__container {
@@ -143,9 +148,9 @@
     flex-direction: column;
 }
 
-// .ant-input-number {
-//     min-width: 100px !important;
-// }
+.ant-input-number {
+    min-width: 100px !important;
+}
 
 .money-input {
     border: 1px solid #bbb8b8;
@@ -155,4 +160,25 @@
 
 .money-input:focus-visible {
     outline: none !important;
+}
+
+.custom-tab-container ::ng-deep .ant-tabs-tab {
+    border: none in !important;
+}
+
+:host ::ng-deep .ant-tabs-content-holder {
+    border-color: white !important;
+}
+
+.ant-table-cell {
+    white-space: pre-line !important;
+    word-break: break-word !important;
+}
+
+.text-col {
+    width: 250px;
+}
+
+.ant-table-measure-now {
+    display: none;
 }
