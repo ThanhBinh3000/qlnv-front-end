@@ -24,7 +24,6 @@ import {
 import {STATUS} from 'src/app/constants/status';
 import {DanhMucService} from 'src/app/services/danhmuc.service';
 import {LOAI_HANG_DTQG} from "../../../../../../constants/config";
-import {defaultThrottleConfig} from "rxjs/internal-compatibility";
 
 @Component({
   selector: 'app-them-moi-tong-hop-kh-ban-truc-tiep',
@@ -93,15 +92,15 @@ export class ThemMoiTongHopKhBanTrucTiepComponent extends Base2Component impleme
   async ngOnInit() {
     await this.spinner.show();
     try {
+      await Promise.all([
+        this.loadDsTenVthh(),
+        this.loadDsVthh()
+      ]);
       if (this.idInput > 0) {
         await this.loadChiTiet()
       } else {
         await this.initForm();
       }
-      await Promise.all([
-        this.loadDsTenVthh(),
-        this.loadDsVthh()
-      ]);
       await this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -128,6 +127,9 @@ export class ThemMoiTongHopKhBanTrucTiepComponent extends Base2Component impleme
         });
         if (data.children && data.children.length > 0) {
           this.showFirstRow(event, data.children[0].idDxHdr);
+        }
+        if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
+          await this.onChangeCLoaiVthh(data.loaiVthh)
         }
       } else {
         this.isTongHop = false;

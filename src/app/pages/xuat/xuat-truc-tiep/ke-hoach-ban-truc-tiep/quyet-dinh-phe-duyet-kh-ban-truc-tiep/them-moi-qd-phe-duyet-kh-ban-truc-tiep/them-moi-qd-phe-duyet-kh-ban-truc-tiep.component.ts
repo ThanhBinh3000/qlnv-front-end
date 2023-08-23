@@ -29,6 +29,8 @@ import {
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/tong-hop-kh-ban-truc-tiep.service';
 import {DanhMucService} from 'src/app/services/danhmuc.service';
 import {ChiTieuKeHoachNamCapTongCucService} from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
+import {LOAI_HANG_DTQG} from "../../../../../../constants/config";
+import {QuyetDinhGiaTCDTNNService} from "../../../../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service";
 
 @Component({
   selector: 'app-them-moi-qd-phe-duyet-kh-ban-truc-tiep',
@@ -65,6 +67,7 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
     private deXuatKhBanTrucTiepService: DeXuatKhBanTrucTiepService,
     private tongHopKhBanTrucTiepService: TongHopKhBanTrucTiepService,
     private chiTieuKeHoachNamCapTongCucService: ChiTieuKeHoachNamCapTongCucService,
+    private quyetDinhGiaTCDTNNService: QuyetDinhGiaTCDTNNService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, quyetDinhPdKhBanTrucTiepService);
     this.formData = this.fb.group({
@@ -204,8 +207,37 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
         this.fileDinhKem = data.fileDinhKem;
       }
       this.danhsachDx = data.children;
+      await this.calculatorTable();
       if (this.danhsachDx && this.danhsachDx.length > 0) {
         await this.showFirstRow(event, this.danhsachDx[0]);
+      }
+    }
+  }
+
+  async calculatorTable() {
+    for (const item of this.danhsachDx) {
+      for (const child of item.children) {
+        for (const s of child.children) {
+          let bodyPag = {
+            namKeHoach: this.formData.get('namKh').value,
+            loaiVthh: this.formData.get('loaiVthh').value,
+            cloaiVthh: this.formData.get('cloaiVthh').value,
+            trangThai: STATUS.BAN_HANH,
+            maDvi: this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? '' : child.maDvi,
+            loaiGia: 'LG04'
+          }
+          let pag = await this.quyetDinhGiaTCDTNNService.getPag(bodyPag)
+          if (pag.msg == MESSAGE.SUCCESS) {
+            if (pag.data) {
+              pag.data.forEach(a => {
+                s.donGiaDuocDuyet = a.giaQdTcdt;
+              })
+            } else {
+              s.donGiaDuocDuyet = null;
+            }
+          }
+          s.thanhTienDuocDuyet = s.donGiaDuocDuyet != null ? s.donGiaDuocDuyet * s.soLuongDeXuat : null;
+        }
       }
     }
   }

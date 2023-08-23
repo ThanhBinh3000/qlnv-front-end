@@ -502,6 +502,7 @@
             <tr>
               <th width="30px">STT</th>
               <th>Tên nhà thầu <span style="color: red">*</span> </th>
+              <th>Giá dự thầu</th>
               <th>Mã số thuế</th>
               <th>Địa chỉ</th>
               <th>Số điện thoại</th>
@@ -513,6 +514,7 @@
             <tr *ngIf="formData.value.trangThaiDt != STATUS.HOAN_THANH_CAP_NHAT">
               <td></td>
               <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow.tenNhaThau"/></td>
+              <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow.donGia"/></td>
               <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow.mst"/></td>
               <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow.diaChi"/></td>
               <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow.sdt"/></td>
@@ -529,6 +531,7 @@
               <ng-container *ngIf="!data.edit; else editTemplate">
                 <td class="text-center">{{i + 1}}</td>
                 <td>{{ data.tenNhaThau }}</td>
+                <td>{{ data.donGia }}</td>
                 <td>{{ data.mst }}</td>
                 <td>{{ data.diaChi }}</td>
                 <td>{{ data.sdt }}</td>
@@ -545,6 +548,7 @@
               <ng-template #editTemplate>
                 <td class="text-center">{{i + 1}}</td>
                 <td><input type="text" nz-input [(ngModel)]="itemRowUpdate.tenNhaThau"/></td>
+                <td><input nz-input [(ngModel)]="itemRowUpdate.donGia"/></td>
                 <td><input nz-input [(ngModel)]="itemRowUpdate.mst"/></td>
                 <td><input nz-input [(ngModel)]="itemRowUpdate.diaChi"/></td>
                 <td><input nz-input [(ngModel)]="itemRowUpdate.sdt"/></td>

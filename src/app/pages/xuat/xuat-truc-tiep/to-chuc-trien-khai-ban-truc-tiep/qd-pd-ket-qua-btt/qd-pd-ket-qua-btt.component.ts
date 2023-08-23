@@ -1,14 +1,17 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { MESSAGE } from 'src/app/constants/message';
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { StorageService } from 'src/app/services/storage.service';
-import { QdPdKetQuaBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/qd-pd-ket-qua-btt.service';
-import { DonviService } from 'src/app/services/donvi.service';
-import { saveAs } from 'file-saver';
+import {Component, Input, OnInit} from '@angular/core';
+import {HttpClient} from "@angular/common/http";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {MESSAGE} from 'src/app/constants/message';
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {StorageService} from 'src/app/services/storage.service';
+import {
+  QdPdKetQuaBttService
+} from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/qd-pd-ket-qua-btt.service';
+import {DonviService} from 'src/app/services/donvi.service';
+import {CHUC_NANG} from "../../../../../constants/status";
+import {XuatTrucTiepComponent} from "../../xuat-truc-tiep.component";
 
 @Component({
   selector: 'app-qd-pd-ket-qua-btt',
@@ -16,18 +19,22 @@ import { saveAs } from 'file-saver';
   styleUrls: ['./qd-pd-ket-qua-btt.component.scss']
 })
 export class QdPdKetQuaBttComponent extends Base2Component implements OnInit {
-  @Input()
-  loaiVthh: string;
+  @Input() loaiVthh: string;
+  CHUC_NANG = CHUC_NANG;
+  public vldTrangThai: XuatTrucTiepComponent
+  isView = false;
+  userdetail: any = {};
   idQdPdKh: number = 0;
   isViewQdPdKh: boolean = false;
   listTrangThai: any[] = [
-    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
-    { ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối - TP' },
-    { ma: this.STATUS.CHO_DUYET_TP, giaTri: 'Đã Chờ duyệt - TP' },
-    { ma: this.STATUS.CHO_DUYET_LDC, giaTri: 'Chờ duyệt - LĐ Cục' },
-    { ma: this.STATUS.TU_CHOI_LDC, giaTri: 'Từ chối - LĐ Cục' },
-    { ma: this.STATUS.BAN_HANH, giaTri: 'Ban Hành' },
+    {ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo'},
+    {ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối - TP'},
+    {ma: this.STATUS.CHO_DUYET_TP, giaTri: 'Đã Chờ duyệt - TP'},
+    {ma: this.STATUS.CHO_DUYET_LDC, giaTri: 'Chờ duyệt - LĐ Cục'},
+    {ma: this.STATUS.TU_CHOI_LDC, giaTri: 'Từ chối - LĐ Cục'},
+    {ma: this.STATUS.BAN_HANH, giaTri: 'Ban Hành'},
   ];
+
   constructor(
     private httpClient: HttpClient,
     private donviService: DonviService,
@@ -35,16 +42,16 @@ export class QdPdKetQuaBttComponent extends Base2Component implements OnInit {
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private qdPdKetQuaBttService: QdPdKetQuaBttService
+    private qdPdKetQuaBttService: QdPdKetQuaBttService,
+    private xuatTrucTiepComponent: XuatTrucTiepComponent,
   ) {
     super(httpClient, storageService, notification, spinner, modal, qdPdKetQuaBttService);
-    super.ngOnInit();
+    this.vldTrangThai = this.xuatTrucTiepComponent;
     this.formData = this.fb.group({
       namKh: null,
       loaiVthh: null,
       ngayCgiaTu: null,
       ngayCgiaDen: null,
-      trangThai: null,
     });
     this.filterTable = {
       soQdKq: '',
@@ -64,27 +71,41 @@ export class QdPdKetQuaBttComponent extends Base2Component implements OnInit {
 
   async ngOnInit() {
     try {
-      this.thimKiem();
-      await this.search();
+      this.timKiem();
+      await Promise.all([
+        this.search(),
+        this.initData()
+      ]);
+      await this.spinner.hide();
     } catch (e) {
-      console.log('error: ', e);
+      console.log('error: ', e)
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
 
-  thimKiem() {
+  async initData() {
+    this.userInfo = this.userService.getUserLogin();
+    this.userdetail.maDvi = this.userInfo.MA_DVI;
+    this.userdetail.tenDvi = this.userInfo.TEN_DVI;
+  }
+
+  timKiem() {
     this.formData.patchValue({
-      maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
       loaiVthh: this.loaiVthh,
-      trangThai: this.userService.isTongCuc() ? this.STATUS.BAN_HANH : null,
     })
   }
 
   clearFilter() {
     this.formData.reset();
-    this.thimKiem();
+    this.timKiem();
     this.search();
+  }
+
+  redirectDetail(id, isView: boolean) {
+    this.idSelected = id;
+    this.isDetail = true;
+    this.isView = isView;
   }
 
   disabledNgayChaoGiaTu = (startValue: Date): boolean => {

@@ -233,8 +233,7 @@
             <td></td>
             <td></td>
             <td>{{ children.tenDiemKho}}</td>
-            <td>{{ children.tenLoKho }} {{children.tenNganKho}}, {{children.tenNhaKho}}
-            </td>
+            <td>{{ children.tenLoKho == null ? children.tenNganKho : children.tenLoKho }}, {{ children.tenNhaKho }}</td>
             <td>{{ children.maDviTsan}}</td>
             <td>{{ children.soLuongDeXuat|number:globals.numberFormat:globals.locale }}</td>
             <td>{{ children.donViTinh}}</td>

@@ -162,7 +162,7 @@ export class ThongTinBienBanNhapDayDuComponent extends Base2Component implements
         soLuongQdDcCuc: this.data.soLuongDc,
         dviTinh: this.data.tenDonViTinh,
       });
-      await this.getDanhSachTT(this.data.qdDcCucId)
+      await this.getDanhSachTT(this.data.qdDcCucId, this.data.maLoKho, this.data.maNganKho)
       await this.loadChiTietQdinh(this.data.qdDcCucId);
     }
 
@@ -187,15 +187,18 @@ export class ThongTinBienBanNhapDayDuComponent extends Base2Component implements
       });
       this.fileDinhKemReq = data.fileDinhKems
       this.danhSach = data.children
-      await this.getDanhSachTT(data.qdDcCucId)
+      await this.getDanhSachTT(data.qdDcCucId, data.maLoKho, data.maNganKho)
       await this.loadChiTietQdinh(data.qdDcCucId);
     }
     await this.spinner.hide();
   }
 
-  async getDanhSachTT(qdinhDccId) {
+  async getDanhSachTT(qdinhDccId, maLoKho, maNganKho) {
     const body = {
-      qdinhDccId
+      qdinhDccId,
+      maLoKho,
+      maNganKho,
+      isVatTu: false
     }
     const children = this.detailData?.children || []
     let res = await this.phieuNhapKhoService.getDanhSachTT(body);
@@ -311,7 +314,7 @@ export class ThongTinBienBanNhapDayDuComponent extends Base2Component implements
           tichLuongKhaDung: "",
           dviTinh: "",
         });
-        await this.getDanhSachTT(data.id)
+
         await this.loadChiTietQdinh(data.id);
       }
     });
@@ -355,6 +358,8 @@ export class ThongTinBienBanNhapDayDuComponent extends Base2Component implements
           dviTinh: data.tenDonViTinh,
           soLuongQdDcCuc: data.soLuongPhanBo,
         });
+
+        await this.getDanhSachTT(this.formData.value.qdDcCucId, data.maLoKhoNhan, data.maNganKhoNhan)
       }
     });
   }

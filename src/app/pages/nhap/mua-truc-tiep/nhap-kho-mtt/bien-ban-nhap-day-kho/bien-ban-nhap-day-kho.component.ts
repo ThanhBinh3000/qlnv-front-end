@@ -154,12 +154,38 @@ export class BienBanNhapDayKhoComponent extends Base2Component implements OnInit
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
-      this.convertDataTable();
+      // this.convertDataTable();
+      this.dataTable.forEach(item => {
+        if (this.userService.isChiCuc()) {
+          item.detail = item.hhQdGiaoNvNhangDtlList.filter(y => y.maDvi == this.userInfo.MA_DVI)[0]
+          item.detail = {
+            children: item.detail.children.filter(x => x.maDiemKho.includes(this.userInfo.MA_DVI))
+          }
+          item.expand = true;
+        } else {
+          let data = [];
+          item.hhQdGiaoNvNhangDtlList.forEach(res => {
+            data = [...data, ...res.children.filter(x => x.idDtl == res.id)];
+          })
+          item.detail = {
+            hhQdGiaoNvNhDdiemList: data,
+          }
+          item.expand = true;
+        };
+      });
+      console.log(this.dataTable)
       this.totalRecord = data.totalElements;
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
     await this.spinner.hide();
+  }
+
+  setExpand(parantExpand: boolean = false, children: any = []): void {
+    if (parantExpand) {
+      return children.map(f => ({ ...f, expand: false }))
+    }
+    return children
   }
 
   convertDataTable() {

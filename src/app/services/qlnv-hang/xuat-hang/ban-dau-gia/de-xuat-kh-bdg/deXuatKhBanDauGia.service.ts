@@ -18,14 +18,4 @@ export class DeXuatKhBanDauGiaService extends BaseService {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/count-sl-kh`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
-
-  getGiaBanToiThieu(cloaiVthh: string, maDvi: string, namKhoach: string) {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/gia-ban-toi-thieu/${cloaiVthh}/${maDvi}/${namKhoach}`;
-    return this.httpClient.get<any>(url).toPromise();
-  }
-
-  getDonGiaDuocDuyet(cloaiVthh: string, maDvi: string, nam: string) {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/don-gia-duoc-duyet/${cloaiVthh}/${maDvi}/${nam}`;
-    return this.httpClient.get<any>(url).toPromise();
-  }
 }

@@ -21,6 +21,8 @@ import { DialogThemMoiBangKeThuMuaLeComponent } from './../../../../../component
 export class BangkeThumualeComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: String;
   dataEdit: any;
+  tuNgayMua: Date | null = null;
+  denNgayMua: Date | null = null;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -74,6 +76,39 @@ export class BangkeThumualeComponent extends Base2Component implements OnInit {
     this.search()
   }
 
+  async search() {
+    await this.spinner.show();
+    try {
+      let body = this.formData.value
+      body.tuNgayMua = this.tuNgayMua != null ? dayjs(this.tuNgayMua).format('YYYY-MM-DD') + " 00:00:00" : null
+      body.denNgayMua = this.denNgayMua != null ? dayjs(this.denNgayMua).format('YYYY-MM-DD') + " 23:59:59" : null
+      body.paggingReq = {
+        limit: this.pageSize,
+        page: this.page - 1
+      }
+      let res = await this.service.search(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        let data = res.data;
+        this.dataTable = data.content;
+        this.totalRecord = data.totalElements;
+        if (this.dataTable && this.dataTable.length > 0) {
+          this.dataTable.forEach((item) => {
+            item.checked = false;
+          });
+        }
+        this.dataTableAll = cloneDeep(this.dataTable);
+      } else {
+        this.dataTable = [];
+        this.totalRecord = 0;
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+    } catch (e) {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      await this.spinner.hide();
+    }
+  }
+
   themMoiBangKeMuaLe($event, data?: any, index?: number) {
     console.log(data, 5555);
     const modalGT = this.modal.create({
@@ -100,6 +135,20 @@ export class BangkeThumualeComponent extends Base2Component implements OnInit {
         this.dataTable.push(data);
       }
     });
+  };
+
+  disabledStartDate = (startValue: Date): boolean => {
+    if (!startValue || !this.denNgayMua) {
+      return false;
+    }
+    return startValue.getTime() > this.denNgayMua.getTime();
+  };
+
+  disabledEndDate = (endValue: Date): boolean => {
+    if (!endValue || !this.tuNgayMua) {
+      return false;
+    }
+    return endValue.getTime() <= this.tuNgayMua.getTime();
   };
 
 }
