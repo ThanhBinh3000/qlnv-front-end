@@ -32,6 +32,7 @@ import {
 import {
   ThongTinChiTietDieuChinhComponent
 } from './dieu-chinh-ban-truc-tiep/chi-tiet-dieu-chinh-ban-truc-tiep/thong-tin-chi-tiet-dieu-chinh/thong-tin-chi-tiet-dieu-chinh.component';
+import {KeHoachBanDauGiaModule} from "../../dau-gia/ke-hoach-ban-dau-gia/ke-hoach-ban-dau-gia.module";
 
 @NgModule({
   declarations: [
@@ -57,6 +58,7 @@ import {
     ComponentsModule,
     MainModule,
     KeHoachVonDauNamModule,
+    KeHoachBanDauGiaModule,
   ]
 })
 export class KeHoachBanTrucTiepModule {

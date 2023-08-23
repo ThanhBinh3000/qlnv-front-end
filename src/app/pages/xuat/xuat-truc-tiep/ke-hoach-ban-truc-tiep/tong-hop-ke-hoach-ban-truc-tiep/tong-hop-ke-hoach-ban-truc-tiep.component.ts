@@ -11,6 +11,8 @@ import {
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/tong-hop-kh-ban-truc-tiep.service';
 import {XuatTrucTiepComponent} from "../../xuat-truc-tiep.component";
 import {CHUC_NANG} from "../../../../../constants/status";
+import {LOAI_HANG_DTQG} from "../../../../../constants/config";
+import {DanhMucService} from "../../../../../services/danhmuc.service";
 
 @Component({
   selector: 'app-tong-hop-ke-hoach-ban-truc-tiep',
@@ -27,6 +29,8 @@ export class TongHopKeHoachBanTrucTiepComponent extends Base2Component implement
   idQdPd: number = 0;
   isViewQdPd: boolean = false;
   isQuyetDinh: boolean = false;
+  listLoaiHangHoa: any[] = [];
+  dataTongHop: any;
   listTrangThai: any[] = [
     {ma: this.STATUS.CHUA_TAO_QD, giaTri: 'Chưa Tạo QĐ'},
     {ma: this.STATUS.DA_DU_THAO_QD, giaTri: 'Đã Dự Thảo QĐ'},
@@ -39,6 +43,7 @@ export class TongHopKeHoachBanTrucTiepComponent extends Base2Component implement
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
+    private danhMucService: DanhMucService,
     private tongHopKhBanTrucTiepService: TongHopKhBanTrucTiepService,
     private xuatTrucTiepComponent: XuatTrucTiepComponent,
   ) {
@@ -83,30 +88,13 @@ export class TongHopKeHoachBanTrucTiepComponent extends Base2Component implement
     this.isView = isView;
   }
 
-  taoQdinh(id: number) {
-    let elem = document.getElementById('mainTongCuc');
-    let tabActive = elem.getElementsByClassName('ant-menu-item')[0];
-    tabActive.classList.remove('ant-menu-item-selected')
-    let setActive = elem.getElementsByClassName('ant-menu-item')[2];
-    setActive.classList.add('ant-menu-item-selected');
-    this.isQuyetDinh = true;
-    this.idSelected = id;
-  }
-
-  showTongHop() {
-    let elem = document.getElementById('mainTongCuc');
-    let tabActive = elem.getElementsByClassName('ant-menu-item')[2];
-    tabActive.classList.remove('ant-menu-item-selected')
-    let setActive = elem.getElementsByClassName('ant-menu-item')[0];
-    setActive.classList.add('ant-menu-item-selected');
-    this.isQuyetDinh = false;
-    this.search;
-  }
-
   timKiem() {
     this.formData.patchValue({
       loaiVthh: this.loaiVthh,
     })
+    if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
+      this.loadDsVthh();
+    }
   }
 
   clearFilter() {
@@ -114,6 +102,34 @@ export class TongHopKeHoachBanTrucTiepComponent extends Base2Component implement
     this.timKiem();
     this.search();
   }
+
+  async loadDsVthh() {
+    let res = await this.danhMucService.getDanhMucHangDvqlAsyn({});
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listLoaiHangHoa = res.data?.filter((x) => x.ma.length == 4);
+    }
+  }
+
+  taoQdinh(data: number) {
+    let elem = document.getElementById('mainTongCuc');
+    let tabActive = elem.getElementsByClassName('ant-menu-item')[0];
+    tabActive.classList.remove('ant-menu-item-selected')
+    let setActive = elem.getElementsByClassName('ant-menu-item')[2];
+    setActive.classList.add('ant-menu-item-selected');
+    this.isQuyetDinh = true;
+    this.dataTongHop = data;
+  }
+
+  async showTongHop() {
+    let elem = document.getElementById('mainTongCuc');
+    let tabActive = elem.getElementsByClassName('ant-menu-item')[2];
+    tabActive.classList.remove('ant-menu-item-selected')
+    let setActive = elem.getElementsByClassName('ant-menu-item')[0];
+    setActive.classList.add('ant-menu-item-selected');
+    this.isQuyetDinh = false;
+    await this.search();
+  }
+
 
   disabledNgayThopTu = (startValue: Date): boolean => {
     if (!startValue || !this.formData.value.ngayThopDen) {
