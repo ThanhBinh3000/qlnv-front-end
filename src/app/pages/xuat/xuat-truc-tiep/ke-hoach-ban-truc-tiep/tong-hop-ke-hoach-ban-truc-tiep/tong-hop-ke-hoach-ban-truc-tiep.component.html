@@ -9,10 +9,16 @@
               <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
             </nz-select>
           </div>
-          <div nz-col [nzSpan]="4">
-            <label> Loại hành hóa </label>
+          <div nz-col [nzSpan]="4" *ngIf="!loaiVthh.startsWith('02')">
+            <label> Loại hàng hóa </label>
             <nz-select formControlName="loaiVthh">
               <nz-option *ngFor="let p of listVthh" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
+            </nz-select>
+          </div>
+          <div nz-col [nzSpan]="4" *ngIf="loaiVthh.startsWith('02')">
+            <label> Loại hàng hóa </label>
+            <nz-select formControlName="loaiVthh">
+              <nz-option *ngFor="let p of listLoaiHangHoa" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
             </nz-select>
           </div>
           <div nz-col [nzSpan]="14">
@@ -175,7 +181,7 @@
             </a>
             <a
               *ngIf="vldTrangThai.checkStatusPermission(data,CHUC_NANG.TAO_QD)  && userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_TONGHOP_TONGHOP')"
-              (click)="taoQdinh(data.id)">
+              (click)="taoQdinh(data)">
               <i class="icon htvbdh_soanthao"></i>
             </a>
             <a
@@ -213,7 +219,7 @@
   </app-them-moi-tong-hop-kh-ban-truc-tiep>
 </div>
 <div *ngIf="isQuyetDinh" class="chi-tiet">
-  <app-them-moi-qd-phe-duyet-kh-ban-truc-tiep (showListEvent)="showTongHop()">
+  <app-them-moi-qd-phe-duyet-kh-ban-truc-tiep [dataTongHop]="dataTongHop" (showListEvent)="showTongHop()">
   </app-them-moi-qd-phe-duyet-kh-ban-truc-tiep>
 </div>
 <!-- Xem -->

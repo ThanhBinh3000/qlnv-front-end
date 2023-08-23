@@ -229,7 +229,7 @@
         </div>
         <div nz-col [nzSpan]="6">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> Tên hàng hóa</nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true"> Tên hàng hóa</nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
               <input nz-input formControlName="moTaHangHoa" [readonly]="isView"/>
             </nz-form-control>
@@ -334,7 +334,7 @@
             <div nz-col [nzSpan]="7">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Phương thức giao nhận</nz-form-label>
-                <nz-form-control nz-col [nzErrorTip]="error">
+                <nz-form-control nz-col>
                   <input placeholder="" nz-input formControlName="pthucGnhan" [readonly]="isView"/>
                 </nz-form-control>
               </nz-form-item>
