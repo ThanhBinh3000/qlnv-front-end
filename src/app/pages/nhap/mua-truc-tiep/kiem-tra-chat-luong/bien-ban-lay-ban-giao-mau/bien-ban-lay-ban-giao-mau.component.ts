@@ -103,6 +103,7 @@ export class BienBanLayBanGiaoMauComponent extends Base2Component implements OnI
           item.detail = {
             children: item.detail.children.filter(x => x.maDiemKho.includes(this.userInfo.MA_DVI))
           }
+          item.expand = true;
         } else {
           let data = [];
           item.hhQdGiaoNvNhangDtlList.forEach(res => {
@@ -111,6 +112,7 @@ export class BienBanLayBanGiaoMauComponent extends Base2Component implements OnI
           item.detail = {
             hhQdGiaoNvNhDdiemList: data,
           }
+          item.expand = true;
         };
       });
       this.dataTableAll = cloneDeep(this.dataTable);
@@ -192,5 +194,12 @@ export class BienBanLayBanGiaoMauComponent extends Base2Component implements OnI
     this.idQdGiaoNvNh = idQdGiaoNvu;
     this.isDetail = true;
     this.isView = isView;
+  }
+
+  setExpand(parantExpand: boolean = false, children: any = []): void {
+    if (parantExpand) {
+      return children.map(f => ({ ...f, expand: false }))
+    }
+    return children
   }
 }
