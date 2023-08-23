@@ -72,7 +72,7 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
         trangThai: [''],
         tenTrangThai: [''],
         soQdPdKq: [''],
-        ghiChu: [''],
+        ghiChuChaoGia: [''],
         loaiHinhNx: [''],
         tenLoaiHinhNx: [''],
         kieuNx: [''],
@@ -121,7 +121,6 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
         .then(async (res) => {
           if (res.msg == MESSAGE.SUCCESS) {
             const data = res.data;
-            console.log(data.children, 999)
             this.dataTable = data.children.filter(item => item.typeQdKq == 0);
             if (this.dataTable && this.dataTable.length > 0) {
               this.showFirstRow(event, this.dataTable[0].children);
@@ -144,7 +143,7 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
               tenCloaiVthh: data.tenCloaiVthh,
               moTaHangHoa: data.moTaHangHoa,
               thoiHanBan: data.thoiHanBan,
-              ghiChu: data.ghiChu,
+              ghiChuChaoGia: data.ghiChuChaoGia,
               trangThai: data.trangThai,
               tenTrangThai: data.tenTrangThai,
             })
@@ -463,10 +462,10 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
     this.formData.controls["ngayKthuc"].setValidators([Validators.required]);
     if (this.formData.value.pthucBanTrucTiep == '01') {
       this.formData.controls["diaDiemChaoGia"].setValidators([Validators.required]);
-      this.formData.controls["ghiChu"].setValidators([Validators.required]);
+      this.formData.controls["ghiChuChaoGia"].setValidators([Validators.required]);
     } else {
       this.formData.controls["diaDiemChaoGia"].clearValidators();
-      this.formData.controls["ghiChu"].clearValidators();
+      this.formData.controls["ghiChuChaoGia"].clearValidators();
 
     }
     if (this.formData.value.pthucBanTrucTiep != '01') {
