@@ -109,6 +109,7 @@ export class DialogTaoMoiDeNghiComponent implements OnInit {
         this.response.nguoiTao = this.userInfo.sub;
         this.response.lstCtiets = [];
         this.request.maLoai = Cvnc.CAP_VON;
+        this.request.trangThai = Status.TT_07
         let id = null;
         await this.getMaDnghi();
         await this.capVonNguonChiService.timKiemDeNghi(this.request.request()).toPromise().then(
@@ -118,11 +119,7 @@ export class DialogTaoMoiDeNghiComponent implements OnInit {
                     if (data.data.content?.length > 0) {
                         lstBcao = data.data.content;
                         lstBcao.sort((a, b) => b.soLan - a.soLan);
-
-                        const index = lstBcao.findIndex(e => !Status.check('reject', e.trangThai));
-                        if (index != -1) {
-                            id = lstBcao[index].id;
-                        }
+                        id = lstBcao[0].id;
                     }
                 } else {
                     this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
