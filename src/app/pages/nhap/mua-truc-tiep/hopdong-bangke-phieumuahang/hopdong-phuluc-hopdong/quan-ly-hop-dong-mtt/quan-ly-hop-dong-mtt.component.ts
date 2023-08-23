@@ -32,6 +32,7 @@ export class QuanLyHopDongMttComponent implements OnInit {
   @Output()
   showListEvent = new EventEmitter<any>();
   idQdKh: number
+  idQdGnvu: number
   idHopDong: number;
   isEditHopDong: boolean
   listNguonVon: any[] = [];
@@ -109,7 +110,6 @@ export class QuanLyHopDongMttComponent implements OnInit {
   async getDetail(id) {
     if (id) {
       let res = await this.quyetDinhPheDuyetKetQuaChaoGiaMTTService.getDetail(id);
-      console.log(res.data)
       if (res.msg == MESSAGE.SUCCESS) {
         const data = res.data;
         await this.quyetDinhPheDuyetKeHoachMTTService.getDetailDtlCuc(data.idPdKhDtl).then(dataTtin => {
@@ -134,7 +134,6 @@ export class QuanLyHopDongMttComponent implements OnInit {
             this.tongSlChaoGia += item.listChaoGia.length
           })
           this.formData.get('canhanTochuc').setValue(this.tongSlChaoGia);
-          console.log(this.danhSachCtiet)
           // this.showDetail(event, this.danhSachCtiet[0])
           this.showDetailHd(event, this.dataTable[0])
         });
@@ -147,10 +146,8 @@ export class QuanLyHopDongMttComponent implements OnInit {
   async getDetailChiCuc(id) {
     if (id) {
       let res = await this.quyetDinhGiaoNvNhapHangService.getDetail(id);
-      console.log(res.data)
       if (res.msg == MESSAGE.SUCCESS) {
-        // const data = res.data;
-        // await this.quyetDinhPheDuyetKeHoachMTTService.getDetailDtlCuc(data.idPdKhDtl).then(dataTtin => {
+        this.dataTable = []
           this.formData.patchValue({
             namKh: res.data.hhQdPheduyetKhMttHdr.namKh,
             soQd: res.data.hhQdPheduyetKhMttHdr.soQd,
@@ -160,19 +157,14 @@ export class QuanLyHopDongMttComponent implements OnInit {
             tongSoLuong: res.data.soLuong,
             tenLoaiVthh: res.data.tenLoaiVthh,
             tenCloaiVthh: res.data.tenCloaiVthh,
-            trangThaiHd: res.data.hhQdPheduyetKhMttHdr.trangThaiHd,
-            tenTrangThaiHd: res.data.hhQdPheduyetKhMttHdr.tenTrangThaiHd
+            trangThaiHd: res.data.trangThaiHd,
+            tenTrangThaiHd: res.data.tenTrangThaiHd
 
           })
         this.idQdKh = res.data.idQdPdKh
-        //   this.danhSachCtiet = res.data.danhSachCtiet;
-        //   this.danhSachCtiet.forEach(item =>{
-            this.dataTable.push(...res.data.hopDongMttHdrs)
-          // })
-          console.log(this.dataTable)
-          // this.showDetail(event, this.danhSachCtiet[0])
-          this.showDetailHd(event, this.dataTable[0])
-        // });
+        this.idQdGnvu = res.data.id
+        this.dataTable.push(...res.data.hopDongMttHdrs)
+        this.showDetailHd(event, this.dataTable[0])
       }
     }
   }
@@ -215,12 +207,15 @@ export class QuanLyHopDongMttComponent implements OnInit {
     this.isEditHopDong = isShowHd;
     this.idHopDong = id;
     if (!isShowHd) {
-      await this.ngOnInit()
+      if(!this.userService.isChiCuc()){
+        await this.ngOnInit()
+      }else{
+        await this.getDetailChiCuc(this.idQdGnvu)
+      }
     }
   }
 
   validateListHopDong(){
-    console.log(this.dataTable)
     if(this.dataTable.filter(x => x.trangThai == STATUS.DU_THAO).length > 0){
       return true
     }else{
@@ -342,10 +337,6 @@ export class QuanLyHopDongMttComponent implements OnInit {
     }
     this.idHopDong = data.id;
     this.id = data.idQdKq;
-
-    console.log("showDetailHd ", this.idHopDong)
-    console.log("showDetailHd ", this.loaiVthh)
-    console.log("showDetailHd ", this.id)
     await this.spinner.hide();
   }
 
@@ -377,6 +368,12 @@ export class QuanLyHopDongMttComponent implements OnInit {
     });
   }
   goBack() {
+    this.showListEvent.emit();
+  }
+
+  showList(idHopDong: number) {
+    this.isDetail = false;
+    this.getDetail(idHopDong);
     this.showListEvent.emit();
   }
 
