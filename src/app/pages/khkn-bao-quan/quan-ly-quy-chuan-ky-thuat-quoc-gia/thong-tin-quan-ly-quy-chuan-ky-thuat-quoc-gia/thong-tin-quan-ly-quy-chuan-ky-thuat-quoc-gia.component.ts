@@ -16,6 +16,8 @@ import { StorageService } from 'src/app/services/storage.service';
 import { DonviService } from 'src/app/services/donvi.service';
 import { Base2Component } from './../../../../components/base2/base2.component';
 import { TimKiemVanBanComponent } from './tim-kiem-van-ban/tim-kiem-van-ban.component';
+import {PREVIEW} from "../../../../constants/fileType";
+import { saveAs } from 'file-saver';
 
 
 @Component({
@@ -59,6 +61,17 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
     {maVb: '/' + dayjs().get('year') + '/TT-BTC'},
     {maVb: '/' + dayjs().get('year') + '/QĐ-BTC'},
   ];
+
+  reportTemplate: any = {
+    typeFile: "",
+    fileName: "tieu_chuan_chat_luong_khcnbq.docx",
+    tenBaoCao: "",
+    trangThai: ""
+  };
+  showDlgPreview = false;
+  pdfSrc: any;
+  wordSrc: any;
+
 
   constructor(
     httpClient: HttpClient,
@@ -734,5 +747,45 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
       this.dataTableView = cloneDeep(this.dataTable);
     }
     this.updateEditCache();
+  }
+
+  async preview() {
+    this.spinner.show();
+    try {
+      let body = {
+        reportTemplateRequest: this.reportTemplate,
+        tieuChuanKyThuat : this.dataTable,
+        maBn : this.formData.value.maBn,
+        ngayHieuLuc : this.formData.value.ngayHieuLuc,
+        ngayHetHieuLuc : this.formData.value.ngayHetHieuLuc,
+        loaiVthh : this.formData.value.loaiVthh,
+      }
+      await this.khCnQuyChuanKyThuat.preview(body).then(async s => {
+        this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
+        this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
+        this.showDlgPreview = true;
+        this
+      });
+      this.spinner.hide();
+    } catch (e) {
+      console.log('error: ', e);
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+  closeDlg() {
+    this.showDlgPreview = false;
+  }
+
+  downloadPdf() {
+      saveAs(this.pdfSrc, "tieu_chuan_chat_luong_khcnbq.pdf");
+    }
+
+  async downloadDocx() {
+    saveAs(this.wordSrc, "tieu_chuan_chat_luong_khcnbq.docx");
+  }
+
+  doPrint() {
+
   }
 }

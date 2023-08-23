@@ -16,6 +16,11 @@
           <span>Quay lại</span>
         </button>
         <button
+          type="button" class="btn btn-sub do ml-2" (click)="preview()">
+          <i class="icon htvbdh_tcdt_tuchoi"></i>
+          <span>Xem trước</span>
+        </button>
+        <button
           *ngIf="userService.isAccessPermisson('KHCNBQ_QCKTTCCS_DUYET') && formData.value.trangThai == STATUS.CHO_DUYET_LDV"
           type='button' class='btn btn-sub do ml-2' (click)='tuChoi()'>
           <i class='icon htvbdh_tcdt_tuchoi '></i>
@@ -319,10 +324,8 @@
                        (input)="searchInTable('ghiChu',filterTable.ghiChu)" size="small"/>
               </nz-input-group>
             </th>
-            <th></th>
+            <th *ngIf='formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV'></th>
           </tr>
-          </thead>
-          <tbody>
           <tr *ngIf='!isView'>
             <td></td>
             <td>
@@ -395,7 +398,7 @@
               </a>
             </td>
           </tr>
-          </tbody>
+          </thead>
           <tbody>
           <tr *ngFor='let data of dataTableView; let idx = index'>
             <ng-container *ngIf='!dataEdit[idx].edit; else editTemplate'>
@@ -520,6 +523,32 @@
   <ng-template #error let-control>
     <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}</ng-container>
   </ng-template>
-  <ng-template #suffixIconSearch>
-  </ng-template>
 </div>
+
+<nz-modal id="modal" [(nzVisible)]="showDlgPreview" nzTitle="QUY CHUẨN, TIÊU CHUẨN QUỐC GIA" nzWidth="100%"
+          (nzOnCancel)="closeDlg()">
+  <div *nzModalContent class="modal__content">
+    <pdf-viewer [src]="pdfSrc" [render-text]="true" style="width: 100%; height: 600px; margin-top: 20px"></pdf-viewer>
+  </div>
+  <div *nzModalFooter >
+    <button nz-button (click)="downloadPdf()"
+            class="modal__button--save ml-2">
+      <i class="icon htvbdh_file-pdf"></i>
+      Xuất .pdf
+    </button>
+    <button nz-button (click)="downloadDocx()"
+            class="modal__button--save">
+      <i class="icon htvbdh_file-word"></i>
+      Xuất .docx
+    </button>
+    <button type="button" class="btn btn-main ml-2" (click)="doPrint()">
+      <i nz-icon nzType="printer" nzTheme="outline"></i>
+      <span>In</span>
+    </button>
+    <button nz-button (click)="closeDlg()" class="modal__button--cancel ml-2" >
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>
+
