@@ -163,15 +163,6 @@ export class ThemMoiToTrinhPagComponent implements OnInit {
     let body = this.formData.value;
     body.type = this.type;
     body.soToTrinh = body.soToTrinh + this.maSuffix;
-    if (this.dataTable && this.dataTable.length > 0) {
-      if (this.formData.value.loaiGia == 'LG01' || this.formData.value.loaiGia == 'LG03') {
-        this.dataTable.forEach(item => {
-          if (item.vat) {
-            item.giaQdTcdtVat = item.giaQdTcdt + item.giaQdTcdt * item.vat
-          }
-        })
-      }
-    }
     body.pagChiTiets = this.dataTable
     let res = await this.toTrinhPAGService.update(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -328,7 +319,7 @@ export class ThemMoiToTrinhPagComponent implements OnInit {
           item.children.forEach(child => {
               if (child.apDungTatCa) {
                 child.giaQdTcdt = item.giaQdTcdt;
-                if (child.vat) {
+                if (child.vat && (this.formData.value.loaiGia == 'LG01' || this.formData.value.loaiGia == 'LG03')) {
                   child.giaQdTcdtVat = child.giaQdTcdt + child.giaQdTcdt * child.vat
                 }
               }

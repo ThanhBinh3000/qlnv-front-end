@@ -10,18 +10,18 @@ import { PheDuyetTongHopModule } from './phe-duyet-tong-hop/phe-duyet-tong-hop.m
 
 
 @NgModule({
-  declarations: [
-    VonPhiHangDuTruQuocGiaComponent,
-  ],
-  imports: [
-    CommonModule,
-    VonPhiHangDuTruQuocGiaRoutingModule,
-    ComponentsModule,
-    DirectivesModule,
-    BaoCaoQuyetToanModule,
-    DieuChinhBaoCaoSauQuyetToanModule,
-    PheDuyetTongHopModule,
-  ],
-  providers: [DatePipe]
+    declarations: [
+        VonPhiHangDuTruQuocGiaComponent,
+    ],
+    imports: [
+        CommonModule,
+        VonPhiHangDuTruQuocGiaRoutingModule,
+        ComponentsModule,
+        DirectivesModule,
+        BaoCaoQuyetToanModule,
+        DieuChinhBaoCaoSauQuyetToanModule,
+        PheDuyetTongHopModule,
+    ],
+    providers: [DatePipe]
 })
 export class VonPhiHangDuTruQuocGiaModule { }

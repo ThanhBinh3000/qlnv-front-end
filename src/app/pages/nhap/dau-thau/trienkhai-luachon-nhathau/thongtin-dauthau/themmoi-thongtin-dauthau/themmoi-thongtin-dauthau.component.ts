@@ -200,7 +200,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
     }
     // hợp đồng
     this.listLoaiHopDong = [];
-    let resHd = await this.danhMucService.danhMucChungGetAll('LOAI_HDONG');
+    let resHd = await this.danhMucService.danhMucChungGetAll('HINH_THUC_HOP_DONG');
     if (resHd.msg == MESSAGE.SUCCESS) {
       this.listLoaiHopDong = resHd.data;
     }
@@ -245,36 +245,36 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
         }
       })
       this.formData.patchValue({
-        namKhoach: data.hhQdKhlcntHdr.namKhoach,
-        soQdPdKhlcnt: data.hhQdKhlcntHdr.soQd,
+        namKhoach: data.hhQdKhlcntHdr?.namKhoach,
+        soQdPdKhlcnt: data.hhQdKhlcntHdr?.soQd,
         soQdPdKqLcnt: data.soQdPdKqLcnt,
         tenDuAn: data.tenDuAn,
         tenDvi: data.tenDvi,
         tongMucDt: tongMucDt,
         tongMucDtGoiTrung: tongMucDtTrung,
-        tenNguonVon: data.dxuatKhLcntHdr.tenNguonVon,
-        tenHthucLcnt: data.dxuatKhLcntHdr.tenHthucLcnt,
-        tenPthucLcnt: data.dxuatKhLcntHdr.tenPthucLcnt,
-        tenLoaiHdong: data.dxuatKhLcntHdr.tenLoaiHdong,
-        hthucLcnt: data.dxuatKhLcntHdr.hthucLcnt,
-        pthucLcnt: data.dxuatKhLcntHdr.pthucLcnt,
-        loaiHdong: data.dxuatKhLcntHdr.loaiHdong,
-        gtriDthau: data.dxuatKhLcntHdr.gtriDthau,
-        gtriHdong: data.dxuatKhLcntHdr.gtriHdong,
-        donGiaVat: data.dxuatKhLcntHdr.donGiaVat,
+        tenNguonVon: data.dxuatKhLcntHdr?.tenNguonVon,
+        tenHthucLcnt: data.dxuatKhLcntHdr?.tenHthucLcnt,
+        tenPthucLcnt: data.dxuatKhLcntHdr?.tenPthucLcnt,
+        tenLoaiHdong: data.dxuatKhLcntHdr?.tenLoaiHdong,
+        hthucLcnt: data.dxuatKhLcntHdr?.hthucLcnt,
+        pthucLcnt: data.dxuatKhLcntHdr?.pthucLcnt,
+        loaiHdong: data.dxuatKhLcntHdr?.loaiHdong,
+        gtriDthau: data.dxuatKhLcntHdr?.gtriDthau,
+        gtriHdong: data.dxuatKhLcntHdr?.gtriHdong,
+        donGiaVat: data.dxuatKhLcntHdr?.donGiaVat,
         soLuong: data.soLuong,
         soGthau: data.soGthau,
         soGthauTrung: slGthauTrung,
-        loaiVthh: data.hhQdKhlcntHdr.loaiVthh,
-        tenLoaiVthh: data.hhQdKhlcntHdr.tenLoaiVthh,
-        cloaiVthh: data.hhQdKhlcntHdr.cloaiVthh,
-        tenCloaiVthh: data.hhQdKhlcntHdr.tenCloaiVthh,
+        loaiVthh: data.hhQdKhlcntHdr?.loaiVthh,
+        tenLoaiVthh: data.hhQdKhlcntHdr?.tenLoaiVthh,
+        cloaiVthh: data.hhQdKhlcntHdr?.cloaiVthh,
+        tenCloaiVthh: data.hhQdKhlcntHdr?.tenCloaiVthh,
         tgianBdauTchuc: formatDate(data.tgianBdauTchuc, "dd/MM/yyyy", 'en-US'),
         tgianDthau: formatDate(data.tgianDthau, "HH:mm dd/MM/yyyy", 'en-US'),
         tgianMthau: formatDate(data.tgianMthau, "HH:mm dd/MM/yyyy", 'en-US'),
         tgianNhang: formatDate(data.tgianNhang, "dd/MM/yyyy", 'en-US'),
-        tenLoaiHinhNx: data.dxuatKhLcntHdr.tenLoaiHinhNx,
-        tenKieuNx: data.dxuatKhLcntHdr.tenKieuNx,
+        tenLoaiHinhNx: data.dxuatKhLcntHdr?.tenLoaiHinhNx,
+        tenKieuNx: data.dxuatKhLcntHdr?.tenKieuNx,
       });
       this.formData.patchValue({
         trangThai: data.trangThai,

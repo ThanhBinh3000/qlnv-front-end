@@ -150,10 +150,10 @@
                                   <td>{{bbNghiemThuBq.tenTrangThai}}</td>
                                   <td>
                                     <a *ngIf="bbNghiemThuBq.trangThai == STATUS.DA_DUYET_LDCC && userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBNTBQLD_XEM')"
-                                       (click)="redirectToChiTiet(false, bbNghiemThuBq.id)">
+                                       (click)="redirectToChiTiet(true, bbNghiemThuBq.id)">
                                       <i class="fa fa-eye" title="Xem chi tiết"></i>
                                     </a>
-                                    <a *ngIf="bbNghiemThuBq.trangThai != STATUS.DA_DUYET_LDCC && userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBNTBQLD_THEM')"
+                                    <a *ngIf="(bbNghiemThuBq.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBNTBQLD_THEM') || bbNghiemThuBq.trangThai == STATUS.TU_CHOI_LDCC && userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBNTBQLD_THEM') || bbNghiemThuBq.trangThai == STATUS.CHO_DUYET_TK && userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBNTBQLD_DUYET_TK') || bbNghiemThuBq.trangThai == STATUS.CHO_DUYET_KT && userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBNTBQLD_DUYET_KT') || bbNghiemThuBq.trangThai == STATUS.CHO_DUYET_LDCC && userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBNTBQLD_DUYET_LDCC'))"
                                        (click)="redirectToChiTiet(false, bbNghiemThuBq.id)">
                                       <i class="fa fa-pencil" title="Sửa"></i>
                                     </a>

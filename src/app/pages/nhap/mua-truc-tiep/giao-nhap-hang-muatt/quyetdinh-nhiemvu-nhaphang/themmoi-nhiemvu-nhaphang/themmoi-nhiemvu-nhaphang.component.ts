@@ -752,6 +752,18 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
     }
   }
 
+  calcTongChil() {
+    if (this.dataTable) {
+      let sum = 0;
+      this.dataTable.forEach(item =>{
+        item.children.forEach(x =>{
+          sum += x.soLuong
+        })
+      })
+      return sum;
+    }
+  }
+
   validateButtonThem(typeButton): boolean {
     if (typeButton == 'ddiemNhap') {
       if (this.rowItem.maDiemKho && this.rowItem.maNhaKho && this.rowItem.maNganKho && this.rowItem.soLuong > 0) {

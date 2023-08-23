@@ -189,7 +189,7 @@
           <td>{{ data.tenTrangThai }}</td>
           <td>
             <a (click)="viewDetail(data.id, true)" *ngIf="((this.pagType == 'LT' && this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_GCT_QDTC_XEM'))
-      || (this.pagType == 'VT' && this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_VT_GCT_QDTC_XEM'))) && !(data.trangThai == STATUS.DU_THAO && data.maDvi == userInfo.MA_DVI)">
+      || (this.pagType == 'VT' && this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_VT_GCT_QDTC_XEM'))) && !(data.trangThai == STATUS.DU_THAO && data.nguoiTaoId == userInfo.ID)">
               <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
             <a *ngIf="data.trangThai == STATUS.DU_THAO && ((this.pagType == 'LT' && this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_GCT_QDTC_THEM'))

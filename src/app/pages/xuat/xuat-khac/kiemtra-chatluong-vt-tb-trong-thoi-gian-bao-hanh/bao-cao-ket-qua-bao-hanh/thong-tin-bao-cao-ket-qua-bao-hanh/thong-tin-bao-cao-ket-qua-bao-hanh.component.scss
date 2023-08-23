@@ -1,0 +1,16 @@
+.bg-selected td {
+  background-color: #ebedff;
+  //background-color: red;
+}
+
+.search-result-list {
+  margin-top: 16px;
+  border: 1px dashed #e9e9e9;
+  border-radius: 6px;
+  background-color: #fafafa;
+  min-height: 100px;
+  text-align: center;
+  padding-top: 40px;
+  font-size: 16px;
+  font-weight: bold;
+}

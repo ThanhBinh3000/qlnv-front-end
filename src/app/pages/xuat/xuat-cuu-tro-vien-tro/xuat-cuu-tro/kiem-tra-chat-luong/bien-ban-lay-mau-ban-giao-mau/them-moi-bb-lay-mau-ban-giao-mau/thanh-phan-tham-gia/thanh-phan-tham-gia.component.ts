@@ -38,6 +38,7 @@ export class ThanhPhanThamGiaComponent implements OnInit {
     this.updateEditCache()
   }
 
+
   emitDataTable() {
     this.dataTableChange.emit(this.dataTable)
   }

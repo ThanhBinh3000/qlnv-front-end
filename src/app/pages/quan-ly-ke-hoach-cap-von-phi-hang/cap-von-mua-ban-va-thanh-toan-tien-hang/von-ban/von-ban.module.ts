@@ -2,19 +2,23 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ComponentsModule } from 'src/app/components/components.module';
 import { DirectivesModule } from 'src/app/directives/directives.module';
-import { DanhSachVonBanComponent } from './danh-sach-von-ban/danh-sach-von-ban.component';
-import { DialogTaoMoiVonBanComponent } from './dialog-tao-moi-von-ban/dialog-tao-moi-von-ban.component';
-import { VonBanTheoDonGiaComponent } from './von-ban-theo-don-gia/von-ban-theo-don-gia.component';
-import { VonBanTheoHopDongComponent } from './von-ban-theo-hop-dong/von-ban-theo-hop-dong.component';
 import { VonBanComponent } from './von-ban.component';
+import { DanhSachVonBanNopDvctComponent } from './danh-sach-von-ban-nop-dvct/danh-sach-von-ban-nop-dvct.component';
+import { DialogTaoMoiComponent } from './dialog-tao-moi/dialog-tao-moi.component';
+import { VonBanTheoHopDongTrungThauComponent } from './von-ban-theo-hop-dong-trung-thau/von-ban-theo-hop-dong-trung-thau.component';
+import { VonBanTheoDonGiaMuaComponent } from './von-ban-theo-don-gia-mua/von-ban-theo-don-gia-mua.component';
+import { DanhSachVonBanTuDvcdComponent } from './danh-sach-von-ban-tu-dvcd/danh-sach-von-ban-tu-dvcd.component';
+import { DialogTongHopComponent } from './dialog-tong-hop/dialog-tong-hop.component';
 
 @NgModule({
     declarations: [
         VonBanComponent,
-        DanhSachVonBanComponent,
-        VonBanTheoHopDongComponent,
-        VonBanTheoDonGiaComponent,
-        DialogTaoMoiVonBanComponent,
+        DanhSachVonBanNopDvctComponent,
+        DialogTaoMoiComponent,
+        DialogTongHopComponent,
+        VonBanTheoHopDongTrungThauComponent,
+        VonBanTheoDonGiaMuaComponent,
+        DanhSachVonBanTuDvcdComponent,
     ],
     imports: [
         CommonModule,
@@ -23,10 +27,6 @@ import { VonBanComponent } from './von-ban.component';
     ],
     exports: [
         VonBanComponent,
-        DanhSachVonBanComponent,
-        VonBanTheoHopDongComponent,
-        VonBanTheoDonGiaComponent,
-        DialogTaoMoiVonBanComponent,
     ]
 })
 export class VonBanModule { }

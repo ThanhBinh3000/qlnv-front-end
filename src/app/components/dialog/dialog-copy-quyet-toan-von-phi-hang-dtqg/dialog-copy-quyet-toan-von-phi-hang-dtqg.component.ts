@@ -3,7 +3,6 @@ import { NzModalRef } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
-import { LBC_KET_QUA_THUC_HIEN_HANG_DTQG, LBC_QUY_TRINH_THUC_HIEN_DU_TOAN_CHI } from 'src/app/Utility/utils';
 
 @Component({
   selector: 'app-dialog-copy-quyet-toan-von-phi-hang-dtqg',
@@ -17,7 +16,7 @@ export class DialogCopyQuyetToanVonPhiHangDtqgComponent implements OnInit {
   text: string = ""
   baoCaos: any = [];
   request = {
-    namBcao :  0,
+    namBcao: 0,
   }
 
   constructor(
