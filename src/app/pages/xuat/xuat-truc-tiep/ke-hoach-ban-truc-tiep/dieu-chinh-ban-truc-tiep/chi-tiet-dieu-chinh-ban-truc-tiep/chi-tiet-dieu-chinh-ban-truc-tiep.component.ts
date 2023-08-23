@@ -1,27 +1,31 @@
-import { Component, Input, OnInit, } from '@angular/core';
-import { Validators } from '@angular/forms';
-import * as dayjs from 'dayjs';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
+import {Component, Input, OnInit} from '@angular/core';
+import {Base2Component} from "../../../../../../components/base2/base2.component";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../../../services/storage.service";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {DanhMucService} from "../../../../../../services/danhmuc.service";
+import {
+  QuyetDinhPdKhBanTrucTiepService
+} from "../../../../../../services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/quyet-dinh-pd-kh-ban-truc-tiep.service";
+import {
+  QuyetDinhDcBanttService
+} from "../../../../../../services/qlnv-hang/xuat-hang/ban-truc-tiep/dieuchinh-kehoach-bantt/quyet-dinh-dc-bantt.service";
+import * as dayjs from "dayjs";
+import {Validators} from "@angular/forms";
+import {STATUS} from "../../../../../../constants/status";
+import {MESSAGE} from "../../../../../../constants/message";
 import {
   DialogTableSelectionComponent
-} from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
-import { MESSAGE } from 'src/app/constants/message';
-import { STATUS } from 'src/app/constants/status';
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
-import { QuyetDinhPdKhBanTrucTiepService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/quyet-dinh-pd-kh-ban-truc-tiep.service';
-import { QuyetDinhDcBanttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/dieuchinh-kehoach-bantt/quyet-dinh-dc-bantt.service';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
+} from "../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
 
 @Component({
-  selector: 'app-themmoi-qd-dieuchinh-khbtt',
-  templateUrl: './themmoi-qd-dieuchinh-khbtt.component.html',
-  styleUrls: ['./themmoi-qd-dieuchinh-khbtt.component.scss']
+  selector: 'app-chi-tiet-dieu-chinh-ban-truc-tiep',
+  templateUrl: './chi-tiet-dieu-chinh-ban-truc-tiep.component.html',
+  styleUrls: ['./chi-tiet-dieu-chinh-ban-truc-tiep.component.scss']
 })
-export class ThemmoiQdDieuchinhKhbttComponent extends Base2Component implements OnInit {
+export class ChiTietDieuChinhBanTrucTiepComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string
   @Input() idInput: number = 0;
 
@@ -243,7 +247,8 @@ export class ThemmoiQdDieuchinhKhbttComponent extends Base2Component implements 
         trangThai = STATUS.TU_CHOI_LDV;
         break;
       }
-    };
+    }
+    ;
     this.reject(this.idInput, trangThai);
   }
 
@@ -268,6 +273,7 @@ export class ThemmoiQdDieuchinhKhbttComponent extends Base2Component implements 
   }
 
   index = 0;
+
   async showDetail($event, index) {
     await this.spinner.show();
     if ($event.type == 'click') {
