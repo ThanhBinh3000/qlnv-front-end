@@ -106,8 +106,7 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
   initForm() {
     this.formData.patchValue({
       pthucBanTrucTiep: '01',
-      trangThai: STATUS.CHUA_CAP_NHAT,
-      tenTrangThai: 'Chưa cập nhật',
+
     })
   }
 
@@ -122,7 +121,8 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
         .then(async (res) => {
           if (res.msg == MESSAGE.SUCCESS) {
             const data = res.data;
-            this.dataTable = data.children
+            console.log(data.children, 999)
+            this.dataTable = data.children.filter(item => item.typeQdKq == 0);
             if (this.dataTable && this.dataTable.length > 0) {
               this.showFirstRow(event, this.dataTable[0].children);
             }
@@ -145,6 +145,8 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
               moTaHangHoa: data.moTaHangHoa,
               thoiHanBan: data.thoiHanBan,
               ghiChu: data.ghiChu,
+              trangThai: data.trangThai,
+              tenTrangThai: data.tenTrangThai,
             })
             this.fileUyQuyen = data.fileUyQuyen;
             this.fileBanLe = data.fileBanLe;
