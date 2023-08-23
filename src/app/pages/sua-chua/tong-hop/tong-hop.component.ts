@@ -63,7 +63,7 @@ export class TongHopComponent extends Base3Component implements OnInit {
   openDialogDs() {
     if (this.userService.isAccessPermisson('SCHDTQG_THDSCSC_TONGHOP')) {
       const modalGT = this.modal.create({
-        nzTitle: 'TỔNG HỢP DANH SÁCH CẦN SỬA CHỮA',
+        nzTitle: 'TỔNG HỢP DANH SÁCH HÀNG CẦN SỬA CHỮA',
         nzContent: ThemmoiThComponent,
         nzMaskClosable: false,
         nzClosable: false,
