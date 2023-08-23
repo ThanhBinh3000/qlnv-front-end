@@ -141,6 +141,7 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
     async search() {
         if (this.searchFilter.loaiTimKiem == '1') {
             this.searchFilter.trangThaiDvct = this.searchFilter.trangThai;
+            // this.searchFilter.trangThai = Status.TT_07;
         }
         this.spinner.show();
         await this.capVonMuaBanTtthService.timKiemVonMuaBan(this.searchFilter.request()).toPromise().then(
