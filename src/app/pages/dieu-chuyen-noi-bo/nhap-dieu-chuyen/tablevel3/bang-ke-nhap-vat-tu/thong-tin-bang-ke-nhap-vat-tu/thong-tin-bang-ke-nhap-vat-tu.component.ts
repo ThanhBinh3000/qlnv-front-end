@@ -308,21 +308,21 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
       nzComponentParams: {
         dataTable: this.dsKeHoach,
         dataHeader: ['Lô kho nhập', 'Ngăn kho nhập', 'Nhà kho nhập', 'Điểm kho nhập'],
-        dataColumn: ['tenLoKho', 'tenNganKho', 'tenNhaKho', 'tenDiemKho']
+        dataColumn: ['tenLoKhoNhan', 'tenNganKhoNhan', 'tenNhaKhoNhan', 'tenDiemKhoNhan']
       },
     });
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
         this.formData.patchValue({
-          tenLoNganKho: `${data.tenLoKho || ""} ${data.tenNganKho}`,
-          tenLoKho: data.tenLoKho,
-          maLoKho: data.maLoKho,
-          tenNganKho: data.tenNganKho,
-          maNganKho: data.maNganKho,
-          tenNhaKho: data.tenNhaKho,
-          maNhaKho: data.maNhaKho,
-          tenDiemKho: data.tenDiemKho,
-          maDiemKho: data.maDiemKho,
+          tenLoNganKho: `${data.tenLoKhoNhan || ""} ${data.tenNganKhoNhan}`,
+          tenLoKho: data.tenLoKhoNhan,
+          maLoKho: data.maLoKhoNhan,
+          tenNganKho: data.tenNganKhoNhan,
+          maNganKho: data.maNganKhoNhan,
+          tenNhaKho: data.tenNhaKhoNhan,
+          maNhaKho: data.maNhaKhoNhan,
+          tenDiemKho: data.tenDiemKhoNhan,
+          maDiemKho: data.maDiemKhoNhan,
           loaiVthh: data.loaiVthh,
           tenLoaiVthh: data.tenLoaiVthh,
           cloaiVthh: data.cloaiVthh,
@@ -374,6 +374,7 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
       // loaiVthh: ['0101', '0102'],
       soQdinhDcc: this.formData.value.soQdinhDcc,
       loaiDc: this.loaiDc,
+      isVatTu: true
       // maDvi: this.userInfo.MA_DVI
       // listTrangThaiXh: [STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN],
     }
