@@ -311,6 +311,10 @@ export class PhuLucSuaChuaComponent implements OnInit {
     };
 
     saveEdit(id: string): void {
+        if (!this.editCache[id].data.tenCongTrinh) {
+            this.notification.warning(MESSAGE.WARNING, "Chưa nhập tên công trình");
+            return;
+        }
         const index = this.lstCtietBcaos.findIndex(item => item.id === id); // lay vi tri hang minh sua
         Object.assign(this.lstCtietBcaos[index], this.editCache[id].data); // set lai data cua lstCtietBcaos[index] = this.editCache[id].data
         this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
