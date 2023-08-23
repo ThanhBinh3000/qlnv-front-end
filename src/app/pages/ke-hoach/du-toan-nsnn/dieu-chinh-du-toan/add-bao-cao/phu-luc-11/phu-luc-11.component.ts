@@ -473,6 +473,10 @@ export class PhuLuc11Component implements OnInit {
     };
 
     saveEdit(id: string): void {
+        if (!this.editCache[id].data.tenNoiDung) {
+            this.notification.warning(MESSAGE.WARNING, "Chưa nhập tên nội dung");
+            return;
+        }
         const index = this.lstCtietBcao.findIndex(item => item.id === id); // lay vi tri hang minh sua
         Object.assign(this.lstCtietBcao[index], this.editCache[id].data); // set lai data cua lstCtietBcao[index] = this.editCache[id].data
         this.editCache[id].edit = false; // CHUYEN VE DANG TEXT

@@ -245,7 +245,7 @@ export class PhuLucTongHopComponent implements OnInit {
         })
 
         this.lstCtietBcao = Table.sortByIndex(this.lstCtietBcao)
-        this.sum1()
+        // this.sum1()
         this.tinhTong();
         this.getTotal();
         this.getStatusButton();
@@ -272,11 +272,11 @@ export class PhuLucTongHopComponent implements OnInit {
             }
         )
     }
-    sum1() {
-        this.lstCtietBcao.forEach(item => {
-            this.sum(item.stt);
-        })
-    }
+    // sum1() {
+    //     this.lstCtietBcao.forEach(item => {
+    //         this.sum(item.stt);
+    //     })
+    // }
 
     async getFormDetail() {
         await this.dieuChinhDuToanService.ctietBieuMau(this.dataInfo.id).toPromise().then(
@@ -568,7 +568,9 @@ export class PhuLucTongHopComponent implements OnInit {
     getTotal() {
         this.total.clear();
         this.lstCtietBcao.forEach(item => {
-            this.total.sum(item);
+            if (item.level == 0) {
+                this.total.sum(item);
+            }
         })
 
         this.total.child = [];
@@ -576,6 +578,7 @@ export class PhuLucTongHopComponent implements OnInit {
             this.total.child.push({
                 ...new ItemDvi(),
                 maDviBcao: item.maDvi,
+                dtoanVuTvqtDnghi: 0
                 // tenDvi: item.tenDvi,
             })
         })
