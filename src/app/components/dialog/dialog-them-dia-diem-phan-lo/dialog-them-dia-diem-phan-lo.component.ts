@@ -17,6 +17,7 @@ import {
   DeXuatKhBanDauGiaService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/deXuatKhBanDauGia.service';
 import {cloneDeep} from 'lodash';
+import {QuyetDinhGiaTCDTNNService} from "../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service";
 
 @Component({
   selector: 'app-dialog-them-dia-diem-phan-lo',
@@ -31,6 +32,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
   cloaiVthh: any;
   tenCloaiVthh: string;
   dataChiTieu: any;
+  dataDonGiaDuocDuyet: any;
   donViTinh: any;
   dataEdit: any;
   listOfData: any[] = [];
@@ -59,6 +61,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
     private notification: NzNotificationService,
     private danhMucService: DanhMucService,
     private quanLyHangTrongKhoService: QuanLyHangTrongKhoService,
+    private quyetDinhGiaTCDTNNService: QuyetDinhGiaTCDTNNService,
   ) {
     this.formData = this.fb.group({
       id: [null],
@@ -196,6 +199,9 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
       this.listDiemKho = res.data.children.filter(item => item.type == 'MLK');
       this.thongtinPhanLo = new DanhSachPhanLo();
     }
+    if (this.dataEdit){
+      await this.getdonGiaDuocDuyet();
+    }
     this.calcTinh();
   }
 
@@ -228,10 +234,32 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
   }
 
   async getdonGiaDuocDuyet() {
-    if (this.cloaiVthh && this.namKh) {
-      let res = await this.deXuatKhBanDauGiaService.getDonGiaDuocDuyet(this.cloaiVthh, this.formData.value.maDvi, this.namKh);
-      if (res.msg === MESSAGE.SUCCESS) {
-        this.thongtinPhanLo.donGiaDuocDuyet = res.data
+    if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
+      if (this.dataDonGiaDuocDuyet && this.dataDonGiaDuocDuyet.length > 0) {
+        this.dataDonGiaDuocDuyet.forEach(item => {
+          if (this.dataEdit){
+            this.listOfData.forEach(s =>{
+              s.donGiaDuocDuyet = item.giaQdTcdt
+            })
+          }else {
+            this.thongtinPhanLo.donGiaDuocDuyet = item.giaQdTcdt
+          }
+        })
+      } else {
+        this.thongtinPhanLo.donGiaDuocDuyet = null;
+      }
+    } else {
+      let donGiaDuocDuyet = this.dataDonGiaDuocDuyet?.filter(item => item.maChiCuc == this.formData.value.maDvi);
+      if (donGiaDuocDuyet && donGiaDuocDuyet.length > 0) {
+        donGiaDuocDuyet.forEach(item => {
+          if (this.dataEdit){
+            this.listOfData.forEach(s =>{
+              s.donGiaDuocDuyet = item.giaQdTcdt
+            })
+          }else {
+            this.thongtinPhanLo.donGiaDuocDuyet = item.giaQdTcdt
+          }
+        })
       } else {
         this.thongtinPhanLo.donGiaDuocDuyet = null;
       }
@@ -266,7 +294,6 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
         this.editCache[index].data.maNganKho = null;
         this.editCache[index].data.maLoKho = null;
       }
-      ;
       this.thongtinPhanLo = new DanhSachPhanLo();
     } else {
       let nhakho = this.listNhaKho.filter(item => item.maDvi == this.thongtinPhanLo.maNhaKho)[0];
