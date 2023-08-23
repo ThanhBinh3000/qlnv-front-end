@@ -212,9 +212,8 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
       idQdPdSldd: data.idQdPdSldd
     })
     this.idKqCgia = data.idKqCgia;
-    console.log("formData1", data)
     this.dataTable = data.qdGiaoNvuDtlList.length > 0 ? data.qdGiaoNvuDtlList.filter(x => x.maDvi.includes(this.userInfo.MA_DVI)) : data.children;
-    console.log("dataTable",this.dataTable)
+    console.log(this.dataTable, 333)
     this.dataTablePhuLuc = data.phuLucDtl;
     this.objHopDongHdr = data;
     this.fileDinhKem = data.fileDinhKems;
@@ -268,7 +267,6 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
     if (res.data) {
       listQdKh = res.data?.content;
     }
-    console.log(res.data)
     this.spinner.hide();
     const modalQD = this.modal.create({
       nzTitle: 'Thông tin Kết quả chào giá',
@@ -316,7 +314,6 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
             });
             this.loaiHd = '02'
             this.dataTable = dataKq.children.filter(x => x.maDvi == this.userInfo.MA_DVI)
-            console.log("formData2", this.dataTable)
             // dataKq.danhSachCtiet.forEach((item) => {
             //   item.listChaoGia.forEach(res => {
             //     if (res.luaChon == true) {
@@ -337,7 +334,6 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
       namKh: this.formData.value.namHd,
       maDvi: this.userInfo.MA_DVI
     };
-  console.log(body)
     let res = await this.quyetDinhPheDuyetKetQuaChaoGiaMTTService.search(body)
     if (res.data) {
       listQdKq = res.data?.content;
@@ -384,8 +380,6 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
                 }
               })
             })
-            console.log("listDviLquan", this.listDviLquan)
-            console.log("slDaKy", this.slDaKy)
             this.formData.patchValue({
               idQdKq: dataKq.id,
               soQdKq: dataKq.soQdKq,
@@ -524,8 +518,6 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
 
   changeDviCungCap($event: any) {
     let dViCc = this.listDviLquan.find(s => s.id === $event);
-    console.log("dViCc ", dViCc)
-    console.log("dViCc222 ", this.formData.value.tongSoLuongQdKh)
     if (dViCc) {
       this.formData.patchValue({
         // idDviMua: dViCc.id,
