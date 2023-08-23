@@ -220,7 +220,8 @@ export class AddBaoCaoComponent implements OnInit {
 
             this.baoCao = this.data.baoCao;
         }
-        if (this.userInfo.CAP_DVI == "1") {
+        const isSynthetic = this.baoCao.lstDviTrucThuoc && this.baoCao.lstDviTrucThuoc.length != 0;
+        if (this.userInfo.CAP_DVI == "1" && isSynthetic == true) {
             this.listAppendix = Dcdt.PHU_LUC_TH
         } else {
             this.listAppendix = Dcdt.PHU_LUC
@@ -231,7 +232,7 @@ export class AddBaoCaoComponent implements OnInit {
             this.listAppendix.forEach(e => {
                 e.tenDm = Utils.getName(this.baoCao.namBcao, e.tenDm);
             })
-            this.baoCao.lstDchinh.forEach(item => {
+            this.baoCao?.lstDchinh.forEach(item => {
                 const appendix = this.listAppendix.find(e => e.id == item.maLoai);
                 item.tenPl = appendix.tenPl;
                 item.tenDm = Utils.getName(this.baoCao.namBcao, appendix.tenDm);
@@ -284,6 +285,9 @@ export class AddBaoCaoComponent implements OnInit {
         this.status.accept = Status.check('accept', this.baoCao.trangThai) && checkAccept && this.isParent;
         // this.status.print = Utils.statusPrint.includes(this.baoCao.trangThai) && checkPrint && this.isChild;
         this.status.export = checkExport && (this.isChild || this.isParent);
+        console.log(this.userService.isAccessPermisson(Roles.DCDT.EXPORT_SYNTHETIC_REPORT));
+        console.log(this.userService.isAccessPermisson(Roles.DCDT.EXPORT_REPORT));
+
         this.status.ok = this.status.accept || this.status.approve || this.status.pass
         this.status.finish = this.status.general;
         this.status.editAppVal = this.status.accept;
@@ -663,6 +667,8 @@ export class AddBaoCaoComponent implements OnInit {
         modalAppendix.afterClose.toPromise().then(async (res) => {
             if (res) {
                 bieuMau.trangThai = res?.trangThai;
+                bieuMau.lyDoTuChoi = res?.lyDoTuChoi;
+                bieuMau.thuyetMinh = res?.thuyetMinh;
             }
         });
     };

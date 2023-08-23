@@ -53,14 +53,14 @@
                 <i class="icon htvbdh_tcdt_tuchoi"></i>
                 <span>Tiếp nhận</span>
             </button>
-            <button class="btn btn-main" [hidden]="statusBtnCopy" (click)="showDialogCopy()">
+            <!-- <button class="btn btn-main" [hidden]="statusBtnCopy" (click)="showDialogCopy()">
                 <i nz-icon nzType="copy" nzTheme="outline"></i>
                 <span>Copy</span>
             </button>
             <button class="btn btn-main" [hidden]="statusBtnPrint" (click)="doPrint()">
                 <i nz-icon nzType="printer" nzTheme="outline"></i>
                 <span>In</span>
-            </button>
+            </button> -->
         </div>
     </nz-affix>
     <div class="bg-trang">
@@ -349,10 +349,10 @@
                         [hidden]="statusGiaoToanBo || !isDvi">
                         <span>Giao toàn bộ</span>
                     </button>
-                    <button type="button" class="btn btn-sub" *ngIf="!status">
+                    <!-- <button type="button" class="btn btn-sub" *ngIf="!status">
                         <i class="icon htvbdh_tcdt_import"></i>
                         <span>Import</span>
-                    </button>
+                    </button> -->
                 </div>
             </ng-template>
         </div>

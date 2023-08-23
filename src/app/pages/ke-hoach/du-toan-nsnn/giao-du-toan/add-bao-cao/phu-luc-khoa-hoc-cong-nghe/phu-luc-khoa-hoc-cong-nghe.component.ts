@@ -435,6 +435,10 @@ export class PhuLucKhoaHocCongNgheComponent implements OnInit {
     };
 
     saveEdit(id: string): void {
+        if (!this.editCache[id].data.tenNoiDung) {
+            this.notification.warning(MESSAGE.WARNING, "Chưa nhập chương Trình/ Đề tài/ Dự án/ Nhiệm vụ HK&CN");
+            return;
+        }
         const index = this.lstCtietBcaos.findIndex(item => item.id === id); // lay vi tri hang minh sua
         Object.assign(this.lstCtietBcaos[index], this.editCache[id].data); // set lai data cua lstCtietBcaos[index] = this.editCache[id].data
         this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
