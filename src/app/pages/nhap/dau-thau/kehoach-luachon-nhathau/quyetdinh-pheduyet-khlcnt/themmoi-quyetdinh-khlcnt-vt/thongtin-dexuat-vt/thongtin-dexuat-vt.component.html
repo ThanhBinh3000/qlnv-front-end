@@ -38,10 +38,9 @@
               <nz-form-label nzRequired [nzNoColon]="true"> Tổng mức đầu tư (tỷ đồng)
               </nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <nz-input-number formControlName="tongMucDtDx" [nzMin]="0" [nzDisabled]="isView"
-                                 [nzMax]="globals.prop.MAX_INPUT" [nzStep]="0.1" [nzSize]="'small'"
-                                 [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
-                </nz-input-number>
+                <input nz-input
+                       [readonly]="isView"
+                       formControlName="tongMucDtDx" class="money-input" currencyMask [options]="amount">
               </nz-form-control>
             </nz-form-item>
           </div>

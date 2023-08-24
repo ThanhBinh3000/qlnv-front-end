@@ -465,4 +465,17 @@ export class DialogThemMoiVatTuComponent implements OnInit {
       return sum;
     }
   }
+  editRow(i, y) {
+    this.listOfData[i].children[y].soLuongEdit = this.listOfData[i].children[y].soLuong;
+    this.listOfData[i].children[y].edit = true;
+  }
+
+  saveEdit(i, y) {
+    this.listOfData[i].children[y].soLuong = this.listOfData[i].children[y].soLuongEdit;
+    this.listOfData[i].children[y].edit = false;
+  }
+
+  cancelEdit(i, y) {
+    this.listOfData[i].children[y].edit = false;
+  }
 }
