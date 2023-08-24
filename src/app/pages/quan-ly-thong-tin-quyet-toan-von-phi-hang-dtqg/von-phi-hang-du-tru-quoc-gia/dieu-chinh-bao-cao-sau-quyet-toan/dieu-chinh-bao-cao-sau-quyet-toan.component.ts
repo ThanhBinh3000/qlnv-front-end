@@ -18,7 +18,6 @@ import { Roles } from './../../../../Utility/utils';
 @Component({
     selector: 'app-dieu-chinh-bao-cao-sau-quyet-toan',
     templateUrl: './dieu-chinh-bao-cao-sau-quyet-toan.component.html',
-    styleUrls: ['./dieu-chinh-bao-cao-sau-quyet-toan.component.scss']
 })
 export class DieuChinhBaoCaoSauQuyetToanComponent implements OnInit {
     @Input() data
